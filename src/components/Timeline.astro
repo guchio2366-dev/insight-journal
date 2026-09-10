@@ -1,0 +1,61 @@
+---
+import { sortTimelineEvents } from "./timeline";
+
+interface HistoricalDate {
+  year: number;
+  month?: number;
+  day?: number;
+}
+
+interface TimelineEvent {
+  id: string;
+  dateLabel: string;
+  start: HistoricalDate | null;
+  end: HistoricalDate | null;
+  precision: "day" | "month" | "year" | "range" | "approximate" | "unknown";
+  title: string;
+  description: string;
+  sourceIds: string[];
+}
+
+interface Props {
+  events: TimelineEvent[];
+  omissionReason?: string | null;
+}
+
+const { events, omissionReason = null } = Astro.props;
+const sortedEvents = sortTimelineEvents(events);
+---
+
+<section class="timeline-panel" aria-labelledby="timeline-title">
+  <div class="section-heading section-heading--compact">
+    <p class="eyebrow">Chronology</p>
+    <h2 id="timeline-title">短い年表</h2>
+  </div>
+
+  {sortedEvents.length > 0 ? (
+    <ol class="timeline-list">
+      {sortedEvents.map((event) => (
+        <li class:list={["timeline-event", { "timeline-event--unknown": event.start === null }]}>
+          <p class="timeline-date">{event.dateLabel}</p>
+          <div class="timeline-copy">
+            <h3>{event.title}</h3>
+            <p>{event.description}</p>
+            {event.sourceIds.length > 0 && (
+              <p class="source-refs" aria-label="この項目の出典">
+                出典：{event.sourceIds.map((id, index) => (
+                  <>
+                    {index > 0 && <span aria-hidden="true">・</span>}
+                    <a href={`#source-${id}`}>{id.toUpperCase()}</a>
+                  </>
+                ))}
+              </p>
+            )}
+          </div>
+        </li>
+      ))}
+    </ol>
+  ) : (
+    <p class="empty-note">{omissionReason ?? "この論点には年表を設定していません。"}</p>
+  )}
+</section>

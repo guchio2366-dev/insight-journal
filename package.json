@@ -1,0 +1,26 @@
+{
+  "name": "insight-journal",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0 <25"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "preview": "astro preview",
+    "schema": "node scripts/generate-schema.mjs",
+    "validate:content": "node scripts/validate-content.mjs",
+    "test": "node --test tests/unit/*.test.mjs",
+    "build": "npm run schema && npm run validate:content && astro build && pagefind --site dist --force-language ja && node scripts/generate-release.mjs",
+    "test:e2e": "node --test tests/e2e/*.test.mjs",
+    "verify:release": "node scripts/verify-release.mjs",
+    "check": "npm test && npm run build && npm run test:e2e && npm run verify:release"
+  },
+  "dependencies": {
+    "astro": "7.3.2"
+  },
+  "devDependencies": {
+    "pagefind": "1.5.2"
+  }
+}

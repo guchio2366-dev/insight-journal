@@ -1,0 +1,51 @@
+---
+interface Source {
+  id: string;
+  title: string;
+  publisher: string;
+  url: string;
+  publishedOn: string | null;
+  accessedOn: string;
+  locator: string | null;
+  verification: "confirmed" | "unconfirmed";
+}
+
+interface Props {
+  sources: Source[];
+}
+
+const { sources } = Astro.props;
+const formatDate = (date: string) => date.slice(0, 10).replace(/-/g, ".");
+---
+
+<section class="sources-panel" aria-labelledby="sources-title" data-pagefind-ignore>
+  <div class="section-heading section-heading--compact">
+    <p class="eyebrow">Sources</p>
+    <h2 id="sources-title">出典</h2>
+  </div>
+  {sources.length > 0 ? (
+    <ol class="source-list">
+      {sources.map((source) => (
+        <li id={`source-${source.id}`}>
+          <div class="source-number">{source.id.toUpperCase()}</div>
+          <div>
+            <a class="source-title" href={source.url} target="_blank" rel="noopener noreferrer">
+              {source.title}<span class="visually-hidden">（新しいタブ）</span>
+            </a>
+            <p class="source-meta">
+              {source.publisher}
+              {source.publishedOn && <> · 公開 {formatDate(source.publishedOn)}</>}
+              <> · 確認 {formatDate(source.accessedOn)}</>
+              {source.locator && <> · {source.locator}</>}
+            </p>
+            {source.verification === "unconfirmed" && (
+              <p class="verification-note">原典との照合が完了していません</p>
+            )}
+          </div>
+        </li>
+      ))}
+    </ol>
+  ) : (
+    <p class="empty-note">参照した外部資料はありません。</p>
+  )}
+</section>

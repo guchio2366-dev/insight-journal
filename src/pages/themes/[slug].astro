@@ -1,0 +1,96 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import ArticleCard from "../../components/ArticleCard.astro";
+import MapFigure from "../../components/MapFigure.astro";
+import SourceList from "../../components/SourceList.astro";
+import TaxonomyBadges from "../../components/TaxonomyBadges.astro";
+import Timeline from "../../components/Timeline.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { compareDatedPublicIds } from "../../lib/dates";
+import { withBase } from "../../lib/urls";
+
+export async function getStaticPaths() {
+  const themes = await getCollection("publicThemes");
+  return themes.map((entry) => ({ params: { slug: entry.data.slug }, props: { entry } }));
+}
+
+interface Props {
+  entry: CollectionEntry<"publicThemes">;
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const articles = (await getCollection("articles"))
+  .filter((article) => article.data.themeIds.includes(entry.data.publicId))
+  .sort((left, right) => compareDatedPublicIds(left.data.publishedAt, left.data.publicId, right.data.publishedAt, right.data.publicId));
+const updatedLabel = entry.data.updatedAt.slice(0, 10).replace(/-/g, ".");
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.summary}>
+  <article class="theme-page" data-pagefind-body>
+    <header class="theme-hero page-hero shell shell--article">
+      <nav class="breadcrumb" aria-label="パンくずリスト" data-pagefind-ignore>
+        <a href={withBase("/")}>ホーム</a><span aria-hidden="true">/</span>
+        <a href={withBase("/themes/")}>テーマ</a><span aria-hidden="true">/</span>
+        <span aria-current="page">{entry.data.title}</span>
+      </nav>
+      <p class="eyebrow">Living theme</p>
+      <h1 data-pagefind-meta="title">{entry.data.title}</h1>
+      <p class="article-deck" data-pagefind-meta="summary">{entry.data.summary}</p>
+      <div class="article-byline">
+        <span>最終更新 <time datetime={entry.data.updatedAt}>{updatedLabel}</time></span>
+        <span>{articles.length}件の記事</span>
+      </div>
+      <TaxonomyBadges
+        topicSlugs={entry.data.topics}
+        countryCodes={entry.data.countries}
+        regionSlugs={entry.data.regions}
+        pagefind={true}
+      />
+    </header>
+
+    <div class="article-layout shell shell--article theme-body-layout">
+      <aside class="theme-index" data-pagefind-ignore>
+        <p class="eyebrow">Current view</p>
+        <p>このページは、新しい記事と根拠に合わせて更新します。</p>
+        <p class="revision-label">Revision {entry.data.revision}</p>
+      </aside>
+      <div class="article-main prose"><Content /></div>
+    </div>
+
+    <div class="article-support shell shell--article">
+      {entry.data.geography.mode === "map" && <MapFigure geography={entry.data.geography} />}
+      {entry.data.timeline.length > 0 && <Timeline events={entry.data.timeline} />}
+      {entry.data.sources.length > 0 && <SourceList sources={entry.data.sources} />}
+    </div>
+
+    <section class="related-section page-section--tinted" data-pagefind-ignore>
+      <div class="shell">
+        <div class="section-heading section-heading--rule">
+          <div>
+            <p class="eyebrow">Articles</p>
+            <h2>このテーマの記事</h2>
+          </div>
+        </div>
+        {articles.length > 0 ? (
+          <div class="article-grid">
+            {articles.map((article) => (
+              <ArticleCard
+                slug={article.data.slug}
+                title={article.data.title}
+                summary={article.data.summary}
+                publishedAt={article.data.publishedAt}
+                updatedAt={article.data.updatedAt}
+                topics={article.data.topics}
+                countries={article.data.countries}
+                regions={article.data.regions}
+              />
+            ))}
+          </div>
+        ) : (
+          <p class="empty-note">このテーマに関連する公開記事はまだありません。</p>
+        )}
+      </div>
+    </section>
+  </article>
+</BaseLayout>

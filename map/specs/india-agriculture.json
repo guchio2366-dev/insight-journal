@@ -1,0 +1,25 @@
+{
+  "publicId": "a-11111111-1111-4111-8111-111111111111",
+  "caption": "インド北部とニューデリーの位置",
+  "alt": "南アジアの地図。インドを強調し、北部のニューデリーを赤い点で示している。",
+  "bounds": { "west": 61, "south": 5, "east": 101, "north": 38 },
+  "points": [
+    {
+      "label": "ニューデリー",
+      "longitude": 77.209,
+      "latitude": 28.6139,
+      "sourceIds": ["s1"]
+    }
+  ],
+  "highlightCountries": ["IN"],
+  "baseMapFile": "map/vendor/ne_110m_admin_0_south_asia.geojson",
+  "baseMap": {
+    "name": "Natural Earth Admin 0 Countries — South Asia subset",
+    "scale": "1:110m",
+    "version": "5.1.2",
+    "sourceUrl": "https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/",
+    "sha256": "8f57658e0fc6691e681879659e1f94dffcfb0120384016fc2d97b27f6952a4a6"
+  },
+  "width": 1600,
+  "height": 900
+}

@@ -1,0 +1,16 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../lib/urls";
+---
+
+<BaseLayout title="ページが見つかりません" noindex={true}>
+  <section class="not-found shell">
+    <p class="error-code">404</p>
+    <h1>ページが見つかりません</h1>
+    <p>URLが変わったか、記事が公開されていない可能性があります。</p>
+    <div class="hero-actions">
+      <a class="button button--primary" href={withBase("/")}>ホームへ戻る</a>
+      <a class="button button--quiet" href={withBase("/search/")}>記事を探す</a>
+    </div>
+  </section>
+</BaseLayout>

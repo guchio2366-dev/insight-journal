@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../lib/urls";
+---
+
+<BaseLayout title="このサイトについて" description="Insight Journalの目的、記事の作り方、出典と更新の方針。">
+  <header class="page-hero shell shell--article">
+    <p class="eyebrow">About this journal</p>
+    <h1>ニュースを、<br />考え続けるために。</h1>
+    <p>Insight Journalは、日々のニュースから生まれた問いを、後から探し、つなぎ、更新できる形で公開する個人の知識アーカイブです。</p>
+  </header>
+  <div class="about-layout shell shell--article">
+    <aside class="about-principles" aria-label="編集原則">
+      <p class="eyebrow">Editorial principles</p>
+      <ol>
+        <li><strong>01</strong><span>事実と解釈を分ける</span></li>
+        <li><strong>02</strong><span>根拠へたどれる</span></li>
+        <li><strong>03</strong><span>理解の変化を残す</span></li>
+      </ol>
+    </aside>
+    <div class="prose about-copy">
+      <h2>記事の読み方</h2>
+      <p>記事の冒頭には、いま何が分かっているかを短く示します。本文では背景や因果関係を整理し、場所が重要な記事には地図を、経緯が重要な記事には短い年表を添えます。</p>
+      <p>出典は記事末尾にまとめます。確認が済んでいない資料には、その状態を表示します。新しい事実によって理解が変わった場合は、更新日と変更内容を記録します。</p>
+      <h2>公開する内容</h2>
+      <p>公開前に確認した記事だけを掲載します。日々の対話や作業用ノートそのものは公開しません。公開記事には、読者が内容を確かめるために必要な情報だけを含めます。</p>
+      <p>このサイトは個人が独立して運営するもので、日本経済新聞社および報道機関各社の公式サイトではありません。各媒体の記事本文を転載する場所ではなく、出典を示したうえで独自の整理と考察を公開します。</p>
+      <h2>探し方</h2>
+      <p>言葉で検索するほか、政治・経済・紛争・宗教・農業などの分野、地域、国、継続テーマで絞り込めます。</p>
+      <p><a class="button button--primary" href={withBase("/search/")}>記事を探す</a></p>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,46 @@
+---
+import { getCollection } from "astro:content";
+import ThemeCard from "../../components/ThemeCard.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { compareDatedPublicIds } from "../../lib/dates";
+
+const allThemes = (await getCollection("publicThemes"))
+  .sort((left, right) => compareDatedPublicIds(left.data.updatedAt, left.data.publicId, right.data.updatedAt, right.data.publicId));
+const articles = await getCollection("articles");
+const themeCounts = new Map<string, number>();
+for (const article of articles) {
+  for (const themeId of article.data.themeIds) {
+    themeCounts.set(themeId, (themeCounts.get(themeId) ?? 0) + 1);
+  }
+}
+const themes = allThemes.filter((theme) => (themeCounts.get(theme.data.publicId) ?? 0) > 0);
+---
+
+<BaseLayout title="テーマ" description="ニュースを継続して追い、現在の理解と変化をまとめたテーマ一覧です。">
+  <header class="page-hero shell">
+    <p class="eyebrow">Themes</p>
+    <h1>テーマから読む</h1>
+    <p>一つのニュースで終わらない論点をつなぎ、理解がどう変わったかを記録します。</p>
+  </header>
+  <section class="page-section shell" aria-label="テーマ一覧">
+    <h2 class="visually-hidden">公開テーマ一覧</h2>
+    {themes.length > 0 ? (
+      <div class="theme-grid theme-grid--all">
+        {themes.map((theme) => (
+          <ThemeCard
+            slug={theme.data.slug}
+            title={theme.data.title}
+            summary={theme.data.summary}
+            topics={theme.data.topics}
+            articleCount={themeCounts.get(theme.data.publicId) ?? 0}
+          />
+        ))}
+      </div>
+    ) : (
+      <div class="empty-state">
+        <h2>テーマを準備しています</h2>
+        <p>継続して考える論点が公開されると、ここに並びます。</p>
+      </div>
+    )}
+  </section>
+</BaseLayout>

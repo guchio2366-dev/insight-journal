@@ -1,0 +1,40 @@
+---
+import { countryLabels, regions, topics } from "../data/taxonomy";
+import { withBase } from "../lib/urls";
+
+interface Props {
+  topicSlugs?: string[];
+  countryCodes?: string[];
+  regionSlugs?: string[];
+  linked?: boolean;
+  pagefind?: boolean;
+}
+
+const {
+  topicSlugs = [],
+  countryCodes = [],
+  regionSlugs = [],
+  linked = true,
+  pagefind = false
+} = Astro.props;
+
+const searchHref = (key: string, value: string) => withBase(`/search/?${new URLSearchParams({ [key]: value })}`);
+---
+
+<ul class="tag-list" aria-label="分類">
+  {topicSlugs.map((slug) => (
+    <li data-pagefind-filter={pagefind ? `topic:${slug}` : undefined}>
+      {linked ? <a class="tag tag--topic" href={searchHref("topic", slug)}>{topics[slug as keyof typeof topics] ?? slug}</a> : <span class="tag tag--topic">{topics[slug as keyof typeof topics] ?? slug}</span>}
+    </li>
+  ))}
+  {regionSlugs.map((slug) => (
+    <li data-pagefind-filter={pagefind ? `region:${slug}` : undefined}>
+      {linked ? <a class="tag" href={searchHref("region", slug)}>{regions[slug as keyof typeof regions] ?? slug}</a> : <span class="tag">{regions[slug as keyof typeof regions] ?? slug}</span>}
+    </li>
+  ))}
+  {countryCodes.map((code) => (
+    <li data-pagefind-filter={pagefind ? `country:${code}` : undefined}>
+      {linked ? <a class="tag" href={searchHref("country", code)}>{countryLabels[code] ?? code}</a> : <span class="tag">{countryLabels[code] ?? code}</span>}
+    </li>
+  ))}
+</ul>
