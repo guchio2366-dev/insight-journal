@@ -1,0 +1,39 @@
+---
+import { normalizeSitePath, withBase } from "../lib/urls";
+
+interface Props {
+  currentPath: string;
+}
+
+const currentPath = normalizeSitePath(Astro.props.currentPath);
+const navItems = [
+  { href: "/", label: "ホーム", match: (path: string) => path === "/" },
+  { href: "/search/", label: "記事を探す", match: (path: string) => path.startsWith("/search/") || path.startsWith("/articles/") },
+  { href: "/themes/", label: "テーマ", match: (path: string) => path.startsWith("/themes/") },
+  { href: "/about/", label: "このサイトについて", match: (path: string) => path.startsWith("/about/") }
+];
+---
+
+<header class="site-header" data-pagefind-ignore>
+  <a class="skip-link" href="#main-content">本文へ移動</a>
+  <div class="header-inner">
+    <a class="site-brand" href={withBase("/")} aria-label="Insight Journal ホーム">
+      <span class="brand-mark" aria-hidden="true">IJ</span>
+      <span>
+        <strong>Insight Journal</strong>
+        <small>ニュースから、理解を育てる。</small>
+      </span>
+    </a>
+    <nav aria-label="主要メニュー">
+      <ul>
+        {navItems.map((item) => (
+          <li>
+            <a href={withBase(item.href)} aria-current={item.match(currentPath) ? "page" : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>

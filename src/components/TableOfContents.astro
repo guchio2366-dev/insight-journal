@@ -1,0 +1,37 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const headings = Astro.props.headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+---
+
+{headings.length > 0 && (
+  <details class="toc" open data-responsive-toc>
+    <summary id="toc-title" class="toc-title">この記事の内容</summary>
+    <ol>
+      {headings.map((heading) => (
+        <li class:list={{ "toc-subitem": heading.depth === 3 }}>
+          <a href={`#${heading.slug}`}>{heading.text}</a>
+        </li>
+      ))}
+    </ol>
+  </details>
+)}
+
+<script is:inline>
+  (() => {
+    const toc = document.querySelector("[data-responsive-toc]");
+    if (!(toc instanceof HTMLDetailsElement)) return;
+    const compact = window.matchMedia("(max-width: 1023px)");
+    const sync = () => { toc.open = !compact.matches; };
+    sync();
+    compact.addEventListener?.("change", sync);
+  })();
+</script>

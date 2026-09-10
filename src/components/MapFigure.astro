@@ -1,0 +1,61 @@
+---
+import { withBase } from "../lib/urls";
+
+interface MapGeography {
+  mode: "map";
+  caption: string;
+  alt: string;
+  highlightCountries: string[];
+  baseMap: {
+    name: string;
+    sourceUrl: string;
+  };
+  image: {
+    path: string;
+    width: number;
+    height: number;
+    alt: string;
+  };
+}
+
+interface Props {
+  geography: MapGeography;
+}
+
+const { geography } = Astro.props;
+const imageUrl = withBase(`/${geography.image.path.replace(/^\//, "")}`);
+---
+
+<section class="map-panel" aria-labelledby="map-title" data-pagefind-ignore>
+  <div class="section-heading section-heading--compact">
+    <p class="eyebrow">Location</p>
+    <h2 id="map-title">場所をみる</h2>
+  </div>
+  <figure class="map-figure">
+    <a
+      class="map-link"
+      href={imageUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`${geography.image.alt || geography.alt}。地図を原寸で開く（新しいタブ）`}
+    >
+      <img
+        src={imageUrl}
+        alt={geography.image.alt || geography.alt}
+        width={geography.image.width}
+        height={geography.image.height}
+        loading="lazy"
+        decoding="async"
+      />
+      <span class="map-expand" aria-hidden="true">拡大 ↗</span>
+    </a>
+    <figcaption>
+      <span>{geography.caption}</span>
+      <span class="map-credit">
+        基図：<a href={geography.baseMap.sourceUrl} target="_blank" rel="noopener noreferrer">
+          {geography.baseMap.name}<span class="visually-hidden">（新しいタブ）</span>
+        </a>
+      </span>
+    </figcaption>
+  </figure>
+</section>

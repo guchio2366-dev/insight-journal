@@ -1,0 +1,28 @@
+---
+import { withBase } from "../lib/urls";
+import TaxonomyBadges from "./TaxonomyBadges.astro";
+
+interface Props {
+  slug: string;
+  title: string;
+  summary: string;
+  articleCount?: number;
+  topics?: string[];
+}
+
+const { slug, title, summary, articleCount = 0, topics = [] } = Astro.props;
+const href = withBase(`/themes/${slug}/`);
+---
+
+<article class="theme-card">
+  <div class="theme-card__count" aria-label={`関連記事${articleCount}件`}>
+    <strong>{String(articleCount).padStart(2, "0")}</strong>
+    <span>articles</span>
+  </div>
+  <div>
+    <p class="eyebrow">Theme</p>
+    <h3><a href={href}>{title}</a></h3>
+    <p>{summary}</p>
+    <TaxonomyBadges topicSlugs={topics} />
+  </div>
+</article>

@@ -1,0 +1,145 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import ArticleCard from "../../components/ArticleCard.astro";
+import MapFigure from "../../components/MapFigure.astro";
+import SourceList from "../../components/SourceList.astro";
+import TableOfContents from "../../components/TableOfContents.astro";
+import TaxonomyBadges from "../../components/TaxonomyBadges.astro";
+import Timeline from "../../components/Timeline.astro";
+import { selectRelatedArticles } from "../../components/related";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { withBase } from "../../lib/urls";
+
+export async function getStaticPaths() {
+  const articles = await getCollection("articles");
+  return articles.map((entry) => ({ params: { slug: entry.data.slug }, props: { entry } }));
+}
+
+interface Props {
+  entry: CollectionEntry<"articles">;
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const [allArticles, allThemes] = await Promise.all([
+  getCollection("articles"),
+  getCollection("publicThemes")
+]);
+const related = selectRelatedArticles(entry, allArticles, 6);
+const relatedThemes = allThemes.filter((theme) => entry.data.themeIds.includes(theme.data.publicId));
+const publishedLabel = entry.data.publishedAt.slice(0, 10).replace(/-/g, ".");
+const updatedLabel = entry.data.updatedAt.slice(0, 10).replace(/-/g, ".");
+const hasUpdate = updatedLabel !== publishedLabel || entry.data.revision > 1;
+const mapImage = entry.data.geography.mode === "map"
+  ? withBase(`/${entry.data.geography.image.path}`)
+  : undefined;
+---
+
+<BaseLayout
+  title={entry.data.title}
+  description={entry.data.summary}
+  type="article"
+  image={mapImage}
+  publishedAt={entry.data.publishedAt}
+  updatedAt={entry.data.updatedAt}
+>
+  <article class="article-page" data-pagefind-body>
+    <header class="article-hero shell shell--article">
+      <nav class="breadcrumb" aria-label="パンくずリスト" data-pagefind-ignore>
+        <a href={withBase("/")}>ホーム</a><span aria-hidden="true">/</span>
+        <a href={withBase("/search/")}>記事</a><span aria-hidden="true">/</span>
+        <span aria-current="page">{entry.data.title}</span>
+      </nav>
+      <p class="eyebrow">Insight · Revision {entry.data.revision}</p>
+      <h1 data-pagefind-meta="title">{entry.data.title}</h1>
+      <p class="article-deck" data-pagefind-meta="summary">{entry.data.summary}</p>
+      <div class="article-byline">
+        <span>公開 <time datetime={entry.data.publishedAt}>{publishedLabel}</time></span>
+        {hasUpdate && <span>更新 <time datetime={entry.data.updatedAt}>{updatedLabel}</time></span>}
+      </div>
+      <TaxonomyBadges
+        topicSlugs={entry.data.topics}
+        countryCodes={entry.data.countries}
+        regionSlugs={entry.data.regions}
+        pagefind={true}
+      />
+      {relatedThemes.length > 0 && (
+        <div class="article-themes">
+          <span>継続テーマ</span>
+          {relatedThemes.map((theme) => (
+            <a
+              href={withBase(`/themes/${theme.data.slug}/`)}
+              data-pagefind-filter={`theme:${theme.data.publicId}`}
+            >
+              {theme.data.title}
+            </a>
+          ))}
+        </div>
+      )}
+      <div class="article-tools" data-pagefind-ignore>
+        <a
+          class="download-link"
+          href={withBase(`/exports/${entry.data.slug}.md`)}
+          download={`${entry.data.slug}.md`}
+        >
+          <span aria-hidden="true">↓</span> 公開内容をMarkdownで保存
+        </a>
+      </div>
+    </header>
+
+    <div class="article-rule shell shell--article" aria-hidden="true"></div>
+
+    <div class="article-context shell shell--article">
+      {entry.data.geography.mode === "map" && <MapFigure geography={entry.data.geography} />}
+      <Timeline events={entry.data.timeline} omissionReason={entry.data.timelineOmissionReason} />
+    </div>
+
+    <div class="article-layout shell shell--article">
+      <aside class="article-sidebar" data-pagefind-ignore>
+        <TableOfContents headings={headings} />
+      </aside>
+      <div class="article-main prose">
+        <Content />
+      </div>
+    </div>
+
+    <div class="article-support shell shell--article">
+      <SourceList sources={entry.data.sources} />
+
+      {(entry.data.changeNote || hasUpdate) && (
+        <section class="change-note" aria-labelledby="change-note-title" data-pagefind-ignore>
+          <p class="eyebrow">Revision note</p>
+          <h2 id="change-note-title">更新について</h2>
+          <p>{entry.data.changeNote ?? `第${entry.data.revision}版として内容を更新しました。`}</p>
+        </section>
+      )}
+    </div>
+
+    {related.length > 0 && (
+      <section class="related-section page-section--tinted" data-pagefind-ignore>
+        <div class="shell">
+          <div class="section-heading section-heading--rule">
+            <div>
+              <p class="eyebrow">Continue reading</p>
+              <h2>関連する記事</h2>
+            </div>
+          </div>
+          <div class="article-grid">
+            {related.map((article) => (
+              <ArticleCard
+                slug={article.data.slug}
+                title={article.data.title}
+                summary={article.data.summary}
+                publishedAt={article.data.publishedAt}
+                updatedAt={article.data.updatedAt}
+                topics={article.data.topics}
+                countries={article.data.countries}
+                regions={article.data.regions}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+  </article>
+</BaseLayout>

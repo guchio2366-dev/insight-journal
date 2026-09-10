@@ -1,0 +1,45 @@
+---
+import { withBase } from "../lib/urls";
+import TaxonomyBadges from "./TaxonomyBadges.astro";
+
+interface Props {
+  slug: string;
+  title: string;
+  summary: string;
+  publishedAt: string;
+  updatedAt?: string;
+  topics?: string[];
+  countries?: string[];
+  regions?: string[];
+  eyebrow?: string;
+}
+
+const {
+  slug,
+  title,
+  summary,
+  publishedAt,
+  updatedAt,
+  topics = [],
+  countries = [],
+  regions = [],
+  eyebrow
+} = Astro.props;
+const href = withBase(`/articles/${slug}/`);
+const dateLabel = publishedAt.slice(0, 10).replace(/-/g, ".");
+const updated = updatedAt && updatedAt.slice(0, 10) !== publishedAt.slice(0, 10);
+---
+
+<article class="article-card">
+  <div class="article-card__meta">
+    <span>{eyebrow ?? "Insight"}</span>
+    <time datetime={publishedAt}>{dateLabel}</time>
+    {updated && <span class="updated-mark">更新</span>}
+  </div>
+  <h3><a href={href}>{title}</a></h3>
+  <p class="article-card__summary">{summary}</p>
+  <TaxonomyBadges topicSlugs={topics} countryCodes={countries} regionSlugs={regions} />
+  <a class="read-link" href={href} aria-label={`${title}を読む`}>
+    読む <span aria-hidden="true">→</span>
+  </a>
+</article>

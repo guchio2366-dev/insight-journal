@@ -1,0 +1,156 @@
+---
+import { getCollection } from "astro:content";
+import ArticleCard from "../../components/ArticleCard.astro";
+import { countryLabels, regions, topics } from "../../data/taxonomy";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { compareDatedPublicIds } from "../../lib/dates";
+import { basePath, withBase } from "../../lib/urls";
+
+const articles = (await getCollection("articles"))
+  .sort((left, right) => compareDatedPublicIds(left.data.publishedAt, left.data.publicId, right.data.publishedAt, right.data.publicId));
+const themes = (await getCollection("publicThemes"))
+  .sort((left, right) => left.data.title.localeCompare(right.data.title, "ja") || left.data.publicId.localeCompare(right.data.publicId));
+const usedCountries = [...new Set([
+  ...articles.flatMap((entry) => entry.data.countries),
+  ...themes.flatMap((entry) => entry.data.countries)
+])].sort((left, right) => (countryLabels[left] ?? left).localeCompare(countryLabels[right] ?? right, "ja"));
+
+const filterGroups = [
+  {
+    key: "kind",
+    label: "種類",
+    options: [
+      { value: "article", label: "記事" },
+      { value: "theme", label: "テーマ" }
+    ]
+  },
+  {
+    key: "topic",
+    label: "分野",
+    options: Object.entries(topics).map(([value, label]) => ({ value, label }))
+  },
+  {
+    key: "region",
+    label: "地域",
+    options: Object.entries(regions).map(([value, label]) => ({ value, label }))
+  },
+  {
+    key: "country",
+    label: "国",
+    options: usedCountries.map((value) => ({ value, label: countryLabels[value] ?? value }))
+  },
+  {
+    key: "theme",
+    label: "テーマとの関連",
+    options: themes.map((theme) => ({ value: theme.data.publicId, label: theme.data.title }))
+  }
+];
+---
+
+<BaseLayout title="記事を探す" description="キーワード、種類、分野、地域、国、テーマからInsight Journalを検索できます。">
+  <header class="search-hero shell">
+    <p class="eyebrow">Search the archive</p>
+    <h1>記事を探す</h1>
+    <p>題名を覚えていなくても、気になった言葉や場所、分野からたどれます。</p>
+  </header>
+
+  <section class="search-shell shell" data-search-app data-base={basePath} data-pagefind-ignore>
+    <form class="search-form" role="search" data-search-form>
+      <div class="query-field">
+        <label for="search-query">キーワード</label>
+        <div class="query-control">
+          <input
+            id="search-query"
+            name="q"
+            type="search"
+            inputmode="search"
+            autocomplete="off"
+            maxlength="200"
+            placeholder="例：食料安全保障、インド、金利"
+            data-search-query
+          />
+          <button class="button button--primary" type="submit">検索</button>
+        </div>
+      </div>
+
+      <div class="filter-grid" aria-label="絞り込み条件">
+        {filterGroups.map((group) => (
+          <details class="filter-menu" data-filter-menu={group.key}>
+            <summary>
+              <span>{group.label}</span>
+              <output data-filter-count={group.key}>すべて</output>
+            </summary>
+            <fieldset>
+              <legend>{group.label}（最大10件）</legend>
+              <div class="check-list">
+                {group.options.length > 0 ? group.options.map((option) => (
+                  <label>
+                    <input type="checkbox" name={group.key} value={option.value} data-filter={group.key} />
+                    <span>{option.label}</span>
+                  </label>
+                )) : <p>選べる項目はまだありません。</p>}
+              </div>
+              {group.key === "topic" && (
+                <div class="topic-mode" role="group" aria-label="選んだ分野の一致方法">
+                  <span>一致方法</span>
+                  <label><input type="radio" name="topicMode" value="any" checked /> いずれか</label>
+                  <label><input type="radio" name="topicMode" value="all" /> すべて</label>
+                </div>
+              )}
+            </fieldset>
+          </details>
+        ))}
+
+        <label class="sort-field" for="search-sort">
+          <span>並び順</span>
+          <select id="search-sort" name="sort" data-search-sort>
+            <option value="relevance">関連度順</option>
+            <option value="latest">公開日の新しい順</option>
+            <option value="updated">更新日の新しい順</option>
+          </select>
+        </label>
+      </div>
+      <div class="filter-actions">
+        <p class="selection-note">各分類は10件まで選べます。同じ分類内はOR、分類をまたぐ条件はANDで検索します。</p>
+        <button class="plain-button" type="button" data-search-clear>条件をすべて解除</button>
+      </div>
+    </form>
+
+    <div class="search-notice" role="status" hidden data-search-notice></div>
+    <div class="search-notice" role="status" aria-live="polite" hidden data-search-degraded></div>
+    <div class="search-results-head">
+      <h2 tabindex="-1" data-search-results-title>検索結果</h2>
+      <p data-search-status aria-live="polite" aria-atomic="true">記事とテーマを読み込んでいます…</p>
+    </div>
+    <div class="search-error" role="alert" hidden data-search-error></div>
+    <div class="search-results" data-search-results aria-busy="true"></div>
+    <nav class="pagination" aria-label="検索結果のページ" hidden data-search-pagination>
+      <button type="button" class="button button--quiet" data-page-prev>前のページ</button>
+      <span data-page-label></span>
+      <button type="button" class="button button--quiet" data-page-next>次のページ</button>
+    </nav>
+  </section>
+
+  <noscript>
+    <style>[data-search-app] { display: none !important; }</style>
+    <section class="page-section shell">
+      <div class="empty-note">絞り込み検索にはJavaScriptが必要です。公開日の新しい順で記事を表示します。</div>
+      <div class="article-grid noscript-list">
+        {articles.map((article) => (
+          <ArticleCard
+            slug={article.data.slug}
+            title={article.data.title}
+            summary={article.data.summary}
+            publishedAt={article.data.publishedAt}
+            updatedAt={article.data.updatedAt}
+            topics={article.data.topics}
+            countries={article.data.countries}
+            regions={article.data.regions}
+          />
+        ))}
+      </div>
+    </section>
+  </noscript>
+
+  <script is:inline src={withBase("/scripts/search.js")} defer></script>
+</BaseLayout>

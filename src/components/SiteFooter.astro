@@ -1,0 +1,17 @@
+---
+import { withBase } from "../lib/urls";
+---
+
+<footer class="site-footer" data-pagefind-ignore>
+  <div class="footer-inner">
+    <div>
+      <p class="footer-name">Insight Journal</p>
+      <p>日々のニュースを、調べ、つなぎ、更新するための記録。</p>
+    </div>
+    <nav aria-label="フッターメニュー">
+      <a href={withBase("/search/")}>記事を探す</a>
+      <a href={withBase("/themes/")}>テーマ</a>
+      <a href={withBase("/about/")}>編集方針</a>
+    </nav>
+  </div>
+</footer>
