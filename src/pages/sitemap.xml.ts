@@ -1,6 +1,7 @@
 import { getCollection } from "astro:content";
 import type { APIRoute } from "astro";
 import { withBase } from "../lib/urls";
+import { agricultureField } from "../data/atlas/north-america-agriculture";
 
 export const prerender = true;
 
@@ -26,6 +27,9 @@ export const GET: APIRoute = async ({ site }) => {
     { loc: absolute("/search/"), lastmod: undefined },
     { loc: absolute("/themes/"), lastmod: undefined },
     { loc: absolute("/about/"), lastmod: undefined },
+    { loc: absolute("/atlas/"), lastmod: agricultureField.updatedAt.slice(0, 10) },
+    { loc: absolute("/atlas/north-america/agriculture/"), lastmod: agricultureField.updatedAt.slice(0, 10) },
+    { loc: absolute("/atlas/north-america/agriculture/report/"), lastmod: agricultureField.updatedAt.slice(0, 10) },
     ...articles.map((entry) => ({
       loc: absolute(`/articles/${entry.data.slug}/`),
       lastmod: entry.data.updatedAt.slice(0, 10)

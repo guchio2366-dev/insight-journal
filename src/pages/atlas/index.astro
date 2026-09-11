@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { withBase } from "../../lib/urls";
+import "../../styles/atlas.css";
+---
+
+<BaseLayout title="地図から読む" description="地図の分布から地域の政治・経済・社会を読み解くAtlas。">
+  <section class="atlas-index shell">
+    <div class="atlas-index-head">
+      <p class="eyebrow">Atlas</p>
+      <h1>地図から読む</h1>
+      <p>場所を起点に、自然条件、産業、政治、ニュースをつなげて読みます。</p>
+    </div>
+
+    <div class="atlas-index-grid">
+      <a class="atlas-index-card" href={withBase("/atlas/north-america/agriculture/")}>
+        <div class="atlas-index-card-top"><span>01</span><small>North America · Agriculture</small></div>
+        <h2>北米の農業</h2>
+        <p>米国本土の州ごとの代表作物を一枚の地図で見て、作物・気候・水・輸送の関係を読む。</p>
+        <span class="atlas-index-card-link">地図を開く <b aria-hidden="true">→</b></span>
+      </a>
+    </div>
+
+    <div class="atlas-index-note">
+      <p class="eyebrow">How to read</p>
+      <p>地図は入口であり、詳述ページで一般条件と地域全体の背景を確認します。データの範囲・対象年・概略表示の意味は、それぞれのページに明記します。</p>
+    </div>
+  </section>
+</BaseLayout>

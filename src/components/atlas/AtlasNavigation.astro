@@ -1,0 +1,28 @@
+---
+import { withBase } from "../../lib/urls";
+
+interface Props {
+  active: "map" | "report";
+  mapHref: string;
+  reportHref: string;
+}
+
+const { active, mapHref, reportHref } = Astro.props;
+const items = [
+  { key: "map", label: "地図", href: mapHref },
+  { key: "report", label: "詳述", href: reportHref }
+] as const;
+---
+
+<nav class="atlas-tabs" aria-label="北米農業の表示切替">
+  {items.map((item) => (
+    <a
+      class:list={["atlas-tab", { "atlas-tab--active": item.key === active }]}
+      href={withBase(item.href)}
+      aria-current={item.key === active ? "page" : undefined}
+    >
+      <span>{item.key === "map" ? "01" : "02"}</span>
+      <strong>{item.label}</strong>
+    </a>
+  ))}
+</nav>

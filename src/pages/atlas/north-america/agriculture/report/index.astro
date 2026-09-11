@@ -1,0 +1,84 @@
+---
+import AtlasNavigation from "../../../../../components/atlas/AtlasNavigation.astro";
+import { agricultureField, reportSections, sources, timelineEvents } from "../../../../../data/atlas/north-america-agriculture";
+import BaseLayout from "../../../../../layouts/BaseLayout.astro";
+import { withBase } from "../../../../../lib/urls";
+import "../../../../../styles/atlas.css";
+
+const mapHref = "/atlas/north-america/agriculture/";
+const reportHref = "/atlas/north-america/agriculture/report/";
+---
+
+<BaseLayout title={`${agricultureField.title}｜詳述`} description="北米農業の作物条件、地域形成、現在の変化を三つの章で読む。">
+  <article class="atlas-report" data-pagefind-body>
+    <div class="shell atlas-page-top">
+      <nav class="breadcrumb" aria-label="パンくずリスト" data-pagefind-ignore>
+        <a href={withBase("/")}>ホーム</a><span aria-hidden="true">/</span>
+        <a href={withBase("/atlas/")}>地図から読む</a><span aria-hidden="true">/</span>
+        <a href={withBase(mapHref)}>北米の農業</a><span aria-hidden="true">/</span>
+        <span aria-current="page">詳述</span>
+      </nav>
+      <AtlasNavigation active="report" {mapHref} {reportHref} />
+    </div>
+
+    <header class="atlas-report-head shell shell--article">
+      <p class="eyebrow">Field report · North America</p>
+      <h1>北米の農業を、<br /><em>条件と地域</em>から読む。</h1>
+      <p class="atlas-report-lede">作物の性質だけでは、農業地域の形は説明できない。気候、水、土地、労働、輸送、市場が重なる場所として地図を読み直す。</p>
+      <div class="atlas-report-meta"><span>{agricultureField.coverage}</span><span>最終更新 {agricultureField.updatedAt.replace(/-/g, ".")}</span></div>
+    </header>
+
+    <div class="atlas-report-layout shell shell--article">
+      <aside class="atlas-report-index" data-pagefind-ignore>
+        <p class="eyebrow">Contents</p>
+        <ol>
+          {reportSections.map((section) => <li><a href={`#${section.id}`}>{section.number} {section.title}</a></li>)}
+        </ol>
+        <a class="atlas-back-link" href={withBase(mapHref)}>← 地図へ戻る</a>
+      </aside>
+
+      <div class="atlas-report-body">
+        <div class="atlas-report-callout">
+          <p class="eyebrow">読む前に</p>
+          <p>{agricultureField.dataNote}</p>
+        </div>
+        {reportSections.map((section) => (
+          <section class="atlas-report-section" id={section.id} aria-labelledby={`${section.id}-title`}>
+            <p class="atlas-section-number">{section.number}</p>
+            <h2 id={`${section.id}-title`}>{section.title}</h2>
+            <p class="atlas-section-lead">{section.lead}</p>
+            {section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+            {section.bullets && (
+              <ul>
+                {section.bullets.map((bullet) => <li>{bullet}</li>)}
+              </ul>
+            )}
+          </section>
+        ))}
+
+        <section class="atlas-report-section atlas-news-section" aria-labelledby="atlas-timeline-title">
+          <p class="atlas-section-number">04</p>
+          <h2 id="atlas-timeline-title">ニュースと年表</h2>
+          <p class="atlas-section-lead">日々の出来事は、発生地・影響範囲・報道日を分けて地図へ追加する。</p>
+          {timelineEvents.length > 0 ? (
+            <ol class="atlas-timeline">
+              {timelineEvents.map((event) => <li><time>{event.dateLabel}</time><div><h3>{event.title}</h3><p>{event.description}</p></div></li>)}
+            </ol>
+          ) : (
+            <div class="atlas-empty-note"><strong>関連ニュースはまだありません。</strong><span>北米の記事が公開されたら、州・地域との関係を付けてここに表示します。</span></div>
+          )}
+        </section>
+
+        <section class="atlas-sources" aria-labelledby="atlas-sources-title">
+          <p class="eyebrow">Sources and method</p>
+          <h2 id="atlas-sources-title">出典と表示方法</h2>
+          <ol>
+            {sources.map((source) => (
+              <li id={source.id}><a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}</a><span>{source.publisher}。{source.note}</span></li>
+            ))}
+          </ol>
+        </section>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

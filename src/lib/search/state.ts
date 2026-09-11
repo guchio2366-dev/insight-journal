@@ -35,7 +35,7 @@ export interface SearchableEntry {
   countries: string[];
   regions: string[];
   themeIds: string[];
-  kind: "article" | "theme";
+  kind: "article" | "theme" | "atlas";
 }
 
 export const emptySearchState = (): SearchState => ({
