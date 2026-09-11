@@ -1,0 +1,153 @@
+---
+import type { AtlasInsight, AtlasPlace } from "../../data/atlas/north-america-agriculture";
+import { agricultureField, geometry } from "../../data/atlas/north-america-agriculture";
+import { withBase } from "../../lib/urls";
+
+interface Props {
+  places: AtlasPlace[];
+  insights: AtlasInsight[];
+  mapHref: string;
+  reportHref: string;
+}
+
+const { places, insights, mapHref, reportHref } = Astro.props;
+const placesById = new Map(places.map((place) => [place.id, place]));
+const mapStates = geometry.states
+  .map((state) => ({ state, place: placesById.get(state.id) }))
+  .filter((item): item is { state: (typeof geometry.states)[number]; place: AtlasPlace } => Boolean(item.place));
+const mapLabelInsights = insights.filter((insight) => insight.placement === "map-label" && insight.mapLabel);
+const payload = JSON.stringify({ field: agricultureField, places, insights }).replace(/</g, "\\u003c");
+---
+
+<section
+  class="atlas-workspace"
+  data-atlas-root
+  data-base={withBase("/").replace(/\/$/, "")}
+  data-report-base={withBase(reportHref)}
+  aria-labelledby="atlas-map-title"
+>
+  <div class="atlas-workspace-head">
+    <div>
+      <p class="eyebrow">Map view · North America</p>
+      <h1 id="atlas-map-title">北米の農業</h1>
+      <p class="atlas-lede">地図を眺め、州を選び、その場所で農業が成り立つ条件を読む。</p>
+    </div>
+    <div class="atlas-head-meta">
+      <span class="atlas-status-chip">{agricultureField.dataStatus}</span>
+      <span>更新 {agricultureField.updatedAt.replace(/-/g, ".")}</span>
+    </div>
+  </div>
+
+  <div class="atlas-map-layout">
+    <div class="atlas-map-column">
+      <div class="atlas-map-card">
+        <div class="atlas-map-card-head">
+          <div>
+            <p class="eyebrow">Representative crop</p>
+            <h2>州ごとの代表作物（概略）</h2>
+          </div>
+          <p class="atlas-coverage">収録範囲：{agricultureField.coverage}</p>
+        </div>
+        <div class="atlas-map-frame">
+          <svg
+            class="atlas-map-svg"
+            viewBox={geometry.viewBox}
+            role="img"
+            aria-labelledby="atlas-svg-title atlas-svg-desc"
+            data-atlas-svg
+          >
+            <title id="atlas-svg-title">米国本土の州別代表作物</title>
+            <desc id="atlas-svg-desc">州境を薄く示し、州ごとに概略の代表作物を色分けしている。州を選択すると説明が開く。</desc>
+            <rect class="atlas-map-ocean" x="0" y="0" width="1200" height="620" rx="12" />
+            <g class="atlas-state-layer">
+              {mapStates.map(({ state, place }) => (
+                <path
+                  class={`atlas-state atlas-state--${place.cropId}`}
+                  d={state.path}
+                  style={`--state-color: ${agricultureField.cropColors[place.cropId]}`}
+                  data-place-id={place.id}
+                  tabindex="0"
+                  role="button"
+                  aria-label={`${place.nameJa}。代表作物：${agricultureField.cropLabels[place.cropId]}`}
+                >
+                  <title>{place.nameJa}：{agricultureField.cropLabels[place.cropId]}</title>
+                </path>
+              ))}
+            </g>
+            <g class="atlas-label-layer" aria-hidden="true">
+              {mapStates.map(({ state, place }) => (
+                <text
+                  class="atlas-state-label"
+                  x={state.labelX}
+                  y={state.labelY}
+                  data-place-id={place.id}
+                >{state.postal}</text>
+              ))}
+            </g>
+          </svg>
+          <div class="atlas-map-key" aria-label="地図の操作案内">
+            <span><b class="atlas-key-swatch atlas-key-swatch--selected"></b>州をタップ・クリック</span>
+            <span>指を離しても解説を保持</span>
+          </div>
+        </div>
+
+        <div class="atlas-legend" aria-label="代表作物の凡例">
+          {Object.entries(agricultureField.cropLabels).map(([cropId, label]) => (
+            <span class="atlas-legend-item">
+              <b
+                class={`atlas-legend-swatch atlas-legend-swatch--${cropId}`}
+                style={`--legend-color: ${agricultureField.cropColors[cropId as keyof typeof agricultureField.cropColors]}`}
+                aria-hidden="true"
+              ></b>
+              {label}
+            </span>
+          ))}
+        </div>
+
+        <p class="atlas-map-note">{agricultureField.dataNote}</p>
+      </div>
+
+      {mapLabelInsights.length > 0 && (
+        <section class="atlas-reading-points" aria-labelledby="atlas-reading-points-title">
+          <div class="atlas-subheading">
+            <p class="eyebrow">Reading points</p>
+            <h2 id="atlas-reading-points-title">地図の読みどころ</h2>
+          </div>
+          <div class="atlas-reading-point-list">
+            {mapLabelInsights.map((insight) => (
+              <button type="button" class="atlas-reading-point" data-insight-id={insight.id}>
+                <span>{insight.title}</span><b aria-hidden="true">↗</b>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <details class="atlas-place-directory">
+        <summary>州名から選ぶ（49地域）</summary>
+        <div class="atlas-place-list">
+          {places.map((place) => (
+            <button type="button" data-place-id={place.id}>
+              <span>{place.nameJa}</span>
+              <small>{agricultureField.cropLabels[place.cropId]}</small>
+            </button>
+          ))}
+        </div>
+      </details>
+    </div>
+
+    <aside class="atlas-insight-panel" data-atlas-panel aria-live="polite">
+      <div class="atlas-panel-empty" data-atlas-empty>
+        <p class="eyebrow">Select a place</p>
+        <h2>州を選ぶと、<br />その場所の事情が開く。</h2>
+        <p>主要作物の分布を見たあと、気になった州を一つ選んでください。解説は選択後も画面に残ります。</p>
+      </div>
+      <div class="atlas-panel-content" data-atlas-content hidden></div>
+    </aside>
+  </div>
+
+  <p class="atlas-source-note">州境：Natural Earth 1:110m。作物分類：初期編集レイヤー。出典と更新方針は<a href={withBase(reportHref)}>詳述ページ</a>に記載。</p>
+  <script type="application/json" data-atlas-payload set:html={payload}></script>
+</section>
+
+<script is:inline src={withBase("/scripts/atlas.js")} defer></script>

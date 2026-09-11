@@ -249,7 +249,8 @@
     }
     copy.append(tags);
 
-    const readLink = element("a", "read-link", entry.kind === "theme" ? "テーマを読む →" : "記事を読む →");
+    const readLabel = entry.kind === "theme" ? "テーマを読む →" : entry.kind === "atlas" ? "地図を開く →" : "記事を読む →";
+    const readLink = element("a", "read-link", readLabel);
     readLink.href = entry.url;
     readLink.setAttribute("aria-label", `${entry.title}を読む`);
     copy.append(readLink);

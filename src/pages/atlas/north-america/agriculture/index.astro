@@ -1,0 +1,27 @@
+---
+import AtlasMap from "../../../../components/atlas/AtlasMap.astro";
+import AtlasNavigation from "../../../../components/atlas/AtlasNavigation.astro";
+import { agricultureField, insights, places } from "../../../../data/atlas/north-america-agriculture";
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import { withBase } from "../../../../lib/urls";
+import "../../../../styles/atlas.css";
+
+const mapHref = "/atlas/north-america/agriculture/";
+const reportHref = "/atlas/north-america/agriculture/report/";
+---
+
+<BaseLayout title={agricultureField.title} description={`${agricultureField.title}を地図から読む。${agricultureField.dataNote}`}>
+  <article class="atlas-page" data-pagefind-body>
+    <div class="shell atlas-page-top">
+      <nav class="breadcrumb" aria-label="パンくずリスト" data-pagefind-ignore>
+        <a href={withBase("/")}>ホーム</a><span aria-hidden="true">/</span>
+        <a href={withBase("/atlas/")}>地図から読む</a><span aria-hidden="true">/</span>
+        <span aria-current="page">北米の農業</span>
+      </nav>
+      <AtlasNavigation active="map" {mapHref} {reportHref} />
+    </div>
+    <div class="shell">
+      <AtlasMap {places} {insights} {mapHref} {reportHref} />
+    </div>
+  </article>
+</BaseLayout>
