@@ -4,20 +4,20 @@ import { withBase } from "../../lib/urls";
 import "../../styles/atlas.css";
 ---
 
-<BaseLayout title="地図から読む" description="地図の分布から地域の政治・経済・社会を読み解くAtlas。">
+<BaseLayout title="地図から見る" description="地図の分布から地域の政治・経済・社会を読み解くAtlas。">
   <section class="atlas-index shell">
     <div class="atlas-index-head">
       <p class="eyebrow">Atlas</p>
-      <h1>地図から読む</h1>
+      <h1>地図から見る</h1>
       <p>場所を起点に、自然条件、産業、政治、ニュースをつなげて読みます。</p>
     </div>
 
     <div class="atlas-index-grid">
-      <a class="atlas-index-card" href={withBase("/atlas/north-america/agriculture/")}>
-        <div class="atlas-index-card-top"><span>01</span><small>North America · Agriculture</small></div>
-        <h2>北米の農業</h2>
-        <p>米国本土の州ごとの代表作物を一枚の地図で見て、作物・気候・水・輸送の関係を読む。</p>
-        <span class="atlas-index-card-link">地図を開く <b aria-hidden="true">→</b></span>
+      <a class="atlas-index-card" href={withBase("/atlas/north-america/")}>
+        <div class="atlas-index-card-top"><span>01</span><small>North America · Geography</small></div>
+        <h2>北米地図</h2>
+        <p>地形・河川・州境を共通の土台に、農業、気候条件、土地、主要産業を重ねて読む。</p>
+        <span class="atlas-index-card-link">北米地図を開く <b aria-hidden="true">→</b></span>
       </a>
     </div>
 

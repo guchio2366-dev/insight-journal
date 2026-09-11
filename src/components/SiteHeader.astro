@@ -9,7 +9,7 @@ const currentPath = normalizeSitePath(Astro.props.currentPath);
 const navItems = [
   { href: "/", label: "ホーム", match: (path: string) => path === "/" },
   { href: "/search/", label: "記事を探す", match: (path: string) => path.startsWith("/search/") || path.startsWith("/articles/") },
-  { href: "/atlas/", label: "地図から読む", match: (path: string) => path.startsWith("/atlas/") },
+  { href: "/atlas/", label: "地図から見る", match: (path: string) => path.startsWith("/atlas/") },
   { href: "/themes/", label: "テーマ", match: (path: string) => path.startsWith("/themes/") },
   { href: "/about/", label: "このサイトについて", match: (path: string) => path.startsWith("/about/") }
 ];
