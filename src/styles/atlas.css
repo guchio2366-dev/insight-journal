@@ -1577,15 +1577,19 @@
 
 .atlas-reference-hotspot:hover,
 .atlas-reference-hotspot:focus-visible {
-  fill: rgb(255 255 255 / 12%);
-  stroke: rgb(16 41 70 / 58%);
+  fill: transparent;
+  stroke: transparent;
   outline: none;
 }
 
 .atlas-reference-hotspot.is-selected {
-  fill: rgb(255 255 255 / 16%);
-  stroke: #0f2948;
-  stroke-width: 6;
+  fill: transparent;
+  stroke: transparent;
+}
+
+.atlas-reference-scroll:has(.atlas-reference-hotspot:focus-visible) {
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
 }
 
 .atlas-reference-guide {
