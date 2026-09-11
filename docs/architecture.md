@@ -35,6 +35,10 @@ search bundle URL, and 404 link must use the shared base-path helper.
 | `/` | Site explanation, search entry, primary topics, newest articles |
 | `/search/` | Japanese full-text search and filters |
 | `/articles/{slug}/` | Article, map, timeline, sources, related articles |
+| `/atlas/` | World-region entry point for map-led reading |
+| `/atlas/north-america/` | North America field selector |
+| `/atlas/north-america/agriculture/` | Approved crop-region map with interactive insight targets |
+| `/atlas/north-america/agriculture/report/` | Agriculture background, method, limits, and sources |
 | `/themes/` | Public themes with public article counts |
 | `/themes/{slug}/` | Current public synthesis and related public articles |
 | `/about/` | Editorial, source, independence, and update policy |
@@ -46,4 +50,3 @@ The design needs no added recurring service: Notion Free is the private store,
 the public repository contains only publishable material, GitHub Actions builds
 the static files, and GitHub Pages is the intended host. A custom domain is
 optional and is the only planned external recurring cost.
-

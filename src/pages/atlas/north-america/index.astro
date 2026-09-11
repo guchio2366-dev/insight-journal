@@ -1,0 +1,34 @@
+---
+import AtlasFieldNavigation from "../../../components/atlas/AtlasFieldNavigation.astro";
+import { northAmericaRegion } from "../../../data/atlas/regions";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { withBase } from "../../../lib/urls";
+import "../../../styles/atlas.css";
+---
+
+<BaseLayout title={northAmericaRegion.label} description={northAmericaRegion.description}>
+  <article class="atlas-region-page" data-pagefind-body>
+    <div class="shell atlas-page-top">
+      <nav class="breadcrumb" aria-label="パンくずリスト" data-pagefind-ignore>
+        <a href={withBase("/")}>ホーム</a><span aria-hidden="true">/</span>
+        <a href={withBase("/atlas/")}>地図から見る</a><span aria-hidden="true">/</span>
+        <span aria-current="page">北米地図</span>
+      </nav>
+    </div>
+
+    <header class="atlas-region-head shell">
+      <p class="eyebrow">Atlas · North America</p>
+      <h1>北米地図</h1>
+      <p>{northAmericaRegion.description}</p>
+    </header>
+
+    <div class="shell">
+      <AtlasFieldNavigation />
+      <section class="atlas-region-intro" aria-labelledby="atlas-region-intro-title">
+        <p class="eyebrow">How to read</p>
+        <h2 id="atlas-region-intro-title">まず地形を置き、次に分野を重ねる。</h2>
+        <p>山地が雨を分け、河川と平野が人の移動や農業を集める。ここでは同じ地図の上に農業・気候条件・土地・主要産業を並べ、ニュースが追加されたときも「どこで起きたか」から読み直せるようにします。</p>
+      </section>
+    </div>
+  </article>
+</BaseLayout>

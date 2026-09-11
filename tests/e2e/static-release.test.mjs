@@ -23,6 +23,9 @@ test("主要ページと日本語検索索引を静的成果物に含む", async
     "themes/index.html",
     "themes/food-and-agriculture-display-sample/index.html",
     "articles/india-agriculture-display-sample/index.html",
+    "atlas/north-america/index.html",
+    "atlas/north-america/agriculture/index.html",
+    "assets/atlas/north-america-agriculture-reference-v1.webp",
     "pagefind/pagefind.js"
   ];
 
@@ -32,7 +35,7 @@ test("主要ページと日本語検索索引を静的成果物に含む", async
 });
 
 test("静的成果物に非公開情報を含めず、サブパス用URLを使う", async () => {
-  const files = (await filesBelow(distRoot)).filter((file) => !file.endsWith(".png"));
+  const files = (await filesBelow(distRoot)).filter((file) => !/\.(?:png|webp)$/i.test(file));
   const text = (await Promise.all(files.map((file) => readFile(file, "utf8")))).join("\n");
 
   assert.doesNotMatch(text, /PRIVATE_SENTINEL/i);
@@ -45,4 +48,3 @@ test("静的成果物に非公開情報を含めず、サブパス用URLを使�
   );
   assert.match(article, /\/insight-journal\/assets\/a-11111111-1111-4111-8111-111111111111\/13ffca4b641f\.png/);
 });
-
