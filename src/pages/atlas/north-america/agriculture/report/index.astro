@@ -1,6 +1,5 @@
 ---
 import AtlasNavigation from "../../../../../components/atlas/AtlasNavigation.astro";
-import AtlasFieldNavigation from "../../../../../components/atlas/AtlasFieldNavigation.astro";
 import { agricultureField, reportSections, sources, timelineEvents } from "../../../../../data/atlas/north-america-agriculture";
 import BaseLayout from "../../../../../layouts/BaseLayout.astro";
 import { withBase } from "../../../../../lib/urls";
@@ -15,13 +14,11 @@ const reportHref = "/atlas/north-america/agriculture/report/";
     <div class="shell atlas-page-top">
       <nav class="breadcrumb" aria-label="パンくずリスト" data-pagefind-ignore>
         <a href={withBase("/")}>ホーム</a><span aria-hidden="true">/</span>
-        <a href={withBase("/atlas/")}>地図から見る</a><span aria-hidden="true">/</span>
-        <a href={withBase("/atlas/north-america/")}>北米地図</a><span aria-hidden="true">/</span>
+        <a href={withBase("/atlas/")}>地図から読む</a><span aria-hidden="true">/</span>
         <a href={withBase(mapHref)}>北米の農業</a><span aria-hidden="true">/</span>
         <span aria-current="page">詳述</span>
       </nav>
-      <AtlasFieldNavigation active="agriculture" />
-      <AtlasNavigation active="report" {mapHref} {reportHref} label="北米農業" />
+      <AtlasNavigation active="report" {mapHref} {reportHref} />
     </div>
 
     <header class="atlas-report-head shell shell--article">
@@ -44,7 +41,6 @@ const reportHref = "/atlas/north-america/agriculture/report/";
         <div class="atlas-report-callout">
           <p class="eyebrow">読む前に</p>
           <p>{agricultureField.dataNote}</p>
-          <p>{agricultureField.methodNote}</p>
         </div>
         {reportSections.map((section) => (
           <section class="atlas-report-section" id={section.id} aria-labelledby={`${section.id}-title`}>

@@ -1,32 +1,22 @@
 ---
 import type { AtlasInsight, AtlasPlace } from "../../data/atlas/north-america-agriculture";
-import {
-  agricultureField,
-  contextLand,
-  cropOverlapPath,
-  geometry,
-  insights as defaultInsights,
-  mapLabels,
-  physicalFeatures,
-  places as defaultPlaces,
-  zones as defaultZones
-} from "../../data/atlas/north-america-agriculture";
+import { agricultureField, geometry } from "../../data/atlas/north-america-agriculture";
 import { withBase } from "../../lib/urls";
 
 interface Props {
-  places?: AtlasPlace[];
-  insights?: AtlasInsight[];
+  places: AtlasPlace[];
+  insights: AtlasInsight[];
   mapHref: string;
   reportHref: string;
 }
 
-const { places = defaultPlaces, insights = defaultInsights, mapHref: _mapHref, reportHref } = Astro.props;
-const zones = defaultZones;
+const { places, insights, mapHref, reportHref } = Astro.props;
+const placesById = new Map(places.map((place) => [place.id, place]));
+const mapStates = geometry.states
+  .map((state) => ({ state, place: placesById.get(state.id) }))
+  .filter((item): item is { state: (typeof geometry.states)[number]; place: AtlasPlace } => Boolean(item.place));
 const mapLabelInsights = insights.filter((insight) => insight.placement === "map-label" && insight.mapLabel);
-const states = geometry.states;
-const overlapPath = cropOverlapPath;
-const payload = JSON.stringify({ field: agricultureField, places, zones, insights }).replace(/</g, "\\u003c");
-const cropName = (cropId: keyof typeof agricultureField.cropLabels) => agricultureField.cropLabels[cropId];
+const payload = JSON.stringify({ field: agricultureField, places, insights }).replace(/</g, "\\u003c");
 ---
 
 <section
@@ -38,9 +28,9 @@ const cropName = (cropId: keyof typeof agricultureField.cropLabels) => agricultu
 >
   <div class="atlas-workspace-head">
     <div>
-      <p class="eyebrow">Map view · North America · Agriculture</p>
+      <p class="eyebrow">Map view · North America</p>
       <h1 id="atlas-map-title">北米の農業</h1>
-      <p class="atlas-lede">州を塗り分けるのではなく、地形・水・気候に沿った作物域として読む。</p>
+      <p class="atlas-lede">地図を眺め、州を選び、その場所で農業が成り立つ条件を読む。</p>
     </div>
     <div class="atlas-head-meta">
       <span class="atlas-status-chip">{agricultureField.dataStatus}</span>
@@ -53,8 +43,8 @@ const cropName = (cropId: keyof typeof agricultureField.cropLabels) => agricultu
       <div class="atlas-map-card">
         <div class="atlas-map-card-head">
           <div>
-            <p class="eyebrow">Regional crop zones</p>
-            <h2>主要栽培域（概略）</h2>
+            <p class="eyebrow">Representative crop</p>
+            <h2>州ごとの代表作物（概略）</h2>
           </div>
           <p class="atlas-coverage">収録範囲：{agricultureField.coverage}</p>
         </div>
@@ -66,71 +56,50 @@ const cropName = (cropId: keyof typeof agricultureField.cropLabels) => agricultu
             aria-labelledby="atlas-svg-title atlas-svg-desc"
             data-atlas-svg
           >
-            <title id="atlas-svg-title">北米の主要栽培域と物理地理</title>
-            <desc id="atlas-svg-desc">山地・河川・湖沼を薄く示した地図に、州境をまたぐ六種類の主要栽培域を重ねている。色の面を選ぶと、その地域のインサイトが開く。</desc>
-            <defs>
-              <pattern id="atlas-zone-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
-                <line x1="0" y1="0" x2="0" y2="8" stroke="#334455" stroke-width="1" opacity="0.22" />
-              </pattern>
-              <filter id="atlas-zone-shadow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-color="#243746" flood-opacity="0.16" />
-              </filter>
-            </defs>
+            <title id="atlas-svg-title">米国本土の州別代表作物</title>
+            <desc id="atlas-svg-desc">州境を薄く示し、州ごとに概略の代表作物を色分けしている。州を選択すると説明が開く。</desc>
             <rect class="atlas-map-ocean" x="0" y="0" width="1200" height="620" rx="12" />
-            <g class="atlas-context-layer" aria-hidden="true">
-              {contextLand.map((land) => <path class="atlas-context-land" d={land.path}><title>{land.label}</title></path>)}
-            </g>
-            <g class="atlas-terrain-layer" aria-hidden="true">
-              {physicalFeatures.filter((feature) => feature.kind === "terrain").map((feature) => <path class="atlas-terrain-band" d={feature.path}><title>{feature.label}</title></path>)}
-            </g>
-            <g class="atlas-state-reference" aria-hidden="true">
-              {states.map((state) => <path class="atlas-state-reference-path" d={state.path} />)}
-              {states.map((state) => <text class="atlas-state-reference-label" x={state.labelX} y={state.labelY}>{state.nameJa}</text>)}
-            </g>
-            <g class="atlas-zone-layer">
-              {zones.map((zone) => (
+            <g class="atlas-state-layer">
+              {mapStates.map(({ state, place }) => (
                 <path
-                  class={`atlas-zone atlas-zone--${zone.cropIds[0]}`}
-                  d={zone.path}
-                  style={`--zone-color: ${agricultureField.cropColors[zone.cropIds[0]]}`}
-                  data-zone-id={zone.id}
+                  class={`atlas-state atlas-state--${place.cropId}`}
+                  d={state.path}
+                  style={`--state-color: ${agricultureField.cropColors[place.cropId]}`}
+                  data-place-id={place.id}
                   tabindex="0"
                   role="button"
-                  aria-pressed="false"
-                  aria-label={`${zone.nameJa}。${zone.cropIds.map(cropName).join("・")}`}
+                  aria-label={`${place.nameJa}。代表作物：${agricultureField.cropLabels[place.cropId]}`}
                 >
-                  <title>{zone.nameJa}：{zone.cropIds.map(cropName).join("・")}</title>
+                  <title>{place.nameJa}：{agricultureField.cropLabels[place.cropId]}</title>
                 </path>
               ))}
-              <path class="atlas-zone-overlap" d={overlapPath} aria-hidden="true" />
             </g>
-            <g class="atlas-hydro-layer" aria-hidden="true">
-              {physicalFeatures.filter((feature) => feature.kind === "lake").map((feature) => <path class="atlas-lake" d={feature.path}><title>{feature.label}</title></path>)}
-              {physicalFeatures.filter((feature) => feature.kind === "river").map((feature) => <path class="atlas-river" d={feature.path}><title>{feature.label}</title></path>)}
-            </g>
-            <g class="atlas-zone-label-layer" aria-hidden="true">
-              {zones.map((zone) => <text class={`atlas-zone-label atlas-zone-label--${zone.cropIds[0]}`} x={zone.labelX} y={zone.labelY}>{zone.label}</text>)}
-            </g>
-            <g class="atlas-map-label-layer" aria-hidden="true">
-              {mapLabels.map((label) => <text class={`atlas-map-label atlas-map-label--${label.kind}`} x={label.x} y={label.y}>{label.text}</text>)}
+            <g class="atlas-label-layer" aria-hidden="true">
+              {mapStates.map(({ state, place }) => (
+                <text
+                  class="atlas-state-label"
+                  x={state.labelX}
+                  y={state.labelY}
+                  data-place-id={place.id}
+                >{state.postal}</text>
+              ))}
             </g>
           </svg>
           <div class="atlas-map-key" aria-label="地図の操作案内">
-            <span><b class="atlas-key-swatch atlas-key-swatch--zone"></b>色の面をタップ・クリック</span>
-            <span><b class="atlas-key-swatch atlas-key-swatch--border"></b>州境・州名は位置確認用</span>
-            <span><b class="atlas-key-swatch atlas-key-swatch--overlap"></b>重なりは輪作・複合域の入口</span>
+            <span><b class="atlas-key-swatch atlas-key-swatch--selected"></b>州をタップ・クリック</span>
+            <span>指を離しても解説を保持</span>
           </div>
         </div>
 
-        <div class="atlas-legend" aria-label="作物域の凡例">
-          {agricultureField.cropOrder.map((cropId) => (
+        <div class="atlas-legend" aria-label="代表作物の凡例">
+          {Object.entries(agricultureField.cropLabels).map(([cropId, label]) => (
             <span class="atlas-legend-item">
               <b
                 class={`atlas-legend-swatch atlas-legend-swatch--${cropId}`}
-                style={`--legend-color: ${agricultureField.cropColors[cropId]}`}
+                style={`--legend-color: ${agricultureField.cropColors[cropId as keyof typeof agricultureField.cropColors]}`}
                 aria-hidden="true"
               ></b>
-              {agricultureField.cropLabels[cropId]}
+              {label}
             </span>
           ))}
         </div>
@@ -154,39 +123,30 @@ const cropName = (cropId: keyof typeof agricultureField.cropLabels) => agricultu
         </section>
       )}
 
-      <section class="atlas-zone-directory" aria-labelledby="atlas-zone-directory-title">
-        <div class="atlas-subheading">
-          <p class="eyebrow">Regional index</p>
-          <h2 id="atlas-zone-directory-title">地域から選ぶ</h2>
-        </div>
-        <div class="atlas-zone-list">
-          {zones.map((zone) => (
-            <button type="button" data-zone-id={zone.id}>
-              <span>{zone.nameJa}</span>
-              <small>{zone.cropIds.map(cropName).join("・")}</small>
+      <details class="atlas-place-directory">
+        <summary>州名から選ぶ（49地域）</summary>
+        <div class="atlas-place-list">
+          {places.map((place) => (
+            <button type="button" data-place-id={place.id}>
+              <span>{place.nameJa}</span>
+              <small>{agricultureField.cropLabels[place.cropId]}</small>
             </button>
           ))}
         </div>
-        <details class="atlas-state-reference-list">
-          <summary>州名は位置確認用に見る</summary>
-          <p>州境は作物域の境界ではありません。地図上の位置を逆算するための補助情報です。</p>
-          <div>{states.map((state) => <span>{state.nameJa}</span>)}</div>
-        </details>
-      </section>
+      </details>
     </div>
 
     <aside class="atlas-insight-panel" data-atlas-panel aria-live="polite">
       <div class="atlas-panel-empty" data-atlas-empty>
-        <p class="eyebrow">Select a regional zone</p>
-        <h2>色の面を選ぶと、<br />その土地の事情が開く。</h2>
-        <p>地形・河川・州境を手がかりに、作物域を一つ選んでください。解説は選択後も画面に残ります。</p>
+        <p class="eyebrow">Select a place</p>
+        <h2>州を選ぶと、<br />その場所の事情が開く。</h2>
+        <p>主要作物の分布を見たあと、気になった州を一つ選んでください。解説は選択後も画面に残ります。</p>
       </div>
       <div class="atlas-panel-content" data-atlas-content hidden></div>
-      <p class="atlas-selection-status" data-atlas-status role="status">地域を選択していません</p>
     </aside>
   </div>
 
-  <p class="atlas-source-note">州境：Natural Earth 1:110m。山地・河川・湖沼：Natural Earthの物理地理資料を参照。作物域：USDA資料を読み合わせた編集概略。出典と更新方針は<a href={withBase(reportHref)}>詳述ページ</a>に記載。</p>
+  <p class="atlas-source-note">州境：Natural Earth 1:110m。作物分類：初期編集レイヤー。出典と更新方針は<a href={withBase(reportHref)}>詳述ページ</a>に記載。</p>
   <script type="application/json" data-atlas-payload set:html={payload}></script>
 </section>
 

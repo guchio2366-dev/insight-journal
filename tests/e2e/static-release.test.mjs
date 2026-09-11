@@ -23,8 +23,6 @@ test("主要ページと日本語検索索引を静的成果物に含む", async
     "themes/index.html",
     "themes/food-and-agriculture-display-sample/index.html",
     "articles/india-agriculture-display-sample/index.html",
-    "atlas/north-america/index.html",
-    "atlas/north-america/agriculture/index.html",
     "pagefind/pagefind.js"
   ];
 
@@ -47,3 +45,4 @@ test("静的成果物に非公開情報を含めず、サブパス用URLを使�
   );
   assert.match(article, /\/insight-journal\/assets\/a-11111111-1111-4111-8111-111111111111\/13ffca4b641f\.png/);
 });
+

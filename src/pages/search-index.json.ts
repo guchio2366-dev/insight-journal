@@ -46,24 +46,6 @@ export const GET: APIRoute = async () => {
       themeLabels: [theme.data.title]
     })),
     {
-      publicId: "atlas-north-america-v2",
-      title: "北米地図",
-      summary: "地形・河川・州境を共通の土台に、農業、気候条件、土地、主要産業を重ねて読む。",
-      publishedAt: agricultureField.updatedAt,
-      updatedAt: agricultureField.updatedAt,
-      topics: [],
-      topicLabels: [],
-      countries: ["US"],
-      countryLabels: [countryLabels.US],
-      regions: ["north_america"],
-      regionLabels: [regions.north_america],
-      kind: "atlas" as const,
-      kindLabel: "地図",
-      url: withBase("/atlas/north-america/"),
-      themeIds: [],
-      themeLabels: []
-    },
-    {
       publicId: "atlas-north-america-agriculture-v1",
       title: agricultureField.title,
       summary: agricultureField.dataNote,
