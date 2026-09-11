@@ -1,152 +1,178 @@
 ---
 import type { AtlasInsight, AtlasPlace } from "../../data/atlas/north-america-agriculture";
-import { agricultureField, geometry } from "../../data/atlas/north-america-agriculture";
+import {
+  agricultureField,
+  insights as defaultInsights,
+  places as defaultPlaces,
+  zones as defaultZones
+} from "../../data/atlas/north-america-agriculture";
 import { withBase } from "../../lib/urls";
 
 interface Props {
-  places: AtlasPlace[];
-  insights: AtlasInsight[];
+  places?: AtlasPlace[];
+  insights?: AtlasInsight[];
   mapHref: string;
   reportHref: string;
 }
 
-const { places, insights, mapHref, reportHref } = Astro.props;
-const placesById = new Map(places.map((place) => [place.id, place]));
-const mapStates = geometry.states
-  .map((state) => ({ state, place: placesById.get(state.id) }))
-  .filter((item): item is { state: (typeof geometry.states)[number]; place: AtlasPlace } => Boolean(item.place));
+const { places = defaultPlaces, insights = defaultInsights, mapHref: _mapHref, reportHref } = Astro.props;
+const zones = defaultZones;
 const mapLabelInsights = insights.filter((insight) => insight.placement === "map-label" && insight.mapLabel);
-const payload = JSON.stringify({ field: agricultureField, places, insights }).replace(/</g, "\\u003c");
+const payload = JSON.stringify({ field: agricultureField, places, zones, insights }).replace(/</g, "\\u003c");
+const cropName = (cropId: keyof typeof agricultureField.cropLabels) => agricultureField.cropLabels[cropId];
+
+// Transparent interaction targets over the approved reference image. Keeping
+// these separate lets the visible map stay faithful while the hit areas can be
+// replaced later by data-derived geometry.
+const hotspotPaths: Record<string, string[]> = {
+  "zone-wheat-pacific-northwest": [
+    "M104 137 C124 143 150 151 187 155 C199 168 210 186 217 213 C196 226 158 224 126 216 C112 197 101 168 104 137 Z"
+  ],
+  "zone-wheat-plains": [
+    "M438 108 C493 106 559 123 616 113 C650 127 697 151 724 169 C731 213 721 264 696 306 C652 332 593 341 556 316 C532 277 508 226 465 199 C447 171 434 137 438 108 Z",
+    "M565 438 C621 421 685 425 735 457 C753 510 774 585 781 653 C752 690 711 716 656 720 C613 699 582 664 568 616 C553 562 550 492 565 438 Z"
+  ],
+  "zone-corn-belt": [
+    "M694 221 C744 199 810 204 863 228 C921 235 985 267 1031 310 C1085 337 1110 384 1080 424 C1035 459 977 477 917 475 C864 470 811 448 772 423 C739 398 716 359 705 319 C693 280 688 248 694 221 Z"
+  ],
+  "zone-soybean-belt": [
+    "M724 213 C770 202 826 211 871 241 C930 249 1000 277 1057 315 C1117 351 1158 391 1145 441 C1124 499 1077 544 1015 571 C963 590 909 573 871 544 C834 514 806 474 775 440 C744 403 720 359 711 310 C707 272 710 238 724 213 Z"
+  ],
+  "zone-cotton-plains": [
+    "M519 591 C551 573 600 575 632 598 C655 624 656 675 632 714 C603 744 554 746 525 719 C503 685 494 626 519 591 Z"
+  ],
+  "zone-cotton-southeast": [
+    "M851 577 C898 560 938 568 970 598 C1017 591 1056 601 1089 625 C1137 609 1180 615 1210 646 C1250 631 1292 639 1316 672 C1328 716 1307 763 1272 790 C1222 811 1164 805 1123 780 C1085 808 1038 817 998 794 C960 812 915 806 883 781 C862 742 850 693 839 649 C836 619 839 593 851 577 Z"
+  ],
+  "zone-rice-delta": [
+    "M834 578 C854 568 879 577 889 603 C897 647 890 696 875 739 C865 777 849 804 831 798 C817 773 819 733 824 694 C829 652 823 609 834 578 Z"
+  ],
+  "zone-rice-gulf": [
+    "M827 764 C862 746 907 754 937 776 C972 769 1011 780 1034 805 C1002 829 960 838 918 830 C882 833 842 821 817 801 C812 784 816 773 827 764 Z"
+  ],
+  "zone-rice-sacramento": [
+    "M64 354 C79 342 96 349 103 369 C110 402 108 438 98 471 C87 488 71 478 66 456 C59 421 57 382 64 354 Z"
+  ],
+  "zone-specialty-central-valley": [
+    "M73 424 C88 414 105 425 110 447 C117 481 114 522 102 552 C88 565 73 548 69 521 C64 486 64 448 73 424 Z"
+  ]
+};
 ---
 
 <section
-  class="atlas-workspace"
+  class="atlas-workspace atlas-workspace--reference"
   data-atlas-root
   data-base={withBase("/").replace(/\/$/, "")}
   data-report-base={withBase(reportHref)}
   aria-labelledby="atlas-map-title"
 >
-  <div class="atlas-workspace-head">
+  <h1 id="atlas-map-title" class="visually-hidden">北米の農業</h1>
+
+  <div class="atlas-reference-toolbar">
     <div>
-      <p class="eyebrow">Map view · North America</p>
-      <h1 id="atlas-map-title">北米の農業</h1>
-      <p class="atlas-lede">地図を眺め、州を選び、その場所で農業が成り立つ条件を読む。</p>
+      <p class="eyebrow">Map view · North America · Agriculture</p>
+      <p>地形と栽培域を一枚で読む</p>
     </div>
     <div class="atlas-head-meta">
-      <span class="atlas-status-chip">{agricultureField.dataStatus}</span>
+      <span class="atlas-status-chip">表示基準：承認済み概念図</span>
       <span>更新 {agricultureField.updatedAt.replace(/-/g, ".")}</span>
     </div>
   </div>
 
-  <div class="atlas-map-layout">
-    <div class="atlas-map-column">
-      <div class="atlas-map-card">
-        <div class="atlas-map-card-head">
-          <div>
-            <p class="eyebrow">Representative crop</p>
-            <h2>州ごとの代表作物（概略）</h2>
-          </div>
-          <p class="atlas-coverage">収録範囲：{agricultureField.coverage}</p>
-        </div>
-        <div class="atlas-map-frame">
-          <svg
-            class="atlas-map-svg"
-            viewBox={geometry.viewBox}
-            role="img"
-            aria-labelledby="atlas-svg-title atlas-svg-desc"
-            data-atlas-svg
+  <div class="atlas-reference-stage">
+    <div class="atlas-reference-scroll" tabindex="0" aria-label="北米農業地図。小さい画面では横方向に移動できます。">
+      <div class="atlas-reference-canvas">
+        <img
+          class="atlas-reference-image"
+          src={withBase("/assets/atlas/north-america-agriculture-reference-v1.webp")}
+          width="1536"
+          height="1024"
+          alt="地形から読むアメリカの農業。陰影付き地形、州境、州名、河川、主要作物のおおまかな栽培域を一枚に重ねた概念図。"
+          decoding="async"
+          fetchpriority="high"
+        />
+        <svg
+          class="atlas-reference-hotspots"
+          viewBox="0 0 1536 1024"
+          role="group"
+          aria-label="作物域を選ぶ"
+          data-atlas-svg
+        >
+          {zones.flatMap((zone) => (hotspotPaths[zone.id] ?? []).map((path, index) => (
+            <path
+              class="atlas-reference-hotspot"
+              d={path}
+              data-zone-id={zone.id}
+              tabindex="0"
+              role="button"
+              aria-pressed="false"
+              aria-label={`${zone.nameJa}。${zone.cropIds.map(cropName).join("・")}`}
+            >
+              <title>{zone.nameJa}：{zone.cropIds.map(cropName).join("・")}{index > 0 ? `（${index + 1}）` : ""}</title>
+            </path>
+          )))}
+          <path
+            class="atlas-reference-hotspot atlas-reference-hotspot--overlap"
+            d="M735 276 C794 260 871 270 930 299 C986 321 1028 352 1035 390 C1014 421 971 438 921 438 C860 436 806 418 768 392 C743 360 730 316 735 276 Z"
+            data-insight-id="insight-corn-soy-belt"
+            tabindex="0"
+            role="button"
+            aria-label="トウモロコシと大豆の分布の重なり"
           >
-            <title id="atlas-svg-title">米国本土の州別代表作物</title>
-            <desc id="atlas-svg-desc">州境を薄く示し、州ごとに概略の代表作物を色分けしている。州を選択すると説明が開く。</desc>
-            <rect class="atlas-map-ocean" x="0" y="0" width="1200" height="620" rx="12" />
-            <g class="atlas-state-layer">
-              {mapStates.map(({ state, place }) => (
-                <path
-                  class={`atlas-state atlas-state--${place.cropId}`}
-                  d={state.path}
-                  style={`--state-color: ${agricultureField.cropColors[place.cropId]}`}
-                  data-place-id={place.id}
-                  tabindex="0"
-                  role="button"
-                  aria-label={`${place.nameJa}。代表作物：${agricultureField.cropLabels[place.cropId]}`}
-                >
-                  <title>{place.nameJa}：{agricultureField.cropLabels[place.cropId]}</title>
-                </path>
-              ))}
-            </g>
-            <g class="atlas-label-layer" aria-hidden="true">
-              {mapStates.map(({ state, place }) => (
-                <text
-                  class="atlas-state-label"
-                  x={state.labelX}
-                  y={state.labelY}
-                  data-place-id={place.id}
-                >{state.postal}</text>
-              ))}
-            </g>
-          </svg>
-          <div class="atlas-map-key" aria-label="地図の操作案内">
-            <span><b class="atlas-key-swatch atlas-key-swatch--selected"></b>州をタップ・クリック</span>
-            <span>指を離しても解説を保持</span>
-          </div>
-        </div>
-
-        <div class="atlas-legend" aria-label="代表作物の凡例">
-          {Object.entries(agricultureField.cropLabels).map(([cropId, label]) => (
-            <span class="atlas-legend-item">
-              <b
-                class={`atlas-legend-swatch atlas-legend-swatch--${cropId}`}
-                style={`--legend-color: ${agricultureField.cropColors[cropId as keyof typeof agricultureField.cropColors]}`}
-                aria-hidden="true"
-              ></b>
-              {label}
-            </span>
-          ))}
-        </div>
-
-        <p class="atlas-map-note">{agricultureField.dataNote}</p>
+            <title>トウモロコシと大豆の分布の重なり</title>
+          </path>
+        </svg>
       </div>
-
-      {mapLabelInsights.length > 0 && (
-        <section class="atlas-reading-points" aria-labelledby="atlas-reading-points-title">
-          <div class="atlas-subheading">
-            <p class="eyebrow">Reading points</p>
-            <h2 id="atlas-reading-points-title">地図の読みどころ</h2>
-          </div>
-          <div class="atlas-reading-point-list">
-            {mapLabelInsights.map((insight) => (
-              <button type="button" class="atlas-reading-point" data-insight-id={insight.id}>
-                <span>{insight.title}</span><b aria-hidden="true">↗</b>
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
-
-      <details class="atlas-place-directory">
-        <summary>州名から選ぶ（49地域）</summary>
-        <div class="atlas-place-list">
-          {places.map((place) => (
-            <button type="button" data-place-id={place.id}>
-              <span>{place.nameJa}</span>
-              <small>{agricultureField.cropLabels[place.cropId]}</small>
-            </button>
-          ))}
-        </div>
-      </details>
     </div>
 
-    <aside class="atlas-insight-panel" data-atlas-panel aria-live="polite">
+    <div class="atlas-reference-guide" aria-label="地図の操作案内">
+      <span>色の面を選ぶと解説が開きます</span>
+      <span>州境・州名は位置確認用</span>
+      <span class="atlas-reference-pan-hint">小さい画面では地図を横に動かせます</span>
+    </div>
+
+    <aside class="atlas-insight-panel atlas-insight-panel--overlay" data-atlas-panel aria-live="polite">
       <div class="atlas-panel-empty" data-atlas-empty>
-        <p class="eyebrow">Select a place</p>
-        <h2>州を選ぶと、<br />その場所の事情が開く。</h2>
-        <p>主要作物の分布を見たあと、気になった州を一つ選んでください。解説は選択後も画面に残ります。</p>
+        <p class="eyebrow">Select a regional zone</p>
+        <p>色の面を選ぶと、その土地の事情が開きます。</p>
       </div>
       <div class="atlas-panel-content" data-atlas-content hidden></div>
+      <p class="atlas-selection-status" data-atlas-status role="status">地域を選択していません</p>
     </aside>
   </div>
 
-  <p class="atlas-source-note">州境：Natural Earth 1:110m。作物分類：初期編集レイヤー。出典と更新方針は<a href={withBase(reportHref)}>詳述ページ</a>に記載。</p>
+  {mapLabelInsights.length > 0 && (
+    <section class="atlas-reading-points" aria-labelledby="atlas-reading-points-title">
+      <div class="atlas-subheading">
+        <p class="eyebrow">Reading points</p>
+        <h2 id="atlas-reading-points-title">地図の読みどころ</h2>
+      </div>
+      <div class="atlas-reading-point-list">
+        {mapLabelInsights.map((insight) => (
+          <button type="button" class="atlas-reading-point" data-insight-id={insight.id}>
+            <span>{insight.title}</span><b aria-hidden="true">↗</b>
+          </button>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section class="atlas-zone-directory" aria-labelledby="atlas-zone-directory-title">
+    <div class="atlas-subheading">
+      <p class="eyebrow">Regional index</p>
+      <h2 id="atlas-zone-directory-title">地域から選ぶ</h2>
+    </div>
+    <div class="atlas-zone-list">
+      {zones.map((zone) => (
+        <button type="button" data-zone-id={zone.id}>
+          <span>{zone.nameJa}</span>
+          <small>{zone.cropIds.map(cropName).join("・")}</small>
+        </button>
+      ))}
+    </div>
+  </section>
+
+  <p class="atlas-map-note">この版は、承認済みの表示概念図をそのまま地図面に使い、操作領域だけを別レイヤーで重ねています。分布範囲は概略です。根拠、表現上の限界、更新方針は<a href={withBase(reportHref)}>詳述ページ</a>で確認できます。</p>
   <script type="application/json" data-atlas-payload set:html={payload}></script>
 </section>
 
