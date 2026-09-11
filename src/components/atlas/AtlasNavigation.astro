@@ -5,17 +5,16 @@ interface Props {
   active: "map" | "report";
   mapHref: string;
   reportHref: string;
-  label?: string;
 }
 
-const { active, mapHref, reportHref, label = "北米農業" } = Astro.props;
+const { active, mapHref, reportHref } = Astro.props;
 const items = [
   { key: "map", label: "地図", href: mapHref },
   { key: "report", label: "詳述", href: reportHref }
 ] as const;
 ---
 
-<nav class="atlas-tabs" aria-label={`${label}の表示切替`}>
+<nav class="atlas-tabs" aria-label="北米農業の表示切替">
   {items.map((item) => (
     <a
       class:list={["atlas-tab", { "atlas-tab--active": item.key === active }]}

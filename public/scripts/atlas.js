@@ -5,10 +5,11 @@
   if (!root) return;
 
   const payloadElement = root.querySelector("[data-atlas-payload]");
+  const panel = root.querySelector("[data-atlas-panel]");
   const emptyPanel = root.querySelector("[data-atlas-empty]");
   const contentPanel = root.querySelector("[data-atlas-content]");
   const svg = root.querySelector("[data-atlas-svg]");
-  if (!payloadElement || !emptyPanel || !contentPanel || !svg) return;
+  if (!payloadElement || !panel || !emptyPanel || !contentPanel || !svg) return;
 
   let payload;
   try {
@@ -18,12 +19,11 @@
     return;
   }
 
-  const zones = new Map((Array.isArray(payload.zones) ? payload.zones : []).map((zone) => [zone.id, zone]));
-  const insights = new Map((Array.isArray(payload.insights) ? payload.insights : []).map((insight) => [insight.id, insight]));
   const places = new Map((Array.isArray(payload.places) ? payload.places : []).map((place) => [place.id, place]));
-  const field = payload.field || { cropLabels: {}, cropOrder: [] };
+  const insights = new Map((Array.isArray(payload.insights) ? payload.insights : []).map((insight) => [insight.id, insight]));
+  const field = payload.field || { cropLabels: {} };
   const reportBase = root.dataset.reportBase || "";
-  let selectedZoneId = null;
+  let selectedPlaceId = null;
   let selectedInsightId = null;
 
   function escapeText(value) {
@@ -37,25 +37,20 @@
     return node;
   }
 
-  function cropLabel(cropId) {
-    return field.cropLabels && field.cropLabels[cropId] ? field.cropLabels[cropId] : cropId;
-  }
-
-  function insightForZone(zone, requestedId) {
-    const ids = Array.isArray(zone.insightIds) ? zone.insightIds : [];
+  function insightForPlace(place, requestedId) {
+    const ids = Array.isArray(place.insightIds) ? place.insightIds : [];
     const requested = requestedId && insights.get(requestedId);
-    if (requested && requested.zoneIds && requested.zoneIds.includes(zone.id)) return requested;
+    if (requested && requested.placeIds.includes(place.id)) return requested;
     const candidates = ids.map((id) => insights.get(id)).filter(Boolean);
     return candidates.find((insight) => insight.priority === "primary") || candidates[0] || null;
   }
 
-  function updateUrl(zoneId, insightId, mode) {
+  function updateUrl(placeId, insightId, mode) {
     const url = new URL(window.location.href);
-    if (zoneId) url.searchParams.set("zone", zoneId);
-    else url.searchParams.delete("zone");
+    if (placeId) url.searchParams.set("place", placeId);
+    else url.searchParams.delete("place");
     if (insightId) url.searchParams.set("insight", insightId);
     else url.searchParams.delete("insight");
-    url.searchParams.delete("place");
     const target = `${url.pathname}${url.search}${url.hash}`;
     window.history[mode === "push" ? "pushState" : "replaceState"]({}, "", target);
   }
@@ -65,7 +60,7 @@
     list.setAttribute("aria-label", "この説明の出典");
     for (const sourceId of insight.sourceIds || []) {
       const item = makeElement("li");
-      const link = makeElement("a", "", "出典を確認");
+      const link = makeElement("a", "", sourceId);
       link.href = `${reportBase}#${sourceId}`;
       item.append(link);
       list.append(item);
@@ -89,7 +84,7 @@
       article.append(details);
       return article;
     }
-    article.append(makeElement("p", "atlas-insight-kicker", "選択地域のインサイト"));
+    article.append(makeElement("p", "atlas-insight-kicker", "選択地点のインサイト"));
     article.append(makeElement("h3", "", insight.title));
     article.append(makeElement("p", "atlas-insight-text", insight.shortText));
     const link = makeElement("a", "atlas-panel-report-link", "詳述の該当節を読む →");
@@ -98,34 +93,21 @@
     return article;
   }
 
-  function relatedStateNames(zone) {
-    return (zone.relatedStateIds || [])
-      .map((id) => places.get(id))
-      .filter(Boolean)
-      .map((place) => place.nameJa)
-      .join("・");
-  }
-
-  function render(zoneId, requestedInsightId, historyMode) {
-    const zone = zones.get(zoneId);
-    if (!zone) {
-      selectedZoneId = null;
+  function render(placeId, requestedInsightId, historyMode) {
+    const place = places.get(placeId);
+    if (!place) {
+      selectedPlaceId = null;
       selectedInsightId = null;
       emptyPanel.hidden = false;
       contentPanel.hidden = true;
       contentPanel.replaceChildren();
-      root.querySelectorAll("[data-zone-id].is-selected").forEach((node) => node.classList.remove("is-selected"));
-      root.querySelectorAll("[data-zone-id]").forEach((node) => {
-        if (node.tagName.toLowerCase() === "path" || node.tagName.toLowerCase() === "button") node.setAttribute("aria-pressed", "false");
-      });
-      const stateLabel = root.querySelector("[data-atlas-status]");
-      if (stateLabel) stateLabel.textContent = "地域を選択していません";
+      root.querySelectorAll("[data-place-id].is-selected").forEach((node) => node.classList.remove("is-selected"));
       updateUrl(null, null, historyMode || "replace");
       return;
     }
 
-    const selectedInsight = insightForZone(zone, requestedInsightId);
-    selectedZoneId = zone.id;
+    const selectedInsight = insightForPlace(place, requestedInsightId);
+    selectedPlaceId = place.id;
     selectedInsightId = selectedInsight ? selectedInsight.id : null;
     emptyPanel.hidden = true;
     contentPanel.hidden = false;
@@ -139,83 +121,72 @@
     contentPanel.append(close);
 
     const head = makeElement("div", "atlas-panel-head");
-    head.append(makeElement("p", "eyebrow", "Selected regional zone"));
-    head.append(makeElement("h2", "", zone.nameJa));
-    head.append(makeElement("p", "atlas-panel-region", (zone.cropIds || []).map(cropLabel).join("・")));
+    head.append(makeElement("p", "eyebrow", "Selected place"));
+    head.append(makeElement("h2", "", place.nameJa));
+    head.append(makeElement("p", "atlas-panel-region", `${place.region} · ${field.cropLabels[place.cropId] || place.cropId}`));
     contentPanel.append(head);
 
-    contentPanel.append(makeElement("p", "atlas-panel-summary", zone.summary));
+    const summary = makeElement("p", "atlas-panel-summary", place.summary);
+    contentPanel.append(summary);
 
-    const relatedStates = relatedStateNames(zone);
-    if (relatedStates) {
-      const reference = makeElement("p", "atlas-panel-reference", `重なる州（位置確認用）：${relatedStates}`);
-      contentPanel.append(reference);
-    }
-
-    const zoneInsights = (zone.insightIds || []).map((id) => insights.get(id)).filter(Boolean);
+    const placeInsights = (place.insightIds || []).map((id) => insights.get(id)).filter(Boolean);
     if (selectedInsight) contentPanel.append(insightCard(selectedInsight, true));
-    for (const insight of zoneInsights) {
+    for (const insight of placeInsights) {
       if (selectedInsight && insight.id === selectedInsight.id) continue;
       contentPanel.append(insightCard(insight, false));
     }
     if (!selectedInsight) {
-      contentPanel.append(makeElement("p", "atlas-panel-unavailable", "この地域の個別インサイトは準備中です。詳述ページで地域全体の条件を確認できます。"));
+      const note = makeElement("p", "atlas-panel-unavailable", "この場所の個別インサイトは準備中です。詳述ページで地域全体の条件を確認できます。");
+      contentPanel.append(note);
     }
     const reportLink = makeElement("a", "button button--quiet atlas-panel-all-link", "北米農業の詳述を読む");
     reportLink.href = reportBase;
     contentPanel.append(reportLink);
 
-    root.querySelectorAll("[data-zone-id]").forEach((node) => {
-      const selected = node.dataset.zoneId === zone.id;
-      node.classList.toggle("is-selected", selected);
-      if (node.tagName.toLowerCase() === "path" || node.tagName.toLowerCase() === "button") node.setAttribute("aria-pressed", selected ? "true" : "false");
+    root.querySelectorAll("[data-place-id]").forEach((node) => {
+      node.classList.toggle("is-selected", node.dataset.placeId === place.id);
+      if (node.tagName.toLowerCase() === "path") node.setAttribute("aria-pressed", node.dataset.placeId === place.id ? "true" : "false");
     });
     const stateLabel = root.querySelector("[data-atlas-status]");
-    if (stateLabel) stateLabel.textContent = `${zone.nameJa}を選択中`;
-    updateUrl(zone.id, selectedInsightId, historyMode || "replace");
+    if (stateLabel) stateLabel.textContent = `${place.nameJa}を選択中`;
+    updateUrl(place.id, selectedInsightId, historyMode || "replace");
   }
 
-  function clickZone(zoneId) {
-    if (zones.has(zoneId)) render(zoneId, null, "push");
+  function clickPlace(placeId) {
+    if (places.has(placeId)) render(placeId, null, "push");
   }
 
   root.addEventListener("click", (event) => {
-    const target = event.target.closest("[data-zone-id], [data-insight-id]");
+    const target = event.target.closest("[data-place-id], [data-insight-id]");
     if (!target || !root.contains(target)) return;
     event.preventDefault();
-    if (target.dataset.zoneId) clickZone(target.dataset.zoneId);
+    if (target.dataset.placeId) clickPlace(target.dataset.placeId);
     else {
       const insight = insights.get(target.dataset.insightId);
-      const firstZone = insight && Array.isArray(insight.zoneIds) ? insight.zoneIds.find((id) => zones.has(id)) : null;
-      if (firstZone) render(firstZone, insight.id, "push");
+      if (insight && insight.placeIds[0]) render(insight.placeIds[0], insight.id, "push");
     }
   });
 
   root.addEventListener("keydown", (event) => {
-    const target = event.target.closest("[data-zone-id]");
+    const target = event.target.closest("[data-place-id]");
     if (!target || !root.contains(target) || !["Enter", " "].includes(event.key)) return;
     event.preventDefault();
-    clickZone(target.dataset.zoneId);
+    clickPlace(target.dataset.placeId);
   });
 
   window.addEventListener("popstate", () => {
     const params = new URLSearchParams(window.location.search);
-    const zoneId = params.get("zone");
+    const placeId = params.get("place");
     const insightId = params.get("insight");
-    render(zoneId, insightId, "replace");
+    render(placeId, insightId, "replace");
   });
 
   const params = new URLSearchParams(window.location.search);
-  const requestedZone = params.get("zone");
+  const requestedPlace = params.get("place");
   const requestedInsight = params.get("insight");
   const insightFromUrl = requestedInsight ? insights.get(requestedInsight) : null;
-  const legacyPlace = params.get("place");
-  const place = legacyPlace ? places.get(legacyPlace) : null;
-  const legacyZone = place && Array.isArray(place.zoneIds) ? place.zoneIds.find((id) => zones.has(id)) : null;
-  const initialZone = zones.has(requestedZone)
-    ? requestedZone
-    : insightFromUrl && insightFromUrl.zoneIds.find((id) => zones.has(id))
-      ? insightFromUrl.zoneIds.find((id) => zones.has(id))
-      : legacyZone;
-  render(initialZone || null, requestedInsight, "replace");
+  const initialPlace = places.has(requestedPlace)
+    ? requestedPlace
+    : insightFromUrl && insightFromUrl.placeIds.find((id) => places.has(id));
+  render(initialPlace || null, requestedInsight, "replace");
 })();
