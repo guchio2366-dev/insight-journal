@@ -28,6 +28,7 @@ export const GET: APIRoute = async ({ site }) => {
     { loc: absolute("/themes/"), lastmod: undefined },
     { loc: absolute("/about/"), lastmod: undefined },
     { loc: absolute("/atlas/"), lastmod: agricultureField.updatedAt.slice(0, 10) },
+    { loc: absolute("/atlas/north-america/"), lastmod: agricultureField.updatedAt.slice(0, 10) },
     { loc: absolute("/atlas/north-america/agriculture/"), lastmod: agricultureField.updatedAt.slice(0, 10) },
     { loc: absolute("/atlas/north-america/agriculture/report/"), lastmod: agricultureField.updatedAt.slice(0, 10) },
     ...articles.map((entry) => ({
