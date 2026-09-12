@@ -1,5 +1,6 @@
 import { readAtlasState, writeAtlasState, type MapField } from '../lib/atlas-state';
-import type { Map as LibreMap, StyleSpecification } from 'maplibre-gl';
+import type { Map as LibreMap } from 'maplibre-gl';
+import { createAtlasStyle, setFieldLayers } from '../lib/atlas-style';
 
 export async function startAtlas() {
   const root=document.querySelector<HTMLElement>('[data-atlas-explorer]');
@@ -20,6 +21,7 @@ export async function startAtlas() {
     const center=map?.getCenter();
     const camera=center?{lng:center.lng,lat:center.lat,zoom:map!.getZoom()}:initial.camera??undefined;
     const url=writeAtlasState(new URL(location.href),config.base,field,camera,selected);
+    if(config.reviewMode){url.pathname=config.base+'review/';url.searchParams.set('field',field);}
     history[push?'pushState':'replaceState']({},'',url);
   }
   function closeSelection(saveUrl=true) {
@@ -46,11 +48,13 @@ export async function startAtlas() {
     root.querySelectorAll<HTMLElement>('[data-field-content]').forEach(section=>section.hidden=!section.dataset.fieldContent!.split(' ').includes(field));
     el('[data-crop-key]').hidden=field!=='agriculture';el('[data-land-key]').hidden=field==='agriculture';
     el<HTMLImageElement>('[data-fallback-image]').src=config.assetBase+(field==='agriculture'?'agriculture':'land')+'-fallback.webp';
+    el<HTMLAnchorElement>('[data-fallback-full]').href=config.assetBase+(field==='agriculture'?'agriculture':'land')+'-fallback.webp';
+    el<HTMLImageElement>('[data-fallback-image]').alt=field==='agriculture'?'米国本土の地形・河川と、州境をまたぐ主要作物の栽培分布。下の作物別解説でも内容を読めます。':'米国本土の地形と水系。西部の山地、中央の平原、東部の山地を比べられます。';
     el('[data-layer-caption]').textContent=field==='agriculture'?'主要栽培域 · ２０２３年の衛星分類から概略化':'地形・水系';
     el('[data-detail-guide]').textContent='↓ '+(field==='agriculture'?'作物の特徴・用途と、地域に根付いた理由':'地形と水系から、地域の条件を読む');
     closeSelection(false);
     if(ready&&map){
-      for(const id of ['crops-fill','crops-outline','crops-overlap']) map.setLayoutProperty(id,'visibility',field==='agriculture'?'visible':'none');
+      setFieldLayers(map,field);
       // Neither setStyle nor fitBounds is called here: preserve the one map and its camera.
       renderLabels();
     }
@@ -60,7 +64,7 @@ export async function startAtlas() {
     if(failed)return; failed=true;ready=false;clearTimeout(timeout);criticalController.abort();
     root.dataset.renderState='fallback'; fallback.hidden=false;surface.hidden=true;
     el('[data-map-labels]').hidden=true;el('.atlas-map-tools').hidden=true;
-    status.textContent=message+' 代替図と下の解説を表示しています。';
+    status.textContent=message+'（代替図）';
     map?.remove();map=undefined;
   }
   root.querySelectorAll<HTMLAnchorElement>('[data-field]').forEach(a=>a.addEventListener('click',e=>{
@@ -96,29 +100,17 @@ export async function startAtlas() {
     }
   }
   try {
-    const fetchJson=async(name:string)=>{const r=await fetch(config.assetBase+name,{signal:criticalController.signal});if(!r.ok)throw new Error(name+': '+r.status);return r.json();};
+    const fetchJson=async(name:string)=>{
+      // A review-only QA control exercises the real critical-asset error path.
+      const testMissing=config.reviewMode&&new URL(location.href).searchParams.get('qa')==='asset-error'&&name==='manifest.json';
+      const r=await fetch(config.assetBase+(testMissing?'qa-missing-manifest.json':name),{signal:criticalController.signal});
+      if(!r.ok)throw new Error(name+': '+r.status);return r.json();
+    };
     const [lib,manifest,base,crops,land,stateLabels,cropLabels]=await Promise.all([
       import('maplibre-gl'),fetchJson('manifest.json'),fetchJson('base.geojson'),fetchJson('agriculture.geojson'),fetchJson('land.geojson'),fetchJson('labels.json'),fetchJson('crop-labels.json')
     ]);
     if(failed)return;
-    const kind=(name:string):any=>['==',['get','kind'],name];
-    const style:StyleSpecification={version:8,sources:{
-      base:{type:'geojson',data:base},crops:{type:'geojson',data:crops},land:{type:'geojson',data:land},
-      relief:{type:'image',url:config.assetBase+'relief.webp',coordinates:manifest.reliefCoordinates}
-    },layers:[
-      {id:'ocean',type:'background',paint:{'background-color':'#c1e1ed'}},
-      {id:'land-fill',type:'fill',source:'base',filter:kind('land'),paint:{'fill-color':'#efebd8'}},
-      {id:'relief',type:'raster',source:'relief',paint:{'raster-opacity':1,'raster-fade-duration':0}},
-      {id:'land-picking',type:'fill',source:'land',paint:{'fill-opacity':0}},
-      {id:'crops-fill',type:'fill',source:'crops',filter:['!=',['get','id'],'corn-soybean'],paint:{'fill-color':['get','color'],'fill-opacity':0.62}},
-      {id:'crops-outline',type:'line',source:'crops',filter:['!=',['get','id'],'corn-soybean'],paint:{'line-color':['get','color'],'line-opacity':0.85,'line-width':1}},
-      {id:'crops-overlap',type:'fill',source:'crops',filter:['==',['get','id'],'corn-soybean'],paint:{'fill-color':'#c8b756','fill-opacity':0.18}},
-      {id:'state-lines',type:'line',source:'base',filter:kind('state'),paint:{'line-color':'#506f73','line-opacity':0.42,'line-width':0.65}},
-      {id:'country-lines',type:'line',source:'base',filter:kind('land'),paint:{'line-color':'#4c7b8a','line-width':0.9,'line-opacity':0.75}},
-      {id:'rivers',type:'line',source:'base',filter:kind('river'),paint:{'line-color':'#5799b5','line-width':['interpolate',['linear'],['zoom'],2,0.5,6,1.5],'line-opacity':0.86}},
-      {id:'lakes',type:'fill',source:'base',filter:kind('lake'),paint:{'fill-color':'#a5d2e6'}},
-      {id:'lakes-outline',type:'line',source:'base',filter:kind('lake'),paint:{'line-color':'#5799b5','line-width':0.65}}
-    ]};
+    const style=createAtlasStyle(config,manifest,base,crops,land);
     lib.setWorkerCount(1);
     map=new lib.Map({container:surface,style,attributionControl:false,renderWorldCopies:false,dragRotate:false,touchPitch:false,pitchWithRotate:false,rollEnabled:false,maxPitch:0,maxZoom:7,minZoom:1,pixelRatio:Math.min(devicePixelRatio,2),bounds:manifest.fitBounds,fitBoundsOptions:{padding:{top:30,bottom:14,left:12,right:12}},maxBounds:[[-137,16],[-56,58]],refreshExpiredTiles:false,fadeDuration:0});
     map.touchZoomRotate.disableRotation();map.scrollZoom.disable();
@@ -165,11 +157,18 @@ export async function startAtlas() {
         const w=frame.clientWidth,h=frame.clientHeight;if(w===lastWidth&&h===lastHeight)return;
         lastWidth=w;lastHeight=h;map.resize();renderLabels();
       }).observe(frame);
+      if(config.reviewMode)window.addEventListener('message',event=>{
+        if(event.origin!==location.origin||event.source!==parent||event.data!=='atlas-qa-lose-context'||!map)return;
+        const gl=map.getCanvas().getContext('webgl2');
+        gl?.getExtension('WEBGL_lose_context')?.loseContext();
+      });
     });
     window.addEventListener('popstate',()=>{
       const state=readAtlasState(new URL(location.href),config.initialField);setField(state.field);
       if(state.camera&&map)map.jumpTo({center:[state.camera.lng,state.camera.lat],zoom:state.camera.zoom});
       if(state.crop)selectCrop(state.crop,undefined,false);
     });
+    const hashTarget=location.hash?document.getElementById(location.hash.slice(1)):null;
+    if(hashTarget?.closest('details'))hashTarget.closest('details')!.open=true;
   }catch(error){console.error('Atlas initialization',error);fail('この環境では操作できる地図を読み込めませんでした。');}
 }

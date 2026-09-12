@@ -115,9 +115,10 @@ fallback figures; the font is not distributed as a runtime dependency.
 
 ## QA and publication
 
-Unit checks cover data hashes, coverage, fields, source year, missing assets and
-URL state. Existing publication-safety checks remain intact. Visual/interaction
-review is mandatory and separate from these automated checks.
+Unit checks cover data hashes, coverage, fields, source year, missing assets,
+URL state, the actual style against the pinned MapLibre style specification, and
+visibility-only field changes with a camera-reset trap. These are not browser
+GPU tests. Existing publication-safety checks remain intact.
 
 `/atlas/qa/` is a noindex responsive review harness using same-origin iframes at
 390×844, 844×390, 820×1180, 1180×820 and 1280×800 CSS pixels. It is **not** physical
@@ -127,3 +128,25 @@ distinction with screenshots and results before marking the revision complete.
 Use the existing pull-request validation and Pages workflow. Do not change
 hosting or permissions. Publish an opt-in review route before promoting the
 main map navigation if a local browser preview cannot be reached.
+
+### Review findings, 2026-09-12
+
+- The cloud Chrome reports `GPUInitializationError: WebGL2 is required`.
+  Automatic fallback was exercised by this real initialization failure.
+  Do not report interactive GPU rendering/camera movement as browser-verified.
+- Fallback legend clicks for all six crop classes selected the matching summary
+  and `#crop-*` link; the detail link reached the corresponding explanation.
+- Initial review found 2px mobile header overflow from inherited negative nav
+  margins and padding. Reset those only within the atlas layout. The QA harness
+  now compares `scrollWidth` with `clientWidth`, excluding scrollbar gutter.
+- The failure banner previously covered the southern edge on short screens.
+  Allocate it its own grid row; keep the complete fallback image visible and
+  offer a full-resolution image link.
+- Geometry sanity checks: all seven crop geometries valid; control points within
+  Iowa corn/soy, Sacramento/Arkansas rice and west-Texas cotton match their broad
+  regions. Tiny lake slivers after coordinate rounding are below 0.0000013 square
+  degrees. These checks catch coordinate mistakes, not field-level accuracy.
+- Responsive screenshots and final deployment state are recorded separately in
+  `docs/atlas-qa.md`. Real iPhone/iPad Safari, live MapLibre pan/zoom, polygon
+  picking and context-loss recovery remain verification items when WebGL2 is
+  available. The review-only harness has explicit asset-error/context-loss controls.

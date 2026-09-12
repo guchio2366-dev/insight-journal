@@ -6,9 +6,10 @@ import { northAmericaFields } from '../../data/atlas/regions';
 interface Props { initialField?: ExplorerField }
 const { initialField='overview' } = Astro.props;
 const assetBase = withBase('/assets/atlas/v3/');
-const payload = JSON.stringify({ initialField, assetBase, base: withBase('/atlas/north-america/'), crops:cropExplanations, geographicLabels }).replace(/</g,'\\u003c');
+const reviewMode = Astro.url.pathname.includes('/review/');
+const payload = JSON.stringify({ initialField, assetBase, reviewMode, base: withBase('/atlas/north-america/'), crops:cropExplanations, geographicLabels }).replace(/</g,'\\u003c');
 ---
-<article class="atlas-explorer" data-atlas-explorer data-pagefind-body>
+<article class="atlas-explorer" data-atlas-explorer data-pagefind-body={reviewMode?undefined:true} data-pagefind-ignore={reviewMode?'all':undefined}>
   <section class="atlas-workspace" aria-label="北米の分野別地図">
     <div class="atlas-compact-heading">
       <nav aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a><span aria-hidden="true"> / </span><a href={withBase('/atlas/north-america/')}>北米地図</a></nav>
@@ -24,8 +25,8 @@ const payload = JSON.stringify({ initialField, assetBase, base: withBase('/atlas
     <div class="atlas-map-frame" data-map-frame>
       <div class="atlas-map-surface" data-map-surface aria-label="拡大縮小できる米国本土地図"></div>
       <div class="atlas-fallback" data-fallback>
-        <img src={`${assetBase}${initialField==='agriculture'?'agriculture':'land'}-fallback.webp`} width="1800" height="1062" alt={initialField==='agriculture'?'米国本土の地形・河川と、州境をまたぐ主要作物の栽培分布。下の作物別解説でも内容を読めます。':'米国本土の地形と水系。西部に山地、中央に平原、東部にアパラチア山脈が続きます。'} data-fallback-image />
-        <p data-fallback-status>代替図。操作できる地図が開かない場合も、下の解説を読めます。</p>
+        <img src={`${assetBase}${initialField==='agriculture'?'agriculture':'land'}-fallback.webp`} width="1800" height="1084" alt={initialField==='agriculture'?'米国本土の地形・河川と、州境をまたぐ主要作物の栽培分布。下の作物別解説でも内容を読めます。':'米国本土の地形と水系。西部に山地、中央に平原、東部にアパラチア山脈が続きます。'} data-fallback-image />
+        <p><span data-fallback-status>代替図を表示しています。解説は地図の下へ。</span> <a href={`${assetBase}${initialField==='agriculture'?'agriculture':'land'}-fallback.webp`} data-fallback-full target="_blank" rel="noopener">図を拡大</a></p>
       </div>
       <div class="atlas-map-labels" data-map-labels aria-hidden="true"></div>
       <div class="atlas-map-tools" aria-label="地図操作">
@@ -56,7 +57,7 @@ const payload = JSON.stringify({ initialField, assetBase, base: withBase('/atlas
       <p>気候は気温・降水・風、土地は土壌、主要産業は集積と交通を追加する予定です。根拠資料と再配布条件を確認できたレイヤーから公開します。準備中の項目は、完成した地図として表示していません。</p>
     </section>
     <section data-field-content="agriculture" hidden={initialField!=='agriculture'}>
-      <h2>作物の特徴と、地域に根付いた理由</h2>
+      <h2 id="crop-conditions">作物の特徴と、地域に根付いた理由</h2>
       <p>色の重なりは、近い地域で複数の作物が栽培されることを表します。同じ畑の同時栽培や、年ごとの輪作を直接観測した図ではありません。</p>
       <div class="atlas-crop-reading">
         {cropExplanations.map(c=><section class="atlas-crop-section" id={`crop-${c.id}`} style={`--crop-color:${c.color}`}><h3><i aria-hidden="true"></i>{c.name}</h3>{c.paragraphs.map(p=><p>{p}</p>)}<p class="atlas-crop-uses"><strong>何に使う？</strong> {c.uses}</p><p class="atlas-inline-sources">出典：{c.sources.map((id,i)=><Fragment>{i>0?' ／ ':''}<a href={`#${id}`}>{sources.find(s=>s.id===id)?.publisher}</a></Fragment>)}</p></section>)}

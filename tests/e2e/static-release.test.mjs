@@ -25,12 +25,26 @@ test("主要ページと日本語検索索引を静的成果物に含む", async
     "articles/india-agriculture-display-sample/index.html",
     "atlas/north-america/index.html",
     "atlas/north-america/agriculture/index.html",
+    "atlas/north-america/land/index.html",
+    "assets/atlas/v3/manifest.json",
+    "assets/atlas/v3/agriculture-fallback.webp",
     "assets/atlas/north-america-agriculture-reference-v1.webp",
     "pagefind/pagefind.js"
   ];
 
   for (const relativePath of expectedFiles) {
     await assert.doesNotReject(access(path.join(distRoot, relativePath)), relativePath);
+  }
+});
+
+test("地図の通常経路は共通レンダラーと下の解説を含み、未完成の分野をリンクにしない", async () => {
+  for (const route of ['atlas/north-america/index.html','atlas/north-america/agriculture/index.html','atlas/north-america/land/index.html','atlas/north-america/agriculture/report/index.html']) {
+    const html=await readFile(path.join(distRoot,route),'utf8');
+    assert.match(html,/data-atlas-explorer/);
+    assert.match(html,/id="atlas-details"/);
+    assert.match(html,/id="crop-conditions"/);
+    assert.doesNotMatch(html,/<a[^>]+data-field="(?:climate|industry)"/);
+    assert.doesNotMatch(html,/atlas-zone-list|atlas-map-stage/);
   }
 });
 
