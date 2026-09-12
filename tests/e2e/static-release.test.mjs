@@ -43,6 +43,7 @@ test("地図の通常経路は共通レンダラーと下の解説を含み、�
     assert.match(html,/data-atlas-explorer/);
     assert.match(html,/id="atlas-details"/);
     assert.match(html,/id="crop-conditions"/);
+    assert.match(html,/<div[^>]*class="atlas-map-tools"[^>]*hidden/);
     assert.doesNotMatch(html,/<a[^>]+data-field="(?:climate|industry)"/);
     assert.doesNotMatch(html,/atlas-zone-list|atlas-map-stage/);
   }

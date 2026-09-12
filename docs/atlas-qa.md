@@ -46,6 +46,10 @@ The static map was visually checked for terrain, water, state/crop positioning
 and text overlap. Dynamic-label collision metrics are not meaningful in fallback
 mode (there are no rendered HTML map labels).
 
+Map zoom/fit controls are hidden in initial static HTML and are exposed only
+after MapLibre's load event. Thus a missing/disabled entry script does not leave
+dead zoom buttons over the fallback. Static release checks enforce that default.
+
 The explicit review-only asset failure produced `manifest.json: 404` and kept
 the fallback, crop legend and text accessible. Switching to land after that
 failure loaded `land-fallback.webp` correctly. Normal public navigation from

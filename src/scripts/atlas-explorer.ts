@@ -119,7 +119,7 @@ export async function startAtlas() {
     map.on('error',event=>{console.error('Atlas data/render error',event.error?.message);fail('地図の描画またはデータの読み込みに失敗しました。');});
     map.once('load',()=>{
       if(failed||!map)return;
-      ready=true;clearTimeout(timeout);root.dataset.renderState='ready';fallback.hidden=true;
+      ready=true;clearTimeout(timeout);root.dataset.renderState='ready';fallback.hidden=true;el('.atlas-map-tools').hidden=false;
       // A tiny self-generated stripe texture denotes overlap; it is not geography.
       const size=12,rgba=new Uint8Array(size*size*4);
       for(let y=0;y<size;y++)for(let x=0;x<size;x++){const n=(y*size+x)*4;rgba.set((x+y)%size<3?[169,139,38,165]:[0,0,0,0],n);}
