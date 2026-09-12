@@ -156,6 +156,20 @@ export const agricultureField = {
 
 export const sources: AtlasSource[] = [
   {
+    id: "source-usda-wheat",
+    title: "Wheat sector at a glance",
+    publisher: "USDA Economic Research Service",
+    url: "https://www.ers.usda.gov/topics/crops/wheat/wheat-sector-at-a-glance",
+    note: "小麦の作型・地域・用途。地図のポリゴンを作る資料ではない。"
+  },
+  {
+    id: "source-usda-feed",
+    title: "Feed grains sector at a glance",
+    publisher: "USDA Economic Research Service",
+    url: "https://www.ers.usda.gov/topics/crops/corn-and-other-feed-grains/feed-grains-sector-at-a-glance",
+    note: "飼料穀物とエタノール等の用途。地図のポリゴンを作る資料ではない。"
+  },
+  {
     id: "source-natural-earth-admin1",
     title: "Admin 1 states and provinces",
     publisher: "Natural Earth",
@@ -562,7 +576,7 @@ export const reportSections: ReportSection[] = [
     paragraphs: [
       "灌漑地域では、利用できる水量と地下水位が作付けの持続性を左右する。大平原の帯水層では低下の程度に地域差があるため、地下水の論点は場所を選んだときの補助解説として表示し、北米農業全体の代表論点には固定しない。",
       "作物の価格、投入資材、輸出需要、保険・補助制度、加工施設の立地が変われば、農家が選ぶ作物も変わる。ニュースを追加する際は、政策の発生地、影響範囲、報道日を分け、地図の静的な作物分布と混ぜない。",
-      "現行レイヤーは理解の入口としての編集試作である。次の更新では、USDA CDL等の対象年・分類コード・集約単位を記録し、実測データへ段階的に更新する。精度が上がっても、読者が地域差を一目でつかめる簡略化は残す。"
+      "新しい地図はUSDA CDL 2023の衛星分類から主要な栽培のまとまりを概略化している。分類コード・抽出間隔・平滑化条件を記録し、地理座標で地形や水系とそろえた。地域差をつかむための一般化を含むため、細かな農地の範囲や生産量を示す図ではない。"
     ],
     bullets: [
       "地下水は常設の主題ではなく、該当地域を選んだときに表示する二次論点。",
