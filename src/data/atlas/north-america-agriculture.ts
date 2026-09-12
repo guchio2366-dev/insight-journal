@@ -1,5 +1,9 @@
 import stateGeometry from "./us-states.json";
 
+// Legacy image-space shapes are retained for older content references only.
+// The current map exclusively reads georeferenced assets/atlas/v3 data.
+// Never reuse path/labelX/labelY from this module as GIS coordinates.
+
 export type CropId = "corn" | "soybean" | "wheat" | "cotton" | "rice" | "specialty";
 export type MapFeatureKind = "terrain" | "river" | "lake";
 
@@ -138,9 +142,9 @@ export const agricultureField = {
   fieldId: "agriculture",
   title: "北米の農業",
   coverage: "米国本土48州＋ワシントンDC（カナダ・メキシコは地理的文脈）",
-  dataStatus: "承認済み表示概念図（分布は概略）",
-  dataNote: "色の面は州別の生産量ではなく、気候・地形・水利・土地利用が重なる主要栽培域を編集したものです。州境は位置を確かめる補助線で、色のない場所が農業を行っていないことを意味しません。",
-  methodNote: "現在の地図面は、地形と栽培域を一枚で理解するために承認した表示概念図です。面積や境界の測定には使わず、個別の記述は下記資料で確認します。操作領域は画像と別に重ね、将来は対象年と集約方法を固定したCDL由来の分布形状へ置き換えます。",
+  dataStatus: "CDL 2023の衛星分類を概略化した栽培分布",
+  dataNote: "色の面は州別の生産量ではなく、衛星分類から作った主要栽培域の概略です。州境は位置の補助線で、色のない場所が農業を行っていないことを意味しません。",
+  methodNote: "USDA NASSのCDL 2023を約2km間隔で抽出し、平滑化・小領域の除外・形状の簡略化を行っています。緯度経度付きの分布形状とNatural Earthの地理データを共通の地図へ重ねます。面積や生産量の計算には使えません。",
   updatedAt: "2026-09-12",
   cropOrder: ["corn", "soybean", "wheat", "cotton", "rice", "specialty"] as CropId[],
   cropLabels,
@@ -155,6 +159,20 @@ export const agricultureField = {
 };
 
 export const sources: AtlasSource[] = [
+  {
+    id: "source-usda-soy",
+    title: "Oil crops sector at a glance",
+    publisher: "USDA Economic Research Service",
+    url: "https://www.ers.usda.gov/topics/crops/soybeans-and-oil-crops/oil-crops-sector-at-a-glance",
+    note: "中西部の大豆栽培・輪作・窒素肥料・搾油と飼料用途。地図の境界の原資料ではない。"
+  },
+  {
+    id: "source-california-water-agriculture",
+    title: "Agriculture and irrigation in California",
+    publisher: "California Department of Water Resources",
+    url: "https://water.ca.gov/Water-Basics/Agriculture",
+    note: "カリフォルニアの農業と、乾期の水を補う灌漑の関係。地図の境界の原資料ではない。"
+  },
   {
     id: "source-usda-wheat",
     title: "Wheat sector at a glance",
