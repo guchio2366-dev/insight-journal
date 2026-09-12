@@ -18,7 +18,8 @@
     "check": "npm test && npm run build && npm run test:e2e && npm run verify:release"
   },
   "dependencies": {
-    "astro": "7.3.2"
+    "astro": "7.3.2",
+    "maplibre-gl": "6.9.0"
   },
   "devDependencies": {
     "pagefind": "1.5.2"

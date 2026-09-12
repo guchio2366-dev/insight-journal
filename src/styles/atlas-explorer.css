@@ -1,0 +1,119 @@
+@import 'maplibre-gl/dist/maplibre-gl.css';
+
+.atlas-layout .header-inner{min-height:48px;gap:14px;width:calc(100% - 32px);max-width:1400px}
+.atlas-layout .brand-mark{width:28px;height:28px;font-size:13px}
+.atlas-layout .site-brand{gap:8px}
+.atlas-layout .site-brand strong{font-size:16px}
+.atlas-layout .site-brand small{display:none}
+.atlas-layout .site-header nav a{padding:12px 0 10px;font-size:12px}
+.atlas-layout .site-header nav ul{gap:22px}
+.atlas-layout{--max:1400px}
+.atlas-explorer{max-width:1400px;margin:auto;padding:0 16px}
+.atlas-workspace{padding:8px 0 0}
+.atlas-compact-heading{display:flex;align-items:center;justify-content:space-between;font-size:12px;line-height:1.5;margin-bottom:8px;color:#526570}
+.atlas-compact-heading a{text-decoration:none}
+.atlas-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid #c7ccbf;border-bottom:0;background:#f1f0e7;min-height:42px}
+.atlas-tabs>a,.atlas-tab-planned{display:flex;justify-content:center;align-items:center;gap:6px;font-size:14px;line-height:1.2;font-weight:700;text-decoration:none;border-right:1px solid #d8d9ce;min-width:0;padding:10px 5px}
+.atlas-tabs>:last-child{border-right:0}
+.atlas-tabs>a[aria-current]{color:#fff;background:#243b48}
+.atlas-tabs>a:hover{background:#dce5da;color:#182536}
+.atlas-tab-planned{color:#8c918b}
+.atlas-tab-planned small{font-weight:400;font-size:9px;border:1px solid #cdd0c5;border-radius:3px;padding:2px}
+.atlas-map-frame{position:relative;height:min(calc(100svh - 200px),calc((100vw - 32px)/1.65),790px);min-height:120px;background:#c1e1ed;overflow:hidden;border:1px solid #abbfc2;isolation:isolate}
+.atlas-map-surface,.atlas-fallback,.atlas-map-labels{position:absolute;inset:0}
+.atlas-map-surface .maplibregl-canvas{outline-offset:-3px}
+.atlas-map-labels{pointer-events:none;overflow:hidden;z-index:2}
+.atlas-fallback{z-index:1;background:#c1e1ed}
+.atlas-fallback img{height:100%;width:100%;object-fit:contain}
+.atlas-fallback p{position:absolute;bottom:0;left:0;right:0;margin:0;padding:7px 12px;font-size:12px;background:#fbfaf2eb;text-align:center}
+.atlas-map-tools{position:absolute;top:10px;right:10px;z-index:4;display:flex;flex-direction:column;gap:5px}
+.atlas-map-tools button{width:40px;height:40px;border:1px solid #b2beb7;border-radius:5px;background:#fffef5ed;font-size:21px;line-height:1;box-shadow:0 1px 3px #243b4820;padding:0;color:#233f4a}
+.atlas-map-tools button:first-child{font-size:11px}
+.atlas-layer-caption{position:absolute;left:9px;top:6px;z-index:3;font-size:11px;line-height:1.4;padding:3px 6px;margin:0;border-radius:3px;background:#fbfaf2df;color:#384a4f;max-width:calc(100% - 70px);pointer-events:none}
+.atlas-geolabel{position:absolute;top:0;left:0;white-space:nowrap;line-height:1.2;font-size:12px;letter-spacing:.025em;color:#304144;text-shadow:0 1px 2px #fffff4,1px 0 2px #fffff4,-1px 0 2px #fffff4,0 -1px 2px #fffff4;will-change:transform}
+.atlas-geolabel--state{font-size:11px;color:#5b6a67;font-weight:400}
+.atlas-geolabel--crop{font-size:15px;font-weight:750;color:#534229;text-shadow:0 1px 2px #ffffe4,1px 0 2px #ffffe4,-1px 0 2px #ffffe4}
+.atlas-geolabel--physical{font-weight:650;font-size:13px;letter-spacing:.08em}
+.atlas-geolabel--water{color:#246584;font-weight:650;font-size:13px}
+.atlas-geolabel--country{color:#56666c;letter-spacing:.25em;font-size:12px}
+.atlas-selection{position:absolute;z-index:5;bottom:8px;left:8px;width:min(440px,calc(100% - 16px));padding:10px 32px 8px 12px;background:#fffef5f5;border:1px solid #819995;border-radius:7px;box-shadow:0 3px 15px #243b4820;font-size:13px;line-height:1.55}
+.atlas-selection strong{font-size:14px}
+.atlas-selection p{margin:3px 0}
+.atlas-selection a{font-size:12px;color:#315c69}
+.atlas-selection-close{position:absolute;right:1px;top:1px;width:34px;height:34px;border:0;background:none;color:#374d51;font-size:23px;padding:0}
+.atlas-key{display:flex;justify-content:center;align-items:center;gap:5px 18px;flex-wrap:wrap;padding:7px 6px;font-size:12px;line-height:1.4;background:#f7f5ec;border:1px solid #c8cfc4;border-top:0}
+.atlas-key a,.atlas-overlap-key{display:inline-flex;align-items:center;gap:5px;text-decoration:none}
+.atlas-key a{min-height:28px}
+.atlas-key i,.atlas-crop-section h3 i{display:inline-block;width:14px;height:10px;border:1px solid #677e7250;border-radius:6px;background:var(--crop-color)}
+.atlas-overlap-key i{background:repeating-linear-gradient(135deg,#e6cf80 0 3px,#a8bb74 3px 5px)}
+.atlas-context-key{padding:9px 12px;margin:0;background:#f7f5ec;border:1px solid #c8cfc4;border-top:0;font-size:12px;line-height:1.7;text-align:center}
+.atlas-detail-guide{display:block;font-size:12px;text-decoration:none;text-align:center;padding:9px 4px;color:#395967;border-bottom:1px solid #d2d7ca;background:linear-gradient(#edf1e9,#f8f7ef)}
+.atlas-reading{max-width:1000px;margin:22px auto 72px;font-size:15px;line-height:1.9;scroll-margin-top:12px}
+.atlas-reading h2{font-family:var(--serif);font-size:26px;line-height:1.5;margin:22px 0 12px}
+.atlas-reading h3{font-size:20px;line-height:1.5;margin:16px 0 10px}
+.atlas-reading p{margin:10px 0}
+.atlas-reading .atlas-evidence-note{font-size:12px;line-height:1.8;color:#60706a;padding:0 0 14px;border-bottom:1px solid #d7d8cc}
+.atlas-crop-reading{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:36px}
+.atlas-crop-section{padding:10px 0 18px;border-top:2px solid var(--crop-color);scroll-margin-top:15px}
+.atlas-crop-section h3{display:flex;align-items:center;gap:9px}
+.atlas-crop-section h3 i{width:20px;height:14px}
+.atlas-crop-uses{background:#f0f0e6;padding:10px 12px;border-radius:4px;font-size:13px}
+.atlas-inline-sources{font-size:11px;color:#5e6b67}
+.atlas-context-reading{padding:15px 0;border-block:1px solid #d0d4c8}
+.atlas-context-reading summary{cursor:pointer;font-weight:600}
+.atlas-method{font-size:13px;color:#52615e;border-top:1px solid #d0d4c8;margin-top:24px}
+.atlas-method h2{font-size:22px}
+.atlas-method li{margin:5px 0}
+.atlas-method details{margin:20px 0}
+.atlas-method summary{cursor:pointer}
+.atlas-explorer [hidden]{display:none!important}
+@media(max-width:700px){
+  .atlas-layout .header-inner{width:calc(100% - 20px);min-height:40px;flex-direction:row;gap:6px;align-items:center}
+  .atlas-layout .site-brand strong{font-size:13px}
+  .atlas-layout .brand-mark{width:24px;height:24px;font-size:11px}
+  .atlas-layout .site-header nav ul{gap:13px;overflow:visible}
+  .atlas-layout .site-header nav li:nth-child(1),.atlas-layout .site-header nav li:nth-child(4),.atlas-layout .site-header nav li:nth-child(5){display:none}
+  .atlas-layout .site-header nav a{font-size:11px;padding:10px 0 8px}
+  .atlas-explorer{padding:0 8px}
+  .atlas-workspace{padding-top:6px}
+  .atlas-compact-heading{font-size:11px;margin-bottom:6px}
+  .atlas-tabs>a,.atlas-tab-planned{font-size:13px;padding:9px 3px;gap:4px;min-height:42px}
+  .atlas-tab-planned{flex-direction:column;gap:2px}
+  .atlas-tab-planned small{font-size:8px;border:0;padding:0}
+  .atlas-map-frame{height:min(calc(100svh - 180px),calc((100vw - 16px)/1.45))}
+  .atlas-layer-caption{font-size:9px;left:4px;top:4px;padding:2px 4px}
+  .atlas-map-tools{top:26px;right:5px;gap:4px}
+  .atlas-map-tools button{width:34px;height:34px}
+  .atlas-geolabel--crop{font-size:11px}
+  .atlas-geolabel--physical,.atlas-geolabel--water{font-size:10px}
+  .atlas-geolabel--state,.atlas-geolabel--country{font-size:9px}
+  .atlas-key{font-size:10px;gap:2px 12px;padding:3px 5px}
+  .atlas-key i{width:11px;height:8px}
+  .atlas-selection{font-size:11px;padding:7px 30px 6px 9px;bottom:5px;left:5px;width:calc(100% - 10px)}
+  .atlas-selection strong{font-size:12px}
+  .atlas-selection a{font-size:11px}
+  .atlas-crop-reading{grid-template-columns:1fr}
+  .atlas-reading{font-size:14px;margin:16px 5px 48px;line-height:1.85}
+  .atlas-reading h2{font-size:22px}
+  .atlas-reading h3{font-size:19px}
+  .atlas-context-key,.atlas-detail-guide{font-size:11px;padding:7px}
+}
+@media(max-height:500px) and (orientation:landscape){
+  .atlas-layout .header-inner{min-height:34px}
+  .atlas-layout .site-header nav a{padding:7px 0}
+  .atlas-workspace{padding-top:3px}
+  .atlas-compact-heading{margin-bottom:3px;font-size:10px}
+  .atlas-tabs{min-height:34px}
+  .atlas-tabs>a,.atlas-tab-planned{padding:7px 3px;min-height:34px;font-size:12px;flex-direction:row}
+  .atlas-map-frame{height:calc(100svh - 163px);min-height:100px}
+  .atlas-key{padding:2px 4px;gap:3px 13px;font-size:10px}
+  .atlas-key a{min-height:22px}
+  .atlas-context-key,.atlas-detail-guide{padding:5px;font-size:10px}
+  .atlas-map-tools{flex-direction:row;top:5px}
+  .atlas-map-tools button{width:34px;height:34px}
+  .atlas-geolabel--crop{font-size:11px}
+  .atlas-geolabel--physical,.atlas-geolabel--water{font-size:10px}
+  .atlas-geolabel--state{font-size:9px}
+  .atlas-selection{font-size:11px;padding:7px 30px 6px 9px}
+}
+@media(prefers-reduced-motion:reduce){.atlas-layout{scroll-behavior:auto}.atlas-layout *{scroll-behavior:auto!important}}
