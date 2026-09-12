@@ -2,7 +2,8 @@ export const readyFields = ['overview', 'agriculture', 'land'] as const;
 export type MapField = typeof readyFields[number];
 export type Camera = { lng: number; lat: number; zoom: number };
 export function readAtlasState(url: URL, defaultField: MapField = 'overview') {
-  const pathField = url.pathname.split('/').filter(Boolean).at(-1);
+  const pathPart = url.pathname.split('/').filter(Boolean).at(-1);
+  const pathField = pathPart==='review' ? url.searchParams.get('field') : pathPart;
   const field = readyFields.includes(pathField as MapField) ? pathField as MapField : defaultField;
   const read = (key:string,min:number,max:number) => {
     const value = url.searchParams.get(key);

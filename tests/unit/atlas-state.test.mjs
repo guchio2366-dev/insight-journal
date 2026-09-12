@@ -1,6 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readAtlasState, writeAtlasState } from '../../src/lib/atlas-state.ts';
+
+test('確認ページでも分野をURLから復元する',()=>{
+ assert.equal(readAtlasState(new URL('https://example.org/insight-journal/atlas/north-america/review/?field=land')).field,'land');
+ assert.equal(readAtlasState(new URL('https://example.org/insight-journal/atlas/north-america/review/?field=unsupported'),'agriculture').field,'agriculture');
+});
 test('地図の分野と位置・倍率をURLから復元する',()=>{
  const state=readAtlasState(new URL('https://example.org/insight-journal/atlas/north-america/land/?lng=-100&lat=40&z=4.125&crop=corn'));
  assert.equal(state.field,'land');assert.deepEqual(state.camera,{lng:-100,lat:40,zoom:4.125});

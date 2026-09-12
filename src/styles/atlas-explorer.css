@@ -1,12 +1,13 @@
 @import 'maplibre-gl/dist/maplibre-gl.css';
 
-.atlas-layout .header-inner{min-height:48px;gap:14px;width:calc(100% - 32px);max-width:1400px}
+.atlas-layout .header-inner{min-height:48px;gap:14px;width:calc(100% - 32px);max-width:1400px;flex-direction:row;align-items:center;padding:0}
 .atlas-layout .brand-mark{width:28px;height:28px;font-size:13px}
-.atlas-layout .site-brand{gap:8px}
+.atlas-layout .site-brand{gap:8px;padding:0}
 .atlas-layout .site-brand strong{font-size:16px}
 .atlas-layout .site-brand small{display:none}
 .atlas-layout .site-header nav a{padding:12px 0 10px;font-size:12px}
-.atlas-layout .site-header nav ul{gap:22px}
+.atlas-layout .site-header nav{margin:0;border:0;overflow:visible}
+.atlas-layout .site-header nav ul{gap:22px;padding:0;min-width:0}
 .atlas-layout{--max:1400px}
 .atlas-explorer{max-width:1400px;margin:auto;padding:0 16px}
 .atlas-workspace{padding:8px 0 0}
@@ -23,9 +24,10 @@
 .atlas-map-surface,.atlas-fallback,.atlas-map-labels{position:absolute;inset:0}
 .atlas-map-surface .maplibregl-canvas{outline-offset:-3px}
 .atlas-map-labels{pointer-events:none;overflow:hidden;z-index:2}
-.atlas-fallback{z-index:1;background:#c1e1ed}
-.atlas-fallback img{height:100%;width:100%;object-fit:contain}
-.atlas-fallback p{position:absolute;bottom:0;left:0;right:0;margin:0;padding:7px 12px;font-size:12px;background:#fbfaf2eb;text-align:center}
+.atlas-fallback{z-index:1;background:#c1e1ed;display:grid;grid-template-rows:minmax(0,1fr) auto}
+.atlas-fallback img{height:100%;width:100%;min-height:0;object-fit:contain}
+.atlas-fallback p{margin:0;padding:5px 8px;font-size:11px;line-height:1.5;background:#fbfaf2eb;text-align:center}
+.atlas-fallback p a{white-space:nowrap}
 .atlas-map-tools{position:absolute;top:10px;right:10px;z-index:4;display:flex;flex-direction:column;gap:5px}
 .atlas-map-tools button{width:40px;height:40px;border:1px solid #b2beb7;border-radius:5px;background:#fffef5ed;font-size:21px;line-height:1;box-shadow:0 1px 3px #243b4820;padding:0;color:#233f4a}
 .atlas-map-tools button:first-child{font-size:11px}
