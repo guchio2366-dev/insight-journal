@@ -119,7 +119,7 @@ export async function startAtlas() {
     map.on('error',event=>{console.error('Atlas data/render error',event.error?.message);fail('地図の描画またはデータの読み込みに失敗しました。');});
     map.once('load',()=>{
       if(failed||!map)return;
-      ready=true;clearTimeout(timeout);root.dataset.renderState='ready';fallback.hidden=true;
+      ready=true;clearTimeout(timeout);root.dataset.renderState='ready';fallback.hidden=true;el('.atlas-map-tools').hidden=false;
       // A tiny self-generated stripe texture denotes overlap; it is not geography.
       const size=12,rgba=new Uint8Array(size*size*4);
       for(let y=0;y<size;y++)for(let x=0;x<size;x++){const n=(y*size+x)*4;rgba.set((x+y)%size<3?[169,139,38,165]:[0,0,0,0],n);}
@@ -128,8 +128,9 @@ export async function startAtlas() {
       labels=[...cropLabels,...config.geographicLabels,...stateLabels].sort((a,b)=>a.priority-b.priority);
       const parent=el('[data-map-labels]');
       for(const item of labels){const node=document.createElement('span');node.className='atlas-geolabel atlas-geolabel--'+item.kind;node.textContent=item.name;node.hidden=true;if(item.color)node.style.setProperty('--label-color',item.color);parent.appendChild(node);item.node=node;}
-      setField(field);save();
+      setField(field);
       if(initial.crop)selectCrop(initial.crop,undefined,false);
+      save();
       map.on('move',renderLabels);
       map.on('moveend',()=>save());
       map.on('click',e=>{
@@ -165,8 +166,9 @@ export async function startAtlas() {
     });
     window.addEventListener('popstate',()=>{
       const state=readAtlasState(new URL(location.href),config.initialField);setField(state.field);
-      if(state.camera&&map)map.jumpTo({center:[state.camera.lng,state.camera.lat],zoom:state.camera.zoom});
       if(state.crop)selectCrop(state.crop,undefined,false);
+      // jumpTo emits moveend synchronously; restore the selection before its URL save.
+      if(state.camera&&map)map.jumpTo({center:[state.camera.lng,state.camera.lat],zoom:state.camera.zoom});
     });
     const hashTarget=location.hash?document.getElementById(location.hash.slice(1)):null;
     if(hashTarget?.closest('details'))hashTarget.closest('details')!.open=true;

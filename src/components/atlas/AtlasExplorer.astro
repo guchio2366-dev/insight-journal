@@ -29,7 +29,7 @@ const payload = JSON.stringify({ initialField, assetBase, reviewMode, base: with
         <p><span data-fallback-status>代替図を表示しています。解説は地図の下へ。</span> <a href={`${assetBase}${initialField==='agriculture'?'agriculture':'land'}-fallback.webp`} data-fallback-full target="_blank" rel="noopener">図を拡大</a></p>
       </div>
       <div class="atlas-map-labels" data-map-labels aria-hidden="true"></div>
-      <div class="atlas-map-tools" aria-label="地図操作">
+      <div class="atlas-map-tools" aria-label="地図操作" hidden>
         <button type="button" data-map-action="fit" aria-label="米国本土の全体を表示">全体</button>
         <button type="button" data-map-action="in" aria-label="地図を拡大">＋</button>
         <button type="button" data-map-action="out" aria-label="地図を縮小">−</button>
