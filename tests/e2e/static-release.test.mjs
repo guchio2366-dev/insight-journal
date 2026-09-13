@@ -42,11 +42,20 @@ test("地図の通常経路は共通レンダラーと下の解説を含み、�
     const html=await readFile(path.join(distRoot,route),'utf8');
     assert.match(html,/data-atlas-explorer/);
     assert.match(html,/id="atlas-details"/);
-    assert.match(html,/id="crop-conditions"/);
+    assert.match(html,/data-national-summary/);
+    assert.match(html,/id="crop-details"/);
     assert.match(html,/<div[^>]*class="atlas-map-tools"[^>]*hidden/);
     assert.doesNotMatch(html,/<a[^>]+data-field="(?:climate|industry)"/);
     assert.doesNotMatch(html,/atlas-zone-list|atlas-map-stage/);
   }
+});
+
+test("農業ページは全米販売高・輸出入と5作物の静的統計を含む",async()=>{
+  const html=await readFile(path.join(distRoot,'atlas/north-america/agriculture/index.html'),'utf8');
+  assert.match(html,/農産物販売高/);assert.match(html,/農産物の輸出・輸入/);
+  for(const id of ['corn','soybean','wheat','cotton','rice'])assert.match(html,new RegExp(`data-stat-panel="${id}"`));
+  assert.doesNotMatch(html,/data-stat-panel="specialty"/);
+  assert.match(html,/サクラメントバレーの稲作/);
 });
 
 test("静的成果物に非公開情報を含めず、サブパス用URLを使う", async () => {

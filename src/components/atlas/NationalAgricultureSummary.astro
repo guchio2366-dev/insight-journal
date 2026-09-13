@@ -1,0 +1,56 @@
+---
+import { atlasStatistics, statisticsSources } from '../../data/atlas/statistics';
+
+const receipts = atlasStatistics.national.cashReceipts;
+const trade = atlasStatistics.national.trade.series;
+const receiptRows = receipts.categories;
+const maxReceipt = Math.max(...receiptRows.map((entry) => entry.value));
+const lastTrade = trade.at(-1)!;
+const tradeGap = lastTrade.imports - lastTrade.exports;
+const x = (index:number) => 25 + index * (310 / (trade.length - 1));
+const y = (value:number) => 119 - ((value - 110) / 110) * 94;
+const exportPoints = trade.map((entry, index) => `${x(index).toFixed(1)},${y(entry.exports).toFixed(1)}`).join(' ');
+const importPoints = trade.map((entry, index) => `${x(index).toFixed(1)},${y(entry.imports).toFixed(1)}`).join(' ');
+const farmSource = statisticsSources.find((entry) => entry.id === 'source-usda-farm-income')!;
+const tradeSource = statisticsSources.find((entry) => entry.id === 'source-usda-fatus-calendar')!;
+---
+<aside class="atlas-national" aria-labelledby="national-agriculture-title" data-national-summary>
+  <header>
+    <p class="atlas-eyebrow">NATIONAL OVERVIEW</p>
+    <h2 id="national-agriculture-title">米国の農業</h2>
+    <p>2025年の農産物販売高は約5,420億ドル。肉牛・子牛が最大で、とうもろこしと大豆も大きな柱です。貿易額では2022年以降、輸入が輸出を上回り、2025年の差は約{(tradeGap*10).toFixed(0)}億ドルでした。</p>
+  </header>
+
+  <figure class="atlas-mini-chart atlas-receipts-chart">
+    <figcaption><strong>農産物販売高</strong><span>2025年推計・10億ドル</span></figcaption>
+    <div class="atlas-bars">
+      {receiptRows.map((entry) => <div class="atlas-bar-row">
+        <span>{entry.label}</span>
+        <i><b style={`width:${entry.value / maxReceipt * 100}%`}></b></i>
+        <strong>{entry.value.toFixed(1)}</strong>
+      </div>)}
+    </div>
+    <p class="atlas-chart-total">全品目　<strong>{receipts.total.toFixed(1)}</strong></p>
+    <p class="atlas-chart-note">販売による現金収入。利益・生産量・GDPではありません。</p>
+    <a href={farmSource.url} target="_blank" rel="noopener noreferrer">出典：USDA ERS</a>
+  </figure>
+
+  <figure class="atlas-mini-chart atlas-trade-chart">
+    <figcaption><strong>農産物の輸出・輸入</strong><span>暦年・名目10億ドル</span></figcaption>
+    <svg viewBox="0 0 360 145" role="img" aria-labelledby="national-trade-title national-trade-desc">
+      <title id="national-trade-title">2016年から2025年の米国農産物輸出額と輸入額</title>
+      <desc id="national-trade-desc">輸出は2016年138.9、2025年171.4。輸入は2016年122.6、2025年212.1、単位は10億ドルです。</desc>
+      {[120,160,200].map(value => <g><line x1="25" y1={y(value)} x2="335" y2={y(value)}></line><text x="2" y={y(value)+4}>{value}</text></g>)}
+      <polyline class="atlas-line atlas-line--export" points={exportPoints}></polyline>
+      <polyline class="atlas-line atlas-line--import" points={importPoints}></polyline>
+      <circle class="atlas-dot atlas-dot--export" cx={x(trade.length-1)} cy={y(lastTrade.exports)} r="3"></circle>
+      <circle class="atlas-dot atlas-dot--import" cx={x(trade.length-1)} cy={y(lastTrade.imports)} r="3"></circle>
+      <text class="atlas-line-label atlas-line-label--import" x="331" y={y(lastTrade.imports)-7} text-anchor="end">輸入 {lastTrade.imports.toFixed(1)}</text>
+      <text class="atlas-line-label atlas-line-label--export" x="331" y={y(lastTrade.exports)+14} text-anchor="end">輸出 {lastTrade.exports.toFixed(1)}</text>
+      <text x="25" y="141">2016</text><text x="335" y="141" text-anchor="end">2025</text>
+    </svg>
+    <div class="atlas-line-key" aria-hidden="true"><span><i class="is-export"></i>輸出</span><span><i class="is-import"></i>輸入</span></div>
+    <a href={tradeSource.url} target="_blank" rel="noopener noreferrer">出典：USDA ERS FATUS</a>
+    <details><summary>数値表</summary><table><thead><tr><th>年</th><th>輸出</th><th>輸入</th></tr></thead><tbody>{trade.map(entry=><tr><th>{entry.year}</th><td>{entry.exports.toFixed(1)}</td><td>{entry.imports.toFixed(1)}</td></tr>)}</tbody></table></details>
+  </figure>
+</aside>

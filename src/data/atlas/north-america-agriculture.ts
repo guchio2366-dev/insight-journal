@@ -235,6 +235,41 @@ export const sources: AtlasSource[] = [
     publisher: "U.S. Geological Survey",
     url: "https://www.usgs.gov/publications/water-level-and-recoverable-water-storage-changes-high-plains-aquifer-predevelopment-1",
     note: "大平原の地下水論点。常設主題ではなく該当地域を選んだときの補助解説に利用。"
+  },
+  {
+    id: "source-noaa-low-level-jet",
+    title: "Great Plains low-level jet and moisture transport",
+    publisher: "NOAA Institutional Repository",
+    url: "https://repository.library.noaa.gov/view/noaa/59778",
+    note: "メキシコ湾方面からグレートプレーンズ・中西部へ運ばれる水蒸気と降水の関係。地域差を伴うため、風だけで収量を断定しない。"
+  },
+  {
+    id: "source-iowa-corn-water",
+    title: "Corn Pollination: Effect of High Temperature and Stress",
+    publisher: "Iowa State University Extension",
+    url: "https://crops.extension.iastate.edu/encyclopedia/corn-pollination-effect-high-temperature-and-stress",
+    note: "受粉期の高温・乾燥と土壌水分が粒の形成へ与える影響。"
+  },
+  {
+    id: "source-usda-northern-plains",
+    title: "Focus on Croplands in the Northern Plains",
+    publisher: "USDA Climate Hubs",
+    url: "https://www.climatehubs.usda.gov/hubs/northern-plains/topic/focus-croplands-northern-plains",
+    note: "北部大平原の春小麦・デュラム小麦、東西の乾湿差、天水と灌漑。"
+  },
+  {
+    id: "source-usda-southern-plains",
+    title: "Southern Plains Climate Hub priorities",
+    publisher: "USDA Climate Hubs",
+    url: "https://www.climatehubs.usda.gov/hubs/hub-priorities-fy22-nifa-rfa",
+    note: "南部大平原の冬小麦・綿花、干ばつ、天水栽培と灌漑の関係。"
+  },
+  {
+    id: "source-wsu-inland-northwest",
+    title: "Climate of the Inland Pacific Northwest",
+    publisher: "Washington State University Extension",
+    url: "https://files.extension.wsu.edu/em108-ch1.pdf",
+    note: "内陸北西部で降水が秋から春に偏り、夏が乾燥する季節性。"
   }
 ];
 

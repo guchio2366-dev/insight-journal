@@ -1,0 +1,86 @@
+---
+import { cropExplanations } from '../../data/atlas/explorer';
+import { atlasStatistics, statisticCropIds, statisticsSources, type StatisticCropId } from '../../data/atlas/statistics';
+import { sources } from '../../data/atlas/north-america-agriculture';
+
+const names: Record<StatisticCropId,string> = { corn:'とうもろこし', soybean:'大豆', wheat:'小麦', cotton:'綿花', rice:'米' };
+const colors: Record<StatisticCropId,string> = { corn:'#d9a526', soybean:'#759b62', wheat:'#bd7b45', cotton:'#a46998', rice:'#3c91b2' };
+const countries: Record<string,string> = {
+  'United States':'米国', China:'中国', Brazil:'ブラジル', 'European Union':'EU', Argentina:'アルゼンチン', India:'インド', Russia:'ロシア', Australia:'豪州', Bangladesh:'バングラデシュ', Indonesia:'インドネシア', Vietnam:'ベトナム', Mexico:'メキシコ', Japan:'日本', 'South Korea':'韓国', Colombia:'コロンビア', 'European Union-27':'EU27', Egypt:'エジプト', Philippines:'フィリピン', Nigeria:'ナイジェリア', Pakistan:'パキスタン', Turkey:'トルコ', Haiti:'ハイチ', Iraq:'イラク', Canada:'カナダ', Other:'その他'
+};
+const sourceForExport = (id:StatisticCropId) => statisticsSources.find(entry=>entry.id===(id==='rice'?'source-usda-gats-rice':'source-usda-fatus-markets'))!;
+const productionSource = statisticsSources.find(entry=>entry.id==='source-usda-psd')!;
+const fmt = (value:number) => new Intl.NumberFormat('ja-JP',{maximumFractionDigits:1}).format(value);
+const pct = (value:number,total:number) => value/total*100;
+const deltaText = (trend:readonly {share:number}[]) => {
+  const average=(items:readonly {share:number}[])=>items.reduce((sum,item)=>sum+item.share,0)/items.length;
+  const change=average(trend.slice(-3))-average(trend.slice(0,3));
+  return Math.abs(change)<0.15?'直近3年平均は、期間初めの3年平均とほぼ同じです。':`直近3年平均は、期間初めの3年平均より${Math.abs(change).toFixed(1)}ポイント${change>0?'高く':'低く'}なっています。`;
+};
+const productionUnit = (id:StatisticCropId) => id==='cotton'?'千480ポンド俵':'千トン';
+---
+<section class="atlas-crop-details" id="crop-details" aria-labelledby="crop-details-title">
+  <header class="atlas-crop-details-head">
+    <p class="atlas-eyebrow">CROP DETAIL</p>
+    <h2 id="crop-details-title">作物を詳しく読む</h2>
+    <p>作物の性質、米国の地域条件、用途と世界の中での位置を一続きで確認できます。</p>
+  </header>
+  <div class="atlas-stat-tabs" role="tablist" aria-label="詳しく見る作物" data-stat-tabs>
+    {statisticCropIds.map((id,index)=><button type="button" role="tab" aria-selected={index===0?'true':'false'} aria-controls={`crop-${id}`} id={`stat-tab-${id}`} data-stat-select={id} style={`--crop-color:${colors[id]}`}>{names[id]}</button>)}
+  </div>
+
+  {statisticCropIds.map((id,index)=>{
+    const description=cropExplanations.find(entry=>entry.id===id)!;
+    const exportData=atlasStatistics.exports[id];
+    const production=atlasStatistics.production[id];
+    const us=production.trend.at(-1)!;
+    const chartMin=Math.max(0,Math.floor(Math.min(...production.trend.map(entry=>entry.share))-3));
+    const chartMax=Math.ceil(Math.max(...production.trend.map(entry=>entry.share))+3);
+    const x=(point:number)=>22+point*(316/(production.trend.length-1));
+    const y=(share:number)=>104-(share-chartMin)/(chartMax-chartMin)*80;
+    const points=production.trend.map((entry,point)=>`${x(point).toFixed(1)},${y(entry.share).toFixed(1)}`).join(' ');
+    let offset=0;
+    return <article class="atlas-crop-panel" id={`crop-${id}`} role="tabpanel" aria-labelledby={`stat-tab-${id}`} data-stat-panel={id} style={`--crop-color:${colors[id]}`}>
+      <div class="atlas-crop-copy">
+        <h3>{names[id]}</h3>
+        {description.paragraphs.map(paragraph=><p>{paragraph}</p>)}
+        <p class="atlas-crop-uses"><strong>主な用途</strong>{description.uses}</p>
+        <p class="atlas-inline-sources">地理・用途：{description.sources.map((sourceId,sourceIndex)=><Fragment>{sourceIndex>0?' ／ ':''}<a href={`#${sourceId}`}>{sources.find(source=>source.id===sourceId)?.publisher}</a></Fragment>)}</p>
+      </div>
+      <div class="atlas-crop-charts">
+        <figure class="atlas-export-chart">
+          <figcaption><strong>米国からの輸出先</strong><span>{exportData.year}年・数量</span></figcaption>
+          <div class="atlas-donut-layout">
+            <svg class="atlas-donut" viewBox="0 0 120 120" role="img" aria-label={`${names[id]}の輸出先構成`}>
+              <circle cx="60" cy="60" r="43" pathLength="100" class="atlas-donut-base"></circle>
+              {exportData.destinations.map((entry,entryIndex)=>{
+                const share=pct(entry.value,exportData.total); const start=offset; offset+=share;
+                return <circle cx="60" cy="60" r="43" pathLength="100" class={`atlas-donut-slice atlas-donut-slice--${entryIndex}`} stroke-dasharray={`${share} ${100-share}`} stroke-dashoffset={-start} transform="rotate(-90 60 60)"><title>{countries[entry.country]??entry.country} {share.toFixed(1)}%</title></circle>;
+              })}
+              <text x="60" y="56" text-anchor="middle">総輸出量</text><text x="60" y="73" text-anchor="middle" class="atlas-donut-total">{fmt(exportData.total/1_000_000)}百万t</text>
+            </svg>
+            <ol class="atlas-donut-key">{exportData.destinations.map((entry,entryIndex)=><li><i class={`atlas-donut-color--${entryIndex}`}></i><span>{countries[entry.country]??entry.country}</span><strong>{pct(entry.value,exportData.total).toFixed(1)}%</strong></li>)}</ol>
+          </div>
+          <p class="atlas-chart-note">総量 {fmt(exportData.total/1_000_000)}百万トン。{id==='rice'?'FAS換算可能な明細の精米換算（MTMEQ）。':'上位5市場とその他。'} 2025年は予備値です。</p>
+          <a href={sourceForExport(id).url} target="_blank" rel="noopener noreferrer">出典：{sourceForExport(id).publisher}</a>
+        </figure>
+
+        <figure class="atlas-world-chart">
+          <figcaption><strong>世界生産と米国シェア</strong><span>{production.marketYear}販売年度</span></figcaption>
+          <div class="atlas-world-bars">{production.countries.map(entry=><div class={`atlas-world-row ${entry.code==='US'?'is-us':''}`}><span>{countries[entry.country]??entry.country}</span><i><b style={`width:${pct(entry.value,production.worldTotal)}%`}></b></i><strong>{pct(entry.value,production.worldTotal).toFixed(1)}%</strong></div>)}</div>
+          <p class="atlas-us-production">米国 {fmt(us.us)} {productionUnit(id)} ／ 世界の {us.share.toFixed(1)}%</p>
+          <svg class="atlas-share-line" viewBox="0 0 360 132" role="img" aria-label={`${names[id]}の世界生産に占める米国シェア、2015から2024販売年度`}>
+            <line x1="22" y1="24" x2="338" y2="24"></line><line x1="22" y1="104" x2="338" y2="104"></line>
+            <text x="1" y="28">{chartMax}%</text><text x="1" y="108">{chartMin}%</text>
+            <polyline points={points}></polyline>
+            {production.trend.map((entry,point)=><circle cx={x(point)} cy={y(entry.share)} r={point===production.trend.length-1?3.4:1.8}><title>{entry.year}年 {entry.share.toFixed(1)}%</title></circle>)}
+            <text x="22" y="128">2015</text><text x="338" y="128" text-anchor="end">2024</text>
+          </svg>
+          <p class="atlas-chart-note">{deltaText(production.trend)} 将来予測や統計的な傾向判定ではありません。</p>
+          <a href={productionSource.url} target="_blank" rel="noopener noreferrer">出典：USDA FAS PSD</a>
+        </figure>
+      </div>
+    </article>;
+  })}
+  <noscript><p class="atlas-chart-note">JavaScriptが無効な場合は、上の作物リンクから各節へ移動して読めます。</p></noscript>
+</section>
