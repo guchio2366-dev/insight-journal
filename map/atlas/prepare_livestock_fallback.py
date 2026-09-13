@@ -45,7 +45,7 @@ def parse_source() -> tuple[dict[str, tuple[str, str, str]], list[tuple[str, str
     return kinds, regions
 
 
-def svg(base_href: str, kinds: dict[str, tuple[str, str, str]], regions: list[tuple[str, str, float, float]]) -> str:
+def svg(kinds: dict[str, tuple[str, str, str]], regions: list[tuple[str, str, float, float]]) -> str:
     marker_nodes = []
     for kind_id, label, longitude, latitude in regions:
         kind_label, symbol, color = kinds[kind_id]
@@ -68,7 +68,6 @@ def svg(base_href: str, kinds: dict[str, tuple[str, str, str]], regions: list[tu
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" role="img" '
         'aria-labelledby="title desc"><title id="title">米国本土の主要な畜産集積地域</title>'
         '<desc id="desc">USDAの郡別統計で確認した主要な集積を説明用の代表点で示します。農場位置、地域境界、頭羽数を表す記号ではありません。</desc>'
-        f'<image href="{base_href}" width="{WIDTH}" height="{HEIGHT}" preserveAspectRatio="none"/>'
         '<rect x="20" y="15" width="895" height="62" rx="14" fill="#fffaf0" opacity=".91"/>'
         '<g font-family="system-ui, sans-serif">' + ''.join(legend_nodes) + ''.join(marker_nodes) + '</g></svg>\n'
     )
@@ -77,12 +76,8 @@ def svg(base_href: str, kinds: dict[str, tuple[str, str, str]], regions: list[tu
 def main() -> None:
     kinds, regions = parse_source()
     OUTPUT.mkdir(parents=True, exist_ok=True)
-    variants = {
-        "agriculture-livestock-fallback.svg": "../../v3/agriculture-fallback.webp",
-        "livestock-fallback.svg": "../../v3/land-fallback.webp",
-    }
-    for name, base_href in variants.items():
-        (OUTPUT / name).write_text(svg(base_href, kinds, regions), encoding="utf-8")
+    for name in ("agriculture-livestock-fallback.svg", "livestock-fallback.svg"):
+        (OUTPUT / name).write_text(svg(kinds, regions), encoding="utf-8")
 
 
 if __name__ == "__main__":

@@ -36,8 +36,8 @@ const payload = JSON.stringify({ initialField, assetBase, livestockAssetBase, re
         <div class="atlas-map-frame" data-map-frame>
           <div class="atlas-map-surface" data-map-surface aria-label="拡大縮小できる米国本土地図"></div>
           <div class="atlas-fallback" data-fallback>
-            <img src={initialField==='agriculture'?`${livestockAssetBase}agriculture-livestock-fallback.svg`:`${assetBase}land-fallback.webp`} width="1800" height="1084" alt={initialField==='agriculture'?'米国本土の地形・河川、主要作物の栽培域、主要な畜産集積地域の概略図。':'米国本土の地形と水系。西部に山地、中央に平原、東部にアパラチア山脈が続きます。'} data-fallback-image />
-            <p><span data-fallback-status>代替図を表示しています。解説は地図の下へ。</span> <a href={initialField==='agriculture'?`${livestockAssetBase}agriculture-livestock-fallback.svg`:`${assetBase}land-fallback.webp`} data-fallback-full target="_blank" rel="noopener">図を拡大</a></p>
+            <div class="atlas-fallback-map"><img src={`${assetBase}${initialField==='agriculture'?'agriculture':'land'}-fallback.webp`} width="1800" height="1084" alt={initialField==='agriculture'?'米国本土の地形・河川と主要作物の栽培域の概略図。':'米国本土の地形と水系。西部に山地、中央に平原、東部にアパラチア山脈が続きます。'} data-fallback-image /><img class="atlas-fallback-livestock" src={`${livestockAssetBase}agriculture-livestock-fallback.svg`} width="1800" height="1084" alt="主要な畜産集積地域の代表点。" data-fallback-livestock /></div>
+            <p><span data-fallback-status>代替図を表示しています。解説は地図の下へ。</span> <a href={`${assetBase}${initialField==='agriculture'?'agriculture':'land'}-fallback.webp`} data-fallback-full target="_blank" rel="noopener">図を拡大</a></p>
           </div>
           <div class="atlas-map-labels" data-map-labels aria-hidden="true"></div>
           <div class="atlas-livestock-markers" data-livestock-markers></div>
