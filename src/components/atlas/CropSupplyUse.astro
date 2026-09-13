@@ -1,0 +1,42 @@
+---
+import { cropSupplyUse, supplyUseSource, formatShare, type SupplyUseCropId } from '../../data/atlas/supply-use';
+interface Props { cropId:SupplyUseCropId }
+const data=cropSupplyUse(Astro.props.cropId);
+const fmt=(n:number)=>n.toLocaleString('ja-JP',{minimumFractionDigits:data.decimals,maximumFractionDigits:data.decimals});
+// Signed adjustments stay outside the stack. Both bars keep the same denominator.
+const positiveTotal=data.destinations.reduce((sum,item)=>sum+item.value,0);
+const scale=Math.max(data.totalSupply,positiveTotal);
+---
+<section class="crop-supply-use" id={`supply-use-${data.id}`} aria-labelledby={`supply-title-${data.id}`} data-supply-use={data.id}>
+  <header><h4 id={`supply-title-${data.id}`}>供給元と行き先</h4><span>2024/25 販売年度 · 実績</span></header>
+  <p class="supply-takeaway">{data.takeaway}</p>
+  <p class="supply-total">総供給 <strong>{fmt(data.totalSupply)}</strong> {data.unit}</p>
+  <figure><figcaption>２本とも総供給が100%。{data.basis}</figcaption>
+    {[{title:'供給元',segments:data.supply},{title:'行き先',segments:data.destinations}].map(row=><div class="supply-row">
+      <h5>{row.title}</h5>
+      <div class="supply-bar" role="img" aria-label={row.title+'：'+row.segments.map(s=>`${s.label} ${formatShare(s.value,data.totalSupply)}`).join('、')}>
+        {row.segments.map(s=><span class={`supply-segment role-${s.role}`} style={`width:${s.value/scale*100}%`} />)}
+        <i class="supply-hundred" style={`left:${data.totalSupply/scale*100}%`} aria-hidden="true" />
+      </div>
+      <ol class="supply-key">{row.segments.map(s=><li><i class={`role-${s.role}`} aria-hidden="true"/><span>{s.label}</span><strong>{formatShare(s.value,data.totalSupply)}</strong></li>)}</ol>
+    </div>)}
+    {data.adjustment!==0&&<p class="supply-adjustment">行き先の合計に、原表の未勘定 {fmt(data.adjustment)} {data.unit}を加えると総供給に一致します。100%の線からの差を引き伸ばして補正していません。</p>}
+  </figure>
+  <p class="supply-processing">{data.processing}</p>
+  <p class="supply-imports"><strong>輸入もある？</strong> {data.importNote}{data.importSource&&<> <a href={data.importSource} target="_blank" rel="noopener">USDA ERS</a></>}</p>
+  <details class="supply-data"><summary>数量・期間・定義を確認</summary>
+    <p>{data.start}〜{data.end}。在庫と輸入を含む米国全体の収支です。当年の国産収穫物だけの行き先を追跡したものではありません。</p>
+    <div class="supply-table-wrap" role="region" aria-label={`${data.name}の数量表`} tabindex="0"><table>
+      <caption>{data.name} · {data.unit} · 2024/25</caption><thead><tr><th scope="col">区分</th><th scope="col">数量</th><th scope="col">総供給比</th><th scope="col">定義</th></tr></thead>
+      <tbody>{[{title:'供給元',rows:data.supply},{title:'行き先',rows:data.destinations}].map(group=><><tr><th colspan="4" scope="colgroup">{group.title}</th></tr>{group.rows.map(s=><tr><th scope="row">{s.label}</th><td>{fmt(s.value)}</td><td>{(s.value/data.totalSupply*100).toFixed(2)}%</td><td>{s.definition}</td></tr>)}</>)}
+      {data.adjustment!==0&&<tr><th scope="row">統計上の未勘定</th><td>{fmt(data.adjustment)}</td><td>{(data.adjustment/data.totalSupply*100).toFixed(2)}%</td><td>総供給−国内利用−輸出−期末在庫。原表の符号を保持。</td></tr>}</tbody>
+    </table></div>
+    <p>棒と数量は原表の公表精度を保持。割合の表示は丸めるため合計が100%にならない場合があります。輸入の最終用途別比率は未収録です。</p>
+  </details>
+  <p class="supply-source"><a href={`${supplyUseSource.url}#page=${data.page}`} target="_blank" rel="noopener">USDA {supplyUseSource.report} p.{data.page}</a> · {supplyUseSource.publishedAt}公表、2024/25列。下の輸出先図は2025暦年の参考で、期間・換算基準が異なります。</p>
+</section>
+<style>
+.crop-supply-use{padding:16px;background:#f6f5ed;border:1px solid #d4d9d0;border-radius:5px;color:#293f42;margin-bottom:18px}.crop-supply-use header{display:flex;justify-content:space-between;align-items:baseline;gap:6px;flex-wrap:wrap}.crop-supply-use h4{font-size:17px;margin:0}.crop-supply-use header span{font-size:12px;color:#4d6262}.supply-takeaway{font-size:15px;line-height:1.8;margin:10px 0}.supply-total{font-size:12px;margin:8px 0}.supply-total strong{font-size:19px;font-variant-numeric:tabular-nums}.crop-supply-use figure{margin:12px 0}.crop-supply-use figcaption{font-size:12px;color:#4d6262;line-height:1.6}.supply-row h5{font-size:13px;margin:12px 0 5px}.supply-bar{height:22px;display:flex;position:relative;background:#e7e9e3}.supply-segment{flex-shrink:0;min-width:0;height:100%;display:block}.supply-hundred{position:absolute;top:-3px;bottom:-3px;width:1px;background:#293f42}.role-production{background:#426f62}.role-import{background:#b57532}.role-export{background:#9d597b}.role-stock{background:#a8aeab}.role-domestic-0{background:#4a7291}.role-domestic-1{background:#8b7538}.role-domestic-2{background:#568a84}.role-domestic-3{background:#7b7993}.supply-key{display:flex;gap:5px 16px;flex-wrap:wrap;margin:7px 0 0;padding:0;list-style:none}.supply-key li{display:flex;align-items:baseline;gap:5px;font-size:12px;line-height:1.7}.supply-key i{width:9px;height:9px;flex-shrink:0}.supply-key strong{font-variant-numeric:tabular-nums}.supply-adjustment,.supply-source{font-size:12px;line-height:1.7;margin:10px 0 0;color:#465d5f}.supply-processing,.supply-imports{font-size:14px;line-height:1.85;margin:12px 0}.supply-imports{border-top:1px solid #d4d9d0;padding-top:10px}.supply-data summary{min-height:44px;align-content:center;cursor:pointer;font-size:13px}.supply-data p{font-size:12px;line-height:1.8}.supply-table-wrap{overflow-x:auto;max-width:100%}.supply-data table{border-collapse:collapse;font-size:12px;min-width:580px;width:100%}.supply-data th,.supply-data td{text-align:left;padding:7px;border-bottom:1px solid #ccd3cf}.supply-data td:nth-child(2),.supply-data td:nth-child(3){white-space:nowrap;font-variant-numeric:tabular-nums}.supply-data caption{text-align:left;margin:5px 0}.supply-data :focus-visible{outline:3px solid #294749;outline-offset:3px}
+@media(max-width:700px){.crop-supply-use{padding:12px}.supply-key{gap:4px 12px}.supply-key li{font-size:12px}.supply-takeaway{font-size:14px}.supply-processing,.supply-imports{font-size:14px}}
+@media(forced-colors:active){.supply-segment{border:1px solid CanvasText}.supply-key i{border:1px solid CanvasText}}
+</style>

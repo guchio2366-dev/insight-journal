@@ -1,0 +1,22 @@
+---
+import { agricultureRelations, relationCoverage, relationCheckedAt } from '../../data/atlas/agriculture-relations';
+---
+<section class="agriculture-relations" aria-labelledby="agriculture-relations-title" data-agriculture-relations>
+  <h2 id="agriculture-relations-title">分布のつながりを読む</h2>
+  {agricultureRelations.map(relation=><article class="agriculture-relation" id={`relation-${relation.id}`} data-relation-item={relation.id}>
+    <button type="button" class="relation-compare" data-relation-select={relation.id} aria-pressed="false" aria-label={`${relation.title}を地図で比較`}>比較</button>
+    <details data-relation-details>
+      <summary><span class="relation-title">{relation.title}</span><span class="relation-takeaway">{relation.takeaway}</span></summary>
+      <p>{relation.body}</p><p class="relation-caveat">{relation.caveat}</p>
+      <nav aria-label={`${relation.title}の詳説`}>{relation.links.map(link=><a href={link.href} data-relation-detail-link>{link.label} →</a>)}</nav>
+      <p class="relation-source">{relation.sources.map(source=><a href={source.url} target="_blank" rel="noopener">{source.label}</a>)}</p>
+    </details>
+  </article>)}
+  <details class="relation-method"><summary>比較の範囲と出典</summary><p>{relationCoverage} 解説確認：{relationCheckedAt}。</p></details>
+</section>
+<style>
+.agriculture-relations{margin-top:16px;color:#293f42}.agriculture-relations h2{font-size:17px;margin:0 0 6px;letter-spacing:.03em}.agriculture-relation{position:relative;border-top:1px solid #d1d8d3;padding:6px 2px;scroll-margin-top:80px}.agriculture-relation summary{padding:4px 0;list-style:none;cursor:pointer;min-height:44px}.agriculture-relation summary::-webkit-details-marker{display:none}.relation-title{display:block;font-size:15px;font-weight:700;line-height:1.6}.relation-title::before{content:'＋';font-size:12px;margin-right:4px}.agriculture-relation details[open] .relation-title::before{content:'−'}.relation-takeaway{display:block;font-size:14px;line-height:1.7;color:#3f5557}.relation-compare{display:none;position:absolute;right:2px;top:8px;min-width:44px;min-height:44px;border:1px solid #829795;border-radius:4px;background:#fffdf7;font:inherit;font-size:12px;color:#294749;cursor:pointer}.relation-compare[aria-pressed=true]{background:#294749;color:white}.agriculture-relation p{font-size:14px;line-height:1.8;margin:8px 0}.relation-caveat,.relation-source,.relation-method p{font-size:12px!important;color:#4b5e60}.agriculture-relation nav{display:flex;flex-wrap:wrap;gap:4px 16px}.agriculture-relation nav a{display:inline-flex;align-items:center;min-height:44px;font-size:13px}.relation-source a{display:inline-block;min-height:44px;align-content:center}.relation-method{border-top:1px solid #d1d8d3}.relation-method summary{min-height:44px;align-content:center;font-size:12px;cursor:pointer}.agriculture-relation.is-selected{border-left:3px solid #294749;padding-left:10px;background:#f3f5ee}button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid #294749;outline-offset:3px}
+:global(.atlas-explorer[data-enhanced="true"]) .relation-compare{display:block}
+:global(.atlas-explorer[data-enhanced="true"]) [data-relation-details]>summary{padding-right:54px}
+@media(max-width:700px){.agriculture-relations{margin-top:12px}.agriculture-relations h2{font-size:16px}.agriculture-relation{padding:4px 2px}.relation-title{font-size:14px}.relation-takeaway{font-size:13px;line-height:1.65}.relation-compare{top:7px}}
+</style>

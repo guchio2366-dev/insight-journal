@@ -18,8 +18,8 @@ export const livestockRegions=[
  {id:'penn-ohio-layers',kindId:'layers',label:'ペンシルベニア・オハイオ',anchor:[-80.6,40.6],summary:'飼料供給と人口の多い市場へのアクセスが採卵鶏の立地を支えます。肉用鶏とは生産・集荷の仕組みが異なります。'}] as const;
 export const livestockReadings=[
  {id:'beef',title:'肉牛',body:'肉牛生産は、草地を使う繁殖・育成と、穀物飼料を多く使う肥育に分かれます。広い半乾燥草原を持つグレートプレーンズは繁殖に向き、中央・南部のハイプレーンズでは飼料、輸送、食肉処理施設への接続が肥育を支えます。このため「牛」の分布は一つの自然条件だけではなく、生産段階の連鎖として捉える必要があります。'},
- {id:'dairy',title:'酪農',body:'乳牛は毎日搾乳し、傷みやすい生乳を継続して集荷・加工します。したがって飼料と水、暑熱管理に加え、加工施設と冷蔵物流が近いことが重要です。上部中西部・北東部では冷涼さと既存の加工基盤、カリフォルニア・アイダホでは大規模飼養、灌漑飼料、加工網が異なる形の酪農地域をつくっています。'},
+ {id:'dairy',title:'酪農',body:'乳牛は毎日搾乳し、傷みやすい生乳を継続して集荷・加工します。したがって飼料と水、暑熱管理に加え、加工施設と冷蔵物流が近いことが重要です。上部中西部・北東部では冷涼さと既存の加工基盤、カリフォルニア・アイダホでは大規模飼養、灌漑飼料、加工網が異なる形の酪農地域をつくっています。山地や谷だけで酪農の立地は説明できず、生乳を生産する農場と乳製品を加工する工場も区別して読みます。'},
  {id:'hogs',title:'養豚',body:'豚はとうもろこし・大豆かすなどの濃厚飼料を効率よく肉へ変えるため、飼料費と処理施設への距離が立地に強く関わります。中西部では飼料穀物地帯との近さが優位になり、ノースカロライナでは繁殖・肥育・処理を結ぶ生産体制が集積を支えました。地図では自然条件と産業組織の両方を見ます。'},
  {id:'broilers',title:'肉用鶏',body:'肉用鶏は短い飼養期間で出荷し、温度を管理した鶏舎と安定した飼料供給を必要とします。米国南東部では、ふ化場、飼料工場、契約農場、処理施設を近距離で結ぶ仕組みが発達しました。そのため気候の適合だけでなく、生産工程をまとめる加工・物流網が地域の定着を説明します。'},
  {id:'layers',title:'採卵鶏',body:'採卵鶏は継続して卵を生産するため、飼料供給、鶏舎環境、選別・包装、日々の出荷が一体になります。アイオワ周辺では飼料穀物への近さ、東部では大消費地への接続が生産を支えます。肉用鶏と同じ「鶏」でも、産物と流通の条件が異なります。'}] as const;
-export const livestockSources=[{publisher:'USDA NASS',url:'https://www.nass.usda.gov/Publications/AgCensus/2022/Online_Resources/Ag_Census_Web_Maps/Overview/index.php'},{publisher:'USDA ERS',url:'https://www.ers.usda.gov/topics/animal-products'}] as const;
+export const livestockSources=[{publisher:'USDA ERS：酪農の生乳生産と加工（2026年1月更新）',url:'https://www.ers.usda.gov/topics/animal-products/dairy/background'},{publisher:'USDA NASS',url:'https://www.nass.usda.gov/Publications/AgCensus/2022/Online_Resources/Ag_Census_Web_Maps/Overview/index.php'},{publisher:'USDA ERS',url:'https://www.ers.usda.gov/topics/animal-products'}] as const;

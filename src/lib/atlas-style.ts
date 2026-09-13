@@ -17,6 +17,7 @@ export function createAtlasStyle(config:{assetBase:string;natureAssetBase?:strin
     contours:{type:'geojson',data:nature?.contours??emptyCollection},
     'nature-overlays':{type:'geojson',data:nature?.overlays??emptyCollection},
     'nature-highlight':{type:'geojson',data:emptyCollection},
+    'agriculture-relation-context':{type:'geojson',data:emptyCollection},
     'crop-context':{type:'geojson',data:emptyCollection}
   },layers:[
     {id:'ocean',type:'background',paint:{'background-color':'#c1e1ed'}},
@@ -31,11 +32,14 @@ export function createAtlasStyle(config:{assetBase:string;natureAssetBase?:strin
     {id:'crops-fill',type:'fill',source:'crops',filter:['!=',['get','id'],'corn-soybean'],paint:{'fill-color':['get','color'],'fill-opacity':0.62}},
     {id:'crops-outline',type:'line',source:'crops',filter:['!=',['get','id'],'corn-soybean'],paint:{'line-color':['get','color'],'line-opacity':0.85,'line-width':1}},
     {id:'crops-overlap',type:'fill',source:'crops',filter:['==',['get','id'],'corn-soybean'],paint:{'fill-color':'#c8b756','fill-opacity':0.18}},
+    {id:'crop-relation-highlight',type:'line',source:'crops',filter:['==',['get','id'],'__no-relation__'],layout:{visibility:'none'},paint:{'line-color':'#263f4c','line-width':2.2,'line-opacity':0.95}},
     {id:'state-lines',type:'line',source:'base',filter:kind('state'),paint:{'line-color':'#506f73','line-opacity':0.42,'line-width':0.65}},
     {id:'country-lines',type:'line',source:'base',filter:kind('land'),paint:{'line-color':'#4c7b8a','line-width':0.9,'line-opacity':0.75}},
     {id:'rivers',type:'line',source:'base',filter:kind('river'),paint:{'line-color':'#5799b5','line-width':['interpolate',['linear'],['zoom'],2,0.5,6,1.5],'line-opacity':0.86}},
     {id:'lakes',type:'fill',source:'base',filter:kind('lake'),paint:{'fill-color':'#a5d2e6'}},
     {id:'lakes-outline',type:'line',source:'base',filter:kind('lake'),paint:{'line-color':'#5799b5','line-width':0.65}},
+    {id:'agriculture-relation-line',type:'line',source:'agriculture-relation-context',filter:['!=',['geometry-type'],'Point'],layout:{visibility:'none'},paint:{'line-color':'#263f4c','line-width':1.8,'line-dasharray':[4,3]}},
+    {id:'agriculture-relation-point',type:'circle',source:'agriculture-relation-context',filter:['==',['geometry-type'],'Point'],layout:{visibility:'none'},paint:{'circle-radius':7,'circle-color':'#fffdf4','circle-stroke-color':'#263f4c','circle-stroke-width':2}},
     {id:'contours-secondary',type:'line',source:'contours',filter:['==',['get','index'],false],layout:{visibility:'none'},paint:{'line-color':'#ad927b','line-width':0.6,'line-opacity':0.7}},
     {id:'contours-index',type:'line',source:'contours',filter:['==',['get','index'],true],layout:{visibility:'none'},paint:{'line-color':'#875d40','line-width':['interpolate',['linear'],['zoom'],2,0.7,6,1.15],'line-opacity':0.82}},
     {id:'contours-hit',type:'line',source:'contours',layout:{visibility:'none'},paint:{'line-color':'#000','line-width':10,'line-opacity':0}},
@@ -51,7 +55,8 @@ export function createAtlasStyle(config:{assetBase:string;natureAssetBase?:strin
 
 export function setFieldLayers(map:{setLayoutProperty:(id:string,key:string,value:string)=>unknown;setPaintProperty?:(id:string,key:string,value:unknown)=>unknown},field:string,natureMode='climate',cropsVisible=true) {
   const agriculture=field==='agriculture', natural=field==='natural';
-  for(const id of ['crops-fill','crops-outline','crops-overlap'])map.setLayoutProperty(id,'visibility',agriculture&&cropsVisible?'visible':'none');
+  for(const id of ['crops-fill','crops-outline','crops-overlap','crop-relation-highlight'])map.setLayoutProperty(id,'visibility',agriculture&&cropsVisible?'visible':'none');
+  for(const id of ['agriculture-relation-line','agriculture-relation-point'])map.setLayoutProperty(id,'visibility',agriculture?'visible':'none');
   map.setLayoutProperty('climate-raster','visibility',natural&&natureMode==='climate'?'visible':'none');
   map.setLayoutProperty('city-points','visibility',natural&&natureMode==='climate'?'visible':'none');
   for(const id of ['aquifers-fill','aquifers-pattern','aquifers-outline','reservoir-points'])map.setLayoutProperty(id,'visibility',natural&&natureMode==='water'?'visible':'none');

@@ -1,0 +1,16 @@
+---
+import {readFileSync} from 'node:fs';
+import {agricultureRelations} from '../../data/atlas/agriculture-relations';
+import {livestockRegions} from '../../data/atlas/livestock';
+import {fallbackProject, fallbackGeometryPath, relationContextFeatures} from '../../lib/atlas-relation-geometry';
+const read=(path:string)=>JSON.parse(readFileSync('public/assets/atlas/'+path,'utf8')).features;
+const crops=read('v3/agriculture.geojson'),base=read('v3/base.geojson'),land=read('v3/land.geojson'),overlays=read('nature-v1/overlays.geojson');
+---
+<svg data-relation-fallback class="relation-fallback" viewBox="0 0 1800 1084" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+  {agricultureRelations.map(relation=><g data-fallback-relation={relation.id} hidden>
+    <g data-relation-crops>{crops.filter((f:any)=>(relation.cropIds as readonly string[]).includes(f.properties.id)).map((f:any)=><path d={fallbackGeometryPath(f.geometry)} />)}</g>
+    <g class="relation-context">{relationContextFeatures(relation.baseFeatureIds,base,land,overlays).map(f=>f.geometry.type==='Point'?<circle cx={fallbackProject(f.geometry.coordinates)[0]} cy={fallbackProject(f.geometry.coordinates)[1]} r="13"/>:<path d={fallbackGeometryPath(f.geometry)} />)}</g>
+    <g class="relation-animals" data-relation-animals>{livestockRegions.filter(r=>(relation.livestockRegionIds as readonly string[]).includes(r.id)).map(r=>{const [x,y]=fallbackProject(r.anchor);return <><circle cx={x} cy={y} r="26"/><circle cx={x} cy={y} r="34"/></>;})}</g>
+  </g>)}
+</svg>
+<style>.relation-fallback{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.relation-fallback path,.relation-fallback circle{fill:none;stroke:#263f4c;stroke-width:1.8;vector-effect:non-scaling-stroke}.relation-context path,.relation-context circle{stroke-dasharray:4 3;stroke-width:1.4}.relation-animals circle{stroke-width:2;stroke:#253f49}</style>

@@ -305,3 +305,25 @@
 .atlas-feature-picker{min-width:0}
 .atlas-geolabel--city{font-size:12px}
 .atlas-nature-tabs button:focus-visible,.atlas-explorer select:focus-visible{outline:3px solid #176f89;outline-offset:2px}
+
+/* Agriculture v6: relationship reading and supply/use keep their own layout. */
+.atlas-crop-data{min-width:0}
+.atlas-crop-charts figcaption{flex-wrap:wrap}
+.atlas-explorer[data-field=agriculture] .atlas-primary-grid>[data-field-national],.atlas-explorer[data-field=agriculture] .atlas-primary-grid .atlas-national{height:auto;align-self:start}
+.atlas-relation-warning{border-top:1px solid #bfccc5;margin-top:8px;padding-top:5px}
+.atlas-relation-warning p{font-size:12px}
+.atlas-relation-warning button{min-height:44px;border:1px solid #607e79;border-radius:4px;background:#fffdf7;color:#254b50;font:inherit;font-size:12px;padding:6px 10px;cursor:pointer}
+.atlas-livestock-marker.is-related{outline:3px double #203c48;outline-offset:4px;box-shadow:0 0 0 4px #fffdf5}
+.atlas-livestock-marker:focus-visible,.atlas-relation-warning button:focus-visible,[data-map-surface]:focus-visible{outline:3px solid #176f89;outline-offset:3px}
+.atlas-crop-panel{scroll-margin-top:70px}
+@media(max-width:899px){.atlas-crop-panel{grid-template-columns:1fr;gap:14px}}
+@media(max-width:700px){
+ .atlas-explorer[data-field=agriculture] .atlas-map-tools button{width:44px;height:44px}
+ .atlas-explorer[data-field=agriculture] .atlas-agri-layers label{min-height:44px}
+ .atlas-livestock-marker{min-height:44px;min-width:44px}
+ .atlas-relation-warning button{max-width:100%}
+ .atlas-explorer[data-field=agriculture] .atlas-selection--below{font-size:14px;line-height:1.7;padding:10px 44px 10px 12px}
+ .atlas-explorer[data-field=agriculture] .atlas-selection--below strong{font-size:15px}
+ .atlas-explorer[data-field=agriculture] .atlas-selection--below a{display:inline-flex;align-items:center;min-height:44px;font-size:13px}
+}
+@media(max-width:360px){.atlas-donut-layout{grid-template-columns:1fr}.atlas-stat-tabs{display:flex;overflow-x:auto}.atlas-stat-tabs button{flex:1 0 64px}}

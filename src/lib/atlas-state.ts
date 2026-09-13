@@ -2,6 +2,8 @@ import { regionalInsightIds } from '../data/atlas/regional-insights.ts';
 import { validNatureFeature } from './atlas-nature-state.ts';
 import { livestockRegions } from '../data/atlas/livestock.ts';
 
+export const agricultureRelationIds=['corn-soy-hogs','plains-wheat-cattle','california-rice-water'] as const;
+
 export const readyFields = ['overview', 'agriculture', 'natural', 'industry'] as const;
 export const natureModes = ['climate', 'water', 'landform', 'contour'] as const;
 export const climateCityIds = ['seattle','san-francisco','los-angeles','las-vegas','denver','dallas','chicago','detroit','new-orleans','miami','washington-dc','new-york'] as const;
@@ -42,6 +44,7 @@ export function readAtlasState(url: URL, defaultField: MapField = 'overview') {
     camera,
     crop:allowed(url.searchParams.get('crop'),mapCropIds),
     region:allowed(url.searchParams.get('region'),regionalInsightIds),
+    relation:allowed(url.searchParams.get('crop'),mapCropIds)||allowed(url.searchParams.get('region'),regionalInsightIds)||validAnimalRegion?null:allowed(url.searchParams.get('relation'),agricultureRelationIds),
     stats:allowed(url.searchParams.get('stats'),statsCropIds) ?? 'corn',
     view:explicitView ?? (camera?'custom':'fit') as ViewMode,
     env:allowed(url.searchParams.get('env'),natureModes) ?? (pathField==='land'?'landform':'climate'),
@@ -61,7 +64,8 @@ export function writeAtlasState(
   stats?:string|null,
   view:ViewMode='custom',
   agriLayers:readonly AgricultureLayer[]=['crops','livestock'],animal?:string|null,animalRegion?:string|null,
-  nature?:{env?:NatureMode;city?:string|null;natureFeature?:string|null}
+  nature?:{env?:NatureMode;city?:string|null;natureFeature?:string|null},
+  relation?:string|null
 ) {
   const next=new URL(url);
   next.pathname=base+(field==='overview'?'':field==='natural'?'nature/':field+'/');
@@ -77,5 +81,6 @@ export function writeAtlasState(
   if(allowed(nature?.env??null,natureModes) && nature!.env!=='climate')next.searchParams.set('env',nature!.env!);else next.searchParams.delete('env');
   if(allowed(nature?.city??null,climateCityIds))next.searchParams.set('city',nature!.city!);else next.searchParams.delete('city');
   if(validNatureFeature(nature?.natureFeature))next.searchParams.set('natureFeature',nature!.natureFeature!);else next.searchParams.delete('natureFeature');
+  if(allowed(relation??null,agricultureRelationIds)&&!next.searchParams.has('crop')&&!next.searchParams.has('region')&&!next.searchParams.has('animalRegion'))next.searchParams.set('relation',relation!);else next.searchParams.delete('relation');
   return next;
 }
