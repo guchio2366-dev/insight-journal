@@ -293,7 +293,7 @@ export async function startAtlas() {
     el('[data-city-picker]').hidden=next!=='climate';root.querySelectorAll<HTMLElement>('[data-nature-key-panel]').forEach(panel=>panel.hidden=panel.dataset.natureKeyPanel!==next);
     root.querySelectorAll<HTMLElement>('[data-nature-summary-panel]').forEach(panel=>panel.hidden=panel.dataset.natureSummaryPanel!==next);
     const captions:Record<NatureMode,string>={climate:'ケッペン＝ガイガー区分 · 1991–2020',water:'河川・湖・貯水池・主要帯水層',landform:'山脈・高原・平原と地形陰影',contour:'標高500m間隔 · 主要線1,000m'};
-    if(field==='natural')el('[data-layer-caption]').textContent=captions[next];const fallbackView=fallbackForCurrentView();el<HTMLImageElement>('[data-fallback-image]').src=fallbackView.base+fallbackView.name;el<HTMLAnchorElement>('[data-fallback-full]').href=fallbackView.base+fallbackView.name;
+    if(field==='natural')el('[data-layer-caption]').textContent=captions[next];updateFallbackImage();
     if(ready&&map){setFieldLayers(map,field,natureMode,agriLayers.has('crops'));void ensureNatureModeData(natureMode);renderLabels();}restoreSelectionForView();if(push)save(true);
   }
 

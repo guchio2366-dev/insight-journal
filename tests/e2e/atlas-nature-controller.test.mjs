@@ -41,7 +41,7 @@ test('都市→水資源→農業→気候で選択とカメラを保持し、�
    q('[data-city-select]').value=option.value;q('[data-city-select]').dispatchEvent(new window.Event('change'));assert.equal(q('[data-city-panel="'+option.value+'"]').hidden,false);
   }
   const selected=q('[data-city-select]').value;
-  q('[data-nature-mode="water"]').click();await delay();assert.equal(q('[data-climate-chart]').hidden,true);assert.equal(q('[data-city-picker]').hidden,true);
+  q('[data-nature-mode="water"]').click();await delay();assert.equal(q('[data-climate-chart]').hidden,true);assert.equal(q('[data-city-picker]').hidden,true);assert.match(q('[data-fallback-image]').alt,/水資源/);
   q('[data-field="agriculture"]').click();assert.equal(root.dataset.field,'agriculture');
   q('[data-field="natural"]').click();q('[data-nature-mode="climate"]').click();await delay();assert.equal(q('[data-city-select]').value,selected);assert.equal(q('[data-climate-chart]').hidden,false);assert.equal(window.__map.cameraChanges,moves);
   q('[data-close-selection]').click();assert.equal(q('[data-selection]').hidden,true);assert.equal(new URL(window.location.href).searchParams.get('city'),null);
