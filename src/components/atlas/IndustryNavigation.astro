@@ -1,0 +1,13 @@
+---
+import {industrySectors,industrySubsectors} from '../../data/atlas/industry-catalog';
+const {active=false}=Astro.props;
+---
+<div class="industry-controls" data-industry-controls hidden={!active}>
+  <div class="industry-tab-row" role="tablist" aria-label="産業の業態">
+    {industrySectors.map(s=><button type="button" role="tab" id={`industry-sector-${s.id}`} aria-selected={s.id==='all'?'true':'false'} tabindex={s.id==='all'?0:-1} aria-controls="nature-map-panel" data-industry-sector={s.id}>{s.label}</button>)}
+  </div>
+  {industrySectors.filter(s=>s.id!=='all').map(s=><div class="industry-tab-row industry-subtabs" role="tablist" aria-label={`${s.label}の分野`} data-industry-subtabs={s.id} hidden>
+    {[{id:'all',label:'全分野'},...industrySubsectors[s.id]].map(sub=><button type="button" role="tab" id={`industry-sub-${s.id}-${sub.id}`} aria-selected={sub.id==='all'?'true':'false'} tabindex={sub.id==='all'?0:-1} aria-controls="industry-detail" data-industry-subsector={sub.id} data-owner-sector={s.id}>{sub.label}</button>)}
+  </div>)}
+  <p class="industry-guide"><span data-industry-breadcrumb>全産業</span><a href="#industry-detail">この分野の詳説へ</a><a href="#industry-insights">インサイトを読む</a></p>
+</div>

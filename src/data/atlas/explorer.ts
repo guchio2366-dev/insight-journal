@@ -1,4 +1,4 @@
-export type ExplorerField = 'overview' | 'agriculture' | 'natural';
+export type ExplorerField = 'overview' | 'agriculture' | 'natural' | 'industry';
 
 export const cropExplanations = [
   { id: 'corn', name: 'とうもろこし', color: '#ecc759', summary: '夏の温度と水分、広い耕地、飼料・加工・輸送の集積が結びつく。', paragraphs: [

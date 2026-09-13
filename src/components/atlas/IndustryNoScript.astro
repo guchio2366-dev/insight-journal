@@ -1,0 +1,13 @@
+---
+import {withBase} from '../../lib/urls';
+import {industryRegions,industrySources} from '../../data/atlas/industry-regions';
+import {industrySectors,subsectorLabel} from '../../data/atlas/industry-catalog';
+const {map=false}=Astro.props;
+const overview=industryRegions.filter(r=>r.overview);
+const merc=(lat:number)=>Math.log(Math.tan(Math.PI/4+lat*Math.PI/360));
+---
+<noscript>
+{map?<svg class="industry-static-map" viewBox="0 0 1800 1084" role="img" aria-label="主要産業の代表地域。番号は下の地域一覧に対応。">
+ {overview.map((r,i)=><a href={`#industry-static-${r.id}`}><circle cx={(r.coordinates[0]+128)/64*1800} cy={(merc(52)-merc(r.coordinates[1]))/(merc(52)-merc(22))*1084} r="20" fill={industrySectors.find(s=>s.id===r.sector)?.color} stroke="#fff" stroke-width="3"/><text x={(r.coordinates[0]+128)/64*1800} y={(merc(52)-merc(r.coordinates[1]))/(merc(52)-merc(22))*1084+7} fill="white" font-size="21" text-anchor="middle">{i+1}</text><title>{r.name}：{subsectorLabel(r.sector,r.subsector)}</title></a>)}
+</svg>:<section class="industry-static-reading"><h2>主要産業の地域一覧</h2><p>JavaScriptが無効のため、切替に代えて全分野の解説を続けて表示しています。<a href="#industry-detail">分野別の詳説へ</a> · <a href={withBase('/atlas/north-america/agriculture/')}>農畜産を見る</a></p>{industryRegions.map(r=><article id={`industry-static-${r.id}`}><h3>{overview.indexOf(r)>=0?`${overview.indexOf(r)+1}. `:''}{r.name}：{subsectorLabel(r.sector,r.subsector)}</h3><p>{r.function}。{r.description}（{r.scope}・{r.year}） <a href={industrySources[r.source].url}>出典</a></p></article>)}</section>}
+</noscript>

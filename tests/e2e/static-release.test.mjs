@@ -50,7 +50,7 @@ test("公開成果物は全国500m等高線だけを含み、保全した詳細�
  assert.ok(!files.some(file=>/^assets\/atlas\/nature-v1\/contours\/(?:100|250)\//.test(file)));
 });
 
-test("地図の通常経路は共通レンダラーと下の解説を含み、未完成の分野をリンクにしない", async () => {
+test("地図の通常経路は共通レンダラーと下の解説を含み、公開済み３分野をリンクにする", async () => {
   for (const route of ['atlas/north-america/index.html','atlas/north-america/agriculture/index.html','atlas/north-america/land/index.html','atlas/north-america/agriculture/report/index.html']) {
     const html=await readFile(path.join(distRoot,route),'utf8');
     assert.match(html,/data-atlas-explorer/);
@@ -58,7 +58,8 @@ test("地図の通常経路は共通レンダラーと下の解説を含み、�
     assert.match(html,/data-national-summary/);
     assert.match(html,/id="crop-details"/);
     assert.match(html,/<div[^>]*class="atlas-map-tools"[^>]*hidden/);
-    assert.doesNotMatch(html,/<a[^>]+data-field="(?:climate|industry)"/);
+    assert.doesNotMatch(html,/<a[^>]+data-field="climate"/);
+    assert.match(html,/<a[^>]+data-field="industry"/);
     assert.doesNotMatch(html,/atlas-zone-list|atlas-map-stage/);
   }
 });

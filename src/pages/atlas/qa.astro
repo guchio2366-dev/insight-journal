@@ -10,10 +10,13 @@ import { withBase } from '../../lib/urls';
  const selector=document.querySelector<HTMLSelectElement>('#viewport')!;
  const reviewUrl=frame.src.split('?')[0];
  const result=document.querySelector('#result')!;
- if(new URL(location.href).searchParams.get('field')==='natural')frame.src=reviewUrl+'?field=natural';
+ const reviewParams=new URL(location.href).searchParams;
+ const selectedField=reviewParams.get('field');
+ if(selectedField==='natural'||selectedField==='industry'){frame.src=reviewUrl+'?'+reviewParams.toString();}
+ const currentReview=frame.src;
  selector.addEventListener('change',()=>{const [w,h]=selector.value.split(',');frame.width=w;frame.height=h;result.textContent='';});
- document.querySelector('#reload')!.addEventListener('click',()=>{frame.src=reviewUrl;result.textContent='';});
- document.querySelector('#asset-error')!.addEventListener('click',()=>{frame.src=reviewUrl+'?qa=asset-error';result.textContent='必須データの404応答から代替図へ移ることを確認します。';});
+ document.querySelector('#reload')!.addEventListener('click',()=>{frame.src=currentReview;result.textContent='';});
+ document.querySelector('#asset-error')!.addEventListener('click',()=>{const errorUrl=new URL(currentReview);errorUrl.searchParams.set('qa','asset-error');frame.src=errorUrl.href;result.textContent='必須データの404応答から代替図へ移ることを確認します。';});
  document.querySelector('#context-loss')!.addEventListener('click',()=>{
    const state=frame.contentDocument?.querySelector('[data-atlas-explorer]')?.getAttribute('data-render-state');
    if(state!=='ready'){result.textContent='WebGL地図が動作していないため、描画中断テストは実行できません。';return;}
@@ -23,7 +26,7 @@ import { withBase } from '../../lib/urls';
  document.querySelector('#measure')!.addEventListener('click',()=>{
    const d=frame.contentDocument!,w=frame.contentWindow!;
    const rect=d.querySelector('.atlas-workspace')!.getBoundingClientRect(),map=d.querySelector('[data-map-frame]')!.getBoundingClientRect(),nav=d.querySelector('.atlas-tabs')!.getBoundingClientRect(),national=d.querySelector('[data-field-national]:not([hidden]) .atlas-national')?.getBoundingClientRect();
-   const labels=[...d.querySelectorAll<HTMLElement>('.atlas-geolabel')].filter(n=>!n.hidden).map(n=>({name:n.textContent,rect:n.getBoundingClientRect()}));
+   const labels=[...d.querySelectorAll<HTMLElement>(d.querySelector('[data-atlas-explorer]')?.getAttribute('data-field')==='industry'?'.industry-marker':'.atlas-geolabel')].filter(n=>!n.hidden).map(n=>({name:n.textContent,rect:n.getBoundingClientRect()}));
    const collisions=labels.flatMap((a,i)=>labels.slice(i+1).filter(b=>a.rect.left<b.rect.right&&a.rect.right>b.rect.left&&a.rect.top<b.rect.bottom&&a.rect.bottom>b.rect.top).map(b=>[a.name,b.name]));
    result.textContent=JSON.stringify({viewport:[w.innerWidth,w.innerHeight],horizontalOverflow:d.documentElement.scrollWidth>d.documentElement.clientWidth,mapFullyVisible:map.top>=0&&map.bottom<=w.innerHeight,tabsVisible:nav.top>=0&&nav.bottom<=w.innerHeight,nationalTop:national&&Math.round(national.top),nationalBottom:national&&Math.round(national.bottom),nationalInitiallyVisible:!!national&&national.top<w.innerHeight,workspaceBottom:Math.round(rect.bottom),state:d.querySelector('[data-atlas-explorer]')?.getAttribute('data-render-state'),natureLoad:d.querySelector('[data-atlas-explorer]')?.getAttribute('data-nature-load'),natureMode:d.querySelector('[data-atlas-explorer]')?.getAttribute('data-nature-mode'),canvasCount:d.querySelectorAll('canvas').length,labelCollisions:collisions,url:w.location.href});
  });
