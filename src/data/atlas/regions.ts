@@ -19,19 +19,11 @@ export const northAmericaFields: AtlasFieldDefinition[] = [
     status: "ready"
   },
   {
-    id: "climate",
-    label: "気候",
-    shortLabel: "Climate",
-    description: "気温・降水・風の帯を重ねる",
-    href: "/atlas/north-america/climate/",
-    status: "planned"
-  },
-  {
-    id: "land",
-    label: "土地",
-    shortLabel: "Land",
-    description: "土壌・地形・水系から土地の性格を読む",
-    href: "/atlas/north-america/land/",
+    id: "natural",
+    label: "自然環境",
+    shortLabel: "Environment",
+    description: "気候・水資源・地形・標高を同じ場所で読み比べる",
+    href: "/atlas/north-america/nature/",
     status: "ready"
   },
   {

@@ -1,3 +1,4 @@
+import { gunzipSync } from "node:zlib";
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -75,10 +76,10 @@ async function verifyLocalFiles(release) {
     if (payload.geography.mode === "map") await assertFile(path.join(dist, payload.geography.image.path), `地図 ${payload.geography.image.path}`);
   }
 
-  const textExtensions = new Set([".html", ".json", ".xml", ".js", ".css", ".txt", ".svg"]);
+  const textExtensions = new Set([".html", ".json", ".xml", ".js", ".css", ".txt", ".svg", ".gz"]);
   const files = await walkFiles(dist, (filename) => textExtensions.has(path.extname(filename).toLowerCase()));
   for (const filename of files) {
-    const text = await readFile(filename, "utf8");
+    const text = filename.endsWith(".gz") ? gunzipSync(await readFile(filename)).toString("utf8") : await readFile(filename, "utf8");
     for (const rule of forbiddenPatterns) {
       if (rule.pattern.test(text)) throw new Error(`${path.relative(root, filename)}に${rule.name}が含まれています`);
     }

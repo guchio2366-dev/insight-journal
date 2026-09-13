@@ -1,0 +1,1658 @@
+[
+  {
+    "id": "seattle",
+    "stationId": "USW00024233",
+    "months": [
+      {
+        "month": 1,
+        "temperatureF": 42.8,
+        "precipitationIn": 5.78,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 2,
+        "temperatureF": 44.0,
+        "precipitationIn": 3.76,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 3,
+        "temperatureF": 47.1,
+        "precipitationIn": 4.17,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 4,
+        "temperatureF": 51.3,
+        "precipitationIn": 3.18,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 5,
+        "temperatureF": 57.5,
+        "precipitationIn": 1.88,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 6,
+        "temperatureF": 62.0,
+        "precipitationIn": 1.45,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "29"
+      },
+      {
+        "month": 7,
+        "temperatureF": 67.1,
+        "precipitationIn": 0.6,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 8,
+        "temperatureF": 67.4,
+        "precipitationIn": 0.97,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 9,
+        "temperatureF": 62.6,
+        "precipitationIn": 1.61,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "29"
+      },
+      {
+        "month": 10,
+        "temperatureF": 53.8,
+        "precipitationIn": 3.91,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 11,
+        "temperatureF": 46.5,
+        "precipitationIn": 6.31,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 12,
+        "temperatureF": 42.0,
+        "precipitationIn": 5.72,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      }
+    ]
+  },
+  {
+    "id": "san-francisco",
+    "stationId": "USW00023272",
+    "months": [
+      {
+        "month": 1,
+        "temperatureF": 52.2,
+        "precipitationIn": 4.4,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 2,
+        "temperatureF": 54.2,
+        "precipitationIn": 4.37,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "29"
+      },
+      {
+        "month": 3,
+        "temperatureF": 55.5,
+        "precipitationIn": 3.15,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 4,
+        "temperatureF": 56.4,
+        "precipitationIn": 1.6,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 5,
+        "temperatureF": 57.8,
+        "precipitationIn": 0.7,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 6,
+        "temperatureF": 59.7,
+        "precipitationIn": 0.2,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 7,
+        "temperatureF": 60.3,
+        "precipitationIn": 0.01,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 8,
+        "temperatureF": 61.7,
+        "precipitationIn": 0.06,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 9,
+        "temperatureF": 62.9,
+        "precipitationIn": 0.1,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "29",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "29"
+      },
+      {
+        "month": 10,
+        "temperatureF": 62.1,
+        "precipitationIn": 0.94,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "29",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 11,
+        "temperatureF": 57.2,
+        "precipitationIn": 2.6,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 12,
+        "temperatureF": 52.5,
+        "precipitationIn": 4.76,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "29"
+      }
+    ]
+  },
+  {
+    "id": "los-angeles",
+    "stationId": "USW00093134",
+    "months": [
+      {
+        "month": 1,
+        "temperatureF": 58.4,
+        "precipitationIn": 3.29,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 2,
+        "temperatureF": 59.0,
+        "precipitationIn": 3.64,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 3,
+        "temperatureF": 61.1,
+        "precipitationIn": 2.23,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 4,
+        "temperatureF": 63.6,
+        "precipitationIn": 0.69,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 5,
+        "temperatureF": 65.9,
+        "precipitationIn": 0.32,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 6,
+        "temperatureF": 69.3,
+        "precipitationIn": 0.09,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 7,
+        "temperatureF": 73.3,
+        "precipitationIn": 0.02,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 8,
+        "temperatureF": 74.7,
+        "precipitationIn": 0.0,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "X",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 9,
+        "temperatureF": 73.6,
+        "precipitationIn": 0.13,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 10,
+        "temperatureF": 69.3,
+        "precipitationIn": 0.58,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 11,
+        "temperatureF": 63.0,
+        "precipitationIn": 0.78,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 12,
+        "temperatureF": 57.8,
+        "precipitationIn": 2.48,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      }
+    ]
+  },
+  {
+    "id": "las-vegas",
+    "stationId": "USW00023169",
+    "months": [
+      {
+        "month": 1,
+        "temperatureF": 49.5,
+        "precipitationIn": 0.56,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 2,
+        "temperatureF": 53.5,
+        "precipitationIn": 0.8,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 3,
+        "temperatureF": 60.8,
+        "precipitationIn": 0.42,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 4,
+        "temperatureF": 67.7,
+        "precipitationIn": 0.2,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 5,
+        "temperatureF": 77.3,
+        "precipitationIn": 0.07,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 6,
+        "temperatureF": 87.6,
+        "precipitationIn": 0.04,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 7,
+        "temperatureF": 93.2,
+        "precipitationIn": 0.38,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 8,
+        "temperatureF": 91.7,
+        "precipitationIn": 0.32,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 9,
+        "temperatureF": 83.6,
+        "precipitationIn": 0.32,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 10,
+        "temperatureF": 70.4,
+        "precipitationIn": 0.32,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 11,
+        "temperatureF": 57.2,
+        "precipitationIn": 0.3,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 12,
+        "temperatureF": 48.2,
+        "precipitationIn": 0.45,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      }
+    ]
+  },
+  {
+    "id": "denver",
+    "stationId": "USW00003017",
+    "months": [
+      {
+        "month": 1,
+        "temperatureF": 31.7,
+        "precipitationIn": 0.38,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "25"
+      },
+      {
+        "month": 2,
+        "temperatureF": 32.7,
+        "precipitationIn": 0.41,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "25"
+      },
+      {
+        "month": 3,
+        "temperatureF": 41.6,
+        "precipitationIn": 0.86,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "26"
+      },
+      {
+        "month": 4,
+        "temperatureF": 47.8,
+        "precipitationIn": 1.68,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "25"
+      },
+      {
+        "month": 5,
+        "temperatureF": 57.4,
+        "precipitationIn": 2.16,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "25"
+      },
+      {
+        "month": 6,
+        "temperatureF": 68.2,
+        "precipitationIn": 1.94,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "25"
+      },
+      {
+        "month": 7,
+        "temperatureF": 75.1,
+        "precipitationIn": 2.14,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "22",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "25"
+      },
+      {
+        "month": 8,
+        "temperatureF": 72.9,
+        "precipitationIn": 1.58,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "25"
+      },
+      {
+        "month": 9,
+        "temperatureF": 64.8,
+        "precipitationIn": 1.35,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "25"
+      },
+      {
+        "month": 10,
+        "temperatureF": 51.1,
+        "precipitationIn": 0.99,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "25"
+      },
+      {
+        "month": 11,
+        "temperatureF": 39.4,
+        "precipitationIn": 0.64,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "26"
+      },
+      {
+        "month": 12,
+        "temperatureF": 31.2,
+        "precipitationIn": 0.35,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "25"
+      }
+    ]
+  },
+  {
+    "id": "dallas",
+    "stationId": "USW00013960",
+    "months": [
+      {
+        "month": 1,
+        "temperatureF": 47.8,
+        "precipitationIn": 2.59,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "29",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "29"
+      },
+      {
+        "month": 2,
+        "temperatureF": 52.0,
+        "precipitationIn": 2.78,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "29",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "29"
+      },
+      {
+        "month": 3,
+        "temperatureF": 59.6,
+        "precipitationIn": 3.45,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "29",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "29"
+      },
+      {
+        "month": 4,
+        "temperatureF": 67.1,
+        "precipitationIn": 3.15,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "29",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 5,
+        "temperatureF": 75.4,
+        "precipitationIn": 4.57,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "29",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 6,
+        "temperatureF": 83.3,
+        "precipitationIn": 3.83,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "29",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 7,
+        "temperatureF": 87.3,
+        "precipitationIn": 1.71,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "29",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "28"
+      },
+      {
+        "month": 8,
+        "temperatureF": 87.3,
+        "precipitationIn": 2.19,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "29",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 9,
+        "temperatureF": 80.1,
+        "precipitationIn": 3.1,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "29",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 10,
+        "temperatureF": 69.1,
+        "precipitationIn": 4.79,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "29",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 11,
+        "temperatureF": 57.8,
+        "precipitationIn": 2.93,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "29"
+      },
+      {
+        "month": 12,
+        "temperatureF": 49.5,
+        "precipitationIn": 3.23,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "29"
+      }
+    ]
+  },
+  {
+    "id": "chicago",
+    "stationId": "USW00094846",
+    "months": [
+      {
+        "month": 1,
+        "temperatureF": 25.2,
+        "precipitationIn": 1.99,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 2,
+        "temperatureF": 28.8,
+        "precipitationIn": 1.97,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "29",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 3,
+        "temperatureF": 39.0,
+        "precipitationIn": 2.45,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 4,
+        "temperatureF": 49.7,
+        "precipitationIn": 3.75,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 5,
+        "temperatureF": 60.6,
+        "precipitationIn": 4.49,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 6,
+        "temperatureF": 70.6,
+        "precipitationIn": 4.1,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "29"
+      },
+      {
+        "month": 7,
+        "temperatureF": 75.4,
+        "precipitationIn": 3.71,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 8,
+        "temperatureF": 73.8,
+        "precipitationIn": 4.25,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 9,
+        "temperatureF": 66.3,
+        "precipitationIn": 3.19,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 10,
+        "temperatureF": 54.0,
+        "precipitationIn": 3.43,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 11,
+        "temperatureF": 41.3,
+        "precipitationIn": 2.42,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 12,
+        "temperatureF": 30.5,
+        "precipitationIn": 2.11,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      }
+    ]
+  },
+  {
+    "id": "detroit",
+    "stationId": "USW00094847",
+    "months": [
+      {
+        "month": 1,
+        "temperatureF": 25.8,
+        "precipitationIn": 2.23,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 2,
+        "temperatureF": 28.0,
+        "precipitationIn": 2.08,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 3,
+        "temperatureF": 37.2,
+        "precipitationIn": 2.43,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 4,
+        "temperatureF": 48.9,
+        "precipitationIn": 3.26,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 5,
+        "temperatureF": 60.3,
+        "precipitationIn": 3.72,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 6,
+        "temperatureF": 69.9,
+        "precipitationIn": 3.26,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 7,
+        "temperatureF": 74.1,
+        "precipitationIn": 3.51,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 8,
+        "temperatureF": 72.3,
+        "precipitationIn": 3.26,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 9,
+        "temperatureF": 64.9,
+        "precipitationIn": 3.22,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 10,
+        "temperatureF": 53.0,
+        "precipitationIn": 2.53,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 11,
+        "temperatureF": 41.2,
+        "precipitationIn": 2.57,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 12,
+        "temperatureF": 31.3,
+        "precipitationIn": 2.25,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      }
+    ]
+  },
+  {
+    "id": "new-orleans",
+    "stationId": "USW00012916",
+    "months": [
+      {
+        "month": 1,
+        "temperatureF": 54.3,
+        "precipitationIn": 5.18,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "24",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 2,
+        "temperatureF": 58.0,
+        "precipitationIn": 4.13,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "24",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 3,
+        "temperatureF": 63.8,
+        "precipitationIn": 4.36,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "24",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 4,
+        "temperatureF": 70.1,
+        "precipitationIn": 5.22,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "24",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 5,
+        "temperatureF": 77.1,
+        "precipitationIn": 5.64,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "29"
+      },
+      {
+        "month": 6,
+        "temperatureF": 82.4,
+        "precipitationIn": 7.62,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 7,
+        "temperatureF": 83.9,
+        "precipitationIn": 6.79,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 8,
+        "temperatureF": 84.0,
+        "precipitationIn": 6.91,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "24",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 9,
+        "temperatureF": 80.8,
+        "precipitationIn": 5.11,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 10,
+        "temperatureF": 72.5,
+        "precipitationIn": 3.7,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 11,
+        "temperatureF": 62.4,
+        "precipitationIn": 3.87,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 12,
+        "temperatureF": 56.6,
+        "precipitationIn": 4.82,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "24",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      }
+    ]
+  },
+  {
+    "id": "miami",
+    "stationId": "USW00012839",
+    "months": [
+      {
+        "month": 1,
+        "temperatureF": 68.6,
+        "precipitationIn": 1.83,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "R",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 2,
+        "temperatureF": 70.7,
+        "precipitationIn": 2.15,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 3,
+        "temperatureF": 73.1,
+        "precipitationIn": 2.46,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 4,
+        "temperatureF": 76.7,
+        "precipitationIn": 3.36,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 5,
+        "temperatureF": 80.1,
+        "precipitationIn": 6.32,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 6,
+        "temperatureF": 82.8,
+        "precipitationIn": 10.51,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 7,
+        "temperatureF": 84.1,
+        "precipitationIn": 7.36,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 8,
+        "temperatureF": 84.2,
+        "precipitationIn": 9.58,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 9,
+        "temperatureF": 83.0,
+        "precipitationIn": 10.22,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 10,
+        "temperatureF": 80.1,
+        "precipitationIn": 7.65,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 11,
+        "temperatureF": 74.8,
+        "precipitationIn": 3.53,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 12,
+        "temperatureF": 71.2,
+        "precipitationIn": 2.44,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      }
+    ]
+  },
+  {
+    "id": "washington-dc",
+    "stationId": "USW00013743",
+    "months": [
+      {
+        "month": 1,
+        "temperatureF": 37.5,
+        "precipitationIn": 2.86,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "27",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 2,
+        "temperatureF": 40.0,
+        "precipitationIn": 2.62,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 3,
+        "temperatureF": 47.6,
+        "precipitationIn": 3.5,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 4,
+        "temperatureF": 58.2,
+        "precipitationIn": 3.21,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 5,
+        "temperatureF": 67.2,
+        "precipitationIn": 3.94,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 6,
+        "temperatureF": 76.3,
+        "precipitationIn": 4.2,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 7,
+        "temperatureF": 81.0,
+        "precipitationIn": 4.33,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 8,
+        "temperatureF": 79.4,
+        "precipitationIn": 3.25,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "25",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 9,
+        "temperatureF": 72.4,
+        "precipitationIn": 3.93,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 10,
+        "temperatureF": 60.8,
+        "precipitationIn": 3.66,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 11,
+        "temperatureF": 49.9,
+        "precipitationIn": 2.91,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 12,
+        "temperatureF": 41.7,
+        "precipitationIn": 3.41,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "26",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      }
+    ]
+  },
+  {
+    "id": "new-york",
+    "stationId": "USW00094728",
+    "months": [
+      {
+        "month": 1,
+        "temperatureF": 33.7,
+        "precipitationIn": 3.64,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "30",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 2,
+        "temperatureF": 35.9,
+        "precipitationIn": 3.19,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "30",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 3,
+        "temperatureF": 42.8,
+        "precipitationIn": 4.29,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "30",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 4,
+        "temperatureF": 53.7,
+        "precipitationIn": 4.09,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "30",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 5,
+        "temperatureF": 63.2,
+        "precipitationIn": 3.96,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "29",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 6,
+        "temperatureF": 72.0,
+        "precipitationIn": 4.54,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "29",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 7,
+        "temperatureF": 77.5,
+        "precipitationIn": 4.6,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 8,
+        "temperatureF": 76.1,
+        "precipitationIn": 4.56,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 9,
+        "temperatureF": 69.2,
+        "precipitationIn": 4.31,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 10,
+        "temperatureF": 57.9,
+        "precipitationIn": 4.38,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "28",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 11,
+        "temperatureF": 48.0,
+        "precipitationIn": 3.58,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "29",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      },
+      {
+        "month": 12,
+        "temperatureF": 39.1,
+        "precipitationIn": 4.38,
+        "meas_flag_MLY-TAVG-NORMAL": "",
+        "comp_flag_MLY-TAVG-NORMAL": "S",
+        "years_MLY-TAVG-NORMAL": "29",
+        "meas_flag_MLY-PRCP-NORMAL": "",
+        "comp_flag_MLY-PRCP-NORMAL": "S",
+        "years_MLY-PRCP-NORMAL": "30"
+      }
+    ]
+  }
+]

@@ -104,3 +104,21 @@ Saved crop or livestock selections render their explanation below the fallback.
 - Public QA caught an external-image limitation in the first SVG fallback.
   PR #17 validation run `34744296145`: success; fallback fix merge
   `ae59fc44d5888f76c6a87bb3d3f0c66c6cc9ca24`; Pages run `34744326539`: success.
+
+## Natural environment lightweight implementation, 2026-09-13
+
+- The four views, 12 NOAA climate diagrams, currents, selection cards and shared
+  agriculture camera/state remain in place.
+- Public contour delivery is fixed to the national 500 m interval gzip. It is
+  requested and assigned to the MapLibre source once per session; pan, zoom and
+  field/tab round trips do not request or reassign it.
+- The 62 regional 100 m/250 m files retain their bytes, SHA-256 and Git Blob SHA
+  under `data/derived/nature-v1/contours-detail/`. They are excluded from `public`
+  and `dist`, reducing the published static files by 24,100,067 bytes including
+  the former index.
+- Local checks cover 58 unit tests and 8 controller/built-site tests. The build
+  and release-boundary verification pass, including a clean-output guard so
+  removed assets cannot remain in an older `dist` directory.
+- Controller checks use the real application code with MapLibre's GPU boundary
+  mocked. Physical iPhone/iPad Safari, GPU rendering and measured first-load
+  timing remain separate post-publication checks.
