@@ -1,0 +1,38 @@
+---
+import {withBase} from '../../lib/urls';
+import {industryCopy,industryInsights} from '../../data/atlas/industry-content';
+import {industrySources,industryRegions} from '../../data/atlas/industry-regions';
+import {sectorLabel,subsectorLabel,type IndustrySector} from '../../data/atlas/industry-catalog';
+import {industryStatRows,industryYears,sectorTotal,statValue,sourceValue,type IndustryStatRow} from '../../data/atlas/industry-statistics';
+const extra:Record<string,IndustryStatRow>={
+  auto:{id:'auto',label:'自動車・車体・部品',naics:'3361–3363',gdpLines:[21],employmentLines:[22]},
+  aerospace:{id:'aerospace',label:'その他の輸送機器（航空宇宙以外も含む）',naics:'3364–3369',gdpLines:[22],employmentLines:[23]},
+  'chemical-products':{id:'chemical-products',label:'化学製品',naics:'325',gdpLines:[32],employmentLines:[33]},
+  'oil-gas':{id:'oil-gas',label:'石油・天然ガス採掘（採掘支援を除く）',naics:'211',gdpLines:[7],employmentLines:[8]},
+  mining:{id:'mining',label:'鉱業（石油・天然ガス採掘以外）',naics:'212',gdpLines:[8],employmentLines:[9]},
+};
+---
+<section class="industry-reading" id="industry-detail" tabindex="-1">
+{industryCopy.map(copy=>{
+  const stat=copy.statId?(extra[copy.statId]??industryStatRows[copy.sector].find(r=>r.id===copy.statId)):null;
+  const sources=[...new Set(industryRegions.filter(r=>r.sector===copy.sector&&(copy.subsector==='all'||r.subsector===copy.subsector)).map(r=>r.source))];
+  return <article data-industry-detail={`${copy.sector}:${copy.subsector}`} hidden={copy.sector!=='all'||copy.subsector!=='all'}>
+    <header><p class="atlas-eyebrow">選択した分野の詳説</p><h2>{copy.title}</h2></header>
+    <div class="industry-copy-grid"><section><h3>何をする産業か</h3><p>{copy.what}</p></section><section><h3>どこに集まり、なぜか</h3><p>{copy.where}</p></section><section><h3>変化をどう読むか</h3><p>{copy.change}</p></section></div>
+    {(copy.subsector==='all'||stat)&&<details class="industry-trend"><summary>{stat?.label??sectorLabel(copy.sector)}の全国推移を見る</summary><p>名目付加価値と年平均雇用。価格変化を含むGDPで、実質成長率ではありません。</p><div class="industry-table-scroll"><table><caption>{stat?.label??sectorLabel(copy.sector)} · BEA · 全米</caption><thead><tr><th>年</th><th>名目付加価値<br/>10億ドル</th><th>雇用<br/>千雇用</th></tr></thead><tbody>{industryYears.map(year=><tr><th>{year}</th><td>{(stat?statValue(stat,'gdp',year):sectorTotal(copy.sector,'gdp',year)).toLocaleString('en-US',{maximumFractionDigits:1})}</td><td>{(stat?statValue(stat,'employment',year):sectorTotal(copy.sector,'employment',year)).toLocaleString('en-US')}</td></tr>)}</tbody></table></div></details>}
+    {copy.subsector==='food'&&<p><a href={withBase('/atlas/north-america/agriculture/')} data-industry-agriculture>同じ場所で農畜産を見る</a></p>}
+    <details class="industry-source-links"><summary>この分野の地域資料</summary><ul>{sources.map(key=><li><a href={industrySources[key].url}>{industrySources[key].title}</a></li>)}</ul><p>全国値は<a href="#industry-method">BEAの原表と集計対応</a>を参照。</p></details>
+  </article>;
+})}
+</section>
+<section class="industry-insights" id="industry-insights"><header><p class="atlas-eyebrow">INSIGHTS</p><h2>産業を見比べるインサイト</h2><p>分野を切り替え、同じ場所で関係を確かめる。</p></header><div class="industry-insight-grid">
+{industryInsights.map(item=><article id={`industry-insight-${item.id}`} data-industry-insight-card={item.id}><span>{item.region}</span><h3>{item.title}</h3><p>{item.text}</p><div class="industry-insight-links">{item.links.map(([sector,subsector])=><a href={withBase(`/atlas/north-america/${sector==='agriculture'?'agriculture/':`industry/?sector=${sector}&subsector=${subsector}`}`)} data-industry-jump-sector={sector} data-industry-jump-subsector={subsector} data-industry-insight={item.id}>{sector==='agriculture'?'農畜産':subsectorLabel(sector as IndustrySector,subsector)}を見る</a>)}</div><a class="industry-source" href={industrySources[item.source].url}>根拠となる地域資料</a></article>)}
+</div></section>
+<section class="industry-method" id="industry-method"><h2>産業データの出典と範囲</h2>
+<p>全国の付加価値はBEA GDP by Industry「Value Added by Industry」の2024年次・名目値（2026年6月25日改定）。雇用はNIPA Table 6.4D（2025年9月26日改定）の国内産業、フルタイム・パートタイム雇用の年平均です。国内生産に対応するため雇用の分母は第２行を使い、第１行の国外調整後の総計は使いません。自営業を含む就業者数やフルタイム換算人数ではありません。</p>
+<p>全米値は50州・D.C.を基本とし、地図は連続48州・D.C.です。農林水産は畜産・林業・漁業等を含み、政府は公営の医療・教育等を含みます。政府のGDPは政府支出総額ではありません。その他のサービスはNAICS81。製造業の残余は繊維・衣服・印刷・非金属鉱物・家具・雑製品です。</p>
+<p>地域は公的資料から採用した代表例です。都市圏、州、資源地域は単位も対象年も異なるため、統一した順位や雇用規模の大小を地図に表していません。点は工場の正確な所在地・産業境界・統計重心ではありません。資料の産業群と本ページの分類が違う場合、その雇用数や特化度は転用していません。</p>
+<p>割合は丸め前の原表値から計算。原表の丸めにより内訳の合計に微差が生じます。帰属家賃を含む不動産のGDPを販売総額と混同しないでください。GDP比と雇用比の差だけから賃金や産業の優劣は判断できません。</p>
+<p><a href="https://www.bea.gov/data/gdp/gdp-industry">BEA産業別GDP</a> · <a href="https://www.bea.gov/itable/national-gdp-and-personal-income">BEA NIPA雇用表6.4D</a> · <a href={withBase('/assets/atlas/industry-v1/bea-gdp.json')}>GDP原表の取得記録</a> · <a href={withBase('/assets/atlas/industry-v1/bea-employment.json')}>雇用原表の取得記録</a> · <a href={withBase('/assets/atlas/industry-v1/manifest.json')}>加工方法・資産記録</a></p>
+<details><summary>分類・地域ごとの根拠を一覧で読む</summary><div class="industry-table-scroll"><table><thead><tr><th>表示</th><th>NAICS等</th><th>GDP行</th><th>雇用行</th></tr></thead><tbody>{Object.entries(industryStatRows).flatMap(([sector,rows])=>rows.map(r=><tr><th>{sectorLabel(sector)}：{r.label}</th><td>{r.naics}</td><td>{r.gdpLines.join(', ')}</td><td>{r.employmentLines.join(', ')}</td></tr>))}</tbody></table></div><ul>{Object.values(industrySources).map(s=><li><a href={s.url}>{s.title}</a></li>)}</ul></details>
+</section>

@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "retrievedAt": "2026-09-13",
+  "commonNationalYear": 2024,
+  "transformVersion": "industry-v1",
+  "national": {
+    "gdp": {
+      "table": "GDP by Industry / Value Added by Industry",
+      "frequency": "Annual",
+      "unit": "billions of current US dollars",
+      "totalLine": 1,
+      "revised": "2026-06-25"
+    },
+    "employment": {
+      "table": "NIPA 6.4D",
+      "frequency": "Annual",
+      "unit": "thousands of full-time and part-time jobs",
+      "totalLine": 2,
+      "revised": "2025-09-26"
+    }
+  },
+  "method": "Read annual 2017–2024 cells from the official BEA interactive tables. Preserve labels and source row numbers in JSON; source URLs retain table selections. Aggregate explicit nonoverlapping row sets. Divide original values by the documented parent; round only for display. GDP source precision 0.1 billion; employment source precision 1 thousand. Rounding tolerance = (child source-row count + 1) × precision / 2.",
+  "regionalEvidence": "Source-backed qualitative examples from BLS, EIA, USGS, state agencies and Federal Reserve regional reports. Source years and geography vary. No QCEW employment or LQ was downloaded or inferred. Missing metrics remain null. NAICS81 has national prose/statistics but no selected regional example.",
+  "terms": "US federal statistics and source-linked factual summaries; do not redistribute third-party figures or agency logos. Source URLs and geographic limits are published on the page.",
+  "assets": [
+    {
+      "path": "public/assets/atlas/industry-v1/bea-gdp.json",
+      "bytes": 11881,
+      "gzipBytes": 4824,
+      "sha256": "39e612602259e6bc9ed2d0445828ec03c7f029ed79d077151debc75c21599d95"
+    },
+    {
+      "path": "public/assets/atlas/industry-v1/bea-employment.json",
+      "bytes": 9752,
+      "gzipBytes": 4079,
+      "sha256": "6a7f1b44825f2a7ce0440af40fdaee34b67225d51f0749fffd2d348d36dfde40"
+    },
+    {
+      "path": "src/data/atlas/industry-catalog.ts",
+      "bytes": 1861,
+      "gzipBytes": 985,
+      "sha256": "697d37be3218c614c445ac27b627f9c7b1965dead5e0d6892e6b88e9e76d140a"
+    },
+    {
+      "path": "src/data/atlas/industry-statistics.ts",
+      "bytes": 3996,
+      "gzipBytes": 1952,
+      "sha256": "fd6a179bc23e1852774c6dc94a47982aca513c22065b3b7b029faafedd303cdd"
+    },
+    {
+      "path": "src/data/atlas/industry-regions.ts",
+      "bytes": 18445,
+      "gzipBytes": 6667,
+      "sha256": "3ca0c4b351c59efba31d4ad32c52f1a7076f578a1626232b97bbca048f7019cf"
+    },
+    {
+      "path": "src/data/atlas/industry-content.ts",
+      "bytes": 21512,
+      "gzipBytes": 8204,
+      "sha256": "ef65888d316ef57d2fd57b5762aa5c7d82c7c89a9f22460e66810233ce3db179"
+    }
+  ],
+  "performance": {
+    "standaloneIndustryJsBytes": 9988,
+    "standaloneIndustryJsGzipBytes": 3755,
+    "additionalGeospatialNetworkRequests": 0,
+    "note": "All 42 region records are embedded in the HTML configuration; no separate regional downloads. This standalone JS upper bound includes its catalog and state codec. Raw national tables are downloadable for audit but are not fetched by the browser controller."
+  }
+}

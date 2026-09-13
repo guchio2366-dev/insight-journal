@@ -3,8 +3,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import AtlasExplorer from './AtlasExplorer.astro';
 import type { ExplorerField } from '../../data/atlas/explorer';
 import '../../styles/atlas-explorer.css';
+import '../../styles/atlas-industry.css';
 const { initialField='overview' } = Astro.props as {initialField?:ExplorerField};
 ---
-<BaseLayout title="北米地図" description="自然環境と、州境をまたぐ主要作物の栽培域を同じ地図で読み比べる。" compactAtlas noindex={Astro.url.pathname.includes('/review/')}>
+<BaseLayout title="北米地図" description="自然環境・農畜産・主要産業を同じ地図で読み比べる。" compactAtlas noindex={Astro.url.pathname.includes('/review/')}>
   <AtlasExplorer {initialField} />
 </BaseLayout>

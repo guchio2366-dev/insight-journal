@@ -32,7 +32,7 @@ export const northAmericaFields: AtlasFieldDefinition[] = [
     shortLabel: "Industry",
     description: "産業集積と交通を地域の形として見る",
     href: "/atlas/north-america/industry/",
-    status: "planned"
+    status: "ready"
   }
 ];
 

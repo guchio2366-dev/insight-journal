@@ -1,0 +1,13 @@
+import {readFile,writeFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {gzipSync} from 'node:zlib';
+import {build} from 'esbuild';
+
+const files=['public/assets/atlas/industry-v1/bea-gdp.json','public/assets/atlas/industry-v1/bea-employment.json','src/data/atlas/industry-catalog.ts','src/data/atlas/industry-statistics.ts','src/data/atlas/industry-regions.ts','src/data/atlas/industry-content.ts'];
+const assets=[];
+for(const path of files){const bytes=await readFile(path);assets.push({path,bytes:bytes.length,gzipBytes:gzipSync(bytes).length,sha256:createHash('sha256').update(bytes).digest('hex')});}
+const bundled=await build({entryPoints:['src/scripts/atlas-industry.ts'],bundle:true,minify:true,write:false,format:'esm'});
+const bytes=bundled.outputFiles[0].contents;
+const manifest={schemaVersion:1,retrievedAt:'2026-09-13',commonNationalYear:2024,transformVersion:'industry-v1',national:{gdp:{table:'GDP by Industry / Value Added by Industry',frequency:'Annual',unit:'billions of current US dollars',totalLine:1,revised:'2026-06-25'},employment:{table:'NIPA 6.4D',frequency:'Annual',unit:'thousands of full-time and part-time jobs',totalLine:2,revised:'2025-09-26'}},method:'Read annual 2017–2024 cells from the official BEA interactive tables. Preserve labels and source row numbers in JSON; source URLs retain table selections. Aggregate explicit nonoverlapping row sets. Divide original values by the documented parent; round only for display. GDP source precision 0.1 billion; employment source precision 1 thousand. Rounding tolerance = (child source-row count + 1) × precision / 2.',regionalEvidence:'Source-backed qualitative examples from BLS, EIA, USGS, state agencies and Federal Reserve regional reports. Source years and geography vary. No QCEW employment or LQ was downloaded or inferred. Missing metrics remain null. NAICS81 has national prose/statistics but no selected regional example.',terms:'US federal statistics and source-linked factual summaries; do not redistribute third-party figures or agency logos. Source URLs and geographic limits are published on the page.',assets,performance:{standaloneIndustryJsBytes:bytes.length,standaloneIndustryJsGzipBytes:gzipSync(bytes).length,additionalGeospatialNetworkRequests:0,note:'All 42 region records are embedded in the HTML configuration; no separate regional downloads. This standalone JS upper bound includes its catalog and state codec. Raw national tables are downloadable for audit but are not fetched by the browser controller.'}};
+await writeFile('public/assets/atlas/industry-v1/manifest.json',JSON.stringify(manifest,null,2)+'\n');
+console.log(JSON.stringify(manifest.performance));

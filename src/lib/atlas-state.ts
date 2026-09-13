@@ -2,7 +2,7 @@ import { regionalInsightIds } from '../data/atlas/regional-insights.ts';
 import { validNatureFeature } from './atlas-nature-state.ts';
 import { livestockRegions } from '../data/atlas/livestock.ts';
 
-export const readyFields = ['overview', 'agriculture', 'natural'] as const;
+export const readyFields = ['overview', 'agriculture', 'natural', 'industry'] as const;
 export const natureModes = ['climate', 'water', 'landform', 'contour'] as const;
 export const climateCityIds = ['seattle','san-francisco','los-angeles','las-vegas','denver','dallas','chicago','detroit','new-orleans','miami','washington-dc','new-york'] as const;
 export const mapCropIds = ['corn', 'soybean', 'wheat', 'cotton', 'rice', 'specialty', 'corn-soybean'] as const;
