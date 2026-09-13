@@ -37,3 +37,10 @@ test('地域例は出典と対象範囲を持ち、未取得の地域雇用・�
  assert.equal(new Set(industryRegions.map(r=>r.id)).size,industryRegions.length);
  for(const r of industryRegions){assert.ok(r.source&&r.scope&&r.year&&r.selectionReason);assert.equal(r.employment,null);assert.equal(r.lq,null);assert.ok(r.coordinates[0]>-128&&r.coordinates[0]<-64&&r.coordinates[1]>22&&r.coordinates[1]<52);}
 });
+
+test('東端で左へ返すラベルも衝突をまとめ、代表座標と全候補を保つ',async()=>{
+ const {groupIndustryMarkers}=await import('../../src/lib/atlas-industry-markers.ts');
+ const groups=groupIndustryMarkers([{x:545,y:120,regions:['midwest']},{x:675,y:130,regions:['newyork']},{x:150,y:300,regions:['california']}],720);
+ assert.equal(groups.length,2);assert.deepEqual(groups[0].regions,['midwest','newyork']);assert.equal(groups[0].x,545);assert.equal(groups[0].y,120);
+ assert.deepEqual(groups.flatMap(g=>g.regions).sort(),['california','midwest','newyork']);
+});
