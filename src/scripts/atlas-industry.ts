@@ -1,3 +1,4 @@
+import {groupIndustryMarkers} from '../lib/atlas-industry-markers';
 import {industrySectors,sectorLabel,subsectorLabel,type IndustrySector} from '../data/atlas/industry-catalog';
 import {readIndustryState,writeIndustryState,type IndustryState} from '../lib/atlas-industry-state';
 import type {IndustryRegion} from '../data/atlas/industry-regions';
@@ -22,10 +23,8 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
     markers.hidden=!hooks.active();if(!hooks.active())return;
     const project=projection(),all=visible(),places=new Map<string,IndustryRegion[]>();
     for(const r of all){if(!places.has(r.placeId))places.set(r.placeId,[]);places.get(r.placeId)!.push(r);}
-    let groups=[...places.values()].filter(rs=>state.sector!=='all'||rs.some(r=>r.overview)).map(rs=>({...project(rs[0].coordinates),regions:rs})).filter(p=>p.x>=12&&p.y>=12&&p.x<=frame.clientWidth-12&&p.y<=frame.clientHeight-30);
-    // Merge overlapping hit/label rectangles. Keep the cluster anchored at an actual representative point.
-    const width=frame.clientWidth<650?92:120,height=48;
-    for(let i=0;i<groups.length;i++)for(let j=i+1;j<groups.length;j++)if(Math.abs(groups[i].x-groups[j].x)<width&&Math.abs(groups[i].y-groups[j].y)<height){groups[i].regions.push(...groups[j].regions);groups.splice(j--,1);}
+    const projected=[...places.values()].filter(rs=>state.sector!=='all'||rs.some(r=>r.overview)).map(rs=>({...project(rs[0].coordinates),regions:rs})).filter(p=>p.x>=20&&p.y>=24&&p.x<=frame.clientWidth-20&&p.y<=frame.clientHeight-40);
+    const groups=groupIndustryMarkers(projected,frame.clientWidth),width=frame.clientWidth<650?92:120;
     const nextSignature=groups.map(g=>g.regions.map(r=>r.id).join(',')).join('|');
     if(nextSignature!==signature){
       const focused=(document.activeElement as HTMLElement)?.dataset.industryMarker;

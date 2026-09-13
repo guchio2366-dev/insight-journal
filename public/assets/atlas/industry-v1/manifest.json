@@ -61,8 +61,8 @@
     }
   ],
   "performance": {
-    "standaloneIndustryJsBytes": 9988,
-    "standaloneIndustryJsGzipBytes": 3755,
+    "standaloneIndustryJsBytes": 10220,
+    "standaloneIndustryJsGzipBytes": 3877,
     "additionalGeospatialNetworkRequests": 0,
     "note": "All 42 region records are embedded in the HTML configuration; no separate regional downloads. This standalone JS upper bound includes its catalog and state codec. Raw national tables are downloadable for audit but are not fetched by the browser controller."
   }

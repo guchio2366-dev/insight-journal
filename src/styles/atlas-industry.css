@@ -28,3 +28,9 @@
 @media(max-width:649px){.industry-controls{padding:4px 5px 0}.industry-tab-row button{font-size:12px;padding:7px 11px}.industry-guide{flex-wrap:wrap;gap:5px 14px;font-size:10px}.industry-guide span{flex-basis:100%}.industry-marker{width:88px;font-size:9px}.industry-marker.is-left-label{margin-left:-54px}.industry-marker span{padding:3px}.industry-marker i{width:28px;height:28px;font-size:10px}.industry-key{font-size:10px}.industry-reading,.industry-insights,.industry-method{margin:18px 0;padding:17px 14px}.industry-copy-grid,.industry-insight-grid{grid-template-columns:1fr;gap:18px}.industry-reading h2,.industry-insights h2,.industry-method h2{font-size:22px}.industry-copy-grid p{font-size:13px}.industry-insight-grid article{padding:15px}.industry-table-scroll th,.industry-table-scroll td{padding:7px 5px}}
 
 .industry-static-map{position:absolute;inset:0;width:100%;height:100%}.industry-static-reading{font-size:13px;line-height:1.8;padding:20px}.industry-static-reading article{scroll-margin-top:20px}
+
+@media(min-width:900px){
+ .industry-bars{gap:2px}.industry-bar-label{line-height:1.15}.industry-chart{margin-top:7px;padding-top:5px}.industry-chart h3{line-height:1.4}
+ .industry-number-table summary{min-height:22px}.industry-national header>p:last-child{line-height:1.4}.industry-stat-note{line-height:1.4;margin-top:5px}
+}
+.atlas-explorer[data-field=industry] .atlas-layer-caption{bottom:34px}
