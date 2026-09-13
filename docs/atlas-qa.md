@@ -1,69 +1,72 @@
-# Atlas QA — 2026-09-12
+# Atlas QA — 2026-09-13
 
-Implementation is staged through the existing GitHub Actions validation and
-GitHub Pages workflow. No hosting permissions, publication/privacy settings,
-paid API or runtime server were added.
+The responsive North America agriculture implementation was published through
+the existing pull-request and GitHub Pages workflows. Hosting permissions,
+publication/privacy settings, paid APIs and runtime servers were unchanged.
 
-## Automated checks
+## Automated and data checks
 
-- 36 unit tests: existing content/privacy/export/search checks; new data hashes,
-  geography coverage, URL state, pinned MapLibre style validation and visibility-
-  only field switching with camera-reset traps.
-- 3 static end-to-end checks including every promoted atlas route, shared
-  renderer, lower explanations, non-interactive planned fields and public safety.
-- Astro build, Pagefind and release verification.
-- Separate geospatial sanity checks confirm valid crop polygons and broad-region
-  control points; see `atlas-data.md` for methodology and limitations.
+- `npm run check` passed locally and in GitHub Actions.
+- 47 unit tests cover existing publication safety plus data totals, commodity
+  bases, 10-year production series, regional selection, URL validation and card
+  placement fallback.
+- 4 built-site tests cover atlas routes, national charts, five crop panels,
+  planned-field behavior and public-content safety.
+- The normalization script reproduced `statistics-generated.ts` byte for byte
+  from the reviewed inputs. Destination parts equal their matching totals;
+  receipt categories plus Other equal All Commodities; U.S. production shares
+  recalculate from the corresponding PSD world totals.
 
-## Browser verification boundary
+## Browser measurements
 
-The provided cloud Chrome has no usable WebGL2. Its real
-`GPUInitializationError` correctly activates the self-hosted fallback. Screenshots
-from this environment are **fallback views**, not evidence of a working GPU map.
+`/atlas/qa/` rendered the same public page in same-origin iframes. These results
+are CSS viewport checks in cloud Chrome, not physical devices or Safari.
 
-Verified in the initial review: all six crop-legend clicks produce the correct
-summary and detail anchor; the detail link scrolls to the intended crop section.
-The short field tabs and full-extent fallback fit the initial phone/tablet sizes.
-Review found inherited mobile-header overflow and an overlapping failure banner;
-both were corrected before promotion.
-
-## Final responsive measurements
-
-Same-origin iframe CSS viewports in cloud Chrome, initial full extent, fallback
-mode. These are not simulated Safari devices or physical-device tests.
-
-| CSS viewport | Full map and tabs visible | Page horizontal overflow | Workspace bottom |
+| CSS viewport | Map and tabs visible | Horizontal overflow | National overview starts in initial viewport |
 | --- | --- | --- | --- |
-| iPhone portrait 390×844 | Yes | None | 459px |
-| iPhone landscape 844×390 | Yes | None | 375px |
-| iPad portrait 820×1180 | Yes | None | 686px |
-| iPad landscape 1180×820 | Yes | None | 828px |
-| PC 1280×800 | Yes | None | 808px |
+| iPhone portrait 390×844 | Yes | None | Yes |
+| iPhone portrait 375×667 | Yes | None | Yes |
+| iPhone landscape 844×390 | Yes | None | Below map after initial viewport |
+| iPad portrait 820×1180 | Yes | None | Yes |
+| iPad landscape 1180×820 | Yes | None | Yes, beside map |
+| iPad landscape 1024×768 | Yes | None | Yes, beside map |
+| PC 1280×800 | Yes | None | Yes, beside map |
+| PC 1366×768 | Yes | None | Yes, beside map |
 
-The map and tabs fit at every size. On the last two sizes, the final lower-guide
-padding extends about 8px beyond the viewport; the map itself is fully visible.
-The static map was visually checked for terrain, water, state/crop positioning
-and text overlap. Dynamic-label collision metrics are not meaningful in fallback
-mode (there are no rendered HTML map labels).
+At 1180×820 the complete map, legend, cash-receipts chart and trade chart are
+visible together. At 390×844 the reading order is map, optional selected-region
+card, national overview and crop details. The map and text retain normal font
+sizes rather than shrinking the whole interface.
 
-Map zoom/fit controls are hidden in initial static HTML and are exposed only
-after MapLibre's load event. Thus a missing/disabled entry script does not leave
-dead zoom buttons over the fallback. Static release checks enforce that default.
+Cloud Chrome reports no usable WebGL2, so the real MapLibre initialization
+failure activated the self-hosted fallback. This verifies failure behavior but
+does not prove GPU map drawing. The fallback retained the six-part legend and
+content links. Selecting rice displayed one card directly below the fallback,
+kept the national summary unchanged, selected the rice detail tab and produced
+`crop=rice&stats=rice&view=fit` in the URL. The rice panel displayed its reviewed
+explanation and export-destination composition.
 
-The explicit review-only asset failure produced `manifest.json: 404` and kept
-the fallback, crop legend and text accessible. Switching to land after that
-failure loaded `land-fallback.webp` correctly. Normal public navigation from
-North America to agriculture also reached the promoted shared renderer.
+## Publication evidence
 
-Publication verified for merge `e545e5a9ae3e89a29746bf30a360f01e8f12a725`:
-GitHub Actions run `34662271249` succeeded and public `_release.json` reported
-that exact SHA. The subsequent documentation/source-citation commit does not
-alter the map data, geometry or layout represented by these screenshots.
+- PR #12 validation run `34737567522`: success.
+- Implementation merge `8cb4669c586bd4ef6ab97cf6754e6dbc743f3d1b`, Pages run
+  `34737596266`: success.
+- Landscape finishing PR #13 validation run `34737820907`: success.
+- Final visual-code merge `45256ce6b05b705f648a1320a43e780e37698af8`, Pages run
+  `34737858133`: success.
+- The public review page showed the revised charts and layout after the final
+  Pages run. The attached review screenshots were taken from that public build.
 
-Not browser-verified here: GPU-rendered labels, coordinate-based polygon picking,
-live pan/zoom and camera preservation, browser Back/Forward with an active map,
-WebGL context-loss recovery, Safari or real iPhone/iPad touch behavior. The
-automated style/camera-contract checks do not replace those checks.
+## Remaining verification boundary
 
-Climate, industry, soils/winds, Canada/Mexico agriculture and commodity export/
-world-share charts remain future scope, not completed functionality.
+Real iPhone/iPad Safari and a browser with WebGL2 remain unverified. Therefore
+live polygon picking, GPU labels, pan/zoom camera preservation and map-overlay
+card placement are supported by code and targeted unit tests, but are not
+reported as real-device evidence. On a capable device, verify that a tapped
+Midwest, Sacramento Valley and lower-Mississippi crop region receives the
+matching note and that the overlay does not cover its selected area; if no safe
+position remains, the same card must move below the map without a camera change.
+
+Climate, soil and industry remain planned peer fields. Region-specific wind and
+water explanations are editorial notes tied to reviewed sources; they are not
+presented as completed quantitative layers.
