@@ -32,7 +32,7 @@ export function createAtlasStyle(config:{assetBase:string;natureAssetBase?:strin
     {id:'crops-fill',type:'fill',source:'crops',filter:['!=',['get','id'],'corn-soybean'],paint:{'fill-color':['get','color'],'fill-opacity':0.62}},
     {id:'crops-outline',type:'line',source:'crops',filter:['!=',['get','id'],'corn-soybean'],paint:{'line-color':['get','color'],'line-opacity':0.85,'line-width':1}},
     {id:'crops-overlap',type:'fill',source:'crops',filter:['==',['get','id'],'corn-soybean'],paint:{'fill-color':'#c8b756','fill-opacity':0.18}},
-    {id:'crop-relation-highlight',type:'line',source:'crops',filter:['==',['get','id'],'__no-relation__'],layout:{visibility:'none'},paint:{'line-color':'#263f4c','line-width':2.2,'line-opacity':0.95}},
+    {id:'crop-relation-highlight',type:'line',source:'crops',filter:['==',['get','id'],'__no-relation__'],layout:{visibility:'none'},paint:{'line-color':'#263f4c','line-width':['interpolate',['linear'],['zoom'],2,0.85,4,1.35,6,2.2],'line-opacity':0.95}},
     {id:'state-lines',type:'line',source:'base',filter:kind('state'),paint:{'line-color':'#506f73','line-opacity':0.42,'line-width':0.65}},
     {id:'country-lines',type:'line',source:'base',filter:kind('land'),paint:{'line-color':'#4c7b8a','line-width':0.9,'line-opacity':0.75}},
     {id:'rivers',type:'line',source:'base',filter:kind('river'),paint:{'line-color':'#5799b5','line-width':['interpolate',['linear'],['zoom'],2,0.5,6,1.5],'line-opacity':0.86}},
