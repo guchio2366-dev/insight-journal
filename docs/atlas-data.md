@@ -21,7 +21,7 @@ reference, never a coordinate source. Do not use its pixel hit regions as GIS.
   equirectangular image between four Mercator corners.
 - Japanese HTML labels use local system fonts and collision rejection; no
   font/tile API, token, commercial basemap, or demo tile server is used.
-- URLs preserve `lng`, `lat`, `z`, `crop` and field route. Invalid numeric state
+- URLs preserve `lng`, `lat`, `z`, `crop`, `region`, `stats`, `view` and field route. Invalid numeric state
   returns to a full-extent view. Restore on reload and browser Back/Forward.
 - Full CONUS initial extent with visible short field tabs. Touch/click and
   keyboard-accessible legend selection; explicit zoom and fit controls.
@@ -29,6 +29,12 @@ reference, never a coordinate source. Do not use its pixel hit regions as GIS.
   shows a self-hosted, georeferenced fallback figure plus the article text.
   No-JavaScript links remain usable. The old generated reference is separately
   identified as an earlier concept image.
+- At wide tablet/desktop sizes the map and fixed national overview share one
+  row. On phones they stack in reading order: map, selected regional note when
+  present, national overview, then crop detail.
+- A finite card-placement algorithm rejects positions intersecting the selected
+  explanatory region, visible labels, caption or map controls. If no safe
+  position exists, the same card moves below the map without changing camera.
 
 ## Published data
 
@@ -83,11 +89,12 @@ upstream requests. Do not fetch new datasets during every Pages build.
 The map opens at North America → agriculture / climate / land / industry. This
 release covers CONUS agriculture and landforms/water. Climate and industry remain
 explicitly marked as in preparation, consistent with their previous status.
-Climate classification, prevailing winds, soil taxonomy, industry distribution,
-Canada/Mexico crop coverage, crop export pies and world-share series are not
-claimed to be complete. Preserve the agreed future statistical design: raw
-commodities, export quantity total plus country-share pie, dated world production
-share and trend, consistent paddy/milled rice and lint/seed-cotton definitions.
+Climate classification, soil taxonomy, industry distribution and Canada/Mexico
+crop coverage are not claimed to be complete. Region-specific climate and wind
+relationships are reviewed editorial notes, not a new quantitative climate
+layer. Export-destination composition, dated world production and U.S. share
+are implemented for five raw commodities; their definitions and update record
+are in `atlas-statistics-data.md`.
 
 Beck et al. Köppen-Geiger was investigated as a climate source. The GloH2O source
 page identifies CC BY 4.0 data, but the Figshare download was inaccessible in this
