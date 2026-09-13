@@ -1,0 +1,196 @@
+{
+  "release": "0fc836a26d4e6fc107560eddf80701133b3d6191",
+  "environment": "Cloud Chrome; CSS iframe sizes; no WebGL; not physical-device emulation",
+  "checks": [
+    {
+      "viewport": [
+        375,
+        667
+      ],
+      "horizontalOverflow": false,
+      "mapFullyVisible": true,
+      "tabsVisible": true,
+      "nationalTop": 956,
+      "nationalBottom": 1777,
+      "nationalInitiallyVisible": false,
+      "workspaceBottom": 1777,
+      "state": "fallback",
+      "natureLoad": null,
+      "natureMode": "climate",
+      "canvasCount": 0,
+      "labelCollisions": [],
+      "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/review/?field=agriculture&relation=corn-soy-hogs&release=0fc836a"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "mapFullyVisible": true,
+      "tabsVisible": true,
+      "nationalTop": 935,
+      "nationalBottom": 1755,
+      "nationalInitiallyVisible": false,
+      "workspaceBottom": 1755,
+      "state": "fallback",
+      "natureLoad": null,
+      "natureMode": "climate",
+      "canvasCount": 0,
+      "labelCollisions": [],
+      "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/review/?field=agriculture&relation=corn-soy-hogs&release=0fc836a"
+    },
+    {
+      "viewport": [
+        844,
+        390
+      ],
+      "horizontalOverflow": false,
+      "mapFullyVisible": true,
+      "tabsVisible": true,
+      "nationalTop": 810,
+      "nationalBottom": 1615,
+      "nationalInitiallyVisible": false,
+      "workspaceBottom": 1615,
+      "state": "fallback",
+      "natureLoad": null,
+      "natureMode": "climate",
+      "canvasCount": 0,
+      "labelCollisions": [],
+      "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/review/?field=agriculture&relation=corn-soy-hogs&release=0fc836a"
+    },
+    {
+      "viewport": [
+        768,
+        1024
+      ],
+      "horizontalOverflow": false,
+      "mapFullyVisible": true,
+      "tabsVisible": true,
+      "nationalTop": 1110,
+      "nationalBottom": 1915,
+      "nationalInitiallyVisible": false,
+      "workspaceBottom": 1915,
+      "state": "fallback",
+      "natureLoad": null,
+      "natureMode": "climate",
+      "canvasCount": 0,
+      "labelCollisions": [],
+      "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/review/?field=agriculture&relation=corn-soy-hogs&release=0fc836a"
+    },
+    {
+      "viewport": [
+        820,
+        1180
+      ],
+      "horizontalOverflow": false,
+      "mapFullyVisible": true,
+      "tabsVisible": true,
+      "nationalTop": 1145,
+      "nationalBottom": 1950,
+      "nationalInitiallyVisible": true,
+      "workspaceBottom": 1950,
+      "state": "fallback",
+      "natureLoad": null,
+      "natureMode": "climate",
+      "canvasCount": 0,
+      "labelCollisions": [],
+      "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/review/?field=agriculture&relation=corn-soy-hogs&release=0fc836a"
+    },
+    {
+      "viewport": [
+        1180,
+        820
+      ],
+      "horizontalOverflow": false,
+      "mapFullyVisible": true,
+      "tabsVisible": true,
+      "nationalTop": 126,
+      "nationalBottom": 947,
+      "nationalInitiallyVisible": true,
+      "workspaceBottom": 1759,
+      "state": "fallback",
+      "natureLoad": null,
+      "natureMode": "climate",
+      "canvasCount": 0,
+      "labelCollisions": [],
+      "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/review/?field=agriculture&relation=corn-soy-hogs&release=0fc836a"
+    },
+    {
+      "viewport": [
+        1024,
+        768
+      ],
+      "horizontalOverflow": false,
+      "mapFullyVisible": true,
+      "tabsVisible": true,
+      "nationalTop": 126,
+      "nationalBottom": 967,
+      "nationalInitiallyVisible": true,
+      "workspaceBottom": 1708,
+      "state": "fallback",
+      "natureLoad": null,
+      "natureMode": "climate",
+      "canvasCount": 0,
+      "labelCollisions": [],
+      "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/review/?field=agriculture&relation=corn-soy-hogs&release=0fc836a"
+    },
+    {
+      "viewport": [
+        507,
+        768
+      ],
+      "horizontalOverflow": false,
+      "mapFullyVisible": true,
+      "tabsVisible": true,
+      "nationalTop": 971,
+      "nationalBottom": 1791,
+      "nationalInitiallyVisible": false,
+      "workspaceBottom": 1791,
+      "state": "fallback",
+      "natureLoad": null,
+      "natureMode": "climate",
+      "canvasCount": 0,
+      "labelCollisions": [],
+      "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/review/?field=agriculture&relation=corn-soy-hogs&release=0fc836a"
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "horizontalOverflow": false,
+      "mapFullyVisible": true,
+      "tabsVisible": true,
+      "nationalTop": 126,
+      "nationalBottom": 947,
+      "nationalInitiallyVisible": true,
+      "workspaceBottom": 1745,
+      "state": "fallback",
+      "natureLoad": null,
+      "natureMode": "climate",
+      "canvasCount": 0,
+      "labelCollisions": [],
+      "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/review/?field=agriculture&relation=corn-soy-hogs&release=0fc836a"
+    },
+    {
+      "viewport": [
+        720,
+        450
+      ],
+      "horizontalOverflow": false,
+      "mapFullyVisible": true,
+      "tabsVisible": true,
+      "nationalTop": 899,
+      "nationalBottom": 1704,
+      "nationalInitiallyVisible": false,
+      "workspaceBottom": 1704,
+      "state": "fallback",
+      "natureLoad": null,
+      "natureMode": "climate",
+      "canvasCount": 0,
+      "labelCollisions": [],
+      "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/review/?field=agriculture&relation=corn-soy-hogs&release=0fc836a"
+    }
+  ]
+}
