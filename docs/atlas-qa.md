@@ -70,3 +70,18 @@ position remains, the same card must move below the map without a camera change.
 Climate, soil and industry remain planned peer fields. Region-specific wind and
 water explanations are editorial notes tied to reviewed sources; they are not
 presented as completed quantitative layers.
+
+## Crop and livestock integration, 2026-09-13
+
+- The national receipts chart now shows the Crop/Livestock parent split and 11
+  crop plus 5 livestock child categories, each with its denominator stated.
+- Crop and livestock checkboxes independently control the shared agriculture
+  map. Both are on initially and their state, livestock selection and camera are
+  represented in the URL.
+- Fifteen livestock representative points cover five reviewed categories.
+  Collision groups open a tappable candidate list instead of hiding an item.
+- Two 6 KB SVG fallbacks cover crop-plus-livestock and livestock-only states.
+  They carry the same non-quantitative point semantics as the interactive map.
+- The completed build and browser measurements for this revision are recorded
+  below after the public Pages deployment. Physical iPhone/iPad Safari remains
+  a separate user-device check.

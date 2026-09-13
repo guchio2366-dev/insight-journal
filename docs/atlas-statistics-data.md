@@ -9,7 +9,7 @@ are not added to their totals.
 
 | Display | Definition | Period | Official source |
 | --- | --- | --- | --- |
-| U.S. cash receipts | Sales receipts for selected individual commodities plus an explicit remainder to All Commodities; not profit, GDP or physical production | 2025 estimate | USDA ERS Farm Income and Wealth Statistics, 2026-09-03 release |
+| U.S. cash receipts | Crop and livestock parent totals, followed by 11 crop and 5 livestock subcategories; not profit, GDP or physical production | 2025 estimate | USDA ERS Farm Income and Wealth Statistics, 2026-09-03 release |
 | U.S. agricultural exports/imports | Calendar-year nominal trade value | 2016–2025 | USDA ERS FATUS calendar-year workbook |
 | Export destinations | Physical export quantity, top five destinations and residual Other | 2025 preliminary | USDA ERS FATUS; rice from USDA FAS GATS |
 | World production | Production and U.S. share calculated within one PSD commodity, unit and marketing year | MY 2015–2024 | USDA FAS PSD, 2026-09-11 file |
@@ -27,6 +27,12 @@ The file contains the EU aggregate without duplicate member-country production
 rows for these extracts. A trend sentence compares the mean of the last three
 marketing years with the first three; it is descriptive, not a significance
 test or forecast.
+
+Cash receipts are read from the source unit `thousand USD`. The page first
+divides Crop and Livestock receipts by All Commodities, then divides each child
+category by its own parent. Consequently the two chart levels have different
+denominators. One-thousand-dollar rounding residuals in each parent are kept as
+explicit reconciliation metadata rather than silently assigned to a category.
 
 ## Input register
 

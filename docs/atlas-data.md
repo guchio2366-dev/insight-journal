@@ -96,6 +96,11 @@ layer. Export-destination composition, dated world production and U.S. share
 are implemented for five raw commodities; their definitions and update record
 are in `atlas-statistics-data.md`.
 
+The agriculture field also includes five livestock categories as explanatory
+representative points. Their source, coverage and non-quantitative meaning are
+recorded in `atlas-livestock-data.md`. These points are not farm locations or
+boundaries and must not be converted into density or sales symbols.
+
 Beck et al. Köppen-Geiger was investigated as a climate source. The GloH2O source
 page identifies CC BY 4.0 data, but the Figshare download was inaccessible in this
 environment. No unverified climate polygons or replacement numbers were invented.

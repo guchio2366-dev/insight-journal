@@ -1,0 +1,4 @@
+---
+import { livestockKinds,livestockReadings,livestockSources } from '../../data/atlas/livestock';
+---
+<section class="atlas-livestock-reading" id="livestock-details"><header><p class="atlas-eyebrow">LIVESTOCK AND PLACE</p><h2>畜産を地理から読む</h2><p>記号は2022年農業センサスの郡別分布と公的資料から確認した主要集積地域の中心を示します。農場の正確な位置や、記号の大きさによる頭・羽数比較ではありません。</p></header><nav class="atlas-livestock-jump" aria-label="畜産の解説">{livestockKinds.map(k=><a href={`#livestock-${k.id}`} style={`--livestock-color:${k.color}`}><i aria-hidden="true">{k.symbol}</i>{k.label}</a>)}</nav><div class="atlas-livestock-copy-grid">{livestockReadings.map(item=><article id={`livestock-${item.id}`} tabindex="-1"><h3>{item.title}</h3><p>{item.body}</p></article>)}</div><p class="atlas-inline-sources">出典：{livestockSources.map((s,i)=><span>{i>0?' ／ ':''}<a href={s.url} target="_blank" rel="noopener noreferrer">{s.publisher}</a></span>)}</p></section>

@@ -22,6 +22,6 @@ export function createAtlasStyle(config:{assetBase:string},manifest:any,base:any
     ]};
 }
 
-export function setFieldLayers(map:{setLayoutProperty:(id:string,key:string,value:string)=>unknown},field:string) {
-  for(const id of ['crops-fill','crops-outline','crops-overlap']) map.setLayoutProperty(id,'visibility',field==='agriculture'?'visible':'none');
+export function setFieldLayers(map:{setLayoutProperty:(id:string,key:string,value:string)=>unknown},field:string,cropsVisible=true) {
+  for(const id of ['crops-fill','crops-outline','crops-overlap']) map.setLayoutProperty(id,'visibility',field==='agriculture'&&cropsVisible?'visible':'none');
 }

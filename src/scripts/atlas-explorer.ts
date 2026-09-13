@@ -7,6 +7,7 @@ type RegionalCopy = {
   id:string; cropIds:string[]; title:string; summary:string; compactSummary:string;
   bounds:[number,number,number,number]; detailCrop:string;
 };
+type LivestockRegion={id:string;kindId:string;label:string;anchor:[number,number];summary:string};
 
 export async function startAtlas() {
   const root=document.querySelector<HTMLElement>('[data-atlas-explorer]');
@@ -18,10 +19,12 @@ export async function startAtlas() {
   const selection=el('[data-selection]'), selectionSlot=el('[data-selection-slot]');
   const initial=readAtlasState(new URL(location.href),config.initialField);
   let field:MapField=initial.field, map:LibreMap|undefined, selected:string|null=null, selectedRegion:string|null=null;
+  let selectedAnimal:string|null=initial.animal,selectedAnimalRegion:string|null=initial.animalRegion,agriLayers=new Set<string>(initial.agriLayers);
   let selectedStats:string=initial.stats, view:ViewMode=initial.view, failed=false, ready=false, restoring=false, suppressNextMove=false;
   let labels:any[]=[]; let currentCopy:{full:string;compact:string}|null=null; let selectedCoordinate:[number,number]|null=null;
   const allCrops=new Map<string,any>(config.crops.map((crop:any)=>[crop.id,crop]));
   const allRegions=new Map<string,RegionalCopy>(config.regionalInsights.map((region:RegionalCopy)=>[region.id,region]));
+  const allLivestockRegions=new Map<string,LivestockRegion>(config.livestockRegions.map((r:LivestockRegion)=>[r.id,r])),allLivestockKinds=new Map<string,any>(config.livestockKinds.map((k:any)=>[k.id,k]));
   const status=el('[data-fallback-status]');
   const criticalController=new AbortController();
   let timeout:number;
@@ -30,7 +33,7 @@ export async function startAtlas() {
     if(restoring)return;
     const center=map?.getCenter();
     const camera=center?{lng:center.lng,lat:center.lat,zoom:map!.getZoom()}:initial.camera??undefined;
-    const url=writeAtlasState(new URL(location.href),config.base,field,camera,selected,selectedRegion,selectedStats,view);
+    const url=writeAtlasState(new URL(location.href),config.base,field,camera,selected,selectedRegion,selectedStats,view,[...agriLayers] as any,selectedAnimal,selectedAnimalRegion);
     if(config.reviewMode){url.pathname=config.base+'review/';url.searchParams.set('field',field);}
     history[push?'pushState':'replaceState']({},'',url);
   }
@@ -79,7 +82,7 @@ export async function startAtlas() {
     el('[data-selection-text]').textContent=frame.clientWidth<650&&currentCopy?currentCopy.compact:currentCopy?.full??'';
     const protectedRects:Rect[]=[];
     const target=selectedRegionRect();if(target)protectedRects.push(target);
-    for(const node of root.querySelectorAll<HTMLElement>('.atlas-map-tools,[data-layer-caption],.atlas-geolabel:not([hidden])'))protectedRects.push(localRect(node));
+    for(const node of root.querySelectorAll<HTMLElement>('.atlas-map-tools,[data-agri-layers],[data-layer-caption],.atlas-geolabel:not([hidden]),.atlas-livestock-marker[aria-pressed="true"]'))protectedRects.push(localRect(node));
     const result=chooseCardPlacement(
       {width:frame.clientWidth,height:frame.clientHeight},
       {width:selection.offsetWidth,height:selection.offsetHeight},
@@ -91,9 +94,10 @@ export async function startAtlas() {
   }
 
   function closeSelection(saveUrl=true) {
-    selected=null;selectedRegion=null;selectedCoordinate=null;currentCopy=null;selection.hidden=true;
+    selected=null;selectedRegion=null;selectedAnimal=null;selectedAnimalRegion=null;selectedCoordinate=null;currentCopy=null;selection.hidden=true;
     frame.appendChild(selection);selection.classList.remove('atlas-selection--below');selection.style.removeProperty('left');selection.style.removeProperty('top');selection.style.removeProperty('visibility');
     root.querySelectorAll('[data-crop-select]').forEach(node=>node.removeAttribute('aria-current'));
+    el('[data-selection-candidates]').hidden=true;el('[data-selection-candidates]').replaceChildren();renderLivestockMarkers();
     if(saveUrl)save();
   }
 
@@ -111,13 +115,14 @@ export async function startAtlas() {
     const crop=id==='corn-soybean'?{name:'とうもろこし・大豆の重なり',summary:'近い地域で両方の作物がまとまります。この図だけでは、同じ畑の輪作や同時栽培は判定できません。'}:allCrops.get(id);
     if(!crop)return;
     const region=regionFor(id,longitude,latitude,requestedRegion);
-    selected=id;selectedRegion=region?.id??null;
+    selected=id;selectedRegion=region?.id??null;selectedAnimal=null;selectedAnimalRegion=null;
     if(longitude!==undefined&&latitude!==undefined)selectedCoordinate=[longitude,latitude];
     else if(region){const [west,south,east,north]=region.bounds;selectedCoordinate=[(west+east)/2,(south+north)/2];}
     else selectedCoordinate=null;
     currentCopy={full:region?.summary??crop.summary,compact:region?.compactSummary??crop.summary};
     el('[data-selection-title]').textContent=region?.title??crop.name;
     el('[data-selection-text]').textContent=currentCopy.full;
+    el('[data-selection-candidates]').hidden=true;el('[data-selection-candidates]').replaceChildren();
     const detailCrop=region?.detailCrop??(id==='corn-soybean'?'corn':id);
     el<HTMLAnchorElement>('[data-selection-link]').href=config.statisticCropIds.includes(detailCrop)?'#crop-details':'#atlas-method';
     el('[data-selection-link]').textContent=config.statisticCropIds.includes(detailCrop)?'↓ 作物の詳説へ':'↓ 表示方法へ';
@@ -125,9 +130,19 @@ export async function startAtlas() {
     root.querySelectorAll<HTMLElement>('[data-crop-select]').forEach(node=>{
       if(node.dataset.cropSelect===id)node.setAttribute('aria-current','true');else node.removeAttribute('aria-current');
     });
-    selection.hidden=false;placeSelectionCard();
+    selection.hidden=false;renderLivestockMarkers();placeSelectionCard();
     if(saveUrl)save();
   }
+
+  function selectLivestock(regionId:string,saveUrl=true){const region=allLivestockRegions.get(regionId);if(!region)return;const kind=allLivestockKinds.get(region.kindId);if(!kind)return;selected=null;selectedRegion=null;selectedAnimal=region.kindId;selectedAnimalRegion=region.id;selectedCoordinate=region.anchor;currentCopy={full:region.summary,compact:region.summary};el('[data-selection-title]').textContent=`${region.label}の${kind.label}`;el('[data-selection-text]').textContent=currentCopy.full;el('[data-selection-candidates]').hidden=true;el('[data-selection-candidates]').replaceChildren();el<HTMLAnchorElement>('[data-selection-link]').href=`#livestock-${region.kindId}`;el('[data-selection-link]').textContent='↓ 畜産の詳説へ';root.querySelectorAll('[data-crop-select]').forEach(n=>n.removeAttribute('aria-current'));selection.hidden=false;renderLivestockMarkers();placeSelectionCard();if(saveUrl)save();}
+
+  function showLivestockCandidates(regions:LivestockRegion[],coordinate:[number,number]){selected=null;selectedRegion=null;selectedAnimal=null;selectedAnimalRegion=null;selectedCoordinate=coordinate;currentCopy={full:'同じ範囲に複数の畜産地域があります。読みたい対象を選んでください。',compact:'複数の対象があります。'};el('[data-selection-title]').textContent='重なっている畜産';el('[data-selection-text]').textContent=currentCopy.full;const holder=el('[data-selection-candidates]');holder.replaceChildren();holder.hidden=false;for(const region of regions){const kind=allLivestockKinds.get(region.kindId),button=document.createElement('button');button.type='button';button.textContent=`${kind.symbol} ${region.label}・${kind.label}`;button.addEventListener('click',()=>selectLivestock(region.id));holder.appendChild(button);}el<HTMLAnchorElement>('[data-selection-link]').href='#livestock-details';el('[data-selection-link]').textContent='↓ 畜産の詳説へ';selection.hidden=false;placeSelectionCard();}
+
+  function renderLivestockMarkers(){const holder=el('[data-livestock-markers]');holder.replaceChildren();if(!ready||!map||field!=='agriculture'||!agriLayers.has('livestock'))return;const visible=config.livestockRegions.map((region:LivestockRegion)=>({region,point:map!.project(region.anchor)})).filter(({point}:any)=>point.x>=20&&point.y>=20&&point.x<=frame.clientWidth-20&&point.y<=frame.clientHeight-20),groups:{regions:LivestockRegion[];points:any[]}[]=[],distance=frame.clientWidth<650?58:48;for(const item of visible){const found=groups.find(g=>Math.hypot(g.points[0].x-item.point.x,g.points[0].y-item.point.y)<distance);if(found){found.regions.push(item.region);found.points.push(item.point);}else groups.push({regions:[item.region],points:[item.point]});}for(const group of groups){const button=document.createElement('button');button.type='button';button.className='atlas-livestock-marker';const x=group.points.reduce((s,p)=>s+p.x,0)/group.points.length,y=group.points.reduce((s,p)=>s+p.y,0)/group.points.length;button.style.transform=`translate(${Math.round(x)}px,${Math.round(y)}px) translate(-50%,-50%)`;if(group.regions.length===1){const region=group.regions[0],kind=allLivestockKinds.get(region.kindId);button.style.setProperty('--livestock-color',kind.color);button.innerHTML=`<i aria-hidden="true">${kind.symbol}</i><span>${kind.label}</span>`;button.setAttribute('aria-label',`${region.label}の${kind.label}`);button.setAttribute('aria-pressed',String(selectedAnimalRegion===region.id));button.addEventListener('click',e=>{e.stopPropagation();selectLivestock(region.id);});}else{button.classList.add('is-cluster');button.innerHTML=`<i aria-hidden="true">${group.regions.length}</i><span>畜産</span>`;button.setAttribute('aria-label',`${group.regions.length}件の畜産地域を選ぶ`);button.addEventListener('click',e=>{e.stopPropagation();const p=map!.unproject([x,y]);showLivestockCandidates(group.regions,[p.lng,p.lat]);});}holder.appendChild(button);}}
+
+  function updateFallbackImage(){const image=el<HTMLImageElement>('[data-fallback-image]'),link=el<HTMLAnchorElement>('[data-fallback-full]');let src=config.assetBase+'land-fallback.webp',alt='米国本土の地形と水系。';if(field==='agriculture'){if(agriLayers.has('crops')&&agriLayers.has('livestock')){src=config.livestockAssetBase+'agriculture-livestock-fallback.svg';alt='主要作物と畜産集積地域の概略図。';}else if(agriLayers.has('crops')){src=config.assetBase+'agriculture-fallback.webp';alt='主要作物の概略図。';}else if(agriLayers.has('livestock')){src=config.livestockAssetBase+'livestock-fallback.svg';alt='主要な畜産集積地域の概略図。';}}image.src=src;image.alt=alt;link.href=src;}
+
+  function syncAgricultureLayers(saveUrl=true){root.querySelectorAll<HTMLInputElement>('[data-agri-layer]').forEach(input=>input.checked=agriLayers.has(input.value));if(ready&&map)setFieldLayers(map,field,agriLayers.has('crops'));updateFallbackImage();el('[data-livestock-key]').hidden=!agriLayers.has('livestock');renderLivestockMarkers();renderLabels();if((selected&&!agriLayers.has('crops'))||(selectedAnimal&&!agriLayers.has('livestock')))closeSelection(false);if(saveUrl)save();}
 
   function setField(next:MapField,push=false) {
     field=next;root.dataset.field=field;
@@ -136,20 +151,17 @@ export async function startAtlas() {
     });
     root.querySelectorAll<HTMLElement>('[data-field-content]').forEach(section=>section.hidden=!section.dataset.fieldContent!.split(' ').includes(field));
     root.querySelectorAll<HTMLElement>('[data-field-national]').forEach(section=>section.hidden=!section.dataset.fieldNational!.split(' ').includes(field));
-    el('[data-crop-key]').hidden=field!=='agriculture';el('[data-land-key]').hidden=field==='agriculture';
-    el<HTMLImageElement>('[data-fallback-image]').src=config.assetBase+(field==='agriculture'?'agriculture':'land')+'-fallback.webp';
-    el<HTMLAnchorElement>('[data-fallback-full]').href=config.assetBase+(field==='agriculture'?'agriculture':'land')+'-fallback.webp';
-    el<HTMLImageElement>('[data-fallback-image]').alt=field==='agriculture'?'米国本土の地形・河川と、州境をまたぐ主要作物の栽培分布。下の作物別解説でも内容を読めます。':'米国本土の地形と水系。西部の山地、中央の平原、東部の山地を比べられます。';
-    el('[data-layer-caption]').textContent=field==='agriculture'?'主要栽培域 · 2023年の衛星分類から概略化':'地形・水系';
+    el('[data-crop-key]').hidden=field!=='agriculture';el('[data-land-key]').hidden=field==='agriculture';el('[data-agri-layers]').hidden=field!=='agriculture';updateFallbackImage();
+    el('[data-layer-caption]').textContent=field==='agriculture'?'作物 2023 · 畜産 2022（概略）':'地形・水系';
     closeSelection(false);
-    if(ready&&map){setFieldLayers(map,field);renderLabels();}
+    if(ready&&map){setFieldLayers(map,field,agriLayers.has('crops'));renderLabels();renderLivestockMarkers();}
     if(push)save(true);
   }
 
   function fail(message:string) {
     if(failed)return;failed=true;ready=false;clearTimeout(timeout);criticalController.abort();
     root.dataset.renderState='fallback';fallback.hidden=false;surface.hidden=true;
-    el('[data-map-labels]').hidden=true;el('.atlas-map-tools').hidden=true;
+    el('[data-map-labels]').hidden=true;el('[data-livestock-markers]').hidden=true;el('.atlas-map-tools').hidden=true;
     status.textContent=message+'（代替図）';map?.remove();map=undefined;
     if(!selection.hidden)moveSelectionBelow();
   }
@@ -159,8 +171,9 @@ export async function startAtlas() {
     event.preventDefault();setField(link.dataset.field as MapField,true);
   }));
   root.querySelectorAll<HTMLAnchorElement>('[data-crop-select]').forEach(link=>link.addEventListener('click',event=>{
-    event.preventDefault();selectCrop(link.dataset.cropSelect!);
+    event.preventDefault();agriLayers.add('crops');syncAgricultureLayers(false);selectCrop(link.dataset.cropSelect!);
   }));
+  root.querySelectorAll<HTMLInputElement>('[data-agri-layer]').forEach(input=>input.addEventListener('change',()=>{if(input.checked)agriLayers.add(input.value);else agriLayers.delete(input.value);syncAgricultureLayers();}));
   root.querySelectorAll<HTMLButtonElement>('[data-stat-select]').forEach(button=>{
     button.addEventListener('click',()=>updateStats(button.dataset.statSelect!));
     button.addEventListener('keydown',event=>{
@@ -172,7 +185,7 @@ export async function startAtlas() {
   el('[data-close-selection]').addEventListener('click',()=>closeSelection());
   el('[data-selection-link]').addEventListener('click',()=>{
     if(config.statisticCropIds.includes(selectedStats))updateStats(selectedStats,false);
-    document.getElementById('crop-details')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+    const target=(el<HTMLAnchorElement>('[data-selection-link]').getAttribute('href')||'#crop-details').slice(1);document.getElementById(target)?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
   });
   root.addEventListener('keydown',event=>{if(event.key==='Escape')closeSelection();});
   updateStats(selectedStats,false);setField(field);
@@ -183,7 +196,7 @@ export async function startAtlas() {
     const width=frame.clientWidth,height=frame.clientHeight,occupied:number[][]=[];
     for(const item of labels){
       const node=item.node as HTMLElement;
-      if(item.kind==='crop'&&field!=='agriculture'){node.hidden=true;continue;}
+      if(item.kind==='crop'&&(field!=='agriculture'||!agriLayers.has('crops'))){node.hidden=true;continue;}
       const point=map.project([item.lng,item.lat]);node.hidden=false;
       const nodeWidth=node.offsetWidth,nodeHeight=node.offsetHeight;
       const rect=[point.x-nodeWidth/2,point.y-nodeHeight/2,point.x+nodeWidth/2,point.y+nodeHeight/2];
@@ -214,23 +227,24 @@ export async function startAtlas() {
     map.on('error',event=>{console.error('Atlas data/render error',event.error?.message);fail('地図の描画またはデータの読み込みに失敗しました。');});
     map.once('load',()=>{
       if(failed||!map)return;
-      ready=true;clearTimeout(timeout);root.dataset.renderState='ready';fallback.hidden=true;el('.atlas-map-tools').hidden=false;
+      ready=true;clearTimeout(timeout);root.dataset.renderState='ready';fallback.hidden=true;el('[data-livestock-markers]').hidden=false;el('.atlas-map-tools').hidden=false;
       const size=12,rgba=new Uint8Array(size*size*4);
       for(let row=0;row<size;row++)for(let column=0;column<size;column++){const index=(row*size+column)*4;rgba.set((column+row)%size<3?[169,139,38,165]:[0,0,0,0],index);}
       map.addImage('overlap-stripe',{width:size,height:size,data:rgba});map.setPaintProperty('crops-overlap','fill-pattern','overlap-stripe');
       labels=[...cropLabels,...config.geographicLabels,...stateLabels].sort((left,right)=>left.priority-right.priority);
       const labelParent=el('[data-map-labels]');
       for(const item of labels){const node=document.createElement('span');node.className='atlas-geolabel atlas-geolabel--'+item.kind;node.textContent=item.name;node.hidden=true;if(item.color)node.style.setProperty('--label-color',item.color);labelParent.appendChild(node);item.node=node;}
-      setField(field);updateStats(initial.stats,false);
-      if(initial.crop)selectCrop(initial.crop,undefined,undefined,initial.region,false);
+      setField(field);updateStats(initial.stats,false);syncAgricultureLayers(false);
+      if(initial.animalRegion)selectLivestock(initial.animalRegion,false);else if(initial.crop)selectCrop(initial.crop,undefined,undefined,initial.region,false);
       renderLabels();placeSelectionCard();save();
-      map.on('move',()=>{renderLabels();if(!selection.hidden&&selection.parentElement===frame)selection.style.visibility='hidden';});
+      map.on('move',()=>{renderLabels();renderLivestockMarkers();if(!selection.hidden&&selection.parentElement===frame)selection.style.visibility='hidden';});
       map.on('moveend',()=>{
         if(!suppressNextMove)view='custom';else suppressNextMove=false;
-        renderLabels();placeSelectionCard();save();
+        renderLabels();renderLivestockMarkers();placeSelectionCard();save();
       });
       map.on('click',event=>{
         if(field==='agriculture'){
+          if(!agriLayers.has('crops')){closeSelection();return;}
           const features=map!.queryRenderedFeatures([[event.point.x-6,event.point.y-6],[event.point.x+6,event.point.y+6]],{layers:['crops-fill','crops-overlap']});
           const feature=features.find(item=>item.properties.id==='corn-soybean')??features[0];
           if(feature)selectCrop(feature.properties.id,event.lngLat.lng,event.lngLat.lat);else closeSelection();
@@ -254,7 +268,7 @@ export async function startAtlas() {
         const width=frame.clientWidth,height=frame.clientHeight;if(width===lastWidth&&height===lastHeight)return;
         lastWidth=width;lastHeight=height;map.resize();
         if(view==='fit'){suppressNextMove=true;map.fitBounds(manifest.fitBounds,{padding:{top:30,bottom:14,left:12,right:12},duration:0});}
-        else{renderLabels();placeSelectionCard();}
+        else{renderLabels();renderLivestockMarkers();placeSelectionCard();}
       }).observe(frame);
       if(config.reviewMode)window.addEventListener('message',event=>{
         if(event.origin!==location.origin||event.source!==parent||event.data!=='atlas-qa-lose-context'||!map)return;
@@ -262,9 +276,9 @@ export async function startAtlas() {
       });
     });
     window.addEventListener('popstate',()=>{
-      restoring=true;const state=readAtlasState(new URL(location.href),config.initialField);view=state.view;setField(state.field);updateStats(state.stats,false);
+      restoring=true;const state=readAtlasState(new URL(location.href),config.initialField);view=state.view;agriLayers=new Set(state.agriLayers);setField(state.field);updateStats(state.stats,false);syncAgricultureLayers(false);
       if(state.camera&&map&&state.view==='custom')map.jumpTo({center:[state.camera.lng,state.camera.lat],zoom:state.camera.zoom});
-      if(state.crop)selectCrop(state.crop,undefined,undefined,state.region,false);restoring=false;
+      if(state.animalRegion)selectLivestock(state.animalRegion,false);else if(state.crop)selectCrop(state.crop,undefined,undefined,state.region,false);restoring=false;
     });
     const hashTarget=location.hash?document.getElementById(location.hash.slice(1)):null;
     if(hashTarget?.closest('details'))hashTarget.closest('details')!.open=true;

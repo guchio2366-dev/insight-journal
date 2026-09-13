@@ -5,14 +5,17 @@ import { sources, reportSections, timelineEvents } from '../../data/atlas/north-
 import { northAmericaFields } from '../../data/atlas/regions';
 import { regionalInsights } from '../../data/atlas/regional-insights';
 import { statisticCropIds } from '../../data/atlas/statistics';
+import { livestockKinds, livestockRegions } from '../../data/atlas/livestock';
 import NationalAgricultureSummary from './NationalAgricultureSummary.astro';
 import CropStatistics from './CropStatistics.astro';
+import LivestockReading from './LivestockReading.astro';
 
 interface Props { initialField?: ExplorerField }
 const { initialField='overview' } = Astro.props;
 const assetBase = withBase('/assets/atlas/v3/');
+const livestockAssetBase = withBase('/assets/atlas/livestock/v1/');
 const reviewMode = Astro.url.pathname.includes('/review/');
-const payload = JSON.stringify({ initialField, assetBase, reviewMode, base: withBase('/atlas/north-america/'), crops:cropExplanations, regionalInsights, statisticCropIds, geographicLabels }).replace(/</g,'\\u003c');
+const payload = JSON.stringify({ initialField, assetBase, livestockAssetBase, reviewMode, base: withBase('/atlas/north-america/'), crops:cropExplanations, regionalInsights, statisticCropIds, geographicLabels, livestockKinds, livestockRegions }).replace(/</g,'\\u003c');
 ---
 <article class="atlas-explorer" data-atlas-explorer data-pagefind-body={reviewMode?undefined:true} data-pagefind-ignore={reviewMode?'all':undefined}>
   <section class="atlas-workspace" aria-label="北米の分野別地図">
@@ -33,25 +36,28 @@ const payload = JSON.stringify({ initialField, assetBase, reviewMode, base: with
         <div class="atlas-map-frame" data-map-frame>
           <div class="atlas-map-surface" data-map-surface aria-label="拡大縮小できる米国本土地図"></div>
           <div class="atlas-fallback" data-fallback>
-            <img src={`${assetBase}${initialField==='agriculture'?'agriculture':'land'}-fallback.webp`} width="1800" height="1084" alt={initialField==='agriculture'?'米国本土の地形・河川と、州境をまたぐ主要作物の栽培分布。下の作物別解説でも内容を読めます。':'米国本土の地形と水系。西部に山地、中央に平原、東部にアパラチア山脈が続きます。'} data-fallback-image />
-            <p><span data-fallback-status>代替図を表示しています。解説は地図の下へ。</span> <a href={`${assetBase}${initialField==='agriculture'?'agriculture':'land'}-fallback.webp`} data-fallback-full target="_blank" rel="noopener">図を拡大</a></p>
+            <img src={initialField==='agriculture'?`${livestockAssetBase}agriculture-livestock-fallback.svg`:`${assetBase}land-fallback.webp`} width="1800" height="1084" alt={initialField==='agriculture'?'米国本土の地形・河川、主要作物の栽培域、主要な畜産集積地域の概略図。':'米国本土の地形と水系。西部に山地、中央に平原、東部にアパラチア山脈が続きます。'} data-fallback-image />
+            <p><span data-fallback-status>代替図を表示しています。解説は地図の下へ。</span> <a href={initialField==='agriculture'?`${livestockAssetBase}agriculture-livestock-fallback.svg`:`${assetBase}land-fallback.webp`} data-fallback-full target="_blank" rel="noopener">図を拡大</a></p>
           </div>
           <div class="atlas-map-labels" data-map-labels aria-hidden="true"></div>
+          <div class="atlas-livestock-markers" data-livestock-markers></div>
+          <fieldset class="atlas-agri-layers" data-agri-layers hidden={initialField!=='agriculture'}><legend class="visually-hidden">農業地図の表示</legend><label><input type="checkbox" value="crops" data-agri-layer checked />作物</label><label><input type="checkbox" value="livestock" data-agri-layer checked />畜産</label></fieldset>
           <div class="atlas-map-tools" aria-label="地図操作" hidden>
             <button type="button" data-map-action="fit" aria-label="米国本土の全体を表示">全体</button>
             <button type="button" data-map-action="in" aria-label="地図を拡大">＋</button>
             <button type="button" data-map-action="out" aria-label="地図を縮小">−</button>
           </div>
-          <p class="atlas-layer-caption" data-layer-caption>{initialField==='agriculture'?'主要栽培域 · 2023年の衛星分類から概略化':'地形・水系'}</p>
+          <p class="atlas-layer-caption" data-layer-caption>{initialField==='agriculture'?'作物 2023 · 畜産 2022（概略）':'地形・水系'}</p>
           <div class="atlas-selection" data-selection hidden role="status" aria-live="polite">
             <button type="button" class="atlas-selection-close" data-close-selection aria-label="選択した地域の説明を閉じる">×</button>
-            <span class="atlas-selection-kicker">選択地域</span><strong data-selection-title></strong><p data-selection-text></p><a href="#crop-details" data-selection-link>↓ 作物の詳説へ</a>
+            <span class="atlas-selection-kicker">選択地域</span><strong data-selection-title></strong><p data-selection-text></p><div class="atlas-selection-candidates" data-selection-candidates hidden></div><a href="#crop-details" data-selection-link>↓ 作物の詳説へ</a>
           </div>
         </div>
         <div class="atlas-selection-slot" data-selection-slot></div>
         <div class="atlas-key" data-crop-key hidden={initialField!=='agriculture'} aria-label="栽培域の凡例">
           {cropExplanations.map(c=><a href={`#crop-${c.id}`} style={`--crop-color:${c.color}`} data-crop-select={c.id}><i aria-hidden="true"></i>{c.name}</a>)}
           <span class="atlas-overlap-key"><i aria-hidden="true"></i>重なり</span>
+          <span class="atlas-livestock-key" data-livestock-key>{livestockKinds.map(k=><span style={`--livestock-color:${k.color}`}><i aria-hidden="true">{k.symbol}</i>{k.label}</span>)}</span>
         </div>
         <p class="atlas-context-key" data-land-key hidden={initialField==='agriculture'}>地形陰影・河川・湖・州境。土壌分類は未収録。</p>
       </div>
@@ -73,6 +79,7 @@ const payload = JSON.stringify({ initialField, assetBase, reviewMode, base: with
     </section>
     <section data-field-content="agriculture" hidden={initialField!=='agriculture'}>
       <CropStatistics />
+      <LivestockReading />
       <details class="atlas-context-reading"><summary>北米農業の背景をさらに読む</summary>
         {reportSections.filter(s=>s.id!=='crop-conditions').map(s=><section id={s.id}><h3>{s.title}</h3>{s.paragraphs.map(p=><p>{p}</p>)}</section>)}
       </details>
@@ -83,6 +90,7 @@ const payload = JSON.stringify({ initialField, assetBase, reviewMode, base: with
       <p>農業：USDA NASS「Cropland Data Layer 2023」。約2km間隔で衛星分類を抽出し、周辺の分布を平滑化して主要なまとまりを表示しています。分類誤差・間引き誤差があり、小さな産地や薄い分布は省略しています。生産量や面積の計算には使えません。</p>
       <p>地形・河川・湖・国境：Natural Earth 5.1.2、縮尺1:5,000万。州境は既存の1:1億1,000万データを再利用。陰影はNatural Earth I 3.2.0。全レイヤーを緯度経度にそろえ、画面上はWebメルカトルで表示しています。面積の見た目を数量比較に使わないでください。</p>
       <p>地域説明は、タップ位置と作物に対応する査読済み原稿を選ぶための概略範囲を使います。その範囲自体は地図に描かず、栽培面積や気候境界として扱いません。<a href={`${assetBase}manifest.json`}>地図データの対象年・加工条件</a></p>
+      <p>畜産：USDA NASS「2022 Census of Agriculture」の郡別分布と公的資料から主要集積地域を確認し、説明用の代表点として表示しています。記号は農場の所在地、地域境界、頭・羽数の大小を示しません。</p>
       <ul>{sources.map(s=><li id={s.id}><a href={s.url} target="_blank" rel="noopener noreferrer">{s.title}</a><span> — {s.publisher}</span></li>)}</ul>
       <details><summary>これまでの表示参考図</summary><p>以下は以前の承認済み概念図です。新しい分布の境界・座標の原資料には使用していません。</p><img src={withBase('/assets/atlas/north-america-agriculture-reference-v1.webp')} width="1536" height="1024" loading="lazy" alt="旧版の表示参考図。地形陰影と淡い栽培域の配色を引き継いでいます。" /></details>
     </section>
