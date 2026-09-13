@@ -1,4 +1,4 @@
-"""Publish categorical climate cells and multi-scale USGS contour vectors.
+"""Publish climate cells and national contours; preserve detailed contours outside public.
 
 Run fetch-nature-dem.py first. Requires rasterio, shapely, pyproj, contourpy,
 numpy and Pillow (preparation only). All published coordinates are EPSG:4326.
@@ -21,6 +21,7 @@ from PIL import Image
 
 ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT/'public/assets/atlas/nature-v1'
+DETAIL=ROOT/'data/derived/nature-v1/contours-detail'
 CACHE=Path(os.environ.get('ATLAS_NATURE_TMP','/tmp/atlas-nature-v1'))
 BASE=json.loads((ROOT/'public/assets/atlas/v3/base.geojson').read_text())
 US=unary_union([shape(f['geometry']) for f in BASE['features'] if f['properties'].get('country')=='USA'])
@@ -34,8 +35,8 @@ MB=(*MERC.transform(-128,22),*MERC.transform(-64,52))
 SIZE=(3200,1940)
 GRID=from_bounds(*MB,*SIZE)
 
-def write(name,data):
-    path=OUT/name
+def write(name,data,base=OUT):
+    path=base/name
     path.parent.mkdir(parents=True,exist_ok=True)
     path.write_text(json.dumps(data,ensure_ascii=False,separators=(',',':')))
 
@@ -134,15 +135,15 @@ def contours():
                             subsets[interval].append(dict(type='Feature',properties=feature['properties'],geometry=mapping(part)))
             for interval,features in subsets.items():
                 if not features:continue
-                name=f'contours/{interval}/{west}_{south}.geojson';write(name,fc(features))
+                name=f'{interval}/{west}_{south}.geojson';write(name,fc(features),DETAIL)
                 tiles.append(dict(file=name,intervalM=interval,bounds=[west,south,west+8,south+6]))
-    write('contour-tiles.json',tiles)
+    write('contour-tiles.json',tiles,DETAIL)
     return dict(source='https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer',
                 publisher='USGS 3DEP / The National Map',license='US government public domain',
                 sourcePublishedThrough='2026-08-24',horizontalCrs='EPSG:5070',verticalDatum='NAVD88 (CONUS USGS 3DEP)',units='m',
-                sampleResolutionM=500,contourIntervalsM=[500,250,100],simplificationM=150,
+                sampleResolutionM=500,contourIntervalsM=[500],simplificationM=150,
                 warning='500 m sampled DEM, generalized national/regional comparison. Small summits and narrow valleys are omitted. Not a surveying/hiking map; contour interval is not vertical accuracy.',
-                inputFiles=records,featureCount=len(detailed))
+                inputFiles=records,featureCount=len(national))
 
 if __name__=='__main__':
     manifest=json.loads((OUT/'manifest.json').read_text())

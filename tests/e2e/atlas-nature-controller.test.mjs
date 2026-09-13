@@ -7,7 +7,7 @@ import {Window} from 'happy-dom';
 // Mock only WebGL's rendering boundary. The actual page, state codec, selectors,
 // card logic and data loaders execute unchanged; browser layout is tested separately.
 const stub=`export function setWorkerCount(){};export class Map {
- constructor(options){window.__map=this;this.options=options;this.events={};this.center={lng:-96,lat:38};this.zoom=3;this.sources=Object.fromEntries(Object.entries(options.style.sources).map(([id,s])=>[id,{data:s.data,setData(d){this.data=d}}]));this.touchZoomRotate={disableRotation(){}};this.scrollZoom={disable(){}};this.cameraChanges=0;}
+ constructor(options){window.__map=this;this.options=options;this.events={};this.center={lng:-96,lat:38};this.zoom=3;this.sources=Object.fromEntries(Object.entries(options.style.sources).map(([id,s])=>[id,{data:s.data,setDataCalls:0,setData(d){this.data=d;this.setDataCalls++}}]));this.touchZoomRotate={disableRotation(){}};this.scrollZoom={disable(){}};this.cameraChanges=0;}
  getSource(id){return this.sources[id]} getCenter(){return this.center} getZoom(){return this.zoom}
  getBounds(){return {getWest:()=>-128,getSouth:()=>22,getEast:()=>-64,getNorth:()=>52,contains:()=>true}}
  project(p){return {x:(p[0]+128)*10,y:(52-p[1])*10}} unproject(p){return {lng:p[0]/10-128,lat:52-p[1]/10}}
@@ -18,6 +18,7 @@ const stub=`export function setWorkerCount(){};export class Map {
 }`;
 const bundle=await build({entryPoints:['src/scripts/atlas-explorer.ts'],bundle:true,write:false,format:'iife',globalName:'NatureTest',plugins:[{name:'map-boundary',setup(b){b.onResolve({filter:/^maplibre-gl$/},()=>({path:'maplibre',namespace:'stub'}));b.onLoad({filter:/.*/,namespace:'stub'},()=>({contents:stub,loader:'js'}));}}]});
 const delay=()=>new Promise(resolve=>setTimeout(resolve,25));
+async function waitFor(check,label){for(let attempt=0;attempt<120;attempt++){if(check())return;await delay();}throw new Error('Timed out: '+label);}
 async function setup(query=''){
  const window=new Window({url:'https://example.com/insight-journal/atlas/north-america/nature/'+query,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true}});
  const html=await readFile('dist/atlas/north-america/nature/index.html','utf8');
@@ -58,5 +59,22 @@ test('遅れた水資源リクエストは新しい地形表示を上書きし�
    q('[data-nature-mode="water"]').click();for(let i=0;i<20&&!release;i++)await delay();assert.ok(release);
    q('[data-nature-mode="landform"]').click();await delay();release();await delay();assert.equal(root.dataset.natureMode,'landform');assert.equal(root.dataset.natureLoad,'ready');assert.equal(q('[data-nature-summary-panel="landform"]').hidden,false);
   }finally{Response.prototype.json=oldJson;release?.();}
+ }finally{await window.happyDOM.close();}
+});
+
+test('全国等高線は初回だけ取得・設定し、パン・ズーム・表示往復で再処理しない',async()=>{
+ const {window,requests,root,q}=await setup();
+ try{
+  const contourRequests=()=>requests.filter(url=>url.endsWith('/contours.geojson.gz'));
+  assert.equal(contourRequests().length,0);
+  q('[data-nature-mode="contour"]').click();await waitFor(()=>root.dataset.natureLoad==='ready','contour ready');
+  assert.equal(contourRequests().length,1);assert.equal(window.__map.sources.contours.setDataCalls,1);
+  for(const zoom of [3,5,7]){window.__map.zoom=zoom;for(const handler of window.__map.events.moveend)handler();await delay();}
+  q('[data-nature-mode="water"]').click();await waitFor(()=>root.dataset.natureLoad==='ready','water ready');
+  q('[data-nature-mode="landform"]').click();await waitFor(()=>root.dataset.natureLoad==='ready','landform ready');
+  q('[data-nature-mode="contour"]').click();await waitFor(()=>root.dataset.natureLoad==='ready','contour restored');
+  q('[data-field="agriculture"]').click();q('[data-field="natural"]').click();await waitFor(()=>root.dataset.natureLoad==='ready','contour after field round trip');
+  assert.equal(contourRequests().length,1);assert.equal(window.__map.sources.contours.setDataCalls,1);
+  assert.ok(requests.every(url=>!url.includes('contour-tiles.json')&&!url.includes('/contours/')));
  }finally{await window.happyDOM.close();}
 });

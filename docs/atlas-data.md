@@ -165,4 +165,4 @@ main map navigation if a local browser preview cannot be reached.
 
 ## 自然環境（2026-09-13）
 
-気候区分・水資源・地形・標高の4表示、NOAA 1991–2020の12都市の雨温図を追加。USGS 3DEPのズーム別等高線、Beck et al. (2023) の気候分類、USGS由来の帯水層を使用する。気候と観測点の欠測、投影、単位、原データ、再生成と検証の詳細は[自然環境の実装・検証記録](atlas-nature-implementation.md)と`public/assets/atlas/nature-v1/manifest.json`を参照。
+気候区分・水資源・地形・標高の4表示、NOAA 1991–2020の12都市の雨温図を追加。USGS 3DEPの全国500m間隔等高線、Beck et al. (2023) の気候分類、USGS由来の帯水層を使用する。地域別100m・250m等高線は公開せず、将来用の派生成果として保全する。気候と観測点の欠測、投影、単位、原データ、再生成と検証の詳細は[自然環境の実装・検証記録](atlas-nature-implementation.md)と`public/assets/atlas/nature-v1/manifest.json`を参照。

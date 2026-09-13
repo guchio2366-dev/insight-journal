@@ -1,9 +1,3 @@
-import { contourInterval } from './atlas-nature-state.ts';
-
-export type ContourTile = {file:string;intervalM:number;bounds:number[]};
-export const intersectingTiles = (tiles:ContourTile[], bounds:number[], zoom:number) =>
-  tiles.filter(tile=>tile.intervalM===contourInterval(zoom)&&tile.bounds[0]<=bounds[2]&&tile.bounds[2]>=bounds[0]&&tile.bounds[1]<=bounds[3]&&tile.bounds[3]>=bounds[1]);
-
 // Request promises are shared; failures are removed so the Retry button can retry.
 // Generation checks belong to the caller: old responses can fill the cache but
 // cannot change the selected view or its legend.
@@ -20,12 +14,7 @@ export function createNatureLoader(base:string, fetcher:typeof fetch=fetch){
     })().catch(error=>{cache.delete(name);throw error;});
     cache.set(name,promise);return promise;
   }
-  async function contours(bounds:number[],zoom:number){
-    if(contourInterval(zoom)===500)return json('contours.geojson.gz');
-    const tiles=intersectingTiles(await json('contour-tiles.json'),bounds,zoom);
-    const collections=await Promise.all(tiles.map(tile=>json(tile.file)));
-    return {type:'FeatureCollection',features:collections.flatMap(data=>data.features)};
-  }
+  async function contours(){return json('contours.geojson.gz');}
   return {json,contours};
 }
 

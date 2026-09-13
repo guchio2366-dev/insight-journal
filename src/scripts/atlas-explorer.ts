@@ -1,5 +1,5 @@
 import { readAtlasState, writeAtlasState, type MapField, type NatureMode, type ViewMode } from '../lib/atlas-state';
-import { validNatureFeature, climateCell, contourInterval } from '../lib/atlas-nature-state';
+import { validNatureFeature, climateCell } from '../lib/atlas-nature-state';
 import { createNatureLoader, contourLabelCandidates } from '../lib/atlas-nature-loader';
 import { chooseCardPlacement, type Rect } from '../lib/atlas-card-placement';
 import type { GeoJSONSource, Map as LibreMap } from 'maplibre-gl';
@@ -31,7 +31,8 @@ export async function startAtlas() {
   const status=el('[data-fallback-status]');
   const criticalController=new AbortController();
   const natureLoader=createNatureLoader(config.natureAssetBase);
-  let natureGeneration=0, appliedNatureKey='', pendingNatureKey='';
+  let natureGeneration=0,pendingNatureKey='';
+  const appliedNatureKeys=new Set<string>();
   let contourLabels:any[]=[], landFeatures:any[]=[], cropFeatures:any[]=[];
   let natureSelectedGeometry:any=null;
   let timeout:number;
@@ -204,20 +205,21 @@ export async function startAtlas() {
     button.hidden=!ready||!map||!fallback.hidden||!selectedCoordinate||map.getBounds().contains(selectedCoordinate);
   }
 
-  function updateContourLegend(interval=500){
-    const major=interval===100?500:1000;
-    el('[data-contour-index]').textContent=`主要線 ${major.toLocaleString('ja-JP')} m`;
-    el('[data-contour-secondary]').textContent=`補助線 ${interval} m`;
-    if(field==='natural'&&natureMode==='contour')el('[data-layer-caption]').textContent=`標高 ${interval} m間隔 · 主要線 ${major.toLocaleString('ja-JP')} m`;
+  function updateContourLegend(){
+    el('[data-contour-index]').textContent='主要線 1,000 m';
+    el('[data-contour-secondary]').textContent='補助線 500 m';
+    if(field==='natural'&&natureMode==='contour')el('[data-layer-caption]').textContent='標高500m間隔 · 主要線1,000m';
+  }
+
+  function showNatureReady(){
+    root.dataset.natureLoad='ready';root.dataset.renderState='ready';surface.hidden=false;fallback.hidden=true;
+    el('[data-map-labels]').hidden=false;el('.atlas-map-tools').hidden=false;
   }
 
   async function ensureNatureModeData(mode:NatureMode){
     if(!map||!ready||field!=='natural')return;
-    const bounds=map.getBounds(),zoom=map.getZoom();
-    const extent=[bounds.getWest(),bounds.getSouth(),bounds.getEast(),bounds.getNorth()];
-    const interval=contourInterval(zoom);
-    const key=mode==='contour'?`${mode}:${interval}:`+(interval===500?'all':extent.map((n,i)=>Math.floor((n+(i%2===0?128:-22))/(i%2===0?8:6))).join(',')):mode;
-    if(appliedNatureKey===key){updateContourLegend(mode==='contour'?interval:500);return;}
+    const key=mode==='contour'?'contour:500':mode;
+    if(appliedNatureKeys.has(key)){updateContourLegend();showNatureReady();renderLabels();placeSelectionCard();updateFocusButton();return;}
     if(pendingNatureKey===key)return;
     const generation=++natureGeneration;pendingNatureKey=key;
     root.dataset.natureLoad='loading';surface.hidden=true;fallback.hidden=false;el('[data-map-labels]').hidden=true;el('.atlas-map-tools').hidden=true;
@@ -231,19 +233,18 @@ export async function startAtlas() {
         const context=canvas.getContext('2d',{willReadFrequently:true})!;context.drawImage(bitmap,0,0);climatePixels=context.getImageData(0,0,canvas.width,canvas.height);bitmap.close();
       }
       if(mode==='water')data=await natureLoader.json('aquifers.geojson');
-      if(mode==='contour')data=await natureLoader.contours(extent,zoom);
+      if(mode==='contour')data=await natureLoader.contours();
       if(generation!==natureGeneration||field!=='natural'||natureMode!==mode||!map)return;
       if(data)(map.getSource(mode==='water'?'aquifers':'contours') as GeoJSONSource).setData(data);
       if(mode==='contour'){
-        const major=interval===100?500:1000;
-        map.setFilter('contours-index',['==',['%',['get','elevationM'],major],0]);
-        map.setFilter('contours-secondary',['!=',['%',['get','elevationM'],major],0]);
+        map.setFilter('contours-index',['==',['%',['get','elevationM'],1000],0]);
+        map.setFilter('contours-secondary',['!=',['%',['get','elevationM'],1000],0]);
         for(const item of contourLabels)item.node.remove();
         contourLabels=contourLabelCandidates(data);const parent=el('[data-map-labels]');
         for(const item of contourLabels){const node=document.createElement('span');node.className='atlas-geolabel atlas-geolabel--contour';node.textContent=item.name;node.hidden=true;parent.appendChild(node);item.node=node;}
-        updateContourLegend(interval);
+        updateContourLegend();
       }
-      appliedNatureKey=key;pendingNatureKey='';root.dataset.natureLoad='ready';root.dataset.renderState='ready';surface.hidden=false;fallback.hidden=true;el('[data-map-labels]').hidden=false;el('.atlas-map-tools').hidden=false;
+      appliedNatureKeys.add(key);pendingNatureKey='';showNatureReady();
       const previousView=view;suppressNextMove=true;map.resize();view=previousView;suppressNextMove=false;renderLabels();placeSelectionCard();updateFocusButton();
     }catch(error){
       if(generation!==natureGeneration||field!=='natural'||natureMode!==mode)return;
@@ -284,7 +285,7 @@ export async function startAtlas() {
   }
 
   function setNatureMode(next:NatureMode,push=false){
-    if(next!==natureMode){natureGeneration++;pendingNatureKey='';appliedNatureKey='';}
+    if(next!==natureMode){natureGeneration++;pendingNatureKey='';}
     natureMode=next;root.dataset.natureMode=next;el('[data-map-panel]').setAttribute('aria-labelledby',`nature-tab-${next}`);
     el('[data-feature-picker]').hidden=next==='climate'||next==='contour';
     root.querySelectorAll<HTMLElement>('[data-feature-options]').forEach(group=>group.hidden=group.dataset.featureOptions!==next);
@@ -297,7 +298,7 @@ export async function startAtlas() {
   }
 
   function setField(next:MapField,push=false){
-    if(next!==field){natureGeneration++;pendingNatureKey='';appliedNatureKey='';}
+    if(next!==field){natureGeneration++;pendingNatureKey='';}
     field=next;root.dataset.field=field;
     if(field!=='natural'&&ready&&!failed){surface.hidden=false;fallback.hidden=true;el('[data-map-labels]').hidden=false;el('.atlas-map-tools').hidden=false;root.dataset.renderState='ready';}
     el('[data-map-panel]').setAttribute('role',field==='natural'?'tabpanel':'group');
@@ -325,14 +326,14 @@ export async function startAtlas() {
   root.querySelectorAll<HTMLInputElement>('[data-agri-layer]').forEach(input=>input.addEventListener('change',()=>{if(input.checked)agriLayers.add(input.value);else agriLayers.delete(input.value);syncAgricultureLayers();}));
   el<HTMLSelectElement>('[data-city-select]').addEventListener('change',event=>{const id=(event.currentTarget as HTMLSelectElement).value;if(id)selectCity(id);else{selectedCity=null;hideSelection();save();}});
   root.querySelectorAll<HTMLButtonElement>('[data-stat-select]').forEach(button=>{button.addEventListener('click',()=>updateStats(button.dataset.statSelect!));button.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight'].includes(event.key))return;event.preventDefault();const buttons=[...root.querySelectorAll<HTMLButtonElement>('[data-stat-select]')],next=(buttons.indexOf(button)+(event.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length;buttons[next].focus();updateStats(buttons[next].dataset.statSelect!);});});
-  el('[data-retry-nature]').addEventListener('click',()=>{appliedNatureKey='';void ensureNatureModeData(natureMode);});
+  el('[data-retry-nature]').addEventListener('click',()=>{appliedNatureKeys.delete(natureMode==='contour'?'contour:500':natureMode);void ensureNatureModeData(natureMode);});
   el('[data-focus-selection]').addEventListener('click',()=>{if(map&&selectedCoordinate){view='custom';map.jumpTo({center:selectedCoordinate});}});
   root.querySelectorAll<HTMLSelectElement>('[data-feature-select]').forEach(select=>select.addEventListener('change',()=>{if(select.value)showNatureFeature(select.value);else closeSelection();}));
   root.querySelectorAll('details').forEach(detail=>detail.addEventListener('toggle',()=>placeSelectionCard()));
   el('[data-close-selection]').addEventListener('click',()=>closeSelection());root.addEventListener('keydown',event=>{if(event.key==='Escape')closeSelection();});
   updateStats(selectedStats,false);setNatureMode(natureMode);setField(field);syncAgricultureLayers(false);timeout=window.setTimeout(()=>fail('地図データの読み込みが完了しませんでした。'),30000);
 
-    window.addEventListener('popstate',()=>{restoring=true;natureGeneration++;pendingNatureKey='';appliedNatureKey='';const state=readAtlasState(new URL(location.href),config.initialField);field=state.field;natureMode=state.env;agriLayers=new Set(state.agriLayers);selectedAnimal=state.animal;selectedAnimalRegion=state.animalRegion;selectedCrop=state.crop;selectedRegion=state.region;selectedCity=state.city;natureFeature=state.natureFeature;view=state.view;savedCamera=state.camera??undefined;setField(field);setNatureMode(natureMode);updateStats(state.stats,false);syncAgricultureLayers(false);if(state.camera&&map&&state.view==='custom')map.jumpTo({center:[state.camera.lng,state.camera.lat],zoom:state.camera.zoom});else if(map&&state.view==='fit'){suppressNextMove=true;map.fitBounds(fitBounds,{duration:0,padding:{top:30,bottom:14,left:12,right:12}});}restoring=false;});
+    window.addEventListener('popstate',()=>{restoring=true;natureGeneration++;pendingNatureKey='';const state=readAtlasState(new URL(location.href),config.initialField);field=state.field;natureMode=state.env;agriLayers=new Set(state.agriLayers);selectedAnimal=state.animal;selectedAnimalRegion=state.animalRegion;selectedCrop=state.crop;selectedRegion=state.region;selectedCity=state.city;natureFeature=state.natureFeature;view=state.view;savedCamera=state.camera??undefined;setField(field);setNatureMode(natureMode);updateStats(state.stats,false);syncAgricultureLayers(false);if(state.camera&&map&&state.view==='custom')map.jumpTo({center:[state.camera.lng,state.camera.lat],zoom:state.camera.zoom});else if(map&&state.view==='fit'){suppressNextMove=true;map.fitBounds(fitBounds,{duration:0,padding:{top:30,bottom:14,left:12,right:12}});}restoring=false;});
 
   try{
     const fetchJson=async(base:string,name:string)=>{const testMissing=config.reviewMode&&new URL(location.href).searchParams.get('qa')==='asset-error'&&name==='manifest.json';const response=await fetch(base+(testMissing?'qa-missing-manifest.json':name),{signal:criticalController.signal});if(!response.ok)throw new Error(name+': '+response.status);return response.json();};
@@ -353,7 +354,7 @@ export async function startAtlas() {
       labels=[...cropLabels,...config.geographicLabels.map((item:any)=>({...item,baseLabel:true})),...config.natureLabels,...cityLabels,...stateLabels.map((item:any)=>({...item,baseLabel:true}))].sort((left,right)=>left.priority-right.priority);
       const labelParent=el('[data-map-labels]');for(const item of labels){const node=document.createElement('span');node.className='atlas-geolabel atlas-geolabel--'+item.kind;node.textContent=item.name;node.hidden=true;if(item.color)node.style.setProperty('--label-color',item.color);labelParent.appendChild(node);item.node=node;}
       setField(field);setNatureMode(natureMode);updateStats(selectedStats,false);renderLabels();restoreSelectionForView();save();
-      map.on('move',()=>{renderLabels();renderLivestockMarkers();if(!selection.hidden&&selection.parentElement===frame)selection.style.visibility='hidden';});map.on('moveend',()=>{if(!suppressNextMove)view='custom';else suppressNextMove=false;renderLabels();renderLivestockMarkers();placeSelectionCard();updateFocusButton();if(field==='natural'&&natureMode==='contour')void ensureNatureModeData(natureMode);save();});
+      map.on('move',()=>{renderLabels();renderLivestockMarkers();if(!selection.hidden&&selection.parentElement===frame)selection.style.visibility='hidden';});map.on('moveend',()=>{if(!suppressNextMove)view='custom';else suppressNextMove=false;renderLabels();renderLivestockMarkers();placeSelectionCard();updateFocusButton();save();});
       map.on('click',event=>{
         if(field==='agriculture'){
           if(!agriLayers.has('crops')){closeSelection();return;}

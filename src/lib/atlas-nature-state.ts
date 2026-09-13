@@ -9,14 +9,12 @@ export function validNatureFeature(value:string|null|undefined):string|null {
   if(kind==='climate'&&climateCodes.includes(id))return value;
   if(kind==='landform'&&landformNames.includes(id))return value;
   if(kind==='water'&&waterNames.includes(id))return value;
-  if(kind==='elevation'&&/^(-100|-50|0|[1-9][0-9]{1,3})$/.test(id)){
+  if(kind==='elevation'&&/^(0|[1-9][0-9]{2,3})$/.test(id)){
     const height=Number(id);
-    if(height>=-100&&height<=4500&&(height%100===0||height%250===0||height===-50))return value;
+    if(height>=0&&height<=4000&&height%500===0)return value;
   }
   return null;
 }
-
-export function contourInterval(zoom:number){return zoom<4.5?500:zoom<6?250:100;}
 
 export function climateCell(longitude:number,latitude:number,width:number,height:number,bounds:readonly number[]){
   const x=6378137*longitude*Math.PI/180;
