@@ -55,21 +55,12 @@ def svg(kinds: dict[str, tuple[str, str, str]], regions: list[tuple[str, str, fl
             f'<circle r="25" fill="{color}" stroke="#fffaf0" stroke-width="5" opacity=".94"/>'
             f'<text text-anchor="middle" dy=".36em" fill="white" font-size="22" font-weight="800">{html.escape(symbol)}</text></g>'
         )
-    legend_nodes = []
-    for index, (_kind_id, (label, symbol, color)) in enumerate(kinds.items()):
-        x = 40 + index * 174
-        legend_nodes.append(
-            f'<g transform="translate({x} 44)"><circle r="18" fill="{color}" stroke="#fffaf0" stroke-width="3"/>'
-            f'<text dy=".36em" text-anchor="middle" fill="white" font-size="15" font-weight="800">{html.escape(symbol)}</text>'
-            f'<text x="28" dy=".36em" fill="#252b27" font-size="20" font-weight="700">{html.escape(label)}</text></g>'
-        )
     return (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" role="img" '
         'aria-labelledby="title desc"><title id="title">米国本土の主要な畜産集積地域</title>'
         '<desc id="desc">USDAの郡別統計で確認した主要な集積を説明用の代表点で示します。農場位置、地域境界、頭羽数を表す記号ではありません。</desc>'
-        '<rect x="20" y="15" width="895" height="62" rx="14" fill="#fffaf0" opacity=".91"/>'
-        '<g font-family="system-ui, sans-serif">' + ''.join(legend_nodes) + ''.join(marker_nodes) + '</g></svg>\n'
+        '<g font-family="system-ui, sans-serif">' + ''.join(marker_nodes) + '</g></svg>\n'
     )
 
 
