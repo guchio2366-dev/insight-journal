@@ -22,6 +22,7 @@
     "maplibre-gl": "6.9.0"
   },
   "devDependencies": {
+    "happy-dom": "20.14.5",
     "pagefind": "1.5.2"
   }
 }

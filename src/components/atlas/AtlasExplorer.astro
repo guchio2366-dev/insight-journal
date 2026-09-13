@@ -7,15 +7,23 @@ import { regionalInsights } from '../../data/atlas/regional-insights';
 import { statisticCropIds } from '../../data/atlas/statistics';
 import { livestockKinds, livestockRegions } from '../../data/atlas/livestock';
 import NationalAgricultureSummary from './NationalAgricultureSummary.astro';
-import CropStatistics from './CropStatistics.astro';
 import LivestockReading from './LivestockReading.astro';
+import CropStatistics from './CropStatistics.astro';
+import NatureViewNavigation from './NatureViewNavigation.astro';
+import NaturalEnvironmentSummary from './NaturalEnvironmentSummary.astro';
+import ClimateDiagram from './ClimateDiagram.astro';
+import { climateCities, climateFamilies, climateLegend, natureFeatureCopy, natureLabels, natureModes, natureSources, type NatureMode } from '../../data/atlas/natural-environment';
 
 interface Props { initialField?: ExplorerField }
 const { initialField='overview' } = Astro.props;
 const assetBase = withBase('/assets/atlas/v3/');
-const livestockAssetBase = withBase('/assets/atlas/livestock/v2/');
+const livestockAssetBase=withBase('/assets/atlas/livestock/v2/');
+const natureAssetBase = withBase('/assets/atlas/nature-v1/');
 const reviewMode = Astro.url.pathname.includes('/review/');
-const payload = JSON.stringify({ initialField, assetBase, livestockAssetBase, reviewMode, base: withBase('/atlas/north-america/'), crops:cropExplanations, regionalInsights, statisticCropIds, geographicLabels, livestockKinds, livestockRegions }).replace(/</g,'\\u003c');
+const requestedMode=Astro.url.pathname.includes('/land/')?'landform':'climate';
+const initialMode=(natureModes.some(mode=>mode.id===requestedMode)?requestedMode:'climate') as NatureMode;
+const fallbackName=initialField==='agriculture'?'agriculture-fallback.webp':initialField==='natural'?`${initialMode}-fallback.webp`:'land-fallback.webp';
+const payload = JSON.stringify({ initialField, initialMode, assetBase, natureAssetBase, livestockAssetBase, livestockKinds, livestockRegions, reviewMode, base: withBase('/atlas/north-america/'), crops:cropExplanations, regionalInsights, statisticCropIds, geographicLabels, climateCities, climateLegend, natureModes, natureLabels, natureFeatureCopy }).replace(/</g,'\\u003c');
 ---
 <article class="atlas-explorer" data-atlas-explorer data-pagefind-body={reviewMode?undefined:true} data-pagefind-ignore={reviewMode?'all':undefined}>
   <section class="atlas-workspace" aria-label="北米の分野別地図">
@@ -23,21 +31,22 @@ const payload = JSON.stringify({ initialField, assetBase, livestockAssetBase, re
       <nav aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a><span aria-hidden="true"> / </span><a href={withBase('/atlas/north-america/')}>北米地図</a></nav>
       <span>米国本土</span>
     </div>
-    <h1 class="visually-hidden">北米地図から読む、農業と土地</h1>
+    <h1 class="visually-hidden">北米地図から読む、農業と自然環境</h1>
     <nav class="atlas-tabs" aria-label="地図の分野">
       {northAmericaFields.map(field => field.status==='ready' ?
         <a href={withBase(field.href)} data-field={field.id} aria-current={initialField===field.id?'page':undefined}>{field.label}</a> :
         <span class="atlas-tab-planned" aria-label={`${field.label}、準備中`}>{field.label}<small>準備中</small></span>
       )}
     </nav>
+    <NatureViewNavigation {initialMode} active={initialField==='natural'} />
 
-    <div class="atlas-primary-grid">
+    <div class="atlas-primary-grid" id="nature-map-panel" data-map-panel role={initialField==='natural'?'tabpanel':'group'} aria-labelledby={initialField==='natural'?`nature-tab-${initialMode}`:undefined}>
       <div class="atlas-map-column">
         <div class="atlas-map-frame" data-map-frame>
           <div class="atlas-map-surface" data-map-surface aria-label="拡大縮小できる米国本土地図"></div>
           <div class="atlas-fallback" data-fallback>
-            <div class="atlas-fallback-map"><img src={`${assetBase}${initialField==='agriculture'?'agriculture':'land'}-fallback.webp`} width="1800" height="1084" alt={initialField==='agriculture'?'米国本土の地形・河川と主要作物の栽培域の概略図。':'米国本土の地形と水系。西部に山地、中央に平原、東部にアパラチア山脈が続きます。'} data-fallback-image /><img class="atlas-fallback-livestock" src={`${livestockAssetBase}agriculture-livestock-fallback.svg`} width="1800" height="1084" alt="主要な畜産集積地域の代表点。" data-fallback-livestock /></div>
-            <p><span data-fallback-status>代替図を表示しています。解説は地図の下へ。</span> <a href={`${assetBase}${initialField==='agriculture'?'agriculture':'land'}-fallback.webp`} data-fallback-full target="_blank" rel="noopener">図を拡大</a></p>
+            <div class="atlas-fallback-map"><img src={initialField==='natural'?`${natureAssetBase}${fallbackName}`:`${assetBase}${fallbackName}`} width="1800" height="1084" alt={initialField==='agriculture'?'米国本土の地形・河川と、州境をまたぐ主要作物の栽培分布。下の作物別解説でも内容を読めます。':initialField==='natural'?'米国本土の自然環境。気候区分、水資源、地形、標高を切り替えて読めます。':'米国本土の地形と水系。西部に山地、中央に平原、東部にアパラチア山脈が続きます。'} data-fallback-image /><img class="atlas-fallback-livestock" src={`${livestockAssetBase}agriculture-livestock-fallback.svg`} width="1800" height="1084" alt="主要な畜産集積地域の代表点。" data-fallback-livestock hidden={initialField!=='agriculture'} /></div>
+            <p><span data-fallback-status>代替図を表示しています。解説は地図の下へ。</span> <a href={`${initialField==='natural'?natureAssetBase:assetBase}${fallbackName}`} data-fallback-full target="_blank" rel="noopener">図を拡大</a> <button type="button" data-retry-nature hidden>再試行</button></p>
           </div>
           <div class="atlas-map-labels" data-map-labels aria-hidden="true"></div>
           <div class="atlas-livestock-markers" data-livestock-markers></div>
@@ -47,23 +56,34 @@ const payload = JSON.stringify({ initialField, assetBase, livestockAssetBase, re
             <button type="button" data-map-action="in" aria-label="地図を拡大">＋</button>
             <button type="button" data-map-action="out" aria-label="地図を縮小">−</button>
           </div>
-          <p class="atlas-layer-caption" data-layer-caption>{initialField==='agriculture'?'作物 2023 · 畜産 2022（概略）':'地形・水系'}</p>
+          <p class="atlas-layer-caption" data-layer-caption>{initialField==='agriculture'?'主要栽培域 · 2023年の衛星分類から概略化':initialField==='natural'?natureModes.find(mode=>mode.id===initialMode)?.caption:'地形・水系'}</p>
           <div class="atlas-selection" data-selection hidden role="status" aria-live="polite">
             <button type="button" class="atlas-selection-close" data-close-selection aria-label="選択した地域の説明を閉じる">×</button>
-            <span class="atlas-selection-kicker">選択地域</span><strong data-selection-title></strong><p data-selection-text></p><div class="atlas-selection-candidates" data-selection-candidates hidden></div><a href="#crop-details" data-selection-link>↓ 作物の詳説へ</a>
+            <span class="atlas-selection-kicker" data-selection-kicker>選択地域</span><strong data-selection-title></strong><p data-selection-text></p>
+            <div class="atlas-climate-diagrams" data-climate-chart hidden>{climateCities.map(city=><ClimateDiagram {city} />)}</div>
+            <div class="atlas-selection-candidates" data-selection-candidates hidden></div>
+            <button class="atlas-focus-selection" type="button" data-focus-selection hidden>選択地点へ</button><a href="#crop-details" data-selection-link>↓ 作物の詳説へ</a>
           </div>
         </div>
-        <div class="atlas-selection-slot" data-selection-slot></div>
         <div class="atlas-key" data-crop-key hidden={initialField!=='agriculture'} aria-label="栽培域の凡例">
           {cropExplanations.map(c=><a href={`#crop-${c.id}`} style={`--crop-color:${c.color}`} data-crop-select={c.id}><i aria-hidden="true"></i>{c.name}</a>)}
           <span class="atlas-overlap-key"><i aria-hidden="true"></i>重なり</span>
           <span class="atlas-livestock-key" data-livestock-key>{livestockKinds.map(k=><a href={`#livestock-${k.id}`} style={`--livestock-color:${k.color}`}><i aria-hidden="true">{k.symbol}</i>{k.label}</a>)}</span>
         </div>
-        <p class="atlas-context-key" data-land-key hidden={initialField==='agriculture'}>地形陰影・河川・湖・州境。土壌分類は未収録。</p>
+        <p class="atlas-context-key" data-land-key hidden={initialField!=='overview'}>地形陰影・河川・湖・州境。自然環境では気候・水・地形・標高を切り替えられます。</p>
+        <div class="atlas-nature-key" data-nature-key hidden={initialField!=='natural'}>
+          <div data-nature-key-panel="climate" hidden={initialMode!=='climate'}>{climateFamilies.map(item=><span>{item.id} {item.label}</span>)}<span><b class="atlas-city-dot"></b>雨温図の都市</span><details class="atlas-climate-legend"><summary>色と気候コード</summary><div>{climateLegend.map(item=><span><i style={`--nature-key-color:${item.color}`}></i>{item.code} {item.nameJa}</span>)}</div></details></div>
+          <div data-nature-key-panel="water" hidden={initialMode!=='water'}><span><i class="atlas-aquifer-key"></i>主要帯水層</span><span><b class="atlas-river-line"></b>河川・湖</span><span><b class="atlas-reservoir-dot"></b>貯水池</span></div>
+          <div data-nature-key-panel="landform" hidden={initialMode!=='landform'}><span><i class="atlas-relief-key"></i>地形陰影</span><span>名称は地形の概略域</span></div>
+          <div data-nature-key-panel="contour" hidden={initialMode!=='contour'}><span><b class="atlas-contour-line"></b><span data-contour-index>主要線 1,000 m</span></span><span><b class="atlas-contour-line is-light"></b><span data-contour-secondary>補助線 500 m</span></span></div>
+          <p><span class="is-cold">↓ カリフォルニア海流（寒流）</span><span class="is-warm">メキシコ湾流（暖流） ↗</span></p>
+        </div>
+        <div class="atlas-selection-slot" data-selection-slot></div>
       </div>
 
       <div data-field-national="agriculture" hidden={initialField!=='agriculture'}><NationalAgricultureSummary /></div>
-      <aside class="atlas-national atlas-land-summary" data-field-national="overview land" hidden={initialField==='agriculture'}>
+      <div data-field-national="natural" hidden={initialField!=='natural'}><NaturalEnvironmentSummary {initialMode} /></div>
+      <aside class="atlas-national atlas-land-summary" data-field-national="overview" hidden={initialField!=='overview'}>
         <header><p class="atlas-eyebrow">GEOGRAPHIC BASE</p><h2>米国本土の地形</h2><p>西部の山地、中央の大平原と低地、東部のアパラチア山脈を共通の土台にします。農業へ切り替えると、同じ位置・倍率のまま栽培域を重ねて比較できます。</p></header>
         <p>河川と湖は水利用や輸送を考える手掛かりです。現在の土地レイヤーは地形・水系の概略であり、土壌や地質の分類ではありません。</p>
       </aside>
@@ -71,11 +91,25 @@ const payload = JSON.stringify({ initialField, assetBase, livestockAssetBase, re
   </section>
 
   <div class="atlas-reading" id="atlas-details">
-    <p class="atlas-evidence-note">米国本土が対象です。周辺国の白地は「栽培なし」ではなく未収録。栽培域は衛星分類を間引き・平滑化した学習用の概略で、農地の境界や生産量ではありません。<a href="#atlas-method">出典・加工方法</a></p>
-    <section data-field-content="overview land" hidden={initialField==='agriculture'}>
+    <p class="atlas-evidence-note">米国本土が主対象です。地図の色・線・点は表示ごとに意味が異なり、面積や水量を直接表すものではありません。<a href="#atlas-method">出典・加工方法</a></p>
+    <section data-field-content="overview" hidden={initialField!=='overview'}>
       <h2 id="land-conditions">土地を読む</h2>
       <p>西部の山地と盆地、中央の大平原・低地、東部の山地を共通の土台にします。「農業」へ切り替えると、同じ場所に栽培域が重なります。地形と水の条件に、気候、灌漑、加工・輸送、市場が加わって農業地域が形成されます。</p>
       <p>地形の陰影はNatural Earthの地理座標付きラスタから作成しました。山地・平原の地域区分もNatural Earthの地誌的な概略で、地質境界・土壌の分類ではありません。</p>
+    </section>
+    <section data-field-content="natural" hidden={initialField!=='natural'}>
+      <h2 id="natural-conditions">自然環境を読み比べる</h2>
+      <p>米国本土では、太平洋から来る空気が西部の高い山地を越える過程で水分を失い、内陸西部に乾燥域が広がります。ロッキー山脈の東には広い平原が続き、東へ進むにつれてメキシコ湾・大西洋からの水分の影響が強まります。東部のアパラチア山脈はロッキーより低いものの、局地的な降水と河川の流れをつくる地形です。</p>
+      <p>長期平均の気候区分だけでは、年ごとの災害や季節差は分かりません。春の大平原では強い雷雨や竜巻、夏から秋の湾岸・東海岸ではハリケーン、南西部では夏のモンスーンに伴う雨が起こります。西部では冬の雨や山地の積雪が、その後の河川・貯水池・灌漑用水につながります。</p>
+      <p>土壌の保水性・排水性や塩類の蓄積も、水の利用しやすさに関わります。土壌中の水と、井戸でくみ上げる帯水層の地下水は同じものとして扱いません。カリフォルニア海流は西岸沖を南へ、暖かいメキシコ湾流は南東岸から北東へ流れます。西岸では風が表層の海水を沖へ運ぶと、冷たく栄養分に富む深い水が上がる沿岸湧昇が起こります。湧昇の強さには季節差があります。</p>
+      <details class="atlas-station-tables"><summary>12都市の観測所・月別平年値を一覧で読む</summary>
+        {climateCities.map(city=><section id={`climate-table-${city.id}`}><h3>{city.nameJa}</h3><p>{city.stationName}（{city.stationId}）· {city.latitude.toFixed(4)}°N / {Math.abs(city.longitude).toFixed(4)}°W · 標高 {city.elevationM} m · 1991–2020年 · <a href={city.sourceUrl}>NOAA原表</a></p><table><thead><tr><th>月</th><th>平均気温 ℃</th><th>降水量 mm</th></tr></thead><tbody>{city.temperatureC.map((value,index)=><tr><th>{index+1}</th><td>{value.toFixed(1)}</td><td>{city.precipitationMm[index].toFixed(1)}</td></tr>)}</tbody></table></section>)}
+      </details>
+      <div class="atlas-nature-reading-grid">
+        <section><h3>気候区分と雨温図</h3><p>ケッペン＝ガイガー区分は月ごとの気温・降水の長期的な組合せを分類します。都市の雨温図は一点の観測所の平年値であり、色面全体の代表値ではありません。</p></section>
+        <section><h3>水資源</h3><p>河川・湖・貯水池と地下水を分け、地元の雨、山地の融雪、貯水、取水がどのようにつながるかを読みます。</p></section>
+        <section><h3>地形と標高</h3><p>地形では山脈・高原・平原の広がりを、等高線では共通のメートル基準による高さを確かめます。同じ「山脈」でもロッキーとアパラチアの高さは大きく異なります。</p></section>
+      </div>
     </section>
     <section data-field-content="agriculture" hidden={initialField!=='agriculture'}>
       <CropStatistics />
@@ -92,6 +126,9 @@ const payload = JSON.stringify({ initialField, assetBase, livestockAssetBase, re
       <p>地域説明は、タップ位置と作物に対応する査読済み原稿を選ぶための概略範囲を使います。その範囲自体は地図に描かず、栽培面積や気候境界として扱いません。<a href={`${assetBase}manifest.json`}>地図データの対象年・加工条件</a></p>
       <p>畜産：USDA NASS「2022 Census of Agriculture」の郡別分布と公的資料から主要集積地域を確認し、説明用の代表点として表示しています。記号は農場の所在地、地域境界、頭・羽数の大小を示しません。</p>
       <ul>{sources.map(s=><li id={s.id}><a href={s.url} target="_blank" rel="noopener noreferrer">{s.title}</a><span> — {s.publisher}</span></li>)}</ul>
+      <p>自然環境：気候区分はBeck et al. (2023) を示すkoppen.earth配信の1991–2020年スナップショットです（V3と同定していません）。分類格子を最近傍で投影し、米国陸域を抽出しました。色・タップ分類・都市分類は同じ格子を参照します。雨温図は同期間のNOAA観測所平年値で、分類格子とはデータ源が異なります。帯水層はUSGS Ground Water Atlas由来、等高線はUSGS 3DEPを500m格子で抽出し、全国500m・地域250m・拡大100mの間隔で生成しました。鉛直基準はNAVD88、線の間隔は標高精度を意味しません。海流線は模式表示で、流速や日々の位置を示しません。<a href={`${natureAssetBase}manifest.json`}>自然環境データの取得・加工記録</a></p>
+      <p>代表的な最高峰：ロッキーのエルバートは約4,400m（<a href="https://www.fs.usda.gov/r02/psicc/recreation/trails/north-mount-elbert-trail-1484">米国森林局の14,433フィート表記</a>から概数）、アパラチアのミッチェルは約2,037m（<a href="https://www.ncparks.gov/state-parks/mount-mitchell-state-park">州立公園の6,684フィート</a>から換算）。山脈の平均標高や間引いたDEMの最高値ではありません。</p>
+      <ul>{natureSources.map(s=><li id={s.id}><a href={s.url} target="_blank" rel="noopener noreferrer">{s.title}</a><span> — {s.publisher}</span></li>)}</ul>
       <details><summary>これまでの表示参考図</summary><p>以下は以前の承認済み概念図です。新しい分布の境界・座標の原資料には使用していません。</p><img src={withBase('/assets/atlas/north-america-agriculture-reference-v1.webp')} width="1536" height="1024" loading="lazy" alt="旧版の表示参考図。地形陰影と淡い栽培域の配色を引き継いでいます。" /></details>
     </section>
   </div>

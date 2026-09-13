@@ -11,7 +11,7 @@ test('実データを含むスタイルが固定MapLibre版の仕様に適合し
   style.layers.find(l=>l.id==='crops-overlap').paint['fill-pattern']='overlap-stripe';
   assert.deepEqual(validateStyleMin(style).map(e=>e.message),[]);
   assert.equal(style.glyphs,undefined);assert.equal(style.sprite,undefined);
-  assert.deepEqual(Object.keys(style.sources),['base','crops','land','relief']);
+  for(const key of ['base','crops','land','relief','climate','cities','aquifers','contours'])assert.ok(style.sources[key]);
   assert.ok(style.sources.relief.url.startsWith('/insight-journal/'));
 });
 
@@ -19,6 +19,7 @@ test('分野切替は共通地図の表示属性だけを変え、位置・倍�
   const calls=[];
   const map={setLayoutProperty:(...args)=>calls.push(args),fitBounds:()=>assert.fail('camera reset'),jumpTo:()=>assert.fail('camera reset'),setStyle:()=>assert.fail('map rebuild')};
   setFieldLayers(map,'agriculture');setFieldLayers(map,'land');setFieldLayers(map,'agriculture');
-  assert.equal(calls.length,9);
-  assert.deepEqual(calls.map(c=>c[2]),['visible','visible','visible','none','none','none','visible','visible','visible']);
+  const cropCalls=calls.filter(c=>['crops-fill','crops-outline','crops-overlap'].includes(c[0]));
+  assert.equal(cropCalls.length,9);
+  assert.deepEqual(cropCalls.map(c=>c[2]),['visible','visible','visible','none','none','none','visible','visible','visible']);
 });

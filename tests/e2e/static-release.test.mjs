@@ -65,7 +65,7 @@ test("農業ページは作物・畜産の地図切替、販売高階層、輸�
 });
 
 test("静的成果物に非公開情報を含めず、サブパス用URLを使う", async () => {
-  const files = (await filesBelow(distRoot)).filter((file) => !/\.(?:png|webp)$/i.test(file));
+  const files = (await filesBelow(distRoot)).filter((file) => !/\.(?:png|webp|gz)$/i.test(file));
   const text = (await Promise.all(files.map((file) => readFile(file, "utf8")))).join("\n");
 
   assert.doesNotMatch(text, /PRIVATE_SENTINEL/i);

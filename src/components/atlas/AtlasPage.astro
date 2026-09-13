@@ -5,6 +5,6 @@ import type { ExplorerField } from '../../data/atlas/explorer';
 import '../../styles/atlas-explorer.css';
 const { initialField='overview' } = Astro.props as {initialField?:ExplorerField};
 ---
-<BaseLayout title="北米地図" description="地形・水系に主要作物の栽培域と畜産の集積地域を重ね、米国農業を地理から読み解く。" compactAtlas noindex={Astro.url.pathname.includes('/review/')}>
+<BaseLayout title="北米地図" description="自然環境と、州境をまたぐ主要作物の栽培域を同じ地図で読み比べる。" compactAtlas noindex={Astro.url.pathname.includes('/review/')}>
   <AtlasExplorer {initialField} />
 </BaseLayout>
