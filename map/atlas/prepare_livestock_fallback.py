@@ -9,7 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / "src/data/atlas/livestock.ts"
-OUTPUT = ROOT / "public/assets/atlas/livestock/v1"
+OUTPUT = ROOT / "public/assets/atlas/livestock/v2"
 WIDTH, HEIGHT = 1800, 1084
 BOUNDS = (-128.0, 22.0, -64.0, 52.0)
 

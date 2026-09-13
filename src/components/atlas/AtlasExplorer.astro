@@ -13,7 +13,7 @@ import LivestockReading from './LivestockReading.astro';
 interface Props { initialField?: ExplorerField }
 const { initialField='overview' } = Astro.props;
 const assetBase = withBase('/assets/atlas/v3/');
-const livestockAssetBase = withBase('/assets/atlas/livestock/v1/');
+const livestockAssetBase = withBase('/assets/atlas/livestock/v2/');
 const reviewMode = Astro.url.pathname.includes('/review/');
 const payload = JSON.stringify({ initialField, assetBase, livestockAssetBase, reviewMode, base: withBase('/atlas/north-america/'), crops:cropExplanations, regionalInsights, statisticCropIds, geographicLabels, livestockKinds, livestockRegions }).replace(/</g,'\\u003c');
 ---
