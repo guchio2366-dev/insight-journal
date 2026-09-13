@@ -28,8 +28,8 @@ test("主要ページと日本語検索索引を静的成果物に含む", async
     "atlas/north-america/land/index.html",
     "assets/atlas/v3/manifest.json",
     "assets/atlas/v3/agriculture-fallback.webp",
-    "assets/atlas/livestock/v1/agriculture-livestock-fallback.svg",
-    "assets/atlas/livestock/v1/livestock-fallback.svg",
+    "assets/atlas/livestock/v2/agriculture-livestock-fallback.svg",
+    "assets/atlas/livestock/v2/livestock-fallback.svg",
     "assets/atlas/north-america-agriculture-reference-v1.webp",
     "pagefind/pagefind.js"
   ];

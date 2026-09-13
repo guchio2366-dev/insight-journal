@@ -22,7 +22,7 @@ test('畜産地域は重複しないIDと米国本土内の代表点を持つ',(
 
 test('軽量な畜産代替図を同梱する',async()=>{
  for(const name of ['agriculture-livestock-fallback.svg','livestock-fallback.svg']){
-  const file=await stat(new URL(`../../public/assets/atlas/livestock/v1/${name}`,import.meta.url));
+  const file=await stat(new URL(`../../public/assets/atlas/livestock/v2/${name}`,import.meta.url));
   assert.ok(file.size<350_000,`${name}: ${file.size}`);
  }
 });
