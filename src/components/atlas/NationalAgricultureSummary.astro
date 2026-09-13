@@ -1,56 +1,21 @@
 ---
 import { atlasStatistics, statisticsSources } from '../../data/atlas/statistics';
-
-const receipts = atlasStatistics.national.cashReceipts;
-const trade = atlasStatistics.national.trade.series;
-const receiptRows = receipts.categories;
-const maxReceipt = Math.max(...receiptRows.map((entry) => entry.value));
-const lastTrade = trade.at(-1)!;
-const tradeGap = lastTrade.imports - lastTrade.exports;
-const x = (index:number) => 25 + index * (310 / (trade.length - 1));
-const y = (value:number) => 119 - ((value - 110) / 110) * 94;
-const exportPoints = trade.map((entry, index) => `${x(index).toFixed(1)},${y(entry.exports).toFixed(1)}`).join(' ');
-const importPoints = trade.map((entry, index) => `${x(index).toFixed(1)},${y(entry.imports).toFixed(1)}`).join(' ');
-const farmSource = statisticsSources.find((entry) => entry.id === 'source-usda-farm-income')!;
-const tradeSource = statisticsSources.find((entry) => entry.id === 'source-usda-fatus-calendar')!;
+const receipts=atlasStatistics.national.cashReceipts,[crops,livestock]=receipts.groups,trade=atlasStatistics.national.trade.series,lastTrade=trade.at(-1)!;
+const totalBillion=receipts.totalThousandUsd/1_000_000, groupShare=(v:number)=>v/receipts.totalThousandUsd*100, itemShare=(v:number,p:number)=>v/p*100;
+const x=(i:number)=>25+i*(310/(trade.length-1)),y=(v:number)=>119-((v-110)/110)*94;
+const exportPoints=trade.map((e,i)=>`${x(i).toFixed(1)},${y(e.exports).toFixed(1)}`).join(' '),importPoints=trade.map((e,i)=>`${x(i).toFixed(1)},${y(e.imports).toFixed(1)}`).join(' ');
+const farmSource=statisticsSources.find(e=>e.id==='source-usda-farm-income')!,tradeSource=statisticsSources.find(e=>e.id==='source-usda-fatus-calendar')!;
 ---
 <aside class="atlas-national" aria-labelledby="national-agriculture-title" data-national-summary>
-  <header>
-    <p class="atlas-eyebrow">NATIONAL OVERVIEW</p>
-    <h2 id="national-agriculture-title">米国の農業</h2>
-    <p>2025年の農産物販売高は約5,420億ドル。肉牛・子牛が最大で、とうもろこしと大豆も大きな柱です。貿易額では2022年以降、輸入が輸出を上回り、2025年の差は約{(tradeGap*10).toFixed(0)}億ドルでした。</p>
-  </header>
-
-  <figure class="atlas-mini-chart atlas-receipts-chart">
-    <figcaption><strong>農産物販売高</strong><span>2025年推計・10億ドル</span></figcaption>
-    <div class="atlas-bars">
-      {receiptRows.map((entry) => <div class="atlas-bar-row">
-        <span>{entry.label}</span>
-        <i><b style={`width:${entry.value / maxReceipt * 100}%`}></b></i>
-        <strong>{entry.value.toFixed(1)}</strong>
-      </div>)}
-    </div>
-    <p class="atlas-chart-total">全品目　<strong>{receipts.total.toFixed(1)}</strong></p>
-    <p class="atlas-chart-note">販売による現金収入。利益・生産量・GDPではありません。</p>
-    <a href={farmSource.url} target="_blank" rel="noopener noreferrer">出典：USDA ERS</a>
-  </figure>
-
-  <figure class="atlas-mini-chart atlas-trade-chart">
-    <figcaption><strong>農産物の輸出・輸入</strong><span>暦年・名目10億ドル</span></figcaption>
-    <svg viewBox="0 0 360 145" role="img" aria-labelledby="national-trade-title national-trade-desc">
-      <title id="national-trade-title">2016年から2025年の米国農産物輸出額と輸入額</title>
-      <desc id="national-trade-desc">輸出は2016年138.9、2025年171.4。輸入は2016年122.6、2025年212.1、単位は10億ドルです。</desc>
-      {[120,160,200].map(value => <g><line x1="25" y1={y(value)} x2="335" y2={y(value)}></line><text x="2" y={y(value)+4}>{value}</text></g>)}
-      <polyline class="atlas-line atlas-line--export" points={exportPoints}></polyline>
-      <polyline class="atlas-line atlas-line--import" points={importPoints}></polyline>
-      <circle class="atlas-dot atlas-dot--export" cx={x(trade.length-1)} cy={y(lastTrade.exports)} r="3"></circle>
-      <circle class="atlas-dot atlas-dot--import" cx={x(trade.length-1)} cy={y(lastTrade.imports)} r="3"></circle>
-      <text class="atlas-line-label atlas-line-label--import" x="331" y={y(lastTrade.imports)-7} text-anchor="end">輸入 {lastTrade.imports.toFixed(1)}</text>
-      <text class="atlas-line-label atlas-line-label--export" x="331" y={y(lastTrade.exports)+14} text-anchor="end">輸出 {lastTrade.exports.toFixed(1)}</text>
-      <text x="25" y="141">2016</text><text x="335" y="141" text-anchor="end">2025</text>
-    </svg>
-    <div class="atlas-line-key" aria-hidden="true"><span><i class="is-export"></i>輸出</span><span><i class="is-import"></i>輸入</span></div>
-    <a href={tradeSource.url} target="_blank" rel="noopener noreferrer">出典：USDA ERS FATUS</a>
-    <details><summary>数値表</summary><table><thead><tr><th>年</th><th>輸出</th><th>輸入</th></tr></thead><tbody>{trade.map(entry=><tr><th>{entry.year}</th><td>{entry.exports.toFixed(1)}</td><td>{entry.imports.toFixed(1)}</td></tr>)}</tbody></table></details>
-  </figure>
+ <header><p class="atlas-eyebrow">NATIONAL OVERVIEW</p><h2 id="national-agriculture-title">米国の農業</h2><p>販売収入は畜産が56%、作物が44%。作物ではとうもろこしと大豆、畜産では牛・子牛と家禽・卵が大きな柱です。</p></header>
+ <figure class="atlas-mini-chart atlas-receipts-chart">
+  <figcaption><strong>農畜産物の販売収入</strong><span>2025年推計</span></figcaption>
+  <div class="atlas-parent-bar" role="img" aria-label={`販売収入約${totalBillion.toFixed(0)}0億ドルのうち作物${groupShare(crops.totalThousandUsd).toFixed(0)}%、畜産${groupShare(livestock.totalThousandUsd).toFixed(0)}%`}>
+   <span class="is-crops" style={`width:${groupShare(crops.totalThousandUsd)}%`}><b>作物</b><strong>{groupShare(crops.totalThousandUsd).toFixed(0)}%</strong></span><span class="is-livestock" style={`width:${groupShare(livestock.totalThousandUsd)}%`}><b>畜産</b><strong>{groupShare(livestock.totalThousandUsd).toFixed(0)}%</strong></span>
+  </div><p class="atlas-chart-total">全品目　<strong>{totalBillion.toFixed(1)}</strong> 十億ドル</p>
+  <div class="atlas-receipt-groups">{receipts.groups.map(group=><section class={`atlas-receipt-group is-${group.id}`} aria-labelledby={`receipt-${group.id}`}><h3 id={`receipt-${group.id}`}>{group.label}内の割合 <span>{(group.totalThousandUsd/1_000_000).toFixed(1)} 十億ドル</span></h3><div class="atlas-bars">{group.items.map(entry=><div class="atlas-bar-row"><span>{entry.label}</span><i><b style={`width:${itemShare(entry.valueThousandUsd,group.totalThousandUsd)/50*100}%`}></b></i><strong>{itemShare(entry.valueThousandUsd,group.totalThousandUsd).toFixed(1)}%</strong></div>)}</div></section>)}</div>
+  <details class="atlas-receipt-definitions"><summary>金額と分類の定義</summary><p>販売による現金収入。利益・生産量・GDPではありません。作物内の「その他」はUSDA原統計の一括分類です。畜産には養殖等の小分類も含みます。</p><table><thead><tr><th>分類</th><th>10億ドル</th></tr></thead><tbody>{receipts.groups.flatMap(group=>group.items).map(entry=><tr><th>{entry.label}</th><td>{(entry.valueThousandUsd/1_000_000).toFixed(1)}</td></tr>)}</tbody></table></details>
+  <a href={farmSource.url} target="_blank" rel="noopener noreferrer">出典：USDA ERS</a>
+ </figure>
+ <figure class="atlas-mini-chart atlas-trade-chart"><figcaption><strong>農産物の輸出・輸入</strong><span>暦年・名目10億ドル</span></figcaption><svg viewBox="0 0 360 145" role="img" aria-labelledby="national-trade-title national-trade-desc"><title id="national-trade-title">2016年から2025年の米国農産物輸出額と輸入額</title><desc id="national-trade-desc">輸出は2016年138.9、2025年171.4。輸入は2016年122.6、2025年212.1、単位は10億ドルです。</desc>{[120,160,200].map(v=><g><line x1="25" y1={y(v)} x2="335" y2={y(v)}></line><text x="2" y={y(v)+4}>{v}</text></g>)}<polyline class="atlas-line atlas-line--export" points={exportPoints}></polyline><polyline class="atlas-line atlas-line--import" points={importPoints}></polyline><circle class="atlas-dot atlas-dot--export" cx={x(trade.length-1)} cy={y(lastTrade.exports)} r="3"></circle><circle class="atlas-dot atlas-dot--import" cx={x(trade.length-1)} cy={y(lastTrade.imports)} r="3"></circle><text class="atlas-line-label atlas-line-label--import" x="331" y={y(lastTrade.imports)-7} text-anchor="end">輸入 {lastTrade.imports.toFixed(1)}</text><text class="atlas-line-label atlas-line-label--export" x="331" y={y(lastTrade.exports)+14} text-anchor="end">輸出 {lastTrade.exports.toFixed(1)}</text><text x="25" y="141">2016</text><text x="335" y="141" text-anchor="end">2025</text></svg><p class="atlas-chart-note">2025年は輸入が輸出を約{(lastTrade.imports-lastTrade.exports).toFixed(1)}十億ドル上回りました。</p><div class="atlas-line-key" aria-hidden="true"><span><i class="is-export"></i>輸出</span><span><i class="is-import"></i>輸入</span></div><a href={tradeSource.url} target="_blank" rel="noopener noreferrer">出典：USDA ERS FATUS</a><details><summary>数値表</summary><table><thead><tr><th>年</th><th>輸出</th><th>輸入</th></tr></thead><tbody>{trade.map(e=><tr><th>{e.year}</th><td>{e.exports.toFixed(1)}</td><td>{e.imports.toFixed(1)}</td></tr>)}</tbody></table></details></figure>
 </aside>

@@ -25,9 +25,10 @@
 .atlas-primary-grid{display:grid;grid-template-columns:minmax(0,1fr);align-items:start}
 .atlas-map-column{min-width:0}
 .atlas-map-frame{position:relative;width:100%;aspect-ratio:1.65;min-height:190px;max-height:640px;overflow:hidden;border:1px solid #abbfc2;background:#c1e1ed;isolation:isolate}
-.atlas-map-surface,.atlas-fallback,.atlas-map-labels{position:absolute;inset:0}
+.atlas-map-surface,.atlas-fallback,.atlas-map-labels,.atlas-livestock-markers{position:absolute;inset:0}
 .atlas-map-surface .maplibregl-canvas{outline-offset:-3px}
 .atlas-map-labels{z-index:2;overflow:hidden;pointer-events:none}
+.atlas-livestock-markers{z-index:4;overflow:hidden;pointer-events:none}
 .atlas-fallback{z-index:1;display:grid;grid-template-rows:minmax(0,1fr) auto;background:#c1e1ed}
 .atlas-fallback img{width:100%;height:100%;min-height:0;object-fit:contain}
 .atlas-fallback p{margin:0;padding:5px 8px;background:#fbfaf2eb;font-size:11px;line-height:1.5;text-align:center}
@@ -35,7 +36,9 @@
 .atlas-map-tools{position:absolute;z-index:4;top:10px;right:10px;display:flex;flex-direction:column;gap:5px}
 .atlas-map-tools button{width:40px;height:40px;padding:0;border:1px solid #b2beb7;border-radius:5px;box-shadow:0 1px 3px #243b4820;background:#fffef5ed;color:#233f4a;font-size:21px;line-height:1}
 .atlas-map-tools button:first-child{font-size:11px}
-.atlas-layer-caption{position:absolute;z-index:3;top:6px;left:9px;max-width:calc(100% - 70px);margin:0;padding:3px 6px;border-radius:3px;background:#fbfaf2df;color:#384a4f;font-size:11px;line-height:1.4;pointer-events:none}
+.atlas-layer-caption{position:absolute;z-index:3;bottom:6px;left:9px;max-width:calc(100% - 18px);margin:0;padding:3px 6px;border-radius:3px;background:#fbfaf2df;color:#384a4f;font-size:10px;line-height:1.4;pointer-events:none}
+.atlas-agri-layers{position:absolute;z-index:5;top:7px;left:8px;display:flex;gap:3px;margin:0;padding:3px;border:1px solid #9eaca3;border-radius:6px;background:#fffef5ed;box-shadow:0 1px 4px #243b4820}.atlas-agri-layers label{display:flex;align-items:center;gap:4px;min-height:36px;padding:0 9px;border-radius:4px;color:#253c45;font-size:12px;font-weight:750;cursor:pointer}.atlas-agri-layers label:has(input:checked){background:#e4eadf}.atlas-agri-layers input{width:17px;height:17px;margin:0;accent-color:#345e50}
+.atlas-livestock-marker{position:absolute;top:0;left:0;display:flex;align-items:center;gap:3px;min-width:44px;min-height:44px;padding:3px 7px 3px 4px;border:0;border-radius:22px;box-shadow:0 1px 6px #243b4860;background:#fffdf4ee;color:#283b40;font:700 10px/1.1 var(--sans);white-space:nowrap;pointer-events:auto}.atlas-livestock-marker i{display:grid;place-items:center;width:28px;height:28px;border:2px solid #fff;border-radius:50%;background:var(--livestock-color);color:#fff;font-style:normal;font-size:11px;box-shadow:0 0 0 1px #42555b66}.atlas-livestock-marker.is-cluster{padding-right:9px}.atlas-livestock-marker.is-cluster i{background:#4f5f5e}.atlas-livestock-marker[aria-pressed="true"]{outline:3px solid #f8f0b4;box-shadow:0 0 0 2px #243b48,0 3px 10px #243b4860}
 .atlas-geolabel{position:absolute;top:0;left:0;color:#304144;font-size:12px;line-height:1.2;letter-spacing:.025em;text-shadow:0 1px 2px #fffff4,1px 0 2px #fffff4,-1px 0 2px #fffff4,0 -1px 2px #fffff4;white-space:nowrap;will-change:transform}
 .atlas-geolabel--state{color:#5b6a67;font-size:11px;font-weight:400}
 .atlas-geolabel--crop{color:#534229;font-size:15px;font-weight:750;text-shadow:0 1px 2px #ffffe4,1px 0 2px #ffffe4,-1px 0 2px #ffffe4}
@@ -49,6 +52,7 @@
 .atlas-selection strong{display:block;font-family:var(--serif);font-size:16px;line-height:1.4}
 .atlas-selection p{margin:4px 0 3px}
 .atlas-selection a{color:#315c69;font-size:12px}
+.atlas-selection-candidates{display:flex;flex-wrap:wrap;gap:5px;margin:7px 0}.atlas-selection-candidates button{min-height:36px;padding:5px 8px;border:1px solid #92a29c;border-radius:4px;background:#f4f2e8;color:#294047;font-weight:700}
 .atlas-selection-close{position:absolute;top:1px;right:1px;width:38px;height:38px;padding:0;border:0;background:none;color:#374d51;font-size:23px}
 .atlas-selection--below{position:relative;inset:auto!important;width:100%;margin:0;border-radius:0;border-top:0;box-shadow:none;background:#fffdf4}
 .atlas-selection-slot:empty{display:none}
@@ -59,6 +63,7 @@
 .atlas-key a[aria-current]{font-weight:800;text-decoration:underline;text-underline-offset:3px}
 .atlas-key i{display:inline-block;width:14px;height:10px;border:1px solid #677e7250;border-radius:6px;background:var(--crop-color)}
 .atlas-overlap-key i{background:repeating-linear-gradient(135deg,#e6cf80 0 3px,#a8bb74 3px 5px)}
+.atlas-livestock-key{display:contents}.atlas-livestock-key>span{display:inline-flex;align-items:center;gap:4px}.atlas-livestock-key>span i{display:grid;place-items:center;width:20px;height:20px;border:0;border-radius:50%;background:var(--livestock-color);color:#fff;font-style:normal;font-size:9px}
 .atlas-context-key{margin:0;padding:9px 12px;border:1px solid #c8cfc4;border-top:0;background:#f7f5ec;font-size:12px;line-height:1.7;text-align:center}
 
 .atlas-national{min-width:0;padding:15px 16px 13px;border:1px solid #c7ccbf;background:#fbfaf3;color:#31444b}
@@ -72,10 +77,13 @@
 .atlas-mini-chart figcaption strong,.atlas-export-chart figcaption strong,.atlas-world-chart figcaption strong{font-size:13px}
 .atlas-mini-chart figcaption span,.atlas-export-chart figcaption span,.atlas-world-chart figcaption span{color:#697871;font-size:10px}
 .atlas-bars{display:grid;gap:4px}
-.atlas-bar-row{display:grid;grid-template-columns:78px minmax(40px,1fr) 35px;align-items:center;gap:6px;font-size:10px}
+.atlas-parent-bar{display:flex;height:30px;overflow:hidden;border-radius:3px;color:#fff}.atlas-parent-bar span{display:flex;align-items:center;justify-content:space-between;min-width:0;padding:0 7px}.atlas-parent-bar .is-crops{background:#4d7861}.atlas-parent-bar .is-livestock{background:#96644e}.atlas-parent-bar b,.atlas-parent-bar strong{font-size:11px}
+.atlas-receipt-groups{display:grid;gap:7px;margin-top:6px}.atlas-receipt-group h3{display:flex;justify-content:space-between;margin:0 0 3px;font-size:10px;line-height:1.3}.atlas-receipt-group h3 span{color:#68766f;font-size:8px;font-weight:500}.atlas-receipt-group .atlas-bars{gap:1px}
+.atlas-bar-row{display:grid;grid-template-columns:82px minmax(40px,1fr) 34px;align-items:center;gap:5px;min-height:14px;font-size:9px;line-height:1.1}
 .atlas-bar-row>span{white-space:nowrap}
-.atlas-bar-row>i,.atlas-world-row>i{display:block;height:8px;border-radius:1px;background:#e2e3da}
+.atlas-bar-row>i,.atlas-world-row>i{display:block;height:6px;border-radius:1px;background:#e2e3da}
 .atlas-bar-row>i>b{display:block;height:100%;border-radius:1px;background:#497765}
+.atlas-receipt-group.is-livestock .atlas-bar-row>i>b{background:#96644e}.atlas-receipt-definitions p{font-size:9px;line-height:1.5}
 .atlas-bar-row>strong{font-size:10px;text-align:right}
 .atlas-chart-total{margin:5px 0 0;font-size:10px;text-align:right}
 .atlas-chart-note{margin:5px 0;color:#66756f;font-size:9px;line-height:1.5}
@@ -149,6 +157,7 @@
 .atlas-share-line polyline{fill:none;stroke:#435f69;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
 .atlas-share-line circle{fill:#fff;stroke:#435f69;stroke-width:1.5}
 .atlas-context-reading{margin-top:26px;padding:15px 0;border-block:1px solid #d0d4c8}
+.atlas-livestock-reading{margin-top:34px;padding-top:20px;border-top:1px solid #cfd4ca;scroll-margin-top:12px}.atlas-livestock-reading>header{display:grid;grid-template-columns:1fr minmax(280px,560px);align-items:end;column-gap:30px;padding-bottom:12px;border-bottom:1px solid #cfd4ca}.atlas-livestock-reading>header .atlas-eyebrow{grid-column:1}.atlas-livestock-reading>header h2{grid-column:1;margin:0}.atlas-livestock-reading>header>p:last-child{grid-column:2;grid-row:1/3;margin:0;color:#5d6d68;font-size:13px;line-height:1.7}.atlas-livestock-jump{display:flex;flex-wrap:wrap;gap:6px;margin:13px 0}.atlas-livestock-jump a{display:flex;align-items:center;gap:5px;min-height:40px;padding:4px 10px;border:1px solid #c3cbc3;border-radius:4px;background:#f5f3e9;color:#2d454b;text-decoration:none;font-weight:750}.atlas-livestock-jump i{display:grid;place-items:center;width:25px;height:25px;border-radius:50%;background:var(--livestock-color);color:#fff;font-style:normal;font-size:10px}.atlas-livestock-copy-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.atlas-livestock-copy-grid article{padding:14px;border-top:3px solid #96644e;background:#f5f2e8;scroll-margin-top:12px}.atlas-livestock-copy-grid h3{margin:0 0 5px;font-size:18px}.atlas-livestock-copy-grid p{margin:0;font-size:13px;line-height:1.8}
 .atlas-context-reading summary{cursor:pointer;font-weight:600}
 .atlas-method{margin-top:24px;border-top:1px solid #d0d4c8;color:#52615e;font-size:13px}
 .atlas-method h2{font-size:22px}
@@ -184,7 +193,7 @@
   .atlas-tab-planned{flex-direction:column;gap:1px}
   .atlas-tab-planned small{padding:0;border:0;font-size:8px}
   .atlas-map-frame{aspect-ratio:1.44;min-height:0}
-  .atlas-layer-caption{top:4px;left:4px;padding:2px 4px;font-size:9px}
+  .atlas-layer-caption{bottom:3px;left:4px;padding:2px 4px;font-size:8px}.atlas-agri-layers{top:4px;left:4px}.atlas-agri-layers label{min-height:34px;padding:0 7px;font-size:11px}.atlas-livestock-marker{min-width:40px;min-height:40px;padding:2px 5px 2px 3px;font-size:9px}.atlas-livestock-marker i{width:25px;height:25px;font-size:9px}
   .atlas-map-tools{top:26px;right:5px;gap:4px}
   .atlas-map-tools button{width:34px;height:34px}
   .atlas-geolabel--crop{font-size:11px}.atlas-geolabel--physical,.atlas-geolabel--water{font-size:10px}.atlas-geolabel--state,.atlas-geolabel--country{font-size:9px}
@@ -208,6 +217,7 @@
   .atlas-crop-panel{grid-template-columns:1fr;gap:12px;padding-top:8px}
   .atlas-crop-copy p{font-size:13px;line-height:1.8}
   .atlas-crop-charts{grid-template-columns:1fr;gap:10px}
+  .atlas-livestock-reading>header{display:block}.atlas-livestock-reading>header>p:last-child{margin:5px 0 0;font-size:11px;line-height:1.6}.atlas-livestock-copy-grid{grid-template-columns:1fr}
   .atlas-export-chart,.atlas-world-chart{padding:12px}
   .atlas-donut-layout{grid-template-columns:120px minmax(0,1fr)}
   .atlas-donut{width:120px;height:120px}

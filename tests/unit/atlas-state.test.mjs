@@ -24,3 +24,13 @@ test('不正な作物・地域・表示状態を公開済みの値へ正規化�
  const state=readAtlasState(new URL('https://example.org/atlas/north-america/agriculture/?crop=%3Cscript%3E&region=unknown&stats=specialty&view=wide'));
  assert.equal(state.crop,null);assert.equal(state.region,null);assert.equal(state.stats,'corn');assert.equal(state.view,'fit');
 });
+
+test('農業の表示レイヤーと畜産地域をURLから復元する',()=>{
+ const state=readAtlasState(new URL('https://example.org/atlas/north-america/agriculture/?agriLayers=livestock&animal=hogs&animalRegion=iowa-hogs'));
+ assert.deepEqual(state.agriLayers,['livestock']);assert.equal(state.animal,'hogs');assert.equal(state.animalRegion,'iowa-hogs');
+});
+
+test('不正な表示レイヤーと畜産地域の組合せを安全な初期値へ戻す',()=>{
+ const state=readAtlasState(new URL('https://example.org/atlas/north-america/agriculture/?agriLayers=bad&animal=hogs&animalRegion=california-dairy'));
+ assert.deepEqual(state.agriLayers,['crops','livestock']);assert.equal(state.animal,null);assert.equal(state.animalRegion,null);
+});

@@ -28,6 +28,8 @@ test("主要ページと日本語検索索引を静的成果物に含む", async
     "atlas/north-america/land/index.html",
     "assets/atlas/v3/manifest.json",
     "assets/atlas/v3/agriculture-fallback.webp",
+    "assets/atlas/livestock/v1/agriculture-livestock-fallback.svg",
+    "assets/atlas/livestock/v1/livestock-fallback.svg",
     "assets/atlas/north-america-agriculture-reference-v1.webp",
     "pagefind/pagefind.js"
   ];
@@ -50,9 +52,13 @@ test("地図の通常経路は共通レンダラーと下の解説を含み、�
   }
 });
 
-test("農業ページは全米販売高・輸出入と5作物の静的統計を含む",async()=>{
+test("農業ページは作物・畜産の地図切替、販売高階層、輸出入と5作物の静的統計を含む",async()=>{
   const html=await readFile(path.join(distRoot,'atlas/north-america/agriculture/index.html'),'utf8');
-  assert.match(html,/農産物販売高/);assert.match(html,/農産物の輸出・輸入/);
+  assert.match(html,/農畜産物の販売収入/);assert.match(html,/農産物の輸出・輸入/);
+  assert.match(html,/作物内の割合/);assert.match(html,/畜産内の割合/);
+  assert.match(html,/data-agri-layer/);assert.match(html,/value="crops"/);assert.match(html,/value="livestock"/);
+  assert.match(html,/id="livestock-details"/);
+  for(const id of ['beef','dairy','hogs','broilers','layers'])assert.match(html,new RegExp(`id="livestock-${id}"`));
   for(const id of ['corn','soybean','wheat','cotton','rice'])assert.match(html,new RegExp(`data-stat-panel="${id}"`));
   assert.doesNotMatch(html,/data-stat-panel="specialty"/);
   assert.match(html,/サクラメントバレーの稲作/);

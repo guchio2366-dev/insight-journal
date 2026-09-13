@@ -4,38 +4,104 @@ export const atlasStatistics = {
     "cashReceipts": {
       "year": 2025,
       "status": "estimate",
-      "unit": "billion USD",
-      "total": 541.988,
-      "categories": [
+      "unit": "thousand USD",
+      "totalThousandUsd": 541987513,
+      "groups": [
         {
-          "id": "cattle-and-calves",
-          "label": "肉牛・子牛",
-          "value": 133.675
+          "id": "crops",
+          "label": "作物",
+          "totalThousandUsd": 238356114,
+          "items": [
+            {
+              "id": "corn",
+              "label": "とうもろこし",
+              "valueThousandUsd": 60510327
+            },
+            {
+              "id": "soybean",
+              "label": "大豆",
+              "valueThousandUsd": 43576352
+            },
+            {
+              "id": "fruit-nuts",
+              "label": "果物・ナッツ",
+              "valueThousandUsd": 34874188
+            },
+            {
+              "id": "vegetables",
+              "label": "野菜・メロン",
+              "valueThousandUsd": 25071738
+            },
+            {
+              "id": "food-grains",
+              "label": "小麦・米など",
+              "valueThousandUsd": 12943927
+            },
+            {
+              "id": "other-feed",
+              "label": "牧草等",
+              "valueThousandUsd": 10242930
+            },
+            {
+              "id": "floriculture",
+              "label": "花き",
+              "valueThousandUsd": 8395125
+            },
+            {
+              "id": "cotton",
+              "label": "綿花",
+              "valueThousandUsd": 5205524
+            },
+            {
+              "id": "sugar-crops",
+              "label": "砂糖原料",
+              "valueThousandUsd": 4907002
+            },
+            {
+              "id": "other-published",
+              "label": "落花生・菜種等",
+              "valueThousandUsd": 5659356
+            },
+            {
+              "id": "miscellaneous",
+              "label": "その他",
+              "valueThousandUsd": 26969646
+            }
+          ],
+          "reconciliationThousandUsd": -1
         },
         {
-          "id": "corn",
-          "label": "とうもろこし",
-          "value": 60.51
-        },
-        {
-          "id": "dairy-products",
-          "label": "乳製品",
-          "value": 48.869
-        },
-        {
-          "id": "broilers",
-          "label": "ブロイラー",
-          "value": 44.567
-        },
-        {
-          "id": "soybeans",
-          "label": "大豆",
-          "value": 43.576
-        },
-        {
-          "id": "other",
-          "label": "その他",
-          "value": 210.791
+          "id": "livestock",
+          "label": "畜産",
+          "totalThousandUsd": 303631399,
+          "items": [
+            {
+              "id": "cattle-calves",
+              "label": "牛・子牛",
+              "valueThousandUsd": 133674891
+            },
+            {
+              "id": "poultry-eggs",
+              "label": "家禽・卵",
+              "valueThousandUsd": 81658455
+            },
+            {
+              "id": "milk",
+              "label": "生乳",
+              "valueThousandUsd": 48869132
+            },
+            {
+              "id": "hogs",
+              "label": "豚",
+              "valueThousandUsd": 30893004
+            },
+            {
+              "id": "other-animals",
+              "label": "その他",
+              "valueThousandUsd": 8535918
+            }
+          ],
+          "reconciliationThousandUsd": -1
         }
       ]
     },

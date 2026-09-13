@@ -27,29 +27,27 @@ def parse_args():
 
 
 def cash_receipts(path):
-    labels = {
-        "Cattle and calves": ("cattle-and-calves", "肉牛・子牛"),
-        "Corn": ("corn", "とうもろこし"),
-        "Dairy products": ("dairy-products", "乳製品"),
-        "Broilers": ("broilers", "ブロイラー"),
-        "Soybeans": ("soybeans", "大豆"),
-    }
+    keys = {"all":"CRAUSAC--VAP","crops":"CRAUSCO--VAP","livestock":"CRAUSLV--VAP","corn":"CRAUSCR--VAP","soybean":"CRAUSSY--VAP","fruit-nuts":"CRAUSFN--VAP","vegetables":"CRAUSVG--VAP","food-grains":"CRAUSFO--VAP","feed":"CRAUSFE--VAP","floriculture":"CRAUSGNFCVAP","cotton":"CRAUSCT--VAP","sugar-cane":"CRAUSCW--VAP","sugar-beets":"CRAUSSR--VAP","other-oil":"CRAUSOC--VAP","other-crops":"CRAUSAOCOVAP","misc-crops":"CRAUSAOOTVAP","tobacco":"CRAUSTB--VAP","cattle":"CRAUSCL--VAP","poultry":"CRAUSPG--VAP","milk":"CRAUSDY--VAP","hogs":"CRAUSHG--VAP","other-animals":"CRAUSLVMIVAP"}
     selected = {}
-    total = None
     with path.open(encoding="cp1252", newline="") as handle:
         for row in csv.DictReader(handle):
-            if row["Year"] != "2025" or row["State"] != "US" or row["VariableDescriptionPart2"] != "All":
+            if row["Year"] != "2025" or row["State"] != "US":
                 continue
-            name = row["VariableDescriptionPart1"]
-            if name == "All Commodities":
-                total = round(float(row["Amount"]) / 1_000_000, 3)
-            elif name in labels:
-                selected[name] = round(float(row["Amount"]) / 1_000_000, 3)
-    if total is None or set(selected) != set(labels):
-        raise ValueError("Farm Income input lacks one or more required US 2025 receipt rows")
-    rows = [{"id": labels[name][0], "label": labels[name][1], "value": selected[name]} for name in labels]
-    rows.append({"id": "other", "label": "その他", "value": round(total - sum(selected.values()), 3)})
-    return {"year": 2025, "status": "estimate", "unit": "billion USD", "total": total, "categories": rows}
+            if row["artificialKey"] in keys.values():
+                if row["artificialKey"] in selected: raise ValueError(f"duplicate Farm Income key: {row['artificialKey']}")
+                if not row["unit_desc"].strip().startswith("$1,000"): raise ValueError(f"unexpected Farm Income unit: {row['unit_desc']}")
+                selected[row["artificialKey"]] = int(row["Amount"])
+    missing=set(keys.values())-set(selected)
+    if missing: raise ValueError(f"Farm Income input lacks required keys: {sorted(missing)}")
+    value=lambda name:selected[keys[name]]
+    if value("all") != value("crops") + value("livestock"): raise ValueError("parent totals do not reconcile")
+    crop_items=[("corn","とうもろこし",value("corn")),("soybean","大豆",value("soybean")),("fruit-nuts","果物・ナッツ",value("fruit-nuts")),("vegetables","野菜・メロン",value("vegetables")),("food-grains","小麦・米など",value("food-grains")),("other-feed","牧草等",value("feed")-value("corn")),("floriculture","花き",value("floriculture")),("cotton","綿花",value("cotton")),("sugar-crops","砂糖原料",value("sugar-cane")+value("sugar-beets")),("other-published","落花生・菜種等",value("other-oil")-value("soybean")+value("other-crops")-value("misc-crops")-value("floriculture")-value("sugar-cane")-value("sugar-beets")+value("tobacco")),("miscellaneous","その他",value("misc-crops"))]
+    animal_items=[("cattle-calves","牛・子牛",value("cattle")),("poultry-eggs","家禽・卵",value("poultry")),("milk","生乳",value("milk")),("hogs","豚",value("hogs")),("other-animals","その他",value("other-animals"))]
+    make=lambda items:[{"id":i,"label":label,"valueThousandUsd":amount} for i,label,amount in items]
+    groups=[{"id":"crops","label":"作物","totalThousandUsd":value("crops"),"items":make(crop_items),"reconciliationThousandUsd":value("crops")-sum(x[2] for x in crop_items)},{"id":"livestock","label":"畜産","totalThousandUsd":value("livestock"),"items":make(animal_items),"reconciliationThousandUsd":value("livestock")-sum(x[2] for x in animal_items)}]
+    for group in groups:
+        if abs(group["reconciliationThousandUsd"]) > len(group["items"]): raise ValueError(f"{group['id']} children exceed rounding tolerance")
+    return {"year":2025,"status":"estimate","unit":"thousand USD","totalThousandUsd":value("all"),"groups":groups}
 
 
 def calendar_trade(path):
