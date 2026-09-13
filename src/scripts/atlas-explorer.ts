@@ -163,6 +163,7 @@ export async function startAtlas() {
     root.dataset.renderState='fallback';fallback.hidden=false;surface.hidden=true;
     el('[data-map-labels]').hidden=true;el('[data-livestock-markers]').hidden=true;el('.atlas-map-tools').hidden=true;
     status.textContent=message+'（代替図）';map?.remove();map=undefined;
+    if(selection.hidden){if(initial.animalRegion)selectLivestock(initial.animalRegion,false);else if(initial.crop)selectCrop(initial.crop,undefined,undefined,initial.region,false);}
     if(!selection.hidden)moveSelectionBelow();
   }
 

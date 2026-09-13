@@ -65,7 +65,7 @@
 .atlas-key a[aria-current]{font-weight:800;text-decoration:underline;text-underline-offset:3px}
 .atlas-key i{display:inline-block;width:14px;height:10px;border:1px solid #677e7250;border-radius:6px;background:var(--crop-color)}
 .atlas-overlap-key i{background:repeating-linear-gradient(135deg,#e6cf80 0 3px,#a8bb74 3px 5px)}
-.atlas-livestock-key{display:contents}.atlas-livestock-key>span{display:inline-flex;align-items:center;gap:4px}.atlas-livestock-key>span i{display:grid;place-items:center;width:20px;height:20px;border:0;border-radius:50%;background:var(--livestock-color);color:#fff;font-style:normal;font-size:9px}
+.atlas-livestock-key{display:contents}.atlas-livestock-key>a{display:inline-flex;align-items:center;gap:4px;min-height:32px;text-decoration:none}.atlas-livestock-key>a i{display:grid;place-items:center;width:20px;height:20px;border:0;border-radius:50%;background:var(--livestock-color);color:#fff;font-style:normal;font-size:9px}
 .atlas-context-key{margin:0;padding:9px 12px;border:1px solid #c8cfc4;border-top:0;background:#f7f5ec;font-size:12px;line-height:1.7;text-align:center}
 
 .atlas-national{min-width:0;padding:15px 16px 13px;border:1px solid #c7ccbf;background:#fbfaf3;color:#31444b}

@@ -57,7 +57,7 @@ const payload = JSON.stringify({ initialField, assetBase, livestockAssetBase, re
         <div class="atlas-key" data-crop-key hidden={initialField!=='agriculture'} aria-label="栽培域の凡例">
           {cropExplanations.map(c=><a href={`#crop-${c.id}`} style={`--crop-color:${c.color}`} data-crop-select={c.id}><i aria-hidden="true"></i>{c.name}</a>)}
           <span class="atlas-overlap-key"><i aria-hidden="true"></i>重なり</span>
-          <span class="atlas-livestock-key" data-livestock-key>{livestockKinds.map(k=><span style={`--livestock-color:${k.color}`}><i aria-hidden="true">{k.symbol}</i>{k.label}</span>)}</span>
+          <span class="atlas-livestock-key" data-livestock-key>{livestockKinds.map(k=><a href={`#livestock-${k.id}`} style={`--livestock-color:${k.color}`}><i aria-hidden="true">{k.symbol}</i>{k.label}</a>)}</span>
         </div>
         <p class="atlas-context-key" data-land-key hidden={initialField==='agriculture'}>地形陰影・河川・湖・州境。土壌分類は未収録。</p>
       </div>

@@ -83,5 +83,24 @@ presented as completed quantitative layers.
 - Two 6 KB SVG fallbacks cover crop-plus-livestock and livestock-only states.
   They carry the same non-quantitative point semantics as the interactive map.
 - The completed build and browser measurements for this revision are recorded
-  below after the public Pages deployment. Physical iPhone/iPad Safari remains
-  a separate user-device check.
+  below. Physical iPhone/iPad Safari remains a separate user-device check.
+
+The public CSS-device harness reported no horizontal overflow, a complete map,
+visible field tabs and a visible national overview at both 390×844 and
+1180×820. At 1180×820 the map and the Crop/Livestock parent and child receipt
+charts are visible side by side; the trade chart follows in the same fixed
+national column. At 390×844 the order is map, national overview, detailed crop
+and livestock reading.
+
+Cloud Chrome again had no usable WebGL2, so it exercised the layered fallback.
+The published base retained terrain, rivers, states and crops while the
+transparent livestock SVG remained aligned above it. Unchecking Crops changed
+the base to land and preserved livestock; unchecking Livestock hid only the
+symbol overlay. Both states were reflected in `agriLayers` in the iframe URL.
+Saved crop or livestock selections render their explanation below the fallback.
+
+- PR #15 validation run `34743966800`: success; implementation merge
+  `d213a465dcfcb5142c2b39ec8370e31ca205aed2`; Pages run `34744014057`: success.
+- Public QA caught an external-image limitation in the first SVG fallback.
+  PR #17 validation run `34744296145`: success; fallback fix merge
+  `ae59fc44d5888f76c6a87bb3d3f0c66c6cc9ca24`; Pages run `34744326539`: success.
