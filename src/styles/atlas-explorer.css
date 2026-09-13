@@ -80,7 +80,7 @@
 .atlas-chart-total{margin:5px 0 0;font-size:10px;text-align:right}
 .atlas-chart-note{margin:5px 0;color:#66756f;font-size:9px;line-height:1.5}
 .atlas-mini-chart>a,.atlas-export-chart>a,.atlas-world-chart>a{color:#49666d;font-size:9px}
-.atlas-trade-chart svg{display:block;width:100%;height:auto;max-height:150px;overflow:visible}
+.atlas-trade-chart svg{display:block;width:100%;height:120px;overflow:visible}
 .atlas-trade-chart svg line{stroke:#d4d8d2;stroke-width:1}
 .atlas-trade-chart svg text{fill:#68766f;font:9px var(--sans)}
 .atlas-trade-chart .atlas-line{fill:none;stroke-width:2.4;stroke-linejoin:round;stroke-linecap:round}
