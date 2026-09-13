@@ -1,4 +1,6 @@
 ---
+import CropSupplyUse from './CropSupplyUse.astro';
+import ConditionText from './ConditionText.astro';
 import { cropExplanations } from '../../data/atlas/explorer';
 import { atlasStatistics, statisticCropIds, statisticsSources, type StatisticCropId } from '../../data/atlas/statistics';
 import { sources } from '../../data/atlas/north-america-agriculture';
@@ -43,13 +45,15 @@ const productionUnit = (id:StatisticCropId) => id==='cotton'?'千480ポンド俵
     return <article class="atlas-crop-panel" id={`crop-${id}`} role="tabpanel" aria-labelledby={`stat-tab-${id}`} data-stat-panel={id} style={`--crop-color:${colors[id]}`}>
       <div class="atlas-crop-copy">
         <h3>{names[id]}</h3>
-        {description.paragraphs.map(paragraph=><p>{paragraph}</p>)}
+        {description.paragraphs.map(paragraph=><ConditionText {paragraph} />)}
         <p class="atlas-crop-uses"><strong>主な用途</strong>{description.uses}</p>
         <p class="atlas-inline-sources">地理・用途：{description.sources.map((sourceId,sourceIndex)=><Fragment>{sourceIndex>0?' ／ ':''}<a href={`#${sourceId}`}>{sources.find(source=>source.id===sourceId)?.publisher}</a></Fragment>)}</p>
       </div>
+      <div class="atlas-crop-data">
+        <CropSupplyUse cropId={id} />
       <div class="atlas-crop-charts">
         <figure class="atlas-export-chart">
-          <figcaption><strong>米国からの輸出先</strong><span>{exportData.year}年・数量</span></figcaption>
+          <figcaption><strong>米国からの輸出先</strong><span>参考：{exportData.year}暦年・数量</span></figcaption>
           <div class="atlas-donut-layout">
             <svg class="atlas-donut" viewBox="0 0 120 120" role="img" aria-label={`${names[id]}の輸出先構成`}>
               <circle cx="60" cy="60" r="43" pathLength="100" class="atlas-donut-base"></circle>
@@ -79,8 +83,8 @@ const productionUnit = (id:StatisticCropId) => id==='cotton'?'千480ポンド俵
           <p class="atlas-chart-note">{deltaText(production.trend)} 将来予測や統計的な傾向判定ではありません。</p>
           <a href={productionSource.url} target="_blank" rel="noopener noreferrer">出典：USDA FAS PSD</a>
         </figure>
-      </div>
+      </div></div>
     </article>;
   })}
-  <noscript><p class="atlas-chart-note">JavaScriptが無効な場合は、上の作物リンクから各節へ移動して読めます。</p></noscript>
+  <noscript><style>.atlas-stat-tabs{display:none}</style><p class="atlas-chart-note">各作物の本文と図を順に表示しています。</p></noscript>
 </section>

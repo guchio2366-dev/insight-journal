@@ -1,0 +1,10 @@
+---
+import type {CropParagraph} from '../../data/atlas/explorer';
+interface Props { paragraph:CropParagraph }
+const {paragraph}=Astro.props;
+---
+<p>{typeof paragraph==='string'?paragraph:paragraph.runs.map(run=>'pairId' in run?<span data-pair-id={run.pairId} class={`condition-${run.emphasisKind}`}>{run.text}</span>:run.text)}</p>
+<style>
+span{font-weight:650;box-decoration-break:clone;-webkit-box-decoration-break:clone;padding-bottom:1px}span.condition-temperature{border-bottom:2px solid #8d6436;background:#eee5d14d}span.condition-water{border-bottom:3px double #367083;background:#dbeef04d}span.condition-land{border-bottom:2px dashed #59784f;background:#e3ecd94d}
+@media(forced-colors:active){span{background:none!important;border-color:CanvasText!important}}
+</style>
