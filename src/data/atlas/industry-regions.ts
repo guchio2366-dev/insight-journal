@@ -1,5 +1,7 @@
 import type {IndustrySector} from './industry-catalog';
 export const industrySources={
+  shipbuilding:{title:'VEDP：ニューポートニューズの造船',url:'https://www.vedp.org/success-story/huntington-ingalls-industries-builds-virginia'},
+  railway:{title:'ニューヨーク州：ホーネルの鉄道車両工場拡張（2025年）',url:'https://www.governor.ny.gov/news/governor-hochul-marks-completion-75-million-expansion-alstoms-car-body-shell-manufacturing'},
   ohioMetals:{title:'BEA／セントルイス連銀：オハイオ州の一次金属付加価値',url:'https://fred.stlouisfed.org/series/OHPRIMETMANNGSP'},
   midwest:{title:'BLS：中西部製造業の変化（1990–2019年）',url:'https://www.bls.gov/opub/mlr/2021/article/exploring-midwest-manufacturing-employment-from-1990-to-2019.htm'},
   southeast:{title:'BLS：南東部製造業の変化（1990–2019年）',url:'https://www.bls.gov/opub/mlr/2021/article/manufacturing-employment-in-the-southeast-examining-the-last-30-years.htm'},
@@ -28,6 +30,8 @@ export interface IndustryRegion{
   selectionReason:string;employment:null;lq:null;nationalShare:null;overview:boolean;
 }
 const regions: Array<[string,string,string,IndustrySector,string,[number,number],string,string,keyof typeof industrySources,string,string,boolean?]>=[
+  ['newportnews-shipbuilding','newportnews','ニューポートニューズ','manufacturing','shipbuilding',[-76.43,36.98],'船舶の建造・整備','大型船の建造と専門技能の訓練が結びつく地域です。船舶・ボート製造全体の全国値と、この地域の主な製品の違いを分けて読みます。','shipbuilding','市・造船所周辺','2026',true],
+  ['hornell-railway','hornell','ホーネル','manufacturing','railway',[-77.66,42.33],'鉄道車両・車体の製造','ニューヨーク州は2025年に車体製造・試験施設の拡張完了を公表しました。鉄道会社による輸送ではなく、車両をつくる生産拠点の例です。','railway','市・工場周辺','2025',true],
   ['michigan-auto','michigan','ミシガン州','manufacturing','auto',[-85,43.5],'生産・部品供給','中西部の自動車・部品生産を読む地域です。長年の供給網と技能の蓄積が重要で、工場所在地と企業本社を同じ意味には扱いません。','midwest','州','1990–2019',true],
   ['kentucky-auto','kentucky','ケンタッキー州','manufacturing','auto',[-85.4,37.7],'車両・部品生産','BLSは輸送機器への特化と自動車工場への投資を確認しています。部品調達、人材、投資支援が組み合わさった立地です。','southeast','州','1990–2019'],
   ['alabama-auto','alabama','アラバマ州','manufacturing','auto',[-86.8,32.8],'自動車生産','海外自動車メーカーの工場立地が輸送機器生産の拡大につながりました。南部のすべての製造業が同じように伸びたわけではありません。','southeast','州','1990–2019',true],

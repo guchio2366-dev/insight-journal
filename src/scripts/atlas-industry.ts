@@ -1,7 +1,9 @@
 import {groupIndustryMarkers} from '../lib/atlas-industry-markers';
-import {industrySectors,sectorLabel,subsectorLabel,type IndustrySector} from '../data/atlas/industry-catalog';
+import {industrySectors,industrySymbol,sectorLabel,subsectorLabel,type IndustrySector} from '../data/atlas/industry-catalog';
 import {readIndustryState,writeIndustryState,type IndustryState} from '../lib/atlas-industry-state';
 import type {IndustryRegion} from '../data/atlas/industry-regions';
+
+import {industryRegionalComparison,regionalEconomySource,economicCircleRadius} from '../data/atlas/industry-regional-economy';
 
 interface Hooks{active:()=>boolean;project:()=>((p:[number,number])=>{x:number;y:number})|null;changed:(push:boolean)=>void;hide:()=>void;show:(region:IndustryRegion)=>void;agriculture:()=>void}
 export function createIndustryController(root:HTMLElement,regions:IndustryRegion[],sources:Record<string,{title:string;url:string}>,hooks:Hooks){
@@ -19,13 +21,17 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
     const merc=(lat:number)=>Math.log(Math.tan(Math.PI/4+lat*Math.PI/360));
     return (p:[number,number])=>({x:left+(p[0]+128)/64*w,y:top+(merc(52)-merc(p[1]))/(merc(52)-merc(22))*h});
   };
+  const comparison=()=>industryRegionalComparison(regions,state.sector,state.subsector);
+  const money=(value:number)=>(value/1e6).toLocaleString('ja-JP',{maximumFractionDigits:2});
   function renderMarkers(){
     markers.hidden=!hooks.active();if(!hooks.active())return;
     const project=projection(),all=visible(),places=new Map<string,IndustryRegion[]>();
     for(const r of all){if(!places.has(r.placeId))places.set(r.placeId,[]);places.get(r.placeId)!.push(r);}
     const projected=[...places.values()].filter(rs=>state.sector!=='all'||rs.some(r=>r.overview)).map(rs=>({...project(rs[0].coordinates),regions:rs})).filter(p=>p.x>=20&&p.y>=24&&p.x<=frame.clientWidth-20&&p.y<=frame.clientHeight-40);
-    const groups=groupIndustryMarkers(projected,frame.clientWidth),width=frame.clientWidth<650?92:120;
-    const nextSignature=groups.map(g=>g.regions.map(r=>r.id).join(',')).join('|');
+    const economic=comparison();
+    // Quantitative circles retain their own location and scale, even when labels overlap.
+    const groups=economic?projected:groupIndustryMarkers(projected,frame.clientWidth),width=frame.clientWidth<650?92:120;
+    const nextSignature=`${state.sector}:${state.subsector}:${economic?.max??'fixed'}:`+groups.map(g=>g.regions.map(r=>r.id).join(',')).join('|');
     if(nextSignature!==signature){
       const focused=(document.activeElement as HTMLElement)?.dataset.industryMarker;
       markers.replaceChildren();signature=nextSignature;
@@ -33,9 +39,19 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
         const button=document.createElement('button');button.type='button';button.className='industry-marker';button.dataset.industryMarker=group.regions[0].id;
         const names=[...new Set(group.regions.map(r=>r.name))],sector=industrySectors.find(s=>s.id===group.regions[0].sector)!;
         button.style.setProperty('--industry-color',sector.color);
-        const dot=document.createElement('i');dot.textContent=group.regions.length>1?String(group.regions.length):sector.symbol;dot.setAttribute('aria-hidden','true');
-        const label=document.createElement('span');label.textContent=names.length>1?`${names[0]} ほか`:names[0];
-        button.append(dot,label);button.setAttribute('aria-label',`${names.join('・')}：${group.regions.length}分野の地域説明`);
+        const point=economic?.points.find(p=>p.regionIds.includes(group.regions[0].id));
+        const dot=document.createElement('i');
+        const fields=new Set(group.regions.map(r=>`${r.sector}:${r.subsector}`));
+        dot.textContent=fields.size>1?'複':industrySymbol(group.regions[0].sector,group.regions[0].subsector);dot.setAttribute('aria-hidden','true');
+        if(point){
+          button.classList.add('is-economic');button.classList.toggle('is-small-value',point.radius<10);
+          button.style.setProperty('--economic-radius',`${point.radius}px`);button.dataset.economicValue=String(point.value);button.dataset.economicRank=String(point.rank);button.dataset.economicMetro=point.id;
+          const circle=document.createElement('em');circle.className='industry-economic-circle';circle.setAttribute('aria-hidden','true');circle.style.width=circle.style.height=`${2*point.radius}px`;button.append(circle);
+        }else if(economic)button.classList.add('is-unmeasured');
+        const label=document.createElement('span');label.textContent=point?point.name:(names.length>1?`${names[0]} ほか`:names[0]);
+        button.append(dot,label);
+        if(group.regions.length>1){const count=document.createElement('b');count.className='industry-marker-count';count.textContent=String(group.regions.length);count.setAttribute('aria-hidden','true');button.append(count);}
+        button.setAttribute('aria-label',point?`${point.name}：${economic!.year}年 ${economic!.label}の付加価値 ${money(point.value)} 十億米ドル、比較対象${economic!.total}都市圏中${point.rank}位`:`${names.join('・')}：${group.regions.length}分野の地域説明${economic?'、比較可能な数値なし':''}`);
         button.addEventListener('click',()=>group.regions.length>1?showCandidates(group.regions):selectRegion(group.regions[0].id));markers.append(button);
       }
       if(focused)markers.querySelector<HTMLButtonElement>(`[data-industry-marker="${focused}"]`)?.focus({preventScroll:true});
@@ -51,7 +67,25 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
     const holder=q('[data-selection-candidates]');holder.replaceChildren();holder.hidden=false;
     for(const region of candidates){const button=document.createElement('button');button.type='button';button.textContent=`${region.name}：${subsectorLabel(region.sector,region.subsector)}`;button.addEventListener('click',()=>{state={...state,sector:region.sector,subsector:region.subsector,industryRegion:region.id};render();showRegion(region);hooks.changed(true);});holder.append(button);}
   }
-  function showRegion(region:IndustryRegion){hooks.show(region);sourceLink(region);}
+  function showRegion(region:IndustryRegion){
+    hooks.show(region);sourceLink(region);
+    const economic=comparison();if(!economic)return;
+    const point=economic.points.find(p=>p.regionIds.includes(region.id));
+    const box=document.createElement('p');box.className='industry-economic-value';
+    box.textContent=point?`${point.name} ／ ${economic.label}の付加価値：${money(point.value)} 十億米ドル（${economic.year}年）。比較対象${economic.total}都市圏中${point.rank}位。公的統計から集計。`:'同じ条件で比較できる都市圏値がないため、規模の比較から除いています。';
+    if(point){const link=document.createElement('a');link.href=regionalEconomySource;link.textContent=' BEA郡別GDP';box.append(link);}
+    q('[data-selection-candidates]').append(box);
+  }
+  function renderLegend(){
+    const economic=comparison(),holder=q('[data-industry-economic-legend]');holder.replaceChildren();holder.hidden=!economic;
+    q('[data-industry-size-note]').hidden=!!economic;
+    if(!economic)return;
+    const title=document.createElement('p');title.textContent=`円の面積＝${economic.label}の付加価値（${economic.year}年・名目）。同じ分野の比較対象${economic.total}都市圏内。`;
+    const key=document.createElement('div');key.className='industry-size-key';
+    for(const share of [.25,1]){const value=economic.max*share,item=document.createElement('span'),circle=document.createElement('i');circle.style.width=circle.style.height=`${economicCircleRadius(value,economic.max)*2}px`;circle.setAttribute('aria-hidden','true');item.append(circle,document.createTextNode(`${money(value)} 十億米ドル`));key.append(item);}
+    const note=document.createElement('p');note.textContent='公的統計から集計。四角い記号は比較可能な数値なし。全米順位ではありません。円の縮尺は地図を動かしても変わりません。';
+    holder.append(title,key,note);
+  }
   function selectRegion(id:string,push=true){const region=visible().find(r=>r.id===id);if(!region)return;state.industryRegion=id;showRegion(region);renderMarkers();if(push)hooks.changed(true);}
   function setScope(sector:IndustrySector,subsector='all',push=true,insight:string|null=null){
     state=readIndustryState(writeIndustryState(new URL(location.href),{sector,subsector,industryRegion:null,industryInsight:insight}),regions);hooks.hide();render();if(push)hooks.changed(true);
@@ -70,7 +104,7 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
     const selected=visible();root.querySelectorAll<HTMLElement>('[data-industry-region-option]').forEach(option=>option.hidden=!selected.some(r=>r.id===option.dataset.industryRegionOption));
     q('[data-industry-empty]').hidden=selected.length>0;
     if(hooks.active())q('[data-map-panel]').setAttribute('aria-labelledby',`industry-sector-${state.sector}`);
-    if(hooks.active())q('[data-layer-caption]').textContent='産業の代表地域 · 対象年は地域ごとに表示';renderMarkers();
+    if(hooks.active())q('[data-layer-caption]').textContent=comparison()?'都市圏の付加価値 · 2024年':'産業の代表地域 · 対象年は地域ごとに表示';renderLegend();renderMarkers();
   }
   function wireTabs(selector:string,action:(button:HTMLElement)=>void){
     root.querySelectorAll<HTMLElement>(selector).forEach(button=>{

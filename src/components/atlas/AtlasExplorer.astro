@@ -99,7 +99,9 @@ const payload = JSON.stringify({ initialField, initialMode, agricultureRelations
         <div data-agriculture-relations-host hidden={initialField!=='agriculture'}><AgricultureRelations /></div>
         <div class="industry-key" data-industry-key hidden={initialField!=='industry'}>
           <p>{industrySectors.filter(s=>s.id!=='all').map(s=><span><i style={`--industry-color:${s.color}`}>{s.symbol}</i>{s.label}</span>)}</p>
-          <p>記号は代表地域。大きさ・個数は生産量や雇用数を表しません。</p>
+          <p data-industry-size-note>記号は代表地域。同じ条件で数値を比べられる分野のみ、円の面積で経済規模を示します。この表示では同サイズです。</p>
+          <p>サービスの記号：金＝金融、情＝情報、専＝専門、商＝商業・物流、観＝宿泊・飲食等、医＝医療・教育、他＝その他。複＝複数分野。</p>
+          <div class="industry-economic-legend" data-industry-economic-legend hidden></div>
           <p data-industry-empty hidden>この分野の地域例は未登録です。全国の構成と下の詳説を確認できます。</p>
           <details><summary>地域一覧から選ぶ</summary><div class="industry-region-list">{industryRegions.map(r=><button type="button" data-industry-region-option={r.id}>{r.name}<small>{subsectorLabel(r.sector,r.subsector)}</small></button>)}</div></details>
           <noscript><p>業態の切替と地図の地域表示にはJavaScriptが必要です。全産業の統計とインサイトはこのまま読めます。</p></noscript>

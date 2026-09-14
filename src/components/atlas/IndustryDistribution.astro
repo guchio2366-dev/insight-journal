@@ -1,0 +1,22 @@
+---
+import type {IndustryDistribution} from '../../data/atlas/industry-detail-statistics';
+import {industryDistributionRows} from '../../lib/atlas-industry-charts';
+interface Props {distribution:IndustryDistribution;world?:boolean}
+const {distribution:d,world=false}=Astro.props;
+const rows=industryDistributionRows(d.rows,d.total,world?'United States':undefined);
+const palette=['#355f75','#71894c','#a76c43','#8b7297','#b49b46','#557d73','#c4c6bf'];
+const color=(id:string,index:number)=>id==='other'?'#c4c6bf':id==='United States'?'#355f75':palette[world?1+rows.slice(0,index).filter(r=>r.id!=='United States').length%5:index%6];
+const format=(v:number)=>v.toLocaleString('ja-JP',{maximumFractionDigits:1});
+const us=d.rows.find(r=>r.id==='United States');
+---
+<figure class="industry-distribution" data-industry-distribution>
+ <figcaption><h3>{d.title}</h3><p>{d.year}年 · {d.unit}</p><p>{d.scope}</p></figcaption>
+ <div class="industry-donut-body"><svg viewBox="0 0 144 144" role="img" aria-label={`${d.title}。総数${format(d.total)} ${d.unit}。国名と割合は隣の一覧。`}>
+  {rows.map((r,i)=><circle cx="72" cy="72" r="52" fill="none" stroke={color(r.id,i)} stroke-width="15" pathLength="100" stroke-dasharray={`${r.share} ${100-r.share}`} stroke-dashoffset={-r.offset} transform="rotate(-90 72 72)"/>)}
+  <text x="72" y="57" text-anchor="middle" class="industry-donut-caption">{world?'世界総生産':'総輸出額'}</text><text x="72" y="79" text-anchor="middle" class="industry-donut-value">{format(d.total)}</text><text x="72" y="99" text-anchor="middle" class="industry-donut-caption">{d.unit}</text>
+ </svg><ul class="industry-donut-labels">{rows.map((r,i)=><li class:list={{'is-us':r.id==='United States'}}><i style={`background:${color(r.id,i)}`} aria-hidden="true"/><span><span>{r.name}</span><strong>{r.share.toFixed(1)}%</strong></span></li>)}</ul></div>
+ {world&&us&&<p class="industry-series-latest">米国 <strong>{format(us.value)}</strong> {d.unit} · {(100*us.value/d.total).toFixed(1)}%</p>}
+ <p class="industry-stat-note">{d.note}</p><p class="industry-stat-source"><a href={d.url}>{d.source}</a></p>
+ <slot/>
+ <details class="industry-stat-values"><summary>国別の数値を見る</summary><table><caption>{d.scope} · {d.year}年 · {d.unit}</caption><thead><tr><th scope="col">国・地域</th><th scope="col">値</th><th scope="col">割合</th></tr></thead><tbody>{rows.map(r=><tr><th scope="row">{r.name}</th><td>{r.value.toLocaleString('ja-JP',{maximumFractionDigits:6})}</td><td>{r.share.toFixed(1)}%</td></tr>)}<tr><th scope="row">総数</th><td>{d.total.toLocaleString('ja-JP',{maximumFractionDigits:6})}</td><td>100%</td></tr></tbody></table></details>
+</figure>
