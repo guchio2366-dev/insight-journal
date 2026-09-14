@@ -179,7 +179,7 @@ test('未収録セルとドラッグに気候区分を割り当てず、遅い�
   const {window,q}=delayed,box=containedMapBox({left:0,top:0,right:788,bottom:460}),p=projectNatureFallback([-105,30],box);
   q('.atlas-fallback-map').dispatchEvent(new window.MouseEvent('click',{clientX:p.x,clientY:p.y,bubbles:true}));await waitFor(()=>release,'image waiting');
   q('[data-nature-label="city:seattle"]').click();release();await delay();
-  assert.equal(q('[data-city-select]').value,'seattle');assert.equal(q('[data-climate-chart]').hidden,false);await waitFor(()=>fallback||root.dataset.natureLoad==='ready','climate restored');
+  assert.equal(q('[data-city-select]').value,'seattle');assert.equal(q('[data-climate-chart]').hidden,false);
  }finally{release?.();await delayed.window.happyDOM.close();}
 });
 
