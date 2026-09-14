@@ -16,10 +16,10 @@ function verify(inputs,placed,bounds,obstacles){
 }
 test('四つの端末幅に相当する全国表示で12都市・9地形を間引かず、名前同士・操作と重ねない',()=>{
  // The page has a reading column at desktop widths; test actual map-width ranges.
- for(const width of [358,788,742,820])for(const fallback of [false,true])for(const entries of [cityInputs,landforms]){
-  const height=width/1.5,bounds=fallback?containedMapBox({left:0,top:0,right:width,bottom:height-40}):{left:0,top:0,right:width,bottom:height};
+ for(const [width,aspect,labelHeight] of [[358,1.5,24],[788,1.5,24],[742,1.65,44],[820,1.65,44]])for(const fallback of [false,true])for(const entries of [cityInputs,landforms]){
+  const height=width/aspect,bounds=fallback?containedMapBox({left:0,top:0,right:width,bottom:height-40}):{left:0,top:0,right:width,bottom:height};
   const obstacles=fallback?[]:[{left:width-57,top:10,right:width-9,bottom:152},{left:9,top:height-28,right:290,bottom:height-6}];
-  const inputs=entries.map(([id,coordinate])=>({id,anchor:projectNatureFallback(coordinate,bounds),width:[...id].reduce((n,c)=>n+(/[A-Za-z.]/.test(c)?7:12),14),height:width>=742&&!fallback?44:24}));
+  const inputs=entries.map(([id,coordinate])=>({id,anchor:projectNatureFallback(coordinate,bounds),width:[...id].reduce((n,c)=>n+(/[A-Za-z.]/.test(c)?7:12),14),height:labelHeight}));
   verify(inputs,layoutNatureLabels(inputs,bounds,obstacles),bounds,obstacles);
  }
 });
