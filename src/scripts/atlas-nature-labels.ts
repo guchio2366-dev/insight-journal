@@ -1,12 +1,12 @@
 import {containedMapBox,layoutNatureLabels,leaderEnd,projectNatureFallback,type Box,type Point} from '../lib/atlas-nature-labels';
 
-type Entry={id:string;name:string;coordinate:[number,number];mode:'climate'|'landform'|'water'};
-type Callbacks={active:()=>boolean;mode:()=>string;project:()=>((p:[number,number])=>Point)|null;select:(entry:Entry,trigger:HTMLButtonElement)=>void;placed:()=>void};
+type Entry={id:string;name:string;coordinate:[number,number];mode:'climate'|'landform'|'water'|'population'};
+type Callbacks={active:()=>boolean;mode:()=>string;project:()=>((p:[number,number])=>Point)|null;select:(entry:Entry,trigger:HTMLButtonElement)=>void;placed:()=>void;holder?:HTMLElement;attribute?:string;controls?:string;fallbackBox?:(imageBox:Box)=>Box;fallbackProject?:(coordinate:readonly number[],box:Box)=>Point};
 
-/** Creates a fixed set of 40 buttons once; only placement and state change. */
+/** Creates a fixed set of buttons once; only placement and state change. */
 export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Callbacks){
   const frame=root.querySelector<HTMLElement>('[data-map-frame]')!;
-  const holder=root.querySelector<HTMLElement>('[data-nature-labels]')!;
+  const holder=callbacks.holder??root.querySelector<HTMLElement>('[data-nature-labels]')!;
   const image=root.querySelector<HTMLImageElement>('[data-fallback-image]')!;
   const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');
   svg.setAttribute('aria-hidden','true');svg.classList.add('atlas-nature-leaders');holder.appendChild(svg);
@@ -14,7 +14,7 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
     const line=document.createElementNS(ns,'line'),dot=document.createElementNS(ns,'circle');
     dot.setAttribute('r','3');svg.append(line,dot);
     const button=document.createElement('button');button.type='button';button.className='atlas-nature-label';button.textContent=entry.name;
-    button.dataset.natureLabel=entry.id;button.dataset.labelMode=entry.mode;button.setAttribute('aria-pressed','false');button.setAttribute('aria-controls',entry.mode==='climate'?'city-climate-chart':'nature-feature-detail');button.hidden=true;
+    button.setAttribute(callbacks.attribute??'data-nature-label',entry.id);button.dataset.labelMode=entry.mode;button.setAttribute('aria-pressed','false');button.setAttribute('aria-controls',callbacks.controls??(entry.mode==='climate'?'city-climate-chart':'nature-feature-detail'));button.hidden=true;
     let start:Point|null=null,dragged=false;
     button.addEventListener('pointerdown',event=>{start={x:event.clientX,y:event.clientY};dragged=false;event.stopPropagation();});
     button.addEventListener('pointermove',event=>{if(start&&Math.hypot(event.clientX-start.x,event.clientY-start.y)>6)dragged=true;});
@@ -32,16 +32,16 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
     const b=frame.getBoundingClientRect(),r=element.getBoundingClientRect();
     return {left:r.left-b.left,top:r.top-b.top,right:r.right-b.left,bottom:r.bottom-b.top};
   }
-  function fallbackBox():Box {return containedMapBox(localBox(image));}
+  function fallbackBox():Box {return callbacks.fallbackBox?callbacks.fallbackBox(localBox(image)):containedMapBox(localBox(image));}
   let queued=0;
   function render(){
-    queued=0;holder.hidden=!callbacks.active()||!['climate','landform','water'].includes(callbacks.mode());
+    queued=0;holder.hidden=!callbacks.active()||!['climate','landform','water','population'].includes(callbacks.mode());
     if(holder.hidden)return;
     const project=callbacks.project(),bounds:Box=project?{left:0,top:0,right:frame.clientWidth,bottom:frame.clientHeight}:fallbackBox();
     if(bounds.right<=bounds.left||bounds.bottom<=bounds.top)return;
     const obstacles=[...root.querySelectorAll<HTMLElement>('.atlas-map-tools:not([hidden]),[data-layer-caption]')].map(localBox).filter(r=>r.right>r.left&&r.bottom>r.top);
     const inputs=nodes.filter(({entry})=>entry.mode===callbacks.mode()).map(({entry,button})=>{
-      button.hidden=false;const anchor=project?project(entry.coordinate):projectNatureFallback(entry.coordinate,bounds);
+      button.hidden=false;const anchor=project?project(entry.coordinate):(callbacks.fallbackProject??projectNatureFallback)(entry.coordinate,bounds);
       return {id:entry.id,anchor,width:button.offsetWidth||entry.name.length*12+14,height:button.offsetHeight||24};
     });
     const layoutBounds=callbacks.mode()==='water'?{left:0,top:0,right:frame.clientWidth,bottom:frame.clientHeight-40}:bounds;

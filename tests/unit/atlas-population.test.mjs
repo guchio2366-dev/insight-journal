@@ -35,3 +35,26 @@ test('an evicted request failure does not discard a newer request with the same 
  const original=globalThis.fetch;let rejectOld,calls=0;globalThis.fetch=async url=>{if(String(url).includes('metro-35620')){calls++;if(calls===1)return new Promise((_,reject)=>rejectOld=reject);}return new Response(JSON.stringify({version:1,rows:[]}));};
  try{const loader=createPopulationLoader('/');const old=loader.get('metro-35620');const rejected=assert.rejects(old);await loader.get('metro-31080');await loader.get('metro-19100');await loader.get('metro-35620');rejectOld(new Error('late failure'));await rejected;await loader.get('metro-35620');assert.equal(calls,2);}finally{globalThis.fetch=original;}
 });
+
+
+test('city URL state uses the exact climate-city catalog and rejects unknown keys',async()=>{
+ const {populationCityProfiles}=await import('../../src/data/atlas/population-reading.ts');
+ const cities=JSON.parse(await readFile('public/assets/atlas/nature-v1/climate-cities.json','utf8'));
+ assert.deepEqual(Object.keys(populationCityProfiles).sort(),cities.map(c=>c.id).sort());
+ for(const city of cities){const url=new URL('https://example.org/?city=seattle&popCity='+city.id);const state=readPopulationState(url);assert.equal(state.city,city.id);assert.equal(writePopulationState(url,state).searchParams.get('city'),'seattle');assert.ok(populationCityProfiles[city.id].jobs);}
+ for(const id of ['bad','__proto__','constructor'])assert.equal(readPopulationState(new URL('https://example.org/?popCity='+id)).city,'');
+});
+
+test('composition preserves 100% geometry without promoting missing religious groups to zero',async()=>{
+ const {populationComposition}=await import('../../src/lib/atlas-population-chart.ts');
+ const raw=JSON.parse(await readFile('data/atlas/population-religion-reviewed.json','utf8'));
+ const items=Object.entries(raw.national).map(([label,n])=>({label,value:n.status==='value'?n.value:null,color:'#123456'}));
+ const chart=populationComposition(items);assert.ok(Math.abs(chart.known-94.9)<1e-8);assert.ok(Math.abs(chart.remainder-5.1)<1e-8);assert.equal(chart.slices.find(s=>s.label==='protestant').value,40);assert.ok(Math.abs(chart.slices.reduce((n,s)=>n+s.value,0)-100)<1e-8);assert.ok(!chart.slices.some(s=>s.label==='otherChristian'));assert.equal(items.find(s=>s.label==='otherChristian').value,null);
+ assert.equal(populationComposition([{label:'invalid',value:101,color:'#fff'}]),null);
+ const full=populationComposition([{label:'a',value:60,color:'#fff'},{label:'b',value:40,color:'#000'}]);assert.equal(full.remainder,0);assert.equal(full.slices[1].offset,60);
+});
+
+test('fallback city coordinates share the raster and religion SVG extents',async()=>{
+ const {populationFallbackExtent,populationFallbackBox,projectPopulationFallback}=await import('../../src/lib/atlas-population-projection.ts');
+ for(const padding of [0,.1]){const extent=populationFallbackExtent(undefined,padding),box=populationFallbackBox({left:0,top:0,right:1200,bottom:720},extent);const ny=projectPopulationFallback([-74,40.7],box,extent);assert.ok(ny.x>900&&ny.x<1100);assert.ok(ny.y>200&&ny.y<400);const center=projectPopulationFallback([-95.5,24],box,extent);assert.ok(Math.abs(center.x-600)<1e-8);assert.ok(box.bottom<=720&&box.top>=0);}
+});
