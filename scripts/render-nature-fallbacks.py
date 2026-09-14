@@ -1,5 +1,7 @@
 """Render the four fallback maps from the same data/projection as MapLibre."""
 import json
+import argparse
+import hashlib
 import os
 import gzip
 import math
@@ -36,9 +38,12 @@ def label(draw,text,coordinate,color='#3a5054',size=26):
     draw.text((x,y),text,font=font,fill=color,anchor='mm',stroke_width=3,stroke_fill='#fcfaf2')
 
 def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--interactive-landform-only',action='store_true',help='Render only the existing landform data without burned-in names for DOM labels')
+    args=parser.parse_args()
     overlays=json.loads((OUT/'overlays.geojson').read_text())['features']
-    contour=json.loads(gzip.decompress((OUT/'contours.geojson.gz').read_bytes()))['features']
-    for mode in ['climate','water','landform','contour']:
+    contour=[] if args.interactive_landform_only else json.loads(gzip.decompress((OUT/'contours.geojson.gz').read_bytes()))['features']
+    for mode in (['landform'] if args.interactive_landform_only else ['climate','water','landform','contour']):
         im=Image.new('RGBA',(WIDTH,HEIGHT),'#e4eff0');draw=ImageDraw.Draw(im)
         for f in BASE['features']:
             if f['properties']['kind']=='land':geometry(draw,f['geometry'],'#faf9f3','#809297',2)
@@ -84,9 +89,9 @@ def main():
         label(draw,'〈寒流〉 ↓',[-119.0,25.5],'#186c8c',26)
         label(draw,'メキシコ湾流〈暖流〉 ↗',[-76,27],'#ac4434',28)
         label(draw,'沿岸湧昇',[-124.2,39.7],'#247d9d',23)
-        if mode in ['landform','contour']:
+        if mode in ['landform','contour'] and not args.interactive_landform_only:
             for text,p in [('ロッキー山脈',[-110,44]),('アパラチア山脈',[-81,37]),('グレートプレーンズ',[-101,40])]:label(draw,text,p,size=30)
-        if mode=='landform':
+        if mode=='landform' and not args.interactive_landform_only:
             for text,p in [('シエラネバダ山脈',[-118.5,37]),('カスケード山脈',[-120.5,46]),('中央平原',[-91,42]),('コロラド高原',[-110.5,36]),('グレートベースン',[-116.5,41]),('海岸平野',[-84,32])]:label(draw,text,p,size=23)
         if mode=='contour':
             label(draw,'最高峰エルバート 約4,400 m',[-110,42.4],size=24)
@@ -96,7 +101,14 @@ def main():
         if mode=='climate':
             for city in json.loads((OUT/'climate-cities.json').read_text()):
                 x,y=project([city['longitude'],city['latitude']]);draw.ellipse((x-6,y-6,x+6,y+6),fill='#fff',outline='#263f4c',width=3)
-        im.convert('RGB').save(OUT/f'{mode}-fallback.webp',quality=90,method=6)
-        print(mode,flush=True)
+        name='landform-interactive.webp' if args.interactive_landform_only else f'{mode}-fallback.webp'
+        im.convert('RGB').save(OUT/name,quality=90,method=6)
+        if args.interactive_landform_only:
+            manifest=json.loads((OUT/'manifest.json').read_text())
+            data=(OUT/name).read_bytes()
+            manifest['files'][name]={'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()}
+            manifest['fallbacks']['interactiveLandform']='landform-interactive.webp: same published geometry and projection; nine names are accessible DOM labels; original labelled image retained for no-JavaScript and full-size viewing'
+            (OUT/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,separators=(',',':')))
+        print(name,flush=True)
 
 if __name__=='__main__':main()
