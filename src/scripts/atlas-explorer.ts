@@ -356,7 +356,7 @@ export async function startAtlas() {
       if(mode==='climate')await loadClimatePixels();
       if(mode==='water')data=await natureLoader.json('aquifers.geojson');
       if(mode==='contour')data=await natureLoader.contours();
-      if(generation!==natureGeneration||field!=='natural'||natureMode!==mode||!map)return;
+      if(!root.isConnected||generation!==natureGeneration||field!=='natural'||natureMode!==mode||!map)return;
       if(data)(map.getSource(mode==='water'?'aquifers':'contours') as GeoJSONSource).setData(data);
       if(mode==='contour'){
         map.setFilter('contours-index',['==',['%',['get','elevationM'],1000],0]);
@@ -369,7 +369,7 @@ export async function startAtlas() {
       appliedNatureKeys.add(key);pendingNatureKey='';showNatureReady();
       const previousView=view;suppressNextMove=true;map.resize();view=previousView;suppressNextMove=false;renderLabels();placeSelectionCard();updateFocusButton();
     }catch(error){
-      if(generation!==natureGeneration||field!=='natural'||natureMode!==mode)return;
+      if(!root.isConnected||generation!==natureGeneration||field!=='natural'||natureMode!==mode)return;
       pendingNatureKey='';root.dataset.natureLoad='error';root.dataset.renderState='fallback';status.textContent='この表示のデータを読み込めませんでした（代替図）。';el('[data-retry-nature]').hidden=false;moveSelectionBelow();
       console.error('Natural environment data',error);
     }

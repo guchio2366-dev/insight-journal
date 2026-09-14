@@ -36,7 +36,7 @@ async function setup(query='',options={}){
  window.fetch=async (url)=>{requests.push(String(url));return new Response(await readFile('public/'+String(url).replace(/^.*?\/insight-journal\//,'')));};
  options.beforeStart?.(window);
  window.Response=Response;window.DecompressionStream=DecompressionStream;
- const entry=window.eval(bundle.outputFiles[0].text+"; NatureTest;");await entry.startAtlas();await delay();
+ const entry=window.eval(bundle.outputFiles[0].text+"; NatureTest;");await entry.startAtlas();await waitFor(()=>options.fallback||window.document.querySelector('[data-atlas-explorer]').dataset.natureLoad==='ready','initial data ready');await delay();
  return {window,requests,root:window.document.querySelector('[data-atlas-explorer]'),q:s=>window.document.querySelector(s)};
 }
 
