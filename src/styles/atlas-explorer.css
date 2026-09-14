@@ -459,3 +459,6 @@
  .atlas-overview-row header{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
  .atlas-nature-label[data-label-mode=water]{max-width:140px;min-height:28px}
 }
+
+/* Keep the map caption clear of the fallback status and its wrapped text. */
+.atlas-explorer[data-field=natural] .atlas-fallback:not([hidden])~.atlas-layer-caption{bottom:52px}

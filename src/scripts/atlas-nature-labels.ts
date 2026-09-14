@@ -22,20 +22,24 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
     button.addEventListener('click',event=>{event.stopPropagation();if(event.detail!==0&&dragged)return;start=null;callbacks.select(entry,button);});
     holder.appendChild(button);return {entry,button,line,dot};
   });
-  function fallbackBox():Box {
-    const b=frame.getBoundingClientRect(),r=image.getBoundingClientRect();
-    return containedMapBox({left:r.left-b.left,top:r.top-b.top,right:r.right-b.left,bottom:r.bottom-b.top});
+  function localBox(element:HTMLElement):Box {
+    // Layout coordinates stay relative to the map during iframe/page scrolling.
+    if(element.clientWidth>0&&element.clientHeight>0){
+      let left=0,top=0,node:HTMLElement|null=element;
+      while(node&&node!==frame){left+=node.offsetLeft;top+=node.offsetTop;node=node.offsetParent as HTMLElement|null;}
+      return {left,top,right:left+(element.offsetWidth||element.clientWidth),bottom:top+(element.offsetHeight||element.clientHeight)};
+    }
+    const b=frame.getBoundingClientRect(),r=element.getBoundingClientRect();
+    return {left:r.left-b.left,top:r.top-b.top,right:r.right-b.left,bottom:r.bottom-b.top};
   }
+  function fallbackBox():Box {return containedMapBox(localBox(image));}
   let queued=0;
   function render(){
     queued=0;holder.hidden=!callbacks.active()||!['climate','landform','water'].includes(callbacks.mode());
     if(holder.hidden)return;
     const project=callbacks.project(),bounds:Box=project?{left:0,top:0,right:frame.clientWidth,bottom:frame.clientHeight}:fallbackBox();
     if(bounds.right<=bounds.left||bounds.bottom<=bounds.top)return;
-    const frameBox=frame.getBoundingClientRect();
-    const obstacles=[...root.querySelectorAll<HTMLElement>('.atlas-map-tools:not([hidden]),[data-layer-caption]')].map(node=>{
-      const r=node.getBoundingClientRect();return {left:r.left-frameBox.left,top:r.top-frameBox.top,right:r.right-frameBox.left,bottom:r.bottom-frameBox.top};
-    }).filter(r=>r.right>r.left&&r.bottom>r.top);
+    const obstacles=[...root.querySelectorAll<HTMLElement>('.atlas-map-tools:not([hidden]),[data-layer-caption]')].map(localBox).filter(r=>r.right>r.left&&r.bottom>r.top);
     const inputs=nodes.filter(({entry})=>entry.mode===callbacks.mode()).map(({entry,button})=>{
       button.hidden=false;const anchor=project?project(entry.coordinate):projectNatureFallback(entry.coordinate,bounds);
       return {id:entry.id,anchor,width:button.offsetWidth||entry.name.length*12+14,height:button.offsetHeight||24};
