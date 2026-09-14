@@ -1,11 +1,16 @@
 ---
 import type { ClimateCity } from '../../data/atlas/natural-environment';
 import { cityClimateReading, cityClimateCodes } from '../../data/atlas/city-climate-reading';
-import overview from '../../data/atlas/climate-overview.json';
+import { cityAgricultureUrl } from '../../lib/atlas-city-agriculture-link';
+import { withBase } from '../../lib/urls';
 interface Props { city:ClimateCity }
 const { city } = Astro.props;
 const reading=cityClimateReading[city.id], classification=city.koppenCode?cityClimateCodes[city.koppenCode]:null;
-const cropSource=overview.find(item=>item.name===reading.cropGroup)?.sources[0];
+const agricultureBase=withBase('/atlas/north-america/');
+const productHref=(product:Parameters<typeof cityAgricultureUrl>[3])=>{
+  const url=cityAgricultureUrl(new URL('https://example.com'),agricultureBase,city.id,product);
+  return url.pathname+url.search+url.hash;
+};
 const left=34,right=286,top=29,bottom=159;
 const x=(index:number)=>left+(right-left)*(index+.5)/12;
 const precipitationY=(value:number)=>bottom-value/350*(bottom-top);
@@ -32,7 +37,18 @@ const months=['1','2','3','4','5','6','7','8','9','10','11','12'];
     <h4>{classification?<><b>{city.koppenCode}</b> {classification.name}</>:'気候区分：データなし'}</h4>
     <p>{reading.body}</p>
     {classification&&<p class="atlas-city-code-meaning">{classification.meaning}</p>}
-    {classification&&reading.crop&&cropSource&&<p class="atlas-city-crop" data-city-crop hidden><strong>気候と作物</strong> {reading.crop} <a href={cropSource.url} target="_blank" rel="noopener noreferrer">出典</a></p>}
+    <div class="atlas-city-cause" data-city-cause>
+      <h5>{classification?'なぜこの気候になる？':'この季節変化の理由'}</h5>
+      <p>{reading.cause} <a class="atlas-city-reference" href={reading.causeSource.url} title={reading.causeSource.name} target="_blank" rel="noopener noreferrer">出典</a></p>
+    </div>
+    <details class="atlas-city-crop" data-city-crop open>
+      <summary>周辺の農業・畜産</summary>
+      <p class="atlas-city-region">{reading.agriculture.region}の生産例</p>
+      <p class="atlas-city-products">{reading.agriculture.products.map((item,index)=><>
+        {index>0&&'・'}{item.product?<a href={productHref(item.product)} data-city-agriculture-link={item.product} aria-label={`${item.name}の解説へ`}><strong>{item.name}</strong></a>:<strong>{item.name}</strong>}{item.examples&&<span>（<strong>{item.examples}</strong>）</span>}
+      </>)}</p>
+      <a class="atlas-city-reference" href={reading.agriculture.source.url} title={reading.agriculture.source.name} target="_blank" rel="noopener noreferrer">2022年農業センサス</a>
+    </details>
   </section>
   <p class="atlas-city-source">1991–2020 · <a href={city.sourceUrl}>NOAA</a> · <a href="#source-koppen">気候区分の出典</a></p>
   <details data-city-numbers><summary>月別の数値・観測地点</summary><p>{city.stationName} · {city.stationId} · 標高 {Math.round(city.elevationM).toLocaleString('ja-JP')} m · {city.latitude.toFixed(4)}°N / {Math.abs(city.longitude).toFixed(4)}°W</p><table><thead><tr><th>月</th><th>平均気温</th><th>降水量</th></tr></thead><tbody>{months.map((month,index)=><tr><th>{month}月</th><td>{city.temperatureC[index].toFixed(1)} ℃</td><td>{city.precipitationMm[index].toFixed(1)} mm</td></tr>)}</tbody></table></details>
