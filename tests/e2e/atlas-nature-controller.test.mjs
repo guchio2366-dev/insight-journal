@@ -51,7 +51,7 @@ test('都市→水資源→農業→気候で選択とカメラを保持し、�
   q('[data-nature-mode="water"]').click();await delay();assert.equal(q('[data-climate-chart]').hidden,true);assert.equal(q('[data-city-picker]').hidden,true);assert.match(q('[data-fallback-image]').alt,/水資源/);
   q('[data-field="agriculture"]').click();assert.equal(root.dataset.field,'agriculture');
   q('[data-field="natural"]').click();q('[data-nature-mode="climate"]').click();await delay();assert.equal(q('[data-city-select]').value,selected);assert.equal(q('[data-climate-chart]').hidden,false);assert.equal(window.__map.cameraChanges,moves);
-  q('[data-close-selection]').click();assert.equal(q('[data-selection]').hidden,true);assert.equal(new URL(window.location.href).searchParams.get('city'),null);
+  q('[data-clear-city]').click();assert.equal(q('[data-selection]').hidden,true);assert.equal(new URL(window.location.href).searchParams.get('city'),null);
  }finally{await window.happyDOM.close();}
 });
 
@@ -97,7 +97,7 @@ test('12都市名と点は同じ図を選択し、閉じる・Escapeで元のボ
    const id=button.dataset.natureLabel.slice(5);
    assert.equal(q('[data-city-panel="'+id+'"]').hidden,false);assert.equal(button.getAttribute('aria-pressed'),'true');
    assert.equal(new URL(window.location.href).searchParams.get('city'),id);
-   q('[data-close-selection]').focus();root.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
+   q('[data-clear-city]').focus();q('[data-clear-city]').dispatchEvent(new window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
    assert.equal(q('[data-selection]').hidden,true);assert.equal(window.document.activeElement,button);assert.equal(button.getAttribute('aria-pressed'),'false');
   }
   const config=JSON.parse(q('[data-explorer-config]').textContent);

@@ -14,7 +14,7 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
     const line=document.createElementNS(ns,'line'),dot=document.createElementNS(ns,'circle');
     dot.setAttribute('r','3');svg.append(line,dot);
     const button=document.createElement('button');button.type='button';button.className='atlas-nature-label';button.textContent=entry.name;
-    button.dataset.natureLabel=entry.id;button.dataset.labelMode=entry.mode;button.setAttribute('aria-pressed','false');button.setAttribute('aria-controls','atlas-selection');button.hidden=true;
+    button.dataset.natureLabel=entry.id;button.dataset.labelMode=entry.mode;button.setAttribute('aria-pressed','false');button.setAttribute('aria-controls',entry.mode==='climate'?'city-climate-chart':'atlas-selection');button.hidden=true;
     let start:Point|null=null,dragged=false;
     button.addEventListener('pointerdown',event=>{start={x:event.clientX,y:event.clientY};dragged=false;event.stopPropagation();});
     button.addEventListener('pointermove',event=>{if(start&&Math.hypot(event.clientX-start.x,event.clientY-start.y)>6)dragged=true;});
