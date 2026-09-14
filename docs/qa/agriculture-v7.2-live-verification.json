@@ -1,0 +1,2096 @@
+{
+  "commit": "1bb645fd5c34bd1feda7f30be87c02b5b01d18b0",
+  "browser": "Chrome CSS viewport; WebGL fallback; physical Safari not tested",
+  "cases": [
+    {
+      "bodyScroll": false,
+      "cards": [],
+      "circle": null,
+      "left": {
+        "bottom": 728,
+        "h": 602,
+        "w": 645,
+        "x": 16,
+        "y": 126
+      },
+      "overflow": false,
+      "overview": true,
+      "render": "fallback",
+      "right": {
+        "bottom": 0,
+        "h": 0,
+        "w": 0,
+        "x": 0,
+        "y": 0
+      },
+      "stats": false,
+      "title": "",
+      "view": "overview",
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "bodyScroll": true,
+      "cards": [
+        {
+          "bottom": 1226,
+          "h": 549,
+          "w": 318,
+          "x": 16,
+          "y": 677
+        },
+        {
+          "bottom": 1055,
+          "h": 378,
+          "w": 318,
+          "x": 346,
+          "y": 677
+        },
+        {
+          "bottom": 1232,
+          "h": 555,
+          "w": 318,
+          "x": 675,
+          "y": 677
+        }
+      ],
+      "circle": {
+        "bottom": 915,
+        "h": 132,
+        "w": 132,
+        "x": 359,
+        "y": 783
+      },
+      "left": {
+        "bottom": 617,
+        "h": 602,
+        "w": 645,
+        "x": 16,
+        "y": 15
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 617,
+        "h": 602,
+        "w": 318,
+        "x": 675,
+        "y": 15
+      },
+      "stats": true,
+      "title": "米",
+      "view": "product",
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "bodyScroll": true,
+      "cards": [
+        {
+          "bottom": 1234,
+          "h": 557,
+          "w": 318,
+          "x": 16,
+          "y": 677
+        },
+        {
+          "bottom": 1055,
+          "h": 378,
+          "w": 318,
+          "x": 346,
+          "y": 677
+        },
+        {
+          "bottom": 1186,
+          "h": 509,
+          "w": 318,
+          "x": 675,
+          "y": 677
+        }
+      ],
+      "circle": {
+        "bottom": 915,
+        "h": 132,
+        "w": 132,
+        "x": 359,
+        "y": 783
+      },
+      "left": {
+        "bottom": 617,
+        "h": 602,
+        "w": 645,
+        "x": 16,
+        "y": 15
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 617,
+        "h": 602,
+        "w": 318,
+        "x": 675,
+        "y": 15
+      },
+      "stats": true,
+      "title": "とうもろこし",
+      "view": "product",
+      "viewport": [
+        1024,
+        768
+      ],
+      "selected": "corn"
+    },
+    {
+      "bodyScroll": true,
+      "cards": [
+        {
+          "bottom": 1254,
+          "h": 577,
+          "w": 318,
+          "x": 16,
+          "y": 677
+        },
+        {
+          "bottom": 1026,
+          "h": 349,
+          "w": 318,
+          "x": 346,
+          "y": 677
+        },
+        {
+          "bottom": 1186,
+          "h": 509,
+          "w": 318,
+          "x": 675,
+          "y": 677
+        }
+      ],
+      "circle": {
+        "bottom": 886,
+        "h": 132,
+        "w": 132,
+        "x": 359,
+        "y": 754
+      },
+      "left": {
+        "bottom": 617,
+        "h": 602,
+        "w": 645,
+        "x": 16,
+        "y": 15
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 617,
+        "h": 602,
+        "w": 318,
+        "x": 675,
+        "y": 15
+      },
+      "stats": true,
+      "title": "大豆",
+      "view": "product",
+      "viewport": [
+        1024,
+        768
+      ],
+      "selected": "soybean"
+    },
+    {
+      "bodyScroll": true,
+      "cards": [
+        {
+          "bottom": 1226,
+          "h": 549,
+          "w": 318,
+          "x": 16,
+          "y": 677
+        },
+        {
+          "bottom": 1026,
+          "h": 349,
+          "w": 318,
+          "x": 346,
+          "y": 677
+        },
+        {
+          "bottom": 1186,
+          "h": 509,
+          "w": 318,
+          "x": 675,
+          "y": 677
+        }
+      ],
+      "circle": {
+        "bottom": 886,
+        "h": 132,
+        "w": 132,
+        "x": 359,
+        "y": 754
+      },
+      "left": {
+        "bottom": 617,
+        "h": 602,
+        "w": 645,
+        "x": 16,
+        "y": 15
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 617,
+        "h": 602,
+        "w": 318,
+        "x": 675,
+        "y": 15
+      },
+      "stats": true,
+      "title": "小麦",
+      "view": "product",
+      "viewport": [
+        1024,
+        768
+      ],
+      "selected": "wheat"
+    },
+    {
+      "bodyScroll": true,
+      "cards": [
+        {
+          "bottom": 1321,
+          "h": 644,
+          "w": 318,
+          "x": 16,
+          "y": 677
+        },
+        {
+          "bottom": 1047,
+          "h": 370,
+          "w": 318,
+          "x": 346,
+          "y": 677
+        },
+        {
+          "bottom": 1186,
+          "h": 509,
+          "w": 318,
+          "x": 675,
+          "y": 677
+        }
+      ],
+      "circle": {
+        "bottom": 886,
+        "h": 132,
+        "w": 132,
+        "x": 359,
+        "y": 754
+      },
+      "left": {
+        "bottom": 617,
+        "h": 602,
+        "w": 645,
+        "x": 16,
+        "y": 15
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 617,
+        "h": 602,
+        "w": 318,
+        "x": 675,
+        "y": 15
+      },
+      "stats": true,
+      "title": "綿花",
+      "view": "product",
+      "viewport": [
+        1024,
+        768
+      ],
+      "selected": "cotton"
+    },
+    {
+      "bodyScroll": true,
+      "cards": [
+        {
+          "bottom": 1226,
+          "h": 549,
+          "w": 318,
+          "x": 16,
+          "y": 677
+        },
+        {
+          "bottom": 1055,
+          "h": 378,
+          "w": 318,
+          "x": 346,
+          "y": 677
+        },
+        {
+          "bottom": 1232,
+          "h": 555,
+          "w": 318,
+          "x": 675,
+          "y": 677
+        }
+      ],
+      "circle": {
+        "bottom": 915,
+        "h": 132,
+        "w": 132,
+        "x": 359,
+        "y": 783
+      },
+      "left": {
+        "bottom": 617,
+        "h": 602,
+        "w": 645,
+        "x": 16,
+        "y": 15
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 617,
+        "h": 602,
+        "w": 318,
+        "x": 675,
+        "y": 15
+      },
+      "stats": true,
+      "title": "米",
+      "view": "product",
+      "viewport": [
+        1024,
+        768
+      ],
+      "selected": "rice"
+    },
+    {
+      "bodyScroll": true,
+      "cards": [],
+      "circle": null,
+      "left": {
+        "bottom": 617,
+        "h": 602,
+        "w": 645,
+        "x": 16,
+        "y": 15
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 617,
+        "h": 602,
+        "w": 318,
+        "x": 675,
+        "y": 15
+      },
+      "stats": false,
+      "title": "果樹・野菜",
+      "view": "product",
+      "viewport": [
+        1024,
+        768
+      ],
+      "selected": "specialty"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1271,
+          "h": 655,
+          "w": 318,
+          "x": 16,
+          "y": 616
+        },
+        {
+          "bottom": 986,
+          "h": 370,
+          "w": 318,
+          "x": 346,
+          "y": 616
+        },
+        {
+          "bottom": 1203,
+          "h": 587,
+          "w": 318,
+          "x": 675,
+          "y": 616
+        }
+      ],
+      "circle": {
+        "bottom": 825,
+        "h": 132,
+        "w": 132,
+        "x": 359,
+        "y": 693
+      },
+      "left": {
+        "bottom": 556,
+        "h": 602,
+        "w": 645,
+        "x": 16,
+        "y": -46
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 556,
+        "h": 602,
+        "w": 318,
+        "x": 675,
+        "y": -46
+      },
+      "stats": true,
+      "title": "肉牛",
+      "view": "product",
+      "viewport": [
+        1024,
+        768
+      ],
+      "selected": "beef"
+    },
+    {
+      "bodyScroll": true,
+      "cards": [
+        {
+          "bottom": 1442,
+          "h": 826,
+          "w": 318,
+          "x": 16,
+          "y": 616
+        },
+        {
+          "bottom": 986,
+          "h": 370,
+          "w": 318,
+          "x": 346,
+          "y": 616
+        },
+        {
+          "bottom": 1224,
+          "h": 608,
+          "w": 318,
+          "x": 675,
+          "y": 616
+        }
+      ],
+      "circle": {
+        "bottom": 825,
+        "h": 132,
+        "w": 132,
+        "x": 359,
+        "y": 693
+      },
+      "left": {
+        "bottom": 556,
+        "h": 602,
+        "w": 645,
+        "x": 16,
+        "y": -46
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 556,
+        "h": 602,
+        "w": 318,
+        "x": 675,
+        "y": -46
+      },
+      "stats": true,
+      "title": "酪農",
+      "view": "product",
+      "viewport": [
+        1024,
+        768
+      ],
+      "selected": "dairy"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1293,
+          "h": 677,
+          "w": 318,
+          "x": 16,
+          "y": 616
+        },
+        {
+          "bottom": 986,
+          "h": 370,
+          "w": 318,
+          "x": 346,
+          "y": 616
+        },
+        {
+          "bottom": 1203,
+          "h": 587,
+          "w": 318,
+          "x": 675,
+          "y": 616
+        }
+      ],
+      "circle": {
+        "bottom": 825,
+        "h": 132,
+        "w": 132,
+        "x": 359,
+        "y": 693
+      },
+      "left": {
+        "bottom": 556,
+        "h": 602,
+        "w": 645,
+        "x": 16,
+        "y": -46
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 556,
+        "h": 602,
+        "w": 318,
+        "x": 675,
+        "y": -46
+      },
+      "stats": true,
+      "title": "養豚",
+      "view": "product",
+      "viewport": [
+        1024,
+        768
+      ],
+      "selected": "hogs"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1241,
+          "h": 625,
+          "w": 318,
+          "x": 16,
+          "y": 616
+        },
+        {
+          "bottom": 1006,
+          "h": 390,
+          "w": 318,
+          "x": 346,
+          "y": 616
+        },
+        {
+          "bottom": 1203,
+          "h": 587,
+          "w": 318,
+          "x": 675,
+          "y": 616
+        }
+      ],
+      "circle": {
+        "bottom": 825,
+        "h": 132,
+        "w": 132,
+        "x": 359,
+        "y": 693
+      },
+      "left": {
+        "bottom": 556,
+        "h": 602,
+        "w": 645,
+        "x": 16,
+        "y": -46
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 556,
+        "h": 602,
+        "w": 318,
+        "x": 675,
+        "y": -46
+      },
+      "stats": true,
+      "title": "肉用鶏",
+      "view": "product",
+      "viewport": [
+        1024,
+        768
+      ],
+      "selected": "broilers"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1369,
+          "h": 753,
+          "w": 318,
+          "x": 16,
+          "y": 616
+        },
+        {
+          "bottom": 1006,
+          "h": 390,
+          "w": 318,
+          "x": 346,
+          "y": 616
+        },
+        {
+          "bottom": 1203,
+          "h": 587,
+          "w": 318,
+          "x": 675,
+          "y": 616
+        }
+      ],
+      "circle": {
+        "bottom": 825,
+        "h": 132,
+        "w": 132,
+        "x": 359,
+        "y": 693
+      },
+      "left": {
+        "bottom": 556,
+        "h": 602,
+        "w": 645,
+        "x": 16,
+        "y": -46
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 556,
+        "h": 602,
+        "w": 318,
+        "x": 675,
+        "y": -46
+      },
+      "stats": true,
+      "title": "採卵鶏",
+      "view": "product",
+      "viewport": [
+        1024,
+        768
+      ],
+      "selected": "layers"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1275,
+          "h": 753,
+          "w": 318,
+          "x": 16,
+          "y": 522
+        },
+        {
+          "bottom": 912,
+          "h": 390,
+          "w": 318,
+          "x": 346,
+          "y": 522
+        },
+        {
+          "bottom": 1109,
+          "h": 587,
+          "w": 318,
+          "x": 675,
+          "y": 522
+        }
+      ],
+      "circle": {
+        "bottom": 731,
+        "h": 132,
+        "w": 132,
+        "x": 359,
+        "y": 599
+      },
+      "left": {
+        "bottom": 462,
+        "h": 602,
+        "w": 645,
+        "x": 16,
+        "y": -140
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 462,
+        "h": 602,
+        "w": 318,
+        "x": 675,
+        "y": -140
+      },
+      "stats": true,
+      "title": "とうもろこし・大豆と豚",
+      "view": "relation",
+      "viewport": [
+        1024,
+        768
+      ],
+      "relation": "corn-soy-hogs"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1275,
+          "h": 753,
+          "w": 318,
+          "x": 16,
+          "y": 522
+        },
+        {
+          "bottom": 912,
+          "h": 390,
+          "w": 318,
+          "x": 346,
+          "y": 522
+        },
+        {
+          "bottom": 1109,
+          "h": 587,
+          "w": 318,
+          "x": 675,
+          "y": 522
+        }
+      ],
+      "circle": {
+        "bottom": 731,
+        "h": 132,
+        "w": 132,
+        "x": 359,
+        "y": 599
+      },
+      "left": {
+        "bottom": 462,
+        "h": 602,
+        "w": 645,
+        "x": 16,
+        "y": -140
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 462,
+        "h": 602,
+        "w": 318,
+        "x": 675,
+        "y": -140
+      },
+      "stats": true,
+      "title": "大平原の小麦と牛",
+      "view": "relation",
+      "viewport": [
+        1024,
+        768
+      ],
+      "relation": "plains-wheat-cattle"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1275,
+          "h": 753,
+          "w": 318,
+          "x": 16,
+          "y": 522
+        },
+        {
+          "bottom": 912,
+          "h": 390,
+          "w": 318,
+          "x": 346,
+          "y": 522
+        },
+        {
+          "bottom": 1109,
+          "h": 587,
+          "w": 318,
+          "x": 675,
+          "y": 522
+        }
+      ],
+      "circle": {
+        "bottom": 731,
+        "h": 132,
+        "w": 132,
+        "x": 359,
+        "y": 599
+      },
+      "left": {
+        "bottom": 462,
+        "h": 602,
+        "w": 645,
+        "x": 16,
+        "y": -140
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 462,
+        "h": 602,
+        "w": 318,
+        "x": 675,
+        "y": -140
+      },
+      "stats": true,
+      "title": "カリフォルニアの米と水",
+      "view": "relation",
+      "viewport": [
+        1024,
+        768
+      ],
+      "relation": "california-rice-water"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1213,
+          "h": 509,
+          "w": 370,
+          "x": 16,
+          "y": 704
+        },
+        {
+          "bottom": 1053,
+          "h": 349,
+          "w": 370,
+          "x": 398,
+          "y": 704
+        },
+        {
+          "bottom": 1233,
+          "h": 529,
+          "w": 370,
+          "x": 779,
+          "y": 704
+        }
+      ],
+      "circle": {
+        "bottom": 913,
+        "h": 132,
+        "w": 132,
+        "x": 411,
+        "y": 781
+      },
+      "left": {
+        "bottom": 644,
+        "h": 675,
+        "w": 765,
+        "x": 16,
+        "y": -31
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 644,
+        "h": 675,
+        "w": 354,
+        "x": 795,
+        "y": -31
+      },
+      "stats": true,
+      "title": "とうもろこし",
+      "view": "product",
+      "viewport": [
+        1180,
+        820
+      ],
+      "selected": "corn"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1185,
+          "h": 481,
+          "w": 370,
+          "x": 16,
+          "y": 704
+        },
+        {
+          "bottom": 1053,
+          "h": 349,
+          "w": 370,
+          "x": 398,
+          "y": 704
+        },
+        {
+          "bottom": 1233,
+          "h": 529,
+          "w": 370,
+          "x": 779,
+          "y": 704
+        }
+      ],
+      "circle": {
+        "bottom": 913,
+        "h": 132,
+        "w": 132,
+        "x": 411,
+        "y": 781
+      },
+      "left": {
+        "bottom": 644,
+        "h": 675,
+        "w": 765,
+        "x": 16,
+        "y": -31
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 644,
+        "h": 675,
+        "w": 354,
+        "x": 795,
+        "y": -31
+      },
+      "stats": true,
+      "title": "大豆",
+      "view": "product",
+      "viewport": [
+        1180,
+        820
+      ],
+      "selected": "soybean"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1204,
+          "h": 501,
+          "w": 370,
+          "x": 16,
+          "y": 704
+        },
+        {
+          "bottom": 1053,
+          "h": 349,
+          "w": 370,
+          "x": 398,
+          "y": 704
+        },
+        {
+          "bottom": 1233,
+          "h": 529,
+          "w": 370,
+          "x": 779,
+          "y": 704
+        }
+      ],
+      "circle": {
+        "bottom": 913,
+        "h": 132,
+        "w": 132,
+        "x": 411,
+        "y": 781
+      },
+      "left": {
+        "bottom": 644,
+        "h": 675,
+        "w": 765,
+        "x": 16,
+        "y": -31
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 644,
+        "h": 675,
+        "w": 354,
+        "x": 795,
+        "y": -31
+      },
+      "stats": true,
+      "title": "小麦",
+      "view": "product",
+      "viewport": [
+        1180,
+        820
+      ],
+      "selected": "wheat"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1248,
+          "h": 544,
+          "w": 370,
+          "x": 16,
+          "y": 704
+        },
+        {
+          "bottom": 1053,
+          "h": 349,
+          "w": 370,
+          "x": 398,
+          "y": 704
+        },
+        {
+          "bottom": 1233,
+          "h": 529,
+          "w": 370,
+          "x": 779,
+          "y": 704
+        }
+      ],
+      "circle": {
+        "bottom": 913,
+        "h": 132,
+        "w": 132,
+        "x": 411,
+        "y": 781
+      },
+      "left": {
+        "bottom": 644,
+        "h": 675,
+        "w": 765,
+        "x": 16,
+        "y": -31
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 644,
+        "h": 675,
+        "w": 354,
+        "x": 795,
+        "y": -31
+      },
+      "stats": true,
+      "title": "綿花",
+      "view": "product",
+      "viewport": [
+        1180,
+        820
+      ],
+      "selected": "cotton"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1176,
+          "h": 473,
+          "w": 370,
+          "x": 16,
+          "y": 704
+        },
+        {
+          "bottom": 1053,
+          "h": 349,
+          "w": 370,
+          "x": 398,
+          "y": 704
+        },
+        {
+          "bottom": 1258,
+          "h": 554,
+          "w": 370,
+          "x": 779,
+          "y": 704
+        }
+      ],
+      "circle": {
+        "bottom": 913,
+        "h": 132,
+        "w": 132,
+        "x": 411,
+        "y": 781
+      },
+      "left": {
+        "bottom": 644,
+        "h": 675,
+        "w": 765,
+        "x": 16,
+        "y": -31
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 644,
+        "h": 675,
+        "w": 354,
+        "x": 795,
+        "y": -31
+      },
+      "stats": true,
+      "title": "米",
+      "view": "product",
+      "viewport": [
+        1180,
+        820
+      ],
+      "selected": "rice"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [],
+      "circle": null,
+      "left": {
+        "bottom": 644,
+        "h": 675,
+        "w": 765,
+        "x": 16,
+        "y": -31
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 644,
+        "h": 675,
+        "w": 354,
+        "x": 795,
+        "y": -31
+      },
+      "stats": false,
+      "title": "果樹・野菜",
+      "view": "product",
+      "viewport": [
+        1180,
+        820
+      ],
+      "selected": "specialty"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1223,
+          "h": 581,
+          "w": 370,
+          "x": 16,
+          "y": 643
+        },
+        {
+          "bottom": 1012,
+          "h": 370,
+          "w": 370,
+          "x": 398,
+          "y": 643
+        },
+        {
+          "bottom": 1250,
+          "h": 607,
+          "w": 370,
+          "x": 779,
+          "y": 643
+        }
+      ],
+      "circle": {
+        "bottom": 852,
+        "h": 132,
+        "w": 132,
+        "x": 411,
+        "y": 720
+      },
+      "left": {
+        "bottom": 583,
+        "h": 675,
+        "w": 765,
+        "x": 16,
+        "y": -92
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 583,
+        "h": 675,
+        "w": 354,
+        "x": 795,
+        "y": -92
+      },
+      "stats": true,
+      "title": "肉牛",
+      "view": "product",
+      "viewport": [
+        1180,
+        820
+      ],
+      "selected": "beef"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1356,
+          "h": 713,
+          "w": 370,
+          "x": 16,
+          "y": 643
+        },
+        {
+          "bottom": 1012,
+          "h": 370,
+          "w": 370,
+          "x": 398,
+          "y": 643
+        },
+        {
+          "bottom": 1250,
+          "h": 607,
+          "w": 370,
+          "x": 779,
+          "y": 643
+        }
+      ],
+      "circle": {
+        "bottom": 852,
+        "h": 132,
+        "w": 132,
+        "x": 411,
+        "y": 720
+      },
+      "left": {
+        "bottom": 583,
+        "h": 675,
+        "w": 765,
+        "x": 16,
+        "y": -92
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 583,
+        "h": 675,
+        "w": 354,
+        "x": 795,
+        "y": -92
+      },
+      "stats": true,
+      "title": "酪農",
+      "view": "product",
+      "viewport": [
+        1180,
+        820
+      ],
+      "selected": "dairy"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1276,
+          "h": 633,
+          "w": 370,
+          "x": 16,
+          "y": 643
+        },
+        {
+          "bottom": 1012,
+          "h": 370,
+          "w": 370,
+          "x": 398,
+          "y": 643
+        },
+        {
+          "bottom": 1250,
+          "h": 607,
+          "w": 370,
+          "x": 779,
+          "y": 643
+        }
+      ],
+      "circle": {
+        "bottom": 852,
+        "h": 132,
+        "w": 132,
+        "x": 411,
+        "y": 720
+      },
+      "left": {
+        "bottom": 583,
+        "h": 675,
+        "w": 765,
+        "x": 16,
+        "y": -92
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 583,
+        "h": 675,
+        "w": 354,
+        "x": 795,
+        "y": -92
+      },
+      "stats": true,
+      "title": "養豚",
+      "view": "product",
+      "viewport": [
+        1180,
+        820
+      ],
+      "selected": "hogs"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1223,
+          "h": 581,
+          "w": 370,
+          "x": 16,
+          "y": 643
+        },
+        {
+          "bottom": 1012,
+          "h": 370,
+          "w": 370,
+          "x": 398,
+          "y": 643
+        },
+        {
+          "bottom": 1250,
+          "h": 607,
+          "w": 370,
+          "x": 779,
+          "y": 643
+        }
+      ],
+      "circle": {
+        "bottom": 852,
+        "h": 132,
+        "w": 132,
+        "x": 411,
+        "y": 720
+      },
+      "left": {
+        "bottom": 583,
+        "h": 675,
+        "w": 765,
+        "x": 16,
+        "y": -92
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 583,
+        "h": 675,
+        "w": 354,
+        "x": 795,
+        "y": -92
+      },
+      "stats": true,
+      "title": "肉用鶏",
+      "view": "product",
+      "viewport": [
+        1180,
+        820
+      ],
+      "selected": "broilers"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1276,
+          "h": 633,
+          "w": 370,
+          "x": 16,
+          "y": 643
+        },
+        {
+          "bottom": 1012,
+          "h": 370,
+          "w": 370,
+          "x": 398,
+          "y": 643
+        },
+        {
+          "bottom": 1250,
+          "h": 607,
+          "w": 370,
+          "x": 779,
+          "y": 643
+        }
+      ],
+      "circle": {
+        "bottom": 852,
+        "h": 132,
+        "w": 132,
+        "x": 411,
+        "y": 720
+      },
+      "left": {
+        "bottom": 583,
+        "h": 675,
+        "w": 765,
+        "x": 16,
+        "y": -92
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 583,
+        "h": 675,
+        "w": 354,
+        "x": 795,
+        "y": -92
+      },
+      "stats": true,
+      "title": "採卵鶏",
+      "view": "product",
+      "viewport": [
+        1180,
+        820
+      ],
+      "selected": "layers"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1181,
+          "h": 633,
+          "w": 370,
+          "x": 16,
+          "y": 548
+        },
+        {
+          "bottom": 917,
+          "h": 370,
+          "w": 370,
+          "x": 398,
+          "y": 548
+        },
+        {
+          "bottom": 1155,
+          "h": 607,
+          "w": 370,
+          "x": 779,
+          "y": 548
+        }
+      ],
+      "circle": {
+        "bottom": 757,
+        "h": 132,
+        "w": 132,
+        "x": 411,
+        "y": 625
+      },
+      "left": {
+        "bottom": 488,
+        "h": 675,
+        "w": 765,
+        "x": 16,
+        "y": -187
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 488,
+        "h": 675,
+        "w": 354,
+        "x": 795,
+        "y": -187
+      },
+      "stats": true,
+      "title": "とうもろこし・大豆と豚",
+      "view": "relation",
+      "viewport": [
+        1180,
+        820
+      ],
+      "relation": "corn-soy-hogs"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1181,
+          "h": 633,
+          "w": 370,
+          "x": 16,
+          "y": 548
+        },
+        {
+          "bottom": 917,
+          "h": 370,
+          "w": 370,
+          "x": 398,
+          "y": 548
+        },
+        {
+          "bottom": 1155,
+          "h": 607,
+          "w": 370,
+          "x": 779,
+          "y": 548
+        }
+      ],
+      "circle": {
+        "bottom": 757,
+        "h": 132,
+        "w": 132,
+        "x": 411,
+        "y": 625
+      },
+      "left": {
+        "bottom": 488,
+        "h": 675,
+        "w": 765,
+        "x": 16,
+        "y": -187
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 488,
+        "h": 675,
+        "w": 354,
+        "x": 795,
+        "y": -187
+      },
+      "stats": true,
+      "title": "大平原の小麦と牛",
+      "view": "relation",
+      "viewport": [
+        1180,
+        820
+      ],
+      "relation": "plains-wheat-cattle"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1181,
+          "h": 633,
+          "w": 370,
+          "x": 16,
+          "y": 548
+        },
+        {
+          "bottom": 917,
+          "h": 370,
+          "w": 370,
+          "x": 398,
+          "y": 548
+        },
+        {
+          "bottom": 1155,
+          "h": 607,
+          "w": 370,
+          "x": 779,
+          "y": 548
+        }
+      ],
+      "circle": {
+        "bottom": 757,
+        "h": 132,
+        "w": 132,
+        "x": 411,
+        "y": 625
+      },
+      "left": {
+        "bottom": 488,
+        "h": 675,
+        "w": 765,
+        "x": 16,
+        "y": -187
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 488,
+        "h": 675,
+        "w": 354,
+        "x": 795,
+        "y": -187
+      },
+      "stats": true,
+      "title": "カリフォルニアの米と水",
+      "view": "relation",
+      "viewport": [
+        1180,
+        820
+      ],
+      "relation": "california-rice-water"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1827,
+          "h": 493,
+          "w": 359,
+          "x": 8,
+          "y": 1334
+        },
+        {
+          "bottom": 2189,
+          "h": 349,
+          "w": 359,
+          "x": 8,
+          "y": 1839
+        },
+        {
+          "bottom": 2751,
+          "h": 550,
+          "w": 359,
+          "x": 8,
+          "y": 2201
+        }
+      ],
+      "circle": {
+        "bottom": 2048,
+        "h": 132,
+        "w": 132,
+        "x": 21,
+        "y": 1916
+      },
+      "left": {
+        "bottom": 698,
+        "h": 585,
+        "w": 359,
+        "x": 8,
+        "y": 113
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 1275,
+        "h": 567,
+        "w": 359,
+        "x": 8,
+        "y": 708
+      },
+      "stats": true,
+      "title": "米",
+      "view": "product",
+      "viewport": [
+        390,
+        844
+      ],
+      "selected": "rice"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1948,
+          "h": 588,
+          "w": 359,
+          "x": 8,
+          "y": 1359
+        },
+        {
+          "bottom": 2309,
+          "h": 349,
+          "w": 359,
+          "x": 8,
+          "y": 1960
+        },
+        {
+          "bottom": 2846,
+          "h": 525,
+          "w": 359,
+          "x": 8,
+          "y": 2321
+        }
+      ],
+      "circle": {
+        "bottom": 2169,
+        "h": 132,
+        "w": 132,
+        "x": 21,
+        "y": 2037
+      },
+      "left": {
+        "bottom": 698,
+        "h": 585,
+        "w": 359,
+        "x": 8,
+        "y": 113
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 1300,
+        "h": 592,
+        "w": 359,
+        "x": 8,
+        "y": 708
+      },
+      "stats": true,
+      "title": "綿花",
+      "view": "product",
+      "viewport": [
+        390,
+        844
+      ],
+      "selected": "cotton"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 2077,
+          "h": 763,
+          "w": 359,
+          "x": 8,
+          "y": 1314
+        },
+        {
+          "bottom": 2459,
+          "h": 370,
+          "w": 359,
+          "x": 8,
+          "y": 2089
+        },
+        {
+          "bottom": 3074,
+          "h": 603,
+          "w": 359,
+          "x": 8,
+          "y": 2471
+        }
+      ],
+      "circle": {
+        "bottom": 2298,
+        "h": 132,
+        "w": 132,
+        "x": 21,
+        "y": 2166
+      },
+      "left": {
+        "bottom": 638,
+        "h": 585,
+        "w": 359,
+        "x": 8,
+        "y": 53
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 1254,
+        "h": 607,
+        "w": 359,
+        "x": 8,
+        "y": 648
+      },
+      "stats": true,
+      "title": "酪農",
+      "view": "product",
+      "viewport": [
+        390,
+        844
+      ],
+      "selected": "dairy"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [],
+      "circle": null,
+      "left": {
+        "bottom": 698,
+        "h": 585,
+        "w": 359,
+        "x": 8,
+        "y": 113
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 1275,
+        "h": 568,
+        "w": 359,
+        "x": 8,
+        "y": 708
+      },
+      "stats": false,
+      "title": "果樹・野菜",
+      "view": "product",
+      "viewport": [
+        390,
+        844
+      ],
+      "selected": "specialty"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 1493,
+          "h": 409,
+          "w": 912,
+          "x": 16,
+          "y": 1084
+        },
+        {
+          "bottom": 1826,
+          "h": 320,
+          "w": 912,
+          "x": 16,
+          "y": 1505
+        },
+        {
+          "bottom": 2554,
+          "h": 716,
+          "w": 912,
+          "x": 16,
+          "y": 1838
+        }
+      ],
+      "circle": {
+        "bottom": 1685,
+        "h": 132,
+        "w": 132,
+        "x": 29,
+        "y": 1553
+      },
+      "left": {
+        "bottom": 643,
+        "h": 764,
+        "w": 912,
+        "x": 16,
+        "y": -121
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 1024,
+        "h": 369,
+        "w": 912,
+        "x": 16,
+        "y": 655
+      },
+      "stats": true,
+      "title": "米",
+      "view": "product",
+      "viewport": [
+        959,
+        820
+      ],
+      "selected": "rice"
+    },
+    {
+      "bodyScroll": true,
+      "cards": [
+        {
+          "bottom": 1252,
+          "h": 549,
+          "w": 296,
+          "x": 16,
+          "y": 704
+        },
+        {
+          "bottom": 1082,
+          "h": 378,
+          "w": 296,
+          "x": 324,
+          "y": 704
+        },
+        {
+          "bottom": 1271,
+          "h": 568,
+          "w": 296,
+          "x": 633,
+          "y": 704
+        }
+      ],
+      "circle": {
+        "bottom": 942,
+        "h": 132,
+        "w": 132,
+        "x": 337,
+        "y": 810
+      },
+      "left": {
+        "bottom": 644,
+        "h": 564,
+        "w": 581,
+        "x": 16,
+        "y": 80
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 644,
+        "h": 564,
+        "w": 318,
+        "x": 611,
+        "y": 80
+      },
+      "stats": true,
+      "title": "米",
+      "view": "product",
+      "viewport": [
+        960,
+        820
+      ],
+      "selected": "rice"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": 2178,
+          "h": 828,
+          "w": 289,
+          "x": 8,
+          "y": 1350
+        },
+        {
+          "bottom": 2702,
+          "h": 512,
+          "w": 289,
+          "x": 8,
+          "y": 2190
+        },
+        {
+          "bottom": 3473,
+          "h": 759,
+          "w": 289,
+          "x": 8,
+          "y": 2714
+        }
+      ],
+      "circle": {
+        "bottom": 2399,
+        "h": 132,
+        "w": 132,
+        "x": 87,
+        "y": 2267
+      },
+      "left": {
+        "bottom": 580,
+        "h": 580,
+        "w": 289,
+        "x": 8,
+        "y": 0
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": 1290,
+        "h": 700,
+        "w": 289,
+        "x": 8,
+        "y": 590
+      },
+      "stats": true,
+      "title": "酪農",
+      "view": "product",
+      "viewport": [
+        320,
+        640
+      ],
+      "selected": "dairy"
+    },
+    {
+      "bodyScroll": false,
+      "cards": [
+        {
+          "bottom": -117,
+          "h": 828,
+          "w": 289,
+          "x": 8,
+          "y": -945
+        },
+        {
+          "bottom": 881,
+          "h": 986,
+          "w": 289,
+          "x": 8,
+          "y": -105
+        },
+        {
+          "bottom": 1652,
+          "h": 759,
+          "w": 289,
+          "x": 8,
+          "y": 893
+        }
+      ],
+      "circle": {
+        "bottom": 104,
+        "h": 132,
+        "w": 132,
+        "x": 87,
+        "y": -28
+      },
+      "left": {
+        "bottom": -1715,
+        "h": 580,
+        "w": 289,
+        "x": 8,
+        "y": -2295
+      },
+      "overflow": false,
+      "overview": false,
+      "render": "fallback",
+      "right": {
+        "bottom": -1005,
+        "h": 700,
+        "w": 289,
+        "x": 8,
+        "y": -1705
+      },
+      "stats": true,
+      "title": "酪農",
+      "view": "product",
+      "viewport": [
+        320,
+        640
+      ],
+      "table": "dairy exports 320"
+    }
+  ]
+}
