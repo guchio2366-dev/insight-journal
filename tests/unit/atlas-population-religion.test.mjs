@@ -2,8 +2,15 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {validateReligionData,religiousShareColor,religiousShareLabel} from '../../src/lib/atlas-population-religion.ts';
+import {validateReligionOverview} from '../../src/lib/atlas-population-religion-overview.ts';
 import {missingColor,shareColors} from '../../src/data/atlas/population.ts';
 const reviewed=JSON.parse(await readFile('data/atlas/population-religion-reviewed.json','utf8'));
+const overview=JSON.parse(await readFile('data/atlas/population-religion-overview-reviewed.json','utf8'));
+test('national religion overview preserves Pew parent categories and the published rounding gap',()=>{
+ assert.ok(validateReligionOverview(overview));assert.equal(overview.categories.reduce((sum,item)=>sum+item.value,0),98);
+ const duplicate=structuredClone(overview);duplicate.categories[0].id=duplicate.categories[1].id;assert.equal(validateReligionOverview(duplicate),false);
+ const over=structuredClone(overview);over.categories[0].value=101;assert.equal(validateReligionOverview(over),false);
+});
 test('reviewed religion observations require ten groups, adult universe and unique valid states',()=>{
  assert.ok(validateReligionData(reviewed));const d=structuredClone(reviewed);d.rows=[{id:'state:06',shares:structuredClone(d.national)}];assert.ok(validateReligionData(d));d.rows.push(d.rows[0]);assert.equal(validateReligionData(d),false);d.rows.pop();d.rows[0].id='county:06037';assert.equal(validateReligionData(d),false);d.rows[0].id='state:60';assert.equal(validateReligionData(d),false);d.rows=[];d.universe='all residents';assert.equal(validateReligionData(d),false);
 });

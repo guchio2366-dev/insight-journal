@@ -8,6 +8,7 @@ import {missingColor,densityColors,shareColors,voteColors} from '../../src/data/
 const base='public/assets/atlas/population/v1/';const data=async n=>JSON.parse(await readFile(base+n+'.json','utf8'));
 test('population URL validates views, groups and geometry while preserving global state',()=>{
  const url=new URL('https://example.org/?crop=rice&z=9&popView=bad&popEthnicity=bad&popGeo=<script>');const state=readPopulationState(url);assert.equal(state.view,'distribution');assert.equal(state.ethnicity,'white');assert.equal(state.geo,'');state.view='religion';state.religion='muslim';state.geo='state:06';const encoded=writePopulationState(url,state);assert.deepEqual(readPopulationState(encoded),state);assert.equal(encoded.searchParams.get('z'),'9');assert.equal(encoded.searchParams.get('crop'),'rice');
+ assert.equal(readPopulationState(new URL('https://example.org/?popReligionStory=utah-lds')).story,'utah-lds');assert.equal(readPopulationState(new URL('https://example.org/?popReligionStory=bad')).story,'');
 });
 test('zeros, exact thresholds, missing data and vote sign have distinct colors',()=>{
  assert.equal(populationColor(null,'distribution'),missingColor);assert.equal(populationColor(0,'distribution'),densityColors[0]);assert.equal(populationColor(1,'distribution'),densityColors[1]);assert.equal(populationColor(10,'distribution'),densityColors[3]);assert.equal(populationColor(10000,'distribution'),densityColors[6]);assert.equal(populationColor(.9,'ethnicity'),shareColors[1]);assert.equal(populationColor(1,'ethnicity'),shareColors[2]);assert.equal(populationColor(101,'ethnicity'),missingColor);for(const [v,i] of [[-15,0],[-5,1],[0,2],[5,3],[15,4]])assert.equal(populationColor(v,'vote'),voteColors[i]);assert.equal(density({population:[null,null],area:2}),null);assert.equal(density({population:[1,null],area:0}),null);
@@ -39,9 +40,12 @@ test('an evicted request failure does not discard a newer request with the same 
 
 test('city URL state uses the exact climate-city catalog and rejects unknown keys',async()=>{
  const {populationCityProfiles}=await import('../../src/data/atlas/population-reading.ts');
+ const {populationCityReligionProfiles,religionStoryIds}=await import('../../src/data/atlas/population-religion-reading.ts');
  const cities=JSON.parse(await readFile('public/assets/atlas/nature-v1/climate-cities.json','utf8'));
  assert.deepEqual(Object.keys(populationCityProfiles).sort(),cities.map(c=>c.id).sort());
+ assert.deepEqual(Object.keys(populationCityReligionProfiles).sort(),cities.map(c=>c.id).sort());
  for(const city of cities){const url=new URL('https://example.org/?city=seattle&popCity='+city.id);const state=readPopulationState(url);assert.equal(state.city,city.id);assert.equal(writePopulationState(url,state).searchParams.get('city'),'seattle');assert.ok(populationCityProfiles[city.id].jobs);}
+ for(const profile of Object.values(populationCityReligionProfiles))for(const story of profile.stories)assert.ok(religionStoryIds.includes(story));
  for(const id of ['bad','__proto__','constructor'])assert.equal(readPopulationState(new URL('https://example.org/?popCity='+id)).city,'');
 });
 

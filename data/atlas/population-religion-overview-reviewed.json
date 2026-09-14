@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "classificationId": "pew-rls-2023-24-overview-5",
+  "period": "2023–2024",
+  "universe": "adults",
+  "geography": "United States",
+  "source": {
+    "url": "https://www.pewresearch.org/religion/2025/02/26/religious-landscape-study-executive-summary/",
+    "title": "2023-24 Religious Landscape Study: Executive summary",
+    "publisher": "Pew Research Center",
+    "published": "2025-02-26",
+    "copyright": "© 2025 Pew Research Center"
+  },
+  "categories": [
+    { "id": "protestant", "label": "プロテスタント", "value": 40 },
+    { "id": "catholic", "label": "カトリック", "value": 19 },
+    { "id": "other_christian_broad", "label": "その他のキリスト教", "value": 3 },
+    { "id": "non_christian_broad", "label": "キリスト教以外", "value": 7 },
+    { "id": "unaffiliated", "label": "特定の宗教に属さない", "value": 29 }
+  ],
+  "publishedPrecision": "whole_percent",
+  "remainderLabel": "無回答・丸め等の差分"
+}
