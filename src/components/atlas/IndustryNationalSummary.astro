@@ -9,8 +9,8 @@ const serviceColor=industrySectors.find(s=>s.id==='services')!.color;
  const gdp=chartRows(sector.id,'gdp'),employment=chartRows(sector.id,'employment');
  const rows=gdp.map(row=>({...row,employment:employment.find(e=>e.id===row.id)!}));
  return <section data-industry-national-panel={sector.id} hidden={sector.id!=='all'}>
-  <header><p class="atlas-eyebrow">米国の産業構造 · {industryYear}年</p><h2>{sector.id==='all'?'全産業の構成':sector.label}</h2>
-   <p>{sector.id==='all'?'農林水産・政府を含む12区分':`全米GDPの${nationalSectorShare(sector.id,'gdp').toFixed(1)}%・雇用の${nationalSectorShare(sector.id,'employment').toFixed(1)}%`}</p>
+  <header><h3>{sector.id==='all'?'全産業':sector.label}の全国構成</h3>
+   <p>{industryYear}年 · {sector.id==='all'?'農林水産・政府を含む12区分':`全米GDPの${nationalSectorShare(sector.id,'gdp').toFixed(1)}%・雇用の${nationalSectorShare(sector.id,'employment').toFixed(1)}%`}</p>
   </header>
   <figure class="industry-chart industry-paired-chart">
    <figcaption><h3>付加価値・雇用の構成比</h3><span>{sector.id==='all'?'全米':sector.label}を100%</span></figcaption>

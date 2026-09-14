@@ -145,3 +145,41 @@
  .atlas-explorer[data-field=industry] .atlas-primary-grid{grid-template-columns:minmax(0,1fr)}
  .atlas-explorer[data-field=industry] .atlas-primary-grid>[data-field-national=industry],.atlas-explorer[data-field=industry] .atlas-primary-grid .atlas-national{height:auto}
 }
+
+/* v1.4: explanation and composition stay together; the map leads into small insights. */
+.atlas-explorer[data-field=industry] .atlas-primary-grid>.industry-map-reading{height:auto;position:static;align-self:start}
+.industry-map-reading .industry-selected-reading{position:static;height:auto;min-height:0;overflow:visible;border-bottom:0;padding:12px 13px}
+.industry-map-reading .industry-selected-reading>article:not([hidden]){display:block;height:auto}
+.industry-map-reading .industry-selected-reading header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 9px;padding:0 0 8px}
+.industry-map-reading .industry-selected-reading h2{font-size:21px;line-height:1.4}
+.industry-map-reading .industry-selected-reading header button{flex:none;margin:0;min-height:44px;padding:5px 8px}
+.industry-map-reading .industry-selected-reading-body{overflow:visible;overscroll-behavior:auto}
+.industry-map-reading .industry-selected-reading-body p{font-size:14px;line-height:1.65;margin:0}
+.industry-map-reading .industry-selected-reading-body p+p{margin-top:7px}
+.industry-selected-reading-body p>strong{margin-right:.5em;font-size:13px;color:#294c4d}
+.industry-map-reading .industry-national{border-top:0;padding:0 13px 10px}
+.industry-map-reading .industry-national header{padding:8px 0 5px;border-top:1px solid #d4d8cc;border-bottom:0}
+.industry-map-reading .industry-national header h3{font:700 14px/1.5 var(--sans);margin:0}
+.industry-map-reading .industry-national header>p:last-child{margin:2px 0 0;line-height:1.5}
+.industry-map-reading .industry-paired-chart{margin-top:5px;padding-top:0;border:0}
+.industry-map-reading .industry-paired-row{padding:3px 0;min-height:28px}
+.industry-map-reading .industry-number-table{margin-top:2px}
+.industry-map-reading .industry-stat-source{margin:0;font-size:11px}
+.industry-map-insights{margin-top:9px;padding:8px 10px;border:1px solid #c8cfc4;background:#f3f5ec;scroll-margin-top:12px;color:#31444b}
+.industry-map-insights h2{margin:0 0 3px;font:700 15px/1.5 var(--sans)}
+.industry-map-insight-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px;align-items:start}
+.industry-map-insight-list>details{min-width:0;border-top:1px solid #d6ddd0;scroll-margin-top:12px}
+.industry-map-insight-list>details>summary{min-height:44px;padding:6px 2px;align-content:center;cursor:pointer;font:700 13px/1.5 var(--sans);overflow-wrap:anywhere}
+.industry-map-insight-list>details.is-selected{border-top-color:#54725e;background:#e9efe2}
+.industry-map-insight-list>details[open]{grid-column:1/-1}
+.industry-map-insight-body{padding:2px 4px 10px}
+.industry-map-insight-body h3{margin:3px 0 6px;font:700 15px/1.5 var(--sans)}
+.industry-map-insight-body p{font-size:14px;line-height:1.7;margin:0 0 8px}
+.industry-map-insight-body .industry-insight-region{font-size:12px;color:#597064}
+.industry-map-insight-body .industry-source{min-height:44px;align-content:center;margin-top:0;font-size:12px}
+.atlas-explorer[data-field=industry] .atlas-evidence-note{display:none}
+.atlas-explorer[data-field=industry] .industry-reading{margin:10px 0 20px;padding:14px 16px}
+.atlas-explorer[data-field=industry] .industry-reading h2{margin:0;font-size:21px;line-height:1.4}
+.atlas-explorer[data-field=industry] .industry-reading .atlas-eyebrow{margin:0 0 3px;font-size:10px}
+.atlas-explorer[data-field=industry] .industry-detail-statistics{margin-top:10px;padding-top:10px}
+@media(max-width:649px){.industry-map-insights{padding:7px 9px}.industry-map-insight-list{column-gap:8px}.industry-map-insight-list>details>summary{font-size:12px}.atlas-explorer[data-field=industry] .industry-reading{padding:12px 10px}}

@@ -24,6 +24,7 @@ import IndustryNavigation from './IndustryNavigation.astro';
 import IndustryNationalSummary from './IndustryNationalSummary.astro';
 import IndustrySelectedExplanation from './IndustrySelectedExplanation.astro';
 import IndustryReading from './IndustryReading.astro';
+import IndustryInsights from './IndustryInsights.astro';
 import IndustryNoScript from './IndustryNoScript.astro';
 import {industryRegions,industrySources} from '../../data/atlas/industry-regions';
 import {industrySectors,subsectorLabel} from '../../data/atlas/industry-catalog';
@@ -111,10 +112,11 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
           <p data-industry-size-note>記号は代表地域。同じ条件で数値を比べられる分野のみ、円の面積で経済規模を示します。この表示では同サイズです。</p>
           <p>サービスの記号：金＝金融、情＝情報、専＝専門、商＝商業・物流、観＝宿泊・飲食等、医＝医療・教育、他＝その他。複＝複数分野。</p>
           <div class="industry-economic-legend" data-industry-economic-legend hidden></div>
-          <p data-industry-empty hidden>この分野の地域例は未登録です。全国の構成と下の詳説を確認できます。</p>
+          <p data-industry-empty hidden>この分野の地域例は未登録です。右欄の説明と下の全国推移を確認できます。</p>
           <details><summary>地域一覧から選ぶ</summary><div class="industry-region-list">{industryRegions.map(r=><button type="button" data-industry-region-option={r.id}>{r.name}<small>{subsectorLabel(r.sector,r.subsector)}</small></button>)}</div></details>
           <noscript><p>業態の切替と地図の地域表示にはJavaScriptが必要です。全産業の統計とインサイトはこのまま読めます。</p></noscript>
         </div>
+        <IndustryInsights active={initialField==='industry'} />
       </div>
 
       <div data-field-national="agriculture" hidden={initialField!=='agriculture'}><div data-agri-overview><NationalAgricultureSummary /></div>
@@ -130,7 +132,7 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
       </div>
       <div data-field-national="natural" hidden={initialField!=='natural'}><NaturalEnvironmentSummary {initialMode} /></div>
       <div data-field-national="population" hidden={initialField!=='population'}><PopulationNationalSummary /></div>
-      <div data-field-national="industry" hidden={initialField!=='industry'}><IndustryNationalSummary /><IndustrySelectedExplanation /></div>
+      <div class="industry-map-reading" data-field-national="industry" hidden={initialField!=='industry'}><IndustrySelectedExplanation /><IndustryNationalSummary /></div>
       <aside class="atlas-national atlas-land-summary" data-field-national="overview" hidden={initialField!=='overview'}>
         <header><p class="atlas-eyebrow">GEOGRAPHIC BASE</p><h2>米国本土の地形</h2><p>西部の山地、中央の大平原と低地、東部のアパラチア山脈を共通の土台にします。農業へ切り替えると、同じ位置・倍率のまま栽培域を重ねて比較できます。</p></header>
         <p>河川と湖は水利用や輸送を考える手掛かりです。現在の土地レイヤーは地形・水系の概略であり、土壌や地質の分類ではありません。</p>

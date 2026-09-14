@@ -1,0 +1,20 @@
+---
+import {withBase} from '../../lib/urls';
+import {industryInsights} from '../../data/atlas/industry-content';
+import {industrySources} from '../../data/atlas/industry-regions';
+import {subsectorLabel,type IndustrySector} from '../../data/atlas/industry-catalog';
+const {active=false}=Astro.props;
+const labels:Record<string,string>={knowledge:'技術人材と企業','supply-chain':'自動車と供給網','energy-chemistry':'資源と石油化学','food-agriculture':'農畜産と食品加工','tourism-logistics':'観光都市と物流','housing-jobs':'都市成長と住宅'};
+---
+<section class="industry-map-insights" id="industry-insights" data-industry-insights hidden={!active} aria-labelledby="industry-insights-title">
+ <h2 id="industry-insights-title">地域と産業のつながり</h2>
+ <div class="industry-map-insight-list">
+ {industryInsights.map(item=><details id={`industry-insight-${item.id}`} data-industry-insight-card={item.id}>
+  <summary>{labels[item.id]}</summary>
+  <div class="industry-map-insight-body"><p class="industry-insight-region">{item.region}</p><h3>{item.title}</h3><p>{item.text}</p>
+   <nav class="industry-insight-links" aria-label={`${labels[item.id]}の関連分野`}>{item.links.map(([sector,subsector])=><a href={withBase(`/atlas/north-america/${sector==='agriculture'?'agriculture/':`industry/?sector=${sector}&subsector=${subsector}`}`)} data-industry-jump-sector={sector} data-industry-jump-subsector={subsector} data-industry-insight={item.id}>{sector==='agriculture'?'農畜産':subsectorLabel(sector as IndustrySector,subsector)}を見る</a>)}</nav>
+   <a class="industry-source" href={industrySources[item.source].url}>根拠となる地域資料</a>
+  </div>
+ </details>)}
+ </div>
+</section>
