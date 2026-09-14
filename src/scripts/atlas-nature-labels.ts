@@ -2,7 +2,7 @@ import {containedMapBox,layoutNatureLabels,leaderEnd,projectNatureFallback,type 
 import {layoutClimateCodes,type ClimateCodeLabel} from '../lib/atlas-climate-code-labels';
 
 type Entry={id:string;name:string;coordinate:[number,number];mode:'climate'|'landform'|'water'|'population'};
-type Callbacks={active:()=>boolean;mode:()=>string;zoom?:()=>number;project:()=>((p:[number,number])=>Point)|null;select:(entry:Entry,trigger:HTMLButtonElement)=>void;placed:()=>void;holder?:HTMLElement;attribute?:string;controls?:string;fallbackBox?:(imageBox:Box)=>Box;fallbackProject?:(coordinate:readonly number[],box:Box)=>Point};
+type Callbacks={active:()=>boolean;mode:()=>string;zoom?:()=>number;project:()=>((p:[number,number])=>Point)|null;select:(entry:Entry,trigger:HTMLButtonElement)=>void;placed:()=>void;holder?:HTMLElement;attribute?:string;controls?:string;obstacleSelector?:string;fallbackBox?:(imageBox:Box)=>Box;fallbackProject?:(coordinate:readonly number[],box:Box)=>Point};
 
 /** Creates a fixed set of buttons once; only placement and state change. */
 export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Callbacks,codeEntries:ClimateCodeLabel[]=[]){
@@ -44,7 +44,8 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
     if(holder.hidden)return;
     const project=callbacks.project(),bounds:Box=project?{left:0,top:0,right:frame.clientWidth,bottom:frame.clientHeight}:fallbackBox();
     if(bounds.right<=bounds.left||bounds.bottom<=bounds.top)return;
-    const obstacles=[...root.querySelectorAll<HTMLElement>('.atlas-map-tools:not([hidden]),[data-layer-caption]')].map(localBox).filter(r=>r.right>r.left&&r.bottom>r.top);
+    const obstacleSelector='.atlas-map-tools:not([hidden]),[data-layer-caption]'+(callbacks.obstacleSelector?','+callbacks.obstacleSelector:'');
+    const obstacles=[...root.querySelectorAll<HTMLElement>(obstacleSelector)].filter(node=>!holder.contains(node)).map(localBox).filter(r=>r.right>r.left&&r.bottom>r.top);
     const inputs=nodes.filter(({entry})=>entry.mode===callbacks.mode()).map(({entry,button})=>{
       button.hidden=false;const anchor=project?project(entry.coordinate):(callbacks.fallbackProject??projectNatureFallback)(entry.coordinate,bounds);
       return {id:entry.id,anchor,width:button.offsetWidth||entry.name.length*12+14,height:button.offsetHeight||24};

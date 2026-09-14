@@ -1,4 +1,5 @@
 import { validateReligionData } from './atlas-population-religion.ts';
+import { validateReligionOverview } from './atlas-population-religion-overview.ts';
 
 // Cache failures are evicted. All files belonging to a metro share one LRU entry.
 export function createPopulationLoader(base: string) {
@@ -30,6 +31,8 @@ export function createPopulationLoader(base: string) {
       if (data.type !== 'FeatureCollection' || !Array.isArray(data.features)) throw new Error('Invalid population geometry');
     } else if (name === 'religion') {
       if (!validateReligionData(data)) throw new Error('Invalid religion data');
+    } else if(name==='religion-overview'){
+      if(!validateReligionOverview(data))throw new Error('Invalid religion overview');
     } else if (data.version !== 1 || !Array.isArray(data.rows)) throw new Error('Invalid population data');
     return data;
   }

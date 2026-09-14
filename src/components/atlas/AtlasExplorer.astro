@@ -75,6 +75,7 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
           <div class="atlas-livestock-markers" data-livestock-markers></div>
           <div class="industry-markers" data-industry-markers hidden={initialField!=='industry'}></div>
           <div class="atlas-nature-labels population-city-markers" data-pop-city-markers hidden={initialField!=='population'}></div>
+          <div class="atlas-nature-labels population-religion-markers" data-pop-religion-markers hidden></div>
           <fieldset class="atlas-agri-layers" data-agri-layers hidden={initialField!=='agriculture'}><legend class="visually-hidden">農業地図の表示</legend><label><input type="checkbox" value="crops" data-agri-layer checked />作物</label><label><input type="checkbox" value="livestock" data-agri-layer checked />畜産</label></fieldset>
           <div class="atlas-map-tools" aria-label="地図操作" hidden>
             <button type="button" data-map-action="fit" aria-label="米国本土の全体を表示">全体</button>
