@@ -22,9 +22,9 @@ const scale=Math.max(data.totalSupply,positiveTotal);
     </div>)}
     {data.adjustment!==0&&<p class="supply-adjustment">行き先の合計に、原表の未勘定 {fmt(data.adjustment)} {data.unit}を加えると総供給に一致します。100%の線からの差を引き伸ばして補正していません。</p>}
   </figure>
+  <details class="supply-data"><summary>数量・期間・定義を確認</summary>
   <p class="supply-processing">{data.processing}</p>
   <p class="supply-imports"><strong>輸入もある？</strong> {data.importNote}{data.importSource&&<> <a href={data.importSource} target="_blank" rel="noopener">USDA ERS</a></>}</p>
-  <details class="supply-data"><summary>数量・期間・定義を確認</summary>
     <p>{data.start}〜{data.end}。在庫と輸入を含む米国全体の収支です。当年の国産収穫物だけの行き先を追跡したものではありません。</p>
     <div class="supply-table-wrap" role="region" aria-label={`${data.name}の数量表`} tabindex="0"><table>
       <caption>{data.name} · {data.unit} · 2024/25</caption><thead><tr><th scope="col">区分</th><th scope="col">数量</th><th scope="col">総供給比</th><th scope="col">定義</th></tr></thead>
