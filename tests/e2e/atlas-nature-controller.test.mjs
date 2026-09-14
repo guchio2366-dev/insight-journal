@@ -51,7 +51,7 @@ test('都市→水資源→農業→気候で選択とカメラを保持し、�
   q('[data-nature-mode="water"]').click();await delay();assert.equal(q('[data-climate-chart]').hidden,true);assert.equal(q('[data-city-picker]').hidden,true);assert.match(q('[data-fallback-image]').alt,/水資源/);
   q('[data-field="agriculture"]').click();assert.equal(root.dataset.field,'agriculture');
   q('[data-field="natural"]').click();q('[data-nature-mode="climate"]').click();await delay();assert.equal(q('[data-city-select]').value,selected);assert.equal(q('[data-climate-chart]').hidden,false);assert.equal(window.__map.cameraChanges,moves);
-  q('[data-clear-city]').click();assert.equal(q('[data-selection]').hidden,true);assert.equal(new URL(window.location.href).searchParams.get('city'),null);
+  q('[data-clear-city]').click();assert.equal(q('[data-nature-detail]').hidden,true);assert.equal(new URL(window.location.href).searchParams.get('city'),null);
  }finally{await window.happyDOM.close();}
 });
 
@@ -98,7 +98,7 @@ test('12都市名と点は同じ図を選択し、閉じる・Escapeで元のボ
    assert.equal(q('[data-city-panel="'+id+'"]').hidden,false);assert.equal(button.getAttribute('aria-pressed'),'true');
    assert.equal(new URL(window.location.href).searchParams.get('city'),id);
    q('[data-clear-city]').focus();q('[data-clear-city]').dispatchEvent(new window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
-   assert.equal(q('[data-selection]').hidden,true);assert.equal(window.document.activeElement,button);assert.equal(button.getAttribute('aria-pressed'),'false');
+   assert.equal(q('[data-nature-detail]').hidden,true);assert.equal(window.document.activeElement,button);assert.equal(button.getAttribute('aria-pressed'),'false');
   }
   const config=JSON.parse(q('[data-explorer-config]').textContent);
   for(const city of config.climateCities){
@@ -113,7 +113,7 @@ test('12都市名と点は同じ図を選択し、閉じる・Escapeで元のボ
   const previous=q('[data-city-select]').value;
   q('[data-nature-label="city:chicago"]').dispatchEvent(new window.MouseEvent('click',{detail:1,bubbles:true}));assert.equal(q('[data-city-select]').value,previous);
   for(let i=0;i<3;i++){q('[data-nature-mode="landform"]').click();await waitFor(()=>root.dataset.natureLoad==='ready','landform ready');q('[data-nature-mode="climate"]').click();await waitFor(()=>root.dataset.natureLoad==='ready','climate ready');}
-  assert.equal(root.querySelectorAll('[data-nature-label]').length,21);nodes.forEach(button=>assert.equal(button.isConnected,true));
+  assert.equal(root.querySelectorAll('[data-nature-label]').length,40);nodes.forEach(button=>assert.equal(button.isConnected,true));
  }finally{await window.happyDOM.close();}
 });
 
@@ -124,10 +124,10 @@ test('9地形名は固有説明を開き、大西洋岸平野の既存URL識別�
   const config=JSON.parse(q('[data-explorer-config]').textContent),moves=window.__map.cameraChanges;
   for(const button of nodes){
    assert.equal(button.hidden,false);button.click();const key=button.dataset.natureLabel;
-   assert.equal(q('[data-selection-text]').textContent,config.natureFeatureCopy[key].full);
-   assert.equal(q('[data-selection-title]').textContent,config.natureFeatureCopy[key].title);
+   assert.equal(q('[data-nature-detail-text]').textContent,config.natureFeatureCopy[key].full);
+   assert.equal(q('[data-nature-detail-title]').textContent,config.natureFeatureCopy[key].title);
    assert.equal(new URL(window.location.href).searchParams.get('natureFeature'),key);
-   q('[data-close-selection]').click();assert.equal(window.document.activeElement,button);
+   q('[data-close-nature-detail]').click();assert.equal(window.document.activeElement,button);
   }
   const coastal=q('[data-nature-label="landform:大西洋海岸平野"]');assert.equal(coastal.textContent,'大西洋岸平野');coastal.click();
   assert.equal(window.__map.cameraChanges,moves);const saved=window.location.href;q('[data-nature-mode="climate"]').click();
@@ -146,14 +146,14 @@ test('通常図・WebGL停止・初期代替図で同じ分類IDと大区分見�
    const climatePoint=projectNatureFallback([-105,30],box);
    const clickFallback=()=>q('.atlas-fallback-map').dispatchEvent(new window.MouseEvent('click',{clientX:climatePoint.x,clientY:climatePoint.y,bubbles:true}));
    if(fallback)clickFallback();else for(const fn of window.__map.events.click)fn({point:{x:230,y:220},lngLat:{lng:-105,lat:30}});
-   await waitFor(()=>q('[data-selection-title]').textContent.includes('Csb'),'climate selected');
-   assert.equal(q('[data-selection-title]').textContent,'温帯｜地中海性・温暖な夏（Csb）');
-   assert.match(q('[data-selection-text]').textContent,/1991–2020/);assert.equal(q('[data-selection-link]').hash,'#source-koppen');
-   if(!fallback){q('[data-map-surface]').dispatchEvent(new window.Event('webglcontextlost'));assert.equal(root.dataset.renderState,'fallback');clickFallback();await delay();assert.match(q('[data-selection-title]').textContent,/温帯/);}
+   await waitFor(()=>q('[data-nature-detail-title]').textContent.includes('Csb'),'climate selected');
+   assert.equal(q('[data-nature-detail-title]').textContent,'温帯｜地中海性・温暖な夏（Csb）');
+   assert.match(q('[data-nature-detail-text]').textContent,/1991–2020/);assert.equal(q('[data-nature-detail-link]').hash,'#source-koppen');
+   if(!fallback){q('[data-map-surface]').dispatchEvent(new window.Event('webglcontextlost'));assert.equal(root.dataset.renderState,'fallback');clickFallback();await delay();assert.match(q('[data-nature-detail-title]').textContent,/温帯/);}
    const config=JSON.parse(q('[data-explorer-config]').textContent),city=config.climateCities.find(c=>c.id==='chicago');
    const point=projectNatureFallback([city.longitude,city.latitude],box);
    q('.atlas-fallback-map').dispatchEvent(new window.MouseEvent('click',{clientX:point.x,clientY:point.y,bubbles:true}));assert.equal(q('[data-city-select]').value,'chicago');
-   q('[data-nature-mode="landform"]').click();await delay();q('[data-nature-label="landform:ロッキー山脈"]').click();assert.equal(q('[data-selection-title]').textContent,'ロッキー山脈');
+   q('[data-nature-mode="landform"]').click();await delay();q('[data-nature-label="landform:ロッキー山脈"]').click();assert.equal(q('[data-nature-detail-title]').textContent,'ロッキー山脈');
    assert.match(q('[data-fallback-image]').src,/landform-interactive.webp$/);assert.match(q('[data-fallback-full]').href,/landform-fallback.webp$/);
    assert.equal(requests.filter(url=>url.endsWith('climate-classes.png')).length,1);
   }finally{await window.happyDOM.close();}
@@ -165,7 +165,7 @@ test('未収録セルとドラッグに気候区分を割り当てず、遅い�
  try{
   const {window,root,q}=absent,box=containedMapBox({left:0,top:0,right:788,bottom:460}),p=projectNatureFallback([-105,30],box);
   q('.atlas-fallback-map').dispatchEvent(new window.MouseEvent('click',{clientX:p.x,clientY:p.y,bubbles:true}));await delay();
-  assert.equal(q('[data-selection]').hidden,true);assert.match(q('[data-atlas-live]').textContent,/収録されていません/);
+  assert.equal(q('[data-nature-detail]').hidden,true);assert.match(q('[data-atlas-live]').textContent,/収録されていません/);
   q('[data-nature-label="city:miami"]').click();
   q('.atlas-fallback-map').dispatchEvent(new window.PointerEvent('pointerdown',{clientX:p.x,clientY:p.y,bubbles:true}));
   q('.atlas-fallback-map').dispatchEvent(new window.PointerEvent('pointermove',{clientX:p.x+20,clientY:p.y,bubbles:true}));
@@ -179,7 +179,7 @@ test('未収録セルとドラッグに気候区分を割り当てず、遅い�
   const {window,q}=delayed,box=containedMapBox({left:0,top:0,right:788,bottom:460}),p=projectNatureFallback([-105,30],box);
   q('.atlas-fallback-map').dispatchEvent(new window.MouseEvent('click',{clientX:p.x,clientY:p.y,bubbles:true}));await waitFor(()=>release,'image waiting');
   q('[data-nature-label="city:seattle"]').click();release();await delay();
-  assert.equal(q('[data-city-select]').value,'seattle');assert.equal(q('[data-climate-chart]').hidden,false);
+  assert.equal(q('[data-city-select]').value,'seattle');assert.equal(q('[data-climate-chart]').hidden,false);await waitFor(()=>fallback||root.dataset.natureLoad==='ready','climate restored');
  }finally{release?.();await delayed.window.happyDOM.close();}
 });
 
@@ -188,22 +188,22 @@ test('概要欄の図と気候区分は共存し、閉じる・解除・履歴�
  try{
   const chart=q('[data-climate-chart]'),figure=q('[data-city-panel="seattle"]'),picker=q('[data-city-select]');
   assert.equal(root.querySelectorAll('[data-city-select]').length,1);
-  assert.ok(chart.closest('[data-nature-summary-panel="climate"]'));assert.equal(q('[data-selection]').contains(chart),false);
-  assert.equal(chart.hidden,false);assert.equal(q('[data-selection]').hidden,false);
+  assert.ok(chart.closest('[data-nature-summary-panel="climate"]'));assert.equal(q('[data-nature-detail]').contains(chart),false);
+  assert.equal(chart.hidden,false);assert.equal(q('[data-nature-detail]').hidden,false);
   assert.equal(q('[data-nature-label="city:seattle"]').getAttribute('aria-pressed'),'true');
   const both=window.location.href,moves=window.__map.cameraChanges;
-  q('[data-close-selection]').click();assert.equal(chart.hidden,false);assert.equal(new URL(window.location.href).searchParams.get('city'),'seattle');
+  q('[data-close-nature-detail]').click();assert.equal(chart.hidden,false);assert.equal(new URL(window.location.href).searchParams.get('city'),'seattle');
   q('[data-nature-label="city:seattle"]').click();q('[data-nature-label="city:seattle"]').click();assert.equal(chart.hidden,false);
   for(const fn of window.__map.events.click)fn({point:{x:230,y:220},lngLat:{lng:-105,lat:30}});
-  await waitFor(()=>!q('[data-selection]').hidden,'area popup');
+  await waitFor(()=>!q('[data-nature-detail]').hidden,'area popup');
   assert.equal(chart.hidden,false);assert.equal(q('[data-nature-label="city:seattle"]').getAttribute('aria-pressed'),'true');
   q('[data-clear-city]').dispatchEvent(new window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
-  assert.equal(q('[data-selection]').hidden,true);assert.equal(chart.hidden,false);
+  assert.equal(q('[data-nature-detail]').hidden,true);assert.equal(chart.hidden,false);
   assert.equal(window.__map.cameraChanges,moves);
   window.history.replaceState({},'',both);window.dispatchEvent(new window.PopStateEvent('popstate'));await delay();
-  assert.equal(chart.hidden,false);assert.equal(q('[data-selection]').hidden,false);
+  assert.equal(chart.hidden,false);assert.equal(q('[data-nature-detail]').hidden,false);
   picker.value='';picker.dispatchEvent(new window.Event('change'));
-  assert.equal(chart.hidden,true);assert.equal(q('[data-city-empty]').hidden,false);assert.equal(q('[data-selection]').hidden,false);
+  assert.equal(chart.hidden,true);assert.equal(q('[data-city-empty]').hidden,false);assert.equal(q('[data-nature-detail]').hidden,false);
   assert.equal(new URL(window.location.href).searchParams.get('city'),null);assert.equal(new URL(window.location.href).searchParams.get('natureFeature'),'climate:Csb');assert.equal(new URL(window.location.href).searchParams.get('crop'),'rice');
   q('[data-nature-label="city:seattle"]').click();const details=figure.querySelector('details');details.open=true;
   q('[data-field="agriculture"]').click();q('[data-map-surface]').dispatchEvent(new window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
@@ -229,4 +229,33 @@ test('画面外でも雨温図を保ち、明示した時だけ都市へ戻り�
   map.getBounds=oldBounds;map.project=oldProject;for(const fn of map.events.moveend)fn();await delay();assert.equal(q('[data-focus-city]').hidden,true);
   q('[data-map-surface]').dispatchEvent(new window.Event('webglcontextlost'));assert.equal(q('[data-focus-city]').hidden,true);assert.equal(q('[data-climate-chart]').hidden,false);
  }finally{await window.happyDOM.close();}
+});
+
+
+test('19水資源は名前から右欄へ開き、概説は選択に左右されず不要UIは存在しない',async()=>{
+ for(const fallback of [false,true]){
+  const {window,root,q}=await setup('?city=seattle',{fallback});
+  try{
+   await waitFor(()=>fallback||root.dataset.natureLoad==='ready','initial climate ready');
+   const overview=q('[data-climate-overview]'),text=overview.textContent;
+   assert.equal(overview.hidden,false);assert.equal(overview.querySelectorAll('.atlas-overview-row').length,8);
+   assert.equal(q('[data-feature-picker]'),null);assert.equal(q('[data-climate-month]'),null);assert.equal(q('.atlas-station-tables'),null);
+   q('[data-climate-code="Csa"]').click();assert.equal(q('[data-nature-detail]').hidden,false);assert.equal(q('[data-selection]').hidden,true);
+   assert.equal(q('[data-climate-chart]').hidden,false);assert.equal(overview.textContent,text);
+   q('[data-nature-mode="water"]').click();await waitFor(()=>fallback||root.dataset.natureLoad==='ready','water names ready');await delay();assert.equal(overview.hidden,true);
+   const names=[...root.querySelectorAll('[data-label-mode="water"]')];assert.equal(names.length,19);
+   for(const name of names){
+    assert.equal(name.hidden,false);name.focus();name.click();
+    assert.equal(q('[data-selection]').hidden,true);assert.equal(q('[data-nature-detail]').hidden,false);
+    assert.ok(q('[data-natural-summary]').contains(q('[data-nature-detail]')));
+    assert.equal(q('[data-nature-detail-title]').textContent,name.textContent);
+    assert.equal(new URL(window.location.href).searchParams.get('natureFeature'),name.dataset.natureLabel);
+    q('[data-close-nature-detail]').click();assert.equal(window.document.activeElement,name);
+   }
+   assert.match(q('[data-fallback-image]').src,/water-interactive.webp$/);
+   assert.match(q('[data-fallback-full]').href,/water-fallback.webp$/);
+   q('[data-nature-mode="climate"]').click();assert.equal(overview.hidden,false);assert.equal(overview.textContent,text);
+   assert.equal(q('[data-city-select]').value,'seattle');assert.equal(q('[data-climate-chart]').hidden,false);await waitFor(()=>fallback||root.dataset.natureLoad==='ready','climate restored');
+  }finally{await window.happyDOM.close();}
+ }
 });

@@ -1,0 +1,17 @@
+---
+import overview from '../../data/atlas/climate-overview.json';
+import { climateLegend } from '../../data/atlas/natural-environment';
+import { withBase } from '../../lib/urls';
+interface Props { visible:boolean }
+const {visible}=Astro.props;
+---
+<section class="atlas-climate-overview" data-climate-overview hidden={!visible} aria-labelledby="climate-overview-heading">
+  <h2 id="climate-overview-heading">気候区分の概説</h2>
+  <p class="atlas-overview-intro">気温と雨の季節変化から、地域の特徴と作物との関係を読みます。</p>
+  <div class="atlas-overview-rows">{overview.map(item=><section class="atlas-overview-row">
+    <header><h3>{item.name}</h3><p class="atlas-overview-codes">{item.codes.map(code=><span><i aria-hidden="true" style={`--climate-color:${climateLegend.find(c=>c.code===code)?.color}`}></i>{code}</span>)}</p></header>
+    <div><p>{item.climate}</p><p><strong>{item.crop}</strong> {item.body}</p><p class="atlas-overview-sources">出典：{item.sources.map((source,index)=><>{index>0?'・':''}<a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}</a></>)}</p></div>
+  </section>)}</div>
+  <p class="atlas-overview-note">作物の育ち方は、気候に加えて土壌・水源・品種・栽培方法にも左右されます。</p>
+  <a class="atlas-cross-link" href={withBase('/atlas/north-america/agriculture/')} data-cross-link="agriculture">同じ場所を農業で見る →</a>
+</section>

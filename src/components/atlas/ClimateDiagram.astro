@@ -26,6 +26,5 @@ const months=['1','2','3','4','5','6','7','8','9','10','11','12'];
   <p><span class="is-cold">棒：降水量 mm</span><span class="is-warm">線：気温 ℃</span></p>
   <p>1991–2020年平年値 · <a href={city.sourceUrl}>NOAA</a> · 観測所標高 {Math.round(city.elevationM).toLocaleString('ja-JP')} m</p>
 
-  <label class="atlas-month-picker">月の値 <select data-climate-month={city.id} aria-label={`${city.nameJa}の月別値`}><option value="">月を選択</option>{months.map((month,index)=><option value={index}>{month}月：{city.temperatureC[index].toFixed(1)}℃ ／ {city.precipitationMm[index].toFixed(1)}mm</option>)}</select></label>
   <details><summary>月別の数値・観測地点</summary><p>{city.stationId} · {city.latitude.toFixed(4)}°N / {Math.abs(city.longitude).toFixed(4)}°W</p><table><thead><tr><th>月</th><th>平均気温</th><th>降水量</th></tr></thead><tbody>{months.map((month,index)=><tr><th>{month}月</th><td>{city.temperatureC[index].toFixed(1)} ℃</td><td>{city.precipitationMm[index].toFixed(1)} mm</td></tr>)}</tbody></table></details>
 </figure>

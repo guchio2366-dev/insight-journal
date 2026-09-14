@@ -1,9 +1,9 @@
 import {containedMapBox,layoutNatureLabels,leaderEnd,projectNatureFallback,type Box,type Point} from '../lib/atlas-nature-labels';
 
-type Entry={id:string;name:string;coordinate:[number,number];mode:'climate'|'landform'};
+type Entry={id:string;name:string;coordinate:[number,number];mode:'climate'|'landform'|'water'};
 type Callbacks={active:()=>boolean;mode:()=>string;project:()=>((p:[number,number])=>Point)|null;select:(entry:Entry,trigger:HTMLButtonElement)=>void;placed:()=>void};
 
-/** Creates a fixed set of 21 buttons once; only placement and state change. */
+/** Creates a fixed set of 40 buttons once; only placement and state change. */
 export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Callbacks){
   const frame=root.querySelector<HTMLElement>('[data-map-frame]')!;
   const holder=root.querySelector<HTMLElement>('[data-nature-labels]')!;
@@ -14,7 +14,7 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
     const line=document.createElementNS(ns,'line'),dot=document.createElementNS(ns,'circle');
     dot.setAttribute('r','3');svg.append(line,dot);
     const button=document.createElement('button');button.type='button';button.className='atlas-nature-label';button.textContent=entry.name;
-    button.dataset.natureLabel=entry.id;button.dataset.labelMode=entry.mode;button.setAttribute('aria-pressed','false');button.setAttribute('aria-controls',entry.mode==='climate'?'city-climate-chart':'atlas-selection');button.hidden=true;
+    button.dataset.natureLabel=entry.id;button.dataset.labelMode=entry.mode;button.setAttribute('aria-pressed','false');button.setAttribute('aria-controls',entry.mode==='climate'?'city-climate-chart':'nature-feature-detail');button.hidden=true;
     let start:Point|null=null,dragged=false;
     button.addEventListener('pointerdown',event=>{start={x:event.clientX,y:event.clientY};dragged=false;event.stopPropagation();});
     button.addEventListener('pointermove',event=>{if(start&&Math.hypot(event.clientX-start.x,event.clientY-start.y)>6)dragged=true;});
@@ -28,7 +28,7 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
   }
   let queued=0;
   function render(){
-    queued=0;holder.hidden=!callbacks.active()||!['climate','landform'].includes(callbacks.mode());
+    queued=0;holder.hidden=!callbacks.active()||!['climate','landform','water'].includes(callbacks.mode());
     if(holder.hidden)return;
     const project=callbacks.project(),bounds:Box=project?{left:0,top:0,right:frame.clientWidth,bottom:frame.clientHeight}:fallbackBox();
     if(bounds.right<=bounds.left||bounds.bottom<=bounds.top)return;
@@ -40,7 +40,8 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
       button.hidden=false;const anchor=project?project(entry.coordinate):projectNatureFallback(entry.coordinate,bounds);
       return {id:entry.id,anchor,width:button.offsetWidth||entry.name.length*12+14,height:button.offsetHeight||24};
     });
-    const placed=layoutNatureLabels(inputs,bounds,obstacles);
+    const layoutBounds=callbacks.mode()==='water'?{left:0,top:0,right:frame.clientWidth,bottom:frame.clientHeight-40}:bounds;
+    const placed=layoutNatureLabels(inputs,layoutBounds,obstacles);
     for(const {entry,button,line,dot} of nodes){
       const box=placed.find(item=>item.id===entry.id);button.hidden=!box;line.style.display=dot.style.display=box?'':'none';
       if(!box)continue;

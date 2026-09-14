@@ -52,7 +52,7 @@ test('公開自然環境資産の全ハッシュとgzipを検証し、巨大な�
   const raw=read(name);assert.equal(raw.byteLength,record.bytes,name);assert.equal(createHash('sha256').update(raw).digest('hex'),record.sha256,name);
   if(name.endsWith('.gz')){const data=JSON.parse(gunzipSync(raw));assert.equal(data.type,'FeatureCollection');assert.ok(data.features.every(f=>Number.isFinite(f.properties.elevationM)));}
  }
- assert.equal(Object.keys(m.files).length,12);assert.equal(Object.values(m.files).reduce((sum,item)=>sum+item.bytes,0),3481293);
+ assert.equal(Object.keys(m.files).length,13);assert.equal(Object.values(m.files).reduce((sum,item)=>sum+item.bytes,0),3666441);
  assert.ok(read('landform-interactive.webp').byteLength<450000);
  assert.ok(read('contours.geojson.gz').byteLength<3e6);assert.ok(!Object.keys(m.files).some(name=>name==='contour-tiles.json'||name.startsWith('contours/')));
  assert.deepEqual(m.elevation.preservedDetailArchive,{repositoryPath:'data/derived/nature-v1/contours-detail/manifest.json',publiclyServed:false,fileCount:62,compressedBytes:24093925});

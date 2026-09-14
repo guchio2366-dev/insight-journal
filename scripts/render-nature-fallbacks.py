@@ -40,10 +40,12 @@ def label(draw,text,coordinate,color='#3a5054',size=26):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--interactive-landform-only',action='store_true',help='Render only the existing landform data without burned-in names for DOM labels')
+    parser.add_argument('--interactive-water-only',action='store_true',help='Render water without burned-in names for accessible DOM labels')
     args=parser.parse_args()
+    interactive=args.interactive_landform_only or args.interactive_water_only
     overlays=json.loads((OUT/'overlays.geojson').read_text())['features']
-    contour=[] if args.interactive_landform_only else json.loads(gzip.decompress((OUT/'contours.geojson.gz').read_bytes()))['features']
-    for mode in (['landform'] if args.interactive_landform_only else ['climate','water','landform','contour']):
+    contour=[] if interactive else json.loads(gzip.decompress((OUT/'contours.geojson.gz').read_bytes()))['features']
+    for mode in (['landform'] if args.interactive_landform_only else ['water'] if args.interactive_water_only else ['climate','water','landform','contour']):
         im=Image.new('RGBA',(WIDTH,HEIGHT),'#e4eff0');draw=ImageDraw.Draw(im)
         for f in BASE['features']:
             if f['properties']['kind']=='land':geometry(draw,f['geometry'],'#faf9f3','#809297',2)
@@ -96,18 +98,18 @@ def main():
         if mode=='contour':
             label(draw,'最高峰エルバート 約4,400 m',[-110,42.4],size=24)
             label(draw,'最高峰ミッチェル 約2,037 m',[-81,35.3],size=24)
-        if mode=='water':
+        if mode=='water' and not args.interactive_water_only:
             for text,p in [('ハイプレーンズ帯水層',[-101,40]),('セントラルバレー帯水層系',[-116,35]),('ミシシッピ川',[-89,33]),('五大湖',[-83,46])]:label(draw,text,p,size=27)
         if mode=='climate':
             for city in json.loads((OUT/'climate-cities.json').read_text()):
                 x,y=project([city['longitude'],city['latitude']]);draw.ellipse((x-6,y-6,x+6,y+6),fill='#fff',outline='#263f4c',width=3)
-        name='landform-interactive.webp' if args.interactive_landform_only else f'{mode}-fallback.webp'
+        name=f'{mode}-interactive.webp' if interactive else f'{mode}-fallback.webp'
         im.convert('RGB').save(OUT/name,quality=90,method=6)
-        if args.interactive_landform_only:
+        if interactive:
             manifest=json.loads((OUT/'manifest.json').read_text())
             data=(OUT/name).read_bytes()
             manifest['files'][name]={'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()}
-            manifest['fallbacks']['interactiveLandform']='landform-interactive.webp: same published geometry and projection; nine names are accessible DOM labels; original labelled image retained for no-JavaScript and full-size viewing'
+            manifest['fallbacks']['interactiveLandform' if mode=='landform' else 'interactiveWater']=f'{name}: same published geometry and projection; names are accessible DOM labels; original labelled image retained for no-JavaScript and full-size viewing'
             (OUT/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,separators=(',',':')))
         print(name,flush=True)
 
