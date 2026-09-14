@@ -537,11 +537,11 @@
 .atlas-nature-summary .atlas-city-reading>.atlas-city-code-meaning{color:#52665e;font-size:12px;line-height:1.6}
 .atlas-city-cause{margin-top:8px}
 .atlas-city-cause h5{margin:0 0 3px;font:700 13px/1.6 var(--sans);color:#355b52}
-.atlas-city-cause p{margin:0;font-size:14px;line-height:1.65}
+.atlas-explorer[data-field=natural] .atlas-city-cause p{margin:0;font-size:14px;line-height:1.65}
 .atlas-city-reference{color:#52665e;font-size:11px;white-space:nowrap}
 .atlas-city-climate .atlas-climate-diagram .atlas-city-crop{margin-top:8px;padding-top:4px;border-top:1px solid #d9dfd5;font-size:13px;line-height:1.6}
 .atlas-city-climate .atlas-climate-diagram .atlas-city-crop>summary{min-height:32px;padding:5px 0;font-weight:700;color:#355b52}
-.atlas-city-crop>p{margin:2px 0;font-size:13px;line-height:1.6}
+.atlas-explorer[data-field=natural] .atlas-city-crop>p{margin:2px 0;font-size:13px;line-height:1.6}
 .atlas-city-region{color:#52665e}
 .atlas-city-products a{display:inline-block;min-height:28px;padding:3px 1px;color:#255964;text-decoration:underline;text-underline-offset:3px}
 .atlas-city-products strong{font-weight:750}
