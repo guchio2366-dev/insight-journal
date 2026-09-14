@@ -1,7 +1,11 @@
 ---
 import type { ClimateCity } from '../../data/atlas/natural-environment';
+import { cityClimateReading, cityClimateCodes } from '../../data/atlas/city-climate-reading';
+import overview from '../../data/atlas/climate-overview.json';
 interface Props { city:ClimateCity }
 const { city } = Astro.props;
+const reading=cityClimateReading[city.id], classification=city.koppenCode?cityClimateCodes[city.koppenCode]:null;
+const cropSource=overview.find(item=>item.name===reading.cropGroup)?.sources[0];
 const left=34,right=286,top=29,bottom=159;
 const x=(index:number)=>left+(right-left)*(index+.5)/12;
 const precipitationY=(value:number)=>bottom-value/350*(bottom-top);
@@ -9,13 +13,13 @@ const temperatureY=(value:number)=>bottom-(value+10)/50*(bottom-top);
 const points=city.temperatureC.map((value,index)=>`${x(index).toFixed(1)},${temperatureY(value).toFixed(1)}`).join(' ');
 const months=['1','2','3','4','5','6','7','8','9','10','11','12'];
 ---
-<figure class="atlas-climate-diagram" data-city-panel={city.id} hidden>
-  <figcaption><strong>{city.nameJa}</strong><span>{city.stationName}</span></figcaption>
+<figure class="atlas-climate-diagram" data-city-panel={city.id} data-city-code={city.koppenCode??''} hidden={city.id!=='los-angeles'}>
   <svg viewBox="0 0 320 198" role="img" aria-label={`${city.nameJa}の1991年から2020年の月平均気温と月降水量`}>
     <g class="atlas-climate-grid">
       {[0,100,200,350].map(value=><><line x1={left} x2={right} y1={precipitationY(value)} y2={precipitationY(value)} /><text x="2" y={precipitationY(value)+3}>{value}</text></>)}
     </g>
     <text class="atlas-climate-unit" x="2" y="12">mm</text><text class="atlas-climate-unit atlas-climate-unit--temp" x="294" y="12">℃</text>
+    <text class="atlas-climate-city-name" x="160" y="13" text-anchor="middle">{city.nameJa}</text>
     {city.precipitationMm.map((value,index)=><rect class="atlas-climate-bar" x={x(index)-7.5} y={precipitationY(value)} width="15" height={bottom-precipitationY(value)} />)}
     <polyline class="atlas-climate-line" points={points} />
     {city.temperatureC.map((value,index)=><circle class="atlas-climate-dot" cx={x(index)} cy={temperatureY(value)} r="2.2" />)}
@@ -24,7 +28,12 @@ const months=['1','2','3','4','5','6','7','8','9','10','11','12'];
     <text class="atlas-climate-axis-title" x="160" y="195">月</text>
   </svg>
   <p><span class="is-cold">棒：降水量 mm</span><span class="is-warm">線：気温 ℃</span></p>
-  <p>1991–2020年平年値 · <a href={city.sourceUrl}>NOAA</a> · 観測所標高 {Math.round(city.elevationM).toLocaleString('ja-JP')} m</p>
-
-  <details><summary>月別の数値・観測地点</summary><p>{city.stationId} · {city.latitude.toFixed(4)}°N / {Math.abs(city.longitude).toFixed(4)}°W</p><table><thead><tr><th>月</th><th>平均気温</th><th>降水量</th></tr></thead><tbody>{months.map((month,index)=><tr><th>{month}月</th><td>{city.temperatureC[index].toFixed(1)} ℃</td><td>{city.precipitationMm[index].toFixed(1)} mm</td></tr>)}</tbody></table></details>
+  <section class="atlas-city-reading" data-city-reading aria-label={`${city.nameJa}の気候区分`}>
+    <h4>{classification?<><b>{city.koppenCode}</b> {classification.name}</>:'気候区分：データなし'}</h4>
+    <p>{reading.body}</p>
+    {classification&&<p class="atlas-city-code-meaning">{classification.meaning}</p>}
+    {classification&&reading.crop&&cropSource&&<p class="atlas-city-crop" data-city-crop hidden><strong>気候と作物</strong> {reading.crop} <a href={cropSource.url} target="_blank" rel="noopener noreferrer">出典</a></p>}
+  </section>
+  <p class="atlas-city-source">1991–2020 · <a href={city.sourceUrl}>NOAA</a> · <a href="#source-koppen">気候区分の出典</a></p>
+  <details data-city-numbers><summary>月別の数値・観測地点</summary><p>{city.stationName} · {city.stationId} · 標高 {Math.round(city.elevationM).toLocaleString('ja-JP')} m · {city.latitude.toFixed(4)}°N / {Math.abs(city.longitude).toFixed(4)}°W</p><table><thead><tr><th>月</th><th>平均気温</th><th>降水量</th></tr></thead><tbody>{months.map((month,index)=><tr><th>{month}月</th><td>{city.temperatureC[index].toFixed(1)} ℃</td><td>{city.precipitationMm[index].toFixed(1)} mm</td></tr>)}</tbody></table></details>
 </figure>

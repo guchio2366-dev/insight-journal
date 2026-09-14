@@ -26,8 +26,6 @@
 .atlas-nature-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid #c9cec4;background:#f2f1e9}
 .atlas-nature-tabs button{min-height:38px;padding:7px 4px;border:0;border-right:1px solid #d3d6cd;background:transparent;color:#344951;font-size:12px;font-weight:750}
 .atlas-nature-tabs button:last-child{border-right:0}.atlas-nature-tabs button[aria-selected="true"]{background:#35515d;color:#fff}.atlas-nature-tabs button:hover{background:#dce6e1;color:#21363e}
-.atlas-city-picker{display:flex;align-items:center;gap:6px;color:#546761;font-size:11px;font-weight:750;white-space:nowrap}
-.atlas-city-picker select{max-width:170px;min-height:38px;border:1px solid #bfc9c3;border-radius:3px;background:#fffef8;color:#263d46;font:inherit;font-weight:600}
 
 .atlas-primary-grid{display:grid;grid-template-columns:minmax(0,1fr);align-items:start}
 .atlas-map-column{min-width:0}
@@ -399,13 +397,8 @@
 .atlas-explorer[data-field=natural] .atlas-primary-grid .atlas-nature-summary{height:auto;overflow:visible}
 .atlas-city-climate{min-width:0;margin-bottom:20px}
 .atlas-city-climate h3{scroll-margin-top:24px}
-.atlas-city-climate .atlas-city-picker{display:grid;justify-content:stretch;gap:6px;margin:10px 0}
-.atlas-city-climate select{width:100%;min-width:0;max-width:none;min-height:44px;font-size:14px}
-.atlas-city-actions{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
-.atlas-city-actions button,.atlas-city-jump{min-height:44px;padding:10px 12px;border:1px solid #aab8ae;background:#fff;color:#31444b;font:inherit;font-size:13px;cursor:pointer}
+.atlas-city-jump{min-height:44px;padding:10px 12px;border:1px solid #aab8ae;background:#fff;color:#31444b;font:inherit;font-size:13px;cursor:pointer}
 .atlas-city-jump{display:inline-flex;align-items:center;margin-top:8px}
-.atlas-city-climate .atlas-climate-diagram figcaption strong{display:block;font-size:18px}
-.atlas-city-climate .atlas-climate-diagram figcaption span{font-size:12px;line-height:1.5}
 .atlas-city-climate .atlas-climate-diagram svg{max-height:none;overflow:visible}
 .atlas-city-climate svg text{font-size:13px}
 .atlas-city-climate .atlas-climate-diagram>p,.atlas-city-climate .atlas-climate-diagram details{font-size:12px!important;line-height:1.6}
@@ -439,8 +432,6 @@
 .atlas-nature-detail-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;font-size:12px}
 .atlas-nature-detail-actions button,.atlas-nature-jump{min-height:44px;padding:8px 10px;border:1px solid #aab8ae;background:#fff;color:#31444b;font:inherit;cursor:pointer}
 .atlas-nature-jump{display:inline-flex;align-items:center;font-size:13px;margin-top:8px}
-.atlas-climate-legend button{display:inline-flex;align-items:center;gap:5px;min-height:32px;padding:4px 6px;background:#fffdf7;border:1px solid #c7d1c9;border-radius:3px;color:#263f46;font:12px/1.5 var(--sans);cursor:pointer}
-.atlas-climate-legend button[aria-pressed=true]{outline:2px solid #176f89;outline-offset:1px}
 .atlas-nature-label[data-label-mode=water]{max-width:158px;min-height:32px;white-space:normal;line-height:16px;text-align:center;overflow-wrap:anywhere}
 .atlas-explorer[data-field=natural][data-nature-mode=water] .atlas-map-frame{min-height:500px}
 @media(min-width:960px){
@@ -535,3 +526,32 @@
  .agri-reading-panel{height:auto}
 }
 @media(max-width:359px){.agri-statistics .atlas-donut-layout{grid-template-columns:minmax(0,1fr)}.agri-statistics .atlas-donut{margin:auto}}
+
+/* Nature v2.4: chart first, city reading, and a closed overview below the map. */
+.atlas-city-climate .atlas-climate-diagrams{border:0;padding:0;margin-top:8px}
+.atlas-city-climate .atlas-climate-city-name{fill:#263e49;font:600 12px var(--sans)}
+.atlas-city-reading{margin-top:12px;padding-top:10px;border-top:1px solid #c7d1c8}
+.atlas-city-reading h4{margin:0 0 7px;font:700 16px/1.5 var(--sans)}
+.atlas-city-reading h4 b{margin-right:5px;color:#355b52;font-size:19px}
+.atlas-nature-summary .atlas-city-reading>p{margin:6px 0;font-size:14px;line-height:1.65}
+.atlas-nature-summary .atlas-city-reading>.atlas-city-code-meaning{color:#52665e;font-size:12px;line-height:1.6}
+.atlas-nature-summary .atlas-city-reading>.atlas-city-crop{margin-top:10px;padding-top:8px;border-top:1px solid #d9dfd5;font-size:13px;line-height:1.6}
+.atlas-city-crop strong{display:block}
+.atlas-city-crop a{white-space:nowrap;font-size:12px}
+.atlas-city-climate .atlas-climate-diagram>.atlas-city-source{justify-content:flex-start;gap:4px;flex-wrap:wrap;margin-top:10px!important;font-size:11px!important}
+.atlas-climate-overview{margin-top:10px;padding:0;border:1px solid #b8c8be;background:#fbfaf3}
+.atlas-climate-overview>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;padding:10px 14px;cursor:pointer;list-style:none}
+.atlas-climate-overview>summary::-webkit-details-marker{display:none}
+.atlas-climate-overview>summary::after{content:'＋';font-size:20px;line-height:1}
+.atlas-climate-overview[open]>summary::after{content:'−'}
+.atlas-climate-overview>summary:focus-visible{outline:3px solid #176f89;outline-offset:2px}
+.atlas-climate-overview h2{font-size:18px;line-height:1.5}
+.atlas-climate-overview>:not(summary){margin-left:14px;margin-right:14px}
+.atlas-climate-overview>.atlas-cross-link{margin-bottom:14px}
+.atlas-climate-map-code{position:absolute;left:0;top:0;font:750 13px/18px var(--sans);color:#263b43;white-space:nowrap;pointer-events:none;text-shadow:0 1px 2px #fffdf4,1px 0 2px #fffdf4,-1px 0 2px #fffdf4,0 -1px 2px #fffdf4}
+.atlas-static-climate-codes{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.atlas-static-climate-codes text{font:750 13px var(--sans);fill:#263b43;stroke:#fffdf4;stroke-width:2px;paint-order:stroke fill}
+@media(max-width:959px){
+ .atlas-city-climate .atlas-climate-diagram>svg{max-width:440px;margin-inline:auto}
+ .atlas-climate-overview{margin-top:16px}
+}
