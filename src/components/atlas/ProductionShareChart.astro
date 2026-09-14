@@ -1,0 +1,43 @@
+---
+import { productionShares,validateProductionTrend,type ProductionCountry,type ProductionTrend } from '../../lib/atlas-production-share';
+interface Props { id:string; name:string; period:string; basis:string; unit:string; totalUnit:string; totalDivisor:number; worldTotal:number; countries:readonly ProductionCountry[]; trend:readonly ProductionTrend[]; sourceUrl:string; sourceLabel:string }
+const p=Astro.props;
+const names:Record<string,string>={'United States':'米国','United States of America':'米国',China:'中国','China, mainland':'中国',Brazil:'ブラジル','European Union':'EU',Argentina:'アルゼンチン',India:'インド',Russia:'ロシア','Russian Federation':'ロシア',Australia:'豪州',Bangladesh:'バングラデシュ',Indonesia:'インドネシア',Vietnam:'ベトナム','Viet Nam':'ベトナム',Pakistan:'パキスタン',Mexico:'メキシコ',Germany:'ドイツ',France:'フランス',Other:'その他'};
+const rows=productionShares(p.worldTotal,p.countries),us=rows.find(r=>r.code==='US')!;
+validateProductionTrend(p.trend,p.worldTotal,us.value);
+const palette=['#c47e55','#b19534','#71946b','#947aa5','#7997a1'];let colorIndex=0,offset=0;
+const slices=rows.map(row=>{const start=offset;offset+=row.share;return {...row,start,color:row.code==='US'?'#355f75':row.code==='OTHER'?'#c4c6bf':palette[colorIndex++%palette.length]};});
+const fmt=(n:number)=>n.toLocaleString('ja-JP',{maximumFractionDigits:1});
+const shares=p.trend.map(r=>r.us/r.world*100);
+const min=Math.max(0,Math.floor(Math.min(...shares)-3)),max=Math.ceil(Math.max(...shares)+3);
+const x=(i:number)=>42+i*280/(p.trend.length-1),y=(share:number)=>106-(share-min)/(max-min)*78;
+const points=shares.map((share,i)=>`${x(i)},${y(share)}`).join(' ');
+const mean=(a:number[])=>a.reduce((s,n)=>s+n,0)/a.length;
+const delta=mean(shares.slice(-3))-mean(shares.slice(0,3));
+---
+<figure class="atlas-world-chart" data-world-production={p.id}>
+  <figcaption><strong>世界生産と米国シェア</strong><span>{p.period}</span></figcaption>
+  <p class="atlas-chart-note">{p.basis} · 国・地域別</p>
+  <div class="atlas-donut-layout">
+    <svg class="atlas-donut" viewBox="0 0 144 144" role="img" aria-labelledby={`world-title-${p.id} world-desc-${p.id}`}>
+      <title id={`world-title-${p.id}`}>{p.name}の世界生産構成</title><desc id={`world-desc-${p.id}`}>世界総量{fmt(p.worldTotal)}{p.unit}。米国{us.share.toFixed(1)}%。国・地域別の値は隣の凡例と数値表に表示。</desc>
+      {slices.map(row=><circle cx="72" cy="72" r="52" pathLength="100" class="atlas-donut-slice" style={`stroke:${row.color}`} stroke-dasharray={`${row.share} ${100-row.share}`} stroke-dashoffset={-row.start} transform="rotate(-90 72 72)"><title>{names[row.country]??row.country} {row.share.toFixed(1)}%</title></circle>)}
+      <text x="72" y="63" text-anchor="middle">世界総生産</text><text x="72" y="82" text-anchor="middle" class="atlas-donut-total">{fmt(p.worldTotal/p.totalDivisor)}</text><text x="72" y="98" text-anchor="middle">{p.totalUnit}</text>
+    </svg>
+    <ol class="atlas-donut-key">{slices.map(row=><li class:list={{'is-us':row.code==='US'}}><i style={`background:${row.color}`} aria-hidden="true"/><span>{names[row.country]??row.country}</span><strong>{row.share.toFixed(1)}%</strong></li>)}</ol>
+  </div>
+  <p class="atlas-us-production">米国 <strong>{fmt(us.value)} {p.unit}</strong> ／ 世界の <strong>{us.share.toFixed(1)}%</strong></p>
+  <svg class="atlas-share-line" viewBox="0 0 360 140" role="img" aria-label={`${p.name}の米国シェア、${p.trend[0].year}〜${p.trend.at(-1)!.year}年`}>
+    <line x1="42" y1="28" x2="322" y2="28"/><line x1="42" y1="106" x2="322" y2="106"/>
+    <text x="1" y="33">{max}%</text><text x="1" y="111">{min}%</text><polyline points={points}/>
+    {p.trend.map((row,i)=><circle cx={x(i)} cy={y(shares[i])} r={i===p.trend.length-1?3.5:2}><title>{row.year}年 {shares[i].toFixed(1)}%</title></circle>)}
+    <text x="42" y="135">{p.trend[0].year}</text><text x="322" y="135" text-anchor="end">{p.trend.at(-1)!.year}</text>
+  </svg>
+  <p class="atlas-chart-note">{Math.abs(delta)<.15?'直近3年平均は、期間初めの3年平均とほぼ同じです。':`直近3年平均は、期間初めの3年平均より${Math.abs(delta).toFixed(1)}ポイント${delta>0?'高く':'低く'}なっています。`} 将来予測ではありません。</p>
+  <details class="atlas-chart-data"><summary>国別の生産量と10年の推移</summary>
+    <table><caption>{p.period} · {p.unit}</caption><thead><tr><th>国・地域</th><th>生産量</th><th>世界比</th></tr></thead><tbody>{slices.map(row=><tr><th scope="row">{names[row.country]??row.country}</th><td>{fmt(row.value)}</td><td>{row.share.toFixed(1)}%</td></tr>)}<tr><th scope="row">世界</th><td>{fmt(p.worldTotal)}</td><td>100%</td></tr></tbody></table>
+    <table><caption>米国シェアの推移 · {p.unit}</caption><thead><tr><th>年</th><th>米国</th><th>世界</th><th>米国比</th></tr></thead><tbody>{p.trend.map((row,i)=><tr><th scope="row">{row.year}</th><td>{fmt(row.us)}</td><td>{fmt(row.world)}</td><td>{shares[i].toFixed(1)}%</td></tr>)}</tbody></table>
+    <p>世界総量を母数に上位5か国・地域と米国、その他を表示。表示割合の合計は丸めで100%と異なる場合があります。</p>
+  </details>
+  <a href={p.sourceUrl} target="_blank" rel="noopener noreferrer">出典：{p.sourceLabel}</a>
+</figure>

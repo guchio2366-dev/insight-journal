@@ -1,0 +1,10 @@
+---
+interface Props { id:string; group:'crops'|'livestock'; color:string }
+const {id,group,color}=Astro.props;
+const crop=group==='crops';
+const attrs=crop?{'data-stat-panel':id}:{'data-livestock-stat-panel':id};
+---
+<article class="atlas-crop-panel" id={`${crop?'crop':'livestock'}-${id}`} role="tabpanel" aria-labelledby={`${crop?'stat':'livestock-stat'}-tab-${id}`} tabindex="-1" style={`--crop-color:${color}`} {...attrs}>
+  <div class="atlas-crop-copy"><slot name="copy" /></div>
+  <div class="atlas-crop-data"><slot name="supply" /><div class="atlas-crop-charts"><slot name="exports" /><slot name="world" /></div><slot name="extra" /></div>
+</article>

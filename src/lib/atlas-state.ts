@@ -1,6 +1,7 @@
 import { regionalInsightIds } from '../data/atlas/regional-insights.ts';
 import { validNatureFeature } from './atlas-nature-state.ts';
 import { livestockRegions } from '../data/atlas/livestock.ts';
+import { readAgricultureDetailState,writeAgricultureDetailState,type AgricultureDetailState } from './atlas-agriculture-detail-state.ts';
 
 export const agricultureRelationIds=['corn-soy-hogs','plains-wheat-cattle','california-rice-water'] as const;
 
@@ -45,7 +46,7 @@ export function readAtlasState(url: URL, defaultField: MapField = 'overview') {
     crop:allowed(url.searchParams.get('crop'),mapCropIds),
     region:allowed(url.searchParams.get('region'),regionalInsightIds),
     relation:allowed(url.searchParams.get('crop'),mapCropIds)||allowed(url.searchParams.get('region'),regionalInsightIds)||validAnimalRegion?null:allowed(url.searchParams.get('relation'),agricultureRelationIds),
-    stats:allowed(url.searchParams.get('stats'),statsCropIds) ?? 'corn',
+    ...readAgricultureDetailState(url),
     view:explicitView ?? (camera?'custom':'fit') as ViewMode,
     env:allowed(url.searchParams.get('env'),natureModes) ?? (pathField==='land'?'landform':'climate'),
     city:allowed(url.searchParams.get('city'),climateCityIds),
@@ -65,7 +66,8 @@ export function writeAtlasState(
   view:ViewMode='custom',
   agriLayers:readonly AgricultureLayer[]=['crops','livestock'],animal?:string|null,animalRegion?:string|null,
   nature?:{env?:NatureMode;city?:string|null;natureFeature?:string|null},
-  relation?:string|null
+  relation?:string|null,
+  details?:AgricultureDetailState
 ) {
   const next=new URL(url);
   next.pathname=base+(field==='overview'?'':field==='natural'?'nature/':field+'/');
@@ -82,5 +84,5 @@ export function writeAtlasState(
   if(allowed(nature?.city??null,climateCityIds))next.searchParams.set('city',nature!.city!);else next.searchParams.delete('city');
   if(validNatureFeature(nature?.natureFeature))next.searchParams.set('natureFeature',nature!.natureFeature!);else next.searchParams.delete('natureFeature');
   if(allowed(relation??null,agricultureRelationIds)&&!next.searchParams.has('crop')&&!next.searchParams.has('region')&&!next.searchParams.has('animalRegion'))next.searchParams.set('relation',relation!);else next.searchParams.delete('relation');
-  return next;
+  return writeAgricultureDetailState(next,{...(details??readAgricultureDetailState(url)),stats:allowed(stats??null,statsCropIds)??'corn'});
 }
