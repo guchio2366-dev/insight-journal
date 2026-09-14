@@ -1,7 +1,7 @@
 import type { AgricultureRelation } from '../data/atlas/agriculture-relations';
 import { relationContextFeatures } from '../lib/atlas-relation-geometry';
 import { readAtlasState, writeAtlasState, type MapField, type NatureMode, type ViewMode } from '../lib/atlas-state';
-import { validNatureFeature, climateCell } from '../lib/atlas-nature-state';
+import { validNatureFeature, climateCell, climateFamilyNames } from '../lib/atlas-nature-state';
 import { createNatureLoader, contourLabelCandidates } from '../lib/atlas-nature-loader';
 import { chooseCardPlacement, type Rect } from '../lib/atlas-card-placement';
 import type { GeoJSONSource, Map as LibreMap } from 'maplibre-gl';
@@ -205,7 +205,7 @@ export async function startAtlas() {
     const configured=config.natureFeatureCopy[key];
     let copy:SelectionCopy,anchor=coordinate??configured?.anchor??null,heading=configured?.title??title??key.split(':')[1];
     if(configured)copy={full:configured.full,compact:configured.compact};
-    else if(key.startsWith('climate:')){const item=config.climateLegend.find((item:any)=>item.code===key.split(':')[1]);if(!item)return;heading=`${item.code}｜${item.nameJa}`;const code=item.code;let description=code[0]==='B'?(code[1]==='W'?'降水が非常に少ない砂漠の気候です。':'砂漠より降水がある半乾燥のステップ気候です。'):code[0]==='A'?'年間を通して気温が高い熱帯の気候です。':code[0]==='E'?'最も暖かい月でも低温となる寒帯の気候です。':`${code[0]==='D'?'冬の寒さが強い冷帯':'比較的穏やかな冬を持つ温帯'}で、${code[1]==='s'?'夏に降水が少なくなります':code[1]==='w'?'冬に降水が少なくなります':'明瞭な乾季がありません'}。`;copy={full:description+' 1991–2020年の分類格子を示します。',compact:description+' 1991–2020年の分類格子です。'};}
+    else if(key.startsWith('climate:')){const item=config.climateLegend.find((item:any)=>item.code===key.split(':')[1]);if(!item)return;heading=`${climateFamilyNames[item.code[0]]}｜${item.nameJa}（${item.code}）`;const code=item.code;let description=code[0]==='B'?(code[1]==='W'?'降水が非常に少ない砂漠の気候です。':'砂漠より降水がある半乾燥のステップ気候です。'):code[0]==='A'?'年間を通して気温が高い熱帯の気候です。':code[0]==='E'?'最も暖かい月でも低温となる寒帯の気候です。':`${code[0]==='D'?'冬の寒さが強い冷帯':'比較的穏やかな冬を持つ温帯'}で、${code[1]==='s'?'夏に降水が少なくなります':code[1]==='w'?'冬に降水が少なくなります':'明瞭な乾季がありません'}。`;copy={full:description+' 1991–2020年の分類格子を示します。',compact:description+' 1991–2020年の分類格子です。'};}
     else if(key.startsWith('landform:'))copy={full:'Natural Earthの地誌的な概略区分です。周囲の陰影とあわせて、山地・高原・平原の位置と広がりを読みます。地質や土壌の境界ではありません。',compact:'地誌的な概略区分です。地質・土壌の境界ではありません。'};
     else if(key.startsWith('elevation:')){const value=Number(key.split(':')[1]);copy={full:`標高${value.toLocaleString('ja-JP')}mの等高線です。同じ値の線は全域で同じ基準とし、ロッキー山脈とアパラチア山脈の高さを直接比べられます。`,compact:`標高${value.toLocaleString('ja-JP')}mの等高線です。全国で同じ基準です。`};heading=`${value.toLocaleString('ja-JP')} m 等高線`;}
     else return;
