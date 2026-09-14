@@ -1,0 +1,18 @@
+{
+  "publisher": "USDA",
+  "report": "WASDE-675",
+  "releaseDate": "2026-09-11",
+  "retrievedAt": "2026-09-14",
+  "url": "https://esmis.nal.usda.gov/sites/default/release-files/796054/wasde0926.pdf",
+  "pdfSha256": "5b7bc06716213aa19c770b2c83c4b7c5cf1d90ec7639a801dc7291778dc67517",
+  "pdfPages": [
+    32,
+    33
+  ],
+  "pdfTextPath": "data-source/atlas/livestock/wasde675-p32-p33.txt",
+  "pdfTextSha256": "b65121d296d427e01ea8f4616415e36d328bfff15789389521450ea553f60150",
+  "textUrl": "https://esmis.nal.usda.gov/sites/default/release-files/796054/wasde0926.txt",
+  "localRawPath": "scripts/data/wasde0926.txt",
+  "sha256": "de4baa0dc24769b2d8cc153bac488049d905b5c8aa1fec9696e2d4e13036e285",
+  "extractMethod": "pdftotext -f 32 -l 33 -layout; quantities parsed from the separately retained official text file, year 2025 only"
+}

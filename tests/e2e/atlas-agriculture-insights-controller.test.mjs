@@ -81,3 +81,56 @@ test('静的HTMLで3関係・5収支・18強調語句・全用途のラベルと
   assert.match(html,/参考：2025暦年/);assert.match(html,/−|未勘定/);
  }finally{await window.happyDOM.close();}
 });
+
+test('作物・畜産の詳細は独立し、20回の切替と乳換算で地図と全国統計を変更しない',async()=>{
+ const {window,q,requests}=await setup('?stats=rice&livestockStats=dairy&milkBasis=skim&lng=-101&lat=39&z=4');
+ try{
+  const count=requests.length,moves=window.__map.cameraChanges,national=q('[data-field-national="agriculture"]').innerHTML;
+  const exports=q('[data-livestock-exports="dairy"]').innerHTML,world=q('[data-world-production="dairy"]').innerHTML;
+  assert.equal(q('[data-milk-panel="skim"]').hidden,false);assert.equal(q('[data-milk-panel="fat"]').hidden,true);
+  for(let i=0;i<20;i++)q('[data-livestock-stat-select="'+['beef','dairy','hogs','broilers','layers'][i%5]+'"]').click();
+  assert.equal(window.__mapCount,1);assert.equal(window.__map.cameraChanges,moves);assert.equal(requests.length,count);
+  assert.equal(q('[data-field-national="agriculture"]').innerHTML,national);assert.equal(q('[data-stat-panel="rice"]').hidden,false);
+  q('[data-livestock-stat-select="dairy"]').click();q('[data-milk-basis="fat"]').click();
+  assert.equal(q('[data-milk-panel="fat"]').hidden,false);assert.match(q('[data-milk-panel="fat"] .animal-supply-total').textContent,/251.1/);
+  q('[data-milk-basis="skim"]').click();assert.match(q('[data-milk-panel="skim"] .animal-supply-total').textContent,/246.6/);
+  assert.equal(q('[data-livestock-exports="dairy"]').innerHTML,exports);assert.equal(q('[data-world-production="dairy"]').innerHTML,world);
+  const animal=q('[data-livestock-stat-select="dairy"]');animal.focus();animal.dispatchEvent(new window.KeyboardEvent('keydown',{key:'End',bubbles:true}));
+  assert.equal(window.document.activeElement.dataset.livestockStatSelect,'layers');assert.equal(q('[data-stat-panel="rice"]').hidden,false);
+  window.document.activeElement.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Home',bubbles:true}));assert.equal(window.document.activeElement.dataset.livestockStatSelect,'beef');
+  q('[data-stat-select="rice"]').dispatchEvent(new window.KeyboardEvent('keydown',{key:'Home',bubbles:true}));assert.equal(q('[data-stat-panel="corn"]').hidden,false);assert.equal(q('[data-livestock-stat-panel="beef"]').hidden,false);
+  q('[data-relation-select="corn-soy-hogs"]').click();assert.equal(q('[data-livestock-stat-panel="beef"]').hidden,false);
+  for(const field of ['natural','industry','agriculture'])q('[data-field="'+field+'"]').click();
+  const url=new URL(window.location.href);assert.equal(url.searchParams.get('milkBasis'),'skim');assert.equal(url.searchParams.get('livestockStats'),'beef');assert.equal(url.searchParams.get('stats'),'corn');
+ }finally{await window.happyDOM.close();}
+});
+
+test('WebGL失敗後も旧アンカー・query競合・履歴・凡例リンクを復元',async()=>{
+ const {window,q}=await setup('?stats=rice&livestockStats=hogs&milkBasis=skim#livestock-dairy',true);
+ try{
+  assert.equal(q('[data-livestock-stat-panel="dairy"]').hidden,false);assert.equal(q('[data-stat-panel="rice"]').hidden,false);
+  q('[data-livestock-stat-select="layers"]').click();assert.equal(new URL(window.location.href).hash,'#livestock-layers');
+  for(const id of ['beef','dairy','hogs','broilers','layers']){
+   window.history.pushState({},'', '?stats=wheat&livestockStats=beef#livestock-'+id);window.dispatchEvent(new window.PopStateEvent('popstate'));
+   assert.equal(q('[data-livestock-stat-panel="'+id+'"]').hidden,false);assert.equal(q('[data-stat-panel="wheat"]').hidden,false);
+  }
+  for(const id of ['corn','soybean','wheat','cotton','rice']){
+   window.history.pushState({},'', '?stats=wheat&livestockStats=layers#crop-'+id);window.dispatchEvent(new window.HashChangeEvent('hashchange'));
+   assert.equal(q('[data-stat-panel="'+id+'"]').hidden,false);assert.equal(q('[data-livestock-stat-panel="layers"]').hidden,false);
+  }
+  q('a[href="#livestock-hogs"]').click();assert.equal(q('[data-livestock-stat-panel="hogs"]').hidden,false);assert.equal(window.document.activeElement.id,'livestock-hogs');
+  assert.equal(new URL(window.location.href).searchParams.get('livestockStats'),'hogs');
+ }finally{await window.happyDOM.close();}
+});
+
+test('JavaScriptなしでも10詳説・全統計・乳2換算が読め、ARIA IDが重複しない',async()=>{
+ const html=await readFile('dist/atlas/north-america/agriculture/index.html','utf8');const w=new Window();w.document.body.innerHTML=html;
+ try{
+  const d=w.document;assert.equal(d.querySelectorAll('[data-stat-panel]').length,5);assert.equal(d.querySelectorAll('[data-livestock-stat-panel]').length,5);
+  assert.equal(d.querySelectorAll('[data-stat-panel][hidden],[data-livestock-stat-panel][hidden],[data-milk-panel][hidden]').length,0);
+  assert.equal(d.querySelectorAll('[data-world-production]').length,10);assert.equal(d.querySelectorAll('[data-livestock-supply]').length,5);assert.equal(d.querySelectorAll('[data-livestock-exports]').length,5);
+  const ids=[...d.querySelectorAll('[id]')].map(n=>n.id);assert.equal(ids.length,new Set(ids).size);
+  for(const t of d.querySelectorAll('[data-detail-group] [role="tab"]'))assert.ok(d.getElementById(t.getAttribute('aria-controls')));
+  assert.match(d.querySelector('#livestock-layers').textContent,/ふ化用/);assert.match(d.querySelector('#livestock-dairy').textContent,/乳製品別の輸出額/);
+ }finally{await w.happyDOM.close();}
+});

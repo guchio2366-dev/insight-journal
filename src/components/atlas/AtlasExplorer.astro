@@ -60,6 +60,7 @@ const payload = JSON.stringify({ initialField, initialMode, agricultureRelations
             <p><span data-fallback-status>代替図を表示しています。解説は地図の下へ。</span> <a href={`${initialField==='natural'?natureAssetBase:assetBase}${fallbackName}`} data-fallback-full target="_blank" rel="noopener">図を拡大</a> <button type="button" data-retry-nature hidden>再試行</button></p>
           </div>
           <div class="atlas-map-labels" data-map-labels aria-hidden="true"></div>
+          <div class="atlas-nature-labels" data-nature-labels hidden></div>
           <div class="atlas-livestock-markers" data-livestock-markers></div>
           <div class="industry-markers" data-industry-markers hidden={initialField!=='industry'}></div>
           <fieldset class="atlas-agri-layers" data-agri-layers hidden={initialField!=='agriculture'}><legend class="visually-hidden">農業地図の表示</legend><label><input type="checkbox" value="crops" data-agri-layer checked />作物</label><label><input type="checkbox" value="livestock" data-agri-layer checked />畜産</label></fieldset>
@@ -69,7 +70,7 @@ const payload = JSON.stringify({ initialField, initialMode, agricultureRelations
             <button type="button" data-map-action="out" aria-label="地図を縮小">−</button>
           </div>
           <p class="atlas-layer-caption" data-layer-caption>{initialField==='agriculture'?'主要栽培域 · 2023年の衛星分類から概略化':initialField==='natural'?natureModes.find(mode=>mode.id===initialMode)?.caption:'地形・水系'}</p>
-          <div class="atlas-selection" data-selection hidden role="region" aria-labelledby="atlas-selection-title">
+          <div class="atlas-selection" data-selection id="atlas-selection" hidden role="region" aria-labelledby="atlas-selection-title">
             <button type="button" class="atlas-selection-close" data-close-selection aria-label="選択した地域の説明を閉じる">×</button>
             <span class="atlas-selection-kicker" data-selection-kicker>選択地域</span><strong id="atlas-selection-title" data-selection-title></strong><p data-selection-text></p>
             <div class="atlas-relation-warning" data-relation-warning hidden><p data-relation-warning-text></p><button type="button" data-enable-relation-layers>必要な層を表示して比較</button></div>

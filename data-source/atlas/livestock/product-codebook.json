@@ -1,0 +1,804 @@
+{
+  "beef": {
+    "bicoParent": "0145AT",
+    "name": "Beef & Beef Products",
+    "included": [
+      {
+        "code": "0201306090",
+        "name": "BFW/OB NP FC NES",
+        "valueUsd": 2829330504
+      },
+      {
+        "code": "0202306000",
+        "name": "BFWO/B, CRC,FRZ",
+        "valueUsd": 2554463245
+      },
+      {
+        "code": "0202206000",
+        "name": "BFW/B CRC,FRZ",
+        "valueUsd": 1056267598
+      },
+      {
+        "code": "0201303550",
+        "name": "BF PRSD WO/B,F/C",
+        "valueUsd": 903620991
+      },
+      {
+        "code": "0206100000",
+        "name": "BOV OFL,ED,FR,CH",
+        "valueUsd": 362761502
+      },
+      {
+        "code": "0202303550",
+        "name": "BF PRSD WO/B FRZ",
+        "valueUsd": 310765692
+      },
+      {
+        "code": "0206290090",
+        "name": "BOV OFL,FZ,OTHER",
+        "valueUsd": 255562111
+      },
+      {
+        "code": "1602509500",
+        "name": "BEEF,PREP,PRES",
+        "valueUsd": 226152994
+      },
+      {
+        "code": "0504000050",
+        "name": "BEEF TRIPE, FZ",
+        "valueUsd": 127077962
+      },
+      {
+        "code": "0201203550",
+        "name": "BF PRSDW/B FR/CH",
+        "valueUsd": 124620103
+      },
+      {
+        "code": "0201206000",
+        "name": "BFW/B NTPRSD F/C",
+        "valueUsd": 122706391
+      },
+      {
+        "code": "0206220000",
+        "name": "BOV LVRS,ED FRZE",
+        "valueUsd": 101486157
+      },
+      {
+        "code": "0206290050",
+        "name": "BOV OFL,FZ,LIPS",
+        "valueUsd": 81058379
+      },
+      {
+        "code": "0206210000",
+        "name": "BOV TNGS,ED FRZ",
+        "valueUsd": 60056620
+      },
+      {
+        "code": "0206290010",
+        "name": "BOV OFL,FZ,HEART",
+        "valueUsd": 56128009
+      },
+      {
+        "code": "1602509020",
+        "name": "PREP MEALS,BEEF",
+        "valueUsd": 47232309
+      },
+      {
+        "code": "0202203550",
+        "name": "BF PRSD W/B FRZ",
+        "valueUsd": 41268400
+      },
+      {
+        "code": "0504000070",
+        "name": "BF INT,FZ,X SSGC",
+        "valueUsd": 26314979
+      },
+      {
+        "code": "0201306010",
+        "name": "BNWO/B NPRSD F/C",
+        "valueUsd": 19812228
+      },
+      {
+        "code": "0206290020",
+        "name": "BOV OFL,FZ,KDNEY",
+        "valueUsd": 9698069
+      },
+      {
+        "code": "0210200000",
+        "name": "BF,SLT,BR,DRD,SM",
+        "valueUsd": 4822492
+      },
+      {
+        "code": "0202100010",
+        "name": "CRC,1/2CRC VL FZ",
+        "valueUsd": 3553746
+      },
+      {
+        "code": "0201100090",
+        "name": "CARCASSES/HALF-C",
+        "valueUsd": 2801265
+      },
+      {
+        "code": "0206290040",
+        "name": "BOV OFL,FZ,SWTBD",
+        "valueUsd": 2758435
+      },
+      {
+        "code": "0201100010",
+        "name": "CRC,1/2CRCVL F/C",
+        "valueUsd": 2049244
+      },
+      {
+        "code": "0202100090",
+        "name": "CARCASSES/HALF-C",
+        "valueUsd": 1497844
+      },
+      {
+        "code": "0206290030",
+        "name": "BOV OFL,FZ,BRAIN",
+        "valueUsd": 224598
+      }
+    ],
+    "excluded": []
+  },
+  "hogs": {
+    "bicoParent": "0150AT",
+    "name": "Pork & Pork Products",
+    "included": [
+      {
+        "code": "0203294000",
+        "name": "SWN MT, FRZ",
+        "valueUsd": 2540632692
+      },
+      {
+        "code": "0203129000",
+        "name": "HM/SH X PC,FR,CH",
+        "valueUsd": 1214406160
+      },
+      {
+        "code": "0203194000",
+        "name": "SWN MT,FR/CH",
+        "valueUsd": 716448207
+      },
+      {
+        "code": "0203121000",
+        "name": "HM,SH,PRC,FR,CH",
+        "valueUsd": 633429586
+      },
+      {
+        "code": "0203192000",
+        "name": "SWN MT,PRC,FR,CH",
+        "valueUsd": 632827126
+      },
+      {
+        "code": "0203292000",
+        "name": "SWN MT,NE,PRC,FZ",
+        "valueUsd": 387447901
+      },
+      {
+        "code": "0206490030",
+        "name": "SWN OFL,FZ,FEET",
+        "valueUsd": 327884378
+      },
+      {
+        "code": "1602497000",
+        "name": "SWN MT PRP,PR,NE",
+        "valueUsd": 284782420
+      },
+      {
+        "code": "0206490090",
+        "name": "SWN OFL,FZ,OTHER",
+        "valueUsd": 259166332
+      },
+      {
+        "code": "0504000020",
+        "name": "HG GUT,BLAD,STM",
+        "valueUsd": 257182071
+      },
+      {
+        "code": "0210120020",
+        "name": "BACON",
+        "valueUsd": 156731497
+      },
+      {
+        "code": "0206300000",
+        "name": "SWN OFL,ED,FR,CH",
+        "valueUsd": 144266687
+      },
+      {
+        "code": "0203229000",
+        "name": "HM/SH,X PRC,FRZ",
+        "valueUsd": 141984300
+      },
+      {
+        "code": "1602492000",
+        "name": "SW MT NE BND/CK",
+        "valueUsd": 101499653
+      },
+      {
+        "code": "0206490010",
+        "name": "SWN OFL,FZ,TNGUE",
+        "valueUsd": 100037375
+      },
+      {
+        "code": "1602424000",
+        "name": "SH,CT NE,PRP,PRS",
+        "valueUsd": 99252457
+      },
+      {
+        "code": "1602419000",
+        "name": "HM.CT.NE,PRP,PRS",
+        "valueUsd": 99196967
+      },
+      {
+        "code": "0210110000",
+        "name": "HM,SH,ST,DR,SMK",
+        "valueUsd": 75838469
+      },
+      {
+        "code": "1602491000",
+        "name": "SWN OFF,PRP,PRES",
+        "valueUsd": 52947043
+      },
+      {
+        "code": "0203221000",
+        "name": "HM,SH,PRC,FZ",
+        "valueUsd": 38870788
+      },
+      {
+        "code": "0210190000",
+        "name": "SWN NE,ST,DR,SM",
+        "valueUsd": 29697462
+      },
+      {
+        "code": "0203110000",
+        "name": "SWN CRC,FR,CH",
+        "valueUsd": 17711931
+      },
+      {
+        "code": "0206490050",
+        "name": "SWN OFL,FZ,RIND",
+        "valueUsd": 17371653
+      },
+      {
+        "code": "0203210000",
+        "name": "SWN CARC,FZ",
+        "valueUsd": 16127830
+      },
+      {
+        "code": "1602412000",
+        "name": "HM,CT,BND,CK",
+        "valueUsd": 15623032
+      },
+      {
+        "code": "0504000080",
+        "name": "PK INT,FZ,X SSGC",
+        "valueUsd": 7824549
+      },
+      {
+        "code": "1602411000",
+        "name": "PREP MEALS,HAM",
+        "valueUsd": 6940619
+      },
+      {
+        "code": "1602494000",
+        "name": "SWN NE,PRP,PRS",
+        "valueUsd": 5333646
+      },
+      {
+        "code": "0206490020",
+        "name": "SWN OFL,FZ,HEART",
+        "valueUsd": 4875072
+      },
+      {
+        "code": "0206490040",
+        "name": "SWN OFL,FZ,HDMT",
+        "valueUsd": 4443911
+      },
+      {
+        "code": "1602422000",
+        "name": "SH,CT,BND,CK,CTR",
+        "valueUsd": 3149161
+      },
+      {
+        "code": "0210120040",
+        "name": "BL,CT.SW,ST,DR,S",
+        "valueUsd": 2976969
+      },
+      {
+        "code": "0206410000",
+        "name": "SWN LVR,ED,FZ",
+        "valueUsd": 962156
+      }
+    ],
+    "excluded": []
+  },
+  "dairy": {
+    "bicoParent": "0170AT",
+    "name": "Dairy Products",
+    "included": [
+      {
+        "code": "0402100000",
+        "name": "NFDM,<1.5% FAT",
+        "valueUsd": 1924546794
+      },
+      {
+        "code": "3502200000",
+        "name": "ALB/MLK,WHEYPRCN",
+        "valueUsd": 977864580
+      },
+      {
+        "code": "0406200000",
+        "name": "CHEESE ALL KINDS",
+        "valueUsd": 789288282
+      },
+      {
+        "code": "0406909550",
+        "name": "CHEESE,INC MIXT",
+        "valueUsd": 781342594
+      },
+      {
+        "code": "0406100000",
+        "name": "FRESH CHEESE",
+        "valueUsd": 754621225
+      },
+      {
+        "code": "0405100000",
+        "name": "BUTTER",
+        "valueUsd": 508739314
+      },
+      {
+        "code": "0406901000",
+        "name": "CHEESE, CHEDDAR",
+        "valueUsd": 491930582
+      },
+      {
+        "code": "1702110000",
+        "name": "LACT,ANH>99%SLD",
+        "valueUsd": 477248701
+      },
+      {
+        "code": "1901100002",
+        "name": "PREP,INF US 4RS",
+        "valueUsd": 290741981
+      },
+      {
+        "code": "0404100500",
+        "name": "WHEY PROT CONC",
+        "valueUsd": 288980943
+      },
+      {
+        "code": "0404900000",
+        "name": "NAT MK PRO NESOI",
+        "valueUsd": 255380948
+      },
+      {
+        "code": "2105000010",
+        "name": "ICE CREAM",
+        "valueUsd": 235876947
+      },
+      {
+        "code": "0404104000",
+        "name": "WHEY, DRIED",
+        "valueUsd": 216812477
+      },
+      {
+        "code": "1901909502",
+        "name": "FD PR,FL/DARY/ST",
+        "valueUsd": 199196448
+      },
+      {
+        "code": "2202991500",
+        "name": "MLK-BASED DRINKS",
+        "valueUsd": 186772462
+      },
+      {
+        "code": "0404100850",
+        "name": "MOD WHEY NESOI",
+        "valueUsd": 150054644
+      },
+      {
+        "code": "0406300000",
+        "name": "CHEESE,PROCESSED",
+        "valueUsd": 144653360
+      },
+      {
+        "code": "0402210000",
+        "name": "NFDM, >I.5% FAT",
+        "valueUsd": 119691964
+      },
+      {
+        "code": "0403200000",
+        "name": "YOGURT",
+        "valueUsd": 105672086
+      },
+      {
+        "code": "0403900000",
+        "name": "BUTTERMILK",
+        "valueUsd": 99231475
+      },
+      {
+        "code": "0401205000",
+        "name": "MLK&CRM,<6% OTH",
+        "valueUsd": 94725794
+      },
+      {
+        "code": "0405900000",
+        "name": "MLKFTS/OLS,NESOI",
+        "valueUsd": 84406862
+      },
+      {
+        "code": "1901902500",
+        "name": "BLENDED FD PRDTS",
+        "valueUsd": 59378881
+      },
+      {
+        "code": "3501100000",
+        "name": "CASEIN",
+        "valueUsd": 48499420
+      },
+      {
+        "code": "0401500000",
+        "name": "MLK&CRM,>10% FAT",
+        "valueUsd": 46301398
+      },
+      {
+        "code": "0402910000",
+        "name": "MLK&CRM,CNTD NSW",
+        "valueUsd": 38898286
+      },
+      {
+        "code": "3501906000",
+        "name": "CSNTS & CASEIN D",
+        "valueUsd": 31319679
+      },
+      {
+        "code": "1702190000",
+        "name": "LACT,SLD,NESOI",
+        "valueUsd": 22794030
+      },
+      {
+        "code": "0401400000",
+        "name": "MLK&CRM,6-10%FAT",
+        "valueUsd": 20479949
+      },
+      {
+        "code": "1901903042",
+        "name": "ARTCLS OF MLK/CM",
+        "valueUsd": 16416238
+      },
+      {
+        "code": "0402990000",
+        "name": "MLK&CRM,CNTD SWT",
+        "valueUsd": 13942642
+      },
+      {
+        "code": "0402290000",
+        "name": "MLK&CRM,>1.5% FT",
+        "valueUsd": 9589110
+      },
+      {
+        "code": "0401201000",
+        "name": "MLK&CRM<6% ORG",
+        "valueUsd": 6429440
+      },
+      {
+        "code": "1901903020",
+        "name": "MALTED MILK",
+        "valueUsd": 5011237
+      },
+      {
+        "code": "3501902000",
+        "name": "CASEIN GLUES",
+        "valueUsd": 4314007
+      },
+      {
+        "code": "0401100000",
+        "name": "MLK&CRM,<1% FAT",
+        "valueUsd": 3733781
+      },
+      {
+        "code": "0406400000",
+        "name": "CHEESE,BLUE-VND",
+        "valueUsd": 2210567
+      },
+      {
+        "code": "0406906500",
+        "name": "CHEESE, COLBY",
+        "valueUsd": 2147347
+      },
+      {
+        "code": "0405200000",
+        "name": "DAIRY SPREADS",
+        "valueUsd": 1617332
+      },
+      {
+        "code": "0404102000",
+        "name": "WHEY, FLUID",
+        "valueUsd": 418098
+      }
+    ],
+    "excluded": []
+  },
+  "broilers": {
+    "bicoParent": "0155AT",
+    "name": "Poultry Meat & Prods. (excl. eggs)",
+    "included": [
+      {
+        "code": "0207140010",
+        "name": "CKN LG QUART,FZN",
+        "valueUsd": 1661752962
+      },
+      {
+        "code": "0207130000",
+        "name": "CHCKN CTS FR/CH",
+        "valueUsd": 989292516
+      },
+      {
+        "code": "0207140090",
+        "name": "CHK OTHER,FZN",
+        "valueUsd": 733714765
+      },
+      {
+        "code": "0207140025",
+        "name": "CHK OTHER LEG,FZ",
+        "valueUsd": 505782464
+      },
+      {
+        "code": "1602320090",
+        "name": "PREP CKN, OTHER",
+        "valueUsd": 197434826
+      },
+      {
+        "code": "0207140045",
+        "name": "CHK,PAWS&FT,FZN",
+        "valueUsd": 194801237
+      },
+      {
+        "code": "1602320020",
+        "name": "MLS/PREP,CHCKN",
+        "valueUsd": 115410341
+      },
+      {
+        "code": "1601000010",
+        "name": "CKN SASG,FRNKS",
+        "valueUsd": 110153169
+      },
+      {
+        "code": "1602320050",
+        "name": "CHK PRE-CKD,SMKD",
+        "valueUsd": 82691250
+      },
+      {
+        "code": "0207140030",
+        "name": "CHKWINGS&OTH,FZN",
+        "valueUsd": 60127100
+      },
+      {
+        "code": "1602320035",
+        "name": "CKN COMNUTED,MSC",
+        "valueUsd": 31962921
+      },
+      {
+        "code": "0207140050",
+        "name": "CHK,OFL,EXLV,FZN",
+        "valueUsd": 26516452
+      },
+      {
+        "code": "0207110040",
+        "name": "CHCKNS,NES FR,CH",
+        "valueUsd": 18332204
+      },
+      {
+        "code": "0207120040",
+        "name": "CHCKNS,NES FRZN",
+        "valueUsd": 17075196
+      },
+      {
+        "code": "0207120020",
+        "name": "CHCKNS,YNG,FR/CH",
+        "valueUsd": 7916374
+      },
+      {
+        "code": "0207110020",
+        "name": "CHCKNS,YNG,FRZN",
+        "valueUsd": 3983221
+      }
+    ],
+    "excluded": [
+      {
+        "code": "0207260000",
+        "name": "TRKY CTS FR/CH",
+        "valueUsd": 339977278
+      },
+      {
+        "code": "1601000020",
+        "name": "TRKY SASG,FRKS",
+        "valueUsd": 212192464
+      },
+      {
+        "code": "0207270090",
+        "name": "TRKY,OTHER",
+        "valueUsd": 45675198
+      },
+      {
+        "code": "1602310050",
+        "name": "TRKY,PR-CKD,SMKD",
+        "valueUsd": 34163874
+      },
+      {
+        "code": "0207250000",
+        "name": "TURKEYS, FROZEN",
+        "valueUsd": 32337494
+      },
+      {
+        "code": "1602310090",
+        "name": "PREP TRKY,OTHER",
+        "valueUsd": 28694412
+      },
+      {
+        "code": "1602310020",
+        "name": "PREP MLS,TURKEY",
+        "valueUsd": 28376896
+      },
+      {
+        "code": "0207270045",
+        "name": "TRKY,BREAST,FZN",
+        "valueUsd": 21734163
+      },
+      {
+        "code": "0207270010",
+        "name": "TRKY,LEGSWBO,FZN",
+        "valueUsd": 18514087
+      },
+      {
+        "code": "0207270025",
+        "name": "TRKY,MDT,NOB,FZN",
+        "valueUsd": 15875995
+      },
+      {
+        "code": "0207240000",
+        "name": "TURKEYS,FRSH,CHL",
+        "valueUsd": 12377781
+      },
+      {
+        "code": "0207270050",
+        "name": "TRKY,OFFALS,FZN",
+        "valueUsd": 7444253
+      },
+      {
+        "code": "0207270030",
+        "name": "TRKY,WING,FZN",
+        "valueUsd": 7091376
+      },
+      {
+        "code": "0207600000",
+        "name": "GF MT/OFL F/C/FZ",
+        "valueUsd": 6656015
+      },
+      {
+        "code": "0207420000",
+        "name": "DUCKS, FRZN",
+        "valueUsd": 4580996
+      },
+      {
+        "code": "0207450000",
+        "name": "DUCK MT/OFL FRZ",
+        "valueUsd": 4226499
+      },
+      {
+        "code": "1602390045",
+        "name": "PTY,MT/OF,PRP/PS",
+        "valueUsd": 2414721
+      },
+      {
+        "code": "1602310030",
+        "name": "TRKY COMNUTD MST",
+        "valueUsd": 687666
+      },
+      {
+        "code": "0207410000",
+        "name": "DUCK, FR/CH",
+        "valueUsd": 422448
+      },
+      {
+        "code": "0207440000",
+        "name": "DK MT OFL XLR FC",
+        "valueUsd": 232258
+      },
+      {
+        "code": "1602390025",
+        "name": "MLS/PRP,NTCKN/TK",
+        "valueUsd": 56956
+      },
+      {
+        "code": "0207540000",
+        "name": "GS MT OFLXLR F/C",
+        "valueUsd": 47881
+      },
+      {
+        "code": "0207510000",
+        "name": "GEESE, FR/CH",
+        "valueUsd": 35251
+      },
+      {
+        "code": "0207520000",
+        "name": "GEESE, FRZ",
+        "valueUsd": 32666
+      },
+      {
+        "code": "0207550000",
+        "name": "GEESE MT/OFL FRZ",
+        "valueUsd": 19131
+      }
+    ]
+  },
+  "layers": {
+    "bicoParent": "0165AT",
+    "name": "Eggs & Products",
+    "included": [
+      {
+        "code": "0407210000",
+        "name": "CHICKN EGG FRESH",
+        "valueUsd": 235937533
+      },
+      {
+        "code": "0408190000",
+        "name": "EGG YLK,FR,FZ,CK",
+        "valueUsd": 47066716
+      },
+      {
+        "code": "3502190000",
+        "name": "OT EGG ALBMN X D",
+        "valueUsd": 21625610
+      },
+      {
+        "code": "0408110000",
+        "name": "EGG YOLKS, DRIED",
+        "valueUsd": 15248472
+      },
+      {
+        "code": "0408910000",
+        "name": "BRD EGGS N/SHELL",
+        "valueUsd": 12978072
+      },
+      {
+        "code": "0407900000",
+        "name": "BIRD EGGS, PR/CK",
+        "valueUsd": 10411929
+      },
+      {
+        "code": "0408990000",
+        "name": "BRD EGG N/SH,FR",
+        "valueUsd": 8883411
+      },
+      {
+        "code": "3502110000",
+        "name": "EGG ALBMN,DRIED",
+        "valueUsd": 7954059
+      }
+    ],
+    "excluded": [
+      {
+        "code": "0407110000",
+        "name": "CHKN EGGS/HATCH",
+        "valueUsd": 470841046
+      },
+      {
+        "code": "3502900000",
+        "name": "ALBUMIN & DRVTS",
+        "valueUsd": 38513920
+      },
+      {
+        "code": "0407190000",
+        "name": "BIRD EGGS/HATCH",
+        "valueUsd": 14982182
+      },
+      {
+        "code": "0407290000",
+        "name": "BIRD EGGS, FRESH",
+        "valueUsd": 10557752
+      }
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 ---
 import { productionShares,validateProductionTrend,type ProductionCountry,type ProductionTrend } from '../../lib/atlas-production-share';
-interface Props { id:string; name:string; period:string; basis:string; unit:string; totalUnit:string; totalDivisor:number; worldTotal:number; countries:readonly ProductionCountry[]; trend:readonly ProductionTrend[]; sourceUrl:string; sourceLabel:string }
+interface Props { id:string; name:string; period:string; basis:string; unit:string; totalUnit:string; totalDivisor:number; worldTotal:number; countries:readonly ProductionCountry[]; trend:readonly ProductionTrend[]; sourceUrl:string; sourceLabel:string; note?:string }
 const p=Astro.props;
 const names:Record<string,string>={'United States':'米国','United States of America':'米国',China:'中国','China, mainland':'中国',Brazil:'ブラジル','European Union':'EU',Argentina:'アルゼンチン',India:'インド',Russia:'ロシア','Russian Federation':'ロシア',Australia:'豪州',Bangladesh:'バングラデシュ',Indonesia:'インドネシア',Vietnam:'ベトナム','Viet Nam':'ベトナム',Pakistan:'パキスタン',Mexico:'メキシコ',Germany:'ドイツ',France:'フランス',Other:'その他'};
 const rows=productionShares(p.worldTotal,p.countries),us=rows.find(r=>r.code==='US')!;
@@ -27,6 +27,7 @@ const delta=mean(shares.slice(-3))-mean(shares.slice(0,3));
     <ol class="atlas-donut-key">{slices.map(row=><li class:list={{'is-us':row.code==='US'}}><i style={`background:${row.color}`} aria-hidden="true"/><span>{names[row.country]??row.country}</span><strong>{row.share.toFixed(1)}%</strong></li>)}</ol>
   </div>
   <p class="atlas-us-production">米国 <strong>{fmt(us.value)} {p.unit}</strong> ／ 世界の <strong>{us.share.toFixed(1)}%</strong></p>
+  {p.note&&<p class="atlas-chart-note">{p.note}</p>}
   <svg class="atlas-share-line" viewBox="0 0 360 140" role="img" aria-label={`${p.name}の米国シェア、${p.trend[0].year}〜${p.trend.at(-1)!.year}年`}>
     <line x1="42" y1="28" x2="322" y2="28"/><line x1="42" y1="106" x2="322" y2="106"/>
     <text x="1" y="33">{max}%</text><text x="1" y="111">{min}%</text><polyline points={points}/>
