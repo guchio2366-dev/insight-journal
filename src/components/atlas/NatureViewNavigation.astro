@@ -1,5 +1,5 @@
 ---
-import { climateCities, natureModes, natureFeatureCopy, type NatureMode } from '../../data/atlas/natural-environment';
+import { natureModes, natureFeatureCopy, type NatureMode } from '../../data/atlas/natural-environment';
 interface Props { initialMode?:NatureMode; active?:boolean }
 const { initialMode='climate', active=false } = Astro.props;
 ---
@@ -7,7 +7,6 @@ const { initialMode='climate', active=false } = Astro.props;
   <div class="atlas-nature-tabs" role="tablist" aria-label="自然環境の表示切替">
     {natureModes.map(mode=><button type="button" role="tab" id={`nature-tab-${mode.id}`} aria-controls="nature-map-panel" data-nature-mode={mode.id} aria-selected={String(mode.id===initialMode)} tabindex={mode.id===initialMode?0:-1}>{mode.label}</button>)}
   </div>
-  <label class="atlas-city-picker" data-city-picker hidden={initialMode!=='climate'}><span>雨温図</span><select data-city-select aria-label="雨温図を表示する都市"><option value="">都市を選択</option>{climateCities.map(city=><option value={city.id}>{city.nameJa}</option>)}</select></label>
   <div class="atlas-feature-picker" data-feature-picker hidden={initialMode==='climate'||initialMode==='contour'}>
     {['water','landform'].map(mode=><label data-feature-options={mode} hidden={initialMode!==mode}>対象を選択 <select data-feature-select aria-label={mode==='water'?'水資源の選択':'地形の選択'}><option value="">地図または一覧から選択</option>{Object.entries(natureFeatureCopy).filter(([key])=>key.startsWith(mode+':')).map(([key,copy])=><option value={key}>{copy.title}</option>)}</select></label>)}
   </div>

@@ -370,3 +370,26 @@
 @media(min-width:1440px){[data-detail-group] .atlas-crop-charts{grid-template-columns:repeat(2,minmax(0,1fr))}[data-detail-group] .atlas-donut-layout{grid-template-columns:1fr}[data-detail-group] .atlas-donut{margin:auto}}
 @media(max-width:420px){[data-detail-group] .atlas-stat-tabs button{flex-basis:95px}[data-detail-group] .atlas-donut-layout{grid-template-columns:1fr}[data-detail-group] .atlas-donut{margin:auto}[data-detail-group] .atlas-crop-details-head>p:last-child{font-size:14px}}
 @media(forced-colors:active){.atlas-donut-slice{stroke:CanvasText!important}.atlas-donut-key i{border:1px solid CanvasText}}
+
+/* Stage 2: one persistent city chart in the natural environment summary. */
+.atlas-explorer[data-field=natural] .atlas-primary-grid{align-items:start}
+.atlas-explorer[data-field=natural] .atlas-primary-grid .atlas-nature-summary{height:auto;overflow:visible}
+.atlas-city-climate{min-width:0;margin-bottom:20px}
+.atlas-city-climate h3{scroll-margin-top:24px}
+.atlas-city-climate .atlas-city-picker{display:grid;gap:6px;margin:10px 0}
+.atlas-city-climate select{width:100%;min-width:0;min-height:44px;font-size:14px}
+.atlas-city-actions{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.atlas-city-actions button,.atlas-city-jump{min-height:44px;padding:10px 12px;border:1px solid #aab8ae;background:#fff;color:#31444b;font:inherit;font-size:13px;cursor:pointer}
+.atlas-city-jump{display:inline-flex;align-items:center;margin-top:8px}
+.atlas-city-climate .atlas-climate-diagram figcaption strong{display:block;font-size:18px}
+.atlas-city-climate .atlas-climate-diagram figcaption span{font-size:12px;line-height:1.5}
+.atlas-city-climate .atlas-climate-diagram svg{max-height:none;overflow:visible}
+.atlas-city-climate svg text{font-size:13px}
+.atlas-city-climate .atlas-climate-diagram>p,.atlas-city-climate .atlas-climate-diagram details{font-size:12px!important;line-height:1.6}
+.atlas-city-climate .atlas-climate-diagram summary{min-height:44px;padding-top:10px}
+.atlas-city-climate .atlas-climate-diagram th,.atlas-city-climate .atlas-climate-diagram td{padding:5px 3px}
+.atlas-explorer[data-field=natural] .atlas-city-note{font-size:12px;line-height:1.6}
+@media(min-width:960px){
+ .atlas-explorer[data-field=natural] .atlas-primary-grid{grid-template-columns:minmax(0,1fr) minmax(340px,380px)}
+ .atlas-city-jump{display:none}
+}

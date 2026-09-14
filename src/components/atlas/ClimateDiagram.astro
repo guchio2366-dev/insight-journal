@@ -2,7 +2,7 @@
 import type { ClimateCity } from '../../data/atlas/natural-environment';
 interface Props { city:ClimateCity }
 const { city } = Astro.props;
-const left=34,right=286,top=13,bottom=143;
+const left=34,right=286,top=29,bottom=159;
 const x=(index:number)=>left+(right-left)*(index+.5)/12;
 const precipitationY=(value:number)=>bottom-value/350*(bottom-top);
 const temperatureY=(value:number)=>bottom-(value+10)/50*(bottom-top);
@@ -11,17 +11,17 @@ const months=['1','2','3','4','5','6','7','8','9','10','11','12'];
 ---
 <figure class="atlas-climate-diagram" data-city-panel={city.id} hidden>
   <figcaption><strong>{city.nameJa}</strong><span>{city.stationName}</span></figcaption>
-  <svg viewBox="0 0 320 178" role="img" aria-label={`${city.nameJa}の1991年から2020年の月平均気温と月降水量`}>
+  <svg viewBox="0 0 320 198" role="img" aria-label={`${city.nameJa}の1991年から2020年の月平均気温と月降水量`}>
     <g class="atlas-climate-grid">
       {[0,100,200,350].map(value=><><line x1={left} x2={right} y1={precipitationY(value)} y2={precipitationY(value)} /><text x="2" y={precipitationY(value)+3}>{value}</text></>)}
     </g>
-    <text class="atlas-climate-unit" x="2" y="9">mm</text><text class="atlas-climate-unit atlas-climate-unit--temp" x="294" y="9">℃</text>
+    <text class="atlas-climate-unit" x="2" y="12">mm</text><text class="atlas-climate-unit atlas-climate-unit--temp" x="294" y="12">℃</text>
     {city.precipitationMm.map((value,index)=><rect class="atlas-climate-bar" x={x(index)-7.5} y={precipitationY(value)} width="15" height={bottom-precipitationY(value)} />)}
     <polyline class="atlas-climate-line" points={points} />
     {city.temperatureC.map((value,index)=><circle class="atlas-climate-dot" cx={x(index)} cy={temperatureY(value)} r="2.2" />)}
-    {months.map((month,index)=><text class="atlas-climate-month" x={x(index)} y="158">{month}</text>)}
+    {months.map((month,index)=><text class="atlas-climate-month" x={x(index)} y="177">{month}</text>)}
     {[40,20,0,-10].map(value=><text class="atlas-climate-temp-label" x="291" y={temperatureY(value)+3}>{value}</text>)}
-    <text class="atlas-climate-axis-title" x="160" y="174">月</text>
+    <text class="atlas-climate-axis-title" x="160" y="195">月</text>
   </svg>
   <p><span class="is-cold">棒：降水量 mm</span><span class="is-warm">線：気温 ℃</span></p>
   <p>1991–2020年平年値 · <a href={city.sourceUrl}>NOAA</a> · 観測所標高 {Math.round(city.elevationM).toLocaleString('ja-JP')} m</p>

@@ -1,5 +1,6 @@
 ---
-import { natureModes, type NatureMode } from '../../data/atlas/natural-environment';
+import { climateCities, natureModes, type NatureMode } from '../../data/atlas/natural-environment';
+import ClimateDiagram from './ClimateDiagram.astro';
 import { withBase } from '../../lib/urls';
 interface Props { initialMode?:NatureMode }
 const { initialMode='climate' } = Astro.props;
@@ -8,7 +9,16 @@ const { initialMode='climate' } = Astro.props;
   <header><p class="atlas-eyebrow">NATURAL ENVIRONMENT</p><h2>米国本土の自然環境</h2><p>西部の高い山地、中央の平原、東部の湿潤な地域。気候の違いと、水・地形の関係を同じ場所で確かめます。</p></header>
   <div class="atlas-nature-overview-tabs">
     {natureModes.map(mode=><section data-nature-summary-panel={mode.id} hidden={mode.id!==initialMode}>
-      {mode.id==='climate'&&<><h3>気候区分</h3><p>西岸北部は偏西風と山地の影響で湿潤、カリフォルニアは夏に乾燥し、内陸西部では乾燥帯が広がります。東部は大西洋・メキシコ湾からの水蒸気を受け、北へ行くほど冬の寒さが強まります。</p><p>都市を選ぶと、同じ1991–2020年の月平均気温と月降水量を表示します。湾岸・東岸の夏〜秋のハリケーンや南西部の夏雨など、季節の違いにも注目できます。</p></>}
+      {mode.id==='climate'&&<>
+        <section class="atlas-city-climate" data-city-climate aria-labelledby="city-climate-heading">
+          <h3 id="city-climate-heading" tabindex="-1">都市の雨温図</h3>
+  <label class="atlas-city-picker" data-city-picker hidden={initialMode!=='climate'}><span>雨温図</span><select data-city-select aria-label="雨温図を表示する都市"><option value="">都市を選択</option>{climateCities.map(city=><option value={city.id}>{city.nameJa}</option>)}</select></label>
+          <p data-city-empty>地図の都市名・点、または一覧から都市を選ぶと、月ごとの気温と降水量を表示します。</p>
+          <div class="atlas-city-actions" data-city-actions hidden><button type="button" data-clear-city>都市の選択を解除</button><button type="button" data-focus-city hidden>都市へ戻る</button></div>
+            <div class="atlas-climate-diagrams" id="city-climate-chart" data-climate-chart hidden>{climateCities.map(city=><ClimateDiagram {city} />)}</div>
+          <p class="atlas-city-note">雨温図は各観測所の平年値です。地図の気候区分は地域の分類を示します。</p>
+        </section>
+        <h3>気候区分の概説</h3><p>西岸北部は偏西風と山地の影響で湿潤、カリフォルニアは夏に乾燥し、内陸西部では乾燥帯が広がります。東部は大西洋・メキシコ湾からの水蒸気を受け、北へ行くほど冬の寒さが強まります。</p><p>都市を選ぶと、同じ1991–2020年の月平均気温と月降水量を表示します。湾岸・東岸の夏〜秋のハリケーンや南西部の夏雨など、季節の違いにも注目できます。</p></>}
       {mode.id==='water'&&<><h3>水資源</h3><p>東部の河川網と五大湖、西部の融雪を源とする河川・貯水池、平原や谷の地下水を分けて示します。雨が少ないことと、水を利用できないことは同じではありません。</p><p>帯水層の面は浅部の主要帯水層の分布であり、地下の全範囲、残水量、水質を示しません。</p></>}
       {mode.id==='landform'&&<><h3>地形</h3><p>西部には海岸側のカスケード・シエラネバダと、内陸側のロッキーが並びます。湿った空気が山地を越える過程で雨や雪を落とし、内陸は乾燥しやすくなります。中央には大平原が広がり、東部のアパラチア山脈は古く、ロッキーより低い山地です。</p><p>地形陰影は位置と広がりを読む表示です。正確な高さは次の等高線で同じ基準から比べます。</p></>}
       {mode.id==='contour'&&<><h3>標高（等高線）</h3><p>全国比較用の500m間隔を、拡大しても同じ線のまま表示します。ロッキーでは2,000〜3,000m級の線が広く連なり、アパラチアでは主に500〜1,000m級に収まる違いが見えます。</p><p>高さは線に付いた数値で、斜面の急緩は同じ間隔の線の密度で読みます。山頂付近の小さな起伏は省略されています。</p></>}

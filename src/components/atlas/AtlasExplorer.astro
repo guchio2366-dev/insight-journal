@@ -14,7 +14,6 @@ import LivestockReading from './LivestockReading.astro';
 import CropStatistics from './CropStatistics.astro';
 import NatureViewNavigation from './NatureViewNavigation.astro';
 import NaturalEnvironmentSummary from './NaturalEnvironmentSummary.astro';
-import ClimateDiagram from './ClimateDiagram.astro';
 import IndustryNavigation from './IndustryNavigation.astro';
 import IndustryNationalSummary from './IndustryNationalSummary.astro';
 import IndustryReading from './IndustryReading.astro';
@@ -74,7 +73,6 @@ const payload = JSON.stringify({ initialField, initialMode, agricultureRelations
             <button type="button" class="atlas-selection-close" data-close-selection aria-label="選択した地域の説明を閉じる">×</button>
             <span class="atlas-selection-kicker" data-selection-kicker>選択地域</span><strong id="atlas-selection-title" data-selection-title></strong><p data-selection-text></p>
             <div class="atlas-relation-warning" data-relation-warning hidden><p data-relation-warning-text></p><button type="button" data-enable-relation-layers>必要な層を表示して比較</button></div>
-            <div class="atlas-climate-diagrams" data-climate-chart hidden>{climateCities.map(city=><ClimateDiagram {city} />)}</div>
             <div class="atlas-selection-candidates" data-selection-candidates hidden></div>
             <button class="atlas-focus-selection" type="button" data-focus-selection hidden>選択地点へ</button><a href="#crop-details" data-selection-link>↓ 作物の詳説へ</a>
           </div>
@@ -93,6 +91,7 @@ const payload = JSON.stringify({ initialField, initialMode, agricultureRelations
           <p><span class="is-cold">↓ カリフォルニア海流（寒流）</span><span class="is-warm">メキシコ湾流（暖流） ↗</span></p>
         </div>
         <div class="atlas-selection-slot" data-selection-slot></div>
+        <a class="atlas-city-jump" data-city-jump href="#city-climate-heading" hidden>都市の雨温図へ</a>
         <p class="visually-hidden" id="atlas-map-description">地図の内容は下の解説でも読めます。タッチ操作は２本指で地図を動かします。</p><p class="visually-hidden" data-atlas-live aria-live="polite" aria-atomic="true"></p>
         <div data-agriculture-relations-host hidden={initialField!=='agriculture'}><AgricultureRelations /></div>
         <div class="industry-key" data-industry-key hidden={initialField!=='industry'}>
