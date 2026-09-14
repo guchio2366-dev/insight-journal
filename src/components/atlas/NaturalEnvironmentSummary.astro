@@ -11,11 +11,7 @@ const { initialMode='climate' } = Astro.props;
       {mode.id==='climate'&&<>
         <section class="atlas-city-climate" data-city-climate aria-labelledby="city-climate-heading">
           <h3 id="city-climate-heading" tabindex="-1">都市の雨温図</h3>
-  <label class="atlas-city-picker" data-city-picker hidden={initialMode!=='climate'}><span>雨温図</span><select data-city-select aria-label="雨温図を表示する都市"><option value="">都市を選択</option>{climateCities.map(city=><option value={city.id}>{city.nameJa}</option>)}</select></label>
-          <p data-city-empty>地図の都市名・点、または一覧から都市を選ぶと、月ごとの気温と降水量を表示します。</p>
-          <div class="atlas-city-actions" data-city-actions hidden><button type="button" data-clear-city>都市の選択を解除</button><button type="button" data-focus-city hidden>都市へ戻る</button></div>
-            <div class="atlas-climate-diagrams" id="city-climate-chart" data-climate-chart hidden>{climateCities.map(city=><ClimateDiagram {city} />)}</div>
-          <p class="atlas-city-note">雨温図は各観測所の平年値です。地図の気候区分は地域の分類を示します。</p>
+          <div class="atlas-climate-diagrams" id="city-climate-chart" data-climate-chart>{climateCities.map(city=><ClimateDiagram {city} />)}</div>
         </section>
         </>}
       {mode.id==='water'&&<div data-nature-empty><h3>水資源の解説</h3><p>地図の川・湖・帯水層の名前から選んでください。</p></div>}

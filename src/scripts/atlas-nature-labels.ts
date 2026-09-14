@@ -1,10 +1,11 @@
 import {containedMapBox,layoutNatureLabels,leaderEnd,projectNatureFallback,type Box,type Point} from '../lib/atlas-nature-labels';
+import {layoutClimateCodes,type ClimateCodeLabel} from '../lib/atlas-climate-code-labels';
 
 type Entry={id:string;name:string;coordinate:[number,number];mode:'climate'|'landform'|'water'|'population'};
-type Callbacks={active:()=>boolean;mode:()=>string;project:()=>((p:[number,number])=>Point)|null;select:(entry:Entry,trigger:HTMLButtonElement)=>void;placed:()=>void;holder?:HTMLElement;attribute?:string;controls?:string;fallbackBox?:(imageBox:Box)=>Box;fallbackProject?:(coordinate:readonly number[],box:Box)=>Point};
+type Callbacks={active:()=>boolean;mode:()=>string;zoom?:()=>number;project:()=>((p:[number,number])=>Point)|null;select:(entry:Entry,trigger:HTMLButtonElement)=>void;placed:()=>void;holder?:HTMLElement;attribute?:string;controls?:string;fallbackBox?:(imageBox:Box)=>Box;fallbackProject?:(coordinate:readonly number[],box:Box)=>Point};
 
 /** Creates a fixed set of buttons once; only placement and state change. */
-export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Callbacks){
+export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Callbacks,codeEntries:ClimateCodeLabel[]=[]){
   const frame=root.querySelector<HTMLElement>('[data-map-frame]')!;
   const holder=callbacks.holder??root.querySelector<HTMLElement>('[data-nature-labels]')!;
   const image=root.querySelector<HTMLImageElement>('[data-fallback-image]')!;
@@ -21,6 +22,9 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
     button.addEventListener('pointercancel',()=>{dragged=true;start=null;});
     button.addEventListener('click',event=>{event.stopPropagation();if(event.detail!==0&&dragged)return;start=null;callbacks.select(entry,button);});
     holder.appendChild(button);return {entry,button,line,dot};
+  });
+  const codeNodes=codeEntries.map(entry=>{
+    const node=document.createElement('span');node.className='atlas-climate-map-code';node.dataset.climateMapCode=entry.code;node.textContent=entry.code;node.setAttribute('aria-hidden','true');node.hidden=true;holder.appendChild(node);return {entry,node};
   });
   function localBox(element:HTMLElement):Box {
     // Layout coordinates stay relative to the map during iframe/page scrolling.
@@ -52,6 +56,19 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
       button.style.transform=`translate(${box.left}px,${box.top}px)`;
       const end=leaderEnd(box.anchor,box);line.setAttribute('x1',String(box.anchor.x));line.setAttribute('y1',String(box.anchor.y));line.setAttribute('x2',String(end.x));line.setAttribute('y2',String(end.y));
       dot.setAttribute('cx',String(box.anchor.x));dot.setAttribute('cy',String(box.anchor.y));
+    }
+    if(codeNodes.length){
+    const zoom=project?(callbacks.zoom?.()??3):3;
+    const codeInputs=codeNodes.filter(({entry})=>callbacks.mode()==='climate'&&entry.minZoom<=zoom).map(({entry,node})=>{
+      node.hidden=false;
+      return {id:entry.id,code:entry.code,width:node.offsetWidth||30,height:node.offsetHeight||18,anchors:[entry.coordinate,...entry.alternatives].map(p=>project?project(p as [number,number]):projectNatureFallback(p,bounds))};
+    });
+    const geographic=[...root.querySelectorAll<HTMLElement>('.atlas-geolabel:not([hidden])')].map(node=>{
+      const r=node.getBoundingClientRect(),f=frame.getBoundingClientRect();return {left:r.left-f.left,right:r.right-f.left,top:r.top-f.top,bottom:r.bottom-f.top};
+    }).filter(r=>r.right>r.left);
+    const points=inputs.map(({anchor})=>({left:anchor.x-6,right:anchor.x+6,top:anchor.y-6,bottom:anchor.y+6}));
+    const codes=layoutClimateCodes(codeInputs,bounds,[...obstacles,...placed,...points,...geographic]);
+    for(const {entry,node} of codeNodes){const box=codes.find(item=>item.id===entry.id);node.hidden=!box;if(box)node.style.transform=`translate(${box.left}px,${box.top}px)`;}
     }
     callbacks.placed();
   }

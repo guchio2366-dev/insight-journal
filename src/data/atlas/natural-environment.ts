@@ -8,6 +8,7 @@ export type ClimateCity = {
   longitude:number; latitude:number; elevationM:number; period:string;
   temperatureC:number[]; precipitationMm:number[]; annualPrecipitationMm:number;
   sourceUrl:string; inputSha256:string;
+  koppenCode:string|null; koppenGridId?:number|null; koppenNote?:string;
 };
 
 export const climateCities = climateCitiesData as ClimateCity[];
