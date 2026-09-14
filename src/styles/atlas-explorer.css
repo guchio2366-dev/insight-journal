@@ -376,8 +376,8 @@
 .atlas-explorer[data-field=natural] .atlas-primary-grid .atlas-nature-summary{height:auto;overflow:visible}
 .atlas-city-climate{min-width:0;margin-bottom:20px}
 .atlas-city-climate h3{scroll-margin-top:24px}
-.atlas-city-climate .atlas-city-picker{display:grid;gap:6px;margin:10px 0}
-.atlas-city-climate select{width:100%;min-width:0;min-height:44px;font-size:14px}
+.atlas-city-climate .atlas-city-picker{display:grid;justify-content:stretch;gap:6px;margin:10px 0}
+.atlas-city-climate select{width:100%;min-width:0;max-width:none;min-height:44px;font-size:14px}
 .atlas-city-actions{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
 .atlas-city-actions button,.atlas-city-jump{min-height:44px;padding:10px 12px;border:1px solid #aab8ae;background:#fff;color:#31444b;font:inherit;font-size:13px;cursor:pointer}
 .atlas-city-jump{display:inline-flex;align-items:center;margin-top:8px}
