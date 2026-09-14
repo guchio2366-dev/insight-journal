@@ -1,0 +1,145 @@
+[
+  {
+    "name": "地中海性気候",
+    "codes": [
+      "Csa",
+      "Csb",
+      "Csc"
+    ],
+    "climate": "夏に乾燥し、冬に雨が多くなる。夏の暖かさは細分類で異なる。",
+    "crop": "ブドウ・オリーブ。",
+    "body": "カリフォルニアではこうした果樹が栽培される。オリーブは日照と乾燥に適応するが、実の生産には水も必要。寒冷なCscまで同じ適性とは考えず、品種・気温・水源を確認する。",
+    "sources": [
+      {
+        "title": "UC ANR",
+        "url": "https://ucanr.edu/blog/uc-master-gardeners-diggin-it-slo/article/olive-trees"
+      },
+      {
+        "title": "USDA",
+        "url": "https://www.climatehubs.usda.gov/hubs/california/topic/future-winegrapes-california"
+      }
+    ]
+  },
+  {
+    "name": "ステップ気候",
+    "codes": [
+      "BSh",
+      "BSk"
+    ],
+    "climate": "降水が少ない半乾燥の気候。気温の高い型と低い型がある。",
+    "crop": "小麦。",
+    "body": "乾燥する大平原には、土の水分を蓄える休閑や栽培方法と組み合わせた小麦生産がある。雨だけで育てる農業と、灌漑を使う農業の条件を分けて読む。",
+    "sources": [
+      {
+        "title": "USDA・北部大平原",
+        "url": "https://www.climatehubs.usda.gov/hubs/northern-plains/topic/focus-croplands-northern-plains"
+      }
+    ]
+  },
+  {
+    "name": "砂漠気候",
+    "codes": [
+      "BWh",
+      "BWk"
+    ],
+    "climate": "降水が著しく少ない。高温の砂漠だけでなく、寒い冬のある砂漠も含む。",
+    "crop": "灌漑下のレタスなど。",
+    "body": "アリゾナの低地砂漠では、コロラド川や井戸の水を使ってレタスを育てる。栽培を支えるのは水の供給と温度管理であり、少雨そのものがレタスに適するわけではない。",
+    "sources": [
+      {
+        "title": "アリゾナ大学",
+        "url": "https://acis.cals.arizona.edu/agricultural-ipm/vegetables/lettuce/irrigation"
+      }
+    ]
+  },
+  {
+    "name": "温暖湿潤気候",
+    "codes": [
+      "Cfa"
+    ],
+    "climate": "夏が暑く、明瞭な乾季がない。生育期の気温と降水を一緒に見る。",
+    "crop": "綿花・落花生・大豆。",
+    "body": "米国南東部で栽培される代表例。暖かい生育期を利用するが、雨の偏りや過湿にも対応が必要で、土壌・排水・灌漑が栽培条件に関わる。",
+    "sources": [
+      {
+        "title": "USDA・南東部",
+        "url": "https://www.climatehubs.usda.gov/hubs/southeast/topic/focus-croplands-southeast"
+      }
+    ]
+  },
+  {
+    "name": "西岸海洋性気候",
+    "codes": [
+      "Cfb",
+      "Cfc"
+    ],
+    "climate": "夏はCfaほど暑くなく、明瞭な乾季がない。Cfcでは暖かい期間が短い。",
+    "crop": "牧草・ベリー類など。",
+    "body": "太平洋岸北西部の海洋の影響を受ける地域では、牧草やベリー類が栽培される。比較的穏やかな気温に加え、降水・土壌条件との組み合わせが大切。冷涼なCfcへ同じ作物例を一律に広げない。",
+    "sources": [
+      {
+        "title": "USDA・北西部",
+        "url": "https://www.climatehubs.usda.gov/hubs/northwest/topic/agriculture-northwest"
+      }
+    ]
+  },
+  {
+    "name": "冷帯（亜寒帯）気候",
+    "codes": [
+      "Dsa",
+      "Dsb",
+      "Dsc",
+      "Dwa",
+      "Dwb",
+      "Dfa",
+      "Dfb",
+      "Dfc"
+    ],
+    "climate": "冬の寒さが強い。夏の暖かさ、乾季の時期、生育できる期間は細分類で異なる。",
+    "crop": "トウモロコシ・大豆・小麦など。",
+    "body": "中西部や北部大平原では、暖かい生育期を利用する。短い夏や霜の制約がある地域も含むため、これらを冷帯全域の適作とはしない。",
+    "sources": [
+      {
+        "title": "USDA・中西部",
+        "url": "https://www.climatehubs.usda.gov/hubs/midwest/topic/agriculture-midwest"
+      },
+      {
+        "title": "北部大平原",
+        "url": "https://www.climatehubs.usda.gov/hubs/northern-plains/topic/focus-croplands-northern-plains"
+      }
+    ]
+  },
+  {
+    "name": "熱帯の気候",
+    "codes": [
+      "Af",
+      "Am",
+      "Aw"
+    ],
+    "climate": "一年を通して高温。Af・Am・Awでは降水量と乾季の現れ方が異なる。",
+    "crop": "マンゴーなどの熱帯果樹。",
+    "body": "南フロリダの暖地に栽培例がある。低温や霜を避けられることが大切で、マンゴーでは開花期の雨の少なさも結実に関わる。",
+    "sources": [
+      {
+        "title": "フロリダ大学IFAS",
+        "url": "https://ask.ifas.ufl.edu/publication/MG216"
+      }
+    ]
+  },
+  {
+    "name": "寒帯の気候",
+    "codes": [
+      "ET",
+      "EF"
+    ],
+    "climate": "ETは夏も冷涼で、EFはさらに低温になる。米国本土では高山部を読むときにも重要。",
+    "crop": "一般的な露地農耕には厳しい条件。",
+    "body": "ここでは作物名を無理に割り当てず、夏の低温と短い生育期間が農業を制約することを説明する。",
+    "sources": [
+      {
+        "title": "分類資料",
+        "url": "https://www.nature.com/articles/s41597-023-02549-6"
+      }
+    ]
+  }
+]

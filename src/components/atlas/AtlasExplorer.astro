@@ -13,6 +13,7 @@ import NationalAgricultureSummary from './NationalAgricultureSummary.astro';
 import LivestockReading from './LivestockReading.astro';
 import CropStatistics from './CropStatistics.astro';
 import NatureViewNavigation from './NatureViewNavigation.astro';
+import ClimateOverview from './ClimateOverview.astro';
 import NaturalEnvironmentSummary from './NaturalEnvironmentSummary.astro';
 import IndustryNavigation from './IndustryNavigation.astro';
 import IndustryNationalSummary from './IndustryNationalSummary.astro';
@@ -33,7 +34,7 @@ const initialMode=(natureModes.some(mode=>mode.id===requestedMode)?requestedMode
 const fallbackName=initialField==='agriculture'?'agriculture-fallback.webp':initialField==='natural'?`${initialMode}-fallback.webp`:'land-fallback.webp';
 const payload = JSON.stringify({ initialField, initialMode, agricultureRelations, assetBase, natureAssetBase, livestockAssetBase, livestockKinds, livestockRegions, industryRegions, industrySources, reviewMode, base: withBase('/atlas/north-america/'), crops:cropExplanations, regionalInsights, statisticCropIds, geographicLabels, climateCities, climateLegend, natureModes, natureLabels, natureFeatureCopy }).replace(/</g,'\\u003c');
 ---
-<article class="atlas-explorer" data-atlas-explorer data-field={initialField} data-pagefind-body={reviewMode?undefined:true} data-pagefind-ignore={reviewMode?'all':undefined}>
+<article class="atlas-explorer" data-atlas-explorer data-field={initialField} data-nature-mode={initialMode} data-pagefind-body={reviewMode?undefined:true} data-pagefind-ignore={reviewMode?'all':undefined}>
   <section class="atlas-workspace" aria-label="北米の分野別地図">
     <div class="atlas-compact-heading">
       <nav aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a><span aria-hidden="true"> / </span><a href={withBase('/atlas/north-america/')}>北米地図</a></nav>
@@ -56,7 +57,7 @@ const payload = JSON.stringify({ initialField, initialMode, agricultureRelations
           <div class="atlas-map-surface" data-map-surface tabindex="0" aria-describedby="atlas-map-description" aria-label="拡大縮小できる米国本土地図"></div>
           <div class="atlas-fallback" data-fallback>
             <div class="atlas-fallback-map"><img src={initialField==='natural'?`${natureAssetBase}${fallbackName}`:`${assetBase}${fallbackName}`} width="1800" height="1084" alt={initialField==='agriculture'?'米国本土の地形・河川と、州境をまたぐ主要作物の栽培分布。下の作物別解説でも内容を読めます。':initialField==='natural'?'米国本土の自然環境。気候区分、水資源、地形、標高を切り替えて読めます。':'米国本土の地形と水系。西部に山地、中央に平原、東部にアパラチア山脈が続きます。'} data-fallback-image /><img class="atlas-fallback-livestock" src={`${livestockAssetBase}agriculture-livestock-fallback.svg`} width="1800" height="1084" alt="主要な畜産集積地域の代表点。" data-fallback-livestock hidden={initialField!=='agriculture'} />{initialField==='industry'&&<IndustryNoScript map />}<AgricultureRelationFallback /></div>
-            <p><span data-fallback-status>代替図を表示しています。解説は地図の下へ。</span> <a href={`${initialField==='natural'?natureAssetBase:assetBase}${fallbackName}`} data-fallback-full target="_blank" rel="noopener">図を拡大</a> <button type="button" data-retry-nature hidden>再試行</button></p>
+            <p><span data-fallback-status>代替図を表示しています。</span> <a href={`${initialField==='natural'?natureAssetBase:assetBase}${fallbackName}`} data-fallback-full target="_blank" rel="noopener">図を拡大</a> <button type="button" data-retry-nature hidden>再試行</button></p>
           </div>
           <div class="atlas-map-labels" data-map-labels aria-hidden="true"></div>
           <div class="atlas-nature-labels" data-nature-labels hidden></div>
@@ -84,12 +85,14 @@ const payload = JSON.stringify({ initialField, initialMode, agricultureRelations
         </div>
         <p class="atlas-context-key" data-land-key hidden={initialField!=='overview'}>地形陰影・河川・湖・州境。自然環境では気候・水・地形・標高を切り替えられます。</p>
         <div class="atlas-nature-key" data-nature-key hidden={initialField!=='natural'}>
-          <div data-nature-key-panel="climate" hidden={initialMode!=='climate'}>{climateFamilies.map(item=><span>{item.id} {item.label}</span>)}<span><b class="atlas-city-dot"></b>雨温図の都市</span><details class="atlas-climate-legend"><summary>色と気候コード</summary><div>{climateLegend.map(item=><span><i style={`--nature-key-color:${item.color}`}></i>{item.code} {item.nameJa}</span>)}</div></details></div>
+          <div data-nature-key-panel="climate" hidden={initialMode!=='climate'}>{climateFamilies.map(item=><span>{item.id} {item.label}</span>)}<span><b class="atlas-city-dot"></b>雨温図の都市</span><details class="atlas-climate-legend"><summary>色と気候コード</summary><div>{climateLegend.map(item=><button type="button" data-climate-code={item.code} aria-controls="nature-feature-detail" aria-pressed="false"><i style={`--nature-key-color:${item.color}`}></i>{item.code} {item.nameJa}</button>)}</div></details></div>
           <div data-nature-key-panel="water" hidden={initialMode!=='water'}><span><i class="atlas-aquifer-key"></i>主要帯水層</span><span><b class="atlas-river-line"></b>河川・湖</span><span><b class="atlas-reservoir-dot"></b>貯水池</span></div>
           <div data-nature-key-panel="landform" hidden={initialMode!=='landform'}><span><i class="atlas-relief-key"></i>地形陰影</span><span>名称は地形の概略域</span></div>
           <div data-nature-key-panel="contour" hidden={initialMode!=='contour'}><span><b class="atlas-contour-line"></b><span data-contour-index>主要線 1,000 m</span></span><span><b class="atlas-contour-line is-light"></b><span data-contour-secondary>補助線 500 m</span></span></div>
           <p><span class="is-cold">↓ カリフォルニア海流（寒流）</span><span class="is-warm">メキシコ湾流（暖流） ↗</span></p>
         </div>
+        <p class="atlas-nature-guide" data-nature-guide hidden></p>
+        <a class="atlas-nature-jump" data-nature-jump href="#nature-feature-heading" hidden>選んだ対象の解説へ</a>
         <div class="atlas-selection-slot" data-selection-slot></div>
         <a class="atlas-city-jump" data-city-jump href="#city-climate-heading" hidden>都市の雨温図へ</a>
         <p class="visually-hidden" id="atlas-map-description">地図の内容は下の解説でも読めます。タッチ操作は２本指で地図を動かします。</p><p class="visually-hidden" data-atlas-live aria-live="polite" aria-atomic="true"></p>
@@ -110,6 +113,7 @@ const payload = JSON.stringify({ initialField, initialMode, agricultureRelations
         <header><p class="atlas-eyebrow">GEOGRAPHIC BASE</p><h2>米国本土の地形</h2><p>西部の山地、中央の大平原と低地、東部のアパラチア山脈を共通の土台にします。農業へ切り替えると、同じ位置・倍率のまま栽培域を重ねて比較できます。</p></header>
         <p>河川と湖は水利用や輸送を考える手掛かりです。現在の土地レイヤーは地形・水系の概略であり、土壌や地質の分類ではありません。</p>
       </aside>
+      <ClimateOverview visible={initialField==='natural'&&initialMode==='climate'} />
     </div>
   </section>
 
@@ -125,9 +129,6 @@ const payload = JSON.stringify({ initialField, initialMode, agricultureRelations
       <p>米国本土では、太平洋から来る空気が西部の高い山地を越える過程で水分を失い、内陸西部に乾燥域が広がります。ロッキー山脈の東には広い平原が続き、東へ進むにつれてメキシコ湾・大西洋からの水分の影響が強まります。東部のアパラチア山脈はロッキーより低いものの、局地的な降水と河川の流れをつくる地形です。</p>
       <p>長期平均の気候区分だけでは、年ごとの災害や季節差は分かりません。春の大平原では強い雷雨や竜巻、夏から秋の湾岸・東海岸ではハリケーン、南西部では夏のモンスーンに伴う雨が起こります。西部では冬の雨や山地の積雪が、その後の河川・貯水池・灌漑用水につながります。</p>
       <p>土壌の保水性・排水性や塩類の蓄積も、水の利用しやすさに関わります。土壌中の水と、井戸でくみ上げる帯水層の地下水は同じものとして扱いません。カリフォルニア海流は西岸沖を南へ、暖かいメキシコ湾流は南東岸から北東へ流れます。西岸では風が表層の海水を沖へ運ぶと、冷たく栄養分に富む深い水が上がる沿岸湧昇が起こります。湧昇の強さには季節差があります。</p>
-      <details class="atlas-station-tables"><summary>12都市の観測所・月別平年値を一覧で読む</summary>
-        {climateCities.map(city=><section id={`climate-table-${city.id}`}><h3>{city.nameJa}</h3><p>{city.stationName}（{city.stationId}）· {city.latitude.toFixed(4)}°N / {Math.abs(city.longitude).toFixed(4)}°W · 標高 {city.elevationM} m · 1991–2020年 · <a href={city.sourceUrl}>NOAA原表</a></p><table><thead><tr><th>月</th><th>平均気温 ℃</th><th>降水量 mm</th></tr></thead><tbody>{city.temperatureC.map((value,index)=><tr><th>{index+1}</th><td>{value.toFixed(1)}</td><td>{city.precipitationMm[index].toFixed(1)}</td></tr>)}</tbody></table></section>)}
-      </details>
       <div class="atlas-nature-reading-grid">
         <section><h3>気候区分と雨温図</h3><p>ケッペン＝ガイガー区分は月ごとの気温・降水の長期的な組合せを分類します。都市の雨温図は一点の観測所の平年値であり、色面全体の代表値ではありません。</p></section>
         <section><h3>水資源</h3><p>河川・湖・貯水池と地下水を分け、地元の雨、山地の融雪、貯水、取水がどのようにつながるかを読みます。</p></section>
