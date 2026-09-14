@@ -28,10 +28,14 @@
         "jsCssGzip": 174,
         "totalGzip": 731
       }
-    }
+    },
+    "finalCiRuns": [
+      34813501000,
+      34813545639
+    ]
   },
   "visual": {
-    "status": "pending-after-deployment",
+    "status": "passed-tested-scope",
     "baseline1024": {
       "panelWidth": 977,
       "corn": {
@@ -43,9 +47,31 @@
         "worldHeight": 602.28125
       }
     },
-    "viewports": []
+    "viewports": [
+      320,
+      375,
+      390,
+      959,
+      960,
+      1024,
+      1180
+    ],
+    "cases": 47,
+    "issues": 0,
+    "evidence": "agriculture-v7.1-live-verification.json",
+    "screenshot": "agriculture-v7.1-comparison.jpg",
+    "limitations": [
+      "CSS viewport checks in Chrome; no physical iPad/iPhone or Safari verification",
+      "WebGL unavailable; map used fallback",
+      "Other design-listed viewport sizes and complete manual interaction matrix not rechecked in this session"
+    ]
   },
   "deployment": {
-    "status": "pending"
+    "status": "success",
+    "pr": 39,
+    "commit": "8d2a2af9218ddeb391d8d4d59867f77749e29c8d",
+    "pagesRun": 34813682374,
+    "publicReleaseCommitVerified": true,
+    "builtAt": "2026-09-14T06:29:43.914Z"
   }
 }
