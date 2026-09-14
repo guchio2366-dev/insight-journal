@@ -43,11 +43,10 @@ const months=['1','2','3','4','5','6','7','8','9','10','11','12'];
     </div>
     <details class="atlas-city-crop" data-city-crop open>
       <summary>周辺の農業・畜産</summary>
-      <p class="atlas-city-region">{reading.agriculture.region}の生産例</p>
+      <p class="atlas-city-region">{reading.agriculture.region}の生産例 · <a class="atlas-city-reference" href={reading.agriculture.source.url} title={reading.agriculture.source.name} target="_blank" rel="noopener noreferrer">2022年</a></p>
       <p class="atlas-city-products">{reading.agriculture.products.map((item,index)=><>
         {index>0&&'・'}{item.product?<a href={productHref(item.product)} data-city-agriculture-link={item.product} aria-label={`${item.name}の解説へ`}><strong>{item.name}</strong></a>:<strong>{item.name}</strong>}{item.examples&&<span>（<strong>{item.examples}</strong>）</span>}
       </>)}</p>
-      <a class="atlas-city-reference" href={reading.agriculture.source.url} title={reading.agriculture.source.name} target="_blank" rel="noopener noreferrer">2022年農業センサス</a>
     </details>
   </section>
   <p class="atlas-city-source">1991–2020 · <a href={city.sourceUrl}>NOAA</a> · <a href="#source-koppen">気候区分の出典</a></p>
