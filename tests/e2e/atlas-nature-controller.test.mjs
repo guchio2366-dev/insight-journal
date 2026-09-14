@@ -182,3 +182,51 @@ test('未収録セルとドラッグに気候区分を割り当てず、遅い�
   assert.equal(q('[data-city-select]').value,'seattle');assert.equal(q('[data-climate-chart]').hidden,false);
  }finally{release?.();await delayed.window.happyDOM.close();}
 });
+
+test('概要欄の図と気候区分は共存し、閉じる・解除・履歴でそれぞれの状態を保つ',async()=>{
+ const {window,root,q,requests}=await setup('?city=seattle&natureFeature=climate:Csb&crop=rice');
+ try{
+  const chart=q('[data-climate-chart]'),figure=q('[data-city-panel="seattle"]'),picker=q('[data-city-select]');
+  assert.equal(root.querySelectorAll('[data-city-select]').length,1);
+  assert.ok(chart.closest('[data-nature-summary-panel="climate"]'));assert.equal(q('[data-selection]').contains(chart),false);
+  assert.equal(chart.hidden,false);assert.equal(q('[data-selection]').hidden,false);
+  assert.equal(q('[data-nature-label="city:seattle"]').getAttribute('aria-pressed'),'true');
+  const both=window.location.href,moves=window.__map.cameraChanges;
+  q('[data-close-selection]').click();assert.equal(chart.hidden,false);assert.equal(new URL(window.location.href).searchParams.get('city'),'seattle');
+  q('[data-nature-label="city:seattle"]').click();q('[data-nature-label="city:seattle"]').click();assert.equal(chart.hidden,false);
+  for(const fn of window.__map.events.click)fn({point:{x:230,y:220},lngLat:{lng:-105,lat:30}});
+  await waitFor(()=>!q('[data-selection]').hidden,'area popup');
+  assert.equal(chart.hidden,false);assert.equal(q('[data-nature-label="city:seattle"]').getAttribute('aria-pressed'),'true');
+  q('[data-clear-city]').dispatchEvent(new window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
+  assert.equal(q('[data-selection]').hidden,true);assert.equal(chart.hidden,false);
+  assert.equal(window.__map.cameraChanges,moves);
+  window.history.replaceState({},'',both);window.dispatchEvent(new window.PopStateEvent('popstate'));await delay();
+  assert.equal(chart.hidden,false);assert.equal(q('[data-selection]').hidden,false);
+  picker.value='';picker.dispatchEvent(new window.Event('change'));
+  assert.equal(chart.hidden,true);assert.equal(q('[data-city-empty]').hidden,false);assert.equal(q('[data-selection]').hidden,false);
+  assert.equal(new URL(window.location.href).searchParams.get('city'),null);assert.equal(new URL(window.location.href).searchParams.get('natureFeature'),'climate:Csb');assert.equal(new URL(window.location.href).searchParams.get('crop'),'rice');
+  q('[data-nature-label="city:seattle"]').click();const details=figure.querySelector('details');details.open=true;
+  q('[data-field="agriculture"]').click();q('[data-map-surface]').dispatchEvent(new window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
+  assert.equal(new URL(window.location.href).searchParams.get('city'),'seattle');
+  q('[data-field="natural"]').click();assert.equal(chart.hidden,false);assert.equal(figure.querySelector('details'),details);assert.equal(details.open,true);
+  assert.equal(root.querySelectorAll('[data-city-panel]:not([hidden])').length,1);assert.equal(root.querySelectorAll('[data-city-panel]').length,12);
+  assert.equal(window.__map.cameraChanges,moves+1);assert.equal(requests.filter(url=>url.endsWith('climate-classes.png')).length,1);
+ }finally{await window.happyDOM.close();}
+});
+
+test('画面外でも雨温図を保ち、明示した時だけ都市へ戻り、解除時は見える操作へフォーカスする',async()=>{
+ const {window,q}=await setup();
+ try{
+  const map=window.__map,button=q('[data-nature-label="city:miami"]');button.click();
+  const oldBounds=map.getBounds.bind(map),oldProject=map.project.bind(map),moves=map.cameraChanges;
+  map.getBounds=()=>({...oldBounds(),contains:()=>false});map.project=()=>({x:-100,y:-100});
+  for(const fn of map.events.moveend)fn();await waitFor(()=>button.hidden,'offscreen label hidden');
+  assert.equal(button.hidden,true);assert.equal(q('[data-climate-chart]').hidden,false);assert.equal(q('[data-focus-city]').hidden,false);assert.equal(map.cameraChanges,moves);
+  q('[data-clear-city]').click();assert.equal(window.document.activeElement,q('[data-city-select]'));
+  q('[data-city-select]').value='miami';q('[data-city-select]').dispatchEvent(new window.Event('change'));
+  const city=JSON.parse(q('[data-explorer-config]').textContent).climateCities.find(c=>c.id==='miami');
+  q('[data-focus-city]').click();assert.equal(map.cameraChanges,moves+1);assert.equal(map.center.lng,city.longitude);assert.equal(map.center.lat,city.latitude);
+  map.getBounds=oldBounds;map.project=oldProject;for(const fn of map.events.moveend)fn();await delay();assert.equal(q('[data-focus-city]').hidden,true);
+  q('[data-map-surface]').dispatchEvent(new window.Event('webglcontextlost'));assert.equal(q('[data-focus-city]').hidden,true);assert.equal(q('[data-climate-chart]').hidden,false);
+ }finally{await window.happyDOM.close();}
+});
