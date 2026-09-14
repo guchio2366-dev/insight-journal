@@ -1,0 +1,126 @@
+{
+  "checkedAt": "2026-09-14T04:25:47.722Z",
+  "deploymentCommit": "418bb775b6517b67ad839ab2f18dcd814650c319",
+  "deploymentRun": "https://github.com/guchio2366-dev/insight-journal/actions/runs/34805294886",
+  "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/agriculture/?stats=rice&livestockStats=dairy&milkBasis=skim&agriLayers=crops%2Clivestock&view=fit#livestock-dairy",
+  "viewport": {
+    "width": 1348,
+    "height": 936,
+    "scrollWidth": 1348
+  },
+  "checks": [
+    {
+      "group": "crop",
+      "name": "とうもろこし",
+      "selected": "true",
+      "visible": true,
+      "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/agriculture/?stats=corn&livestockStats=dairy&milkBasis=fat&agriLayers=crops%2Clivestock&view=fit"
+    },
+    {
+      "group": "crop",
+      "name": "大豆",
+      "selected": "true",
+      "visible": true,
+      "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/agriculture/?stats=soybean&livestockStats=dairy&milkBasis=fat&agriLayers=crops%2Clivestock&view=fit"
+    },
+    {
+      "group": "crop",
+      "name": "小麦",
+      "selected": "true",
+      "visible": true,
+      "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/agriculture/?stats=wheat&livestockStats=dairy&milkBasis=fat&agriLayers=crops%2Clivestock&view=fit"
+    },
+    {
+      "group": "crop",
+      "name": "綿花",
+      "selected": "true",
+      "visible": true,
+      "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/agriculture/?stats=cotton&livestockStats=dairy&milkBasis=fat&agriLayers=crops%2Clivestock&view=fit"
+    },
+    {
+      "group": "crop",
+      "name": "米",
+      "selected": "true",
+      "visible": true,
+      "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/agriculture/?stats=rice&livestockStats=dairy&milkBasis=fat&agriLayers=crops%2Clivestock&view=fit"
+    },
+    {
+      "group": "livestock",
+      "name": "肉牛",
+      "selected": "true",
+      "visible": true,
+      "cropPreserved": "true",
+      "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/agriculture/?stats=rice&livestockStats=beef&milkBasis=fat&agriLayers=crops%2Clivestock&view=fit"
+    },
+    {
+      "group": "livestock",
+      "name": "酪農",
+      "selected": "true",
+      "visible": true,
+      "cropPreserved": "true",
+      "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/agriculture/?stats=rice&livestockStats=dairy&milkBasis=fat&agriLayers=crops%2Clivestock&view=fit"
+    },
+    {
+      "group": "livestock",
+      "name": "養豚",
+      "selected": "true",
+      "visible": true,
+      "cropPreserved": "true",
+      "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/agriculture/?stats=rice&livestockStats=hogs&milkBasis=fat&agriLayers=crops%2Clivestock&view=fit"
+    },
+    {
+      "group": "livestock",
+      "name": "肉用鶏",
+      "selected": "true",
+      "visible": true,
+      "cropPreserved": "true",
+      "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/agriculture/?stats=rice&livestockStats=broilers&milkBasis=fat&agriLayers=crops%2Clivestock&view=fit"
+    },
+    {
+      "group": "livestock",
+      "name": "採卵鶏",
+      "selected": "true",
+      "visible": true,
+      "cropPreserved": "true",
+      "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/agriculture/?stats=rice&livestockStats=layers&milkBasis=fat&agriLayers=crops%2Clivestock&view=fit"
+    },
+    {
+      "case": "skim milk",
+      "total246_6": true,
+      "pressed": "true",
+      "url": "https://guchio2366-dev.github.io/insight-journal/atlas/north-america/agriculture/?stats=rice&livestockStats=dairy&milkBasis=skim&agriLayers=crops%2Clivestock&view=fit"
+    },
+    {
+      "case": "hogs anchor",
+      "selected": "true",
+      "focus": "livestock-hogs"
+    },
+    {
+      "case": "back",
+      "hogsSelected": "true"
+    },
+    {
+      "case": "forward",
+      "dairySelected": "true",
+      "milkPreserved": "true"
+    },
+    {
+      "case": "reload",
+      "dairySelected": "true",
+      "riceSelected": "true",
+      "skimSelected": "true"
+    }
+  ],
+  "screenshots": [
+    "agriculture-v7-live-dairy-verified-1789359530736.jpg",
+    "agriculture-v7-live-charts-1789359659246.jpg",
+    "agriculture-v7-live-world-1789359714851.jpg"
+  ],
+  "visualResult": "At 1348x936, observed dairy supply, export doughnut, world doughnut and trend without clipping or horizontal page overflow.",
+  "limitations": [
+    "This browser does not expose viewport resizing; the six target device sizes were not visually verified.",
+    "The cloud browser has no WebGL2; map interaction was checked only through the fallback and detail links.",
+    "Safari and iPhone/iPad physical devices were not tested.",
+    "The browser automation keypress timed out before End was dispatched. Keyboard behavior remains covered by automated controller tests, not this live check."
+  ]
+}

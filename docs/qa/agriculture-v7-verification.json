@@ -47,9 +47,13 @@
     "geographyRequestsDuringSwitches": 0
   },
   "visualQA": {
-    "status": "not verified",
-    "reason": "Local preview URL and shared file URL were refused by the browser URL security policy. No bypass attempted.",
-    "screenshots": [],
+    "status": "desktop viewport verified; device sizes pending",
+    "reason": "Production URL is accessible. Earlier local/shared-file restrictions were not bypassed.",
+    "screenshots": [
+      "agriculture-v7-live-dairy-verified-1789359530736.jpg",
+      "agriculture-v7-live-charts-1789359659246.jpg",
+      "agriculture-v7-live-world-1789359714851.jpg"
+    ],
     "pendingViewports": [
       {
         "width": 390,
@@ -76,9 +80,20 @@
         "height": 900
       }
     ],
-    "realDevice": "not verified"
+    "realDevice": "not verified",
+    "liveReport": "agriculture-v7-live-verification.json",
+    "verifiedViewport": {
+      "width": 1348,
+      "height": 936,
+      "scrollWidth": 1348
+    }
   },
-  "deployment": "not performed",
+  "deployment": {
+    "status": "published",
+    "commit": "418bb775b6517b67ad839ab2f18dcd814650c319",
+    "run": "https://github.com/guchio2366-dev/insight-journal/actions/runs/34805294886",
+    "releaseMarkerVerified": true
+  },
   "dataLimitations": [
     "FAOSTAT published world and country totals differ; cause unresolved; retained published denominator with visible note.",
     "Processed egg HS codes do not identify bird species; scope difference shown rather than estimated allocation."
