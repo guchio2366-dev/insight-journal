@@ -108,12 +108,11 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
     }
   }
   function render(){
-    q('[data-industry-controls]').hidden=!hooks.active();q('[data-industry-key]').hidden=!hooks.active();
+    q('[data-industry-controls]').hidden=!hooks.active();q('[data-industry-key]').hidden=!hooks.active();q('[data-industry-insights]').hidden=!hooks.active();
     root.dataset.industrySector=state.sector;root.dataset.industrySubsector=state.subsector;
-    const hasDescription=state.subsector!=='all';
-    q('[data-industry-national-summary]').hidden=hasDescription;q('[data-industry-description]').hidden=!hasDescription;
+    q('[data-industry-national-summary]').hidden=false;q('[data-industry-description]').hidden=false;
     root.querySelectorAll<HTMLElement>('[data-industry-description-panel]').forEach(p=>p.hidden=p.dataset.industryDescriptionPanel!==`${state.sector}:${state.subsector}`);
-    if(hasDescription)q('[data-industry-description]').setAttribute('aria-labelledby',`industry-description-${state.subsector}`);else q('[data-industry-description]').removeAttribute('aria-labelledby');
+    q('[data-industry-description]').setAttribute('aria-labelledby',`industry-description-${state.sector}-${state.subsector}`);
     root.querySelectorAll<HTMLElement>('[data-industry-sector]').forEach(b=>{const active=b.dataset.industrySector===state.sector;b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;});
     root.querySelectorAll<HTMLElement>('[data-industry-subtabs]').forEach(p=>p.hidden=p.dataset.industrySubtabs!==state.sector);
     root.querySelectorAll<HTMLElement>('[data-industry-subsector]').forEach(b=>{const active=b.dataset.industrySubsector===state.subsector;b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;});

@@ -2,14 +2,13 @@
 import {industryCopy} from '../../data/atlas/industry-content';
 import {sectorLabel} from '../../data/atlas/industry-catalog';
 ---
-<aside class="atlas-national industry-selected-reading" id="industry-description" data-industry-description hidden aria-label="選択した製品・サービスの解説" tabindex="-1">
- {industryCopy.filter(copy=>copy.subsector!=='all').map(copy=><article data-industry-description-panel={`${copy.sector}:${copy.subsector}`} hidden>
-  <header><p class="atlas-eyebrow">製品・サービスの解説</p><h2 id={`industry-description-${copy.subsector}`}>{copy.title}</h2><button type="button" data-industry-overview>{sectorLabel(copy.sector)}の構成へ</button></header>
+<aside class="atlas-national industry-selected-reading" id="industry-description" data-industry-description aria-labelledby="industry-description-all-all" tabindex="-1">
+ {industryCopy.map(copy=><article data-industry-description-panel={`${copy.sector}:${copy.subsector}`} hidden={copy.sector!=='all'||copy.subsector!=='all'}>
+  <header><h2 id={`industry-description-${copy.sector}-${copy.subsector}`}>{copy.title}</h2>{copy.subsector!=='all'&&<button type="button" data-industry-overview aria-label={`${sectorLabel(copy.sector)}の全分野へ戻る`}>全分野へ</button>}</header>
   <div class="industry-selected-reading-body">
-   <section><h3>何をする産業か</h3><p>{copy.what}</p></section>
-   <section><h3>どこに集まり、なぜか</h3><p>{copy.where}</p></section>
-   <section><h3>変化をどう読むか</h3><p>{copy.change}</p></section>
-   <a class="industry-reading-stat-link" href="#industry-detail">{copy.title}の統計・出典へ</a>
+   <p><strong>概要</strong>{copy.what}</p>
+   <p><strong>立地</strong>{copy.where}</p>
+   <p><strong>変化</strong>{copy.change}</p>
   </div>
  </article>)}
 </aside>

@@ -42,13 +42,13 @@ test('金融→情報通信で右欄の解説を切り替え、構成比の数�
   assert.equal(root.dataset.field,'industry');const map=window.__map,moves=map.cameraChanges;
   const before=q('[data-industry-national-summary]').innerHTML;
   assert.equal(q('[data-industry-detail="services:finance"]').hidden,false);
-  assert.equal(q('[data-industry-description-panel="services:finance"]').hidden,false);assert.equal(q('[data-industry-national-summary]').hidden,true);
+  assert.equal(q('[data-industry-description-panel="services:finance"]').hidden,false);assert.equal(q('[data-industry-national-summary]').hidden,false);
   q('[data-industry-subsector="information"]').click();
   assert.equal(q('[data-industry-national-summary]').innerHTML,before);
   assert.equal(q('[data-industry-detail="services:information"]').hidden,false);
   assert.equal(q('[data-industry-description-panel="services:finance"]').hidden,true);assert.equal(q('[data-industry-description-panel="services:information"]').hidden,false);
   q('[data-industry-sector="manufacturing"]').click();
-  assert.equal(root.dataset.industrySubsector,'all');assert.equal(q('[data-industry-national-panel="manufacturing"]').hidden,false);assert.equal(q('[data-industry-national-summary]').hidden,false);assert.equal(q('[data-industry-description]').hidden,true);
+  assert.equal(root.dataset.industrySubsector,'all');assert.equal(q('[data-industry-national-panel="manufacturing"]').hidden,false);assert.equal(q('[data-industry-national-summary]').hidden,false);assert.equal(q('[data-industry-description]').hidden,false);assert.equal(q('[data-industry-description-panel="manufacturing:all"]').hidden,false);
   assert.equal(q('[data-industry-national-panel="services"]').hidden,true);assert.equal(map.cameraChanges,moves);assert.equal(window.__map,map);
  }finally{await window.happyDOM.close();}
 });
@@ -145,7 +145,7 @@ test('解説と統計を一度だけ出力し、自動車の3図ずつを同じ�
  const {window,root,q}=await setup('?sector=manufacturing&subsector=auto');
  try{
   const copy=q('[data-industry-description-panel="manufacturing:auto"]'),detail=q('[data-industry-detail="manufacturing:auto"]');
-  assert.equal(copy.hidden,false);assert.equal(copy.querySelectorAll('.industry-selected-reading-body>section').length,3);
+  assert.equal(copy.hidden,false);assert.equal(copy.querySelectorAll('.industry-selected-reading-body>p').length,3);
   assert.equal(detail.querySelector('.industry-copy-grid'),null);
   assert.equal(detail.querySelector('.industry-trend-grid').children.length,3);assert.equal(detail.querySelector('.industry-comparison-grid').children.length,3);
   assert.equal(detail.querySelector('.industry-distribution .industry-series'),null);
@@ -154,5 +154,36 @@ test('解説と統計を一度だけ出力し、自動車の3図ずつを同じ�
   copy.querySelector('[data-industry-overview]').click();assert.equal(root.dataset.industrySubsector,'all');assert.equal(q('[data-industry-national-summary]').hidden,false);
   window.history.replaceState({},'', '?sector=services&subsector=finance');window.dispatchEvent(new window.PopStateEvent('popstate'));
   assert.equal(q('[data-industry-description-panel="services:finance"]').hidden,false);
+ }finally{await window.happyDOM.close();}
+});
+
+
+test('業態総論と構成比を右欄にまとめ、地図直下のインサイトから同じ地図で比較する',async()=>{
+ const {window,root,q}=await setup();
+ try{
+  const reading=q('[data-field-national="industry"]'),insights=q('[data-industry-insights]');
+  assert.equal(reading.firstElementChild,q('[data-industry-description]'));
+  assert.equal(q('[data-industry-description]').nextElementSibling,q('[data-industry-national-summary]'));
+  assert.equal(insights.closest('.atlas-map-column'),q('.atlas-map-column'));
+  assert.equal(window.document.querySelectorAll('#industry-insights').length,1);
+  assert.equal(insights.querySelectorAll('[data-industry-insight-card]').length,6);
+  assert.ok([...insights.querySelectorAll('details')].every(d=>!d.open));
+  for(const sector of ['all','manufacturing','resources','services','construction-real-estate']){
+   q(`[data-industry-sector="${sector}"]`).click();
+   assert.equal(q(`[data-industry-description-panel="${sector}:all"]`).hidden,false);
+   assert.equal(q(`[data-industry-national-panel="${sector}"]`).hidden,false);
+   assert.equal(q('[data-industry-description]').hidden,false);
+   assert.equal(q('[data-industry-national-summary]').hidden,false);
+   assert.equal(q(`[data-industry-detail="${sector}:all"] .industry-copy-grid`),null);
+   assert.equal(q('#industry-detail').contains(insights),false);
+  }
+  const item=q('[data-industry-insight-card="supply-chain"]');item.querySelector('summary').click();assert.equal(item.open,true);
+  const moves=window.__map.cameraChanges;
+  item.querySelector('[data-industry-jump-subsector="auto"]').click();
+  assert.equal(root.dataset.industrySubsector,'auto');assert.equal(window.__map.cameraChanges,moves);assert.equal(item.open,true);
+  assert.equal(q('[data-industry-description-panel="manufacturing:auto"]').hidden,false);
+  assert.equal(q('[data-industry-national-panel="manufacturing"]').hidden,false);
+  q('[data-field="natural"]').click();assert.equal(insights.hidden,true);
+  q('[data-field="industry"]').click();assert.equal(insights.hidden,false);assert.equal(item.open,true);
  }finally{await window.happyDOM.close();}
 });
