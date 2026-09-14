@@ -1,0 +1,51 @@
+{
+  "baseCommit": "7d4cbac49b66b8fca558cab3ee64e7d022fd8a28",
+  "designPr": 38,
+  "automated": {
+    "npmRunCheck": "passed",
+    "unitTests": 77,
+    "builtSiteTests": 25,
+    "displayRegression": {
+      "panels": 10,
+      "unchangedSlices": 121,
+      "unchangedTrends": 10,
+      "cropExportTableRows": 35,
+      "extraPanels": 1
+    },
+    "transfer": {
+      "baseline": {
+        "htmlGzip": 125866,
+        "jsCssGzip": 465698,
+        "totalGzip": 591564
+      },
+      "implementation": {
+        "htmlGzip": 126423,
+        "jsCssGzip": 465872,
+        "totalGzip": 592295
+      },
+      "difference": {
+        "htmlGzip": 557,
+        "jsCssGzip": 174,
+        "totalGzip": 731
+      }
+    }
+  },
+  "visual": {
+    "status": "pending-after-deployment",
+    "baseline1024": {
+      "panelWidth": 977,
+      "corn": {
+        "exportHeight": 285.28125,
+        "worldHeight": 583.28125
+      },
+      "beef": {
+        "exportHeight": 370.671875,
+        "worldHeight": 602.28125
+      }
+    },
+    "viewports": []
+  },
+  "deployment": {
+    "status": "pending"
+  }
+}

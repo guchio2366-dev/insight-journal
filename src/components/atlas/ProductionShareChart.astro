@@ -16,15 +16,14 @@ const mean=(a:number[])=>a.reduce((s,n)=>s+n,0)/a.length;
 const delta=mean(shares.slice(-3))-mean(shares.slice(0,3));
 ---
 <figure class="atlas-world-chart" data-world-production={p.id}>
-  <figcaption><strong>世界生産と米国シェア</strong><span>{p.period}</span></figcaption>
-  <p class="atlas-chart-note">{p.basis} · 国・地域別</p>
+  <figcaption class="atlas-comparison-caption"><strong>世界生産と米国シェア</strong><span>{p.period}</span><span>{p.basis} · {p.unit} · 国・地域別</span></figcaption>
   <div class="atlas-donut-layout">
     <svg class="atlas-donut" viewBox="0 0 144 144" role="img" aria-labelledby={`world-title-${p.id} world-desc-${p.id}`}>
       <title id={`world-title-${p.id}`}>{p.name}の世界生産構成</title><desc id={`world-desc-${p.id}`}>世界総量{fmt(p.worldTotal)}{p.unit}。米国{us.share.toFixed(1)}%。国・地域別の値は隣の凡例と数値表に表示。</desc>
       {slices.map(row=><circle cx="72" cy="72" r="52" pathLength="100" class="atlas-donut-slice" style={`stroke:${row.color}`} stroke-dasharray={`${row.share} ${100-row.share}`} stroke-dashoffset={-row.start} transform="rotate(-90 72 72)"><title>{names[row.country]??row.country} {row.share.toFixed(1)}%</title></circle>)}
-      <text x="72" y="63" text-anchor="middle">世界総生産</text><text x="72" y="82" text-anchor="middle" class="atlas-donut-total">{fmt(p.worldTotal/p.totalDivisor)}</text><text x="72" y="98" text-anchor="middle">{p.totalUnit}</text>
+      <text x="72" y="62" text-anchor="middle">世界総生産</text><text x="72" y="80" text-anchor="middle" class="atlas-donut-total">{fmt(p.worldTotal/p.totalDivisor)}</text><text x="72" y="96" text-anchor="middle">{p.totalUnit}</text>
     </svg>
-    <ol class="atlas-donut-key">{slices.map(row=><li class:list={{'is-us':row.code==='US'}}><i style={`background:${row.color}`} aria-hidden="true"/><span>{names[row.country]??row.country}</span><strong>{row.share.toFixed(1)}%</strong></li>)}</ol>
+    <ol class="atlas-donut-key">{slices.map(row=><li class:list={{'is-us':row.code==='US'}}><i style={`background:${row.color}`} aria-hidden="true"/><span class="atlas-donut-label"><span>{names[row.country]??row.country}</span><strong>{row.share.toFixed(1)}%</strong></span></li>)}</ol>
   </div>
   <p class="atlas-us-production">米国 <strong>{fmt(us.value)} {p.unit}</strong> ／ 世界の <strong>{us.share.toFixed(1)}%</strong></p>
   {p.note&&<p class="atlas-chart-note">{p.note}</p>}
