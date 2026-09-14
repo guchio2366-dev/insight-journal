@@ -91,3 +91,6 @@
 .industry-marker.is-economic span{position:absolute;left:calc(22px + max(var(--economic-radius),26px));top:50%;transform:translateY(-50%);width:90px;padding:4px;font-size:11px;pointer-events:none}
 .industry-marker.is-economic.is-left-label span{left:auto;right:calc(30px + max(var(--economic-radius),26px))}
 .industry-marker.is-economic.is-small-value span{padding:4px}
+
+.industry-economic-leader{position:absolute;left:18px;top:22px;height:1px;background:#355f75;transform-origin:0 50%;pointer-events:none}
+.industry-marker.is-economic span{pointer-events:auto}

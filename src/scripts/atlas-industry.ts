@@ -1,4 +1,4 @@
-import {groupIndustryMarkers} from '../lib/atlas-industry-markers';
+import {groupIndustryMarkers,placeIndustryEconomicLabels} from '../lib/atlas-industry-markers';
 import {industrySectors,industrySymbol,sectorLabel,subsectorLabel,type IndustrySector} from '../data/atlas/industry-catalog';
 import {readIndustryState,writeIndustryState,type IndustryState} from '../lib/atlas-industry-state';
 import type {IndustryRegion} from '../data/atlas/industry-regions';
@@ -46,6 +46,7 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
         if(point){
           button.classList.add('is-economic');button.classList.toggle('is-small-value',point.radius<10);
           button.style.setProperty('--economic-radius',`${point.radius}px`);button.dataset.economicValue=String(point.value);button.dataset.economicRank=String(point.rank);button.dataset.economicMetro=point.id;
+          const leader=document.createElement('b');leader.className='industry-economic-leader';leader.setAttribute('aria-hidden','true');button.append(leader);
           const circle=document.createElement('em');circle.className='industry-economic-circle';circle.setAttribute('aria-hidden','true');circle.style.width=circle.style.height=`${2*point.radius}px`;button.append(circle);
         }else if(economic)button.classList.add('is-unmeasured');
         const label=document.createElement('span');label.textContent=point?point.name:(names.length>1?`${names[0]} ほか`:names[0]);
@@ -57,6 +58,17 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
       if(focused)markers.querySelector<HTMLButtonElement>(`[data-industry-marker="${focused}"]`)?.focus({preventScroll:true});
     }
     [...markers.children].forEach((node,index)=>{const group=groups[index];(node as HTMLElement).classList.toggle('is-left-label',group.x>frame.clientWidth-width);(node as HTMLElement).style.transform=`translate(${Math.round(group.x-18)}px,${Math.round(group.y-22)}px)`;node.setAttribute('aria-pressed',String(group.regions.some(r=>r.id===state.industryRegion)));});
+    if(economic){
+      const nodes=[...markers.children] as HTMLElement[];
+      const targets=groups.flatMap((g,index)=>{const point=economic.points.find(p=>p.regionIds.includes(g.regions[0].id));if(!point)return [];const label=nodes[index].querySelector('span')!;return [{id:String(index),x:g.x,y:g.y,radius:point.radius,width:label.offsetWidth||90,height:label.offsetHeight||34}];});
+      for(const box of placeIndustryEconomicLabels(targets,frame.clientWidth,frame.clientHeight)){
+        const index=Number(box.id),group=groups[index],button=nodes[index],label=button.querySelector('span')!;
+        label.style.left=`${box.left-Math.round(group.x-18)}px`;label.style.right='auto';label.style.top=`${box.top-Math.round(group.y-22)}px`;label.style.transform='none';
+        const endX=Math.max(box.left,Math.min(box.left+box.width,group.x)),endY=Math.max(box.top,Math.min(box.top+box.height,group.y));
+        const leader=button.querySelector<HTMLElement>('.industry-economic-leader')!;
+        leader.style.width=`${Math.hypot(endX-group.x,endY-group.y)}px`;leader.style.transform=`rotate(${Math.atan2(endY-group.y,endX-group.x)}rad)`;
+      }
+    }
   }
   function sourceLink(region:IndustryRegion){
     const holder=q('[data-selection-candidates]');holder.hidden=false;

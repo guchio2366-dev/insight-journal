@@ -9,3 +9,23 @@ export function groupIndustryMarkers<T extends {x:number;y:number;regions:unknow
  }
  return groups;
 }
+
+/** Place names around fixed economic circles without changing their position or area. */
+export function placeIndustryEconomicLabels(points:readonly {id:string;x:number;y:number;radius:number;width:number;height:number}[],frameWidth:number,frameHeight:number){
+ type Box={left:number;top:number;width:number;height:number};
+ const overlap=(a:Box,b:Box)=>Math.max(0,Math.min(a.left+a.width,b.left+b.width)-Math.max(a.left,b.left))*Math.max(0,Math.min(a.top+a.height,b.top+b.height)-Math.max(a.top,b.top));
+ const placed:{id:string;left:number;top:number;width:number;height:number}[]=[];
+ const circles=points.map(p=>({left:p.x-p.radius-3,top:p.y-p.radius-3,width:p.radius*2+6,height:p.radius*2+6}));
+ for(const p of [...points].sort((a,b)=>b.radius-a.radius)){
+  const choices:Box[]=[];
+  for(const shift of [0,-p.height-10,p.height+10,-2*p.height-20,2*p.height+20])for(const side of [1,-1]){
+   const left=side===1?p.x+Math.max(32,p.radius)+5:p.x-Math.max(32,p.radius)-5-p.width;
+   choices.push({left:Math.max(4,Math.min(frameWidth-p.width-4,left)),top:Math.max(4,Math.min(frameHeight-p.height-4,p.y+shift-p.height/2)),width:p.width,height:p.height});
+  }
+  const score=(b:Box)=>[...circles,...placed.map(r=>({left:r.left-4,top:r.top-4,width:r.width+8,height:r.height+8}))].reduce((sum,r)=>sum+overlap(b,r),0);
+  let best=choices[0],bestScore=Infinity;
+  for(const b of choices){const s=score(b);if(s<bestScore){best=b;bestScore=s;}if(s===0)break;}
+  placed.push({id:p.id,...best});
+ }
+ return placed;
+}

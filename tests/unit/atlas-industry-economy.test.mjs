@@ -50,3 +50,13 @@ test('サービス7分野の文字を固定し、分類には航空宇宙・造�
  assert.deepEqual(['finance','information','professional','trade-logistics','tourism','health-education','other-services'].map(s=>data.industrySymbol('services',s)),['金','情','専','商','観','医','他']);
  for(const s of ['aerospace','shipbuilding','railway'])assert.ok(data.industryRegions.some(r=>r.subsector===s));
 });
+
+
+test('狭幅の隣接する都市圏名を分離し、円の位置と面積を変えない',async()=>{
+ const {placeIndustryEconomicLabels}=await import('../../src/lib/atlas-industry-markers.ts');
+ const points=[{id:'dallas',x:169,y:134,radius:32,width:90,height:34},{id:'sanantonio',x:159,y:157,radius:16.4,width:90,height:34}];
+ const before=JSON.stringify(points),labels=placeIndustryEconomicLabels(points,344,220),[a,b]=labels;
+ assert.equal(JSON.stringify(points),before);
+ assert.ok(a.left+a.width<=b.left||b.left+b.width<=a.left||a.top+a.height<=b.top||b.top+b.height<=a.top);
+ for(const label of labels){assert.ok(label.left>=0&&label.left+label.width<=344);assert.ok(label.top>=0&&label.top+label.height<=220);}
+});
