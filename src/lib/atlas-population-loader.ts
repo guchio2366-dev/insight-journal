@@ -2,8 +2,8 @@
 export function createPopulationLoader(base:string){
  const cache=new Map<string,Promise<any>>();
  async function read(name:string){
-  let response=await fetch(base+name+'.json.gz');
-  if(!response.ok){response=await fetch(base+name+'.json');if(!response.ok)throw new Error(`Population HTTP ${response.status}`);}
+  let response=await fetch(base+name+'.json.gz',{signal:AbortSignal.timeout(20000)});
+  if(!response.ok){response=await fetch(base+name+'.json',{signal:AbortSignal.timeout(20000)});if(!response.ok)throw new Error(`Population HTTP ${response.status}`);}
   const bytes=new Uint8Array(await response.arrayBuffer());
   const text=bytes[0]===31&&bytes[1]===139?await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text():new TextDecoder().decode(bytes);
   const data=JSON.parse(text);

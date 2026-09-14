@@ -15,7 +15,8 @@
     "build": "node scripts/clean-dist.mjs && node scripts/prepare-population.mjs && npm run schema && npm run validate:content && astro build && pagefind --site dist --force-language ja && node scripts/generate-release.mjs",
     "test:e2e": "node --test tests/e2e/*.test.mjs",
     "verify:release": "node scripts/verify-release.mjs",
-    "check": "npm test && npm run build && npm run test:e2e && npm run verify:release"
+    "check": "npm test && npm run build && npm run test:e2e && npm run verify:release",
+    "pretest": "node scripts/prepare-population.mjs"
   },
   "dependencies": {
     "astro": "7.3.2",

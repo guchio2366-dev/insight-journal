@@ -4,7 +4,8 @@ import {populationColor,density,type County} from '../lib/atlas-population-data'
 import {createPopulationLoader} from '../lib/atlas-population-loader';
 export function createPopulationController(root:HTMLElement,base:string,options:{active:()=>boolean;map:()=>any;changed:(push?:boolean)=>void;fit:(bounds:any)=>void}){
  const el=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
- const loader=createPopulationLoader(base);let state=readPopulationState(new URL(location.href)),generation=0,appliedMap:any,countyData:any,data:any,rows:County[]=[],values=new Map<string,any>(),pickerKey='',selectedState='',datasetKey='',loadedGeometry:any;
+ const loader=createPopulationLoader(base);let state=readPopulationState(new URL(location.href)),generation=0,appliedMap:any,countyData:any,data:any,rows:County[]=[],values=new Map<string,any>(),pickerKey='',selectedState='',datasetKey='',loadedGeometry:any,dataFailed=false;
+ const option=(label:string,value:string)=>{const node=document.createElement('option');node.textContent=label;node.value=value;return node;};
  const fmt=(n:number|null|undefined,digits=0)=>n==null?'未取得・非公表':n.toLocaleString('ja-JP',{maximumFractionDigits:digits});
  function release(){if(appliedMap&&appliedMap===options.map()){for(const id of ['population-selected','population-city-outlines','population-outlines','population-lines','population-fill'])if(appliedMap.getLayer(id))appliedMap.removeLayer(id);for(const id of ['population-outlines','population'])if(appliedMap.getSource(id))appliedMap.removeSource(id);}appliedMap=undefined;loadedGeometry=undefined;}
  function value(row:County):number|null{
@@ -13,7 +14,7 @@ export function createPopulationController(root:HTMLElement,base:string,options:
   if(state.view==='vote'){const v=values.get(row.id);return v?.total>0?(v.r-v.d)/v.total*100:null;}
   return null;
  }
- function fallback(){if(!options.active())return;el<HTMLImageElement>('[data-fallback-livestock]').hidden=true;if(options.map())return;
+ function fallback(){if(!options.active())return;el<HTMLImageElement>('[data-fallback-livestock]').hidden=true;if(options.map()&&!dataFailed)return;
   const name=state.view==='distribution'&&state.metro!=='national'?`metro-${state.metro}`:state.view==='ethnicity'?`ethnicity-${state.ethnicity}`:state.view==='religion'?'religion':state.view==='vote'?'vote':'density';
   const image=el<HTMLImageElement>('[data-fallback-image]');image.src=base+name+'.webp';image.alt=state.view==='religion'?'宗教の州別データは未取得。灰色はゼロを意味しません。':`${populationViews.find(x=>x[0]===state.view)?.[1]}の代替図。凡例と下の地域一覧でも確認できます。`;el<HTMLAnchorElement>('[data-fallback-full]').href=image.src;
  }
@@ -32,7 +33,7 @@ export function createPopulationController(root:HTMLElement,base:string,options:
  function picker(){
   if(!countyData)return;const stateSelect=el<HTMLSelectElement>('[data-pop-state]');
   const available=[...new Set(rows.map(r=>r.state))].sort();if(!available.includes(selectedState))selectedState=rows.find(r=>r.id===state.geo)?.state??available[0]??'';
-  const key=datasetKey+':'+selectedState;if(key!==pickerKey){pickerKey=key;stateSelect.replaceChildren(...available.map(id=>new Option(countyData.states[id]??id,id)));const select=el<HTMLSelectElement>('[data-pop-geo]');select.replaceChildren(new Option('地域を選択',''),...rows.filter(r=>r.state===selectedState).map(r=>new Option(r.name,r.id)));}
+  const key=datasetKey+':'+selectedState;if(key!==pickerKey){pickerKey=key;stateSelect.replaceChildren(...available.map(id=>option(countyData.states[id]??id,id)));const select=el<HTMLSelectElement>('[data-pop-geo]');select.replaceChildren(option('地域を選択',''),...rows.filter(r=>r.state===selectedState).map(r=>option(r.name,r.id)));}
   stateSelect.value=selectedState;el<HTMLSelectElement>('[data-pop-geo]').value=state.geo;
  }
  function bars(items:[string,number|null][],totalLabel:string,note:string){el('[data-pop-total]').textContent=totalLabel;el('[data-pop-national-note]').textContent=note;const host=el('[data-pop-bars]');host.replaceChildren();for(const [label,n] of items){const row=document.createElement('div');row.className='population-bar';const line=document.createElement('div');line.className='population-bar-label';const title=document.createElement('span');title.textContent=label;const number=document.createElement('span');number.textContent=n===null?'未取得':fmt(n,1)+'%';line.append(title,number);const track=document.createElement('div');track.className='population-bar-track';const fill=document.createElement('div');fill.className='population-bar-fill';fill.style.width=`${n??0}%`;track.append(fill);row.append(line,track);host.append(row);}}
@@ -51,7 +52,7 @@ export function createPopulationController(root:HTMLElement,base:string,options:
   root.querySelectorAll<HTMLButtonElement>('[data-pop-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.popView===state.view)));
   root.querySelectorAll<HTMLElement>('[data-pop-filter]').forEach(n=>n.hidden=n.dataset.popFilter!==state.view);
   el<HTMLSelectElement>('[data-pop-metro]').value=state.metro;el<HTMLSelectElement>('[data-pop-ethnicity]').value=state.ethnicity;el<HTMLSelectElement>('[data-pop-religion]').value=state.religion;
-  release();legend();fallback();el('[data-pop-selected-value]').textContent='データを読み込んでいます…';el('[data-pop-selected-note]').textContent='';el('[data-pop-bars]').replaceChildren();el('[data-pop-status]').textContent='データを読み込んでいます…';el('[data-pop-retry]').hidden=true;
+  dataFailed=false;release();legend();fallback();el('[data-pop-selected-value]').textContent='データを読み込んでいます…';el('[data-pop-selected-note]').textContent='';el('[data-pop-bars]').replaceChildren();el('[data-pop-status]').textContent='データを読み込んでいます…';el('[data-pop-retry]').hidden=true;
   const current=()=>ticket===generation&&options.active()&&root.isConnected;
   try{
    countyData=await loader.get('counties');if(!current())return;
@@ -68,7 +69,8 @@ export function createPopulationController(root:HTMLElement,base:string,options:
    const features=geometry.features.map((f:any)=>({...f,properties:{...f.properties,color:byId.has(f.properties.id)?populationColor(value(byId.get(f.properties.id)!),state.view):missingColor}}));
    map.addSource('population',{type:'geojson',data:{type:'FeatureCollection',features}});map.addLayer({id:'population-fill',type:'fill',source:'population',paint:{'fill-color':['get','color'],'fill-opacity':.95}},'state-lines');map.addLayer({id:'population-lines',type:'line',source:'population',paint:{'line-color':'#637c7c','line-width':.3,'line-opacity':.4}},'state-lines');map.addLayer({id:'population-selected',type:'line',source:'population',filter:['==',['get','id'],state.geo],paint:{'line-color':'#162e40','line-width':2}});appliedMap=map;
    if(metro){const outlines=await loader.get(datasetKey+'.outlines.geo');if(!current()||options.map()!==map)return;map.addSource('population-outlines',{type:'geojson',data:outlines});map.addLayer({id:'population-outlines',type:'line',source:'population-outlines',filter:['==',['get','kind'],'urban'],paint:{'line-color':'#344955','line-width':.8,'line-dasharray':[3,2]}});map.addLayer({id:'population-city-outlines',type:'line',source:'population-outlines',filter:['==',['get','kind'],'city'],paint:{'line-color':'#7d3f70','line-width':1.6}});}
-  }catch(error){if(!current())return;release();el('[data-pop-status]').textContent='データを読み込めませんでした。再試行できます。';el('[data-pop-retry]').hidden=false;console.error('Population data',error);}
+   if(current()&&options.map()===map){el('[data-fallback]').hidden=true;el('[data-map-surface]').hidden=false;el('.atlas-map-tools').hidden=false;root.dataset.renderState='ready';}
+  }catch(error){if(!current())return;release();dataFailed=true;el('[data-fallback]').hidden=false;el('[data-map-surface]').hidden=true;el('.atlas-map-tools').hidden=true;root.dataset.renderState='fallback';fallback();el('[data-pop-status]').textContent='データを読み込めませんでした。再試行できます。';el('[data-pop-retry]').hidden=false;console.error('Population data',error);}
  }
  root.querySelectorAll<HTMLButtonElement>('[data-pop-view]').forEach(b=>b.addEventListener('click',()=>{state.view=b.dataset.popView!;state.geo='';void render();options.changed(true);}));
  for(const [selector,key] of [['[data-pop-metro]','metro'],['[data-pop-ethnicity]','ethnicity'],['[data-pop-religion]','religion']] as const)el<HTMLSelectElement>(selector)?.addEventListener('change',async e=>{state[key]=(e.target as HTMLSelectElement).value;if(key==='metro')state.geo='';await render();if(key==='metro'&&state.view==='distribution'&&options.active())options.fit(state.metro==='national'?[[-125,24],[-66,50]]:data?.bounds);options.changed(true);});
