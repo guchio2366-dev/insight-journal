@@ -118,7 +118,7 @@ export async function startAtlas() {
     agriculture:()=>{root.dataset.industryVisited='true';setField('agriculture',true);},
   });
 
-  const population=createPopulationController(root,config.populationAssetBase??config.assetBase.replace(/v3\/$/,'population/v1/'),{active:()=>field==='population',map:()=>ready&&!failed?map:undefined,changed:push=>save(push),fit:bounds=>{if(map&&bounds){view='custom';map.fitBounds(bounds,{padding:30,duration:0,maxZoom:10});}}});
+  const population=createPopulationController(root,config.populationAssetBase??config.assetBase.replace(/v3\/$/,'population/v1/'),{cities:config.climateCities,active:()=>field==='population',map:()=>ready&&!failed?map:undefined,changed:push=>save(push),fit:bounds=>{if(map&&bounds){view='custom';map.fitBounds(bounds,{padding:30,duration:0,maxZoom:10});}}});
 
   function cameraState(){
     const center=map?.getCenter();
@@ -451,7 +451,7 @@ export async function startAtlas() {
   }
 
   function fail(message:string){
-    if(failed)return;failed=true;ready=false;mapMoving=false;clearTimeout(timeout);criticalController.abort();root.dataset.renderState='fallback';fallback.hidden=false;surface.hidden=true;el('[data-map-labels]').hidden=true;el('[data-livestock-markers]').hidden=true;el('.atlas-map-tools').hidden=true;status.textContent=message+'（代替図）';if(natureTrigger===surface)natureTrigger=el('.atlas-fallback-map');if(cityTrigger===surface)cityTrigger=el('.atlas-fallback-map');updateCityFocusButton();savedCamera=cameraState();map?.remove();map=undefined;population.unavailable();natureLabelController.schedule();syncRelationVisuals();industries.renderMarkers();if(!selection.hidden)moveSelectionBelow();renderNatureChrome();
+    if(failed)return;failed=true;ready=false;mapMoving=false;clearTimeout(timeout);criticalController.abort();root.dataset.renderState='fallback';fallback.hidden=false;surface.hidden=true;el('[data-map-labels]').hidden=true;el('[data-livestock-markers]').hidden=true;el('.atlas-map-tools').hidden=true;status.textContent=message+'（代替図）';if(natureTrigger===surface)natureTrigger=el('.atlas-fallback-map');if(cityTrigger===surface)cityTrigger=el('.atlas-fallback-map');updateCityFocusButton();savedCamera=cameraState();map?.remove();map=undefined;population.unavailable();natureLabelController.schedule();syncRelationVisuals();industries.renderMarkers();population.renderMarkers();if(!selection.hidden)moveSelectionBelow();renderNatureChrome();
   }
 
   function activeRelation(){return field==='agriculture'&&selectedRelation?allRelations.get(selectedRelation):undefined;}
@@ -534,7 +534,7 @@ export async function startAtlas() {
       const labelParent=el('[data-map-labels]');for(const item of labels){const node=document.createElement('span');node.className='atlas-geolabel atlas-geolabel--'+item.kind;node.textContent=item.name;node.hidden=true;if(item.color)node.style.setProperty('--label-color',item.color);labelParent.appendChild(node);item.node=node;}
       setField(field);setNatureMode(natureMode);renderLabels();restoreSelectionForView();save();
       map.on('movestart',()=>{mapMoving=true;});map.on('dragstart',()=>{mapDragged=true;});
-      map.on('move',()=>{updateCityFocusButton();renderLabels();renderLivestockMarkers();industries.renderMarkers();if(!selection.hidden&&selection.parentElement===frame)selection.style.visibility='hidden';});map.on('moveend',()=>{mapMoving=false;if(!suppressNextMove)view='custom';else suppressNextMove=false;renderLabels();renderLivestockMarkers();industries.renderMarkers();placeSelectionCard();updateFocusButton();save();});
+      map.on('move',()=>{updateCityFocusButton();renderLabels();renderLivestockMarkers();industries.renderMarkers();population.renderMarkers();if(!selection.hidden&&selection.parentElement===frame)selection.style.visibility='hidden';});map.on('moveend',()=>{mapMoving=false;if(!suppressNextMove)view='custom';else suppressNextMove=false;renderLabels();renderLivestockMarkers();industries.renderMarkers();population.renderMarkers();placeSelectionCard();updateFocusButton();save();});
       map.on('click',event=>{
         if(field==='population'){population.click(event.point);return;}
         if(field==='natural'&&mapDragged)return;
@@ -553,7 +553,7 @@ export async function startAtlas() {
         const features=map!.queryRenderedFeatures(event.point,{layers:['land-picking']}).sort((left,right)=>left.properties.area-right.properties.area);if(!features.length){hideSelection();return;}showSelection(features[0].properties.name,'選択地域',{full:'Natural Earthの地誌的な地域区分です。自然環境へ切り替えると、同じ位置で気候・水・地形・標高を比べられます。',compact:'地誌的な概略区分です。自然環境で詳しく比べられます。'},[event.lngLat.lng,event.lngLat.lat],'#land-conditions','↓ 土地の解説へ');
       });
       root.querySelectorAll<HTMLButtonElement>('[data-map-action]').forEach(button=>button.addEventListener('click',()=>{if(!map)return;if(button.dataset.mapAction==='fit'){if(field==='population')population.national();view='fit';suppressNextMove=true;map.fitBounds(fitBounds,{padding:{top:30,bottom:14,left:12,right:12},duration:0});}if(button.dataset.mapAction==='in'){view='custom';map.zoomIn({duration:0});}if(button.dataset.mapAction==='out'){view='custom';map.zoomOut({duration:0});}}));
-      let lastWidth=frame.clientWidth,lastHeight=frame.clientHeight;new ResizeObserver(()=>{if(!map||failed)return;const width=frame.clientWidth,height=frame.clientHeight;if(width===lastWidth&&height===lastHeight)return;lastWidth=width;lastHeight=height;const oldView=view;suppressNextMove=true;map.resize();if(oldView==='fit'){suppressNextMove=true;map.fitBounds(fitBounds,{padding:{top:30,bottom:14,left:12,right:12},duration:0});}else{renderLabels();renderLivestockMarkers();industries.renderMarkers();placeSelectionCard();}}).observe(frame);
+      let lastWidth=frame.clientWidth,lastHeight=frame.clientHeight;new ResizeObserver(()=>{if(!map||failed)return;const width=frame.clientWidth,height=frame.clientHeight;if(width===lastWidth&&height===lastHeight)return;lastWidth=width;lastHeight=height;const oldView=view;suppressNextMove=true;map.resize();if(oldView==='fit'){suppressNextMove=true;map.fitBounds(fitBounds,{padding:{top:30,bottom:14,left:12,right:12},duration:0});}else{renderLabels();renderLivestockMarkers();industries.renderMarkers();population.renderMarkers();placeSelectionCard();}}).observe(frame);
       if(config.reviewMode)window.addEventListener('message',event=>{if(event.origin!==location.origin||event.source!==parent||event.data!=='atlas-qa-lose-context'||!map)return;map.getCanvas().getContext('webgl2')?.getExtension('WEBGL_lose_context')?.loseContext();});
     });
 
