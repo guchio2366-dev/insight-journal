@@ -1,0 +1,50 @@
+{
+  "publisher": "USDA FAS / U.S. Census Bureau",
+  "landingUrl": "https://apps.fas.usda.gov/gats/ExpressQuery1.aspx",
+  "retrievedAt": "2026-09-14",
+  "releaseDate": "2026-09-03",
+  "direction": "X Exports",
+  "valuation": "Current USD, Census F.A.S. export value; Canada follows bilateral data exchange adjustment. Includes domestic exports and re-exports.",
+  "valuationUrl": "https://www.census.gov/foreign-trade/guide/sec2.html",
+  "periodStart": "2025-01-01",
+  "periodEnd": "2025-12-31",
+  "statistics": "GVAL / D / Annual / 2025-2025 / Jan-Dec",
+  "queries": [
+    {
+      "kind": "bico-partners",
+      "rawResponseSha256": "5f768634b19f5bf25a09a7a245985a4564a13338ccec747a69035861a93eb631",
+      "localRawPath": "data-source/atlas/livestock/gats-bico-partners-2025.json",
+      "extractSha256": "3eb225c2883777e2a946dcde90c6cde85150734bfdad7d224f1f7344edda2ea0",
+      "reportLabels": [
+        "2025",
+        "January - December",
+        "January - December"
+      ],
+      "selection": "BICO-HS10 0145AT,0150AT,0155AT,0165AT,0170AT / R00+ALLPT / Product-Partner / detail Partner; retain R00 immediate children only"
+    },
+    {
+      "kind": "hs-world",
+      "rawResponseSha256": "e709ad598cf01998ca6e622d438f976b6cb329dee72f8addb0f23275b84f1527",
+      "localRawPath": "data-source/atlas/livestock/gats-hs-products-2025.json",
+      "extractSha256": "41f41b00bb970e09adf5387896cf9b6c0d5b12705567ab27b7c70afc28de760f",
+      "reportLabels": [
+        "2025",
+        "January - December",
+        "January - December"
+      ],
+      "selection": "same five groups / R00 / Product-Partner / detail Product"
+    },
+    {
+      "kind": "hs-partners",
+      "rawResponseSha256": "af9473fd8718d2586d4ca6f6fa3d22433970affcccd483e36ef5d5146e1f20d8",
+      "localRawPath": "data-source/atlas/livestock/gats-hs-partners-2025.json",
+      "extractSha256": "e026b907127e5068ea6bfb97597de8ccaa2f9cfc182f2a8864af12d81a098ba3",
+      "reportLabels": [
+        "2025",
+        "January - December",
+        "January - December"
+      ],
+      "selection": "0155AT,0165AT / ALLPT / Partner-Product / detail Product; retain integer-rank partner parents and HS10 children only"
+    }
+  ]
+}

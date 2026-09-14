@@ -1,4 +1,28 @@
 ---
-import { livestockKinds,livestockReadings,livestockSources } from '../../data/atlas/livestock';
+import {livestockKinds,livestockReadings,livestockSources} from '../../data/atlas/livestock';
+import {livestockStatistics,livestockStatLabels} from '../../data/atlas/livestock-statistics';
+import AgricultureDetailPanel from './AgricultureDetailPanel.astro';
+import ProductionShareChart from './ProductionShareChart.astro';
+import LivestockSupplyUse from './LivestockSupplyUse.astro';
+import LivestockExports from './LivestockExports.astro';
+const dairy=livestockStatistics.exports.dairy;
 ---
-<section class="atlas-livestock-reading" id="livestock-details"><header><p class="atlas-eyebrow">LIVESTOCK AND PLACE</p><h2>畜産を地理から読む</h2><p>記号は2022年農業センサスの郡別分布と公的資料から確認した主要集積地域の中心を示します。農場の正確な位置や、記号の大きさによる頭・羽数比較ではありません。</p></header><nav class="atlas-livestock-jump" aria-label="畜産の解説">{livestockKinds.map(k=><a href={`#livestock-${k.id}`} style={`--livestock-color:${k.color}`}><i aria-hidden="true">{k.symbol}</i>{k.label}</a>)}</nav><div class="atlas-livestock-copy-grid">{livestockReadings.map(item=><article id={`livestock-${item.id}`} tabindex="-1"><h3>{item.title}</h3><p>{item.body}</p></article>)}</div><p class="atlas-inline-sources">出典：{livestockSources.map((s,i)=><span>{i>0?' ／ ':''}<a href={s.url} target="_blank" rel="noopener noreferrer">{s.publisher}</a></span>)}</p></section>
+<section class="atlas-crop-details" id="livestock-details" aria-labelledby="livestock-details-title" data-detail-group="livestock">
+  <header class="atlas-crop-details-head"><p class="atlas-eyebrow">LIVESTOCK DETAIL</p><h2 id="livestock-details-title">畜産を詳しく読む</h2><p>生産を支える地域の条件から、供給・行き先、製品輸出、世界の中での位置を確認できます。</p></header>
+  <div class="atlas-stat-tabs" role="tablist" aria-label="詳しく見る畜産">
+    {livestockKinds.map((k,i)=><button type="button" role="tab" aria-selected={i===0?'true':'false'} aria-controls={`livestock-${k.id}`} id={`livestock-stat-tab-${k.id}`} data-livestock-stat-select={k.id} style={`--crop-color:${k.color}`}>{k.label}</button>)}
+  </div>
+  {livestockKinds.map(k=>{
+    const reading=livestockReadings.find(r=>r.id===k.id)!,labels=livestockStatLabels[k.id],world=livestockStatistics.production[k.id];
+    return <AgricultureDetailPanel id={k.id} group="livestock" color={k.color}>
+      <Fragment slot="copy"><h3>{reading.title}</h3><p>{reading.body}</p><p class="atlas-crop-uses"><strong>主な製品</strong>{labels.products}</p><p class="atlas-inline-sources">地図の記号は主要集積地域の代表点です。全国の生産量や頭・羽数の大きさを表していません。</p><p class="atlas-inline-sources">地理の出典：{livestockSources.map((s,i)=><Fragment>{i>0?' ／ ':''}<a href={s.url} target="_blank" rel="noopener">{s.publisher}</a></Fragment>)}</p></Fragment>
+      <LivestockSupplyUse slot="supply" id={k.id}/><LivestockExports slot="exports" id={k.id}/>
+      <ProductionShareChart slot="world" id={k.id} name={k.label} period={`${world.year}年・FAO公表値（推計を含む）`} basis={labels.world} unit="トン" totalUnit="百万トン" totalDivisor={1e6} worldTotal={world.worldTotal} countries={world.countries} trend={world.trend} sourceUrl={livestockStatistics.sources.faostat.landingUrl} sourceLabel="FAOSTAT QCL" note="世界計はFAOの公表値。その他は表示国以外と原表の集計差を含みます。"/>
+      {k.id==='dairy'&&<section slot="extra" class="dairy-product-exports"><h4>乳製品別の輸出額</h4><p>2025暦年 · 同じ総輸出額 {Number(dairy.totalUsd/1e8).toFixed(1)}億米ドルの内訳です。</p><table><caption>国内販売構成ではなく、乳由来の製品・派生品の輸出構成</caption><thead><tr><th>製品</th><th>億米ドル</th><th>構成比</th></tr></thead><tbody>{dairy.products.map(r=><tr><th scope="row">{r.label}</th><td>{(r.valueUsd/1e8).toFixed(2)}</td><td>{(r.valueUsd/dairy.totalUsd*100).toFixed(1)}%</td></tr>)}</tbody></table><p>その他には飲用乳、発酵乳、アイスクリーム、乳糖、カゼイン、乳を含む調製品等を含みます。各商品コードは１区分だけに計上しています。</p><a href={livestockStatistics.sources.gats.landingUrl} target="_blank" rel="noopener">出典：USDA FAS GATS</a></section>}
+    </AgricultureDetailPanel>;
+  })}
+  <noscript><style>.atlas-stat-tabs{display:none}</style><p class="atlas-chart-note">各畜産分類の本文と図を順に表示しています。酪農は２つの換算基準を続けて表示します。</p></noscript>
+</section>
+<style>
+.dairy-product-exports{margin-top:16px;padding:16px;border:1px solid #d4d8cf;background:#fbfaf5;font-size:14px;line-height:1.7}.dairy-product-exports h4{font-size:17px;margin:0 0 8px}.dairy-product-exports table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}.dairy-product-exports th,.dairy-product-exports td{padding:8px 3px;border-bottom:1px solid #d4d8cf;text-align:right}.dairy-product-exports th:first-child{text-align:left}.dairy-product-exports caption{text-align:left;font-size:12px}.dairy-product-exports>p:last-of-type,.dairy-product-exports>a{font-size:12px}
+</style>

@@ -1,0 +1,45 @@
+---
+import {livestockStatistics,livestockStatLabels,supplySegments,type LivestockSupplyId} from '../../data/atlas/livestock-statistics';
+import type {LivestockKindId} from '../../data/atlas/livestock';
+interface Props {id:LivestockKindId}
+const {id}=Astro.props,labels=livestockStatLabels[id],milk=id==='dairy';
+const variants:LivestockSupplyId[]=milk?['dairy-fat','dairy-skim']:[id as LivestockSupplyId];
+---
+<section class="livestock-supply-use" data-livestock-supply={id} aria-labelledby={`animal-supply-title-${id}`}>
+  <header><h4 id={`animal-supply-title-${id}`}>供給元と行き先</h4><span>2025暦年 · 数量</span></header>
+  <p class="animal-supply-takeaway">{labels.takeaway}</p>
+  {milk&&<div class="milk-basis-controls" role="group" aria-label="乳換算の基準"><button type="button" data-milk-basis="fat" aria-pressed="true">乳脂肪ベース</button><button type="button" data-milk-basis="skim" aria-pressed="false">無脂乳固形分ベース</button></div>}
+  {variants.map(key=>{
+    const {data:d,supply,uses}=supplySegments(key);
+    const fmt=(n:number)=>n.toLocaleString('ja-JP',{minimumFractionDigits:d.decimals,maximumFractionDigits:d.decimals});
+    const signed=(n:number)=>`${n>0?'+':''}${fmt(n)}`;
+    const scale=Math.max(d.totalSupply,supply.reduce((s,r)=>s+r.value,0),uses.reduce((s,r)=>s+r.value,0));
+    return <div {...(milk?{'data-milk-panel':key==='dairy-fat'?'fat':'skim'}:{})}>
+      <p class="animal-production">米国の{labels.quantity}生産量 <strong>{fmt('rawMilkProduction'in d?d.rawMilkProduction:d.production)} {d.unit}</strong></p>
+      <p class="animal-supply-total">総供給 <strong>{fmt(d.totalSupply)} {d.unit}</strong> · {d.basis}</p>
+      {milk&&<p class="animal-supply-note">乳製品を生乳量に換算。{key==='dairy-skim'?'無脂乳固形分は、たんぱく質・乳糖などです。':'乳脂肪の含有量を基準にしています。'} 実際に液体の生乳が輸出された量ではありません。</p>}
+      <figure><figcaption>２本とも公表総供給が100%。同じ数量尺度で比較します。</figcaption>
+        {[{label:'供給元',rows:supply},{label:'行き先',rows:uses}].map(group=><div class="animal-supply-row"><h5>{group.label}</h5>
+          <div class="animal-supply-bar" role="img" aria-label={group.label+'：'+group.rows.map(r=>`${r.label} ${fmt(r.value)}${d.unit}、${(r.value/d.totalSupply*100).toFixed(1)}%`).join('。')}>
+            {group.rows.map(r=><span class={`animal-role-${r.role}`} style={`width:${r.value/scale*100}%`}/>)}<i class="animal-supply-hundred" style={`left:${d.totalSupply/scale*100}%`} aria-hidden="true"/>
+          </div>
+          <ol class="animal-supply-key">{group.rows.map(r=><li><i class={`animal-role-${r.role}`} aria-hidden="true"/><span>{r.label}</span><strong>{fmt(r.value)} <small>{d.unit}</small></strong><span>{(r.value/d.totalSupply*100).toFixed(1)}%</span></li>)}</ol>
+        </div>)}
+      </figure>
+      {(d.supplyDifference!==0||d.useDifference!==0)&&<p class="animal-supply-note">公表総供給との差：供給元 {signed(d.supplyDifference)}、行き先 {signed(d.useDifference)} {d.unit}。原表の丸め差を保持しています。</p>}
+      <details class="atlas-chart-data"><summary>数量の定義と公表値</summary>
+        <p>2025年1月〜12月。国内利用は原表の国内消失量で、実際に食べた量だけを測る値ではありません。輸入と前年からの在庫を含む供給全体の収支です。</p>
+        {'farmUse'in d&&<p>生乳生産 {fmt(d.rawMilkProduction)} − 農場内利用 {fmt(d.farmUse)} ＝ 市場出荷 {fmt(d.production)} {d.unit}。農場内利用を市場出荷から二度差し引きません。２つの乳換算は合計できません。</p>}
+        <table><caption>{labels.quantity} · 2025暦年 · {d.unit} · {d.basis}</caption><thead><tr><th>区分</th><th>数量</th><th>総供給比</th></tr></thead><tbody>
+          {[{label:'供給元',rows:supply},{label:'行き先',rows:uses}].map(group=><><tr><th colspan="3" scope="colgroup">{group.label}</th></tr>{group.rows.map(r=><tr><th scope="row">{r.label}</th><td>{fmt(r.value)}</td><td>{(r.value/d.totalSupply*100).toFixed(2)}%</td></tr>)}</>)}
+          <tr><th scope="row">公表総供給</th><td>{fmt(d.totalSupply)}</td><td>100%</td></tr></tbody></table>
+        <p>値は原表の公表精度で表示。構成比は丸めるため、表示合計が100%と異なる場合があります。</p>
+      </details>
+      <p class="animal-supply-note"><a href={`${livestockStatistics.sources.wasde.url}#page=${d.page}`} target="_blank" rel="noopener">出典：USDA WASDE-675 p.{d.page}</a> · 2026年9月11日公表、2025年列。</p>
+    </div>;
+  })}
+  <noscript><style>.milk-basis-controls{display:none}</style></noscript>
+</section>
+<style>
+.livestock-supply-use{padding:16px;background:#f6f5ed;border:1px solid #d4d9d0;border-radius:5px;color:#293f42;margin-bottom:18px}.livestock-supply-use header{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}.livestock-supply-use h4{font-size:17px;margin:0}.livestock-supply-use header span,.animal-supply-note{font-size:12px;line-height:1.7}.animal-supply-takeaway{font-size:14px;line-height:1.8}.animal-production,.animal-supply-total{font-size:14px;line-height:1.7}.animal-production strong,.animal-supply-total strong{font-size:18px;font-variant-numeric:tabular-nums}.livestock-supply-use figure{margin:12px 0}.livestock-supply-use figcaption{font-size:12px;line-height:1.6}.animal-supply-row h5{font-size:14px;margin:14px 0 5px}.animal-supply-bar{height:24px;display:flex;position:relative;background:#e7e9e3}.animal-supply-bar>span{flex-shrink:0;min-width:0}.animal-supply-hundred{position:absolute;top:-3px;bottom:-3px;width:1px;background:#293f42}.animal-role-production{background:#426f62}.animal-role-import{background:#b57532}.animal-role-stock{background:#a8aeab}.animal-role-domestic{background:#4a7291}.animal-role-hatching{background:#8b7538}.animal-role-export{background:#9d597b}.animal-supply-key{display:grid;gap:5px;padding:0;margin:9px 0;list-style:none}.animal-supply-key li{display:grid;grid-template-columns:9px minmax(55px,1fr) auto minmax(48px,auto);gap:7px;align-items:baseline;font-size:14px;line-height:1.5;font-variant-numeric:tabular-nums}.animal-supply-key small{font-size:12px;font-weight:400}.animal-supply-key li>span:last-child{text-align:right}.animal-supply-key i{width:9px;height:9px}.milk-basis-controls{display:flex;flex-wrap:wrap;gap:8px}.milk-basis-controls button{min-height:44px;padding:8px 12px;font:inherit;font-size:14px;border:1px solid #8a9e9c;background:#faf9f4;border-radius:4px;color:#29444c}.milk-basis-controls button[aria-pressed="true"]{background:#29444c;color:#fff}.milk-basis-controls button:focus-visible{outline:3px solid #355f75;outline-offset:3px}[data-milk-panel][hidden]{display:none}@media(max-width:650px){.livestock-supply-use{padding:12px}}@media(max-width:360px){.animal-supply-key li{grid-template-columns:9px 1fr auto}.animal-supply-key li strong{grid-column:2}.animal-supply-key li>span:last-child{grid-column:3;grid-row:auto}}@media(forced-colors:active){.animal-supply-bar>span,.animal-supply-key i{border:1px solid CanvasText}}
+</style>

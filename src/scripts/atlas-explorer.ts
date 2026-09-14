@@ -1,3 +1,4 @@
+import { createAgricultureDetails } from './atlas-agriculture-details';
 import type { AgricultureRelation } from '../data/atlas/agriculture-relations';
 import { relationContextFeatures } from '../lib/atlas-relation-geometry';
 import { readAtlasState, writeAtlasState, type MapField, type NatureMode, type ViewMode } from '../lib/atlas-state';
@@ -97,6 +98,9 @@ export async function startAtlas() {
   }
 
 
+  const agricultureDetails=createAgricultureDetails(root,(state,push,url)=>{selectedStats=state.stats;save(push,url);});
+  selectedStats=agricultureDetails.state().stats;
+
   const industries=createIndustryController(root,config.industryRegions,config.industrySources,{
     active:()=>field==='industry',
     project:()=>ready&&map&&!failed&&fallback.hidden?(p)=>map!.project(p):null,
@@ -115,16 +119,16 @@ export async function startAtlas() {
     return center?{lng:center.lng,lat:center.lat,zoom:map!.getZoom()}:savedCamera;
   }
 
-  function save(push=false){
+  function save(push=false,sourceUrl=new URL(location.href)){
     if(restoring)return;
-    const url=industries.write(writeAtlasState(new URL(location.href),config.base,field,cameraState(),selectedCrop,selectedRegion,selectedStats,view,[...agriLayers] as any,selectedAnimal,selectedAnimalRegion,{env:natureMode,city:selectedCity,natureFeature},selectedRelation));
+    const url=industries.write(writeAtlasState(sourceUrl,config.base,field,cameraState(),selectedCrop,selectedRegion,selectedStats,view,[...agriLayers] as any,selectedAnimal,selectedAnimalRegion,{env:natureMode,city:selectedCity,natureFeature},selectedRelation,agricultureDetails.state()));
     if(field==='industry'&&push)url.hash='';
     if(config.reviewMode){url.pathname=config.base+'review/';url.searchParams.set('field',field);}
     history[push?'pushState':'replaceState']({},'',url);
     const returnUrl=new URL(url);returnUrl.pathname=config.base+'industry/';returnUrl.searchParams.delete('field');
     el<HTMLAnchorElement>('[data-industry-return-link]').href=returnUrl.pathname+returnUrl.search;
     root.querySelectorAll<HTMLAnchorElement>('[data-cross-link="agriculture"]').forEach(link=>{
-      const target=writeAtlasState(new URL(url),config.base,'agriculture',cameraState(),selectedCrop,selectedRegion,selectedStats,view,[...agriLayers] as any,selectedAnimal,selectedAnimalRegion,{env:natureMode,city:selectedCity,natureFeature},selectedRelation);
+      const target=writeAtlasState(new URL(url),config.base,'agriculture',cameraState(),selectedCrop,selectedRegion,selectedStats,view,[...agriLayers] as any,selectedAnimal,selectedAnimalRegion,{env:natureMode,city:selectedCity,natureFeature},selectedRelation,agricultureDetails.state());
       link.href=target.pathname+target.search;
     });
   }
@@ -132,11 +136,7 @@ export async function startAtlas() {
   function updateStats(id:string,saveUrl=true){
     if(!config.statisticCropIds.includes(id))return;
     selectedStats=id;
-    root.querySelectorAll<HTMLButtonElement>('[data-stat-select]').forEach(button=>{
-      const active=button.dataset.statSelect===id;
-      button.setAttribute('aria-selected',String(active));button.tabIndex=active?0:-1;
-    });
-    root.querySelectorAll<HTMLElement>('[data-stat-panel]').forEach(panel=>panel.hidden=panel.dataset.statPanel!==id);
+    agricultureDetails.selectCrop(id,false);
     if(saveUrl)save();
   }
 
@@ -441,8 +441,7 @@ export async function startAtlas() {
   root.querySelectorAll<HTMLAnchorElement>('[data-relation-detail-link],[data-selection-link]').forEach(link=>link.addEventListener('click',event=>{
     if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
     const id=link.hash.slice(1);
-    if(id.startsWith('crop-')&&config.statisticCropIds.includes(id.slice(5))){event.preventDefault();updateStats(id.slice(5),false);save(true);const target=el('#'+id);target.scrollIntoView({block:'start'});target.tabIndex=-1;target.focus({preventScroll:true});}
-    else if(id.startsWith('relation-')){event.preventDefault();const target=el('#'+id);target.querySelector<HTMLDetailsElement>('details')!.open=true;target.scrollIntoView({block:'start'});target.tabIndex=-1;target.focus({preventScroll:true});}
+    if(id.startsWith('relation-')){event.preventDefault();const target=el('#'+id);target.querySelector<HTMLDetailsElement>('details')!.open=true;target.scrollIntoView({block:'start'});target.tabIndex=-1;target.focus({preventScroll:true});}
   }));
 
   el('[data-industry-return-link]').addEventListener('click',event=>{if((event as MouseEvent).metaKey||(event as MouseEvent).ctrlKey||(event as MouseEvent).shiftKey||(event as MouseEvent).altKey)return;event.preventDefault();setField('industry',true);});
@@ -454,7 +453,6 @@ export async function startAtlas() {
   });
   root.querySelectorAll<HTMLInputElement>('[data-agri-layer]').forEach(input=>input.addEventListener('change',()=>{if(input.checked)agriLayers.add(input.value);else agriLayers.delete(input.value);syncAgricultureLayers();}));
   el<HTMLSelectElement>('[data-city-select]').addEventListener('change',event=>{const id=(event.currentTarget as HTMLSelectElement).value;if(id)selectCity(id,true,event.currentTarget as HTMLElement);else{selectedCity=null;closeSelection();}});
-  root.querySelectorAll<HTMLButtonElement>('[data-stat-select]').forEach(button=>{button.addEventListener('click',()=>updateStats(button.dataset.statSelect!));button.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight'].includes(event.key))return;event.preventDefault();const buttons=[...root.querySelectorAll<HTMLButtonElement>('[data-stat-select]')],next=(buttons.indexOf(button)+(event.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length;buttons[next].focus();updateStats(buttons[next].dataset.statSelect!);});});
   el('[data-retry-nature]').addEventListener('click',()=>{appliedNatureKeys.delete(natureMode==='contour'?'contour:500':natureMode);void ensureNatureModeData(natureMode);});
   el('[data-focus-selection]').addEventListener('click',()=>{if(map&&selectedCoordinate){view='custom';map.jumpTo({center:selectedCoordinate});}});
   root.querySelectorAll<HTMLSelectElement>('[data-feature-select]').forEach(select=>select.addEventListener('change',()=>{if(select.value)showNatureFeature(select.value,undefined,undefined,true,select);else closeSelection();}));
@@ -474,10 +472,9 @@ export async function startAtlas() {
     const coordinate=unprojectNatureFallback(point,box);if(!coordinate)return;
     const city=cityAt(point,p=>projectNatureFallback(p,box));if(city)selectCity(city.id,true,fallbackMap);else void pickClimate(coordinate,fallbackMap);
   });
-  if(location.hash.startsWith('#crop-')&&config.statisticCropIds.includes(location.hash.slice(6)))selectedStats=location.hash.slice(6);
   updateStats(selectedStats,false);setNatureMode(natureMode);setField(field);syncAgricultureLayers(false);timeout=window.setTimeout(()=>fail('地図データの読み込みが完了しませんでした。'),30000);
 
-    window.addEventListener('popstate',()=>{restoring=true;natureGeneration++;pendingNatureKey='';const state=readAtlasState(new URL(location.href),config.initialField);field=state.field;natureMode=state.env;agriLayers=new Set(state.agriLayers);selectedRelation=state.relation;relationTrigger=null;natureTrigger=null;naturePickGeneration++;selectedAnimal=state.animal;selectedAnimalRegion=state.animalRegion;selectedCrop=state.crop;selectedRegion=state.region;selectedCity=state.city;natureFeature=state.natureFeature;view=state.view;savedCamera=state.camera??undefined;industries.restore();setField(field);setNatureMode(natureMode);updateStats(state.stats,false);syncAgricultureLayers(false);if(state.camera&&map&&state.view==='custom')map.jumpTo({center:[state.camera.lng,state.camera.lat],zoom:state.camera.zoom});else if(map&&state.view==='fit'){suppressNextMove=true;map.fitBounds(fitBounds,{duration:0,padding:{top:30,bottom:14,left:12,right:12}});}restoring=false;});
+    window.addEventListener('popstate',()=>{restoring=true;natureGeneration++;pendingNatureKey='';const state=readAtlasState(new URL(location.href),config.initialField);agricultureDetails.restore();field=state.field;natureMode=state.env;agriLayers=new Set(state.agriLayers);selectedRelation=state.relation;relationTrigger=null;natureTrigger=null;naturePickGeneration++;selectedAnimal=state.animal;selectedAnimalRegion=state.animalRegion;selectedCrop=state.crop;selectedRegion=state.region;selectedCity=state.city;natureFeature=state.natureFeature;view=state.view;savedCamera=state.camera??undefined;industries.restore();setField(field);setNatureMode(natureMode);updateStats(state.stats,false);syncAgricultureLayers(false);if(state.camera&&map&&state.view==='custom')map.jumpTo({center:[state.camera.lng,state.camera.lat],zoom:state.camera.zoom});else if(map&&state.view==='fit'){suppressNextMove=true;map.fitBounds(fitBounds,{duration:0,padding:{top:30,bottom:14,left:12,right:12}});}restoring=false;});
 
   try{
     const fetchJson=async(base:string,name:string)=>{const testMissing=config.reviewMode&&new URL(location.href).searchParams.get('qa')==='asset-error'&&name==='manifest.json';const response=await fetch(base+(testMissing?'qa-missing-manifest.json':name),{signal:criticalController.signal});if(!response.ok)throw new Error(name+': '+response.status);return response.json();};

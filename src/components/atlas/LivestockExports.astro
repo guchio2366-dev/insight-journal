@@ -1,0 +1,27 @@
+---
+import {livestockStatistics,livestockStatLabels} from '../../data/atlas/livestock-statistics';
+import type {LivestockKindId} from '../../data/atlas/livestock';
+interface Props {id:LivestockKindId}
+const {id}=Astro.props,d=livestockStatistics.exports[id],label=livestockStatLabels[id];
+const names:Record<string,string>={'Korea, South':'韓国',Japan:'日本',China:'中国',Mexico:'メキシコ',Canada:'カナダ',Taiwan:'台湾',Cuba:'キューバ',Ireland:'アイルランド','Bahamas, The':'バハマ',Other:'その他'};
+const fmt=(n:number,digits=1)=>n.toLocaleString('ja-JP',{maximumFractionDigits:digits});
+let offset=0;
+---
+<figure class="atlas-export-chart" data-livestock-exports={id}>
+  <figcaption><strong>米国からの輸出先</strong><span>2025暦年 · 輸出額</span></figcaption>
+  <p class="atlas-chart-note">{label.exports} · 名目米ドル</p>
+  <div class="atlas-donut-layout">
+    <svg class="atlas-donut" viewBox="0 0 144 144" role="img" aria-labelledby={`animal-export-title-${id}`}><title id={`animal-export-title-${id}`}>{label.exports}の輸出額構成。総額{fmt(d.totalUsd,0)}米ドル。相手国別の額は下の表に表示。</title>
+      {d.destinations.map((r,i)=>{const share=r.value/d.totalUsd*100,start=offset;offset+=share;return <circle cx="72" cy="72" r="52" pathLength="100" class={`atlas-donut-slice atlas-donut-slice--${i}`} stroke-dasharray={`${share} ${100-share}`} stroke-dashoffset={-start} transform="rotate(-90 72 72)"><title>{names[r.country]??r.country} {share.toFixed(1)}%</title></circle>;})}
+      <text x="72" y="63" text-anchor="middle">総輸出額</text><text x="72" y="82" text-anchor="middle" class="atlas-donut-total">{fmt(d.totalUsd/1e8)}</text><text x="72" y="98" text-anchor="middle">億米ドル</text>
+    </svg>
+    <ol class="atlas-donut-key">{d.destinations.map((r,i)=><li><i class={`atlas-donut-color--${i}`} aria-hidden="true"/><span>{names[r.country]??r.country}</span><strong>{(r.value/d.totalUsd*100).toFixed(1)}%</strong></li>)}</ol>
+  </div>
+  <p class="atlas-chart-note">{label.scope}</p>
+  <details class="atlas-chart-data"><summary>輸出額・対象範囲を確認</summary>
+    <table><caption>2025年1月〜12月 · 名目米ドル</caption><thead><tr><th>輸出先</th><th>金額</th><th>構成比</th></tr></thead><tbody>{d.destinations.map(r=><tr><th scope="row">{names[r.country]??r.country}</th><td>{fmt(r.value,0)}</td><td>{(r.value/d.totalUsd*100).toFixed(1)}%</td></tr>)}<tr><th scope="row">世界向け総額</th><td>{fmt(d.totalUsd,0)}</td><td>100%</td></tr></tbody></table>
+    <p>輸出は再輸出を含む総輸出。米国の輸出港・空港・国境で評価した金額です。国内の農家売上や小売売上とは異なります。相手先はGATSの国・地域区分に従い、上位5市場以外をその他にまとめています。</p>
+    <p>数量図の輸出と、この金額図は品目範囲が異なります。{id==='layers'?'加工卵の鳥種を推測して鶏だけの額へ配分していません。':''}</p>
+  </details>
+  <a href={livestockStatistics.sources.gats.landingUrl} target="_blank" rel="noopener">出典：USDA FAS GATS／U.S. Census Bureau</a>
+</figure>

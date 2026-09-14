@@ -1,0 +1,86 @@
+{
+  "checkedAt": "2026-09-14",
+  "baselineCommit": "942dfb1da0358efa670574ab8f0cdb4fc6af58b9",
+  "command": "npm run check",
+  "unit": {
+    "passed": 76,
+    "failed": 0
+  },
+  "builtIntegration": {
+    "passed": 22,
+    "failed": 0,
+    "environment": "Happy DOM with MapLibre boundary mocked; not a real browser/GPU"
+  },
+  "postMetadataUpdate": {
+    "command": "python scripts/prepare-atlas-livestock-statistics.py && node --test tests/unit/atlas-agriculture-details.test.mjs",
+    "passed": 6,
+    "failed": 0
+  },
+  "releaseBoundary": "passed",
+  "performance": {
+    "method": "gzip.compress(..., mtime=0); agriculture HTML and all generated JS/CSS; includes lazy MapLibre; unchanged images/geodata excluded",
+    "bytes": {
+      "baseline": {
+        "atlas/north-america/agriculture/index.html": 107763,
+        "_astro/AtlasExplorer.astro_astro_type_script_index_0_lang.BmCKAqL6.js": 25611,
+        "_astro/AtlasPage.MDMVfwZJ.css": 20388,
+        "_astro/BaseLayout.C1yMU9OT.css": 6279,
+        "_astro/index.BixJj6W_.css": 5087,
+        "_astro/maplibre-gl.BrJ8BarH.js": 278995,
+        "total": 444123
+      },
+      "implementation": {
+        "atlas/north-america/agriculture/index.html": 124735,
+        "_astro/AtlasExplorer.astro_astro_type_script_index_0_lang.BGOTsoag.js": 26493,
+        "_astro/AtlasPage.D4KRBmlz.css": 21636,
+        "_astro/BaseLayout.C1yMU9OT.css": 6279,
+        "_astro/index.BixJj6W_.css": 5087,
+        "_astro/maplibre-gl.BrJ8BarH.js": 278995,
+        "total": 463225
+      },
+      "delta": 19102
+    },
+    "standaloneDetailControllerGzipBytes": 1336,
+    "repeatedDetailSwitches": 20,
+    "mapInstanceCount": 1,
+    "cameraChangesDuringSwitches": 0,
+    "geographyRequestsDuringSwitches": 0
+  },
+  "visualQA": {
+    "status": "not verified",
+    "reason": "Local preview URL and shared file URL were refused by the browser URL security policy. No bypass attempted.",
+    "screenshots": [],
+    "pendingViewports": [
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 844,
+        "height": 390
+      },
+      {
+        "width": 820,
+        "height": 1180
+      },
+      {
+        "width": 1180,
+        "height": 820
+      },
+      {
+        "width": 507,
+        "height": 768
+      },
+      {
+        "width": 1440,
+        "height": 900
+      }
+    ],
+    "realDevice": "not verified"
+  },
+  "deployment": "not performed",
+  "dataLimitations": [
+    "FAOSTAT published world and country totals differ; cause unresolved; retained published denominator with visible note.",
+    "Processed egg HS codes do not identify bird species; scope difference shown rather than estimated allocation."
+  ]
+}

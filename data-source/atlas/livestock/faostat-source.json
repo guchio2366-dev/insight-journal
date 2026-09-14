@@ -1,0 +1,15 @@
+{
+  "publisher": "FAO",
+  "dataset": "QCL",
+  "url": "https://bulks-faostat.fao.org/production/Production_Crops_Livestock_E_All_Data_(Normalized).zip",
+  "landingUrl": "https://www.fao.org/faostat/en/#data/QCL",
+  "releaseDate": "2025-12-31T00:00:00",
+  "retrievedAt": "2026-09-14",
+  "sha256": "c5835418c18f9322e7decbd6800f93a216eaae3cdfa31acb08f0518c0c6d6853",
+  "methodologyUrl": "https://files-faostat.fao.org/production/QCL/QCL_methodology_e.pdf",
+  "methodologySha256": "a3a4ec502c17305ccdd84f2127fb4568168677521763466c05c00cf51fb1877f",
+  "sourceMember": "Production_Crops_Livestock_E_All_Data_(Normalized).csv",
+  "filter": "Element Code 5510; items 867,882,1035,1058,1062; 2024 all areas and 2015-2024 areas 231,5000",
+  "extractSha256": "55ca92c3b3db92c3a4f36954f6e5da224c9cf84b0169865800402c2a806098c6",
+  "missing": "Empty Value is missing, never zero. Official world rows are retained rather than reconstructed from country sums."
+}

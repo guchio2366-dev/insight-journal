@@ -337,3 +337,36 @@
  .atlas-explorer[data-field=agriculture] .atlas-selection--below a{display:inline-flex;align-items:center;min-height:44px;font-size:13px}
 }
 @media(max-width:360px){.atlas-donut-layout{grid-template-columns:1fr}.atlas-stat-tabs{display:flex;overflow-x:auto}.atlas-stat-tabs button{flex:1 0 64px}}
+
+/* Agriculture detail v7: one reading structure for crops and livestock. */
+[data-detail-group] .atlas-stat-tabs{display:flex;flex-wrap:wrap;overflow:visible;position:static;gap:1px;border:0;background:#c8cec5}
+[data-detail-group] .atlas-stat-tabs button{flex:1 1 110px;min-height:44px;padding:9px 12px;font-size:14px;border:0;background:#f1f0e8}
+[data-detail-group] .atlas-stat-tabs button[aria-selected="true"]{background:#263e49}
+[data-detail-group] .atlas-stat-tabs :focus-visible{outline:3px solid #355f75;outline-offset:3px;z-index:1}
+[data-detail-group] .atlas-crop-copy p{font-size:14px}
+[data-detail-group] .atlas-crop-copy h3{color:#fff;background:#29444c;border-left:8px solid var(--crop-color)}
+[data-detail-group] .atlas-crop-details-head>p:last-child{font-size:14px}
+[data-detail-group] .atlas-crop-charts{grid-template-columns:1fr;gap:16px}
+[data-detail-group] .atlas-donut-layout{grid-template-columns:144px minmax(0,1fr);gap:14px}
+[data-detail-group] .atlas-donut{width:144px;height:144px}
+[data-detail-group] .atlas-donut text{font-size:12px}
+[data-detail-group] .atlas-donut .atlas-donut-total{font-size:14px}
+[data-detail-group] .atlas-donut-key{font-size:14px;gap:5px}
+[data-detail-group] .atlas-donut-key li{grid-template-columns:10px minmax(0,1fr) auto;gap:6px;line-height:1.5}
+[data-detail-group] .atlas-donut-key .is-us{font-weight:800}
+[data-detail-group] .atlas-donut-key i{width:9px;height:9px}
+[data-detail-group] .atlas-export-chart figcaption strong,[data-detail-group] .atlas-world-chart figcaption strong{font-size:16px}
+[data-detail-group] .atlas-export-chart figcaption span,[data-detail-group] .atlas-world-chart figcaption span{font-size:12px}
+[data-detail-group] .atlas-chart-note,[data-detail-group] .atlas-inline-sources,[data-detail-group] .atlas-export-chart>a,[data-detail-group] .atlas-world-chart>a{font-size:12px;line-height:1.7}
+[data-detail-group] .atlas-us-production{font-size:14px;line-height:1.7}
+[data-detail-group] .atlas-share-line text{font-size:13px}
+[data-detail-group] .atlas-share-line{max-width:430px;margin:0 auto}
+.atlas-chart-data{font-size:12px;line-height:1.7;margin:8px 0}
+.atlas-chart-data summary{min-height:44px;align-content:center;cursor:pointer;font-size:14px}
+.atlas-chart-data table{border-collapse:collapse;width:100%;table-layout:auto;font-variant-numeric:tabular-nums}
+.atlas-chart-data th,.atlas-chart-data td{padding:6px 3px;border-bottom:1px solid #d4d8cf;text-align:right;overflow-wrap:anywhere}
+.atlas-chart-data th:first-child{text-align:left}
+.atlas-chart-data caption{text-align:left;padding:8px 0}
+@media(min-width:1440px){[data-detail-group] .atlas-crop-charts{grid-template-columns:repeat(2,minmax(0,1fr))}[data-detail-group] .atlas-donut-layout{grid-template-columns:1fr}[data-detail-group] .atlas-donut{margin:auto}}
+@media(max-width:420px){[data-detail-group] .atlas-stat-tabs button{flex-basis:95px}[data-detail-group] .atlas-donut-layout{grid-template-columns:1fr}[data-detail-group] .atlas-donut{margin:auto}[data-detail-group] .atlas-crop-details-head>p:last-child{font-size:14px}}
+@media(forced-colors:active){.atlas-donut-slice{stroke:CanvasText!important}.atlas-donut-key i{border:1px solid CanvasText}}

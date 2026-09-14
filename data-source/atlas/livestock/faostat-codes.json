@@ -1,0 +1,1280 @@
+{
+  "ItemCodes": [
+    {
+      "Item Code": "1062",
+      "CPC Code": "'0231",
+      "Item": "Hen eggs in shell; fresh"
+    },
+    {
+      "Item Code": "867",
+      "CPC Code": "'21111.01",
+      "Item": "Meat of cattle with the bone; fresh or chilled"
+    },
+    {
+      "Item Code": "1058",
+      "CPC Code": "'21121",
+      "Item": "Meat of chickens; fresh or chilled"
+    },
+    {
+      "Item Code": "1035",
+      "CPC Code": "'21113.01",
+      "Item": "Meat of pig with the bone; fresh or chilled"
+    },
+    {
+      "Item Code": "882",
+      "CPC Code": "'02211",
+      "Item": "Raw milk of cattle"
+    }
+  ],
+  "AreaCodes": [
+    {
+      "Area Code": "2",
+      "M49 Code": "'004",
+      "Area": "Afghanistan"
+    },
+    {
+      "Area Code": "5100",
+      "M49 Code": "'002",
+      "Area": "Africa"
+    },
+    {
+      "Area Code": "3",
+      "M49 Code": "'008",
+      "Area": "Albania"
+    },
+    {
+      "Area Code": "4",
+      "M49 Code": "'012",
+      "Area": "Algeria"
+    },
+    {
+      "Area Code": "5200",
+      "M49 Code": "'019",
+      "Area": "Americas"
+    },
+    {
+      "Area Code": "7",
+      "M49 Code": "'024",
+      "Area": "Angola"
+    },
+    {
+      "Area Code": "8",
+      "M49 Code": "'028",
+      "Area": "Antigua and Barbuda"
+    },
+    {
+      "Area Code": "9",
+      "M49 Code": "'032",
+      "Area": "Argentina"
+    },
+    {
+      "Area Code": "1",
+      "M49 Code": "'051",
+      "Area": "Armenia"
+    },
+    {
+      "Area Code": "5300",
+      "M49 Code": "'142",
+      "Area": "Asia"
+    },
+    {
+      "Area Code": "10",
+      "M49 Code": "'036",
+      "Area": "Australia"
+    },
+    {
+      "Area Code": "5501",
+      "M49 Code": "'053",
+      "Area": "Australia and New Zealand"
+    },
+    {
+      "Area Code": "11",
+      "M49 Code": "'040",
+      "Area": "Austria"
+    },
+    {
+      "Area Code": "52",
+      "M49 Code": "'031",
+      "Area": "Azerbaijan"
+    },
+    {
+      "Area Code": "12",
+      "M49 Code": "'044",
+      "Area": "Bahamas"
+    },
+    {
+      "Area Code": "13",
+      "M49 Code": "'048",
+      "Area": "Bahrain"
+    },
+    {
+      "Area Code": "16",
+      "M49 Code": "'050",
+      "Area": "Bangladesh"
+    },
+    {
+      "Area Code": "14",
+      "M49 Code": "'052",
+      "Area": "Barbados"
+    },
+    {
+      "Area Code": "57",
+      "M49 Code": "'112",
+      "Area": "Belarus"
+    },
+    {
+      "Area Code": "255",
+      "M49 Code": "'056",
+      "Area": "Belgium"
+    },
+    {
+      "Area Code": "23",
+      "M49 Code": "'084",
+      "Area": "Belize"
+    },
+    {
+      "Area Code": "53",
+      "M49 Code": "'204",
+      "Area": "Benin"
+    },
+    {
+      "Area Code": "18",
+      "M49 Code": "'064",
+      "Area": "Bhutan"
+    },
+    {
+      "Area Code": "19",
+      "M49 Code": "'068",
+      "Area": "Bolivia (Plurinational State of)"
+    },
+    {
+      "Area Code": "80",
+      "M49 Code": "'070",
+      "Area": "Bosnia and Herzegovina"
+    },
+    {
+      "Area Code": "20",
+      "M49 Code": "'072",
+      "Area": "Botswana"
+    },
+    {
+      "Area Code": "21",
+      "M49 Code": "'076",
+      "Area": "Brazil"
+    },
+    {
+      "Area Code": "26",
+      "M49 Code": "'096",
+      "Area": "Brunei Darussalam"
+    },
+    {
+      "Area Code": "27",
+      "M49 Code": "'100",
+      "Area": "Bulgaria"
+    },
+    {
+      "Area Code": "233",
+      "M49 Code": "'854",
+      "Area": "Burkina Faso"
+    },
+    {
+      "Area Code": "29",
+      "M49 Code": "'108",
+      "Area": "Burundi"
+    },
+    {
+      "Area Code": "35",
+      "M49 Code": "'132",
+      "Area": "Cabo Verde"
+    },
+    {
+      "Area Code": "115",
+      "M49 Code": "'116",
+      "Area": "Cambodia"
+    },
+    {
+      "Area Code": "32",
+      "M49 Code": "'120",
+      "Area": "Cameroon"
+    },
+    {
+      "Area Code": "33",
+      "M49 Code": "'124",
+      "Area": "Canada"
+    },
+    {
+      "Area Code": "5206",
+      "M49 Code": "'029",
+      "Area": "Caribbean"
+    },
+    {
+      "Area Code": "37",
+      "M49 Code": "'140",
+      "Area": "Central African Republic"
+    },
+    {
+      "Area Code": "5204",
+      "M49 Code": "'013",
+      "Area": "Central America"
+    },
+    {
+      "Area Code": "5301",
+      "M49 Code": "'143",
+      "Area": "Central Asia"
+    },
+    {
+      "Area Code": "39",
+      "M49 Code": "'148",
+      "Area": "Chad"
+    },
+    {
+      "Area Code": "40",
+      "M49 Code": "'152",
+      "Area": "Chile"
+    },
+    {
+      "Area Code": "351",
+      "M49 Code": "'159",
+      "Area": "China"
+    },
+    {
+      "Area Code": "96",
+      "M49 Code": "'344",
+      "Area": "China; Hong Kong SAR"
+    },
+    {
+      "Area Code": "128",
+      "M49 Code": "'446",
+      "Area": "China; Macao SAR"
+    },
+    {
+      "Area Code": "41",
+      "M49 Code": "'156",
+      "Area": "China; mainland"
+    },
+    {
+      "Area Code": "214",
+      "M49 Code": "'158",
+      "Area": "China; Taiwan Province of"
+    },
+    {
+      "Area Code": "44",
+      "M49 Code": "'170",
+      "Area": "Colombia"
+    },
+    {
+      "Area Code": "45",
+      "M49 Code": "'174",
+      "Area": "Comoros"
+    },
+    {
+      "Area Code": "46",
+      "M49 Code": "'178",
+      "Area": "Congo"
+    },
+    {
+      "Area Code": "47",
+      "M49 Code": "'184",
+      "Area": "Cook Islands"
+    },
+    {
+      "Area Code": "48",
+      "M49 Code": "'188",
+      "Area": "Costa Rica"
+    },
+    {
+      "Area Code": "107",
+      "M49 Code": "'384",
+      "Area": "Côte d'Ivoire"
+    },
+    {
+      "Area Code": "98",
+      "M49 Code": "'191",
+      "Area": "Croatia"
+    },
+    {
+      "Area Code": "49",
+      "M49 Code": "'192",
+      "Area": "Cuba"
+    },
+    {
+      "Area Code": "50",
+      "M49 Code": "'196",
+      "Area": "Cyprus"
+    },
+    {
+      "Area Code": "167",
+      "M49 Code": "'203",
+      "Area": "Czechia"
+    },
+    {
+      "Area Code": "116",
+      "M49 Code": "'408",
+      "Area": "Democratic People's Republic of Korea"
+    },
+    {
+      "Area Code": "250",
+      "M49 Code": "'180",
+      "Area": "Democratic Republic of the Congo"
+    },
+    {
+      "Area Code": "54",
+      "M49 Code": "'208",
+      "Area": "Denmark"
+    },
+    {
+      "Area Code": "72",
+      "M49 Code": "'262",
+      "Area": "Djibouti"
+    },
+    {
+      "Area Code": "55",
+      "M49 Code": "'212",
+      "Area": "Dominica"
+    },
+    {
+      "Area Code": "56",
+      "M49 Code": "'214",
+      "Area": "Dominican Republic"
+    },
+    {
+      "Area Code": "5101",
+      "M49 Code": "'014",
+      "Area": "Eastern Africa"
+    },
+    {
+      "Area Code": "5302",
+      "M49 Code": "'030",
+      "Area": "Eastern Asia"
+    },
+    {
+      "Area Code": "5401",
+      "M49 Code": "'151",
+      "Area": "Eastern Europe"
+    },
+    {
+      "Area Code": "58",
+      "M49 Code": "'218",
+      "Area": "Ecuador"
+    },
+    {
+      "Area Code": "59",
+      "M49 Code": "'818",
+      "Area": "Egypt"
+    },
+    {
+      "Area Code": "60",
+      "M49 Code": "'222",
+      "Area": "El Salvador"
+    },
+    {
+      "Area Code": "61",
+      "M49 Code": "'226",
+      "Area": "Equatorial Guinea"
+    },
+    {
+      "Area Code": "178",
+      "M49 Code": "'232",
+      "Area": "Eritrea"
+    },
+    {
+      "Area Code": "63",
+      "M49 Code": "'233",
+      "Area": "Estonia"
+    },
+    {
+      "Area Code": "209",
+      "M49 Code": "'748",
+      "Area": "Eswatini"
+    },
+    {
+      "Area Code": "238",
+      "M49 Code": "'231",
+      "Area": "Ethiopia"
+    },
+    {
+      "Area Code": "5400",
+      "M49 Code": "'150",
+      "Area": "Europe"
+    },
+    {
+      "Area Code": "5707",
+      "M49 Code": "'097",
+      "Area": "European Union (27)"
+    },
+    {
+      "Area Code": "64",
+      "M49 Code": "'234",
+      "Area": "Faroe Islands"
+    },
+    {
+      "Area Code": "66",
+      "M49 Code": "'242",
+      "Area": "Fiji"
+    },
+    {
+      "Area Code": "67",
+      "M49 Code": "'246",
+      "Area": "Finland"
+    },
+    {
+      "Area Code": "68",
+      "M49 Code": "'250",
+      "Area": "France"
+    },
+    {
+      "Area Code": "70",
+      "M49 Code": "'258",
+      "Area": "French Polynesia"
+    },
+    {
+      "Area Code": "74",
+      "M49 Code": "'266",
+      "Area": "Gabon"
+    },
+    {
+      "Area Code": "75",
+      "M49 Code": "'270",
+      "Area": "Gambia"
+    },
+    {
+      "Area Code": "73",
+      "M49 Code": "'268",
+      "Area": "Georgia"
+    },
+    {
+      "Area Code": "79",
+      "M49 Code": "'276",
+      "Area": "Germany"
+    },
+    {
+      "Area Code": "81",
+      "M49 Code": "'288",
+      "Area": "Ghana"
+    },
+    {
+      "Area Code": "84",
+      "M49 Code": "'300",
+      "Area": "Greece"
+    },
+    {
+      "Area Code": "86",
+      "M49 Code": "'308",
+      "Area": "Grenada"
+    },
+    {
+      "Area Code": "89",
+      "M49 Code": "'320",
+      "Area": "Guatemala"
+    },
+    {
+      "Area Code": "90",
+      "M49 Code": "'324",
+      "Area": "Guinea"
+    },
+    {
+      "Area Code": "175",
+      "M49 Code": "'624",
+      "Area": "Guinea-Bissau"
+    },
+    {
+      "Area Code": "91",
+      "M49 Code": "'328",
+      "Area": "Guyana"
+    },
+    {
+      "Area Code": "93",
+      "M49 Code": "'332",
+      "Area": "Haiti"
+    },
+    {
+      "Area Code": "95",
+      "M49 Code": "'340",
+      "Area": "Honduras"
+    },
+    {
+      "Area Code": "97",
+      "M49 Code": "'348",
+      "Area": "Hungary"
+    },
+    {
+      "Area Code": "99",
+      "M49 Code": "'352",
+      "Area": "Iceland"
+    },
+    {
+      "Area Code": "100",
+      "M49 Code": "'356",
+      "Area": "India"
+    },
+    {
+      "Area Code": "101",
+      "M49 Code": "'360",
+      "Area": "Indonesia"
+    },
+    {
+      "Area Code": "102",
+      "M49 Code": "'364",
+      "Area": "Iran (Islamic Republic of)"
+    },
+    {
+      "Area Code": "103",
+      "M49 Code": "'368",
+      "Area": "Iraq"
+    },
+    {
+      "Area Code": "104",
+      "M49 Code": "'372",
+      "Area": "Ireland"
+    },
+    {
+      "Area Code": "105",
+      "M49 Code": "'376",
+      "Area": "Israel"
+    },
+    {
+      "Area Code": "106",
+      "M49 Code": "'380",
+      "Area": "Italy"
+    },
+    {
+      "Area Code": "109",
+      "M49 Code": "'388",
+      "Area": "Jamaica"
+    },
+    {
+      "Area Code": "110",
+      "M49 Code": "'392",
+      "Area": "Japan"
+    },
+    {
+      "Area Code": "112",
+      "M49 Code": "'400",
+      "Area": "Jordan"
+    },
+    {
+      "Area Code": "108",
+      "M49 Code": "'398",
+      "Area": "Kazakhstan"
+    },
+    {
+      "Area Code": "114",
+      "M49 Code": "'404",
+      "Area": "Kenya"
+    },
+    {
+      "Area Code": "83",
+      "M49 Code": "'296",
+      "Area": "Kiribati"
+    },
+    {
+      "Area Code": "118",
+      "M49 Code": "'414",
+      "Area": "Kuwait"
+    },
+    {
+      "Area Code": "113",
+      "M49 Code": "'417",
+      "Area": "Kyrgyzstan"
+    },
+    {
+      "Area Code": "5802",
+      "M49 Code": "'432",
+      "Area": "Land Locked Developing Countries (LLDCs)"
+    },
+    {
+      "Area Code": "120",
+      "M49 Code": "'418",
+      "Area": "Lao People's Democratic Republic"
+    },
+    {
+      "Area Code": "119",
+      "M49 Code": "'428",
+      "Area": "Latvia"
+    },
+    {
+      "Area Code": "5801",
+      "M49 Code": "'199",
+      "Area": "Least Developed Countries (LDCs)"
+    },
+    {
+      "Area Code": "121",
+      "M49 Code": "'422",
+      "Area": "Lebanon"
+    },
+    {
+      "Area Code": "122",
+      "M49 Code": "'426",
+      "Area": "Lesotho"
+    },
+    {
+      "Area Code": "123",
+      "M49 Code": "'430",
+      "Area": "Liberia"
+    },
+    {
+      "Area Code": "124",
+      "M49 Code": "'434",
+      "Area": "Libya"
+    },
+    {
+      "Area Code": "126",
+      "M49 Code": "'440",
+      "Area": "Lithuania"
+    },
+    {
+      "Area Code": "5815",
+      "M49 Code": "'901",
+      "Area": "Low Income Food Deficit Countries (LIFDCs)"
+    },
+    {
+      "Area Code": "256",
+      "M49 Code": "'442",
+      "Area": "Luxembourg"
+    },
+    {
+      "Area Code": "129",
+      "M49 Code": "'450",
+      "Area": "Madagascar"
+    },
+    {
+      "Area Code": "130",
+      "M49 Code": "'454",
+      "Area": "Malawi"
+    },
+    {
+      "Area Code": "131",
+      "M49 Code": "'458",
+      "Area": "Malaysia"
+    },
+    {
+      "Area Code": "133",
+      "M49 Code": "'466",
+      "Area": "Mali"
+    },
+    {
+      "Area Code": "134",
+      "M49 Code": "'470",
+      "Area": "Malta"
+    },
+    {
+      "Area Code": "136",
+      "M49 Code": "'478",
+      "Area": "Mauritania"
+    },
+    {
+      "Area Code": "137",
+      "M49 Code": "'480",
+      "Area": "Mauritius"
+    },
+    {
+      "Area Code": "5502",
+      "M49 Code": "'054",
+      "Area": "Melanesia"
+    },
+    {
+      "Area Code": "138",
+      "M49 Code": "'484",
+      "Area": "Mexico"
+    },
+    {
+      "Area Code": "5503",
+      "M49 Code": "'057",
+      "Area": "Micronesia"
+    },
+    {
+      "Area Code": "145",
+      "M49 Code": "'583",
+      "Area": "Micronesia (Federated States of)"
+    },
+    {
+      "Area Code": "5102",
+      "M49 Code": "'017",
+      "Area": "Middle Africa"
+    },
+    {
+      "Area Code": "141",
+      "M49 Code": "'496",
+      "Area": "Mongolia"
+    },
+    {
+      "Area Code": "273",
+      "M49 Code": "'499",
+      "Area": "Montenegro"
+    },
+    {
+      "Area Code": "143",
+      "M49 Code": "'504",
+      "Area": "Morocco"
+    },
+    {
+      "Area Code": "144",
+      "M49 Code": "'508",
+      "Area": "Mozambique"
+    },
+    {
+      "Area Code": "28",
+      "M49 Code": "'104",
+      "Area": "Myanmar"
+    },
+    {
+      "Area Code": "147",
+      "M49 Code": "'516",
+      "Area": "Namibia"
+    },
+    {
+      "Area Code": "148",
+      "M49 Code": "'520",
+      "Area": "Nauru"
+    },
+    {
+      "Area Code": "149",
+      "M49 Code": "'524",
+      "Area": "Nepal"
+    },
+    {
+      "Area Code": "5817",
+      "M49 Code": "'902",
+      "Area": "Net Food Importing Developing Countries (NFIDCs)"
+    },
+    {
+      "Area Code": "150",
+      "M49 Code": "'528",
+      "Area": "Netherlands (Kingdom of the)"
+    },
+    {
+      "Area Code": "153",
+      "M49 Code": "'540",
+      "Area": "New Caledonia"
+    },
+    {
+      "Area Code": "156",
+      "M49 Code": "'554",
+      "Area": "New Zealand"
+    },
+    {
+      "Area Code": "158",
+      "M49 Code": "'562",
+      "Area": "Niger"
+    },
+    {
+      "Area Code": "159",
+      "M49 Code": "'566",
+      "Area": "Nigeria"
+    },
+    {
+      "Area Code": "160",
+      "M49 Code": "'570",
+      "Area": "Niue"
+    },
+    {
+      "Area Code": "154",
+      "M49 Code": "'807",
+      "Area": "North Macedonia"
+    },
+    {
+      "Area Code": "5103",
+      "M49 Code": "'015",
+      "Area": "Northern Africa"
+    },
+    {
+      "Area Code": "5203",
+      "M49 Code": "'021",
+      "Area": "Northern America"
+    },
+    {
+      "Area Code": "5402",
+      "M49 Code": "'154",
+      "Area": "Northern Europe"
+    },
+    {
+      "Area Code": "162",
+      "M49 Code": "'578",
+      "Area": "Norway"
+    },
+    {
+      "Area Code": "5500",
+      "M49 Code": "'009",
+      "Area": "Oceania"
+    },
+    {
+      "Area Code": "221",
+      "M49 Code": "'512",
+      "Area": "Oman"
+    },
+    {
+      "Area Code": "165",
+      "M49 Code": "'586",
+      "Area": "Pakistan"
+    },
+    {
+      "Area Code": "166",
+      "M49 Code": "'591",
+      "Area": "Panama"
+    },
+    {
+      "Area Code": "168",
+      "M49 Code": "'598",
+      "Area": "Papua New Guinea"
+    },
+    {
+      "Area Code": "169",
+      "M49 Code": "'600",
+      "Area": "Paraguay"
+    },
+    {
+      "Area Code": "170",
+      "M49 Code": "'604",
+      "Area": "Peru"
+    },
+    {
+      "Area Code": "171",
+      "M49 Code": "'608",
+      "Area": "Philippines"
+    },
+    {
+      "Area Code": "173",
+      "M49 Code": "'616",
+      "Area": "Poland"
+    },
+    {
+      "Area Code": "5504",
+      "M49 Code": "'061",
+      "Area": "Polynesia"
+    },
+    {
+      "Area Code": "174",
+      "M49 Code": "'620",
+      "Area": "Portugal"
+    },
+    {
+      "Area Code": "177",
+      "M49 Code": "'630",
+      "Area": "Puerto Rico"
+    },
+    {
+      "Area Code": "179",
+      "M49 Code": "'634",
+      "Area": "Qatar"
+    },
+    {
+      "Area Code": "117",
+      "M49 Code": "'410",
+      "Area": "Republic of Korea"
+    },
+    {
+      "Area Code": "146",
+      "M49 Code": "'498",
+      "Area": "Republic of Moldova"
+    },
+    {
+      "Area Code": "183",
+      "M49 Code": "'642",
+      "Area": "Romania"
+    },
+    {
+      "Area Code": "185",
+      "M49 Code": "'643",
+      "Area": "Russian Federation"
+    },
+    {
+      "Area Code": "184",
+      "M49 Code": "'646",
+      "Area": "Rwanda"
+    },
+    {
+      "Area Code": "188",
+      "M49 Code": "'659",
+      "Area": "Saint Kitts and Nevis"
+    },
+    {
+      "Area Code": "189",
+      "M49 Code": "'662",
+      "Area": "Saint Lucia"
+    },
+    {
+      "Area Code": "191",
+      "M49 Code": "'670",
+      "Area": "Saint Vincent and the Grenadines"
+    },
+    {
+      "Area Code": "244",
+      "M49 Code": "'882",
+      "Area": "Samoa"
+    },
+    {
+      "Area Code": "193",
+      "M49 Code": "'678",
+      "Area": "Sao Tome and Principe"
+    },
+    {
+      "Area Code": "194",
+      "M49 Code": "'682",
+      "Area": "Saudi Arabia"
+    },
+    {
+      "Area Code": "195",
+      "M49 Code": "'686",
+      "Area": "Senegal"
+    },
+    {
+      "Area Code": "272",
+      "M49 Code": "'688",
+      "Area": "Serbia"
+    },
+    {
+      "Area Code": "196",
+      "M49 Code": "'690",
+      "Area": "Seychelles"
+    },
+    {
+      "Area Code": "197",
+      "M49 Code": "'694",
+      "Area": "Sierra Leone"
+    },
+    {
+      "Area Code": "200",
+      "M49 Code": "'702",
+      "Area": "Singapore"
+    },
+    {
+      "Area Code": "199",
+      "M49 Code": "'703",
+      "Area": "Slovakia"
+    },
+    {
+      "Area Code": "198",
+      "M49 Code": "'705",
+      "Area": "Slovenia"
+    },
+    {
+      "Area Code": "5803",
+      "M49 Code": "'722",
+      "Area": "Small Island Developing States (SIDS)"
+    },
+    {
+      "Area Code": "25",
+      "M49 Code": "'090",
+      "Area": "Solomon Islands"
+    },
+    {
+      "Area Code": "201",
+      "M49 Code": "'706",
+      "Area": "Somalia"
+    },
+    {
+      "Area Code": "202",
+      "M49 Code": "'710",
+      "Area": "South Africa"
+    },
+    {
+      "Area Code": "5207",
+      "M49 Code": "'005",
+      "Area": "South America"
+    },
+    {
+      "Area Code": "277",
+      "M49 Code": "'728",
+      "Area": "South Sudan"
+    },
+    {
+      "Area Code": "5304",
+      "M49 Code": "'035",
+      "Area": "South-eastern Asia"
+    },
+    {
+      "Area Code": "5104",
+      "M49 Code": "'018",
+      "Area": "Southern Africa"
+    },
+    {
+      "Area Code": "5303",
+      "M49 Code": "'034",
+      "Area": "Southern Asia"
+    },
+    {
+      "Area Code": "5403",
+      "M49 Code": "'039",
+      "Area": "Southern Europe"
+    },
+    {
+      "Area Code": "203",
+      "M49 Code": "'724",
+      "Area": "Spain"
+    },
+    {
+      "Area Code": "38",
+      "M49 Code": "'144",
+      "Area": "Sri Lanka"
+    },
+    {
+      "Area Code": "276",
+      "M49 Code": "'729",
+      "Area": "Sudan"
+    },
+    {
+      "Area Code": "207",
+      "M49 Code": "'740",
+      "Area": "Suriname"
+    },
+    {
+      "Area Code": "210",
+      "M49 Code": "'752",
+      "Area": "Sweden"
+    },
+    {
+      "Area Code": "211",
+      "M49 Code": "'756",
+      "Area": "Switzerland"
+    },
+    {
+      "Area Code": "212",
+      "M49 Code": "'760",
+      "Area": "Syrian Arab Republic"
+    },
+    {
+      "Area Code": "208",
+      "M49 Code": "'762",
+      "Area": "Tajikistan"
+    },
+    {
+      "Area Code": "216",
+      "M49 Code": "'764",
+      "Area": "Thailand"
+    },
+    {
+      "Area Code": "176",
+      "M49 Code": "'626",
+      "Area": "Timor-Leste"
+    },
+    {
+      "Area Code": "217",
+      "M49 Code": "'768",
+      "Area": "Togo"
+    },
+    {
+      "Area Code": "219",
+      "M49 Code": "'776",
+      "Area": "Tonga"
+    },
+    {
+      "Area Code": "220",
+      "M49 Code": "'780",
+      "Area": "Trinidad and Tobago"
+    },
+    {
+      "Area Code": "222",
+      "M49 Code": "'788",
+      "Area": "Tunisia"
+    },
+    {
+      "Area Code": "223",
+      "M49 Code": "'792",
+      "Area": "Türkiye"
+    },
+    {
+      "Area Code": "213",
+      "M49 Code": "'795",
+      "Area": "Turkmenistan"
+    },
+    {
+      "Area Code": "227",
+      "M49 Code": "'798",
+      "Area": "Tuvalu"
+    },
+    {
+      "Area Code": "226",
+      "M49 Code": "'800",
+      "Area": "Uganda"
+    },
+    {
+      "Area Code": "230",
+      "M49 Code": "'804",
+      "Area": "Ukraine"
+    },
+    {
+      "Area Code": "225",
+      "M49 Code": "'784",
+      "Area": "United Arab Emirates"
+    },
+    {
+      "Area Code": "229",
+      "M49 Code": "'826",
+      "Area": "United Kingdom of Great Britain and Northern Ireland"
+    },
+    {
+      "Area Code": "215",
+      "M49 Code": "'834",
+      "Area": "United Republic of Tanzania"
+    },
+    {
+      "Area Code": "231",
+      "M49 Code": "'840",
+      "Area": "United States of America"
+    },
+    {
+      "Area Code": "234",
+      "M49 Code": "'858",
+      "Area": "Uruguay"
+    },
+    {
+      "Area Code": "235",
+      "M49 Code": "'860",
+      "Area": "Uzbekistan"
+    },
+    {
+      "Area Code": "155",
+      "M49 Code": "'548",
+      "Area": "Vanuatu"
+    },
+    {
+      "Area Code": "236",
+      "M49 Code": "'862",
+      "Area": "Venezuela (Bolivarian Republic of)"
+    },
+    {
+      "Area Code": "237",
+      "M49 Code": "'704",
+      "Area": "Viet Nam"
+    },
+    {
+      "Area Code": "5105",
+      "M49 Code": "'011",
+      "Area": "Western Africa"
+    },
+    {
+      "Area Code": "5305",
+      "M49 Code": "'145",
+      "Area": "Western Asia"
+    },
+    {
+      "Area Code": "5404",
+      "M49 Code": "'155",
+      "Area": "Western Europe"
+    },
+    {
+      "Area Code": "5000",
+      "M49 Code": "'001",
+      "Area": "World"
+    },
+    {
+      "Area Code": "249",
+      "M49 Code": "'887",
+      "Area": "Yemen"
+    },
+    {
+      "Area Code": "251",
+      "M49 Code": "'894",
+      "Area": "Zambia"
+    },
+    {
+      "Area Code": "181",
+      "M49 Code": "'716",
+      "Area": "Zimbabwe"
+    }
+  ],
+  "Elements": [
+    {
+      "Element Code": "5312",
+      "Element": "Area harvested"
+    },
+    {
+      "Element Code": "5423",
+      "Element": "Extraction Rate"
+    },
+    {
+      "Element Code": "5313",
+      "Element": "Laying"
+    },
+    {
+      "Element Code": "5318",
+      "Element": "Milk Animals"
+    },
+    {
+      "Element Code": "5319",
+      "Element": "Prod Popultn"
+    },
+    {
+      "Element Code": "5314",
+      "Element": "Prod Popultn"
+    },
+    {
+      "Element Code": "5320",
+      "Element": "Producing Animals/Slaughtered"
+    },
+    {
+      "Element Code": "5321",
+      "Element": "Producing Animals/Slaughtered"
+    },
+    {
+      "Element Code": "5322",
+      "Element": "Production"
+    },
+    {
+      "Element Code": "5323",
+      "Element": "Production"
+    },
+    {
+      "Element Code": "5510",
+      "Element": "Production"
+    },
+    {
+      "Element Code": "5513",
+      "Element": "Production"
+    },
+    {
+      "Element Code": "5111",
+      "Element": "Stocks"
+    },
+    {
+      "Element Code": "5112",
+      "Element": "Stocks"
+    },
+    {
+      "Element Code": "5114",
+      "Element": "Stocks"
+    },
+    {
+      "Element Code": "5412",
+      "Element": "Yield"
+    },
+    {
+      "Element Code": "5413",
+      "Element": "Yield"
+    },
+    {
+      "Element Code": "5422",
+      "Element": "Yield"
+    },
+    {
+      "Element Code": "5417",
+      "Element": "Yield/Carcass Weight"
+    },
+    {
+      "Element Code": "5424",
+      "Element": "Yield/Carcass Weight"
+    }
+  ],
+  "Flags": [
+    {
+      "Flag": "A",
+      " Description": "Official figure"
+    },
+    {
+      "Flag": "E",
+      " Description": "Estimated value"
+    },
+    {
+      "Flag": "I",
+      " Description": "Value imputed by a receiving agency"
+    },
+    {
+      "Flag": "M",
+      " Description": "Missing value; data cannot exist"
+    },
+    {
+      "Flag": "X",
+      " Description": "Figure from external organization"
+    }
+  ]
+}
