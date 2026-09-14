@@ -10,8 +10,8 @@ import IndustryStatistics from './IndustryStatistics.astro';
 {industryCopy.map(copy=>{
   const sources=[...new Set(industryRegions.filter(r=>r.sector===copy.sector&&(copy.subsector==='all'||r.subsector===copy.subsector)).map(r=>r.source))];
   return <article data-industry-detail={`${copy.sector}:${copy.subsector}`} hidden={copy.sector!=='all'||copy.subsector!=='all'}>
-    <header><p class="atlas-eyebrow">選択した分野の詳説</p><h2>{copy.title}</h2></header>
-    <div class="industry-copy-grid"><section><h3>何をする産業か</h3><p>{copy.what}</p></section><section><h3>どこに集まり、なぜか</h3><p>{copy.where}</p></section><section><h3>変化をどう読むか</h3><p>{copy.change}</p></section></div>
+    <header><p class="atlas-eyebrow">選択した分野の統計</p><h2>{copy.subsector==='all'?copy.title:`${copy.title}の統計`}</h2></header>
+    {copy.subsector==='all'&&<div class="industry-copy-grid"><section><h3>何をする産業か</h3><p>{copy.what}</p></section><section><h3>どこに集まり、なぜか</h3><p>{copy.where}</p></section><section><h3>変化をどう読むか</h3><p>{copy.change}</p></section></div>}
     <IndustryStatistics sector={copy.sector} subsector={copy.subsector} statId={copy.statId}/>
     {copy.subsector==='food'&&<p><a href={withBase('/atlas/north-america/agriculture/')} data-industry-agriculture>同じ場所で農畜産を見る</a></p>}
     <details class="industry-source-links"><summary>この分野の地域資料</summary><ul>{sources.map(key=><li><a href={industrySources[key].url}>{industrySources[key].title}</a></li>)}</ul><p>全国値は各グラフの出典と<a href="#industry-method">統計の対象範囲</a>を参照。</p></details>

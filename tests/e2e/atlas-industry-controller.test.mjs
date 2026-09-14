@@ -36,17 +36,19 @@ async function setup(query='',fail=false){
  return {window,requests,root:window.document.querySelector('[data-atlas-explorer]'),q:s=>window.document.querySelector(s)};
 }
 
-test('金融→情報通信で右欄とカメラを保持し、製造業へ移ると親内訳を変更する',async()=>{
+test('金融→情報通信で右欄の解説を切り替え、構成比の数値とカメラを保つ',async()=>{
  const {window,root,q}=await setup('?sector=services&subsector=finance&lng=-90&lat=35&z=4');
  try{
   assert.equal(root.dataset.field,'industry');const map=window.__map,moves=map.cameraChanges;
-  const before=q('[data-field-national="industry"]').outerHTML;
+  const before=q('[data-industry-national-summary]').innerHTML;
   assert.equal(q('[data-industry-detail="services:finance"]').hidden,false);
+  assert.equal(q('[data-industry-description-panel="services:finance"]').hidden,false);assert.equal(q('[data-industry-national-summary]').hidden,true);
   q('[data-industry-subsector="information"]').click();
-  assert.equal(q('[data-field-national="industry"]').outerHTML,before);
+  assert.equal(q('[data-industry-national-summary]').innerHTML,before);
   assert.equal(q('[data-industry-detail="services:information"]').hidden,false);
+  assert.equal(q('[data-industry-description-panel="services:finance"]').hidden,true);assert.equal(q('[data-industry-description-panel="services:information"]').hidden,false);
   q('[data-industry-sector="manufacturing"]').click();
-  assert.equal(root.dataset.industrySubsector,'all');assert.equal(q('[data-industry-national-panel="manufacturing"]').hidden,false);
+  assert.equal(root.dataset.industrySubsector,'all');assert.equal(q('[data-industry-national-panel="manufacturing"]').hidden,false);assert.equal(q('[data-industry-national-summary]').hidden,false);assert.equal(q('[data-industry-description]').hidden,true);
   assert.equal(q('[data-industry-national-panel="services"]').hidden,true);assert.equal(map.cameraChanges,moves);assert.equal(window.__map,map);
  }finally{await window.happyDOM.close();}
 });
@@ -83,20 +85,21 @@ test('重なる地域候補は全件選べ、WebGL失敗でも産業記号と地
 test('第二段のキーボード選択とインサイト比較が右欄・カメラの責務を保つ',async()=>{
  const {window,root,q}=await setup('?sector=services');
  try{
-  const map=window.__map,moves=map.cameraChanges,before=q('[data-field-national="industry"]').outerHTML;
+  const map=window.__map,moves=map.cameraChanges,before=q('[data-industry-national-summary]').innerHTML;
   q('[data-owner-sector="services"][data-industry-subsector="all"]').dispatchEvent(new window.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));
-  assert.equal(root.dataset.industrySubsector,'information');assert.equal(q('[data-field-national="industry"]').outerHTML,before);
+  assert.equal(root.dataset.industrySubsector,'information');assert.equal(q('[data-industry-national-summary]').innerHTML,before);
   q('[data-industry-insight="energy-chemistry"]').click();assert.equal(new URL(window.location.href).searchParams.get('industryInsight'),'energy-chemistry');assert.equal(map.cameraChanges,moves);
  }finally{await window.happyDOM.close();}
 });
 
-test('全産業の２図・数表に12区分を表示し、サービス選択から全産業へ復帰できる',async()=>{
+test('全産業を12行の対比図にまとめ、付加価値・雇用と全区分を残す',async()=>{
  const {window,q}=await setup();
  try{
   const panel=q('[data-industry-national-panel="all"]');
-  const before=panel.innerHTML;
+  const before=panel.innerHTML;assert.equal(panel.querySelectorAll('figure').length,1);
   for(const figure of panel.querySelectorAll('figure')){
    assert.equal(figure.querySelectorAll('li[data-industry-stat-row]').length,12);
+   assert.equal(figure.querySelectorAll('[data-industry-metric="gdp"]').length,12);assert.equal(figure.querySelectorAll('[data-industry-metric="employment"]').length,12);
    assert.equal(figure.querySelectorAll('.industry-service-detail').length,7);
    assert.equal(figure.querySelectorAll('.industry-service-heading').length,1);
    assert.equal(figure.querySelectorAll('tbody tr').length,13);
@@ -134,5 +137,22 @@ test('航空宇宙・造船・鉄道のグラフと輸出先を独立表示し�
    assert.equal(detail.querySelectorAll('.industry-series>svg').length,2);assert.equal(detail.querySelectorAll('.industry-distribution').length,1);
    assert.ok([...detail.querySelectorAll('.industry-stat-values')].every(d=>!d.open));
   }
+ }finally{await window.happyDOM.close();}
+});
+
+
+test('解説と統計を一度だけ出力し、自動車の3図ずつを同じ段に置く',async()=>{
+ const {window,root,q}=await setup('?sector=manufacturing&subsector=auto');
+ try{
+  const copy=q('[data-industry-description-panel="manufacturing:auto"]'),detail=q('[data-industry-detail="manufacturing:auto"]');
+  assert.equal(copy.hidden,false);assert.equal(copy.querySelectorAll('.industry-selected-reading-body>section').length,3);
+  assert.equal(detail.querySelector('.industry-copy-grid'),null);
+  assert.equal(detail.querySelector('.industry-trend-grid').children.length,3);assert.equal(detail.querySelector('.industry-comparison-grid').children.length,3);
+  assert.equal(detail.querySelector('.industry-distribution .industry-series'),null);
+  const table=detail.querySelector('.industry-stat-values');table.open=true;
+  q('[data-industry-subsector="aerospace"]').click();q('[data-industry-subsector="auto"]').click();assert.equal(table.open,true);
+  copy.querySelector('[data-industry-overview]').click();assert.equal(root.dataset.industrySubsector,'all');assert.equal(q('[data-industry-national-summary]').hidden,false);
+  window.history.replaceState({},'', '?sector=services&subsector=finance');window.dispatchEvent(new window.PopStateEvent('popstate'));
+  assert.equal(q('[data-industry-description-panel="services:finance"]').hidden,false);
  }finally{await window.happyDOM.close();}
 });

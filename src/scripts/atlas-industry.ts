@@ -101,10 +101,19 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
   function selectRegion(id:string,push=true){const region=visible().find(r=>r.id===id);if(!region)return;state.industryRegion=id;showRegion(region);renderMarkers();if(push)hooks.changed(true);}
   function setScope(sector:IndustrySector,subsector='all',push=true,insight:string|null=null){
     state=readIndustryState(writeIndustryState(new URL(location.href),{sector,subsector,industryRegion:null,industryInsight:insight}),regions);hooks.hide();render();if(push)hooks.changed(true);
+    if(push&&state.subsector!=='all'){
+      q('[data-atlas-live]').textContent=`${subsectorLabel(state.sector,state.subsector)}の解説と統計を表示しました。`;
+      const panel=q('[data-industry-description]'),box=panel.getBoundingClientRect();
+      if(!window.matchMedia('(min-width:960px) and (min-height:600px)').matches&&(box.top<0||box.top>window.innerHeight-80))panel.scrollIntoView({block:'start',behavior:window.matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth'});
+    }
   }
   function render(){
     q('[data-industry-controls]').hidden=!hooks.active();q('[data-industry-key]').hidden=!hooks.active();
     root.dataset.industrySector=state.sector;root.dataset.industrySubsector=state.subsector;
+    const hasDescription=state.subsector!=='all';
+    q('[data-industry-national-summary]').hidden=hasDescription;q('[data-industry-description]').hidden=!hasDescription;
+    root.querySelectorAll<HTMLElement>('[data-industry-description-panel]').forEach(p=>p.hidden=p.dataset.industryDescriptionPanel!==`${state.sector}:${state.subsector}`);
+    if(hasDescription)q('[data-industry-description]').setAttribute('aria-labelledby',`industry-description-${state.subsector}`);else q('[data-industry-description]').removeAttribute('aria-labelledby');
     root.querySelectorAll<HTMLElement>('[data-industry-sector]').forEach(b=>{const active=b.dataset.industrySector===state.sector;b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;});
     root.querySelectorAll<HTMLElement>('[data-industry-subtabs]').forEach(p=>p.hidden=p.dataset.industrySubtabs!==state.sector);
     root.querySelectorAll<HTMLElement>('[data-industry-subsector]').forEach(b=>{const active=b.dataset.industrySubsector===state.subsector;b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;});
@@ -126,6 +135,8 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
   }
   wireTabs('[data-industry-sector]',b=>setScope(b.dataset.industrySector as IndustrySector));
   wireTabs('[data-industry-subsector]',b=>setScope(state.sector,b.dataset.industrySubsector));
+  root.querySelectorAll<HTMLElement>('[data-industry-overview]').forEach(b=>b.addEventListener('click',()=>setScope(state.sector)));
+  q('[data-industry-description]').addEventListener('keydown',event=>{if(event.key==='Escape'){event.stopPropagation();setScope(state.sector);q(`[data-industry-sector="${state.sector}"]`).focus({preventScroll:true});}});
   root.querySelectorAll<HTMLElement>('[data-industry-region-option]').forEach(b=>b.addEventListener('click',()=>selectRegion(b.dataset.industryRegionOption!)));
   root.querySelectorAll<HTMLAnchorElement>('[data-industry-jump-sector],[data-industry-agriculture]').forEach(link=>link.addEventListener('click',event=>{if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;event.preventDefault();if(link.dataset.industryJumpSector==='agriculture'||link.hasAttribute('data-industry-agriculture')){hooks.agriculture();return;}setScope(link.dataset.industryJumpSector as IndustrySector,link.dataset.industryJumpSubsector,true,link.dataset.industryInsight??null);q('[data-industry-controls]').scrollIntoView({block:'start'});}));
   q('[data-selection-link]').addEventListener('click',event=>{

@@ -6,9 +6,11 @@ import IndustryDistribution from './IndustryDistribution.astro';
 interface Props {sector:IndustrySector;subsector:string;statId?:string}
 const {sector,subsector,statId}=Astro.props;
 const series=industryDetailSeries(sector,subsector,statId),exports=industryExportDistribution(subsector),world=industryWorldDistribution(subsector);
+const trends=[series.economic,series.quantity,series.employment].filter(Boolean);
+const comparisonCount=Number(!!exports)+Number(!!world)*2;
 ---
 <div class="industry-detail-statistics">
- <div class="industry-trend-grid"><div>{series.economic?<IndustryTrend series={series.economic}/>:<p class="industry-stat-note">この分野に対応する全国の経済指標は未整備です。</p>}{series.quantity&&<IndustryTrend series={series.quantity} compact/>}</div>{series.employment&&<IndustryTrend series={series.employment}/>}</div>
- {(exports||world)&&<div class="industry-comparison-grid">{exports&&<IndustryDistribution distribution={exports}/>} {world&&<IndustryDistribution distribution={world} world><IndustryTrend series={industryAutoWorldTrend} compact/></IndustryDistribution>}</div>}
+ <div class:list={["industry-trend-grid",`industry-chart-count-${trends.length}`]}>{trends.map(series=><IndustryTrend series={series!}/>)}{!trends.length&&<p class="industry-stat-note">この分野に対応する全国の経済指標は未整備です。</p>}</div>
+ {(exports||world)&&<div class:list={["industry-comparison-grid",`industry-chart-count-${comparisonCount}`]}>{exports&&<IndustryDistribution distribution={exports}/>} {world&&<IndustryDistribution distribution={world} world/>}{world&&<IndustryTrend series={industryAutoWorldTrend}/>}</div>}
  {subsector!=='all'&&<p class="industry-stat-availability">{!exports&&'この分野に一致する国別のサービス輸出・製品輸出は未整備です。'}{!world&&' 同じ製品・産業範囲と年で比較できる世界生産・付加価値のシェアは未整備です。'}</p>}
 </div>
