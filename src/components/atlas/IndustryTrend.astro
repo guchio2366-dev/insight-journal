@@ -1,0 +1,18 @@
+---
+import type {IndustrySeries} from '../../data/atlas/industry-detail-statistics';
+import {industryTrendGeometry} from '../../lib/atlas-industry-charts';
+interface Props {series:IndustrySeries;compact?:boolean}
+const {series,compact=false}=Astro.props;
+const geo=industryTrendGeometry(series.points),latest=geo.points.at(-1);
+const format=(v:number)=>v.toLocaleString('ja-JP',{maximumFractionDigits:1});
+---
+<figure class:list={['industry-series',{'is-compact':compact}]} data-industry-series>
+ <figcaption><h3>{series.label}</h3><p class="industry-series-latest">{latest?<><strong>{format(latest.value)}</strong> {series.unit}<span> · {latest.year}年</span></>:'比較可能な数値は未整備'}</p><p class="industry-series-scope">{series.scope}</p></figcaption>
+ {geo.points.length>1&&<svg viewBox="0 0 360 140" role="img" aria-label={`${series.label}、${geo.first}〜${geo.last}年。単位：${series.unit}。年ごとの値は数値表を参照。`}>
+  {geo.ticks.map(t=><g><line x1="72" x2="342" y1={geo.y(t)} y2={geo.y(t)} class="industry-gridline"/><text x="66" y={geo.y(t)+5} text-anchor="end">{format(t)}</text></g>)}
+  <path d={geo.path} class="industry-trend-line"/>{geo.points.map(p=><circle cx={p.x} cy={p.y} r="2.8" class="industry-trend-point"><title>{p.year}年：{format(p.value)} {series.unit}</title></circle>)}
+  <text x="72" y="132">{geo.first}</text><text x="342" y="132" text-anchor="end">{geo.last}</text>
+ </svg>}
+ <p class="industry-stat-note">{series.note}</p><p class="industry-stat-source"><a href={series.url}>{series.source}</a></p>
+ <details class="industry-stat-values"><summary>数値を見る</summary><table><caption>{series.label} · {series.unit}</caption><thead><tr><th scope="col">年</th><th scope="col">値</th></tr></thead><tbody>{series.points.map(p=><tr><th scope="row">{p.year}</th><td>{p.value===null?'—（未収録）':p.value.toLocaleString('ja-JP',{maximumFractionDigits:6})}</td></tr>)}</tbody></table></details>
+</figure>

@@ -41,3 +41,53 @@
 [data-industry-national-panel="all"] .industry-chart{margin-top:14px;padding-top:10px}
 .industry-service-heading{font-size:11px;font-weight:600;color:#357080;margin:4px 0 5px}
 .industry-service-detail .industry-bar-label>span{padding-left:8px}
+
+/* v1.2: compact charts use the full detail width, independently of the map sidebar. */
+.industry-detail-statistics{margin-top:20px;border-top:1px solid #d8ddd1;padding-top:16px}
+.industry-trend-grid,.industry-comparison-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start}
+.industry-comparison-grid{margin-top:16px;padding-top:16px;border-top:1px solid #d8ddd1}
+.industry-trend-grid>*,.industry-comparison-grid>*{min-width:0}
+.industry-series,.industry-distribution{margin:0;padding:12px;background:#fffdf7;border:1px solid #e0e2d7;border-radius:6px;min-width:0}
+.industry-series.is-compact{margin-top:12px;padding:10px 0 0;border:0;border-top:1px solid #e0e2d7;background:transparent}
+.industry-series h3,.industry-distribution h3{margin:0 0 5px;font:700 16px/1.4 var(--sans)}
+.industry-series-latest{font-size:14px;line-height:1.5;margin:4px 0}.industry-series-latest strong{font-size:20px;font-variant-numeric:tabular-nums}
+.industry-series-scope,.industry-distribution figcaption p{font-size:12px;line-height:1.5;margin:4px 0;overflow-wrap:anywhere}
+.industry-series>svg{display:block;width:100%;max-width:360px;height:auto;margin-top:6px;overflow:visible}
+.industry-series svg text{font:16px var(--sans);fill:#40574e}.industry-gridline{stroke:#dce2d7;stroke-width:1;vector-effect:non-scaling-stroke}
+.industry-trend-line{fill:none;stroke:#355f75;stroke-width:2.25;vector-effect:non-scaling-stroke}.industry-trend-point{fill:#355f75}
+.industry-detail-statistics .industry-stat-note,.industry-stat-source,.industry-stat-availability{font-size:12px;line-height:1.6;margin:7px 0 0;overflow-wrap:anywhere;color:#455d53}
+.industry-stat-source a{text-underline-offset:2px}.industry-stat-values{font-size:12px;line-height:1.5;margin-top:5px}
+.industry-stat-values summary{min-height:44px;cursor:pointer;align-content:center}
+.industry-stat-values table{border-collapse:collapse;width:100%;table-layout:fixed;overflow-wrap:anywhere}
+.industry-stat-values th,.industry-stat-values td{padding:6px 3px;border-bottom:1px solid #e0e2d7;text-align:right;font-variant-numeric:tabular-nums}
+.industry-stat-values th:first-child{text-align:left}.industry-stat-values caption{text-align:left;margin-bottom:6px}
+.industry-donut-body{display:grid;grid-template-columns:144px minmax(0,1fr);gap:12px;align-items:start;margin-top:10px}
+.industry-donut-body>svg{width:144px;height:144px;display:block}.industry-donut-caption{font:13px var(--sans);fill:#455d53}.industry-donut-value{font:700 16px var(--sans);fill:#243f43}
+.industry-donut-labels{list-style:none;margin:0;padding:0;display:grid;gap:4px;font:14px/1.5 var(--sans)}
+.industry-donut-labels li{display:grid;grid-template-columns:9px minmax(0,1fr);gap:6px;align-items:start}
+.industry-donut-labels li>i{width:9px;height:9px;margin-top:6px;border-radius:2px}.industry-donut-labels li>span{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 4px;min-width:0;overflow-wrap:anywhere}
+.industry-donut-labels strong{white-space:nowrap;font-variant-numeric:tabular-nums}.industry-donut-labels .is-us{font-weight:700}
+.industry-stat-availability{margin-top:12px}
+.industry-economic-legend{font-size:12px;line-height:1.5}.industry-economic-legend p{margin:5px 0}
+.industry-size-key{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.industry-size-key span{display:flex;align-items:center;gap:4px}.industry-size-key i{display:block;border-radius:50%;background:#357080;flex:none}
+.industry-economic-value{margin:8px 0;padding:8px;border-left:3px solid #357080;font-size:13px;line-height:1.6;background:#f2f5eb}
+.industry-marker.is-economic .industry-economic-circle{position:absolute;left:18px;top:22px;transform:translate(-50%,-50%);border-radius:50%;background:var(--industry-color);opacity:.85;pointer-events:none}
+.industry-marker.is-economic i{position:relative;background:transparent;border:0;box-shadow:none;color:#173b48;font-size:14px;text-shadow:0 0 3px #fff,0 0 3px #fff}
+.industry-marker.is-economic.is-small-value i{transform:translateX(22px)}.industry-marker.is-economic.is-small-value span{padding-left:17px}
+.industry-marker.is-economic[aria-pressed=true] i{outline:none}.industry-marker.is-economic[aria-pressed=true] .industry-economic-circle{outline:2px solid #203d45;outline-offset:3px}
+.industry-marker.is-economic.is-left-label .industry-economic-circle{left:100px}.industry-marker.is-unmeasured i{border-radius:3px;background:#fffdf4;color:#355f75;border:1px dashed #55736b}
+.industry-marker-count{font-size:10px;background:#fffdf4;color:#253b42;padding:2px;border-radius:3px;white-space:nowrap}
+@media(min-width:960px){.industry-trend-grid,.industry-comparison-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.industry-distribution>figcaption{min-height:72px}}
+@media(max-width:420px){.industry-donut-body{grid-template-columns:132px minmax(0,1fr);gap:10px}.industry-donut-body>svg{width:132px;height:132px}.industry-donut-value{font-size:17px}.industry-donut-caption{font-size:14px}.industry-series,.industry-distribution{padding:8px}}
+@media(max-width:359px){.industry-donut-body{grid-template-columns:minmax(0,1fr);gap:12px}.industry-series svg text{font-size:18px}}
+@media(max-width:649px){.industry-marker.is-economic.is-left-label .industry-economic-circle{left:72px}}
+
+/* Keep the economic circle unobscured and the glyph/touch target independent of its area. */
+.industry-marker i{font-size:14px}
+.industry-marker.is-economic,.industry-marker.is-economic.is-left-label{display:block;width:44px;height:44px;margin-left:0}
+.industry-marker.is-economic i,.industry-marker.is-economic.is-small-value i{position:absolute;left:3px;top:7px;width:30px;height:30px;transform:none}
+.industry-marker.is-economic.is-small-value i{left:25px}
+.industry-marker.is-economic .industry-economic-circle,.industry-marker.is-economic.is-left-label .industry-economic-circle{left:18px}
+.industry-marker.is-economic span{position:absolute;left:calc(22px + max(var(--economic-radius),26px));top:50%;transform:translateY(-50%);width:90px;padding:4px;font-size:11px;pointer-events:none}
+.industry-marker.is-economic.is-left-label span{left:auto;right:calc(30px + max(var(--economic-radius),26px))}
+.industry-marker.is-economic.is-small-value span{padding:4px}

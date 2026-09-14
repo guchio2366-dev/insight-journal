@@ -71,7 +71,7 @@ test('重なる地域候補は全件選べ、WebGL失敗でも産業記号と地
  try{
   assert.equal(root.dataset.renderState,'fallback');assert.equal(q('[data-fallback]').hidden,false);
   assert.ok(q('[data-industry-markers]').children.length>0);
-  const cluster=[...q('[data-industry-markers]').children].find(b=>Number(b.querySelector('i').textContent)>1);assert.ok(cluster);cluster.click();
+  const cluster=[...q('[data-industry-markers]').children].find(b=>Number(b.querySelector('.industry-marker-count')?.textContent)>1);assert.ok(cluster);cluster.click();
   assert.ok(q('[data-selection-candidates]').querySelectorAll('button').length>1);
   q('[data-selection-candidates] button').click();assert.equal(q('[data-selection]').hidden,false);assert.ok(q('[data-selection]').classList.contains('atlas-selection--below'));
   q('[data-industry-sector="services"]').click();q('[data-industry-subsector="finance"]').click();q('[data-industry-region-option="newyork-finance"]').click();
@@ -107,5 +107,32 @@ test('全産業の２図・数表に12区分を表示し、サービス選択か
   q('[data-industry-subsector="finance"]').click();
   q('[data-industry-sector="all"]').click();
   assert.equal(panel.hidden,false);assert.equal(panel.innerHTML,before);
+ }finally{await window.happyDOM.close();}
+});
+
+test('金融の経済規模・欠測・凡例と全産業の固定記号を切り替える',async()=>{
+ const {window,q}=await setup('?sector=services&subsector=finance');
+ try{
+  const dots=[...q('[data-industry-markers]').querySelectorAll('.is-economic')];assert.equal(dots.length,2);
+  assert.equal(q('[data-industry-economic-legend]').hidden,false);assert.ok(dots.every(b=>b.querySelector('i').textContent==='金'));
+  const large=dots.find(b=>b.dataset.economicRank==='1'),small=dots.find(b=>b.dataset.economicRank==='2');
+  const ratio=parseFloat(small.querySelector('em').style.width)**2/parseFloat(large.querySelector('em').style.width)**2;
+  // CSSOM serialization rounds subpixel dimensions; the pure function is tested without rounding.
+  assert.ok(Math.abs(ratio-Number(small.dataset.economicValue)/Number(large.dataset.economicValue))<1e-6,`area ratio ${ratio}`);
+  large.click();assert.match(q('.industry-economic-value').textContent,/2都市圏中1位/);
+  q('[data-industry-region-option="newyork-finance"]').click();assert.match(q('.industry-economic-value').textContent,/比較から除いて/);
+  q('[data-industry-sector="all"]').click();assert.equal(q('[data-industry-economic-legend]').hidden,true);assert.equal(q('[data-industry-markers] .is-economic'),null);
+  assert.ok([...q('[data-industry-markers]').querySelectorAll('i')].every(i=>i.textContent!=='サ'));
+ }finally{await window.happyDOM.close();}
+});
+test('航空宇宙・造船・鉄道のグラフと輸出先を独立表示し、表は閉じておく',async()=>{
+ const {window,q}=await setup('?sector=manufacturing&subsector=aerospace');
+ try{
+  for(const [field,code] of [['aerospace','3364'],['shipbuilding','3366'],['railway','3365']]){
+   q(`[data-industry-subsector="${field}"]`).click();const detail=q(`[data-industry-detail="manufacturing:${field}"]`);
+   assert.equal(detail.hidden,false);assert.match(detail.querySelector('.industry-series-scope').textContent,new RegExp(code));
+   assert.equal(detail.querySelectorAll('.industry-series>svg').length,2);assert.equal(detail.querySelectorAll('.industry-distribution').length,1);
+   assert.ok([...detail.querySelectorAll('.industry-stat-values')].every(d=>!d.open));
+  }
  }finally{await window.happyDOM.close();}
 });
