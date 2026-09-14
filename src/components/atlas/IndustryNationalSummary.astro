@@ -1,11 +1,13 @@
 ---
 import {industrySectors} from '../../data/atlas/industry-catalog';
-import {industryYear,chartRows,sectorTotal,nationalSectorShare} from '../../data/atlas/industry-statistics';
+import {industryYear,chartRows,sectorTotal,nationalSectorShare,industryStatRows} from '../../data/atlas/industry-statistics';
+const serviceIds=new Set(industryStatRows.services.map(r=>r.id));
+const serviceColor=industrySectors.find(s=>s.id==='services')!.color;
 ---
 <aside class="atlas-national industry-national" aria-label="選択した業態の全米統計">
 {industrySectors.map(sector=><section data-industry-national-panel={sector.id} hidden={sector.id!=='all'}>
   <header><p class="atlas-eyebrow">米国の産業構造 · {industryYear}年</p><h2>{sector.id==='all'?'全産業の構成':sector.label}</h2>
-    <p>{sector.id==='all'?'農林水産・政府を含む全米の構成。':`全米GDPの${nationalSectorShare(sector.id,'gdp').toFixed(1)}%・雇用の${nationalSectorShare(sector.id,'employment').toFixed(1)}%`}</p>
+    <p>{sector.id==='all'?'農林水産・政府を含む12区分。サービス業は7分野に分けて表示。':`全米GDPの${nationalSectorShare(sector.id,'gdp').toFixed(1)}%・雇用の${nationalSectorShare(sector.id,'employment').toFixed(1)}%`}</p>
   </header>
   {(['gdp','employment'] as const).map(metric=>{
     const rows=chartRows(sector.id,metric);
@@ -13,11 +15,19 @@ import {industryYear,chartRows,sectorTotal,nationalSectorShare} from '../../data
       <figcaption><h3>{metric==='gdp'?(sector.id==='all'?'GDPの構成':'付加価値の内訳'):(sector.id==='all'?'雇用の構成':'雇用の内訳')}</h3><span>{sector.id==='all'?'全米':sector.label}を100%</span></figcaption>
       <div class="industry-chart-axis" aria-hidden="true"><span>0</span><span>50</span><span>100%</span></div>
       <ol class="industry-bars" aria-label={`${metric==='gdp'?'名目付加価値':'雇用'}の割合`}>
-        {rows.map(r=><li><div class="industry-bar-label"><span>{r.label}</span><strong>{r.share.toFixed(1)}<small>%</small></strong></div><div class="industry-bar-track"><i style={`width:${r.share}%;--industry-color:${sector.id==='all'?industrySectors.find(s=>s.id===r.id)?.color??'#64815d':sector.color}`}></i></div></li>)}
+        {rows.map(r=>{
+          const serviceDetail=sector.id==='all'&&serviceIds.has(r.id);
+          const color=sector.id==='all'?(serviceDetail?serviceColor:industrySectors.find(s=>s.id===r.id)?.color??'#64815d'):sector.color;
+          return <li data-industry-stat-row={r.id} class:list={{'industry-service-detail':serviceDetail}}>
+            {serviceDetail&&r.id==='information'&&<p class="industry-service-heading">サービス業の内訳</p>}
+            <div class="industry-bar-label"><span>{r.label}</span><strong>{r.share.toFixed(1)}<small>%</small></strong></div>
+            <div class="industry-bar-track"><i style={`width:${r.share}%;--industry-color:${color}`}></i></div>
+          </li>;
+        })}
       </ol>
       <details class="industry-number-table"><summary>金額・雇用数を見る</summary><table><caption>{industryYear}年 · {metric==='gdp'?'名目・10億ドル':'年平均・千雇用'}</caption><thead><tr><th>区分</th><th>値</th></tr></thead><tbody>{rows.map(r=><tr><th>{r.label}</th><td>{r.value.toLocaleString('en-US',{maximumFractionDigits:1})}</td></tr>)}<tr><th>合計</th><td>{sectorTotal(sector.id,metric).toLocaleString('en-US',{maximumFractionDigits:1})}</td></tr></tbody></table></details>
     </figure>;
   })}
 </section>)}
-<p class="industry-stat-note">統計：全米／地図：米国本土。雇用はフルタイム・パートタイムの年平均（自営業を除く）。<a href="#industry-method">BEA原表・分類</a></p>
+<p class="industry-stat-note">「娯楽・宿泊・飲食」は住民の利用も含み、観光だけの値ではありません。統計：全米／地図：米国本土。雇用はフルタイム・パートタイムの年平均（自営業を除く）。<a href="#industry-method">BEA原表・分類</a></p>
 </aside>

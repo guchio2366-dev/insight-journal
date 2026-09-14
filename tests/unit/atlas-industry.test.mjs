@@ -44,3 +44,19 @@ test('東端で左へ返すラベルも衝突をまとめ、代表座標と全�
  assert.equal(groups.length,2);assert.deepEqual(groups[0].regions,['midwest','newyork']);assert.equal(groups[0].x,545);assert.equal(groups[0].y,120);
  assert.deepEqual(groups.flatMap(g=>g.regions).sort(),['california','midwest','newyork']);
 });
+
+test('全産業はサービス親行を重ねず12区分を全米分母で示し、サービス内訳は親分母を保つ',()=>{
+ const ids=['agriculture','manufacturing','resources','information','finance','professional','trade-logistics','tourism','health-education','other-services','construction-real-estate','government'];
+ for(const metric of ['gdp','employment']){
+  const national=chartRows('all',metric),services=chartRows('services',metric);
+  assert.deepEqual(national.map(r=>r.id),ids);
+  assert.equal(services.length,7);
+  for(const service of services){
+   const expanded=national.find(r=>r.id===service.id);
+   assert.equal(expanded.value,service.value);
+   assert.equal(expanded.share,100*service.value/sectorTotal('all',metric));
+   assert.equal(service.share,100*service.value/sectorTotal('services',metric));
+   assert.ok(service.share>expanded.share);
+  }
+ }
+});

@@ -89,3 +89,23 @@ test('第二段のキーボード選択とインサイト比較が右欄・カ�
   q('[data-industry-insight="energy-chemistry"]').click();assert.equal(new URL(window.location.href).searchParams.get('industryInsight'),'energy-chemistry');assert.equal(map.cameraChanges,moves);
  }finally{await window.happyDOM.close();}
 });
+
+test('全産業の２図・数表に12区分を表示し、サービス選択から全産業へ復帰できる',async()=>{
+ const {window,q}=await setup();
+ try{
+  const panel=q('[data-industry-national-panel="all"]');
+  const before=panel.innerHTML;
+  for(const figure of panel.querySelectorAll('figure')){
+   assert.equal(figure.querySelectorAll('li[data-industry-stat-row]').length,12);
+   assert.equal(figure.querySelectorAll('.industry-service-detail').length,7);
+   assert.equal(figure.querySelectorAll('.industry-service-heading').length,1);
+   assert.equal(figure.querySelectorAll('tbody tr').length,13);
+   assert.equal(figure.querySelector('[data-industry-stat-row="services"]'),null);
+  }
+  q('[data-industry-sector="services"]').click();
+  assert.equal(q('[data-industry-national-panel="services"] .industry-bars').children.length,7);
+  q('[data-industry-subsector="finance"]').click();
+  q('[data-industry-sector="all"]').click();
+  assert.equal(panel.hidden,false);assert.equal(panel.innerHTML,before);
+ }finally{await window.happyDOM.close();}
+});

@@ -7,16 +7,15 @@ export const industryYears=gdp.years;
 type Metric='gdp'|'employment';
 export interface IndustryStatRow {id:string;label:string;gdpLines:number[];employmentLines:number[];naics:string;color?:string}
 const row=(id:string,label:string,naics:string,gdpLines:number[],employmentLines:number[]):IndustryStatRow=>({id,label,naics,gdpLines,employmentLines});
-export const industryStatRows:Record<IndustrySector,IndustryStatRow[]>={
-  all:[
+const industryParentRows:IndustryStatRow[]=[
     row('agriculture','農林水産（畜産を含む）','11',[3],[4]),
     row('manufacturing','製造業','31–33',[12],[13]),
     row('resources','資源・エネルギー','21,22',[6,10],[7,11]),
     row('services','サービス業','42,44–45,48–49,51–52,54–56,61–62,71–72,81',[34,35,40,49,55,66,70,71,75,76,82,85,88],[35,38,43,52,57,65,69,70,73,74,79,82,85]),
     row('construction-real-estate','建設・不動産','23,53',[11,60],[12,62]),
     row('government','政府','government',[89],[86]),
-  ],
-  services:[
+  ];
+const serviceRows:IndustryStatRow[]=[
     row('information','情報通信','51',[49],[52]),
     row('finance','金融・保険','52',[55],[57]),
     row('professional','専門・業務支援','54–56',[66,70,71],[65,69,70]),
@@ -24,7 +23,10 @@ export const industryStatRows:Record<IndustrySector,IndustryStatRow[]>={
     row('tourism','娯楽・宿泊・飲食','71–72',[82,85],[79,82]),
     row('health-education','医療・教育・福祉','61–62',[75,76],[73,74]),
     row('other-services','その他のサービス','81',[88],[85]),
-  ],
+  ];
+export const industryStatRows:Record<IndustrySector,IndustryStatRow[]>={
+  all:industryParentRows.flatMap(r=>r.id==='services'?serviceRows:[r]),
+  services:serviceRows,
   manufacturing:[
     row('food','食品・飲料・たばこ','311–312',[26],[27]),
     row('wood-paper','木材・紙','321,322',[14,29],[15,30]),
@@ -46,7 +48,7 @@ export function sourceValue(metric:Metric,line:number,year=industryYear){
 export function statValue(row:IndustryStatRow,metric:Metric,year=industryYear){return row[metric==='gdp'?'gdpLines':'employmentLines'].reduce((sum,line)=>sum+sourceValue(metric,line,year),0);}
 export function sectorTotal(sector:IndustrySector,metric:Metric,year=industryYear){
   if(sector==='all')return sourceValue(metric,metric==='gdp'?1:2,year);
-  return statValue(industryStatRows.all.find(r=>r.id===sector)!,metric,year);
+  return statValue(industryParentRows.find(r=>r.id===sector)!,metric,year);
 }
 export function nationalSectorShare(sector:IndustrySector,metric:Metric){return 100*sectorTotal(sector,metric)/sectorTotal('all',metric);}
 export function chartRows(sector:IndustrySector,metric:Metric){return industryStatRows[sector].map(r=>({...r,value:statValue(r,metric),share:100*statValue(r,metric)/sectorTotal(sector,metric)}));}
