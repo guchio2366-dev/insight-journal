@@ -70,7 +70,7 @@ def build():
                     candidates.append((int(r), int(c)))
                 absolute = [(r+ys.start, c+xs.start) for r, c in candidates]
                 # Tiny mountain/coastal regions are exposed as the map is enlarged.
-                zoom = 0 if area >= 6000 else 4 if area >= 600 else 5.5 if area >= 30 else 8
+                zoom = 0 if area >= 6000 or (item['code'] in ['Am', 'Aw'] and rank == 0) else 4 if area >= 600 else 5.5 if area >= 30 else 8
                 entries.append(dict(id=f"{item['code']}-{region}-{repeat}", code=item['code'],
                     gridId=item['id'], gridPixel=list(absolute[0]), area=area,
                     minZoom=zoom, priority=rank*10+repeat,

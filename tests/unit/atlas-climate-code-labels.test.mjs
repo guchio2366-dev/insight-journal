@@ -25,3 +25,10 @@ test('全国用のコード候補を狭い地図でもはみ出さず配置し�
   for(const [i,p] of placed.entries()){assert.ok(p.left>=0&&p.top>=0&&p.right<=bounds.right&&p.bottom<=bounds.bottom);assert.ok(placed.slice(i+1).every(other=>!boxesOverlap(p,other)));}
  }
 });
+
+test('小領域は元の位置を短い引出線で示し、都市名を覆わない',()=>{
+ const anchor={x:100,y:100},obstacle={left:95,top:110,right:150,bottom:160};
+ const [label]=layoutClimateCodes([{id:'small',code:'Am',width:30,height:18,anchors:[anchor]}],{left:0,top:0,right:300,bottom:200},[obstacle]);
+ assert.ok(label.leader);assert.deepEqual(label.anchor,anchor);assert.ok(!boxesOverlap(label,obstacle));
+ assert.ok(Math.hypot((label.left+label.right)/2-anchor.x,(label.top+label.bottom)/2-anchor.y)<=26);
+});
