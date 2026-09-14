@@ -102,7 +102,7 @@ export async function startAtlas() {
   }
 
 
-  const agricultureDetails=createAgricultureDetails(root,(state,push,url)=>{selectedStats=state.stats;save(push,url);});
+  const agricultureDetails=createAgricultureDetails(root,(state,push,url,source)=>{selectedStats=state.stats;if(!source){selectedRegion=null;selectedAnimalRegion=null;}syncAgricultureReading();save(push,url);});
   selectedStats=agricultureDetails.state().stats;
 
   const industries=createIndustryController(root,config.industryRegions,config.industrySources,{
@@ -137,13 +137,6 @@ export async function startAtlas() {
       const target=writeAtlasState(new URL(url),config.base,'agriculture',cameraState(),selectedCrop,selectedRegion,selectedStats,view,[...agriLayers] as any,selectedAnimal,selectedAnimalRegion,{env:natureMode,city:selectedCity,natureFeature},selectedRelation,agricultureDetails.state());
       link.href=target.pathname+target.search;
     });
-  }
-
-  function updateStats(id:string,saveUrl=true){
-    if(!config.statisticCropIds.includes(id))return;
-    selectedStats=id;
-    agricultureDetails.selectCrop(id,false);
-    if(saveUrl)save();
   }
 
   function moveSelectionBelow(){
@@ -220,7 +213,7 @@ export async function startAtlas() {
 
   function closeSelection(saveUrl=true,restoreFocus=false){
     const origin=field==='natural'?natureTrigger:relationTrigger;naturePickGeneration++;
-    if(field==='agriculture'){selectedRelation=null;relationTrigger=null;syncRelationVisuals();selectedAnimal=null;selectedAnimalRegion=null;selectedCrop=null;selectedRegion=null;root.querySelectorAll('[data-crop-select]').forEach(node=>node.removeAttribute('aria-current'));}
+    if(field==='agriculture'){agricultureDetails.overview();return;}
     else if(field==='natural')natureFeature=null;
     if(field==='industry')industries.clearSelection();
     hideSelection();updateFocusButton();if(saveUrl)save(true);if(restoreFocus){const visible=origin?.isConnected&&!origin.closest('[hidden]');if(visible)origin.focus({preventScroll:true});else if(field==='natural')el(`[data-nature-mode="${natureMode}"]`).focus({preventScroll:true});}
@@ -239,15 +232,25 @@ export async function startAtlas() {
     return config.regionalInsights.filter((region:RegionalCopy)=>region.cropIds.some(crop=>normalized.includes(crop))).filter((region:RegionalCopy)=>longitude>=region.bounds[0]&&longitude<=region.bounds[2]&&latitude>=region.bounds[1]&&latitude<=region.bounds[3]).sort((left:RegionalCopy,right:RegionalCopy)=>(left.bounds[2]-left.bounds[0])*(left.bounds[3]-left.bounds[1])-(right.bounds[2]-right.bounds[0])*(right.bounds[3]-right.bounds[1]))[0]??null;
   }
 
+  function syncAgricultureReading(){
+    const v=agricultureDetails.state().reading.view;
+    const previousCrop=selectedCrop,previousAnimal=selectedAnimal;
+    selectedRelation=v.kind==='relation'?v.id:null;
+    selectedCrop=v.kind==='map-context'?'corn-soybean':v.kind==='product'&&allCrops.has(v.id)?v.id:null;
+    selectedAnimal=v.kind==='product'&&allLivestockKinds.has(v.id)?v.id:null;
+    if(previousCrop!==selectedCrop)selectedRegion=null;
+    if(previousAnimal!==selectedAnimal)selectedAnimalRegion=null;
+    hideSelection();syncRelationVisuals();renderLivestockMarkers();
+    const cropRegion=selectedRegion?allRegions.get(selectedRegion):null,animalRegion=selectedAnimalRegion?allLivestockRegions.get(selectedAnimalRegion):null;
+    agricultureDetails.region(cropRegion?.title??animalRegion?.label,cropRegion?.summary??animalRegion?.summary);
+  }
+
   function selectCrop(id:string,longitude?:number,latitude?:number,requestedRegion?:string|null,saveUrl=true){
-    const crop=id==='corn-soybean'?{name:'とうもろこし・大豆の重なり',summary:'近い地域で両方の作物がまとまります。この図だけでは、同じ畑の輪作や同時栽培は判定できません。'}:allCrops.get(id);if(!crop)return;
-    selectedRelation=null;relationTrigger=null;syncRelationVisuals();
-    const region=regionFor(id,longitude,latitude,requestedRegion);selectedCrop=id;selectedRegion=region?.id??null;selectedAnimal=null;selectedAnimalRegion=null;renderLivestockMarkers();
-    const coordinate:[number,number]|null=longitude!==undefined&&latitude!==undefined?[longitude,latitude]:region?[(region.bounds[0]+region.bounds[2])/2,(region.bounds[1]+region.bounds[3])/2]:null;
-    const detailCrop=region?.detailCrop??(id==='corn-soybean'?'corn':id);if(config.statisticCropIds.includes(detailCrop))updateStats(detailCrop,false);
-    root.querySelectorAll<HTMLElement>('[data-crop-select]').forEach(node=>node.dataset.cropSelect===id?node.setAttribute('aria-current','true'):node.removeAttribute('aria-current'));
-    showSelection(region?.title??crop.name,'選択地域',{full:region?.summary??crop.summary,compact:region?.compactSummary??crop.summary},coordinate,config.statisticCropIds.includes(detailCrop)?'#crop-details':'#atlas-method',config.statisticCropIds.includes(detailCrop)?'↓ 作物の詳説へ':'↓ 表示方法へ');
-    if(saveUrl)save();
+    if(id!=='corn-soybean'&&!allCrops.has(id))return;
+    const region=regionFor(id,longitude,latitude,requestedRegion);
+    selectedCrop=id;selectedRegion=region?.id??null;selectedAnimal=null;selectedAnimalRegion=null;
+    if(id==='corn-soybean')agricultureDetails.selectContext(saveUrl);else agricultureDetails.selectProduct(id,saveUrl,'map');
+    syncAgricultureReading();
   }
 
   // City observations have their own state and never participate in map-card placement.
@@ -311,15 +314,20 @@ export async function startAtlas() {
 
   function modePrefix(){return natureMode==='contour'?'elevation':natureMode;}
 
-  function selectLivestock(regionId:string,saveUrl=true){hideSelection();selectedRelation=null;relationTrigger=null;syncRelationVisuals();el('[data-selection-kicker]').textContent='選択地域';const region=allLivestockRegions.get(regionId);if(!region)return;const kind=allLivestockKinds.get(region.kindId);if(!kind)return;selectedCrop=null;selectedRegion=null;selectedAnimal=region.kindId;selectedAnimalRegion=region.id;selectedCoordinate=region.anchor;currentCopy={full:region.summary,compact:region.summary};el('[data-selection-title]').textContent=`${region.label}の${kind.label}`;el('[data-selection-text]').textContent=currentCopy.full;el('[data-selection-candidates]').hidden=true;el('[data-selection-candidates]').replaceChildren();el<HTMLAnchorElement>('[data-selection-link]').href=`#livestock-${region.kindId}`;el('[data-selection-link]').textContent='↓ 畜産の詳説へ';root.querySelectorAll('[data-crop-select]').forEach(n=>n.removeAttribute('aria-current'));selection.hidden=false;renderLivestockMarkers();placeSelectionCard();if(saveUrl)save();}
+  function selectLivestock(regionId:string,saveUrl=true){
+    const region=allLivestockRegions.get(regionId);if(!region)return;
+    selectedAnimal=region.kindId;selectedAnimalRegion=region.id;selectedCrop=null;selectedRegion=null;
+    agricultureDetails.selectProduct(region.kindId,saveUrl,'map');syncAgricultureReading();
+  }
+  function showLivestockCandidates(regions:LivestockRegion[],coordinate:[number,number]){
+    hideSelection();agricultureDetails.candidates(regions.map(region=>({label:`${region.label}・${allLivestockKinds.get(region.kindId).label}`,select:()=>selectLivestock(region.id)})));
+  }
 
-  function showLivestockCandidates(regions:LivestockRegion[],coordinate:[number,number]){hideSelection();selectedRelation=null;relationTrigger=null;syncRelationVisuals();selectedCrop=null;selectedRegion=null;selectedAnimal=null;selectedAnimalRegion=null;selectedCoordinate=coordinate;currentCopy={full:'同じ範囲に複数の畜産地域があります。読みたい対象を選んでください。',compact:'複数の対象があります。'};el('[data-selection-title]').textContent='重なっている畜産';el('[data-selection-text]').textContent=currentCopy.full;const holder=el('[data-selection-candidates]');holder.replaceChildren();holder.hidden=false;for(const region of regions){const kind=allLivestockKinds.get(region.kindId),button=document.createElement('button');button.type='button';button.textContent=`${kind.symbol} ${region.label}・${kind.label}`;button.addEventListener('click',()=>selectLivestock(region.id));holder.appendChild(button);}el<HTMLAnchorElement>('[data-selection-link]').href='#livestock-details';el('[data-selection-link]').textContent='↓ 畜産の詳説へ';selection.hidden=false;placeSelectionCard();}
-
-  function renderLivestockMarkers(){const holder=el('[data-livestock-markers]');holder.replaceChildren();if(!ready||!map||field!=='agriculture'||!agriLayers.has('livestock'))return;const visible=config.livestockRegions.map((region:LivestockRegion)=>({region,point:map!.project(region.anchor)})).filter(({point}:any)=>point.x>=20&&point.y>=20&&point.x<=frame.clientWidth-20&&point.y<=frame.clientHeight-20),groups:{regions:LivestockRegion[];points:any[]}[]=[],distance=frame.clientWidth<650?58:48;for(const item of visible){const found=groups.find(g=>Math.hypot(g.points[0].x-item.point.x,g.points[0].y-item.point.y)<distance);if(found){found.regions.push(item.region);found.points.push(item.point);}else groups.push({regions:[item.region],points:[item.point]});}for(const group of groups){const button=document.createElement('button');button.type='button';button.className='atlas-livestock-marker';const x=group.points.reduce((s,p)=>s+p.x,0)/group.points.length,y=group.points.reduce((s,p)=>s+p.y,0)/group.points.length;button.style.transform=`translate(${Math.round(x)}px,${Math.round(y)}px) translate(-50%,-50%)`;if(group.regions.length===1){const region=group.regions[0],kind=allLivestockKinds.get(region.kindId);button.style.setProperty('--livestock-color',kind.color);button.innerHTML=`<i aria-hidden="true">${kind.symbol}</i><span>${kind.label}</span>`;button.setAttribute('aria-label',`${region.label}の${kind.label}`);button.setAttribute('aria-pressed',String(selectedAnimalRegion===region.id));button.addEventListener('click',e=>{e.stopPropagation();selectLivestock(region.id);});}else{button.classList.add('is-cluster');button.innerHTML=`<i aria-hidden="true">${group.regions.length}</i><span>畜産</span>`;button.setAttribute('aria-label',`${group.regions.length}件の畜産地域を選ぶ`);button.addEventListener('click',e=>{e.stopPropagation();const p=map!.unproject([x,y]);showLivestockCandidates(group.regions,[p.lng,p.lat]);});}const related=selectedRelation?allRelations.get(selectedRelation):null;const emphasized=related&&group.regions.some(region=>(related.livestockRegionIds as readonly string[]).includes(region.id));button.classList.toggle('is-related',Boolean(emphasized));if(emphasized)button.setAttribute('aria-label',button.getAttribute('aria-label')+'、選択した関係で強調中');holder.appendChild(button);}}
+  function renderLivestockMarkers(){const holder=el('[data-livestock-markers]');holder.replaceChildren();if(!ready||!map||field!=='agriculture'||!agriLayers.has('livestock'))return;const visible=config.livestockRegions.map((region:LivestockRegion)=>({region,point:map!.project(region.anchor)})).filter(({point}:any)=>point.x>=20&&point.y>=20&&point.x<=frame.clientWidth-20&&point.y<=frame.clientHeight-20),groups:{regions:LivestockRegion[];points:any[]}[]=[],distance=frame.clientWidth<650?58:48;for(const item of visible){const found=groups.find(g=>Math.hypot(g.points[0].x-item.point.x,g.points[0].y-item.point.y)<distance);if(found){found.regions.push(item.region);found.points.push(item.point);}else groups.push({regions:[item.region],points:[item.point]});}for(const group of groups){const button=document.createElement('button');button.type='button';button.className='atlas-livestock-marker';const x=group.points.reduce((s,p)=>s+p.x,0)/group.points.length,y=group.points.reduce((s,p)=>s+p.y,0)/group.points.length;button.style.transform=`translate(${Math.round(x)}px,${Math.round(y)}px) translate(-50%,-50%)`;if(group.regions.length===1){const region=group.regions[0],kind=allLivestockKinds.get(region.kindId);button.style.setProperty('--livestock-color',kind.color);button.innerHTML=`<i aria-hidden="true">${kind.symbol}</i><span>${kind.label}</span>`;button.setAttribute('aria-label',`${region.label}の${kind.label}`);button.setAttribute('aria-pressed',String(selectedAnimalRegion?selectedAnimalRegion===region.id:selectedAnimal===region.kindId));button.addEventListener('click',e=>{e.stopPropagation();selectLivestock(region.id);});}else{button.classList.add('is-cluster');button.innerHTML=`<i aria-hidden="true">${group.regions.length}</i><span>畜産</span>`;button.setAttribute('aria-label',`${group.regions.length}件の畜産地域を選ぶ`);button.addEventListener('click',e=>{e.stopPropagation();const p=map!.unproject([x,y]);showLivestockCandidates(group.regions,[p.lng,p.lat]);});}const related=selectedRelation?allRelations.get(selectedRelation):null;const emphasized=group.regions.some(region=>related?(related.livestockRegionIds as readonly string[]).includes(region.id):selectedAnimal===region.kindId);button.classList.toggle('is-related',Boolean(emphasized));if(emphasized)button.setAttribute('aria-label',button.getAttribute('aria-label')+'、選択した関係で強調中');holder.appendChild(button);}}
 
   function updateFallbackImage(){if(field==='population'){population.fallback();return;}const image=el<HTMLImageElement>('[data-fallback-image]'),overlay=el<HTMLImageElement>('[data-fallback-livestock]'),link=el<HTMLAnchorElement>('[data-fallback-full]');const showCrops=field==='agriculture'&&agriLayers.has('crops'),showLivestock=field==='agriculture'&&agriLayers.has('livestock');const src=field==='natural'?config.natureAssetBase+(['landform','water'].includes(natureMode)?`${natureMode}-interactive.webp`:`${natureMode}-fallback.webp`):config.assetBase+(showCrops?'agriculture':'land')+'-fallback.webp';image.src=src;image.alt=field==='natural'?'米国本土の自然環境・'+config.natureModes.find((m:any)=>m.id===natureMode).label:showCrops?'米国本土の地形・河川と主要作物の栽培域の概略図。':'米国本土の地形と水系。';overlay.hidden=!showLivestock;overlay.src=config.livestockAssetBase+(showCrops?'agriculture-livestock':'livestock')+'-fallback.svg';link.href=field==='natural'?config.natureAssetBase+`${natureMode}-fallback.webp`:src;}
 
-  function syncAgricultureLayers(saveUrl=true){syncRelationVisuals();root.querySelectorAll<HTMLInputElement>('[data-agri-layer]').forEach(input=>input.checked=agriLayers.has(input.value));if(ready&&map)setFieldLayers(map,field,natureMode,agriLayers.has('crops'));updateFallbackImage();el('[data-livestock-key]').hidden=!agriLayers.has('livestock');renderLivestockMarkers();renderLabels();if(field==='agriculture'&&((selectedCrop&&!agriLayers.has('crops'))||(selectedAnimal&&!agriLayers.has('livestock'))))closeSelection(false);placeSelectionCard();if(saveUrl)save(true);}
+  function syncAgricultureLayers(saveUrl=true){syncRelationVisuals();root.querySelectorAll<HTMLInputElement>('[data-agri-layer]').forEach(input=>input.checked=agriLayers.has(input.value));if(ready&&map)setFieldLayers(map,field,natureMode,agriLayers.has('crops'));updateFallbackImage();renderLivestockMarkers();renderLabels();placeSelectionCard();if(saveUrl)save(true);}
 
 
   function fallbackForCurrentView(){
@@ -406,9 +414,7 @@ export async function startAtlas() {
 
   function restoreSelectionForView(){
     hideSelection();renderCity();renderNatureChrome();
-    if(field==='agriculture'&&selectedRelation)selectRelation(selectedRelation,undefined,false);
-    else if(field==='agriculture'&&selectedAnimalRegion)selectLivestock(selectedAnimalRegion,false);
-    else if(field==='agriculture'&&selectedCrop)selectCrop(selectedCrop,undefined,undefined,selectedRegion,false);
+    if(field==='agriculture')syncAgricultureReading();
     else if(field==='natural'&&natureFeature?.startsWith(modePrefix()+':'))showNatureFeature(natureFeature,undefined,undefined,false);
     else if(field==='industry')industries.restoreSelection();
   }
@@ -456,41 +462,25 @@ export async function startAtlas() {
     root.querySelectorAll('[data-fallback-relation]').forEach(group=>group.toggleAttribute('hidden',group.getAttribute('data-fallback-relation')!==relation?.id));
     root.querySelectorAll('[data-relation-crops]').forEach(group=>group.toggleAttribute('hidden',!agriLayers.has('crops')));
     root.querySelectorAll('[data-relation-animals]').forEach(group=>group.toggleAttribute('hidden',!agriLayers.has('livestock')));
-    const signature=relation?.id??'';
+    const selected=field==='agriculture'?selectedCrop:null;
+    const signature=relation?.id??selected??'';
     if(ready&&map&&lastRelationSignature!==signature){
       lastRelationSignature=signature;
-      map.setFilter('crop-relation-highlight',relation?['in',['get','id'],['literal',[...relation.cropIds]]]:['==',['get','id'],'__no-relation__']);
+      map.setFilter('crop-relation-highlight',relation?['in',['get','id'],['literal',[...relation.cropIds]]]:['==',['get','id'],selected??'__no-relation__']);
       (map.getSource('agriculture-relation-context') as GeoJSONSource).setData({type:'FeatureCollection',features:relation?relationContextFeatures(relation.baseFeatureIds,baseFeatures,landFeatures,overlayFeatures):[]});
     }
-    const missing=relation?.requiredLayers.filter(layer=>!agriLayers.has(layer))??[];
+    const required=relation?.requiredLayers??(selectedCrop?['crops']:selectedAnimal?['livestock']:[]);
+    const missing=required.filter(layer=>!agriLayers.has(layer));
+    el('[data-agri-layer-warning]').hidden=!missing.length;
+    el('[data-agri-layer-warning] p').textContent=missing.length?`${missing.map(layer=>layer==='crops'?'作物':'畜産').join('・')}が非表示です。表示設定は維持しています。`:'';
     el('[data-relation-warning]').hidden=!missing.length;
     el('[data-relation-warning-text]').textContent=missing.length?`${missing.map(layer=>layer==='crops'?'作物':'畜産').join('・')}が非表示です。表示設定は維持しています。`:'';
   }
-  function selectRelation(id:string,trigger?:HTMLElement,saveUrl=true){
-    const relation=allRelations.get(id);if(!relation)return;
-    if(saveUrl&&selectedRelation===id){closeSelection(true,true);return;}
-    hideSelection();selectedRelation=id;relationTrigger=trigger??relationTrigger;
-    selectedCrop=null;selectedRegion=null;selectedAnimal=null;selectedAnimalRegion=null;
-    root.querySelectorAll('[data-crop-select]').forEach(node=>node.removeAttribute('aria-current'));
-    syncRelationVisuals();renderLivestockMarkers();
-    showSelection(relation.title,'分布のつながり',{full:relation.mapSummary,compact:relation.takeaway},[...relation.anchor],`#relation-${relation.id}`,'↓ このつながりを詳しく読む');
-    syncRelationVisuals();placeSelectionCard();
-    if(saveUrl){el('[data-atlas-live]').textContent=`${relation.title}を選択。地図の位置と全国統計は変わりません。`;save(true);}
-  }
-  root.querySelectorAll<HTMLButtonElement>('[data-relation-select]').forEach(button=>button.addEventListener('click',()=>selectRelation(button.dataset.relationSelect!,button)));
   el('[data-enable-relation-layers]').addEventListener('click',()=>{activeRelation()?.requiredLayers.forEach(layer=>agriLayers.add(layer));syncAgricultureLayers();});
-  const wideRelations=matchMedia('(min-width:900px)');
-  const sizeRelationDetails=()=>root.querySelectorAll<HTMLDetailsElement>('[data-relation-details]').forEach(detail=>detail.open=wideRelations.matches);
-  sizeRelationDetails();wideRelations.addEventListener('change',sizeRelationDetails);
-  root.querySelectorAll<HTMLAnchorElement>('[data-relation-detail-link],[data-selection-link]').forEach(link=>link.addEventListener('click',event=>{
-    if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
-    const id=link.hash.slice(1);
-    if(id.startsWith('relation-')){event.preventDefault();const target=el('#'+id);target.querySelector<HTMLDetailsElement>('details')!.open=true;target.scrollIntoView({block:'start'});target.tabIndex=-1;target.focus({preventScroll:true});}
-  }));
+  el('[data-agri-enable-layers]').addEventListener('click',()=>{const required=activeRelation()?.requiredLayers??(selectedCrop?['crops']:selectedAnimal?['livestock']:[]);required.forEach(layer=>agriLayers.add(layer));syncAgricultureLayers();});
 
   el('[data-industry-return-link]').addEventListener('click',event=>{if((event as MouseEvent).metaKey||(event as MouseEvent).ctrlKey||(event as MouseEvent).shiftKey||(event as MouseEvent).altKey)return;event.preventDefault();setField('industry',true);});
   root.querySelectorAll<HTMLAnchorElement>('[data-field]').forEach(link=>link.addEventListener('click',event=>{if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;event.preventDefault();setField(link.dataset.field as MapField,true);}));
-  root.querySelectorAll<HTMLAnchorElement>('[data-crop-select]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();agriLayers.add('crops');syncAgricultureLayers(false);selectCrop(link.dataset.cropSelect!);}));
   root.querySelectorAll<HTMLButtonElement>('[data-nature-mode]').forEach(button=>{
     button.addEventListener('click',()=>setNatureMode(button.dataset.natureMode as NatureMode,true));
     button.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key))return;event.preventDefault();const buttons=[...root.querySelectorAll<HTMLButtonElement>('[data-nature-mode]')],step=['ArrowRight','ArrowDown'].includes(event.key)?1:-1,next=(buttons.indexOf(button)+step+buttons.length)%buttons.length;buttons[next].focus();setNatureMode(buttons[next].dataset.natureMode as NatureMode,true);});
@@ -506,7 +496,7 @@ export async function startAtlas() {
   el('[data-retry-nature]').addEventListener('click',()=>{appliedNatureKeys.delete(natureMode==='contour'?'contour:500':natureMode);void ensureNatureModeData(natureMode);});
   el('[data-focus-selection]').addEventListener('click',()=>{if(map&&selectedCoordinate){view='custom';map.jumpTo({center:selectedCoordinate});}});
   root.querySelectorAll('details').forEach(detail=>detail.addEventListener('toggle',()=>placeSelectionCard()));
-  el('[data-close-selection]').addEventListener('click',()=>closeSelection(true,true));root.addEventListener('keydown',event=>{if(event.key!=='Escape')return;if(!selection.hidden||(field==='natural'&&!natureDetail.hidden)){event.preventDefault();closeSelection(true,true);return;}const target=event.target as HTMLElement;if(field==='natural'&&natureMode==='climate'&&selectedCity&&target.closest('[data-map-frame],[data-city-climate],[data-city-jump]')){event.preventDefault();clearCity();}});
+  el('[data-close-selection]').addEventListener('click',()=>closeSelection(true,true));root.addEventListener('keydown',event=>{if(event.defaultPrevented||event.key!=='Escape')return;if(!selection.hidden||(field==='natural'&&!natureDetail.hidden)){event.preventDefault();closeSelection(true,true);return;}const target=event.target as HTMLElement;if(field==='natural'&&natureMode==='climate'&&selectedCity&&target.closest('[data-map-frame],[data-city-climate],[data-city-jump]')){event.preventDefault();clearCity();}});
   let pointerStart:{x:number;y:number}|null=null,mapDragged=false;
   for(const target of [surface,fallback]){
     target.addEventListener('pointerdown',event=>{mapDragged=Boolean(pointerStart);pointerStart={x:event.clientX,y:event.clientY};});
@@ -521,9 +511,9 @@ export async function startAtlas() {
     const coordinate=unprojectNatureFallback(point,box);if(!coordinate)return;
     const city=cityAt(point,p=>projectNatureFallback(p,box));if(city)selectCity(city.id,true,fallbackMap);else void pickClimate(coordinate,fallbackMap);
   });
-  updateStats(selectedStats,false);setNatureMode(natureMode);setField(field);syncAgricultureLayers(false);timeout=window.setTimeout(()=>fail('地図データの読み込みが完了しませんでした。'),30000);
+  setNatureMode(natureMode);setField(field);syncAgricultureLayers(false);timeout=window.setTimeout(()=>fail('地図データの読み込みが完了しませんでした。'),30000);
 
-    window.addEventListener('popstate',()=>{restoring=true;natureGeneration++;pendingNatureKey='';const state=readAtlasState(new URL(location.href),config.initialField);agricultureDetails.restore();field=state.field;natureMode=state.env;agriLayers=new Set(state.agriLayers);selectedRelation=state.relation;relationTrigger=null;natureTrigger=null;cityTrigger=null;naturePickGeneration++;selectedAnimal=state.animal;selectedAnimalRegion=state.animalRegion;selectedCrop=state.crop;selectedRegion=state.region;selectedCity=state.city;natureFeature=state.natureFeature;view=state.view;savedCamera=state.camera??undefined;industries.restore();population.restore();setField(field);setNatureMode(natureMode);updateStats(state.stats,false);syncAgricultureLayers(false);if(state.camera&&map&&state.view==='custom')map.jumpTo({center:[state.camera.lng,state.camera.lat],zoom:state.camera.zoom});else if(map&&state.view==='fit'){suppressNextMove=true;map.fitBounds(fitBounds,{duration:0,padding:{top:30,bottom:14,left:12,right:12}});}restoring=false;});
+    window.addEventListener('popstate',()=>{restoring=true;natureGeneration++;pendingNatureKey='';const state=readAtlasState(new URL(location.href),config.initialField);agricultureDetails.restore();selectedStats=agricultureDetails.state().stats;field=state.field;natureMode=state.env;agriLayers=new Set(state.agriLayers);selectedRelation=state.relation;relationTrigger=null;natureTrigger=null;cityTrigger=null;naturePickGeneration++;selectedAnimal=state.animal;selectedAnimalRegion=state.animalRegion;selectedCrop=state.crop;selectedRegion=state.region;selectedCity=state.city;natureFeature=state.natureFeature;view=state.view;savedCamera=state.camera??undefined;industries.restore();population.restore();setField(field);setNatureMode(natureMode);syncAgricultureLayers(false);if(state.camera&&map&&state.view==='custom')map.jumpTo({center:[state.camera.lng,state.camera.lat],zoom:state.camera.zoom});else if(map&&state.view==='fit'){suppressNextMove=true;map.fitBounds(fitBounds,{duration:0,padding:{top:30,bottom:14,left:12,right:12}});}restoring=false;});
 
   try{
     const fetchJson=async(base:string,name:string)=>{const testMissing=config.reviewMode&&new URL(location.href).searchParams.get('qa')==='asset-error'&&name==='manifest.json';const response=await fetch(base+(testMissing?'qa-missing-manifest.json':name),{signal:criticalController.signal});if(!response.ok)throw new Error(name+': '+response.status);return response.json();};
@@ -542,7 +532,7 @@ export async function startAtlas() {
       const pattern=new Uint8Array(size*size*4);for(let y=0;y<size;y++)for(let x=0;x<size;x++)pattern.set((x+y)%size<2?[128,112,145,220]:[0,0,0,0],(y*size+x)*4);map.addImage('aquifer-stripe',{width:size,height:size,data:pattern});map.setPaintProperty('aquifers-pattern','fill-pattern','aquifer-stripe');
       labels=[...cropLabels,...config.geographicLabels.map((item:any)=>({...item,baseLabel:true})),...config.natureLabels,...stateLabels.map((item:any)=>({...item,baseLabel:true}))].sort((left,right)=>left.priority-right.priority);
       const labelParent=el('[data-map-labels]');for(const item of labels){const node=document.createElement('span');node.className='atlas-geolabel atlas-geolabel--'+item.kind;node.textContent=item.name;node.hidden=true;if(item.color)node.style.setProperty('--label-color',item.color);labelParent.appendChild(node);item.node=node;}
-      setField(field);setNatureMode(natureMode);updateStats(selectedStats,false);renderLabels();restoreSelectionForView();save();
+      setField(field);setNatureMode(natureMode);renderLabels();restoreSelectionForView();save();
       map.on('movestart',()=>{mapMoving=true;});map.on('dragstart',()=>{mapDragged=true;});
       map.on('move',()=>{updateCityFocusButton();renderLabels();renderLivestockMarkers();industries.renderMarkers();if(!selection.hidden&&selection.parentElement===frame)selection.style.visibility='hidden';});map.on('moveend',()=>{mapMoving=false;if(!suppressNextMove)view='custom';else suppressNextMove=false;renderLabels();renderLivestockMarkers();industries.renderMarkers();placeSelectionCard();updateFocusButton();save();});
       map.on('click',event=>{

@@ -39,19 +39,19 @@ async function setup(query='',noWebGL=false){
 test('20回の関係比較でカメラ・全国値・下部作物・取得回数を変えず、直接選択で解除',async()=>{
  const {window,root,q,requests}=await setup('?stats=rice&lng=-101&lat=39&z=4');
  try{
-  const national=q('[data-field-national="agriculture"]').innerHTML,moves=window.__map.cameraChanges,count=requests.length;
+  const national=q('[data-agri-overview]').innerHTML,moves=window.__map.cameraChanges,count=requests.length;
   const ids=['corn-soy-hogs','plains-wheat-cattle','california-rice-water'];
   for(let i=0;i<20;i++)q('[data-relation-select="'+ids[i%3]+'"]').click();
   assert.equal(window.__mapCount,1);assert.equal(window.__map.cameraChanges,moves);assert.equal(requests.length,count);
-  assert.equal(q('[data-field-national="agriculture"]').innerHTML,national);assert.equal(q('[data-stat-panel="rice"]').hidden,false);
+  assert.equal(q('[data-agri-overview]').innerHTML,national);assert.equal(q('[data-stat-panel="rice"]').hidden,false);
   q('[data-relation-select="corn-soy-hogs"]').click();
   assert.ok(q('.atlas-livestock-marker.is-related'));assert.equal(JSON.stringify(window.__map.filters['crop-relation-highlight'][2][1]),JSON.stringify(['corn','soybean','corn-soybean']));
   q('[data-agri-layer][value="livestock"]').click();assert.equal(q('[data-agri-layer][value="livestock"]').checked,false);
-  q('[data-relation-select="plains-wheat-cattle"]').click();assert.equal(q('[data-agri-layer][value="livestock"]').checked,false);assert.equal(q('[data-relation-warning]').hidden,false);
-  q('[data-enable-relation-layers]').click();assert.equal(q('[data-agri-layer][value="livestock"]').checked,true);
+  q('[data-relation-select="plains-wheat-cattle"]').click();assert.equal(q('[data-agri-layer][value="livestock"]').checked,false);assert.equal(q('[data-agri-layer-warning]').hidden,false);
+  q('[data-agri-enable-layers]').click();assert.equal(q('[data-agri-layer][value="livestock"]').checked,true);
   q('[data-field="natural"]').click();q('[data-field="agriculture"]').click();
   assert.equal(q('[data-relation-select="plains-wheat-cattle"]').getAttribute('aria-pressed'),'true');
-  q('[data-close-selection]').click();assert.equal(window.document.activeElement.dataset.relationSelect,'plains-wheat-cattle');
+  q('[data-agri-overview-button]').click();assert.equal(window.document.activeElement.dataset.relationSelect,'plains-wheat-cattle');
   q('[data-relation-select="corn-soy-hogs"]').click();q('[data-crop-select="rice"]').click();assert.equal(new URL(window.location.href).searchParams.has('relation'),false);
  }finally{await window.happyDOM.close();}
 });
@@ -59,15 +59,15 @@ test('20回の関係比較でカメラ・全国値・下部作物・取得回数
 test('関係の直開き・履歴・詳細リンクと、WebGL失敗後の正確な代替線を復元する',async()=>{
  const {window,q,root}=await setup('?relation=california-rice-water&stats=soybean&agriLayers=none',true);
  try{
-  assert.equal(root.dataset.renderState,'fallback');assert.equal(q('[data-selection]').hidden,false);
+  assert.equal(root.dataset.renderState,'fallback');assert.equal(q('[data-agri-reading-panel]').hidden,false);
   assert.equal(q('[data-fallback-relation="california-rice-water"]').hasAttribute('hidden'),false);
   assert.equal(q('[data-fallback-relation="california-rice-water"] [data-relation-crops]').hasAttribute('hidden'),true);
-  q('[data-enable-relation-layers]').click();assert.equal(q('[data-fallback-relation="california-rice-water"] [data-relation-crops]').hasAttribute('hidden'),false);
+  q('[data-agri-enable-layers]').click();assert.equal(q('[data-fallback-relation="california-rice-water"] [data-relation-crops]').hasAttribute('hidden'),false);
   assert.equal(q('[data-agri-layer][value="livestock"]').checked,false);
   q('[data-relation-item="california-rice-water"] [data-relation-detail-link]').click();assert.equal(q('[data-stat-panel="rice"]').hidden,false);
   window.history.pushState({},'', '?relation=plains-wheat-cattle&agriLayers=crops,livestock&stats=wheat');window.dispatchEvent(new window.PopStateEvent('popstate'));
-  assert.equal(q('[data-selection-title]').textContent,'大平原の小麦と牛');assert.equal(q('[data-stat-panel="wheat"]').hidden,false);
-  q('[data-close-selection]').click();assert.equal(q('[data-selection]').hidden,true);assert.equal(q('[data-fallback-relation="plains-wheat-cattle"]').hasAttribute('hidden'),true);
+  assert.equal(q('#agri-reading-heading').textContent,'大平原の小麦と牛');assert.equal(q('[data-stat-panel="wheat"]').hidden,false);
+  q('[data-agri-overview-button]').click();assert.equal(q('[data-selection]').hidden,true);assert.equal(q('[data-fallback-relation="plains-wheat-cattle"]').hasAttribute('hidden'),true);
  }finally{await window.happyDOM.close();}
 });
 
@@ -82,23 +82,22 @@ test('静的HTMLで3関係・5収支・18強調語句・全用途のラベルと
  }finally{await window.happyDOM.close();}
 });
 
-test('作物・畜産の詳細は独立し、20回の切替と乳換算で地図と全国統計を変更しない',async()=>{
+test('作物・畜産の単一選択、20回の切替と乳換算でカメラと取得回数を変更しない',async()=>{
  const {window,q,requests}=await setup('?stats=rice&livestockStats=dairy&milkBasis=skim&lng=-101&lat=39&z=4');
  try{
-  const count=requests.length,moves=window.__map.cameraChanges,national=q('[data-field-national="agriculture"]').innerHTML;
+  const count=requests.length,moves=window.__map.cameraChanges,national=q('[data-agri-overview]').innerHTML;
   const exports=q('[data-livestock-exports="dairy"]').innerHTML,world=q('[data-world-production="dairy"]').innerHTML;
   assert.equal(q('[data-milk-panel="skim"]').hidden,false);assert.equal(q('[data-milk-panel="fat"]').hidden,true);
-  for(let i=0;i<20;i++)q('[data-livestock-stat-select="'+['beef','dairy','hogs','broilers','layers'][i%5]+'"]').click();
+  for(let i=0;i<20;i++)q('a[href="#livestock-'+['beef','dairy','hogs','broilers','layers'][i%5]+'"]').click();
   assert.equal(window.__mapCount,1);assert.equal(window.__map.cameraChanges,moves);assert.equal(requests.length,count);
-  assert.equal(q('[data-field-national="agriculture"]').innerHTML,national);assert.equal(q('[data-stat-panel="rice"]').hidden,false);
-  q('[data-livestock-stat-select="dairy"]').click();q('[data-milk-basis="fat"]').click();
+  assert.equal(q('[data-agri-overview]').innerHTML,national);assert.equal(q('[data-stat-panel="rice"]').hidden,true);
+  q('a[href="#livestock-dairy"]').click();q('[data-milk-basis="fat"]').click();
   assert.equal(q('[data-milk-panel="fat"]').hidden,false);assert.match(q('[data-milk-panel="fat"] .animal-supply-total').textContent,/251.1/);
   q('[data-milk-basis="skim"]').click();assert.match(q('[data-milk-panel="skim"] .animal-supply-total').textContent,/246.6/);
   assert.equal(q('[data-livestock-exports="dairy"]').innerHTML,exports);assert.equal(q('[data-world-production="dairy"]').innerHTML,world);
-  const animal=q('[data-livestock-stat-select="dairy"]');animal.focus();animal.dispatchEvent(new window.KeyboardEvent('keydown',{key:'End',bubbles:true}));
-  assert.equal(window.document.activeElement.dataset.livestockStatSelect,'layers');assert.equal(q('[data-stat-panel="rice"]').hidden,false);
-  window.document.activeElement.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Home',bubbles:true}));assert.equal(window.document.activeElement.dataset.livestockStatSelect,'beef');
-  q('[data-stat-select="rice"]').dispatchEvent(new window.KeyboardEvent('keydown',{key:'Home',bubbles:true}));assert.equal(q('[data-stat-panel="corn"]').hidden,false);assert.equal(q('[data-livestock-stat-panel="beef"]').hidden,false);
+  q('a[href="#livestock-beef"]').click();assert.equal(q('[data-stat-panel="rice"]').hidden,true);
+  q('[data-crop-select="corn"]').click();assert.equal(q('[data-stat-panel="corn"]').hidden,false);assert.equal(q('[data-livestock-stat-panel="beef"]').hidden,true);
+  q('a[href="#livestock-beef"]').click();
   q('[data-relation-select="corn-soy-hogs"]').click();assert.equal(q('[data-livestock-stat-panel="beef"]').hidden,false);
   for(const field of ['natural','industry','agriculture'])q('[data-field="'+field+'"]').click();
   const url=new URL(window.location.href);assert.equal(url.searchParams.get('milkBasis'),'skim');assert.equal(url.searchParams.get('livestockStats'),'beef');assert.equal(url.searchParams.get('stats'),'corn');
@@ -108,17 +107,17 @@ test('作物・畜産の詳細は独立し、20回の切替と乳換算で地図
 test('WebGL失敗後も旧アンカー・query競合・履歴・凡例リンクを復元',async()=>{
  const {window,q}=await setup('?stats=rice&livestockStats=hogs&milkBasis=skim#livestock-dairy',true);
  try{
-  assert.equal(q('[data-livestock-stat-panel="dairy"]').hidden,false);assert.equal(q('[data-stat-panel="rice"]').hidden,false);
-  q('[data-livestock-stat-select="layers"]').click();assert.equal(new URL(window.location.href).hash,'#livestock-layers');
+  assert.equal(q('[data-livestock-stat-panel="dairy"]').hidden,false);assert.equal(q('[data-stat-panel="rice"]').hidden,true);
+  q('a[href="#livestock-layers"]').click();assert.equal(new URL(window.location.href).searchParams.get('agriReading'),'product:layers');
   for(const id of ['beef','dairy','hogs','broilers','layers']){
    window.history.pushState({},'', '?stats=wheat&livestockStats=beef#livestock-'+id);window.dispatchEvent(new window.PopStateEvent('popstate'));
-   assert.equal(q('[data-livestock-stat-panel="'+id+'"]').hidden,false);assert.equal(q('[data-stat-panel="wheat"]').hidden,false);
+   assert.equal(q('[data-livestock-stat-panel="'+id+'"]').hidden,false);assert.equal(q('[data-stat-panel="wheat"]').hidden,true);
   }
   for(const id of ['corn','soybean','wheat','cotton','rice']){
    window.history.pushState({},'', '?stats=wheat&livestockStats=layers#crop-'+id);window.dispatchEvent(new window.HashChangeEvent('hashchange'));
-   assert.equal(q('[data-stat-panel="'+id+'"]').hidden,false);assert.equal(q('[data-livestock-stat-panel="layers"]').hidden,false);
+   assert.equal(q('[data-stat-panel="'+id+'"]').hidden,false);assert.equal(q('[data-livestock-stat-panel="layers"]').hidden,true);
   }
-  q('a[href="#livestock-hogs"]').click();assert.equal(q('[data-livestock-stat-panel="hogs"]').hidden,false);assert.equal(window.document.activeElement.id,'livestock-hogs');
+  const link=q('a[href="#livestock-hogs"]');link.focus();link.click();assert.equal(q('[data-livestock-stat-panel="hogs"]').hidden,false);assert.equal(window.document.activeElement,link);
   assert.equal(new URL(window.location.href).searchParams.get('livestockStats'),'hogs');
  }finally{await window.happyDOM.close();}
 });
@@ -133,4 +132,23 @@ test('JavaScriptなしでも10詳説・全統計・乳2換算が読め、ARIA ID
   for(const t of d.querySelectorAll('[data-detail-group] [role="tab"]'))assert.ok(d.getElementById(t.getAttribute('aria-controls')));
   assert.match(d.querySelector('#livestock-layers').textContent,/ふ化用/);assert.match(d.querySelector('#livestock-dairy').textContent,/乳製品別の輸出額/);
  }finally{await w.happyDOM.close();}
+});
+
+test('初期概説・11品目・関係から戻る・履歴復元・未収録統計を一貫して扱う',async()=>{
+ const {window,q,root}=await setup();
+ try{
+  assert.equal(q('[data-agri-overview]').hidden,false);assert.equal(q('[data-agri-statistics]').hidden,true);
+  q('[data-relation-select="corn-soy-hogs"]').click();assert.equal(q('[data-agri-statistics]').hidden,true);
+  const saved=window.location.href;window.history.replaceState({},'',saved);window.dispatchEvent(new window.PopStateEvent('popstate'));
+  assert.equal(q('[data-agri-statistics]').hidden,true);
+  q('[data-relation-select="corn-soy-hogs"]').click();assert.equal(q('[data-agri-overview]').hidden,false);
+  for(const id of ['corn','soybean','wheat','cotton','rice','specialty','beef','dairy','hogs','broilers','layers']){
+   q(`[data-crop-key] a[href="#${['beef','dairy','hogs','broilers','layers'].includes(id)?'livestock':'crop'}-${id}"]`).click();
+   assert.equal(root.dataset.agriReading,'product');assert.equal(q('[data-agri-statistics]').hidden,id==='specialty');
+   assert.equal(root.querySelectorAll('[data-agri-reading-content] > :not([hidden])').length,1);
+   const length=window.history.length;q('[data-relation-select="plains-wheat-cattle"]').click();assert.equal(window.history.length,length+1);
+   q('[data-relation-select="plains-wheat-cattle"]').click();assert.equal(new URL(window.location.href).searchParams.get('agriProduct'),id);
+  }
+  q('[data-agri-overview-button]').click();assert.equal(q('[data-agri-statistics]').hidden,true);
+ }finally{await window.happyDOM.close();}
 });

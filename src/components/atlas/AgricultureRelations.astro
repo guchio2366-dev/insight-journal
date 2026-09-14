@@ -3,8 +3,8 @@ import { agricultureRelations, relationCoverage, relationCheckedAt } from '../..
 ---
 <section class="agriculture-relations" aria-labelledby="agriculture-relations-title" data-agriculture-relations>
   <h2 id="agriculture-relations-title">分布のつながりを読む</h2>
+  <nav class="agri-relation-picker" aria-label="分布のつながり">{agricultureRelations.map(relation=><a href={`#relation-${relation.id}`} data-relation-select={relation.id} aria-pressed="false">{relation.title}<span aria-hidden="true"> →</span></a>)}</nav>
   {agricultureRelations.map(relation=><article class="agriculture-relation" id={`relation-${relation.id}`} data-relation-item={relation.id}>
-    <button type="button" class="relation-compare" data-relation-select={relation.id} aria-pressed="false" aria-label={`${relation.title}を地図で比較`}>比較</button>
     <details data-relation-details>
       <summary><span class="relation-title">{relation.title}</span><span class="relation-takeaway">{relation.takeaway}</span></summary>
       <p>{relation.body}</p><p class="relation-caveat">{relation.caveat}</p>

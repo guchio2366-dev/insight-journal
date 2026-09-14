@@ -12,6 +12,7 @@ import { agricultureRelations } from '../../data/atlas/agriculture-relations';
 import NationalAgricultureSummary from './NationalAgricultureSummary.astro';
 import LivestockReading from './LivestockReading.astro';
 import CropStatistics from './CropStatistics.astro';
+import ConditionText from './ConditionText.astro';
 import NatureViewNavigation from './NatureViewNavigation.astro';
 import ClimateOverview from './ClimateOverview.astro';
 import NaturalEnvironmentSummary from './NaturalEnvironmentSummary.astro';
@@ -86,9 +87,9 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
           </div>
         </div>
         <div class="atlas-key" data-crop-key hidden={initialField!=='agriculture'} aria-label="栽培域の凡例">
-          {cropExplanations.map(c=><a href={`#crop-${c.id}`} style={`--crop-color:${c.color}`} data-crop-select={c.id}><i aria-hidden="true"></i>{c.name}</a>)}
+          <span class="agri-picker-group" id="agri-crop-picker"><strong>作物</strong>{cropExplanations.map(c=><a href={`#crop-${c.id}`} style={`--crop-color:${c.color}`} data-crop-select={c.id}><i aria-hidden="true"></i>{c.name}</a>)}</span>
           <span class="atlas-overlap-key"><i aria-hidden="true"></i>重なり</span>
-          <span class="atlas-livestock-key" data-livestock-key>{livestockKinds.map(k=><a href={`#livestock-${k.id}`} style={`--livestock-color:${k.color}`}><i aria-hidden="true">{k.symbol}</i>{k.label}</a>)}</span>
+          <span class="atlas-livestock-key agri-picker-group" data-livestock-key id="agri-livestock-picker"><strong>畜産</strong>{livestockKinds.map(k=><a href={`#livestock-${k.id}`} style={`--livestock-color:${k.color}`}><i aria-hidden="true">{k.symbol}</i>{k.label}</a>)}</span>
         </div>
         <p class="atlas-context-key" data-land-key hidden={initialField!=='overview'}>地形陰影・河川・湖・州境。自然環境では気候・水・地形・標高を切り替えられます。</p>
         <div class="atlas-nature-key" data-nature-key hidden={initialField!=='natural'}>
@@ -116,7 +117,17 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
         </div>
       </div>
 
-      <div data-field-national="agriculture" hidden={initialField!=='agriculture'}><NationalAgricultureSummary /></div>
+      <div data-field-national="agriculture" hidden={initialField!=='agriculture'}><div data-agri-overview><NationalAgricultureSummary /></div>
+        <section class="agri-reading-panel" data-agri-reading-panel hidden aria-labelledby="agri-reading-heading">
+          <header><button type="button" data-agri-overview-button>← 米国の農業</button><h2 id="agri-reading-heading" tabindex="-1"></h2></header>
+          <div class="agri-reading-body" data-agri-reading-body>
+            <div data-agri-reading-content></div>
+            <details data-agri-region hidden><summary></summary><p></p></details>
+            <div data-agri-candidates hidden></div>
+            <div class="atlas-relation-warning" data-agri-layer-warning hidden><p></p><button type="button" data-agri-enable-layers>必要な層を表示して比較</button></div>
+          </div>
+        </section>
+      </div>
       <div data-field-national="natural" hidden={initialField!=='natural'}><NaturalEnvironmentSummary {initialMode} /></div>
       <div data-field-national="population" hidden={initialField!=='population'}><PopulationNationalSummary /></div>
       <div data-field-national="industry" hidden={initialField!=='industry'}><IndustryNationalSummary /><IndustrySelectedExplanation /></div>
@@ -126,6 +137,9 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
       </aside>
       <ClimateOverview visible={initialField==='natural'&&initialMode==='climate'} />
     </div>
+    <section data-field-content="agriculture" hidden={initialField!=='agriculture'}>
+      <div class="agri-statistics" data-agri-statistics hidden><h2 data-agri-statistics-heading></h2><div data-agri-statistics-panels></div></div>
+    </section>
   </section>
 
   <div class="atlas-reading" id="atlas-details">
@@ -150,6 +164,8 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
       <p class="industry-return" data-industry-return hidden><a href={withBase('/atlas/north-america/industry/')} data-industry-return-link>主要産業の選択へ戻る</a></p>
       <CropStatistics />
       <LivestockReading />
+      {cropExplanations.filter(c=>c.id==='specialty').map(c=><article id="crop-specialty" data-agri-extra-copy="specialty" class="atlas-crop-copy"><h3>{c.name}</h3>{c.paragraphs.map(paragraph=><ConditionText {paragraph} />)}<p><strong>主な用途</strong> {c.uses}</p><p>{c.sources.map(id=><a href={`#${id}`}>{sources.find(source=>source.id===id)?.publisher} </a>)}</p><p>複数品目のため、この区分の共通統計は未収録</p></article>)}
+      <article data-agri-extra-copy="corn-soybean" class="atlas-crop-copy"><h3>とうもろこし・大豆の重なり</h3><p>近い地域で両方の作物がまとまります。この図だけでは、同じ畑の輪作や同時栽培は判定できません。</p><p><a href="#crop-corn">とうもろこし</a> ／ <a href="#crop-soybean">大豆</a></p></article>
       <details class="atlas-context-reading"><summary>北米農業の背景をさらに読む</summary>
         {reportSections.filter(s=>s.id!=='crop-conditions').map(s=><section id={s.id}><h3>{s.title}</h3>{s.paragraphs.map(p=><p>{p}</p>)}</section>)}
       </details>
