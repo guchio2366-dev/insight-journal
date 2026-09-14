@@ -94,3 +94,54 @@
 
 .industry-economic-leader{position:absolute;left:18px;top:22px;height:1px;background:#355f75;transform-origin:0 50%;pointer-events:none}
 .industry-marker.is-economic span{pointer-events:auto}
+
+/* v1.3: the selected product is read beside the map; national comparisons share rows. */
+.industry-selected-reading{scroll-margin-top:12px}
+.industry-selected-reading header{margin:0 0 14px}
+.industry-selected-reading header button{margin-top:8px;min-height:44px;padding:6px 10px;border:1px solid #bcc9ba;border-radius:4px;background:#edf1e6;color:#294c4d;font:700 12px var(--sans);cursor:pointer}
+.industry-selected-reading-body section+section{margin-top:18px}
+.industry-selected-reading-body h3{margin:0 0 6px;font:700 15px/1.4 var(--sans)}
+.industry-selected-reading-body p{margin:0;font-size:14px;line-height:1.75}
+.industry-reading-stat-link{display:flex;align-items:center;min-height:44px;margin-top:12px;font-size:12px;color:#3f6265}
+.industry-paired-chart figcaption{flex-wrap:wrap;gap:4px;margin-bottom:8px}
+.industry-paired-heading,.industry-paired-row{display:grid;grid-template-columns:minmax(0,1.65fr) repeat(2,minmax(50px,1fr));column-gap:8px;align-items:center}
+.industry-paired-heading{font-size:11px;color:#53685e;text-align:right;margin-bottom:2px}.industry-paired-heading>span:first-child{text-align:left}
+.industry-national .industry-paired-bars{gap:0}
+.industry-paired-row{padding:5px 0;min-height:30px;border-bottom:1px solid #e5e8dd}
+.industry-paired-name{font-size:12px;line-height:1.35;overflow-wrap:anywhere}
+.industry-paired-cell{display:grid;gap:3px;min-width:0;text-align:right;line-height:1}
+.industry-paired-cell strong{font-size:12px;font-variant-numeric:tabular-nums}.industry-paired-cell small{font-size:10px;font-weight:400;margin-left:2px}
+.industry-paired-track{display:block;height:4px;background:#e2e7da;border-right:1px solid #c7cfc1}
+.industry-paired-track b{display:block;height:100%;background:var(--industry-color)}
+.industry-paired-cell[data-industry-metric=employment] .industry-paired-track b{opacity:.7}
+.industry-paired-bars .industry-service-heading{margin:8px 0 1px;font-size:11px}
+.industry-paired-bars .industry-service-detail .industry-paired-name{padding-left:6px}
+.industry-paired-chart .industry-number-table{font-size:12px}.industry-paired-chart .industry-number-table summary{min-height:44px}
+.industry-paired-chart table{table-layout:fixed;overflow-wrap:anywhere}.industry-paired-chart caption{font-size:11px;text-align:left}
+.industry-detail-statistics h3{font:700 16px/1.4 var(--sans);margin:0 0 5px}
+.industry-detail-statistics .industry-series-latest,.industry-detail-statistics .industry-series-scope,.industry-detail-statistics .industry-distribution figcaption p{margin:4px 0}
+.industry-detail-statistics .industry-stat-source{margin:7px 0 0}
+.industry-detail-statistics .industry-stat-values summary{min-height:44px}
+.industry-trend-grid,.industry-comparison-grid{grid-template-columns:minmax(0,1fr)}
+.industry-chart-count-3 .industry-series svg text{font-size:20px}
+@media(min-width:960px) and (min-height:600px){
+ .atlas-explorer[data-field=industry] .atlas-primary-grid{grid-template-columns:minmax(0,2.05fr) minmax(318px,.95fr);gap:12px}
+ .atlas-explorer[data-field=industry] [data-field-national=industry]{position:relative;min-height:0}
+ .atlas-explorer[data-field=industry] .atlas-primary-grid .industry-national{height:auto}
+ .industry-selected-reading{position:absolute;inset:0;min-height:0;overflow:hidden}
+ .industry-selected-reading>article:not([hidden]){display:flex;flex-direction:column;height:100%;min-height:0}
+ .industry-selected-reading header{flex:none}
+ .industry-selected-reading-body{overflow-y:auto;min-height:0;overscroll-behavior:contain}
+ .industry-chart-count-1{grid-template-columns:minmax(0,360px)}
+ .industry-chart-count-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .industry-chart-count-3{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+ .industry-chart-count-3 .industry-series>figcaption{min-height:96px}
+ .industry-chart-count-3 .industry-distribution>figcaption{min-height:80px}
+ .industry-chart-count-3 .industry-donut-body{grid-template-columns:132px minmax(0,1fr);gap:8px}
+ .industry-chart-count-3 .industry-donut-body>svg{width:132px;height:132px}
+ .industry-chart-count-3 .industry-donut-caption{font-size:14px}
+}
+@media(max-width:959px),(max-height:599px){
+ .atlas-explorer[data-field=industry] .atlas-primary-grid{grid-template-columns:minmax(0,1fr)}
+ .atlas-explorer[data-field=industry] .atlas-primary-grid>[data-field-national=industry],.atlas-explorer[data-field=industry] .atlas-primary-grid .atlas-national{height:auto}
+}
