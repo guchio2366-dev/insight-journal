@@ -1,4 +1,4 @@
-export type ExplorerField = 'overview' | 'agriculture' | 'natural' | 'industry';
+export type ExplorerField = 'overview' | 'agriculture' | 'natural' | 'industry' | 'population';
 
 export type ConditionRun = {text:string;emphasisKind?:never;pairId?:never}|{text:string;emphasisKind:'temperature'|'water'|'land';pairId:string};
 export type CropParagraph = string|{runs:ConditionRun[]};
