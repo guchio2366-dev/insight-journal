@@ -1,10 +1,10 @@
 ---
 import entries from '../../data/atlas/climate-code-labels.json';
 import { climateCities } from '../../data/atlas/natural-environment';
-import { projectNatureFallback } from '../../lib/atlas-nature-labels';
+import { projectNatureFallback,leaderEnd } from '../../lib/atlas-nature-labels';
 import { layoutClimateCodes } from '../../lib/atlas-climate-code-labels';
 const bounds={left:0,top:0,right:720,bottom:436.4};
 const points=climateCities.map(city=>projectNatureFallback([city.longitude,city.latitude],bounds));
 const labels=layoutClimateCodes(entries.filter(e=>e.minZoom<=3).map(e=>({id:e.id,code:e.code,width:30,height:18,anchors:[e.coordinate,...e.alternatives].map(p=>projectNatureFallback(p,bounds))})),bounds,points.map(p=>({left:p.x-7,right:p.x+7,top:p.y-7,bottom:p.y+7})));
 ---
-<noscript><svg class="atlas-static-climate-codes" viewBox="0 0 720 436.4" role="img" aria-label="主な気候区分のコード">{labels.map(label=><text x={label.anchor.x} y={label.anchor.y} dominant-baseline="central" text-anchor="middle">{entries.find(e=>e.id===label.id)!.code}</text>)}</svg></noscript>
+<noscript><svg class="atlas-static-climate-codes" viewBox="0 0 720 436.4" role="img" aria-label="主な気候区分のコード">{labels.map(label=><>{label.leader&&<line x1={label.anchor.x} y1={label.anchor.y} x2={leaderEnd(label.anchor,label).x} y2={leaderEnd(label.anchor,label).y} stroke="#425b60"/>}<text x={(label.left+label.right)/2} y={(label.top+label.bottom)/2} dominant-baseline="central" text-anchor="middle">{entries.find(e=>e.id===label.id)!.code}</text></>)}</svg></noscript>

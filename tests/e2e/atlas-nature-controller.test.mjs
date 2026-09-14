@@ -148,7 +148,7 @@ test('通常図・WebGL停止・初期代替図でコードは常時表示し、
   try{
    assert.equal(root.dataset.selectedCity,'los-angeles');
    const codeNodes=[...root.querySelectorAll('[data-climate-map-code]')];assert.ok(codeNodes.length>20&&codeNodes.length<=120);
-   assert.ok(codeNodes.some(n=>!n.hidden&&n.textContent==='Cfa'));
+   for(const code of ['Csa','Csb','BWh','BWk','BSk','Cfa','Dfa','Dfb','Am'])assert.ok(codeNodes.some(n=>!n.hidden&&n.textContent===code),'principal code visible: '+code);
    assert.ok(codeNodes.every(n=>n.tagName==='SPAN'&&n.getAttribute('aria-hidden')==='true'));
    const box=containedMapBox({left:0,top:0,right:788,bottom:460}),p=projectNatureFallback([-105,30],box);
    if(fallback)q('.atlas-fallback-map').dispatchEvent(new window.MouseEvent('click',{clientX:p.x,clientY:p.y,bubbles:true}));
