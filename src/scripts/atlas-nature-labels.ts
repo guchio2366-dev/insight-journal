@@ -54,10 +54,10 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
       node.hidden=false;
       return {id:entry.id,code:entry.code,width:node.offsetWidth||30,height:node.offsetHeight||18,anchors:[entry.coordinate,...entry.alternatives].map(p=>project?project(p as [number,number]):projectNatureFallback(p,bounds))};
     });
-    // Reserve one small in-class slot per principal code on the iPad map. City
-    // names can move around these slots, keeping both the names and the codes.
+    // Only narrow coastal classes need reserved space. Reserving broad inland
+    // classes too would needlessly push western city names away from their points.
     const points=inputs.map(({anchor})=>({left:anchor.x-6,right:anchor.x+6,top:anchor.y-6,bottom:anchor.y+6}));
-    const firstCodes=codeInputs.filter((item,index,all)=>all.findIndex(other=>other.code===item.code)===index);
+    const firstCodes=codeInputs.filter((item,index,all)=>['Csa','Csb','Am','Aw'].includes(item.code)&&all.findIndex(other=>other.code===item.code)===index);
     const reserved=bounds.right-bounds.left>=500?layoutClimateCodes(firstCodes,bounds,[...obstacles,...points]):[];
     const layoutBounds=callbacks.mode()==='water'?{left:0,top:0,right:frame.clientWidth,bottom:frame.clientHeight-40}:bounds;
     const placed=layoutNatureLabels(inputs,layoutBounds,[...obstacles,...reserved]);
