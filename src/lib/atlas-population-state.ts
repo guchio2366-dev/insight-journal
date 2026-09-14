@@ -1,4 +1,4 @@
-import {populationViews,ethnicities,religions,metros} from '../data/atlas/population';
+import {populationViews,ethnicities,religions,metros} from '../data/atlas/population.ts';
 export function readPopulationState(url:URL){
  const allowed=(key:string,items:readonly (readonly string[])[])=>items.find(x=>x[0]===url.searchParams.get(key))?.[0]??items[0][0];
  const geo=url.searchParams.get('popGeo')??'';

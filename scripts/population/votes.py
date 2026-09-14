@@ -19,9 +19,9 @@ assert missing=={'35011','35019','35021','35023'},missing
 towns={r.record['COUSUBFP']:(r.record['COUNTYFP'],r.record['NAME']) for r in shapes(RAW/'ct_towns.zip').iterShapeRecords()};seen=set()
 with zipfile.ZipFile(RAW/'ct24.zip') as z:
  for r in csv.DictReader(io.TextIOWrapper(z.open('ct24.csv'))):
-  if r['office']!='US PRESIDENT' or r['mode']!='TOTAL' or r['candidate'] not in candidates:continue
+  if r['office']!='US PRESIDENT' or r['mode']!='TOTAL':continue
   town=r['jurisdiction_fips'][-5:];region,name=towns[town];assert name.casefold()==r['jurisdiction_name'].casefold(),(name,r['jurisdiction_name']);seen.add(town)
-  county['09'+region][candidates[r['candidate']]]+=int(r['votes'])
+  county['09'+region][candidates.get(r['candidate'],'other')]+=int(r['votes'])
 assert len(seen)==169,len(seen)
 ct={k:sum(v[k] for f,v in county.items() if f.startswith('09')) for k in ['d','r','other']};assert ct=={'d':992053,'r':736918,'other':30039},ct
 rows=[]

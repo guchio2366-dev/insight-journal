@@ -11,7 +11,9 @@ suppressed=set('36103122406 36103122501 36103145601 36103145602 36103145603 3610
 def valid(g):return g if g.is_valid else shapely.make_valid(g)
 def rounded(g):
  def coords(v):return [round(x,6) for x in v] if isinstance(v[0],(int,float)) else [coords(x) for x in v]
- d=mapping(g);d['coordinates']=coords(d['coordinates']);return d if shape(d).is_valid else mapping(g)
+ d=mapping(g)
+ if 'geometries' in d:return {'type':'GeometryCollection','geometries':[rounded(x) for x in g.geoms if not x.is_empty]}
+ d['coordinates']=coords(d['coordinates']);return d if shape(d).is_valid else mapping(g)
 def feature(g,properties):return {'type':'Feature','properties':properties,'geometry':rounded(g)}
 urban=[(r.record['NAME20'],shape(r.shape.__geo_interface__)) for r in shapes(RAW/'urban.zip').iterShapeRecords()]
 for metro in ['35620','31080','19100']:

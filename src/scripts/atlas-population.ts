@@ -6,7 +6,7 @@ export function createPopulationController(root:HTMLElement,base:string,options:
  const el=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const loader=createPopulationLoader(base);let state=readPopulationState(new URL(location.href)),generation=0,appliedMap:any,countyData:any,data:any,rows:County[]=[],values=new Map<string,any>(),pickerKey='',selectedState='',datasetKey='',loadedGeometry:any;
  const fmt=(n:number|null|undefined,digits=0)=>n==null?'未取得・非公表':n.toLocaleString('ja-JP',{maximumFractionDigits:digits});
- function release(){if(appliedMap&&appliedMap===options.map()){for(const id of ['population-selected','population-outlines','population-lines','population-fill'])if(appliedMap.getLayer(id))appliedMap.removeLayer(id);for(const id of ['population-outlines','population'])if(appliedMap.getSource(id))appliedMap.removeSource(id);}appliedMap=undefined;loadedGeometry=undefined;}
+ function release(){if(appliedMap&&appliedMap===options.map()){for(const id of ['population-selected','population-city-outlines','population-outlines','population-lines','population-fill'])if(appliedMap.getLayer(id))appliedMap.removeLayer(id);for(const id of ['population-outlines','population'])if(appliedMap.getSource(id))appliedMap.removeSource(id);}appliedMap=undefined;loadedGeometry=undefined;}
  function value(row:County):number|null{
   if(state.view==='distribution')return density(row);
   if(state.view==='ethnicity'){const n=values.get(row.id)?.counts?.[ethnicities.findIndex(x=>x[0]===state.ethnicity)]?.[0];return n!=null&&row.population[0]?n/row.population[0]*100:null;}
@@ -51,23 +51,23 @@ export function createPopulationController(root:HTMLElement,base:string,options:
   root.querySelectorAll<HTMLButtonElement>('[data-pop-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.popView===state.view)));
   root.querySelectorAll<HTMLElement>('[data-pop-filter]').forEach(n=>n.hidden=n.dataset.popFilter!==state.view);
   el<HTMLSelectElement>('[data-pop-metro]').value=state.metro;el<HTMLSelectElement>('[data-pop-ethnicity]').value=state.ethnicity;el<HTMLSelectElement>('[data-pop-religion]').value=state.religion;
-  legend();fallback();el('[data-pop-status]').textContent='データを読み込んでいます…';el('[data-pop-retry]').hidden=true;
+  release();legend();fallback();el('[data-pop-selected-value]').textContent='データを読み込んでいます…';el('[data-pop-selected-note]').textContent='';el('[data-pop-bars]').replaceChildren();el('[data-pop-status]').textContent='データを読み込んでいます…';el('[data-pop-retry]').hidden=true;
   const current=()=>ticket===generation&&options.active()&&root.isConnected;
   try{
    countyData=await loader.get('counties');if(!current())return;
    const metro=state.view==='distribution'&&state.metro!=='national';datasetKey=state.view==='religion'?'states':metro?`metro-${state.metro}`:'counties';
    data=state.view==='ethnicity'?await loader.get('ethnicity'):state.view==='vote'?await loader.get('votes'):metro?await loader.get(datasetKey):countyData;if(!current())return;
    rows=state.view==='religion'?Object.entries(countyData.states).map(([id,name])=>({id:'state:'+id,name:String(name),state:id,population:[null,null],area:0})):data===countyData||['ethnicity','vote'].includes(state.view)?countyData.rows:data.rows;
-   values=new Map((data.rows??[]).map((r:any)=>[r.id,r]));if(state.geo&&!rows.some(r=>r.id===state.geo))state.geo='';national();picker();selected();
+   values=new Map((data.rows??[]).map((r:any)=>[r.id,r]));if(state.geo&&!rows.some(r=>r.id===state.geo))state.geo='';el('[data-pop-selected-title]').textContent='地域を選んで比較';national();picker();selected();
    const unit=state.view==='distribution'?'人口密度（人／km²）':state.view==='vote'?'共和党−民主党（ポイント）':state.view==='religion'?religions.find(x=>x[0]===state.religion)![1]+'：成人に占める割合（%）':ethnicities.find(x=>x[0]===state.ethnicity)![1]+'：全住民に占める割合（%）';
    el('[data-layer-caption]').textContent=unit;el('[data-pop-map-note]').textContent=unit+(metro?'。実線：主要都市境界。破線：2020年市街地境界。市街地の外側全域を郊外とは扱いません。':'。灰色は未取得・非公表。面積の大きさは人数・票数の大きさを意味しません。');
    el('[data-pop-status]').textContent=state.view==='religion'?'宗教の州別原表は未取得です。全国で確認できた値のみ掲載しています。':`${rows.length.toLocaleString()} 地域の数値を表示できます。${metro?'NYの一部非公表トラクトは灰色です。':''}`;
    const map=options.map();if(!map){fallback();return;}
-   const geometry=await loader.get(datasetKey+'.geo');if(!current())return;
+   const geometry=await loader.get(datasetKey+'.geo');if(!current()||options.map()!==map)return;
    release();loadedGeometry=geometry;const byId=new Map(rows.map(r=>[r.id,r]));
    const features=geometry.features.map((f:any)=>({...f,properties:{...f.properties,color:byId.has(f.properties.id)?populationColor(value(byId.get(f.properties.id)!),state.view):missingColor}}));
    map.addSource('population',{type:'geojson',data:{type:'FeatureCollection',features}});map.addLayer({id:'population-fill',type:'fill',source:'population',paint:{'fill-color':['get','color'],'fill-opacity':.95}},'state-lines');map.addLayer({id:'population-lines',type:'line',source:'population',paint:{'line-color':'#637c7c','line-width':.3,'line-opacity':.4}},'state-lines');map.addLayer({id:'population-selected',type:'line',source:'population',filter:['==',['get','id'],state.geo],paint:{'line-color':'#162e40','line-width':2}});appliedMap=map;
-   if(metro){const outlines=await loader.get(datasetKey+'.outlines.geo');if(!current())return;map.addSource('population-outlines',{type:'geojson',data:outlines});map.addLayer({id:'population-outlines',type:'line',source:'population-outlines',paint:{'line-color':['match',['get','kind'],'city','#7d3f70','#344955'],'line-width':['match',['get','kind'],'city',1.6,.8],'line-dasharray':['match',['get','kind'],'city',['literal',[1,0]],['literal',[3,2]]]}});}
+   if(metro){const outlines=await loader.get(datasetKey+'.outlines.geo');if(!current()||options.map()!==map)return;map.addSource('population-outlines',{type:'geojson',data:outlines});map.addLayer({id:'population-outlines',type:'line',source:'population-outlines',filter:['==',['get','kind'],'urban'],paint:{'line-color':'#344955','line-width':.8,'line-dasharray':[3,2]}});map.addLayer({id:'population-city-outlines',type:'line',source:'population-outlines',filter:['==',['get','kind'],'city'],paint:{'line-color':'#7d3f70','line-width':1.6}});}
   }catch(error){if(!current())return;release();el('[data-pop-status]').textContent='データを読み込めませんでした。再試行できます。';el('[data-pop-retry]').hidden=false;console.error('Population data',error);}
  }
  root.querySelectorAll<HTMLButtonElement>('[data-pop-view]').forEach(b=>b.addEventListener('click',()=>{state.view=b.dataset.popView!;state.geo='';void render();options.changed(true);}));

@@ -1,4 +1,4 @@
-import {densityColors,shareColors,voteColors,missingColor} from '../data/atlas/population';
+import {densityColors,shareColors,voteColors,missingColor} from '../data/atlas/population.ts';
 export type County={id:string;name:string;state:string;population:[number|null,number|null];area:number;class?:number};
 export function populationColor(value:number|null,kind:string){
  if(value===null||!Number.isFinite(value)||kind!=='vote'&&value<0)return missingColor;

@@ -6,3 +6,9 @@ dist/
 *.log
 __pycache__/
 *.pyc
+
+# Reproducible population JSON fallback files; gzip sources are versioned.
+/public/assets/atlas/population/v1/*.json
+!/public/assets/atlas/population/v1/counties.geo.json
+/public/assets/atlas/population/v1/counties.geo.json.gz
+/scripts/population/__pycache__/
