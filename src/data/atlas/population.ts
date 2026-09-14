@@ -1,0 +1,9 @@
+export const populationViews=[['distribution','人口分布'],['ethnicity','人種・民族'],['religion','宗教'],['vote','投票傾向']] as const;
+export const ethnicities=[['white','白人（非ヒスパニック）'],['black','黒人（非ヒスパニック）'],['hispanic','ヒスパニック／ラティーノ'],['asian','アジア系（非ヒスパニック）'],['aian','先住民（非ヒスパニック）'],['nhpi','太平洋諸島系（非ヒスパニック）'],['multiple','複数人種（非ヒスパニック）'],['other','その他の人種（非ヒスパニック）']] as const;
+export const religions=[['protestant','プロテスタント'],['catholic','カトリック'],['lds','末日聖徒'],['otherChristian','その他のキリスト教'],['jewish','ユダヤ教'],['muslim','イスラム教'],['buddhist','仏教'],['hindu','ヒンドゥー教'],['other','その他の宗教'],['unaffiliated','無宗教']] as const;
+export const metros=[['national','全国'],['35620','ニューヨーク都市圏'],['31080','ロサンゼルス都市圏'],['19100','ダラス・フォートワース都市圏']] as const;
+export const populationClasses=['大都市圏・中心郡','大都市圏・周辺郡','中小都市圏の郡','非都市圏の郡'];
+export const densityColors=['#f5f3e9','#edf3dd','#d1e4c0','#a4ccb3','#68aa9f','#357d88','#174e6a'];
+export const shareColors=['#f5f3e9','#edf3dd','#d6e7c5','#b4d8bb','#87bcb0','#599d9f','#337986','#164d65'];
+export const voteColors=['#275d9f','#8ab6d5','#ebe7dd','#dfa197','#a6373e'];
+export const missingColor='#c8ccd0';

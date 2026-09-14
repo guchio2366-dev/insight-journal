@@ -34,6 +34,7 @@ export const northAmericaFields: AtlasFieldDefinition[] = [
     href: "/atlas/north-america/industry/",
     status: "ready"
   }
+  ,{id:"population",label:"人口",shortLabel:"Population",description:"人口分布・人種民族・宗教・投票傾向を読み比べる",href:"/atlas/north-america/population/",status:"ready"}
 ];
 
 export const northAmericaRegion = {

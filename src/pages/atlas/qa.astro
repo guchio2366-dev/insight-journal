@@ -12,7 +12,7 @@ import { withBase } from '../../lib/urls';
  const result=document.querySelector('#result')!;
  const reviewParams=new URL(location.href).searchParams;
  const selectedField=reviewParams.get('field');
- if(selectedField&&['agriculture','natural','industry','overview'].includes(selectedField)){frame.src=reviewUrl+'?'+reviewParams.toString();}
+ if(selectedField&&['agriculture','natural','industry','population','overview'].includes(selectedField)){frame.src=reviewUrl+'?'+reviewParams.toString();}
  const currentReview=frame.src;
  selector.addEventListener('change',()=>{const [w,h]=selector.value.split(',');frame.width=w;frame.height=h;result.textContent='';});
  document.querySelector('#reload')!.addEventListener('click',()=>{frame.src=currentReview;result.textContent='';});

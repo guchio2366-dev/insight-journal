@@ -5,7 +5,7 @@ import { readAgricultureDetailState,writeAgricultureDetailState,type Agriculture
 
 export const agricultureRelationIds=['corn-soy-hogs','plains-wheat-cattle','california-rice-water'] as const;
 
-export const readyFields = ['overview', 'agriculture', 'natural', 'industry'] as const;
+export const readyFields = ['overview', 'agriculture', 'natural', 'industry', 'population'] as const;
 export const natureModes = ['climate', 'water', 'landform', 'contour'] as const;
 export const climateCityIds = ['seattle','san-francisco','los-angeles','las-vegas','denver','dallas','chicago','detroit','new-orleans','miami','washington-dc','new-york'] as const;
 export const mapCropIds = ['corn', 'soybean', 'wheat', 'cotton', 'rice', 'specialty', 'corn-soybean'] as const;
@@ -32,7 +32,7 @@ export function readAtlasState(url: URL, defaultField: MapField = 'overview') {
     if (value===null || value.trim()==='') return null;
     const n=Number(value); return Number.isFinite(n)&&n>=min&&n<=max?n:null;
   };
-  const lng=read('lng',-137,-56),lat=read('lat',16,58),zoom=read('z',1,7);
+  const lng=read('lng',-137,-56),lat=read('lat',16,58),zoom=read('z',1,10);
   const camera=lng!==null&&lat!==null&&zoom!==null?{lng,lat,zoom}:null;
   const explicitView=allowed(url.searchParams.get('view'),['fit','custom'] as const);
   const rawLayers=url.searchParams.get('agriLayers');

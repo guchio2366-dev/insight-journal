@@ -1,0 +1,9 @@
+---
+const {active=false}=Astro.props;
+---
+<section class="population-map-reading" data-population-reading hidden={!active} aria-label="地図の凡例と選択地域">
+ <div class="population-legend" data-pop-legend></div>
+ <p data-pop-map-note>人口密度（人／km²）。面積の大きさは人口の多さを意味しません。</p>
+ <div class="population-picker"><label>州<select data-pop-state><option value="">州を選択</option></select></label><label>地域<select data-pop-geo><option value="">地域を選択</option></select></label></div>
+ <article class="population-selected" aria-live="polite"><h2 data-pop-selected-title>地域を選んで比較</h2><p data-pop-selected-value>地図をクリックするか、上の一覧から選べます。</p><p data-pop-selected-note></p></article>
+</section>

@@ -15,6 +15,10 @@ import CropStatistics from './CropStatistics.astro';
 import NatureViewNavigation from './NatureViewNavigation.astro';
 import ClimateOverview from './ClimateOverview.astro';
 import NaturalEnvironmentSummary from './NaturalEnvironmentSummary.astro';
+import PopulationNavigation from './PopulationNavigation.astro';
+import PopulationMapReading from './PopulationMapReading.astro';
+import PopulationNationalSummary from './PopulationNationalSummary.astro';
+import PopulationReading from './PopulationReading.astro';
 import IndustryNavigation from './IndustryNavigation.astro';
 import IndustryNationalSummary from './IndustryNationalSummary.astro';
 import IndustrySelectedExplanation from './IndustrySelectedExplanation.astro';
@@ -28,12 +32,13 @@ interface Props { initialField?: ExplorerField }
 const { initialField='overview' } = Astro.props;
 const assetBase = withBase('/assets/atlas/v3/');
 const livestockAssetBase=withBase('/assets/atlas/livestock/v2/');
+const populationAssetBase=withBase('/assets/atlas/population/v1/');
 const natureAssetBase = withBase('/assets/atlas/nature-v1/');
 const reviewMode = Astro.url.pathname.includes('/review/');
 const requestedMode=Astro.url.pathname.includes('/land/')?'landform':'climate';
 const initialMode=(natureModes.some(mode=>mode.id===requestedMode)?requestedMode:'climate') as NatureMode;
-const fallbackName=initialField==='agriculture'?'agriculture-fallback.webp':initialField==='natural'?`${initialMode}-fallback.webp`:'land-fallback.webp';
-const payload = JSON.stringify({ initialField, initialMode, agricultureRelations, assetBase, natureAssetBase, livestockAssetBase, livestockKinds, livestockRegions, industryRegions, industrySources, reviewMode, base: withBase('/atlas/north-america/'), crops:cropExplanations, regionalInsights, statisticCropIds, geographicLabels, climateCities, climateLegend, natureModes, natureLabels, natureFeatureCopy }).replace(/</g,'\\u003c');
+const fallbackName=initialField==='population'?'density.webp':initialField==='agriculture'?'agriculture-fallback.webp':initialField==='natural'?`${initialMode}-fallback.webp`:'land-fallback.webp';
+const payload = JSON.stringify({ initialField, initialMode, populationAssetBase, agricultureRelations, assetBase, natureAssetBase, livestockAssetBase, livestockKinds, livestockRegions, industryRegions, industrySources, reviewMode, base: withBase('/atlas/north-america/'), crops:cropExplanations, regionalInsights, statisticCropIds, geographicLabels, climateCities, climateLegend, natureModes, natureLabels, natureFeatureCopy }).replace(/</g,'\\u003c');
 ---
 <article class="atlas-explorer" data-atlas-explorer data-field={initialField} data-nature-mode={initialMode} data-pagefind-body={reviewMode?undefined:true} data-pagefind-ignore={reviewMode?'all':undefined}>
   <section class="atlas-workspace" aria-label="北米の分野別地図">
@@ -41,7 +46,7 @@ const payload = JSON.stringify({ initialField, initialMode, agricultureRelations
       <nav aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a><span aria-hidden="true"> / </span><a href={withBase('/atlas/north-america/')}>北米地図</a></nav>
       <span>米国本土</span>
     </div>
-    <h1 class="visually-hidden">北米地図から読む、農業・自然環境・主要産業</h1>
+    <h1 class="visually-hidden">北米地図から読む、農業・自然環境・主要産業・人口</h1>
     <nav class="atlas-tabs" aria-label="地図の分野">
       {northAmericaFields.map(field => field.status==='ready' ?
         <a href={withBase(field.href)} data-field={field.id} aria-current={initialField===field.id?'page':undefined}>{field.label}</a> :
@@ -51,14 +56,15 @@ const payload = JSON.stringify({ initialField, initialMode, agricultureRelations
     <NatureViewNavigation {initialMode} active={initialField==='natural'} />
     {initialField==='industry'&&<noscript><style is:global>.atlas-explorer [data-industry-detail][hidden]{display:block!important}.atlas-explorer [data-industry-detail]{margin-bottom:30px}.industry-controls,.industry-key>details{display:none!important}#industry-description[hidden],[data-industry-description-panel][hidden]{display:block!important}#industry-description{position:static!important;height:auto!important}</style></noscript>}
     <IndustryNavigation active={initialField==='industry'} />
+    <PopulationNavigation active={initialField==='population'} />
 
     <div class="atlas-primary-grid" id="nature-map-panel" data-map-panel role={initialField==='natural'?'tabpanel':'group'} aria-labelledby={initialField==='natural'?`nature-tab-${initialMode}`:undefined}>
       <div class="atlas-map-column">
         <div class="atlas-map-frame" data-map-frame>
           <div class="atlas-map-surface" data-map-surface tabindex="0" aria-describedby="atlas-map-description" aria-label="拡大縮小できる米国本土地図"></div>
           <div class="atlas-fallback" data-fallback>
-            <div class="atlas-fallback-map"><img src={initialField==='natural'?`${natureAssetBase}${fallbackName}`:`${assetBase}${fallbackName}`} width="1800" height="1084" alt={initialField==='agriculture'?'米国本土の地形・河川と、州境をまたぐ主要作物の栽培分布。下の作物別解説でも内容を読めます。':initialField==='natural'?'米国本土の自然環境。気候区分、水資源、地形、標高を切り替えて読めます。':'米国本土の地形と水系。西部に山地、中央に平原、東部にアパラチア山脈が続きます。'} data-fallback-image /><img class="atlas-fallback-livestock" src={`${livestockAssetBase}agriculture-livestock-fallback.svg`} width="1800" height="1084" alt="主要な畜産集積地域の代表点。" data-fallback-livestock hidden={initialField!=='agriculture'} />{initialField==='industry'&&<IndustryNoScript map />}<AgricultureRelationFallback /></div>
-            <p><span data-fallback-status>代替図を表示しています。</span> <a href={`${initialField==='natural'?natureAssetBase:assetBase}${fallbackName}`} data-fallback-full target="_blank" rel="noopener">図を拡大</a> <button type="button" data-retry-nature hidden>再試行</button></p>
+            <div class="atlas-fallback-map"><img src={initialField==='population'?`${populationAssetBase}${fallbackName}`:initialField==='natural'?`${natureAssetBase}${fallbackName}`:`${assetBase}${fallbackName}`} width="1800" height="1084" alt={initialField==='population'?'米国本土の人口密度（ACS 2020–2024）。下の説明で表示方法を確認できます。':initialField==='agriculture'?'米国本土の地形・河川と、州境をまたぐ主要作物の栽培分布。下の作物別解説でも内容を読めます。':initialField==='natural'?'米国本土の自然環境。気候区分、水資源、地形、標高を切り替えて読めます。':'米国本土の地形と水系。西部に山地、中央に平原、東部にアパラチア山脈が続きます。'} data-fallback-image /><img class="atlas-fallback-livestock" src={`${livestockAssetBase}agriculture-livestock-fallback.svg`} width="1800" height="1084" alt="主要な畜産集積地域の代表点。" data-fallback-livestock hidden={initialField!=='agriculture'} />{initialField==='industry'&&<IndustryNoScript map />}<AgricultureRelationFallback /></div>
+            <p><span data-fallback-status>代替図を表示しています。</span> <a href={`${initialField==='population'?populationAssetBase:initialField==='natural'?natureAssetBase:assetBase}${fallbackName}`} data-fallback-full target="_blank" rel="noopener">図を拡大</a> <button type="button" data-retry-nature hidden>再試行</button></p>
           </div>
           <div class="atlas-map-labels" data-map-labels aria-hidden="true"></div>
           <div class="atlas-nature-labels" data-nature-labels hidden></div>
@@ -94,6 +100,7 @@ const payload = JSON.stringify({ initialField, initialMode, agricultureRelations
         </div>
         <p class="atlas-nature-guide" data-nature-guide hidden></p>
         <a class="atlas-nature-jump" data-nature-jump href="#nature-feature-heading" hidden>選んだ対象の解説へ</a>
+        <PopulationMapReading active={initialField==='population'} />
         <div class="atlas-selection-slot" data-selection-slot></div>
         <a class="atlas-city-jump" data-city-jump href="#city-climate-heading" hidden>都市の雨温図へ</a>
         <p class="visually-hidden" id="atlas-map-description">地図の内容は下の解説でも読めます。タッチ操作は２本指で地図を動かします。</p><p class="visually-hidden" data-atlas-live aria-live="polite" aria-atomic="true"></p>
@@ -111,6 +118,7 @@ const payload = JSON.stringify({ initialField, initialMode, agricultureRelations
 
       <div data-field-national="agriculture" hidden={initialField!=='agriculture'}><NationalAgricultureSummary /></div>
       <div data-field-national="natural" hidden={initialField!=='natural'}><NaturalEnvironmentSummary {initialMode} /></div>
+      <div data-field-national="population" hidden={initialField!=='population'}><PopulationNationalSummary /></div>
       <div data-field-national="industry" hidden={initialField!=='industry'}><IndustryNationalSummary /><IndustrySelectedExplanation /></div>
       <aside class="atlas-national atlas-land-summary" data-field-national="overview" hidden={initialField!=='overview'}>
         <header><p class="atlas-eyebrow">GEOGRAPHIC BASE</p><h2>米国本土の地形</h2><p>西部の山地、中央の大平原と低地、東部のアパラチア山脈を共通の土台にします。農業へ切り替えると、同じ位置・倍率のまま栽培域を重ねて比較できます。</p></header>
@@ -147,6 +155,7 @@ const payload = JSON.stringify({ initialField, initialMode, agricultureRelations
       </details>
       <section id="atlas-news"><h3>ニュースと年表</h3>{timelineEvents.length===0?<p>関連する公開記事はまだありません。記事が追加されたら、発生地・影響範囲・報道日を分けて結びつけます。</p>:<ol>{timelineEvents.map(e=><li>{e.dateLabel} {e.title}</li>)}</ol>}</section>
     </section>
+    <section data-field-content="population" hidden={initialField!=='population'}><PopulationReading /></section>
     <section data-field-content="industry" hidden={initialField!=='industry'}><IndustryReading />{initialField==='industry'&&<IndustryNoScript />}</section>
     <section class="atlas-method" id="atlas-method">
       <h2>出典と表示方法</h2>

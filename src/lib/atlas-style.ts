@@ -63,11 +63,11 @@ export function setFieldLayers(map:{setLayoutProperty:(id:string,key:string,valu
   for(const id of ['contour-land-fill','contours-secondary','contours-index','contours-hit'])map.setLayoutProperty(id,'visibility',natural&&natureMode==='contour'?'visible':'none');
   for(const id of ['current-lines','upwelling-line'])map.setLayoutProperty(id,'visibility',natural?'visible':'none');
   for(const id of ['crop-context-line','nature-highlight-line','nature-highlight-point'])map.setLayoutProperty(id,'visibility',natural?'visible':'none');
-  map.setLayoutProperty('relief','visibility',natural&&(natureMode==='climate'||natureMode==='contour')?'none':'visible');
+  map.setLayoutProperty('relief','visibility',(field==='population'||natural&&(natureMode==='climate'||natureMode==='contour'))?'none':'visible');
   map.setPaintProperty?.('relief','raster-opacity',natural?(natureMode==='water'?0.15:0.65):1);
   map.setPaintProperty?.('land-fill','fill-color',natural?'#faf9f3':'#efebd8');
   map.setPaintProperty?.('ocean','background-color',natural?'#e4eff0':'#c1e1ed');
-  map.setLayoutProperty('land-picking','visibility',!agriculture&&(!natural||natureMode==='landform')?'visible':'none');
-  const waterVisible=!natural||natureMode==='water'||natureMode==='landform';
+  map.setLayoutProperty('land-picking','visibility',field!=='population'&&!agriculture&&(!natural||natureMode==='landform')?'visible':'none');
+  const waterVisible=field!=='population'&&(!natural||natureMode==='water'||natureMode==='landform');
   for(const id of ['rivers','lakes','lakes-outline'])map.setLayoutProperty(id,'visibility',waterVisible?'visible':'none');
 }
