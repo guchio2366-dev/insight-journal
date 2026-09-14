@@ -26,3 +26,12 @@ test('loader retries invalid payloads and accepts compressed or already decompre
  const original=globalThis.fetch;let calls=0;const content=JSON.stringify({version:1,rows:[]});globalThis.fetch=async()=>{calls++;return new Response(calls===1?'{}':content)};
  try{const loader=createPopulationLoader('/');await assert.rejects(loader.get('counties'));assert.equal((await loader.get('counties')).version,1);await loader.get('counties');assert.equal(calls,2);const {gzipSync}=await import('node:zlib');globalThis.fetch=async()=>new Response(gzipSync(content));assert.equal((await createPopulationLoader('/').get('counties')).version,1);}finally{globalThis.fetch=original;}
 });
+
+test('metro LRU refreshes the whole metro when any one of its files is reused',async()=>{
+ const original=globalThis.fetch, requests=[];globalThis.fetch=async url=>{requests.push(url);return new Response(JSON.stringify(String(url).includes('.geo.')?{type:'FeatureCollection',features:[]}:{version:1,rows:[]}));};
+ try{const loader=createPopulationLoader('/');await loader.get('metro-35620');await loader.get('metro-35620.geo');await loader.get('metro-31080');await loader.get('metro-35620.geo');await loader.get('metro-19100');await loader.get('metro-35620');assert.equal(requests.filter(x=>x==='/metro-35620.json.gz').length,1);await loader.get('metro-31080');assert.equal(requests.filter(x=>x==='/metro-31080.json.gz').length,2);}finally{globalThis.fetch=original;}
+});
+test('an evicted request failure does not discard a newer request with the same key',async()=>{
+ const original=globalThis.fetch;let rejectOld,calls=0;globalThis.fetch=async url=>{if(String(url).includes('metro-35620')){calls++;if(calls===1)return new Promise((_,reject)=>rejectOld=reject);}return new Response(JSON.stringify({version:1,rows:[]}));};
+ try{const loader=createPopulationLoader('/');const old=loader.get('metro-35620');const rejected=assert.rejects(old);await loader.get('metro-31080');await loader.get('metro-19100');await loader.get('metro-35620');rejectOld(new Error('late failure'));await rejected;await loader.get('metro-35620');assert.equal(calls,2);}finally{globalThis.fetch=original;}
+});

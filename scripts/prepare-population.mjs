@@ -1,4 +1,5 @@
 // Compressed population sources are versioned. Expand deterministic JSON fallbacks for the static host.
+import './population/prepare-religion.mjs';
 import {readdir,readFile,writeFile} from 'node:fs/promises';
 import {gzipSync,gunzipSync} from 'node:zlib';
 const base=new URL('../public/assets/atlas/population/v1/',import.meta.url);

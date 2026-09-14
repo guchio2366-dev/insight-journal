@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "period": "2023–2024",
+  "universe": "adults",
+  "source": {
+    "url": "https://www.pewresearch.org/religion/2025/02/26/religious-landscape-study-religious-identity/",
+    "title": "Religious Landscape Study 2023–24: Religious identity",
+    "copyright": "© 2025 Pew Research Center"
+  },
+  "national": {
+    "protestant": {
+      "status": "value",
+      "value": 40
+    },
+    "catholic": {
+      "status": "value",
+      "value": 19
+    },
+    "lds": {
+      "status": "value",
+      "value": 2
+    },
+    "otherChristian": {
+      "status": "missing",
+      "reason": "親分類の公表値が未取得。丸めた子分類を合算しない。"
+    },
+    "jewish": {
+      "status": "value",
+      "value": 1.7
+    },
+    "muslim": {
+      "status": "value",
+      "value": 1.2
+    },
+    "buddhist": {
+      "status": "value",
+      "value": 1.1
+    },
+    "hindu": {
+      "status": "value",
+      "value": 0.9
+    },
+    "other": {
+      "status": "missing",
+      "reason": "親分類の公表値が未取得。丸めた子分類を合算しない。"
+    },
+    "unaffiliated": {
+      "status": "value",
+      "value": 29
+    }
+  },
+  "rows": []
+}
