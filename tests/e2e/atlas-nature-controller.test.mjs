@@ -29,6 +29,7 @@ async function setup(query='',options={}){
  Object.defineProperties(frame,{clientWidth:{value:788},clientHeight:{value:500}});
  frame.getBoundingClientRect=()=>({left:0,top:0,right:788,bottom:500,width:788,height:500});
  image.getBoundingClientRect=()=>({left:0,top:0,right:788,bottom:460,width:788,height:460});
+ if(options.relativeImageGeometry){Object.defineProperties(image,{clientWidth:{value:788},clientHeight:{value:460},offsetLeft:{value:0},offsetTop:{value:0},offsetParent:{value:frame}});image.getBoundingClientRect=()=>({left:-350,top:0,right:438,bottom:460,width:788,height:460});}
  window.ResizeObserver=class {observe(){}disconnect(){}};
  window.createImageBitmap=async()=>({width:1,height:1,close(){}});
  window.HTMLCanvasElement.prototype.getContext=()=>({drawImage(){},getImageData:()=>({width:1,height:1,data:new Uint8ClampedArray([window.__climateId??9,0,0,255])})});
@@ -258,4 +259,10 @@ test('19水資源は名前から右欄へ開き、概説は選択に左右され
    assert.equal(q('[data-city-select]').value,'seattle');assert.equal(q('[data-climate-chart]').hidden,false);await waitFor(()=>fallback||root.dataset.natureLoad==='ready','climate restored');
   }finally{await window.happyDOM.close();}
  }
+});
+
+
+test('代替画像のレイアウト座標を使い、画面の位置が変わっても西部の水資源名を失わない',async()=>{
+ const {window,root}=await setup('?env=water',{fallback:true,relativeImageGeometry:true});
+ try{assert.equal(root.querySelectorAll('[data-label-mode="water"]:not([hidden])').length,19);}finally{await window.happyDOM.close();}
 });
