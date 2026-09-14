@@ -12,6 +12,8 @@ import { createNatureLabels } from './atlas-nature-labels';
 import { projectNatureFallback, unprojectNatureFallback } from '../lib/atlas-nature-labels';
 import { subsectorLabel } from '../data/atlas/industry-catalog';
 import { createAtlasStyle, setFieldLayers } from '../lib/atlas-style';
+import { cityAgricultureUrl } from '../lib/atlas-city-agriculture-link';
+import { isProduct } from '../lib/atlas-agriculture-detail-state';
 
 type RegionalCopy = {id:string;cropIds:string[];title:string;summary:string;compactSummary:string;bounds:[number,number,number,number];detailCrop:string};
 type ClimateCity = {id:string;nameJa:string;stationId:string;stationName:string;longitude:number;latitude:number;elevationM:number;period:string;temperatureC:number[];precipitationMm:number[];annualPrecipitationMm:number;koppenCode:string|null};
@@ -102,6 +104,12 @@ export async function startAtlas() {
     root.querySelectorAll<HTMLAnchorElement>('[data-cross-link="agriculture"]').forEach(link=>{
       const target=writeAtlasState(new URL(url),config.base,'agriculture',cameraState(),selectedCrop,selectedRegion,selectedStats,view,[...agriLayers] as any,selectedAnimal,selectedAnimalRegion,{env:natureMode,city:selectedCity,natureFeature},selectedRelation,agricultureDetails.state());
       link.href=target.pathname+target.search;
+    });
+    root.querySelectorAll<HTMLAnchorElement>('[data-city-agriculture-link]').forEach(link=>{
+      const product=link.dataset.cityAgricultureLink??null,city=link.closest<HTMLElement>('[data-city-panel]')?.dataset.cityPanel;
+      if(!city||!isProduct(product))return;
+      const target=cityAgricultureUrl(url,config.base,city,product);
+      link.href=target.pathname+target.search+target.hash;
     });
   }
 
@@ -223,16 +231,16 @@ export async function startAtlas() {
     natureLabelController.sync(field!=='natural'?null:natureMode==='climate'?(selectedCity?'city:'+selectedCity:null):natureFeature);
   }
 
-  // Fit crops against the unscrolled viewport, never against scroll position.
-  // Core chart/copy is always visible; optional station details do not affect fit.
+  // Fit the regional examples against the unscrolled viewport. Keep their summary
+  // reachable even when space is short; a user's own open/close choice wins.
   function fitCityCrop(){
     const panel=root.querySelector<HTMLElement>('[data-city-panel]:not([hidden])');
-    const crop=panel?.querySelector<HTMLElement>('[data-city-crop]');if(!crop)return;
-    crop.hidden=false;
-    if(window.innerWidth<960){crop.hidden=true;return;}
+    const crop=panel?.querySelector<HTMLDetailsElement>('[data-city-crop]');if(!crop||crop.dataset.userToggled)return;
+    crop.open=window.innerWidth>=960;
+    if(!crop.open)return;
     const reading=panel!.querySelector<HTMLElement>('[data-city-reading]')!;
     const bottom=reading.getBoundingClientRect().bottom+window.scrollY;
-    crop.hidden=bottom>window.innerHeight-16;
+    crop.open=bottom<=window.innerHeight-16;
   }
 
   function renderCity(){
@@ -446,6 +454,7 @@ export async function startAtlas() {
   });
   root.querySelectorAll<HTMLInputElement>('[data-agri-layer]').forEach(input=>input.addEventListener('change',()=>{if(input.checked)agriLayers.add(input.value);else agriLayers.delete(input.value);syncAgricultureLayers();}));
   el('[data-city-jump]').addEventListener('click',event=>{event.preventDefault();el('#city-climate-heading').focus();el('#city-climate-heading').scrollIntoView({block:'start'});});
+  root.querySelectorAll<HTMLDetailsElement>('[data-city-crop]').forEach(detail=>detail.querySelector('summary')!.addEventListener('click',()=>{detail.dataset.userToggled='true';}));
   el('[data-close-nature-detail]').addEventListener('click',()=>closeSelection(true,true));
   el('[data-nature-jump]').addEventListener('click',event=>{event.preventDefault();el('#nature-feature-heading').focus();el('#nature-feature-heading').scrollIntoView({block:'start'});});
   el('[data-retry-nature]').addEventListener('click',()=>{appliedNatureKeys.delete(natureMode==='contour'?'contour:500':natureMode);void ensureNatureModeData(natureMode);});

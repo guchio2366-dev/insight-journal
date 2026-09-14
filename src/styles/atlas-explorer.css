@@ -530,14 +530,22 @@
 /* Nature v2.4: chart first, city reading, and a closed overview below the map. */
 .atlas-city-climate .atlas-climate-diagrams{border:0;padding:0;margin-top:8px}
 .atlas-city-climate .atlas-climate-city-name{fill:#263e49;font:600 12px var(--sans)}
-.atlas-city-reading{margin-top:12px;padding-top:10px;border-top:1px solid #c7d1c8}
-.atlas-city-reading h4{margin:0 0 7px;font:700 16px/1.5 var(--sans)}
+.atlas-city-reading{margin-top:8px;padding-top:8px;border-top:1px solid #c7d1c8}
+.atlas-city-reading h4{margin:0 0 4px;font:700 16px/1.5 var(--sans)}
 .atlas-city-reading h4 b{margin-right:5px;color:#355b52;font-size:19px}
 .atlas-nature-summary .atlas-city-reading>p{margin:6px 0;font-size:14px;line-height:1.65}
 .atlas-nature-summary .atlas-city-reading>.atlas-city-code-meaning{color:#52665e;font-size:12px;line-height:1.6}
-.atlas-nature-summary .atlas-city-reading>.atlas-city-crop{margin-top:10px;padding-top:8px;border-top:1px solid #d9dfd5;font-size:13px;line-height:1.6}
-.atlas-city-crop strong{display:block}
-.atlas-city-crop a{white-space:nowrap;font-size:12px}
+.atlas-city-cause{margin-top:8px}
+.atlas-city-cause h5{margin:0 0 3px;font:700 13px/1.6 var(--sans);color:#355b52}
+.atlas-city-cause p{margin:0;font-size:14px;line-height:1.65}
+.atlas-city-reference{color:#52665e;font-size:11px;white-space:nowrap}
+.atlas-city-climate .atlas-climate-diagram .atlas-city-crop{margin-top:8px;padding-top:4px;border-top:1px solid #d9dfd5;font-size:13px;line-height:1.6}
+.atlas-city-climate .atlas-climate-diagram .atlas-city-crop>summary{min-height:32px;padding:5px 0;font-weight:700;color:#355b52}
+.atlas-city-crop>p{margin:2px 0;font-size:13px;line-height:1.6}
+.atlas-city-region{color:#52665e}
+.atlas-city-products a{display:inline-block;min-height:28px;padding:3px 1px;color:#255964;text-decoration:underline;text-underline-offset:3px}
+.atlas-city-products strong{font-weight:750}
+.atlas-city-products a:focus-visible,.atlas-city-crop>summary:focus-visible{outline:3px solid #176f89;outline-offset:2px}
 .atlas-city-climate .atlas-climate-diagram>.atlas-city-source{justify-content:flex-start;gap:4px;flex-wrap:wrap;margin-top:10px!important;font-size:11px!important}
 .atlas-climate-overview{margin-top:10px;padding:0;border:1px solid #b8c8be;background:#fbfaf3}
 .atlas-climate-overview>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;padding:10px 14px;cursor:pointer;list-style:none}

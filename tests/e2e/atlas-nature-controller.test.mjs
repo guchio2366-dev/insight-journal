@@ -21,7 +21,7 @@ const bundle=await build({entryPoints:['src/scripts/atlas-explorer.ts'],bundle:t
 const delay=()=>new Promise(resolve=>setTimeout(resolve,25));
 async function waitFor(check,label){for(let attempt=0;attempt<120;attempt++){if(check())return;await delay();}throw new Error('Timed out: '+label);}
 async function setup(query='',options={}){
- const window=new Window({url:'https://example.com/insight-journal/atlas/north-america/nature/'+query,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true}});
+ const window=new Window({url:'https://example.com/insight-journal/atlas/north-america/'+(options.fieldPath??'nature')+'/'+query,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true}});
  const html=await readFile('dist/atlas/north-america/nature/index.html','utf8');
  window.document.body.innerHTML=html.replace(/<script(?![^>]*application\/json)[\s\S]*?<\/script>/g,'');
  window.__forceMapFail=options.fallback;
@@ -170,7 +170,7 @@ test('不正な都市はLA、DCの欠測は未分類のままとし、旧ハッ�
   const {window,root,q}=await setup(query,{fallback:true});
   try{
    assert.equal(root.dataset.selectedCity,expected);assert.equal(new URL(window.location.href).searchParams.get('city'),expected);
-   if(expected==='washington-dc'){const panel=q('[data-city-panel="washington-dc"]');assert.match(panel.querySelector('h4').textContent,/データなし/);assert.equal(panel.querySelector('[data-city-crop]'),null);assert.equal(panel.querySelector('.atlas-city-code-meaning'),null);assert.equal(panel.querySelectorAll('.atlas-climate-bar').length,12);}
+   if(expected==='washington-dc'){const panel=q('[data-city-panel="washington-dc"]');assert.match(panel.querySelector('h4').textContent,/データなし/);assert.match(panel.querySelector('[data-city-cause] h5').textContent,/季節変化/);assert.equal(panel.querySelector('.atlas-city-code-meaning'),null);assert.equal(panel.querySelectorAll('.atlas-climate-bar').length,12);}
   }finally{await window.happyDOM.close();}
  }
 });
@@ -183,11 +183,11 @@ test('各気候区分の概説は初期に閉じ、都市・モード・履歴�
   assert.equal(overview.tagName,'DETAILS');assert.equal(overview.open,false);assert.equal(overview.querySelector('summary').textContent,'各気候区分の概説');
   assert.equal(overview.querySelectorAll('.atlas-overview-row').length,8);assert.equal(q('[data-nature-detail]').hidden,true);
   assert.equal(new URL(window.location.href).searchParams.get('natureFeature'),null);
-  const saved=window.location.href,text=overview.textContent;overview.open=true;figure.querySelector('details').open=true;
+  const saved=window.location.href,text=overview.textContent;overview.open=true;figure.querySelector('[data-city-numbers]').open=true;
   q('[data-nature-label="city:los-angeles"]').click();q('[data-nature-mode="water"]').click();await delay();assert.equal(overview.hidden,true);
   q('[data-nature-mode="climate"]').click();assert.equal(overview.open,true);assert.equal(overview.textContent,text);
   window.history.replaceState({},'',saved);window.dispatchEvent(new window.PopStateEvent('popstate'));await delay();
-  assert.equal(root.dataset.selectedCity,'seattle');assert.equal(overview.open,true);assert.equal(figure.querySelector('details').open,true);
+  assert.equal(root.dataset.selectedCity,'seattle');assert.equal(overview.open,true);assert.equal(figure.querySelector('[data-city-numbers]').open,true);
   assert.equal(root.querySelectorAll('[data-city-panel]:not([hidden])').length,1);assert.equal(root.querySelectorAll('[data-city-panel]').length,12);
   assert.equal(new URL(window.location.href).searchParams.get('crop'),'rice');
  }finally{await window.happyDOM.close();}
@@ -238,4 +238,51 @@ test('19水資源は名前から右欄へ開き、概説は選択に左右され
 test('代替画像のレイアウト座標を使い、画面の位置が変わっても西部の水資源名を失わない',async()=>{
  const {window,root}=await setup('?env=water',{fallback:true,relativeImageGeometry:true});
  try{assert.equal(root.querySelectorAll('[data-label-mode="water"]:not([hidden])').length,19);}finally{await window.happyDOM.close();}
+});
+
+test('都市の理由と近郊の品目リンクは分類に依存せず、遷移先で該当本文・統計を開く',async()=>{
+ const {window,root,q}=await setup('?city=denver&crop=rice&region=sacramento-rice&lng=-104.8&lat=39.7&z=5&sector=services',{fallback:true});
+ const targets=[];
+ try{
+  for(const panel of root.querySelectorAll('[data-city-panel]')){
+   assert.ok(panel.querySelector('[data-city-cause] p').textContent.length>30);
+   assert.match(panel.querySelector('[data-city-crop] summary').textContent,/周辺の農業・畜産/);
+   assert.ok(panel.querySelector('.atlas-city-region').textContent.includes('郡'));
+   for(const link of panel.querySelectorAll('[data-city-agriculture-link]')){
+    const url=new URL(link.href);assert.equal(url.searchParams.get('city'),panel.dataset.cityPanel);
+    assert.equal(url.searchParams.get('agriProduct'),link.dataset.cityAgricultureLink);
+    assert.equal(url.searchParams.get('region'),null);assert.equal(url.searchParams.get('lng'),'-104.80000');
+   }
+  }
+  for(const [city,product] of [['denver','wheat'],['washington-dc','dairy'],['los-angeles','specialty']]){
+   q(`[data-nature-label="city:${city}"]`).click();
+   targets.push({city,product,url:new URL(q(`[data-city-panel="${city}"] [data-city-agriculture-link="${product}"]`).href)});
+  }
+ }finally{await window.happyDOM.close();}
+ for(const {city,product,url} of targets){
+  const next=await setup(url.search+url.hash,{fieldPath:'agriculture',fallback:true});
+  try{
+   assert.equal(next.root.dataset.field,'agriculture');assert.equal(next.root.dataset.agriReading,'product');
+   assert.equal(new URL(next.window.location.href).searchParams.get('agriProduct'),product);
+   assert.equal(next.q('#'+(product==='dairy'?'livestock-':'crop-')+product).hidden,false);
+   assert.equal(next.q('[data-agri-statistics]').hidden,product==='specialty');
+   next.q('[data-field="natural"]').click();
+   assert.equal(next.root.dataset.selectedCity,city);assert.equal(next.q(`[data-city-panel="${city}"]`).hidden,false);
+  }finally{await next.window.happyDOM.close();}
+ }
+});
+
+test('農畜産物は収まらなくても開閉でき、手動の選択を都市切替やリサイズで失わない',async()=>{
+ let bottom=1000;
+ const {window,q}=await setup('',{fallback:true,beforeStart:window=>{
+  for(const reading of window.document.querySelectorAll('[data-city-reading]'))reading.getBoundingClientRect=()=>({bottom});
+ }});
+ try{
+  const crop=q('[data-city-panel="los-angeles"] [data-city-crop]');
+  assert.equal(crop.hidden,false);assert.equal(crop.open,false);
+  crop.querySelector('summary').click();assert.equal(crop.open,true);
+  q('[data-nature-label="city:denver"]').click();q('[data-nature-label="city:los-angeles"]').click();await delay();
+  window.dispatchEvent(new window.Event('resize'));assert.equal(crop.open,true);
+  crop.querySelector('summary').click();bottom=200;window.dispatchEvent(new window.Event('resize'));assert.equal(crop.open,false);
+ }finally{await window.happyDOM.close();}
 });
