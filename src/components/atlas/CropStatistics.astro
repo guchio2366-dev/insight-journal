@@ -1,4 +1,5 @@
 ---
+import AgricultureProductReading from './AgricultureProductReading.astro';
 import AgricultureDetailPanel from './AgricultureDetailPanel.astro';
 import ProductionShareChart from './ProductionShareChart.astro';
 import CropSupplyUse from './CropSupplyUse.astro';
@@ -37,7 +38,7 @@ const productionUnit = (id:StatisticCropId) => id==='cotton'?'千480ポンド俵
     return <AgricultureDetailPanel id={id} group="crops" color={colors[id]}>
       <Fragment slot="copy">
         <h3>{names[id]}</h3>
-        {description.paragraphs.map(paragraph=><ConditionText {paragraph} />)}
+        <AgricultureProductReading product={id} />
         <p class="atlas-crop-uses"><strong>主な用途</strong>{description.uses}</p>
         <p class="atlas-inline-sources">地理・用途：{description.sources.map((sourceId,sourceIndex)=><Fragment>{sourceIndex>0?' ／ ':''}<a href={`#${sourceId}`}>{sources.find(source=>source.id===sourceId)?.publisher}</a></Fragment>)}</p>
       </Fragment>

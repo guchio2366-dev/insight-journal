@@ -6,6 +6,8 @@ import { northAmericaFields } from '../../data/atlas/regions';
 import { regionalInsights } from '../../data/atlas/regional-insights';
 import { statisticCropIds } from '../../data/atlas/statistics';
 import { livestockKinds, livestockRegions } from '../../data/atlas/livestock';
+import '../../styles/atlas-agriculture-insights.css';
+import AgricultureProductReading from './AgricultureProductReading.astro';
 import AgricultureRelations from './AgricultureRelations.astro';
 import AgricultureRelationFallback from './AgricultureRelationFallback.astro';
 import { agricultureRelations } from '../../data/atlas/agriculture-relations';
@@ -172,7 +174,7 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
       <p class="industry-return" data-industry-return hidden><a href={withBase('/atlas/north-america/industry/')} data-industry-return-link>主要産業の選択へ戻る</a></p>
       <CropStatistics />
       <LivestockReading />
-      {cropExplanations.filter(c=>c.id==='specialty').map(c=><article id="crop-specialty" data-agri-extra-copy="specialty" class="atlas-crop-copy"><h3>{c.name}</h3>{c.paragraphs.map(paragraph=><ConditionText {paragraph} />)}<p><strong>主な用途</strong> {c.uses}</p><p>{c.sources.map(id=><a href={`#${id}`}>{sources.find(source=>source.id===id)?.publisher} </a>)}</p><p>複数品目のため、この区分の共通統計は未収録</p></article>)}
+      {cropExplanations.filter(c=>c.id==='specialty').map(c=><article id="crop-specialty" data-agri-extra-copy="specialty" class="atlas-crop-copy"><h3>{c.name}</h3><AgricultureProductReading product="specialty" /><p><strong>主な用途</strong> {c.uses}</p><p>{c.sources.map(id=><a href={`#${id}`}>{sources.find(source=>source.id===id)?.publisher} </a>)}</p><p>複数品目のため、この区分の共通統計は未収録</p></article>)}
       <article data-agri-extra-copy="corn-soybean" class="atlas-crop-copy"><h3>とうもろこし・大豆の重なり</h3><p>近い地域で両方の作物がまとまります。この図だけでは、同じ畑の輪作や同時栽培は判定できません。</p><p><a href="#crop-corn">とうもろこし</a> ／ <a href="#crop-soybean">大豆</a></p></article>
       <details class="atlas-context-reading"><summary>北米農業の背景をさらに読む</summary>
         {reportSections.filter(s=>s.id!=='crop-conditions').map(s=><section id={s.id}><h3>{s.title}</h3>{s.paragraphs.map(p=><p>{p}</p>)}</section>)}
