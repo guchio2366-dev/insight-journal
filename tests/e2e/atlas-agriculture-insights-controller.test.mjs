@@ -71,11 +71,14 @@ test('関係の直開き・履歴・詳細リンクと、WebGL失敗後の正確
  }finally{await window.happyDOM.close();}
 });
 
-test('静的HTMLで3関係・5収支・18強調語句・全用途のラベルと元値を読める',async()=>{
+test('静的HTMLで3関係・5収支・全品目の本文と30リンク・全用途の元値を読める',async()=>{
  const html=await readFile('dist/atlas/north-america/agriculture/index.html','utf8');
  const window=new Window();window.document.body.innerHTML=html;
  try{
-  const d=window.document;assert.equal(d.querySelectorAll('[data-relation-item]').length,3);assert.equal(d.querySelectorAll('[data-supply-use]').length,5);assert.equal(d.querySelectorAll('[data-pair-id]').length,18);
+  const d=window.document;assert.equal(d.querySelectorAll('[data-relation-item]').length,3);assert.equal(d.querySelectorAll('[data-supply-use]').length,5);assert.equal(d.querySelectorAll('[data-agri-insight-link]').length,30);
+  assert.equal(d.querySelectorAll('.agri-reading-sources').length,11);
+  assert.ok(d.querySelectorAll('[data-reading-emphasis]').length>=18);
+  assert.equal(d.querySelectorAll('[data-agri-link-product="hogs"],[data-agri-link-product="broilers"],[data-agri-link-product="layers"]').length,0);
   assert.equal(d.querySelectorAll('[data-stat-panel][hidden]').length,0);
   for(const panel of d.querySelectorAll('[data-supply-use]')){assert.equal(panel.querySelectorAll('.supply-bar').length,2);assert.ok(panel.querySelectorAll('tbody tr').length>=8);assert.ok(panel.querySelector('.supply-imports').textContent.length>35);}
   assert.match(html,/参考：2025暦年/);assert.match(html,/−|未勘定/);
