@@ -1,7 +1,7 @@
 // Reviewed aggregate input only. No web scraping and no inferred state observations.
 import { readFile, writeFile } from 'node:fs/promises';
 import { gzipSync } from 'node:zlib';
-import { validateReligionData } from '../../src/lib/atlas-population-religion.ts';
+import { validateReligionData, validateReligionDominantData } from '../../src/lib/atlas-population-religion.ts';
 import { validateReligionOverview } from '../../src/lib/atlas-population-religion-overview.ts';
 const input = JSON.parse(await readFile(new URL('../../data/atlas/population-religion-reviewed.json', import.meta.url), 'utf8'));
 if (!validateReligionData(input)) throw new Error('Reviewed religion input failed validation');
@@ -10,6 +10,15 @@ await writeFile(output, gzipSync(JSON.stringify(input), { level: 9, mtime: 0 }))
 const overview=JSON.parse(await readFile(new URL('../../data/atlas/population-religion-overview-reviewed.json',import.meta.url),'utf8'));
 if(!validateReligionOverview(overview))throw new Error('Reviewed religion overview failed validation');
 await writeFile(new URL('../../public/assets/atlas/population/v1/religion-overview.json.gz',import.meta.url),gzipSync(JSON.stringify(overview),{level:9,mtime:0}));
+const dominant=JSON.parse(await readFile(new URL('../../data/atlas/population-religion-dominant-reviewed.json',import.meta.url),'utf8'));
+if(!validateReligionDominantData(dominant))throw new Error('Reviewed dominant religion input failed validation');
+await writeFile(new URL('../../public/assets/atlas/population/v1/religion-dominant.json.gz',import.meta.url),gzipSync(JSON.stringify(dominant),{level:9,mtime:0}));
+const baseCounties=JSON.parse(await readFile(new URL('../../public/assets/atlas/population/v1/counties.geo.json',import.meta.url),'utf8'));
+const connecticut=JSON.parse(await readFile(new URL('../../data/atlas/population-religion-ct-2020.geo.json',import.meta.url),'utf8'));
+const religionGeometry={type:'FeatureCollection',features:[...baseCounties.features.filter(feature=>!feature.properties.id.startsWith('county:09')),...connecticut.features].sort((a,b)=>a.properties.id.localeCompare(b.properties.id))};
+const expected=new Set(dominant.rows.map(row=>row.id)),actual=new Set(religionGeometry.features.map(feature=>feature.properties.id));
+if(religionGeometry.features.length!==3108||actual.size!==3108||expected.size!==3108||[...expected].some(id=>!actual.has(id)))throw new Error('2020 religion geometry failed FIPS validation');
+await writeFile(new URL('../../public/assets/atlas/population/v1/religion-counties-2020.geo.json.gz',import.meta.url),gzipSync(JSON.stringify(religionGeometry),{level:9,mtime:0}));
 
 if (input.rows.length) {
   const { gunzipSync } = await import('node:zlib');

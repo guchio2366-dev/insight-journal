@@ -7,7 +7,7 @@ import {createPopulationLoader} from '../../src/lib/atlas-population-loader.ts';
 import {missingColor,densityColors,shareColors,voteColors} from '../../src/data/atlas/population.ts';
 const base='public/assets/atlas/population/v1/';const data=async n=>JSON.parse(await readFile(base+n+'.json','utf8'));
 test('population URL validates views, groups and geometry while preserving global state',()=>{
- const url=new URL('https://example.org/?crop=rice&z=9&popView=bad&popEthnicity=bad&popGeo=<script>');const state=readPopulationState(url);assert.equal(state.view,'distribution');assert.equal(state.ethnicity,'');assert.equal(state.geo,'');state.view='religion';state.religion='muslim';state.geo='state:06';const encoded=writePopulationState(url,state);assert.deepEqual(readPopulationState(encoded),state);assert.equal(encoded.searchParams.get('z'),'9');assert.equal(encoded.searchParams.get('crop'),'rice');
+ const url=new URL('https://example.org/?crop=rice&z=9&popView=bad&popEthnicity=bad&popGeo=<script>');const state=readPopulationState(url);assert.equal(state.view,'distribution');assert.equal(state.ethnicity,'');assert.equal(state.geo,'');state.view='religion';state.religion='catholic';state.geo='state:06';const encoded=writePopulationState(url,state);assert.deepEqual(readPopulationState(encoded),state);assert.equal(encoded.searchParams.get('z'),'9');assert.equal(encoded.searchParams.get('crop'),'rice');
  assert.equal(readPopulationState(new URL('https://example.org/?popReligionStory=utah-lds')).story,'utah-lds');assert.equal(readPopulationState(new URL('https://example.org/?popReligionStory=bad')).story,'');
 });
 test('zeros, exact thresholds, missing data and vote sign have distinct colors',()=>{

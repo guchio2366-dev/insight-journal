@@ -9,6 +9,28 @@ export const religionStories=[
 
 export const religionStoryIds=religionStories.map(story=>story.id);
 
+export const religionDominantCategories=[
+ ['catholic','カトリック'],
+ ['southern_baptist','南部バプテスト'],
+ ['mainline_protestant','主流派プロテスタント'],
+ ['nondenominational','無教派キリスト教会'],
+ ['other_conservative_protestant','その他の保守系プロテスタント'],
+ ['latter_day_saints','末日聖徒'],
+ ['black_protestant','黒人プロテスタント'],
+ ['other','その他の最多グループ'],
+] as const;
+
+export const religionDominantReading:Record<string,{region:string;definition:string;history:string;connections:string;source:string;sourceLabel:string}>={
+ catholic:{region:'北東部、五大湖周辺、ルイジアナ、南西部など',definition:'USRCで Catholic Church が最多だった郡です。郡人口の過半数や、住民全体の宗教構成を意味しません。',history:'アイルランド・イタリアなどからの移民、フランス・スペインによる植民、メキシコとの国境変化が、地域ごとに異なるカトリック社会の背景になりました。',connections:'港湾・工業都市、農村、国境地域では移住と雇用の歴史が異なります。投票行動は人種・世代・階層などでも分かれるため、カトリックという分類だけでは説明できません。',source:'https://www.usreligioncensus.org/node/1639',sourceLabel:'U.S. Religion Census：2020年データ'},
+ southern_baptist:{region:'南部を中心とする広い地域',definition:'Southern Baptist Convention が最多だった郡です。南部にある全教会や全住民を一つの宗派として表すものではありません。',history:'バプテスト系教会は南部の地域社会に長く根付き、奴隷制と人種分離を含む歴史とも関わってきました。黒人教会は別の制度と共同体として発展しました。',connections:'農業、製造、近年の都市成長が重なる南部では、雇用構造も一様ではありません。宗教と共和党支持の地理的重なりは見られても、個人の投票を直接決める因果とは扱いません。',source:'https://www.sbc.net/about/what-we-do/fast-facts/',sourceLabel:'Southern Baptist Convention：概要'},
+ mainline_protestant:{region:'中西部と北東部の一部',definition:'United Methodist、ELCA、American Baptist、Reformed、UCC、Episcopal、PCUSAのいずれかが最多だった郡をまとめています。',history:'欧州からの移住、農地への定住、町の形成とともに複数の宗派が広がりました。「主流派」は一つの宗派名ではなく、歴史や教義の異なる教会群です。',connections:'農村部から旧工業都市まで含むため、産業・雇用や投票傾向は地域で異なります。宗派群の名称から住民個人の政治的立場を推定しません。',source:'https://www.usreligioncensus.org/node/1639',sourceLabel:'U.S. Religion Census：2020年データ'},
+ nondenominational:{region:'都市近郊や人口流入地域を含む各地',definition:'Non-denominational Christian Churches が最多だった郡です。個々の教会の教義や組織形態が同じという意味ではありません。',history:'特定の歴史的宗派名を掲げない教会が、郊外化や人口移動の進む地域でも成長してきました。USRCは会衆単位の報告を集計しています。',connections:'人口増加、住宅開発、サービス業の拡大と地理的に重なる場合がありますが、地図だけで成長の原因は決められません。投票との関係も別の調査で確かめます。',source:'https://www.usreligioncensus.org/faq',sourceLabel:'U.S. Religion Census：定義と方法'},
+ other_conservative_protestant:{region:'中西部、南部、農村部などに点在',definition:'保守系ルター派、Churches of Christ、アーミッシュ、メノナイトなど、最多になった23グループをまとめた表示区分です。',history:'宗派ごとに移住経路、教会組織、都市や農村との関係が異なります。凡例を読みやすくするための地図上の集約であり、単一の共同体ではありません。',connections:'農業地域、製造地域、小都市など異なる産業基盤を含みます。集約色と政党支持の重なりから、一括して価値観や投票を説明しません。',source:'https://www.usreligioncensus.org/node/1639',sourceLabel:'U.S. Religion Census：2020年データ'},
+ latter_day_saints:{region:'ユタ州と周辺の山岳西部',definition:'Church of Jesus Christ of Latter-day Saints が最多だった郡です。',history:'19世紀に迫害を受けた末日聖徒の開拓者が西方へ移住し、ユタを中心に灌漑と共同体を築いた歴史が現在の集中の背景です。',connections:'乾燥地の入植、水利用、都市成長を合わせて読むと地域形成が見えます。政治文化との関係は強くても、所属から個人の投票を決めつけません。',source:'https://www.nps.gov/mopi/learn/historyculture/index.htm',sourceLabel:'NPS：Mormon Pioneer National Historic Trail'},
+ black_protestant:{region:'南部の一部',definition:'AME、National Missionary Baptist Convention、CMEのいずれかが最多だった郡です。黒人住民全体と同じ母集団ではありません。',history:'奴隷制と人種分離の下で、黒人教会は礼拝に加えて教育、相互扶助、公民権運動を支える共同体の役割を担いました。',connections:'南部の農業史や、工業雇用を求めた大移動とつながります。現在の投票行動との関連は歴史・制度・政策選好も含めて説明し、宗教だけへ還元しません。',source:'https://www.pewresearch.org/religion/2021/02/16/faith-among-black-americans/',sourceLabel:'Pew Research Center：黒人の宗教生活'},
+ other:{region:'本土ではコロラド州の2郡',definition:'上の7区分以外のグループが最多だった例です。本土地図ではVajrayana Buddhistが該当します。',history:'少数の例外を消さずに示すための区分です。紫色の郡すべてを同一の宗教文化として扱いません。',connections:'特定施設や小規模共同体の所在が郡の最大分類に影響することがあります。産業や投票との一般的関係は、この2郡だけから推論できません。',source:'https://www.usreligioncensus.org/node/1639',sourceLabel:'U.S. Religion Census：2020年データ'},
+};
+
 type CityReligion={text:string;source:string;sourceLabel:string;stories:readonly string[]};
 export const populationCityReligionProfiles:Record<string,CityReligion>={
  seattle:{text:'太平洋岸北西部を読む入口です。「特定の宗教に属さない」という回答と、信仰・精神性の有無を同じものと見なさず、州の傾向を市民全員へ当てはめません。',source:'https://www.pewresearch.org/religious-landscape-study/state/washington/',sourceLabel:'Pew：ワシントン州',stories:['northwest-unaffiliated']},

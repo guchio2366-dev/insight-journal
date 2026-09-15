@@ -15,3 +15,8 @@ __pycache__/
 
 /public/assets/atlas/population/v1/religion.json.gz
 /public/assets/atlas/population/v1/religion-*.svg
+/public/assets/atlas/population/v1/religion-dominant.json.gz
+/public/assets/atlas/population/v1/religion-counties-2020.geo.json.gz
+/public/assets/atlas/population/v1/ethnicity-dominant.webp
+/public/assets/atlas/population/v1/religion-dominant.webp
+/public/assets/atlas/population/v1/vote-state-*.webp
