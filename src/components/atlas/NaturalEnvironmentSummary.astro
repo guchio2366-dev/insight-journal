@@ -1,5 +1,6 @@
 ---
 import { climateCities, natureModes, type NatureMode } from '../../data/atlas/natural-environment';
+import WaterReading from './WaterReading.astro';
 import ClimateDiagram from './ClimateDiagram.astro';
 import NatureFeatureDetail from './NatureFeatureDetail.astro';
 interface Props { initialMode?:NatureMode }
@@ -19,5 +20,6 @@ const { initialMode='climate' } = Astro.props;
       {mode.id==='contour'&&<div data-nature-empty><h3>標高（等高線）</h3><p>全国比較用の500m間隔を、拡大しても同じ線のまま表示します。ロッキーでは2,000〜3,000m級の線が広く連なり、アパラチアでは主に500〜1,000m級に収まる違いが見えます。</p><p>高さは線に付いた数値で、斜面の急緩は同じ間隔の線の密度で読みます。山頂付近の小さな起伏は省略されています。</p></div>}
     </section>)}
   </div>
+  <WaterReading />
   <NatureFeatureDetail />
 </aside>

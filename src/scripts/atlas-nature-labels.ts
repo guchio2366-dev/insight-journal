@@ -1,7 +1,7 @@
 import {containedMapBox,layoutNatureLabels,leaderEnd,projectNatureFallback,type Box,type Point} from '../lib/atlas-nature-labels';
 import {layoutClimateCodes,type ClimateCodeLabel} from '../lib/atlas-climate-code-labels';
 
-type Entry={id:string;name:string;coordinate:[number,number];mode:'climate'|'landform'|'water'|'population'};
+type Entry={id:string;name:string;coordinate:[number,number];mode:'climate'|'landform'|'water'|'population'|'precipitation'|'basins'};
 type Callbacks={active:()=>boolean;mode:()=>string;zoom?:()=>number;project:()=>((p:[number,number])=>Point)|null;select:(entry:Entry,trigger:HTMLButtonElement)=>void;placed:()=>void;holder?:HTMLElement;attribute?:string;controls?:string;obstacleSelector?:string;fallbackBox?:(imageBox:Box)=>Box;fallbackProject?:(coordinate:readonly number[],box:Box)=>Point};
 
 /** Creates a fixed set of buttons once; only placement and state change. */

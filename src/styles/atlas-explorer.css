@@ -563,3 +563,23 @@
  .atlas-city-climate .atlas-climate-diagram>svg{max-width:440px;margin-inline:auto}
  .atlas-climate-overview{margin-top:16px}
 }
+/* Water subviews share the existing map and right-hand reading column. */
+.atlas-water-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+.atlas-water-tabs[hidden],.atlas-water-key[hidden],[data-water-reading][hidden]{display:none}
+.atlas-water-tabs button{font:inherit;font-size:14px;min-height:40px;border:1px solid #b6c8c9;border-radius:5px;padding:7px 16px;background:#fff;color:#244653;cursor:pointer}
+.atlas-water-tabs button[aria-selected=true]{background:#244653;color:#fff;border-color:#244653}
+.atlas-water-tabs button:focus-visible,[data-water-parent]:focus-visible{outline:3px solid #c57927;outline-offset:2px}
+.atlas-water-key{font-size:12px;line-height:1.7;margin:6px 0;display:flex;gap:4px 12px;flex-wrap:wrap}
+.atlas-water-key span{white-space:nowrap}.atlas-water-key i{display:inline-block;width:14px;height:10px;margin-right:4px;border:1px solid #849391}
+.atlas-explorer[data-field=natural] [data-water-reading] p{font-size:14px;line-height:1.8;margin:8px 0}
+.atlas-explorer[data-field=natural] [data-water-reading] .atlas-water-credit{font-size:11px;line-height:1.5;color:#566b70}
+[data-water-reading] details{margin-top:12px;font-size:12px}[data-water-reading] details p{font-size:12px!important}
+[data-water-parent]{font:inherit;font-size:13px;padding:7px;border:1px solid #adc3c4;border-radius:4px;background:#f0f6f5;color:#244653;cursor:pointer}
+.atlas-water-back{display:none}
+[data-water-labels] .atlas-nature-label{font-size:12px}
+[data-water-labels] .atlas-nature-label[aria-pressed=true]{background:#244653;color:#fff}
+@media(max-width:959px){.atlas-water-back{display:inline-block;margin-top:12px}.atlas-water-tabs button{padding:6px 11px}}
+.atlas-water-isohyet{position:absolute;transform:translate(-50%,-50%);font-size:11px;font-weight:700;color:#264e5b;text-shadow:0 0 3px #fff,1px 1px #fff,-1px -1px #fff;pointer-events:none}
+.atlas-water-isohyet[hidden]{display:none}
+.atlas-water-highlight{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:hidden}
+.atlas-water-highlight path{fill:none;stroke:#183c4a;stroke-width:2}
