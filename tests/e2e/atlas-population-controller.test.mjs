@@ -40,36 +40,103 @@ async function setup(query='',fail=false){
 
 const pick=(window,id)=>{window.__map.queryRenderedFeatures=()=>[{properties:{id}}];window.__map.events.click[0]({point:{x:1,y:1}});};
 const change=(window,element,value)=>{element.value=value;element.dispatchEvent(new window.Event('change'));};
-test('population selection keeps national statistics and shared camera; view changes are lazy',async()=>{
+
+test('legend changes only the reading, preserving all map colors, camera and requests',async()=>{
+ const {window,q,requests}=await setup('?popView=ethnicity');
+ try{
+  const map=window.__map;await waitFor(()=>map.getLayer('population-fill'),'ethnicity map');
+  const source=map.getSource('population'),before=JSON.stringify(source.data),moves=map.cameraChanges,count=requests.length;
+  assert.equal(q('[data-pop-ethnicity]'),null);assert.equal(q('[data-pop-metro]'),null);
+  assert.match(q('[data-pop-overview]').textContent,/サラダボウル/);
+  q('[data-pop-group="hispanic"]').click();
+  assert.match(q('[data-pop-overview-title]').textContent,/ヒスパニック/);
+  assert.match(q('[data-pop-reading-body]').textContent,/1848/);
+  assert.equal(q('[data-pop-group="hispanic"]').getAttribute('aria-pressed'),'true');
+  assert.equal(map.getSource('population'),source);assert.equal(JSON.stringify(source.data),before);
+  assert.equal(map.cameraChanges,moves);assert.equal(requests.length,count);
+  assert.equal(new URL(window.location.href).searchParams.get('popEthnicity'),'hispanic');
+  q('[data-pop-group="asian"]').click();assert.match(q('[data-pop-overview-title]').textContent,/アジア/);
+  assert.doesNotMatch(q('[data-pop-reading-body]').textContent,/1848/);
+  q('[data-pop-reading-reset]').click();assert.match(q('[data-pop-overview]').textContent,/サラダボウル/);
+  assert.equal(map.getSource('population'),source);
+ }finally{await window.happyDOM.close();}
+});
+test('city replaces nationwide reading and national reset clears it without moving density map',async()=>{
  const {window,q,requests}=await setup('?lng=-96&lat=38&z=5');
- try{const map=window.__map;await waitFor(()=>map.getLayer('population-fill'),'density map');const moves=map.cameraChanges,before=q('[data-pop-chart]').textContent;assert.ok(!requests.some(x=>x.includes('ethnicity.json')));q('.population-city-list [data-pop-city="los-angeles"]').click();assert.match(q('[data-pop-city-title]').textContent,/ロサンゼルス/);assert.match(q('[data-pop-city-jobs]').textContent,/2.9%/);assert.equal(q('[data-pop-state]'),null);assert.equal(q('[data-pop-geo]'),null);assert.equal(q('[data-pop-chart]').textContent,before);q('[data-pop-view="ethnicity"]').click();await waitFor(()=>q('[data-pop-national-title]').textContent==='全国の人種・民族','ethnicity');change(window,q('[data-pop-ethnicity]'),'hispanic');await waitFor(()=>map.getLayer('population-fill'),'ethnicity map');assert.equal(window.__map,map);assert.equal(map.cameraChanges,moves);assert.equal(new URL(window.location.href).searchParams.get('popEthnicity'),'hispanic');assert.equal(new URL(window.location.href).searchParams.get('popCity'),'los-angeles');assert.match(q('[data-pop-city-title]').textContent,/ロサンゼルス/);q('a[data-field="industry"]').click();assert.equal(map.getLayer('population-fill'),undefined);q('a[data-field="population"]').click();await waitFor(()=>map.getLayer('population-fill'),'return population');assert.equal(window.__map,map);
+ try{
+  const map=window.__map,moves=map.cameraChanges;await waitFor(()=>map.getLayer('population-fill'),'density map');
+  q('.population-city-list [data-pop-city="los-angeles"]').click();
+  assert.equal(q('[data-pop-overview-title]').textContent,'ロサンゼルス');
+  assert.match(q('[data-pop-reading-body]').textContent,/2.9%/);
+  assert.doesNotMatch(q('[data-pop-reading]').textContent,/東西の沿岸や五大湖周辺に人口が集まり/);
+  assert.equal(q('[data-pop-chart]'),null);assert.equal(map.cameraChanges,moves);
+  assert.ok(!requests.some(x=>x.includes('metro-')||x.includes('ethnicity.json')));
+  q('[data-pop-reading-reset]').click();assert.equal(new URL(window.location.href).searchParams.has('popCity'),false);
+  assert.match(q('[data-pop-overview-title]').textContent,/人は都市に/);
+  q('a[data-field="industry"]').click();assert.equal(map.getSource('population'),undefined);
+  q('a[data-field="population"]').click();await waitFor(()=>map.getLayer('population-fill'),'population returns');assert.equal(window.__map,map);
  }finally{await window.happyDOM.close();}
 });
-test('three metros load on explicit selection, preserve suppressed values, and release sources',async()=>{
- const {window,q}=await setup();
- try{for(const code of ['35620','31080','19100']){change(window,q('[data-pop-metro]'),code);await waitFor(()=>window.__map.getLayer('population-city-outlines'),'metro outlines '+code);assert.ok(window.__map.getSource('population').data.features.length>1000);assert.ok(Object.keys(window.__map.sources).filter(x=>x.startsWith('population')).length<=2);if(code==='35620'){pick(window,'tract:36103122406');assert.match(q('[data-pop-selected-note]').textContent,/errata 148/);}}q('a[data-field="agriculture"]').click();assert.equal(window.__map.getSource('population'),undefined);assert.equal(window.__map.getSource('population-outlines'),undefined);
+test('religion city and region share one selector and replace each other',async()=>{
+ const {window,q}=await setup('?popView=religion');
+ try{
+  const region=q('.population-city-list [data-pop-place-story="utah-lds"]');assert.equal(region.hidden,false);
+  region.click();assert.match(q('[data-pop-overview-title]').textContent,/末日聖徒/);
+  assert.equal(new URL(window.location.href).searchParams.get('popReligionStory'),'utah-lds');
+  q('.population-city-list [data-pop-city="chicago"]').click();
+  assert.equal(q('[data-pop-overview-title]').textContent,'シカゴ');assert.match(q('[data-pop-reading-body]').textContent,/大移動/);
+  assert.equal(new URL(window.location.href).searchParams.has('popReligionStory'),false);
+  assert.equal(region.getAttribute('aria-pressed'),'false');
+  region.click();assert.equal(new URL(window.location.href).searchParams.has('popCity'),false);
+  assert.match(q('[data-pop-status]').textContent,/郡別.*データ取得後/);assert.equal(q('[data-pop-chart]'),null);
+  assert.equal(window.__map.getSource('population'),undefined);
  }finally{await window.happyDOM.close();}
 });
-test('without WebGL all climate cities, voting and the religion reading remain available',async()=>{
- const {window,q}=await setup('',true);
- try{assert.match(q('[data-fallback-image]').src,/density.webp/);assert.equal(window.document.querySelectorAll('.population-city-list [data-pop-city]').length,12);q('.population-city-list [data-pop-city="seattle"]').click();assert.match(q('[data-pop-city-jobs]').textContent,/9.3%/);q('[data-pop-view="vote"]').click();await waitFor(()=>q('[data-pop-national-title]').textContent==='全国の得票構成','vote');assert.match(q('[data-fallback-image]').src,/vote.webp/);q('[data-pop-view="religion"]').click();await waitFor(()=>q('[data-pop-national-title]').textContent==='全国の宗教構成','religion');assert.match(q('[data-pop-status]').textContent,/6つの地域解説/);assert.match(q('[data-fallback-image]').src,/religion.webp/);assert.match(q('[data-pop-chart]').textContent,/無回答・丸め等の差分2%/);assert.match(q('[data-pop-chart]').textContent,/その他のキリスト教3%/);assert.equal(q('[data-pop-religion]'),null);assert.equal(window.document.querySelectorAll('[data-pop-religion-guide]').length,6);assert.equal(q('[data-pop-religion-stories]').hidden,false);assert.match(q('[data-pop-city-religion]').textContent,/州の傾向を市民全員/);assert.match(q('[data-pop-spatial-reading]').textContent,/信徒の人数/);
+test('history restores ethnicity reading on unchanged categorical geography',async()=>{
+ const {window,q}=await setup('?popView=ethnicity');
+ try{
+  await waitFor(()=>window.__map.getLayer('population-fill'),'first map');
+  const before=JSON.stringify(window.__map.getSource('population').data);
+  const url=new URL(window.location.href);url.searchParams.set('popEthnicity','black');url.searchParams.set('popGeo','county:36061');
+  window.history.replaceState({},'',url);window.dispatchEvent(new window.PopStateEvent('popstate'));
+  await waitFor(()=>q('[data-pop-overview-title]').textContent.includes('黒人')&&window.__map.getLayer('population-fill'),'restored group');
+  assert.equal(JSON.stringify(window.__map.getSource('population').data),before);
+  assert.equal(q('[data-pop-selected]').hidden,true);
  }finally{await window.happyDOM.close();}
 });
-
-test('history restores a city and a map-clicked county without native geography selectors',async()=>{
- const {window,q}=await setup();try{q('.population-city-list [data-pop-city="los-angeles"]').click();const url=new URL(window.location.href);url.searchParams.set('popCity','new-york');url.searchParams.set('popGeo','county:36061');window.history.replaceState({},'',url);window.dispatchEvent(new window.PopStateEvent('popstate'));await waitFor(()=>q('[data-pop-selected-title]').textContent.includes('New York'),'restored county');assert.match(q('[data-pop-city-title]').textContent,/ニューヨーク/);assert.equal(q('.population-city-list [data-pop-city="new-york"]').getAttribute('aria-pressed'),'true');assert.equal(q('[data-pop-state]'),null);assert.equal(q('[data-pop-geo]'),null);}finally{await window.happyDOM.close();}
+test('vote focus zooms the shared map and has a truthful Alaska limitation',async()=>{
+ const {window,q}=await setup('?popView=vote');
+ try{
+  await waitFor(()=>window.__map.getLayer('population-fill'),'votes');
+  const map=window.__map,moves=map.cameraChanges,source=map.getSource('population');
+  change(window,q('[data-pop-vote-state]'),'48');
+  assert.equal(q('[data-pop-overview-title]').textContent,'テキサスの投票分布');assert.ok(map.cameraChanges>moves);assert.equal(map.getSource('population'),source);
+  assert.match(q('[data-pop-reading-body]').textContent,/Harris/);
+  pick(window,'county:48201');assert.equal(q('[data-pop-selected]').hidden,false);
+  change(window,q('[data-pop-vote-state]'),'33');assert.match(q('[data-pop-overview-title]').textContent,/ニューハンプシャー/);
+  change(window,q('[data-pop-vote-state]'),'02');assert.match(q('[data-pop-reading-body]').textContent,/収録していません/);
+  q('[data-pop-reading-reset]').click();assert.equal(q('[data-pop-vote-state]').value,'');assert.equal(q('[data-pop-selected]').hidden,true);
+ }finally{await window.happyDOM.close();}
 });
-test('a late metro response cannot move the camera after a newer selection',async()=>{
- const {window,q}=await setup();let release;try{const fetch=window.fetch;window.fetch=async url=>{if(String(url).endsWith('metro-35620.json.gz'))await new Promise(resolve=>release=resolve);return fetch(url);};change(window,q('[data-pop-metro]'),'35620');await waitFor(()=>release,'NY request held');assert.equal(q('[data-pop-selected]').hidden,true);q('.population-city-list [data-pop-city="dallas"]').click();assert.match(q('[data-pop-city-jobs]').textContent,/10.5%/);change(window,q('[data-pop-metro]'),'31080');await waitFor(()=>window.__map.getLayer('population-city-outlines'),'LA ready');const moves=window.__map.cameraChanges;release();await delay();assert.equal(window.__map.cameraChanges,moves);assert.equal(q('[data-pop-metro]').value,'31080');assert.equal(new URL(window.location.href).searchParams.get('popMetro'),'31080');}finally{release?.();await window.happyDOM.close();}
+test('no-WebGL fallbacks use the categorical map and focused vote extent',async()=>{
+ const {window,q,requests}=await setup('',true);
+ try{
+  q('[data-pop-view="ethnicity"]').click();await waitFor(()=>q('[data-fallback-image]').src.includes('ethnicity-dominant.webp'),'categorical fallback');
+  const src=q('[data-fallback-image]').src;q('[data-pop-group="white"]').click();assert.equal(q('[data-fallback-image]').src,src);
+  q('[data-pop-view="vote"]').click();await waitFor(()=>q('[data-fallback-image]').src.endsWith('vote.webp'),'vote fallback');
+  change(window,q('[data-pop-vote-state]'),'33');assert.match(q('[data-fallback-image]').src,/vote-state-33.webp/);
+  q('[data-pop-reading-reset]').click();assert.match(q('[data-fallback-image]').src,/\/vote.webp$/);
+  q('[data-pop-view="religion"]').click();await waitFor(()=>q('[data-pop-status]').textContent.includes('6つの地域解説'),'religion');
+  assert.match(q('[data-fallback-image]').src,/religion.webp/);assert.ok(!requests.some(x=>x.includes('metro-')));
+ }finally{await window.happyDOM.close();}
 });
-test('religion uses linked reference points without a state choropleth',async()=>{
- const {window,q}=await setup();try{q('[data-pop-view="religion"]').click();await waitFor(()=>q('[data-pop-national-title]').textContent==='全国の宗教構成','religion overview');await waitFor(()=>window.document.querySelectorAll('[data-pop-religion-marker]:not([hidden])').length===6,'religion markers');assert.equal(window.__map.getLayer('population-fill'),undefined);assert.equal(window.__map.getSource('population'),undefined);const guide=q('[data-pop-religion-guide="utah-lds"]');guide.click();const story=q('[data-pop-religion-story="utah-lds"]');assert.equal(story.open,true);assert.equal(guide.getAttribute('aria-pressed'),'true');assert.equal(q('[data-pop-religion-marker="utah-lds"]').getAttribute('aria-pressed'),'true');assert.equal(new URL(window.location.href).searchParams.get('popReligionStory'),'utah-lds');q('.population-city-list [data-pop-city="chicago"]').click();assert.match(q('[data-pop-city-religion]').textContent,/大移動/);const related=q('[data-pop-city-religion-story="black-churches"]');assert.ok(related);related.click();assert.equal(q('[data-pop-religion-story="black-churches"]').open,true);assert.equal(story.open,false);assert.equal(new URL(window.location.href).searchParams.get('popReligionStory'),'black-churches');}finally{await window.happyDOM.close();}
-});
-
-test('history restores religion city and story while discarding an old state selection',async()=>{
- const {window,q}=await setup('?popView=religion&popCity=new-york&popReligionStory=northeast-immigration&popGeo=state:36');try{assert.match(q('[data-pop-city-title]').textContent,/ニューヨーク/);assert.equal(q('[data-pop-religion-story="northeast-immigration"]').open,true);assert.equal(q('[data-pop-selected]').hidden,true);assert.equal(window.__map.getLayer('population-fill'),undefined);assert.equal(new URL(window.location.href).searchParams.get('popReligionStory'),'northeast-immigration');}finally{await window.happyDOM.close();}
-});
-
-test('settlement reading switches the mapped category while preserving the selected city',async()=>{
- const {window,q}=await setup();try{q('[data-pop-city-markers] [data-pop-city="detroit"]').click();q('[data-pop-view="ethnicity"]').click();await waitFor(()=>q('[data-pop-national-title]').textContent==='全国の人種・民族','ethnicity');assert.equal(q('[data-pop-settlement]').hidden,false);assert.match(q('[data-pop-overview]').textContent,/サラダボウル/);assert.match(q('[data-pop-spatial-reading]').textContent,/白人の色から両者を区別/);q('[data-pop-story="african"]').click();await waitFor(()=>q('[data-pop-ethnicity]').value==='black'&&window.__map.getLayer('population-fill'),'black population map');assert.match(q('[data-pop-city-title]').textContent,/デトロイト/);assert.match(q('[data-pop-city-jobs]').textContent,/生産職8.8%/);q('[data-pop-city-clear]').click();assert.equal(new URL(window.location.href).searchParams.has('popCity'),false);assert.equal(q('[data-pop-city-content]').hidden,true);}finally{await window.happyDOM.close();}
+test('late ethnicity data cannot repaint a newer religion selection',async()=>{
+ const {window,q}=await setup();let release;
+ try{
+  const fetch=window.fetch;window.fetch=async url=>{if(String(url).endsWith('ethnicity.json.gz'))await new Promise(resolve=>release=resolve);return fetch(url);};
+  q('[data-pop-view="ethnicity"]').click();await waitFor(()=>release,'held ethnicity');
+  q('[data-pop-view="religion"]').click();await waitFor(()=>q('[data-pop-status]').textContent.includes('6つの地域解説'),'religion ready');
+  q('[data-pop-place-story="utah-lds"]').click();release();await delay();
+  assert.match(q('[data-pop-overview-title]').textContent,/末日聖徒/);assert.equal(window.__map.getSource('population'),undefined);
+ }finally{release?.();await window.happyDOM.close();}
 });

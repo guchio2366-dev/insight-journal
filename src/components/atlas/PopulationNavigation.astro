@@ -1,13 +1,11 @@
 ---
-import {populationViews,ethnicities,metros} from '../../data/atlas/population';
+import {populationViews} from '../../data/atlas/population';
+import {populationVoteStates} from '../../data/atlas/population-focus';
 const {active=false}=Astro.props;
 ---
 <div class="population-controls" data-population-controls hidden={!active}>
  <nav aria-label="人口の表示" class="population-tabs">{populationViews.map(([id,label])=><button type="button" data-pop-view={id} aria-pressed={id==='distribution'}>{label}</button>)}</nav>
- <div class="population-filters">
-  <label data-pop-filter="distribution">比較範囲<select data-pop-metro>{metros.map(([id,label])=><option value={id}>{label}</option>)}</select></label>
-  <label data-pop-filter="ethnicity" hidden>表示する区分<select data-pop-ethnicity>{ethnicities.map(([id,label])=><option value={id}>{label}</option>)}</select></label>
- </div>
+ <div class="population-filters" data-pop-filter="vote" hidden><label>注目州<select data-pop-vote-state><option value="">全国</option>{populationVoteStates.map(state=><option value={state.id}>{state.name}</option>)}</select></label></div>
  <p data-pop-status role="status">人口統計を読み込みます。</p><button type="button" data-pop-retry hidden>データの読み込みを再試行</button>
- <noscript><p>地図の切替と都市選択にはJavaScriptが必要です。人口密度の代替図と全国人口、分類方法はこのまま読めます。</p></noscript>
+ <noscript><p>地図の切替と都市選択にはJavaScriptが必要です。人口密度の代替図と分類方法はこのまま読めます。</p></noscript>
 </div>
