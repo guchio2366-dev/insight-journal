@@ -33,7 +33,7 @@ async function setup(query='',fail=false){
  const requests=[];
  window.fetch=async (url)=>{requests.push(String(url));return new Response(await readFile('public/'+String(url).replace(/^.*?\/insight-journal\//,'')));};
  window.Blob=Blob;window.Response=Response;window.DecompressionStream=DecompressionStream;
- const entry=window.eval(bundle.outputFiles[0].text+"; NatureTest;");await entry.startAtlas();await waitFor(()=>/3,144|6つの地域解説/.test(window.document.querySelector('[data-pop-status]').textContent),'population ready').catch(error=>{console.log(window.document.querySelector('[data-pop-status]').textContent,requests,window.happyDOM.virtualConsolePrinter.readAsString());throw error;});await delay();
+ const entry=window.eval(bundle.outputFiles[0].text+"; NatureTest;");await entry.startAtlas();await waitFor(()=>/3,144|3,108/.test(window.document.querySelector('[data-pop-status]').textContent),'population ready').catch(error=>{console.log(window.document.querySelector('[data-pop-status]').textContent,requests,window.happyDOM.virtualConsolePrinter.readAsString());throw error;});await delay();
  return {window,requests,root:window.document.querySelector('[data-atlas-explorer]'),q:s=>window.document.querySelector(s)};
 }
 
@@ -77,9 +77,11 @@ test('city replaces nationwide reading and national reset clears it without movi
   q('a[data-field="population"]').click();await waitFor(()=>map.getLayer('population-fill'),'population returns');assert.equal(window.__map,map);
  }finally{await window.happyDOM.close();}
 });
-test('religion city and region share one selector and replace each other',async()=>{
- const {window,q}=await setup('?popView=religion');
+test('religion map, legend, city and region share one selector without repainting the map',async()=>{
+ const {window,q,requests}=await setup('?popView=religion');
  try{
+  const map=window.__map;await waitFor(()=>map.getLayer('population-fill'),'religion map');const source=map.getSource('population'),before=JSON.stringify(source.data),moves=map.cameraChanges,count=requests.length;
+  q('[data-pop-religion-group="latter_day_saints"]').click();assert.match(q('[data-pop-overview-title]').textContent,/末日聖徒/);assert.match(q('[data-pop-reading-body]').textContent,/灌漑/);assert.equal(map.getSource('population'),source);assert.equal(JSON.stringify(source.data),before);assert.equal(map.cameraChanges,moves);assert.equal(requests.length,count);
   const region=q('.population-city-list [data-pop-place-story="utah-lds"]');assert.equal(region.hidden,false);
   region.click();assert.match(q('[data-pop-overview-title]').textContent,/末日聖徒/);
   assert.equal(new URL(window.location.href).searchParams.get('popReligionStory'),'utah-lds');
@@ -88,8 +90,8 @@ test('religion city and region share one selector and replace each other',async(
   assert.equal(new URL(window.location.href).searchParams.has('popReligionStory'),false);
   assert.equal(region.getAttribute('aria-pressed'),'false');
   region.click();assert.equal(new URL(window.location.href).searchParams.has('popCity'),false);
-  assert.match(q('[data-pop-status]').textContent,/郡別.*データ取得後/);assert.equal(q('[data-pop-chart]'),null);
-  assert.equal(window.__map.getSource('population'),undefined);
+  assert.match(q('[data-pop-status]').textContent,/3,108 郡/);assert.equal(q('[data-pop-chart]'),null);
+  assert.equal(window.__map.getSource('population'),source);
  }finally{await window.happyDOM.close();}
 });
 test('history restores ethnicity reading on unchanged categorical geography',async()=>{
@@ -126,8 +128,8 @@ test('no-WebGL fallbacks use the categorical map and focused vote extent',async(
   q('[data-pop-view="vote"]').click();await waitFor(()=>q('[data-fallback-image]').src.endsWith('vote.webp'),'vote fallback');
   change(window,q('[data-pop-vote-state]'),'33');assert.match(q('[data-fallback-image]').src,/vote-state-33.webp/);
   q('[data-pop-reading-reset]').click();assert.match(q('[data-fallback-image]').src,/\/vote.webp$/);
-  q('[data-pop-view="religion"]').click();await waitFor(()=>q('[data-pop-status]').textContent.includes('6つの地域解説'),'religion');
-  assert.match(q('[data-fallback-image]').src,/religion.webp/);assert.ok(!requests.some(x=>x.includes('metro-')));
+  q('[data-pop-view="religion"]').click();await waitFor(()=>q('[data-pop-status]').textContent.includes('3,108 郡'),'religion');
+  assert.match(q('[data-fallback-image]').src,/religion-dominant.webp/);assert.ok(!requests.some(x=>x.includes('metro-')));
  }finally{await window.happyDOM.close();}
 });
 test('late ethnicity data cannot repaint a newer religion selection',async()=>{
@@ -135,8 +137,8 @@ test('late ethnicity data cannot repaint a newer religion selection',async()=>{
  try{
   const fetch=window.fetch;window.fetch=async url=>{if(String(url).endsWith('ethnicity.json.gz'))await new Promise(resolve=>release=resolve);return fetch(url);};
   q('[data-pop-view="ethnicity"]').click();await waitFor(()=>release,'held ethnicity');
-  q('[data-pop-view="religion"]').click();await waitFor(()=>q('[data-pop-status]').textContent.includes('6つの地域解説'),'religion ready');
+  q('[data-pop-view="religion"]').click();await waitFor(()=>q('[data-pop-status]').textContent.includes('3,108 郡'),'religion ready');
   q('[data-pop-place-story="utah-lds"]').click();release();await delay();
-  assert.match(q('[data-pop-overview-title]').textContent,/末日聖徒/);assert.equal(window.__map.getSource('population'),undefined);
+  assert.match(q('[data-pop-overview-title]').textContent,/末日聖徒/);assert.ok(window.__map.getSource('population'));
  }finally{release?.();await window.happyDOM.close();}
 });

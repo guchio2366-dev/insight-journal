@@ -1,11 +1,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFile} from 'node:fs/promises';
-import {validateReligionData,religiousShareColor,religiousShareLabel} from '../../src/lib/atlas-population-religion.ts';
+import {readFile,stat} from 'node:fs/promises';
+import {gunzipSync} from 'node:zlib';
+import {validateReligionData,validateReligionDominantData,religiousShareColor,religiousShareLabel} from '../../src/lib/atlas-population-religion.ts';
 import {validateReligionOverview} from '../../src/lib/atlas-population-religion-overview.ts';
 import {missingColor,shareColors} from '../../src/data/atlas/population.ts';
 const reviewed=JSON.parse(await readFile('data/atlas/population-religion-reviewed.json','utf8'));
 const overview=JSON.parse(await readFile('data/atlas/population-religion-overview-reviewed.json','utf8'));
+const dominant=JSON.parse(await readFile('data/atlas/population-religion-dominant-reviewed.json','utf8'));
+test('county religion winners reconcile with reviewed categories and 2020 boundaries',async()=>{
+ assert.ok(validateReligionDominantData(dominant));assert.equal(dominant.rows.length,3108);assert.deepEqual(Object.fromEntries(dominant.categories.map(item=>[item.id,item.count])),{catholic:1221,southern_baptist:1056,mainline_protestant:327,nondenominational:274,other_conservative_protestant:116,latter_day_saints:94,black_protestant:15,other:2,unreported:3});
+ const path='public/assets/atlas/population/v1/religion-counties-2020.geo.json.gz',geometry=JSON.parse(gunzipSync(await readFile(path)));assert.equal(geometry.features.length,3108);assert.deepEqual(new Set(geometry.features.map(feature=>feature.properties.id)),new Set(dominant.rows.map(row=>row.id)));assert.ok((await stat(path)).size<1_200_000);
+ const broken=structuredClone(dominant);broken.rows[0].category='unknown';assert.equal(validateReligionDominantData(broken),false);
+ const duplicate=structuredClone(dominant);duplicate.rows[1].id=duplicate.rows[0].id;assert.equal(validateReligionDominantData(duplicate),false);
+});
 test('national religion overview preserves Pew parent categories and the published rounding gap',()=>{
  assert.ok(validateReligionOverview(overview));assert.equal(overview.categories.reduce((sum,item)=>sum+item.value,0),98);
  const duplicate=structuredClone(overview);duplicate.categories[0].id=duplicate.categories[1].id;assert.equal(validateReligionOverview(duplicate),false);

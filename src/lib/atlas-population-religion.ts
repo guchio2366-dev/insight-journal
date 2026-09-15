@@ -15,6 +15,43 @@ export type ReligionData = {
   national: Record<string, ReligiousShare>;
   rows: ReligiousRow[];
 };
+export const religionDominantColors: Record<string, string> = {
+  catholic: '#9b4f67',
+  southern_baptist: '#d47a3e',
+  mainline_protestant: '#4f8067',
+  nondenominational: '#d5ad42',
+  other_conservative_protestant: '#9d6550',
+  latter_day_saints: '#626aa3',
+  black_protestant: '#345b78',
+  other: '#8b6d9d',
+  unreported: missingColor,
+};
+export type ReligionDominantRow = {id: string; category: string; group: string | null};
+export type ReligionDominantData = {
+  version: 1;
+  year: 2020;
+  universe: 'congregation-linked adherents';
+  geography: string;
+  source: {url: string; title: string; citation: string};
+  categories: {id: string; label: string; count: number}[];
+  rows: ReligionDominantRow[];
+};
+export function validateReligionDominantData(data: any): data is ReligionDominantData {
+  const ids = Object.keys(religionDominantColors);
+  const rows = Array.isArray(data?.rows) ? data.rows : [];
+  const categories = Array.isArray(data?.categories) ? data.categories : [];
+  const rowIds = rows.map((row: any) => row.id);
+  const counts = new Map(ids.map(id => [id, 0]));
+  for (const row of rows) if (ids.includes(row?.category)) counts.set(row.category, counts.get(row.category)! + 1);
+  return data?.version === 1 && data.year === 2020 && data.universe === 'congregation-linked adherents'
+    && typeof data.geography === 'string' && data.source?.url === 'https://www.usreligioncensus.org/node/1639'
+    && rows.length === 3108 && new Set(rowIds).size === rows.length
+    && rows.every((row: any) => /^county:\d{5}$/.test(row?.id) && ids.includes(row.category)
+      && (row.category === 'unreported' ? row.group === null : typeof row.group === 'string' && row.group.length > 0))
+    && categories.length === ids.length && new Set(categories.map((item: any) => item.id)).size === ids.length
+    && categories.every((item: any) => ids.includes(item.id) && typeof item.label === 'string'
+      && Number.isInteger(item.count) && item.count === counts.get(item.id));
+}
 export function validReligiousShare(value: unknown): value is ReligiousShare {
   if (!value || typeof value !== 'object') return false;
   const v = value as any;
