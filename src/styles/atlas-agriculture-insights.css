@@ -1,0 +1,32 @@
+
+.agri-insight-links{margin:12px 0 6px;border-top:1px solid #d4d8cf;padding-top:10px}
+.agri-insight-links>strong{display:block;font-size:13px;margin-bottom:6px}
+.agri-insight-links>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.agri-insight-links a{display:flex;flex-direction:column;justify-content:center;min-height:44px;padding:5px 8px;border:1px solid #b6c7c1;border-radius:4px;color:#254e53;text-decoration:none;background:#f1f5ef;box-sizing:border-box;font-size:13px;line-height:1.45}
+.agri-insight-links small{font-size:10px;color:#536b6f}
+.agri-insight-links a:hover{background:#e4ecdf}
+.agri-insight-links a:focus-visible,.agri-insight-back:focus-visible{outline:3px solid #176f89;outline-offset:2px}
+.agri-reading-sources{font-size:12px;margin-top:6px}
+.agri-reading-sources summary{min-height:44px;align-content:center;cursor:pointer}
+.agri-reading-sources ul{margin:0;padding-left:18px}
+.agri-insight-context{padding:12px 14px;margin-bottom:12px;border:1px solid #a8bbb3;background:#f4f6ef;overflow-wrap:anywhere}
+.agri-insight-context h2{font-size:16px;line-height:1.5;margin:0 0 8px}
+.agri-insight-context p{font-size:13px;line-height:1.7;margin:6px 0}
+.agri-insight-targets{padding-left:18px;font-size:12px;margin:6px 0}
+.agri-insight-back{display:inline-flex;align-items:center;min-height:44px;font-size:13px;font-weight:700;color:#254e53}
+.agri-insight-error:empty{display:none}
+.agri-insight-context button{min-height:44px}
+.agri-insight-overlay{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;overflow:hidden}
+.agri-insight-overlay path{fill:none;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.agri-product-halo{stroke:#fffdf3;stroke-width:5;stroke-opacity:.95}
+.agri-product-line{stroke:#60422b;stroke-width:2.7}
+.agri-product-line.is-comparison{stroke-dasharray:6 4;stroke-width:2.3}
+.agri-target-halo{stroke:#fffdf3;stroke-width:5.5}
+.agri-target-line{stroke:#183c4a;stroke-width:3}
+.agri-insight-overlay circle{fill:#fffdf3;stroke:#183c4a;stroke-width:3}
+.agri-insight-overlay text{font-size:11px;fill:#243f46;stroke:#fffdf3;stroke-width:3px;paint-order:stroke;font-weight:700}
+.agri-comparison-key{font-size:11px!important;line-height:1.5;margin:6px 0;color:#36545a}
+.atlas-explorer[data-selected-product]:not([data-selected-product=""]) .atlas-livestock-marker:not(.is-related){opacity:.5}
+.atlas-livestock-marker.is-related{outline:3px solid #fffdf3;box-shadow:0 0 0 5px #263f4c}
+@media(max-width:599px){.agri-insight-links>div{grid-template-columns:1fr}.agri-insight-links small{font-size:11px}}
+@media(min-width:960px) and (min-height:600px){.agri-reading-panel .atlas-crop-copy p{margin:8px 0;line-height:1.65}.agri-reading-panel .agri-insight-links{margin-top:8px}}

@@ -1,6 +1,7 @@
 ---
 import {livestockKinds,livestockReadings,livestockSources} from '../../data/atlas/livestock';
 import {livestockStatistics,livestockStatLabels} from '../../data/atlas/livestock-statistics';
+import AgricultureProductReading from './AgricultureProductReading.astro';
 import AgricultureDetailPanel from './AgricultureDetailPanel.astro';
 import ProductionShareChart from './ProductionShareChart.astro';
 import LivestockSupplyUse from './LivestockSupplyUse.astro';
@@ -15,7 +16,7 @@ const dairy=livestockStatistics.exports.dairy;
   {livestockKinds.map(k=>{
     const reading=livestockReadings.find(r=>r.id===k.id)!,labels=livestockStatLabels[k.id],world=livestockStatistics.production[k.id];
     return <AgricultureDetailPanel id={k.id} group="livestock" color={k.color} hasExtra={k.id==='dairy'}>
-      <Fragment slot="copy"><h3>{reading.title}</h3><p>{reading.body}</p><p class="atlas-crop-uses"><strong>主な製品</strong>{labels.products}</p><p class="atlas-inline-sources">地図の記号は主要集積地域の代表点です。全国の生産量や頭・羽数の大きさを表していません。</p><p class="atlas-inline-sources">地理の出典：{livestockSources.map((s,i)=><Fragment>{i>0?' ／ ':''}<a href={s.url} target="_blank" rel="noopener">{s.publisher}</a></Fragment>)}</p></Fragment>
+      <Fragment slot="copy"><h3>{reading.title}</h3><AgricultureProductReading product={k.id} /><p class="atlas-crop-uses"><strong>主な製品</strong>{labels.products}</p><p class="atlas-inline-sources">地図の記号は主要集積地域の代表点です。全国の生産量や頭・羽数の大きさを表していません。</p><p class="atlas-inline-sources">地理の出典：{livestockSources.map((s,i)=><Fragment>{i>0?' ／ ':''}<a href={s.url} target="_blank" rel="noopener">{s.publisher}</a></Fragment>)}</p></Fragment>
       <LivestockSupplyUse slot="supply" id={k.id}/><LivestockExports slot="exports" id={k.id}/>
       <ProductionShareChart slot="world" id={k.id} name={k.label} period={`${world.year}年・FAO公表値（推計を含む）`} basis={labels.world} unit="トン" totalUnit="百万トン" totalDivisor={1e6} worldTotal={world.worldTotal} countries={world.countries} trend={world.trend} sourceUrl={livestockStatistics.sources.faostat.landingUrl} sourceLabel="FAOSTAT QCL" note="世界計はFAOの公表値。その他は表示国以外と原表の集計差を含みます。"/>
       {k.id==='dairy'&&<section slot="extra" class="dairy-product-exports"><h4>乳製品別の輸出額</h4><p>2025暦年 · 同じ総輸出額 {Number(dairy.totalUsd/1e8).toFixed(1)}億米ドルの内訳です。</p><table><caption>国内販売構成ではなく、乳由来の製品・派生品の輸出構成</caption><thead><tr><th>製品</th><th>億米ドル</th><th>構成比</th></tr></thead><tbody>{dairy.products.map(r=><tr><th scope="row">{r.label}</th><td>{(r.valueUsd/1e8).toFixed(2)}</td><td>{(r.valueUsd/dairy.totalUsd*100).toFixed(1)}%</td></tr>)}</tbody></table><p>その他には飲用乳、発酵乳、アイスクリーム、乳糖、カゼイン、乳を含む調製品等を含みます。各商品コードは１区分だけに計上しています。</p><a href={livestockStatistics.sources.gats.landingUrl} target="_blank" rel="noopener">出典：USDA FAS GATS</a></section>}

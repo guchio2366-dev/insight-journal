@@ -4,7 +4,7 @@ import {animalDetailIds, cropDetailIds, type ProductId} from './atlas-agricultur
 export function cityAgricultureUrl(source:URL,base:string,city:string,product:ProductId):URL {
   const url=new URL(source), animal=animalDetailIds.includes(product as typeof animalDetailIds[number]);
   url.pathname=base+'agriculture/';
-  for(const key of ['field','region','relation','animal','animalRegion','crop','env','natureFeature'])url.searchParams.delete(key);
+  for(const key of ['field','region','relation','animal','animalRegion','crop','env','natureFeature','waterView','precipBand','basin','agriInsight','agriReturn'])url.searchParams.delete(key);
   url.searchParams.set('city',city);
   url.searchParams.set('agriReading','product:'+product);
   url.searchParams.set('agriProduct',product);

@@ -1,0 +1,20 @@
+
+---
+import {withBase} from '../../lib/urls';
+import {productParagraphs,productSources,productInsightOrder,insightFor,targetLabel} from '../../data/atlas/agriculture-insights';
+import {agricultureInsightUrl} from '../../lib/atlas-agriculture-insight-state';
+import type {ProductId} from '../../lib/atlas-agriculture-detail-state';
+interface Props {product:ProductId}
+const {product}=Astro.props;
+const base=withBase('/atlas/north-america/');
+const origin=new URL(base+'agriculture/','https://atlas.invalid');
+origin.searchParams.set('agriReading','product:'+product);
+origin.searchParams.set('agriProduct',product);
+const links=productInsightOrder[product].map(id=>insightFor(id)!);
+---
+{productParagraphs[product].map(text=><p>{text}</p>)}
+{links.length>0&&<nav class="agri-insight-links" aria-label="地図で確かめる">
+  <strong>地図で確かめる</strong>
+  <div>{links.map(item=>{const u=agricultureInsightUrl(origin,base,product,item.id);return <a href={u.pathname+u.search} data-agri-insight-link={item.id} data-agri-link-product={product}><span>{item.label}</span><small>{targetLabel(item.target)}</small></a>;})}</div>
+</nav>}
+<details class="agri-reading-sources"><summary>解説の出典</summary><ul>{productSources[product].map(([label,url])=><li><a href={url} target="_blank" rel="noopener noreferrer">{label}</a></li>)}</ul></details>
