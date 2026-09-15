@@ -1,3 +1,4 @@
+import {createWaterController} from './atlas-water';
 import {createPopulationController} from './atlas-population';
 import { createAgricultureDetails } from './atlas-agriculture-details';
 import type { AgricultureRelation } from '../data/atlas/agriculture-relations';
@@ -59,7 +60,7 @@ export async function startAtlas() {
     ...Object.entries(config.natureFeatureCopy).filter(([key])=>key.startsWith('landform:')).map(([id,value]:[string,any])=>({id,name:id==='landform:大西洋海岸平野'?'大西洋岸平野':id.split(':')[1],coordinate:value.anchor,mode:'landform'})),
     ...Object.entries(config.natureFeatureCopy).filter(([key])=>key.startsWith('water:')).map(([id,value]:[string,any])=>({id,name:value.title,coordinate:value.anchor,mode:'water'})),
   ],{
-    active:()=>field==='natural',mode:()=>natureMode,zoom:()=>map?.getZoom()??3,
+    active:()=>field==='natural'&&!(natureMode==='water'&&water.active()),mode:()=>natureMode,zoom:()=>map?.getZoom()??3,
     project:()=>ready&&map&&!failed&&fallback.hidden?coordinate=>map!.project(coordinate):null,
     select:(entry,trigger)=>entry.mode==='climate'?selectCity(entry.id.slice(5),true,trigger):showNatureFeature(entry.id,undefined,undefined,true,trigger),
     placed:()=>{if(!mapMoving)placeSelectionCard();},
@@ -88,6 +89,8 @@ export async function startAtlas() {
 
   const population=createPopulationController(root,config.populationAssetBase??config.assetBase.replace(/v3\/$/,'population/v1/'),{cities:config.climateCities,active:()=>field==='population',map:()=>ready&&!failed?map:undefined,changed:push=>save(push),fit:bounds=>{if(map&&bounds){view='custom';map.fitBounds(bounds,{padding:30,duration:0,maxZoom:10});}}});
 
+  const water=createWaterController(root,config.base,{dragged:()=>mapDragged,active:()=>field==='natural'&&natureMode==='water',map:()=>ready&&!failed?map:undefined,project:()=>ready&&map&&!failed&&fallback.hidden?p=>map!.project(p):null,changed:()=>save(true),viewChanged:()=>{natureGeneration++;pendingNatureKey='';setNatureMode(natureMode,true);}});
+
   function cameraState(){
     const center=map?.getCenter();
     return center?{lng:center.lng,lat:center.lat,zoom:map!.getZoom()}:savedCamera;
@@ -95,7 +98,7 @@ export async function startAtlas() {
 
   function save(push=false,sourceUrl=new URL(location.href)){
     if(restoring)return;
-    const url=population.write(industries.write(writeAtlasState(sourceUrl,config.base,field,cameraState(),selectedCrop,selectedRegion,selectedStats,view,[...agriLayers] as any,selectedAnimal,selectedAnimalRegion,{env:natureMode,city:selectedCity,natureFeature},selectedRelation,agricultureDetails.state())));
+    const url=water.write(population.write(industries.write(writeAtlasState(sourceUrl,config.base,field,cameraState(),selectedCrop,selectedRegion,selectedStats,view,[...agriLayers] as any,selectedAnimal,selectedAnimalRegion,{env:natureMode,city:selectedCity,natureFeature},selectedRelation,agricultureDetails.state()))));
     if(field==='industry'&&push)url.hash='';
     if(config.reviewMode){url.pathname=config.base+'review/';url.searchParams.set('field',field);}
     history[push?'pushState':'replaceState']({},'',url);
@@ -171,7 +174,7 @@ export async function startAtlas() {
     el('[data-climate-overview]').hidden=!active||natureMode!=='climate';
     const guide=el('[data-nature-guide]');guide.hidden=!active||(natureMode==='contour'&&!fallback.hidden);
     const guides:Record<NatureMode,string>={climate:'都市名をタップすると、雨温図と気候の解説を表示します。',water:'地図の川・湖・帯水層の名前をタップすると、解説を表示します。',landform:'地図の山脈・高原・平原の名前をタップすると、解説を表示します。',contour:'等高線をタップすると、その線の標高を表示します。'};
-    guide.textContent=guides[natureMode];
+    guide.textContent=guides[natureMode];water.render();
   }
 
   function hideSelection(){
@@ -293,12 +296,13 @@ export async function startAtlas() {
 
   function renderLivestockMarkers(){const holder=el('[data-livestock-markers]');holder.replaceChildren();if(!ready||!map||field!=='agriculture'||!agriLayers.has('livestock'))return;const visible=config.livestockRegions.map((region:LivestockRegion)=>({region,point:map!.project(region.anchor)})).filter(({point}:any)=>point.x>=20&&point.y>=20&&point.x<=frame.clientWidth-20&&point.y<=frame.clientHeight-20),groups:{regions:LivestockRegion[];points:any[]}[]=[],distance=frame.clientWidth<650?58:48;for(const item of visible){const found=groups.find(g=>Math.hypot(g.points[0].x-item.point.x,g.points[0].y-item.point.y)<distance);if(found){found.regions.push(item.region);found.points.push(item.point);}else groups.push({regions:[item.region],points:[item.point]});}for(const group of groups){const button=document.createElement('button');button.type='button';button.className='atlas-livestock-marker';const x=group.points.reduce((s,p)=>s+p.x,0)/group.points.length,y=group.points.reduce((s,p)=>s+p.y,0)/group.points.length;button.style.transform=`translate(${Math.round(x)}px,${Math.round(y)}px) translate(-50%,-50%)`;if(group.regions.length===1){const region=group.regions[0],kind=allLivestockKinds.get(region.kindId);button.style.setProperty('--livestock-color',kind.color);button.innerHTML=`<i aria-hidden="true">${kind.symbol}</i><span>${kind.label}</span>`;button.setAttribute('aria-label',`${region.label}の${kind.label}`);button.setAttribute('aria-pressed',String(selectedAnimalRegion?selectedAnimalRegion===region.id:selectedAnimal===region.kindId));button.addEventListener('click',e=>{e.stopPropagation();selectLivestock(region.id);});}else{button.classList.add('is-cluster');button.innerHTML=`<i aria-hidden="true">${group.regions.length}</i><span>畜産</span>`;button.setAttribute('aria-label',`${group.regions.length}件の畜産地域を選ぶ`);button.addEventListener('click',e=>{e.stopPropagation();const p=map!.unproject([x,y]);showLivestockCandidates(group.regions,[p.lng,p.lat]);});}const related=selectedRelation?allRelations.get(selectedRelation):null;const emphasized=group.regions.some(region=>related?(related.livestockRegionIds as readonly string[]).includes(region.id):selectedAnimal===region.kindId);button.classList.toggle('is-related',Boolean(emphasized));if(emphasized)button.setAttribute('aria-label',button.getAttribute('aria-label')+'、選択した関係で強調中');holder.appendChild(button);}}
 
-  function updateFallbackImage(){if(field==='population'){population.fallback();return;}const image=el<HTMLImageElement>('[data-fallback-image]'),overlay=el<HTMLImageElement>('[data-fallback-livestock]'),link=el<HTMLAnchorElement>('[data-fallback-full]');const showCrops=field==='agriculture'&&agriLayers.has('crops'),showLivestock=field==='agriculture'&&agriLayers.has('livestock');const src=field==='natural'?config.natureAssetBase+(['landform','water'].includes(natureMode)?`${natureMode}-interactive.webp`:`${natureMode}-fallback.webp`):config.assetBase+(showCrops?'agriculture':'land')+'-fallback.webp';image.src=src;image.alt=field==='natural'?'米国本土の自然環境・'+config.natureModes.find((m:any)=>m.id===natureMode).label:showCrops?'米国本土の地形・河川と主要作物の栽培域の概略図。':'米国本土の地形と水系。';overlay.hidden=!showLivestock;overlay.src=config.livestockAssetBase+(showCrops?'agriculture-livestock':'livestock')+'-fallback.svg';link.href=field==='natural'?config.natureAssetBase+`${natureMode}-fallback.webp`:src;}
+  function updateFallbackImage(){if(water.active()){water.render();return;}if(field==='population'){population.fallback();return;}const image=el<HTMLImageElement>('[data-fallback-image]'),overlay=el<HTMLImageElement>('[data-fallback-livestock]'),link=el<HTMLAnchorElement>('[data-fallback-full]');const showCrops=field==='agriculture'&&agriLayers.has('crops'),showLivestock=field==='agriculture'&&agriLayers.has('livestock');const src=field==='natural'?config.natureAssetBase+(['landform','water'].includes(natureMode)?`${natureMode}-interactive.webp`:`${natureMode}-fallback.webp`):config.assetBase+(showCrops?'agriculture':'land')+'-fallback.webp';image.src=src;image.alt=field==='natural'?'米国本土の自然環境・'+config.natureModes.find((m:any)=>m.id===natureMode).label:showCrops?'米国本土の地形・河川と主要作物の栽培域の概略図。':'米国本土の地形と水系。';overlay.hidden=!showLivestock;overlay.src=config.livestockAssetBase+(showCrops?'agriculture-livestock':'livestock')+'-fallback.svg';link.href=field==='natural'?config.natureAssetBase+`${natureMode}-fallback.webp`:src;}
 
   function syncAgricultureLayers(saveUrl=true){syncRelationVisuals();root.querySelectorAll<HTMLInputElement>('[data-agri-layer]').forEach(input=>input.checked=agriLayers.has(input.value));if(ready&&map)setFieldLayers(map,field,natureMode,agriLayers.has('crops'));updateFallbackImage();renderLivestockMarkers();renderLabels();placeSelectionCard();if(saveUrl)save(true);}
 
 
   function fallbackForCurrentView(){
+    if(water.active())return {base:water.assetBase,name:water.view()+'-fallback.webp',alt:'米国本土の'+(water.view()==='basins'?'河川の流域':'年平均降水量')};
     if(field==='population')return {base:config.populationAssetBase,name:'density.webp',alt:'米国本土の人口密度'};
     if(field==='agriculture')return {base:config.assetBase,name:agriLayers.has('crops')?'agriculture-fallback.webp':'land-fallback.webp',alt:'米国本土の主要作物の栽培分布'};
     if(field==='natural')return {base:config.natureAssetBase,name:['landform','water'].includes(natureMode)?`${natureMode}-interactive.webp`:`${natureMode}-fallback.webp`,alt:'米国本土の自然環境'};
@@ -319,13 +323,13 @@ export async function startAtlas() {
 
   function showNatureReady(){
     root.dataset.natureLoad='ready';root.dataset.renderState='ready';surface.hidden=false;fallback.hidden=true;
-    el('[data-map-labels]').hidden=false;el('.atlas-map-tools').hidden=false;renderNatureChrome();
+    el('[data-map-labels]').hidden=false;el('.atlas-map-tools').hidden=false;renderNatureChrome();if(water.active())void water.ensure().catch(()=>{});
   }
 
   async function ensureNatureModeData(mode:NatureMode){
     if(!map||!ready||field!=='natural')return;
-    const key=mode==='contour'?'contour:500':mode;
-    if(appliedNatureKeys.has(key)){updateContourLegend();showNatureReady();renderLabels();placeSelectionCard();updateFocusButton();return;}
+    const key=mode==='water'&&water.active()?'water:'+water.view():mode==='contour'?'contour:500':mode;
+    if(!water.active()&&appliedNatureKeys.has(key)){updateContourLegend();showNatureReady();renderLabels();placeSelectionCard();updateFocusButton();return;}
     if(pendingNatureKey===key)return;
     const generation=++natureGeneration;pendingNatureKey=key;
     root.dataset.natureLoad='loading';surface.hidden=true;fallback.hidden=false;el('[data-map-labels]').hidden=true;el('.atlas-map-tools').hidden=true;
@@ -333,7 +337,7 @@ export async function startAtlas() {
     el('[data-retry-nature]').hidden=true;updateFallbackImage();updateContourLegend();
     try{
       let data:any=null;
-      if(mode==='water')data=await natureLoader.json('aquifers.geojson');
+      if(mode==='water'){if(water.active())await water.ensure();else data=await natureLoader.json('aquifers.geojson');}
       if(mode==='contour')data=await natureLoader.contours();
       if(!root.isConnected||generation!==natureGeneration||field!=='natural'||natureMode!==mode||!map)return;
       if(data)(map.getSource(mode==='water'?'aquifers':'contours') as GeoJSONSource).setData(data);
@@ -355,7 +359,7 @@ export async function startAtlas() {
   }
 
   function renderLabels(){
-    natureLabelController.schedule();if(!map||!ready)return;
+    natureLabelController.schedule();water.schedule();if(!map||!ready)return;
     const width=frame.clientWidth,height=frame.clientHeight,occupied:number[][]=[];
     for(const item of [...labels,...contourLabels]){
       const node=item.node as HTMLElement;
@@ -380,9 +384,9 @@ export async function startAtlas() {
   }
 
   function restoreSelectionForView(){
-    hideSelection();renderCity();renderNatureChrome();
+    hideSelection();renderCity();renderNatureChrome();if(water.active()&&!ready)void water.ensure().catch(()=>{});
     if(field==='agriculture')syncAgricultureReading();
-    else if(field==='natural'&&natureFeature?.startsWith(modePrefix()+':'))showNatureFeature(natureFeature,undefined,undefined,false);
+    else if(field==='natural'&&!water.active()&&natureFeature?.startsWith(modePrefix()+':'))showNatureFeature(natureFeature,undefined,undefined,false);
     else if(field==='industry')industries.restoreSelection();
   }
 
@@ -418,7 +422,7 @@ export async function startAtlas() {
   }
 
   function fail(message:string){
-    if(failed)return;failed=true;ready=false;mapMoving=false;clearTimeout(timeout);criticalController.abort();root.dataset.renderState='fallback';fallback.hidden=false;surface.hidden=true;el('[data-map-labels]').hidden=true;el('[data-livestock-markers]').hidden=true;el('.atlas-map-tools').hidden=true;status.textContent=message+'（代替図）';if(natureTrigger===surface)natureTrigger=el('.atlas-fallback-map');savedCamera=cameraState();map?.remove();map=undefined;population.unavailable();natureLabelController.schedule();syncRelationVisuals();industries.renderMarkers();population.renderMarkers();if(!selection.hidden)moveSelectionBelow();renderNatureChrome();
+    if(failed)return;failed=true;ready=false;mapMoving=false;clearTimeout(timeout);criticalController.abort();root.dataset.renderState='fallback';fallback.hidden=false;surface.hidden=true;el('[data-map-labels]').hidden=true;el('[data-livestock-markers]').hidden=true;el('.atlas-map-tools').hidden=true;status.textContent=message+'（代替図）';if(natureTrigger===surface)natureTrigger=el('.atlas-fallback-map');savedCamera=cameraState();map?.remove();map=undefined;population.unavailable();natureLabelController.schedule();syncRelationVisuals();industries.renderMarkers();population.renderMarkers();if(!selection.hidden)moveSelectionBelow();renderNatureChrome();if(water.active())void water.ensure().catch(()=>{});
   }
 
   function activeRelation(){return field==='agriculture'&&selectedRelation?allRelations.get(selectedRelation):undefined;}
@@ -475,9 +479,9 @@ export async function startAtlas() {
     const coordinate=unprojectNatureFallback(point,box);if(!coordinate)return;
     const city=cityAt(point,p=>projectNatureFallback(p,box));if(city)selectCity(city.id,true,fallbackMap);
   });
-  setNatureMode(natureMode);setField(field);syncAgricultureLayers(false);if(field==='natural')save();window.addEventListener('resize',fitCityCrop);document.fonts?.ready.then(fitCityCrop);timeout=window.setTimeout(()=>fail('地図データの読み込みが完了しませんでした。'),30000);
+  setNatureMode(natureMode);setField(field);syncAgricultureLayers(false);if(field==='natural')save();if(water.active())void water.ensure().catch(()=>{});window.addEventListener('resize',fitCityCrop);document.fonts?.ready.then(fitCityCrop);timeout=window.setTimeout(()=>fail('地図データの読み込みが完了しませんでした。'),30000);
 
-    window.addEventListener('popstate',()=>{restoring=true;natureGeneration++;pendingNatureKey='';const state=readAtlasState(new URL(location.href),config.initialField);agricultureDetails.restore();selectedStats=agricultureDetails.state().stats;field=state.field;natureMode=state.env;agriLayers=new Set(state.agriLayers);selectedRelation=state.relation;relationTrigger=null;natureTrigger=null;selectedAnimal=state.animal;selectedAnimalRegion=state.animalRegion;selectedCrop=state.crop;selectedRegion=state.region;selectedCity=state.city;natureFeature=state.natureFeature?.startsWith('climate:')?null:state.natureFeature;view=state.view;savedCamera=state.camera??undefined;industries.restore();population.restore();setField(field);setNatureMode(natureMode);syncAgricultureLayers(false);if(state.camera&&map&&state.view==='custom')map.jumpTo({center:[state.camera.lng,state.camera.lat],zoom:state.camera.zoom});else if(map&&state.view==='fit'){suppressNextMove=true;map.fitBounds(fitBounds,{duration:0,padding:{top:30,bottom:14,left:12,right:12}});}restoring=false;if(field==='natural')save();});
+    window.addEventListener('popstate',()=>{restoring=true;natureGeneration++;pendingNatureKey='';const state=readAtlasState(new URL(location.href),config.initialField);agricultureDetails.restore();water.restore();selectedStats=agricultureDetails.state().stats;field=state.field;natureMode=state.env;agriLayers=new Set(state.agriLayers);selectedRelation=state.relation;relationTrigger=null;natureTrigger=null;selectedAnimal=state.animal;selectedAnimalRegion=state.animalRegion;selectedCrop=state.crop;selectedRegion=state.region;selectedCity=state.city;natureFeature=state.natureFeature?.startsWith('climate:')?null:state.natureFeature;view=state.view;savedCamera=state.camera??undefined;industries.restore();population.restore();setField(field);setNatureMode(natureMode);syncAgricultureLayers(false);if(state.camera&&map&&state.view==='custom')map.jumpTo({center:[state.camera.lng,state.camera.lat],zoom:state.camera.zoom});else if(map&&state.view==='fit'){suppressNextMove=true;map.fitBounds(fitBounds,{duration:0,padding:{top:30,bottom:14,left:12,right:12}});}restoring=false;if(field==='natural')save();});
 
   try{
     const fetchJson=async(base:string,name:string)=>{const testMissing=config.reviewMode&&new URL(location.href).searchParams.get('qa')==='asset-error'&&name==='manifest.json';const response=await fetch(base+(testMissing?'qa-missing-manifest.json':name),{signal:criticalController.signal});if(!response.ok)throw new Error(name+': '+response.status);return response.json();};
@@ -508,6 +512,7 @@ export async function startAtlas() {
         if(field==='natural'){
           const box:[[number,number],[number,number]]=[[event.point.x-8,event.point.y-8],[event.point.x+8,event.point.y+8]];
           if(natureMode==='climate'){const city=cityAt(event.point,p=>map!.project(p));if(city)selectCity(city.id,true,surface);return;}
+          if(natureMode==='water'&&water.click(event.point))return;
           if(natureMode==='water'){const candidates=map!.queryRenderedFeatures(box,{layers:['reservoir-points','rivers','lakes','aquifers-fill']});const feature=candidates.filter(item=>validNatureFeature('water:'+(item.properties.kind==='reservoir'?item.properties.id:item.properties.AQ_NAME??item.properties.name))).sort((a,b)=>['reservoir-points','rivers','lakes','aquifers-fill'].indexOf(a.layer.id)-['reservoir-points','rivers','lakes','aquifers-fill'].indexOf(b.layer.id))[0];if(!feature){natureFeature=null;hideSelection();save();return;}const identity=feature.properties.kind==='reservoir'?feature.properties.id:feature.properties.AQ_NAME??feature.properties.name;showNatureFeature(`water:${identity}`,feature.properties.nameJa,[event.lngLat.lng,event.lngLat.lat]);return;}
           if(natureMode==='landform'){const feature=map!.queryRenderedFeatures(event.point,{layers:['land-picking']}).sort((left,right)=>left.properties.area-right.properties.area)[0];if(!feature){natureFeature=null;hideSelection();save();return;}showNatureFeature(`landform:${feature.properties.name}`,feature.properties.name,[event.lngLat.lng,event.lngLat.lat]);return;}
           const feature=map!.queryRenderedFeatures(box,{layers:['contours-hit']}).sort((left,right)=>Number(right.properties.index)-Number(left.properties.index))[0];if(feature)showNatureFeature(`elevation:${feature.properties.elevationM}`,undefined,[event.lngLat.lng,event.lngLat.lat]);else{natureFeature=null;hideSelection();save();}return;

@@ -286,3 +286,33 @@ test('農畜産物は収まらなくても開閉でき、手動の選択を都�
   crop.querySelector('summary').click();bottom=200;window.dispatchEvent(new window.Event('resize'));assert.equal(crop.open,false);
  }finally{await window.happyDOM.close();}
 });
+
+test('水資源の新3タブは選択・URL・親流域・従来表示を保つ',async()=>{
+ const {window,root,q,requests}=await setup('?env=water&waterView=precipitation&precipBand=1000-1500&city=denver');
+ try{
+  await waitFor(()=>q('[data-water-title]').textContent==='1,000〜1,500mm未満','precipitation selected');
+  assert.equal(q('[data-water-reading]').hidden,false);assert.equal(q('[data-nature-detail]').hidden,true);
+  const moves=window.__map.cameraChanges;
+  q('[data-water-view="basins"]').click();await waitFor(()=>root.dataset.natureLoad==='ready','basin loaded');
+  q('[data-water-label="missouri"]').click();assert.match(q('[data-water-body]').textContent,/ミシシッピ川水系の一部/);
+  assert.equal(new URL(window.location.href).searchParams.get('basin'),'missouri');
+  q('[data-water-parent]').click();assert.equal(q('[data-water-title]').textContent,'ミシシッピ川');
+  q('[data-water-view="rivers"]').click();await delay();q('[data-nature-label="water:Colorado"]').click();assert.equal(q('[data-nature-detail]').hidden,false);assert.equal(q('[data-water-reading]').hidden,true);
+  q('[data-water-view="precipitation"]').click();await delay();assert.equal(q('[data-water-title]').textContent,'1,000〜1,500mm未満');assert.equal(window.__map.cameraChanges,moves);
+  assert.equal(requests.filter(x=>x.endsWith('precipitation.geojson.gz')).length,1);assert.equal(requests.filter(x=>x.endsWith('basins.geojson.gz')).length,1);
+  assert.equal(new URL(window.location.href).searchParams.get('city'),'denver');
+  q('[data-field="agriculture"]').click();assert.equal(q('[data-water-reading]').hidden,true);assert.equal(q('[data-water-tabs]').hidden,true);
+ }finally{await window.happyDOM.close();}
+});
+
+test('水資源は代替地図でも流域名から解説と農業リンクへ進める',async()=>{
+ const {window,q}=await setup('?env=water&waterView=basins&basin=sacramento',{fallback:true});
+ try{
+  await waitFor(()=>q('[data-water-title]').textContent==='サクラメント川','fallback basin');
+  assert.match(q('[data-fallback-image]').src,/basins-fallback.webp$/);
+  assert.equal(q('[data-water-reading]').hidden,false);
+  assert.equal(new URL(q('[data-water-product]').href).searchParams.get('agriReading'),'product:rice');
+  q('[data-water-label="ohio"]').click();assert.match(q('[data-water-body]').textContent,/テネシー川/);
+  q('[data-nature-mode="climate"]').click();assert.equal(q('[data-water-tabs]').hidden,true);assert.equal(q('[data-water-reading]').hidden,true);
+ }finally{await window.happyDOM.close();}
+});

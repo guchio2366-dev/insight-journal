@@ -72,6 +72,7 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
           </div>
           <div class="atlas-map-labels" data-map-labels aria-hidden="true"></div>
           <div class="atlas-nature-labels" data-nature-labels hidden></div>
+          <div class="atlas-nature-labels" data-water-labels hidden></div>
           <div class="atlas-livestock-markers" data-livestock-markers></div>
           <div class="industry-markers" data-industry-markers hidden={initialField!=='industry'}></div>
           <div class="atlas-nature-labels population-city-markers" data-pop-city-markers hidden={initialField!=='population'}></div>
@@ -97,6 +98,7 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
           <span class="atlas-livestock-key agri-picker-group" data-livestock-key id="agri-livestock-picker"><strong>畜産</strong>{livestockKinds.map(k=><a href={`#livestock-${k.id}`} style={`--livestock-color:${k.color}`}><i aria-hidden="true">{k.symbol}</i>{k.label}</a>)}</span>
         </div>
         <p class="atlas-context-key" data-land-key hidden={initialField!=='overview'}>地形陰影・河川・湖・州境。自然環境では気候・水・地形・標高を切り替えられます。</p>
+        <div class="atlas-water-key" data-water-key hidden></div>
         <div class="atlas-nature-key" data-nature-key hidden={initialField!=='natural'}>
           <div data-nature-key-panel="climate" hidden={initialMode!=='climate'}>{climateFamilies.map(item=><span>{item.id} {item.label}</span>)}<span><b class="atlas-city-dot"></b>雨温図の都市</span></div>
           <div data-nature-key-panel="water" hidden={initialMode!=='water'}><span><i class="atlas-aquifer-key"></i>主要帯水層</span><span><b class="atlas-river-line"></b>河川・湖</span><span><b class="atlas-reservoir-dot"></b>貯水池</span></div>

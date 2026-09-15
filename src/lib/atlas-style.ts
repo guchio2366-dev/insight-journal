@@ -9,6 +9,7 @@ export function createAtlasStyle(config:{assetBase:string;natureAssetBase?:strin
   const cityFeatures=nature?.cities.map(city=>({type:'Feature',properties:{id:city.id,nameJa:city.nameJa,kind:'city'},geometry:{type:'Point',coordinates:[city.longitude,city.latitude]}}))??[];
   const natureAssetBase=config.natureAssetBase??config.assetBase;
   return {version:8,sources:{
+    'water-data':{type:'geojson',data:emptyCollection},
     base:{type:'geojson',data:base},crops:{type:'geojson',data:crops},land:{type:'geojson',data:land},
     relief:{type:'image',url:config.assetBase+'relief.webp',coordinates:manifest.reliefCoordinates},
     climate:{type:'image',url:natureAssetBase+'koppen-1991-2020.png',coordinates:nature?.manifest.imageCoordinates??manifest.reliefCoordinates},
@@ -33,6 +34,11 @@ export function createAtlasStyle(config:{assetBase:string;natureAssetBase?:strin
     {id:'crops-outline',type:'line',source:'crops',filter:['!=',['get','id'],'corn-soybean'],paint:{'line-color':['get','color'],'line-opacity':0.85,'line-width':1}},
     {id:'crops-overlap',type:'fill',source:'crops',filter:['==',['get','id'],'corn-soybean'],paint:{'fill-color':'#c8b756','fill-opacity':0.18}},
     {id:'crop-relation-highlight',type:'line',source:'crops',filter:['==',['get','id'],'__no-relation__'],layout:{visibility:'none'},paint:{'line-color':'#263f4c','line-width':['interpolate',['linear'],['zoom'],2,0.85,4,1.35,6,2.2],'line-opacity':0.95}},
+    {id:'water-fill',type:'fill',source:'water-data',filter:['in',['get','kind'],['literal',['band','basin']]],layout:{visibility:'none'},paint:{'fill-color':['get','color'],'fill-opacity':1}},
+    {id:'water-outline',type:'line',source:'water-data',filter:['==',['get','kind'],'outline'],layout:{visibility:'none'},paint:{'line-color':'#63776c','line-width':1}},
+    {id:'water-isohyets',type:'line',source:'water-data',filter:['==',['get','kind'],'isohyet'],layout:{visibility:'none'},paint:{'line-color':'#416d7a','line-width':['case',['boolean',['get','major'],false],1.6,.65]}},
+    {id:'water-hit',type:'line',source:'water-data',filter:['==',['get','kind'],'isohyet'],layout:{visibility:'none'},paint:{'line-width':14,'line-opacity':0}},
+    {id:'water-selected',type:'line',source:'water-data',filter:['==',['get','id'],'__none'],layout:{visibility:'none'},paint:{'line-color':'#183c4a','line-width':2.7}},
     {id:'state-lines',type:'line',source:'base',filter:kind('state'),paint:{'line-color':'#506f73','line-opacity':0.42,'line-width':0.65}},
     {id:'country-lines',type:'line',source:'base',filter:kind('land'),paint:{'line-color':'#4c7b8a','line-width':0.9,'line-opacity':0.75}},
     {id:'rivers',type:'line',source:'base',filter:kind('river'),paint:{'line-color':'#5799b5','line-width':['interpolate',['linear'],['zoom'],2,0.5,6,1.5],'line-opacity':0.86}},

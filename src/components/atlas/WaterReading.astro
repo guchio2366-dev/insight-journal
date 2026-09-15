@@ -1,0 +1,16 @@
+---
+import {withBase} from '../../lib/urls';
+---
+<section data-water-reading hidden aria-labelledby="water-reading-title">
+ <h3 id="water-reading-title" tabindex="-1" data-water-title></h3>
+ <p data-water-body></p><p data-water-note class="atlas-water-note"></p>
+ <button type="button" data-water-parent hidden>ミシシッピ川水系全体を見る</button>
+ <p><a data-water-product hidden></a></p>
+ <p class="atlas-water-credit" data-water-credit></p>
+ <details><summary>出典・データについて</summary>
+  <p>降水量：<a href="https://prism.oregonstate.edu/">PRISM Group, Oregon State University</a>、1991–2020年平均、約4km格子。2026年9月15日取得。年合計の平均で、直近の天候ではありません。雨温図の観測所値とはデータ源が異なります。</p>
+  <p>流域：<a href="https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer">USGS WBD</a>のHUC8境界を結合・簡略化した米国内の概略です。地下水の流動や給水区域は表していません。灰色はその他・未収録域です。</p>
+  <p>農業に必要な水は季節・蒸発散・土壌・灌漑でも変わります。<a href="https://www.fao.org/4/s2022e/s2022e02.htm">FAOの解説</a>。<a href={withBase('/assets/atlas/water-v1/manifest.json')}>取得・加工記録</a></p>
+ </details>
+ <a class="atlas-water-back" href="#nature-map-panel">地図へ戻る</a>
+</section>
