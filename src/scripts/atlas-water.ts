@@ -14,7 +14,7 @@ export function createWaterController(root:HTMLElement,base:string,callbacks:Cal
  const loader=createNatureLoader(assetBase),holder=q('[data-water-labels]');
  const ns='http://www.w3.org/2000/svg',highlight=document.createElementNS(ns,'svg'),highlightPath=document.createElementNS(ns,'path');highlight.classList.add('atlas-water-highlight');highlight.setAttribute('aria-hidden','true');highlight.append(highlightPath);q('[data-map-frame]').append(highlight);
  const entries=[...precipitationBands.map(x=>({id:x.id,name:x.title,coordinate:[...x.anchor] as [number,number],mode:'precipitation' as const})),...riverBasins.map(x=>({id:x.id,name:x.title,coordinate:[...x.anchor] as [number,number],mode:'basins' as const}))];
- const labels=createNatureLabels(root,entries,{active:()=>active(),mode:()=>state.waterView,project:callbacks.project,select:(entry,trigger)=>select(entry.id,trigger),placed:()=>{},holder,attribute:'data-water-label',controls:'water-reading-title'});
+ const labels=createNatureLabels(root,entries,{active:()=>active(),mode:()=>state.waterView,project:callbacks.project,select:(entry,trigger)=>select(entry.id,trigger),placed:()=>paint(),holder,attribute:'data-water-label',controls:'water-reading-title'});
  const active=()=>callbacks.active()&&state.waterView!=='rivers';
  const current=()=>state.waterView==='precipitation'?state.precipBand:state.basin;
  const choices=()=>state.waterView==='precipitation'?precipitationBands:riverBasins;
@@ -46,8 +46,9 @@ export function createWaterController(root:HTMLElement,base:string,callbacks:Cal
   render();callbacks.changed();q('[data-atlas-live]').textContent=q('[data-water-title]').textContent+'の解説を表示しました。';
   if(trigger&&window.innerWidth<960){q('[data-water-title]').focus({preventScroll:true});q('[data-water-title]').scrollIntoView?.({block:'start',behavior:'instant'});}
  }
- function schedule(){
-  labels.schedule();const project=callbacks.project();
+ function schedule(){labels.schedule();paint();}
+ function paint(){
+  const project=callbacks.project();
   highlight.style.display=active()&&!project&&data?'block':'none';
   if(active()&&!project&&data){const box=labels.fallbackBox();const path=(g:any):string=>{const c=g.coordinates,points=(r:number[][])=>r.map(p=>{const t=projectNatureFallback(p,box);return t.x.toFixed(1)+','+t.y.toFixed(1);}).join('L');if(g.type==='Polygon')return c.map((r:number[][])=>'M'+points(r)+'Z').join('');if(g.type==='LineString')return c.length?'M'+points(c):'';if(g.type==='MultiPolygon')return c.map((x:any)=>path({type:'Polygon',coordinates:x})).join('');if(g.type==='MultiLineString')return c.map((x:any)=>path({type:'LineString',coordinates:x})).join('');return g.type==='GeometryCollection'?g.geometries.map(path).join(''):'';};const f=data.features.find((f:any)=>f.properties.id===current()&&f.properties.kind===(state.waterView==='basins'?'outline':'band'));highlightPath.setAttribute('d',f?path(f.geometry):'');}
 for(const {node,coordinate} of lineLabels){node.hidden=!active()||state.waterView!=='precipitation'||!project;if(!node.hidden){const p=project!(coordinate);node.style.left=p.x+'px';node.style.top=p.y+'px';node.hidden=p.x<15||p.y<15||p.x>q('[data-map-frame]').clientWidth-15||p.y>q('[data-map-frame]').clientHeight-40;}}

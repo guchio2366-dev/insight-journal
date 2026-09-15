@@ -40,7 +40,7 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
   function fallbackBox():Box {return callbacks.fallbackBox?callbacks.fallbackBox(localBox(image)):containedMapBox(localBox(image));}
   let queued=0;
   function render(){
-    queued=0;holder.hidden=!callbacks.active()||!['climate','landform','water','population'].includes(callbacks.mode());
+    queued=0;holder.hidden=!callbacks.active()||!['climate','landform','water','population','precipitation','basins'].includes(callbacks.mode());
     if(holder.hidden)return;
     const project=callbacks.project(),bounds:Box=project?{left:0,top:0,right:frame.clientWidth,bottom:frame.clientHeight}:fallbackBox();
     if(bounds.right<=bounds.left||bounds.bottom<=bounds.top)return;
