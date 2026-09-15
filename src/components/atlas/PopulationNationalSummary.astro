@@ -1,18 +1,12 @@
 ---
-import {populationOverviews,settlementStories} from '../../data/atlas/population-reading';
-import {religionStories} from '../../data/atlas/population-religion-reading';
+import {populationOverviews} from '../../data/atlas/population-reading';
 ---
-<aside class="atlas-national population-national" aria-label="人口の総論と都市の解説">
- <header><p class="atlas-eyebrow">UNITED STATES · 人口</p><h2 data-pop-overview-title>{populationOverviews.distribution.title}</h2><p data-pop-overview>{populationOverviews.distribution.text}</p></header>
- <section class="population-national-chart" aria-labelledby="population-national-title"><h3 id="population-national-title" data-pop-national-title>全国の人口構成</h3><p class="population-total" data-pop-total>334,922,499 人</p><p data-pop-national-note>全住民 ／ ACS 2020–2024</p><div class="population-composition" data-pop-chart></div><p class="population-footnote" data-pop-national-footnote>郡の都市化区分別人口。郊外の人口率とは異なります。</p></section>
- <section class="population-city-reading" id="population-city-reading" data-pop-city-reading aria-labelledby="population-city-title" tabindex="-1">
-  <div class="population-city-heading"><h3 id="population-city-title" data-pop-city-title>都市を選んで、仕事と暮らしを読む</h3><button type="button" data-pop-city-clear hidden aria-label="都市の選択を解除">×</button></div>
-  <p data-pop-city-location>左の都市名を選ぶと、主な産業と働く人の職種を表示します。</p>
-  <div data-pop-city-content hidden><dl><dt data-pop-city-religion-label hidden>宗教文化</dt><dd data-pop-city-religion hidden></dd><dt>主な産業</dt><dd data-pop-city-industries></dd><dt>働く人の職種</dt><dd data-pop-city-jobs></dd></dl><a data-pop-city-religion-source hidden target="_blank" rel="noopener">宗教文化の出典</a><p class="population-footnote">職種割合：BLS OEWS・2025年5月。市域ではなく周辺を含む都市圏の雇用。</p><a data-pop-city-source href="https://www.bls.gov/oes/">職種構成の出典</a><div class="population-city-related" data-pop-city-religion-related hidden><strong>関連する地域解説</strong></div></div>
-  <a class="population-map-return" href="#nature-map-panel">↑ 地図と見比べる</a>
+<aside class="atlas-national population-national" aria-label="人口の分布と選択した場所の解説">
+ <div class="population-reading-heading"><p class="atlas-eyebrow">UNITED STATES · 人口</p><button type="button" data-pop-reading-reset hidden>全国の解説へ</button></div>
+ <section id="population-city-reading" data-pop-reading tabindex="-1" aria-label="選択した項目の解説">
+  <h2 data-pop-overview-title>{populationOverviews.distribution.title}</h2>
+  <p data-pop-overview>{populationOverviews.distribution.text}</p>
+  <div data-pop-reading-body><h3>地図のどこを見る？</h3><p>{populationOverviews.distribution.reading}</p></div>
  </section>
- <section class="population-spatial-reading" aria-labelledby="population-spatial-title"><h3 id="population-spatial-title">地図のどこを見る？</h3><p data-pop-spatial-reading>{populationOverviews.distribution.reading}</p>
-  <div data-pop-settlement hidden>{settlementStories.map((story,index)=><details class="population-settlement" open={index===0}><summary>{story.label}<span>{story.region}</span></summary><p>{story.text}</p><button type="button" data-pop-story={story.id}>地図を{story.group==='white'?'白人':story.group==='black'?'黒人':'ヒスパニック'}区分にする</button><a href={story.source}>{story.sourceLabel}</a></details>)}</div>
-  <div class="population-religion-stories" id="population-religion-stories" data-pop-religion-stories hidden><h3>地域に根付いた宗教文化</h3>{religionStories.map(story=><details class="population-religion-story" data-pop-religion-story={story.id}><summary><b>{story.number}</b><span>{story.title}<small>{story.region}</small></span></summary><p>{story.text}</p><div class="population-story-sources">{story.sources.map(source=><a href={source.url} target="_blank" rel="noopener">{source.label}</a>)}</div><a class="population-map-return" href="#nature-map-panel">↑ 地図と見比べる</a></details>)}</div>
- </section>
+ <a class="population-map-return" href="#nature-map-panel">↑ 地図と見比べる</a>
 </aside>

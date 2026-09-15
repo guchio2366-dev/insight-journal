@@ -1,11 +1,12 @@
 ---
 import {climateCities} from '../../data/atlas/natural-environment';
+import {religionStories} from '../../data/atlas/population-religion-reading';
 const {active=false}=Astro.props;
 ---
-<section class="population-map-reading" data-population-reading hidden={!active} aria-label="地図の凡例と主要都市">
+<section class="population-map-reading" data-population-reading hidden={!active} aria-label="地図の凡例と都市・地域">
  <div class="population-legend" data-pop-legend></div>
  <p data-pop-map-note>人口密度（人／km²）。面積の大きさは人口の多さを意味しません。</p>
- <details class="population-city-list"><summary>気候タブと同じ12都市から選ぶ</summary><div>{climateCities.map(city=><button type="button" data-pop-city={city.id} aria-pressed="false" aria-controls="population-city-reading">{city.nameJa}</button>)}</div></details>
- <a class="population-reading-jump" href="#population-city-reading" data-pop-city-jump hidden>選んだ都市の解説へ</a>
+ <details class="population-city-list"><summary>都市・地域から解説を選ぶ</summary><div>{climateCities.map(city=><button type="button" data-pop-city={city.id} aria-pressed="false" aria-controls="population-city-reading">{city.nameJa}</button>)}{religionStories.map(story=><button type="button" data-pop-place-story={story.id} hidden aria-pressed="false" aria-controls="population-city-reading">{story.number} {story.region}</button>)}</div></details>
+ <a class="population-reading-jump" href="#population-city-reading" data-pop-city-jump hidden>選んだ項目の解説へ</a>
  <article class="population-selected" data-pop-selected hidden aria-live="polite"><h2 data-pop-selected-title></h2><p data-pop-selected-value></p><p data-pop-selected-note></p></article>
 </section>
