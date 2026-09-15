@@ -10,9 +10,17 @@ const base=withBase('/atlas/north-america/');
 const origin=new URL(base+'agriculture/','https://atlas.invalid');
 origin.searchParams.set('agriReading','product:'+product);
 origin.searchParams.set('agriProduct',product);
+const emphasis:Record<ProductId,readonly string[]>={
+corn:['中央低地','センターピボット','ミシシッピ川'],soybean:['輪作','大豆ミール','ミシシッピ川水系'],
+wheat:['春小麦','冬小麦','ステップ気候'],cotton:['ハイプレーンズ帯水層','フロリダン帯水層系'],
+rice:['沖積帯水層','サクラメント川','シャスタ湖'],specialty:['セントラルヴァレー','地下水','流域'],
+beef:['放牧','肥育','飼料作物の灌漑'],dairy:['集荷・冷却・加工','乳製品加工','飼料生産'],
+hogs:['エネルギー源','たんぱく源','生産の仕組み'],broilers:['とうもろこし','大豆ミール','契約農場'],layers:['集荷','包装','輸送']
+};
+const terms=new Set(emphasis[product]),pattern=new RegExp('('+emphasis[product].join('|')+')','g');
 const links=productInsightOrder[product].map(id=>insightFor(id)!);
 ---
-{productParagraphs[product].map(text=><p>{text}</p>)}
+{productParagraphs[product].map(text=><p>{text.split(pattern).map(part=>terms.has(part)?<strong data-reading-emphasis>{part}</strong>:part)}</p>)}
 {links.length>0&&<nav class="agri-insight-links" aria-label="地図で確かめる">
   <strong>地図で確かめる</strong>
   <div>{links.map(item=>{const u=agricultureInsightUrl(origin,base,product,item.id);return <a href={u.pathname+u.search} data-agri-insight-link={item.id} data-agri-link-product={product}><span>{item.label}</span><small>{targetLabel(item.target)}</small></a>;})}</div>
