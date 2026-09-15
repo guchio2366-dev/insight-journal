@@ -292,6 +292,7 @@ test('水資源の新3タブは選択・URL・親流域・従来表示を保つ'
  try{
   await waitFor(()=>q('[data-water-title]').textContent==='1,000〜1,500mm未満','precipitation selected');
   assert.equal(q('[data-water-reading]').hidden,false);assert.equal(q('[data-nature-detail]').hidden,true);
+  await waitFor(()=>!q('[data-water-labels]').hidden&&!q('[data-water-label="1000-1500"]').hidden,'water labels visible');
   const moves=window.__map.cameraChanges;
   q('[data-water-view="basins"]').click();await waitFor(()=>root.dataset.natureLoad==='ready','basin loaded');
   q('[data-water-label="missouri"]').click();assert.match(q('[data-water-body]').textContent,/ミシシッピ川水系の一部/);
@@ -310,6 +311,7 @@ test('水資源は代替地図でも流域名から解説と農業リンクへ�
  try{
   await waitFor(()=>q('[data-water-title]').textContent==='サクラメント川','fallback basin');
   assert.match(q('[data-fallback-image]').src,/basins-fallback.webp$/);
+  await waitFor(()=>!q('[data-water-labels]').hidden&&!q('[data-water-label="sacramento"]').hidden,'fallback labels visible');
   assert.equal(q('[data-water-reading]').hidden,false);
   assert.equal(new URL(q('[data-water-product]').href).searchParams.get('agriReading'),'product:rice');
   q('[data-water-label="ohio"]').click();assert.match(q('[data-water-body]').textContent,/テネシー川/);
