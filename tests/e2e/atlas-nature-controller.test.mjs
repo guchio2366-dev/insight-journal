@@ -13,7 +13,7 @@ const stub=`export function setWorkerCount(){};export class Map {
  getBounds(){return {getWest:()=>-128,getSouth:()=>22,getEast:()=>-64,getNorth:()=>52,contains:()=>true}}
  project(p){return {x:(p[0]+128)*10,y:(52-p[1])*10}} unproject(p){return {lng:p[0]/10-128,lat:52-p[1]/10}}
  setLayoutProperty(){}setPaintProperty(){}setFilter(){}addImage(){}resize(){}remove(){}queryRenderedFeatures(){return []}
- on(name,fn){(this.events[name]??=[]).push(fn)}once(name,fn){this.on(name,fn);if(name==='load')queueMicrotask(()=>fn())}
+ on(name,fn){(this.events[name]??=[]).push(fn)}once(name,fn){this.on(name,fn);if(name==='load'&&!window.__deferMapLoad)queueMicrotask(()=>fn())}
  jumpTo(o){this.cameraChanges++;this.center={lng:o.center[0],lat:o.center[1]};this.zoom=o.zoom??this.zoom}fitBounds(){this.cameraChanges++}
  zoomIn(){this.zoom++}zoomOut(){this.zoom--}getCanvas(){return {getContext:()=>null}}
 }`;
@@ -37,7 +37,7 @@ async function setup(query='',options={}){
  window.fetch=async (url)=>{requests.push(String(url));return new Response(await readFile('public/'+String(url).replace(/^.*?\/insight-journal\//,'')));};
  options.beforeStart?.(window);
  window.Response=Response;window.DecompressionStream=DecompressionStream;
- const entry=window.eval(bundle.outputFiles[0].text+"; NatureTest;");await entry.startAtlas();await waitFor(()=>options.fallback||window.document.querySelector('[data-atlas-explorer]').dataset.natureLoad==='ready','initial data ready');await delay();
+ const entry=window.eval(bundle.outputFiles[0].text+"; NatureTest;");await entry.startAtlas();await waitFor(()=>options.pending||options.fallback||window.document.querySelector('[data-atlas-explorer]').dataset.natureLoad==='ready','initial data ready');await delay();
  return {window,requests,root:window.document.querySelector('[data-atlas-explorer]'),q:s=>window.document.querySelector(s)};
 }
 
@@ -316,5 +316,47 @@ test('水資源は代替地図でも流域名から解説と農業リンクへ�
   assert.equal(new URL(q('[data-water-product]').href).searchParams.get('agriReading'),'product:rice');
   q('[data-water-label="ohio"]').click();assert.match(q('[data-water-body]').textContent,/テネシー川/);
   q('[data-nature-mode="climate"]').click();assert.equal(q('[data-water-tabs]').hidden,true);assert.equal(q('[data-water-reading]').hidden,true);
+ }finally{await window.happyDOM.close();}
+});
+
+for(const fallback of [false,true])test(`農業インサイトの往復は地図と産地データを再作成しない（代替図=${fallback}）`,async()=>{
+ const {window,requests,root,q}=await setup('?env=landform&view=custom&lng=-100&lat=38&z=4',{fallback});
+ try{
+  q('[data-field="agriculture"]').click();
+  q('[data-crop-key] a[href="#crop-rice"]').click();
+  const original=window.location.href,map=window.__map;
+  await waitFor(()=>q('.agri-product-line').getAttribute('d')?.length>0,'rice outline');
+  const cropRequests=()=>requests.filter(url=>url.endsWith('/agriculture.geojson')).length;
+  assert.equal(cropRequests(),1);
+  q('[data-agri-insight-link="rice-alluvial"]').click();
+  assert.equal(root.dataset.field,'natural');
+  assert.equal(root.dataset.selectedProduct,'rice');
+  await waitFor(()=>q('.agri-product-line').getAttribute('d')?.length>0&&q('.agri-target-line').getAttribute('d')?.length>0,'comparison outlines');
+  assert.equal(q('.agri-insight-back').textContent,'稲作の解説に戻る');
+  const destination=window.location.href;
+  q('.agri-insight-back').click();
+  assert.equal(root.dataset.field,'agriculture');
+  assert.equal(root.dataset.agriReading,'product');
+  assert.equal(root.dataset.selectedProduct,'rice');
+  assert.equal(q('[data-agri-reading-panel]').hidden,false);
+  assert.equal(window.__map,map);
+  assert.equal(cropRequests(),1);
+  for(const key of ['stats','livestockStats','milkBasis','agriProduct','view','lng','lat','z','agriLayers'])assert.equal(new URL(window.location.href).searchParams.get(key),new URL(original).searchParams.get(key),key);
+  window.history.replaceState({},'',destination);window.dispatchEvent(new window.PopStateEvent('popstate'));
+  assert.equal(root.dataset.field,'natural');assert.equal(root.dataset.selectedProduct,'rice');
+  const click=new window.MouseEvent('click',{bubbles:true,cancelable:true,ctrlKey:true});
+  q('.agri-insight-back').dispatchEvent(click);
+  assert.equal(click.defaultPrevented,false);assert.equal(root.dataset.field,'natural');
+ }finally{await window.happyDOM.close();}
+});
+test('産地の輪郭は操作地図の準備を待たずに代替図へ表示する',async()=>{
+ const {window,root,q,requests}=await setup('?agriProduct=rice&agriReading=product:rice&crop=rice',{
+  fieldPath:'agriculture',pending:true,beforeStart:w=>{w.__deferMapLoad=true;}
+ });
+ try{
+  assert.equal(root.dataset.renderState,'loading');
+  await waitFor(()=>q('.agri-product-line').getAttribute('d')?.length>0,'early rice outline');
+  assert.equal(root.dataset.renderState,'loading');
+  assert.equal(requests.filter(url=>url.endsWith('/agriculture.geojson')).length,1);
  }finally{await window.happyDOM.close();}
 });
