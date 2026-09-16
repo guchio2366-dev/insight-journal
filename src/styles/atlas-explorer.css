@@ -597,3 +597,11 @@
 .agri-reading-panel .atlas-crop-copy .agri-editorial-section h3,.agri-editorial-section h3{display:block;font-size:14px;line-height:1.5;margin:14px 0 4px;color:#36584c}
 .agri-reading-panel .atlas-crop-copy .agri-editorial-section p,.agri-editorial-section p{margin:5px 0;line-height:1.75}
 .agri-reading-panel .atlas-crop-copy .agri-editorial-guide,.agri-editorial-section .agri-editorial-guide{font-size:12px;line-height:1.65;color:#4b6057;padding-left:8px;border-left:2px solid #c8d4c7}
+
+.agri-inline-actions{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
+.agri-inline-actions a{display:inline-flex;align-items:center;gap:5px;min-height:44px;padding:6px 9px;box-sizing:border-box;border:1px solid #b6c7c1;border-radius:4px;background:#f1f5ef;color:#254e53;font-size:12px;line-height:1.45;text-decoration:none}
+.agri-inline-actions a:hover{background:#e4ecdf}
+.agri-inline-actions a:focus-visible{outline:3px solid #176f89;outline-offset:2px}
+.agri-reading-panel .atlas-crop-copy .agri-editorial-subtitle{margin:0 0 7px;font-size:12px;font-weight:700;color:#526e48}
+.agri-editorial-use>strong{display:block;margin-bottom:2px}
+[id^="supply-use-"],[id^="exports-"]{scroll-margin-top:70px}

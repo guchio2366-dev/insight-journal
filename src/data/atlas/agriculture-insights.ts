@@ -4,7 +4,7 @@ import type {ProductId} from '../../lib/atlas-agriculture-detail-state.ts';
 
 export const productNames:Record<ProductId,string>={corn:'とうもろこし',soybean:'大豆',wheat:'小麦',cotton:'綿花',rice:'稲作',specialty:'果樹・野菜等',beef:'肉牛',dairy:'酪農',hogs:'養豚',broilers:'肉用鶏',layers:'採卵鶏'};
 export const productParagraphs:Record<ProductId,readonly string[]>={
-corn:cornReading.sections.map(section=>section.key+section.body),
+corn:cornReading.sections.map(section=>section.key+section.body+(section.paragraphs?.map(p=>p.label+p.text).join('')??'')),
 soybean:[
 '大豆はとうもろこしと重なる中西部の産地が多く、両者を組み合わせた輪作が行われます。油を搾った後の大豆ミールは、豚や鶏などの飼料のたんぱく源になります。とうもろこしの飼料利用と合わせて、作物と畜産の結び付きを読むことができます。',
 '国内の加工・飼料需要に加え、輸出も重要です。ミシシッピ川水系は輸送経路の一つで、川の線を下流へたどると、内陸の産地とメキシコ湾側の輸出拠点とのつながりが分かります。'],
@@ -42,7 +42,7 @@ const transport='https://www.ams.usda.gov/sites/default/files/media/ReliableWate
 const california='https://water.ca.gov/Water-Basics/The-California-Water-System';
 const feedWater='https://agdatacommons.nal.usda.gov/articles/dataset/Data_from_Irrigation_water_used_to_produce_cattle_feeds_throughout_the_United_States/30128560';
 export const productSources:Record<ProductId,readonly [string,string][]>={
-corn:[['NASA・コーンベルトの土壌','https://science.nasa.gov/missions/landsat/shoring-up-the-corn-belts-soil-health/'],['Minnesota Extension・播種と温度','https://extension.umn.edu/agriculture/crop-production/corn/strategies-for-successful-corn-planting'],['Minnesota Extension・受粉期の水','https://extension.umn.edu/agriculture/crop-production/corn/dry-conditions-during-corn-pollination'],['USDA ERS・飼料穀物',ers+'crops/corn-and-other-feed-grains/feed-grains-sector-at-a-glance'],['USGS・灌漑','https://pubs.usgs.gov/publication/sir20225042/full'],['USDA AMS・穀物水運',transport]],
+corn:[['日本ペドロジー学会・高校地理の土壌用語','https://www.jstage.jst.go.jp/article/pedologist/68/2/68_69/_article/-char/ja'],['USDA・東部コーンベルトの気候','https://ltar.ars.usda.gov/wp-content/uploads/2021/08/ECB_Climate_Final_Edits.pdf'],['NASA・コーンベルトの土壌','https://science.nasa.gov/missions/landsat/shoring-up-the-corn-belts-soil-health/'],['Minnesota Extension・播種と温度','https://extension.umn.edu/agriculture/crop-production/corn/strategies-for-successful-corn-planting'],['Minnesota Extension・受粉期の水','https://extension.umn.edu/agriculture/crop-production/corn/dry-conditions-during-corn-pollination'],['USDA ERS・飼料穀物',ers+'crops/corn-and-other-feed-grains/feed-grains-sector-at-a-glance'],['USGS・灌漑','https://pubs.usgs.gov/publication/sir20225042/full'],['USDA AMS・穀物水運',transport]],
 soybean:[['USDA ERS・大豆',ers+'crops/soybeans-and-oil-crops/oil-crops-sector-at-a-glance'],['USDA AMS・穀物水運',transport]],
 wheat:[['USDA ERS・小麦',ers+'crops/wheat/wheat-sector-at-a-glance'],['Minnesota Extension・小麦の過湿','https://extension.umn.edu/agriculture/crop-production/small-grains/wheat-flooding-and-waterlogging']],
 cotton:[['USDA ERS・綿花',ers+'crops/cotton-and-wool/cotton-sector-at-a-glance'],['Florida IFAS・綿花','https://ask.ifas.ufl.edu/publication/AG495'],['Georgia EPD・灌漑','https://epd.georgia.gov/document/document/20241025-response-commentpdf/download']],

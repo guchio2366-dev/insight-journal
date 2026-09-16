@@ -40,3 +40,7 @@
 .agri-insight-overlay.is-river-focus .agri-target-halo{stroke-width:7.5}
 .agri-insight-overlay.is-rain-focus .agri-target-line{stroke:#82314a;stroke-width:3.5}
 .agri-insight-overlay.is-rain-focus .agri-target-halo{stroke-width:6}
+
+.agri-insight-overlay.is-corn-river .agri-target-line{stroke:#28738a;stroke-width:2;stroke-opacity:.85}
+.agri-insight-overlay.is-corn-river .agri-target-halo{stroke-width:3.5;stroke-opacity:.65}
+.agri-insight-overlay .agri-corn-river-label{font-size:12px;fill:#205d70;stroke-width:4px}

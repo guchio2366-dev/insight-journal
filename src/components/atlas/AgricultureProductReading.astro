@@ -25,11 +25,15 @@ const links=productInsightOrder[product].map(id=>insightFor(id)!);
   <p class="agri-editorial-takeaway"><strong data-reading-emphasis>{cornReading.takeaway}</strong></p>
   {cornReading.sections.map(section=><section class="agri-editorial-section">
     <h3>{section.heading}</h3>
+    {section.subtitle&&<p class="agri-editorial-subtitle">{section.subtitle}</p>}
     <p><strong data-reading-emphasis>{section.key}</strong> {section.body}</p>
-    <p class="agri-editorial-guide">{section.guide}</p>
+    {section.paragraphs?.map(part=><p class="agri-editorial-use"><strong data-reading-emphasis>{part.label}</strong>{part.text}</p>)}
+    <nav class="agri-inline-actions" aria-label={`${section.heading}を確かめる`}>
+      {section.actions.map(action=>{const u=action.insight?agricultureInsightUrl(origin,base,product,action.insight):null;return <a href={u?u.pathname+u.search:action.href} data-agri-insight-link={action.insight} data-agri-link-product={action.insight?product:undefined}>{action.label}<span aria-hidden="true"> →</span></a>;})}
+    </nav>
   </section>)}
 </div>:productParagraphs[product].map(text=><p>{text.split(pattern).map(part=>terms.has(part)?<strong data-reading-emphasis>{part}</strong>:part)}</p>)}
-{links.length>0&&<nav class="agri-insight-links" aria-label="地図で確かめる">
+{product!=='corn'&&links.length>0&&<nav class="agri-insight-links" aria-label="地図で確かめる">
   <strong>地図で確かめる</strong>
   <div>{links.map(item=>{const u=agricultureInsightUrl(origin,base,product,item.id);return <a href={u.pathname+u.search} data-agri-insight-link={item.id} data-agri-link-product={product}><span>{item.label}</span><small>{targetLabel(item.target)}</small></a>;})}</div>
 </nav>}

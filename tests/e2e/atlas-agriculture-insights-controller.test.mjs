@@ -24,6 +24,8 @@ async function setup(query='',noWebGL=false){
  const html=await readFile('dist/atlas/north-america/agriculture/index.html','utf8');
  window.document.body.innerHTML=html.replace(/<script(?![^>]*application\/json)[\s\S]*?<\/script>/g,'');
  const frame=window.document.querySelector('[data-map-frame]');Object.defineProperty(frame,'clientWidth',{value:800});Object.defineProperty(frame,'clientHeight',{value:480});
+ frame.getBoundingClientRect=()=>({left:0,top:0,right:800,bottom:480,width:800,height:480});
+ window.document.querySelector('[data-fallback-image]').getBoundingClientRect=()=>({left:0,top:0,right:800,bottom:480,width:800,height:480});
  window.ResizeObserver=class {observe(){}disconnect(){}};
  window.createImageBitmap=async()=>({width:1,height:1,close(){}});
  window.HTMLCanvasElement.prototype.getContext=()=>({drawImage(){},getImageData:()=>({width:1,height:1,data:new Uint8ClampedArray([9,0,0,255])})});
@@ -153,5 +155,23 @@ test('初期概説・11品目・関係から戻る・履歴復元・未収録統
    q('[data-relation-select="plains-wheat-cattle"]').click();assert.equal(new URL(window.location.href).searchParams.get('agriProduct'),id);
   }
   q('[data-agri-overview-button]').click();assert.equal(q('[data-agri-statistics]').hidden,true);
+ }finally{await window.happyDOM.close();}
+});
+
+for(const noWebGL of [false,true])test(`とうもろこしは本文内から比較を開け、ミシシッピ川の線・名称を品目切替で解除する（代替図=${noWebGL}）`,async()=>{
+ const {window,q,root}=await setup('?agriReading=product:corn&agriProduct=corn',noWebGL);
+ try{
+  await waitFor(()=>q('.agri-corn-river-label').textContent==='ミシシッピ川','river label');
+  assert.ok(q('.agri-insight-overlay.is-corn-river .agri-target-line').getAttribute('d').length>10);
+  assert.equal(q('[data-editorial-product="corn"]').querySelectorAll('[data-agri-insight-link]').length,5);
+  assert.equal(q('[data-editorial-product="corn"]').querySelectorAll('.agri-editorial-use>strong').length,3);
+  q('[data-editorial-product="corn"] [data-agri-insight-link="central-lowland"]').click();
+  await waitFor(()=>root.dataset.field==='natural','inline destination');
+  assert.equal(new URL(window.location.href).searchParams.get('agriInsight'),'central-lowland');
+  q('.agri-insight-back').click();
+  await waitFor(()=>q('.agri-corn-river-label').textContent==='ミシシッピ川','returned river');
+  q('[data-crop-select="soybean"]').click();
+  await waitFor(()=>q('.agri-corn-river-label').textContent==='','river cleared');
+  assert.equal(q('.agri-insight-overlay').classList.contains('is-corn-river'),false);
  }finally{await window.happyDOM.close();}
 });
