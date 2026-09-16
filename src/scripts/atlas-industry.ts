@@ -28,6 +28,7 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
   const money=(value:number)=>(value/1e6).toLocaleString('ja-JP',{maximumFractionDigits:2});
   function renderMarkers(){
     markers.hidden=!hooks.active();if(!hooks.active())return;
+    const focusedState=(document.activeElement as HTMLElement)?.dataset.industryStateMarker;
     markers.querySelector('[data-industry-state-layer]')?.remove();
     const project=projection(),all=visible(),places=new Map<string,IndustryRegion[]>();
     for(const r of all){if(!places.has(r.placeId))places.set(r.placeId,[]);places.get(r.placeId)!.push(r);}
@@ -74,6 +75,7 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
       }
     }
     renderStateCircles(markers,frame,stateComparison(),project,state.industryState??null,id=>selectState(id));
+    if(focusedState)markers.querySelector<HTMLButtonElement>(`[data-industry-state-marker="${focusedState}"]`)?.focus({preventScroll:true});
   }
   function selectState(id:string,push=true){
     const c=stateComparison(),p=c?.rows.find(r=>r.id===id);if(!c||!p)return;
