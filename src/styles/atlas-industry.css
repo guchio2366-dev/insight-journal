@@ -205,3 +205,16 @@
 [data-industry-markers][data-state-economy=true]>.industry-marker{width:36px;margin-left:0;z-index:1}
 [data-industry-markers][data-state-economy=true]>.industry-marker>span{display:none}
 .industry-state-marker:hover>span[hidden],.industry-state-marker:focus-visible>span[hidden],.industry-state-marker:hover>.industry-state-leader[hidden],.industry-state-marker:focus-visible>.industry-state-leader[hidden]{display:block!important}
+
+/* Shared editorial guidance: takeaways and geographic explanation stay beside the map. */
+.industry-map-reading .industry-key-sentence{border-left:3px solid #507b72;padding-left:10px;margin-bottom:12px!important}
+.industry-selected-reading-body .industry-key-sentence>strong{font-size:14px;line-height:1.65;color:#223e3b;margin:0}
+.industry-selected-reading-body section h3{font-size:14px;line-height:1.5;margin:0 0 5px}
+.industry-reading-places{display:flex;flex-wrap:wrap;gap:2px 12px;margin-top:4px}
+.industry-reading-places button{background:none;border:0;padding:8px 0;min-height:44px;color:#245b58;font:600 12px/1.5 var(--sans);text-align:left;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.industry-reading-places button:focus-visible{outline:2px solid #245b58;outline-offset:2px}
+.industry-reading-definitions{margin-top:6px;border-top:1px solid #dce4df;font-size:12px}
+.industry-reading-definitions summary{padding:10px 0;min-height:44px;box-sizing:border-box;cursor:pointer;color:#4d625d}
+.industry-map-reading .industry-reading-definitions p{font-size:12px;line-height:1.65;margin:0 0 7px}
+.industry-reading-definitions a{display:block;font-size:12px;line-height:1.5;padding:7px 0;color:#245b58;overflow-wrap:anywhere}
+.industry-composition-takeaway{font-size:12px;line-height:1.6;margin:4px 0 8px;color:#344e48}

@@ -7,11 +7,13 @@ const serviceColor=industrySectors.find(s=>s.id==='services')!.color;
 <aside class="atlas-national industry-national" data-industry-national-summary aria-label="選択した業態の全米統計">
 {industrySectors.map(sector=>{
  const gdp=chartRows(sector.id,'gdp'),employment=chartRows(sector.id,'employment');
+ const largestGDP=gdp.reduce((a,b)=>a.share>b.share?a:b),largestEmployment=employment.reduce((a,b)=>a.share>b.share?a:b);
  const rows=gdp.map(row=>({...row,employment:employment.find(e=>e.id===row.id)!}));
  return <section data-industry-national-panel={sector.id} hidden={sector.id!=='all'}>
   <header><h3>{sector.id==='all'?'全産業':sector.label}の全国構成</h3>
    <p>{industryYear}年 · {sector.id==='all'?'農林水産・政府を含む12区分':`全米GDPの${nationalSectorShare(sector.id,'gdp').toFixed(1)}%・雇用の${nationalSectorShare(sector.id,'employment').toFixed(1)}%`}</p>
   </header>
+  <p class="industry-composition-takeaway">{largestGDP.id===largestEmployment.id?`${largestGDP.label}が付加価値・雇用とも最大。`:`付加価値は${largestGDP.label}、雇用は${largestEmployment.label}の割合が最大。`}</p>
   <figure class="industry-chart industry-paired-chart">
    <figcaption><h3>付加価値・雇用の構成比</h3><span>{sector.id==='all'?'全米':sector.label}を100%</span></figcaption>
    <div class="industry-paired-heading" aria-hidden="true"><span>区分</span><span>付加価値</span><span>雇用</span></div>

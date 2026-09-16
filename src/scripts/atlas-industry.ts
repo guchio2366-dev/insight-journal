@@ -168,7 +168,7 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
   wireTabs('[data-industry-subsector]',b=>setScope(state.sector,b.dataset.industrySubsector));
   root.querySelectorAll<HTMLElement>('[data-industry-overview]').forEach(b=>b.addEventListener('click',()=>setScope(state.sector)));
   q('[data-industry-description]').addEventListener('keydown',event=>{if(event.key==='Escape'){event.stopPropagation();setScope(state.sector);q(`[data-industry-sector="${state.sector}"]`).focus({preventScroll:true});}});
-  root.querySelectorAll<HTMLElement>('[data-industry-region-option]').forEach(b=>b.addEventListener('click',()=>selectRegion(b.dataset.industryRegionOption!)));
+  root.querySelectorAll<HTMLElement>('[data-industry-region-option]').forEach(b=>b.addEventListener('click',()=>{selectRegion(b.dataset.industryRegionOption!);if(b.hasAttribute('data-industry-reading-place')){const panel=q('[data-map-panel]');panel.scrollIntoView({block:'nearest'});q('[data-atlas-live]').textContent=`${b.textContent?.replace('を地図で見る','')}を地図で選択しました。`;}}));
   root.querySelectorAll<HTMLAnchorElement>('[data-industry-jump-sector],[data-industry-agriculture]').forEach(link=>link.addEventListener('click',event=>{if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;event.preventDefault();if(link.dataset.industryJumpSector==='agriculture'||link.hasAttribute('data-industry-agriculture')){hooks.agriculture();return;}setScope(link.dataset.industryJumpSector as IndustrySector,link.dataset.industryJumpSubsector,true,link.dataset.industryInsight??null);q('[data-industry-controls]').scrollIntoView({block:'start'});}));
   q('[data-selection-link]').addEventListener('click',event=>{
     if(!hooks.active())return;

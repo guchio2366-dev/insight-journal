@@ -1,14 +1,18 @@
 ---
 import {industryCopy} from '../../data/atlas/industry-content';
+import {industryEditorial} from '../../data/atlas/industry-editorial';
+import {industryRegions,industrySources} from '../../data/atlas/industry-regions';
 import {sectorLabel} from '../../data/atlas/industry-catalog';
 ---
 <aside class="atlas-national industry-selected-reading" id="industry-description" data-industry-description aria-labelledby="industry-description-all-all" tabindex="-1">
- {industryCopy.map(copy=><article data-industry-description-panel={`${copy.sector}:${copy.subsector}`} hidden={copy.sector!=='all'||copy.subsector!=='all'}>
+ {industryCopy.map(copy=>{const reading=industryEditorial[copy.subsector==='all'?copy.sector:copy.subsector];const regions=reading.regions.map(id=>industryRegions.find(r=>r.id===id)!);const sources=[...new Set(regions.map(r=>r.source))];return <article data-industry-description-panel={`${copy.sector}:${copy.subsector}`} hidden={copy.sector!=='all'||copy.subsector!=='all'}>
   <header><h2 id={`industry-description-${copy.sector}-${copy.subsector}`}>{copy.title}</h2>{copy.subsector!=='all'&&<button type="button" data-industry-overview aria-label={`${sectorLabel(copy.sector)}の全分野へ戻る`}>全分野へ</button>}</header>
   <div class="industry-selected-reading-body">
-   <p><strong>概要</strong>{copy.what}</p>
-   <p><strong>立地</strong>{copy.where}</p>
-   <p><strong>変化</strong>{copy.change}</p>
+   <p class="industry-key-sentence"><strong>{reading.lead}</strong></p>
+   <section><h3>{reading.heading}</h3><p>{reading.body}</p>
+    {regions.length>0&&<div class="industry-reading-places" aria-label="本文の地域を地図で確認">{regions.map(region=><button type="button" data-industry-region-option={region.id} data-industry-reading-place>{region.name}を地図で見る</button>)}</div>}
+   </section>
+   <details class="industry-reading-definitions"><summary>対象範囲・統計の読み方・出典</summary><p>{copy.what}</p><p>{copy.change}</p>{sources.map(source=><a href={industrySources[source].url}>{industrySources[source].title}</a>)}<a href="#industry-method">統計の原表・分類を確認する</a></details>
   </div>
- </article>)}
+ </article>;})}
 </aside>
