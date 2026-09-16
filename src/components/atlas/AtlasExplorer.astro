@@ -117,9 +117,7 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
         <div data-agriculture-relations-host hidden={initialField!=='agriculture'}><AgricultureRelations /></div>
         <div class="industry-overview-list" data-industry-overview-list hidden aria-label="州ごとの掲載産業"></div>
         <div class="industry-key" data-industry-key hidden={initialField!=='industry'}>
-          <p>点は州の代表位置。州名の下は、公的資料で確認した掲載産業です（州内の全産業・順位ではありません）。</p>
-          <p data-industry-size-note>全分野は州の代表位置と掲載産業。分野別は同じ条件の公表値を比べ、上位5地域までを円の面積で示します。</p>
-          <p>サービスの記号：金＝金融、情＝情報、専＝専門、商＝商業・物流、観＝宿泊・飲食等、医＝医療・教育、他＝その他。複＝複数分野。</p>
+          <p data-industry-size-note>点は州の代表位置。州名の下は、公的資料で確認した掲載産業です（州内の全産業・順位ではありません）。</p>
           <div class="industry-economic-legend" data-industry-economic-legend hidden></div>
           <p data-industry-empty hidden>この分野の地域例は未登録です。右欄の説明と下の全国推移を確認できます。</p>
           <details><summary>地域一覧から選ぶ</summary><div class="industry-region-list">{industryRegions.map(r=><button type="button" data-industry-region-option={r.id}>{r.name}<small>{subsectorLabel(r.sector,r.subsector)}</small></button>)}</div></details>
