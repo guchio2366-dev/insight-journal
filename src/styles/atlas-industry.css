@@ -201,3 +201,7 @@
 .industry-state-table button{font:inherit;min-height:44px;background:transparent;border:0;text-decoration:underline;color:#205c65;cursor:pointer;padding:4px 0}
 .industry-economic-legend>details>summary{min-height:44px;align-content:center;cursor:pointer}
 @media(max-width:649px){.industry-state-marker>span{font-size:10px}.industry-state-table{font-size:11px}}
+
+[data-industry-markers][data-state-economy=true]>.industry-marker{width:36px;margin-left:0;z-index:1}
+[data-industry-markers][data-state-economy=true]>.industry-marker>span{display:none}
+.industry-state-marker:hover>span[hidden],.industry-state-marker:focus-visible>span[hidden],.industry-state-marker:hover>.industry-state-leader[hidden],.industry-state-marker:focus-visible>.industry-state-leader[hidden]{display:block!important}

@@ -9,7 +9,9 @@ export function renderStateCircles(markers:HTMLElement,frame:HTMLElement,c:State
  layer.replaceChildren();
  const color=industrySectors.find(s=>s.id===c.sector)?.color??'#435965';
  const points=c.points.map(p=>({...p,...project(p.coordinates as [number,number])})).filter(p=>p.x>=0&&p.y>=0&&p.x<=frame.clientWidth&&p.y<=frame.clientHeight);
- const labels=placeIndustryEconomicLabels(points.map(p=>({id:p.id,x:p.x,y:p.y,radius:p.radius,width:frame.clientWidth<650?66:94,height:24})),frame.clientWidth,frame.clientHeight);
+ const named=points.filter(p=>p.id===selected||p.rank<=(frame.clientWidth<650?3:8));
+ const labelWidth=(name:string)=>Math.max(70,name.length*(frame.clientWidth<650?10:11)+10);
+ const labels=placeIndustryEconomicLabels(named.map(p=>({id:p.id,x:p.x,y:p.y,radius:p.radius,width:labelWidth(p.name),height:24})),frame.clientWidth,frame.clientHeight);
  for(const p of points){
   const b=document.createElement('button');b.type='button';b.className='industry-state-marker';b.dataset.industryStateMarker=p.id;b.dataset.economicValue=String(p.value);b.dataset.economicRank=String(p.rank);
   b.style.left=`${p.x}px`;b.style.top=`${p.y}px`;b.style.setProperty('--industry-color',color);
@@ -17,9 +19,9 @@ export function renderStateCircles(markers:HTMLElement,frame:HTMLElement,c:State
   const circle=document.createElement('i');circle.style.width=circle.style.height=`${2*p.radius}px`;circle.setAttribute('aria-hidden','true');b.append(circle);
   const anchor=document.createElement('em');anchor.setAttribute('aria-hidden','true');b.append(anchor);
   const label=document.createElement('span');label.textContent=p.name;label.setAttribute('aria-hidden','true');
-  const box=labels.find(l=>l.id===p.id)!;label.style.left=`${box.left-p.x+22}px`;label.style.top=`${box.top-p.y+22}px`;label.style.width=`${box.width}px`;
-  // At narrow widths show selected/top labels; every circle keeps its accessible name and table row.
-  label.hidden=frame.clientWidth<650&&p.id!==selected&&p.rank>3;
+  const box=labels.find(l=>l.id===p.id)??{left:Math.max(4,Math.min(frame.clientWidth-labelWidth(p.name)-4,p.x+Math.max(12,p.radius))),top:Math.max(4,p.y-30),width:labelWidth(p.name)};label.style.left=`${box.left-p.x+22}px`;label.style.top=`${box.top-p.y+22}px`;label.style.width=`${box.width}px`;
+  // Show selected/top labels; every circle keeps its accessible name and table row.
+  label.hidden=!named.some(n=>n.id===p.id);
   const leader=document.createElement('b');leader.className='industry-state-leader';leader.hidden=label.hidden;leader.setAttribute('aria-hidden','true');
   const x=Math.max(box.left,Math.min(box.left+box.width,p.x)),y=Math.max(box.top,Math.min(box.top+box.height,p.y));
   leader.style.width=`${Math.hypot(x-p.x,y-p.y)}px`;leader.style.transform=`rotate(${Math.atan2(y-p.y,x-p.x)}rad)`;

@@ -30,6 +30,7 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
     markers.hidden=!hooks.active();if(!hooks.active())return;
     const focusedState=(document.activeElement as HTMLElement)?.dataset.industryStateMarker;
     markers.querySelector('[data-industry-state-layer]')?.remove();
+    markers.dataset.stateEconomy=String(!!stateComparison());
     const project=projection(),all=visible(),places=new Map<string,IndustryRegion[]>();
     for(const r of all){if(!places.has(r.placeId))places.set(r.placeId,[]);places.get(r.placeId)!.push(r);}
     const projected=[...places.values()].filter(rs=>state.sector!=='all'||rs.some(r=>r.overview)).map(rs=>({...project(rs[0].coordinates),regions:rs})).filter(p=>p.x>=20&&p.y>=24&&p.x<=frame.clientWidth-20&&p.y<=frame.clientHeight-40);
