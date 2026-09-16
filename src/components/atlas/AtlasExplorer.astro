@@ -115,9 +115,10 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
         <a class="atlas-city-jump" data-city-jump href="#city-climate-heading" hidden>都市の雨温図へ</a>
         <p class="visually-hidden" id="atlas-map-description">地図の内容は下の解説でも読めます。タッチ操作は２本指で地図を動かします。</p><p class="visually-hidden" data-atlas-live aria-live="polite" aria-atomic="true"></p>
         <div data-agriculture-relations-host hidden={initialField!=='agriculture'}><AgricultureRelations /></div>
+        <div class="industry-overview-list" data-industry-overview-list hidden aria-label="州ごとの掲載産業"></div>
         <div class="industry-key" data-industry-key hidden={initialField!=='industry'}>
-          <p>{industrySectors.filter(s=>s.id!=='all').map(s=><span><i style={`--industry-color:${s.color}`}>{s.symbol}</i>{s.label}</span>)}</p>
-          <p data-industry-size-note>記号は代表地域。同じ条件で数値を比べられる分野のみ、円の面積で経済規模を示します。この表示では同サイズです。</p>
+          <p>点は州の代表位置。州名の下は、公的資料で確認した掲載産業です（州内の全産業・順位ではありません）。</p>
+          <p data-industry-size-note>全分野は州の代表位置と掲載産業。分野別は同じ条件の公表値を比べ、上位5地域までを円の面積で示します。</p>
           <p>サービスの記号：金＝金融、情＝情報、専＝専門、商＝商業・物流、観＝宿泊・飲食等、医＝医療・教育、他＝その他。複＝複数分野。</p>
           <div class="industry-economic-legend" data-industry-economic-legend hidden></div>
           <p data-industry-empty hidden>この分野の地域例は未登録です。右欄の説明と下の全国推移を確認できます。</p>

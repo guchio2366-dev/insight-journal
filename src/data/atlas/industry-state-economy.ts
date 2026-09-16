@@ -9,7 +9,7 @@ export function industryStateComparison(sector:string,subsector:string){
  if(valid.length<2)return null;
  const max=valid[0].value!;
  const points=valid.map(r=>({...r,value:r.value!,radius:economicCircleRadius(r.value!,max),rank:1+valid.filter(p=>p.value!>r.value!).length}));
- return {...field,sourceInfo:data.sources[field.source as keyof typeof data.sources],max,total:rows.filter(r=>r.value!==null).length,rows,points};
+ return {...field,subsector,sourceInfo:data.sources[field.source as keyof typeof data.sources],max,total:rows.filter(r=>r.value!==null).length,rows,points};
 }
 export type StateEconomyComparison=NonNullable<ReturnType<typeof industryStateComparison>>;
 export function stateEconomyValue(value:number,comparison:StateEconomyComparison){return (value/comparison.divisor).toLocaleString('ja-JP',{maximumFractionDigits:2});}

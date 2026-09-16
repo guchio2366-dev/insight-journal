@@ -1,3 +1,4 @@
+import {renderIndustryOverview} from './atlas-industry-overview';
 import {industryStateComparison,stateEconomyValue,stateEconomyStatus} from '../data/atlas/industry-state-economy';
 import {renderStateCircles} from './atlas-industry-state-circles';
 import {groupIndustryMarkers,placeIndustryEconomicLabels} from '../lib/atlas-industry-markers';
@@ -28,15 +29,17 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
   const money=(value:number)=>(value/1e6).toLocaleString('ja-JP',{maximumFractionDigits:2});
   function renderMarkers(){
     markers.hidden=!hooks.active();if(!hooks.active())return;
+    const overviewList=q('[data-industry-overview-list]');overviewList.hidden=true;
+    if(state.subsector==='all'){signature='';renderIndustryOverview(markers,frame,overviewList,visible(),projection(),state.industryRegion,rs=>rs.length>1?showCandidates(rs):selectRegion(rs[0].id));return;}
     const focusedState=(document.activeElement as HTMLElement)?.dataset.industryStateMarker;
     markers.querySelector('[data-industry-state-layer]')?.remove();
     markers.dataset.stateEconomy=String(!!stateComparison());
-    const project=projection(),all=visible(),places=new Map<string,IndustryRegion[]>();
+    const project=projection(),all=stateComparison()?[]:visible(),places=new Map<string,IndustryRegion[]>();
     for(const r of all){if(!places.has(r.placeId))places.set(r.placeId,[]);places.get(r.placeId)!.push(r);}
     const projected=[...places.values()].filter(rs=>state.sector!=='all'||rs.some(r=>r.overview)).map(rs=>({...project(rs[0].coordinates),regions:rs})).filter(p=>p.x>=20&&p.y>=24&&p.x<=frame.clientWidth-20&&p.y<=frame.clientHeight-40);
     const economic=comparison();
     // Quantitative circles retain their own location and scale, even when labels overlap.
-    const groups=economic?projected:groupIndustryMarkers(projected,frame.clientWidth),width=frame.clientWidth<650?92:120;
+    const groups=economic?projected.filter(g=>economic.points.slice(0,5).some(p=>p.regionIds.includes(g.regions[0].id))):groupIndustryMarkers(projected,frame.clientWidth),width=frame.clientWidth<650?92:120;
     const nextSignature=`${state.sector}:${state.subsector}:${economic?.max??'fixed'}:`+groups.map(g=>g.regions.map(r=>r.id).join(',')).join('|');
     if(nextSignature!==signature){
       const focused=(document.activeElement as HTMLElement)?.dataset.industryMarker;
@@ -48,7 +51,7 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
         const point=economic?.points.find(p=>p.regionIds.includes(group.regions[0].id));
         const dot=document.createElement('i');
         const fields=new Set(group.regions.map(r=>`${r.sector}:${r.subsector}`));
-        dot.textContent=fields.size>1?'複':industrySymbol(group.regions[0].sector,group.regions[0].subsector);dot.setAttribute('aria-hidden','true');
+        dot.textContent=industrySymbol(group.regions[0].sector,group.regions[0].subsector);dot.setAttribute('aria-hidden','true');
         if(point){
           button.classList.add('is-economic');button.classList.toggle('is-small-value',point.radius<10);
           button.style.setProperty('--economic-radius',`${point.radius}px`);button.dataset.economicValue=String(point.value);button.dataset.economicRank=String(point.rank);button.dataset.economicMetro=point.id;
@@ -114,13 +117,13 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
     const title=document.createElement('p');title.textContent=`円の面積＝${economic.label}の付加価値（${economic.year}年・名目）。同じ分野の比較対象${economic.total}都市圏内。`;
     const key=document.createElement('div');key.className='industry-size-key';
     for(const share of [.25,1]){const value=economic.max*share,item=document.createElement('span'),circle=document.createElement('i');circle.style.width=circle.style.height=`${economicCircleRadius(value,economic.max)*2}px`;circle.setAttribute('aria-hidden','true');item.append(circle,document.createTextNode(`${money(value)} 十億米ドル`));key.append(item);}
-    const note=document.createElement('p');note.textContent='公的統計から集計。四角い記号は比較可能な数値なし。全米順位ではありません。円の縮尺は地図を動かしても変わりません。';
+    const note=document.createElement('p');note.textContent='公的統計から集計。円は比較対象内の上位5地域まで。全米順位ではありません。円の縮尺は地図を動かしても変わりません。';
     holder.append(title,key,note);
   }
   function renderStateLegend(holder:HTMLElement,c:NonNullable<ReturnType<typeof stateComparison>>){
     const lead=document.createElement('p');lead.className='industry-state-takeaway';
     lead.textContent=`${c.label}の${c.metric}は、${c.points.slice(0,3).map(p=>p.name).join('・')}が公表値の上位です。`;
-    const note=document.createElement('p');note.textContent=`${c.year}年｜円の面積＝州の${c.metric}｜公表値のある${c.total}/51州・DC。小さな文字入り記号は代表拠点。`;
+    const note=document.createElement('p');note.textContent=`${c.year}年｜円の面積＝州の${c.metric}｜公表値のある${c.total}/51州・DC。円は公表値の上位5地域のみ。文字は選択分野の先頭文字。全地域の値は一覧で確認できます。`;
     const details=document.createElement('details');const summary=document.createElement('summary');summary.textContent='州別の数値と出典';details.append(summary);
     const scope=document.createElement('p');scope.textContent=`対象：${c.label}（${c.source==='census'?'NAICS':'BEA行'} ${c.codes.join('・')}）。${c.metric==='出荷額'?'出荷額は製品を出荷した金額で、付加価値とは異なります。':'付加価値は生産額から原材料などの中間投入を差し引いた、新たに生み出した価値です。'}秘匿・未収録はゼロと区別しています。縮尺は地図移動で変わりません。`;
     const table=document.createElement('table');table.className='industry-state-table';const caption=document.createElement('caption');caption.textContent=`${c.year}年 ${c.label}の${c.metric}（${c.displayUnit}）`;table.append(caption);
@@ -140,7 +143,7 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
     }
   }
   function render(){
-    q('[data-industry-controls]').hidden=!hooks.active();q('[data-industry-key]').hidden=!hooks.active();q('[data-industry-insights]').hidden=!hooks.active();
+    q('[data-industry-overview-list]').hidden=!hooks.active()||state.subsector!=='all';q('[data-industry-controls]').hidden=!hooks.active();q('[data-industry-key]').hidden=!hooks.active();q('[data-industry-insights]').hidden=!hooks.active();
     root.dataset.industrySector=state.sector;root.dataset.industrySubsector=state.subsector;
     q('[data-industry-national-summary]').hidden=false;q('[data-industry-description]').hidden=false;
     root.querySelectorAll<HTMLElement>('[data-industry-description-panel]').forEach(p=>p.hidden=p.dataset.industryDescriptionPanel!==`${state.sector}:${state.subsector}`);

@@ -47,7 +47,7 @@ test('円の面積は原値に比例し、比較対象は都市圏で重複除�
  assert.equal(data.industryRegionalComparison(rs,'manufacturing','aerospace'),null);
 });
 test('サービス7分野の文字を固定し、分類には航空宇宙・造船・鉄道車両が独立する',()=>{
- assert.deepEqual(['finance','information','professional','trade-logistics','tourism','health-education','other-services'].map(s=>data.industrySymbol('services',s)),['金','情','専','商','観','医','他']);
+ assert.deepEqual(['finance','information','professional','trade-logistics','tourism','health-education','other-services'].map(s=>data.industrySymbol('services',s)),['金','情','専','商','観','医','そ']);
  for(const s of ['aerospace','shipbuilding','railway'])assert.ok(data.industryRegions.some(r=>r.subsector===s));
 });
 
