@@ -142,3 +142,24 @@ test('late ethnicity data cannot repaint a newer religion selection',async()=>{
   assert.match(q('[data-pop-overview-title]').textContent,/末日聖徒/);assert.ok(window.__map.getSource('population'));
  }finally{release?.();await window.happyDOM.close();}
 });
+
+test('inline readings preserve the map and return to the original takeaway',async()=>{
+ const {window,q,requests}=await setup('?popView=ethnicity');
+ try{
+  await waitFor(()=>window.__map.getLayer('population-fill'),'map');
+  const source=window.__map.getSource('population'),moves=window.__map.cameraChanges,count=requests.length;
+  q('[data-pop-group="black"]').click();const key=q('[data-pop-key]').textContent;
+  const press=label=>Array.from(window.document.querySelectorAll('.population-reading-action')).find(b=>b.textContent===label).click();
+  press('五大湖のデトロイトで仕事と移住を読む');
+  assert.equal(q('[data-pop-overview-title]').textContent,'デトロイト');
+  assert.match(q('[data-pop-key]').textContent,/住宅差別/);
+  assert.doesNotMatch(q('[data-pop-reading-body]').textContent,/周りの密度/);
+  press('← 前の解説へ戻る');assert.equal(q('[data-pop-key]').textContent,key);
+  assert.equal(new URL(window.location.href).searchParams.get('popEthnicity'),'black');
+  assert.equal(window.__map.getSource('population'),source);assert.equal(window.__map.cameraChanges,moves);assert.equal(requests.length,count);
+  q('[data-pop-reading-reset]').click();assert.equal(q('[data-pop-overview]').hidden,true);
+  q('[data-pop-view="religion"]').click();await waitFor(()=>/3,108/.test(q('[data-pop-status]').textContent),'religion');
+  press('② ユタへの移住と共同体を読む');assert.match(q('[data-pop-key]').textContent,/西方移住/);
+  press('← 前の解説へ戻る');assert.match(q('[data-pop-key]').textContent,/バプテスト/);
+ }finally{await window.happyDOM.close();}
+});

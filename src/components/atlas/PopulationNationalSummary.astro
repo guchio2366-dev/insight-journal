@@ -5,7 +5,8 @@ import {populationOverviews} from '../../data/atlas/population-reading';
  <div class="population-reading-heading"><p class="atlas-eyebrow">UNITED STATES · 人口</p><button type="button" data-pop-reading-reset hidden>全国の解説へ</button></div>
  <section id="population-city-reading" data-pop-reading tabindex="-1" aria-label="選択した項目の解説">
   <h2 data-pop-overview-title>{populationOverviews.distribution.title}</h2>
-  <p data-pop-overview>{populationOverviews.distribution.text}</p>
+  <p class="population-key"><strong data-pop-key>{populationOverviews.distribution.text}</strong></p>
+  <p data-pop-overview hidden>{populationOverviews.distribution.text}</p>
   <div data-pop-reading-body><h3>地図のどこを見る？</h3><p>{populationOverviews.distribution.reading}</p></div>
  </section>
  <a class="population-map-return" href="#nature-map-panel">↑ 地図と見比べる</a>
