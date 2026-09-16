@@ -170,10 +170,10 @@ export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbac
     takeaway.textContent=ctx.insight?insightTakeaway(ctx.insight,ctx.product):'';takeaway.hidden=!takeaway.textContent;
     photo.replaceChildren();photo.hidden=ctx.insight?.photo!=='pivot';
     if(!photo.hidden){
-     const image=document.createElement('img');image.src=config.base.replace(/atlas\/north-america\/$/,'assets/atlas/agriculture-insights/center-pivot-usgs.jpg');image.alt='車輪で支えた長い散水管が畑に水をまくセンターピボット式灌漑装置';image.width=220;image.height=165;image.loading='lazy';image.decoding='async';
-     const caption=document.createElement('figcaption'),credit=document.createElement('a');credit.href='https://www.usgs.gov/media/images/center-pivot-irrigation-midwest-corn-belt';credit.textContent='写真：USGS / Peter C. Van Metre（2013年、Public Domain）';
-     const full=document.createElement('a');full.href='https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/thumbnails/image/IMG_6265.JPG';full.target='_blank';full.rel='noopener';full.setAttribute('aria-label','センターピボットの写真を拡大（新しいタブ）');full.append(image);
-     caption.append('米国中西部の装置の例。タップで拡大。中央の支点を中心に回転して散水します。',document.createElement('br'),credit);photo.append(full,caption);
+     const image=document.createElement('img');image.src=config.base.replace(/atlas\/north-america\/$/,'assets/atlas/agriculture-insights/center-pivot-aerial-nasa.jpg');image.alt='上空から見たカンザス州の円形の畑。センターピボット式灌漑による散水範囲が円になっている';image.width=540;image.height=540;image.loading='lazy';image.decoding='async';
+     const caption=document.createElement('figcaption'),credit=document.createElement('a');credit.href='https://science.nasa.gov/earth/earth-observatory/crop-circles-in-kansas-5772/';credit.textContent='衛星画像：NASA/GSFC/METI/ERSDAC/JAROS, and U.S./Japan ASTER Science Team（2001年6月24日）';
+     const full=document.createElement('a');full.href='https://assets.science.nasa.gov/dynamicimage/assets/science/esd/eo/images/imagerecords/5000/5772/kansas_AST_2001175_lrg.jpg?crop=faces%2Cfocalpoint&fit=clip&h=2481&w=2589';full.target='_blank';full.rel='noopener';full.setAttribute('aria-label','センターピボットの上空画像を拡大（新しいタブ）');full.append(image);
+     caption.append('なぜ円形？ 中心の井戸を支点に長い散水管が回るため、水の届く範囲が円になります。カンザス州の例で、とうもろこし・小麦・ソルガムなどが栽培される地域です。タップで拡大。',document.createElement('br'),credit);photo.append(full,caption);
     }
     sourceLinks.replaceChildren();sourceLinks.hidden=!ctx.insight?.sources?.length;
     for(const [label,url] of ctx.insight?.sources??[]){const a=document.createElement('a');a.href=url;a.textContent=label;sourceLinks.append(a,' ');}

@@ -393,7 +393,7 @@ test('河川の強調と灌漑写真は対応するインサイトだけに表�
   q('.agri-insight-back').click();q('[data-agri-insight-link="corn-pivot-water"]').click();
   assert.equal(q('.agri-insight-photo').hidden,false);
   assert.match(q('.agri-insight-photo img').alt,/センターピボット/);
-  assert.match(q('.agri-insight-photo figcaption').textContent,/Public Domain/);
+  assert.match(q('.agri-insight-photo figcaption').textContent,/衛星画像：NASA/);
   q('.agri-insight-back').click();q('[data-agri-link-product="corn"][data-agri-insight-link="grain-rivers"]').click();
   assert.equal(q('.agri-insight-photo').hidden,true);
  }finally{await window.happyDOM.close();}
