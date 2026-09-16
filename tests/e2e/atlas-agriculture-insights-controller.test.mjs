@@ -30,7 +30,7 @@ async function setup(query='',noWebGL=false){
  window.createImageBitmap=async()=>({width:1,height:1,close(){}});
  window.HTMLCanvasElement.prototype.getContext=()=>({drawImage(){},getImageData:()=>({width:1,height:1,data:new Uint8ClampedArray([9,0,0,255])})});
  const requests=[];
- window.fetch=async (url)=>{requests.push(String(url));return new Response(await readFile('public/'+String(url).replace(/^.*?\/insight-journal\//,'')));};
+ window.fetch=async (url)=>{requests.push(String(url));if(window.__forestAssetError&&String(url).includes('/forestry/'))return new Response('',{status:503});return new Response(await readFile('public/'+String(url).replace(/^.*?\/insight-journal\//,'')));};
  window.Response=Response;window.DecompressionStream=DecompressionStream;
  window.__forceNoWebGL=noWebGL;
  const entry=window.eval(bundle.outputFiles[0].text+"; NatureTest;");await entry.startAtlas();await delay();
@@ -173,5 +173,45 @@ for(const noWebGL of [false,true])test(`とうもろこしは本文内から比�
   q('[data-crop-select="soybean"]').click();
   await waitFor(()=>q('.agri-corn-river-label').textContent==='','river cleared');
   assert.equal(q('.agri-insight-overlay').classList.contains('is-corn-river'),false);
+ }finally{await window.happyDOM.close();}
+});
+
+test('林業は独立表示し、比較・復帰・20回の切替で地図とデータを再作成しない',async()=>{
+ const {window,q,root,requests}=await setup('?agriReading=product:rice&agriLayers=crops&lng=-101&lat=39&z=4&view=custom');
+ try{
+  q('[data-forestry-select]').click();
+  await waitFor(()=>q('.forest-overlay image').getAttribute('href'),'forest raster');
+  assert.equal(root.dataset.agriReading,'forestry');assert.equal(q('[data-agri-statistics]').hidden,true);assert.equal(q('[data-forest-statistics]').hidden,false);
+  assert.equal(q('[data-fallback-livestock]').hidden,true);assert.equal(q('[data-livestock-markers]').children.length,0);
+  q('[data-forest-region="northwest"]').click();const camera=new URL(window.location.href).searchParams.get('lng');
+  q('[data-forest-compare="precipitation"]').click();
+  assert.equal(root.dataset.field,'natural');assert.equal(q('.forest-comparison').hidden,false);await waitFor(()=>q('.forest-overlay path').getAttribute('d'),'forest region outline');
+  q('[data-forest-back]').click();assert.equal(root.dataset.agriReading,'forestry');assert.equal(new URL(window.location.href).searchParams.get('forestRegion'),'northwest');assert.equal(new URL(window.location.href).searchParams.get('lng'),camera);
+  const count=requests.filter(s=>s.includes('/forestry/')).length;
+  for(let i=0;i<20;i++){q('[data-crop-select="rice"]').click();q('[data-forestry-select]').click();}
+  assert.equal(requests.filter(s=>s.includes('/forestry/')).length,count);assert.equal(window.__mapCount,1);
+  q('[data-crop-select="rice"]').click();assert.equal(q('[data-stat-panel="rice"]').hidden,false);assert.equal(q('[data-forest-statistics]').hidden,true);assert.equal(q('[data-agri-layer][value="livestock"]').checked,false);
+ }finally{await window.happyDOM.close();}
+});
+test('WebGLなしでも林業の直接URLと地域・比較からの復帰が成立する',async()=>{
+ const {window,q,root}=await setup('?agriReading=forestry:timber&forestRegion=south',true);
+ try{
+  await waitFor(()=>q('.forest-overlay image').getAttribute('href'),'fallback forest raster');
+  assert.equal(root.dataset.renderState,'fallback');assert.equal(root.dataset.agriReading,'forestry');assert.ok(q('[data-fallback-image]').src.endsWith('land-fallback.webp'));
+  assert.equal(q('[data-forest-region-copy="south"]').hidden,false);
+  q('[data-forest-compare="landform"]').click();assert.equal(q('.forest-comparison').hidden,false);
+  q('[data-forest-back]').click();assert.equal(root.dataset.agriReading,'forestry');assert.equal(q('[data-forest-region-copy="south"]').hidden,false);
+ }finally{await window.happyDOM.close();}
+});
+test('林業データ取得失敗を明示し、再読み込みで回復する',async()=>{
+ const {window,q}=await setup('',true);
+ try{
+  window.__forestAssetError=true;q('[data-forestry-select]').click();
+  await waitFor(()=>!q('.forest-map-key button').hidden,'forest retry');
+  assert.match(q('.forest-map-key [role="status"]').textContent,/読み込めません/);
+  assert.ok(q('[data-fallback-image]').src.endsWith('land-fallback.webp'));
+  window.__forestAssetError=false;q('.forest-map-key button').click();
+  await waitFor(()=>q('.forest-overlay image').getAttribute('href'),'forest recovered');
+  assert.equal(q('.forest-map-key button').hidden,true);
  }finally{await window.happyDOM.close();}
 });

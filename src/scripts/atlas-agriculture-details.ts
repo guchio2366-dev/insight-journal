@@ -27,11 +27,12 @@ export function createAgricultureDetails(root:HTMLElement,changed:(state:Agricul
     q('[data-agri-overview]').hidden=v.kind!=='overview';panel.hidden=v.kind==='overview';
     heading.textContent=key?titles.get(key)??'農業の解説':'';
     for(const [id,node] of copies)node.hidden=id!==key;
-    const statId=product&&product!=='specialty'?product:null;
+    const statId=v.kind!=='forestry'&&product&&product!=='specialty'?product:null;
     stats.hidden=!statId;
+    q('[data-forest-statistics]').hidden=v.kind!=='forestry';
     q('[data-agri-statistics-heading]').textContent=statId?`${titles.get(statId)}の統計`:'';
     for(const [id,node] of panels)node.hidden=id!==statId;
-    root.querySelectorAll<HTMLAnchorElement>('[data-crop-key] a').forEach(a=>{const target=readingAnchor(a.hash),active=target?.kind==='product'&&target.id===(v.kind==='product'?v.id:null);if(active)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current');a.setAttribute('aria-controls','agri-reading-heading');});
+    root.querySelectorAll<HTMLAnchorElement>('[data-crop-key] a').forEach(a=>{const target=readingAnchor(a.hash),active=target?.kind===v.kind&&'id' in target&&'id' in v&&target.id===v.id;if(active)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current');a.setAttribute('aria-controls','agri-reading-heading');});
     root.querySelectorAll<HTMLElement>('[data-relation-select]').forEach(a=>a.setAttribute('aria-pressed',String(v.kind==='relation'&&v.id===a.dataset.relationSelect)));
     root.querySelectorAll<HTMLButtonElement>('[data-milk-basis]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.milkBasis===state.milkBasis)));
     root.querySelectorAll<HTMLElement>('[data-milk-panel]').forEach(p=>p.hidden=p.dataset.milkPanel!==state.milkBasis);
@@ -54,7 +55,7 @@ export function createAgricultureDetails(root:HTMLElement,changed:(state:Agricul
     if(notify&&prior!==JSON.stringify(state.reading))commit(true,source);
     else if(notify)commit(false,source);
     if(notify)focusReading();
-    q('[data-atlas-live]').textContent=view.kind==='overview'?'米国の農業を表示しました。':`${titles.get(view.id)}の解説を表示しました。`;
+    q('[data-atlas-live]').textContent=view.kind==='overview'?'米国の農林業を表示しました。':`${titles.get(view.id)}の解説を表示しました。`;
   };
   const product=(id:string,notify=true,source?:'map')=>{if(isProduct(id))select({kind:'product',id},notify,source);};
   const relation=(id:string,notify=true)=>{
@@ -71,7 +72,7 @@ export function createAgricultureDetails(root:HTMLElement,changed:(state:Agricul
     const url=new URL(a.href,location.href);if(url.origin!==location.origin||url.pathname!==location.pathname)return;
     const view=readingAnchor(url.hash);if(!view)return;
     event.preventDefault();trigger=a;
-    if(view.kind==='relation')relation(view.id);else if(view.kind==='product')product(view.id);
+    if(view.kind==='relation')relation(view.id);else if(view.kind==='product')product(view.id);else if(view.kind==='forestry')select(view);
   });
   root.querySelectorAll<HTMLButtonElement>('[data-milk-basis]').forEach(b=>b.addEventListener('click',()=>{state.milkBasis=b.dataset.milkBasis==='skim'?'skim':'fat';render();commit(false,'restore');}));
   const restore=()=>{state=read();region.hidden=true;candidates.hidden=true;render();return {...state};};
