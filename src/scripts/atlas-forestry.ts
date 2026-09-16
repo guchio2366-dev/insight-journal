@@ -1,6 +1,6 @@
 import {forestRegion} from '../data/atlas/forestry';
 import {forestComparison,forestComparisonUrl,forestReturn} from '../lib/atlas-forestry-state';
-import {containedMapBox,projectNatureFallback} from '../lib/atlas-nature-labels';
+import {containedMapBox,projectNatureFallback,layoutNatureLabels} from '../lib/atlas-nature-labels';
 
 type Callbacks={field:()=>string;selected:()=>boolean;project:()=>((p:readonly number[])=>{x:number;y:number})|null;changed:()=>void};
 const ns='http://www.w3.org/2000/svg';
@@ -53,9 +53,15 @@ export function createForestry(root:HTMLElement,base:string,cb:Callbacks){
   names.replaceChildren();
   if(region){
    const anchors:Record<string,[number,number]>={NC:[-79.8,35.6],WA:[-120.8,47.4],OR:[-120.6,43.6],ME:[-69.0,46.1],NH:[-71.2,43.0],VT:[-72.7,44.0]};
-   for(const f of features.filter(f=>(region.codes as readonly string[]).includes(f.properties.code))){
-    const at=p(anchors[f.properties.code]);if(f.properties.code==='VT'){at.x-=60;at.y-=18;}if(f.properties.code==='NH')at.y+=20;const text=document.createElementNS(ns,'text');text.textContent=f.properties.name;
-    text.setAttribute('x',String(Math.max(75,Math.min(frame.clientWidth-75,at.x))));text.setAttribute('y',String(Math.max(28,Math.min(frame.clientHeight-16,at.y))));text.setAttribute('text-anchor','middle');names.append(text);
+   const selected=features.filter(f=>(region.codes as readonly string[]).includes(f.properties.code));
+   const labels=selected.map(f=>({id:f.properties.code,anchor:p(anchors[f.properties.code]),width:f.properties.name.length*12+8,height:20}));
+   const rect=frame.getBoundingClientRect();
+   const obstacles=Array.from(root.querySelectorAll<HTMLElement>('[data-water-label],[data-nature-label]')).filter(n=>!n.hidden&&n.getClientRects().length).map(n=>{const r=n.getBoundingClientRect();return {left:r.left-rect.left,top:r.top-rect.top,right:r.right-rect.left,bottom:r.bottom-rect.top};});
+   const placements=layoutNatureLabels(labels,{left:6,top:24,right:frame.clientWidth-6,bottom:frame.clientHeight-26},obstacles);
+   for(const label of placements){
+    const f=selected.find(f=>f.properties.code===label.id),line=document.createElementNS(ns,'line'),text=document.createElementNS(ns,'text');
+    line.setAttribute('x1',String(label.anchor.x));line.setAttribute('y1',String(label.anchor.y));line.setAttribute('x2',String(label.left+label.width/2));line.setAttribute('y2',String(label.top+10));line.setAttribute('stroke','#315a47');line.setAttribute('stroke-width','1');
+    text.textContent=f.properties.name;text.setAttribute('x',String(label.left+label.width/2));text.setAttribute('y',String(label.top+15));text.setAttribute('text-anchor','middle');names.append(line,text);
    }
   }
  }
@@ -84,6 +90,7 @@ export function createForestry(root:HTMLElement,base:string,cb:Callbacks){
   history.pushState({},'',url);sync();cb.changed();
  });
  retry.addEventListener('click',()=>{void ensure();});
- new ResizeObserver(schedule).observe(frame);root.querySelector('[data-fallback-image]')!.addEventListener('load',schedule);
+ new ResizeObserver(schedule).observe(frame);
+ for(const holder of root.querySelectorAll('[data-water-labels],[data-nature-labels]'))new MutationObserver(schedule).observe(holder,{attributes:true,childList:true,subtree:true,attributeFilter:['style','hidden']});root.querySelector('[data-fallback-image]')!.addEventListener('load',schedule);
  return {sync,schedule};
 }
