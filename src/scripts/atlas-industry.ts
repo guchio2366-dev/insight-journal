@@ -1,3 +1,5 @@
+import {industryStateComparison,stateEconomyValue,stateEconomyStatus} from '../data/atlas/industry-state-economy';
+import {renderStateCircles} from './atlas-industry-state-circles';
 import {groupIndustryMarkers,placeIndustryEconomicLabels} from '../lib/atlas-industry-markers';
 import {industrySectors,industrySymbol,sectorLabel,subsectorLabel,type IndustrySector} from '../data/atlas/industry-catalog';
 import {readIndustryState,writeIndustryState,type IndustryState} from '../lib/atlas-industry-state';
@@ -21,10 +23,12 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
     const merc=(lat:number)=>Math.log(Math.tan(Math.PI/4+lat*Math.PI/360));
     return (p:[number,number])=>({x:left+(p[0]+128)/64*w,y:top+(merc(52)-merc(p[1]))/(merc(52)-merc(22))*h});
   };
-  const comparison=()=>industryRegionalComparison(regions,state.sector,state.subsector);
+  const stateComparison=()=>industryStateComparison(state.sector,state.subsector);
+  const comparison=()=>stateComparison()?null:industryRegionalComparison(regions,state.sector,state.subsector);
   const money=(value:number)=>(value/1e6).toLocaleString('ja-JP',{maximumFractionDigits:2});
   function renderMarkers(){
     markers.hidden=!hooks.active();if(!hooks.active())return;
+    markers.querySelector('[data-industry-state-layer]')?.remove();
     const project=projection(),all=visible(),places=new Map<string,IndustryRegion[]>();
     for(const r of all){if(!places.has(r.placeId))places.set(r.placeId,[]);places.get(r.placeId)!.push(r);}
     const projected=[...places.values()].filter(rs=>state.sector!=='all'||rs.some(r=>r.overview)).map(rs=>({...project(rs[0].coordinates),regions:rs})).filter(p=>p.x>=20&&p.y>=24&&p.x<=frame.clientWidth-20&&p.y<=frame.clientHeight-40);
@@ -69,6 +73,17 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
         leader.style.width=`${Math.hypot(endX-group.x,endY-group.y)}px`;leader.style.transform=`rotate(${Math.atan2(endY-group.y,endX-group.x)}rad)`;
       }
     }
+    renderStateCircles(markers,frame,stateComparison(),project,state.industryState??null,id=>selectState(id));
+  }
+  function selectState(id:string,push=true){
+    const c=stateComparison(),p=c?.rows.find(r=>r.id===id);if(!c||!p)return;
+    state.industryRegion=null;state.industryState=id;
+    const value=p.value===null?stateEconomyStatus(p.status):`${stateEconomyValue(p.value,c)} ${c.displayUnit}`;
+    const rank=c.points.find(r=>r.id===id)?.rank;
+    hooks.show({id:`state-${id}`,placeId:`state-${id}`,name:p.name,sector:state.sector,subsector:state.subsector,coordinates:p.coordinates as [number,number],function:`${c.label}の${c.metric}：${value}`,description:`${rank?`公表値のある${c.total}州・DC中${rank}位。`:''}州全体の数値です。円の位置は州内の代表点です。`,source:'washington',scope:'州・DC',year:String(c.year),selectionReason:'州別公式統計',employment:null,lq:null,nationalShare:null,overview:false});
+    const holder=q('[data-selection-candidates]');holder.replaceChildren();holder.hidden=false;
+    const a=document.createElement('a');a.href=c.sourceInfo.url;a.textContent=c.sourceInfo.title;holder.append(a);
+    renderMarkers();if(push)hooks.changed(true);
   }
   function sourceLink(region:IndustryRegion){
     const holder=q('[data-selection-candidates]');holder.hidden=false;
@@ -89,7 +104,8 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
     q('[data-selection-candidates]').append(box);
   }
   function renderLegend(){
-    const economic=comparison(),holder=q('[data-industry-economic-legend]');holder.replaceChildren();holder.hidden=!economic;
+    const economic=comparison(),c=stateComparison(),holder=q('[data-industry-economic-legend]');holder.replaceChildren();holder.hidden=!economic&&!c;
+    if(c){renderStateLegend(holder,c);q('[data-industry-size-note]').hidden=true;return;}
     q('[data-industry-size-note]').hidden=!!economic;
     if(!economic)return;
     const title=document.createElement('p');title.textContent=`円の面積＝${economic.label}の付加価値（${economic.year}年・名目）。同じ分野の比較対象${economic.total}都市圏内。`;
@@ -98,7 +114,20 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
     const note=document.createElement('p');note.textContent='公的統計から集計。四角い記号は比較可能な数値なし。全米順位ではありません。円の縮尺は地図を動かしても変わりません。';
     holder.append(title,key,note);
   }
-  function selectRegion(id:string,push=true){const region=visible().find(r=>r.id===id);if(!region)return;state.industryRegion=id;showRegion(region);renderMarkers();if(push)hooks.changed(true);}
+  function renderStateLegend(holder:HTMLElement,c:NonNullable<ReturnType<typeof stateComparison>>){
+    const lead=document.createElement('p');lead.className='industry-state-takeaway';
+    lead.textContent=`${c.label}の${c.metric}は、${c.points.slice(0,3).map(p=>p.name).join('・')}が公表値の上位です。`;
+    const note=document.createElement('p');note.textContent=`${c.year}年｜円の面積＝州の${c.metric}｜公表値のある${c.total}/51州・DC。小さな文字入り記号は代表拠点。`;
+    const details=document.createElement('details');const summary=document.createElement('summary');summary.textContent='州別の数値と出典';details.append(summary);
+    const scope=document.createElement('p');scope.textContent=`対象：${c.label}（${c.source==='census'?'NAICS':'BEA行'} ${c.codes.join('・')}）。${c.metric==='出荷額'?'出荷額は製品を出荷した金額で、付加価値とは異なります。':'付加価値は生産額から原材料などの中間投入を差し引いた、新たに生み出した価値です。'}秘匿・未収録はゼロと区別しています。縮尺は地図移動で変わりません。`;
+    const table=document.createElement('table');table.className='industry-state-table';const caption=document.createElement('caption');caption.textContent=`${c.year}年 ${c.label}の${c.metric}（${c.displayUnit}）`;table.append(caption);
+    const head=document.createElement('thead');head.innerHTML='<tr><th scope="col">州・DC</th><th scope="col">金額</th><th scope="col">公表値内順位</th></tr>';table.append(head);
+    const body=document.createElement('tbody');
+    const rows=[...c.rows].sort((a,b)=>(b.value??-1)-(a.value??-1)||a.id.localeCompare(b.id));
+    for(const r of rows){const tr=document.createElement('tr'),th=document.createElement('th'),button=document.createElement('button'),amount=document.createElement('td'),rank=document.createElement('td');th.scope='row';button.type='button';button.textContent=r.name;button.dataset.industryStateOption=r.id;button.addEventListener('click',()=>selectState(r.id));th.append(button);amount.textContent=r.value===null?stateEconomyStatus(r.status):stateEconomyValue(r.value,c);rank.textContent=String(c.points.find(p=>p.id===r.id)?.rank??'—');tr.append(th,amount,rank);body.append(tr);}table.append(body);
+    const link=document.createElement('a');link.href=c.sourceInfo.url;link.textContent=c.sourceInfo.title;details.append(scope,table,link);holder.append(lead,note,details);
+  }
+  function selectRegion(id:string,push=true){const region=visible().find(r=>r.id===id);if(!region)return;state.industryRegion=id;state.industryState=null;showRegion(region);renderMarkers();if(push)hooks.changed(true);}
   function setScope(sector:IndustrySector,subsector='all',push=true,insight:string|null=null){
     state=readIndustryState(writeIndustryState(new URL(location.href),{sector,subsector,industryRegion:null,industryInsight:insight}),regions);hooks.hide();render();if(push)hooks.changed(true);
     if(push&&state.subsector!=='all'){
@@ -122,9 +151,9 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
     q('[data-industry-breadcrumb]').textContent=sectorLabel(state.sector)+(state.sector==='all'?'':` ／ ${subsectorLabel(state.sector,state.subsector)}`);
     q('#industry-detail').setAttribute('aria-labelledby',state.sector==='all'?'industry-sector-all':`industry-sub-${state.sector}-${state.subsector}`);
     const selected=visible();root.querySelectorAll<HTMLElement>('[data-industry-region-option]').forEach(option=>option.hidden=!selected.some(r=>r.id===option.dataset.industryRegionOption));
-    q('[data-industry-empty]').hidden=selected.length>0;
+    q('[data-industry-empty]').hidden=selected.length>0||!!stateComparison();
     if(hooks.active())q('[data-map-panel]').setAttribute('aria-labelledby',`industry-sector-${state.sector}`);
-    if(hooks.active())q('[data-layer-caption]').textContent=comparison()?'都市圏の付加価値 · 2024年':'産業の代表地域 · 対象年は地域ごとに表示';renderLegend();renderMarkers();
+    if(hooks.active()){const c=stateComparison();q('[data-layer-caption]').textContent=c?`州別${c.metric} · ${c.year}年`:comparison()?'都市圏の付加価値 · 2024年':'産業の代表地域 · 対象年は地域ごとに表示';}renderLegend();renderMarkers();
   }
   function wireTabs(selector:string,action:(button:HTMLElement)=>void){
     root.querySelectorAll<HTMLElement>(selector).forEach(button=>{
@@ -139,11 +168,13 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
   root.querySelectorAll<HTMLElement>('[data-industry-region-option]').forEach(b=>b.addEventListener('click',()=>selectRegion(b.dataset.industryRegionOption!)));
   root.querySelectorAll<HTMLAnchorElement>('[data-industry-jump-sector],[data-industry-agriculture]').forEach(link=>link.addEventListener('click',event=>{if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;event.preventDefault();if(link.dataset.industryJumpSector==='agriculture'||link.hasAttribute('data-industry-agriculture')){hooks.agriculture();return;}setScope(link.dataset.industryJumpSector as IndustrySector,link.dataset.industryJumpSubsector,true,link.dataset.industryInsight??null);q('[data-industry-controls]').scrollIntoView({block:'start'});}));
   q('[data-selection-link]').addEventListener('click',event=>{
-    if(!hooks.active()||!state.industryRegion)return;
+    if(!hooks.active())return;
+    if(state.industryState){event.preventDefault();q('#industry-detail').scrollIntoView({block:'start'});q('#industry-detail').focus({preventScroll:true});return;}
+    if(!state.industryRegion)return;
     const region=regions.find(r=>r.id===state.industryRegion);if(!region)return;
     event.preventDefault();setScope(region.sector,region.subsector);q('#industry-detail').scrollIntoView({block:'start'});q('#industry-detail').focus({preventScroll:true});
   });
   new ResizeObserver(()=>renderMarkers()).observe(frame);
   q<HTMLImageElement>('[data-fallback-image]').addEventListener('load',renderMarkers);
-  return {render,renderMarkers,getState:()=>state,setScope,clearSelection:()=>{state.industryRegion=null;renderMarkers();},write:(url:URL)=>writeIndustryState(url,state),restore:()=>{state=readIndustryState(new URL(location.href),regions);render();},restoreSelection:()=>{if(state.industryRegion)selectRegion(state.industryRegion,false);}};
+  return {render,renderMarkers,getState:()=>state,setScope,clearSelection:()=>{state.industryRegion=null;state.industryState=null;renderMarkers();},write:(url:URL)=>writeIndustryState(url,state),restore:()=>{state=readIndustryState(new URL(location.href),regions);render();},restoreSelection:()=>{if(state.industryState){selectState(state.industryState,false);return;}if(state.industryRegion)selectRegion(state.industryRegion,false);}};
 }

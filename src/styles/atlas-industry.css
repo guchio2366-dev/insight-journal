@@ -183,3 +183,21 @@
 .atlas-explorer[data-field=industry] .industry-reading .atlas-eyebrow{margin:0 0 3px;font-size:10px}
 .atlas-explorer[data-field=industry] .industry-detail-statistics{margin-top:10px;padding-top:10px}
 @media(max-width:649px){.industry-map-insights{padding:7px 9px}.industry-map-insight-list{column-gap:8px}.industry-map-insight-list>details>summary{font-size:12px}.atlas-explorer[data-field=industry] .industry-reading{padding:12px 10px}}
+
+/* State totals and qualitative industrial locations are separate marks. */
+.industry-state-layer{position:absolute;inset:0;pointer-events:none;z-index:0}
+.industry-state-marker{position:absolute;width:44px;height:44px;transform:translate(-22px,-22px);padding:0;border:0;background:none;pointer-events:auto;cursor:pointer;color:#203e45}
+.industry-state-marker>i{position:absolute;left:22px;top:22px;transform:translate(-50%,-50%);border-radius:50%;background:color-mix(in srgb,var(--industry-color) 25%,transparent);box-shadow:inset 0 0 0 1px var(--industry-color);pointer-events:none}
+.industry-state-marker>em{position:absolute;left:20px;top:20px;width:4px;height:4px;border-radius:50%;background:var(--industry-color);pointer-events:none}
+.industry-state-marker>span{position:absolute;font:600 11px/24px var(--sans);height:24px;white-space:nowrap;background:#fffef2e8;border-radius:3px;text-align:center;pointer-events:none}
+.industry-state-leader{position:absolute;left:22px;top:22px;height:1px;background:#687d7899;transform-origin:left center;pointer-events:none}
+.industry-state-marker[aria-pressed=true]>i{box-shadow:inset 0 0 0 2px #162f39;background:color-mix(in srgb,var(--industry-color) 45%,transparent)}
+.industry-state-marker:focus-visible{outline:2px solid #162f39;outline-offset:2px;border-radius:50%}
+.industry-state-takeaway{font-weight:700}
+.industry-state-table{width:100%;font-size:12px;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.industry-state-table caption{text-align:left;padding:6px 0}
+.industry-state-table th,.industry-state-table td{padding:3px 4px;border-bottom:1px solid #d6ddd0;text-align:right}
+.industry-state-table th:first-child{text-align:left}
+.industry-state-table button{font:inherit;min-height:44px;background:transparent;border:0;text-decoration:underline;color:#205c65;cursor:pointer;padding:4px 0}
+.industry-economic-legend>details>summary{min-height:44px;align-content:center;cursor:pointer}
+@media(max-width:649px){.industry-state-marker>span{font-size:10px}.industry-state-table{font-size:11px}}
