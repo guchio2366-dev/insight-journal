@@ -73,7 +73,7 @@ test('重なる地域候補は全件選べ、WebGL失敗でも産業記号と地
  try{
   assert.equal(root.dataset.renderState,'fallback');assert.equal(q('[data-fallback]').hidden,false);
   assert.ok(q('[data-industry-markers]').children.length>0);
-  const cluster=[...q('[data-industry-markers]').children].find(b=>Number(b.querySelector('.industry-marker-count')?.textContent)>1);assert.ok(cluster);cluster.click();
+  const cluster=q('[data-industry-markers] [data-industry-overview-state="48"]');assert.ok(cluster);cluster.click();
   assert.ok(q('[data-selection-candidates]').querySelectorAll('button').length>1);
   q('[data-selection-candidates] button').click();assert.equal(q('[data-selection]').hidden,false);assert.ok(q('[data-selection]').classList.contains('atlas-selection--below'));
   q('[data-industry-sector="services"]').click();q('[data-industry-subsector="finance"]').click();q('[data-industry-region-option="newyork-finance"]').click();
@@ -101,7 +101,7 @@ test('全産業を12行の対比図にまとめ、付加価値・雇用と全区
    assert.equal(figure.querySelectorAll('li[data-industry-stat-row]').length,12);
    assert.equal(figure.querySelectorAll('[data-industry-metric="gdp"]').length,12);assert.equal(figure.querySelectorAll('[data-industry-metric="employment"]').length,12);
    assert.equal(figure.querySelectorAll('.industry-service-detail').length,7);
-   assert.equal(figure.querySelectorAll('.industry-service-heading').length,1);
+   assert.equal(figure.querySelectorAll('.industry-service-heading').length,0);
    assert.equal(figure.querySelectorAll('tbody tr').length,13);
    assert.equal(figure.querySelector('[data-industry-stat-row="services"]'),null);
   }
@@ -228,5 +228,29 @@ test('本文の地名から拠点を選べ、分野変更で選択を解除す�
   assert.equal(new URL(window.location.href).searchParams.get('industryRegion'),'moseslake-aerospace');
   air.querySelector('[data-industry-overview]').click();assert.equal(root.dataset.industrySubsector,'all');
   assert.equal(new URL(window.location.href).searchParams.has('industryRegion'),false);
+ }finally{await window.happyDOM.close();}
+});
+
+test('州別の全産業名・上位5円・構成の昇順を保持する',async()=>{
+ const {window,root,q}=await setup();
+ try{
+  const nv=q('[data-industry-markers] [data-industry-overview-state="32"]');
+  assert.match(nv.textContent,/ネバダ州/);assert.match(nv.textContent,/金などの鉱物採掘/);assert.match(nv.textContent,/商業・物流/);assert.match(nv.textContent,/観光・娯楽/);
+  assert.ok([...q('[data-industry-markers]').querySelectorAll('i')].every(i=>i.textContent===''));
+  const panels=root.querySelectorAll('[data-industry-national-panel]');
+  for(const panel of panels){
+   const rows=[...panel.querySelectorAll('li[data-industry-stat-row]')];
+   const ordinary=rows.filter(r=>!r.dataset.industryStatRow.startsWith('other-'));
+   const shares=ordinary.map(r=>Number(r.querySelector('[data-industry-metric="gdp"] strong').textContent.replace('%','')));
+   assert.deepEqual(shares,[...shares].sort((a,b)=>a-b));
+   if(rows.some(r=>r.dataset.industryStatRow.startsWith('other-')))assert.ok(rows.at(-1).dataset.industryStatRow.startsWith('other-'));
+  }
+  q('[data-industry-sector="manufacturing"]').click();q('[data-industry-subsector="aerospace"]').click();
+  const circles=()=>[...root.querySelectorAll('[data-industry-state-marker]')];
+  assert.equal(circles().length,5);assert.ok(circles().every(c=>Number(c.dataset.economicRank)<=5));assert.ok(circles().every(c=>c.querySelector('em').textContent==='航'));
+  assert.equal(root.querySelectorAll('[data-industry-state-option]').length,51);
+  const other=[...root.querySelectorAll('[data-industry-state-option]')].find(b=>!circles().some(c=>c.dataset.industryStateMarker===b.dataset.industryStateOption));other.click();assert.equal(circles().length,5);
+  assert.equal(q('[data-industry-description-panel="manufacturing:aerospace"] .industry-geographic-reading').querySelectorAll('section').length,3);
+  q('[data-industry-sector="all"]').click();assert.equal(q('[data-industry-state-layer]'),null);assert.ok(q('[data-industry-overview-state="32"]'));
  }finally{await window.happyDOM.close();}
 });
