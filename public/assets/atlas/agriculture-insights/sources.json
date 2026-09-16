@@ -1,13 +1,14 @@
 {
-  "center-pivot-usgs.jpg": {
-    "title": "Center pivot irrigation in the Midwest Corn Belt",
-    "publisher": "USGS",
-    "photographer": "Peter C. Van Metre",
-    "date": "2013-05-31",
-    "license": "Public Domain",
-    "source": "https://www.usgs.gov/media/images/center-pivot-irrigation-midwest-corn-belt",
-    "download": "https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/styles/medium/public/thumbnails/image/IMG_6265.JPG?itok=Yiirh7AR",
+  "center-pivot-aerial-nasa.jpg": {
+    "title": "Crop Circles in Kansas",
+    "publisher": "NASA Earth Observatory",
+    "credit": "NASA/GSFC/METI/ERSDAC/JAROS, and U.S./Japan ASTER Science Team",
+    "date": "2001-06-24",
+    "source": "https://science.nasa.gov/earth/earth-observatory/crop-circles-in-kansas-5772/",
+    "usage": "Educational use with source credit; NASA images and media guidelines",
+    "usageGuidelines": "https://www.nasa.gov/nasa-brand-center/images-and-media/",
+    "download": "https://assets.science.nasa.gov/dynamicimage/assets/science/esd/eo/images/imagerecords/5000/5772/kansas_AST_2001175.jpg?w=540&h=540&fit=clip&crop=faces%2Cfocalpoint",
     "retrieved": "2026-09-16",
-    "processing": "USGS-provided 220x165 thumbnail, unmodified. Full-resolution image linked on demand."
+    "processing": "NASA-provided 540x540 image, unmodified. Full-resolution satellite image linked on demand."
   }
 }

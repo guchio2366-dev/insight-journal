@@ -33,7 +33,7 @@
 
 .agri-insight-context .agri-insight-takeaway{font-weight:700;font-size:15px;line-height:1.6;border-left:3px solid #36545a;padding-left:9px;margin:10px 0}
 .agri-insight-photo{margin:10px 0}
-.agri-insight-photo img{display:block;width:220px;max-width:100%;height:auto;object-fit:contain;background:#e4e8df}
+.agri-insight-photo img{display:block;width:300px;max-width:100%;height:auto;object-fit:contain;background:#e4e8df}
 .agri-insight-photo figcaption{font-size:11px;line-height:1.5;margin-top:5px}
 .agri-insight-context .agri-insight-sources{font-size:11px}
 .agri-insight-overlay.is-river-focus .agri-target-line{stroke:#006b98;stroke-width:4.5}

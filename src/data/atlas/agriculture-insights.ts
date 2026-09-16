@@ -12,7 +12,8 @@ soybean:[
 '国内の加工・飼料需要に加え、輸出も重要です。ミシシッピ川水系は輸送経路の一つで、川の線を下流へたどると、内陸の産地とメキシコ湾側の輸出拠点とのつながりが分かります。'],
 wheat:[
 '小麦はグレートプレーンズなどに広がり、北部では春にまく春小麦、中部から南部では秋にまいて越冬する冬小麦が重要です。これは地域的な傾向で、すべての小麦を単純な南北の境界で分けるものではありません。',
-'グレートプレーンズの西寄りにはステップ気候が見られます。気候図では乾燥の程度を、地形・標高図では、平原でも中央低地より標高が高い地域があることを確かめられます。小麦の栽培域全体がステップ気候に一致するわけではありません。'],
+'グレートプレーンズの西寄りにはステップ気候が見られます。気候図では乾燥の程度を、地形・標高図では、平原でも中央低地より標高が高い地域があることを確かめられます。小麦の栽培域全体がステップ気候に一致するわけではありません。',
+'雨が多ければ一律に不適になるわけではなく、東部やミシシッピ川沿いには軟質冬小麦の産地もあります。過湿は根に負担をかけますが、年降水量だけでなく雨の時期や排水、他作物との採算の違いも重要です。この地図は主な栽培のまとまりを示し、小さく分散した産地を省略しています。'],
 cotton:[
 '綿花は、霜のない暖かい期間を確保できる南部で栽培されます。ただし、西寄りのテキサスと南東部では水の条件が異なり、降水に頼る栽培と灌漑を利用する栽培の両方があります。',
 'テキサスのハイプレーンズ帯水層と、南西ジョージアなどで利用されるフロリダン帯水層系を見比べると、離れた産地でも地下水が農業を支える例を読めます。南東部の例をフロリダ半島全体に広げて考えないこと、年降水量だけでなく雨の時期や土壌も関わることが大切です。'],
@@ -45,7 +46,7 @@ const feedWater='https://agdatacommons.nal.usda.gov/articles/dataset/Data_from_I
 export const productSources:Record<ProductId,readonly [string,string][]>={
 corn:[['USDA ERS・飼料穀物',ers+'crops/corn-and-other-feed-grains/feed-grains-sector-at-a-glance'],['USGS・灌漑','https://pubs.usgs.gov/publication/sir20225042/full'],['USDA AMS・穀物水運',transport]],
 soybean:[['USDA ERS・大豆',ers+'crops/soybeans-and-oil-crops/oil-crops-sector-at-a-glance'],['USDA AMS・穀物水運',transport]],
-wheat:[['USDA ERS・小麦',ers+'crops/wheat/wheat-sector-at-a-glance']],
+wheat:[['USDA ERS・小麦',ers+'crops/wheat/wheat-sector-at-a-glance'],['Minnesota Extension・小麦の過湿','https://extension.umn.edu/agriculture/crop-production/small-grains/wheat-flooding-and-waterlogging']],
 cotton:[['USDA ERS・綿花',ers+'crops/cotton-and-wool/cotton-sector-at-a-glance'],['Florida IFAS・綿花','https://ask.ifas.ufl.edu/publication/AG495'],['Georgia EPD・灌漑','https://epd.georgia.gov/document/document/20241025-response-commentpdf/download']],
 rice:[['USDA ERS・米',ers+'crops/rice/rice-sector-at-a-glance'],['USGS・地下水灌漑','https://www.usgs.gov/media/images/irrigation-water-a-groundwater-well-a-rice-crop-field'],['California DWR',california]],
 specialty:[['California DWR',california]],
@@ -93,12 +94,13 @@ beef:['great-plains','beef-feed-water'],dairy:['dairy-processing','valley-water'
 };
 export function insightFor(id:string|null){return agricultureInsights.find(x=>x.id===id);}
 export function insightLead(item:AgricultureInsight,product:ProductId){
+if(item.id==='interior-rainfall'&&product==='wheat')return '小麦の分布を重ねています。約500mmの線は乾湿を比べる目安で、750〜1,000mmも栽培の上限ではありません。東部にも軟質冬小麦の産地があります。雨の時期・排水や、とうもろこし・大豆などとの採算の違いも関わります。この図は小さく分散した産地を省略しているため、輪郭のない場所を栽培不適地とは読めません。';
 if(item.id==='valley-water')return (product==='dairy'?'カリフォルニアの酪農地域と、飼料生産を含む水利用の背景を見ます。':'カリフォルニアの栽培域と、谷の地下水・河川の位置関係を見ます。')+item.lead;
 return productNames[product]+'の分布を重ねています。'+item.lead;
 }
 export function targetLabel(t:InsightTarget){return t.page==='industry'?'産業 › 食品・乳製品加工':t.env==='water'?'自然環境 › '+(t.waterView==='precipitation'?'降水量':t.waterView==='basins'?'河川の流域':'河川・地下水'):'自然環境 › '+({climate:'気候区分',landform:'地形',contour:'標高'}[t.env??'climate']);}
 
 export function insightTakeaway(item:AgricultureInsight,product:ProductId){
- if(item.id==='interior-rainfall')return product==='wheat'?'約500mmの線を手掛かりに、乾燥した平原へ広がる小麦産地を見る。':product==='soybean'?'大豆産地は比較的湿潤な東寄りに広がる。西側は約500mm線と比べる。':'とうもろこし産地の西側では、約500mmを目安に水確保の条件が変わる。';
+ if(item.id==='interior-rainfall')return product==='wheat'?'小麦の分布は、乾湿だけでなく他作物との採算の違いも反映する。':product==='soybean'?'大豆産地は比較的湿潤な東寄りに広がる。西側は約500mm線と比べる。':'とうもろこし産地の西側では、約500mmを目安に水確保の条件が変わる。';
  return item.takeaway??'';
 }
