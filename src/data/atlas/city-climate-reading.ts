@@ -22,7 +22,7 @@ export const cityClimateReading:Record<string,CityReading> = {
   },
   'los-angeles':{
     body:'夏は暑く乾燥し、雨は冬に多くなります。',
-    cause:'夏は北太平洋高気圧に覆われ、低気圧が北を通るため雨が減ります。冬は偏西風と低気圧の経路が南下し、太平洋から雨を運びます。',causeSource:climate('ca'),
+    cause:'夏は北太平洋高気圧に覆われ、低気圧が北を通るため雨が減ります。冬は偏西風（中緯度の上空を西から東へ吹く風）に沿う低気圧の経路が南下し、雨が増えます。',causeSource:climate('ca'),
     agriculture:{region:'北西のベンチュラ郡',products:[{name:'果樹・野菜',product:'specialty',examples:'レモン・アボカドなど'}],source:census('California','06111')},
   },
   'las-vegas':{
@@ -32,7 +32,7 @@ export const cityClimateReading:Record<string,CityReading> = {
   },
   'denver':{
     body:'冬は寒く、雨は少なめですが春から初夏に増えます。',
-    cause:'太平洋からの空気は山脈で水分を失い、ロッキー山脈の東側は雨陰になります。一方、春から夏には東側から湿気も入り、雨や雷雨をもたらします。',causeSource:{name:'Colorado State University · 気候と水',url:'https://waterknowledge.colostate.edu/climate/'},
+    cause:'太平洋からの空気は山脈で水分を失い、ロッキー山脈の東側は雨陰（山の風下の少雨域）になります。一方、春から夏には東側から湿気も入り、雨や雷雨をもたらします。',causeSource:{name:'Colorado State University · 気候と水',url:'https://waterknowledge.colostate.edu/climate/'},
     agriculture:{region:'北東のウェルド郡',products:[{name:'小麦',product:'wheat'},{name:'酪農',product:'dairy'}],source:census('Colorado','08123')},
   },
   'dallas':{
@@ -67,7 +67,7 @@ export const cityClimateReading:Record<string,CityReading> = {
   },
   'new-york':{
     body:'夏は暑く、冬は寒く、明瞭な乾季はありません。',
-    cause:'偏西風が大陸内部の空気を運び、冬には強い寒気も届きます。大西洋が気温差を和らげる一方、低気圧の通過が降水をもたらします。',causeSource:climate('ny'),
+    cause:'西から東へ吹く偏西風が大陸内部の空気を運び、冬には強い寒気も届きます。大西洋が気温差を和らげる一方、低気圧の通過が降水をもたらします。',causeSource:climate('ny'),
     agriculture:{region:'北方のオレンジ郡（ニューヨーク）',products:[{name:'酪農',product:'dairy'},{name:'果樹・野菜',product:'specialty',examples:'タマネギなど'}],source:census('New_York','36071')},
   },
 };
@@ -80,4 +80,20 @@ export const cityClimateCodes:Record<string,{name:string;meaning:string}> = {
   Cfa:{name:'温暖湿潤気候',meaning:'C：温帯 · f：明瞭な乾季なし · a：暑い夏'},
   Dfa:{name:'冷帯湿潤気候（暑い夏）',meaning:'D：冷帯 · f：明瞭な乾季なし · a：暑い夏'},
   Am:{name:'熱帯モンスーン気候',meaning:'A：熱帯 · m：短い乾季のあるモンスーン型'},
+};
+
+// Concrete mechanism headings let readers skim the cause, not just a question.
+export const cityClimateMechanisms:Record<string,string> = {
+ 'seattle':'冬の低気圧・海が和らげる暑さと寒さ',
+ 'san-francisco':'夏の高気圧・冬に南下する低気圧',
+ 'los-angeles':'夏の高気圧・冬に届く太平洋の雨',
+ 'las-vegas':'雨陰｜山脈の風下にできる少雨域',
+ 'denver':'雨陰と、春から夏に東から届く湿気',
+ 'dallas':'南からの湿気と北からの寒気',
+ 'chicago':'内陸の季節差・湖岸で和らぐ気温差',
+ 'detroit':'内陸の寒暖差・五大湖の作用',
+ 'new-orleans':'メキシコ湾から届く熱と水分',
+ 'miami':'低緯度の暖かさ・夏の湿気と雷雨',
+ 'washington-dc':'季節変化｜内陸の寒暖差と海からの湿気',
+ 'new-york':'大陸からの空気と大西洋の作用',
 };
