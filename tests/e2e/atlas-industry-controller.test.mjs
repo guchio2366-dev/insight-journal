@@ -187,3 +187,24 @@ test('業態総論と構成比を右欄にまとめ、地図直下のインサ�
   q('[data-field="industry"]').click();assert.equal(insights.hidden,false);assert.equal(item.open,true);
  }finally{await window.happyDOM.close();}
 });
+
+test('州の出荷額・秘匿値・選択URLを描画し、都市圏と全分野へ戻れる',async()=>{
+ const {window,q}=await setup('?sector=manufacturing&subsector=auto&industryState=26');
+ try{
+  assert.ok(q('[data-industry-state-layer]'));
+  assert.equal(window.document.querySelectorAll('[data-industry-state-option]').length,51);
+  assert.match(q('[data-selection-title]').textContent,/ミシガン/);
+  assert.match(q('[data-industry-economic-legend]').textContent,/9\/51/);
+  q('[data-industry-state-option="06"]').click();
+  assert.equal(new URL(window.location.href).searchParams.get('industryState'),'06');
+  assert.match(q('[data-selection-title]').textContent,/カリフォルニア/);
+  q('[data-industry-subsector="aerospace"]').click();
+  assert.equal(new URL(window.location.href).searchParams.has('industryState'),false);
+  assert.match(q('[data-industry-economic-legend]').textContent,/34\/51/);
+  q('[data-industry-sector="services"]').click();q('[data-industry-subsector="information"]').click();
+  assert.match(q('[data-industry-economic-legend]').textContent,/51\/51/);
+  q('[data-industry-subsector="finance"]').click();
+  assert.equal(q('[data-industry-state-layer]'),null);assert.match(q('[data-industry-economic-legend]').textContent,/都市圏/);
+  q('[data-industry-sector="all"]').click();assert.equal(q('[data-industry-economic-legend]').hidden,true);
+ }finally{await window.happyDOM.close();}
+});
