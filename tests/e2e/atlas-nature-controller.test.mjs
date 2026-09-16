@@ -370,10 +370,13 @@ for(const fallback of [false,true])test(`農業の降水リンクは実データ
   assert.match(q('.agri-insight-takeaway').textContent,/500mm/);
   assert.match(q('.agri-insight-targets').textContent,/500mm/);
   assert.equal(q('.agri-insight-overlay').classList.contains('is-rain-focus'),true);
+  assert.equal(q('.agri-target-line').getAttribute('clip-path'),'url(#agri-rain-focus-clip)');
+  assert.ok(Number(q('#agri-rain-focus-clip rect').getAttribute('width'))>0);
   assert.equal(requests.filter(u=>u.endsWith('/precipitation.geojson.gz')).length,1);
   q('[data-water-label="750-1000"]').click();
   await waitFor(()=>!q('.agri-target-line').getAttribute('d'),'manual selection clears prescribed isohyet');
   assert.equal(q('.agri-insight-takeaway').hidden,true);
+  await waitFor(()=>!q('.agri-target-line').hasAttribute('clip-path'),'clear regional clipping');
   assert.equal(root.dataset.selectedProduct,'corn');
  }finally{await window.happyDOM.close();}
 });
