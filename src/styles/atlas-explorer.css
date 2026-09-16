@@ -605,3 +605,17 @@
 .agri-reading-panel .atlas-crop-copy .agri-editorial-subtitle{margin:0 0 7px;font-size:12px;font-weight:700;color:#526e48}
 .agri-editorial-use>strong{display:block;margin-bottom:2px}
 [id^="supply-use-"],[id^="exports-"]{scroll-margin-top:70px}
+
+/* Natural-environment reading: claim first, mechanism second, action beside it. */
+.atlas-nature-summary .atlas-reading-copy h4{margin:12px 0 4px;font:700 13px/1.55 var(--sans);color:#355b52}
+.atlas-explorer[data-field=natural] .atlas-reading-copy p{margin:6px 0 10px;font-size:14px;line-height:1.75}
+.atlas-explorer[data-field=natural] .atlas-reading-copy .atlas-reading-takeaway{margin:8px 0 12px;padding-left:10px;border-left:3px solid #426e64;font-size:15px;line-height:1.7;color:#243f42}
+.atlas-reading-action{display:inline-flex;align-items:center;min-height:44px;max-width:100%;box-sizing:border-box;padding:8px 11px;border:1px solid #b9cdc4;border-radius:4px;background:#f2f6f2;color:#255964;font:600 13px/1.5 var(--sans);text-decoration:none;overflow-wrap:anywhere}
+.atlas-reading-action[hidden]{display:none}
+.atlas-reading-action:hover{background:#e6efea}.atlas-reading-action:focus-visible{outline:3px solid #176f89;outline-offset:2px}
+.atlas-explorer[data-field=natural] .atlas-reading-caveat,.atlas-explorer[data-field=natural] .atlas-reading-prompt{font-size:12px!important;line-height:1.65!important;color:#52665e}
+.atlas-city-products a{min-height:40px;padding:7px 8px;margin:2px 2px 2px 0;box-sizing:border-box;border:1px solid #b9cdc4;border-radius:4px;background:#f2f6f2;text-decoration:none}
+.atlas-nature-summary .atlas-city-reading .atlas-reading-takeaway{font-size:14px;line-height:1.65}
+.atlas-nature-detail{border-top:0;padding-top:0}
+.atlas-nature-detail-actions{margin-top:14px;padding-top:10px;border-top:1px solid #d9dfd5}
+@media(max-width:959px){.atlas-reading-action{min-height:44px}.atlas-city-products a{min-height:44px}}

@@ -129,7 +129,8 @@ test('9地形名は固有説明を開き、大西洋岸平野の既存URL識別�
   const config=JSON.parse(q('[data-explorer-config]').textContent),moves=window.__map.cameraChanges;
   for(const button of nodes){
    assert.equal(button.hidden,false);button.click();const key=button.dataset.natureLabel;
-   assert.equal(q('[data-nature-detail-text]').textContent,config.natureFeatureCopy[key].full);
+   assert.equal(q('[data-nature-detail-text] > p:not(.atlas-reading-takeaway)').textContent,config.natureFeatureCopy[key].full);
+   assert.ok(q('[data-nature-detail-text] strong').textContent.length>0);
    assert.equal(q('[data-nature-detail-title]').textContent,config.natureFeatureCopy[key].title);
    assert.equal(new URL(window.location.href).searchParams.get('natureFeature'),key);
    q('[data-close-nature-detail]').click();assert.equal(window.document.activeElement,button);
@@ -396,5 +397,23 @@ test('河川の強調と灌漑写真は対応するインサイトだけに表�
   assert.match(q('.agri-insight-photo figcaption').textContent,/衛星画像：NASA/);
   q('.agri-insight-back').click();q('[data-agri-link-product="corn"][data-agri-insight-link="grain-rivers"]').click();
   assert.equal(q('.agri-insight-photo').hidden,true);
+ }finally{await window.happyDOM.close();}
+});
+
+test('自然環境の本文リンクは同じ地図で流域と貯水池を往復し、戻ると選択を復元する',async()=>{
+ const {window,root,q}=await setup('?env=water&waterView=basins&basin=colorado&city=denver&crop=rice',{fallback:true});
+ try{
+  await waitFor(()=>q('[data-water-body] [data-nature-reading-link]'),'basin reading');
+  const start=window.location.href;
+  assert.match(q('[data-water-body] strong').textContent,/上流の山地/);
+  q('[data-water-body] [data-nature-reading-link]').click();await delay();
+  assert.equal(root.dataset.waterView,'rivers');assert.equal(q('[data-nature-detail-title]').textContent,'ミード湖');
+  assert.equal(new URL(window.location.href).searchParams.get('city'),'denver');
+  assert.equal(new URL(window.location.href).searchParams.get('crop'),'rice');
+  assert.equal(q('[data-water-reading]').hidden,true);
+  q('[data-nature-detail-text] [data-nature-reading-link]').click();await delay();
+  assert.equal(root.dataset.waterView,'basins');assert.equal(q('[data-water-title]').textContent,'コロラド川');
+  window.history.replaceState({},'',start);window.dispatchEvent(new window.PopStateEvent('popstate'));await delay();
+  assert.equal(q('[data-water-title]').textContent,'コロラド川');assert.equal(q('[data-nature-detail]').hidden,true);
  }finally{await window.happyDOM.close();}
 });

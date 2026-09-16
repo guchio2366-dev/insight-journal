@@ -54,16 +54,18 @@ export const natureFeatureCopy:Record<string,{title:string;full:string;compact:s
   'water:Columbia':{title:'コロンビア川',full:'太平洋岸北西部の大きな流域を太平洋へ結ぶ河川です。山地の降水・融雪と、発電・灌漑・輸送との関係を読む手掛かりになります。',compact:'北西部の降水・融雪を集める河川。発電・灌漑・輸送とも関係します。',anchor:[-119.7,45.8]},
   'water:Sacramento':{title:'サクラメント川',full:'カリフォルニア中央谷の北部を流れます。山地からの水とシャスタ湖などの貯水が、夏に乾燥する農業地域の水利用につながります。',compact:'中央谷北部を流れ、山地・貯水池と夏の水利用をつなぎます。',anchor:[-121.8,39.2]},
   'water:San Joaquin':{title:'サンホアキン川',full:'カリフォルニア中央谷の南部を流れる水系です。シエラネバダ山脈側の水源と、谷の農地・地下水を区別して確認できます。',compact:'中央谷南部の水系。シエラネバダ側の水源と農地・地下水を読み比べます。',anchor:[-120.2,36.7]},
-  'water:High Plains Aquifer':{title:'ハイプレーンズ帯水層',full:'グレートプレーンズ中央部の地下に広がる主要帯水層です。降水の少ない地域の灌漑を支えますが、この面は地下の全範囲や残水量を示すものではありません。',compact:'乾燥しやすい大平原の灌漑を支える主要帯水層。面は地下の全範囲や残水量ではありません。',anchor:[-101.5,38.2]},
-  'water:Central Valley Aquifer System':{title:'セントラルバレー帯水層系',full:'カリフォルニア中央谷の地下水系です。河川・貯水池の水とともに灌漑を支えますが、地表に雨が少ない夏は水源の組み合わせを確認する必要があります。',compact:'中央谷の灌漑を支える地下水系。河川・貯水池と組み合わせて読みます。',anchor:[-120.4,37.4]},
-  'water:Mississippi River Valley Alluvial Aquifer':{title:'ミシシッピ川谷沖積帯水層',full:'ミシシッピ川下流域の沖積地に沿う浅い主要帯水層です。平坦な農地と水利用の関係を、河川そのものとは分けて読めます。',compact:'ミシシッピ川谷の沖積地に沿う浅い主要帯水層です。',anchor:[-91.2,34.3]},
-  'water:Floridan Aquifer System':{title:'フロリダ帯水層系',full:'石灰岩を主体とする広域の帯水層系です。地図は浅部の主要帯水層を示し、地下水量・水質・取水可能量を直接表しません。',compact:'石灰岩を主体とする広域帯水層。面は水量や水質を表しません。',anchor:[-82.2,29.0]},
+  'water:High Plains Aquifer':{title:'ハイプレーンズ帯水層',full:'グレートプレーンズ中央部の地下に広がります。砂や礫などの隙間を通る地下水を井戸でくみ上げ、灌漑（農地へ人工的に水を供給すること）に使います。地図の面は地下水の残量を示しません。',compact:'乾燥しやすい大平原の灌漑を支える主要帯水層。面は地下の全範囲や残水量ではありません。',anchor:[-101.5,38.2]},
+  'water:Central Valley Aquifer System':{title:'セントラルバレー帯水層系',full:'カリフォルニア中央谷では、地層に蓄えられた地下水を井戸でくみ上げ、農地へ供給します。夏に雨が少ないため、河川・貯水池の水と組み合わせることが重要です。',compact:'中央谷の灌漑を支える地下水系。河川・貯水池と組み合わせて読みます。',anchor:[-120.4,37.4]},
+  'water:Mississippi River Valley Alluvial Aquifer':{title:'ミシシッピ川谷沖積帯水層',full:'ミシシッピ川下流域では、川が運んだ砂や礫の隙間に地下水が蓄えられます。浅い帯水層からくみ上げる水は、地表の河川水とともに農業の水源になります。',compact:'ミシシッピ川谷の沖積地に沿う浅い主要帯水層です。',anchor:[-91.2,34.3]},
+  'water:Floridan Aquifer System':{title:'フロリダ帯水層系',full:'フロリダ半島と周辺に広がる、石灰岩を主体とした帯水層系です。岩の割れ目や隙間を地下水が通り、水源になります。面の広さは地下水量や取水可能量を表しません。',compact:'石灰岩を主体とする広域帯水層。面は水量や水質を表しません。',anchor:[-82.2,29.0]},
   'water:lake-mead':{title:'ミード湖',full:'コロラド川の大規模な貯水池です。乾燥する南西部では、山地の降雪・河川流量・貯水と都市・灌漑用水がつながっています。',compact:'コロラド川の貯水池。山地の雪と南西部の水利用をつなぎます。',anchor:[-114.74,36.1]},
   'water:lake-powell':{title:'パウエル湖',full:'コロラド川上流側の貯水池です。降水の少ない地域へ水を運ぶ仕組みを、河川と貯水の両方から考える地点です。',compact:'コロラド川上流側の貯水池。河川と貯水を一緒に読みます。',anchor:[-111.48,37.02]},
   'water:shasta-lake':{title:'シャスタ湖',full:'サクラメント川水系の貯水池です。冬季の雨と山地の雪を貯え、乾燥する夏の都市・農業用水へつなぐ役割があります。',compact:'冬の雨・雪を、乾燥する夏の水利用へつなぐ貯水池です。',anchor:[-122.2,40.72]},
 };
 
 export const natureSources = [
+  {id:'source-water-terms',title:'Water Science Glossary',publisher:'USGS Water Science School',url:'https://www.usgs.gov/water-science-school/science/water-science-glossary'},
+  {id:'source-contour-reading',title:'Topographic Map Symbols',publisher:'USGS',url:'https://pubs.usgs.gov/gip/TopographicMapSymbols/topomapsymbols.pdf'},
   {id:'source-noaa-normals',title:'U.S. Climate Normals 1991–2020',publisher:'NOAA NCEI',url:'https://www.ncei.noaa.gov/products/land-based-station/us-climate-normals'},
   {id:'source-koppen',title:'High-resolution Köppen–Geiger maps for 1901–2099',publisher:'Beck et al. / Scientific Data',url:'https://www.nature.com/articles/s41597-023-02549-6'},
   {id:'source-usgs-aquifers',title:'Principal Aquifers of the United States',publisher:'U.S. Geological Survey',url:'https://www.usgs.gov/mission-areas/water-resources/science/principal-aquifers-united-states'},
@@ -83,12 +85,12 @@ for(const [name,title,anchor] of [
 // Natural Earth names remain the feature keys; titles use familiar Japanese names.
 for(const [name,title,anchor,full] of [
  ['ロッキー山脈','ロッキー山脈',[-109,42],'西部内陸を南北に連なる高い山地です。山地で蓄えられた雪は河川の水源となり、東側には比較的乾燥した大平原が広がります。太平洋側のシエラネバダ・カスケードとは別の山系です。'],
- ['アパラチア山脈','アパラチア山脈',[-81,37],'東部を北東から南西へ延びる山地です。長い侵食を経てロッキーより低くなっていますが、斜面による降水の違いや分水界をつくり、河川・交通路の位置にも関わります。'],
+ ['アパラチア山脈','アパラチア山脈',[-81,37],'東部を北東から南西へ延びる山地です。長い侵食を経てロッキーより低くなっていますが、斜面による降水の違いや、水の流れる先を分ける分水界をつくり、河川・交通路の位置にも関わります。'],
  ['カスケード山脈','カスケード山脈',[-121,45.5],'北西部の太平洋岸に沿う山地です。湿った空気が上昇する西側で雨や雪が多く、東側では水分が減るため、同じ緯度でも湿潤な海岸側と乾燥した内陸が隣り合います。'],
  ['シエラネバダ山脈','シエラネバダ山脈',[-119,37],'カリフォルニア中央谷の東にそびえる山地です。冬の降雪と春以降の融雪が河川・貯水池を通じて夏の水利用を支え、東側の盆地は雨陰で乾燥しやすくなります。'],
  ['コロラド高原','コロラド高原',[-110.5,36],'南西部に広がる標高の高い台地です。乾燥した地表を河川が深く刻み、コロラド川などの峡谷が発達しています。平らに見える土地でも標高は高いことを等高線で確かめられます。'],
- ['グレートベースン','グレートベースン',[-116.4,39],'西部内陸に山地と盆地が交互に広がる地域です。多くの水が海へ流れ出ず、盆地の湖や地表から蒸発します。乾燥と閉じた水系は塩類の集積や水利用の制約につながります。'],
+ ['グレートベースン','グレートベースン',[-116.4,39],'西部内陸に山地と盆地が交互に広がる地域です。内陸流域とは、水が海へ流れ出ず、地域内の湖や地表に集まる範囲です。そこで水が蒸発すると、溶けていた塩類が残ります。乾燥と閉じた水系は塩類の集積や水利用の制約につながります。'],
  ['グレートプレーンズ','グレートプレーンズ',[-101,40],'ロッキー東麓から中央部へ広がる平原です。東へなだらかに低くなり、一般に東側ほど水分条件が改善します。広い農地、降水、ハイプレーンズ帯水層の利用を見比べられます。'],
- ['中央低地','中央平原（中央低地）',[-91,42],'五大湖周辺からミシシッピ川流域に続く広い低地です。氷河や河川が残した堆積物と平坦な地形が分布し、農業と河川・湖を利用した輸送が重なる地域です。'],
+ ['中央低地','中央平原（中央低地）',[-91,42],'五大湖周辺からミシシッピ川流域に続く低地です。斜面や段差が少ないため、大型農機で広い畑を連続して作業できます。川や湖を使う輸送も重なり、内陸の生産と出荷を支えます。'],
  ['大西洋海岸平野','大西洋岸平野',[-79,34],'東海岸の山地より海側に広がる低い平野です。傾斜の緩い土地には湿地や低地も多く、農業や都市利用では土の排水性、河川・沿岸の水との関係が重要になります。'],
 ] as [string,string,[number,number],string][]){natureFeatureCopy['landform:'+name]={title,anchor,full,compact:full};}

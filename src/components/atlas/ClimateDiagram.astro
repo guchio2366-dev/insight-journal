@@ -1,6 +1,6 @@
 ---
 import type { ClimateCity } from '../../data/atlas/natural-environment';
-import { cityClimateReading, cityClimateCodes } from '../../data/atlas/city-climate-reading';
+import { cityClimateReading, cityClimateCodes, cityClimateMechanisms } from '../../data/atlas/city-climate-reading';
 import { cityAgricultureUrl } from '../../lib/atlas-city-agriculture-link';
 import { withBase } from '../../lib/urls';
 interface Props { city:ClimateCity }
@@ -35,10 +35,10 @@ const months=['1','2','3','4','5','6','7','8','9','10','11','12'];
   <p><span class="is-cold">棒：降水量 mm</span><span class="is-warm">線：気温 ℃</span></p>
   <section class="atlas-city-reading" data-city-reading aria-label={`${city.nameJa}の気候区分`}>
     <h4>{classification?<><b>{city.koppenCode}</b> {classification.name}</>:'気候区分：データなし'}</h4>
-    <p>{reading.body}</p>
+    <p class="atlas-reading-takeaway"><strong>{reading.body}</strong></p>
     {classification&&<p class="atlas-city-code-meaning">{classification.meaning}</p>}
     <div class="atlas-city-cause" data-city-cause>
-      <h5>{classification?'なぜこの気候になる？':'この季節変化の理由'}</h5>
+      <h5>{cityClimateMechanisms[city.id]}</h5>
       <p>{reading.cause} <a class="atlas-city-reference" href={reading.causeSource.url} title={reading.causeSource.name} target="_blank" rel="noopener noreferrer">出典</a></p>
     </div>
     <details class="atlas-city-crop" data-city-crop open>

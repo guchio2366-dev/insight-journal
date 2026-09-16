@@ -3,9 +3,11 @@ import {withBase} from '../../lib/urls';
 ---
 <section data-water-reading hidden aria-labelledby="water-reading-title">
  <h3 id="water-reading-title" tabindex="-1" data-water-title></h3>
- <p data-water-body></p><p data-water-note class="atlas-water-note"></p>
+ <div class="atlas-reading-copy" data-water-body></div>
+ <p class="atlas-reading-caveat" data-water-rain-caveat>年降水量の線は栽培限界ではありません。雨の季節と灌漑も合わせて読みます。</p>
+ <details data-water-scope hidden><summary>この流域図に含む範囲</summary><p data-water-note class="atlas-water-note"></p></details>
  <button type="button" data-water-parent hidden>ミシシッピ川水系全体を見る</button>
- <p><a data-water-product hidden></a></p>
+ <p><a class="atlas-reading-action" data-water-product hidden></a></p>
  <p class="atlas-water-credit" data-water-credit></p>
  <details><summary>出典・データについて</summary>
   <p>降水量：<a href="https://prism.oregonstate.edu/">PRISM Group, Oregon State University</a>、1991–2020年平均、約4km格子。2026年9月15日取得。年合計の平均で、直近の天候ではありません。雨温図の観測所値とはデータ源が異なります。</p>

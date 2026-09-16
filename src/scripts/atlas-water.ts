@@ -1,3 +1,5 @@
+import {waterEditorial} from '../data/atlas/nature-editorial';
+import {renderNatureReading} from '../lib/atlas-nature-reading';
 import {precipitationBands,riverBasins,waterViewNames,type WaterView} from '../data/atlas/water-resources';
 import {readWaterState,writeWaterState,waterContains} from '../lib/atlas-water-state';
 import {waterGeometryLoader} from '../lib/atlas-water-geometry';
@@ -26,6 +28,7 @@ export function createWaterController(root:HTMLElement,base:string,callbacks:Cal
   if(map){for(const id of ids)map.setLayoutProperty(id,'visibility',show?'visible':'none');if(show){for(const id of ['aquifers-fill','aquifers-pattern','aquifers-outline','reservoir-points','current-lines','upwelling-line','crop-context-line'])map.setLayoutProperty(id,'visibility','none');map.setLayoutProperty('relief','visibility','none');map.setFilter('water-selected',['all',['==',['get','id'],current()??'__none'],['==',['get','kind'],state.waterView==='basins'?'outline':'band']]);}}
   schedule();labels.sync(current());
   if(!show)return;
+  q('[data-water-rain-caveat]').hidden=state.waterView!=='precipitation';
   q('[data-fallback-livestock]').hidden=true;
   q('[data-nature-detail]').hidden=true;root.querySelectorAll<HTMLElement>('[data-nature-summary-panel="water"]').forEach(n=>n.hidden=true);
   q('[data-nature-key-panel="water"]').hidden=true;
@@ -34,10 +37,11 @@ export function createWaterController(root:HTMLElement,base:string,callbacks:Cal
   q<HTMLImageElement>('[data-fallback-image]').src=assetBase+state.waterView+'-fallback.webp';q<HTMLImageElement>('[data-fallback-image]').alt=q('[data-layer-caption]').textContent!;q<HTMLAnchorElement>('[data-fallback-full]').href=assetBase+state.waterView+'-fallback.webp';
   const item:any=choices().find(x=>x.id===current());
   q('[data-water-title]').textContent=item?.title??(state.waterView==='precipitation'?'年平均降水量':'河川の流域');
-  q('[data-water-body]').textContent=item?.body??(state.waterView==='precipitation'?'色と等雨量線で、雨や雪がどこに多く降るかを読みます。1,000mm・1,500mmの線を少し太く表示しています。地域を選ぶと、その降水量帯の読み方を表示します。':'流域は、降った水が地表を流れて同じ川へ集まる範囲です。川の線と流域の面を合わせると、上流と下流のつながりを読めます。川の名前や色をタップしてください。');
-  q('[data-water-note]').textContent=item?.note??'';q('[data-water-note]').hidden=!item?.note;q('[data-water-parent]').hidden=!item?.parent;
+  const body=item?.body??(state.waterView==='precipitation'?'西部の山地では空気が上昇して雨や雪を降らせ、風下の内陸は乾燥しやすくなります。中央部では概ね東へ進むほど雨が増えます。太線の1,000mm・1,500mmを手掛かりに、地図の色や降水量帯をタップして比べてください。':'支流が本流へ合流すると、それぞれの流域も一つの水系につながります。地図の色や川の名前をタップすると、雨や雪がどこから集まるかを確認できます。');
+  renderNatureReading(q('[data-water-body]'),body,waterEditorial[state.waterView+':'+(item?.id??'overview')],writeWaterState(new URL(location.href),state),base);
+  q('[data-water-note]').textContent=item?.note??'';q('[data-water-note]').hidden=!item?.note;q('[data-water-scope]').hidden=!item?.note;q('[data-water-parent]').hidden=!item?.parent;
   const credit=q('[data-water-credit]');credit.replaceChildren();if(state.waterView==='precipitation'){const a=document.createElement('a');a.href='https://prism.oregonstate.edu/';a.textContent='PRISM Group, Oregon State University';credit.append(a,' · 2026年9月15日取得');}else credit.textContent='USGS WBD · 主要7対象／その他は灰色';
-  const product=q<HTMLAnchorElement>('[data-water-product]');product.hidden=!item?.product;if(item?.product){const names:Record<string,string>={corn:'とうもろこし',wheat:'小麦',rice:'稲作',specialty:'果樹・野菜'};product.textContent=names[item.product]+'の解説へ';product.href=cityAgricultureUrl(writeWaterState(new URL(location.href),state),base,new URL(location.href).searchParams.get('city')??'',item.product).href;}
+  const product=q<HTMLAnchorElement>('[data-water-product]');product.hidden=!item?.product;if(item?.product){const names:Record<string,string>={corn:'とうもろこし',wheat:'小麦',rice:'稲作',specialty:'果樹・野菜'};product.textContent=names[item.product]+'の産地と水の条件を見る →';product.href=cityAgricultureUrl(writeWaterState(new URL(location.href),state),base,new URL(location.href).searchParams.get('city')??'',item.product).href;}
   const key=q('[data-water-key]');key.replaceChildren();for(const x of choices()){const span=document.createElement('span'),i=document.createElement('i');i.style.backgroundColor=x.color;span.append(i,x.title);key.append(span);}if(state.waterView==='basins')key.append('灰色：その他・未収録');
  }
  function select(id:string,trigger?:HTMLElement){
@@ -62,7 +66,7 @@ for(const {node,coordinate} of lineLabels){node.hidden=!active()||state.waterVie
   if(!active())return;const view=state.waterView,token=++generation;
   try{const next=await loader.json(view+'.geojson.gz');if(token!==generation||!active()||view!==state.waterView)return;
    data=next;makeLineLabels(next);const map=callbacks.map();if(map){map.getSource('water-data').setData(next);applied=view;}render();
-  }catch(error){if(token===generation&&active()){q('[data-water-note]').hidden=false;q('[data-water-note]').textContent='地図データを取得できませんでした。再試行してください。';throw error;}}
+  }catch(error){if(token===generation&&active()){q('[data-water-scope]').hidden=false;q<HTMLDetailsElement>('[data-water-scope]').open=true;q('[data-water-note]').hidden=false;q('[data-water-note]').textContent='地図データを取得できませんでした。再試行してください。';throw error;}}
  }
  function setView(view:WaterView){if(!['rivers','precipitation','basins'].includes(view))return;state.waterView=view;generation++;data=null;applied='';callbacks.viewChanged();render();if(!callbacks.map()&&active())void ensure().catch(()=>{});}
  root.querySelectorAll<HTMLButtonElement>('[data-water-view]').forEach(b=>{b.addEventListener('click',()=>setView(b.dataset.waterView as WaterView));b.addEventListener('keydown',e=>{const order=['rivers','precipitation','basins'];let i=order.indexOf(b.dataset.waterView!);if(e.key==='ArrowRight')i=(i+1)%3;else if(e.key==='ArrowLeft')i=(i+2)%3;else if(e.key==='Home')i=0;else if(e.key==='End')i=2;else return;e.preventDefault();q<HTMLButtonElement>(`[data-water-view="${order[i]}"]`).focus();setView(order[i] as WaterView);});});

@@ -15,9 +15,9 @@ const { initialMode='climate' } = Astro.props;
           <div class="atlas-climate-diagrams" id="city-climate-chart" data-climate-chart>{climateCities.map(city=><ClimateDiagram {city} />)}</div>
         </section>
         </>}
-      {mode.id==='water'&&<div data-nature-empty><h3>水資源の解説</h3><p>地図の川・湖・帯水層の名前から選んでください。</p></div>}
-      {mode.id==='landform'&&<div data-nature-empty><h3>地形の解説</h3><p>地図の山脈・高原・平原の名前から選んでください。</p></div>}
-      {mode.id==='contour'&&<div data-nature-empty><h3>標高（等高線）</h3><p>全国比較用の500m間隔を、拡大しても同じ線のまま表示します。ロッキーでは2,000〜3,000m級の線が広く連なり、アパラチアでは主に500〜1,000m級に収まる違いが見えます。</p><p>高さは線に付いた数値で、斜面の急緩は同じ間隔の線の密度で読みます。山頂付近の小さな起伏は省略されています。</p></div>}
+      {mode.id==='water'&&<div data-nature-empty class="atlas-reading-copy"><h3>河川・地下水</h3><p class="atlas-reading-takeaway"><strong>雨の少ない土地でも、上流の雪や地下水が水利用を支えます。</strong></p><h4>水が届く経路を分けて読む</h4><p>河川は上流の雨や融雪を運び、貯水池は水を使う時期を調整します。帯水層は、地下で水を蓄え、通す地層です。井戸からくみ上げた水も農地や都市へ届きます。</p><p class="atlas-reading-prompt">地図の川・湖・帯水層の名前をタップすると、その場所の役割を読めます。</p></div>}
+      {mode.id==='landform'&&<div data-nature-empty class="atlas-reading-copy"><h3>山地・高原・平原</h3><p class="atlas-reading-takeaway"><strong>山地は雨と川の流れを変え、平原は広い農地や輸送路の土台になります。</strong></p><h4>西の高い山地・中央の平原・東の山地</h4><p>西部の山地は湿った空気を上昇させ、風下に少雨域をつくります。中央部では起伏の小さい土地と河川が広がり、大規模農業や内陸輸送につながります。</p><p class="atlas-reading-prompt">地図の山脈・高原・平原の名前をタップすると、その地形が気候や水利用にどう関わるかを読めます。</p></div>}
+      {mode.id==='contour'&&<div data-nature-empty class="atlas-reading-copy"><h3>標高（等高線）</h3><p class="atlas-reading-takeaway"><strong>同じ「山脈」でも高さは違い、高い土地が急斜面とは限りません。</strong></p><h4>数値は高さ・線の密度は傾斜</h4><p>等高線は、標高が同じ地点を結ぶ線です。同じ500m間隔なら、線が密な場所ほど斜面が急です。高原のように、高い位置に平坦な土地が広がる場所もあります。</p><h4>ロッキーとアパラチアを比べる</h4><p>西部のロッキーでは2,000〜3,000m級の線が広く連なり、東部のアパラチアでは主に500〜1,000m級に収まります。</p><p class="atlas-reading-caveat">全国比較の500m間隔です。拡大しても線の間隔は変わらず、小さな起伏は省略されています。</p></div>}
     </section>)}
   </div>
   <WaterReading />

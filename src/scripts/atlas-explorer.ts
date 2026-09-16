@@ -1,4 +1,6 @@
 import {loadAgricultureGeometry} from '../lib/atlas-agriculture-geometry';
+import {natureEditorial} from '../data/atlas/nature-editorial';
+import {renderNatureReading} from '../lib/atlas-nature-reading';
 import {createAgricultureInsights} from './atlas-agriculture-insights';
 import {normalizeInsightNavigation} from '../lib/atlas-agriculture-insight-state';
 import {cityClimateCodes} from '../data/atlas/city-climate-reading';
@@ -293,7 +295,8 @@ export async function startAtlas() {
     natureFeature=key;if(key.startsWith('climate:'))renderCity();
     if(key.startsWith('landform:')){const feature=landFeatures.find(item=>item.properties.name===key.split(':')[1]);natureSelectedGeometry=feature?.geometry??null;(map?.getSource('nature-highlight') as GeoJSONSource|undefined)?.setData({type:'FeatureCollection',features:feature?[feature]:[]});}
     else {natureSelectedGeometry=null;(map?.getSource('nature-highlight') as GeoJSONSource|undefined)?.setData({type:'FeatureCollection',features:[]});}
-    el('[data-nature-detail-title]').textContent=heading;el('[data-nature-detail-text]').textContent=copy.full;
+    el('[data-nature-detail-title]').textContent=heading;
+    renderNatureReading(el('[data-nature-detail-text]'),copy.full,natureEditorial[key],new URL(location.href),config.base);
     const detailLink=el<HTMLAnchorElement>('[data-nature-detail-link]');detailLink.href='#natural-conditions';detailLink.textContent='自然環境の概説へ';
     natureDetail.hidden=false;root.querySelectorAll<HTMLElement>('[data-nature-empty]').forEach(node=>node.hidden=true);
     const jump=el('[data-nature-jump]');jump.hidden=false;jump.textContent=heading+'の解説へ';
@@ -508,7 +511,7 @@ export async function startAtlas() {
   // These destinations share this explorer. Keep its map and loaded geometry alive.
   root.addEventListener('click',event=>{
     if(event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
-    const link=(event.target as Element).closest<HTMLAnchorElement>('a[data-agri-insight-link],a.agri-insight-back');
+    const link=(event.target as Element).closest<HTMLAnchorElement>('a[data-agri-insight-link],a.agri-insight-back,a[data-nature-reading-link]');
     if(!link||link.hasAttribute('download')||(link.target&&link.target!=='_self'))return;
     const url=new URL(link.href,location.href);
     if(url.origin!==location.origin||![config.base+'agriculture/',config.base+'nature/',config.base+'industry/'].includes(url.pathname))return;
@@ -516,7 +519,7 @@ export async function startAtlas() {
     insights?.prepareNavigation(url);
     history.pushState({},'',url);
     restoreFromUrl();
-    const heading=el<HTMLElement>(field==='agriculture'?'#agri-reading-heading':'#agri-insight-heading');
+    const heading=el<HTMLElement>(field==='agriculture'?'#agri-reading-heading':link.hasAttribute('data-nature-reading-link')?(water.active()?'#water-reading-title':natureFeature?'#nature-feature-heading':natureMode==='climate'?'#city-climate-heading':'#nature-map-panel'):'#agri-insight-heading');
     if(heading){heading.tabIndex=-1;heading.focus({preventScroll:true});}
   });
 
