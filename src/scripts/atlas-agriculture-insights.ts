@@ -60,6 +60,7 @@ export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbac
  clip.id='agri-rain-focus-clip';clip.append(clipRect);defs.append(clip);
  const mask=make('image','agri-climate-mask');
  const targetHalo=make('path','agri-target-halo'),targetLine=make('path','agri-target-line'),targetPoints=make('g','agri-target-points');
+ const riverLabel=make('text','agri-corn-river-label');
  const cropHalo=make('path','agri-product-halo'),cropLine=make('path','agri-product-line'),animals=make('g','agri-product-animals');
  frame.append(svg);
  const legend=document.createElement('p');legend.className='agri-comparison-key';legend.hidden=true;frame.after(legend);
@@ -76,6 +77,7 @@ export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbac
  let preset=firstContext?.insight&&!firstURL.searchParams.has('lng')?firstContext.insight:null;
  function targetKeys(){
   const s=cb.state(),ctx=(s.field==='natural'||s.field==='industry')?readInsightContext(new URL(location.href),config.base):null;
+  if(s.field==='agriculture'&&s.product==='corn')return ['water:Mississippi'];
   if(ctx?.insight?.target.isohyets)return ctx.insight.target.isohyets.map(value=>'isohyet:'+value);
   if(ctx?.insight?.target.features)return [...ctx.insight.target.features];
   if(s.field!=='natural'||(s.mode==='water'&&s.waterView!=='rivers'))return [];
@@ -98,6 +100,15 @@ export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbac
   svg.setAttribute('viewBox','0 0 '+frame.clientWidth+' '+frame.clientHeight);
   const live=cb.project(),project=live??((p:readonly number[])=>projectNatureFallback(p,cb.box()));
   const d=enabled?crops.map(f=>shape(f.geometry,project)).join(''):'';
+  const cornRiver=s.field==='agriculture'&&product==='corn';
+  svg.classList.toggle('is-corn-river',cornRiver);
+  riverLabel.textContent='';
+  if(cornRiver){
+   const points:number[][]=[];
+   for(const f of selectedTargets){if(f.geometry.type==='LineString')points.push(...f.geometry.coordinates);else if(f.geometry.type==='MultiLineString')for(const line of f.geometry.coordinates)points.push(...line);}
+   const anchor=points.reduce<number[]|null>((best,p)=>!best||Math.hypot(p[0]+91.2,p[1]-33.5)<Math.hypot(best[0]+91.2,best[1]-33.5)?p:best,null);
+   if(anchor){const p=project(anchor);if(p.x>0&&p.y>0&&p.x<frame.clientWidth-95&&p.y<frame.clientHeight){riverLabel.setAttribute('x',String(p.x+8));riverLabel.setAttribute('y',String(p.y-6));riverLabel.textContent='ミシシッピ川';}}
+  }
   svg.classList.toggle('is-river-focus',ctx?.insight?.id==='grain-rivers');
   const rainFocus=Boolean(ctx?.insight?.target.isohyets);
   svg.classList.toggle('is-rain-focus',rainFocus);
@@ -119,7 +130,7 @@ export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbac
   }else mask.removeAttribute('href');
   svg.style.display=d||t||selectedAnimal||maskData?'block':'none';
   legend.hidden=!product&&!selectionError;
-  if(product)legend.textContent=(s.field==='agriculture'?productNames[product]+'を強調中':(selectedAnimal?'輪付き記号：':'破線：')+productNames[product]+'の分布／'+(ctx?.insight?.target.isohyets?'太い実線：比較地域の年降水量'+ctx.insight.target.isohyets.join('・')+'mm':ctx?.insight?.id==='grain-rivers'?'青い太線：ミシシッピ川・オハイオ川':'実線：確認する自然条件'))+(enabled?'':'（レイヤー非表示）')+(selectionError?' · '+selectionError:'');
+  if(product)legend.textContent=(s.field==='agriculture'?productNames[product]+'を強調中'+(cornRiver?' · 青い線：ミシシッピ川':''):(selectedAnimal?'輪付き記号：':'破線：')+productNames[product]+'の分布／'+(ctx?.insight?.target.isohyets?'太い実線：比較地域の年降水量'+ctx.insight.target.isohyets.join('・')+'mm':ctx?.insight?.id==='grain-rivers'?'青い太線：ミシシッピ川・オハイオ川':'実線：確認する自然条件'))+(enabled?'':'（レイヤー非表示）')+(selectionError?' · '+selectionError:'');
   else legend.textContent=selectionError;
  }
  function schedule(){if(!raf)raf=requestAnimationFrame(paint);}
