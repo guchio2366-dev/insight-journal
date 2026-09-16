@@ -591,3 +591,9 @@
 .atlas-water-isohyet[hidden]{display:none}
 .atlas-water-highlight{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:hidden}
 .atlas-water-highlight path{fill:none;stroke:#183c4a;stroke-width:2}
+
+/* Corn editorial pilot: short headings, sentence emphasis and map-reading cues. */
+.agri-editorial-reading .agri-editorial-takeaway{padding:8px 10px;border-left:3px solid #526e48;background:#edf2e7}
+.agri-reading-panel .atlas-crop-copy .agri-editorial-section h3,.agri-editorial-section h3{display:block;font-size:14px;line-height:1.5;margin:14px 0 4px;color:#36584c}
+.agri-reading-panel .atlas-crop-copy .agri-editorial-section p,.agri-editorial-section p{margin:5px 0;line-height:1.75}
+.agri-reading-panel .atlas-crop-copy .agri-editorial-guide,.agri-editorial-section .agri-editorial-guide{font-size:12px;line-height:1.65;color:#4b6057;padding-left:8px;border-left:2px solid #c8d4c7}
