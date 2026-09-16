@@ -1,6 +1,6 @@
 import {precipitationBands,riverBasins,waterViewNames,type WaterView} from '../data/atlas/water-resources';
 import {readWaterState,writeWaterState,waterContains} from '../lib/atlas-water-state';
-import {createNatureLoader} from '../lib/atlas-nature-loader';
+import {waterGeometryLoader} from '../lib/atlas-water-geometry';
 import {createNatureLabels} from './atlas-nature-labels';
 import {unprojectNatureFallback,projectNatureFallback} from '../lib/atlas-nature-labels';
 import {cityAgricultureUrl} from '../lib/atlas-city-agriculture-link';
@@ -11,7 +11,7 @@ export function createWaterController(root:HTMLElement,base:string,callbacks:Cal
  const assetBase=base.replace(/atlas\/north-america\/$/,'assets/atlas/water-v1/');
  let lineLabels:{node:HTMLElement;coordinate:[number,number]}[]=[];
  let state=readWaterState(new URL(location.href)),data:any=null,generation=0,applied='';
- const loader=createNatureLoader(assetBase),holder=q('[data-water-labels]');
+ const loader=waterGeometryLoader(assetBase),holder=q('[data-water-labels]');
  const ns='http://www.w3.org/2000/svg',highlight=document.createElementNS(ns,'svg'),highlightPath=document.createElementNS(ns,'path');highlight.classList.add('atlas-water-highlight');highlight.setAttribute('aria-hidden','true');highlight.append(highlightPath);q('[data-map-frame]').append(highlight);
  const entries=[...precipitationBands.map(x=>({id:x.id,name:x.title,coordinate:[...x.anchor] as [number,number],mode:'precipitation' as const})),...riverBasins.map(x=>({id:x.id,name:x.title,coordinate:[...x.anchor] as [number,number],mode:'basins' as const}))];
  const labels=createNatureLabels(root,entries,{active:()=>active(),mode:()=>state.waterView,project:callbacks.project,select:(entry,trigger)=>select(entry.id,trigger),placed:()=>paint(),holder,attribute:'data-water-label',controls:'water-reading-title'});

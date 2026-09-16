@@ -30,3 +30,13 @@
 .atlas-livestock-marker.is-related{outline:3px solid #fffdf3;box-shadow:0 0 0 5px #263f4c}
 @media(max-width:599px){.agri-insight-links>div{grid-template-columns:1fr}.agri-insight-links small{font-size:11px}}
 @media(min-width:960px) and (min-height:600px){.agri-reading-panel .atlas-crop-copy p{margin:8px 0;line-height:1.65}.agri-reading-panel .agri-insight-links{margin-top:8px}}
+
+.agri-insight-context .agri-insight-takeaway{font-weight:700;font-size:15px;line-height:1.6;border-left:3px solid #36545a;padding-left:9px;margin:10px 0}
+.agri-insight-photo{margin:10px 0}
+.agri-insight-photo img{display:block;width:220px;max-width:100%;height:auto;object-fit:contain;background:#e4e8df}
+.agri-insight-photo figcaption{font-size:11px;line-height:1.5;margin-top:5px}
+.agri-insight-context .agri-insight-sources{font-size:11px}
+.agri-insight-overlay.is-river-focus .agri-target-line{stroke:#006b98;stroke-width:4.5}
+.agri-insight-overlay.is-river-focus .agri-target-halo{stroke-width:7.5}
+.agri-insight-overlay.is-rain-focus .agri-target-line{stroke:#82314a;stroke-width:3.5}
+.agri-insight-overlay.is-rain-focus .agri-target-halo{stroke-width:6}

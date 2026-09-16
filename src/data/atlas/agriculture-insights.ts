@@ -6,10 +6,10 @@ export const productParagraphs:Record<ProductId,readonly string[]>={
 corn:[
 'とうもろこしは、中央低地を中心とするコーンベルトに広がります。地形と標高を見比べると、内陸に広い農地が続く様子を読み取れます。ただし、平坦であることと標高が低いことは同じではありません。',
 '用途は家畜の飼料、燃料用エタノール、食品原料など。大豆との輪作も行われます。西寄りの産地では灌漑も重要で、長い散水装置が支点の周りを回るセンターピボット方式によって、円形の畑が見られます。全産地が同じ灌漑方式というわけではありません。',
-'ミシシッピ川と支流は、穀物を下流の輸出拠点へ運ぶ経路の一つです。雨の分布、川の線、流域の面を切り替えると、農地の水条件と輸送のつながりを別々に確かめられます。'],
+'ミシシッピ川と支流は、穀物を下流の輸出拠点へ運ぶ経路の一つです。川の線をたどると内陸から海への輸送を、降水量と帯水層を見比べると農地の水確保を読み取れます。'],
 soybean:[
 '大豆はとうもろこしと重なる中西部の産地が多く、両者を組み合わせた輪作が行われます。油を搾った後の大豆ミールは、豚や鶏などの飼料のたんぱく源になります。とうもろこしの飼料利用と合わせて、作物と畜産の結び付きを読むことができます。',
-'国内の加工・飼料需要に加え、輸出も重要です。ミシシッピ川水系は輸送経路の一つで、川の位置と広い流域を見比べると、内陸の産地と下流側のつながりが分かります。流域に含まれること自体が、その農地の灌漑を意味するわけではありません。'],
+'国内の加工・飼料需要に加え、輸出も重要です。ミシシッピ川水系は輸送経路の一つで、川の線を下流へたどると、内陸の産地とメキシコ湾側の輸出拠点とのつながりが分かります。'],
 wheat:[
 '小麦はグレートプレーンズなどに広がり、北部では春にまく春小麦、中部から南部では秋にまいて越冬する冬小麦が重要です。これは地域的な傾向で、すべての小麦を単純な南北の境界で分けるものではありません。',
 'グレートプレーンズの西寄りにはステップ気候が見られます。気候図では乾燥の程度を、地形・標高図では、平原でも中央低地より標高が高い地域があることを確かめられます。小麦の栽培域全体がステップ気候に一致するわけではありません。'],
@@ -27,7 +27,7 @@ beef:[
 '肥育には、とうもろこしなどの飼料作物との関係もあります。水の利用を考えるときは牛の飲み水だけでなく、飼料を育てるための灌漑にも注目します。南部グレートプレーンズの例では、ハイプレーンズ帯水層と飼料生産とのつながりを確認できます。'],
 dairy:[
 '酪農は五大湖周辺や北東部だけでなく、カリフォルニアやアイダホにも分布します。飼料の確保、暑さへの対応、搾った生乳の集荷・冷却・加工などが関わるため、「寒い地域だから」だけでは分布を説明できません。',
-'ウィスコンシンでは乳製品加工とのつながりを産業地図で、カリフォルニアでは飼料生産や水資源との関係を自然環境地図で確かめられます。帯水層と河川流域は別の範囲であり、流域内の水がそのまま酪農へ配分されるという意味ではありません。'],
+'ウィスコンシンでは乳製品加工とのつながりを産業地図で、カリフォルニアでは飼料生産や水資源との関係を自然環境地図で確かめられます。飼料作物を育てる水も、酪農を支える条件の一つです。'],
 hogs:[
 '養豚では、とうもろこしがエネルギー源、大豆ミールがたんぱく源となり、飼料作物との結び付きが重要です。中西部の産地はコーンベルトとの関係で読み取れます。',
 '一方、ノースカロライナなどにも生産地域があり、飼料の近さだけでは全体を説明できません。飼料供給、飼育、加工を結び付ける生産の仕組みにも目を向けます。'],
@@ -55,43 +55,41 @@ hogs:[['USDA ERS・養豚',ers+'animal-products/hogs-pork/sector-at-a-glance']],
 broilers:[['USDA ERS・家禽と卵',ers+'animal-products/poultry-eggs/sector-at-a-glance']],
 layers:[['USDA ERS・家禽と卵',ers+'animal-products/poultry-eggs/sector-at-a-glance']]
 };
-export type InsightTarget={page:'nature'|'industry';env?:'climate'|'water'|'landform'|'contour';waterView?:'rivers'|'precipitation'|'basins';features?:readonly string[];basin?:string;sector?:string;subsector?:string;industryRegion?:string};
-export type AgricultureInsight={id:string;products:readonly ProductId[];label:string;lead:string;target:InsightTarget;bounds:readonly [number,number,number,number]};
+export type InsightTarget={page:'nature'|'industry';env?:'climate'|'water'|'landform'|'contour';waterView?:'rivers'|'precipitation'|'basins';features?:readonly string[];isohyets?:readonly number[];basin?:string;sector?:string;subsector?:string;industryRegion?:string};
+export type AgricultureInsight={id:string;products:readonly ProductId[];label:string;lead:string;takeaway?:string;photo?:'pivot';sources?:readonly [string,string][];target:InsightTarget;bounds:readonly [number,number,number,number]};
 const interior=[-106,30,-80,50] as const,plains=[-109,28,-94,50] as const,ms=[-114,28,-77,50] as const,ca=[-125,32,-115,43] as const;
 const water=(...features:string[]):InsightTarget=>({page:'nature',env:'water',waterView:'rivers',features:features.map(id=>'water:'+id)});
 const rain:InsightTarget={page:'nature',env:'water',waterView:'precipitation'};
 const basin=(id:string):InsightTarget=>({page:'nature',env:'water',waterView:'basins',basin:id});
 export const agricultureInsights:readonly AgricultureInsight[]=[
-{id:'plains-elevation',products:['corn','wheat'],label:'低地と高原の高さ',lead:'中央低地から西側の平原へ、500m間隔の等高線を見比べます。平坦さと標高の低さは別の条件です。',target:{page:'nature',env:'contour'},bounds:interior},
-{id:'central-lowland',products:['corn'],label:'中央低地の広がり',lead:'とうもろこしの栽培域と中央低地の位置関係を見ます。地形区分の境界は、土壌の肥沃さの境界ではありません。',target:{page:'nature',env:'landform',features:['landform:中央低地']},bounds:[-101,33,-80,49]},
-{id:'grain-rivers',products:['corn','soybean'],label:'川と穀物輸送',lead:'ミシシッピ川とオハイオ川は、内陸の穀物を下流の輸出拠点へ運ぶ経路の一つです。川の線は輸送量やすべての物流経路を表しません。',target:water('Mississippi','Ohio'),bounds:ms},
-{id:'corn-pivot-water',products:['corn'],label:'円形の畑を支える水',lead:'ネブラスカなど西寄りの産地と、ハイプレーンズ帯水層を見比べます。地下水灌漑とセンターピボットの関係を読む例であり、帯水層全域が円形農場という意味ではありません。',target:water('High Plains Aquifer'),bounds:[-105,35,-94,44]},
-{id:'interior-rainfall',products:['corn','soybean','wheat'],label:'内陸の雨の分布',lead:'中央低地から西側の平原へ、産地と雨量帯を見比べます。1991–2020年の年降水量平年値であり、1,000mmや1,500mmの線は作物の栽培限界ではありません。',target:rain,bounds:interior},
-{id:'grain-basin',products:['corn','soybean'],label:'ミシシッピ川の流域',lead:'支流を含む集水域と産地の位置を見比べます。流域は雨水が河川へ集まる範囲であり、物流網・灌漑の供給範囲・帯水層とは別です。',target:basin('mississippi'),bounds:ms},
-{id:'wheat-steppe',products:['wheat'],label:'ステップ気候を確かめる',lead:'グレートプレーンズ西寄りのBSk（低温のステップ気候）と小麦を比べます。小麦の栽培域全体がこの気候区分に一致するわけではありません。',target:{page:'nature',env:'climate',features:['climate:BSk']},bounds:plains},
-{id:'great-plains',products:['wheat','beef'],label:'グレートプレーンズ',lead:'産地とグレートプレーンズの広がりを見比べます。同じ平原の中でも、気候や生産方式は一様ではありません。',target:{page:'nature',env:'landform',features:['landform:グレートプレーンズ']},bounds:plains},
-{id:'cotton-aquifers',products:['cotton'],label:'二つの産地の地下水',lead:'テキサスのハイプレーンズ帯水層と、南西ジョージアなどで利用されるフロリダン帯水層系を同時に強調しています。南東部の例をフロリダ半島全体に広げないように見比べます。',target:water('High Plains Aquifer','Floridan Aquifer System'),bounds:[-106,24,-79,42]},
-{id:'cotton-rainfall',products:['cotton'],label:'綿花産地の雨の違い',lead:'テキサスと南東部の年降水量を比べます。年間の雨量だけでは雨の時期や土壌、天水・灌漑の実態までは判断できません。',target:rain,bounds:[-106,24,-79,42]},
-{id:'rice-alluvial',products:['rice'],label:'南部の稲作と地下水',lead:'南部の稲作とミシシッピ川流域沖積帯水層を重ねます。この地下水の範囲は、川へ地表水が集まる流域の面とは異なります。',target:water('Mississippi River Valley Alluvial Aquifer'),bounds:[-97,28,-86,38]},
-{id:'rice-humid',products:['rice'],label:'温暖湿潤気候を確かめる',lead:'ミシシッピ川下流域の稲作とCfa（温暖湿潤気候）を見比べます。暖かく雨のある気候でも、必要な時期の灌漑水が自動的に確保されるわけではありません。',target:{page:'nature',env:'climate',features:['climate:Cfa']},bounds:[-97,28,-86,38]},
-{id:'rice-sacramento-water',products:['rice'],label:'川と貯水池から見る稲作',lead:'サクラメント川とシャスタ湖を強調しています。農地の外にある上流の水源と貯水を合わせて読みます。',target:water('Sacramento','shasta-lake'),bounds:[-124,37,-119,42.5]},
-{id:'sacramento-basin',products:['rice'],label:'サクラメント川の流域',lead:'カリフォルニアの稲作と上流の集水域を比べます。流域境界は灌漑の供給契約や水の配分範囲ではありません。',target:basin('sacramento'),bounds:[-124,37,-119,42.5]},
-{id:'california-rainfall',products:['rice','specialty'],label:'谷と山地の雨の違い',lead:'カリフォルニアの谷底、山地、北側の雨雪の分布を見比べます。農地の外にも水源があることを読む図で、年降水量図だけで夏冬の違いを表したものではありません。',target:rain,bounds:ca},
-{id:'rice-mississippi-basin',products:['rice'],label:'南部の稲作と河川流域',lead:'南部の稲作とミシシッピ川の集水域を比べます。沖積帯水層の図と切り替え、地表の流域と地下水の範囲の違いを確かめます。',target:basin('mississippi'),bounds:ms},
-{id:'valley-landform',products:['specialty'],label:'谷と周囲の山地',lead:'セントラルヴァレーの谷底と、シエラネバダ山脈・太平洋岸山脈を見比べます。果樹・野菜のすべてに同じ生育条件を当てはめないための地域例です。',target:{page:'nature',env:'landform',features:['landform:カリフォルニアセントラルヴァレー','landform:シエラネバダ山脈','landform:太平洋岸山脈']},bounds:ca},
-{id:'valley-water',products:['specialty','dairy'],label:'谷の農業を支える水',lead:'セントラルヴァレー帯水層系とサンホアキン川を見比べます。図の近接だけで個別農場の取水源を特定することはできません。',target:water('Central Valley Aquifer System','San Joaquin'),bounds:ca},
-{id:'san-joaquin-basin',products:['specialty','dairy'],label:'サンホアキン川の流域',lead:'上流の集水域と産地を比べます。この流域図にはトゥーレア閉鎖流域を含まず、セントラルヴァレー全体や灌漑範囲とは一致しません。',target:basin('san-joaquin'),bounds:ca},
-{id:'beef-feed-water',products:['beef'],label:'飼料生産を支える地下水',lead:'南部グレートプレーンズの肉牛とハイプレーンズ帯水層を見比べます。牛の飲み水だけでなく、飼料作物の灌漑を介した関係に注目します。',target:water('High Plains Aquifer'),bounds:[-106,29,-95,42]},
-{id:'dairy-processing',products:['dairy'],label:'乳製品加工とのつながり',lead:'ウィスコンシンの食品・乳製品加工と酪農を重ねて見ます。記号は代表地域で、個々の加工場の所在地や生産量を示しません。',target:{page:'industry',sector:'manufacturing',subsector:'food',industryRegion:'wisconsin-food'},bounds:[-96,40,-84,49]}
+{id:'plains-elevation',products:['corn','wheat'],label:'低地と高原の高さ',lead:'中央低地からグレートプレーンズへ等高線を追います。500m間隔の線が増える方向と、産地の広がりを見比べてください。',takeaway:'平坦な農地でも、西へ進むと標高が高くなる。',target:{page:'nature',env:'contour'},bounds:interior},
+{id:'central-lowland',products:['corn'],label:'中央低地の広がり',lead:'強調した中央低地と産地の輪郭を比較します。平地の広がりは読み取れますが、土壌の肥沃さを直接示す図ではありません。',takeaway:'中央低地の広がりと、とうもろこし産地の重なりを見る。',target:{page:'nature',env:'landform',features:['landform:中央低地']},bounds:[-101,33,-80,49]},
+{id:'grain-rivers',sources:[['USDA AMS・穀物水運',transport]],products:['corn','soybean'],label:'川と穀物輸送',lead:'青い太線はミシシッピ川・オハイオ川です。産地の破線と見比べ、川を合流点から南の河口へたどってください。河川全区間の航行可能性や輸送量を示す線ではありません。',takeaway:'内陸の穀物は、川を下ってメキシコ湾側の輸出拠点へ運ばれる。',target:water('Mississippi','Ohio'),bounds:ms},
+{id:'corn-pivot-water',photo:'pivot',products:['corn'],label:'円形の畑を支える水',lead:'ネブラスカなど西寄りの産地とハイプレーンズ帯水層を重ねます。写真の長い散水装置は中央の支点を中心に回転し、上空から見る円形の灌漑区画をつくります。写真は方式の実例で、個別農場の取水源を示すものではありません。',takeaway:'雨だけで足りない水を地下水で補い、回転する散水装置で畑へ届ける。',target:water('High Plains Aquifer'),bounds:[-105,35,-94,44]},
+{id:'interior-rainfall',sources:[['Penn State・作物と水','https://courses.ems.psu.edu/geog3/node/1093']],products:['corn','soybean','wheat'],label:'500mm線と産地の東西差',lead:'太く強調した500mm線と産地を見比べます。内陸の西寄りでは500mm未満の地域が広がり、多くの作物で雨だけによる高収量の確保が難しくなります。灌漑や乾燥に対応した栽培が重要になりますが、500mmは栽培可否の一律の境界ではありません。',takeaway:'年降水量約500mmは、東西の水条件の違いを見る目安になる。',target:{...rain,isohyets:[500]},bounds:interior},
+{id:'wheat-steppe',sources:[['Columbia・大平原の乾湿と作物','https://lamont.columbia.edu/news/100th-meridian-where-great-plains-begin-may-be-shifting']],products:['wheat'],label:'ステップ気候を確かめる',lead:'強調したBSk（低温のステップ気候）と小麦産地を比較します。北部の春小麦・中南部の冬小麦という作付けの違いと合わせて読みます。産地全体がBSkに一致するわけではありません。',takeaway:'小麦は、とうもろこしより乾燥した地域でも重要な作物になる。',target:{page:'nature',env:'climate',features:['climate:BSk']},bounds:plains},
+{id:'great-plains',products:['wheat','beef'],label:'グレートプレーンズ',lead:'地形の実線と産地の破線・記号を比較します。平原の広がりを手掛かりにしつつ、東西の乾燥度や生産方式の違いも考えます。',takeaway:'グレートプレーンズは、広い平原に小麦や肉牛の生産が展開する地域。',target:{page:'nature',env:'landform',features:['landform:グレートプレーンズ']},bounds:plains},
+{id:'cotton-aquifers',products:['cotton'],label:'二つの産地の地下水',lead:'ハイプレーンズ帯水層とフロリダン帯水層系を同時に強調します。テキサスと南西ジョージア周辺の産地を見比べてください。フロリダ半島全体が綿花産地という意味ではありません。',takeaway:'西部と南東部の離れた綿花産地に、それぞれ地下水を使う地域がある。',target:water('High Plains Aquifer','Floridan Aquifer System'),bounds:[-106,24,-79,42]},
+{id:'cotton-rainfall',products:['cotton'],label:'綿花産地の雨の違い',lead:'500mm・1,000mmの等雨量線を強調しています。テキサス側と南東部の産地で色を比較すると、水確保の条件の違いが見えます。二本の線は比較の目盛りで、綿花の栽培限界ではありません。',takeaway:'綿花は少雨の西部にも、比較的雨の多い南東部にも広がる。',target:{...rain,isohyets:[500,1000]},bounds:[-106,24,-79,42]},
+{id:'rice-alluvial',products:['rice'],label:'南部の稲作と地下水',lead:'実線のミシシッピ川谷沖積帯水層と稲作の破線が重なる場所を見ます。多雨の地域でも、生育に必要な時期の水を灌漑で補うことがあります。',takeaway:'南部の稲作は、雨に加えて沖積帯水層の地下水にも支えられる。',target:water('Mississippi River Valley Alluvial Aquifer'),bounds:[-97,28,-86,38]},
+{id:'rice-humid',products:['rice'],label:'温暖湿潤気候を確かめる',lead:'南部の稲作とCfa（温暖湿潤気候）の重なりを見ます。気候の一致だけでは水田へ届く水を説明できないため、地下水の地図と合わせて読むと関係が分かります。',takeaway:'温暖で雨のある気候と、稲作に使う灌漑水は別々に確かめる。',target:{page:'nature',env:'climate',features:['climate:Cfa']},bounds:[-97,28,-86,38]},
+{id:'rice-sacramento-water',products:['rice'],label:'川と貯水池から見る稲作',lead:'サクラメント川を北へたどり、強調したシャスタ湖と産地の位置を比較します。川・貯水池の位置を示す図で、用水路や個別農場への配水を示すものではありません。',takeaway:'カリフォルニアの稲作では、農地より上流の川と貯水が鍵になる。',target:water('Sacramento','shasta-lake'),bounds:[-124,37,-119,42.5]},
+{id:'sacramento-basin',products:['rice'],label:'サクラメント川の流域',lead:'稲作の輪郭とサクラメント川流域の面を比較し、産地より北や山地側へ広がる集水域に注目します。流域の境界は灌漑の供給区域ではありません。',takeaway:'農地の外側に降った雨や雪も、上流から川へ集まる。',target:basin('sacramento'),bounds:[-124,37,-119,42.5]},
+{id:'california-rainfall',products:['rice','specialty'],label:'谷と山地の雨の違い',lead:'500mm・1,000mm線を強調し、谷底の産地と周囲の雨雪の多い地域を比較します。カリフォルニアでは冬の降水や山地の雪を貯え、乾燥する夏の水利用につなぎます。年降水量図そのものは季節差を表しません。',takeaway:'谷底の農地と、水源となる北部・山地では降水量が違う。',target:{...rain,isohyets:[500,1000]},bounds:ca},
+{id:'valley-landform',products:['specialty'],label:'谷と周囲の山地',lead:'セントラルヴァレーと両側の山脈を強調しています。果樹・野菜の産地を谷底に重ね、山地との位置関係を確認します。品目ごとの栽培条件は同じではありません。',takeaway:'谷底に農地が広がり、その周囲に水源となる山地がある。',target:{page:'nature',env:'landform',features:['landform:カリフォルニアセントラルヴァレー','landform:シエラネバダ山脈','landform:太平洋岸山脈']},bounds:ca},
+{id:'valley-water',products:['specialty','dairy'],label:'谷の農業を支える水',lead:'セントラルヴァレー帯水層系とサンホアキン川を強調しています。産地との重なりや近さを比較してください。個別農場の取水源はこの図だけでは特定できません。',takeaway:'雨の少ない谷の農業を、河川と地下水の両方から読む。',target:water('Central Valley Aquifer System','San Joaquin'),bounds:ca},
+{id:'san-joaquin-basin',products:['specialty','dairy'],label:'サンホアキン川の流域',lead:'産地の輪郭とサンホアキン川流域を重ね、シエラネバダ山脈側から谷底へのつながりを読みます。南のトゥーレア閉鎖流域は含まれず、谷全体の灌漑区域とは一致しません。',takeaway:'谷底の産地の上流に、山地の集水域が広がる。',target:basin('san-joaquin'),bounds:ca},
+{id:'beef-feed-water',products:['beef'],label:'飼料生産を支える地下水',lead:'肉牛の代表地域とハイプレーンズ帯水層を比較します。飼料を育てる水も畜産を支えるため、記号の近さだけで牛の飲水量を判断しないでください。',takeaway:'肉牛と地下水の関係は、飲み水だけでなく飼料作物の灌漑にもある。',target:water('High Plains Aquifer'),bounds:[-106,29,-95,42]},
+{id:'dairy-processing',products:['dairy'],label:'乳製品加工とのつながり',lead:'ウィスコンシンの酪農地域と食品・乳製品加工を重ねます。記号は代表地域で、個々の農場や加工場の所在地・生産量ではありません。',takeaway:'生乳は搾った後の集荷・冷却・加工まで含めて産業になる。',target:{page:'industry',sector:'manufacturing',subsector:'food',industryRegion:'wisconsin-food'},bounds:[-96,40,-84,49]}
 ];
 export const productInsightOrder:Record<ProductId,readonly string[]>={
-corn:['plains-elevation','central-lowland','grain-rivers','corn-pivot-water','interior-rainfall','grain-basin'],
-soybean:['grain-rivers','interior-rainfall','grain-basin'],
+corn:['plains-elevation','central-lowland','grain-rivers','corn-pivot-water','interior-rainfall'],
+soybean:['grain-rivers','interior-rainfall'],
 wheat:['wheat-steppe','great-plains','plains-elevation','interior-rainfall'],
 cotton:['cotton-aquifers','cotton-rainfall'],
-rice:['rice-alluvial','rice-humid','rice-sacramento-water','sacramento-basin','california-rainfall','rice-mississippi-basin'],
+rice:['rice-alluvial','rice-humid','rice-sacramento-water','sacramento-basin','california-rainfall'],
 specialty:['valley-landform','valley-water','california-rainfall','san-joaquin-basin'],
-beef:['great-plains','beef-feed-water'],dairy:['dairy-processing','valley-water','san-joaquin-basin'],hogs:[],broilers:[],layers:[]
+beef:['great-plains','beef-feed-water'],dairy:['dairy-processing','valley-water'],hogs:[],broilers:[],layers:[]
 };
 export function insightFor(id:string|null){return agricultureInsights.find(x=>x.id===id);}
 export function insightLead(item:AgricultureInsight,product:ProductId){
@@ -99,3 +97,8 @@ if(item.id==='valley-water')return (product==='dairy'?'カリフォルニアの�
 return productNames[product]+'の分布を重ねています。'+item.lead;
 }
 export function targetLabel(t:InsightTarget){return t.page==='industry'?'産業 › 食品・乳製品加工':t.env==='water'?'自然環境 › '+(t.waterView==='precipitation'?'降水量':t.waterView==='basins'?'河川の流域':'河川・地下水'):'自然環境 › '+({climate:'気候区分',landform:'地形',contour:'標高'}[t.env??'climate']);}
+
+export function insightTakeaway(item:AgricultureInsight,product:ProductId){
+ if(item.id==='interior-rainfall')return product==='wheat'?'約500mmの線を手掛かりに、乾燥した平原へ広がる小麦産地を見る。':product==='soybean'?'大豆産地は比較的湿潤な東寄りに広がる。西側は約500mm線と比べる。':'とうもろこし産地の西側では、約500mmを目安に水確保の条件が変わる。';
+ return item.takeaway??'';
+}
