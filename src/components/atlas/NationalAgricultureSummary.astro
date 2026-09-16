@@ -7,12 +7,12 @@ const exportPoints=trade.map((e,i)=>`${x(i).toFixed(1)},${y(e.exports).toFixed(1
 const farmSource=statisticsSources.find(e=>e.id==='source-usda-farm-income')!,tradeSource=statisticsSources.find(e=>e.id==='source-usda-fatus-calendar')!;
 ---
 <aside class="atlas-national" aria-labelledby="national-agriculture-title" data-national-summary>
- <header><p class="atlas-eyebrow">NATIONAL OVERVIEW</p><h2 id="national-agriculture-title">米国の農業</h2><p>販売収入は畜産が56%、作物が44%。作物ではとうもろこしと大豆、畜産では牛・子牛と家禽・卵が大きな柱です。</p></header>
+ <header><p class="atlas-eyebrow">NATIONAL OVERVIEW</p><h2 id="national-agriculture-title">米国の農林業</h2><p>作物・畜産・林業を、自然条件と生産・利用のつながりから読みます。地図下の項目から詳説を選べます。</p><h3>農畜産の概況</h3><p>販売収入は畜産が56%、作物が44%。作物ではとうもろこしと大豆、畜産では牛・子牛と家禽・卵が大きな柱です。</p></header>
  <figure class="atlas-mini-chart atlas-receipts-chart">
   <figcaption><strong>農畜産物の販売収入</strong><span>2025年推計</span></figcaption>
   <div class="atlas-parent-bar" role="img" aria-label={`販売収入約${totalBillion.toFixed(0)}0億ドルのうち作物${groupShare(crops.totalThousandUsd).toFixed(0)}%、畜産${groupShare(livestock.totalThousandUsd).toFixed(0)}%`}>
    <span class="is-crops" style={`width:${groupShare(crops.totalThousandUsd)}%`}><b>作物</b><strong>{groupShare(crops.totalThousandUsd).toFixed(0)}%</strong></span><span class="is-livestock" style={`width:${groupShare(livestock.totalThousandUsd)}%`}><b>畜産</b><strong>{groupShare(livestock.totalThousandUsd).toFixed(0)}%</strong></span>
-  </div><p class="atlas-chart-total">全品目　<strong>{totalBillion.toFixed(1)}</strong> 十億ドル</p>
+  </div><p class="atlas-chart-total">農畜産物計　<strong>{totalBillion.toFixed(1)}</strong> 十億ドル</p>
   <div class="atlas-receipt-groups">{receipts.groups.map(group=><section class={`atlas-receipt-group is-${group.id}`} aria-labelledby={`receipt-${group.id}`}><h3 id={`receipt-${group.id}`}>{group.label}内の割合 <span>{(group.totalThousandUsd/1_000_000).toFixed(1)} 十億ドル</span></h3><div class="atlas-bars">{group.items.map(entry=><div class="atlas-bar-row"><span>{entry.label}</span><i><b style={`width:${itemShare(entry.valueThousandUsd,group.totalThousandUsd)/50*100}%`}></b></i><strong>{itemShare(entry.valueThousandUsd,group.totalThousandUsd).toFixed(1)}%</strong></div>)}</div></section>)}</div>
   <details class="atlas-receipt-definitions"><summary>金額と分類の定義</summary><p>販売による現金収入。利益・生産量・GDPではありません。作物内の「その他」はUSDA原統計の一括分類です。畜産には養殖等の小分類も含みます。</p><table><thead><tr><th>分類</th><th>10億ドル</th></tr></thead><tbody>{receipts.groups.flatMap(group=>group.items).map(entry=><tr><th>{entry.label}</th><td>{(entry.valueThousandUsd/1_000_000).toFixed(1)}</td></tr>)}</tbody></table></details>
   <a href={farmSource.url} target="_blank" rel="noopener noreferrer">出典：USDA ERS</a>

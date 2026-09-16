@@ -12,9 +12,9 @@ export interface AtlasFieldDefinition {
 export const northAmericaFields: AtlasFieldDefinition[] = [
   {
     id: "agriculture",
-    label: "農業",
-    shortLabel: "Agriculture",
-    description: "作物域を、地形・水・気候・輸送と一緒に読む",
+    label: "農林業",
+    shortLabel: "Agriculture & Forestry",
+    description: "作物・畜産・森林資源を、自然条件と利用から読む",
     href: "/atlas/north-america/agriculture/",
     status: "ready"
   },

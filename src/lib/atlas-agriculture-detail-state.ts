@@ -26,10 +26,11 @@ export function writeAgricultureDetailState(url:URL,state:AgricultureDetailState
 export const productIds=[...cropDetailIds,'specialty',...animalDetailIds] as const;
 export const relationIds=['corn-soy-hogs','plains-wheat-cattle','california-rice-water'] as const;
 export type ProductId=typeof productIds[number];
-export type ReadingView={kind:'overview'}|{kind:'product';id:ProductId}|{kind:'relation';id:typeof relationIds[number]}|{kind:'map-context';id:'corn-soybean'};
+export type ReadingView={kind:'forestry';id:'timber'}|{kind:'overview'}|{kind:'product';id:ProductId}|{kind:'relation';id:typeof relationIds[number]}|{kind:'map-context';id:'corn-soybean'};
 export type AgricultureReadingState={view:ReadingView;resumeProductId:ProductId|null};
 export const isProduct=(id:string|null):id is ProductId=>productIds.includes(id as ProductId);
 export function parseReading(value:string|null):ReadingView|null {
+  if(value==='forestry:timber')return {kind:'forestry',id:'timber'};
   if(value==='overview')return {kind:'overview'};
   if(value?.startsWith('product:')&&isProduct(value.slice(8)))return {kind:'product',id:value.slice(8) as ProductId};
   if(value?.startsWith('relation:')&&relationIds.includes(value.slice(9) as any))return {kind:'relation',id:value.slice(9) as any};
@@ -37,6 +38,7 @@ export function parseReading(value:string|null):ReadingView|null {
   return null;
 }
 export function readingAnchor(hash:string):ReadingView|null {
+  if(hash==='#forestry-timber')return {kind:'forestry',id:'timber'};
   const product=hash.startsWith('#crop-')?hash.slice(6):hash.startsWith('#livestock-')?hash.slice(11):null;
   if(isProduct(product))return {kind:'product',id:product};
   return hash.startsWith('#relation-')?parseReading('relation:'+hash.slice(10)):null;

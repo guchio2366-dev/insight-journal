@@ -1,0 +1,77 @@
+{
+  "version": "1.0",
+  "source": "USGS/MRLC NLCD 2021",
+  "sourceUrl": "https://www.mrlc.gov/",
+  "request": "https://www.mrlc.gov/geoserver/mrlc_display/wms?service=WMS&version=1.1.1&request=GetMap&layers=NLCD_2021_Land_Cover_L48&srs=EPSG%3A3857&bbox=-14248894.821539016%2C2511525.2348457123%2C-7124447.410769508%2C6800125.454397307&width=1800&height=1084&format=image%2Fpng&styles=&transparent=true&format_options=antialias%3Anone",
+  "legendRequest": "https://www.mrlc.gov/geoserver/mrlc_display/wms?service=WMS&version=1.1.1&request=GetLegendGraphic&format=application/json&layer=NLCD_2021_Land_Cover_L48",
+  "license": "US government public-domain data; WMS AccessConstraints NONE",
+  "year": 2021,
+  "coverage": "Conterminous United States (48 states)",
+  "bounds": [
+    -128,
+    22,
+    -64,
+    52
+  ],
+  "coordinates": [
+    [
+      -128,
+      52
+    ],
+    [
+      -64,
+      52
+    ],
+    [
+      -64,
+      22
+    ],
+    [
+      -128,
+      22
+    ]
+  ],
+  "crs": "EPSG:3857",
+  "size": [
+    1800,
+    1084
+  ],
+  "classes": [
+    41,
+    42,
+    43
+  ],
+  "method": "Exact official categorical WMS palette extraction, no smoothing or invented boundaries. Downsampled display only, not area statistics. Woody wetlands (90) omitted.",
+  "inputSha256": "388843334bc2c95780e3a29f4743086f9b94c389858ba4131688b6db6096ec0c",
+  "forestDisplayPixels": 213769,
+  "unknownColors": 0,
+  "regionGeometry": "Existing Natural Earth US state boundaries; educational examples, not harvest/forest boundaries.",
+  "regionCodes": {
+    "south": [
+      "NC"
+    ],
+    "northwest": [
+      "WA",
+      "OR"
+    ],
+    "northeast": [
+      "ME",
+      "NH",
+      "VT"
+    ]
+  },
+  "files": {
+    "forest-cover.png": {
+      "bytes": 162657,
+      "sha256": "83a416e6d24dd9bd7340d17ec07871c8f522f99d947ce56c1bd53b2739553ef5"
+    },
+    "regions.geojson": {
+      "bytes": 5053,
+      "sha256": "aedf73cd38b34632a110395f2938336f854f469eea26a136dae9386a05f821cc"
+    },
+    "forestry-fallback.webp": {
+      "bytes": 358232,
+      "sha256": "f6d37519444214a7795791e3f23d396f80ac7f6da003b7f14632985bf8f4cfe2"
+    }
+  }
+}

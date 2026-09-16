@@ -1,5 +1,7 @@
 ---
 import { withBase } from '../../lib/urls';
+import ForestryReading from './ForestryReading.astro';
+import '../../styles/atlas-forestry.css';
 import { cropExplanations, geographicLabels, type ExplorerField } from '../../data/atlas/explorer';
 import { sources, reportSections, timelineEvents } from '../../data/atlas/north-america-agriculture';
 import { northAmericaFields } from '../../data/atlas/regions';
@@ -52,7 +54,7 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
       <nav aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a><span aria-hidden="true"> / </span><a href={withBase('/atlas/north-america/')}>北米地図</a></nav>
       <span>米国本土</span>
     </div>
-    <h1 class="visually-hidden">北米地図から読む、農業・自然環境・主要産業・人口</h1>
+    <h1 class="visually-hidden">北米地図から読む、農林業・自然環境・主要産業・人口</h1>
     <nav class="atlas-tabs" aria-label="地図の分野">
       {northAmericaFields.map(field => field.status==='ready' ?
         <a href={withBase(field.href)} data-field={field.id} aria-current={initialField===field.id?'page':undefined}>{field.label}</a> :
@@ -98,6 +100,7 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
           <span class="agri-picker-group" id="agri-crop-picker"><strong>作物</strong>{cropExplanations.map(c=><a href={`#crop-${c.id}`} style={`--crop-color:${c.color}`} data-crop-select={c.id}><i aria-hidden="true"></i>{c.name}</a>)}</span>
           <span class="atlas-overlap-key"><i aria-hidden="true"></i>重なり</span>
           <span class="atlas-livestock-key agri-picker-group" data-livestock-key id="agri-livestock-picker"><strong>畜産</strong>{livestockKinds.map(k=><a href={`#livestock-${k.id}`} style={`--livestock-color:${k.color}`}><i aria-hidden="true">{k.symbol}</i>{k.label}</a>)}</span>
+          <span class="agri-picker-group"><strong>林業</strong><a href="#forestry-timber" data-forestry-select>森林資源と木材生産</a></span>
         </div>
         <p class="atlas-context-key" data-land-key hidden={initialField!=='overview'}>地形陰影・河川・湖・州境。自然環境では気候・水・地形・標高を切り替えられます。</p>
         <div class="atlas-water-key" data-water-key hidden></div>
@@ -128,7 +131,7 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
 
       <div data-field-national="agriculture" hidden={initialField!=='agriculture'}><div data-agri-overview><NationalAgricultureSummary /></div>
         <section class="agri-reading-panel" data-agri-reading-panel hidden aria-labelledby="agri-reading-heading">
-          <header><button type="button" data-agri-overview-button>← 米国の農業</button><h2 id="agri-reading-heading" tabindex="-1"></h2></header>
+          <header><button type="button" data-agri-overview-button>← 米国の農林業</button><h2 id="agri-reading-heading" tabindex="-1"></h2></header>
           <div class="agri-reading-body" data-agri-reading-body>
             <div data-agri-reading-content></div>
             <details data-agri-region hidden><summary></summary><p></p></details>
@@ -147,6 +150,7 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
       <ClimateOverview visible={initialField==='natural'&&initialMode==='climate'} />
     </div>
     <section data-field-content="agriculture" hidden={initialField!=='agriculture'}>
+      <ForestryReading statistics />
       <div class="agri-statistics" data-agri-statistics hidden><h2 data-agri-statistics-heading></h2><div data-agri-statistics-panels></div></div>
     </section>
   </section>
@@ -155,7 +159,7 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
     <p class="atlas-evidence-note">米国本土が主対象です。地図の色・線・点は表示ごとに意味が異なり、面積や水量を直接表すものではありません。<a href="#atlas-method">出典・加工方法</a></p>
     <section data-field-content="overview" hidden={initialField!=='overview'}>
       <h2 id="land-conditions">土地を読む</h2>
-      <p>西部の山地と盆地、中央の大平原・低地、東部の山地を共通の土台にします。「農業」へ切り替えると、同じ場所に栽培域が重なります。地形と水の条件に、気候、灌漑、加工・輸送、市場が加わって農業地域が形成されます。</p>
+      <p>西部の山地と盆地、中央の大平原・低地、東部の山地を共通の土台にします。「農林業」へ切り替えると、同じ場所に栽培域が重なります。地形と水の条件に、気候、灌漑、加工・輸送、市場が加わって農業地域が形成されます。</p>
       <p>地形の陰影はNatural Earthの地理座標付きラスタから作成しました。山地・平原の地域区分もNatural Earthの地誌的な概略で、地質境界・土壌の分類ではありません。</p>
     </section>
     <section data-field-content="natural" hidden={initialField!=='natural'}>
@@ -177,6 +181,7 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
       <CropStatistics />
       <LivestockReading />
       {cropExplanations.filter(c=>c.id==='specialty').map(c=><article id="crop-specialty" data-agri-extra-copy="specialty" class="atlas-crop-copy"><h3>{c.name}</h3><AgricultureProductReading product="specialty" /><p><strong>主な用途</strong> {c.uses}</p><p>{c.sources.map(id=><a href={`#${id}`}>{sources.find(source=>source.id===id)?.publisher} </a>)}</p><p>複数品目のため、この区分の共通統計は未収録</p></article>)}
+      <ForestryReading />
       <article data-agri-extra-copy="corn-soybean" class="atlas-crop-copy"><h3>とうもろこし・大豆の重なり</h3><p>近い地域で両方の作物がまとまります。この図だけでは、同じ畑の輪作や同時栽培は判定できません。</p><p><a href="#crop-corn">とうもろこし</a> ／ <a href="#crop-soybean">大豆</a></p></article>
       <details class="atlas-context-reading"><summary>北米農業の背景をさらに読む</summary>
         {reportSections.filter(s=>s.id!=='crop-conditions').map(s=><section id={s.id}><h3>{s.title}</h3>{s.paragraphs.map(p=><p>{p}</p>)}</section>)}

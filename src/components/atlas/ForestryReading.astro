@@ -1,0 +1,38 @@
+---
+import {forestRegions,timberExample as timber} from '../../data/atlas/forestry';
+import {withBase} from '../../lib/urls';
+const {statistics=false}=Astro.props;
+---
+{statistics ? <section class="forest-statistics" data-forest-statistics hidden aria-labelledby="forest-stat-title">
+ <header><h2 id="forest-stat-title">木材が何に使われるか — 南部の一州を読む</h2><p>ノースカロライナ州・2022年の事例。全国の構成比ではありません。</p></header>
+ <div class="forest-stat-grid">
+  <figure><figcaption><strong>丸太生産の用途構成</strong><span>州内で生産した丸太の体積に占める割合</span></figcaption>
+  <div class="forest-bars">{timber.products.map(p=><div><span>{p.label}</span><i aria-hidden="true"><b style={`width:${p.share}%`}></b></i><strong>{p.share.toFixed(1)}%</strong></div>)}</div>
+  <p><strong>製材用とパルプ用で約4分の3。</strong>建築材をつくる用途と、繊維を取り出す用途が柱です。</p>
+  <a href={timber.source}>出典：USFS TPO 2022（2024年公表）</a></figure>
+  <section><h3>「森林」と「生産量」を分けて読む</h3><p class="forest-takeaway">緑色が濃く見える場所ほど、木材を多く生産するとは限りません。</p>
+   <dl><dt>森林分布</dt><dd>地図は2021年の土地被覆。木が生えている場所を示します。</dd><dt>年間の生産量</dt><dd>この州の2022年の丸太生産は<strong>{timber.productionMcf.toLocaleString()} 千立方フィート</strong>。1年間に生産した木材の体積です。</dd><dt>立木の蓄積</dt><dd>森林に立っている木の体積。毎年の生産量とは別の、資源のストックです。</dd></dl>
+   <p>森林の管理、伐採できる条件、運搬先となる工場も、生産の立地に関わります。</p>
+  </section>
+ </div>
+</section> : <article id="forestry-timber" data-agri-extra-copy="timber" class="atlas-crop-copy forest-reading">
+ <h3>森林資源と木材生産</h3>
+ <p class="forest-subtitle">森林の成立条件 × 育成・管理 × 木材の用途</p>
+ <p class="forest-takeaway"><strong>木が育つ場所と、木材を生産する場所を分けて考える。</strong>自然条件に加え、育て方と加工・輸送へのつながりが林業の地域差を生みます。</p>
+ <section><h4>まず、森林が広がる場所を見る</h4><p>地図の緑は<strong>落葉樹林・常緑樹林・混交林</strong>です。混交林は、異なる種類の樹木が混ざった森林。水分と気温は木の生育を左右し、山地では斜面の向きや標高も生育条件を変えます。</p>
+ <p>針のような葉を持つマツなどが<strong>針葉樹</strong>です。ただし、常緑樹と針葉樹は同じ分類ではありません。この地図の色から樹種や人工林の範囲までは判断できません。</p>
+ <a class="forest-link" data-forest-compare="precipitation" href={withBase('/atlas/north-america/nature/?env=water&waterView=precipitation&forestCompare=precipitation')}>森林と雨の分布を比べる →</a>
+ </section>
+ <section><h4>地域を選んで、育ち方と利用を読む</h4>
+ <div class="forest-region-picker" aria-label="林業の地域事例"><button type="button" data-forest-region="" aria-pressed="true">全体</button>{forestRegions.map(r=><button type="button" data-forest-region={r.id} aria-pressed="false">{r.label}</button>)}</div>
+ <p data-forest-region-intro>地域名を押すと、解説に登場する州の輪郭と地名を地図に表示します。輪郭は位置確認用で、森林や伐採区域の境界ではありません。</p>
+ {forestRegions.map(r=><section data-forest-region-copy={r.id} hidden><h5>{r.places}</h5><p><strong>{r.takeaway}</strong></p><p>{r.text}</p><p class="forest-source"><a href={r.source}>この地域の解説資料（USFS）</a>{'climateSource' in r&&<> · <a href={r.climateSource}>生育と気候</a></>}</p></section>)}
+ <p><strong>人工林</strong>は植林などで人が成立させた森林、<strong>天然林</strong>は主に自然の更新で成立した森林です。天然林でも木材生産のための管理は行われます。</p>
+ <a class="forest-link" data-forest-compare="landform" href={withBase('/atlas/north-america/nature/?env=landform&forestCompare=landform')}>森林と地形を重ねて見る →</a>
+ </section>
+ <section><h4>用途は、建築材と繊維を分けて読む</h4>
+ <p><strong>建築材：</strong>伐採した幹を切った「丸太」を、柱や板にひいたものが<strong>製材</strong>です。薄くむいた板（単板）を貼り合わせた<strong>合板</strong>も、建築などに使われます。</p>
+ <p><strong>紙などの原料：</strong>木材から取り出した繊維が<strong>パルプ</strong>です。丸太は製材工場やパルプ工場へ運ばれ、加工を経て製品になります。育林・伐採と、その先の製造業がここでつながります。</p>
+ <a class="forest-link" href="#forest-stat-title">ノースカロライナ州の用途構成を見る ↓</a></section>
+ <details class="forest-source"><summary>地図の出典と読み方</summary><p>USGS／MRLC NLCD 2021の森林3分類を表示用に間引き。湿地の樹木は別分類のため含めません。生産量・所有区分・伐採可能区域を示す図ではありません。</p><a href="https://www.mrlc.gov/">NLCD（公式）</a> · <a href={withBase('/assets/atlas/forestry/v1/manifest.json')}>対象範囲・加工記録</a></details>
+</article>}
