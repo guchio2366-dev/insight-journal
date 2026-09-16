@@ -1,6 +1,7 @@
+import {waterGeometryLoader} from '../lib/atlas-water-geometry';
 import {loadAgricultureGeometry} from '../lib/atlas-agriculture-geometry';
 
-import {productNames,insightLead,targetLabel} from '../data/atlas/agriculture-insights';
+import {productNames,insightLead,insightTakeaway,targetLabel} from '../data/atlas/agriculture-insights';
 import {agricultureInsightUrl,readInsightContext} from '../lib/atlas-agriculture-insight-state';
 import {isProduct} from '../lib/atlas-agriculture-detail-state';
 import {projectNatureFallback} from '../lib/atlas-nature-labels';
@@ -52,6 +53,7 @@ function climateMask(base:string,code:string){
 export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbacks){
  const q=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const frame=q('[data-map-frame]');
+ const waterLoader=waterGeometryLoader(config.base.replace(/atlas\/north-america\/$/,'assets/atlas/water-v1/'));
  const svg=document.createElementNS(ns,'svg');svg.classList.add('agri-insight-overlay');svg.setAttribute('aria-hidden','true');
  const make=(name:string,cls:string)=>{const e=document.createElementNS(ns,name);e.setAttribute('class',cls);svg.append(e);return e;};
  const mask=make('image','agri-climate-mask');
@@ -61,14 +63,18 @@ export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbac
  const legend=document.createElement('p');legend.className='agri-comparison-key';legend.hidden=true;frame.after(legend);
  const note=document.createElement('section');note.className='agri-insight-context';note.hidden=true;note.setAttribute('aria-labelledby','agri-insight-heading');
  const title=document.createElement('h2');title.id='agri-insight-heading';
+ const takeaway=document.createElement('p');takeaway.className='agri-insight-takeaway';
+ const photo=document.createElement('figure');photo.className='agri-insight-photo';photo.hidden=true;
+ const sourceLinks=document.createElement('p');sourceLinks.className='agri-insight-sources';
  const lead=document.createElement('p'),targets=document.createElement('ul'),back=document.createElement('a'),error=document.createElement('p'),retry=document.createElement('button');
  targets.className='agri-insight-targets';back.className='agri-insight-back';error.setAttribute('role','status');error.className='agri-insight-error';retry.type='button';retry.textContent='強調を再読み込み';retry.hidden=true;
- note.append(title,lead,targets,error,retry,back);
+ note.append(title,back,takeaway,lead,targets,photo,sourceLinks,error,retry);
  let signature='',copySignature='',generation=0,raf=0,crops:any[]=[],selectedTargets:any[]=[],selectedAnimal:string|null=null,maskData:any=null,selectionError='';
  const firstURL=new URL(location.href),firstContext=readInsightContext(firstURL,config.base);
  let preset=firstContext?.insight&&!firstURL.searchParams.has('lng')?firstContext.insight:null;
  function targetKeys(){
   const s=cb.state(),ctx=(s.field==='natural'||s.field==='industry')?readInsightContext(new URL(location.href),config.base):null;
+  if(ctx?.insight?.target.isohyets)return ctx.insight.target.isohyets.map(value=>'isohyet:'+value);
   if(ctx?.insight?.target.features)return [...ctx.insight.target.features];
   if(s.field!=='natural'||(s.mode==='water'&&s.waterView!=='rivers'))return [];
   return s.feature?.startsWith(s.mode+':')?[s.feature]:[];
@@ -86,10 +92,12 @@ export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbac
  }
  function paint(){
   raf=0;if(!root.isConnected)return;
-  const s=cb.state(),product=selectedProduct(),enabled=s.field==='agriculture'?(selectedAnimal?s.layers.has('livestock'):s.layers.has('crops')):true;
+  const s=cb.state(),product=selectedProduct(),ctx=readInsightContext(new URL(location.href),config.base),enabled=s.field==='agriculture'?(selectedAnimal?s.layers.has('livestock'):s.layers.has('crops')):true;
   svg.setAttribute('viewBox','0 0 '+frame.clientWidth+' '+frame.clientHeight);
   const live=cb.project(),project=live??((p:readonly number[])=>projectNatureFallback(p,cb.box()));
   const d=enabled?crops.map(f=>shape(f.geometry,project)).join(''):'';
+  svg.classList.toggle('is-river-focus',ctx?.insight?.id==='grain-rivers');
+  svg.classList.toggle('is-rain-focus',Boolean(ctx?.insight?.target.isohyets));
   cropHalo.setAttribute('d',d);cropLine.setAttribute('d',d);cropLine.classList.toggle('is-comparison',s.field!=='agriculture');
   const t=selectedTargets.map(f=>shape(f.geometry,project)).join('');targetHalo.setAttribute('d',t);targetLine.setAttribute('d',t);
   targetPoints.replaceChildren();for(const f of selectedTargets){if(f.geometry.type==='Point')point(targetPoints,project(f.geometry.coordinates),'');}
@@ -103,7 +111,7 @@ export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbac
   }else mask.removeAttribute('href');
   svg.style.display=d||t||selectedAnimal||maskData?'block':'none';
   legend.hidden=!product&&!selectionError;
-  if(product)legend.textContent=(s.field==='agriculture'?productNames[product]+'を強調中':(selectedAnimal?'輪付き記号：':'破線：')+productNames[product]+'の分布／実線：確認する自然条件')+(enabled?'':'（レイヤー非表示）')+(selectionError?' · '+selectionError:'');
+  if(product)legend.textContent=(s.field==='agriculture'?productNames[product]+'を強調中':(selectedAnimal?'輪付き記号：':'破線：')+productNames[product]+'の分布／'+(ctx?.insight?.target.isohyets?'太い実線：年降水量'+ctx.insight.target.isohyets.join('・')+'mm':ctx?.insight?.id==='grain-rivers'?'青い太線：ミシシッピ川・オハイオ川':'実線：確認する自然条件'))+(enabled?'':'（レイヤー非表示）')+(selectionError?' · '+selectionError:'');
   else legend.textContent=selectionError;
  }
  function schedule(){if(!raf)raf=requestAnimationFrame(paint);}
@@ -114,7 +122,8 @@ export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbac
   if(product&&!selectedAnimal)jobs.push((async()=>{const all=source.crops.length?source.crops:(await loadAgricultureGeometry(config.assetBase)).features;const ids=product==='corn'||product==='soybean'?[product,'corn-soybean']:[product];if(g===generation)crops=all.filter((f:any)=>ids.includes(f.properties.id));})());
   for(const key of keys){
    const [kind,id]=key.split(':');
-   if(kind==='climate')jobs.push(climateMask(config.natureAssetBase,id).then(m=>{if(g===generation)maskData=m;}));
+   if(kind==='isohyet')jobs.push(waterLoader.json('precipitation.geojson.gz').then(data=>{const found=data.features.filter((f:any)=>f.properties.kind==='isohyet'&&f.properties.value===Number(id));if(!found.length)throw new Error('Isohyet unavailable');if(g===generation)selectedTargets.push(...found);}));
+   else if(kind==='climate')jobs.push(climateMask(config.natureAssetBase,id).then(m=>{if(g===generation)maskData=m;}));
    else jobs.push((async()=>{
     let pool:any[]=[];
     if(kind==='landform')pool=source.land.length?source.land:(await json(config.assetBase+'land.geojson')).features;
@@ -150,8 +159,19 @@ export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbac
    const copyKey=ctx.product+':'+(ctx.insight?.id??'explore');
    if(copyKey!==copySignature){
     copySignature=copyKey;title.textContent=productNames[ctx.product]+(ctx.insight?'から'+targetLabel(ctx.insight.target).replace(' › ','・')+'を確認中':'の分布を重ねて表示中');
+    takeaway.textContent=ctx.insight?insightTakeaway(ctx.insight,ctx.product):'';takeaway.hidden=!takeaway.textContent;
+    photo.replaceChildren();photo.hidden=ctx.insight?.photo!=='pivot';
+    if(!photo.hidden){
+     const image=document.createElement('img');image.src=config.base.replace(/atlas\/north-america\/$/,'assets/atlas/agriculture-insights/center-pivot-usgs.jpg');image.alt='車輪で支えた長い散水管が畑に水をまくセンターピボット式灌漑装置';image.width=220;image.height=165;image.loading='lazy';image.decoding='async';
+     const caption=document.createElement('figcaption'),credit=document.createElement('a');credit.href='https://www.usgs.gov/media/images/center-pivot-irrigation-midwest-corn-belt';credit.textContent='写真：USGS / Peter C. Van Metre（2013年、Public Domain）';
+     const full=document.createElement('a');full.href='https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/thumbnails/image/IMG_6265.JPG';full.target='_blank';full.rel='noopener';full.setAttribute('aria-label','センターピボットの写真を拡大（新しいタブ）');full.append(image);
+     caption.append('米国中西部の装置の例。タップで拡大。中央の支点を中心に回転して散水します。',document.createElement('br'),credit);photo.append(full,caption);
+    }
+    sourceLinks.replaceChildren();sourceLinks.hidden=!ctx.insight?.sources?.length;
+    for(const [label,url] of ctx.insight?.sources??[]){const a=document.createElement('a');a.href=url;a.textContent=label;sourceLinks.append(a,' ');}
     lead.textContent=ctx.insight?insightLead(ctx.insight,ctx.product):'別の自然条件・産業地域も選べます。元の品目の説明と統計へは、下のリンクで戻れます。';
     targets.replaceChildren();
+    for(const value of ctx.insight?.target.isohyets??[]){const li=document.createElement('li');li.textContent='年降水量 '+value.toLocaleString('ja-JP')+'mm線（PRISM・1991–2020年）';targets.append(li);}
     for(const id of ctx.insight?.target.features??[]){const li=document.createElement('li');const copy=config.natureFeatureCopy[id];li.textContent=copy?.title??(id==='climate:Cfa'?'Cfa・温暖湿潤気候':id==='climate:BSk'?'BSk・ステップ気候（低温）':id.split(':')[1]);targets.append(li);}
    }
   }else copySignature='';

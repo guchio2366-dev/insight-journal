@@ -360,3 +360,38 @@ test('産地の輪郭は操作地図の準備を待たずに代替図へ表示�
   assert.equal(requests.filter(url=>url.endsWith('/agriculture.geojson')).length,1);
  }finally{await window.happyDOM.close();}
 });
+
+for(const fallback of [false,true])test(`農業の降水リンクは実データの500mm線と産地を強調し、雨量帯の手動選択で解除する（代替図=${fallback}）`,async()=>{
+ const {window,root,q,requests}=await setup('?env=landform',{fallback});
+ try{
+  q('[data-field="agriculture"]').click();q('[data-crop-key] a[href="#crop-corn"]').click();
+  q('[data-agri-link-product="corn"][data-agri-insight-link="interior-rainfall"]').click();
+  await waitFor(()=>q('.agri-target-line').getAttribute('d')?.length>0&&q('.agri-product-line').getAttribute('d')?.length>0,'rain and crop outlines');
+  assert.match(q('.agri-insight-takeaway').textContent,/500mm/);
+  assert.match(q('.agri-insight-targets').textContent,/500mm/);
+  assert.equal(q('.agri-insight-overlay').classList.contains('is-rain-focus'),true);
+  assert.equal(requests.filter(u=>u.endsWith('/precipitation.geojson.gz')).length,1);
+  q('[data-water-label="750-1000"]').click();
+  await waitFor(()=>!q('.agri-target-line').getAttribute('d'),'manual selection clears prescribed isohyet');
+  assert.equal(q('.agri-insight-takeaway').hidden,true);
+  assert.equal(root.dataset.selectedProduct,'corn');
+ }finally{await window.happyDOM.close();}
+});
+test('河川の強調と灌漑写真は対応するインサイトだけに表示する',async()=>{
+ const {window,q}=await setup('?env=landform',{fallback:true});
+ try{
+  q('[data-field="agriculture"]').click();q('[data-crop-key] a[href="#crop-corn"]').click();
+  assert.equal(q('[data-agri-insight-link="grain-basin"]'),null);
+  assert.equal(q('[data-agri-insight-link="rice-mississippi-basin"]'),null);
+  q('[data-agri-link-product="corn"][data-agri-insight-link="grain-rivers"]').click();
+  await waitFor(()=>q('.agri-target-line').getAttribute('d')?.length>0,'rivers');
+  assert.equal(q('.agri-insight-overlay').classList.contains('is-river-focus'),true);
+  assert.match(q('.agri-insight-targets').textContent,/ミシシッピ.*オハイオ/);
+  q('.agri-insight-back').click();q('[data-agri-insight-link="corn-pivot-water"]').click();
+  assert.equal(q('.agri-insight-photo').hidden,false);
+  assert.match(q('.agri-insight-photo img').alt,/センターピボット/);
+  assert.match(q('.agri-insight-photo figcaption').textContent,/Public Domain/);
+  q('.agri-insight-back').click();q('[data-agri-link-product="corn"][data-agri-insight-link="grain-rivers"]').click();
+  assert.equal(q('.agri-insight-photo').hidden,true);
+ }finally{await window.happyDOM.close();}
+});
