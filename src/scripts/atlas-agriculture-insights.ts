@@ -1,3 +1,4 @@
+import {loadAgricultureGeometry} from '../lib/atlas-agriculture-geometry';
 
 import {productNames,insightLead,targetLabel} from '../data/atlas/agriculture-insights';
 import {agricultureInsightUrl,readInsightContext} from '../lib/atlas-agriculture-insight-state';
@@ -108,10 +109,9 @@ export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbac
  function schedule(){if(!raf)raf=requestAnimationFrame(paint);}
  async function loadSelection(key:string,product:string|null,keys:string[]){
   const g=++generation,s=cb.state();crops=[];selectedTargets=[];maskData=null;selectedAnimal=livestockKinds.some(k=>k.id===product)?product:null;selectionError='';schedule();
-  if(!s.ready&&!s.failed)return;
   const source=cb.features();let failures=0;
   const jobs:Promise<void>[]=[];
-  if(product&&!selectedAnimal)jobs.push((async()=>{const all=source.crops.length?source.crops:(await json(config.assetBase+'agriculture.geojson')).features;const ids=product==='corn'||product==='soybean'?[product,'corn-soybean']:[product];if(g===generation)crops=all.filter((f:any)=>ids.includes(f.properties.id));})());
+  if(product&&!selectedAnimal)jobs.push((async()=>{const all=source.crops.length?source.crops:(await loadAgricultureGeometry(config.assetBase)).features;const ids=product==='corn'||product==='soybean'?[product,'corn-soybean']:[product];if(g===generation)crops=all.filter((f:any)=>ids.includes(f.properties.id));})());
   for(const key of keys){
    const [kind,id]=key.split(':');
    if(kind==='climate')jobs.push(climateMask(config.natureAssetBase,id).then(m=>{if(g===generation)maskData=m;}));
@@ -128,7 +128,7 @@ export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbac
     if(g===generation)selectedTargets.push(...found);
    })());
   }
-  await Promise.all(jobs.map(p=>p.catch(()=>{failures++;})));
+  await Promise.all(jobs.map(p=>p.catch(()=>{failures++;}).finally(()=>{if(g===generation)schedule();})));
   if(g!==generation||key!==signature)return;
   selectionError=failures?'一部の強調を表示できません':'';
   error.textContent=selectionError;retry.hidden=!failures;
@@ -164,5 +164,5 @@ export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbac
  q<HTMLImageElement>('[data-fallback-image]').addEventListener('load',schedule);
  new ResizeObserver(schedule).observe(frame);
  window.addEventListener('pageshow',sync);
- return {sync,schedule};
+ return {sync,schedule,prepareNavigation:(url:URL)=>{const ctx=readInsightContext(url,config.base);preset=ctx?.insight&&!url.searchParams.has('lng')?ctx.insight:null;}};
 }

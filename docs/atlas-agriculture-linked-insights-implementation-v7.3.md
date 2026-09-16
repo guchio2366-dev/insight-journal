@@ -33,3 +33,11 @@
 3. 降水量の雨量帯を自動固定しないこと、サンホアキン流域と帯水層の違い。
 4. 酪農→食品加工と、元の品目・統計・カメラへの復帰。
 5. iPad横画面／スマートフォン／WebGL非対応での表示。
+
+## 2026-09-16: linked-map return performance
+
+- Cause: insight and return anchors performed full document navigation; the product overlay also waited for all map initialization to succeed or fail.
+- Normal same-tab clicks now use the existing explorer's URL restoration logic. The map instance, parsed geometry, product/statistics/layer/camera state remain available across agriculture–nature/industry navigation. Modified clicks retain ordinary anchor behavior.
+- Crop geometry has one shared retryable request per document. The SVG overlay can render against the fallback image while the interactive map is still loading; each completed target request schedules its own paint.
+- Regression coverage: map instance reuse, one crop request, rice/aquifer overlays, return-state restoration, history restoration, modified clicks, and outline rendering before the map load event. WebGL is stubbed only at the renderer boundary in these controller tests.
+- Cloud browser can inspect production, but local preview is blocked by the browser client and production currently uses its fallback map in that browser. No iPad hardware timing claim is made.

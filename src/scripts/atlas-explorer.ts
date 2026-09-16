@@ -1,3 +1,4 @@
+import {loadAgricultureGeometry} from '../lib/atlas-agriculture-geometry';
 import {createAgricultureInsights} from './atlas-agriculture-insights';
 import {normalizeInsightNavigation} from '../lib/atlas-agriculture-insight-state';
 import {cityClimateCodes} from '../data/atlas/city-climate-reading';
@@ -502,17 +503,33 @@ export async function startAtlas() {
   });
   setNatureMode(natureMode);setField(field);syncAgricultureLayers(false);if(field==='natural')save();if(water.active())void water.ensure().catch(()=>{});window.addEventListener('resize',fitCityCrop);document.fonts?.ready.then(fitCityCrop);timeout=window.setTimeout(()=>fail('地図データの読み込みが完了しませんでした。'),30000);
 
-    window.addEventListener('popstate',()=>{restoring=true;natureGeneration++;pendingNatureKey='';const state=readAtlasState(new URL(location.href),config.initialField);agricultureDetails.restore();water.restore();selectedStats=agricultureDetails.state().stats;field=state.field;natureMode=state.env;agriLayers=new Set(state.agriLayers);selectedRelation=state.relation;relationTrigger=null;natureTrigger=null;selectedAnimal=state.animal;selectedAnimalRegion=state.animalRegion;selectedCrop=state.crop;selectedRegion=state.region;selectedCity=state.city;natureFeature=state.city&&state.natureFeature?.startsWith('climate:')?null:state.natureFeature;view=state.view;savedCamera=state.camera??undefined;industries.restore();population.restore();setField(field);setNatureMode(natureMode);syncAgricultureLayers(false);if(state.camera&&map&&state.view==='custom')map.jumpTo({center:[state.camera.lng,state.camera.lat],zoom:state.camera.zoom});else if(map&&state.view==='fit'){suppressNextMove=true;map.fitBounds(fitBounds,{duration:0,padding:{top:30,bottom:14,left:12,right:12}});}restoring=false;if(field==='natural')save();});
+  function restoreFromUrl(){restoring=true;natureGeneration++;pendingNatureKey='';const state=readAtlasState(new URL(location.href),config.initialField);agricultureDetails.restore();water.restore();selectedStats=agricultureDetails.state().stats;field=state.field;natureMode=state.env;agriLayers=new Set(state.agriLayers);selectedRelation=state.relation;relationTrigger=null;natureTrigger=null;selectedAnimal=state.animal;selectedAnimalRegion=state.animalRegion;selectedCrop=state.crop;selectedRegion=state.region;selectedCity=state.city;natureFeature=state.city&&state.natureFeature?.startsWith('climate:')?null:state.natureFeature;view=state.view;savedCamera=state.camera??undefined;industries.restore();population.restore();setField(field);setNatureMode(natureMode);syncAgricultureLayers(false);if(state.camera&&map&&state.view==='custom')map.jumpTo({center:[state.camera.lng,state.camera.lat],zoom:state.camera.zoom});else if(map&&state.view==='fit'){suppressNextMove=true;map.fitBounds(fitBounds,{duration:0,padding:{top:30,bottom:14,left:12,right:12}});}restoring=false;if(field==='natural')save();}
+  window.addEventListener('popstate',restoreFromUrl);
+  // These destinations share this explorer. Keep its map and loaded geometry alive.
+  root.addEventListener('click',event=>{
+    if(event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+    const link=(event.target as Element).closest<HTMLAnchorElement>('a[data-agri-insight-link],a.agri-insight-back');
+    if(!link||link.hasAttribute('download')||(link.target&&link.target!=='_self'))return;
+    const url=new URL(link.href,location.href);
+    if(url.origin!==location.origin||![config.base+'agriculture/',config.base+'nature/',config.base+'industry/'].includes(url.pathname))return;
+    event.preventDefault();
+    insights?.prepareNavigation(url);
+    history.pushState({},'',url);
+    restoreFromUrl();
+    const heading=el<HTMLElement>(field==='agriculture'?'#agri-reading-heading':'#agri-insight-heading');
+    if(heading){heading.tabIndex=-1;heading.focus({preventScroll:true});}
+  });
+
 
   try{
     const fetchJson=async(base:string,name:string)=>{const testMissing=config.reviewMode&&new URL(location.href).searchParams.get('qa')==='asset-error'&&name==='manifest.json';const response=await fetch(base+(testMissing?'qa-missing-manifest.json':name),{signal:criticalController.signal});if(!response.ok)throw new Error(name+': '+response.status);return response.json();};
     const empty={type:'FeatureCollection',features:[]};
-    const [lib,manifest,base,crops,land,stateLabels,cropLabels,natureManifest,overlays]=await Promise.all([import('maplibre-gl'),fetchJson(config.assetBase,'manifest.json'),fetchJson(config.assetBase,'base.geojson'),fetchJson(config.assetBase,'agriculture.geojson'),fetchJson(config.assetBase,'land.geojson'),fetchJson(config.assetBase,'labels.json'),fetchJson(config.assetBase,'crop-labels.json'),natureLoader.json('manifest.json'),fetchJson(config.natureAssetBase,'overlays.geojson')]);
+    const [lib,manifest,base,crops,land,stateLabels,cropLabels,natureManifest,overlays]=await Promise.all([import('maplibre-gl'),fetchJson(config.assetBase,'manifest.json'),fetchJson(config.assetBase,'base.geojson'),loadAgricultureGeometry(config.assetBase),fetchJson(config.assetBase,'land.geojson'),fetchJson(config.assetBase,'labels.json'),fetchJson(config.assetBase,'crop-labels.json'),natureLoader.json('manifest.json'),fetchJson(config.natureAssetBase,'overlays.geojson')]);
     if(failed)return;
     fitBounds=[[-128,22],[-64,52]];landFeatures=land.features;cropFeatures=crops.features;baseFeatures=base.features;overlayFeatures=overlays.features;
     const style=createAtlasStyle(config,manifest,base,crops,land,{manifest:natureManifest,cities:config.climateCities,aquifers:empty,contours:empty,overlays});
     lib.setWorkerCount(1);map=new lib.Map({container:surface,style,attributionControl:false,cooperativeGestures:true,locale:{'CooperativeGesturesHandler.MobileHelpText':'地図は２本指で動かせます'},renderWorldCopies:false,dragRotate:false,touchPitch:false,pitchWithRotate:false,rollEnabled:false,maxPitch:0,maxZoom:10,minZoom:1,pixelRatio:Math.min(devicePixelRatio,2),bounds:fitBounds,fitBoundsOptions:{padding:{top:30,bottom:14,left:12,right:12}},maxBounds:[[-137,16],[-56,58]],refreshExpiredTiles:false,fadeDuration:0});
-    map.touchZoomRotate.disableRotation();map.scrollZoom.disable();if(initial.camera&&initial.view==='custom')map.jumpTo({center:[initial.camera.lng,initial.camera.lat],zoom:initial.camera.zoom});
+    map.touchZoomRotate.disableRotation();map.scrollZoom.disable();if(savedCamera&&view==='custom')map.jumpTo({center:[savedCamera.lng,savedCamera.lat],zoom:savedCamera.zoom});
     surface.addEventListener('webglcontextlost',()=>fail('この端末の地図描画が停止しました。'),true);map.on('error',event=>{console.error('Atlas data/render error',event.error?.message);fail('地図の描画またはデータの読み込みに失敗しました。');});
     map.once('load',()=>{
       if(failed||!map)return;ready=true;clearTimeout(timeout);root.dataset.renderState='ready';fallback.hidden=true;el('.atlas-map-tools').hidden=false;
