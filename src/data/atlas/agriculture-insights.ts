@@ -1,12 +1,10 @@
+import {cornReading} from './corn-reading';
 
 import type {ProductId} from '../../lib/atlas-agriculture-detail-state.ts';
 
 export const productNames:Record<ProductId,string>={corn:'とうもろこし',soybean:'大豆',wheat:'小麦',cotton:'綿花',rice:'稲作',specialty:'果樹・野菜等',beef:'肉牛',dairy:'酪農',hogs:'養豚',broilers:'肉用鶏',layers:'採卵鶏'};
 export const productParagraphs:Record<ProductId,readonly string[]>={
-corn:[
-'とうもろこしは、中央低地を中心とするコーンベルトに広がります。地形と標高を見比べると、内陸に広い農地が続く様子を読み取れます。ただし、平坦であることと標高が低いことは同じではありません。',
-'用途は家畜の飼料、燃料用エタノール、食品原料など。大豆との輪作も行われます。西寄りの産地では灌漑も重要で、長い散水装置が支点の周りを回るセンターピボット方式によって、円形の畑が見られます。全産地が同じ灌漑方式というわけではありません。',
-'ミシシッピ川と支流は、穀物を下流の輸出拠点へ運ぶ経路の一つです。川の線をたどると内陸から海への輸送を、降水量と帯水層を見比べると農地の水確保を読み取れます。'],
+corn:cornReading.sections.map(section=>section.key+section.body),
 soybean:[
 '大豆はとうもろこしと重なる中西部の産地が多く、両者を組み合わせた輪作が行われます。油を搾った後の大豆ミールは、豚や鶏などの飼料のたんぱく源になります。とうもろこしの飼料利用と合わせて、作物と畜産の結び付きを読むことができます。',
 '国内の加工・飼料需要に加え、輸出も重要です。ミシシッピ川水系は輸送経路の一つで、川の線を下流へたどると、内陸の産地とメキシコ湾側の輸出拠点とのつながりが分かります。'],
@@ -44,7 +42,7 @@ const transport='https://www.ams.usda.gov/sites/default/files/media/ReliableWate
 const california='https://water.ca.gov/Water-Basics/The-California-Water-System';
 const feedWater='https://agdatacommons.nal.usda.gov/articles/dataset/Data_from_Irrigation_water_used_to_produce_cattle_feeds_throughout_the_United_States/30128560';
 export const productSources:Record<ProductId,readonly [string,string][]>={
-corn:[['USDA ERS・飼料穀物',ers+'crops/corn-and-other-feed-grains/feed-grains-sector-at-a-glance'],['USGS・灌漑','https://pubs.usgs.gov/publication/sir20225042/full'],['USDA AMS・穀物水運',transport]],
+corn:[['NASA・コーンベルトの土壌','https://science.nasa.gov/missions/landsat/shoring-up-the-corn-belts-soil-health/'],['Minnesota Extension・播種と温度','https://extension.umn.edu/agriculture/crop-production/corn/strategies-for-successful-corn-planting'],['Minnesota Extension・受粉期の水','https://extension.umn.edu/agriculture/crop-production/corn/dry-conditions-during-corn-pollination'],['USDA ERS・飼料穀物',ers+'crops/corn-and-other-feed-grains/feed-grains-sector-at-a-glance'],['USGS・灌漑','https://pubs.usgs.gov/publication/sir20225042/full'],['USDA AMS・穀物水運',transport]],
 soybean:[['USDA ERS・大豆',ers+'crops/soybeans-and-oil-crops/oil-crops-sector-at-a-glance'],['USDA AMS・穀物水運',transport]],
 wheat:[['USDA ERS・小麦',ers+'crops/wheat/wheat-sector-at-a-glance'],['Minnesota Extension・小麦の過湿','https://extension.umn.edu/agriculture/crop-production/small-grains/wheat-flooding-and-waterlogging']],
 cotton:[['USDA ERS・綿花',ers+'crops/cotton-and-wool/cotton-sector-at-a-glance'],['Florida IFAS・綿花','https://ask.ifas.ufl.edu/publication/AG495'],['Georgia EPD・灌漑','https://epd.georgia.gov/document/document/20241025-response-commentpdf/download']],
@@ -84,7 +82,7 @@ export const agricultureInsights:readonly AgricultureInsight[]=[
 {id:'dairy-processing',products:['dairy'],label:'乳製品加工とのつながり',lead:'ウィスコンシンの酪農地域と食品・乳製品加工を重ねます。記号は代表地域で、個々の農場や加工場の所在地・生産量ではありません。',takeaway:'生乳は搾った後の集荷・冷却・加工まで含めて産業になる。',target:{page:'industry',sector:'manufacturing',subsector:'food',industryRegion:'wisconsin-food'},bounds:[-96,40,-84,49]}
 ];
 export const productInsightOrder:Record<ProductId,readonly string[]>={
-corn:['plains-elevation','central-lowland','grain-rivers','corn-pivot-water','interior-rainfall'],
+corn:['central-lowland','plains-elevation','interior-rainfall','corn-pivot-water','grain-rivers'],
 soybean:['grain-rivers','interior-rainfall'],
 wheat:['wheat-steppe','great-plains','plains-elevation','interior-rainfall'],
 cotton:['cotton-aquifers','cotton-rainfall'],
@@ -93,7 +91,15 @@ specialty:['valley-landform','valley-water','california-rainfall','san-joaquin-b
 beef:['great-plains','beef-feed-water'],dairy:['dairy-processing','valley-water'],hogs:[],broilers:[],layers:[]
 };
 export function insightFor(id:string|null){return agricultureInsights.find(x=>x.id===id);}
+const cornMapLeads:Record<string,string>={
+'central-lowland':'強調した中央低地（米国中央部の低地・平原）に、とうもろこし産地の輪郭を重ねています。内陸に続く広い農地を、平坦〜緩やかな土地で機械を使った大規模耕作がしやすいことと結び付けて見てください。',
+'plains-elevation':'中央低地から、西側のグレートプレーンズ（内陸西部に広がる大平原）へ500m間隔の等高線を追います。西ほど標高が高くなる様子と、とうもろこし産地の広がりを比べてください。',
+'interior-rainfall':'とうもろこしの産地と、太く示した年降水量500mm線を見比べます。内陸の西寄りでは雨が少なく、灌漑による水の確保が重要になります。500mm線は東西の乾湿を比べる目安です。栽培には夏、とくに受粉して実がつく時期に使える水が大切です。',
+'corn-pivot-water':'強調したハイプレーンズ帯水層は、内陸の大平原の地下で水を蓄える地層です。とうもろこし産地の西側と重ね、地下水をくみ上げる灌漑との関係を見てください。下の上空画像は、この地域にあるカンザス州の例です。円形の区画は、センターピボットの散水管が支点の周りを回って水を届ける仕組みを示します。',
+'grain-rivers':'青い太線は、米国中央部を南へ流れるミシシッピ川と、東から合流するオハイオ川です。産地の輪郭から川を南へたどると、内陸の穀物がメキシコ湾（米国南側の海）の沿岸の輸出港へ運ばれる経路が分かります。'
+};
 export function insightLead(item:AgricultureInsight,product:ProductId){
+if(product==='corn'&&cornMapLeads[item.id])return cornMapLeads[item.id];
 if(item.id==='interior-rainfall'&&product==='wheat')return '小麦の分布を重ねています。約500mmの線は乾湿を比べる目安で、750〜1,000mmも栽培の上限ではありません。東部にも軟質冬小麦の産地があります。雨の時期・排水や、とうもろこし・大豆などとの採算の違いも関わります。この図は小さく分散した産地を省略しているため、輪郭のない場所を栽培不適地とは読めません。';
 if(item.id==='valley-water')return (product==='dairy'?'カリフォルニアの酪農地域と、飼料生産を含む水利用の背景を見ます。':'カリフォルニアの栽培域と、谷の地下水・河川の位置関係を見ます。')+item.lead;
 return productNames[product]+'の分布を重ねています。'+item.lead;
