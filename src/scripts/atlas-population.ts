@@ -3,9 +3,9 @@ import {readPopulationState,writePopulationState} from '../lib/atlas-population-
 import {populationColor,density} from '../lib/atlas-population-data';
 import {dominantCategory,ethnicityColors} from '../lib/atlas-population-dominant';
 import {createPopulationLoader} from '../lib/atlas-population-loader';
-import {populationCityProfiles,populationOverviews,settlementStories} from '../data/atlas/population-reading';
-import {populationCityReligionProfiles,religionStories,religionDominantCategories,religionDominantReading} from '../data/atlas/population-religion-reading';
-import {ethnicityReading,populationVoteStates} from '../data/atlas/population-focus';
+import {populationCityProfiles,populationCityTakeaways,populationOverviews,settlementStories} from '../data/atlas/population-reading';
+import {populationCityReligionProfiles,religionStories,religionDominantCategories,religionDominantReading,religionTakeaways} from '../data/atlas/population-religion-reading';
+import {ethnicityReading,ethnicityTakeaways,populationVoteStates} from '../data/atlas/population-focus';
 import {createNatureLabels} from './atlas-nature-labels';
 import {populationFallbackExtent,populationFallbackBox,projectPopulationFallback} from '../lib/atlas-population-projection';
 import {religionDominantColors} from '../lib/atlas-population-religion';
@@ -15,6 +15,7 @@ export function createPopulationController(root:HTMLElement,base:string,options:
  const el=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const loader=createPopulationLoader(base),cities=new Map(options.cities.map(c=>[c.id,c]));
  let state=readPopulationState(new URL(location.href)),generation=0,appliedMap:any,dataFailed=false,countyData:any,rows:any[]=[],values=new Map<string,any>();
+ let readingTrail:Array<{city:string;ethnicity:string;religion:string;story:string}>=[];
  const number=(n:number)=>n.toLocaleString('ja-JP',{maximumFractionDigits:1});
  const focusState=()=>populationVoteStates.find(s=>s.id===state.voteState);
  const extent=()=>populationFallbackExtent(state.view==='vote'&&focusState()?.bounds?focusState()!.bounds!.map(b=>[...b]):undefined,state.view==='religion' ? .1 : 0);
@@ -40,9 +41,16 @@ export function createPopulationController(root:HTMLElement,base:string,options:
  for(const story of religionStories)root.querySelector('[data-pop-religion-marker="'+story.id+'"]')?.setAttribute('aria-label',story.number+' '+story.title+'の解説を開く');
  function schedule(){cityLabels.schedule();storyLabels.schedule();}
  function paragraph(host:HTMLElement,title:string,text:string){
-  const h=document.createElement('h3'),p=document.createElement('p');h.textContent=title;p.textContent=text;host.append(h,p);
+  const section=document.createElement('section'),h=document.createElement('h3'),p=document.createElement('p');
+  section.className='population-reading-section';h.textContent=title;p.textContent=text;section.append(h,p);host.append(section);
  }
  function source(host:HTMLElement,label:string,url:string){const a=document.createElement('a');a.href=url;a.textContent=label;a.className='population-source';host.append(a);}
+ function note(host:HTMLElement,text:string){const p=document.createElement('p');p.className='population-footnote';p.textContent=text;host.append(p);}
+ function detail(host:HTMLElement,text:string){const d=document.createElement('details'),summary=document.createElement('summary'),p=document.createElement('p');d.className='population-reading-detail';summary.textContent='分類と読み方を確認';p.textContent=text;d.append(summary,p);host.append(d);}
+ function action(host:HTMLElement,label:string,kind:'city'|'group'|'religion'|'story',id:string){
+  const button=document.createElement('button');button.type='button';button.className='population-reading-action';button.textContent=label;button.setAttribute('aria-controls','population-city-reading');
+  button.addEventListener('click',()=>{readingTrail.push({city:state.city,ethnicity:state.ethnicity,religion:state.religion,story:state.story});choose(kind,id,true);});host.append(button);
+ }
  function reading(){
   const group=state.view==='ethnicity'?state.ethnicity:'';
   const religionGroup=state.view==='religion'?state.religion:'';
@@ -50,31 +58,57 @@ export function createPopulationController(root:HTMLElement,base:string,options:
   const city=cities.get(state.city),profile=city&&populationCityProfiles[city.id];
   const vote=state.view==='vote'?focusState():undefined,copy=populationOverviews[state.view];
   const body=el('[data-pop-reading-body]');body.replaceChildren();
-  let title=copy.title,text=copy.text;
+  let title=copy.title,text=copy.text,key=copy.text;
+  // Every selected view supplies one takeaway before supporting detail.
   if(group){
-   title=ethnicities.find(x=>x[0]===group)![1];text=ethnicityReading[group];
+   title=ethnicities.find(x=>x[0]===group)![1];text=ethnicityReading[group];key=ethnicityTakeaways[group];
    for(const item of settlementStories.filter(s=>s.group===group)){paragraph(body,item.label+'｜'+item.region,item.text);source(body,item.sourceLabel,item.source);}
-   paragraph(body,'産業・暮らし・投票とのつながり','移住の経緯に加え、職種・所得・年齢・住宅や通勤の条件を確かめます。地域の構成から、個人の職業や支持政党を決めることはできません。');
-   paragraph(body,'地図の読み方','色は郡内で最大の区分です。過半数とは限らず、最大にならない集団の居住地は色に現れません。都市圏内の細かな分布は追加データの準備中です。');
+   if(group==='black'){
+    paragraph(body,'仕事への移動と、住まいの制約','大移動とは、20世紀に南部の黒人が差別を逃れ、仕事や教育の機会を求めて北部・中西部・西部へ移った動きです。移住先でも住宅差別が居住地を制約しました。職場があることと、そこへ通える場所に住めることは別の問題です。');
+    action(body,'五大湖のデトロイトで仕事と移住を読む','city','detroit');
+   }else if(group==='hispanic'){action(body,'南西部のロサンゼルスで移住を読む','city','los-angeles');}
+   else if(group==='white'){action(body,'五大湖のシカゴで産業を読む','city','chicago');}
+   detail(body,'色は郡内で最大の区分で、過半数とは限りません。最大でない集団も各地に暮らしています。都市圏内の細かな分布は未収録です。ヒスパニック以外は非ヒスパニックの区分です。地域の構成だけから個人の職業や投票先は分かりません。');
   }else if(religionGroup){
    const item=religionDominantReading[religionGroup],label=religionDominantCategories.find(x=>x[0]===religionGroup)![1];
-   title=label;text=item.region;paragraph(body,'この色が示すもの',item.definition);paragraph(body,'歴史的な経緯',item.history);paragraph(body,'産業・雇用・投票への接続',item.connections);source(body,item.sourceLabel,item.source);
-   paragraph(body,'地図の読み方','色は宗教団体が把握したadherentsのうち郡内で最大のグループです。過半数や住民全体の宗教構成を意味せず、報告されない人を無宗教とは扱いません。');
+   title=label;text=item.region;key=religionTakeaways[religionGroup];
+   paragraph(body,'移住・定住が共同体の土台に',item.history);
+   const related:Record<string,string>={catholic:'northeast-immigration',southern_baptist:'south-protestant',latter_day_saints:'utah-lds',black_protestant:'black-churches'};
+   const target=religionStories.find(s=>s.id===related[religionGroup]);if(target)action(body,target.number+' '+target.title+'を読む','story',target.id);
+   paragraph(body,'雇用と政治を、地域の歴史に重ねる',item.connections);source(body,item.sourceLabel,item.source);
+   detail(body,item.definition+' adherentsは宗教団体が報告・推計した所属者・子どもなどです。住民全体の構成とは異なり、未報告の人を無宗教とは扱いません。');
   }else if(story){
-   title=story.title;text=story.region;paragraph(body,'歴史と地域社会',story.text);
+   title=story.title;text=story.region;key=religionTakeaways[story.id];paragraph(body,'地図の位置と、共同体ができた背景',story.text);
    for(const item of story.sources)source(body,item.label,item.url);
-   paragraph(body,'産業・投票とのつながりを読む','移住先での仕事や住まい、学校・教会などの共同体が、地域社会の形成にどう関わったかを考えます。現在の得票分布との重なりだけで因果関係は判断できません。');
+   const cityTargets:Record<string,string>={'south-protestant':'dallas','northeast-immigration':'new-york','southwest-catholic':'los-angeles','northwest-unaffiliated':'seattle','black-churches':'detroit'};
+   const target=cityTargets[story.id];if(target)action(body,cities.get(target)!.nameJa+'の宗教文化と仕事を読む','city',target);
+   if(story.id==='utah-lds')action(body,'末日聖徒の分布と入植を読む','religion','latter_day_saints');
+   note(body,story.id==='northwest-unaffiliated'?'無宗教・無所属の分布は、このUSRC郡地図では示していません。ここでの説明はPewの回答調査に基づきます。':'番号は代表地点です。宗教文化の正確な境界を示すものではありません。');
   }else if(profile){
-   title=city!.nameJa;text=profile.location;
+   title=city!.nameJa;text=profile.location;key=populationCityTakeaways[city!.id];
    if(state.view==='religion'){
-    const religion=populationCityReligionProfiles[city!.id];paragraph(body,'宗教文化と歴史',religion.text);source(body,religion.sourceLabel,religion.source);
+    const religion=populationCityReligionProfiles[city!.id];key=religion.text.split('。')[0]+'。';
+    paragraph(body,'移住と宗教文化｜共同体が根付く背景',religion.text.slice(religion.text.indexOf('。')+1)||religion.text);source(body,religion.sourceLabel,religion.source);
+    for(const id of religion.stories){const related=religionStories.find(s=>s.id===id)!;action(body,related.number+' '+related.title+'を読む','story',id);}
+   }else if(state.view==='ethnicity'){
+    const industrial=['chicago','detroit'].includes(city!.id),southwest=city!.id==='los-angeles';
+    key=industrial?'工業都市への移住と住宅差別の歴史を合わせると、仕事と住まいの分布を結び付けて考えられます。':southwest?ethnicityTakeaways.hispanic:'都市の周辺を郡単位で見比べ、居住の分布と雇用の特徴を分けて読みます。';
+    paragraph(body,'人の移動と住まい｜郡の色から歴史へ',industrial?'南部からの大移動では、工場の求人が移住先を形づくりました。一方、移住先の住宅差別は住める地域を制約しました。人々の居住地は仕事の場所だけでなく、住まいを得られる条件にも左右されます。':southwest?ethnicityReading.hispanic:'都市名の周りにある郡の色を見比べます。色は最大区分だけを示すため、同じ色の郡でも人口構成が同じとは限りません。市内の地区別分布はこの地図には収録していません。');
+    if(industrial){source(body,'米国国立公文書館：大移動と住宅差別','https://www.archives.gov/research/african-americans/migrations/great-migration');action(body,'黒人の分布を南部からたどる','group','black');}
+    if(southwest)action(body,'ヒスパニックの定住史を読む','group','hispanic');
+   }else if(state.view==='vote'){
+    key='都市を含む郡と周辺の郡を比べ、得票率差と実際の票数を分けて読むことが大切です。';
+    paragraph(body,'都市周辺｜色の広さより票数','都市名の周りで赤青と濃淡を見比べ、郡を押して得票率差と票数を確認します。郡の結果は都市そのものの結果とは異なります。下の職種構成は地域の雇用背景で、職種別の投票先を示すものではありません。');
    }
-   paragraph(body,'主な産業',profile.industries);paragraph(body,'働く人の職種',profile.jobs);
-   paragraph(body,'都市と周辺を見比べる','左の都市とその周りの密度を見比べ、職場と住まいがどの範囲に広がるかを考えます。郡の平均密度だけでは、市内・郊外の境界や通勤経路は分かりません。');
+   paragraph(body,'産業の集積｜'+profile.industries,profile.jobs);
    source(body,'BLS：都市圏の職種構成（2025年5月）',profile.source);
-   const foot=document.createElement('p');foot.className='population-footnote';foot.textContent='職種割合は市域の住民構成ではなく、周辺を含む都市圏の雇用です。';body.append(foot);
+   if(state.view==='distribution'){
+    paragraph(body,'都市圏｜働く場所と暮らす場所を合わせて読む','都市圏は、中心となる都市と、通勤などで結び付く周辺を合わせた地域です。左の都市名の周りで、人口密度が高い郡のまとまりを確認します。郊外は一般に中心都市の外に広がる住宅地などを指しますが、郡境がその境界になるわけではありません。');
+    const other=city!.id==='detroit'?'seattle':'detroit';action(body,cities.get(other)!.nameJa+'と仕事の違いを比べる','city',other);
+   }
+   detail(body,'職種割合は市域の住民構成ではなく、周辺を含む都市圏の雇用です。郡の平均密度や最大区分から、市内の地区別分布・通勤経路・個人の職業や投票先は分かりません。');
   }else if(vote){
-   title=vote.name+'の投票分布';text='2024年大統領選。現在の支持率や2026年選挙の接戦評価とは別です。';
+   title=vote.name+'の投票分布';key=vote.id==='02'?'アラスカは郡と選挙結果の地理単位を合わせられず、この地図では比較できません。':'都市を含む郡の票数と周辺の得票率差を比べると、州の中の違いが見えてきます。';text='2024年大統領選。現在の支持率や2026年選挙の接戦評価とは別です。';
    if(vote.id==='02'){paragraph(body,'アラスカの扱い','現在の郡別選挙データには、アラスカの地理単位に一致する結果を収録していません。左は参考として全米本土を表示しています。');}
    else{
     const counties=rows.filter(r=>r.state===vote.id);
@@ -85,28 +119,38 @@ export function createPopulationController(root:HTMLElement,base:string,options:
    }
    source(body,'2024年大統領選：FEC公式結果','https://www.fec.gov/resources/cms-content/documents/federalelections2024.pdf');
   }else{
-   paragraph(body,'地図のどこを見る？',copy.reading);
+   paragraph(body,state.view==='distribution'?'沿岸・五大湖・内陸の都市を見比べる':state.view==='ethnicity'?'南部・五大湖・国境を見比べる':state.view==='religion'?'南部・北東部・ユタ周辺を見比べる':'都市周辺の色と、郡の票数を見比べる',copy.reading);
+   if(state.view==='distribution')action(body,'デトロイトで製造業と雇用を見る','city','detroit');
+   if(state.view==='religion'){action(body,'② ユタへの移住と共同体を読む','story','utah-lds');detail(body,'最多は過半数を意味しません。住民全体の宗教構成ではなく、未報告も無宗教を意味しません。分類・出典はページ下部で確認できます。');}
    if(state.view==='ethnicity'){
-    paragraph(body,'凡例から歴史を読む','白人・ヒスパニック・アジア系などの凡例を選ぶと、この欄が選んだ区分の解説に替わります。地図の範囲と各区分の色は変わりません。');
+    action(body,'黒人の大移動と工業都市のつながりを読む','group','black');
+    action(body,'ヒスパニックの分布と国境の歴史を読む','group','hispanic');
+    detail(body,'最大は過半数とは限りません。英系・独系など祖先の出身地は別の分類で、白人の色から区別できません。人種区分は身体的特徴や能力を説明するものではありません。');
    }
   }
-  el('[data-pop-overview-title]').textContent=title;el('[data-pop-overview]').textContent=text;
-  const selected=!!(group||religionGroup||story||profile||vote);
-  el('[data-pop-reading-reset]').hidden=!selected;el('[data-pop-city-jump]').hidden=!selected;el('[data-pop-city-jump]').textContent=title+'の解説へ';
+  if(readingTrail.length){
+   const back=document.createElement('button');back.type='button';back.className='population-reading-action';back.textContent='← 前の解説へ戻る';
+   back.addEventListener('click',()=>{Object.assign(state,readingTrail.pop());state.geo='';selected();reading();options.changed(true);el('[data-pop-reading]').focus({preventScroll:true});});body.append(back);
+  }
+  el('[data-pop-overview-title]').textContent=title;el('[data-pop-overview]').textContent=text;el('[data-pop-overview]').hidden=text===key;el('[data-pop-key]').textContent=key;
+  const isSelected=!!(group||religionGroup||story||profile||vote);
+  el('[data-pop-reading-reset]').hidden=!isSelected;el('[data-pop-city-jump]').hidden=!isSelected;el('[data-pop-city-jump]').textContent=title+'の解説へ';
   root.querySelectorAll<HTMLElement>('[data-pop-city]').forEach(n=>n.setAttribute('aria-pressed',String(!group&&!religionGroup&&!story&&n.dataset.popCity===state.city)));
   root.querySelectorAll<HTMLElement>('[data-pop-place-story]').forEach(n=>{n.hidden=state.view!=='religion';n.setAttribute('aria-pressed',String(n.dataset.popPlaceStory===story?.id));});
   root.querySelectorAll<HTMLElement>('[data-pop-group]').forEach(n=>n.setAttribute('aria-pressed',String(n.dataset.popGroup===group)));
   root.querySelectorAll<HTMLElement>('[data-pop-religion-group]').forEach(n=>n.setAttribute('aria-pressed',String(n.dataset.popReligionGroup===religionGroup)));
   cityLabels.sync(!group&&!religionGroup&&!story?state.city:'');storyLabels.sync(religionGroup?'':story?.id??'');schedule();
  }
- function choose(kind:'city'|'group'|'religion'|'story',id:string){
+ function choose(kind:'city'|'group'|'religion'|'story',id:string,fromReading=false){
   if(kind==='city'&&!cities.has(id)||kind==='group'&&id&&!ethnicities.some(x=>x[0]===id)||kind==='religion'&&id&&!religionDominantCategories.some(x=>x[0]===id)||kind==='story'&&!religionStories.some(s=>s.id===id))return;
+  if(!fromReading)readingTrail=[];
   state.city=kind==='city'?id:'';state.ethnicity=kind==='group'?id:'';state.religion=kind==='religion'?id:'';state.story=kind==='story'?id:'';state.geo='';
   selected();reading();options.changed(true);
   el('[data-atlas-live]').textContent=el('[data-pop-overview-title]').textContent+'の解説を表示しました。';
   if(matchMedia('(max-width: 899px), (max-height: 599px)').matches){el('[data-pop-reading]').focus({preventScroll:true});el('[data-pop-reading]').scrollIntoView({block:'nearest',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}
  }
  function reset(){
+  readingTrail=[];
   const zoomed=state.view==='vote'&&!!state.voteState;
   state.city='';state.ethnicity='';state.religion='';state.story='';state.geo='';state.voteState='';
   el<HTMLSelectElement>('[data-pop-vote-state]').value='';selected();reading();fallback();
@@ -152,6 +196,7 @@ export function createPopulationController(root:HTMLElement,base:string,options:
   if(appliedMap===options.map()&&appliedMap?.getLayer('population-selected'))appliedMap.setFilter('population-selected',['==',['get','id'],row?state.geo:'']);
  }
  async function render(){
+  readingTrail=[];
   const ticket=++generation,active=options.active();
   el('[data-population-controls]').hidden=!active;el('[data-population-reading]').hidden=!active;el('[data-pop-city-markers]').hidden=!active;el('[data-pop-religion-markers]').hidden=!active||state.view!=='religion';
   if(!active){release();schedule();return;}
