@@ -1,5 +1,6 @@
 import type {IndustrySector} from './industry-catalog';
 export const industrySources={
+  waAerospace:{title:'ワシントン州商務省：航空宇宙の供給網・人材・地域拠点',url:'https://choosewashingtonstate.com/why-washington/our-key-sectors/aerospace/'},
   shipbuilding:{title:'VEDP：ニューポートニューズの造船',url:'https://www.vedp.org/success-story/huntington-ingalls-industries-builds-virginia'},
   railway:{title:'ニューヨーク州：ホーネルの鉄道車両工場拡張（2025年）',url:'https://www.governor.ny.gov/news/governor-hochul-marks-completion-75-million-expansion-alstoms-car-body-shell-manufacturing'},
   ohioMetals:{title:'BEA／セントルイス連銀：オハイオ州の一次金属付加価値',url:'https://fred.stlouisfed.org/series/OHPRIMETMANNGSP'},
@@ -36,7 +37,7 @@ const regions: Array<[string,string,string,IndustrySector,string,[number,number]
   ['kentucky-auto','kentucky','ケンタッキー州','manufacturing','auto',[-85.4,37.7],'車両・部品生産','BLSは輸送機器への特化と自動車工場への投資を確認しています。部品調達、人材、投資支援が組み合わさった立地です。','southeast','州','1990–2019'],
   ['alabama-auto','alabama','アラバマ州','manufacturing','auto',[-86.8,32.8],'自動車生産','海外自動車メーカーの工場立地が輸送機器生産の拡大につながりました。南部のすべての製造業が同じように伸びたわけではありません。','southeast','州','1990–2019',true],
   ['sanantonio-auto','sanantonio','サンアントニオ','manufacturing','auto',[-98.49,29.42],'完成車・部品生産','トヨタの完成車工場と敷地内の部品供給企業が結びつく例です。2023年を中心とする地域資料で生産機能を確認しています。','sanantonio','都市圏','2023中心'],
-  ['washington-aerospace','washington','ワシントン州','manufacturing','aerospace',[-121,47.5],'航空機・部品生産','航空機と部品の供給網に加え、訓練・技術開発のつながりが州の航空産業を支えます。記号は州内の代表点です。','washington','州','2026確認',true],
+  ['washington-aerospace','washington','ワシントン州','manufacturing','aerospace',[-121,47.5],'航空機・部品生産','航空機と部品の供給網に加え、訓練・技術開発のつながりが州の航空産業を支えます。記号は州内の代表点です。','waAerospace','州','2026確認',true],
   ['moseslake-aerospace','moseslake','モーゼスレイク','manufacturing','aerospace',[-119.28,47.13],'航空機試験・整備','広い空域と空港用地を持つ航空拠点です。完成機製造とは機能が異なり、試験・整備・新技術の検証に特色があります。','waflight','都市・空港周辺','2026'],
   ['fortworth-aerospace','fortworth','フォートワース','manufacturing','aerospace',[-97.33,32.76],'航空宇宙・輸送機器','航空宇宙・防衛と輸送関連の企業が集まる地域です。生産拠点を、航空会社や空港の運輸サービスから区別します。','fortworth','都市圏内の地域','2023中心',true],
   ['california-electronics','california','カリフォルニア州','manufacturing','electronics',[-121.9,37.33],'半導体の設計・開発・製造','半導体の設計、装置、研究開発、製造が連なる地域です。設計拠点が大きいことと、ウエハー生産量が多いことは同じではありません。','california','州（代表点はサンノゼ付近）','2026確認',true],
