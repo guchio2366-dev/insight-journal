@@ -15,8 +15,8 @@ const common: Record<string,[string,string]> = {
 const copy:Record<SupplyUseCropId,{name:string;unit:string;basis:string;start:string;end:string;takeaway:string;processing:string;importNote:string;importSource?:string}>= {
   corn:{name:'とうもろこし',unit:'百万ブッシェル',basis:'穀粒とうもろこし',start:'2024-09-01',end:'2025-08-31',
     takeaway:'供給の約3分の1ずつが飼料等とエタノール工場へ。輸出は約17%です。',
-    processing:'エタノール工場では燃料とともに蒸留かすなどの飼料副産物が生じます。この棒は最初の原料投入先で分け、加工後に飼料へ戻る量は重ねて足していません。',
-    importNote:'輸入もありますが、この年度は総供給の1%未満です。この需給表は輸入品の最終用途や品種を分けていないため、輸入分を飼料・食用へ配分することはできません。'},
+    processing:'エタノール製造後に残る蒸留かすは飼料にも利用されます。棒グラフは最初の原料投入先で分類し、この再利用分の二重計上を避けています。',
+    importNote:'供給の中心は国内生産で、輸入は総供給の1%未満です。輸入分の品種・最終用途は、この需給表の区分には含まれません。'},
   soybean:{name:'大豆',unit:'百万ブッシェル',basis:'丸大豆（油・粕の重量は含めない）',start:'2024-09-01',end:'2025-08-31',
     takeaway:'約52%が国内の搾油・加工へ、約40%が丸大豆として輸出されます。',
     processing:'搾油すると、大豆油とたんぱく質を多く含む大豆粕が同時に得られます。油は食品や燃料、粕は飼料に使われます。加工後の油・粕の輸出は、丸大豆の輸出と別の段階です。',

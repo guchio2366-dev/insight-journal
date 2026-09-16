@@ -1,5 +1,6 @@
 
 ---
+import {cornReading} from '../../data/atlas/corn-reading';
 import {withBase} from '../../lib/urls';
 import {productParagraphs,productSources,productInsightOrder,insightFor,targetLabel} from '../../data/atlas/agriculture-insights';
 import {agricultureInsightUrl} from '../../lib/atlas-agriculture-insight-state';
@@ -20,7 +21,14 @@ hogs:['エネルギー源','たんぱく源','生産の仕組み'],broilers:['�
 const terms=new Set(emphasis[product]),pattern=new RegExp('('+emphasis[product].join('|')+')','g');
 const links=productInsightOrder[product].map(id=>insightFor(id)!);
 ---
-{productParagraphs[product].map(text=><p>{text.split(pattern).map(part=>terms.has(part)?<strong data-reading-emphasis>{part}</strong>:part)}</p>)}
+{product==='corn'?<div class="agri-editorial-reading" data-editorial-product="corn">
+  <p class="agri-editorial-takeaway"><strong data-reading-emphasis>{cornReading.takeaway}</strong></p>
+  {cornReading.sections.map(section=><section class="agri-editorial-section">
+    <h3>{section.heading}</h3>
+    <p><strong data-reading-emphasis>{section.key}</strong> {section.body}</p>
+    <p class="agri-editorial-guide">{section.guide}</p>
+  </section>)}
+</div>:productParagraphs[product].map(text=><p>{text.split(pattern).map(part=>terms.has(part)?<strong data-reading-emphasis>{part}</strong>:part)}</p>)}
 {links.length>0&&<nav class="agri-insight-links" aria-label="地図で確かめる">
   <strong>地図で確かめる</strong>
   <div>{links.map(item=>{const u=agricultureInsightUrl(origin,base,product,item.id);return <a href={u.pathname+u.search} data-agri-insight-link={item.id} data-agri-link-product={product}><span>{item.label}</span><small>{targetLabel(item.target)}</small></a>;})}</div>

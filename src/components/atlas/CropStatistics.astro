@@ -39,7 +39,7 @@ const productionUnit = (id:StatisticCropId) => id==='cotton'?'千480ポンド俵
       <Fragment slot="copy">
         <h3>{names[id]}</h3>
         <AgricultureProductReading product={id} />
-        <p class="atlas-crop-uses"><strong>主な用途</strong>{description.uses}</p>
+        {id!=='corn'&&<p class="atlas-crop-uses"><strong>主な用途</strong>{description.uses}</p>}
         <p class="atlas-inline-sources">地理・用途：{description.sources.map((sourceId,sourceIndex)=><Fragment>{sourceIndex>0?' ／ ':''}<a href={`#${sourceId}`}>{sources.find(source=>source.id===sourceId)?.publisher}</a></Fragment>)}</p>
       </Fragment>
       <CropSupplyUse slot="supply" cropId={id} />
