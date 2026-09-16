@@ -145,7 +145,7 @@ test('解説と統計を一度だけ出力し、自動車の3図ずつを同じ�
  const {window,root,q}=await setup('?sector=manufacturing&subsector=auto');
  try{
   const copy=q('[data-industry-description-panel="manufacturing:auto"]'),detail=q('[data-industry-detail="manufacturing:auto"]');
-  assert.equal(copy.hidden,false);assert.equal(copy.querySelectorAll('.industry-selected-reading-body>p').length,3);
+  assert.equal(copy.hidden,false);assert.match(copy.querySelector('.industry-key-sentence').textContent,/部品供給/);assert.equal(copy.querySelector('.industry-reading-definitions').open,false);
   assert.equal(detail.querySelector('.industry-copy-grid'),null);
   assert.equal(detail.querySelector('.industry-trend-grid').children.length,3);assert.equal(detail.querySelector('.industry-comparison-grid').children.length,3);
   assert.equal(detail.querySelector('.industry-distribution .industry-series'),null);
@@ -206,5 +206,27 @@ test('州の出荷額・秘匿値・選択URLを描画し、都市圏と全分�
   q('[data-industry-subsector="finance"]').click();
   assert.equal(q('[data-industry-state-layer]'),null);assert.match(q('[data-industry-economic-legend]').textContent,/都市圏/);
   q('[data-industry-sector="all"]').click();assert.equal(q('[data-industry-economic-legend]').hidden,true);
+ }finally{await window.happyDOM.close();}
+});
+
+test('本文の地名から拠点を選べ、分野変更で選択を解除する',async()=>{
+ const {window,root,q}=await setup('?sector=manufacturing&subsector=auto');
+ try{
+  for(const panel of root.querySelectorAll('[data-industry-description-panel]')){
+   assert.ok(panel.querySelector('.industry-key-sentence strong').textContent.length>15);
+   assert.ok(panel.querySelector('section h3').textContent.length>5);
+   assert.equal(panel.querySelector('.industry-reading-definitions').open,false);
+  }
+  const copy=q('[data-industry-description-panel="manufacturing:auto"]');
+  const place=copy.querySelector('[data-industry-reading-place]');assert.equal(place.hidden,false);place.click();
+  assert.equal(new URL(window.location.href).searchParams.get('industryRegion'),'michigan-auto');
+  assert.match(q('[data-atlas-live]').textContent,/ミシガン州/);
+  q('[data-industry-subsector="aerospace"]').click();
+  assert.equal(new URL(window.location.href).searchParams.has('industryRegion'),false);
+  const air=q('[data-industry-description-panel="manufacturing:aerospace"]');
+  air.querySelector('[data-industry-region-option="moseslake-aerospace"]').click();
+  assert.equal(new URL(window.location.href).searchParams.get('industryRegion'),'moseslake-aerospace');
+  air.querySelector('[data-industry-overview]').click();assert.equal(root.dataset.industrySubsector,'all');
+  assert.equal(new URL(window.location.href).searchParams.has('industryRegion'),false);
  }finally{await window.happyDOM.close();}
 });

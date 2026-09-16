@@ -4,7 +4,7 @@ import {industryInsights} from '../../data/atlas/industry-content';
 import {industrySources} from '../../data/atlas/industry-regions';
 import {subsectorLabel,type IndustrySector} from '../../data/atlas/industry-catalog';
 const {active=false}=Astro.props;
-const labels:Record<string,string>={knowledge:'技術人材と企業','supply-chain':'自動車と供給網','energy-chemistry':'資源と石油化学','food-agriculture':'農畜産と食品加工','tourism-logistics':'観光都市と物流','housing-jobs':'都市成長と住宅'};
+const labels:Record<string,string>={knowledge:'技術人材を共有する産業','supply-chain':'車の生産を支える供給網','energy-chemistry':'採掘地と加工拠点は違う','food-agriculture':'農畜産から加工・設備へ','tourism-logistics':'同じ州でも都市の役割は違う','housing-jobs':'仕事の集積が住宅需要を生む'};
 ---
 <section class="industry-map-insights" id="industry-insights" data-industry-insights hidden={!active} aria-labelledby="industry-insights-title">
  <h2 id="industry-insights-title">地域と産業のつながり</h2>
