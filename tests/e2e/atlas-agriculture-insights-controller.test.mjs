@@ -19,9 +19,9 @@ const stub=`export function setWorkerCount(){};export class Map {
 const bundle=await build({entryPoints:['src/scripts/atlas-explorer.ts'],bundle:true,write:false,format:'iife',globalName:'NatureTest',plugins:[{name:'map-boundary',setup(b){b.onResolve({filter:/^maplibre-gl$/},()=>({path:'maplibre',namespace:'stub'}));b.onLoad({filter:/.*/,namespace:'stub'},()=>({contents:stub,loader:'js'}));}}]});
 const delay=()=>new Promise(resolve=>setTimeout(resolve,25));
 async function waitFor(check,label){for(let attempt=0;attempt<120;attempt++){if(check())return;await delay();}throw new Error('Timed out: '+label);}
-async function setup(query='',noWebGL=false){
- const window=new Window({url:'https://example.com/insight-journal/atlas/north-america/agriculture/'+query,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true}});
- const html=await readFile('dist/atlas/north-america/agriculture/index.html','utf8');
+async function setup(query='',noWebGL=false,page='agriculture'){
+ const window=new Window({url:`https://example.com/insight-journal/atlas/north-america/${page}/`+query,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true}});
+ const html=await readFile(`dist/atlas/north-america/${page}/index.html`,'utf8');
  window.document.body.innerHTML=html.replace(/<script(?![^>]*application\/json)[\s\S]*?<\/script>/g,'');
  const frame=window.document.querySelector('[data-map-frame]');Object.defineProperty(frame,'clientWidth',{value:800});Object.defineProperty(frame,'clientHeight',{value:480});
  frame.getBoundingClientRect=()=>({left:0,top:0,right:800,bottom:480,width:800,height:480});
@@ -73,11 +73,11 @@ test('関係の直開き・履歴・詳細リンクと、WebGL失敗後の正確
  }finally{await window.happyDOM.close();}
 });
 
-test('静的HTMLで3関係・5収支・全品目の本文と26リンク・全用途の元値を読める',async()=>{
+test('静的HTMLで3関係・5収支・全品目の本文と比較リンク・全用途の元値を読める',async()=>{
  const html=await readFile('dist/atlas/north-america/agriculture/index.html','utf8');
  const window=new Window();window.document.body.innerHTML=html;
  try{
-  const d=window.document;assert.equal(d.querySelectorAll('[data-relation-item]').length,3);assert.equal(d.querySelectorAll('[data-supply-use]').length,5);assert.equal(d.querySelectorAll('[data-agri-insight-link]').length,26);
+  const d=window.document;assert.equal(d.querySelectorAll('[data-relation-item]').length,3);assert.equal(d.querySelectorAll('[data-supply-use]').length,5);assert.equal(d.querySelectorAll('[data-agri-insight-link]').length,30);
   assert.equal(d.querySelectorAll('.agri-reading-sources').length,11);
   assert.ok(d.querySelectorAll('[data-reading-emphasis]').length>=18);
   assert.equal(d.querySelectorAll('[data-agri-link-product="hogs"],[data-agri-link-product="broilers"],[data-agri-link-product="layers"]').length,0);
@@ -163,7 +163,7 @@ for(const noWebGL of [false,true])test(`とうもろこしは本文内から比�
  try{
   await waitFor(()=>q('.agri-corn-river-label').textContent==='ミシシッピ川','river label');
   assert.ok(q('.agri-insight-overlay.is-corn-river .agri-target-line').getAttribute('d').length>10);
-  assert.equal(q('[data-editorial-product="corn"]').querySelectorAll('[data-agri-insight-link]').length,5);
+  assert.equal(q('.corn-story-index').querySelectorAll('[data-corn-story-link]').length,4);
   assert.equal(q('[data-editorial-product="corn"]').querySelectorAll('.agri-editorial-use>strong').length,3);
   q('[data-editorial-product="corn"] [data-agri-insight-link="central-lowland"]').click();
   await waitFor(()=>root.dataset.field==='natural','inline destination');
@@ -173,6 +173,45 @@ for(const noWebGL of [false,true])test(`とうもろこしは本文内から比�
   q('[data-crop-select="soybean"]').click();
   await waitFor(()=>q('.agri-corn-river-label').textContent==='','river cleared');
   assert.equal(q('.agri-insight-overlay').classList.contains('is-corn-river'),false);
+ }finally{await window.happyDOM.close();}
+});
+
+for(const noWebGL of [false,true])test(`4項目は1クリックで解説と比較を開き、URL再読込・戻る・他品目選択で復元する（代替図=${noWebGL}）`,async()=>{
+ const {window,q,root}=await setup('?agriReading=product:corn&agriProduct=corn&agriLayers=crops&milkBasis=skim',noWebGL);
+ try{
+  assert.ok(root.hasAttribute('data-corn-index'));
+  for(const id of ['central-lowland','corn-pivot-water','corn-hogs','grain-rivers']){
+   const key=q(`[data-corn-story-link="${id}"] strong`).textContent;
+   q(`[data-corn-story-link="${id}"]`).click();
+   await waitFor(()=>root.dataset.cornStory===id,'story '+id);
+   assert.equal(q('#agri-insight-heading').textContent,key);
+   assert.ok(q('.corn-story-explanation').textContent.length>100);
+   assert.equal(root.hasAttribute('data-corn-index'),false);
+   if(id==='corn-hogs'){
+    assert.equal(root.dataset.field,'agriculture');
+    assert.equal(q('[data-agri-layer][value="livestock"]').checked,true);
+    if(noWebGL)assert.equal(q('[data-fallback-relation="corn-soy-hogs"]').hasAttribute('hidden'),false);
+    else assert.ok(q('.atlas-livestock-marker.is-related'));
+   }
+   if(id==='central-lowland'||id==='corn-pivot-water')assert.ok(q('.agri-insight-photo img').src.endsWith(id==='central-lowland'?'corn-harvest-usda.jpg':'center-pivot-aerial-nasa.jpg'));
+   const destination=new URL(window.location.href);
+   const direct=await setup(destination.search,noWebGL,destination.pathname.split('/').filter(Boolean).at(-1));
+   try{assert.equal(direct.root.dataset.cornStory,id);assert.equal(direct.q('#agri-insight-heading').textContent,key);}finally{await direct.window.happyDOM.close();}
+   q('.agri-insight-back').click();
+   assert.ok(root.hasAttribute('data-corn-index'));assert.equal(root.dataset.cornStory,'');
+   assert.equal(q('[data-stat-panel="corn"]').hidden,false);
+   assert.equal(q('[data-agri-layer][value="livestock"]').checked,false);
+   assert.equal(new URL(window.location.href).searchParams.get('milkBasis'),'skim');
+  }
+  q('[data-corn-story-link="corn-hogs"]').click();
+  window.history.back();
+  await waitFor(()=>root.hasAttribute('data-corn-index'),'browser back');
+  window.history.forward();
+  await waitFor(()=>root.dataset.cornStory==='corn-hogs','browser forward');
+  q('[data-crop-select="soybean"]').click();
+  assert.equal(root.dataset.cornStory,'');assert.equal(root.hasAttribute('data-corn-index'),false);
+  assert.equal(q('.agri-insight-context').hidden,true);
+  if(!noWebGL)assert.equal(window.__mapCount,1);
  }finally{await window.happyDOM.close();}
 });
 

@@ -31,6 +31,7 @@ function validReturn(source:URL,base:string,product:ProductId):URL|null{
 }
 export function targetMatches(url:URL,item:AgricultureInsight){
  const t=item.target,p=url.searchParams,part=url.pathname.split('/').filter(Boolean).at(-1);
+ if(t.page==='agriculture')return (part==='agriculture'||part==='review'&&p.get('field')==='agriculture')&&p.get('agriReading')==='relation:'+t.relation;
  if(part!==t.page&&!(part==='review'&&p.get('field')===(t.page==='nature'?'natural':'industry')))return false;
  if(t.page==='industry')return p.get('sector')===t.sector&&p.get('subsector')===t.subsector&&p.get('industryRegion')===t.industryRegion;
  if((p.get('env')??'climate')!==t.env)return false;
@@ -53,12 +54,16 @@ export function agricultureInsightUrl(source:URL,base:string,product:ProductId,i
  const origin=canonicalReturn(source,base,product),t=item.target,url=new URL(base+t.page+'/',source),p=url.searchParams;
  for(const key of ['env','waterView','basin','sector','subsector','industryRegion'] as const){const value=t[key];if(value&&value!=='rivers')p.set(key,value);}
  if(t.features?.length)p.set('natureFeature',t.features[0]);
+ if(t.page==='agriculture'){p.set('agriReading','relation:'+t.relation);p.set('relation',t.relation!);p.set('stats','corn');p.set('agriLayers','crops,livestock');}
  p.set('agriProduct',product);p.set('agriInsight',id);p.set('agriReturn',origin.searchParams.toString());
  return url;
 }
 /** Shared state writers own their fields; comparison context must survive their defaults. */
 export function normalizeInsightNavigation(next:URL,source:URL,base:string,field:string):URL{
  const context=readInsightContext(source,base),n=new URL(next),p=n.searchParams;
+ if(field==='agriculture'&&context?.insight?.target.page==='agriculture'&&targetMatches(n,context.insight)){
+  p.set('agriProduct',context.product);p.set('agriInsight',context.insight.id);p.set('agriReturn',context.back.searchParams.toString());return n;
+ }
  if(field!=='natural'&&field!=='industry'){
   p.delete('agriInsight');p.delete('agriReturn');
   if(field==='agriculture'){for(const k of ['waterView','precipBand','basin'])p.delete(k);}

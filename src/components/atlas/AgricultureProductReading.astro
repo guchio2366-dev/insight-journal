@@ -1,6 +1,6 @@
 
 ---
-import {cornReading} from '../../data/atlas/corn-reading';
+import {cornReading,cornStories} from '../../data/atlas/corn-reading';
 import {withBase} from '../../lib/urls';
 import {productParagraphs,productSources,productInsightOrder,insightFor,targetLabel} from '../../data/atlas/agriculture-insights';
 import {agricultureInsightUrl} from '../../lib/atlas-agriculture-insight-state';
@@ -22,6 +22,10 @@ const terms=new Set(emphasis[product]),pattern=new RegExp('('+emphasis[product].
 const links=productInsightOrder[product].map(id=>insightFor(id)!);
 ---
 {product==='corn'?<div class="agri-editorial-reading" data-editorial-product="corn">
+  <nav class="corn-story-index" aria-label="とうもろこしを読む4つの視点">
+    {cornStories.map((story,index)=>{const u=agricultureInsightUrl(origin,base,product,story.id);return <a href={u.pathname+u.search} data-agri-insight-link={story.id} data-agri-link-product={product} data-corn-story-link={story.id}><small>{String(index+1).padStart(2,'0')}　{story.label}</small><strong>{story.key}</strong><span aria-hidden="true">→</span></a>;})}
+  </nav>
+  <details class="corn-full-reading"><summary>全体の解説を読む</summary>
   <p class="agri-editorial-takeaway"><strong data-reading-emphasis>{cornReading.takeaway}</strong></p>
   {cornReading.sections.map(section=><section class="agri-editorial-section">
     <h3>{section.heading}</h3>
@@ -32,6 +36,7 @@ const links=productInsightOrder[product].map(id=>insightFor(id)!);
       {section.actions.map(action=>{const u=action.insight?agricultureInsightUrl(origin,base,product,action.insight):null;return <a href={u?u.pathname+u.search:action.href} data-agri-insight-link={action.insight} data-agri-link-product={action.insight?product:undefined}>{action.label}<span aria-hidden="true"> →</span></a>;})}
     </nav>
   </section>)}
+  </details>
 </div>:productParagraphs[product].map(text=><p>{text.split(pattern).map(part=>terms.has(part)?<strong data-reading-emphasis>{part}</strong>:part)}</p>)}
 {product!=='corn'&&links.length>0&&<nav class="agri-insight-links" aria-label="地図で確かめる">
   <strong>地図で確かめる</strong>
