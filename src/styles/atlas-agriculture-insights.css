@@ -29,6 +29,8 @@
 .atlas-explorer[data-corn-story]:not([data-corn-story=""]) .agri-insight-context{margin:0;background:#fbfaf5}
 .atlas-explorer[data-corn-story]:not([data-corn-story=""]) .agri-insight-photo img{max-height:230px;width:100%;object-fit:contain}
 .atlas-explorer[data-corn-story]:not([data-corn-story=""]) .agri-insight-context .agri-insight-takeaway{font-size:14px;font-weight:500;border:0;padding:0}
+/* In the export story, keep the nearby aquifer name from covering the port. */
+.atlas-explorer[data-corn-story="grain-rivers"] [data-nature-label="water:Mississippi River Valley Alluvial Aquifer"]{display:none}
 /* Keep the four entry points beside the map on ordinary PC screens, too. */
 @media(min-width:1200px){
  .atlas-desktop-shell:has(.atlas-explorer[data-corn-index]),.atlas-desktop-shell:has(.atlas-explorer[data-corn-story]:not([data-corn-story=""])){grid-template-columns:clamp(220px,19vw,340px) minmax(0,1fr);gap:16px}
