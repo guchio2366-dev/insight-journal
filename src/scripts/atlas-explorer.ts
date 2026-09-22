@@ -526,8 +526,13 @@ export async function startAtlas() {
     insights?.prepareNavigation(url);
     history.pushState({},'',url);
     restoreFromUrl();
-    const heading=el<HTMLElement>(field==='agriculture'?'#agri-reading-heading':link.hasAttribute('data-forest-compare')?'#forest-comparison-heading':link.hasAttribute('data-nature-reading-link')?(water.active()?'#water-reading-title':natureFeature?'#nature-feature-heading':natureMode==='climate'?'#city-climate-heading':'#nature-map-panel'):'#agri-insight-heading');
+    const heading=el<HTMLElement>(root.dataset.cornStory?'#agri-insight-heading':field==='agriculture'?'#agri-reading-heading':link.hasAttribute('data-forest-compare')?'#forest-comparison-heading':link.hasAttribute('data-nature-reading-link')?(water.active()?'#water-reading-title':natureFeature?'#nature-feature-heading':natureMode==='climate'?'#city-climate-heading':'#nature-map-panel'):'#agri-insight-heading');
     if(heading){heading.tabIndex=-1;heading.focus({preventScroll:true});}
+    if(link.matches('[data-corn-story-link],.agri-insight-back')){
+      const body=el('[data-agri-reading-body]');body.scrollTop=0;
+      const panel=root.dataset.cornStory?el('.agri-insight-context'):el('[data-agri-reading-panel]');
+      if(panel&&innerWidth<1200)panel.scrollIntoView({block:'start',behavior:'instant'});
+    }
   });
 
 

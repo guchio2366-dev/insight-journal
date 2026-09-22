@@ -1,5 +1,12 @@
 /** Editorial pilot: key sentences explain why the mapped distribution exists. */
 type ReadingSection={heading:string;subtitle?:string;key:string;body:string;paragraphs?:{label:string;text:string}[];actions:{label:string;insight?:string;href?:string}[]};
+/** Four entry points; the full explanation belongs to the selected destination. */
+export const cornStories = [
+  {id:'central-lowland',label:'土地と機械',key:'平らで肥沃な土地が、大型機械を使ったトウモロコシの大規模栽培を支える。',summary:'平らな土地は大型機械での作業に適し、肥沃な土壌は作物の生育を支えます。',section:0},
+  {id:'corn-pivot-water',label:'雨と地下水',key:'雨の少ない西寄りの産地では、地下水を使う灌漑が雨の不足を補う。',summary:'灌漑は、畑に必要な水を人工的に供給すること。西寄りの産地の一部では、帯水層からくみ上げた地下水を使います。',section:1},
+  {id:'corn-hogs',label:'作物と養豚',key:'トウモロコシは豚の飼料に。中西部では、その産地と養豚地域が重なる。',summary:'飼料の産地に近ければ、大量に必要な餌を集めやすくなります。アイオワ州などでは、とうもろこし・大豆の生産と養豚が結び付いています。',section:2},
+  {id:'grain-rivers',label:'産地と輸出',key:'ミシシッピ川の水運が、内陸のトウモロコシ産地を輸出港、そして世界へつなぐ。',summary:'トラックや鉄道で集めた穀物を、川の水運も使ってメキシコ湾岸の港へ。大量の穀物をまとめて運ぶ仕組みが、内陸の産地を海外市場と結びます。',section:3},
+] as const;
 export const cornReading:{takeaway:string;sections:ReadingSection[]} = {
   takeaway:'中西部の肥沃な土地と暖かく湿潤な夏が大規模生産を支え、収穫物は飼料・燃料・輸出へつながる。',
   sections:[
