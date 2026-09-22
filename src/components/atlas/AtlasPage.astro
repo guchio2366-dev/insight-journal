@@ -1,12 +1,17 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AtlasExplorer from './AtlasExplorer.astro';
+import AtlasNewsRail from './AtlasNewsRail.astro';
 import type { ExplorerField } from '../../data/atlas/explorer';
 import '../../styles/atlas-explorer.css';
 import '../../styles/atlas-industry.css';
 import '../../styles/atlas-population.css';
+import '../../styles/atlas-desktop.css';
 const { initialField='overview' } = Astro.props as {initialField?:ExplorerField};
 ---
 <BaseLayout title="北米地図" description="自然環境・農林業・主要産業・人口を同じ地図で読み比べる。" compactAtlas noindex={Astro.url.pathname.includes('/review/')}>
-  <AtlasExplorer {initialField} />
+  <div class="atlas-desktop-shell" data-atlas-shell>
+    <AtlasNewsRail />
+    <AtlasExplorer {initialField} />
+  </div>
 </BaseLayout>
