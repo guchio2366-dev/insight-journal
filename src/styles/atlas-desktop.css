@@ -1,0 +1,44 @@
+/* Shared desktop frame only: individual field content and data stay unchanged. */
+.atlas-desktop-shell{padding:12px 20px 36px;max-width:2048px;margin-inline:auto;display:grid;grid-template-columns:300px minmax(0,1fr);gap:20px;align-items:start}
+.atlas-desktop-shell .atlas-explorer{max-width:none;width:100%;min-width:0;padding:0}
+.atlas-news{position:sticky;top:12px;height:calc(100dvh - 72px);min-height:320px;display:flex;flex-direction:column;background:#fffefa;border:1px solid #deded5;border-radius:12px;overflow:hidden;color:#253b3d}
+.atlas-news-header{padding:22px 20px 18px;border-bottom:1px solid #e4e4db}
+.atlas-news-header>p{margin:0 0 8px;font-size:10px;font-weight:700;letter-spacing:.16em;color:#637a72}
+.atlas-news-header h2{margin:0 0 7px;font-size:22px;letter-spacing:.03em}
+.atlas-news-header>span{font-size:12px;color:#677574}
+.atlas-news-list,.atlas-news-reader{overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;min-height:0;flex:1;padding:0 20px 24px}
+.atlas-news [hidden]{display:none!important}
+.atlas-news-count{display:flex;justify-content:space-between;padding:17px 0;font-size:12px;color:#687b74;border-bottom:1px solid #e7e7df}
+.atlas-news-empty{padding:36px 0;color:#687874;font-size:13px;line-height:1.9}
+.atlas-news-empty>span{display:grid;place-items:center;border:1px solid #d4dfd7;border-radius:50%;width:40px;height:40px;font-size:22px;color:#759282}
+.atlas-news-empty h3{font-size:15px;color:#344d43;margin-top:20px}
+.atlas-news-card{padding:22px 0;border-bottom:1px solid #e7e7df}
+.atlas-news-meta{display:flex;gap:8px;flex-wrap:wrap;font-size:10px;color:#667a71}
+.atlas-news-card h3{font-size:17px;line-height:1.65;margin:10px 0}
+.atlas-news-card h3 a{color:inherit;text-decoration:none}
+.atlas-news-card p{font-size:13px;line-height:1.9;color:#5c6b68;margin:0 0 14px}
+.atlas-news-read{display:flex;justify-content:space-between;font-size:12px;color:#356347}
+.atlas-news-footer{border-top:1px solid #e7e7df;padding:12px 14px;font-size:10px;color:#65756e;background:#f6f7f1}
+.atlas-news-reader{padding-top:18px;line-height:1.9;font-size:14px;overflow-wrap:anywhere}
+.atlas-news-reader button{border:1px solid #ccd9cf;background:#f2f6ef;border-radius:6px;padding:8px 10px;color:#2d5841;cursor:pointer;text-align:left;font:inherit;font-size:12px}
+.atlas-news-reader time{display:block;font-size:11px;color:#65756e;margin-top:22px}
+.atlas-news-reader h2{font-size:23px;line-height:1.6;margin:10px 0}
+.atlas-news-prose{margin-top:28px}.atlas-news-prose h2{font-size:20px}.atlas-news-prose h3{font-size:17px}.atlas-news-prose img{max-width:100%;height:auto}.atlas-news-prose table{display:block;overflow-x:auto}
+.atlas-news :focus-visible{outline:2px solid #42694e;outline-offset:3px}
+@media(min-width:1200px){
+  .atlas-layout{--max:2008px}
+  .atlas-layout .header-inner{max-width:2008px;width:calc(100% - 40px)}
+  .atlas-desktop-shell{grid-template-columns:clamp(300px,23vw,380px) minmax(0,1fr)}
+  .atlas-desktop-shell.is-reading-news{grid-template-columns:clamp(380px,32vw,520px) minmax(0,1fr)}
+  .atlas-desktop-shell .atlas-explorer .atlas-primary-grid{grid-template-columns:minmax(0,1.8fr) minmax(280px,1fr);gap:16px}
+  .atlas-desktop-shell .atlas-explorer .atlas-map-frame{min-height:300px;max-height:640px;aspect-ratio:1.55}
+  .atlas-desktop-shell .atlas-explorer .atlas-map-column{min-width:0;top:12px}
+  .atlas-desktop-shell .atlas-primary-grid>*{min-width:0}
+}
+/* Basic safe fallback, without redesigning the tablet/mobile layouts. */
+@media(max-width:1199px){
+  .atlas-desktop-shell{display:flex;flex-direction:column;padding:12px 16px 28px}
+  .atlas-news{position:relative;top:auto;width:100%;height:300px;min-height:0}
+  .atlas-desktop-shell.is-reading-news .atlas-news{height:70dvh}
+  .atlas-news-header{padding:12px 16px}.atlas-news-header h2{font-size:18px}.atlas-news-header>p{display:none}
+}
