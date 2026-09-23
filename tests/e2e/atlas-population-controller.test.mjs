@@ -41,6 +41,29 @@ async function setup(query='',fail=false){
 const pick=(window,id)=>{window.__map.queryRenderedFeatures=()=>[{properties:{id}}];window.__map.events.click[0]({point:{x:1,y:1}});};
 const change=(window,element,value)=>{element.value=value;element.dispatchEvent(new window.Event('change'));};
 
+test('concentration colors reveal white-plurality counties, multiple city groups and county composition',async()=>{
+ const {window,q,requests}=await setup('?popView=ethnicity');
+ try{
+  const map=window.__map;await waitFor(()=>map.getLayer('population-fill'),'concentration map');
+  const source=map.getSource('population'),moves=map.cameraChanges,count=requests.length;
+  assert.equal(source.data.features.find(f=>f.properties.id==='county:53033').properties.color,'#8870b5');
+  const bay=q('.population-city-markers [data-pop-city="san-francisco"]');
+  assert.ok(bay.querySelectorAll('.population-ethnicity-dots i').length>=2);
+  assert.match(bay.getAttribute('aria-label'),/ヒスパニック.*アジア系/);
+  bay.click();assert.equal(q('[data-pop-reading-body] tbody').children.length,8);
+  assert.match(q('[data-pop-reading-body]').textContent,/9郡を人口で合算/);
+  assert.match(q('[data-pop-reading-body]').textContent,/Santa Clara County/);
+  pick(window,'county:06037');assert.equal(q('[data-pop-selected]').hidden,false);
+  assert.match(q('[data-pop-selected-title]').textContent,/Los Angeles County/);
+  assert.match(q('[data-pop-selected-value]').textContent,/ヒスパニック.*アジア系/);
+  assert.equal(q('[data-pop-selected-composition] tbody').children.length,8);
+  assert.equal(new URL(window.location.href).searchParams.get('popGeo'),'county:06037');
+  assert.equal(map.getSource('population'),source);assert.equal(map.cameraChanges,moves);assert.equal(requests.length,count);
+  q('[data-pop-view="distribution"]').click();await waitFor(()=>q('[data-layer-caption]').textContent.includes('人口密度'),'density');
+  assert.equal(q('.population-ethnicity-dots'),null);assert.equal(q('[data-pop-ethnicity-method]').hidden,true);assert.equal(q('[data-pop-selected]').hidden,true);
+ }finally{await window.happyDOM.close();}
+});
+
 test('legend changes only the reading, preserving all map colors, camera and requests',async()=>{
  const {window,q,requests}=await setup('?popView=ethnicity');
  try{
@@ -103,7 +126,9 @@ test('history restores ethnicity reading on unchanged categorical geography',asy
   window.history.replaceState({},'',url);window.dispatchEvent(new window.PopStateEvent('popstate'));
   await waitFor(()=>q('[data-pop-overview-title]').textContent.includes('黒人')&&window.__map.getLayer('population-fill'),'restored group');
   assert.equal(JSON.stringify(window.__map.getSource('population').data),before);
-  assert.equal(q('[data-pop-selected]').hidden,true);
+  assert.equal(q('[data-pop-selected]').hidden,false);
+  assert.match(q('[data-pop-selected-title]').textContent,/New York County/);
+  assert.equal(q('[data-pop-selected-composition] tbody').children.length,8);
  }finally{await window.happyDOM.close();}
 });
 test('vote focus zooms the shared map and has a truthful Alaska limitation',async()=>{
@@ -123,7 +148,7 @@ test('vote focus zooms the shared map and has a truthful Alaska limitation',asyn
 test('no-WebGL fallbacks use the categorical map and focused vote extent',async()=>{
  const {window,q,requests}=await setup('',true);
  try{
-  q('[data-pop-view="ethnicity"]').click();await waitFor(()=>q('[data-fallback-image]').src.includes('ethnicity-dominant.webp'),'categorical fallback');
+  q('[data-pop-view="ethnicity"]').click();await waitFor(()=>q('[data-fallback-image]').src.includes('ethnicity-concentration.webp'),'categorical fallback');
   const src=q('[data-fallback-image]').src;q('[data-pop-group="white"]').click();assert.equal(q('[data-fallback-image]').src,src);
   q('[data-pop-view="vote"]').click();await waitFor(()=>q('[data-fallback-image]').src.endsWith('vote.webp'),'vote fallback');
   change(window,q('[data-pop-vote-state]'),'33');assert.match(q('[data-fallback-image]').src,/vote-state-33.webp/);

@@ -1,4 +1,4 @@
-export const ethnicityColors=['#376a85','#ad6657','#ccac53','#579792','#897bac','#96977d','#bb87a1','#767e83'] as const;
+export const ethnicityColors=['#d3d6d4','#218b83','#e28b40','#8870b5','#bd983b','#4f91ba','#bd788e','#927563'] as const;
 /** Eight mutually exclusive ACS estimates. A tie, missing estimate or no residents has no unique winner. */
 export function dominantCategory(counts:unknown):number|null{
  if(!Array.isArray(counts)||counts.length!==8)return null;
