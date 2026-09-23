@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {containedMapBox,projectNatureFallback,unprojectNatureFallback,layoutNatureLabels,boxesOverlap,leaderEnd} from '../../src/lib/atlas-nature-labels.ts';
+import {populationFallbackBox,populationFallbackExtent,projectPopulationFallback} from '../../src/lib/atlas-population-projection.ts';
 const cities=JSON.parse(readFileSync('public/assets/atlas/nature-v1/climate-cities.json'));
 const landforms=[['ロッキー山脈',[-109,42]],['アパラチア山脈',[-81,37]],['カスケード山脈',[-121,45.5]],['シエラネバダ山脈',[-119,37]],['コロラド高原',[-110.5,36]],['グレートベースン',[-116.4,39]],['グレートプレーンズ',[-101,40]],['中央低地',[-91,42]],['大西洋岸平野',[-79,34]]];
 const cityInputs=cities.map(c=>[c.nameJa,[c.longitude,c.latitude]]);
@@ -14,6 +15,15 @@ function verify(inputs,placed,bounds,obstacles){
   for(const other of obstacles)assert.equal(boxesOverlap(p,other,0),false,`${p.id} covers map control`);
  }
 }
+test('population city labels with color dots stay individually tappable at 320px and 390px page widths',()=>{
+ for(const width of [270,340])for(const fallback of [false,true]){
+  const height=440,bounds={left:0,top:0,right:width,bottom:height-40},extent=populationFallbackExtent();
+  const plot=populationFallbackBox({left:0,top:0,right:width,bottom:height-60},extent);
+  const obstacles=fallback?[{left:0,top:height-60,right:width,bottom:height}]:[{left:width-45,top:26,right:width-5,bottom:170},{left:0,top:height-30,right:width,bottom:height}];
+  const inputs=cityInputs.map(([id,coordinate])=>({id,anchor:projectPopulationFallback(coordinate,plot,extent),width:[...id].reduce((n,c)=>n+(/[A-Za-z.]/.test(c)?7:11),14),height:44}));
+  verify(inputs,layoutNatureLabels(inputs,bounds,obstacles),bounds,obstacles);
+ }
+});
 test('四つの端末幅に相当する全国表示で12都市・9地形を間引かず、名前同士・操作と重ねない',()=>{
  // The page has a reading column at desktop widths; test actual map-width ranges.
  for(const [width,aspect,labelHeight] of [[358,1.5,24],[788,1.5,24],[742,1.65,44],[820,1.65,44]])for(const fallback of [false,true])for(const entries of [cityInputs,landforms]){

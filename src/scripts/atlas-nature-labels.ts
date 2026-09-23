@@ -60,7 +60,9 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
     const points=inputs.map(({anchor})=>({left:anchor.x-6,right:anchor.x+6,top:anchor.y-6,bottom:anchor.y+6}));
     const firstCodes=codeInputs.filter((item,index,all)=>['Csa','Csb','Am','Aw'].includes(item.code)&&all.findIndex(other=>other.code===item.code)===index);
     const reserved=bounds.right-bounds.left>=500?layoutClimateCodes(firstCodes,bounds,[...obstacles,...points]):[];
-    const layoutBounds=callbacks.mode()==='water'?{left:0,top:0,right:frame.clientWidth,bottom:frame.clientHeight-40}:bounds;
+    // Population labels can use the letterbox margins while leaders remain
+    // anchored to the correctly projected county map, including on small phones.
+    const layoutBounds=['water','population'].includes(callbacks.mode())?{left:0,top:0,right:frame.clientWidth,bottom:frame.clientHeight-40}:bounds;
     const placed=layoutNatureLabels(inputs,layoutBounds,[...obstacles,...reserved]);
     for(const {entry,button,line,dot} of nodes){
       const box=placed.find(item=>item.id===entry.id);button.hidden=!box;line.style.display=dot.style.display=box?'':'none';
