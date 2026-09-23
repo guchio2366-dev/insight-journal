@@ -31,6 +31,7 @@ export function createPopulationController(root:HTMLElement,base:string,options:
  const project=()=>options.map()&&!dataFailed&&el('[data-fallback]').hidden?(coordinate:readonly number[])=>options.map().project(coordinate):null;
  const cityLabels=createNatureLabels(root,options.cities.map(city=>({id:city.id,name:city.nameJa,coordinate:[city.longitude,city.latitude],mode:'population'})),{
   holder:el('[data-pop-city-markers]'),attribute:'data-pop-city',controls:'population-city-reading',active:options.active,mode:()=>'population',project,
+  obstacleSelector:'.atlas-fallback:not([hidden]) > p',
   fallbackBox:box=>populationFallbackBox(box,extent()),fallbackProject:(coordinate,box)=>projectPopulationFallback(coordinate,box,extent()),
   select:entry=>choose('city',entry.id),placed:()=>{},
  });
@@ -38,7 +39,7 @@ export function createPopulationController(root:HTMLElement,base:string,options:
   holder:el('[data-pop-religion-markers]'),attribute:'data-pop-religion-marker',controls:'population-city-reading',
   active:()=>options.active()&&state.view==='religion',mode:()=>'population',project,
   fallbackBox:box=>populationFallbackBox(box,extent()),fallbackProject:(coordinate,box)=>projectPopulationFallback(coordinate,box,extent()),
-  obstacleSelector:'.population-city-markers .atlas-nature-label:not([hidden])',select:entry=>choose('story',entry.id),placed:()=>{},
+  obstacleSelector:'.population-city-markers .atlas-nature-label:not([hidden]),.atlas-fallback:not([hidden]) > p',select:entry=>choose('story',entry.id),placed:()=>{},
  });
  for(const story of religionStories)root.querySelector('[data-pop-religion-marker="'+story.id+'"]')?.setAttribute('aria-label',story.number+' '+story.title+'の解説を開く');
  function schedule(){cityLabels.schedule();storyLabels.schedule();}
