@@ -1,7 +1,8 @@
 import {populationViews,ethnicities,densityColors,voteColors,missingColor} from '../data/atlas/population';
 import {readPopulationState,writePopulationState} from '../lib/atlas-population-state';
 import {populationColor,density} from '../lib/atlas-population-data';
-import {dominantCategory,ethnicityColors} from '../lib/atlas-population-dominant';
+import {ethnicityColors} from '../lib/atlas-population-dominant';
+import {ethnicityComposition,ethnicityFill,ethnicityMissingColor,ethnicityMethod,ethnicityUncertainty,ethnicityCityCounties,cityEthnicityCounts} from '../lib/atlas-population-concentration';
 import {createPopulationLoader} from '../lib/atlas-population-loader';
 import {populationCityProfiles,populationCityTakeaways,populationOverviews,settlementStories} from '../data/atlas/population-reading';
 import {populationCityReligionProfiles,religionStories,religionDominantCategories,religionDominantReading,religionTakeaways} from '../data/atlas/population-religion-reading';
@@ -16,6 +17,7 @@ export function createPopulationController(root:HTMLElement,base:string,options:
  const loader=createPopulationLoader(base),cities=new Map(options.cities.map(c=>[c.id,c]));
  let state=readPopulationState(new URL(location.href)),generation=0,appliedMap:any,dataFailed=false,countyData:any,rows:any[]=[],values=new Map<string,any>();
  let readingTrail:Array<{city:string;ethnicity:string;religion:string;story:string}>=[];
+ let ethnicityNational:unknown;
  const number=(n:number)=>n.toLocaleString('ja-JP',{maximumFractionDigits:1});
  const focusState=()=>populationVoteStates.find(s=>s.id===state.voteState);
  const extent=()=>populationFallbackExtent(state.view==='vote'&&focusState()?.bounds?focusState()!.bounds!.map(b=>[...b]):undefined,state.view==='religion' ? .1 : 0);
@@ -40,6 +42,34 @@ export function createPopulationController(root:HTMLElement,base:string,options:
  });
  for(const story of religionStories)root.querySelector('[data-pop-religion-marker="'+story.id+'"]')?.setAttribute('aria-label',story.number+' '+story.title+'の解説を開く');
  function schedule(){cityLabels.schedule();storyLabels.schedule();}
+ function cityDots(){
+  root.querySelectorAll<HTMLElement>('[data-pop-city]').forEach(button=>{
+   button.querySelector('.population-ethnicity-dots')?.remove();button.removeAttribute('aria-label');
+   if(state.view!=='ethnicity')return;
+   const composition=ethnicityComposition(cityEthnicityCounts(button.dataset.popCity!,values),ethnicityNational);
+   if(!composition)return;
+   const dots=document.createElement('span');dots.className='population-ethnicity-dots';dots.setAttribute('aria-hidden','true');
+   for(const i of composition.qualified){const dot=document.createElement('i');dot.style.background=ethnicityColors[i];dots.append(dot);}
+   if(dots.childElementCount)button.append(dots);
+   button.setAttribute('aria-label',cities.get(button.dataset.popCity!)!.nameJa+'の郡別集計：'+(composition.qualified.map(i=>ethnicities[i][1]).join('、')||'着色基準に達する区分なし')+'。構成比と解説を開く');
+  });schedule();
+ }
+ function compositionTable(host:HTMLElement,counts:unknown,caption:string){
+  const composition=ethnicityComposition(counts,ethnicityNational);
+  if(!composition){note(host,'比較可能な人口構成は未取得です。');return;}
+  const table=document.createElement('table');table.className='population-composition';
+  const label=document.createElement('caption');label.textContent=caption;table.append(label);
+  const head=document.createElement('thead'),header=document.createElement('tr');
+  for(const text of ['区分','構成比','全米']){const th=document.createElement('th');th.scope='col';th.textContent=text;header.append(th);}head.append(header);table.append(head);
+  const body=document.createElement('tbody');
+  ethnicities.forEach(([id,name],i)=>{
+   const row=document.createElement('tr'),title=document.createElement('th'),local=document.createElement('td'),nation=document.createElement('td'),dot=document.createElement('i');
+   row.dataset.ethnicity=id;title.scope='row';dot.style.background=ethnicityColors[i];dot.setAttribute('aria-hidden','true');title.append(dot,document.createTextNode(name));
+   if(composition.qualified.includes(i)){const mark=document.createElement('small');mark.textContent='集積基準に該当';title.append(mark);}
+   local.textContent=number(composition.shares[i]*100)+'%';nation.textContent=number(composition.nationalShares[i]*100)+'%';row.append(title,local,nation);body.append(row);
+  });table.append(body);host.append(table);
+  note(host,'全住民を分母とする重複のない8区分。ヒスパニック以外は非ヒスパニック。割合は丸めています。');
+ }
  function paragraph(host:HTMLElement,title:string,text:string){
   const section=document.createElement('section'),h=document.createElement('h3'),p=document.createElement('p');
   section.className='population-reading-section';h.textContent=title;p.textContent=text;section.append(h,p);host.append(section);
@@ -68,7 +98,7 @@ export function createPopulationController(root:HTMLElement,base:string,options:
     action(body,'五大湖のデトロイトで仕事と移住を読む','city','detroit');
    }else if(group==='hispanic'){action(body,'南西部のロサンゼルスで移住を読む','city','los-angeles');}
    else if(group==='white'){action(body,'五大湖のシカゴで産業を読む','city','chicago');}
-   detail(body,'色は郡内で最大の区分で、過半数とは限りません。最大でない集団も各地に暮らしています。都市圏内の細かな分布は未収録です。ヒスパニック以外は非ヒスパニックの区分です。地域の構成だけから個人の職業や投票先は分かりません。');
+   detail(body,ethnicityMethod+' '+ethnicityUncertainty+' 地域の構成だけから個人の職業や投票先は分かりません。');
   }else if(religionGroup){
    const item=religionDominantReading[religionGroup],label=religionDominantCategories.find(x=>x[0]===religionGroup)![1];
    title=label;text=item.region;key=religionTakeaways[religionGroup];
@@ -91,9 +121,12 @@ export function createPopulationController(root:HTMLElement,base:string,options:
     paragraph(body,'移住と宗教文化｜共同体が根付く背景',religion.text.slice(religion.text.indexOf('。')+1)||religion.text);source(body,religion.sourceLabel,religion.source);
     for(const id of religion.stories){const related=religionStories.find(s=>s.id===id)!;action(body,related.number+' '+related.title+'を読む','story',id);}
    }else if(state.view==='ethnicity'){
+    const ids=ethnicityCityCounties[city!.id]??[];
+    compositionTable(body,cityEthnicityCounts(city!.id,values),'都市を含む郡の人口構成｜ACS 2020–2024');
+    note(body,'集計範囲：'+ids.map(id=>rows.find(row=>row.id==='county:'+id)?.name??id).join('、')+'。'+(ids.length>1?ids.length+'郡を人口で合算。':'')+'市域・都市圏の範囲とは異なる場合があります。');
     const industrial=['chicago','detroit'].includes(city!.id),southwest=city!.id==='los-angeles';
     key=industrial?'工業都市への移住と住宅差別の歴史を合わせると、仕事と住まいの分布を結び付けて考えられます。':southwest?ethnicityTakeaways.hispanic:'都市の周辺を郡単位で見比べ、居住の分布と雇用の特徴を分けて読みます。';
-    paragraph(body,'人の移動と住まい｜郡の色から歴史へ',industrial?'南部からの大移動では、工場の求人が移住先を形づくりました。一方、移住先の住宅差別は住める地域を制約しました。人々の居住地は仕事の場所だけでなく、住まいを得られる条件にも左右されます。':southwest?ethnicityReading.hispanic:'都市名の周りにある郡の色を見比べます。色は最大区分だけを示すため、同じ色の郡でも人口構成が同じとは限りません。市内の地区別分布はこの地図には収録していません。');
+    paragraph(body,'人の移動と住まい｜郡の色から歴史へ',industrial?'南部からの大移動では、工場の求人が移住先を形づくりました。一方、移住先の住宅差別は住める地域を制約しました。人々の居住地は仕事の場所だけでなく、住まいを得られる条件にも左右されます。':southwest?ethnicityReading.hispanic:'都市名の周りにある郡の色を見比べます。地色は着色基準に該当する区分のうち割合が最大のもの、都市の色点は該当する全区分を示します。市内の地区別分布はこの地図には収録していません。');
     if(industrial){source(body,'米国国立公文書館：大移動と住宅差別','https://www.archives.gov/research/african-americans/migrations/great-migration');action(body,'黒人の分布を南部からたどる','group','black');}
     if(southwest)action(body,'ヒスパニックの定住史を読む','group','hispanic');
    }else if(state.view==='vote'){
@@ -106,7 +139,7 @@ export function createPopulationController(root:HTMLElement,base:string,options:
     paragraph(body,'都市圏｜働く場所と暮らす場所を合わせて読む','都市圏は、中心となる都市と、通勤などで結び付く周辺を合わせた地域です。左の都市名の周りで、人口密度が高い郡のまとまりを確認します。郊外は一般に中心都市の外に広がる住宅地などを指しますが、郡境がその境界になるわけではありません。');
     const other=city!.id==='detroit'?'seattle':'detroit';action(body,cities.get(other)!.nameJa+'と仕事の違いを比べる','city',other);
    }
-   detail(body,'職種割合は市域の住民構成ではなく、周辺を含む都市圏の雇用です。郡の平均密度や最大区分から、市内の地区別分布・通勤経路・個人の職業や投票先は分かりません。');
+   detail(body,'職種割合は市域の住民構成ではなく、周辺を含む都市圏の雇用です。郡の平均密度や人口構成から、市内の地区別分布・通勤経路・個人の職業や投票先は分かりません。'+(state.view==='ethnicity'?ethnicityUncertainty:''));
   }else if(vote){
    title=vote.name+'の投票分布';key=vote.id==='02'?'アラスカは郡と選挙結果の地理単位を合わせられず、この地図では比較できません。':'都市を含む郡の票数と周辺の得票率差を比べると、州の中の違いが見えてきます。';text='2024年大統領選。現在の支持率や2026年選挙の接戦評価とは別です。';
    if(vote.id==='02'){paragraph(body,'アラスカの扱い','現在の郡別選挙データには、アラスカの地理単位に一致する結果を収録していません。左は参考として全米本土を表示しています。');}
@@ -125,7 +158,7 @@ export function createPopulationController(root:HTMLElement,base:string,options:
    if(state.view==='ethnicity'){
     action(body,'黒人の大移動と工業都市のつながりを読む','group','black');
     action(body,'ヒスパニックの分布と国境の歴史を読む','group','hispanic');
-    detail(body,'最大は過半数とは限りません。英系・独系など祖先の出身地は別の分類で、白人の色から区別できません。人種区分は身体的特徴や能力を説明するものではありません。');
+    detail(body,ethnicityMethod+' 英系・独系など祖先の出身地は別の分類です。人種区分は身体的特徴や能力を説明するものではありません。');
    }
   }
   if(readingTrail.length){
@@ -161,9 +194,9 @@ export function createPopulationController(root:HTMLElement,base:string,options:
   if(state.view==='ethnicity'){
    for(const [i,[id,label]] of [['','全国の解説'],...ethnicities].entries()){
     const b=document.createElement('button');b.type='button';b.dataset.popGroup=id;b.setAttribute('aria-controls','population-city-reading');b.setAttribute('aria-pressed',String(state.ethnicity===id));
-    if(i){const icon=document.createElement('i');icon.style.background=ethnicityColors[i-1];b.append(icon);}b.append(document.createTextNode(label));host.append(b);
+    if(i>1){const icon=document.createElement('i');icon.style.background=ethnicityColors[i-1];b.append(icon);}b.append(document.createTextNode(label));host.append(b);
    }
-   const note=document.createElement('span');note.textContent='灰色：未取得・同率最大・人口0';host.append(note);return;
+   for(const [color,label] of [[ethnicityColors[0],'灰色：着色基準に達しない郡（主に白人が最多）'],[ethnicityMissingColor,'濃灰色：欠測・人口0']]){const note=document.createElement('span'),icon=document.createElement('i');icon.style.background=color;note.append(icon,document.createTextNode(label));host.append(note);}return;
   }
   if(state.view==='religion'){
    for(const [i,[id,label]] of [['','全国の解説'],...religionDominantCategories].entries()){
@@ -181,17 +214,25 @@ export function createPopulationController(root:HTMLElement,base:string,options:
   el<HTMLImageElement>('[data-fallback-livestock]').hidden=true;
   if(options.map()&&!dataFailed)return;
   const vote=state.view==='vote'&&focusState()?.bounds?'-state-'+state.voteState:'';
-  const name=state.view==='ethnicity'?'ethnicity-dominant':state.view==='religion'?'religion-dominant':state.view==='vote'?'vote'+vote:'density';
-  const image=el<HTMLImageElement>('[data-fallback-image]');image.src=base+name+'.webp';image.alt=state.view==='ethnicity'?'郡ごとに最大の人種・民族区分を示す分布図。色は凡例と対応します。':state.view==='religion'?'宗教団体が把握したadherentsについて、郡ごとの最大グループを示す分布図。色は凡例と対応します。':populationViews.find(v=>v[0]===state.view)![1]+'の代替図。';
+  const name=state.view==='ethnicity'?'ethnicity-concentration':state.view==='religion'?'religion-dominant':state.view==='vote'?'vote'+vote:'density';
+  const image=el<HTMLImageElement>('[data-fallback-image]');image.src=base+name+'.webp';image.alt=state.view==='ethnicity'?'灰色を背景に、人種・民族の特徴的な集積を郡別に示す分布図。着色基準と各色は凡例に記載しています。':state.view==='religion'?'宗教団体が把握したadherentsについて、郡ごとの最大グループを示す分布図。色は凡例と対応します。':populationViews.find(v=>v[0]===state.view)![1]+'の代替図。';
   el<HTMLAnchorElement>('[data-fallback-full]').href=image.src;el('.atlas-fallback-map').setAttribute('aria-label',image.alt);
  }
  function selected(){
-  const row=state.view==='vote'?rows.find(r=>r.id===state.geo):undefined,v=row&&values.get(row.id);
+  const row=['vote','ethnicity'].includes(state.view)?rows.find(r=>r.id===state.geo):undefined,v=row&&values.get(row.id);
+  const composition=el('[data-pop-selected-composition]');composition.replaceChildren();
   el('[data-pop-selected]').hidden=!row;
   if(row){
    el('[data-pop-selected-title]').textContent=row.name+' — '+(countyData?.states[row.state]??'');
+   if(state.view==='ethnicity'){
+    const result=ethnicityComposition(v?.counts,ethnicityNational);
+    el('[data-pop-selected-value]').textContent=result?'集積基準に該当：'+(result.qualified.map(i=>ethnicities[i][1]).join('、')||'なし（灰色）'):'比較可能な人口構成は未取得です。';
+    el('[data-pop-selected-note]').textContent='地色は該当する区分のうち割合が最大のものです。'+ethnicityUncertainty;
+    if(result)compositionTable(composition,v.counts,'郡の人口構成｜ACS 2020–2024');
+   }else{
    el('[data-pop-selected-value]').textContent=v?.total>0?'共和党 − 民主党：'+number((v.r-v.d)/v.total*100)+' ポイント':'比較可能な結果は未収録です。';
    el('[data-pop-selected-note]').textContent=v?.total>0?'共和党 '+number(v.r)+' 票 ／ 民主党 '+number(v.d)+' 票 ／ その他 '+number(v.other)+' 票。分母 '+number(v.total)+' 票（2024年）。':v?.reason??'地理単位と得票の対応を確認できていません。';
+   }
   }
   if(appliedMap===options.map()&&appliedMap?.getLayer('population-selected'))appliedMap.setFilter('population-selected',['==',['get','id'],row?state.geo:'']);
  }
@@ -203,30 +244,32 @@ export function createPopulationController(root:HTMLElement,base:string,options:
   root.querySelectorAll<HTMLElement>('[data-pop-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.popView===state.view)));
   root.querySelectorAll<HTMLElement>('[data-pop-filter]').forEach(n=>n.hidden=n.dataset.popFilter!==state.view);
   el<HTMLSelectElement>('[data-pop-vote-state]').value=state.voteState;
-  release();dataFailed=false;rows=[];values.clear();selected();legend();reading();fallback();
+  el('[data-pop-ethnicity-method]').hidden=state.view!=='ethnicity';
+  release();dataFailed=false;rows=[];values.clear();ethnicityNational=undefined;cityDots();selected();legend();reading();fallback();
   el('[data-pop-status]').textContent='データを読み込んでいます…';el('[data-pop-retry]').hidden=true;
   const current=()=>ticket===generation&&options.active()&&root.isConnected;
   try{
    const religion=state.view==='religion';
    const [counties,data]=religion?await Promise.all([loader.get('religion-counties-2020.geo'),loader.get('religion-dominant')]):await Promise.all([loader.get('counties'),state.view==='ethnicity'?loader.get('ethnicity'):state.view==='vote'?loader.get('votes'):loader.get('counties')]);
    if(!current())return;countyData=religion?undefined:counties;rows=religion?data.rows:counties.rows;values=new Map(data.rows.map((r:any)=>[r.id,r]));
-   const unit=state.view==='distribution'?'人口密度（人／km²）':state.view==='ethnicity'?'郡内で最大の人種・民族区分（過半数とは限りません）':religion?'郡内で最大の宗教グループ（adherents、過半数とは限りません）':'共和党 − 民主党（ポイント）';
+   if(state.view==='ethnicity')ethnicityNational=data.national;cityDots();
+   const unit=state.view==='distribution'?'人口密度（人／km²）':state.view==='ethnicity'?'人種・民族の特徴的な集積（郡別）':religion?'郡内で最大の宗教グループ（adherents、過半数とは限りません）':'共和党 − 民主党（ポイント）';
    el('[data-layer-caption]').textContent=unit;
-   el('[data-pop-map-note]').textContent=religion?'宗教団体が把握したadherentsの最大グループ。過半数や住民全体の構成ではありません。番号は地域解説の参照点です。':unit+'。面積の大きさは人数・票数の大きさを意味しません。';
-   el('[data-pop-status]').textContent=rows.length.toLocaleString()+' 郡のデータ。'+(state.view==='ethnicity'?'ACS 2020–2024。都市圏内の詳細分布は準備中です。':religion?'2020 U.S. Religion Census。報告なし3郡。':'');
+   el('[data-pop-map-note]').textContent=religion?'宗教団体が把握したadherentsの最大グループ。過半数や住民全体の構成ではありません。番号は地域解説の参照点です。':state.view==='ethnicity'?'白人以外の区分が20%以上、または5%以上かつ全米割合の1.5倍以上の郡を着色。都市の色点は該当する全区分です。都市名を押すと構成比を確認できます。面積や点の大きさは人数を表しません。':unit+'。面積の大きさは人数・票数の大きさを意味しません。';
+   el('[data-pop-status]').textContent=rows.length.toLocaleString()+' 郡のデータ。'+(state.view==='ethnicity'?'ACS 2020–2024。地図は米国本土。':religion?'2020 U.S. Religion Census。報告なし3郡。':'');
    selected();reading();
    const map=options.map();if(!map){fallback();return true;}
    const geometry=religion?counties:await loader.get('counties.geo');if(!current()||map!==options.map())return;
    const byId=new Map(rows.map(r=>[r.id,r]));
    const features=geometry.features.map((f:any)=>{
-    const row=byId.get(f.properties.id),v=values.get(f.properties.id),winner=dominantCategory(v?.counts);
-    const color=state.view==='ethnicity'?(winner===null?missingColor:ethnicityColors[winner]):religion?(religionDominantColors[v?.category]??missingColor):populationColor(state.view==='distribution'?(row?density(row):null):v?.total>0?(v.r-v.d)/v.total*100:null,state.view);
+    const row=byId.get(f.properties.id),v=values.get(f.properties.id);
+    const color=state.view==='ethnicity'?ethnicityFill(v?.counts,ethnicityNational):religion?(religionDominantColors[v?.category]??missingColor):populationColor(state.view==='distribution'?(row?density(row):null):v?.total>0?(v.r-v.d)/v.total*100:null,state.view);
     return {...f,properties:{...f.properties,color}};
    });
    map.addSource('population',{type:'geojson',data:{type:'FeatureCollection',features}});appliedMap=map;
    map.addLayer({id:'population-fill',type:'fill',source:'population',paint:{'fill-color':['get','color'],'fill-opacity':.95}},'state-lines');
    map.addLayer({id:'population-lines',type:'line',source:'population',paint:{'line-color':'#637c7c','line-width':.3,'line-opacity':.4}},'state-lines');
-   map.addLayer({id:'population-selected',type:'line',source:'population',filter:['==',['get','id'],state.view==='vote'?state.geo:''],paint:{'line-color':'#162e40','line-width':2}});
+   map.addLayer({id:'population-selected',type:'line',source:'population',filter:['==',['get','id'],['vote','ethnicity'].includes(state.view)?state.geo:''],paint:{'line-color':'#162e40','line-width':2}});
    el('[data-fallback]').hidden=true;el('[data-map-surface]').hidden=false;el('.atlas-map-tools').hidden=false;root.dataset.renderState='ready';if(state.view==='vote'&&focusState()?.bounds&&!new URL(location.href).searchParams.has('z'))options.fit(focusState()!.bounds);schedule();return true;
   }catch(error){
    if(!current())return;release();dataFailed=true;el('[data-fallback]').hidden=false;el('[data-map-surface]').hidden=true;el('.atlas-map-tools').hidden=true;root.dataset.renderState='fallback';fallback();
@@ -254,7 +297,7 @@ export function createPopulationController(root:HTMLElement,base:string,options:
  return {render,fallback,renderMarkers:schedule,unavailable(){appliedMap=undefined;fallback();},write:(url:URL)=>writePopulationState(url,state),
  restore(){state=readPopulationState(new URL(location.href));},
  click(point:any){const map=options.map();if(appliedMap!==map||!map?.getLayer('population-fill'))return;const feature=map.queryRenderedFeatures(point,{layers:['population-fill']})[0];if(!feature)return;const id=feature.properties.id;
-  if(state.view==='ethnicity'){const winner=dominantCategory(values.get(id)?.counts);if(winner!==null)choose('group',ethnicities[winner][0]);}
+  if(state.view==='ethnicity'){state.geo=id;selected();options.changed(true);el('[data-atlas-live]').textContent=el('[data-pop-selected-title]').textContent+'の人口構成を表示しました。';}
   else if(state.view==='religion'){const category=values.get(id)?.category;if(category&&category!=='unreported')choose('religion',category);}
   else if(state.view==='vote'){state.geo=id;selected();options.changed(true);}
  },national(){state.metro='national';reset();}};
