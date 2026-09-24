@@ -3,6 +3,7 @@
 import {cornReading,cornStories} from '../../data/atlas/corn-reading';
 import {withBase} from '../../lib/urls';
 import {productParagraphs,productSources,productInsightOrder,insightFor,targetLabel} from '../../data/atlas/agriculture-insights';
+import {productStories} from '../../data/atlas/agriculture-stories';
 import {agricultureInsightUrl} from '../../lib/atlas-agriculture-insight-state';
 import type {ProductId} from '../../lib/atlas-agriculture-detail-state';
 interface Props {product:ProductId}
@@ -13,7 +14,7 @@ origin.searchParams.set('agriReading','product:'+product);
 origin.searchParams.set('agriProduct',product);
 const emphasis:Record<ProductId,readonly string[]>={
 corn:['中央低地','センターピボット','ミシシッピ川'],soybean:['輪作','大豆ミール','ミシシッピ川水系'],
-wheat:['春小麦','冬小麦','ステップ気候'],cotton:['ハイプレーンズ帯水層','フロリダン帯水層系'],
+wheat:['春小麦','冬小麦','グレートプレーンズ'],cotton:['ハイプレーンズ帯水層','フロリダン帯水層系'],
 rice:['沖積帯水層','サクラメント川','シャスタ湖'],specialty:['セントラルヴァレー','地下水','流域'],
 beef:['放牧','肥育','飼料作物の灌漑'],dairy:['集荷・冷却・加工','乳製品加工','飼料生産'],
 hogs:['エネルギー源','たんぱく源','生産の仕組み'],broilers:['とうもろこし','大豆ミール','契約農場'],layers:['集荷','包装','輸送']
@@ -22,10 +23,11 @@ const terms=new Set(emphasis[product]),pattern=new RegExp('('+emphasis[product].
 const links=productInsightOrder[product].map(id=>insightFor(id)!);
 ---
 {product==='corn'?<div class="agri-editorial-reading" data-editorial-product="corn">
-  <nav class="corn-story-index" aria-label="とうもろこしを読む4つの視点">
-    {cornStories.map((story,index)=>{const u=agricultureInsightUrl(origin,base,product,story.id);return <a href={u.pathname+u.search} data-agri-insight-link={story.id} data-agri-link-product={product} data-corn-story-link={story.id}><small>{String(index+1).padStart(2,'0')}　{story.label}</small><strong>{story.key}</strong><span aria-hidden="true">→</span></a>;})}
+  <nav class="corn-story-index" aria-label="とうもろこしを読む5つの視点">
+    {cornStories.map((story,index)=>{const u=agricultureInsightUrl(origin,base,product,story.id);return <a href={u.pathname+u.search} data-agri-insight-link={story.id} data-agri-link-product={product} data-corn-story-link={story.id}><small>{String(index+1).padStart(2,'0')}　{story.label}</small><strong>{story.key}</strong><em>{story.map} <span aria-hidden="true">→</span></em></a>;})}
   </nav>
   <details class="corn-full-reading"><summary>全体の解説を読む</summary>
+  <div class="corn-full-content">
   <p class="agri-editorial-takeaway"><strong data-reading-emphasis>{cornReading.takeaway}</strong></p>
   {cornReading.sections.map(section=><section class="agri-editorial-section">
     <h3>{section.heading}</h3>
@@ -36,10 +38,16 @@ const links=productInsightOrder[product].map(id=>insightFor(id)!);
       {section.actions.map(action=>{const u=action.insight?agricultureInsightUrl(origin,base,product,action.insight):null;return <a href={u?u.pathname+u.search:action.href} data-agri-insight-link={action.insight} data-agri-link-product={action.insight?product:undefined}>{action.label}<span aria-hidden="true"> →</span></a>;})}
     </nav>
   </section>)}
+  <details class="agri-reading-sources"><summary>解説の出典</summary><ul>{productSources[product].map(([label,url])=><li><a href={url} target="_blank" rel="noopener noreferrer">{label}</a></li>)}</ul></details>
+  </div>
   </details>
-</div>:productParagraphs[product].map(text=><p>{text.split(pattern).map(part=>terms.has(part)?<strong data-reading-emphasis>{part}</strong>:part)}</p>)}
-{product!=='corn'&&links.length>0&&<nav class="agri-insight-links" aria-label="地図で確かめる">
-  <strong>地図で確かめる</strong>
-  <div>{links.map(item=>{const u=agricultureInsightUrl(origin,base,product,item.id);return <a href={u.pathname+u.search} data-agri-insight-link={item.id} data-agri-link-product={product}><span>{item.label}</span><small>{targetLabel(item.target)}</small></a>;})}</div>
-</nav>}
-<details class="agri-reading-sources"><summary>解説の出典</summary><ul>{productSources[product].map(([label,url])=><li><a href={url} target="_blank" rel="noopener noreferrer">{label}</a></li>)}</ul></details>
+</div>:<div class="agri-product-story">
+  <nav class="agri-insight-links" aria-label={`${product}の分布を読む`}>
+    <strong>地図で確かめる</strong>
+    <div>{links.map(item=>{const u=agricultureInsightUrl(origin,base,product,item.id),story=productStories[product]?.find(s=>s.id===item.id);return <a href={u.pathname+u.search} data-agri-insight-link={item.id} data-agri-link-product={product}><strong>{story?.key??item.label}</strong><small>{story?.map??targetLabel(item.target)} →</small><span class="agri-story-summary">{story?.summary}</span></a>;})}</div>
+  </nav>
+  <details class="corn-full-reading"><summary>全体の解説を読む</summary><div class="corn-full-content">
+    {productParagraphs[product].map(text=><p>{text.split(pattern).map(part=>terms.has(part)?<strong data-reading-emphasis>{part}</strong>:part)}</p>)}
+    <details class="agri-reading-sources"><summary>解説の出典</summary><ul>{productSources[product].map(([label,url])=><li><a href={url} target="_blank" rel="noopener noreferrer">{label}</a></li>)}</ul></details>
+  </div></details>
+</div>}

@@ -333,7 +333,7 @@ for(const fallback of [false,true])test(`農業インサイトの往復は地図
   assert.equal(root.dataset.field,'natural');
   assert.equal(root.dataset.selectedProduct,'rice');
   await waitFor(()=>q('.agri-product-line').getAttribute('d')?.length>0&&q('.agri-target-line').getAttribute('d')?.length>0,'comparison outlines');
-  assert.equal(q('.agri-insight-back').textContent,'稲作の解説に戻る');
+  assert.equal(q('.agri-insight-back').textContent,'← 稲作の項目に戻る');
   const destination=window.location.href;
   q('.agri-insight-back').click();
   assert.equal(root.dataset.field,'agriculture');

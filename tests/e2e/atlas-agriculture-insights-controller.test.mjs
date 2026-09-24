@@ -73,14 +73,18 @@ test('関係の直開き・履歴・詳細リンクと、WebGL失敗後の正確
  }finally{await window.happyDOM.close();}
 });
 
-test('静的HTMLで3関係・5収支・全品目の本文と比較リンク・全用途の元値を読める',async()=>{
+test('静的HTMLで7関係・5収支・全品目の本文と比較リンク・全用途の元値を読める',async()=>{
  const html=await readFile('dist/atlas/north-america/agriculture/index.html','utf8');
  const window=new Window();window.document.body.innerHTML=html;
  try{
-  const d=window.document;assert.equal(d.querySelectorAll('[data-relation-item]').length,3);assert.equal(d.querySelectorAll('[data-supply-use]').length,5);assert.equal(d.querySelectorAll('[data-agri-insight-link]').length,30);
+  const d=window.document;assert.equal(d.querySelectorAll('[data-relation-item]').length,7);assert.equal(d.querySelectorAll('[data-supply-use]').length,5);assert.equal(d.querySelectorAll('[data-agri-insight-link]').length,31);
   assert.equal(d.querySelectorAll('.agri-reading-sources').length,11);
   assert.ok(d.querySelectorAll('[data-reading-emphasis]').length>=18);
-  assert.equal(d.querySelectorAll('[data-agri-link-product="hogs"],[data-agri-link-product="broilers"],[data-agri-link-product="layers"]').length,0);
+  assert.equal(d.querySelectorAll('[data-agri-link-product="hogs"],[data-agri-link-product="broilers"],[data-agri-link-product="layers"]').length,6);
+  assert.equal(d.querySelectorAll('[data-corn-story-link]').length,5);
+  assert.match(d.querySelector('[data-agri-link-product="wheat"][data-agri-insight-link="interior-rainfall"]').textContent,/500mm線/);
+  assert.equal(d.querySelector('[data-agri-link-product="wheat"][data-agri-insight-link="wheat-steppe"]'),null);
+  assert.equal(d.querySelector('[data-agri-link-product="cotton"][data-agri-insight-link="cotton-rainfall"]'),null);
   assert.equal(d.querySelectorAll('[data-stat-panel][hidden]').length,0);
   for(const panel of d.querySelectorAll('[data-supply-use]')){assert.equal(panel.querySelectorAll('.supply-bar').length,2);assert.ok(panel.querySelectorAll('tbody tr').length>=8);assert.ok(panel.querySelector('.supply-imports').textContent.length>35);}
   assert.match(html,/参考：2025暦年/);assert.match(html,/−|未勘定/);
@@ -163,7 +167,7 @@ for(const noWebGL of [false,true])test(`とうもろこしは本文内から比�
  try{
   await waitFor(()=>q('.agri-corn-river-label').textContent==='ミシシッピ川','river label');
   assert.ok(q('.agri-insight-overlay.is-corn-river .agri-target-line').getAttribute('d').length>10);
-  assert.equal(q('.corn-story-index').querySelectorAll('[data-corn-story-link]').length,4);
+  assert.equal(q('.corn-story-index').querySelectorAll('[data-corn-story-link]').length,5);
   assert.equal(q('[data-editorial-product="corn"]').querySelectorAll('.agri-editorial-use>strong').length,3);
   q('[data-editorial-product="corn"] [data-agri-insight-link="central-lowland"]').click();
   await waitFor(()=>root.dataset.field==='natural','inline destination');
@@ -176,11 +180,11 @@ for(const noWebGL of [false,true])test(`とうもろこしは本文内から比�
  }finally{await window.happyDOM.close();}
 });
 
-for(const noWebGL of [false,true])test(`4項目は1クリックで解説と比較を開き、URL再読込・戻る・他品目選択で復元する（代替図=${noWebGL}）`,async()=>{
+for(const noWebGL of [false,true])test(`5項目は1クリックで解説と比較を開き、URL再読込・戻る・他品目選択で復元する（代替図=${noWebGL}）`,async()=>{
  const {window,q,root}=await setup('?agriReading=product:corn&agriProduct=corn&agriLayers=crops&milkBasis=skim',noWebGL);
  try{
   assert.ok(root.hasAttribute('data-corn-index'));
-  for(const id of ['central-lowland','corn-pivot-water','corn-hogs','grain-rivers']){
+  for(const id of ['central-lowland','interior-rainfall','corn-pivot-water','corn-hogs','grain-rivers']){
    const key=q(`[data-corn-story-link="${id}"] strong`).textContent;
    q(`[data-corn-story-link="${id}"]`).click();
    await waitFor(()=>root.dataset.cornStory===id,'story '+id);
@@ -212,6 +216,26 @@ for(const noWebGL of [false,true])test(`4項目は1クリックで解説と比�
   assert.equal(root.dataset.cornStory,'');assert.equal(root.hasAttribute('data-corn-index'),false);
   assert.equal(q('.agri-insight-context').hidden,true);
   if(!noWebGL)assert.equal(window.__mapCount,1);
+ }finally{await window.happyDOM.close();}
+});
+
+test('小麦・綿花・肉牛・養豚・鶏のキーセンテンスから対応する比較図へ進み、解説へ戻れる',async()=>{
+ const {window,q,root}=await setup('?agriReading=product:wheat&agriProduct=wheat',true);
+ try{
+  for(const [product,id,field] of [['wheat','great-plains','natural'],['wheat','interior-rainfall','natural'],['wheat','plains-elevation','natural'],['cotton','cotton-aquifers','natural'],['beef','plains-wheat-beef','agriculture'],['dairy','dairy-climate','natural'],['hogs','hog-carolina','agriculture'],['broilers','broiler-southeast','agriculture'],['layers','poultry-compare','agriculture']]){
+   if(root.dataset.agriReading!=='product'||new URL(window.location.href).searchParams.get('agriProduct')!==product){
+    q(`[data-crop-key] a[href="#${['beef','dairy','hogs','broilers','layers'].includes(product)?'livestock':'crop'}-${product}"]`).click();
+   }
+   q(`[data-agri-link-product="${product}"][data-agri-insight-link="${id}"]`).click();
+   await waitFor(()=>root.dataset.productStory===id,product+':'+id);
+   assert.equal(root.dataset.field,field);
+   assert.match(q('.agri-story-map-label').textContent,/重ねる|比べる/);
+   assert.ok(q('.corn-story-explanation').textContent.length>75);
+   if(id==='plains-wheat-beef')assert.match(q('.corn-story-explanation').textContent,/小麦の栽培域と北部・南部/);
+   q('.agri-insight-back').click();
+   assert.equal(root.dataset.productStory,'');
+   assert.equal(root.dataset.field,'agriculture');
+  }
  }finally{await window.happyDOM.close();}
 });
 
