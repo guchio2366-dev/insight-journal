@@ -295,7 +295,7 @@ export function createPopulationController(root:HTMLElement,base:string,options:
   state.insight=b.dataset.popInsight!;state.view=state.insight==='vote'?'vote':state.insight==='settlement'?'ethnicity':'distribution';state.city='';state.story='';state.ethnicity='';state.religion='';state.geo='';state.voteState='';void render();options.changed(true);
   el('[data-population-controls]').scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
  }));
- return {render,fallback,renderMarkers:schedule,unavailable(){appliedMap=undefined;fallback();},write:(url:URL)=>writePopulationState(url,state),
+ return {render,fallback,renderMarkers:schedule,state:()=>state,load:(name:string)=>loader.get(name),unavailable(){appliedMap=undefined;fallback();},write:(url:URL)=>writePopulationState(url,state),
  restore(){state=readPopulationState(new URL(location.href));},
  click(point:any){const map=options.map();if(appliedMap!==map||!map?.getLayer('population-fill'))return;const feature=map.queryRenderedFeatures(point,{layers:['population-fill']})[0];if(!feature)return;const id=feature.properties.id;
   if(state.view==='ethnicity'){state.geo=id;selected();options.changed(true);el('[data-atlas-live]').textContent=el('[data-pop-selected-title]').textContent+'の人口構成を表示しました。';}

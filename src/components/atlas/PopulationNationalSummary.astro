@@ -1,8 +1,10 @@
 ---
 import {populationOverviews} from '../../data/atlas/population-reading';
+import PopulationInsights from './PopulationInsights.astro';
 ---
 <aside class="atlas-national population-national" aria-label="人口の分布と選択した場所の解説">
  <div class="population-reading-heading"><p class="atlas-eyebrow">UNITED STATES · 人口</p><button type="button" data-pop-reading-reset hidden>全国の解説へ</button></div>
+ <PopulationInsights />
  <section id="population-city-reading" data-pop-reading tabindex="-1" aria-label="選択した項目の解説">
   <h2 data-pop-overview-title>{populationOverviews.distribution.title}</h2>
   <p class="population-key"><strong data-pop-key>{populationOverviews.distribution.text}</strong></p>
