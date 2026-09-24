@@ -11,6 +11,16 @@ field explanations on the right, no changes to statistics or public content.
 Flexible: rail width (300–380px; 380–520px while reading), map/reading ratio,
 spacing. Below 1200px the rail stacks safely above the existing workspace.
 
+### Laptop correction (nature, industry, population)
+
+At 1200–1599 CSS pixels these three fields retain the same news / map / reading
+columns as the monitor layout. Their idle rail uses `clamp(220px,19vw,340px)`;
+the map/reading grid uses `1.65fr / minmax(320px,1fr)` with a 14px column gap.
+Nature's climate overview stays below the map, with its selected explanation
+spanning both rows on the right. News-reader expansion is unchanged.
+Agriculture's existing fallback and story overrides are deliberately untouched,
+as are the layouts below 1200px and at/above 1600px.
+
 ## Content and interaction contract
 
 - Build the list from approved public `articles` only. Match North America or
@@ -33,3 +43,6 @@ honest empty state, reader/focus/close behavior, and explicit camera URL changes
 Synthetic article fixtures exist only in tests and are not published.
 Desktop browser review additionally checks rail/map/reading geometry, horizontal
 overflow, independent scroll, expanded reading, and tab switching.
+`tests/e2e/atlas-desktop-layout.test.mjs` checks the built CSS cascade at
+390, 1199, 1200, 1280, 1366, 1440, 1599, 1600, and 1920 CSS pixels. These are
+style-contract checks, not browser geometry or GPU-rendering tests.

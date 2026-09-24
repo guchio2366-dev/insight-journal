@@ -35,11 +35,14 @@
   .atlas-desktop-shell .atlas-explorer .atlas-map-column{min-width:0;top:12px}
   .atlas-desktop-shell .atlas-primary-grid>*{min-width:0}
 }
-/* Basic safe fallback, without redesigning the tablet/mobile layouts. */
+/* Keep the existing fallback/story overrides for other fields unchanged. */
 @media(min-width:1200px) and (max-width:1599px){
-  .atlas-desktop-shell .atlas-explorer[data-field] .atlas-primary-grid{grid-template-columns:minmax(0,1fr)}
-  .atlas-desktop-shell .atlas-explorer[data-field] .atlas-primary-grid>*{grid-column:1;grid-row:auto}
-  .atlas-desktop-shell .atlas-explorer[data-field] .atlas-map-column{position:static}
+  .atlas-desktop-shell .atlas-explorer:is([data-field=agriculture],[data-field=overview]) .atlas-primary-grid{grid-template-columns:minmax(0,1fr)}
+  .atlas-desktop-shell .atlas-explorer:is([data-field=agriculture],[data-field=overview]) .atlas-primary-grid>*{grid-column:1;grid-row:auto}
+  .atlas-desktop-shell .atlas-explorer:is([data-field=agriculture],[data-field=overview]) .atlas-map-column{position:static}
+  /* Laptop screens retain the monitor's news / map / explanation arrangement. */
+  .atlas-desktop-shell:not(.is-reading-news):has(.atlas-explorer:is([data-field=natural],[data-field=industry],[data-field=population])){grid-template-columns:clamp(220px,19vw,340px) minmax(0,1fr);gap:16px}
+  .atlas-desktop-shell .atlas-explorer:is([data-field=natural],[data-field=industry],[data-field=population]) .atlas-primary-grid{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);column-gap:14px}
 }
 @media(max-width:1199px){
   .atlas-desktop-shell{display:flex;flex-direction:column;padding:12px 16px 28px}
