@@ -3,6 +3,11 @@
 .agri-insight-links>strong{display:block;font-size:13px;margin-bottom:6px}
 .agri-insight-links>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
 .agri-insight-links a{display:flex;flex-direction:column;justify-content:center;min-height:44px;padding:5px 8px;border:1px solid #b6c7c1;border-radius:4px;color:#254e53;text-decoration:none;background:#f1f5ef;box-sizing:border-box;font-size:13px;line-height:1.45}
+.agri-product-story .agri-insight-links>div{grid-template-columns:minmax(0,1fr)}
+.agri-product-story .agri-insight-links a{gap:3px;padding:8px 10px}
+.agri-product-story .agri-insight-links a>strong{font-size:14px;font-weight:650;line-height:1.45}
+.agri-product-story .agri-insight-links a>small{font-size:11px;color:#315d60}
+.agri-story-summary{font-size:12px;color:#53675b;line-height:1.45}
 .agri-insight-links small{font-size:10px;color:#536b6f}
 .agri-insight-links a:hover{background:#e4ecdf}
 .agri-insight-links a:focus-visible,.agri-insight-back:focus-visible{outline:3px solid #176f89;outline-offset:2px}
@@ -10,25 +15,34 @@
 .agri-reading-sources summary{min-height:44px;align-content:center;cursor:pointer}
 .agri-reading-sources ul{margin:0;padding-left:18px}
 .corn-story-index{display:grid;gap:0;margin:4px 0 8px}
-.corn-story-index a{position:relative;display:grid;gap:4px;min-height:44px;padding:12px 24px 12px 0;border-bottom:1px solid #d4d8cf;color:#294a3b;text-decoration:none}
+.corn-story-index a{position:relative;display:grid;gap:2px;min-height:44px;padding:8px 0;border-bottom:1px solid #d4d8cf;color:#294a3b;text-decoration:none}
 .corn-story-index a:last-child{border-bottom:0}
 .corn-story-index small{font-size:11px;line-height:1.3;color:#627267;letter-spacing:.04em}
 .corn-story-index strong{font-size:14px;line-height:1.6;font-weight:650}
-.corn-story-index a>span{position:absolute;right:2px;top:50%;font-size:18px}
+.corn-story-index a>em{font-size:11px;font-style:normal;color:#315d60;line-height:1.45}
 .corn-story-index a:hover{color:#125535;background:#eef3e9}
 .corn-story-index a:focus-visible{outline:3px solid #176f89;outline-offset:2px}
 .corn-full-reading>summary{font-size:12px!important;color:#52685c}
 .corn-story-explanation p>strong{display:block;margin-bottom:3px}
 .corn-story-evidence{font-size:12px;margin-top:12px}
 .corn-story-evidence>summary{min-height:44px;align-content:center;cursor:pointer}
-.atlas-explorer[data-corn-index] .agri-reading-panel{height:auto}
-.atlas-explorer[data-corn-index] .agri-reading-body{overflow:visible;scrollbar-gutter:auto}
+.atlas-explorer[data-corn-index] .agri-reading-body{min-height:0;flex:1;display:flex;flex-direction:column;overflow:hidden;scrollbar-gutter:auto}
+.atlas-explorer[data-corn-index] [data-agri-reading-content],.atlas-explorer[data-corn-index] .atlas-crop-copy,.atlas-explorer[data-corn-index] .agri-editorial-reading{display:flex;flex-direction:column;min-height:0;flex:1}
+.atlas-explorer[data-corn-index] .corn-story-index{flex:none}
+.atlas-explorer[data-corn-index] .corn-full-reading[open]{display:flex;flex-direction:column;min-height:0;flex:1;overflow:hidden}
+.atlas-explorer[data-corn-index] .corn-full-reading>summary{flex:none}
+.atlas-explorer[data-corn-index] .corn-full-content{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
 .atlas-explorer[data-corn-index] .agri-reading-panel>header{padding-bottom:6px}
 .atlas-explorer[data-corn-index] .agri-reading-panel>header button{min-height:32px}
 .atlas-explorer[data-corn-story]:not([data-corn-story=""]) [data-field-national]>:not(.agri-insight-context){display:none!important}
 .atlas-explorer[data-corn-story]:not([data-corn-story=""]) .agri-insight-context{margin:0;background:#fbfaf5}
 .atlas-explorer[data-corn-story]:not([data-corn-story=""]) .agri-insight-photo img{max-height:230px;width:100%;object-fit:contain}
 .atlas-explorer[data-corn-story]:not([data-corn-story=""]) .agri-insight-context .agri-insight-takeaway{font-size:14px;font-weight:500;border:0;padding:0}
+.atlas-explorer[data-product-story]:not([data-product-story=""]) [data-field-national]>:not(.agri-insight-context){display:none!important}
+.atlas-explorer[data-product-story]:not([data-product-story=""]) .agri-insight-context{margin:0;background:#fbfaf5;display:flex;flex-direction:column;max-height:min(700px,calc(100dvh - 150px));overflow:hidden}
+.atlas-explorer[data-product-story]:not([data-product-story=""]) .agri-insight-context>.agri-insight-back,.atlas-explorer[data-product-story]:not([data-product-story=""]) .agri-insight-context>h2,.atlas-explorer[data-product-story]:not([data-product-story=""]) .agri-insight-context>.agri-insight-takeaway{flex:none}
+.atlas-explorer[data-product-story]:not([data-product-story=""]) .agri-story-detail-scroll{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+.agri-story-map-label{font-weight:700;color:#315d60}
 /* In the export story, keep the nearby aquifer name from covering the port. */
 .atlas-explorer[data-corn-story="grain-rivers"] [data-nature-label="water:Mississippi River Valley Alluvial Aquifer"]{display:none}
 /* Keep the four entry points beside the map on ordinary PC screens, too. */
@@ -38,8 +52,16 @@
  .atlas-desktop-shell .atlas-explorer[data-corn-index] .atlas-primary-grid>.atlas-map-column,.atlas-desktop-shell .atlas-explorer[data-corn-story]:not([data-corn-story=""]) .atlas-primary-grid>.atlas-map-column{grid-column:1;grid-row:1}
  .atlas-desktop-shell .atlas-explorer[data-corn-index] .atlas-primary-grid>[data-field-national],.atlas-desktop-shell .atlas-explorer[data-corn-story]:not([data-corn-story=""]) .atlas-primary-grid>[data-field-national]{grid-column:2;grid-row:1;height:auto}
  .atlas-desktop-shell .atlas-explorer[data-corn-index] .agri-reading-panel{padding:10px 14px}
- .atlas-explorer[data-corn-index] .corn-story-index a{padding-block:10px}
+ .atlas-explorer[data-corn-index] .corn-story-index a{padding-block:5px}
+ .atlas-explorer[data-corn-index] .corn-story-index strong{font-size:13px;line-height:1.4}
+ .atlas-explorer[data-corn-index] .corn-story-index a>em{font-size:10px;line-height:1.3}
+ .atlas-desktop-shell:has(.atlas-explorer[data-product-story]:not([data-product-story=""])){grid-template-columns:clamp(220px,19vw,340px) minmax(0,1fr);gap:16px}
+ .atlas-desktop-shell .atlas-explorer[data-product-story]:not([data-product-story=""]) .atlas-primary-grid{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px;align-items:start}
+ .atlas-desktop-shell .atlas-explorer[data-product-story]:not([data-product-story=""]) .atlas-primary-grid>.atlas-map-column{grid-column:1;grid-row:1}
+ .atlas-desktop-shell .atlas-explorer[data-product-story]:not([data-product-story=""]) .atlas-primary-grid>[data-field-national]{grid-column:2;grid-row:1;height:auto}
 }
+@media(min-width:960px) and (min-height:600px){.atlas-explorer[data-corn-index] .agri-reading-panel{height:var(--agri-map-height,auto)}}
+@media(max-width:959px){.atlas-explorer[data-corn-index] .agri-reading-panel{height:auto}.atlas-explorer[data-corn-index] .agri-reading-body{overflow:visible}.atlas-explorer[data-corn-index] .corn-full-reading[open]{max-height:50dvh}}
 .agri-insight-context{padding:12px 14px;margin-bottom:12px;border:1px solid #a8bbb3;background:#f4f6ef;overflow-wrap:anywhere}
 .agri-insight-context h2{font-size:16px;line-height:1.5;margin:0 0 8px}
 .agri-insight-context p{font-size:13px;line-height:1.7;margin:6px 0}

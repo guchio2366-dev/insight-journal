@@ -7,6 +7,8 @@ import {isProduct} from '../lib/atlas-agriculture-detail-state';
 import {projectNatureFallback} from '../lib/atlas-nature-labels';
 import {livestockKinds,livestockRegions} from '../data/atlas/livestock';
 import {cornReading,cornStories} from '../data/atlas/corn-reading';
+import {productStory} from '../data/atlas/agriculture-stories';
+import {agricultureRelations} from '../data/atlas/agriculture-relations';
 
 type Point={x:number;y:number};
 type Callbacks={
@@ -75,22 +77,24 @@ export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbac
  const evidence=document.createElement('details'),evidenceSummary=document.createElement('summary');evidence.className='corn-story-evidence';evidenceSummary.textContent='地図の読み方・出典';
  evidence.append(evidenceSummary,targets,sourceLinks);
  targets.className='agri-insight-targets';back.className='agri-insight-back';error.setAttribute('role','status');error.className='agri-insight-error';retry.type='button';retry.textContent='強調を再読み込み';retry.hidden=true;
- note.append(back,title,takeaway,photo,explanation,lead,evidence,error,retry);
+ const detailScroll=document.createElement('div');detailScroll.className='agri-story-detail-scroll';
+ detailScroll.append(photo,explanation,lead,evidence,error,retry);
+ note.append(back,title,takeaway,detailScroll);
  let signature='',copySignature='',generation=0,raf=0,crops:any[]=[],selectedTargets:any[]=[],selectedAnimal:string|null=null,maskData:any=null,selectionError='';
  const firstURL=new URL(location.href),firstContext=readInsightContext(firstURL,config.base);
  let preset=firstContext?.insight&&!firstURL.searchParams.has('lng')?firstContext.insight:null;
  function targetKeys(){
-  const s=cb.state(),ctx=(s.field==='natural'||s.field==='industry')?readInsightContext(new URL(location.href),config.base):null;
-  if(s.field==='agriculture'&&s.product==='corn')return ['water:Mississippi'];
+  const s=cb.state(),ctx=readInsightContext(new URL(location.href),config.base);
+  if(s.field==='agriculture')return s.product==='corn'&&ctx?.insight?.target.page!=='agriculture'?['water:Mississippi']:[];
   if(ctx?.insight?.target.isohyets)return [...(ctx.insight.target.features??[]),...ctx.insight.target.isohyets.map(value=>'isohyet:'+value)];
   if(ctx?.insight?.target.features)return [...ctx.insight.target.features];
   if(s.field!=='natural'||(s.mode==='water'&&s.waterView!=='rivers'))return [];
   return s.feature?.startsWith(s.mode+':')?[s.feature]:[];
  }
  function selectedProduct(){
-  const s=cb.state();
-  if(s.field==='agriculture')return readInsightContext(new URL(location.href),config.base)?.insight?.target.page==='agriculture'?'corn':isProduct(s.product)?s.product:null;
-  if(s.field==='natural'||s.field==='industry')return readInsightContext(new URL(location.href),config.base)?.product??null;
+  const s=cb.state(),ctx=readInsightContext(new URL(location.href),config.base);
+  if(s.field==='agriculture')return ctx?.insight?.target.page==='agriculture'?ctx.product:isProduct(s.product)?s.product:null;
+  if(s.field==='natural'||s.field==='industry')return ctx?.product??null;
   return null;
  }
  function point(parent:Element,p:Point,label:string,r=7){
@@ -100,10 +104,10 @@ export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbac
  }
  function paint(){
   raf=0;if(!root.isConnected)return;
-  const s=cb.state(),product=selectedProduct(),ctx=readInsightContext(new URL(location.href),config.base),enabled=s.field==='agriculture'?(selectedAnimal?s.layers.has('livestock'):s.layers.has('crops')):true;
+  const s=cb.state(),product=selectedProduct(),ctx=readInsightContext(new URL(location.href),config.base),relation=agricultureRelations.find(r=>r.id===ctx?.insight?.target.relation),enabled=s.field==='agriculture'?(selectedAnimal?s.layers.has('livestock'):s.layers.has('crops')):true;
   svg.setAttribute('viewBox','0 0 '+frame.clientWidth+' '+frame.clientHeight);
   const live=cb.project(),project=live??((p:readonly number[])=>projectNatureFallback(p,cb.box()));
-  const d=enabled?crops.map(f=>shape(f.geometry,project)).join(''):'';
+  const d=(s.field!=='agriculture'||s.layers.has('crops'))?crops.map(f=>shape(f.geometry,project)).join(''):'';
   const cornRiver=s.field==='agriculture'&&product==='corn'&&ctx?.insight?.id!=='corn-hogs';
   svg.classList.toggle('is-corn-river',cornRiver);
   riverLabel.textContent='';
@@ -126,7 +130,7 @@ export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbac
   targetPoints.replaceChildren();for(const f of selectedTargets){if(f.geometry.type==='Point')point(targetPoints,project(f.geometry.coordinates),'');}
   if(ctx?.product==='corn'&&ctx.insight?.id==='grain-rivers')point(targetPoints,project([-90.1,29.95]),'ニューオーリンズ周辺の輸出港',5);
   animals.replaceChildren();
-  if(enabled&&selectedAnimal&&(!live||s.field!=='agriculture'))for(const region of livestockRegions.filter(r=>r.kindId===selectedAnimal)){
+  if((s.field!=='agriculture'||s.layers.has('livestock'))&&(!live||s.field!=='agriculture'))for(const region of livestockRegions.filter(r=>relation?relation.livestockRegionIds.includes(r.id as never):r.kindId===selectedAnimal)){
    const kind=livestockKinds.find(k=>k.id===selectedAnimal)!;point(animals,project(region.anchor),kind.symbol+' '+region.label,7);
   }
   if(maskData&&s.field==='natural'&&s.mode==='climate'){
@@ -139,13 +143,15 @@ export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbac
   else legend.textContent=selectionError;
   if(ctx?.insight?.id==='corn-hogs')legend.textContent='輪郭：とうもろこし産地／強調した豚の記号：関連する養豚地域'+(selectionError?' · '+selectionError:'');
   if(ctx?.insight?.id==='corn-pivot-water')legend.textContent='破線：とうもろこし産地／実線：帯水層・年降水量500mm線'+(selectionError?' · '+selectionError:'');
+  if(relation)legend.textContent='輪郭：'+(relation.cropIds.length?relation.cropIds.filter(id=>id!=='corn-soybean').map(id=>productNames[id as 'corn'|'soybean'|'wheat']).join('・')+'の栽培域':'作物の強調なし')+'／記号：'+(relation.livestockRegionIds.length?relation.livestockRegionIds.map(id=>livestockRegions.find(r=>r.id===id)?.kindId).filter((id,i,a)=>a.indexOf(id)===i).map(id=>productNames[id as 'beef'|'hogs'|'broilers'|'layers']).join('・')+'の代表地域':'畜産の強調なし')+(selectionError?' · '+selectionError:'');
  }
  function schedule(){if(!raf)raf=requestAnimationFrame(paint);}
  async function loadSelection(key:string,product:string|null,keys:string[]){
   const g=++generation,s=cb.state();crops=[];selectedTargets=[];maskData=null;selectedAnimal=livestockKinds.some(k=>k.id===product)?product:null;selectionError='';schedule();
   const source=cb.features();let failures=0;
   const jobs:Promise<void>[]=[];
-  if(product&&!selectedAnimal)jobs.push((async()=>{const all=source.crops.length?source.crops:(await loadAgricultureGeometry(config.assetBase)).features;const ids=product==='corn'||product==='soybean'?[product,'corn-soybean']:[product];if(g===generation)crops=all.filter((f:any)=>ids.includes(f.properties.id));})());
+  const relation=agricultureRelations.find(r=>r.id===readInsightContext(new URL(location.href),config.base)?.insight?.target.relation);
+  if(product&&(!selectedAnimal||relation?.cropIds.length))jobs.push((async()=>{const all=source.crops.length?source.crops:(await loadAgricultureGeometry(config.assetBase)).features;const ids=relation?.cropIds??(product==='corn'||product==='soybean'?[product,'corn-soybean']:[product]);if(g===generation)crops=all.filter((f:any)=>(ids as readonly string[]).includes(f.properties.id));})());
   for(const key of keys){
    const [kind,id]=key.split(':');
    if(kind==='isohyet')jobs.push(waterLoader.json('precipitation.geojson.gz').then(data=>{const found=data.features.filter((f:any)=>f.properties.kind==='isohyet'&&f.properties.value===Number(id));if(!found.length)throw new Error('Isohyet unavailable');if(g===generation)selectedTargets.push(...found);}));
@@ -172,8 +178,10 @@ export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbac
  }
  function sync(){
   const s=cb.state(),url=new URL(location.href),candidate=readInsightContext(url,config.base),ctx=(s.field==='natural'||s.field==='industry'||candidate?.insight?.target.page==='agriculture')?candidate:null;
-  const story=ctx?.product==='corn'?cornStories.find(item=>item.id===ctx.insight?.id):undefined;
-  root.dataset.cornStory=story?.id??'';
+  const cornStory=ctx?.product==='corn'?cornStories.find(item=>item.id===ctx.insight?.id):undefined;
+  const story=ctx&&(cornStory??productStory(ctx.product,ctx.insight?.id??null));
+  root.dataset.cornStory=cornStory?.id??'';
+  root.dataset.productStory=story?.id??'';
   root.toggleAttribute('data-corn-index',s.field==='agriculture'&&s.product==='corn'&&!ctx);
   const product=selectedProduct(),keys=targetKeys();
   root.dataset.selectedProduct=product??'';
@@ -184,7 +192,7 @@ export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbac
   note.hidden=!ctx;
   if(ctx){
    const host=q('[data-field-national="'+s.field+'"]');if(note.parentElement!==host)host.prepend(note);
-   back.href=ctx.back.pathname+ctx.back.search;back.textContent=story?'← トウモロコシの4項目に戻る':productNames[ctx.product]+'の解説に戻る';
+   back.href=ctx.back.pathname+ctx.back.search;back.textContent=story?'← '+productNames[ctx.product]+'の項目に戻る':productNames[ctx.product]+'の解説に戻る';
    const copyKey=ctx.product+':'+(ctx.insight?.id??'explore');
    if(copyKey!==copySignature){
     copySignature=copyKey;title.textContent=productNames[ctx.product]+(ctx.insight?'から'+targetLabel(ctx.insight.target).replace(' › ','・')+'を確認中':'の分布を重ねて表示中');
@@ -192,10 +200,14 @@ export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbac
     takeaway.textContent=ctx.insight?insightTakeaway(ctx.insight,ctx.product):'';takeaway.hidden=!takeaway.textContent;
     if(story){takeaway.textContent=story.summary;takeaway.hidden=false;}
     explanation.replaceChildren();explanation.hidden=!story;
-    if(story){
-     const section=cornReading.sections[story.section];
+    if(story&&cornStory){
+     const section=cornReading.sections[cornStory.section];
      if(section.body){const p=document.createElement('p');p.textContent=section.body;explanation.append(p);}
      for(const part of section.paragraphs??[]){const p=document.createElement('p'),strong=document.createElement('strong');strong.textContent=part.label;p.append(strong,document.createTextNode(part.text));explanation.append(p);}
+    }
+    if(story){
+     const guide=document.createElement('p');guide.className='agri-story-map-label';guide.textContent='地図で見る：'+story.map;explanation.prepend(guide);
+     if(!cornStory){const p=document.createElement('p');p.textContent=story.detail;explanation.append(p);}
     }
     photo.replaceChildren();photo.hidden=ctx.insight?.photo!=='pivot';
     if(!photo.hidden){
@@ -208,11 +220,11 @@ export function createAgricultureInsights(root:HTMLElement,config:any,cb:Callbac
      photo.hidden=false;const image=document.createElement('img');image.src=config.base.replace(/atlas\/north-america\/$/,'assets/atlas/agriculture-insights/corn-harvest-usda.jpg');image.alt='ミズーリ州のトウモロコシ畑で収穫する大型コンバイン';image.width=640;image.height=426;image.loading='lazy';image.decoding='async';
      const caption=document.createElement('figcaption'),credit=document.createElement('a');credit.href='https://www.ars.usda.gov/oc/images/photos/k4912-11';credit.textContent='写真：USDA ARS / Bruce Fritz（ミズーリ州コロンビア、撮影年不詳）';caption.append('広い畑を大型コンバインで収穫する。',document.createElement('br'),credit);photo.append(image,caption);
     }
-    const sources=story?productSources.corn.concat(ctx.insight?.sources??[]):ctx.insight?.sources??[];
+    const sources=story?productSources[ctx.product].concat(ctx.insight?.sources??[]):ctx.insight?.sources??[];
     sourceLinks.replaceChildren();sourceLinks.hidden=!sources.length;
     for(const [label,url] of [...new Map(sources.map(source=>[source[1],source])).values()]){const a=document.createElement('a');a.href=url;a.textContent=label;sourceLinks.append(a,' ');}
     lead.textContent=ctx.insight?insightLead(ctx.insight,ctx.product):'別の自然条件・産業地域も選べます。元の品目の説明と統計へは、下のリンクで戻れます。';
-    if(story){evidence.insertBefore(lead,targets);evidence.open=false;}else{note.insertBefore(lead,evidence);evidence.open=true;}
+    if(story){evidence.insertBefore(lead,targets);evidence.open=false;}else{detailScroll.insertBefore(lead,evidence);evidence.open=true;}
     targets.replaceChildren();
     for(const value of ctx.insight?.target.isohyets??[]){const li=document.createElement('li');li.textContent='年降水量 '+value.toLocaleString('ja-JP')+'mm線（PRISM・1991–2020年）';targets.append(li);}
     for(const id of ctx.insight?.target.features??[]){const li=document.createElement('li');const copy=config.natureFeatureCopy[id];li.textContent=copy?.title??(id==='climate:Cfa'?'Cfa・温暖湿潤気候':id==='climate:BSk'?'BSk・ステップ気候（低温）':id.split(':')[1]);targets.append(li);}

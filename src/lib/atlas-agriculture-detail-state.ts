@@ -24,7 +24,7 @@ export function writeAgricultureDetailState(url:URL,state:AgricultureDetailState
 }
 
 export const productIds=[...cropDetailIds,'specialty',...animalDetailIds] as const;
-export const relationIds=['corn-soy-hogs','plains-wheat-cattle','california-rice-water'] as const;
+export const relationIds=['corn-soy-hogs','corn-soy-rotation','plains-wheat-cattle','california-rice-water','broiler-supply','layer-feed','poultry-compare'] as const;
 export type ProductId=typeof productIds[number];
 export type ReadingView={kind:'forestry';id:'timber'}|{kind:'overview'}|{kind:'product';id:ProductId}|{kind:'relation';id:typeof relationIds[number]}|{kind:'map-context';id:'corn-soybean'};
 export type AgricultureReadingState={view:ReadingView;resumeProductId:ProductId|null};

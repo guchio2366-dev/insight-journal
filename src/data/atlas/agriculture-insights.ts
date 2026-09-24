@@ -10,7 +10,7 @@ soybean:[
 '国内の加工・飼料需要に加え、輸出も重要です。ミシシッピ川水系は輸送経路の一つで、川の線を下流へたどると、内陸の産地とメキシコ湾側の輸出拠点とのつながりが分かります。'],
 wheat:[
 '小麦はグレートプレーンズなどに広がり、北部では春にまく春小麦、中部から南部では秋にまいて越冬する冬小麦が重要です。これは地域的な傾向で、すべての小麦を単純な南北の境界で分けるものではありません。',
-'グレートプレーンズの西寄りにはステップ気候が見られます。気候図では乾燥の程度を、地形・標高図では、平原でも中央低地より標高が高い地域があることを確かめられます。小麦の栽培域全体がステップ気候に一致するわけではありません。',
+'グレートプレーンズの地形と等高線を見ると、広い平原でも西へ進むほど標高が高くなることが分かります。年降水量500mm線は内陸の東西の乾湿を比べる目安です。',
 '雨が多ければ一律に不適になるわけではなく、東部やミシシッピ川沿いには軟質冬小麦の産地もあります。過湿は根に負担をかけますが、年降水量だけでなく雨の時期や排水、他作物との採算の違いも重要です。この地図は主な栽培のまとまりを示し、小さく分散した産地を省略しています。'],
 cotton:[
 '綿花は、霜のない暖かい期間を確保できる南部で栽培されます。ただし、西寄りのテキサスと南東部では水の条件が異なり、降水に頼る栽培と灌漑を利用する栽培の両方があります。',
@@ -26,7 +26,7 @@ beef:[
 '肥育には、とうもろこしなどの飼料作物との関係もあります。水の利用を考えるときは牛の飲み水だけでなく、飼料を育てるための灌漑にも注目します。南部グレートプレーンズの例では、ハイプレーンズ帯水層と飼料生産とのつながりを確認できます。'],
 dairy:[
 '酪農は五大湖周辺や北東部だけでなく、カリフォルニアやアイダホにも分布します。飼料の確保、暑さへの対応、搾った生乳の集荷・冷却・加工などが関わるため、「寒い地域だから」だけでは分布を説明できません。',
-'ウィスコンシンでは乳製品加工とのつながりを産業地図で、カリフォルニアでは飼料生産や水資源との関係を自然環境地図で確かめられます。飼料作物を育てる水も、酪農を支える条件の一つです。'],
+'ウィスコンシンでは乳製品加工とのつながりを産業地図で、五大湖周辺とカリフォルニアの酪農は気候区分図で比べられます。カリフォルニアでは、飼料作物を育てる水や暑さへの対応も重要です。'],
 hogs:[
 '養豚では、とうもろこしがエネルギー源、大豆ミールがたんぱく源となり、飼料作物との結び付きが重要です。中西部の産地はコーンベルトとの関係で読み取れます。',
 '一方、ノースカロライナなどにも生産地域があり、飼料の近さだけでは全体を説明できません。飼料供給、飼育、加工を結び付ける生産の仕組みにも目を向けます。'],
@@ -54,7 +54,7 @@ hogs:[['USDA ERS・養豚',ers+'animal-products/hogs-pork/sector-at-a-glance']],
 broilers:[['USDA ERS・家禽と卵',ers+'animal-products/poultry-eggs/sector-at-a-glance']],
 layers:[['USDA ERS・家禽と卵',ers+'animal-products/poultry-eggs/sector-at-a-glance']]
 };
-export type InsightTarget={page:'nature'|'industry'|'agriculture';relation?:'corn-soy-hogs';env?:'climate'|'water'|'landform'|'contour';waterView?:'rivers'|'precipitation'|'basins';features?:readonly string[];isohyets?:readonly number[];basin?:string;sector?:string;subsector?:string;industryRegion?:string};
+export type InsightTarget={page:'nature'|'industry'|'agriculture';relation?:'corn-soy-hogs'|'corn-soy-rotation'|'plains-wheat-cattle'|'broiler-supply'|'layer-feed'|'poultry-compare';env?:'climate'|'water'|'landform'|'contour';waterView?:'rivers'|'precipitation'|'basins';features?:readonly string[];isohyets?:readonly number[];basin?:string;sector?:string;subsector?:string;industryRegion?:string};
 export type AgricultureInsight={id:string;products:readonly ProductId[];label:string;lead:string;takeaway?:string;photo?:'pivot';sources?:readonly [string,string][];target:InsightTarget;bounds:readonly [number,number,number,number]};
 const interior=[-106,30,-80,50] as const,plains=[-109,28,-94,50] as const,ms=[-114,28,-77,50] as const,ca=[-125,32,-115,43] as const;
 const water=(...features:string[]):InsightTarget=>({page:'nature',env:'water',waterView:'rivers',features:features.map(id=>'water:'+id)});
@@ -67,10 +67,8 @@ export const agricultureInsights:readonly AgricultureInsight[]=[
 {id:'grain-rivers',sources:[['USDA AMS・穀物水運',transport]],products:['corn','soybean'],label:'川と穀物輸送',lead:'青い太線はミシシッピ川・オハイオ川です。産地の破線と見比べ、川を合流点から南の河口へたどってください。河川全区間の航行可能性や輸送量を示す線ではありません。',takeaway:'内陸の穀物は、川を下ってメキシコ湾側の輸出拠点へ運ばれる。',target:water('Mississippi','Ohio'),bounds:ms},
 {id:'corn-pivot-water',photo:'pivot',products:['corn'],label:'円形の畑を支える水',lead:'ネブラスカなど西寄りの産地とハイプレーンズ帯水層を重ねます。上空画像に並ぶ円形の区画は、長い散水装置が支点の周りを回って水を届ける仕組みの表れです。カンザス州の実例で、とうもろこし以外の畑も含まれます。',takeaway:'雨だけで足りない水を地下水で補い、回転する散水装置で畑へ届ける。',target:{...water('High Plains Aquifer'),isohyets:[500]},bounds:[-105,35,-94,44],sources:productSources.corn.filter(([label])=>label.startsWith('USGS'))},
 {id:'interior-rainfall',sources:[['Penn State・作物と水','https://courses.ems.psu.edu/geog3/node/1093']],products:['corn','soybean','wheat'],label:'500mm線と産地の東西差',lead:'太く強調した500mm線と産地を見比べます。内陸の西寄りでは500mm未満の地域が広がり、多くの作物で雨だけによる高収量の確保が難しくなります。灌漑や乾燥に対応した栽培が重要になりますが、500mmは栽培可否の一律の境界ではありません。',takeaway:'年降水量約500mmは、東西の水条件の違いを見る目安になる。',target:{...rain,isohyets:[500]},bounds:interior},
-{id:'wheat-steppe',sources:[['Columbia・大平原の乾湿と作物','https://lamont.columbia.edu/news/100th-meridian-where-great-plains-begin-may-be-shifting']],products:['wheat'],label:'ステップ気候を確かめる',lead:'強調したBSk（低温のステップ気候）と小麦産地を比較します。北部の春小麦・中南部の冬小麦という作付けの違いと合わせて読みます。産地全体がBSkに一致するわけではありません。',takeaway:'小麦は、とうもろこしより乾燥した地域でも重要な作物になる。',target:{page:'nature',env:'climate',features:['climate:BSk']},bounds:plains},
 {id:'great-plains',products:['wheat','beef'],label:'グレートプレーンズ',lead:'地形の実線と産地の破線・記号を比較します。平原の広がりを手掛かりにしつつ、東西の乾燥度や生産方式の違いも考えます。',takeaway:'グレートプレーンズは、広い平原に小麦や肉牛の生産が展開する地域。',target:{page:'nature',env:'landform',features:['landform:グレートプレーンズ']},bounds:plains},
 {id:'cotton-aquifers',products:['cotton'],label:'二つの産地の地下水',lead:'ハイプレーンズ帯水層とフロリダン帯水層系を同時に強調します。テキサスと南西ジョージア周辺の産地を見比べてください。フロリダ半島全体が綿花産地という意味ではありません。',takeaway:'西部と南東部の離れた綿花産地に、それぞれ地下水を使う地域がある。',target:water('High Plains Aquifer','Floridan Aquifer System'),bounds:[-106,24,-79,42]},
-{id:'cotton-rainfall',products:['cotton'],label:'綿花産地の雨の違い',lead:'500mm・1,000mmの等雨量線を強調しています。テキサス側と南東部の産地で色を比較すると、水確保の条件の違いが見えます。二本の線は比較の目盛りで、綿花の栽培限界ではありません。',takeaway:'綿花は少雨の西部にも、比較的雨の多い南東部にも広がる。',target:{...rain,isohyets:[500,1000]},bounds:[-106,24,-79,42]},
 {id:'rice-alluvial',products:['rice'],label:'南部の稲作と地下水',lead:'実線のミシシッピ川谷沖積帯水層と稲作の破線が重なる場所を見ます。多雨の地域でも、生育に必要な時期の水を灌漑で補うことがあります。',takeaway:'南部の稲作は、雨に加えて沖積帯水層の地下水にも支えられる。',target:water('Mississippi River Valley Alluvial Aquifer'),bounds:[-97,28,-86,38]},
 {id:'rice-humid',products:['rice'],label:'温暖湿潤気候を確かめる',lead:'南部の稲作とCfa（温暖湿潤気候）の重なりを見ます。気候の一致だけでは水田へ届く水を説明できないため、地下水の地図と合わせて読むと関係が分かります。',takeaway:'温暖で雨のある気候と、稲作に使う灌漑水は別々に確かめる。',target:{page:'nature',env:'climate',features:['climate:Cfa']},bounds:[-97,28,-86,38]},
 {id:'rice-sacramento-water',products:['rice'],label:'川と貯水池から見る稲作',lead:'サクラメント川を北へたどり、強調したシャスタ湖と産地の位置を比較します。川・貯水池の位置を示す図で、用水路や個別農場への配水を示すものではありません。',takeaway:'カリフォルニアの稲作では、農地より上流の川と貯水が鍵になる。',target:water('Sacramento','shasta-lake'),bounds:[-124,37,-119,42.5]},
@@ -81,15 +79,25 @@ export const agricultureInsights:readonly AgricultureInsight[]=[
 {id:'san-joaquin-basin',products:['specialty','dairy'],label:'サンホアキン川の流域',lead:'産地の輪郭とサンホアキン川流域を重ね、シエラネバダ山脈側から谷底へのつながりを読みます。南のトゥーレア閉鎖流域は含まれず、谷全体の灌漑区域とは一致しません。',takeaway:'谷底の産地の上流に、山地の集水域が広がる。',target:basin('san-joaquin'),bounds:ca},
 {id:'beef-feed-water',products:['beef'],label:'飼料生産を支える地下水',lead:'肉牛の代表地域とハイプレーンズ帯水層を比較します。飼料を育てる水も畜産を支えるため、記号の近さだけで牛の飲水量を判断しないでください。',takeaway:'肉牛と地下水の関係は、飲み水だけでなく飼料作物の灌漑にもある。',target:water('High Plains Aquifer'),bounds:[-106,29,-95,42]},
 {id:'dairy-processing',products:['dairy'],label:'乳製品加工とのつながり',lead:'ウィスコンシンの酪農地域と食品・乳製品加工を重ねます。記号は代表地域で、個々の農場や加工場の所在地・生産量ではありません。',takeaway:'生乳は搾った後の集荷・冷却・加工まで含めて産業になる。',target:{page:'industry',sector:'manufacturing',subsector:'food',industryRegion:'wisconsin-food'},bounds:[-96,40,-84,49]}
+,{id:'dairy-climate',products:['dairy'],label:'二つの酪農地域の気候',lead:'五大湖周辺とカリフォルニアの酪農の代表点を、気候区分図と重ねます。',target:{page:'nature',env:'climate'},bounds:[-125,32,-75,50]}
+,{id:'soy-corn-rotation',products:['soybean'],label:'大豆とトウモロコシ',lead:'大豆とトウモロコシの分布を比較します。',target:{page:'agriculture',relation:'corn-soy-rotation'},bounds:[-104,33,-79,49]},
+{id:'soy-hogs',products:['soybean'],label:'大豆と養豚',lead:'飼料作物と養豚の代表地域を比較します。',target:{page:'agriculture',relation:'corn-soy-hogs'},bounds:[-104,33,-79,49]},
+{id:'plains-wheat-beef',products:['beef'],label:'大平原の小麦と肉牛',lead:'小麦栽培域と肉牛の代表地域を比較します。',target:{page:'agriculture',relation:'plains-wheat-cattle'},bounds:plains},
+{id:'hog-corn-soy',products:['hogs'],label:'中西部の飼料と豚',lead:'トウモロコシ・大豆と豚の地域を比較します。',target:{page:'agriculture',relation:'corn-soy-hogs'},bounds:[-104,33,-79,49]},
+{id:'hog-carolina',products:['hogs'],label:'二つの養豚地域',lead:'中西部とノースカロライナの豚を比較します。',target:{page:'agriculture',relation:'corn-soy-hogs'},bounds:[-103,30,-74,46]},
+{id:'broiler-southeast',products:['broilers'],label:'南東部の肉用鶏',lead:'肉用鶏と飼料作物を比較します。',target:{page:'agriculture',relation:'broiler-supply'},bounds:[-98,29,-74,40]},
+{id:'layer-feed',products:['layers'],label:'採卵鶏と飼料',lead:'採卵鶏と飼料作物を比較します。',target:{page:'agriculture',relation:'layer-feed'},bounds:[-102,36,-79,48]},
+{id:'poultry-compare',products:['broilers','layers'],label:'肉用鶏と採卵鶏',lead:'二種類の鶏の代表地域を比較します。',target:{page:'agriculture',relation:'poultry-compare'},bounds:[-103,29,-73,49]}
 ];
 export const productInsightOrder:Record<ProductId,readonly string[]>={
 corn:['central-lowland','plains-elevation','interior-rainfall','corn-pivot-water','grain-rivers'],
-soybean:['grain-rivers','interior-rainfall'],
-wheat:['wheat-steppe','great-plains','plains-elevation','interior-rainfall'],
-cotton:['cotton-aquifers','cotton-rainfall'],
-rice:['rice-alluvial','rice-humid','rice-sacramento-water','sacramento-basin','california-rainfall'],
-specialty:['valley-landform','valley-water','california-rainfall','san-joaquin-basin'],
-beef:['great-plains','beef-feed-water'],dairy:['dairy-processing','valley-water'],hogs:[],broilers:[],layers:[]
+soybean:['soy-corn-rotation','soy-hogs'],
+wheat:['great-plains','interior-rainfall','plains-elevation'],
+cotton:['cotton-aquifers'],
+rice:['rice-sacramento-water','rice-alluvial'],
+specialty:['valley-landform','valley-water'],
+beef:['plains-wheat-beef','great-plains','beef-feed-water'],dairy:['dairy-processing','dairy-climate'],
+hogs:['hog-corn-soy','hog-carolina'],broilers:['broiler-southeast','poultry-compare'],layers:['layer-feed','poultry-compare']
 };
 export function insightFor(id:string|null){return agricultureInsights.find(x=>x.id===id);}
 const cornMapLeads:Record<string,string>={
@@ -101,7 +109,7 @@ const cornMapLeads:Record<string,string>={
 };
 export function insightLead(item:AgricultureInsight,product:ProductId){
 if(product==='corn'&&cornMapLeads[item.id])return cornMapLeads[item.id];
-if(item.id==='interior-rainfall'&&product==='wheat')return '小麦の分布を重ねています。約500mmの線は乾湿を比べる目安で、750〜1,000mmも栽培の上限ではありません。東部にも軟質冬小麦の産地があります。雨の時期・排水や、とうもろこし・大豆などとの採算の違いも関わります。この図は小さく分散した産地を省略しているため、輪郭のない場所を栽培不適地とは読めません。';
+if(item.id==='interior-rainfall'&&product==='wheat')return '小麦の栽培域と年降水量500mm線を重ねています。線は乾湿を比べる目安で、小麦の栽培限界ではありません。東部にも軟質冬小麦の産地があります。雨の時期・排水や、とうもろこし・大豆などとの採算も関わります。この図は小さく分散した産地を省略しています。';
 if(item.id==='valley-water')return (product==='dairy'?'カリフォルニアの酪農地域と、飼料生産を含む水利用の背景を見ます。':'カリフォルニアの栽培域と、谷の地下水・河川の位置関係を見ます。')+item.lead;
 return productNames[product]+'の分布を重ねています。'+item.lead;
 }
