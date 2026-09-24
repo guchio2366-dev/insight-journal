@@ -169,7 +169,7 @@ export function createPopulationInsights(root:HTMLElement,config:any,hooks:Hooks
    });
   }else{
    panel.querySelector<HTMLElement>('#population-story-heading')?.focus({preventScroll:true});
-   if(innerWidth<900&&link.hasAttribute('data-pop-story-link'))panel.scrollIntoView({block:'start',behavior:'instant'});
+   if(link.hasAttribute('data-pop-story-link'))(innerWidth<900?panel:q('[data-map-panel]')).scrollIntoView({block:'start',behavior:'instant'});
   }
  }
  q<HTMLImageElement>('[data-fallback-image]').addEventListener('load',schedule);
