@@ -1,0 +1,16 @@
+---
+import {withBase} from '../../lib/urls';
+import {populationInsights} from '../../data/atlas/population-insights';
+import {populationInsightUrl} from '../../lib/atlas-population-insight-state';
+const base=withBase('/atlas/north-america/');
+---
+<section class="population-insights" data-pop-story-index aria-label="地図をつないで読む">
+ <p class="population-insights-label">地図をつないで読む</p>
+ {populationInsights.map(item=>{
+  const source=new URL(base+'population/',Astro.url);source.searchParams.set('popView',item.views[0]);
+  const url=populationInsightUrl(source,base,item.id);
+  return <a class="population-insight-link" data-pop-story-link={item.id} data-story-views={item.views.join(' ')} href={url.pathname+url.search}>
+   <strong>{item.title}</strong><span>{item.preview} →</span><small>{item.destination}</small>
+  </a>;
+ })}
+</section>
