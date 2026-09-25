@@ -1,0 +1,25 @@
+Asia rice distribution derivative assets
+
+Source: International Food Policy Research Institute (IFPRI), 2026,
+Global Spatially-Disaggregated Crop Production Statistics Data for 2020
+Version 2.0 Release 2 (MapSPAM 2020 v2r2).
+DOI: https://doi.org/10.7910/DVN/SWPENT
+Accessed through the CGIAR Climate Action Data Hub:
+https://cgiar-climate-data-hub.github.io/catalog/spam2020/
+Dataset-specific license declared by that distribution: CC-BY-SA-4.0.
+
+Adaptations by Insight Journal: selected rice, all production systems,
+harvested area; subset to three Asia regions; masked to the existing
+Natural Earth country outlines; rounded query values to 0.01 ha;
+classified and reprojected the display with nearest-cell resampling.
+
+The derived rice JSON and PNG assets in this directory are made available
+under Creative Commons Attribution-ShareAlike 4.0 International:
+https://creativecommons.org/licenses/by-sa/4.0/
+
+Natural Earth geographical mask: public domain.
+https://www.naturalearthdata.com/about/terms-of-use/
+
+This data was provided by the International Food Policy Research Institute
+(IFPRI). IFPRI bears no responsibility for the analyses or interpretations
+of the data presented here.
