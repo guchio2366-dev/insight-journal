@@ -11,15 +11,18 @@ field explanations on the right, no changes to statistics or public content.
 Flexible: rail width (300–380px; 380–520px while reading), map/reading ratio,
 spacing. Below 1200px the rail stacks safely above the existing workspace.
 
-### Laptop correction (nature, industry, population)
+### Laptop correction (all four fields)
 
-At 1200–1599 CSS pixels these three fields retain the same news / map / reading
+At 1200–1599 CSS pixels all four fields retain the same news / map / reading
 columns as the monitor layout. Their idle rail uses `clamp(220px,19vw,340px)`;
 the map/reading grid uses `1.65fr / minmax(320px,1fr)` with a 14px column gap.
 Nature's climate overview stays below the map, with its selected explanation
 spanning both rows on the right. News-reader expansion is unchanged.
-Agriculture's existing fallback and story overrides are deliberately untouched,
-as are the layouts below 1200px and at/above 1600px.
+Agriculture uses this layout for its overview, every crop/livestock product,
+forestry and relation readings; it no longer depends on selecting corn or
+opening a story. Existing corn/product-story overrides remain unchanged, as do
+the layouts below 1200px and at/above 1600px. Only the legacy land overview
+retains the single-column laptop fallback.
 
 ## Content and interaction contract
 

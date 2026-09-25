@@ -42,7 +42,7 @@ async function openField(field, width, attributes = {}) {
   return {window, css, declarations};
 }
 
-for (const field of ['nature', 'industry', 'population']) {
+for (const field of ['agriculture', 'nature', 'industry', 'population']) {
   test(`${field}: laptop keeps news, map and reading side by side at both breakpoint edges`, async () => {
     for (const width of [1200, 1280, 1366, 1440, 1599]) {
       const {window, css, declarations} = await openField(field, width);
@@ -77,12 +77,7 @@ for (const field of ['nature', 'industry', 'population']) {
   });
 }
 
-test('agriculture keeps its existing laptop fallback and corn story layout', async () => {
-  const {window, css} = await openField('agriculture', 1366);
-  try {
-    assert.equal(css('.atlas-desktop-shell', 'grid-template-columns'), 'clamp(300px,23vw,380px)minmax(0,1fr)');
-    assert.equal(css('.atlas-primary-grid', 'grid-template-columns'), 'minmax(0,1fr)');
-  } finally { await window.happyDOM.close(); }
+test('corn keeps its existing laptop story layout', async () => {
   const corn = await openField('agriculture', 1366, {'data-corn-index':''});
   try {
     assert.equal(corn.css('.atlas-desktop-shell', 'grid-template-columns'), 'clamp(220px,19vw,340px)minmax(0,1fr)');
