@@ -11,7 +11,7 @@ export const regionalMaps: Record<RegionalId, { label: string; group: AtlasGroup
   'east-asia': { label: '東アジア', group: 'asia', href: '/atlas/asia/east-asia/', description: '日本・中国・朝鮮半島・台湾・モンゴルの位置関係を読む。', latitude: 35, color: '#94b8b8' },
   'southeast-asia': { label: '東南アジア', group: 'asia', href: '/atlas/asia/southeast-asia/', description: 'インドシナ半島から島々へ、11か国の位置関係を読む。', latitude: 10, color: '#a9bd8b' },
   'south-central-asia': { label: '南・中央アジア', group: 'asia', href: '/atlas/asia/south-central-asia/', description: 'インド周辺から中央アジアへ、海と内陸をつなげて読む。', latitude: 27, color: '#d1b176' },
-  'latin-america': { label: '中南米', group: 'americas', href: '/atlas/latin-america/', description: '中米・カリブ・南米の国と地域の位置関係を読む。', latitude: -12, color: '#a9bd8b' },
+  'latin-america': { label: '中南米', group: 'americas', href: '/atlas/latin-america/', description: '中米・カリブ・南米の自然・農林業・産業・人口を分布図と解説で読む。', latitude: -12, color: '#a9bd8b' },
   canada: { label: 'カナダ', group: 'americas', href: '/atlas/north-america/canada/', description: '北米北部に広がるカナダと周辺の位置関係を読む。', latitude: 58, color: '#94b8b8' },
   mexico: { label: 'メキシコ', group: 'americas', href: '/atlas/north-america/mexico/', description: '太平洋とメキシコ湾に面する国の位置関係を読む。', latitude: 24, color: '#d1b176' }
 };
