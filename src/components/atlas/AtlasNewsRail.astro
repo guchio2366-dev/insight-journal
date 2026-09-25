@@ -2,25 +2,30 @@
 import { getCollection, render } from 'astro:content';
 import { withBase } from '../../lib/urls';
 import { topics } from '../../data/taxonomy';
+import { atlasNewsRegions, articleMatchesNewsRegion, type AtlasNewsRegion } from '../../scripts/atlas-news';
+
+interface Props { region?: AtlasNewsRegion }
+const {region='north-america'}=Astro.props;
+const config=atlasNewsRegions[region];
 
 // Only approved, public articles for this region belong in this rail.
 const articles = (await getCollection('articles'))
-  .filter(({data}) => data.regions.includes('north_america') || data.countries.some(code => ['US','CA','MX'].includes(code)))
+  .filter(({data}) => articleMatchesNewsRegion(data,region))
   .sort((a,b) => Date.parse(b.data.publishedAt)-Date.parse(a.data.publishedAt) || a.data.slug.localeCompare(b.data.slug));
 const rendered = await Promise.all(articles.map(async entry => ({entry, ...await render(entry)})));
 ---
-<aside class="atlas-news" aria-labelledby="atlas-news-heading" data-news-rail data-pagefind-ignore="all">
+<aside class="atlas-news" aria-labelledby="atlas-news-heading" data-news-rail data-news-region={region==='latin-america'?region:undefined} data-news-bounds={region==='latin-america'?config.bounds.join(','):undefined} data-pagefind-ignore="all">
   <header class="atlas-news-header">
     <p>NEWS & CONTEXT</p>
-    <h2 id="atlas-news-heading">北米のニュース</h2>
+    <h2 id="atlas-news-heading">{config.label}のニュース</h2>
     <span>記事と地図を、並べて読む</span>
   </header>
-  <div class="atlas-news-list" data-news-list tabindex="0" aria-label="北米のニュース一覧">
+  <div class="atlas-news-list" data-news-list tabindex="0" aria-label={`${config.label}のニュース一覧`}>
     <div class="atlas-news-count">新着順 <span>{articles.length} 件</span></div>
     {articles.length === 0 && <div class="atlas-news-empty">
       <span aria-hidden="true">＋</span>
       <h3>記事の追加を待っています</h3>
-      <p>北米に関連する公開記事を、ここに新着順で表示します。</p>
+      <p>{config.label}に関連する公開記事を、ここに新着順で表示します。</p>
       <p>地図や各分野の解説は、右側で引き続き利用できます。</p>
     </div>}
     {articles.map(({data}) => <article class="atlas-news-card">
@@ -36,7 +41,8 @@ const rendered = await Promise.all(articles.map(async entry => ({entry, ...await
   </section>
   <footer class="atlas-news-footer">ニュース欄は独立してスクロールできます</footer>
   {rendered.map(({entry:{data}, Content}) => {
-    const point = data.geography.mode==='map' ? data.geography.points.find(p=>p.longitude>=-137&&p.longitude<=-56&&p.latitude>=16&&p.latitude<=58) : undefined;
+    const [west,south,east,north]=config.bounds;
+    const point = data.geography.mode==='map' ? data.geography.points.find(p=>p.longitude>=west&&p.longitude<=east&&p.latitude>=south&&p.latitude<=north) : undefined;
     return <template data-news-template={data.slug}>
       <time datetime={data.publishedAt}>{data.publishedAt.slice(0,10)}</time>
       <h2 tabindex="-1">{data.title}</h2>

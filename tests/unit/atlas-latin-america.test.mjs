@@ -10,11 +10,11 @@ const json=async path=>JSON.parse(await readFile(new URL('../../'+path,import.me
 const geography=await json('src/data/atlas/regional-countries.json');
 const countries=geography.features.filter(({properties:p})=>(p.region==='South America'||['Central America','Caribbean'].includes(p.subregion))&&p.code!=='MEX').map(f=>f.properties.code);
 const topics=[...latinSocietyTopics,...latinEconomyTopics],ids=new Set(topics.map(t=>t.id));
-const read=search=>readLatinState(search,topics,countries,latinClimateCities);
+const read=(search,defaultField)=>readLatinState(search,topics,countries,latinClimateCities,defaultField);
 
 test('Latin readings and comparisons resolve against the actual country filter and topic catalog',()=>{
  assert.equal(ids.size,topics.length,'topic IDs must be unique');
- for(const field of latinFields)assert.ok(topics.some(t=>t.field===field),field);
+ for(const field of latinFields.filter(f=>f!=='overview'))assert.ok(topics.some(t=>t.field===field),field);
  for(const topic of topics){
   assert.ok(topic.countries.length,topic.id);
   for(const country of topic.countries)assert.ok(countries.includes(country),`${topic.id}: country ${country} is absent from the selector`);
@@ -58,6 +58,19 @@ test('invalid URLs cannot select foreign countries, missing topics or invalid fi
  assert.equal(read('?field=industry&city=manaus').city,'');
 });
 
+test('static routes provide a default field while legacy query links and overview remain shareable',()=>{
+ assert.ok(latinFields.includes('overview'));
+ for(const field of latinFields){
+  assert.equal(read('',field).field,field,'a route without query state selects its own field');
+  assert.equal(read('?field=unsupported',field).field,field,'invalid query state returns to the route default');
+  const state=read('?place=BRA&map=-55,-14,5',field);
+  assert.deepEqual(read(writeLatinState(state),'overview'),state,'field survives sharing and reloading');
+ }
+ assert.equal(read('?field=agriculture&crop=maiz','overview').field,'agriculture','existing query-only links still work');
+ const overview=read('?topic=amazon&city=manaus&place=BRA','overview');
+ assert.equal(overview.field,'overview');assert.equal(overview.topic,'');assert.equal(overview.city,'');assert.equal(overview.place,'BRA');
+});
+
 test('a shared reading round trips its topic, crop, country and exact equatorial camera',()=>{
  const initial=read('?field=agriculture&topic=cerrado-soy&place=BRA&crop=maiz&map=-60,0,4');
  assert.deepEqual(read(writeLatinState(initial)),initial);
@@ -80,9 +93,10 @@ test('contradictory URL selections resolve to one reading and a compatible count
 });
 
 test('blank, nonnumeric and out-of-range camera coordinates do not become real zero coordinates',()=>{
- for(const camera of ['-60,,3','-60, ,3','-60,NaN,3','-60,Infinity,3','-60,33,3','-101,0,3','-60,0,0','-60,0,10','-60,0']){
+ for(const camera of ['-60,,3','-60, ,3','-60,NaN,3','-60,Infinity,3','-60,71,3','-181,0,3','1,0,3','-60,-71,3','-60,0,0','-60,0,10','-60,0']){
   assert.equal(read('?map='+encodeURIComponent(camera)).camera,undefined,camera);
  }
+ for(const camera of [[-110,33,2],[-30,-65,2]])assert.deepEqual(read(writeLatinState({...read(''),camera})).camera,camera,'wide-frame panning restores within the rendered map bounds');
 });
 
 test('crop sampling distinguishes positive, valid zero, missing, and map-edge cells',()=>{

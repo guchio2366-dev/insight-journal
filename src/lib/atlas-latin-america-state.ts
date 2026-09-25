@@ -1,8 +1,8 @@
-export const latinFields = ['nature','agriculture','industry','population'] as const;
+export const latinFields = ['overview','nature','agriculture','industry','population'] as const;
 export type LatinState = {field:string;topic:string;place:string;city:string;crop:string;view:string;camera?:[number,number,number]};
 export const cropIds=['whea','rice','maiz','soyb','sugc','coff','rcof','bana','coco','cott','pota','temf','cattle','pig','chicken','none'];
-export function readLatinState(search:string, topics:{id:string;field:string;countries?:string[]}[],places:string[],cities:(string|{id:string;countryCode:string})[]):LatinState {
- const p=new URLSearchParams(search),field=latinFields.includes(p.get('field') as any)?p.get('field')!:'nature';
+export function readLatinState(search:string, topics:{id:string;field:string;countries?:string[]}[],places:string[],cities:(string|{id:string;countryCode:string})[],defaultField='nature'):LatinState {
+ const p=new URLSearchParams(search),field=latinFields.includes(p.get('field') as any)?p.get('field')!:latinFields.includes(defaultField as any)?defaultField:'nature';
  const selectedCity=field==='nature'?cities.find(c=>(typeof c==='string'?c:c.id)===p.get('city')):undefined;
  const city=selectedCity?(typeof selectedCity==='string'?selectedCity:selectedCity.id):'';
  const selectedTopic=city?undefined:topics.find(t=>t.id===p.get('topic')&&t.field===field);
@@ -11,7 +11,7 @@ export function readLatinState(search:string, topics:{id:string;field:string;cou
  if(place&&((typeof selectedCity==='object'&&selectedCity.countryCode!==place)||(selectedTopic?.countries&&!selectedTopic.countries.includes(place))))place='';
  const crop=cropIds.includes(p.get('crop')??'')?p.get('crop')!:'soyb';
  const raw=(p.get('map')??'').split(',').map(v=>v.trim()===''?NaN:Number(v));
- const camera=raw.length===3&&raw.every(Number.isFinite)&&raw[0]>=-100&&raw[0]<=-25&&raw[1]>=-60&&raw[1]<=32&&raw[2]>=1&&raw[2]<=9?raw as [number,number,number]:undefined;
+ const camera=raw.length===3&&raw.every(Number.isFinite)&&raw[0]>=-180&&raw[0]<=0&&raw[1]>=-70&&raw[1]<=70&&raw[2]>=1&&raw[2]<=9?raw as [number,number,number]:undefined;
  return {field,topic,place,city,crop,view:p.get('view')==='rivers'?'rivers':'climate',camera};
 }
 export function writeLatinState(state:LatinState):string {
