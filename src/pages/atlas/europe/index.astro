@@ -51,7 +51,8 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
       <p>西欧から東欧・ロシア西部まで、45の国・地域の位置関係を確かめる基礎地図です。</p>
     </header>
 
-    <p><a data-europe-detail-link href={withBase('/atlas/europe/nature/')}>欧州の気候と24地点の雨温図を見る →</a>　<a data-europe-detail-link href={withBase('/atlas/europe/agriculture/')}>小麦の分布を見る →</a></p>
+    <p><a data-europe-detail-link href={withBase('/atlas/europe/nature/')}>欧州の気候と24地点の雨温図を見る →</a>　<a data-europe-detail-link href={withBase('/atlas/europe/agriculture/')}>作物・家畜・森林を見る →</a></p>
+    <p><a data-europe-detail-link href={withBase('/atlas/europe/industry/')}>産業の拠点と国別の構成を見る →</a>　<a data-europe-detail-link href={withBase('/atlas/europe/population/')}>人口密度・都市・高齢化を見る →</a></p>
     <nav class="europe-regions" aria-label="欧州の地域を選ぶ">
       <button type="button" data-region-button="all" aria-pressed="true">欧州全体</button>
       {regionOrder.map(region => <button type="button" data-region-button={region} aria-pressed="false">{regionNames[region]}</button>)}
@@ -168,7 +169,7 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
       for (const link of root.querySelectorAll<HTMLAnchorElement>('[data-europe-detail-link]')) {
         const url = new URL(link.href);
         url.search = window.location.search;
-        url.searchParams.set('layer', url.pathname.includes('/agriculture/') ? 'wheat' : 'climate');
+        url.searchParams.set('layer', url.pathname.includes('/agriculture/') ? 'wheat' : url.pathname.includes('/industry/') ? 'hubs' : url.pathname.includes('/population/') ? 'density' : 'climate');
         link.href = url.href;
       }
     }
@@ -255,4 +256,3 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
   @media (max-width: 850px) { .europe-layout { grid-template-columns: 1fr; } .europe-side { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); } .europe-country-list { border-top: 0; border-left: 1px solid var(--rule); } }
   @media (max-width: 600px) { .europe-atlas { padding-top: 18px; } .europe-heading { margin: 18px 0 20px; } .europe-heading > p:last-child { font-size: 15px; } .europe-map-heading { display: block; } .europe-map-heading p { margin-top: 4px; } .europe-side { display: block; } .europe-country-list { border-top: 1px solid var(--rule); border-left: 0; } .europe-country-buttons { max-height: 240px; } }
 </style>
-

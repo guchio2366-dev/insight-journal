@@ -82,6 +82,19 @@
 .eu-reading-strip h2 { font-family:var(--serif); font-size:24px; margin:0; }.eu-reading-strip p { font-size:13px; }.eu-reading-actions { display:flex; flex-direction:column; justify-content:center; gap:12px; }.eu-reading-actions button { text-align:left; }
 .eu-sources { margin-top:20px; border-top:1px solid var(--rule); }.eu-sources li { font-size:12px; margin-bottom:9px; }
 .eu-atlas [hidden] { display:none!important; }
+.eu-subject-select { display:flex; gap:12px; align-items:center; padding:0 16px 12px; font-size:12px; }
+.eu-subject-select select { flex:1; min-width:0; max-width:440px; }
+.eu-subject-reader h2 { font-family:var(--serif); font-size:25px; margin:0 0 12px; }
+.eu-subject-reader h3 { font-size:18px; margin:18px 0 8px; }
+.eu-subject-reader p { font-size:13px; line-height:1.9; }
+.eu-national-values>div { display:grid; grid-template-columns:1fr; padding:10px 0; border-bottom:1px solid #d6dcd5; }
+.eu-national-values dt { font-size:12px; }.eu-national-values dd { font-size:19px; font-weight:700; margin:4px 0 0; }
+.eu-expanded-readings { margin-top:36px; border-top:1px solid var(--rule); padding-top:20px; }
+.eu-expanded-readings h2 { font:700 27px var(--serif); }.eu-reading-index { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px 30px; }
+.eu-reading-index article { padding:16px 0; border-bottom:1px solid var(--rule); }.eu-reading-index h3 { font:700 21px var(--serif); margin:0 0 10px; }.eu-reading-index p { font-size:13px; line-height:1.9; }.eu-reading-index article>div { display:flex; flex-wrap:wrap; gap:8px; }
+.eu-reading-index .eu-source-link { display:block; overflow-wrap:anywhere; }
+.eu-atlas button:disabled { opacity:.5; cursor:not-allowed; }
+@media(max-width:700px) { .eu-field-nav { gap:0; justify-content:space-between; font-size:12px; }.eu-reading-index { grid-template-columns:1fr; gap:8px; }.eu-subject-select { padding-inline:12px; }.eu-subject-reader { margin-top:12px; } }
 .eu-layer-controls { display:flex; gap:6px; padding:0 14px 12px; flex-wrap:wrap; }
 .eu-layer-controls button { font-size:12px; }
 .eu-grid-value { padding:12px 16px; background:#f3f0e7; font-size:13px; }
