@@ -40,7 +40,11 @@ function start(root:HTMLElement) {
     const el=$('[data-map-state]');el.textContent=message;el.hidden=!message;
     $('[data-map-retry]').hidden=!error;
   }
+  function syncFieldLinks() {
+    $$<HTMLAnchorElement>('.atlas-tabs [data-field]').forEach(a=>{if(a.dataset.field===state.field)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');a.href=writeAsiaAtlasState(new URL(a.href),{...state,field:a.dataset.field as AsiaField,back:null}).href;});
+  }
   function persist(push:boolean) {
+    syncFieldLinks();
     const url=writeAsiaAtlasState(new URL(location.href),state);
     if(url.href===location.href)return;
     history[push?'pushState':'replaceState']({},'',url);
@@ -67,7 +71,7 @@ function start(root:HTMLElement) {
     for(const option of citySelect.options){const allowed=!state.place||!option.value||option.dataset.country===state.place;option.hidden=!allowed;option.disabled=!allowed;}
     $$<HTMLButtonElement>('[data-country-button]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.countryButton===state.place)));
     $$('[data-map-country]').forEach(p=>p.classList.toggle('is-selected',(p as SVGPathElement).dataset.mapCountry===state.place));
-    $$<HTMLAnchorElement>('.atlas-tabs [data-field]').forEach(a=>{if(a.dataset.field===state.field)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');a.href=writeAsiaAtlasState(new URL(a.href),{...state,field:a.dataset.field as AsiaField,back:null}).href;});
+    syncFieldLinks();
     const explorer=$<HTMLElement>('[data-asia-explorer]');
     if(explorer)explorer.dataset.field=state.field;
     const fieldPanel=$<HTMLElement>('[data-field-national]');if(fieldPanel)fieldPanel.dataset.fieldNational=state.field;

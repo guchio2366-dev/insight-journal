@@ -178,6 +178,12 @@ test('分野リンクは選択を含む実URLになり、切替・履歴復元�
     agriculture.dispatchEvent(modified);
     assert.equal(intercepted, false, 'modified clicks retain normal link behavior');
     assert.equal(window.__maps.length, 1);
+    await delay();
+    window.__map.center = {lng:138.2,lat:36.5}; window.__map.zoom = 6;
+    await window.__map.fire('moveend');
+    await until(() => new URL(agriculture.href).searchParams.get('lng') === '138.20000', 'field link follows map movement');
+    assert.equal(new URL(agriculture.href).searchParams.get('lat'),'36.50000');
+    assert.equal(new URL(agriculture.href).searchParams.get('z'),'6.000');
   } finally { await window.happyDOM.close(); }
 });
 
