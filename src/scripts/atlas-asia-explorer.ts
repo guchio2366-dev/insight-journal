@@ -100,6 +100,8 @@ function start(root:HTMLElement) {
     let text=state.field==='natural'?'地図上の陸地を選ぶと、気候区分を確認できます。':'地図上の対象地域を選ぶと、格子内の米の収穫面積を確認できます。';
     const point=selectedPoint??config.cities.find(c=>c.id===state.city)?.coordinates;
     if(state.field==='natural'&&climateManifest&&state.place&&climateManifest.regions[config.regionId].countryCoverage[state.place]?.classifiedPixels===0)text='この国・地域は広域の気候格子で分類できる画素がありません。都市の観測値は別に確認できます。';
+    const riceCoverage=riceLayer.countries.find(c=>c.code===state.place);
+    if(state.field==='agriculture'&&riceCoverage?.validCells===0)text=riceCoverage.maskCells===0?'この国・地域の小島は、今回の広域格子と国境の組合せでは表示できません。米の収穫面積が0という意味ではありません。':'この国・地域は採用した米の分布データに有効な格子がありません。米の収穫面積が0という意味ではありません。';
     if(point){
       if(state.field==='natural'&&climateGrid){
         const id=gridCellAt(climateGrid,point[0],point[1]),classification=config.classes.find(c=>c.id===id);
@@ -107,7 +109,8 @@ function start(root:HTMLElement) {
         selectedClass=id;renderClass();
       }
       if(state.field==='agriculture'&&riceGrid){const result=readAsiaRiceCell(riceGrid,point[0],point[1]);text=result.status==='value'?`${point[1].toFixed(2)}°, ${point[0].toFixed(2)}° · 米の収穫面積 ${result.harvestedHa.toLocaleString('ja-JP',{maximumFractionDigits:1})} ha／格子`:'選択した格子はデータなし、または対象範囲外です。米の収穫面積が0という意味ではありません。';$('[data-rice-value]').textContent=text;}
-    }else if(state.field==='agriculture')$('[data-rice-value]').textContent='地図上の対象地域を選ぶと、格子内の収穫面積を表示します。';
+    }
+    if(state.field==='agriculture')$('[data-rice-value]').textContent=text;
     $('[data-grid-reading]').textContent=text;
   }
   async function loadClimateGrid() {

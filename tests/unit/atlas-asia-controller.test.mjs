@@ -72,9 +72,9 @@ async function until(check, message) {
 function fixture() {
   const singles = ['reading-title', 'reading-summary', 'reading-questions', 'map-title', 'map-eyebrow', 'map-period', 'grid-reading', 'class-code', 'class-name', 'class-description', 'rice-value', 'climate-method', 'agriculture-method', 'rice-source', 'rice-summary', 'rice-scale'];
   return `<main data-asia-atlas>
-    <select data-country-select><option value=""></option><option value="JPN">Japan</option><option value="CHN">China</option></select>
+    <select data-country-select><option value=""></option><option value="JPN">Japan</option><option value="CHN">China</option><option value="MNG">Mongolia</option></select>
     <select data-city-select><option value=""></option><option value="tokyo" data-country="JPN">Tokyo</option><option value="beijing" data-country="CHN">Beijing</option></select>
-    <button data-country-button="JPN"></button><button data-country-button="CHN"></button>
+    <button data-country-button="JPN"></button><button data-country-button="CHN"></button><button data-country-button="MNG"></button>
     <button data-field="natural"></button><button data-field="agriculture"></button>
     <div data-map-surface></div><div data-map-fallback><svg><path data-map-country="JPN"></path></svg></div>
     <div data-map-state></div><button data-map-retry hidden></button>
@@ -99,7 +99,7 @@ async function setup(query = '', options = {}) {
   const [west, south] = mercatorPoint(72, 17), [east, north] = mercatorPoint(155, 56);
   q('[data-asia-config]').textContent = JSON.stringify({
     regionId: 'east-asia', label: '東アジア', bounds: [72, 17, 155, 56],
-    countries: [{ code: 'JPN', name: '日本', bounds: [129, 30, 146, 46] }, { code: 'CHN', name: '中国', bounds: [73, 18, 135, 53] }],
+    countries: [{ code: 'JPN', name: '日本', bounds: [129, 30, 146, 46] }, { code: 'CHN', name: '中国', bounds: [73, 18, 135, 53] }, { code: 'MNG', name: 'モンゴル', bounds: [87, 41, 120, 53] }],
     cities: [{ id: 'tokyo', name: '東京', countryCode: 'JPN', coordinates: [139.75, 35.69] }, { id: 'beijing', name: '北京', countryCode: 'CHN', coordinates: [116.4, 39.9] }],
     classes: asiaClimateClasses, climate: { image: 'east-asia.png', imageCoordinates: [[72, 56], [155, 56], [155, 17], [72, 17]], grid: 'east-asia.grid.json', classIds: [14, 21], countryCoverage: { JPN: { classifiedPixels: 1 }, CHN: { classifiedPixels: 1 } } },
     geographyUrl: '/assets/geography.json', climateBase: '/assets/climate/', agricultureBase: '/assets/agriculture/',
@@ -208,6 +208,28 @@ test('以前の気候取得が失敗しても、新しく開いた農業分野�
     assert.equal(q('[data-rice-reading]').hidden, false);
     assert.equal(q('[data-map-state]').hidden, true, 'inactive climate request must not replace active agriculture status');
   } finally { rejectClimate(); await window.happyDOM.close(); }
+});
+
+test('国の米データ欠測を選択直後に説明し、収録国への切替で格子案内へ戻す', async () => {
+  const { window, q } = await setup('?field=agriculture&place=MNG');
+  try {
+    await until(() => q('[data-map-state]').hidden, 'agriculture ready');
+    assert.equal(new URL(window.location.href).searchParams.get('place'), 'MNG');
+    for (const selector of ['[data-grid-reading]', '[data-rice-value]']) {
+      const text = q(selector).textContent;
+      assert.match(text, /データ(?:が)?(?:なし|ありません)|欠測|収録されていません|有効な格子がありません/, selector + ' explains missing country data');
+      assert.match(text, /0.*(?:意味ではありません|意味しません)/, selector + ' does not equate missing data with zero');
+      assert.doesNotMatch(text, /0\s*ha/, selector + ' does not display a measured zero');
+    }
+    q('[data-country-select]').value = 'CHN';
+    q('[data-country-select]').dispatchEvent(new window.Event('change'));
+    await delay(); // Let the cached-grid continuation finish before closing the DOM.
+    assert.equal(new URL(window.location.href).searchParams.get('place'), 'CHN');
+    for (const selector of ['[data-grid-reading]', '[data-rice-value]']) {
+      assert.match(q(selector).textContent, /地図上.*選ぶと.*格子/);
+      assert.doesNotMatch(q(selector).textContent, /データなし|欠測|収録されていません/);
+    }
+  } finally { await window.happyDOM.close(); }
 });
 
 test('米の数値取得が成功しても、地図画像の失敗と再試行ボタンを消さない', async () => {

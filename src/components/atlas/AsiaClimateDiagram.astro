@@ -30,7 +30,7 @@ const format=(v:number|null,unit:string)=>v===null?'欠測':`${v.toLocaleString(
     <text x="320" y="205">月</text>
   </svg>
   <div class="chart-key"><span><i class="bar-key"></i>降水量</span><span><i class="line-key"></i>平均気温</span>{validRain.length<12&&<span>× 未収録</span>}</div>
-  <div class="climate-metrics"><div><small>年間降水量</small><b>{annualRain===null?'欠測あり':`${Math.round(annualRain).toLocaleString('ja-JP')} mm`}</b></div><div><small>月平均気温の範囲</small><b>{temperatures.length?`${Math.min(...temperatures).toFixed(1)}〜${Math.max(...temperatures).toFixed(1)} ℃`:'欠測'}</b></div></div>
+  <div class="climate-metrics"><div><small>年間降水量</small><b>{annualRain===null?'欠測あり':`${annualRain.toLocaleString('ja-JP',{maximumFractionDigits:1})} mm`}</b></div><div><small>月平均気温の範囲</small><b>{temperatures.length?`${Math.min(...temperatures).toFixed(1)}〜${Math.max(...temperatures).toFixed(1)} ℃`:'欠測'}</b></div></div>
   <p class="chart-note">同じ地域の雨温図は共通の目盛りです。気温と降水量は別の軸で読みます。{validRain.length<12&&' ×は降水量の未収録を示します。0mmではありません。'}</p>
   <details class="monthly-values"><summary>月別の数値と観測地点</summary>
     <p>{city.stationName}{city.elevationM!==undefined?` · 標高 ${city.elevationM.toLocaleString('ja-JP')} m`:''}<br />観測地点 {Math.abs(city.coordinates[1]).toFixed(2)}°{city.coordinates[1]>=0?'N':'S'} / {city.coordinates[0].toFixed(2)}°E</p>
