@@ -18,3 +18,10 @@ and derivation are recorded in `map/vendor/README.md` and
 - Principal aquifers: USGS Ground Water Atlas, distributed through Esri's USA Aquifers Feature Layer. Attribution is retained in the public manifest.
 - Natural Earth physical geography and relief: public domain, as credited above.
 - Fallback map text is rasterized from Noto Sans CJK JP (SIL Open Font License 1.1); the font software is not redistributed.
+
+
+## Africa atlas
+
+- Natural Earth Admin 0 Countries 1:50m, public domain. Retrieved 2026-09-25. https://www.naturalearthdata.com/about/terms-of-use/
+- World Bank, World Development Indicators (source 2), including FAO, UN Population Division and national accounts sources. Retrieved 2026-09-25. CC BY 4.0 under the World Bank data terms: https://datacatalog.worldbank.org/public-licenses . Indicator definitions, upstream credits, URLs and hashes are preserved in data-source/atlas/africa/manifest.json.
+- Derived Africa country subset, rounded coordinates, code harmonization, country/year extraction and Japanese explanations are modifications made for this site. No endorsement by the original providers is implied.
