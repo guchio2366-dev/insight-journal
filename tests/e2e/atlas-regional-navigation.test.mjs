@@ -13,11 +13,11 @@ async function page(route) {
 }
 const selections = doc => [...doc.querySelectorAll('[data-country-button]')].map(button => button.dataset.countryButton).sort();
 
-test('入口の5つの選択肢が中間ページを挟まず、存在する地図へ直接つながる', async () => {
+test('入口の6つの選択肢が中間ページを挟まず、存在する地図へ直接つながる', async () => {
   const doc = await page('atlas');
   const links = [...doc.querySelectorAll('.atlas-region-link')];
-  assert.equal(links.length, 5);
-  assert.deepEqual([...doc.querySelectorAll('.atlas-group-heading h2')].map(el => el.textContent), ['南北アメリカ', 'アジア']);
+  assert.equal(links.length, 6);
+  assert.deepEqual([...doc.querySelectorAll('.atlas-group-heading h2')].map(el => el.textContent), ['南北アメリカ', '欧州', 'アジア']);
   for (const link of links) {
     const route = link.getAttribute('href').replace('/insight-journal/', '');
     assert.notEqual(route, 'atlas/asia/');

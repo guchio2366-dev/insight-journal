@@ -7,17 +7,20 @@ const groups = [
     { label:'北米', href:'/atlas/north-america/', description:'カナダ・米国・メキシコ。米国の自然環境・農林業・産業・人口の地図から開きます。' },
     { label:'中南米', href:'/atlas/latin-america/', description:'中米・カリブ・南米の国と地域の位置関係を読む基礎地図。' }
   ] },
+  { id:'europe', label:'欧州', english:'Europe', maps:[
+    { label:'欧州', href:'/atlas/europe/', description:'西欧から東欧・ロシア西部まで、45の国・地域の位置関係を読む基礎地図。' }
+  ] },
   { id:'asia', label:'アジア', english:'Asia', maps:asiaMapIds.map(id => regionalMaps[id]) }
 ];
 ---
-<BaseLayout title="地図から見る" description="南北アメリカとアジアから地域を選び、地図を読む。">
+<BaseLayout title="地図から見る" description="南北アメリカ・欧州・アジアから地域を選び、地図を読む。">
   <div class="atlas-directory shell">
     <header><p class="eyebrow">Atlas</p><h1>地図から見る</h1><p>読みたい地域を選ぶと、その地図が開きます。</p></header>
     {groups.map(group => <section class="atlas-group" id={group.id} aria-labelledby={group.id + '-title'}>
       <div class="atlas-group-heading"><h2 id={group.id + '-title'}>{group.label}</h2><span>{group.english}</span></div>
       <div class="atlas-group-links">{group.maps.map(map => <a href={withBase(map.href)} class="atlas-region-link"><h3>{map.label}<span aria-hidden="true">↗</span></h3><p>{map.description}</p><span class="atlas-open">地図を開く →</span></a>)}</div>
     </section>)}
-    <p class="atlas-directory-note">アジアは3地域に分けて掲載しています。中東とロシアは別枠です。メキシコは北米に含めています。</p>
+    <p class="atlas-directory-note">アジアは3地域に分けて掲載しています。中東は別枠とし、ロシア西部は欧州地図に含めています。メキシコは北米に含めています。</p>
   </div>
 </BaseLayout>
 <style>
