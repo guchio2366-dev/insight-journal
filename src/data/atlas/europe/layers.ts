@@ -21,6 +21,7 @@ export const europeLayers: EuropeLayer[] = [
  {id:'growth',field:'population',title:'人口増加率',period:'2023',unit:'% / 年',note:'国全体の年間人口増加率。自然増減と移動を含む総人口の変化であり、移民数そのものではありません。',source:'https://data.worldbank.org/indicator/SP.POP.GROW',indicator:'growth',breaks:[-2,-1,0,1,2],colors:['#91452c','#bf7d59','#e6c6b2','#c9dfd9','#78aba1','#337e73']},
 ];
 export const fields: {id:EuropeField;label:string;initial:string}[] = [{id:'nature',label:'自然環境',initial:'climate'},{id:'agriculture',label:'農林業',initial:'wheat'},{id:'industry',label:'産業',initial:'hubs'},{id:'population',label:'人口',initial:'density'}];
+export const europeFieldHeadings: Record<EuropeField,string> = {nature:'国境を越えて、自然を読む。',agriculture:'農地と森林、その分布を読む。',industry:'つながる産業、その立地を読む。',population:'人の分布と、国ごとの違いを読む。'};
 export function layerColor(layer: EuropeLayer, value: number | null) {
  if (value === null || !Number.isFinite(value)) return '#d9dcda';
  let i=0;while(i<(layer.breaks?.length??0) && value>=layer.breaks![i])i++;

@@ -34,6 +34,9 @@ export function readEuropeState(search: string, countries: { code: string; regio
 }
 export function writeEuropeState(url: URL, state: EuropeState): URL {
   const next = new URL(url);
+  const displayedLayer=state.layer==='overlay'?(state.returnLayer==='climate'?'wheat':state.returnLayer):state.layer;
+  const field=europeLayers.find(layer=>layer.id===displayedLayer)?.field;
+  if(field)next.pathname=next.pathname.replace(/(\/atlas\/europe\/)(nature|agriculture|industry|population)\/?$/,`$1${field}/`);
   for (const key of ['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature']) next.searchParams.delete(key);
   if (state.region !== 'all') next.searchParams.set('region', state.region);
   if (state.place) next.searchParams.set('place', state.place);

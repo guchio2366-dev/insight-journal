@@ -1,5 +1,5 @@
 import { frame, project, unproject, wheatCell, displayCell, visibleBounds, readEuropeState, writeEuropeState } from './atlas-europe-view';
-import { layerColor, type EuropeLayer } from '../data/atlas/europe/layers';
+import { layerColor, fields, europeFieldHeadings, type EuropeLayer } from '../data/atlas/europe/layers';
 import type { EuropeReading } from '../data/atlas/europe/readings';
 import type { Geometry } from './atlas-europe-geometry';
 import type { Map as LibreMap, Marker } from 'maplibre-gl';
@@ -194,6 +194,13 @@ export function initEuropeAtlas() {
     map?.fitBounds(bounds, { padding: 35, maxZoom: 7, duration: reduced ? 0 : 450 });
   }
   function render(refit = false) {
+    const currentField=fields.find(field=>field.id===subject().field)!;
+    query('[data-eu-field-label]').textContent=currentField.label;
+    query('[data-eu-field-kicker]').textContent='EUROPE · '+currentField.id.toUpperCase();
+    query('[data-eu-field-heading]').textContent=europeFieldHeadings[currentField.id];
+    document.title=`欧州の${currentField.label}｜Insight Journal`;
+    const canonical=writeEuropeState(new URL(location.href),state);
+    if(canonical.pathname!==location.pathname)history.replaceState({},'',canonical);
     countrySelect.value = state.place;
     citySelect.value = state.city;
     const active = [state.city, ...state.compare];
@@ -205,13 +212,13 @@ export function initEuropeAtlas() {
     all<HTMLElement>('[data-eu-region]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.euRegion === state.region)));
     all<SVGElement>('[data-eu-shape]').forEach(shape => shape.classList.toggle('is-selected', shape.dataset.euShape === state.place));
     all<HTMLElement>('[data-city-card]').forEach(card => { card.hidden = !active.includes(card.dataset.cityCard!); card.style.order = String(active.indexOf(card.dataset.cityCard!)); });
-    all<SVGElement>('[data-eu-point]').forEach(point => {point.classList.toggle('is-active', active.includes(point.dataset.euPoint!));point.style.display=climateReader()?'':'none';});
+    all<SVGElement>('[data-eu-point]').forEach(point => {point.classList.toggle('is-active', active.includes(point.dataset.euPoint!));point.style.display=climateReader()?'':'none';point.removeAttribute('hidden');});
     markers.forEach(({ city, element }) => {element.hidden=!climateReader(); element.classList.toggle('is-active', active.includes(city)); element.setAttribute('aria-pressed', String(active.includes(city))); });
     all<SVGElement>('[data-eu-feature-point]').forEach(p=>{p.style.display=featureVisible(p.dataset.euFeaturePoint!)?'':'none';p.removeAttribute('hidden');p.classList.toggle('is-active',p.dataset.euFeaturePoint===state.feature);});
     featureMarkers.forEach(({id,element})=>{element.hidden=!featureVisible(id);element.classList.toggle('is-active',id===state.feature);element.setAttribute('aria-pressed',String(id===state.feature));});
     if (map?.getLayer('selected')) map.setFilter('selected', ['==', ['get', 'code'], state.place]);
     all<HTMLAnchorElement>('[data-base-map]').forEach(a => { a.href = writeEuropeState(new URL(a.href), state).href; });
-    all<HTMLAnchorElement>('[data-eu-field]').forEach(a => { a.href = writeEuropeState(new URL(a.href), { ...state, layer: a.dataset.euField! }).href; });
+    all<HTMLAnchorElement>('[data-eu-field]').forEach(a => { a.href = writeEuropeState(new URL(a.href), { ...state, layer: a.dataset.euField! }).href;if(a.dataset.euField===currentField.initial)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current'); });
     const city = cities.find(c => c.id === state.city)!;
     message.textContent = place && city.country !== place.code ? `${place.name}を地図で選択中。雨温図は${city.name}です。${cities.some(c => c.country === place.code) ? '観測地点の一覧から変更できます。' : '選んだ国の観測地点はこの一覧にありません。'}` : '';
     query<HTMLButtonElement>('[data-eu-render]').textContent = failed || state.render === 'static' ? '操作できる地図に戻す' : '簡易表示にする';

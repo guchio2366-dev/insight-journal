@@ -1,12 +1,14 @@
 ---
 import { europeReadings } from '../../data/atlas/europe/readings';
-const { mode = 'reader' } = Astro.props;
+import type { EuropeLayer } from '../../data/atlas/europe/layers';
+interface Props { mode?: 'reader' | 'index'; layer?: EuropeLayer; features?: {id:string;name:string;group?:string}[]; hidden?:boolean }
+const { mode = 'reader', layer, features = [], hidden = false } = Astro.props;
 ---
-{mode === 'reader' ? <section class="eu-subject-reader" data-eu-subject-reader hidden aria-labelledby="eu-subject-title">
- <p class="eu-kicker">READ THE MAP</p><h2 id="eu-subject-title" data-eu-subject-title>地図を読む</h2>
- <p data-eu-subject-note></p>
- <label class="eu-select-label">地点・解説を選ぶ<select data-eu-feature><option value="">選択してください</option></select></label>
- <p class="eu-data-note" data-eu-feature-help></p>
+{mode === 'reader' ? <section class="eu-subject-reader" data-eu-subject-reader hidden={hidden} aria-labelledby="eu-subject-title">
+ <p class="eu-kicker">READ THE MAP</p><h2 id="eu-subject-title" data-eu-subject-title>{layer?.title ?? '地図を読む'}</h2>
+ <p data-eu-subject-note>{layer?.note}</p>
+ <label class="eu-select-label">地点・解説を選ぶ<select data-eu-feature disabled={!features.length}><option value="">選択してください</option>{features.map(p=><option value={p.id}>{p.name}{p.group?` · ${p.group}`:''}</option>)}</select></label>
+ <p class="eu-data-note" data-eu-feature-help>{layer?.field==='population'?'都市の位置を選べます。都市人口のランキングではありません。':layer?.field==='industry'?'出典付きの代表地点。国を選ぶと一覧を絞ります。':'分布と選択した地点を読み比べます。'}</p>
  <div data-eu-feature-card aria-live="polite"></div>
  <div class="eu-country-reader"><h3 data-eu-country-title>国を選んで数値を確認</h3><p class="eu-data-note">2023年・国全体の統計。ロシアは全土、海外領土の算入は原統計に従います。格子や都市の値とは異なります。</p><dl class="eu-national-values" data-eu-national-values></dl></div>
  <details class="eu-months" data-eu-trend hidden><summary>選んだ指標の2020〜2024年</summary><table><caption data-eu-trend-caption></caption><thead><tr><th>年</th><th>値</th></tr></thead><tbody data-eu-trend-rows></tbody></table><p>各年とも国全体。欠測は「—」。当年価格のGDPは物価・為替の影響を含みます。</p></details>

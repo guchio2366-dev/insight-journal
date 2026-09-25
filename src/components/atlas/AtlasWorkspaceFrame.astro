@@ -1,0 +1,11 @@
+---
+import AtlasNewsRail from './AtlasNewsRail.astro';
+import '../../styles/atlas-explorer.css';
+import '../../styles/atlas-desktop.css';
+interface Props { region?: 'north-america' | 'latin-america' }
+const {region='north-america'} = Astro.props;
+---
+<div class="atlas-desktop-shell" data-atlas-shell>
+  <AtlasNewsRail {region} />
+  <slot />
+</div>

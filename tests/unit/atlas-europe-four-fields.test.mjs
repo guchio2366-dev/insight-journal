@@ -18,6 +18,19 @@ test('全主題と比較元・地点をURLに保存し、未知の主題を受�
  }
  assert.equal(readEuropeState('?layer=unknown',countries,['london'],'density').layer,'density');
 });
+test('主題の分野へURLを同期し、地域入口・比較元・選択国を維持する',()=>{
+ const state=readEuropeState('?place=FRA&layer=density&render=static',countries,['london'],'hubs');
+ const current=new URL('https://example.test/insight-journal/atlas/europe/industry/?external=kept');
+ assert.equal(writeEuropeState(current,state).pathname,'/insight-journal/atlas/europe/population/');
+ assert.equal(writeEuropeState(current,state).searchParams.get('place'),'FRA');
+ assert.equal(writeEuropeState(current,state).searchParams.get('external'),'kept');
+ for(const layer of europeLayers)assert.equal(writeEuropeState(current,{...state,layer:layer.id}).pathname,`/insight-journal/atlas/europe/${layer.field}/`);
+ const overlay={...state,layer:'overlay',returnLayer:'density'};
+ assert.equal(writeEuropeState(current,overlay).pathname,'/insight-journal/atlas/europe/population/');
+ assert.equal(writeEuropeState(current,overlay).searchParams.get('returnLayer'),'density');
+ assert.equal(writeEuropeState(new URL('https://example.test/insight-journal/atlas/europe/'),state).pathname,'/insight-journal/atlas/europe/');
+});
+
 test('45対象の全国値は2023年に固定し、0と欠測を分けて塗る',()=>{
  const data=json('src/data/atlas/europe/country-statistics.json');assert.equal(data.year,2023);
  assert.equal(data.indicators.length,10);

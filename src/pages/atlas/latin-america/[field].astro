@@ -1,0 +1,6 @@
+---
+import LatinAmericaAtlasPage from '../../../components/atlas/LatinAmericaAtlasPage.astro';
+export function getStaticPaths(){return ['agriculture','nature','industry','population'].map(field=>({params:{field},props:{field}}));}
+const {field}=Astro.props;
+---
+<LatinAmericaAtlasPage initialField={field} />
