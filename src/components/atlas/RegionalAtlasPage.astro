@@ -1,0 +1,139 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AtlasRegionNavigation from './AtlasRegionNavigation.astro';
+import { features, japaneseNames, regionalMaps, regionFeatures, type RegionalId, type CountryFeature } from '../../data/atlas/regional-atlas';
+import { withBase } from '../../lib/urls';
+interface Props { regionId: RegionalId }
+const { regionId } = Astro.props;
+const config = regionalMaps[regionId];
+const targets = regionFeatures(regionId);
+const longitudeScale = Math.cos(config.latitude * Math.PI / 180);
+const project = ([lon, lat]: number[]) => [lon * longitudeScale, -lat];
+const rings = (f: CountryFeature) => f.geometry.type === 'Polygon' ? f.geometry.coordinates as number[][][] : (f.geometry.coordinates as number[][][][]).flat();
+const points = targets.flatMap(f => rings(f).flat().map(project));
+const bounds = [Math.min(...points.map(p => p[0])), Math.min(...points.map(p => p[1])), Math.max(...points.map(p => p[0])), Math.max(...points.map(p => p[1]))];
+const w = (bounds[2] - bounds[0]) * 1.12;
+const h = (bounds[3] - bounds[1]) * 1.12;
+const frameW = Math.max(w, h * 1.45);
+const frameH = frameW / 1.45;
+const frame = [(bounds[0] + bounds[2] - frameW) / 2, (bounds[1] + bounds[3] - frameH) / 2, frameW, frameH];
+function mapPath(feature: CountryFeature) {
+  return rings(feature).map(ring => ring.map((position, index) => {
+    const [x, y] = project(position);
+    return `${index ? 'L' : 'M'}${x.toFixed(4)},${y.toFixed(4)}`;
+  }).join('') + 'Z').join('');
+}
+const codes = new Set(targets.map(f => f.properties.code));
+const context = features.filter(f => !codes.has(f.properties.code) && rings(f).some(ring => ring.some(p => {
+  const [x, y] = project(p);
+  return x >= frame[0] - frameW && x <= frame[0] + frameW * 2 && y >= frame[1] - frameH && y <= frame[1] + frameH * 2;
+})));
+const countries = targets.map(f => ({ code: f.properties.code, name: japaneseNames[f.properties.code] ?? f.properties.name, path: mapPath(f) })).sort((a, b) => a.name.localeCompare(b.name, 'ja'));
+const isNorth = regionId === 'canada' || regionId === 'mexico';
+---
+<BaseLayout title={`${config.label}地図`} description={config.description} compactAtlas>
+  <div class="regional-atlas shell" data-regional-atlas data-region-name={config.label} style={`--region-fill:${config.color}`}>
+    <p class="regional-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / {config.group === 'asia' ? 'アジア' : '南北アメリカ'}{isNorth ? ' / 北米' : ''} / {config.label}</p>
+    <header><p class="eyebrow">Atlas · {config.group === 'asia' ? 'Asia' : 'Americas'}</p><h1>{config.label}地図</h1><p>{config.description}</p></header>
+    <AtlasRegionNavigation group={config.group} current={isNorth ? 'north-america' : regionId} country={isNorth ? regionId : undefined} />
+    <div class="regional-layout">
+      <section class="regional-map-panel" aria-labelledby="regional-map-title">
+        <div class="regional-map-heading"><h2 id="regional-map-title">国・地域の位置</h2><button type="button" data-reset-map>{config.label}全体</button></div>
+        <svg class="regional-map" viewBox={frame.join(' ')} data-default-frame={frame.join(' ')} role="img" aria-labelledby="regional-svg-title regional-svg-desc">
+          <title id="regional-svg-title">{config.label}の基礎地図</title><desc id="regional-svg-desc">色のついた範囲が対象地域、灰色が周辺の陸地です。国・地域は一覧からも選択できます。</desc>
+          <g class="regional-context" aria-hidden="true">{context.map(f => <path d={mapPath(f)} fill-rule="evenodd" />)}</g>
+          <g>{countries.map(country => <path d={country.path} fill-rule="evenodd" data-map-country={country.code}><title>{country.name}</title></path>)}</g>
+        </svg>
+        <p class="regional-caption"><span class="regional-swatch"></span>対象地域 <span class="regional-swatch context"></span>周辺の陸地 · 国を選ぶと拡大します。「{config.label}全体」で戻れます。</p>
+        <noscript><p class="regional-caption">基礎地図と国の一覧を表示しています。選択・拡大にはJavaScriptが必要です。</p></noscript>
+      </section>
+      <aside class="regional-side" aria-labelledby="regional-selection-title">
+        <div class="regional-selection" aria-live="polite"><p class="eyebrow">Selected place</p><h2 id="regional-selection-title" data-selection-name>{config.label}</h2><p data-selection-description>地図または一覧から国・地域を選択してください。</p></div>
+        <div class="regional-list"><h3>国・地域を選ぶ</h3><div class="regional-country-buttons">{countries.map(country => <button type="button" data-country-button={country.code} aria-pressed="false">{country.name}</button>)}</div></div>
+      </aside>
+    </div>
+    <footer class="regional-source"><h2>地図の範囲と出典</h2>
+      {config.group === 'asia' ? <p>このサイトのアジアは「東アジア」「東南アジア」「南・中央アジア」の3地域です。中東（イランを含む）とロシアは別枠とし、選択対象に含めません。</p> : <p>このサイトでは、カナダ・米国・メキシコを北米にまとめ、中南米はメキシコを除く中米・カリブ・南米を対象とします。</p>}
+      <p>現在は国・地域の位置を読む基礎地図です。自然環境・農林業・産業・人口のテーマ別表示は含みません。</p>
+      <p>境界は<a href="https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/">Natural Earth Admin 0 Countries（1:110m）</a>、小さな国の一部は<a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/">1:50mデータ</a>を使用。小島や一部の地域は省略されます。表示は等距円筒図法で、面積の比較には適しません。境界・名称は出典の表示上の区分であり、政治的な地位や主権についての見解を示すものではありません。</p>
+    </footer>
+  </div>
+</BaseLayout>
+<script>
+  const root = document.querySelector<HTMLElement>('[data-regional-atlas]');
+  if (root) {
+    const map = root.querySelector<SVGSVGElement>('.regional-map')!;
+    const paths = [...root.querySelectorAll<SVGPathElement>('[data-map-country]')];
+    const buttons = [...root.querySelectorAll<HTMLButtonElement>('[data-country-button]')];
+    const name = root.querySelector<HTMLElement>('[data-selection-name]')!;
+    const description = root.querySelector<HTMLElement>('[data-selection-description]')!;
+    const defaultFrame = map.dataset.defaultFrame!;
+    const label = root.dataset.regionName!;
+    let selected = '';
+    function render() {
+      for (const button of buttons) button.setAttribute('aria-pressed', String(button.dataset.countryButton === selected));
+      for (const path of paths) path.classList.toggle('is-selected', path.dataset.mapCountry === selected);
+      const path = paths.find(path => path.dataset.mapCountry === selected);
+      const button = buttons.find(button => button.dataset.countryButton === selected);
+      name.textContent = button?.textContent ?? label;
+      description.textContent = button ? '選択した国・地域に地図を合わせました。' : '地図または一覧から国・地域を選択してください。';
+      if (!path) { map.setAttribute('viewBox', defaultFrame); return; }
+      const box = path.getBBox();
+      const width = Math.max(box.width * 1.3, box.height * 1.3 * 1.45, .45);
+      const height = width / 1.45;
+      map.setAttribute('viewBox', `${box.x + box.width / 2 - width / 2} ${box.y + box.height / 2 - height / 2} ${width} ${height}`);
+    }
+    function readUrl() {
+      const requested = new URLSearchParams(location.search).get('place');
+      selected = requested && buttons.some(button => button.dataset.countryButton === requested) ? requested : '';
+      render();
+    }
+    function select(code: string) {
+      if (selected === code) return;
+      selected = code;
+      const url = new URL(location.href);
+      url.searchParams.delete('region');
+      code ? url.searchParams.set('place', code) : url.searchParams.delete('place');
+      history.pushState(null, '', url);
+      render();
+    }
+    buttons.forEach(button => button.addEventListener('click', () => select(button.dataset.countryButton!)));
+    paths.forEach(path => path.addEventListener('click', () => select(path.dataset.mapCountry!)));
+    root.querySelector('[data-reset-map]')?.addEventListener('click', () => select(''));
+    window.addEventListener('popstate', readUrl);
+    readUrl();
+  }
+</script>
+<style>
+  .regional-atlas { padding: 16px 0 50px; }
+  .regional-breadcrumb { color: var(--ink-soft); font-size: 12px; }
+  header { margin: 20px 0 16px; }
+  h1 { margin: 0; font-family: var(--serif); font-size: clamp(30px, 4vw, 44px); letter-spacing: -.04em; }
+  header > p:last-child { margin: 9px 0 0; color: var(--ink-soft); font-size: 15px; }
+  .regional-layout { display: grid; grid-template-columns: minmax(0, 1fr) 275px; gap: 18px; align-items: start; }
+  .regional-map-panel, .regional-side { min-width: 0; border: 1px solid var(--rule); background: var(--white); }
+  .regional-map-heading { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; padding: 12px 16px; }
+  .regional-map-heading h2 { margin: 0; font-family: var(--serif); font-size: 21px; }
+  button { min-height: 44px; padding: 8px 11px; border: 1px solid var(--rule); background: var(--white); color: var(--ink); font: inherit; font-size: 12px; cursor: pointer; }
+  button:focus-visible { outline: 3px solid #ad5232; outline-offset: 2px; }
+  .regional-map { display: block; width: 100%; height: auto; aspect-ratio: 1.45; background: #e0edf0; }
+  .regional-map path { fill: var(--region-fill); stroke: #fffaf0; stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .regional-map .regional-context path { fill: #d8d9d2; stroke: #f1f0e9; }
+  .regional-map [data-map-country] { cursor: pointer; }
+  .regional-map [data-map-country]:hover, .regional-map path.is-selected { fill: #ad5232; stroke: #583522; stroke-width: 1.5; }
+  .regional-caption { margin: 0; padding: 12px 16px; color: var(--ink-soft); font-size: 12px; line-height: 1.8; }
+  .regional-swatch { display: inline-block; width: 10px; height: 10px; background: var(--region-fill); border: 1px solid #50616b; margin-right: 3px; }
+  .regional-swatch.context { background: #d8d9d2; margin-left: 10px; }
+  .regional-selection { padding: 20px; background: #f7f5ed; }
+  .regional-selection h2 { margin: 3px 0 10px; font-family: var(--serif); font-size: 25px; }
+  .regional-selection p:last-child { margin: 0; font-size: 12px; line-height: 1.8; color: var(--ink-soft); }
+  .regional-list { padding: 18px; border-top: 1px solid var(--rule); }
+  .regional-list h3 { margin: 0 0 10px; font-size: 13px; }
+  .regional-country-buttons { display: flex; flex-wrap: wrap; gap: 5px; }
+  button[aria-pressed='true'] { background: #ad5232; color: #fff; border-color: #ad5232; }
+  .regional-source { max-width: 900px; margin-top: 30px; padding-top: 18px; border-top: 1px solid var(--rule); }
+  .regional-source h2 { font-family: var(--serif); font-size: 21px; margin: 0 0 8px; }
+  .regional-source p { color: var(--ink-soft); font-size: 12px; line-height: 1.9; margin: 6px 0; }
+  @media (max-width: 850px) { .regional-layout { grid-template-columns: 1fr; } .regional-side { display: grid; grid-template-columns: 1fr 1.6fr; } .regional-list { border-top: 0; border-left: 1px solid var(--rule); } }
+  @media (max-width: 520px) { .regional-side { display: block; } .regional-list { border-left: 0; border-top: 1px solid var(--rule); } }
+</style>

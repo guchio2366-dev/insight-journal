@@ -1,256 +1,31 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import AtlasRegionNavigation from '../../../components/atlas/AtlasRegionNavigation.astro';
+import { asiaMapIds, regionalMaps, regionFeatures } from '../../../data/atlas/regional-atlas';
 import { withBase } from '../../../lib/urls';
-import geography from '../../../data/atlas/asia-countries.json';
-
-type Region = 'east' | 'southeast' | 'south' | 'central' | 'west' | 'north';
-type Feature = {
-  properties: { code: string; name: string; subregion: string };
-  geometry: { type: 'Polygon' | 'MultiPolygon'; coordinates: number[][][] | number[][][][] };
-};
-
-const regionNames: Record<Region, string> = {
-  east: '東アジア', southeast: '東南アジア', south: '南アジア',
-  central: '中央アジア', west: '西アジア', north: '北アジア'
-};
-const sourceRegions: Record<string, Region> = {
-  'Eastern Asia': 'east', 'South-Eastern Asia': 'southeast',
-  'Southern Asia': 'south', 'Central Asia': 'central', 'Western Asia': 'west'
-};
-const japaneseNames: Record<string, string> = {
-  AFG: 'アフガニスタン', ARE: 'アラブ首長国連邦', ARM: 'アルメニア', AZE: 'アゼルバイジャン',
-  BGD: 'バングラデシュ', BRN: 'ブルネイ', BTN: 'ブータン', CHN: '中国', CYN: '北キプロス',
-  CYP: 'キプロス', GEO: 'ジョージア', IDN: 'インドネシア', IND: 'インド', IRN: 'イラン',
-  IRQ: 'イラク', ISR: 'イスラエル', JOR: 'ヨルダン', JPN: '日本', KAZ: 'カザフスタン',
-  KGZ: 'キルギス', KHM: 'カンボジア', KOR: '韓国', KWT: 'クウェート', LAO: 'ラオス',
-  LBN: 'レバノン', LKA: 'スリランカ', MMR: 'ミャンマー', MNG: 'モンゴル', MYS: 'マレーシア',
-  NPL: 'ネパール', OMN: 'オマーン', PAK: 'パキスタン', PHL: 'フィリピン', PRK: '北朝鮮',
-  PSX: 'パレスチナ', QAT: 'カタール', RUS: 'ロシア', SAU: 'サウジアラビア', SYR: 'シリア',
-  THA: 'タイ', TJK: 'タジキスタン', TLS: '東ティモール', TKM: 'トルクメニスタン',
-  TUR: 'トルコ', TWN: '台湾', UZB: 'ウズベキスタン', VNM: 'ベトナム', YEM: 'イエメン'
-};
-const width = 1200;
-const height = 705;
-const project = ([longitude, latitude]: number[]) => [
-  ((longitude - 20) / 160) * width,
-  ((82 - latitude) / 94) * height
-];
-function mapPath(geometry: Feature['geometry']) {
-  const rings = geometry.type === 'Polygon'
-    ? geometry.coordinates as number[][][]
-    : (geometry.coordinates as number[][][][]).flat();
-  return rings.map(ring => ring.map((position, index) => {
-    const [x, y] = project(position);
-    return `${index ? 'L' : 'M'}${x.toFixed(1)},${y.toFixed(1)}`;
-  }).join('') + 'Z').join('');
-}
-const countries = (geography.features as Feature[]).map(feature => {
-  const { code, name, subregion } = feature.properties;
-  return {
-    code, name: japaneseNames[code] ?? name,
-    region: code === 'RUS' ? 'north' as Region : sourceRegions[subregion],
-    path: mapPath(feature.geometry)
-  };
-}).sort((a, b) => a.name.localeCompare(b.name, 'ja'));
-const regionOrder: Region[] = ['east', 'southeast', 'south', 'central', 'west', 'north'];
+const routes = Object.fromEntries(asiaMapIds.map(id => [id, withBase(regionalMaps[id].href)]));
+const countryRoutes = Object.fromEntries(asiaMapIds.flatMap(id => regionFeatures(id).map(feature => [feature.properties.code, id])));
 ---
-
-<BaseLayout title="アジア地図" description="アジアの国・地域の位置と広がりを確認できる基礎地図。" compactAtlas>
-  <div class="asia-atlas shell" data-asia-atlas>
-    <p class="asia-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / アジア</p>
-    <header class="asia-heading">
-      <p class="eyebrow">Atlas · Asia</p>
-      <h1>アジア地図</h1>
-      <p>地域を切り替えながら、国・地域の位置関係を確かめる基礎地図です。</p>
-    </header>
-
-    <nav class="asia-regions" aria-label="アジアの地域を選ぶ">
-      <button type="button" data-region-button="all" aria-pressed="true">アジア全体</button>
-      {regionOrder.map(region => <button type="button" data-region-button={region} aria-pressed="false">{regionNames[region]}</button>)}
-    </nav>
-
-    <div class="asia-layout">
-      <section class="asia-map-card" aria-labelledby="asia-map-title">
-        <div class="asia-map-heading">
-          <h2 id="asia-map-title">国・地域の位置</h2>
-          <p>地域・国を選ぶと、その範囲を拡大します。</p>
-        </div>
-        <div class="asia-map-scroll">
-          <svg class="asia-map" viewBox={`0 0 ${width} ${height}`} role="img" aria-labelledby="asia-map-svg-title asia-map-svg-desc">
-            <title id="asia-map-svg-title">アジアの国・地域の基礎地図</title>
-            <desc id="asia-map-svg-desc">地域ごとに色分けした国・地域の概略境界。下の一覧からも選択できます。</desc>
-            <rect width={width} height={height} fill="#e0edf0" />
-            {countries.map(country => <path d={country.path} fill-rule="evenodd" data-map-country={country.code} data-map-region={country.region}><title>{country.name}</title></path>)}
-            <text x="1100" y="175" class="asia-ocean-label">太平洋</text>
-            <text x="275" y="630" class="asia-ocean-label">インド洋</text>
-          </svg>
-        </div>
-        <p class="asia-map-caption">色は地域区分を示します。「アジア全体」で元の範囲に戻ります。Natural Earth 1:110m の概略境界を使用し、小さな島や国・地域は省略される場合があります。</p>
-      </section>
-
-      <aside class="asia-side" aria-labelledby="asia-selection-title">
-        <div class="asia-selection" aria-live="polite">
-          <p class="eyebrow">Selected place</p>
-          <h2 id="asia-selection-title" data-selection-name>地図を読む</h2>
-          <p data-selection-region>地域を選び、地図または一覧から国・地域を選択してください。</p>
-        </div>
-        <div class="asia-country-list">
-          <h3>地図に表示している国・地域</h3>
-          <div class="asia-country-buttons">
-            {countries.map(country => <button type="button" data-country-button={country.code} data-country-region={country.region} aria-pressed="false">{country.name}</button>)}
-          </div>
-        </div>
-      </aside>
-    </div>
-
-    <footer class="asia-source">
-      <h2>地図の範囲と出典</h2>
-      <p>境界は <a href="https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/">Natural Earth Admin 0 Countries（1:110m）</a>を使用。地域区分はデータのサブリージョンに基づき、ロシアをこの地図では北アジアとして表示しています。境界・名称は出典データの表示上の区分であり、政治的な地位や主権についての見解を示すものではありません。東経20度～180度、南緯12度～北緯82度を表示します。</p>
-    </footer>
-  </div>
+<BaseLayout title="アジア地図" description="東アジア・東南アジア・南・中央アジアの地域別地図。" compactAtlas noindex>
+  <section class="shell asia-legacy" data-asia-legacy data-routes={JSON.stringify(routes)} data-country-routes={JSON.stringify(countryRoutes)}>
+    <p><a href={withBase('/atlas/')}>地図から見る</a> / アジア</p><h1>アジア地図</h1>
+    <p>地域別の地図へ移動します。移動しない場合は、地域を選択してください。</p>
+    <AtlasRegionNavigation group="asia" current="" />
+  </section>
 </BaseLayout>
-
 <script>
-  const root = document.querySelector<HTMLElement>('[data-asia-atlas]');
+  const root = document.querySelector<HTMLElement>('[data-asia-legacy]');
   if (root) {
-    const regionButtons = [...root.querySelectorAll<HTMLButtonElement>('[data-region-button]')];
-    const countryButtons = [...root.querySelectorAll<HTMLButtonElement>('[data-country-button]')];
-    const mapCountries = [...root.querySelectorAll<SVGPathElement>('[data-map-country]')];
-    const map = root.querySelector<SVGSVGElement>('.asia-map');
-    const selectionName = root.querySelector<HTMLElement>('[data-selection-name]');
-    const selectionRegion = root.querySelector<HTMLElement>('[data-selection-region]');
-    const regionNames: Record<string, string> = {
-      east: '東アジア', southeast: '東南アジア', south: '南アジア',
-      central: '中央アジア', west: '西アジア', north: '北アジア'
-    };
-    let activeRegion = 'all';
-    let activeCountry = '';
-    function fitSelection() {
-      if (!map) return;
-      if (activeRegion === 'all' && !activeCountry) {
-        map.setAttribute('viewBox', '0 0 1200 705');
-        return;
-      }
-      const paths = mapCountries.filter(path => activeCountry
-        ? path.dataset.mapCountry === activeCountry
-        : path.dataset.mapRegion === activeRegion);
-      const boxes = paths.map(path => path.getBBox());
-      if (!boxes.length) return;
-      // Clip source geometry to the map's longitude range before fitting.
-      const left = Math.max(0, Math.min(...boxes.map(box => box.x)));
-      const top = Math.max(0, Math.min(...boxes.map(box => box.y)));
-      const right = Math.min(1200, Math.max(...boxes.map(box => box.x + box.width)));
-      const bottom = Math.min(705, Math.max(...boxes.map(box => box.y + box.height)));
-      const spanX = Math.max(100, (right - left) * 1.22);
-      const spanY = Math.max(70, (bottom - top) * 1.22);
-      const aspect = 1200 / 705;
-      const frameWidth = Math.max(spanX, spanY * aspect);
-      const frameHeight = frameWidth / aspect;
-      map.setAttribute('viewBox', `${(left + right - frameWidth) / 2} ${(top + bottom - frameHeight) / 2} ${frameWidth} ${frameHeight}`);
-    }
-    function applyState(writeUrl = false) {
-      for (const button of regionButtons) button.setAttribute('aria-pressed', String(button.dataset.regionButton === activeRegion));
-      for (const button of countryButtons) {
-        const visible = activeRegion === 'all' || button.dataset.countryRegion === activeRegion;
-        button.hidden = !visible;
-        button.setAttribute('aria-pressed', String(button.dataset.countryButton === activeCountry));
-      }
-      for (const path of mapCountries) {
-        path.classList.toggle('is-muted', activeRegion !== 'all' && path.dataset.mapRegion !== activeRegion);
-        path.classList.toggle('is-selected', path.dataset.mapCountry === activeCountry);
-      }
-      fitSelection();
-      const chosen = countryButtons.find(button => button.dataset.countryButton === activeCountry);
-      if (selectionName && selectionRegion) {
-        selectionName.textContent = chosen?.textContent ?? (activeRegion === 'all' ? '地図を読む' : regionNames[activeRegion]);
-        selectionRegion.textContent = chosen
-          ? `${regionNames[chosen.dataset.countryRegion ?? '']}の区分で表示しています。地図を選択した場所に合わせました。`
-          : activeRegion === 'all' ? '地域を選び、地図または一覧から国・地域を選択してください。' : '色のついた範囲から国・地域を選択してください。';
-      }
-      if (writeUrl) {
-        const url = new URL(window.location.href);
-        activeRegion === 'all' ? url.searchParams.delete('region') : url.searchParams.set('region', activeRegion);
-        activeCountry ? url.searchParams.set('place', activeCountry) : url.searchParams.delete('place');
-        history.pushState(null, '', url);
-      }
-    }
-    function readUrl() {
-      const params = new URLSearchParams(window.location.search);
-      const requestedRegion = params.get('region');
-      const requestedCountry = params.get('place');
-      activeRegion = requestedRegion && regionButtons.some(button => button.dataset.regionButton === requestedRegion) ? requestedRegion : 'all';
-      activeCountry = requestedCountry && countryButtons.some(button => button.dataset.countryButton === requestedCountry) ? requestedCountry : '';
-      const chosen = countryButtons.find(button => button.dataset.countryButton === activeCountry);
-      if (chosen && activeRegion !== 'all' && chosen.dataset.countryRegion !== activeRegion) activeRegion = chosen.dataset.countryRegion ?? 'all';
-      applyState();
-    }
-    for (const button of regionButtons) button.addEventListener('click', () => {
-      activeRegion = button.dataset.regionButton ?? 'all';
-      activeCountry = '';
-      applyState(true);
-    });
-    function selectCountry(code: string) {
-      const chosen = countryButtons.find(button => button.dataset.countryButton === code);
-      if (!chosen) return;
-      activeCountry = code;
-      if (activeRegion !== 'all' && chosen.dataset.countryRegion !== activeRegion) activeRegion = chosen.dataset.countryRegion ?? 'all';
-      applyState(true);
-    }
-    for (const button of countryButtons) button.addEventListener('click', () => selectCountry(button.dataset.countryButton ?? ''));
-    for (const path of mapCountries) path.addEventListener('click', () => selectCountry(path.dataset.mapCountry ?? ''));
-    window.addEventListener('popstate', readUrl);
-    readUrl();
+    const routes: Record<string,string> = JSON.parse(root.dataset.routes!);
+    const countryRoutes: Record<string,string> = JSON.parse(root.dataset.countryRoutes!);
+    const oldRegions: Record<string,string> = {east:'east-asia', southeast:'southeast-asia', south:'south-central-asia', central:'south-central-asia'};
+    const params = new URLSearchParams(location.search);
+    const place = params.get('place') ?? '';
+    const region = countryRoutes[place] ?? oldRegions[params.get('region') ?? ''] ?? 'east-asia';
+    const destination = new URL(routes[region], location.origin);
+    if (countryRoutes[place]) destination.searchParams.set('place', place);
+    location.replace(destination.href);
   }
 </script>
-
-<style>
-  .asia-atlas { padding: 18px 0 60px; }
-  .asia-breadcrumb { color: var(--ink-soft); font-size: 12px; }
-  .asia-heading { max-width: 760px; margin: 18px 0 22px; }
-  .asia-heading h1 { margin: 0; font-family: var(--serif); font-size: clamp(32px, 4vw, 48px); letter-spacing: -.05em; }
-  .asia-heading > p:last-child { margin: 10px 0 0; color: var(--ink-soft); font-family: var(--serif); font-size: 16px; line-height: 1.8; }
-  .asia-regions { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 18px; }
-  .asia-regions button { min-height: 44px; padding: 10px 13px; border: 1px solid var(--rule); background: #fff; color: var(--ink); font: inherit; font-size: 13px; cursor: pointer; }
-  .asia-regions button:not([data-region-button='all'])::before { content: ''; display: inline-block; width: 10px; height: 10px; margin-right: 6px; background: var(--region-color); border: 1px solid #50616b; }
-  [data-region-button='east'] { --region-color: #94b8b8; }
-  [data-region-button='southeast'] { --region-color: #a9bd8b; }
-  [data-region-button='south'] { --region-color: #d1b176; }
-  [data-region-button='central'] { --region-color: #bdaca6; }
-  [data-region-button='west'] { --region-color: #d5a795; }
-  [data-region-button='north'] { --region-color: #b6c7d2; }
-  .asia-regions button[aria-pressed='true'] { background: #162638; border-color: #162638; color: #fff; }
-  .asia-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 290px); gap: 18px; align-items: start; }
-  .asia-map-card, .asia-side { border: 1px solid var(--rule); background: #fff; }
-  .asia-map-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 18px 20px; }
-  .asia-map-heading h2 { margin: 0; font-family: var(--serif); font-size: 23px; }
-  .asia-map-heading p { margin: 0; color: var(--ink-soft); font-size: 12px; }
-  .asia-map-scroll { overflow-x: auto; background: #e0edf0; }
-  .asia-map-scroll:focus-visible, .asia-atlas button:focus-visible { outline: 3px solid #b75230; outline-offset: -3px; }
-  .asia-map { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 705; }
-  .asia-map path { fill: #d9d2bc; stroke: #fffaf0; stroke-width: 1.3; vector-effect: non-scaling-stroke; cursor: pointer; transition: opacity .15s, fill .15s; }
-  .asia-map path[data-map-region='east'] { fill: #94b8b8; }
-  .asia-map path[data-map-region='southeast'] { fill: #a9bd8b; }
-  .asia-map path[data-map-region='south'] { fill: #d1b176; }
-  .asia-map path[data-map-region='central'] { fill: #bdaca6; }
-  .asia-map path[data-map-region='west'] { fill: #d5a795; }
-  .asia-map path[data-map-region='north'] { fill: #b6c7d2; }
-  .asia-map path.is-muted { opacity: .22; }
-  .asia-map path:hover, .asia-map path.is-selected { fill: #ad5232; stroke: #583522; stroke-width: 2.2; opacity: 1; }
-  .asia-ocean-label { fill: #5d8590; font-family: var(--serif); font-size: 17px; text-anchor: middle; pointer-events: none; }
-  .asia-map-caption { margin: 0; padding: 12px 20px; border-top: 1px solid var(--rule); color: var(--ink-soft); font-size: 11px; line-height: 1.7; }
-  .asia-selection { min-height: 150px; padding: 20px; background: #f7f5ed; }
-  .asia-selection h2 { margin: 4px 0 8px; font-family: var(--serif); font-size: 27px; }
-  .asia-selection p:last-child { margin: 0; color: var(--ink-soft); font-size: 12px; line-height: 1.8; }
-  .asia-country-list { padding: 18px 20px 22px; border-top: 1px solid var(--rule); }
-  .asia-country-list h3 { margin: 0 0 10px; font-size: 13px; }
-  .asia-country-buttons { display: flex; flex-wrap: wrap; gap: 5px; max-height: 370px; overflow-y: auto; }
-  .asia-country-buttons button { min-height: 40px; padding: 8px 10px; border: 1px solid var(--rule); background: #fff; color: var(--ink); font: inherit; font-size: 12px; cursor: pointer; }
-  .asia-country-buttons button[aria-pressed='true'] { border-color: #ad5232; background: #ad5232; color: #fff; }
-  .asia-country-buttons button[hidden] { display: none; }
-  .asia-source { max-width: 900px; margin-top: 34px; padding-top: 20px; border-top: 1px solid var(--rule); }
-  .asia-source h2 { margin: 0 0 8px; font-family: var(--serif); font-size: 22px; }
-  .asia-source p { margin: 0; color: var(--ink-soft); font-size: 12px; line-height: 1.9; }
-  @media (max-width: 850px) { .asia-layout { grid-template-columns: 1fr; } .asia-side { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); } .asia-country-list { border-top: 0; border-left: 1px solid var(--rule); } }
-  @media (max-width: 600px) { .asia-atlas { padding-top: 18px; } .asia-heading { margin: 18px 0 20px; } .asia-heading > p:last-child { font-size: 15px; } .asia-map-heading { display: block; } .asia-map-heading p { margin-top: 4px; } .asia-side { display: block; } .asia-country-list { border-top: 1px solid var(--rule); border-left: 0; } .asia-country-buttons { max-height: 240px; } }
-</style>
+<style>.asia-legacy { padding: 30px 0 70px; }</style>
 
