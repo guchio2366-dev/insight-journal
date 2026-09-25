@@ -7,7 +7,7 @@ import { features, japaneseNames, regionalMaps, regionFeatures, type CountryFeat
 import { asiaClimateCities } from '../../data/atlas/asia-climate-cities';
 import { asiaClimateClasses } from '../../data/atlas/asia-climate-definitions';
 import { asiaRegionReading } from '../../data/atlas/asia-reading';
-import climateManifest from '../../../public/assets/atlas/asia-climate-v1/manifest.json';
+import climateManifest from '../../../public/assets/atlas/asia-climate-v2/manifest.json';
 import { asiaFieldPaths, type AsiaRegionId, type AsiaField } from '../../lib/atlas-asia-state';
 import { withBase } from '../../lib/urls';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -27,7 +27,7 @@ const frame=[bounds[0]*longitudeScale,-bounds[3],(bounds[2]-bounds[0])*longitude
 const path=(f:CountryFeature)=>rings(f).map(ring=>ring.map((p,i)=>{const [x,y]=project(p);return `${i?'L':'M'}${x.toFixed(3)},${y.toFixed(3)}`;}).join('')+'Z').join('');
 const nearby=features.filter(f=>!countryCodes.has(f.properties.code)&&rings(f).some(r=>r.some(p=>p[0]>bounds[0]-10&&p[0]<bounds[2]+10&&p[1]>bounds[1]-10&&p[1]<bounds[3]+10)));
 const precipitationMax=Math.max(400,Math.ceil(Math.max(...cities.flatMap(c=>c.precipitationMm.filter(v=>v!==null) as number[]))/200)*200);
-const config={regionId,label:region.label,bounds,countries,cities,classes:asiaClimateClasses,climate:climateManifest.regions[regionId],geographyUrl:withBase('/assets/atlas/asia-geography-v1.json'),climateBase:withBase('/assets/atlas/asia-climate-v1/'),agricultureBase:withBase('/assets/atlas/asia-agriculture-v1/')};
+const config={regionId,label:region.label,bounds,countries,cities,classes:asiaClimateClasses,climate:climateManifest.regions[regionId],geographyUrl:withBase('/assets/atlas/asia-geography-v1.json'),climateBase:withBase('/assets/atlas/asia-climate-v2/'),agricultureBase:withBase('/assets/atlas/asia-agriculture-v1/')};
 const familyNames=['熱帯','乾燥帯','温帯','冷帯','寒帯'];
 const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林業'},{id:'natural',label:'自然環境'}];
 ---

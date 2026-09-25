@@ -13,6 +13,10 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       window.document.write(html);
       const q = s=>window.document.querySelector(s), all = s=>window.document.querySelectorAll(s);
       assert.equal(all('[data-map-surface]').length,1);
+      const config=JSON.parse(q('[data-asia-config]').textContent);
+      assert.equal(config.climateBase,'/insight-journal/assets/atlas/asia-climate-v2/');
+      assert.equal(config.climate.gridEncoding,'uint8-gzip');
+      assert.ok(config.climate.width>2000);
       assert.equal(all('[data-news-rail]').length,1);
       assert.equal(q('[data-news-rail]').dataset.newsRegion,region);
       assert.match(q('[data-news-rail]').textContent,new RegExp(`${label}のニュース`));
