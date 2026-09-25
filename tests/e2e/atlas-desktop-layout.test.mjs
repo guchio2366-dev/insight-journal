@@ -7,8 +7,8 @@ import {Window} from 'happy-dom';
 // Test the built CSS cascade, not browser geometry: visual QA uses /atlas/qa/.
 // Formatting also avoids Happy DOM's parser limitation with minified @media.
 const styles = new Map();
-async function openField(field, width, attributes = {}) {
-  const window = new Window({width, height:768, settings:{disableCSSFileLoading:true}});
+async function openField(field, width, attributes = {}, height = 768) {
+  const window = new Window({width, height, settings:{disableCSSFileLoading:true}});
   window.document.write(await readFile(`dist/atlas/north-america/${field}/index.html`, 'utf8'));
   for (const [name, value] of Object.entries(attributes)) window.document.querySelector('.atlas-explorer').setAttribute(name, value);
   for (const node of window.document.querySelectorAll('style, link[rel=stylesheet]')) {
@@ -84,4 +84,46 @@ test('corn keeps its existing laptop story layout', async () => {
     assert.equal(corn.css('.atlas-primary-grid', 'grid-template-columns'), 'minmax(0,1.65fr)minmax(320px,1fr)');
     assert.ok(corn.declarations('[data-field-national=agriculture]', 'grid-area').includes('1/2'));
   } finally { await corn.window.happyDOM.close(); }
+});
+
+test('all 11 full product readings reach their sources through one scroll container', async () => {
+  for (const [width, height] of [[390,844], [844,390], [1200,768], [1366,768], [1920,1080]]) {
+    const {window, css} = await openField('agriculture', width, {}, height);
+    try {
+      const d = window.document, root = d.querySelector('.atlas-explorer');
+      const body = d.querySelector('[data-agri-reading-body]');
+      const content = d.querySelector('[data-agri-reading-content]');
+      const copies = [...d.querySelectorAll('[data-stat-panel], [data-livestock-stat-panel]')].map(panel => ({
+        id:panel.dataset.statPanel ?? panel.dataset.livestockStatPanel,
+        copy:panel.querySelector('.atlas-crop-copy')
+      }));
+      copies.push({id:'specialty', copy:d.querySelector('[data-agri-extra-copy="specialty"]')});
+      assert.equal(copies.length, 11);
+      // Match the controller's move-once structure, then expand each native disclosure.
+      root.setAttribute('data-agri-reading-ready', 'true');
+      d.querySelector('[data-agri-reading-panel]').hidden = false;
+      for (const {copy} of copies) { content.append(copy); copy.hidden = true; }
+      assert.equal(body.tabIndex, 0, 'keyboard users can focus the scrolling text');
+      assert.equal(body.getAttribute('aria-label'), '選択した項目の解説本文');
+      for (const {id, copy} of copies) {
+        copy.hidden = false;
+        root.toggleAttribute('data-corn-index', id === 'corn');
+        const full = copy.querySelector('.corn-full-reading');
+        const sources = full.querySelector('.agri-reading-sources');
+        full.open = true; sources.open = true;
+        const lastSource = sources.querySelector('li:last-child a');
+        assert.ok(lastSource, `${id}: source at the end of the full text`);
+        for (let node = lastSource; node !== body; node = node.parentElement) {
+          assert.ok(node, `${id}: source belongs to the reading body`);
+          const style = window.getComputedStyle(node);
+          assert.ok(!['hidden', 'clip', 'auto', 'scroll'].includes(style.overflowY),
+            `${width}×${height} ${id}: ${node.className} must not clip or create a nested scroller`);
+        }
+        // Happy DOM reports an omitted initial overflow value as an empty string.
+        assert.equal(css('.agri-reading-body', 'overflow-y') || 'visible', width >= 960 && height >= 600 ? 'auto' : 'visible',
+          `${width}×${height} ${id}: desktop panel scroll, mobile/short-screen page scroll`);
+        copy.hidden = true;
+      }
+    } finally { await window.happyDOM.close(); }
+  }
 });

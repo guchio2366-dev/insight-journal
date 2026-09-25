@@ -26,12 +26,8 @@
 .corn-story-explanation p>strong{display:block;margin-bottom:3px}
 .corn-story-evidence{font-size:12px;margin-top:12px}
 .corn-story-evidence>summary{min-height:44px;align-content:center;cursor:pointer}
-.atlas-explorer[data-corn-index] .agri-reading-body{min-height:0;flex:1;display:flex;flex-direction:column;overflow:hidden;scrollbar-gutter:auto}
-.atlas-explorer[data-corn-index] [data-agri-reading-content],.atlas-explorer[data-corn-index] .atlas-crop-copy,.atlas-explorer[data-corn-index] .agri-editorial-reading{display:flex;flex-direction:column;min-height:0;flex:1}
-.atlas-explorer[data-corn-index] .corn-story-index{flex:none}
-.atlas-explorer[data-corn-index] .corn-full-reading[open]{display:flex;flex-direction:column;min-height:0;flex:1;overflow:hidden}
-.atlas-explorer[data-corn-index] .corn-full-reading>summary{flex:none}
-.atlas-explorer[data-corn-index] .corn-full-content{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+/* Every product uses .agri-reading-body as its only scroll container.
+   Native details content stays in normal flow so its end cannot be clipped. */
 .atlas-explorer[data-corn-index] .agri-reading-panel>header{padding-bottom:6px}
 .atlas-explorer[data-corn-index] .agri-reading-panel>header button{min-height:32px}
 .atlas-explorer[data-corn-story]:not([data-corn-story=""]) [data-field-national]>:not(.agri-insight-context){display:none!important}
@@ -60,8 +56,6 @@
  .atlas-desktop-shell .atlas-explorer[data-product-story]:not([data-product-story=""]) .atlas-primary-grid>.atlas-map-column{grid-column:1;grid-row:1}
  .atlas-desktop-shell .atlas-explorer[data-product-story]:not([data-product-story=""]) .atlas-primary-grid>[data-field-national]{grid-column:2;grid-row:1;height:auto}
 }
-@media(min-width:960px) and (min-height:600px){.atlas-explorer[data-corn-index] .agri-reading-panel{height:var(--agri-map-height,auto)}}
-@media(max-width:959px){.atlas-explorer[data-corn-index] .agri-reading-panel{height:auto}.atlas-explorer[data-corn-index] .agri-reading-body{overflow:visible}.atlas-explorer[data-corn-index] .corn-full-reading[open]{max-height:50dvh}}
 .agri-insight-context{padding:12px 14px;margin-bottom:12px;border:1px solid #a8bbb3;background:#f4f6ef;overflow-wrap:anywhere}
 .agri-insight-context h2{font-size:16px;line-height:1.5;margin:0 0 8px}
 .agri-insight-context p{font-size:13px;line-height:1.7;margin:6px 0}

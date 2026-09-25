@@ -24,6 +24,15 @@ opening a story. Existing corn/product-story overrides remain unchanged, as do
 the layouts below 1200px and at/above 1600px. Only the legacy land overview
 retains the single-column laptop fallback.
 
+### Expanded agriculture readings
+
+All 11 crop/livestock products use the common `.agri-reading-body` scroll
+container. The full-reading disclosure and its sources remain in normal flow;
+no nested flex/hidden-overflow box may clip their content. The body is keyboard
+focusable. On narrow or short screens the existing page scroll reaches the full
+text. This also removes the corn-only nested scroll layout that hid the text
+beyond the disclosure's visible edge.
+
 ## Content and interaction contract
 
 - Build the list from approved public `articles` only. Match North America or
@@ -49,3 +58,6 @@ overflow, independent scroll, expanded reading, and tab switching.
 `tests/e2e/atlas-desktop-layout.test.mjs` checks the built CSS cascade at
 390, 1199, 1200, 1280, 1366, 1440, 1599, 1600, and 1920 CSS pixels. These are
 style-contract checks, not browser geometry or GPU-rendering tests.
+Expanded-reading checks cover all 11 products at laptop, monitor, mobile and
+short-screen sizes, including the source links at the end of the text. Browser
+review must additionally open the disclosures and scroll the text to its end.
