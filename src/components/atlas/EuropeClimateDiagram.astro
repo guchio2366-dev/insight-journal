@@ -1,0 +1,34 @@
+---
+import { climateSummary } from '../../lib/atlas-europe-view';
+interface Props { city: { id: string; name: string; stationName: string; coordinates: number[]; elevationM: number; sourceUrl: string; months: { month: number; temperature: number | null; precipitation: number | null }[] }; country: string; }
+const { city, country } = Astro.props;
+const summary = climateSummary(city.months);
+const x = (i: number) => 42 + i * 23;
+const yT = (v: number) => 170 - (v + 10) / 50 * 140;
+const yP = (v: number) => 170 - v / 350 * 140;
+const n = (v: number | null) => v === null ? '欠測' : v.toFixed(1);
+let open = false;
+const line = city.months.map((m, i) => {
+  if (m.temperature === null) { open = false; return ''; }
+  const d = `${open ? 'L' : 'M'}${x(i)},${yT(m.temperature).toFixed(2)}`;
+  open = true; return d;
+}).join(' ');
+---
+<article class="eu-city-card" data-city-card={city.id} hidden={city.id !== 'london'} aria-labelledby={`city-${city.id}`}>
+  <div class="eu-card-heading"><div><p class="eu-kicker">{country}</p><h3 id={`city-${city.id}`}>{city.name}</h3></div><span class="eu-period">1991–2020</span></div>
+  <p class="eu-station">観測地点：{city.stationName.split(' -')[0]} · 標高 {city.elevationM} m</p>
+  <svg class="eu-climate-chart" viewBox="0 0 338 203" role="img" aria-labelledby={`chart-${city.id}`}>
+    <title id={`chart-${city.id}`}>{city.name}の月別雨温図。青い棒は降水量、赤い線は気温。詳細な数値は下の表で確認できます。</title>
+    <text x="12" y="15" class="eu-axis-precip">mm</text><text x="302" y="15" class="eu-axis-temp">℃</text>
+    {[0, 100, 200, 300].map(v => <g><line x1="29" y1={yP(v)} x2="308" y2={yP(v)} class="eu-grid" /><text x="25" y={yP(v) + 4} text-anchor="end">{v}</text></g>)}
+    {[-10, 0, 10, 20, 30, 40].map(v => <text x="312" y={yT(v) + 4} class="eu-axis-temp">{v}</text>)}
+    {city.months.map((m, i) => <g>{m.precipitation !== null && <rect x={x(i) - 7} y={yP(m.precipitation)} width="14" height={170 - yP(m.precipitation)} class="eu-rain" />}<text x={x(i)} y="191" text-anchor="middle">{i + 1}</text></g>)}
+    <path d={line} class="eu-temperature" />
+    {city.months.filter(m => m.temperature !== null).map(m => <circle cx={x(m.month - 1)} cy={yT(m.temperature!)} r="2" fill="#b54731" />)}
+  </svg>
+  <p class="eu-chart-key"><span>■ 降水量（左軸）</span><span>━ 気温（右軸）</span></p>
+  <dl class="eu-summary"><div><dt>年間降水量</dt><dd>{summary.annualRain === null ? '算出できません' : `${Math.round(summary.annualRain).toLocaleString('ja-JP')} mm`}</dd></div><div><dt>気温の年較差</dt><dd>{summary.range === null ? '算出できません' : `${summary.range.toFixed(1)} ℃`}</dd></div></dl>
+  <p class="eu-reading">{summary.coldest !== null ? `最寒月は${summary.coldest.toFixed(1)}℃、最暖月は${summary.warmest!.toFixed(1)}℃。` : '月別気温に欠測があります。'}{summary.annualRain === null ? '降水量に欠測があり、棒と年間合計を表示していません。' : 'ほかの地点と同じ軸で、雨の季節と冬の寒さを比べられます。'}</p>
+  <details class="eu-months"><summary>月別の数値・観測地点を見る</summary><p>北緯 {city.coordinates[1]}° / {city.coordinates[0] < 0 ? '西経' : '東経'} {Math.abs(city.coordinates[0])}°。都市名に近い観測地点を表示しています。</p><table><caption>{city.name}の平年値</caption><thead><tr><th>月</th><th>気温 ℃</th><th>降水量 mm</th></tr></thead><tbody>{city.months.map(m => <tr><th scope="row">{m.month}月</th><td>{n(m.temperature)}</td><td>{n(m.precipitation)}</td></tr>)}</tbody></table></details>
+  <a class="eu-source-link" href={city.sourceUrl} target="_blank" rel="noreferrer">気象庁の原データ ↗</a>
+</article>
