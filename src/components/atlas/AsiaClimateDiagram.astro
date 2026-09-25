@@ -1,0 +1,44 @@
+---
+import type { AsiaClimateCity } from '../../data/atlas/asia-climate-cities';
+interface Props { city: AsiaClimateCity; precipitationMax: number }
+const { city, precipitationMax } = Astro.props;
+const left=35,right=298,top=25,bottom=185;
+const x=(i:number)=>left+(right-left)*(i+.5)/12;
+const py=(v:number)=>bottom-v/precipitationMax*(bottom-top);
+const ty=(v:number)=>bottom-(v+30)/75*(bottom-top);
+const segments:string[]=[]; let segment='';
+city.temperatureC.forEach((v,i)=>{if(v===null){if(segment)segments.push(segment);segment='';}else segment+=`${segment?' ':''}${x(i)},${ty(v)}`;});
+if(segment)segments.push(segment);
+const validRain=city.precipitationMm.filter(v=>v!==null) as number[];
+const annualRain=validRain.length===12?validRain.reduce((a,b)=>a+b,0):null;
+const temperatures=city.temperatureC.filter(v=>v!==null) as number[];
+const format=(v:number|null,unit:string)=>v===null?'欠測':`${v.toLocaleString('ja-JP',{minimumFractionDigits:1,maximumFractionDigits:1})} ${unit}`;
+---
+<figure class="asia-climate-diagram">
+  <figcaption><span>雨温図</span><strong>{city.name}</strong><small>{city.normalPeriod} 平年値</small></figcaption>
+  <svg viewBox="0 0 338 218" role="img" aria-labelledby={`chart-title-${city.id} chart-desc-${city.id}`}>
+    <title id={`chart-title-${city.id}`}>{city.name}の月別の気温と降水量</title>
+    <desc id={`chart-desc-${city.id}`}>{validRain.length?'青い棒が降水量、赤い線が平均気温。':'赤い線が平均気温。降水量平年値は12か月とも未収録で、0mmではありません。'}月別の数値表が下にあります。{city.normalPeriod}の観測所平年値。</desc>
+    {[0,.25,.5,.75,1].map(f=><g><line x1={left} x2={right} y1={py(f*precipitationMax)} y2={py(f*precipitationMax)} class="grid" /><text x="29" y={py(f*precipitationMax)+4} text-anchor="end">{Math.round(f*precipitationMax)}</text></g>)}
+    <text x="4" y="12">mm</text><text x="306" y="12" class="temperature">℃</text>
+    {[-30,-15,0,15,30,45].map(v=><text x="305" y={ty(v)+4} class="temperature">{v}</text>)}
+    <line x1={left} x2={right} y1={ty(0)} y2={ty(0)} class="zero" />
+    {city.precipitationMm.map((v,i)=>v===null?<text x={x(i)} y={bottom-3} text-anchor="middle">×</text>:<rect x={x(i)-7} y={py(v)} width="14" height={bottom-py(v)} rx="1" class="rain" />)}
+    {segments.map(points=><polyline points={points} class="temperature-line" />)}
+    {city.temperatureC.map((v,i)=>v!==null&&<circle cx={x(i)} cy={ty(v)} r="2.4" class="temperature-dot" />)}
+    {Array.from({length:12},(_,i)=><text x={x(i)} y="205" text-anchor="middle">{i+1}</text>)}
+    <text x="320" y="205">月</text>
+  </svg>
+  <div class="chart-key"><span><i class="bar-key"></i>降水量</span><span><i class="line-key"></i>平均気温</span>{validRain.length<12&&<span>× 未収録</span>}</div>
+  <div class="climate-metrics"><div><small>年間降水量</small><b>{annualRain===null?'欠測あり':`${Math.round(annualRain).toLocaleString('ja-JP')} mm`}</b></div><div><small>月平均気温の範囲</small><b>{temperatures.length?`${Math.min(...temperatures).toFixed(1)}〜${Math.max(...temperatures).toFixed(1)} ℃`:'欠測'}</b></div></div>
+  <p class="chart-note">同じ地域の雨温図は共通の目盛りです。気温と降水量は別の軸で読みます。{validRain.length<12&&' ×は降水量の未収録を示します。0mmではありません。'}</p>
+  <details class="monthly-values"><summary>月別の数値と観測地点</summary>
+    <p>{city.stationName}{city.elevationM!==undefined?` · 標高 ${city.elevationM.toLocaleString('ja-JP')} m`:''}<br />観測地点 {Math.abs(city.coordinates[1]).toFixed(2)}°{city.coordinates[1]>=0?'N':'S'} / {city.coordinates[0].toFixed(2)}°E</p>
+    <table><thead><tr><th scope="col">月</th><th scope="col">平均気温</th><th scope="col">降水量</th></tr></thead><tbody>{city.temperatureC.map((v,i)=><tr><th scope="row">{i+1}月</th><td>{format(v,'℃')}</td><td>{format(city.precipitationMm[i],'mm')}</td></tr>)}</tbody></table>
+    {city.notes.map(note=><p>{note}</p>)}
+  </details>
+  <p class="climate-source">出典：<a href={city.sourceUrl} target="_blank" rel="noopener noreferrer">{city.sourceName}</a> · 平年期間 {city.normalPeriod}。{city.countryCode==='TWN'?'台湾・中央気象署':'気象庁'}の資料を加工して作成。</p>
+</figure>
+<style>
+  figure{margin:0}figcaption{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:10px}figcaption span{font-size:11px;color:var(--ink-soft)}figcaption strong{font-size:20px;font-family:var(--serif)}figcaption small{font-size:11px;color:var(--ink-soft);margin-left:auto}svg{display:block;width:100%;height:auto;overflow:visible}svg text{font-family:var(--sans);font-size:11px;fill:#51606b}.grid{stroke:#dfe4e3;stroke-width:1}.zero{stroke:#b97469;stroke-dasharray:3 3;stroke-width:.65}.rain{fill:#648ca3}.temperature-line{fill:none;stroke:#bd523c;stroke-width:2.3}.temperature-dot{fill:#bd523c}svg .temperature{fill:#ad4736}.chart-key{display:flex;justify-content:center;gap:20px;font-size:12px}.chart-key span{display:flex;gap:7px;align-items:center}.bar-key{width:12px;height:10px;background:#648ca3}.line-key{width:18px;height:0;border-top:2px solid #bd523c}.climate-metrics{display:grid;grid-template-columns:1fr 1.35fr;gap:10px;border-block:1px solid var(--rule);padding:12px 0;margin-top:16px}.climate-metrics small{display:block;font-size:11px;color:var(--ink-soft)}.climate-metrics b{font-size:16px;font-variant-numeric:tabular-nums}.chart-note,.climate-source{font-size:11px;line-height:1.8;color:var(--ink-soft);margin:8px 0}.monthly-values{font-size:12px;margin:14px 0}.monthly-values summary{min-height:44px;display:flex;align-items:center;cursor:pointer;text-decoration:underline;text-underline-offset:3px}.monthly-values summary:before{content:'＋';margin-right:7px}.monthly-values[open] summary:before{content:'−'}.monthly-values p{font-size:11px}.monthly-values table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}.monthly-values th,.monthly-values td{border-bottom:1px solid var(--rule);padding:5px;text-align:right}.monthly-values th:first-child{text-align:left}
+</style>

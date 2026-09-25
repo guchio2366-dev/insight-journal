@@ -1,9 +1,9 @@
 ---
-import RegionalAtlasPage from '../../../components/atlas/RegionalAtlasPage.astro';
+import AsiaAtlasPage from '../../../components/atlas/AsiaAtlasPage.astro';
 import { asiaMapIds } from '../../../data/atlas/regional-atlas';
 export function getStaticPaths() {
   return asiaMapIds.map(regionId => ({params: {region: regionId}, props: {regionId}}));
 }
 const { regionId } = Astro.props;
 ---
-<RegionalAtlasPage {regionId} />
+<AsiaAtlasPage {regionId} />
