@@ -29,8 +29,17 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       for(const card of all('[data-city-panel]')) assert.ok(card.querySelector('.asia-climate-diagram'));
       assert.ok(q('[data-city-panel]').compareDocumentPosition(q('[data-class-reading]')) & 4,'city diagrams precede classification notes');
       assert.ok(sitemap.includes(`/atlas/asia/${region}/${field}/`));
+      assert.ok(q('link[rel="canonical"]').href.endsWith(`/atlas/asia/${region}/${field}/`));
+      assert.ok(!sitemap.includes(`/atlas/asia/${region}/</loc>`),'legacy duplicate is excluded');
       assert.equal(q('[data-country-select] option[value="IRN"]'),null);
       assert.equal(q('[data-country-select] option[value="RUS"]'),null);
     } finally { await window.happyDOM.close(); }
+  }
+});
+
+test('旧アジア地域ページは自然環境の正規URLを示す', async () => {
+  for(const region of ['east-asia','southeast-asia','south-central-asia']) {
+    const html=await readFile(`dist/atlas/asia/${region}/index.html`,'utf8');
+    assert.match(html,new RegExp(`<link rel="canonical" href="https://guchio2366-dev.github.io/insight-journal/atlas/asia/${region}/nature/"`));
   }
 });

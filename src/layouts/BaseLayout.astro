@@ -13,6 +13,7 @@ interface Props {
   updatedAt?: string;
   noindex?: boolean;
   compactAtlas?: boolean;
+  canonicalPath?: string;
 }
 
 const {
@@ -23,12 +24,13 @@ const {
   publishedAt,
   updatedAt,
   noindex = false,
-  compactAtlas = false
+  compactAtlas = false,
+  canonicalPath
 } = Astro.props;
 const siteName = "Insight Journal";
 const pageTitle = title ? `${title}｜${siteName}` : `${siteName}｜ニュースから、理解を育てる。`;
 const siteRoot = Astro.site ?? Astro.url;
-const canonical = new URL(withBase(normalizeSitePath(Astro.url.pathname)), siteRoot);
+const canonical = new URL(withBase(normalizeSitePath(canonicalPath ?? Astro.url.pathname)), siteRoot);
 const imageUrl = image ? new URL(image, siteRoot) : undefined;
 const sitemapUrl = new URL(withBase("/sitemap.xml"), siteRoot);
 ---

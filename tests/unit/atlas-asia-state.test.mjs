@@ -148,6 +148,17 @@ test('公開された分野URLと旧クエリURLは、選択を失わず同じ�
   }
 });
 
+test('正規の分野URLを優先し、古いfieldクエリの空値や矛盾で別分野へ切り替えない', () => {
+  for(const [path,field] of [['nature','natural'],['agriculture','agriculture']]) for(const query of ['field=', 'field=unknown', 'field=natural', 'field=agriculture']) {
+    const original=url(`${path}/?${query}&city=tokyo`),state=readAsiaAtlasState(original,east);
+    assert.equal(state.field,field);
+    const normalized=writeAsiaAtlasState(original,state);
+    assert.equal(normalized.pathname,original.pathname);
+    assert.equal(normalized.searchParams.has('field'),false);
+    assert.equal(normalized.searchParams.get('city'),'tokyo');
+  }
+});
+
 test('Mercator照会は北からの行順を使い、0を分類値として返さない', () => {
   const grid = { width: 2, height: 2, bounds3857: [-1000000, -1000000, 1000000, 1000000], values: [14, 21, 0, 1] };
   assert.equal(gridCellAt(grid, -5, 5), 14);

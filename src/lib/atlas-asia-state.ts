@@ -5,11 +5,11 @@ export type AsiaState = { field: AsiaField; place: string | null; city: string |
 export type AsiaStateContext = { countries: readonly string[]; cities: readonly { id: string; countryCode: string }[]; bounds: readonly number[]; fields: readonly AsiaField[]; topics?: Partial<Record<AsiaField, readonly string[]>>; details?: Partial<Record<AsiaField, readonly string[]>> };
 const ownedKeys = ['field', 'place', 'city', 'lng', 'lat', 'z', 'back', 'region', 'at', 'topic', 'detail', 'compare'];
 export const asiaFieldPaths: Record<AsiaField, string> = { natural: 'nature', agriculture: 'agriculture', industry: 'industry', population: 'population' };
-const routeField = (url: URL): AsiaField | undefined => Object.entries(asiaFieldPaths).find(([, path]) => url.pathname.endsWith(`/${path}/`))?.[0] as AsiaField | undefined;
+const routeField = (url: URL): AsiaField | undefined => Object.entries(asiaFieldPaths).find(([, path]) => url.pathname.replace(/\/$/, '').endsWith(`/${path}`))?.[0] as AsiaField | undefined;
 
 export function readAsiaAtlasState(url: URL, context: AsiaStateContext): AsiaState {
   const q = url.searchParams;
-  const requested = q.get('field') ?? routeField(url);
+  const requested = routeField(url) ?? q.get('field');
   const field = context.fields.includes(requested as AsiaField) ? requested as AsiaField : 'natural';
   const rawPlace = q.get('place');
   let place = rawPlace && context.countries.includes(rawPlace) ? rawPlace : null;
@@ -68,7 +68,11 @@ export function startAsiaComparison(url: URL, state: AsiaState, field: AsiaField
 
 export function restoreAsiaComparison(url: URL, state: AsiaState, context: AsiaStateContext): AsiaState {
   if (!state.back) return state;
-  const previous = new URL(url); previous.search = state.back;
+  const previous = new URL(url);
+  // The saved query explicitly owns the original field. Read it as a legacy
+  // region URL, rather than letting the comparison page's field override it.
+  previous.pathname = previous.pathname.replace(/(\/atlas\/asia\/(?:east-asia|southeast-asia|south-central-asia))\/(?:nature|agriculture|industry|population)\/?$/, '$1/');
+  previous.search = state.back;
   return { ...readAsiaAtlasState(previous, context), back: null };
 }
 

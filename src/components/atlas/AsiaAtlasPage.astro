@@ -31,7 +31,7 @@ const config={regionId,label:region.label,bounds,countries,cities,classes:asiaCl
 const familyNames=['熱帯','乾燥帯','温帯','冷帯','寒帯'];
 const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林業'},{id:'natural',label:'自然環境'}];
 ---
-<BaseLayout title={`${region.label}地図｜気候と農業`} description={reading.summary} compactAtlas>
+<BaseLayout title={`${region.label}地図｜気候と農業`} description={reading.summary} compactAtlas canonicalPath={`/atlas/asia/${regionId}/${asiaFieldPaths[initialField]}/`}>
   <div class="asia-atlas-root" data-asia-atlas data-region={regionId}>
    <div class="shell asia-region-shell">
     <AtlasRegionNavigation group="asia" current={regionId} />
