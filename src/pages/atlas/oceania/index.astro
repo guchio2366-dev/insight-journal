@@ -1,0 +1,131 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { withBase } from '../../../lib/urls';
+import geography from '../../../data/atlas/oceania-countries.json';
+import { oceaniaRegions, oceaniaSourceRegions, oceaniaNames } from '../../../data/atlas/oceania';
+import { oceaniaPath, oceaniaExtent, oceaniaWidth as width, oceaniaHeight as height, projectOceania } from '../../../lib/atlas-oceania-geometry';
+const countries = geography.features.filter(f => f.properties.kind === 'oceania').map(f => ({
+  code: f.properties.code, name: oceaniaNames[f.properties.code], region: oceaniaSourceRegions[f.properties.subregion],
+  path: oceaniaPath(f.geometry), extent: oceaniaExtent(f.geometry)
+})).sort((a,b) => a.name.localeCompare(b.name, 'ja'));
+const context = geography.features.filter(f => f.properties.kind === 'context').map(f => oceaniaPath(f.geometry));
+const locators = countries.filter(c => c.extent[2] - c.extent[0] < 12 && c.extent[3] - c.extent[1] < 12);
+const labels = [{name:'オーストラリア',point:[134,-25]}, {name:'ニュージーランド',point:[183,-43]}, {name:'パプアニューギニア',point:[147,-3]}];
+---
+<BaseLayout title="オセアニア地図" description="太平洋を中心に、オセアニア25の国・地域を選んで位置と広がりを読む基礎地図。" compactAtlas>
+  <div class="oceania-atlas shell" data-oceania-atlas>
+    <p class="oceania-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / オセアニア</p>
+    <header class="oceania-heading">
+      <p class="eyebrow">Atlas · Oceania</p><h1>オセアニア地図</h1>
+      <p>オーストラリア大陸から太平洋の島々まで、25の国・地域の位置関係を確かめます。180度経線の両側を、ひと続きの地図で読めます。</p>
+    </header>
+    <nav class="oceania-regions" aria-label="オセアニアの地域を選ぶ">
+      <button type="button" data-region-button="all" aria-pressed="true">オセアニア全体</button>
+      {Object.entries(oceaniaRegions).map(([id,name]) => <button type="button" data-region-button={id} aria-pressed="false">{name}</button>)}
+    </nav>
+    <div class="oceania-layout">
+      <section class="oceania-map-card" aria-labelledby="oceania-map-title">
+        <div class="oceania-map-heading"><h2 id="oceania-map-title">大陸と島々の位置</h2><p>国・地域を選ぶと拡大します。</p></div>
+        <svg class="oceania-map" viewBox={[0,0,width,height].join(" ")} data-default-frame={[0,0,width,height].join(" ")} role="img" aria-labelledby="oceania-svg-title oceania-svg-desc">
+          <title id="oceania-svg-title">太平洋を中心とするオセアニアの基礎地図</title>
+          <desc id="oceania-svg-desc">4地域の陸地を色分け。180度経線を地図中央に置き、小島の位置を中空の丸で補います。地図の下の一覧からすべての対象を選択できます。</desc>
+          {context.map(path => <path class="oceania-context" d={path} fill-rule="evenodd" aria-hidden="true" />)}
+          {[0,-30].map(lat => <line class="oceania-graticule" x1="0" x2={width} y1={projectOceania([110,lat])[1]} y2={projectOceania([250,lat])[1]} />)}
+          <line class="oceania-graticule" x1={width/2} x2={width/2} y1="0" y2={height} />
+          {countries.map(c => <path d={c.path} fill-rule="evenodd" data-map-country={c.code} data-map-region={c.region} data-extent={c.extent.join(' ')}><title>{c.name}</title></path>)}
+          {locators.map(c => <circle class="oceania-locator" cx={(c.extent[0]+c.extent[2])/2} cy={(c.extent[1]+c.extent[3])/2} r="5" data-locator={c.code} data-locator-region={c.region} aria-hidden="true" />)}
+          {labels.map(label => <text class="oceania-land-label" x={projectOceania(label.point)[0]} y={projectOceania(label.point)[1]}>{label.name}</text>)}
+          <text class="oceania-ocean-label" x={projectOceania([209,-26])[0]} y={projectOceania([209,-26])[1]}>南太平洋</text>
+          <text class="oceania-ocean-label" x={width/2} y="30">180°</text>
+          <text class="oceania-ocean-label" x="35" y={projectOceania([110,0])[1]-8}>赤道</text>
+        </svg>
+        <p class="oceania-map-caption">色は4地域の区分、灰色は周辺の陸地。中空の丸は小島の位置の目印で、陸地の大きさではありません。「オセアニア全体」で最初の範囲に戻れます。</p>
+        <noscript><p class="oceania-map-caption">地図・名称・出典はこのまま読めます。選択・拡大にはJavaScriptが必要です。</p></noscript>
+      </section>
+      <aside class="oceania-side" aria-labelledby="oceania-selection-title">
+        <div class="oceania-selection" aria-live="polite">
+          <p class="eyebrow">Selected place</p><h2 id="oceania-selection-title" data-selection-name>太平洋を中心に読む</h2>
+          <p data-selection-region>地図または一覧から国・地域を選択してください。小さな島は一覧から選ぶと拡大できます。</p>
+          <button type="button" class="oceania-show-map" data-show-map>選んだ場所を地図で見る ↑</button>
+        </div>
+        <div class="oceania-country-list"><h3>国・地域を選ぶ</h3>
+          <div class="oceania-country-buttons">{countries.map(c => <button type="button" data-country-button={c.code} data-country-region={c.region} aria-pressed="false">{c.name}</button>)}</div>
+        </div>
+      </aside>
+    </div>
+    <footer class="oceania-source">
+      <h2>地図の範囲と出典</h2>
+      <p>国・地域の陸地を読む基礎地図です。自然環境・農林業・産業・人口のテーマ別分布は含みません。地域区分はNatural EarthのOceaniaとその4つのサブリージョンを使用し、国と海外領域を区別せず選択対象にしています。</p>
+      <p>境界は<a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/">Natural Earth Admin 0 Countries（1:50m）</a>、原本は<a href={geography.source.url}>固定版 v5.1.2</a>、2026年9月25日取得。<a href={geography.source.licenseUrl}>Public domain</a>。東経110度から西経110度、南緯58度から北緯25度の範囲を、南緯20度を標準緯線とする等距円筒図法で表示しています。面積比較には適しません。破線は赤道・南緯30度・180度経線で、日付変更線そのものではありません。</p>
+      <p>原本に輪郭がないトケラウなどの小島は未収録です。ハワイ・ラパヌイはこのデータのOceania区分に含まれません。海域や排他的経済水域（EEZ）の境界は表示していません。境界・名称・区分は出典に基づく概略で、政治的な地位や主権についての見解を示すものではありません。</p>
+    </footer>
+  </div>
+</BaseLayout>
+<script>
+  import { initOceaniaAtlas } from '../../../scripts/atlas-oceania';
+  const root = document.querySelector<HTMLElement>('[data-oceania-atlas]');
+  if (root) initOceaniaAtlas(root);
+</script>
+<style>
+  .oceania-atlas { padding: 18px 0 60px; }
+  .oceania-breadcrumb { color: var(--ink-soft); font-size: 12px; }
+  .oceania-heading { max-width: 760px; margin: 18px 0 22px; }
+  .oceania-heading h1 { margin: 0; font-family: var(--serif); font-size: clamp(32px, 4vw, 48px); letter-spacing: -.05em; }
+  .oceania-heading > p:last-child { margin: 10px 0 0; color: var(--ink-soft); font-family: var(--serif); font-size: 16px; line-height: 1.8; }
+  .oceania-regions { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 18px; }
+  .oceania-regions button { min-height: 44px; padding: 10px 13px; border: 1px solid var(--rule); background: #fff; color: var(--ink); font: inherit; font-size: 13px; cursor: pointer; }
+  .oceania-regions button:not([data-region-button='all'])::before { content: ''; display: inline-block; width: 10px; height: 10px; margin-right: 6px; background: var(--region-color); border: 1px solid #50616b; }
+  [data-region-button='polynesia'] { --region-color: #b7adce; }
+  
+  [data-region-button='micronesia'] { --region-color: #d8ad7e; }
+  
+  [data-region-button='melanesia'] { --region-color: #99baa4; }
+  [data-region-button='australasia'] { --region-color: #a2c7d2; }
+  .oceania-regions button[aria-pressed='true'] { background: #162638; border-color: #162638; color: #fff; }
+  .oceania-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 290px); gap: 18px; align-items: start; }
+  .oceania-map-card, .oceania-side { border: 1px solid var(--rule); background: #fff; }
+  .oceania-map-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 18px 20px; }
+  .oceania-map-heading h2 { margin: 0; font-family: var(--serif); font-size: 23px; }
+  .oceania-map-heading p { margin: 0; color: var(--ink-soft); font-size: 12px; }
+  .oceania-map-scroll { overflow-x: auto; background: #e0edf0; }
+  .oceania-map-scroll:focus-visible, .oceania-atlas button:focus-visible { outline: 3px solid #b75230; outline-offset: -3px; }
+  .oceania-map { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 757; background: #e0edf0; }
+  .oceania-map path { fill: #d9d2bc; stroke: #fffaf0; stroke-width: 1.3; vector-effect: non-scaling-stroke; transition: opacity .15s, fill .15s; }
+  .oceania-map path[data-map-country] { cursor: pointer; stroke: #5c7874; stroke-width: .7; }
+  .oceania-map path.oceania-context { fill: #e8e5d9; stroke: #fffaf0; }
+  .oceania-map path[data-map-region='polynesia'] { fill: #b7adce; }
+  
+  .oceania-map path[data-map-region='micronesia'] { fill: #d8ad7e; }
+  
+  .oceania-map path[data-map-region='melanesia'] { fill: #99baa4; }
+  .oceania-map path[data-map-region='australasia'] { fill: #a2c7d2; }
+  .oceania-map path.is-muted { opacity: .22; }
+  .oceania-map path[data-map-country]:hover, .oceania-map path.is-selected { fill: #ad5232; stroke: #583522; stroke-width: 2.2; opacity: 1; }
+  .oceania-map[data-detail="true"] .oceania-ocean-label { display: none; }
+  .oceania-ocean-label { fill: #5d8590; font-family: var(--serif); font-size: 17px; text-anchor: middle; pointer-events: none; }
+  .oceania-map-caption { margin: 0; padding: 12px 20px; border-top: 1px solid var(--rule); color: var(--ink-soft); font-size: 11px; line-height: 1.7; }
+  .oceania-selection { min-height: 150px; padding: 20px; background: #f7f5ed; }
+  .oceania-selection h2 { margin: 4px 0 8px; font-family: var(--serif); font-size: 27px; }
+  .oceania-selection [data-selection-region] { margin: 0; color: var(--ink-soft); font-size: 12px; line-height: 1.8; }
+  .oceania-country-list { padding: 18px 20px 22px; border-top: 1px solid var(--rule); }
+  .oceania-country-list h3 { margin: 0 0 10px; font-size: 13px; }
+  .oceania-country-buttons { display: flex; flex-wrap: wrap; gap: 5px;  }
+  .oceania-country-buttons button { min-height: 44px; padding: 8px 10px; border: 1px solid var(--rule); background: #fff; color: var(--ink); font: inherit; font-size: 12px; cursor: pointer; }
+  .oceania-country-buttons button[aria-pressed='true'] { border-color: #ad5232; background: #ad5232; color: #fff; }
+  .oceania-country-buttons button[hidden] { display: none; }
+  .oceania-source { max-width: 900px; margin-top: 34px; padding-top: 20px; border-top: 1px solid var(--rule); }
+  .oceania-source h2 { margin: 0 0 8px; font-family: var(--serif); font-size: 22px; }
+  .oceania-source p { margin: 0; color: var(--ink-soft); font-size: 12px; line-height: 1.9; }
+  @media (max-width: 850px) { .oceania-layout { grid-template-columns: 1fr; } .oceania-side { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); } .oceania-country-list { border-top: 0; border-left: 1px solid var(--rule); } }
+  @media (max-width: 600px) { .oceania-atlas { padding-top: 18px; } .oceania-heading { margin: 18px 0 20px; } .oceania-heading > p:last-child { font-size: 15px; } .oceania-map-heading { display: block; } .oceania-map-heading p { margin-top: 4px; } .oceania-side { display: block; } .oceania-country-list { border-top: 1px solid var(--rule); border-left: 0; } .oceania-country-buttons { max-height: none; } }
+
+  .oceania-graticule { fill: none; stroke: #718f97; stroke-width: .6; stroke-dasharray: 4 5; vector-effect: non-scaling-stroke; opacity: .5; }
+  .oceania-land-label { font: 17px sans-serif; fill: #263e40; text-anchor: middle; pointer-events: none; }
+  .oceania-map[data-detail="true"] .oceania-land-label { display: none; }
+  .oceania-locator { fill: none; stroke: #365c69; stroke-width: 1; vector-effect: non-scaling-stroke; pointer-events: none; }
+  .oceania-show-map { min-height: 44px; padding: 8px 12px; margin-top: 12px; border: 1px solid var(--rule); background: white; color: var(--ink); cursor: pointer; }
+  .oceania-map { scroll-margin-top: 110px; }
+  @media (max-width: 600px) { .oceania-land-label { font-size: 38px; } .oceania-ocean-label { font-size: 34px; } }
+  @media (max-width: 850px) { .oceania-side { display: block; } .oceania-country-list { border-left: 0; border-top: 1px solid var(--rule); } }
+  @media (prefers-reduced-motion: reduce) { .oceania-map path { transition: none; } }
+</style>
