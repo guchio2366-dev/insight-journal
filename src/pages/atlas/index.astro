@@ -27,4 +27,11 @@ const availableRegions = ['africa', 'oceania'].filter(id => `./${id}/index.astro
     header > p { margin: 7px 0 0; font-size: 12px; }
     .eyebrow { font-size: 10px; }
   }
+  @media (max-height: 600px) and (min-width: 601px) {
+    .atlas-directory { padding-top: 10px; }
+    header { align-items: center; margin-bottom: 10px; }
+    .eyebrow { display: none; }
+    h1 { font-size: 28px; }
+    header > p { font-size: 11px; }
+  }
 </style>
