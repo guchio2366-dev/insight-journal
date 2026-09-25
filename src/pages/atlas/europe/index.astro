@@ -51,6 +51,7 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
       <p>西欧から東欧・ロシア西部まで、45の国・地域の位置関係を確かめる基礎地図です。</p>
     </header>
 
+    <p><a data-europe-detail-link href={withBase('/atlas/europe/nature/')}>欧州の気候と24地点の雨温図を見る →</a>　<a data-europe-detail-link href={withBase('/atlas/europe/agriculture/')}>小麦の分布を見る →</a></p>
     <nav class="europe-regions" aria-label="欧州の地域を選ぶ">
       <button type="button" data-region-button="all" aria-pressed="true">欧州全体</button>
       {regionOrder.map(region => <button type="button" data-region-button={region} aria-pressed="false">{regionNames[region]}</button>)}
@@ -163,6 +164,12 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
         activeRegion === 'all' ? url.searchParams.delete('region') : url.searchParams.set('region', activeRegion);
         activeCountry ? url.searchParams.set('place', activeCountry) : url.searchParams.delete('place');
         history.pushState(null, '', url);
+      }
+      for (const link of root.querySelectorAll<HTMLAnchorElement>('[data-europe-detail-link]')) {
+        const url = new URL(link.href);
+        url.search = window.location.search;
+        url.searchParams.set('layer', url.pathname.includes('/agriculture/') ? 'wheat' : 'climate');
+        link.href = url.href;
       }
     }
     function readUrl() {

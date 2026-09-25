@@ -30,6 +30,8 @@ export const GET: APIRoute = async ({ site }) => {
     { loc: absolute("/about/"), lastmod: undefined },
     { loc: absolute("/atlas/"), lastmod: agricultureField.updatedAt.slice(0, 10) },
     { loc: absolute("/atlas/europe/"), lastmod: "2026-09-25" },
+    { loc: absolute("/atlas/europe/nature/"), lastmod: "2026-09-25" },
+    { loc: absolute("/atlas/europe/agriculture/"), lastmod: "2026-09-25" },
     ...Object.values(regionalMaps).map(map => ({ loc: absolute(map.href), lastmod: "2026-09-25" })),
     { loc: absolute("/atlas/north-america/"), lastmod: agricultureField.updatedAt.slice(0, 10) },
     { loc: absolute("/atlas/north-america/agriculture/"), lastmod: agricultureField.updatedAt.slice(0, 10) },
