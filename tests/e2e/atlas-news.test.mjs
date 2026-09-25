@@ -24,6 +24,34 @@ test('all field pages share one news rail and never publish unrelated sample art
   }
 });
 
+test('アジアニュースは国タグで3地域に分かれ、中東・ロシアの記事を混ぜない',()=>{
+  const regions={'east-asia':['JP','CN','TW','KR','KP','MN'],'southeast-asia':['TH','SG','ID','VN','TL'],'south-central-asia':['IN','PK','BD','KZ','UZ','AF']};
+  for(const [region,countries] of Object.entries(regions)){
+    for(const [other,codes] of Object.entries(regions)) for(const code of codes) assert.equal(articleMatchesNewsRegion({regions:['asia'],countries:[code]},region),other===region,`${region}: ${code}`);
+    for(const code of ['IR','RU','US']) assert.equal(articleMatchesNewsRegion({regions:['asia'],countries:[code]},region),false);
+    assert.equal(articleMatchesNewsRegion({regions:['asia'],countries:[]},region),true);
+    assert.equal(articleMatchesNewsRegion({regions:[],countries},region),true);
+  }
+});
+
+test('アジア記事の地点表示は分野を保ち、以前の選択・比較を消して地図へ移動する',async()=>{
+  const window=new Window({url:'https://example.com/insight-journal/atlas/asia/east-asia/agriculture/?place=JPN&city=tokyo&at=139,35&back=field%3Dnatural&topic=rice&detail=note&compare=CHN&campaign=study',settings:{enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
+  try{
+    window.document.body.innerHTML='<div data-atlas-shell><aside data-news-rail data-news-region="east-asia"><div data-news-list></div><section data-news-reader hidden><div data-news-body></div></section><button data-news-location>Map</button></aside><div data-map-surface tabindex="0"></div></div>';
+    const api=window.eval(bundle.outputFiles[0].text+'; NewsTest;'),rail=window.document.querySelector('[data-news-rail]'),button=rail.querySelector('button');
+    api.initAtlasNews(rail);let moves=0;window.addEventListener('popstate',()=>moves++);
+    const original=window.location.href;
+    for(const [lng,lat] of [['','35'],['139',''],['139','80'],['-90','35']]){button.dataset.lng=lng;button.dataset.lat=lat;button.click();assert.equal(window.location.href,original);}
+    button.dataset.lng='121.47';button.dataset.lat='31.23';button.click();
+    const url=new URL(window.location.href);
+    assert.equal(url.pathname,'/insight-journal/atlas/asia/east-asia/agriculture/');
+    assert.equal(url.searchParams.get('lng'),'121.47');assert.equal(url.searchParams.get('lat'),'31.23');assert.equal(url.searchParams.get('z'),'4');
+    for(const key of ['place','city','at','back','topic','detail','compare','view'])assert.equal(url.searchParams.has(key),false,key);
+    assert.equal(url.searchParams.get('campaign'),'study');assert.equal(moves,1);
+    assert.equal(window.document.activeElement,window.document.querySelector('[data-map-surface]'));
+  }finally{await window.happyDOM.close();}
+});
+
 test('Latin America uses the same news rail markup with its own public-region label and bounds',async()=>{
   const html=await readFile('dist/atlas/latin-america/index.html','utf8');
   assert.equal((html.match(/<aside[^>]*data-news-rail/g)||[]).length,1);

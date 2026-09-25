@@ -1,16 +1,19 @@
-export type AtlasNewsRegion = 'north-america' | 'latin-america';
+export type AtlasNewsRegion = 'north-america' | 'latin-america' | 'east-asia' | 'southeast-asia' | 'south-central-asia';
 export const atlasNewsRegions = {
   'north-america': { label: '北米', articleRegion: 'north_america', countries: ['US','CA','MX'], bounds: [-137,16,-56,58] },
   'latin-america': { label: '中南米', articleRegion: 'latin_america', countries: ['AG','AR','BS','BB','BZ','BO','BR','CL','CO','CR','CU','DM','DO','EC','FK','GD','GT','GY','HT','HN','JM','KN','LC','NI','PA','PY','PE','PR','SR','VC','TT','UY','VE','SV'], bounds: [-93,-56,-33,28] },
+  'east-asia': { label: '東アジア', articleRegion: 'asia', countries: ['CN','JP','KR','KP','MN','TW'], bounds: [72,17,155,56] },
+  'southeast-asia': { label: '東南アジア', articleRegion: 'asia', countries: ['BN','ID','KH','LA','MM','MY','PH','SG','TH','TL','VN'], bounds: [91,-12,143,30] },
+  'south-central-asia': { label: '南・中央アジア', articleRegion: 'asia', countries: ['AF','BD','BT','IN','KZ','KG','LK','MV','NP','PK','TJ','TM','UZ'], bounds: [45,-2,99,57] },
 } satisfies Record<AtlasNewsRegion,{label:string;articleRegion:string;countries:string[];bounds:[number,number,number,number]}>;
 
 export function articleMatchesNewsRegion(data:{regions:readonly string[];countries:readonly string[]},region:AtlasNewsRegion='north-america') {
   const config=atlasNewsRegions[region];
-  return data.regions.includes(config.articleRegion)||data.countries.some(code=>config.countries.includes(code));
+  return data.countries.some(code=>config.countries.includes(code))||(data.regions.includes(config.articleRegion)&&(config.articleRegion!=='asia'||data.countries.length===0));
 }
 
 export function initAtlasNews(rail: HTMLElement) {
-  const region:AtlasNewsRegion=rail.dataset.newsRegion==='latin-america'?'latin-america':'north-america';
+  const region:AtlasNewsRegion=Object.hasOwn(atlasNewsRegions,rail.dataset.newsRegion??'')?rail.dataset.newsRegion as AtlasNewsRegion:'north-america';
   const configuredBounds=rail.dataset.newsBounds?.split(',').map(Number);
   const bounds=configuredBounds?.length===4&&configuredBounds.every(Number.isFinite)?configuredBounds:atlasNewsRegions[region].bounds;
   const shell = rail.closest<HTMLElement>('[data-atlas-shell]');
@@ -49,7 +52,7 @@ export function initAtlasNews(rail: HTMLElement) {
     if (target.closest('[data-news-close]')) close();
     const location = target.closest<HTMLElement>('[data-news-location]');
     if (location) {
-      if(region==='latin-america'&&(!location.dataset.lng?.trim()||!location.dataset.lat?.trim()))return;
+      if(!location.dataset.lng?.trim()||!location.dataset.lat?.trim())return;
       const lng = Number(location.dataset.lng), lat = Number(location.dataset.lat);
       if (!Number.isFinite(lng) || !Number.isFinite(lat) || lng < bounds[0] || lng > bounds[2] || lat < bounds[1] || lat > bounds[3]) return;
       const url = new URL(window.location.href);
@@ -60,7 +63,8 @@ export function initAtlasNews(rail: HTMLElement) {
       url.searchParams.set('lng',String(lng));
       url.searchParams.set('lat',String(lat));
       url.searchParams.set('z','4');
-      url.searchParams.set('view','custom');
+      if(region==='north-america')url.searchParams.set('view','custom');
+      else for(const key of ['view','topic','detail','city','place','at','back','compare'])url.searchParams.delete(key);
       }
       history.pushState({},'',url);
       window.dispatchEvent(new PopStateEvent('popstate'));

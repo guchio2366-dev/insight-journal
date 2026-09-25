@@ -46,7 +46,7 @@ function start(root:HTMLElement) {
     history[push?'pushState':'replaceState']({},'',url);
   }
   function navigate(next:AsiaState,fit=true) {
-    state=next;selectedClass=null;selectedPoint=state.point??null;persist(true);render();if(fit)fitSelection();
+    state=next;selectedClass=null;selectedPoint=state.point??null;persist(true);render();const reading=$('.asia-reading-scroll');if(reading)reading.scrollTop=0;if(fit)fitSelection();
   }
   function camera():AsiaCamera|null {if(!mapReady||!map)return state.camera;const c=map.getCenter();return{lng:c.lng,lat:c.lat,zoom:map.getZoom()};}
   function fitSelection() {
@@ -67,7 +67,12 @@ function start(root:HTMLElement) {
     for(const option of citySelect.options){const allowed=!state.place||!option.value||option.dataset.country===state.place;option.hidden=!allowed;option.disabled=!allowed;}
     $$<HTMLButtonElement>('[data-country-button]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.countryButton===state.place)));
     $$('[data-map-country]').forEach(p=>p.classList.toggle('is-selected',(p as SVGPathElement).dataset.mapCountry===state.place));
-    $$<HTMLButtonElement>('[data-field]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.field===state.field)));
+    $$<HTMLAnchorElement>('.atlas-tabs [data-field]').forEach(a=>{if(a.dataset.field===state.field)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');a.href=writeAsiaAtlasState(new URL(a.href),{...state,field:a.dataset.field as AsiaField,back:null}).href;});
+    const explorer=$<HTMLElement>('[data-asia-explorer]');
+    if(explorer)explorer.dataset.field=state.field;
+    const fieldPanel=$<HTMLElement>('[data-field-national]');if(fieldPanel)fieldPanel.dataset.fieldNational=state.field;
+    const placeLabel=$('[data-current-place]');if(placeLabel)placeLabel.textContent=country?.name??`${config.label}全体`;
+    const cityPicker=$<HTMLElement>('[data-city-picker]');if(cityPicker)cityPicker.hidden=state.field!=='natural';
     $$<HTMLElement>('[data-city-panel]').forEach(el=>el.hidden=state.field!=='natural'||el.dataset.cityPanel!==state.city);
     $('[data-overview]').hidden=state.field!=='natural'||Boolean(city);
     $('[data-rice-reading]').hidden=state.field!=='agriculture';
@@ -194,7 +199,7 @@ function start(root:HTMLElement) {
   citySelect.addEventListener('change',()=>{if(citySelect.value)selectCity(citySelect.value);else navigate({...state,city:null,camera:null});});
   $$<HTMLButtonElement>('[data-country-button]').forEach(b=>b.addEventListener('click',()=>selectCountry(b.dataset.countryButton!)));
   $$<SVGPathElement>('[data-map-country]').forEach(p=>p.addEventListener('click',()=>selectCountry(p.dataset.mapCountry!)));
-  $$<HTMLButtonElement>('[data-field]').forEach(b=>b.addEventListener('click',()=>navigate({...state,field:b.dataset.field as AsiaField,camera:camera(),back:null},false)));
+  $$<HTMLAnchorElement>('.atlas-tabs [data-field]').forEach(a=>a.addEventListener('click',event=>{if(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey||event.button!==0)return;event.preventDefault();navigate({...state,field:a.dataset.field as AsiaField,camera:camera(),back:null},false);}));
   $$<HTMLButtonElement>('[data-compare]').forEach(b=>b.addEventListener('click',()=>navigate(startAsiaComparison(new URL(location.href),{...state,camera:camera()},b.dataset.compare as AsiaField),false)));
   $('[data-comparison-back]').addEventListener('click',()=>navigate(restoreAsiaComparison(new URL(location.href),state,context)));
   $$<HTMLButtonElement>('[data-climate-class]').forEach(b=>b.addEventListener('click',()=>{selectedClass=Number(b.dataset.climateClass);selectedPoint=null;state={...state,point:null};persist(false);renderClass();const c=config.classes.find(c=>c.id===selectedClass)!;$('[data-grid-reading]').textContent=`凡例：${c.code} ${c.name} · ${c.description}`;}));
@@ -206,5 +211,8 @@ function start(root:HTMLElement) {
   window.addEventListener('popstate',()=>{state=readAsiaAtlasState(new URL(location.href),context);selectedPoint=state.point??null;selectedClass=null;render();fitSelection();});
   window.addEventListener('pagehide',event=>{clearTimeout(moveTimer);if(!event.persisted){map?.remove();map=null;mapReady=false;}});
   window.addEventListener('pageshow',event=>{if(event.persisted){map?.resize();if(!mapReady)void initialiseMap();}});
-  sourceText();render();persist(false);void initialiseMap();
+  const syncLayout=()=>{map?.resize();const height=$('.asia-map-frame')?.getBoundingClientRect().height;if(height)root.style.setProperty('--asia-map-height',`${height}px`);};
+  const layoutObserver=new ResizeObserver(syncLayout);layoutObserver.observe($('[data-map-surface]'));
+  window.addEventListener('resize',syncLayout);
+  sourceText();render();persist(false);syncLayout();void initialiseMap();
 }

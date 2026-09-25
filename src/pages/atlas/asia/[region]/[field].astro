@@ -1,0 +1,9 @@
+---
+import AsiaAtlasPage from '../../../../components/atlas/AsiaAtlasPage.astro';
+import { asiaMapIds } from '../../../../data/atlas/regional-atlas';
+export function getStaticPaths() {
+  return asiaMapIds.flatMap(regionId=>['nature','agriculture'].map(field=>({params:{region:regionId,field},props:{regionId,initialField:field==='nature'?'natural':'agriculture'}})));
+}
+const {regionId,initialField}=Astro.props;
+---
+<AsiaAtlasPage {regionId} {initialField} />

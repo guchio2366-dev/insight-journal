@@ -24,7 +24,7 @@ test('アジアの国・都市と東経のカメラをURL往復で保持する',
     camera: { lng: 139.76, lat: 35.68, zoom: 5.125 }, back: null,
   });
   const written = writeAsiaAtlasState(original, state);
-  assert.equal(written.pathname, original.pathname);
+  assert.equal(written.pathname, '/insight-journal/atlas/asia/east-asia/nature/');
   assert.equal(written.searchParams.get('place'), 'JPN');
   assert.deepEqual(readAsiaAtlasState(written, east), state);
 });
@@ -125,6 +125,27 @@ test('比較URLの復帰先も現在の地域で検証し、外部URLへ遷移�
   assert.equal(current.hostname, 'example.org');
   const crafted = { ...state, back: 'https://other.example/atlas/?place=JPN' };
   assert.equal(restoreAsiaComparison(current, crafted, east).place, null);
+});
+
+test('公開された分野URLと旧クエリURLは、選択を失わず同じ分野URLへ正規化する', () => {
+  for (const region of ['east-asia', 'southeast-asia', 'south-central-asia']) {
+    for (const field of ['natural', 'agriculture']) {
+      const path = field === 'natural' ? 'nature' : field;
+      const original = new URL(`https://example.org/insight-journal/atlas/asia/${region}/${path}/?place=JPN&city=tokyo&lng=139&lat=35&z=5&campaign=study#asia-sources`);
+      const state = readAsiaAtlasState(original, east);
+      assert.equal(state.field, field);
+      assert.equal(writeAsiaAtlasState(original, state).pathname, original.pathname);
+      const legacy = new URL(original); legacy.pathname = `/insight-journal/atlas/asia/${region}/`; legacy.searchParams.set('field', field);
+      assert.deepEqual(readAsiaAtlasState(legacy, east), state);
+      assert.equal(writeAsiaAtlasState(legacy, state).href, writeAsiaAtlasState(original, state).href);
+      const comparison = startAsiaComparison(original, state, field === 'natural' ? 'agriculture' : 'natural');
+      const comparisonUrl = writeAsiaAtlasState(original, comparison);
+      assert.notEqual(comparisonUrl.pathname, original.pathname);
+      const restored = restoreAsiaComparison(comparisonUrl, readAsiaAtlasState(comparisonUrl, east), east);
+      assert.deepEqual(restored, state);
+      assert.equal(writeAsiaAtlasState(comparisonUrl, restored).pathname, original.pathname);
+    }
+  }
 });
 
 test('Mercator照会は北からの行順を使い、0を分類値として返さない', () => {

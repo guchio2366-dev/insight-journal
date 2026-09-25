@@ -1,13 +1,15 @@
 export type AsiaRegionId = 'east-asia' | 'southeast-asia' | 'south-central-asia';
-export type AsiaField = 'natural' | 'agriculture';
+export type AsiaField = 'natural' | 'agriculture' | 'industry' | 'population';
 export type AsiaCamera = { lng: number; lat: number; zoom: number };
-export type AsiaState = { field: AsiaField; place: string | null; city: string | null; camera: AsiaCamera | null; back: string | null; point?: [number, number] | null };
-export type AsiaStateContext = { countries: readonly string[]; cities: readonly { id: string; countryCode: string }[]; bounds: readonly number[]; fields: readonly AsiaField[] };
-const ownedKeys = ['field', 'place', 'city', 'lng', 'lat', 'z', 'back', 'region', 'at'];
+export type AsiaState = { field: AsiaField; place: string | null; city: string | null; camera: AsiaCamera | null; back: string | null; point?: [number, number] | null; topic?: string | null; detail?: string | null; compare?: string | null };
+export type AsiaStateContext = { countries: readonly string[]; cities: readonly { id: string; countryCode: string }[]; bounds: readonly number[]; fields: readonly AsiaField[]; topics?: Partial<Record<AsiaField, readonly string[]>>; details?: Partial<Record<AsiaField, readonly string[]>> };
+const ownedKeys = ['field', 'place', 'city', 'lng', 'lat', 'z', 'back', 'region', 'at', 'topic', 'detail', 'compare'];
+export const asiaFieldPaths: Record<AsiaField, string> = { natural: 'nature', agriculture: 'agriculture', industry: 'industry', population: 'population' };
+const routeField = (url: URL): AsiaField | undefined => Object.entries(asiaFieldPaths).find(([, path]) => url.pathname.endsWith(`/${path}/`))?.[0] as AsiaField | undefined;
 
 export function readAsiaAtlasState(url: URL, context: AsiaStateContext): AsiaState {
   const q = url.searchParams;
-  const requested = q.get('field');
+  const requested = q.get('field') ?? routeField(url);
   const field = context.fields.includes(requested as AsiaField) ? requested as AsiaField : 'natural';
   const rawPlace = q.get('place');
   let place = rawPlace && context.countries.includes(rawPlace) ? rawPlace : null;
@@ -27,13 +29,22 @@ export function readAsiaAtlasState(url: URL, context: AsiaStateContext): AsiaSta
   const coordinates=q.get('at')?.split(',');
   const point=coordinates?.length===2&&coordinates.every(v=>v.trim()!==''&&Number.isFinite(Number(v)))?coordinates.map(Number):null;
   const validPoint=point&&point[0]>=context.bounds[0]&&point[0]<=context.bounds[2]&&point[1]>=context.bounds[1]&&point[1]<=context.bounds[3]?point as [number,number]:null;
-  return { field, place, city, camera, back, ...(validPoint?{point:validPoint}:{}) };
+  const topic = q.get('topic'), detail = q.get('detail'), compare = q.get('compare');
+  return { field, place, city, camera, back, ...(validPoint?{point:validPoint}:{}),
+    ...(topic && context.topics?.[field]?.includes(topic) ? {topic} : {}),
+    ...(detail && context.details?.[field]?.includes(detail) ? {detail} : {}),
+    ...(compare && compare !== place && context.countries.includes(compare) ? {compare} : {}) };
 }
 
 export function writeAsiaAtlasState(url: URL, state: AsiaState): URL {
   const next = new URL(url);
   ownedKeys.forEach(key => next.searchParams.delete(key));
-  if (state.field !== 'natural') next.searchParams.set('field', state.field);
+  const regionPath=next.pathname.match(/^(.*\/atlas\/asia\/(?:east-asia|southeast-asia|south-central-asia))(?:\/(?:nature|agriculture|industry|population))?\/?$/);
+  if (regionPath) next.pathname = `${regionPath[1]}/${asiaFieldPaths[state.field]}/`;
+  else if (state.field !== 'natural') next.searchParams.set('field', state.field);
+  if (state.topic) next.searchParams.set('topic', state.topic);
+  if (state.detail) next.searchParams.set('detail', state.detail);
+  if (state.compare) next.searchParams.set('compare', state.compare);
   if (state.place) next.searchParams.set('place', state.place);
   if (state.city) next.searchParams.set('city', state.city);
   if (state.camera) {
@@ -50,7 +61,9 @@ export function startAsiaComparison(url: URL, state: AsiaState, field: AsiaField
   const from = writeAsiaAtlasState(url, { ...state, back: null });
   const approved = new URLSearchParams();
   for (const key of ownedKeys) if (key !== 'back' && from.searchParams.has(key)) approved.set(key, from.searchParams.get(key)!);
-  return { ...state, field, back: approved.toString() || 'field=natural' };
+  approved.set('field', state.field);
+  const {topic, detail, ...base} = state;
+  return { ...base, field, back: approved.toString() };
 }
 
 export function restoreAsiaComparison(url: URL, state: AsiaState, context: AsiaStateContext): AsiaState {
