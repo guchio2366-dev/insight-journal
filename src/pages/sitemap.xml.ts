@@ -2,6 +2,7 @@ import { getCollection } from "astro:content";
 import type { APIRoute } from "astro";
 import { withBase } from "../lib/urls";
 import { agricultureField } from "../data/atlas/north-america-agriculture";
+import { regionalMaps } from "../data/atlas/regional-atlas";
 
 export const prerender = true;
 
@@ -28,7 +29,8 @@ export const GET: APIRoute = async ({ site }) => {
     { loc: absolute("/themes/"), lastmod: undefined },
     { loc: absolute("/about/"), lastmod: undefined },
     { loc: absolute("/atlas/"), lastmod: agricultureField.updatedAt.slice(0, 10) },
-    { loc: absolute("/atlas/asia/"), lastmod: "2026-09-25" },
+    { loc: absolute("/atlas/europe/"), lastmod: "2026-09-25" },
+    ...Object.values(regionalMaps).map(map => ({ loc: absolute(map.href), lastmod: "2026-09-25" })),
     { loc: absolute("/atlas/north-america/"), lastmod: agricultureField.updatedAt.slice(0, 10) },
     { loc: absolute("/atlas/north-america/agriculture/"), lastmod: agricultureField.updatedAt.slice(0, 10) },
     { loc: absolute("/atlas/north-america/agriculture/report/"), lastmod: agricultureField.updatedAt.slice(0, 10) },

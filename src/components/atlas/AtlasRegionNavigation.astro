@@ -1,0 +1,27 @@
+---
+import { americaLinks, asiaMapIds, northAmericaLinks, regionalMaps, type AtlasGroup } from '../../data/atlas/regional-atlas';
+import { withBase } from '../../lib/urls';
+interface Props { group: AtlasGroup; current: string; country?: string }
+const { group, current, country } = Astro.props;
+const links = group === 'asia' ? asiaMapIds.map(id => ({id, ...regionalMaps[id]})) : americaLinks;
+---
+<div class="regional-navigation">
+  <nav class="regional-tabs" aria-label={group === 'asia' ? 'アジアの地域' : '南北アメリカの地域'}>
+    {links.map(link => <a href={withBase(link.href)} aria-current={link.id === current ? 'page' : undefined}>{link.label}</a>)}
+  </nav>
+  {country && <nav class="regional-countries" aria-label="北米の国">
+    {northAmericaLinks.map(link => <a href={withBase(link.href)} aria-current={link.id === country ? 'page' : undefined}>{link.label}</a>)}
+  </nav>}
+</div>
+<style>
+  .regional-navigation { margin: 12px 0 18px; }
+  .regional-tabs, .regional-countries { display: flex; flex-wrap: wrap; gap: 6px; }
+  .regional-tabs a, .regional-countries a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 15px; border: 1px solid var(--rule); background: var(--white); color: var(--ink); font-size: 14px; text-decoration: none; }
+  .regional-tabs a[aria-current] { color: #fff; background: #162638; border-color: #162638; }
+  .regional-countries { margin-top: 7px; }
+  .regional-countries a { font-size: 13px; min-height: 40px; padding: 6px 13px; }
+  .regional-countries a[aria-current] { font-weight: 700; border-color: #162638; box-shadow: inset 0 -3px #162638; }
+  a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  a:focus-visible { outline: 3px solid #ad5232; outline-offset: 2px; }
+  @media (pointer: coarse) { .regional-countries a { min-height: 44px; } }
+</style>

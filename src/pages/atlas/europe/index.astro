@@ -2,6 +2,7 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { withBase } from '../../../lib/urls';
 import geography from '../../../data/atlas/europe-countries.json';
+import { europePath as mapPath, europeWidth as width, europeHeight as height, projectEurope } from '../../../lib/atlas-europe-geometry';
 
 type Region = 'north' | 'west' | 'south' | 'east';
 type Feature = {
@@ -17,6 +18,7 @@ const sourceRegions: Record<string, Region> = {
   'Southern Europe': 'south', 'Eastern Europe': 'east'
 };
 const japaneseNames: Record<string, string> = {
+  MLT: 'マルタ', AND: 'アンドラ', LIE: 'リヒテンシュタイン', MCO: 'モナコ', SMR: 'サンマリノ', VAT: 'バチカン',
   ALB: 'アルバニア', AUT: 'オーストリア', BEL: 'ベルギー', BGR: 'ブルガリア',
   BIH: 'ボスニア・ヘルツェゴビナ', BLR: 'ベラルーシ', CHE: 'スイス', CZE: 'チェコ',
   DEU: 'ドイツ', DNK: 'デンマーク', ESP: 'スペイン', EST: 'エストニア',
@@ -28,21 +30,6 @@ const japaneseNames: Record<string, string> = {
   ROU: 'ルーマニア', RUS: 'ロシア', SRB: 'セルビア', SVK: 'スロバキア',
   SVN: 'スロベニア', SWE: 'スウェーデン', UKR: 'ウクライナ'
 };
-const width = 1200;
-const height = 650;
-const project = ([longitude, latitude]: number[]) => [
-  ((longitude + 25) / 90) * width,
-  ((73 - latitude) / 41) * height
-];
-function mapPath(geometry: Feature['geometry']) {
-  const rings = geometry.type === 'Polygon'
-    ? geometry.coordinates as number[][][]
-    : (geometry.coordinates as number[][][][]).flat();
-  return rings.map(ring => ring.map((position, index) => {
-    const [x, y] = project(position);
-    return `${index ? 'L' : 'M'}${x.toFixed(1)},${y.toFixed(1)}`;
-  }).join('') + 'Z').join('');
-}
 const context = (geography.features as Feature[])
   .filter(feature => feature.properties.kind === 'context')
   .map(feature => mapPath(feature.geometry));
@@ -55,13 +42,13 @@ const countries = (geography.features as Feature[])
 const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
 ---
 
-<BaseLayout title="欧州地図" description="欧州の国・地域の位置と広がりを確認できる基礎地図。" compactAtlas noindex>
+<BaseLayout title="欧州地図" description="欧州の国・地域の位置と広がりを確認できる基礎地図。" compactAtlas>
   <div class="europe-atlas shell" data-europe-atlas>
     <p class="europe-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / 欧州</p>
     <header class="europe-heading">
       <p class="eyebrow">Atlas · Europe</p>
       <h1>欧州地図</h1>
-      <p>地域を切り替えながら、国・地域の位置関係を確かめる基礎地図です。</p>
+      <p>西欧から東欧・ロシア西部まで、45の国・地域の位置関係を確かめる基礎地図です。</p>
     </header>
 
     <nav class="europe-regions" aria-label="欧州の地域を選ぶ">
@@ -76,18 +63,17 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
           <p>地域・国を選ぶと、その範囲を拡大します。</p>
         </div>
         <div class="europe-map-scroll">
-          <svg class="europe-map" viewBox={`0 0 ${width} ${height}`} role="img" aria-labelledby="europe-map-svg-title europe-map-svg-desc">
+          <svg class="europe-map" viewBox={`0 0 ${width} ${height}`} data-default-frame={`0 0 ${width} ${height}`} role="img" aria-labelledby="europe-map-svg-title europe-map-svg-desc">
             <title id="europe-map-svg-title">欧州の国・地域の基礎地図</title>
             <desc id="europe-map-svg-desc">地域ごとに色分けした国・地域の概略境界。下の一覧からも選択できます。</desc>
             <rect width={width} height={height} fill="#e0edf0" />
             {context.map(path => <path class="europe-context" d={path} fill-rule="evenodd" aria-hidden="true" />)}
             {countries.map(country => <path d={country.path} fill-rule="evenodd" data-map-country={country.code} data-map-region={country.region}><title>{country.name}</title></path>)}
-            <text x="125" y="330" class="europe-ocean-label">大西洋</text>
-            <text x="380" y="235" class="europe-ocean-label">北海</text>
-            <text x="570" y="595" class="europe-ocean-label">地中海</text>
+            {[{name:'大西洋',point:[-16,52]}, {name:'北海',point:[3,58]}, {name:'地中海',point:[18,35]}].map(label => <text x={projectEurope(label.point)[0]} y={projectEurope(label.point)[1]} class="europe-ocean-label">{label.name}</text>)}
           </svg>
         </div>
-        <p class="europe-map-caption">色は北欧・西欧・南欧・東欧の区分、灰色は周辺地域です。「欧州全体」で元の範囲に戻ります。Natural Earth 1:110m の概略境界を使い、小国・島は省略される場合があります。</p>
+        <p class="europe-map-caption">色は北欧・西欧・南欧・東欧の区分、灰色は周辺地域です。「欧州全体」で元の範囲に戻ります。概略境界を表示しています。小さな国は一覧から選ぶと拡大できます。</p>
+        <noscript><p class="europe-map-caption">基礎地図と国・地域の一覧を表示しています。選択・拡大にはJavaScriptが必要です。</p></noscript>
       </section>
 
       <aside class="europe-side" aria-labelledby="europe-selection-title">
@@ -107,7 +93,8 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
 
     <footer class="europe-source">
       <h2>地図の範囲と出典</h2>
-      <p>境界は <a href="https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/">Natural Earth Admin 0 Countries（1:110m）</a>を使用。北欧・西欧・南欧・東欧の区分は原本のサブリージョンに基づきます。灰色は周辺地域です。ロシアは表示範囲内の西部だけを示します。境界・名称は出典データの表示上の区分であり、政治的な地位や主権についての見解を示すものではありません。西経25度～東経65度、北緯32度～73度を表示します。</p>
+      <p>境界は <a href="https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/">Natural Earth Admin 0 Countries（1:110m）</a>を使用。北欧・西欧・南欧・東欧の区分は原本のサブリージョンに基づきます。灰色は周辺地域です。東欧にはウクライナ、ベラルーシ、モルドバ、ポーランド、ルーマニアなどを含め、ロシアは表示範囲内の西部を示します。境界・名称は出典データの表示上の区分であり、政治的な地位や主権についての見解を示すものではありません。西経25度～東経65度、北緯32度～73度を表示します。</p>
+      <p>マルタ、アンドラ、リヒテンシュタイン、モナコ、サンマリノ、バチカンの輪郭には<a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/">Natural Earth 1:50m</a>を使用しています。北緯53度を標準緯線とする等距円筒図法で、面積の比較には適しません。</p>
     </footer>
   </div>
 </BaseLayout>
@@ -124,12 +111,15 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
     const regionNames: Record<string, string> = {
       north: '北欧', west: '西欧', south: '南欧', east: '東欧'
     };
+    const frame = (map?.dataset.defaultFrame ?? '0 0 1200 908').split(' ').map(Number);
+    const mapWidth = frame[2], mapHeight = frame[3];
     let activeRegion = 'all';
     let activeCountry = '';
     function fitSelection() {
       if (!map) return;
+      map.dataset.detail = String(activeRegion !== 'all' || !!activeCountry);
       if (activeRegion === 'all' && !activeCountry) {
-        map.setAttribute('viewBox', '0 0 1200 650');
+        map.setAttribute('viewBox', frame.join(' '));
         return;
       }
       const paths = mapCountries.filter(path => activeCountry
@@ -140,11 +130,11 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
       // Clip source geometry to the map's longitude range before fitting.
       const left = Math.max(0, Math.min(...boxes.map(box => box.x)));
       const top = Math.max(0, Math.min(...boxes.map(box => box.y)));
-      const right = Math.min(1200, Math.max(...boxes.map(box => box.x + box.width)));
-      const bottom = Math.min(650, Math.max(...boxes.map(box => box.y + box.height)));
-      const spanX = Math.max(100, (right - left) * 1.22);
-      const spanY = Math.max(70, (bottom - top) * 1.22);
-      const aspect = 1200 / 650;
+      const right = Math.min(mapWidth, Math.max(...boxes.map(box => box.x + box.width)));
+      const bottom = Math.min(mapHeight, Math.max(...boxes.map(box => box.y + box.height)));
+      const spanX = Math.max(12, (right - left) * 1.22);
+      const spanY = Math.max(8, (bottom - top) * 1.22);
+      const aspect = mapWidth / mapHeight;
       const frameWidth = Math.max(spanX, spanY * aspect);
       const frameHeight = frameWidth / aspect;
       map.setAttribute('viewBox', `${(left + right - frameWidth) / 2} ${(top + bottom - frameHeight) / 2} ${frameWidth} ${frameHeight}`);
@@ -186,13 +176,14 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
       applyState();
     }
     for (const button of regionButtons) button.addEventListener('click', () => {
+      if (activeRegion === button.dataset.regionButton && !activeCountry) return;
       activeRegion = button.dataset.regionButton ?? 'all';
       activeCountry = '';
       applyState(true);
     });
     function selectCountry(code: string) {
       const chosen = countryButtons.find(button => button.dataset.countryButton === code);
-      if (!chosen) return;
+      if (!chosen || activeCountry === code) return;
       activeCountry = code;
       if (activeRegion !== 'all' && chosen.dataset.countryRegion !== activeRegion) activeRegion = chosen.dataset.countryRegion ?? 'all';
       applyState(true);
@@ -227,7 +218,7 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
   .europe-map-heading p { margin: 0; color: var(--ink-soft); font-size: 12px; }
   .europe-map-scroll { overflow-x: auto; background: #e0edf0; }
   .europe-map-scroll:focus-visible, .europe-atlas button:focus-visible { outline: 3px solid #b75230; outline-offset: -3px; }
-  .europe-map { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 650; }
+  .europe-map { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 908; background: #e0edf0; }
   .europe-map path { fill: #d9d2bc; stroke: #fffaf0; stroke-width: 1.3; vector-effect: non-scaling-stroke; transition: opacity .15s, fill .15s; }
   .europe-map path[data-map-country] { cursor: pointer; }
   .europe-map path.europe-context { fill: #e8e5d9; stroke: #fffaf0; }
@@ -239,6 +230,7 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
   .europe-map path[data-map-region='north'] { fill: #a2c7d2; }
   .europe-map path.is-muted { opacity: .22; }
   .europe-map path[data-map-country]:hover, .europe-map path.is-selected { fill: #ad5232; stroke: #583522; stroke-width: 2.2; opacity: 1; }
+  .europe-map[data-detail="true"] .europe-ocean-label { display: none; }
   .europe-ocean-label { fill: #5d8590; font-family: var(--serif); font-size: 17px; text-anchor: middle; pointer-events: none; }
   .europe-map-caption { margin: 0; padding: 12px 20px; border-top: 1px solid var(--rule); color: var(--ink-soft); font-size: 11px; line-height: 1.7; }
   .europe-selection { min-height: 150px; padding: 20px; background: #f7f5ed; }
@@ -247,7 +239,7 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
   .europe-country-list { padding: 18px 20px 22px; border-top: 1px solid var(--rule); }
   .europe-country-list h3 { margin: 0 0 10px; font-size: 13px; }
   .europe-country-buttons { display: flex; flex-wrap: wrap; gap: 5px; max-height: 370px; overflow-y: auto; }
-  .europe-country-buttons button { min-height: 40px; padding: 8px 10px; border: 1px solid var(--rule); background: #fff; color: var(--ink); font: inherit; font-size: 12px; cursor: pointer; }
+  .europe-country-buttons button { min-height: 44px; padding: 8px 10px; border: 1px solid var(--rule); background: #fff; color: var(--ink); font: inherit; font-size: 12px; cursor: pointer; }
   .europe-country-buttons button[aria-pressed='true'] { border-color: #ad5232; background: #ad5232; color: #fff; }
   .europe-country-buttons button[hidden] { display: none; }
   .europe-source { max-width: 900px; margin-top: 34px; padding-top: 20px; border-top: 1px solid var(--rule); }
