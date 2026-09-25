@@ -39,7 +39,7 @@ const chartX=(i:number)=>38+i*24,chartT=(t:number)=>145-(t+10)/50*125;
    </div>
   </div>
   <AtlasWorkspaceFrame region="latin-america">
-   <article class="atlas-explorer latin-atlas" data-latin-explorer data-field={initialField==='nature'?'natural':initialField} data-nature-mode="climate">
+   <article class="atlas-explorer latin-atlas" data-latin-explorer data-field={initialField==='nature'?'natural':initialField==='overview'?'regional-overview':initialField} data-nature-mode="climate">
     <section class="atlas-workspace" aria-label="中南米の分野別地図">
      <div class="atlas-compact-heading"><nav aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a><span aria-hidden="true"> / </span><a href={basePath}>中南米地図</a></nav><span data-current-place>中米・カリブ・南米</span></div>
      <h1 class="visually-hidden">中南米地図から読む、農林業・自然環境・主要産業・人口</h1>

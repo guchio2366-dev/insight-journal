@@ -50,7 +50,7 @@ export function init(root:HTMLElement){
   const isLivestock=['cattle','pig','chicken'].includes(state.crop);
   const topic=topics.find(t=>t.id===state.topic),field=config.fields.find((f:any)=>f.id===state.field);
   const displayCity=state.city||(!state.topic&&state.field==='nature'&&state.view==='climate'?(state.place?cities.find(c=>c.countryCode===state.place)?.id:cities.find(c=>c.id==='sao-paulo')?.id):'')||'';
-  explorer.dataset.field=state.field==='nature'?'natural':state.field;
+  explorer.dataset.field=state.field==='nature'?'natural':state.field==='overview'?'regional-overview':state.field;
   explorer.dataset.natureMode=state.view==='climate'?'climate':'water';
   q('[data-field-national]').setAttribute('data-field-national',explorer.dataset.field);
   all<HTMLAnchorElement>('.atlas-tabs [data-field]').forEach(b=>{if(b.dataset.field===state.field)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
@@ -196,8 +196,8 @@ export function init(root:HTMLElement){
   table.append(tbody);q('[data-statistics-table]').replaceChildren(table);q('[data-statistics-status]').textContent='';q<HTMLAnchorElement>('[data-statistics-source]').href=metric.sourceUrl;
  }
  function changeCrop(crop:string){
-  const topicIds:Record<string,string>={soyb:'cerrado-soy',maiz:'brazil-second-maize',whea:'pampas-farming',sugc:'brazil-sugar',coff:state.place==='COL'?'colombia-coffee':'brazil-coffee',bana:'tropical-bananas',pota:'andean-farming',temf:'chile-fruit',none:'planted-forests',cattle:'pampas-farming'};
-  const topic=topics.find(t=>t.id===topicIds[crop]&&(!state.place||t.countries.includes(state.place)));
+  const topicIds:Record<string,string[]>={soyb:['cerrado-soy'],maiz:['brazil-second-maize'],whea:['pampas-farming'],sugc:['brazil-sugar'],coff:['brazil-coffee','colombia-coffee','central-coffee'],rcof:['brazil-coffee'],bana:['tropical-bananas'],pota:['andean-farming'],temf:['chile-fruit'],none:['planted-forests'],cattle:['pampas-farming']};
+  const topic=(topicIds[crop]??[]).map(id=>topics.find(t=>t.id===id)).find(t=>t&&(!state.place||t.countries.includes(state.place)));
   commit({...state,field:'agriculture',crop,topic:topic?.id??'',city:''},{keepView:true});renderStatistics();
  }
  function syncReadingHeight(){explorer.style.setProperty('--latin-map-height',`${Math.max(300,q('.latin-map-frame').getBoundingClientRect().height)}px`)}

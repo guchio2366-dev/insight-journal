@@ -23,7 +23,7 @@ const nextTurn=()=>new Promise(resolve=>setImmediate(resolve));
 const atlasPath='/insight-journal/atlas/latin-america/';
 const fieldOrder=['agriculture','nature','industry','population'];
 const fieldTab=(q,field)=>q(`.atlas-tabs [data-field="${field}"]`);
-const routeField=q=>q('[data-latin-explorer]').dataset.field;
+const routeField=q=>q('[data-latin-explorer]').dataset.field==='regional-overview'?'overview':q('[data-latin-explorer]').dataset.field;
 async function waitFor(check,label){const deadline=Date.now()+15000;while(Date.now()<deadline){if(check())return;await new Promise(resolve=>setTimeout(resolve,10));}throw Error('Timed out: '+label);}
 async function settleData(window){
  const deadline=Date.now()+15000;
@@ -96,6 +96,7 @@ test('overview and every field route render the shared North America frame, news
    assert.ok(q('.atlas-primary-grid > [data-field-national] .atlas-national'),field+' reading sits beside the map');
    assert.ok(q('.atlas-explorer > .atlas-reading'),field+' sources remain below the map workspace');
    assert.equal(routeField(q),field==='nature'?'natural':field);
+   if(field==='overview')assert.equal(q('[data-latin-explorer]').dataset.field,'regional-overview','regional landing must not activate the legacy land-overview layout');
    const tabs=[...q('.atlas-tabs').querySelectorAll('a[data-field]')];
    assert.deepEqual(tabs.map(a=>a.dataset.field),fieldOrder);
    for(const tab of tabs){
@@ -196,6 +197,24 @@ test('crop buttons preserve the country filter when their default reading belong
   assert.equal(q('[data-place]').value,'BRA');
   change(window,q('[data-place]'),'ARG');q('[data-crop-option="whea"]').click();
   assert.equal(q('[data-topic-panel="pampas-farming"]').hidden,false);assert.equal(q('[data-place]').value,'ARG');
+ }finally{await close(window);}
+});
+
+test('coffee products open a compatible country reading and retain the selected variety and map',async()=>{
+ const {window,q}=await setup('?map=-70,0,4',{route:'agriculture'});
+ try{
+  for(const [place,crop,topic] of [['','coff','brazil-coffee'],['GTM','coff','central-coffee'],['HND','coff','central-coffee'],['CRI','coff','central-coffee'],['COL','coff','colombia-coffee'],['BRA','rcof','brazil-coffee'],['COL','rcof','']]){
+   change(window,q('[data-place]'),place);
+   const center=window.__map.getCenter(),camera=[center.lng,center.lat,window.__map.getZoom()].map((n,i)=>n.toFixed(i===2?2:3)).join(',');
+   q(`[data-crop-option="${crop}"]`).click();
+   await readyRaster(window,q,crop+'.png');
+   const url=new URL(window.location.href);
+   assert.equal(q('[data-place]').value,place);assert.equal(url.searchParams.get('place')??'',place);
+   assert.equal(url.searchParams.get('crop'),crop);assert.equal(url.searchParams.get('map'),camera);
+   assert.equal(url.searchParams.get('topic')??'',topic);
+   assert.equal(q(`[data-crop-option="${crop}"]`).getAttribute('aria-pressed'),'true');
+   assert.deepEqual(visiblePanels(q).map(p=>p.dataset.topicPanel),topic?[topic]:[]);
+  }
  }finally{await close(window);}
 });
 
