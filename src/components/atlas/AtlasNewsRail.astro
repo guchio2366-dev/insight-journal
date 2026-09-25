@@ -14,7 +14,7 @@ const articles = (await getCollection('articles'))
   .sort((a,b) => Date.parse(b.data.publishedAt)-Date.parse(a.data.publishedAt) || a.data.slug.localeCompare(b.data.slug));
 const rendered = await Promise.all(articles.map(async entry => ({entry, ...await render(entry)})));
 ---
-<aside class="atlas-news" aria-labelledby="atlas-news-heading" data-news-rail data-news-region={region==='latin-america'?region:undefined} data-news-bounds={region==='latin-america'?config.bounds.join(','):undefined} data-pagefind-ignore="all">
+<aside class="atlas-news" aria-labelledby="atlas-news-heading" data-news-rail data-news-region={region!=='north-america'?region:undefined} data-news-bounds={region!=='north-america'?config.bounds.join(','):undefined} data-pagefind-ignore="all">
   <header class="atlas-news-header">
     <p>NEWS & CONTEXT</p>
     <h2 id="atlas-news-heading">{config.label}のニュース</h2>

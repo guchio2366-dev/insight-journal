@@ -75,7 +75,7 @@ function fixture() {
     <select data-country-select><option value=""></option><option value="JPN">Japan</option><option value="CHN">China</option><option value="MNG">Mongolia</option></select>
     <select data-city-select><option value=""></option><option value="tokyo" data-country="JPN">Tokyo</option><option value="beijing" data-country="CHN">Beijing</option></select>
     <button data-country-button="JPN"></button><button data-country-button="CHN"></button><button data-country-button="MNG"></button>
-    <button data-field="natural"></button><button data-field="agriculture"></button>
+    <nav class="atlas-tabs"><a href="/insight-journal/atlas/asia/east-asia/nature/" data-field="natural"></a><a href="/insight-journal/atlas/asia/east-asia/agriculture/" data-field="agriculture"></a></nav>
     <div data-map-surface></div><div data-map-fallback><svg><path data-map-country="JPN"></path></svg></div>
     <div data-map-state></div><button data-map-retry hidden></button>
     <section data-overview><div class="asia-next"><p></p><div class="asia-city-links"></div></div></section>
@@ -146,6 +146,44 @@ test('workerを先に設定し、格子クリック→比較→復帰を一つ�
     assert.equal(q('[data-rice-reading]').hidden, true);
     assert.equal(new URL(window.location.href).searchParams.get('at'), '116.75000,34.25000');
     assert.equal(window.__maps.length, 1);
+  } finally { await window.happyDOM.close(); }
+});
+
+test('分野リンクは選択を含む実URLになり、切替・履歴復元でも地図を作り直さない', async () => {
+  const { window, q } = await setup('nature/?place=JPN&city=tokyo&lng=139.75&lat=35.69&z=5');
+  try {
+    await until(() => q('[data-grid-reading]').textContent.includes('Cfa'), 'initial climate loaded');
+    const agriculture = q('.atlas-tabs [data-field="agriculture"]');
+    assert.equal(new URL(agriculture.href).pathname, '/insight-journal/atlas/asia/east-asia/agriculture/');
+    assert.equal(new URL(agriculture.href).searchParams.get('city'), 'tokyo');
+    const original = window.location.href;
+    const activate = new window.MouseEvent('click', { bubbles:true, cancelable:true, button:0 });
+    agriculture.dispatchEvent(activate);
+    assert.equal(activate.defaultPrevented, true);
+    assert.equal(window.location.pathname, '/insight-journal/atlas/asia/east-asia/agriculture/');
+    assert.equal(agriculture.getAttribute('aria-current'), 'page');
+    assert.equal(q('[data-city-panel="tokyo"]').hidden, true);
+    assert.equal(q('[data-rice-reading]').hidden, false);
+    await until(() => q('[data-rice-value]').textContent.includes('123.4'), 'rice selection loaded');
+    window.history.replaceState({}, '', original);
+    window.dispatchEvent(new window.PopStateEvent('popstate'));
+    assert.equal(q('.atlas-tabs [data-field="natural"]').getAttribute('aria-current'), 'page');
+    assert.equal(q('[data-city-panel="tokyo"]').hidden, false);
+    assert.equal(q('[data-rice-reading]').hidden, true);
+    await until(() => q('[data-grid-reading]').textContent.includes('Cfa'), 'restored climate loaded');
+    assert.equal(window.__maps.length, 1);
+    const modified = new window.MouseEvent('click', { bubbles: true, cancelable: true, ctrlKey: true });
+    let intercepted;
+    agriculture.addEventListener('click', event => { intercepted = event.defaultPrevented; event.preventDefault(); }, {once:true});
+    agriculture.dispatchEvent(modified);
+    assert.equal(intercepted, false, 'modified clicks retain normal link behavior');
+    assert.equal(window.__maps.length, 1);
+    await delay();
+    window.__map.center = {lng:138.2,lat:36.5}; window.__map.zoom = 6;
+    await window.__map.fire('moveend');
+    await until(() => new URL(agriculture.href).searchParams.get('lng') === '138.20000', 'field link follows map movement');
+    assert.equal(new URL(agriculture.href).searchParams.get('lat'),'36.50000');
+    assert.equal(new URL(agriculture.href).searchParams.get('z'),'6.000');
   } finally { await window.happyDOM.close(); }
 });
 
