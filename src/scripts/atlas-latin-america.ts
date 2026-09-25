@@ -211,7 +211,10 @@ export function init(root:HTMLElement){
   else if(b.hasAttribute('data-reading-overview'))commit({...state,topic:'',city:''},{keepView:true});
   else if(b.dataset.selectTopic)selectTopic(b.dataset.selectTopic);
   else if(b.dataset.compareTopic)selectTopic(b.dataset.compareTopic,true);
-  else if(b.dataset.compareField)commit({...state,field:b.dataset.compareField,topic:'',city:''},{keepView:true,comparison:true});
+  else if(b.dataset.compareField){
+   const city=cities.find(c=>c.id===b.closest<HTMLElement>('[data-city-panel]')?.dataset.cityPanel);
+   commit({...state,field:b.dataset.compareField,topic:'',city:'',camera:city?[city.longitude,city.latitude,5]:state.camera},{keepView:!city,comparison:true});
+  }
   else if(b.hasAttribute('data-return')&&returnTo){const previous=returnTo;commit(previous);}
   else if(b.dataset.countryButton){commit({...state,place:b.dataset.countryButton,topic:'',city:'',camera:undefined});renderStatistics();}
   else if(b.hasAttribute('data-reset')){commit({...state,place:'',topic:'',city:'',camera:undefined});renderStatistics();}

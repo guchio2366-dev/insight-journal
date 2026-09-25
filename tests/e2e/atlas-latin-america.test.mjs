@@ -240,6 +240,29 @@ test('nature initially shows a default climate chart without selecting a city or
  }finally{await close(window);}
 });
 
+test('default climate chart compares the displayed city surroundings and returns to the original wide view',async()=>{
+ for(const failMap of [false,true]){
+  const {window,q,config}=await setup('',{route:'nature',failMap});
+  try{
+   const city=config.cities.find(c=>c.id==='sao-paulo');
+   const before=failMap?q('[data-map-fallback]').getAttribute('viewBox').split(' ').map(Number):[window.__map.getCenter().lng,window.__map.getCenter().lat,window.__map.getZoom()];
+   assert.equal(q('[data-city-panel="sao-paulo"]').hidden,false);assert.equal(new URL(window.location.href).searchParams.has('city'),false);
+   q('[data-city-panel="sao-paulo"] [data-compare-field="agriculture"]').click();
+   const compared=new URL(window.location.href),camera=compared.searchParams.get('map').split(',').map(Number);
+   assert.equal(compared.pathname,atlasPath+'agriculture/');assert.equal(routeField(q),'agriculture');
+   assert.deepEqual(camera,[Number(city.longitude.toFixed(3)),Number(city.latitude.toFixed(3)),5]);
+   assert.equal(q('[data-comparison-return]').hidden,false);
+   if(!failMap)assert.deepEqual([window.__map.getCenter().lng,window.__map.getCenter().lat,window.__map.getZoom()],[city.longitude,city.latitude,5]);
+   q('[data-return]').click();
+   assert.equal(window.location.pathname,atlasPath+'nature/');assert.equal(q('[data-city-panel="sao-paulo"]').hidden,false);
+   assert.equal(new URL(window.location.href).searchParams.has('city'),false,'return restores the default preview rather than selecting the station');
+   assert.equal(q('[data-comparison-return]').hidden,true);
+   const after=failMap?q('[data-map-fallback]').getAttribute('viewBox').split(' ').map(Number):[window.__map.getCenter().lng,window.__map.getCenter().lat,window.__map.getZoom()];
+   after.forEach((value,i)=>assert.ok(Math.abs(value-before[i])<.02,'return restores the original regional viewport'));
+  }finally{await close(window);}
+ }
+});
+
 test('related readings and comparison return synchronize the country filter with its statistics highlight',async()=>{
  const {window,q}=await setup('?place=BRA&topic=cerrado-soy',{route:'agriculture'});
  try{
