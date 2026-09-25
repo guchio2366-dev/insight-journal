@@ -1,0 +1,25 @@
+---
+import { europeReadings } from '../../data/atlas/europe/readings';
+const { mode = 'reader' } = Astro.props;
+---
+{mode === 'reader' ? <section class="eu-subject-reader" data-eu-subject-reader hidden aria-labelledby="eu-subject-title">
+ <p class="eu-kicker">READ THE MAP</p><h2 id="eu-subject-title" data-eu-subject-title>地図を読む</h2>
+ <p data-eu-subject-note></p>
+ <label class="eu-select-label">地点・解説を選ぶ<select data-eu-feature><option value="">選択してください</option></select></label>
+ <p class="eu-data-note" data-eu-feature-help></p>
+ <div data-eu-feature-card aria-live="polite"></div>
+ <div class="eu-country-reader"><h3 data-eu-country-title>国を選んで数値を確認</h3><p class="eu-data-note">2023年・国全体の統計。ロシアは全土、海外領土の算入は原統計に従います。格子や都市の値とは異なります。</p><dl class="eu-national-values" data-eu-national-values></dl></div>
+ <details class="eu-months" data-eu-trend hidden><summary>選んだ指標の2020〜2024年</summary><table><caption data-eu-trend-caption></caption><thead><tr><th>年</th><th>値</th></tr></thead><tbody data-eu-trend-rows></tbody></table><p>各年とも国全体。欠測は「—」。当年価格のGDPは物価・為替の影響を含みます。</p></details>
+ <details class="eu-months" data-eu-country-comparison hidden><summary>同じ指標で45の国・地域を比較</summary><table><caption data-eu-country-comparison-caption></caption><thead><tr><th>国・地域</th><th>2023年</th></tr></thead><tbody data-eu-country-comparison-rows></tbody></table><p>名前を押すと地図で選択。欠測は「—」。国全体の同一年・同じ単位で比べます。</p></details>
+ <p class="eu-data-note">国別の統計はWorld Bank WDI。都市の位置はNatural Earth 5.1.2。都市の点は同じ大きさで、人口の大小を示しません。</p>
+</section> : <section class="eu-expanded-readings" data-eu-expanded-readings>
+ <h2>分布を読み比べる</h2>
+ <div class="eu-reading-index">
+  <article><h3>穀物・油糧作物・畜産</h3><p>小麦、大麦、トウモロコシ、ヒマワリを同じ面積階級で切り替えます。作物と牛・豚の分布を比べるときは、ha/格子と頭/km²の単位の違いを確認してください。</p><div><button data-eu-jump="sunflower" type="button">ヒマワリを見る</button><button data-eu-jump="cattle" type="button">牛の分布を見る</button></div><p class="eu-data-note">SPAMには単独のブドウ・オリーブ・ライ麦・オーツの格子がないため、他の区分をそれらと見なして表示していません。</p></article>
+  <article><h3>森林と加工業</h3><p>森林面積比率で北欧の国々を比較し、ラッペーンランタの加工拠点を確認します。森林が多いという国別の値だけでは、木材生産量や工場の位置は決まりません。</p><div><button data-eu-jump="forest" type="button">森林面積比率</button><button data-eu-reading="kaukas" type="button">パルプ・バイオ燃料</button></div></article>
+  <article><h3>人口集中と高齢化</h3><p>人口密度は国内の分布、65歳以上の比率は国全体の構成を表します。同じ国でも都市と農村には差があり、国別の色を各都市の数値とは読めません。</p><div><button data-eu-jump="density" type="button">人口密度</button><button data-eu-jump="age" type="button">65歳以上の比率</button></div></article>
+  <article><h3>国を越える産業</h3><p>工場・研究開発・金融など14の代表地点を、4つのまとまりでたどります。拠点地図と国別の製造業比率を切り替え、位置と産業構成を分けて読みます。</p><div><button data-eu-jump="hubs" type="button">産業の拠点</button><button data-eu-jump="manufacturing" type="button">製造業のGDP比率</button></div></article>
+ </div>
+ <details><summary>自然環境・産業の解説一覧</summary><div class="eu-reading-index">{europeReadings.map(r=><article><h3>{r.name}</h3><p class="eu-kicker">{r.group} · {r.period}</p><p>{r.body}</p><p>{r.question}</p><button type="button" data-eu-reading={r.id}>地図で見る</button><a class="eu-source-link" href={r.source}>{r.sourceLabel}</a></article>)}</div></details>
+ <details><summary>全国値の読み方と欠測</summary><p>国の境界を選択しても、隣国の主題表示は残ります。統計の単位は国全体で、表示枠内への切り抜き集計ではありません。2023年が欠測の国を別年の値で塗ることはせず、灰色で示します。サービス業・鉱工業・製造業には内包関係があるため、単純に足して100%にはできません。移動の方向や移民数、言語・宗教の分布は人口増加率から推定できません。</p></details>
+</section>}
