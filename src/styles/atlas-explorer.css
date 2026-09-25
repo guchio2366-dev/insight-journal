@@ -480,6 +480,7 @@
 .agri-reading-panel>header button{font:inherit;font-size:13px;min-height:44px;padding:0;background:none;border:0;color:#49666d;cursor:pointer}
 .agri-reading-panel h2{font-family:var(--serif);font-size:22px;line-height:1.5;margin:0;scroll-margin-top:70px}
 .agri-reading-body{min-height:0;overflow-wrap:anywhere}
+.agri-reading-body:focus-visible{outline:2px solid #176f89;outline-offset:2px}
 .agri-reading-panel .atlas-crop-copy{border:0}
 .agri-reading-panel .atlas-crop-copy h3{display:none}
 .agri-reading-panel .atlas-crop-copy p,.agri-reading-panel .agriculture-relation p{font-size:14px;line-height:1.8;margin:12px 0}

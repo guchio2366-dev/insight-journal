@@ -132,7 +132,7 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
       <div data-field-national="agriculture" hidden={initialField!=='agriculture'}><div data-agri-overview><NationalAgricultureSummary /></div>
         <section class="agri-reading-panel" data-agri-reading-panel hidden aria-labelledby="agri-reading-heading">
           <header><button type="button" data-agri-overview-button>← 米国の農林業</button><h2 id="agri-reading-heading" tabindex="-1"></h2></header>
-          <div class="agri-reading-body" data-agri-reading-body>
+          <div class="agri-reading-body" data-agri-reading-body tabindex="0" role="region" aria-label="選択した項目の解説本文">
             <div data-agri-reading-content></div>
             <details data-agri-region hidden><summary></summary><p></p></details>
             <div data-agri-candidates hidden></div>
