@@ -17,7 +17,7 @@ export function visibleBounds(geometries: Geometry[]): [[number, number], [numbe
   if (!points.length) return [[-25, 32], [65, 73]];
   return [[Math.min(...points.map(p => p[0])), Math.min(...points.map(p => p[1]))], [Math.max(...points.map(p => p[0])), Math.max(...points.map(p => p[1]))]];
 }
-export type EuropeState = { region: string; place: string; city: string; compare: string[]; render: string; layer: string };
+export type EuropeState = { region: string; place: string; city: string; compare: string[]; render: string; layer: string; returnLayer: string };
 export function readEuropeState(search: string, countries: { code: string; region: string }[], cityIds: string[], initialLayer = 'climate'): EuropeState {
   const p = new URLSearchParams(search);
   const place = countries.find(c => c.code === p.get('place'));
@@ -25,17 +25,19 @@ export function readEuropeState(search: string, countries: { code: string; regio
   const city = cityIds.includes(p.get('city') ?? '') ? p.get('city')! : cityIds[0];
   const compare = [...new Set((p.get('compare') ?? '').split(','))].filter(id => cityIds.includes(id) && id !== city).slice(0, 2);
   const layer = ['climate', 'wheat', 'overlay'].includes(p.get('layer') ?? '') ? p.get('layer')! : initialLayer;
-  return { region, place: place?.code ?? '', city, compare, render: p.get('render') === 'static' ? 'static' : 'auto', layer };
+  const returnLayer = ['climate', 'wheat'].includes(p.get('returnLayer') ?? '') ? p.get('returnLayer')! : initialLayer;
+  return { region, place: place?.code ?? '', city, compare, render: p.get('render') === 'static' ? 'static' : 'auto', layer, returnLayer };
 }
 export function writeEuropeState(url: URL, state: EuropeState): URL {
   const next = new URL(url);
-  for (const key of ['region', 'place', 'city', 'compare', 'render', 'layer']) next.searchParams.delete(key);
+  for (const key of ['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer']) next.searchParams.delete(key);
   if (state.region !== 'all') next.searchParams.set('region', state.region);
   if (state.place) next.searchParams.set('place', state.place);
   if (state.city) next.searchParams.set('city', state.city);
   if (state.compare.length) next.searchParams.set('compare', state.compare.join(','));
   if (state.render === 'static') next.searchParams.set('render', 'static');
   if (state.layer) next.searchParams.set('layer', state.layer);
+  if (state.layer === 'overlay') next.searchParams.set('returnLayer', state.returnLayer);
   return next;
 }
 export function wheatCell(values: Float32Array, [lon, lat]: number[]): { value: number | null; center: number[] } | null {

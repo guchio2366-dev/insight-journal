@@ -12,11 +12,13 @@ const geography = json('src/data/atlas/europe-countries.json');
 test('国選択と都市比較がURL往復・不正入力の正規化で保たれる', () => {
   const ids = cities.map(c => c.id);
   const s = readEuropeState('?region=west&place=UKR&city=kyiv&compare=london,london,warsaw,moscow,invalid&layer=overlay', countries, ids);
-  assert.deepEqual(s, { region: 'east', place: 'UKR', city: 'kyiv', compare: ['london','warsaw'], render: 'auto', layer: 'overlay' });
+  assert.deepEqual(s, { region: 'east', place: 'UKR', city: 'kyiv', compare: ['london','warsaw'], render: 'auto', layer: 'overlay', returnLayer: 'climate' });
   const url = writeEuropeState(new URL('https://example.test/atlas/europe/agriculture/?external=kept'), s);
   assert.deepEqual(readEuropeState(url.search,countries,ids),s);
   assert.equal(url.searchParams.get('external'),'kept');
   assert.equal(readEuropeState('?place=bad&city=bad&region=bad&layer=bad',countries,ids,'wheat').layer,'wheat');
+  const returnToClimate = readEuropeState('?layer=overlay&returnLayer=climate', countries, ids, 'wheat');
+  assert.equal(readEuropeState(writeEuropeState(new URL('https://example.test/'), returnToClimate).search, countries, ids, 'wheat').returnLayer, 'climate');
 });
 
 test('静的地図と通常地図の投影が一致し、ロシアは表示枠内で拡大する', () => {

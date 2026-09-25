@@ -22,7 +22,6 @@ export function initEuropeAtlas() {
   const message = query<HTMLElement>('[data-eu-message]');
   const ids = cities.map(c => c.id);
   let state = readEuropeState(location.search, countries, ids, config.initialLayer);
-  let previousLayer = state.layer === 'overlay' ? 'wheat' : state.layer;
   let valuesPromise: Promise<Float32Array> | undefined;
   let gridRequest = 0;
   let map: LibreMap | undefined;
@@ -194,8 +193,8 @@ export function initEuropeAtlas() {
     const point = new DOMPoint(event.clientX, event.clientY).matrixTransform(transform.inverse());
     void showGrid(unproject([point.x, point.y]));
   });
-  all<HTMLElement>('[data-eu-layer]').forEach(b => b.addEventListener('click', () => { if (b.dataset.euLayer === 'overlay' && state.layer !== 'overlay') previousLayer = state.layer; state.layer = b.dataset.euLayer!; commit(false); }));
-  query('[data-eu-layer-back]').addEventListener('click', () => { state.layer = previousLayer; commit(false); });
+  all<HTMLElement>('[data-eu-layer]').forEach(b => b.addEventListener('click', () => { if (b.dataset.euLayer === 'overlay' && state.layer !== 'overlay') state.returnLayer = state.layer; state.layer = b.dataset.euLayer!; commit(false); }));
+  query('[data-eu-layer-back]').addEventListener('click', () => { state.layer = state.returnLayer; commit(false); });
   all<HTMLElement>('[data-eu-wheat-country]').forEach(b => b.addEventListener('click', () => { state.layer = 'wheat'; selectCountry(b.dataset.euWheatCountry!); query('[data-eu-map-title]').scrollIntoView({ behavior: reduced ? 'instant' : 'smooth', block: 'start' }); }));
   query('[data-eu-reset]').addEventListener('click', () => { state.region = 'all'; state.place = ''; commit(true); });
   all<HTMLElement>('[data-eu-zoom]').forEach(button => button.addEventListener('click', () => {
