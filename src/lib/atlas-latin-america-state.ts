@@ -11,7 +11,7 @@ export function readLatinState(search:string, topics:{id:string;field:string;cou
  if(place&&((typeof selectedCity==='object'&&selectedCity.countryCode!==place)||(selectedTopic?.countries&&!selectedTopic.countries.includes(place))))place='';
  const crop=cropIds.includes(p.get('crop')??'')?p.get('crop')!:'soyb';
  const raw=(p.get('map')??'').split(',').map(v=>v.trim()===''?NaN:Number(v));
- const camera=raw.length===3&&raw.every(Number.isFinite)&&raw[0]>=-180&&raw[0]<=0&&raw[1]>=-70&&raw[1]<=70&&raw[2]>=1&&raw[2]<=9?raw as [number,number,number]:undefined;
+ const camera=raw.length===3&&raw.every(Number.isFinite)&&raw[0]>=-180&&raw[0]<=90&&raw[1]>=-70&&raw[1]<=70&&raw[2]>=1&&raw[2]<=9?raw as [number,number,number]:undefined;
  return {field,topic,place,city,crop,view:p.get('view')==='rivers'?'rivers':'climate',camera};
 }
 export function writeLatinState(state:LatinState):string {

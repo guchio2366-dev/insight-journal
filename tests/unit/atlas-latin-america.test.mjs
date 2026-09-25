@@ -93,7 +93,7 @@ test('contradictory URL selections resolve to one reading and a compatible count
 });
 
 test('blank, nonnumeric and out-of-range camera coordinates do not become real zero coordinates',()=>{
- for(const camera of ['-60,,3','-60, ,3','-60,NaN,3','-60,Infinity,3','-60,71,3','-181,0,3','1,0,3','-60,-71,3','-60,0,0','-60,0,10','-60,0']){
+ for(const camera of ['-60,,3','-60, ,3','-60,NaN,3','-60,Infinity,3','-60,71,3','-181,0,3','91,0,3','-60,-71,3','-60,0,0','-60,0,10','-60,0']){
   assert.equal(read('?map='+encodeURIComponent(camera)).camera,undefined,camera);
  }
  for(const camera of [[-110,33,2],[-30,-65,2]])assert.deepEqual(read(writeLatinState({...read(''),camera})).camera,camera,'wide-frame panning restores within the rendered map bounds');
