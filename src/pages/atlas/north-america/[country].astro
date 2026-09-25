@@ -1,0 +1,8 @@
+---
+import RegionalAtlasPage from '../../../components/atlas/RegionalAtlasPage.astro';
+export function getStaticPaths() {
+  return ['canada', 'mexico'].map(regionId => ({params: {country: regionId}, props: {regionId}}));
+}
+const { regionId } = Astro.props;
+---
+<RegionalAtlasPage {regionId} />

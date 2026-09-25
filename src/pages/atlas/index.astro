@@ -1,35 +1,42 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import { withBase } from "../../lib/urls";
-import "../../styles/atlas.css";
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { withBase } from '../../lib/urls';
+import { asiaMapIds, regionalMaps } from '../../data/atlas/regional-atlas';
+const groups = [
+  { id:'americas', label:'南北アメリカ', english:'Americas', maps:[
+    { label:'北米', href:'/atlas/north-america/', description:'カナダ・米国・メキシコ。米国の自然環境・農林業・産業・人口の地図から開きます。' },
+    { label:'中南米', href:'/atlas/latin-america/', description:'中米・カリブ・南米の国と地域の位置関係を読む基礎地図。' }
+  ] },
+  { id:'asia', label:'アジア', english:'Asia', maps:asiaMapIds.map(id => regionalMaps[id]) }
+];
 ---
-
-<BaseLayout title="地図から見る" description="地図の分布から地域の政治・経済・社会を読み解くAtlas。">
-  <section class="atlas-index shell">
-    <div class="atlas-index-head">
-      <p class="eyebrow">Atlas</p>
-      <h1>地図から見る</h1>
-      <p>場所を起点に、自然条件、産業、政治、ニュースをつなげて読みます。</p>
-    </div>
-
-    <div class="atlas-index-grid">
-      <a class="atlas-index-card" href={withBase("/atlas/north-america/")}>
-        <div class="atlas-index-card-top"><span>01</span><small>North America · Geography</small></div>
-        <h2>北米地図</h2>
-        <p>地形・河川・州境を共通の土台に、農業、気候条件、土地、主要産業を重ねて読む。</p>
-        <span class="atlas-index-card-link">北米地図を開く <b aria-hidden="true">→</b></span>
-      </a>
-      <a class="atlas-index-card" href={withBase("/atlas/asia/")}>
-        <div class="atlas-index-card-top"><span>02</span><small>Asia · Geography</small></div>
-        <h2>アジア地図</h2>
-        <p>東・東南・南・中央・西・北アジアを切り替え、国・地域の位置関係を確かめる基礎地図。</p>
-        <span class="atlas-index-card-link">アジア地図を開く <b aria-hidden="true">→</b></span>
-      </a>
-    </div>
-
-    <div class="atlas-index-note">
-      <p class="eyebrow">How to read</p>
-      <p>地図は入口であり、詳述ページで一般条件と地域全体の背景を確認します。データの範囲・対象年・概略表示の意味は、それぞれのページに明記します。</p>
-    </div>
-  </section>
+<BaseLayout title="地図から見る" description="南北アメリカとアジアから地域を選び、地図を読む。">
+  <div class="atlas-directory shell">
+    <header><p class="eyebrow">Atlas</p><h1>地図から見る</h1><p>読みたい地域を選ぶと、その地図が開きます。</p></header>
+    {groups.map(group => <section class="atlas-group" id={group.id} aria-labelledby={group.id + '-title'}>
+      <div class="atlas-group-heading"><h2 id={group.id + '-title'}>{group.label}</h2><span>{group.english}</span></div>
+      <div class="atlas-group-links">{group.maps.map(map => <a href={withBase(map.href)} class="atlas-region-link"><h3>{map.label}<span aria-hidden="true">↗</span></h3><p>{map.description}</p><span class="atlas-open">地図を開く →</span></a>)}</div>
+    </section>)}
+    <p class="atlas-directory-note">アジアは3地域に分けて掲載しています。中東とロシアは別枠です。メキシコは北米に含めています。</p>
+  </div>
 </BaseLayout>
+<style>
+  .atlas-directory { padding: 36px 0 70px; }
+  header { margin-bottom: 36px; }
+  h1 { font-family: var(--serif); font-size: clamp(34px, 4vw, 50px); letter-spacing: -.05em; margin: 0 0 12px; }
+  header > p:last-child { margin: 0; color: var(--ink-soft); font-size: 16px; }
+  .atlas-group { margin: 30px 0; scroll-margin-top: 90px; }
+  .atlas-group-heading { display: flex; align-items: baseline; gap: 14px; border-bottom: 2px solid var(--ink); padding-bottom: 10px; margin-bottom: 16px; }
+  .atlas-group-heading h2 { margin: 0; font-family: var(--serif); font-size: 27px; }
+  .atlas-group-heading > span { color: var(--ink-soft); font-size: 12px; }
+  .atlas-group-links { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .atlas-region-link { display: flex; flex-direction: column; padding: 22px; border: 1px solid var(--rule); background: var(--white); color: var(--ink); text-decoration: none; }
+  .atlas-region-link:hover { border-color: var(--ink); background: #f7f5ed; }
+  .atlas-region-link:focus-visible { outline: 3px solid #ad5232; outline-offset: 3px; }
+  h3 { display: flex; justify-content: space-between; gap: 10px; margin: 0; font-family: var(--serif); font-size: 25px; }
+  h3 > span { font-family: sans-serif; font-size: 20px; color: var(--ink-soft); }
+  .atlas-region-link p { margin: 12px 0 22px; color: var(--ink-soft); font-size: 13px; line-height: 1.85; }
+  .atlas-open { margin-top: auto; font-size: 12px; font-weight: 700; }
+  .atlas-directory-note { margin-top: 30px; color: var(--ink-soft); font-size: 12px; line-height: 1.9; }
+  @media (max-width: 700px) { .atlas-directory { padding-top: 26px; } .atlas-group-links { grid-template-columns: 1fr; gap: 10px; } .atlas-region-link { padding: 18px; } .atlas-region-link p { margin-bottom: 14px; } }
+</style>
