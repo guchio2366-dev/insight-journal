@@ -32,7 +32,7 @@ export class Map {
  setFilter(){}getCenter(){return this.center}getZoom(){return this.zoom}getCanvas(){return this.canvas}
  jumpTo(options){this.center={lng:options.center[0],lat:options.center[1]};this.zoom=options.zoom??this.zoom}
  fitBounds(bounds){this.center={lng:(bounds[0][0]+bounds[1][0])/2,lat:(bounds[0][1]+bounds[1][1])/2}}
- queryRenderedFeatures(){return [{properties:{code:'CHN'}}]}
+ queryRenderedFeatures(){return [{properties:{code:window.__hitCountry??'CHN'}}]}
  zoomIn(){this.zoom++}zoomOut(){this.zoom--}resize(){this.resizeCount++}
  remove(){this.removed=true;this.canvas.remove()}
 }
@@ -70,12 +70,12 @@ async function until(check, message) {
 }
 
 function fixture() {
-  const singles = ['reading-title', 'reading-summary', 'reading-questions', 'map-title', 'map-eyebrow', 'map-period', 'grid-reading', 'class-code', 'class-name', 'class-description', 'rice-value', 'climate-method', 'agriculture-method', 'rice-source', 'rice-summary', 'rice-scale','physical-title','physical-takeaway','physical-value','physical-detail-title','physical-detail','physical-context'];
+  const singles = ['reading-title', 'reading-summary', 'reading-questions', 'map-title', 'map-eyebrow', 'map-period', 'grid-reading', 'class-code', 'class-name', 'class-description', 'rice-value', 'climate-method', 'agriculture-method', 'rice-source', 'rice-summary', 'rice-scale','physical-title','physical-takeaway','physical-value','physical-detail-title','physical-detail','physical-context','population-title','population-takeaway','population-value','population-coverage','population-detail','population-resolution','urban-population','urban-area','urban-density','urban-history'];
   return `<main data-asia-atlas>
     <select data-country-select><option value=""></option><option value="JPN">Japan</option><option value="CHN">China</option><option value="MNG">Mongolia</option></select>
     <select data-city-select><option value=""></option><option value="tokyo" data-country="JPN">Tokyo</option><option value="beijing" data-country="CHN">Beijing</option></select>
     <button data-country-button="JPN"></button><button data-country-button="CHN"></button><button data-country-button="MNG"></button>
-    <nav class="atlas-tabs"><a href="/insight-journal/atlas/asia/east-asia/nature/" data-field="natural"></a><a href="/insight-journal/atlas/asia/east-asia/agriculture/" data-field="agriculture"></a></nav>
+    <nav class="atlas-tabs"><a href="/insight-journal/atlas/asia/east-asia/nature/" data-field="natural"></a><a href="/insight-journal/atlas/asia/east-asia/agriculture/" data-field="agriculture"></a><a href="/insight-journal/atlas/asia/east-asia/population/" data-field="population"></a></nav>
     <div data-map-surface></div><div data-map-fallback><svg><path data-map-country="JPN"></path></svg></div>
     <div data-map-state></div><button data-map-retry hidden></button>
     <section data-overview><div class="asia-next"><p></p><div class="asia-city-links"></div></div></section>
@@ -86,7 +86,7 @@ function fixture() {
     <div data-comparison-return hidden><button data-comparison-back></button></div>
     <button data-compare="natural"></button><button data-compare="agriculture"></button>
     <button data-reset></button><button data-map-fit></button><button data-zoom-in></button><button data-zoom-out></button>
-    <section data-physical-reading hidden></section><section data-physical-legend hidden></section>
+    <section data-population-reading hidden></section><section data-population-legend hidden></section><div data-population-city-facts hidden></div><label data-population-topics><select data-population-topic><option value="density"></option><option value="urban"></option></select></label><select data-population-city><option value=""></option><option value="uc-tokyo" data-country="JPN"></option></select><section data-physical-reading hidden></section><section data-physical-legend hidden></section>
     <label data-natural-topics><select data-natural-topic><option value="climate"></option><option value="terrain"></option><option value="water"></option></select></label>
     <select data-physical-focus><option value=""></option><option value="basin" data-country="CHN"></option></select>
     <label data-water-picker hidden><select data-water-select><option value=""></option><option value="rivers-1"></option></select></label>
@@ -110,10 +110,17 @@ async function setup(query = '', options = {}) {
     physicalBase:'/assets/physical/',physical:{width:1,height:1,bounds3857:[west,south,east,north],grid:'elevation.gz',image:'terrain.png',contours:'contours.png',water:'water.json',imageCoordinates:[[72,56],[155,56],[155,17],[72,17]],waterFeatures:[{id:'rivers-1',name:'試験河川',kind:'rivers',countries:['CHN'],bounds:[90,30,120,40]}]},
     physicalFocus:[{id:'basin',region:'east-asia',country:'CHN',name:'盆地',coordinates:[100,35],reading:'周囲の山地と比較します。'}],
   });
+  if(options.population){
+    const conf=JSON.parse(q('[data-asia-config]').textContent);
+    const raster={width:1,height:1,bounds4326:[72,17,155,56],bounds3857:[west,south,east,north],imageCoordinates:[[72,56],[155,56],[155,17],[72,17]],image:'density.png',grid:'density.gz',sourceCellKm:5};
+    conf.populationBase='/assets/population/';conf.population={...raster,urban:'urban.json',geography:'geography.json',countryCoverage:{JPN:{sourceUrbanCentres:100,listedUrbanCentres:1}},cities:[{id:'uc-tokyo',sourceId:5929,name:'東京',sourceName:'Tokyo',country:'JPN',coordinates:[139.65,35.66],bounds:[139,35,141,37],population:33447551.24,areaKm2:5165,density:6475.8,history:{2000:30000000,2010:32000000,2020:33447551.24},detail:{...raster,sourceCellKm:1,grid:'tokyo.gz',image:'tokyo.png'}}]};
+    q('[data-asia-config]').textContent=JSON.stringify(conf);
+  }
+  window.__hitCountry=options.hitCountry;
   window.__forceMapFail = options.mapFailure;
   window.__initialSourceFailure = options.initialSourceFailure;
   const requests = [];
-  let rejectClimate, resolveRice,resolveWater;
+  let rejectClimate, resolveRice,resolveWater,resolveUrban;
   window.fetch = async address => {
     const name = String(address); requests.push(name);
     if (name === '/assets/geography.json') return new Response(JSON.stringify({ type: 'FeatureCollection', features: [] }));
@@ -126,14 +133,55 @@ async function setup(query = '', options = {}) {
       if (options.delayedRice) return new Promise(resolve => { resolveRice = () => resolve(response()); });
       return response();
     }
+    if(name==='/assets/population/geography.json')return new Response(JSON.stringify({type:'FeatureCollection',features:[]}));
+    if(name==='/assets/population/urban.json'){const response=()=>new Response(JSON.stringify({type:'FeatureCollection',features:[]}));if(options.delayedUrban)return new Promise(resolve=>{resolveUrban=()=>resolve(response());});return response();}
+    if(name.startsWith('/assets/population/')){if(options.populationFailure)throw Error('population 503');const data=new Uint8Array(4);new DataView(data.buffer).setFloat32(0,options.populationZero?0:name.endsWith('tokyo.gz')?15000:1200,true);return new Response(data);}
     if(name==='/assets/physical/elevation.gz'){const data=new Uint8Array(2);new DataView(data.buffer).setInt16(0,-75,true);return new Response(data);}
     if(name==='/assets/physical/water.json'){const response=()=>new Response(JSON.stringify({type:'FeatureCollection',features:[]}));if(options.delayedWater)return new Promise(resolve=>{resolveWater=()=>resolve(response());});return response();}
     throw Error('Unexpected fetch: ' + name);
   };
   window.eval(bundle.outputFiles[0].text);
   await until(() => options.mapFailure ? !q('[data-map-retry]').hidden : root.dataset.mapReady === 'true', 'controller ready');
-  return { window, root, q, requests, rejectClimate: () => rejectClimate?.(Error('simulated climate fetch failure')), resolveRice: () => resolveRice?.(),resolveWater:()=>resolveWater?.() };
+  return { window, root, q, requests, rejectClimate: () => rejectClimate?.(Error('simulated climate fetch failure')), resolveRice: () => resolveRice?.(),resolveWater:()=>resolveWater?.(),resolveUrban:()=>resolveUrban?.() };
 }
+
+test('人口は都市の輪郭・1km格子・統計を表示し、比較復帰と選択解除で状態を保つ',async()=>{
+ const {window,q,requests}=await setup('?field=population&detail=uc-tokyo&topic=urban',{population:true,hitCountry:'JPN'});
+ try{
+  await until(()=>window.__map.getLayer('asia-urban-selected'),'urban geometry');
+  assert.equal(new URL(window.location.href).searchParams.get('place'),'JPN');
+  assert.equal(window.__map.layers['asia-country-border'].layout.visibility,'none');assert.equal(window.__map.layers['asia-population-border'].layout.visibility,'visible');
+  assert.match(q('[data-urban-population]').textContent,/33,447,551/);assert.equal(q('[data-population-city-facts]').hidden,false);
+  assert.equal(requests.some(r=>r.endsWith('tokyo.gz')),false,'numeric grid is lazy until a point is selected');
+  await window.__map.fire('click',{point:{x:1,y:1},lngLat:{lng:139.76,lat:35.68}});
+  assert.match(q('[data-population-value]').textContent,/15,000.*1km/);assert.equal(new URL(window.location.href).searchParams.get('detail'),'uc-tokyo');
+  q('[data-compare="natural"]').click();assert.equal(window.__map.layers['asia-population-uc-tokyo'].layout.visibility,'none');assert.equal(window.__map.layers['asia-country-border'].layout.visibility,'visible');assert.equal(window.__map.layers['asia-population-border'].layout.visibility,'none');
+  q('[data-comparison-back]').click();await until(()=>q('[data-population-value]').textContent.includes('15,000'),'population restore');
+  assert.equal(new URL(window.location.href).searchParams.get('detail'),'uc-tokyo');assert.equal(new URL(window.location.href).searchParams.get('topic'),'urban');
+  q('[data-population-city]').value='';q('[data-population-city]').dispatchEvent(new window.Event('change'));
+  assert.equal(q('[data-population-city-facts]').hidden,true);assert.equal(new URL(window.location.href).searchParams.has('at'),false);assert.equal(window.__map.layers['asia-population-uc-tokyo'].layout.visibility,'none');assert.equal(window.__maps.length,1);
+ }finally{await window.happyDOM.close();}
+});
+
+test('人口の推計0と取得失敗を区別し、描画できない場合も都市の表を読める',async()=>{
+ for(const opts of [{populationZero:true},{populationFailure:true,mapFailure:true}]){
+  const {window,q}=await setup('?field=population&detail=uc-tokyo&at=139.76,35.68',{population:true,...opts});
+  try{
+   await until(()=>q('[data-population-value]').textContent.includes(opts.populationZero?'0 人/km²':'取得できません'),'population status');
+   assert.match(q('[data-urban-population]').textContent,/33,447,551/);
+   if(opts.populationZero)assert.match(q('[data-population-value]').textContent,/海の格子/);else assert.equal(q('[data-map-retry]').hidden,false);
+  }finally{await window.happyDOM.close();}
+ }
+});
+
+test('都市形状の取得中に分野を変えても古い人口図を重ねない',async()=>{
+ const {window,q,resolveUrban}=await setup('?field=population&topic=urban',{population:true,delayedUrban:true});
+ try{
+  q('[data-field="agriculture"]').click();resolveUrban();await delay();await delay();
+  assert.equal(window.__map.getSource('asia-urban'),undefined);assert.equal(window.__map.layers['asia-population'].layout.visibility,'none');
+  assert.equal(q('[data-population-reading]').hidden,true);
+ }finally{await window.happyDOM.close();}
+});
 
 test('地形は必要時だけ読み、負の標高と主題・地点・カメラを比較復帰で保持する',async()=>{
   const {window,q,requests}=await setup();

@@ -1,0 +1,29 @@
+---
+import {japaneseNames} from '../../data/atlas/regional-atlas';
+import {asiaPopulationReading, type AsiaPopulationRegion} from '../../data/atlas/asia-population';
+import type {AsiaRegionId} from '../../lib/atlas-asia-state';
+interface Props {regionId:AsiaRegionId;population:AsiaPopulationRegion;active:boolean}
+const {regionId,population,active}=Astro.props;
+---
+<section data-population-reading hidden={!active}>
+ <p class="eyebrow">Population · 2020</p><h2 data-population-title>人口の分布を読む</h2>
+ <p class="asia-takeaway" data-population-takeaway>{asiaPopulationReading[regionId].takeaway}</p>
+ <label class="population-picker">都市を選ぶ<select data-population-city aria-label="人口を見る都市を選ぶ"><option value="">地域の分布を見る</option>{population.cities.map(c=><option value={c.id} data-country={c.country}>{c.name} · {japaneseNames[c.country]}{c.detail?'（詳細図あり）':''}</option>)}</select></label>
+ <p data-population-coverage></p>
+ <div class="population-point" data-population-value aria-live="polite">地図上の地点を選ぶと、格子面積当たりの推計人口を表示します。</div>
+ <div data-population-city-facts hidden>
+  <h3>この都市の範囲と人口</h3><button type="button" class="asia-compare" data-population-centroid>資料の都市代表点の格子を読む<span>→</span></button>
+  <dl class="population-facts"><div><dt>2020年の推計人口</dt><dd data-urban-population></dd></div><div><dt>2025年の都市範囲の面積</dt><dd data-urban-area></dd></div><div><dt>その範囲の平均人口密度（2020年）</dt><dd data-urban-density></dd></div></dl>
+  <p>輪郭は、資料が人口の集中するまとまりとして定めた「都市」の範囲です。市区町村の境界や通勤圏とは異なります。ここでは、2025年の資料が定めた同じ範囲に、各年に何人が暮らしていたかという推計値を比較します。</p>
+  <table><caption>同じ都市範囲で比べた推計人口</caption><thead><tr><th scope="col">人口の年</th><th scope="col">推計人口（人）</th></tr></thead><tbody data-urban-history></tbody></table>
+  <p class="population-note">値は整数に丸めています。1人単位の正確さを保証する値ではありません。この表から、都市の面積が何年に拡大したかを読み取ることはできません。</p>
+ </div>
+ <h3>分布から読み取る</h3><p data-population-detail>{asiaPopulationReading[regionId].reading}</p>
+ <details><summary>色と数値の意味を確認する</summary><p>元資料はGHS-POP R2023Aの2020年の推計人口です。地表で1km²になる格子に人口を割り当てた資料を使います。広域図では5×5格子をまとめ、推計人口の合計を、有効な元格子の面積で割っています。「詳細図あり」の都市では、元の1km格子を表示します。</p><p>海岸では海を含む格子も計算に含まれます。そのため、数値は陸地の面積だけで割った人口密度とは異なります。推計0人とデータがない場合は別々に扱い、選択した地点の説明で区別します。国の概略境界で人口データを切り取ったり、近隣の値で小島を埋めたりはしていません。</p><p>都市の一覧には、各地域で2020年の推計人口が多い12都市に加え、各国で最も人口の多い都市と詳細図の対象都市を掲載しています。すべての都市や首都を網羅した一覧ではありません。</p></details>
+ <button class="asia-compare" type="button" data-compare="natural">同じ場所で自然環境を比べる<span>→</span></button>
+ <button class="asia-compare" type="button" data-compare="agriculture">同じ場所で米の分布を比べる<span>→</span></button>
+ <p class="population-note">出典：<a href="https://doi.org/10.2905/2FF68A52-5B5B-4A22-8F40-C41DA8332CFE">Schiavinaほか（2023）、GHS-POP R2023A</a>、<a href="https://human-settlement.emergency.copernicus.eu/ghs_ucdb_2024.php">欧州委員会JRC、GHS-UCDB R2024A V1.2</a>。手法は<a href="https://human-settlement.emergency.copernicus.eu/GHSLhowToCite.php">Pesaresiほか（2024）と利用条件</a>を参照してください。CC BY 4.0に基づき、Insight Journalが地域の抽出・集約・色分けを行っています。人口図の海岸線と国境には、<a href="https://www.naturalearthdata.com/about/terms-of-use/">Natural Earth v5.1.2の1:10m資料（パブリックドメイン）</a>を使っています。縮尺1:10mは1千万分の1を表し、10mの細かさを意味するものではありません。</p>
+</section>
+<style>
+ [hidden]{display:none!important}h2{font-family:var(--serif);font-size:27px;line-height:1.6;margin:5px 0 14px}h3{font-size:14px;margin:20px 0 8px}p{font-size:13px;line-height:2}.asia-takeaway{font-size:14px}.population-picker{display:grid;gap:6px;font-size:12px;margin:14px 0}.population-picker select{width:100%;min-height:44px;font:inherit;border:1px solid var(--rule);padding:8px;background:var(--white)}.population-point{padding:14px;border-left:3px solid #438b9f;background:#edf3f5;font-size:13px;line-height:1.8}.population-facts{display:grid;gap:10px;margin:14px 0}.population-facts>div{border-bottom:1px solid var(--rule);padding-bottom:8px}.population-facts dt{font-size:11px}.population-facts dd{font-size:21px;margin:4px 0 0;font-variant-numeric:tabular-nums}table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}caption{text-align:left;margin:12px 0 8px}th,td{border-bottom:1px solid var(--rule);padding:8px;text-align:right}th:first-child,td:first-child{text-align:left}.population-note{font-size:11px;color:var(--ink-soft)}summary{min-height:44px;cursor:pointer;font-size:12px;display:flex;align-items:center}.asia-compare{display:flex;justify-content:space-between;align-items:center;width:100%;min-height:48px;background:#edf3f1;border:1px solid #315b61;color:#264c52;padding:12px;font-size:12px;margin:15px 0}button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #a74830;outline-offset:2px}
+</style>

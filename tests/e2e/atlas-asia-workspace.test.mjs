@@ -6,7 +6,7 @@ import {Window} from 'happy-dom';
 test('アジア3地域の分野ページは一つの地図・ニュース欄・解説欄を持ち、初期表示がURLと一致する', async () => {
   const labels = {'east-asia':'東アジア','southeast-asia':'東南アジア','south-central-asia':'南・中央アジア'};
   const sitemap = await readFile('dist/sitemap.xml','utf8');
-  for (const [region,label] of Object.entries(labels)) for (const field of ['nature','agriculture']) {
+  for (const [region,label] of Object.entries(labels)) for (const field of ['nature','agriculture','population']) {
     const window = new Window({settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true}});
     try {
       const html = await readFile(`dist/atlas/asia/${region}/${field}/index.html`,'utf8');
@@ -23,7 +23,12 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.ok(q('[data-map-surface]').closest('[data-atlas-shell]'));
       assert.equal(q('[data-map-surface]').getAttribute('tabindex'),'0');
       assert.equal(q('.atlas-tabs [aria-current="page"]').getAttribute('href'),`/insight-journal/atlas/asia/${region}/${field}/`);
-      assert.equal(all('.atlas-tabs a').length,2,'only implemented fields are offered');
+      assert.equal(all('.atlas-tabs a').length,3,'only implemented fields are offered');
+      assert.equal(q('[data-population-reading]').hidden,field!=='population');
+      assert.equal(q('[data-population-legend]').hidden,field!=='population');
+      assert.equal(config.populationBase,'/insight-journal/assets/atlas/asia-population-v1/');
+      assert.ok(config.population.cities.length>=12);
+      assert.match(q('[data-population-reading]').textContent,/2025年の資料が定めた同じ範囲/);
       assert.equal(q('[data-overview]').hidden,field!=='nature');
       assert.equal(q('[data-rice-reading]').hidden,field!=='agriculture');
       assert.equal(q('[data-city-picker]').hidden,field!=='nature');
