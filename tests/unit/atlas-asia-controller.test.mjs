@@ -70,7 +70,7 @@ async function until(check, message) {
 }
 
 function fixture() {
-  const singles = ['reading-title', 'reading-summary', 'reading-questions', 'map-title', 'map-eyebrow', 'map-period', 'grid-reading', 'class-code', 'class-name', 'class-description', 'rice-value', 'climate-method', 'agriculture-method', 'rice-source', 'rice-summary', 'rice-scale'];
+  const singles = ['reading-title', 'reading-summary', 'reading-questions', 'map-title', 'map-eyebrow', 'map-period', 'grid-reading', 'class-code', 'class-name', 'class-description', 'rice-value', 'climate-method', 'agriculture-method', 'rice-source', 'rice-summary', 'rice-scale','physical-title','physical-takeaway','physical-value','physical-detail-title','physical-detail','physical-context'];
   return `<main data-asia-atlas>
     <select data-country-select><option value=""></option><option value="JPN">Japan</option><option value="CHN">China</option><option value="MNG">Mongolia</option></select>
     <select data-city-select><option value=""></option><option value="tokyo" data-country="JPN">Tokyo</option><option value="beijing" data-country="CHN">Beijing</option></select>
@@ -86,6 +86,10 @@ function fixture() {
     <div data-comparison-return hidden><button data-comparison-back></button></div>
     <button data-compare="natural"></button><button data-compare="agriculture"></button>
     <button data-reset></button><button data-map-fit></button><button data-zoom-in></button><button data-zoom-out></button>
+    <section data-physical-reading hidden></section><section data-physical-legend hidden></section>
+    <label data-natural-topics><select data-natural-topic><option value="climate"></option><option value="terrain"></option><option value="water"></option></select></label>
+    <select data-physical-focus><option value=""></option><option value="basin" data-country="CHN"></option></select>
+    <label data-water-picker hidden><select data-water-select><option value=""></option><option value="rivers-1"></option></select></label>
     ${singles.map(name => `<div data-${name}></div>`).join('')}
     <script type="application/json" data-asia-config></script>
   </main>`;
@@ -103,11 +107,13 @@ async function setup(query = '', options = {}) {
     cities: [{ id: 'tokyo', name: '東京', countryCode: 'JPN', coordinates: [139.75, 35.69] }, { id: 'beijing', name: '北京', countryCode: 'CHN', coordinates: [116.4, 39.9] }],
     classes: asiaClimateClasses, climate: { image: 'east-asia.png', imageCoordinates: [[72, 56], [155, 56], [155, 17], [72, 17]], grid: 'east-asia.grid.json', classIds: [14, 21], countryCoverage: { JPN: { classifiedPixels: 1 }, CHN: { classifiedPixels: 1 } } },
     geographyUrl: '/assets/geography.json', climateBase: '/assets/climate/', agricultureBase: '/assets/agriculture/',
+    physicalBase:'/assets/physical/',physical:{width:1,height:1,bounds3857:[west,south,east,north],grid:'elevation.gz',image:'terrain.png',contours:'contours.png',water:'water.json',imageCoordinates:[[72,56],[155,56],[155,17],[72,17]],waterFeatures:[{id:'rivers-1',name:'試験河川',kind:'rivers',countries:['CHN'],bounds:[90,30,120,40]}]},
+    physicalFocus:[{id:'basin',region:'east-asia',country:'CHN',name:'盆地',coordinates:[100,35],reading:'周囲の山地と比較します。'}],
   });
   window.__forceMapFail = options.mapFailure;
   window.__initialSourceFailure = options.initialSourceFailure;
   const requests = [];
-  let rejectClimate, resolveRice;
+  let rejectClimate, resolveRice,resolveWater;
   window.fetch = async address => {
     const name = String(address); requests.push(name);
     if (name === '/assets/geography.json') return new Response(JSON.stringify({ type: 'FeatureCollection', features: [] }));
@@ -120,12 +126,57 @@ async function setup(query = '', options = {}) {
       if (options.delayedRice) return new Promise(resolve => { resolveRice = () => resolve(response()); });
       return response();
     }
+    if(name==='/assets/physical/elevation.gz'){const data=new Uint8Array(2);new DataView(data.buffer).setInt16(0,-75,true);return new Response(data);}
+    if(name==='/assets/physical/water.json'){const response=()=>new Response(JSON.stringify({type:'FeatureCollection',features:[]}));if(options.delayedWater)return new Promise(resolve=>{resolveWater=()=>resolve(response());});return response();}
     throw Error('Unexpected fetch: ' + name);
   };
   window.eval(bundle.outputFiles[0].text);
   await until(() => options.mapFailure ? !q('[data-map-retry]').hidden : root.dataset.mapReady === 'true', 'controller ready');
-  return { window, root, q, requests, rejectClimate: () => rejectClimate?.(Error('simulated climate fetch failure')), resolveRice: () => resolveRice?.() };
+  return { window, root, q, requests, rejectClimate: () => rejectClimate?.(Error('simulated climate fetch failure')), resolveRice: () => resolveRice?.(),resolveWater:()=>resolveWater?.() };
 }
+
+test('地形は必要時だけ読み、負の標高と主題・地点・カメラを比較復帰で保持する',async()=>{
+  const {window,q,requests}=await setup();
+  try{
+    assert.equal(requests.some(r=>r.includes('/physical/')),false);
+    q('[data-natural-topic]').value='terrain';q('[data-natural-topic]').dispatchEvent(new window.Event('change'));
+    q('[data-physical-focus]').value='basin';q('[data-physical-focus]').dispatchEvent(new window.Event('change'));
+    await until(()=>q('[data-physical-value]').textContent.includes('-75'),'negative elevation');
+    assert.equal(q('[data-climate-legend]').hidden,true);assert.equal(q('[data-physical-reading]').hidden,false);
+    assert.equal(q('[data-map-city="tokyo"]').hidden,true);
+    assert.equal(window.__map.layers['asia-terrain'].layout.visibility,'visible');
+    q('[data-compare="agriculture"]').click();
+    await until(()=>q('[data-rice-value]').textContent.includes('123.4'),'comparison rice value');
+    assert.equal(window.__map.layers['asia-terrain'].layout.visibility,'none');
+    q('[data-comparison-back]').click();
+    assert.equal(new URL(window.location.href).searchParams.get('topic'),'terrain');
+    assert.equal(new URL(window.location.href).searchParams.get('detail'),'basin');
+    assert.equal(window.__map.center.lng,100);assert.equal(window.__map.zoom,5);
+    assert.match(q('[data-physical-value]').textContent,/-75/);assert.equal(window.__maps.length,1);
+  }finally{await window.happyDOM.close();}
+});
+
+test('遅い河川の取得中に気候へ戻っても水系を重ねず、再選択でキャッシュを利用する',async()=>{
+ const {window,q,resolveWater,requests}=await setup('?topic=water',{delayedWater:true});
+ try{
+  await until(()=>requests.includes('/assets/physical/water.json'),'water requested');
+  q('[data-natural-topic]').value='climate';q('[data-natural-topic]').dispatchEvent(new window.Event('change'));
+  resolveWater();await delay();await delay();assert.equal(window.__map.getSource('asia-water'),undefined);
+  q('[data-natural-topic]').value='water';q('[data-natural-topic]').dispatchEvent(new window.Event('change'));
+  await until(()=>window.__map.getLayer('asia-rivers'),'water rendered');
+  q('[data-water-select]').value='rivers-1';q('[data-water-select]').dispatchEvent(new window.Event('change'));
+  assert.equal(new URL(window.location.href).searchParams.get('detail'),'rivers-1');
+  assert.equal(q('[data-physical-detail-title]').textContent,'試験河川');
+  assert.equal(requests.filter(r=>r==='/assets/physical/water.json').length,1);
+ }finally{resolveWater();await window.happyDOM.close();}
+});
+
+test('着目点だけのURLでも所属国・数値を復元し、異なる国の説明を混ぜない',async()=>{
+ const first=await setup('?topic=terrain&detail=basin');
+ try{await until(()=>first.q('[data-physical-value]').textContent.includes('-75'),'deep-link elevation');assert.equal(new URL(first.window.location.href).searchParams.get('place'),'CHN');assert.equal(new URL(first.window.location.href).searchParams.get('at'),'100.00000,35.00000');}finally{await first.window.happyDOM.close();}
+ const second=await setup('?topic=terrain&detail=basin&place=JPN');
+ try{assert.equal(new URL(second.window.location.href).searchParams.get('detail'),null);assert.notEqual(second.q('[data-physical-detail-title]').textContent,'盆地');}finally{await second.window.happyDOM.close();}
+});
 
 test('workerを先に設定し、格子クリック→比較→復帰を一つの地図で行う', async () => {
   const { window, root, q, requests } = await setup('?city=tokyo');
