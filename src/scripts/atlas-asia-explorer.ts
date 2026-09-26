@@ -249,7 +249,11 @@ function start(root:HTMLElement) {
   async function loadFarmingGrid(record:AsiaFarmingLayer) {
     if(!record.grid)return null;const key=record.grid;
     if(farmingGrids.has(key))return farmingGrids.get(key)!;
-    if(!farmingPromises.has(key))farmingPromises.set(key,fetchAsset(asset(config.farmingBase!,key),async response=>decodeAsiaNumericGrid(new Uint8Array(await response.arrayBuffer()),record,'float32',-1)).then(grid=>{farmingGrids.set(key,grid);return grid;}).catch(error=>{farmingPromises.delete(key);throw error;}));
+    if(!farmingPromises.has(key))farmingPromises.set(key,fetchAsset(asset(config.farmingBase!,key),async response=>decodeAsiaNumericGrid(new Uint8Array(await response.arrayBuffer()),record,'float32',-1)).then(grid=>{
+      // A late response for a previous topic must not refill the retained cache.
+      if(farmingLayer()?.grid===key){farmingGrids.clear();farmingGrids.set(key,grid);}
+      return grid;
+    }).finally(()=>farmingPromises.delete(key)));
     return farmingPromises.get(key)!;
   }
   async function loadFarmingStatistics(){
@@ -259,6 +263,7 @@ function start(root:HTMLElement) {
   }
   function renderFarming(){
     const active=state.field==='agriculture',layer=farmingLayer(),topic=farmingTopic();
+    for(const key of farmingGrids.keys())if(key!==layer?.grid)farmingGrids.delete(key);
     optionalHidden('[data-farming-topics]',!active);optionalHidden('[data-farming-panel]',!active);optionalHidden('[data-farming-legend]',!layer);
     if(!active||!config.farming)return;
     const select=$<HTMLSelectElement>('[data-farming-topic]');if(select)select.value=topic!;
@@ -306,6 +311,12 @@ function start(root:HTMLElement) {
     }
     if(map.getLayer('asia-rice'))map.setLayoutProperty('asia-rice','visibility',rice?'visible':'none');
     const farm=farmingLayer();
+    for(const layer of config.farming?.layers??[]){
+      if(layer.id===farm?.id)continue;
+      const id='asia-farming-'+layer.id;
+      if(map.getLayer(id))map.removeLayer(id);
+      if(map.getSource(id))map.removeSource(id);
+    }
     if(farm&&!map.getSource('asia-farming-'+farm.id)){const id='asia-farming-'+farm.id;map.addSource(id,{type:'image',url:asset(config.farmingBase!,farm.image),coordinates:farm.imageCoordinates});map.addLayer({id,type:'raster',source:id,paint:{'raster-opacity':.95,'raster-resampling':'nearest','raster-fade-duration':0}},'asia-context');}
     for(const layer of config.farming?.layers??[]){const id='asia-farming-'+layer.id;if(map.getLayer(id))map.setLayoutProperty(id,'visibility',farm?.id===layer.id?'visible':'none');}
     if(!physical)for(const id of ['asia-terrain','asia-contours'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility','none');

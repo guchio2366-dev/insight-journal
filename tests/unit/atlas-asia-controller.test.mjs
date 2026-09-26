@@ -28,6 +28,7 @@ export class Map {
  async fire(name,event={}){for(const fn of this.events[name]??[])await fn(event)}
  getSource(id){return this.sources[id]}getLayer(id){return this.layers[id]}
  addSource(id,source){this.sources[id]=source}addLayer(layer){this.layers[layer.id]=layer}
+ removeLayer(id){delete this.layers[id]}removeSource(id){delete this.sources[id]}
  setLayoutProperty(id,key,value){this.layers[id].layout??={};this.layers[id].layout[key]=value}
  setFilter(){}getCenter(){return this.center}getZoom(){return this.zoom}getCanvas(){return this.canvas}
  jumpTo(options){this.center={lng:options.center[0],lat:options.center[1]};this.zoom=options.zoom??this.zoom}
@@ -432,20 +433,30 @@ test('農林業は品目・単位・地点を切り替え、国別統計と比�
   await until(()=>q('[data-farming-statistics-tables]').textContent.includes('134,250,000'),'published production');
   assert.equal(q('[data-rice-reading]').hidden,true);assert.equal(window.__map.layers['asia-farming-wheat'].layout.visibility,'visible');
   assert.match(q('[data-farming-statistics-status]').textContent,/中国本土/);
-  q('[data-compare="natural"]').click();assert.equal(window.__map.layers['asia-farming-wheat'].layout.visibility,'none');
-  q('[data-comparison-back]').click();assert.equal(new URL(window.location.href).searchParams.get('topic'),'wheat');assert.match(q('[data-farming-value]').textContent,/123.4.*ha/);
+  q('[data-compare="natural"]').click();assert.equal(window.__map.layers['asia-farming-wheat'],undefined);assert.equal(window.__map.sources['asia-farming-wheat'],undefined);
+  q('[data-comparison-back]').click();assert.equal(new URL(window.location.href).searchParams.get('topic'),'wheat');await until(()=>q('[data-farming-value]').textContent.includes('123.4'),'wheat reloaded');
+  assert.equal(requests.filter(r=>r.endsWith('wheat.gz')).length,2);
   q('[data-farming-topic]').value='chicken';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));await until(()=>q('[data-farming-value]').textContent.includes('0 羽/km²'),'chicken zero');
   assert.match(q('[data-farming-statistics-tables]').textContent,/千羽/);assert.match(q('[data-farming-statistics-tables]').textContent,/2020.*0/);assert.match(q('[data-farming-statistics-tables]').textContent,/2015.*未掲載/);
+  for(const topic of ['wheat','chicken','wheat','chicken']){
+   q('[data-farming-topic]').value=topic;q('[data-farming-topic]').dispatchEvent(new window.Event('change'));
+   await until(()=>q('[data-farming-value]').textContent.includes(topic==='wheat'?'123.4':'0 羽/km²'),'topic reloaded');
+   assert.deepEqual(Object.keys(window.__map.sources).filter(id=>id.startsWith('asia-farming-')),['asia-farming-'+topic]);
+  }
+  assert.equal(requests.filter(r=>r.endsWith('wheat.gz')).length,4);
   q('[data-farming-topic]').value='forest';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));assert.match(q('[data-farming-value]').textContent,/地点の数値は計算せず/);assert.equal(requests.some(r=>r.includes('forest.gz')),false);
   q('[data-farming-topic]').value='rice';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));assert.equal(q('[data-rice-reading]').hidden,false);await until(()=>q('[data-rice-value]').textContent.includes('123.4'),'rice restore');assert.equal(window.__maps.length,1);
  }finally{await window.happyDOM.close();}
 });
 test('農林業の遅い応答は新しい主題を上書きせず、統計の失敗は単独で再試行できる',async()=>{
- const {window,q,resolveFarm}=await setup('?field=agriculture&topic=wheat&place=CHN&at=116,35',{farming:true,delayedFarm:true,statisticsFailure:true});
+  const {window,q,resolveFarm,requests}=await setup('?field=agriculture&topic=wheat&place=CHN&at=116,35',{farming:true,delayedFarm:true,statisticsFailure:true});
  try{
   await until(()=>!q('[data-farming-statistics-retry]').hidden,'statistics error');q('[data-farming-statistics-retry]').click();
   await until(()=>q('[data-farming-statistics-tables]').textContent.includes('134,250,000'),'statistics retry');
   q('[data-farming-topic]').value='forest';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));resolveFarm();await delay();await delay();
-  assert.match(q('[data-farming-value]').textContent,/参考画像/);assert.equal(window.__map.layers['asia-farming-wheat'].layout.visibility,'none');assert.equal(q('[data-farming-statistics-retry]').hidden,true);
+  assert.match(q('[data-farming-value]').textContent,/参考画像/);assert.equal(window.__map.layers['asia-farming-wheat'],undefined);assert.equal(q('[data-farming-statistics-retry]').hidden,true);
+  q('[data-farming-topic]').value='wheat';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));
+  await until(()=>requests.filter(r=>r.endsWith('wheat.gz')).length===2,'late grid was not retained');resolveFarm();
+  await until(()=>q('[data-farming-value]').textContent.includes('123.4'),'new wheat request finished');
  }finally{await window.happyDOM.close();}
 });
