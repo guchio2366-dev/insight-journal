@@ -3,6 +3,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import AtlasRegionNavigation from './AtlasRegionNavigation.astro';
 import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
 import AsiaClimateDiagram from './AsiaClimateDiagram.astro';
+import AsiaPopulationPanel from './AsiaPopulationPanel.astro';
+import populationManifest from '../../../public/assets/atlas/asia-population-v1/manifest.json';
+import {asiaPopulationTopics,asiaPopulationColors,asiaPopulationLabels,type AsiaPopulationRegion} from '../../data/atlas/asia-population';
 import { features, japaneseNames, regionalMaps, regionFeatures, type CountryFeature } from '../../data/atlas/regional-atlas';
 import { asiaClimateCities } from '../../data/atlas/asia-climate-cities';
 import { asiaClimateClasses } from '../../data/atlas/asia-climate-definitions';
@@ -13,7 +16,7 @@ import { asiaNaturalTopics, asiaPhysicalFocus, asiaPhysicalReading } from '../..
 import { asiaFieldPaths, type AsiaRegionId, type AsiaField } from '../../lib/atlas-asia-state';
 import { withBase } from '../../lib/urls';
 import 'maplibre-gl/dist/maplibre-gl.css';
-interface Props { regionId: AsiaRegionId; initialField?: 'natural' | 'agriculture' }
+interface Props { regionId: AsiaRegionId; initialField?: 'natural' | 'agriculture' | 'population' }
 const {regionId,initialField='natural'}=Astro.props;
 const region=regionalMaps[regionId],reading=asiaRegionReading[regionId];
 const cities=asiaClimateCities.filter(city=>city.regionId===regionId);
@@ -30,11 +33,13 @@ const path=(f:CountryFeature)=>rings(f).map(ring=>ring.map((p,i)=>{const [x,y]=p
 const nearby=features.filter(f=>!countryCodes.has(f.properties.code)&&rings(f).some(r=>r.some(p=>p[0]>bounds[0]-10&&p[0]<bounds[2]+10&&p[1]>bounds[1]-10&&p[1]<bounds[3]+10)));
 const precipitationMax=Math.max(400,Math.ceil(Math.max(...cities.flatMap(c=>c.precipitationMm.filter(v=>v!==null) as number[]))/200)*200);
 const physical=physicalManifest.regions[regionId], physicalFocus=asiaPhysicalFocus.filter(f=>f.region===regionId);
+const population=populationManifest.regions[regionId] as unknown as AsiaPopulationRegion;
 const config={regionId,label:region.label,bounds,countries,cities,classes:asiaClimateClasses,climate:climateManifest.regions[regionId],physical,physicalFocus,geographyUrl:withBase('/assets/atlas/asia-geography-v1.json'),climateBase:withBase('/assets/atlas/asia-climate-v2/'),agricultureBase:withBase('/assets/atlas/asia-agriculture-v1/'),physicalBase:withBase('/assets/atlas/asia-physical-v1/')};
 const familyNames=['熱帯','乾燥帯','温帯','冷帯','寒帯'];
-const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林業'},{id:'natural',label:'自然環境'}];
+Object.assign(config,{population,populationBase:withBase('/assets/atlas/asia-population-v1/')});
+const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林業'},{id:'natural',label:'自然環境'},{id:'population',label:'人口'}];
 ---
-<BaseLayout title={`${region.label}地図｜気候と農業`} description={reading.summary} compactAtlas canonicalPath={`/atlas/asia/${regionId}/${asiaFieldPaths[initialField]}/`}>
+<BaseLayout title={`${region.label}地図｜自然環境・農業・人口`} description={reading.summary} compactAtlas canonicalPath={`/atlas/asia/${regionId}/${asiaFieldPaths[initialField]}/`}>
   <div class="asia-atlas-root" data-asia-atlas data-region={regionId}>
    <div class="shell asia-region-shell">
     <AtlasRegionNavigation group="asia" current={regionId} />
@@ -44,9 +49,10 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
     <article class="atlas-explorer asia-atlas" data-asia-explorer data-field={initialField}>
      <section class="atlas-workspace" aria-label={`${region.label}の分野別地図`}>
       <div class="atlas-compact-heading"><nav aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a><span> / </span><a href={withBase(`/atlas/asia/${regionId}/`)}>{region.label}</a></nav><span data-current-place>{region.label}全体</span></div>
-      <h1 class="visually-hidden">{region.label}の地図から自然環境と農林業を読む</h1>
+      <h1 class="visually-hidden">{region.label}の地図から自然環境・農林業・人口を読む</h1>
       <nav class="atlas-tabs asia-field-tabs" aria-label="地図の分野">{fieldTabs.map(f=><a href={withBase(`/atlas/asia/${regionId}/${asiaFieldPaths[f.id]}/`)} data-field={f.id} aria-current={initialField===f.id?'page':undefined}>{f.label}</a>)}</nav>
       <label class="asia-topic-picker" data-natural-topics hidden={initialField!=='natural'}>自然環境の主題<select data-natural-topic aria-label="自然環境の主題">{asiaNaturalTopics.map(t=><option value={t.id}>{t.label}</option>)}</select></label>
+      <label class="asia-topic-picker" data-population-topics hidden={initialField!=='population'}>人口の主題<select data-population-topic aria-label="人口の主題">{asiaPopulationTopics.map(t=><option value={t.id}>{t.label}</option>)}</select></label>
       <div class="atlas-primary-grid asia-layout">
       <section class="atlas-map-column asia-map-panel" aria-labelledby="asia-map-title">
         <div class="visually-hidden"><p data-map-eyebrow>{initialField==='natural'?'Climate · 1991–2020':'Agriculture · 2020'}</p><h2 id="asia-map-title" data-map-title>{initialField==='natural'?'気候区分と都市':'米の収穫面積'}</h2><span data-map-period>{initialField==='natural'?'ケッペン＝ガイガー':'モデルによる推計'}</span></div>
@@ -64,12 +70,14 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
         <section class="asia-legend" data-climate-legend hidden={initialField!=='natural'} aria-label="気候区分の凡例"><div class="legend-title"><h3>気候区分</h3><span>区分を選ぶと意味を表示</span></div><div class="asia-family-legend">{familyNames.map(family=><details><summary><i style={`background:${asiaClimateClasses.find(c=>c.group.startsWith(family))?.color??'#aaa'}`}></i>{family}</summary><div class="asia-class-list">{asiaClimateClasses.filter(c=>c.group.startsWith(family)).map(c=><button type="button" data-climate-class={c.id} aria-pressed="false"><i style={`background:${c.color}`}></i><b>{c.code}</b><span>{c.name}</span></button>)}</div></details>)}</div></section>
         <section class="asia-legend" data-agriculture-legend hidden={initialField!=='agriculture'} aria-label="米の収穫面積の凡例"><h3>米の収穫面積</h3><div data-rice-scale></div><p>1格子内の年間収穫面積（ha）。二期作などは収穫の回数を含むため、土地の面積とは異なります。</p></section>
         <section class="asia-legend" data-physical-legend hidden aria-label="標高と水系の凡例"><h3>標高（m・EGM2008基準）</h3><div class="asia-physical-key">{['0未満','0–200','200–500','500–1,000','1,000–2,000','2,000–3,000','3,000–4,500','4,500以上'].map((label,i)=><span><i style={`background:#${physicalManifest.colors[i]}`}></i>{label}</span>)}</div><p>等高線：500m間隔。青い線：河川、青い面：湖。線の太さは川幅や流量を表しません。周辺国は灰色、対象内の透明な箇所はデータなし。</p></section>
+        <section class="asia-legend" data-population-legend hidden={initialField!=='population'} aria-label="人口密度の凡例"><h3>格子面積当たりの推計人口（人/km²・2020年）</h3><div class="asia-physical-key">{asiaPopulationLabels.map((label,i)=><span><i style={`background:${asiaPopulationColors[i]}`}></i>{label}</span>)}</div><p>丸は掲載都市の位置を示し、大きさは人口を表しません。輪郭は2025年の資料による都市範囲です。色のない箇所は、推計0人・海・データなしを含みます。地点を選ぶと数値を確認できます。</p><p data-population-resolution></p></section>
         <details class="asia-country-list"><summary>{region.label}の国・地域を一覧から選ぶ</summary><div>{countries.map(c=><button type="button" data-country-button={c.code} aria-pressed="false">{c.name}</button>)}</div></details>
       </section>
       <aside class="atlas-field-national asia-reading-panel" data-field-national={initialField} aria-label="地図の解説">
        <div class="atlas-national asia-reading-scroll" tabindex="0" role="region" aria-label="選択した場所の解説">
         <label class="asia-city-picker" data-city-picker hidden={initialField!=='natural'}>都市の雨温図<select data-city-select aria-label="都市の雨温図を選ぶ"><option value="">都市を選ぶ</option>{cities.map(c=><option value={c.id} data-country={c.countryCode}>{c.name} · {japaneseNames[c.countryCode]}</option>)}</select></label>
         <div class="asia-comparison-return" data-comparison-return hidden><p>元の選択と地図の位置を保存しています。</p><button type="button" data-comparison-back>比較前の地図に戻る</button></div>
+        <AsiaPopulationPanel {regionId} {population} active={initialField==='population'} />
         <section class="asia-overview" data-overview hidden={initialField!=='natural'}><p class="eyebrow" data-reading-eyebrow>How to read this map</p><h2 data-reading-title>{reading.title}</h2><p class="asia-takeaway" data-reading-summary>{reading.summary}</p><div data-reading-questions><h3>地図で確かめること</h3><ol>{reading.questions.map(q=><li>{q}</li>)}</ol></div><div class="asia-next"><p>都市を選ぶと、雨温図と月別の数値を読めます。</p><div class="asia-city-links">{cities.slice(0,4).map(city=><button type="button" data-city-shortcut={city.id}>{city.name}<span>↗</span></button>)}</div></div></section>
         {cities.map(city=><article class="asia-city-card" data-city-panel={city.id} id={`city-${city.id}`} hidden><h2 class="visually-hidden">{city.name}の気候</h2><AsiaClimateDiagram {city} {precipitationMax} /><p class="asia-takeaway">{city.summary}</p><section class="asia-city-reading"><h3>季節の変化を読む</h3><p>{city.reading}</p></section><button class="asia-compare" type="button" data-compare="agriculture">同じ場所で米の分布を見る<span>→</span></button></article>)}
         <section class="asia-class-reading" data-class-reading hidden><p class="eyebrow">Climate classification</p><h3><b data-class-code></b><span data-class-name></span></h3><p data-class-description></p><p class="asia-small">広域の格子データによる分類です。観測所の位置や気候の期間・解像度によって、雨温図から読む特徴と一致しないことがあります。</p></section>
@@ -79,7 +87,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
       </aside>
      </div>
     </section>
-    <footer class="asia-sources" id="asia-sources"><h2>地図の範囲と出典</h2><div class="asia-source-grid"><section><h3>気候区分・都市</h3><p>気候区分：<a href="https://www.nature.com/articles/s41597-023-02549-6">Beckほか（2023）</a>、<a href="https://www.gloh2o.org/koppen/">GloH2O</a>。1991–2020の分類データを広域表示向けに加工。元データと加工した表示の解像度を区別して使用しています。</p><p data-climate-method>気候データの版・解像度・利用条件を読み込んでいます。</p><p>雨温図：<a href="https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/frame.php">気象庁 ClimatView</a>ほか。観測所・平年期間と個別の出典は各都市の図表に記載。欠測値は補いません。</p></section><section><h3>米の分布・国境</h3><p data-agriculture-method>米の分布の出典・対象年・利用条件を読み込んでいます。</p><p>国境：<a href="https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/">Natural Earth</a>。1:110m、一部の小国は1:50m。小島などの細部は省略されます。境界・名称は資料の表示上の区分に沿っています。</p><p>対象はアジア3地域の30か国・地域。中東（イランを含む）とロシアは選択対象に含みません。周辺国は灰色で表示します。地図は面積の比較には適しません。</p></section></div><p class="asia-source-status">掲載範囲：気候区分、都市の雨温図、標高・等高線・河川・湖、米の分布。その他の農林業、主要産業、人口は詳細化を進めています。水系の形状と、水資源の量・利用は別の情報です。</p></footer>
+    <footer class="asia-sources" id="asia-sources"><h2>地図の範囲と出典</h2><div class="asia-source-grid"><section><h3>気候区分・都市</h3><p>気候区分：<a href="https://www.nature.com/articles/s41597-023-02549-6">Beckほか（2023）</a>、<a href="https://www.gloh2o.org/koppen/">GloH2O</a>。1991–2020の分類データを広域表示向けに加工。元データと加工した表示の解像度を区別して使用しています。</p><p data-climate-method>気候データの版・解像度・利用条件を読み込んでいます。</p><p>雨温図：<a href="https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/frame.php">気象庁 ClimatView</a>ほか。観測所・平年期間と個別の出典は各都市の図表に記載。欠測値は補いません。</p></section><section><h3>米の分布・国境</h3><p data-agriculture-method>米の分布の出典・対象年・利用条件を読み込んでいます。</p><p>国境：<a href="https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/">Natural Earth</a>。1:110m、一部の小国は1:50m。小島などの細部は省略されます。境界・名称は資料の表示上の区分に沿っています。</p><p>対象はアジア3地域の30か国・地域。中東（イランを含む）とロシアは選択対象に含みません。周辺国は灰色で表示します。地図は面積の比較には適しません。</p></section></div><p class="asia-source-status">掲載範囲：気候区分、都市の雨温図、標高・等高線・河川・湖、米の分布、人口分布、52都市の範囲と推計人口、うち11都市の詳細人口図です。その他の農林業、主要産業、行政区域別の人口統計は詳細化を進めています。水系の形状と、水資源の量・利用は別の情報です。</p></footer>
     <noscript><p>操作にはJavaScriptが必要です。国・地域の位置と、以下の都市の観測値を参照できます。</p><ul>{cities.map(c=><li><a href={c.sourceUrl}>{c.name}の平年値（{c.sourceName}）</a></li>)}</ul></noscript>
     </article>
    </AtlasWorkspaceFrame>
@@ -91,7 +99,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
   :global(.asia-point-marker){background:#fffef6;color:#2a3f45;border:1px solid #8a4934;border-bottom:4px solid #a24a34;border-radius:3px;padding:5px 8px;font-size:11px;box-shadow:0 1px 5px #0002;pointer-events:none;white-space:nowrap}:global(.asia-point-marker[hidden]){display:none!important}
   .asia-topic-picker{display:flex;align-items:center;gap:12px;font-size:12px;padding:8px 0}.asia-topic-picker select,.asia-detail-picker select{min-height:44px;border:1px solid var(--rule);background:var(--white);font:inherit;padding:8px;max-width:100%}.asia-detail-picker{display:grid;gap:5px;font-size:12px;margin:12px 0}.asia-physical-key{display:flex;flex-wrap:wrap;gap:6px 12px}.asia-physical-key span{display:flex;gap:4px;font-size:10px;align-items:center}.asia-physical-key i{display:inline-block;width:16px;height:12px}.asia-method summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:12px}.asia-method summary:before{content:"＋";margin-right:6px}.asia-method[open] summary:before{content:"−"}
 
-  .asia-region-shell{padding-top:10px;display:flex;align-items:center;justify-content:space-between;gap:16px}.asia-region-shell :global(.regional-navigation){margin:0}.asia-region-shell .asia-toolbar{padding:0;align-items:center;gap:12px}.asia-region-shell .asia-toolbar label{flex-direction:row;align-items:center;gap:8px}.asia-field-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .asia-region-shell{padding-top:10px;display:flex;align-items:center;justify-content:space-between;gap:16px}.asia-region-shell :global(.regional-navigation){margin:0}.asia-region-shell .asia-toolbar{padding:0;align-items:center;gap:12px}.asia-region-shell .asia-toolbar label{flex-direction:row;align-items:center;gap:8px}.asia-field-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}
   :global(.atlas-desktop-shell) .asia-atlas{padding:0;max-width:none;width:100%}
   :global(.atlas-desktop-shell) .asia-map-panel{position:static;top:auto;border:0;border-radius:0;background:transparent;overflow:visible}
   :global(.atlas-desktop-shell) .asia-map-frame{height:auto;min-height:190px;max-height:640px}
