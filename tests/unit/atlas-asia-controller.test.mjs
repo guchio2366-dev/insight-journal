@@ -178,6 +178,24 @@ test('着目点だけのURLでも所属国・数値を復元し、異なる国�
  try{assert.equal(new URL(second.window.location.href).searchParams.get('detail'),null);assert.notEqual(second.q('[data-physical-detail-title]').textContent,'盆地');}finally{await second.window.happyDOM.close();}
 });
 
+test('地形・河川の未選択項目は説明・地点・マーカーを解除し、地図の位置を保つ',async()=>{
+ const {window,q}=await setup('?topic=terrain&detail=basin');
+ try{
+  await until(()=>q('[data-physical-value]').textContent.includes('-75'),'terrain ready');
+  q('[data-physical-focus]').value='';q('[data-physical-focus]').dispatchEvent(new window.Event('change'));
+  assert.equal(new URL(window.location.href).searchParams.get('detail'),null);assert.equal(new URL(window.location.href).searchParams.get('at'),null);
+  assert.notEqual(q('[data-physical-detail-title]').textContent,'盆地');assert.equal(q('.asia-point-marker').hidden,true);assert.equal(window.__map.center.lng,100);
+  q('[data-natural-topic]').value='water';q('[data-natural-topic]').dispatchEvent(new window.Event('change'));
+  await until(()=>window.__map.getLayer('asia-rivers'),'water ready');
+  q('[data-water-select]').value='rivers-1';q('[data-water-select]').dispatchEvent(new window.Event('change'));
+  assert.equal(q('[data-physical-detail-title]').textContent,'試験河川');
+  const center={...window.__map.center};
+  q('[data-water-select]').value='';q('[data-water-select]').dispatchEvent(new window.Event('change'));
+  assert.equal(new URL(window.location.href).searchParams.get('detail'),null);assert.notEqual(q('[data-physical-detail-title]').textContent,'試験河川');assert.equal(window.__map.center.lng,center.lng);assert.equal(window.__map.center.lat,center.lat);
+  assert.match(q('[data-grid-reading]').textContent,/地図または着目点/);
+ }finally{await window.happyDOM.close();}
+});
+
 test('workerを先に設定し、格子クリック→比較→復帰を一つの地図で行う', async () => {
   const { window, root, q, requests } = await setup('?city=tokyo');
   try {
