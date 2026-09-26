@@ -4,6 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { calculatePayloadHash } from "../src/lib/publication/serialize.ts";
 import { loadAllPublicContent, parseArguments, walkFiles } from "./lib/content.mjs";
+import { isVerifiedFarmingGrid } from "./lib/atlas-numeric-release.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const args = parseArguments(process.argv.slice(2));
@@ -78,9 +79,15 @@ async function verifyLocalFiles(release) {
 
   const textExtensions = new Set([".html", ".json", ".xml", ".js", ".css", ".txt", ".svg", ".gz"]);
   const files = await walkFiles(dist, (filename) => textExtensions.has(path.extname(filename).toLowerCase()));
+  const farmingDirectory=path.join(dist,'assets','atlas','asia-farming-v1');
+  let farmingManifest;
+  if(files.includes(path.join(farmingDirectory,'manifest.json')))farmingManifest=JSON.parse(await readFile(path.join(farmingDirectory,'manifest.json'),'utf8'));
   for (const filename of files) {
-    const text = filename.endsWith(".gz") ? gunzipSync(await readFile(filename)).toString("utf8") : await readFile(filename, "utf8");
+    const bytes=await readFile(filename);
+    const numeric=path.dirname(filename)===farmingDirectory&&isVerifiedFarmingGrid(path.basename(filename),bytes,farmingManifest);
+    const text = filename.endsWith(".gz") ? gunzipSync(bytes).toString("utf8") : bytes.toString("utf8");
     for (const rule of forbiddenPatterns) {
+      if(numeric&&rule.name==='Notion形式のID')continue;
       if (rule.pattern.test(text)) throw new Error(`${path.relative(root, filename)}に${rule.name}が含まれています`);
     }
   }

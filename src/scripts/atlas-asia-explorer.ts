@@ -6,6 +6,8 @@ import { decodeAsiaClimateGrid } from '../lib/atlas-asia-climate-grid';
 import { decodeAsiaNumericGrid, readAsiaNumericCell, type AsiaNumericGrid } from '../lib/atlas-asia-numeric-grid';
 import { asiaPhysicalReading, asiaNaturalTopics, type AsiaPhysicalFocus } from '../data/atlas/asia-physical-reading';
 import {asiaPopulationTopics,asiaPopulationReading,asiaUrbanReading,type AsiaPopulationRegion,type AsiaPopulationRaster} from '../data/atlas/asia-population';
+import {renderAsiaFarmingPanel} from './atlas-asia-farming-panel';
+import type {AsiaFarmingRegion,AsiaFarmingLayer,AsiaFarmStatistics} from '../data/atlas/asia-farming';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 
 const root=document.querySelector<HTMLElement>('[data-asia-atlas]');
@@ -20,9 +22,11 @@ function start(root:HTMLElement) {
     geographyUrl:string;climateBase:string;agricultureBase:string;climate:any;
     physicalBase?:string;physical?:any;physicalFocus?:AsiaPhysicalFocus[];
     populationBase?:string;population?:AsiaPopulationRegion;
+    farmingBase?:string;farming?:AsiaFarmingRegion;
   };
   const context:AsiaStateContext={countries:config.countries.map(c=>c.code),cities:config.cities,bounds:config.bounds,fields:['natural','agriculture'],topics:{natural:asiaNaturalTopics.map(t=>t.id)},details:{natural:[...(config.physicalFocus??[]).map(f=>f.id),...(config.physical?.waterFeatures??[]).map((f:any)=>f.id)]}};
   if(config.population){context.fields=[...context.fields,'population'];context.topics!.population=asiaPopulationTopics.map(t=>t.id);context.details!.population=config.population.cities.map(c=>c.id);}
+  if(config.farming)context.topics!.agriculture=['rice',...config.farming.layers.map(t=>t.id)];
   const countrySelect=$<HTMLSelectElement>('[data-country-select]'),citySelect=$<HTMLSelectElement>('[data-city-select]');
   const overviewTitle=$('[data-reading-title]').textContent!,overviewSummary=$('[data-reading-summary]').textContent!;
   function readState():AsiaState {
@@ -50,6 +54,10 @@ function start(root:HTMLElement) {
   let urbanPromise:Promise<any>|null=null,populationGeographyPromise:Promise<any>|null=null;
   const urbanCity=()=>state.field==='population'?config.population?.cities.find(c=>c.id===state.detail):undefined;
   const populationRaster=():AsiaPopulationRaster|undefined=>{const detail=urbanCity()?.detail,point=state.point,b=detail?.bounds4326;return detail&&(!point||b&&point[0]>=b[0]&&point[0]<=b[2]&&point[1]>=b[1]&&point[1]<=b[3])?detail:config.population;};
+  const farmingTopic=()=>state.field==='agriculture'?(state.topic??'rice'):null;
+  const farmingLayer=()=>config.farming?.layers.find(t=>t.id===farmingTopic());
+  const farmingGrids=new Map<string,AsiaNumericGrid>(),farmingPromises=new Map<string,Promise<AsiaNumericGrid>>();
+  let farmingStatistics:AsiaFarmStatistics|null=null,farmingStatisticsPromise:Promise<AsiaFarmStatistics>|null=null,farmingStatisticsError=false;
   const naturalTopic=()=>state.field==='natural'?(state.topic??'climate'):null;
   const isPhysical=()=>naturalTopic()==='terrain'||naturalTopic()==='water';
   const optionalHidden=(selector:string,hidden:boolean)=>{const el=$(selector);if(el)el.hidden=hidden;};
@@ -118,9 +126,9 @@ function start(root:HTMLElement) {
     const cityPicker=$<HTMLElement>('[data-city-picker]');if(cityPicker)cityPicker.hidden=!climate;
     $$<HTMLElement>('[data-city-panel]').forEach(el=>el.hidden=!climate||el.dataset.cityPanel!==state.city);
     $('[data-overview]').hidden=!climate||Boolean(city);
-    $('[data-rice-reading]').hidden=state.field!=='agriculture';
+    $('[data-rice-reading]').hidden=farmingTopic()!=='rice';
     $('[data-climate-legend]').hidden=!climate;
-    $('[data-agriculture-legend]').hidden=state.field!=='agriculture';
+    $('[data-agriculture-legend]').hidden=farmingTopic()!=='rice';
     $('[data-map-title]').textContent=state.field==='natural'?'気候区分と都市':'米の収穫面積';
     $('[data-map-eyebrow]').textContent=state.field==='natural'?'Climate · 1991–2020':'Agriculture · 2020';
     $('[data-map-period]').textContent=state.field==='natural'?'ケッペン＝ガイガー':'モデルによる推計';
@@ -136,6 +144,7 @@ function start(root:HTMLElement) {
     const topicSelect=$<HTMLSelectElement>('[data-natural-topic]');if(topicSelect)topicSelect.value=naturalTopic()??'climate';
     renderPhysical();
     renderPopulation();
+    renderFarming();
     renderClass();
     renderGridReading();
     for(const item of markers){item.button.hidden=!climate;item.button.setAttribute('aria-pressed',String(item.city.id===state.city));item.button.style.opacity=!state.place||item.city.countryCode===state.place?'1':'.45';}
@@ -150,6 +159,13 @@ function start(root:HTMLElement) {
     $('[data-class-code]').textContent=classification.code;$('[data-class-name]').textContent=classification.name;$('[data-class-description]').textContent=classification.description;
   }
   function renderGridReading() {
+    const farm=farmingLayer();
+    if(farm){
+      const point=selectedPoint??config.cities.find(c=>c.id===state.city)?.coordinates,grid=farm.grid?farmingGrids.get(farm.grid):null;
+      let message=farm.kind==='forest'?'森林は提供元の参考画像です。地点の数値は計算せず、国別の面積・木材生産量を下の統計で表示します。':'地図上の地点を選ぶと、表示している格子の推計値を表示します。';
+      if(point&&farm.grid){const value=grid?readAsiaNumericCell(grid,...point):null;message=!grid?'選択地点の数値を読み込んでいます。':value===null?'この地点はデータなし、または表示範囲外です。推計0とは異なります。':`${point[1].toFixed(3)}°, ${point[0].toFixed(3)}° · ${farm.title} ${value.toLocaleString('ja-JP',{maximumFractionDigits:2})} ${farm.unit}（2020年の推計）${value===0?'。元資料の推計値は0です。':''}`;}
+      $('[data-grid-reading]').textContent=message;const el=$('[data-farming-value]');if(el)el.textContent=message;return;
+    }
     if(state.field==='population'&&config.population){
       const record=populationRaster()!,grid=populationGrids.get(record.grid);
       let message='地図上の地点を選ぶと、格子面積当たりの推計人口を表示します。';
@@ -230,6 +246,40 @@ function start(root:HTMLElement) {
     }
     if(selectedPoint&&!populationGrids.has(record.grid))void loadPopulationGrid(record).then(()=>{if(state.field==='population')renderGridReading();}).catch(()=>{if(state.field==='population'&&populationRaster()?.grid===record.grid){const message='人口の数値を取得できませんでした。再読み込みをお試しください。';$('[data-population-value]').textContent=message;status(message,true);}});
   }
+  async function loadFarmingGrid(record:AsiaFarmingLayer) {
+    if(!record.grid)return null;const key=record.grid;
+    if(farmingGrids.has(key))return farmingGrids.get(key)!;
+    if(!farmingPromises.has(key))farmingPromises.set(key,fetchAsset(asset(config.farmingBase!,key),async response=>decodeAsiaNumericGrid(new Uint8Array(await response.arrayBuffer()),record,'float32',-1)).then(grid=>{
+      // A late response for a previous topic must not refill the retained cache.
+      if(farmingLayer()?.grid===key){farmingGrids.clear();farmingGrids.set(key,grid);}
+      return grid;
+    }).finally(()=>farmingPromises.delete(key)));
+    return farmingPromises.get(key)!;
+  }
+  async function loadFarmingStatistics(){
+    if(farmingStatistics)return farmingStatistics;
+    farmingStatisticsPromise??=fetchAsset(asset(config.farmingBase!,'statistics.json.gz'),async response=>{const bytes=new Uint8Array(await response.arrayBuffer());const decoded=bytes[0]===0x1f&&bytes[1]===0x8b?await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text():new TextDecoder().decode(bytes);return JSON.parse(decoded) as AsiaFarmStatistics;}).then(data=>{farmingStatistics=data;farmingStatisticsError=false;return data;}).catch(error=>{farmingStatisticsPromise=null;farmingStatisticsError=true;throw error;});
+    return farmingStatisticsPromise;
+  }
+  function renderFarming(){
+    const active=state.field==='agriculture',layer=farmingLayer(),topic=farmingTopic();
+    for(const key of farmingGrids.keys())if(key!==layer?.grid)farmingGrids.delete(key);
+    optionalHidden('[data-farming-topics]',!active);optionalHidden('[data-farming-panel]',!active);optionalHidden('[data-farming-legend]',!layer);
+    if(!active||!config.farming)return;
+    const select=$<HTMLSelectElement>('[data-farming-topic]');if(select)select.value=topic!;
+    renderAsiaFarmingPanel(root,config.regionId,topic!,layer,config.countries.find(c=>c.code===state.place),farmingStatistics);
+    optionalHidden('[data-farming-statistics-retry]',!farmingStatisticsError);
+    if(farmingStatisticsError&&state.place)$('[data-farming-statistics-status]').textContent='統計を取得できませんでした。再読み込みをお試しください。';
+    if(state.place&&!farmingStatistics&&!farmingStatisticsError)void loadFarmingStatistics().then(()=>{if(state.field==='agriculture')renderFarming();}).catch(()=>{if(state.field==='agriculture')renderFarming();});
+    if(!layer)return;
+    $('[data-map-title]').textContent=layer.title;$('[data-map-eyebrow]').textContent='Agriculture & Forestry · 2020';$('[data-map-period]').textContent=layer.unit??'森林の参考図';
+    $('[data-map-gesture]').textContent=layer.kind==='forest'?'国を選ぶと森林面積と木材の統計を読めます。地図は2本指で移動・拡大できます。':'地点を選ぶと推計値、国を選ぶと公表統計を読めます。地図は2本指で移動・拡大できます。';
+    $('[data-farming-legend-title]').textContent=layer.kind==='forest'?'森林の分布（2020年・参考画像）':`${layer.title}（${layer.unit}・2020年）`;
+    const scale=$('[data-farming-scale]');scale.replaceChildren();
+    for(const [i,color] of (layer.colors??['4d9221']).entries()){const item=document.createElement('span'),swatch=document.createElement('i');swatch.style.backgroundColor='#'+color;const breaks=layer.breaks??[],label=layer.kind==='forest'?'資料で森林と分類された場所':i===0?`0より大きく${breaks[0]}未満`:i===breaks.length?`${breaks[i-1].toLocaleString('ja-JP')}以上`:`${breaks[i-1].toLocaleString('ja-JP')}以上${breaks[i].toLocaleString('ja-JP')}未満`;item.append(swatch,document.createTextNode(label));scale.append(item);}
+    $('[data-farming-legend-note]').textContent=layer.kind==='forest'?'提供元が描いた画像を表示しています。元資料の10m分類をこの広域図で読み分けられるわけではありません。色から森林面積は計算しません。':'色がない場所は、推計0・欠測・海を含みます。地点を選ぶと0と欠測を区別できます。元資料は5分角（南北で約9km）で、拡大しても畑や農場を特定できません。';
+    if((selectedPoint||state.city)&&layer.grid&&!farmingGrids.has(layer.grid))void loadFarmingGrid(layer).then(()=>{if(farmingLayer()?.id===layer.id)renderGridReading();}).catch(()=>{if(farmingLayer()?.id===layer.id){const message='選択した主題の数値を取得できませんでした。再読み込みをお試しください。';$('[data-farming-value]').textContent=message;status(message,true);}});
+  }
   function renderPhysical() {
     const physical=isPhysical();
     optionalHidden('[data-physical-reading]',!physical);optionalHidden('[data-physical-legend]',!physical);
@@ -253,13 +303,22 @@ function start(root:HTMLElement) {
   }
   async function showField() {
     if(!mapReady||!map)return;
-    const revision=++fieldRevision,natural=naturalTopic()==='climate',rice=state.field==='agriculture',physical=isPhysical(),water=naturalTopic()==='water';
+    const revision=++fieldRevision,natural=naturalTopic()==='climate',rice=farmingTopic()==='rice',physical=isPhysical(),water=naturalTopic()==='water';
     map.setLayoutProperty('asia-climate','visibility',natural?'visible':'none');
     if(rice&&!map.getSource('asia-rice')){
       map.addSource('asia-rice',{type:'image',url:asset(config.agricultureBase,riceLayer.imageUrl),coordinates:riceLayer.coordinates as [number,number][]});
       map.addLayer({id:'asia-rice',type:'raster',source:'asia-rice',paint:{'raster-opacity':.95,'raster-resampling':'nearest','raster-fade-duration':0}},'asia-context');
     }
     if(map.getLayer('asia-rice'))map.setLayoutProperty('asia-rice','visibility',rice?'visible':'none');
+    const farm=farmingLayer();
+    for(const layer of config.farming?.layers??[]){
+      if(layer.id===farm?.id)continue;
+      const id='asia-farming-'+layer.id;
+      if(map.getLayer(id))map.removeLayer(id);
+      if(map.getSource(id))map.removeSource(id);
+    }
+    if(farm&&!map.getSource('asia-farming-'+farm.id)){const id='asia-farming-'+farm.id;map.addSource(id,{type:'image',url:asset(config.farmingBase!,farm.image),coordinates:farm.imageCoordinates});map.addLayer({id,type:'raster',source:id,paint:{'raster-opacity':.95,'raster-resampling':'nearest','raster-fade-duration':0}},'asia-context');}
+    for(const layer of config.farming?.layers??[]){const id='asia-farming-'+layer.id;if(map.getLayer(id))map.setLayoutProperty(id,'visibility',farm?.id===layer.id?'visible':'none');}
     if(!physical)for(const id of ['asia-terrain','asia-contours'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility','none');
     if(!water)for(const id of ['asia-lakes','asia-rivers','asia-rivers-hit','asia-water-selected'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility','none');
     const population=state.field==='population'&&!!config.population,urban=population&&state.topic==='urban',selectedUrban=urbanCity();
@@ -277,19 +336,19 @@ function start(root:HTMLElement) {
     for(const id of ['asia-urban-points','asia-urban-hit'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility',population?'visible':'none');
     for(const id of ['asia-urban-boundary','asia-urban-selected'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility',population&&(urban||!!selectedUrban)?'visible':'none');
     const populationGeographyVisibility=()=>{
-      if(!map)return;const detailed=population&&!!map.getSource('asia-population-geography');
+      if(!map)return;const detailed=(population||!!farm)&&!!map.getSource('asia-population-geography');
       for(const id of ['asia-land','asia-context','asia-context-border','asia-country-hit','asia-country-border','asia-country-selected'])map.setLayoutProperty(id,'visibility',detailed?'none':'visible');
       for(const id of ['asia-population-land','asia-population-context','asia-population-country-hit','asia-population-border','asia-population-country-selected'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility',detailed?'visible':'none');
       if(map.getLayer('asia-population-country-selected'))map.setFilter('asia-population-country-selected',['==',['get','code'],state.place??'']);
     };
     populationGeographyVisibility();
-    if(population&&config.population?.geography&&!map.getSource('asia-population-geography')){
+    if((population||farm)&&config.population?.geography&&!map.getSource('asia-population-geography')){
       try{
         populationGeographyPromise??=fetchJson(asset(config.populationBase!,config.population.geography)).catch(error=>{populationGeographyPromise=null;throw error;});const data=await populationGeographyPromise;
         if(revision!==fieldRevision||!mapReady||!map)return;
         if(!map.getSource('asia-population-geography')){
           map.addSource('asia-population-geography',{type:'geojson',data});
-          map.addLayer({id:'asia-population-land',type:'fill',source:'asia-population-geography',paint:{'fill-color':'#e1e4db'}},'asia-population');
+          map.addLayer({id:'asia-population-land',type:'fill',source:'asia-population-geography',paint:{'fill-color':'#e1e4db'}},'asia-climate');
           map.addLayer({id:'asia-population-context',type:'fill',source:'asia-population-geography',filter:['==',['get','target'],false],paint:{'fill-color':'#d7dad5'}},'asia-country-border');
           map.addLayer({id:'asia-population-country-hit',type:'fill',source:'asia-population-geography',filter:['==',['get','target'],true],paint:{'fill-opacity':0}},'asia-country-border');
           map.addLayer({id:'asia-population-border',type:'line',source:'asia-population-geography',paint:{'line-color':'#5b7077','line-width':.65}},'asia-country-border');
@@ -331,13 +390,13 @@ function start(root:HTMLElement) {
     }
     if(map?.getLayer('asia-water-selected'))map.setFilter('asia-water-selected',['==',['get','id'],state.detail??'']);
     if((state.city||selectedPoint)&&natural){try{await loadClimateGrid();if(naturalTopic()==='climate')renderGridReading();}catch{if(naturalTopic()==='climate')status('気候の数値を取得できませんでした。雨温図は引き続き読めます。',true);}}
-    if(rice){try{await loadRiceGrid();if(state.field==='agriculture'){renderGridReading();if(!sourceFailed)status('');}}catch{if(state.field==='agriculture')status('米の数値を取得できませんでした。気候や都市の雨温図へ切り替えられます。',true);}}
+    if(rice){try{await loadRiceGrid();if(farmingTopic()==='rice'){renderGridReading();if(!sourceFailed)status('');}}catch{if(farmingTopic()==='rice')status('米の数値を取得できませんでした。気候や都市の雨温図へ切り替えられます。',true);}}
   }
   function sourceText() {
     const climate=$('[data-climate-method]');
     climate.textContent='元データは30秒角（赤道付近で約1km）。表示・選択はWeb Mercator上で約2.23km間隔の格子に、分類値を最近傍で再標本化しています。地表での間隔は緯度により小さくなります。国境の概略化による海岸・小島の欠測は残ります。出典：Beckほか（2023）／CC BY 4.0。地域抽出・加工：Insight Journal。';
     const agr=$('[data-agriculture-method]');agr.replaceChildren();
-    const a=document.createElement('a');a.href=asiaRiceSources[0].href;a.textContent='IFPRI MapSPAM 2020 v2r2 / CGIAR';agr.append(a,document.createTextNode(`。${asiaRiceReading.scaleNote} ${asiaRiceReading.attribution}`));
+    const a=document.createElement('a');a.href=asiaRiceSources[0].href;a.textContent='IFPRI MapSPAM 2020 v2r2 / CGIAR';agr.append(a,document.createTextNode(`。${asiaRiceReading.scaleNote} ${asiaRiceReading.attribution.replace('農業の派生','米の派生')}`));
     const src=$('[data-rice-source]');src.replaceChildren(document.createTextNode('出典：'));
     for(const [index,source] of asiaRiceSources.entries()){if(index)src.append(document.createTextNode(' · '));const link=document.createElement('a');link.href=source.href;link.textContent=source.label;src.append(link);}
     $('[data-rice-summary]').textContent=riceNote.reading;
@@ -377,24 +436,26 @@ function start(root:HTMLElement) {
       });
       map.on('click',async event=>{
         if(!mapReady||!map)return;
-        if(state.field==='population'){
-          const city=map.getLayer('asia-urban-hit')?map.queryRenderedFeatures(event.point,{layers:['asia-urban-hit']})[0]:null;
+        if(state.field==='population'||farmingLayer()){
+          const city=state.field==='population'&&map.getLayer('asia-urban-hit')?map.queryRenderedFeatures(event.point,{layers:['asia-urban-hit']})[0]:null;
+          /* Population points must not intercept farming clicks. */
           if(city?.properties.id){selectUrban(city.properties.id);return;}
           const contextHit=map.queryRenderedFeatures(event.point,{layers:[map.getSource('asia-population-geography')?'asia-population-context':'asia-context']})[0];
-          if(contextHit?.properties.code&&!context.countries.includes(contextHit.properties.code)){const message='灰色の周辺国は、この地域の人口図の選択対象に含めていません。';$('[data-grid-reading]').textContent=message;return;}
+          if(contextHit?.properties.code&&!context.countries.includes(contextHit.properties.code)){const message='灰色の周辺国は、この地域の地図の選択対象に含めていません。';$('[data-grid-reading]').textContent=message;return;}
         }
         if(naturalTopic()==='water'&&map.getLayer('asia-rivers-hit')){
           const feature=map.queryRenderedFeatures(event.point,{layers:['asia-rivers-hit','asia-lakes']})[0];
           if(feature?.properties.id){selectWater(feature.properties.id);return;}
         }
-        const hit=map.queryRenderedFeatures(event.point,{layers:[state.field==='population'&&map.getSource('asia-population-geography')?'asia-population-country-hit':'asia-country-hit']})[0];
+        const hit=map.queryRenderedFeatures(event.point,{layers:[(state.field==='population'||farmingLayer())&&map.getSource('asia-population-geography')?'asia-population-country-hit':'asia-country-hit']})[0];
         selectedPoint=[event.lngLat.lng,event.lngLat.lat];
         const keepUrban=state.field==='population'&&(!hit?.properties.code||hit.properties.code===state.place);
         state={...state,point:selectedPoint,place:hit?.properties.code??state.place,city:null,detail:keepUrban?state.detail:null,camera:camera()};persist(true);render();
+        if(farmingLayer()){const layer=farmingLayer()!;try{await loadFarmingGrid(layer);if(farmingLayer()?.id===layer.id)renderGridReading();}catch{if(farmingLayer()?.id===layer.id)status('選択した主題の数値を取得できませんでした。再読み込みをお試しください。',true);}return;}
         if(state.field==='population'){try{await loadPopulationGrid(populationRaster()!);if(state.field==='population')renderGridReading();}catch{if(state.field==='population')status('人口の数値を取得できませんでした。再読み込みをお試しください。',true);}return;}
         if(isPhysical()){try{await loadPhysicalGrid();if(isPhysical())renderGridReading();}catch{if(isPhysical())status('標高の数値を取得できませんでした。再読み込みをお試しください。',true);}}
         else if(state.field==='natural'){try{await loadClimateGrid();if(naturalTopic()==='climate')renderGridReading();}catch{if(naturalTopic()==='climate')status('気候の数値を取得できませんでした。再読み込みをお試しください。',true);}}
-        else {try{await loadRiceGrid();if(state.field==='agriculture')renderGridReading();}catch{if(state.field==='agriculture')status('米の数値を取得できませんでした。気候の表示は利用できます。',true);}}
+        else {try{await loadRiceGrid();if(farmingTopic()==='rice')renderGridReading();}catch{if(farmingTopic()==='rice')status('米の数値を取得できませんでした。気候の表示は利用できます。',true);}}
       });
       map.on('moveend',()=>{if(suppressCamera||!mapReady)return;clearTimeout(moveTimer);moveTimer=setTimeout(()=>{state={...state,camera:camera()};persist(false);},120);});
       map.on('error',event=>{if(currentAttempt!==attempt)return;sourceFailed=true;console.warn('Asia map asset failed',event.error?.message);status('地図の一部を読み込めませんでした。都市の図表・出典は引き続き読めます。',true);});
@@ -404,6 +465,8 @@ function start(root:HTMLElement) {
   }
   countrySelect.addEventListener('change',()=>selectCountry(countrySelect.value||null));
   $<HTMLSelectElement>('[data-natural-topic]')?.addEventListener('change',event=>selectNaturalTopic((event.target as HTMLSelectElement).value));
+  $<HTMLSelectElement>('[data-farming-topic]')?.addEventListener('change',event=>navigate({...state,field:'agriculture',topic:(event.target as HTMLSelectElement).value,detail:null,point:state.point??config.cities.find(c=>c.id===state.city)?.coordinates??null,city:null,camera:camera()},false));
+  $('[data-farming-statistics-retry]')?.addEventListener('click',()=>{farmingStatisticsError=false;renderFarming();});
   $<HTMLSelectElement>('[data-population-topic]')?.addEventListener('change',event=>navigate({...state,field:'population',topic:(event.target as HTMLSelectElement).value,city:null,camera:camera()},false));
   $<HTMLSelectElement>('[data-population-city]')?.addEventListener('change',event=>selectUrban((event.target as HTMLSelectElement).value));
   $('[data-population-centroid]')?.addEventListener('click',()=>{const city=urbanCity();if(city)navigate({...state,point:city.coordinates,camera:camera()},false);});

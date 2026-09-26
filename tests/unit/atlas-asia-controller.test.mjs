@@ -28,6 +28,7 @@ export class Map {
  async fire(name,event={}){for(const fn of this.events[name]??[])await fn(event)}
  getSource(id){return this.sources[id]}getLayer(id){return this.layers[id]}
  addSource(id,source){this.sources[id]=source}addLayer(layer){this.layers[layer.id]=layer}
+ removeLayer(id){delete this.layers[id]}removeSource(id){delete this.sources[id]}
  setLayoutProperty(id,key,value){this.layers[id].layout??={};this.layers[id].layout[key]=value}
  setFilter(){}getCenter(){return this.center}getZoom(){return this.zoom}getCanvas(){return this.canvas}
  jumpTo(options){this.center={lng:options.center[0],lat:options.center[1]};this.zoom=options.zoom??this.zoom}
@@ -70,7 +71,7 @@ async function until(check, message) {
 }
 
 function fixture() {
-  const singles = ['reading-title', 'reading-summary', 'reading-questions', 'map-title', 'map-eyebrow', 'map-period', 'grid-reading', 'class-code', 'class-name', 'class-description', 'rice-value', 'climate-method', 'agriculture-method', 'rice-source', 'rice-summary', 'rice-scale','physical-title','physical-takeaway','physical-value','physical-detail-title','physical-detail','physical-context','population-title','population-takeaway','population-value','population-coverage','population-detail','population-resolution','urban-population','urban-area','urban-density','urban-history'];
+  const singles = ['reading-title', 'reading-summary', 'reading-questions', 'map-title', 'map-eyebrow', 'map-period', 'grid-reading', 'class-code', 'class-name', 'class-description', 'rice-value', 'climate-method', 'agriculture-method', 'rice-source', 'rice-summary', 'rice-scale','physical-title','physical-takeaway','physical-value','physical-detail-title','physical-detail','physical-context','population-title','population-takeaway','population-value','population-coverage','population-detail','population-resolution','urban-population','urban-area','urban-density','urban-history','farming-title','farming-takeaway','farming-value','farming-definition','farming-coverage','farming-reference','farming-statistics-title','farming-statistics-definition','farming-statistics-status','farming-statistics-tables','farming-method','farming-map-source','farming-legend-title','farming-scale','farming-legend-note','map-gesture'];
   return `<main data-asia-atlas>
     <select data-country-select><option value=""></option><option value="JPN">Japan</option><option value="CHN">China</option><option value="MNG">Mongolia</option></select>
     <select data-city-select><option value=""></option><option value="tokyo" data-country="JPN">Tokyo</option><option value="beijing" data-country="CHN">Beijing</option></select>
@@ -86,7 +87,7 @@ function fixture() {
     <div data-comparison-return hidden><button data-comparison-back></button></div>
     <button data-compare="natural"></button><button data-compare="agriculture"></button>
     <button data-reset></button><button data-map-fit></button><button data-zoom-in></button><button data-zoom-out></button>
-    <section data-population-reading hidden></section><section data-population-legend hidden></section><div data-population-city-facts hidden></div><label data-population-topics><select data-population-topic><option value="density"></option><option value="urban"></option></select></label><select data-population-city><option value=""></option><option value="uc-tokyo" data-country="JPN"></option></select><section data-physical-reading hidden></section><section data-physical-legend hidden></section>
+    <section data-farming-panel hidden></section><div data-farming-extra hidden></div><div data-farming-map-method hidden></div><div data-farming-legend hidden></div><button data-farming-statistics-retry hidden></button><label data-farming-topics><select data-farming-topic><option value="rice"></option><option value="wheat"></option><option value="chicken"></option><option value="forest"></option></select></label><section data-population-reading hidden></section><section data-population-legend hidden></section><div data-population-city-facts hidden></div><label data-population-topics><select data-population-topic><option value="density"></option><option value="urban"></option></select></label><select data-population-city><option value=""></option><option value="uc-tokyo" data-country="JPN"></option></select><section data-physical-reading hidden></section><section data-physical-legend hidden></section>
     <label data-natural-topics><select data-natural-topic><option value="climate"></option><option value="terrain"></option><option value="water"></option></select></label>
     <select data-physical-focus><option value=""></option><option value="basin" data-country="CHN"></option></select>
     <label data-water-picker hidden><select data-water-select><option value=""></option><option value="rivers-1"></option></select></label>
@@ -116,14 +117,25 @@ async function setup(query = '', options = {}) {
     conf.populationBase='/assets/population/';conf.population={...raster,urban:'urban.json',geography:'geography.json',countryCoverage:{JPN:{sourceUrbanCentres:100,listedUrbanCentres:1}},cities:[{id:'uc-tokyo',sourceId:5929,name:'東京',sourceName:'Tokyo',country:'JPN',coordinates:[139.65,35.66],bounds:[139,35,141,37],population:33447551.24,areaKm2:5165,density:6475.8,history:{2000:30000000,2010:32000000,2020:33447551.24},detail:{...raster,sourceCellKm:1,grid:'tokyo.gz',image:'tokyo.png'}}]};
     q('[data-asia-config]').textContent=JSON.stringify(conf);
   }
+  if(options.farming){
+    const conf=JSON.parse(q('[data-asia-config]').textContent),raster={width:1,height:1,bounds3857:[west,south,east,north],imageCoordinates:[[72,56],[155,56],[155,17],[72,17]],year:2020};
+    conf.farmingBase='/assets/farming/';conf.farming={layers:[{...raster,id:'wheat',title:'小麦',kind:'crop',unit:'ha/格子',faoItem:15,image:'wheat.png',grid:'wheat.gz',breaks:[1,10],colors:['fff','ddd','aaa']},{...raster,id:'chicken',title:'鶏',kind:'livestock',unit:'羽/km²',faoItem:1057,image:'chicken.png',grid:'chicken.gz',breaks:[1,10],colors:['fff','ddd','aaa']},{...raster,id:'forest',title:'森林の分布と木材',kind:'forest',image:'forest.png'}]};
+    q('[data-asia-config]').textContent=JSON.stringify(conf);
+  }
   window.__hitCountry=options.hitCountry;
   window.__forceMapFail = options.mapFailure;
   window.__initialSourceFailure = options.initialSourceFailure;
   const requests = [];
-  let rejectClimate, resolveRice,resolveWater,resolveUrban;
+  let rejectClimate, resolveRice,resolveWater,resolveUrban,resolveFarm;
+  let statisticsAttempts=0;
   window.fetch = async address => {
     const name = String(address); requests.push(name);
     if (name === '/assets/geography.json') return new Response(JSON.stringify({ type: 'FeatureCollection', features: [] }));
+    if(name==='/assets/farming/statistics.json.gz'){
+      if(options.statisticsFailure&&statisticsAttempts++===0)throw Error('statistics 503');
+      return new Response(JSON.stringify({countries:{CHN:{observations:[{domain:'Production_Crops_Livestock',item:'15',element:'Production',year:2020,unit:'t',value:134250000,flag:'A',note:null},{domain:'Production_Crops_Livestock',item:'1057',element:'Stocks',year:2020,unit:'1000 An',value:0,flag:'I',note:null}]}}}));
+    }
+    if(name.startsWith('/assets/farming/')){const response=()=>{const data=new Uint8Array(4);new DataView(data.buffer).setFloat32(0,name.endsWith('chicken.gz')?0:123.4,true);return new Response(data);};if(options.delayedFarm&&name.endsWith('wheat.gz'))return new Promise(resolve=>{resolveFarm=()=>resolve(response());});return response();}
     if (name.startsWith('/assets/climate/')) {
       if (options.delayedClimateFailure) return new Promise((_, reject) => { rejectClimate = reject; });
       return new Response(JSON.stringify({ width: 1, height: 1, bounds3857: [west, south, east, north], values: [14] }));
@@ -142,7 +154,7 @@ async function setup(query = '', options = {}) {
   };
   window.eval(bundle.outputFiles[0].text);
   await until(() => options.mapFailure ? !q('[data-map-retry]').hidden : root.dataset.mapReady === 'true', 'controller ready');
-  return { window, root, q, requests, rejectClimate: () => rejectClimate?.(Error('simulated climate fetch failure')), resolveRice: () => resolveRice?.(),resolveWater:()=>resolveWater?.(),resolveUrban:()=>resolveUrban?.() };
+  return { window, root, q, requests, rejectClimate: () => rejectClimate?.(Error('simulated climate fetch failure')), resolveRice: () => resolveRice?.(),resolveWater:()=>resolveWater?.(),resolveUrban:()=>resolveUrban?.(),resolveFarm:()=>resolveFarm?.() };
 }
 
 test('人口は都市の輪郭・1km格子・統計を表示し、比較復帰と選択解除で状態を保つ',async()=>{
@@ -412,4 +424,39 @@ test('初期画像が失敗した場合はMapLibre load到達後も再試行を�
     assert.equal(q('[data-map-state]').hidden, true);
     assert.equal(q('[data-map-retry]').hidden, true);
   } finally { await window.happyDOM.close(); }
+});
+
+test('農林業は品目・単位・地点を切り替え、国別統計と比較復帰を保持する',async()=>{
+ const {window,q,requests}=await setup('?field=agriculture&topic=wheat&place=CHN&at=116,35',{farming:true,population:true});
+ try{
+  await until(()=>q('[data-farming-value]').textContent.includes('123.4'),'wheat reading');
+  await until(()=>q('[data-farming-statistics-tables]').textContent.includes('134,250,000'),'published production');
+  assert.equal(q('[data-rice-reading]').hidden,true);assert.equal(window.__map.layers['asia-farming-wheat'].layout.visibility,'visible');
+  assert.match(q('[data-farming-statistics-status]').textContent,/中国本土/);
+  q('[data-compare="natural"]').click();assert.equal(window.__map.layers['asia-farming-wheat'],undefined);assert.equal(window.__map.sources['asia-farming-wheat'],undefined);
+  q('[data-comparison-back]').click();assert.equal(new URL(window.location.href).searchParams.get('topic'),'wheat');await until(()=>q('[data-farming-value]').textContent.includes('123.4'),'wheat reloaded');
+  assert.equal(requests.filter(r=>r.endsWith('wheat.gz')).length,2);
+  q('[data-farming-topic]').value='chicken';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));await until(()=>q('[data-farming-value]').textContent.includes('0 羽/km²'),'chicken zero');
+  assert.match(q('[data-farming-statistics-tables]').textContent,/千羽/);assert.match(q('[data-farming-statistics-tables]').textContent,/2020.*0/);assert.match(q('[data-farming-statistics-tables]').textContent,/2015.*未掲載/);
+  for(const topic of ['wheat','chicken','wheat','chicken']){
+   q('[data-farming-topic]').value=topic;q('[data-farming-topic]').dispatchEvent(new window.Event('change'));
+   await until(()=>q('[data-farming-value]').textContent.includes(topic==='wheat'?'123.4':'0 羽/km²'),'topic reloaded');
+   assert.deepEqual(Object.keys(window.__map.sources).filter(id=>id.startsWith('asia-farming-')),['asia-farming-'+topic]);
+  }
+  assert.equal(requests.filter(r=>r.endsWith('wheat.gz')).length,4);
+  q('[data-farming-topic]').value='forest';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));assert.match(q('[data-farming-value]').textContent,/地点の数値は計算せず/);assert.equal(requests.some(r=>r.includes('forest.gz')),false);
+  q('[data-farming-topic]').value='rice';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));assert.equal(q('[data-rice-reading]').hidden,false);await until(()=>q('[data-rice-value]').textContent.includes('123.4'),'rice restore');assert.equal(window.__maps.length,1);
+ }finally{await window.happyDOM.close();}
+});
+test('農林業の遅い応答は新しい主題を上書きせず、統計の失敗は単独で再試行できる',async()=>{
+  const {window,q,resolveFarm,requests}=await setup('?field=agriculture&topic=wheat&place=CHN&at=116,35',{farming:true,delayedFarm:true,statisticsFailure:true});
+ try{
+  await until(()=>!q('[data-farming-statistics-retry]').hidden,'statistics error');q('[data-farming-statistics-retry]').click();
+  await until(()=>q('[data-farming-statistics-tables]').textContent.includes('134,250,000'),'statistics retry');
+  q('[data-farming-topic]').value='forest';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));resolveFarm();await delay();await delay();
+  assert.match(q('[data-farming-value]').textContent,/参考画像/);assert.equal(window.__map.layers['asia-farming-wheat'],undefined);assert.equal(q('[data-farming-statistics-retry]').hidden,true);
+  q('[data-farming-topic]').value='wheat';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));
+  await until(()=>requests.filter(r=>r.endsWith('wheat.gz')).length===2,'late grid was not retained');resolveFarm();
+  await until(()=>q('[data-farming-value]').textContent.includes('123.4'),'new wheat request finished');
+ }finally{await window.happyDOM.close();}
 });
