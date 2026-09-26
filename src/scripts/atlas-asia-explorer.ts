@@ -2,6 +2,7 @@ import { readAsiaAtlasState, writeAsiaAtlasState, startAsiaComparison, restoreAs
 import { getAsiaRiceLayer, asiaRiceLegend, asiaRiceReading, asiaRiceRegionNotes, asiaRiceSources, readAsiaRiceCell, type AsiaRiceGrid } from '../data/atlas/asia-agriculture';
 import type { AsiaClimateCity } from '../data/atlas/asia-climate-cities';
 import type { AsiaClimateClass } from '../data/atlas/asia-climate-definitions';
+import { decodeAsiaClimateGrid } from '../lib/atlas-asia-climate-grid';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 
 const root=document.querySelector<HTMLElement>('[data-asia-atlas]');
@@ -30,11 +31,12 @@ function start(root:HTMLElement) {
   const riceLayer=getAsiaRiceLayer(config.regionId)!;
   const riceNote=asiaRiceRegionNotes[config.regionId];
 
-  async function fetchJson(url:string) {
+  async function fetchAsset<T>(url:string,read:(response:Response)=>Promise<T>):Promise<T> {
     const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);
-    try {const response=await fetch(url,{signal:controller.signal});if(!response.ok)throw new Error(`${response.status}: ${url}`);return await response.json();}
+    try {const response=await fetch(url,{signal:controller.signal});if(!response.ok)throw new Error(`${response.status}: ${url}`);return await read(response);}
     finally{clearTimeout(timer);}
   }
+  const fetchJson=(url:string)=>fetchAsset(url,response=>response.json());
   const asset=(base:string,name:string)=>base+name.split('/').at(-1);
   function status(message:string,error=false) {
     const el=$('[data-map-state]');el.textContent=message;el.hidden=!message;
@@ -125,7 +127,10 @@ function start(root:HTMLElement) {
   async function loadClimateGrid() {
     if(climateGrid)return climateGrid;
     if(!climateManifest)return null;
-    gridPromise??=fetchJson(asset(config.climateBase,climateManifest.regions[config.regionId].grid)).then(grid=>{climateGrid=grid;return grid;}).catch(error=>{gridPromise=null;throw error;});
+    const record=climateManifest.regions[config.regionId],url=asset(config.climateBase,record.grid);
+    gridPromise??=(record.gridEncoding==='uint8-gzip'
+      ?fetchAsset(url,async response=>decodeAsiaClimateGrid(new Uint8Array(await response.arrayBuffer()),record))
+      :fetchJson(url)).then(grid=>{climateGrid=grid;return grid;}).catch(error=>{gridPromise=null;throw error;});
     return gridPromise;
   }
   async function loadRiceGrid() {
@@ -147,7 +152,7 @@ function start(root:HTMLElement) {
   }
   function sourceText() {
     const climate=$('[data-climate-method]');
-    climate.textContent='表示・選択用の元格子は0.1度（南北約11km）。分類値を最近傍で再投影しています。出典：Beckほか（2023）／CC BY 4.0。地域抽出・加工：Insight Journal。';
+    climate.textContent='元データは30秒角（赤道付近で約1km）。表示・選択はWeb Mercator上で約2.23km間隔の格子に、分類値を最近傍で再標本化しています。地表での間隔は緯度により小さくなります。国境の概略化による海岸・小島の欠測は残ります。出典：Beckほか（2023）／CC BY 4.0。地域抽出・加工：Insight Journal。';
     const agr=$('[data-agriculture-method]');agr.replaceChildren();
     const a=document.createElement('a');a.href=asiaRiceSources[0].href;a.textContent='IFPRI MapSPAM 2020 v2r2 / CGIAR';agr.append(a,document.createTextNode(`。${asiaRiceReading.scaleNote} ${asiaRiceReading.attribution}`));
     const src=$('[data-rice-source]');src.replaceChildren(document.createTextNode('出典：'));

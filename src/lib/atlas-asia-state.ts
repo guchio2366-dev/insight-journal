@@ -81,7 +81,7 @@ export function mercatorPoint(lng: number, lat: number): [number, number] {
   return [6378137 * lng * Math.PI / 180, 6378137 * Math.log(Math.tan(Math.PI / 4 + limit * Math.PI / 360))];
 }
 
-export function gridCellAt(grid: { width: number; height: number; bounds3857: number[]; values: number[] }, lng: number, lat: number): number | null {
+export function gridCellAt(grid: { width: number; height: number; bounds3857: number[]; values: ArrayLike<number> }, lng: number, lat: number): number | null {
   const [x, y] = mercatorPoint(lng, lat), [west, south, east, north] = grid.bounds3857;
   if (x < west || x >= east || y <= south || y > north) return null;
   const col = Math.floor((x - west) / (east - west) * grid.width);
