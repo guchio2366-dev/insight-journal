@@ -1,5 +1,5 @@
-import {asiaPlaceReadings,choosePlaceReading,selectedPlaceReading} from '../data/atlas/asia-place-readings';
-import {startAsiaComparison,type AsiaState,type AsiaRegionId,type AsiaCamera} from '../lib/atlas-asia-state';
+import {asiaPlaceReadings,choosePlaceReading,selectedPlaceReading,startPlaceComparison} from '../data/atlas/asia-place-readings';
+import type {AsiaState,AsiaRegionId,AsiaCamera} from '../lib/atlas-asia-state';
 
 export function createPlaceReadings(root:HTMLElement,region:AsiaRegionId,getState:()=>AsiaState,navigate:(s:AsiaState,fit?:boolean)=>void,camera:()=>AsiaCamera|null){
  const panel=root.querySelector<HTMLElement>('[data-place-reading]');
@@ -18,7 +18,7 @@ export function createPlaceReadings(root:HTMLElement,region:AsiaRegionId,getStat
   $('[data-place-story-text]').textContent=scene.reading;$('[data-place-story-scope]').textContent=scene.scope;
   const source=$<HTMLAnchorElement>('[data-place-story-source]');source.textContent=scene.source.label;source.href=scene.source.url;
   const links=$('[data-place-story-bridges]');links.replaceChildren();
-  for(const bridge of scene.bridges){const button=document.createElement('button');button.type='button';button.textContent=bridge.label+' →';button.addEventListener('click',()=>{const saved=startAsiaComparison(new URL(location.href),{...getState(),camera:camera()},bridge.field);navigate({...saved,topic:bridge.topic,detail:bridge.detail??null,...(bridge.relocate?{camera:null,point:null}:{})},Boolean(bridge.relocate));});links.append(button);}
+  for(const bridge of scene.bridges){const button=document.createElement('button');button.type='button';button.textContent=bridge.label+' →';button.addEventListener('click',()=>navigate(startPlaceComparison(new URL(location.href),{...getState(),camera:camera()},bridge),Boolean(bridge.relocate)));links.append(button);}
  }
  return {render};
 }

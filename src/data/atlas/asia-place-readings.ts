@@ -1,6 +1,6 @@
-import type {AsiaField,AsiaRegionId,AsiaState} from '../../lib/atlas-asia-state';
+import {startAsiaComparison,type AsiaField,type AsiaRegionId,type AsiaState} from '../../lib/atlas-asia-state.ts';
 
-export type PlaceBridge={label:string;field:AsiaField;topic:string;detail?:string;relocate?:boolean};
+export type PlaceBridge={label:string;field:AsiaField;topic:string;detail?:string;relocate?:boolean;point?:[number,number]};
 export type PlaceReading={id:string;region:AsiaRegionId;field:AsiaField;country:string;topic:string;detail?:string;point?:[number,number];name:string;lead:string;reading:string;scope:string;source:{label:string;url:string};bridges:PlaceBridge[]};
 const nature=(topic:string,label:string):PlaceBridge=>({field:'natural',topic,label});
 const trade=(chapter:string,label:string):PlaceBridge=>({field:'industry',topic:'trade-exports',detail:'t-'+chapter,label});
@@ -26,7 +26,7 @@ export const asiaPlaceReadings:PlaceReading[]=[
  {id:'thailand-coast',region:'southeast-asia',field:'industry',country:'THA',topic:'manufacturing',point:[100.88,13.08],name:'タイ東部臨海部：港と工業',lead:'工場群と、原料・製品を運ぶ港や道路を結び付けて読む。',reading:'タイ投資委員会の2017年資料は、東部臨海部の自動車・電子産業、マプタプットの石油化学、レムチャバン港と道路・鉄道の整備を説明しています。沿岸の立地を、原料を受け入れ製品を運ぶ仕組みと合わせて考えます。',scope:'点は沿岸部を見るための位置で、施設台帳ではありません。地図の値はタイ全体の製造業であり、この地域の生産額ではありません。2017年資料の将来計画を完成済みとは扱っていません。',source:thai,bridges:[trade('87','タイ全体の車両・部分品輸出を比べる'),{field:'population',topic:'urban',detail:'uc-2315',relocate:true,label:'バンコクの都市範囲と人口を比べる'}]},
  {id:'bengaluru-services',region:'south-central-asia',field:'industry',country:'IND',topic:'in-services',detail:'IN-KA',point:[77.67,12.85],name:'ベンガルール：通信基盤とソフトウェア',lead:'製品を運ぶ港とは異なる、通信と人材の基盤を読む。',reading:'STPIの沿革は、ベンガルールで1990年代初めに通信回線や事業用の施設を提供し、ソフトウェア事業を支えた経緯を説明しています。サービス業の集積を読む際には、通信や事業支援の仕組みにも目を向けられます。',scope:'地図はカルナータカ州のサービス業全体です。ベンガルール市だけ、またはソフトウェアだけの生産額ではありません。ソフトウェアサービスをHS分類の商品貿易へ合算していません。',source:stpi,bridges:[{field:'population',topic:'urban',detail:'uc-9558',relocate:true,label:'ベンガルールの都市範囲と人口を比べる'},{field:'industry',topic:'in-manufacturing',detail:'IN-KA',label:'同じ州の製造業を比べる'}]},
  {id:'nagoya-city',region:'east-asia',field:'population',country:'JPN',topic:'urban',detail:'uc-5213',name:'名古屋：都市の広がりと製造業',lead:'都市の人口のまとまりと、県単位の産業を異なる範囲として読む。',reading:'愛知県が説明する完成車・部品・素材の集積を背景に、名古屋の都市範囲の内外で人口密度を比べます。次に愛知県の輸送用機械器具の統計へ移ると、都市の範囲と行政区域の違いを確認できます。',scope:'都市人口はGHSLが定める人口のまとまりの推計で、名古屋市や愛知県の人口ではありません。住宅から工場への通勤や、職業別人口をこの図だけから判断できません。',source:aichi,bridges:[{field:'industry',topic:'jp-31',detail:'JP-23',relocate:true,label:'愛知県の輸送用機械器具を比べる'},nature('terrain','同じ範囲の標高を比べる')]},
- {id:'bangkok-city',region:'southeast-asia',field:'population',country:'THA',topic:'urban',detail:'uc-2315',name:'バンコク：都市と東部の工業地域',lead:'都市の人口のまとまりと、その東に位置する生産・物流の地域を読む。',reading:'2017年のタイ投資委員会資料が扱う東部の工業地域と港を、バンコクの都市範囲から位置関係を見ながら比べます。地図で人口が連続する範囲を確かめ、産業へ切り替えて国全体の製造業や輸出の構成を読みます。',scope:'都市の輪郭は通勤圏でも東部経済回廊の境界でもありません。人口密度が高いことだけでは、その地点に住む人の勤務先や職業は分かりません。',source:thai,bridges:[{field:'industry',topic:'manufacturing',label:'タイ全体の製造業を比べる'},nature('basins','同じ地点を含む流域を比べる')]},
+ {id:'bangkok-city',region:'southeast-asia',field:'population',country:'THA',topic:'urban',detail:'uc-2315',name:'バンコク：都市と東部の工業地域',lead:'都市の人口のまとまりと、その東に位置する生産・物流の地域を読む。',reading:'2017年のタイ投資委員会資料が扱う東部の工業地域と港を、バンコクの都市範囲から位置関係を見ながら比べます。地図で人口が連続する範囲を確かめ、産業へ切り替えて国全体の製造業や輸出の構成を読みます。',scope:'都市の輪郭は通勤圏でも東部経済回廊の境界でもありません。人口密度が高いことだけでは、その地点に住む人の勤務先や職業は分かりません。',source:thai,bridges:[{field:'industry',topic:'manufacturing',label:'タイ全体の製造業を比べる'},{...nature('basins','バンコクの都市代表点を含む流域を比べる'),point:[100.55463,13.76344]}]},
  {id:'bengaluru-city',region:'south-central-asia',field:'population',country:'IND',topic:'urban',detail:'uc-9558',name:'ベンガルール：都市人口とサービス業',lead:'人が集まる範囲と、通信・事業支援の仕組みを結び付けて読む。',reading:'STPIが紹介する通信や事業施設の支援を背景として、ベンガルールの人口のまとまりを確認します。カルナータカ州のサービス業と比べる際は、都市と州の範囲を混同せず、それぞれの値が何を数えたかを確かめます。',scope:'この都市人口には様々な職業・年齢の人が含まれます。人口増加をソフトウェア産業だけで説明したり、人口からその産業の従業者数を求めたりすることはできません。',source:stpi,bridges:[{field:'industry',topic:'in-services',detail:'IN-KA',relocate:true,label:'カルナータカ州のサービス業を比べる'},nature('terrain','同じ範囲の標高を比べる')]},
 ];
 
@@ -38,4 +38,8 @@ export function normalizePlaceReading(region:AsiaRegionId,state:AsiaState):AsiaS
 }
 export function choosePlaceReading(state:AsiaState,scene:PlaceReading):AsiaState {
  return {...state,field:scene.field,place:scene.country,topic:scene.topic,detail:scene.detail??null,point:scene.point??null,city:null,story:scene.id,back:null,camera:scene.point?{lng:scene.point[0],lat:scene.point[1],zoom:6}:null};
+}
+export function startPlaceComparison(url:URL,state:AsiaState,bridge:PlaceBridge):AsiaState {
+ const saved=startAsiaComparison(url,state,bridge.field);
+ return {...saved,topic:bridge.topic,detail:bridge.detail??null,...(bridge.relocate?{camera:null,point:null}:{}),...(bridge.point?{point:bridge.point}:{})};
 }

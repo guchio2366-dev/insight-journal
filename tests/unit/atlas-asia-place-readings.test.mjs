@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
-import {asiaPlaceReadings,choosePlaceReading,selectedPlaceReading,normalizePlaceReading} from '../../src/data/atlas/asia-place-readings.ts';
+import {asiaPlaceReadings,choosePlaceReading,selectedPlaceReading,normalizePlaceReading,startPlaceComparison} from '../../src/data/atlas/asia-place-readings.ts';
+import {waterContains} from '../../src/data/atlas/asia-water.ts';
 import {readAsiaAtlasState,writeAsiaAtlasState,startAsiaComparison,restoreAsiaComparison} from '../../src/lib/atlas-asia-state.ts';
 import {asiaNaturalTopics} from '../../src/data/atlas/asia-physical-reading.ts';
 import {tradeTopics} from '../../src/data/atlas/asia-trade.ts';
@@ -51,4 +52,18 @@ test('都市名は日本語表示でも原資料名・数値・都市IDを保持
  for(const [region,id,name,source] of [['east-asia','uc-5213','名古屋','Nagoya'],['south-central-asia','uc-9558','ベンガルール','Bengaluru']]){
   const c=population.regions[region].cities.find(c=>c.id===id);assert.equal(c.name,name);assert.equal(c.sourceName,source);assert.ok(c.population>1000000);
  }
+});
+
+test('バンコクの都市代表点を渡して実際の流域を選び、復帰時には都市範囲へ戻す',()=>{
+ const scene=asiaPlaceReadings.find(s=>s.id==='bangkok-city'),bridge=scene.bridges.find(b=>b.topic==='basins');
+ const city=population.regions[scene.region].cities.find(c=>c.id===scene.detail);
+ const state=choosePlaceReading(base,scene),url=new URL('https://example.org/atlas/asia/southeast-asia/population/');
+ const target=startPlaceComparison(url,state,bridge);assert.ok(target.point);assert.equal(target.story,undefined);
+ target.point.forEach((v,i)=>assert.ok(Math.abs(v-city.coordinates[i])<0.00001));
+ const basin=asset('water','southeast-asia.basins.json.gz');
+ const hit=basin.geometry.features.find(f=>waterContains(f.geometry,target.point));assert.ok(hit,'a real basin contains the city point');
+ assert.ok(basin.records.find(r=>r.id===hit.properties.id).countries.includes('THA'));
+ const context={countries:['THA'],cities:[],bounds:[91,-12,143,30],fields:['population','natural'],topics:{population:['urban']},details:{population:[scene.detail]},stories:{population:[scene.id]}};
+ const back=restoreAsiaComparison(url,target,context);assert.equal(back.point,undefined);assert.equal(back.detail,scene.detail);assert.equal(back.story,scene.id);
+ for(const s of asiaPlaceReadings)for(const b of s.bridges.filter(b=>b.topic==='basins'))assert.ok(startPlaceComparison(url,choosePlaceReading(base,s),b).point,'every same-location basin comparison has a point');
 });
