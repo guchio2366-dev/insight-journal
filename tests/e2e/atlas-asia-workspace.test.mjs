@@ -24,6 +24,8 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.equal(q('[data-map-surface]').getAttribute('tabindex'),'0');
       assert.equal(q('.atlas-tabs [aria-current="page"]').getAttribute('href'),`/insight-journal/atlas/asia/${region}/${field}/`);
       assert.equal(all('.atlas-tabs a').length,4,'implemented fields are offered');
+      assert.equal(all('.atlas-nature-tabs button[data-natural-topic]').length,6);
+      assert.equal(q('[data-natural-topic=climate]').getAttribute('aria-pressed'),'true');
       assert.equal(q('[data-industry-panel]').hidden,field!=='industry');
       assert.equal(q('[data-industry-legend]').hidden,field!=='industry');
       assert.equal(config.industryBase,'/insight-journal/assets/atlas/asia-industry-v1/');
@@ -35,7 +37,7 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.ok(Buffer.byteLength(JSON.stringify(config.water))<4000,'water geometry and numeric grids remain lazy assets');
       assert.equal(q('[data-hydrology-panel]').hidden,true);
       assert.equal(q('[data-hydrology-legend]').hidden,true);
-      for(const id of ['precipitation','basins','groundwater'])assert.ok(q(`[data-natural-topic] option[value="${id}"]`));
+      for(const id of ['precipitation','basins','groundwater'])assert.ok(q(`button[data-natural-topic="${id}"]`));
       assert.equal(all('[data-industry-topic] optgroup').length,5);
       assert.equal(q('[data-population-reading]').hidden,field!=='population');
       assert.equal(q('[data-population-legend]').hidden,field!=='population');

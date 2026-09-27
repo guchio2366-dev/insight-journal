@@ -15,6 +15,7 @@ from rasterio.transform import from_bounds
 from rasterio.warp import transform_geom
 from rasterio.windows import Window
 from PIL import Image
+from atlas_asia_climate_palette import display_classes, palette_record, write_definitions
 
 ROOT=Path(__file__).resolve().parents[1]
 BASE=ROOT/'public/assets/atlas/asia-climate-v1'
@@ -40,7 +41,7 @@ def main():
     geography=ROOT/baseline['processing']['boundaryFile']
     assert digest(geography.read_bytes())==baseline['processing']['boundarySha256']
     features={f['properties']['code']:f for f in json.loads(geography.read_text(encoding='utf8'))['features']}
-    classes=json.loads((BASE/'legend.json').read_text(encoding='utf8'))
+    classes=display_classes()
     palette=np.zeros((31,4),dtype=np.uint8)
     for c in classes: palette[c['id']]=list(bytes.fromhex(c['color'][1:]))+[255]
     OUT.mkdir(parents=True,exist_ok=True)
@@ -90,11 +91,13 @@ def main():
                 'countriesWithoutClassifiedPixels':[c for c,v in coverage.items() if not v['classifiedPixels']]}
             print(region,w,h,'image bytes',(OUT/image).stat().st_size,'lookup bytes',len(packed),flush=True)
     write(OUT/'legend.json',classes)
-    manifest={**baseline,'schemaVersion':2,'version':'2.0.0',
+    write_definitions(classes)
+    manifest={**baseline,'schemaVersion':2,'version':'2.1.0',
         'source':{**baseline['source'],'member':MEMBER,'memberSha256':digest(tif),'memberBytes':len(tif),
             'sourceResolutionDegrees':1/120,'sourceResolutionNote':'Publisher 30 arc-second (approximately 1 km at the equator) source. Sampled at the centres of the display grid; not enlarged from the 0.1-degree version.'},
         'processing':{**baseline['processing'],'script':'scripts/atlas-asia-climate-detail.py',
             'scriptSha256':digest(Path(__file__).read_bytes()),
+            'displayPalette':palette_record(),
             'baselineManifestSha256':digest((BASE/'manifest.json').read_bytes()),
             'runtime':{'python':platform.python_version(),'numpy':np.__version__,'rasterio':rasterio.__version__},
             'targetPixelSizeMetres3857':PIXEL_METRES,
