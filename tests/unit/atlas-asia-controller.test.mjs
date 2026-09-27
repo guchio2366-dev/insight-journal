@@ -162,17 +162,24 @@ async function setup(query = '', options = {}) {
     for(const name of ['panel','legend','legend-title','scale','legend-note','title','lead','value','coverage','status','content']){const e=window.document.createElement('div');e.setAttribute('data-trade-'+name,'');root.append(e);}
     root.insertAdjacentHTML('beforeend','<button data-trade-retry></button><button data-trade-domestic></button><select data-trade-chapter><option value="TOTAL">全商品</option></select><div data-farm-trade></div>');
   }
+  if(options.presentation){
+    const conf=JSON.parse(q('[data-asia-config]').textContent);
+    conf.presentationBase='/assets/presentation/';conf.presentation={farming:{file:'farming.json.gz',products:[],labels:[]},rainfall:{file:'rainfall.json.gz',levels:[500],labels:[]},climate:[]};q('[data-asia-config]').textContent=JSON.stringify(conf);
+    root.insertAdjacentHTML('beforeend','<div data-map-annotations></div><section data-farm-overview-reading></section><section data-farm-overview-legend></section><input type="checkbox" data-farm-kind="crop" checked><input type="checkbox" data-farm-kind="livestock" checked><button data-farm-choice="overview"></button><button data-farm-choice="wheat"></button>');
+    q('[data-farming-topic]').insertAdjacentHTML('afterbegin','<option value="overview"></option>');
+  }
   window.__hitCountry=options.hitCountry;
   window.__forceMapFail = options.mapFailure;
   window.__initialSourceFailure = options.initialSourceFailure;
   const requests = [];
-  let rejectClimate, resolveRice,resolveWater,resolveUrban,resolveFarm;
-  let statisticsAttempts=0,industryAttempts=0,resolveIndustry;
+  let rejectClimate, resolveRice,resolveWater,resolveUrban,resolveFarm,resolvePresentation;
+  let statisticsAttempts=0,industryAttempts=0,resolveIndustry,presentationAttempts=0;
   let hydrologyAttempts=0,resolveHydrology;
   let socialAttempts=0,resolveSocial;
   let tradeAttempts=0,resolveTrade,rejectPopulation;
   window.fetch = async address => {
     const name = String(address); requests.push(name);
+    if(name.startsWith('/assets/presentation/')){if(options.presentationFailure&&presentationAttempts++===0)throw Error('presentation 503');const response=()=>new Response(JSON.stringify({type:'FeatureCollection',features:[]}));if(options.delayedPresentation)return new Promise(resolve=>{resolvePresentation=()=>resolve(response());});return response();}
     if(name.startsWith('/assets/trade/')){
       if(options.tradeFailure&&tradeAttempts++===0)throw Error('trade 503');
       const b=readFileSync(new URL('../../public/assets/atlas/asia-trade-v1/east-asia.json.gz',import.meta.url)),response=()=>new Response(options.tradeCompressed?b:gunzipSync(b));
@@ -223,7 +230,7 @@ async function setup(query = '', options = {}) {
   };
   window.eval(bundle.outputFiles[0].text);
   await until(() => options.mapFailure ? !q('[data-map-retry]').hidden : root.dataset.mapReady === 'true', 'controller ready');
-  return { window, root, q, requests, rejectPopulation:()=>rejectPopulation?.(Error('population failed late')),resolveTrade:()=>resolveTrade?.(),rejectClimate: () => rejectClimate?.(Error('simulated climate fetch failure')), resolveRice: () => resolveRice?.(),resolveWater:()=>resolveWater?.(),resolveUrban:()=>resolveUrban?.(),resolveFarm:()=>resolveFarm?.(),resolveIndustry:()=>resolveIndustry?.(),resolveHydrology:()=>resolveHydrology?.(),resolveSocial:()=>resolveSocial?.() };
+  return { window, root, q, requests, resolvePresentation:()=>resolvePresentation?.(), rejectPopulation:()=>rejectPopulation?.(Error('population failed late')),resolveTrade:()=>resolveTrade?.(),rejectClimate: () => rejectClimate?.(Error('simulated climate fetch failure')), resolveRice: () => resolveRice?.(),resolveWater:()=>resolveWater?.(),resolveUrban:()=>resolveUrban?.(),resolveFarm:()=>resolveFarm?.(),resolveIndustry:()=>resolveIndustry?.(),resolveHydrology:()=>resolveHydrology?.(),resolveSocial:()=>resolveSocial?.() };
 }
 
 test('貿易の品目を国変更・輸出入切替・国内比較の往復で維持し、復元時にも検証する',async()=>{
@@ -672,5 +679,68 @@ test('農林業の遅い応答は新しい主題を上書きせず、統計の�
   q('[data-farming-topic]').value='wheat';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));
   await until(()=>requests.filter(r=>r.endsWith('wheat.gz')).length===2,'late grid was not retained');resolveFarm();
   await until(()=>q('[data-farming-value]').textContent.includes('123.4'),'new wheat request finished');
+ }finally{await window.happyDOM.close();}
+});
+
+
+test('農畜産物の概要は初期同時表示し、種類切替・詳細図・履歴で地図を作り直さない',async()=>{
+ const {window,q,requests}=await setup('',{farming:true,presentation:true,population:true,industry:true});
+ try{
+  assert.equal(requests.some(r=>r.startsWith('/assets/presentation/')),false);
+  q('[data-field="agriculture"]').click();
+  await until(()=>window.__map.getLayer('asia-farm-overview-crop')?.layout?.visibility==='visible','overview loaded');
+  assert.equal(q('[data-farm-overview-reading]').hidden,false);assert.equal(q('[data-rice-reading]').hidden,true);
+  assert.equal(window.__map.layers['asia-farm-overview-livestock'].layout.visibility,'visible');
+  const livestock=q('[data-farm-kind=livestock]');livestock.checked=false;livestock.dispatchEvent(new window.Event('change'));
+  await until(()=>window.__map.layers['asia-farm-overview-crop'].layout.visibility==='visible','crop retained');
+  assert.equal(window.__map.layers['asia-farm-overview-livestock'].layout.visibility,'none');
+  q('[data-farm-choice=wheat]').click();assert.equal(q('[data-farm-overview-reading]').hidden,true);assert.ok(window.__map.getLayer('asia-farming-wheat'));assert.equal(window.__map.layers['asia-farm-overview-crop'].layout.visibility,'none');
+  q('[data-farm-choice=overview]').click();await until(()=>window.__map.layers['asia-farm-overview-crop'].layout.visibility==='visible','overview restored');assert.equal(window.__maps.length,1);assert.equal(requests.filter(r=>r.startsWith('/assets/presentation/')).length,1);
+  q('[data-field=industry]').click();assert.equal(window.__map.layers['asia-farm-overview-crop'].layout.visibility,'none','old overview hides before detailed geography resolves');await until(()=>window.__map.getLayer('asia-industry-national'),'industry settled');
+ }finally{await window.happyDOM.close();}
+});
+
+test('遅い概要図の応答は移動後の気候図に重ならない',async()=>{
+ const app=await setup('?field=agriculture',{farming:true,presentation:true,delayedPresentation:true});
+ try{await until(()=>app.requests.some(r=>r.startsWith('/assets/presentation/')),'overview requested');app.q('[data-field="natural"]').click();app.resolvePresentation();await delay();await delay();assert.equal(app.window.__map.getLayer('asia-farm-overview-crop'),undefined);assert.equal(app.q('[data-farm-overview-reading]').hidden,true);}finally{app.resolvePresentation();await app.window.happyDOM.close();}
+});
+
+
+test('地図の再読み込み後も農畜産物のチェック状態と表示が一致する',async()=>{
+ const {window,q}=await setup('?field=agriculture',{farming:true,presentation:true});
+ try{
+  await until(()=>window.__map.getLayer('asia-farm-overview-crop')?.layout?.visibility==='visible','overview loaded');
+  const livestock=q('[data-farm-kind=livestock]');livestock.checked=false;livestock.dispatchEvent(new window.Event('change'));
+  await until(()=>window.__map.layers['asia-farm-overview-crop'].layout.visibility==='visible','filter applied');
+  assert.equal(window.__map.layers['asia-farm-overview-livestock'].layout.visibility,'none');
+  window.__map.getCanvas().dispatchEvent(new window.Event('webglcontextlost'));q('[data-map-retry]').click();
+  await until(()=>window.__maps.length===2&&window.__map.getLayer('asia-farm-overview-crop')?.layout?.visibility==='visible','overview rebuilt');
+  assert.equal(livestock.checked,false);assert.equal(window.__map.layers['asia-farm-overview-livestock'].layout.visibility,'none');assert.match(q('[data-grid-reading]').textContent,/家畜の分布は非表示/);
+  livestock.checked=true;livestock.dispatchEvent(new window.Event('change'));await until(()=>window.__map.layers['asia-farm-overview-livestock'].layout.visibility==='visible','filter still works');
+ }finally{await window.happyDOM.close();}
+});
+
+test('概要図の取得失敗は種類切替で回復すると消え、別の地図エラーは保持する',async()=>{
+ for(const sourceError of [false,true]){
+  const {window,q}=await setup('?field=agriculture',{farming:true,presentation:true,presentationFailure:true});
+  try{
+   await until(()=>q('[data-map-state]').textContent.includes('農畜産物の分布図を取得できません'),'overview error');
+   assert.equal(q('[data-map-retry]').hidden,false);
+   if(sourceError)await window.__map.fire('error',{error:Error('image 503')});
+   const livestock=q('[data-farm-kind=livestock]');livestock.checked=false;livestock.dispatchEvent(new window.Event('change'));
+   await until(()=>window.__map.getLayer('asia-farm-overview-crop')?.layout?.visibility==='visible','overview recovered');
+   assert.equal(q('[data-map-state]').hidden,!sourceError);assert.equal(q('[data-map-retry]').hidden,!sourceError);
+   if(sourceError)assert.match(q('[data-map-state]').textContent,/地図の一部を読み込めません/);
+  }finally{await window.happyDOM.close();}
+ }
+});
+
+test('等雨量線の取得失敗は主題を離れると消え、戻ると再取得できる',async()=>{
+ const {window,q}=await setup('?topic=precipitation',{hydrology:true,presentation:true,presentationFailure:true});
+ try{
+  await until(()=>q('[data-map-state]').textContent.includes('等雨量線を取得できません'),'rainfall error');
+  q('[data-natural-topic=climate]').click();assert.equal(q('[data-map-state]').hidden,true);assert.equal(q('[data-map-retry]').hidden,true);
+  q('[data-natural-topic=precipitation]').click();await until(()=>window.__map.getLayer('asia-rainfall-lines')?.layout?.visibility==='visible','rainfall recovered');
+  assert.equal(q('[data-map-state]').hidden,true);assert.equal(q('[data-map-retry]').hidden,true);
  }finally{await window.happyDOM.close();}
 });

@@ -1,0 +1,44 @@
+.asia-atlas [hidden]{display:none!important}
+.asia-atlas .asia-primary-topics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin:6px 0;border:1px solid #c7ccbf}
+.asia-atlas .asia-primary-topics button{border:0;border-right:1px solid #d4d7cc;border-radius:0;background:#f2f1e9;color:#344951;min-height:44px;padding:10px 8px;font-size:15px;font-weight:700}
+.asia-atlas .asia-primary-topics button:last-child{border-right:0}
+.asia-atlas .asia-primary-topics button[aria-pressed=true]{background:#35515d;color:#fff}
+.asia-atlas .asia-secondary-topics,.asia-atlas .asia-industry-sectors,.asia-atlas .asia-industry-subsectors{display:flex;align-items:center;flex-wrap:wrap;gap:4px;border-bottom:1px solid #d7dbcf;padding:5px 0}
+.asia-atlas .asia-secondary-topics button,.asia-atlas .asia-industry-sectors button,.asia-atlas .asia-industry-subsectors button{border:0;border-radius:4px;background:transparent;color:#35515d;min-height:44px;padding:10px 14px;font:700 13px/1.4 sans-serif}
+.asia-atlas .asia-industry-sectors button{font-size:15px}
+.asia-atlas .asia-industry-sectors button[aria-pressed=true]{background:#35515d;color:#fff}
+.asia-atlas .asia-secondary-topics button[aria-pressed=true],.asia-atlas .asia-industry-subsectors button[aria-pressed=true]{background:#e3e9dd;box-shadow:inset 0 -3px #527961;color:#24453d}
+.asia-atlas .asia-industry-guide{display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px 16px;padding:6px 0;font-size:11px;line-height:1.6;color:#344951}
+.asia-atlas .asia-industry-guide strong{font-size:12px}
+.asia-atlas .asia-navigation-note{margin:0 0 8px;padding:8px 12px;background:#f0eee4;border-left:3px solid #ad8060;font-size:12px;line-height:1.7}
+.asia-atlas .asia-population-tabs{display:flex;flex-wrap:wrap;gap:8px;padding:12px 0 8px}
+.asia-atlas .asia-population-tabs button{border:1px solid #b5c6c8;border-radius:4px;background:white;color:#174b5c;font-size:16px;min-height:44px;padding:9px 13px}
+.asia-atlas .asia-population-tabs button[aria-pressed=true]{background:#244e5b;color:#fff}
+.asia-atlas .asia-population-tabs button:disabled{color:#636b6c;background:#f1f1e9}
+.asia-atlas .asia-population-tabs small{font-size:10px;display:block}
+.asia-atlas button:focus-visible{outline:3px solid #a74730;outline-offset:2px}
+.asia-atlas .asia-farm-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:8px 16px;min-height:50px;padding:8px 0}
+.asia-atlas .asia-farm-toolbar label{display:flex;align-items:center;gap:5px;font-weight:700;font-size:14px;min-height:36px}
+.asia-atlas .asia-farm-toolbar input{width:18px;height:18px;accent-color:#35515d}
+.asia-atlas .asia-farm-toolbar button{border:1px solid #b9c9b5;border-radius:4px;padding:8px 12px;min-height:44px;background:#edf1e6;color:#304a42;font-weight:700}
+.asia-atlas .asia-farm-products{display:flex;flex-wrap:wrap;gap:4px 8px}
+.asia-atlas .asia-farm-products button{border:0;background:transparent;display:flex;gap:5px;align-items:center;font-size:12px;color:#344951;min-height:36px;padding:4px 6px}
+.asia-atlas .asia-farm-products i{width:20px;height:12px;border:2px solid var(--product-color);background:color-mix(in srgb,var(--product-color) 22%,transparent)}
+.asia-atlas .asia-farm-products button[data-kind=livestock] i{border-style:dashed;background:transparent}
+.asia-atlas .asia-farm-products button[aria-pressed=true]{background:#e3e9dd;font-weight:700}
+.asia-atlas .asia-farm-overview-reading p{font-size:14px;line-height:1.9}
+.asia-atlas .asia-farm-overview-reading .asia-takeaway{border-left:3px solid #759457;background:#eff2e8;padding:12px;font-weight:700}
+.asia-atlas .asia-map-annotations{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+.asia-atlas .asia-map-annotations svg{position:absolute;inset:0;width:100%;height:100%;overflow:hidden}
+.asia-atlas .asia-map-annotations button{position:absolute;pointer-events:auto;white-space:nowrap;cursor:pointer;color:#244654;font:700 12px/1.3 sans-serif;padding:6px 7px;border:1px solid #778d8e;border-radius:3px;background:#fffdf1f5;box-shadow:0 1px 2px #233a4012}
+.asia-atlas .asia-map-annotations button[aria-pressed=true]{background:#244e5b;color:#fff;border-color:#fff}
+.asia-atlas .asia-map-annotations .asia-climate-code{font-size:13px;padding:3px 5px;background:#ffffffe6;border:0;color:#273c45;text-shadow:0 1px white}
+.asia-atlas .asia-map-annotations .asia-farm-label{border-color:var(--label-color);color:var(--label-color);font-size:12px;padding:3px 4px;background:#fffdf1e8}
+.asia-atlas .asia-map-annotations .asia-rain-label{font-size:11px;padding:2px 4px;border:0;background:#ffffffe8;color:#286487}
+.asia-atlas .asia-map-tools,.asia-atlas .asia-map-retry,.asia-atlas .asia-map-state{z-index:5}
+.asia-atlas .asia-reading-panel .asia-topic-picker{margin:0 0 12px;border:0;border-bottom:1px solid #d4d8cb;padding:0 0 12px;background:transparent;display:grid;gap:6px;min-height:0;font-size:11px}
+.asia-atlas .asia-reading-panel .asia-topic-picker select{width:100%;min-width:0;font-size:12px;background:#fff}
+.asia-atlas .asia-place-reading{margin-top:20px}
+@media(max-width:700px){.asia-atlas .asia-primary-topics button{font-size:13px;padding:8px 3px}.asia-atlas .asia-population-tabs{gap:5px}.asia-atlas .asia-population-tabs button{font-size:13px;padding:8px}.asia-atlas .asia-industry-sectors button{font-size:13px;padding:8px}.asia-atlas .asia-industry-subsectors button{font-size:12px;padding:8px}.asia-atlas .asia-map-annotations button{font-size:11px;padding:4px 5px}.asia-atlas .asia-map-annotations .asia-climate-code{font-size:12px}}
+
+.asia-atlas .atlas-tabs>a[aria-current=page]{background:#243b48;color:white}
