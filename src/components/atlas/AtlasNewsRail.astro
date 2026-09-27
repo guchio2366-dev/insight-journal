@@ -47,7 +47,7 @@ const rendered = await Promise.all(articles.map(async entry => ({entry, ...await
       <time datetime={data.publishedAt}>{data.publishedAt.slice(0,10)}</time>
       <h2 tabindex="-1">{data.title}</h2>
       <p class="atlas-news-deck">{data.summary}</p>
-      {point && <button type="button" data-news-location data-lng={point.longitude} data-lat={point.latitude}>関連地域を地図で見る：{point.label}</button>}
+      {point && region!=='europe' && <button type="button" data-news-location data-lng={point.longitude} data-lat={point.latitude}>関連地域を地図で見る：{point.label}</button>}
       <div class="atlas-news-prose"><Content /></div>
       <h3>出典</h3>
       <ul>{data.sources.map(source=><li id={`source-${source.id}`}><a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}</a> — {source.publisher}</li>)}</ul>
