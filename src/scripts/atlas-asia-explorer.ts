@@ -108,7 +108,8 @@ function start(root:HTMLElement) {
   function choosePopulation(topic:string){if(config.social?.topics.some(t=>t.id===topic))social?.chooseTopic(topic);else navigate({...state,field:'population',topic,detail:null,story:null,city:null,camera:camera()},false);}
   const navigation=createAsiaNavigation(root,config.industry,()=>state,navigate,choosePopulation,selectNaturalTopic,chooseFarm);
   let presentation:ReturnType<typeof createAsiaPresentation>|null=null;
-  function createPresentation(){presentation?.destroy();presentation=config.presentation&&$('[data-map-annotations]')?createAsiaPresentation(root,{presentation:config.presentation,presentationBase:config.presentationBase!,cities:config.cities,population:config.population},()=>state,selectCity,selectUrban,point=>navigate({...state,point,city:null,detail:null,story:null,camera:camera()},false),chooseFarm,message=>status(message,true)):null;}
+  let mainStatus={message:'',error:false},presentationError='';
+  function createPresentation(){presentation?.destroy();presentation=config.presentation&&$('[data-map-annotations]')?createAsiaPresentation(root,{presentation:config.presentation,presentationBase:config.presentationBase!,cities:config.cities,population:config.population},()=>state,selectCity,selectUrban,point=>navigate({...state,point,city:null,detail:null,story:null,camera:camera()},false),chooseFarm,message=>{presentationError=message;renderMapStatus();}):null;}
   createPresentation();
 
   async function fetchAsset<T>(url:string,read:(response:Response)=>Promise<T>):Promise<T> {
@@ -119,8 +120,12 @@ function start(root:HTMLElement) {
   const fetchJson=(url:string)=>fetchAsset(url,response=>response.json());
   const asset=(base:string,name:string)=>base+name.split('/').at(-1);
   function status(message:string,error=false) {
+    mainStatus={message,error};renderMapStatus();
+  }
+  function renderMapStatus() {
+    const message=mainStatus.error?mainStatus.message:presentationError||mainStatus.message;
     const el=$('[data-map-state]');el.textContent=message;el.hidden=!message;
-    $('[data-map-retry]').hidden=!error;
+    $('[data-map-retry]').hidden=!(mainStatus.error||presentationError);
   }
   function syncFieldLinks() {
     $$<HTMLAnchorElement>('.atlas-tabs [data-field]').forEach(a=>{if(a.dataset.field===state.field)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');a.href=writeAsiaAtlasState(new URL(a.href),{...state,field:a.dataset.field as AsiaField,topic:a.dataset.field===state.field?state.topic:null,detail:a.dataset.field===state.field?state.detail:null,story:a.dataset.field===state.field?state.story:null,back:null}).href;});

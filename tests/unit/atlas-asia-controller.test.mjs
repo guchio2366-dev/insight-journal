@@ -173,13 +173,13 @@ async function setup(query = '', options = {}) {
   window.__initialSourceFailure = options.initialSourceFailure;
   const requests = [];
   let rejectClimate, resolveRice,resolveWater,resolveUrban,resolveFarm,resolvePresentation;
-  let statisticsAttempts=0,industryAttempts=0,resolveIndustry;
+  let statisticsAttempts=0,industryAttempts=0,resolveIndustry,presentationAttempts=0;
   let hydrologyAttempts=0,resolveHydrology;
   let socialAttempts=0,resolveSocial;
   let tradeAttempts=0,resolveTrade,rejectPopulation;
   window.fetch = async address => {
     const name = String(address); requests.push(name);
-    if(name.startsWith('/assets/presentation/')){const response=()=>new Response(JSON.stringify({type:'FeatureCollection',features:[]}));if(options.delayedPresentation)return new Promise(resolve=>{resolvePresentation=()=>resolve(response());});return response();}
+    if(name.startsWith('/assets/presentation/')){if(options.presentationFailure&&presentationAttempts++===0)throw Error('presentation 503');const response=()=>new Response(JSON.stringify({type:'FeatureCollection',features:[]}));if(options.delayedPresentation)return new Promise(resolve=>{resolvePresentation=()=>resolve(response());});return response();}
     if(name.startsWith('/assets/trade/')){
       if(options.tradeFailure&&tradeAttempts++===0)throw Error('trade 503');
       const b=readFileSync(new URL('../../public/assets/atlas/asia-trade-v1/east-asia.json.gz',import.meta.url)),response=()=>new Response(options.tradeCompressed?b:gunzipSync(b));
@@ -717,5 +717,30 @@ test('地図の再読み込み後も農畜産物のチェック状態と表示�
   await until(()=>window.__maps.length===2&&window.__map.getLayer('asia-farm-overview-crop')?.layout?.visibility==='visible','overview rebuilt');
   assert.equal(livestock.checked,false);assert.equal(window.__map.layers['asia-farm-overview-livestock'].layout.visibility,'none');assert.match(q('[data-grid-reading]').textContent,/家畜の分布は非表示/);
   livestock.checked=true;livestock.dispatchEvent(new window.Event('change'));await until(()=>window.__map.layers['asia-farm-overview-livestock'].layout.visibility==='visible','filter still works');
+ }finally{await window.happyDOM.close();}
+});
+
+test('概要図の取得失敗は種類切替で回復すると消え、別の地図エラーは保持する',async()=>{
+ for(const sourceError of [false,true]){
+  const {window,q}=await setup('?field=agriculture',{farming:true,presentation:true,presentationFailure:true});
+  try{
+   await until(()=>q('[data-map-state]').textContent.includes('農畜産物の分布図を取得できません'),'overview error');
+   assert.equal(q('[data-map-retry]').hidden,false);
+   if(sourceError)await window.__map.fire('error',{error:Error('image 503')});
+   const livestock=q('[data-farm-kind=livestock]');livestock.checked=false;livestock.dispatchEvent(new window.Event('change'));
+   await until(()=>window.__map.getLayer('asia-farm-overview-crop')?.layout?.visibility==='visible','overview recovered');
+   assert.equal(q('[data-map-state]').hidden,!sourceError);assert.equal(q('[data-map-retry]').hidden,!sourceError);
+   if(sourceError)assert.match(q('[data-map-state]').textContent,/地図の一部を読み込めません/);
+  }finally{await window.happyDOM.close();}
+ }
+});
+
+test('等雨量線の取得失敗は主題を離れると消え、戻ると再取得できる',async()=>{
+ const {window,q}=await setup('?topic=precipitation',{hydrology:true,presentation:true,presentationFailure:true});
+ try{
+  await until(()=>q('[data-map-state]').textContent.includes('等雨量線を取得できません'),'rainfall error');
+  q('[data-natural-topic=climate]').click();assert.equal(q('[data-map-state]').hidden,true);assert.equal(q('[data-map-retry]').hidden,true);
+  q('[data-natural-topic=precipitation]').click();await until(()=>window.__map.getLayer('asia-rainfall-lines')?.layout?.visibility==='visible','rainfall recovered');
+  assert.equal(q('[data-map-state]').hidden,true);assert.equal(q('[data-map-retry]').hidden,true);
  }finally{await window.happyDOM.close();}
 });
