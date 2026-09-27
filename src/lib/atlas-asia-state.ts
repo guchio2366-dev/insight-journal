@@ -1,9 +1,9 @@
 export type AsiaRegionId = 'east-asia' | 'southeast-asia' | 'south-central-asia';
 export type AsiaField = 'natural' | 'agriculture' | 'industry' | 'population';
 export type AsiaCamera = { lng: number; lat: number; zoom: number };
-export type AsiaState = { field: AsiaField; place: string | null; city: string | null; camera: AsiaCamera | null; back: string | null; point?: [number, number] | null; topic?: string | null; detail?: string | null; compare?: string | null };
-export type AsiaStateContext = { countries: readonly string[]; cities: readonly { id: string; countryCode: string }[]; bounds: readonly number[]; fields: readonly AsiaField[]; topics?: Partial<Record<AsiaField, readonly string[]>>; details?: Partial<Record<AsiaField, readonly string[] | ((id:string)=>boolean)>> };
-const ownedKeys = ['field', 'place', 'city', 'lng', 'lat', 'z', 'back', 'region', 'at', 'topic', 'detail', 'compare'];
+export type AsiaState = { field: AsiaField; place: string | null; city: string | null; camera: AsiaCamera | null; back: string | null; point?: [number, number] | null; topic?: string | null; detail?: string | null; compare?: string | null; story?:string|null };
+export type AsiaStateContext = { countries: readonly string[]; cities: readonly { id: string; countryCode: string }[]; bounds: readonly number[]; fields: readonly AsiaField[]; topics?: Partial<Record<AsiaField, readonly string[]>>; details?: Partial<Record<AsiaField, readonly string[] | ((id:string)=>boolean)>>; stories?:Partial<Record<AsiaField,readonly string[]>> };
+const ownedKeys = ['field', 'place', 'city', 'lng', 'lat', 'z', 'back', 'region', 'at', 'topic', 'detail', 'compare','story'];
 export const asiaFieldPaths: Record<AsiaField, string> = { natural: 'nature', agriculture: 'agriculture', industry: 'industry', population: 'population' };
 const routeField = (url: URL): AsiaField | undefined => Object.entries(asiaFieldPaths).find(([, path]) => url.pathname.replace(/\/$/, '').endsWith(`/${path}`))?.[0] as AsiaField | undefined;
 
@@ -29,12 +29,13 @@ export function readAsiaAtlasState(url: URL, context: AsiaStateContext): AsiaSta
   const coordinates=q.get('at')?.split(',');
   const point=coordinates?.length===2&&coordinates.every(v=>v.trim()!==''&&Number.isFinite(Number(v)))?coordinates.map(Number):null;
   const validPoint=point&&point[0]>=context.bounds[0]&&point[0]<=context.bounds[2]&&point[1]>=context.bounds[1]&&point[1]<=context.bounds[3]?point as [number,number]:null;
-  const topic = q.get('topic'), detail = q.get('detail'), compare = q.get('compare');
+  const topic = q.get('topic'), detail = q.get('detail'), compare = q.get('compare'),story=q.get('story');
   const allowedDetails=context.details?.[field];
   const validDetail=detail&&(typeof allowedDetails==='function'?allowedDetails(detail):allowedDetails?.includes(detail));
   return { field, place, city, camera, back, ...(validPoint?{point:validPoint}:{}),
     ...(topic && context.topics?.[field]?.includes(topic) ? {topic} : {}),
     ...(validDetail ? {detail:detail!} : {}),
+    ...(story&&context.stories?.[field]?.includes(story)?{story}:{}),
     ...(compare && compare !== place && context.countries.includes(compare) ? {compare} : {}) };
 }
 
@@ -46,6 +47,7 @@ export function writeAsiaAtlasState(url: URL, state: AsiaState): URL {
   else if (state.field !== 'natural') next.searchParams.set('field', state.field);
   if (state.topic) next.searchParams.set('topic', state.topic);
   if (state.detail) next.searchParams.set('detail', state.detail);
+  if (state.story) next.searchParams.set('story', state.story);
   if (state.compare) next.searchParams.set('compare', state.compare);
   if (state.place) next.searchParams.set('place', state.place);
   if (state.city) next.searchParams.set('city', state.city);
@@ -64,7 +66,7 @@ export function startAsiaComparison(url: URL, state: AsiaState, field: AsiaField
   const approved = new URLSearchParams();
   for (const key of ownedKeys) if (key !== 'back' && from.searchParams.has(key)) approved.set(key, from.searchParams.get(key)!);
   approved.set('field', state.field);
-  const {topic, detail, ...base} = state;
+  const {topic, detail, story, ...base} = state;
   return { ...base, field, back: approved.toString() };
 }
 

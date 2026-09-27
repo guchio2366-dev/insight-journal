@@ -1,5 +1,7 @@
 # Asia detail implementation
 
+The sections below retain the initial design and staged implementation notes. See [2026-09-27 verification and coverage](atlas-asia-parity-verification.md) for the current release, including the social, water, trade and place-reading additions.
+
 Scope: East Asia (6), Southeast Asia (11), South/Central Asia (13). Russia and the Middle East, including Iran, remain context only. Extend the existing North America workspace and shared visual language; do not redesign other regions.
 
 ## Interaction and rendering contract
