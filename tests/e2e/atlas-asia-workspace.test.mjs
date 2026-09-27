@@ -36,7 +36,7 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.equal(q('[data-hydrology-panel]').hidden,true);
       assert.equal(q('[data-hydrology-legend]').hidden,true);
       for(const id of ['precipitation','basins','groundwater'])assert.ok(q(`[data-natural-topic] option[value="${id}"]`));
-      assert.equal(all('[data-industry-topic] optgroup').length,4);
+      assert.equal(all('[data-industry-topic] optgroup').length,5);
       assert.equal(q('[data-population-reading]').hidden,field!=='population');
       assert.equal(q('[data-population-legend]').hidden,field!=='population');
       assert.equal(config.populationBase,'/insight-journal/assets/atlas/asia-population-v1/');
@@ -44,6 +44,9 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.ok(config.social.adminCount>=16);
       assert.ok(Buffer.byteLength(JSON.stringify(config.social))<30000,'social geometry, counts and series stay in lazy assets');
       assert.equal(q('[data-social-panel]').hidden,true);
+      assert.equal(q('[data-trade-panel]').hidden,true);assert.ok(q('[data-trade-chapter]')&&q('[data-farm-trade]'));
+      assert.equal(config.tradeBase,'/insight-journal/assets/atlas/asia-trade-v1/');assert.ok(config.trade.covered>=5);assert.ok(config.industry.topics.some(t=>t.id==='trade-exports'));
+      assert.ok(Buffer.byteLength(JSON.stringify(config.tradeChapters))<8000);
       assert.ok(q('[data-population-topic] option[value="national-age-old"]'));
       assert.ok(q('[data-social-metric]')&&q('[data-social-area]')&&q('[data-social-density]'));
       assert.ok(config.population.cities.length>=12);

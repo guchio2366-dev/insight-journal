@@ -41,7 +41,7 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
   for(const r of records)selectEl.append(option(r.name+' · '+countryName(r.country),r.id));selectEl.value=state.detail??'';
  }
  function render(){
-  const state=getState(),active=state.field==='industry';$('[data-industry-panel]').hidden=!active;$('[data-industry-topics]').hidden=!active;$('[data-industry-legend]').hidden=!active;
+  const state=getState(),active=state.field==='industry'&&current().kind!=='trade';$('[data-industry-panel]').hidden=!active;$('[data-industry-topics]').hidden=state.field!=='industry';$('[data-industry-legend]').hidden=!active;
   if(!active)return;const t=current();$<HTMLSelectElement>('[data-industry-topic]').value=t.id;
   $('[data-map-title]').textContent=t.title;$('[data-map-eyebrow]').textContent='Industry · '+t.year;$('[data-map-period]').textContent=t.unit;
   $('[data-industry-title]').textContent=t.title;$('[data-industry-definition]').textContent=t.note;
@@ -85,9 +85,9 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
  async function show(currentMap:import('maplibre-gl').Map){
   map=currentMap;const seq=++revision;
   for(const id of layerIds)if(map.getLayer(id))map.setLayoutProperty(id,'visibility','none');
-  if(getState().field!=='industry')return;
+  if(getState().field!=='industry'||current().kind==='trade')return;
   try{await load();}catch{render();return;}
-  if(seq!==revision||getState().field!=='industry'||map!==currentMap)return;
+  if(seq!==revision||getState().field!=='industry'||current().kind==='trade'||map!==currentMap)return;
   const t=current(),state=getState(),values=industryValues(t,data!,national!,region.countries),scale=industryScale(t,values);
   if(t.kind==='admin'&&!map.getSource('asia-industry-admin')){map.addSource('asia-industry-admin',{type:'geojson',data:data!.geometry});map.addLayer({id:'asia-industry-admin',type:'fill',source:'asia-industry-admin',paint:{'fill-color':'#d2ceca','fill-opacity':.95}});map.addLayer({id:'asia-industry-admin-lines',type:'line',source:'asia-industry-admin',paint:{'line-color':'#64736f','line-width':.6}});map.addLayer({id:'asia-industry-admin-selected',type:'line',source:'asia-industry-admin',paint:{'line-color':'#a4412e','line-width':2.5}});}
   if((t.kind==='national'||t.kind==='steel')&&!map.getLayer('asia-industry-national'))map.addLayer({id:'asia-industry-national',type:'fill',source:map.getSource('asia-population-geography')?'asia-population-geography':'asia-countries',filter:['in',['get','code'],['literal',region.countries]],paint:{'fill-color':'#d2ceca','fill-opacity':.88}},map.getLayer('asia-population-border')?'asia-population-border':'asia-country-border');
@@ -100,6 +100,6 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
  $('[data-industry-retry]').addEventListener('click',()=>{failed=false;render();});
  $<HTMLSelectElement>('[data-industry-detail]').addEventListener('change',e=>select((e.target as HTMLSelectElement).value));
  $<HTMLInputElement>('[data-industry-search]').addEventListener('input',picker);
- $<HTMLSelectElement>('[data-industry-topic]').addEventListener('change',e=>{const topic=region.topics.find(t=>t.id===(e.target as HTMLSelectElement).value)!;navigate({...getState(),field:'industry',topic:topic.id,detail:null,place:topic.country??getState().place,point:null,city:null,camera:topic.country&&topic.country!==getState().place?null:camera()},!!topic.country&&topic.country!==getState().place);});
+ $<HTMLSelectElement>('[data-industry-topic]').addEventListener('change',e=>{const topic=region.topics.find(t=>t.id===(e.target as HTMLSelectElement).value)!;navigate({...getState(),field:'industry',topic:topic.id,detail:topic.kind==='trade'&&current().kind==='trade'?getState().detail:null,place:topic.country??getState().place,point:null,city:null,camera:topic.country&&topic.country!==getState().place?null:camera()},!!topic.country&&topic.country!==getState().place);});
  return{render,show,select,detail,normalize:(state:AsiaState)=>normalizeIndustryState(region,state,data),hit:(point:any)=>{if(!map)return false;const t=current(),layer=t.kind==='admin'?'asia-industry-admin':t.kind==='power'?'asia-industry-power-hit':null;if(!layer||!map.getLayer(layer))return false;const f=map.queryRenderedFeatures(point,{layers:[layer]})[0];if(f?.properties.id){select(f.properties.id);return true;}return false;}};
 }

@@ -1,5 +1,5 @@
 import type {AsiaState} from '../../lib/atlas-asia-state';
-export type IndustryTopic={id:string;title:string;parent:string;kind:'national'|'admin'|'power'|'steel';unit:string;year:string;source:string;note:string;country?:string;fuel?:string};
+export type IndustryTopic={id:string;title:string;parent:string;kind:'national'|'admin'|'power'|'steel'|'trade';unit:string;year:string;source:string;note:string;country?:string;fuel?:string};
 export type IndustryRegion={data:string;topics:IndustryTopic[];powerCount:number;adminCount:number;countries:string[]};
 export type IndustrySeries={year:string;value:number|null;status?:string}[];
 export type IndustryAdmin={id:string;country:string;name:string;sourceName:string;point?:[number,number];bounds?:number[];series:Record<string,IndustrySeries>;steelMethods?:Record<string,number>;employment2025?:number};
@@ -9,12 +9,13 @@ export type IndustryNational={indicators:{id:string;label:string;unit:string;not
 export const industryColors=['#eaf0dc','#c5d5a6','#92b982','#559078','#1d625e'];
 export const industryFuelNames:Record<string,string>={Coal:'石炭',Gas:'天然ガス',Oil:'石油',Hydro:'水力',Nuclear:'原子力',Solar:'太陽光',Wind:'風力',Biomass:'バイオマス',Waste:'廃棄物',Geothermal:'地熱','Wave and Tidal':'波力・潮汐'};
 export const industryFuelColors:Record<string,string>={Coal:'#4c4846',Gas:'#c07739',Oil:'#84637c',Hydro:'#2076a5',Nuclear:'#ad4c3b',Solar:'#c6a127',Wind:'#638e50',Biomass:'#356e4e',Waste:'#a47f62',Geothermal:'#bf744e','Wave and Tidal':'#346e83'};
-export const industryGroups=['製造業','資源・エネルギー','サービス業','工業・建設と経済全体'];
+export const industryGroups=['製造業','資源・エネルギー','サービス業','工業・建設と経済全体','貿易'];
 export function industryTopic(region:IndustryRegion,state:AsiaState){return region.topics.find(t=>t.id===state.topic)??region.topics[0];}
 export function isIndustryDetailId(id:string){return /^[A-Za-z0-9_-]{1,64}$/.test(id);}
 export function normalizeIndustryState(region:IndustryRegion,state:AsiaState,data?:IndustryData|null):AsiaState{
  if(state.field!=='industry')return state;
  const topic=industryTopic(region,state),candidate=state.detail&&isIndustryDetailId(state.detail)?state.detail:null;
+ if(topic.kind==='trade')return {...state,topic:topic.id,city:null};
  // Keep a bounded URL candidate until the lazy dataset can validate it. No
  // facility names, coordinates or selections are displayed from this ID alone.
  if(!data)return {...state,topic:topic.id,detail:(topic.kind==='power'||topic.kind==='admin'&&(!state.place||state.place===topic.country))?candidate:null,place:topic.country??state.place,city:null};
