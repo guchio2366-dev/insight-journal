@@ -1,0 +1,1265 @@
+{
+  "version": 1,
+  "retrievedAt": "2026-09-26",
+  "sources": [
+    {
+      "name": "dosm-gdp.csv",
+      "url": "https://storage.dosm.gov.my/gdp/gdp_state_real_supply.csv",
+      "bytes": 79740,
+      "sha256": "0478e221408f506167d2cbbd1b0e9a73881ccc7509fe59ff6b7b81cbffaf63cb"
+    },
+    {
+      "name": "dosm-lookup.csv",
+      "url": "https://storage.dosm.gov.my/gdp/gdp_lookup.csv",
+      "bytes": 12680,
+      "sha256": "ca3ba2dcbe5eb455de8d54105091be9a0c9d4d6514e12376812633b7875d09a2"
+    },
+    {
+      "name": "meti-results.html",
+      "url": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+      "bytes": 18338,
+      "sha256": "387c61fd7e5e9c8d9dc70df05415a2f647b1d69cd2591ac9782a7f1e8e68104f"
+    },
+    {
+      "name": "rbi-manufacturing.html",
+      "url": "https://www.rbi.org.in/scripts/PublicationsView.aspx?id=23483",
+      "bytes": 81638,
+      "sha256": "b4bba2cc8564586b76c4dc2086b4ca924b65897109bb9d0255ac168e59a33174"
+    },
+    {
+      "name": "rbi-services.html",
+      "url": "https://www.rbi.org.in/scripts/PublicationsView.aspx?id=23499",
+      "bytes": 82137,
+      "sha256": "fdc2e94c033132a1efcc7e7bf476c4093bf7bf321161343f82d0c4dbcde2fcec"
+    },
+    {
+      "name": "wri-dataset.html",
+      "url": "https://datasets.wri.org/datasets/global-power-plant-database",
+      "bytes": 121610,
+      "sha256": "4077d2d15df0ee81de5e67b572342531aaa18504a70046f95d5f46126fe9c163"
+    },
+    {
+      "name": "wri-power-v130.zip",
+      "url": "https://datasets.wri.org/private-admin/dataset/53623dfd-3df6-4f15-a091-67457cdb571f/resource/66bcdacc-3d0e-46ad-9271-a5a76b1853d2/download/globalpowerplantdatabasev130.zip",
+      "bytes": 4178889,
+      "sha256": "59f3e57312a85eec3c281608e5f3c8f993d8fdad5dde179430dca42f2ac6ce99"
+    },
+    {
+      "name": "ne-admin1-v512.geojson",
+      "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_admin_1_states_provinces.geojson",
+      "bytes": 40726851,
+      "sha256": "22d0e3ad85eb3e27f17cabf8ba2d50e554fbc27a87796ff891d958185da62fb5"
+    },
+    {
+      "name": "meti-2025-industry.xlsx",
+      "url": "https://www.meti.go.jp/statistics/tyo/kkj/xls/2025-k3-data.xlsx",
+      "bytes": 1816469,
+      "sha256": "0b85216c78e30ba53a3297f10ebcfcbc6e9c5d0b4cd382772b54859f25cdc001"
+    },
+    {
+      "name": "meti-2025-regional.xlsx",
+      "url": "https://www.meti.go.jp/statistics/tyo/kkj/xls/2025-k4-data.xlsx",
+      "bytes": 3771881,
+      "sha256": "4971245aed38665c231dadaad59e73de0d4c0c3bceef4be983f8f8bfd9057809"
+    },
+    {
+      "name": "meti-2025-notes.pdf",
+      "url": "https://www.meti.go.jp/statistics/tyo/kkj/pdf/seizo_riyou2025.pdf",
+      "bytes": 295986,
+      "sha256": "5ed7388ab73e6abc103095c64d3ab116d34790f199a62ea06ef4408f3d34239d"
+    },
+    {
+      "name": "gem-china-steel.csv",
+      "url": "https://docs.google.com/spreadsheets/d/1-Y783ohEwMiEG7uCd4Im90FTwoxgDc-LvWJv1J1Eyc4/export?format=csv",
+      "bytes": 2964,
+      "sha256": "8c21255932be9c6a55bcf5afa0c15a31c86e9399efb1714c4ac7fd76a29257e9"
+    },
+    {
+      "name": "gem-countries-steel.csv",
+      "url": "https://docs.google.com/spreadsheets/d/1mOWPPmjCQtoAWUCY0pAChgWskobG0odjdNUHV041_a8/export?format=csv",
+      "bytes": 5271,
+      "sha256": "84a246c9a1bf7125e3a097ba42fe62cbc406fb301148f8b9ad9374ff48a9b43c"
+    },
+    {
+      "name": "gem-countries-steel-status.csv",
+      "url": "https://docs.google.com/spreadsheets/d/10aR9TJC00JKeDrF7kZzD261ex86vq8j72UdcVLkc4nU/export?format=csv",
+      "bytes": 4648,
+      "sha256": "a17c5dca468f0f67cccf0052959d1d593f4c4649010c260dfa4f977d65b43d38"
+    },
+    {
+      "name": "dosm-2025-release.html",
+      "url": "https://www.dosm.gov.my/portal-main/release-content/gross-domestic-product-gdp-by-state-2025",
+      "bytes": 976399,
+      "sha256": "e398bc0b3fbf26e8b8a90e700c30cf41bc50941e28df724794e6aa1376040b84"
+    }
+  ],
+  "national": "national.json.gz",
+  "nationalSha256": "fc4f14244c1670ba78f36ca2bf0eb6b3fab02a1270a15c3f68d450377c5e43bc",
+  "regions": {
+    "east-asia": {
+      "data": "east-asia.json.gz",
+      "topics": [
+        {
+          "id": "manufacturing",
+          "title": "製造業の付加価値（国別）",
+          "parent": "製造業",
+          "kind": "national",
+          "unit": "GDP比 %",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NV.IND.MANF.ZS",
+          "note": "製造業は工業全体の内数です。製造業と工業を足し合わせません。"
+        },
+        {
+          "id": "industry",
+          "title": "工業・建設の付加価値（国別）",
+          "parent": "工業・建設と経済全体",
+          "kind": "national",
+          "unit": "GDP比 %",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NV.IND.TOTL.ZS",
+          "note": "鉱業、製造業、建設、電気・ガス・水道を含みます。"
+        },
+        {
+          "id": "services",
+          "title": "サービス業の付加価値（国別）",
+          "parent": "サービス業",
+          "kind": "national",
+          "unit": "GDP比 %",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NV.SRV.TOTL.ZS",
+          "note": "市場・非市場サービスを含む国全体の値です。都市の値ではありません。"
+        },
+        {
+          "id": "agriculture",
+          "title": "農林水産業の付加価値（国別）",
+          "parent": "工業・建設と経済全体",
+          "kind": "national",
+          "unit": "GDP比 %",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NV.AGR.TOTL.ZS",
+          "note": "産業構成を比べるための農林水産業の国別集計です。"
+        },
+        {
+          "id": "industrial-employment",
+          "title": "工業・建設の就業者（国別）",
+          "parent": "工業・建設と経済全体",
+          "kind": "national",
+          "unit": "全就業者比 %",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/SL.IND.EMPL.ZS",
+          "note": "ILOのモデル推計。付加価値の構成比とは分母も測定対象も異なります。"
+        },
+        {
+          "id": "service-employment",
+          "title": "サービス業の就業者（国別）",
+          "parent": "サービス業",
+          "kind": "national",
+          "unit": "全就業者比 %",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/SL.SRV.EMPL.ZS",
+          "note": "ILOのモデル推計。国ごとの労働市場の違いを含みます。"
+        },
+        {
+          "id": "manufactured-exports",
+          "title": "製造品の輸出（国別）",
+          "parent": "製造業",
+          "kind": "national",
+          "unit": "商品輸出比 %",
+          "year": "2023",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/TX.VAL.MANF.ZS.UN",
+          "note": "サービス輸出を含まない商品輸出の構成比です。"
+        },
+        {
+          "id": "hightech-exports",
+          "title": "ハイテク製品の輸出（国別）",
+          "parent": "製造業",
+          "kind": "national",
+          "unit": "製造品輸出比 %",
+          "year": "2023",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/TX.VAL.TECH.MF.ZS",
+          "note": "商品輸出比やGDP比とは分母が異なります。"
+        },
+        {
+          "id": "resource-rents",
+          "title": "天然資源レント（国別）",
+          "parent": "資源・エネルギー",
+          "kind": "national",
+          "unit": "GDP比 %",
+          "year": "2021",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NY.GDP.TOTL.RT.ZS",
+          "note": "資源の市場価値から生産費用を差し引いた推計。資源産業の売上高ではありません。"
+        },
+        {
+          "id": "real-gdp",
+          "title": "実質GDP（国別）",
+          "parent": "工業・建設と経済全体",
+          "kind": "national",
+          "unit": "2015年基準 米ドル",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NY.GDP.MKTP.KD",
+          "note": "物価変動を除いた規模の時系列。為替換算額や購買力平価ではありません。"
+        },
+        {
+          "id": "gdp-growth",
+          "title": "実質GDP成長率（国別）",
+          "parent": "工業・建設と経済全体",
+          "kind": "national",
+          "unit": "前年比 %",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NY.GDP.MKTP.KD.ZG",
+          "note": "国民経済全体の成長率です。特定企業や産業拠点の成長率ではありません。"
+        },
+        {
+          "id": "jp-00",
+          "title": "日本：製造業計",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-09",
+          "title": "日本：食料品製造業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-10",
+          "title": "日本：飲料・たばこ・飼料製造業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-11",
+          "title": "日本：繊維工業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-12",
+          "title": "日本：木材・木製品製造業（家具を除く）",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-13",
+          "title": "日本：家具・装備品製造業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-14",
+          "title": "日本：パルプ・紙・紙加工品製造業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-15",
+          "title": "日本：印刷・同関連業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-16",
+          "title": "日本：化学工業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-17",
+          "title": "日本：石油製品・石炭製品製造業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-18",
+          "title": "日本：プラスチック製品製造業（別掲を除く）",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-19",
+          "title": "日本：ゴム製品製造業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-20",
+          "title": "日本：なめし革・同製品・毛皮製造業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-21",
+          "title": "日本：窯業・土石製品製造業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-22",
+          "title": "日本：鉄鋼業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-23",
+          "title": "日本：非鉄金属製造業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-24",
+          "title": "日本：金属製品製造業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-25",
+          "title": "日本：はん用機械器具製造業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-26",
+          "title": "日本：生産用機械器具製造業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-27",
+          "title": "日本：業務用機械器具製造業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-28",
+          "title": "日本：電子部品・デバイス・電子回路製造業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-29",
+          "title": "日本：電気機械器具製造業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-30",
+          "title": "日本：情報通信機械器具製造業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-31",
+          "title": "日本：輸送用機械器具製造業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "jp-32",
+          "title": "日本：その他の製造業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万円",
+          "year": "2024",
+          "source": "https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html",
+          "note": "製造品出荷額等です。付加価値とは異なり、原材料や中間製品の価値も含みます。個人経営の事業所は対象外です。",
+          "country": "JPN"
+        },
+        {
+          "id": "cn-steel",
+          "title": "中国：省別の粗鋼生産能力",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "千t/年",
+          "year": "2026年6月版",
+          "source": "https://globalenergymonitor.org/projects/global-iron-steel-tracker/",
+          "note": "稼働区分の設備能力です。実際の生産量ではありません。原則50万t/年以上の鉄鋼拠点が対象で、小規模・圧延のみの施設を含みません。",
+          "country": "CHN"
+        },
+        {
+          "id": "steel-capacity",
+          "title": "粗鋼生産能力（国別）",
+          "parent": "製造業",
+          "kind": "steel",
+          "unit": "千t/年",
+          "year": "2026年6月版",
+          "source": "https://globalenergymonitor.org/projects/global-iron-steel-tracker/",
+          "note": "GEMの対象施設の稼働区分の能力です。未掲載国を0とはしません。実際の生産量・輸出量とは別の指標です。"
+        },
+        {
+          "id": "power-all",
+          "title": "発電施設：すべての電源",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "all"
+        },
+        {
+          "id": "power-coal",
+          "title": "発電施設：石炭",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Coal"
+        },
+        {
+          "id": "power-gas",
+          "title": "発電施設：天然ガス",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Gas"
+        },
+        {
+          "id": "power-oil",
+          "title": "発電施設：石油",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Oil"
+        },
+        {
+          "id": "power-hydro",
+          "title": "発電施設：水力",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Hydro"
+        },
+        {
+          "id": "power-nuclear",
+          "title": "発電施設：原子力",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Nuclear"
+        },
+        {
+          "id": "power-solar",
+          "title": "発電施設：太陽光",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Solar"
+        },
+        {
+          "id": "power-wind",
+          "title": "発電施設：風力",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Wind"
+        },
+        {
+          "id": "power-biomass",
+          "title": "発電施設：バイオマス",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Biomass"
+        },
+        {
+          "id": "power-waste",
+          "title": "発電施設：廃棄物",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Waste"
+        },
+        {
+          "id": "power-geothermal",
+          "title": "発電施設：地熱",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Geothermal"
+        },
+        {
+          "id": "power-wave-and-tidal",
+          "title": "発電施設：波力・潮汐",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Wave and Tidal"
+        }
+      ],
+      "powerCount": 4967,
+      "adminCount": 78,
+      "countries": [
+        "CHN",
+        "JPN",
+        "KOR",
+        "MNG",
+        "PRK",
+        "TWN"
+      ]
+    },
+    "southeast-asia": {
+      "data": "southeast-asia.json.gz",
+      "topics": [
+        {
+          "id": "manufacturing",
+          "title": "製造業の付加価値（国別）",
+          "parent": "製造業",
+          "kind": "national",
+          "unit": "GDP比 %",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NV.IND.MANF.ZS",
+          "note": "製造業は工業全体の内数です。製造業と工業を足し合わせません。"
+        },
+        {
+          "id": "industry",
+          "title": "工業・建設の付加価値（国別）",
+          "parent": "工業・建設と経済全体",
+          "kind": "national",
+          "unit": "GDP比 %",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NV.IND.TOTL.ZS",
+          "note": "鉱業、製造業、建設、電気・ガス・水道を含みます。"
+        },
+        {
+          "id": "services",
+          "title": "サービス業の付加価値（国別）",
+          "parent": "サービス業",
+          "kind": "national",
+          "unit": "GDP比 %",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NV.SRV.TOTL.ZS",
+          "note": "市場・非市場サービスを含む国全体の値です。都市の値ではありません。"
+        },
+        {
+          "id": "agriculture",
+          "title": "農林水産業の付加価値（国別）",
+          "parent": "工業・建設と経済全体",
+          "kind": "national",
+          "unit": "GDP比 %",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NV.AGR.TOTL.ZS",
+          "note": "産業構成を比べるための農林水産業の国別集計です。"
+        },
+        {
+          "id": "industrial-employment",
+          "title": "工業・建設の就業者（国別）",
+          "parent": "工業・建設と経済全体",
+          "kind": "national",
+          "unit": "全就業者比 %",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/SL.IND.EMPL.ZS",
+          "note": "ILOのモデル推計。付加価値の構成比とは分母も測定対象も異なります。"
+        },
+        {
+          "id": "service-employment",
+          "title": "サービス業の就業者（国別）",
+          "parent": "サービス業",
+          "kind": "national",
+          "unit": "全就業者比 %",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/SL.SRV.EMPL.ZS",
+          "note": "ILOのモデル推計。国ごとの労働市場の違いを含みます。"
+        },
+        {
+          "id": "manufactured-exports",
+          "title": "製造品の輸出（国別）",
+          "parent": "製造業",
+          "kind": "national",
+          "unit": "商品輸出比 %",
+          "year": "2023",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/TX.VAL.MANF.ZS.UN",
+          "note": "サービス輸出を含まない商品輸出の構成比です。"
+        },
+        {
+          "id": "hightech-exports",
+          "title": "ハイテク製品の輸出（国別）",
+          "parent": "製造業",
+          "kind": "national",
+          "unit": "製造品輸出比 %",
+          "year": "2023",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/TX.VAL.TECH.MF.ZS",
+          "note": "商品輸出比やGDP比とは分母が異なります。"
+        },
+        {
+          "id": "resource-rents",
+          "title": "天然資源レント（国別）",
+          "parent": "資源・エネルギー",
+          "kind": "national",
+          "unit": "GDP比 %",
+          "year": "2021",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NY.GDP.TOTL.RT.ZS",
+          "note": "資源の市場価値から生産費用を差し引いた推計。資源産業の売上高ではありません。"
+        },
+        {
+          "id": "real-gdp",
+          "title": "実質GDP（国別）",
+          "parent": "工業・建設と経済全体",
+          "kind": "national",
+          "unit": "2015年基準 米ドル",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NY.GDP.MKTP.KD",
+          "note": "物価変動を除いた規模の時系列。為替換算額や購買力平価ではありません。"
+        },
+        {
+          "id": "gdp-growth",
+          "title": "実質GDP成長率（国別）",
+          "parent": "工業・建設と経済全体",
+          "kind": "national",
+          "unit": "前年比 %",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NY.GDP.MKTP.KD.ZG",
+          "note": "国民経済全体の成長率です。特定企業や産業拠点の成長率ではありません。"
+        },
+        {
+          "id": "steel-capacity",
+          "title": "粗鋼生産能力（国別）",
+          "parent": "製造業",
+          "kind": "steel",
+          "unit": "千t/年",
+          "year": "2026年6月版",
+          "source": "https://globalenergymonitor.org/projects/global-iron-steel-tracker/",
+          "note": "GEMの対象施設の稼働区分の能力です。未掲載国を0とはしません。実際の生産量・輸出量とは別の指標です。"
+        },
+        {
+          "id": "my-p3",
+          "title": "マレーシア：州別の製造業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "百万リンギット（2015年価格）",
+          "year": "2025",
+          "source": "https://open.dosm.gov.my/data-catalogue/gdp_state_real_supply",
+          "note": "物価変動を除いた州内の付加価値です。16州・連邦直轄領を別々に表示します。地域に配分されないSupraは地図に着色しません。",
+          "country": "MYS"
+        },
+        {
+          "id": "my-p2",
+          "title": "マレーシア：州別の鉱業",
+          "parent": "資源・エネルギー",
+          "kind": "admin",
+          "unit": "百万リンギット（2015年価格）",
+          "year": "2025",
+          "source": "https://open.dosm.gov.my/data-catalogue/gdp_state_real_supply",
+          "note": "物価変動を除いた州内の付加価値です。16州・連邦直轄領を別々に表示します。地域に配分されないSupraは地図に着色しません。",
+          "country": "MYS"
+        },
+        {
+          "id": "my-p5",
+          "title": "マレーシア：州別のサービス業",
+          "parent": "サービス業",
+          "kind": "admin",
+          "unit": "百万リンギット（2015年価格）",
+          "year": "2025",
+          "source": "https://open.dosm.gov.my/data-catalogue/gdp_state_real_supply",
+          "note": "物価変動を除いた州内の付加価値です。16州・連邦直轄領を別々に表示します。地域に配分されないSupraは地図に着色しません。",
+          "country": "MYS"
+        },
+        {
+          "id": "my-p4",
+          "title": "マレーシア：州別の建設業",
+          "parent": "工業・建設と経済全体",
+          "kind": "admin",
+          "unit": "百万リンギット（2015年価格）",
+          "year": "2025",
+          "source": "https://open.dosm.gov.my/data-catalogue/gdp_state_real_supply",
+          "note": "物価変動を除いた州内の付加価値です。16州・連邦直轄領を別々に表示します。地域に配分されないSupraは地図に着色しません。",
+          "country": "MYS"
+        },
+        {
+          "id": "power-all",
+          "title": "発電施設：すべての電源",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "all"
+        },
+        {
+          "id": "power-coal",
+          "title": "発電施設：石炭",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Coal"
+        },
+        {
+          "id": "power-gas",
+          "title": "発電施設：天然ガス",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Gas"
+        },
+        {
+          "id": "power-oil",
+          "title": "発電施設：石油",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Oil"
+        },
+        {
+          "id": "power-hydro",
+          "title": "発電施設：水力",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Hydro"
+        },
+        {
+          "id": "power-nuclear",
+          "title": "発電施設：原子力",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Nuclear"
+        },
+        {
+          "id": "power-solar",
+          "title": "発電施設：太陽光",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Solar"
+        },
+        {
+          "id": "power-wind",
+          "title": "発電施設：風力",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Wind"
+        },
+        {
+          "id": "power-biomass",
+          "title": "発電施設：バイオマス",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Biomass"
+        },
+        {
+          "id": "power-waste",
+          "title": "発電施設：廃棄物",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Waste"
+        },
+        {
+          "id": "power-geothermal",
+          "title": "発電施設：地熱",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Geothermal"
+        },
+        {
+          "id": "power-wave-and-tidal",
+          "title": "発電施設：波力・潮汐",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Wave and Tidal"
+        }
+      ],
+      "powerCount": 877,
+      "adminCount": 17,
+      "countries": [
+        "BRN",
+        "IDN",
+        "KHM",
+        "LAO",
+        "MMR",
+        "MYS",
+        "PHL",
+        "SGP",
+        "THA",
+        "TLS",
+        "VNM"
+      ]
+    },
+    "south-central-asia": {
+      "data": "south-central-asia.json.gz",
+      "topics": [
+        {
+          "id": "manufacturing",
+          "title": "製造業の付加価値（国別）",
+          "parent": "製造業",
+          "kind": "national",
+          "unit": "GDP比 %",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NV.IND.MANF.ZS",
+          "note": "製造業は工業全体の内数です。製造業と工業を足し合わせません。"
+        },
+        {
+          "id": "industry",
+          "title": "工業・建設の付加価値（国別）",
+          "parent": "工業・建設と経済全体",
+          "kind": "national",
+          "unit": "GDP比 %",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NV.IND.TOTL.ZS",
+          "note": "鉱業、製造業、建設、電気・ガス・水道を含みます。"
+        },
+        {
+          "id": "services",
+          "title": "サービス業の付加価値（国別）",
+          "parent": "サービス業",
+          "kind": "national",
+          "unit": "GDP比 %",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NV.SRV.TOTL.ZS",
+          "note": "市場・非市場サービスを含む国全体の値です。都市の値ではありません。"
+        },
+        {
+          "id": "agriculture",
+          "title": "農林水産業の付加価値（国別）",
+          "parent": "工業・建設と経済全体",
+          "kind": "national",
+          "unit": "GDP比 %",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NV.AGR.TOTL.ZS",
+          "note": "産業構成を比べるための農林水産業の国別集計です。"
+        },
+        {
+          "id": "industrial-employment",
+          "title": "工業・建設の就業者（国別）",
+          "parent": "工業・建設と経済全体",
+          "kind": "national",
+          "unit": "全就業者比 %",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/SL.IND.EMPL.ZS",
+          "note": "ILOのモデル推計。付加価値の構成比とは分母も測定対象も異なります。"
+        },
+        {
+          "id": "service-employment",
+          "title": "サービス業の就業者（国別）",
+          "parent": "サービス業",
+          "kind": "national",
+          "unit": "全就業者比 %",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/SL.SRV.EMPL.ZS",
+          "note": "ILOのモデル推計。国ごとの労働市場の違いを含みます。"
+        },
+        {
+          "id": "manufactured-exports",
+          "title": "製造品の輸出（国別）",
+          "parent": "製造業",
+          "kind": "national",
+          "unit": "商品輸出比 %",
+          "year": "2023",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/TX.VAL.MANF.ZS.UN",
+          "note": "サービス輸出を含まない商品輸出の構成比です。"
+        },
+        {
+          "id": "hightech-exports",
+          "title": "ハイテク製品の輸出（国別）",
+          "parent": "製造業",
+          "kind": "national",
+          "unit": "製造品輸出比 %",
+          "year": "2023",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/TX.VAL.TECH.MF.ZS",
+          "note": "商品輸出比やGDP比とは分母が異なります。"
+        },
+        {
+          "id": "resource-rents",
+          "title": "天然資源レント（国別）",
+          "parent": "資源・エネルギー",
+          "kind": "national",
+          "unit": "GDP比 %",
+          "year": "2021",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NY.GDP.TOTL.RT.ZS",
+          "note": "資源の市場価値から生産費用を差し引いた推計。資源産業の売上高ではありません。"
+        },
+        {
+          "id": "real-gdp",
+          "title": "実質GDP（国別）",
+          "parent": "工業・建設と経済全体",
+          "kind": "national",
+          "unit": "2015年基準 米ドル",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NY.GDP.MKTP.KD",
+          "note": "物価変動を除いた規模の時系列。為替換算額や購買力平価ではありません。"
+        },
+        {
+          "id": "gdp-growth",
+          "title": "実質GDP成長率（国別）",
+          "parent": "工業・建設と経済全体",
+          "kind": "national",
+          "unit": "前年比 %",
+          "year": "2024",
+          "source": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NY.GDP.MKTP.KD.ZG",
+          "note": "国民経済全体の成長率です。特定企業や産業拠点の成長率ではありません。"
+        },
+        {
+          "id": "steel-capacity",
+          "title": "粗鋼生産能力（国別）",
+          "parent": "製造業",
+          "kind": "steel",
+          "unit": "千t/年",
+          "year": "2026年6月版",
+          "source": "https://globalenergymonitor.org/projects/global-iron-steel-tracker/",
+          "note": "GEMの対象施設の稼働区分の能力です。未掲載国を0とはしません。実際の生産量・輸出量とは別の指標です。"
+        },
+        {
+          "id": "in-manufacturing",
+          "title": "インド：州別の製造業",
+          "parent": "製造業",
+          "kind": "admin",
+          "unit": "10万ルピー（2011–12年価格）",
+          "year": "2022–23",
+          "source": "https://www.rbi.org.in/scripts/PublicationsView.aspx?id=23483",
+          "note": "物価変動を除いた州内の付加価値です。年度は4月から翌年3月。比較できる地域が多い2022–23年度を地図に採用しています。",
+          "country": "IND"
+        },
+        {
+          "id": "in-services",
+          "title": "インド：州別のサービス業",
+          "parent": "サービス業",
+          "kind": "admin",
+          "unit": "10万ルピー（2011–12年価格）",
+          "year": "2022–23",
+          "source": "https://www.rbi.org.in/scripts/PublicationsView.aspx?id=23499",
+          "note": "物価変動を除いた州内の付加価値です。年度は4月から翌年3月。比較できる地域が多い2022–23年度を地図に採用しています。",
+          "country": "IND"
+        },
+        {
+          "id": "power-all",
+          "title": "発電施設：すべての電源",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "all"
+        },
+        {
+          "id": "power-coal",
+          "title": "発電施設：石炭",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Coal"
+        },
+        {
+          "id": "power-gas",
+          "title": "発電施設：天然ガス",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Gas"
+        },
+        {
+          "id": "power-oil",
+          "title": "発電施設：石油",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Oil"
+        },
+        {
+          "id": "power-hydro",
+          "title": "発電施設：水力",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Hydro"
+        },
+        {
+          "id": "power-nuclear",
+          "title": "発電施設：原子力",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Nuclear"
+        },
+        {
+          "id": "power-solar",
+          "title": "発電施設：太陽光",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Solar"
+        },
+        {
+          "id": "power-wind",
+          "title": "発電施設：風力",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Wind"
+        },
+        {
+          "id": "power-biomass",
+          "title": "発電施設：バイオマス",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Biomass"
+        },
+        {
+          "id": "power-waste",
+          "title": "発電施設：廃棄物",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Waste"
+        },
+        {
+          "id": "power-geothermal",
+          "title": "発電施設：地熱",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Geothermal"
+        },
+        {
+          "id": "power-wave-and-tidal",
+          "title": "発電施設：波力・潮汐",
+          "parent": "資源・エネルギー",
+          "kind": "power",
+          "unit": "MW（設備容量）",
+          "year": "2021年公開版",
+          "source": "https://datasets.wri.org/datasets/global-power-plant-database",
+          "note": "WRI v1.3.0（2021-06-02公開）の収録施設です。約1MW以上の系統接続施設が中心で、網羅的ではありません。設備容量は発電した電力量ではなく、2026年の稼働状況も示しません。",
+          "fuel": "Wave and Tidal"
+        }
+      ],
+      "powerCount": 1858,
+      "adminCount": 36,
+      "countries": [
+        "AFG",
+        "BGD",
+        "BTN",
+        "IND",
+        "KAZ",
+        "KGZ",
+        "LKA",
+        "MDV",
+        "NPL",
+        "PAK",
+        "TJK",
+        "TKM",
+        "UZB"
+      ]
+    }
+  }
+}

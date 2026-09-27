@@ -1,0 +1,21 @@
+---
+interface Props{active:boolean}
+const {active}=Astro.props;
+---
+<section data-industry-panel hidden={!active}>
+ <p class="eyebrow">Industry · Economy &amp; Energy</p><h2 data-industry-title>産業の分布を読む</h2>
+ <p class="asia-takeaway" data-industry-lead></p><div class="industry-value" data-industry-value aria-live="polite"></div>
+ <p data-industry-definition></p><p class="industry-note" data-industry-coverage></p>
+ <div data-industry-status role="status"></div><button type="button" data-industry-retry hidden>産業のデータを再読み込み</button>
+ <label data-industry-search-label hidden>発電施設を名前で探す<input type="search" data-industry-search placeholder="例：Kashiwazaki" aria-label="発電施設を名前で探す" /></label>
+ <label data-industry-detail-label hidden>地域・施設を選ぶ<select data-industry-detail aria-label="産業の地域・施設を選ぶ"><option value="">選択を解除する</option></select></label>
+ <div data-industry-content></div>
+ <h3>同じ場所で確かめる</h3><p>人口の集まり、地形・水系、農産物の分布を比較できます。分布が重なるだけで、産業の立地原因が確定するわけではありません。</p>
+ <button class="asia-compare" type="button" data-compare="population">同じ場所で人口を比べる<span>→</span></button>
+ <button class="asia-compare" type="button" data-compare="natural">同じ場所で自然環境を比べる<span>→</span></button>
+ <button class="asia-compare" type="button" data-compare="agriculture">同じ場所で農林業を比べる<span>→</span></button>
+ <details><summary>出典・年・単位と収録範囲</summary><div data-industry-method></div><p>国・地域の統計と施設データは別の母集団です。発電施設を足して国全体の設備容量とはしません。国内の行政区域別統計は日本・中国・マレーシア・インドを収録し、ほかの国に隣国の値を補っていません。</p><p>行政界はNatural Earth v5.1.2（縮尺1:1000万）を表示用に簡略化しています。境界は政治的な主張を示すものではなく、色の面積を経済の規模と読むことはできません。</p></details>
+</section>
+<style>
+ [hidden]{display:none!important}h2{font-family:var(--serif);font-size:27px;line-height:1.5;margin:5px 0 14px}h3{font-size:14px;margin:22px 0 8px}p{font-size:13px;line-height:2}.asia-takeaway{font-size:14px}.industry-value{padding:14px;background:#edf2e7;border-left:3px solid #477e6b;font-size:14px;line-height:1.8}.industry-note{font-size:11px;color:var(--ink-soft)}label{display:flex;flex-direction:column;gap:6px;font-size:12px;margin:15px 0}select,input{min-height:44px;width:100%;max-width:100%;font:inherit;border:1px solid #afbcb6;background:#fff;padding:10px;color:#263c40}summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:12px}.asia-compare,[data-industry-retry]{width:100%;min-height:48px;font-size:12px;border:1px solid #315b61;background:#edf3f1;color:#264c52;padding:12px;margin:12px 0;display:flex;align-items:center;justify-content:space-between}:global(.industry-table){width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed;margin:14px 0}:global(.industry-table caption){text-align:left;font-size:12px;font-weight:700;padding:8px 0}:global(.industry-table td),:global(.industry-table th){padding:9px 4px;text-align:right;border-bottom:1px solid #d4dcd4;overflow-wrap:anywhere;vertical-align:top}:global(.industry-table th:first-child),:global(.industry-table td:first-child){text-align:left;width:45%}:global(.industry-table button){min-height:44px;border:0;background:none;text-align:left;text-decoration:underline;color:#285b60;font:inherit;padding:3px 0}:global(.industry-table small){display:block;font-size:10px;font-weight:400}:global(.industry-bar){display:block;height:5px;background:#477e6b;margin-top:5px}:global(.industry-history){display:flex;gap:3px;align-items:end;height:85px;border-bottom:1px solid #a1b2a5;margin:15px 0}:global(.industry-history span){flex:1;background:#477e6b;min-height:1px}button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #a74830;outline-offset:2px}
+</style>
