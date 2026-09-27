@@ -31,6 +31,11 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.ok(config.industry.powerCount>800);
       assert.equal(config.industry.details,undefined,'facility index stays in the lazy dataset');
       assert.ok(Buffer.byteLength(JSON.stringify(config.industry))<30000,'initial industry config contains only topic/file metadata');
+      assert.equal(config.waterBase,'/insight-journal/assets/atlas/asia-water-v1/');
+      assert.ok(Buffer.byteLength(JSON.stringify(config.water))<4000,'water geometry and numeric grids remain lazy assets');
+      assert.equal(q('[data-hydrology-panel]').hidden,true);
+      assert.equal(q('[data-hydrology-legend]').hidden,true);
+      for(const id of ['precipitation','basins','groundwater'])assert.ok(q(`[data-natural-topic] option[value="${id}"]`));
       assert.equal(all('[data-industry-topic] optgroup').length,4);
       assert.equal(q('[data-population-reading]').hidden,field!=='population');
       assert.equal(q('[data-population-legend]').hidden,field!=='population');

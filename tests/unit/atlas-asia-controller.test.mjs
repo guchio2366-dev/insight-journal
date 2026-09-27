@@ -134,14 +134,32 @@ async function setup(query = '', options = {}) {
     root.insertAdjacentHTML('beforeend','<button data-industry-retry></button><input data-industry-search><select data-industry-detail></select><select data-industry-topic>'+conf.industry.topics.map(t=>'<option value="'+t.id+'">'+t.title+'</option>').join('')+'</select>');
     q('.atlas-tabs').insertAdjacentHTML('beforeend','<a data-field="industry" href="/insight-journal/atlas/asia/east-asia/industry/">産業</a>');
   }
+  if(options.hydrology){
+    const conf=JSON.parse(q('[data-asia-config]').textContent);
+    conf.waterBase='/assets/hydrology/';conf.water={basins:'basins.json.gz',groundwater:'groundwater.json.gz',basinCount:1,groundwaterCount:1,coverage:{JPN:{maskCells:1,displayCells:1,basins:1,groundwater:1},CHN:{maskCells:1,displayCells:1,basins:0,groundwater:0}},precipitation:{width:1,height:1,bounds3857:[west,south,east,north],imageCoordinates:[[72,56],[155,56],[155,17],[72,17]],image:'rain.png',grid:'rain.gz'}};
+    q('[data-asia-config]').textContent=JSON.stringify(conf);
+    for(const name of ['panel','legend','legend-title','scale','legend-note','title','lead','value','definition','coverage','status','detail-label','picker-note','content','scene-reading','method']){const e=window.document.createElement('div');e.setAttribute('data-hydrology-'+name,'');root.append(e);}
+    root.insertAdjacentHTML('beforeend','<button data-hydrology-retry></button><select data-hydrology-detail></select><select data-hydrology-scene></select>');
+    for(const topic of ['precipitation','basins','groundwater']){q('[data-natural-topic]').insertAdjacentHTML('beforeend','<option value="'+topic+'">'+topic+'</option>');root.insertAdjacentHTML('beforeend','<button data-hydrology-related="'+topic+'">'+topic+'</button>');}
+  }
   window.__hitCountry=options.hitCountry;
   window.__forceMapFail = options.mapFailure;
   window.__initialSourceFailure = options.initialSourceFailure;
   const requests = [];
   let rejectClimate, resolveRice,resolveWater,resolveUrban,resolveFarm;
   let statisticsAttempts=0,industryAttempts=0,resolveIndustry;
+  let hydrologyAttempts=0,resolveHydrology;
   window.fetch = async address => {
     const name = String(address); requests.push(name);
+    if(name.startsWith('/assets/hydrology/')){
+      if(options.hydrologyFailure&&hydrologyAttempts++===0)throw Error('hydrology 503');
+      const response=()=>{
+        if(name.endsWith('rain.gz')){const b=new Uint8Array(2);new DataView(b.buffer).setInt16(0,options.rainMissing?-32768:options.rainZero?0:1534,true);return new Response(b);}
+        const basin=name.endsWith('basins.json.gz'),id=basin?'b-123':'g-456',geometry={type:'FeatureCollection',features:[{type:'Feature',properties:{id,category:15},geometry:{type:'Polygon',coordinates:[[[138,34],[141,34],[141,38],[138,38],[138,34]]]}}]};
+        const record={id,sourceId:basin?123:456,countries:['JPN'],point:[139.75,35.69],countryPoints:{JPN:[139.75,35.69]},bounds:[138,34,141,38],...(basin?{name:'試験河川を含む集水域',areaKm2:12345.6,subBasins:3,endorheic:false,coastal:!!options.coastal,outsideFrame:true,otherTargetCountries:[],flow:options.coastal?null:{mean:100,lowestMonth:20,highestMonth:300}}:{class:15,aquifer:'major groundwater basin',recharge:'very high (>300)'})};return new Response(JSON.stringify({records:[record],geometry,outlines:geometry}));
+      };
+      if(options.delayedHydrology&&name.endsWith('basins.json.gz'))return new Promise(resolve=>{resolveHydrology=()=>resolve(response());});return response();
+    }
     if(name==='/assets/industry/national.json.gz')return new Response(JSON.stringify({missingNotes:{},indicators:['manufacturing','agriculture','industry','services'].map(id=>({id,label:id,observations:[{countryCode:'JPN',year:2024,value:30},{countryCode:'CHN',year:2024,value:null}]}))}));
     if(name==='/assets/industry/east.json.gz'){
       if(options.industryFailure&&industryAttempts++===0)throw Error('industry 503');
@@ -172,8 +190,34 @@ async function setup(query = '', options = {}) {
   };
   window.eval(bundle.outputFiles[0].text);
   await until(() => options.mapFailure ? !q('[data-map-retry]').hidden : root.dataset.mapReady === 'true', 'controller ready');
-  return { window, root, q, requests, rejectClimate: () => rejectClimate?.(Error('simulated climate fetch failure')), resolveRice: () => resolveRice?.(),resolveWater:()=>resolveWater?.(),resolveUrban:()=>resolveUrban?.(),resolveFarm:()=>resolveFarm?.(),resolveIndustry:()=>resolveIndustry?.() };
+  return { window, root, q, requests, rejectClimate: () => rejectClimate?.(Error('simulated climate fetch failure')), resolveRice: () => resolveRice?.(),resolveWater:()=>resolveWater?.(),resolveUrban:()=>resolveUrban?.(),resolveFarm:()=>resolveFarm?.(),resolveIndustry:()=>resolveIndustry?.(),resolveHydrology:()=>resolveHydrology?.() };
 }
+
+test('水の資料は主題ごとに遅延取得し、降水量0と欠測を区別する',async()=>{
+ const initial=await setup('',{hydrology:true});try{await delay();assert.equal(initial.requests.some(r=>r.startsWith('/assets/hydrology/')),false);}finally{await initial.window.happyDOM.close();}
+ for(const missing of [false,true]){
+  const {window,q,requests}=await setup('?topic=precipitation&detail=w-tokyo',{hydrology:true,rainZero:!missing,rainMissing:missing});
+  try{await until(()=>!q('[data-hydrology-value]').textContent.includes('読み込'),'rain loaded');assert.match(q('[data-hydrology-value]').textContent,missing?/データなし/:/年降水量 0 mm\/年/);assert.equal(new URL(window.location.href).searchParams.get('at'),'139.75000,35.69000');assert.equal(requests.some(r=>r.includes('basins')||r.includes('groundwater')||r.startsWith('/assets/climate/')),false);}finally{await window.happyDOM.close();}
+ }
+});
+test('流域の直接URLと比較復帰は国・地点・流域を保持し、地下水へ同じ地点を渡す',async()=>{
+ const {window,q,requests}=await setup('?topic=basins&detail=b-123',{hydrology:true,population:true});
+ try{
+  await until(()=>q('[data-hydrology-value]').textContent.includes('12,345.6')&&window.__map.getLayer('asia-hydrology-basins'),'basin ready');
+  assert.equal(new URL(window.location.href).searchParams.get('place'),'JPN');assert.match(q('[data-hydrology-content]').textContent,/1971–2000/);assert.match(q('[data-hydrology-content]').textContent,/表示枠の外/);
+  q('[data-compare="agriculture"]').click();await delay();assert.equal(window.__map.layers['asia-hydrology-basins'].layout.visibility,'none');q('[data-comparison-back]').click();
+  await until(()=>q('[data-hydrology-value]').textContent.includes('12,345.6'),'basin return');assert.equal(new URL(window.location.href).searchParams.get('detail'),'b-123');
+  q('[data-hydrology-related="groundwater"]').click();await until(()=>q('[data-hydrology-value]').textContent.includes('300超'),'groundwater');assert.equal(new URL(window.location.href).searchParams.get('at'),'139.75000,35.69000');
+  assert.equal(requests.filter(r=>r.endsWith('basins.json.gz')).length,1);assert.equal(window.__map.layers['asia-hydrology-basins'].layout.visibility,'none');
+  window.__map.getCanvas().dispatchEvent(new window.Event('webglcontextlost'));q('[data-map-retry]').click();await until(()=>window.__maps.length===2&&window.__map.getLayer('asia-hydrology-groundwater'),'water rebuilt');assert.equal(requests.filter(r=>r.endsWith('groundwater.json.gz')).length,1);
+ }finally{await window.happyDOM.close();}
+});
+test('水の遅い応答・失敗・未掲載・沿岸区分を混同しない',async()=>{
+ const late=await setup('?topic=basins',{hydrology:true,delayedHydrology:true});
+ try{late.q('[data-field="agriculture"]').click();late.resolveHydrology();await delay();await delay();assert.equal(late.q('[data-hydrology-panel]').hidden,true);assert.equal(late.window.__map.getLayer('asia-hydrology-basins'),undefined);}finally{late.resolveHydrology();await late.window.happyDOM.close();}
+ const {window,q,requests}=await setup('?topic=basins&detail=b-123',{hydrology:true,hydrologyFailure:true,coastal:true});
+ try{await until(()=>!q('[data-hydrology-retry]').hidden,'retry shown');const count=requests.length;await delay();assert.equal(requests.length,count,'no automatic retry loop');q('[data-hydrology-retry]').click();await until(()=>q('[data-hydrology-content]').textContent.includes('複数の出口'),'retry complete');assert.equal(q('[data-hydrology-content] table'),null);q('[data-country-select]').value='CHN';q('[data-country-select]').dispatchEvent(new window.Event('change'));assert.match(q('[data-hydrology-coverage]').textContent,/区域がありません/);assert.equal(new URL(window.location.href).searchParams.has('detail'),false);}finally{await window.happyDOM.close();}
+});
 
 test('他分野の初期表示は産業データを読み込まず、未検証URLは読み込み後に照合する',async()=>{
  const initial=await setup('',{industry:true});
