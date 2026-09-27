@@ -1,8 +1,14 @@
 ---
 import { climateSummary } from '../../lib/atlas-europe-view';
+import mapLabels from '../../data/atlas/europe/map-labels.json';
+import legend from '../../data/atlas/europe/climate-legend.json';
 interface Props { city: { id: string; name: string; stationName: string; coordinates: number[]; elevationM: number; sourceUrl: string; months: { month: number; temperature: number | null; precipitation: number | null }[] }; country: string; }
 const { city, country } = Astro.props;
 const summary = climateSummary(city.months);
+const code=(mapLabels.cityClasses as Record<string,string>)[city.id];
+const classification=legend.find(l=>l.code===code);
+const coldMonth=city.months.find(m=>m.temperature!==null&&m.temperature===summary.coldest)?.month;
+const warmMonth=city.months.find(m=>m.temperature!==null&&m.temperature===summary.warmest)?.month;
 const x = (i: number) => 42 + i * 23;
 const yT = (v: number) => 170 - (v + 10) / 50 * 140;
 const yP = (v: number) => 170 - v / 350 * 140;
@@ -15,8 +21,7 @@ const line = city.months.map((m, i) => {
 }).join(' ');
 ---
 <article class="eu-city-card" data-city-card={city.id} hidden={city.id !== 'london'} aria-labelledby={`city-${city.id}`}>
-  <div class="eu-card-heading"><div><p class="eu-kicker">{country}</p><h3 id={`city-${city.id}`}>{city.name}</h3></div><span class="eu-period">1991–2020</span></div>
-  <p class="eu-station">観測地点：{city.stationName.split(' -')[0]} · 標高 {city.elevationM} m</p>
+  <div class="eu-card-heading"><h3 id={`city-${city.id}`}>{city.name}</h3><span class="eu-period">{country}</span></div>
   <svg class="eu-climate-chart" viewBox="0 0 338 203" role="img" aria-labelledby={`chart-${city.id}`}>
     <title id={`chart-${city.id}`}>{city.name}の月別雨温図。青い棒は降水量、赤い線は気温。詳細な数値は下の表で確認できます。</title>
     <text x="12" y="15" class="eu-axis-precip">mm</text><text x="302" y="15" class="eu-axis-temp">℃</text>
@@ -27,8 +32,9 @@ const line = city.months.map((m, i) => {
     {city.months.filter(m => m.temperature !== null).map(m => <circle cx={x(m.month - 1)} cy={yT(m.temperature!)} r="2" fill="#b54731" />)}
   </svg>
   <p class="eu-chart-key"><span>■ 降水量（左軸）</span><span>━ 気温（右軸）</span></p>
+  {classification&&<h4 class="eu-city-climate"><strong>{classification.code}</strong> {classification.name}</h4>}
+  <p class="eu-reading">{summary.coldest !== null ? `最も寒い${coldMonth}月は${summary.coldest.toFixed(1)}℃、最も暖かい${warmMonth}月は${summary.warmest!.toFixed(1)}℃です。` : '月別気温に欠測があります。'}{summary.annualRain === null ? '降水量に欠測があります。欠測の月は棒を描かず、年間合計も算出していません。' : '青い棒から、雨の多い季節と少ない季節を読み取れます。'}</p>
   <dl class="eu-summary"><div><dt>年間降水量</dt><dd>{summary.annualRain === null ? '算出できません' : `${Math.round(summary.annualRain).toLocaleString('ja-JP')} mm`}</dd></div><div><dt>気温の年較差</dt><dd>{summary.range === null ? '算出できません' : `${summary.range.toFixed(1)} ℃`}</dd></div></dl>
-  <p class="eu-reading">{summary.coldest !== null ? `最寒月は${summary.coldest.toFixed(1)}℃、最暖月は${summary.warmest!.toFixed(1)}℃。` : '月別気温に欠測があります。'}{summary.annualRain === null ? '降水量に欠測があり、棒と年間合計を表示していません。' : 'ほかの地点と同じ軸で、雨の季節と冬の寒さを比べられます。'}</p>
-  <details class="eu-months"><summary>月別の数値・観測地点を見る</summary><p>北緯 {city.coordinates[1]}° / {city.coordinates[0] < 0 ? '西経' : '東経'} {Math.abs(city.coordinates[0])}°。都市名に近い観測地点を表示しています。</p><table><caption>{city.name}の平年値</caption><thead><tr><th>月</th><th>気温 ℃</th><th>降水量 mm</th></tr></thead><tbody>{city.months.map(m => <tr><th scope="row">{m.month}月</th><td>{n(m.temperature)}</td><td>{n(m.precipitation)}</td></tr>)}</tbody></table></details>
+  <details class="eu-months"><summary>月別の数値・観測地点を見る</summary><p>観測地点：{city.stationName.split(' -')[0]} · 標高 {city.elevationM} m。北緯 {city.coordinates[1]}° / {city.coordinates[0] < 0 ? '西経' : '東経'} {Math.abs(city.coordinates[0])}°。</p><p>気候記号は観測地点の位置にある地図の格子を参照しています。雨温図から分類を計算したものではありません。</p><table><caption>{city.name}の平年値（1991〜2020年）</caption><thead><tr><th>月</th><th>気温 ℃</th><th>降水量 mm</th></tr></thead><tbody>{city.months.map(m => <tr><th scope="row">{m.month}月</th><td>{n(m.temperature)}</td><td>{n(m.precipitation)}</td></tr>)}</tbody></table></details>
   <a class="eu-source-link" href={city.sourceUrl} target="_blank" rel="noreferrer">気象庁の原データ ↗</a>
 </article>

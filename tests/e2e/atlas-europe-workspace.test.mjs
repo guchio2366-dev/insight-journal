@@ -16,13 +16,20 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
     assert.ok(doc.querySelector('.eu-read-panel,.europe-side'));
     if (!field) assert.equal(doc.querySelectorAll('[data-europe-country-select] option').length,46);
     if (field) {
-      assert.equal(doc.querySelectorAll('[data-eu-country]').length, 1);
-      assert.ok(doc.querySelector('.eu-read-panel [data-eu-country]'));
-      assert.ok(doc.querySelector('.eu-read-panel [data-eu-subject]'));
+      assert.equal(doc.querySelectorAll('.eu-read-panel select').length, 0);
+      assert.equal(doc.querySelector('[data-eu-country]'),null);
+      assert.equal(doc.querySelector('[data-eu-subject]'),null);
+      assert.ok(doc.querySelector('.eu-map-stage [data-eu-annotations]'));
       assert.ok(doc.querySelector('.eu-map-stage [data-eu-zoom="in"]'));
       assert.equal(doc.querySelectorAll('[data-eu-config]').length, 1);
     }
-    if (field==='nature/') assert.deepEqual([...doc.querySelectorAll('[data-eu-topic-field="nature"] button')].map(b=>b.textContent), ['気候区分','水資源','地形','標高（等高線）']);
+    if (field==='nature/') {
+      assert.deepEqual([...doc.querySelectorAll('[data-eu-topic-field="nature"] button')].map(b=>b.textContent), ['気候区分','水資源','地形','標高（等高線）']);
+      assert.equal(doc.querySelector('[data-eu-climate-reader] h2').textContent,'都市の雨温図');
+      assert.ok(doc.querySelector('[data-city-card="london"] .eu-climate-chart'));
+      assert.equal(doc.querySelector('[data-eu-compare]'),null);
+      assert.ok(doc.querySelectorAll('[data-eu-static-codes] text').length>=15);
+    }
     if (field==='industry/') assert.ok(doc.querySelector('.eu-map-stage [data-eu-topic-field="industry"]'));
     if (field==='population/') {
       const planned=[...doc.querySelectorAll('[data-eu-topic-field="population"] button:disabled')];
