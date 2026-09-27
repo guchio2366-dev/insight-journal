@@ -1,0 +1,21 @@
+<section data-trade-panel hidden>
+ <p class="eyebrow">Trade · 2023</p><h2 data-trade-title>商品貿易を読む</h2>
+ <p data-trade-lead></p><div class="trade-value" data-trade-value aria-live="polite"></div>
+ <label>比較する商品区分<select data-trade-chapter aria-label="貿易の商品区分"><option value="TOTAL">全商品</option></select></label>
+ <p data-trade-coverage></p><p data-trade-status role="status"></p><button data-trade-retry type="button" hidden>貿易データを再読み込み</button>
+ <div data-trade-content></div>
+ <button class="asia-compare" data-trade-domestic type="button">同じ場所で国内の産業を比べる<span>→</span></button>
+ <button class="asia-compare" data-compare="agriculture" type="button">同じ場所で農林業を比べる<span>→</span></button>
+ <button class="asia-compare" data-compare="population" type="button">同じ場所で人口を比べる<span>→</span></button>
+ <details><summary>単位・対象・資料を確認する</summary>
+ <p>2023年のUN Comtradeの商品貿易です。金額は当年の米ドルで、表の百万米ドルは100万米ドルを1とする単位です。物価変化を除いた実質値ではありません。輸出には再輸出、輸入には再輸入が含まれます。</p>
+ <p>通常、輸出は本船渡し価格（FOB）、輸入は運賃・保険料込みの価格（CIF）で、国による例外があります。値は資料のprimaryValueを使用します。輸出入の差を、そのまま国内の利益や付加価値とは読めません。</p>
+ <p>商品は国際的な分類HSの2桁の章で比較します。章の中には原材料・部品・完成品が含まれます。輸出先は記録上の相手先で、海路・陸路や経由地を示すものではありません。</p>
+ <p>米国の区分842にはプエルトリコと米領バージン諸島が含まれます。台湾の位置に表示する区分490については、選択時の注記を確認してください。</p>
+ <p><a href="https://comtradeplus.un.org/">UN Comtrade</a> · <a href="https://uncomtrade.org/docs/trade-valuation/">価格の定義</a> · <a href="https://uncomtrade.org/docs/distinction-between-exports-and-re-exports-imports-and-re-imports/">再輸出・再輸入</a> · <a href="https://uncomtrade.org/docs/taiwan-province-of-china-trade-data/">台湾等の報告区分</a> · <a href="https://uncomtrade.org/docs/policy-on-use-and-re-dissemination/">利用条件</a></p>
+ <p>2026年9月27日に公開APIから取得し、Insight Journalが対象を抽出・日本語の分類名を要約しています。別年や相手国の値で欠測を補いません。全商品・商品章と、農林業の4桁品目は階層が重なるため、足し合わせません。</p>
+ </details>
+</section>
+<style>
+ [hidden]{display:none!important}h2{font-family:var(--serif);font-size:27px;line-height:1.5;margin:5px 0 14px}p{font-size:13px;line-height:2}.trade-value{padding:14px;background:#edf2e7;border-left:3px solid #477e6b;font-size:14px;line-height:1.8}label{display:flex;flex-direction:column;gap:6px;font-size:12px;margin:15px 0}select{min-height:44px;width:100%;max-width:100%;font:inherit;border:1px solid #afbcb6;background:white;padding:10px;color:#263c40}.asia-compare,[data-trade-retry]{width:100%;min-height:48px;font-size:12px;border:1px solid #315b61;background:#edf3f1;color:#264c52;padding:12px;margin:12px 0;display:flex;align-items:center;justify-content:space-between}summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:12px}:global(.trade-table){width:100%;border-collapse:collapse;table-layout:fixed;font-size:11px;margin:14px 0}:global(.trade-table caption){font-size:12px;text-align:left;font-weight:700;padding:8px 0}:global(.trade-table td),:global(.trade-table th){padding:9px 4px;vertical-align:top;border-bottom:1px solid #d4dcd4;text-align:right;overflow-wrap:anywhere}:global(.trade-table th:first-child){text-align:left;width:43%}:global(.trade-table button){min-height:44px;border:0;background:none;color:#285b60;text-decoration:underline;font:inherit;text-align:left;padding:3px 0}:global(.trade-table i){display:block;height:5px;background:#477e6b;margin-top:5px}:global(.trade-table small){display:block;font-size:10px}:global(.trade-note){font-size:11px;line-height:1.9;color:var(--ink-soft)}:global([data-farm-trade]){border-top:1px solid var(--rule);padding-top:12px;margin-top:22px}:global([data-farm-trade] button){min-height:44px;max-width:100%;font:inherit}:global([data-farm-trade] p){font-size:12px;line-height:1.9}:global([data-trade-content]>p button){display:block;width:100%;min-height:44px;margin:5px 0;padding:8px;text-align:left;border:1px solid #bdccc3;background:#f5f7f0;color:#285b60;font:inherit}button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #a74830;outline-offset:2px}
+</style>

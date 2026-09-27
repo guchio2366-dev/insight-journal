@@ -103,6 +103,9 @@ async function setup(query = '', options = {}) {
   const window = new Window({ url: 'https://example.com/insight-journal/atlas/asia/east-asia/' + query,
     settings: { disableCSSFileLoading: true, disableJavaScriptFileLoading: true, enableJavaScriptEvaluation: true, suppressInsecureJavaScriptEnvironmentWarning: true } });
   window.document.body.innerHTML = fixture();
+  // happy-dom omits the browser's native gzip stream API. Use Node's same
+  // standard implementation so compressed and HTTP-decoded delivery both run.
+  window.DecompressionStream=DecompressionStream;
   const q = selector => window.document.querySelector(selector), root = q('[data-asia-atlas]');
   const [west, south] = mercatorPoint(72, 17), [east, north] = mercatorPoint(155, 56);
   q('[data-asia-config]').textContent = JSON.stringify({
@@ -150,6 +153,14 @@ async function setup(query = '', options = {}) {
     root.insertAdjacentHTML('beforeend','<button data-social-retry></button><select data-social-metric></select><select data-social-area></select><button data-social-density></button>');
     for(const g of conf.social.groups){const t=conf.social.topics.find(t=>t.group===g.id&&(t.key==='old'||t.key==='rate'||t.key==='foreign'));q('[data-population-topic]').insertAdjacentHTML('beforeend','<option value="'+t.id+'">'+g.label+'</option>');}
   }
+  if(options.trade){
+    const conf=JSON.parse(q('[data-asia-config]').textContent),manifest=JSON.parse(readFileSync(new URL('../../public/assets/atlas/asia-trade-v1/manifest.json',import.meta.url),'utf8'));
+    conf.trade=manifest.regions['east-asia'];conf.tradeBase='/assets/trade/';conf.tradeChapters=manifest.chapters;
+    for(const id of ['trade-exports','trade-imports']){conf.industry.topics.push({id,kind:'trade',title:id,year:'2023',unit:'百万米ドル'});q('[data-industry-topic]').insertAdjacentHTML('beforeend','<option value="'+id+'">'+id+'</option>');}
+    q('[data-asia-config]').textContent=JSON.stringify(conf);
+    for(const name of ['panel','legend','legend-title','scale','legend-note','title','lead','value','coverage','status','content']){const e=window.document.createElement('div');e.setAttribute('data-trade-'+name,'');root.append(e);}
+    root.insertAdjacentHTML('beforeend','<button data-trade-retry></button><button data-trade-domestic></button><select data-trade-chapter><option value="TOTAL">全商品</option></select><div data-farm-trade></div>');
+  }
   window.__hitCountry=options.hitCountry;
   window.__forceMapFail = options.mapFailure;
   window.__initialSourceFailure = options.initialSourceFailure;
@@ -158,8 +169,14 @@ async function setup(query = '', options = {}) {
   let statisticsAttempts=0,industryAttempts=0,resolveIndustry;
   let hydrologyAttempts=0,resolveHydrology;
   let socialAttempts=0,resolveSocial;
+  let tradeAttempts=0,resolveTrade,rejectPopulation;
   window.fetch = async address => {
     const name = String(address); requests.push(name);
+    if(name.startsWith('/assets/trade/')){
+      if(options.tradeFailure&&tradeAttempts++===0)throw Error('trade 503');
+      const b=readFileSync(new URL('../../public/assets/atlas/asia-trade-v1/east-asia.json.gz',import.meta.url)),response=()=>new Response(options.tradeCompressed?b:gunzipSync(b));
+      if(options.delayedTrade)return new Promise(resolve=>{resolveTrade=()=>resolve(response());});return response();
+    }
     if(name.startsWith('/assets/social/')){
       if(options.socialFailure&&socialAttempts++===0)throw Error('social 503');
       const bytes=readFileSync(new URL('../../public/assets/atlas/asia-social-v1/east-asia.json.gz',import.meta.url));
@@ -198,15 +215,39 @@ async function setup(query = '', options = {}) {
     }
     if(name==='/assets/population/geography.json')return new Response(JSON.stringify({type:'FeatureCollection',features:[]}));
     if(name==='/assets/population/urban.json'){const response=()=>new Response(JSON.stringify({type:'FeatureCollection',features:[]}));if(options.delayedUrban)return new Promise(resolve=>{resolveUrban=()=>resolve(response());});return response();}
-    if(name.startsWith('/assets/population/')){if(options.populationFailure)throw Error('population 503');const data=new Uint8Array(4);new DataView(data.buffer).setFloat32(0,options.populationZero?0:name.endsWith('tokyo.gz')?15000:1200,true);return new Response(data);}
+    if(name.startsWith('/assets/population/')){if(options.delayedPopulationFailure)return new Promise((_,reject)=>{rejectPopulation=reject;});if(options.populationFailure)throw Error('population 503');const data=new Uint8Array(4);new DataView(data.buffer).setFloat32(0,options.populationZero?0:name.endsWith('tokyo.gz')?15000:1200,true);return new Response(data);}
     if(name==='/assets/physical/elevation.gz'){const data=new Uint8Array(2);new DataView(data.buffer).setInt16(0,-75,true);return new Response(data);}
     if(name==='/assets/physical/water.json'){const response=()=>new Response(JSON.stringify({type:'FeatureCollection',features:[]}));if(options.delayedWater)return new Promise(resolve=>{resolveWater=()=>resolve(response());});return response();}
     throw Error('Unexpected fetch: ' + name);
   };
   window.eval(bundle.outputFiles[0].text);
   await until(() => options.mapFailure ? !q('[data-map-retry]').hidden : root.dataset.mapReady === 'true', 'controller ready');
-  return { window, root, q, requests, rejectClimate: () => rejectClimate?.(Error('simulated climate fetch failure')), resolveRice: () => resolveRice?.(),resolveWater:()=>resolveWater?.(),resolveUrban:()=>resolveUrban?.(),resolveFarm:()=>resolveFarm?.(),resolveIndustry:()=>resolveIndustry?.(),resolveHydrology:()=>resolveHydrology?.(),resolveSocial:()=>resolveSocial?.() };
+  return { window, root, q, requests, rejectPopulation:()=>rejectPopulation?.(Error('population failed late')),resolveTrade:()=>resolveTrade?.(),rejectClimate: () => rejectClimate?.(Error('simulated climate fetch failure')), resolveRice: () => resolveRice?.(),resolveWater:()=>resolveWater?.(),resolveUrban:()=>resolveUrban?.(),resolveFarm:()=>resolveFarm?.(),resolveIndustry:()=>resolveIndustry?.(),resolveHydrology:()=>resolveHydrology?.(),resolveSocial:()=>resolveSocial?.() };
 }
+
+test('貿易の品目を国変更・輸出入切替・国内比較の往復で維持し、復元時にも検証する',async()=>{
+ const {window,q,requests}=await setup('?field=industry&topic=trade-exports&detail=t-85&place=JPN&at=137,35&lng=135&lat=35&z=6',{trade:true,industry:true,population:true});
+ try{
+  await until(()=>q('[data-trade-value]').textContent.includes('101,')&&window.__map.getLayer('asia-trade'),'trade loaded');
+  assert.equal(q('[data-industry-panel]').hidden,true);assert.equal(requests.some(r=>r.startsWith('/assets/industry/')),false);
+  q('[data-country-select]').value='CHN';q('[data-country-select]').dispatchEvent(new window.Event('change'));assert.equal(new URL(window.location.href).searchParams.get('detail'),'t-85');assert.match(q('[data-trade-value]').textContent,/中国/);
+  q('[data-industry-topic]').value='trade-imports';q('[data-industry-topic]').dispatchEvent(new window.Event('change'));assert.equal(new URL(window.location.href).searchParams.get('detail'),'t-85');assert.match(q('[data-trade-title]').textContent,/輸入/);
+  const saved=new URL(window.location.href);q('[data-trade-domestic]').click();await until(()=>!q('[data-industry-panel]').hidden,'domestic opened');assert.equal(window.__map.layers['asia-trade'].layout.visibility,'none');
+  q('[data-comparison-back]').click();await until(()=>!q('[data-trade-panel]').hidden,'trade returned');for(const key of ['topic','detail','place','lng','lat','z'])assert.equal(new URL(window.location.href).searchParams.get(key),saved.searchParams.get(key));
+  window.__map.getCanvas().dispatchEvent(new window.Event('webglcontextlost'));q('[data-map-retry]').click();await until(()=>window.__maps.length===2&&window.__map.getLayer('asia-trade'),'map rebuild');assert.equal(requests.filter(r=>r.startsWith('/assets/trade/')).length,1);
+ }finally{await window.happyDOM.close();}
+ const invalid=await setup('?field=industry&topic=trade-exports&detail=t-77',{trade:true,industry:true});try{assert.equal(new URL(invalid.window.location.href).searchParams.has('detail'),false);}finally{await invalid.window.happyDOM.close();}
+});
+test('貿易は必要時だけ取得し、遅い応答・失敗・gzip・農林業の戻り先を扱う',async()=>{
+ const initial=await setup('',{trade:true,industry:true});try{assert.equal(initial.requests.some(r=>r.startsWith('/assets/trade/')),false);}finally{await initial.window.happyDOM.close();}
+ const late=await setup('?field=industry&topic=trade-exports',{trade:true,industry:true,delayedTrade:true});try{late.q('[data-field="natural"]').click();late.resolveTrade();await delay();await delay();assert.equal(late.q('[data-trade-panel]').hidden,true);assert.equal(late.window.__map.getLayer('asia-trade'),undefined);}finally{late.resolveTrade();await late.window.happyDOM.close();}
+ const failed=await setup('?field=industry&topic=trade-exports&place=JPN',{trade:true,industry:true,tradeFailure:true,tradeCompressed:true});try{await until(()=>!failed.q('[data-trade-retry]').hidden,'trade failure');const count=failed.requests.length;await delay();assert.equal(failed.requests.length,count);failed.q('[data-trade-retry]').click();await until(()=>failed.q('[data-trade-value]').textContent.includes('717,219.22'),'manual trade retry');}finally{await failed.window.happyDOM.close();}
+ const farm=await setup('?field=agriculture&topic=wheat&place=CHN&at=116,35',{trade:true,industry:true,farming:true});try{await until(()=>farm.q('[data-farm-trade]').textContent.includes('HS 1001'),'farm trade');const b=[...farm.q('[data-farm-trade]').querySelectorAll('button')].find(b=>b.textContent.includes('章ごと'));b.click();assert.equal(new URL(farm.window.location.href).searchParams.get('detail'),'t-10');farm.q('[data-comparison-back]').click();assert.equal(new URL(farm.window.location.href).searchParams.get('topic'),'wheat');assert.deepEqual(new URL(farm.window.location.href).searchParams.get('at').split(',').map(Number),[116,35]);assert.equal(farm.requests.filter(r=>r.startsWith('/assets/trade/')).length,1);await until(()=>farm.q('[data-farming-value]').textContent.includes('123.4'),'farm grid returned');}finally{await farm.window.happyDOM.close();}
+});
+test('密度の遅い失敗が、切り替え後の年齢・社会地図をエラー表示にしない',async()=>{
+ const {window,q,rejectPopulation}=await setup('?field=population&topic=density&place=JPN&at=139,36',{social:true,population:true,delayedPopulationFailure:true});
+ try{q('[data-population-topic]').value='jp-age-old';q('[data-population-topic]').dispatchEvent(new window.Event('change'));await until(()=>q('[data-social-content]').textContent.includes('28.68'),'social loaded');rejectPopulation();await delay();assert.equal(q('[data-map-state]').hidden,true);assert.equal(q('[data-map-retry]').hidden,true);assert.equal(q('[data-social-panel]').hidden,false);}finally{rejectPopulation();await window.happyDOM.close();}
+});
 
 test('社会統計は必要時にだけ読み込み、密度との比較から区域・主題・地点へ戻る',async()=>{
  const initial=await setup('',{social:true,population:true});try{await delay();assert.equal(initial.requests.some(r=>r.startsWith('/assets/social/')),false);}finally{await initial.window.happyDOM.close();}
