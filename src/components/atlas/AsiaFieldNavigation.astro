@@ -1,0 +1,22 @@
+---
+import {industrySectors,industrySubsectors,naturalGroups,populationGroups,populationGroup} from '../../data/atlas/asia-navigation';
+import {socialDefault,type SocialRegion} from '../../data/atlas/asia-social';
+import {asiaPopulationTopics} from '../../data/atlas/asia-population';
+import type {AsiaField} from '../../lib/atlas-asia-state';
+const {initialField,social}=Astro.props as {initialField:AsiaField;social:SocialRegion};
+const populationTopics=[...asiaPopulationTopics,...social.groups.map(g=>({id:socialDefault(g.id),label:g.label}))];
+---
+<div class="asia-natural-controls" data-natural-topics hidden={initialField!=='natural'}>
+ <nav class="asia-primary-topics" aria-label="自然環境の主題">{naturalGroups.map(t=><button type="button" data-natural-group={t.id} aria-pressed={t.id==='climate'}>{t.label}</button>)}</nav>
+ <nav class="asia-secondary-topics" data-water-topics hidden aria-label="水資源の種類">{[{id:'water',label:'河川・湖'},{id:'basins',label:'流域'},{id:'groundwater',label:'地下水と涵養'}].map(t=><button type="button" data-natural-topic={t.id} aria-pressed="false">{t.label}</button>)}</nav>
+</div>
+<div class="asia-population-navigation" data-population-topics hidden={initialField!=='population'}>
+ <nav class="asia-population-tabs" aria-label="人口の主題">{populationGroups.map(g=>{const available=populationTopics.filter(t=>populationGroup(t.id)===g.id);return <button type="button" data-population-group={g.id} data-topic={available[0]?.id} aria-pressed={g.id==='distribution'} disabled={!available.length} title={!available.length?'この地域の比較可能な資料は未収録です':undefined}>{g.label}{!available.length&&<small>未収録</small>}</button>})}</nav>
+ {populationGroups.map(g=><nav class="asia-secondary-topics" data-population-subgroup={g.id} hidden={g.id!=='distribution'} aria-label={`${g.label}の資料`}>{populationTopics.filter(t=>populationGroup(t.id)===g.id).map(t=><button type="button" data-population-choice={t.id} aria-pressed={t.id==='density'}>{t.label}</button>)}</nav>)}
+</div>
+<div class="asia-industry-navigation" data-industry-navigation hidden={initialField!=='industry'}>
+ <nav class="asia-industry-sectors" aria-label="産業の業種">{industrySectors.map(s=><button type="button" data-industry-sector={s.id} aria-pressed={s.id==='manufacturing'}>{s.label}</button>)}</nav>
+ {industrySectors.filter(s=>s.id!=='all').map(s=><nav class="asia-industry-subsectors" data-industry-subsectors={s.id} aria-label={`${s.label}の分野`} hidden={s.id!=='manufacturing'}>{[{id:'all',label:'全分野'},...industrySubsectors[s.id]].map(sub=><button type="button" data-industry-subsector={sub.id} data-sector={s.id} aria-pressed={sub.id==='all'}>{sub.label}</button>)}</nav>)}
+ <div class="asia-industry-guide"><strong data-industry-navigation-label>製造業 ／ 全分野</strong><span>地図に表示中：<span data-industry-current-map></span></span></div>
+ <p class="asia-navigation-note" data-industry-navigation-note hidden role="status"></p>
+</div>

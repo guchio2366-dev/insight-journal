@@ -7,7 +7,7 @@ export type BasinRecord=WaterRecord&{name:string;rivers:string[];areaKm2:number;
 export type GroundwaterRecord=WaterRecord&{class:number;aquifer:string;recharge:string};
 export type WaterDataset={records:(BasinRecord|GroundwaterRecord)[];geometry:any;outlines?:any};
 export const waterTopics:Record<WaterTopic,{title:string;period:string;unit:string;definition:string;source:string}>={
- precipitation:{title:'年降水量の分布',period:'1981–2010年の推計平年値',unit:'mm/年',definition:'雨と雪などを水の深さに換算した年間降水量です。CHELSAの約1km原本を、投影座標上で約4km間隔の表示格子に平均化しています。雨温図の1991–2020年とは期間・資料が異なります。',source:'https://www.chelsa-climate.org/datasets/chelsa_bioclim'},
+ precipitation:{title:'等雨量線で年降水量を読む',period:'1981–2010年の推計平年値',unit:'mm/年',definition:'雨と雪などを水の深さに換算した年間降水量です。CHELSAの約1km原本を、投影座標上で約4km間隔の表示格子に平均化しています。雨温図の1991–2020年とは期間・資料が異なります。',source:'https://www.chelsa-climate.org/datasets/chelsa_bioclim'},
  basins:{title:'水が集まる範囲：流域',period:'BasinATLAS v1.0・地形に基づく範囲',unit:'km²',definition:'地表の水が同じ出口へ向かう範囲を示します。内陸で途切れる水系を仮想的に接続せず、元資料の小流域を出口ごとに結合しています。沿岸の小流域群は、複数の川をまとめた区分です。',source:'https://www.hydrosheds.org/hydroatlas'},
  groundwater:{title:'地下水を蓄える地層と涵養',period:'WHYMAP 2008年の概観図・2026年取得',unit:'涵養量の区分（mm/年）',definition:'帯水層は、水を含み、水を通す地層です。涵養は地表から地下水へ補給される水を指します。色は広域の地質条件と涵養量の区分で、現在の貯水量・水位・安全に取水できる量ではありません。',source:'https://www.bgr.bund.de/whymap/EN/Maps_Data/maps_data_node_en.html'},
 };
