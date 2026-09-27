@@ -1,0 +1,15 @@
+<section data-social-panel hidden>
+ <p class="eyebrow">Population · Age &amp; society</p><h2 data-social-title></h2>
+ <p class="asia-takeaway" data-social-lead></p><div class="social-value" data-social-value aria-live="polite"></div>
+ <p data-social-definition></p><p data-social-coverage></p><p data-social-status role="status"></p><button type="button" data-social-retry hidden>人口統計を再読み込み</button>
+ <label data-social-metric-label>比較する区分<select data-social-metric aria-label="人口統計の区分を選ぶ"></select></label>
+ <label data-social-area-label>国内の区域<select data-social-area aria-label="人口統計の区域を選ぶ"><option value="">地図か一覧から選ぶ</option></select></label>
+ <div data-social-content></div>
+ <button class="asia-compare" type="button" data-social-density>同じ場所で人口の分布を比べる<span>→</span></button>
+ <button class="asia-compare" type="button" data-compare="industry">同じ場所で主要産業を比べる<span>→</span></button>
+ <button class="asia-compare" type="button" data-compare="natural">同じ場所で自然環境を比べる<span>→</span></button>
+ <details><summary>資料・分母・収録範囲を確認する</summary><div data-social-method></div><p>灰色はこの主題で未掲載の範囲で、人口や該当者が0という意味ではありません。地域の構成比を、その場所にいる個人の属性や考え方へ当てはめることはできません。</p></details>
+</section>
+<style>
+ [hidden]{display:none!important}section{min-width:0}h2{font-family:var(--serif);font-size:26px;line-height:1.5}p,:global([data-social-content] p),:global([data-social-method] p){font-size:13px;line-height:1.9;overflow-wrap:anywhere}.asia-takeaway{font-size:14px}.social-value{padding:14px;background:#edf3ef;border-left:3px solid #438d8d;font-size:14px;line-height:1.8}label{display:grid;gap:6px;font-size:12px;margin:14px 0;min-width:0}select{width:100%;min-width:0;max-width:100%;min-height:44px;font:inherit;background:#fff;border:1px solid var(--rule);padding:8px}button,summary{min-height:44px;cursor:pointer}summary{display:flex;align-items:center;font-size:12px}.asia-compare{display:flex;justify-content:space-between;align-items:center;width:100%;min-height:48px;background:#edf3f1;border:1px solid #315b61;color:#264c52;padding:12px;font-size:12px;margin:15px 0}button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #a74830;outline-offset:2px}:global([data-social-content] h3){font-size:15px;margin:20px 0 8px}:global([data-social-content] table){width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums;table-layout:fixed}:global([data-social-content] caption){text-align:left;margin:14px 0 8px}:global([data-social-content] th),:global([data-social-content] td){padding:8px 4px;border-bottom:1px solid var(--rule);overflow-wrap:anywhere;text-align:right}:global([data-social-content] th:first-child){text-align:left;width:60%}:global([data-social-content] button){min-height:44px;border:0;background:transparent;color:#285d6b;text-align:left;font:inherit;cursor:pointer;text-decoration:underline}:global([data-social-content] summary){min-height:44px;cursor:pointer;font-size:12px}:global([data-social-content] a),:global([data-social-method] a){font-size:12px;overflow-wrap:anywhere}:global([data-social-content] .social-bar){height:4px;display:block;background:#438d8d;margin-top:4px;margin-left:auto}
+</style>

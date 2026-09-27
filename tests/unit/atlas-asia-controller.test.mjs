@@ -7,6 +7,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { dirname, extname, resolve } from 'node:path';
 import { asiaClimateClasses } from '../../src/data/atlas/asia-climate-definitions.ts';
 import { mercatorPoint } from '../../src/lib/atlas-asia-state.ts';
+import {gunzipSync} from 'node:zlib';
 
 // Replace the renderer/worker boundary only. The production controller, URL
 // codec, selection logic and fetch handling run without a prebuilt dist/ tree.
@@ -26,7 +27,7 @@ export class Map {
  on(name,handler){(this.events[name]??=[]).push(handler);return this}
  once(name,handler){this.on(name,handler);if(name==='load'&&!window.__deferMapLoad)queueMicrotask(async()=>{if(window.__initialSourceFailure)await this.fire('error',{error:Error('initial image 503')});await this.fire('load')});return this}
  async fire(name,event={}){for(const fn of this.events[name]??[])await fn(event)}
- getSource(id){return this.sources[id]}getLayer(id){return this.layers[id]}
+ getSource(id){return this.sources[id]}getLayer(id){return this.layers[id]}getStyle(){return this.removed?undefined:this.options.style}
  addSource(id,source){this.sources[id]=source}addLayer(layer){this.layers[layer.id]=layer}
  removeLayer(id){delete this.layers[id]}removeSource(id){delete this.sources[id]}
  setLayoutProperty(id,key,value){this.layers[id].layout??={};this.layers[id].layout[key]=value}
@@ -35,7 +36,7 @@ export class Map {
  setFilter(id,filter){this.layers[id].filter=filter}getCenter(){return this.center}getZoom(){return this.zoom}getCanvas(){return this.canvas}
  jumpTo(options){this.center={lng:options.center[0],lat:options.center[1]};this.zoom=options.zoom??this.zoom}
  fitBounds(bounds){this.center={lng:(bounds[0][0]+bounds[1][0])/2,lat:(bounds[0][1]+bounds[1][1])/2}}
- queryRenderedFeatures(){return [{properties:{code:window.__hitCountry??'CHN'}}]}
+ queryRenderedFeatures(point,options){if(options?.layers?.includes('asia-social-admin')&&window.__hitSocialId)return [{properties:{id:window.__hitSocialId}}];return [{properties:{code:window.__hitCountry??'CHN'}}]}
  zoomIn(){this.zoom++}zoomOut(){this.zoom--}resize(){this.resizeCount++}
  remove(){this.removed=true;this.canvas.remove()}
 }
@@ -142,6 +143,13 @@ async function setup(query = '', options = {}) {
     root.insertAdjacentHTML('beforeend','<button data-hydrology-retry></button><select data-hydrology-detail></select><select data-hydrology-scene></select>');
     for(const topic of ['precipitation','basins','groundwater']){q('[data-natural-topic]').insertAdjacentHTML('beforeend','<option value="'+topic+'">'+topic+'</option>');root.insertAdjacentHTML('beforeend','<button data-hydrology-related="'+topic+'">'+topic+'</button>');}
   }
+  if(options.social){
+    const conf=JSON.parse(q('[data-asia-config]').textContent),manifest=JSON.parse(readFileSync(new URL('../../public/assets/atlas/asia-social-v1/manifest.json',import.meta.url),'utf8'));
+    conf.social=manifest.regions['east-asia'];conf.socialBase='/assets/social/';q('[data-asia-config]').textContent=JSON.stringify(conf);
+    for(const name of ['panel','legend','legend-title','scale','legend-note','title','lead','value','definition','coverage','status','metric-label','area-label','content','method']){const e=window.document.createElement('div');e.setAttribute('data-social-'+name,'');root.append(e);}
+    root.insertAdjacentHTML('beforeend','<button data-social-retry></button><select data-social-metric></select><select data-social-area></select><button data-social-density></button>');
+    for(const g of conf.social.groups){const t=conf.social.topics.find(t=>t.group===g.id&&(t.key==='old'||t.key==='rate'||t.key==='foreign'));q('[data-population-topic]').insertAdjacentHTML('beforeend','<option value="'+t.id+'">'+g.label+'</option>');}
+  }
   window.__hitCountry=options.hitCountry;
   window.__forceMapFail = options.mapFailure;
   window.__initialSourceFailure = options.initialSourceFailure;
@@ -149,8 +157,15 @@ async function setup(query = '', options = {}) {
   let rejectClimate, resolveRice,resolveWater,resolveUrban,resolveFarm;
   let statisticsAttempts=0,industryAttempts=0,resolveIndustry;
   let hydrologyAttempts=0,resolveHydrology;
+  let socialAttempts=0,resolveSocial;
   window.fetch = async address => {
     const name = String(address); requests.push(name);
+    if(name.startsWith('/assets/social/')){
+      if(options.socialFailure&&socialAttempts++===0)throw Error('social 503');
+      const bytes=readFileSync(new URL('../../public/assets/atlas/asia-social-v1/east-asia.json.gz',import.meta.url));
+      const response=()=>new Response(options.socialCompressed?bytes:gunzipSync(bytes));
+      if(options.delayedSocial)return new Promise(resolve=>{resolveSocial=()=>resolve(response());});return response();
+    }
     if(name.startsWith('/assets/hydrology/')){
       if(options.hydrologyFailure&&hydrologyAttempts++===0)throw Error('hydrology 503');
       const response=()=>{
@@ -190,8 +205,30 @@ async function setup(query = '', options = {}) {
   };
   window.eval(bundle.outputFiles[0].text);
   await until(() => options.mapFailure ? !q('[data-map-retry]').hidden : root.dataset.mapReady === 'true', 'controller ready');
-  return { window, root, q, requests, rejectClimate: () => rejectClimate?.(Error('simulated climate fetch failure')), resolveRice: () => resolveRice?.(),resolveWater:()=>resolveWater?.(),resolveUrban:()=>resolveUrban?.(),resolveFarm:()=>resolveFarm?.(),resolveIndustry:()=>resolveIndustry?.(),resolveHydrology:()=>resolveHydrology?.() };
+  return { window, root, q, requests, rejectClimate: () => rejectClimate?.(Error('simulated climate fetch failure')), resolveRice: () => resolveRice?.(),resolveWater:()=>resolveWater?.(),resolveUrban:()=>resolveUrban?.(),resolveFarm:()=>resolveFarm?.(),resolveIndustry:()=>resolveIndustry?.(),resolveHydrology:()=>resolveHydrology?.(),resolveSocial:()=>resolveSocial?.() };
 }
+
+test('社会統計は必要時にだけ読み込み、密度との比較から区域・主題・地点へ戻る',async()=>{
+ const initial=await setup('',{social:true,population:true});try{await delay();assert.equal(initial.requests.some(r=>r.startsWith('/assets/social/')),false);}finally{await initial.window.happyDOM.close();}
+ const {window,q,requests}=await setup('?field=population&topic=jp-age-old&detail=s-JP-05',{social:true,population:true});
+ try{
+  await until(()=>q('[data-social-value]').textContent.includes('37.6'),'Akita loaded');assert.equal(q('[data-population-reading]').hidden,true);assert.equal(requests.some(r=>r.endsWith('density.gz')),false);
+  const before=new URL(window.location.href);assert.equal(before.searchParams.get('place'),'JPN');
+  q('[data-social-density]').click();await delay();assert.equal(q('[data-social-panel]').hidden,true);assert.equal(window.__map.layers['asia-social-admin'].layout.visibility,'none');
+  q('[data-comparison-back]').click();await until(()=>!q('[data-social-panel]').hidden,'return');const after=new URL(window.location.href);
+  for(const key of ['topic','detail','place','at'])assert.equal(after.searchParams.get(key),before.searchParams.get(key));
+  q('[data-social-metric]').value='jp-age-young';q('[data-social-metric]').dispatchEvent(new window.Event('change'));assert.equal(new URL(window.location.href).searchParams.get('detail'),'s-JP-05');assert.equal(q('[data-population-topic]').value,'jp-age-old');
+  window.__map.getCanvas().dispatchEvent(new window.Event('webglcontextlost'));q('[data-map-retry]').click();await until(()=>window.__maps.length===2&&window.__map.getLayer('asia-social-admin'),'social map rebuilt');assert.equal(requests.filter(r=>r.startsWith('/assets/social/')).length,1);
+  q('[data-country-select]').value='CHN';q('[data-country-select]').dispatchEvent(new window.Event('change'));assert.equal(new URL(window.location.href).searchParams.get('topic'),'national-age-old');assert.equal(new URL(window.location.href).searchParams.has('detail'),false);
+ }finally{await window.happyDOM.close();}
+});
+
+test('社会統計の遅い応答・取得失敗・手動再読込でも別主題を書き換えない',async()=>{
+ const late=await setup('?field=population&topic=jp-age-old',{social:true,population:true,delayedSocial:true});
+ try{late.q('[data-field="natural"]').click();late.resolveSocial();await delay();await delay();assert.equal(late.q('[data-social-panel]').hidden,true);assert.equal(late.window.__map.getLayer('asia-social-admin'),undefined);}finally{late.resolveSocial();await late.window.happyDOM.close();}
+ const {window,q,requests}=await setup('?field=population&topic=jp-age-old&detail=s-JP-13',{social:true,population:true,socialFailure:true});
+ try{await until(()=>!q('[data-social-retry]').hidden,'social retry');const count=requests.length;await delay();assert.equal(requests.length,count);q('[data-social-retry]').click();await until(()=>q('[data-social-value]').textContent.includes('22.82'),'retry succeeded');assert.match(q('[data-social-content]').textContent,/14,047,594/);}finally{await window.happyDOM.close();}
+});
 
 test('水の資料は主題ごとに遅延取得し、降水量0と欠測を区別する',async()=>{
  const initial=await setup('',{hydrology:true});try{await delay();assert.equal(initial.requests.some(r=>r.startsWith('/assets/hydrology/')),false);}finally{await initial.window.happyDOM.close();}
