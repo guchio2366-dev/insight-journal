@@ -1,6 +1,6 @@
 import type {AsiaState} from '../../lib/atlas-asia-state';
 export type IndustryTopic={id:string;title:string;parent:string;kind:'national'|'admin'|'power'|'steel';unit:string;year:string;source:string;note:string;country?:string;fuel?:string};
-export type IndustryRegion={data:string;topics:IndustryTopic[];details:[string,string,string][];powerCount:number;adminCount:number;countries:string[]};
+export type IndustryRegion={data:string;topics:IndustryTopic[];powerCount:number;adminCount:number;countries:string[]};
 export type IndustrySeries={year:string;value:number|null;status?:string}[];
 export type IndustryAdmin={id:string;country:string;name:string;sourceName:string;point?:[number,number];bounds?:number[];series:Record<string,IndustrySeries>;steelMethods?:Record<string,number>;employment2025?:number};
 export type IndustryPlant={id:string;country:string;name:string;point:[number,number];fuel:string;capacity:number|null;capacityYear:string|null;source:string;url:string;locationSource:string;generation:IndustrySeries;generationSource:string};
@@ -11,11 +11,16 @@ export const industryFuelNames:Record<string,string>={Coal:'石炭',Gas:'天然�
 export const industryFuelColors:Record<string,string>={Coal:'#4c4846',Gas:'#c07739',Oil:'#84637c',Hydro:'#2076a5',Nuclear:'#ad4c3b',Solar:'#c6a127',Wind:'#638e50',Biomass:'#356e4e',Waste:'#a47f62',Geothermal:'#bf744e','Wave and Tidal':'#346e83'};
 export const industryGroups=['製造業','資源・エネルギー','サービス業','工業・建設と経済全体'];
 export function industryTopic(region:IndustryRegion,state:AsiaState){return region.topics.find(t=>t.id===state.topic)??region.topics[0];}
-export function normalizeIndustryState(region:IndustryRegion,state:AsiaState):AsiaState{
+export function isIndustryDetailId(id:string){return /^[A-Za-z0-9_-]{1,64}$/.test(id);}
+export function normalizeIndustryState(region:IndustryRegion,state:AsiaState,data?:IndustryData|null):AsiaState{
  if(state.field!=='industry')return state;
- const topic=industryTopic(region,state),detail=region.details.find(d=>d[0]===state.detail);
- const valid=detail&&(!state.place||detail[1]===state.place)&&(topic.kind==='admin'?detail[2]==='admin'&&detail[1]===topic.country:topic.kind==='power'&&detail[2]!=='admin'&&(topic.fuel==='all'||topic.fuel===detail[2]));
- return {...state,topic:topic.id,detail:valid?detail[0]:null,place:valid?detail[1]:topic.country??state.place,city:null};
+ const topic=industryTopic(region,state),candidate=state.detail&&isIndustryDetailId(state.detail)?state.detail:null;
+ // Keep a bounded URL candidate until the lazy dataset can validate it. No
+ // facility names, coordinates or selections are displayed from this ID alone.
+ if(!data)return {...state,topic:topic.id,detail:(topic.kind==='power'||topic.kind==='admin'&&(!state.place||state.place===topic.country))?candidate:null,place:topic.country??state.place,city:null};
+ const detail=topic.kind==='admin'?data.admin.find(d=>d.id===candidate&&d.point&&d.country===topic.country):topic.kind==='power'?data.power.find(d=>d.id===candidate&&(topic.fuel==='all'||topic.fuel===d.fuel)):undefined;
+ const valid=detail&&(!state.place||detail.country===state.place);
+ return {...state,topic:topic.id,detail:valid?detail.id:null,place:valid?detail.country:topic.country??state.place,city:null};
 }
 export function industryValues(topic:IndustryTopic,data:IndustryData,national:IndustryNational,countries:string[]):{id:string;value:number|null}[]{
  if(topic.kind==='admin')return data.admin.filter(a=>a.country===topic.country).map(a=>({id:a.id,value:a.series[topic.id]?.find(v=>v.year===topic.year)?.value??null}));

@@ -126,8 +126,7 @@ manifest={'version':1,'retrievedAt':'2026-09-26','sources':downloads,'national':
 for region,codes in regions.items():
  localadmin=[x for x in admin if x['country'] in codes];localpower=[x for x in power if x['country'] in codes]
  localtopics=[x for x in topics if not x.get('country') or x['country'] in codes]
- index=[[x['id'],x['country'],'admin'] for x in localadmin if x.get('point')]+[[x['id'],x['country'],x['fuel']] for x in localpower]
  file=write(region+'.json',{'admin':localadmin,'power':localpower,'steel':{c:v for c,v in steel.items() if c in codes},'geometry':{'type':'FeatureCollection','features':[f for f in features if f['properties']['country'] in codes]}})
- manifest['regions'][region]={'data':file,'topics':localtopics,'details':index,'powerCount':len(localpower),'adminCount':len(localadmin),'countries':codes}
+ manifest['regions'][region]={'data':file,'topics':localtopics,'powerCount':len(localpower),'adminCount':len(localadmin),'countries':codes}
  print(region,len(localadmin),len(localpower),(out/file).stat().st_size)
 (out/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')

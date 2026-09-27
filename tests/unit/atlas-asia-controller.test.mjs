@@ -127,7 +127,7 @@ async function setup(query = '', options = {}) {
   if(options.industry){
     const conf=JSON.parse(q('[data-asia-config]').textContent);
     const topic=(id,title,kind,country,fuel)=>({id,title,kind,country,fuel,parent:'製造業',unit:'百万円',year:'2024',source:'https://example.org/source',note:'公表値の定義です。'});
-    conf.industryBase='/assets/industry/';conf.industry={data:'east.json.gz',countries:['JPN','CHN','MNG'],topics:[topic('manufacturing','製造業','national'),topic('jp-00','日本製造業','admin','JPN'),topic('power-all','発電所','power',null,'all'),topic('power-coal','石炭','power',null,'Coal')],details:[['JP-23','JPN','admin'],['p1','JPN','Hydro'],['p2','CHN','Coal']]};
+    conf.industryBase='/assets/industry/';conf.industry={data:'east.json.gz',countries:['JPN','CHN','MNG'],topics:[topic('manufacturing','製造業','national'),topic('jp-00','日本製造業','admin','JPN'),topic('power-all','発電所','power',null,'all'),topic('power-coal','石炭','power',null,'Coal')]};
     q('[data-asia-config]').textContent=JSON.stringify(conf);
     const fields=['industry-panel','industry-topics','industry-legend','industry-title','industry-lead','industry-value','industry-definition','industry-coverage','industry-status','industry-content','industry-method','industry-legend-title','industry-scale','industry-legend-note','industry-search-label','industry-detail-label'];
     for(const name of fields){const e=window.document.createElement('div');e.setAttribute('data-'+name,'');root.append(e);}
@@ -174,6 +174,20 @@ async function setup(query = '', options = {}) {
   await until(() => options.mapFailure ? !q('[data-map-retry]').hidden : root.dataset.mapReady === 'true', 'controller ready');
   return { window, root, q, requests, rejectClimate: () => rejectClimate?.(Error('simulated climate fetch failure')), resolveRice: () => resolveRice?.(),resolveWater:()=>resolveWater?.(),resolveUrban:()=>resolveUrban?.(),resolveFarm:()=>resolveFarm?.(),resolveIndustry:()=>resolveIndustry?.() };
 }
+
+test('他分野の初期表示は産業データを読み込まず、未検証URLは読み込み後に照合する',async()=>{
+ const initial=await setup('',{industry:true});
+ try{await delay();assert.equal(initial.requests.some(r=>r.startsWith('/assets/industry/')),false);}finally{await initial.window.happyDOM.close();}
+ for(const query of ['?field=industry&topic=power-coal&detail=p1','?field=industry&topic=power-all&detail=unknown','?field=industry&topic=power-all&place=CHN&detail=p1']){
+  const {window,q}=await setup(query,{industry:true});
+  try{await until(()=>window.__map.getLayer('asia-industry-power'),'lazy URL validated');assert.equal(new URL(window.location.href).searchParams.has('detail'),false);assert.doesNotMatch(q('[data-industry-value]').textContent,/Water plant/);}finally{await window.happyDOM.close();}
+ }
+});
+
+test('未読み込みの産業詳細を比較元に持つURLから施設へ復帰できる',async()=>{
+ const {window,q,requests}=await setup('?back='+encodeURIComponent('field=industry&topic=power-all&detail=p1'),{industry:true});
+ try{assert.equal(requests.some(r=>r.startsWith('/assets/industry/')),false);q('[data-comparison-back]').click();await until(()=>q('[data-industry-value]').textContent.includes('Water plant'),'saved facility loaded');assert.equal(new URL(window.location.href).searchParams.get('detail'),'p1');assert.equal(new URL(window.location.href).searchParams.get('place'),'JPN');}finally{await window.happyDOM.close();}
+});
 
 test('産業の国内値・詳細URL・比較復帰は同じ場所を保持する',async()=>{
  const {window,q,requests}=await setup('?field=industry&topic=jp-00&detail=JP-23',{industry:true,population:true});

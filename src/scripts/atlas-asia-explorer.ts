@@ -8,7 +8,7 @@ import { asiaPhysicalReading, asiaNaturalTopics, type AsiaPhysicalFocus } from '
 import {asiaPopulationTopics,asiaPopulationReading,asiaUrbanReading,type AsiaPopulationRegion,type AsiaPopulationRaster} from '../data/atlas/asia-population';
 import {renderAsiaFarmingPanel} from './atlas-asia-farming-panel';
 import {createAsiaIndustry} from './atlas-asia-industry';
-import {normalizeIndustryState,type IndustryRegion} from '../data/atlas/asia-industry';
+import {isIndustryDetailId,normalizeIndustryState,type IndustryRegion} from '../data/atlas/asia-industry';
 import type {AsiaFarmingRegion,AsiaFarmingLayer,AsiaFarmStatistics} from '../data/atlas/asia-farming';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 
@@ -30,12 +30,13 @@ function start(root:HTMLElement) {
   const context:AsiaStateContext={countries:config.countries.map(c=>c.code),cities:config.cities,bounds:config.bounds,fields:['natural','agriculture'],topics:{natural:asiaNaturalTopics.map(t=>t.id)},details:{natural:[...(config.physicalFocus??[]).map(f=>f.id),...(config.physical?.waterFeatures??[]).map((f:any)=>f.id)]}};
   if(config.population){context.fields=[...context.fields,'population'];context.topics!.population=asiaPopulationTopics.map(t=>t.id);context.details!.population=config.population.cities.map(c=>c.id);}
   if(config.farming)context.topics!.agriculture=['rice',...config.farming.layers.map(t=>t.id)];
-  if(config.industry){context.fields=[...context.fields,'industry'];context.topics!.industry=config.industry.topics.map(t=>t.id);context.details!.industry=config.industry.details.map(d=>d[0]);}
+  if(config.industry){context.fields=[...context.fields,'industry'];context.topics!.industry=config.industry.topics.map(t=>t.id);context.details!.industry=isIndustryDetailId;}
   const countrySelect=$<HTMLSelectElement>('[data-country-select]'),citySelect=$<HTMLSelectElement>('[data-city-select]');
   const overviewTitle=$('[data-reading-title]').textContent!,overviewSummary=$('[data-reading-summary]').textContent!;
+  let industry:ReturnType<typeof createAsiaIndustry>|null=null;
   function readState():AsiaState {
     const restored=readAsiaAtlasState(new URL(location.href),context);
-    if(restored.field==='industry'&&config.industry)return normalizeIndustryState(config.industry,restored);
+    if(restored.field==='industry'&&config.industry)return industry?.normalize(restored)??normalizeIndustryState(config.industry,restored);
     if(restored.field==='population'){
       const urban=config.population?.cities.find(c=>c.id===restored.detail&&(!restored.place||c.country===restored.place));
       return {...restored,detail:urban?.id??null,place:urban?.country??restored.place,point:restored.point??config.cities.find(c=>c.id===restored.city)?.coordinates??null,city:null};
@@ -72,7 +73,7 @@ function start(root:HTMLElement) {
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const riceLayer=getAsiaRiceLayer(config.regionId)!;
   const riceNote=asiaRiceRegionNotes[config.regionId];
-  const industry=config.industry?createAsiaIndustry(root,{industry:config.industry,industryBase:config.industryBase!,countries:config.countries},()=>state,navigate,camera,()=>{const d=industry?.detail();if(d?.point){state={...state,point:state.point??d.point};selectedPoint=state.point??null;persist(false);}render();fitSelection();}):null;
+  industry=config.industry?createAsiaIndustry(root,{industry:config.industry,industryBase:config.industryBase!,countries:config.countries},()=>state,navigate,camera,()=>{state=industry!.normalize(state);const d=industry!.detail();if(d?.point)state={...state,point:state.point??d.point};selectedPoint=state.point??null;persist(false);render();fitSelection();}):null;
 
   async function fetchAsset<T>(url:string,read:(response:Response)=>Promise<T>):Promise<T> {
     const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);
@@ -96,7 +97,7 @@ function start(root:HTMLElement) {
   }
   function navigate(next:AsiaState,fit=true) {
     if(next.field==='industry')next={...next,point:next.point??config.cities.find(c=>c.id===next.city)?.coordinates??null};
-    if(config.industry)next=normalizeIndustryState(config.industry,next);
+    if(industry)next=industry.normalize(next);
     if(next.field==='population')next={...next,point:next.point??config.cities.find(c=>c.id===next.city)?.coordinates??null,city:null};
     state=next;selectedClass=null;selectedPoint=state.point??null;persist(true);render();const reading=$('.asia-reading-scroll');if(reading)reading.scrollTop=0;if(fit)fitSelection();
   }

@@ -29,6 +29,8 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.equal(config.industryBase,'/insight-journal/assets/atlas/asia-industry-v1/');
       assert.ok(config.industry.topics.length>20);
       assert.ok(config.industry.powerCount>800);
+      assert.equal(config.industry.details,undefined,'facility index stays in the lazy dataset');
+      assert.ok(Buffer.byteLength(JSON.stringify(config.industry))<30000,'initial industry config contains only topic/file metadata');
       assert.equal(all('[data-industry-topic] optgroup').length,4);
       assert.equal(q('[data-population-reading]').hidden,field!=='population');
       assert.equal(q('[data-population-legend]').hidden,field!=='population');
