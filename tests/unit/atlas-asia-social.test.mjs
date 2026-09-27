@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {gunzipSync} from 'node:zlib';
 import {socialValue,socialColor,socialContains,socialDenominator,normalizeSocialState,socialDefault} from '../../src/data/atlas/asia-social.ts';
+import {withSocialOverviews,areaValues,leadingCategory,areaCategories} from '../../src/data/atlas/asia-social-overview.ts';
 const base=new URL('../../public/assets/atlas/asia-social-v1/',import.meta.url),raw=n=>readFileSync(new URL(n,base));
 const manifest=JSON.parse(raw('manifest.json')),read=n=>JSON.parse(gunzipSync(raw(n)));
 
@@ -50,4 +51,24 @@ test('人口のURLは区域と地点を照合し、別国・別主題の詳細�
  assert.equal(normalizeSocialState(r,{...base,point:tokyo.point},d).detail,tokyo.id);
  assert.equal(normalizeSocialState(r,{...base,topic:'density',detail:tokyo.id},d).detail,null);
  assert.equal(normalizeSocialState(r,{...base,topic:'national-age-old',detail:tokyo.id},d).detail,null);
+});
+
+
+test('社会統計の区域色は確認した最多区分を使い、母語・宗教・外国籍の分母を混同しない',()=>{
+ for(const [regionId,groupId,cases] of [
+  ['east-asia','jp-nationality',[['s-JP-13','中国'],['s-JP-23','ブラジル'],['s-JP-27','韓国，朝鮮']]],
+  ['southeast-asia','my-ethnicity',[['s-MY-12','その他のブミプトラ'],['s-MY-13','その他のブミプトラ'],['s-MY-07','マレー人']]],
+  ['south-central-asia','in-religion',[['s-IN-03','シク教'],['s-IN-01','イスラム教'],['s-IN-13','キリスト教']]],
+  ['south-central-asia','in-language',[['s-IN-33','タミル語'],['s-IN-32','マラヤーラム語'],['s-IN-19','ベンガル語']]],
+ ]){
+  const r=withSocialOverviews(manifest.regions[regionId]),d=read(r.data),g=r.groups.find(x=>x.id===groupId);
+  assert.ok(r.topics.some(t=>t.id===groupId+'-overview'));
+  for(const [id,title] of cases)assert.equal(leadingCategory(d.records.find(x=>x.id===id),r,g).title,title);
+  for(const record of d.records){const values=areaValues(record,r,g);assert.ok(Math.abs(values.reduce((sum,x)=>sum+x.value,0)-100)<.001);}
+  const winners=d.records.map(x=>leadingCategory(x,r,g));const ids=[...new Set(winners.filter(Boolean).map(x=>x.id))];const colors=areaCategories(r,g).filter(x=>ids.includes(x.id)).map(x=>x.color);assert.equal(new Set(colors).size,ids.length);
+ }
+ const r=withSocialOverviews(manifest.regions['south-central-asia']),d=read(r.data),g=r.groups.find(x=>x.id==='in-religion');
+ const winner=leadingCategory(d.records.find(x=>x.id==='s-IN-12'),r,g);assert.ok(winner.value<31&&winner.value>30,'plurality is not majority');
+ assert.equal(leadingCategory({series:{},counts:{},nationalities:[]},r,g),null);
+ const tie={series:Object.fromEntries(r.topics.filter(t=>t.group===g.id&&t.key!=='overview').map(t=>[t.id,{'2011':25}]))};assert.equal(leadingCategory(tie,r,g),null);
 });

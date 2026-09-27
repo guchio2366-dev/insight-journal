@@ -1,5 +1,6 @@
 import {socialTopic,socialGroup,socialDefault,socialValue,socialColors,socialColor,socialDenominator,socialReadings,taiwanRegistered2025,normalizeSocialState,type SocialRegion,type SocialData} from '../data/atlas/asia-social';
 import {startAsiaComparison,type AsiaState,type AsiaCamera} from '../lib/atlas-asia-state';
+import {socialEntry,areaGroups,areaCategories,areaValues,leadingCategory,areaReadings} from '../data/atlas/asia-social-overview';
 
 type Config={social:SocialRegion;socialBase:string;countries:{code:string;name:string}[]};
 const fmt=(n:number|null|undefined)=>n==null?'未掲載':n.toLocaleString('ja-JP',{maximumFractionDigits:2});
@@ -48,8 +49,9 @@ export function createAsiaSocial(root:HTMLElement,config:Config,getState:()=>Asi
  }
  function render(){
   const t=current(),g=group();$('[data-social-panel]').hidden=!t;$('[data-social-legend]').hidden=!t;if(!t||!g)return;
-  const state=getState(),title=g.label+'：'+t.title;
-  $<HTMLSelectElement>('[data-population-topic]').value=socialDefault(g.id);
+  const quick=$('[data-social-quick-key]');if(quick){quick.hidden=true;quick.replaceChildren();}
+  const state=getState(),overview=t.key==='overview',title=overview?areaReadings[g.id].title:g.label+'：'+t.title;
+  $<HTMLSelectElement>('[data-population-topic]').value=region.topics.some(x=>x.id===socialEntry(g.id))?socialEntry(g.id):socialDefault(g.id);
   $('[data-social-title]').textContent=title;$('[data-map-title]').textContent=title;$('[data-map-eyebrow]').textContent='Population · '+g.year;$('[data-map-period]').textContent='% · '+g.year;
   $('[data-map-gesture]').textContent='色を塗った国・行政区域を地図か一覧から選ぶと、数値と内訳を読めます。地図は2本指で動かせます。';
   $('[data-social-definition]').textContent=g.note;
@@ -61,7 +63,7 @@ export function createAsiaSocial(root:HTMLElement,config:Config,getState:()=>Asi
   method.append(el('p','収録範囲：'+region.countries.map(c=>countryName(c)+'（国別年齢・増減'+(region.coverage[c].national?'あり':'未掲載')+'、国内の区域別人口'+(region.coverage[c].admin?region.coverage[c].admin+'区域':'未収録')+'）').join('、')+'。未収録は非公開という意味ではありません。国によって国籍・民族・言語・宗教の分類は異なるため、同じ区分として統合していません。'));
   method.append(el('p',g.id.startsWith('jp-')?'出典：総務省統計局・2020年国勢調査（e-Stat）。不詳を除いた割合を計算し、地図へ加工しました。':g.id.startsWith('my-')?'出典：Department of Statistics Malaysia（DOSM）／CC BY 4.0。州別人数から割合・増減を計算しました。':g.id.startsWith('in-')?'出典：Office of the Registrar General & Census Commissioner, India、2011年国勢調査C-01・C-16。数値を抽出し、区域の統合と割合の計算を行いました。対応する政府オープンデータはGODL-Indiaで公開されています。':'出典：世界銀行 World Development Indicators（2010–2025）／CC BY 4.0。年齢構成と増減率はWDIの公表値です。'));
   const scale=$('[data-social-scale]');scale.replaceChildren();$('[data-social-legend-title]').textContent=t.title+' · '+g.year;
-  for(let i=0;i<5;i++){const s=el('span'),swatch=el('i');swatch.style.backgroundColor=socialColors[i];s.append(swatch,document.createTextNode(i===0?fmt(t.breaks[0])+'未満':i===4?fmt(t.breaks[3])+'以上':fmt(t.breaks[i-1])+'以上'+fmt(t.breaks[i])+'未満'));scale.append(s);}const missing=el('span'),swatch=el('i');swatch.style.backgroundColor='#d2ceca';missing.append(swatch,document.createTextNode('未掲載'));scale.append(missing);
+  for(let i=0;i<(overview?0:5);i++){const s=el('span'),swatch=el('i');swatch.style.backgroundColor=socialColors[i];s.append(swatch,document.createTextNode(i===0?fmt(t.breaks[0])+'未満':i===4?fmt(t.breaks[3])+'以上':fmt(t.breaks[i-1])+'以上'+fmt(t.breaks[i])+'未満'));scale.append(s);}const missing=el('span'),swatch=el('i');swatch.style.backgroundColor='#d2ceca';missing.append(swatch,document.createTextNode('未掲載'));scale.append(missing);
   $('[data-social-legend-note]').textContent='単位は%です。割合の分母と資料年は主題によって異なります。0は最も淡い色、未掲載は灰色で示します。';
   const content=$('[data-social-content]');content.replaceChildren();
   if(!data){$('[data-social-lead]').textContent='分布、人数と分母、内訳の順に読みます。';$('[data-social-value]').textContent=status.textContent;$('[data-grid-reading]').textContent=status.textContent;$('[data-social-coverage]').textContent='';if(!failed&&!pending)void load().then(()=>{render();if(active())onReady();if(map)void show(map);}).catch(()=>render());return;}
@@ -72,6 +74,8 @@ export function createAsiaSocial(root:HTMLElement,config:Config,getState:()=>Asi
   $('[data-social-value]').textContent=message;$('[data-grid-reading]').textContent=message;
   $('[data-social-coverage]').textContent=g.kind==='admin'?`${countryName(g.country!)}の${values.length}区域中${covered}区域を収録しています。区域全体の統計であり、区域内の全地点が同じ構成という意味ではありません。`:`${values.length}か国・地域中${covered}か国・地域に2025年の値があります。欠けた国を別の年の値で埋めていません。`;
   const area=$<HTMLSelectElement>('[data-social-area]');area.replaceChildren(option('地図か一覧から選ぶ',''),...data.records.filter(r=>r.country===g.country).sort((a,b)=>a.id.localeCompare(b.id)).map(r=>option(r.name,r.id)));area.value=r?.id??'';
+  if(overview){renderAreas(g,r);return;}
+  if(areaGroups.includes(g.id)&&region.topics.some(x=>x.id===g.id+'-overview')){const back=el('button','各区分の分布をまとめて見る');back.type='button';back.className='asia-compare';back.onclick=()=>chooseTopic(g.id+'-overview');content.append(back);}
   const ranked=values.filter(v=>v.value!==null).sort((a,b)=>b.value!-a.value!);
   const reading=r&&socialReadings[r.id];
   $('[data-social-lead]').textContent=reading?.body??(value!==null?`${name}の${t.title}は${fmt(value)}%です。${g.id.includes('growth')?'増減率の正負と、増減前後の人口を区別して読んでください。':'割合だけでなく人数も確かめ、周辺の地域との違いを比べてください。'}`:ranked[0]?`${g.year}年のこの指標では、${ranked[0].name}が収録範囲で最も高い割合です。地図と一覧から、国内または国どうしの違いを読めます。`:'この年の値を収録していません。');
@@ -91,9 +95,31 @@ export function createAsiaSocial(root:HTMLElement,config:Config,getState:()=>Asi
    if(g.id==='national-growth'&&national.total['2024'])content.append(el('p',`2024年の年央人口：${fmt(national.total['2024'])}人。増減人数は${fmt(national.total['2025']-national.total['2024'])}人です。`));
    if(state.place==='TWN'){const ref=taiwanRegistered2025;content.append(el('h3','台湾の別資料を読む'),el('p',`台湾は今回取得したWDI系列に含まれません。内政部の2025年12月の戸籍登録人口は${fmt(ref.total)}人で、前年末より${fmt(-ref.change)}人減っています。これは登録人口であり、地図の年央・全居住人口の系列とは範囲と基準日が異なります。`),table('戸籍登録人口の年齢構成（2025年12月）',[['15歳未満',ref.young],['15–64歳',ref.working],['65歳以上',ref.old]].map(([name,n])=>({name:String(name),value:Number(n)/ref.total*100}))),link('内政部の2025年戸口統計',ref.source));}
   }
-  if(selected&&topics.length>1){const rows=topics.map(x=>({name:x.title,value:socialValue(selected,x,g),click:()=>chooseTopic(x.id)}));const composition=table('同じ対象の区分を切り替える',rows);if(rows.length>12){const box=el('details');box.append(el('summary',`${rows.length}言語群の内訳を読む`),composition);content.append(box);}else content.append(composition);}
+  if(selected&&topics.length>1){const rows=topics.filter(x=>x.key!=='overview').map(x=>({name:x.title,value:socialValue(selected,x,g),click:()=>chooseTopic(x.id)}));const composition=table('同じ対象の区分を切り替える',rows);if(rows.length>12){const box=el('details');box.append(el('summary',`${rows.length}言語群の内訳を読む`),composition);content.append(box);}else content.append(composition);}
   const series=selected?.series[t.id];if(series&&Object.keys(series).length>1){const box=el('details');box.append(el('summary','年次の数値を読む'),table('同じ定義の年次推移',Object.entries(series).sort(([a],[b])=>a.localeCompare(b)).map(([year,value])=>({name:year+'年',value}))));content.append(box);}
   const comparison=el('details');comparison.open=!selected;comparison.append(el('summary',g.kind==='admin'?`国内の${values.length}区域を比較する`:`${values.length}か国・地域を比較する`),table(g.kind==='admin'?'国内の区域を同じ指標で比較する':'国・地域を同じ指標で比較する',[...ranked,...values.filter(v=>v.value===null)].map(v=>({name:v.name,value:v.value,click:g.kind==='admin'?()=>select(v.id):()=>navigate({...getState(),place:v.id,detail:null,point:null,camera:null})}))));content.append(comparison);
+ }
+ function renderAreas(g:import('../data/atlas/asia-social').SocialGroup,r:import('../data/atlas/asia-social').SocialRecord|undefined){
+  const reading=areaReadings[g.id],records=data!.records.filter(x=>x.country===g.country),winners=records.map(record=>({record,category:leadingCategory(record,region,g)})),selected=r&&leadingCategory(r,region,g);
+  $('[data-social-lead]').textContent=reading.lead;
+  $('[data-social-coverage]').textContent=`${countryName(g.country!)}の${records.length}区域中${winners.filter(w=>w.category).length}区域で最多区分を表示しています。他国の未収録地域は灰色で示します。`;
+  $('[data-social-definition]').textContent=reading.note;
+  $('[data-map-period]').textContent=g.year+'年 · 区域ごとの最多区分';
+  const message=selected?`${r!.name}：${selected.title} ${fmt(selected.value)}%（${g.year}年）`:'色は区域ごとの最多区分を示します。地図か地名を選ぶと、他の区分も含めた構成を読めます。';
+  $('[data-social-value]').textContent=message;$('[data-grid-reading]').textContent=message;
+  const scale=$('[data-social-scale]');scale.replaceChildren();$('[data-social-legend-title]').textContent='色分け：区域ごとの最多区分 · '+g.year;
+  const visible=new Set(winners.flatMap(w=>w.category?[w.category.id]:[]));
+  for(const c of areaCategories(region,g).filter(c=>visible.has(c.id))){const b=el('button'),swatch=el('i');b.type='button';swatch.style.backgroundColor=c.color;b.append(swatch,document.createTextNode(c.title));if(g.id!=='jp-nationality')b.onclick=()=>chooseTopic(c.id);else b.onclick=()=>select(winners.find(w=>w.category?.id===c.id)!.record.id);scale.append(b);}
+  const quick=$('[data-social-quick-key]');if(quick&&visible.size<=8){quick.hidden=false;for(const c of areaCategories(region,g).filter(c=>visible.has(c.id))){const item=el('span'),swatch=el('i');swatch.style.backgroundColor=c.color;item.append(swatch,document.createTextNode(c.title));quick.append(item);}}
+  const missing=el('span','灰色：未収録・同率');scale.append(missing);
+  $('[data-social-legend-note]').textContent='最多でも過半数とは限りません。区域内には複数の集団が暮らしています。詳しい割合は区分を選んで確認できます。';
+  const content=$('[data-social-content]');content.replaceChildren();
+  const places=el('div');places.className='asia-insight-places';
+  for(const id of reading.places){const record=records.find(x=>x.id===id);if(!record)continue;const b=el('button',record.name.replace(/（.*$/,''));b.type='button';b.onclick=()=>select(id);places.append(b);}content.append(el('h3','本文の場所を地図で確かめる'),places);
+  if(r){const rows=areaValues(r,region,g).sort((a,b)=>b.value-a.value);content.append(el('h3',r.name+'の構成'),table('同じ区域の内訳（'+g.year+'年）',rows.map(c=>({name:c.title,value:c.value,...(g.id==='jp-nationality'?{}:{click:()=>chooseTopic(c.id)})}))));}
+  else content.append(el('p','区域を選ぶと、最多の区分だけでなく、他の区分の割合も確認できます。'));
+  content.append(link('この分布と説明の一次資料',g.source));
+  const list=el('details');list.append(el('summary','収録した全区域の最多区分を読む'));const entries=el('ul');for(const w of winners){const li=el('li'),b=el('button',`${w.record.name}：${w.category?`${w.category.title} ${fmt(w.category.value)}%`:'未収録・同率'}`);b.type='button';b.onclick=()=>select(w.record.id);li.append(b);entries.append(li);}list.append(entries);content.append(list);
  }
  const layers=['asia-social-national','asia-social-admin','asia-social-lines','asia-social-selected'];
  async function show(currentMap:import('maplibre-gl').Map){
@@ -103,7 +129,7 @@ export function createAsiaSocial(root:HTMLElement,config:Config,getState:()=>Asi
   const t=current()!,g=group()!,state=getState();
   if(g.kind==='admin'){
    if(!map.getSource('asia-social-admin')){map.addSource('asia-social-admin',{type:'geojson',data:data!.geometry});map.addLayer({id:'asia-social-admin',type:'fill',source:'asia-social-admin',paint:{'fill-color':'#d2ceca','fill-opacity':.96}});map.addLayer({id:'asia-social-lines',type:'line',source:'asia-social-admin',paint:{'line-color':'#526b65','line-width':.6}});map.addLayer({id:'asia-social-selected',type:'line',source:'asia-social-admin',paint:{'line-color':'#a4412e','line-width':2.8}});}
-   const color:any=['match',['get','id'],...data!.records.filter(r=>r.country===g.country).flatMap(r=>[r.id,socialColor(socialValue(r,t,g),t)]),'#d2ceca'];map.setPaintProperty('asia-social-admin','fill-color',color);
+   const color:any=['match',['get','id'],...data!.records.filter(r=>r.country===g.country).flatMap(r=>[r.id,t.key==='overview'?leadingCategory(r,region,g)?.color??'#d2ceca':socialColor(socialValue(r,t,g),t)]),'#d2ceca'];map.setPaintProperty('asia-social-admin','fill-color',color);
    for(const id of ['asia-social-admin','asia-social-lines','asia-social-selected']){map.setFilter(id,['all',['==',['get','country'],g.country!],...(id==='asia-social-selected'?[['==',['get','id'],state.detail??'']]:[])] as any);map.setLayoutProperty(id,'visibility','visible');}
   }else{
    if(!map.getLayer('asia-social-national'))map.addLayer({id:'asia-social-national',type:'fill',source:map.getSource('asia-population-geography')?'asia-population-geography':'asia-countries',filter:['in',['get','code'],['literal',region.countries]],paint:{'fill-color':'#d2ceca','fill-opacity':.96}},map.getLayer('asia-population-border')?'asia-population-border':'asia-country-border');

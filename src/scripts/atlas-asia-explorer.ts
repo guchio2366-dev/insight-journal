@@ -39,6 +39,7 @@ function start(root:HTMLElement) {
     waterBase?:string;water?:WaterRegion;
     socialBase?:string;social?:SocialRegion;
     presentation?:AsiaPresentation;presentationBase?:string;
+    farmInsight?:{title:string;lead:string;waterTitle:string;waterLead:string;rivers:string[]};
     tradeBase?:string;trade?:TradeRegion;tradeChapters?:Record<string,string>;
   };
   const context:AsiaStateContext={countries:config.countries.map(c=>c.code),cities:config.cities,bounds:config.bounds,fields:['natural','agriculture'],topics:{natural:asiaNaturalTopics.map(t=>t.id)},details:{natural:[...(config.physicalFocus??[]).map(f=>f.id),...(config.physical?.waterFeatures??[]).map((f:any)=>f.id)]}};
@@ -104,12 +105,12 @@ function start(root:HTMLElement) {
   const placeReadings=createPlaceReadings(root,config.regionId,()=>state,navigate,camera);
 
 
-  function chooseFarm(topic:string){navigate({...state,field:'agriculture',topic,detail:null,story:null,point:state.point??config.cities.find(c=>c.id===state.city)?.coordinates??null,city:null,camera:camera()},false);}
+  function chooseFarm(topic:string){navigate({...state,field:'agriculture',topic,overlay:null,detail:null,story:null,point:state.point??config.cities.find(c=>c.id===state.city)?.coordinates??null,city:null,camera:camera()},false);}
   function choosePopulation(topic:string){if(config.social?.topics.some(t=>t.id===topic))social?.chooseTopic(topic);else navigate({...state,field:'population',topic,detail:null,story:null,city:null,camera:camera()},false);}
   const navigation=createAsiaNavigation(root,config.industry,()=>state,navigate,choosePopulation,selectNaturalTopic,chooseFarm);
   let presentation:ReturnType<typeof createAsiaPresentation>|null=null;
   let mainStatus={message:'',error:false},presentationError='';
-  function createPresentation(){presentation?.destroy();presentation=config.presentation&&$('[data-map-annotations]')?createAsiaPresentation(root,{presentation:config.presentation,presentationBase:config.presentationBase!,cities:config.cities,population:config.population},()=>state,selectCity,selectUrban,point=>navigate({...state,point,city:null,detail:null,story:null,camera:camera()},false),chooseFarm,message=>{presentationError=message;renderMapStatus();}):null;}
+  function createPresentation(){presentation?.destroy();presentation=config.presentation&&$('[data-map-annotations]')?createAsiaPresentation(root,{presentation:config.presentation,presentationBase:config.presentationBase!,cities:config.cities,population:config.population,riverFile:config.physical&&config.physicalBase!+config.physical.water.split('/').at(-1),riverIds:config.farmInsight?.rivers},()=>state,selectCity,selectUrban,point=>navigate({...state,point,city:null,detail:null,story:null,camera:camera()},false),chooseFarm,message=>{presentationError=message;renderMapStatus();}):null;}
   createPresentation();
 
   async function fetchAsset<T>(url:string,read:(response:Response)=>Promise<T>):Promise<T> {
@@ -137,6 +138,7 @@ function start(root:HTMLElement) {
     history[push?'pushState':'replaceState']({},'',url);
   }
   function navigate(next:AsiaState,fit=true) {
+    if(next.field!=='agriculture'||next.topic&&next.topic!=='overview')next={...next,overlay:null};
     if(next.field!=='industry')next={...next,sector:null,subsector:null};
     if(next.field==='industry')next={...next,point:next.point??config.cities.find(c=>c.id===next.city)?.coordinates??null};
     if(industry)next=industry.normalize(next);
@@ -215,6 +217,7 @@ function start(root:HTMLElement) {
     for(const item of markers){item.button.hidden=!climate;item.button.setAttribute('aria-pressed',String(item.city.id===state.city));item.button.style.opacity=!state.place||item.city.countryCode===state.place?'1':'.45';}
     if(pointLabel){pointLabel.hidden=!selectedPoint;if(selectedPoint){pointMarker?.setLngLat(selectedPoint);pointLabel.textContent=selectedPlaceReading(config.regionId,state)?.point?'事例の着目位置':social?.detail()?.name??config.physicalFocus?.find(f=>f.id===state.detail)?.name??'選択地点';}}
     if(mapReady&&map){map.setFilter('asia-country-selected',['==',['get','code'],state.place??'']);void showField();}
+    requestAnimationFrame(syncLayout);
   }
   function renderClass() {
     const classification=config.classes.find(c=>c.id===selectedClass);
@@ -337,8 +340,11 @@ function start(root:HTMLElement) {
     if(!active||!config.farming)return;
     const select=$<HTMLSelectElement>('[data-farming-topic]');if(select)select.value=topic!;
     for(const b of $$<HTMLButtonElement>('[data-farm-choice]'))b.setAttribute('aria-pressed',String(b.dataset.farmChoice===topic));
-    for(const c of $$<HTMLInputElement>('[data-farm-kind]'))c.disabled=topic!=='overview';
-    if(topic==='overview'){$('[data-map-title]').textContent='農畜産物の特徴的な分布';$('[data-map-gesture]').textContent='品目名を選ぶと詳しい分布を開きます。地図は2本指で移動・拡大できます。';return;}
+    const water=topic==='overview'&&state.overlay==='water';
+    for(const c of $$<HTMLInputElement>('[data-farm-kind]'))c.disabled=topic!=='overview'||water;
+    for(const b of $$<HTMLButtonElement>('[data-farm-water]'))b.setAttribute('aria-pressed',String(water));
+    if(config.farmInsight){$('[data-farm-insight-title]').textContent=water?config.farmInsight.waterTitle:config.farmInsight.title;$('[data-farm-insight-lead]').textContent=water?config.farmInsight.waterLead:config.farmInsight.lead;}
+    if(topic==='overview'){$('[data-map-title]').textContent=water?'米の栽培域・雨・川':'農畜産物の特徴的な分布';$('[data-map-gesture]').textContent=water?'緑は米の概略栽培域、青の太線は主な川、細線は250mm間隔の年降水量です。':'品目名を選ぶと詳しい分布を開きます。地図は2本指で移動・拡大できます。';return;}
     renderAsiaFarmingPanel(root,config.regionId,topic!,layer,config.countries.find(c=>c.code===state.place),farmingStatistics);
     optionalHidden('[data-farming-statistics-retry]',!farmingStatisticsError);
     if(farmingStatisticsError&&state.place)$('[data-farming-statistics-status]').textContent='統計を取得できませんでした。再読み込みをお試しください。';
@@ -449,7 +455,8 @@ function start(root:HTMLElement) {
         map.addLayer({id,type:'raster',source:id,paint:{'raster-opacity':1,'raster-resampling':'nearest','raster-fade-duration':0}},'asia-context');
       }
     }
-    for(const id of ['asia-terrain','asia-contours'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility',physical?'visible':'none');
+    for(const id of ['asia-terrain','asia-contours'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility',physical&&!(id==='asia-contours'&&naturalTopic()==='terrain'&&config.presentation?.terrain)?'visible':'none');
+    if(map.getLayer('asia-terrain'))map.setPaintProperty('asia-terrain','raster-opacity',naturalTopic()==='terrain'&&config.presentation?.terrain? .3:1);
     for(const id of ['asia-lakes','asia-rivers','asia-rivers-hit','asia-water-selected'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility',water?'visible':'none');
     if(water&&config.physical&&!map.getSource('asia-water')){
       try{
@@ -560,6 +567,7 @@ function start(root:HTMLElement) {
   for(const button of $$<HTMLButtonElement>('[data-natural-topic]'))button.addEventListener('click',()=>selectNaturalTopic(button.dataset.naturalTopic!));
   $<HTMLSelectElement>('[data-farming-topic]')?.addEventListener('change',event=>navigate({...state,field:'agriculture',topic:(event.target as HTMLSelectElement).value,detail:null,point:state.point??config.cities.find(c=>c.id===state.city)?.coordinates??null,city:null,camera:camera()},false));
   $('[data-farming-statistics-retry]')?.addEventListener('click',()=>{farmingStatisticsError=false;renderFarming();});
+  for(const button of $$<HTMLButtonElement>('[data-farm-water]'))button.addEventListener('click',()=>navigate({...state,field:'agriculture',topic:'overview',overlay:state.overlay==='water'?null:'water',detail:null,story:null,point:null,city:null,camera:camera()},false));
   $<HTMLSelectElement>('[data-population-topic]')?.addEventListener('change',event=>{const topic=(event.target as HTMLSelectElement).value;if(config.social?.topics.some(t=>t.id===topic))social?.chooseTopic(topic);else navigate({...state,field:'population',topic,city:null,camera:camera()},false);});
   $<HTMLSelectElement>('[data-population-city]')?.addEventListener('change',event=>selectUrban((event.target as HTMLSelectElement).value));
   $('[data-population-centroid]')?.addEventListener('click',()=>{const city=urbanCity();if(city)navigate({...state,point:city.coordinates,camera:camera()},false);});
@@ -580,8 +588,13 @@ function start(root:HTMLElement) {
   window.addEventListener('popstate',()=>{state=readState();selectedPoint=state.point??null;selectedClass=null;render();fitSelection();});
   window.addEventListener('pagehide',event=>{clearTimeout(moveTimer);if(!event.persisted){presentation?.destroy();map?.remove();map=null;mapReady=false;}});
   window.addEventListener('pageshow',event=>{if(event.persisted){map?.resize();if(!mapReady)void initialiseMap();}});
-  const syncLayout=()=>{map?.resize();const height=$('.asia-map-frame')?.getBoundingClientRect().height;if(height)root.style.setProperty('--asia-map-height',`${height}px`);};
+  function syncLayout(){
+    const frame=$('.asia-map-frame'),key=$('[data-farm-overview-legend]');
+    if(frame&&key&&state.field==='agriculture'&&window.innerWidth>=1200){const height=Math.max(200,Math.min(640,window.innerHeight-frame.getBoundingClientRect().top-key.getBoundingClientRect().height-20));root.style.setProperty('--asia-farm-map-height',`${Math.floor(height)}px`);}
+    if(frame)map?.resize();const height=frame?.getBoundingClientRect().height;if(height)root.style.setProperty('--asia-map-height',`${height}px`);
+  }
   const layoutObserver=new ResizeObserver(syncLayout);layoutObserver.observe($('[data-map-surface]'));
+  if($('[data-farm-overview-legend]'))layoutObserver.observe($('[data-farm-overview-legend]'));
   window.addEventListener('resize',syncLayout);
   sourceText();render();persist(false);syncLayout();void initialiseMap();
 }

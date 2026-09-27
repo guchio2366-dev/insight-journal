@@ -8,6 +8,7 @@ import { dirname, extname, resolve } from 'node:path';
 import { asiaClimateClasses } from '../../src/data/atlas/asia-climate-definitions.ts';
 import { mercatorPoint } from '../../src/lib/atlas-asia-state.ts';
 import {gunzipSync} from 'node:zlib';
+import {withSocialOverviews,socialEntry} from '../../src/data/atlas/asia-social-overview.ts';
 
 // Replace the renderer/worker boundary only. The production controller, URL
 // codec, selection logic and fetch handling run without a prebuilt dist/ tree.
@@ -149,10 +150,10 @@ async function setup(query = '', options = {}) {
   }
   if(options.social){
     const conf=JSON.parse(q('[data-asia-config]').textContent),manifest=JSON.parse(readFileSync(new URL('../../public/assets/atlas/asia-social-v1/manifest.json',import.meta.url),'utf8'));
-    conf.social=manifest.regions['east-asia'];conf.socialBase='/assets/social/';q('[data-asia-config]').textContent=JSON.stringify(conf);
+    conf.social=withSocialOverviews(manifest.regions['east-asia']);conf.socialBase='/assets/social/';q('[data-asia-config]').textContent=JSON.stringify(conf);
     for(const name of ['panel','legend','legend-title','scale','legend-note','title','lead','value','definition','coverage','status','metric-label','area-label','content','method']){const e=window.document.createElement('div');e.setAttribute('data-social-'+name,'');root.append(e);}
     root.insertAdjacentHTML('beforeend','<button data-social-retry></button><select data-social-metric></select><select data-social-area></select><button data-social-density></button>');
-    for(const g of conf.social.groups){const t=conf.social.topics.find(t=>t.group===g.id&&(t.key==='old'||t.key==='rate'||t.key==='foreign'));q('[data-population-topic]').insertAdjacentHTML('beforeend','<option value="'+t.id+'">'+g.label+'</option>');}
+    for(const g of conf.social.groups){const t=conf.social.topics.find(t=>t.id===socialEntry(g.id));q('[data-population-topic]').insertAdjacentHTML('beforeend','<option value="'+t.id+'">'+g.label+'</option>');}
   }
   if(options.trade){
     const conf=JSON.parse(q('[data-asia-config]').textContent),manifest=JSON.parse(readFileSync(new URL('../../public/assets/atlas/asia-trade-v1/manifest.json',import.meta.url),'utf8'));
@@ -164,8 +165,8 @@ async function setup(query = '', options = {}) {
   }
   if(options.presentation){
     const conf=JSON.parse(q('[data-asia-config]').textContent);
-    conf.presentationBase='/assets/presentation/';conf.presentation={farming:{file:'farming.json.gz',products:[],labels:[]},rainfall:{file:'rainfall.json.gz',levels:[500],labels:[]},climate:[]};q('[data-asia-config]').textContent=JSON.stringify(conf);
-    root.insertAdjacentHTML('beforeend','<div data-map-annotations></div><section data-farm-overview-reading></section><section data-farm-overview-legend></section><input type="checkbox" data-farm-kind="crop" checked><input type="checkbox" data-farm-kind="livestock" checked><button data-farm-choice="overview"></button><button data-farm-choice="wheat"></button>');
+    conf.presentationBase='/assets/presentation/';conf.presentation={farming:{file:'farming.json.gz',products:[],labels:[]},rainfall:{file:'rainfall.json.gz',levels:[250,500],labels:[]},terrain:{file:'terrain.json.gz',levels:[500,1000],labels:[]},climate:[]};q('[data-asia-config]').textContent=JSON.stringify(conf);
+    root.insertAdjacentHTML('beforeend','<button data-farm-water></button><div data-map-annotations></div><section data-farm-overview-reading></section><section data-farm-overview-legend></section><input type="checkbox" data-farm-kind="crop" checked><input type="checkbox" data-farm-kind="livestock" checked><button data-farm-choice="overview"></button><button data-farm-choice="wheat"></button>');
     q('[data-farming-topic]').insertAdjacentHTML('afterbegin','<option value="overview"></option>');
   }
   window.__hitCountry=options.hitCountry;
@@ -742,5 +743,44 @@ test('等雨量線の取得失敗は主題を離れると消え、戻ると再�
   q('[data-natural-topic=climate]').click();assert.equal(q('[data-map-state]').hidden,true);assert.equal(q('[data-map-retry]').hidden,true);
   q('[data-natural-topic=precipitation]').click();await until(()=>window.__map.getLayer('asia-rainfall-lines')?.layout?.visibility==='visible','rainfall recovered');
   assert.equal(q('[data-map-state]').hidden,true);assert.equal(q('[data-map-retry]').hidden,true);
+ }finally{await window.happyDOM.close();}
+});
+
+
+test('米・雨・川の重ね合わせはURLから復元でき、品目変更と分野移動で解除する',async()=>{
+ const {window,q,requests}=await setup('?field=agriculture&topic=overview&overlay=water',{farming:true,presentation:true,hydrology:true});
+ try{
+  await until(()=>window.__map.getLayer('asia-rainfall-lines')?.layout?.visibility==='visible','rain overlay loaded');
+  const map=window.__map;
+  assert.equal(map.layers['asia-farm-overview-livestock'].layout.visibility,'none');
+  assert.ok(JSON.stringify(map.layers['asia-farm-overview-fill'].filter).includes('rice'));
+  assert.equal(q('[data-farm-kind=crop]').disabled,true);
+  assert.equal(q('[data-farm-water]').getAttribute('aria-pressed'),'true');
+  q('[data-farm-choice=wheat]').click();
+  assert.equal(new URL(window.location.href).searchParams.has('overlay'),false);
+  assert.equal(map.layers['asia-rainfall-lines'].layout.visibility,'none');
+  q('[data-farm-water]').click();await until(()=>map.layers['asia-rainfall-lines'].layout.visibility==='visible','overlay reopened');
+  q('[data-field=natural]').click();assert.equal(map.layers['asia-rainfall-lines'].layout.visibility,'none');
+  q('[data-natural-topic=terrain]').click();await until(()=>map.getLayer('asia-terrain-lines')?.layout?.visibility==='visible','simplified contours');
+  assert.equal(map.layers['asia-contours'].layout.visibility,'none');
+  assert.equal(map.layers['asia-terrain'].paint['raster-opacity'],.3);
+  assert.equal(window.__maps.length,1);
+ }finally{await window.happyDOM.close();}
+});
+
+test('国籍の概要は区域の最多区分で色分けし、詳細に切り替えても選択を保つ',async()=>{
+ const {window,q}=await setup('?field=population&topic=jp-nationality-overview&detail=s-JP-13',{social:true,population:true});
+ try{
+  await until(()=>window.__map.getLayer('asia-social-admin'),'social areas');
+  assert.match(q('[data-social-lead]').textContent,/外国人住民/);
+  assert.match(q('[data-social-value]').textContent,/東京都：中国/);
+  assert.match(q('[data-social-coverage]').textContent,/47区域中47区域/);
+  assert.equal(q('[data-population-topic]').value,'jp-nationality-overview');
+  const colors=window.__map.layers['asia-social-admin'].paint['fill-color'];
+  assert.notEqual(colors[colors.indexOf('s-JP-13')+1],colors[colors.indexOf('s-JP-23')+1]);
+  q('[data-social-metric]').value='jp-nationality-foreign';q('[data-social-metric]').dispatchEvent(new window.Event('change'));
+  assert.equal(new URL(window.location.href).searchParams.get('detail'),'s-JP-13');
+  assert.match(q('[data-social-value]').textContent,/外国人/);
+  assert.equal(window.__maps.length,1);
  }finally{await window.happyDOM.close();}
 });

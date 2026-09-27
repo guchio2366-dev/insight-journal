@@ -23,6 +23,12 @@ test('Asia presentation assets retain exact input provenance and real climate an
   for(const product of presentation.farming.products){assert.ok(ids.has(product.id),product.id);assert.ok(product.threshold>0);assert.match(product.color,/^#[0-9a-f]{6}$/);}
   const rain=JSON.parse(gunzipSync(readFileSync(base+presentation.rainfall.file)));
   assert.ok(rain.features.length>20);
+  assert.equal(presentation.rainfall.interval,250);
+  assert.ok(rain.features.every(f=>f.properties.value%250===0));
+  const terrain=JSON.parse(gunzipSync(readFileSync(base+presentation.terrain.file)));
+  assert.equal(presentation.terrain.interval,500);
+  assert.ok(terrain.features.length>20);assert.ok(terrain.features.every(f=>f.properties.value%500===0));
+  for(const product of presentation.farming.products){const parts=farming.features.filter(f=>f.properties.id===product.id);assert.ok(parts.length<=(product.kind==='crop'?6:3));assert.ok(parts.every(f=>['Polygon','MultiPolygon'].includes(f.geometry.type)));}
   for(const f of rain.features){assert.equal(f.geometry.type,'LineString');assert.ok(presentation.rainfall.levels.includes(f.properties.value));assert.ok(f.geometry.coordinates.length>=2);}
   assert.ok(readFileSync(base+presentation.farming.file).length<600000,'overview remains lazy and compact');
  }
@@ -59,4 +65,14 @@ test('Industry sector/subsector selection survives reload and comparison return'
  assert.equal(readAsiaAtlasState(writeAsiaAtlasState(url,state),context).subsector,'auto');
  const comparison=startAsiaComparison(url,state,'natural');assert.equal(comparison.sector,undefined);assert.equal(restoreAsiaComparison(url,comparison,context).subsector,'auto');
  assert.equal(readAsiaAtlasState(new URL('https://example.com/atlas/asia/east-asia/industry/?sector=services&subsector=auto'),context).subsector,undefined);
+});
+
+
+test('米・雨・川の重ね合わせは農業の概要に限りURLと比較復帰で保存される',()=>{
+ const context={countries:['IND'],cities:[],bounds:[46,0,92,57],fields:['natural','agriculture'],topics:{agriculture:['overview','rice']}};
+ const url=new URL('https://example.com/atlas/asia/south-central-asia/agriculture/?overlay=water');
+ const state=readAsiaAtlasState(url,context);assert.equal(state.overlay,'water');
+ assert.equal(readAsiaAtlasState(writeAsiaAtlasState(url,state),context).overlay,'water');
+ const comparison=startAsiaComparison(url,state,'natural');assert.equal(comparison.overlay,undefined);assert.equal(restoreAsiaComparison(url,comparison,context).overlay,'water');
+ assert.equal(readAsiaAtlasState(new URL(url.href+'&topic=rice'),context).overlay,undefined);
 });

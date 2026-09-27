@@ -2,9 +2,9 @@ import {industrySectors,industrySubsectors,type IndustrySector} from '../data/at
 export type AsiaRegionId = 'east-asia' | 'southeast-asia' | 'south-central-asia';
 export type AsiaField = 'natural' | 'agriculture' | 'industry' | 'population';
 export type AsiaCamera = { lng: number; lat: number; zoom: number };
-export type AsiaState = { field: AsiaField; place: string | null; city: string | null; camera: AsiaCamera | null; back: string | null; point?: [number, number] | null; topic?: string | null; detail?: string | null; compare?: string | null; story?:string|null; sector?:string|null; subsector?:string|null };
+export type AsiaState = { field: AsiaField; place: string | null; city: string | null; camera: AsiaCamera | null; back: string | null; point?: [number, number] | null; topic?: string | null; detail?: string | null; compare?: string | null; story?:string|null; sector?:string|null; subsector?:string|null; overlay?:'water'|null };
 export type AsiaStateContext = { countries: readonly string[]; cities: readonly { id: string; countryCode: string }[]; bounds: readonly number[]; fields: readonly AsiaField[]; topics?: Partial<Record<AsiaField, readonly string[]>>; details?: Partial<Record<AsiaField, readonly string[] | ((id:string)=>boolean)>>; stories?:Partial<Record<AsiaField,readonly string[]>> };
-const ownedKeys = ['field', 'place', 'city', 'lng', 'lat', 'z', 'back', 'region', 'at', 'topic', 'detail', 'compare','story','sector','subsector'];
+const ownedKeys = ['field', 'place', 'city', 'lng', 'lat', 'z', 'back', 'region', 'at', 'topic', 'detail', 'compare','story','sector','subsector','overlay'];
 export const asiaFieldPaths: Record<AsiaField, string> = { natural: 'nature', agriculture: 'agriculture', industry: 'industry', population: 'population' };
 const routeField = (url: URL): AsiaField | undefined => Object.entries(asiaFieldPaths).find(([, path]) => url.pathname.replace(/\/$/, '').endsWith(`/${path}`))?.[0] as AsiaField | undefined;
 
@@ -38,6 +38,7 @@ export function readAsiaAtlasState(url: URL, context: AsiaStateContext): AsiaSta
   const validDetail=detail&&(typeof allowedDetails==='function'?allowedDetails(detail):allowedDetails?.includes(detail));
   return { field, place, city, camera, back, ...(validSector?{sector}:{}),...(validSubsector?{subsector}:{}), ...(validPoint?{point:validPoint}:{}),
     ...(topic && context.topics?.[field]?.includes(topic) ? {topic} : {}),
+    ...(field==='agriculture'&&(!topic||topic==='overview')&&q.get('overlay')==='water'?{overlay:'water' as const}:{}),
     ...(validDetail ? {detail:detail!} : {}),
     ...(story&&context.stories?.[field]?.includes(story)?{story}:{}),
     ...(compare && compare !== place && context.countries.includes(compare) ? {compare} : {}) };
@@ -51,6 +52,7 @@ export function writeAsiaAtlasState(url: URL, state: AsiaState): URL {
   else if (state.field !== 'natural') next.searchParams.set('field', state.field);
   if(state.field==='industry'&&state.sector){next.searchParams.set('sector',state.sector);if(state.subsector)next.searchParams.set('subsector',state.subsector);}
   if (state.topic) next.searchParams.set('topic', state.topic);
+  if(state.field==='agriculture'&&(!state.topic||state.topic==='overview')&&state.overlay==='water')next.searchParams.set('overlay','water');
   if (state.detail) next.searchParams.set('detail', state.detail);
   if (state.story) next.searchParams.set('story', state.story);
   if (state.compare) next.searchParams.set('compare', state.compare);
@@ -71,7 +73,7 @@ export function startAsiaComparison(url: URL, state: AsiaState, field: AsiaField
   const approved = new URLSearchParams();
   for (const key of ownedKeys) if (key !== 'back' && from.searchParams.has(key)) approved.set(key, from.searchParams.get(key)!);
   approved.set('field', state.field);
-  const {topic, detail, story, sector, subsector, ...base} = state;
+  const {topic, detail, story, sector, subsector, overlay, ...base} = state;
   return { ...base, field, back: approved.toString() };
 }
 

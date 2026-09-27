@@ -55,13 +55,13 @@ export function createAsiaWater(root:HTMLElement,config:Config,getState:()=>Asia
  function legend(t:WaterTopic){
   const content=$('[data-hydrology-scale]');content.replaceChildren();$('[data-hydrology-legend-title]').textContent=waterTopics[t].title;
   const swatch=(color:string,label:string)=>{const s=el('span'),i=el('i');i.style.backgroundColor=color;s.append(i,document.createTextNode(label));content.append(s);};
-  if(t==='precipitation'){swatch('#347d9c','等雨量線：100・250・500・750・1,000・1,500・2,000・3,000・4,000 mm/年');$('[data-hydrology-legend-note]').textContent='1981–2010年の推計平年値。同じ年間降水量の地点を青い線で結びます。薄い背景色は降水量の広がりを補助的に示します。海・欠測の範囲は線をつなぎません。';}
+  if(t==='precipitation'){swatch('#347d9c','等雨量線：250mm/年間隔（数字は500mmごと）');$('[data-hydrology-legend-note]').textContent='1981–2010年の推計平年値。同じ年間降水量の地点を青い線で結びます。薄い背景色は降水量の広がりを補助的に示します。海・欠測の範囲は線をつなぎません。';}
   else if(t==='basins'){swatch('#b5ced9','色の違い：出口が異なる流域');swatch('#ac432f','赤い輪郭：選択した流域');$('[data-hydrology-legend-note]').textContent='色は水量や面積の大小を表しません。同じ色を別の流域にも使います。国境を越える流域は輪郭でつなぎ、対象国の範囲を塗っています。';}
   else{for(const c of Object.values(groundwaterClasses))swatch(c.color,c.type+'・'+c.recharge);$('[data-hydrology-legend-note]').textContent='涵養量の区分（mm/年）。青は主要な地下水盆地、緑は複雑な水文地質構造、茶は局地的・浅い帯水層です。地質の種類が違う色の濃さは、そのまま比較できません。';}
  }
  function method(t:WaterTopic){
   const c=$('[data-hydrology-method]');c.replaceChildren(el('p',waterTopics[t].period+'。'+waterTopics[t].definition),link('地図データの提供元を開く',waterTopics[t].source));
-  if(t==='precipitation')c.append(el('p','等雨量線は表示格子の間を補間して作っています。16km未満の短い線を省き、最大1.5kmの許容差で簡略化しています。地点の数値は線から読み取るのではなく、元の表示格子の値を使います。'),el('p','CHELSA BIO12 v2.1（CC0 1.0）。気候モデル・再解析を地形などで細かくした約1km格子です。表示格子へ平均化した後に整数mmに丸め、色と選択値を同じ格子から作っています。約4kmは投影座標上の間隔で、地表の距離や測定精度ではありません。海岸や小島では原資料・表示格子に欠ける部分があります。'));
+  if(t==='precipitation')c.append(el('p','等雨量線は表示格子の値を投影座標上の半径約12kmでならして作っています。80km未満の短い線を省き、最大6kmの許容差で簡略化しています。地表での距離は緯度により異なります。地点の数値は線から読み取るのではなく、元の表示格子の値を使います。'),el('p','CHELSA BIO12 v2.1（CC0 1.0）。気候モデル・再解析を地形などで細かくした約1km格子です。表示格子へ平均化した後に整数mmに丸め、色と選択値を同じ格子から作っています。約4kmは投影座標上の間隔で、地表の距離や測定精度ではありません。海岸や小島では原資料・表示格子に欠ける部分があります。'));
   if(t==='basins')c.append(el('p','BasinATLAS v1.0（CC BY 4.0）のレベル6小流域を、実際につながる出口（NEXT_SINK）ごとに結合しました。面積は原資料の小流域面積を合計しており、国ごとの面積ではありません。塗りは対象国の陸地、輪郭は表示範囲で切り出していますが、数値は表示外を含む集水域全体です。名称はNatural Earthの河川との重なりを使った補助表示で、元資料の公式流域名ではありません。'),el('p','出口の流量はWaterGAP 2.2（2014年版）による1971–2000年の自然化推計です。人による取水・貯水施設などの影響を除いたモデル値で、現在の流量ではありません。最少・最多月は長期平均した12か月のうちの月で、洪水時の最大流量ではありません。原モデルは0.5度格子で、細かい流域形状ほどの精度はありません。'),link('属性の定義・出典（HydroATLAS）','https://data.hydrosheds.org/file/technical-documentation/BasinATLAS_Catalog_v10.pdf'));
   if(t==='groundwater')c.append(el('p','Datenquelle: WHYMAP, (C) BGR Hannover & UNESCO Paris。2008年の世界図（縮尺1:25,000,000）の提供サービスを2026年に取得しました。地質・涵養の区分を維持して陸地で切り出し、表示のため輪郭を簡略化しています。拡大しても地域の井戸や水質を調べる精度にはなりません。区域の境界と海岸線の間に資料の違いによる空白があります。'));
  }
