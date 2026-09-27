@@ -40,6 +40,12 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.equal(q('[data-population-reading]').hidden,field!=='population');
       assert.equal(q('[data-population-legend]').hidden,field!=='population');
       assert.equal(config.populationBase,'/insight-journal/assets/atlas/asia-population-v1/');
+      assert.equal(config.socialBase,'/insight-journal/assets/atlas/asia-social-v1/');
+      assert.ok(config.social.adminCount>=16);
+      assert.ok(Buffer.byteLength(JSON.stringify(config.social))<30000,'social geometry, counts and series stay in lazy assets');
+      assert.equal(q('[data-social-panel]').hidden,true);
+      assert.ok(q('[data-population-topic] option[value="national-age-old"]'));
+      assert.ok(q('[data-social-metric]')&&q('[data-social-area]')&&q('[data-social-density]'));
       assert.ok(config.population.cities.length>=12);
       assert.match(q('[data-population-reading]').textContent,/2025年の資料が定めた同じ範囲/);
       assert.equal(q('[data-overview]').hidden,field!=='nature');
