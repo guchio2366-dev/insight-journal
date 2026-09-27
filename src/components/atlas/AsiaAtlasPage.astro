@@ -8,6 +8,7 @@ import AsiaIndustryPanel from './AsiaIndustryPanel.astro';
 import AsiaWaterPanel from './AsiaWaterPanel.astro';
 import AsiaSocialPanel from './AsiaSocialPanel.astro';
 import AsiaTradePanel from './AsiaTradePanel.astro';
+import AsiaPlaceReading from './AsiaPlaceReading.astro';
 import tradeManifest from '../../../public/assets/atlas/asia-trade-v1/manifest.json';
 import {tradeTopics} from '../../data/atlas/asia-trade';
 import socialManifest from '../../../public/assets/atlas/asia-social-v1/manifest.json';
@@ -106,6 +107,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
        <div class="atlas-national asia-reading-scroll" tabindex="0" role="region" aria-label="選択した場所の解説">
         <label class="asia-city-picker" data-city-picker hidden={initialField!=='natural'}>都市の雨温図<select data-city-select aria-label="都市の雨温図を選ぶ"><option value="">都市を選ぶ</option>{cities.map(c=><option value={c.id} data-country={c.countryCode}>{c.name} · {japaneseNames[c.countryCode]}</option>)}</select></label>
         <div class="asia-comparison-return" data-comparison-return hidden><p>元の選択と地図の位置を保存しています。</p><button type="button" data-comparison-back>比較前の地図に戻る</button></div>
+        <AsiaPlaceReading />
         <AsiaPopulationPanel {regionId} {population} active={initialField==='population'} />
         <AsiaIndustryPanel active={initialField==='industry'} />
         <AsiaWaterPanel />

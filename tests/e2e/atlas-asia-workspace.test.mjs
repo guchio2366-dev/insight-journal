@@ -57,6 +57,7 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.equal(q('[data-climate-legend]').hidden,field!=='nature');
       assert.equal(q('[data-agriculture-legend]').hidden,field!=='agriculture');
       assert.equal(q('.asia-reading-scroll').getAttribute('tabindex'),'0');
+      assert.ok(q('[data-place-reading]')&&q('[data-place-story]')&&q('[data-place-story-bridges]'));
       for(const card of all('[data-city-panel]')) assert.ok(card.querySelector('.asia-climate-diagram'));
       assert.ok(q('[data-city-panel]').compareDocumentPosition(q('[data-class-reading]')) & 4,'city diagrams precede classification notes');
       assert.ok(sitemap.includes(`/atlas/asia/${region}/${field}/`));

@@ -76,6 +76,7 @@ async function until(check, message) {
 function fixture() {
   const singles = ['reading-title', 'reading-summary', 'reading-questions', 'map-title', 'map-eyebrow', 'map-period', 'grid-reading', 'class-code', 'class-name', 'class-description', 'rice-value', 'climate-method', 'agriculture-method', 'rice-source', 'rice-summary', 'rice-scale','physical-title','physical-takeaway','physical-value','physical-detail-title','physical-detail','physical-context','population-title','population-takeaway','population-value','population-coverage','population-detail','population-resolution','urban-population','urban-area','urban-density','urban-history','farming-title','farming-takeaway','farming-value','farming-definition','farming-coverage','farming-reference','farming-statistics-title','farming-statistics-definition','farming-statistics-status','farming-statistics-tables','farming-method','farming-map-source','farming-legend-title','farming-scale','farming-legend-note','map-gesture'];
   return `<main data-asia-atlas>
+    <section data-place-reading hidden><select data-place-story></select><div data-place-story-body hidden><h2 data-place-story-title></h2><p data-place-story-lead></p><p data-place-story-text></p><p data-place-story-scope></p><a data-place-story-source></a><div data-place-story-bridges></div></div></section>
     <select data-country-select><option value=""></option><option value="JPN">Japan</option><option value="CHN">China</option><option value="MNG">Mongolia</option></select>
     <select data-city-select><option value=""></option><option value="tokyo" data-country="JPN">Tokyo</option><option value="beijing" data-country="CHN">Beijing</option></select>
     <button data-country-button="JPN"></button><button data-country-button="CHN"></button><button data-country-button="MNG"></button>
@@ -612,6 +613,27 @@ test('初期画像が失敗した場合はMapLibre load到達後も再試行を�
     assert.equal(q('[data-map-state]').hidden, true);
     assert.equal(q('[data-map-retry]').hidden, true);
   } finally { await window.happyDOM.close(); }
+});
+
+test('事例の選択・比較・復帰・別地点選択を実コントローラーで処理する',async()=>{
+ const {window,q}=await setup('?field=agriculture',{farming:true,hydrology:true});
+ try{
+  q('[data-place-story]').value='north-china-wheat';q('[data-place-story]').dispatchEvent(new window.Event('change'));
+  await until(()=>q('[data-farming-value]').textContent.includes('123.4'),'scene numeric value');
+  assert.equal(q('[data-place-story-body]').hidden,false);assert.match(q('[data-place-story-text]').textContent,/灌漑/);
+  assert.equal(new URL(window.location.href).searchParams.get('story'),'north-china-wheat');
+  q('[data-place-story-bridges] button').click();assert.equal(new URL(window.location.href).searchParams.get('topic'),'precipitation');assert.equal(q('[data-place-reading]').hidden,true);
+  await until(()=>q('[data-hydrology-value]').textContent.includes('1,534'),'rain comparison loaded');
+  assert.equal(new URL(window.location.href).searchParams.has('story'),false);
+  q('[data-comparison-back]').click();await until(()=>q('[data-farming-value]').textContent.includes('123.4'),'scene restored');
+  assert.equal(q('[data-place-story]').value,'north-china-wheat');assert.equal(window.__map.getCenter().lng,115);
+  await window.__map.fire('click',{lngLat:{lng:116,lat:38},point:{x:10,y:10}});
+  assert.equal(q('[data-place-story-body]').hidden,true);assert.equal(new URL(window.location.href).searchParams.has('story'),false);
+  q('[data-place-story]').value='north-china-wheat';q('[data-place-story]').dispatchEvent(new window.Event('change'));
+  q('[data-farming-topic]').value='chicken';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));
+  await until(()=>q('[data-farming-value]').textContent.includes('0 羽/km²'),'new topic loaded');
+  assert.equal(q('[data-place-story-body]').hidden,true);assert.equal(window.__maps.length,1);
+ }finally{await window.happyDOM.close();}
 });
 
 test('農林業は品目・単位・地点を切り替え、国別統計と比較復帰を保持する',async()=>{
