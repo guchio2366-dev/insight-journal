@@ -12,21 +12,27 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
     assert.equal(doc.querySelectorAll('[data-city-card]').length,24);
     assert.equal(doc.querySelectorAll('[data-city-card="kyiv"] tbody tr').length,12);
     assert.ok(doc.querySelector('[data-city-card="rome"]').textContent.includes('欠測'));
-    const active=field==='nature'?'climate':field==='agriculture'?'wheat':field==='population'?'subject':null;
+    const active=field==='nature'?'climate':field==='agriculture'||field==='population'?'subject':null;
     if(active)assert.ok(doc.querySelector(`[data-eu-${active}-image]`).getAttribute('href'));
     assert.equal(doc.querySelectorAll('[data-eu-field]').length,4);
-    assert.equal(JSON.parse(doc.querySelector('[data-eu-config]').textContent).layers.length,29);
+    assert.equal(JSON.parse(doc.querySelector('[data-eu-config]').textContent).layers.length,30);
     assert.ok(doc.querySelector('a[href="https://doi.org/10.7910/DVN/SWPENT"]'));
-    assert.ok(doc.querySelector('[data-eu-field="wheat"]'));
+    assert.ok(doc.querySelector('[data-eu-field="crops"]'));
     assert.equal(doc.querySelector('meta[name="robots"]'),null);
     const climateReader=field==='nature';
     assert.equal(doc.querySelector('[data-eu-climate-reader]').hidden,!climateReader);
     assert.equal(doc.querySelector('[data-eu-subject-reader]').hidden,climateReader);
-    assert.equal(doc.querySelector('[data-eu-subject-legend]').hidden,climateReader||field==='agriculture');
+    assert.equal(doc.querySelector('[data-eu-subject-legend]').hidden,climateReader);
     assert.equal(doc.querySelector('[data-eu-climate-legend]').hidden,field!=='nature');
-    assert.equal(doc.querySelector('[data-eu-wheat-legend]').hidden,field!=='agriculture');
+    assert.equal(doc.querySelector('[data-eu-wheat-legend]').hidden,true);
     assert.equal(doc.querySelector('.eu-read-panel').getAttribute('aria-labelledby'),climateReader?'eu-city-heading':'eu-subject-title');
     assert.equal(doc.querySelectorAll('[data-eu-point]:not([hidden])').length,climateReader?15:0);
+    if(field==='agriculture'){
+      assert.equal(doc.querySelector('[data-eu-map-title]').textContent,'作物の分布');
+      assert.match(doc.querySelector('[data-eu-subject-image]').getAttribute('href'),/crop-overview-v1\/crops.png$/);
+      assert.equal(doc.querySelectorAll('[data-eu-legend-items] .eu-swatch').length,12);
+      assert.match(doc.querySelector('[data-eu-subject-note]').textContent,/ブドウとオリーブの単独分布は.*含まれず/);
+    }
     if(field==='industry'||field==='population'){
       const title=field==='industry'?'産業の拠点':'人口密度';
       assert.equal(doc.querySelector('[data-eu-map-title]').textContent,title);

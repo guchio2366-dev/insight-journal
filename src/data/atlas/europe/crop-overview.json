@@ -1,0 +1,16 @@
+{
+  "crops": [
+    { "id": "wheat", "name": "小麦", "color": "#b89138" },
+    { "id": "barley", "name": "大麦", "color": "#826fbd" },
+    { "id": "maize", "name": "トウモロコシ", "color": "#d37438" },
+    { "id": "rapeseed", "name": "菜種", "color": "#c6ad30" },
+    { "id": "sunflower", "name": "ヒマワリ", "color": "#b95b4a" },
+    { "id": "sugarbeet", "name": "テンサイ", "color": "#986480" },
+    { "id": "potato", "name": "ジャガイモ", "color": "#816a55" },
+    { "id": "rice", "name": "米", "color": "#358f9b" },
+    { "id": "soybean", "name": "大豆", "color": "#68965d" },
+    { "id": "vegetables", "name": "その他の野菜", "color": "#437da5" },
+    { "id": "temperatefruit", "name": "温帯果樹", "color": "#b06797" },
+    { "id": "citrus", "name": "柑橘類", "color": "#dc904c" }
+  ]
+}
