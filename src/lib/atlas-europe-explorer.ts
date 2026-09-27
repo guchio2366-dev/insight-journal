@@ -198,6 +198,11 @@ export function initEuropeAtlas() {
     query('[data-eu-field-label]').textContent=currentField.label;
     query('[data-eu-field-kicker]').textContent='EUROPE · '+currentField.id.toUpperCase();
     query('[data-eu-field-heading]').textContent=europeFieldHeadings[currentField.id];
+    query<HTMLElement>('.eu-workspace').dataset.field=currentField.id==='nature'?'natural':currentField.id;
+    all<HTMLElement>('[data-eu-topic-field]').forEach(group=>{group.hidden=group.dataset.euTopicField!==currentField.id;});
+    const topic=subject().id;
+    const selectedTopic=currentField.id==='agriculture'?(topic==='forest'?'forest':['cattle','pig','chicken','sheep'].includes(topic)?'cattle':'wheat'):currentField.id==='industry'?(topic==='services'?'services':'hubs'):currentField.id==='population'?'density':topic;
+    all<HTMLElement>('[data-eu-topic]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.euTopic===selectedTopic)));
     document.title=`欧州の${currentField.label}｜Insight Journal`;
     const canonical=writeEuropeState(new URL(location.href),state);
     if(canonical.pathname!==location.pathname)history.replaceState({},'',canonical);
@@ -312,6 +317,7 @@ export function initEuropeAtlas() {
     void showGrid(unproject([point.x, point.y]));
   });
   all<HTMLElement>('[data-eu-layer]').forEach(b => b.addEventListener('click', () => setLayer(b.dataset.euLayer!)));
+  all<HTMLElement>('[data-eu-topic]').forEach(button=>button.addEventListener('click',()=>setLayer(button.dataset.euTopic!)));
   query<HTMLSelectElement>('[data-eu-subject]').addEventListener('change',e=>setLayer((e.target as HTMLSelectElement).value));
   query<HTMLSelectElement>('[data-eu-feature]').addEventListener('change',e=>selectFeature((e.target as HTMLSelectElement).value));
   all<HTMLElement>('[data-eu-jump]').forEach(b=>b.addEventListener('click',()=>{setLayer(b.dataset.euJump!);query('[data-eu-map-title]').scrollIntoView({block:'start'});}));

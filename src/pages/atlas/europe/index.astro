@@ -1,4 +1,7 @@
 ---
+import AtlasWorkspaceFrame from '../../../components/atlas/AtlasWorkspaceFrame.astro';
+import EuropeRegionNavigation from '../../../components/atlas/EuropeRegionNavigation.astro';
+import '../../../styles/atlas-europe-workspace.css';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { withBase } from '../../../lib/urls';
 import geography from '../../../data/atlas/europe-countries.json';
@@ -43,20 +46,18 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
 ---
 
 <BaseLayout title="欧州地図" description="欧州の国・地域の位置と広がりを確認できる基礎地図。" compactAtlas>
-  <div class="europe-atlas shell" data-europe-atlas>
+  <div class="europe-atlas eu-workspace-root" data-europe-atlas>
+    <EuropeRegionNavigation overview />
+    <AtlasWorkspaceFrame region="europe">
+    <div class="eu-workspace atlas-explorer" data-field="regional-overview">
     <p class="europe-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / 欧州</p>
-    <header class="europe-heading">
+    <header class="europe-heading visually-hidden">
       <p class="eyebrow">Atlas · Europe</p>
       <h1>欧州地図</h1>
       <p>西欧から東欧・ロシア西部まで、45の国・地域の位置関係を確かめる基礎地図です。</p>
     </header>
 
-    <p><a data-europe-detail-link href={withBase('/atlas/europe/nature/')}>欧州の気候と24地点の雨温図を見る →</a>　<a data-europe-detail-link href={withBase('/atlas/europe/agriculture/')}>作物・家畜・森林を見る →</a></p>
-    <p><a data-europe-detail-link href={withBase('/atlas/europe/industry/')}>産業の拠点と国別の構成を見る →</a>　<a data-europe-detail-link href={withBase('/atlas/europe/population/')}>人口密度・都市・高齢化を見る →</a></p>
-    <nav class="europe-regions" aria-label="欧州の地域を選ぶ">
-      <button type="button" data-region-button="all" aria-pressed="true">欧州全体</button>
-      {regionOrder.map(region => <button type="button" data-region-button={region} aria-pressed="false">{regionNames[region]}</button>)}
-    </nav>
+    <nav class="eu-field-nav" aria-label="欧州地図の表示"><a href={withBase('/atlas/europe/')} aria-current="page">欧州概況</a>{[['agriculture','農林業'],['nature','自然環境'],['industry','主要産業'],['population','人口']].map(([id,label])=><a data-europe-detail-link href={withBase('/atlas/europe/'+id+'/')}>{label}</a>)}</nav>
 
     <div class="europe-layout">
       <section class="europe-map-card" aria-labelledby="europe-map-title">
@@ -79,6 +80,7 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
       </section>
 
       <aside class="europe-side" aria-labelledby="europe-selection-title">
+        <label class="europe-country-picker">国・地域<select data-europe-country-select><option value="">欧州全体</option>{countries.map(country=><option value={country.code}>{country.name}</option>)}</select></label>
         <div class="europe-selection" aria-live="polite">
           <p class="eyebrow">Selected place</p>
           <h2 id="europe-selection-title" data-selection-name>地図を読む</h2>
@@ -98,6 +100,8 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
       <p>境界は <a href="https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/">Natural Earth Admin 0 Countries（1:110m）</a>を使用。北欧・西欧・南欧・東欧の区分は原本のサブリージョンに基づきます。灰色は周辺地域です。東欧にはウクライナ、ベラルーシ、モルドバ、ポーランド、ルーマニアなどを含め、ロシアは表示範囲内の西部を示します。境界・名称は出典データの表示上の区分であり、政治的な地位や主権についての見解を示すものではありません。西経25度～東経65度、北緯32度～73度を表示します。</p>
       <p>マルタ、アンドラ、リヒテンシュタイン、モナコ、サンマリノ、バチカンの輪郭には<a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/">Natural Earth 1:50m</a>を使用しています。北緯53度を標準緯線とする等距円筒図法で、面積の比較には適しません。</p>
     </footer>
+    </div>
+    </AtlasWorkspaceFrame>
   </div>
 </BaseLayout>
 
@@ -110,6 +114,7 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
     const map = root.querySelector<SVGSVGElement>('.europe-map');
     const selectionName = root.querySelector<HTMLElement>('[data-selection-name]');
     const selectionRegion = root.querySelector<HTMLElement>('[data-selection-region]');
+    const countrySelect = root.querySelector<HTMLSelectElement>('[data-europe-country-select]')!;
     const regionNames: Record<string, string> = {
       north: '北欧', west: '西欧', south: '南欧', east: '東欧'
     };
@@ -142,6 +147,7 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
       map.setAttribute('viewBox', `${(left + right - frameWidth) / 2} ${(top + bottom - frameHeight) / 2} ${frameWidth} ${frameHeight}`);
     }
     function applyState(writeUrl = false) {
+      countrySelect.value = activeCountry;
       for (const button of regionButtons) button.setAttribute('aria-pressed', String(button.dataset.regionButton === activeRegion));
       for (const button of countryButtons) {
         const visible = activeRegion === 'all' || button.dataset.countryRegion === activeRegion;
@@ -196,6 +202,10 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
       if (activeRegion !== 'all' && chosen.dataset.countryRegion !== activeRegion) activeRegion = chosen.dataset.countryRegion ?? 'all';
       applyState(true);
     }
+    countrySelect.addEventListener('change', () => {
+      if (countrySelect.value) selectCountry(countrySelect.value);
+      else { activeCountry=''; activeRegion='all'; applyState(true); }
+    });
     for (const button of countryButtons) button.addEventListener('click', () => selectCountry(button.dataset.countryButton ?? ''));
     for (const path of mapCountries) path.addEventListener('click', () => selectCountry(path.dataset.mapCountry ?? ''));
     window.addEventListener('popstate', readUrl);

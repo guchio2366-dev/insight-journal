@@ -1,0 +1,10 @@
+---
+import { withBase } from '../../lib/urls';
+interface Props { overview?: boolean }
+const { overview = false } = Astro.props;
+const regions = [['all','欧州全体'],['north','北欧'],['west','西欧'],['south','南欧'],['east','東欧']];
+---
+<div class="eu-region-navigation shell">
+  <nav class="eu-region-top" aria-label="地図の地域"><a href={withBase('/atlas/')}>世界の地域</a><a href={withBase('/atlas/europe/')} aria-current="page">欧州</a></nav>
+  <nav class="eu-region-buttons" aria-label="欧州の地域を選ぶ">{regions.map(([id,name]) => <button type="button" data-region-button={overview?id:undefined} data-eu-region={overview?undefined:id} aria-pressed={id==='all'}>{name}</button>)}</nav>
+</div>
