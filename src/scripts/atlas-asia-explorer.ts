@@ -371,6 +371,8 @@ function start(root:HTMLElement) {
   async function showField() {
     if(!mapReady||!map)return;
     const revision=++fieldRevision,natural=naturalTopic()==='climate',rice=farmingTopic()==='rice',physical=isPhysical(),water=naturalTopic()==='water';
+    // Hide the previous field before awaiting geography or any other asset.
+    void presentation?.show(map);
     map.setLayoutProperty('asia-climate','visibility',natural?'visible':'none');
     if(rice&&!map.getSource('asia-rice')){
       map.addSource('asia-rice',{type:'image',url:asset(config.agricultureBase,riceLayer.imageUrl),coordinates:riceLayer.coordinates as [number,number][]});
@@ -424,7 +426,6 @@ function start(root:HTMLElement) {
         populationGeographyVisibility();
       }catch{if(revision===fieldRevision)status('詳細な海岸線を取得できませんでした。概略の国境と都市の表は引き続き読めます。',true);}
     }
-    if(revision===fieldRevision&&map)void presentation?.show(map);
     if(revision===fieldRevision&&map)void industry?.show(map);
     if(revision===fieldRevision&&map)void hydrology?.show(map);
     if(revision===fieldRevision&&map)void social?.show(map);

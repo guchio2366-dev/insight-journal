@@ -684,7 +684,7 @@ test('農林業の遅い応答は新しい主題を上書きせず、統計の�
 
 
 test('農畜産物の概要は初期同時表示し、種類切替・詳細図・履歴で地図を作り直さない',async()=>{
- const {window,q,requests}=await setup('',{farming:true,presentation:true});
+ const {window,q,requests}=await setup('',{farming:true,presentation:true,population:true,industry:true});
  try{
   assert.equal(requests.some(r=>r.startsWith('/assets/presentation/')),false);
   q('[data-field="agriculture"]').click();
@@ -696,6 +696,7 @@ test('農畜産物の概要は初期同時表示し、種類切替・詳細図�
   assert.equal(window.__map.layers['asia-farm-overview-livestock'].layout.visibility,'none');
   q('[data-farm-choice=wheat]').click();assert.equal(q('[data-farm-overview-reading]').hidden,true);assert.ok(window.__map.getLayer('asia-farming-wheat'));assert.equal(window.__map.layers['asia-farm-overview-crop'].layout.visibility,'none');
   q('[data-farm-choice=overview]').click();await until(()=>window.__map.layers['asia-farm-overview-crop'].layout.visibility==='visible','overview restored');assert.equal(window.__maps.length,1);assert.equal(requests.filter(r=>r.startsWith('/assets/presentation/')).length,1);
+  q('[data-field=industry]').click();assert.equal(window.__map.layers['asia-farm-overview-crop'].layout.visibility,'none','old overview hides before detailed geography resolves');await until(()=>window.__map.getLayer('asia-industry-national'),'industry settled');
  }finally{await window.happyDOM.close();}
 });
 
