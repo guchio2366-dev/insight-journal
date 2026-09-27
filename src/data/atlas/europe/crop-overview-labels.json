@@ -1,0 +1,110 @@
+[
+  {
+    "id": "wheat",
+    "name": "小麦",
+    "coordinate": [
+      31.0417,
+      46.625
+    ],
+    "detail": false
+  },
+  {
+    "id": "barley",
+    "name": "大麦",
+    "coordinate": [
+      -3.9583,
+      40.9583
+    ],
+    "detail": false
+  },
+  {
+    "id": "maize",
+    "name": "トウモロコシ",
+    "coordinate": [
+      24.0417,
+      45.7083
+    ],
+    "detail": false
+  },
+  {
+    "id": "rapeseed",
+    "name": "菜種",
+    "coordinate": [
+      10.7083,
+      51.375
+    ],
+    "detail": false
+  },
+  {
+    "id": "sunflower",
+    "name": "ヒマワリ",
+    "coordinate": [
+      30.0417,
+      46.5417
+    ],
+    "detail": false
+  },
+  {
+    "id": "rice",
+    "name": "米",
+    "coordinate": [
+      10.2917,
+      45.0417
+    ],
+    "detail": false
+  },
+  {
+    "id": "vegetables",
+    "name": "その他の野菜",
+    "coordinate": [
+      -1.125,
+      38.625
+    ],
+    "detail": false
+  },
+  {
+    "id": "temperatefruit",
+    "name": "温帯果樹",
+    "coordinate": [
+      6.4583,
+      46.0417
+    ],
+    "detail": false
+  },
+  {
+    "id": "sugarbeet",
+    "name": "テンサイ",
+    "coordinate": [
+      4.0417,
+      49.4583
+    ],
+    "detail": true
+  },
+  {
+    "id": "potato",
+    "name": "ジャガイモ",
+    "coordinate": [
+      19.5417,
+      52.0417
+    ],
+    "detail": true
+  },
+  {
+    "id": "soybean",
+    "name": "大豆",
+    "coordinate": [
+      24.7083,
+      43.9583
+    ],
+    "detail": true
+  },
+  {
+    "id": "citrus",
+    "name": "柑橘類",
+    "coordinate": [
+      -1.7083,
+      38.4583
+    ],
+    "detail": true
+  }
+]

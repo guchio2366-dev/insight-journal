@@ -2,6 +2,11 @@ import type { EuropeLayer } from '../data/atlas/europe/layers';
 
 /** Short reading guidance; source/method detail remains with the map legend. */
 export function europeReaderCopy(layer:EuropeLayer) {
+  if(layer.id==='crops')return {
+    title:'作物の分布',takeaway:'欧州の作物は地域ごとに組み合わさって栽培されています。',
+    body:'地図の作物名を押すと、その品目の収穫面積を個別の図で確認できます。この一枚絵は収録済みの12区分を重ねた概況図で、斜線は2品目が目立つ場所です。',
+    note:'2020年頃のモデル推計です。ブドウとオリーブの単独分布は元データに含まれず、この図には示していません。',
+  };
   if(layer.id==='water')return {
     title:'河川・湖',takeaway:'国境を越えて続く川をたどり、水のつながりを読みます。',
     body:'青い線は河川、青い面は湖です。ドナウ川やライン川の名前を押すと、流域の国々と水利用の関係を確認できます。',

@@ -1,26 +1,29 @@
 import { layoutNatureLabels, leaderEnd, type Box, type Point, type LabelPlacement } from './atlas-nature-labels';
 import { layoutClimateCodes, type CodePlacement } from './atlas-climate-code-labels';
 import climateLabels from '../data/atlas/europe/map-labels.json';
+import cropLabels from '../data/atlas/europe/crop-overview-labels.json';
+import cropOverview from '../data/atlas/europe/crop-overview.json';
 
 export const majorClimateCities = ['london','paris','berlin','warsaw','kyiv','moscow','madrid','lisbon','rome','athens','reykjavik','bergen','oslo','helsinki','budapest'];
 const compactCities = ['london','paris','moscow','madrid','rome','athens','reykjavik','helsinki'];
 type Place = { id:string; name:string; coordinates:number[] };
-type Annotation = Place & { kind:'city'|'feature'; button:HTMLButtonElement; line:SVGLineElement; dot:SVGCircleElement };
-type View = { climate:boolean; detailed:boolean; city:string; feature?:string; places:Place[] };
+type Annotation = Place & { kind:'city'|'feature'|'crop'; button:HTMLButtonElement; line:SVGLineElement; dot:SVGCircleElement; detail?:boolean };
+type View = { climate:boolean; crops:boolean; detailed:boolean; city:string; feature?:string; places:Place[] };
 
 /** One screen-space annotation layer is shared by MapLibre and the SVG fallback. */
-export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], features:Place[], getView:()=>View, project:(coordinate:number[])=>Point, select:(kind:'city'|'feature', id:string)=>void) {
+export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], features:Place[], getView:()=>View, project:(coordinate:number[])=>Point, select:(kind:'city'|'feature'|'crop', id:string)=>void) {
   const overlay=stage.querySelector<HTMLElement>('[data-eu-annotations]')!;
   const svg=overlay.querySelector<SVGSVGElement>('svg')!;
   const ns='http://www.w3.org/2000/svg';
   const create=<K extends keyof SVGElementTagNameMap>(name:K)=>document.createElementNS(ns,name);
   const items:Annotation[]=[];
   const mapNames:Record<string,string>={danube:'ドナウ川',rhine:'ライン川',alps:'アルプス山脈'};
-  for(const [kind, places] of [['city',cities],['feature',features]] as const) for(const place of places) {
+  for(const [kind, places] of [['city',cities],['feature',features],['crop',cropLabels.map(({coordinate,...label})=>({...label,coordinates:coordinate}))]] as const) for(const place of places) {
     const name=kind==='feature'?(mapNames[place.id]??place.name):place.name;
     const button=document.createElement('button');button.type='button';button.className='eu-map-label';button.textContent=name;
+    if(kind==='crop'){button.classList.add('eu-crop-label');button.style.setProperty('--crop-color',cropOverview.crops.find(c=>c.id===place.id)?.color??'#426b6b');}
     button.dataset.euMapPlace=place.id;button.dataset.euMapKind=kind;
-    button.setAttribute('aria-label',name+(kind==='city'?'の雨温図':'の解説'));
+    button.setAttribute('aria-label',name+(kind==='city'?'の雨温図':kind==='crop'?'の個別分布':'の解説'));
     button.addEventListener('click',e=>{e.stopPropagation();select(kind,place.id);});
     const line=create('line');line.classList.add('eu-label-leader');
     const dot=create('circle');dot.classList.add('eu-label-dot');dot.setAttribute('r','3.5');
@@ -40,7 +43,8 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
     svg.setAttribute('viewBox',`0 0 ${width} ${height}`);
     const bounds:Box={left:5,top:5,right:width-5,bottom:height-32};
     const major=width<500?compactCities:majorClimateCities;
-    const visible=items.filter(item=>view.climate ? item.kind==='city'&&(view.detailed||major.includes(item.id)||item.id===view.city) : item.kind==='feature'&&view.places.some(p=>p.id===item.id));
+    const compactCrops=['wheat','barley','maize','rapeseed','rice'];
+    const visible=items.filter(item=>view.climate ? item.kind==='city'&&(view.detailed||major.includes(item.id)||item.id===view.city) : view.crops ? item.kind==='crop'&&((view.detailed&&width>=500)||(!item.detail&&(width>=500||compactCrops.includes(item.id)))) : item.kind==='feature'&&view.places.some(p=>p.id===item.id));
     const selected=(item:Annotation)=>item.kind==='city'?item.id===view.city:item.id===view.feature;
     const inputs=visible.map(item=>{
       item.button.hidden=false;
@@ -50,7 +54,8 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
     for(const item of items) {
       const isVisible=inputIds.has(item.kind+'-'+item.id);
       item.button.hidden=!isVisible;item.line.style.display=item.dot.style.display=isVisible?'':'none';
-      item.button.setAttribute('aria-pressed',String(selected(item)));
+      if(item.kind==='crop')item.button.removeAttribute('aria-pressed');
+      else item.button.setAttribute('aria-pressed',String(selected(item)));
       item.dot.classList.toggle('is-active',selected(item));
     }
     const stageRect=stage.getBoundingClientRect();

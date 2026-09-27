@@ -49,13 +49,13 @@ export function initEuropeAtlas() {
     return !('rank' in p) || (p.rank??0)<=(state.region==='all'?1:3) || p.id===state.feature;
   };
   const annotations=createEuropeAnnotations(query<HTMLElement>('.eu-map-stage'),cities,features,
-    ()=>({climate:climateReader(),city:state.city,feature:state.feature,detailed:map&&liveMap.classList.contains('is-ready')?map.getBounds().getEast()-map.getBounds().getWest()<60:box[2]<frame.width*.65,places:visibleFeatures().filter(p=>featureVisible(p.id))}),
+    ()=>({climate:climateReader(),crops:subject().id==='crops',city:state.city,feature:state.feature,detailed:map&&liveMap.classList.contains('is-ready')?map.getBounds().getEast()-map.getBounds().getWest()<60:box[2]<frame.width*.65,places:visibleFeatures().filter(p=>featureVisible(p.id))}),
     coordinate=>{
       if(map&&liveMap.classList.contains('is-ready'))return map.project(coordinate as [number,number]);
       const [x,y]=project(coordinate), matrix=staticMap.getScreenCTM(),rect=query<HTMLElement>('.eu-map-stage').getBoundingClientRect();
       const point=matrix?new DOMPoint(x,y).matrixTransform(matrix):new DOMPoint();
       return {x:point.x-rect.left,y:point.y-rect.top};
-    },(kind,id)=>kind==='city'?selectCity(id):selectFeature(id));
+    },(kind,id)=>kind==='city'?selectCity(id):kind==='crop'?setLayer(id):selectFeature(id));
   function setLayer(id:string) {
     if(id==='overlay' && state.layer!=='overlay')state.returnLayer=state.layer;
     state.layer=id;delete state.feature;commit(false);
@@ -143,6 +143,8 @@ export function initEuropeAtlas() {
     query('#eu-map-label').textContent=layer.title+'。地図の名前から地点を選べます。';
     query<SVGGElement>('[data-eu-static-codes]').style.display=climateVisible?'':'none';
     query<SVGGElement>('[data-eu-static-codes]').removeAttribute('hidden');
+    query<SVGGElement>('[data-eu-static-crops]').style.display=layer.id==='crops'?'':'none';
+    query<SVGGElement>('[data-eu-static-crops]').removeAttribute('hidden');
   }
   async function showGrid(point: number[]) {
     const layer=subject();if(!layer.grid)return;
@@ -197,7 +199,7 @@ export function initEuropeAtlas() {
     query<HTMLElement>('.eu-workspace').dataset.field=currentField.id==='nature'?'natural':currentField.id;
     all<HTMLElement>('[data-eu-topic-field]').forEach(group=>{group.hidden=group.dataset.euTopicField!==currentField.id;});
     const topic=subject().id;
-    const selectedTopic=currentField.id==='agriculture'?(topic==='forest'?'forest':['cattle','pig','chicken','sheep'].includes(topic)?'cattle':'wheat'):currentField.id==='industry'?(topic==='services'?'services':'hubs'):currentField.id==='population'?'density':topic;
+    const selectedTopic=currentField.id==='agriculture'?(topic==='forest'?'forest':['cattle','pig','chicken','sheep'].includes(topic)?'cattle':'crops'):currentField.id==='industry'?(topic==='services'?'services':'hubs'):currentField.id==='population'?'density':topic;
     all<HTMLElement>('[data-eu-topic]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.euTopic===selectedTopic)));
     document.title=`欧州の${currentField.label}｜Insight Journal`;
     const canonical=writeEuropeState(new URL(location.href),state);
@@ -217,7 +219,7 @@ export function initEuropeAtlas() {
     layers();
     updateReader();
     query<HTMLElement>('.eu-read-panel').setAttribute('aria-labelledby',climateReader()?'eu-city-heading':'eu-subject-title');
-    if(!failed)status.textContent=climateReader()?'都市名を押すと、雨温図を表示します。拡大すると、ほかの都市名も表示します。':visibleFeatures().length?'地図の名前を押すと、その場所の説明を表示します。':subject().grid?'地図を押すと、その位置の値を地図の下に表示します。':'国を押すと、国全体の数値を表示します。';
+    if(!failed)status.textContent=climateReader()?'都市名を押すと、雨温図を表示します。拡大すると、ほかの都市名も表示します。':subject().id==='crops'?'地図の作物名を押すと、品目別の分布を表示します。':visibleFeatures().length?'地図の名前を押すと、その場所の説明を表示します。':subject().grid?'地図を押すと、その位置の値を地図の下に表示します。':subject().indicator?'国を押すと、国全体の数値を表示します。':'地図の凡例と右側の説明を読み比べます。';
     all<HTMLElement>('[data-eu-extra-field]').forEach(el=>{el.hidden=el.dataset.euExtraField!==currentField.id;});
     requestAnimationFrame(() => { map?.resize(); if (refit) fit(); annotations.refresh(); });
   }
@@ -250,7 +252,7 @@ export function initEuropeAtlas() {
   }
   function fallback() {
     disposeMap(); failed = true;
-    status.textContent = '簡易地図で表示中。地図の名前から雨温図や解説を表示できます。';
+    status.textContent = '簡易地図で表示中。地図の名前から雨温図・作物・解説を選べます。';
     query<HTMLButtonElement>('[data-eu-render]').textContent = '操作できる地図を再試行';
     fit();
   }
