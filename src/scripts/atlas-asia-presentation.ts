@@ -13,9 +13,9 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
  const metadata=config.presentation,overlay=root.querySelector<HTMLElement>('[data-map-annotations]')!;
  let map:import('maplibre-gl').Map|null=null,revision=0,scheduled=0,disposed=false;
  const events=new AbortController();
- const selectedKinds=new Set(['crop','livestock']);
- const datasets=new Map<string,any>(),pending=new Map<string,Promise<any>>();
  const controls=root.querySelectorAll<HTMLInputElement>('[data-farm-kind]');
+ const selectedKinds=new Set([...controls].filter(control=>control.checked).map(control=>control.dataset.farmKind!));
+ const datasets=new Map<string,any>(),pending=new Map<string,Promise<any>>();
  const buttons=new Map<string,HTMLButtonElement>();
  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('aria-hidden','true');overlay.append(svg);
  const mode=()=>{const s=getState();return s.field==='natural'?(s.topic??'climate'):s.field==='agriculture'?(s.topic??(s.city?'rice':'overview')):s.field==='population'&&(!s.topic||['density','urban'].includes(s.topic))?'population':null;};
@@ -68,6 +68,7 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
  async function show(currentMap:import('maplibre-gl').Map){
   if(map!==currentMap){map=currentMap;map.on('movestart',()=>{overlay.hidden=true;});map.on('moveend',schedule);map.on('resize',schedule);}
   const seq=++revision,current=mode();schedule();
+  if(current==='overview'){const reading=root.querySelector<HTMLElement>('[data-grid-reading]');if(reading)reading.textContent=selectedKinds.size===2?'作物と家畜の特徴的な分布を同時に表示しています。品目名を選ぶと詳しい分布を読めます。':selectedKinds.size===0?'地図に表示する作物・家畜をチェックしてください。':selectedKinds.has('crop')?'作物の特徴的な分布を表示しています。家畜の分布は非表示です。':'家畜の特徴的な分布を表示しています。作物の分布は非表示です。';}
   for(const id of ['asia-farm-overview-fill','asia-farm-overview-crop','asia-farm-overview-livestock','asia-rainfall-lines'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility','none');
   if(current!=='overview'&&current!=='precipitation')return;
   const farm=current==='overview',id=farm?'asia-farm-overview':'asia-rainfall-lines';

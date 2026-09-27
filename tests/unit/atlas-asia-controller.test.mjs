@@ -704,3 +704,18 @@ test('遅い概要図の応答は移動後の気候図に重ならない',async(
  const app=await setup('?field=agriculture',{farming:true,presentation:true,delayedPresentation:true});
  try{await until(()=>app.requests.some(r=>r.startsWith('/assets/presentation/')),'overview requested');app.q('[data-field="natural"]').click();app.resolvePresentation();await delay();await delay();assert.equal(app.window.__map.getLayer('asia-farm-overview-crop'),undefined);assert.equal(app.q('[data-farm-overview-reading]').hidden,true);}finally{app.resolvePresentation();await app.window.happyDOM.close();}
 });
+
+
+test('地図の再読み込み後も農畜産物のチェック状態と表示が一致する',async()=>{
+ const {window,q}=await setup('?field=agriculture',{farming:true,presentation:true});
+ try{
+  await until(()=>window.__map.getLayer('asia-farm-overview-crop')?.layout?.visibility==='visible','overview loaded');
+  const livestock=q('[data-farm-kind=livestock]');livestock.checked=false;livestock.dispatchEvent(new window.Event('change'));
+  await until(()=>window.__map.layers['asia-farm-overview-crop'].layout.visibility==='visible','filter applied');
+  assert.equal(window.__map.layers['asia-farm-overview-livestock'].layout.visibility,'none');
+  window.__map.getCanvas().dispatchEvent(new window.Event('webglcontextlost'));q('[data-map-retry]').click();
+  await until(()=>window.__maps.length===2&&window.__map.getLayer('asia-farm-overview-crop')?.layout?.visibility==='visible','overview rebuilt');
+  assert.equal(livestock.checked,false);assert.equal(window.__map.layers['asia-farm-overview-livestock'].layout.visibility,'none');assert.match(q('[data-grid-reading]').textContent,/家畜の分布は非表示/);
+  livestock.checked=true;livestock.dispatchEvent(new window.Event('change'));await until(()=>window.__map.layers['asia-farm-overview-livestock'].layout.visibility==='visible','filter still works');
+ }finally{await window.happyDOM.close();}
+});
