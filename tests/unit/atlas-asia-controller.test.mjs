@@ -92,7 +92,7 @@ function fixture() {
     <button data-compare="natural"></button><button data-compare="agriculture"></button>
     <button data-reset></button><button data-map-fit></button><button data-zoom-in></button><button data-zoom-out></button>
     <section data-farming-panel hidden></section><div data-farming-extra hidden></div><div data-farming-map-method hidden></div><div data-farming-legend hidden></div><button data-farming-statistics-retry hidden></button><label data-farming-topics><select data-farming-topic><option value="rice"></option><option value="wheat"></option><option value="chicken"></option><option value="forest"></option></select></label><section data-population-reading hidden></section><section data-population-legend hidden></section><div data-population-city-facts hidden></div><label data-population-topics><select data-population-topic><option value="density"></option><option value="urban"></option></select></label><select data-population-city><option value=""></option><option value="uc-tokyo" data-country="JPN"></option></select><section data-physical-reading hidden></section><section data-physical-legend hidden></section>
-    <label data-natural-topics><select data-natural-topic><option value="climate"></option><option value="terrain"></option><option value="water"></option></select></label>
+    <nav data-natural-topics><button data-natural-topic="climate"></button><button data-natural-topic="terrain"></button><button data-natural-topic="water"></button></nav>
     <select data-physical-focus><option value=""></option><option value="basin" data-country="CHN"></option></select>
     <label data-water-picker hidden><select data-water-select><option value=""></option><option value="rivers-1"></option></select></label>
     ${singles.map(name => `<div data-${name}></div>`).join('')}
@@ -145,7 +145,7 @@ async function setup(query = '', options = {}) {
     q('[data-asia-config]').textContent=JSON.stringify(conf);
     for(const name of ['panel','legend','legend-title','scale','legend-note','title','lead','value','definition','coverage','status','detail-label','picker-note','content','scene-reading','method']){const e=window.document.createElement('div');e.setAttribute('data-hydrology-'+name,'');root.append(e);}
     root.insertAdjacentHTML('beforeend','<button data-hydrology-retry></button><select data-hydrology-detail></select><select data-hydrology-scene></select>');
-    for(const topic of ['precipitation','basins','groundwater']){q('[data-natural-topic]').insertAdjacentHTML('beforeend','<option value="'+topic+'">'+topic+'</option>');root.insertAdjacentHTML('beforeend','<button data-hydrology-related="'+topic+'">'+topic+'</button>');}
+    for(const topic of ['precipitation','basins','groundwater']){q('[data-natural-topics]').insertAdjacentHTML('beforeend','<button data-natural-topic="'+topic+'">'+topic+'</button>');root.insertAdjacentHTML('beforeend','<button data-hydrology-related="'+topic+'">'+topic+'</button>');}
   }
   if(options.social){
     const conf=JSON.parse(q('[data-asia-config]').textContent),manifest=JSON.parse(readFileSync(new URL('../../public/assets/atlas/asia-social-v1/manifest.json',import.meta.url),'utf8'));
@@ -387,8 +387,12 @@ test('都市形状の取得中に分野を変えても古い人口図を重ね�
 test('地形は必要時だけ読み、負の標高と主題・地点・カメラを比較復帰で保持する',async()=>{
   const {window,q,requests}=await setup();
   try{
+    assert.equal(window.__map.layers['asia-climate'].paint['raster-opacity'],1,'display colors match the legend without blending');
+    assert.equal(q('[data-natural-topic="climate"]').getAttribute('aria-pressed'),'true');
     assert.equal(requests.some(r=>r.includes('/physical/')),false);
-    q('[data-natural-topic]').value='terrain';q('[data-natural-topic]').dispatchEvent(new window.Event('change'));
+    q('[data-natural-topic="terrain"]').click();
+    assert.equal(q('[data-natural-topic="terrain"]').getAttribute('aria-pressed'),'true');
+    assert.equal(q('[data-natural-topic="climate"]').getAttribute('aria-pressed'),'false');
     q('[data-physical-focus]').value='basin';q('[data-physical-focus]').dispatchEvent(new window.Event('change'));
     await until(()=>q('[data-physical-value]').textContent.includes('-75'),'negative elevation');
     assert.equal(q('[data-climate-legend]').hidden,true);assert.equal(q('[data-physical-reading]').hidden,false);
@@ -409,9 +413,9 @@ test('遅い河川の取得中に気候へ戻っても水系を重ねず、再�
  const {window,q,resolveWater,requests}=await setup('?topic=water',{delayedWater:true});
  try{
   await until(()=>requests.includes('/assets/physical/water.json'),'water requested');
-  q('[data-natural-topic]').value='climate';q('[data-natural-topic]').dispatchEvent(new window.Event('change'));
+  q('[data-natural-topic="climate"]').click();
   resolveWater();await delay();await delay();assert.equal(window.__map.getSource('asia-water'),undefined);
-  q('[data-natural-topic]').value='water';q('[data-natural-topic]').dispatchEvent(new window.Event('change'));
+  q('[data-natural-topic="water"]').click();
   await until(()=>window.__map.getLayer('asia-rivers'),'water rendered');
   q('[data-water-select]').value='rivers-1';q('[data-water-select]').dispatchEvent(new window.Event('change'));
   assert.equal(new URL(window.location.href).searchParams.get('detail'),'rivers-1');
@@ -434,7 +438,7 @@ test('地形・河川の未選択項目は説明・地点・マーカーを解�
   q('[data-physical-focus]').value='';q('[data-physical-focus]').dispatchEvent(new window.Event('change'));
   assert.equal(new URL(window.location.href).searchParams.get('detail'),null);assert.equal(new URL(window.location.href).searchParams.get('at'),null);
   assert.notEqual(q('[data-physical-detail-title]').textContent,'盆地');assert.equal(q('.asia-point-marker').hidden,true);assert.equal(window.__map.center.lng,100);
-  q('[data-natural-topic]').value='water';q('[data-natural-topic]').dispatchEvent(new window.Event('change'));
+  q('[data-natural-topic="water"]').click();
   await until(()=>window.__map.getLayer('asia-rivers'),'water ready');
   q('[data-water-select]').value='rivers-1';q('[data-water-select]').dispatchEvent(new window.Event('change'));
   assert.equal(q('[data-physical-detail-title]').textContent,'試験河川');

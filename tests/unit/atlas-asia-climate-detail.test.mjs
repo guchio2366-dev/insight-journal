@@ -5,6 +5,7 @@ import {createHash} from 'node:crypto';
 import {gzipSync,gunzipSync,inflateSync} from 'node:zlib';
 import {decodeAsiaClimateGrid} from '../../src/lib/atlas-asia-climate-grid.ts';
 import {gridCellAt,mercatorPoint} from '../../src/lib/atlas-asia-state.ts';
+import {asiaClimateClasses} from '../../src/data/atlas/asia-climate-definitions.ts';
 
 const base=new URL('../../public/assets/atlas/asia-climate-v2/',import.meta.url);
 const read=name=>readFileSync(new URL(name,base));
@@ -12,6 +13,22 @@ const manifest=JSON.parse(read('manifest.json'));
 const palette=JSON.parse(read('legend.json'));
 const grids=Object.fromEntries(Object.entries(manifest.regions).map(([id,r])=>[id,{...r,values:gunzipSync(read(r.grid))}]));
 const hash=raw=>createHash('sha256').update(raw).digest('hex');
+
+test('表示凡例と全30区分の色は北米に一致し、元の分類定義は変えない',()=>{
+  assert.deepEqual(asiaClimateClasses,palette);
+  const record=manifest.processing.displayPalette;
+  for(const key of ['reference','legend','script'])assert.equal(hash(readFileSync(new URL('../../'+record[key],import.meta.url))),record[key+'Sha256']);
+  const reference=readFileSync(new URL('../../'+record.reference,import.meta.url),'utf8');
+  const codes=reference.match(/codes='([^']+)'\.split/)[1].split(' ');
+  const colors=reference.match(/palette='([^']+)'\.split/)[1].split(' ');
+  assert.equal(codes.length,30);
+  for(const item of palette)assert.equal(item.color,'#'+colors[codes.indexOf(item.code)],item.code);
+  const published=JSON.parse(readFileSync(new URL('../../'+record.legend,import.meta.url)));
+  for(const item of published)assert.equal(palette.find(c=>c.code===item.code).color,item.color,item.code);
+  const source=JSON.parse(readFileSync(new URL('../../public/assets/atlas/asia-climate-v1/legend.json',import.meta.url)));
+  const metadata=items=>items.map(({color,...item})=>item);
+  assert.deepEqual(metadata(palette),metadata(source),'only display colors change');
+});
 
 // Independent PNG decoding detects palette/row/column mismatches in delivery.
 function pixels(raw){

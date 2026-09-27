@@ -3,7 +3,6 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { inflateSync } from 'node:zlib';
-import { asiaClimateClasses } from '../../src/data/atlas/asia-climate-definitions.ts';
 import { gridCellAt, mercatorPoint } from '../../src/lib/atlas-asia-state.ts';
 
 const base = new URL('../../public/assets/atlas/asia-climate-v1/', import.meta.url);
@@ -14,6 +13,7 @@ const read = name => {
 };
 const json = name => JSON.parse(read(name));
 const manifest = json('manifest.json');
+const asiaClimateClasses = json('legend.json');
 const regions = Object.fromEntries(Object.entries(manifest.regions).map(([id, record]) => [id, { record, grid: json(record.grid) }]));
 
 // Decode the three small non-interlaced RGBA PNGs once. This checks delivered
