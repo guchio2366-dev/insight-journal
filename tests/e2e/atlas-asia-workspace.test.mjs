@@ -63,6 +63,11 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.equal(all('[data-population-group]').length,4);
       assert.equal(q('[data-population-group=voting]').disabled,true);
       assert.ok(q('[data-map-annotations]'));
+      assert.equal(q('.asia-map-frame').nextElementSibling,q('[data-farm-overview-legend]'));
+      assert.equal(config.presentation.rainfall.interval,250);assert.equal(config.presentation.terrain.interval,500);
+      assert.ok(config.farmInsight.rivers.length>=2);assert.ok(q('[data-farm-water]'));
+      assert.ok(config.social.topics.some(t=>t.key==='overview'));
+      assert.ok(q('[data-social-quick-key]'));
       assert.ok(config.presentation.farming.products.some(p=>p.kind==='crop')&&config.presentation.farming.products.some(p=>p.kind==='livestock'));
       assert.ok(q('[data-industry-topic]').closest('.asia-reading-panel'));
       assert.ok(q('[data-population-topic]').closest('.asia-reading-panel'));

@@ -42,3 +42,17 @@
 @media(max-width:700px){.asia-atlas .asia-primary-topics button{font-size:13px;padding:8px 3px}.asia-atlas .asia-population-tabs{gap:5px}.asia-atlas .asia-population-tabs button{font-size:13px;padding:8px}.asia-atlas .asia-industry-sectors button{font-size:13px;padding:8px}.asia-atlas .asia-industry-subsectors button{font-size:12px;padding:8px}.asia-atlas .asia-map-annotations button{font-size:11px;padding:4px 5px}.asia-atlas .asia-map-annotations .asia-climate-code{font-size:12px}}
 
 .asia-atlas .atlas-tabs>a[aria-current=page]{background:#243b48;color:white}
+.asia-atlas .asia-farm-key{padding:6px 10px;background:#fafbf5;border-bottom:1px solid #c7ccbf}
+.asia-atlas .asia-farm-key-row{display:grid;grid-template-columns:36px 1fr;align-items:start;gap:4px}
+.asia-atlas .asia-farm-key-row>strong{font-size:11px;padding-top:8px}
+.asia-atlas .asia-farm-key .asia-farm-products{gap:0 4px}
+.asia-atlas .asia-farm-key .asia-farm-products button{min-height:30px;font-size:12px;padding:4px}
+.asia-atlas .asia-farm-toolbar button[aria-pressed=true]{background:#35515d;color:#fff}
+.asia-atlas .asia-map-annotations .asia-river-label{font-size:12px;padding:2px 4px;border:0;background:#ffffffee;color:#175f7b}
+.asia-atlas [data-social-scale] button{display:flex;align-items:center;gap:5px;min-height:36px;padding:4px 7px;border:1px solid #c3cbbc;background:#fffdf5;color:#344951;font-size:12px}
+.asia-atlas .asia-insight-places{display:flex;flex-wrap:wrap;gap:6px}
+.asia-atlas .asia-insight-places button{min-height:40px;padding:7px 10px;background:#f0f4ec;border:1px solid #b7c6b0;color:#2d4e53;font-weight:700}
+@media(min-width:1200px){.asia-atlas:has([data-farming-topics]:not([hidden])) .asia-map-frame{height:var(--asia-farm-map-height,420px);min-height:200px;max-height:none}}
+@media(pointer:coarse){.asia-atlas .asia-farm-key .asia-farm-products button,.asia-atlas [data-social-scale] button{min-height:44px}}
+
+.asia-atlas .asia-social-quick-key{display:flex;flex-wrap:wrap;gap:6px 12px;margin:8px 0 15px}.asia-atlas .asia-social-quick-key span{display:flex;align-items:center;gap:5px;font-size:12px}.asia-atlas .asia-social-quick-key i{width:14px;height:12px;border:1px solid #64736a55}
