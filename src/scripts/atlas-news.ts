@@ -1,5 +1,6 @@
-export type AtlasNewsRegion = 'europe' | 'north-america' | 'latin-america' | 'east-asia' | 'southeast-asia' | 'south-central-asia';
+export type AtlasNewsRegion = 'europe' | 'north-america' | 'latin-america' | 'east-asia' | 'southeast-asia' | 'south-central-asia' | 'west-asia';
 export const atlasNewsRegions = {
+  'west-asia': { label: '西アジア・中東', articleRegion: 'middle_east', countries: ['AM','AZ','BH','CY','GE','IQ','IL','JO','KW','LB','OM','QA','SA','PS','SY','TR','AE','YE','IR','EG'], bounds: [23,10,64,45] },
   'europe': { label: '欧州', articleRegion: 'europe', countries: ['AL','AD','AT','BY','BE','BA','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IS','IE','IT','XK','LV','LI','LT','LU','MT','MD','MC','ME','NL','MK','NO','PL','PT','RO','RU','SM','RS','SK','SI','ES','SE','CH','UA','GB','VA'], bounds: [-25,32,65,73] },
   'north-america': { label: '北米', articleRegion: 'north_america', countries: ['US','CA','MX'], bounds: [-137,16,-56,58] },
   'latin-america': { label: '中南米', articleRegion: 'latin_america', countries: ['AG','AR','BS','BB','BZ','BO','BR','CL','CO','CR','CU','DM','DO','EC','FK','GD','GT','GY','HT','HN','JM','KN','LC','NI','PA','PY','PE','PR','SR','VC','TT','UY','VE','SV'], bounds: [-93,-56,-33,28] },

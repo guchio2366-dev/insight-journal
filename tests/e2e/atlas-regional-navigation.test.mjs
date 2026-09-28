@@ -29,7 +29,8 @@ test('世界地図と地域名から、公開されている各地域の地図�
     ['europe', 'atlas/europe/'],
     ['east-asia', 'atlas/asia/east-asia/'],
     ['southeast-asia', 'atlas/asia/southeast-asia/'],
-    ['south-central-asia', 'atlas/asia/south-central-asia/']
+    ['south-central-asia', 'atlas/asia/south-central-asia/'],
+    ['west-asia', 'atlas/west-asia/']
   ]);
   for (const id of ['africa', 'oceania']) {
     let published = false;
@@ -58,7 +59,7 @@ test('世界地図と地域名から、公開されている各地域の地図�
 
   const regionFor = code => svg.querySelector(`a[href] [data-world-country="${code}"]`)?.closest('[data-world-region]')?.getAttribute('data-world-region');
   assert.equal(regionFor('MEX'), 'north-america', 'Mexico belongs to the published North America map');
-  assert.equal(regionFor('IRN'), undefined, 'Iran is outside the published Asia regions');
+  assert.equal(regionFor('IRN'), 'west-asia', 'Iran opens the editorial West Asia / Middle East grouping');
   assert.equal(regionFor('GRL'), undefined, 'Greenland is not one of the three published North America countries');
   assert.equal(regionFor('RUS'), 'europe', 'the published western Russia shape opens Europe');
   assert.equal(svg.querySelector('[data-world-country="ATA"]'), null, 'Antarctica is omitted from this navigation map');
