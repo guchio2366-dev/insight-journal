@@ -7,9 +7,9 @@ import {Window} from 'happy-dom';
 // Test the built CSS cascade, not browser geometry: visual QA uses /atlas/qa/.
 // Formatting also avoids Happy DOM's parser limitation with minified @media.
 const styles = new Map();
-async function openField(field, width, attributes = {}, height = 768) {
+async function openField(field, width, attributes = {}, height = 768, region = 'north-america') {
   const window = new Window({width, height, settings:{disableCSSFileLoading:true}});
-  window.document.write(await readFile(`dist/atlas/north-america/${field}/index.html`, 'utf8'));
+  window.document.write(await readFile(`dist/atlas/${region}/${field}/index.html`, 'utf8'));
   for (const [name, value] of Object.entries(attributes)) window.document.querySelector('.atlas-explorer').setAttribute(name, value);
   for (const node of window.document.querySelectorAll('style, link[rel=stylesheet]')) {
     const path = node.tagName === 'LINK' ? `dist/${node.getAttribute('href').split('/insight-journal/')[1]}` : null;
@@ -76,6 +76,17 @@ for (const field of ['agriculture', 'nature', 'industry', 'population']) {
     }
   });
 }
+
+test('West Asia uses the North America layout rules in every field and screen size', async () => {
+  for(const field of ['agriculture','nature','industry','population']) for(const width of [390, 1024, 1440, 1920]) {
+    const north=await openField(field,width),west=await openField(field,width,{},768,'west-asia');
+    try {
+      for(const [selector,property] of [['.atlas-primary-grid','grid-template-columns'],['.atlas-map-frame','aspect-ratio'],['.atlas-map-frame','min-height'],['.atlas-tabs','grid-template-columns']]) {
+        assert.equal(west.css(selector,property),north.css(selector,property),`${field} ${width}px ${property}`);
+      }
+    } finally {await north.window.happyDOM.close();await west.window.happyDOM.close();}
+  }
+});
 
 test('corn keeps its existing laptop story layout', async () => {
   const corn = await openField('agriculture', 1366, {'data-corn-index':''});

@@ -243,6 +243,7 @@ async function init(root:HTMLElement){
  async function render(){
   const version=++renderVersion;++pointVersion;const restoreMapFocus=svg.contains(document.activeElement);
   const t=topic();countrySelect.value=state.country;yearSelect.value=String(state.year);root.dataset.topic=t.id;
+  if(field==='natural')root.dataset.natureMode=t.group==='水資源'?'water':t.id==='terrain'?'landform':t.id==='contours'?'contour':'climate';
   $('[data-west-scope]').textContent=country()?.name??'20か国・地域';
   $('[data-west-year-label]').hidden=!(t.indicator||t.faoItem);
   $('[data-west-city-label]').hidden=t.id!=='climate';$('[data-west-urban-label]').hidden=t.id!=='cities';$('[data-west-basin-label]').hidden=t.id!=='basins';

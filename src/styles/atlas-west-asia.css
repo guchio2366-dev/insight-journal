@@ -80,6 +80,6 @@
 .west-static-data{max-width:660px}
 .west-persisted{font-size:11px!important;color:#647570}
 @media(min-width:1200px){.west-atlas .atlas-map-column{position:sticky;top:12px}}
-@media(max-width:1199px){.west-atlas .atlas-primary-grid{grid-template-columns:1fr!important}.west-atlas .atlas-climate-overview{grid-column:1;grid-row:auto}.west-reading{margin-top:12px}.west-back-map{display:inline-flex}.west-atlas .atlas-map-frame{min-height:300px;aspect-ratio:1.55;max-height:640px}.west-source-grid{gap:16px}}
-@media(max-width:600px){.west-region-country select{flex:1}.west-atlas .atlas-map-frame{min-height:340px;aspect-ratio:1;max-height:460px}.west-source-grid,.west-climate-codes{grid-template-columns:1fr}.west-reading h2{font-size:21px}.west-agri-picker button,.west-cultivation button,.west-subtabs button{min-height:44px}.west-climate-key{gap:4px 9px}}
-@media(max-height:550px) and (min-width:601px){.west-atlas .atlas-map-frame{min-height:280px;max-height:420px;aspect-ratio:1.8}}
+@media(max-width:1199px){.west-source-grid{gap:16px}}
+@media(max-width:959px){.west-back-map{display:inline-flex}}
+@media(max-width:600px){.west-region-country select{flex:1}.west-source-grid,.west-climate-codes{grid-template-columns:1fr}.west-reading h2{font-size:21px}.west-agri-picker button,.west-cultivation button,.west-subtabs button{min-height:44px}.west-climate-key{gap:4px 9px}}

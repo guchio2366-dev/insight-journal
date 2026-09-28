@@ -55,7 +55,7 @@ const climateSource='https://www.data.jma.go.jp/tcc/tcc/products/climate/climatv
      <details class="west-map-method"><summary>地図の出典・表示方法</summary><p class="west-method" data-west-method></p><p class="west-source" data-west-source></p><p>ドラッグ・矢印キーで移動できます。スマートフォンでは地図の上下の余白からページをスクロールできます。</p></details>
      <button class="west-retry" data-west-retry hidden>資料を再読み込みする</button>
     </section>
-    <aside class={`atlas-national west-reading ${initialField==='natural'?'atlas-nature-summary':initialField==='population'?'population-national':initialField==='industry'?'industry-national':'west-agri-reading'}`} aria-labelledby="west-detail-title">
+    <aside class={`atlas-national west-reading ${initialField==='natural'?'atlas-nature-summary':initialField==='population'?'population-national':initialField==='industry'?'industry-national':'west-agri-reading'}`} data-field-national={initialField} aria-labelledby="west-detail-title">
      <div data-west-detail><h2 id="west-detail-title">{initial.label}</h2><p>{initial.description}</p></div>
      <div class="west-detail-controls" data-west-stat-controls>
       <label data-west-year-label>国別統計の年<select data-west-year aria-label="国別統計の年">{[2024,2023,2022,2021,2020].map(y=><option value={y}>{y}年</option>)}</select></label>

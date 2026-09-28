@@ -30,8 +30,9 @@
   .atlas-layout .header-inner{max-width:2008px;width:calc(100% - 40px)}
   .atlas-desktop-shell{grid-template-columns:clamp(300px,23vw,380px) minmax(0,1fr)}
   .atlas-desktop-shell.is-reading-news{grid-template-columns:clamp(380px,32vw,520px) minmax(0,1fr)}
-  .atlas-desktop-shell .atlas-explorer .atlas-primary-grid{grid-template-columns:minmax(0,1.8fr) minmax(280px,1fr);gap:16px}
-  .atlas-desktop-shell .atlas-explorer .atlas-map-frame{min-height:300px;max-height:640px;aspect-ratio:1.55}
+  /* The shared frame wins over a field stylesheet, regardless of bundle order. */
+  .atlas-desktop-shell .atlas-explorer[data-field] .atlas-primary-grid{grid-template-columns:minmax(0,1.8fr) minmax(280px,1fr);gap:16px}
+  .atlas-desktop-shell .atlas-explorer[data-field] .atlas-map-frame{min-height:300px;max-height:640px;aspect-ratio:1.55}
   .atlas-desktop-shell .atlas-explorer .atlas-map-column{min-width:0;top:12px}
   .atlas-desktop-shell .atlas-primary-grid>*{min-width:0}
 }
