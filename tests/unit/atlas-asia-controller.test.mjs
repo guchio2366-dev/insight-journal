@@ -93,7 +93,7 @@ function fixture() {
     <div data-comparison-return hidden><button data-comparison-back></button></div>
     <button data-compare="natural"></button><button data-compare="agriculture"></button>
     <button data-reset></button><button data-map-fit></button><button data-zoom-in></button><button data-zoom-out></button>
-    <section data-farming-panel hidden></section><div data-farming-extra hidden></div><div data-farming-map-method hidden></div><div data-farming-legend hidden></div><button data-farming-statistics-retry hidden></button><label data-farming-topics><select data-farming-topic><option value="rice"></option><option value="wheat"></option><option value="chicken"></option><option value="forest"></option></select></label><section data-population-reading hidden></section><section data-population-legend hidden></section><div data-population-city-facts hidden></div><label data-population-topics><select data-population-topic><option value="density"></option><option value="urban"></option></select></label><select data-population-city><option value=""></option><option value="uc-tokyo" data-country="JPN"></option></select><section data-physical-reading hidden></section><section data-physical-legend hidden></section>
+    <p data-farm-density-key></p><section data-farming-panel hidden></section><div data-farming-extra hidden></div><div data-farming-map-method hidden></div><div data-farming-legend hidden></div><button data-farming-statistics-retry hidden></button><label data-farming-topics><select data-farming-topic><option value="rice"></option><option value="wheat"></option><option value="chicken"></option><option value="forest"></option></select></label><section data-population-reading hidden></section><section data-population-legend hidden></section><div data-population-city-facts hidden></div><label data-population-topics><select data-population-topic><option value="density"></option><option value="urban"></option></select></label><select data-population-city><option value=""></option><option value="uc-tokyo" data-country="JPN"></option></select><section data-physical-reading hidden></section><section data-physical-legend hidden></section>
     <nav data-natural-topics><button data-natural-topic="climate"></button><button data-natural-topic="terrain"></button><button data-natural-topic="water"></button></nav>
     <select data-physical-focus><option value=""></option><option value="basin" data-country="CHN"></option></select>
     <label data-water-picker hidden><select data-water-select><option value=""></option><option value="rivers-1"></option></select></label>
@@ -713,35 +713,35 @@ test('農畜産物の概要は初期同時表示し、種類切替・詳細図�
  try{
   assert.equal(requests.some(r=>r.startsWith('/assets/presentation/')),false);
   q('[data-field="agriculture"]').click();
-  await until(()=>window.__map.getLayer('asia-farm-overview-crop')?.layout?.visibility==='visible','overview loaded');
+  await until(()=>window.__map.getLayer('asia-farm-overview-fill')?.layout?.visibility==='visible','overview loaded');
   assert.equal(q('[data-farm-overview-reading]').hidden,false);assert.equal(q('[data-rice-reading]').hidden,true);
-  assert.equal(window.__map.layers['asia-farm-overview-livestock'].layout.visibility,'visible');
+  assert.equal(window.__map.layers['asia-farm-overview-livestock-fill'].layout.visibility,'visible');assert.equal(q('[data-farm-density-key]').hidden,false);
   const livestock=q('[data-farm-kind=livestock]');livestock.checked=false;livestock.dispatchEvent(new window.Event('change'));
-  await until(()=>window.__map.layers['asia-farm-overview-crop'].layout.visibility==='visible','crop retained');
-  assert.equal(window.__map.layers['asia-farm-overview-livestock'].layout.visibility,'none');
-  q('[data-farm-choice=wheat]').click();assert.equal(q('[data-farm-overview-reading]').hidden,true);assert.ok(window.__map.getLayer('asia-farming-wheat'));assert.equal(window.__map.layers['asia-farm-overview-crop'].layout.visibility,'none');
-  q('[data-farm-choice=overview]').click();await until(()=>window.__map.layers['asia-farm-overview-crop'].layout.visibility==='visible','overview restored');assert.equal(window.__maps.length,1);assert.equal(requests.filter(r=>r.startsWith('/assets/presentation/')).length,1);
-  q('[data-field=industry]').click();assert.equal(window.__map.layers['asia-farm-overview-crop'].layout.visibility,'none','old overview hides before detailed geography resolves');await until(()=>window.__map.getLayer('asia-industry-national'),'industry settled');
+  await until(()=>window.__map.layers['asia-farm-overview-fill'].layout.visibility==='visible','crop retained');
+  assert.equal(window.__map.layers['asia-farm-overview-livestock-fill'].layout.visibility,'none');
+  q('[data-farm-choice=wheat]').click();assert.equal(q('[data-farm-density-key]').hidden,true);assert.equal(q('[data-farm-overview-reading]').hidden,true);assert.ok(window.__map.getLayer('asia-farming-wheat'));assert.equal(window.__map.layers['asia-farm-overview-fill'].layout.visibility,'none');
+  q('[data-farm-choice=overview]').click();await until(()=>window.__map.layers['asia-farm-overview-fill'].layout.visibility==='visible','overview restored');assert.equal(window.__maps.length,1);assert.equal(requests.filter(r=>r.startsWith('/assets/presentation/')).length,1);
+  q('[data-field=industry]').click();assert.equal(window.__map.layers['asia-farm-overview-fill'].layout.visibility,'none','old overview hides before detailed geography resolves');await until(()=>window.__map.getLayer('asia-industry-national'),'industry settled');
  }finally{await window.happyDOM.close();}
 });
 
 test('遅い概要図の応答は移動後の気候図に重ならない',async()=>{
  const app=await setup('?field=agriculture',{farming:true,presentation:true,delayedPresentation:true});
- try{await until(()=>app.requests.some(r=>r.startsWith('/assets/presentation/')),'overview requested');app.q('[data-field="natural"]').click();app.resolvePresentation();await delay();await delay();assert.equal(app.window.__map.getLayer('asia-farm-overview-crop'),undefined);assert.equal(app.q('[data-farm-overview-reading]').hidden,true);}finally{app.resolvePresentation();await app.window.happyDOM.close();}
+ try{await until(()=>app.requests.some(r=>r.startsWith('/assets/presentation/')),'overview requested');app.q('[data-field="natural"]').click();app.resolvePresentation();await delay();await delay();assert.equal(app.window.__map.getLayer('asia-farm-overview-fill'),undefined);assert.equal(app.q('[data-farm-overview-reading]').hidden,true);}finally{app.resolvePresentation();await app.window.happyDOM.close();}
 });
 
 
 test('地図の再読み込み後も農畜産物のチェック状態と表示が一致する',async()=>{
  const {window,q}=await setup('?field=agriculture',{farming:true,presentation:true});
  try{
-  await until(()=>window.__map.getLayer('asia-farm-overview-crop')?.layout?.visibility==='visible','overview loaded');
+  await until(()=>window.__map.getLayer('asia-farm-overview-fill')?.layout?.visibility==='visible','overview loaded');
   const livestock=q('[data-farm-kind=livestock]');livestock.checked=false;livestock.dispatchEvent(new window.Event('change'));
-  await until(()=>window.__map.layers['asia-farm-overview-crop'].layout.visibility==='visible','filter applied');
-  assert.equal(window.__map.layers['asia-farm-overview-livestock'].layout.visibility,'none');
+  await until(()=>window.__map.layers['asia-farm-overview-fill'].layout.visibility==='visible','filter applied');
+  assert.equal(window.__map.layers['asia-farm-overview-livestock-fill'].layout.visibility,'none');
   window.__map.getCanvas().dispatchEvent(new window.Event('webglcontextlost'));q('[data-map-retry]').click();
-  await until(()=>window.__maps.length===2&&window.__map.getLayer('asia-farm-overview-crop')?.layout?.visibility==='visible','overview rebuilt');
-  assert.equal(livestock.checked,false);assert.equal(window.__map.layers['asia-farm-overview-livestock'].layout.visibility,'none');assert.match(q('[data-grid-reading]').textContent,/家畜の分布は非表示/);
-  livestock.checked=true;livestock.dispatchEvent(new window.Event('change'));await until(()=>window.__map.layers['asia-farm-overview-livestock'].layout.visibility==='visible','filter still works');
+  await until(()=>window.__maps.length===2&&window.__map.getLayer('asia-farm-overview-fill')?.layout?.visibility==='visible','overview rebuilt');
+  assert.equal(livestock.checked,false);assert.equal(window.__map.layers['asia-farm-overview-livestock-fill'].layout.visibility,'none');assert.match(q('[data-grid-reading]').textContent,/家畜の分布は非表示/);
+  livestock.checked=true;livestock.dispatchEvent(new window.Event('change'));await until(()=>window.__map.layers['asia-farm-overview-livestock-fill'].layout.visibility==='visible','filter still works');
  }finally{await window.happyDOM.close();}
 });
 
@@ -753,7 +753,7 @@ test('概要図の取得失敗は種類切替で回復すると消え、別の�
    assert.equal(q('[data-map-retry]').hidden,false);
    if(sourceError)await window.__map.fire('error',{error:Error('image 503')});
    const livestock=q('[data-farm-kind=livestock]');livestock.checked=false;livestock.dispatchEvent(new window.Event('change'));
-   await until(()=>window.__map.getLayer('asia-farm-overview-crop')?.layout?.visibility==='visible','overview recovered');
+   await until(()=>window.__map.getLayer('asia-farm-overview-fill')?.layout?.visibility==='visible','overview recovered');
    assert.equal(q('[data-map-state]').hidden,!sourceError);assert.equal(q('[data-map-retry]').hidden,!sourceError);
    if(sourceError)assert.match(q('[data-map-state]').textContent,/地図の一部を読み込めません/);
   }finally{await window.happyDOM.close();}
@@ -776,7 +776,7 @@ test('米・雨・川の重ね合わせはURLから復元でき、品目変更�
  try{
   await until(()=>window.__map.getLayer('asia-rainfall-lines')?.layout?.visibility==='visible','rain overlay loaded');
   const map=window.__map;
-  assert.equal(map.layers['asia-farm-overview-livestock'].layout.visibility,'none');
+  assert.equal(map.layers['asia-farm-overview-livestock-fill'].layout.visibility,'none');
   assert.ok(JSON.stringify(map.layers['asia-farm-overview-fill'].filter).includes('rice'));
   assert.equal(q('[data-farm-kind=crop]').disabled,true);
   assert.equal(q('[data-farm-water]').getAttribute('aria-pressed'),'true');

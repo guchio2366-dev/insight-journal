@@ -356,6 +356,7 @@ function start(root:HTMLElement) {
     for(const b of $$<HTMLButtonElement>('[data-farm-water]'))b.setAttribute('aria-pressed',String(water));
     if(config.farmInsight){$('[data-farm-insight-title]').textContent=water?config.farmInsight.waterTitle:config.farmInsight.title;$('[data-farm-insight-lead]').textContent=water?config.farmInsight.waterLead:config.farmInsight.lead;}
     const farmReturn=$('[data-farm-choice="overview"]');if(farmReturn)farmReturn.hidden=topic==='overview';
+    optionalHidden('[data-farm-density-key]',!active||topic!=='overview'||water);
     if(topic==='overview'){$('[data-map-title]').textContent=water?'米の栽培域・雨・川':'農畜産物の特徴的な分布';$('[data-map-gesture]').textContent=water?'緑は米の概略栽培域、青の太線は主な川、細線は250mm間隔の年降水量です。':'品目名を選ぶと詳しい分布を開きます。地図は2本指で移動・拡大できます。';return;}
     renderAsiaFarmingPanel(root,config.regionId,topic!,layer,config.countries.find(c=>c.code===state.place),farmingStatistics);
     optionalHidden('[data-farming-statistics-retry]',!farmingStatisticsError);

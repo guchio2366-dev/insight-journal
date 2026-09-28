@@ -109,12 +109,13 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
     const id='asia-farm-overview';
     if(!map.getSource(id)){
      map.addSource(id,{type:'geojson',data:datasets.get(metadata.farming.file)});
-     map.addLayer({id:id+'-fill',type:'fill',source:id,paint:{'fill-color':['get','color'],'fill-opacity':.72}},'asia-country-border');
-     map.addLayer({id:id+'-livestock-fill',type:'fill',source:id,paint:{'fill-color':['get','color'],'fill-opacity':.72}},'asia-country-border');
+     const opacity:any=['case',['==',['get','distribution'],'spread'],.36,.76];
+     map.addLayer({id:id+'-fill',type:'fill',source:id,paint:{'fill-color':['get','color'],'fill-opacity':opacity}},'asia-country-border');
+     map.addLayer({id:id+'-livestock-fill',type:'fill',source:id,paint:{'fill-color':['get','color'],'fill-opacity':opacity}},'asia-country-border');
      map.addLayer({id:id+'-crop',type:'line',source:id,paint:{'line-color':['get','color'],'line-opacity':.7,'line-width':.85}},'asia-country-border');
      map.addLayer({id:id+'-livestock',type:'line',source:id,paint:{'line-color':['get','color'],'line-opacity':.7,'line-width':1.2}},'asia-country-border');
     }
-    for(const [suffix,kind] of [['fill','crop'],['crop','crop'],['livestock-fill','livestock'],['livestock','livestock']]){const layer=id+'-'+suffix;map.setFilter(layer,['all',['==',['get','kind'],kind],...(water?[['==',['get','id'],'rice']]:[])] as any);map.setLayoutProperty(layer,'visibility',(water?kind==='crop':selectedKinds.has(kind))?'visible':'none');}
+    for(const [suffix,kind] of [['fill','crop'],['crop','crop'],['livestock-fill','livestock'],['livestock','livestock']]){const layer=id+'-'+suffix;map.setFilter(layer,['all',['==',['get','kind'],kind],...(water?[['==',['get','id'],'rice']]:[])] as any);map.setLayoutProperty(layer,'visibility',suffix.endsWith('fill')&&(water?kind==='crop':selectedKinds.has(kind))?'visible':'none');}
    }
    for(const [visible,id,record,color] of [[current==='precipitation'||water,'asia-rainfall-lines',metadata.rainfall,'#347d9c'],[terrain,'asia-terrain-lines',metadata.terrain,'#8c7051']] as const){
     if(!visible||!record)continue;
