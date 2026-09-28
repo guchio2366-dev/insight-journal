@@ -87,3 +87,5 @@
 .asia-atlas[data-field=agriculture] .asia-map-frame{height:var(--asia-farm-map-height,420px)}
 
 @media(min-width:1200px){.asia-atlas[data-field=agriculture] .asia-map-frame{height:var(--asia-farm-map-height,420px)!important;min-height:180px!important;max-height:none!important}}
+
+.asia-atlas .asia-farm-density-key{display:flex;flex-wrap:wrap;gap:3px 12px;margin:3px 0 2px;font-size:11px;line-height:1.6;color:#435a5e}.asia-atlas .asia-farm-density-key span{display:inline-flex;align-items:center;gap:4px}.asia-atlas .asia-farm-density-key i{width:15px;height:10px;background:#408475}.asia-atlas .asia-farm-density-key .core{opacity:.76}.asia-atlas .asia-farm-density-key .spread{opacity:.36}
