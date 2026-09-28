@@ -61,6 +61,7 @@ test('縦長・横長の表示を繰り返し拡縮・移動してもURLへ復�
    const s=readWestState('','natural',data);s.view=v;assert.notEqual(readWestState(westSearch(s),'natural',data).view,null);
   }
   v=panWestView(v,1e6,-1e6);assert.equal(v[0],4000);assert.equal(v[1],-4000);
+  v=zoomWestView(v,.65);const s=readWestState('','natural',data);s.view=v;assert.notEqual(readWestState(westSearch(s),'natural',data).view,null);
  }
 });
 test('ナイル川を含む流域はエジプトの南側を切り落とさず、都市人口は固定範囲を使う',async()=>{

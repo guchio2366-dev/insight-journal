@@ -41,7 +41,7 @@ export function zoomWestView(view, factor) {
   const [x,y,w,h]=view;
   const scale=Math.max(15/Math.min(w,h),Math.min(3000/Math.max(w,h),factor));
   const width=w*scale,height=h*scale;
-  return [x+(w-width)/2,y+(h-height)/2,width,height];
+  return panWestView([x+(w-width)/2,y+(h-height)/2,width,height],0,0);
 }
 export function panWestView(view,dx,dy) {
   return [Math.max(-4000,Math.min(4000,view[0]+dx)),Math.max(-4000,Math.min(4000,view[1]+dy)),view[2],view[3]];
