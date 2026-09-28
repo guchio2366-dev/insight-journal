@@ -1,6 +1,6 @@
 ---
 import type { AsiaClimateCity } from '../../data/atlas/asia-climate-cities';
-interface Props { city: AsiaClimateCity; precipitationMax: number }
+interface Props { city: Omit<AsiaClimateCity, 'regionId'>; precipitationMax: number }
 const { city, precipitationMax } = Astro.props;
 const left=35,right=298,top=25,bottom=185;
 const x=(i:number)=>left+(right-left)*(i+.5)/12;

@@ -12,6 +12,7 @@ const regions = [
   { id:'europe', label:'欧州', href:'/atlas/europe/', x:53, y:24, color:'#b6aed1' },
   { id:'east-asia', label:'東アジア', href:'/atlas/asia/east-asia/', x:84, y:31, color:'#8ebfba' },
   { id:'south-central-asia', label:'南・中央アジア', href:'/atlas/asia/south-central-asia/', x:68, y:48, color:'#d7b57b' },
+  { id:'west-asia', label:'西アジア・中東', href:'/atlas/west-asia/', x:61, y:38, color:'#c9ae96' },
   { id:'southeast-asia', label:'東南アジア', href:'/atlas/asia/southeast-asia/', x:83, y:61, color:'#a8bd83' },
   { id:'africa', label:'アフリカ', href:'/atlas/africa/', x:53, y:60, color:'#d6a38d', optional:true },
   { id:'oceania', label:'オセアニア', href:'/atlas/oceania/', x:87, y:85, color:'#96bacd', optional:true },
@@ -33,6 +34,7 @@ function regionCountries(id: string) {
   if (id === 'europe') return europeCountries.map(feature => ({ code:feature.properties.code, d:path(europeRings(feature.geometry)) }));
   return features.filter(feature => {
     if (id === 'north-america') return ['CAN','USA','MEX'].includes(feature.properties.code);
+    if (id === 'west-asia') return ['ARM','AZE','BHR','CYP','CYN','GEO','IRQ','ISR','JOR','KWT','LBN','OMN','QAT','SAU','PSE','PSX','SYR','TUR','ARE','YEM','IRN','EGY'].includes(feature.properties.code);
     if (id === 'africa') return feature.properties.region === 'Africa';
     if (id === 'oceania') return feature.properties.region === 'Oceania';
     return belongsToRegion(feature, id as RegionalId);
@@ -79,7 +81,7 @@ function regionCountries(id: string) {
   </nav>
   <details class="world-notes">
     <summary>地域の区分・地図の出典</summary>
-    <p>北米はカナダ・米国・メキシコ。アジアは東アジア、東南アジア、南・中央アジアに分けています。ロシア西部は欧州の地図に含み、中東とロシアのその他の地域は掲載対象外です。</p>
+    <p>北米はカナダ・米国・メキシコ。アジアは東アジア、東南アジア、南・中央アジア、西アジア・中東に分けています。西アジア・中東は国連M49の西アジアにイランとエジプトを加えた編集上の範囲です。欧州などと重なる入口があっても、同じ国を別の国として数えるものではありません。ロシア西部は欧州に含み、その他の地域は掲載対象外です。</p>
     <p>境界：<a href="https://www.naturalearthdata.com/about/terms-of-use/">Natural Earth（パブリックドメイン）</a>。位置を選ぶための概略図で、小島などは省略しています。等距円筒図法を使用し、面積の比較には適しません。境界・名称は資料の表示上の区分に沿っています。</p>
   </details>
 </section>
