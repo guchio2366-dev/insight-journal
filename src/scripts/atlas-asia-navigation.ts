@@ -20,7 +20,13 @@ export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|un
  function render(){
   const state=getState(),natural=naturalGroup(state.topic??'climate');
   for(const b of all('[data-natural-group]'))b.setAttribute('aria-pressed',String(b.dataset.naturalGroup===natural));
-  const water=$('[data-water-topics]');if(water)water.hidden=state.field!=='natural'||natural!=='water';
+  const water=$('[data-water-topics]');if(water)water.hidden=state.field!=='natural'||!['water','precipitation'].includes(natural);
+  const kinds=$('[data-water-kinds]');if(kinds)kinds.hidden=state.field!=='natural'||!['water','groundwater'].includes(state.topic??'');
+  for(const b of all('[data-water-view]'))b.setAttribute('aria-pressed',String(b.dataset.waterView===(state.topic==='groundwater'?'water':state.topic)));
+  for(const a of all<HTMLAnchorElement>('[data-focus-link]')){
+   const url=new URL(a.href);url.pathname=url.pathname.replace(/\/(nature|agriculture|industry|population)\/$/,'/'+({natural:'nature',agriculture:'agriculture',industry:'industry',population:'population'}[state.field])+'/');
+   url.search='';if(state.topic)url.searchParams.set('topic',state.topic);if(state.overlay)url.searchParams.set('overlay',state.overlay);a.href=url.href;
+  }
   const population=populationGroup(state.topic??'density');
   for(const b of all('[data-population-group]'))b.setAttribute('aria-pressed',String(b.dataset.populationGroup===population));
   for(const nav of all('[data-population-subgroup]'))nav.hidden=nav.dataset.populationSubgroup!==population;

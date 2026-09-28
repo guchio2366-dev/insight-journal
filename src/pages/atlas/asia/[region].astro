@@ -1,9 +1,10 @@
 ---
 import AsiaAtlasPage from '../../../components/atlas/AsiaAtlasPage.astro';
 import { asiaMapIds } from '../../../data/atlas/regional-atlas';
+import {asiaFocusIds} from '../../../data/atlas/asia-focus';
 export function getStaticPaths() {
-  return asiaMapIds.map(regionId => ({params: {region: regionId}, props: {regionId}}));
+  return [...asiaMapIds,...asiaFocusIds].map(id => ({params:{region:id},props:{regionId:asiaFocusIds.includes(id as any)?'south-central-asia':id,focusId:asiaFocusIds.includes(id as any)?id:undefined}}));
 }
-const { regionId } = Astro.props;
+const { regionId,focusId } = Astro.props;
 ---
-<AsiaAtlasPage {regionId} />
+<AsiaAtlasPage {regionId} {focusId} />

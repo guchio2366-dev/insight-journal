@@ -37,7 +37,7 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.ok(Buffer.byteLength(JSON.stringify(config.water))<4000,'water geometry and numeric grids remain lazy assets');
       assert.equal(q('[data-hydrology-panel]').hidden,true);
       assert.equal(q('[data-hydrology-legend]').hidden,true);
-      for(const id of ['precipitation','climate','terrain','water'])assert.ok(q(`button[data-natural-group="${id}"]`));
+      for(const id of ['landform','climate','terrain','water'])assert.ok(q(`button[data-natural-group="${id}"]`));
       for(const id of ['water','basins','groundwater'])assert.ok(q(`button[data-natural-topic="${id}"]`));
       assert.equal(all('[data-industry-topic] optgroup').length,5);
       assert.equal(q('[data-population-reading]').hidden,field!=='population');
@@ -93,4 +93,20 @@ test('旧アジア地域ページは自然環境の正規URLを示す', async ()
     const html=await readFile(`dist/atlas/asia/${region}/index.html`,'utf8');
     assert.match(html,new RegExp(`<link rel="canonical" href="https://guchio2366-dev.github.io/insight-journal/atlas/asia/${region}/nature/"`));
   }
+});
+
+
+test('南アジア・中央アジアは別URLと初期範囲を持ち、元資料の範囲を変更しない',async()=>{
+ for(const [id,label] of [['south-asia','南アジア'],['central-asia','中央アジア']])for(const field of ['nature','agriculture','industry','population']){
+  const window=new Window({settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true}});
+  try{
+   window.document.write(await readFile(`dist/atlas/asia/${id}/${field}/index.html`,'utf8'));
+   const q=s=>window.document.querySelector(s),cfg=JSON.parse(q('[data-asia-config]').textContent);
+   assert.equal(cfg.label,label);assert.equal(cfg.regionId,'south-central-asia');assert.notDeepEqual(cfg.bounds,cfg.dataBounds);
+   assert.equal(cfg.climate.image.includes('south-central-asia'),true);
+   assert.ok(q('link[rel=canonical]').href.endsWith(`/atlas/asia/${id}/${field}/`));
+   assert.ok(q('[data-focus-link="'+id+'"][aria-current="page"]'));
+   assert.ok((await readFile('dist/sitemap.xml','utf8')).includes(`/atlas/asia/${id}/${field}/`));
+  }finally{await window.happyDOM.close();}
+ }
 });

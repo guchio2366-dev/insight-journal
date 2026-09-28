@@ -1,6 +1,7 @@
 import type {AsiaState,AsiaRegionId} from '../../lib/atlas-asia-state';
 export type WaterTopic='precipitation'|'basins'|'groundwater';
-export const isWaterTopic=(topic?:string|null):topic is WaterTopic=>['precipitation','basins','groundwater'].includes(topic??'');
+export const isWaterTopic=(topic?:string|null):topic is WaterTopic|'water'=>['water','precipitation','basins','groundwater'].includes(topic??'');
+export const waterDatasetTopic=(topic:WaterTopic|'water'):WaterTopic=>topic==='water'?'basins':topic;
 export type WaterRegion={basins:string;groundwater:string;precipitation:{image:string;grid:string;width:number;height:number;bounds3857:number[];bounds4326:number[];imageCoordinates:number[][];nominalPixelMetres3857:number};coverage:Record<string,{displayCells:number;maskCells:number;basins:number;groundwater:number}>;basinCount:number;groundwaterCount:number};
 export type WaterRecord={id:string;sourceId:number;countries:string[];point:[number,number];countryPoints:Record<string,[number,number]>;bounds:number[]};
 export type BasinRecord=WaterRecord&{name:string;rivers:string[];areaKm2:number;outletUpAreaKm2:number;subBasins:number;endorheic:boolean;coastal:boolean;outsideFrame:boolean;fullBounds:number[];otherTargetCountries:string[];flow:{mean:number;lowestMonth:number;highestMonth:number}|null};
@@ -40,7 +41,7 @@ export function normalizeWaterState(regionId:AsiaRegionId,state:AsiaState,data?:
  if(state.field!=='natural'||!isWaterTopic(state.topic))return state;
  const scene=waterScenes.find(s=>s.region===regionId&&s.id===state.detail&&(!state.place||s.country===state.place));
  if(scene)return {...state,place:scene.country,point:scene.point,city:null};
- const candidate=state.detail&&/^[bg]-\d{1,12}$/.test(state.detail)&&state.detail.startsWith(state.topic==='basins'?'b-':state.topic==='groundwater'?'g-':'!')?state.detail:null;
+ const candidate=state.detail&&/^[bg]-\d{1,12}$/.test(state.detail)&&state.detail.startsWith(waterDatasetTopic(state.topic)==='basins'?'b-':state.topic==='groundwater'?'g-':'!')?state.detail:null;
  if(!data)return {...state,detail:candidate,city:null};
  const record=data.records.find(r=>r.id===candidate&&(!state.place||r.countries.includes(state.place)));
  return {...state,detail:record?.id??null,place:record?.countries.length===1?record.countries[0]:state.place,point:state.point??(record?(state.place?record.countryPoints[state.place]:record.point):null),city:null};

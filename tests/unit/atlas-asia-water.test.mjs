@@ -73,3 +73,14 @@ test('水のURLは主題・地域・国・区域を照合し、穴を含む多�
  const scene=normalizeWaterState('east-asia',{...state,topic:'precipitation',detail:'w-tokyo'});assert.equal(scene.place,'JPN');assert.deepEqual(scene.point,[139.75,35.69]);
  const polygon={type:'Polygon',coordinates:[[[0,0],[4,0],[4,4],[0,4],[0,0]],[[1,1],[3,1],[3,3],[1,3],[1,1]]]};assert.equal(waterContains(polygon,[2,2]),false);assert.equal(waterContains(polygon,[.5,.5]),true);
 });
+
+
+test('主な川の流域リンクは既存資料の出口と実際の河川を指す',async()=>{
+ const {asiaWaterFocus}=await import('../../src/data/atlas/asia-water-focus.ts');
+ const fs=await import('node:fs'),z=await import('node:zlib');
+ const physical=JSON.parse(fs.readFileSync('public/assets/atlas/asia-physical-v1/manifest.json','utf8'));
+ for(const [region,focus] of Object.entries(asiaWaterFocus)){
+  const data=JSON.parse(z.gunzipSync(fs.readFileSync(`public/assets/atlas/asia-water-v1/${region}.basins.json.gz`)));
+  for(const item of focus){const basin=data.records.find(r=>r.id===item.id),river=physical.regions[region].waterFeatures.find(f=>f.id===item.river);assert.ok(basin&&!basin.coastal);assert.ok(river);assert.ok(basin.rivers.includes(river.name));}
+ }
+});

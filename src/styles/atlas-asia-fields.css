@@ -32,7 +32,7 @@
 .asia-atlas .asia-map-annotations svg{position:absolute;inset:0;width:100%;height:100%;overflow:hidden}
 .asia-atlas .asia-map-annotations button{position:absolute;pointer-events:auto;white-space:nowrap;cursor:pointer;color:#244654;font:700 12px/1.3 sans-serif;padding:6px 7px;border:1px solid #778d8e;border-radius:3px;background:#fffdf1f5;box-shadow:0 1px 2px #233a4012}
 .asia-atlas .asia-map-annotations button[aria-pressed=true]{background:#244e5b;color:#fff;border-color:#fff}
-.asia-atlas .asia-map-annotations .asia-climate-code{font-size:13px;padding:3px 5px;background:#ffffffe6;border:0;color:#273c45;text-shadow:0 1px white}
+.asia-atlas .asia-map-annotations .asia-climate-code{font-size:13px;padding:3px 5px;background:transparent;border:0;border-radius:0;box-shadow:none;color:#273c45;text-shadow:-1px -1px 2px white,1px -1px 2px white,-1px 1px 2px white,1px 1px 2px white}
 .asia-atlas .asia-map-annotations .asia-farm-label{border-color:var(--label-color);color:var(--label-color);font-size:12px;padding:3px 4px;background:#fffdf1e8}
 .asia-atlas .asia-map-annotations .asia-rain-label{font-size:11px;padding:2px 4px;border:0;background:#ffffffe8;color:#286487}
 .asia-atlas .asia-map-tools,.asia-atlas .asia-map-retry,.asia-atlas .asia-map-state{z-index:5}
@@ -56,3 +56,24 @@
 @media(pointer:coarse){.asia-atlas .asia-farm-key .asia-farm-products button,.asia-atlas [data-social-scale] button{min-height:44px}}
 
 .asia-atlas .asia-social-quick-key{display:flex;flex-wrap:wrap;gap:6px 12px;margin:8px 0 15px}.asia-atlas .asia-social-quick-key span{display:flex;align-items:center;gap:5px;font-size:12px}.asia-atlas .asia-social-quick-key i{width:14px;height:12px;border:1px solid #64736a55}
+
+.asia-focus-navigation{display:flex;flex-wrap:wrap;gap:6px}
+.asia-focus-navigation a,.asia-water-kinds button{min-height:36px;display:inline-flex;align-items:center;padding:6px 12px;border:1px solid #bdc6b9;background:#fffdf7;color:#294b58;font:600 13px/1.4 sans-serif;text-decoration:none}
+.asia-focus-navigation a[aria-current],.asia-water-kinds button[aria-pressed=true]{background:#e2e9dd;border-color:#365861;box-shadow:inset 0 -2px #365861}
+.asia-water-kinds{display:flex;gap:6px;padding:5px 0 8px}
+.asia-atlas .asia-map-annotations .asia-climate-station{z-index:4;width:24px;height:24px;min-height:0;padding:0;border:0;box-shadow:none;background:transparent;transform:translate(-50%,-50%);border-radius:50%;overflow:visible}
+.asia-atlas .asia-climate-station:before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:7px;height:7px;border:2px solid #345965;border-radius:50%;background:white}
+.asia-atlas .asia-climate-station[aria-pressed=true]:before{background:#ac432f;border-color:#fff;box-shadow:0 0 0 1px #ac432f}
+.asia-atlas .asia-climate-station span{display:none;position:absolute;left:calc(50% + 9px);top:50%;transform:translateY(-50%);padding:5px 8px;background:#fffdf5;border:1px solid #789097;border-radius:2px;color:#244654;white-space:nowrap;pointer-events:none}
+.asia-atlas .asia-climate-station:hover,.asia-atlas .asia-climate-station:focus-visible{z-index:6}
+.asia-atlas .asia-climate-station:hover span,.asia-atlas .asia-climate-station:focus-visible span{display:block}
+.asia-atlas .asia-climate-station:focus-visible{outline:2px solid #ad5232;outline-offset:0}
+@media(pointer:coarse){.asia-atlas .asia-map-annotations .asia-climate-station{width:44px;height:44px}.asia-focus-navigation a,.asia-water-kinds button{min-height:44px}}
+
+.asia-atlas .asia-map-annotations .asia-landform-label{background:#fffdf3d9;color:#655238;border:0;box-shadow:none}
+[data-physical-view=landform] [data-physical-legend]>p{display:none}
+
+[data-basin-shortcuts]{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0}
+[data-basin-shortcuts] button{border:1px solid #a8b8b8;background:#f4f7ed;color:#254a57;padding:8px;font:600 12px/1.4 sans-serif;cursor:pointer;min-height:36px}
+[data-basin-shortcuts] button[aria-pressed=true]{background:#345964;color:white}
+@media(min-width:900px){.asia-region-shell{display:grid!important;grid-template-columns:1fr auto!important;gap:7px 16px!important}.asia-region-shell .regional-navigation{grid-column:1}.asia-region-shell .asia-toolbar{grid-column:2;grid-row:1;margin:0!important}.asia-region-shell .asia-focus-navigation{grid-row:2;grid-column:1/-1}}

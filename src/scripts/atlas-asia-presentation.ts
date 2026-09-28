@@ -1,6 +1,7 @@
 import {layoutNatureLabels,leaderEnd,type Box} from '../lib/atlas-nature-labels';
 import {layoutClimateCodes,type CodeInput} from '../lib/atlas-climate-code-labels';
 import type {AsiaState} from '../lib/atlas-asia-state';
+import {majorClimateCities} from '../data/atlas/asia-focus';
 type Coordinate=[number,number];
 type Annotation={id:string;text:string;coordinate:Coordinate;product?:string;kind?:string;color?:string;value?:number};
 export type AsiaPresentation={
@@ -10,7 +11,7 @@ export type AsiaPresentation={
  climate:{id:number;code:string;name:string;anchors:Coordinate[];minZoom:number}[];
 };
 type City={id:string;name:string;coordinates:Coordinate;countryCode?:string;country?:string};
-export function createAsiaPresentation(root:HTMLElement,config:{presentation:AsiaPresentation;presentationBase:string;cities:City[];population?:{cities:City[]};riverFile?:string;riverIds?:string[]},getState:()=>AsiaState,chooseCity:(id:string)=>void,chooseUrban:(id:string)=>void,choosePoint:(point:Coordinate)=>void,chooseFarm:(id:string)=>void,onStatus:(message:string)=>void){
+export function createAsiaPresentation(root:HTMLElement,config:{presentation:AsiaPresentation;presentationBase:string;cities:City[];population?:{cities:City[]};riverFile?:string;riverIds?:string[];landforms?:{id:string;name:string;coordinates:Coordinate}[];waterFocus?:{id:string;name:string;river:string}[];selectLandform?:(id:string)=>void},getState:()=>AsiaState,chooseCity:(id:string)=>void,chooseUrban:(id:string)=>void,choosePoint:(point:Coordinate)=>void,chooseFarm:(id:string)=>void,onStatus:(message:string)=>void){
  const metadata=config.presentation,overlay=root.querySelector<HTMLElement>('[data-map-annotations]')!;
  let map:import('maplibre-gl').Map|null=null,revision=0,scheduled=0,disposed=false;
  let errorMode:string|null=null;
@@ -35,7 +36,7 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
  function measuredWidth(b:HTMLButtonElement,fallback:number){b.hidden=false;b.style.width='max-content';const width=b.getBoundingClientRect().width;b.hidden=true;return width||fallback;}
  function update(){
   scheduled=0;if(!map||disposed||typeof map.project!=='function')return;
-  const active=mode(),state=getState(),water=active==='overview'&&state.overlay==='water';overlay.hidden=!['climate','population','overview','precipitation','terrain'].includes(active??'');
+  const active=mode(),state=getState(),water=active==='overview'&&state.overlay==='water';overlay.hidden=!['climate','population','overview','precipitation','terrain','landform','water','basins'].includes(active??'');
   for(const b of buttons.values())b.hidden=true;svg.replaceChildren();if(overlay.hidden)return;
   const width=overlay.clientWidth,height=overlay.clientHeight;if(!width||!height)return;
   const compact=width<440,bounds={left:0,top:0,right:width,bottom:height};
@@ -43,6 +44,18 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
   const project=(p:Coordinate)=>map!.project(p);
   const cities=active==='climate'?config.cities:active==='population'?config.population?.cities??[]:[];
   let visible=cities.filter(c=>{const p=project(c.coordinates);return p.x>=0&&p.x<=width&&p.y>=0&&p.y<=height;});
+  if(active==='climate'){
+   // Station points survive label thinning and collisions. Hover/focus names
+   // and tap-to-open diagrams also expose stations without a permanent label.
+   for(const city of visible){
+    const p=project(city.coordinates),b=button('station-'+city.id,'','asia-climate-station',()=>chooseCity(city.id));
+    b.dataset.station=city.id;b.setAttribute('aria-label',city.name+'の雨温図');b.setAttribute('aria-pressed',String(state.city===city.id));
+    const name=document.createElement('span');name.textContent=city.name;if(p.x>width-150){name.style.left='auto';name.style.right='calc(50% + 9px)';}b.append(name);
+    b.style.left=p.x+'px';b.style.top=p.y+'px';b.hidden=false;
+    obstacles.push({left:p.x-5,top:p.y-5,right:p.x+5,bottom:p.y+5});
+   }
+   visible=visible.filter(c=>majorClimateCities.has(c.id)||c.id===state.city);
+  }
   if(active==='population'&&map.getZoom()<5){
    const ordered=[...visible].sort((a,b)=>Number(b.id===state.detail)-Number(a.id===state.detail));
    const chosen:City[]=[];const limit=compact?8:12;
@@ -52,7 +65,7 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
   if(active==='population')for(const id of ['asia-urban-points','asia-urban-hit'])if(map.getLayer(id))map.setFilter(id,['in',['get','id'],['literal',visible.map(c=>c.id)]]);
   const inputs=visible.map(c=>{const b=button(active+'-'+c.id,c.name.split('／')[0],'asia-city-name',()=>active==='climate'?chooseCity(c.id):chooseUrban(c.id));b.dataset[active==='climate'?'mapCity':'mapUrban']=c.id;b.setAttribute('aria-label',`${c.name}の${active==='climate'?'雨温図':'人口'}`);b.setAttribute('aria-pressed',String((active==='climate'?state.city:state.detail)===c.id));return {id:c.id,anchor:project(c.coordinates),width:Math.max(40,c.name.split('／')[0].length*(compact?11:12)+14),height:compact?28:32};});
   const placed=layoutNatureLabels(inputs,bounds,obstacles);
-  for(const rect of placed){const b=buttons.get(active+'-'+rect.id)!;b.hidden=false;b.style.left=rect.left+'px';b.style.top=rect.top+'px';b.style.width=(rect.right-rect.left)+'px';b.style.height=(rect.bottom-rect.top)+'px';const end=leaderEnd(rect.anchor,rect);line(rect.anchor.x,rect.anchor.y,end.x,end.y);dot(rect.anchor.x,rect.anchor.y);}
+  for(const rect of placed){const b=buttons.get(active+'-'+rect.id)!;b.hidden=false;b.style.left=rect.left+'px';b.style.top=rect.top+'px';b.style.width=(rect.right-rect.left)+'px';b.style.height=(rect.bottom-rect.top)+'px';const end=leaderEnd(rect.anchor,rect);line(rect.anchor.x,rect.anchor.y,end.x,end.y);if(active!=='climate')dot(rect.anchor.x,rect.anchor.y);}
   const codes:CodeInput[]=[];
   if(active==='climate')for(const cls of metadata.climate){
    if(map.getZoom()<cls.minZoom)continue;
@@ -62,11 +75,16 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
    codes.push({id,code:text,anchors:cls.anchors.map(project),width:measuredWidth(b,cls.code.length*9+12),height:24});
   }
   const annotation:Annotation[]=[];
+  if(['water','basins'].includes(active??'')&&config.riverFile&&datasets.has(config.riverFile))for(const focus of config.waterFocus??[]){
+   const feature=datasets.get(config.riverFile).features.find((f:any)=>f.properties.id===focus.river);if(!feature)continue;
+   const lines=feature.geometry.type==='MultiLineString'?feature.geometry.coordinates:[feature.geometry.coordinates],path=[...lines].sort((a:any,b:any)=>b.length-a.length)[0];if(path?.length)annotation.push({id:focus.river,text:focus.name,coordinate:path[Math.floor(path.length/2)],kind:'river'});
+  }
+  if(active==='landform')annotation.push(...(config.landforms??[]).map(f=>({id:f.id,text:f.name,coordinate:f.coordinates,kind:'landform'})));
   if(active==='overview'&&!water&&datasets.has(metadata.farming.file))annotation.push(...metadata.farming.labels.filter(a=>a.kind==='crop'&&selectedKinds.has('crop')));
   if(water&&config.riverFile&&datasets.has(config.riverFile))for(const f of datasets.get(config.riverFile).features.filter((f:any)=>config.riverIds?.includes(f.properties.id))){const lines=f.geometry.type==='MultiLineString'?f.geometry.coordinates:[f.geometry.coordinates];const line=[...lines].sort((a:any,b:any)=>b.length-a.length)[0];annotation.push({id:f.properties.id,text:f.properties.label,coordinate:line[Math.floor(line.length/2)],kind:'river'});}
   const isoline=active==='terrain'?metadata.terrain:active==='precipitation'||water?metadata.rainfall:null;
   if(isoline&&datasets.has(isoline.file))annotation.push(...isoline.labels.filter(a=>!a.value||a.value%(water?1000:active==='terrain'?1000:500)===0).slice(0,water?6:12));
-  for(const a of annotation){const id=active+'-'+a.id;const b=button(id,a.text,a.kind==='river'?'asia-river-label':a.product?'asia-farm-label':'asia-rain-label',()=>a.product?chooseFarm(a.product):choosePoint(a.coordinate));if(a.color)b.style.setProperty('--label-color',a.color);b.setAttribute('aria-label',a.product?a.text+'の詳しい分布':a.kind==='river'?a.text:`${a.text}${active==='terrain'?'mの等高線':'mmの等雨量線'}`);codes.push({id,code:a.text,anchors:[project(a.coordinate)],width:measuredWidth(b,a.text.length*11+10),height:24});}
+  for(const a of annotation){const id=active+'-'+a.id;const b=button(id,a.text,a.kind==='river'?'asia-river-label':a.kind==='landform'?'asia-landform-label':a.product?'asia-farm-label':'asia-rain-label',()=>a.product?chooseFarm(a.product):a.kind==='landform'&&config.selectLandform?config.selectLandform(a.id):choosePoint(a.coordinate));if(a.color)b.style.setProperty('--label-color',a.color);b.setAttribute('aria-label',a.product?a.text+'の詳しい分布':['river','landform'].includes(a.kind??'')?a.text:`${a.text}${active==='terrain'?'mの等高線':'mmの等雨量線'}`);codes.push({id,code:a.text,anchors:[project(a.coordinate)],width:measuredWidth(b,a.text.length*11+10),height:24});}
   const codePlacements=layoutClimateCodes(codes,bounds,[...obstacles,...placed]);
   for(const rect of codePlacements){const b=buttons.get(rect.id)!;b.hidden=false;b.style.left=rect.left+'px';b.style.top=rect.top+'px';b.style.width=(rect.right-rect.left)+'px';b.style.height=(rect.bottom-rect.top)+'px';if(rect.id.startsWith('climate-')){const cls=metadata.climate.find(c=>'climate-'+c.id===rect.id)!;const index=cls.anchors.findIndex(p=>{const q=project(p);return Math.abs(q.x-rect.anchor.x)<.1&&Math.abs(q.y-rect.anchor.y)<.1;});b.dataset.coordinate=cls.anchors[Math.max(0,index)].join(',');}if(rect.leader){const end=leaderEnd(rect.anchor,rect);line(rect.anchor.x,rect.anchor.y,end.x,end.y);}}
  }
@@ -104,5 +122,5 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
 
  }
  for(const control of controls)control.addEventListener('change',()=>{if(control.checked)selectedKinds.add(control.dataset.farmKind!);else selectedKinds.delete(control.dataset.farmKind!);if(map)void show(map);},{signal:events.signal});
- return {show,refresh:schedule,destroy(){disposed=true;events.abort();cancelAnimationFrame(scheduled);overlay.replaceChildren();onStatus('');}};
+ return {show,refresh:schedule,setRivers(data:any){if(config.riverFile)datasets.set(config.riverFile,data);schedule();},destroy(){disposed=true;events.abort();cancelAnimationFrame(scheduled);overlay.replaceChildren();onStatus('');}};
 }

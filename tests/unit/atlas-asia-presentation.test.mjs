@@ -35,7 +35,7 @@ test('Asia presentation assets retain exact input provenance and real climate an
 });
 
 test('Asia has the requested four nature topics and four population primary tabs',()=>{
- assert.deepEqual(naturalGroups.map(t=>t.label),['気候区分','水資源','等雨量線','標高線']);
+ assert.deepEqual(naturalGroups.map(t=>t.label),['気候区分','水資源','地形','標高（等高線）']);
  assert.equal(naturalGroup('basins'),'water');assert.equal(naturalGroup('groundwater'),'water');
  assert.equal(populationGroups.length,4);assert.equal(populationGroup('national-age-old'),'distribution');assert.equal(populationGroup('in-religion-hindu'),'religion');assert.equal(populationGroup('in-language-006000'),'identity');
 });
