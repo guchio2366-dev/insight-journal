@@ -1,5 +1,85 @@
-.west-atlas{min-width:0}.west-heading{margin:10px 0 13px}.west-heading .eyebrow{font-size:10px;margin:0 0 3px}.west-heading h1{font-family:var(--serif);font-size:30px;line-height:1.4;margin:0;letter-spacing:.025em}.west-heading>p:last-child{font-size:12px;color:#556a68;margin:5px 0 0}.west-region-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:12px}.west-region-row label{display:flex;align-items:center;gap:8px;font-size:12px}.west-region-row a{font-size:12px;color:#35565c}.west-atlas select{min-height:44px;max-width:100%;min-width:0;padding:7px 10px;background:#fffef8;border:1px solid #b8c5bd;border-radius:3px;font:inherit;color:#253e46}.west-controls{grid-template-columns:1fr;gap:5px}.west-topic-label{display:flex;gap:10px;align-items:center;font-size:12px}.west-topic-label select{flex:1}.west-atlas .atlas-nature-tabs{grid-template-columns:repeat(4,minmax(0,1fr))}.west-atlas .atlas-nature-tabs button{line-height:1.4;min-height:42px}.west-map-heading{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:13px 0 9px;min-height:53px}.west-map-heading h2{font-family:var(--serif);font-size:20px;margin:0;line-height:1.45}.west-map-heading>span{font-size:11px;white-space:nowrap;color:#577078}.west-atlas .atlas-map-frame{background:#dbe8eb}.west-atlas [data-west-map]{display:block;width:100%;height:100%;touch-action:none;cursor:grab}.west-atlas [data-west-map]:active{cursor:grabbing}.west-atlas .atlas-map-tools button{min-width:44px;min-height:44px}.west-country-line{fill:transparent;stroke:#52646d;stroke-width:.8;vector-effect:non-scaling-stroke;cursor:pointer}.west-country-line.is-selected{stroke:#933d2d;stroke-width:2.5}.west-map-label{font:11px var(--sans);fill:#243e48;paint-order:stroke;stroke:#fffef4;stroke-width:3;stroke-linejoin:round;pointer-events:none}.west-station circle{fill:#fffdf2;stroke:#284652;stroke-width:1.6;vector-effect:non-scaling-stroke}.west-station.is-selected circle{fill:#ac4c35;stroke:white;stroke-width:2}.west-station{cursor:pointer}.west-map-loading{position:absolute;left:10px;bottom:10px;max-width:calc(100% - 20px);background:#fffffff0;border:1px solid #c7d1c8;padding:8px 10px;font-size:12px}.west-map-help,.west-method,.west-source{font-size:11px;color:#5b706f;line-height:1.8;margin:8px 0;overflow-wrap:anywhere}.west-point{font-size:12px;line-height:1.8;background:#f0f3e9;border-left:3px solid #66836a;padding:9px 10px;min-height:52px;margin:10px 0}.west-legend{border-block:1px solid #ccd5ca;padding:9px 0;font-size:11px}.west-legend .west-swatches{display:flex;flex-wrap:wrap;gap:5px 11px}.west-swatches span{display:inline-flex;align-items:center;gap:5px;line-height:1.5}.west-swatches i{display:inline-block;width:15px;height:12px;border:1px solid #52616b44;flex:none}.west-legend summary{min-height:36px;cursor:pointer;line-height:1.8}.west-legend p{margin:5px 0;line-height:1.8}.west-reading{padding-top:14px;min-width:0}.west-detail-controls{display:grid;gap:8px;padding-bottom:14px;border-bottom:1px solid #cbd3c8}.west-detail-controls label{display:grid;gap:5px;font-size:11px}.west-detail-controls select{width:100%}.west-reading h2{font-family:var(--serif);font-size:24px;line-height:1.45;margin:5px 0 12px}.west-reading h3{font-size:14px;margin:21px 0 8px}.west-reading p{font-size:13px;line-height:1.9;margin:10px 0}.west-reading .eyebrow{font-size:10px;margin-top:17px}.west-reading .west-value{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;margin:12px 0 2px}.west-reading .west-value small{font-size:13px;font-weight:400}.west-reading .west-stat-note{font-size:11px;color:#5b706f;line-height:1.8}.west-related{border-top:1px solid #cbd3c8;margin-top:20px;padding-top:2px}.west-related a{display:inline-flex;margin:2px 6px 4px 0;min-height:44px;align-items:center;padding:7px 10px;border:1px solid #b9cabb;background:#f6f8ef;font-size:12px;color:#355649;text-decoration:none}.west-back-map{display:inline-flex;align-items:center;min-height:44px;font-size:12px}.west-reading table,.west-static-data table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}.west-reading th,.west-reading td,.west-static-data td,.west-static-data th{padding:8px 5px;border-bottom:1px solid #dce2d8;text-align:right}.west-reading th:first-child,.west-static-data th{text-align:left;font-weight:500}.west-reading table button{border:0;background:transparent;color:#265660;text-decoration:underline;padding:4px 0;text-align:left;min-height:32px;font:inherit}.west-reading caption,.west-static-data caption{font-size:11px;text-align:left;line-height:1.7;color:#5c716c;padding-block:8px}.west-reading details summary,.west-static-data summary{min-height:44px;padding:10px 0;cursor:pointer;font-size:12px}.west-reading .west-chart{margin-top:22px}.west-sources{margin-top:32px;border-top:2px solid #354b4b;padding-top:18px}.west-sources h2{font-family:var(--serif);font-size:22px;margin:0 0 12px}.west-sources h3{font-size:13px;margin:10px 0}.west-sources p{font-size:11px;line-height:1.9;color:#556b67}.west-source-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}.west-retry{min-height:44px;padding:8px 12px;border:1px solid #9fafac;background:#fff9e9;font:inherit;font-size:12px}.west-atlas [hidden]{display:none!important}.west-atlas :focus-visible{outline:3px solid #ad5232;outline-offset:2px}.west-atlas [data-west-map]:focus-visible{outline-offset:-3px}.west-static-data{max-width:660px}.west-persisted{background:#f4efe4;padding:8px 10px;border-left:3px solid #b29361;font-size:11px!important}
-@media(min-width:1200px){.west-reading{max-height:900px;overflow:auto;scrollbar-gutter:stable;padding-right:5px}.west-atlas .atlas-map-column{position:sticky;top:12px}}
-@media(max-width:1199px){.west-reading{margin-top:10px}.west-atlas .atlas-map-frame{min-height:360px;aspect-ratio:1.5;max-height:620px}.west-source-grid{gap:16px}}
-@media(max-width:600px){.west-heading h1{font-size:27px}.west-region-row{gap:8px}.west-region-row label{width:100%}.west-region-row select{flex:1}.west-atlas .atlas-tabs>a{font-size:13px;min-height:44px}.west-atlas .atlas-map-frame{min-height:340px;aspect-ratio:1;max-height:460px}.west-atlas .atlas-nature-tabs button{font-size:11px;min-height:44px}.west-source-grid{grid-template-columns:1fr;gap:4px}.west-reading h2{font-size:25px}.west-map-heading h2{font-size:19px}.west-topic-label>span{font-size:11px;max-width:65px}.west-topic-label select{font-size:12px}.west-reading table button{min-height:44px}.west-atlas .atlas-compact-heading{font-size:11px}}
-@media(max-height:550px) and (min-width:601px){.west-atlas .atlas-map-frame{min-height:280px;max-height:420px;aspect-ratio:1.8}}
+/* West Asia follows the North America frame, tabs, map key and reading column. */
+.west-atlas{min-width:0}
+.west-regional-navigation{margin-top:12px;margin-bottom:18px}
+.west-region-links{display:flex;flex-wrap:wrap;gap:6px}
+.west-region-links a{display:inline-flex;align-items:center;min-height:44px;padding:8px 15px;border:1px solid var(--rule);background:var(--white);font-size:14px;text-decoration:none}
+.west-region-links a[aria-current]{color:#fff;background:#162638;border-color:#162638}
+.west-region-country{display:flex;align-items:center;gap:8px;margin-top:7px;font-size:13px}
+.west-atlas select,.west-region-country select{min-height:44px;max-width:100%;min-width:0;padding:7px 10px;background:#fffef8;border:1px solid #b8c5bd;border-radius:3px;font:inherit;color:#253e46}
+.west-region-country select{min-height:40px}
+.west-controls{grid-template-columns:1fr}
+.west-subtabs{padding:6px;margin:0;border:1px solid #c7ccbf;border-bottom:0;background:#fbfaf3}
+.west-atlas .atlas-map-frame{background:#e3eff0}
+.west-atlas [data-west-map]{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+.west-atlas [data-west-map]:active{cursor:grabbing}
+.west-atlas .atlas-map-tools button{min-width:44px;min-height:44px}
+.west-country-line{fill:transparent;stroke:#52646d;stroke-width:.8;vector-effect:non-scaling-stroke;cursor:pointer}
+.west-country-line.is-selected{stroke:#365560;stroke-width:2}
+.west-map-label{font:11px var(--sans);fill:#243e48;paint-order:stroke;stroke:#fffef4;stroke-width:3;stroke-linejoin:round;pointer-events:none}
+.west-station{cursor:pointer}
+.west-station circle{fill:#fffdf2;stroke:#284652;stroke-width:1.4;vector-effect:non-scaling-stroke}
+.west-station line{stroke:#526e75;stroke-width:1;vector-effect:non-scaling-stroke;pointer-events:none}
+.west-station rect{fill:#fffef4;stroke:#60767c;stroke-width:1;vector-effect:non-scaling-stroke}
+.west-station text{font:600 12px var(--sans);fill:#203b47}
+.west-station.is-selected rect{fill:#fff1ae;stroke:#243b48;stroke-width:2}
+.west-station:focus rect{stroke:#ad5232;stroke-width:3}
+.west-map-loading{position:absolute;left:10px;top:10px;max-width:calc(100% - 76px);background:#fffffff0;border:1px solid #c7d1c8;padding:8px 10px;font-size:12px}
+.west-map-help,.west-method,.west-source{font-size:12px;color:#51656b;line-height:1.75;margin:8px 0;overflow-wrap:anywhere}
+.west-map-lists details,.west-map-method{font-size:12px;line-height:1.7}
+.west-map-lists summary,.west-map-method summary{min-height:40px;padding:8px 0;cursor:pointer}
+.west-map-lists label{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.west-map-lists select{max-width:100%;font-size:12px}
+.west-point{font-size:12px;line-height:1.8;padding:9px 10px;background:#f1f5ee;border-left:3px solid #66836a;margin:10px 0}
+.west-legend{border:1px solid #c8cfc4;border-top:0;background:#f7f5ec;padding:6px;font-size:11px}
+.west-swatches,.west-climate-key{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 12px}
+.west-swatches span{display:inline-flex;align-items:center;gap:5px;line-height:1.5}
+.west-swatches i{display:inline-block;width:15px;height:12px;border:1px solid #52616b44;flex:none}
+.west-legend p{margin:4px 0;line-height:1.7}
+.west-agri-picker{justify-content:flex-start;gap:6px 14px}
+.west-agri-picker .agri-picker-group{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.west-agri-picker strong{font-size:12px}
+.west-agri-picker button{min-height:40px;padding:5px 8px;font:inherit;color:#254952;background:transparent;border:1px solid transparent;cursor:pointer}
+.west-agri-picker button[aria-pressed=true]{font-weight:700;text-decoration:underline;text-underline-offset:4px;border-color:#b8c8ba;background:#eaf0e3}
+.west-cultivation{padding:5px 6px;margin:0;border-inline:1px solid #c8cfc4;background:#f7f5ec}
+.west-cultivation button{font-size:12px;min-height:40px;padding:6px 10px}
+.west-reading{min-width:0;height:auto!important;overflow:visible}
+.west-reading h2{font-family:var(--serif);font-size:23px;line-height:1.4;margin:0}
+.west-reading h3{font-size:18px;font-family:var(--serif);margin:0 0 10px}
+.west-reading p{font-size:14px;line-height:1.85;margin:8px 0}
+.west-reading .atlas-eyebrow{font-size:10px;margin:0 0 5px;color:#52665f}
+.west-reading .west-value{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;margin:12px 0 2px}
+.west-value small{font-size:13px;font-weight:400}
+.west-reading .west-stat-note{font-size:11px!important;color:#5b706f;line-height:1.7!important}
+.west-detail-controls{margin-top:12px}
+.west-detail-controls label{display:flex;align-items:center;gap:10px;font-size:12px}
+.west-reading .atlas-city-climate{margin-bottom:0}
+.west-related{border-top:1px solid #d4dbd0;margin-top:16px;padding-top:12px}
+.west-related h3{font-family:var(--sans);font-size:12px;margin:0 0 6px}
+.west-related a{display:inline-flex;align-items:center;min-height:40px;padding:6px 8px;margin:2px;border:1px solid #b9cdc4;border-radius:4px;background:#f2f6f2;font-size:12px;color:#255964;text-decoration:none}
+.west-back-map{display:none;align-items:center;min-height:44px;font-size:12px}
+.west-reading table,.west-statistics table,.west-static-data table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
+.west-reading th,.west-reading td,.west-statistics th,.west-statistics td,.west-static-data th,.west-static-data td{padding:8px 5px;border-bottom:1px solid #dce2d8;text-align:right}
+.west-reading th:first-child,.west-statistics th:first-child,.west-static-data th{text-align:left;font-weight:500}
+.west-statistics table button{border:0;background:transparent;color:#265660;text-decoration:underline;padding:4px 0;text-align:left;min-height:40px;font:inherit}
+.west-reading caption,.west-statistics caption,.west-static-data caption{font-size:11px;text-align:left;line-height:1.7;color:#5c716c;padding-block:8px}
+.west-reading details summary,.west-statistics summary,.west-static-data summary{min-height:44px;padding:10px 0;cursor:pointer;font-size:12px}
+.west-climate-codes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 16px;padding-bottom:14px}
+.west-climate-codes h3{display:flex;align-items:center;gap:6px;font-size:12px;margin:8px 0 4px}
+.west-climate-codes i{width:12px;height:12px;flex:none;border:1px solid #6785}
+.west-climate-codes p,.west-atlas .atlas-climate-overview>p{font-size:12px;line-height:1.75;margin:5px 0}
+.west-statistics{margin-top:28px;border-top:1px solid #c7ccbf;padding-top:16px;max-width:880px}
+.west-statistics h2,.west-sources h2{font-family:var(--serif);font-size:22px;margin:0 0 12px}
+.west-sources{margin-top:32px;border-top:2px solid #354b4b;padding-top:18px}
+.west-sources h3{font-size:13px;margin:10px 0}
+.west-sources p{font-size:12px;line-height:1.9;color:#556b67}
+.west-source-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.west-retry{min-height:44px;padding:8px 12px;border:1px solid #9fafac;background:#fff9e9;font:inherit;font-size:12px}
+.west-atlas [hidden]{display:none!important}
+.west-atlas :focus-visible,.west-regional-navigation :focus-visible{outline:3px solid #ad5232;outline-offset:2px}
+.west-atlas [data-west-map]:focus-visible{outline-offset:-3px}
+.west-static-data{max-width:660px}
+.west-persisted{font-size:11px!important;color:#647570}
+@media(min-width:1200px){.west-atlas .atlas-map-column{position:sticky;top:12px}}
+@media(max-width:1199px){.west-source-grid{gap:16px}}
+@media(max-width:959px){.west-back-map{display:inline-flex}}
+@media(max-width:600px){.west-region-country select{flex:1}.west-source-grid,.west-climate-codes{grid-template-columns:1fr}.west-reading h2{font-size:21px}.west-agri-picker button,.west-cultivation button,.west-subtabs button{min-height:44px}.west-climate-key{gap:4px 9px}}

@@ -1,63 +1,72 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
-import AsiaClimateDiagram from './AsiaClimateDiagram.astro';
+import WestAsiaClimateDiagram from './WestAsiaClimateDiagram.astro';
 import {withBase} from '../../lib/urls';
 import data from '../../data/atlas/west-asia.json';
 import {westFields,westTopics,observation} from '../../data/atlas/west-asia-topics.mjs';
 import '../../styles/atlas-west-asia.css';
+import '../../styles/atlas-industry.css';
+import '../../styles/atlas-population.css';
 interface Props { initialField?: 'natural'|'agriculture'|'industry'|'population' }
 const {initialField='natural'}=Astro.props;
 const field=westFields.find(f=>f.id===initialField)!;
 const topics=westTopics.filter(t=>t.field===initialField);
 const initial=topics.find(t=>t.id===field.first)!;
 const groups=[...new Set(topics.map(t=>t.group))];
-const rainMax=Math.ceil(Math.max(...data.cities.flatMap(c=>c.precipitationMm).filter(v=>v!==null))/100)*100;
+const topicButton=(t:typeof initial)=>t.label.replace('の収穫面積','').replace('・国別生産量','').replace('の分布','');
 const assetBase=withBase('/assets/atlas/west-asia-v1/');
 const climateSource='https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/frame.php';
 ---
 <BaseLayout title={`西アジア・中東の${field.label}`} description="20か国・地域の自然環境、農林業、産業、人口を、資料の対象年とともに読む地図。" compactAtlas>
+ <div class="shell west-regional-navigation">
+  <nav class="west-region-links" aria-label="世界の地域"><a data-west-other="north-america" href={withBase(`/atlas/north-america/${field.route}/`)}>北米</a><a href={withBase('/atlas/europe/')}>欧州</a><a href={withBase(`/atlas/west-asia/${field.route}/`)} aria-current="page">西アジア・中東</a></nav>
+  <label class="west-region-country">国・地域<select data-west-country aria-label="国・地域を選択"><option value="">地域全体</option>{data.countries.map(c=><option value={c.code}>{c.name}</option>)}</select></label>
+ </div>
  <AtlasWorkspaceFrame region="west-asia">
   <article class="atlas-explorer west-atlas" data-west-atlas data-field={initialField} data-assets={assetBase}>
-   <div class="atlas-compact-heading"><a href={withBase('/atlas/')}>← 世界の地域を選ぶ</a><span>20か国・地域</span></div>
-   <header class="west-heading"><p class="eyebrow">REGIONAL ATLAS</p><h1>西アジア・中東</h1><p>場所を選び、水・土地・産業・暮らしのつながりを読む。</p></header>
-   <div class="west-region-row">
-    <label>国・地域<select data-west-country aria-label="国・地域を選択"><option value="">地域全体</option>{data.countries.map(c=><option value={c.code}>{c.name}</option>)}</select></label>
-    <a data-west-other="north-america" href={withBase(`/atlas/north-america/${field.route}/`)}>北米を見る</a>
-    <a href={withBase('/atlas/europe/')}>欧州を見る</a>
-   </div>
+   <section class="atlas-workspace" aria-label="西アジア・中東の分野別地図">
+   <div class="atlas-compact-heading"><nav aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a><span> / </span><a href={withBase('/atlas/west-asia/')}>西アジア・中東地図</a></nav><span data-west-scope>20か国・地域</span></div>
+   <h1 class="visually-hidden">西アジア・中東地図から読む、農林業・自然環境・主要産業・人口</h1>
    <nav class="atlas-tabs" aria-label="地図の分野">{westFields.map(f=><a data-west-field={f.id} href={withBase(`/atlas/west-asia/${f.route}/`)} aria-current={f.id===initialField?'page':undefined}>{f.label}</a>)}</nav>
-   <div class="atlas-nature-controls west-controls">
-    <div class="atlas-nature-tabs" role="group" aria-label={`${field.label}の主題群`}>{groups.map((g,i)=><button type="button" data-west-group={g} aria-pressed={i===0} aria-selected={i===0}>{g}</button>)}</div>
-    <label class="west-topic-label"><span>表示する地図</span><select data-west-topic aria-label="表示する地図">{groups.map(g=><optgroup label={g}>{topics.filter(t=>t.group===g).map(t=><option value={t.id}>{t.label}</option>)}</optgroup>)}</select></label>
-   </div>
-   <div class="atlas-primary-grid">
+   {initialField!=='agriculture'&&<div class={initialField==='natural'?'atlas-nature-controls west-controls':initialField==='industry'?'industry-controls':'population-controls'}>
+    <div class={initialField==='natural'?'atlas-nature-tabs':initialField==='industry'?'industry-tab-row':'population-tabs'} role="tablist" aria-label={`${field.label}の表示切替`}>{groups.map(g=><button type="button" role="tab" id={`west-group-${groups.indexOf(g)}`} aria-controls="west-map-panel" data-west-group={g} aria-pressed={g===initial.group} aria-selected={g===initial.group} tabindex={g===initial.group?0:-1}>{g}</button>)}</div>
+   </div>}
+   {initialField!=='agriculture'&&groups.filter(g=>topics.filter(t=>t.group===g).length>1).map(g=><div class={initialField==='industry'?'industry-tab-row industry-subtabs west-subtabs':'atlas-water-tabs west-subtabs'} role="tablist" aria-label={`${g}の表示切替`} data-west-subgroup={g} hidden={g!==initial.group}>{topics.filter(t=>t.group===g).map(t=><button type="button" role="tab" data-west-topic-button={t.id} aria-controls="west-map-panel" aria-selected={t.id===initial.id} tabindex={t.id===initial.id?0:-1}>{topicButton(t)}</button>)}</div>)}
+   <div class="atlas-primary-grid" id="west-map-panel" role="tabpanel" aria-label={`${field.label}の地図と解説`}>
     <section class="atlas-map-column" aria-labelledby="west-map-title">
-     <div class="west-map-heading"><h2 id="west-map-title">{initial.label}</h2><span data-west-period></span></div>
+     <h2 id="west-map-title" class="visually-hidden">{initial.label}</h2>
      <div class="atlas-map-frame">
       <svg data-west-map data-map-surface viewBox={`0 0 ${data.width} ${data.height}`} tabindex="0" role="group" aria-label="西アジア・中東の主題図。矢印キーで移動、プラスとマイナスで拡大・縮小。国・都市は一覧からも選択できます。"><title>西アジア・中東の地図</title><g data-west-scene></g></svg>
       <div class="atlas-map-tools" aria-label="地図の表示範囲"><button data-west-reset aria-label="地域全体へ戻る">全体</button><button data-west-zoom="0.65" aria-label="地図を拡大">＋</button><button data-west-zoom="1.54" aria-label="地図を縮小">−</button></div>
       <div class="west-map-loading" data-west-loading role="status">地図資料を読み込んでいます。</div>
+      <p class="atlas-layer-caption"><span data-west-caption>{initial.label}</span> · <span data-west-period></span></p>
      </div>
-     <p class="west-map-help">地図の場所、または上の国の一覧を選んでください。ドラッグ・矢印キーで移動できます。スマートフォンでは上下の余白からページをスクロールできます。</p>
-     <p class="west-point" data-west-point aria-live="polite">場所を選ぶと、ここに地図の値を表示します。</p>
+     {initialField==='agriculture'&&<div class="atlas-key west-agri-picker" aria-label="農林業の品目">{groups.map(g=><span class="agri-picker-group"><strong>{g==='土地・森林'?'林業・土地':g}</strong>{topics.filter(t=>t.group===g&&!t.id.endsWith('-irrigated')&&!t.id.endsWith('-rainfed')).map(t=><button type="button" data-west-topic-button={t.id} aria-pressed={t.id===initial.id}>{topicButton(t)}</button>)}</span>)}</div>}
+     {initialField==='agriculture'&&['wheat','barley'].map(id=><div class="atlas-water-tabs west-cultivation" aria-label="栽培方法" role="tablist" data-west-cultivation={id} hidden={id!==initial.id}>{topics.filter(t=>t.id===id||t.id.startsWith(id+'-')).map(t=><button type="button" role="tab" data-west-topic-button={t.id} aria-selected={t.id===initial.id} tabindex={t.id===initial.id?0:-1}>{t.id===id?'収穫面積':t.id.endsWith('irrigated')?'灌漑栽培':'天水栽培'}</button>)}</div>)}
      <div class="west-legend" data-west-legend aria-label="地図の凡例"></div>
-     <p class="west-method" data-west-method></p>
-     <p class="west-source" data-west-source></p>
+     <p class="west-map-help" data-west-guide>地図の国・都市名を選ぶと、右側に解説を表示します。</p>
+     <div class="west-map-lists">
+      <details data-west-city-label><summary>都市の一覧から雨温図を選ぶ</summary><label>観測所<select data-west-city aria-label="雨温図の観測所"><option value="">観測所を選択</option>{data.cities.map(c=><option value={c.id}>{c.name}</option>)}</select></label></details>
+      <details data-west-urban-label hidden><summary>都市の一覧から選ぶ</summary><select data-west-urban aria-label="人口を読む都市"><option value="">都市を選択</option>{data.urban.cities.map(c=><option value={c.id}>{c.name}</option>)}</select></details>
+      <details data-west-basin-label hidden><summary>流域の一覧から選ぶ</summary><select data-west-basin aria-label="流域を選択"><option value="">流域を選択</option></select></details>
+     </div>
+     <p class="west-point" data-west-point aria-live="polite" hidden>場所を選ぶと、ここに地図の値を表示します。</p>
+     <details class="west-map-method"><summary>地図の出典・表示方法</summary><p class="west-method" data-west-method></p><p class="west-source" data-west-source></p><p>ドラッグ・矢印キーで移動できます。スマートフォンでは地図の上下の余白からページをスクロールできます。</p></details>
      <button class="west-retry" data-west-retry hidden>資料を再読み込みする</button>
     </section>
-    <aside class="west-reading" aria-labelledby="west-detail-title">
-     <div class="west-detail-controls">
+    <aside class={`atlas-national west-reading ${initialField==='natural'?'atlas-nature-summary':initialField==='population'?'population-national':initialField==='industry'?'industry-national':'west-agri-reading'}`} data-field-national={initialField} aria-labelledby="west-detail-title">
+     <div data-west-detail><h2 id="west-detail-title">{initial.label}</h2><p>{initial.description}</p></div>
+     <div class="west-detail-controls" data-west-stat-controls>
       <label data-west-year-label>国別統計の年<select data-west-year aria-label="国別統計の年">{[2024,2023,2022,2021,2020].map(y=><option value={y}>{y}年</option>)}</select></label>
-      <label data-west-city-label>観測所の雨温図<select data-west-city aria-label="雨温図の観測所"><option value="">観測所を選択</option>{data.cities.map(c=><option value={c.id}>{c.name}</option>)}</select></label>
-      <label data-west-urban-label hidden>都市中心部<select data-west-urban aria-label="人口を読む都市"><option value="">都市を選択</option>{data.urban.cities.map(c=><option value={c.id}>{c.name}</option>)}</select></label>
-      <label data-west-basin-label hidden>流域全体へ移動<select data-west-basin aria-label="流域を選択"><option value="">流域を選択</option></select></label>
      </div>
-     <div data-west-detail><p class="eyebrow">読み方</p><h2 id="west-detail-title">{initial.label}</h2><p>{initial.description}</p><p>国や都市を選ぶと、統計と説明を表示します。</p></div>
      <div class="west-related"><h3>同じ場所の別の分野へ</h3>{westFields.filter(f=>f.id!==initialField).map(f=><a data-west-field={f.id} href={withBase(`/atlas/west-asia/${f.route}/`)}>{f.label} →</a>)}</div>
      <a class="west-back-map" href="#west-map-title">地図へ戻る ↑</a>
     </aside>
+    {initialField==='natural'&&<details class="atlas-climate-overview" data-west-climate-overview><summary><h2>各気候区分の概説</h2></summary><p>色と区分は北米と共通です。分類は1991–2020年の平均的な気温・降水の組合せを表します。</p><div class="west-climate-codes">{data.classes.map(c=><section><h3><i style={`background:${c.color}`}></i>{c.code} {c.name}</h3><p>{c.description}</p></section>)}</div></details>}
    </div>
+   </section>
+   <section class="west-statistics" id="west-statistics" data-west-comparison hidden aria-label="国別統計"></section>
    <section class="west-sources" id="west-sources"><h2>資料の範囲と読み方</h2>
     <p>このページは、国連M49の西アジア18か国・地域にイランとエジプトを加えた編集上の範囲です。国連が「中東」をこの20と定めたものではありません。<a href="https://unstats.un.org/unsd/methodology/m49/overview">国連M49</a></p>
     <p>境界はNatural Earth v5.1.2の表示区分を採用しています。パレスチナは資料のPSXをPSEに対応させ、キプロスの2つの境界ポリゴンは選択項目をまとめています。境界・名称は現在の実効支配や領有権の確定を示しません。国別統計は各提供元の対象範囲に従い、境界図と厳密には一致しない場合があります。</p>
@@ -68,7 +77,7 @@ const climateSource='https://www.data.jma.go.jp/tcc/tcc/products/climate/climatv
     <details class="west-static-data"><summary>国別の基本人口と出典を読む（操作できない場合も利用できます）</summary><table><caption>2024年の人口／World Bank WDI。欠測は未収録と表示します。</caption><thead><tr><th>国・地域</th><th>人口</th></tr></thead><tbody>{data.countries.map(c=>{const r=observation(data,{indicator:'SP.POP.TOTL',unit:'人'},c.code,2024);return <tr><th>{c.name}</th><td>{r.value===null?'未収録':`${r.value.toLocaleString('ja-JP')}人`}</td></tr>})}</tbody></table></details>
    </section>
    <noscript><p>地図の切替にはJavaScriptが必要です。上の国別人口表と出典はそのまま読めます。</p></noscript>
-   {data.cities.map(c=><template data-west-chart={c.id}><AsiaClimateDiagram city={c} precipitationMax={rainMax}/></template>)}
+   {data.cities.map(c=><template data-west-chart={c.id}><WestAsiaClimateDiagram city={c}/></template>)}
   </article>
  </AtlasWorkspaceFrame>
 </BaseLayout>

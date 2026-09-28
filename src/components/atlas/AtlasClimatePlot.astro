@@ -1,0 +1,28 @@
+---
+interface Props {
+  name: string;
+  period?: string;
+  temperatureC: (number|null)[];
+  precipitationMm: (number|null)[];
+}
+const {name,period='1991–2020',temperatureC,precipitationMm}=Astro.props;
+// Shared scale and drawing for regional rain/temperature diagrams.
+const left=34,right=286,top=29,bottom=159;
+const x=(i:number)=>left+(right-left)*(i+.5)/12;
+const py=(v:number)=>bottom-v/350*(bottom-top);
+const ty=(v:number)=>bottom-(v+10)/50*(bottom-top);
+const segments:string[]=[];let segment='';
+temperatureC.forEach((v,i)=>{if(v===null){if(segment)segments.push(segment);segment='';}else segment+=`${segment?' ':''}${x(i).toFixed(1)},${ty(v).toFixed(1)}`;});
+if(segment)segments.push(segment);
+---
+<svg viewBox="0 0 320 198" role="img" aria-label={`${name}の${period}の月平均気温と月降水量`}>
+ <g class="atlas-climate-grid">{[0,100,200,350].map(v=><><line x1={left} x2={right} y1={py(v)} y2={py(v)}/><text x="2" y={py(v)+3}>{v}</text></>)}</g>
+ <text class="atlas-climate-unit" x="2" y="12">mm</text><text class="atlas-climate-unit atlas-climate-unit--temp" x="294" y="12">℃</text>
+ <text class="atlas-climate-city-name" x="160" y="13" text-anchor="middle">{name}</text>
+ {precipitationMm.map((v,i)=>v===null?<text class="atlas-climate-month" x={x(i)} y={bottom-3}>×</text>:<rect class="atlas-climate-bar" x={x(i)-7.5} y={py(v)} width="15" height={bottom-py(v)}/>)}
+ {segments.map(points=><polyline class="atlas-climate-line" {points}/>)}
+ {temperatureC.map((v,i)=>v!==null&&<circle class="atlas-climate-dot" cx={x(i)} cy={ty(v)} r="2.2"/>)}
+ {Array.from({length:12},(_,i)=><text class="atlas-climate-month" x={x(i)} y="177">{i+1}</text>)}
+ {[40,20,0,-10].map(v=><text class="atlas-climate-temp-label" x="291" y={ty(v)+3}>{v}</text>)}
+ <text class="atlas-climate-axis-title" x="160" y="195">月</text>
+</svg>
