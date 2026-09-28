@@ -88,7 +88,7 @@ export function createAsiaWater(root:HTMLElement,config:Config,getState:()=>Asia
   const content=$('[data-hydrology-content]');content.replaceChildren();let message=status;
   const waterPicker=root.querySelector<HTMLElement>('[data-water-picker]');
   if(waterPicker){waterPicker.hidden=getState().topic!=='water';if(!waterPicker.hidden){content.before(waterPicker);const input=waterPicker.querySelector<HTMLSelectElement>('select')!;input.value=river()?.id??'';for(const o of input.options){const allowed=!o.value||!state.place||config.waterFeatures?.find(f=>f.id===o.value)?.countries.includes(state.place);o.hidden=!allowed;o.disabled=!allowed;}}}
-  if(river()){const r=river()!;content.append(el('h3',r.label??r.name),el('p',r.kind==='rivers'?'青い線は川の概略の流路です。背景の色は、地表の水が同じ出口に向かう流域を示します。支流の名前を選ぶと、本流を含む集水域が選ばれる場合があります。':'青い面は資料に収録された湖の概略形状です。現在の湖面や貯水量を示すものではありません。周辺の色を選ぶと、その地点の流域を確認できます。'));}
+  if(river()){const r=river()!;content.append(el('h3',r.label??r.name),el('p',r.kind==='rivers'?'青い線は川の概略の流路です。背景の淡い青の面は、地下水を蓄える主要な地層の広がりを示します。河川の流域を調べるときは、上の「河川の流域」を選んでください。':'青い面は資料に収録された湖の概略形状です。現在の湖面や貯水量を示すものではありません。周辺の淡い青の面は主要な地下水盆地です。'));}
 
   if(t==='precipitation'){
    if(state.point&&grid){const n=readAsiaNumericCell(grid,...state.point);message=n===null?'この地点はデータなし、または表示範囲外です。降水量0mmとは異なります。':`${state.point[1].toFixed(3)}°, ${state.point[0].toFixed(3)}°：年降水量 ${fmt(n)} mm/年（1981–2010年の推計平年値）`;}
