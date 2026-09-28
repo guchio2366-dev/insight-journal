@@ -181,3 +181,13 @@ test('画像の北端・西端は含み、東端・南端は範囲外にする',
   assert.equal(gridCellAt(grid, 10, 0), null);
   assert.equal(gridCellAt(grid, 0, -10), null);
 });
+
+
+test('南・中央アジアの個別ページでも分野のURLと選択が往復する',()=>{
+ const context={countries:['IND','KAZ'],cities:[],bounds:[45,-2,99,57],fields:['natural','agriculture','industry','population'],topics:{natural:['water','landform','terrain']}};
+ for(const region of ['south-asia','central-asia']){
+  const url=new URL(`https://example.com/atlas/asia/${region}/nature/?topic=water`),state=readAsiaAtlasState(url,context);
+  assert.equal(state.topic,'water');const next=writeAsiaAtlasState(url,{...state,field:'agriculture',topic:null});
+  assert.equal(next.pathname,`/atlas/asia/${region}/agriculture/`);assert.equal(readAsiaAtlasState(next,context).field,'agriculture');
+ }
+});

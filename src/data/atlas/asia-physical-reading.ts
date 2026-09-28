@@ -1,5 +1,5 @@
 import type { AsiaRegionId } from '../../lib/atlas-asia-state';
-export const asiaNaturalTopics=[{id:'climate',label:'気候と雨温図'},{id:'terrain',label:'標高と地形'},{id:'water',label:'河川と湖'},{id:'precipitation',label:'年降水量'},{id:'basins',label:'流域'},{id:'groundwater',label:'地下水と涵養'}];
+export const asiaNaturalTopics=[{id:'landform',label:'地形'},{id:'climate',label:'気候と雨温図'},{id:'terrain',label:'標高と地形'},{id:'water',label:'河川と湖'},{id:'precipitation',label:'年降水量'},{id:'basins',label:'流域'},{id:'groundwater',label:'地下水と涵養'}];
 export const asiaPhysicalReading:Record<AsiaRegionId,{terrain:string;water:string;terrainDetail:string;waterDetail:string}>= {
  'east-asia':{
   terrain:'西の高原・盆地から東の平野と島弧へ、高低差をたどる。',

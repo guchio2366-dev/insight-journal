@@ -21,5 +21,5 @@ export function populationGroup(topic:string){
  return 'distribution';
 }
 export const populationGroups=[{id:'distribution',label:'人口分布'},{id:'identity',label:'民族・国籍・言語'},{id:'religion',label:'宗教'},{id:'voting',label:'投票傾向'}];
-export const naturalGroups=[{id:'climate',label:'気候区分'},{id:'water',label:'水資源'},{id:'precipitation',label:'等雨量線'},{id:'terrain',label:'標高線'}];
-export const naturalGroup=(topic:string)=>['basins','groundwater'].includes(topic)?'water':topic;
+export const naturalGroups=[{id:'climate',label:'気候区分'},{id:'water',label:'水資源'},{id:'landform',label:'地形'},{id:'terrain',label:'標高（等高線）'}];
+export const naturalGroup=(topic:string)=>['precipitation','basins','groundwater'].includes(topic)?'water':topic;

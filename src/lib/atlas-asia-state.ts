@@ -47,7 +47,7 @@ export function readAsiaAtlasState(url: URL, context: AsiaStateContext): AsiaSta
 export function writeAsiaAtlasState(url: URL, state: AsiaState): URL {
   const next = new URL(url);
   ownedKeys.forEach(key => next.searchParams.delete(key));
-  const regionPath=next.pathname.match(/^(.*\/atlas\/asia\/(?:east-asia|southeast-asia|south-central-asia))(?:\/(?:nature|agriculture|industry|population))?\/?$/);
+  const regionPath=next.pathname.match(/^(.*\/atlas\/asia\/(?:east-asia|southeast-asia|south-central-asia|south-asia|central-asia))(?:\/(?:nature|agriculture|industry|population))?\/?$/);
   if (regionPath) next.pathname = `${regionPath[1]}/${asiaFieldPaths[state.field]}/`;
   else if (state.field !== 'natural') next.searchParams.set('field', state.field);
   if(state.field==='industry'&&state.sector){next.searchParams.set('sector',state.sector);if(state.subsector)next.searchParams.set('subsector',state.subsector);}
@@ -82,7 +82,7 @@ export function restoreAsiaComparison(url: URL, state: AsiaState, context: AsiaS
   const previous = new URL(url);
   // The saved query explicitly owns the original field. Read it as a legacy
   // region URL, rather than letting the comparison page's field override it.
-  previous.pathname = previous.pathname.replace(/(\/atlas\/asia\/(?:east-asia|southeast-asia|south-central-asia))\/(?:nature|agriculture|industry|population)\/?$/, '$1/');
+  previous.pathname = previous.pathname.replace(/(\/atlas\/asia\/(?:east-asia|southeast-asia|south-central-asia|south-asia|central-asia))\/(?:nature|agriculture|industry|population)\/?$/, '$1/');
   previous.search = state.back;
   return { ...readAsiaAtlasState(previous, context), back: null };
 }

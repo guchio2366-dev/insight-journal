@@ -28,6 +28,7 @@ export class Map {
  on(name,handler){(this.events[name]??=[]).push(handler);return this}
  once(name,handler){this.on(name,handler);if(name==='load'&&!window.__deferMapLoad)queueMicrotask(async()=>{if(window.__initialSourceFailure)await this.fire('error',{error:Error('initial image 503')});await this.fire('load')});return this}
  async fire(name,event={}){for(const fn of this.events[name]??[])await fn(event)}
+ project(p){return {x:(p[0]-90)*7,y:(50-p[1])*9}}
  getSource(id){return this.sources[id]}getLayer(id){return this.layers[id]}getStyle(){return this.removed?undefined:this.options.style}
  addSource(id,source){this.sources[id]=source}addLayer(layer){this.layers[layer.id]=layer}
  removeLayer(id){delete this.layers[id]}removeSource(id){delete this.sources[id]}
@@ -169,6 +170,11 @@ async function setup(query = '', options = {}) {
     root.insertAdjacentHTML('beforeend','<button data-farm-water></button><div data-map-annotations></div><section data-farm-overview-reading></section><section data-farm-overview-legend></section><input type="checkbox" data-farm-kind="crop" checked><input type="checkbox" data-farm-kind="livestock" checked><button data-farm-choice="overview"></button><button data-farm-choice="wheat"></button>');
     q('[data-farming-topic]').insertAdjacentHTML('afterbegin','<option value="overview"></option>');
   }
+  if(options.stationPoints){
+   const conf=JSON.parse(q('[data-asia-config]').textContent);conf.cities.push({id:'sapporo',name:'札幌',countryCode:'JPN',coordinates:[141.35,43.06]});q('[data-asia-config]').textContent=JSON.stringify(conf);
+   Object.defineProperties(q('[data-map-annotations]'),{clientWidth:{value:600},clientHeight:{value:400}});
+   q('[data-city-select]').insertAdjacentHTML('beforeend','<option value="sapporo" data-country="JPN">札幌</option>');root.insertAdjacentHTML('beforeend','<article data-city-panel="sapporo" hidden>札幌の雨温図</article>');
+  }
   window.__hitCountry=options.hitCountry;
   window.__forceMapFail = options.mapFailure;
   window.__initialSourceFailure = options.initialSourceFailure;
@@ -197,7 +203,7 @@ async function setup(query = '', options = {}) {
       const response=()=>{
         if(name.endsWith('rain.gz')){const b=new Uint8Array(2);new DataView(b.buffer).setInt16(0,options.rainMissing?-32768:options.rainZero?0:1534,true);return new Response(b);}
         const basin=name.endsWith('basins.json.gz'),id=basin?'b-123':'g-456',geometry={type:'FeatureCollection',features:[{type:'Feature',properties:{id,category:15},geometry:{type:'Polygon',coordinates:[[[138,34],[141,34],[141,38],[138,38],[138,34]]]}}]};
-        const record={id,sourceId:basin?123:456,countries:['JPN'],point:[139.75,35.69],countryPoints:{JPN:[139.75,35.69]},bounds:[138,34,141,38],...(basin?{name:'試験河川を含む集水域',areaKm2:12345.6,subBasins:3,endorheic:false,coastal:!!options.coastal,outsideFrame:true,otherTargetCountries:[],flow:options.coastal?null:{mean:100,lowestMonth:20,highestMonth:300}}:{class:15,aquifer:'major groundwater basin',recharge:'very high (>300)'})};return new Response(JSON.stringify({records:[record],geometry,outlines:geometry}));
+        const record={id,sourceId:basin?123:456,countries:['JPN'],point:[139.75,35.69],countryPoints:{JPN:[139.75,35.69]},bounds:[138,34,141,38],...(basin?{name:'試験河川を含む集水域',rivers:['試験河川'],areaKm2:12345.6,subBasins:3,endorheic:false,coastal:!!options.coastal,outsideFrame:true,otherTargetCountries:[],flow:options.coastal?null:{mean:100,lowestMonth:20,highestMonth:300}}:{class:15,aquifer:'major groundwater basin',recharge:'very high (>300)'})};return new Response(JSON.stringify({records:[record],geometry,outlines:geometry}));
       };
       if(options.delayedHydrology&&name.endsWith('basins.json.gz'))return new Promise(resolve=>{resolveHydrology=()=>resolve(response());});return response();
     }
@@ -782,5 +788,35 @@ test('国籍の概要は区域の最多区分で色分けし、詳細に切り�
   assert.equal(new URL(window.location.href).searchParams.get('detail'),'s-JP-13');
   assert.match(q('[data-social-value]').textContent,/外国人/);
   assert.equal(window.__maps.length,1);
+ }finally{await window.happyDOM.close();}
+});
+
+
+test('河川画面は標高を取得せず、川と流域を重ね、旧河川URLも復元する',async()=>{
+ const {window,q,requests}=await setup('?topic=water&detail=rivers-1',{hydrology:true,population:true});
+ try{
+  await until(()=>window.__map.getLayer('asia-hydrology-basins')&&window.__map.getLayer('asia-rivers'),'river basin overlay');
+  assert.equal(q('[data-physical-reading]').hidden,true);assert.equal(q('[data-physical-legend]').hidden,true);
+  assert.equal(q('[data-hydrology-panel]').hidden,false);assert.equal(q('[data-water-picker]').hidden,false);
+  assert.equal(new URL(window.location.href).searchParams.get('detail'),'rivers-1');
+  assert.match(q('[data-hydrology-value]').textContent,/12,345.6/);
+  assert.equal(window.__map.getLayer('asia-terrain'),undefined);assert.ok(!requests.some(r=>/elevation|terrain|contours/.test(r)));
+  q('[data-natural-topic="terrain"]').click();await delay();q('[data-natural-topic="water"]').click();await delay();
+  assert.equal(window.__map.layers['asia-terrain'].layout.visibility,'none');assert.equal(window.__map.layers['asia-rivers'].layout.visibility,'visible');
+  q('[data-natural-topic="climate"]').click();await delay();assert.equal(window.__map.layers['asia-hydrology-basins'].layout.visibility,'none');assert.equal(window.__map.layers['asia-rivers'].layout.visibility,'none');
+ }finally{await window.happyDOM.close();}
+});
+
+test('気候図は全観測地点の点を残し、主要都市だけに名前を常設する',async()=>{
+ const {window,q}=await setup('',{presentation:true,stationPoints:true});
+ try{
+  await until(()=>q('[data-station="sapporo"]')&&!q('[data-station="sapporo"]').hidden,'station points');
+  assert.equal(window.document.querySelectorAll('[data-station]:not([hidden])').length,3);
+  assert.equal(window.document.querySelectorAll('.asia-city-name:not([hidden])').length,2);
+  assert.equal(q('[data-station="sapporo"] span').textContent,'札幌');
+  q('[data-station="sapporo"]').click();await until(()=>!q('[data-city-panel="sapporo"]').hidden,'tap opens diagram');
+  assert.equal(new URL(window.location.href).searchParams.get('city'),'sapporo');
+  q('[data-natural-topic="terrain"]').click();await until(()=>q('[data-map-annotations]').hidden===false,'terrain annotations');await delay();
+  assert.equal(window.document.querySelectorAll('[data-station]:not([hidden])').length,0);
  }finally{await window.happyDOM.close();}
 });
