@@ -1,12 +1,12 @@
 <section data-hydrology-panel hidden>
-  <nav class="asia-water-kinds" data-water-kinds hidden aria-label="河川・地下水の資料"><button type="button" data-natural-topic="water" aria-pressed="true">河川・湖と流域</button><button type="button" data-natural-topic="groundwater" aria-pressed="false">地下水と涵養</button></nav>
+
  <p class="eyebrow">Water · Rain, catchments &amp; groundwater</p>
  <h2 data-hydrology-title></h2><p class="asia-takeaway" data-hydrology-lead></p>
  <nav data-basin-shortcuts aria-label="主な河川の集水域" hidden></nav>
  <div class="asia-rice-value" data-hydrology-value aria-live="polite"></div>
  <p data-hydrology-definition></p><p class="asia-small" data-hydrology-coverage></p>
  <p data-hydrology-status role="status"></p><button class="asia-reset" data-hydrology-retry type="button" hidden>水の資料を再読み込み</button>
- <label class="asia-detail-picker">着目する場所<select data-hydrology-scene aria-label="水の着目点"><option value="">地図上の地点を選ぶ</option></select></label>
+ <details class="asia-method"><summary>地点別の数値と関連資料</summary><label class="asia-detail-picker">着目する場所<select data-hydrology-scene aria-label="水の着目点"><option value="">地図上の地点を選ぶ</option></select></label>
  <div data-hydrology-scene-reading></div>
  <label class="asia-detail-picker" data-hydrology-detail-label>流域・地下水の区域<select data-hydrology-detail aria-label="流域・地下水の区域"><option value="">選択を解除する</option></select></label>
  <p class="asia-small" data-hydrology-picker-note></p>
@@ -18,7 +18,7 @@
  <button class="asia-compare" data-hydrology-related="climate" type="button">同じ場所の気候と雨温図へ<span>→</span></button>
  <button class="asia-compare" data-compare="agriculture" type="button">同じ場所で農林業を比べる<span>→</span></button>
  <button class="asia-compare" data-compare="population" type="button">同じ場所で人口を比べる<span>→</span></button>
- <details class="asia-method"><summary>資料の定義・加工・出典</summary><div data-hydrology-method></div></details>
+ </details><details class="asia-method"><summary>資料の定義・加工・出典</summary><div data-hydrology-method></div></details>
 </section>
 <style>
  section{min-width:0;max-width:100%;overflow-wrap:anywhere}[hidden]{display:none!important}

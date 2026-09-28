@@ -1,7 +1,7 @@
 import type {AsiaState,AsiaRegionId} from '../../lib/atlas-asia-state';
 export type WaterTopic='precipitation'|'basins'|'groundwater';
 export const isWaterTopic=(topic?:string|null):topic is WaterTopic|'water'=>['water','precipitation','basins','groundwater'].includes(topic??'');
-export const waterDatasetTopic=(topic:WaterTopic|'water'):WaterTopic=>topic==='water'?'basins':topic;
+export const waterDatasetTopic=(topic:WaterTopic|'water'):WaterTopic=>topic==='water'?'groundwater':topic;
 export type WaterRegion={basins:string;groundwater:string;precipitation:{image:string;grid:string;width:number;height:number;bounds3857:number[];bounds4326:number[];imageCoordinates:number[][];nominalPixelMetres3857:number};coverage:Record<string,{displayCells:number;maskCells:number;basins:number;groundwater:number}>;basinCount:number;groundwaterCount:number};
 export type WaterRecord={id:string;sourceId:number;countries:string[];point:[number,number];countryPoints:Record<string,[number,number]>;bounds:number[]};
 export type BasinRecord=WaterRecord&{name:string;rivers:string[];areaKm2:number;outletUpAreaKm2:number;subBasins:number;endorheic:boolean;coastal:boolean;outsideFrame:boolean;fullBounds:number[];otherTargetCountries:string[];flow:{mean:number;lowestMonth:number;highestMonth:number}|null};
@@ -10,7 +10,7 @@ export type WaterDataset={records:(BasinRecord|GroundwaterRecord)[];geometry:any
 export const waterTopics:Record<WaterTopic,{title:string;period:string;unit:string;definition:string;source:string}>={
  precipitation:{title:'等雨量線で年降水量を読む',period:'1981–2010年の推計平年値',unit:'mm/年',definition:'雨と雪などを水の深さに換算した年間降水量です。CHELSAの約1km原本を、投影座標上で約4km間隔の表示格子に平均化しています。雨温図の1991–2020年とは期間・資料が異なります。',source:'https://www.chelsa-climate.org/datasets/chelsa_bioclim'},
  basins:{title:'水が集まる範囲：流域',period:'BasinATLAS v1.0・地形に基づく範囲',unit:'km²',definition:'地表の水が同じ出口へ向かう範囲を示します。内陸で途切れる水系を仮想的に接続せず、元資料の小流域を出口ごとに結合しています。沿岸の小流域群は、複数の川をまとめた区分です。',source:'https://www.hydrosheds.org/hydroatlas'},
- groundwater:{title:'地下水を蓄える地層と涵養',period:'WHYMAP 2008年の概観図・2026年取得',unit:'涵養量の区分（mm/年）',definition:'帯水層は、水を含み、水を通す地層です。涵養は地表から地下水へ補給される水を指します。色は広域の地質条件と涵養量の区分で、現在の貯水量・水位・安全に取水できる量ではありません。',source:'https://www.bgr.bund.de/whymap/EN/Maps_Data/maps_data_node_en.html'},
+ groundwater:{title:'地下水を蓄える地層と涵養',period:'WHYMAP 2008年の概観図・2026年取得',unit:'涵養量の区分（mm/年）',definition:'帯水層は、水を含み、水を通す地層です。涵養は地表から地下水へ補給される水を指します。淡い青は主要な地下水盆地の広がりで、現在の貯水量・水位・安全に取水できる量ではありません。',source:'https://www.bgr.bund.de/whymap/EN/Maps_Data/maps_data_node_en.html'},
 };
 export const precipitationBreaks=[100,250,500,750,1000,1500,2000,3000];
 export const precipitationColors=['#eee4ce','#e4e5c4','#cfdfbd','#a7d7bd','#79c9c5','#4dafc2','#278eaf','#146890','#123e65'];
@@ -41,7 +41,7 @@ export function normalizeWaterState(regionId:AsiaRegionId,state:AsiaState,data?:
  if(state.field!=='natural'||!isWaterTopic(state.topic))return state;
  const scene=waterScenes.find(s=>s.region===regionId&&s.id===state.detail&&(!state.place||s.country===state.place));
  if(scene)return {...state,place:scene.country,point:scene.point,city:null};
- const candidate=state.detail&&/^[bg]-\d{1,12}$/.test(state.detail)&&state.detail.startsWith(waterDatasetTopic(state.topic)==='basins'?'b-':state.topic==='groundwater'?'g-':'!')?state.detail:null;
+ const candidate=state.detail&&/^[bg]-\d{1,12}$/.test(state.detail)&&state.detail.startsWith(waterDatasetTopic(state.topic)==='basins'?'b-':waterDatasetTopic(state.topic)==='groundwater'?'g-':'!')?state.detail:null;
  if(!data)return {...state,detail:candidate,city:null};
  const record=data.records.find(r=>r.id===candidate&&(!state.place||r.countries.includes(state.place)));
  return {...state,detail:record?.id??null,place:record?.countries.length===1?record.countries[0]:state.place,point:state.point??(record?(state.place?record.countryPoints[state.place]:record.point):null),city:null};
