@@ -23,8 +23,7 @@
 .asia-atlas .asia-farm-toolbar button{border:1px solid #b9c9b5;border-radius:4px;padding:8px 12px;min-height:44px;background:#edf1e6;color:#304a42;font-weight:700}
 .asia-atlas .asia-farm-products{display:flex;flex-wrap:wrap;gap:4px 8px}
 .asia-atlas .asia-farm-products button{border:0;background:transparent;display:flex;gap:5px;align-items:center;font-size:12px;color:#344951;min-height:36px;padding:4px 6px}
-.asia-atlas .asia-farm-products i{width:20px;height:12px;border:2px solid var(--product-color);background:color-mix(in srgb,var(--product-color) 22%,transparent)}
-.asia-atlas .asia-farm-products button[data-kind=livestock] i{border-style:dashed;background:transparent}
+.asia-atlas .asia-farm-products i{width:20px;height:12px;border:2px solid var(--product-color);background:color-mix(in srgb,var(--product-color) 72%,transparent)}
 .asia-atlas .asia-farm-products button[aria-pressed=true]{background:#e3e9dd;font-weight:700}
 .asia-atlas .asia-farm-overview-reading p{font-size:14px;line-height:1.9}
 .asia-atlas .asia-farm-overview-reading .asia-takeaway{border-left:3px solid #759457;background:#eff2e8;padding:12px;font-weight:700}
@@ -77,3 +76,14 @@
 [data-basin-shortcuts] button{border:1px solid #a8b8b8;background:#f4f7ed;color:#254a57;padding:8px;font:600 12px/1.4 sans-serif;cursor:pointer;min-height:36px}
 [data-basin-shortcuts] button[aria-pressed=true]{background:#345964;color:white}
 @media(min-width:900px){.asia-region-shell{display:grid!important;grid-template-columns:1fr auto!important;gap:7px 16px!important}.asia-region-shell .regional-navigation{grid-column:1}.asia-region-shell .asia-toolbar{grid-column:2;grid-row:1;margin:0!important}.asia-region-shell .asia-focus-navigation{grid-row:2;grid-column:1/-1}}
+
+.asia-atlas .asia-point-marker{font-size:15px!important;font-weight:700!important;padding:8px 12px!important;color:#173f50!important;background:#fffdf3!important;border:1px solid #718992!important}
+.asia-farm-return{font:600 12px/1.4 sans-serif;padding:7px 10px;background:#eef2e5;color:#254b55;border:1px solid #aebcb4;cursor:pointer}
+
+.asia-settlement-key{display:flex;flex-wrap:wrap;gap:8px 15px;padding:10px 0}.asia-settlement-key span{display:inline-flex;align-items:center;gap:5px;font-size:12px}.asia-settlement-key i{display:inline-block;width:16px;height:13px;border:1px solid #60766d55}
+.asia-atlas .asia-map-annotations .asia-settlement-label{font-size:12px;font-weight:700;color:#203e49;background:#fffdf1dd;border:0;border-bottom:3px solid var(--label-color);box-shadow:none}
+.asia-settlement-scope{padding:12px;background:#f0f2e9;border-left:3px solid #728879;font-size:13px;line-height:1.8}
+.asia-atlas [data-population-selector]{display:none!important}
+.asia-atlas[data-field=agriculture] .asia-map-frame{height:var(--asia-farm-map-height,420px)}
+
+@media(min-width:1200px){.asia-atlas[data-field=agriculture] .asia-map-frame{height:var(--asia-farm-map-height,420px)!important;min-height:180px!important;max-height:none!important}}

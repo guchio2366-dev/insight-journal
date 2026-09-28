@@ -12,8 +12,7 @@ const populationTopics=[...asiaPopulationTopics,...social.groups.map(g=>({id:soc
  <nav class="asia-secondary-topics" data-water-topics hidden aria-label="水資源の種類">{[{id:'water',label:'河川・地下水'},{id:'precipitation',label:'降水量'},{id:'basins',label:'河川の流域'}].map(t=><button type="button" data-water-view={t.id} data-natural-topic={t.id} aria-pressed="false">{t.label}</button>)}</nav>
 </div>
 <div class="asia-population-navigation" data-population-topics hidden={initialField!=='population'}>
- <nav class="asia-population-tabs" aria-label="人口の主題">{populationGroups.map(g=>{const available=populationTopics.filter(t=>populationGroup(t.id)===g.id);return <button type="button" data-population-group={g.id} data-topic={available[0]?.id} aria-pressed={g.id==='distribution'} disabled={!available.length} title={!available.length?'この地域の比較可能な資料は未収録です':undefined}>{g.label}{!available.length&&<small>未収録</small>}</button>})}</nav>
- {populationGroups.map(g=><nav class="asia-secondary-topics" data-population-subgroup={g.id} hidden={g.id!=='distribution'} aria-label={`${g.label}の資料`}>{populationTopics.filter(t=>populationGroup(t.id)===g.id).map(t=><button type="button" data-population-choice={t.id} aria-pressed={t.id==='density'}>{t.label}</button>)}</nav>)}
+ <nav class="asia-population-tabs" aria-label="人口の主題">{populationGroups.map(g=><button type="button" data-population-group={g.id} data-topic={{distribution:'density',identity:'ethnicity',religion:'religion'}[g.id]} aria-pressed={g.id==='distribution'}>{g.label}</button>)}</nav>
 </div>
 <div class="asia-industry-navigation" data-industry-navigation hidden={initialField!=='industry'}>
  <nav class="asia-industry-sectors" aria-label="産業の業種">{industrySectors.map(s=><button type="button" data-industry-sector={s.id} aria-pressed={s.id==='manufacturing'}>{s.label}</button>)}</nav>

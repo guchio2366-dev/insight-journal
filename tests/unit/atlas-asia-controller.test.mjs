@@ -30,7 +30,7 @@ export class Map {
  async fire(name,event={}){for(const fn of this.events[name]??[])await fn(event)}
  project(p){return {x:(p[0]-90)*7,y:(50-p[1])*9}}
  getSource(id){return this.sources[id]}getLayer(id){return this.layers[id]}getStyle(){return this.removed?undefined:this.options.style}
- addSource(id,source){this.sources[id]=source}addLayer(layer){this.layers[layer.id]=layer}
+ addSource(id,source){this.sources[id]=source;source.setData=data=>{source.data=data}}addLayer(layer){this.layers[layer.id]=layer}
  removeLayer(id){delete this.layers[id]}removeSource(id){delete this.sources[id]}
  setLayoutProperty(id,key,value){this.layers[id].layout??={};this.layers[id].layout[key]=value}
  setPaintProperty(id,key,value){this.layers[id].paint??={};this.layers[id].paint[key]=value}
@@ -170,6 +170,11 @@ async function setup(query = '', options = {}) {
     root.insertAdjacentHTML('beforeend','<button data-farm-water></button><div data-map-annotations></div><section data-farm-overview-reading></section><section data-farm-overview-legend></section><input type="checkbox" data-farm-kind="crop" checked><input type="checkbox" data-farm-kind="livestock" checked><button data-farm-choice="overview"></button><button data-farm-choice="wheat"></button>');
     q('[data-farming-topic]').insertAdjacentHTML('afterbegin','<option value="overview"></option>');
   }
+  if(options.settlements){
+   Object.defineProperties(q('[data-map-annotations]'),{clientWidth:{value:600},clientHeight:{value:400}});
+   const conf=JSON.parse(q('[data-asia-config]').textContent);conf.presentation.settlements={ethnicity:{file:'ethnicity.json.gz',categories:[{id:'a',label:'集団',color:'#aabbcc',anchors:[[0,0],[139,35]]}]},religion:{file:'religion.json.gz',categories:[]}};q('[data-asia-config]').textContent=JSON.stringify(conf);
+   root.insertAdjacentHTML('beforeend','<section data-settlement-reading="ethnicity" hidden></section><section data-settlement-reading="religion" hidden></section><section data-settlement-legend="ethnicity" hidden></section><section data-settlement-legend="religion" hidden></section><button data-population-group="identity" data-topic="ethnicity"></button><button data-population-group="religion" data-topic="religion"></button>');
+  }
   if(options.stationPoints){
    const conf=JSON.parse(q('[data-asia-config]').textContent);conf.cities.push({id:'sapporo',name:'札幌',countryCode:'JPN',coordinates:[141.35,43.06]});q('[data-asia-config]').textContent=JSON.stringify(conf);
    Object.defineProperties(q('[data-map-annotations]'),{clientWidth:{value:600},clientHeight:{value:400}});
@@ -302,18 +307,22 @@ test('流域の直接URLと比較復帰は国・地点・流域を保持し、�
   await until(()=>q('[data-hydrology-value]').textContent.includes('12,345.6'),'basin return');assert.equal(new URL(window.location.href).searchParams.get('detail'),'b-123');
   q('[data-hydrology-related="groundwater"]').click();await until(()=>q('[data-hydrology-value]').textContent.includes('300超'),'groundwater');assert.equal(new URL(window.location.href).searchParams.get('at'),'139.75000,35.69000');
   assert.equal(requests.filter(r=>r.endsWith('basins.json.gz')).length,1);assert.equal(window.__map.layers['asia-hydrology-basins'].layout.visibility,'none');
-  for(const id of ['asia-lakes','asia-rivers','asia-rivers-hit'])assert.equal(window.__map.layers[id]?.layout.visibility,'none');
+  for(const id of ['asia-lakes','asia-rivers','asia-rivers-hit'])assert.equal(window.__map.layers[id]?.layout.visibility,'visible');
+  assert.equal(window.__map.layers['asia-hydrology-groundwater-selected'].layout.visibility,'none');
   window.__map.getCanvas().dispatchEvent(new window.Event('webglcontextlost'));q('[data-map-retry]').click();await until(()=>window.__maps.length===2&&window.__map.getLayer('asia-hydrology-groundwater'),'water rebuilt');assert.equal(requests.filter(r=>r.endsWith('groundwater.json.gz')).length,1);
  }finally{await window.happyDOM.close();}
 });
-test('地下水の直接URLでは河川・湖・標高を取得せず地下水だけを表示する',async()=>{
+test('地下水の直接URLも川と主要な地下水域を示し、標高と区画線を追加しない',async()=>{
  const {window,requests}=await setup('?topic=groundwater',{hydrology:true});
  try{
-  await until(()=>window.__map.getLayer('asia-hydrology-groundwater'),'groundwater ready');
-  assert.equal(requests.some(r=>r.startsWith('/assets/physical/')||r.endsWith('basins.json.gz')),false);
-  for(const id of ['asia-lakes','asia-rivers','asia-rivers-hit','asia-terrain'])assert.equal(window.__map.getLayer(id),undefined);
+  await until(()=>window.__map.getLayer('asia-hydrology-groundwater')&&window.__map.getLayer('asia-rivers'),'groundwater and rivers ready');
+  assert.equal(requests.some(r=>/elevation|terrain|contours/.test(r)||r.endsWith('basins.json.gz')),false);
+  assert.equal(window.__map.layers['asia-hydrology-groundwater-selected'].layout.visibility,'none');
+  assert.deepEqual(JSON.parse(JSON.stringify(window.__map.layers['asia-hydrology-groundwater'].filter)),['<',['get','category'],20]);
+  assert.equal(window.__map.getLayer('asia-terrain'),undefined);
  }finally{await window.happyDOM.close();}
 });
+
 test('水の遅い応答・失敗・未掲載・沿岸区分を混同しない',async()=>{
  const late=await setup('?topic=basins',{hydrology:true,delayedHydrology:true});
  try{late.q('[data-field="agriculture"]').click();late.resolveHydrology();await delay();await delay();assert.equal(late.q('[data-hydrology-panel]').hidden,true);assert.equal(late.window.__map.getLayer('asia-hydrology-basins'),undefined);}finally{late.resolveHydrology();await late.window.happyDOM.close();}
@@ -387,12 +396,12 @@ test('人口は都市の輪郭・1km格子・統計を表示し、比較復帰�
  }finally{await window.happyDOM.close();}
 });
 
-test('人口の推計0と取得失敗を区別し、描画できない場合も都市の表を読める',async()=>{
+test('人口の推計0と取得失敗を区別し、密度図に都市の人口履歴を混ぜない',async()=>{
  for(const opts of [{populationZero:true},{populationFailure:true,mapFailure:true}]){
   const {window,q}=await setup('?field=population&detail=uc-tokyo&at=139.76,35.68',{population:true,...opts});
   try{
    await until(()=>q('[data-population-value]').textContent.includes(opts.populationZero?'0 人/km²':'取得できません'),'population status');
-   assert.match(q('[data-urban-population]').textContent,/33,447,551/);
+   assert.equal(q('[data-population-city-facts]').hidden,true);
    if(opts.populationZero)assert.match(q('[data-population-value]').textContent,/海の格子/);else assert.equal(q('[data-map-retry]').hidden,false);
   }finally{await window.happyDOM.close();}
  }
@@ -801,18 +810,19 @@ test('国籍の概要は区域の最多区分で色分けし、詳細に切り�
 });
 
 
-test('河川画面は標高を取得せず、川と流域を重ね、旧河川URLも復元する',async()=>{
+test('河川画面は標高を取得せず、川と地下水域を重ね、旧河川URLも復元する',async()=>{
  const {window,q,requests}=await setup('?topic=water&detail=rivers-1',{hydrology:true,population:true});
  try{
-  await until(()=>window.__map.getLayer('asia-hydrology-basins')&&window.__map.getLayer('asia-rivers'),'river basin overlay');
+  await until(()=>window.__map.getLayer('asia-hydrology-groundwater')&&window.__map.getLayer('asia-rivers'),'river basin overlay');
   assert.equal(q('[data-physical-reading]').hidden,true);assert.equal(q('[data-physical-legend]').hidden,true);
   assert.equal(q('[data-hydrology-panel]').hidden,false);assert.equal(q('[data-water-picker]').hidden,false);
   assert.equal(new URL(window.location.href).searchParams.get('detail'),'rivers-1');
-  assert.match(q('[data-hydrology-value]').textContent,/12,345.6/);
+  assert.match(q('[data-hydrology-value]').textContent,/試験河川/);
+  assert.equal(window.__map.layers['asia-hydrology-groundwater-selected'].layout.visibility,'none');
   assert.equal(window.__map.getLayer('asia-terrain'),undefined);assert.ok(!requests.some(r=>/elevation|terrain|contours/.test(r)));
   q('[data-natural-topic="terrain"]').click();await delay();q('[data-natural-topic="water"]').click();await delay();
   assert.equal(window.__map.layers['asia-terrain'].layout.visibility,'none');assert.equal(window.__map.layers['asia-rivers'].layout.visibility,'visible');
-  q('[data-natural-topic="climate"]').click();await delay();assert.equal(window.__map.layers['asia-hydrology-basins'].layout.visibility,'none');assert.equal(window.__map.layers['asia-rivers'].layout.visibility,'none');
+  q('[data-natural-topic="climate"]').click();await delay();assert.equal(window.__map.layers['asia-hydrology-groundwater'].layout.visibility,'none');assert.equal(window.__map.layers['asia-rivers'].layout.visibility,'none');
  }finally{await window.happyDOM.close();}
 });
 
@@ -828,4 +838,30 @@ test('気候図は全観測地点の点を残し、主要都市だけに名前�
   q('[data-natural-topic="terrain"]').click();await until(()=>q('[data-map-annotations]').hidden===false,'terrain annotations');await delay();
   assert.equal(window.document.querySelectorAll('[data-station]:not([hidden])').length,0);
  }finally{await window.happyDOM.close();}
+});
+
+test('都市を選んでも中心とズームが変わらず、雨温図だけが切り替わる',async()=>{
+ const {window,q}=await setup('?lng=118&lat=32&z=3.2');
+ try{
+  await until(()=>window.__map&&q('[data-map-surface]'),'map ready');
+  const before={...window.__map.getCenter(),zoom:window.__map.getZoom()};
+  const option=[...q('[data-city-select]').options].find(o=>o.value);q('[data-city-select]').value=option.value;q('[data-city-select]').dispatchEvent(new window.Event('change'));
+  await delay();assert.deepEqual({...window.__map.getCenter(),zoom:window.__map.getZoom()},before);
+  assert.equal(new URL(window.location.href).searchParams.get('city'),option.value);
+ }finally{await window.happyDOM.close();}
+});
+
+test('民族・宗教は人口密度や行政区の塗りを重ねず、切り替えと遅い応答を処理する',async()=>{
+ const app=await setup('?field=population&topic=ethnicity',{population:true,presentation:true,settlements:true});
+ try{
+  await until(()=>app.window.__map.getLayer('asia-settlement-fill'),'ethnicity area loaded');
+  assert.equal(app.q('[data-settlement-reading=ethnicity]').hidden,false);assert.equal(app.q('[data-population-reading]').hidden,true);
+  assert.equal(app.window.__map.getLayer('asia-population'),undefined);
+  await until(()=>app.q('.asia-settlement-label')&&!app.q('.asia-settlement-label').hidden,'settlement label positioned');app.q('.asia-settlement-label').click();await delay();assert.equal(new URL(app.window.location.href).searchParams.get('at'),'139.00000,35.00000','use the displayed alternative anchor, not the offscreen one');
+  app.q('[data-population-group=religion]').click();await until(()=>app.requests.some(r=>r.endsWith('religion.json.gz')),'religion area loaded');await delay();
+  assert.equal(app.q('[data-settlement-reading=religion]').hidden,false);assert.equal(app.q('[data-settlement-reading=ethnicity]').hidden,true);
+  app.q('[data-field=natural]').click();await delay();assert.equal(app.window.__map.layers['asia-settlement-fill'].layout.visibility,'none');
+ }finally{await app.window.happyDOM.close();}
+ const late=await setup('?field=population&topic=ethnicity',{population:true,presentation:true,settlements:true,delayedPresentation:true});
+ try{await until(()=>late.requests.some(r=>r.endsWith('ethnicity.json.gz')),'ethnicity requested');late.q('[data-field=natural]').click();late.resolvePresentation();await delay();await delay();assert.equal(late.window.__map.getLayer('asia-settlement-fill'),undefined);}finally{late.resolvePresentation();await late.window.happyDOM.close();}
 });

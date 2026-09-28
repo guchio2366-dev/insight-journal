@@ -6,10 +6,10 @@ export type AsiaPopulationRegion = AsiaPopulationRaster & {urban:string;geograph
 export const asiaPopulationTopics=[{id:'density',label:'人口の分布'},{id:'urban',label:'都市の広がりと人口'}];
 export const asiaPopulationColors=['#f0f1e8','#dce8df','#b0d2cc','#7ab5bb','#438b9f','#28627f','#173b60'];
 export const asiaPopulationLabels=['0超–1未満','1–10未満','10–100未満','100–500未満','500–2,000未満','2,000–10,000未満','10,000以上'];
-export const asiaPopulationReading:Record<AsiaRegionId,{takeaway:string;reading:string}>={
- 'east-asia':{takeaway:'中国の東部と内陸、日本列島の平野と山地を比べると、同じ国の中でも人口の集中する場所が異なることが分かります。',reading:'まず地域全体の人口分布を見てから、東京・上海・ソウルを順に選んでください。都市の詳細では約1km四方の元データを使うため、広域の表示より細かく分布を読めます。ただし、この格子から建物や世帯の位置までは分かりません。'},
- 'southeast-asia':{takeaway:'大都市の周辺、河川沿いの平野、島の内陸部では、人口が集まる範囲と密度が異なります。',reading:'ジャカルタ、マニラ、バンコク、シンガポールの詳細を開き、都市の輪郭と人口の色分けを比べてください。島の海岸では海を含む格子もあります。格子面積当たりの人口を、そのまま陸地だけの人口密度と解釈することはできません。'},
- 'south-central-asia':{takeaway:'南アジアの平野と中央アジアの乾燥地域では、人口が連続して分布する範囲と、都市ごとに集中する様子が異なります。',reading:'ニューデリー、ダッカ、タシケントを選び、人口が集中する範囲を比べてください。マレでは、小さな島が広域表示で見えにくくても、都市の詳細図で元の1km格子を確認できます。地形や水系と重ねて読む際も、地形だけが人口分布を決めるとは限りません。'},
+export const asiaPopulationReading:Record<string,{takeaway:string;reading:string}>={
+ 'east-asia':{takeaway:'中国東部の平野・沿海部、朝鮮半島、日本の主要都市周辺に人口が集中し、乾燥した内陸や高原では疎らになります。',reading:'人口が多い格子が連続する範囲と、都市の周りだけにまとまる範囲を見比べます。同じ色の目盛りで、人口の集中と疎らな地域を読み取れます。'},
+ 'southeast-asia':{takeaway:'ジャワ島や大陸部の大河川の平野などに、人口の集中が見られます。山地・森林域との違いを色の濃淡で確かめられます。',reading:'一つの都市だけでなく、色の濃い格子がどの方向へ続くかを見てください。島や半島の全体が一様に密集しているわけではありません。'},
+ 'south-central-asia':{takeaway:'南アジアの河川平野では人口が帯状に広がり、中央アジアでは周囲の人口が少ない地域の中に都市や灌漑地域の集まりが見えます。',reading:'ガンジス川流域からベンガルの平野へ続く人口の集中と、乾燥した内陸・高山域の疎らな分布を見比べてください。色は2020年の推計人口密度で、現在の正確な居住者数ではありません。'},
 };
 export const asiaUrbanReading:Record<string,string>={
  Tokyo:'都市の輪郭に接する場所と、輪郭から離れた場所を選び、人口の色の変わり方を比べてください。資料が定めた東京の都市範囲は東京都の行政区域とは異なるため、この人口を東京都の人口として使うことはできません。',

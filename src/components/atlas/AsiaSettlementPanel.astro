@@ -1,0 +1,24 @@
+---
+import manifest from '../../../public/assets/atlas/asia-settlements-v1/manifest.json';
+const {regionId}=Astro.props as {regionId:keyof typeof manifest.regions};
+const readings={
+ 'east-asia':{ethnicity:'チベット系・ウイグル系などの居住域は、中国西部から周辺の高原・内陸へ広がっています。',religion:'掲載範囲では、チベット系集団に結びつく仏教の地域と、新疆などのイスラム教に結びつく地域を見比べられます。'},
+ 'southeast-asia':{ethnicity:'大陸の河川平野と島しょ部では、特徴的な居住域のまとまりが異なります。マレー系の分布は国境を越えて続きます。',religion:'掲載範囲では、大陸部に仏教と結びついた居住域が広がり、マレー半島からインドネシアにはイスラム教と結びついた居住域が続きます。'},
+ 'south-central-asia':{ethnicity:'ベンガルやパンジャーブ、パシュトゥーンの居住域は、国境をまたいで広がっています。国ごとの色分けだけでは見えない分布です。',religion:'掲載範囲では、インドの広い範囲にヒンドゥー教と結びつく集団が分布し、パキスタン・バングラデシュにはイスラム教と結びつく居住域が広がります。'}
+};
+---
+{(['ethnicity','religion'] as const).map(topic=><section data-settlement-reading={topic} hidden>
+ <p class="eyebrow">Population · Settlement areas · 2020</p>
+ <h2>{topic==='ethnicity'?'民族の特徴的な居住域':'宗教と結びついた居住域'}</h2>
+ <p class="asia-takeaway">{readings[regionId][topic]}</p>
+ <p class="asia-settlement-scope">掲載した集団の居住域を示す概略図です。{topic==='religion'?'各場所での信者の割合や、多数派の宗教を示す地図ではありません。':'各場所での多数派や、全住民の民族を示す地図ではありません。'}</p>
+ <p>灰色は掲載した居住域の重なりです。色のない地域にも人々は暮らしていますが、この図では分類していません。</p>
+ <h3>この地図の掲載範囲</h3>
+ <p>{regionId==='east-asia'?'この図は中国西部などの特徴的な居住域を抜粋しています。漢族・日本人など全国的に分布する集団や、朝鮮半島全体の分布を網羅していません。':regionId==='southeast-asia'?'大陸部と島しょ部の代表的な居住域を抜粋しています。すべての民族・宗教を網羅しておらず、都市内の混住も表していません。':'南アジアと中央アジアの代表的な居住域を抜粋しています。インドの言語集団は資料が政治・社会上の区分で定めた一部の集団であり、その言語を話すすべての人を含みません。'}</p>
+ <details class="asia-method"><summary>資料の定義と掲載集団を確認する</summary>
+  <p>居住域はGeoEPR 2021のうち、2020年に有効な地域分布を使います。政治的に関係のある集団を扱う研究資料であり、全民族を対象とした人口調査ではありません。全国の境界を居住域とする記録と、都市だけに分布する記録は面表示に使っていません。州別人口の値から境界を作っていません。</p>
+  {topic==='religion'&&<p>宗教の色は、EPR-ED 2021でその集団の8割以上に共通すると記録された宗教について、確認した事例だけを結びつけています。集団全体の特徴を、その居住域の全住民の信仰と同一視することはできません。複数の信仰を併せ持つ状況や、2020年以後の変化も示しません。</p>}
+  <ul>{manifest.regions[regionId][topic].categories.filter(c=>c.sourceGroups.length).map(c=><li><strong>{c.label}</strong>：{c.sourceGroups.map(g=>`${g.statename} / ${g.group}`).join('、')}</li>)}</ul>
+  <p>出典：<a href="https://icr.ethz.ch/data/epr/geoepr/">GeoEPR 2021</a>（Wucherpfennigほか、2011；Vogtほか、2015）{topic==='religion'&&<>、<a href="https://icr.ethz.ch/data/epr/ed/">EPR-ED 2021</a>（Bormannほか、2017）</>}。地域の抜粋・同じ分類の結合・重なりの表示はInsight Journalによります。元資料の境界も概略であり、居住地や信仰を個人について判断する用途には使えません。</p>
+ </details>
+</section>)}

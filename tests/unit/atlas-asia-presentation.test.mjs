@@ -28,16 +28,16 @@ test('Asia presentation assets retain exact input provenance and real climate an
   const terrain=JSON.parse(gunzipSync(readFileSync(base+presentation.terrain.file)));
   assert.equal(presentation.terrain.interval,500);
   assert.ok(terrain.features.length>20);assert.ok(terrain.features.every(f=>f.properties.value%500===0));
-  for(const product of presentation.farming.products){const parts=farming.features.filter(f=>f.properties.id===product.id);assert.ok(parts.length<=(product.kind==='crop'?6:3));assert.ok(parts.every(f=>['Polygon','MultiPolygon'].includes(f.geometry.type)));}
+  for(const product of presentation.farming.products){const parts=farming.features.filter(f=>f.properties.id===product.id);assert.ok(parts.length<=6);assert.ok(parts.every(f=>['Polygon','MultiPolygon'].includes(f.geometry.type)));}
   for(const f of rain.features){assert.equal(f.geometry.type,'LineString');assert.ok(presentation.rainfall.levels.includes(f.properties.value));assert.ok(f.geometry.coordinates.length>=2);}
   assert.ok(readFileSync(base+presentation.farming.file).length<600000,'overview remains lazy and compact');
  }
 });
 
-test('Asia has the requested four nature topics and four population primary tabs',()=>{
+test('Asia has the requested four nature topics and three population primary tabs',()=>{
  assert.deepEqual(naturalGroups.map(t=>t.label),['気候区分','水資源','地形','標高（等高線）']);
  assert.equal(naturalGroup('basins'),'water');assert.equal(naturalGroup('groundwater'),'water');
- assert.equal(populationGroups.length,4);assert.equal(populationGroup('national-age-old'),'distribution');assert.equal(populationGroup('in-religion-hindu'),'religion');assert.equal(populationGroup('in-language-006000'),'identity');
+ assert.deepEqual(populationGroups.map(t=>t.label),['人口分布','人種・民族','宗教']);assert.equal(populationGroup('national-age-old'),'distribution');assert.equal(populationGroup('in-religion-hindu'),'religion');assert.equal(populationGroup('in-language-006000'),'identity');
 });
 
 test('Industry navigation never substitutes a transport total for an automobile map',async()=>{
