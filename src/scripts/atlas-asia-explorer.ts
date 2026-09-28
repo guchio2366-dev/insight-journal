@@ -383,7 +383,7 @@ function start(root:HTMLElement) {
   }
   async function showField() {
     if(!mapReady||!map)return;
-    const revision=++fieldRevision,natural=naturalTopic()==='climate',rice=farmingTopic()==='rice',physical=isPhysical(),water=['water','basins','groundwater'].includes(naturalTopic()??'');
+    const revision=++fieldRevision,natural=naturalTopic()==='climate',rice=farmingTopic()==='rice',physical=isPhysical(),water=['water','basins'].includes(naturalTopic()??'');
     // Hide the previous field before awaiting geography or any other asset.
     void presentation?.show(map);
     map.setLayoutProperty('asia-climate','visibility',natural?'visible':'none');

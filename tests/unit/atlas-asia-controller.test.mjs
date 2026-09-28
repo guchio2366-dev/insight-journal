@@ -302,7 +302,16 @@ test('流域の直接URLと比較復帰は国・地点・流域を保持し、�
   await until(()=>q('[data-hydrology-value]').textContent.includes('12,345.6'),'basin return');assert.equal(new URL(window.location.href).searchParams.get('detail'),'b-123');
   q('[data-hydrology-related="groundwater"]').click();await until(()=>q('[data-hydrology-value]').textContent.includes('300超'),'groundwater');assert.equal(new URL(window.location.href).searchParams.get('at'),'139.75000,35.69000');
   assert.equal(requests.filter(r=>r.endsWith('basins.json.gz')).length,1);assert.equal(window.__map.layers['asia-hydrology-basins'].layout.visibility,'none');
+  for(const id of ['asia-lakes','asia-rivers','asia-rivers-hit'])assert.equal(window.__map.layers[id]?.layout.visibility,'none');
   window.__map.getCanvas().dispatchEvent(new window.Event('webglcontextlost'));q('[data-map-retry]').click();await until(()=>window.__maps.length===2&&window.__map.getLayer('asia-hydrology-groundwater'),'water rebuilt');assert.equal(requests.filter(r=>r.endsWith('groundwater.json.gz')).length,1);
+ }finally{await window.happyDOM.close();}
+});
+test('地下水の直接URLでは河川・湖・標高を取得せず地下水だけを表示する',async()=>{
+ const {window,requests}=await setup('?topic=groundwater',{hydrology:true});
+ try{
+  await until(()=>window.__map.getLayer('asia-hydrology-groundwater'),'groundwater ready');
+  assert.equal(requests.some(r=>r.startsWith('/assets/physical/')||r.endsWith('basins.json.gz')),false);
+  for(const id of ['asia-lakes','asia-rivers','asia-rivers-hit','asia-terrain'])assert.equal(window.__map.getLayer(id),undefined);
  }finally{await window.happyDOM.close();}
 });
 test('水の遅い応答・失敗・未掲載・沿岸区分を混同しない',async()=>{
