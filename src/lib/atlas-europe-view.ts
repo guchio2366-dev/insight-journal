@@ -18,18 +18,32 @@ export function visibleBounds(geometries: Geometry[]): [[number, number], [numbe
   if (!points.length) return [[-25, 32], [65, 73]];
   return [[Math.min(...points.map(p => p[0])), Math.min(...points.map(p => p[1]))], [Math.max(...points.map(p => p[0])), Math.max(...points.map(p => p[1]))]];
 }
-export type EuropeState = { region: string; place: string; city: string; compare: string[]; render: string; layer: string; returnLayer: string; feature?: string };
+export type EuropeState = { region: string; place: string; city: string; compare: string[]; render: string; layer: string; returnLayer: string; feature?: string; showCrops?: boolean; showLivestock?: boolean; single?: boolean };
+const europeCapitalCities: Record<string, string> = {
+  GBR:'london', FRA:'paris', DEU:'berlin', POL:'warsaw', UKR:'kyiv', BLR:'minsk',
+  MDA:'chisinau', RUS:'moscow', SRB:'belgrade', ROU:'bucharest', BGR:'sofia',
+  HUN:'budapest', AUT:'vienna', ESP:'madrid', PRT:'lisbon', ITA:'rome', GRC:'athens',
+  ISL:'reykjavik', NOR:'oslo', FIN:'helsinki', EST:'tallinn',
+};
+export function defaultEuropeCity(country: string, ids: string[]): string {
+  const city = country ? europeCapitalCities[country] : 'london';
+  return city && ids.includes(city) ? city : '';
+}
+const isIndividualFarmingLayer = (id: string) => europeLayers.some(layer => layer.id === id && layer.field === 'agriculture' && !!layer.grid);
 export function readEuropeState(search: string, countries: { code: string; region: string }[], cityIds: string[], initialLayer = 'climate'): EuropeState {
   const p = new URLSearchParams(search);
   const place = countries.find(c => c.code === p.get('place'));
   const region = place?.region ?? (['north', 'west', 'south', 'east'].includes(p.get('region') ?? '') ? p.get('region')! : 'all');
-  const city = cityIds.includes(p.get('city') ?? '') ? p.get('city')! : cityIds[0];
+  const city = cityIds.includes(p.get('city') ?? '') ? p.get('city')! : defaultEuropeCity(place?.code ?? '', cityIds);
   const compare = [...new Set((p.get('compare') ?? '').split(','))].filter(id => cityIds.includes(id) && id !== city).slice(0, 2);
   const allowed = europeLayers.map(l => l.id);
   const layer = [...allowed, 'overlay'].includes(p.get('layer') ?? '') ? p.get('layer')! : initialLayer;
   const returnLayer = allowed.includes(p.get('returnLayer') ?? '') ? p.get('returnLayer')! : initialLayer;
   const state: EuropeState = { region, place: place?.code ?? '', city, compare, render: p.get('render') === 'static' ? 'static' : 'auto', layer, returnLayer };
   if (/^[a-z0-9-]{1,60}$/.test(p.get('feature') ?? '')) state.feature = p.get('feature')!;
+  if (p.get('crops') === 'off') state.showCrops = false;
+  if (p.get('livestock') === 'off') state.showLivestock = false;
+  if (p.get('single') === '1' && isIndividualFarmingLayer(layer)) state.single = true;
   return state;
 }
 export function writeEuropeState(url: URL, state: EuropeState): URL {
@@ -37,7 +51,7 @@ export function writeEuropeState(url: URL, state: EuropeState): URL {
   const displayedLayer=state.layer==='overlay'?(state.returnLayer==='climate'?'wheat':state.returnLayer):state.layer;
   const field=europeLayers.find(layer=>layer.id===displayedLayer)?.field;
   if(field)next.pathname=next.pathname.replace(/(\/atlas\/europe\/)(nature|agriculture|industry|population)\/?$/,`$1${field}/`);
-  for (const key of ['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature']) next.searchParams.delete(key);
+  for (const key of ['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'crops', 'livestock', 'single']) next.searchParams.delete(key);
   if (state.region !== 'all') next.searchParams.set('region', state.region);
   if (state.place) next.searchParams.set('place', state.place);
   if (state.city) next.searchParams.set('city', state.city);
@@ -46,6 +60,9 @@ export function writeEuropeState(url: URL, state: EuropeState): URL {
   if (state.layer) next.searchParams.set('layer', state.layer);
   if (state.layer === 'overlay') next.searchParams.set('returnLayer', state.returnLayer);
   if (state.feature) next.searchParams.set('feature', state.feature);
+  if (state.showCrops === false) next.searchParams.set('crops', 'off');
+  if (state.showLivestock === false) next.searchParams.set('livestock', 'off');
+  if (state.single === true && isIndividualFarmingLayer(state.layer)) next.searchParams.set('single', '1');
   return next;
 }
 export function displayCell(values: Float32Array, point: number[], nodata = -1) {

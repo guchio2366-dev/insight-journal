@@ -57,7 +57,7 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
       <p>西欧から東欧・ロシア西部まで、45の国・地域の位置関係を確かめる基礎地図です。</p>
     </header>
 
-    <nav class="eu-field-nav" aria-label="欧州地図の表示"><a href={withBase('/atlas/europe/')} aria-current="page">欧州概況</a>{[['agriculture','農林業'],['nature','自然環境'],['industry','主要産業'],['population','人口']].map(([id,label])=><a data-europe-detail-link href={withBase('/atlas/europe/'+id+'/')}>{label}</a>)}</nav>
+    <nav class="eu-field-nav" aria-label="欧州地図の表示">{[['agriculture','農林業'],['nature','自然環境'],['industry','主要産業'],['population','人口']].map(([id,label])=><a data-europe-detail-link href={withBase('/atlas/europe/'+id+'/')}>{label}</a>)}</nav>
 
     <div class="europe-layout">
       <section class="europe-map-card" aria-labelledby="europe-map-title">
@@ -223,9 +223,9 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
   .europe-regions button { min-height: 44px; padding: 10px 13px; border: 1px solid var(--rule); background: #fff; color: var(--ink); font: inherit; font-size: 13px; cursor: pointer; }
   .europe-regions button:not([data-region-button='all'])::before { content: ''; display: inline-block; width: 10px; height: 10px; margin-right: 6px; background: var(--region-color); border: 1px solid #50616b; }
   [data-region-button='east'] { --region-color: #b7adce; }
-  
+
   [data-region-button='south'] { --region-color: #d8ad7e; }
-  
+
   [data-region-button='west'] { --region-color: #99baa4; }
   [data-region-button='north'] { --region-color: #a2c7d2; }
   .europe-regions button[aria-pressed='true'] { background: #162638; border-color: #162638; color: #fff; }
@@ -241,9 +241,9 @@ const regionOrder: Region[] = ['north', 'west', 'south', 'east'];
   .europe-map path[data-map-country] { cursor: pointer; }
   .europe-map path.europe-context { fill: #e8e5d9; stroke: #fffaf0; }
   .europe-map path[data-map-region='east'] { fill: #b7adce; }
-  
+
   .europe-map path[data-map-region='south'] { fill: #d8ad7e; }
-  
+
   .europe-map path[data-map-region='west'] { fill: #99baa4; }
   .europe-map path[data-map-region='north'] { fill: #a2c7d2; }
   .europe-map path.is-muted { opacity: .22; }

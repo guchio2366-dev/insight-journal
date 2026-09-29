@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { gunzipSync } from 'node:zlib';
-import { project, unproject, visibleBounds, readEuropeState, writeEuropeState, climateSummary, wheatCell } from '../../src/lib/atlas-europe-view.ts';
+import { project, unproject, visibleBounds, readEuropeState, writeEuropeState, defaultEuropeCity, climateSummary, wheatCell } from '../../src/lib/atlas-europe-view.ts';
 const json = path => JSON.parse(readFileSync(new URL(`../../${path}`, import.meta.url)));
 const countries = json('src/data/atlas/europe/countries.json');
 const cities = json('src/data/atlas/europe/climate-cities.json');
@@ -19,6 +19,88 @@ test('国選択と都市比較がURL往復・不正入力の正規化で保た�
   assert.equal(readEuropeState('?place=bad&city=bad&region=bad&layer=bad',countries,ids,'wheat').layer,'wheat');
   const returnToClimate = readEuropeState('?layer=overlay&returnLayer=climate', countries, ids, 'wheat');
   assert.equal(readEuropeState(writeEuropeState(new URL('https://example.test/'), returnToClimate).search, countries, ids, 'wheat').returnLayer, 'climate');
+});
+
+test('初回は対象国の収録済み首都を使い、首都の未収録を別都市で埋めない', () => {
+  const ids = cities.map(c => c.id);
+  assert.equal(defaultEuropeCity('', ids), 'london');
+  assert.equal(defaultEuropeCity('NOR', ids), 'oslo');
+  assert.equal(defaultEuropeCity('CHE', ids), '');
+  assert.equal(defaultEuropeCity('SWE', ids), '');
+  assert.equal(defaultEuropeCity('', ['paris']), '');
+  assert.equal(defaultEuropeCity('NOR', ['bergen']), '');
+  for (const country of countries) {
+    const city = defaultEuropeCity(country.code, ids);
+    if (city) assert.equal(cities.find(c => c.id === city)?.country, country.code);
+  }
+  assert.equal(readEuropeState('', countries, ids).city, 'london');
+  assert.equal(readEuropeState('?place=NOR&city=invalid', countries, ids).city, 'oslo');
+  const missing = readEuropeState('?place=CHE&city=invalid', countries, ids);
+  assert.equal(missing.city, '');
+  const url = writeEuropeState(new URL('https://example.test/atlas/europe/nature/'), missing);
+  assert.equal(url.searchParams.has('city'), false);
+  assert.deepEqual(readEuropeState(url.search, countries, ids), missing);
+});
+
+test('有効な保存済み都市は首都の初期選択より優先し、都市比較も保持する', () => {
+  const ids = cities.map(c => c.id);
+  const saved = readEuropeState('?place=NOR&city=bergen&compare=oslo,paris', countries, ids);
+  assert.equal(saved.city, 'bergen');
+  const foreign = readEuropeState('?place=CHE&city=paris&compare=zurich,london', countries, ids);
+  assert.equal(foreign.city, 'paris');
+  assert.deepEqual(foreign.compare, ['zurich', 'london']);
+  for (const state of [saved, foreign]) {
+    const url = writeEuropeState(new URL('https://example.test/atlas/europe/nature/'), state);
+    assert.deepEqual(readEuropeState(url.search, countries, ids), state);
+  }
+});
+
+test('作物と畜産は未指定ならONで、OFFを独立してURLと分野往復に保持する', () => {
+  const ids = cities.map(c => c.id);
+  const initial = readEuropeState('?layer=crops', countries, ids);
+  assert.equal(Object.hasOwn(initial, 'showCrops'), false);
+  assert.equal(Object.hasOwn(initial, 'showLivestock'), false);
+  const cropOff = readEuropeState('?layer=wheat&crops=off', countries, ids);
+  assert.equal(cropOff.showCrops, false);
+  assert.equal(Object.hasOwn(cropOff, 'showLivestock'), false);
+  const bothOff = readEuropeState('?layer=wheat&crops=off&livestock=off', countries, ids);
+  for (const layer of ['wheat', 'forest', 'climate', 'pig']) {
+    const state = {...bothOff, layer};
+    const url = writeEuropeState(new URL('https://example.test/atlas/europe/agriculture/'), state);
+    assert.deepEqual(readEuropeState(url.search, countries, ids), state);
+  }
+  const malformed = readEuropeState('?layer=crops&crops=false&livestock=on', countries, ids);
+  assert.equal(Object.hasOwn(malformed, 'showCrops'), false);
+  assert.equal(Object.hasOwn(malformed, 'showLivestock'), false);
+  const normalized = writeEuropeState(new URL('https://example.test/?crops=off&livestock=off&external=keep'), {...initial, showCrops:true, showLivestock:true});
+  assert.equal(normalized.searchParams.has('crops'), false);
+  assert.equal(normalized.searchParams.has('livestock'), false);
+  assert.equal(normalized.searchParams.get('external'), 'keep');
+});
+
+test('単独表示は個別農畜産物に限り、通常表示への復帰で元のON／OFFを失わない', () => {
+  const ids = cities.map(c => c.id);
+  const original = readEuropeState('?layer=wheat&crops=off&livestock=off', countries, ids);
+  assert.equal(Object.hasOwn(original, 'single'), false);
+  const isolated = {...original, single:true};
+  const singleUrl = writeEuropeState(new URL('https://example.test/atlas/europe/agriculture/'), isolated);
+  assert.equal(singleUrl.searchParams.get('single'), '1');
+  assert.deepEqual(readEuropeState(singleUrl.search, countries, ids), isolated);
+  const returnedUrl = writeEuropeState(singleUrl, {...isolated, single:false});
+  assert.equal(returnedUrl.searchParams.has('single'), false);
+  assert.deepEqual(readEuropeState(returnedUrl.search, countries, ids), original);
+  assert.equal(singleUrl.searchParams.get('single'), '1');
+  const anotherUrl = writeEuropeState(singleUrl, {...isolated, layer:'pig'});
+  assert.equal(readEuropeState(anotherUrl.search, countries, ids).layer, 'pig');
+  assert.equal(readEuropeState(anotherUrl.search, countries, ids).single, true);
+  for (const layer of ['crops', 'forest', 'climate', 'terrain', 'density', 'overlay']) {
+    const state = readEuropeState(`?layer=${layer}&single=1&crops=off`, countries, ids);
+    assert.equal(Object.hasOwn(state, 'single'), false);
+    const url = writeEuropeState(singleUrl, {...isolated, layer});
+    assert.equal(url.searchParams.has('single'), false);
+    assert.equal(url.searchParams.get('crops'), 'off');
+    assert.equal(url.searchParams.get('livestock'), 'off');
+  }
 });
 
 test('静的地図と通常地図の投影が一致し、ロシアは表示枠内で拡大する', () => {

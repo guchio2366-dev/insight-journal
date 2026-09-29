@@ -1,0 +1,50 @@
+---
+import { climateSummary } from '../../lib/atlas-europe-view';
+import mapLabels from '../../data/atlas/europe/map-labels.json';
+import legend from '../../data/atlas/europe/climate-legend.json';
+
+interface Props {
+  city: {
+    id: string; name: string; stationName: string; sourceUrl: string; period: string;
+    months: { month: number; temperature: number | null; precipitation: number | null }[];
+  };
+  country: string;
+}
+const { city, country } = Astro.props;
+const summary = climateSummary(city.months);
+const station = city.stationName.split(' -')[0];
+const code = (mapLabels.cityClasses as Record<string, string>)[city.id];
+const classification = legend.find(entry => entry.code === code);
+const meanings: Record<string, string> = {
+  Cfb: 'Cは温帯、fは明瞭な乾季がないこと、bは温暖な夏を示します。',
+  Cfa: 'Cは温帯、fは明瞭な乾季がないこと、aは暑い夏を示します。',
+  Csa: 'Cは温帯、sは夏に乾燥すること、aは暑い夏を示します。',
+  Csb: 'Cは温帯、sは夏に乾燥すること、bは温暖な夏を示します。',
+  Dfa: 'Dは冷帯、fは明瞭な乾季がないこと、aは暑い夏を示します。',
+  Dfb: 'Dは冷帯、fは明瞭な乾季がないこと、bは温暖な夏を示します。',
+  BSk: 'Bは乾燥帯、Sはステップ（半乾燥）の区分、kは年平均気温18 ℃未満を示します。',
+};
+const coldMonths = city.months.filter(month => month.temperature !== null && month.temperature === summary.coldest).map(month => `${month.month}月`).join('・');
+const warmMonths = city.months.filter(month => month.temperature !== null && month.temperature === summary.warmest).map(month => `${month.month}月`).join('・');
+const rainValues = city.months.flatMap(month => month.precipitation === null ? [] : [month.precipitation]);
+const minRain = rainValues.length ? Math.min(...rainValues) : null;
+const maxRain = rainValues.length ? Math.max(...rainValues) : null;
+const wetMonths = city.months.filter(month => month.precipitation !== null && month.precipitation === maxRain).map(month => `${month.month}月`).join('・');
+const dryMonths = city.months.filter(month => month.precipitation !== null && month.precipitation === minRain).map(month => `${month.month}月`).join('・');
+---
+<article class="eu-city-reading" data-city-reading={city.id} hidden={city.id !== 'london'} aria-labelledby={`city-reading-${city.id}`}>
+  <header class="eu-city-reading-head">
+    <p class="eu-city-reading-country">{country}{city.id === 'london' && ' · 初期対象国'}</p>
+    <h3 id={`city-reading-${city.id}`}>{city.name}の気候</h3>
+    <p>{city.id === 'london' ? 'イギリスの首都ロンドンについて、HEATHROW（ヒースロー）観測所の平年値を示します。' : `${city.name}の観測所 ${station} の平年値を示します。`}</p>
+    <p class="eu-reader-takeaway">{summary.coldest !== null && summary.warmest !== null ? `最も寒い${coldMonths}の平均気温は${summary.coldest.toFixed(1)} ℃、最も暖かい${warmMonths}は${summary.warmest.toFixed(1)} ℃です。` : '気温に欠測があり、年間の寒暖差は算出していません。'}</p>
+  </header>
+  <div class="eu-city-reading-body">
+    <h4 class="eu-city-climate">{classification ? <><strong>{classification.code}</strong> {classification.name}</> : '気候区分：観測地点の分類は未収録です'}</h4>
+    {classification && meanings[code] && <p>{meanings[code]}</p>}
+    <p class="eu-statistic-note">気候区分は地図の格子から読み取った分類です。観測所の月別値から計算した分類ではありません。{!classification && '近隣の分類で補わず、観測所の雨温図は下の統計領域に表示します。'}</p>
+    {summary.annualRain !== null && minRain !== null && maxRain !== null ? <p>月降水量は{wetMonths}が最も多く{maxRain.toFixed(1)} mm、{dryMonths}が最も少なく{minRain.toFixed(1)} mmです。下の雨温図と月別表で季節ごとの差を確認できます。</p> : <p>降水量に欠測があるため、雨の多い季節・少ない季節や年間降水量は、この資料だけでは示せません。</p>}
+    <p class="eu-statistic-note">期間は{city.period}年です。1観測所の気候であり、都市や国の全体を代表する値ではありません。</p>
+    <p class="eu-statistic-source">原典：<a href={city.sourceUrl} target="_blank" rel="noopener noreferrer">気象庁の観測所平年値 ↗</a> ／ <a href="https://www.gloh2o.org/koppen/" target="_blank" rel="noopener noreferrer">Beckほかの気候区分 ↗</a></p>
+  </div>
+</article>
