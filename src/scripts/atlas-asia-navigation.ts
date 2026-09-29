@@ -19,7 +19,7 @@ export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|un
  for(const b of all('[data-industry-subsector]'))b.addEventListener('click',()=>selectIndustry(b.dataset.sector as IndustrySector,b.dataset.industrySubsector!));
  for(const b of all('[data-industry-feature]'))b.addEventListener('click',()=>{
   const t=industry?.topics.find(t=>t.id===b.dataset.industryFeature);if(!t)return;
-  const s=getState();navigate({...s,topic:t.id,sector:null,subsector:null,detail:null,city:null,point:null,place:t.country??null,camera:s.camera},false);
+  const s=getState(),fit=!!t.country&&t.country!==s.place;navigate({...s,topic:t.id,sector:null,subsector:null,detail:null,city:null,point:null,place:t.country??null,camera:fit?null:s.camera},fit);
  });
  function render(){
   const state=getState(),natural=naturalGroup(state.topic??'climate');

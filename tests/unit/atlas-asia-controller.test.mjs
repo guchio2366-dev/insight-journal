@@ -140,6 +140,7 @@ async function setup(query = '', options = {}) {
     for(const name of fields){const e=window.document.createElement('div');e.setAttribute('data-'+name,'');root.append(e);}
     root.insertAdjacentHTML('beforeend','<button data-industry-retry></button><input data-industry-search><select data-industry-detail></select><select data-industry-topic>'+conf.industry.topics.map(t=>'<option value="'+t.id+'">'+t.title+'</option>').join('')+'</select>');
     q('.atlas-tabs').insertAdjacentHTML('beforeend','<a data-field="industry" href="/insight-journal/atlas/asia/east-asia/industry/">産業</a>');
+    root.insertAdjacentHTML('beforeend',conf.industry.topics.map(t=>'<button data-industry-feature="'+t.id+'">'+t.title+'</button>').join(''));
   }
   if(options.hydrology){
     const conf=JSON.parse(q('[data-asia-config]').textContent);
@@ -167,7 +168,7 @@ async function setup(query = '', options = {}) {
   if(options.presentation){
     const conf=JSON.parse(q('[data-asia-config]').textContent);
     conf.presentationBase='/assets/presentation/';conf.presentation={farming:{file:'farming.json.gz',products:[],labels:[]},rainfall:{file:'rainfall.json.gz',levels:[250,500],labels:[]},terrain:{file:'terrain.json.gz',levels:[500,1000],labels:[]},climate:[]};q('[data-asia-config]').textContent=JSON.stringify(conf);
-    root.insertAdjacentHTML('beforeend','<button data-farm-toggle="crop" aria-pressed="true"><span></span></button><button data-farm-toggle="livestock" aria-pressed="true"><span></span></button><button data-farm-water></button><div data-map-annotations></div><section data-farm-overview-reading></section><section data-farm-overview-legend></section><input type="checkbox" data-farm-kind="crop" checked><input type="checkbox" data-farm-kind="livestock" checked><button data-farm-choice="overview"></button><button data-farm-choice="wheat"></button>');
+    root.insertAdjacentHTML('beforeend','<div data-farm-switches><button data-farm-toggle="crop" aria-pressed="true"><span></span></button><button data-farm-toggle="livestock" aria-pressed="true"><span></span></button></div><button data-farm-water></button><div data-map-annotations></div><section data-farm-overview-reading></section><section data-farm-overview-legend></section><input type="checkbox" data-farm-kind="crop" checked><input type="checkbox" data-farm-kind="livestock" checked><button data-farm-choice="overview"></button><button data-farm-choice="wheat"></button>');
     q('[data-farming-topic]').insertAdjacentHTML('afterbegin','<option value="overview"></option>');
   }
   if(options.indiaLabels){Object.defineProperties(q('[data-map-annotations]'),{clientWidth:{value:600},clientHeight:{value:400}});const conf=JSON.parse(q('[data-asia-config]').textContent);const base=conf.population.cities[0];conf.population.cities=[{...base,id:'uc-7963',name:'ニューデリー',country:'IND',coordinates:[105,35]},{...base,id:'uc-small',name:'地方都市',country:'IND',coordinates:[125,35]}];q('[data-asia-config]').textContent=JSON.stringify(conf);}
@@ -709,6 +710,16 @@ test('農林業の遅い応答は新しい主題を上書きせず、統計の�
 });
 
 
+test('国別の主要産業を選ぶと対象国へ移り、同じ対象国の再選択は表示範囲を維持する',async()=>{
+ const {window,q}=await setup('?field=industry&place=CHN&lng=110&lat=35&z=4',{industry:true});
+ try{
+  q('[data-industry-feature="jp-00"]').click();await until(()=>window.__map.getCenter().lng===137.5,'Japan fitted');
+  assert.equal(new URL(window.location.href).searchParams.get('place'),'JPN');assert.equal(window.__map.getCenter().lat,38);
+  window.__map.jumpTo({center:[140,36],zoom:6});await window.__map.fire('moveend');
+  q('[data-industry-feature="jp-00"]').click();await delay();assert.deepEqual({...window.__map.getCenter(),zoom:window.__map.getZoom()},{lng:140,lat:36,zoom:6});
+ }finally{await window.happyDOM.close();}
+});
+
 test('農畜産物の概要は初期同時表示し、種類切替・詳細図・履歴で地図を作り直さない',async()=>{
  const {window,q,requests}=await setup('',{farming:true,presentation:true,population:true,industry:true});
  try{
@@ -780,10 +791,12 @@ test('米・雨・川の重ね合わせはURLから復元でき、品目変更�
   assert.equal(map.layers['asia-farm-overview-livestock-fill'].layout.visibility,'none');
   assert.ok(JSON.stringify(map.layers['asia-farm-overview-fill'].filter).includes('rice'));
   assert.equal(q('[data-farm-kind=crop]').disabled,true);
+  assert.equal(q('[data-farm-switches]').hidden,true);
   assert.equal(q('[data-farm-water]').getAttribute('aria-pressed'),'true');
   q('[data-farm-choice=wheat]').click();
   assert.equal(new URL(window.location.href).searchParams.has('overlay'),false);
   assert.equal(map.layers['asia-rainfall-lines'].layout.visibility,'none');
+  q('[data-farm-choice=overview]').click();assert.equal(q('[data-farm-switches]').hidden,false);
   q('[data-farm-water]').click();await until(()=>map.layers['asia-rainfall-lines'].layout.visibility==='visible','overlay reopened');
   q('[data-field=natural]').click();assert.equal(map.layers['asia-rainfall-lines'].layout.visibility,'none');
   q('[data-natural-topic=terrain]').click();await until(()=>map.getLayer('asia-terrain-lines')?.layout?.visibility==='visible','simplified contours');
