@@ -53,7 +53,7 @@ test('climate charts have twelve observed months and traceable, in-region statio
 
 test('invalid URLs cannot select foreign countries, missing topics or invalid field/crop values',()=>{
  const invalid=read('?field=unsupported&topic=missing&place=MEX&city=missing&crop=missing&view=missing');
- assert.deepEqual(invalid,{field:'nature',topic:'',place:'',city:'',crop:'soyb',view:'climate',camera:undefined});
+ assert.deepEqual(invalid,{field:'nature',topic:'',place:'',city:'brasilia',crop:'',view:'climate',cropsOn:true,livestockOn:true,agriMode:'all',camera:undefined});
  assert.equal(read('?field=industry&topic=andes&city=manaus').topic,'');
  assert.equal(read('?field=industry&city=manaus').city,'');
 });
@@ -147,4 +147,34 @@ test('country comparison indicators share one stated year and retain absent valu
  }
  assert.equal(data.indicators.find(i=>i.id==='NV.IND.MANF.ZS').values.VEN,null);
  assert.equal(Object.hasOwn(data.indicators[0].values,'MEX'),false);
+});
+
+test('capital defaults and independent farming settings survive direct links and history',()=>{
+ assert.equal(read('', 'nature').city,'brasilia');
+ assert.equal(read('?place=CHL','nature').city,'santiago');
+ for(const place of ['BLZ','BOL','PRY'])assert.equal(read('?place='+place,'nature').city,'','missing capital must not select a different city');
+ assert.equal(read('?city=manaus','nature').city,'manaus');
+ assert.equal(read('?city=none','nature').city,'','an explicit return to overview remains shareable');
+ assert.equal(read('?view=rivers&city=lima','nature').city,'lima');
+ const s=read('?crop=coff&crops=off&livestock=on&mode=single','agriculture');
+ assert.equal(s.agriMode,'single');assert.equal(s.cropsOn,false);assert.equal(s.livestockOn,true);
+ assert.deepEqual(read(writeLatinState(s)),s);
+ assert.equal(read('?mode=single&crop=missing','agriculture').agriMode,'all');
+ assert.equal(read('','agriculture').crop,'','new agriculture opens without a selected item');
+});
+
+test('overview and all fifteen selection masks retain source provenance and real label cells',async()=>{
+ const {createHash}=await import('node:crypto');
+ const manifest=await json('public/assets/atlas/latin-america-overview-v1/manifest.json');
+ const products=await json('src/data/atlas/latin-america-products.json');
+ assert.equal(manifest.inputs.length,15);assert.equal(products.filter(p=>p.kind==='crop').length,12);
+ const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
+ for(const input of manifest.inputs){
+  const raw=await readFile(new URL('../../'+input.path,import.meta.url));assert.equal(hash(raw),input.sha256,input.id);
+  const grid=JSON.parse(raw),label=manifest.labels.find(l=>l.id===input.id);
+  assert.ok(cropValueAt(grid,...label.coordinate)>=1,input.id+' label must be in a real displayed cell');
+  assert.equal(input.shownCells,grid.positiveCells.filter(([,value])=>value>=1).length,input.id+' every visible cell belongs to the selection mask');
+  const outline=await readFile(new URL('../../public/assets/atlas/latin-america-overview-v1/'+input.outline,import.meta.url));assert.equal(hash(outline),input.outlineSha256);
+ }
+ for(const group of Object.values(manifest.groups))assert.equal(hash(await readFile(new URL('../../public/assets/atlas/latin-america-overview-v1/'+group.image,import.meta.url))),group.sha256);
 });

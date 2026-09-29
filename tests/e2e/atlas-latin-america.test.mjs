@@ -94,7 +94,7 @@ test('overview and every field route render the shared North America frame, news
    assert.ok(q('[data-news-list][tabindex="0"]'));
    assert.ok(shell.querySelector(':scope > .atlas-explorer > .atlas-workspace > .atlas-primary-grid > .atlas-map-column > .atlas-map-frame'),field+' uses the common map frame');
    assert.ok(q('.atlas-primary-grid > [data-field-national] .atlas-national'),field+' reading sits beside the map');
-   assert.ok(q('.atlas-explorer > .atlas-reading'),field+' sources remain below the map workspace');
+   assert.ok(shell.querySelector(':scope > .atlas-reading.latin-statistics-area'),field+' statistics and sources span below news, map and reading');
    assert.equal(routeField(q),field==='nature'?'natural':field);
    if(field==='overview')assert.equal(q('[data-latin-explorer]').dataset.field,'regional-overview','regional landing must not activate the legacy land-overview layout');
    const tabs=[...q('.atlas-tabs').querySelectorAll('a[data-field]')];
@@ -130,33 +130,18 @@ test('field links change paths and active tabs, and history restores both the ov
  }finally{await close(window);}
 });
 
-test('field route defaults initialize without a field query and products and overview return preserve map context',async()=>{
+test('normal product selection keeps the overview layers, reading, statistics and camera aligned',async()=>{
  const {window,q}=await setup('?place=BRA&map=-55,-14,5',{route:'agriculture'});
  try{
-  assert.equal(routeField(q),'agriculture');assert.equal(fieldTab(q,'agriculture').getAttribute('aria-current'),'page');
-  assert.equal(q('[data-agriculture-controls]').hidden,false);
-  q('[data-crop-option="maiz"]').click();
-  await readyRaster(window,q,'maiz.png');
-  assert.equal(q('[data-crop-option="maiz"]').getAttribute('aria-pressed'),'true');
-  assert.equal(q('[data-crop-option="soyb"]').getAttribute('aria-pressed'),'false');
-  assert.equal(q('[data-crop]').value,'maiz','the compatibility select follows the visible product button');
-  const productUrl=new URL(window.location.href);
-  assert.equal(productUrl.pathname,atlasPath+'agriculture/');assert.equal(productUrl.searchParams.get('crop'),'maiz');
-  assert.equal(productUrl.searchParams.get('place'),'BRA');assert.deepEqual(productUrl.searchParams.get('map').split(',').map(Number),[-55,-14,5]);
-  q('[data-select-topic="brazil-second-maize"]').click();
-  assert.equal(q('[data-topic-panel="brazil-second-maize"]').hidden,false);assert.equal(q('[data-reading-topbar]').hidden,false);
-  q('[data-zoom="1"]').click();
-  const readingUrl=new URL(window.location.href),camera=readingUrl.searchParams.get('map');
-  q('[data-reading-overview]').click();
-  const overviewUrl=new URL(window.location.href);
-  assert.equal(overviewUrl.pathname,atlasPath+'agriculture/');assert.equal(overviewUrl.searchParams.get('crop'),'maiz');
-  assert.equal(overviewUrl.searchParams.get('place'),'BRA');assert.equal(overviewUrl.searchParams.get('map'),camera);
-  assert.equal(overviewUrl.searchParams.has('topic'),false);assert.equal(overviewUrl.searchParams.has('city'),false);
-  assert.equal(visiblePanels(q).length,0);assert.equal(q('[data-overview]').hidden,false);assert.equal(q('[data-reading-topbar]').hidden,true);
-  assert.equal(q('[data-crop-option="maiz"]').getAttribute('aria-pressed'),'true');
-  window.history.back();await waitFor(()=>!q('[data-topic-panel="brazil-second-maize"]').hidden,'back restores the selected maize reading');
-  assert.equal(q('[data-crop-option="maiz"]').getAttribute('aria-pressed'),'true');
-  assert.equal(new URL(window.location.href).searchParams.get('map'),camera);
+  assert.ok(window.__map.getSource('latin-crops'));assert.ok(window.__map.getSource('latin-livestock'));
+  q('[data-crop-option="maiz"]').click();await settleData(window);
+  assert.equal(q('[data-product-panel]').hidden,false);assert.equal(q('[data-selection-title]').textContent,'とうもろこし');
+  assert.match(q('[data-product-stat-title]').textContent,/とうもろこし/);assert.ok(window.__map.getSource('latin-crops'));assert.ok(window.__map.getSource('latin-livestock'));
+  assert.match(window.__map.getSource('latin-selection').url,/maiz-outline/);
+  const u=new URL(window.location.href);assert.equal(u.searchParams.get('place'),'BRA');assert.deepEqual(u.searchParams.get('map').split(',').map(Number),[-55,-14,5]);
+  q('[data-reading-overview]').click();await settleData(window);
+  assert.equal(q('[data-overview]').hidden,false);assert.equal(q('[data-selected-statistics]').hidden,true);assert.equal(window.__map.getSource('latin-selection'),undefined);
+  window.history.back();await waitFor(()=>q('[data-selection-title]').textContent==='とうもろこし','history restores product');
  }finally{await close(window);}
 });
 
@@ -178,43 +163,32 @@ test('built Latin America page has full prose, usable citations, fallback geogra
  }finally{await close(window);}
 });
 
-test('crop buttons preserve the country filter when their default reading belongs to another country',async()=>{
- const {window,q}=await setup('?place=BRA&topic=cerrado-soy&map=-55,-14,5',{route:'agriculture'});
+test('all fifteen products preserve country and keep their own definitions and lower statistics',async()=>{
+ const {window,q,config}=await setup('?place=BRA&map=-55,-14,5',{route:'agriculture'});
  try{
-  for(const crop of ['whea','cattle']){
-   q(`[data-crop-option="${crop}"]`).click();
-   await readyRaster(window,q,crop+'.png');
-   const url=new URL(window.location.href);
-   assert.equal(q('[data-place]').value,'BRA',crop);assert.equal(url.searchParams.get('place'),'BRA',crop);
-   assert.equal(url.searchParams.get('crop'),crop);assert.deepEqual(url.searchParams.get('map').split(',').map(Number),[-55,-14,5]);
-   assert.equal(q(`[data-crop-option="${crop}"]`).getAttribute('aria-pressed'),'true');
-   assert.equal(visiblePanels(q).length,0,'an incompatible default reading must not override the country');
-   assert.equal(url.searchParams.has('topic'),false);assert.equal(q('[data-overview]').hidden,false);
-   assert.match(q('[data-statistics-table] .is-selected').textContent,/ブラジル/);
+  for(const product of config.products){
+   q(`[data-crop-option="${product.id}"]`).click();await settleData(window);
+   assert.equal(q('[data-selection-title]').textContent,product.name);assert.equal(q('[data-product-panel]').hidden,false);
+   assert.match(q('[data-product-stat-title]').textContent,new RegExp(product.name.replace(/[()]/g,'\\$&')));
+   assert.equal(q('[data-place]').value,'BRA');assert.equal(q('[data-product-stat-table]').querySelectorAll('tbody tr').length,34);
+   assert.match(window.__map.getSource('latin-selection').url,new RegExp(product.id+'-outline'));
+   assert.equal(q('[data-product-statistics]').closest('.latin-reading'),null);
+   assert.equal(q('[data-product-statistics]').closest('.atlas-explorer'),null,'statistics span below the three columns');
   }
-  q('[data-crop-option="maiz"]').click();
-  assert.equal(q('[data-topic-panel="brazil-second-maize"]').hidden,false,'a compatible default reading still opens');
-  assert.equal(q('[data-place]').value,'BRA');
-  change(window,q('[data-place]'),'ARG');q('[data-crop-option="whea"]').click();
-  assert.equal(q('[data-topic-panel="pampas-farming"]').hidden,false);assert.equal(q('[data-place]').value,'ARG');
  }finally{await close(window);}
 });
 
-test('coffee products open a compatible country reading and retain the selected variety and map',async()=>{
- const {window,q}=await setup('?map=-70,0,4',{route:'agriculture'});
+test('coffee varieties keep their own statistics and regional stories are explicit additional selections',async()=>{
+ const {window,q}=await setup('?place=BRA',{route:'agriculture'});
  try{
-  for(const [place,crop,topic] of [['','coff','brazil-coffee'],['GTM','coff','central-coffee'],['HND','coff','central-coffee'],['CRI','coff','central-coffee'],['COL','coff','colombia-coffee'],['BRA','rcof','brazil-coffee'],['COL','rcof','']]){
-   change(window,q('[data-place]'),place);
-   const center=window.__map.getCenter(),camera=[center.lng,center.lat,window.__map.getZoom()].map((n,i)=>n.toFixed(i===2?2:3)).join(',');
-   q(`[data-crop-option="${crop}"]`).click();
-   await readyRaster(window,q,crop+'.png');
-   const url=new URL(window.location.href);
-   assert.equal(q('[data-place]').value,place);assert.equal(url.searchParams.get('place')??'',place);
-   assert.equal(url.searchParams.get('crop'),crop);assert.equal(url.searchParams.get('map'),camera);
-   assert.equal(url.searchParams.get('topic')??'',topic);
-   assert.equal(q(`[data-crop-option="${crop}"]`).getAttribute('aria-pressed'),'true');
-   assert.deepEqual(visiblePanels(q).map(p=>p.dataset.topicPanel),topic?[topic]:[]);
-  }
+  q('[data-crop-option="rcof"]').click();await settleData(window);
+  assert.equal(q('[data-topic-panel="brazil-coffee"]').hidden,true);assert.match(q('[data-product-stat-title]').textContent,/ロブスタ/);
+  assert.equal(q('[data-topic-stat="brazil-coffee"]').hidden,true,'Arabica figures must not appear under Robusta');
+  change(window,q('[data-place]'),'COL');q('[data-crop-option="coff"]').click();await settleData(window);
+  assert.ok(q('[data-product-topics] [data-select-topic="colombia-coffee"]'));
+  assert.equal(q('[data-product-topics] [data-select-topic="brazil-coffee"]'),null);
+  q('[data-product-topics] [data-select-topic="colombia-coffee"]').click();
+  assert.equal(q('[data-topic-panel="colombia-coffee"]').hidden,false);
  }finally{await close(window);}
 });
 
@@ -244,18 +218,18 @@ test('whole-map control fits the regional extent without losing the selected cit
  }
 });
 
-test('nature initially shows a default climate chart without selecting a city or zooming to its station',async()=>{
+test('climate starts with an actual capital selection and reports missing capitals honestly',async()=>{
  const {window,q,config}=await setup('',{route:'nature'});
  try{
-  assert.equal(q('[data-city-panel="sao-paulo"]').hidden,false);assert.equal(q('[data-city]').value,'sao-paulo');
-  assert.equal(visiblePanels(q).length,1);assert.equal(new URL(window.location.href).searchParams.has('city'),false);
+  assert.equal(q('[data-city-panel="brasilia"]').hidden,false);assert.equal(q('[data-city]').value,'brasilia');
+  assert.equal(new URL(window.location.href).searchParams.get('city'),'brasilia');assert.match(q('[data-current-place]').textContent,/ブラジル/);
+  assert.equal(q('[data-city-stat="brasilia"]').hidden,false);assert.equal(q('[data-city-stat="brasilia"] .latin-months').closest('.latin-reading'),null);
   const [west,south,east,north]=config.bounds;
-  assert.deepEqual(Array.from(window.__map.lastFitBounds,pair=>Array.from(pair)),[[west,south],[east,north]],'the default chart must not change the regional map extent');
-  change(window,q('[data-place]'),'CHL');
-  const country=config.countries.find(c=>c.code==='CHL'),city=config.cities.find(c=>c.countryCode==='CHL');
-  assert.equal(q(`[data-city-panel="${city.id}"]`).hidden,false);assert.equal(q('[data-city]').value,city.id);
-  assert.equal(new URL(window.location.href).searchParams.has('city'),false,'the country default is a reading display, not an explicit city selection');
-  assert.deepEqual(Array.from(window.__map.lastFitBounds,pair=>Array.from(pair)),[[country.bounds[0],country.bounds[1]],[country.bounds[2],country.bounds[3]]]);
+  assert.deepEqual(Array.from(window.__map.lastFitBounds,p=>Array.from(p)),[[west,south],[east,north]]);
+  change(window,q('[data-place]'),'CHL');assert.equal(q('[data-city]').value,'santiago');
+  for(const place of ['BLZ','BOL']){change(window,q('[data-place]'),place);assert.equal(q('[data-city]').value,'');assert.equal(q('[data-capital-missing]').hidden,false);assert.equal(q('[data-selected-statistics]').hidden,true);}
+  change(window,q('[data-city]'),'manaus');q('[data-view-option="rivers"]').click();assert.equal(q('[data-city-panel="manaus"]').hidden,true);
+  q('[data-view-option="climate"]').click();assert.equal(q('[data-city-panel="manaus"]').hidden,false);
  }finally{await close(window);}
 });
 
@@ -263,18 +237,18 @@ test('default climate chart compares the displayed city surroundings and returns
  for(const failMap of [false,true]){
   const {window,q,config}=await setup('',{route:'nature',failMap});
   try{
-   const city=config.cities.find(c=>c.id==='sao-paulo');
+   const city=config.cities.find(c=>c.id==='brasilia');
    const before=failMap?q('[data-map-fallback]').getAttribute('viewBox').split(' ').map(Number):[window.__map.getCenter().lng,window.__map.getCenter().lat,window.__map.getZoom()];
-   assert.equal(q('[data-city-panel="sao-paulo"]').hidden,false);assert.equal(new URL(window.location.href).searchParams.has('city'),false);
-   q('[data-city-panel="sao-paulo"] [data-compare-field="agriculture"]').click();
+   assert.equal(q('[data-city-panel="brasilia"]').hidden,false);assert.equal(new URL(window.location.href).searchParams.get('city'),'brasilia');
+   q('[data-city-panel="brasilia"] [data-compare-field="agriculture"]').click();
    const compared=new URL(window.location.href),camera=compared.searchParams.get('map').split(',').map(Number);
    assert.equal(compared.pathname,atlasPath+'agriculture/');assert.equal(routeField(q),'agriculture');
    assert.deepEqual(camera,[Number(city.longitude.toFixed(3)),Number(city.latitude.toFixed(3)),5]);
    assert.equal(q('[data-comparison-return]').hidden,false);
    if(!failMap)assert.deepEqual([window.__map.getCenter().lng,window.__map.getCenter().lat,window.__map.getZoom()],[city.longitude,city.latitude,5]);
    q('[data-return]').click();
-   assert.equal(window.location.pathname,atlasPath+'nature/');assert.equal(q('[data-city-panel="sao-paulo"]').hidden,false);
-   assert.equal(new URL(window.location.href).searchParams.has('city'),false,'return restores the default preview rather than selecting the station');
+   assert.equal(window.location.pathname,atlasPath+'nature/');assert.equal(q('[data-city-panel="brasilia"]').hidden,false);
+   assert.equal(new URL(window.location.href).searchParams.get('city'),'brasilia','return restores the capital selection');
    assert.equal(q('[data-comparison-return]').hidden,true);
    const after=failMap?q('[data-map-fallback]').getAttribute('viewBox').split(' ').map(Number):[window.__map.getCenter().lng,window.__map.getCenter().lat,window.__map.getZoom()];
    after.forEach((value,i)=>assert.ok(Math.abs(value-before[i])<.02,'return restores the original regional viewport'));
@@ -311,7 +285,7 @@ test('country filtering retains agriculture and industry topics, and reset clear
 });
 
 test('deep links, related-reading return and browser history restore the selected reading',async()=>{
- const {window,q}=await setup('?field=agriculture&topic=cerrado-soy&place=BRA&crop=maiz&map=-55,-14,5');
+ const {window,q}=await setup('?field=agriculture&topic=cerrado-soy&place=BRA&crop=soyb&map=-55,-14,5');
  try{
   assert.equal(q('[data-topic-panel="cerrado-soy"]').hidden,false);assert.equal(visiblePanels(q).length,1);
   const before=new URL(window.location.href);
@@ -344,7 +318,7 @@ test('simplified map comparison preserves manual zoom and URL reproduction',asyn
 });
 
 test('raster failure keeps geographic context and cited selected prose usable',async()=>{
- const {window,q}=await setup('?field=agriculture&topic=cerrado-soy',{failMap:true,failRaster:true});
+ const {window,q}=await setup('?field=agriculture&topic=cerrado-soy&crop=soyb&mode=single',{failMap:true,failRaster:true});
  try{
   await waitFor(()=>q('[data-legend]').textContent.includes('未表示'),'explicit unavailable layer');
   assert.equal(q('[data-topic-panel="cerrado-soy"]').hidden,false);
@@ -359,7 +333,7 @@ test('raster failure keeps geographic context and cited selected prose usable',a
 
 test('map sampling and comparison table distinguish real zero from absent data',async()=>{
  const grid={bounds:[-64,-4,-60,0],width:4,height:4,cellSize:1,validRuns:[[0,2]],positiveCells:[[0,12.5]]};
- const {window,q}=await setup('?field=agriculture',{cropGrid:grid,zeroStatistics:true});
+ const {window,q}=await setup('?field=agriculture&crop=soyb&mode=single',{cropGrid:grid,zeroStatistics:true});
  try{
   await readyRaster(window,q,'soyb.png');
   assert.match(q('[data-legend]').textContent,/ha/);
@@ -374,7 +348,7 @@ test('map sampling and comparison table distinguish real zero from absent data',
 
 test('livestock selection reports density in animal units and narrative-only forestry removes the raster',async()=>{
  const grid={bounds:[-64,-4,-60,0],width:4,height:4,cellSize:1,validRuns:[[0,2]],positiveCells:[[0,12.5]]};
- const {window,q}=await setup('?field=agriculture&crop=cattle',{livestockGrid:grid});
+ const {window,q}=await setup('?field=agriculture&crop=cattle&mode=single',{livestockGrid:grid});
  try{
   await readyRaster(window,q,'cattle.png');
   assert.match(q('[data-legend]').textContent,/頭\/km²/);
@@ -432,5 +406,47 @@ test('agricultural readings choose their associated crop instead of leaving an u
    assert.equal(new URL(window.location.href).searchParams.get('crop'),crop,topic);
   }
   assert.equal(q('[data-fallback-raster]').getAttribute('href'),null);
+ }finally{await close(window);}
+});
+
+test('OFF selections, explicit single-item mode, return and history preserve independent display settings',async()=>{
+ for(const failMap of [false,true]){
+  const {window,q}=await setup('',{route:'agriculture',failMap});
+  try{
+   q('[data-toggle-crops]').click();q('[data-crop-option="soyb"]').click();await settleData(window);
+   assert.equal(q('[data-toggle-crops]').getAttribute('aria-pressed'),'false');assert.equal(q('[data-show-selected]').hidden,false);
+   assert.equal(q('[data-fallback-extra] [data-extra-raster="crops"]'),null);assert.ok(q('[data-fallback-extra] [data-extra-raster="livestock"]'));
+   q('[data-only-selected]').click();await settleData(window);
+   assert.match(q('[data-fallback-raster]').getAttribute('href'),/soyb.png$/);assert.equal(q('[data-fallback-extra]').childElementCount,0);
+   q('[data-crop-option="whea"]').click();await settleData(window);assert.match(q('[data-fallback-raster]').getAttribute('href'),/whea.png$/);
+   q('[data-all-products]').click();await settleData(window);
+   assert.equal(q('[data-selection-title]').textContent,'大豆');assert.equal(q('[data-toggle-crops]').getAttribute('aria-pressed'),'false');assert.equal(q('[data-toggle-livestock]').getAttribute('aria-pressed'),'true');
+   q('[data-only-selected]').click();await settleData(window);q('[data-toggle-crops]').click();await settleData(window);
+   assert.equal(q('[data-toggle-crops]').getAttribute('aria-pressed'),'false','ON toggle in single mode must turn the visible crop OFF');
+   assert.equal(q('[data-fallback-extra]').childElementCount,0);assert.match(q('[data-layer-notice]').textContent,/非表示/);
+   window.history.back();await waitFor(()=>new URL(window.location.href).searchParams.get('mode')==='single','back restores single display');await settleData(window);
+   assert.match(q('[data-fallback-raster]').getAttribute('href'),/soyb.png$/);
+  }finally{await close(window);}
+ }
+});
+
+test('rapid single-product changes never show a stale product grid or stale statistics',async()=>{
+ const {window,q}=await setup('?crop=soyb&mode=single',{route:'agriculture'});
+ try{
+  for(const id of ['coff','rice','rcof','pig','maiz'])q(`[data-crop-option="${id}"]`).click();
+  await readyRaster(window,q,'maiz.png');assert.equal(q('[data-selection-title]').textContent,'とうもろこし');assert.match(q('[data-product-stat-title]').textContent,/とうもろこし/);
+  assert.equal(q('[data-product-stat-table]').querySelectorAll('tbody tr').length,34);
+ }finally{await close(window);}
+});
+
+test('contradictory product links and comparison locations cannot borrow unrelated readings',async()=>{
+ const {window,q}=await setup('?crop=maiz&topic=cerrado-soy&mode=single',{route:'agriculture'});
+ try{
+  await readyRaster(window,q,'maiz.png');assert.equal(q('[data-topic-panel="cerrado-soy"]').hidden,true);assert.equal(q('[data-topic-stat="cerrado-soy"]').hidden,true);
+  q('[data-select-topic="chile-fruit"]').click();q('[data-selection-actions] [data-compare-field="nature"]').click();await settleData(window);
+  assert.equal(q('[data-city-panel="brasilia"]').hidden,true,'a local comparison cannot show a distant capital');
+  assert.equal(q('[data-city-stat="brasilia"]').hidden,true);assert.equal(q('[data-overview]').hidden,false);
+  change(window,q('[data-place]'),'BRA');q('[data-reading-overview]').click();
+  assert.equal(q('[data-capital-missing]').hidden,true,'clearing a selection does not mean the capital data are missing');
  }finally{await close(window);}
 });

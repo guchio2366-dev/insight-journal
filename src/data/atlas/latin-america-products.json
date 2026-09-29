@@ -1,0 +1,17 @@
+[
+ {"id":"soyb","name":"大豆","color":"#779747","kind":"crop","topics":["cerrado-soy"]},
+ {"id":"maiz","name":"とうもろこし","color":"#e2b53b","kind":"crop","topics":["brazil-second-maize"]},
+ {"id":"whea","name":"小麦","color":"#c98940","kind":"crop","topics":["pampas-farming"]},
+ {"id":"rice","name":"米","color":"#399c9a","kind":"crop","topics":[]},
+ {"id":"sugc","name":"さとうきび","color":"#36865b","kind":"crop","topics":["brazil-sugar"]},
+ {"id":"coff","name":"コーヒー（アラビカ）","color":"#aa6345","kind":"crop","topics":["brazil-coffee","colombia-coffee","central-coffee"]},
+ {"id":"rcof","name":"コーヒー（ロブスタ）","color":"#773c50","kind":"crop","topics":["brazil-coffee"]},
+ {"id":"bana","name":"バナナ","color":"#d7ce43","kind":"crop","topics":["tropical-bananas"]},
+ {"id":"coco","name":"カカオ","color":"#9d6586","kind":"crop","topics":[]},
+ {"id":"cott","name":"綿花","color":"#8894ba","kind":"crop","topics":[]},
+ {"id":"pota","name":"じゃがいも","color":"#b09d7b","kind":"crop","topics":["andean-farming"]},
+ {"id":"temf","name":"温帯果樹","color":"#d87587","kind":"crop","topics":["chile-fruit"]},
+ {"id":"cattle","name":"牛","color":"#6c487b","kind":"livestock","topics":[]},
+ {"id":"pig","name":"豚","color":"#a34675","kind":"livestock","topics":[]},
+ {"id":"chicken","name":"鶏","color":"#345d86","kind":"livestock","topics":[]}
+]
