@@ -167,13 +167,14 @@ async function setup(query = '', options = {}) {
   if(options.presentation){
     const conf=JSON.parse(q('[data-asia-config]').textContent);
     conf.presentationBase='/assets/presentation/';conf.presentation={farming:{file:'farming.json.gz',products:[],labels:[]},rainfall:{file:'rainfall.json.gz',levels:[250,500],labels:[]},terrain:{file:'terrain.json.gz',levels:[500,1000],labels:[]},climate:[]};q('[data-asia-config]').textContent=JSON.stringify(conf);
-    root.insertAdjacentHTML('beforeend','<button data-farm-water></button><div data-map-annotations></div><section data-farm-overview-reading></section><section data-farm-overview-legend></section><input type="checkbox" data-farm-kind="crop" checked><input type="checkbox" data-farm-kind="livestock" checked><button data-farm-choice="overview"></button><button data-farm-choice="wheat"></button>');
+    root.insertAdjacentHTML('beforeend','<button data-farm-toggle="crop" aria-pressed="true"><span></span></button><button data-farm-toggle="livestock" aria-pressed="true"><span></span></button><button data-farm-water></button><div data-map-annotations></div><section data-farm-overview-reading></section><section data-farm-overview-legend></section><input type="checkbox" data-farm-kind="crop" checked><input type="checkbox" data-farm-kind="livestock" checked><button data-farm-choice="overview"></button><button data-farm-choice="wheat"></button>');
     q('[data-farming-topic]').insertAdjacentHTML('afterbegin','<option value="overview"></option>');
   }
+  if(options.indiaLabels){Object.defineProperties(q('[data-map-annotations]'),{clientWidth:{value:600},clientHeight:{value:400}});const conf=JSON.parse(q('[data-asia-config]').textContent);const base=conf.population.cities[0];conf.population.cities=[{...base,id:'uc-7963',name:'ニューデリー',country:'IND',coordinates:[105,35]},{...base,id:'uc-small',name:'地方都市',country:'IND',coordinates:[125,35]}];q('[data-asia-config]').textContent=JSON.stringify(conf);}
   if(options.settlements){
    Object.defineProperties(q('[data-map-annotations]'),{clientWidth:{value:600},clientHeight:{value:400}});
    const conf=JSON.parse(q('[data-asia-config]').textContent);conf.presentation.settlements={ethnicity:{file:'ethnicity.json.gz',categories:[{id:'a',label:'集団',color:'#aabbcc',anchors:[[0,0],[139,35]]}]},religion:{file:'religion.json.gz',categories:[]}};q('[data-asia-config]').textContent=JSON.stringify(conf);
-   root.insertAdjacentHTML('beforeend','<section data-settlement-reading="ethnicity" hidden></section><section data-settlement-reading="religion" hidden></section><section data-settlement-legend="ethnicity" hidden></section><section data-settlement-legend="religion" hidden></section><button data-population-group="identity" data-topic="ethnicity"></button><button data-population-group="religion" data-topic="religion"></button>');
+   root.insertAdjacentHTML('beforeend','<section data-settlement-reading="ethnicity" hidden></section><section data-settlement-reading="religion" hidden></section><article data-settlement-detail="a" data-settlement-topic="ethnicity" hidden>集団 — 日本</article><button data-settlement-clear></button><button data-settlement-choice="a" data-settlement-topic="ethnicity"></button><section data-settlement-legend="ethnicity" hidden></section><section data-settlement-legend="religion" hidden></section><button data-population-group="identity" data-topic="ethnicity"></button><button data-population-group="religion" data-topic="religion"></button>');
   }
   if(options.stationPoints){
    const conf=JSON.parse(q('[data-asia-config]').textContent);conf.cities.push({id:'sapporo',name:'札幌',countryCode:'JPN',coordinates:[141.35,43.06]});q('[data-asia-config]').textContent=JSON.stringify(conf);
@@ -715,7 +716,7 @@ test('農畜産物の概要は初期同時表示し、種類切替・詳細図�
   q('[data-field="agriculture"]').click();
   await until(()=>window.__map.getLayer('asia-farm-overview-fill')?.layout?.visibility==='visible','overview loaded');
   assert.equal(q('[data-farm-overview-reading]').hidden,false);assert.equal(q('[data-rice-reading]').hidden,true);
-  assert.equal(window.__map.layers['asia-farm-overview-livestock-fill'].layout.visibility,'visible');assert.equal(q('[data-farm-density-key]').hidden,false);
+  assert.equal(window.__map.layers['asia-farm-overview-livestock-fill'].layout.visibility,'none','livestock is represented by points');assert.equal(q('[data-farm-density-key]').hidden,false);
   const livestock=q('[data-farm-kind=livestock]');livestock.checked=false;livestock.dispatchEvent(new window.Event('change'));
   await until(()=>window.__map.layers['asia-farm-overview-fill'].layout.visibility==='visible','crop retained');
   assert.equal(window.__map.layers['asia-farm-overview-livestock-fill'].layout.visibility,'none');
@@ -741,7 +742,7 @@ test('地図の再読み込み後も農畜産物のチェック状態と表示�
   window.__map.getCanvas().dispatchEvent(new window.Event('webglcontextlost'));q('[data-map-retry]').click();
   await until(()=>window.__maps.length===2&&window.__map.getLayer('asia-farm-overview-fill')?.layout?.visibility==='visible','overview rebuilt');
   assert.equal(livestock.checked,false);assert.equal(window.__map.layers['asia-farm-overview-livestock-fill'].layout.visibility,'none');assert.match(q('[data-grid-reading]').textContent,/家畜の分布は非表示/);
-  livestock.checked=true;livestock.dispatchEvent(new window.Event('change'));await until(()=>window.__map.layers['asia-farm-overview-livestock-fill'].layout.visibility==='visible','filter still works');
+  livestock.checked=true;livestock.dispatchEvent(new window.Event('change'));await until(()=>!new URL(window.location.href).searchParams.has('farms'),'both kinds restored in URL');await delay();await delay();
  }finally{await window.happyDOM.close();}
 });
 
@@ -857,11 +858,36 @@ test('民族・宗教は人口密度や行政区の塗りを重ねず、切り�
   await until(()=>app.window.__map.getLayer('asia-settlement-fill'),'ethnicity area loaded');
   assert.equal(app.q('[data-settlement-reading=ethnicity]').hidden,false);assert.equal(app.q('[data-population-reading]').hidden,true);
   assert.equal(app.window.__map.getLayer('asia-population'),undefined);
-  await until(()=>app.q('.asia-settlement-label')&&!app.q('.asia-settlement-label').hidden,'settlement label positioned');app.q('.asia-settlement-label').click();await delay();assert.equal(new URL(app.window.location.href).searchParams.get('at'),'139.00000,35.00000','use the displayed alternative anchor, not the offscreen one');
+  await until(()=>app.q('.asia-settlement-label')&&!app.q('.asia-settlement-label').hidden,'settlement label positioned');app.q('.asia-settlement-label').click();await delay();assert.equal(new URL(app.window.location.href).searchParams.get('detail'),'a');assert.equal(new URL(app.window.location.href).searchParams.has('at'),false);assert.equal(new URL(app.window.location.href).searchParams.has('place'),false);await until(()=>app.window.__map.layers['asia-settlement-selected'].filter[2]==='a','outline matches selection');
   app.q('[data-population-group=religion]').click();await until(()=>app.requests.some(r=>r.endsWith('religion.json.gz')),'religion area loaded');await delay();
   assert.equal(app.q('[data-settlement-reading=religion]').hidden,false);assert.equal(app.q('[data-settlement-reading=ethnicity]').hidden,true);
   app.q('[data-field=natural]').click();await delay();assert.equal(app.window.__map.layers['asia-settlement-fill'].layout.visibility,'none');
  }finally{await app.window.happyDOM.close();}
  const late=await setup('?field=population&topic=ethnicity',{population:true,presentation:true,settlements:true,delayedPresentation:true});
  try{await until(()=>late.requests.some(r=>r.endsWith('ethnicity.json.gz')),'ethnicity requested');late.q('[data-field=natural]').click();late.resolvePresentation();await delay();await delay();assert.equal(late.window.__map.getLayer('asia-settlement-fill'),undefined);}finally{late.resolvePresentation();await late.window.happyDOM.close();}
+});
+
+test('農業の二つの表示ボタンは独立し、再読み込み後もカメラを保つ',async()=>{
+ const app=await setup('?field=agriculture&farms=livestock&lng=118&lat=32&z=3.2',{farming:true,presentation:true});
+ try{const {window,q}=app;await until(()=>window.__map.getLayer('asia-farm-overview-fill'),'overview');const before={...window.__map.getCenter(),zoom:window.__map.getZoom()};
+ assert.equal(q('[data-farm-toggle=crop]').getAttribute('aria-pressed'),'false');assert.equal(window.__map.layers['asia-farm-overview-fill'].layout.visibility,'none');
+ q('[data-farm-toggle=livestock]').click();await delay();assert.equal(new URL(window.location.href).searchParams.get('farms'),'none');assert.match(q('[data-grid-reading]').textContent,/非表示/);
+ q('[data-farm-toggle=crop]').click();await until(()=>window.__map.layers['asia-farm-overview-fill'].layout.visibility==='visible','crop enabled');assert.equal(q('[data-farm-toggle=livestock]').getAttribute('aria-pressed'),'false');assert.deepEqual({...window.__map.getCenter(),zoom:window.__map.getZoom()},before);
+ }finally{await app.window.happyDOM.close();}
+});
+
+test('インドの常設都市名を絞っても、掲載都市の点とホバー名は残る',async()=>{
+ const app=await setup('?field=population',{population:true,presentation:true,indiaLabels:true});
+ try{const {window,q}=app;await until(()=>q('[data-station=uc-small]')&&!q('[data-station=uc-small]').hidden,'all city points');
+ assert.equal(q('[data-station=uc-small] span').textContent,'地方都市');assert.ok(q('[data-map-urban=uc-7963]'));assert.equal(q('[data-map-urban=uc-small]'),null);assert.equal(JSON.stringify(window.__map.layers['asia-urban-points'].filter[2][1]),JSON.stringify(['uc-7963','uc-small']));
+ q('[data-station=uc-small]').click();await delay();assert.ok(new URL(window.location.href).searchParams.has('at'));
+ }finally{await app.window.happyDOM.close();}
+});
+
+test('分布の選択URLを復元し、右の説明と輪郭が同じ対象を示す',async()=>{
+ const app=await setup('?field=population&topic=ethnicity&detail=a&place=CHN',{population:true,presentation:true,settlements:true});
+ try{const {window,q}=app;await until(()=>window.__map.getLayer('asia-settlement-selected'),'outline');assert.equal(q('[data-settlement-detail=a]').hidden,false);assert.equal(q('.asia-point-marker').hidden,true);assert.equal(window.__map.layers['asia-settlement-selected'].filter[2],'a');
+ q('[data-settlement-clear]').click();await delay();assert.equal(q('[data-settlement-detail=a]').hidden,true);assert.equal(new URL(window.location.href).searchParams.has('detail'),false);
+ q('[data-settlement-choice=a]').click();await delay();assert.equal(q('[data-settlement-detail=a]').hidden,false);assert.equal(q('[data-settlement-choice=a]').getAttribute('aria-pressed'),'true');
+ }finally{await app.window.happyDOM.close();}
 });

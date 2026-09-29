@@ -8,10 +8,17 @@ Every climate label anchor is checked against the original classification grid.
 from pathlib import Path
 import gzip, hashlib, json, math
 import numpy as np
-import contourpy
-from rasterio.features import shapes, geometry_mask
-from rasterio.transform import from_bounds
-from rasterio.warp import transform_geom, reproject, Resampling
+import sys, importlib.util
+CACHE_DIR=Path(sys.argv[sys.argv.index('--farming-cache')+1]) if '--farming-cache' in sys.argv else None
+if CACHE_DIR:
+    spec=importlib.util.spec_from_file_location('grid_polygons',Path(__file__).with_name('atlas-grid-polygons.py'))
+    compat=importlib.util.module_from_spec(spec);spec.loader.exec_module(compat)
+    shapes,geometry_mask,from_bounds,transform_geom=compat.shapes,compat.geometry_mask,compat.from_bounds,compat.transform_geom
+else:
+    import contourpy
+    from rasterio.features import shapes, geometry_mask
+    from rasterio.transform import from_bounds
+    from rasterio.warp import transform_geom, reproject, Resampling
 from shapely.geometry import shape, mapping, LineString
 from shapely.ops import unary_union
 
@@ -24,6 +31,7 @@ COLORS = dict(rice='#408475', wheat='#bc8a2b', maize='#dcac35', soybean='#819747
  lentil='#be6d3b', pearlmillet='#808940', cattle='#8b4943', buffalo='#5b658e',
  sheep='#996394', goat='#8c7838', pig='#c26768', chicken='#a0602f')
 inputs = {}
+projection_caches = {}
 
 def read(path):
     b = path.read_bytes()
@@ -66,10 +74,15 @@ def farming(region, layers, rice):
         if layer.get('grid'):
             a=np.frombuffer(gzip.decompress(read(ASSETS/'asia-farming-v1'/layer['grid'])),dtype='<f4').reshape(layer['height'],layer['width'])
             all_layers.append((layer,a,layer['bounds3857'],'EPSG:3857'))
+    cached=np.load(CACHE_DIR/(region+'.npz')) if CACHE_DIR else None
     scores=[];meta=[]
     for layer,a,b,crs in all_layers:
         target=np.zeros((height,width),dtype='float32')
-        reproject(np.where(np.isfinite(a)&(a>0),a,0).astype('float32'),target,src_transform=from_bounds(*b,a.shape[1],a.shape[0]),src_crs=crs,dst_transform=grid_transform,dst_crs='EPSG:3857',resampling=Resampling.average)
+        if cached is not None:
+            assert np.allclose(cached['bounds'],bounds) and cached['raw'].shape[1:]==(height,width)
+            target=cached['raw'][list(cached['names']).index(layer['id'])]
+        else:
+            reproject(np.where(np.isfinite(a)&(a>0),a,0).astype('float32'),target,src_transform=from_bounds(*b,a.shape[1],a.shape[0]),src_crs=crs,dst_transform=grid_transform,dst_crs='EPSG:3857',resampling=Resampling.average)
         weights=box_mean(land,2);smoothed=np.divide(box_mean(np.where(land,target,0),2),weights,out=np.zeros_like(weights),where=weights>0)
         values=np.sort(smoothed[land&(smoothed>0)])
         score=np.searchsorted(values,smoothed,side='right')/max(1,len(values))
@@ -77,7 +90,7 @@ def farming(region, layers, rice):
         # values alone must not extend a product into an unsupported cell.
         score[~land|(target<1)|(smoothed<=0)|(score<.45)]=0
         scores.append(score);meta.append(dict(id=layer['id'],title=layer['title'],kind=layer['kind'],color=COLORS[layer['id']],threshold=.45,coreThreshold=.85,minimumSourceValue=1,unit=layer['unit']))
-    ranked=np.stack(scores);winner=np.argmax(ranked,axis=0)+1;winner[np.max(ranked,axis=0)==0]=0
+    ranked=np.stack([score if m['kind']=='crop' else np.zeros_like(score) for score,m in zip(scores,meta)]);winner=np.argmax(ranked,axis=0)+1;winner[np.max(ranked,axis=0)==0]=0
     # Suppress isolated specks without extending a product outside its candidate area.
     counts=[]
     for i in range(len(meta)):
@@ -87,6 +100,23 @@ def farming(region, layers, rice):
     core=(winner>0)&(selected_score>=.85)
     features=[];labels=[];coverage={}
     for index,m in enumerate(meta):
+        if m['kind']=='livestock':
+            # The animal symbols locate real concentration components. Their
+            # size is fixed; they are not proportional quantities or area claims.
+            animal_core=(scores[index]>=.85).astype('uint8')
+            areas=sorted([shape(g) for g,v in shapes(animal_core,mask=animal_core==1,transform=grid_transform) if v==1],key=lambda g:-g.area)
+            coverage[m['id']]=dict(components=len(areas),displayCells=int(np.sum(scores[index]>0)),coreCells=int(animal_core.sum()))
+            kept=[]
+            for poly in areas:
+                if len(kept)>=3:break
+                if poly.area<3*12000**2:continue
+                g=shape(transform_geom('EPSG:3857','EPSG:4326',mapping(poly),precision=5)).buffer(0).intersection(land_geo)
+                if g.is_empty:continue
+                pt=g.representative_point()
+                if any(pt.distance(other)<1 for other in kept):continue
+                kept.append(pt)
+                labels.append(dict(id=m['id']+'-'+str(len(kept)-1),product=m['id'],text=m['title'],kind='livestock',color=m['color'],coordinate=[round(pt.x,5),round(pt.y,5)]))
+            continue
         # Keep every supported area. Label limits must not remove geometry.
         for level,mask in [('core',(winner==index+1)&core),('spread',(winner==index+1)&~core)]:
             parts=[shape(g) for g,value in shapes(winner,mask=mask,transform=grid_transform) if value==index+1]
@@ -114,7 +144,8 @@ def farming(region, layers, rice):
         mask=geometry_mask([transform_geom('EPSG:4326','EPSG:3857',f['geometry'])],out_shape=(height,width),transform=grid_transform,invert=True)
         regional_coverage[f['properties']['code']]=dict(landCells=int(np.sum(mask)),displayCells=int(np.sum(mask&(winner>0))),coreCells=int(np.sum(mask&core)))
     name=region+'.farming-areas.json.gz';write(name,fc(features))
-    return dict(file=name,products=meta,labels=labels,coverage=coverage,countryCoverage=regional_coverage,method='Exclusive highest within-product spatial percentile; >=45th percentile for broad distribution, >=85th for concentration cores; source value >=1 in the original unit after average reprojection to approximately 12 projected km; land-weighted 5x5-cell smoothing; conditional 3x3-cell majority only among eligible products; all supported components retained, sixteen large components for alternative label anchors only; no polygon simplification; clipped to land. Relative concentration, not quantity, farmland coverage, or exclusive land use.')
+    if CACHE_DIR:projection_caches[region+'.npz']=hashlib.sha256((CACHE_DIR/(region+'.npz')).read_bytes()).hexdigest()
+    return dict(file=name,products=meta,labels=labels,coverage=coverage,countryCoverage=regional_coverage,method='Crop-only exclusive highest within-product spatial percentile; livestock uses up to three representative points inside large concentration components (not area or quantity symbols); >=45th percentile for broad distribution, >=85th for concentration cores; source value >=1 in the original unit after average reprojection to approximately 12 projected km; land-weighted 5x5-cell smoothing; conditional 3x3-cell majority only among eligible products; all supported components retained, sixteen large components for alternative label anchors only; no polygon simplification; clipped to land. Relative concentration, not quantity, farmland coverage, or exclusive land use.')
 
 def isolines(region, record, kind):
     directory='asia-water-v1' if kind=='rainfall' else 'asia-physical-v1'
@@ -163,17 +194,21 @@ def main():
     OUT.mkdir(exist_ok=True)
     import sys
     if '--farming-only' in sys.argv:
+        if CACHE_DIR:
+            previous=json.loads((OUT/'manifest.json').read_text(encoding='utf8'))
+            for path,digest in previous['inputs'].items():
+                if (ROOT/path).exists():assert hashlib.sha256((ROOT/path).read_bytes()).hexdigest()==digest,path
         manifest=json.loads((OUT/'manifest.json').read_text(encoding='utf8'));manifest['inputs'].pop('public/assets/atlas/asia-presentation-v1/manifest.json',None);farms=js(ASSETS/'asia-farming-v1/manifest.json');rice=js(ASSETS/'asia-agriculture-v1/manifest.json')
         for region in manifest['regions']:
             manifest['regions'][region]['farming']=farming(region,farms['regions'][region]['layers'],next(r for r in rice['regions'] if r['regionId']==region))
             print(region,manifest['regions'][region]['farming']['coverage'],flush=True)
-        manifest['version']=4;manifest['method']['farming']=next(iter(manifest['regions'].values()))['farming']['method'];manifest['inputs'].update(inputs);write('manifest.json',manifest);return
+        manifest['version']=5;manifest['method']['farming']=next(iter(manifest['regions'].values()))['farming']['method'];manifest['inputs'].update(inputs);manifest['projectionCaches']=projection_caches;write('manifest.json',manifest);return
     farms=js(ASSETS/'asia-farming-v1/manifest.json');rice=js(ASSETS/'asia-agriculture-v1/manifest.json');water=js(ASSETS/'asia-water-v1/manifest.json');climate=js(ASSETS/'asia-climate-v2/manifest.json');physical=js(ASSETS/'asia-physical-v1/manifest.json')
     definitions=(ROOT/'src/data/atlas/asia-climate-definitions.ts').read_text(encoding='utf8');classes=json.loads(definitions[definitions.index('= [')+2:].strip().rstrip(';'))
     regions={}
     for region,record in climate['regions'].items():
         regions[region]=dict(farming=farming(region,farms['regions'][region]['layers'],next(r for r in rice['regions'] if r['regionId']==region)),rainfall=isolines(region,water['regions'][region]['precipitation'],'rainfall'),terrain=isolines(region,physical['regions'][region],'terrain'),climate=climate_labels(record,classes))
         print(region,'complete',flush=True)
-    write('manifest.json',dict(version=4,licenses=dict(rice='CC BY-SA 4.0',otherCrops='CC BY 4.0',livestock='CC BY 4.0',rainfall='CC0 1.0',terrain='Public domain (NOAA)',climate='CC BY 4.0'),method=dict(farming=next(iter(regions.values()))['farming']['method'],rainfall='CHELSA 1981–2010 display grid, valid-land moving mean radius 12 projected km; 250 mm interval; masked cells remain masked; lines under 80 projected km omitted; simplify 6 projected km. Point queries retain unsmoothed values.',terrain='ETOPO 2022 display grid, valid-land moving mean radius 6 projected km; 500 m interval; lines under 80 projected km omitted; simplify 3 projected km. Point queries retain unsmoothed values.',climate='All anchors verified against the classification grid; alternatives permit collision avoidance.'),inputs=inputs,regions=regions))
+    write('manifest.json',dict(version=5,licenses=dict(rice='CC BY-SA 4.0',otherCrops='CC BY 4.0',livestock='CC BY 4.0',rainfall='CC0 1.0',terrain='Public domain (NOAA)',climate='CC BY 4.0'),method=dict(farming=next(iter(regions.values()))['farming']['method'],rainfall='CHELSA 1981–2010 display grid, valid-land moving mean radius 12 projected km; 250 mm interval; masked cells remain masked; lines under 80 projected km omitted; simplify 6 projected km. Point queries retain unsmoothed values.',terrain='ETOPO 2022 display grid, valid-land moving mean radius 6 projected km; 500 m interval; lines under 80 projected km omitted; simplify 3 projected km. Point queries retain unsmoothed values.',climate='All anchors verified against the classification grid; alternatives permit collision avoidance.'),inputs=inputs,regions=regions))
 
 if __name__=='__main__':main()

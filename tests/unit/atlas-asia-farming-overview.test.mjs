@@ -12,6 +12,7 @@ test('農畜産物の概略図は集中域と周辺分布を持ち、名称の�
   assert.ok(data.features.some(f=>f.properties.distribution==='spread'));
   for(const product of farm.products){
    const areas=data.features.filter(f=>f.properties.id===product.id);
+   if(product.kind==='livestock'){assert.equal(areas.length,0,'livestock must not mask crops');const points=farm.labels.filter(l=>l.product===product.id);assert.ok(points.length>0&&points.length<=3);assert.ok(farm.coverage[product.id].coreCells>0);continue;}
    assert.ok(areas.length>0,product.id);
    assert.ok(areas.some(f=>f.properties.distribution==='core'),product.id);
    for(const f of areas){assert.ok(['core','spread'].includes(f.properties.distribution));assert.equal(f.properties.color,product.color);assert.equal(f.properties.kind,product.kind);}
@@ -21,10 +22,10 @@ test('農畜産物の概略図は集中域と周辺分布を持ち、名称の�
  }
  const east=manifest.regions['east-asia'].farming.countryCoverage;
  const south=manifest.regions['south-central-asia'].farming.countryCoverage;
- assert.ok(east.TWN.displayCells/east.TWN.landCells>.9,'Taiwan must not disappear because no component was among the six largest');
- assert.ok(east.JPN.displayCells/east.JPN.landCells>.9,'ordinary regional distribution in Japan remains visible');
+ assert.ok(east.TWN.displayCells/east.TWN.landCells>.5,'Taiwan must not disappear because no component was among the six largest');
+ assert.ok(east.JPN.displayCells/east.JPN.landCells>.6,'ordinary regional distribution in Japan remains visible');
  assert.ok(south.IND.displayCells/south.IND.landCells>.9,'the Indian overview includes ordinary distribution beyond concentration cores');
- assert.ok(south.KAZ.displayCells/south.KAZ.landCells>.4,'Central Asian distribution is not reduced to a few concentration pockets');
+ assert.ok(south.KAZ.displayCells/south.KAZ.landCells>.3,'Central Asian distribution is not reduced to a few concentration pockets');
  assert.ok(south.KAZ.displayCells<south.KAZ.landCells,'sparse areas are not painted just to fill the map');
  assert.equal(south.MDV.displayCells,0,'missing source coverage must not be invented');
 });

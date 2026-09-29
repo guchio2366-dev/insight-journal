@@ -1,7 +1,7 @@
 ---
 import type { AsiaClimateCity } from '../../data/atlas/asia-climate-cities';
-interface Props { city: Omit<AsiaClimateCity, 'regionId'>; precipitationMax: number }
-const { city, precipitationMax } = Astro.props;
+interface Props { city: Omit<AsiaClimateCity, 'regionId'>; precipitationMax: number; countryName?: string }
+const { city, precipitationMax, countryName } = Astro.props;
 const left=35,right=298,top=25,bottom=185;
 const x=(i:number)=>left+(right-left)*(i+.5)/12;
 const py=(v:number)=>bottom-v/precipitationMax*(bottom-top);
@@ -15,7 +15,7 @@ const temperatures=city.temperatureC.filter(v=>v!==null) as number[];
 const format=(v:number|null,unit:string)=>v===null?'欠測':`${v.toLocaleString('ja-JP',{minimumFractionDigits:1,maximumFractionDigits:1})} ${unit}`;
 ---
 <figure class="asia-climate-diagram">
-  <figcaption><span>雨温図</span><strong>{city.name}</strong><small>{city.normalPeriod} 平年値</small></figcaption>
+  <figcaption><span>雨温図</span><strong data-climate-place>{city.name}{countryName&&` — ${countryName}`}</strong><small>{city.normalPeriod} 平年値</small></figcaption>
   <svg viewBox="0 0 338 218" role="img" aria-labelledby={`chart-title-${city.id} chart-desc-${city.id}`}>
     <title id={`chart-title-${city.id}`}>{city.name}の月別の気温と降水量</title>
     <desc id={`chart-desc-${city.id}`}>{validRain.length?'青い棒が降水量、赤い線が平均気温。':'赤い線が平均気温。降水量平年値は12か月とも未収録で、0mmではありません。'}月別の数値表が下にあります。{city.normalPeriod}の観測所平年値。</desc>

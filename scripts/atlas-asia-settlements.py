@@ -49,6 +49,7 @@ RELIGIOUS_GROUPS={
   76002000,76001010,76001020,77001000,77005000,77006000,77004000,77008000,
   77102000,77103000,78003000,78004000,78001000,78002000,79001000,79003000,79006000]
 }
+MIXED_CENTRAL=[70301000,70406000,70502000]
 RELIGIONS={'ARI':('イスラム教','#6a9c82'),'ERH':('ヒンドゥー教','#c69752'),
  'ERB':('仏教','#b79ab9'),'ERS':('シク教','#9ca947'),'ARC':('キリスト教','#7a9fb8')}
 
@@ -64,10 +65,10 @@ def main():
  features={f['properties']['gwgroupid']:f for f in json.loads(raw)['features'] if f['properties']['from']<=2020<=f['properties']['to']}
  ed={r['gwgroupid']:r for r in json.loads(edraw)['data']}
  OUT.mkdir(exist_ok=True)
- manifest={'version':1,'year':2020,'sourceVersion':2021,'sources':[
+ manifest={'version':2,'year':2020,'sourceVersion':2021,'sources':[
   {'url':'https://icr.ethz.ch/data/epr/geoepr/GeoEPR-2021.geojson','sha256':hashlib.sha256(raw).hexdigest()},
   {'url':'https://icr.ethz.ch/data/epr/ed/ED-2021.json','sha256':hashlib.sha256(edraw).hexdigest()}],
-  'method':'Selected regional settlement footprints in GeoEPR 2021 valid in 2020; excludes Statewide, Urban, Migrant and Dispersed records. Same-category unions; cross-category overlaps explicitly mapped as shared. Religion joins manually reviewed EPR-ED group examples with >=0.8 dominant-group religious segment. This does not estimate religion or ethnicity shares within a location. Not a comprehensive population map. No administrative statistics used.','regions':{}}
+  'method':'Selected regional settlement footprints in GeoEPR 2021 valid in 2020; excludes Statewide, Urban, Migrant and Dispersed records. Same-category unions; cross-category overlaps explicitly mapped as shared. Religion joins manually reviewed EPR-ED group examples with >=0.8 dominant-group religious segment. Central Asian mixed-composition groups are separately labelled and retain all EPR-ED segments; they do not satisfy the single-religion >=0.8 rule. This does not estimate religion or ethnicity shares within a location. Not a comprehensive population map. No administrative statistics used.','regions':{}}
  for region,groups in GROUPS.items():
   geography=json.loads((ROOT/'public/assets/atlas/asia-population-v1'/f'{region}.geography.json').read_text())
   land=unary_union([shape(f['geometry']) for f in geography['features'] if f['properties'].get('target')])
@@ -83,12 +84,13 @@ def main():
      assert r['rel1_size']>=.8,(gid,r)
      classified[key].append(gid)
     categories=[(label,classified[key],color) for key,(label,color) in RELIGIONS.items() if classified[key]]
+   if topic=='religion' and region=='south-central-asia':categories.append(('イスラム教など（複数の帰属）',MIXED_CENTRAL,'#83b9ae'))
    rows=[]
    for i,(label,ids,color) in enumerate(categories):
     selected=[features[gid] for gid in ids]
     assert all(f['properties']['type'] in ['Regionally based','Regional & urban','Aggregate'] for f in selected)
     g=polygon(unary_union([shape(f['geometry']).buffer(0) for f in selected]).intersection(land))
-    if not g.is_empty:rows.append({'id':f'{topic}-{i}','label':label,'color':color,'geometry':g,'sourceGroups':[dict(f['properties'],**({'religion':ed[f['properties']['gwgroupid']]['religion1'],'groupReligiousShare':ed[f['properties']['gwgroupid']]['rel1_size']} if topic=='religion' else {})) for f in selected]})
+    if not g.is_empty:rows.append({'id':f'{topic}-{i}','label':label,'color':color,'geometry':g,'sourceGroups':[dict(f['properties'],**({'religion':ed[f['properties']['gwgroupid']]['religion1'],'groupReligiousShare':ed[f['properties']['gwgroupid']]['rel1_size'],'mixed':f['properties']['gwgroupid'] in MIXED_CENTRAL,'segments':[{'religion':ed[f['properties']['gwgroupid']][f'religion{n}'],'share':ed[f['properties']['gwgroupid']][f'rel{n}_size']} for n in [1,2,3] if ed[f['properties']['gwgroupid']][f'religion{n}']]} if topic=='religion' else {})) for f in selected]})
    overlaps=unary_union([a['geometry'].intersection(b['geometry']) for i,a in enumerate(rows) for b in rows[i+1:]])
    overlaps=polygon(overlaps)
    for r in rows:r['geometry']=polygon(r['geometry'].difference(overlaps))
@@ -101,6 +103,8 @@ def main():
     parts=sorted(getattr(g,'geoms',[g]),key=lambda x:x.area,reverse=True)
     anchors=[[round(p.representative_point().x,5),round(p.representative_point().y,5)] for p in parts[:8]]
     output.append({'type':'Feature','geometry':mapping(g),'properties':{k:r[k] for k in ['id','label','color']}})
+    # Country names follow the source groups, not tiny intersections between
+    # independently generalized country and settlement boundaries.
     meta.append(dict(r,anchors=anchors))
    filename=f'{region}.{topic}.json.gz';write(filename,{'type':'FeatureCollection','features':output})
    manifest['regions'][region][topic]={'file':filename,'categories':meta}
