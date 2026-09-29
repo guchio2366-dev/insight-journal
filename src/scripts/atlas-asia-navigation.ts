@@ -17,6 +17,10 @@ export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|un
  }
  for(const b of all('[data-industry-sector]'))b.addEventListener('click',()=>selectIndustry(b.dataset.industrySector as IndustrySector,'all'));
  for(const b of all('[data-industry-subsector]'))b.addEventListener('click',()=>selectIndustry(b.dataset.sector as IndustrySector,b.dataset.industrySubsector!));
+ for(const b of all('[data-industry-feature]'))b.addEventListener('click',()=>{
+  const t=industry?.topics.find(t=>t.id===b.dataset.industryFeature);if(!t)return;
+  const s=getState(),fit=!!t.country&&t.country!==s.place;navigate({...s,topic:t.id,sector:null,subsector:null,detail:null,city:null,point:null,place:t.country??null,camera:fit?null:s.camera},fit);
+ });
  function render(){
   const state=getState(),natural=naturalGroup(state.topic??'climate');
   for(const b of all('[data-natural-group]'))b.setAttribute('aria-pressed',String(b.dataset.naturalGroup===natural));
@@ -33,7 +37,9 @@ export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|un
   for(const b of all('[data-population-choice]'))b.setAttribute('aria-pressed',String(b.dataset.populationChoice===(state.topic??'density')));
   const populationSelect=$('[data-population-selector]');if(populationSelect)populationSelect.hidden=true;
   const navigation=$('[data-industry-navigation]');if(navigation)navigation.hidden=state.field!=='industry';
+  const advanced=$('[data-industry-all]');if(advanced)advanced.hidden=state.field!=='industry';
   if(!industry||state.field!=='industry')return;
+  for(const b of all('[data-industry-feature]'))b.setAttribute('aria-pressed',String(b.dataset.industryFeature===(state.topic??'manufacturing')));
   const current=industry.topics.find(t=>t.id===state.topic)??industry.topics[0],group=industryTopicGroup(current);
   const sector=(state.sector??group.sector) as IndustrySector,subsector=state.subsector??(state.sector?'all':group.subsector);
   for(const b of all('[data-industry-sector]'))b.setAttribute('aria-pressed',String(b.dataset.industrySector===sector));

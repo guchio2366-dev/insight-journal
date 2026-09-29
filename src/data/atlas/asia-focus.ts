@@ -17,6 +17,12 @@ export const asiaFocusViews = {
 export type AsiaFocusId = keyof typeof asiaFocusViews;
 export const asiaFocusIds = Object.keys(asiaFocusViews) as AsiaFocusId[];
 
+export const indiaPopulationLabels:Record<string,string>={
+ 'uc-7963':'首都ニューデリーを含む都市のまとまりです。インド北部の平野に続く人口の集中を確かめられます。',
+ 'uc-7599':'西岸のムンバイです。海岸沿いの大きな人口の集まりを、内陸の分布と比較できます。',
+ 'uc-11352':'東部のコルカタです。ベンガルの平野へ続く人口の密な分布を確かめられます。',
+ 'uc-10300':'南東岸のチェンナイです。インド南部の沿岸の人口集中を確かめられます。',
+};
 // Editorial selection for uncluttered regional maps; every station keeps a point.
 export const majorClimateCities = new Set([
  'tokyo','beijing','shanghai','seoul','taipei','ulaanbaatar',

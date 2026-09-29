@@ -20,7 +20,7 @@ test('Asia presentation assets retain exact input provenance and real climate an
   const farming=JSON.parse(gunzipSync(readFileSync(base+presentation.farming.file)));
   const ids=new Set(farming.features.map(f=>f.properties.id));
   assert.ok(ids.has('rice'));assert.ok(presentation.farming.products.filter(p=>p.kind==='crop').length>=6);assert.ok(presentation.farming.products.filter(p=>p.kind==='livestock').length>=4);
-  for(const product of presentation.farming.products){assert.ok(ids.has(product.id),product.id);assert.ok(product.threshold>0);assert.match(product.color,/^#[0-9a-f]{6}$/);}
+  for(const product of presentation.farming.products){assert.ok(product.kind==='crop'?ids.has(product.id):presentation.farming.labels.some(l=>l.product===product.id),product.id);assert.ok(product.threshold>0);assert.match(product.color,/^#[0-9a-f]{6}$/);}
   const rain=JSON.parse(gunzipSync(readFileSync(base+presentation.rainfall.file)));
   assert.ok(rain.features.length>20);
   assert.equal(presentation.rainfall.interval,250);

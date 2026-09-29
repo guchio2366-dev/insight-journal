@@ -58,8 +58,8 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.equal(q('[data-rice-reading]').hidden,true);
       assert.equal(q('[data-farm-overview-reading]').hidden,field!=='agriculture');
       assert.equal(all('[data-farm-kind]').length,0);
-      assert.equal(all('[data-industry-sector]').length,5);
-      assert.equal(all('[data-industry-subsectors=manufacturing] [data-industry-subsector]').length,11);
+      assert.ok(all('[data-industry-feature]').length>=4&&all('[data-industry-feature]').length<=6);assert.equal(all('[data-farm-toggle]').length,2);assert.ok(q('[data-industry-all]'));for(const b of all('[data-industry-feature]'))assert.ok(config.industry.topics.some(t=>t.id===b.dataset.industryFeature));
+      assert.equal(all('[data-industry-subsector]').length,0);
       assert.equal(all('[data-population-group]').length,3);
       assert.equal(q('[data-population-group=voting]'),null);
       assert.equal(all('[data-population-subgroup]').length,0);

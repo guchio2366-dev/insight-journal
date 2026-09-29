@@ -1,10 +1,10 @@
 ---
-import {industrySectors,industrySubsectors,naturalGroups,populationGroups,populationGroup} from '../../data/atlas/asia-navigation';
+import {majorAsiaIndustries,naturalGroups,populationGroups,populationGroup} from '../../data/atlas/asia-navigation';
 import {type SocialRegion} from '../../data/atlas/asia-social';
 import {socialEntry} from '../../data/atlas/asia-social-overview';
 import {asiaPopulationTopics} from '../../data/atlas/asia-population';
 import type {AsiaField} from '../../lib/atlas-asia-state';
-const {initialField,social}=Astro.props as {initialField:AsiaField;social:SocialRegion};
+const {initialField,social,regionId}=Astro.props as {initialField:AsiaField;social:SocialRegion;regionId:string};
 const populationTopics=[...asiaPopulationTopics,...social.groups.map(g=>({id:socialEntry(g.id),label:g.label}))];
 ---
 <div class="asia-natural-controls" data-natural-topics hidden={initialField!=='natural'}>
@@ -15,8 +15,7 @@ const populationTopics=[...asiaPopulationTopics,...social.groups.map(g=>({id:soc
  <nav class="asia-population-tabs" aria-label="人口の主題">{populationGroups.map(g=><button type="button" data-population-group={g.id} data-topic={{distribution:'density',identity:'ethnicity',religion:'religion'}[g.id]} aria-pressed={g.id==='distribution'}>{g.label}</button>)}</nav>
 </div>
 <div class="asia-industry-navigation" data-industry-navigation hidden={initialField!=='industry'}>
- <nav class="asia-industry-sectors" aria-label="産業の業種">{industrySectors.map(s=><button type="button" data-industry-sector={s.id} aria-pressed={s.id==='manufacturing'}>{s.label}</button>)}</nav>
- {industrySectors.filter(s=>s.id!=='all').map(s=><nav class="asia-industry-subsectors" data-industry-subsectors={s.id} aria-label={`${s.label}の分野`} hidden={s.id!=='manufacturing'}>{[{id:'all',label:'全分野'},...industrySubsectors[s.id]].map(sub=><button type="button" data-industry-subsector={sub.id} data-sector={s.id} aria-pressed={sub.id==='all'}>{sub.label}</button>)}</nav>)}
+ <nav class="asia-industry-sectors" aria-label="主要な産業">{majorAsiaIndustries[regionId].map(t=><button type="button" data-industry-feature={t.id} aria-pressed={t.id==='manufacturing'}>{t.label}</button>)}</nav>
  <div class="asia-industry-guide"><strong data-industry-navigation-label>製造業 ／ 全分野</strong><span>地図に表示中：<span data-industry-current-map></span></span></div>
  <p class="asia-navigation-note" data-industry-navigation-note hidden role="status"></p>
 </div>
