@@ -6,14 +6,18 @@ const { layer, hidden=false }=Astro.props;
 const copy=europeReaderCopy(layer);
 ---
 <section class="eu-subject-reader" data-eu-subject-reader hidden={hidden} aria-labelledby="eu-subject-title">
+  <div class="eu-reader-summary">
+  <button class="eu-reader-back" type="button" data-eu-overview hidden>← 欧州の農林業</button>
   <h2 id="eu-subject-title" data-eu-subject-title>{copy.title}</h2>
   <p class="eu-reader-takeaway" data-eu-subject-takeaway>{copy.takeaway}</p>
+  <p class="eu-visibility-note" data-eu-hidden-note hidden></p>
+  <button type="button" data-eu-single hidden></button>
+  <button type="button" data-eu-return-multi hidden>元の分布表示に戻る</button>
+  </div>
+  <div class="eu-reader-body">
   <p data-eu-subject-intro>{copy.body}</p>
   <div class="eu-feature-reading" data-eu-feature-card aria-live="polite" hidden></div>
   <p class="eu-data-note" data-eu-subject-note>{copy.note}</p>
-  <details class="eu-country-reader" data-eu-country-reader hidden>
-    <summary data-eu-country-title></summary>
-    <p class="eu-data-note">2023年・国全体の統計です。格子や都市の値とは異なります。ロシアは全土の値です。</p>
-    <dl class="eu-national-values" data-eu-national-values></dl>
-  </details>
+  <a class="eu-source-link" data-eu-subject-source href={layer.source}>説明と地図の出典</a>
+  </div>
 </section>

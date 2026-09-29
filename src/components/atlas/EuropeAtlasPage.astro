@@ -4,7 +4,9 @@ import EuropeRegionNavigation from './EuropeRegionNavigation.astro';
 import EuropeLayoutControls from './EuropeLayoutControls.astro';
 import '../../styles/atlas-europe-workspace.css';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import EuropeClimateDiagram from './EuropeClimateDiagram.astro';
+import EuropeClimateReading from './EuropeClimateReading.astro';
+import EuropeStatistics from './EuropeStatistics.astro';
+import farmingAreas from '../../data/atlas/europe/farming-areas.json';
 import EuropeSubjectReader from './EuropeSubjectReader.astro';
 import { europeLayers, fields, europeFieldHeadings, type EuropeField } from '../../data/atlas/europe/layers';
 import { europeReadings } from '../../data/atlas/europe/readings';
@@ -18,7 +20,7 @@ import cities from '../../data/atlas/europe/climate-cities.json';
 import legend from '../../data/atlas/europe/climate-legend.json';
 import wheatLegend from '../../data/atlas/europe/wheat-legend.json';
 import mapLabels from '../../data/atlas/europe/map-labels.json';
-import cropLabels from '../../data/atlas/europe/crop-overview-labels.json';
+
 import { majorClimateCities } from '../../lib/atlas-europe-annotations';
 import '../../styles/atlas-europe.css';
 interface Props { field?: EuropeField }
@@ -34,7 +36,7 @@ const initialLayer = layers.find(l=>l.id===currentField.initial)!;
 const initialClimateReader = field==='nature';
 const initialFeatures = field==='population'?populationCities:field==='industry'?europeReadings.filter(r=>r.field==='industry'):[];
 const initialPointVisible = (p:{id:string;rank?:number}) => initialFeatures.some(f=>f.id===p.id)&&(p.rank??0)<=1;
-const config = { geography, countries, cities: cities.map(({ id, name, country, coordinates }) => ({ id, name, country, coordinates })), climate, wheat, wheatValues: withBase('/assets/atlas/europe/wheat-v1/values.bin.gz'), initialLayer: currentField.initial, layers, populationCities, readings:europeReadings, statistics };
+const config = { farmingAreas, geography, countries, cities: cities.map(({ id, name, country, coordinates }) => ({ id, name, country, coordinates })), climate, wheat, wheatValues: withBase('/assets/atlas/europe/wheat-v1/values.bin.gz'), initialLayer: currentField.initial, layers, populationCities, readings:europeReadings, statistics };
 ---
 <BaseLayout title={`欧州の${currentField.label}`} description="欧州の自然環境・農林業・産業・人口を、国境をまたぐ分布と国別の数値で読み比べる地図。" compactAtlas>
   <div class="eu-atlas eu-workspace-root" data-europe-detail>
@@ -43,8 +45,12 @@ const config = { geography, countries, cities: cities.map(({ id, name, country, 
     <div class="eu-workspace atlas-explorer" data-field={field==='nature'?'natural':field}>
     <p class="eu-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / <a data-base-map href={withBase('/atlas/europe/')}>欧州</a> / <span data-eu-field-label>{currentField.label}</span></p>
     <header class="eu-heading visually-hidden"><div><p class="eu-kicker" data-eu-field-kicker>EUROPE · {field.toUpperCase()}</p><h1 data-eu-field-heading>{europeFieldHeadings[field]}</h1></div><p>西欧から東欧・ロシア西部まで。<br />地図上の名前を選び、分布と説明を読み比べます。</p></header>
-    <nav class="eu-field-nav" aria-label="欧州地図の表示"><a data-base-map href={withBase('/atlas/europe/')}>欧州概況</a>{[fields[1],fields[0],...fields.slice(2)].map(f=><a data-eu-field={f.initial} href={withBase(`/atlas/europe/${f.id}/`)} aria-current={field===f.id?'page':undefined}>{f.id==='industry'?'主要産業':f.label}</a>)}</nav>
+    <nav class="eu-field-nav" aria-label="欧州地図の表示">{[fields[1],fields[0],...fields.slice(2)].map(f=><a data-eu-field={f.initial} href={withBase(`/atlas/europe/${f.id}/`)} aria-current={field===f.id?'page':undefined}>{f.id==='industry'?'主要産業':f.label}</a>)}</nav>
     <EuropeLayoutControls position="above" {field} />
+    <div class="eu-water-options" data-eu-water-options hidden role="group" aria-label="水資源の表示">
+      <button type="button" aria-pressed="true" data-eu-topic="water">河川・地下水</button><button type="button" disabled>降水量 <small>分布未収録</small></button><button type="button" disabled>河川の流域 <small>分布未収録</small></button>
+      <p>現在は河川・湖の位置を掲載しています。地下水・降水量・流域の分布は未収録です。</p>
+    </div>
     <div class="eu-layout">
       <section class="eu-map-panel" aria-labelledby="eu-map-title">
         <div class="eu-map-stage" data-map-surface tabindex="0" role="region" aria-label="欧州の地図">
@@ -57,41 +63,67 @@ const config = { geography, countries, cities: cities.map(({ id, name, country, 
             {geography.features.map(f => <path d={viewPath(f.geometry)} fill="#edece5" />)}
             <image data-eu-climate-image href={field === 'nature' ? climate : undefined} x="0" y="0" width={frame.width} height={frame.height} preserveAspectRatio="none" />
             <image data-eu-wheat-image x="0" y="0" width={frame.width} height={frame.height} preserveAspectRatio="none" />
-            <image data-eu-subject-image href={agriculture||field==='population'?initialLayer.image:undefined} x="0" y="0" width={frame.width} height={frame.height} preserveAspectRatio="none" />
+            <image data-eu-subject-image href={field==='population'?initialLayer.image:undefined} x="0" y="0" width={frame.width} height={frame.height} preserveAspectRatio="none" />
+            <g class="eu-farming-areas" style={agriculture?'':'display:none'} data-eu-farming-shapes>
+              {farmingAreas.features.map(f=><path d={viewPath(f.geometry as any)} data-eu-farm-area={f.properties.id} fill-rule="evenodd" fill={f.properties.color} fill-opacity={f.properties.kind==='crop'?.44:.13} stroke={f.properties.color} stroke-width={f.properties.kind==='crop'?.8:1.2} stroke-dasharray={f.properties.kind==='livestock'?'5 3':undefined} vector-effect="non-scaling-stroke"><title>{f.properties.name}の主な分布</title></path>)}
+            </g>
+            <g class="eu-farming-selection">
+              {farmingAreas.features.map(f=><g><path d={viewPath(f.geometry as any)} data-eu-farm-outline={f.properties.id} fill="none" stroke="#fffdf2" stroke-width="5" vector-effect="non-scaling-stroke" style="display:none"/><path d={viewPath(f.geometry as any)} data-eu-farm-outline={f.properties.id} fill="none" stroke="#173c48" stroke-width="2.5" vector-effect="non-scaling-stroke" style="display:none"/></g>)}
+            </g>
             {geography.features.map(f => <path d={viewPath(f.geometry)} class:list={['eu-outline', { 'eu-context': f.properties.kind === 'context' }]} data-eu-shape={f.properties.kind === 'europe' ? f.properties.code : undefined}><title>{countryName(f.properties.code)}</title></path>)}
             {cities.map(city => <g data-eu-point={city.id} class="eu-city-point" hidden={!initialClimateReader||!majorClimateCities.includes(city.id)}><circle cx={project(city.coordinates)[0]} cy={project(city.coordinates)[1]} r="6" /><text x={project(city.coordinates)[0] + 10} y={project(city.coordinates)[1] - 8}>{city.name}</text></g>)}
             {[...populationCities,...europeReadings].map(p=><g data-eu-feature-point={p.id} class="eu-city-point" hidden={!initialPointVisible(p)}><circle cx={project(p.coordinates)[0]} cy={project(p.coordinates)[1]} r="5"/><text x={project(p.coordinates)[0]+10} y={project(p.coordinates)[1]-8}>{p.name}</text></g>)}
             <g data-eu-static-codes hidden={!initialClimateReader}>{mapLabels.labels.filter(l=>!l.detail).map(l=><text x={project(l.coordinate)[0]} y={project(l.coordinate)[1]} class="eu-static-code">{l.code}</text>)}</g>
-            <g data-eu-static-crops hidden={!agriculture}>{cropLabels.filter(l=>!l.detail).map(l=><text x={project(l.coordinate)[0]} y={project(l.coordinate)[1]} class="eu-static-crop">{l.name}</text>)}</g>
+            <g data-eu-static-crops hidden></g>
           </svg>
           <div class="eu-live-map" data-eu-live aria-label="操作できる欧州地図"></div>
           <div class="eu-map-annotations" data-eu-annotations aria-label="地図の都市と地点"><svg aria-hidden="true"></svg></div>
         </div>
         <div class="eu-map-footer"><span data-eu-map-status>{initialClimateReader?'都市名を押すと、雨温図を表示します。':agriculture?'地図の作物名を押すと、品目別の分布を表示します。':'地図の分布と右側の説明を読み比べます。'}</span><button type="button" data-eu-render>簡易表示にする</button></div>
+
+        <div class="eu-item-list" data-eu-farming-list hidden={!agriculture} aria-label="農畜産物と林業を選ぶ">
+          {(['crop','livestock'] as const).map(kind=><section><h3>{kind==='crop'?'作物':'畜産'}</h3><div>{farmingAreas.features.filter(f=>f.properties.kind===kind).map(f=><button type="button" data-eu-layer={f.properties.id} aria-pressed="false"><span class:list={['eu-item-swatch',{'is-livestock':kind==='livestock'}]} style={{'--item-color':f.properties.color}}></span>{f.properties.name}</button>)}</div></section>)}
+          <section><h3>林業</h3><button type="button" data-eu-layer="forest" aria-pressed="false">森林面積比率</button></section>
+        </div>
+        <div class="eu-farming-key" data-eu-farming-legend hidden={!agriculture}>
+          <p><strong>主な栽培域・飼養地域 · 2020年頃</strong></p>
+          <p>作物は実線、家畜は破線で示します。重なった色は新しい分類ではありません。品目を選ぶと、その分布の輪郭を濃くします。</p>
+          <p>モデル推計の格子から主な集中域を取り出した概略図です。色のない場所でも生産がないとは限りません。色や面積で品目間の生産量を比較できません。</p>
+          <p>牛は肉用・乳用、鶏は肉用・採卵用を分けていません。オリーブ・ブドウ単独の分布は未収録です。</p>
+          <a href={withBase('/assets/atlas/europe/farming-overview-v2/manifest.json')}>出典・分布面の加工方法</a>
+        </div>
+        <div class="eu-map-candidates" data-eu-farm-candidates hidden aria-live="polite"></div>
+        <div class="eu-item-list" data-eu-city-list hidden={!initialClimateReader} aria-label="雨温図の都市を選ぶ"><h3>都市を選ぶ</h3><div>{cities.map(city=><button type="button" data-eu-city-select={city.id} aria-pressed={city.id==='london'}>{city.name}<small>{countryName(city.country)}</small></button>)}</div></div>
+        <div class="eu-item-list" data-eu-feature-list hidden aria-label="地図の地点を選ぶ"><h3>地図の名称から選ぶ</h3><div data-eu-feature-options></div></div>
         <p class="eu-map-caption">線は国境です。ロシアは欧州側の表示枠内を掲載しています。境界は概略で、係争地の帰属を示すものではありません。</p>
-        <div class="eu-grid-value" data-eu-subject-grid hidden={initialClimateReader||agriculture||!initialLayer.grid}><strong data-eu-grid-title>{initialLayer.title} · {initialLayer.unit}</strong><p data-eu-subject-result aria-live="polite">地図を押すと格子の数値を表示します。</p></div>
-        <details class="eu-legend" data-eu-subject-legend open hidden={initialClimateReader}><summary><span data-eu-legend-title>{initialLayer.title} · {initialLayer.period} · {initialLayer.unit}</span></summary><div class="eu-legend-grid" data-eu-legend-items>{initialLayer.labels?.map((label,i)=><div><span class="eu-swatch" style={`background:${initialLayer.colors![i]}`}></span><span>{label}</span></div>)}{initialLayer.grid&&<div><span class="eu-swatch" style="background:repeating-linear-gradient(45deg,#fff,#fff 3px,#ccd3cc 3px,#ccd3cc 4px)"></span><span>データなし</span></div>}</div><p data-eu-layer-note>{initialLayer.note}</p><a class="eu-source-link" data-eu-layer-source href={initialLayer.source}>データの出典</a></details>
-        <div class="eu-grid-value" data-eu-wheat-reading hidden><strong>小麦の面積を調べる</strong><p data-eu-grid-result aria-live="polite">地図を押すと、その格子に割り当てられた収穫面積（ha）を表示します。</p><p>5分角の格子ごとのモデル推計です。2020年頃の分布であり、現在の生産量や戦争の影響は表しません。面積の割合ではないため、緯度によって格子の実面積が異なる点にも注意してください。</p></div>
+        <details class="eu-legend" data-eu-subject-legend open hidden={initialClimateReader||agriculture}><summary><span data-eu-legend-title>{initialLayer.title} · {initialLayer.period} · {initialLayer.unit}</span></summary><div class="eu-legend-grid" data-eu-legend-items>{initialLayer.labels?.map((label,i)=><div><span class="eu-swatch" style={`background:${initialLayer.colors![i]}`}></span><span>{label}</span></div>)}{initialLayer.grid&&<div><span class="eu-swatch" style="background:repeating-linear-gradient(45deg,#fff,#fff 3px,#ccd3cc 3px,#ccd3cc 4px)"></span><span>データなし</span></div>}</div><p data-eu-layer-note>{initialLayer.note}</p><a class="eu-source-link" data-eu-layer-source href={initialLayer.source}>データの出典</a></details>
         <details class="eu-legend" data-eu-wheat-legend open hidden><summary>小麦の収穫面積 <span>2020年頃 · ha / 格子</span></summary><div class="eu-legend-grid">{wheatLegend.map(l => <div><span class="eu-swatch" style={`background:${l.color}`}></span><span>{l.label}</span></div>)}<div><span class="eu-swatch" style="background:repeating-linear-gradient(45deg,#fff,#fff 3px,#ccd3cc 3px,#ccd3cc 4px)"></span><span>データなし（下地が透けます）</span></div></div><p>IFPRI SPAM 2020 v2r2。全栽培方式の合計。0とデータなしを区別しています。重ね合わせでは小麦の色を半透明にするため、気候図と小麦図を切り替えて凡例を確認してください。</p></details>
-        <details class="eu-legend" data-eu-climate-legend hidden={field!=='nature'}><summary>気候区分の凡例 <span>17区分</span></summary><div class="eu-legend-grid">{legend.map(l => <div><span class="eu-swatch" style={`background:${l.color}`}></span><strong>{l.code}</strong><span>{l.name}</span></div>)}</div><p>区分はBeckほかのKöppen–Geiger分類。周辺の北アフリカ・西アジアも同じ色で表示します。掲載画像の元格子は0.05度で、細かな局地気候を表すものではありません。</p></details>
+        <details class="eu-legend" data-eu-climate-legend open hidden={field!=='nature'}><summary>気候区分の凡例 <span>17区分</span></summary><div class="eu-legend-grid">{legend.map(l => <div><span class="eu-swatch" style={`background:${l.color}`}></span><strong>{l.code}</strong><span>{l.name}</span></div>)}</div><p>区分はBeckほかのKöppen–Geiger分類。周辺の北アフリカ・西アジアも同じ色で表示します。掲載画像の元格子は0.05度で、細かな局地気候を表すものではありません。</p></details>
       </section>
       <aside class="eu-read-panel" aria-labelledby={initialClimateReader?'eu-city-heading':'eu-subject-title'}>
         <EuropeSubjectReader layer={initialLayer} hidden={initialClimateReader} />
         <div data-eu-climate-reader hidden={!initialClimateReader}>
-        <div class="eu-reader-heading"><h2 id="eu-city-heading">都市の雨温図</h2></div>
-        <div class="eu-city-cards">{cities.map(city => <EuropeClimateDiagram city={city} country={countryName(city.country)} />)}</div>
-        <p class="eu-data-note">雨温図は観測地点の1991〜2020年の平年値です。利用できた観測年数は地点ごとに異なります。</p>
+        <div class="eu-reader-heading"><h2 id="eu-city-heading">都市の気候</h2></div>
+        <p class="eu-data-note" data-eu-climate-scope>初期対象国：イギリス。首都ロンドンの観測値を表示しています。</p>
+        <p class="eu-data-note">地図は気候区分の広がりを示します。都市1地点の観測値が国全体を代表するわけではありません。</p>
+        <div class="eu-city-readings">{cities.map(city=><EuropeClimateReading city={city} country={countryName(city.country)} />)}</div>
+        <p data-eu-capital-missing hidden>対象国の首都の観測値は未収録です。地図下の都市一覧から、収録済みの観測地点を選べます。</p>
+        <a class="eu-statistics-jump" href="#europe-climate-statistics" data-eu-climate-statistics-link>選択した都市の雨温図・月別表へ ↓</a>
         </div>
       </aside>
     </div>
-    <details class="eu-sources eu-extra-topics" data-eu-extra-field="agriculture" hidden={!agriculture}><summary>個別の作物・家畜の分布を見る</summary><div>{layers.filter(l=>l.field==='agriculture'&&l.grid).map(l=><button type="button" data-eu-layer={l.id}>{l.title}</button>)}</div></details>
     <details class="eu-sources"><summary>追加データの出典・加工記録</summary><ul><li>人口密度：欧州委員会JRC・GHSL R2023A、2020年、CC BY 4.0。Insight Journalが5km格子集計・投影を加工。<a href={withBase('/assets/atlas/europe/population-v1/manifest.json')}>加工記録</a></li><li>標高・等高線：NOAA NCEI ETOPO 2022、60秒角、EGM2008基準。水系：Natural Earth 5.1.2、1:50m、パブリックドメイン。<a href={withBase('/assets/atlas/europe/physical-v1/manifest.json')}>加工記録</a></li><li>作物：IFPRI SPAM 2020 v2r2・V6。家畜：FAO GLW4、2020年、CC BY 4.0。<a href={withBase('/assets/atlas/europe/farming-v1/manifest.json')}>取得・加工記録</a></li><li>国別統計：World Bank WDI、2023年を比較年として固定。都市位置：Natural Earth 5.1.2の首都・地図優先順位5以下、132地点。<a href={withBase('/assets/atlas/europe/context-v1/manifest.json')}>取得記録</a></li></ul></details>
-    <p class="eu-data-note" data-eu-extra-field="agriculture" hidden={!agriculture}>作物の出典：IFPRI (2026), <a href="https://doi.org/10.7910/DVN/SWPENT">Global Spatially-Disaggregated Crop Production Statistics Data for 2020 Version 2.0 Release 2</a>, Harvard Dataverse, V6。CC BY 4.0（IFPRI Dataverse利用条件）。Insight Journalが欧州範囲を切り出して加工しました。<a href={withBase('/assets/atlas/europe/crop-overview-v1/manifest.json')}>統合図の加工記録</a>と<a href={withBase('/assets/atlas/europe/farming-v1/manifest.json')}>品目別データの取得記録</a>を確認できます。</p>
+    <p class="eu-data-note" data-eu-extra-field="agriculture" hidden={!agriculture}>作物の出典：IFPRI (2026), <a href="https://doi.org/10.7910/DVN/SWPENT">Global Spatially-Disaggregated Crop Production Statistics Data for 2020 Version 2.0 Release 2</a>, Harvard Dataverse, V6。CC BY 4.0（IFPRI Dataverse利用条件）。Insight Journalが欧州範囲を切り出して加工しました。<a href={withBase('/assets/atlas/europe/farming-overview-v2/manifest.json')}>統合図の加工記録</a>と<a href={withBase('/assets/atlas/europe/farming-v1/manifest.json')}>品目別データの取得記録</a>を確認できます。</p>
     <details class="eu-sources"><summary>出典・データの範囲</summary><ul><li>気候分類：<a href="https://www.gloh2o.org/koppen/">Beck et al. (2023)</a>、1991–2020、CC BY 4.0。koppen.earthから取得し、Insight Journalが配色・投影を加工。<a href={withBase('/assets/atlas/europe/climate-v1/manifest.json')}>加工記録</a></li><li>雨温図：<a href="https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/outline.html">気象庁 ClimatView</a>、<a href="https://ds.data.jma.go.jp/tcc/tcc/products/climate/explanation/normal.html">平年値の算出方法</a>。気象庁のデータをInsight Journalが加工。<a href={withBase('/assets/atlas/europe/climate-v1/cities-manifest.json')}>取得記録</a></li><li>国境：<a href="https://www.naturalearthdata.com/">Natural Earth</a> 1:110m、微小国は1:50mを補完、パブリックドメイン。海外領土・表示枠外は省略。</li><li>気候色は格子分類、雨温図は観測地点の数値です。地図の色だけから国全体や観測所の値を推定しないでください。</li></ul></details>
     <noscript><p>JavaScriptが無効です。初期地図・解説一覧・出典を表示しています。主題や地点の変更にはJavaScriptが必要です。</p></noscript>
     <script type="application/json" data-eu-config set:html={JSON.stringify(config).replaceAll('<', '\\u003c')} />
     </div>
     </AtlasWorkspaceFrame>
+    <EuropeStatistics {field}>
+        <div class="eu-grid-value" data-eu-subject-grid hidden={initialClimateReader||agriculture||!initialLayer.grid}><strong data-eu-grid-title>{initialLayer.title} · {initialLayer.unit}</strong><p data-eu-subject-result aria-live="polite">地図を押すと格子の数値を表示します。</p></div>
+        <div class="eu-grid-value" data-eu-wheat-reading hidden><strong>小麦の面積を調べる</strong><p data-eu-grid-result aria-live="polite">地図を押すと、その格子に割り当てられた収穫面積（ha）を表示します。</p><p>5分角の格子ごとのモデル推計です。2020年頃の分布であり、現在の生産量や戦争の影響は表しません。面積の割合ではないため、緯度によって格子の実面積が異なる点にも注意してください。</p></div>
+<details class="eu-country-reader" data-eu-country-reader hidden><summary data-eu-country-title></summary><p class="eu-data-note">2023年・国全体の統計です。格子や都市の値とは異なります。ロシアは全土の値です。</p><dl class="eu-national-values" data-eu-national-values></dl></details>
+    </EuropeStatistics>
   </div>
 </BaseLayout>
 <script>

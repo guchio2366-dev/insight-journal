@@ -1,0 +1,145 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { farmingPresentation } from '../../src/lib/atlas-europe-farming.ts';
+import { readEuropeState, writeEuropeState } from '../../src/lib/atlas-europe-view.ts';
+
+const json = path => JSON.parse(readFileSync(new URL(`../../${path}`, import.meta.url)));
+const countries = json('src/data/atlas/europe/countries.json');
+const cityIds = json('src/data/atlas/europe/climate-cities.json').map(city => city.id);
+const items = Object.freeze([
+  {id:'wheat', name:'小麦', kind:'crop', color:'#d5a56c', labelCoordinate:[2,48]},
+  {id:'maize', name:'トウモロコシ', kind:'crop', color:'#ecc759', labelCoordinate:[8,45]},
+  {id:'cattle', name:'牛', kind:'livestock', color:'#8f4f35', labelCoordinate:[-2,54]},
+  {id:'pig', name:'豚', kind:'livestock', color:'#a86272', labelCoordinate:[10,52]},
+].map(Object.freeze));
+const allIds = items.map(item => item.id);
+const read = search => readEuropeState(search, countries, cityIds, 'crops');
+const urlFor = state => writeEuropeState(new URL('https://example.test/atlas/europe/agriculture/'), state);
+const visibleIds = state => farmingPresentation(state, items).visible.map(item => item.id);
+
+test('初回は品目未選択で作物と畜産を同時表示する', () => {
+  const state = Object.freeze(read(''));
+  const view = farmingPresentation(state, items);
+  assert.equal(state.layer, 'crops');
+  assert.equal(view.active, true);
+  assert.equal(view.item, undefined);
+  assert.equal(view.single, false);
+  assert.equal(view.selectedVisible, false);
+  assert.deepEqual(visibleIds(state), allIds);
+  assert.equal(Object.hasOwn(state, 'showCrops'), false);
+  assert.equal(Object.hasOwn(state, 'showLivestock'), false);
+});
+
+test('通常の品目選択と再選択は他品目を残し、選択対象だけを識別する', () => {
+  const initial = read('');
+  for (const item of items) {
+    const selected = Object.freeze({...initial, layer:item.id});
+    const view = farmingPresentation(selected, items);
+    assert.equal(view.item?.id, item.id);
+    assert.equal(view.selectedVisible, true);
+    assert.equal(view.single, false);
+    assert.deepEqual(visibleIds(selected), allIds);
+    assert.deepEqual(farmingPresentation(selected, items), view);
+  }
+  assert.equal(farmingPresentation(initial, items).item, undefined);
+});
+
+test('種類をOFFにしても品目の選択を保持し、もう一方の表示は維持する', () => {
+  const cases = [
+    {layer:'wheat', showCrops:false, expected:['cattle','pig'], selectedVisible:false},
+    {layer:'pig', showCrops:false, expected:['cattle','pig'], selectedVisible:true},
+    {layer:'pig', showLivestock:false, expected:['wheat','maize'], selectedVisible:false},
+    {layer:'wheat', showLivestock:false, expected:['wheat','maize'], selectedVisible:true},
+  ];
+  for (const {expected, selectedVisible, ...settings} of cases) {
+    const state = Object.freeze({...read(''), ...settings});
+    const view = farmingPresentation(state, items);
+    assert.equal(view.item?.id, settings.layer);
+    assert.equal(view.selectedVisible, selectedVisible);
+    assert.deepEqual(visibleIds(state), expected);
+    assert.deepEqual(farmingPresentation(read(urlFor(state).search), items), view);
+  }
+});
+
+test('両方OFFは分布だけを消し、概論への復帰でもOFF設定を保持する', () => {
+  const selected = read('?layer=wheat&crops=off&livestock=off');
+  const view = farmingPresentation(selected, items);
+  assert.equal(view.active, true);
+  assert.equal(view.item?.id, 'wheat');
+  assert.equal(view.selectedVisible, false);
+  assert.deepEqual(view.visible, []);
+  const overview = {...selected, layer:'crops'};
+  assert.equal(farmingPresentation(overview, items).item, undefined);
+  assert.deepEqual(visibleIds(overview), []);
+  assert.deepEqual(read(urlFor(overview).search), overview);
+  assert.deepEqual(visibleIds({...overview, showCrops:true}), ['wheat','maize']);
+  assert.deepEqual(visibleIds({...overview, showLivestock:true}), ['cattle','pig']);
+});
+
+test('明示した単独表示は対象だけを描き、解除すると以前の独立したON／OFFへ戻る', () => {
+  for (const layer of ['wheat','pig']) {
+    for (const query of ['', '&crops=off', '&livestock=off', '&crops=off&livestock=off']) {
+      const original = read(`?layer=${layer}${query}`);
+      const isolated = Object.freeze({...original, single:true});
+      const view = farmingPresentation(isolated, items);
+      assert.equal(view.single, true);
+      assert.equal(view.selectedVisible, true);
+      assert.deepEqual(visibleIds(isolated), [layer]);
+      const isolatedUrl = urlFor(isolated);
+      assert.equal(isolatedUrl.searchParams.get('single'), '1');
+      assert.deepEqual(read(isolatedUrl.search), isolated);
+      const returnedUrl = writeEuropeState(isolatedUrl, {...isolated, single:false});
+      const returned = read(returnedUrl.search);
+      assert.deepEqual(returned, original);
+      assert.deepEqual(farmingPresentation(returned, items), farmingPresentation(original, items));
+      assert.equal(returnedUrl.searchParams.has('single'), false);
+      assert.equal(isolatedUrl.searchParams.get('single'), '1');
+    }
+  }
+});
+
+test('単独表示中に別品目へ移ると前の品目を残さず、再読込も同じ表示になる', () => {
+  const first = read('?layer=wheat&single=1&crops=off');
+  const next = {...first, layer:'pig'};
+  const nextUrl = urlFor(next);
+  const reloaded = read(nextUrl.search);
+  assert.deepEqual(visibleIds(reloaded), ['pig']);
+  assert.equal(farmingPresentation(reloaded, items).item?.id, 'pig');
+  assert.equal(reloaded.showCrops, false);
+  assert.equal(nextUrl.pathname, '/atlas/europe/agriculture/');
+  assert.deepEqual(visibleIds(first), ['wheat']);
+});
+
+test('自然環境への表示変更は農畜産物を隠し、都市・地物・表示設定をURLに保存できる', () => {
+  const original = read('?layer=wheat&city=paris&feature=danube&crops=off&livestock=off');
+  for (const layer of ['climate','water','terrain','contours']) {
+    const nature = Object.freeze({...original, layer});
+    const view = farmingPresentation(nature, items);
+    assert.equal(view.active, false);
+    assert.equal(view.single, false);
+    assert.equal(view.selectedVisible, false);
+    assert.deepEqual(view.visible, []);
+    const natureUrl = urlFor(nature);
+    assert.equal(natureUrl.pathname, '/atlas/europe/nature/');
+    const reloaded = read(natureUrl.search);
+    assert.deepEqual(reloaded, nature);
+    assert.equal(reloaded.city, 'paris');
+    assert.equal(reloaded.feature, 'danube');
+    const returned = read(urlFor({...reloaded, layer:original.layer}).search);
+    assert.deepEqual(returned, original);
+    assert.equal(farmingPresentation(returned, items).item?.id, 'wheat');
+  }
+});
+
+test('概況・森林・自然環境へ単独指定が持ち込まれても個別農畜産物を誤表示しない', () => {
+  for (const layer of ['crops','forest','climate']) {
+    const state = read(`?layer=${layer}&single=1&livestock=off`);
+    assert.equal(Object.hasOwn(state, 'single'), false);
+    const view = farmingPresentation(state, items);
+    assert.equal(view.single, false);
+    assert.equal(view.item, undefined);
+    assert.deepEqual(visibleIds(state), layer === 'crops' ? ['wheat','maize'] : []);
+    assert.equal(urlFor(state).searchParams.has('single'), false);
+  }
+});

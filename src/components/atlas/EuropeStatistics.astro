@@ -1,0 +1,34 @@
+---
+import EuropeClimateDiagram from './EuropeClimateDiagram.astro';
+import cities from '../../data/atlas/europe/climate-cities.json';
+import countries from '../../data/atlas/europe/countries.json';
+import type { EuropeField } from '../../data/atlas/europe/layers';
+import '../../styles/atlas-europe-statistics.css';
+
+interface Props { field: EuropeField }
+const { field } = Astro.props;
+const countryName = (code: string) => countries.find(country => country.code === code)?.name ?? code;
+---
+<section class="eu-statistics" data-eu-statistics aria-label="選択中の分野・品目の統計">
+  <section id="europe-climate-statistics" data-eu-climate-statistics hidden={field !== 'nature'} aria-labelledby="europe-climate-statistics-title">
+    <header class="eu-statistics-heading">
+      <h2 id="europe-climate-statistics-title">都市の気温・降水量</h2>
+      <p>地図で選んだ都市の観測所データです。都市を選び直すと、雨温図・年の要約・月別表が一緒に切り替わります。</p>
+    </header>
+    <div class="eu-city-cards">{cities.map(city => <EuropeClimateDiagram city={city} country={countryName(city.country)} />)}</div>
+  </section>
+  <section data-eu-farming-statistics hidden={field !== 'agriculture'} aria-labelledby="europe-farming-statistics-title">
+    <header class="eu-statistics-heading">
+      <h2 id="europe-farming-statistics-title" data-eu-statistics-title>欧州の農林業の統計</h2>
+      <p>対象：<strong data-eu-statistics-item>欧州の農畜産物</strong>。下の数値は未収録です。地図の収穫面積や家畜密度から、販売総額や生産量を推計していません。</p>
+    </header>
+    <dl class="eu-statistics-availability">
+      <div><dt>販売総額（米ドル）</dt><dd><span data-eu-statistics-item>欧州の農畜産物</span>の販売総額は未収録です。</dd></div>
+      <div><dt>需給・用途別消費</dt><dd><span data-eu-statistics-item>欧州の農畜産物</span>の需給・用途別消費は未収録です。</dd></div>
+      <div><dt>輸出額・輸出相手国</dt><dd><span data-eu-statistics-item>欧州の農畜産物</span>の輸出額と相手国別の内訳は未収録です。</dd></div>
+      <div><dt>生産量・世界生産シェア</dt><dd><span data-eu-statistics-item>欧州の農畜産物</span>の生産量と、対応する世界生産量を分母にしたシェアは未収録です。</dd></div>
+    </dl>
+    <p class="eu-statistic-note">「未収録」は、このサイトに数値を収録していないことを示します。販売・生産・輸出がゼロという意味ではありません。</p>
+  </section>
+  <slot />
+</section>

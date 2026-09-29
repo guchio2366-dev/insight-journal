@@ -6,10 +6,14 @@ const groups = position === 'above' ? [
   {field:'nature',items:[['climate','気候区分'],['water','水資源'],['terrain','地形'],['contours','標高（等高線）']]},
   {field:'population',items:[['density','人口分布'],['','宗教の分布'],['','民族の分布']]},
 ] : [
-  {field:'agriculture',items:[['crops','農業'],['cattle','畜産'],['forest','林業']]},
   {field:'industry',items:[['hubs','製造業'],['','資源・エネルギー'],['services','サービス'],['','建設・不動産']]},
 ];
 ---
 {groups.map(group=><div class:list={['eu-topic-tabs',`eu-topic-${position}`]} data-eu-topic-field={group.field} hidden={field!==group.field} role="group" aria-label={`${group.field==='nature'?'自然環境':group.field==='agriculture'?'農林業':group.field==='industry'?'主要産業':'人口'}の区分`}>
   {group.items.map(([id,label],i)=><button type="button" data-eu-topic={id||undefined} disabled={!id} aria-pressed={id?i===0:undefined}>{label}{!id&&<small>準備中</small>}</button>)}
 </div>)}
+
+{position==='map'&&<div class="eu-topic-tabs eu-topic-map eu-farming-toggles" data-eu-farming-toggles hidden={field!=='agriculture'} role="group" aria-label="農畜産物の分布表示">
+  <button type="button" data-eu-toggle="crop" aria-pressed="true">作物の分布 <span>表示中</span></button>
+  <button type="button" data-eu-toggle="livestock" aria-pressed="true">畜産の分布 <span>表示中</span></button>
+</div>}
