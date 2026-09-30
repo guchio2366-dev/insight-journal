@@ -87,7 +87,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
        {regionId==='south-central-asia'&&<nav class="asia-focus-navigation" aria-label="南・中央アジアの表示範囲">{[{id:'south-central-asia',label:'南・中央アジア全体'},...Object.entries(asiaFocusViews).map(([id,v])=>({id,label:v.label}))].map(v=><a href={withBase(`/atlas/asia/${v.id}/${asiaFieldPaths[initialField]}/`)} data-focus-link={v.id} aria-current={pageId===v.id?'page':undefined}>{v.label}</a>)}</nav>}
        <div class="asia-toolbar"><label>国・地域<select data-country-select aria-label="国・地域を選ぶ"><option value="">{region.label}全体</option>{countries.map(c=><option value={c.code}>{c.name}</option>)}</select></label><button class="asia-reset" type="button" data-reset>全体に戻す</button></div>
       </div>
-      <nav class="atlas-tabs asia-field-tabs" aria-label="地図の分野">{fieldTabs.map(f=><a href={withBase(`/atlas/asia/${pageId}/${asiaFieldPaths[f.id]}/`)} data-field={f.id} aria-current={initialField===f.id?'page':undefined}>{f.label}</a>)}</nav>
+      <nav class="atlas-tabs atlas-tabs-with-overview asia-field-tabs" aria-label="地図の分野"><a data-atlas-overview-link href={withBase(`/atlas/asia/${pageId}/overview/`)}>概要</a>{fieldTabs.map(f=><a href={withBase(`/atlas/asia/${pageId}/${asiaFieldPaths[f.id]}/`)} data-field={f.id} aria-current={initialField===f.id?'page':undefined}>{f.label}</a>)}</nav>
       <AsiaFieldNavigation {initialField} {social} {regionId} />
 
       <div class="atlas-primary-grid asia-layout">
@@ -166,7 +166,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
   .asia-region-shell .asia-toolbar label{flex-direction:row;align-items:center;gap:8px;font-size:12px}
   .asia-region-shell .asia-toolbar select,.asia-region-shell .asia-reset{min-height:40px;padding-block:6px}
   .asia-region-shell .asia-reset{margin-left:0}
-  .asia-field-tabs{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .asia-field-tabs{grid-template-columns:repeat(5,minmax(0,1fr))}
   :global(.atlas-desktop-shell) .asia-atlas{padding:0;max-width:none;width:100%}
   :global(.atlas-desktop-shell) .asia-map-panel{position:static;top:auto;border:0;border-radius:0;background:transparent;overflow:visible}
   :global(.atlas-desktop-shell) .asia-reading-panel{margin-top:0;min-width:0}

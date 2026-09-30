@@ -46,7 +46,7 @@ const config = { farmingAreas, geography, climateWater, countries, cities: citie
     <p class="eu-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / <a data-base-map href={withBase('/atlas/europe/')}>欧州</a> / <span data-eu-field-label>{currentField.label}</span></p>
     <header class="eu-heading visually-hidden"><div><p class="eu-kicker" data-eu-field-kicker>EUROPE · {field.toUpperCase()}</p><h1 data-eu-field-heading>{europeFieldHeadings[field]}</h1></div><p>西欧から東欧・ロシア西部まで。<br />地図上の名前を選び、分布と説明を読み比べます。</p></header>
     <EuropeRegionNavigation />
-    <nav class="eu-field-nav" aria-label="欧州地図の表示">{[fields[1],fields[0],...fields.slice(2)].map(f=><a data-eu-field={f.initial} href={withBase(`/atlas/europe/${f.id}/`)} aria-current={field===f.id?'page':undefined}>{f.id==='industry'?'主要産業':f.label}</a>)}</nav>
+    <nav class="eu-field-nav" aria-label="欧州地図の表示"><a data-atlas-overview-link href={withBase('/atlas/europe/overview/')}>概要</a>{[fields[1],fields[0],...fields.slice(2)].map(f=><a data-eu-field={f.initial} href={withBase(`/atlas/europe/${f.id}/`)} aria-current={field===f.id?'page':undefined}>{f.id==='industry'?'主要産業':f.label}</a>)}</nav>
     <EuropeLayoutControls position="above" {field} />
     <div class="eu-water-options" data-eu-water-options hidden role="group" aria-label="水資源の表示">
       <button type="button" aria-pressed="true" data-eu-topic="water">河川・地下水</button><button type="button" disabled>降水量 <small>分布未収録</small></button><button type="button" disabled>河川の流域 <small>分布未収録</small></button>

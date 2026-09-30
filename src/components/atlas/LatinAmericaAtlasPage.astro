@@ -45,7 +45,7 @@ const chartX=(i:number)=>38+i*24,chartT=(t:number)=>145-(t+10)/50*125;
        <button type="button" data-reset>全体に戻す</button>
       </div>
      </div>
-     <nav class="atlas-tabs" aria-label="地図の分野">{fieldTabs.map(f=><a href={`${basePath}${f.id}/`} data-field={f.id} aria-current={initialField===f.id?'page':undefined}>{f.name}</a>)}</nav>
+     <nav class="atlas-tabs atlas-tabs-with-overview" aria-label="地図の分野"><a data-atlas-overview-link href={`${basePath}overview/`}>概要</a>{fieldTabs.map(f=><a href={`${basePath}${f.id}/`} data-field={f.id} aria-current={initialField===f.id?'page':undefined}>{f.name}</a>)}</nav>
      <div class="atlas-nature-controls latin-nature-controls" data-nature-controls hidden={initialField!=='nature'}>
       <div class="atlas-nature-tabs" role="tablist" aria-label="自然環境の表示切替"><button type="button" role="tab" data-view-option="climate" aria-selected="true">気候区分</button><button type="button" role="tab" data-view-option="rivers" aria-selected="false">河川・地形の解説</button></div>
       <select data-view aria-label="自然環境の表示" hidden><option value="climate">気候区分</option><option value="rivers">河川と地域</option></select>

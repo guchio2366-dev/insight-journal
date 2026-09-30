@@ -23,7 +23,12 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.ok(q('[data-map-surface]').closest('[data-atlas-shell]'));
       assert.equal(q('[data-map-surface]').getAttribute('tabindex'),'0');
       assert.equal(q('.atlas-tabs [aria-current="page"]').getAttribute('href'),`/insight-journal/atlas/asia/${region}/${field}/`);
-      assert.equal(all('.atlas-tabs a').length,4,'implemented fields are offered');
+      assert.equal(all('.atlas-tabs a[data-field]').length,4,'implemented map fields are offered');
+      const overview=q('.atlas-tabs > a:first-child');
+      assert.equal(overview.textContent,'概要');
+      assert.equal(overview.getAttribute('href'),`/insight-journal/atlas/asia/${region}/overview/`);
+      assert.ok(overview.hasAttribute('data-atlas-overview-link'));
+      assert.equal(overview.hasAttribute('data-field'),false,'概要は地図主題ではなく独立ページへ移動する');
       assert.equal(all('[data-natural-group]').length,4);
       assert.equal(q('[data-natural-group=climate]').getAttribute('aria-pressed'),'true');
       assert.equal(q('[data-industry-panel]').hidden,field!=='industry');

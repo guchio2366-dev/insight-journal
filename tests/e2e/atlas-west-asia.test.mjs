@@ -10,7 +10,12 @@ test('西アジアの全4分野は共通枠・一つの地図・20の選択肢�
    w.document.write(await readFile(`dist/atlas/west-asia/${route}/index.html`,'utf8'));const q=s=>w.document.querySelector(s),all=s=>[...w.document.querySelectorAll(s)];
    assert.equal(q('[data-west-atlas]').dataset.field,field);assert.equal(all('[data-map-surface]').length,1);
    assert.ok(q('[data-map-surface]').closest('[data-atlas-shell]'));assert.equal(q('[data-news-rail]').dataset.newsRegion,'west-asia');
-   assert.deepEqual(all('.atlas-tabs a').map(a=>a.textContent),['農林業','自然環境','主要産業','人口']);
+   assert.deepEqual(all('.atlas-tabs a[data-west-field]').map(a=>a.textContent),['農林業','自然環境','主要産業','人口']);
+   const overview=q('.atlas-tabs > a:first-child');
+   assert.equal(overview.textContent,'概要');
+   assert.equal(overview.getAttribute('href'),'/insight-journal/atlas/west-asia/overview/');
+   assert.ok(overview.hasAttribute('data-atlas-overview-link'));
+   assert.equal(overview.hasAttribute('data-west-field'),false,'概要は地図主題ではなく独立ページへ移動する');
    assert.equal(q('.atlas-tabs [aria-current]').getAttribute('href'),`/insight-journal/atlas/west-asia/${route}/`);
    assert.equal(all('[data-west-country] option').length,21);assert.equal(all('[data-west-chart]').length,18);
    assert.equal(q('[data-west-topic]'),null,'全項目のプルダウンを上部に重ねない');

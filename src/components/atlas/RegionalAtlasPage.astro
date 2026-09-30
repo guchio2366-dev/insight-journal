@@ -36,6 +36,7 @@ const isNorth = regionId === 'canada' || regionId === 'mexico';
     <p class="regional-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / {config.group === 'asia' ? 'アジア' : '南北アメリカ'}{isNorth ? ' / 北米' : ''} / {config.label}</p>
     <header><p class="eyebrow">Atlas · {config.group === 'asia' ? 'Asia' : 'Americas'}</p><h1>{config.label}地図</h1><p>{config.description}</p></header>
     <AtlasRegionNavigation group={config.group} current={isNorth ? 'north-america' : regionId} country={isNorth ? regionId : undefined} />
+    <nav class="regional-page-navigation" aria-label={`${config.label}のページ`}><a data-atlas-overview-link href={withBase(isNorth?`/atlas/north-america/overview/?country=${regionId==='canada'?'CAN':'MEX'}`:`/atlas/asia/${regionId}/overview/`)}>概要</a><span aria-current="page">基礎地図</span></nav>
     <div class="regional-layout">
       <section class="regional-map-panel" aria-labelledby="regional-map-title">
         <div class="regional-map-heading"><h2 id="regional-map-title">国・地域の位置</h2><button type="button" data-reset-map>{config.label}全体</button></div>
@@ -105,6 +106,10 @@ const isNorth = regionId === 'canada' || regionId === 'mexico';
   }
 </script>
 <style>
+  .regional-page-navigation { display:flex; flex-wrap:wrap; border:1px solid var(--rule); background:#f1f0e7; margin:0 0 14px; }
+  .regional-page-navigation a,.regional-page-navigation span { display:flex; align-items:center; justify-content:center; min-height:44px; min-width:100px; padding:9px 18px; font-size:14px; font-weight:700; text-decoration:none; }
+  .regional-page-navigation [aria-current] { color:white; background:#243b48; }
+  .regional-page-navigation a:focus-visible { outline:3px solid #a74830; outline-offset:2px; }
   .regional-atlas { padding: 16px 0 50px; }
   .regional-breadcrumb { color: var(--ink-soft); font-size: 12px; }
   header { margin: 20px 0 16px; }

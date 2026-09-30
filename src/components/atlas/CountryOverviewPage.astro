@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
+import { getOverviewRegion, overviewTopics, type OverviewRegionId } from '../../data/atlas/country-overview';
+import { withBase } from '../../lib/urls';
+import '../../styles/atlas-country-overview.css';
+
+interface Props { regionId: OverviewRegionId }
+const region = getOverviewRegion(Astro.props.regionId);
+const initialCountry = region.countries.find(country => country.code === region.defaultCountry) ?? region.countries[0];
+const config = { countries: region.countries, defaultCountry: initialCountry.code, topics: overviewTopics.map(topic => ({ id: topic.id, label: topic.label })), regionLabel: region.label };
+---
+
+<BaseLayout title={`${region.label}｜国・地域の概要`} description={`${region.label}の国・地域を選び、農林業・自然環境・主要産業・人口・政治の解説を読むページです。本文は準備中です。`} compactAtlas>
+  <AtlasWorkspaceFrame region={region.newsRegion} mapActions={false}>
+    <article class="atlas-explorer country-overview" data-country-overview data-field="country-overview" data-overview-region={region.id}>
+      <nav class="country-overview-breadcrumb" aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a><span aria-hidden="true"> / </span><a href={withBase(region.mapPath)}>{region.label}</a><span aria-hidden="true"> / </span><span>概要</span></nav>
+
+      <div class="atlas-region-controls country-overview-controls">
+        <nav class="country-overview-regions" aria-label="地域を選ぶ">
+          <a href={withBase('/atlas/')}>世界の地域</a>
+          {region.peers.map(id => { const peer = getOverviewRegion(id); return <a href={withBase(peer.path)} aria-current={id === region.id ? 'page' : undefined}>{peer.label}</a>; })}
+        </nav>
+        <label class="country-overview-picker" for="overview-country">国・地域
+          <select id="overview-country" data-overview-country>{region.countries.map(country => <option value={country.code} selected={country.code === initialCountry.code}>{country.name}</option>)}</select>
+        </label>
+      </div>
+
+      <nav class="atlas-tabs country-overview-fields" aria-label="概要と分野別地図">
+        <a href={withBase(region.path)} aria-current="page" data-overview-current-link>概要</a>
+        {region.fields.map(field => field.href ? <a href={withBase(field.href)}>{field.label}</a> : <span class="atlas-tab-planned" aria-disabled="true">{field.label}<small>準備中</small></span>)}
+      </nav>
+
+      <header class="country-overview-heading">
+        <div class="country-overview-title-row"><h1><span data-overview-country-name>{initialCountry.name}</span>の概要</h1><span class="country-overview-status">本文は準備中です</span></div>
+        <p>国・地域を選び、5つのテーマから詳しい解説を読めます。現在は、掲載予定の項目を表示しています。</p>
+      </header>
+
+      <div class="country-overview-topic-tabs" role="tablist" aria-label="国・地域の解説テーマ">
+        {overviewTopics.map((topic, index) => <button type="button" id={`overview-tab-${topic.id}`} role="tab" aria-controls={`overview-panel-${topic.id}`} aria-selected={index === 0 ? 'true' : 'false'} tabindex={index === 0 ? 0 : -1} data-overview-topic={topic.id}>{topic.label}</button>)}
+      </div>
+      <p class="visually-hidden" data-overview-announcement aria-live="polite" aria-atomic="true"></p>
+      <noscript><p class="country-overview-noscript">初期表示の国・地域の農林業欄を表示しています。国・地域やテーマの切り替えにはJavaScriptが必要です。</p></noscript>
+
+      {overviewTopics.map((topic, topicIndex) => <section class="country-overview-panel" id={`overview-panel-${topic.id}`} role="tabpanel" aria-labelledby={`overview-tab-${topic.id}`} tabindex="0" hidden={topicIndex !== 0}>
+        <div class="country-overview-reading">
+          <nav class="country-overview-contents" aria-label={`${topic.label}の目次`}>
+            <h2>このテーマの内容</h2>
+            <ol>{topic.sections.map((section, index) => <li><a href={`#overview-${topic.id}-section-${index + 1}`}>{section.heading}</a></li>)}</ol>
+            <a class="country-overview-source-jump" href={`#overview-${topic.id}-sources`}>出典・参考資料</a>
+          </nav>
+          <div class="country-overview-copy">
+            <header class="country-overview-introduction"><h2><span data-overview-country-name>{initialCountry.name}</span>の{topic.label}</h2><p>{topic.introduction}</p></header>
+            {topic.sections.map((section, index) => <section class="country-overview-section" id={`overview-${topic.id}-section-${index + 1}`}>
+              <h3><span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>{section.heading}</h3>
+              <p>{section.placeholder}</p>
+              <p class="country-overview-placeholder">この項目の本文は準備中です。</p>
+            </section>)}
+            <footer class="country-overview-sources" id={`overview-${topic.id}-sources`}><h3>出典・参考資料</h3><p>本文の公開時に、資料名・発行機関・対象年・参照先を掲載します。現時点では、国別の本文や統計は掲載していません。</p></footer>
+          </div>
+        </div>
+      </section>)}
+      <script type="application/json" data-overview-config set:html={JSON.stringify(config).replace(/</g, '\u003c')} />
+    </article>
+  </AtlasWorkspaceFrame>
+</BaseLayout>
+
+<script>
+  import { initCountryOverview } from '../../scripts/atlas-country-overview';
+  document.querySelectorAll<HTMLElement>('[data-country-overview]').forEach(initCountryOverview);
+</script>
