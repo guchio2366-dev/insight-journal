@@ -18,7 +18,7 @@ const rendered = await Promise.all(articles.map(async entry => ({entry, ...await
   <header class="atlas-news-header">
     <p>NEWS & CONTEXT</p>
     <h2 id="atlas-news-heading">{config.label}のニュース</h2>
-    <span>{mapActions?'記事と地図を、並べて読む':'記事と国の概要を、並べて読む'}</span>
+    <span>{mapActions?'記事と地図を、並べて読む':'記事と地域の背景を、並べて読む'}</span>
   </header>
   <div class="atlas-news-list" data-news-list tabindex="0" aria-label={`${config.label}のニュース一覧`}>
     <div class="atlas-news-count">新着順 <span>{articles.length} 件</span></div>
@@ -26,7 +26,7 @@ const rendered = await Promise.all(articles.map(async entry => ({entry, ...await
       <span aria-hidden="true">＋</span>
       <h3>記事の追加を待っています</h3>
       <p>{config.label}に関連する公開記事を、ここに新着順で表示します。</p>
-      <p>{mapActions?'地図や各分野の解説は、右側で引き続き利用できます。':'国の概要は、右側でテーマを選んで確認できます。'}</p>
+      <p>{mapActions?'地図や各分野の解説は、右側で引き続き利用できます。':'白地図と地域の概要も利用できます。'}</p>
     </div>}
     {articles.map(({data}) => <article class="atlas-news-card">
       <div class="atlas-news-meta"><time datetime={data.publishedAt}>{data.publishedAt.slice(0,10).replaceAll('-','.')}</time><span>{data.topics.map(topic=>topics[topic]).join('・')}</span></div>
