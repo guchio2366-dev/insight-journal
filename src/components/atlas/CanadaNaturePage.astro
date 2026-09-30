@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AtlasRegionNavigation from './AtlasRegionNavigation.astro';
+import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
+import AtlasClimatePlot from './AtlasClimatePlot.astro';
+import climate from '../../data/atlas/canada/climate.json';
+import rivers from '../../data/atlas/canada/rivers.json';
+import lakes from '../../data/atlas/canada/lakes.json';
+import {features} from '../../data/atlas/regional-atlas';
+import {climateCause,landReading,waterReading,geographySource,mechanismSource} from '../../data/atlas/canada/reading';
+import {withBase} from '../../lib/urls';
+import '../../styles/atlas-canada-nature.css';
+const width=900,height=580,fullFrame=`0 0 ${width} ${height}`;
+const project=([lon,lat]:number[])=>[(lon+145)/95*width,(85-lat)/45*height];
+function geometryPath(g:any):string{
+ const line=(coords:number[][],closed:boolean)=>coords.map((p,i)=>{const [x,y]=project(p);return `${i?'L':'M'}${x.toFixed(2)},${y.toFixed(2)}`}).join('')+(closed?'Z':'');
+ if(g.type==='LineString')return line(g.coordinates,false);
+ if(g.type==='MultiLineString')return g.coordinates.map((r:number[][])=>line(r,false)).join('');
+ if(g.type==='Polygon')return g.coordinates.map((r:number[][])=>line(r,true)).join('');
+ if(g.type==='MultiPolygon')return g.coordinates.flat().map((r:number[][])=>line(r,true)).join('');
+ return '';
+}
+const japaneseWater:Record<string,string>={'Mackenzie':'マッケンジー川','Fraser':'フレーザー川','Nelson':'ネルソン川','St. Lawrence':'セントローレンス川','Great Slave Lake':'グレートスレーブ湖','Great Bear Lake':'グレートベア湖','Lake Superior':'スペリオル湖','Lake Ontario':'オンタリオ湖','Lake Winnipeg':'ウィニペグ湖'};
+const waterNames=Object.keys(japaneseWater).filter(name=>[...rivers.features,...lakes.features].some(f=>f.properties.name===name));
+const fmt=(v:number|null)=>v===null?'未収録':v.toLocaleString('ja-JP',{minimumFractionDigits:1,maximumFractionDigits:1});
+const config={cities:climate.stations.map(s=>({id:s.id,name:s.name,point:project(s.coordinates)})),waters:waterNames,width,height};
+---
+<BaseLayout title="カナダの自然環境｜地形・気候・河川" description="首都オタワと沿岸・内陸・北部の気候を比べ、カナダの山地・平原・湖と河川のつながりを読む。" compactAtlas>
+ <AtlasWorkspaceFrame region="north-america" mapActions={false}>
+  <article class="canada-nature" data-canada-nature>
+   <p class="canada-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / カナダ</p>
+   <AtlasRegionNavigation group="americas" current="north-america" country="canada" />
+   <header><p class="eyebrow">Canada · Natural environment</p><h1>カナダの自然環境</h1><p class="canada-lead">西岸の海と山地、内陸の平原、東部の楯状地、北部の島々。場所を確かめ、季節と水の違いを読む。</p></header>
+   <nav class="canada-fields" aria-label="カナダの分野"><a data-atlas-overview-link href={withBase('/atlas/north-america/overview/?country=CAN')}>概要</a><a href={withBase('/atlas/north-america/canada/nature/')} aria-current="page">自然環境</a>{['農林業','主要産業','人口'].map(label=><span aria-disabled="true">{label}<small>準備中</small></span>)}</nav>
+   <nav class="canada-views" aria-label="自然環境の表示"><button data-canada-view="climate" aria-pressed="true">都市の気候</button><button data-canada-view="landform" aria-pressed="false">地形地域</button><button data-canada-view="water" aria-pressed="false">湖と河川</button></nav>
+   <div class="canada-workspace">
+    <section class="canada-map-column" aria-label="カナダの地図">
+     <section data-canada-locator>
+      <div class="canada-map-title"><h2>観測地点と水の位置</h2><button type="button" data-country-button="CAN" data-canada-reset>カナダ全体</button></div>
+      <svg class="canada-map" data-canada-map viewBox={fullFrame} role="group" aria-labelledby="canada-map-title canada-map-desc">
+       <title id="canada-map-title">カナダの観測地点、湖、河川</title><desc id="canada-map-desc">首都オタワと比較4地点を表示。都市は地図下の一覧からも選べます。湖と河川の表示では実際の概略形状を示します。</desc>
+       <defs><clipPath id="canada-map-clip"><rect width={width} height={height}/></clipPath></defs>
+       <g clip-path="url(#canada-map-clip)">
+        {features.filter(f=>['CAN','USA','GRL'].includes(f.properties.code)).map(f=><path class:list={['canada-land',{'is-context':f.properties.code!=='CAN'}]} d={geometryPath(f.geometry)} fill-rule="evenodd" data-map-country={f.properties.code==='CAN'?'CAN':undefined} />)}
+        <g data-canada-water-layers hidden>
+         {lakes.features.map(f=><path class="canada-lake" data-canada-water-shape={f.properties.name??''} d={geometryPath(f.geometry)} fill-rule="evenodd"><title>{japaneseWater[f.properties.name]??f.properties.name}</title></path>)}
+         {rivers.features.map(f=><path class="canada-river" data-canada-water-shape={f.properties.name??''} d={geometryPath(f.geometry)}><title>{japaneseWater[f.properties.name]??f.properties.name}</title></path>)}
+        </g>
+        {climate.stations.map(s=>{const [x,y]=project(s.coordinates);return <g data-canada-map-city={s.id} role="button" tabindex="0" aria-label={`${s.name}の気候を読む`} aria-pressed={s.id==='ottawa'?'true':'false'}><circle cx={x} cy={y} r="6"/><text x={x+10} y={y-9}>{s.name}</text></g>;})}
+        <text class="canada-ocean" x="80" y="420">太平洋</text><text class="canada-ocean" x="750" y="515">大西洋</text><text class="canada-ocean" x="400" y="38">北極海</text><text class="canada-ocean" x="550" y="265">ハドソン湾</text>
+       </g>
+      </svg>
+      <div class="canada-map-actions"><button data-canada-zoom="in" aria-label="地図を拡大">＋</button><button data-canada-zoom="out" aria-label="地図を縮小">−</button><button data-canada-focus>選んだ都市の位置へ</button></div>
+      <p class="canada-caption">点は観測地点の位置、灰色は周辺の陸地。位置図は等距円筒図法で、面積比較には使いません。都市を選んでも表示範囲を勝手に変えません。</p>
+     </section>
+     <figure class="canada-physical-map" data-canada-physical hidden>
+      <h2>山地・平原・楯状地の分布</h2><a href={withBase('/assets/atlas/canada-nature-v1/physiographic-regions-full.jpg')}><img src={withBase('/assets/atlas/canada-nature-v1/physiographic-regions.jpg')} alt="カナダ政府の地形地域図。西部のコルディレラ、中央の内陸平原、東部の楯状地、セントローレンス低地、北部の地形地域を色分け。" width="1600" height="1433" loading="lazy" /></a><figcaption>クリックで原寸図。NRCan『Atlas of Canada』第6版、2009年の保存版。地形分類の基礎資料は1967年。ランベルト正角円錐図法で、別の位置図とは投影が異なります。現在の行政境界の確認には使いません。<a href={geographySource}>原典と利用条件</a></figcaption>
+     </figure>
+     <div class="canada-city-list" aria-label="観測地点を選ぶ">{climate.stations.map(s=><button data-canada-city-button={s.id} aria-pressed={s.id==='ottawa'?'true':'false'}>{s.name}{s.id==='ottawa'?'（首都）':''}</button>)}</div>
+     <div class="canada-water-controls" data-canada-water-controls hidden><label>水系・湖<select data-canada-water><option value="">全体を読む</option>{waterNames.map(name=><option value={name}>{japaneseWater[name]}</option>)}</select></label><label><input type="checkbox" data-canada-only /> 選んだ川・湖だけを表示</label><button data-canada-all-water>すべての水系へ戻す</button><p>川と湖はNatural Earth v5.1.2の1:50m概略形状。国境をまたぐ水系を含みます。選択表示でも国土と都市を残します。</p></div>
+    </section>
+    <aside class="canada-reading" aria-label="地図と一緒に読む">
+     <section data-canada-reading="climate">
+      <div class="canada-city-controls"><label>読む都市<select data-canada-city>{climate.stations.map(s=><option value={s.id} selected={s.id==='ottawa'}>{s.name}</option>)}</select></label><label>比べる都市<select data-canada-compare><option value="">比較なし</option>{climate.stations.map(s=><option value={s.id}>{s.name}</option>)}</select></label></div>
+      <p class="canada-period">ECCC 1991–2020年平年値 · 全地点を同じ尺度で比較</p>
+      <p>降水量は雨と雪などを水量に換算した合計です。今の天気や国全体の平均ではありません。複数観測所をつないだ合成系列を含みます。</p>
+      <div class="canada-climate-cards">
+       {climate.stations.map(s=><section class="canada-climate-card" data-canada-climate-card={s.id} hidden={s.id!=='ottawa'}>
+        <h2>{s.name}</h2><p class="canada-takeaway">{climateCause[s.id].lead}</p>
+        <AtlasClimatePlot name={s.name} period="1991–2020" temperatureC={s.temperatureC} precipitationMm={s.precipitationMm} minTemperatureC={-30} />
+        <p class="canada-plot-key">青の棒：降水量 mm ／ 赤の線：平均気温 ℃。×：未収録。</p>
+        <p>{climateCause[s.id].body}</p>
+        <dl class="canada-climate-facts"><div><dt>年平均気温</dt><dd>{fmt(s.annualTemperatureC)} ℃</dd></div><div><dt>年降水量</dt><dd>{fmt(s.annualPrecipitationMm)} mm</dd></div><div><dt>1月／7月の平均気温</dt><dd>{fmt(s.temperatureC[0])} ／ {fmt(s.temperatureC[6])} ℃</dd></div></dl>
+        <p class="canada-sources-inline"><a href={s.sourceUrl}>月別値・合成観測系列の原典</a> ／ <a href={mechanismSource}>気候の地域差を読む資料</a></p>
+        <details><summary>12か月の数値・観測地点</summary><p>{s.composite} · 基準観測所 {s.station}（{s.climateId}）· {s.coordinates[1]}°N / {Math.abs(s.coordinates[0])}°W · 標高 {s.elevationM} m。観測所の構成と要素別の使用期間は原典のComposite Metadata / Threadsを参照。</p><table><caption>{s.name}の1991–2020年平年値</caption><thead><tr><th>月</th><th>平均気温 ℃</th><th>降水量 mm</th></tr></thead><tbody>{s.temperatureC.map((t,i)=><tr><th>{i+1}</th><td>{fmt(t)}</td><td>{fmt(s.precipitationMm[i])}</td></tr>)}</tbody></table></details>
+       </section>)}
+      </div>
+     </section>
+     <section data-canada-reading="landform" hidden><h2>同じ国の中で、地形が変わる</h2>{landReading.map(r=><section class="canada-reading-section"><h3>{r.title}</h3><p>{r.body}</p><a href={geographySource}>地形地域の原典</a></section>)}<p>英語の地名と日本語説明を対応させ、公式図の分布を読みます。都市の位置へ戻るには「都市の気候」を選べます。</p></section>
+     <section data-canada-reading="water" hidden><h2>湖と川を、海までつなげて読む</h2>{waterReading.map(r=><section class="canada-reading-section"><h3>{r.title}</h3><p>{r.body}</p></section>)}<p><a href="https://www.naturalearthdata.com/downloads/50m-physical-vectors/">河川・湖の原典</a>。概略図のため小河川は省略されます。線の幅・湖の色は流量・水深・水質ではありません。</p></section>
+    </aside>
+   </div>
+   <footer class="canada-source-footer" id="canada-nature-sources"><h2>出典・対象期間・読み方</h2><ul><li>気候：Environment and Climate Change Canada、1991–2020年平年値。公式表の数値を抽出し、未収録値を補間しません。取得日2026年9月30日。<a href="https://climate.weather.gc.ca/climate_normals/index_e.html">計算方法と観測所一覧</a> ／ <a href="https://www.canada.ca/en/transparency/terms.html">政府サイト利用条件</a>。公式グラフの転載ではなく数値から作図しています。</li><li>地形地域図：Natural Resources Canada、Atlas第6版の2009年保存版。地形分類の基礎資料は1967年。<a href={geographySource}>データカタログ</a> ／ <a href="https://open.canada.ca/en/open-government-licence-canada">Open Government Licence – Canada</a>。原図を縮小し、分類・配置を変更していません。提供機関による本サイトの承認を意味しません。</li><li>境界・河川・湖：Natural Earth v5.1.2、public domain。既存国境データは1:110m、河川・湖は1:50m。国土の周辺を含む表示範囲で抽出。詳細な境界・現在の実効支配・流域境界を示すものではありません。</li><li>本文の気候説明：<a href={mechanismSource}>Canada's Changing Climate Report（2019年）、第4章</a>と、各観測地点の平年値。地域の仕組みと一点の観測値を区別します。</li></ul><p><a href={withBase('/assets/atlas/canada-nature-v1/manifest.json')}>加工方法・固定版・ファイルハッシュの台帳</a></p></footer>
+   <noscript><p>地図、首都オタワの雨温図、数値・本文・出典を読めます。地点・表示・比較の切替にはJavaScriptが必要です。</p></noscript>
+   <p class="visually-hidden" data-canada-announcement aria-live="polite"></p>
+   <script type="application/json" data-canada-config set:html={JSON.stringify(config).replace(/</g,'\\u003c')} />
+  </article>
+ </AtlasWorkspaceFrame>
+</BaseLayout>
+<script>import {initCanadaNature} from '../../scripts/atlas-canada-nature';const root=document.querySelector<HTMLElement>('[data-canada-nature]');if(root)initCanadaNature(root);</script>

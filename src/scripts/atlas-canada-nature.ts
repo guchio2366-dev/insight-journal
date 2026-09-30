@@ -1,0 +1,55 @@
+import {readCanadaNatureState,writeCanadaNatureState,type CanadaNatureState} from '../lib/atlas-canada-nature';
+export function initCanadaNature(root:HTMLElement){
+ const config=JSON.parse(root.querySelector('[data-canada-config]')!.textContent!);
+ const ids=config.cities.map((c:any)=>c.id),waters=config.waters;
+ const $=<T extends Element=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
+ const map=$<SVGSVGElement>('[data-canada-map]');
+ let state=readCanadaNatureState(new URL(location.href),ids,waters);
+ const full=[0,0,config.width,config.height];
+ function render(){
+  $<HTMLSelectElement>('[data-canada-city]').value=state.city;
+  $<HTMLSelectElement>('[data-canada-compare]').value=state.compare??'';
+  for(const option of $<HTMLSelectElement>('[data-canada-compare]').options)option.disabled=option.value===state.city;
+  for(const el of root.querySelectorAll<HTMLElement>('[data-canada-city-button],[data-canada-map-city]'))el.setAttribute('aria-pressed',String((el.dataset.canadaCityButton??el.dataset.canadaMapCity)===state.city));
+  for(const button of root.querySelectorAll<HTMLElement>('[data-canada-view]'))button.setAttribute('aria-pressed',String(button.dataset.canadaView===state.view));
+  for(const panel of root.querySelectorAll<HTMLElement>('[data-canada-reading]'))panel.hidden=panel.dataset.canadaReading!==state.view;
+  for(const card of root.querySelectorAll<HTMLElement>('[data-canada-climate-card]'))card.hidden=![state.city,state.compare].includes(card.dataset.canadaClimateCard!);
+  $('.canada-climate-cards').classList.toggle('is-comparing',!!state.compare);
+  $('[data-canada-locator]').hidden=state.view==='landform';
+  $('[data-canada-physical]').hidden=state.view!=='landform';
+  $('[data-canada-water-controls]').hidden=state.view!=='water';
+  const group=$<SVGGElement>('[data-canada-water-layers]');group.setAttribute('display',state.view==='water'?'':'none');group.removeAttribute('hidden');
+  $<HTMLSelectElement>('[data-canada-water]').value=state.water??'';
+  $<HTMLInputElement>('[data-canada-only]').checked=state.only;
+  $<HTMLInputElement>('[data-canada-only]').disabled=!state.water;
+  for(const shape of root.querySelectorAll<SVGPathElement>('[data-canada-water-shape]')){
+   const selected=shape.dataset.canadaWaterShape===state.water;
+   shape.style.display=state.only&&state.water&&!selected?'none':'';shape.classList.toggle('is-selected',selected);
+  }
+  map.setAttribute('viewBox',(state.frame??full).join(' '));
+  const name=config.cities.find((c:any)=>c.id===state.city).name;
+  $('[data-canada-announcement]').textContent=`${name}${state.compare?'と比較':''}。${({climate:'都市の気候',landform:'地形地域',water:'湖と河川'})[state.view]}を表示。`;
+ }
+ function update(patch:Partial<CanadaNatureState>){state={...state,...patch};if(state.compare===state.city)state.compare=null;history.pushState(null,'',writeCanadaNatureState(new URL(location.href),state));render();}
+ const select=(city:string)=>update({city});
+ $<HTMLSelectElement>('[data-canada-city]').addEventListener('change',e=>select((e.target as HTMLSelectElement).value));
+ $<HTMLSelectElement>('[data-canada-compare]').addEventListener('change',e=>update({compare:(e.target as HTMLSelectElement).value||null}));
+ for(const button of root.querySelectorAll<HTMLElement>('[data-canada-city-button],[data-canada-map-city]')){
+  const action=()=>select((button.dataset.canadaCityButton??button.dataset.canadaMapCity)!);
+  button.addEventListener('click',action);
+  if(button.dataset.canadaMapCity)button.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();action();}});
+ }
+ for(const button of root.querySelectorAll<HTMLElement>('[data-canada-view]'))button.addEventListener('click',()=>update({view:button.dataset.canadaView as CanadaNatureState['view']}));
+ $<HTMLSelectElement>('[data-canada-water]').addEventListener('change',e=>update({water:(e.target as HTMLSelectElement).value||null,only:false}));
+ $<HTMLInputElement>('[data-canada-only]').addEventListener('change',e=>update({only:(e.target as HTMLInputElement).checked}));
+ $('[data-canada-all-water]').addEventListener('click',()=>update({water:null,only:false}));
+ $('[data-canada-reset]').addEventListener('click',()=>update({frame:null}));
+ $('[data-canada-focus]').addEventListener('click',()=>{const p=config.cities.find((c:any)=>c.id===state.city).point;update({frame:[p[0]-150,p[1]-100,300,200]});});
+ for(const button of root.querySelectorAll<HTMLElement>('[data-canada-zoom]'))button.addEventListener('click',()=>{
+  const [x,y,w,h]=state.frame??full,factor=button.dataset.canadaZoom==='in'?.75:1/.75;
+  const nw=Math.min(config.width,Math.max(30,w*factor)),nh=Math.min(config.height,Math.max(20,h*factor));
+  update({frame:nw===config.width?null:[Math.max(0,Math.min(config.width-nw,x+(w-nw)/2)),Math.max(0,Math.min(config.height-nh,y+(h-nh)/2)),nw,nh]});
+ });
+ window.addEventListener('popstate',()=>{state=readCanadaNatureState(new URL(location.href),ids,waters);render();});
+ render();
+}

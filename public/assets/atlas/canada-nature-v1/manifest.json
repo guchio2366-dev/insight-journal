@@ -1,0 +1,44 @@
+{
+  "retrievedAt": "2026-09-30",
+  "climate": {
+    "publisher": "Environment and Climate Change Canada",
+    "period": "1991–2020",
+    "count": 5,
+    "sourceExtractSha256": "b83b47fe64b155d386f46dc55ac8edcbb72de591d60adec8f9df90cee77ddd2c",
+    "terms": "https://www.canada.ca/en/transparency/terms.html",
+    "method": "Extract published numeric facts. Missing or annotated cells stay null; no inferred replacement. 30-year composite values, not current weather or national averages."
+  },
+  "waters": [
+    {
+      "file": "rivers.json",
+      "count": 84,
+      "inputSha256": "c020fc2553727d8517e7405f45a94b662debbae9b9740aac5a969532dcf47639",
+      "sha256": "ccf172c4fbf81690f91ee3eaa5ea8cf3a8618f40590aefd394a71cfa18c880ea",
+      "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_50m_rivers_lake_centerlines.geojson",
+      "license": "Public domain",
+      "method": "Keep features having a source vertex in Canada display bounds; coordinates unchanged. Includes cross-border waters; not a national clipping or discharge map."
+    },
+    {
+      "file": "lakes.json",
+      "count": 149,
+      "inputSha256": "d350b75978b26fe839b797c2c529b2fb8f47fb3983c03f4964e36d5df9378a52",
+      "sha256": "47234d580f67f2057329ed95ce755e5bc64d93bddbb2ca9cb44f3be5810bfc9a",
+      "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_50m_lakes.geojson",
+      "license": "Public domain",
+      "method": "Keep features having a source vertex in Canada display bounds; coordinates unchanged. Includes cross-border waters; not a national clipping or discharge map."
+    }
+  ],
+  "physiography": {
+    "publisher": "Natural Resources Canada",
+    "title": "Atlas of Canada 6th Edition: Physiographic Regions",
+    "edition": 2009,
+    "baseGeologyYear": 1967,
+    "source": "https://open.canada.ca/data/en/dataset/dcdd5e21-8893-11e0-8ea0-6cf049291510",
+    "download": "https://ftp.geogratis.gc.ca/pub/nrcan_rncan/raster/atlas_6_ed/eng/6422_physiographic_regions.zip",
+    "license": "Open Government Licence – Canada",
+    "licenseUrl": "https://open.canada.ca/en/open-government-licence-canada",
+    "inputSha256": "4fd07bda32f94601b5e35bef1fc3b3586fa7da7726a296bd8e8c815adfbc4dfe",
+    "thumbnailSha256": "3c7e3823ba31bdfa169999c1723697b238361cab777548768afdd74625a0ed8f",
+    "method": "Official historical map, unchanged layout; JPEG resized for display. Its Lambert projection is not overlaid onto the separate locator map."
+  }
+}
