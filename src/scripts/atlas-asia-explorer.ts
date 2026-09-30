@@ -235,7 +235,16 @@ function start(root:HTMLElement) {
   }
   function renderClass() {
     const classification=config.classes.find(c=>c.id===selectedClass);
-    $('[data-class-reading]').hidden=naturalTopic()!=='climate'||!classification;
+    const city=config.cities.find(c=>c.id===state.city);
+    const cityClass=city&&climateGrid?config.classes.find(c=>c.id===gridCellAt(climateGrid,...city.coordinates)):null;
+    if(city){
+      const panel=$$('[data-city-panel]').find(p=>p.dataset.cityPanel===city.id);
+      const code=panel?.querySelector('[data-city-class-code]'),name=panel?.querySelector('[data-city-class-name]'),description=panel?.querySelector('[data-city-class-description]');
+      if(code)code.textContent=cityClass?.code??'';
+      if(name)name.textContent=cityClass?.name??(climateGrid?'気候区分：この地点は未分類':'気候区分：未取得');
+      if(description)description.textContent=cityClass?.description??(climateGrid?'海岸や小島など、広域格子では分類値がない地点もあります。':'');
+    }
+    $('[data-class-reading]').hidden=naturalTopic()!=='climate'||!classification||Boolean(city&&cityClass?.id===classification.id);
     $$('[data-climate-class]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.climateClass)===selectedClass)));
     if(!state.city)$('[data-overview]').hidden=naturalTopic()!=='climate'||Boolean(classification);
     if(!classification)return;
