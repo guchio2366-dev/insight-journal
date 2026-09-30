@@ -1,4 +1,6 @@
 .africa-atlas{padding:20px 0 64px;color:var(--ink)}
+.africa-region-navigation{display:flex;margin-bottom:10px}
+.africa-atlas .africa-region-navigation label{flex-direction:row;align-items:center;gap:8px;max-width:100%}
 .africa-controls [data-latest]{align-self:center;min-height:44px;max-width:190px;border:1px solid #aeb8a2;background:#fff;padding:8px 12px;font-size:11px;line-height:1.6}
 .africa-atlas [hidden]{display:none!important}
 .africa-breadcrumb{font-size:12px;color:var(--ink-soft)}

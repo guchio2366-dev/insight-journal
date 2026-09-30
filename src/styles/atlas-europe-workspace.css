@@ -1,6 +1,6 @@
 /* Europe follows the existing North America workspace; all overrides stay local. */
 .eu-workspace-root { --eu-teal:#245d62; padding:0!important; }
-.eu-workspace-root .eu-region-navigation { margin:12px auto 18px; }
+.eu-workspace-root .eu-region-navigation { width:100%; margin:0 0 10px; }
 .eu-workspace-root .eu-region-top,.eu-workspace-root .eu-region-buttons { display:flex; flex-wrap:wrap; justify-content:flex-start; gap:6px; }
 .eu-workspace-root .eu-region-top a,.eu-workspace-root .eu-region-buttons button { display:inline-flex; align-items:center; min-height:44px; padding:8px 15px; border:1px solid var(--rule); border-radius:0; background:var(--white); color:var(--ink); font:14px var(--sans); text-decoration:none; }
 .eu-workspace-root .eu-region-top a[aria-current] { background:#162638; border-color:#162638; color:white; }
@@ -118,7 +118,6 @@
 }
 @media(pointer:coarse), (max-width:640px) { .eu-workspace-root .eu-map-label { min-height:44px; padding:6px 8px; } }
 @media(max-width:640px) {
- .eu-workspace-root .eu-region-navigation { width:calc(100% - 24px); }
  .eu-workspace-root .eu-region-buttons button { font-size:12px; padding:6px 10px; }
  .eu-workspace-root .eu-field-nav a { padding:9px 2px; font-size:11px; }
  .eu-workspace-root .eu-topic-above { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
@@ -131,7 +130,7 @@
 @media(max-width:959px) and (max-height:500px) and (orientation:landscape) {
  .atlas-layout:has(.eu-workspace-root) .site-header { display:none; }
  .eu-workspace-root .eu-region-top,.eu-workspace-root .atlas-news { display:none; }
- .eu-workspace-root .eu-region-navigation { margin:6px auto; }
+ .eu-workspace-root .eu-region-navigation { margin:0 0 6px; }
  .eu-workspace-root .eu-region-buttons { margin-top:0; }
  .eu-workspace-root .eu-region-buttons button { min-height:32px; padding:3px 10px; }
  .eu-workspace-root .atlas-desktop-shell { display:block; padding:6px 12px 22px; }

@@ -32,19 +32,19 @@ const chartX=(i:number)=>38+i*24,chartT=(t:number)=>145-(t+10)/50*125;
 
 <BaseLayout title="中南米地図｜自然環境・農林業・産業・人口" description="中南米の気候、作物分布、産業拠点、人口を同じ地図で読み比べる。" compactAtlas>
  <div data-latin-atlas>
-  <div class="shell latin-region-shell">
-   <AtlasRegionNavigation group="americas" current="latin-america" />
-   <div class="latin-country-navigation" aria-label="中南米の国・地域">
-    <label class="visually-hidden" for="latin-country">国・地域</label>
-    <select id="latin-country" data-place aria-label="国・地域"><option value="">中南米全体</option>{countries.map(c=><option value={c.code}>{c.name}</option>)}</select>
-    <button type="button" data-reset>全体に戻す</button>
-   </div>
-  </div>
   <AtlasWorkspaceFrame region="latin-america">
    <article class="atlas-explorer latin-atlas" data-latin-explorer data-field={initialField==='nature'?'natural':initialField==='overview'?'regional-overview':initialField} data-nature-mode="climate">
     <section class="atlas-workspace" aria-label="中南米の分野別地図">
      <div class="atlas-compact-heading"><nav aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a><span aria-hidden="true"> / </span><a href={basePath}>中南米地図</a></nav><span data-current-place>中米・カリブ・南米</span></div>
      <h1 class="visually-hidden">中南米地図から読む、農林業・自然環境・主要産業・人口</h1>
+     <div class="atlas-region-controls latin-region-shell">
+      <AtlasRegionNavigation group="americas" current="latin-america" />
+      <div class="latin-country-navigation" aria-label="中南米の国・地域">
+       <label class="visually-hidden" for="latin-country">国・地域</label>
+       <select id="latin-country" data-place aria-label="国・地域"><option value="">中南米全体</option>{countries.map(c=><option value={c.code}>{c.name}</option>)}</select>
+       <button type="button" data-reset>全体に戻す</button>
+      </div>
+     </div>
      <nav class="atlas-tabs" aria-label="地図の分野">{fieldTabs.map(f=><a href={`${basePath}${f.id}/`} data-field={f.id} aria-current={initialField===f.id?'page':undefined}>{f.name}</a>)}</nav>
      <div class="atlas-nature-controls latin-nature-controls" data-nature-controls hidden={initialField!=='nature'}>
       <div class="atlas-nature-tabs" role="tablist" aria-label="自然環境の表示切替"><button type="button" role="tab" data-view-option="climate" aria-selected="true">気候区分</button><button type="button" role="tab" data-view-option="rivers" aria-selected="false">河川・地形の解説</button></div>

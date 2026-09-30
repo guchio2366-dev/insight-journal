@@ -1,6 +1,10 @@
 /* Shared desktop frame only: individual field content and data stay unchanged. */
 .atlas-desktop-shell{padding:12px 20px 36px;max-width:2048px;margin-inline:auto;display:grid;grid-template-columns:300px minmax(0,1fr);gap:20px;align-items:start}
 .atlas-desktop-shell .atlas-explorer{max-width:none;width:100%;min-width:0;padding:0}
+.atlas-region-controls{width:100%;min-width:0;margin:0 0 10px}
+.atlas-desktop-shell .atlas-region-controls .regional-navigation{margin:0}
+.atlas-region-controls.west-regional-navigation{margin:0 0 10px}
+.atlas-region-controls .latin-country-navigation{margin:7px 0 0}
 .atlas-news{position:sticky;top:12px;height:calc(100dvh - 72px);min-height:320px;display:flex;flex-direction:column;background:#fffefa;border:1px solid #deded5;border-radius:12px;overflow:hidden;color:#253b3d}
 .atlas-news-header{padding:22px 20px 18px;border-bottom:1px solid #e4e4db}
 .atlas-news-header>p{margin:0 0 8px;font-size:10px;font-weight:700;letter-spacing:.16em;color:#637a72}

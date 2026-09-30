@@ -19,15 +19,15 @@ const assetBase=withBase('/assets/atlas/west-asia-v1/');
 const climateSource='https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/frame.php';
 ---
 <BaseLayout title={`西アジア・中東の${field.label}`} description="20か国・地域の自然環境、農林業、産業、人口を、資料の対象年とともに読む地図。" compactAtlas>
- <div class="shell west-regional-navigation">
-  <nav class="west-region-links" aria-label="世界の地域"><a data-west-other="north-america" href={withBase(`/atlas/north-america/${field.route}/`)}>北米</a><a href={withBase('/atlas/europe/')}>欧州</a><a href={withBase(`/atlas/west-asia/${field.route}/`)} aria-current="page">西アジア・中東</a></nav>
-  <label class="west-region-country">国・地域<select data-west-country aria-label="国・地域を選択"><option value="">地域全体</option>{data.countries.map(c=><option value={c.code}>{c.name}</option>)}</select></label>
- </div>
  <AtlasWorkspaceFrame region="west-asia">
   <article class="atlas-explorer west-atlas" data-west-atlas data-field={initialField} data-assets={assetBase}>
    <section class="atlas-workspace" aria-label="西アジア・中東の分野別地図">
    <div class="atlas-compact-heading"><nav aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a><span> / </span><a href={withBase('/atlas/west-asia/')}>西アジア・中東地図</a></nav><span data-west-scope>20か国・地域</span></div>
    <h1 class="visually-hidden">西アジア・中東地図から読む、農林業・自然環境・主要産業・人口</h1>
+   <div class="atlas-region-controls west-regional-navigation">
+    <nav class="west-region-links" aria-label="世界の地域"><a data-west-other="north-america" href={withBase(`/atlas/north-america/${field.route}/`)}>北米</a><a href={withBase('/atlas/europe/')}>欧州</a><a href={withBase(`/atlas/west-asia/${field.route}/`)} aria-current="page">西アジア・中東</a></nav>
+    <label class="west-region-country">国・地域<select data-west-country aria-label="国・地域を選択"><option value="">地域全体</option>{data.countries.map(c=><option value={c.code}>{c.name}</option>)}</select></label>
+   </div>
    <nav class="atlas-tabs" aria-label="地図の分野">{westFields.map(f=><a data-west-field={f.id} href={withBase(`/atlas/west-asia/${f.route}/`)} aria-current={f.id===initialField?'page':undefined}>{f.label}</a>)}</nav>
    {initialField!=='agriculture'&&<div class={initialField==='natural'?'atlas-nature-controls west-controls':initialField==='industry'?'industry-controls':'population-controls'}>
     <div class={initialField==='natural'?'atlas-nature-tabs':initialField==='industry'?'industry-tab-row':'population-tabs'} role="tablist" aria-label={`${field.label}の表示切替`}>{groups.map(g=><button type="button" role="tab" id={`west-group-${groups.indexOf(g)}`} aria-controls="west-map-panel" data-west-group={g} aria-pressed={g===initial.group} aria-selected={g===initial.group} tabindex={g===initial.group?0:-1}>{g}</button>)}</div>
