@@ -25,3 +25,9 @@ and derivation are recorded in `map/vendor/README.md` and
 - Natural Earth Admin 0 Countries 1:50m, public domain. Retrieved 2026-09-25. https://www.naturalearthdata.com/about/terms-of-use/
 - World Bank, World Development Indicators (source 2), including FAO, UN Population Division and national accounts sources. Retrieved 2026-09-25. CC BY 4.0 under the World Bank data terms: https://datacatalog.worldbank.org/public-licenses . Indicator definitions, upstream credits, URLs and hashes are preserved in data-source/atlas/africa/manifest.json.
 - Derived Africa country subset, rounded coordinates, code harmonization, country/year extraction and Japanese explanations are modifications made for this site. No endorsement by the original providers is implied.
+
+## Canada forestry
+
+- NRCan / Canada Centre for Remote Sensing, 2020 Land Cover of Canada: Open Government Licence - Canada. Four forest-cover classes are masked from an official WMS image, with colors independently verified against the source GeoTIFF palette. Modified mask and legend, bounds, years, hashes and source URLs are recorded in data-source/atlas/canada/agriculture/forestry and the public manifest. No area estimates are derived.
+- Statistics Canada Table 16-10-0117-01: Statistics Canada Open Licence. Original nominal manufacturing revenues (thousand CAD), quality symbols and confidential values are preserved. Product, reference years, access date and prescribed derivative attribution are displayed. NRCan personal-use-only statisticalprofile-datasets derivatives are not used.
+- Existing Natural Earth public-domain country/river locator data and existing ECCC station positions are reused. No mill, logging boundary or shipping route is inferred from these location markers.

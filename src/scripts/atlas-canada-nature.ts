@@ -7,6 +7,8 @@ export function initCanadaNature(root:HTMLElement){
  let state=readCanadaNatureState(new URL(location.href),ids,waters);
  const full=[0,0,config.width,config.height];
  function render(){
+  const forestryBack=root.querySelector<HTMLAnchorElement>('[data-canada-forestry-return]'),savedForestry=new URL(location.href).searchParams.get('forestryReturn');
+  if(forestryBack){forestryBack.hidden=!savedForestry;if(savedForestry){const back=new URL(forestryBack.getAttribute('href')!,location.href),params=new URLSearchParams(savedForestry);back.search='';for(const key of ['year','province','compare','metric','cover','region','zoom']){const value=params.get(key);if(value)back.searchParams.set(key,value);}forestryBack.href=back.href;}}
   $<HTMLSelectElement>('[data-canada-city]').value=state.city;
   $<HTMLSelectElement>('[data-canada-compare]').value=state.compare??'';
   for(const option of $<HTMLSelectElement>('[data-canada-compare]').options)option.disabled=option.value===state.city;
