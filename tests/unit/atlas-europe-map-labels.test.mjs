@@ -14,6 +14,24 @@ const cities=json('src/data/atlas/europe/climate-cities.json');
 const grid=gunzipSync(readFileSync(new URL('../../public/assets/atlas/europe/climate-v1/classes.bin.gz',import.meta.url)));
 const classify=coordinate=>{const [x,y]=project(coordinate);return grid[Math.floor(y/frame.height*1502)*1800+Math.floor(x/frame.width*1800)];};
 
+test('カスピ海の水面を覆い、周辺陸地と気候記号の地点を覆わない',()=>{
+  const water=json('src/data/atlas/europe/climate-water.json');
+  assert.equal(water.features.length,1);
+  assert.match(water.source.url,/natural-earth-vector\/v5\.1\.2\/geojson\/ne_110m_ocean\.geojson$/);
+  const ring=water.features[0].geometry.coordinates[0];
+  const inside=([x,y])=>{
+    let hit=false;
+    for(let i=0,j=ring.length-1;i<ring.length;j=i++){
+      const [a,b]=ring[i],[c,d]=ring[j];
+      if((b>y)!==(d>y)&&x<(c-a)*(y-b)/(d-b)+a)hit=!hit;
+    }
+    return hit;
+  };
+  for(const point of [[51,38],[51,42],[51,46]])assert.equal(inside(point),true,`水面: ${point}`);
+  for(const point of [[45,42],[57,42],[51,50]])assert.equal(inside(point),false,`陸地: ${point}`);
+  for(const label of labels.labels)for(const point of [label.coordinate,...label.alternatives])assert.equal(inside(point),false,`${label.id}を水面に表示しない`);
+});
+
 test('欧州の気候記号と全代替アンカーは元の分類格子に一致する',()=>{
   const image=readFileSync(new URL('../../public'+labels.source,import.meta.url));
   assert.equal(createHash('sha256').update(image).digest('hex'),labels.sha256);

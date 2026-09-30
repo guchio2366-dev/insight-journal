@@ -17,7 +17,7 @@ export function initEuropeAtlas() {
   const root = document.querySelector<HTMLElement>('[data-europe-detail]');
   if (!root || root.dataset.initialized) return;
   root.dataset.initialized = 'true';
-  const config = JSON.parse(root.querySelector('[data-eu-config]')!.textContent!) as { farmingAreas:FarmingAreas; countries: Country[]; cities: City[]; geography: { type: 'FeatureCollection'; features: Feature[] }; climate: string; wheat: string; wheatValues: string; initialLayer: string; layers:EuropeLayer[];populationCities:Place[];readings:EuropeReading[];statistics:{indicators:Indicator[]} };
+  const config = JSON.parse(root.querySelector('[data-eu-config]')!.textContent!) as { farmingAreas:FarmingAreas; countries: Country[]; cities: City[]; geography: { type: 'FeatureCollection'; features: Feature[] }; climateWater: { type:'FeatureCollection';features:{type:'Feature';properties:{id:string;name:string};geometry:Geometry}[] }; climate: string; wheat: string; wheatValues: string; initialLayer: string; layers:EuropeLayer[];populationCities:Place[];readings:EuropeReading[];statistics:{indicators:Indicator[]} };
   const { countries, cities, geography } = config;
   const query = <T extends Element>(selector: string) => root.querySelector<T>(selector)!;
   const all = <T extends Element>(selector: string) => Array.from(root.querySelectorAll<T>(selector));
@@ -113,6 +113,8 @@ export function initEuropeAtlas() {
   function layers() {
     const layer=subject(),farm=farmingView();
     const climateVisible = state.layer === 'climate'||state.layer==='overlay', wheatVisible = layer.id==='wheat'&&!farm.active;
+    query<SVGGElement>('[data-eu-climate-water]').style.display=climateVisible?'':'none';
+    for(const id of ['climate-water','climate-water-outline'])if(map?.getLayer(id))map.setLayoutProperty(id,'visibility',climateVisible?'visible':'none');
     for (const [name, visible, url] of [['climate', climateVisible, config.climate], ['wheat', wheatVisible, config.wheat]] as const) {
       const svgImage = query<SVGImageElement>(`[data-eu-${name}-image]`);
       svgImage.style.display = visible ? '' : 'none';
@@ -252,6 +254,7 @@ export function initEuropeAtlas() {
     all<HTMLElement>('[data-city-reading]').forEach(card=>{card.hidden=card.dataset.cityReading!==state.city;});
     all<HTMLElement>('[data-eu-city-select]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.euCitySelect===state.city)));
     const city=cities.find(city=>city.id===state.city);
+    query('#eu-city-heading').textContent=city?`${city.name}の雨温図`:'雨温図：観測地点未選択';
     query<HTMLElement>('[data-eu-capital-missing]').hidden=!!city;
     query('[data-eu-capital-missing]').textContent=`対象国：${place?.name??'未選択'}。首都の観測値は未収録です。地図下の都市一覧から、収録済みの観測地点を選べます。`;
     query<HTMLElement>('[data-eu-climate-statistics-link]').hidden=!city;
@@ -347,6 +350,9 @@ export function initEuropeAtlas() {
         map.addLayer({ id: 'land', type: 'fill', source: 'countries', paint: { 'fill-color': '#edece5' } });
         map.addLayer({ id: 'context', type: 'fill', source: 'countries', filter: ['==', ['get', 'kind'], 'context'], paint: { 'fill-color': '#e9e6dc', 'fill-opacity': .55 } });
         map.addLayer({ id: 'borders', type: 'line', source: 'countries', paint: { 'line-color': '#536a6f', 'line-width': .7 } });
+        map.addSource('climate-water',{type:'geojson',data:config.climateWater as any});
+        map.addLayer({id:'climate-water',type:'fill',source:'climate-water',paint:{'fill-color':'#e7eff1'}});
+        map.addLayer({id:'climate-water-outline',type:'line',source:'climate-water',paint:{'line-color':'#8ca6aa','line-width':.7}});
         map.addLayer({ id: 'selected', type: 'line', source: 'countries', filter: ['==', ['get', 'code'], state.place], paint: { 'line-color': '#173c48', 'line-width': 3 } });
         map.on('click', 'land', e => { const code = e.features?.[0]?.properties?.code; if (subject().indicator && countries.some(c => c.code === code)) selectCountry(code); });
         map.on('click', e => { mapSelection([e.lngLat.lng, e.lngLat.lat]); });
