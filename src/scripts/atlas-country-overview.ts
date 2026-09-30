@@ -1,12 +1,12 @@
 import type { OverviewCountry, OverviewTopicId } from '../data/atlas/country-overview';
+import { initOverviewMap, type OverviewMapConfig } from './atlas-overview-map';
 
-interface OverviewConfig {
+interface OverviewConfig extends OverviewMapConfig {
   countries: OverviewCountry[];
-  defaultCountry: string;
   topics: { id: OverviewTopicId; label: string }[];
   regionLabel: string;
 }
-interface OverviewState { country: string; topic: OverviewTopicId }
+interface OverviewState { country: string; city: string; topic: OverviewTopicId }
 
 export function initCountryOverview(root: HTMLElement) {
   if (root.dataset.overviewReady === 'true') return;
@@ -18,21 +18,38 @@ export function initCountryOverview(root: HTMLElement) {
   const panels = Array.from(root.querySelectorAll<HTMLElement>('[role="tabpanel"]'));
   const countryNames = Array.from(root.querySelectorAll<HTMLElement>('[data-overview-country-name]'));
   const announcement = root.querySelector<HTMLElement>('[data-overview-announcement]')!;
+  const detail = root.querySelector<HTMLElement>('[data-overview-country-detail]')!;
+  const detailLink = root.querySelector<HTMLAnchorElement>('[data-overview-detail-link]')!;
 
   const readState = (): OverviewState => {
     const params = new URLSearchParams(location.search);
+    const city = config.cities.find(city => city.id === params.get('city'));
+    const country = config.countries.find(country => country.code === params.get('country'))?.code ?? '';
     return {
-      country: config.countries.find(country => country.code === params.get('country'))?.code ?? config.defaultCountry,
+      country: country || city?.country || '',
+      city: city && (!country || country === city.country) ? city.id : '',
       topic: config.topics.find(topic => topic.id === params.get('topic'))?.id ?? 'agriculture',
     };
   };
   let state = readState();
+  const map = initOverviewMap(root, config, (country, city = '') => {
+    state.country = country; state.city = city;
+    render(true); updateUrl(false);
+  });
 
   const render = (announce = false) => {
-    const country = config.countries.find(country => country.code === state.country)!;
+    const country = config.countries.find(country => country.code === state.country);
+    const city = config.cities.find(city => city.id === state.city);
     const topic = config.topics.find(topic => topic.id === state.topic)!;
-    picker.value = country.code;
-    countryNames.forEach(element => { element.textContent = country.name; });
+    picker.value = country?.code ?? '';
+    countryNames.forEach(element => { element.textContent = country?.name ?? ''; });
+    detail.hidden = !country; detailLink.hidden = !country;
+    root.querySelector<HTMLElement>('[data-overview-place-title]')!.textContent = city && country ? `${city.name} · ${country.name}` : country?.name ?? '国や都市を選んで、位置を確かめる';
+    const cities = config.cities.filter(city => city.country === state.country).map(city => city.name);
+    root.querySelector<HTMLElement>('[data-overview-place-description]')!.textContent = country
+      ? cities.length ? `地図に載せた主な都市：${cities.join('、')}。` : 'この国・地域の位置を拡大しています。'
+      : '地図の国名・都市名、または上の一覧から国・地域を選べます。';
+    map.select(state.country, state.city);
     tabs.forEach(tab => {
       const selected = tab.dataset.overviewTopic === state.topic;
       tab.setAttribute('aria-selected', String(selected));
@@ -42,17 +59,19 @@ export function initCountryOverview(root: HTMLElement) {
     const currentLink = root.querySelector<HTMLAnchorElement>('[data-overview-current-link]');
     if (currentLink) {
       const url = new URL(currentLink.href);
-      url.searchParams.set('country', state.country);
-      url.searchParams.set('topic', state.topic);
+      state.country ? url.searchParams.set('country', state.country) : url.searchParams.delete('country');
+      state.country ? url.searchParams.set('topic', state.topic) : url.searchParams.delete('topic');
+      state.city ? url.searchParams.set('city', state.city) : url.searchParams.delete('city');
       currentLink.href = url.href;
     }
-    document.title = `${country.name}の概要｜${topic.label}｜${config.regionLabel}｜Insight Journal`;
-    if (announce) announcement.textContent = `${country.name}の${topic.label}を表示しました。本文は準備中です。`;
+    document.title = country ? `${country.name}｜${config.regionLabel}の概要｜Insight Journal` : `${config.regionLabel}の概要と白地図｜Insight Journal`;
+    if (announce) announcement.textContent = country ? `${city?.name ?? country.name}を選択しました。地図の下から国別の解説へ進めます。` : `${config.regionLabel}全体を表示しました。`;
   };
   const updateUrl = (replace: boolean) => {
     const url = new URL(location.href);
-    url.searchParams.set('country', state.country);
-    url.searchParams.set('topic', state.topic);
+    state.country ? url.searchParams.set('country', state.country) : url.searchParams.delete('country');
+    state.country ? url.searchParams.set('topic', state.topic) : url.searchParams.delete('topic');
+    state.city ? url.searchParams.set('city', state.city) : url.searchParams.delete('city');
     // An anchor within the previous tab must not point into a now-hidden panel.
     if (!replace && url.hash.startsWith('#overview-')) url.hash = '';
     if (url.href !== location.href) history[replace ? 'replaceState' : 'pushState'](null, '', url);
@@ -69,7 +88,8 @@ export function initCountryOverview(root: HTMLElement) {
   };
 
   picker.addEventListener('change', () => {
-    state.country = config.countries.find(country => country.code === picker.value)?.code ?? config.defaultCountry;
+    state.country = config.countries.find(country => country.code === picker.value)?.code ?? '';
+    state.city = '';
     render(true);
     updateUrl(false);
   });

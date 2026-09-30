@@ -13,7 +13,7 @@
 .country-overview-fields .atlas-tab-planned{flex-wrap:wrap;gap:4px;color:#69716d}
 .country-overview-heading{padding:26px 0 22px}
 .country-overview-title-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px}
-.country-overview-title-row h1{font-family:var(--serif);font-size:clamp(25px,2.3vw,36px);line-height:1.5;margin:0}
+.country-overview-title-row h2{font-family:var(--serif);font-size:clamp(25px,2.3vw,36px);line-height:1.5;margin:0}
 .country-overview-status{padding:3px 9px;border:1px solid #c9cfbf;background:#f0f1e8;color:#526055;font-size:12px}
 .country-overview-heading>p{margin:10px 0 0;font-size:14px;color:var(--ink-soft);line-height:1.8}
 .country-overview-topic-tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border:1px solid #c7ccbf;background:#f3f3ec}
@@ -64,3 +64,54 @@
  .country-overview-section h3{font-size:18px;gap:10px}
 }
 @media(prefers-reduced-motion:reduce){.country-overview{scroll-behavior:auto}}
+
+/* The overview opens with geographic orientation, then a regional reading. */
+.overview-workspace .atlas-desktop-shell:not(.is-reading-news){grid-template-columns:220px minmax(0,1fr);gap:18px}
+.overview-map-reading{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(300px,1fr);gap:18px;margin-top:12px;align-items:start}
+.overview-map-column{min-width:0}
+.overview-map-stage{position:relative;height:clamp(460px,calc(100vh - 215px),800px);overflow:hidden;border:1px solid #b5c8c9;background:#eaf2f3;isolation:isolate;user-select:none}
+.overview-base-map{display:block;width:100%;height:100%;cursor:grab}
+.overview-base-map:active{cursor:grabbing}
+.overview-context-land{fill:#eaece5;stroke:#bac5bf;stroke-width:.8;vector-effect:non-scaling-stroke}
+.overview-country-shape{fill:#fffef8;stroke:#91a6a5;stroke-width:1;vector-effect:non-scaling-stroke;cursor:pointer}
+.overview-country-shape:hover{fill:#eef0db;stroke:#4e7675;stroke-width:1.6}
+.overview-country-shape[aria-pressed=true]{fill:#efe6bb;stroke:#557a6d;stroke-width:2}
+.overview-map-water{fill:#eaf2f3;stroke:#b7ced0;stroke-width:.65;vector-effect:non-scaling-stroke;pointer-events:none}
+.overview-water-name{fill:#7c999f;letter-spacing:.14em;font-family:var(--serif);text-anchor:middle;pointer-events:none}
+.overview-city-dot{fill:#607e7a;stroke:#fffefa;stroke-width:.8;vector-effect:non-scaling-stroke;pointer-events:none}
+.overview-city-dot.is-selected{fill:#ac5134;stroke-width:1.2}
+.overview-map-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.overview-map-labels button{position:absolute;display:block;transform:translate(-50%,-50%);min-height:0;padding:2px 4px;line-height:21px;border:0;border-radius:2px;background:transparent;white-space:nowrap;pointer-events:auto;cursor:pointer;text-shadow:0 1px 3px #fffefa,1px 0 3px #fffefa,-1px 0 3px #fffefa,0 -1px 3px #fffefa;color:#284646}
+.overview-map-labels .overview-country-label{font:700 13px/21px var(--sans);letter-spacing:.03em}
+.overview-map-labels .overview-city-label{font:500 11px/17px var(--sans);padding:1px 2px;color:#416563}
+.overview-map-labels button:hover,.overview-map-labels button[aria-pressed=true]{background:#fffae1;box-shadow:0 0 0 1px #728f83;color:#173e3d}
+.overview-map-controls{position:absolute;z-index:2;right:10px;top:10px;display:grid;gap:5px}
+.overview-map-controls button{min-width:40px;min-height:40px;padding:5px 7px;border:1px solid #b3c4be;background:#fffef7ef;border-radius:3px;color:#335953;font:17px var(--sans);cursor:pointer}
+.overview-map-controls button:last-child{font-size:12px}
+.overview-map-badge{position:absolute;bottom:9px;left:10px;max-width:calc(100% - 20px);padding:5px 8px;background:#fffef7e8;color:#577371;font-size:11px;border-radius:2px;pointer-events:none}
+.overview-map-key{display:flex;gap:12px;flex-wrap:wrap;padding:9px 11px;border:1px solid #c8d2c8;border-top:0;background:#f6f7ef;font-size:11px;color:#536b65}
+.overview-map-key span{display:inline-flex;gap:6px;align-items:center}
+.overview-map-key i{display:inline-block;width:14px;height:10px}
+.overview-key-border{border:1px solid #91a6a5;background:#fffef8}
+.overview-map-key .overview-key-city{height:5px;width:5px;border-radius:50%;background:#607e7a}
+.overview-key-selected{border:1px solid #557a6d;background:#efe6bb}
+.overview-place-summary{padding:16px 0 12px;border-bottom:1px solid var(--rule);font-size:14px;line-height:1.8}
+.overview-place-summary strong{font:600 20px/1.5 var(--serif)}
+.overview-place-summary p{margin:7px 0;color:var(--ink-soft);font-size:12px}
+.overview-place-summary a{font-size:13px;color:#365d56}
+.overview-map-source{margin-top:13px;color:var(--ink-soft);font-size:11px;line-height:1.8}
+.overview-map-source summary{cursor:pointer}
+.overview-map-source p{margin:8px 0}
+.overview-region-reading{min-width:0;padding:22px 21px;border:1px solid #d1d6ca;background:#fbfaf3}
+.overview-reading-eyebrow{margin:0 0 8px;font-size:11px;letter-spacing:.13em;color:#58766c}
+.overview-region-reading h2{font:500 29px/1.5 var(--serif);margin:0 0 15px}
+.overview-region-intro{margin:0;font-size:16px;line-height:1.95}
+.overview-region-section{border-top:1px solid #d8dccf;padding-top:20px;margin-top:23px}
+.overview-region-section h3{font:700 17px/1.6 var(--sans);margin:0 0 10px;color:#30534c}
+.overview-region-section p{font-size:14px;line-height:1.95;margin:0}
+.overview-region-section .overview-inline-sources{display:flex;flex-wrap:wrap;gap:5px 10px;font-size:10px;line-height:1.6;margin-top:10px;color:#687e76}
+.overview-reading-date{margin:20px 0 0;font-size:10px;color:#687e76}
+#overview-country-detail{border-top:1px solid var(--rule);margin-top:30px;scroll-margin-top:20px}
+@media(min-width:1600px){.overview-workspace .atlas-desktop-shell:not(.is-reading-news){grid-template-columns:260px minmax(0,1fr)}.overview-region-reading{padding:25px}.overview-region-section p{font-size:15px}}
+@media(max-width:1199px){.overview-workspace .atlas-desktop-shell:not(.is-reading-news){grid-template-columns:minmax(0,1fr)}.overview-workspace .atlas-desktop-shell:not(.is-reading-news) .atlas-news{height:155px}.overview-map-reading{grid-template-columns:minmax(0,1.65fr) minmax(300px,1fr)}.overview-map-stage{height:600px}}
+@media(max-width:760px){.overview-map-reading{grid-template-columns:minmax(0,1fr);gap:20px}.overview-map-stage{height:500px}.overview-region-reading{padding:20px}.overview-map-labels .overview-country-label{font-size:12px}}
