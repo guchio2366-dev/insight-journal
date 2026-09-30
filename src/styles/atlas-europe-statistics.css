@@ -8,7 +8,7 @@
 .eu-workspace-root .eu-statistic-heading h3 { margin:0 0 5px; font:700 21px/1.5 var(--serif); }
 .eu-workspace-root .eu-statistic-heading p { margin:0; font:13px/1.7 var(--sans); }
 .eu-workspace-root .eu-statistics .eu-city-card { padding:0; border:0; border-radius:0; background:transparent; }
-.eu-workspace-root .eu-climate-statistic-layout { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(290px,1fr); gap:30px; align-items:start; }
+.eu-workspace-root .eu-climate-statistic-layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(290px,1.35fr); gap:30px; align-items:start; }
 .eu-workspace-root .eu-climate-statistic-layout>* { min-width:0; }
 .eu-workspace-root .eu-climate-plot { margin:0; max-width:700px; }
 .eu-workspace-root .eu-climate-plot svg { display:block; width:100%; height:auto; }
@@ -34,11 +34,14 @@
 .eu-workspace-root .eu-statistic-months table { width:100%; font:13px/1.5 var(--sans); font-variant-numeric:tabular-nums; }
 .eu-workspace-root .eu-statistic-months caption { padding-bottom:8px; font-size:12px; line-height:1.6; }
 .eu-workspace-root .eu-statistic-months :is(td,th) { padding:6px 8px; }
-.eu-workspace-root .eu-city-reading-head h3 { margin:0 0 10px; font:700 24px/1.5 var(--serif); }
+.eu-workspace-root .eu-city-reading-title { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
 .eu-workspace-root .eu-city-reading :is(p,li) { font-size:14px; line-height:1.85; }
-.eu-workspace-root .eu-city-reading .eu-city-reading-country { margin:0 0 5px; color:#526561; font-size:12px; }
+.eu-workspace-root .eu-city-chart-meta { margin:8px 0 0; }
 .eu-workspace-root .eu-city-reading .eu-city-climate { margin:16px 0 8px; padding-top:14px; border-top:1px solid #c7cec3; font:700 18px/1.65 var(--sans); }
 .eu-workspace-root .eu-city-reading .eu-city-climate strong { color:#426b6b; }
+.eu-workspace-root .eu-climate-farming { margin-top:16px; padding-top:14px; border-top:1px solid #c7cec3; }
+.eu-workspace-root .eu-climate-farming h4 { margin:0 0 8px; color:#365f58; font:700 17px/1.65 var(--sans); }
+.eu-workspace-root .eu-climate-farming>p { margin:8px 0; }
 .eu-workspace-root .eu-city-reading .eu-statistic-note,.eu-workspace-root .eu-city-reading .eu-statistic-source { font-size:12px; }
 .eu-workspace-root .eu-statistics-jump { display:inline-block; min-height:40px; padding-block:9px; font-size:14px; }
 .eu-workspace-root .eu-statistics-availability { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 24px; margin:0; }

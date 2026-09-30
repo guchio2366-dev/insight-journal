@@ -252,10 +252,8 @@ export function initEuropeAtlas() {
     all<HTMLElement>('[data-city-reading]').forEach(card=>{card.hidden=card.dataset.cityReading!==state.city;});
     all<HTMLElement>('[data-eu-city-select]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.euCitySelect===state.city)));
     const city=cities.find(city=>city.id===state.city);
-    const cityCountry=countries.find(country=>country.code===city?.country);
-    const capital=city&&defaultEuropeCity(city.country,ids)===city.id;
-    query('[data-eu-climate-scope]').textContent=city?`対象国：${cityCountry?.name??city.country}。${capital?'首都':''}${city.name}の観測値を表示しています。`:`対象国：${place?.name??'未選択'}。首都の観測値は未収録です。`;
     query<HTMLElement>('[data-eu-capital-missing]').hidden=!!city;
+    query('[data-eu-capital-missing]').textContent=`対象国：${place?.name??'未選択'}。首都の観測値は未収録です。地図下の都市一覧から、収録済みの観測地点を選べます。`;
     query<HTMLElement>('[data-eu-climate-statistics-link]').hidden=!city;
     all<SVGElement>('[data-eu-point]').forEach(point => {point.classList.toggle('is-active', active.includes(point.dataset.euPoint!));point.style.display=climateReader()?'':'none';point.removeAttribute('hidden');});
     all<SVGElement>('[data-eu-feature-point]').forEach(p=>{p.style.display=featureVisible(p.dataset.euFeaturePoint!)?'':'none';p.removeAttribute('hidden');p.classList.toggle('is-active',p.dataset.euFeaturePoint===state.feature);});
@@ -267,7 +265,7 @@ export function initEuropeAtlas() {
     updateReader();
     query<HTMLElement>('.eu-read-panel').setAttribute('aria-labelledby',climateReader()?'eu-city-heading':'eu-subject-title');
     const farm=farmingView();
-    const guidance=climateReader()?'都市名を押すと、右に説明、画面下部に雨温図を表示します。':farm.active?farm.single?`${farm.item!.name}だけを表示中です。元の表示には右側のボタンで戻れます。`:!farm.visible.length?'作物・畜産の分布は非表示です。左上のボタンで表示できます。':farm.item&&!farm.selectedVisible?`${farm.item.name}の分布は非表示です。選択した説明は右側に表示しています。`:'品目名を選ぶと、その分布全体の輪郭を強調します。重なる場所では候補を選べます。':visibleFeatures().length?'地図の名前を押すと、その場所の説明を表示します。':subject().grid?'地図を押すと、その位置の値を画面下部に表示します。':subject().indicator?'国を押すと、画面下部に国全体の数値を表示します。':'地図の凡例と右側の説明を読み比べます。';
+    const guidance=climateReader()?'都市名を押すと、右側の雨温図・気候区分・農畜産物の説明が切り替わります。':farm.active?farm.single?`${farm.item!.name}だけを表示中です。元の表示には右側のボタンで戻れます。`:!farm.visible.length?'作物・畜産の分布は非表示です。左上のボタンで表示できます。':farm.item&&!farm.selectedVisible?`${farm.item.name}の分布は非表示です。選択した説明は右側に表示しています。`:'品目名を選ぶと、その分布全体の輪郭を強調します。重なる場所では候補を選べます。':visibleFeatures().length?'地図の名前を押すと、その場所の説明を表示します。':subject().grid?'地図を押すと、その位置の値を画面下部に表示します。':subject().indicator?'国を押すと、画面下部に国全体の数値を表示します。':'地図の凡例と右側の説明を読み比べます。';
     status.textContent=(failed?'簡易地図で表示中。':'')+guidance;
     query<HTMLElement>('[data-eu-statistics]').hidden=all<HTMLElement>('[data-eu-statistics] > *').every(section=>section.hidden);
     all<HTMLElement>('[data-eu-extra-field]').forEach(el=>{el.hidden=el.dataset.euExtraField!==currentField.id;});

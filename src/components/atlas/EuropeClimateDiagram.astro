@@ -1,5 +1,4 @@
 ---
-import AtlasClimatePlot from './AtlasClimatePlot.astro';
 import { climateSummary } from '../../lib/atlas-europe-view';
 
 interface Props {
@@ -13,32 +12,15 @@ interface Props {
 const { city, country } = Astro.props;
 const summary = climateSummary(city.months);
 const station = city.stationName.split(' -')[0];
-const temperature = city.months.map(month => month.temperature);
-const precipitation = city.months.map(month => month.precipitation);
-const missingRain = precipitation.some(value => value === null);
-const missingTemperature = temperature.some(value => value === null);
 const format = (value: number | null) => value === null ? '欠測' : value.toFixed(1);
-// All 24 recorded stations fit the common scale; reject future out-of-range
-// source values explicitly instead of silently cutting a bar or a line.
-if (temperature.some(value => value !== null && (value < -10 || value > 40)) ||
-    precipitation.some(value => value !== null && (value < 0 || value > 350))) {
-  throw new Error(`Europe climate values exceed the shared plot scale: ${city.id}`);
-}
 ---
 <article class="eu-city-card eu-climate-statistic" data-city-card={city.id} hidden={city.id !== 'london'} aria-labelledby={`city-${city.id}`}>
   <header class="eu-statistic-heading">
-    <h3 id={`city-${city.id}`}>{city.name}の雨温図</h3>
+    <h3 id={`city-${city.id}`}>{city.name}の月別の数値・年間の要約</h3>
     <p>{country} · {city.period}年の平年値 · 観測所 {station}</p>
   </header>
   <div class="eu-climate-statistic-layout">
-    <div class="eu-climate-statistic-chart">
-      <figure class="eu-climate-plot">
-        <AtlasClimatePlot name={city.name} period={`${city.period}年`} temperatureC={temperature} precipitationMm={precipitation} />
-        <figcaption class="eu-chart-key"><span>棒：降水量 mm（左軸）</span><span>線：気温 ℃（右軸）</span></figcaption>
-      </figure>
-      <p class="eu-statistic-note">全24都市で目盛りは共通です。降水量は0〜350 mm、気温は−10〜40 ℃で示します。</p>
-      {missingRain && <p class="eu-statistic-missing">×は降水量の欠測を示し、0 mmではありません。欠測月の棒と年間合計は表示していません。</p>}
-      {missingTemperature && <p class="eu-statistic-missing">気温の欠測月では線を途切れさせています。気温の年較差は算出していません。</p>}
+    <div class="eu-climate-statistic-summary">
       <dl class="eu-summary">
         <div><dt>年間降水量</dt><dd>{summary.annualRain === null ? '欠測のため算出できません' : `${summary.annualRain.toLocaleString('ja-JP', { maximumFractionDigits: 1 })} mm`}</dd></div>
         <div><dt>気温の年較差</dt><dd>{summary.range === null ? '欠測のため算出できません' : `${summary.range.toFixed(1)} ℃`}</dd></div>

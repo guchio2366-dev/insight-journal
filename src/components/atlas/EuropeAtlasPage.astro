@@ -103,12 +103,10 @@ const config = { farmingAreas, geography, countries, cities: cities.map(({ id, n
       <aside class="eu-read-panel" aria-labelledby={initialClimateReader?'eu-city-heading':'eu-subject-title'}>
         <EuropeSubjectReader layer={initialLayer} hidden={initialClimateReader} />
         <div data-eu-climate-reader hidden={!initialClimateReader}>
-        <div class="eu-reader-heading"><h2 id="eu-city-heading">都市の気候</h2></div>
-        <p class="eu-data-note" data-eu-climate-scope>初期対象国：イギリス。首都ロンドンの観測値を表示しています。</p>
-        <p class="eu-data-note">地図は気候区分の広がりを示します。都市1地点の観測値が国全体を代表するわけではありません。</p>
+        <div class="eu-reader-heading"><h2 id="eu-city-heading">都市の雨温図</h2></div>
         <div class="eu-city-readings">{cities.map(city=><EuropeClimateReading city={city} country={countryName(city.country)} />)}</div>
         <p data-eu-capital-missing hidden>対象国の首都の観測値は未収録です。地図下の都市一覧から、収録済みの観測地点を選べます。</p>
-        <a class="eu-statistics-jump" href="#europe-climate-statistics" data-eu-climate-statistics-link>選択した都市の雨温図・月別表へ ↓</a>
+        <a class="eu-statistics-jump" href="#europe-climate-statistics" data-eu-climate-statistics-link>月別の数値・年間の要約へ ↓</a>
         </div>
       </aside>
     </div>
