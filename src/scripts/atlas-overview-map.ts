@@ -21,6 +21,8 @@ export function initOverviewMap(root: HTMLElement, config: OverviewMapConfig, on
     const scale = Math.min(width / frame[2], height / frame[3]);
     const offsetX = (width - frame[2] * scale) / 2, offsetY = (height - frame[3] * scale) / 2;
     const occupied: number[][] = [[width - 62, 0, width, 155], [0, height - 34, 185, height]];
+    const rankLimit = frame[2] >= config.width * .75 ? 3 : frame[2] >= config.width * .4 ? 5 : Infinity;
+    const cityVisible = (city: OverviewMapConfig['cities'][number]) => city.country === selectedCountry || city.rank <= rankLimit;
     const priority = (label: HTMLButtonElement) => {
       if (selectedCity && label.dataset.overviewMapCity === selectedCity) return 1000;
       if (selectedCountry && label.dataset.overviewLabelCountry === selectedCountry) return 950;
@@ -28,6 +30,8 @@ export function initOverviewMap(root: HTMLElement, config: OverviewMapConfig, on
       return label.dataset.overviewLabelCountry ? 40 + Math.log(Math.max(1, Number(label.dataset.priority))) * 2 : 58 - Number(label.dataset.priority || 0);
     };
     [...labels].sort((a, b) => priority(b) - priority(a)).forEach(label => {
+      const city = config.cities.find(city => city.id === label.dataset.overviewMapCity);
+      if (city && !cityVisible(city)) { label.hidden = true; return; }
       const x = (Number(label.dataset.x) - frame[0]) * scale + offsetX, y = (Number(label.dataset.y) - frame[1]) * scale + offsetY;
       const country = !!label.dataset.overviewLabelCountry;
       label.hidden = false;
@@ -42,6 +46,8 @@ export function initOverviewMap(root: HTMLElement, config: OverviewMapConfig, on
       label.setAttribute('aria-pressed', String(country ? label.dataset.overviewLabelCountry === selectedCountry : label.dataset.overviewMapCity === selectedCity));
     });
     root.querySelectorAll<SVGCircleElement>('[data-overview-city-dot]').forEach(dot => {
+      const city = config.cities.find(city => city.id === dot.dataset.overviewCityDot);
+      dot.style.display = city && cityVisible(city) ? '' : 'none';
       const selected = dot.dataset.overviewCityDot === selectedCity;
       dot.setAttribute('r', String((selected ? 4 : 2.5) / scale)); dot.classList.toggle('is-selected', selected);
     });
@@ -92,6 +98,7 @@ export function initOverviewMap(root: HTMLElement, config: OverviewMapConfig, on
   stage.addEventListener('pointerup', () => { drag = null; setTimeout(() => { dragged = false; }, 0); });
   stage.addEventListener('pointercancel', () => { drag = null; dragged = false; });
   if (typeof ResizeObserver !== 'undefined') new ResizeObserver(draw).observe(stage);
+  document.fonts?.ready.then(draw);
   draw();
   return { select };
 }
