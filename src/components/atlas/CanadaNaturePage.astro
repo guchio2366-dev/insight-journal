@@ -31,7 +31,8 @@ const config={cities:climate.stations.map(s=>({id:s.id,name:s.name,point:project
    <p class="canada-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / カナダ</p>
    <AtlasRegionNavigation group="americas" current="north-america" country="canada" />
    <header><p class="eyebrow">Canada · Natural environment</p><h1>カナダの自然環境</h1><p class="canada-lead">西岸の海と山地、内陸の平原、東部の楯状地、北部の島々。場所を確かめ、季節と水の違いを読む。</p></header>
-   <nav class="canada-fields" aria-label="カナダの分野"><a data-atlas-overview-link href={withBase('/atlas/north-america/overview/?country=CAN')}>概要</a><a href={withBase('/atlas/north-america/canada/nature/')} aria-current="page">自然環境</a><a href={withBase('/atlas/north-america/canada/agriculture/')}>農畜林業<small>カノーラ・小麦・肉牛公開</small></a>{['主要産業','人口'].map(label=><span aria-disabled="true">{label}<small>準備中</small></span>)}</nav>
+   <nav class="canada-fields" aria-label="カナダの分野"><a data-atlas-overview-link href={withBase('/atlas/north-america/overview/?country=CAN')}>概要</a><a href={withBase('/atlas/north-america/canada/nature/')} aria-current="page">自然環境</a><a href={withBase('/atlas/north-america/canada/agriculture/')}>農畜林業<small>カノーラ・小麦・肉牛・林業公開</small></a>{['主要産業','人口'].map(label=><span aria-disabled="true">{label}<small>準備中</small></span>)}</nav>
+   <p><a href={withBase('/atlas/north-america/canada/agriculture/forestry/')} data-canada-forestry-return hidden>林業の森林図・州比較へ戻る</a></p>
    <nav class="canada-views" aria-label="自然環境の表示"><button data-canada-view="climate" aria-pressed="true">都市の気候</button><button data-canada-view="landform" aria-pressed="false">地形地域</button><button data-canada-view="water" aria-pressed="false">湖と河川</button></nav>
    <div class="canada-workspace">
     <section class="canada-map-column" aria-label="カナダの地図">

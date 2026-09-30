@@ -1,0 +1,9 @@
+export type CanadaForestryState={year:number;province:string;compare:string|null;metric:'wood'|'paper';cover:'all'|'needleleaf'|'taiga'|'broadleaf'|'mixed';region:'bc'|'quebec'|'ontario';zoom:boolean};
+export const forestryStateKeys=['year','province','compare','metric','cover','region','zoom'] as const;
+export function readCanadaForestryState(url:URL,years:number[],provinces:string[]):CanadaForestryState{
+ const p=url.searchParams,y=Number(p.get('year')),province=provinces.includes(p.get('province')??'')?p.get('province')!:'British Columbia',compare=p.get('compare');
+ return {year:years.includes(y)?y:2024,province,compare:compare&&provinces.includes(compare)&&compare!==province?compare:null,metric:p.get('metric')==='paper'?'paper':'wood',cover:['all','needleleaf','taiga','broadleaf','mixed'].includes(p.get('cover')??'')?p.get('cover') as CanadaForestryState['cover']:'all',region:['bc','quebec','ontario'].includes(p.get('region')??'')?p.get('region') as CanadaForestryState['region']:'bc',zoom:p.get('zoom')==='1'};
+}
+export function writeCanadaForestryState(url:URL,state:CanadaForestryState){const u=new URL(url);for(const key of forestryStateKeys)u.searchParams.delete(key);for(const key of ['year','province','metric','cover','region'] as const)u.searchParams.set(key,String(state[key]));if(state.compare)u.searchParams.set('compare',state.compare);if(state.zoom)u.searchParams.set('zoom','1');return u;}
+export function formatCanadaForestryValue(v:number|null){return v===null?'欠測':v.toLocaleString('ja-JP',{maximumFractionDigits:0});}
+export function canadaForestryComparisonUrl(source:URL,target:URL,state:CanadaForestryState){const params=writeCanadaForestryState(new URL(source.pathname,source),state).searchParams;target.searchParams.set('forestryReturn',params.toString());return target;}

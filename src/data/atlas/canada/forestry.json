@@ -1,0 +1,808 @@
+{
+  "years": [
+    2021,
+    2023,
+    2024
+  ],
+  "provinces": [
+    {
+      "id": "Canada",
+      "name": "カナダ全体"
+    },
+    {
+      "id": "Newfoundland and Labrador",
+      "name": "ニューファンドランド・ラブラドル"
+    },
+    {
+      "id": "Prince Edward Island",
+      "name": "プリンスエドワード島"
+    },
+    {
+      "id": "Nova Scotia",
+      "name": "ノバスコシア"
+    },
+    {
+      "id": "New Brunswick",
+      "name": "ニューブランズウィック"
+    },
+    {
+      "id": "Quebec",
+      "name": "ケベック"
+    },
+    {
+      "id": "Ontario",
+      "name": "オンタリオ"
+    },
+    {
+      "id": "Manitoba",
+      "name": "マニトバ"
+    },
+    {
+      "id": "Saskatchewan",
+      "name": "サスカチュワン"
+    },
+    {
+      "id": "Alberta",
+      "name": "アルバータ"
+    },
+    {
+      "id": "British Columbia",
+      "name": "ブリティッシュコロンビア"
+    }
+  ],
+  "metrics": [
+    {
+      "id": "wood",
+      "name": "木材製品製造",
+      "source": "Wood product manufacturing [321]",
+      "unit": "千CAD"
+    },
+    {
+      "id": "paper",
+      "name": "紙製品製造",
+      "source": "Paper manufacturing [322]",
+      "unit": "千CAD"
+    }
+  ],
+  "data": [
+    {
+      "year": 2021,
+      "id": "Canada",
+      "name": "カナダ全体",
+      "values": {
+        "wood": {
+          "value": 53445762,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105899919",
+          "decimals": 0
+        },
+        "paper": {
+          "value": 29169104,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105899929",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Newfoundland and Labrador",
+      "name": "ニューファンドランド・ラブラドル",
+      "values": {
+        "wood": {
+          "value": null,
+          "status": "x",
+          "symbol": "",
+          "vector": "v105902527",
+          "decimals": 0
+        },
+        "paper": {
+          "value": null,
+          "status": "x",
+          "symbol": "",
+          "vector": "v105902537",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Prince Edward Island",
+      "name": "プリンスエドワード島",
+      "values": {
+        "wood": {
+          "value": null,
+          "status": "x",
+          "symbol": "",
+          "vector": "v105903392",
+          "decimals": 0
+        },
+        "paper": {
+          "value": null,
+          "status": "x",
+          "symbol": "",
+          "vector": "v105903402",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Nova Scotia",
+      "name": "ノバスコシア",
+      "values": {
+        "wood": {
+          "value": null,
+          "status": "x",
+          "symbol": "",
+          "vector": "v105904245",
+          "decimals": 0
+        },
+        "paper": {
+          "value": null,
+          "status": "x",
+          "symbol": "",
+          "vector": "v105904255",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "New Brunswick",
+      "name": "ニューブランズウィック",
+      "values": {
+        "wood": {
+          "value": null,
+          "status": "x",
+          "symbol": "",
+          "vector": "v105905406",
+          "decimals": 0
+        },
+        "paper": {
+          "value": 2243867,
+          "status": "A",
+          "symbol": "",
+          "vector": "v105905416",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Quebec",
+      "name": "ケベック",
+      "values": {
+        "wood": {
+          "value": 14479588,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105906622",
+          "decimals": 0
+        },
+        "paper": {
+          "value": 9534550,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105906632",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Ontario",
+      "name": "オンタリオ",
+      "values": {
+        "wood": {
+          "value": 8030303,
+          "status": "C",
+          "symbol": "",
+          "vector": "v105908049",
+          "decimals": 0
+        },
+        "paper": {
+          "value": 8998592,
+          "status": "C",
+          "symbol": "",
+          "vector": "v105908059",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Manitoba",
+      "name": "マニトバ",
+      "values": {
+        "wood": {
+          "value": 716334,
+          "status": "C",
+          "symbol": "",
+          "vector": "v105910838",
+          "decimals": 0
+        },
+        "paper": {
+          "value": null,
+          "status": "x",
+          "symbol": "",
+          "vector": "v105910848",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Saskatchewan",
+      "name": "サスカチュワン",
+      "values": {
+        "wood": {
+          "value": 1544385,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105912088",
+          "decimals": 0
+        },
+        "paper": {
+          "value": null,
+          "status": "x",
+          "symbol": "",
+          "vector": "v105912098",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Alberta",
+      "name": "アルバータ",
+      "values": {
+        "wood": {
+          "value": 7914084,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105913321",
+          "decimals": 0
+        },
+        "paper": {
+          "value": 2344509,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105913331",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "British Columbia",
+      "name": "ブリティッシュコロンビア",
+      "values": {
+        "wood": {
+          "value": 17190022,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105914711",
+          "decimals": 0
+        },
+        "paper": {
+          "value": 4532717,
+          "status": "A",
+          "symbol": "",
+          "vector": "v105914721",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "Canada",
+      "name": "カナダ全体",
+      "values": {
+        "wood": {
+          "value": 39565837,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105899919",
+          "decimals": 0
+        },
+        "paper": {
+          "value": 32813239,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105899929",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "Newfoundland and Labrador",
+      "name": "ニューファンドランド・ラブラドル",
+      "values": {
+        "wood": {
+          "value": null,
+          "status": "x",
+          "symbol": "",
+          "vector": "v105902527",
+          "decimals": 0
+        },
+        "paper": {
+          "value": null,
+          "status": "x",
+          "symbol": "",
+          "vector": "v105902537",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "Prince Edward Island",
+      "name": "プリンスエドワード島",
+      "values": {
+        "wood": {
+          "value": null,
+          "status": "x",
+          "symbol": "",
+          "vector": "v105903392",
+          "decimals": 0
+        },
+        "paper": {
+          "value": null,
+          "status": "x",
+          "symbol": "",
+          "vector": "v105903402",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "Nova Scotia",
+      "name": "ノバスコシア",
+      "values": {
+        "wood": {
+          "value": 568580,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105904245",
+          "decimals": 0
+        },
+        "paper": {
+          "value": null,
+          "status": "x",
+          "symbol": "",
+          "vector": "v105904255",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "New Brunswick",
+      "name": "ニューブランズウィック",
+      "values": {
+        "wood": {
+          "value": 1894262,
+          "status": "A",
+          "symbol": "",
+          "vector": "v105905406",
+          "decimals": 0
+        },
+        "paper": {
+          "value": 2438546,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105905416",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "Quebec",
+      "name": "ケベック",
+      "values": {
+        "wood": {
+          "value": 11624604,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105906622",
+          "decimals": 0
+        },
+        "paper": {
+          "value": 11433377,
+          "status": "A",
+          "symbol": "",
+          "vector": "v105906632",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "Ontario",
+      "name": "オンタリオ",
+      "values": {
+        "wood": {
+          "value": 7176252,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105908049",
+          "decimals": 0
+        },
+        "paper": {
+          "value": 10306775,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105908059",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "Manitoba",
+      "name": "マニトバ",
+      "values": {
+        "wood": {
+          "value": 860643,
+          "status": "C",
+          "symbol": "",
+          "vector": "v105910838",
+          "decimals": 0
+        },
+        "paper": {
+          "value": null,
+          "status": "x",
+          "symbol": "",
+          "vector": "v105910848",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "Saskatchewan",
+      "name": "サスカチュワン",
+      "values": {
+        "wood": {
+          "value": 835648,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105912088",
+          "decimals": 0
+        },
+        "paper": {
+          "value": null,
+          "status": "x",
+          "symbol": "",
+          "vector": "v105912098",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "Alberta",
+      "name": "アルバータ",
+      "values": {
+        "wood": {
+          "value": 5180978,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105913321",
+          "decimals": 0
+        },
+        "paper": {
+          "value": 2409740,
+          "status": "A",
+          "symbol": "",
+          "vector": "v105913331",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "British Columbia",
+      "name": "ブリティッシュコロンビア",
+      "values": {
+        "wood": {
+          "value": 11279259,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105914711",
+          "decimals": 0
+        },
+        "paper": {
+          "value": 4474268,
+          "status": "A",
+          "symbol": "",
+          "vector": "v105914721",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "Canada",
+      "name": "カナダ全体",
+      "values": {
+        "wood": {
+          "value": 39408009,
+          "status": "C",
+          "symbol": "",
+          "vector": "v105899919",
+          "decimals": 0
+        },
+        "paper": {
+          "value": 33064422,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105899929",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "Newfoundland and Labrador",
+      "name": "ニューファンドランド・ラブラドル",
+      "values": {
+        "wood": {
+          "value": 105923,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105902527",
+          "decimals": 0
+        },
+        "paper": {
+          "value": null,
+          "status": "x",
+          "symbol": "",
+          "vector": "v105902537",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "Prince Edward Island",
+      "name": "プリンスエドワード島",
+      "values": {
+        "wood": {
+          "value": 25319,
+          "status": "C",
+          "symbol": "",
+          "vector": "v105903392",
+          "decimals": 0
+        },
+        "paper": {
+          "value": null,
+          "status": "x",
+          "symbol": "",
+          "vector": "v105903402",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "Nova Scotia",
+      "name": "ノバスコシア",
+      "values": {
+        "wood": {
+          "value": 580600,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105904245",
+          "decimals": 0
+        },
+        "paper": {
+          "value": 501338,
+          "status": "A",
+          "symbol": "",
+          "vector": "v105904255",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "New Brunswick",
+      "name": "ニューブランズウィック",
+      "values": {
+        "wood": {
+          "value": 1951588,
+          "status": "C",
+          "symbol": "",
+          "vector": "v105905406",
+          "decimals": 0
+        },
+        "paper": {
+          "value": 2494946,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105905416",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "Quebec",
+      "name": "ケベック",
+      "values": {
+        "wood": {
+          "value": 11789608,
+          "status": "C",
+          "symbol": "",
+          "vector": "v105906622",
+          "decimals": 0
+        },
+        "paper": {
+          "value": 11928895,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105906632",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "Ontario",
+      "name": "オンタリオ",
+      "values": {
+        "wood": {
+          "value": 6822684,
+          "status": "C",
+          "symbol": "",
+          "vector": "v105908049",
+          "decimals": 0
+        },
+        "paper": {
+          "value": 9741289,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105908059",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "Manitoba",
+      "name": "マニトバ",
+      "values": {
+        "wood": {
+          "value": 873429,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105910838",
+          "decimals": 0
+        },
+        "paper": {
+          "value": null,
+          "status": "x",
+          "symbol": "",
+          "vector": "v105910848",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "Saskatchewan",
+      "name": "サスカチュワン",
+      "values": {
+        "wood": {
+          "value": 908461,
+          "status": "B",
+          "symbol": "",
+          "vector": "v105912088",
+          "decimals": 0
+        },
+        "paper": {
+          "value": null,
+          "status": "x",
+          "symbol": "",
+          "vector": "v105912098",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "Alberta",
+      "name": "アルバータ",
+      "values": {
+        "wood": {
+          "value": 5432520,
+          "status": "C",
+          "symbol": "",
+          "vector": "v105913321",
+          "decimals": 0
+        },
+        "paper": {
+          "value": 2483602,
+          "status": "A",
+          "symbol": "",
+          "vector": "v105913331",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "British Columbia",
+      "name": "ブリティッシュコロンビア",
+      "values": {
+        "wood": {
+          "value": 10916312,
+          "status": "C",
+          "symbol": "",
+          "vector": "v105914711",
+          "decimals": 0
+        },
+        "paper": {
+          "value": 4733033,
+          "status": "A",
+          "symbol": "",
+          "vector": "v105914721",
+          "decimals": 0
+        }
+      }
+    }
+  ],
+  "classes": [
+    {
+      "id": "needleleaf",
+      "code": 1,
+      "name": "温帯・亜寒帯の針葉樹林",
+      "sourceName": "Temperate or sub-polar needleleaf forest",
+      "color": [
+        0,
+        60,
+        0
+      ]
+    },
+    {
+      "id": "taiga",
+      "code": 2,
+      "name": "亜寒帯のタイガ針葉樹林",
+      "sourceName": "Sub-polar taiga needleleaf forest",
+      "color": [
+        147,
+        155,
+        111
+      ]
+    },
+    {
+      "id": "broadleaf",
+      "code": 5,
+      "name": "温帯・亜寒帯の落葉広葉樹林",
+      "sourceName": "Temperate or sub-polar broadleaf deciduous forest",
+      "color": [
+        19,
+        139,
+        4
+      ]
+    },
+    {
+      "id": "mixed",
+      "code": 6,
+      "name": "混交林",
+      "sourceName": "Mixed forest",
+      "color": [
+        91,
+        116,
+        42
+      ]
+    }
+  ]
+}
