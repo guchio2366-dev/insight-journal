@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AtlasRegionNavigation from './AtlasRegionNavigation.astro';
+import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
+import AtlasClimatePlot from './AtlasClimatePlot.astro';
+import canola from '../../data/atlas/canada/canola.json';
+import climate from '../../data/atlas/canada/climate.json';
+import {canolaReading,canolaSources} from '../../data/atlas/canada/agriculture-reading';
+import {withBase} from '../../lib/urls';
+import '../../styles/atlas-canada-nature.css';
+import '../../styles/atlas-canada-agriculture.css';
+const regina=climate.stations.find(s=>s.id==='regina')!;
+const fmt=(v:number|null)=>v===null?'未収録':v.toLocaleString('ja-JP');
+const nature=(query:string)=>withBase(`/atlas/north-america/canada/nature/${query}`);
+---
+<BaseLayout title="カナダの農林業｜カノーラとプレーリー" description="カノーラの面積分布を、プレーリーの気候・土壌管理・機械化・加工・需要へつなげて読む。" compactAtlas>
+ <AtlasWorkspaceFrame region="north-america" mapActions={false}>
+  <article class="canada-nature canada-agriculture" data-canada-agriculture>
+   <p class="canada-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / カナダ</p>
+   <AtlasRegionNavigation group="americas" current="north-america" country="canada" />
+   <header><p class="eyebrow">Canada · Agriculture and forestry</p><h1>カノーラから読む、カナダの農林業</h1><p class="canada-lead">自然条件から、育てる・収穫する・運ぶ・加工する・買う人へ。プレーリーの分布をたどる。</p></header>
+   <nav class="canada-fields" aria-label="カナダの分野"><a href={withBase('/atlas/north-america/overview/?country=CAN')}>概説</a><a href={nature('')}>自然環境</a><a href={withBase('/atlas/north-america/canada/agriculture/')} aria-current="page">農林業</a><span aria-disabled="true">主要産業<small>準備中</small></span><span aria-disabled="true">人口<small>準備中</small></span></nav>
+   <p class="canola-scope">公開項目：カノーラ。小麦などの主要栽培・畜産・林業は準備中です。農林業分野全体の完成を示すページではありません。</p>
+   <div class="canada-workspace">
+    <section class="canada-map-column" aria-label="カノーラの分布と比較">
+     <h2>どこに栽培面積が集まる？</h2>
+     <figure class="canola-distribution"><div class="canola-map-scroll" data-canola-map-scroll><a href={withBase('/assets/atlas/canada-agriculture-v1/canola-map-2021.jpg')} aria-label="カノーラ分布図を原寸で開く"><img src={withBase('/assets/atlas/canada-agriculture-v1/canola-map-2021.jpg')} width="1133" height="814" alt="2021年カノーラ面積の公式ドット分布図。プレーリー南部に赤い点が集まり、北部は少ない。Regina、Edmonton、Winnipegと州境・凡例を表示。" /></a></div><figcaption><strong>2021年・農業センサスの分布図（固定）</strong>。1点＝10,000 acres（約4,047 ha）。点はセンサス区の農業地域内にランダム配置した面積量で、農場の位置・数ではありません。<a href={canolaSources.map}>原図・説明・区別表</a>。地図と凡例を保持し、末尾の政府シンボル部分を除いて掲載。</figcaption></figure>
+     <div class="canada-map-actions"><button data-canola-zoom aria-pressed="false">図を拡大して読む</button><button data-canola-map-reset>全体へ戻す</button><a href={withBase('/assets/atlas/canada-agriculture-v1/canola-map-2021.jpg')}>原寸画像</a></div>
+     <div class="canola-map-key"><h3>凡例の読み方</h3><p>赤い点＝面積量。網掛け＝秘匿。薄黄色＝農業地域、またはnull値。灰色＝農業地域外。点のない場所をすべて栽培ゼロと解釈せず、秘匿と小面積の丸めを区別します。</p><p>西→東：アルバータ／Edmonton、サスカチュワン／Regina、マニトバ／Winnipeg。図の都市と州境を手掛かりに読みます。</p></div>
+     <h2>州別の面積と生産量を比べる</h2>
+     <div class="canola-stat-controls"><label>年次統計の年<select data-canola-year>{canola.years.map(y=><option value={y} selected={y===2021}>{y}年</option>)}</select></label><label>指標<select data-canola-metric>{canola.metrics.map(m=><option value={m.id}>{m.name}（{m.unit}）</option>)}</select></label><label>読む地域<select data-canola-province>{canola.provinces.map(p=><option value={p.id} selected={p.id==='Saskatchewan'}>{p.name}</option>)}</select></label><label>比べる地域<select data-canola-compare><option value="">比較なし</option>{canola.provinces.map(p=><option value={p.id}>{p.name}</option>)}</select></label></div>
+     <div class="canada-city-list">{canola.provinces.filter(p=>['Alberta','Saskatchewan','Manitoba'].includes(p.id)).map(p=><button data-canola-province-button={p.id} aria-pressed={p.id==='Saskatchewan'}>{p.name}</button>)}</div>
+     <p class="canola-comparison" data-canola-comparison aria-live="polite">2021年 作付面積 — サスカチュワン</p>
+     <p>年を変えても上の分布図は2021年のままです。下はStatCan年次推計。州全体の量を比較し、州の面積当たり密度ではありません。作付面積と収穫面積、生産量は異なる指標です。</p>
+     <div class="canola-table-scroll"><table class="canola-stats"><caption>カノーラ：公表値と品質記号（32-10-0359-01）</caption><thead><tr><th>年・地域</th><th>作付 ha</th><th>収穫 ha</th><th>生産 t</th></tr></thead><tbody>{canola.data.map(r=><tr data-canola-row={r.id} data-year={r.year} hidden={r.year!==2021}><th>{r.year}年 {r.name}{r.id!=='Canada'&&<span class="canola-bar-track"><span data-canola-bar={r.id}/></span>}</th>{canola.metrics.map(m=>{const v=r.values[m.id as keyof typeof r.values];return <td data-canola-cell={m.id}>{fmt(v.value)}{(v.status||v.symbol)&&<small> {[v.status,v.symbol].filter(Boolean).join(" ")}</small>}</td>;})}</tr>)}</tbody></table></div>
+     <p class="canada-caption">未収録＝数値未公表。F＝信頼性不足のため非公表、x＝秘匿、r＝改訂済み。公表された0は0のまま保持します。全国合計には非公表の州値を含む場合があり、丸めもあるため、表示州の合計と必ず一致するとは限りません。3準州はこの比較表の収録対象外です。</p>
+     <p><a href={canolaSources.table}>数値・定義・注記の原表</a> ／ <a href={withBase('/assets/atlas/canada-agriculture-v1/canola-selected.csv')}>今回の抽出CSV</a></p>
+    </section>
+    <aside class="canada-reading" aria-label="自然から社会へつながる説明">
+     {canolaReading.map((r,i)=><section class="canada-reading-section"><h2>{r.title}</h2><p>{r.body}</p><p class="canada-sources-inline"><a href={r.source}>この説明の資料</a>{r.extraSource&&<> ／ <a href={r.extraSource}>加工・制度の分析（2025年3月）</a></>}</p>
+      {i===0&&<p><a href={nature('?city=regina')}>Reginaの場所と気候へ</a> ／ <a href={nature('?city=winnipeg')}>Winnipegの場所と気候へ</a></p>}
+      {i===1&&<div class="canola-climate-example"><h3>気候の事例：Regina Airport</h3><AtlasClimatePlot name="Regina（事例）" period="1991–2020" temperatureC={regina.temperatureC} precipitationMm={regina.precipitationMm} minTemperatureC={-30}/><p>青い棒＝降水量 mm、赤い線＝平均気温 °C。雪を水量に換算した分も含みます。1観測地点であり、プレーリー全体の代表値ではありません。</p><a href={nature('?city=regina')}>12か月の数値・観測所・出典を見る</a> ／ <a href={nature('')}>首都Ottawaから自然環境を読む</a></div>}
+      {i===2&&<p><a href={nature('?city=regina&view=landform')}>山地と内陸平原を読む</a> ／ <a href={nature('?city=regina&view=water')}>湖と河川の位置を読む</a>（灌漑量や利用可能水量の地図ではありません）</p>}
+      {i===3&&<p><a href={nature('?city=vancouver')}>Vancouverの西岸の位置へ</a></p>}
+     </section>)}
+     <section class="canada-reading-section"><h2>読み終えたら</h2><p>図で栽培の集中地域を探す → 年次表で面積と生産量を分ける → 気温・水・土壌管理を読む → 加工・輸送・需要・制度が生産に戻る関係を説明する。この順に、自然だけで結果を決めつけずに考えます。</p></section>
+    </aside>
+   </div>
+   <footer class="canada-source-footer" id="canada-agriculture-sources"><h2>出典・年・単位・利用条件</h2><ul><li>分布：Statistics Canada、2021 Census of Agriculture。1点＝10,000 acres（約4,047 ha）。公表全国面積9,012,449 ha。点の量から区別面積を逆算していません。<a href={canolaSources.map}>原資料</a>。</li><li>年次統計：Statistics Canada、32-10-0359-01、取得日2026年9月30日。2020・2021・2022・2025年の作付面積 ha、収穫面積 ha、生産量 metric tonnes。公表値と品質記号を保持し、欠損を0で補完しません。<a href={canolaSources.table}>原表と注記</a>。<a href="https://www.statcan.gc.ca/en/terms-conditions/open-licence">Statistics Canada Open Licence</a>に基づく利用。Statistics Canadaが本教材を承認したことを意味しません。</li><li>気候：ECCC 1991–2020年平年値、Regina composite 4016560。<a href={regina.sourceUrl}>観測所と数値</a>。気象の平年値は年次収量や畑の土壌水分と別です。</li><li>生育と管理：<a href={canolaSources.management}>Manitoba Agriculture</a>。加工・輸送・制度：<a href={canolaSources.industry}>USDA報告、2025年3月31日</a>。日本とのつながり：<a href={canolaSources.japan}>AAFCの日本市場資料、2023年貿易</a>。当時の分析・予測と現在の制度・実績を区別し、予測数字は年次統計に混ぜていません。</li></ul><a href={withBase('/assets/atlas/canada-agriculture-v1/manifest.json')}>加工方法・収録範囲・ハッシュ台帳</a></footer>
+   <noscript><p>2021年の分布図・州別3指標・本文・気候事例・出典を読めます。年・比較・拡大の切替にはJavaScriptが必要です。</p></noscript>
+   <script type="application/json" data-canola-config set:html={JSON.stringify(canola).replace(/</g,'\u003c')} />
+  </article>
+ </AtlasWorkspaceFrame>
+</BaseLayout>
+<script>import {initCanadaAgriculture} from '../../scripts/atlas-canada-agriculture';const root=document.querySelector<HTMLElement>('[data-canada-agriculture]');if(root)initCanadaAgriculture(root);</script>
