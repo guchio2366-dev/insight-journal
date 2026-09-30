@@ -1,0 +1,106 @@
+{
+  "publisher": "Environment and Climate Change Canada",
+  "method": "Exact official monthly rows and matching station-inventory entry. No interpolation; composite stations may combine station threads. Raw site graphics are not reproduced.",
+  "stations": [
+    {
+      "id": "ottawa",
+      "name": "オタワ",
+      "climateId": "6105976",
+      "station": "OTTAWA CDA",
+      "composite": "OTTAWA (CITY)",
+      "quality": "A",
+      "coordinates": [
+        -75.72,
+        45.38
+      ],
+      "elevationM": 79.2,
+      "period": "1991–2020",
+      "sourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=6105976&dispBack=0",
+      "retrievedAt": "2026-09-30",
+      "sourceSha256": "f8e08a19e98014eeda0fe25224ffd00906b189ffd1e7d44f56ff27315a9a5022",
+      "temperatureRow": "<tr><th>Daily Average (&deg;C)</th><td>-9.6</td><td>-8.1</td><td>-2.2</td><td>6.2</td><td>13.8</td><td>18.8</td><td>21.3</td><td>20.1</td><td>15.6</td><td>8.8</td><td>2.0</td><td>-5.1</td><td>6.8</td><td><a href=\"#legendA\">A</a></td></tr>",
+      "precipitationRow": "<tr><th>Precipitation (mm)</th><td>65.2</td><td>52.4</td><td>61.6</td><td>81.3</td><td>80.1</td><td>95.1</td><td>92.3</td><td>87.4</td><td>87.0</td><td>90.2</td><td>72.0</td><td>73.6</td><td>938.1</td><td><a href=\"#legendA\">A</a></td></tr>",
+      "inventoryRow": "\"OTTAWA (CITY)\",\"A\",\"OTTAWA CDA\",\"6105976\",\"\",\"WCG\",\"ONTARIO\",\"45.38\",\"-75.72\",\"79.2\""
+    },
+    {
+      "id": "vancouver",
+      "name": "バンクーバー",
+      "climateId": "1108447",
+      "station": "VANCOUVER INT'L A",
+      "composite": "VANCOUVER INTERNATIONAL (AIRPORT)",
+      "quality": "C",
+      "coordinates": [
+        -123.18,
+        49.2
+      ],
+      "elevationM": 4.3,
+      "period": "1991–2020",
+      "sourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=1108447&dispBack=0",
+      "retrievedAt": "2026-09-30",
+      "sourceSha256": "ce00bddcaeb03178ac208723d72ab9a53aef671295c352a1b96110340745afb4",
+      "temperatureRow": "<tr><th>Daily Average (&deg;C)</th><td>4.1</td><td>4.7</td><td>6.7</td><td>9.4</td><td>13.0</td><td>15.8</td><td>18.2</td><td>18.2</td><td>15.2</td><td>10.3</td><td>6.4</td><td>3.9</td><td>10.5</td><td><a href=\"#legendB\">B</a></td></tr>",
+      "precipitationRow": "<tr><th>Precipitation (mm)</th><td>174.0</td><td>90.8</td><td>106.4</td><td>85.5</td><td>59.1</td><td>51.1</td><td>34.1</td><td>36.1</td><td>51.9</td><td>123.9</td><td>174.6</td><td>172.2</td><td>1,159.5</td><td><a href=\"#legendC\">C</a></td></tr>",
+      "inventoryRow": "\"VANCOUVER INTERNATIONAL (AIRPORT)\",\"C\",\"VANCOUVER INT'L A\",\"1108447\",\"\",\"YVR\",\"BRITISH COLUMBIA\",\"49.20\",\"-123.18\",\"4.3\""
+    },
+    {
+      "id": "winnipeg",
+      "name": "ウィニペグ",
+      "climateId": "5023222",
+      "station": "WINNIPEG RICHARDSON INT'L A",
+      "composite": "WINNIPEG RICHARDSON (AIRPORT)",
+      "quality": "C",
+      "coordinates": [
+        -97.23,
+        49.92
+      ],
+      "elevationM": 238.7,
+      "period": "1991–2020",
+      "sourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=5023222&dispBack=0",
+      "retrievedAt": "2026-09-30",
+      "sourceSha256": "444d0bd3afef067d60a0f3944000a7ff21a1e4e7765a6f8e80e52f26783e3505",
+      "temperatureRow": "<tr><th>Daily Average (&deg;C)</th><td>-16.3</td><td>-14.1</td><td>-6.1</td><td>3.8</td><td>11.1</td><td>17.1</td><td>19.5</td><td>18.7</td><td>13.3</td><td>5.1</td><td>-4.4</td><td>-12.7</td><td>2.9</td><td><a href=\"#legendA\">A</a></td></tr>",
+      "precipitationRow": "<tr><th>Precipitation (mm)</th><td>18.0</td><td>13.3</td><td>25.5</td><td>32.5</td><td>69.5</td><td>74.3</td><td>76.6</td><td>74.3</td><td>53.2</td><td>38.1</td><td>24.7</td><td>19.4</td><td>519.2</td><td><a href=\"#legendC\">C</a></td></tr>",
+      "inventoryRow": "\"WINNIPEG RICHARDSON (AIRPORT)\",\"C\",\"WINNIPEG RICHARDSON INT'L A\",\"5023222\",\"71852\",\"YWG\",\"MANITOBA\",\"49.92\",\"-97.23\",\"238.7\""
+    },
+    {
+      "id": "iqaluit",
+      "name": "イカルイト",
+      "climateId": "2402590",
+      "station": "IQALUIT A",
+      "composite": "IQALUIT",
+      "quality": "D",
+      "coordinates": [
+        -68.55,
+        63.75
+      ],
+      "elevationM": 33.5,
+      "period": "1991–2020",
+      "sourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=2402590&dispBack=0",
+      "retrievedAt": "2026-09-30",
+      "sourceSha256": "dbf81a1f0d7262d0a4df5fe2fa43366acbb94531efe8179533c9b7f6bc7e1a42",
+      "temperatureRow": "<tr><th>Daily Average (&deg;C)</th><td>-26.0</td><td>-27.0</td><td>-22.4</td><td>-13.5</td><td>-3.2</td><td>3.9</td><td>8.1</td><td>7.5</td><td>2.9</td><td>-3.2</td><td>-11.1</td><td>-18.9</td><td>-8.6</td><td><a href=\"#legendA\">A</a></td></tr>",
+      "precipitationRow": "<tr><th>Precipitation (mm)</th><td>16.3</td><td>14.0</td><td>21.4</td><td>22.7</td><td>21.0</td><td>48.7</td><td>39.8</td><td>61.7</td><td>50.8</td><td>30.2</td><td>18.5</td><td>16.2</td><td>361.2</td><td><a href=\"#legendD\">D</a></td></tr>",
+      "inventoryRow": "\"IQALUIT\",\"D\",\"IQALUIT A\",\"2402590\",\"71909\",\"YFB\",\"NUNAVUT\",\"63.75\",\"-68.55\",\"33.5\""
+    },
+    {
+      "id": "regina",
+      "name": "レジャイナ",
+      "climateId": "4016560",
+      "station": "REGINA INT'L A",
+      "composite": "REGINA (AIRPORT)",
+      "quality": "C",
+      "coordinates": [
+        -104.67,
+        50.43
+      ],
+      "elevationM": 577.6,
+      "period": "1991–2020",
+      "sourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=4016560&dispBack=0",
+      "retrievedAt": "2026-09-30",
+      "sourceSha256": "6f8ae79701c3d045bee21a3704a4ade938cee585b90f0dc13c18a37a34f77ee2",
+      "temperatureRow": "<tr><th>Daily Average (&deg;C)</th><td>-14.7</td><td>-12.7</td><td>-5.5</td><td>3.9</td><td>11.0</td><td>15.9</td><td>18.6</td><td>17.9</td><td>12.4</td><td>4.2</td><td>-5.0</td><td>-12.1</td><td>2.8</td><td><a href=\"#legendA\">A</a></td></tr>",
+      "precipitationRow": "<tr><th>Precipitation (mm)</th><td>12.8</td><td>8.6</td><td>15.4</td><td>27.1</td><td>46.5</td><td>84.6</td><td>60.0</td><td>50.1</td><td>31.6</td><td>25.0</td><td>14.7</td><td>13.7</td><td>390.1</td><td><a href=\"#legendC\">C</a></td></tr>",
+      "inventoryRow": "\"REGINA (AIRPORT)\",\"C\",\"REGINA INT'L A\",\"4016560\",\"71863\",\"YQR\",\"SASKATCHEWAN\",\"50.43\",\"-104.67\",\"577.6\""
+    }
+  ]
+}

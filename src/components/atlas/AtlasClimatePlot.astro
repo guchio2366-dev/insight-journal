@@ -4,13 +4,14 @@ interface Props {
   period?: string;
   temperatureC: (number|null)[];
   precipitationMm: (number|null)[];
+  minTemperatureC?: number;
 }
-const {name,period='1991–2020',temperatureC,precipitationMm}=Astro.props;
+const {name,period='1991–2020',temperatureC,precipitationMm,minTemperatureC=-10}=Astro.props;
 // Shared scale and drawing for regional rain/temperature diagrams.
 const left=34,right=286,top=29,bottom=159;
 const x=(i:number)=>left+(right-left)*(i+.5)/12;
 const py=(v:number)=>bottom-v/350*(bottom-top);
-const ty=(v:number)=>bottom-(v+10)/50*(bottom-top);
+const ty=(v:number)=>bottom-(v-minTemperatureC)/(40-minTemperatureC)*(bottom-top);
 const segments:string[]=[];let segment='';
 temperatureC.forEach((v,i)=>{if(v===null){if(segment)segments.push(segment);segment='';}else segment+=`${segment?' ':''}${x(i).toFixed(1)},${ty(v).toFixed(1)}`;});
 if(segment)segments.push(segment);
@@ -23,6 +24,6 @@ if(segment)segments.push(segment);
  {segments.map(points=><polyline class="atlas-climate-line" {points}/>)}
  {temperatureC.map((v,i)=>v!==null&&<circle class="atlas-climate-dot" cx={x(i)} cy={ty(v)} r="2.2"/>)}
  {Array.from({length:12},(_,i)=><text class="atlas-climate-month" x={x(i)} y="177">{i+1}</text>)}
- {[40,20,0,-10].map(v=><text class="atlas-climate-temp-label" x="291" y={ty(v)+3}>{v}</text>)}
+ {(minTemperatureC===-10?[40,20,0,-10]:[40,20,0,minTemperatureC]).map(v=><text class="atlas-climate-temp-label" x="291" y={ty(v)+3}>{v}</text>)}
  <text class="atlas-climate-axis-title" x="160" y="195">月</text>
 </svg>
