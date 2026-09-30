@@ -31,8 +31,8 @@ const nature=(query:string)=>withBase(`/atlas/north-america/canada/nature/${quer
    <AtlasRegionNavigation group="americas" current="north-america" country="canada" />
    <header><p class="eyebrow">Canada · Agriculture and forestry</p><h1>{cropName}から読む、カナダの農林業</h1><p class="canada-lead">自然条件から、育てる・収穫する・運ぶ・加工する・買う人へ。プレーリーの分布をたどる。</p></header>
    <nav class="canada-fields" aria-label="カナダの分野"><a href={withBase('/atlas/north-america/overview/?country=CAN')}>概説</a><a href={nature('')}>自然環境</a><a href={withBase('/atlas/north-america/canada/agriculture/')} aria-current="page">農林業</a><span aria-disabled="true">主要産業<small>準備中</small></span><span aria-disabled="true">人口<small>準備中</small></span></nav>
-   <p class="canola-scope">公開項目：カノーラ・小麦。その他の主要栽培・畜産・林業は準備中です。農林業分野全体の完成を示すページではありません。</p>
-   <nav class="canada-crop-tabs" aria-label="公開済みの作物"><a href={withBase('/atlas/north-america/canada/agriculture/')} aria-current={!isWheat?'page':undefined}>カノーラ</a><a href={withBase('/atlas/north-america/canada/agriculture/wheat/')} aria-current={isWheat?'page':undefined}>小麦</a></nav>
+   <p class="canola-scope">公開項目：カノーラ・小麦・肉牛と放牧の初回版。その他の主要栽培・畜産・林業は準備中です。農林業分野全体の完成を示すページではありません。</p>
+   <nav class="canada-crop-tabs" aria-label="公開済みの農畜林業"><a href={withBase('/atlas/north-america/canada/agriculture/')} aria-current={!isWheat?'page':undefined}>カノーラ</a><a href={withBase('/atlas/north-america/canada/agriculture/wheat/')} aria-current={isWheat?'page':undefined}>小麦</a><a href={withBase('/atlas/north-america/canada/agriculture/beef/')}>肉牛・放牧と飼料</a></nav>
    <div class="canada-workspace">
     <section class="canada-map-column" aria-label={`${cropName}の分布と比較`}>
      <h2>どこに栽培面積が集まる？</h2>

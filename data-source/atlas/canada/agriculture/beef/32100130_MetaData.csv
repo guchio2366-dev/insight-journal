@@ -1,0 +1,82 @@
+﻿"Cube Title","Product Id","CANSIM Id",URL,"Cube Notes","Archive Status",Frequency,"Start Reference Period","End Reference Period","Total number of dimensions"
+"Number of cattle, by class and farm type","32100130","003-0032","https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210013001",2;4,"CURRENT - a cube available to the public and that is current","Annual","1931-01-01","2026-01-01","4",
+
+"Dimension ID","Dimension name","Dimension Notes","Dimension Definitions"
+"1","Geography",,""
+"2","Livestock",,""
+"3","Survey date",,""
+"4","Farm type",,""
+
+"Dimension ID","Member Name","Classification Code","Member ID","Parent Member ID",Terminated,"Member Notes","Member Definitions"
+"1","Canada","[11124]","1","","",,
+"1","Eastern provinces","","12","1","",,
+"1","Atlantic provinces","[1]","13","12","",,
+"1","Newfoundland and Labrador","[10]","2","13","",,
+"1","Prince Edward Island","[11]","3","13","",,
+"1","Nova Scotia","[12]","4","13","",,
+"1","New Brunswick","[13]","5","13","",,
+"1","Quebec","[24]","6","12","",,
+"1","Ontario","[35]","7","12","",,
+"1","Western provinces","","14","1","",,
+"1","Manitoba","[46]","8","14","",,
+"1","Saskatchewan","[47]","9","14","",,
+"1","Alberta","[48]","10","14","",,
+"1","British Columbia","[59]","11","14","",,
+"2","Total cattle","","1","","",,
+"2","Bulls, 1 year and over","","2","1","",,
+"2","Dairy cows","","3","1","",5,
+"2","Beef cows","","4","1","",,
+"2","Total heifers","","5","1","",7,
+"2","Heifers for dairy replacement","","6","5","",6,
+"2","Total beef heifers","","7","5","",,
+"2","Heifers for beef replacement","","15","7","",8,
+"2","Heifers for slaughter","","16","7","",,
+"2","Steers, 1 year and over","","10","1","",,
+"2","Calves, under 1 year","","11","1","",,
+"3","At January 1","","2","","",,
+"3","At July 1","","1","","",,
+"4","On all cattle operations","","1","","",,
+"4","On dairy operations","","2","1","",12,
+"4","On beef operations","","3","1","",9;12,
+"4","On cow calf operations","","4","3","",12,
+"4","On feeder and stocker operations","","5","3","",10;12,
+"4","On feeding operations","","6","3","",11;12,
+
+Symbol Legend
+Description,Symbol
+"not available for a specific reference period","..",
+"less than the limit of detection","<LOD",
+"value rounded to 0 (zero) where there is a meaningful distinction between true zero and the value that was rounded","0s",
+"data quality: excellent","A",
+"data quality: very good","B",
+"data quality: good","C",
+"data quality: acceptable","D",
+"use with caution","E",
+"too unreliable to be published","F",
+"not applicable","...",
+"preliminary","p",
+"revised","r",
+"suppressed to meet the confidentiality requirements of the Statistics Act","x",
+"terminated","t",
+
+"Survey Code","Survey Name"
+"3460","Livestock Survey"
+
+"Subject Code","Subject Name"
+"32","Agriculture and food"
+
+"Note ID",Note
+2,"Data for Newfoundland and Labrador starts in 1976. These figures are included in the Canada totals."
+4,"For calves born, refer to table 32-10-0139, for hogs, refer to table 32-10-0160 and for sheep and lambs, refer to table 32-10-0129."
+5,"Female cattle who have calved at least once, kept mainly for milk purposes."
+6,"Female cattle over a year of age, who have not yet calved, being raised mainly for milk purposes."
+7,"Female cattle over 1 year old which have never calved."
+8,"Female cattle over one year of age, who have not yet calved, being raised mainly to produce beef calves."
+9,"Excluding small numbers of heifers for slaughter and steers on dairy operations."
+10,"Farms where cattle are fed on a low energy ration such as hay or pasture."
+11,"Farms where cattle are fed a high energy ration such as grain as they are fattened for market."
+12,"Data are not available at a provincial level for the Atlantic provinces."
+
+"Correction ID","Correction Date","Correction Note"
+"1266","2020-08-24","On August 24, 2020, a correction was made to the number of cattle, by class and farm type in New Brunswick and Ontario for the period of January 1, 2019 to July 1, 2020, in Quebec for the period of July 1, 2019 to July 1, 2020 and in Alberta for the period July 1, 2018 to July 1, 2020.",
+
