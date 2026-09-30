@@ -11,9 +11,10 @@ export function initCanadaNature(root:HTMLElement){
   if(forestryBack){forestryBack.hidden=!savedForestry;if(savedForestry){const back=new URL(forestryBack.getAttribute('href')!,location.href),params=new URLSearchParams(savedForestry);back.search='';for(const key of ['year','province','compare','metric','cover','region','zoom']){const value=params.get(key);if(value)back.searchParams.set(key,value);}forestryBack.href=back.href;}}
   const forestContext=root.querySelector<HTMLElement>('[data-canada-forest-context]'),forestMap=root.querySelector<SVGElement>('[data-canada-forest-context-map]'),forestLegend=root.querySelector<HTMLElement>('[data-canada-forest-context-legend]');
   if(forestContext&&forestMap&&forestLegend){
-   forestContext.hidden=!savedForestry;forestMap.style.display=savedForestry&&state.view!=='landform'?'':'none';forestLegend.hidden=!savedForestry||state.view==='landform';
+   forestContext.hidden=!savedForestry;root.classList.toggle('is-learning-comparison',!!savedForestry);forestMap.style.display=savedForestry&&state.view!=='landform'?'':'none';forestLegend.hidden=!savedForestry||state.view==='landform';
    const text=forestContext.querySelector<HTMLElement>('[data-canada-forest-context-text]')!;
-   text.textContent=state.view==='landform'?'森林の生育条件と、伐採地から海岸へ運ぶ条件を分けて考えます。山地と海岸はこの地形図で、針葉樹林の分布と観測点は「都市の気候」の重ね図で確認できます。':state.view==='water'?'針葉樹林の分布とFraser川の位置を重ね、森林が育つ場所と海岸へつながる地形を照合します。川の位置だけで木材の輸送経路が決まるわけではなく、林業ページでは道路・港の役割を読みます。':state.city==='vancouver'?'Vancouverの冬の気温と秋冬の降水を、沿岸の温帯針葉樹林と比べます。温和で湿潤な条件が樹木の生育を支え、木材産業には森林管理・加工・輸送が加わります。':'観測点を切り替えています。沿岸林業の問いは、Vancouverの気温・降水と針葉樹林の分布の関係です。Vancouverを選ぶと沿岸の事例へ戻れます。';
+   const waterText=state.water&&state.water!=='Fraser'?`現在は${state.water}${state.only?'だけ':'を選択して全水系'}を表示しています。林業の比較入口はFraser川とBCの針葉樹林です。Fraserを選ぶと、森林と海岸の位置関係へ戻れます。`:'針葉樹林とFraser川の位置を重ね、森林と海岸のつながりを照合します。木材輸送には道路・港も必要です。';
+   text.textContent=state.view==='landform'?'山地と海岸を地形図で確かめます。針葉樹林と観測点の重ね図へは「都市の気候」で戻れます。':state.view==='water'?waterText:state.city==='vancouver'?'Vancouverの温和な冬・秋冬の雨を、沿岸の針葉樹林と比べます。':'観測点を切り替えています。元の問いはVancouverの沿岸気候と針葉樹林の関係です。Vancouverで沿岸の事例へ戻れます。';
   }
   $<HTMLSelectElement>('[data-canada-city]').value=state.city;
   $<HTMLSelectElement>('[data-canada-compare]').value=state.compare??'';

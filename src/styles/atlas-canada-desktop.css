@@ -39,6 +39,17 @@
  .atlas-desktop-shell .canada-nature .canada-comparison-context{padding:8px 10px;background:#e9efdf;border-left:3px solid #557149;margin-bottom:10px}
  .atlas-desktop-shell .canada-nature .canada-comparison-context h2{font-size:16px;margin:0}
  .atlas-desktop-shell .canada-nature .canada-comparison-context p{font-size:13px;line-height:1.7;margin:5px 0}
+ .atlas-desktop-shell .canada-nature .canada-city-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ .atlas-desktop-shell .canada-nature .canada-city-controls label{min-width:0;font-size:12px}
+ .atlas-desktop-shell .canada-nature .canada-city-controls select{width:100%;min-width:0;font-size:13px}
+ .atlas-desktop-shell .is-learning-comparison [data-canada-reading=climate]{display:flex;flex-direction:column}
+ .atlas-desktop-shell .is-learning-comparison [data-canada-reading=climate]>.canada-climate-cards{order:1}
+ .atlas-desktop-shell .is-learning-comparison [data-canada-reading=climate]>.canada-period,.atlas-desktop-shell .is-learning-comparison [data-canada-reading=climate]>p{order:2}
+ .atlas-desktop-shell .is-learning-comparison .canada-climate-card{display:flex;flex-direction:column}
+ .atlas-desktop-shell .is-learning-comparison .canada-climate-card>h2{order:0}
+ .atlas-desktop-shell .is-learning-comparison .canada-climate-card>svg{order:1}
+ .atlas-desktop-shell .is-learning-comparison .canada-climate-card>p,.atlas-desktop-shell .is-learning-comparison .canada-climate-card>dl,.atlas-desktop-shell .is-learning-comparison .canada-climate-card>details{order:2}
+ .atlas-desktop-shell .canada-nature .canada-comparison-context details{margin-top:4px;font-size:12px}
 }
 @media(min-width:1600px){
  .atlas-desktop-shell:has(.canada-nature){grid-template-columns:clamp(300px,19vw,380px) minmax(0,1fr)}
