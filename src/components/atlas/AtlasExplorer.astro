@@ -55,6 +55,7 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
       <span>米国本土</span>
     </div>
     <h1 class="visually-hidden">北米地図から読む、農林業・自然環境・主要産業・人口</h1>
+    <slot name="region-navigation" />
     <nav class="atlas-tabs" aria-label="地図の分野">
       {northAmericaFields.map(field => field.status==='ready' ?
         <a href={withBase(field.href)} data-field={field.id} aria-current={initialField===field.id?'page':undefined}>{field.label}</a> :

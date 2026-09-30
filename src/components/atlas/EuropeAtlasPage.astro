@@ -41,11 +41,11 @@ const config = { farmingAreas, geography, climateWater, countries, cities: citie
 ---
 <BaseLayout title={`欧州の${currentField.label}`} description="欧州の自然環境・農林業・産業・人口を、国境をまたぐ分布と国別の数値で読み比べる地図。" compactAtlas>
   <div class="eu-atlas eu-workspace-root" data-europe-detail>
-    <EuropeRegionNavigation />
     <AtlasWorkspaceFrame region="europe">
     <div class="eu-workspace atlas-explorer" data-field={field==='nature'?'natural':field}>
     <p class="eu-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / <a data-base-map href={withBase('/atlas/europe/')}>欧州</a> / <span data-eu-field-label>{currentField.label}</span></p>
     <header class="eu-heading visually-hidden"><div><p class="eu-kicker" data-eu-field-kicker>EUROPE · {field.toUpperCase()}</p><h1 data-eu-field-heading>{europeFieldHeadings[field]}</h1></div><p>西欧から東欧・ロシア西部まで。<br />地図上の名前を選び、分布と説明を読み比べます。</p></header>
+    <EuropeRegionNavigation />
     <nav class="eu-field-nav" aria-label="欧州地図の表示">{[fields[1],fields[0],...fields.slice(2)].map(f=><a data-eu-field={f.initial} href={withBase(`/atlas/europe/${f.id}/`)} aria-current={field===f.id?'page':undefined}>{f.id==='industry'?'主要産業':f.label}</a>)}</nav>
     <EuropeLayoutControls position="above" {field} />
     <div class="eu-water-options" data-eu-water-options hidden role="group" aria-label="水資源の表示">

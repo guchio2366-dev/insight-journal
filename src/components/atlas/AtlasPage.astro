@@ -12,8 +12,9 @@ import '../../styles/atlas-population-insights.css';
 const { initialField='overview' } = Astro.props as {initialField?:ExplorerField};
 ---
 <BaseLayout title="北米地図" description="自然環境・農林業・主要産業・人口を同じ地図で読み比べる。" compactAtlas noindex={Astro.url.pathname.includes('/review/')}>
-  <div class="shell"><AtlasRegionNavigation group="americas" current="north-america" country="usa" /></div>
   <AtlasWorkspaceFrame>
-    <AtlasExplorer {initialField} />
+    <AtlasExplorer {initialField}>
+      <div class="atlas-region-controls" slot="region-navigation"><AtlasRegionNavigation group="americas" current="north-america" country="usa" /></div>
+    </AtlasExplorer>
   </AtlasWorkspaceFrame>
 </BaseLayout>
