@@ -1,0 +1,32 @@
+{
+  "retrievedAt": "2026-09-30",
+  "table": "32-10-0359-01",
+  "years": [
+    "2020",
+    "2021",
+    "2022",
+    "2025"
+  ],
+  "rawCsvSha256": "433ad149f8f60ab2a23ee03cc7502d2a229571b9f567a539dc130bf14e2a34ba",
+  "csvDownload": "https://www150.statcan.gc.ca/n1/tbl/csv/32100359-eng.zip",
+  "selectedRows": 132,
+  "licence": "Statistics Canada Open Licence",
+  "licenceUrl": "https://www.statcan.gc.ca/en/terms-conditions/open-licence",
+  "map": {
+    "year": 2021,
+    "source": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-027-eng.htm",
+    "imageSource": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/m-c/m-c-027-eng.jpg",
+    "originalSha256": "ca6ca741685494acae41bc98a2d2e1600193926d5ad9872cbca2cddad70ad93a",
+    "crop": {
+      "left": 0,
+      "top": 0,
+      "width": 1133,
+      "height": 814
+    },
+    "method": "Remove footer official symbols; preserve map, legend, source and inset. Points are source random placements representing area, not farms. No coordinates or classes changed.",
+    "dotAcres": 10000,
+    "dotHectares": 4047,
+    "totalAcres": 22270249,
+    "totalHectares": 9012449
+  }
+}
