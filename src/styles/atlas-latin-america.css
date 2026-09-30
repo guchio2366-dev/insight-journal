@@ -46,3 +46,19 @@
 @media(min-width:1100px){.latin-marker{min-height:36px}}
 @media(max-width:959px){.latin-reading-scroll{overflow:visible}.latin-map-note a{min-height:36px;padding:6px 0}.latin-product-key button{min-height:40px}}
 @media(max-width:700px){.latin-country-navigation{flex-wrap:wrap}.latin-country-navigation select{max-width:70%;min-height:44px}.latin-country-navigation button{min-height:44px}.latin-section-heading{display:block}.latin-section-heading label{display:block;margin-top:12px}.latin-sources>div{grid-template-columns:1fr}.latin-reading h2{font-size:21px}.latin-reading p{font-size:15px}.latin-marker{font-size:10px;min-height:28px}.latin-climate-chart{max-height:none}}
+
+/* Latin America handbook alignment. Shared and other-region styles are untouched. */
+.atlas-desktop-shell>.latin-statistics-area{grid-column:1/-1;width:100%;min-width:0;max-width:none;margin:0;padding:0;position:relative;z-index:10;background:#fbfaf3}.latin-statistics-area [hidden]{display:none!important}
+@media(min-width:1200px){[data-latin-atlas] .atlas-desktop-shell .latin-atlas[data-field] .latin-map-frame{aspect-ratio:auto;height:clamp(380px,62vh,640px);max-height:640px}}
+.latin-layer-switches{position:absolute;left:10px;top:10px;z-index:6;display:flex;flex-wrap:wrap;gap:5px;max-width:calc(100% - 110px)}
+.latin-layer-switches button{padding:7px 10px;border:1px solid #6d8068;border-radius:3px;background:#fffdf4f2;color:#294839;font-size:12px}
+.latin-layer-switches button[aria-pressed=true]{background:#e8efdb;font-weight:700}
+.latin-product-key button::before{background:var(--product-color)!important}
+.latin-selection-summary h2{margin:4px 0;font-size:23px}.latin-selection-summary .latin-related{margin-top:4px;padding-top:0;border-top:0}.latin-selection-summary .latin-related h3{display:none}.latin-selection-summary .latin-related button{margin:3px 0;padding:5px 8px;font-size:11px}
+.latin-product-actions{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}.latin-product-actions button{border:1px solid #759079;padding:7px 9px;background:#edf2e5;color:#294e39;font-size:12px;text-align:left}.latin-product-actions a{font-size:12px;padding:6px 0}
+.latin-topic-reading>h2,.latin-topic-reading>.latin-takeaway,.latin-topic-reading>.eyebrow,.latin-topic-reading>.latin-related{display:none}
+.latin-selected-statistics{border-top:1px solid #c7d2c3;margin-top:26px;padding-top:20px}.latin-selected-statistics h2{font-size:24px}.latin-selected-statistics .latin-climate-chart{max-width:700px;max-height:370px}.latin-selected-statistics .latin-months{max-width:700px}.latin-selected-statistics details summary{cursor:pointer;padding:10px 0}
+.latin-selected-statistics .latin-facts{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}.latin-city-name{text-align:left!important;font-size:16px!important}
+.latin-map-fallback [data-fallback-extra] image[data-extra-raster=selection]{opacity:1}
+@media(min-width:960px) and (min-height:700px){.latin-atlas .latin-reading[data-selected=true]{display:flex;flex-direction:column;max-height:var(--latin-map-height,640px)}.latin-atlas .latin-reading[data-selected=true] .latin-reading-scroll{overflow-y:auto;min-height:100px;padding-right:6px}.latin-selection-summary,.latin-reading-topbar,.latin-product-actions,.latin-city-picker,.latin-comparison-return{flex-shrink:0}}
+@media(max-height:699px){.latin-atlas[data-field] .latin-reading[data-selected=true]{max-height:none;display:block}.latin-atlas[data-field] .latin-reading[data-selected=true] .latin-reading-scroll{overflow:visible}.latin-selection-summary{position:sticky;top:0;background:#fbfaf3;z-index:2}}

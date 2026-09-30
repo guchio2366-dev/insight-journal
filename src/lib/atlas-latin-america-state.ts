@@ -1,24 +1,38 @@
 export const latinFields = ['overview','nature','agriculture','industry','population'] as const;
-export type LatinState = {field:string;topic:string;place:string;city:string;crop:string;view:string;camera?:[number,number,number]};
+export type LatinState = {field:string;topic:string;place:string;city:string;crop:string;view:string;cropsOn:boolean;livestockOn:boolean;agriMode:'all'|'single';camera?:[number,number,number]};
 export const cropIds=['whea','rice','maiz','soyb','sugc','coff','rcof','bana','coco','cott','pota','temf','cattle','pig','chicken','none'];
+// Nearby airport stations are identified as such in the observation metadata.
+// Belize City is not Belmopan; La Paz is not substituted for constitutional capital Sucre.
+export const latinCapitalCities:Record<string,string>={BRA:'brasilia',ARG:'buenos-aires',CHL:'santiago',PER:'lima',COL:'bogota',ECU:'quito-izobamba',URY:'montevideo',CUB:'havana',JAM:'kingston',CRI:'san-jose'};
+export function latinCapital(place:string){return latinCapitalCities[place||'BRA']??'';}
+export const latinTopicCrops:Record<string,string>={'cerrado-soy':'soyb','brazil-second-maize':'maiz','brazil-coffee':'coff','colombia-coffee':'coff','central-coffee':'coff','brazil-sugar':'sugc','pampas-farming':'whea','chile-fruit':'temf','andean-farming':'pota','tropical-bananas':'bana','planted-forests':'none'};
 export function readLatinState(search:string, topics:{id:string;field:string;countries?:string[]}[],places:string[],cities:(string|{id:string;countryCode:string})[],defaultField='nature'):LatinState {
  const p=new URLSearchParams(search),field=latinFields.includes(p.get('field') as any)?p.get('field')!:latinFields.includes(defaultField as any)?defaultField:'nature';
  const selectedCity=field==='nature'?cities.find(c=>(typeof c==='string'?c:c.id)===p.get('city')):undefined;
- const city=selectedCity?(typeof selectedCity==='string'?selectedCity:selectedCity.id):'';
- const selectedTopic=city?undefined:topics.find(t=>t.id===p.get('topic')&&t.field===field);
- const topic=selectedTopic?.id??'';
+ let city=selectedCity?(typeof selectedCity==='string'?selectedCity:selectedCity.id):'';
+ const selectedTopic=city&&p.get('view')!=='rivers'?undefined:topics.find(t=>t.id===p.get('topic')&&t.field===field);
+ let topic=selectedTopic?.id??'';
  let place=places.includes(p.get('place')??'')?p.get('place')!:'';
  if(place&&((typeof selectedCity==='object'&&selectedCity.countryCode!==place)||(selectedTopic?.countries&&!selectedTopic.countries.includes(place))))place='';
- const crop=cropIds.includes(p.get('crop')??'')?p.get('crop')!:'soyb';
+ let crop=cropIds.includes(p.get('crop')??'')?p.get('crop')!:'';
+ if(field==='agriculture'&&topic){const expected=latinTopicCrops[topic];if(crop&&expected&&crop!==expected)topic='';else crop=expected??crop;}
+ if(field==='nature'&&!city&&!topic&&p.get('city')!=='none'){
+  const capital=latinCapital(place);if(cities.some(c=>(typeof c==='string'?c:c.id)===capital))city=capital;
+ }
  const raw=(p.get('map')??'').split(',').map(v=>v.trim()===''?NaN:Number(v));
  const camera=raw.length===3&&raw.every(Number.isFinite)&&raw[0]>=-180&&raw[0]<=90&&raw[1]>=-70&&raw[1]<=70&&raw[2]>=1&&raw[2]<=9?raw as [number,number,number]:undefined;
- return {field,topic,place,city,crop,view:p.get('view')==='rivers'?'rivers':'climate',camera};
+ return {field,topic,place,city,crop,view:p.get('view')==='rivers'?'rivers':'climate',cropsOn:p.get('crops')!=='off',livestockOn:p.get('livestock')!=='off',agriMode:p.get('mode')==='single'&&crop&&crop!=='none'?'single':'all',camera};
 }
 export function writeLatinState(state:LatinState):string {
  const p=new URLSearchParams();
  p.set('field',state.field);
  for(const key of ['topic','place','city'] as const) if(state[key])p.set(key,state[key]);
- if(state.field==='agriculture')p.set('crop',state.crop);
+ if(state.field==='agriculture'&&state.crop)p.set('crop',state.crop);
+ if(state.field==='nature'&&!state.city)p.set('city','none');
+ // Keep the group settings across field changes, sharing and browser history.
+ if(!state.cropsOn)p.set('crops','off');
+ if(!state.livestockOn)p.set('livestock','off');
+ if(state.field==='agriculture'&&state.agriMode==='single')p.set('mode','single');
  if(state.field==='nature'&&state.view!=='climate')p.set('view',state.view);
  if(state.camera)p.set('map',state.camera.map((n,i)=>n.toFixed(i===2?2:3)).join(','));
  return p.toString();
