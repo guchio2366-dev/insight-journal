@@ -27,4 +27,4 @@ Automated tests cover source values, null versus zero, revision markers, unit/ye
 
 ## Next packages
 
-Prioritize another Prairie staple (wheat), a livestock distribution and a forestry distribution with public primary sources and causal explanations. Check source coverage before deciding exact secondary items. Reuse the pilot's dated provenance, comparisons, missingness, place-to-map links and nature-to-social-feedback explanation. None of these packages is marked complete by this canola publication.
+The wheat package is documented separately in `wheat/README.md` and reuses the pilot's controls. Next prioritize a livestock distribution and a forestry distribution with public primary sources and causal explanations. Check source coverage before deciding exact secondary items. Reuse dated provenance, comparisons, missingness, place-to-map links and nature-to-social-feedback explanation. Livestock, forestry and other crops are not marked complete by these two crop publications.

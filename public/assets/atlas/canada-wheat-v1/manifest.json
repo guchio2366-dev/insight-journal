@@ -1,0 +1,53 @@
+{
+  "retrievedAt": "2026-09-30",
+  "table": "32-10-0359-01",
+  "crop": "Wheat, all",
+  "definition": "All wheat includes spring wheat, durum wheat and winter wheat seeded in the fall (table note 33). Do not sum these with the all-wheat total or substitute winter wheat remaining.",
+  "years": [
+    "2020",
+    "2021",
+    "2022",
+    "2025"
+  ],
+  "rawCsvSha256": "433ad149f8f60ab2a23ee03cc7502d2a229571b9f567a539dc130bf14e2a34ba",
+  "csvDownload": "https://www150.statcan.gc.ca/n1/tbl/csv/32100359-eng.zip",
+  "selectedRows": 132,
+  "licence": "Statistics Canada Open Licence",
+  "licenceUrl": "https://www.statcan.gc.ca/en/terms-conditions/open-licence",
+  "map": {
+    "year": 2021,
+    "source": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-025-eng.htm",
+    "imageSource": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/m-c/m-c-025-eng.jpg",
+    "originalSha256": "f923c1db428c68eb4049ca9333273711f8263bf126f7013d6448fab29aab71c1",
+    "crop": {
+      "left": 0,
+      "top": 0,
+      "width": 1133,
+      "height": 814
+    },
+    "method": "Remove footer official symbols; retain complete map, legend, source and both Ontario/Quebec insets. Points are source random placements representing area, not farms. No coordinates or classes changed.",
+    "dotAcres": 15000,
+    "dotHectares": 6070,
+    "totalAcres": 23262197,
+    "totalHectares": 9413876
+  },
+  "selectedCsvSha256": "1367cf65048c98e62c68de3780b21b7fa9abaded4d7c7b361130b9d44e81a899",
+  "mapSha256": "34002d2c251a82d0860923f755f7eef264393c252f3a47751acc35a02bc09bfd",
+  "records": 44,
+  "metrics": [
+    {
+      "id": "seeded",
+      "unit": "ha"
+    },
+    {
+      "id": "harvested",
+      "unit": "ha"
+    },
+    {
+      "id": "production",
+      "unit": "t"
+    }
+  ],
+  "missing": 9,
+  "method": "Retain published values and status symbols. Missing stays null, not zero. Do not derive census-division area from rounded dot counts. Census map stays fixed at 2021; annual table year changes independently."
+}

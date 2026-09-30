@@ -1,0 +1,14 @@
+import fs from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import sharp from 'sharp';
+const research=process.argv[2];if(!research)throw Error('Pass the directory containing the official wheat map and full field-crops CSV');
+const dest='data-source/atlas/canada/agriculture/wheat';await fs.mkdir(dest,{recursive:true});
+const raw=await fs.readFile(`${research}/field-crops/32100359.csv`,'utf8'),years=['2020','2021','2022','2025'];
+const rows=raw.split(/\r?\n/),header=rows.shift();
+const selected=rows.filter(s=>years.some(y=>s.startsWith(`"${y}"`))&&s.includes('"Wheat, all"')&&(/"Seeded area \(hectares\)"|"Harvested area \(hectares\)"|"Production \(metric tonnes\)"/.test(s)));
+if(selected.length!==132)throw Error(`Unexpected source coverage: ${selected.length}`);
+await fs.writeFile(`${dest}/wheat-selected.csv`,[header,...selected].join('\n')+'\n');
+const original=await fs.readFile(`${research}/wheat-map.jpg`),crop={left:0,top:0,width:1133,height:814};
+await sharp(original).extract(crop).jpeg({quality:95,chromaSubsampling:'4:4:4'}).toFile(`${dest}/wheat-map-2021.jpg`);
+const provenance={retrievedAt:'2026-09-30',table:'32-10-0359-01',crop:'Wheat, all',definition:'All wheat includes spring wheat, durum wheat and winter wheat seeded in the fall (table note 33). Do not sum these with the all-wheat total or substitute winter wheat remaining.',years,rawCsvSha256:createHash('sha256').update(raw).digest('hex'),csvDownload:'https://www150.statcan.gc.ca/n1/tbl/csv/32100359-eng.zip',selectedRows:selected.length,licence:'Statistics Canada Open Licence',licenceUrl:'https://www.statcan.gc.ca/en/terms-conditions/open-licence',map:{year:2021,source:'https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-025-eng.htm',imageSource:'https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/m-c/m-c-025-eng.jpg',originalSha256:createHash('sha256').update(original).digest('hex'),crop,method:'Remove footer official symbols; retain complete map, legend, source and both Ontario/Quebec insets. Points are source random placements representing area, not farms. No coordinates or classes changed.',dotAcres:15000,dotHectares:6070,totalAcres:23262197,totalHectares:9413876}};
+await fs.writeFile(`${dest}/provenance.json`,JSON.stringify(provenance,null,2)+'\n');console.log(`Retained ${selected.length} all-wheat metric rows`);

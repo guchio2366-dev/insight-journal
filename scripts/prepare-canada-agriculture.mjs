@@ -1,8 +1,9 @@
 import {readFile,writeFile,mkdir,copyFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-const input='data-source/atlas/canada/agriculture',out='src/data/atlas/canada',assets='public/assets/atlas/canada-agriculture-v1';
+for(const crop of ["canola","wheat"]){
+const input='data-source/atlas/canada/agriculture'+(crop==='wheat'?'/wheat':''),out='src/data/atlas/canada',assets=crop==='wheat'?'public/assets/atlas/canada-wheat-v1':'public/assets/atlas/canada-agriculture-v1';
 await mkdir(assets,{recursive:true});
-const raw=await readFile(`${input}/canola-selected.csv`,'utf8');
+const raw=await readFile(`${input}/${crop}-selected.csv`,'utf8');
 const parse=line=>[...line.matchAll(/"((?:[^"]|"")*)"(?:,|$)/g)].map(m=>m[1].replaceAll('""','"'));
 const lines=raw.trim().split(/\r?\n/),headers=parse(lines.shift());
 const records=lines.map(line=>Object.fromEntries(parse(line).map((v,i)=>[headers[i],v])));
@@ -10,8 +11,10 @@ const provinces=[['Canada','カナダ全体'],['Newfoundland and Labrador','ニ�
 const years=[2020,2021,2022,2025];
 const metrics=[{id:'seeded',name:'作付面積',source:'Seeded area (hectares)',unit:'ha'},{id:'harvested',name:'収穫面積',source:'Harvested area (hectares)',unit:'ha'},{id:'production',name:'生産量',source:'Production (metric tonnes)',unit:'t'}];
 const data=years.flatMap(year=>provinces.map(([id,name])=>({year,id,name,values:Object.fromEntries(metrics.map(m=>{const r=records.find(r=>Number(r.REF_DATE)===year&&r.GEO===id&&r['Harvest disposition']===m.source);if(!r)throw Error(`Missing source row ${year}/${id}/${m.id}`);if(r.SCALAR_FACTOR!=='units')throw Error('Unexpected scalar');const value=r.VALUE!==''&&/^[-+]?\d+(\.\d+)?$/.test(r.VALUE)?Number(r.VALUE):null;return [m.id,{value,status:r.STATUS,symbol:r.SYMBOL,vector:r.VECTOR,decimals:Number(r.DECIMALS)}];}))})));
-await writeFile(`${out}/canola.json`,JSON.stringify({years,provinces:provinces.map(([id,name])=>({id,name})),metrics,data},null,2)+'\n');
-await copyFile(`${input}/canola-map-2021.jpg`,`${assets}/canola-map-2021.jpg`);await copyFile(`${input}/canola-selected.csv`,`${assets}/canola-selected.csv`);
+await writeFile(`${out}/${crop}.json`,JSON.stringify({years,provinces:provinces.map(([id,name])=>({id,name})),metrics,data},null,2)+'\n');
+await copyFile(`${input}/${crop}-map-2021.jpg`,`${assets}/${crop}-map-2021.jpg`);await copyFile(`${input}/${crop}-selected.csv`,`${assets}/${crop}-selected.csv`);
 const provenance=JSON.parse(await readFile(`${input}/provenance.json`,'utf8'));const hash=async path=>createHash('sha256').update(await readFile(path)).digest('hex');
-await writeFile(`${assets}/manifest.json`,JSON.stringify({...provenance,selectedCsvSha256:await hash(`${input}/canola-selected.csv`),mapSha256:await hash(`${assets}/canola-map-2021.jpg`),records:data.length,metrics:metrics.map(m=>({id:m.id,unit:m.unit})),missing:records.filter(r=>r.VALUE==='').length,method:'Retain published values and status symbols. Missing stays null, not zero. Do not derive census-division area from rounded dot counts. Census map stays fixed at 2021; annual table year changes independently.'},null,2)+'\n');
-console.log(`Canada canola: ${data.length} province/year records; ${records.length} metric cells`);
+await writeFile(`${assets}/manifest.json`,JSON.stringify({...provenance,selectedCsvSha256:await hash(`${input}/${crop}-selected.csv`),mapSha256:await hash(`${assets}/${crop}-map-2021.jpg`),records:data.length,metrics:metrics.map(m=>({id:m.id,unit:m.unit})),missing:records.filter(r=>r.VALUE==='').length,method:'Retain published values and status symbols. Missing stays null, not zero. Do not derive census-division area from rounded dot counts. Census map stays fixed at 2021; annual table year changes independently.'},null,2)+'\n');
+console.log(`Canada ${crop}: ${data.length} province/year records; ${records.length} metric cells`);
+
+}
