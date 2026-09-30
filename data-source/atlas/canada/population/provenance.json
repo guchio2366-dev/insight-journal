@@ -1,0 +1,117 @@
+{
+  "accessDate": "2026-09-30",
+  "statistics": {
+    "tables": [
+      "98-10-0003-01",
+      "98-10-0001-01"
+    ],
+    "releaseDate": "2022-02-09",
+    "cmaCount": 41,
+    "nationalAndProvinces": 14,
+    "years": [
+      2016,
+      2021
+    ],
+    "densityYear": 2021,
+    "missingPolicy": "An empty value remains null; published zero remains zero. Each metric keeps the immediately following Symbols column. Geographic footnote IDs are retained. Census counts are not population estimates.",
+    "licence": "https://www.statcan.gc.ca/en/terms-conditions/open-licence"
+  },
+  "geometry": {
+    "sourceCrs": "EPSG:3347",
+    "displayCrs": "EPSG:4326",
+    "sourceBoundaryDate": "2021-01-01",
+    "sourceRecords": 42,
+    "uniqueCmas": 41,
+    "rings": 2519,
+    "originalVertices": 668399,
+    "displayVertices": 76130,
+    "toleranceMetres": 250,
+    "maxRoundTripMetres": 3.754281321679498e-9,
+    "spotChecks": [
+      {
+        "id": "933",
+        "name": "ECCC Vancouver station",
+        "coordinates": [
+          -123.18,
+          49.2
+        ],
+        "insideOriginal": true
+      },
+      {
+        "id": "505",
+        "name": "ECCC Ottawa station",
+        "coordinates": [
+          -75.72,
+          45.38
+        ],
+        "insideOriginal": true
+      },
+      {
+        "id": "602",
+        "name": "ECCC Winnipeg station",
+        "coordinates": [
+          -97.23,
+          49.9
+        ],
+        "insideOriginal": true
+      },
+      {
+        "id": "705",
+        "name": "ECCC Regina station",
+        "coordinates": [
+          -104.67,
+          50.43
+        ],
+        "insideOriginal": true
+      }
+    ],
+    "method": "Original polygon rings including holes are retained; Douglas–Peucker display simplification in original metres, inverse ellipsoidal Lambert projection, no area/density estimation. Ottawa–Gatineau province pieces are combined as one CMA. Symbol anchors are interior geometric display anchors, not city halls, population centroids or individual locations.",
+    "licence": "https://open.canada.ca/en/open-government-licence-canada"
+  },
+  "sources": [
+    {
+      "file": "98100003.csv",
+      "url": "https://www150.statcan.gc.ca/n1/tbl/csv/98100003-eng.zip",
+      "table": "98-10-0003-01",
+      "bytes": 173733,
+      "sha256": "4d5b6d98f71d15a946eaafab9de82cfb0143abf41c813818db88ed7806e8a7a4"
+    },
+    {
+      "file": "98100003-metadata.csv",
+      "url": "https://www150.statcan.gc.ca/n1/tbl/csv/98100003-eng.zip",
+      "bytes": 972430,
+      "sha256": "a8aac774acf00523a78adaf72450fe1f8e02a4ae33d57b58fff58d806476dc23"
+    },
+    {
+      "file": "98100001.csv",
+      "url": "https://www150.statcan.gc.ca/n1/tbl/csv/98100001-eng.zip",
+      "table": "98-10-0001-01",
+      "bytes": 3091,
+      "sha256": "4f05e651c9592f88066d5287f7684ee8df5e6c5677c0361464a972506690e5f1"
+    },
+    {
+      "file": "98100001-metadata.csv",
+      "url": "https://www150.statcan.gc.ca/n1/tbl/csv/98100001-eng.zip",
+      "bytes": 20065,
+      "sha256": "a03617d24a5a6b9c290ab034e12c814f9163da62824c75302c12035763ea6c9a"
+    },
+    {
+      "file": "lcma000b21a_e.zip",
+      "url": "https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/files-fichiers/lcma000b21a_e.zip",
+      "bytes": 13397176,
+      "sha256": "a12dd39b3262edb48f9490b435d2f43b0327cc4af7d829f32aebae4d4b9f8fa0"
+    }
+  ],
+  "assets": [
+    {
+      "file": "population-selected.csv",
+      "bytes": 5972,
+      "sha256": "32dac113417ca604e446cbe017aecf596724bea2a327a9594129c4ea224fc811"
+    },
+    {
+      "file": "population-boundaries.geojson",
+      "bytes": 1911976,
+      "sha256": "1f2d45579d8bff43637b0374031c56329c4288052cfa0e1e862efed372e1ced5"
+    }
+  ]
+}

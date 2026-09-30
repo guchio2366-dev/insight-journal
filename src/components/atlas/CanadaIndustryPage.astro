@@ -32,7 +32,7 @@ const valueText=(v:{value:number|null;status:string;symbol:string})=>`${fmt(v.va
    <p class="canada-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / カナダ</p>
    <AtlasRegionNavigation group="americas" current="north-america" country="canada" />
    <header><p class="eyebrow">Canada · Industry</p><h1>州ごとの構成から読む、カナダの産業</h1><p class="canada-lead">地下資源の立地に加工・輸送・市場が重なり、州ごとの産業構成が変わる。</p></header>
-   <nav class="canada-fields" aria-label="カナダの分野"><a href={withBase('/atlas/north-america/overview/?country=CAN')}>概説</a><a href={nature('')}>自然環境</a><a href={withBase('/atlas/north-america/canada/agriculture/')}>農畜林業</a><a href={withBase('/atlas/north-america/canada/industry/')} aria-current="page">主要産業</a><span aria-disabled="true">人口<small>準備中</small></span></nav>
+   <nav class="canada-fields" aria-label="カナダの分野"><a href={withBase('/atlas/north-america/overview/?country=CAN')}>概説</a><a href={nature('')}>自然環境</a><a href={withBase('/atlas/north-america/canada/agriculture/')}>農畜林業</a><a href={withBase('/atlas/north-america/canada/industry/')} aria-current="page">主要産業</a><a href={withBase('/atlas/north-america/canada/population/')}>人口</a></nav>
    <div class="canada-workspace">
     <section class="canada-map-column" aria-label="州内GDP割合の地図と比較">
      <div class="canada-map-title"><h2>その州の経済で、どの産業が大きい？</h2></div>
@@ -88,7 +88,7 @@ const valueText=(v:{value:number|null;status:string;symbol:string})=>`${fmt(v.va
      <section data-industry-reading="services" hidden>
       <h3>人口と仕事を支える、多様な活動</h3>
       <p class="canada-takeaway">サービスは商業だけでなく、運輸・教育・医療・公的活動も含む。都市の人口と仕事へつなげて読む。</p>
-      <p class="canada-sources-inline"><a href="https://www12.statcan.gc.ca/census-recensement/2021/as-sa/98-200-X/2021001/98-200-X2021001-eng.cfm">StatCan：都市圏の人口集中（2021年）</a><br/><a href={targets.coast} data-industry-nature-link={targets.coast}>BCの沿岸・Vancouver・Fraser川は、太平洋側の市場とどうつながる？</a></p>
+      <p class="canada-sources-inline"><a href={withBase('/atlas/north-america/canada/population/')}>都市圏の人口分布と、仕事の集まる場所を読む</a><br/><a href={targets.coast} data-industry-nature-link={targets.coast}>BCの沿岸・Vancouver・Fraser川は、太平洋側の市場とどうつながる？</a></p>
       <p>オンタリオとBCの州内割合を比べ、次に人口ページで都市圏の集まり方を確かめます。州全体の産業割合と都市圏の人口は、対象と分母が異なる統計です。</p>
       <details><summary>港・道路と、州全体のサービスを分ける</summary><p>Transport Canadaの2024年報告は、BCの港・鉄道・道路・米国との陸上国境を結ぶ交通を説明しています。Vancouverの位置は沿岸事例です。この交通の説明だけで、BCのサービス割合全体の原因を確定することはできません。</p><p><a href={forestrySources.transport}>BCの輸送ネットワークの根拠</a> / <a href={sources.table}>サービス生産産業の元表・定義</a></p></details>
      </section>
