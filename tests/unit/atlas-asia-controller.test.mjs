@@ -86,7 +86,7 @@ function fixture() {
     <div data-map-surface></div><div data-map-fallback><svg><path data-map-country="JPN"></path></svg></div>
     <div data-map-state></div><button data-map-retry hidden></button>
     <section data-overview><div class="asia-next"><p></p><div class="asia-city-links"></div></div></section>
-    <article data-city-panel="tokyo" hidden></article><article data-city-panel="beijing" hidden></article>
+    ${['tokyo','beijing'].map(id=>`<article data-city-panel="${id}" hidden><h3><b data-city-class-code></b><span data-city-class-name></span></h3><p data-city-class-description></p></article>`).join('')}
     <section class="asia-rice-reading" data-rice-reading hidden><p class="asia-takeaway"></p></section>
     <section data-class-reading hidden></section><section data-climate-legend></section><section data-agriculture-legend hidden></section>
     <button data-climate-class="14"></button><button data-climate-class="21"></button>
@@ -228,7 +228,7 @@ async function setup(query = '', options = {}) {
     if(name.startsWith('/assets/farming/')){const response=()=>{const data=new Uint8Array(4);new DataView(data.buffer).setFloat32(0,name.endsWith('chicken.gz')?0:123.4,true);return new Response(data);};if(options.delayedFarm&&name.endsWith('wheat.gz'))return new Promise(resolve=>{resolveFarm=()=>resolve(response());});return response();}
     if (name.startsWith('/assets/climate/')) {
       if (options.delayedClimateFailure) return new Promise((_, reject) => { rejectClimate = reject; });
-      return new Response(JSON.stringify({ width: 1, height: 1, bounds3857: [west, south, east, north], values: [14] }));
+      return new Response(JSON.stringify({ width: 1, height: 1, bounds3857: [west, south, east, north], values: [options.climateMissing?0:14] }));
     }
     if (name.startsWith('/assets/agriculture/')) {
       const response = () => new Response(JSON.stringify({ bounds: [100, 20, 140, 60], width: 1, height: 1, cellSize: 40, positiveCells: [[0, 123.4]], validRuns: [[0, 1]] }));
@@ -863,6 +863,21 @@ test('都市を選んでも中心とズームが変わらず、雨温図だけ�
   await delay();assert.deepEqual({...window.__map.getCenter(),zoom:window.__map.getZoom()},before);
   assert.equal(new URL(window.location.href).searchParams.get('city'),option.value);
  }finally{await window.happyDOM.close();}
+});
+
+test('雨温図直下の分類は観測地点の格子に対応し、凡例選択や欠測と混同しない',async()=>{
+ for(const climateMissing of [false,true]){
+  const {window,q}=await setup('?city=tokyo',{climateMissing});
+  try{
+   const code=()=>q('[data-city-panel="tokyo"] [data-city-class-code]').textContent;
+   await until(()=>climateMissing?q('[data-city-class-name]').textContent.includes('未分類'):code()==='Cfa','station classification');
+   assert.equal(code(),climateMissing?'':'Cfa');
+   assert.equal(q('[data-class-reading]').hidden,true);
+   q('[data-climate-class="21"]').click();
+   assert.equal(code(),climateMissing?'':'Cfa','legend choice must not relabel the station');
+   assert.equal(q('[data-class-reading]').hidden,false,'a different legend class retains its explanation');
+  }finally{await window.happyDOM.close();}
+ }
 });
 
 test('民族・宗教は人口密度や行政区の塗りを重ねず、切り替えと遅い応答を処理する',async()=>{
