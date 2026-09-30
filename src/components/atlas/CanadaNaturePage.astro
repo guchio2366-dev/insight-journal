@@ -6,6 +6,7 @@ import AtlasClimatePlot from './AtlasClimatePlot.astro';
 import climate from '../../data/atlas/canada/climate.json';
 import rivers from '../../data/atlas/canada/rivers.json';
 import lakes from '../../data/atlas/canada/lakes.json';
+import forestry from '../../data/atlas/canada/forestry.json';
 import {features} from '../../data/atlas/regional-atlas';
 import {climateCause,landReading,waterReading,geographySource,mechanismSource} from '../../data/atlas/canada/reading';
 import {withBase} from '../../lib/urls';
@@ -43,6 +44,9 @@ const config={cities:climate.stations.map(s=>({id:s.id,name:s.name,point:project
        <defs><clipPath id="canada-map-clip"><rect width={width} height={height}/></clipPath></defs>
        <g clip-path="url(#canada-map-clip)">
         {features.filter(f=>['CAN','USA','GRL'].includes(f.properties.code)).map(f=><path class:list={['canada-land',{'is-context':f.properties.code!=='CAN'}]} d={geometryPath(f.geometry)} fill-rule="evenodd" data-map-country={f.properties.code==='CAN'?'CAN':undefined} />)}
+        <g data-canada-forest-context-map style="display:none">
+         <image href={withBase('/assets/atlas/canada-forestry-v1/forest-needleleaf-2020.png')} x="0" y="0" width={width} height={height} preserveAspectRatio="none" />
+        </g>
         <g data-canada-water-layers hidden>
          {lakes.features.map(f=><path class="canada-lake" data-canada-water-shape={f.properties.name??''} d={geometryPath(f.geometry)} fill-rule="evenodd"><title>{japaneseWater[f.properties.name]??f.properties.name}</title></path>)}
          {rivers.features.map(f=><path class="canada-river" data-canada-water-shape={f.properties.name??''} d={geometryPath(f.geometry)}><title>{japaneseWater[f.properties.name]??f.properties.name}</title></path>)}
@@ -51,6 +55,7 @@ const config={cities:climate.stations.map(s=>({id:s.id,name:s.name,point:project
         <text class="canada-ocean" x="80" y="420">太平洋</text><text class="canada-ocean" x="750" y="515">大西洋</text><text class="canada-ocean" x="400" y="38">北極海</text><text class="canada-ocean" x="550" y="265">ハドソン湾</text>
        </g>
       </svg>
+      <p class="canada-caption" data-canada-forest-context-legend hidden><i style={`display:inline-block;width:18px;height:12px;background:rgb(${forestry.classes[0].color.join(',')})`} aria-hidden="true"/> 温帯・亜寒帯の針葉樹林（NRCan、2020年、元データ30m）。位置図と同じ範囲に重ねています。気候は点の位置の1991–2020年平年値です。<a href={withBase('/atlas/north-america/canada/agriculture/forestry/#canada-forestry-sources')}>森林分類・利用条件</a></p>
       <div class="canada-map-actions"><button data-canada-zoom="in" aria-label="地図を拡大">＋</button><button data-canada-zoom="out" aria-label="地図を縮小">−</button><button data-canada-focus>選んだ都市の位置へ</button></div>
       <p class="canada-caption">点は観測地点の位置、灰色は周辺の陸地。位置図は等距円筒図法で、面積比較には使いません。都市を選んでも表示範囲を勝手に変えません。</p>
      </section>
@@ -61,6 +66,7 @@ const config={cities:climate.stations.map(s=>({id:s.id,name:s.name,point:project
      <div class="canada-water-controls" data-canada-water-controls hidden><label>水系・湖<select data-canada-water><option value="">全体を読む</option>{waterNames.map(name=><option value={name}>{japaneseWater[name]}</option>)}</select></label><label><input type="checkbox" data-canada-only /> 選んだ川・湖だけを表示</label><button data-canada-all-water>すべての水系へ戻す</button><p>川と湖はNatural Earth v5.1.2の1:50m概略形状。国境をまたぐ水系を含みます。選択表示でも国土と都市を残します。</p></div>
     </section>
     <aside class="canada-reading" aria-label="地図と一緒に読む">
+     <section class="canada-comparison-context" data-canada-forest-context hidden><h2>森林と沿岸気候を比べる</h2><p data-canada-forest-context-text></p><p class="canada-caption">Vancouverは沿岸の1観測地点です。BCの山地・内陸を代表する平年値ではありません。森林被覆2020年と気候平年1991–2020年は対象期間が異なります。</p></section>
      <section data-canada-reading="climate">
       <div class="canada-city-controls"><label>読む都市<select data-canada-city>{climate.stations.map(s=><option value={s.id} selected={s.id==='ottawa'}>{s.name}</option>)}</select></label><label>比べる都市<select data-canada-compare><option value="">比較なし</option>{climate.stations.map(s=><option value={s.id}>{s.name}</option>)}</select></label></div>
       <p class="canada-period">ECCC 1991–2020年平年値 · 全地点を同じ尺度で比較</p>

@@ -1,0 +1,46 @@
+/* Canada keeps the news / map / reading arrangement on laptop screens. */
+@media(min-width:900px){
+ .atlas-desktop-shell:has(.canada-nature){display:grid;grid-template-columns:clamp(200px,19vw,340px) minmax(0,1fr);gap:14px;padding:10px 16px 28px}
+ .atlas-desktop-shell:has(.canada-nature) .atlas-news{position:sticky;top:10px;width:auto;height:calc(100dvh - 82px);min-height:320px}
+ .atlas-desktop-shell:has(.canada-nature) .atlas-news-header{padding:14px}
+ .atlas-desktop-shell:has(.canada-nature) .atlas-news-list,.atlas-desktop-shell:has(.canada-nature) .atlas-news-reader{padding-inline:14px}
+ .atlas-desktop-shell .canada-nature{padding:12px}
+ .atlas-desktop-shell .canada-nature .regional-navigation{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:7px 0}
+ .atlas-desktop-shell .canada-nature .regional-navigation .regional-tabs,.canada-nature .regional-navigation .regional-countries{gap:4px;margin:0}
+ .atlas-desktop-shell .canada-nature .regional-navigation a{min-height:30px;padding:4px 8px;font-size:12px}
+ .atlas-desktop-shell .canada-nature header{margin:8px 0}
+ .atlas-desktop-shell .canada-nature header .eyebrow{display:none}
+ .atlas-desktop-shell .canada-nature h1{font-size:27px;line-height:1.4;margin:0 0 4px}
+ .atlas-desktop-shell .canada-nature .canada-lead{margin:0;font-size:14px;line-height:1.65}
+ .atlas-desktop-shell .canada-nature .canada-fields{gap:3px;margin:8px 0;padding-bottom:6px}
+ .atlas-desktop-shell .canada-nature .canada-fields a,.canada-nature .canada-fields span{padding:5px 8px;font-size:13px}
+ .atlas-desktop-shell .canada-nature .canola-scope{margin:6px 0;padding:6px 9px;font-size:12px;line-height:1.6}
+ .atlas-desktop-shell .canada-nature .canada-crop-tabs{gap:5px;margin:7px 0}
+ .atlas-desktop-shell .canada-nature .canada-crop-tabs a{padding:5px 8px;font-size:12px}
+ .atlas-desktop-shell .canada-nature .canada-workspace{grid-template-columns:minmax(0,1.65fr) minmax(285px,1fr);gap:14px}
+ .atlas-desktop-shell .canada-nature .canada-map-column>h2{font-size:19px;margin-bottom:7px}
+ .atlas-desktop-shell .canada-nature .canada-reading{padding:13px;font-size:14px;max-height:calc(100dvh - 360px);overflow-y:auto;scrollbar-gutter:stable;overscroll-behavior:contain}
+ .atlas-desktop-shell .canada-nature .canada-reading h2{font-size:19px;margin-bottom:8px}
+ .atlas-desktop-shell .canada-nature .canada-reading p{line-height:1.8}
+ .atlas-desktop-shell .canada-nature .canada-reading .canada-takeaway{font-size:15px}
+ .atlas-desktop-shell .canada-nature .canada-map-actions{gap:5px;margin:7px 0}
+ .atlas-desktop-shell .canada-nature .canada-map-actions button{min-height:32px;padding:5px 8px;font-size:12px}
+ .atlas-desktop-shell .canada-nature .forestry-map-controls{gap:6px;margin:7px 0}
+ .atlas-desktop-shell .canada-nature .forestry-map-controls label{display:flex;flex-wrap:wrap;align-items:center;gap:5px;font-size:12px}
+ .atlas-desktop-shell .canada-nature .forestry-map-controls select{flex:1;min-width:125px;width:0}
+ .atlas-desktop-shell .canada-nature .forestry-map-controls select{min-height:32px;padding:4px 7px}
+ .atlas-desktop-shell .canada-nature .canada-caption{margin:6px 0;line-height:1.65}
+ .atlas-desktop-shell .canada-nature .canada-map{max-height:clamp(250px,calc(100dvh - 465px),580px)}
+ .atlas-desktop-shell .canada-nature .canada-map text{font-size:24px}
+ .atlas-desktop-shell .canada-nature>p:has(a[hidden]){display:none}
+ .atlas-desktop-shell .canada-nature .canada-views{margin:7px 0}
+ .atlas-desktop-shell .canada-nature .canada-views button{min-height:32px;padding:5px 8px;font-size:13px}
+ .atlas-desktop-shell .canada-nature .canada-climate-card{padding-top:10px;margin-top:10px}
+ .atlas-desktop-shell .canada-nature .canada-comparison-context{padding:8px 10px;background:#e9efdf;border-left:3px solid #557149;margin-bottom:10px}
+ .atlas-desktop-shell .canada-nature .canada-comparison-context h2{font-size:16px;margin:0}
+ .atlas-desktop-shell .canada-nature .canada-comparison-context p{font-size:13px;line-height:1.7;margin:5px 0}
+}
+@media(min-width:1600px){
+ .atlas-desktop-shell:has(.canada-nature){grid-template-columns:clamp(300px,19vw,380px) minmax(0,1fr)}
+ .atlas-desktop-shell .canada-nature .canada-workspace{grid-template-columns:minmax(0,1.65fr) minmax(360px,1fr)}
+}
