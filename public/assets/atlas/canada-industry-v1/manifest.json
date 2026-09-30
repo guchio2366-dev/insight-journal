@@ -1,0 +1,145 @@
+{
+  "accessed": "2026-09-30",
+  "statistics": {
+    "table": "36-10-0400-01",
+    "sourceUrl": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3610040001",
+    "csvZipUrl": "https://www150.statcan.gc.ca/n1/tbl/csv/36100400-eng.zip",
+    "releaseDate": "2026-05-01",
+    "years": [
+      2023,
+      2024,
+      2025
+    ],
+    "provinces": 13,
+    "industries": [
+      "All industries [T001]",
+      "Mining, quarrying, and oil and gas extraction [21]",
+      "Manufacturing [31-33]",
+      "Services-producing industries [T003]"
+    ],
+    "selectedValues": 156,
+    "missingSelectedValues": 0,
+    "uom": "Percentage share",
+    "scalarFactor": "units",
+    "schema": {
+      "pruid": "2-digit Statistics Canada province/territory UID",
+      "name": "English province/territory name matching GDP CSV GEO",
+      "year": "integer reference year",
+      "industry": "all | services | manufacturing | miningQuarryingOilGas",
+      "sourceIndustry": "exact NAICS/special aggregation label",
+      "value": "percentage share, 2 decimals in raw CSV; null only if original missing",
+      "status": "original STATUS; blank for all 156 selected values",
+      "vector": "original StatCan VECTOR"
+    },
+    "definition": "Each industry value is its current-price GDP share of the province/territory total economy.",
+    "footnotes": [
+      {
+        "id": 1,
+        "summary": "Current price weights represent each industry share of the provincial/territorial total economy."
+      },
+      {
+        "id": 2,
+        "summary": "Current and chained dollars are in table 36-10-0711-01."
+      },
+      {
+        "id": 3,
+        "summary": "With the November 6, 2025 release, GDP by industry adopted NAICS Canada 2022 version 1.0."
+      }
+    ],
+    "limitations": [
+      "The selected Mining, quarrying, and oil and gas extraction [21] includes activities beyond oil and gas extraction [211]; retain its exact definition.",
+      "All industries [T001] is 100%, useful as a total reference rather than an industry pattern map."
+    ],
+    "artifacts": [
+      {
+        "file": "gdp-share.zip",
+        "bytes": 128884,
+        "sha256": "be6796c83f33297e680c80dcb1d43ec61eb842af061d59924707bc920bb2ecc6"
+      },
+      {
+        "file": "gdp-share/36100400.csv",
+        "bytes": 1473572,
+        "sha256": "b789332f97a0eaa95d7f26738cfa11fd38616f810aecb526a55520e2267cb620"
+      },
+      {
+        "file": "gdp-share/36100400_MetaData.csv",
+        "bytes": 5001,
+        "sha256": "2f2838819dacfaef973c6d2a7786a1a7fd64c11bf0ccf600b3420fd4674197fc"
+      },
+      {
+        "file": "share-selected-156-values.json",
+        "bytes": 38918,
+        "sha256": "320e396db5f5028d0dea10c76e763a19d9a0e198447ba6932aed1dddfc779823"
+      }
+    ]
+  },
+  "boundaries": {
+    "source": "Statistics Canada 2021 Census Cartographic Boundary Files, PR - lpr_000b21s_e",
+    "layerUrl": "https://geo.statcan.gc.ca/geo_wa/rest/services/2021/Cartographic_boundary_files/MapServer/0",
+    "downloadMetadataFile": "province-boundaries-geojson.metadata.json",
+    "featureCount": 13,
+    "coordinateCount": 729270,
+    "outputSR": 4326,
+    "bbox": [
+      -141.0181,
+      41.68142,
+      -52.61941,
+      83.13656
+    ],
+    "referenceDate": "2021-01-01",
+    "guideUrl": "https://www150.statcan.gc.ca/n1/pub/92-160-g/92-160-g2021001-eng.htm",
+    "guideRelease": "2021-11-17",
+    "definition": "Cartographic boundaries remove coastal water areas; same source metadata apply to official Esri REST and WMS services.",
+    "license": {
+      "catalogueTitle": "2021 Census - Boundary files",
+      "catalogueId": "ef70dc3b-1069-4037-9bce-61f47e628a1d",
+      "catalogueUrl": "https://open.canada.ca/data/en/dataset/ef70dc3b-1069-4037-9bce-61f47e628a1d",
+      "licenseTitle": "Open Government Licence - Canada",
+      "licenseUrl": "https://open.canada.ca/en/open-government-licence-canada",
+      "statcanOpenLicenceUrl": "https://www.statcan.gc.ca/en/terms-conditions/open-licence"
+    },
+    "artifact": {
+      "file": "province-boundaries-geojson.geojson",
+      "bytes": 16029828,
+      "sha256": "28966276a200b7c88f97cc4d1e770588e161e2fe63aa85ca9b736015aaeddd57"
+    },
+    "metadataArtifact": {
+      "file": "province-boundaries-geojson.metadata.json",
+      "bytes": 1210,
+      "sha256": "6575bde92a7a891c85e9f98a7058b1e37a5bf4750f422bbcbf7ca850a4d073fb"
+    },
+    "licenseMetadataArtifact": {
+      "file": "boundary-license-package.json",
+      "bytes": 29716,
+      "sha256": "9a2d0e255bea2652aa4156f531119bfce638bd8e4c6485b4fbbfe57126e43924"
+    },
+    "join": "PRUID or DGUID; PRENAME matches GDP GEO",
+    "limitations": [
+      "Educational statistical mapping; not cadastral/legal/survey precision.",
+      "Raw source is detailed; display generalization may be needed.",
+      "Metadata endpoint repeatedly returned server configuration error, but the openly documented GeoJSON query returned HTTP 200 without bypass."
+    ]
+  },
+  "reading": {
+    "energy": "https://www.cer-rec.gc.ca/en/data-analysis/energy-markets/province-territory-energy-profiles/alberta.html",
+    "energyYear": 2023,
+    "energyUse": "Independent factual paraphrase and link; no CER figure redistribution",
+    "transport": "https://tc.canada.ca/en/corporate-services/transparency/corporate-management-reporting/transportation-canada-annual-reports/transportation-canada-2024",
+    "transportYear": 2024
+  },
+  "excluded": "No chained-dollar level, no GDP dollar back-calculation, no claim that NAICS21 means all natural resources or only oil/gas.",
+  "records": 39,
+  "values": 156,
+  "missing": 0,
+  "selectedCsvSha256": "f95054a487c76a37fb0f540c43bfa5742ffe289e8f0b3d918cb3e1e27310fe26",
+  "boundarySourceSha256": "28966276a200b7c88f97cc4d1e770588e161e2fe63aa85ca9b736015aaeddd57",
+  "geometrySha256": "0b6434b080a455f66b9cb631dc47a69a5ff65eaec3cf83890526b0bfc3bbf576",
+  "generalization": {
+    "displayTolerancePixels": 0.25,
+    "originalPoints": 729270,
+    "displayPoints": 32408,
+    "ringCount": 175871,
+    "omittedSubpixelRings": 173583,
+    "method": "Douglas–Peucker in display coordinates; retained rings remain closed and holes use evenodd. Rings with bounding-box diagonal below 0.5 display pixels are omitted from the display only. Full original geography and original bounds retained; no area calculation; province-label anchors are editorial location guides, not facilities."
+  }
+}
