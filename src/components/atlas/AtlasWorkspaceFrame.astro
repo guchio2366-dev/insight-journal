@@ -3,10 +3,10 @@ import AtlasNewsRail from './AtlasNewsRail.astro';
 import type { AtlasNewsRegion } from '../../scripts/atlas-news';
 import '../../styles/atlas-explorer.css';
 import '../../styles/atlas-desktop.css';
-interface Props { region?: AtlasNewsRegion }
-const {region='north-america'} = Astro.props;
+interface Props { region?: AtlasNewsRegion; mapActions?: boolean }
+const {region='north-america', mapActions=true} = Astro.props;
 ---
 <div class="atlas-desktop-shell" data-atlas-shell>
-  <AtlasNewsRail {region} />
+  <AtlasNewsRail {region} {mapActions} />
   <slot />
 </div>

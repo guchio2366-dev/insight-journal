@@ -1,0 +1,9 @@
+---
+import CountryOverviewPage from '../../../../../components/atlas/CountryOverviewPage.astro';
+import { overviewRegions } from '../../../../../data/atlas/country-overview';
+export function getStaticPaths() {
+  return overviewRegions.filter(region=>region.path.startsWith('/atlas/asia/')).map(region=>({params:{region:region.id},props:{regionId:region.id}}));
+}
+const {regionId}=Astro.props;
+---
+<CountryOverviewPage {regionId} />

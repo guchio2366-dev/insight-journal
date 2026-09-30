@@ -10,7 +10,12 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
     doc.write(readFileSync(new URL(`../../dist/atlas/europe/${field}index.html`, import.meta.url), 'utf8'));
     assert.equal(doc.querySelectorAll('[data-news-region="europe"]').length, 1);
     assert.equal(doc.querySelector('[data-news-rail] h2').textContent, '欧州のニュース');
-    assert.deepEqual([...doc.querySelectorAll('.eu-field-nav a')].map(a=>a.textContent), ['農林業','自然環境','主要産業','人口']);
+    assert.deepEqual([...doc.querySelectorAll('.eu-field-nav a:not([data-atlas-overview-link])')].map(a=>a.textContent), ['農林業','自然環境','主要産業','人口']);
+    const overview=doc.querySelector('.eu-field-nav > a:first-child');
+    assert.equal(overview.textContent,'概要');
+    assert.equal(overview.getAttribute('href'),'/insight-journal/atlas/europe/overview/');
+    assert.ok(overview.hasAttribute('data-atlas-overview-link'));
+    assert.equal(overview.hasAttribute('data-eu-field'),false,'概要は地図主題ではなく独立ページへ移動する');
     assert.ok(doc.querySelector('[data-atlas-shell] .eu-workspace'));
     assert.equal(doc.querySelectorAll('.eu-region-buttons button').length, 5);
     assert.ok(doc.querySelector('.eu-read-panel,.europe-side'));

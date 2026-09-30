@@ -15,7 +15,7 @@ const ordered=[...countries].sort((a,b)=>a.name.localeCompare(b.name,'ja'));
   <p class="africa-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / アフリカ</p>
   <header class="africa-heading"><p class="eyebrow">Atlas · Africa</p><h1>アフリカ地図</h1><p>雨と水、土地の利用、産業、人口。同じ場所を選んだまま、四つの視点で読み比べる。</p></header>
   <div class="africa-region-navigation"><label>地域<select data-region>{Object.entries(regionNames).map(([id,name])=><option value={id}>{name}</option>)}</select></label></div>
-  <nav class="africa-fields" aria-label="分野を選ぶ">{Object.entries(fields).map(([id,f],i)=><button type="button" data-field={id} aria-pressed={i===0?'true':'false'}><span>0{i+1}</span>{f.label}</button>)}</nav>
+  <nav class="africa-fields" aria-label="分野を選ぶ"><a data-atlas-overview-link href={withBase('/atlas/africa/overview/')}>概要</a>{Object.entries(fields).map(([id,f],i)=><button type="button" data-field={id} aria-pressed={i===0?'true':'false'}><span>0{i+1}</span>{f.label}</button>)}</nav>
   <div class="africa-intro"><h2 data-field-title>{fields.nature.title}</h2><p data-field-summary>{fields.nature.summary}</p></div>
   <div class="africa-controls">
    <label>指標<select data-metric>{metrics.map(m=><option value={m.id} hidden={m.field!=='nature'} selected={m.id===state.metric}>{m.label}</option>)}</select></label>

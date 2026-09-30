@@ -10,7 +10,7 @@
 .eu-workspace-root .eu-workspace { padding:8px 0 0!important; width:100%; min-width:0; margin:0; }
 .eu-workspace-root .eu-breadcrumb,.eu-workspace-root .eu-workspace .europe-breadcrumb { margin:0 0 8px; font-size:12px; line-height:18px; letter-spacing:0; }
 .eu-workspace-root .eu-breadcrumb a,.eu-workspace-root .eu-workspace .europe-breadcrumb a { text-decoration:none; }
-.eu-workspace-root .eu-field-nav { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:0; margin:0; border:1px solid #c7ccbf; background:#f1f0e7; }
+.eu-workspace-root .eu-field-nav { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:0; margin:0; border:1px solid #c7ccbf; background:#f1f0e7; }
 .eu-workspace-root .eu-field-nav a { display:flex; justify-content:center; align-items:center; text-align:center; min-height:42px; padding:9px 5px; border:0; border-right:1px solid #d8d9ce; font-size:14px; line-height:1.2; font-weight:700; text-decoration:none; }
 .eu-workspace-root .eu-field-nav a:last-child { border-right:0; }
 .eu-workspace-root .eu-field-nav a[aria-current] { background:#243b48; color:white; }

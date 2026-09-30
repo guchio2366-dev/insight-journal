@@ -23,6 +23,7 @@ const labels = [{name:'オーストラリア',point:[134,-25]}, {name:'ニュー
       <button type="button" data-region-button="all" aria-pressed="true">オセアニア全体</button>
       {Object.entries(oceaniaRegions).map(([id,name]) => <button type="button" data-region-button={id} aria-pressed="false">{name}</button>)}
     </nav>
+    <nav class="oceania-page-navigation" aria-label="オセアニアのページ"><a data-atlas-overview-link href={withBase('/atlas/oceania/overview/')}>概要</a><span aria-current="page">基礎地図</span></nav>
     <div class="oceania-layout">
       <section class="oceania-map-card" aria-labelledby="oceania-map-title">
         <div class="oceania-map-heading"><h2 id="oceania-map-title">大陸と島々の位置</h2><p>国・地域を選ぶと拡大します。</p></div>
@@ -67,6 +68,10 @@ const labels = [{name:'オーストラリア',point:[134,-25]}, {name:'ニュー
   if (root) initOceaniaAtlas(root);
 </script>
 <style>
+  .oceania-page-navigation { display:flex; flex-wrap:wrap; border:1px solid var(--rule); background:#f1f0e7; margin:0 0 14px; }
+  .oceania-page-navigation a,.oceania-page-navigation span { display:flex; align-items:center; justify-content:center; min-height:44px; min-width:100px; padding:9px 18px; font-size:14px; font-weight:700; text-decoration:none; }
+  .oceania-page-navigation [aria-current] { color:white; background:#243b48; }
+  .oceania-page-navigation a:focus-visible { outline:3px solid #a74830; outline-offset:2px; }
   .oceania-atlas { padding: 18px 0 60px; }
   .oceania-breadcrumb { color: var(--ink-soft); font-size: 12px; }
   .oceania-heading { max-width: 760px; margin: 18px 0 22px; }

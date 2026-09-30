@@ -4,8 +4,8 @@ import { withBase } from '../../lib/urls';
 import { topics } from '../../data/taxonomy';
 import { atlasNewsRegions, articleMatchesNewsRegion, type AtlasNewsRegion } from '../../scripts/atlas-news';
 
-interface Props { region?: AtlasNewsRegion }
-const {region='north-america'}=Astro.props;
+interface Props { region?: AtlasNewsRegion; mapActions?: boolean }
+const {region='north-america',mapActions=true}=Astro.props;
 const config=atlasNewsRegions[region];
 
 // Only approved, public articles for this region belong in this rail.
@@ -18,7 +18,7 @@ const rendered = await Promise.all(articles.map(async entry => ({entry, ...await
   <header class="atlas-news-header">
     <p>NEWS & CONTEXT</p>
     <h2 id="atlas-news-heading">{config.label}のニュース</h2>
-    <span>記事と地図を、並べて読む</span>
+    <span>{mapActions?'記事と地図を、並べて読む':'記事と国の概要を、並べて読む'}</span>
   </header>
   <div class="atlas-news-list" data-news-list tabindex="0" aria-label={`${config.label}のニュース一覧`}>
     <div class="atlas-news-count">新着順 <span>{articles.length} 件</span></div>
@@ -26,7 +26,7 @@ const rendered = await Promise.all(articles.map(async entry => ({entry, ...await
       <span aria-hidden="true">＋</span>
       <h3>記事の追加を待っています</h3>
       <p>{config.label}に関連する公開記事を、ここに新着順で表示します。</p>
-      <p>地図や各分野の解説は、右側で引き続き利用できます。</p>
+      <p>{mapActions?'地図や各分野の解説は、右側で引き続き利用できます。':'国の概要は、右側でテーマを選んで確認できます。'}</p>
     </div>}
     {articles.map(({data}) => <article class="atlas-news-card">
       <div class="atlas-news-meta"><time datetime={data.publishedAt}>{data.publishedAt.slice(0,10).replaceAll('-','.')}</time><span>{data.topics.map(topic=>topics[topic]).join('・')}</span></div>
@@ -47,7 +47,7 @@ const rendered = await Promise.all(articles.map(async entry => ({entry, ...await
       <time datetime={data.publishedAt}>{data.publishedAt.slice(0,10)}</time>
       <h2 tabindex="-1">{data.title}</h2>
       <p class="atlas-news-deck">{data.summary}</p>
-      {point && region!=='europe' && <button type="button" data-news-location data-lng={point.longitude} data-lat={point.latitude}>関連地域を地図で見る：{point.label}</button>}
+      {mapActions && point && region!=='europe' && <button type="button" data-news-location data-lng={point.longitude} data-lat={point.latitude}>関連地域を地図で見る：{point.label}</button>}
       <div class="atlas-news-prose"><Content /></div>
       <h3>出典</h3>
       <ul>{data.sources.map(source=><li id={`source-${source.id}`}><a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}</a> — {source.publisher}</li>)}</ul>

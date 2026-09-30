@@ -28,7 +28,7 @@ const climateSource='https://www.data.jma.go.jp/tcc/tcc/products/climate/climatv
     <nav class="west-region-links" aria-label="世界の地域"><a data-west-other="north-america" href={withBase(`/atlas/north-america/${field.route}/`)}>北米</a><a href={withBase('/atlas/europe/')}>欧州</a><a href={withBase(`/atlas/west-asia/${field.route}/`)} aria-current="page">西アジア・中東</a></nav>
     <label class="west-region-country">国・地域<select data-west-country aria-label="国・地域を選択"><option value="">地域全体</option>{data.countries.map(c=><option value={c.code}>{c.name}</option>)}</select></label>
    </div>
-   <nav class="atlas-tabs" aria-label="地図の分野">{westFields.map(f=><a data-west-field={f.id} href={withBase(`/atlas/west-asia/${f.route}/`)} aria-current={f.id===initialField?'page':undefined}>{f.label}</a>)}</nav>
+   <nav class="atlas-tabs atlas-tabs-with-overview" aria-label="地図の分野"><a data-atlas-overview-link href={withBase('/atlas/west-asia/overview/')}>概要</a>{westFields.map(f=><a data-west-field={f.id} href={withBase(`/atlas/west-asia/${f.route}/`)} aria-current={f.id===initialField?'page':undefined}>{f.label}</a>)}</nav>
    {initialField!=='agriculture'&&<div class={initialField==='natural'?'atlas-nature-controls west-controls':initialField==='industry'?'industry-controls':'population-controls'}>
     <div class={initialField==='natural'?'atlas-nature-tabs':initialField==='industry'?'industry-tab-row':'population-tabs'} role="tablist" aria-label={`${field.label}の表示切替`}>{groups.map(g=><button type="button" role="tab" id={`west-group-${groups.indexOf(g)}`} aria-controls="west-map-panel" data-west-group={g} aria-pressed={g===initial.group} aria-selected={g===initial.group} tabindex={g===initial.group?0:-1}>{g}</button>)}</div>
    </div>}

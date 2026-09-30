@@ -3,6 +3,7 @@ import type { APIRoute } from "astro";
 import { withBase } from "../lib/urls";
 import { agricultureField } from "../data/atlas/north-america-agriculture";
 import { regionalMaps } from "../data/atlas/regional-atlas";
+import { overviewRegions } from "../data/atlas/country-overview";
 
 export const prerender = true;
 
@@ -29,6 +30,7 @@ export const GET: APIRoute = async ({ site }) => {
     { loc: absolute("/themes/"), lastmod: undefined },
     { loc: absolute("/about/"), lastmod: undefined },
     { loc: absolute("/atlas/"), lastmod: agricultureField.updatedAt.slice(0, 10) },
+    ...overviewRegions.map(region=>({loc:absolute(region.path),lastmod:"2026-09-30"})),
     { loc: absolute("/atlas/oceania/"), lastmod: "2026-09-25" },
     { loc: absolute("/atlas/europe/"), lastmod: "2026-09-25" },
     { loc: absolute("/atlas/africa/"), lastmod: "2026-09-25" },
