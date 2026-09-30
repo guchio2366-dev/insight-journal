@@ -192,13 +192,8 @@
  .eu-workspace-root[data-europe-detail] .eu-subject-reader { display:flex; flex-direction:column; min-height:0; max-height:calc(100dvh - 62px); }
  .eu-workspace-root .eu-reader-summary { flex:0 0 auto; background:#fbfaf3; }
  .eu-workspace-root .eu-reader-body { flex:1 1 auto; min-height:110px; overflow-y:auto; overscroll-behavior:contain; scrollbar-gutter:stable; padding-right:6px; padding-bottom:8px; }
- .eu-workspace-root [data-eu-climate-reader] { display:flex; flex-direction:column; max-height:calc(100dvh - 62px); min-height:0; }
- .eu-workspace-root [data-eu-climate-reader]>.eu-data-note { margin:0 0 8px; line-height:1.65; }
- .eu-workspace-root .eu-city-readings { display:flex; flex-direction:column; flex:1 1 auto; min-height:0; }
- .eu-workspace-root .eu-city-reading { display:flex; flex-direction:column; min-height:0; }
- .eu-workspace-root .eu-city-reading-head { flex:0 0 auto; }
- .eu-workspace-root .eu-city-reading-body { min-height:110px; overflow-y:auto; overscroll-behavior:contain; scrollbar-gutter:stable; padding-right:6px; padding-bottom:8px; }
- .eu-workspace-root [data-eu-climate-reader]>.eu-statistics-jump { flex:0 0 auto; }
+ /* Climate reads as one continuous column: plot, climate, then farming. */
+ .eu-workspace-root[data-europe-detail] .eu-read-panel:has([data-eu-climate-reader]:not([hidden])) { position:static; }
 }
 @media(min-width:960px) and (max-width:1199px) {
  .eu-workspace-root[data-europe-detail] .atlas-desktop-shell:not(.is-reading-news) { display:grid; grid-template-columns:180px minmax(0,1fr); gap:14px; }
@@ -210,8 +205,8 @@
 }
 @media(min-width:960px) and (max-height:650px) {
  .eu-workspace-root[data-europe-detail] .eu-read-panel { padding:12px; }
- .eu-workspace-root[data-europe-detail] .eu-subject-reader,.eu-workspace-root [data-eu-climate-reader] { max-height:calc(100dvh - 50px); }
- .eu-workspace-root .eu-reader-summary h2,.eu-workspace-root .eu-city-reading-head h3 { font-size:21px; }
+ .eu-workspace-root[data-europe-detail] .eu-subject-reader { max-height:calc(100dvh - 50px); }
+ .eu-workspace-root .eu-reader-summary h2 { font-size:21px; }
  .eu-workspace-root .eu-reader-summary .eu-reader-takeaway { font-size:13px; line-height:1.65; margin-bottom:8px; }
- .eu-workspace-root .eu-reader-body,.eu-workspace-root .eu-city-reading-body { min-height:100px; }
+ .eu-workspace-root .eu-reader-body { min-height:100px; }
 }

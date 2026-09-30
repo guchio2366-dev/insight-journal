@@ -23,20 +23,23 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.ok(doc.querySelector('.eu-map-stage [data-eu-zoom="in"]'));
       assert.equal(doc.querySelectorAll('[data-eu-config]').length, 1);
       const shell=doc.querySelector('[data-atlas-shell]');
-      const workspace=doc.querySelector('.eu-workspace');
       const statistics=doc.querySelector('[data-eu-statistics]');
       assert.equal(statistics.parentElement,shell.parentElement);
       assert.ok([...shell.parentElement.children].indexOf(statistics)>[...shell.parentElement.children].indexOf(shell));
       assert.equal(doc.querySelector('.eu-read-panel [data-eu-statistics]'),null);
-      assert.equal(doc.querySelector('.eu-read-panel .eu-climate-plot svg'),null);
+      assert.equal(doc.querySelector('[data-eu-climate-statistics] svg'),null);
+      assert.equal(doc.querySelectorAll('.eu-read-panel [data-eu-city-chart] svg').length,24);
       assert.ok(doc.querySelector('.eu-breadcrumb [data-base-map]'));
     }
     if (field==='nature/') {
       assert.deepEqual([...doc.querySelectorAll('[data-eu-topic-field="nature"] button')].map(b=>b.textContent), ['気候区分','水資源','地形','標高（等高線）']);
-      assert.equal(doc.querySelector('[data-eu-climate-reader] h2').textContent,'都市の気候');
-      assert.ok(doc.querySelector('[data-eu-climate-statistics] [data-city-card="london"] .eu-climate-plot svg'));
+      assert.equal(doc.querySelector('[data-eu-climate-reader] h2').textContent,'都市の雨温図');
+      assert.ok(doc.querySelector('.eu-read-panel [data-city-reading="london"] [data-eu-city-chart="london"] svg'));
+      assert.match(doc.querySelector('[data-eu-climate-statistics] h2').textContent,/月別の数値.*年間の要約/);
+      assert.ok(doc.querySelector('[data-eu-climate-statistics] [data-city-card="london"] table'));
+      assert.ok(doc.querySelector('[data-eu-climate-statistics] [data-city-card="london"] .eu-summary'));
       assert.ok(doc.querySelector('.eu-read-panel [data-city-reading="london"]'));
-      assert.match(doc.querySelector('[data-eu-climate-scope]').textContent,/イギリス.*首都ロンドン/);
+      assert.match(doc.querySelector('[data-city-reading="london"] .eu-city-chart-meta').textContent,/イギリス.*首都ロンドン/);
       const cityList=doc.querySelector('.eu-map-panel [data-eu-city-list]');
       assert.equal(cityList.hidden,false);
       assert.equal(cityList.querySelectorAll('[data-eu-city-select]').length,24);
