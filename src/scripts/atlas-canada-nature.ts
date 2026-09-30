@@ -9,6 +9,13 @@ export function initCanadaNature(root:HTMLElement){
  function render(){
   const forestryBack=root.querySelector<HTMLAnchorElement>('[data-canada-forestry-return]'),savedForestry=new URL(location.href).searchParams.get('forestryReturn');
   if(forestryBack){forestryBack.hidden=!savedForestry;if(savedForestry){const back=new URL(forestryBack.getAttribute('href')!,location.href),params=new URLSearchParams(savedForestry);back.search='';for(const key of ['year','province','compare','metric','cover','region','zoom']){const value=params.get(key);if(value)back.searchParams.set(key,value);}forestryBack.href=back.href;}}
+  const forestContext=root.querySelector<HTMLElement>('[data-canada-forest-context]'),forestMap=root.querySelector<SVGElement>('[data-canada-forest-context-map]'),forestLegend=root.querySelector<HTMLElement>('[data-canada-forest-context-legend]');
+  if(forestContext&&forestMap&&forestLegend){
+   forestContext.hidden=!savedForestry;root.classList.toggle('is-learning-comparison',!!savedForestry);forestMap.style.display=savedForestry&&state.view!=='landform'?'':'none';forestLegend.hidden=!savedForestry||state.view==='landform';
+   const text=forestContext.querySelector<HTMLElement>('[data-canada-forest-context-text]')!;
+   const waterText=state.water&&state.water!=='Fraser'?`現在は${state.water}${state.only?'だけ':'を選択して全水系'}を表示しています。林業の比較入口はFraser川とBCの針葉樹林です。Fraserを選ぶと、森林と海岸の位置関係へ戻れます。`:'針葉樹林とFraser川の位置を重ね、森林と海岸のつながりを照合します。木材輸送には道路・港も必要です。';
+   text.textContent=state.view==='landform'?'山地と海岸を地形図で確かめます。針葉樹林と観測点の重ね図へは「都市の気候」で戻れます。':state.view==='water'?waterText:state.city==='vancouver'?'Vancouverの温和な冬・秋冬の雨を、沿岸の針葉樹林と比べます。':'観測点を切り替えています。元の問いはVancouverの沿岸気候と針葉樹林の関係です。Vancouverで沿岸の事例へ戻れます。';
+  }
   $<HTMLSelectElement>('[data-canada-city]').value=state.city;
   $<HTMLSelectElement>('[data-canada-compare]').value=state.compare??'';
   for(const option of $<HTMLSelectElement>('[data-canada-compare]').options)option.disabled=option.value===state.city;

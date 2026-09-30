@@ -63,12 +63,15 @@ const natureTargets={climate:nature('?city=vancouver'),landform:nature('?city=va
      <p><a href={forestrySources.table}>元表・定義・脚注</a> / <a href={withBase(`${assetRoot}/forestry-selected.csv`)}>今回の抽出CSV</a></p>
     </section>
     <aside class="canada-reading" aria-label="森林と林業をつなぐ説明">
-     {regions.map(r=><section class="forestry-region-reading" data-forestry-region-reading={r.id}><h2>{r.name}</h2><p class="canada-takeaway">{r.takeaway}</p><p>{r.body}</p><a href={r.source}>森林・生態分類の根拠</a></section>)}
-     {canadaForestryReading.map((r,i)=><section class="canada-reading-section"><h2>{r.title}</h2><p>{r.body}</p><p class="canada-sources-inline"><a href={r.source}>この説明の資料</a></p>
-      {i===0&&<p><a href={natureTargets.climate} data-forestry-nature-link={natureTargets.climate}>Vancouverの12か月気候：冬の気温と降水の季節配分を見る</a>。沿岸の1観測地点であり、BC全域・山地・森林生育地の代表平均ではありません。</p>}
-      {i===2&&<p><a href={natureTargets.landform} data-forestry-nature-link={natureTargets.landform}>地形：西部の山地と海岸の位置を確認</a> / <a href={natureTargets.water} data-forestry-nature-link={natureTargets.water}>水：Fraser川を分離して海へのつながりを見る</a>。水量・航行条件や伐採地からの出荷経路はこの図では分かりません。</p>}
+     {regions.map(r=><section class="forestry-region-reading" data-forestry-region-reading={r.id}><h2>{r.name}</h2><p class="canada-takeaway">{r.takeaway}</p>
+      {r.id==='bc'&&<><p>気温・水・土壌・地形が森林の違いをつくり、管理と交通が木材生産を支えます。</p><p class="canada-sources-inline"><a href={natureTargets.climate} data-forestry-nature-link={natureTargets.climate}>森林とVancouver気候を比べる：冬の気温・降水の季節配分</a><br/><a href={natureTargets.landform} data-forestry-nature-link={natureTargets.landform}>森林と地形を照合：西部の山地・海岸の位置</a><br/><a href={natureTargets.water} data-forestry-nature-link={natureTargets.water}>森林とFraser川を比べる：海へのつながりを位置で確認</a></p></>}
+      <details><summary>この地域の森林・生態分類を詳しく読む</summary><p>{r.body}</p><a href={r.source}>森林・生態分類の根拠</a></details>
      </section>)}
-     <section class="canada-reading-section"><h2>読み終えたら</h2><p>森林4分類を一つずつ見る → 州内でも分布が変わる場所を追う → 木材製品と紙製品の金額を比べる → 生育条件・管理・輸送・需要をつなぐ。森林が広いことだけでは加工業の規模が決まらない理由を説明してみましょう。</p><p><a href={natureTargets.ottawa} data-forestry-nature-link={natureTargets.ottawa}>自然環境の入口：首都Ottawaから読む</a> / <a href={withBase('/atlas/north-america/canada/agriculture/beef/')}>肉牛：草地・飼料・管理との関係</a> / <a href={withBase('/atlas/north-america/canada/agriculture/wheat/')}>小麦：用途・輸送・需要</a> / <a href={withBase('/atlas/north-america/canada/agriculture/')}>カノーラ：加工と輸出</a></p></section>
+     {canadaForestryReading.map((r,i)=><details class="canada-reading-section"><summary>{r.title}</summary><p>{r.body}</p><p class="canada-sources-inline"><a href={r.source}>この説明の資料</a></p>
+      {i===0&&<p>Vancouverは沿岸の1観測地点であり、BC全域・山地・森林生育地の代表平均ではありません。</p>}
+      {i===2&&<p>Fraser川の位置図から、水量・航行条件や伐採地からの出荷経路は分かりません。</p>}
+     </details>)}
+     <details class="canada-reading-section"><summary>読み終えたら</summary><p>森林4分類を一つずつ見る → 州内でも分布が変わる場所を追う → 木材製品と紙製品の金額を比べる → 生育条件・管理・輸送・需要をつなぐ。森林が広いことだけでは加工業の規模が決まらない理由を説明してみましょう。</p><p><a href={natureTargets.ottawa} data-forestry-nature-link={natureTargets.ottawa}>自然環境の入口：首都Ottawaから読む</a> / <a href={withBase('/atlas/north-america/canada/agriculture/beef/')}>肉牛：草地・飼料・管理との関係</a> / <a href={withBase('/atlas/north-america/canada/agriculture/wheat/')}>小麦：用途・輸送・需要</a> / <a href={withBase('/atlas/north-america/canada/agriculture/')}>カノーラ：加工と輸出</a></p></details>
     </aside>
    </div>
    <footer class="canada-source-footer" id="canada-forestry-sources"><h2>出典・年・単位・利用条件</h2>
