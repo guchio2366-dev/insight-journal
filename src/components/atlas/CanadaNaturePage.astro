@@ -66,7 +66,7 @@ const config={cities:climate.stations.map(s=>({id:s.id,name:s.name,point:project
      <div class="canada-water-controls" data-canada-water-controls hidden><label>水系・湖<select data-canada-water><option value="">全体を読む</option>{waterNames.map(name=><option value={name}>{japaneseWater[name]}</option>)}</select></label><label><input type="checkbox" data-canada-only /> 選んだ川・湖だけを表示</label><button data-canada-all-water>すべての水系へ戻す</button><p>川と湖はNatural Earth v5.1.2の1:50m概略形状。国境をまたぐ水系を含みます。選択表示でも国土と都市を残します。</p></div>
     </section>
     <aside class="canada-reading" aria-label="地図と一緒に読む">
-     <section class="canada-comparison-context" data-canada-forest-context hidden><h2>森林と沿岸気候を比べる</h2><p data-canada-forest-context-text></p><details><summary>比較の年・範囲</summary><p class="canada-caption">Vancouverは沿岸1地点。BC全域平均ではありません。森林2020年／気候1991–2020年。</p></details></section>
+     <section class="canada-comparison-context" data-canada-forest-context hidden><h2>森林と沿岸気候を比べる</h2><p data-canada-forest-context-text></p><p class="canada-caption">Vancouverは沿岸1地点。BC全域平均ではありません。</p><details><summary>比較の年・範囲</summary><p class="canada-caption">Vancouverは沿岸1地点。BC全域平均ではありません。森林2020年／気候1991–2020年。</p></details></section>
      <section data-canada-reading="climate">
       <div class="canada-city-controls"><label>読む都市<select data-canada-city>{climate.stations.map(s=><option value={s.id} selected={s.id==='ottawa'}>{s.name}</option>)}</select></label><label>比べる都市<select data-canada-compare><option value="">比較なし</option>{climate.stations.map(s=><option value={s.id}>{s.name}</option>)}</select></label></div>
       <p class="canada-period">ECCC 1991–2020年平年値 · 全地点を同じ尺度で比較</p>

@@ -50,6 +50,17 @@
  .atlas-desktop-shell .is-learning-comparison .canada-climate-card>svg{order:1}
  .atlas-desktop-shell .is-learning-comparison .canada-climate-card>p,.atlas-desktop-shell .is-learning-comparison .canada-climate-card>dl,.atlas-desktop-shell .is-learning-comparison .canada-climate-card>details{order:2}
  .atlas-desktop-shell .canada-nature .canada-comparison-context details{margin-top:4px;font-size:12px}
+ /* Comparison keeps its question, source map and complete monthly chart together. */
+ .atlas-desktop-shell .is-learning-comparison .canada-breadcrumb,
+ .atlas-desktop-shell .is-learning-comparison .regional-navigation,
+ .atlas-desktop-shell .is-learning-comparison header .canada-lead{display:none}
+ .atlas-desktop-shell .is-learning-comparison header{height:0;margin:0}
+ .atlas-desktop-shell .is-learning-comparison header h1{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+ .atlas-desktop-shell .is-learning-comparison .canada-fields{margin:0 0 6px}
+ .atlas-desktop-shell .is-learning-comparison>p:has([data-canada-forestry-return]),
+ .atlas-desktop-shell .is-learning-comparison>p:has([data-canada-industry-return]),
+ .atlas-desktop-shell .is-learning-comparison>p:has([data-canada-population-return]){margin:6px 0}
+ .atlas-desktop-shell .is-learning-comparison .canada-reading{max-height:calc(100dvh - 230px)}
 }
 @media(min-width:1600px){
  .atlas-desktop-shell:has(.canada-nature){grid-template-columns:clamp(300px,19vw,380px) minmax(0,1fr)}
