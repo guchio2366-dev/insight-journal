@@ -1,0 +1,1308 @@
+{
+  "years": [
+    2020,
+    2021,
+    2022,
+    2025
+  ],
+  "provinces": [
+    {
+      "id": "Canada",
+      "name": "カナダ全体"
+    },
+    {
+      "id": "Newfoundland and Labrador",
+      "name": "ニューファンドランド・ラブラドル"
+    },
+    {
+      "id": "Prince Edward Island",
+      "name": "プリンスエドワード島"
+    },
+    {
+      "id": "Nova Scotia",
+      "name": "ノバスコシア"
+    },
+    {
+      "id": "New Brunswick",
+      "name": "ニューブランズウィック"
+    },
+    {
+      "id": "Quebec",
+      "name": "ケベック"
+    },
+    {
+      "id": "Ontario",
+      "name": "オンタリオ"
+    },
+    {
+      "id": "Manitoba",
+      "name": "マニトバ"
+    },
+    {
+      "id": "Saskatchewan",
+      "name": "サスカチュワン"
+    },
+    {
+      "id": "Alberta",
+      "name": "アルバータ"
+    },
+    {
+      "id": "British Columbia",
+      "name": "ブリティッシュコロンビア"
+    }
+  ],
+  "metrics": [
+    {
+      "id": "seeded",
+      "name": "作付面積",
+      "source": "Seeded area (hectares)",
+      "unit": "ha"
+    },
+    {
+      "id": "harvested",
+      "name": "収穫面積",
+      "source": "Harvested area (hectares)",
+      "unit": "ha"
+    },
+    {
+      "id": "production",
+      "name": "生産量",
+      "source": "Production (metric tonnes)",
+      "unit": "t"
+    }
+  ],
+  "data": [
+    {
+      "year": 2020,
+      "id": "Canada",
+      "name": "カナダ全体",
+      "values": {
+        "seeded": {
+          "value": 10193600,
+          "status": "",
+          "symbol": "",
+          "vector": "v114995671",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 10017800,
+          "status": "",
+          "symbol": "",
+          "vector": "v114995787",
+          "decimals": 0
+        },
+        "production": {
+          "value": 35437200,
+          "status": "",
+          "symbol": "",
+          "vector": "v114995749",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2020,
+      "id": "Newfoundland and Labrador",
+      "name": "ニューファンドランド・ラブラドル",
+      "values": {
+        "seeded": {
+          "value": null,
+          "status": "F",
+          "symbol": "",
+          "vector": "v1000142854",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": null,
+          "status": "F",
+          "symbol": "",
+          "vector": "v1001388099",
+          "decimals": 0
+        },
+        "production": {
+          "value": null,
+          "status": "F",
+          "symbol": "",
+          "vector": "v1001388103",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2020,
+      "id": "Prince Edward Island",
+      "name": "プリンスエドワード島",
+      "values": {
+        "seeded": {
+          "value": 20000,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113883",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 17900,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113898",
+          "decimals": 0
+        },
+        "production": {
+          "value": 62200,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113923",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2020,
+      "id": "Nova Scotia",
+      "name": "ノバスコシア",
+      "values": {
+        "seeded": {
+          "value": 4500,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113946",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 3200,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113961",
+          "decimals": 0
+        },
+        "production": {
+          "value": 11800,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113987",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2020,
+      "id": "New Brunswick",
+      "name": "ニューブランズウィック",
+      "values": {
+        "seeded": {
+          "value": 5400,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114011",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 5200,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114047",
+          "decimals": 0
+        },
+        "production": {
+          "value": 14300,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114035",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2020,
+      "id": "Quebec",
+      "name": "ケベック",
+      "values": {
+        "seeded": {
+          "value": 118300,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114079",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 106900,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114102",
+          "decimals": 0
+        },
+        "production": {
+          "value": 248500,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114140",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2020,
+      "id": "Ontario",
+      "name": "オンタリオ",
+      "values": {
+        "seeded": {
+          "value": 517700,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114175",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 465100,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114319",
+          "decimals": 0
+        },
+        "production": {
+          "value": 2485300,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114281",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2020,
+      "id": "Manitoba",
+      "name": "マニトバ",
+      "values": {
+        "seeded": {
+          "value": 1282600,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114671",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 1278400,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114985",
+          "decimals": 0
+        },
+        "production": {
+          "value": 5274100,
+          "status": "",
+          "symbol": "",
+          "vector": "v115115020",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2020,
+      "id": "Saskatchewan",
+      "name": "サスカチュワン",
+      "values": {
+        "seeded": {
+          "value": 5203700,
+          "status": "",
+          "symbol": "",
+          "vector": "v114995602",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 5175400,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114426",
+          "decimals": 0
+        },
+        "production": {
+          "value": 16238400,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114239",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2020,
+      "id": "Alberta",
+      "name": "アルバータ",
+      "values": {
+        "seeded": {
+          "value": 3014300,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114483",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 2944700,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114742",
+          "decimals": 0
+        },
+        "production": {
+          "value": 11041000,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114552",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2020,
+      "id": "British Columbia",
+      "name": "ブリティッシュコロンビア",
+      "values": {
+        "seeded": {
+          "value": 27500,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114882",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 21000,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114902",
+          "decimals": 0
+        },
+        "production": {
+          "value": 61600,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114938",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Canada",
+      "name": "カナダ全体",
+      "values": {
+        "seeded": {
+          "value": 9491860,
+          "status": "",
+          "symbol": "",
+          "vector": "v114995671",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 9198900,
+          "status": "",
+          "symbol": "",
+          "vector": "v114995787",
+          "decimals": 0
+        },
+        "production": {
+          "value": 22422100,
+          "status": "",
+          "symbol": "",
+          "vector": "v114995749",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Newfoundland and Labrador",
+      "name": "ニューファンドランド・ラブラドル",
+      "values": {
+        "seeded": {
+          "value": null,
+          "status": "F",
+          "symbol": "",
+          "vector": "v1000142854",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": null,
+          "status": "F",
+          "symbol": "",
+          "vector": "v1001388099",
+          "decimals": 0
+        },
+        "production": {
+          "value": null,
+          "status": "F",
+          "symbol": "",
+          "vector": "v1001388103",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Prince Edward Island",
+      "name": "プリンスエドワード島",
+      "values": {
+        "seeded": {
+          "value": 15430,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113883",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 11800,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113898",
+          "decimals": 0
+        },
+        "production": {
+          "value": 48200,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113923",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Nova Scotia",
+      "name": "ノバスコシア",
+      "values": {
+        "seeded": {
+          "value": 4933,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113946",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 2500,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113961",
+          "decimals": 0
+        },
+        "production": {
+          "value": 11200,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113987",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "New Brunswick",
+      "name": "ニューブランズウィック",
+      "values": {
+        "seeded": {
+          "value": 2823,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114011",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 2600,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114047",
+          "decimals": 0
+        },
+        "production": {
+          "value": 10100,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114035",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Quebec",
+      "name": "ケベック",
+      "values": {
+        "seeded": {
+          "value": 94622,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114079",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 90600,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114102",
+          "decimals": 0
+        },
+        "production": {
+          "value": 329200,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114140",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Ontario",
+      "name": "オンタリオ",
+      "values": {
+        "seeded": {
+          "value": 528152,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114175",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 508200,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114319",
+          "decimals": 0
+        },
+        "production": {
+          "value": 2993000,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114281",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Manitoba",
+      "name": "マニトバ",
+      "values": {
+        "seeded": {
+          "value": 1178077,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114671",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 1167600,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114985",
+          "decimals": 0
+        },
+        "production": {
+          "value": 3762800,
+          "status": "",
+          "symbol": "",
+          "vector": "v115115020",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Saskatchewan",
+      "name": "サスカチュワン",
+      "values": {
+        "seeded": {
+          "value": 4827426,
+          "status": "",
+          "symbol": "",
+          "vector": "v114995602",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 4674200,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114426",
+          "decimals": 0
+        },
+        "production": {
+          "value": 8833900,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114239",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Alberta",
+      "name": "アルバータ",
+      "values": {
+        "seeded": {
+          "value": 2813129,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114483",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 2717800,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114742",
+          "decimals": 0
+        },
+        "production": {
+          "value": 6374900,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114552",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "British Columbia",
+      "name": "ブリティッシュコロンビア",
+      "values": {
+        "seeded": {
+          "value": 27140,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114882",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 23600,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114902",
+          "decimals": 0
+        },
+        "production": {
+          "value": 58800,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114938",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2022,
+      "id": "Canada",
+      "name": "カナダ全体",
+      "values": {
+        "seeded": {
+          "value": 10289400,
+          "status": "",
+          "symbol": "r",
+          "vector": "v114995671",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 10110900,
+          "status": "",
+          "symbol": "r",
+          "vector": "v114995787",
+          "decimals": 0
+        },
+        "production": {
+          "value": 34878782,
+          "status": "",
+          "symbol": "r",
+          "vector": "v114995749",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2022,
+      "id": "Newfoundland and Labrador",
+      "name": "ニューファンドランド・ラブラドル",
+      "values": {
+        "seeded": {
+          "value": 0,
+          "status": "",
+          "symbol": "",
+          "vector": "v1000142854",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 0,
+          "status": "",
+          "symbol": "",
+          "vector": "v1001388099",
+          "decimals": 0
+        },
+        "production": {
+          "value": 0,
+          "status": "",
+          "symbol": "",
+          "vector": "v1001388103",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2022,
+      "id": "Prince Edward Island",
+      "name": "プリンスエドワード島",
+      "values": {
+        "seeded": {
+          "value": 17000,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113883",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 15900,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113898",
+          "decimals": 0
+        },
+        "production": {
+          "value": 74464,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113923",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2022,
+      "id": "Nova Scotia",
+      "name": "ノバスコシア",
+      "values": {
+        "seeded": {
+          "value": 3100,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113946",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 2600,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113961",
+          "decimals": 0
+        },
+        "production": {
+          "value": 12546,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113987",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2022,
+      "id": "New Brunswick",
+      "name": "ニューブランズウィック",
+      "values": {
+        "seeded": {
+          "value": 3700,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114011",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 3600,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114047",
+          "decimals": 0
+        },
+        "production": {
+          "value": 13428,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114035",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2022,
+      "id": "Quebec",
+      "name": "ケベック",
+      "values": {
+        "seeded": {
+          "value": 95200,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114079",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 88500,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114102",
+          "decimals": 0
+        },
+        "production": {
+          "value": 347135,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114140",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2022,
+      "id": "Ontario",
+      "name": "オンタリオ",
+      "values": {
+        "seeded": {
+          "value": 415200,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114175",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 394400,
+          "status": "",
+          "symbol": "r",
+          "vector": "v115114319",
+          "decimals": 0
+        },
+        "production": {
+          "value": 2557300,
+          "status": "",
+          "symbol": "r",
+          "vector": "v115114281",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2022,
+      "id": "Manitoba",
+      "name": "マニトバ",
+      "values": {
+        "seeded": {
+          "value": 1267300,
+          "status": "",
+          "symbol": "r",
+          "vector": "v115114671",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 1233800,
+          "status": "",
+          "symbol": "r",
+          "vector": "v115114985",
+          "decimals": 0
+        },
+        "production": {
+          "value": 5126368,
+          "status": "",
+          "symbol": "r",
+          "vector": "v115115020",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2022,
+      "id": "Saskatchewan",
+      "name": "サスカチュワン",
+      "values": {
+        "seeded": {
+          "value": 5362200,
+          "status": "",
+          "symbol": "",
+          "vector": "v114995602",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 5306800,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114426",
+          "decimals": 0
+        },
+        "production": {
+          "value": 15293389,
+          "status": "",
+          "symbol": "r",
+          "vector": "v115114239",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2022,
+      "id": "Alberta",
+      "name": "アルバータ",
+      "values": {
+        "seeded": {
+          "value": 3089600,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114483",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 3031700,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114742",
+          "decimals": 0
+        },
+        "production": {
+          "value": 11343305,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114552",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2022,
+      "id": "British Columbia",
+      "name": "ブリティッシュコロンビア",
+      "values": {
+        "seeded": {
+          "value": 36300,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114882",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 33600,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114902",
+          "decimals": 0
+        },
+        "production": {
+          "value": 110846,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114938",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Canada",
+      "name": "カナダ全体",
+      "values": {
+        "seeded": {
+          "value": 10939800,
+          "status": "",
+          "symbol": "",
+          "vector": "v114995671",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 10615300,
+          "status": "",
+          "symbol": "",
+          "vector": "v114995787",
+          "decimals": 0
+        },
+        "production": {
+          "value": 40561984,
+          "status": "",
+          "symbol": "r",
+          "vector": "v114995749",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Newfoundland and Labrador",
+      "name": "ニューファンドランド・ラブラドル",
+      "values": {
+        "seeded": {
+          "value": null,
+          "status": "F",
+          "symbol": "",
+          "vector": "v1000142854",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": null,
+          "status": "F",
+          "symbol": "",
+          "vector": "v1001388099",
+          "decimals": 0
+        },
+        "production": {
+          "value": null,
+          "status": "F",
+          "symbol": "",
+          "vector": "v1001388103",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Prince Edward Island",
+      "name": "プリンスエドワード島",
+      "values": {
+        "seeded": {
+          "value": 15800,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113883",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 13200,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113898",
+          "decimals": 0
+        },
+        "production": {
+          "value": 58624,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113923",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Nova Scotia",
+      "name": "ノバスコシア",
+      "values": {
+        "seeded": {
+          "value": 4100,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113946",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 3600,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113961",
+          "decimals": 0
+        },
+        "production": {
+          "value": 18731,
+          "status": "",
+          "symbol": "",
+          "vector": "v115113987",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "New Brunswick",
+      "name": "ニューブランズウィック",
+      "values": {
+        "seeded": {
+          "value": 4300,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114011",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 3800,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114047",
+          "decimals": 0
+        },
+        "production": {
+          "value": 13370,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114035",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Quebec",
+      "name": "ケベック",
+      "values": {
+        "seeded": {
+          "value": 89300,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114079",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 84200,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114102",
+          "decimals": 0
+        },
+        "production": {
+          "value": 301838,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114140",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Ontario",
+      "name": "オンタリオ",
+      "values": {
+        "seeded": {
+          "value": 514200,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114175",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 479400,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114319",
+          "decimals": 0
+        },
+        "production": {
+          "value": 3054986,
+          "status": "",
+          "symbol": "r",
+          "vector": "v115114281",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Manitoba",
+      "name": "マニトバ",
+      "values": {
+        "seeded": {
+          "value": 1338000,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114671",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 1328300,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114985",
+          "decimals": 0
+        },
+        "production": {
+          "value": 5933572,
+          "status": "",
+          "symbol": "r",
+          "vector": "v115115020",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Saskatchewan",
+      "name": "サスカチュワン",
+      "values": {
+        "seeded": {
+          "value": 5674800,
+          "status": "",
+          "symbol": "",
+          "vector": "v114995602",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 5462600,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114426",
+          "decimals": 0
+        },
+        "production": {
+          "value": 18759567,
+          "status": "",
+          "symbol": "r",
+          "vector": "v115114239",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Alberta",
+      "name": "アルバータ",
+      "values": {
+        "seeded": {
+          "value": 3258800,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114483",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 3203700,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114742",
+          "decimals": 0
+        },
+        "production": {
+          "value": 12283980,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114552",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "British Columbia",
+      "name": "ブリティッシュコロンビア",
+      "values": {
+        "seeded": {
+          "value": 40500,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114882",
+          "decimals": 0
+        },
+        "harvested": {
+          "value": 36500,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114902",
+          "decimals": 0
+        },
+        "production": {
+          "value": 137315,
+          "status": "",
+          "symbol": "",
+          "vector": "v115114938",
+          "decimals": 0
+        }
+      }
+    }
+  ]
+}
