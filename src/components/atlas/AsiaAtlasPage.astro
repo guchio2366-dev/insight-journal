@@ -172,7 +172,12 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
   :global(.atlas-desktop-shell) .asia-reading-panel{margin-top:0;min-width:0}
   .asia-city-picker{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px;margin-bottom:12px}.asia-city-picker select{min-width:0;max-width:68%;min-height:36px;padding:4px;border:1px solid #bdcbbb;background:#fffef8;font:inherit}
   .asia-reading-panel .atlas-national h2{font-size:23px;line-height:1.4}.asia-reading-panel .atlas-national h3{font-size:16px}.asia-reading-panel .atlas-national p{font-size:13px;line-height:1.8}
-  @media(min-width:1200px){.asia-reading-scroll{max-height:var(--asia-map-height,640px);overflow:auto;scrollbar-gutter:stable}}
+  @media(min-width:1200px){
+    .asia-atlas .asia-layout>.asia-reading-panel{position:sticky;top:12px;align-self:start;height:auto}
+    .asia-atlas .asia-layout .asia-reading-scroll{height:var(--asia-reading-height,calc(100dvh - 260px));max-height:none;min-height:0;overflow:auto;overscroll-behavior-y:contain;scrollbar-gutter:stable}
+    .asia-atlas-root :global(.atlas-news){height:var(--asia-news-height,calc(100dvh - 180px));min-height:0}
+    .asia-atlas-root :global(.atlas-desktop-shell) .asia-atlas[data-field] .asia-map-frame{min-height:min(300px,var(--asia-map-available-height,640px));max-height:min(640px,var(--asia-map-available-height,640px))}
+  }
   @media(max-width:1199px){.asia-reading-scroll{overflow:visible;max-height:none}}
   @media(max-width:700px){.asia-region-shell .asia-toolbar{display:flex;flex-wrap:wrap}.asia-region-shell .asia-toolbar label{flex:1;min-width:0}.asia-region-shell .asia-toolbar select{flex:1;min-width:0;width:auto}.asia-region-shell :global(.regional-tabs){display:grid;grid-template-columns:1fr 1fr 1.25fr;gap:4px}.asia-region-shell :global(.regional-tabs a){justify-content:center;font-size:12px;padding:7px}}
   @media(pointer:coarse){.asia-region-shell .asia-toolbar select,.asia-region-shell .asia-reset{min-height:44px}}

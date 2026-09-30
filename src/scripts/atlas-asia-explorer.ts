@@ -618,13 +618,26 @@ function start(root:HTMLElement) {
   window.addEventListener('popstate',()=>{state=readState();selectedPoint=state.point??null;selectedClass=null;render();fitSelection();});
   window.addEventListener('pagehide',event=>{clearTimeout(moveTimer);if(!event.persisted){presentation?.destroy();map?.remove();map=null;mapReady=false;}});
   window.addEventListener('pageshow',event=>{if(event.persisted){map?.resize();if(!mapReady)void initialiseMap();}});
+  function syncReadingLayout(){
+    // Each reading pane uses its own distance to the viewport bottom. Neither
+    // the map's aspect ratio nor a short article determines the pane height.
+    for(const [selector,property] of [['.asia-reading-panel','--asia-reading-height'],['.atlas-news','--asia-news-height']] as const){
+      const pane=$(selector);if(!pane)continue;
+      const value=window.innerWidth>=1200?`${Math.max(0,Math.floor(window.innerHeight-Math.max(12,pane.getBoundingClientRect().top)-12))}px`:'';
+      if(root.style.getPropertyValue(property)!==value){if(value)root.style.setProperty(property,value);else root.style.removeProperty(property);}
+    }
+  }
   function syncLayout(){
     const frame=$('.asia-map-frame'),key=$('[data-farm-overview-legend]');
+    if(frame&&window.innerWidth>=1200)root.style.setProperty('--asia-map-available-height',`${Math.max(0,Math.floor(window.innerHeight-frame.getBoundingClientRect().top-12))}px`);
     if(frame&&key&&state.field==='agriculture'&&window.innerWidth>=1200){const height=Math.max(200,Math.min(640,window.innerHeight-frame.getBoundingClientRect().top-key.getBoundingClientRect().height-20));root.style.setProperty('--asia-farm-map-height',`${Math.floor(height)}px`);}
-    if(frame)map?.resize();const height=frame?.getBoundingClientRect().height;if(height)root.style.setProperty('--asia-map-height',`${height}px`);
+    if(frame)map?.resize();syncReadingLayout();
   }
   const layoutObserver=new ResizeObserver(syncLayout);layoutObserver.observe($('[data-map-surface]'));
   if($('[data-farm-overview-legend]'))layoutObserver.observe($('[data-farm-overview-legend]'));
+  for(const selector of ['.atlas-workspace','.asia-region-shell'])if($(selector))layoutObserver.observe($(selector));
+  let readingLayoutFrame=0;
+  window.addEventListener('scroll',()=>{if(!readingLayoutFrame)readingLayoutFrame=requestAnimationFrame(()=>{readingLayoutFrame=0;syncReadingLayout();});},{passive:true});
   window.addEventListener('resize',syncLayout);
   sourceText();render();persist(false);syncLayout();void initialiseMap();
 }
