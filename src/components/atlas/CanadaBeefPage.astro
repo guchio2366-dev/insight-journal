@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AtlasRegionNavigation from './AtlasRegionNavigation.astro';
+import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
+import AtlasClimatePlot from './AtlasClimatePlot.astro';
+import data from '../../data/atlas/canada/beef.json';
+import climate from '../../data/atlas/canada/climate.json';
+import {beefMaps,beefReading,beefSources} from '../../data/atlas/canada/beef-reading';
+import {formatCanadaBeefValue as fmt} from '../../lib/atlas-canada-beef';
+import {withBase} from '../../lib/urls';
+import '../../styles/atlas-canada-nature.css';
+import '../../styles/atlas-canada-agriculture.css';
+const assetRoot='/assets/atlas/canada-beef-v1',asset=(id:string)=>withBase(`${assetRoot}/${id}-map-2021.jpg`);
+const regina=climate.stations.find(s=>s.id==='regina')!;
+const nature=(q:string)=>withBase(`/atlas/north-america/canada/nature/${q}`);
+const beefMax=(year:number)=>Math.max(1,...data.data.filter(r=>r.year===year&&r.id!=='Canada').map(r=>r.values.beef.value??0));
+---
+<BaseLayout title="カナダの農畜林業｜肉牛・放牧と飼料" description="肉用母牛・放牧地・乾草などの3図と州別頭数から、草の生育、放牧管理、冬の飼料、繁殖・育成・肥育をつないで読む。" compactAtlas>
+ <AtlasWorkspaceFrame region="north-america" mapActions={false}>
+  <article class="canada-nature canada-agriculture" data-canada-beef>
+   <p class="canada-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / カナダ</p>
+   <AtlasRegionNavigation group="americas" current="north-america" country="canada" />
+   <header><p class="eyebrow">Canada · Agriculture and forestry</p><h1>肉牛・放牧と飼料から読む、カナダの農畜林業</h1><p class="canada-lead">自然条件から草の生育へ、放牧管理・冬の貯蔵飼料・繁殖・育成・肥育へ。分布と数値を分けてつなぐ。</p></header>
+   <nav class="canada-fields" aria-label="カナダの分野"><a href={withBase('/atlas/north-america/overview/?country=CAN')}>概説</a><a href={nature('')}>自然環境</a><a href={withBase('/atlas/north-america/canada/agriculture/')} aria-current="page">農畜林業</a><span aria-disabled="true">主要産業<small>準備中</small></span><span aria-disabled="true">人口<small>準備中</small></span></nav>
+   <p class="canola-scope">公開項目：カノーラ・小麦・肉牛と放牧の初回版。その他の主要作物・畜産・林業は準備中です。肉牛の全統計や乳業を網羅したページではありません。</p>
+   <nav class="canada-crop-tabs" aria-label="公開済みの農畜林業"><a href={withBase('/atlas/north-america/canada/agriculture/')}>カノーラ</a><a href={withBase('/atlas/north-america/canada/agriculture/wheat/')}>小麦</a><a href={withBase('/atlas/north-america/canada/agriculture/beef/')} aria-current="page">肉牛・放牧と飼料</a></nav>
+   <div class="canada-workspace">
+    <section class="canada-map-column" aria-label="肉用母牛と飼料の分布・頭数比較">
+     <h2>母牛と、草を使う土地はどこに広がる？</h2>
+     <label class="beef-map-control">2021年の分布図<select data-beef-map>{beefMaps.map(m=><option value={m.id}>{m.name}</option>)}</select></label>
+     {beefMaps.map((m,i)=><figure class="canola-distribution" data-beef-map-panel={m.id} hidden={i!==0}>
+      <div class="canola-map-scroll" data-beef-map-scroll><a href={asset(m.id)} aria-label={`${m.name}の分布図を原寸で開く`}><img src={asset(m.id)} width="1133" height="814" alt={`2021年 ${m.name}の公式ドット分布図。西部プレーリーに点が多く、東部拡大枠AとEdmonton、Regina、Winnipeg、Toronto、Ottawa、Québecを表示。${m.dot}。ランダムに置かれた量の点で農場位置ではない。`} /></a></div>
+      <figcaption><strong>2021年農業センサス（固定）：{m.name}</strong>。{m.dot}。{m.total}。{m.description} 点はセンサス区の農業地域内にランダム配置した量で、農場・肥育場の位置ではありません。<a href={m.source}>原図・凡例・点数表</a>。地図・凡例・出典を保持し、下端の政府シンボルのみ除去。<a href="#canada-statcan-attribution">帰属表示</a>。</figcaption>
+     </figure>)}
+     <div class="canada-map-actions"><button data-beef-zoom aria-pressed="false">図を拡大して読む</button><button data-beef-map-reset>全体へ戻る</button></div>
+     <p class="beef-map-links">各図の原寸画像：{beefMaps.map(m=><a href={asset(m.id)}>{m.name}</a>)}</p>
+     <div class="canola-map-key"><h3>3図で点の意味が違う</h3><p>肉用母牛は頭数、放牧地とTotal hayは面積量です。網掛けは秘匿。薄黄色は農業地域またはnull、灰色は農業地域外。点がない場所をすべてゼロとせず、丸めや秘匿と区別します。点数を掛けて地区の正確な数値を作りません。</p><p>本文の場所：プレーリー3州のEdmonton・Regina・Winnipegと州境、東部は枠AのToronto・Ottawa・Québec。母牛と放牧地だけでなく東部の乾草なども比べます。</p></div>
+     <section class="canada-reading-section" id="beef-definitions"><h3>放牧地・Total hayの区分</h3><p>放牧地は「Tame or seeded pasture」と「Natural land for pasture」の合計です。2021年の全国値4,828,538 ha＋13,731,114 haは原図の18,559,652 haに一致します。牧草の刈取り用地は放牧地と分けます。</p><p>Total hayは原図の名称を維持しています。調査票はアルファルファ等の乾草・サイレージ・生草用、その他の牧草・飼料作物、採種用を分けており、「乾草だけ」と読み替えません。地図の用途別内訳はここでは再集計しません。</p><p><a href={beefSources.pastureDefinition}>2021年土地利用表</a> ／ <a href={beefSources.questionnaire}>調査票の作物・土地利用区分</a> ／ <a href={beefSources.forageDefinition}>飼料作物等の表</a></p></section>
+     <h2>牛の役割を分けて、州別頭数を比べる</h2>
+     <div class="canola-stat-controls"><label>年（各年7月1日）<select data-beef-year>{data.years.map(y=><option value={y} selected={y===2021}>{y}年</option>)}</select></label><label>牛の区分<select data-beef-metric>{data.metrics.map(m=><option value={m.id}>{m.name}（千頭）</option>)}</select></label><label>読む地域<select data-beef-province>{data.provinces.map(p=><option value={p.id} selected={p.id==='Alberta'}>{p.name}</option>)}</select></label><label>比べる地域<select data-beef-compare><option value="">比較なし</option>{data.provinces.map(p=><option value={p.id}>{p.name}</option>)}</select></label></div>
+     <div class="canada-city-list">{data.provinces.filter(p=>['Alberta','Saskatchewan','Manitoba'].includes(p.id)).map(p=><button data-beef-province-button={p.id} aria-pressed={p.id==='Alberta'}>{p.name}</button>)}</div>
+     <p class="canola-comparison" data-beef-comparison aria-live="polite">2021年7月1日 肉用母牛 — アルバータ: 1,664.3 千頭</p>
+     <p>表は全牛飼養経営を対象とする年次調査、各年<strong>7月1日現在</strong>の頭数です。1千頭＝1,000頭。元表の千頭・小数1桁を保ちます。肉用母牛は繁殖を担う母牛、乳牛は少なくとも1回出産し主に乳用に飼う雌牛。総牛頭数には子牛・未経産牛・雄牛・去勢牛等も含むため、母牛＋乳牛とは一致しません。総数−乳牛を「肉牛」と計算しません。</p>
+     <p>年・区分を変えても3図は2021年のままです。センサス図と7月の調査は時点・調査が異なり、同じ年でも全国値を同一視しません。棒は各年・選択区分の州別最大値を100%にした相対長で、全国総数を基準にしません。年をまたぐ量の比較には数値を使います。</p>
+     <div class="canola-table-scroll"><table class="canola-stats"><caption>公表頭数・品質記号（32-10-0130-01／すべて千頭）</caption><thead><tr><th>年7月1日・地域</th>{data.metrics.map(m=><th>{m.name}<br/>千頭</th>)}</tr></thead><tbody>{data.data.map(r=><tr data-beef-row={r.id} data-year={r.year} hidden={r.year!==2021}><th>{r.year}年 {r.name}{r.id!=='Canada'&&<span class:list={['canola-bar-track',{'is-missing':r.values.beef.value===null}]} aria-label={`${r.name}: ${fmt(r.values.beef.value)} 千頭`}><span data-beef-bar={r.id} style={`width:${(r.values.beef.value??0)/beefMax(r.year)*100}%`}/></span>}</th>{data.metrics.map(m=>{const v=r.values[m.id as keyof typeof r.values];return <td data-beef-cell={m.id}>{fmt(v.value)}{(v.status||v.symbol)&&<small> {[v.status,v.symbol].filter(Boolean).join(' ')}</small>}</td>;})}</tr>)}</tbody></table></div>
+     <p class="canada-caption">今回の99値に欠損はありません。欠損は0で補わず「未収録」、公表0は0.0として区別します。品質記号Fは公表できない値、xは秘匿、rは改訂。3準州や経営種類別の州比較は今回の対象外で、対象外を0とは扱いません。全国と表示州の合計には丸め等の差があり得ます。</p>
+     <p><a href={beefSources.table}>元表・区分・注記</a> ／ <a href={withBase(`${assetRoot}/beef-selected.csv`)}>今回の抽出CSV</a></p>
+    </section>
+    <aside class="canada-reading" aria-label="自然条件から畜産へつなぐ説明">
+     {beefReading.map((r,i)=><section class="canada-reading-section"><h2>{r.title}</h2><p>{r.body}</p><p class="canada-sources-inline"><a href={r.source}>この説明の資料</a>{r.extraSource&&<> ／ <a href={r.extraSource}>肥育飼料の資料</a></>}</p>
+      {i===0&&<p><a href={nature('?city=regina')}>Regina：図の場所と気温・降水を確認</a> ／ <a href={nature('?city=winnipeg')}>Winnipeg：東寄りのプレーリーの季節を比較</a></p>}
+      {i===1&&<div class="canola-climate-example"><h3>草が育つ季節を考える例：Regina Airport</h3><AtlasClimatePlot name="Regina（事例）" period="1991–2020" temperatureC={regina.temperatureC} precipitationMm={regina.precipitationMm} minTemperatureC={-30}/><p>月平均気温℃と降水mm。1観測所の平年値で、プレーリー全域の代表値や牧場の水収支ではありません。</p><a href={nature('?city=regina')}>12か月表・観測所・出典を読む</a> ／ <a href={nature('')}>首都Ottawaから自然環境を読む</a></div>}
+      {i===2&&<p><a href={nature('?city=regina&view=landform')}>地形：平原と山地の位置を確かめる</a> ／ <a href={nature('?city=regina&view=water')}>水：川と湖の位置を確かめる</a>（飲水可能量・水利の地図ではありません）</p>}
+      {i===3&&<p><a href={nature('?city=winnipeg')}>Winnipegの12か月表で冬と生育期を読む</a></p>}
+      {i===4&&<p><a href={withBase('/atlas/north-america/canada/agriculture/wheat/')}>小麦：穀物の生育・用途と輸送を読む</a> ／ <a href={withBase('/atlas/north-america/canada/agriculture/')}>カノーラ：油の加工と産地を読む</a></p>}
+     </section>)}
+     <section class="canada-reading-section"><h2>読み終えたら</h2><p>3図の単位を確かめる → 州別表で牛の役割を分ける → 草の生育と放牧管理を考える → 冬の貯蔵飼料と育成・肥育をつなぐ。自然条件に加え、飼料の確保・管理・加工が必要になる理由を説明してみましょう。</p></section>
+    </aside>
+   </div>
+   <footer class="canada-source-footer" id="canada-beef-sources"><h2>出典・年・単位・利用条件</h2><p id="canada-statcan-attribution" lang="en">Adapted from Statistics Canada, Thematic maps from the Census of Agriculture, 2021 — Total beef cows, Total pasture area and Total hay area by census division (CD), 2021; Table 32-10-0130-01, Number of cattle, by class and farm type, reference dates July 1, 2021, 2025 and 2026; Table 32-10-0249-01, Land use, Census of Agriculture, 2021; and Table 32-10-0309-01, Field crops and hay, Census of Agriculture, 2021 (accessed September 30, 2026). This does not constitute an endorsement by Statistics Canada of this product.</p><ul>
+    {beefMaps.map(m=><li>分布図：<a href={m.source}>{m.title} by census division (CD), 2021</a>。2022年12月23日更新の公式図。{m.dot}、{m.total}。点から地区の正確な数量や用途別内訳を逆算しません。</li>)}
+    <li>牛頭数：<a href={beefSources.table}>Statistics Canada 32-10-0130-01</a>。2026年8月24日公表、2026年9月30日取得。全国・10州、全牛飼養経営、2021/2025/2026年7月1日、肉用母牛・乳牛・総牛頭数。原表Head×thousands、千頭小数1桁。全国・東部・西部等の重複集計を追加していません。</li>
+    <li><a href="https://www.statcan.gc.ca/en/terms-conditions/open-licence">Statistics Canada Open Licence</a>に基づく加工・掲載。政府のシンボルは利用対象から除外。Statistics Canadaが本教材を推奨・承認したことを意味しません。</li>
+    <li>区分：<a href={beefSources.questionnaire}>2021年農業センサス調査票</a>、<a href={beefSources.pastureDefinition}>土地利用表</a>、<a href={beefSources.forageDefinition}>作物・飼料作物表</a>。Total hayの名称・原図全国値を維持し、独自の用途別合計へ置き換えていません。</li>
+    <li>放牧・冬飼料・肥育：上記Manitoba Agriculture資料を参照。州政府の説明を要約し、文章全文・写真・給餌配合表は転載していません。掲載年を確認できない資料に年を推測付与せず、2026年9月30日参照とします。</li>
+    <li>気候：ECCC 1991–2020年平年値、Regina composite 4016560。<a href={regina.sourceUrl}>観測所と数値</a>。平年値と年次の頭数・土地面積を区別します。</li>
+   </ul><a href={withBase(`${assetRoot}/manifest.json`)}>抽出・加工・出典・ハッシュ台帳</a></footer>
+   <noscript><p>2021年の肉用母牛図・頭数表・本文・気候事例・出典を読めます。他の2図は「各図の原寸画像」から開けます。年・比較・図の切替と拡大にはJavaScriptが必要です。</p></noscript>
+   <script type="application/json" data-beef-config set:html={JSON.stringify(data).replace(/</g,'\u003c')} />
+  </article>
+ </AtlasWorkspaceFrame>
+</BaseLayout>
+<script>import {initCanadaBeef} from '../../scripts/atlas-canada-beef';const root=document.querySelector<HTMLElement>('[data-canada-beef]');if(root)initCanadaBeef(root);</script>

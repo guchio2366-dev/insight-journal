@@ -1,0 +1,1001 @@
+{
+  "years": [
+    2021,
+    2025,
+    2026
+  ],
+  "provinces": [
+    {
+      "id": "Canada",
+      "name": "カナダ全体"
+    },
+    {
+      "id": "Newfoundland and Labrador",
+      "name": "ニューファンドランド・ラブラドル"
+    },
+    {
+      "id": "Prince Edward Island",
+      "name": "プリンスエドワード島"
+    },
+    {
+      "id": "Nova Scotia",
+      "name": "ノバスコシア"
+    },
+    {
+      "id": "New Brunswick",
+      "name": "ニューブランズウィック"
+    },
+    {
+      "id": "Quebec",
+      "name": "ケベック"
+    },
+    {
+      "id": "Ontario",
+      "name": "オンタリオ"
+    },
+    {
+      "id": "Manitoba",
+      "name": "マニトバ"
+    },
+    {
+      "id": "Saskatchewan",
+      "name": "サスカチュワン"
+    },
+    {
+      "id": "Alberta",
+      "name": "アルバータ"
+    },
+    {
+      "id": "British Columbia",
+      "name": "ブリティッシュコロンビア"
+    }
+  ],
+  "metrics": [
+    {
+      "id": "beef",
+      "name": "肉用母牛",
+      "source": "Beef cows",
+      "unit": "千頭"
+    },
+    {
+      "id": "dairy",
+      "name": "乳牛（経産牛）",
+      "source": "Dairy cows",
+      "unit": "千頭"
+    },
+    {
+      "id": "total",
+      "name": "牛の総頭数（子牛を含む）",
+      "source": "Total cattle",
+      "unit": "千頭"
+    }
+  ],
+  "data": [
+    {
+      "year": 2021,
+      "id": "Canada",
+      "name": "カナダ全体",
+      "values": {
+        "beef": {
+          "value": 3776.3,
+          "status": "",
+          "symbol": "",
+          "vector": "v61385",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 980.3,
+          "status": "",
+          "symbol": "",
+          "vector": "v61384",
+          "decimals": 1
+        },
+        "total": {
+          "value": 12645,
+          "status": "",
+          "symbol": "",
+          "vector": "v61382",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Newfoundland and Labrador",
+      "name": "ニューファンドランド・ラブラドル",
+      "values": {
+        "beef": {
+          "value": 0.7,
+          "status": "",
+          "symbol": "",
+          "vector": "v61405",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 5.2,
+          "status": "",
+          "symbol": "",
+          "vector": "v61404",
+          "decimals": 1
+        },
+        "total": {
+          "value": 10.7,
+          "status": "",
+          "symbol": "",
+          "vector": "v61402",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Prince Edward Island",
+      "name": "プリンスエドワード島",
+      "values": {
+        "beef": {
+          "value": 7.8,
+          "status": "",
+          "symbol": "",
+          "vector": "v61415",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 13.6,
+          "status": "",
+          "symbol": "",
+          "vector": "v61414",
+          "decimals": 1
+        },
+        "total": {
+          "value": 58.7,
+          "status": "",
+          "symbol": "",
+          "vector": "v61412",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Nova Scotia",
+      "name": "ノバスコシア",
+      "values": {
+        "beef": {
+          "value": 14.8,
+          "status": "",
+          "symbol": "",
+          "vector": "v61425",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 21.7,
+          "status": "",
+          "symbol": "",
+          "vector": "v61424",
+          "decimals": 1
+        },
+        "total": {
+          "value": 72.6,
+          "status": "",
+          "symbol": "",
+          "vector": "v61422",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "New Brunswick",
+      "name": "ニューブランズウィック",
+      "values": {
+        "beef": {
+          "value": 11,
+          "status": "",
+          "symbol": "",
+          "vector": "v61435",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 16.6,
+          "status": "",
+          "symbol": "",
+          "vector": "v61434",
+          "decimals": 1
+        },
+        "total": {
+          "value": 56.7,
+          "status": "",
+          "symbol": "",
+          "vector": "v61432",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Quebec",
+      "name": "ケベック",
+      "values": {
+        "beef": {
+          "value": 126.6,
+          "status": "",
+          "symbol": "",
+          "vector": "v61445",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 357,
+          "status": "",
+          "symbol": "",
+          "vector": "v61444",
+          "decimals": 1
+        },
+        "total": {
+          "value": 1030,
+          "status": "",
+          "symbol": "",
+          "vector": "v61442",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Ontario",
+      "name": "オンタリオ",
+      "values": {
+        "beef": {
+          "value": 224.2,
+          "status": "",
+          "symbol": "",
+          "vector": "v61455",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 327.3,
+          "status": "",
+          "symbol": "",
+          "vector": "v61454",
+          "decimals": 1
+        },
+        "total": {
+          "value": 1606.3,
+          "status": "",
+          "symbol": "",
+          "vector": "v61452",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Manitoba",
+      "name": "マニトバ",
+      "values": {
+        "beef": {
+          "value": 425,
+          "status": "",
+          "symbol": "",
+          "vector": "v61465",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 42.8,
+          "status": "",
+          "symbol": "",
+          "vector": "v61464",
+          "decimals": 1
+        },
+        "total": {
+          "value": 1080,
+          "status": "",
+          "symbol": "",
+          "vector": "v61462",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Saskatchewan",
+      "name": "サスカチュワン",
+      "values": {
+        "beef": {
+          "value": 1107.1,
+          "status": "",
+          "symbol": "",
+          "vector": "v61475",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 28.7,
+          "status": "",
+          "symbol": "",
+          "vector": "v61474",
+          "decimals": 1
+        },
+        "total": {
+          "value": 2650,
+          "status": "",
+          "symbol": "",
+          "vector": "v61472",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "Alberta",
+      "name": "アルバータ",
+      "values": {
+        "beef": {
+          "value": 1664.3,
+          "status": "",
+          "symbol": "",
+          "vector": "v61485",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 86.8,
+          "status": "",
+          "symbol": "",
+          "vector": "v61484",
+          "decimals": 1
+        },
+        "total": {
+          "value": 5460,
+          "status": "",
+          "symbol": "",
+          "vector": "v61482",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2021,
+      "id": "British Columbia",
+      "name": "ブリティッシュコロンビア",
+      "values": {
+        "beef": {
+          "value": 194.8,
+          "status": "",
+          "symbol": "",
+          "vector": "v61395",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 80.6,
+          "status": "",
+          "symbol": "",
+          "vector": "v61394",
+          "decimals": 1
+        },
+        "total": {
+          "value": 620,
+          "status": "",
+          "symbol": "",
+          "vector": "v61392",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Canada",
+      "name": "カナダ全体",
+      "values": {
+        "beef": {
+          "value": 3443.4,
+          "status": "",
+          "symbol": "",
+          "vector": "v61385",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 974.2,
+          "status": "",
+          "symbol": "",
+          "vector": "v61384",
+          "decimals": 1
+        },
+        "total": {
+          "value": 11730,
+          "status": "",
+          "symbol": "",
+          "vector": "v61382",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Newfoundland and Labrador",
+      "name": "ニューファンドランド・ラブラドル",
+      "values": {
+        "beef": {
+          "value": 0.5,
+          "status": "",
+          "symbol": "",
+          "vector": "v61405",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 5.2,
+          "status": "",
+          "symbol": "",
+          "vector": "v61404",
+          "decimals": 1
+        },
+        "total": {
+          "value": 10.4,
+          "status": "",
+          "symbol": "",
+          "vector": "v61402",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Prince Edward Island",
+      "name": "プリンスエドワード島",
+      "values": {
+        "beef": {
+          "value": 7.3,
+          "status": "",
+          "symbol": "",
+          "vector": "v61415",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 12.3,
+          "status": "",
+          "symbol": "",
+          "vector": "v61414",
+          "decimals": 1
+        },
+        "total": {
+          "value": 55.8,
+          "status": "",
+          "symbol": "",
+          "vector": "v61412",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Nova Scotia",
+      "name": "ノバスコシア",
+      "values": {
+        "beef": {
+          "value": 15,
+          "status": "",
+          "symbol": "",
+          "vector": "v61425",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 20.7,
+          "status": "",
+          "symbol": "",
+          "vector": "v61424",
+          "decimals": 1
+        },
+        "total": {
+          "value": 70.7,
+          "status": "",
+          "symbol": "",
+          "vector": "v61422",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "New Brunswick",
+      "name": "ニューブランズウィック",
+      "values": {
+        "beef": {
+          "value": 11.3,
+          "status": "",
+          "symbol": "",
+          "vector": "v61435",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 16,
+          "status": "",
+          "symbol": "",
+          "vector": "v61434",
+          "decimals": 1
+        },
+        "total": {
+          "value": 56.9,
+          "status": "",
+          "symbol": "",
+          "vector": "v61432",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Quebec",
+      "name": "ケベック",
+      "values": {
+        "beef": {
+          "value": 119.3,
+          "status": "",
+          "symbol": "",
+          "vector": "v61445",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 359.2,
+          "status": "",
+          "symbol": "",
+          "vector": "v61444",
+          "decimals": 1
+        },
+        "total": {
+          "value": 1000,
+          "status": "",
+          "symbol": "",
+          "vector": "v61442",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Ontario",
+      "name": "オンタリオ",
+      "values": {
+        "beef": {
+          "value": 216.5,
+          "status": "",
+          "symbol": "",
+          "vector": "v61455",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 323,
+          "status": "",
+          "symbol": "",
+          "vector": "v61454",
+          "decimals": 1
+        },
+        "total": {
+          "value": 1536.2,
+          "status": "",
+          "symbol": "",
+          "vector": "v61452",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Manitoba",
+      "name": "マニトバ",
+      "values": {
+        "beef": {
+          "value": 377.2,
+          "status": "",
+          "symbol": "",
+          "vector": "v61465",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 41.8,
+          "status": "",
+          "symbol": "",
+          "vector": "v61464",
+          "decimals": 1
+        },
+        "total": {
+          "value": 945,
+          "status": "",
+          "symbol": "",
+          "vector": "v61462",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Saskatchewan",
+      "name": "サスカチュワン",
+      "values": {
+        "beef": {
+          "value": 989.1,
+          "status": "",
+          "symbol": "",
+          "vector": "v61475",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 28.6,
+          "status": "",
+          "symbol": "",
+          "vector": "v61474",
+          "decimals": 1
+        },
+        "total": {
+          "value": 2440,
+          "status": "",
+          "symbol": "",
+          "vector": "v61472",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Alberta",
+      "name": "アルバータ",
+      "values": {
+        "beef": {
+          "value": 1519.9,
+          "status": "",
+          "symbol": "",
+          "vector": "v61485",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 86.3,
+          "status": "",
+          "symbol": "",
+          "vector": "v61484",
+          "decimals": 1
+        },
+        "total": {
+          "value": 5050,
+          "status": "",
+          "symbol": "",
+          "vector": "v61482",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "British Columbia",
+      "name": "ブリティッシュコロンビア",
+      "values": {
+        "beef": {
+          "value": 187.3,
+          "status": "",
+          "symbol": "",
+          "vector": "v61395",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 81.1,
+          "status": "",
+          "symbol": "",
+          "vector": "v61394",
+          "decimals": 1
+        },
+        "total": {
+          "value": 565,
+          "status": "",
+          "symbol": "",
+          "vector": "v61392",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2026,
+      "id": "Canada",
+      "name": "カナダ全体",
+      "values": {
+        "beef": {
+          "value": 3510.1,
+          "status": "",
+          "symbol": "",
+          "vector": "v61385",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 983,
+          "status": "",
+          "symbol": "",
+          "vector": "v61384",
+          "decimals": 1
+        },
+        "total": {
+          "value": 12100,
+          "status": "",
+          "symbol": "",
+          "vector": "v61382",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2026,
+      "id": "Newfoundland and Labrador",
+      "name": "ニューファンドランド・ラブラドル",
+      "values": {
+        "beef": {
+          "value": 0.5,
+          "status": "",
+          "symbol": "",
+          "vector": "v61405",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 5.1,
+          "status": "",
+          "symbol": "",
+          "vector": "v61404",
+          "decimals": 1
+        },
+        "total": {
+          "value": 10.2,
+          "status": "",
+          "symbol": "",
+          "vector": "v61402",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2026,
+      "id": "Prince Edward Island",
+      "name": "プリンスエドワード島",
+      "values": {
+        "beef": {
+          "value": 7.3,
+          "status": "",
+          "symbol": "",
+          "vector": "v61415",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 12.2,
+          "status": "",
+          "symbol": "",
+          "vector": "v61414",
+          "decimals": 1
+        },
+        "total": {
+          "value": 56.5,
+          "status": "",
+          "symbol": "",
+          "vector": "v61412",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2026,
+      "id": "Nova Scotia",
+      "name": "ノバスコシア",
+      "values": {
+        "beef": {
+          "value": 15.1,
+          "status": "",
+          "symbol": "",
+          "vector": "v61425",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 21.2,
+          "status": "",
+          "symbol": "",
+          "vector": "v61424",
+          "decimals": 1
+        },
+        "total": {
+          "value": 71.9,
+          "status": "",
+          "symbol": "",
+          "vector": "v61422",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2026,
+      "id": "New Brunswick",
+      "name": "ニューブランズウィック",
+      "values": {
+        "beef": {
+          "value": 11.1,
+          "status": "",
+          "symbol": "",
+          "vector": "v61435",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 16.6,
+          "status": "",
+          "symbol": "",
+          "vector": "v61434",
+          "decimals": 1
+        },
+        "total": {
+          "value": 57.4,
+          "status": "",
+          "symbol": "",
+          "vector": "v61432",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2026,
+      "id": "Quebec",
+      "name": "ケベック",
+      "values": {
+        "beef": {
+          "value": 119.4,
+          "status": "",
+          "symbol": "",
+          "vector": "v61445",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 366.2,
+          "status": "",
+          "symbol": "",
+          "vector": "v61444",
+          "decimals": 1
+        },
+        "total": {
+          "value": 1020,
+          "status": "",
+          "symbol": "",
+          "vector": "v61442",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2026,
+      "id": "Ontario",
+      "name": "オンタリオ",
+      "values": {
+        "beef": {
+          "value": 214.8,
+          "status": "",
+          "symbol": "",
+          "vector": "v61455",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 322.1,
+          "status": "",
+          "symbol": "",
+          "vector": "v61454",
+          "decimals": 1
+        },
+        "total": {
+          "value": 1544,
+          "status": "",
+          "symbol": "",
+          "vector": "v61452",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2026,
+      "id": "Manitoba",
+      "name": "マニトバ",
+      "values": {
+        "beef": {
+          "value": 375.9,
+          "status": "",
+          "symbol": "",
+          "vector": "v61465",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 41.9,
+          "status": "",
+          "symbol": "",
+          "vector": "v61464",
+          "decimals": 1
+        },
+        "total": {
+          "value": 950,
+          "status": "",
+          "symbol": "",
+          "vector": "v61462",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2026,
+      "id": "Saskatchewan",
+      "name": "サスカチュワン",
+      "values": {
+        "beef": {
+          "value": 1009.1,
+          "status": "",
+          "symbol": "",
+          "vector": "v61475",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 29.2,
+          "status": "",
+          "symbol": "",
+          "vector": "v61474",
+          "decimals": 1
+        },
+        "total": {
+          "value": 2505,
+          "status": "",
+          "symbol": "",
+          "vector": "v61472",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2026,
+      "id": "Alberta",
+      "name": "アルバータ",
+      "values": {
+        "beef": {
+          "value": 1568.7,
+          "status": "",
+          "symbol": "",
+          "vector": "v61485",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 86.4,
+          "status": "",
+          "symbol": "",
+          "vector": "v61484",
+          "decimals": 1
+        },
+        "total": {
+          "value": 5315,
+          "status": "",
+          "symbol": "",
+          "vector": "v61482",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "year": 2026,
+      "id": "British Columbia",
+      "name": "ブリティッシュコロンビア",
+      "values": {
+        "beef": {
+          "value": 188.2,
+          "status": "",
+          "symbol": "",
+          "vector": "v61395",
+          "decimals": 1
+        },
+        "dairy": {
+          "value": 82.1,
+          "status": "",
+          "symbol": "",
+          "vector": "v61394",
+          "decimals": 1
+        },
+        "total": {
+          "value": 570,
+          "status": "",
+          "symbol": "",
+          "vector": "v61392",
+          "decimals": 1
+        }
+      }
+    }
+  ],
+  "surveyDate": "7月1日",
+  "unit": "千頭"
+}

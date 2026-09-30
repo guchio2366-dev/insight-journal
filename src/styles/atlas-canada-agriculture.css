@@ -2,3 +2,4 @@
 .canola-bar-track.is-missing{background:repeating-linear-gradient(45deg,#eee 0 4px,#b9c1b9 4px 5px);border:1px dashed #87978b}
 
 .canada-crop-tabs{display:flex;gap:.6rem;flex-wrap:wrap;margin:1rem 0}.canada-crop-tabs a{border:1px solid #677b62;border-radius:6px;padding:.5rem .8rem}.canada-crop-tabs [aria-current="page"]{background:#e6efdf;font-weight:700}.canola-stats[data-wheat-types] td{white-space:normal;text-align:left;min-width:140px}.canola-stats[data-wheat-types] td small{display:block;margin-top:.35rem}
+.beef-map-control{display:grid;gap:.4rem;margin-bottom:1rem;font-size:14px}.beef-map-control select{width:100%}.beef-map-links{display:flex;gap:.6rem;flex-wrap:wrap;font-size:13px}.beef-map-links a{display:inline-block}

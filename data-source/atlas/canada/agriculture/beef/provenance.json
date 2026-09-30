@@ -1,0 +1,74 @@
+{
+  "retrievedAt": "2026-09-30",
+  "releasedAt": "2026-08-24",
+  "table": "32-10-0130-01",
+  "years": [
+    2021,
+    2025,
+    2026
+  ],
+  "surveyDate": "At July 1",
+  "farmType": "On all cattle operations",
+  "unit": "thousand head",
+  "selectedRows": 99,
+  "rawCsvSha256": "6915cf91ffde8899365a289c8a3eacb81ffc7a92f37b11b6877d57c5e8de7fe5",
+  "csvDownload": "https://www150.statcan.gc.ca/n1/tbl/csv/32100130-eng.zip",
+  "licence": "Statistics Canada Open Licence",
+  "licenceUrl": "https://www.statcan.gc.ca/en/terms-conditions/open-licence",
+  "maps": [
+    {
+      "id": "beef",
+      "title": "Total beef cows",
+      "year": 2021,
+      "source": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-043-eng.htm",
+      "imageSource": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/m-c/m-c-043-eng.jpg",
+      "originalSha256": "c0e36dc08285f3107cf9a9fae891f61f836d448eaa79f55aa60657cda83c5f07",
+      "crop": {
+        "left": 0,
+        "top": 0,
+        "width": 1133,
+        "height": 814
+      },
+      "dot": 2500,
+      "unit": "animals",
+      "total": 3776389,
+      "method": "Remove footer official symbols only; preserve complete map, legend, source and Ontario/Quebec insets. Source dots are random quantity placements, not farm or feedlot locations. Do not derive census-division totals from rounded dots."
+    },
+    {
+      "id": "pasture",
+      "title": "Total pasture area",
+      "year": 2021,
+      "source": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-013-eng.htm",
+      "imageSource": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/m-c/m-c-013-eng.jpg",
+      "originalSha256": "ddec568fd1e89e4466cb401239538f9c7f56a10e239d368e063e7a72db4552b6",
+      "crop": {
+        "left": 0,
+        "top": 0,
+        "width": 1133,
+        "height": 814
+      },
+      "dot": 16188,
+      "unit": "hectares",
+      "total": 18559652,
+      "method": "Remove footer official symbols only; preserve complete map, legend, source and Ontario/Quebec insets. Source dots are random quantity placements, not farm or feedlot locations. Do not derive census-division totals from rounded dots."
+    },
+    {
+      "id": "hay",
+      "title": "Total hay area",
+      "year": 2021,
+      "source": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-037-eng.htm",
+      "imageSource": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/m-c/m-c-037-eng.jpg",
+      "originalSha256": "462b3d66f5bb99cc2410d8c5a96e7d575cc4db886cdafec4424973aa42c7b2b8",
+      "crop": {
+        "left": 0,
+        "top": 0,
+        "width": 1133,
+        "height": 814
+      },
+      "dot": 3238,
+      "unit": "hectares",
+      "total": 5394265,
+      "method": "Remove footer official symbols only; preserve complete map, legend, source and Ontario/Quebec insets. Source dots are random quantity placements, not farm or feedlot locations. Do not derive census-division totals from rounded dots."
+    }
+  ]
+}
