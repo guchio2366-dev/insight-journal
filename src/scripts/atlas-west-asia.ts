@@ -289,7 +289,8 @@ async function init(root:HTMLElement){
  function sizeComparisonMap(){
   if(root.dataset.comparisonWorkspace!=='true')return;
   const grid=$('.atlas-primary-grid'),swipe=$('[data-west-swipe]');
-  const columns=grid.getBoundingClientRect().width>=970;
+  const box=getComputedStyle(grid),inset=['paddingLeft','paddingRight','borderLeftWidth','borderRightWidth'].reduce((sum,key)=>sum+(parseFloat(box[key as keyof CSSStyleDeclaration] as string)||0),0);
+  const columns=grid.getBoundingClientRect().width-inset>=914;
   root.dataset.comparisonColumns=String(columns);
   const reserved=columns?$('.west-reading').getBoundingClientRect().height+8:comparisonKey.getBoundingClientRect().height;
   const available=window.innerHeight-grid.getBoundingClientRect().top-reserved-16;

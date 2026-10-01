@@ -147,7 +147,7 @@
 }
 /* Full class names stay beside a readable map when the desktop has room. */
 @media(min-width:960px){
- .atlas-desktop-shell .west-atlas[data-field][data-comparison-workspace=true][data-comparison-columns=true] .atlas-primary-grid{grid-template-columns:minmax(300px,.55fr) minmax(656px,1fr)}
+ .atlas-desktop-shell .west-atlas[data-field][data-comparison-workspace=true][data-comparison-columns=true] .atlas-primary-grid{grid-template-columns:minmax(260px,.55fr) minmax(640px,1fr)}
  .atlas-desktop-shell .west-atlas[data-field][data-comparison-workspace=true][data-comparison-columns=true] .west-reading{grid-column:1/-1;grid-row:1;padding:6px 12px}
  .west-atlas[data-comparison-workspace=true][data-comparison-columns=true] [data-west-detail]{display:grid;grid-template-columns:minmax(0,1.85fr) minmax(280px,1fr);gap:4px 16px}
  .west-atlas[data-comparison-workspace=true][data-comparison-columns=true] .west-reading header{grid-column:1/-1;padding-bottom:4px}

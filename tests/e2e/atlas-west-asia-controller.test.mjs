@@ -187,10 +187,12 @@ test('比較横配置はニュースによる実作業幅の変更へ追随し�
   const root=q('[data-west-atlas]'),grid=q('.atlas-primary-grid'),view=q('[data-west-map]').getAttribute('viewBox'),url=w.location.href;
   const keys=()=>[...q('[data-west-legend]').querySelectorAll('i')].map(x=>x.getAttribute('style')).sort();const expected=keys();
   let width=984;grid.getBoundingClientRect=()=>({width,top:249});
-  for(const [available,columns] of [[984,'true'],[916,'false'],[873,'false'],[1050,'true']]){
+  for(const [available,columns] of [[984,'true'],[916,'true'],[913,'false'],[873,'false'],[1050,'true']]){
    width=available;notifyResize('.atlas-primary-grid');assert.equal(root.dataset.comparisonColumns,columns);
    assert.equal(w.innerWidth,1366);assert.equal(w.location.href,url);assert.equal(q('[data-west-map]').getAttribute('viewBox'),view);assert.deepEqual(keys(),expected);
   }
+  width=916;grid.style.padding='0 7px';notifyResize('.atlas-primary-grid');assert.equal(root.dataset.comparisonColumns,'false','外寸ではなくpaddingを除いた作業幅を使う');
+  grid.style.padding='';notifyResize('.atlas-primary-grid');assert.equal(root.dataset.comparisonColumns,'true');
  }finally{await w.happyDOM.close();}
 });
 
