@@ -274,3 +274,10 @@
  .russia-population-meta .russia-control-note{flex:1;margin:0;padding:0!important;font-size:13px;line-height:19.5px}
  .russia-population-meta .russia-population-layer{flex:0 0 250px;margin:0}
 }
+
+/* Keep both agriculture entries visible below the map and layer selector. */
+@media(min-width:960px){
+ .russia-workspace .russia-learning[data-field=agriculture] .russia-legend-spacer{display:none}
+ .russia-workspace .russia-agriculture-subtabs button{font-size:14px;font-weight:750;line-height:1.75;min-height:44px}
+ .russia-workspace .russia-agriculture-subtabs small{font-size:13px;line-height:1.5}
+}

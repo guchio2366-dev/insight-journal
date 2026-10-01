@@ -173,7 +173,7 @@
 
 /* Match the approved US main and climate controls at desktop widths. */
 @media(min-width:960px){
- .latin-workspace .latin-fields a{color:#21343d;font-weight:700}.latin-workspace .latin-fields a[aria-current]{background:#243b48;color:#fff}.latin-workspace .latin-fields a:last-child{border-right:0}
+ .latin-workspace .latin-fields a{color:#21343d;font-weight:700;background:#f1f0e7;border-right-color:#d8d9ce}.latin-workspace .latin-fields a[aria-current]{background:#243b48;color:#fff}.latin-workspace .latin-fields a:last-child{border-right:0}
  .latin-workspace.latin-nature .latin-subfield-row{padding-right:15px}
  .latin-workspace.latin-nature .latin-subfield-band button{height:44px;min-height:44px;font-size:14px;font-weight:750;line-height:24.5px;padding:7px 4px;color:#344951}
  .latin-workspace.latin-nature .latin-subfield-band button[aria-pressed=true]{background:#35515d;color:#fff}

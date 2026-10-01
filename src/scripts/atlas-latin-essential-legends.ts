@@ -13,7 +13,19 @@ export function initLatinEssentialLegends():void {
   const panel=document.createElement('section');panel.className='latin-essential-legend';panel.setAttribute('aria-label','現在の地図の凡例');
   const heading=document.createElement('p');heading.className='latin-essential-legend-heading';heading.textContent='現在の地図の凡例';
   const note=document.createElement('p');note.className='latin-essential-legend-note';
-  note.textContent=root.dataset.latinField==='nature'?'細線：国境。太枠：選択国。色は5気候群で、国平均ではありません。':root.dataset.latinField==='agriculture'?'細線：国境。太枠：選択国。色は格子の分布で、国の合計ではありません。':root.dataset.latinField==='population'?'細線：国境。太枠：選択国。色は国全体の平均密度です。':'細線：国境。太枠：選択国。色は国の商品輸出額に占める割合（%）、2024年。';
+  const syncLegendNote=()=>{
+   const field=root.dataset.latinField,params=new URLSearchParams(location.search),routeLayer=params.get('layer');
+   if(field==='industry'){
+    const control=root.querySelector<HTMLSelectElement>('[data-industry-layer]');
+    const layer=root.dataset.layer??(routeLayer&&['ores','manufactures','canal'].includes(routeLayer)?routeLayer:control?.value);
+    note.textContent=layer==='canal'?'2024会計年度の説明図。矢印＝淡水と物流のつながり。位置・流量・数量の比例図ではありません。':'細線：国境。太枠：選択国。色は国の商品輸出額に占める割合（%）、2024年。';
+   }else if(field==='population'){
+    const control=root.querySelector<HTMLSelectElement>('[data-lp-layer-select]');
+    const layer=root.dataset.lpLayer??(routeLayer&&['density','population','scale'].includes(routeLayer)?routeLayer:control?.value);
+    note.textContent=layer==='population'?'円面積＝2023年の国人口（人）。地色は固定。細線：国境。太枠：選択国。':layer==='scale'?'色＝2023年の国平均密度（人/陸地km²）。円面積＝国人口（人）。細線：国境。太枠：選択国。':'細線：国境。太枠：選択国。色＝2023年の国平均密度（人/陸地km²）。';
+   }else note.textContent=field==='nature'?'細線：国境。太枠：選択国。色は5気候群で、国平均ではありません。':'細線：国境。太枠：選択国。色は格子の分布で、国の合計ではありません。';
+  };
+  syncLegendNote();
   panel.append(heading,note);fixed.after(panel);
   // The population entry explanations and numeric examples remain available in the independent reader.
   const scroll=reader.querySelector<HTMLElement>('.latin-reading-scroll,.latin-industry-reading-scroll');
@@ -34,6 +46,7 @@ export function initLatinEssentialLegends():void {
    const example=fixed.querySelector<HTMLElement>('[data-lp-reading-short]');if(example)scroll.prepend(example);
   }
   const placeLegend=()=>{
+   syncLegendNote();
    const comparison=root.classList.contains('is-comparison'),desktop=window.matchMedia('(min-width:960px)').matches;
    if(comparison||!desktop){if(legend.parentElement===panel){anchor.after(legend);spacer.remove();}panel.hidden=true;return;}
    panel.hidden=false;
@@ -41,7 +54,7 @@ export function initLatinEssentialLegends():void {
   };
   // Waiting one frame lets the field controller apply the selected layer before measuring its old flow.
   requestAnimationFrame(placeLegend);
-  new window.MutationObserver(placeLegend).observe(root,{attributes:true,attributeFilter:['class']});
+  new window.MutationObserver(placeLegend).observe(root,{attributes:true,attributeFilter:['class','data-layer','data-lp-layer']});
   window.addEventListener('resize',placeLegend);
  }
 }
