@@ -44,7 +44,7 @@ export function initializeIndustryFeature(root: HTMLElement) {
     const fullValue=country?(state.view==='market'?country.marketLabel:country.manufacturingLabel):'';
     const shortValue=country?(state.view==='market'?(country.mapMarketLabel??country.marketLabel):(country.mapManufacturingLabel??country.manufacturingLabel)):'';
     set('[data-if-value]',!country?'選択を解除しました':missing?'該当データ未収録':shortValue);
-    set('[data-if-country-note]',missing&&country?`全動力・全車型の比較値：${country.marketLabel}（2025年）`:state.sector==='automotive'&&state.view==='market'?(country?.countryNote??'2025年 · 新車販売（IEAのCars）'):`${fullValue}${country?.countryNote?'。'+country.countryNote:''}`);
+    set('[data-if-country-note]',missing&&country?`基準値（BEV＋PHEV・全車型）：${country.marketLabel}（2025年）`:state.sector==='automotive'&&state.view==='market'?(country?.countryNote??'2025年 · 新車販売（IEAのCars）'):`${fullValue}${country?.countryNote?'。'+country.countryNote:''}`);
     set('[data-if-summary]',state.view==='mechanism'?region.why:region.summary);
     set('[data-if-example-status]',`${region.example.status} · ${region.example.period} · ${region.label}の代表事例`);
     set('[data-if-example-scope]',region.example.scope);

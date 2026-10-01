@@ -253,6 +253,57 @@ test('powertrain and body stay independent and unavailable cross-statistics are 
   } finally { await window.happyDOM.close(); }
 });
 
+test('every powertrain and body selection keeps missing cross-statistics separate from the BEV plus PHEV baseline', async () => {
+  const { window, document } = page();
+  try {
+    query(document, '[data-if-classification]').open = true;
+    const powertrains = [...document.querySelectorAll('[data-if-powertrain]')].map(button => button.dataset.ifPowertrain);
+    const bodies = [...document.querySelectorAll('[data-if-body]')].map(button => button.dataset.ifBody);
+    assert.equal(powertrains.length, 6);
+    assert.equal(bodies.length, 5);
+    for (const powertrain of powertrains) {
+      click(document, `[data-if-powertrain=${powertrain}]`);
+      for (const body of bodies) {
+        click(document, `[data-if-body=${body}]`);
+        assert.equal(query(document, `[data-if-powertrain=${powertrain}]`).getAttribute('aria-pressed'), 'true');
+        assert.equal(query(document, `[data-if-body=${body}]`).getAttribute('aria-pressed'), 'true');
+        const filtered = powertrain !== 'all' || body !== 'all';
+        assert.equal(query(document, '[data-if-missing]').hidden, !filtered);
+        assert.equal(text(document, '[data-if-value]'), filtered ? '該当データ未収録' : '10%未満');
+        const note = text(document, '[data-if-country-note]');
+        assert.equal(note, filtered ? '基準値（BEV＋PHEV・全車型）：10%未満（2025年）' : '2025年 · 新車販売（IEAのCars）');
+        assert.doesNotMatch(note, /全動力/);
+        assert.equal(activeMap(document).querySelector('[data-feature-marker=USA] [data-feature-country-value]').textContent, filtered ? '未収録' : '10%未満');
+      }
+    }
+  } finally { await window.happyDOM.close(); }
+});
+
+test('a restored HEV SUV selection keeps the same BEV plus PHEV reference scope when changing country', async () => {
+  const { window, document } = page('?sector=automotive&region=north-america&country=USA&view=market&powertrain=hev&body=suv');
+  try {
+    assert.equal(query(document, '[data-if-powertrain=hev]').getAttribute('aria-pressed'), 'true');
+    assert.equal(query(document, '[data-if-body=suv]').getAttribute('aria-pressed'), 'true');
+    assert.equal(text(document, '[data-if-value]'), '該当データ未収録');
+    assert.equal(text(document, '[data-if-country-note]'), '基準値（BEV＋PHEV・全車型）：10%未満（2025年）');
+    click(document, '[data-if-region=asia]');
+    click(document, '[data-if-country=JPN]');
+    assert.equal(text(document, '[data-if-country-name]'), '日本');
+    assert.equal(text(document, '[data-if-value]'), '該当データ未収録');
+    assert.equal(text(document, '[data-if-country-note]'), '基準値（BEV＋PHEV・全車型）：3%未満（2025年）');
+    assert.doesNotMatch(text(document, '[data-if-country-note]'), /全動力/);
+    const selection = new URL(window.location.href).searchParams;
+    assert.equal(selection.get('country'), 'JPN');
+    assert.equal(selection.get('powertrain'), 'hev');
+    assert.equal(selection.get('body'), 'suv');
+    click(document, '[data-if-powertrain=all]');
+    click(document, '[data-if-body=all]');
+    assert.equal(text(document, '[data-if-value]'), '3%未満');
+    assert.equal(text(document, '[data-if-country-note]'), '2025年 · 新車販売（IEAのCars）');
+    assert.equal(query(document, '[data-if-missing]').hidden, true);
+  } finally { await window.happyDOM.close(); }
+});
+
 test('regional policy citations remain available when another representative country is selected', async () => {
   const cases = [
     { region: 'north-america', country: 'CAN', source: 'irs-credit' },
