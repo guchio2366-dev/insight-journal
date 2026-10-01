@@ -50,8 +50,8 @@ entry; 1366×768 and mobile checks protect the existing layout. Built-CSS tests
 cover both edges of the new width range separately from the mobile/monitor
 contract and continue to protect access to expanded readings and sources.
 
-The West Asia comparison workspace keeps its explanation and named return above
-a readable main map and complete distribution keys. The climate key includes
+The West Asia comparison workspace places a readable main map on the left and
+its explanation, named return and complete distribution keys on the right. The climate key includes
 all 16 classes present in the existing masked regional PNG and grid, including
 the four-cell Cwb class. It shows codes with short meaningful Japanese names;
 all 30 formal names and colors remain accessible in the closed dictionary.

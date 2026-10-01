@@ -151,13 +151,13 @@
 /* A complete key for this region leaves the main map enough room to study. */
 @media(min-width:960px){
  .atlas-desktop-shell .west-atlas[data-field][data-comparison-workspace=true][data-comparison-columns=true] .atlas-primary-grid{grid-template-columns:minmax(500px,1.4fr) minmax(370px,1fr)}
- .atlas-desktop-shell .west-atlas[data-field][data-comparison-workspace=true][data-comparison-columns=true] .west-reading{grid-column:1/-1;grid-row:1;padding:6px 12px}
- .west-atlas[data-comparison-workspace=true][data-comparison-columns=true] [data-west-detail]{display:grid;grid-template-columns:minmax(0,1.85fr) minmax(280px,1fr);gap:4px 16px}
- .west-atlas[data-comparison-workspace=true][data-comparison-columns=true] .west-reading header{grid-column:1/-1;padding-bottom:4px}
- .west-atlas[data-comparison-workspace=true][data-comparison-columns=true] .west-comparison-reading{grid-column:1;grid-row:2;margin:0;padding:6px 8px}
+ .atlas-desktop-shell .west-atlas[data-field][data-comparison-workspace=true][data-comparison-columns=true] .west-reading{grid-column:2;grid-row:1;padding:4px 10px}
+ .west-atlas[data-comparison-workspace=true][data-comparison-columns=true] [data-west-detail]{display:block}
+ .west-atlas[data-comparison-workspace=true][data-comparison-columns=true] .west-reading header{padding-bottom:2px}
+ .west-atlas[data-comparison-workspace=true][data-comparison-columns=true] .west-comparison-reading{margin:0;padding:4px 6px}
  .west-atlas[data-comparison-workspace=true][data-comparison-columns=true] .west-comparison-reading p{margin:0}
- .west-atlas[data-comparison-workspace=true][data-comparison-columns=true] .west-reading-dock{grid-column:2;grid-row:2;align-self:center;margin:0;padding-top:0;border-top:0}
- .atlas-desktop-shell .west-atlas[data-field][data-comparison-workspace=true][data-comparison-columns=true] .atlas-map-column{grid-column:1;grid-row:2}
+ .west-atlas[data-comparison-workspace=true][data-comparison-columns=true] .west-reading-dock{margin:0;padding-top:0;border-top:0}
+ .atlas-desktop-shell .west-atlas[data-field][data-comparison-workspace=true][data-comparison-columns=true] .atlas-map-column{grid-column:1;grid-row:1/3}
  .west-atlas[data-comparison-workspace=true][data-comparison-columns=true] .west-comparison-key-slot{grid-column:2;grid-row:2}
  .west-atlas[data-comparison-workspace=true][data-comparison-columns=true] .west-legend-heading{gap:0 10px}
  .west-atlas[data-comparison-workspace=true][data-comparison-columns=true] .west-legend-heading h3{margin:0}

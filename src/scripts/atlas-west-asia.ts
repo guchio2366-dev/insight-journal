@@ -109,11 +109,13 @@ async function init(root:HTMLElement){
   for(const marker of markers){
    const label=marker.querySelector<SVGGElement>('[data-marker-label]');if(!label)continue;
    const w=Number(label.dataset.width),h=44,x=(Number(marker.dataset.x)-b[0])/k+ox,y=(Number(marker.dataset.y)-b[1])/k+oy;
-   if(x<0||y<0||x>svg.clientWidth||y>svg.clientHeight){label.style.display='none';marker.querySelector('line')!.style.display='none';continue;}
+   const boundary=ox+b[2]*split/100/k;
+   const minX=comparisonSource&&marker.dataset.markerSide==='target'?boundary:0,maxX=comparisonSource&&marker.dataset.markerSide==='source'?boundary:svg.clientWidth;
+   if(x<minX||y<0||x>maxX||y>svg.clientHeight||maxX-minX<w+4){label.style.display='none';marker.querySelector('line')!.style.display='none';continue;}
    const candidates=[[8,-h-7],[-w-8,-h-7],[8,8],[-w-8,8],[-w/2,-h-18],[-w/2,18],[15,-h/2],[-w-15,-h/2]];
    let best:number[]|null=null,bestScore=Infinity;
    for(const [dx,dy] of candidates){
-    const lx=Math.max(2,Math.min(svg.clientWidth-w-2,x+dx)),ly=Math.max(2,Math.min(svg.clientHeight-h-2,y+dy));
+    const lx=Math.max(minX+2,Math.min(maxX-w-2,x+dx)),ly=Math.max(2,Math.min(svg.clientHeight-h-2,y+dy));
     const score=placed.reduce((sum,r)=>sum+Math.max(0,Math.min(lx+w+3,r[0]+r[2])-Math.max(lx-3,r[0]))*Math.max(0,Math.min(ly+h+3,r[1]+r[3])-Math.max(ly-3,r[1])),0);
     if(score<bestScore){best=[lx,ly,w,h];bestScore=score;}
    }
@@ -305,7 +307,7 @@ async function init(root:HTMLElement){
   const box=getComputedStyle(grid),inset=['paddingLeft','paddingRight','borderLeftWidth','borderRightWidth'].reduce((sum,key)=>sum+(parseFloat(box[key as keyof CSSStyleDeclaration] as string)||0),0);
   const columns=grid.getBoundingClientRect().width-inset>=884;
   root.dataset.comparisonColumns=String(columns);
-  const reserved=columns?$('.west-reading').getBoundingClientRect().height+8:comparisonKey.getBoundingClientRect().height;
+  const reserved=columns?0:comparisonKey.getBoundingClientRect().height;
   const available=window.innerHeight-grid.getBoundingClientRect().top-reserved-16;
   const height=Math.max(columns?300:330,Math.min(440,available-swipe.getBoundingClientRect().height-8));
   root.style.setProperty('--west-comparison-map-height',height+'px');applyView();
@@ -332,7 +334,7 @@ async function init(root:HTMLElement){
   }
   if(t.id==='climate')html+=data.cities.map((c:any)=>{
    const p=project(c.coordinates),name=c.name.replace(/（.*?）/g,''),width=Math.max(52,[...name].reduce((n:number,s:string)=>n+(s.charCodeAt(0)>255?12:7),0)+14);
-   return `<g class="west-station ${comparisonSource.city===c.id?'is-selected':''}" data-marker data-x="${p[0]}" data-y="${p[1]}"><title>${esc(c.name)}・元図の観測所</title><line x1="0" y1="0" x2="0" y2="0"/><circle r="4"/><g data-marker-label data-width="${width}"><rect width="${width}" height="44" rx="2"/><text x="${width/2}" y="27" text-anchor="middle">${esc(name)}</text></g></g>`;
+   return `<g class="west-station ${comparisonSource.city===c.id?'is-selected':''}" data-marker data-marker-side="source" data-x="${p[0]}" data-y="${p[1]}"><title>${esc(c.name)}・元図の観測所</title><line x1="0" y1="0" x2="0" y2="0"/><circle r="4"/><g data-marker-label data-width="${width}"><rect width="${width}" height="44" rx="2"/><text x="${width/2}" y="27" text-anchor="middle">${esc(name)}</text></g></g>`;
   }).join('');
   return html;
  }
@@ -382,7 +384,7 @@ async function init(root:HTMLElement){
   const points=t.id==='climate'?data.cities:t.id==='cities'?data.urban.cities:[];
   html+=`<g ${comparisonSource?'clip-path="url(#west-target-half)"':''}>`+points.map((c:any)=>{
    const p=project(c.coordinates),selected=state.city===c.id||state.urban===c.id,name=c.name.replace(/（.*?）/g,''),width=Math.max(52,[...name].reduce((n:number,s:string)=>n+(s.charCodeAt(0)>255?12:7),0)+14);
-   return `<g class="west-station ${selected?'is-selected':''}" data-marker data-x="${p[0]}" data-y="${p[1]}" data-${t.id==='climate'?'city':'urban'}="${c.id}" role="button" tabindex="0" aria-label="${esc(c.name)}を選択" aria-pressed="${selected}"><title>${esc(c.name)}</title><line x1="0" y1="0" x2="0" y2="0"/><circle r="4"/><g data-marker-label data-width="${width}"><rect width="${width}" height="44" rx="2"/><text x="${width/2}" y="27" text-anchor="middle">${esc(name)}</text></g></g>`;
+   return `<g class="west-station ${selected?'is-selected':''}" data-marker data-marker-side="target" data-x="${p[0]}" data-y="${p[1]}" data-${t.id==='climate'?'city':'urban'}="${c.id}" role="button" tabindex="0" aria-label="${esc(c.name)}を選択" aria-pressed="${selected}"><title>${esc(c.name)}</title><line x1="0" y1="0" x2="0" y2="0"/><circle r="4"/><g data-marker-label data-width="${width}"><rect width="${width}" height="44" rx="2"/><text x="${width/2}" y="27" text-anchor="middle">${esc(name)}</text></g></g>`;
   }).join('')+'</g>';
   scene.innerHTML=html;applyView();
   scene.querySelectorAll<SVGImageElement>('[data-west-raster]').forEach(raster=>raster.addEventListener('error',()=>{if(version===renderVersion)fail('分布画像を読み込めませんでした。国の選択と統計は利用できます。');}));
