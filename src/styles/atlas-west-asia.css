@@ -78,7 +78,7 @@
  .west-atlas[data-field=population] .population-tabs{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
  .west-atlas[data-field=population] .population-tabs button{font-size:14px;line-height:20px;min-height:40px;padding:9px 12px}
  .west-atlas[data-field=population] .west-control-status{margin:0 0 0 auto;padding:0 6px;align-self:center}
- .west-atlas[data-field=natural]:not([data-comparing=true]) .west-reading{padding-block:12px}
+ .west-atlas[data-field=natural]:not([data-comparing=true]) .west-reading{padding-block:10px}
  .west-atlas[data-field=natural]:not([data-comparing=true]) .west-reading-header,.west-atlas[data-field=natural]:not([data-comparing=true]) .west-reading-header:has([data-west-reading-overview]){display:flex;align-items:center;gap:8px;padding-bottom:2px}
  .west-atlas[data-field=natural]:not([data-comparing=true]) .west-reading-header h2{order:-1;flex:none}
  .west-atlas[data-field=natural]:not([data-comparing=true]) .west-reading-header .atlas-eyebrow{margin:0;white-space:nowrap}

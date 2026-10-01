@@ -83,6 +83,33 @@ test('通常の気候16区分と人口密度全階級・時点は固定凡例に
  try{assert.equal(rainfall.q('[data-west-atlas]').dataset.comparing,'true');assert.match(rainfall.q('[data-west-detail]').textContent,/降水量は未整備/);assert.equal(new URL(rainfall.w.location.href).searchParams.get('category'),'precipitation');assert.ok(rainfall.q('[data-west-return]'));assert.equal(rainfall.q('[data-west-subgroup="水資源"]').hidden,false);assert.equal(rainfall.q('[data-west-unavailable="降水量"]').getAttribute('aria-selected'),'true');assert.equal(new URL(rainfall.w.location.href).searchParams.get('topic'),'climate');}finally{await rainfall.w.happyDOM.close();}
 });
 
+test('比較中の水資源から未整備降水量へ進んでも元分布と地点・年・対象・履歴が残る',async()=>{
+ for(const source of ['wheat','barley']){
+  const initial='?topic=climate&country=TUR&city=istanbul&year=2020&map=100,120,400,300&at=29,41&side=source&from='+encodeURIComponent('?topic='+source+'&country=TUR&year=2020');
+  const app=await setup('nature',initial,false,{width:1366,height:768});
+  try{
+   const {w,q}=app,before=w.location.href,original=new URL(before).searchParams,view=q('[data-west-map]').getAttribute('viewBox');
+   q('[data-west-standard-group="水資源"]').click();await until(()=>q('[data-west-loading]').hidden);
+   const riverPair=source==='wheat';assert.equal(new URL(w.location.href).searchParams.get('topic'),riverPair?'rivers':'climate');assert.equal(q('[data-west-subgroup="水資源"]').hidden,false);assert.equal(q('[data-west-atlas]').dataset.comparing,'true');
+   q('[data-west-unavailable="降水量"]').click();await until(()=>q('[data-west-loading]').hidden);
+   const selected=w.location.href,p=new URL(selected).searchParams;
+   const verify=target=>{const {w,q}=target,params=new URL(w.location.href).searchParams;assert.equal(params.get('category'),'precipitation');assert.equal(params.get('topic'),riverPair?'rivers':'climate');for(const key of ['country','year','city','map','at','from','side'])assert.equal(params.get(key),original.get(key),key);assert.equal(q('[data-west-map]').getAttribute('viewBox'),view);assert.equal(q('[data-west-atlas]').dataset.comparing,'true');assert.match(q('[data-west-detail]').textContent,/降水量は未整備/);assert.match(q('[data-west-caption]').textContent,/未整備.*参考図/);assert.equal(q('[data-west-unavailable="降水量"]').getAttribute('aria-selected'),'true');assert.equal(q('[data-west-subgroup="水資源"]').hidden,false);assert.ok(q('[data-west-return]'));assert.equal(q('[data-west-legend]').querySelectorAll('.west-legend-subject').length,2);};
+   verify(app);const reload=await setup('nature','?'+p.toString(),false,{width:1366,height:768});try{verify(reload);}finally{await reload.w.happyDOM.close();}
+   w.history.replaceState({},'',before);w.dispatchEvent(new w.PopStateEvent('popstate'));await until(()=>q('[data-west-loading]').hidden);assert.equal(q('[data-west-atlas]').dataset.comparing,'true');assert.doesNotMatch(q('[data-west-caption]').textContent,/未整備/);
+   w.history.replaceState({},'',selected);w.dispatchEvent(new w.PopStateEvent('popstate'));await until(()=>q('[data-west-loading]').hidden);verify(app);
+   if(!riverPair){q('[data-west-topic-button="rivers"]').click();await until(()=>q('[data-west-loading]').hidden);assert.equal(q('[data-west-atlas]').dataset.comparing,'false');assert.equal(new URL(w.location.href).searchParams.has('from'),false);}
+  }finally{await app.w.happyDOM.close();}
+ }
+});
+
+test('農林業の地図を読む数値階級・単位・固定年は初期凡例で保たれ森林と国にも同期する',async()=>{
+ const app=await setup('agriculture','?topic=wheat&country=TUR&year=2020',false,{width:1366,height:768});
+ try{
+  const {w,q,select}=app,l=climateData.layers.find(x=>x.id==='wheat'),verify=()=>{const legend=q('[data-west-reading-key] [data-west-legend]');assert.ok(legend);assert.deepEqual([...legend.querySelectorAll('i')].map(x=>x.getAttribute('style')),l.colors.map(c=>'background:'+c).concat('background:#e4e5df'));assert.match(legend.textContent,/ha／原資料の格子.*2020/);for(const b of l.breaks)assert.ok(legend.textContent.includes(b.toLocaleString('ja-JP')));assert.match(legend.textContent,/周辺国・未収録/);assert.equal(w.document.querySelectorAll('[data-west-legend]').length,1);};
+  verify();select('[data-west-country]','IRN');await until(()=>q('[data-west-loading]').hidden);verify();q('[data-west-standard-group="林業"]').click();await until(()=>q('[data-west-loading]').hidden);const forest=q('[data-west-reading-key] [data-west-legend]');assert.equal(forest.querySelectorAll('i').length,2);assert.match(forest.textContent,/森林の参考分布（2020年）/);assert.equal(q('[data-west-cultivation="wheat"]').hidden,true);q('[data-west-standard-group="農畜産"]').click();await until(()=>q('[data-west-loading]').hidden);verify();assert.equal(q('[data-west-cultivation="wheat"]').hidden,false);
+ }finally{await app.w.happyDOM.close();}
+});
+
 test('資料取得に失敗しても国と主題を切り替えられる',async()=>{
  const {w,q,select}=await setup('nature','',true);
  try{
