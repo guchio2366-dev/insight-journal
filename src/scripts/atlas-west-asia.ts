@@ -209,6 +209,7 @@ async function init(root:HTMLElement){
  function details(){
   const t=topic(),c=country(),city=data.cities.find((x:any)=>x.id===state.city),urban=data.urban.cities.find((x:any)=>x.id===state.urban);
   const reading=westReading(t),source=sourceTopic(),comparison=source?westReading(source).comparisons.find((x:any)=>x.topic===t.id):null;
+  statistics.hidden=true;statistics.replaceChildren();statistics.setAttribute('aria-label',t.id==='climate'?'観測所の気温・降水量':'国別統計');
   let html=`<header class="west-reading-header"><p class="atlas-eyebrow">${c?esc(c.name):'西アジア・中東'}</p>${!source&&!readingOverview?'<button type="button" data-west-reading-overview>分野の概論へ戻る</button>':''}<h2 id="west-detail-title">${esc(unavailable?unavailable:!source&&readingOverview?westFields.find(f=>f.id===field)!.label+'の概論':t.label)}</h2></header>`;
   if(unavailable){$('[data-west-detail]').innerHTML=html+`<p class="atlas-reading-takeaway"><strong>${esc(unavailable)}は未整備です。</strong></p><div data-west-reading-extra><p>西アジア・中東の20対象で比較できる資料を現在収録していません。表示中の${esc(t.label)}は参考図で、この項目の分布を表していません。</p><button type="button" data-west-topic-button="${esc(t.id)}">${esc(t.label)}の説明へ戻る</button></div>`;statistics.hidden=true;return;}
   html+=source?`<section class="west-comparison-reading"><h3>${esc(source.label)} × ${esc(t.label)}</h3><p class="atlas-reading-takeaway"><strong>${esc(comparison?.explanation)}</strong></p><p class="west-stat-note">左は元の主題、右は比較先です。地図の境目を動かすと、同じ場所の両方の分布を読めます。凡例の単位・時点も比べてください。</p></section>`:`<p class="atlas-reading-takeaway"><strong>${esc(readingOverview?fieldIntroductions[field]:reading.message)}</strong></p>`;
@@ -218,7 +219,10 @@ async function init(root:HTMLElement){
   statistics.hidden=true;
   if(state.city&&t.id!=='climate')html+=`<p class="west-persisted">${esc(city?.name)}の選択を保持しています。「気候区分」へ戻ると同じ雨温図を読めます。</p>`;
   if(t.id==='climate'){
-   if(city)html+=`<details class="west-chart-details" ${!comparisonSource||cityExplicit?'open':''}><summary>${esc(city.name)}の雨温図・気候の説明</summary><section class="atlas-city-climate"><h3>都市の雨温図</h3><div class="atlas-climate-diagrams" data-west-active-chart></div></section></details>`;
+   if(city){
+    html+=`<section class="atlas-city-climate"><h3>${esc(city.name)}の気候</h3><div data-west-city-reading></div></section>`;
+    statistics.hidden=false;statistics.innerHTML=`<h2>${esc(city.name)}の雨温図</h2><details class="west-chart-details" ${!source||cityExplicit?'open':''}><summary>雨温図・月別の数値・観測地点</summary><div class="atlas-climate-diagrams" data-west-active-chart></div></details>`;
+   }
    else{
     const count=data.cities.filter((x:any)=>!c||x.countryCode===c.code).length;
     html+='<h3>都市の雨温図</h3><p>'+(c?esc(c.name)+'：':'')+(count?`地図の都市名、または地図下の一覧から${count}観測所の雨温図を選べます。`:'この国・地域では今回の資料取得範囲に観測所の平年値がありません。近隣国の値を代用しません。地域全体に戻ると、収録した18観測所を選べます。')+'分類の色は国全体の気候を一つに決めたものではありません。</p>';
@@ -250,7 +254,7 @@ async function init(root:HTMLElement){
   $('[data-west-detail]').innerHTML=html;
   if(city&&t.id==='climate'){
    const tpl=root.querySelector<HTMLTemplateElement>(`template[data-west-chart="${city.id}"]`);
-   if(tpl)$('[data-west-active-chart]').append(tpl.content.cloneNode(true));
+   if(tpl){const chart=statistics.querySelector('[data-west-active-chart]')!;chart.append(tpl.content.cloneNode(true));const reading=chart.querySelector('.atlas-city-reading');if(reading)$('[data-west-city-reading]').append(reading);const source=chart.querySelector('.atlas-city-source');if(source)$('[data-west-city-reading]').append(source.cloneNode(true));}
   }
  }
  function legendHtml(t:any,year:number,complete=false){
@@ -421,11 +425,12 @@ async function init(root:HTMLElement){
   };
   fillOptions(citySelect,data.cities,state.city);fillOptions(urbanSelect,data.urban.cities,state.urban);
   root.querySelectorAll<HTMLButtonElement>('[data-west-group]').forEach(b=>{const selected=b.dataset.westGroup===t.group;b.setAttribute('aria-selected',String(selected));b.setAttribute('aria-pressed',String(selected));b.tabIndex=selected?0:-1;});
-  root.querySelectorAll<HTMLButtonElement>('[data-west-standard-group]').forEach(b=>{const selected=unavailable?b.dataset.westStandardGroup===unavailable:b.dataset.westStandardGroup===standardGroup(t);b.setAttribute('aria-selected',String(selected));b.setAttribute('aria-pressed',String(selected));b.tabIndex=selected?0:-1;});
+  root.querySelectorAll<HTMLButtonElement>('[data-west-standard-group]').forEach(b=>{const selected=b.dataset.westStandardGroup===(unavailable==='降水量'?'水資源':unavailable||standardGroup(t));b.setAttribute('aria-selected',String(selected));b.setAttribute('aria-pressed',String(selected));b.tabIndex=selected?0:-1;});
+  root.querySelectorAll<HTMLButtonElement>('[data-west-unavailable]').forEach(b=>{const selected=b.dataset.westUnavailable===unavailable;b.setAttribute('aria-selected',String(selected));b.tabIndex=selected?0:-1;});
   root.querySelectorAll<HTMLElement>('[data-west-item-group]').forEach(el=>{const forestry=standardGroup(t)==='林業';el.hidden=forestry&&el.dataset.westItemGroup!=='土地・森林';el.querySelectorAll<HTMLButtonElement>('[data-west-topic-button]').forEach(button=>button.hidden=forestry?button.dataset.westTopicButton!=='forest':button.dataset.westTopicButton==='forest');if(el.dataset.westItemGroup==='土地・森林')el.querySelector('strong')!.textContent=forestry?'森林':'土地利用';});
   const waterItems=root.querySelector<HTMLElement>('[data-west-water-items]');if(waterItems)waterItems.hidden=t.group!=='水資源'||t.id==='basins'||!!unavailable;
   const status=root.querySelector<HTMLElement>('[data-west-control-status]');if(status)status.textContent=unavailable?unavailable+'は未整備です。':t.label+'を表示しています。';
-  root.querySelectorAll<HTMLButtonElement>('[data-west-topic-button]').forEach(b=>{const selected=b.dataset.westTopicButton===t.id||(!!b.closest('.west-agri-picker')&&t.id.startsWith(b.dataset.westTopicButton+'-'))||(!!b.closest('[data-west-subgroup="水資源"]')&&b.dataset.westTopicButton==='rivers'&&['groundwater','desalination'].includes(t.id));if(b.getAttribute('role')==='tab'){b.setAttribute('aria-selected',String(selected));b.tabIndex=selected?0:-1;}else b.setAttribute('aria-pressed',String(selected));});
+  root.querySelectorAll<HTMLButtonElement>('[data-west-topic-button]').forEach(b=>{const selected=!unavailable&&(b.dataset.westTopicButton===t.id||(!!b.closest('.west-agri-picker')&&t.id.startsWith(b.dataset.westTopicButton+'-'))||(!!b.closest('[data-west-subgroup="水資源"]')&&b.dataset.westTopicButton==='rivers'&&['groundwater','desalination'].includes(t.id)));if(b.getAttribute('role')==='tab'){b.setAttribute('aria-selected',String(selected));b.tabIndex=selected?0:-1;}else b.setAttribute('aria-pressed',String(selected));});
   root.querySelectorAll<HTMLElement>('[data-west-subgroup]').forEach(el=>el.hidden=el.dataset.westSubgroup!==t.group);
   root.querySelectorAll<HTMLElement>('[data-west-cultivation]').forEach(el=>el.hidden=!(t.id===el.dataset.westCultivation||t.id.startsWith(el.dataset.westCultivation+'-')));
   const overview=root.querySelector<HTMLElement>('[data-west-climate-overview]');if(overview)overview.hidden=t.id!=='climate';
@@ -464,8 +469,8 @@ async function init(root:HTMLElement){
  root.addEventListener('click',event=>{
   if(!data)return;const target=event.target as Element;
   if(target.closest('[data-west-reading-overview]')){readingOverview=true;details();links();comparisonLayout();return;}
-  const missing=target.closest<HTMLElement>('[data-west-unavailable]');if(missing){unavailable=missing.dataset.westUnavailable!;readingOverview=false;comparisonSource=null;render();return;}
-  const standard=target.closest<HTMLElement>('[data-west-standard-group]');if(standard){const group=standard.dataset.westStandardGroup!;if(['人種・民族','宗教'].includes(group)){unavailable=group;readingOverview=false;comparisonSource=null;render();return;}const id=field==='agriculture'?(group==='林業'?'forest':'wheat'):field==='industry'?'manufacturing':field==='population'?'density':westTopics.find(t=>t.field===field&&t.group===group)!.id;unavailable='';readingOverview=false;changeTopic(id);return;}
+  const missing=target.closest<HTMLElement>('[data-west-unavailable]');if(missing){unavailable=missing.dataset.westUnavailable!;readingOverview=false;comparisonSource=null;commit();render();return;}
+  const standard=target.closest<HTMLElement>('[data-west-standard-group]');if(standard){const group=standard.dataset.westStandardGroup!;if(['人種・民族','宗教'].includes(group)){unavailable=group;readingOverview=false;comparisonSource=null;commit();render();return;}const id=field==='agriculture'?(group==='林業'?'forest':'wheat'):field==='industry'?'manufacturing':field==='population'?'density':westTopics.find(t=>t.field===field&&t.group===group)!.id;unavailable='';readingOverview=false;changeTopic(id);return;}
   if(target.closest('[data-west-topic-button],[data-west-country-button]')){unavailable='';readingOverview=false;}
   const group=target.closest<HTMLElement>('[data-west-group]');if(group){const t=westTopics.find(t=>t.field===field&&t.group===group.dataset.westGroup)!;changeTopic(t.id);}
   const topicButton=target.closest<HTMLElement>('[data-west-topic-button]');if(topicButton)changeTopic(topicButton.dataset.westTopicButton!);

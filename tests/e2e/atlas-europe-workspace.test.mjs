@@ -73,7 +73,7 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.equal(doc.querySelector('[data-eu-farming-statistics]').hidden,false);
     }
     if (field==='industry/') {
-      const chooser=doc.querySelector('.eu-topic-measures [data-eu-layer-choice="industry"]');
+      const chooser=doc.querySelector('.eu-map-panel .eu-topic-measures [data-eu-layer-choice="industry"]');
       assert.ok(chooser);
       assert.deepEqual([...chooser.options].map(option=>option.value),['hubs','manufacturing','industry','services']);
       assert.equal(chooser.value,'hubs');

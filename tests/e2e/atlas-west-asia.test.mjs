@@ -22,8 +22,14 @@ test('西アジアの全4分野は共通枠・一つの地図・20の選択肢�
    assert.equal(q('.west-heading'),null,'独自の大見出しで地図を押し下げない');
    assert.ok(q('.atlas-primary-grid>.atlas-national'),'解説は北米と同じ隣接パネル');
    assert.ok(q('.atlas-map-column .west-legend'));assert.ok(q('.atlas-map-column .west-map-lists'));
+   const expected={natural:['気候区分','水資源','地形','標高（等高線）'],agriculture:['農畜産','林業'],industry:['地域主要産業'],population:['人口分布','人種・民族','宗教']};
+   const groups=all('[role=tablist] [data-west-standard-group]');assert.deepEqual(groups.map(b=>b.dataset.westStandardGroup),expected[field]);
+   assert.equal(groups[0].getAttribute('aria-selected'),'true');assert.equal(groups[0].getAttribute('tabindex'),'0');
+   for(const b of groups.slice(1)){assert.equal(b.getAttribute('aria-selected'),'false');assert.equal(b.getAttribute('tabindex'),'-1');}
    if(field==='agriculture')assert.ok(q('.atlas-map-column .atlas-key [data-west-topic-button]'));
-   else assert.ok(q('[role=tablist] [data-west-group]'));
+   if(field==='industry')assert.ok(q('.atlas-map-column .west-item-picker [data-west-topic-button="manufacturing"]'));
+   if(field==='population')assert.ok(q('.atlas-map-column .west-additional-topics [data-west-topic-button="age-older"]'));
+   if(field==='natural'){assert.deepEqual(all('[data-west-subgroup="水資源"] button').map(b=>b.textContent),['河川・地下水','降水量','河川の流域']);assert.ok(q('[data-west-unavailable="降水量"]'));}
    assert.equal(all('.west-static-data tbody tr').length,20);assert.ok(q('[data-west-retry]'));
    assert.match(q('#west-sources').textContent,/欠測は0に置き換えず/);
    assert.match(q('#west-sources').textContent,/実効支配や領有権の確定を示しません/);

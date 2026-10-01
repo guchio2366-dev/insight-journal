@@ -178,7 +178,7 @@
  .atlas-desktop-shell .asia-atlas[data-field] .asia-layout{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px;align-items:start}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-map-frame{height:auto!important;min-height:0!important;max-height:640px!important;aspect-ratio:1.55!important}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-region-shell{display:flex;flex-wrap:wrap;gap:7px 16px;margin:0 0 10px;padding:0;align-items:center;flex-direction:row}
- .atlas-desktop-shell .asia-atlas[data-field] .asia-region-shell>.regional-navigation{width:100%}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-region-shell>.regional-navigation{width:100%;flex:0 0 100%}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-region-shell .regional-tabs{width:100%}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-toolbar{display:flex;gap:12px;align-items:center;width:100%;margin:0;padding:0}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-toolbar label{display:flex;align-items:center;gap:8px;font-size:13px}
@@ -192,6 +192,9 @@
  .atlas-desktop-shell .asia-atlas[data-field] :is(.asia-primary-topics,.asia-population-tabs,.asia-industry-sectors){display:flex;gap:0;flex-wrap:wrap;margin:7px 0 10px;padding:0;border:1px solid #c7ccbf;border-top:0;background:#f1f0e7}
  .atlas-desktop-shell .asia-atlas[data-field] :is(.asia-primary-topics,.asia-population-tabs,.asia-industry-sectors)>button{flex:1;min-width:0;min-height:40px;font-size:14px;font-weight:600;line-height:20px;padding:9px 8px;border:0;border-right:1px solid #d8d9ce;border-radius:0;background:transparent;color:#36565c}
  .atlas-desktop-shell .asia-atlas[data-field] :is(.asia-primary-topics,.asia-population-tabs,.asia-industry-sectors)>button[aria-pressed=true]{background:#35515d;color:#fff;border-bottom:0}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-population-tabs{gap:8px;border:0;background:transparent}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-population-tabs>button{flex:none;min-height:40px;padding:8px 12px;border:1px solid #c7ccbf;border-radius:4px;background:#fbfcf5;color:#36565c;font-size:14px}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-population-tabs>button[aria-pressed=true]{border:1px solid #35515d;background:#35515d;color:#fff}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-secondary-topics{margin:-10px 0 10px;padding:0;border:1px solid #c7ccbf;border-top:0;gap:0;background:#f1f0e7}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-secondary-topics>button{flex:1;min-height:44px;font-size:13px;padding:9px 8px;border-right:1px solid #d8d9ce}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-industry-guide{display:none}
@@ -217,11 +220,12 @@
  .atlas-desktop-shell .asia-atlas[data-field] .asia-main-legend p{font-size:12px;line-height:1.35;margin:0}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-main-legend .asia-comparison-key{width:100%;gap:1px 10px;margin:0}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-main-legend .asia-comparison-key span{font-size:12px;line-height:1.35}
- .atlas-desktop-shell .asia-atlas[data-field] .asia-farm-key{padding:2px 0;border:0}
- .atlas-desktop-shell .asia-atlas[data-field] .asia-farm-period{float:right;margin:0 0 0 6px;font-size:12px;line-height:24px;color:#435a5e}
- .atlas-desktop-shell .asia-atlas[data-field] .asia-farm-products{gap:0 6px}
- .atlas-desktop-shell .asia-atlas[data-field] .asia-farm-products button{min-height:24px;font-size:13px;line-height:18px;padding:2px 6px;border-radius:4px}
- .atlas-desktop-shell .asia-atlas[data-field] .asia-farm-key-row>strong{font-size:13px;padding-top:3px}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-farm-key{display:flex;flex-wrap:wrap;align-items:center;gap:0 6px;padding:2px 0;border:0}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-farm-period{margin:0 4px 0 0;font-size:12px;line-height:24px;color:#435a5e}
+ .atlas-desktop-shell .asia-atlas[data-field] :is(.asia-farm-key-row,.asia-farm-products){display:contents}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-farm-products button{min-height:24px;font-size:13px;line-height:18px;padding:2px;border-radius:4px}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-farm-products button i{width:12px;height:10px}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-farm-key-row>strong{display:inline-flex;align-items:center;min-height:24px;font-size:13px;padding:0 3px;border-left:2px solid #a7b6ad;background:#edf3ef}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-farm-density-key{font-size:12px}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-gesture{margin:4px 0;font-size:12px;line-height:1.5}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-map-selection{padding:5px 0;font-size:12px;line-height:1.5}

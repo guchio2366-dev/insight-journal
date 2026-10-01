@@ -20,6 +20,13 @@
 .west-layout-statistics[hidden]{display:none!important}
 .west-layout-statistics table{width:100%}
 .west-layout-statistics th,.west-layout-statistics td{font-size:13px}
+.west-layout-statistics .atlas-climate-diagrams{grid-template-columns:minmax(0,1fr);max-width:720px}
+.west-layout-statistics .atlas-climate-diagram{margin:0;max-width:none}
+.west-layout-statistics p{font-size:14px;line-height:1.85}
+.west-layout-statistics .atlas-city-source{font-size:13px}
+@media(min-width:960px) and (max-width:1199px){
+ .atlas-desktop-shell .west-atlas[data-field]:not([data-comparing=true]) .atlas-primary-grid{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px}
+}
 @media(min-width:960px){
  .west-agri-controls,.west-atlas .industry-controls{padding:6px;border:1px solid #c7ccbf;border-bottom:0;background:#fbfaf3;margin:0 0 6px}
  .west-agri-controls .atlas-water-tabs,.west-atlas .industry-controls .industry-tab-row{min-height:40px;margin:0;padding:0;gap:6px}

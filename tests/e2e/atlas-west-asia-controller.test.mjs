@@ -56,9 +56,15 @@ test('標準階層の未整備項目を明示し、説明だけの概論復帰�
  }finally{await population.w.happyDOM.close();}
  const nature=await setup('nature');
  try{
-  const {q}=nature;q('[data-west-standard-group="水資源"]').click();await until(()=>q('[data-west-loading]').hidden);q('[data-west-unavailable="降水量"]').click();await until(()=>q('[data-west-loading]').hidden);assert.match(q('[data-west-detail]').textContent,/降水量は未整備/);
+  const {q}=nature;q('[data-west-standard-group="水資源"]').click();await until(()=>q('[data-west-loading]').hidden);q('[data-west-unavailable="降水量"]').click();await until(()=>q('[data-west-loading]').hidden);assert.match(q('[data-west-detail]').textContent,/降水量は未整備/);assert.equal(q('[data-west-standard-group="水資源"]').getAttribute('aria-selected'),'true');assert.equal(q('[data-west-unavailable="降水量"]').getAttribute('aria-selected'),'true');assert.equal(q('[data-west-subgroup="水資源"] [data-west-topic-button="rivers"]').getAttribute('aria-selected'),'false');
   q('[data-west-standard-group="気候区分"]').click();await until(()=>q('[data-west-loading]').hidden);assert.ok(q('[data-west-active-chart] svg'));assert.equal(q('[data-west-comparison]').parentElement,q('[data-atlas-shell]'));
  }finally{await nature.w.happyDOM.close();}
+ const compared=await setup('population','?topic=density&country=EGY&year=2020&map=100,120,400,300&side=source&from='+encodeURIComponent('?topic=rivers&country=EGY&year=2020'));
+ try{
+  const {w,q}=compared,before=w.location.href,frame=q('[data-west-map]').getAttribute('viewBox');assert.equal(q('[data-west-atlas]').dataset.comparing,'true');q('[data-west-standard-group="宗教"]').click();await until(()=>q('[data-west-loading]').hidden);
+  const p=new URL(w.location.href).searchParams;assert.equal(p.has('from'),false);assert.equal(p.has('side'),false);assert.equal(p.get('country'),'EGY');assert.equal(p.get('year'),'2020');assert.equal(q('[data-west-map]').getAttribute('viewBox'),frame);assert.equal(q('[data-west-atlas]').dataset.comparing,'false');assert.match(q('[data-west-detail]').textContent,/宗教は未整備/);
+  w.history.replaceState({},'',before);w.dispatchEvent(new w.PopStateEvent('popstate'));await until(()=>q('[data-west-loading]').hidden);assert.equal(q('[data-west-atlas]').dataset.comparing,'true');assert.doesNotMatch(q('[data-west-detail]').textContent,/宗教は未整備/);assert.ok(q('[data-west-return]'));
+ }finally{await compared.w.happyDOM.close();}
 });
 test('資料取得に失敗しても国と主題を切り替えられる',async()=>{
  const {w,q,select}=await setup('nature','',true);
@@ -81,7 +87,7 @@ test('北米と同じ読み順で初期雨温図が表示され、都市選択�
  const {w,q}=await setup('nature');
  try{
   await until(()=>q('[data-west-climate-class]')?.textContent.includes('BWh'));
-  assert.equal(q('[data-west-city]').value,'riyadh');assert.equal(q('[data-west-detail] .atlas-city-climate h3').textContent,'都市の雨温図');
+  assert.equal(q('[data-west-city]').value,'riyadh');assert.match(q('[data-west-detail] .atlas-city-climate h3').textContent,/リヤド.*気候/);assert.equal(q('[data-west-detail] svg'),null);assert.equal(q('[data-west-active-chart]').closest('[data-west-comparison]'),q('[data-west-comparison]'));assert.equal(q('[data-west-comparison]').parentElement,q('[data-atlas-shell]'));assert.ok(q('[data-west-comparison] [data-city-numbers] table'));assert.equal(q('[data-west-climate-class]').closest('[data-west-detail]'),q('[data-west-detail]'));
   assert.equal(q('[data-west-scene]').querySelectorAll('[data-city]').length,18);
   const before=q('[data-west-map]').getAttribute('viewBox');
   q('[data-city="tehran"]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));

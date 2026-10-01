@@ -1,5 +1,6 @@
 /* Loaded only by Europe and Asia overview routes; the US reference is unchanged. */
 @media(min-width:960px){
+ .overview-workspace .atlas-desktop-shell>[data-regional-overview-layout]{align-self:start;margin:0}
  [data-regional-overview-layout] .country-overview-breadcrumb{margin-bottom:13px}
  .overview-workspace:has([data-regional-overview-layout]) .atlas-desktop-shell:not(.is-reading-news){display:grid;grid-template-columns:clamp(190px,19vw,280px) minmax(0,1fr);gap:16px;padding:12px 20px 36px}
  [data-regional-overview-layout] .country-overview-controls{display:grid;grid-template-columns:minmax(0,1fr);gap:7px;margin:0 0 10px}

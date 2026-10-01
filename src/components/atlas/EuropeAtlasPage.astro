@@ -92,6 +92,7 @@ const config = { farmingAreas, geography, climateWater, countries, cities: citie
         <div class="eu-map-candidates" data-eu-farm-candidates hidden aria-live="polite"></div>
         <div class="eu-item-list" data-eu-city-list hidden={!initialClimateReader} aria-label="雨温図の都市を選ぶ"><h3>都市を選ぶ</h3><div>{cities.map(city=><button type="button" data-eu-city-select={city.id} aria-pressed={city.id==='london'}>{city.name}<small>{countryName(city.country)}</small></button>)}</div></div>
         <div class="eu-item-list" data-eu-feature-list hidden aria-label="地図の地点を選ぶ"><h3>地図の名称から選ぶ</h3><div data-eu-feature-options></div></div>
+        <EuropeLayoutControls position="items" {field} />
         <div class="eu-map-footer"><span data-eu-map-status>{initialClimateReader?'都市名を押すと、雨温図を表示します。':agriculture?'地図の作物名を押すと、品目別の分布を表示します。':'地図の分布と右側の説明を読み比べます。'}</span><button type="button" data-eu-render>簡易表示にする</button></div>
         <section class="eu-origin-key" data-eu-origin-key hidden aria-label="比較元の図と凡例"><div data-eu-origin-caption></div><div data-eu-origin-legend></div><svg data-eu-origin-map hidden viewBox={`0 0 ${frame.width} ${frame.height}`} role="img" aria-label="元の分布図"></svg></section>
 

@@ -275,7 +275,7 @@
 }
 
 /* Europe uses the same desktop reading positions as the approved US workspace. */
-.eu-workspace-root[data-europe-detail] .eu-topic-measures { padding:6px 0; }
+.eu-workspace-root[data-europe-detail] .eu-topic-measures { padding:4px 0; }
 .eu-workspace-root[data-europe-detail] .eu-topic-measures .eu-layer-choice { padding:0; font-weight:400; }
 .eu-workspace-root[data-europe-detail] .eu-topic-measures select { width:auto; flex:1; max-width:340px; }
 .eu-workspace-root[data-europe-detail] .eu-comparison-links a { display:flex; align-items:center; min-height:44px; text-decoration:none; }
@@ -292,6 +292,9 @@
  .eu-workspace-root[data-europe-detail] .eu-field-nav a { min-height:42px; padding:9px 5px; }
  .eu-workspace-root[data-europe-detail] .eu-topic-above { padding:6px 0 12px; border:0; background:transparent; gap:5px; }
  .eu-workspace-root[data-europe-detail] .eu-topic-above button { min-height:40px; height:40px; padding:4px 10px; }
+ .eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="population"] { justify-content:flex-start; gap:8px; }
+ .eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="population"] button { flex:0 0 auto; padding:4px 14px; font-size:14px; }
+ .eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="population"] small { font-size:10px; line-height:1.1; }
  .eu-workspace-root[data-europe-detail] .eu-layout { grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr); gap:14px; }
  .eu-workspace-root[data-europe-detail] .eu-map-stage,
  .eu-workspace-root[data-europe-detail].has-eu-comparison:has([data-eu-climate-reader]:not([hidden])) .eu-map-stage { width:100%; height:auto; min-height:0; max-height:none; aspect-ratio:1.55; }
@@ -310,8 +313,9 @@
  .eu-workspace-root[data-europe-detail] .eu-reader-heading { margin:8px 0; }
  .eu-workspace-root[data-europe-detail] .eu-reader-heading h2 { font:700 17px/1.5 var(--sans); }
  .eu-workspace-root[data-europe-detail] .eu-city-reading-title { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
- .eu-workspace-root[data-europe-detail] .eu-item-list button { min-height:44px; font-size:13px; }
- .eu-workspace-root[data-europe-detail] .eu-item-list { display:flex; flex-wrap:wrap; align-items:center; gap:4px; margin-top:4px; padding:4px; }
+ .eu-workspace-root[data-europe-detail] .eu-item-list button { min-height:24px; height:24px; padding:1px 5px; font-size:13px; }
+ .eu-workspace-root[data-europe-detail] .eu-item-list { display:flex; flex-wrap:wrap; align-items:center; gap:1px; margin-top:2px; padding:0; }
+ .eu-workspace-root[data-europe-detail] .eu-item-swatch { flex-basis:12px; width:12px; height:12px; }
  .eu-workspace-root[data-europe-detail] .eu-item-list section { display:contents; }
  .eu-workspace-root[data-europe-detail] .eu-item-list h3 { margin:0; padding:0 4px; }
  .eu-workspace-root[data-europe-detail] .eu-item-list>div,.eu-workspace-root[data-europe-detail] .eu-item-list section>div { display:contents; }
