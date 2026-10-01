@@ -1,4 +1,5 @@
-import {asiaPlaceReadings,choosePlaceReading,selectedPlaceReading,startPlaceComparison} from '../data/atlas/asia-place-readings';
+import {availablePlaceReadings,choosePlaceReading,selectedPlaceReading,startPlaceComparison} from '../data/atlas/asia-place-readings';
+import {asiaFocusForPath} from '../data/atlas/asia-focus';
 import type {AsiaState,AsiaRegionId,AsiaCamera} from '../lib/atlas-asia-state';
 
 export function createPlaceReadings(root:HTMLElement,region:AsiaRegionId,getState:()=>AsiaState,navigate:(s:AsiaState,fit?:boolean)=>void,camera:()=>AsiaCamera|null){
@@ -7,9 +8,9 @@ export function createPlaceReadings(root:HTMLElement,region:AsiaRegionId,getStat
  const $=<T extends Element=HTMLElement>(q:string)=>panel.querySelector<T>(q)!;
  const picker=$<HTMLSelectElement>('[data-place-story]');
  const option=(name:string,value:string)=>{const item=document.createElement('option');item.textContent=name;item.value=value;return item;};
- picker.addEventListener('change',()=>{const state=getState(),scene=asiaPlaceReadings.find(s=>s.region===region&&s.field===state.field&&s.id===picker.value);navigate(scene?choosePlaceReading(state,scene):{...state,story:null,camera:camera()},Boolean(scene));});
+ picker.addEventListener('change',()=>{const state=getState(),scene=availablePlaceReadings(region,state.field,asiaFocusForPath(location.pathname)).find(s=>s.id===picker.value);navigate(scene?choosePlaceReading(state,scene):{...state,story:null,camera:camera()},Boolean(scene));});
  function render(){
-  const state=getState(),available=asiaPlaceReadings.filter(s=>s.region===region&&s.field===state.field),scene=selectedPlaceReading(region,state);
+  const state=getState(),available=availablePlaceReadings(region,state.field,asiaFocusForPath(location.pathname)),scene=available.find(s=>s===selectedPlaceReading(region,state));
   panel!.hidden=!available.length;
   picker.replaceChildren(option('事例を選ぶ',''),...available.map(s=>option(s.name,s.id)));picker.value=scene?.id??'';
   $('[data-place-story-body]').hidden=!scene;

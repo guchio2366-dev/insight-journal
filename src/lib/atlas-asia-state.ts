@@ -76,7 +76,10 @@ export function startAsiaComparison(url: URL, state: AsiaState, field: AsiaField
   for (const key of ownedKeys) if (key !== 'back' && from.searchParams.has(key)) approved.set(key, from.searchParams.get(key)!);
   approved.set('field', state.field);
   const {topic, detail, story, sector, subsector, overlay, farms, ...base} = state;
-  return { ...base, field, back: approved.toString() };
+  // Further comparisons keep the first reading and selection as their return
+  // point, rather than silently replacing it with the intermediate map.
+  const back=state.back&&state.back.length<=600&&!new URLSearchParams(state.back).has('back')?state.back:approved.toString();
+  return { ...base, field, back };
 }
 
 export function restoreAsiaComparison(url: URL, state: AsiaState, context: AsiaStateContext): AsiaState {
