@@ -62,3 +62,13 @@ test('copyright attribution and original time periods are visible in the layers'
  assert.match(api.getRussiaLayer('cattle').unit,/頭/);assert.match(api.getRussiaLayer('climate').period,/1991/);assert.equal(api.getRussiaLayer('climate').legend.length,18);
  assert.ok(api.russiaLayers.every(l=>l.period&&l.unit&&l.sources.length&&l.sources.every(s=>s.url.startsWith('https://'))));
 });
+
+test('theme descriptions and SVG names identify the displayed learning window',()=>{
+ for(const [field,theme,expected,excluded] of [['agriculture','wheat-and-water',['小麦と生育期・出荷','欧州側・ウラル付近','シベリア'],['極東']],['industry','northern-resources',['北極圏','シベリア'],['欧州側・ウラル付近','極東']]]){
+  const state=api.createRussiaState('?scope=theme&theme='+theme,field),reading=api.getRussiaComparisonReading(state),scene=api.renderRussiaScene(api.getRussiaLayer(state.layer),state),aria=scene.match(/aria-label="([^"]+)"/)[1];
+  for(const name of expected){assert.ok(reading.message.includes(name));assert.ok(aria.includes(name));}
+  for(const name of [...excluded,'ロシア全域']){assert.ok(!aria.includes(name));assert.ok(!api.russiaScopeName(state).includes(name));}
+  const climateScene=api.renderRussiaScene(api.getRussiaLayer('climate'),state);for(const name of excluded)assert.ok(!climateScene.includes('>'+name+'</text>'));
+  const all={...state,scope:'all'};assert.match(api.renderRussiaScene(api.getRussiaLayer(state.layer),all),/aria-label="[^"]*ロシア全域"/);assert.ok(api.getRussiaComparisonReading(all).message.startsWith('ロシア全域：'));
+ }
+});
