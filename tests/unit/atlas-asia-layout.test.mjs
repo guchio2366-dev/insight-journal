@@ -62,3 +62,20 @@ test('都市の雨温図・月別表だけを全幅下へ移し、選択説明�
  assert.equal(root.querySelector('[data-asia-statistics]').hidden,true);
  window.happyDOM.abort();
 });
+
+test('気候と民族の操作ボタンは地図直下へ残し、正式名と既存イベントを維持する',()=>{
+ const window=new Window();window.document.body.innerHTML='<div data-asia-atlas><div class="asia-map-panel"><div data-asia-map-legend></div><section class="asia-legend" data-climate-legend><details><summary>温帯</summary><button data-climate-class="14"><i></i><b>Cfa</b><span>温暖湿潤気候</span></button></details></section><section class="asia-legend" data-settlement-legend="ethnicity" hidden><button data-settlement-choice="a">集団A</button></section><section class="asia-legend" data-physical-legend>資料の定義</section><div data-asia-map-items></div></div><div data-reading-map-legend>1991–2020年</div><details data-asia-map-method></details><section data-asia-statistics hidden></section></div>';
+ const root=window.document.querySelector('[data-asia-atlas]'),climate=root.querySelector('[data-climate-class]'),settlement=root.querySelector('[data-settlement-choice]');let chosen=0;
+ climate.addEventListener('click',()=>chosen++);settlement.addEventListener('click',()=>chosen+=10);
+ createAsiaLayout(root).render({field:'natural'});
+ assert.equal(root.querySelector('[data-asia-map-legend] [data-climate-class]'),climate);
+ assert.equal(climate.closest('details'),null,'class selection is always available beside the map');
+ assert.match(climate.getAttribute('aria-label'),/Cfa.*温暖湿潤気候/);
+ assert.equal(climate.querySelector('span').hidden,true,'only the code is compact; the full name is accessible');
+ climate.click();assert.equal(chosen,1);
+ assert.equal(root.querySelector('[data-asia-map-items] [data-settlement-choice]'),settlement);
+ assert.equal(settlement.closest('details'),null);
+ settlement.click();assert.equal(chosen,11);
+ assert.equal(root.querySelector('[data-asia-map-method] button'),null,'methods contain no selection buttons');
+ window.happyDOM.abort();
+});

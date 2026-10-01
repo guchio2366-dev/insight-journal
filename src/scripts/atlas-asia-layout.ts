@@ -9,7 +9,20 @@ export function createAsiaLayout(root:HTMLElement){
  const mainLegend=query('[data-reading-map-legend]'),legendHost=query('[data-asia-map-legend]');
  if(mainLegend&&legendHost)legendHost.append(mainLegend);
  const methods=query('[data-asia-map-method]');
- if(methods)for(const legend of root.querySelectorAll<HTMLElement>('.asia-map-panel>section.asia-legend:not(.asia-farm-key)'))methods.append(legend);
+ const climateLegend=query('[data-climate-legend]');
+ if(climateLegend&&legendHost){
+  const choices=root.ownerDocument.createElement('div');choices.className='asia-climate-choices';
+  for(const button of climateLegend.querySelectorAll<HTMLButtonElement>('[data-climate-class]')){
+   const fullName=button.textContent?.trim()??'';button.title=fullName;button.setAttribute('aria-label',fullName);
+   const name=button.querySelector<HTMLElement>('span');if(name)name.hidden=true;
+   choices.append(button);
+  }
+  climateLegend.replaceChildren(choices);legendHost.append(climateLegend);
+ }
+ for(const legend of root.querySelectorAll<HTMLElement>('.asia-map-panel>section.asia-legend:not(.asia-farm-key)')){
+  if(legend.hasAttribute('data-settlement-legend'))items.prepend(legend);
+  else if(methods)methods.append(legend);
+ }
  const controls:{node:HTMLElement;owner:HTMLElement|null;wrapper:HTMLElement}[]=[];
  const farmingNote=query('[data-farm-density-key]');
  if(methods&&farmingNote){const owner=farmingNote.closest<HTMLElement>('[data-farm-overview-legend]'),wrapper=root.ownerDocument.createElement('div');wrapper.append(farmingNote);methods.append(wrapper);controls.push({node:farmingNote,owner,wrapper});}

@@ -1,21 +1,22 @@
 ---
 import { europeLayers, type EuropeField } from '../../data/atlas/europe/layers';
+import { europeReadings } from '../../data/atlas/europe/readings';
+import countries from '../../data/atlas/europe/countries.json';
 interface Props { position: 'above' | 'map' | 'items'; field: EuropeField }
 const { position, field } = Astro.props;
 type TopicGroup = { field: EuropeField; items: string[][]; choices?: string[] };
 const definitions: TopicGroup[] = [
   {field:'agriculture',items:[['crops','農畜産'],['forest','林業']]},
   {field:'nature',items:[['climate','気候区分'],['water','水資源'],['terrain','地形'],['contours','標高（等高線）']]},
-  {field:'industry',items:[['hubs','地域主要産業']],choices:['hubs','manufacturing','industry','services']},
+  {field:'industry',items:[['hubs','全拠点'],...['資源・素材','機械・輸送','技術・医薬','物流・サービス'].map(group=>['hubs',group,europeReadings.find(reading=>reading.field==='industry'&&reading.group===group)!.id]),['manufacturing','製造業'],['industry','鉱工業・建設業'],['services','サービス業']]},
   {field:'population',items:[['density','人口分布'],['','人種・民族'],['','宗教']],choices:['density','urban','age','growth']},
 ];
 const groups = position === 'above' ? definitions : [];
-const measures = definitions.filter(group=>group.choices && (position==='above' && group.field==='population' || position==='items' && group.field==='industry'));
 ---
 {groups.map(group=><div class:list={['eu-topic-tabs',`eu-topic-${position}`]} data-eu-topic-field={group.field} hidden={field!==group.field} role="group" aria-label={`${group.field==='nature'?'自然環境':group.field==='agriculture'?'農林業':group.field==='industry'?'主要産業':'人口'}の区分`}>
-  {group.items.map(([id,label],i)=><button type="button" data-eu-topic={id||undefined} disabled={!id} aria-pressed={id?i===0:undefined}>{label}{!id&&<small>準備中</small>}</button>)}
+  {group.items.map(([id,label,feature],i)=>{const reading=europeReadings.find(reading=>reading.id===feature);const destination=reading?`${label}：${reading.name}（${countries.find(country=>country.code===reading.country)?.name}）の代表地点へ移動`:undefined;return <button type="button" data-eu-topic={id||undefined} data-eu-topic-feature={feature} disabled={!id} aria-label={destination} title={destination} aria-pressed={id?i===0:undefined}>{label}{feature&&<small>代表地点</small>}{group.field==='industry'&&id!=='hubs'&&<small>国別GDP比</small>}{!id&&<small>準備中</small>}</button>;})}
+  {group.choices&&<label class="eu-layer-choice">国別指標<select data-eu-layer-choice={group.field} aria-label="人口の図">{group.choices.map(id=>{const layer=europeLayers.find(layer=>layer.id===id)!;return <option value={id}>{layer.title}</option>;})}</select></label>}
 </div>)}
-{measures.map(group=><div class="eu-topic-measures" data-eu-topic-field={group.field} hidden={field!==group.field}><label class="eu-layer-choice">{group.field==='industry'?'地域の拠点・国別の産業構成':'人口の図・国別指標'}<select data-eu-layer-choice={group.field} aria-label={`${group.field==='industry'?'主要産業':'人口'}の図`}>{group.choices!.map(id=>{const layer=europeLayers.find(layer=>layer.id===id)!;return <option value={id}>{layer.title}</option>;})}</select></label></div>)}
 
 {position==='map'&&<div class="eu-topic-tabs eu-topic-map eu-farming-toggles" data-eu-farming-toggles hidden={field!=='agriculture'} role="group" aria-label="農畜産物の分布表示">
   <button type="button" data-eu-toggle="crop" aria-pressed="true">作物の分布 <span>表示中</span></button>

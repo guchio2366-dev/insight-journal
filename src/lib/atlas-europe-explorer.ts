@@ -89,9 +89,9 @@ export function initEuropeAtlas() {
     query<HTMLAnchorElement>('[data-eu-subject-source]').href=layer.source;
     const readingSources=query<HTMLElement>('[data-eu-reading-sources]');readingSources.replaceChildren();
     for(const source of europeReaderSources(layer)){const a=document.createElement('a');a.href=source.url;a.textContent=source.label;a.className='eu-source-link';readingSources.append(a);}
-    const feature=visibleFeatures().find(p=>p.id===state.feature);
+    const feature=visibleFeatures().find(p=>p.id===state.feature&&featureVisible(p.id));
     if(feature){
-      query('[data-eu-subject-title]').textContent=feature.name;
+      query('[data-eu-subject-title]').textContent=`${feature.name}（${countries.find(country=>country.code===feature.country)?.name??feature.country}）`;
       // Reuse the sourced reading's first sentence; its full text and source
       // remain in the independently scrolling details below.
       query('[data-eu-subject-takeaway]').textContent='body' in feature
@@ -126,7 +126,7 @@ export function initEuropeAtlas() {
     query<HTMLElement>(climateReader()?'[data-eu-climate-reader]':'[data-eu-subject-reader]').append(details);
     // Named source readings stay immediately available; the overview's methods
     // are secondary to the key statement and genuine comparison entries.
-    details.open=!!feature;
+    details.open=!!feature||layer.field==='industry'||layer.field==='population';
     const country=countries.find(c=>c.code===state.place);
     query<HTMLElement>('[data-eu-country-reader]').hidden=!country||layer.field==='nature';
     query('[data-eu-country-title]').textContent=country?country.name+'の国全体の数値':'';
@@ -198,7 +198,8 @@ export function initEuropeAtlas() {
     query<SVGGElement>('[data-eu-farming-shapes]').style.display=farm.active?'':'none';
     query<HTMLElement>('[data-eu-farming-legend]').hidden=!farm.active;
     query<HTMLElement>('[data-eu-farming-list]').hidden=layer.field!=='agriculture';
-    query<HTMLElement>('[data-eu-farming-toggles]').hidden=layer.field!=='agriculture';
+    all<HTMLElement>('[data-eu-farming-children]').forEach(section=>{section.hidden=layer.id==='forest'?section.dataset.euFarmingChildren!=='forest':section.dataset.euFarmingChildren==='forest';});
+    query<HTMLElement>('[data-eu-farming-toggles]').hidden=layer.field!=='agriculture'||layer.id==='forest';
     all<HTMLButtonElement>('[data-eu-toggle]').forEach(button=>{
       const enabled=button.dataset.euToggle==='crop'?state.showCrops!==false:state.showLivestock!==false;
       button.setAttribute('aria-pressed',String(enabled));
@@ -210,7 +211,12 @@ export function initEuropeAtlas() {
     const places=visibleFeatures().filter(p=>featureVisible(p.id));
     query<HTMLElement>('[data-eu-feature-list]').hidden=!places.length;
     const choices=query('[data-eu-feature-options]');choices.replaceChildren();
-    for(const place of places){const button=document.createElement('button');button.type='button';button.textContent=place.name;button.dataset.euFeatureSelect=place.id;button.setAttribute('aria-pressed',String(state.feature===place.id));button.addEventListener('click',()=>selectFeature(place.id));choices.append(button);}
+    if(layer.field==='population'){
+      const select=document.createElement('select');select.setAttribute('aria-label','人口地図の都市を選ぶ');select.dataset.euFeatureChoice='';
+      const prompt=document.createElement('option');prompt.value='';prompt.textContent='都市を選ぶ';select.append(prompt);
+      for(const place of places){const option=document.createElement('option');option.value=place.id;option.textContent=place.name;select.append(option);}
+      select.value=state.feature??'';select.addEventListener('change',()=>{if(select.value)selectFeature(select.value);});choices.append(select);
+    } else for(const place of places){const button=document.createElement('button');button.type='button';button.textContent=place.name;button.dataset.euFeatureSelect=place.id;button.setAttribute('aria-pressed',String(state.feature===place.id));button.addEventListener('click',()=>selectFeature(place.id));choices.append(button);}
     query<HTMLElement>('[data-eu-subject-legend]').hidden=!custom;
     query('[data-eu-legend-title]').textContent=layer.title+' · '+layer.period+' · '+layer.unit;
     const key=query('[data-eu-legend-items]');key.replaceChildren();
@@ -289,8 +295,13 @@ export function initEuropeAtlas() {
     query<HTMLElement>('.eu-workspace').dataset.field=currentField.id==='nature'?'natural':currentField.id;
     all<HTMLElement>('[data-eu-topic-field]').forEach(group=>{group.hidden=group.dataset.euTopicField!==currentField.id;});
     const topic=subject().id;
-    const selectedTopic=currentField.id==='agriculture'?(topic==='forest'?'forest':'crops'):currentField.id==='industry'?'hubs':currentField.id==='population'?'density':topic;
-    all<HTMLElement>('[data-eu-topic]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.euTopic===selectedTopic)));
+    const selectedTopic=currentField.id==='agriculture'?(topic==='forest'?'forest':'crops'):currentField.id==='population'?'density':topic;
+    const selectedIndustry=topic==='hubs'?config.readings.find(reading=>reading.id===state.feature&&reading.field==='industry'):undefined;
+    all<HTMLElement>('[data-eu-topic]').forEach(button=>{
+      const representative=config.readings.find(reading=>reading.id===button.dataset.euTopicFeature);
+      const active=representative?topic==='hubs'&&selectedIndustry?.group===representative.group:button.dataset.euTopic===selectedTopic&&!(topic==='hubs'&&selectedIndustry);
+      button.setAttribute('aria-pressed',String(active));
+    });
     all<HTMLSelectElement>('[data-eu-layer-choice]').forEach(select=>{select.value=select.dataset.euLayerChoice===currentField.id?topic:select.options[0].value;});
     document.title=`欧州の${currentField.label}｜Insight Journal`;
     const canonical=writeEuropeState(new URL(location.href),state);
@@ -303,6 +314,7 @@ export function initEuropeAtlas() {
     all<HTMLElement>('[data-city-card]').forEach(card => { card.hidden = !active.includes(card.dataset.cityCard!); card.style.order = String(active.indexOf(card.dataset.cityCard!)); });
     all<HTMLElement>('[data-city-reading]').forEach(card=>{card.hidden=card.dataset.cityReading!==state.city;});
     all<HTMLElement>('[data-eu-city-select]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.euCitySelect===state.city)));
+    query<HTMLSelectElement>('[data-eu-city-choice]').value=state.city;
     const city=cities.find(city=>city.id===state.city);
     query('#eu-city-heading').textContent=city?`${city.name}の気候と農畜産`:'気候の読み方：観測地点未選択';
     query<HTMLElement>('[data-eu-capital-missing]').hidden=!!city;
@@ -313,7 +325,8 @@ export function initEuropeAtlas() {
     if (map?.getLayer('selected')) map.setFilter('selected', ['==', ['get', 'code'], state.place]);
     all<HTMLAnchorElement>('[data-base-map]').forEach(a => { a.href = writeEuropeState(new URL(a.href), state).href; });
     all<HTMLAnchorElement>('[data-eu-field]').forEach(a => { a.href = writeEuropeState(new URL(a.href), { ...state, layer: a.dataset.euField! }).href;if(a.dataset.euField===currentField.initial)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current'); });
-    query<HTMLButtonElement>('[data-eu-render]').textContent = failed || state.render === 'static' ? '操作できる地図に戻す' : '簡易表示にする';
+    query<HTMLButtonElement>('[data-eu-render]').textContent = failed || state.render === 'static' ? '操作地図' : '簡易表示';
+    query<HTMLButtonElement>('[data-eu-render]').setAttribute('aria-label',failed||state.render==='static'?'操作できる地図に戻す':'簡易表示にする');
     layers();
     updateReader();
     updateComparison();
@@ -422,11 +435,20 @@ export function initEuropeAtlas() {
     mapSelection(unproject([point.x, point.y]));
   });
   all<HTMLElement>('[data-eu-layer]').forEach(b => b.addEventListener('click', () => setLayer(b.dataset.euLayer!)));
-  all<HTMLElement>('[data-eu-topic]').forEach(button=>button.addEventListener('click',()=>setLayer(button.dataset.euTopic!)));
+  all<HTMLElement>('[data-eu-topic]').forEach(button=>button.addEventListener('click',()=>{
+    if(button.dataset.euTopicFeature){
+      const representative=config.readings.find(reading=>reading.id===button.dataset.euTopicFeature)!;
+      state.layer='hubs';state.feature=representative.id;state.place=representative.country;
+      state.region=countries.find(country=>country.code===representative.country)?.region??'all';
+      delete state.single;commit(true);
+    }
+    else {if(subject().field==='industry')delete state.feature;setLayer(button.dataset.euTopic!);}
+  }));
   all<HTMLSelectElement>('[data-eu-layer-choice]').forEach(select=>select.addEventListener('change',()=>{
     if(config.layers.some(layer=>layer.id===select.value&&layer.field===select.dataset.euLayerChoice))setLayer(select.value);
   }));
   all<HTMLElement>('[data-eu-city-select]').forEach(button=>button.addEventListener('click',()=>selectCity(button.dataset.euCitySelect!)));
+  query<HTMLSelectElement>('[data-eu-city-choice]').addEventListener('change',event=>selectCity((event.target as HTMLSelectElement).value));
   all<HTMLElement>('[data-eu-toggle]').forEach(button=>button.addEventListener('click',()=>{
     if(button.dataset.euToggle==='crop')state.showCrops=state.showCrops===false;
     else state.showLivestock=state.showLivestock===false;

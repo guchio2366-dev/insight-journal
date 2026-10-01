@@ -233,4 +233,20 @@
 .asia-statistics [data-city-statistics]{max-width:640px;margin-inline:auto}
 .asia-statistics [data-city-statistics]>svg{max-width:440px}
 .asia-atlas .asia-map-method>summary{min-height:44px;font-size:13px;cursor:pointer;padding:10px 0}
+.asia-climate-choices{display:flex;flex-wrap:wrap;gap:4px}
+.asia-climate-choices button{display:inline-flex;align-items:center;gap:4px;min-height:32px;padding:4px;border:1px solid #c7ccbf;background:#fbfcf5;font-size:13px}
+.asia-climate-choices button i{display:inline-block;width:12px;height:10px;border:1px solid #738877}
+@media(min-width:960px){
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-map-legend:has([data-climate-legend]:not([hidden])){display:flex;flex-wrap:wrap;align-items:center;gap:0 4px;padding:2px 0}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-map-legend:has([data-climate-legend]:not([hidden])) :is(.asia-main-legend,.asia-main-legend>section,[data-climate-legend],.asia-climate-choices){display:contents}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-map-legend:has([data-climate-legend]:not([hidden])) .asia-main-legend :is(h4,.asia-comparison-key){display:none}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-map-legend:has([data-climate-legend]:not([hidden])) .asia-main-legend p{line-height:24px;margin-right:6px}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-climate-choices button{display:inline-flex;align-items:center;gap:4px;min-height:24px;padding:2px;border:1px solid transparent;border-radius:4px;background:transparent;color:#264c52;font-size:12px;line-height:18px;cursor:pointer}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-climate-choices button i{width:12px;height:10px;flex:none;border:1px solid #738877}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-climate-choices button[aria-pressed=true]{border-color:#315b61;background:#e1ece5;box-shadow:inset 0 -2px #315b61}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-climate-choices button:focus-visible{outline:3px solid #a74830;outline-offset:2px}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-map-items [data-settlement-legend]{border:0;padding:2px 0}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-map-items .asia-settlement-key{display:flex;flex-wrap:wrap;gap:2px 6px}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-map-items .asia-settlement-key button{min-height:24px;padding:2px 4px;font-size:13px;line-height:18px}
+}
 @media(min-width:1600px){.atlas-desktop-shell .asia-atlas[data-field] .asia-layout{grid-template-columns:minmax(0,1.8fr) minmax(280px,1fr);gap:16px}}

@@ -52,8 +52,12 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.match(doc.querySelector('[data-city-reading="london"] .eu-city-chart-meta').textContent,/イギリス.*首都ロンドン/);
       const cityList=doc.querySelector('.eu-map-panel [data-eu-city-list]');
       assert.equal(cityList.hidden,false);
-      assert.equal(cityList.querySelectorAll('[data-eu-city-select]').length,24);
-      assert.deepEqual([...cityList.querySelectorAll('[aria-pressed="true"]')].map(button=>button.dataset.euCitySelect),['london']);
+      assert.equal(cityList.querySelectorAll('[data-eu-city-choice] option').length,24);
+      assert.equal(cityList.querySelector('[data-eu-city-choice]').value,'london');
+      const key=doc.querySelector('.eu-read-panel [data-eu-climate-legend]');
+      assert.ok(key.open);
+      assert.equal(key.querySelectorAll('.eu-legend-grid>div').length,17);
+      assert.match(key.querySelector('summary').textContent,/1991–2020.*17/);
       const jump=doc.querySelector('[data-eu-climate-statistics-link]');
       assert.equal(doc.getElementById(jump.getAttribute('href').slice(1)),doc.querySelector('[data-eu-climate-statistics]'));
       assert.equal(doc.querySelector('[data-eu-compare]'),null);
@@ -66,24 +70,27 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.ok([...toggles.querySelectorAll('button')].every(button=>button.getAttribute('aria-pressed')==='true'&&!button.disabled));
       const list=doc.querySelector('.eu-map-panel [data-eu-farming-list]');
       assert.equal(list.hidden,false);
-      assert.deepEqual([...list.querySelectorAll('h3')].map(heading=>heading.textContent),['作物','畜産','林業']);
+      assert.deepEqual([...list.querySelectorAll('[data-eu-farming-children]:not([hidden]) h3')].map(heading=>heading.textContent),['作物','畜産']);
+      assert.equal(list.querySelector('[data-eu-farming-children="forest"]').hidden,true);
       assert.equal(list.querySelectorAll('[data-eu-layer][aria-pressed="true"]').length,0);
       assert.equal(doc.querySelector('[data-eu-overview]').hidden,true);
       assert.equal(doc.querySelector('[data-eu-single]').hidden,true);
       assert.equal(doc.querySelector('[data-eu-farming-statistics]').hidden,false);
     }
     if (field==='industry/') {
-      const chooser=doc.querySelector('.eu-map-panel .eu-topic-measures [data-eu-layer-choice="industry"]');
-      assert.ok(chooser);
-      assert.deepEqual([...chooser.options].map(option=>option.value),['hubs','manufacturing','industry','services']);
-      assert.equal(chooser.value,'hubs');
-      assert.equal(doc.querySelector('[data-eu-topic-field="industry"] button').textContent,'地域主要産業');
+      const topics=doc.querySelector('[data-eu-topic-field="industry"]');
+      assert.deepEqual([...topics.querySelectorAll('[data-eu-topic-feature]')].map(button=>button.textContent),['資源・素材代表地点','機械・輸送代表地点','技術・医薬代表地点','物流・サービス代表地点']);
+      assert.deepEqual([...topics.querySelectorAll('button:not([data-eu-topic-feature])')].map(button=>button.dataset.euTopic),['hubs','manufacturing','industry','services']);
+      assert.ok(doc.querySelector('.eu-reader-body').open);
+      assert.ok(doc.querySelector('.eu-read-panel [data-eu-subject-legend]').open);
     }
     if (field==='population/') {
       const chooser=doc.querySelector('[data-eu-layer-choice="population"]');
       assert.ok(chooser);
       assert.deepEqual([...chooser.options].map(option=>option.value),['density','urban','age','growth']);
       assert.equal(chooser.value,'density');
+      assert.ok(chooser.closest('[data-eu-topic-field="population"]'));
+      assert.ok(doc.querySelector('.eu-reader-body').open);
       const planned=[...doc.querySelectorAll('[data-eu-topic-field="population"] button:disabled')];
       assert.equal(planned.length,2);
       assert.deepEqual([...doc.querySelectorAll('[data-eu-topic-field="population"] button')].map(b=>b.textContent),['人口分布','人種・民族準備中','宗教準備中']);
