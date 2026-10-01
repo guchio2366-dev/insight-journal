@@ -13,6 +13,7 @@ export function initOceaniaAtlas(root: HTMLElement) {
   const regionNames: Record<string, string> = oceaniaRegions;
   let region = 'all';
   let country = '';
+  let scope: 'all' | 'theme' | 'country' = 'all';
 
   function fitSelection() {
     const selected = paths.filter(path => country ? path.dataset.mapCountry === country : path.dataset.mapRegion === region);
@@ -51,10 +52,17 @@ export function initOceaniaAtlas(root: HTMLElement) {
       ? `${regionNames[chosen.dataset.countryRegion!]}の区分で表示しています。選択した国・地域の陸地に合わせて拡大しました。`
       : '地図または一覧から国・地域を選択してください。小さな島は一覧から選ぶと拡大できます。';
     fitSelection();
+    for (const link of root.querySelectorAll<HTMLAnchorElement>('[data-oceania-learning-link]')) {
+      const url = new URL(link.href);
+      url.searchParams.set('place', country || 'all');
+      url.searchParams.set('scope', scope);
+      link.href = url.href;
+    }
     if (writeUrl) {
       const url = new URL(win.location.href);
       region === 'all' ? url.searchParams.delete('region') : url.searchParams.set('region', region);
       country ? url.searchParams.set('place', country) : url.searchParams.delete('place');
+      url.searchParams.set('scope', scope);
       win.history.pushState(null, '', url);
     }
   }
@@ -65,6 +73,10 @@ export function initOceaniaAtlas(root: HTMLElement) {
     const requestedCountry = params.get('place');
     const chosen = countryButtons.find(button => button.dataset.countryButton === requestedCountry);
     country = chosen?.dataset.countryButton ?? '';
+    const requestedScope = params.get('scope');
+    scope = requestedScope === 'all' || requestedScope === 'theme' || requestedScope === 'country'
+      ? requestedScope : country ? 'country' : 'all';
+    if (scope === 'country' && !country) scope = 'all';
     if (chosen && region !== 'all') region = chosen.dataset.countryRegion!;
     render();
   }
@@ -74,15 +86,17 @@ export function initOceaniaAtlas(root: HTMLElement) {
     listeners.push(() => element.removeEventListener('click', action));
   }
   for (const button of regionButtons) listen(button, () => {
-    if (region === button.dataset.regionButton && !country) return;
+    if (region === button.dataset.regionButton && !country && scope === 'all') return;
     region = button.dataset.regionButton!;
     country = '';
+    scope = 'all';
     render(true);
   });
   function select(code: string) {
     const chosen = countryButtons.find(button => button.dataset.countryButton === code);
     if (!chosen || country === code) return;
     country = code;
+    scope = 'country';
     if (region !== 'all') region = chosen.dataset.countryRegion!;
     render(true);
   }

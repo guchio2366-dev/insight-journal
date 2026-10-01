@@ -48,7 +48,7 @@
 .oceania-learning-scene .oceania-country{fill:transparent;stroke:#637d7b;stroke-width:.7;vector-effect:non-scaling-stroke;cursor:pointer}
 .oceania-learning-scene .oceania-country:hover,.oceania-learning-scene .oceania-country.is-selected{stroke:#133741;stroke-width:2.1}
 .oceania-learning-scene .oceania-island-locator{fill:none;stroke:#365966;stroke-width:1;vector-effect:non-scaling-stroke;cursor:pointer}
-.oceania-learning-scene text{fill:#24434d;stroke:#fbfaf4;stroke-width:2;paint-order:stroke;stroke-linejoin:round;font-family:var(--serif);pointer-events:none}
+.oceania-learning-scene text{fill:#24434d;stroke:#fbfaf4;stroke-width:2;vector-effect:non-scaling-stroke;paint-order:stroke;stroke-linejoin:round;font-family:var(--serif);pointer-events:none}
 .oceania-learning-legend{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px 10px;padding:8px 12px 10px;background:#fff;border-top:1px solid #d9e1df;font-size:14px;line-height:1.5}
 .oceania-learning-legend>span{display:flex;align-items:flex-start;gap:6px;min-width:0}
 .oceania-learning .oceania-legend-mark{display:inline-block;flex:none;width:13px;height:13px;margin-top:4px;background:var(--mark);border:1px solid #5c7170}

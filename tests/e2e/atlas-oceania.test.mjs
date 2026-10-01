@@ -53,3 +53,41 @@ test('無効なURL値と他地域の国を受け入れず、地図上からも�
   assert.ok(win.location.search.includes('place=KIR'));
   dispose(); win.happyDOM.abort();
 });
+
+test('基礎地図から4分野へ戻る入口は選択した国と表示範囲を引き継ぐ', () => {
+  for (const scope of ['all','theme','country']) {
+    const {win,root,dispose} = setup(`?place=NZL&scope=${scope}`);
+    try {
+      const link = root.querySelector('[data-oceania-learning-link]');
+      assert.ok(link,'公開HTMLに4分野への専用入口がある');
+      const destination = () => new URL(link.href);
+      assert.equal(destination().pathname,'/insight-journal/atlas/oceania/nature/');
+      assert.equal(destination().searchParams.get('place'),'NZL');
+      assert.equal(destination().searchParams.get('scope'),scope);
+      root.querySelector('[data-country-button="FJI"]').click();
+      assert.equal(destination().searchParams.get('place'),'FJI');
+      assert.equal(destination().searchParams.get('scope'),'country');
+      root.querySelector('[data-region-button="all"]').click();
+      assert.equal(destination().searchParams.get('place'),'all');
+      assert.equal(destination().searchParams.get('scope'),'all');
+      win.history.replaceState(null,'','?place=NZL&scope=theme');
+      win.dispatchEvent(new win.PopStateEvent('popstate'));
+      assert.equal(root.querySelector('[data-country-button="NZL"]').getAttribute('aria-pressed'),'true');
+      assert.equal(destination().searchParams.get('place'),'NZL');
+      assert.equal(destination().searchParams.get('scope'),'theme');
+    } finally {dispose(); win.happyDOM.abort();}
+  }
+  const {win,root,dispose} = setup('?place=USA&scope=country');
+  try {
+    const destination = new URL(root.querySelector('[data-oceania-learning-link]').href);
+    assert.equal(destination.searchParams.get('place'),'all');
+    assert.equal(destination.searchParams.get('scope'),'all');
+  } finally {dispose(); win.happyDOM.abort();}
+  const whole = setup('?place=all&scope=theme');
+  try {
+    whole.root.querySelector('[data-region-button="all"]').click();
+    const destination = new URL(whole.root.querySelector('[data-oceania-learning-link]').href);
+    assert.equal(destination.searchParams.get('place'),'all');
+    assert.equal(destination.searchParams.get('scope'),'all');
+  } finally {whole.dispose(); whole.win.happyDOM.abort();}
+});

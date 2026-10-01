@@ -1,6 +1,6 @@
 import {withBase} from '../lib/urls';
 import {getOceaniaComparisonReading} from '../data/atlas/oceania-comparison-reading';
-import {oceaniaFields,oceaniaCountries,oceaniaLayers,oceaniaThemes,oceaniaPopulationReading,createOceaniaState,getOceaniaTheme,getOceaniaLayer,renderOceaniaScene,renderOceaniaLegend,oceaniaCoverage,type OceaniaField,type OceaniaState,type OceaniaSource} from '../data/atlas/oceania-learning';
+import {oceaniaFields,oceaniaCountries,oceaniaLayers,oceaniaThemes,oceaniaPopulationReading,createOceaniaState,getOceaniaTheme,getOceaniaLayer,renderOceaniaScene,renderOceaniaLegend,oceaniaCoverage,oceaniaFocusName,type OceaniaField,type OceaniaState,type OceaniaSource} from '../data/atlas/oceania-learning';
 
 const htmlEscape=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 const ownKeys=['theme','layer','place','scope','view','compare'];
@@ -39,14 +39,14 @@ export function initOceaniaLearningAtlas(root:HTMLElement):void{
   root.querySelectorAll<HTMLButtonElement>('[data-scope]').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.scope===state.scope));b.disabled=b.dataset.scope==='country'&&state.place==='all';});
   one('normal-view').hidden=state.comparison;one('comparison-view').hidden=!state.comparison;
   for(const [prefix,item] of [['primary',layer],['original',layer],['comparison',compare]] as const){
-   text(prefix+'-title',(prefix==='original'?'元の分布：':'')+item.title+(state.scope==='country'?' · '+targetName()+(['KIR','PYF'].includes(state.place)?state.place==='KIR'?'／タラワ周辺':'／タヒチ周辺':''):''));
+   text(prefix+'-title',(prefix==='original'?'元の分布：':'')+item.title+(state.scope==='country'?' · '+targetName()+(oceaniaFocusName(state)?'／'+oceaniaFocusName(state):''):''));
    text(prefix+'-period',item.period);text(prefix+'-unit',item.unit+(item.resolution?' · '+item.resolution:''));one(prefix+'-legend').innerHTML=renderOceaniaLegend(item);
   }
   text('theme-title',theme.title);text('takeaway',theme.takeaway);text('explanation',theme.explanation);
   text('coverage',oceaniaCoverage(layer,state));text('comparison',compare.title+'と比べる →');text('return','← '+layer.title+'へ戻る：'+targetName()+(state.scope!=='country'&&state.place!=='all'?'／選択：'+oceaniaCountries.find(c=>c.code===state.place)?.name:''));text('comparison-explanation',comparisonText());
   const shorter=one(layer.legend.length<=compare.legend.length?'original-map':'comparison-map').closest('.oceania-learning-map-panel');shorter?.append(one('comparison-explanation'));
   const keys:Record<string,keyof typeof oceaniaPopulationReading.contexts>={AUS:'australia',NZL:'new-zealand',PNG:'papua-new-guinea',FJI:'fiji',KIR:'tarawa',PYF:'tahiti',WSM:'samoa'};
-  if(field==='population')text('explanation',(oceaniaPopulationReading.contexts[keys[state.place]??'overview'])+' '+theme.explanation);
+  if(field==='population'){const context=oceaniaPopulationReading.contexts[keys[state.place]??'overview'];text('explanation',[context,theme.explanation.replace(context,'').trim()].filter(Boolean).join(' '));}
   text('social-context',oceaniaPopulationReading.socialConnections.map(c=>c.title+'：'+c.text).join('\n\n'));
   sources([...layer.sources,...theme.sources,...(state.comparison?[...compare.sources,...getOceaniaComparisonReading(state).sources]:[]),...oceaniaPopulationReading.sources.filter(s=>s.id.startsWith('world-bank')||s.id.startsWith('abs')).map(s=>({title:s.title,url:s.url}))]);
   root.querySelectorAll<HTMLAnchorElement>('[data-field-link]').forEach(a=>{
