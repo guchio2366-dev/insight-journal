@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AtlasRegionNavigation from './AtlasRegionNavigation.astro';
 import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
+import NorthAmericaCountryFieldNavigation from './NorthAmericaCountryFieldNavigation.astro';
 import data from '../../data/atlas/canada/population.json';
 import geometry from '../../data/atlas/canada/population-geometry.json';
 import industry from '../../data/atlas/canada/industry.json';
@@ -22,32 +23,38 @@ const geo=data.cmas.map(r=>({...geometry.features.find(g=>g.id===r.id)!,name:r.n
 const statisticCell=(v:{value:number|null;symbol:string},density=false,area=false)=>v.value===null?'未公表':density?fmt(v.value,'density'):v.value.toLocaleString('ja-JP',{minimumFractionDigits:area?2:0,maximumFractionDigits:area?2:1});
 const sources={cma:'https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=9810000301',national:'https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=9810000101',boundary:'https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/files-fichiers/lcma000b21a_e.zip',definition:'https://www12.statcan.gc.ca/census-recensement/2021/ref/dict/az/Definition-eng.cfm?ID=geo009',urban:'https://www150.statcan.gc.ca/n1/daily-quotidien/220209/dq220209b-eng.htm',transport:'https://tc.canada.ca/en/corporate-services/transparency/corporate-management-reporting/transportation-canada-annual-reports/transportation-canada-2024/role-canada-s-transportation-network'};
 const natureTargets={climate:nature('?city=ottawa&compare=vancouver'),water:nature('?city=ottawa&view=water&water=Lake%20Ontario&only=1&frame=140,340,760,240'),landform:nature('?city=ottawa&view=landform')};
+import '../../styles/atlas-canada-country-parity.css';
 ---
 <BaseLayout title="カナダの人口｜都市圏の集中と交通・仕事・住まい" description="公式2021年都市圏境界で41 CMAの2016/2021年人口と2021年密度を比較し、南部の都市集中と交通・仕事・住まいの関係を読む。" compactAtlas>
  <AtlasWorkspaceFrame region="north-america" mapActions={false}>
   <article class="canada-nature canada-population" data-canada-population>
-   <p class="canada-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / カナダ</p>
+   <div class="atlas-explorer atlas-workspace canada-country-primary" data-field="population">
+   <div class="atlas-compact-heading"><nav aria-label="パンくず"><a href={withBase('/atlas/')}>地図から見る</a> / <a href={withBase('/atlas/north-america/')}>北米地図</a></nav><span>カナダ</span></div>
    <AtlasRegionNavigation group="americas" current="north-america" country="canada" />
-   <header><p class="eyebrow">Canada · Population</p><h1>都市圏に集まる、カナダの人口</h1><p class="canada-lead">人口は南部の都市圏に集中し、交通・仕事・住まいのつながりが、その集中と広がりを支えている。</p></header>
-   <nav class="canada-fields" aria-label="カナダの分野"><a href={withBase('/atlas/north-america/overview/?country=CAN')}>概説</a><a href={nature()}>自然環境</a><a href={withBase(`${path}agriculture/`)}>農畜林業</a><a href={withBase(`${path}industry/`)}>主要産業</a><a href={withBase(`${path}population/`)} aria-current="page">人口</a></nav>
-   <div class="canada-workspace population-workspace">
-    <section class="canada-map-column" aria-label="都市圏の地図と選択">
-     <div class="population-controls"><label>読む都市圏<select data-population-cma>{data.cmas.map(r=><option value={r.id} selected={r.id==='535'}>{r.name}</option>)}</select></label><label>比べる都市圏<select data-population-compare><option value="">比較なし</option>{data.cmas.map(r=><option value={r.id}>{r.name}</option>)}</select></label><label>地図の指標<select data-population-metric><option value="population">人口総数（円の面積）</option><option value="density">2021年人口密度（色）</option></select></label><label>人口総数の年<select data-population-year><option value="2021">2021年</option><option value="2016">2016年</option></select></label></div>
-     <svg class="canada-map population-map" data-population-map viewBox="140 340 760 240" role="group" aria-labelledby="canada-population-title canada-population-desc">
+   <h1 class="visually-hidden">都市圏に集まる、カナダの人口</h1>
+   <NorthAmericaCountryFieldNavigation country="canada" field="population" />
+   <nav class="country-topic-tabs" aria-label="人口の分野"><button aria-pressed="true">人口分布</button><button disabled>人種・民族<small>未整備</small></button><button disabled>宗教<small>未整備</small></button></nav>
+<div class="population-controls"><label>読む都市圏<select data-population-cma>{data.cmas.map(r=><option value={r.id} selected={r.id==='535'}>{r.name}</option>)}</select></label><label>比べる都市圏<select data-population-compare><option value="">比較なし</option>{data.cmas.map(r=><option value={r.id}>{r.name}</option>)}</select></label><label>地図の指標<select data-population-metric><option value="population">人口総数（円の面積）</option><option value="density">2021年人口密度（色）</option></select></label><label>人口総数の年<select data-population-year><option value="2021">2021年</option><option value="2016">2016年</option></select></label></div>
+   <div class="canada-workspace atlas-primary-grid population-workspace">
+    <section class="canada-map-column atlas-map-column" aria-label="都市圏の地図と選択">
+
+     <div class="atlas-map-frame canada-map-frame"><svg class="canada-map population-map" data-population-map viewBox="140 340 760 240" role="group" aria-labelledby="canada-population-title canada-population-desc">
       <title id="canada-population-title">カナダの41都市圏、2021年境界</title><desc id="canada-population-desc">南部を初期表示。円の面積は都市圏人口、輪郭は2021年CMA境界。自治体境界ではありません。都市圏を選ぶと隣の比較が更新されます。図にない場所の人口をゼロとする地図ではありません。</desc>
       {features.filter(f=>['CAN','USA'].includes(f.properties.code)).map(f=><path class:list={['canada-land',{'is-context':f.properties.code!=='CAN'}]} d={geometryPath(f.geometry)} fill-rule="evenodd" />)}
       {lakes.features.filter(f=>f.properties.name==='Lake Ontario').map(f=><g class="population-lake"><path class="canada-lake" d={geometryPath(f.geometry)} fill-rule="evenodd"><title>Ontario湖（オンタリオ湖）</title></path><text x="638" y="562">Ontario湖</text></g>)}
       {rivers.features.filter(f=>f.properties.name==='St. Lawrence').map(f=><path class="canada-river" d={geometryPath(f.geometry)}><title>セントローレンス川</title></path>)}
       {geo.map(g=><g data-population-map-cma={g.id} role="button" tabindex="0" aria-label={`${g.name}都市圏を選ぶ`} aria-pressed={g.id==='535'?'true':'false'} class:list={{'is-selected-cma':g.id==='535'}}><title>{g.name}都市圏、2021年 {fmt(g.population.value)}人{g.population.symbol?' '+g.population.symbol:''}</title><path data-population-boundary d={g.rings.map(r=>line(r)).join('')} fill-rule="evenodd" /><circle class="population-anchor" cx={g.point[0]} cy={g.point[1]} r="1.8"/><circle data-population-symbol cx={g.point[0]} cy={g.point[1]} r={g.population.value===null?0:Math.sqrt(g.population.value/max)*22} style={g.population.value===null?'display:none':undefined}/><text data-population-label x={g.point[0]+4} y={g.point[1]-7} style={['535','462','933'].includes(g.id)?undefined:'display:none'}>{g.id==='535'?'Toronto':g.id==='462'?'Montréal':g.id==='933'?'Vancouver':g.id==='505'?'Ottawa–Gatineau':g.name.split('（')[0]}</text></g>)}
       <text class="canada-ocean" x="160" y="525">太平洋</text><text class="canada-ocean" x="820" y="540">大西洋</text><text class="canada-ocean" x="450" y="60">北極海</text>
-     </svg>
+     </svg></div>
      <div class="population-legend" data-population-population-legend><svg viewBox="0 0 280 56" role="img" aria-label="人口総数の円、100万人と500万人。2016年と2021年で同じ尺度"><circle cx="25" cy="25" r={Math.sqrt(1000000/max)*22}/><circle cx="160" cy="25" r={Math.sqrt(5000000/max)*22}/><text x="45" y="31">100万人</text><text x="190" y="31">500万人</text></svg><span>円の面積が人口総数。両年は共通尺度。輪郭の広さは人口の多さではありません。</span></div>
      <ul class="population-density-legend" data-population-density-legend hidden aria-label="2021年人口密度の凡例">{['50未満','50–150未満','150–300未満','300–600未満','600以上'].map((label,i)=><li><i style={`background:${populationDensityColors[i]}`} aria-hidden="true"/>{label}</li>)}<li>人/km²・都市圏全体</li></ul>
      <div class="population-map-actions"><label>地図の範囲<select data-population-zoom><option value="south">南部・41都市圏</option><option value="country">カナダ全体</option><option value="selected">選択都市圏を拡大</option></select></label><button data-population-only aria-pressed="false">選択都市圏だけ表示</button><button data-population-reset>全41都市圏へ戻る</button></div>
      <p class="canada-caption" data-population-map-status aria-live="polite">境界は2021年固定 / 2021年人口を円の面積で表示 / 41都市圏 / 南部</p>
      <p class="canada-caption">CMA＝中心部と通勤などで結びつく複数の自治体をまとめた都市圏。丸の位置は境界から求めた表示用位置で、都心や居住地点ではありません。<a href={sources.definition}>定義</a></p>
     </section>
-    <aside class="canada-reading population-reading" aria-label="人口比較と集中の理由">
+    <aside class="canada-reading atlas-national population-reading" aria-label="人口比較と集中の理由">
+   <header class="canada-national-header"><p class="atlas-eyebrow">Canada · Population</p><h2>都市圏に集まる、カナダの人口</h2><p class="canada-lead">人口は南部の都市圏に集中し、交通・仕事・住まいのつながりが、その集中と広がりを支えている。</p></header>
+
      <h2>規模と密度を分けて読む</h2>
      <p class="population-comparison" data-population-comparison aria-live="polite">2021年 都市圏人口 — {initial.name}: {fmt(initial.population[2021].value)} 人</p>
      <p class="population-change" data-population-change>2016→2021年の変化: {initial.name} +{initial.changePercent.value.toFixed(1)}%。2021年境界での比較。</p>
@@ -57,6 +64,8 @@ const natureTargets={climate:nature('?city=ottawa&compare=vancouver'),water:natu
      <details class="population-more"><summary>都市の広がり・移動と、自然や農畜林業との関係</summary><p>2016–2019年に移住してきた人の9割超はCMAに居住しました。2016→2021年には中心部と郊外の両方で人口が増え、住宅供給・価格や通勤時間も居住場所に関わっています。人口が増えると交通・住宅・サービスの整備が必要になり、都市の拡大は農地などの利用へも影響します。これは当時の分析で、2026年現在の人口・移民動向を示す数値ではありません。</p><p><a href={sources.urban}>Statistics Canadaの2016→2021年分析</a> / <a href={sources.transport}>Transport Canada 2024年交通報告</a></p><p><button data-population-locate="505">Ottawa–Gatineauを拡大</button>は州をまたぐ1都市圏です。首都Ottawaの自治体だけの人口とは区別します。</p><p><a href={natureTargets.climate} data-population-nature-link={natureTargets.climate}>首都OttawaとVancouver：2地点の気温と雨の季節を比較</a>。観測所の気候と、都市圏全体の人口を同じ対象としません。<a href={natureTargets.landform} data-population-nature-link={natureTargets.landform}>地形：南部の低地・西部の山地の位置を確認</a>。</p><p><button data-population-locate="602">Winnipegの都市圏</button>と<button data-population-locate="705">Reginaの都市圏</button>を図で確かめ、<a href={withBase(`${path}agriculture/wheat/`)}>小麦の産地・輸送・需要</a>、<a href={withBase(`${path}agriculture/`)}>カノーラの生産と加工</a>へ。<a href={withBase(`${path}agriculture/beef/`)}>肉牛の草地・飼料・管理</a>、<a href={withBase(`${path}agriculture/forestry/`)}>森林と木材加工</a>も、自然条件と人の活動を分けて読みます。</p></details>
     </aside>
    </div>
+   </div>
+
    <details class="population-tables" id="canada-population-comparisons"><summary>41都市圏・全国と13州準州の数値、年・記号を確認</summary>
     <p>人口は人、密度は2021年の人/km²、陸地面積は2021年km²。2016年人口は原表の改定値を保持し、2021年境界で比較します。rは改定、空欄の記号は記号なし。未公表値は0で補いません。2016年人口を選んでも境界は2021年のままです。センサス人口と年次の人口推計は異なります。</p>
     <div class="canola-table-scroll"><table class="canola-stats population-stats"><caption>41 CMA・Statistics Canada 98-10-0003-01</caption><thead><tr><th>都市圏</th><th>2016年人口<br/>人</th><th>2021年人口<br/>人</th><th>2016→2021<br/>増減%</th><th>2021年密度<br/>人/km²</th><th>2021年陸地<br/>km²</th></tr></thead><tbody>{data.cmas.map(r=><tr data-population-row={r.id} class:list={{'is-selected-province':r.id==='535'}}><th>{r.name}{r.notes.includes(2)&&<small> ※</small>}<span class:list={['canola-bar-track',{'is-missing':r.population[2021].value===null}]} aria-label={`${r.name}: ${fmt(r.population[2021].value)}人`}><span data-population-bar style={`width:${(r.population[2021].value??0)/max*100}%`} /></span></th>{[2016,2021].map(y=><td data-population-cell={y} class:list={{'is-current-metric':y===2021}}>{fmt(r.population[y as 2016|2021].value)}{r.population[y as 2016|2021].symbol&&<small> {r.population[y as 2016|2021].symbol}</small>}</td>)}<td>{statisticCell(r.changePercent)}{r.changePercent.symbol&&<small> {r.changePercent.symbol}</small>}</td><td data-population-cell="density">{statisticCell(r.density2021,true)}{r.density2021.symbol&&<small> {r.density2021.symbol}</small>}</td><td>{statisticCell(r.landAreaKm2,false,true)}{r.landAreaKm2.symbol&&<small> {r.landAreaKm2.symbol}</small>}</td></tr>)}</tbody></table></div>

@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AtlasRegionNavigation from './AtlasRegionNavigation.astro';
 import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
+import NorthAmericaCountryFieldNavigation from './NorthAmericaCountryFieldNavigation.astro';
 import AtlasClimatePlot from './AtlasClimatePlot.astro';
 import climate from '../../data/atlas/canada/climate.json';
 import rivers from '../../data/atlas/canada/rivers.json';
@@ -30,25 +31,28 @@ const japaneseWater:Record<string,string>={'Mackenzie':'マッケンジー川','
 const waterNames=Object.keys(japaneseWater).filter(name=>[...rivers.features,...lakes.features].some(f=>f.properties.name===name));
 const fmt=(v:number|null)=>v===null?'未収録':v.toLocaleString('ja-JP',{minimumFractionDigits:1,maximumFractionDigits:1});
 const config={cities:climate.stations.map(s=>({id:s.id,name:s.name,point:project(s.coordinates)})),waters:waterNames,width,height,industry:{...industry,geometry:industryGeometry.features},population:{...population,geometryUrl:populationGeometryUrl,geometry:populationGeometry.features.map(({id,point,bounds,provinceCodes})=>({id,point,bounds,provinceCodes}))}};
+import '../../styles/atlas-canada-country-parity.css';
 ---
 <BaseLayout title="カナダの自然環境｜地形・気候・河川" description="首都オタワと沿岸・内陸・北部の気候を比べ、カナダの山地・平原・湖と河川のつながりを読む。" compactAtlas>
  <AtlasWorkspaceFrame region="north-america" mapActions={false}>
   <article class="canada-nature" data-canada-nature>
-   <p class="canada-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / カナダ</p>
+   <div class="atlas-explorer atlas-workspace canada-country-primary" data-field="natural">
+   <div class="atlas-compact-heading"><nav aria-label="パンくず"><a href={withBase('/atlas/')}>地図から見る</a> / <a href={withBase('/atlas/north-america/')}>北米地図</a></nav><span>カナダ</span></div>
    <AtlasRegionNavigation group="americas" current="north-america" country="canada" />
-   <header><p class="eyebrow">Canada · Natural environment</p><h1>カナダの自然環境</h1><p class="canada-lead">西岸の海と山地、内陸の平原、東部の楯状地、北部の島々。場所を確かめ、季節と水の違いを読む。</p></header>
-   <nav class="canada-fields" aria-label="カナダの分野"><a data-atlas-overview-link href={withBase('/atlas/north-america/overview/?country=CAN')}>概要</a><a href={withBase('/atlas/north-america/canada/nature/')} aria-current="page">自然環境</a><a href={withBase('/atlas/north-america/canada/agriculture/')}>農畜林業<small>カノーラ・小麦・肉牛・林業公開</small></a><a href={withBase('/atlas/north-america/canada/industry/')}>主要産業</a><a href={withBase('/atlas/north-america/canada/population/')}>人口</a></nav>
+   <h1 class="visually-hidden">カナダの自然環境</h1>
+   <NorthAmericaCountryFieldNavigation country="canada" field="nature" />
    <p><a href={withBase('/atlas/north-america/canada/agriculture/forestry/')} data-canada-forestry-return hidden>林業の森林図・州比較へ戻る</a></p>
    <p><a href={withBase('/atlas/north-america/canada/industry/')} data-canada-industry-return hidden>主要産業の州別構成・比較へ戻る</a></p>
    <p><a href={withBase('/atlas/north-america/canada/population/')} data-canada-population-return hidden>人口の都市圏分布・比較へ戻る</a></p>
    <p><a href={withBase('/atlas/north-america/canada/agriculture/')} data-canada-crop-return hidden>農畜産の分布・比較へ戻る</a></p>
-   <nav class="canada-views" aria-label="自然環境の表示"><button data-canada-view="climate" aria-pressed="true">都市の気候</button><button data-canada-view="landform" aria-pressed="false">地形地域</button><button data-canada-view="water" aria-pressed="false">湖と河川</button></nav>
-   <div class="canada-workspace">
-    <section class="canada-map-column" aria-label="カナダの地図">
+   <nav class="canada-views country-topic-tabs" aria-label="自然環境の表示"><button data-canada-view="climate" aria-pressed="true">気候区分<small>区分図は未整備・都市気候を表示</small></button><button data-canada-view="water" aria-pressed="false">水資源</button><button data-canada-view="landform" aria-pressed="false">地形</button><button disabled>標高<small>未整備</small></button></nav>
+   <nav class="country-water-topics" aria-label="水資源の内訳"><span>河川・地下水<small>河川を収録・地下水は未整備</small></span><button disabled>降水量<small>分布図は未整備</small></button><button disabled>河川の流域<small>未整備</small></button></nav>
+   <div class="canada-workspace atlas-primary-grid">
+    <section class="canada-map-column atlas-map-column" aria-label="カナダの地図">
      <figure class="canada-crop-source" data-canada-crop-source hidden><h2 data-canada-crop-map-title></h2><a data-canada-crop-image-link href={withBase('/atlas/north-america/canada/agriculture/')}><img data-canada-crop-image width="1133" height="814" alt="" /></a><figcaption data-canada-crop-map-key></figcaption><p class="canada-caption">原図をクリックすると凡例まで原寸で読めます。自然地図とは投影が異なるため、位置を重ねず並べて照合します。</p></figure>
      <section data-canada-locator>
-      <div class="canada-map-title"><h2>観測地点と水の位置</h2><button type="button" data-country-button="CAN" data-canada-reset>カナダ全体</button></div>
-      <svg class="canada-map" data-canada-map viewBox={fullFrame} role="group" aria-labelledby="canada-map-title canada-map-desc">
+      <div class="canada-map-title"><h2>観測地点と水の位置</h2></div>
+      <div class="atlas-map-frame canada-map-frame"><svg class="canada-map" data-canada-map viewBox={fullFrame} role="group" aria-labelledby="canada-map-title canada-map-desc">
        <title id="canada-map-title">カナダの観測地点、湖、河川</title><desc id="canada-map-desc">首都オタワと比較4地点を表示。都市は地図下の一覧からも選べます。湖と河川の表示では実際の概略形状を示します。</desc>
        <defs><clipPath id="canada-map-clip"><rect width={width} height={height}/></clipPath></defs>
        <g clip-path="url(#canada-map-clip)">
@@ -67,10 +71,11 @@ const config={cities:climate.stations.map(s=>({id:s.id,name:s.name,point:project
         <text class="canada-ocean" x="80" y="420">太平洋</text><text class="canada-ocean" x="750" y="515">大西洋</text><text class="canada-ocean" x="400" y="38">北極海</text><text class="canada-ocean" x="550" y="265">ハドソン湾</text>
        </g>
       </svg>
+       <div class="canada-map-actions canada-nature-map-tools"><button type="button" data-country-button="CAN" data-canada-reset aria-label="カナダ全体を表示">全体</button><button data-canada-zoom="in" aria-label="地図を拡大">＋</button><button data-canada-zoom="out" aria-label="地図を縮小">−</button><button data-canada-focus aria-label="選んだ都市の位置へ">都市へ</button></div>
+      </div>
       <p class="canada-caption" data-canada-forest-context-legend hidden><i style={`display:inline-block;width:18px;height:12px;background:rgb(${forestry.classes[0].color.join(',')})`} aria-hidden="true"/> 温帯・亜寒帯の針葉樹林（NRCan、2020年、元データ30m）。位置図と同じ範囲に重ねています。気候は点の位置の1991–2020年平年値です。<a href={withBase('/atlas/north-america/canada/agriculture/forestry/#canada-forestry-sources')}>森林分類・利用条件</a></p>
       <p class="canada-caption" data-canada-industry-context-legend hidden></p>
       <p class="canada-caption" data-canada-population-context-legend hidden></p>
-      <div class="canada-map-actions"><button data-canada-zoom="in" aria-label="地図を拡大">＋</button><button data-canada-zoom="out" aria-label="地図を縮小">−</button><button data-canada-focus>選んだ都市の位置へ</button></div>
       <p class="canada-caption" data-canada-position-caption>点は観測地点の位置、灰色は周辺の陸地。位置図は等距円筒図法で、面積比較には使いません。都市を選んでも表示範囲を勝手に変えません。</p>
      </section>
      <figure class="canada-physical-map" data-canada-physical hidden>
@@ -79,7 +84,9 @@ const config={cities:climate.stations.map(s=>({id:s.id,name:s.name,point:project
      <div class="canada-city-list" aria-label="観測地点を選ぶ">{climate.stations.map(s=><button data-canada-city-button={s.id} aria-pressed={s.id==='ottawa'?'true':'false'}>{s.name}{s.id==='ottawa'?'（首都）':''}</button>)}</div>
      <div class="canada-water-controls" data-canada-water-controls hidden><label>水系・湖<select data-canada-water><option value="">全体を読む</option>{waterNames.map(name=><option value={name}>{japaneseWater[name]}</option>)}</select></label><label><input type="checkbox" data-canada-only /> <span data-canada-only-label>選んだ川・湖だけを表示</span></label><button data-canada-all-water>すべての水系へ戻す</button><p>川と湖はNatural Earth v5.1.2の1:50m概略形状。国境をまたぐ水系を含みます。国土は残り、製造業の五大湖比較では水域を読みやすくするため観測点を隠します。</p></div>
     </section>
-    <aside class="canada-reading" aria-label="地図と一緒に読む">
+    <aside class="canada-reading atlas-national" aria-label="地図と一緒に読む"><p data-population-geometry-status hidden></p>
+   <header class="canada-national-header"><p class="atlas-eyebrow">Canada · Natural environment</p><h2>カナダの自然環境</h2><p class="canada-lead">西岸の海と山地、内陸の平原、東部の楯状地、北部の島々。場所を確かめ、季節と水の違いを読む。</p></header>
+
      <section class="canada-comparison-context" data-canada-crop-context hidden><h2 data-canada-crop-context-title></h2><p data-canada-crop-context-text></p><p class="canada-caption" data-canada-crop-scope></p><div data-canada-crop-mini hidden></div><details><summary>元の図・比較年・利用条件</summary><p data-canada-crop-origin></p><p>図は2021年農業センサス、州比較は元ページで選んだ年次統計です。面積や頭数の量を示す点は農場の所在地ではありません。<a href="https://www.statcan.gc.ca/en/terms-conditions/open-licence">Statistics Canada Open Licence</a>。Adapted from Statistics Canada, 2021 Census of Agriculture, Thematic maps (Canola area / Total wheat area / Beef cows / Pasture / Total hay), accessed September 30, 2026. This does not constitute an endorsement by Statistics Canada of this product. 各図の原典・定義は元の農畜産ページに保持しています。</p></details></section>
      <section class="canada-comparison-context" data-canada-forest-context hidden><h2>森林と沿岸気候を比べる</h2><p data-canada-forest-context-text></p><p class="canada-caption">Vancouverは沿岸1地点。BC全域平均ではありません。</p><details><summary>比較の年・範囲</summary><p class="canada-caption">Vancouverは沿岸1地点。BC全域平均ではありません。森林2020年／気候1991–2020年。</p></details></section>
      <section class="canada-comparison-context" data-canada-industry-context hidden><h2 data-canada-industry-context-heading></h2><p data-canada-industry-context-text></p><svg class="canada-map" data-canada-industry-context-mini-map viewBox="0 0 900 580" role="img" aria-label="元の州内GDP割合分布：別投影の地形図と左右で照合" style="display:none"></svg><p class="canada-caption" data-canada-industry-context-mini-legend hidden></p><details><summary>比較の年・分母と出典</summary><p>州内GDP割合は基本価格・当年価格。境界2021年、気候1991–2020年、水系Natural Earth概形。地図の位置だけから産業の原因や輸送経路を確定しません。<a href={withBase('/atlas/north-america/canada/industry/#canada-industry-sources')}>公式構成比・境界・交通の根拠</a></p></details></section>
@@ -104,6 +111,8 @@ const config={cities:climate.stations.map(s=>({id:s.id,name:s.name,point:project
      <section data-canada-reading="water" hidden><details class="canada-general-reading" data-canada-general-reading open><summary>全国の湖・河川と原典を読む</summary><h2>湖と川を、海までつなげて読む</h2>{waterReading.map(r=><section class="canada-reading-section"><h3>{r.title}</h3><p>{r.body}</p></section>)}<p><a href="https://www.naturalearthdata.com/downloads/50m-physical-vectors/">河川・湖の原典</a>。概略図のため小河川は省略されます。線の幅・湖の色は流量・水深・水質ではありません。</p></details></section>
     </aside>
    </div>
+   </div>
+
    <footer class="canada-source-footer" id="canada-nature-sources"><h2>出典・対象期間・読み方</h2><ul><li>気候：Environment and Climate Change Canada、1991–2020年平年値。公式表の数値を抽出し、未収録値を補間しません。取得日2026年9月30日。<a href="https://climate.weather.gc.ca/climate_normals/index_e.html">計算方法と観測所一覧</a> ／ <a href="https://www.canada.ca/en/transparency/terms.html">政府サイト利用条件</a>。公式グラフの転載ではなく数値から作図しています。</li><li>地形地域図：Natural Resources Canada、Atlas第6版の2009年保存版。地形分類の基礎資料は1967年。<a href={geographySource}>データカタログ</a> ／ <a href="https://open.canada.ca/en/open-government-licence-canada">Open Government Licence – Canada</a>。原図を縮小し、分類・配置を変更していません。提供機関による本サイトの承認を意味しません。</li><li>境界・河川・湖：Natural Earth v5.1.2、public domain。既存国境データは1:110m、河川・湖は1:50m。国土の周辺を含む表示範囲で抽出。詳細な境界・現在の実効支配・流域境界を示すものではありません。</li><li>本文の気候説明：<a href={mechanismSource}>Canada's Changing Climate Report（2019年）、第4章</a>と、各観測地点の平年値。地域の仕組みと一点の観測値を区別します。</li></ul><p><a href={withBase('/assets/atlas/canada-nature-v1/manifest.json')}>加工方法・固定版・ファイルハッシュの台帳</a></p></footer>
    <noscript><p>地図、首都オタワの雨温図、数値・本文・出典を読めます。地点・表示・比較の切替にはJavaScriptが必要です。</p></noscript>
    <p class="visually-hidden" data-canada-announcement aria-live="polite"></p>

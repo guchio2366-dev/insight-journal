@@ -1,0 +1,153 @@
+/* Match the approved U.S. workspace while retaining Mexico's official geometry. */
+.atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field]{display:contents;color:#21343d}
+.mexico-workspace .mexico-learning-workspace{min-width:0;padding:8px 0 0;background:transparent;border:0;border-radius:0}
+.mexico-workspace .mexico-learning-workspace{position:relative}
+.atlas-desktop-shell .mexico-workspace.mexico-industry .country-industry-navigation{display:block;min-width:0;margin:0;padding:5px 8px 0;border:1px solid #c7ccbf;border-bottom:0;background:#fbfaf3}
+.atlas-desktop-shell .mexico-workspace .country-industry-navigation .industry-tab-row{display:flex;gap:4px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;padding-bottom:3px}
+.atlas-desktop-shell .mexico-workspace .country-industry-navigation .industry-tab-row button{flex:none;min-height:44px;padding:8px 15px;border:1px solid transparent;border-radius:4px;background:transparent;color:#344951;font:700 13px/1.3 var(--sans);cursor:pointer;white-space:nowrap}
+.atlas-desktop-shell .mexico-workspace .country-industry-navigation .industry-tab-row button:is([aria-selected=true],[aria-pressed=true]){background:#35515d;color:white}
+.atlas-desktop-shell .mexico-workspace .country-industry-navigation .industry-tab-row button:hover{border-color:#829c94}
+.atlas-desktop-shell .mexico-workspace .country-industry-navigation .industry-tab-row button:focus-visible{outline:3px solid #a94d32;outline-offset:2px}
+.atlas-desktop-shell .mexico-workspace.mexico-industry .country-industry-map-controls{position:absolute;z-index:5;top:7px;left:8px;display:flex;flex-wrap:wrap;align-items:center;gap:3px;max-width:calc(100% - 16px);margin:0;padding:3px;border:1px solid #9eaca3;border-radius:6px;background:#fffef5ed;box-shadow:0 1px 4px #243b4820}
+.mexico-workspace .mexico-learning-workspace>.mexico-controls{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:0;padding:6px;border:1px solid #c7ccbf;border-bottom:0;border-radius:0;background:#fbfaf3}
+.mexico-workspace.mexico-agriculture .mexico-topic-controls{position:absolute;z-index:5;transform:translate(8px,7px);width:fit-content;padding:3px;border:1px solid #9eaca3;border-radius:6px;background:#fffef5ed;box-shadow:0 1px 4px #243b4820}
+.mexico-workspace.mexico-agriculture .mexico-agriculture-topic-tabs{display:flex}
+.mexico-workspace.mexico-agriculture .mexico-agriculture-topic-tabs a{min-height:36px;padding:0 9px;border:0;border-radius:4px;font-size:12px;font-weight:750}
+.atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-controls{top:58px}
+.mexico-workspace .mexico-navigation{margin:0 0 10px}
+.mexico-workspace .mexico-navigation .regional-navigation{display:block;margin:0}
+.atlas-explorer.mexico-workspace .mexico-navigation .regional-navigation .regional-tabs,.atlas-explorer.mexico-workspace .mexico-navigation .regional-navigation .regional-countries{gap:6px}
+.atlas-explorer.mexico-workspace .mexico-navigation .regional-navigation .regional-countries{margin:7px 0 0}
+.atlas-explorer.mexico-workspace .mexico-navigation .regional-navigation a{min-height:44px;padding:8px 15px;font-size:14px}
+.atlas-explorer.mexico-workspace .mexico-navigation .regional-navigation .regional-countries a{min-height:40px;padding:6px 13px;font-size:13px}
+.mexico-workspace .atlas-tabs.atlas-tabs-with-overview{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;margin:0;padding:0;min-height:42px;border:1px solid #c7ccbf;border-bottom:0;background:#f1f0e7}
+.mexico-workspace .atlas-tabs>a{min-height:42px;padding:9px 5px;border:0;border-right:1px solid #d8d9ce;border-radius:0;font-size:14px;line-height:1.2;font-weight:700;color:inherit}
+.mexico-workspace .atlas-tabs>a:last-child{border-right:0}
+.mexico-workspace .atlas-tabs>a[aria-current]{color:#fff;background:#243b48}
+.mexico-workspace .atlas-tabs>a:hover{color:#182536;background:#dce5da}
+.mexico-workspace .atlas-primary-grid.mexico-primary-grid{gap:16px;grid-template-columns:minmax(0,1fr)}
+.mexico-workspace .atlas-national.mexico-reading{padding:15px 16px 13px;border:1px solid #c7ccbf;border-radius:0;background:#fbfaf3;color:#31444b;max-height:none;overflow:visible}
+.mexico-workspace .mexico-header{margin:0;padding-bottom:11px;border-bottom:1px solid #d4d8cc}
+.mexico-workspace .mexico-header h1{margin:0;font-family:var(--serif);font-size:23px;line-height:1.3}
+.mexico-workspace .mexico-header .mexico-lead{margin:7px 0 0!important;font-size:12px!important;line-height:1.65!important}
+.mexico-workspace .mexico-reading-content{padding-top:11px}
+.mexico-workspace .mexico-overview-button{min-height:44px;margin:0 0 8px;padding:6px 10px;border:1px solid #bcc9ba;border-radius:4px;background:#edf1e6;color:#294c4d;font:700 12px var(--sans)}
+.mexico-workspace[data-mexico-reading-selected=false]:not(.is-comparison) :is(.mexico-agriculture-selection,.population-state-summary,.mi-selected){display:none}
+.mexico-workspace[data-mexico-field=agriculture][data-mexico-reading-selected=false] [data-agriculture-selected-label]{display:none}
+.mexico-workspace[data-mexico-field=agriculture][data-mexico-reading-selected=false] .mexico-agriculture-map .mexico-state{stroke:#fffefa;stroke-width:.8}
+.mexico-workspace[data-mexico-field=agriculture][data-mexico-reading-selected=false] .mexico-agriculture-map .mexico-agriculture-symbol{fill-opacity:.67;stroke:#785219;stroke-width:.8}
+.mexico-workspace[data-mexico-field=agriculture][data-mexico-reading-selected=false] .mexico-agriculture-stat-summary>p:not(:first-child){display:none}
+.mexico-workspace .mexico-agriculture-country-overview{padding-top:12px}
+.mexico-workspace .mexico-agriculture-country-overview h2{font-size:18px}
+.mexico-workspace .mexico-agriculture-country-overview dl{margin:12px 0}
+.mexico-workspace .mexico-agriculture-country-overview dl>div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #d4d8cc;padding:9px 0;font-size:13px;line-height:1.5}
+.mexico-workspace .mexico-agriculture-country-overview dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+.mexico-workspace .mexico-reading h2{margin:0 0 8px;font-family:var(--serif);font-size:23px;line-height:1.3}
+.mexico-workspace .mexico-reading h3{margin:11px 0 4px;font-family:var(--serif);font-size:18px}
+.mexico-workspace .mexico-reading p{font-size:13px;line-height:1.8}
+.mexico-workspace.is-comparison .mexico-header{display:none}
+.mexico-workspace .mexico-map-frame{position:relative;width:100%;aspect-ratio:1.65;min-height:190px;max-height:640px;border:1px solid #abbfc2;border-radius:0;background:#eaf1ee;overflow:hidden}
+.atlas-desktop-shell .mexico-workspace .mexico-map-frame svg:is(.mexico-map,[data-mexico-map]),
+.atlas-desktop-shell .mexico-workspace .mexico-map-frame .population-fallback-image{display:block;width:100%;height:100%;max-height:none;min-height:0;border:0;border-radius:0;object-fit:contain}
+.mexico-workspace .mexico-map-frame>.mexico-controls,.mexico-workspace .mi-map-panel>.mi-controls{position:absolute;z-index:5;top:7px;left:8px;max-width:calc(100% - 16px);margin:0;padding:3px;border:1px solid #9eaca3;border-radius:6px;background:#fffef5ed;box-shadow:0 1px 4px #243b4820;gap:3px}
+.mexico-workspace .mexico-controls label{display:flex;align-items:center;gap:4px;min-height:36px;padding:0 5px;border-radius:4px;font-size:12px;line-height:1.4;font-weight:750;color:#253c45}
+.mexico-workspace .mexico-controls button,.mexico-workspace .mexico-controls select{min-height:32px;padding:4px 6px;font-size:12px;border-color:#b2beb7;background:#fffef5ed;color:#233f4a}
+.mexico-workspace .mexico-controls input{width:17px;height:17px;margin:0;accent-color:#345e50}
+.mexico-workspace .mexico-controls .mexico-nature-state-control{justify-content:flex-start;flex:none}
+.mexico-workspace .mexico-controls select{max-width:170px;min-width:0}
+.mexico-workspace .population-controls{display:flex;flex-wrap:wrap;grid-template-columns:none}
+.mexico-workspace .population-map-figure,.mexico-workspace .population-map-fallback{height:100%;margin:0}
+.mexico-workspace .mexico-map-frame [data-agriculture-map-fallback]{height:100%;border:0;border-radius:0}
+.mexico-workspace .mexico-map-frame [data-agriculture-map-fallback]>.mexico-table-scroll{height:calc(100% - 40px)}
+.mexico-workspace .population-map-fallback figcaption{position:absolute;bottom:0;left:0;right:0;margin:0;padding:5px 8px;background:#fbfaf2eb;font-size:11px;line-height:1.5;text-align:center}
+.mexico-workspace .mi-map-panel{position:relative}
+.mexico-workspace .mi-map-panel:has([data-mi-comparison-heading]:not([hidden]))>.mi-controls{position:relative;top:auto;left:auto;width:fit-content;margin-bottom:7px}
+.atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field] .mi-map-grid .mi-map-figure{display:block;grid-template-columns:none;width:100%;max-width:none}
+.mexico-workspace .mi-map-figure .mi-map-heading{margin:0;padding:6px 8px;font-size:13px;line-height:1.5;border-inline:1px solid #c8cfc4;background:#f7f5ec}
+.mexico-workspace .mi-map-heading span{display:inline;margin-left:8px;font-size:11px}
+.mexico-workspace .mi-map-figure .mi-legend-unit{position:static;width:auto;height:auto;padding:0;margin:5px 0 3px!important;overflow:visible;clip-path:none;white-space:normal;border:0}
+.mexico-workspace .mi-map-figure [data-mi-export-legend],.mexico-workspace .mi-map-figure [data-mi-population-legend]{padding:5px 8px;border:1px solid #c8cfc4;border-top:0;background:#f7f5ec}
+.mexico-workspace .mi-map-figure .mi-legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;line-height:1.4}
+.atlas-desktop-shell .mexico-workspace.mexico-industry .mi-map-figure .mi-legend{display:flex;flex-wrap:wrap;gap:4px 12px;margin:0;padding:0;list-style:none;font-size:12px;line-height:1.4}
+.atlas-desktop-shell .mexico-workspace.mexico-industry .mi-map-figure .mi-legend li{display:inline-flex;align-items:center;gap:4px;min-height:18px;white-space:nowrap}
+.atlas-desktop-shell .mexico-workspace.mexico-industry .mi-map-figure .mi-legend-unit{position:static;width:auto;height:auto;padding:0;margin:3px 0 4px!important;overflow:visible;clip-path:none;white-space:normal;border:0}
+.mexico-workspace .mexico-agriculture-map-heading,.mexico-workspace .mexico-nature-map-title,.mexico-workspace [data-population-map-heading]{margin:0;padding:6px 8px;border:1px solid #c8cfc4;border-top:0;background:#f7f5ec}
+.mexico-workspace .mexico-agriculture-map-heading h2,.mexico-workspace .mexico-nature-map-title h2,.mexico-workspace [data-population-map-heading]{font-size:13px;line-height:1.5}
+.mexico-workspace .mexico-agriculture-period,.mexico-workspace .mexico-nature-map-title span{font-size:11px}
+.mexico-workspace .mexico-map-column>.mexico-caption,.mexico-workspace .mexico-map-column figcaption{font-size:11px!important;line-height:1.5!important}
+.mexico-workspace .mexico-agriculture-figure figcaption{margin:0;padding:5px 8px;min-height:0;border-inline:1px solid #c8cfc4;background:#f7f5ec}
+.mexico-workspace .mexico-agriculture-key,.mexico-workspace .population-density-key,.mexico-workspace .population-symbol-key,.mexico-workspace .mexico-nature-primary>.mexico-legend{margin:0;padding:5px 8px;border:1px solid #c8cfc4;border-top:0;background:#f7f5ec}
+.mexico-workspace .mexico-agriculture-symbol-key svg{max-width:none}
+.mexico-workspace .mexico-nature-primary>.mexico-legend{display:flex;flex-wrap:wrap;gap:5px 14px;font-size:12px;line-height:1.4}
+.mexico-workspace .mexico-nature-primary>.mexico-caption{margin:0;padding:5px 8px;border:1px solid #c8cfc4;border-top:0;background:#f7f5ec;font-size:11px!important;line-height:1.5!important}
+.mexico-workspace .mexico-items.atlas-key{margin:0;justify-content:center;gap:4px 16px;padding:6px;border:1px solid #c8cfc4;border-top:0;border-radius:0;background:#f7f5ec;font-size:12px;line-height:1.4}
+.mexico-workspace .mexico-items a{min-height:32px;font-size:12px;text-decoration:none}
+.mexico-workspace .mexico-items a[aria-current]{font-weight:800;text-decoration:underline;text-underline-offset:3px;background:transparent;color:inherit}
+.mexico-workspace .mexico-agriculture-tabs{justify-content:center;gap:4px 16px}
+.mexico-workspace .mexico-agriculture-tabs a{border:0;border-radius:0;padding:0;background:transparent;color:inherit;font-size:12px}
+.mexico-workspace .mexico-agriculture-tabs small{font-size:10px}
+.mexico-workspace .mexico-nature-view-controls{grid-template-columns:minmax(0,1fr)}
+.mexico-workspace .mexico-nature-tabs{grid-template-columns:repeat(4,minmax(0,1fr))}
+.mexico-workspace .mexico-nature-tabs button{min-height:44px;border:0;border-right:1px solid #d3d6cd;border-radius:0;padding:7px 4px;background:transparent;color:#344951;font-size:13px;font-weight:750}
+.mexico-workspace .mexico-nature-tabs button[aria-pressed=true]{background:#35515d;color:#fff}
+.mexico-workspace .mexico-topic-controls{grid-template-columns:minmax(0,1fr)}
+.mexico-workspace .mexico-topic-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}
+.mexico-workspace .mexico-agriculture-topic-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}
+.mexico-workspace .mexico-topic-tabs a,.mexico-workspace .mexico-topic-tabs button{display:flex;justify-content:center;align-items:center;gap:6px;min-height:44px;padding:7px 4px;border:0;border-right:1px solid #d3d6cd;border-radius:0;background:transparent;color:#344951;font-size:13px;font-weight:750;text-decoration:none}
+.mexico-workspace .mexico-topic-tabs a[aria-current]{background:#35515d;color:#fff}
+.mexico-workspace .mexico-topic-tabs>:last-child,.mexico-workspace .mexico-nature-tabs>:last-child{border-right:0}
+.atlas-desktop-shell .mexico-workspace.mexico-population .mexico-topic-controls{display:block;padding:12px 0;margin:0;border:0;background:none}
+.atlas-desktop-shell .mexico-workspace.mexico-population .mexico-population-topic-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;border:0;background:none}
+.atlas-desktop-shell .mexico-workspace.mexico-population .mexico-population-topic-tabs>:is(a,button){display:inline-flex;flex-direction:row;gap:4px;min-height:40px;padding:8px 10px;border:1px solid #bac9c6;border-radius:4px;background:#fff;color:#243f48;font:400 16px/1.75 var(--sans)}
+.atlas-desktop-shell .mexico-workspace.mexico-population .mexico-population-topic-tabs>[aria-current]{background:#224c59;color:#fff}
+.atlas-desktop-shell .mexico-workspace.mexico-population .mexico-population-topic-tabs small{display:inline;margin:0;padding:0;border:0;font-size:10px;line-height:inherit}
+.mexico-workspace :is(.mexico-topic-tabs,.mexico-nature-tabs) button:disabled{color:#8c918b;cursor:default}
+.mexico-workspace :is(.mexico-topic-tabs,.mexico-nature-tabs) small{padding:2px;border:1px solid #cdd0c5;border-radius:3px;font-size:9px;font-weight:400}
+.mexico-workspace .mexico-water-pending-list{display:block;font-size:9px;line-height:1.4;font-weight:400;margin-top:3px}
+.mexico-workspace .mexico-unavailable-item{color:#8c918b;font-size:12px}
+.mexico-workspace .mexico-unavailable-item small{padding:2px;border:1px solid #cdd0c5;border-radius:3px;font-size:9px}
+.mexico-workspace .mexico-statistics{margin:18px 0 0;padding:18px 0 0;border-top:1px solid #d5d7ce;min-width:0}
+.mexico-workspace .mexico-sources{min-width:0;margin:18px 0 0}
+@media(min-width:1200px){
+ .atlas-desktop-shell:has([data-mexico-workspace]){display:grid;grid-template-columns:clamp(300px,23vw,380px) minmax(0,1fr);gap:20px;padding:12px 20px 36px}
+ .atlas-desktop-shell:has([data-mexico-workspace])>.atlas-news{grid-column:1;grid-row:1;position:sticky;top:12px;height:calc(100dvh - 72px);min-height:320px;width:auto}
+ .mexico-workspace .mexico-learning-workspace{grid-column:2;grid-row:1}
+ .mexico-workspace .mexico-statistics,.mexico-workspace .mexico-sources{grid-column:1/-1}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field] .mexico-primary-grid{grid-template-columns:minmax(0,1.8fr) minmax(280px,1fr);gap:16px}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field] .mexico-map-frame{aspect-ratio:1.55;min-height:300px;max-height:640px}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field] .mexico-reading{max-height:calc(100dvh - 220px);overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+ .atlas-desktop-shell:has([data-mexico-workspace]) .atlas-news-header{padding:22px 20px 18px}
+ .atlas-desktop-shell:has([data-mexico-workspace]) .atlas-news-header h2{font-size:22px}
+ .atlas-desktop-shell:has([data-mexico-workspace]) .atlas-news-list,.atlas-desktop-shell:has([data-mexico-workspace]) .atlas-news-reader{padding-inline:20px}
+ .atlas-desktop-shell:has([data-mexico-workspace]) .atlas-news-empty{padding:36px 0}
+ .atlas-desktop-shell:has([data-mexico-workspace]) .atlas-news-empty>span{display:grid}
+ .atlas-desktop-shell:has([data-mexico-workspace]) .atlas-news-empty h3{margin-top:20px}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field=industry] .mexico-map-frame{height:clamp(320px,calc(100dvh - 400px),480px);min-height:0;max-height:none;aspect-ratio:auto}
+}
+@media(min-width:1200px) and (max-width:1599px){
+ .atlas-desktop-shell:not(.is-reading-news):has([data-mexico-workspace]){grid-template-columns:clamp(220px,19vw,340px) minmax(0,1fr);gap:16px}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field] .mexico-primary-grid{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);column-gap:14px}
+}
+@media(min-width:960px) and (max-width:1199px){
+ .atlas-desktop-shell:not(.is-reading-news):has([data-mexico-workspace]){display:grid;grid-template-columns:160px minmax(0,1fr);gap:12px;padding:10px 12px 24px}
+ .atlas-desktop-shell:not(.is-reading-news):has([data-mexico-workspace])>.atlas-news{grid-column:1;grid-row:1;position:sticky;top:10px;width:auto;height:calc(100dvh - 82px);min-height:0}
+ .mexico-workspace .mexico-learning-workspace{grid-column:2;grid-row:1}
+ .mexico-workspace .mexico-statistics,.mexico-workspace .mexico-sources{grid-column:1/-1}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field] .mexico-primary-grid{column-gap:14px}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field=agriculture] .mexico-primary-grid{grid-template-columns:minmax(0,2fr) minmax(318px,1fr)}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field=natural] .mexico-primary-grid{grid-template-columns:minmax(0,1.5fr) minmax(380px,1fr)}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field=population] .mexico-primary-grid{grid-template-columns:minmax(0,1.65fr) minmax(360px,1fr)}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field=industry] .mexico-primary-grid{grid-template-columns:minmax(0,2fr) minmax(318px,1fr)}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field] .mexico-map-frame{aspect-ratio:1.65;min-height:190px;max-height:640px}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field=industry] .mexico-map-frame{height:clamp(320px,calc(100dvh - 350px),430px);min-height:0;max-height:none;aspect-ratio:auto}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field] .mexico-reading{max-height:calc(100dvh - 220px);overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+ .mexico-workspace .mexico-navigation .regional-navigation{display:flex;flex-wrap:wrap;align-items:center;gap:7px 16px}
+ .mexico-workspace .mexico-navigation .regional-countries{margin-top:0}
+}
+@media(max-width:959px){
+ .atlas-desktop-shell:has([data-mexico-workspace]){display:flex;flex-direction:column;padding:12px 16px 28px;gap:20px}
+ .mexico-workspace .mexico-learning-workspace,.mexico-workspace .mexico-statistics,.mexico-workspace .mexico-sources{width:100%}
+ .mexico-workspace .mexico-map-frame{aspect-ratio:1.55;min-height:240px}
+ .mexico-workspace .mexico-controls select{max-width:150px}
+ .mexico-workspace .mexico-reading h2{font-size:21px}
+}

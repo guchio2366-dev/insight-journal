@@ -5,12 +5,18 @@ export function initCanadaIndustry(root:HTMLElement){
  const config=JSON.parse(root.querySelector('[data-industry-config]')!.textContent!),ids=config.provinces.map((p:any)=>p.id),$=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const valueText=(v:any)=>`${formatCanadaIndustryValue(v.value)}${v.value===null?'':'%'}${[v.status,v.symbol].filter(Boolean).length?`（${[v.status,v.symbol].filter(Boolean).join(' ')}）`:''}`;
  let state=readCanadaIndustryState(new URL(location.href),config.years,ids);const storageKey='insight-journal:canada-industry:v1';
+ const metricButtons=[...root.querySelectorAll<HTMLButtonElement>('[data-canada-industry-metric]')];
  function render(){
   for(const key of ['year','province','compare','metric'])$<HTMLSelectElement>(`[data-industry-${key}]`).value=String(state[key as keyof CanadaIndustryState]??'');
+  for(const button of metricButtons){const active=button.dataset.canadaIndustryMetric===state.metric;button.setAttribute('aria-selected',String(active));button.tabIndex=active?0:-1;}
+  root.querySelector('#canada-industry-map-panel')?.setAttribute('aria-labelledby',`canada-industry-metric-${state.metric}`);
   for(const o of $<HTMLSelectElement>('[data-industry-compare]').options)o.disabled=o.value===state.province;
   $<HTMLInputElement>('[data-industry-only]').checked=state.only;
   const rows=config.data.filter((r:any)=>r.year===state.year),metric=config.metrics.find((m:any)=>m.id===state.metric),selected=[state.province,state.compare].filter(Boolean);
   root.querySelector('[data-industry-map] title')!.textContent=`${state.year}年、${metric.name}の州内GDP割合${state.only?'（選択州のみ）':''}`;
+  const mapTitle=root.querySelector('[data-industry-map] title')!.textContent!;
+  const heading=root.querySelector<HTMLElement>('[data-canada-industry-map-title]');if(heading)heading.textContent=mapTitle;
+  root.querySelector('[data-canada-industry-legend]')?.setAttribute('aria-label',mapTitle);
   for(const shape of root.querySelectorAll<SVGPathElement>('[data-industry-province-shape]')){const id=shape.dataset.industryProvinceShape!,r=rows.find((r:any)=>r.id===id),v=r.values[state.metric];shape.setAttribute('fill',industryShareColor(v.value));shape.style.display=state.only&&!selected.includes(id)?'none':'';shape.classList.toggle('is-selected-industry',id===state.province);shape.classList.toggle('is-compared-industry',id===state.compare);shape.setAttribute('aria-pressed',String(id===state.province));shape.setAttribute('aria-label',`${r.name} ${state.year}年 ${metric.name} ${valueText(v)}`);shape.querySelector('title')!.textContent=shape.getAttribute('aria-label')!;}
   for(const label of root.querySelectorAll<SVGElement>('[data-industry-province-label]'))label.style.display=state.only&&!selected.includes(label.dataset.industryProvinceLabel!)?'none':'';
   for(const row of root.querySelectorAll<HTMLElement>('[data-industry-row]')){row.hidden=Number(row.dataset.year)!==state.year;row.classList.toggle('is-selected-province',selected.includes(row.dataset.industryRow!));}
@@ -30,6 +36,14 @@ export function initCanadaIndustry(root:HTMLElement){
   if(general.dataset.comparison!==String(populationComparison)){general.open=!populationComparison;general.dataset.comparison=String(populationComparison);}
  }
  function update(patch:Partial<CanadaIndustryState>){state={...state,...patch};if(state.province===state.compare)state.compare=null;history.pushState(null,'',writeCanadaIndustryState(new URL(location.href),state));render();}
+ for(const [index,button] of metricButtons.entries()){
+  const choose=()=>update({metric:button.dataset.canadaIndustryMetric as CanadaIndustryState['metric']});
+  button.addEventListener('click',choose);
+  button.addEventListener('keydown',event=>{
+   const target=event.key==='Home'?0:event.key==='End'?metricButtons.length-1:event.key==='ArrowRight'?(index+1)%metricButtons.length:event.key==='ArrowLeft'?(index+metricButtons.length-1)%metricButtons.length:null;
+   if(target===null)return;event.preventDefault();metricButtons[target].click();metricButtons[target].focus();
+  });
+ }
  for(const key of ['year','province','compare','metric'])$<HTMLSelectElement>(`[data-industry-${key}]`).addEventListener('change',e=>{const v=(e.target as HTMLSelectElement).value;update({[key]:key==='year'?Number(v):v||null});});
  for(const shape of root.querySelectorAll<SVGElement>('[data-industry-province-shape]')){const choose=()=>update({province:shape.dataset.industryProvinceShape!});shape.addEventListener('click',choose);shape.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose();}});}
  for(const b of root.querySelectorAll<HTMLElement>('[data-industry-example]'))b.addEventListener('click',()=>update({province:b.dataset.province!,compare:b.dataset.compare||null,metric:b.dataset.industryExample as CanadaIndustryState['metric']}));
