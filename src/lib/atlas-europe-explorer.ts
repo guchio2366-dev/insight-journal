@@ -115,7 +115,7 @@ export function initEuropeAtlas() {
     query<HTMLElement>('[data-eu-country-reader]').hidden=!country||layer.field==='nature';
     query('[data-eu-country-title]').textContent=country?country.name+'の国全体の数値':'';
     const panel=query('[data-eu-national-values]');panel.replaceChildren();
-    const preferred=layer.field==='population'?['population','urban']:layer.field==='industry'?['manufacturing','industry','services']:['forest','agrishare'];
+    const preferred=layer.field==='population'?Array.from(new Set([...(layer.indicator?[layer.indicator]:[]),'population','urban'])):layer.field==='industry'?['manufacturing','industry','services']:['forest','agrishare'];
     if(country&&layer.field!=='nature')for(const id of preferred){const ind=config.statistics.indicators.find(i=>i.id===id)!;const value=ind.values[country.code]?.['2023'];const row=document.createElement('div'),dt=document.createElement('dt'),dd=document.createElement('dd'),a=document.createElement('a');a.href=ind.sourceUrl;a.textContent=ind.label;dt.append(a);dd.textContent=value==null?'データなし':value.toLocaleString('ja-JP',{maximumFractionDigits:id==='population'?0:2})+' '+ind.unit;row.append(dt,dd);panel.append(row);}
   }
 
@@ -278,6 +278,7 @@ export function initEuropeAtlas() {
     const topic=subject().id;
     const selectedTopic=currentField.id==='agriculture'?(topic==='forest'?'forest':['cattle','pig','chicken','sheep'].includes(topic)?'cattle':'crops'):currentField.id==='industry'?(topic==='services'?'services':'hubs'):currentField.id==='population'?'density':topic;
     all<HTMLElement>('[data-eu-topic]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.euTopic===selectedTopic)));
+    all<HTMLSelectElement>('[data-eu-layer-choice]').forEach(select=>{select.value=select.dataset.euLayerChoice===currentField.id?topic:select.options[0].value;});
     document.title=`欧州の${currentField.label}｜Insight Journal`;
     const canonical=writeEuropeState(new URL(location.href),state);
     if(canonical.pathname!==location.pathname)history.replaceState({},'',canonical);
@@ -409,6 +410,9 @@ export function initEuropeAtlas() {
   });
   all<HTMLElement>('[data-eu-layer]').forEach(b => b.addEventListener('click', () => setLayer(b.dataset.euLayer!)));
   all<HTMLElement>('[data-eu-topic]').forEach(button=>button.addEventListener('click',()=>setLayer(button.dataset.euTopic!)));
+  all<HTMLSelectElement>('[data-eu-layer-choice]').forEach(select=>select.addEventListener('change',()=>{
+    if(config.layers.some(layer=>layer.id===select.value&&layer.field===select.dataset.euLayerChoice))setLayer(select.value);
+  }));
   all<HTMLElement>('[data-eu-city-select]').forEach(button=>button.addEventListener('click',()=>selectCity(button.dataset.euCitySelect!)));
   all<HTMLElement>('[data-eu-toggle]').forEach(button=>button.addEventListener('click',()=>{
     if(button.dataset.euToggle==='crop')state.showCrops=state.showCrops===false;

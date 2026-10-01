@@ -72,8 +72,17 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.equal(doc.querySelector('[data-eu-single]').hidden,true);
       assert.equal(doc.querySelector('[data-eu-farming-statistics]').hidden,false);
     }
-    if (field==='industry/') assert.ok(doc.querySelector('.eu-map-stage [data-eu-topic-field="industry"]'));
+    if (field==='industry/') {
+      const chooser=doc.querySelector('.eu-map-stage [data-eu-layer-choice="industry"]');
+      assert.ok(chooser);
+      assert.deepEqual([...chooser.options].map(option=>option.value),['hubs','manufacturing','industry','services']);
+      assert.equal(chooser.value,'hubs');
+    }
     if (field==='population/') {
+      const chooser=doc.querySelector('[data-eu-layer-choice="population"]');
+      assert.ok(chooser);
+      assert.deepEqual([...chooser.options].map(option=>option.value),['density','urban','age','growth']);
+      assert.equal(chooser.value,'density');
       const planned=[...doc.querySelectorAll('[data-eu-topic-field="population"] button:disabled')];
       assert.equal(planned.length,2);
       assert.ok(planned.every(b=>b.textContent.includes('準備中')));

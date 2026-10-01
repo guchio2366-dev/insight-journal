@@ -57,7 +57,7 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
     <h1 class="visually-hidden">北米地図から読む、農林業・自然環境・主要産業・人口</h1>
     <slot name="region-navigation" />
     <nav class="atlas-tabs atlas-tabs-with-overview" aria-label="地図の分野">
-      <a data-atlas-overview-link href={withBase('/atlas/north-america/overview/')}>概要</a>
+      <a data-atlas-overview-link href={withBase('/atlas/north-america/overview/?country=USA')}>概要</a>
       {northAmericaFields.map(field => field.status==='ready' ?
         <a href={withBase(field.href)} data-field={field.id} aria-current={initialField===field.id?'page':undefined}>{field.label}</a> :
         <span class="atlas-tab-planned" aria-label={`${field.label}、準備中`}>{field.label}<small>準備中</small></span>
