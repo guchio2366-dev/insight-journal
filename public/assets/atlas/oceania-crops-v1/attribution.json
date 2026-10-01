@@ -1,0 +1,14 @@
+{
+  "citation": "International Food Policy Research Institute (IFPRI), 2026, \"Global Spatially-Disaggregated Crop Production Statistics Data for 2020 Version 2.0 Release 2\", Harvard Dataverse, V6, https://doi.org/10.7910/DVN/SWPENT.",
+  "termsUrl": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/SWPENT&version=6.0",
+  "termsApiUrl": "https://dataverse.harvard.edu/api/datasets/:persistentId/versions/6.0?persistentId=doi%3A10.7910%2FDVN%2FSWPENT",
+  "termsTitle": "IFPRI Datasets Terms of Use Statement (December 2019)",
+  "license": "CC BY 4.0",
+  "licenseSection": "4",
+  "adaptationSection": "5.2",
+  "requiredAdaptationText": "This data was provided by the International Food Policy Research Institute (IFPRI). IFPRI bears no responsibility for the analyses or interpretations of the data presented here.",
+  "attributionOrder": "Citation followed by requiredAdaptationText",
+  "versionNumber": 6,
+  "versionMinorNumber": 0,
+  "releaseTime": "2026-05-05T15:48:25Z"
+}

@@ -1,0 +1,117 @@
+/** Population/social reading copy. The map framework owns layout and controls. */
+export const oceaniaPopulationReading = {
+  field: '人口・社会',
+  title: '海を隔てた居住地を、交通と公共サービスが結ぶ',
+  message: '沿岸や島々の人口分布を読み、交通・仕事・医療などの仕組みと結び付けて考える。',
+  takeaway: '気候や海の距離だけで暮らしは決まらない。居住地を結ぶ交通と、各地へサービスを届ける制度も大切な条件になる。',
+  gridLabel: '人口密度の推計 · 2020年 · 人/km²',
+  centreLabel: '都市中心の人口 · 2020年 · 人（2025年固定範囲）',
+  legend: ['0より大きく1未満', '1–10未満', '10–100未満', '100–500未満', '500–2,000未満', '2,000–10,000未満', '10,000以上'],
+  zeroLabel: '有効な0（海域を含む）',
+  missingLabel: '欠測・未収録（0と区別）',
+  readingSteps: [
+    '全域で人口が濃い場所を探し、オーストラリア・ニュージーランド・PNGへ拡大する。',
+    '島嶼はフィジー、タラワ、タヒチ、サモアの1 km元セル表示でも確かめる。',
+    '都市中心の点と人口格子を区別し、自然条件・生産・交通や公共サービスとの関係を比べる。',
+  ],
+  contexts: {
+    overview: 'オーストラリア沿岸の集中と、海を隔てた島々の居住を同じ全域図で読む。全域の表示間隔で小島が見えない場合は拡大する。',
+    australia: '沿岸の都市と広い内陸の密度差を確かめる。気候と合わせて、仕事・交通・住宅・公共サービスの条件も考える。',
+    'new-zealand': 'オークランドなどの都市中心と島内の人口格子を比べる。都市の点は自治体や大都市圏の全人口ではない。',
+    'papua-new-guinea': 'ポートモレスビーと内陸のマウントハーゲンを探す。人口分布を沿岸の都市だけで説明せず、内陸の居住も確かめる。',
+    fiji: 'スバの都市中心と、フィジーの島々に広がる人口格子を比べる。都市点と島全体の人口は別の範囲を表す。',
+    tarawa: 'キリバスは都市中心データに未収録でも、タラワの人口格子に正の値がある。都市点がないことと人口ゼロを区別する。',
+    tahiti: '西経のタヒチも日付変更線をまたぐ全域図につながる。パペーテの都市中心と島の人口格子を区別する。',
+    samoa: 'アピアの都市中心と他の居住地を見比べ、各地の暮らしを道路・医療・地域の取り組みがどう支えるか考える。',
+  },
+  comparisons: {
+    climate: {
+      title: '気候と居住の条件',
+      message: '乾燥した内陸や湿潤な沿岸の人口密度を比べる。気候と人口の対応だけで原因を決めず、水の管理、仕事、交通などの条件も考える。',
+    },
+    agriculture: {
+      title: '生産地と居住の分布',
+      message: '作物・家畜の分布と人口が濃い場所を比較する。生産地と、消費・加工・輸送を担う都市の役割の違いを読む。',
+    },
+    industry: {
+      title: '施設と居住地を結ぶ仕組み',
+      message: '鉱山や港・加工の代表地点を人口分布と比較し、交通・加工・市場との関係を考える。施設の位置や近さだけから雇用量や所得は推定できない。',
+    },
+  },
+  socialConnections: [
+    {
+      title: '交通が日常の移動を支える',
+      text: 'サモアやトンガの道路・港・空港の改善例では、学校、病院、仕事へ通う経路を維持することが重視されている。海や災害への対応と、整備・維持の仕組みを一緒に考える。',
+      source: 'world-bank-transport',
+    },
+    {
+      title: '人口の少ない島にも医療を届ける',
+      text: 'キリバス、サモア、ツバルでは、遠隔地の医療、人材、患者の移送や通信の改善が進められている。人口密度が低いことと、公共サービスが不要であることは別である。',
+      source: 'world-bank-health',
+    },
+    {
+      title: '統計の都市は同じ範囲とは限らない',
+      text: 'オーストラリアのABSは大都市圏（GCCSA）などの地域区分で人口を示す。ここで使うGHSLの都市中心と範囲・基準年が異なるため、そのまま大小を比べない。',
+      source: 'abs-regional-population',
+    },
+  ],
+  methodNotes: [
+    '全域と大きな陸域は、元の等面積1 kmセルを5×5で集計。人口合計を有効な1 km²セル数で割った値を表示する。島嶼の専用表示は元の1 kmセルを保つ。',
+    '密度の分母には海岸セル内の水域を含む。陸地だけの面積で割った密度ではない。表示図の画素面積は一定ではなく、画素値を足して人口総数にはできない。',
+    '格子は2020年の人口推計を建物情報などで配分したモデル。現在の人口や個々の世帯を直接数えた図ではない。',
+    '都市中心の2000・2010・2020年人口は、同じ2025年固定範囲に対応する。都市域の拡大そのものを示す増減ではない。',
+    '都市中心は25の国・地域に対応する62件をすべて収録。未収録は人口ゼロではなく、全ての首都・居住地を示す点データでもない。',
+  ],
+  sources: [
+    {
+      id: 'ghs-pop',
+      title: 'GHS-POP R2023A · 2020年人口格子',
+      citation: 'Schiavina, M.; Freire, S.; Carioli, A.; MacManus, K. (2026). GHS-POP R2023A. European Commission, Joint Research Centre [Dataset].',
+      url: 'https://data.jrc.ec.europa.eu/dataset/2ff68a52-5b5b-4a22-8f40-c41da8332cfe',
+      doi: 'https://doi.org/10.2905/2FF68A52-5B5B-4A22-8F40-C41DA8332CFE',
+      note: '元セル1 km・等面積Mollweide。製品版はR2023A、観測対象年は2020年、現在のJRCカタログ引用年は2026年。',
+      license: 'CC BY 4.0',
+    },
+    {
+      id: 'ghs-ucdb',
+      title: 'GHS-UCDB R2024A V1.2 · 2025年固定都市範囲',
+      citation: 'Mari Rivero, I. et al. (2026). GHS-UCDB R2024A - GHS Urban Centre Database 2025. European Commission, Joint Research Centre [Dataset].',
+      url: 'https://data.jrc.ec.europa.eu/dataset/1a338be6-7eaf-480c-9664-3a8ade88cbcd',
+      doi: 'https://doi.org/10.2905/JRC.05RDPR0',
+      note: '使用したZIPはハッシュを固定したV1.2。製品紹介ページの旧V1.1表記とは区別する。',
+      license: 'CC BY 4.0',
+    },
+    {
+      id: 'ghsl-reference',
+      title: 'GHSLの作成方法と評価 · Pesaresi et al. (2024)',
+      citation: 'Pesaresi, M. et al. (2024). Advances on the Global Human Settlement Layer by joint assessment of Earth Observation and Population Survey data. International Journal of Digital Earth 17(1).',
+      url: 'https://publications.jrc.ec.europa.eu/repository/handle/JRC136539',
+      doi: 'https://doi.org/10.1080/17538947.2024.2390454',
+    },
+    {
+      id: 'ucdb-documentation',
+      title: '都市中心データの定義 · Stats in the City (2024)',
+      citation: 'Melchiorri, M. et al. (2024). Stats in the City - the GHSL Urban Centre Database 2025. Publications Office of the European Union, JRC139768.',
+      url: 'https://doi.org/10.2760/3046391',
+      doi: 'https://doi.org/10.2760/3046391',
+    },
+    {
+      id: 'world-bank-transport',
+      title: '世界銀行 · 島嶼の交通と公共サービス（2024）',
+      url: 'https://www.worldbank.org/en/results/2024/04/22/keeping-communities-connected-in-small-island-developing-states',
+      period: 'サモア・トンガなどの2013–2023年事例。将来計画を実績として扱わない。',
+    },
+    {
+      id: 'world-bank-health',
+      title: '世界銀行 · 太平洋諸島の医療へのアクセス（2025）',
+      url: 'https://www.worldbank.org/en/results/2025/05/19/transforming-health-care-access-in-the-pacific-islands-with-world-bank-support',
+      period: 'キリバス・サモア・ツバルの2020–2025年事例。人口格子の2020年とは別の文脈。',
+    },
+    {
+      id: 'abs-regional-population',
+      title: 'ABS · Regional population, 2021',
+      url: 'https://www.abs.gov.au/statistics/people/population/regional-population/2021',
+      period: '2021年推計、2023年改訂。都市範囲の定義を確認する参考資料。',
+    },
+  ],
+} as const;

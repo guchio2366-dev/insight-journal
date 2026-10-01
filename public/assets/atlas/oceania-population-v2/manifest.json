@@ -1,0 +1,2604 @@
+{
+  "schemaVersion": 2,
+  "populationYear": 2020,
+  "sourceEdition": "GHS-POP R2023A V1.0; 2020 1 km Mollweide",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://human-settlement.emergency.copernicus.eu/GHSLhowToCite.php",
+  "populationCitation": "Schiavina, M.; Freire, S.; Carioli, A.; MacManus, K. (2026). GHS-POP R2023A - GHS population grid multitemporal (1975-2030). European Commission, Joint Research Centre [Dataset].",
+  "populationDoi": "https://doi.org/10.2905/2FF68A52-5B5B-4A22-8F40-C41DA8332CFE",
+  "referencePublication": "Pesaresi, M. et al. (2024). Advances on the Global Human Settlement Layer by joint assessment of Earth Observation and population survey data. International Journal of Digital Earth 17(1).",
+  "referencePublicationDoi": "https://doi.org/10.1080/17538947.2024.2390454",
+  "decoderValidation": {
+    "implementation": "Fixed typed-buffer TIFF LZW through the public GeoTIFF.js addDecoder API; package files unchanged",
+    "full256x256Float64TilesExactlyEqualToOfficialDecoder": [
+      {
+        "name": "Sydney",
+        "window": [
+          31488,
+          13056,
+          31744,
+          13312
+        ],
+        "sha256": "adc2d9339b2aaddbc4e15f739ba82cefdd8a614528edf9f6bb63d657a8dc3c48"
+      },
+      {
+        "name": "Port Moresby",
+        "window": [
+          32512,
+          9984,
+          32768,
+          10240
+        ],
+        "sha256": "9c91c2c6afe9228ddc1313e1613e9b441286a2f5814d694b95b9c00f570d9b96"
+      },
+      {
+        "name": "Papeete",
+        "window": [
+          3328,
+          11008,
+          3584,
+          11264
+        ],
+        "sha256": "71d80fd000f35e590149c8f6f0ef0806968af7d05887ee13f1b86654bcdc1645"
+      }
+    ]
+  },
+  "input": {
+    "file": "GHS_POP_E2020_GLOBE_R2023A_54009_1000_V1_0.tif",
+    "sha256": "db25d12ab0851446af467a56eb1651d383867dc3fbf4aa6348ec8e3372225196",
+    "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2020_GLOBE_R2023A_54009_1000/V1-0/GHS_POP_E2020_GLOBE_R2023A_54009_1000_V1_0.zip",
+    "coordinateCrs": "ESRI:54009",
+    "sourceCellMetres": [
+      1000,
+      1000
+    ],
+    "noData": -200,
+    "unit": "people per 1 km equal-area source cell",
+    "dataNature": "census/administrative estimates disaggregated using built-up information; not a direct household count"
+  },
+  "displayProjection": "Pacific-centred equirectangular with standard latitude -20; longitude 110 to 250 unwrapped",
+  "lookup": {
+    "encoding": "float32-le-gzip",
+    "unit": "people/km2 of valid source cells including water",
+    "noData": -1,
+    "zero": 0,
+    "validCountEncoding": "uint8-gzip",
+    "validCountMeaning": "number of valid original 1 km cells in the selected aligned 5x5 or 1x1 block"
+  },
+  "breaks": [
+    1,
+    10,
+    100,
+    500,
+    2000,
+    10000
+  ],
+  "colors": [
+    "f0f1e8",
+    "dce8df",
+    "b0d2cc",
+    "7ab5bb",
+    "438b9f",
+    "28627f",
+    "173b60"
+  ],
+  "method": "Original equal-area 1 km people/cell are read only in bounded 250x250 source windows with disabled tile cache and no workers. Aligned 5x5 blocks use sum of nonnegative finite population divided by valid original 1 km2 cell count, including zero/water cells. Island detail views retain native 1 km cells. Display pixel centres are projected to source Mollweide and use the containing aligned source block (nearest-neighbour at the aggregated block scale). No bilinear smoothing, generalized land masks, nearest-land imputation or raster-derived urban-centre totals. PNG colors and Float32 lookup values are generated from one array.",
+  "limitations": [
+    "5 km overview cells can include water and cannot measure land-only population density. Zero cells include ocean; missing is separately stored as -1.",
+    "Equirectangular pixels have unequal areas; the displayed density comes from equal-area source cells. Never sum display pixels as population.",
+    "A small island can be missed at the regional display spacing even when source cells contain population. Use dedicated island view and the coverage diagnostics.",
+    "Surrounding non-target countries can occur in rectangular source extents; keep them neutral in the map framework. Source-read sums are diagnostics only.",
+    "The 2020 distribution is modelled from census/administrative estimates and built-up information. Do not infer individual homes, exact contemporary population or municipal boundaries."
+  ],
+  "urbanCentres": {
+    "file": "../oceania-population-v1/centres.json",
+    "manifest": "../oceania-population-v1/manifest.json",
+    "populationYears": [
+      2000,
+      2010,
+      2020
+    ],
+    "urbanBoundaryYear": 2025,
+    "scope": "All 62 source-defined centres across the adopted 25 countries/territories; no-centre status never means zero population"
+  },
+  "views": {
+    "overview": {
+      "title": "オセアニア全体",
+      "bounds4326": [
+        110,
+        -58,
+        250,
+        25
+      ],
+      "boundsUnwrapped": [
+        110,
+        -58,
+        250,
+        25
+      ],
+      "width": 1000,
+      "height": 631,
+      "image": "overview.png",
+      "grid": "overview.density.gz",
+      "validCountGrid": "overview.valid-count.gz",
+      "sourceCellKm": 5,
+      "sourceAggregation": [
+        5,
+        5
+      ],
+      "outputSpacingDegrees": [
+        0.14,
+        0.13153724247226625
+      ],
+      "imageCoordinates": [
+        [
+          110,
+          25
+        ],
+        [
+          250,
+          25
+        ],
+        [
+          250,
+          -58
+        ],
+        [
+          110,
+          -58
+        ]
+      ],
+      "positivePixels": 19616,
+      "zeroPixels": 37495,
+      "missingPixels": 573889,
+      "minPositive": 0.000012670582691498566,
+      "maxValue": 56081.37890625,
+      "sourceReadDiagnostics": {
+        "processedWindows": 2193,
+        "maximumSourceWindowCells": 62500,
+        "sourceValidCells": 11863346,
+        "sourceMissingCells": 124863154,
+        "sourceZeroCells": 10321449,
+        "sourcePopulationSum": 555946789.9326626,
+        "aggregatedReconstitutedSum": 555946789.9326631,
+        "maximumWindowRelativeSumError": 8.174618920312408e-15,
+        "populationSumDifference": 4.76837158203125e-7,
+        "peakRssBytes": 123092992,
+        "elapsedSeconds": 29.6234667,
+        "outOfBoundsDisplayPixels": 0,
+        "note": "These source-read sums cover requested rectangular processing windows, including surrounding land/ocean. They verify aggregation only; they are not regional or national population totals."
+      },
+      "countryCoverage": {
+        "VUT": {
+          "landPixels": 59,
+          "positivePixels": 41,
+          "zeroPixels": 18,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "FSM": {
+          "landPixels": 2,
+          "positivePixels": 1,
+          "zeroPixels": 1,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "MHL": {
+          "landPixels": 1,
+          "positivePixels": 1,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "MNP": {
+          "landPixels": 4,
+          "positivePixels": 2,
+          "zeroPixels": 2,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "GUM": {
+          "landPixels": 2,
+          "positivePixels": 2,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "ASM": {
+          "landPixels": 1,
+          "positivePixels": 1,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "PCN": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "TON": {
+          "landPixels": 1,
+          "positivePixels": 1,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "SLB": {
+          "landPixels": 119,
+          "positivePixels": 80,
+          "zeroPixels": 39,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "WSM": {
+          "landPixels": 14,
+          "positivePixels": 12,
+          "zeroPixels": 2,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "PNG": {
+          "landPixels": 2066,
+          "positivePixels": 939,
+          "zeroPixels": 1127,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "PLW": {
+          "landPixels": 2,
+          "positivePixels": 2,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "NZL": {
+          "landPixels": 1569,
+          "positivePixels": 1084,
+          "zeroPixels": 485,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "NIU": {
+          "landPixels": 1,
+          "positivePixels": 1,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "COK": {
+          "landPixels": 1,
+          "positivePixels": 1,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "NRU": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "KIR": {
+          "landPixels": 6,
+          "positivePixels": 1,
+          "zeroPixels": 5,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "WLF": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PYF": {
+          "landPixels": 10,
+          "positivePixels": 8,
+          "zeroPixels": 2,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "NCL": {
+          "landPixels": 89,
+          "positivePixels": 71,
+          "zeroPixels": 18,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "FJI": {
+          "landPixels": 88,
+          "positivePixels": 75,
+          "zeroPixels": 13,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "AUS": {
+          "landPixels": 37773,
+          "positivePixels": 9255,
+          "zeroPixels": 28518,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "NFK": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "ATC": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "TUV": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        }
+      },
+      "countryCoverageMethod": "Diagnostic pixel-centre mask of adopted Natural Earth v5.1.2 1:50m land geometry on this display grid. Does not measure complete source coverage or national population; no mask is applied to population values.",
+      "knownPlaceSamples": {
+        "Sydney": {
+          "coordinates4326": [
+            151.07285573238156,
+            -33.853975720075375
+          ],
+          "displayPixel": [
+            293,
+            447
+          ],
+          "densityPeopleKm2": 4193.51025390625,
+          "validSourceCells": 25,
+          "populationYear": 2020
+        },
+        "Auckland": {
+          "coordinates4326": [
+            174.782174550969,
+            -36.89176261348013
+          ],
+          "displayPixel": [
+            462,
+            470
+          ],
+          "densityPeopleKm2": 3715.800537109375,
+          "validSourceCells": 25,
+          "populationYear": 2020
+        },
+        "Port Moresby": {
+          "coordinates4326": [
+            147.18304421125364,
+            -9.458034581582206
+          ],
+          "displayPixel": [
+            265,
+            261
+          ],
+          "densityPeopleKm2": 1569.8682861328125,
+          "validSourceCells": 25,
+          "populationYear": 2020
+        },
+        "Suva": {
+          "coordinates4326": [
+            178.4725397365752,
+            -18.099192775492007
+          ],
+          "displayPixel": [
+            489,
+            327
+          ],
+          "densityPeopleKm2": 1078.2532958984375,
+          "validSourceCells": 25,
+          "populationYear": 2020
+        },
+        "Papeete": {
+          "coordinates4326": [
+            -149.58093592135455,
+            -17.55859337930198
+          ],
+          "displayPixel": [
+            717,
+            323
+          ],
+          "densityPeopleKm2": 1297.1795654296875,
+          "validSourceCells": 25,
+          "populationYear": 2020
+        },
+        "Apia": {
+          "coordinates4326": [
+            -171.79052398143105,
+            -13.836858075301254
+          ],
+          "displayPixel": [
+            558,
+            295
+          ],
+          "densityPeopleKm2": 455.66064453125,
+          "validSourceCells": 25,
+          "populationYear": 2020
+        }
+      },
+      "pixelValidation": {
+        "imageAndGridFromIdenticalFloat32Values": true,
+        "pngLosslessRoundtrip": true,
+        "gzipFloat32Roundtrip": true,
+        "zeroOpaqueWhiteAndMissingTransparent": true
+      }
+    },
+    "australia": {
+      "title": "オーストラリア",
+      "bounds4326": [
+        110,
+        -45,
+        155,
+        -9
+      ],
+      "boundsUnwrapped": [
+        110,
+        -45,
+        155,
+        -9
+      ],
+      "width": 750,
+      "height": 639,
+      "image": "australia.png",
+      "grid": "australia.density.gz",
+      "validCountGrid": "australia.valid-count.gz",
+      "sourceCellKm": 5,
+      "sourceAggregation": [
+        5,
+        5
+      ],
+      "outputSpacingDegrees": [
+        0.06,
+        0.056338028169014086
+      ],
+      "imageCoordinates": [
+        [
+          110,
+          -9
+        ],
+        [
+          155,
+          -9
+        ],
+        [
+          155,
+          -45
+        ],
+        [
+          110,
+          -45
+        ]
+      ],
+      "positivePixels": 53766,
+      "zeroPixels": 161998,
+      "missingPixels": 263486,
+      "minPositive": 0.000007971292689035181,
+      "maxValue": 8026.66455078125,
+      "sourceReadDiagnostics": {
+        "processedWindows": 324,
+        "maximumSourceWindowCells": 62500,
+        "sourceValidCells": 8149955,
+        "sourceMissingCells": 12100045,
+        "sourceZeroCells": 7597474,
+        "sourcePopulationSum": 51650318.89900454,
+        "aggregatedReconstitutedSum": 51650318.89900458,
+        "maximumWindowRelativeSumError": 8.174618920312408e-15,
+        "populationSumDifference": 3.725290298461914e-8,
+        "peakRssBytes": 125530112,
+        "elapsedSeconds": 5.029417600000004,
+        "outOfBoundsDisplayPixels": 0,
+        "note": "These source-read sums cover requested rectangular processing windows, including surrounding land/ocean. They verify aggregation only; they are not regional or national population totals."
+      },
+      "countryCoverage": {
+        "VUT": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "FSM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "MHL": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "MNP": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "GUM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "ASM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PCN": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "TON": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "SLB": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "WSM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PNG": {
+          "landPixels": 1155,
+          "positivePixels": 541,
+          "zeroPixels": 614,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "PLW": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NZL": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NIU": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "COK": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NRU": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "KIR": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "WLF": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PYF": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NCL": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "FJI": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "AUS": {
+          "landPixels": 205897,
+          "positivePixels": 50623,
+          "zeroPixels": 155273,
+          "missingPixels": 1,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "NFK": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "ATC": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "TUV": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        }
+      },
+      "countryCoverageMethod": "Diagnostic pixel-centre mask of adopted Natural Earth v5.1.2 1:50m land geometry on this display grid. Does not measure complete source coverage or national population; no mask is applied to population values.",
+      "knownPlaceSamples": {
+        "Sydney": {
+          "coordinates4326": [
+            151.07285573238156,
+            -33.853975720075375
+          ],
+          "displayPixel": [
+            684,
+            441
+          ],
+          "densityPeopleKm2": 4041.83154296875,
+          "validSourceCells": 25,
+          "populationYear": 2020
+        },
+        "Port Moresby": {
+          "coordinates4326": [
+            147.18304421125364,
+            -9.458034581582206
+          ],
+          "displayPixel": [
+            619,
+            8
+          ],
+          "densityPeopleKm2": 8026.66455078125,
+          "validSourceCells": 25,
+          "populationYear": 2020
+        }
+      },
+      "pixelValidation": {
+        "imageAndGridFromIdenticalFloat32Values": true,
+        "pngLosslessRoundtrip": true,
+        "gzipFloat32Roundtrip": true,
+        "zeroOpaqueWhiteAndMissingTransparent": true
+      }
+    },
+    "new-zealand": {
+      "title": "ニュージーランド",
+      "bounds4326": [
+        165,
+        -48,
+        179.5,
+        -33
+      ],
+      "boundsUnwrapped": [
+        165,
+        -48,
+        179.5,
+        -33
+      ],
+      "width": 500,
+      "height": 550,
+      "image": "new-zealand.png",
+      "grid": "new-zealand.density.gz",
+      "validCountGrid": "new-zealand.valid-count.gz",
+      "sourceCellKm": 5,
+      "sourceAggregation": [
+        5,
+        5
+      ],
+      "outputSpacingDegrees": [
+        0.029,
+        0.02727272727272727
+      ],
+      "imageCoordinates": [
+        [
+          165,
+          -33
+        ],
+        [
+          179.5,
+          -33
+        ],
+        [
+          179.5,
+          -48
+        ],
+        [
+          165,
+          -48
+        ]
+      ],
+      "positivePixels": 27960,
+      "zeroPixels": 17110,
+      "missingPixels": 229930,
+      "minPositive": 0.000019246488591306843,
+      "maxValue": 3910.530029296875,
+      "sourceReadDiagnostics": {
+        "processedWindows": 56,
+        "maximumSourceWindowCells": 62500,
+        "sourceValidCells": 307702,
+        "sourceMissingCells": 3192298,
+        "sourceZeroCells": 227268,
+        "sourcePopulationSum": 5060497.106792801,
+        "aggregatedReconstitutedSum": 5060497.1067928,
+        "maximumWindowRelativeSumError": 4.0903387711530143e-16,
+        "populationSumDifference": -9.313225746154785e-10,
+        "peakRssBytes": 118755328,
+        "elapsedSeconds": 1.0688133999999991,
+        "outOfBoundsDisplayPixels": 0,
+        "note": "These source-read sums cover requested rectangular processing windows, including surrounding land/ocean. They verify aggregation only; they are not regional or national population totals."
+      },
+      "countryCoverage": {
+        "VUT": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "FSM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "MHL": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "MNP": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "GUM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "ASM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PCN": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "TON": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "SLB": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "WSM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PNG": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PLW": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NZL": {
+          "landPixels": 36481,
+          "positivePixels": 25304,
+          "zeroPixels": 11177,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "NIU": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "COK": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NRU": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "KIR": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "WLF": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PYF": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NCL": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "FJI": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "AUS": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NFK": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "ATC": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "TUV": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        }
+      },
+      "countryCoverageMethod": "Diagnostic pixel-centre mask of adopted Natural Earth v5.1.2 1:50m land geometry on this display grid. Does not measure complete source coverage or national population; no mask is applied to population values.",
+      "knownPlaceSamples": {
+        "Auckland": {
+          "coordinates4326": [
+            174.782174550969,
+            -36.89176261348013
+          ],
+          "displayPixel": [
+            337,
+            142
+          ],
+          "densityPeopleKm2": 3910.530029296875,
+          "validSourceCells": 25,
+          "populationYear": 2020
+        }
+      },
+      "pixelValidation": {
+        "imageAndGridFromIdenticalFloat32Values": true,
+        "pngLosslessRoundtrip": true,
+        "gzipFloat32Roundtrip": true,
+        "zeroOpaqueWhiteAndMissingTransparent": true
+      }
+    },
+    "papua-new-guinea": {
+      "title": "パプアニューギニア",
+      "bounds4326": [
+        140,
+        -12,
+        157,
+        0
+      ],
+      "boundsUnwrapped": [
+        140,
+        -12,
+        157,
+        0
+      ],
+      "width": 650,
+      "height": 488,
+      "image": "papua-new-guinea.png",
+      "grid": "papua-new-guinea.density.gz",
+      "validCountGrid": "papua-new-guinea.valid-count.gz",
+      "sourceCellKm": 5,
+      "sourceAggregation": [
+        5,
+        5
+      ],
+      "outputSpacingDegrees": [
+        0.026153846153846153,
+        0.02459016393442623
+      ],
+      "imageCoordinates": [
+        [
+          140,
+          0
+        ],
+        [
+          157,
+          0
+        ],
+        [
+          157,
+          -12
+        ],
+        [
+          140,
+          -12
+        ]
+      ],
+      "positivePixels": 34797,
+      "zeroPixels": 51004,
+      "missingPixels": 231399,
+      "minPositive": 0.00028586163534782827,
+      "maxValue": 8026.66455078125,
+      "sourceReadDiagnostics": {
+        "processedWindows": 48,
+        "maximumSourceWindowCells": 62500,
+        "sourceValidCells": 712813,
+        "sourceMissingCells": 2287187,
+        "sourceZeroCells": 649418,
+        "sourcePopulationSum": 11374728.886547962,
+        "aggregatedReconstitutedSum": 11374728.886547962,
+        "maximumWindowRelativeSumError": 0,
+        "populationSumDifference": 0,
+        "peakRssBytes": 122134528,
+        "elapsedSeconds": 0.8073593000000037,
+        "outOfBoundsDisplayPixels": 0,
+        "note": "These source-read sums cover requested rectangular processing windows, including surrounding land/ocean. They verify aggregation only; they are not regional or national population totals."
+      },
+      "countryCoverage": {
+        "VUT": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "FSM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "MHL": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "MNP": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "GUM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "ASM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PCN": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "TON": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "SLB": {
+          "landPixels": 342,
+          "positivePixels": 183,
+          "zeroPixels": 159,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "WSM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PNG": {
+          "landPixels": 58868,
+          "positivePixels": 26828,
+          "zeroPixels": 32038,
+          "missingPixels": 2,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "PLW": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NZL": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NIU": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "COK": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NRU": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "KIR": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "WLF": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PYF": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NCL": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "FJI": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "AUS": {
+          "landPixels": 1411,
+          "positivePixels": 111,
+          "zeroPixels": 1300,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "NFK": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "ATC": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "TUV": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        }
+      },
+      "countryCoverageMethod": "Diagnostic pixel-centre mask of adopted Natural Earth v5.1.2 1:50m land geometry on this display grid. Does not measure complete source coverage or national population; no mask is applied to population values.",
+      "knownPlaceSamples": {
+        "Port Moresby": {
+          "coordinates4326": [
+            147.18304421125364,
+            -9.458034581582206
+          ],
+          "displayPixel": [
+            274,
+            384
+          ],
+          "densityPeopleKm2": 8026.66455078125,
+          "validSourceCells": 25,
+          "populationYear": 2020
+        }
+      },
+      "pixelValidation": {
+        "imageAndGridFromIdenticalFloat32Values": true,
+        "pngLosslessRoundtrip": true,
+        "gzipFloat32Roundtrip": true,
+        "zeroOpaqueWhiteAndMissingTransparent": true
+      }
+    },
+    "fiji": {
+      "title": "フィジー",
+      "bounds4326": [
+        176,
+        -21,
+        182,
+        -15
+      ],
+      "boundsUnwrapped": [
+        176,
+        -21,
+        182,
+        -15
+      ],
+      "width": 500,
+      "height": 532,
+      "image": "fiji.png",
+      "grid": "fiji.density.gz",
+      "validCountGrid": "fiji.valid-count.gz",
+      "sourceCellKm": 1,
+      "sourceAggregation": [
+        1,
+        1
+      ],
+      "outputSpacingDegrees": [
+        0.012,
+        0.011278195488721804
+      ],
+      "imageCoordinates": [
+        [
+          176,
+          -15
+        ],
+        [
+          182,
+          -15
+        ],
+        [
+          182,
+          -21
+        ],
+        [
+          176,
+          -21
+        ]
+      ],
+      "positivePixels": 4774,
+      "zeroPixels": 16089,
+      "missingPixels": 245137,
+      "minPositive": 0.0008643142064101994,
+      "maxValue": 11042.4892578125,
+      "sourceReadDiagnostics": {
+        "processedWindows": 22,
+        "maximumSourceWindowCells": 62500,
+        "sourceValidCells": 33864,
+        "sourceMissingCells": 1341136,
+        "sourceZeroCells": 26166,
+        "sourcePopulationSum": 922440.2941394772,
+        "aggregatedReconstitutedSum": 922440.2941394772,
+        "maximumWindowRelativeSumError": 0,
+        "populationSumDifference": 0,
+        "peakRssBytes": 124813312,
+        "elapsedSeconds": 0.36650019999999495,
+        "outOfBoundsDisplayPixels": 0,
+        "note": "These source-read sums cover requested rectangular processing windows, including surrounding land/ocean. They verify aggregation only; they are not regional or national population totals."
+      },
+      "countryCoverage": {
+        "VUT": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "FSM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "MHL": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "MNP": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "GUM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "ASM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PCN": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "TON": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "SLB": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "WSM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PNG": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PLW": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NZL": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NIU": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "COK": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NRU": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "KIR": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "WLF": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PYF": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NCL": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "FJI": {
+          "landPixels": 11503,
+          "positivePixels": 3356,
+          "zeroPixels": 8064,
+          "missingPixels": 83,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "AUS": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NFK": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "ATC": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "TUV": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        }
+      },
+      "countryCoverageMethod": "Diagnostic pixel-centre mask of adopted Natural Earth v5.1.2 1:50m land geometry on this display grid. Does not measure complete source coverage or national population; no mask is applied to population values.",
+      "knownPlaceSamples": {
+        "Suva": {
+          "coordinates4326": [
+            178.4725397365752,
+            -18.099192775492007
+          ],
+          "displayPixel": [
+            206,
+            274
+          ],
+          "densityPeopleKm2": 6618.3076171875,
+          "validSourceCells": 1,
+          "populationYear": 2020
+        }
+      },
+      "pixelValidation": {
+        "imageAndGridFromIdenticalFloat32Values": true,
+        "pngLosslessRoundtrip": true,
+        "gzipFloat32Roundtrip": true,
+        "zeroOpaqueWhiteAndMissingTransparent": true
+      }
+    },
+    "tarawa": {
+      "title": "タラワ環礁（キリバス）",
+      "bounds4326": [
+        172.8,
+        1.1,
+        173.5,
+        1.8
+      ],
+      "boundsUnwrapped": [
+        172.8,
+        1.1,
+        173.5,
+        1.8
+      ],
+      "width": 350,
+      "height": 372,
+      "image": "tarawa.png",
+      "grid": "tarawa.density.gz",
+      "validCountGrid": "tarawa.valid-count.gz",
+      "sourceCellKm": 1,
+      "sourceAggregation": [
+        1,
+        1
+      ],
+      "outputSpacingDegrees": [
+        0.0019999999999999675,
+        0.0018817204301075268
+      ],
+      "imageCoordinates": [
+        [
+          172.8,
+          1.8
+        ],
+        [
+          173.5,
+          1.8
+        ],
+        [
+          173.5,
+          1.1
+        ],
+        [
+          172.8,
+          1.1
+        ]
+      ],
+      "positivePixels": 1742,
+      "zeroPixels": 13803,
+      "missingPixels": 114655,
+      "minPositive": 2.8030104637145996,
+      "maxValue": 8357.3798828125,
+      "sourceReadDiagnostics": {
+        "processedWindows": 1,
+        "maximumSourceWindowCells": 62500,
+        "sourceValidCells": 2310,
+        "sourceMissingCells": 60190,
+        "sourceZeroCells": 2114,
+        "sourcePopulationSum": 93979.07719223097,
+        "aggregatedReconstitutedSum": 93979.07719223097,
+        "maximumWindowRelativeSumError": 0,
+        "populationSumDifference": 0,
+        "peakRssBytes": 119980032,
+        "elapsedSeconds": 0.036679500000005645,
+        "outOfBoundsDisplayPixels": 0,
+        "note": "These source-read sums cover requested rectangular processing windows, including surrounding land/ocean. They verify aggregation only; they are not regional or national population totals."
+      },
+      "countryCoverage": {
+        "VUT": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "FSM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "MHL": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "MNP": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "GUM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "ASM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PCN": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "TON": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "SLB": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "WSM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PNG": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PLW": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NZL": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NIU": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "COK": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NRU": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "KIR": {
+          "landPixels": 1191,
+          "positivePixels": 608,
+          "zeroPixels": 583,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "WLF": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PYF": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NCL": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "FJI": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "AUS": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NFK": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "ATC": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "TUV": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        }
+      },
+      "countryCoverageMethod": "Diagnostic pixel-centre mask of adopted Natural Earth v5.1.2 1:50m land geometry on this display grid. Does not measure complete source coverage or national population; no mask is applied to population values.",
+      "knownPlaceSamples": {},
+      "pixelValidation": {
+        "imageAndGridFromIdenticalFloat32Values": true,
+        "pngLosslessRoundtrip": true,
+        "gzipFloat32Roundtrip": true,
+        "zeroOpaqueWhiteAndMissingTransparent": true
+      }
+    },
+    "tahiti": {
+      "title": "タヒチ島周辺（仏領ポリネシア）",
+      "bounds4326": [
+        209,
+        -18.5,
+        212,
+        -16
+      ],
+      "boundsUnwrapped": [
+        209,
+        -18.5,
+        212,
+        -16
+      ],
+      "width": 400,
+      "height": 355,
+      "image": "tahiti.png",
+      "grid": "tahiti.density.gz",
+      "validCountGrid": "tahiti.valid-count.gz",
+      "sourceCellKm": 1,
+      "sourceAggregation": [
+        1,
+        1
+      ],
+      "outputSpacingDegrees": [
+        0.0075,
+        0.007042253521126761
+      ],
+      "imageCoordinates": [
+        [
+          209,
+          -16
+        ],
+        [
+          212,
+          -16
+        ],
+        [
+          212,
+          -18.5
+        ],
+        [
+          209,
+          -18.5
+        ]
+      ],
+      "positivePixels": 1023,
+      "zeroPixels": 3014,
+      "missingPixels": 137963,
+      "minPositive": 0.028415963053703308,
+      "maxValue": 5085.58837890625,
+      "sourceReadDiagnostics": {
+        "processedWindows": 6,
+        "maximumSourceWindowCells": 62500,
+        "sourceValidCells": 9077,
+        "sourceMissingCells": 365923,
+        "sourceZeroCells": 8089,
+        "sourcePopulationSum": 260655.97402145527,
+        "aggregatedReconstitutedSum": 260655.97402145527,
+        "maximumWindowRelativeSumError": 0,
+        "populationSumDifference": 0,
+        "peakRssBytes": 119775232,
+        "elapsedSeconds": 0.11712720000000264,
+        "outOfBoundsDisplayPixels": 0,
+        "note": "These source-read sums cover requested rectangular processing windows, including surrounding land/ocean. They verify aggregation only; they are not regional or national population totals."
+      },
+      "countryCoverage": {
+        "VUT": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "FSM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "MHL": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "MNP": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "GUM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "ASM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PCN": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "TON": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "SLB": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "WSM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PNG": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PLW": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NZL": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NIU": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "COK": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NRU": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "KIR": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "WLF": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PYF": {
+          "landPixels": 1767,
+          "positivePixels": 564,
+          "zeroPixels": 1203,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "NCL": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "FJI": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "AUS": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NFK": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "ATC": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "TUV": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        }
+      },
+      "countryCoverageMethod": "Diagnostic pixel-centre mask of adopted Natural Earth v5.1.2 1:50m land geometry on this display grid. Does not measure complete source coverage or national population; no mask is applied to population values.",
+      "knownPlaceSamples": {
+        "Papeete": {
+          "coordinates4326": [
+            -149.58093592135455,
+            -17.55859337930198
+          ],
+          "displayPixel": [
+            189,
+            221
+          ],
+          "densityPeopleKm2": 557.6990966796875,
+          "validSourceCells": 1,
+          "populationYear": 2020
+        }
+      },
+      "pixelValidation": {
+        "imageAndGridFromIdenticalFloat32Values": true,
+        "pngLosslessRoundtrip": true,
+        "gzipFloat32Roundtrip": true,
+        "zeroOpaqueWhiteAndMissingTransparent": true
+      }
+    },
+    "samoa": {
+      "title": "サモア",
+      "bounds4326": [
+        187.2,
+        -15,
+        189.3,
+        -13
+      ],
+      "boundsUnwrapped": [
+        187.2,
+        -15,
+        189.3,
+        -13
+      ],
+      "width": 400,
+      "height": 405,
+      "image": "samoa.png",
+      "grid": "samoa.density.gz",
+      "validCountGrid": "samoa.valid-count.gz",
+      "sourceCellKm": 1,
+      "sourceAggregation": [
+        1,
+        1
+      ],
+      "outputSpacingDegrees": [
+        0.005250000000000057,
+        0.0049382716049382715
+      ],
+      "imageCoordinates": [
+        [
+          187.2,
+          -13
+        ],
+        [
+          189.3,
+          -13
+        ],
+        [
+          189.3,
+          -15
+        ],
+        [
+          187.2,
+          -15
+        ]
+      ],
+      "positivePixels": 4002,
+      "zeroPixels": 10735,
+      "missingPixels": 147263,
+      "minPositive": 0.013436372391879559,
+      "maxValue": 3834.99609375,
+      "sourceReadDiagnostics": {
+        "processedWindows": 5,
+        "maximumSourceWindowCells": 62500,
+        "sourceValidCells": 5454,
+        "sourceMissingCells": 307046,
+        "sourceZeroCells": 4112,
+        "sourcePopulationSum": 261916.86456930428,
+        "aggregatedReconstitutedSum": 261916.86456930428,
+        "maximumWindowRelativeSumError": 0,
+        "populationSumDifference": 0,
+        "peakRssBytes": 121688064,
+        "elapsedSeconds": 0.07649749999999768,
+        "outOfBoundsDisplayPixels": 0,
+        "note": "These source-read sums cover requested rectangular processing windows, including surrounding land/ocean. They verify aggregation only; they are not regional or national population totals."
+      },
+      "countryCoverage": {
+        "VUT": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "FSM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "MHL": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "MNP": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "GUM": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "ASM": {
+          "landPixels": 250,
+          "positivePixels": 172,
+          "zeroPixels": 78,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "PCN": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "TON": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "SLB": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "WSM": {
+          "landPixels": 8675,
+          "positivePixels": 2784,
+          "zeroPixels": 5891,
+          "missingPixels": 0,
+          "status": "positive-population-displayed",
+          "explanation": "人口が正の格子を表示。領域全体の人口を集計したものではありません。"
+        },
+        "PNG": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PLW": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NZL": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NIU": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "COK": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NRU": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "KIR": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "WLF": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "PYF": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NCL": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "FJI": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "AUS": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "NFK": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "ATC": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        },
+        "TUV": {
+          "landPixels": 0,
+          "positivePixels": 0,
+          "zeroPixels": 0,
+          "missingPixels": 0,
+          "status": "no-display-land-pixel-centre",
+          "explanation": "この表示間隔と1:50m陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。"
+        }
+      },
+      "countryCoverageMethod": "Diagnostic pixel-centre mask of adopted Natural Earth v5.1.2 1:50m land geometry on this display grid. Does not measure complete source coverage or national population; no mask is applied to population values.",
+      "knownPlaceSamples": {
+        "Apia": {
+          "coordinates4326": [
+            -171.79052398143105,
+            -13.836858075301254
+          ],
+          "displayPixel": [
+            192,
+            169
+          ],
+          "densityPeopleKm2": 1677.9942626953125,
+          "validSourceCells": 1,
+          "populationYear": 2020
+        }
+      },
+      "pixelValidation": {
+        "imageAndGridFromIdenticalFloat32Values": true,
+        "pngLosslessRoundtrip": true,
+        "gzipFloat32Roundtrip": true,
+        "zeroOpaqueWhiteAndMissingTransparent": true
+      }
+    }
+  },
+  "files": {
+    "overview.png": {
+      "bytes": 28117,
+      "sha256": "e80b6766d4d7caba6d77ba0b6c638f3f02d3e76cbe3505b9e742ef3588320e7c"
+    },
+    "overview.density.gz": {
+      "bytes": 98889,
+      "sha256": "dd6e4446fa24b06eea48ab69ea89775e23a5934a471f1f120ecf440b4ac70c50"
+    },
+    "overview.valid-count.gz": {
+      "bytes": 12358,
+      "sha256": "cce732c58a64d6cb78329c185c92533124b21455b01fc0c63a413bcd476117e2"
+    },
+    "australia.png": {
+      "bytes": 39423,
+      "sha256": "582cdd5eec1fa9ba5249767c332bed421a7f5c0fbdfbd73675f0be185f818898"
+    },
+    "australia.density.gz": {
+      "bytes": 240137,
+      "sha256": "1d91ee1fa94405bb5f063c62ccf254c43183139876544dccf3b510eacbe31425"
+    },
+    "australia.valid-count.gz": {
+      "bytes": 11709,
+      "sha256": "6b021ad284a0b1497b66ae08123ffe80d2340e027609b7afdd8b54bb58cc5104"
+    },
+    "new-zealand.png": {
+      "bytes": 10637,
+      "sha256": "5474f521e66241ba33a8226ba2471f470f3ee3d13281f20dae56f51ac5f61ca4"
+    },
+    "new-zealand.density.gz": {
+      "bytes": 45458,
+      "sha256": "6da376dbab1e90ffb81d2dc884fdeedc8c562a53918409b351c990b363e4b24d"
+    },
+    "new-zealand.valid-count.gz": {
+      "bytes": 5055,
+      "sha256": "c60407df5cef30853ad729887a864037b19dd500e3b8dc26fd65c474add20b37"
+    },
+    "papua-new-guinea.png": {
+      "bytes": 22851,
+      "sha256": "855b0f22668948f1c59778b2ce6074f1a0d6953b39ab43d572bcd948a3560e1b"
+    },
+    "papua-new-guinea.density.gz": {
+      "bytes": 68622,
+      "sha256": "1639b21ff3b132b486e3514e3f036d0b9f21fdb8a91f0b94b4dcb37d4e84c36d"
+    },
+    "papua-new-guinea.valid-count.gz": {
+      "bytes": 10445,
+      "sha256": "206b7984e622878e76033782a98b3da5081eb80681dabc2d44c06f3e8687f588"
+    },
+    "fiji.png": {
+      "bytes": 10208,
+      "sha256": "fcb802ec4eb0813c7ba990ebb0d1ac9780753dfd8d7bce2adc646d31b14678a5"
+    },
+    "fiji.density.gz": {
+      "bytes": 26265,
+      "sha256": "d92aa8f6e67c53eafb464d4573b0646178631385f0c85ef80e69013aa3e4eaa6"
+    },
+    "fiji.valid-count.gz": {
+      "bytes": 2826,
+      "sha256": "07b5dad60d2eda8e9b84217809ba81954f3223538363c21a74b159c509a39f57"
+    },
+    "tarawa.png": {
+      "bytes": 1574,
+      "sha256": "f7cdab58839dc5da6e9c4df5881b38dd304b3f533f271a3beeca21e562912705"
+    },
+    "tarawa.density.gz": {
+      "bytes": 1866,
+      "sha256": "093e50f8e22a6794241bed01d835680f39d6d95b90d212f54bae92929d656e28"
+    },
+    "tarawa.valid-count.gz": {
+      "bytes": 598,
+      "sha256": "03de1861b955236d9b7ddb7f01522570eb034d422013f9d6eec2b6eeadf1ff47"
+    },
+    "tahiti.png": {
+      "bytes": 2289,
+      "sha256": "234e2bef11258934d99076cfa153bb5a8fafff9ed2521483a569c8182fd0237b"
+    },
+    "tahiti.density.gz": {
+      "bytes": 4788,
+      "sha256": "8bc1ace88bc136097c6162152ae276157ef774061ccef1d30843be0badd5c933"
+    },
+    "tahiti.valid-count.gz": {
+      "bytes": 595,
+      "sha256": "ef25596c3efdda43659b8cbfa8450cb90cec349a424b92b04881ee428f1a571b"
+    },
+    "samoa.png": {
+      "bytes": 3609,
+      "sha256": "435585e41a4d687e02a0f39a9bbae3088ef647530aca89038aa908d194f28f0e"
+    },
+    "samoa.density.gz": {
+      "bytes": 8631,
+      "sha256": "2e22bbe26d3f1f74bd75a58ae6d504957550dce9c9e7bcfe544c9800322582fd"
+    },
+    "samoa.valid-count.gz": {
+      "bytes": 724,
+      "sha256": "f90d63c98dc9e3f912464a987d76e90dd679ad804769284c74e92e39bbf7d579"
+    }
+  },
+  "populationCitationCatalog": "https://data.jrc.ec.europa.eu/dataset/2ff68a52-5b5b-4a22-8f40-c41da8332cfe",
+  "populationCitationPersistentDoi": "https://doi.org/10.2905/JRC.CXKEDRR",
+  "sourceReleaseIssued": "2023-05-08",
+  "citationVerifiedAt": "2026-10-01",
+  "zeroColor": "#ffffff",
+  "displayZeroColor": "#ffffff",
+  "rasterZeroAlpha": 255,
+  "rasterMissingAlpha": 0
+}

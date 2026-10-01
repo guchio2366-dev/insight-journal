@@ -1,0 +1,53 @@
+{
+  "version": 2,
+  "checkedAt": "2026-10-01",
+  "quantityEncoding": "none",
+  "coordinateOrder": "longitude,latitude",
+  "places": [
+    {
+      "id": "tauranga-port",
+      "country": "NZL",
+      "name": "タウランガ港",
+      "coordinates": [176.18333333333334, -37.65],
+      "kind": "port",
+      "note": "港湾管理者の2011年資料にある港の代表位置。木材・紙製品・乳製品との関係は、2018年を扱う2019年の運輸省報告による。加工工場の位置や現在の輸出量を表す印ではありません。",
+      "sourceUrl": "https://www.port-tauranga.co.nz/wp-content/uploads/Location-and-Transport-Links.pdf"
+    },
+    {
+      "id": "lihir-project",
+      "country": "PNG",
+      "name": "リヒール：金の採掘・処理地区",
+      "coordinates": [152.64083333333332, -3.115],
+      "kind": "processing",
+      "note": "Newmontの2024年技術報告に記載された事業地区の概略位置。情報時点は2023年12月31日。採掘と鉱石処理を含む地区の代表印で、工場単体の位置、現在の稼働確認、生産量を表しません。",
+      "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1164727/000116472724000016/exhibit967-lihiroperatio.htm"
+    },
+    {
+      "id": "lae-port",
+      "country": "PNG",
+      "name": "ラエ港",
+      "coordinates": [146.98333333333332, -6.733333333333333],
+      "kind": "port",
+      "note": "PNG Portsが示す港の代表位置。一般貨物・コンテナを扱う港です。個々の鉱山の輸出港や鉱山からの輸送経路は、この印からは分かりません。ページの公開年は不明、2026年10月1日確認。",
+      "sourceUrl": "https://www.pngports.com.pg/index.php/port-information/ports-of-png/lae-port"
+    },
+    {
+      "id": "noro-port",
+      "country": "SLB",
+      "name": "ノロ港・水産加工地域",
+      "coordinates": [157.19533333333334, -8.228333333333333],
+      "kind": "port",
+      "note": "SIPA factsheetの主埠頭位置を、水揚げと加工がつながる港湾地域の代表に使用。水先案内の乗降位置や加工工場の入口ではありません。水産加工の説明はFFAの2025年11月25日記事による。港資料の公開年は不明、2026年10月1日確認。",
+      "sourceUrl": "https://www.sipa.com.sb/media/1404/fact-sheet-noro.pdf"
+    },
+    {
+      "id": "suva-city",
+      "country": "FJI",
+      "name": "スバ：港湾都市とサービス",
+      "coordinates": [178.4501, -18.1248],
+      "kind": "city",
+      "note": "Fiji Portsが示すスバ市の代表位置。港の埠頭や観光施設の位置ではありません。金融・保険・観光などの説明はフィジー全国についてのDFAT資料によるもので、スバ市の産業割合を表しません。公開年は不明、2026年10月1日確認。",
+      "sourceUrl": "https://fijiports.com.fj/our-story/our-facilities/"
+    }
+  ]
+}

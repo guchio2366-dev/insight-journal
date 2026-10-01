@@ -1,0 +1,1034 @@
+{
+  "schemaVersion": 1,
+  "version": "2.0.0",
+  "period": "1991-2020",
+  "unit": "Koppen-Geiger categorical class ID",
+  "source": {
+    "archiveUrl": "https://ndownloader.figshare.com/files/45057352",
+    "archiveSha256": "d37b8d05b39b96e7cf6e9007b024c7d1ab301d6668409e3e792962a2408fc05d",
+    "member": "1991_2020/koppen_geiger_0p00833333.tif",
+    "memberSha256": "c4ce842d5c0270f74604c1727b127064f5acb21edb650d8542b4ef2ac9681b14",
+    "crs": "EPSG:4326",
+    "resolutionDegrees": 0.008333333333333333,
+    "sourceWidth": 43200,
+    "sourceHeight": 21600,
+    "sourceNoData": 0,
+    "citation": "https://doi.org/10.1038/s41597-023-02549-6",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://www.gloh2o.org/koppen/"
+  },
+  "broadView": "../oceania-climate-v1/manifest.json",
+  "display": {
+    "projection": "Pacific-centred equirectangular; standard latitude -20; not equal-area",
+    "palette": {
+      "reference": "scripts/refine-atlas-nature.py",
+      "referenceSha256": "34b5506bb83dbd526be05e7b6b52b2e4487cc709e74f372a484e2e2bf29f749c",
+      "legend": "public/assets/atlas/nature-v1/climate-legend.json",
+      "legendSha256": "a2be6f64e858736ef8095e607402ff580789df76973059b6773b70eb6f1a8fad",
+      "script": "scripts/atlas_asia_climate_palette.py",
+      "scriptSha256": "734f1ebeb446647025ca73e5df692a5f0b585098c651eca19f1369bb5d17b43f",
+      "method": "All 30 codes use the North America climate() palette. RGBA colors only; class IDs, masks and grids are unchanged."
+    },
+    "countryClip": "Use source country geometry for display; diagnostic centre mask does not alter original grid values"
+  },
+  "frames": {
+    "aus": {
+      "id": "aus",
+      "country": "AUS",
+      "label": "Australia",
+      "boundsUnwrapped": [
+        112.608,
+        -55.05,
+        159.259,
+        -9.751
+      ],
+      "bounds": [
+        112.608,
+        -55.05,
+        159.259,
+        -9.751
+      ],
+      "width": 800,
+      "height": 777,
+      "sourceResolutionDegrees": 0.008333333333333333,
+      "displayResolutionDegrees": [
+        0.05831374999999998,
+        0.0582998712998713
+      ],
+      "period": "1991-2020",
+      "unit": "Koppen-Geiger categorical class ID",
+      "noData": 0,
+      "image": "aus.png",
+      "data": "aus.grid.bin.gz",
+      "actualClassIds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        14,
+        15,
+        16,
+        26,
+        27,
+        29
+      ],
+      "countryCentreCoverage": {
+        "maskCells": 204693,
+        "classifiedCells": 203888,
+        "noDataCells": 805,
+        "classes": [
+          {
+            "id": 1,
+            "code": "Af",
+            "cells": 54
+          },
+          {
+            "id": 2,
+            "code": "Am",
+            "cells": 160
+          },
+          {
+            "id": 3,
+            "code": "Aw",
+            "cells": 19287
+          },
+          {
+            "id": 4,
+            "code": "BWh",
+            "cells": 100090
+          },
+          {
+            "id": 5,
+            "code": "BWk",
+            "cells": 5377
+          },
+          {
+            "id": 6,
+            "code": "BSh",
+            "cells": 45899
+          },
+          {
+            "id": 7,
+            "code": "BSk",
+            "cells": 12386
+          },
+          {
+            "id": 8,
+            "code": "Csa",
+            "cells": 1645
+          },
+          {
+            "id": 9,
+            "code": "Csb",
+            "cells": 2412
+          },
+          {
+            "id": 11,
+            "code": "Cwa",
+            "cells": 1367
+          },
+          {
+            "id": 12,
+            "code": "Cwb",
+            "cells": 15
+          },
+          {
+            "id": 14,
+            "code": "Cfa",
+            "cells": 6340
+          },
+          {
+            "id": 15,
+            "code": "Cfb",
+            "cells": 8701
+          },
+          {
+            "id": 16,
+            "code": "Cfc",
+            "cells": 122
+          },
+          {
+            "id": 26,
+            "code": "Dfb",
+            "cells": 12
+          },
+          {
+            "id": 27,
+            "code": "Dfc",
+            "cells": 13
+          },
+          {
+            "id": 29,
+            "code": "ET",
+            "cells": 8
+          }
+        ]
+      },
+      "sourceSampling": {
+        "columnRange": [
+          35116,
+          40707
+        ],
+        "rowRange": [
+          11973,
+          17402
+        ],
+        "dateLineCrossing": false
+      }
+    },
+    "nzl": {
+      "id": "nzl",
+      "country": "NZL",
+      "label": "New Zealand",
+      "boundsUnwrapped": [
+        165.589,
+        -52.871,
+        189.114,
+        -8.246
+      ],
+      "bounds": [
+        165.589,
+        -52.871,
+        189.114,
+        -8.246
+      ],
+      "width": 422,
+      "height": 800,
+      "sourceResolutionDegrees": 0.008333333333333333,
+      "displayResolutionDegrees": [
+        0.055746445497630345,
+        0.05578125
+      ],
+      "period": "1991-2020",
+      "unit": "Koppen-Geiger categorical class ID",
+      "noData": 0,
+      "image": "nzl.png",
+      "data": "nzl.grid.bin.gz",
+      "actualClassIds": [
+        1,
+        2,
+        3,
+        7,
+        8,
+        14,
+        15,
+        16,
+        26,
+        27,
+        29
+      ],
+      "countryCentreCoverage": {
+        "maskCells": 9342,
+        "classifiedCells": 9110,
+        "noDataCells": 232,
+        "classes": [
+          {
+            "id": 7,
+            "code": "BSk",
+            "cells": 63
+          },
+          {
+            "id": 15,
+            "code": "Cfb",
+            "cells": 7583
+          },
+          {
+            "id": 16,
+            "code": "Cfc",
+            "cells": 419
+          },
+          {
+            "id": 26,
+            "code": "Dfb",
+            "cells": 28
+          },
+          {
+            "id": 27,
+            "code": "Dfc",
+            "cells": 212
+          },
+          {
+            "id": 29,
+            "code": "ET",
+            "cells": 805
+          }
+        ]
+      },
+      "sourceSampling": {
+        "columnRange": [
+          6,
+          43199
+        ],
+        "rowRange": [
+          11792,
+          17141
+        ],
+        "dateLineCrossing": true
+      }
+    },
+    "png": {
+      "id": "png",
+      "country": "PNG",
+      "label": "Papua New Guinea",
+      "boundsUnwrapped": [
+        140.562,
+        -11.931,
+        156.258,
+        -1.053
+      ],
+      "bounds": [
+        140.562,
+        -11.931,
+        156.258,
+        -1.053
+      ],
+      "width": 800,
+      "height": 555,
+      "sourceResolutionDegrees": 0.008333333333333333,
+      "displayResolutionDegrees": [
+        0.01962,
+        0.0196
+      ],
+      "period": "1991-2020",
+      "unit": "Koppen-Geiger categorical class ID",
+      "noData": 0,
+      "image": "png.png",
+      "data": "png.grid.bin.gz",
+      "actualClassIds": [
+        1,
+        2,
+        3,
+        15,
+        16,
+        29
+      ],
+      "countryCentreCoverage": {
+        "maskCells": 98332,
+        "classifiedCells": 96710,
+        "noDataCells": 1622,
+        "classes": [
+          {
+            "id": 1,
+            "code": "Af",
+            "cells": 75417
+          },
+          {
+            "id": 2,
+            "code": "Am",
+            "cells": 4818
+          },
+          {
+            "id": 3,
+            "code": "Aw",
+            "cells": 377
+          },
+          {
+            "id": 15,
+            "code": "Cfb",
+            "cells": 15512
+          },
+          {
+            "id": 16,
+            "code": "Cfc",
+            "cells": 2
+          },
+          {
+            "id": 29,
+            "code": "ET",
+            "cells": 584
+          }
+        ]
+      },
+      "sourceSampling": {
+        "columnRange": [
+          38468,
+          40349
+        ],
+        "rowRange": [
+          10927,
+          12230
+        ],
+        "dateLineCrossing": false
+      }
+    },
+    "fji": {
+      "id": "fji",
+      "country": "FJI",
+      "label": "Fiji",
+      "boundsUnwrapped": [
+        174.31,
+        -21.983,
+        182.026,
+        -12.2
+      ],
+      "bounds": [
+        174.31,
+        -21.983,
+        182.026,
+        -12.2
+      ],
+      "width": 631,
+      "height": 800,
+      "sourceResolutionDegrees": 0.008333333333333333,
+      "displayResolutionDegrees": [
+        0.012228209191759126,
+        0.012228750000000002
+      ],
+      "period": "1991-2020",
+      "unit": "Koppen-Geiger categorical class ID",
+      "noData": 0,
+      "image": "fji.png",
+      "data": "fji.grid.bin.gz",
+      "actualClassIds": [
+        1,
+        2,
+        3,
+        14,
+        15
+      ],
+      "countryCentreCoverage": {
+        "maskCells": 10443,
+        "classifiedCells": 9684,
+        "noDataCells": 759,
+        "classes": [
+          {
+            "id": 1,
+            "code": "Af",
+            "cells": 7909
+          },
+          {
+            "id": 2,
+            "code": "Am",
+            "cells": 1736
+          },
+          {
+            "id": 14,
+            "code": "Cfa",
+            "cells": 1
+          },
+          {
+            "id": 15,
+            "code": "Cfb",
+            "cells": 38
+          }
+        ]
+      },
+      "sourceSampling": {
+        "columnRange": [
+          0,
+          43198
+        ],
+        "rowRange": [
+          12264,
+          13437
+        ],
+        "dateLineCrossing": true
+      }
+    },
+    "wsm": {
+      "id": "wsm",
+      "country": "WSM",
+      "label": "Samoa",
+      "boundsUnwrapped": [
+        187.181,
+        -14.088,
+        188.591,
+        -13.425
+      ],
+      "bounds": [
+        187.181,
+        -14.088,
+        188.591,
+        -13.425
+      ],
+      "width": 170,
+      "height": 80,
+      "sourceResolutionDegrees": 0.008333333333333333,
+      "displayResolutionDegrees": [
+        0.008294117647058804,
+        0.00828749999999998
+      ],
+      "period": "1991-2020",
+      "unit": "Koppen-Geiger categorical class ID",
+      "noData": 0,
+      "image": "wsm.png",
+      "data": "wsm.grid.bin.gz",
+      "actualClassIds": [
+        1,
+        2,
+        15
+      ],
+      "countryCentreCoverage": {
+        "maskCells": 3271,
+        "classifiedCells": 3141,
+        "noDataCells": 130,
+        "classes": [
+          {
+            "id": 1,
+            "code": "Af",
+            "cells": 3045
+          },
+          {
+            "id": 2,
+            "code": "Am",
+            "cells": 2
+          },
+          {
+            "id": 15,
+            "code": "Cfb",
+            "cells": 94
+          }
+        ]
+      },
+      "sourceSampling": {
+        "columnRange": [
+          862,
+          1030
+        ],
+        "rowRange": [
+          12411,
+          12490
+        ],
+        "dateLineCrossing": false
+      }
+    },
+    "ton": {
+      "id": "ton",
+      "country": "TON",
+      "label": "Tonga",
+      "boundsUnwrapped": [
+        184.551,
+        -21.538,
+        186.165,
+        -18.478
+      ],
+      "bounds": [
+        184.551,
+        -21.538,
+        186.165,
+        -18.478
+      ],
+      "width": 194,
+      "height": 368,
+      "sourceResolutionDegrees": 0.008333333333333333,
+      "displayResolutionDegrees": [
+        0.008319587628866002,
+        0.008315217391304345
+      ],
+      "period": "1991-2020",
+      "unit": "Koppen-Geiger categorical class ID",
+      "noData": 0,
+      "image": "ton.png",
+      "data": "ton.grid.bin.gz",
+      "actualClassIds": [
+        1
+      ],
+      "countryCentreCoverage": {
+        "maskCells": 538,
+        "classifiedCells": 447,
+        "noDataCells": 91,
+        "classes": [
+          {
+            "id": 1,
+            "code": "Af",
+            "cells": 447
+          }
+        ]
+      },
+      "sourceSampling": {
+        "columnRange": [
+          546,
+          739
+        ],
+        "rowRange": [
+          13017,
+          13384
+        ],
+        "dateLineCrossing": false
+      }
+    },
+    "kir": {
+      "id": "kir",
+      "country": "KIR",
+      "label": "Kiribati",
+      "boundsUnwrapped": [
+        169.222,
+        -11.757,
+        208.518,
+        4.224
+      ],
+      "bounds": [
+        169.222,
+        -11.757,
+        208.518,
+        4.224
+      ],
+      "width": 800,
+      "height": 326,
+      "sourceResolutionDegrees": 0.008333333333333333,
+      "displayResolutionDegrees": [
+        0.04911999999999999,
+        0.04902147239263804
+      ],
+      "period": "1991-2020",
+      "unit": "Koppen-Geiger categorical class ID",
+      "noData": 0,
+      "image": "kir.png",
+      "data": "kir.grid.bin.gz",
+      "actualClassIds": [
+        1,
+        3
+      ],
+      "countryCentreCoverage": {
+        "maskCells": 33,
+        "classifiedCells": 14,
+        "noDataCells": 19,
+        "classes": [
+          {
+            "id": 1,
+            "code": "Af",
+            "cells": 3
+          },
+          {
+            "id": 3,
+            "code": "Aw",
+            "cells": 11
+          }
+        ]
+      },
+      "sourceSampling": {
+        "columnRange": [
+          0,
+          43194
+        ],
+        "rowRange": [
+          10296,
+          12207
+        ],
+        "dateLineCrossing": true
+      }
+    },
+    "pyf": {
+      "id": "pyf",
+      "country": "PYF",
+      "label": "French Polynesia",
+      "boundsUnwrapped": [
+        208.187,
+        -21.176,
+        224.007,
+        -8.481
+      ],
+      "bounds": [
+        208.187,
+        -21.176,
+        224.007,
+        -8.481
+      ],
+      "width": 800,
+      "height": 642,
+      "sourceResolutionDegrees": 0.008333333333333333,
+      "displayResolutionDegrees": [
+        0.01977499999999999,
+        0.019774143302180684
+      ],
+      "period": "1991-2020",
+      "unit": "Koppen-Geiger categorical class ID",
+      "noData": 0,
+      "image": "pyf.png",
+      "data": "pyf.grid.bin.gz",
+      "actualClassIds": [
+        1,
+        2,
+        3,
+        15
+      ],
+      "countryCentreCoverage": {
+        "maskCells": 567,
+        "classifiedCells": 414,
+        "noDataCells": 153,
+        "classes": [
+          {
+            "id": 1,
+            "code": "Af",
+            "cells": 407
+          },
+          {
+            "id": 2,
+            "code": "Am",
+            "cells": 2
+          },
+          {
+            "id": 3,
+            "code": "Aw",
+            "cells": 2
+          },
+          {
+            "id": 15,
+            "code": "Cfb",
+            "cells": 3
+          }
+        ]
+      },
+      "sourceSampling": {
+        "columnRange": [
+          3383,
+          5279
+        ],
+        "rowRange": [
+          11818,
+          13339
+        ],
+        "dateLineCrossing": false
+      }
+    },
+    "kir-tarawa": {
+      "id": "kir-tarawa",
+      "country": "KIR",
+      "label": "タラワ周辺",
+      "boundsUnwrapped": [
+        172.75,
+        1.15,
+        173.25,
+        1.85
+      ],
+      "bounds": [
+        172.75,
+        1.15,
+        173.25,
+        1.85
+      ],
+      "width": 60,
+      "height": 85,
+      "sourceResolutionDegrees": 0.008333333333333333,
+      "displayResolutionDegrees": [
+        0.008333333333333333,
+        0.008235294117647061
+      ],
+      "period": "1991-2020",
+      "unit": "Koppen-Geiger categorical class ID",
+      "noData": 0,
+      "image": "kir-tarawa.png",
+      "data": "kir-tarawa.grid.bin.gz",
+      "actualClassIds": [
+        1
+      ],
+      "countryCentreCoverage": {
+        "maskCells": 73,
+        "classifiedCells": 14,
+        "noDataCells": 59,
+        "classes": [
+          {
+            "id": 1,
+            "code": "Af",
+            "cells": 14
+          }
+        ]
+      },
+      "sourceSampling": {
+        "columnRange": [
+          42330,
+          42389
+        ],
+        "rowRange": [
+          10578,
+          10661
+        ],
+        "dateLineCrossing": false
+      }
+    },
+    "pyf-tahiti": {
+      "id": "pyf-tahiti",
+      "country": "PYF",
+      "label": "タヒチ周辺",
+      "boundsUnwrapped": [
+        210.1,
+        -18.05,
+        211.05,
+        -17.3
+      ],
+      "bounds": [
+        210.1,
+        -18.05,
+        211.05,
+        -17.3
+      ],
+      "width": 115,
+      "height": 90,
+      "sourceResolutionDegrees": 0.008333333333333333,
+      "displayResolutionDegrees": [
+        0.00826086956521754,
+        0.008333333333333333
+      ],
+      "period": "1991-2020",
+      "unit": "Koppen-Geiger categorical class ID",
+      "noData": 0,
+      "image": "pyf-tahiti.png",
+      "data": "pyf-tahiti.grid.bin.gz",
+      "actualClassIds": [
+        1,
+        15
+      ],
+      "countryCentreCoverage": {
+        "maskCells": 1343,
+        "classifiedCells": 1209,
+        "noDataCells": 134,
+        "classes": [
+          {
+            "id": 1,
+            "code": "Af",
+            "cells": 1192
+          },
+          {
+            "id": 15,
+            "code": "Cfb",
+            "cells": 17
+          }
+        ]
+      },
+      "sourceSampling": {
+        "columnRange": [
+          3612,
+          3725
+        ],
+        "rowRange": [
+          12876,
+          12965
+        ],
+        "dateLineCrossing": false
+      }
+    }
+  },
+  "legend": "legend.json",
+  "verification": {
+    "knownSourceSamples": [
+      {
+        "name": "Alice Springs",
+        "country": "AUS",
+        "longitude": 133.88,
+        "latitude": -23.7,
+        "sourceColumn": 37665,
+        "sourceRow": 13644,
+        "classId": 4,
+        "code": "BWh"
+      },
+      {
+        "name": "Perth",
+        "country": "AUS",
+        "longitude": 115.86,
+        "latitude": -31.95,
+        "sourceColumn": 35503,
+        "sourceRow": 14634,
+        "classId": 8,
+        "code": "Csa"
+      },
+      {
+        "name": "Sydney",
+        "country": "AUS",
+        "longitude": 151.21,
+        "latitude": -33.87,
+        "sourceColumn": 39745,
+        "sourceRow": 14864,
+        "classId": 14,
+        "code": "Cfa"
+      },
+      {
+        "name": "Auckland",
+        "country": "NZL",
+        "longitude": 174.76,
+        "latitude": -36.85,
+        "sourceColumn": 42571,
+        "sourceRow": 15222,
+        "classId": 15,
+        "code": "Cfb"
+      },
+      {
+        "name": "Port Moresby",
+        "country": "PNG",
+        "longitude": 147.18,
+        "latitude": -9.44,
+        "sourceColumn": 39261,
+        "sourceRow": 11932,
+        "classId": 2,
+        "code": "Am"
+      },
+      {
+        "name": "Goroka",
+        "country": "PNG",
+        "longitude": 145.39,
+        "latitude": -6.08,
+        "sourceColumn": 39046,
+        "sourceRow": 11529,
+        "classId": 1,
+        "code": "Af"
+      },
+      {
+        "name": "Suva",
+        "country": "FJI",
+        "longitude": 178.45,
+        "latitude": -18.14,
+        "sourceColumn": 43014,
+        "sourceRow": 12976,
+        "classId": 1,
+        "code": "Af"
+      },
+      {
+        "name": "Apia",
+        "country": "WSM",
+        "longitude": -171.77,
+        "latitude": -13.83,
+        "sourceColumn": 987,
+        "sourceRow": 12459,
+        "classId": 1,
+        "code": "Af"
+      },
+      {
+        "name": "Nuku'alofa",
+        "country": "TON",
+        "longitude": -175.2,
+        "latitude": -21.14,
+        "sourceColumn": 576,
+        "sourceRow": 13336,
+        "classId": 1,
+        "code": "Af"
+      },
+      {
+        "name": "Tarawa",
+        "country": "KIR",
+        "longitude": 173.02,
+        "latitude": 1.45,
+        "sourceColumn": 42362,
+        "sourceRow": 10626,
+        "classId": 0,
+        "code": null
+      },
+      {
+        "name": "Papeete",
+        "country": "PYF",
+        "longitude": -149.57,
+        "latitude": -17.54,
+        "sourceColumn": 3651,
+        "sourceRow": 12904,
+        "classId": 0,
+        "code": null
+      }
+    ],
+    "allPngPixelsMatchGrid": true,
+    "classIdsUnchanged": true,
+    "decodedUniqueSourceTiles": 982,
+    "maxCachedSourceTiles": 128,
+    "tileShape": [
+      256,
+      256
+    ],
+    "maxCachedTileBytes": 8388608,
+    "globalSourceArrayCreated": false
+  },
+  "processing": {
+    "script": "scripts/prepare-oceania-climate-detail.py",
+    "scriptSha256": "bbe72f97a239a253bd02b27c5f1593369361667f5f9c995d5acdecd1a9d077cd",
+    "method": "Read source LZW tiles only; nearest source cell at each display pixel centre. No interpolation, class merging, coastal fill, synthetic island values or whole-globe array. PNG and lookup from the same uint8 grid. Country-centre coverage is a display-grid diagnostic, not land area.",
+    "geometrySha256": "8f8ea3295c57e66ffa92137a42ae50d8242dc968aeae00f9eaa857eefb744a25",
+    "pythonVersion": "3.12.14",
+    "shapelyVersion": "2.1.2"
+  },
+  "limitations": [
+    "The 1 km source is sampled to at most 800 pixels per edge; national-frame display resolution can be coarser than the source. Selected local island frames retain source spacing.",
+    "Country-centre counts use generalized Natural Earth 1:50m outlines. A narrow island may have no display pixel centre inside its outline.",
+    "Class 0 is missing, not a climate zone. Detail views can still contain missing coastal cells.",
+    "Climate classes do not measure current weather, elevation, rainfall totals, groundwater quantity or farm production.",
+    "Unmasked source windows can contain context countries; preserve their neutral country outline treatment in the UI."
+  ],
+  "files": {
+    "aus.png": {
+      "bytes": 23040,
+      "sha256": "bf28fe422e85238960f2f1fb27f779667f61c6ff5f303e144b545a5a5202e1f5"
+    },
+    "aus.grid.bin.gz": {
+      "bytes": 12191,
+      "sha256": "076c165dd3aee73327ae5267992a0fb5dc8e2e9f7eee100cad183c0879a9f821"
+    },
+    "nzl.png": {
+      "bytes": 7996,
+      "sha256": "3579a90b55f285b5b0f7023ae55a3e2030db2e7b208d382cb58e54a8c0c1aae4"
+    },
+    "nzl.grid.bin.gz": {
+      "bytes": 3576,
+      "sha256": "c2a5b3e9221570203735ae7bbf3c5bafbf95ab25ab53b47b786d7a42d0f176d8"
+    },
+    "png.png": {
+      "bytes": 18137,
+      "sha256": "b120d2217d6381ff01181691a99796d14353d0b0a23a5d4e3f09ea836750a125"
+    },
+    "png.grid.bin.gz": {
+      "bytes": 10066,
+      "sha256": "b42cf857122ecd4e198f91afed05ea204a196c91ca49b10dd74d04ba3e043a99"
+    },
+    "fji.png": {
+      "bytes": 5895,
+      "sha256": "8d0badf138abbacb3edec8db2b1c8b4d4bb32c1e001eb711995d0cc03961e000"
+    },
+    "fji.grid.bin.gz": {
+      "bytes": 2807,
+      "sha256": "fbf733fe5d5f0d69dd62303c3adb70481cbbd9150e8e8ae7e6718c0ccf56583d"
+    },
+    "wsm.png": {
+      "bytes": 782,
+      "sha256": "717a1b5b81e85be81415037c49abf7e9aca18e3dc1eb519d379760ad8f466efb"
+    },
+    "wsm.grid.bin.gz": {
+      "bytes": 333,
+      "sha256": "7e1424cd6acd73b69af65a779c2a54f7f552a315e441dc2f1d39195958bd3f09"
+    },
+    "ton.png": {
+      "bytes": 1078,
+      "sha256": "f3f32ccd367079a7e00cc0d4394ab1b617a97d6bb34aac79219600cd84cc69e1"
+    },
+    "ton.grid.bin.gz": {
+      "bytes": 529,
+      "sha256": "f720c43bc0a6733817a45739100fd81fd7405b46f73fa627b72f64aca304ca6a"
+    },
+    "kir.png": {
+      "bytes": 1213,
+      "sha256": "1b3f41c521369072e01bc5aa68b6bf0adfc78a6a09c552abf9849a2075829f0e"
+    },
+    "kir.grid.bin.gz": {
+      "bytes": 365,
+      "sha256": "345896cc1ee65db98935c050db35a4a78b70767af50cc53c487e1849ff75354b"
+    },
+    "pyf.png": {
+      "bytes": 3197,
+      "sha256": "eeca7122ac06aa60ae3714e2682cb35f318eeafba879b3a7b6829be8f1e63651"
+    },
+    "pyf.grid.bin.gz": {
+      "bytes": 1241,
+      "sha256": "565b2ed5eebf5d1508e23bbe3004266d8b14f092bf0a0f5cae000dbc9de5eb96"
+    },
+    "kir-tarawa.png": {
+      "bytes": 222,
+      "sha256": "b0b5dc7dc08960246af3afd8746e3abc7b44999b9db17913e1227cc4f0392d78"
+    },
+    "kir-tarawa.grid.bin.gz": {
+      "bytes": 106,
+      "sha256": "3cf7078fdf07fa15095216383a394bb1c014f12fbc926fbee9879a33baf448d9"
+    },
+    "pyf-tahiti.png": {
+      "bytes": 519,
+      "sha256": "71bac97169cf0250040462307f3f39bec3060bc24d810c12bec191da9d293f4b"
+    },
+    "pyf-tahiti.grid.bin.gz": {
+      "bytes": 237,
+      "sha256": "7c6313942c5a4efd810a24f74ef1646f34b7b5f080284cef68c5f677ae228eb4"
+    },
+    "legend.json": {
+      "bytes": 8225,
+      "sha256": "8fa339d2044bf3c0d7388168558372949beb793525da36b3b8c5bb97a32aff7b"
+    }
+  }
+}

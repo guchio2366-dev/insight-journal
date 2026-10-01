@@ -1,0 +1,1476 @@
+{
+  "schemaVersion": 1,
+  "region": "oceania",
+  "year": 2020,
+  "generator": {
+    "file": "scripts/prepare-oceania-crops.py",
+    "sha256": "762a45cfc586ef404cfa94afa2fce0fb539e6a28efb894549f943c64f4e494f7",
+    "digestMethod": "SHA256 of UTF-8 source text with CRLF converted to LF; remaining bytes unchanged",
+    "generatedJsonEncoding": "UTF-8, LF line endings"
+  },
+  "source": {
+    "name": "IFPRI MapSPAM 2020 v2r2 harvested area",
+    "edition": "Harvard Dataverse version 6.0, file 13827040",
+    "url": "https://dataverse.harvard.edu/api/access/datafile/13827040",
+    "catalogUrl": "https://doi.org/10.7910/DVN/SWPENT",
+    "sha256": "34895a332ba7ff9d9732a81fe9da7063458d197f3c72ce3a405329c41f94ade2",
+    "citation": "International Food Policy Research Institute (IFPRI), 2026, \"Global Spatially-Disaggregated Crop Production Statistics Data for 2020 Version 2.0 Release 2\", Harvard Dataverse, V6, https://doi.org/10.7910/DVN/SWPENT.",
+    "citationVersion": "Harvard Dataverse V6.0, released 2026-05-05",
+    "termsUrl": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/SWPENT&version=6.0",
+    "termsApiUrl": "https://dataverse.harvard.edu/api/datasets/:persistentId/versions/6.0?persistentId=doi%3A10.7910%2FDVN%2FSWPENT",
+    "license": "CC BY 4.0",
+    "licenseEvidence": "Pinned V6.0 IFPRI Datasets Terms of Use section 4. This fixed version is distinct from legacy mapspam.info licence statements.",
+    "adaptationAttribution": {
+      "section": "5.2",
+      "requiredText": "This data was provided by the International Food Policy Research Institute (IFPRI). IFPRI bears no responsibility for the analyses or interpretations of the data presented here.",
+      "placement": "After the complete source citation",
+      "sourceUrl": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/SWPENT&version=6.0",
+      "record": "attribution.json",
+      "recordSha256": "003996a98115955f963d1a7295ac5a0bb06c2d8efe51227603190bfcdde118c8"
+    },
+    "crs": "EPSG:4326",
+    "nominalResolutionDegrees": 0.08333333333333333,
+    "width": 4320,
+    "height": 2160,
+    "nativeGeoTiffTags": {
+      "pixelScale": [
+        0.0833333332727273,
+        0.0833333332727273,
+        0.0
+      ],
+      "modelTiepoint": [
+        0.0,
+        0.0,
+        0.0,
+        -180.0,
+        90.00000000000004,
+        0.0
+      ],
+      "geoKeyDirectory": [
+        1,
+        1,
+        0,
+        13,
+        1024,
+        0,
+        1,
+        2,
+        1025,
+        0,
+        1,
+        1,
+        2048,
+        0,
+        1,
+        4326,
+        2049,
+        34737,
+        84,
+        0,
+        2050,
+        0,
+        1,
+        6326,
+        2051,
+        0,
+        1,
+        8901,
+        2054,
+        0,
+        1,
+        9102,
+        2055,
+        34736,
+        1,
+        0,
+        2056,
+        0,
+        1,
+        7030,
+        2057,
+        34736,
+        1,
+        1,
+        2059,
+        34736,
+        1,
+        2,
+        2061,
+        34736,
+        1,
+        3,
+        3073,
+        34737,
+        163,
+        84
+      ],
+      "noData": -3.4028234663852886e+38
+    },
+    "measurementType": "modelled harvested area"
+  },
+  "geometry": {
+    "file": "src/data/atlas/oceania-countries.json",
+    "sha256": "dd9e4f68e17a741ca7ce3cc378e3d043524d94f0f48673c2ce024c1ce0af48a1",
+    "digestMethod": "SHA256 of UTF-8 source text with CRLF converted to LF; remaining bytes unchanged",
+    "source": {
+      "name": "Natural Earth Admin 0 Countries 1:50m",
+      "version": "repository tag v5.1.2",
+      "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_50m_admin_0_countries.geojson",
+      "sha256": "3e458fc036ad0a66411f2c1e6cac49c5d7bfb81cb1123bc513b22511a2b7fdeb",
+      "license": "Public domain",
+      "licenseUrl": "https://www.naturalearthdata.com/about/terms-of-use/",
+      "retrievedAt": "2026-09-25",
+      "method": "Oceania by CONTINENT; IDN/TLS/PHL as context. Original WGS84 geometry and precision retained. Display clipping and longitude wrapping occur at build time.",
+      "omissions": "Small islands absent in the source, including Tokelau, are not represented. This is a land boundary map, not an EEZ map."
+    },
+    "targetCountryOrTerritoryCount": 25,
+    "maskMethod": "Strict polygon-interior even-odd scanlines at native 5 arc-minute source-cell centres. Holes subtracted; rings unwrapped at date line. Diagnostics only, no value clipping."
+  },
+  "display": {
+    "crs": "EPSG:4326 with unwrapped longitudes 110 to 250 east",
+    "projection": "Pacific-centred equirectangular map-space rectangle",
+    "bounds4326Unwrapped": [
+      110,
+      -58,
+      250,
+      25
+    ],
+    "width": 1680,
+    "height": 996,
+    "nominalTransform": [
+      110,
+      0.08333333333333333,
+      0,
+      25,
+      0,
+      -0.08333333333333333
+    ],
+    "sourceRowRange": [
+      780,
+      1776
+    ],
+    "sourceColumnSpans": [
+      [
+        3480,
+        4320
+      ],
+      [
+        0,
+        840
+      ]
+    ],
+    "indexConvention": "Half-open source ranges, row 0 north; original source cells concatenated west then east",
+    "nativeAffineRounding": "Source pixel step differs from nominal 1/12 degree by about 6e-11 degree. Display bounds use nominal grid edges; native pixel centres used for diagnostics. Maximum coordinate difference below 3e-7 degree. No data resampling."
+  },
+  "lookup": {
+    "encoding": "float32-le-gzip",
+    "noData": -1,
+    "validZero": 0
+  },
+  "legend": {
+    "breaks": [
+      1,
+      10,
+      100,
+      1000,
+      5000
+    ],
+    "colors": [
+      "edf1e3",
+      "d7e7b4",
+      "afd08b",
+      "7fa95c",
+      "4f7e3d",
+      "23582d"
+    ],
+    "positiveClassesHaPerCell": [
+      "0 < value < 1",
+      "1 <= value < 10",
+      "10 <= value < 100",
+      "100 <= value < 1000",
+      "1000 <= value < 5000",
+      "value >= 5000"
+    ],
+    "zeroColor": "f6f5eb",
+    "missingAlpha": 0,
+    "zeroAndMissing": "Valid zero is opaque #f6f5eb; missing is transparent. Grid and coverage also retain zero separately from missing. Missing must be labelled data unavailable, never no farming."
+  },
+  "method": "Exact original float32 source-cell cutout. No averaging, smoothing, interpolation or country-value mask. Same array creates colour and numerical lookup. NaN, infinities and original negative no-data normalized to -1 only.",
+  "limitations": [
+    "Harvested area is not production, yield or physical cropland area; multiple harvests can count the same ground more than once.",
+    "Five arc-minute source cells and NE 1:50m geometry do not resolve every small island. No cell centre in a polygon is not absence of farming.",
+    "No valid source cells is data unavailable; valid zero means this model estimates zero for this crop only.",
+    "Per-country cell counts diagnose source coverage and are not official national statistics.",
+    "Neither the longitude-latitude grid nor the equirectangular display is equal-area. Do not compare area by visual pixel size.",
+    "Includes source values on surrounding countries; any display clipping must preserve source values and distinguish data gaps."
+  ],
+  "layers": [
+    {
+      "id": "wheat",
+      "sourceCode": "WHEA",
+      "title": "小麦",
+      "kind": "crop",
+      "year": 2020,
+      "unit": "ha/格子",
+      "unitEnglish": "harvested hectares per source cell",
+      "image": "wheat.png",
+      "grid": "wheat.values.gz",
+      "width": 1680,
+      "height": 996,
+      "bounds4326Unwrapped": [
+        110,
+        -58,
+        250,
+        25
+      ],
+      "breaks": [
+        1,
+        10,
+        100,
+        1000,
+        5000
+      ],
+      "colors": [
+        "edf1e3",
+        "d7e7b4",
+        "afd08b",
+        "7fa95c",
+        "4f7e3d",
+        "23582d"
+      ],
+      "sourceMember": "spam2020V2r2_global_harvested_area/spam2020_V2r2_global_H_WHEA_A.tif",
+      "sourceMemberSha256": "288f583e50e8237b0eaad880e5ef188383c97701c5015744cf6a62f2bf7dba9e",
+      "nativeGeoTiffTags": {
+        "pixelScale": [
+          0.0833333332727273,
+          0.0833333332727273,
+          0.0
+        ],
+        "modelTiepoint": [
+          0.0,
+          0.0,
+          0.0,
+          -180.0,
+          90.00000000000004,
+          0.0
+        ],
+        "geoKeyDirectory": [
+          1,
+          1,
+          0,
+          13,
+          1024,
+          0,
+          1,
+          2,
+          1025,
+          0,
+          1,
+          1,
+          2048,
+          0,
+          1,
+          4326,
+          2049,
+          34737,
+          84,
+          0,
+          2050,
+          0,
+          1,
+          6326,
+          2051,
+          0,
+          1,
+          8901,
+          2054,
+          0,
+          1,
+          9102,
+          2055,
+          34736,
+          1,
+          0,
+          2056,
+          0,
+          1,
+          7030,
+          2057,
+          34736,
+          1,
+          1,
+          2059,
+          34736,
+          1,
+          2,
+          2061,
+          34736,
+          1,
+          3,
+          3073,
+          34737,
+          163,
+          84
+        ],
+        "noData": -3.4028234663852886e+38
+      },
+      "coverage": {
+        "VUT": {
+          "maskCells": 139,
+          "validCells": 0,
+          "missingCells": 139,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "FSM": {
+          "maskCells": 8,
+          "validCells": 0,
+          "missingCells": 8,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "MHL": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "MNP": {
+          "maskCells": 5,
+          "validCells": 0,
+          "missingCells": 5,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "GUM": {
+          "maskCells": 5,
+          "validCells": 0,
+          "missingCells": 5,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "ASM": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "PCN": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "TON": {
+          "maskCells": 6,
+          "validCells": 0,
+          "missingCells": 6,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "SLB": {
+          "maskCells": 307,
+          "validCells": 0,
+          "missingCells": 307,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "WSM": {
+          "maskCells": 33,
+          "validCells": 0,
+          "missingCells": 33,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "PNG": {
+          "maskCells": 5425,
+          "validCells": 0,
+          "missingCells": 5425,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "PLW": {
+          "maskCells": 5,
+          "validCells": 0,
+          "missingCells": 5,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "NZL": {
+          "maskCells": 4176,
+          "validCells": 1682,
+          "missingCells": 2494,
+          "zeroCells": 1141,
+          "positiveCells": 541,
+          "positiveAtLeast1HaCells": 354,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "NIU": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "COK": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "NRU": {
+          "maskCells": 0,
+          "validCells": 0,
+          "missingCells": 0,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-source-cell-centre-in-geometry"
+        },
+        "KIR": {
+          "maskCells": 11,
+          "validCells": 0,
+          "missingCells": 11,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "WLF": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "PYF": {
+          "maskCells": 34,
+          "validCells": 0,
+          "missingCells": 34,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "NCL": {
+          "maskCells": 236,
+          "validCells": 10,
+          "missingCells": 226,
+          "zeroCells": 0,
+          "positiveCells": 10,
+          "positiveAtLeast1HaCells": 8,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "FJI": {
+          "maskCells": 228,
+          "validCells": 0,
+          "missingCells": 228,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "AUS": {
+          "maskCells": 100200,
+          "validCells": 24570,
+          "missingCells": 75630,
+          "zeroCells": 10226,
+          "positiveCells": 14344,
+          "positiveAtLeast1HaCells": 9091,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "NFK": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "ATC": {
+          "maskCells": 0,
+          "validCells": 0,
+          "missingCells": 0,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-source-cell-centre-in-geometry"
+        },
+        "TUV": {
+          "maskCells": 0,
+          "validCells": 0,
+          "missingCells": 0,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-source-cell-centre-in-geometry"
+        }
+      },
+      "spotChecks": [
+        {
+          "name": "Western Australia wheatbelt",
+          "longitudeUnwrapped": 117.0,
+          "latitude": -31.0,
+          "outputRow": 672,
+          "outputColumn": 84,
+          "sourceRow": 1452,
+          "sourceColumn": 3564,
+          "valueHaPerSourceCell": 2951.699951171875
+        },
+        {
+          "name": "Canterbury NZ",
+          "longitudeUnwrapped": 172.0,
+          "latitude": -43.5,
+          "outputRow": 822,
+          "outputColumn": 744,
+          "sourceRow": 1602,
+          "sourceColumn": 4224,
+          "valueHaPerSourceCell": 0.0
+        },
+        {
+          "name": "Papua New Guinea",
+          "longitudeUnwrapped": 145.0,
+          "latitude": -6.0,
+          "outputRow": 372,
+          "outputColumn": 420,
+          "sourceRow": 1152,
+          "sourceColumn": 3900,
+          "valueHaPerSourceCell": -1.0
+        },
+        {
+          "name": "Solomon Islands",
+          "longitudeUnwrapped": 160.0,
+          "latitude": -9.5,
+          "outputRow": 414,
+          "outputColumn": 600,
+          "sourceRow": 1194,
+          "sourceColumn": 4080,
+          "valueHaPerSourceCell": -1.0
+        },
+        {
+          "name": "Fiji west of date line",
+          "longitudeUnwrapped": 178.0,
+          "latitude": -17.0,
+          "outputRow": 504,
+          "outputColumn": 816,
+          "sourceRow": 1284,
+          "sourceColumn": 4296,
+          "valueHaPerSourceCell": -1.0
+        },
+        {
+          "name": "Fiji east of date line",
+          "longitudeUnwrapped": 181.0,
+          "latitude": -17.0,
+          "outputRow": 504,
+          "outputColumn": 852,
+          "sourceRow": 1284,
+          "sourceColumn": 12,
+          "valueHaPerSourceCell": -1.0
+        },
+        {
+          "name": "Samoa",
+          "longitudeUnwrapped": 188.0,
+          "latitude": -13.8,
+          "outputRow": 465,
+          "outputColumn": 936,
+          "sourceRow": 1245,
+          "sourceColumn": 96,
+          "valueHaPerSourceCell": -1.0
+        }
+      ]
+    },
+    {
+      "id": "coconut",
+      "sourceCode": "CNUT",
+      "title": "ココナツ",
+      "kind": "crop",
+      "year": 2020,
+      "unit": "ha/格子",
+      "unitEnglish": "harvested hectares per source cell",
+      "image": "coconut.png",
+      "grid": "coconut.values.gz",
+      "width": 1680,
+      "height": 996,
+      "bounds4326Unwrapped": [
+        110,
+        -58,
+        250,
+        25
+      ],
+      "breaks": [
+        1,
+        10,
+        100,
+        1000,
+        5000
+      ],
+      "colors": [
+        "edf1e3",
+        "d7e7b4",
+        "afd08b",
+        "7fa95c",
+        "4f7e3d",
+        "23582d"
+      ],
+      "sourceMember": "spam2020V2r2_global_harvested_area/spam2020_V2r2_global_H_CNUT_A.tif",
+      "sourceMemberSha256": "8f0a9fc01265ac59c4583dda0e53fbae8bc51e863e3c267406204798cf8ead59",
+      "nativeGeoTiffTags": {
+        "pixelScale": [
+          0.0833333333333144,
+          0.0833333333333144,
+          0.0
+        ],
+        "modelTiepoint": [
+          0.0,
+          0.0,
+          0.0,
+          -180.0,
+          90.00000000000004,
+          0.0
+        ],
+        "geoKeyDirectory": [
+          1,
+          1,
+          0,
+          13,
+          1024,
+          0,
+          1,
+          2,
+          1025,
+          0,
+          1,
+          1,
+          2048,
+          0,
+          1,
+          4326,
+          2049,
+          34737,
+          84,
+          0,
+          2050,
+          0,
+          1,
+          6326,
+          2051,
+          0,
+          1,
+          8901,
+          2054,
+          0,
+          1,
+          9102,
+          2055,
+          34736,
+          1,
+          0,
+          2056,
+          0,
+          1,
+          7030,
+          2057,
+          34736,
+          1,
+          1,
+          2059,
+          34736,
+          1,
+          2,
+          2061,
+          34736,
+          1,
+          3,
+          3073,
+          34737,
+          163,
+          84
+        ],
+        "noData": -3.4028234663852886e+38
+      },
+      "coverage": {
+        "VUT": {
+          "maskCells": 139,
+          "validCells": 125,
+          "missingCells": 14,
+          "zeroCells": 1,
+          "positiveCells": 124,
+          "positiveAtLeast1HaCells": 114,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "FSM": {
+          "maskCells": 8,
+          "validCells": 0,
+          "missingCells": 8,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "MHL": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "MNP": {
+          "maskCells": 5,
+          "validCells": 0,
+          "missingCells": 5,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "GUM": {
+          "maskCells": 5,
+          "validCells": 0,
+          "missingCells": 5,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "ASM": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "PCN": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "TON": {
+          "maskCells": 6,
+          "validCells": 0,
+          "missingCells": 6,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "SLB": {
+          "maskCells": 307,
+          "validCells": 285,
+          "missingCells": 22,
+          "zeroCells": 39,
+          "positiveCells": 246,
+          "positiveAtLeast1HaCells": 235,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "WSM": {
+          "maskCells": 33,
+          "validCells": 0,
+          "missingCells": 33,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "PNG": {
+          "maskCells": 5425,
+          "validCells": 3552,
+          "missingCells": 1873,
+          "zeroCells": 725,
+          "positiveCells": 2827,
+          "positiveAtLeast1HaCells": 2531,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "PLW": {
+          "maskCells": 5,
+          "validCells": 0,
+          "missingCells": 5,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "NZL": {
+          "maskCells": 4176,
+          "validCells": 0,
+          "missingCells": 4176,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "NIU": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "COK": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "NRU": {
+          "maskCells": 0,
+          "validCells": 0,
+          "missingCells": 0,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-source-cell-centre-in-geometry"
+        },
+        "KIR": {
+          "maskCells": 11,
+          "validCells": 0,
+          "missingCells": 11,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "WLF": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "PYF": {
+          "maskCells": 34,
+          "validCells": 0,
+          "missingCells": 34,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "NCL": {
+          "maskCells": 236,
+          "validCells": 29,
+          "missingCells": 207,
+          "zeroCells": 15,
+          "positiveCells": 14,
+          "positiveAtLeast1HaCells": 14,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "FJI": {
+          "maskCells": 228,
+          "validCells": 95,
+          "missingCells": 133,
+          "zeroCells": 3,
+          "positiveCells": 92,
+          "positiveAtLeast1HaCells": 76,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "AUS": {
+          "maskCells": 100200,
+          "validCells": 0,
+          "missingCells": 100200,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "NFK": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "ATC": {
+          "maskCells": 0,
+          "validCells": 0,
+          "missingCells": 0,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-source-cell-centre-in-geometry"
+        },
+        "TUV": {
+          "maskCells": 0,
+          "validCells": 0,
+          "missingCells": 0,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-source-cell-centre-in-geometry"
+        }
+      },
+      "spotChecks": [
+        {
+          "name": "Western Australia wheatbelt",
+          "longitudeUnwrapped": 117.0,
+          "latitude": -31.0,
+          "outputRow": 672,
+          "outputColumn": 84,
+          "sourceRow": 1452,
+          "sourceColumn": 3564,
+          "valueHaPerSourceCell": -1.0
+        },
+        {
+          "name": "Canterbury NZ",
+          "longitudeUnwrapped": 172.0,
+          "latitude": -43.5,
+          "outputRow": 822,
+          "outputColumn": 744,
+          "sourceRow": 1602,
+          "sourceColumn": 4224,
+          "valueHaPerSourceCell": -1.0
+        },
+        {
+          "name": "Papua New Guinea",
+          "longitudeUnwrapped": 145.0,
+          "latitude": -6.0,
+          "outputRow": 372,
+          "outputColumn": 420,
+          "sourceRow": 1152,
+          "sourceColumn": 3900,
+          "valueHaPerSourceCell": 0.0
+        },
+        {
+          "name": "Solomon Islands",
+          "longitudeUnwrapped": 160.0,
+          "latitude": -9.5,
+          "outputRow": 414,
+          "outputColumn": 600,
+          "sourceRow": 1194,
+          "sourceColumn": 4080,
+          "valueHaPerSourceCell": 393.0
+        },
+        {
+          "name": "Fiji west of date line",
+          "longitudeUnwrapped": 178.0,
+          "latitude": -17.0,
+          "outputRow": 504,
+          "outputColumn": 816,
+          "sourceRow": 1284,
+          "sourceColumn": 4296,
+          "valueHaPerSourceCell": -1.0
+        },
+        {
+          "name": "Fiji east of date line",
+          "longitudeUnwrapped": 181.0,
+          "latitude": -17.0,
+          "outputRow": 504,
+          "outputColumn": 852,
+          "sourceRow": 1284,
+          "sourceColumn": 12,
+          "valueHaPerSourceCell": -1.0
+        },
+        {
+          "name": "Samoa",
+          "longitudeUnwrapped": 188.0,
+          "latitude": -13.8,
+          "outputRow": 465,
+          "outputColumn": 936,
+          "sourceRow": 1245,
+          "sourceColumn": 96,
+          "valueHaPerSourceCell": -1.0
+        }
+      ]
+    },
+    {
+      "id": "cacao",
+      "sourceCode": "COCO",
+      "title": "カカオ",
+      "kind": "crop",
+      "year": 2020,
+      "unit": "ha/格子",
+      "unitEnglish": "harvested hectares per source cell",
+      "image": "cacao.png",
+      "grid": "cacao.values.gz",
+      "width": 1680,
+      "height": 996,
+      "bounds4326Unwrapped": [
+        110,
+        -58,
+        250,
+        25
+      ],
+      "breaks": [
+        1,
+        10,
+        100,
+        1000,
+        5000
+      ],
+      "colors": [
+        "edf1e3",
+        "d7e7b4",
+        "afd08b",
+        "7fa95c",
+        "4f7e3d",
+        "23582d"
+      ],
+      "sourceMember": "spam2020V2r2_global_harvested_area/spam2020_V2r2_global_H_COCO_A.tif",
+      "sourceMemberSha256": "78f1cc7d42026f70cef33c9f7e9a8a0da23f65ffb180926186df5069adb2b97d",
+      "nativeGeoTiffTags": {
+        "pixelScale": [
+          0.0833333333333144,
+          0.0833333333333144,
+          0.0
+        ],
+        "modelTiepoint": [
+          0.0,
+          0.0,
+          0.0,
+          -180.0,
+          90.00000000000004,
+          0.0
+        ],
+        "geoKeyDirectory": [
+          1,
+          1,
+          0,
+          13,
+          1024,
+          0,
+          1,
+          2,
+          1025,
+          0,
+          1,
+          1,
+          2048,
+          0,
+          1,
+          4326,
+          2049,
+          34737,
+          84,
+          0,
+          2050,
+          0,
+          1,
+          6326,
+          2051,
+          0,
+          1,
+          8901,
+          2054,
+          0,
+          1,
+          9102,
+          2055,
+          34736,
+          1,
+          0,
+          2056,
+          0,
+          1,
+          7030,
+          2057,
+          34736,
+          1,
+          1,
+          2059,
+          34736,
+          1,
+          2,
+          2061,
+          34736,
+          1,
+          3,
+          3073,
+          34737,
+          163,
+          84
+        ],
+        "noData": -3.4028234663852886e+38
+      },
+      "coverage": {
+        "VUT": {
+          "maskCells": 139,
+          "validCells": 125,
+          "missingCells": 14,
+          "zeroCells": 31,
+          "positiveCells": 94,
+          "positiveAtLeast1HaCells": 57,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "FSM": {
+          "maskCells": 8,
+          "validCells": 0,
+          "missingCells": 8,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "MHL": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "MNP": {
+          "maskCells": 5,
+          "validCells": 0,
+          "missingCells": 5,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "GUM": {
+          "maskCells": 5,
+          "validCells": 0,
+          "missingCells": 5,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "ASM": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "PCN": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "TON": {
+          "maskCells": 6,
+          "validCells": 0,
+          "missingCells": 6,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "SLB": {
+          "maskCells": 307,
+          "validCells": 285,
+          "missingCells": 22,
+          "zeroCells": 5,
+          "positiveCells": 280,
+          "positiveAtLeast1HaCells": 267,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "WSM": {
+          "maskCells": 33,
+          "validCells": 0,
+          "missingCells": 33,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "PNG": {
+          "maskCells": 5425,
+          "validCells": 3600,
+          "missingCells": 1825,
+          "zeroCells": 75,
+          "positiveCells": 3525,
+          "positiveAtLeast1HaCells": 2736,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "PLW": {
+          "maskCells": 5,
+          "validCells": 0,
+          "missingCells": 5,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "NZL": {
+          "maskCells": 4176,
+          "validCells": 0,
+          "missingCells": 4176,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "NIU": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "COK": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "NRU": {
+          "maskCells": 0,
+          "validCells": 0,
+          "missingCells": 0,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-source-cell-centre-in-geometry"
+        },
+        "KIR": {
+          "maskCells": 11,
+          "validCells": 0,
+          "missingCells": 11,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "WLF": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "PYF": {
+          "maskCells": 34,
+          "validCells": 0,
+          "missingCells": 34,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "NCL": {
+          "maskCells": 236,
+          "validCells": 0,
+          "missingCells": 236,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "FJI": {
+          "maskCells": 228,
+          "validCells": 34,
+          "missingCells": 194,
+          "zeroCells": 8,
+          "positiveCells": 26,
+          "positiveAtLeast1HaCells": 5,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "AUS": {
+          "maskCells": 100200,
+          "validCells": 0,
+          "missingCells": 100200,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "NFK": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "ATC": {
+          "maskCells": 0,
+          "validCells": 0,
+          "missingCells": 0,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-source-cell-centre-in-geometry"
+        },
+        "TUV": {
+          "maskCells": 0,
+          "validCells": 0,
+          "missingCells": 0,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HaCells": 0,
+          "coverageStatus": "no-source-cell-centre-in-geometry"
+        }
+      },
+      "spotChecks": [
+        {
+          "name": "Western Australia wheatbelt",
+          "longitudeUnwrapped": 117.0,
+          "latitude": -31.0,
+          "outputRow": 672,
+          "outputColumn": 84,
+          "sourceRow": 1452,
+          "sourceColumn": 3564,
+          "valueHaPerSourceCell": -1.0
+        },
+        {
+          "name": "Canterbury NZ",
+          "longitudeUnwrapped": 172.0,
+          "latitude": -43.5,
+          "outputRow": 822,
+          "outputColumn": 744,
+          "sourceRow": 1602,
+          "sourceColumn": 4224,
+          "valueHaPerSourceCell": -1.0
+        },
+        {
+          "name": "Papua New Guinea",
+          "longitudeUnwrapped": 145.0,
+          "latitude": -6.0,
+          "outputRow": 372,
+          "outputColumn": 420,
+          "sourceRow": 1152,
+          "sourceColumn": 3900,
+          "valueHaPerSourceCell": -1.0
+        },
+        {
+          "name": "Solomon Islands",
+          "longitudeUnwrapped": 160.0,
+          "latitude": -9.5,
+          "outputRow": 414,
+          "outputColumn": 600,
+          "sourceRow": 1194,
+          "sourceColumn": 4080,
+          "valueHaPerSourceCell": 67.30000305175781
+        },
+        {
+          "name": "Fiji west of date line",
+          "longitudeUnwrapped": 178.0,
+          "latitude": -17.0,
+          "outputRow": 504,
+          "outputColumn": 816,
+          "sourceRow": 1284,
+          "sourceColumn": 4296,
+          "valueHaPerSourceCell": -1.0
+        },
+        {
+          "name": "Fiji east of date line",
+          "longitudeUnwrapped": 181.0,
+          "latitude": -17.0,
+          "outputRow": 504,
+          "outputColumn": 852,
+          "sourceRow": 1284,
+          "sourceColumn": 12,
+          "valueHaPerSourceCell": -1.0
+        },
+        {
+          "name": "Samoa",
+          "longitudeUnwrapped": 188.0,
+          "latitude": -13.8,
+          "outputRow": 465,
+          "outputColumn": 936,
+          "sourceRow": 1245,
+          "sourceColumn": 96,
+          "valueHaPerSourceCell": -1.0
+        }
+      ]
+    }
+  ],
+  "files": {
+    "attribution.json": {
+      "bytes": 1001,
+      "sha256": "003996a98115955f963d1a7295ac5a0bb06c2d8efe51227603190bfcdde118c8"
+    },
+    "cacao.png": {
+      "bytes": 33664,
+      "sha256": "477f538487417de7d4d8e201ccea1b44432b05a33187c63a1dc9ae9d77df7c80"
+    },
+    "cacao.values.gz": {
+      "bytes": 54136,
+      "sha256": "f7fec4ccb2b7a4e537dd08b1bf484e5daaea40d8aa920258784637c75010ef8c"
+    },
+    "coconut.png": {
+      "bytes": 35864,
+      "sha256": "3c181092e6bea1867023e824195bf12e5b4381e0371a74a9df0dbc863f30dc8c"
+    },
+    "coconut.values.gz": {
+      "bytes": 58610,
+      "sha256": "a96f2ec26cc15b12d7e38931916b20fedc72942eab819e90ceaa4c601776c98f"
+    },
+    "wheat.png": {
+      "bytes": 30416,
+      "sha256": "820b9933556d8ac38290f70848964af4214e748f1ed50c5b5806478c0f91a512"
+    },
+    "wheat.values.gz": {
+      "bytes": 44435,
+      "sha256": "f33a98f2b1b6ca87cdb4920c3ea8942afeb129bfc3979dae32fc31d3de1b843a"
+    }
+  },
+  "binaryDigestMethod": "SHA256 of exact archive, source TIFF member and generated PNG/gzip file bytes; no normalization",
+  "verification": {
+    "sourceArchiveHash": "passed",
+    "sourceMemberHashes": "passed",
+    "sourceTransformAndCrs": "passed",
+    "validCellIdentity": "passed",
+    "gridRoundTrip": "passed",
+    "pngRoundTrip": "passed",
+    "dateLineSpotChecks": "passed"
+  }
+}
