@@ -138,6 +138,11 @@ def main() -> None:
     if sha_file(args.source) != SOURCE_SHA256:
         raise ValueError("MapSPAM source archive SHA256 differs from the pinned input")
     OUT.mkdir(parents=True, exist_ok=True)
+    attribution_path = OUT / "attribution.json"
+    attribution = json.loads(attribution_path.read_text(encoding="utf-8"))
+    if (attribution["versionNumber"] != 6 or attribution["versionMinorNumber"] != 0 or
+            attribution["license"] != "CC BY 4.0" or attribution["adaptationSection"] != "5.2"):
+        raise ValueError("Unexpected pinned MapSPAM attribution or licence record")
     geography_path = ROOT / "src/data/atlas/oceania-countries.json"
     geography = json.loads(geography_path.read_text(encoding="utf-8"))
     layers = []
@@ -184,7 +189,8 @@ def main() -> None:
                 if not np.array_equal(values[~invalid], original[~invalid]):
                     raise ValueError("Valid original source cells changed")
                 rgba = PALETTE[np.searchsorted(BREAKS, values, side="right")]
-                rgba[values <= 0] = 0
+                rgba[values < 0] = 0
+                rgba[values == 0] = [246, 245, 235, 255]
                 image_name, grid_name = f"{topic}.png", f"{topic}.values.gz"
                 Image.fromarray(rgba).save(OUT / image_name, optimize=True)
                 (OUT / grid_name).write_bytes(gzip.compress(values.tobytes(), mtime=0))
@@ -230,7 +236,12 @@ def main() -> None:
         "source": {"name": "IFPRI MapSPAM 2020 v2r2 harvested area", "edition": "Harvard Dataverse version 6.0, file 13827040",
                    "url": "https://dataverse.harvard.edu/api/access/datafile/13827040",
                    "catalogUrl": "https://doi.org/10.7910/DVN/SWPENT", "sha256": SOURCE_SHA256,
-                   "license": "CC BY 4.0", "licenseEvidence": "IFPRI Dataverse Terms of Use section 4; fixed archive as used by asia-farming-v1",
+                   "citation": attribution["citation"], "citationVersion": "Harvard Dataverse V6.0, released 2026-05-05",
+                   "termsUrl": attribution["termsUrl"], "termsApiUrl": attribution["termsApiUrl"],
+                   "license": "CC BY 4.0", "licenseEvidence": "Pinned V6.0 IFPRI Datasets Terms of Use section 4. This fixed version is distinct from legacy mapspam.info licence statements.",
+                   "adaptationAttribution": {"section": "5.2", "requiredText": attribution["requiredAdaptationText"],
+                                             "placement": "After the complete source citation", "sourceUrl": attribution["termsUrl"],
+                                             "record": "attribution.json", "recordSha256": sha_file(attribution_path)},
                    "crs": "EPSG:4326", "nominalResolutionDegrees": 1 / 12, "width": 4320, "height": 2160,
                    "nativeGeoTiffTags": reference_tags, "measurementType": "modelled harvested area"},
         "geometry": {"file": "src/data/atlas/oceania-countries.json", "sha256": sha_canonical_lf(geography_path),
@@ -246,7 +257,8 @@ def main() -> None:
         "lookup": {"encoding": "float32-le-gzip", "noData": -1, "validZero": 0},
         "legend": {"breaks": BREAKS, "colors": COLORS,
                    "positiveClassesHaPerCell": ["0 < value < 1", "1 <= value < 10", "10 <= value < 100", "100 <= value < 1000", "1000 <= value < 5000", "value >= 5000"],
-                   "zeroAndMissing": "Both transparent in PNG; lookup and coverage retain zero separately from missing. Missing must be labelled data unavailable, never no farming."},
+                   "zeroColor": "f6f5eb", "missingAlpha": 0,
+                   "zeroAndMissing": "Valid zero is opaque #f6f5eb; missing is transparent. Grid and coverage also retain zero separately from missing. Missing must be labelled data unavailable, never no farming."},
         "method": "Exact original float32 source-cell cutout. No averaging, smoothing, interpolation or country-value mask. Same array creates colour and numerical lookup. NaN, infinities and original negative no-data normalized to -1 only.",
         "limitations": ["Harvested area is not production, yield or physical cropland area; multiple harvests can count the same ground more than once.",
                         "Five arc-minute source cells and NE 1:50m geometry do not resolve every small island. No cell centre in a polygon is not absence of farming.",

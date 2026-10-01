@@ -1,0 +1,301 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-10-01",
+  "independentDecoder": "Python Pillow PNG decode; NumPy Float32 grid and palette computation",
+  "totalPixelsVerified": 2402650,
+  "views": {
+    "overview": {
+      "pixelsVerified": 631000,
+      "zeroWhiteOpaquePixels": 37495,
+      "missingTransparentPixels": 573889,
+      "maximumValidSourceCells": 25,
+      "maximumAggregationRelativeSumError": 8.174618920312408e-15,
+      "fileHashesVerified": true
+    },
+    "australia": {
+      "pixelsVerified": 479250,
+      "zeroWhiteOpaquePixels": 161998,
+      "missingTransparentPixels": 263486,
+      "maximumValidSourceCells": 25,
+      "maximumAggregationRelativeSumError": 8.174618920312408e-15,
+      "fileHashesVerified": true
+    },
+    "new-zealand": {
+      "pixelsVerified": 275000,
+      "zeroWhiteOpaquePixels": 17110,
+      "missingTransparentPixels": 229930,
+      "maximumValidSourceCells": 25,
+      "maximumAggregationRelativeSumError": 4.0903387711530143e-16,
+      "fileHashesVerified": true
+    },
+    "papua-new-guinea": {
+      "pixelsVerified": 317200,
+      "zeroWhiteOpaquePixels": 51004,
+      "missingTransparentPixels": 231399,
+      "maximumValidSourceCells": 25,
+      "maximumAggregationRelativeSumError": 0,
+      "fileHashesVerified": true
+    },
+    "fiji": {
+      "pixelsVerified": 266000,
+      "zeroWhiteOpaquePixels": 16089,
+      "missingTransparentPixels": 245137,
+      "maximumValidSourceCells": 1,
+      "maximumAggregationRelativeSumError": 0,
+      "fileHashesVerified": true
+    },
+    "tarawa": {
+      "pixelsVerified": 130200,
+      "zeroWhiteOpaquePixels": 13803,
+      "missingTransparentPixels": 114655,
+      "maximumValidSourceCells": 1,
+      "maximumAggregationRelativeSumError": 0,
+      "fileHashesVerified": true
+    },
+    "tahiti": {
+      "pixelsVerified": 142000,
+      "zeroWhiteOpaquePixels": 3014,
+      "missingTransparentPixels": 137963,
+      "maximumValidSourceCells": 1,
+      "maximumAggregationRelativeSumError": 0,
+      "fileHashesVerified": true
+    },
+    "samoa": {
+      "pixelsVerified": 162000,
+      "zeroWhiteOpaquePixels": 10735,
+      "missingTransparentPixels": 147263,
+      "maximumValidSourceCells": 1,
+      "maximumAggregationRelativeSumError": 0,
+      "fileHashesVerified": true
+    }
+  },
+  "all24AssetHashesVerified": true,
+  "countryCoverageScope": "Display-pixel-centre geometry diagnostic; not complete source coverage or national population",
+  "noRegionalPixelCentre": [
+    "PCN",
+    "NRU",
+    "WLF",
+    "NFK",
+    "ATC",
+    "TUV"
+  ],
+  "positiveRegionalCountries": [
+    "VUT",
+    "FSM",
+    "MHL",
+    "MNP",
+    "GUM",
+    "ASM",
+    "TON",
+    "SLB",
+    "WSM",
+    "PNG",
+    "PLW",
+    "NZL",
+    "NIU",
+    "COK",
+    "KIR",
+    "PYF",
+    "NCL",
+    "FJI",
+    "AUS"
+  ],
+  "noCentreCountriesWithPositiveRegionalPixels": [
+    "FSM",
+    "MHL",
+    "MNP",
+    "GUM",
+    "ASM",
+    "PLW",
+    "NIU",
+    "COK",
+    "KIR"
+  ],
+  "independentNativeSourceSamples": [
+    {
+      "view": "overview",
+      "name": "Sydney",
+      "displayPixel": [
+        293,
+        447
+      ],
+      "displayCentre4326": [
+        151.09,
+        -33.86291600633914
+      ],
+      "alignedSourceBlock": [
+        31535,
+        13090,
+        5,
+        5
+      ],
+      "nativeOfficialDecoderValidCells": 25,
+      "nativeOfficialDecoderPopulationSum": 104837.75635125325,
+      "expectedFloat32Density": 4193.51025390625,
+      "actualGridDensity": 4193.51025390625,
+      "exactMatch": true
+    },
+    {
+      "view": "australia",
+      "name": "Sydney",
+      "displayPixel": [
+        684,
+        441
+      ],
+      "displayCentre4326": [
+        151.07,
+        -33.87323943661972
+      ],
+      "alignedSourceBlock": [
+        31530,
+        13090,
+        5,
+        5
+      ],
+      "nativeOfficialDecoderValidCells": 25,
+      "nativeOfficialDecoderPopulationSum": 101045.79024163066,
+      "expectedFloat32Density": 4041.83154296875,
+      "actualGridDensity": 4041.83154296875,
+      "exactMatch": true
+    },
+    {
+      "view": "new-zealand",
+      "name": "Auckland",
+      "displayPixel": [
+        337,
+        142
+      ],
+      "displayCentre4326": [
+        174.7875,
+        -36.88636363636363
+      ],
+      "alignedSourceBlock": [
+        33290,
+        13435,
+        5,
+        5
+      ],
+      "nativeOfficialDecoderValidCells": 25,
+      "nativeOfficialDecoderPopulationSum": 97763.25225980929,
+      "expectedFloat32Density": 3910.530029296875,
+      "actualGridDensity": 3910.530029296875,
+      "exactMatch": true
+    },
+    {
+      "view": "papua-new-guinea",
+      "name": "Port Moresby",
+      "displayPixel": [
+        274,
+        384
+      ],
+      "displayCentre4326": [
+        147.17923076923077,
+        -9.454918032786885
+      ],
+      "alignedSourceBlock": [
+        32665,
+        10165,
+        5,
+        5
+      ],
+      "nativeOfficialDecoderValidCells": 25,
+      "nativeOfficialDecoderPopulationSum": 200666.61852158606,
+      "expectedFloat32Density": 8026.66455078125,
+      "actualGridDensity": 8026.66455078125,
+      "exactMatch": true
+    },
+    {
+      "view": "fiji",
+      "name": "Suva",
+      "displayPixel": [
+        206,
+        274
+      ],
+      "displayCentre4326": [
+        178.478,
+        -18.095864661654137
+      ],
+      "alignedSourceBlock": [
+        35376,
+        11223,
+        1,
+        1
+      ],
+      "nativeOfficialDecoderValidCells": 1,
+      "nativeOfficialDecoderPopulationSum": 6618.307524740696,
+      "expectedFloat32Density": 6618.3076171875,
+      "actualGridDensity": 6618.3076171875,
+      "exactMatch": true
+    },
+    {
+      "view": "tahiti",
+      "name": "Papeete",
+      "displayPixel": [
+        189,
+        221
+      ],
+      "displayCentre4326": [
+        -149.57875,
+        -17.559859154929576
+      ],
+      "alignedSourceBlock": [
+        3485,
+        11158,
+        1,
+        1
+      ],
+      "nativeOfficialDecoderValidCells": 1,
+      "nativeOfficialDecoderPopulationSum": 557.6990836872719,
+      "expectedFloat32Density": 557.6990966796875,
+      "actualGridDensity": 557.6990966796875,
+      "exactMatch": true
+    },
+    {
+      "view": "samoa",
+      "name": "Apia",
+      "displayPixel": [
+        192,
+        169
+      ],
+      "displayCentre4326": [
+        -171.789375,
+        -13.837037037037037
+      ],
+      "alignedSourceBlock": [
+        1133,
+        10704,
+        1,
+        1
+      ],
+      "nativeOfficialDecoderValidCells": 1,
+      "nativeOfficialDecoderPopulationSum": 1677.9943105727434,
+      "expectedFloat32Density": 1677.9942626953125,
+      "actualGridDensity": 1677.9942626953125,
+      "exactMatch": true
+    },
+    {
+      "view": "tarawa",
+      "name": "Tarawa positive grid sample",
+      "displayPixel": [
+        57,
+        234
+      ],
+      "displayCentre4326": [
+        172.91500000000002,
+        1.358736559139785
+      ],
+      "alignedSourceBlock": [
+        35368,
+        8832,
+        1,
+        1
+      ],
+      "nativeOfficialDecoderValidCells": 1,
+      "nativeOfficialDecoderPopulationSum": 8357.37950515747,
+      "expectedFloat32Density": 8357.3798828125,
+      "actualGridDensity": 8357.3798828125,
+      "exactMatch": true
+    }
+  ],
+  "independentSourceDecoder": "Unmodified official GeoTIFF.js 3.0.5 decoder; one 256x256 native tile at a time, no workers/cache. Independent bisection Mollweide transform."
+}

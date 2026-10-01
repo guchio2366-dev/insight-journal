@@ -4,7 +4,7 @@
   "year": 2020,
   "generator": {
     "file": "scripts/prepare-oceania-crops.py",
-    "sha256": "a3097e74874588186226aea456a982ed38734b1339c01fcfef694fe4b782f805",
+    "sha256": "762a45cfc586ef404cfa94afa2fce0fb539e6a28efb894549f943c64f4e494f7",
     "digestMethod": "SHA256 of UTF-8 source text with CRLF converted to LF; remaining bytes unchanged",
     "generatedJsonEncoding": "UTF-8, LF line endings"
   },
@@ -14,8 +14,20 @@
     "url": "https://dataverse.harvard.edu/api/access/datafile/13827040",
     "catalogUrl": "https://doi.org/10.7910/DVN/SWPENT",
     "sha256": "34895a332ba7ff9d9732a81fe9da7063458d197f3c72ce3a405329c41f94ade2",
+    "citation": "International Food Policy Research Institute (IFPRI), 2026, \"Global Spatially-Disaggregated Crop Production Statistics Data for 2020 Version 2.0 Release 2\", Harvard Dataverse, V6, https://doi.org/10.7910/DVN/SWPENT.",
+    "citationVersion": "Harvard Dataverse V6.0, released 2026-05-05",
+    "termsUrl": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/SWPENT&version=6.0",
+    "termsApiUrl": "https://dataverse.harvard.edu/api/datasets/:persistentId/versions/6.0?persistentId=doi%3A10.7910%2FDVN%2FSWPENT",
     "license": "CC BY 4.0",
-    "licenseEvidence": "IFPRI Dataverse Terms of Use section 4; fixed archive as used by asia-farming-v1",
+    "licenseEvidence": "Pinned V6.0 IFPRI Datasets Terms of Use section 4. This fixed version is distinct from legacy mapspam.info licence statements.",
+    "adaptationAttribution": {
+      "section": "5.2",
+      "requiredText": "This data was provided by the International Food Policy Research Institute (IFPRI). IFPRI bears no responsibility for the analyses or interpretations of the data presented here.",
+      "placement": "After the complete source citation",
+      "sourceUrl": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/SWPENT&version=6.0",
+      "record": "attribution.json",
+      "recordSha256": "003996a98115955f963d1a7295ac5a0bb06c2d8efe51227603190bfcdde118c8"
+    },
     "crs": "EPSG:4326",
     "nominalResolutionDegrees": 0.08333333333333333,
     "width": 4320,
@@ -179,7 +191,9 @@
       "1000 <= value < 5000",
       "value >= 5000"
     ],
-    "zeroAndMissing": "Both transparent in PNG; lookup and coverage retain zero separately from missing. Missing must be labelled data unavailable, never no farming."
+    "zeroColor": "f6f5eb",
+    "missingAlpha": 0,
+    "zeroAndMissing": "Valid zero is opaque #f6f5eb; missing is transparent. Grid and coverage also retain zero separately from missing. Missing must be labelled data unavailable, never no farming."
   },
   "method": "Exact original float32 source-cell cutout. No averaging, smoothing, interpolation or country-value mask. Same array creates colour and numerical lookup. NaN, infinities and original negative no-data normalized to -1 only.",
   "limitations": [
@@ -1420,25 +1434,29 @@
     }
   ],
   "files": {
+    "attribution.json": {
+      "bytes": 1001,
+      "sha256": "003996a98115955f963d1a7295ac5a0bb06c2d8efe51227603190bfcdde118c8"
+    },
     "cacao.png": {
-      "bytes": 29346,
-      "sha256": "08b2ecc33453eb459544177f1522991ca89c069bacf4b85b66bb76d4356cbedf"
+      "bytes": 33664,
+      "sha256": "477f538487417de7d4d8e201ccea1b44432b05a33187c63a1dc9ae9d77df7c80"
     },
     "cacao.values.gz": {
       "bytes": 54136,
       "sha256": "f7fec4ccb2b7a4e537dd08b1bf484e5daaea40d8aa920258784637c75010ef8c"
     },
     "coconut.png": {
-      "bytes": 31508,
-      "sha256": "79bc770262fe3c68032948f2e56e8dba48cbbefd8802e0cc0e94f3d5465695bb"
+      "bytes": 35864,
+      "sha256": "3c181092e6bea1867023e824195bf12e5b4381e0371a74a9df0dbc863f30dc8c"
     },
     "coconut.values.gz": {
       "bytes": 58610,
       "sha256": "a96f2ec26cc15b12d7e38931916b20fedc72942eab819e90ceaa4c601776c98f"
     },
     "wheat.png": {
-      "bytes": 23717,
-      "sha256": "f3eb08c67d564cdbdc5fdfc7a3085f21ba16f02b8ba0f76f9173609fddcab644"
+      "bytes": 30416,
+      "sha256": "820b9933556d8ac38290f70848964af4214e748f1ed50c5b5806478c0f91a512"
     },
     "wheat.values.gz": {
       "bytes": 44435,

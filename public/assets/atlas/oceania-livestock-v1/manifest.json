@@ -1,0 +1,1235 @@
+{
+  "schemaVersion": 1,
+  "region": "oceania",
+  "year": 2020,
+  "generator": {
+    "file": "scripts/prepare-oceania-livestock.py",
+    "sha256": "a89efa6c0c6f3a2f8b4f5c4046783fa4ae5e913d6bf4ae5227f8a1619052a31a",
+    "digestMethod": "SHA256 of UTF-8 source text with CRLF converted to LF; remaining bytes unchanged",
+    "helper": {
+      "file": "scripts/prepare-oceania-crops.py",
+      "sha256": "762a45cfc586ef404cfa94afa2fce0fb539e6a28efb894549f943c64f4e494f7"
+    },
+    "generatedJsonEncoding": "UTF-8, LF line endings"
+  },
+  "source": {
+    "name": "FAO Gridded Livestock of the World v4 (GLW4), 2020",
+    "edition": "CGIAR Climate Data Hub Zarr conversion, updated 2026-06-23",
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/",
+    "catalogUrl": "https://cgiar-climate-data-hub.github.io/catalog/glw4-2020/",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "metadataFile": "glw-zarr.json",
+    "metadataUrl": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/zarr.json",
+    "metadataSha256": "60849b62074ea823af210c0fe6beafa36e14de2b5c61b880557d468f023dc5e3",
+    "referenceYear": 2020,
+    "crs": "EPSG:4326",
+    "resolutionDegrees": 0.08333333333333333,
+    "width": 4320,
+    "height": 2160,
+    "chunkShape": [
+      1080,
+      1080
+    ],
+    "nativeNoData": "NaN",
+    "unit": "head/km2",
+    "measurementType": "modelled livestock density, dasymetric",
+    "chunks": [
+      {
+        "key": "sheep/c/0/3",
+        "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/sheep/c/0/3",
+        "file": "glw-sheep_c_0_3",
+        "sha256": "65af83eeb536688f01ec4818e3da868bcca3efc6a755fca50da684d1be6374f8",
+        "bytes": 1318493,
+        "decodedShape": [
+          1080,
+          1080
+        ]
+      },
+      {
+        "key": "sheep/c/0/0",
+        "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/sheep/c/0/0",
+        "file": "glw-sheep_c_0_0",
+        "sha256": "c6deb4bef523e486365e3c97650dd8cb5173f4c4f1a002b561952964e9cfaf22",
+        "bytes": 955954,
+        "decodedShape": [
+          1080,
+          1080
+        ]
+      },
+      {
+        "key": "sheep/c/1/3",
+        "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/sheep/c/1/3",
+        "file": "glw-sheep_c_1_3",
+        "sha256": "6bf0469b3e6d1090ee93885d6e8a6866c25655d26c9e6f790571de0ead3dfca7",
+        "bytes": 336804,
+        "decodedShape": [
+          1080,
+          1080
+        ]
+      },
+      {
+        "key": "sheep/c/1/0",
+        "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/sheep/c/1/0",
+        "file": "glw-sheep_c_1_0",
+        "sha256": "83106b0bc90153cfafb296105fd7cbc03611765f6f5489571ad8ba991c25888c",
+        "bytes": 824,
+        "decodedShape": [
+          1080,
+          1080
+        ]
+      },
+      {
+        "key": "cattle/c/0/3",
+        "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/cattle/c/0/3",
+        "file": "glw-cattle_c_0_3",
+        "sha256": "3b66ebfae7879afb3311137200709390a57a54d45dc5a5446aece39db12e5918",
+        "bytes": 1468674,
+        "decodedShape": [
+          1080,
+          1080
+        ]
+      },
+      {
+        "key": "cattle/c/0/0",
+        "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/cattle/c/0/0",
+        "file": "glw-cattle_c_0_0",
+        "sha256": "33583a1b7edd2a1d688b2d37a14fa8d1ccd5f6e7a35dfac74040870d28c2b40e",
+        "bytes": 980294,
+        "decodedShape": [
+          1080,
+          1080
+        ]
+      },
+      {
+        "key": "cattle/c/1/3",
+        "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/cattle/c/1/3",
+        "file": "glw-cattle_c_1_3",
+        "sha256": "0866f9e5fba9280e12f94aebbec96228f21a3d6d7f39631f74fcce557f3e4fbe",
+        "bytes": 448560,
+        "decodedShape": [
+          1080,
+          1080
+        ]
+      },
+      {
+        "key": "cattle/c/1/0",
+        "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/cattle/c/1/0",
+        "file": "glw-cattle_c_1_0",
+        "sha256": "41d2352de6a352392b8424c69d90698ac6e2f25d0dd59936227d75bb5343e37e",
+        "bytes": 960,
+        "decodedShape": [
+          1080,
+          1080
+        ]
+      }
+    ]
+  },
+  "geometry": {
+    "file": "src/data/atlas/oceania-countries.json",
+    "sha256": "dd9e4f68e17a741ca7ce3cc378e3d043524d94f0f48673c2ce024c1ce0af48a1",
+    "digestMethod": "SHA256 of UTF-8 source text with CRLF converted to LF; remaining bytes unchanged",
+    "source": {
+      "name": "Natural Earth Admin 0 Countries 1:50m",
+      "version": "repository tag v5.1.2",
+      "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_50m_admin_0_countries.geojson",
+      "sha256": "3e458fc036ad0a66411f2c1e6cac49c5d7bfb81cb1123bc513b22511a2b7fdeb",
+      "license": "Public domain",
+      "licenseUrl": "https://www.naturalearthdata.com/about/terms-of-use/",
+      "retrievedAt": "2026-09-25",
+      "method": "Oceania by CONTINENT; IDN/TLS/PHL as context. Original WGS84 geometry and precision retained. Display clipping and longitude wrapping occur at build time.",
+      "omissions": "Small islands absent in the source, including Tokelau, are not represented. This is a land boundary map, not an EEZ map."
+    },
+    "targetCountryOrTerritoryCount": 25,
+    "maskMethod": "Strict polygon-interior even-odd scanlines at native source-cell centres. Holes subtracted, date line unwrapped. Diagnostics only; source values never clipped."
+  },
+  "display": {
+    "crs": "EPSG:4326 with unwrapped longitudes 110 to 250 east",
+    "projection": "Pacific-centred equirectangular map-space rectangle",
+    "bounds4326Unwrapped": [
+      110,
+      -58,
+      250,
+      25
+    ],
+    "width": 1680,
+    "height": 996,
+    "nominalTransform": [
+      110,
+      0.08333333333333333,
+      0,
+      25,
+      0,
+      -0.08333333333333333
+    ],
+    "sourceRowRange": [
+      780,
+      1776
+    ],
+    "sourceColumnSpans": [
+      [
+        3480,
+        4320
+      ],
+      [
+        0,
+        840
+      ]
+    ],
+    "indexConvention": "Half-open source ranges, row 0 north; original source cells concatenated west then east",
+    "sourceChunkColumnsUsed": [
+      3,
+      0
+    ],
+    "unusedCachedChunkColumn": 2,
+    "nativeAffineRounding": "Source metadata step differs from nominal 1/12 degree by floating-point rounding only. Native source centres used for diagnostics. No values resampled."
+  },
+  "lookup": {
+    "encoding": "float32-le-gzip",
+    "noData": -1,
+    "validZero": 0
+  },
+  "legend": {
+    "breaks": [
+      1,
+      10,
+      50,
+      200,
+      1000
+    ],
+    "colors": [
+      "fff6e4",
+      "fee5be",
+      "f9c889",
+      "ee9960",
+      "cb653f",
+      "873c31"
+    ],
+    "positiveClassesHeadPerKm2": [
+      "0 < value < 1",
+      "1 <= value < 10",
+      "10 <= value < 50",
+      "50 <= value < 200",
+      "200 <= value < 1000",
+      "value >= 1000"
+    ],
+    "zeroColor": "f6f5eb",
+    "missingAlpha": 0,
+    "zeroAndMissing": "Valid zero is opaque #f6f5eb; missing is transparent. Grid and coverage preserve true zero separately from missing. Missing means data unavailable, never no livestock."
+  },
+  "method": "Exact float32 source-cell cutout from eight pinned Blosc chunks. No averaging, smoothing, interpolation or country-value clipping. Same array creates PNG classifications and numerical lookup. Nonfinite/negative missing values normalized to -1 only.",
+  "limitations": [
+    "Density is head per km2, not head per cell or national head count; never sum these densities as a livestock total.",
+    "Modelled distribution from subnational census inputs, not a direct observation of every farm.",
+    "The cattle layer combines cattle types; it cannot distinguish dairy from beef cattle. Sheep density cannot distinguish wool from meat production.",
+    "A 5 arc-minute source and NE 1:50m boundaries do not resolve every small island. No cell centre or valid model value is not absence of livestock.",
+    "Coverage cell counts are diagnostics, not official statistics. Neither geographic grid nor equirectangular display is equal-area; coloured pixel area does not measure numbers of animals.",
+    "Surrounding-country source cells are retained; display clipping must preserve missing/zero distinctions."
+  ],
+  "layers": [
+    {
+      "id": "sheep",
+      "sourceCode": "sheep",
+      "title": "羊",
+      "kind": "livestock",
+      "year": 2020,
+      "unit": "頭/km²",
+      "unitEnglish": "head/km2, modelled livestock density",
+      "image": "sheep.png",
+      "grid": "sheep.values.gz",
+      "width": 1680,
+      "height": 996,
+      "bounds4326Unwrapped": [
+        110,
+        -58,
+        250,
+        25
+      ],
+      "breaks": [
+        1,
+        10,
+        50,
+        200,
+        1000
+      ],
+      "colors": [
+        "fff6e4",
+        "fee5be",
+        "f9c889",
+        "ee9960",
+        "cb653f",
+        "873c31"
+      ],
+      "sourceArrayMetadata": {
+        "shape": [
+          2160,
+          4320
+        ],
+        "data_type": "float32",
+        "chunk_grid": {
+          "name": "regular",
+          "configuration": {
+            "chunk_shape": [
+              1080,
+              1080
+            ]
+          }
+        },
+        "chunk_key_encoding": {
+          "name": "default",
+          "configuration": {
+            "separator": "/"
+          }
+        },
+        "fill_value": "NaN",
+        "codecs": [
+          {
+            "name": "bytes",
+            "configuration": {
+              "endian": "little"
+            }
+          },
+          {
+            "name": "blosc",
+            "configuration": {
+              "typesize": 4,
+              "cname": "zstd",
+              "clevel": 9,
+              "shuffle": "noshuffle",
+              "blocksize": 0
+            }
+          }
+        ],
+        "attributes": {
+          "long_name": "Sheep density",
+          "units": "head/km2",
+          "source_url": "https://storage.googleapis.com/fao-gismgr-glw4-2020-data/DATA/GLW4-2020/MAPSET/D-DA/GLW4-2020.D-DA.SHP.tif",
+          "spatial:dimensions": [
+            "y",
+            "x"
+          ],
+          "spatial:bbox": [
+            -180.0,
+            -89.99999999999994,
+            179.99999999999983,
+            90.0
+          ],
+          "spatial:transform_type": "affine",
+          "spatial:transform": [
+            0.0833333333333333,
+            0.0,
+            -180.0,
+            0.0,
+            -0.0833333333333333,
+            90.0
+          ],
+          "spatial:shape": [
+            2160,
+            4320
+          ],
+          "spatial:registration": "pixel",
+          "proj:code": "EPSG:4326",
+          "zarr_conventions": [
+            {
+              "uuid": "689b58e2-cf7b-45e0-9fff-9cfc0883d6b4",
+              "schema_url": "https://raw.githubusercontent.com/zarr-conventions/spatial/refs/tags/v1/schema.json",
+              "spec_url": "https://github.com/zarr-conventions/spatial/blob/v1/README.md",
+              "name": "spatial:",
+              "description": "Spatial coordinate information"
+            },
+            {
+              "uuid": "f17cb550-5864-4468-aeb7-f3180cfb622f",
+              "schema_url": "https://raw.githubusercontent.com/zarr-experimental/geo-proj/refs/tags/v1/schema.json",
+              "spec_url": "https://github.com/zarr-experimental/geo-proj/blob/v1/README.md",
+              "name": "proj:",
+              "description": "Coordinate reference system information for geospatial data"
+            }
+          ],
+          "_FillValue": "AAAAAAAA+H8="
+        },
+        "dimension_names": [
+          "y",
+          "x"
+        ],
+        "zarr_format": 3,
+        "node_type": "array",
+        "storage_transformers": []
+      },
+      "sourceChunks": [
+        {
+          "key": "sheep/c/0/3",
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/sheep/c/0/3",
+          "file": "glw-sheep_c_0_3",
+          "sha256": "65af83eeb536688f01ec4818e3da868bcca3efc6a755fca50da684d1be6374f8",
+          "bytes": 1318493,
+          "decodedShape": [
+            1080,
+            1080
+          ]
+        },
+        {
+          "key": "sheep/c/0/0",
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/sheep/c/0/0",
+          "file": "glw-sheep_c_0_0",
+          "sha256": "c6deb4bef523e486365e3c97650dd8cb5173f4c4f1a002b561952964e9cfaf22",
+          "bytes": 955954,
+          "decodedShape": [
+            1080,
+            1080
+          ]
+        },
+        {
+          "key": "sheep/c/1/3",
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/sheep/c/1/3",
+          "file": "glw-sheep_c_1_3",
+          "sha256": "6bf0469b3e6d1090ee93885d6e8a6866c25655d26c9e6f790571de0ead3dfca7",
+          "bytes": 336804,
+          "decodedShape": [
+            1080,
+            1080
+          ]
+        },
+        {
+          "key": "sheep/c/1/0",
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/sheep/c/1/0",
+          "file": "glw-sheep_c_1_0",
+          "sha256": "83106b0bc90153cfafb296105fd7cbc03611765f6f5489571ad8ba991c25888c",
+          "bytes": 824,
+          "decodedShape": [
+            1080,
+            1080
+          ]
+        }
+      ],
+      "coverage": {
+        "VUT": {
+          "maskCells": 139,
+          "validCells": 116,
+          "missingCells": 23,
+          "zeroCells": 0,
+          "positiveCells": 116,
+          "positiveAtLeast1HeadPerKm2Cells": 48,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "FSM": {
+          "maskCells": 8,
+          "validCells": 0,
+          "missingCells": 8,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "MHL": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "MNP": {
+          "maskCells": 5,
+          "validCells": 0,
+          "missingCells": 5,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "GUM": {
+          "maskCells": 5,
+          "validCells": 0,
+          "missingCells": 5,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "ASM": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "PCN": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "TON": {
+          "maskCells": 6,
+          "validCells": 4,
+          "missingCells": 2,
+          "zeroCells": 4,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "SLB": {
+          "maskCells": 307,
+          "validCells": 0,
+          "missingCells": 307,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "WSM": {
+          "maskCells": 33,
+          "validCells": 26,
+          "missingCells": 7,
+          "zeroCells": 26,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "PNG": {
+          "maskCells": 5425,
+          "validCells": 5303,
+          "missingCells": 122,
+          "zeroCells": 10,
+          "positiveCells": 5293,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "PLW": {
+          "maskCells": 5,
+          "validCells": 0,
+          "missingCells": 5,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "NZL": {
+          "maskCells": 4176,
+          "validCells": 4022,
+          "missingCells": 154,
+          "zeroCells": 336,
+          "positiveCells": 3686,
+          "positiveAtLeast1HeadPerKm2Cells": 3564,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "NIU": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "COK": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "NRU": {
+          "maskCells": 0,
+          "validCells": 0,
+          "missingCells": 0,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-source-cell-centre-in-geometry"
+        },
+        "KIR": {
+          "maskCells": 11,
+          "validCells": 0,
+          "missingCells": 11,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "WLF": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "PYF": {
+          "maskCells": 34,
+          "validCells": 20,
+          "missingCells": 14,
+          "zeroCells": 20,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "NCL": {
+          "maskCells": 236,
+          "validCells": 210,
+          "missingCells": 26,
+          "zeroCells": 0,
+          "positiveCells": 210,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "FJI": {
+          "maskCells": 228,
+          "validCells": 197,
+          "missingCells": 31,
+          "zeroCells": 12,
+          "positiveCells": 185,
+          "positiveAtLeast1HeadPerKm2Cells": 135,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "AUS": {
+          "maskCells": 100200,
+          "validCells": 99450,
+          "missingCells": 750,
+          "zeroCells": 30090,
+          "positiveCells": 69360,
+          "positiveAtLeast1HeadPerKm2Cells": 31636,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "NFK": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "ATC": {
+          "maskCells": 0,
+          "validCells": 0,
+          "missingCells": 0,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-source-cell-centre-in-geometry"
+        },
+        "TUV": {
+          "maskCells": 0,
+          "validCells": 0,
+          "missingCells": 0,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-source-cell-centre-in-geometry"
+        }
+      },
+      "spotChecks": [
+        {
+          "name": "Western Australia",
+          "longitudeUnwrapped": 117.0,
+          "latitude": -31.0,
+          "outputRow": 672,
+          "outputColumn": 84,
+          "sourceRow": 1452,
+          "sourceColumn": 3564,
+          "sourceChunkKey": "sheep/c/1/3",
+          "valueHeadPerKm2": 35.47993087768555
+        },
+        {
+          "name": "Eastern Australia",
+          "longitudeUnwrapped": 148.0,
+          "latitude": -32.0,
+          "outputRow": 684,
+          "outputColumn": 456,
+          "sourceRow": 1464,
+          "sourceColumn": 3936,
+          "sourceChunkKey": "sheep/c/1/3",
+          "valueHeadPerKm2": 60.94980239868164
+        },
+        {
+          "name": "Canterbury, NZ",
+          "longitudeUnwrapped": 172.0,
+          "latitude": -43.5,
+          "outputRow": 822,
+          "outputColumn": 744,
+          "sourceRow": 1602,
+          "sourceColumn": 4224,
+          "sourceChunkKey": "sheep/c/1/3",
+          "valueHeadPerKm2": 161.17657470703125
+        },
+        {
+          "name": "Papua New Guinea",
+          "longitudeUnwrapped": 145.0,
+          "latitude": -6.0,
+          "outputRow": 372,
+          "outputColumn": 420,
+          "sourceRow": 1152,
+          "sourceColumn": 3900,
+          "sourceChunkKey": "sheep/c/1/3",
+          "valueHeadPerKm2": 0.019765092059969902
+        },
+        {
+          "name": "Fiji, west of date line",
+          "longitudeUnwrapped": 178.0,
+          "latitude": -17.0,
+          "outputRow": 504,
+          "outputColumn": 816,
+          "sourceRow": 1284,
+          "sourceColumn": 4296,
+          "sourceChunkKey": "sheep/c/1/3",
+          "valueHeadPerKm2": -1.0
+        },
+        {
+          "name": "Fiji, east of date line",
+          "longitudeUnwrapped": 181.0,
+          "latitude": -17.0,
+          "outputRow": 504,
+          "outputColumn": 852,
+          "sourceRow": 1284,
+          "sourceColumn": 12,
+          "sourceChunkKey": "sheep/c/1/0",
+          "valueHeadPerKm2": -1.0
+        },
+        {
+          "name": "Samoa",
+          "longitudeUnwrapped": 188.0,
+          "latitude": -13.8,
+          "outputRow": 465,
+          "outputColumn": 936,
+          "sourceRow": 1245,
+          "sourceColumn": 96,
+          "sourceChunkKey": "sheep/c/1/0",
+          "valueHeadPerKm2": -1.0
+        }
+      ],
+      "sourceCellCounts": {
+        "valid": 134877,
+        "zero": 43935,
+        "positive": 90942,
+        "missing": 1538403
+      }
+    },
+    {
+      "id": "cattle",
+      "sourceCode": "cattle",
+      "title": "牛",
+      "kind": "livestock",
+      "year": 2020,
+      "unit": "頭/km²",
+      "unitEnglish": "head/km2, modelled livestock density",
+      "image": "cattle.png",
+      "grid": "cattle.values.gz",
+      "width": 1680,
+      "height": 996,
+      "bounds4326Unwrapped": [
+        110,
+        -58,
+        250,
+        25
+      ],
+      "breaks": [
+        1,
+        10,
+        50,
+        200,
+        1000
+      ],
+      "colors": [
+        "fff6e4",
+        "fee5be",
+        "f9c889",
+        "ee9960",
+        "cb653f",
+        "873c31"
+      ],
+      "sourceArrayMetadata": {
+        "shape": [
+          2160,
+          4320
+        ],
+        "data_type": "float32",
+        "chunk_grid": {
+          "name": "regular",
+          "configuration": {
+            "chunk_shape": [
+              1080,
+              1080
+            ]
+          }
+        },
+        "chunk_key_encoding": {
+          "name": "default",
+          "configuration": {
+            "separator": "/"
+          }
+        },
+        "fill_value": "NaN",
+        "codecs": [
+          {
+            "name": "bytes",
+            "configuration": {
+              "endian": "little"
+            }
+          },
+          {
+            "name": "blosc",
+            "configuration": {
+              "typesize": 4,
+              "cname": "zstd",
+              "clevel": 9,
+              "shuffle": "noshuffle",
+              "blocksize": 0
+            }
+          }
+        ],
+        "attributes": {
+          "long_name": "Cattle density",
+          "units": "head/km2",
+          "source_url": "https://storage.googleapis.com/fao-gismgr-glw4-2020-data/DATA/GLW4-2020/MAPSET/D-DA/GLW4-2020.D-DA.CTL.tif",
+          "spatial:dimensions": [
+            "y",
+            "x"
+          ],
+          "spatial:bbox": [
+            -180.0,
+            -89.99999999999994,
+            179.99999999999983,
+            90.0
+          ],
+          "spatial:transform_type": "affine",
+          "spatial:transform": [
+            0.0833333333333333,
+            0.0,
+            -180.0,
+            0.0,
+            -0.0833333333333333,
+            90.0
+          ],
+          "spatial:shape": [
+            2160,
+            4320
+          ],
+          "spatial:registration": "pixel",
+          "proj:code": "EPSG:4326",
+          "zarr_conventions": [
+            {
+              "uuid": "689b58e2-cf7b-45e0-9fff-9cfc0883d6b4",
+              "schema_url": "https://raw.githubusercontent.com/zarr-conventions/spatial/refs/tags/v1/schema.json",
+              "spec_url": "https://github.com/zarr-conventions/spatial/blob/v1/README.md",
+              "name": "spatial:",
+              "description": "Spatial coordinate information"
+            },
+            {
+              "uuid": "f17cb550-5864-4468-aeb7-f3180cfb622f",
+              "schema_url": "https://raw.githubusercontent.com/zarr-experimental/geo-proj/refs/tags/v1/schema.json",
+              "spec_url": "https://github.com/zarr-experimental/geo-proj/blob/v1/README.md",
+              "name": "proj:",
+              "description": "Coordinate reference system information for geospatial data"
+            }
+          ],
+          "_FillValue": "AAAAAAAA+H8="
+        },
+        "dimension_names": [
+          "y",
+          "x"
+        ],
+        "zarr_format": 3,
+        "node_type": "array",
+        "storage_transformers": []
+      },
+      "sourceChunks": [
+        {
+          "key": "cattle/c/0/3",
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/cattle/c/0/3",
+          "file": "glw-cattle_c_0_3",
+          "sha256": "3b66ebfae7879afb3311137200709390a57a54d45dc5a5446aece39db12e5918",
+          "bytes": 1468674,
+          "decodedShape": [
+            1080,
+            1080
+          ]
+        },
+        {
+          "key": "cattle/c/0/0",
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/cattle/c/0/0",
+          "file": "glw-cattle_c_0_0",
+          "sha256": "33583a1b7edd2a1d688b2d37a14fa8d1ccd5f6e7a35dfac74040870d28c2b40e",
+          "bytes": 980294,
+          "decodedShape": [
+            1080,
+            1080
+          ]
+        },
+        {
+          "key": "cattle/c/1/3",
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/cattle/c/1/3",
+          "file": "glw-cattle_c_1_3",
+          "sha256": "0866f9e5fba9280e12f94aebbec96228f21a3d6d7f39631f74fcce557f3e4fbe",
+          "bytes": 448560,
+          "decodedShape": [
+            1080,
+            1080
+          ]
+        },
+        {
+          "key": "cattle/c/1/0",
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/cattle/c/1/0",
+          "file": "glw-cattle_c_1_0",
+          "sha256": "41d2352de6a352392b8424c69d90698ac6e2f25d0dd59936227d75bb5343e37e",
+          "bytes": 960,
+          "decodedShape": [
+            1080,
+            1080
+          ]
+        }
+      ],
+      "coverage": {
+        "VUT": {
+          "maskCells": 139,
+          "validCells": 116,
+          "missingCells": 23,
+          "zeroCells": 0,
+          "positiveCells": 116,
+          "positiveAtLeast1HeadPerKm2Cells": 116,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "FSM": {
+          "maskCells": 8,
+          "validCells": 4,
+          "missingCells": 4,
+          "zeroCells": 4,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "MHL": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "MNP": {
+          "maskCells": 5,
+          "validCells": 1,
+          "missingCells": 4,
+          "zeroCells": 1,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "GUM": {
+          "maskCells": 5,
+          "validCells": 5,
+          "missingCells": 0,
+          "zeroCells": 5,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "valid-source-coverage"
+        },
+        "ASM": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "PCN": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "TON": {
+          "maskCells": 6,
+          "validCells": 4,
+          "missingCells": 2,
+          "zeroCells": 4,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "SLB": {
+          "maskCells": 307,
+          "validCells": 273,
+          "missingCells": 34,
+          "zeroCells": 0,
+          "positiveCells": 273,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "WSM": {
+          "maskCells": 33,
+          "validCells": 26,
+          "missingCells": 7,
+          "zeroCells": 26,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "PNG": {
+          "maskCells": 5425,
+          "validCells": 5303,
+          "missingCells": 122,
+          "zeroCells": 112,
+          "positiveCells": 5191,
+          "positiveAtLeast1HeadPerKm2Cells": 394,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "PLW": {
+          "maskCells": 5,
+          "validCells": 0,
+          "missingCells": 5,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "NZL": {
+          "maskCells": 4176,
+          "validCells": 4022,
+          "missingCells": 154,
+          "zeroCells": 336,
+          "positiveCells": 3686,
+          "positiveAtLeast1HeadPerKm2Cells": 3550,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "NIU": {
+          "maskCells": 1,
+          "validCells": 1,
+          "missingCells": 0,
+          "zeroCells": 1,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "valid-source-coverage"
+        },
+        "COK": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "NRU": {
+          "maskCells": 0,
+          "validCells": 0,
+          "missingCells": 0,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-source-cell-centre-in-geometry"
+        },
+        "KIR": {
+          "maskCells": 11,
+          "validCells": 0,
+          "missingCells": 11,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "WLF": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "PYF": {
+          "maskCells": 34,
+          "validCells": 20,
+          "missingCells": 14,
+          "zeroCells": 20,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "NCL": {
+          "maskCells": 236,
+          "validCells": 210,
+          "missingCells": 26,
+          "zeroCells": 0,
+          "positiveCells": 210,
+          "positiveAtLeast1HeadPerKm2Cells": 141,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "FJI": {
+          "maskCells": 228,
+          "validCells": 197,
+          "missingCells": 31,
+          "zeroCells": 5,
+          "positiveCells": 192,
+          "positiveAtLeast1HeadPerKm2Cells": 184,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "AUS": {
+          "maskCells": 100200,
+          "validCells": 99450,
+          "missingCells": 750,
+          "zeroCells": 5771,
+          "positiveCells": 93679,
+          "positiveAtLeast1HeadPerKm2Cells": 44209,
+          "coverageStatus": "partial-source-coverage"
+        },
+        "NFK": {
+          "maskCells": 1,
+          "validCells": 0,
+          "missingCells": 1,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-valid-source-cells"
+        },
+        "ATC": {
+          "maskCells": 0,
+          "validCells": 0,
+          "missingCells": 0,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-source-cell-centre-in-geometry"
+        },
+        "TUV": {
+          "maskCells": 0,
+          "validCells": 0,
+          "missingCells": 0,
+          "zeroCells": 0,
+          "positiveCells": 0,
+          "positiveAtLeast1HeadPerKm2Cells": 0,
+          "coverageStatus": "no-source-cell-centre-in-geometry"
+        }
+      },
+      "spotChecks": [
+        {
+          "name": "Western Australia",
+          "longitudeUnwrapped": 117.0,
+          "latitude": -31.0,
+          "outputRow": 672,
+          "outputColumn": 84,
+          "sourceRow": 1452,
+          "sourceColumn": 3564,
+          "sourceChunkKey": "cattle/c/1/3",
+          "valueHeadPerKm2": 0.4123828411102295
+        },
+        {
+          "name": "Eastern Australia",
+          "longitudeUnwrapped": 148.0,
+          "latitude": -32.0,
+          "outputRow": 684,
+          "outputColumn": 456,
+          "sourceRow": 1464,
+          "sourceColumn": 3936,
+          "sourceChunkKey": "cattle/c/1/3",
+          "valueHeadPerKm2": 6.124189853668213
+        },
+        {
+          "name": "Canterbury, NZ",
+          "longitudeUnwrapped": 172.0,
+          "latitude": -43.5,
+          "outputRow": 822,
+          "outputColumn": 744,
+          "sourceRow": 1602,
+          "sourceColumn": 4224,
+          "sourceChunkKey": "cattle/c/1/3",
+          "valueHeadPerKm2": 76.48550415039062
+        },
+        {
+          "name": "Papua New Guinea",
+          "longitudeUnwrapped": 145.0,
+          "latitude": -6.0,
+          "outputRow": 372,
+          "outputColumn": 420,
+          "sourceRow": 1152,
+          "sourceColumn": 3900,
+          "sourceChunkKey": "cattle/c/1/3",
+          "valueHeadPerKm2": 0.07696366310119629
+        },
+        {
+          "name": "Fiji, west of date line",
+          "longitudeUnwrapped": 178.0,
+          "latitude": -17.0,
+          "outputRow": 504,
+          "outputColumn": 816,
+          "sourceRow": 1284,
+          "sourceColumn": 4296,
+          "sourceChunkKey": "cattle/c/1/3",
+          "valueHeadPerKm2": -1.0
+        },
+        {
+          "name": "Fiji, east of date line",
+          "longitudeUnwrapped": 181.0,
+          "latitude": -17.0,
+          "outputRow": 504,
+          "outputColumn": 852,
+          "sourceRow": 1284,
+          "sourceColumn": 12,
+          "sourceChunkKey": "cattle/c/1/0",
+          "valueHeadPerKm2": -1.0
+        },
+        {
+          "name": "Samoa",
+          "longitudeUnwrapped": 188.0,
+          "latitude": -13.8,
+          "outputRow": 465,
+          "outputColumn": 936,
+          "sourceRow": 1245,
+          "sourceColumn": 96,
+          "sourceChunkKey": "cattle/c/1/0",
+          "valueHeadPerKm2": -1.0
+        }
+      ],
+      "sourceCellCounts": {
+        "valid": 135184,
+        "zero": 7138,
+        "positive": 128046,
+        "missing": 1538096
+      }
+    }
+  ],
+  "files": {
+    "cattle.png": {
+      "bytes": 49574,
+      "sha256": "e6138f404908a9ae860d805cc86b223a40065009d3aa7a31c51f2301c6dd1957"
+    },
+    "cattle.values.gz": {
+      "bytes": 500374,
+      "sha256": "cd0b8e3f47aba26a3fe42151845dcc4fef2e967219134f70847cf97ffe1390c0"
+    },
+    "sheep.png": {
+      "bytes": 44462,
+      "sha256": "275439483fc3d6ace1084db3829028dd7fa1be86625644c8f7f4aac41a8f8b6c"
+    },
+    "sheep.values.gz": {
+      "bytes": 366605,
+      "sha256": "cef98c55a6667365fb6d581e7978614a2802a89f892ede20dc497516f2dc850f"
+    }
+  },
+  "binaryDigestMethod": "SHA256 of exact source metadata, compressed source chunks and generated PNG/gzip bytes; no normalization",
+  "verification": {
+    "sourceMetadataHash": "passed",
+    "sourceChunkHashes": "passed",
+    "sourceTransformCrsUnitsAndCodecs": "passed",
+    "allPixelValidSourceCellIdentity": "passed",
+    "allPixelMissingSourceCellIdentity": "passed",
+    "allPixelNumericalGridIdentity": "passed",
+    "allPixelPngClassificationIdentity": "passed",
+    "zeroAndMissingSeparated": "passed",
+    "coverageArithmetic": "passed"
+  }
+}

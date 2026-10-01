@@ -33,6 +33,20 @@ SOURCES = {
 EXPECTED_COUNTS = {"AUS": 35, "NZL": 9, "PNG": 10, "FJI": 2,
                    "SLB": 1, "VUT": 1, "NCL": 1, "WSM": 1, "TON": 1, "PYF": 1}
 EXPECTED_CODES = set("AUS NZL PNG FJI SLB VUT NCL FSM MHL PLW NRU KIR GUM MNP WSM ASM TON TUV COK NIU PYF WLF PCN NFK ATC".split())
+CITATIONS = {
+    "dataset": "Mari Rivero, I. et al. (2026). GHS-UCDB R2024A - GHS Urban Centre Database 2025. European Commission, Joint Research Centre [Dataset].",
+    "datasetDoi": "https://doi.org/10.2905/JRC.05RDPR0",
+    "datasetVersionDoi": "https://doi.org/10.2905/1a338be6-7eaf-480c-9664-3a8ade88cbcd",
+    "catalogUrl": "https://data.jrc.ec.europa.eu/dataset/1a338be6-7eaf-480c-9664-3a8ade88cbcd",
+    "documentation": "Melchiorri, M. et al. (2024). Stats in the City - the GHSL Urban Centre Database 2025. Publications Office of the European Union, JRC139768.",
+    "documentationDoi": "https://doi.org/10.2760/3046391",
+    "referencePublication": "Pesaresi, M. et al. (2024). Advances on the Global Human Settlement Layer by joint assessment of Earth Observation and Population Survey data. International Journal of Digital Earth 17(1).",
+    "referencePublicationDoi": "https://doi.org/10.1080/17538947.2024.2390454",
+    "referencePublicationUrl": "https://publications.jrc.ec.europa.eu/repository/handle/JRC136539",
+    "citationRequirementsUrl": "https://human-settlement.emergency.copernicus.eu/GHSLhowToCite.php",
+    "verifiedAt": "2026-10-01",
+    "versionNote": "Pinned downloaded archives are V1.2. The product landing page still describes V1.1; source names and hashes, not that legacy label, identify the used inputs. The current JRC catalogue cites 2026; the archive readme retains an older 2024 citation.",
+}
 
 
 def sha(path):
@@ -138,6 +152,10 @@ def main():
                              for y in YEARS} for r in rows}
             else:
                 general_rows = [r for r in rows if r["GC_CNT_GAD_2025"] in names]
+                readme = read_member(archive, "readme_V1_2.txt", entry["members"], "utf-8")
+                if b"V1_2" not in readme or b"15/05/2026" not in readme:
+                    raise ValueError("Unexpected V1.2 readme edition")
+                entry["readmeDataLastUpdate"] = "2026-05-15"
                 member = "GHS_UCDB_THEME_GENERAL_CHARACTERISTICS_GLOBE_R2024A.gpkg"
                 gpkg_raw = read_member(archive, member, entry["members"])
                 with tempfile.TemporaryDirectory(prefix="oceania-centres-") as directory:
@@ -214,10 +232,11 @@ def main():
     write(OUT / "centres.json", {"schemaVersion": 1, "sourceEdition": "GHS-UCDB R2024A V1.2",
           "populationYear": 2020, "populationYears": list(YEARS), "urbanBoundaryYear": 2025,
           "coordinateCrs": "EPSG:4326", "unit": "people within source-defined urban centre",
-          "centres": centres, "countryCoverage": coverage})
+          "citations": CITATIONS, "centres": centres, "countryCoverage": coverage})
     output = OUT / "centres.json"
     write(OUT / "manifest.json", {"schemaVersion": 1, "sourceEdition": "GHS-UCDB R2024A V1.2",
           "sourceUrl": "https://human-settlement.emergency.copernicus.eu/ghs_ucdb_2024.php",
+          "citations": CITATIONS,
           "license": "CC BY 4.0", "licenseUrl": "https://human-settlement.emergency.copernicus.eu/GHSLhowToCite.php",
           "populationYears": list(YEARS), "urbanBoundaryYear": 2025,
           "sourceCoordinateCrs": "ESRI:54009", "outputCoordinateCrs": "EPSG:4326",

@@ -1,0 +1,41 @@
+/* Oceania's overview only: reuse the geographic map and keep the entries visible. */
+.oceania-overview.shell{width:calc(100% - 40px);max-width:1480px;padding:8px 0 40px;color:var(--ink);font-size:14px;line-height:1.65}
+.oceania-overview h1,.oceania-overview p{margin:0}
+.oceania-overview-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:8px}
+.oceania-overview-heading h1{font:500 25px/1.35 var(--serif);letter-spacing:-.02em}
+.oceania-overview .country-overview-breadcrumb{font-size:14px;line-height:1.5;margin:0 0 2px}
+.oceania-overview .country-overview-picker{flex:none;font-size:14px;white-space:nowrap}
+.oceania-overview .country-overview-picker select{width:240px;font-size:14px}
+.oceania-overview-navigation{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:1px;border:1px solid var(--rule);background:var(--rule)}
+.oceania-overview-navigation a{display:flex;align-items:center;justify-content:center;min-height:44px;background:#fff;padding:6px 8px;text-decoration:none;font-size:14px;font-weight:700;line-height:1.45}
+.oceania-overview-navigation [aria-current=page]{background:#234b54;color:#fff}
+.oceania-overview .overview-map-reading{grid-template-columns:minmax(0,1fr) minmax(300px,340px);gap:14px;margin-top:10px}
+.oceania-overview .overview-map-stage{height:clamp(310px,calc(100dvh - 325px),600px)}
+.oceania-overview .overview-map-key{font-size:14px;line-height:1.5;padding:8px 10px;gap:6px 14px}
+.oceania-overview .overview-map-badge{font-size:13px;padding:5px 8px}
+.oceania-overview .overview-map-controls button{min-height:44px;min-width:44px}
+.oceania-overview .overview-map-controls button:last-child{font-size:14px}
+.oceania-overview .overview-map-labels .overview-country-label{font-size:14px;line-height:22px}
+.oceania-overview .overview-map-labels .overview-city-label{font-size:13px;line-height:19px}
+.oceania-overview .overview-place-summary{padding:10px 0 0;border-bottom:0;font-size:14px}
+.oceania-overview .overview-place-summary strong{font:600 21px/1.5 var(--serif)}
+.oceania-overview .overview-place-summary p{font-size:14px;line-height:1.6;margin:4px 0 0}
+.oceania-overview .overview-region-reading{padding:14px 16px;background:#f6f4eb}
+.oceania-overview .overview-reading-eyebrow{font-size:14px;line-height:1.5;margin-bottom:5px;letter-spacing:0}
+.oceania-overview .overview-region-reading h2{font-size:23px;line-height:1.45;margin-bottom:10px}
+.oceania-overview .overview-region-intro{font-size:16px;line-height:1.75}
+.oceania-overview-start{display:block;margin-top:14px;min-height:44px;padding:10px 12px;background:#234b54;color:#fff;font-size:15px;font-weight:700;line-height:1.6;text-decoration:none}
+.oceania-overview .oceania-overview-field-guide{font-size:14px;line-height:1.6;margin:10px 0}
+.oceania-overview-background{border-top:1px solid #d4dacd;font-size:14px;line-height:1.8}
+.oceania-overview-background summary{min-height:44px;padding:9px 0;font-size:14px;font-weight:700;cursor:pointer}
+.oceania-overview-background>p{margin:8px 0}
+.oceania-overview .overview-region-section{padding-top:12px;margin-top:12px}
+.oceania-overview .overview-region-section h3{font-size:17px;line-height:1.5;margin-bottom:7px}
+.oceania-overview .overview-region-section p{font-size:15px;line-height:1.8}
+.oceania-overview .overview-region-section .overview-inline-sources{font-size:14px;line-height:1.7;margin-top:8px;gap:6px 10px}
+.oceania-overview .overview-reading-date{font-size:14px;margin:12px 0}
+.oceania-overview .country-overview-noscript{font-size:14px;margin-top:12px}
+.oceania-overview :is(a,button,select,summary):focus-visible{outline:3px solid #ab4b2d;outline-offset:2px}
+@media(max-width:900px){.oceania-overview .overview-map-reading{grid-template-columns:minmax(0,1fr) minmax(280px,320px)}.oceania-overview .overview-map-stage{height:480px}}
+@media(max-width:700px){.oceania-overview.shell{width:calc(100% - 28px)}.oceania-overview-heading{display:block}.oceania-overview-heading h1{font-size:23px}.oceania-overview .country-overview-picker{margin-top:10px;width:100%}.oceania-overview .country-overview-picker select{flex:1;width:0}.oceania-overview-navigation{grid-template-columns:repeat(3,minmax(0,1fr))}.oceania-overview-navigation a{font-size:14px}.oceania-overview .overview-map-reading{grid-template-columns:minmax(0,1fr);gap:14px}.oceania-overview .overview-map-stage{height:390px}.oceania-overview .overview-region-reading{padding:15px}.oceania-overview .overview-map-key{font-size:14px}}
+@media(prefers-reduced-motion:reduce){.oceania-overview{scroll-behavior:auto}}

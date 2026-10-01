@@ -1,0 +1,100 @@
+/* Dedicated Oceania learning workspace; no shared or other-region overrides. */
+.oceania-learning.shell{width:calc(100% - 40px);max-width:1480px;padding:8px 0 40px;color:var(--ink);font-size:14px;line-height:1.6}
+.oceania-learning [hidden]{display:none!important}
+.oceania-learning h1,.oceania-learning h2,.oceania-learning h3,.oceania-learning p{margin:0}
+.oceania-learning button,.oceania-learning select{font:inherit;color:inherit}
+.oceania-learning button,.oceania-learning summary{cursor:pointer}
+.oceania-learning button{min-height:44px;border:1px solid #a8b7b8;background:#fff;padding:6px 11px;font-size:14px;line-height:1.5}
+.oceania-learning select{min-height:44px;min-width:0;max-width:100%;width:100%;border:1px solid #a8b7b8;background:#fff;padding:6px 28px 6px 9px;font-size:14px}
+.oceania-learning button:disabled{opacity:.5;cursor:default}
+.oceania-learning :is(a,button,select,summary):focus-visible{outline:3px solid #ab4b2d;outline-offset:2px}
+.oceania-learning-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:6px}
+.oceania-learning-heading h1{font-family:var(--serif);font-size:25px;line-height:1.3;letter-spacing:-.02em}
+.oceania-learning-breadcrumb{display:none;font-size:14px;color:var(--ink-soft);line-height:1.5}
+.oceania-learning-title{min-width:0;flex:1}
+.oceania-learning .oceania-learning-return,.oceania-learning-compare-layer{display:none}
+.oceania-learning:has([data-comparison-view]:not([hidden])) .oceania-learning-title{display:none}
+.oceania-learning:has([data-comparison-view]:not([hidden])) .oceania-learning-return{display:block;flex:1;min-width:0;text-align:left;font-weight:700}
+.oceania-learning:has([data-comparison-view]:not([hidden])) .oceania-learning-place select{width:180px}
+.oceania-learning:has([data-comparison-view]:not([hidden])) .oceania-learning-compare-layer{display:flex;flex:none;align-items:center;gap:8px;font-size:14px}
+.oceania-learning-compare-layer select{width:230px}
+.oceania-learning-place{display:flex;flex:none;align-items:center;gap:10px;font-size:14px;white-space:nowrap}
+.oceania-learning-place select{width:240px}
+.oceania-learning-fields{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border:1px solid var(--rule);gap:1px;background:var(--rule);margin-bottom:6px}
+.oceania-learning-fields a{display:flex;min-height:44px;align-items:center;justify-content:center;background:#fff;text-decoration:none;padding:6px 8px;font-size:14px;font-weight:700;line-height:1.4}
+.oceania-learning-fields [aria-current=page]{background:#234b54;color:#fff}
+.oceania-learning-toolbar{display:flex;flex-direction:column;align-items:stretch;gap:8px;padding:10px 12px;border-bottom:1px solid var(--rule);background:#f6f7f0}
+.oceania-learning-themes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));min-width:0;gap:6px}
+.oceania-learning-themes button{flex:1;padding:6px 9px;font-weight:700;background:#f4f3e9}
+.oceania-learning-themes button[aria-pressed=true]{background:#234b54;color:#fff;border-color:#234b54}
+.oceania-learning-scope{display:flex;gap:4px}
+.oceania-learning-scope button{flex:1}
+.oceania-learning-scope button{padding-inline:9px;background:#f5f7f5}
+.oceania-learning-scope button[aria-pressed=true]{background:#dce9e7;border-color:#587d7d;font-weight:700}
+.oceania-learning-normal{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:14px;align-items:start}
+.oceania-learning-map-panel,.oceania-learning-reading{min-width:0;border:1px solid var(--rule);background:#fff}
+.oceania-learning-map-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;padding:6px 12px}
+.oceania-learning-map-heading>div{min-width:0}
+.oceania-learning-map-heading h2{font-family:var(--serif);font-size:18px;line-height:1.35}
+.oceania-learning-map-heading p{display:flex;flex-wrap:wrap;gap:3px 10px;font-size:14px;line-height:1.45;color:var(--ink-soft)}
+.oceania-learning-layer{flex:none;width:240px}
+.oceania-learning-layer select{font-size:14px}
+.oceania-learning-scene{position:relative;width:100%;height:clamp(322px,calc(100dvh - 426px),350px);background:#e3eef0;overflow:hidden;aspect-ratio:auto}
+.oceania-learning-scene svg{display:block;width:100%;height:100%;background:#e3eef0}
+.oceania-learning-scene .oceania-context-inset{position:absolute;left:10px;top:10px;width:130px;border:1px solid #849d9f;background:#fff;color:#24434d;box-shadow:0 1px 3px #193e4220;pointer-events:none}
+.oceania-learning-scene .oceania-context-inset svg{display:block;width:100%;height:82px;background:#eaf1f2}
+.oceania-learning-scene .oceania-context-inset span{display:block;padding:3px 4px;font-size:13px;line-height:1.3;text-align:center}
+.oceania-learning-scene .oceania-context{fill:#e6e4d9;stroke:#fbfaf4;stroke-width:1;vector-effect:non-scaling-stroke}
+.oceania-learning-scene .oceania-country{fill:transparent;stroke:#637d7b;stroke-width:.7;vector-effect:non-scaling-stroke;cursor:pointer}
+.oceania-learning-scene .oceania-country:hover,.oceania-learning-scene .oceania-country.is-selected{stroke:#133741;stroke-width:2.1}
+.oceania-learning-scene .oceania-island-locator{fill:none;stroke:#365966;stroke-width:1;vector-effect:non-scaling-stroke;cursor:pointer}
+.oceania-learning-scene text{fill:#24434d;stroke:#fbfaf4;stroke-width:2;paint-order:stroke;stroke-linejoin:round;font-family:var(--serif);pointer-events:none}
+.oceania-learning-legend{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px 10px;padding:8px 12px 10px;background:#fff;border-top:1px solid #d9e1df;font-size:14px;line-height:1.5}
+.oceania-learning-legend>span{display:flex;align-items:flex-start;gap:6px;min-width:0}
+.oceania-learning .oceania-legend-mark{display:inline-block;flex:none;width:13px;height:13px;margin-top:4px;background:var(--mark);border:1px solid #5c7170}
+.oceania-learning .oceania-legend-mark.circle{border-radius:50%}
+.oceania-learning .oceania-legend-mark.diamond{width:11px;height:11px;transform:rotate(45deg);margin:5px 1px 0}
+.oceania-learning .oceania-legend-mark.missing{background:repeating-linear-gradient(135deg,var(--mark) 0px,var(--mark) 3px,#a8a89c 3px,#a8a89c 4px)}
+.oceania-learning-message{padding:12px 14px;background:#f3f1e6}
+.oceania-learning-kicker{font-size:14px;font-weight:700;color:#416971;line-height:1.5;margin-bottom:4px!important}
+.oceania-learning-message h2{font-family:var(--serif);font-size:21px;line-height:1.45;margin-bottom:8px}
+.oceania-learning-takeaway{font-size:16px;line-height:1.7;margin-bottom:12px!important}
+.oceania-learning .oceania-learning-comparison-button{display:block;width:100%;padding:9px 12px;text-align:left;background:#234b54;border-color:#234b54;color:#fff;font-weight:700}
+.oceania-learning-explanation{margin-top:8px}
+.oceania-learning summary{min-height:44px;padding:10px 0;font-size:14px;font-weight:700;line-height:1.6}
+.oceania-learning-explanation[open] p{padding:4px 0 8px;font-size:15px;line-height:1.75}
+.oceania-learning-social[open] p{padding:4px 0 8px;font-size:15px;line-height:1.75}
+.oceania-learning-coverage{padding:10px 14px 12px;border-top:1px solid var(--rule)}
+.oceania-learning-coverage h3{font-size:14px;line-height:1.5;margin-bottom:5px}
+.oceania-learning-coverage p{font-size:14px;line-height:1.65;color:#3e575d}
+.oceania-learning-comparison-toolbar{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:0 0 8px}
+.oceania-learning:has([data-comparison-view]:not([hidden])) .oceania-learning-toolbar{display:none}
+.oceania-learning-comparison-toolbar>button{min-width:0;font-weight:700;text-align:left}
+.oceania-learning-comparison-toolbar label{display:flex;flex:none;align-items:center;gap:10px;font-size:14px}
+.oceania-learning-comparison-toolbar select{width:285px}
+.oceania-learning-comparison-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}
+.oceania-learning-comparison-grid .oceania-learning-map-heading{min-height:52px}
+.oceania-learning-comparison-grid .oceania-learning-scene{height:260px}
+.oceania-learning-comparison-grid .oceania-learning-legend{grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 12px;font-size:14px;line-height:1.4}
+.oceania-learning-comparison-explanation{padding:8px 12px 10px;background:#f3f1e6;border-top:1px solid var(--rule);font-size:14px;line-height:1.6}
+.oceania-learning-sources{margin-top:10px;padding:0 14px;border:1px solid var(--rule);background:#fff;font-size:14px;line-height:1.75}
+.oceania-learning-sources[open]>summary{margin-bottom:10px;border-bottom:1px solid var(--rule)}
+.oceania-learning-source-entry{padding:12px 0;margin-top:8px;border-top:1px solid var(--rule)}
+.oceania-learning-source-entry h2{font-family:var(--serif);font-size:20px;margin-bottom:7px}
+.oceania-learning-source-entry h3{font-size:16px;margin:8px 0 3px}
+.oceania-learning-current-sources{margin-top:12px}
+.oceania-learning-current-sources h2{font-family:var(--serif);font-size:20px;line-height:1.5}
+.oceania-learning [data-source-list] :is(div,p){margin:7px 0}
+.oceania-learning [data-source-list] a{overflow-wrap:anywhere}
+.oceania-learning-citation{margin:9px 0}
+.oceania-learning-citation a{overflow-wrap:anywhere}
+.oceania-learning-citation p{margin:4px 0 0;font-size:14px}
+.oceania-learning-noscript{margin-top:12px;font-size:14px}
+.oceania-learning-detailed-readings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
+.oceania-learning-detailed-readings details{margin:0;padding:0 14px;border:1px solid var(--rule);background:#fff}
+.oceania-learning:has([data-comparison-view]:not([hidden])) .oceania-learning-detailed-readings{display:none}
+@media(max-width:1200px){.oceania-learning-normal{grid-template-columns:minmax(0,1fr) 330px;gap:12px}.oceania-learning-heading h1{font-size:23px}.oceania-learning-place select{width:220px}.oceania-learning-layer{width:210px}.oceania-learning-map-heading{gap:8px}.oceania-learning-map-heading h2{font-size:17px}.oceania-learning-themes button{padding-inline:7px}}
+@media(max-width:1000px){.oceania-learning-normal{grid-template-columns:minmax(0,1fr) 290px}.oceania-learning-layer{width:170px}.oceania-learning-legend{grid-template-columns:repeat(2,minmax(0,1fr))}.oceania-learning-scene{height:350px}.oceania-learning-comparison-grid .oceania-learning-scene{height:260px}.oceania-learning-heading{flex-wrap:wrap}.oceania-learning:has([data-comparison-view]:not([hidden])) .oceania-learning-return{flex-basis:100%}.oceania-learning:has([data-comparison-view]:not([hidden])) .oceania-learning-compare-layer{flex:1}.oceania-learning-compare-layer select{width:100%}}
+@media(max-width:760px){.oceania-learning.shell{width:calc(100% - 24px);padding-top:10px}.oceania-learning-heading{display:block}.oceania-learning-heading h1{font-size:25px}.oceania-learning-breadcrumb{display:block}.oceania-learning-place{margin-top:10px;justify-content:space-between}.oceania-learning-place select{width:min(75%,360px)}.oceania-learning-fields{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:10px}.oceania-learning-normal{grid-template-columns:1fr}.oceania-learning-layer{width:45%}.oceania-learning-scene{height:auto;min-height:250px;aspect-ratio:1200/757}.oceania-learning-legend{grid-template-columns:repeat(2,minmax(0,1fr))}.oceania-learning-comparison-grid{grid-template-columns:1fr}.oceania-learning-comparison-grid .oceania-learning-scene{height:auto;min-height:250px}.oceania-learning-message h2{font-size:22px}.oceania-learning:has([data-comparison-view]:not([hidden])) .oceania-learning-return{width:100%;margin-bottom:8px}.oceania-learning:has([data-comparison-view]:not([hidden])) .oceania-learning-compare-layer{margin-top:8px}.oceania-learning-detailed-readings{grid-template-columns:1fr}}
+@media(max-width:400px){.oceania-learning-map-heading{display:block}.oceania-learning-layer{display:block;width:100%;margin-top:7px}.oceania-learning-legend{column-gap:8px;padding-inline:8px}.oceania-learning-map-heading h2{font-size:18px}}
+@media(prefers-reduced-motion:reduce){.oceania-learning *{scroll-behavior:auto!important}}

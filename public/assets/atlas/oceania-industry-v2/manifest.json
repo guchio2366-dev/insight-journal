@@ -1,0 +1,195 @@
+{
+  "version": 2,
+  "region": "oceania",
+  "field": "industry",
+  "dataset": "representative-industry-places",
+  "checkedAt": "2026-10-01",
+  "data": "places.json",
+  "recordCount": 5,
+  "countries": [
+    "NZL",
+    "PNG",
+    "SLB",
+    "FJI"
+  ],
+  "quantityEncoding": "none",
+  "production": false,
+  "reserves": false,
+  "capacity": false,
+  "routes": false,
+  "coverage": "A selected teaching set of five representative places: three ports, one mining/processing district, and one city; not an Oceania-wide inventory of mines, factories, ports or service-sector employment.",
+  "coordinateOrder": "longitude,latitude",
+  "coordinateMethod": "Convert the cited primary source's degrees/minutes/seconds to decimal degrees; retain the published decimal city position. Plot as approximate representative geographic positions. The cited positions do not all state a datum and are not survey boundaries or navigation coordinates.",
+  "legend": [
+    {
+      "kind": "port",
+      "label": "港の代表位置",
+      "quantity": "none"
+    },
+    {
+      "kind": "processing",
+      "label": "採掘・加工地区の代表位置",
+      "quantity": "none"
+    },
+    {
+      "kind": "city",
+      "label": "サービスを読む都市の代表位置",
+      "quantity": "none"
+    }
+  ],
+  "separateCountedLayer": {
+    "data": "../oceania-industry-v1/mines.json",
+    "manifest": "../oceania-industry-v1/manifest.json",
+    "publisher": "Geoscience Australia",
+    "referenceYear": 2025,
+    "sourceStatus": "Operating mine",
+    "recordCount": 347,
+    "country": "AUS",
+    "license": "CC BY 4.0",
+    "doi": "https://doi.org/10.26186/150821",
+    "dataSha256": "aa2a6caffa18021e852e73b50ca2743df68aee16935bce4d2173a9fb7ac72c9f",
+    "sourceSha256": "65d720cab1228efe147b2e069c7b7862318c90d474310d5baacd8fdf992fb14d",
+    "pointQuantity": "One registered operating mine location in the 2025 source; not production or reserves.",
+    "legendRule": "Use a separate mine/commodity legend. Qualitative representative marks must not be added to the 347 mine count or sized by invented quantities."
+  },
+  "sources": [
+    {
+      "id": "tauranga-position",
+      "publisher": "Port of Tauranga",
+      "url": "https://www.port-tauranga.co.nz/wp-content/uploads/Location-and-Transport-Links.pdf",
+      "publishedAt": "2011-02",
+      "locator": "PDF page 3, Location and General Description of the Tauranga Harbour",
+      "position": {
+        "latitude": "37 degrees 39 minutes S",
+        "longitude": "176 degrees 11 minutes E"
+      },
+      "markId": "tauranga-port",
+      "positionScope": "General harbour reference position, not a factory or a particular terminal."
+    },
+    {
+      "id": "nz-processing",
+      "publisher": "New Zealand Ministry for Primary Industries",
+      "url": "https://www.mpi.govt.nz/forestry/forest-industry-and-workforce/the-wood-processing-sector-in-new-zealand",
+      "publishedAt": null,
+      "supports": "National wood-processing stages including sawn timber, plywood and pulp. This source supplies explanation rather than factory coordinates."
+    },
+    {
+      "id": "tauranga-exports",
+      "publisher": "New Zealand Ministry of Transport",
+      "url": "https://www.transport.govt.nz/assets/Uploads/Report/UNISCS-Interim-progress-report-on-the-Upper-North-Island-Supply-Chain-Strategy_Final.pdf",
+      "publishedYear": 2019,
+      "referenceYear": 2018,
+      "locator": "Printed page 6 / PDF page 6, Port of Tauranga",
+      "supports": "The historical relationship of the port with wood/paper and dairy exports; no historic percentage is presented as current."
+    },
+    {
+      "id": "lihir-project-position-and-reading",
+      "publisher": "Newmont; filed with the US Securities and Exchange Commission",
+      "url": "https://www.sec.gov/Archives/edgar/data/1164727/000116472724000016/exhibit967-lihiroperatio.htm",
+      "publishedAt": "2024-02",
+      "informationCurrentAt": "2023-12-31",
+      "locator": "Technical Report Summary section 3.1, page 3-1; infrastructure and social considerations sections 1.15/1.17 and 4.4",
+      "position": {
+        "latitude": "3 degrees 06 minutes 54 seconds S",
+        "longitude": "152 degrees 38 minutes 27 seconds E"
+      },
+      "markId": "lihir-project",
+      "positionScope": "The approximate project position includes the mining and processing district; not an individual processing building or a current-status mine inventory."
+    },
+    {
+      "id": "png-resource-coordination",
+      "publisher": "Papua New Guinea Mineral Resources Authority",
+      "url": "https://mra.gov.pg/developmentcoordination/mineprojectcoordination/",
+      "publishedAt": null,
+      "supports": "Stakeholder consultation, project agreements and benefit distribution. The page's operating/care-and-maintenance list is not used as current mine status."
+    },
+    {
+      "id": "lae-position-and-role",
+      "publisher": "PNG Ports Corporation Limited",
+      "url": "https://www.pngports.com.pg/index.php/port-information/ports-of-png/lae-port",
+      "publishedAt": null,
+      "locator": "General Port Information and Location",
+      "position": {
+        "latitude": "06 degrees 44.0 minutes S",
+        "longitude": "146 degrees 59.0 minutes E"
+      },
+      "markId": "lae-port",
+      "positionScope": "Published representative port location; no mine-to-port relationship inferred."
+    },
+    {
+      "id": "noro-position",
+      "publisher": "Solomon Islands Ports Authority",
+      "url": "https://www.sipa.com.sb/media/1404/fact-sheet-noro.pdf",
+      "publishedAt": null,
+      "locator": "PDF page 1, Location of Noro Port (Main Wharf)",
+      "position": {
+        "latitude": "08 degrees 13.70 minutes S",
+        "longitude": "157 degrees 11.72 minutes E"
+      },
+      "markId": "noro-port",
+      "positionScope": "Main wharf represents the harbour processing area; distinct from pilot boarding grounds and factory entrances."
+    },
+    {
+      "id": "noro-processing",
+      "publisher": "Pacific Islands Forum Fisheries Agency",
+      "url": "https://www.ffa.int/2025/11/a-town-built-by-tuna-ffa-head-visits-noros-unique-tuna-hub/",
+      "publishedAt": "2025-11-25",
+      "supports": "Noro's co-located fishing, processing, canning, container handling, investment and regional employment. This article predates the 2026-10-01 check date."
+    },
+    {
+      "id": "suva-position-and-port-services",
+      "publisher": "Fiji Ports Corporation",
+      "url": "https://fijiports.com.fj/our-story/our-facilities/",
+      "publishedAt": null,
+      "locator": "Overview of Ports in Fiji; Port of Suva",
+      "position": {
+        "latitude": "18.1248 degrees S",
+        "longitude": "178.4501 degrees E"
+      },
+      "markId": "suva-city",
+      "positionScope": "Published Suva city position, not Kings Wharf, a tourist facility or a city-sector statistic."
+    },
+    {
+      "id": "fiji-industries",
+      "publisher": "Australian Government Department of Foreign Affairs and Trade",
+      "url": "https://www.dfat.gov.au/geo/fiji/fiji-country-brief",
+      "publishedAt": null,
+      "locator": "Trade and investment ties",
+      "supports": "National tourism, finance/insurance, manufacturing and agriculture context; not Suva employment or GDP shares."
+    },
+    {
+      "id": "australia-iron-processing",
+      "publisher": "Geoscience Australia",
+      "url": "https://www.ga.gov.au/education/minerals-energy/australian-mineral-facts/iron",
+      "updatedAt": "2025-05-14",
+      "locator": "Mining and Processing",
+      "supports": "Ore processing and beneficiation, and the relation between ore properties, processing technology and viable use. Its embedded 2022 map is not substituted for the separate 2025 mine layer."
+    }
+  ],
+  "reuse": {
+    "sourceDocumentsRedistributed": false,
+    "sourceImagesRedistributed": false,
+    "content": "A small set of factual coordinates and original Japanese teaching explanations with primary-source links. Source publishers retain rights to their documents and images.",
+    "gaLicenseScope": "CC BY 4.0 applies to the separately referenced Geoscience Australia mine dataset; it is not asserted as the license of every cited port or operator document."
+  },
+  "limitations": [
+    "Five selected representative positions are qualitative examples, not a countable regional inventory.",
+    "Missing representative marks do not mean absent industry.",
+    "Different source years are kept explicit; Lihir's 2023 information is not a 2026 operating-status claim.",
+    "No transport, shipping or mine-to-port lines are estimated.",
+    "The Suva symbol represents a city, while the Fiji industry description is national context."
+  ],
+  "diagnostics": {
+    "invalidCoordinates": 0,
+    "duplicateIds": 0,
+    "duplicateCoordinates": 0,
+    "quantityFields": 0,
+    "sourceVerifiedPositions": 5
+  },
+  "generatedJsonNewline": "LF",
+  "dataSha256": "e3dee1af3bbd9361daed5ebe504ffe7e79af32911aeff7a7d1a1058e1570b560",
+  "dataBytes": 2962,
+  "readingModule": "src/data/atlas/oceania-industry-reading.ts",
+  "readingModuleSha256": "00b248d1bf343eb9571ed368989f94637f691c2ffc280e855b10bb75f8adef83",
+  "readingModuleHashNormalization": "CRLF and CR to LF; all other bytes unchanged."
+}

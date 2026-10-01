@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { calculatePayloadHash } from "../src/lib/publication/serialize.ts";
 import { loadAllPublicContent, parseArguments, walkFiles } from "./lib/content.mjs";
 import { isVerifiedFarmingGrid } from "./lib/atlas-numeric-release.mjs";
+import { isVerifiedOceaniaCropGrid } from "./lib/atlas-oceania-numeric-release.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const args = parseArguments(process.argv.slice(2));
@@ -82,9 +83,13 @@ async function verifyLocalFiles(release) {
   const farmingDirectory=path.join(dist,'assets','atlas','asia-farming-v1');
   let farmingManifest;
   if(files.includes(path.join(farmingDirectory,'manifest.json')))farmingManifest=JSON.parse(await readFile(path.join(farmingDirectory,'manifest.json'),'utf8'));
+  const oceaniaCropDirectory=path.join(dist,'assets','atlas','oceania-crops-v1');
+  let oceaniaCropManifest;
+  if(files.includes(path.join(oceaniaCropDirectory,'manifest.json')))oceaniaCropManifest=JSON.parse(await readFile(path.join(oceaniaCropDirectory,'manifest.json'),'utf8'));
   for (const filename of files) {
     const bytes=await readFile(filename);
-    const numeric=path.dirname(filename)===farmingDirectory&&isVerifiedFarmingGrid(path.basename(filename),bytes,farmingManifest);
+    const numeric=(path.dirname(filename)===farmingDirectory&&isVerifiedFarmingGrid(path.basename(filename),bytes,farmingManifest))
+      ||(path.dirname(filename)===oceaniaCropDirectory&&isVerifiedOceaniaCropGrid(path.basename(filename),bytes,oceaniaCropManifest));
     const text = filename.endsWith(".gz") ? gunzipSync(bytes).toString("utf8") : bytes.toString("utf8");
     for (const rule of forbiddenPatterns) {
       if(numeric&&rule.name==='Notion形式のID')continue;
