@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AtlasWorldNavigation from '../../components/atlas/AtlasWorldNavigation.astro';
+import { withBase } from '../../lib/urls';
 
 // Enable the two new destinations when their independently maintained pages exist.
 const optionalPages = import.meta.glob('./{africa,oceania}/index.astro');
@@ -13,6 +14,7 @@ const availableRegions = ['africa', 'oceania'].filter(id => `./${id}/index.astro
       <p>世界地図の地域や名前をタップして開く。</p>
     </header>
     <AtlasWorldNavigation availableRegions={availableRegions} />
+    <a class="atlas-industry-feature-entry" data-industry-feature-entry href={withBase('/atlas/industry/')}><strong>産業を動かす地理</strong><span>自動車・太陽光・蓄電池・半導体を、北米・欧州・アジアで比べる</span><span aria-hidden="true">→</span></a>
   </div>
 </BaseLayout>
 <style>
@@ -21,11 +23,18 @@ const availableRegions = ['africa', 'oceania'].filter(id => `./${id}/index.astro
   .eyebrow { margin: 0 0 5px; }
   h1 { font-family: var(--serif); font-size: clamp(28px, 3.5vw, 42px); letter-spacing: -.05em; margin: 0; }
   header > p { margin: 0 0 5px; color: var(--ink-soft); font-size: 13px; }
+  .atlas-industry-feature-entry { display: flex; align-items: center; gap: 14px; margin-top: 16px; padding: 12px 16px; border: 1px solid var(--rule); border-radius: 8px; color: var(--ink); text-decoration: none; background: var(--paper); }
+  .atlas-industry-feature-entry strong { white-space: nowrap; font-size: 15px; }
+  .atlas-industry-feature-entry > span { font-size: 12px; color: var(--ink-soft); }
+  .atlas-industry-feature-entry > span:last-child { margin-left: auto; }
+  .atlas-industry-feature-entry:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
   @media (max-width: 600px) {
     .atlas-directory { padding-top: 16px; }
     header { display: block; margin-bottom: 12px; }
     header > p { margin: 7px 0 0; font-size: 12px; }
     .eyebrow { font-size: 10px; }
+    .atlas-industry-feature-entry { gap: 6px 12px; flex-wrap: wrap; padding: 10px 12px; }
+    .atlas-industry-feature-entry > span:not(:last-child) { flex-basis: 100%; order: 1; }
   }
   @media (max-height: 600px) and (min-width: 601px) {
     .atlas-directory { padding-top: 10px; }

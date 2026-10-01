@@ -1,0 +1,106 @@
+---
+import regionalGeography from '../../data/atlas/regional-countries.json';
+import europeGeography from '../../data/atlas/europe-countries.json';
+import {
+  industryEuCountries, industryLabelPosition, industryMapBounds, pathIndustry, projectIndustry,
+  type IndustryGeometry, type IndustryRegion,
+} from '../../lib/industry-feature-map';
+
+interface Props {
+  region: IndustryRegion;
+  countries: { id: string; name: string; coordinates: [number, number] }[];
+  hidden?: boolean;
+  initialValues?: Record<string, string>;
+  initialCountry?: string;
+}
+
+const { region, countries, hidden = false, initialValues = {}, initialCountry = '' } = Astro.props;
+const initiallyRecorded = (id: string) => Object.prototype.hasOwnProperty.call(initialValues, id);
+const shapeRecorded = (code: string) => initiallyRecorded(code) || (initiallyRecorded('EU') && industryEuCountries.has(code));
+const shapeSelected = (code: string) => code === initialCountry || (initialCountry === 'EU' && industryEuCountries.has(code));
+const names: Record<IndustryRegion, string> = { 'north-america': '北米', europe: '欧州', asia: 'アジア' };
+const features = region === 'europe' ? europeGeography.features : regionalGeography.features;
+const shapes = features.map(feature => ({
+  code: feature.properties.code,
+  name: feature.properties.name,
+  path: pathIndustry(feature.geometry as IndustryGeometry, region),
+})).filter(feature => feature.path.length > 0);
+const clipId = `industry-map-clip-${region}`;
+const titleId = `industry-map-title-${region}`;
+const descriptionId = `industry-map-description-${region}`;
+const [west, south, east, north] = industryMapBounds[region];
+const [left, top] = projectIndustry([west, north], region);
+const [right, bottom] = projectIndustry([east, south], region);
+---
+
+<svg
+  class="industry-feature-map"
+  data-feature-map={region}
+  viewBox="0 0 1000 550"
+  width="1000"
+  height="550"
+  role="group"
+  aria-labelledby={`${titleId} ${descriptionId}`}
+  hidden={hidden}
+>
+  <title id={titleId}>{names[region]}の代表国・地域を選ぶ</title>
+  <desc id={descriptionId}>国の位置を示す地図です。点は工場の正確な位置ではありません。国名を選ぶと説明が切り替わります。値を収録していない国も背景として表示しています。</desc>
+  <defs>
+    <clipPath id={clipId}><rect x={left} y={top} width={right - left} height={bottom - top} /></clipPath>
+  </defs>
+  <rect width="1000" height="550" fill="#e7eff1" />
+  <g class="industry-feature-land" clip-path={`url(#${clipId})`} aria-hidden="true">
+    {shapes.map(shape => (
+      <path
+        class:list={{ 'is-recorded': shapeRecorded(shape.code), 'is-selected': shapeSelected(shape.code) }}
+        d={shape.path}
+        data-feature-shape={shape.code}
+        data-feature-group={industryEuCountries.has(shape.code) ? 'EU' : undefined}
+        fill="#edece5"
+        stroke="#a7b3b2"
+        stroke-width="0.85"
+        vector-effect="non-scaling-stroke"
+        fill-rule="evenodd"
+      ><title>{shape.name}{industryEuCountries.has(shape.code) ? ' — European Union member' : ''}</title></path>
+    ))}
+  </g>
+  {countries.map((country, index) => {
+    const anchor = projectIndustry(country.coordinates, region);
+    const label = industryLabelPosition(country.id, region, anchor, index);
+    const labelWidth = 234;
+    const labelHeight = 84;
+    const connectorX = anchor[0] < label[0] ? label[0] : anchor[0] > label[0] + labelWidth ? label[0] + labelWidth : anchor[0];
+    const connectorY = Math.max(label[1] + 18, Math.min(label[1] + labelHeight - 18, anchor[1]));
+    return (
+      <g
+        class:list={['industry-feature-marker', { 'is-selected': country.id === initialCountry }]}
+        data-feature-marker={country.id}
+        data-country={country.id}
+        data-feature-locator="country"
+        tabindex={initiallyRecorded(country.id) ? '0' : '-1'}
+        role="button"
+        aria-label={`${country.name}の説明を選ぶ`}
+        aria-pressed={String(country.id === initialCountry)}
+        aria-hidden={String(!initiallyRecorded(country.id))}
+        hidden={!initiallyRecorded(country.id)}
+      >
+        <title>{country.id.toUpperCase() === 'EU' ? 'European Union（EU加盟国の統計範囲）' : `${country.name}：国の位置を示す点`}</title>
+        <path class="industry-feature-connector" d={`M${anchor[0]},${anchor[1]}L${connectorX},${connectorY}`} fill="none" stroke="#627d83" stroke-width="1.4" vector-effect="non-scaling-stroke" />
+        <circle class="industry-feature-hit" cx={anchor[0]} cy={anchor[1]} r="22" fill="transparent" />
+        <circle class="industry-feature-anchor" cx={anchor[0]} cy={anchor[1]} r="6" fill="#3e6971" stroke="#fff" stroke-width="2" vector-effect="non-scaling-stroke" />
+        <rect class="industry-feature-label-box" x={label[0]} y={label[1]} width={labelWidth} height={labelHeight} rx="9" fill="#fff" fill-opacity="0.96" stroke="#c5d1d1" stroke-width="1" vector-effect="non-scaling-stroke" />
+        <text x={label[0] + 16} y={label[1] + 31} data-feature-country-name fill="#213d43" font-size="24" font-weight="700">{country.name}</text>
+        <text x={label[0] + 16} y={label[1] + 66} data-feature-country-value fill="#3c575d" font-size="28" font-weight="600">{initialValues[country.id] ?? ''}</text>
+      </g>
+    );
+  })}
+  <rect x="0.5" y="0.5" width="999" height="549" fill="none" stroke="#c5d1d1" vector-effect="non-scaling-stroke" aria-hidden="true" />
+</svg>
+
+<style>
+  .industry-feature-map { display: block; width: 100%; height: auto; overflow: visible; }
+  .industry-feature-map[hidden], .industry-feature-marker[hidden] { display: none; }
+  .industry-feature-marker { cursor: pointer; outline: none; }
+  .industry-feature-marker:focus-visible .industry-feature-label-box { stroke: #214f5b; stroke-width: 3; }
+  .industry-feature-marker:focus-visible .industry-feature-anchor { stroke: #214f5b; stroke-width: 3; }
+</style>
