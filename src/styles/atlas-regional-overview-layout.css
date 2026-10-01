@@ -1,11 +1,13 @@
 /* Loaded only by Europe and Asia overview routes; the US reference is unchanged. */
 @media(min-width:960px){
+ [data-regional-overview-layout] .country-overview-breadcrumb{margin-bottom:13px}
  .overview-workspace:has([data-regional-overview-layout]) .atlas-desktop-shell:not(.is-reading-news){display:grid;grid-template-columns:clamp(190px,19vw,280px) minmax(0,1fr);gap:16px;padding:12px 20px 36px}
  [data-regional-overview-layout] .country-overview-controls{display:grid;grid-template-columns:minmax(0,1fr);gap:7px;margin:0 0 10px}
  [data-regional-overview-layout] .country-overview-regions{min-height:44px;align-items:center}
  [data-regional-overview-layout] .country-overview-picker{min-height:40px;justify-self:start;gap:10px;font-size:12px}
  [data-regional-overview-layout] .country-overview-picker select{min-height:40px;height:40px;width:240px;padding:7px 32px 7px 10px;font-size:12px}
- [data-regional-overview-layout] .country-overview-fields>a,[data-regional-overview-layout] .country-overview-fields>span{min-height:44px;padding:9px 4px;font-size:14px;line-height:24px}
+ [data-regional-overview-layout] .country-overview-fields{height:43px}
+ [data-regional-overview-layout] .country-overview-fields>a,[data-regional-overview-layout] .country-overview-fields>span{height:42px;min-height:0;padding:8px 4px;font-size:14px;line-height:24px}
  [data-regional-overview-layout] .overview-map-reading{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px;margin-top:0}
  [data-regional-overview-layout] .overview-map-stage{height:auto;min-height:0;aspect-ratio:1.55}
  [data-regional-overview-layout] .overview-region-reading{height:auto;max-height:calc(100dvh - 272px);min-height:350px;display:flex;flex-direction:column;padding:14px;overflow:hidden}
@@ -18,7 +20,7 @@
  [data-regional-overview-layout] .overview-region-section{margin-top:18px;padding-top:16px}
  [data-regional-overview-layout] .overview-region-section p{font-size:14px;line-height:1.85}
  [data-regional-overview-layout] .overview-map-key{font-size:12px;line-height:1.7;padding:8px}
- [data-regional-overview-layout] .overview-place-summary{padding:10px 0 8px;font-size:13px}
+ [data-regional-overview-layout] .overview-place-summary{padding:8px 0 10px;margin-bottom:12px;font-size:13px;border-top:1px solid var(--rule)}
  [data-regional-overview-layout] .overview-place-summary strong{font-size:18px}
  .overview-workspace:has([data-regional-overview-layout]) .atlas-news{position:sticky;top:12px;height:calc(100dvh - 72px);min-height:0}
 }

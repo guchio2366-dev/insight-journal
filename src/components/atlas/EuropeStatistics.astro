@@ -12,8 +12,8 @@ const countryName = (code: string) => countries.find(country => country.code ===
 <section class="eu-statistics" data-eu-statistics aria-label="選択中の分野・品目の統計">
   <section id="europe-climate-statistics" data-eu-climate-statistics hidden={field !== 'nature'} aria-labelledby="europe-climate-statistics-title">
     <header class="eu-statistics-heading">
-      <h2 id="europe-climate-statistics-title">月別の数値・年間の要約</h2>
-      <p>地図の右側の雨温図に対応する数値です。都市を選び直すと、この表と年間の要約も一緒に切り替わります。</p>
+      <h2 id="europe-climate-statistics-title">雨温図・月別の数値・年間の要約</h2>
+      <p>右側の説明と同じ観測地点の雨温図と数値です。都市を選び直すと、図・表・年間の要約が一緒に切り替わります。</p>
     </header>
     <div class="eu-city-cards">{cities.map(city => <EuropeClimateDiagram city={city} country={countryName(city.country)} />)}</div>
   </section>

@@ -21,10 +21,14 @@
 .west-layout-statistics table{width:100%}
 .west-layout-statistics th,.west-layout-statistics td{font-size:13px}
 @media(min-width:960px){
+ .west-agri-controls,.west-atlas .industry-controls{padding:6px;border:1px solid #c7ccbf;border-bottom:0;background:#fbfaf3;margin:0 0 6px}
+ .west-agri-controls .atlas-water-tabs,.west-atlas .industry-controls .industry-tab-row{min-height:40px;margin:0;padding:0;gap:6px}
+ .west-agri-controls .atlas-water-tabs button,.west-atlas .industry-controls button,.west-subtabs button{font-size:14px;line-height:20px;min-height:40px;padding:9px 12px}
  .west-regional-navigation{display:block!important;margin:0 0 10px!important}
  .west-atlas:not([data-comparing=true]) .atlas-primary-grid{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px;align-items:start}
  .west-atlas:not([data-comparing=true]) .atlas-map-frame{height:auto!important;aspect-ratio:1.55;min-height:300px!important;max-height:640px}
  .west-atlas:not([data-comparing=true]) .west-reading{display:flex;flex-direction:column;height:clamp(420px,calc(100dvh - 305px),580px)!important;overflow:hidden;padding:14px 16px}
+ .west-atlas[data-field=population]:not([data-comparing=true]) .west-reading{height:calc(100dvh - 350px)!important;min-height:300px}
  .west-atlas:not([data-comparing=true]) [data-west-detail]{display:flex;flex-direction:column;min-height:0;flex:1;overflow:hidden}
  .west-atlas:not([data-comparing=true]) [data-west-detail]>header,.west-atlas:not([data-comparing=true]) .atlas-reading-takeaway,.west-atlas:not([data-comparing=true]) .west-reading-dock{flex:none}
  .west-atlas:not([data-comparing=true]) [data-west-reading-extra]{min-height:0;flex:1;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding-right:6px;border-top:1px solid #d4dbd0;margin-top:10px}

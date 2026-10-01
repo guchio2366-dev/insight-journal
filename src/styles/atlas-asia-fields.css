@@ -177,18 +177,20 @@
 @media(min-width:960px){
  .atlas-desktop-shell .asia-atlas[data-field] .asia-layout{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px;align-items:start}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-map-frame{height:auto!important;min-height:0!important;max-height:640px!important;aspect-ratio:1.55!important}
- .atlas-desktop-shell .asia-atlas[data-field] .asia-region-shell{display:flex;flex-wrap:wrap;gap:8px 16px;margin:0 0 9px;padding:0;align-items:center;flex-direction:row}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-region-shell{display:flex;flex-wrap:wrap;gap:7px 16px;margin:0 0 10px;padding:0;align-items:center;flex-direction:row}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-region-shell>.regional-navigation{width:100%}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-region-shell .regional-tabs{width:100%}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-toolbar{display:flex;gap:12px;align-items:center;width:100%;margin:0;padding:0}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-toolbar label{display:flex;align-items:center;gap:8px;font-size:13px}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-toolbar :is(select,button){min-height:40px;font-size:13px;padding:7px 10px;border:1px solid #c7ccbf;border-radius:4px;background:#fbfcf5;color:#264c52}
- .atlas-desktop-shell .asia-atlas[data-field] .asia-focus-navigation{width:100%;gap:8px;margin:0}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-focus-navigation{width:auto;gap:8px;margin:0;flex:1}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-region-shell:has(.asia-focus-navigation) .asia-toolbar{width:auto;flex:none}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-focus-navigation a{min-height:40px;font-size:13px;padding:7px 10px;border-radius:4px}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-field-tabs{margin:0;grid-template-columns:repeat(5,minmax(0,1fr));min-height:42px}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-field-tabs>a{min-height:42px;padding:9px 5px;font-size:14px;line-height:1.2;font-weight:700}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-field-tabs>a[aria-current]{background:#243b48;color:#fff}
- .atlas-desktop-shell .asia-atlas[data-field] :is(.asia-primary-topics,.asia-population-tabs,.asia-industry-sectors){display:flex;gap:0;flex-wrap:wrap;margin:0 0 10px;padding:0;border:1px solid #c7ccbf;border-top:0;background:#f1f0e7}
- .atlas-desktop-shell .asia-atlas[data-field] :is(.asia-primary-topics,.asia-population-tabs,.asia-industry-sectors)>button{flex:1;min-width:0;min-height:44px;font-size:14px;font-weight:600;padding:9px 8px;border:0;border-right:1px solid #d8d9ce;border-radius:0;background:transparent;color:#36565c}
+ .atlas-desktop-shell .asia-atlas[data-field] :is(.asia-primary-topics,.asia-population-tabs,.asia-industry-sectors){display:flex;gap:0;flex-wrap:wrap;margin:7px 0 10px;padding:0;border:1px solid #c7ccbf;border-top:0;background:#f1f0e7}
+ .atlas-desktop-shell .asia-atlas[data-field] :is(.asia-primary-topics,.asia-population-tabs,.asia-industry-sectors)>button{flex:1;min-width:0;min-height:40px;font-size:14px;font-weight:600;line-height:20px;padding:9px 8px;border:0;border-right:1px solid #d8d9ce;border-radius:0;background:transparent;color:#36565c}
  .atlas-desktop-shell .asia-atlas[data-field] :is(.asia-primary-topics,.asia-population-tabs,.asia-industry-sectors)>button[aria-pressed=true]{background:#35515d;color:#fff;border-bottom:0}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-secondary-topics{margin:-10px 0 10px;padding:0;border:1px solid #c7ccbf;border-top:0;gap:0;background:#f1f0e7}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-secondary-topics>button{flex:1;min-height:44px;font-size:13px;padding:9px 8px;border-right:1px solid #d8d9ce}
@@ -204,19 +206,27 @@
  .atlas-desktop-shell .asia-atlas[data-field] .asia-reading-scroll{height:var(--asia-reading-height,300px);max-height:var(--asia-reading-height,300px);overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding:14px;border:0}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-reading-scroll :is(h2,h3){font-size:18px;line-height:1.5}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-reading-scroll :is(p,li){font-size:14px;line-height:1.8}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-reading-scroll :is([data-overview],[data-farm-overview-reading],[data-rice-reading],[data-physical-reading],[data-population-reading],[data-industry-panel],[data-social-panel],[data-farming-extra],[data-trade-panel],[data-place-story-body])>:is(h2,.eyebrow,.asia-takeaway,[data-place-story-lead]){display:none}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-map-items :is(label,summary){font-size:13px;line-height:1.5}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-map-items :is(select,button){font-size:13px;min-height:44px;border-radius:4px}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-map-items .asia-city-picker{display:flex;gap:8px;align-items:center;padding:8px 0;margin:0}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-map-items .asia-city-picker select{min-width:0;flex:1;font-size:13px;min-height:44px}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-main-legend{margin:0;border:0;background:transparent}
- .atlas-desktop-shell .asia-atlas[data-field] .asia-main-legend>section{border:0;padding:6px 0;background:transparent}
- .atlas-desktop-shell .asia-atlas[data-field] .asia-main-legend h4{font-size:13px;line-height:1.4;margin:0 0 3px}
- .atlas-desktop-shell .asia-atlas[data-field] .asia-main-legend p{font-size:12px;line-height:1.5;margin:0 0 4px}
- .atlas-desktop-shell .asia-atlas[data-field] .asia-main-legend .asia-comparison-key{gap:3px 10px;margin:0}
- .atlas-desktop-shell .asia-atlas[data-field] .asia-farm-key{padding:8px 0;border:0}
- .atlas-desktop-shell .asia-atlas[data-field] .asia-farm-products button{min-height:44px;font-size:13px;padding:5px 8px;border-radius:4px}
- .atlas-desktop-shell .asia-atlas[data-field] .asia-farm-key-row>strong{font-size:13px}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-main-legend>section{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 8px;border:0;padding:2px 0;background:transparent}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-main-legend h4{font-size:12px;line-height:1.35;margin:0}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-main-legend p{font-size:12px;line-height:1.35;margin:0}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-main-legend .asia-comparison-key{width:100%;gap:1px 10px;margin:0}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-main-legend .asia-comparison-key span{font-size:12px;line-height:1.35}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-farm-key{padding:2px 0;border:0}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-farm-period{float:right;margin:0 0 0 6px;font-size:12px;line-height:24px;color:#435a5e}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-farm-products{gap:0 6px}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-farm-products button{min-height:24px;font-size:13px;line-height:18px;padding:2px 6px;border-radius:4px}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-farm-key-row>strong{font-size:13px;padding-top:3px}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-farm-density-key{font-size:12px}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-gesture{margin:4px 0;font-size:12px;line-height:1.5}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-map-selection{padding:5px 0;font-size:12px;line-height:1.5}
 }
+.asia-statistics [data-city-statistics]{max-width:640px;margin-inline:auto}
+.asia-statistics [data-city-statistics]>svg{max-width:440px}
+.asia-atlas .asia-map-method>summary{min-height:44px;font-size:13px;cursor:pointer;padding:10px 0}
 @media(min-width:1600px){.atlas-desktop-shell .asia-atlas[data-field] .asia-layout{grid-template-columns:minmax(0,1.8fr) minmax(280px,1fr);gap:16px}}

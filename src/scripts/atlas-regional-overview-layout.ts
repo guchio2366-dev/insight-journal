@@ -12,9 +12,10 @@ export function initRegionalOverviewLayout(root:HTMLElement){
     if(child.matches('.overview-reading-eyebrow,h2'))header.append(child);
     else body.append(child);
   }
-  if(introduction?.textContent){
-    const takeaway=document.createElement('p');takeaway.className='regional-overview-takeaway';
-    takeaway.textContent=introduction.textContent.split('。')[0]+'。';header.append(takeaway);
+  if(introduction){
+    introduction.classList.add('regional-overview-takeaway');header.append(introduction);
   }
+  const selection=root.querySelector<HTMLElement>('[data-overview-place-summary]');
+  if(selection)header.append(selection);
   reading.append(header,body);
 }

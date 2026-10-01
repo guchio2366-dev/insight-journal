@@ -50,6 +50,9 @@ test('標準階層の未整備項目を明示し、説明だけの概論復帰�
   statistics.querySelector('[data-west-country-button="IRN"]').click();await until(()=>q('[data-west-loading]').hidden);assert.equal(q('[data-west-country]').value,'IRN');assert.match(q('[data-west-detail]').textContent,/イラン/);assert.equal(w.document.querySelectorAll('[data-west-comparison]').length,1);
   select('[data-west-year]','2020');await until(()=>statistics.querySelector('caption').textContent.includes('2020年'));assert.equal(new URL(w.location.href).searchParams.get('year'),'2020');
   w.history.replaceState({},'',location);w.dispatchEvent(new w.PopStateEvent('popstate'));await until(()=>q('[data-west-country]').value==='TUR');assert.match(statistics.querySelector('caption').textContent,/2024年/);
+  q('[data-west-standard-group="宗教"]').click();await until(()=>q('[data-west-loading]').hidden);assert.match(q('[data-west-detail]').textContent,/宗教は未整備/);
+  w.history.replaceState({},'',location);w.dispatchEvent(new w.PopStateEvent('popstate'));await until(()=>q('[data-west-loading]').hidden);assert.equal(q('#west-detail-title').textContent,'人口分布');assert.doesNotMatch(q('[data-west-caption]').textContent,/未整備/);assert.equal(statistics.hidden,false);
+  q('[data-west-standard-group="宗教"]').click();await until(()=>q('[data-west-loading]').hidden);w.history.replaceState({},'',w.location.pathname);w.dispatchEvent(new w.PopStateEvent('popstate'));await until(()=>q('[data-west-loading]').hidden);assert.match(q('#west-detail-title').textContent,/人口の概論/);assert.equal(q('[data-west-country]').value,'');
  }finally{await population.w.happyDOM.close();}
  const nature=await setup('nature');
  try{
@@ -98,6 +101,8 @@ test('農林業の地図下の品目と栽培方法、人口の上部タブを�
   assert.equal(q('[data-west-cultivation="barley"]').hidden,false);assert.equal(q('[data-west-cultivation="wheat"]').hidden,true);
   q('[data-west-topic-button="barley-rainfed"]').click();assert.equal(q('.west-agri-picker [data-west-topic-button="barley"]').getAttribute('aria-pressed'),'true');
   assert.match(q('[data-west-detail]').textContent,/天水栽培/);assert.equal(q('[data-west-comparison]').hidden,false);
+  q('[data-west-standard-group="林業"]').click();assert.equal(q('.west-agri-picker [data-west-topic-button="forest"]').hidden,false);assert.equal(q('.west-agri-picker [data-west-topic-button="pasture"]').hidden,true);
+  q('[data-west-standard-group="農畜産"]').click();assert.equal(q('.west-agri-picker [data-west-topic-button="pasture"]').hidden,false);assert.equal(q('.west-agri-picker [data-west-topic-button="forest"]').hidden,true);
  }finally{await agriculture.w.happyDOM.close();}
  const population=await setup('population');
  try{

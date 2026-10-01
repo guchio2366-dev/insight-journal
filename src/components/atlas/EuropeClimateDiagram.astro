@@ -1,5 +1,6 @@
 ---
 import { climateSummary } from '../../lib/atlas-europe-view';
+import AtlasClimatePlot from './AtlasClimatePlot.astro';
 
 interface Props {
   city: {
@@ -13,14 +14,24 @@ const { city, country } = Astro.props;
 const summary = climateSummary(city.months);
 const station = city.stationName.split(' -')[0];
 const format = (value: number | null) => value === null ? '欠測' : value.toFixed(1);
+const temperature = city.months.map(month => month.temperature);
+const precipitation = city.months.map(month => month.precipitation);
+if (temperature.some(value => value !== null && (value < -10 || value > 40)) ||
+    precipitation.some(value => value !== null && (value < 0 || value > 350))) {
+  throw new Error(`Europe climate values exceed the shared plot scale: ${city.id}`);
+}
 ---
 <article class="eu-city-card eu-climate-statistic" data-city-card={city.id} hidden={city.id !== 'london'} aria-labelledby={`city-${city.id}`}>
   <header class="eu-statistic-heading">
-    <h3 id={`city-${city.id}`}>{city.name}の月別の数値・年間の要約</h3>
+    <h3 id={`city-${city.id}`}>{city.name}の雨温図・月別の数値・年間の要約</h3>
     <p>{country} · {city.period}年の平年値 · 観測所 {station}</p>
   </header>
   <div class="eu-climate-statistic-layout">
     <div class="eu-climate-statistic-summary">
+      <figure class="eu-climate-plot" data-eu-city-chart={city.id}>
+        <AtlasClimatePlot name={city.name} period={`${city.period}年`} temperatureC={temperature} precipitationMm={precipitation} />
+        <figcaption class="eu-chart-key"><span>棒：降水量 mm（左軸）</span><span>線：気温 ℃（右軸）</span></figcaption>
+      </figure>
       <dl class="eu-summary">
         <div><dt>年間降水量</dt><dd>{summary.annualRain === null ? '欠測のため算出できません' : `${summary.annualRain.toLocaleString('ja-JP', { maximumFractionDigits: 1 })} mm`}</dd></div>
         <div><dt>気温の年較差</dt><dd>{summary.range === null ? '欠測のため算出できません' : `${summary.range.toFixed(1)} ℃`}</dd></div>

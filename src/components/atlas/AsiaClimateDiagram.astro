@@ -16,7 +16,7 @@ const temperatures=city.temperatureC.filter(v=>v!==null) as number[];
 const format=(v:number|null,unit:string)=>v===null?'欠測':`${v.toLocaleString('ja-JP',{minimumFractionDigits:1,maximumFractionDigits:1})} ${unit}`;
 const sourceLabel=city.countryCode==='TWN'?'台湾・中央気象署':'気象庁';
 ---
-<figure class="asia-climate-diagram">
+<div class="asia-climate-diagram"><figure data-city-statistics>
   <figcaption><strong data-climate-place>{city.name}{countryName&&` — ${countryName}`}</strong></figcaption>
   <svg viewBox="0 0 320 185" role="img" aria-labelledby={`chart-title-${city.id} chart-desc-${city.id}`}>
     <title id={`chart-title-${city.id}`}>{city.name}の月別の気温と降水量</title>
@@ -32,7 +32,7 @@ const sourceLabel=city.countryCode==='TWN'?'台湾・中央気象署':'気象庁
   </svg>
   <div class="chart-key"><span>棒：降水量 mm</span><span>線：気温 ℃</span></div>
   {validRain.length<12&&<p class="chart-missing">×は降水量の未収録を示します。0mmではありません。</p>}
-  <section class="city-climate-reading" aria-label={`${city.name}の気候区分と季節の変化`}>
+  </figure><section class="city-climate-reading" aria-label={`${city.name}の気候区分と季節の変化`}>
     <h3 data-city-climate-class title="観測地点を含む広域格子の気候区分"><b data-city-class-code></b><span data-city-class-name>気候区分：未取得</span></h3>
     <p class="city-takeaway"><strong>{city.summary}</strong></p>
     <p class="city-class-description" data-city-class-description></p>
@@ -49,7 +49,7 @@ const sourceLabel=city.countryCode==='TWN'?'台湾・中央気象署':'気象庁
     {city.notes.map(note=><p>{note}</p>)}
   <p class="climate-source">出典：<a href={city.sourceUrl} target="_blank" rel="noopener noreferrer">{city.sourceName}</a> · 平年期間 {city.normalPeriod}。{city.countryCode==='TWN'?'台湾・中央気象署':'気象庁'}の資料を加工して作成。</p>
   </details>
-</figure>
+</div>
 <style>
   figure{margin:0;min-width:0}figcaption{margin:0 20px 3px;text-align:center;line-height:1.5}figcaption strong{font:600 12px/1.5 var(--sans);letter-spacing:normal;overflow-wrap:anywhere}
   svg{display:block;width:100%;height:auto;max-width:440px;margin-inline:auto;overflow:visible}svg text{font:11px var(--sans);fill:#65736e}.grid{stroke:#d6ddd8;stroke-width:1}.rain{fill:#78b4d1;opacity:.78}.temperature-line{fill:none;stroke:#c95042;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}.temperature-dot{fill:#fff;stroke:#c95042;stroke-width:1.3}svg .temperature{fill:#9c4a3d}

@@ -47,3 +47,18 @@ test('社会区分・発電施設の選択欄は元分野を離れると隠れ�
  assert.equal(metric.parentElement.hidden,true);assert.equal(power.parentElement.hidden,true);
  window.happyDOM.abort();
 });
+
+test('都市の雨温図・月別表だけを全幅下へ移し、選択説明と気候区分は右に保つ',()=>{
+ const window=new Window();window.document.body.innerHTML='<div data-asia-atlas><div data-asia-map-legend></div><div data-asia-map-items></div><section data-asia-statistics hidden></section><aside><div data-reading-map-legend>全気候区分・1991–2020</div><article data-city-panel="tokyo"><figure data-city-statistics><svg><title>雨温図</title></svg></figure><section class="city-climate-reading"><h3 data-city-climate-class>Cfa</h3><p class="city-takeaway">夏に雨が多い</p></section><p class="climate-source">1991–2020年</p><details class="monthly-values"><summary>月別表</summary><table><tbody><tr><td>12.3℃</td></tr></tbody></table></details></article></aside></div>';
+ const root=window.document.querySelector('[data-asia-atlas]'),layout=createAsiaLayout(root);
+ layout.render({field:'natural',city:'tokyo'});
+ assert.equal(root.querySelector('[data-asia-map-legend] [data-reading-map-legend]').textContent,'全気候区分・1991–2020');
+ assert.equal(root.querySelector('[data-asia-statistics] svg title').textContent,'雨温図');
+ assert.equal(root.querySelector('[data-asia-statistics] .monthly-values td').textContent,'12.3℃');
+ assert.equal(root.querySelector('aside .city-climate-reading [data-city-climate-class]').textContent,'Cfa');
+ assert.equal(root.querySelector('aside .city-takeaway').textContent,'夏に雨が多い');
+ assert.equal(root.querySelector('[data-asia-statistics]').hidden,false);
+ root.querySelector('[data-city-panel]').hidden=true;layout.render({field:'industry'});
+ assert.equal(root.querySelector('[data-asia-statistics]').hidden,true);
+ window.happyDOM.abort();
+});

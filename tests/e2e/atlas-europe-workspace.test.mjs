@@ -37,14 +37,14 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.equal(statistics.parentElement,shell.parentElement);
       assert.ok([...shell.parentElement.children].indexOf(statistics)>[...shell.parentElement.children].indexOf(shell));
       assert.equal(doc.querySelector('.eu-read-panel [data-eu-statistics]'),null);
-      assert.equal(doc.querySelector('[data-eu-climate-statistics] svg'),null);
-      assert.equal(doc.querySelectorAll('.eu-read-panel [data-eu-city-chart] svg').length,24);
+      assert.equal(doc.querySelectorAll('[data-eu-climate-statistics] [data-eu-city-chart] svg').length,24);
+      assert.equal(doc.querySelector('.eu-read-panel [data-eu-city-chart]'),null);
       assert.ok(doc.querySelector('.eu-breadcrumb [data-base-map]'));
     }
     if (field==='nature/') {
       assert.deepEqual([...doc.querySelectorAll('[data-eu-topic-field="nature"] button')].map(b=>b.textContent), ['気候区分','水資源','地形','標高（等高線）']);
-      assert.equal(doc.querySelector('[data-eu-climate-reader] h2').textContent,'ロンドンの雨温図');
-      assert.ok(doc.querySelector('.eu-read-panel [data-city-reading="london"] [data-eu-city-chart="london"] svg'));
+      assert.equal(doc.querySelector('[data-eu-climate-reader] h2').textContent,'ロンドンの気候と農畜産');
+      assert.ok(doc.querySelector('[data-eu-climate-statistics] [data-city-card="london"] [data-eu-city-chart="london"] svg'));
       assert.match(doc.querySelector('[data-eu-climate-statistics] h2').textContent,/月別の数値.*年間の要約/);
       assert.ok(doc.querySelector('[data-eu-climate-statistics] [data-city-card="london"] table'));
       assert.ok(doc.querySelector('[data-eu-climate-statistics] [data-city-card="london"] .eu-summary'));
