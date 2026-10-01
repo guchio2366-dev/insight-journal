@@ -1,0 +1,27 @@
+{
+  "retrievedDate": "2026-10-01",
+  "quantitativeData": {
+    "yearSelected": 2024,
+    "grain": "country/territory, calendar year",
+    "unit": "percent of merchandise export value",
+    "sourceChain": "UN Comtrade → WITS / World Bank estimates → WDI API → 2024 country subset → Japanese map and CSV",
+    "noImputation": true,
+    "sources": [
+      {"file": "ores-all-2023-2024.json", "url": "https://api.worldbank.org/v2/country/all/indicator/TX.VAL.MMTL.ZS.UN?date=2023:2024&format=json&per_page=2000", "licence": "CC BY 4.0"},
+      {"file": "manufactures-all-2023-2024.json", "url": "https://api.worldbank.org/v2/country/all/indicator/TX.VAL.MANF.ZS.UN?date=2023:2024&format=json&per_page=2000", "licence": "CC BY 4.0"},
+      {"file": "ores-metadata.json", "url": "https://api.worldbank.org/v2/indicator/TX.VAL.MMTL.ZS.UN?format=json"},
+      {"file": "manufactures-metadata.json", "url": "https://api.worldbank.org/v2/indicator/TX.VAL.MANF.ZS.UN?format=json"},
+      {"file": "ores-glossary.html", "url": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/TX.VAL.MMTL.ZS.UN", "licenceEvidence": "License Type CC BY-4.0, unit %, annual, SITC Rev.3 divisions 27/28/68"},
+      {"file": "manufactures-glossary.html", "url": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/TX.VAL.MANF.ZS.UN", "licenceEvidence": "License Type CC BY-4.0, unit %, annual, SITC Rev.3 sections 5/6/7/8 excluding 68"},
+      {"file": "wdi-catalog.html", "url": "https://datacatalog.worldbank.org/search/dataset/0037712/world-development-indicators", "licenceEvidence": "World Development Indicators dataset: Creative Commons Attribution 4.0"}
+    ],
+    "statusRules": {"value": "API published numeric >0", "zero": "API published numeric exactly 0; no observations in selected 2024 subset", "missing": "API value=null; reason not specified, do not label confidential", "notCovered": "No country/year record in complete response: FLK", "confidential": "Not supplied by this API; never inferred from null"},
+    "displayRounding": "One decimal place only in labels. Source and CSV retain unrounded original percentages. A positive value below 0.05% is labelled less than 0.05%, never 0%."
+  },
+  "readingEvidence": [
+    {"file": "chile-minerals-2024.html", "url": "https://www.usgs.gov/centers/national-minerals-information-center/chile", "fact": "2024 copper production in Antofagasta about 57%; China's share of Chile copper exports about 52%; mineral production and trade differentiated", "reuse": "Official facts paraphrased with citation. No third-party photographs, map or report text republished."},
+    {"file": "costa-rica-trade-2024.html", "url": "https://admin.inec.cr/en/node/56908", "fact": "2024 definitive customs statistics; medical instruments and fruit among main exports; free zone regime 69% of customs export value; US main trade partner", "reuse": "Official facts paraphrased with citation. No report, image or source text republished; these customs aggregates are not substituted for the WDI shares."},
+    {"file": "dominican-supply-chain-2024.html", "url": "https://presidencia.gob.do/noticias/consejo-nacional-de-zonas-francas-de-exportacion-realiza-exitosa-ronda-de-negocios-con", "fact": "2024 medical device and electronic component manufacturing in free zones; government initiative connects local/international input and service suppliers", "reuse": "Official facts paraphrased with citation. No image or source text republished."},
+    {"file": "panama-canal-fy2024.html", "url": "https://pancanal.com/en/the-canals-fy-2024-financial-results-reaffirm-its-focus-on-sustainability-and-vision-for-the-future/", "fact": "2024 fiscal year deep-draft transits 9,944; 21% fewer than FY2023 due to temporary water-saving measures; drought affected Gatun and Alhajuela lakes; population water supply prioritised", "reuse": "Only factual numbers and a newly drawn explanatory diagram; no source article, photographs or map republished. Transit decline is not represented as a revenue decline."}
+  ]
+}

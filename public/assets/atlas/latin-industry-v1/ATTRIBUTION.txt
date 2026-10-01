@@ -1,0 +1,5 @@
+Source: World Bank, World Development Indicators, based on UN Comtrade, WITS and World Bank staff estimates. Indicators TX.VAL.MMTL.ZS.UN and TX.VAL.MANF.ZS.UN, 2024. CC BY 4.0. Country subset, Japanese labels and thematic maps prepared by Insight Journal; no endorsement implied.
+
+商品輸出額の構成比。国内産業全体の付加価値・雇用・工場数や輸出額の規模は表さない。サービス輸出（運河・観光など）は分母に入らない。
+非鉄金属は鉱石・金属に含み、製造品から除く。分類されていない貿易があるため、各品目の比率の合計は100%と一致しない場合がある。
+原典のnullは欠測（理由記載なし）として保持。秘匿と断定せず、0へ変換しない。国・年のレコードがないFLKは対象統計なしとして区別。

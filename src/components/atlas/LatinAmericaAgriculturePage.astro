@@ -1,0 +1,62 @@
+---
+import LatinAmericaWorkspace from './LatinAmericaWorkspace.astro';
+import data from '../../data/atlas/latin-america/agriculture.json';
+import {latinCountries34} from '../../lib/atlas-latin-america-geometry';
+import {agricultureLayerTitle,latinAgricultureReading,renderLatinAgricultureMap,renderLatinAgricultureLegend,formatLatinAgricultureValue,faoFlagLabel} from '../../lib/atlas-latin-agriculture';
+import {withBase} from '../../lib/urls';
+import '../../styles/atlas-latin-agriculture.css';
+const state={layer:'bana',place:'CRI',scope:'central',only:false};
+const layer=data.layers[0];
+const selected=layer.countries.find(c=>c.code==='CRI')!;
+const reading=latinAgricultureReading.bana;
+---
+<LatinAmericaWorkspace field="agriculture" title="中南米の農畜産" lead="熱帯のバナナ・高地のコーヒー・内陸の大豆・牛の飼育を、自然条件と市場へのつながりから読む。">
+ <Fragment slot="map">
+  <div class="latin-agriculture-heading"><h2 data-latin-agriculture-title>{agricultureLayerTitle('bana')}</h2><span>分布推計・2020年</span></div>
+  <div class="latin-controls">
+   <label>地域 <select data-latin-agriculture-scope aria-label="地図の地域"><option value="central" selected>中米・カリブ</option><option value="south">南米</option><option value="all">中南米全体</option><option value="country">選択国を拡大</option></select></label>
+   <label>読む国 <select data-latin-agriculture-place aria-label="読む国"><option value="all">中南米全体</option>{latinCountries34.map(c=><option value={c.code} selected={c.code==='CRI'}>{c.name}</option>)}</select></label>
+   <label><input type="checkbox" data-latin-agriculture-only /> 選択国を強調</label><button type="button" data-latin-agriculture-fallback aria-pressed="false">数値一覧で読む</button>
+  </div>
+  <div class="latin-agriculture-comparison-message" data-latin-agriculture-comparison-message hidden><p class="latin-takeaway" data-latin-agriculture-comparison-explanation></p><a class="latin-return" data-latin-agriculture-return hidden href={withBase('/atlas/latin-america/nature/')}>比較元に戻る</a></div>
+  <figure data-latin-agriculture-normal-container>
+   <div class="latin-agriculture-map-panes" data-latin-agriculture-map-panes>
+    <div class="latin-agriculture-source-pane" data-latin-agriculture-source-pane hidden><h3 data-latin-agriculture-source-title>元の自然環境</h3><div data-latin-agriculture-source-map /><div data-latin-agriculture-source-legend /></div>
+    <div data-latin-agriculture-target-pane><h3 class="latin-agriculture-target-title" data-latin-agriculture-target-title hidden>農畜産の分布</h3><div data-latin-agriculture-map-container set:html={renderLatinAgricultureMap(state)} /><div data-latin-agriculture-legend-container set:html={renderLatinAgricultureLegend('bana')} /></div>
+   </div>
+   <figcaption data-latin-agriculture-map-caption>約9kmの格子に推計された年間収穫面積。農地の境界を示す図ではありません。</figcaption>
+  </figure>
+  <div class="latin-agriculture-fallback" data-latin-agriculture-fallback-container hidden>
+   <p class="latin-caption">同じ34か国・地域の値を読みます。国別の合計と格子の色は異なる尺度です。</p>
+   <div class="latin-table-scroll"><table><caption data-latin-agriculture-fallback-caption>バナナの国別収穫面積（2020年・推計）</caption><thead><tr><th>国・地域</th><th data-latin-agriculture-fallback-unit>収穫面積 ha</th></tr></thead><tbody data-latin-agriculture-fallback-rows>{layer.countries.map(c=><tr><th><button type="button" data-latin-agriculture-country={c.code}>{latinCountries34.find(country=>country.code===c.code)?.name}</button></th><td>{formatLatinAgricultureValue(c.spatial.value,'ha',c.spatial.status)}</td></tr>)}</tbody></table></div>
+  </div>
+ </Fragment>
+ <Fragment slot="items">
+  <div class="latin-agriculture-layer-buttons" role="group" aria-label="農畜産の指標">{data.layers.map(l=><button type="button" data-latin-agriculture-layer={l.id} aria-pressed={l.id==='bana'}>{l.label}</button>)}</div>
+ </Fragment>
+ <Fragment slot="reading">
+  <h2 data-latin-agriculture-reading-title>{reading.title}</h2>
+  <p class="latin-takeaway" data-latin-agriculture-takeaway>{reading.takeaway}</p>
+  <div class="latin-agriculture-selected"><strong data-latin-agriculture-selected-name>コスタリカ</strong><span data-latin-agriculture-selected-spatial>{formatLatinAgricultureValue(selected.spatial.value,'ha')}</span><small data-latin-agriculture-selected-unit>国全体の年間収穫面積推計・2020年</small></div>
+  <a class="latin-comparison-link" data-latin-agriculture-compare href={withBase('/atlas/latin-america/nature/?layer=climate&place=CRI&scope=central&from=agriculture&sourceLayer=bana&sourcePlace=CRI&sourceScope=central&sourceFallback=0')}>{reading.compare} →</a>
+  <div class="latin-agriculture-steps" data-latin-agriculture-steps>{reading.steps.map(([title,body],index)=><details open={index===0}><summary>{title}</summary><p>{body}</p></details>)}</div>
+  <details><summary>中米・カリブ・南米の事例を選ぶ</summary><div class="latin-agriculture-examples" data-latin-agriculture-examples>{reading.examples.map(example=><button type="button" data-latin-agriculture-example={example.place}>{example.label}<span>{example.text}</span></button>)}</div></details>
+  <details><summary>地図と統計の読み方</summary><p data-latin-agriculture-definition>{data.definitions.crop}</p><p data-latin-agriculture-coffee-definition hidden>{data.definitions.coffee}</p><p>{data.definitions.zero} {data.definitions.missing}</p></details>
+ </Fragment>
+ <Fragment slot="statistics">
+  <details>
+   <summary>2024年の国別生産統計と、2020年の分布推計を確かめる</summary>
+   <p class="latin-caption" data-latin-agriculture-stat-note>国別統計はFAOSTATの2024年生産量（t）。地図の2020年収穫面積（ha）とは年・単位が異なります。</p>
+   <div class="latin-table-scroll"><table><caption data-latin-agriculture-stat-caption>バナナ・34か国／地域</caption><thead><tr><th>国・地域</th><th data-latin-agriculture-stat-spatial-head>収穫面積推計 ha（2020）</th><th data-latin-agriculture-stat-national-head>生産量 t（2024）</th><th>FAO注記</th></tr></thead><tbody data-latin-agriculture-stat-rows>{layer.countries.map(c=><tr><th>{latinCountries34.find(country=>country.code===c.code)?.name}</th><td>{formatLatinAgricultureValue(c.spatial.value,'ha',c.spatial.status)}</td><td>{formatLatinAgricultureValue(c.national2024.value,'t',c.national2024.status)}</td><td>{faoFlagLabel(c.national2024.flag)}</td></tr>)}</tbody></table></div>
+   <p class="latin-caption">CC BY 4.0：FAO, FAOSTAT「Crops and livestock products」、2025年12月31日更新、2026年10月1日取得。0・欠測・該当行なしを区別して掲載。</p>
+  </details>
+ </Fragment>
+ <Fragment slot="sources">
+  <details><summary>出典・年・単位・加工と利用条件</summary>
+   <ul data-latin-agriculture-reading-sources>{reading.sources.map(source=><li><a href={source.url} target="_blank" rel="noopener noreferrer">{source.label}</a> — {source.period}</li>)}</ul>
+   <ul><li><a href="https://doi.org/10.7910/DVN/SWPENT" target="_blank" rel="noopener noreferrer">IFPRI (2026), MapSPAM 2020 Version 2 Release 2</a>。5分格子の年間収穫面積、CC BY-SA 4.0。CGIAR Climate Action Data Hub経由、地域抽出・可視化・有効格子画像はInsight Journalによる加工。同ライセンスで配信。</li><li><a href="https://cgiar-climate-data-hub.github.io/catalog/glw4-2020/" target="_blank" rel="noopener noreferrer">FAO (2024), GLW4・2020年の家畜密度</a>。5分格子、頭/km²、CC BY 4.0。国別の密度平均は有効格子を面積加重。公式飼養頭数とは区別。</li><li><a href="https://www.fao.org/faostat/en/#data/QCL" target="_blank" rel="noopener noreferrer">FAO (2025), FAOSTAT Crops and livestock products</a>。2024年国別生産量・飼養頭数。2026年10月1日取得、<a href="https://www.fao.org/contact-us/terms/db-terms-of-use/en" target="_blank" rel="noopener noreferrer">CC BY 4.0・利用条件</a>。日本語表示と地域抽出はInsight Journalによる加工。</li></ul>
+   <p><a href={withBase('/assets/atlas/latin-agriculture-v2/agriculture.json')}>表示用データ</a> · <a href={withBase('/assets/atlas/latin-agriculture-v2/provenance.json')}>原典→加工→配信のhash台帳</a></p>
+  </details>
+ </Fragment>
+ <script>import '../../scripts/atlas-latin-agriculture';</script>
+</LatinAmericaWorkspace>

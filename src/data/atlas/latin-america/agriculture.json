@@ -1,0 +1,2819 @@
+{
+  "schemaVersion": 1,
+  "scope": {
+    "countries": [
+      "ARG",
+      "CHL",
+      "HTI",
+      "DOM",
+      "BHS",
+      "FLK",
+      "URY",
+      "BRA",
+      "BOL",
+      "PER",
+      "COL",
+      "PAN",
+      "CRI",
+      "NIC",
+      "HND",
+      "SLV",
+      "GTM",
+      "BLZ",
+      "VEN",
+      "GUY",
+      "SUR",
+      "ECU",
+      "PRI",
+      "JAM",
+      "CUB",
+      "PRY",
+      "TTO",
+      "VCT",
+      "LCA",
+      "KNA",
+      "GRD",
+      "DMA",
+      "BRB",
+      "ATG"
+    ],
+    "countryCount": 34,
+    "description": "中米・カリブ・南米の32か国と2地域。メキシコは北米の専用ページに掲載。"
+  },
+  "spatialYear": 2020,
+  "nationalYear": 2024,
+  "nationalSource": {
+    "name": "FAO, FAOSTAT Crops and livestock products",
+    "updated": "2025-12-31",
+    "accessed": "2026-10-01",
+    "url": "https://www.fao.org/faostat/en/#data/QCL",
+    "licence": "CC BY 4.0",
+    "grain": "country/calendar year",
+    "stockUnit": "head",
+    "productionUnit": "t"
+  },
+  "defaultLayer": "bana",
+  "defaultPlace": "CRI",
+  "layers": [
+    {
+      "id": "bana",
+      "label": "バナナ",
+      "referenceYear": 2020,
+      "spatialUnit": "ha/5分格子",
+      "image": "/assets/atlas/latin-america-agriculture-v1/bana.png",
+      "validityImage": "/assets/atlas/latin-agriculture-v2/bana-validity.png",
+      "query": "/assets/atlas/latin-america-agriculture-v1/bana-grid.json",
+      "bounds": [
+        -93,
+        -56,
+        -33,
+        28
+      ],
+      "breaks": [
+        1,
+        10,
+        100,
+        1000,
+        5000
+      ],
+      "colors": [
+        "#d9f0a3",
+        "#addd8e",
+        "#78c679",
+        "#31a354",
+        "#006837"
+      ],
+      "assets": {
+        "bana.png": {
+          "sha256": "a61d29c426a5792c473f24b80d6d18b65b5c64f9c6e81ee0c162ee34cf92c70a",
+          "bytes": 56193
+        },
+        "bana-grid.json": {
+          "sha256": "fae5823c808762431b8c9c923672109dc57a6b3bd3bdc0072975153e002d0ab6",
+          "bytes": 1006329
+        },
+        "bana-validity.png": {
+          "sha256": "b4ab86ca4e6725e6e17c5d613ac3abdc57f580c5a148727cc7fea5750ade50de",
+          "bytes": 40809
+        }
+      },
+      "countries": [
+        {
+          "code": "ARG",
+          "spatial": {
+            "value": 8356.5,
+            "status": "value",
+            "validCells": 1364
+          },
+          "national2024": {
+            "value": 177081.85,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "177081.850000",
+            "note": null
+          }
+        },
+        {
+          "code": "CHL",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "HTI",
+          "spatial": {
+            "value": 55506.1,
+            "status": "value",
+            "validCells": 229
+          },
+          "national2024": {
+            "value": 264881.29,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "264881.290000",
+            "note": null
+          }
+        },
+        {
+          "code": "DOM",
+          "spatial": {
+            "value": 28066.5,
+            "status": "value",
+            "validCells": 517
+          },
+          "national2024": {
+            "value": 2038904.64,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "2038904.640000",
+            "note": null
+          }
+        },
+        {
+          "code": "BHS",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": 10540.86,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "10540.860000",
+            "note": null
+          }
+        },
+        {
+          "code": "FLK",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "URY",
+          "spatial": {
+            "value": 7.2,
+            "status": "value",
+            "validCells": 34
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "BRA",
+          "spatial": {
+            "value": 453267.9,
+            "status": "value",
+            "validCells": 60249
+          },
+          "national2024": {
+            "value": 7046345,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "7046345.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "BOL",
+          "spatial": {
+            "value": 23655.5,
+            "status": "value",
+            "validCells": 3488
+          },
+          "national2024": {
+            "value": 301638.28,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "301638.280000",
+            "note": null
+          }
+        },
+        {
+          "code": "PER",
+          "spatial": {
+            "value": 169917.1,
+            "status": "value",
+            "validCells": 4431
+          },
+          "national2024": {
+            "value": 2343310.52,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "2343310.520000",
+            "note": null
+          }
+        },
+        {
+          "code": "COL",
+          "spatial": {
+            "value": 102178.5,
+            "status": "value",
+            "validCells": 3260
+          },
+          "national2024": {
+            "value": 2638063.85,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "2638063.850000",
+            "note": null
+          }
+        },
+        {
+          "code": "PAN",
+          "spatial": {
+            "value": 8201.4,
+            "status": "value",
+            "validCells": 423
+          },
+          "national2024": {
+            "value": 387690.09,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "387690.090000",
+            "note": null
+          }
+        },
+        {
+          "code": "CRI",
+          "spatial": {
+            "value": 47837.4,
+            "status": "value",
+            "validCells": 260
+          },
+          "national2024": {
+            "value": 2630019.89,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "2630019.890000",
+            "note": null
+          }
+        },
+        {
+          "code": "NIC",
+          "spatial": {
+            "value": 2232.9,
+            "status": "value",
+            "validCells": 33
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "HND",
+          "spatial": {
+            "value": 11561.5,
+            "status": "value",
+            "validCells": 1300
+          },
+          "national2024": {
+            "value": 550868.63,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "550868.630000",
+            "note": null
+          }
+        },
+        {
+          "code": "SLV",
+          "spatial": {
+            "value": 717.6,
+            "status": "value",
+            "validCells": 240
+          },
+          "national2024": {
+            "value": 20053.72,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "20053.720000",
+            "note": null
+          }
+        },
+        {
+          "code": "GTM",
+          "spatial": {
+            "value": 75814.2,
+            "status": "value",
+            "validCells": 68
+          },
+          "national2024": {
+            "value": 2843486.78,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "2843486.780000",
+            "note": null
+          }
+        },
+        {
+          "code": "BLZ",
+          "spatial": {
+            "value": 3015.2,
+            "status": "value",
+            "validCells": 77
+          },
+          "national2024": {
+            "value": 85071.99,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "85071.990000",
+            "note": null
+          }
+        },
+        {
+          "code": "VEN",
+          "spatial": {
+            "value": 36648,
+            "status": "value",
+            "validCells": 2512
+          },
+          "national2024": {
+            "value": 533896.07,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "533896.070000",
+            "note": null
+          }
+        },
+        {
+          "code": "GUY",
+          "spatial": {
+            "value": 471.3,
+            "status": "value",
+            "validCells": 127
+          },
+          "national2024": {
+            "value": 21136,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "21136.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "SUR",
+          "spatial": {
+            "value": 882.3,
+            "status": "value",
+            "validCells": 38
+          },
+          "national2024": {
+            "value": 3586.26,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "3586.260000",
+            "note": null
+          }
+        },
+        {
+          "code": "ECU",
+          "spatial": {
+            "value": 168775.6,
+            "status": "value",
+            "validCells": 1715
+          },
+          "national2024": {
+            "value": 7585653,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "7585653.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "PRI",
+          "spatial": {
+            "value": 1556.7,
+            "status": "value",
+            "validCells": 6
+          },
+          "national2024": {
+            "value": 107393.28,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "107393.280000",
+            "note": null
+          }
+        },
+        {
+          "code": "JAM",
+          "spatial": {
+            "value": 8130.2,
+            "status": "value",
+            "validCells": 117
+          },
+          "national2024": {
+            "value": 62997.8,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "62997.800000",
+            "note": null
+          }
+        },
+        {
+          "code": "CUB",
+          "spatial": {
+            "value": 36748.3,
+            "status": "value",
+            "validCells": 1068
+          },
+          "national2024": {
+            "value": 155957.02,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "155957.020000",
+            "note": null
+          }
+        },
+        {
+          "code": "PRY",
+          "spatial": {
+            "value": 8883,
+            "status": "value",
+            "validCells": 2691
+          },
+          "national2024": {
+            "value": 88870.53,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "88870.530000",
+            "note": null
+          }
+        },
+        {
+          "code": "TTO",
+          "spatial": {
+            "value": 1015.8,
+            "status": "value",
+            "validCells": 61
+          },
+          "national2024": {
+            "value": 3245.59,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "3245.590000",
+            "note": null
+          }
+        },
+        {
+          "code": "VCT",
+          "spatial": {
+            "value": 6177,
+            "status": "value",
+            "validCells": 2
+          },
+          "national2024": {
+            "value": 59514.64,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "59514.640000",
+            "note": null
+          }
+        },
+        {
+          "code": "LCA",
+          "spatial": {
+            "value": 234.3,
+            "status": "value",
+            "validCells": 6
+          },
+          "national2024": {
+            "value": 2843.7,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "2843.700000",
+            "note": null
+          }
+        },
+        {
+          "code": "KNA",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "GRD",
+          "spatial": {
+            "value": 932.1,
+            "status": "value",
+            "validCells": 4
+          },
+          "national2024": {
+            "value": 1502,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "1502.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "DMA",
+          "spatial": {
+            "value": 2824,
+            "status": "value",
+            "validCells": 10
+          },
+          "national2024": {
+            "value": 11535.15,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "11535.150000",
+            "note": null
+          }
+        },
+        {
+          "code": "BRB",
+          "spatial": {
+            "value": 177.6,
+            "status": "value",
+            "validCells": 6
+          },
+          "national2024": {
+            "value": 981.37,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "981.370000",
+            "note": null
+          }
+        },
+        {
+          "code": "ATG",
+          "spatial": {
+            "value": 19.7,
+            "status": "value",
+            "validCells": 4
+          },
+          "national2024": {
+            "value": 2.37,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "2.370000",
+            "note": null
+          }
+        }
+      ],
+      "licence": "CC BY-SA 4.0",
+      "attribution": "IFPRI (2026), MapSPAM 2020 Version 2 Release 2; via CGIAR Climate Action Data Hub. Regional visualization and country aggregation by Insight Journal."
+    },
+    {
+      "id": "coff",
+      "label": "アラビカコーヒー",
+      "referenceYear": 2020,
+      "spatialUnit": "ha/5分格子",
+      "image": "/assets/atlas/latin-america-agriculture-v1/coff.png",
+      "validityImage": "/assets/atlas/latin-agriculture-v2/coff-validity.png",
+      "query": "/assets/atlas/latin-america-agriculture-v1/coff-grid.json",
+      "bounds": [
+        -93,
+        -56,
+        -33,
+        28
+      ],
+      "breaks": [
+        1,
+        10,
+        100,
+        1000,
+        5000
+      ],
+      "colors": [
+        "#d9f0a3",
+        "#addd8e",
+        "#78c679",
+        "#31a354",
+        "#006837"
+      ],
+      "assets": {
+        "coff.png": {
+          "sha256": "115815ed510b328120b3738d8d236088ac49dd1e34ff33a3a63bee0eb91d557e",
+          "bytes": 46005
+        },
+        "coff-grid.json": {
+          "sha256": "381e3f572f8c44fb70aa498c0812a8e3553fdb3e4411e964e2e865d2ceef48ec",
+          "bytes": 638978
+        },
+        "coff-validity.png": {
+          "sha256": "af71f6f583d708d05396f171a55177e40c0f79229daa703d81106ba203eb9802",
+          "bytes": 36209
+        }
+      },
+      "countries": [
+        {
+          "code": "ARG",
+          "spatial": {
+            "value": 0.9,
+            "status": "value",
+            "validCells": 22
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "CHL",
+          "spatial": {
+            "value": 13.8,
+            "status": "value",
+            "validCells": 2
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "HTI",
+          "spatial": {
+            "value": 39302.8,
+            "status": "value",
+            "validCells": 231
+          },
+          "national2024": {
+            "value": 4371.49,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "4371.490000",
+            "note": null
+          }
+        },
+        {
+          "code": "DOM",
+          "spatial": {
+            "value": 51406,
+            "status": "value",
+            "validCells": 532
+          },
+          "national2024": {
+            "value": 24838,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "24838.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "BHS",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "FLK",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "URY",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "BRA",
+          "spatial": {
+            "value": 1464194.5,
+            "status": "value",
+            "validCells": 30253
+          },
+          "national2024": {
+            "value": 3387724,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "3387724.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "BOL",
+          "spatial": {
+            "value": 25558,
+            "status": "value",
+            "validCells": 3204
+          },
+          "national2024": {
+            "value": 23063.65,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "23063.650000",
+            "note": null
+          }
+        },
+        {
+          "code": "PER",
+          "spatial": {
+            "value": 434377.5,
+            "status": "value",
+            "validCells": 8456
+          },
+          "national2024": {
+            "value": 358993.78,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "358993.780000",
+            "note": null
+          }
+        },
+        {
+          "code": "COL",
+          "spatial": {
+            "value": 845703.3,
+            "status": "value",
+            "validCells": 4471
+          },
+          "national2024": {
+            "value": 839846.69,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "839846.690000",
+            "note": null
+          }
+        },
+        {
+          "code": "PAN",
+          "spatial": {
+            "value": 8.2,
+            "status": "value",
+            "validCells": 3
+          },
+          "national2024": {
+            "value": 6318.02,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "6318.020000",
+            "note": null
+          }
+        },
+        {
+          "code": "CRI",
+          "spatial": {
+            "value": 73091.5,
+            "status": "value",
+            "validCells": 521
+          },
+          "national2024": {
+            "value": 62153.98,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "62153.980000",
+            "note": null
+          }
+        },
+        {
+          "code": "NIC",
+          "spatial": {
+            "value": 152419.8,
+            "status": "value",
+            "validCells": 386
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "HND",
+          "spatial": {
+            "value": 349891.3,
+            "status": "value",
+            "validCells": 1324
+          },
+          "national2024": {
+            "value": 324015.02,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "324015.020000",
+            "note": null
+          }
+        },
+        {
+          "code": "SLV",
+          "spatial": {
+            "value": 137900.7,
+            "status": "value",
+            "validCells": 234
+          },
+          "national2024": {
+            "value": 28487.64,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "28487.640000",
+            "note": null
+          }
+        },
+        {
+          "code": "GTM",
+          "spatial": {
+            "value": 291499.3,
+            "status": "value",
+            "validCells": 996
+          },
+          "national2024": {
+            "value": 224860,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "224860.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "BLZ",
+          "spatial": {
+            "value": 71.7,
+            "status": "value",
+            "validCells": 98
+          },
+          "national2024": {
+            "value": 89.57,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "89.570000",
+            "note": null
+          }
+        },
+        {
+          "code": "VEN",
+          "spatial": {
+            "value": 159166.9,
+            "status": "value",
+            "validCells": 3451
+          },
+          "national2024": {
+            "value": 58268.29,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "58268.290000",
+            "note": null
+          }
+        },
+        {
+          "code": "GUY",
+          "spatial": {
+            "value": 0,
+            "status": "zero",
+            "validCells": 4
+          },
+          "national2024": {
+            "value": 151,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "151.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "SUR",
+          "spatial": {
+            "value": 276,
+            "status": "value",
+            "validCells": 36
+          },
+          "national2024": {
+            "value": 6.22,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "6.220000",
+            "note": null
+          }
+        },
+        {
+          "code": "ECU",
+          "spatial": {
+            "value": 23599,
+            "status": "value",
+            "validCells": 1768
+          },
+          "national2024": {
+            "value": 5465.05,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "5465.050000",
+            "note": null
+          }
+        },
+        {
+          "code": "PRI",
+          "spatial": {
+            "value": 6881.3,
+            "status": "value",
+            "validCells": 6
+          },
+          "national2024": {
+            "value": 635.99,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "635.990000",
+            "note": null
+          }
+        },
+        {
+          "code": "JAM",
+          "spatial": {
+            "value": 9223.2,
+            "status": "value",
+            "validCells": 117
+          },
+          "national2024": {
+            "value": 6521,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "6521.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "CUB",
+          "spatial": {
+            "value": 24869.3,
+            "status": "value",
+            "validCells": 1069
+          },
+          "national2024": {
+            "value": 6000,
+            "status": "value",
+            "flag": "X",
+            "sourceValue": "6000.000000",
+            "note": "Unofficial figure"
+          }
+        },
+        {
+          "code": "PRY",
+          "spatial": {
+            "value": 294.3,
+            "status": "value",
+            "validCells": 3417
+          },
+          "national2024": {
+            "value": 363.19,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "363.190000",
+            "note": null
+          }
+        },
+        {
+          "code": "TTO",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": 757.86,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "757.860000",
+            "note": null
+          }
+        },
+        {
+          "code": "VCT",
+          "spatial": {
+            "value": 543.4,
+            "status": "value",
+            "validCells": 2
+          },
+          "national2024": {
+            "value": 189.99,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "189.990000",
+            "note": null
+          }
+        },
+        {
+          "code": "LCA",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "missing",
+            "flag": "M",
+            "note": "原表の空欄"
+          }
+        },
+        {
+          "code": "KNA",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "GRD",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "DMA",
+          "spatial": {
+            "value": 648.6,
+            "status": "value",
+            "validCells": 10
+          },
+          "national2024": {
+            "value": 361.65,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "361.650000",
+            "note": null
+          }
+        },
+        {
+          "code": "BRB",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "ATG",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        }
+      ],
+      "licence": "CC BY-SA 4.0",
+      "attribution": "IFPRI (2026), MapSPAM 2020 Version 2 Release 2; via CGIAR Climate Action Data Hub. Regional visualization and country aggregation by Insight Journal."
+    },
+    {
+      "id": "soyb",
+      "label": "大豆",
+      "referenceYear": 2020,
+      "spatialUnit": "ha/5分格子",
+      "image": "/assets/atlas/latin-america-agriculture-v1/soyb.png",
+      "validityImage": "/assets/atlas/latin-agriculture-v2/soyb-validity.png",
+      "query": "/assets/atlas/latin-america-agriculture-v1/soyb-grid.json",
+      "bounds": [
+        -93,
+        -56,
+        -33,
+        28
+      ],
+      "breaks": [
+        1,
+        10,
+        100,
+        1000,
+        5000
+      ],
+      "colors": [
+        "#d9f0a3",
+        "#addd8e",
+        "#78c679",
+        "#31a354",
+        "#006837"
+      ],
+      "assets": {
+        "soyb.png": {
+          "sha256": "fa5a32b95dd810aa41554b347a08ca4539ef6c852cb045624818ad8e48ce8bd9",
+          "bytes": 71543
+        },
+        "soyb-grid.json": {
+          "sha256": "49c9d202c1ddaaadd8982b0093bda7d3a4936b32995eb731eecbdde367673cbe",
+          "bytes": 1136826
+        },
+        "soyb-validity.png": {
+          "sha256": "03040ddf930c3f63de8484efed658a10958142ad5cbfe015cb89d9205e6b5115",
+          "bytes": 35850
+        }
+      },
+      "countries": [
+        {
+          "code": "ARG",
+          "spatial": {
+            "value": 16616083.02,
+            "status": "value",
+            "validCells": 16197
+          },
+          "national2024": {
+            "value": 48213207,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "48213207.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "CHL",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "missing",
+            "flag": "M",
+            "note": "原表の空欄"
+          }
+        },
+        {
+          "code": "HTI",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "DOM",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "BHS",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "FLK",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "URY",
+          "spatial": {
+            "value": 945794.9,
+            "status": "value",
+            "validCells": 1109
+          },
+          "national2024": {
+            "value": 3065000,
+            "status": "value",
+            "flag": "X",
+            "sourceValue": "3065000.000000",
+            "note": "Unofficial figure"
+          }
+        },
+        {
+          "code": "BRA",
+          "spatial": {
+            "value": 37340812.61,
+            "status": "value",
+            "validCells": 49036
+          },
+          "national2024": {
+            "value": 144473768,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "144473768.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "BOL",
+          "spatial": {
+            "value": 1391309.8,
+            "status": "value",
+            "validCells": 3105
+          },
+          "national2024": {
+            "value": 3216439.76,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "3216439.760000",
+            "note": null
+          }
+        },
+        {
+          "code": "PER",
+          "spatial": {
+            "value": 750.6,
+            "status": "value",
+            "validCells": 2005
+          },
+          "national2024": {
+            "value": 2230.3,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "2230.300000",
+            "note": null
+          }
+        },
+        {
+          "code": "COL",
+          "spatial": {
+            "value": 44325.6,
+            "status": "value",
+            "validCells": 1338
+          },
+          "national2024": {
+            "value": 235454,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "235454.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "PAN",
+          "spatial": {
+            "value": 261.6,
+            "status": "value",
+            "validCells": 469
+          },
+          "national2024": {
+            "value": 96.32,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "96.320000",
+            "note": null
+          }
+        },
+        {
+          "code": "CRI",
+          "spatial": {
+            "value": 12,
+            "status": "value",
+            "validCells": 8
+          },
+          "national2024": {
+            "value": null,
+            "status": "missing",
+            "flag": "M",
+            "note": "原表の空欄"
+          }
+        },
+        {
+          "code": "NIC",
+          "spatial": {
+            "value": 3997.4,
+            "status": "value",
+            "validCells": 386
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "HND",
+          "spatial": {
+            "value": 909,
+            "status": "value",
+            "validCells": 1275
+          },
+          "national2024": {
+            "value": 2192.87,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "2192.870000",
+            "note": null
+          }
+        },
+        {
+          "code": "SLV",
+          "spatial": {
+            "value": 2681.4,
+            "status": "value",
+            "validCells": 234
+          },
+          "national2024": {
+            "value": 5379.63,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "5379.630000",
+            "note": null
+          }
+        },
+        {
+          "code": "GTM",
+          "spatial": {
+            "value": 15931,
+            "status": "value",
+            "validCells": 696
+          },
+          "national2024": {
+            "value": 45000,
+            "status": "value",
+            "flag": "X",
+            "sourceValue": "45000.000000",
+            "note": "Unofficial figure"
+          }
+        },
+        {
+          "code": "BLZ",
+          "spatial": {
+            "value": 9808.2,
+            "status": "value",
+            "validCells": 115
+          },
+          "national2024": {
+            "value": 26404,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "26404.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "VEN",
+          "spatial": {
+            "value": 4682.7,
+            "status": "value",
+            "validCells": 2695
+          },
+          "national2024": {
+            "value": 11057.23,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "11057.230000",
+            "note": null
+          }
+        },
+        {
+          "code": "GUY",
+          "spatial": {
+            "value": 0,
+            "status": "zero",
+            "validCells": 4
+          },
+          "national2024": {
+            "value": null,
+            "status": "missing",
+            "flag": "M",
+            "note": "原表の空欄"
+          }
+        },
+        {
+          "code": "SUR",
+          "spatial": {
+            "value": 6.5,
+            "status": "value",
+            "validCells": 38
+          },
+          "national2024": {
+            "value": 2.35,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "2.350000",
+            "note": null
+          }
+        },
+        {
+          "code": "ECU",
+          "spatial": {
+            "value": 21354.2,
+            "status": "value",
+            "validCells": 1186
+          },
+          "national2024": {
+            "value": 24711.24,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "24711.240000",
+            "note": null
+          }
+        },
+        {
+          "code": "PRI",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "JAM",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "CUB",
+          "spatial": {
+            "value": 392.9,
+            "status": "value",
+            "validCells": 1248
+          },
+          "national2024": {
+            "value": 1000,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "1000.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "PRY",
+          "spatial": {
+            "value": 3614375.4,
+            "status": "value",
+            "validCells": 4574
+          },
+          "national2024": {
+            "value": 11100256,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "11100256.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "TTO",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "VCT",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "LCA",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "KNA",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "GRD",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "DMA",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "BRB",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "ATG",
+          "spatial": {
+            "value": null,
+            "status": "missing",
+            "validCells": 0
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        }
+      ],
+      "licence": "CC BY-SA 4.0",
+      "attribution": "IFPRI (2026), MapSPAM 2020 Version 2 Release 2; via CGIAR Climate Action Data Hub. Regional visualization and country aggregation by Insight Journal."
+    },
+    {
+      "id": "cattle",
+      "label": "牛",
+      "referenceYear": 2020,
+      "spatialUnit": "頭/km²",
+      "image": "/assets/atlas/latin-america-livestock-v1/cattle.png",
+      "validityImage": "/assets/atlas/latin-agriculture-v2/cattle-validity.png",
+      "query": "/assets/atlas/latin-america-livestock-v1/cattle-grid.json",
+      "bounds": [
+        -93,
+        -56,
+        -33,
+        28
+      ],
+      "breaks": [
+        1,
+        10,
+        50,
+        200,
+        1000
+      ],
+      "colors": [
+        "#fee8c8",
+        "#fdbb84",
+        "#fc8d59",
+        "#e34a33",
+        "#b30000"
+      ],
+      "assets": {
+        "cattle.png": {
+          "sha256": "fa3953569e6bec239388b667aee5174d14d307ae53c5ebaa680b0a7fba019b96",
+          "bytes": 77125
+        },
+        "cattle-grid.json": {
+          "sha256": "445d08f8adecf84b40f9665255d131c9d480fdcb4b84b88e50600e69015ca923",
+          "bytes": 3544623
+        },
+        "cattle-validity.png": {
+          "sha256": "a05a768623f07988e91484b7dab389041651c596b37e0710b969e34cfb6f150d",
+          "bytes": 21717
+        }
+      },
+      "countries": [
+        {
+          "code": "ARG",
+          "spatial": {
+            "value": 19.7399,
+            "status": "value",
+            "validCells": 39687,
+            "modelEstimatedHead": 54387192.62,
+            "validAreaKm2": 2755190.01
+          },
+          "national2024": {
+            "value": 52783892,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "52783892.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 3178044,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "3178044.000000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 10908039,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "10908039.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "CHL",
+          "spatial": {
+            "value": 4.4504,
+            "status": "value",
+            "validCells": 10648,
+            "modelEstimatedHead": 3174941.12,
+            "validAreaKm2": 713408.69
+          },
+          "national2024": {
+            "value": 2962490,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "2962490.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 197958.3,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "197958.300000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 2300034,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "2300034.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "HTI",
+          "spatial": {
+            "value": 56.879,
+            "status": "value",
+            "validCells": 316,
+            "modelEstimatedHead": 1459761.46,
+            "validAreaKm2": 25664.32
+          },
+          "national2024": {
+            "value": 1524965,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "1524965.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 49944.42,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "49944.420000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 47231.99,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "47231.990000",
+            "note": null
+          }
+        },
+        {
+          "code": "DOM",
+          "spatial": {
+            "value": 64.7477,
+            "status": "value",
+            "validCells": 570,
+            "modelEstimatedHead": 2997979.15,
+            "validAreaKm2": 46302.45
+          },
+          "national2024": {
+            "value": 3030340,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "3030340.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 67693.11,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "67693.110000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 892257.36,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "892257.360000",
+            "note": null
+          }
+        },
+        {
+          "code": "BHS",
+          "spatial": {
+            "value": 0.1067,
+            "status": "value",
+            "validCells": 73,
+            "modelEstimatedHead": 605.76,
+            "validAreaKm2": 5675.48
+          },
+          "national2024": {
+            "value": 743,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "743.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 17.55,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "17.550000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 684.11,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "684.110000",
+            "note": null
+          }
+        },
+        {
+          "code": "FLK",
+          "spatial": {
+            "value": 0.3749,
+            "status": "value",
+            "validCells": 176,
+            "modelEstimatedHead": 3508.2,
+            "validAreaKm2": 9357.53
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          },
+          "beef2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          },
+          "milk2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "URY",
+          "spatial": {
+            "value": 63.6841,
+            "status": "value",
+            "validCells": 2446,
+            "modelEstimatedHead": 11243278.37,
+            "validAreaKm2": 176547.66
+          },
+          "national2024": {
+            "value": 11960556,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "11960556.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 577892.98,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "577892.980000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 2268781,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "2268781.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "BRA",
+          "spatial": {
+            "value": 25.6445,
+            "status": "value",
+            "validCells": 101453,
+            "modelEstimatedHead": 217335815.31,
+            "validAreaKm2": 8474963
+          },
+          "national2024": {
+            "value": 238180757,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "238180757.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 10237584,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "10237584.000000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 36816177.86,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "36816177.860000",
+            "note": null
+          }
+        },
+        {
+          "code": "BOL",
+          "spatial": {
+            "value": 9.4677,
+            "status": "value",
+            "validCells": 13188,
+            "modelEstimatedHead": 10253666.39,
+            "validAreaKm2": 1083017.92
+          },
+          "national2024": {
+            "value": 11245622,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "11245622.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 349417.26,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "349417.260000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 582164,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "582164.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "PER",
+          "spatial": {
+            "value": 4.3662,
+            "status": "value",
+            "validCells": 15273,
+            "modelEstimatedHead": 5636016.08,
+            "validAreaKm2": 1290831.6
+          },
+          "national2024": {
+            "value": 5842166,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "5842166.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 203990.58,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "203990.580000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 2228888.97,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "2228888.970000",
+            "note": null
+          }
+        },
+        {
+          "code": "COL",
+          "spatial": {
+            "value": 24.5479,
+            "status": "value",
+            "validCells": 13421,
+            "modelEstimatedHead": 28176435.34,
+            "validAreaKm2": 1147812.71
+          },
+          "national2024": {
+            "value": 30344182,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "30344182.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 731624.83,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "731624.830000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 7943000,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "7943000.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "PAN",
+          "spatial": {
+            "value": 20.7849,
+            "status": "value",
+            "validCells": 833,
+            "modelEstimatedHead": 1470117.71,
+            "validAreaKm2": 70729.92
+          },
+          "national2024": {
+            "value": 1401169,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "1401169.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 71678.08,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "71678.080000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 168490,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "168490.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "CRI",
+          "spatial": {
+            "value": 28.2554,
+            "status": "value",
+            "validCells": 606,
+            "modelEstimatedHead": 1447862.15,
+            "validAreaKm2": 51241.88
+          },
+          "national2024": {
+            "value": 1576149,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "1576149.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 94191.44,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "94191.440000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 1268230,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "1268230.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "NIC",
+          "spatial": {
+            "value": 44.3963,
+            "status": "value",
+            "validCells": 1420,
+            "modelEstimatedHead": 5274880.2,
+            "validAreaKm2": 118813.44
+          },
+          "national2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          },
+          "beef2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          },
+          "milk2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "HND",
+          "spatial": {
+            "value": 25.3208,
+            "status": "value",
+            "validCells": 1348,
+            "modelEstimatedHead": 2833176.41,
+            "validAreaKm2": 111891.31
+          },
+          "national2024": {
+            "value": 2900458,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "2900458.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 65000,
+            "status": "value",
+            "flag": "X",
+            "sourceValue": "65000.000000",
+            "note": "Unofficial figure"
+          },
+          "milk2024": {
+            "value": 695611.06,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "695611.060000",
+            "note": null
+          }
+        },
+        {
+          "code": "SLV",
+          "spatial": {
+            "value": 32.8823,
+            "status": "value",
+            "validCells": 249,
+            "modelEstimatedHead": 682921.72,
+            "validAreaKm2": 20768.7
+          },
+          "national2024": {
+            "value": 772208,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "772208.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 16414.65,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "16414.650000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 419176.82,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "419176.820000",
+            "note": null
+          }
+        },
+        {
+          "code": "GTM",
+          "spatial": {
+            "value": 37.2937,
+            "status": "value",
+            "validCells": 1329,
+            "modelEstimatedHead": 4096014.2,
+            "validAreaKm2": 109831.38
+          },
+          "national2024": {
+            "value": 4343871,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "4343871.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 312601.68,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "312601.680000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 540070.34,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "540070.340000",
+            "note": null
+          }
+        },
+        {
+          "code": "BLZ",
+          "spatial": {
+            "value": 4.9484,
+            "status": "value",
+            "validCells": 266,
+            "modelEstimatedHead": 107955.95,
+            "validAreaKm2": 21816.41
+          },
+          "national2024": {
+            "value": 99019,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "99019.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 2143,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "2143.000000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 5186,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "5186.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "VEN",
+          "spatial": {
+            "value": 17.9438,
+            "status": "value",
+            "validCells": 10561,
+            "modelEstimatedHead": 16131050.44,
+            "validAreaKm2": 898974.07
+          },
+          "national2024": {
+            "value": 15749209,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "15749209.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 379168.96,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "379168.960000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 3307777.67,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "3307777.670000",
+            "note": null
+          }
+        },
+        {
+          "code": "GUY",
+          "spatial": {
+            "value": 0.4313,
+            "status": "value",
+            "validCells": 2453,
+            "modelEstimatedHead": 90476.61,
+            "validAreaKm2": 209781.06
+          },
+          "national2024": {
+            "value": 98851,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "98851.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 3256,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "3256.000000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 21089,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "21089.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "SUR",
+          "spatial": {
+            "value": 0.2509,
+            "status": "value",
+            "validCells": 1685,
+            "modelEstimatedHead": 36207.94,
+            "validAreaKm2": 144284.33
+          },
+          "national2024": {
+            "value": 28821,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "28821.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 1488.48,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "1488.480000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 2709.19,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "2709.190000",
+            "note": null
+          }
+        },
+        {
+          "code": "ECU",
+          "spatial": {
+            "value": 17.4206,
+            "status": "value",
+            "validCells": 2886,
+            "modelEstimatedHead": 4314219.46,
+            "validAreaKm2": 247651.07
+          },
+          "national2024": {
+            "value": 3436276,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "3436276.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 242011,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "242011.000000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 1964000,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "1964000.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "PRI",
+          "spatial": {
+            "value": 44.3185,
+            "status": "value",
+            "validCells": 100,
+            "modelEstimatedHead": 361413.12,
+            "validAreaKm2": 8154.9
+          },
+          "national2024": {
+            "value": 218598,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "218598.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 4060.48,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "4060.480000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 221013.26,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "221013.260000",
+            "note": null
+          }
+        },
+        {
+          "code": "JAM",
+          "spatial": {
+            "value": 15.0518,
+            "status": "value",
+            "validCells": 126,
+            "modelEstimatedHead": 154733.74,
+            "validAreaKm2": 10280.06
+          },
+          "national2024": {
+            "value": 153169,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "153169.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 7407,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "7407.000000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 9792,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "9792.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "CUB",
+          "spatial": {
+            "value": 35.7326,
+            "status": "value",
+            "validCells": 1294,
+            "modelEstimatedHead": 3690296.34,
+            "validAreaKm2": 103275.43
+          },
+          "national2024": {
+            "value": 3250000,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "3250000.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 60208.81,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "60208.810000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 231000,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "231000.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "PRY",
+          "spatial": {
+            "value": 35.0378,
+            "status": "value",
+            "validCells": 5078,
+            "modelEstimatedHead": 14028975.87,
+            "validAreaKm2": 400395.72
+          },
+          "national2024": {
+            "value": 13630216,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "13630216.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 427139.78,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "427139.780000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 559000,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "559000.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "TTO",
+          "spatial": {
+            "value": 6.6363,
+            "status": "value",
+            "validCells": 61,
+            "modelEstimatedHead": 34182.99,
+            "validAreaKm2": 5150.89
+          },
+          "national2024": {
+            "value": 35419,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "35419.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 1020,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "1020.000000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 1720,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "1720.000000",
+            "note": null
+          }
+        },
+        {
+          "code": "VCT",
+          "spatial": {
+            "value": 14.1366,
+            "status": "value",
+            "validCells": 3,
+            "modelEstimatedHead": 3544.32,
+            "validAreaKm2": 250.72
+          },
+          "national2024": {
+            "value": 2600,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "2600.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 155,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "155.000000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 824.43,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "824.430000",
+            "note": null
+          }
+        },
+        {
+          "code": "LCA",
+          "spatial": {
+            "value": 21.4133,
+            "status": "value",
+            "validCells": 6,
+            "modelEstimatedHead": 10709.19,
+            "validAreaKm2": 500.12
+          },
+          "national2024": {
+            "value": 10486,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "10486.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 403.73,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "403.730000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 1031.42,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "1031.420000",
+            "note": null
+          }
+        },
+        {
+          "code": "KNA",
+          "spatial": {
+            "value": 23.5503,
+            "status": "value",
+            "validCells": 1,
+            "modelEstimatedHead": 1929.84,
+            "validAreaKm2": 81.95
+          },
+          "national2024": {
+            "value": 1709,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "1709.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 42.73,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "42.730000",
+            "note": null
+          },
+          "milk2024": {
+            "value": null,
+            "status": "unavailable",
+            "flag": null,
+            "note": "2024年の該当行なし"
+          }
+        },
+        {
+          "code": "GRD",
+          "spatial": {
+            "value": 13.5832,
+            "status": "value",
+            "validCells": 4,
+            "modelEstimatedHead": 4561.14,
+            "validAreaKm2": 335.79
+          },
+          "national2024": {
+            "value": 6191,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "6191.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 190.83,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "190.830000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 616.59,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "616.590000",
+            "note": null
+          }
+        },
+        {
+          "code": "DMA",
+          "spatial": {
+            "value": 19.1551,
+            "status": "value",
+            "validCells": 9,
+            "modelEstimatedHead": 14268.88,
+            "validAreaKm2": 744.91
+          },
+          "national2024": {
+            "value": 13873,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "13873.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 543.97,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "543.970000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 6996.69,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "6996.690000",
+            "note": null
+          }
+        },
+        {
+          "code": "BRB",
+          "spatial": {
+            "value": 23.8501,
+            "status": "value",
+            "validCells": 6,
+            "modelEstimatedHead": 11963.42,
+            "validAreaKm2": 501.61
+          },
+          "national2024": {
+            "value": 11241,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "11241.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 146.44,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "146.440000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 4166.44,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "4166.440000",
+            "note": null
+          }
+        },
+        {
+          "code": "ATG",
+          "spatial": {
+            "value": 14.8533,
+            "status": "value",
+            "validCells": 3,
+            "modelEstimatedHead": 3653.65,
+            "validAreaKm2": 245.98
+          },
+          "national2024": {
+            "value": 4500,
+            "status": "value",
+            "flag": "E",
+            "sourceValue": "4500.000000",
+            "note": null
+          },
+          "beef2024": {
+            "value": 73.34,
+            "status": "value",
+            "flag": "A",
+            "sourceValue": "73.340000",
+            "note": null
+          },
+          "milk2024": {
+            "value": 3102.05,
+            "status": "value",
+            "flag": "I",
+            "sourceValue": "3102.050000",
+            "note": null
+          }
+        }
+      ],
+      "licence": "CC BY 4.0",
+      "attribution": "FAO (2024), GLW4 Gridded Livestock Density, reference year 2020; via CGIAR Climate Action Data Hub. Regional visualization and country aggregation by Insight Journal."
+    }
+  ],
+  "flags": [
+    {
+      "Flag": "A",
+      " Description": "Official figure"
+    },
+    {
+      "Flag": "E",
+      " Description": "Estimated value"
+    },
+    {
+      "Flag": "I",
+      " Description": "Value imputed by a receiving agency"
+    },
+    {
+      "Flag": "M",
+      " Description": "Missing value; data cannot exist"
+    },
+    {
+      "Flag": "X",
+      " Description": "Figure from external organization"
+    }
+  ],
+  "definitions": {
+    "crop": "MapSPAM 2020 v2r2による約9km（5分）格子の年間収穫面積。播種地の境界ではなく、複数回収穫を含むため農地の実面積とは一致しない。",
+    "coffee": "地図はアラビカ種の収穫面積。FAOSTATの2024年国別値は全品種のコーヒー生豆生産量で、地図と品種範囲が異なる。",
+    "cattle": "GLW4による2020年の牛の分布推計（頭/km²）。国別平均は有効格子の面積加重平均。2024年飼養頭数は別のFAOSTAT国統計。牛肉は骨付きの生鮮・冷蔵肉、牛乳は生乳を集計。",
+    "zero": "数値0は原表又はモデルに有効な0。小さい正値は0と区別して表示する。",
+    "missing": "原表空欄/モデル有効格子なしは欠測。2024年に該当国・品目行がない場合は「原表行なし」。取得が完了していない指標は「未取得」、非公表扱いの値は「秘匿」と区別し、0に変換しない。"
+  }
+}

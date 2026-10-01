@@ -20,7 +20,7 @@ const bundle=await build({entryPoints:['latin-controller'],tsconfigRaw:{},bundle
  b.onLoad({filter:/.*/,namespace:'latin-test'},({path})=>{if(!(path in modules))throw Error('Unexpected controller dependency: '+path);return {contents:modules[path],loader:'ts'};});
 }}]});
 const nextTurn=()=>new Promise(resolve=>setImmediate(resolve));
-const atlasPath='/insight-journal/atlas/latin-america/';
+const atlasPath='/insight-journal/atlas/latin-america/base-map/';
 const fieldOrder=['agriculture','nature','industry','population'];
 const fieldTab=(q,field)=>q(`.atlas-tabs [data-field="${field}"]`);
 const routeField=q=>q('[data-latin-explorer]').dataset.field==='regional-overview'?'overview':q('[data-latin-explorer]').dataset.field;
@@ -42,7 +42,7 @@ async function readyRaster(window,q,suffix){
 async function setup(query='',options={}){
  const route=options.route?options.route+'/':'';
  const window=new Window({url:'https://example.org'+atlasPath+route+query,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
- const html=await readFile('dist/atlas/latin-america/'+route+'index.html','utf8');
+ const html=await readFile('dist/atlas/latin-america/base-map/'+route+'index.html','utf8');
  window.document.body.innerHTML=html.replace(/<script(?![^>]*application\/json)[\s\S]*?<\/script>/g,'');
  const q=s=>window.document.querySelector(s),svg=q('[data-map-fallback]');
  window.Option=function(text,value){const option=window.document.createElement('option');option.textContent=text;option.value=value;return option;};
@@ -85,7 +85,7 @@ test('overview and every field route render the shared North America frame, news
   const route=field==='overview'?'':field+'/';
   const window=new Window({url:'https://example.org'+atlasPath+route,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true}});
   try{
-   const html=await readFile('dist/atlas/latin-america/'+route+'index.html','utf8');
+   const html=await readFile('dist/atlas/latin-america/base-map/'+route+'index.html','utf8');
    window.document.body.innerHTML=html.replace(/<script[\s\S]*?<\/script>/g,'');
    const q=s=>window.document.querySelector(s),shell=q('.atlas-desktop-shell[data-atlas-shell]');
    assert.ok(shell,field);assert.equal(window.document.querySelectorAll('[data-news-rail]').length,1);

@@ -1,0 +1,18 @@
+{
+  "source": "src/data/atlas/regional-countries.json",
+  "sourceSha256": "bcc64013965f7253790fd296d1127f3f419c2a32255570b05c025a7a9048f1c0",
+  "selectedSourceSha256": "b9a343e2541469c3c790500e61a734d7b78e9a18d640c428260c973bad3dfb91",
+  "targetCount": 34,
+  "excludedContext": [
+    "MEX"
+  ],
+  "license": "Natural Earth public domain",
+  "licenseUrl": "https://www.naturalearthdata.com/about/terms-of-use/",
+  "transformation": "Retain original Polygon/MultiPolygon coordinates and all rings; select existing South America/Central America/Caribbean definitions; Web Mercator for alignment with existing thematic rasters. Positions used for quantity symbols are representative locations, not population or production centroids.",
+  "bounds4326": [
+    -93,
+    -56,
+    -33,
+    28
+  ]
+}

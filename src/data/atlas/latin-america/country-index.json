@@ -1,0 +1,308 @@
+[
+  {
+    "code": "ARG",
+    "name": "アルゼンチン",
+    "subregion": "South America",
+    "label": [
+      -64,
+      -38
+    ]
+  },
+  {
+    "code": "CHL",
+    "name": "チリ",
+    "subregion": "South America",
+    "label": [
+      -70,
+      -31
+    ]
+  },
+  {
+    "code": "HTI",
+    "name": "ハイチ",
+    "subregion": "Caribbean",
+    "label": [
+      -72.8,
+      19
+    ]
+  },
+  {
+    "code": "DOM",
+    "name": "ドミニカ共和国",
+    "subregion": "Caribbean",
+    "label": [
+      -70.4,
+      19
+    ]
+  },
+  {
+    "code": "BHS",
+    "name": "バハマ",
+    "subregion": "Caribbean",
+    "label": [
+      -77.8,
+      24.7
+    ]
+  },
+  {
+    "code": "FLK",
+    "name": "フォークランド諸島（マルビナス諸島）",
+    "subregion": "South America",
+    "label": [
+      -59,
+      -51.8
+    ]
+  },
+  {
+    "code": "URY",
+    "name": "ウルグアイ",
+    "subregion": "South America",
+    "label": [
+      -56,
+      -33
+    ]
+  },
+  {
+    "code": "BRA",
+    "name": "ブラジル",
+    "subregion": "South America",
+    "label": [
+      -53,
+      -13
+    ]
+  },
+  {
+    "code": "BOL",
+    "name": "ボリビア",
+    "subregion": "South America",
+    "label": [
+      -64,
+      -17
+    ]
+  },
+  {
+    "code": "PER",
+    "name": "ペルー",
+    "subregion": "South America",
+    "label": [
+      -75,
+      -9.5
+    ]
+  },
+  {
+    "code": "COL",
+    "name": "コロンビア",
+    "subregion": "South America",
+    "label": [
+      -73,
+      4
+    ]
+  },
+  {
+    "code": "PAN",
+    "name": "パナマ",
+    "subregion": "Central America",
+    "label": [
+      -80.3,
+      8.7
+    ]
+  },
+  {
+    "code": "CRI",
+    "name": "コスタリカ",
+    "subregion": "Central America",
+    "label": [
+      -84,
+      10
+    ]
+  },
+  {
+    "code": "NIC",
+    "name": "ニカラグア",
+    "subregion": "Central America",
+    "label": [
+      -85,
+      13
+    ]
+  },
+  {
+    "code": "HND",
+    "name": "ホンジュラス",
+    "subregion": "Central America",
+    "label": [
+      -86.5,
+      14.9
+    ]
+  },
+  {
+    "code": "SLV",
+    "name": "エルサルバドル",
+    "subregion": "Central America",
+    "label": [
+      -88.9,
+      13.7
+    ]
+  },
+  {
+    "code": "GTM",
+    "name": "グアテマラ",
+    "subregion": "Central America",
+    "label": [
+      -90.4,
+      15.6
+    ]
+  },
+  {
+    "code": "BLZ",
+    "name": "ベリーズ",
+    "subregion": "Central America",
+    "label": [
+      -88.7,
+      17.2
+    ]
+  },
+  {
+    "code": "VEN",
+    "name": "ベネズエラ",
+    "subregion": "South America",
+    "label": [
+      -65.5,
+      7.5
+    ]
+  },
+  {
+    "code": "GUY",
+    "name": "ガイアナ",
+    "subregion": "South America",
+    "label": [
+      -58.9,
+      5
+    ]
+  },
+  {
+    "code": "SUR",
+    "name": "スリナム",
+    "subregion": "South America",
+    "label": [
+      -55.9,
+      4
+    ]
+  },
+  {
+    "code": "ECU",
+    "name": "エクアドル",
+    "subregion": "South America",
+    "label": [
+      -79,
+      -1.5
+    ]
+  },
+  {
+    "code": "PRI",
+    "name": "プエルトリコ",
+    "subregion": "Caribbean",
+    "label": [
+      -66.45,
+      18.2
+    ]
+  },
+  {
+    "code": "JAM",
+    "name": "ジャマイカ",
+    "subregion": "Caribbean",
+    "label": [
+      -77.3,
+      18.15
+    ]
+  },
+  {
+    "code": "CUB",
+    "name": "キューバ",
+    "subregion": "Caribbean",
+    "label": [
+      -79.5,
+      22
+    ]
+  },
+  {
+    "code": "PRY",
+    "name": "パラグアイ",
+    "subregion": "South America",
+    "label": [
+      -58,
+      -23
+    ]
+  },
+  {
+    "code": "TTO",
+    "name": "トリニダード・トバゴ",
+    "subregion": "Caribbean",
+    "label": [
+      -61.27,
+      10.47
+    ]
+  },
+  {
+    "code": "VCT",
+    "name": "セントビンセント・グレナディーン",
+    "subregion": "Caribbean",
+    "label": [
+      -61.2,
+      13.2
+    ]
+  },
+  {
+    "code": "LCA",
+    "name": "セントルシア",
+    "subregion": "Caribbean",
+    "label": [
+      -60.98,
+      13.9
+    ]
+  },
+  {
+    "code": "KNA",
+    "name": "セントクリストファー・ネービス",
+    "subregion": "Caribbean",
+    "label": [
+      -62.75,
+      17.3
+    ]
+  },
+  {
+    "code": "GRD",
+    "name": "グレナダ",
+    "subregion": "Caribbean",
+    "label": [
+      -61.68,
+      12.12
+    ]
+  },
+  {
+    "code": "DMA",
+    "name": "ドミニカ国",
+    "subregion": "Caribbean",
+    "label": [
+      -61.37,
+      15.42
+    ]
+  },
+  {
+    "code": "BRB",
+    "name": "バルバドス",
+    "subregion": "Caribbean",
+    "label": [
+      -59.56,
+      13.16
+    ]
+  },
+  {
+    "code": "ATG",
+    "name": "アンティグア・バーブーダ",
+    "subregion": "Caribbean",
+    "label": [
+      -61.8,
+      17.1
+    ]
+  }
+]

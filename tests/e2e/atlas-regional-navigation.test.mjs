@@ -92,7 +92,10 @@ test('北米の国を切り替えられ、中南米とメキシコの選択対�
   const config = JSON.parse(mexico.querySelector('[data-mexico-nature-config]').textContent);
   assert.deepEqual(config.states.map(state => state.code), Array.from({length:32}, (_,i) => String(i+1).padStart(2,'0')));
   assert.ok(mexico.querySelector('svg[data-mexico-nature-main-map]'));
-  const latin = selections(await page('atlas/latin-america'));
+  const latinPage=await page('atlas/latin-america');
+  assert.equal(latinPage.querySelector('[data-latin-field]')?.dataset.latinField,'nature');
+  const latin = [...latinPage.querySelectorAll('[data-nature-place] option')].map(option=>option.value).filter(value=>value!=='all').sort();
+  assert.equal(latin.length,34);
   assert.ok(latin.includes('BRA') && latin.includes('GTM') && latin.includes('CUB'));
   assert.ok(!latin.includes('MEX') && !latin.includes('USA') && !latin.includes('CAN'));
 });

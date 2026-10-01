@@ -1,0 +1,123 @@
+{
+  "version": 1,
+  "year": 2024,
+  "countries": 34,
+  "records": 68,
+  "statusCounts": {
+    "ores": {
+      "value": 24,
+      "zero": 0,
+      "missing": 9,
+      "notCovered": 1
+    },
+    "manufactures": {
+      "value": 24,
+      "zero": 0,
+      "missing": 9,
+      "notCovered": 1
+    }
+  },
+  "source": {
+    "name": "World Bank, World Development Indicators (UN Comtrade / WITS / World Bank estimates)",
+    "updated": "2026-07-13",
+    "downloadedAt": "2026-10-01T08:18:00Z",
+    "grain": "country / calendar year",
+    "sourceUnit": "percent of merchandise export value",
+    "displayUnit": "%",
+    "licence": "CC BY 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "catalogUrl": "https://datacatalog.worldbank.org/search/dataset/0037712/world-development-indicators",
+    "attribution": "Source: World Bank, World Development Indicators, based on UN Comtrade, WITS and World Bank staff estimates. Indicators TX.VAL.MMTL.ZS.UN and TX.VAL.MANF.ZS.UN, 2024. CC BY 4.0. Country subset, Japanese labels and thematic maps prepared by Insight Journal; no endorsement implied."
+  },
+  "sourceFiles": [
+    {
+      "file": "chile-minerals-2024.html",
+      "bytes": 132212,
+      "sha256": "39c57c4798417215abe841281cf187518d1e9f843b3d71781f062eba699ccac8"
+    },
+    {
+      "file": "costa-rica-trade-2024.html",
+      "bytes": 30189,
+      "sha256": "edf095d7e5274a70f37eb7b67da5f1f35aa79e21b7a4656af8beab8c41e0095d"
+    },
+    {
+      "file": "dominican-supply-chain-2024.html",
+      "bytes": 60353,
+      "sha256": "7a1921ee2748502ed8208f6bb24273f841b6ab875e115a8276753f6c9ec253a2"
+    },
+    {
+      "file": "industry-selected-2024.csv",
+      "bytes": 3174,
+      "sha256": "ecfc55395d131257a72d0514e6bd184a9c42118899e2054279227bd495e5fd71"
+    },
+    {
+      "file": "manufactures-all-2023-2024.json",
+      "bytes": 128226,
+      "sha256": "b27504f1477d1db5494ba017a2b19a9c8ef9feb7850be5fe78c3a26212ada34a"
+    },
+    {
+      "file": "manufactures-glossary.html",
+      "bytes": 59827,
+      "sha256": "234a27432a60caa768a93b851e62f600a8ae3777befe3f70cf58bc841e617fc3"
+    },
+    {
+      "file": "manufactures-metadata.json",
+      "bytes": 1059,
+      "sha256": "aa5d7174a1eb525414e0cca544f4cf73207abafb7d8307b9d590eb1b6f367c55"
+    },
+    {
+      "file": "ores-all-2023-2024.json",
+      "bytes": 129853,
+      "sha256": "97592c5fd55edc0772566b972558b6c82e0fa59c07b0a09258045674c5ec57c2"
+    },
+    {
+      "file": "ores-glossary.html",
+      "bytes": 59884,
+      "sha256": "ff7ea5727c4b4881edf4e899c9287b3daa7cf1751953252e111985f42e56fd1d"
+    },
+    {
+      "file": "ores-metadata.json",
+      "bytes": 1114,
+      "sha256": "d26558e3333e7da6868577cac1225ff5ea8a28ae18a87ef39200b89a990e221f"
+    },
+    {
+      "file": "panama-canal-fy2024.html",
+      "bytes": 155114,
+      "sha256": "1624f6f13d337931a3059a1f9df3089e2c48c0ddbc843dae75c3f90dd6af6bb5"
+    },
+    {
+      "file": "provenance.json",
+      "bytes": 4085,
+      "sha256": "39599b4a0139651d3b1649ba3e9e00513eb2a22dba3519de744a7dbbecc0a864"
+    },
+    {
+      "file": "wdi-catalog.html",
+      "bytes": 1874764,
+      "sha256": "ba0b8b1933f085fb0d35642f8801d5e18ad3d13f108b2b23c03118475a25ada4"
+    }
+  ],
+  "normalized": {
+    "file": "src/data/atlas/latin-america/industry.json",
+    "bytes": 20617,
+    "sha256": "411547ec51cde7b8dfea67b425fd1058cc015a8bdc3f18e59c968794501337fb"
+  },
+  "published": [
+    {
+      "file": "industry-selected-2024.csv",
+      "bytes": 3174,
+      "sha256": "ecfc55395d131257a72d0514e6bd184a9c42118899e2054279227bd495e5fd71"
+    },
+    {
+      "file": "ATTRIBUTION.txt",
+      "bytes": 849,
+      "sha256": "fadebe6a44c6e8f48c15bb96835e5d42587da6d9eb4e805747e3caacf874a0c3"
+    }
+  ],
+  "processing": [
+    "Read complete original API responses; retain source values and nulls.",
+    "Select calendar year 2024 and the 34 existing Latin America country/territory geometries; no imputation or latest-year mixing.",
+    "Keep unrounded source percentages; Japanese UI rounds only the displayed text.",
+    "Separate numeric zero, API null (missing) and absent country/year record (notCovered). No confidential flag is supplied by this API.",
+    "Apply identical 0–5, 5–20, 20–40, 40–60, 60–80, 80–100 percent bins to both export classifications."
+  ]
+}

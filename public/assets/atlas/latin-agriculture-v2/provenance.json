@@ -1,0 +1,497 @@
+{
+  "retrieved": "2026-10-01",
+  "preparationScript": "scripts/prepare-latin-agriculture.mjs",
+  "originalSources": {
+    "qcl": {
+      "metadata": {
+        "DatasetCode": "QCL",
+        "DatasetName": "Production: Crops and livestock products",
+        "Topic": "FAO strives to provide data for all countries, and for all crops and livestock commodities in terms of production (primary and processed), harvested areas, and live and slaughtered animal numbers.",
+        "DatasetDescription": "Crop and livestock statistics are recorded for 278 products, covering the following categories: 1) CROPS PRIMARY: Cereals, Citrus Fruit, Fibre Crops, Fruit, Oil Crops, Oil Crops and Cakes in Oil Equivalent, Pulses, Roots and Tubers, Sugar Crops, Treenuts and Vegetables. Data are expressed in terms of area harvested, production quantity and yield. Cereals: Area and production data on cereals relate to crops harvested for dry grain only. Cereal crops harvested for hay or harvested green for food, feed or silage or used for grazing are therefore excluded. 2) CROPS PROCESSED: Beer of barley; Cotton lint; Cottonseed; Margarine, short; Molasses; Oil, coconut (copra); Oil, cottonseed; Oil, groundnut; Oil, linseed; Oil, maize; Oil, olive, virgin; Oil, palm; Oil, palm kernel; Oil, rapeseed; Oil, safflower; Oil, sesame; Oil, soybean; Oil, sunflower; Palm kernels; Sugar Raw Centrifugal; Wine. 3) LIVE ANIMALS: Animals live n.e.s.; Asses; Beehives; Buffaloes; Camelids, other; Camels; Cattle; Chickens; Ducks; Geese and guinea fowls; Goats; Horses; Mules; Pigeons, other birds; Pigs; Rabbits and hares; Rodents, other; Sheep; Turkeys. 4) LIVESTOCK PRIMARY: Beeswax; Eggs (various types); Hides buffalo, fresh; Hides, cattle, fresh; Honey, natural; Meat (ass, bird nes, buffalo, camel, cattle, chicken, duck, game, goat, goose and guinea fowl, horse, mule, Meat nes, meat other camelids, Meat other rodents, pig, rabbit, sheep, turkey); Milk (buffalo, camel, cow, goat, sheep); Offals, nes; Silk-worm cocoons, reelable; Skins (goat, sheep); Snails, not sea; Wool, greasy. 5) LIVESTOCK PROCESSED: Butter (of milk from sheep, goat, buffalo, cow); Cheese (of milk from goat, buffalo, sheep, cow milk); Cheese of skimmed cow milk; Cream fresh; Ghee (cow and buffalo milk); Lard; Milk (dry buttermilk, skimmed condensed, skimmed cow, skimmed dried, skimmed evaporated, whole condensed, whole dried, whole evaporated); Silk raw; Tallow; Whey (condensed and dry); Yoghurt.",
+        "Contact": "Food and Agriculture Organization of the United Nations (FAO): Statistics Division (ESS), Crops, Livestock and Food Statistics Team",
+        "Email": "faostat@fao.org",
+        "DateUpdate": "2025-12-31T00:00:00",
+        "CompressionFormat": "zip",
+        "FileType": "csv",
+        "FileSize": "33127KB",
+        "FileRows": 4209110,
+        "FileLocation": "https://bulks-faostat.fao.org/production/Production_Crops_Livestock_E_All_Data_(Normalized).zip"
+      },
+      "sourceMember": "Production_Crops_Livestock_E_All_Data_(Normalized).csv",
+      "zipSha256": "c5835418c18f9322e7decbd6800f93a216eaae3cdfa31acb08f0518c0c6d6853",
+      "selectedSha256": "12f1a5fd1d6fdfb38eb332b8054ee83d45ecb2ded9fe2473c5259c50c86737d9",
+      "retrieved": "2026-10-01",
+      "licence": "CC BY 4.0",
+      "terms": "https://www.fao.org/contact-us/terms/db-terms-of-use/en",
+      "selection": {
+        "year": 2024,
+        "itemCodes": [
+          486,
+          656,
+          236,
+          866,
+          867,
+          882
+        ],
+        "elementCodes": [
+          5510,
+          5111
+        ]
+      },
+      "selectedCsvEncoding": "UTF-8, LF; original column values and flags retained"
+    },
+    "crops": {
+      "retrieved": "2026-09-25",
+      "sources": {
+        "metadata": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/zarr.json",
+          "sha256": "ddf7880ed0d0905735deecc9508416b71804176b837d9890c9120537b8a34028",
+          "bytes": 21301
+        },
+        "crop": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/crop/c/0",
+          "sha256": "e50ef268de45a364c8bb2e31db64b0fab889b6d1c1e284e6ce2197405b32ec89",
+          "bytes": 196
+        },
+        "whea": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/harvested_area/c/0/0/0/0",
+          "sha256": "e344616e77a42a7155fb170cf8e3d09bad4c3eb89ce4f756a0b5c38ca82c597a",
+          "bytes": 1413500
+        },
+        "rice": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/harvested_area/c/0/1/0/0",
+          "sha256": "33182cb6a41cc7ecc86bb74ad1daa1751a397dbb8ae65bdf527e46eb578f043e",
+          "bytes": 821001
+        },
+        "maiz": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/harvested_area/c/0/2/0/0",
+          "sha256": "2e2f046bc6534b864e7053f9f323a8d265b9101126bc071f9c16872ac6557f7c",
+          "bytes": 1626560
+        },
+        "soyb": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/harvested_area/c/0/19/0/0",
+          "sha256": "c6c56a79139b06604fe4750fa0c9b95bd1f22a394c08eb1672a69ab499be15e6",
+          "bytes": 1102688
+        },
+        "sugc": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/harvested_area/c/0/27/0/0",
+          "sha256": "d4f37f6d2b72f4834a55b600454318c7bfac920bb5e36bd17d7bb285a63b6546",
+          "bytes": 443214
+        },
+        "coff": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/harvested_area/c/0/31/0/0",
+          "sha256": "e27c4b6a8925987ec95bd3eaf3ab4e38099dc0a3fa7cdf517b31eda6add2ca21",
+          "bytes": 218970
+        },
+        "rcof": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/harvested_area/c/0/32/0/0",
+          "sha256": "7c9783ead9b3b8fd4fb58b157b871224b1f31f953f634b68a02b1443c7cbe1e7",
+          "bytes": 196765
+        },
+        "bana": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/harvested_area/c/0/36/0/0",
+          "sha256": "d861f903fac6be18e0c308d58957c13ea92b7484aae929de353c5087e241c8ed",
+          "bytes": 466480
+        },
+        "coco": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/harvested_area/c/0/33/0/0",
+          "sha256": "ed2df57983a93b91e0899dc250a36b68f872f25d302532b638effc15eb54bc2c",
+          "bytes": 225153
+        },
+        "cott": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/harvested_area/c/0/29/0/0",
+          "sha256": "a21995d7ea4e3e483c07bf2f631777a0d352eeb9259298475911593a44a9cfd2",
+          "bytes": 555709
+        },
+        "pota": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/harvested_area/c/0/8/0/0",
+          "sha256": "5bab1bdbf26d9db42752159e3e140c7db64f365d22bac65dde9ea58e1d097722",
+          "bytes": 1081128
+        },
+        "temf": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/harvested_area/c/0/40/0/0",
+          "sha256": "07cf763c869741e630bad25c3ba9ed9f8c9dab7847c2a5c88b5a943ac90cc27c",
+          "bytes": 1170370
+        }
+      },
+      "maskSha256": "bcc64013965f7253790fd296d1127f3f419c2a32255570b05c025a7a9048f1c0",
+      "license": "CC-BY-SA-4.0",
+      "attribution": "International Food Policy Research Institute (IFPRI), MapSPAM 2020 v2r2 via CGIAR Climate Action Data Hub. Regional clipping and visualization by Insight Journal."
+    },
+    "livestock": {
+      "retrieved": "2026-09-25",
+      "referenceYear": 2020,
+      "catalogue": "https://cgiar-climate-data-hub.github.io/catalog/glw4-2020/",
+      "originalCatalog": "https://data.fao.org/catalog/dataset/9d1e149b-d63f-4213-978b-317a8eb42d02",
+      "sources": {
+        "zarr.json": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/zarr.json",
+          "sha256": "60849b62074ea823af210c0fe6beafa36e14de2b5c61b880557d468f023dc5e3",
+          "bytes": 21109
+        },
+        "cattle/c/0/0": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/cattle/c/0/0",
+          "sha256": "33583a1b7edd2a1d688b2d37a14fa8d1ccd5f6e7a35dfac74040870d28c2b40e",
+          "bytes": 980294
+        },
+        "cattle/c/0/1": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/cattle/c/0/1",
+          "sha256": "ca35610c8ab047976bf6bbfda0792b87a2228e3f685fb82309cea912bf0c44ed",
+          "bytes": 710396
+        },
+        "cattle/c/1/0": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/cattle/c/1/0",
+          "sha256": "41d2352de6a352392b8424c69d90698ac6e2f25d0dd59936227d75bb5343e37e",
+          "bytes": 960
+        },
+        "cattle/c/1/1": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/cattle/c/1/1",
+          "sha256": "d2d2afeacc61aeda1ecdc47d5418958822c5fc22fe490a89999f7f3b9b89201d",
+          "bytes": 661795
+        },
+        "pig/c/0/0": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/pig/c/0/0",
+          "sha256": "b2579ca35c43dd0a7ed26a933f0efac6a3f8ee439ce45c789e3a4b0e8922c751",
+          "bytes": 948893
+        },
+        "pig/c/0/1": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/pig/c/0/1",
+          "sha256": "fa748d03e0eab99250e1a936f7a2b4f40a56137e8f1998661a7b2da48d0eaaa5",
+          "bytes": 630532
+        },
+        "pig/c/1/0": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/pig/c/1/0",
+          "sha256": "79358587e02af71a72d576751bd9ac04b480ab020abb7aa74380a2d967f2ebcf",
+          "bytes": 966
+        },
+        "pig/c/1/1": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/pig/c/1/1",
+          "sha256": "dc401bbf7ef04fd57393ca32c6e1b8b5614971376820f29619df9875f47e2e3b",
+          "bytes": 669048
+        },
+        "chicken/c/0/0": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/chicken/c/0/0",
+          "sha256": "bd1d26813d81a3868d0066973700e88559ee08592552bfa748bebafcc68e1da3",
+          "bytes": 979316
+        },
+        "chicken/c/0/1": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/chicken/c/0/1",
+          "sha256": "f15a87cd85bfb0d2e9ad94a307d157f285bec510ad69893d601a25e3aea86f90",
+          "bytes": 763591
+        },
+        "chicken/c/1/0": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/chicken/c/1/0",
+          "sha256": "f475d5204bc11ae1ba84b5b01b3a5a61376b70eda7355ba0d0a765bbea6e4003",
+          "bytes": 974
+        },
+        "chicken/c/1/1": {
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/chicken/c/1/1",
+          "sha256": "ac6bb2e7de106ce14663203db0f70fe8ae22df9e5c5bd92591fe3d73c99ed2a3",
+          "bytes": 577783
+        }
+      },
+      "maskSha256": "bcc64013965f7253790fd296d1127f3f419c2a32255570b05c025a7a9048f1c0",
+      "license": "CC-BY-4.0",
+      "attribution": "Food and Agriculture Organization of the United Nations (2024), GLW 4: Gridded Livestock Density (Global - 2020 - 10 km). Accessed through CGIAR Climate Action Data Hub. Clipping, Web Mercator nearest-cell visualization and density queries by Insight Journal.",
+      "queryGrid": {
+        "crs": "EPSG:4326",
+        "registration": "pixel center",
+        "stepDegrees": 0.08333333333333333,
+        "roundingDecimals": 4
+      },
+      "displayGrid": {
+        "crs": "EPSG:3857",
+        "method": "nearest source cell, density preserved"
+      },
+      "countryAggregation": {
+        "earthRadiusKm": 6371.0088,
+        "method": "sum density * spherical cell area for grid centers inside Natural Earth country polygons; not official counts"
+      },
+      "validation": [
+        {
+          "species": "cattle",
+          "validCells": 227578,
+          "positiveCells": 214740,
+          "minimumDensity": 0,
+          "maximumDensity": 1002.404297,
+          "samples": [
+            {
+              "place": "Buenos Aires",
+              "longitude": -58.38,
+              "latitude": -34.6,
+              "gridIndex": 541135,
+              "densityHeadPerKm2": 0
+            },
+            {
+              "place": "Brasilia",
+              "longitude": -47.88,
+              "latitude": -15.79,
+              "gridIndex": 378541,
+              "densityHeadPerKm2": 6.0989
+            },
+            {
+              "place": "Santa Catarina",
+              "longitude": -50.33,
+              "latitude": -27.81,
+              "gridIndex": 482192,
+              "densityHeadPerKm2": 23.5705
+            },
+            {
+              "place": "Guatemala",
+              "longitude": -90.51,
+              "latitude": 14.63,
+              "gridIndex": 115229,
+              "densityHeadPerKm2": 0
+            },
+            {
+              "place": "Havana",
+              "longitude": -82.37,
+              "latitude": 23.11,
+              "gridIndex": 41887,
+              "densityHeadPerKm2": 0
+            }
+          ]
+        },
+        {
+          "species": "pig",
+          "validCells": 226839,
+          "positiveCells": 214621,
+          "minimumDensity": 0,
+          "maximumDensity": 3478.353271,
+          "samples": [
+            {
+              "place": "Buenos Aires",
+              "longitude": -58.38,
+              "latitude": -34.6,
+              "gridIndex": 541135,
+              "densityHeadPerKm2": 0
+            },
+            {
+              "place": "Brasilia",
+              "longitude": -47.88,
+              "latitude": -15.79,
+              "gridIndex": 378541,
+              "densityHeadPerKm2": 20.7671
+            },
+            {
+              "place": "Santa Catarina",
+              "longitude": -50.33,
+              "latitude": -27.81,
+              "gridIndex": 482192,
+              "densityHeadPerKm2": 7.4234
+            },
+            {
+              "place": "Guatemala",
+              "longitude": -90.51,
+              "latitude": 14.63,
+              "gridIndex": 115229,
+              "densityHeadPerKm2": 0
+            },
+            {
+              "place": "Havana",
+              "longitude": -82.37,
+              "latitude": 23.11,
+              "gridIndex": 41887,
+              "densityHeadPerKm2": 0
+            }
+          ]
+        },
+        {
+          "species": "chicken",
+          "validCells": 226664,
+          "positiveCells": 190672,
+          "minimumDensity": 0,
+          "maximumDensity": 42998.8125,
+          "samples": [
+            {
+              "place": "Buenos Aires",
+              "longitude": -58.38,
+              "latitude": -34.6,
+              "gridIndex": 541135,
+              "densityHeadPerKm2": 0
+            },
+            {
+              "place": "Brasilia",
+              "longitude": -47.88,
+              "latitude": -15.79,
+              "gridIndex": 378541,
+              "densityHeadPerKm2": 1058.994
+            },
+            {
+              "place": "Santa Catarina",
+              "longitude": -50.33,
+              "latitude": -27.81,
+              "gridIndex": 482192,
+              "densityHeadPerKm2": 3.5941
+            },
+            {
+              "place": "Guatemala",
+              "longitude": -90.51,
+              "latitude": 14.63,
+              "gridIndex": 115229,
+              "densityHeadPerKm2": 0
+            },
+            {
+              "place": "Havana",
+              "longitude": -82.37,
+              "latitude": 23.11,
+              "gridIndex": 41887,
+              "densityHeadPerKm2": 0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "processing": {
+    "scope": [
+      "ARG",
+      "CHL",
+      "HTI",
+      "DOM",
+      "BHS",
+      "FLK",
+      "URY",
+      "BRA",
+      "BOL",
+      "PER",
+      "COL",
+      "PAN",
+      "CRI",
+      "NIC",
+      "HND",
+      "SLV",
+      "GTM",
+      "BLZ",
+      "VEN",
+      "GUY",
+      "SUR",
+      "ECU",
+      "PRI",
+      "JAM",
+      "CUB",
+      "PRY",
+      "TTO",
+      "VCT",
+      "LCA",
+      "KNA",
+      "GRD",
+      "DMA",
+      "BRB",
+      "ATG"
+    ],
+    "qclYear": 2024,
+    "m49Join": {
+      "ARG": "032",
+      "CHL": "152",
+      "HTI": "332",
+      "DOM": "214",
+      "BHS": "044",
+      "FLK": "238",
+      "URY": "858",
+      "BRA": "076",
+      "BOL": "068",
+      "PER": "604",
+      "COL": "170",
+      "PAN": "591",
+      "CRI": "188",
+      "NIC": "558",
+      "HND": "340",
+      "SLV": "222",
+      "GTM": "320",
+      "BLZ": "084",
+      "VEN": "862",
+      "GUY": "328",
+      "SUR": "740",
+      "ECU": "218",
+      "PRI": "630",
+      "JAM": "388",
+      "CUB": "192",
+      "PRY": "600",
+      "TTO": "780",
+      "VCT": "670",
+      "LCA": "662",
+      "KNA": "659",
+      "GRD": "308",
+      "DMA": "212",
+      "BRB": "052",
+      "ATG": "028"
+    },
+    "cropCountryValue": "sum of modeled annual harvested-area cells, ha",
+    "cattleCountryValue": "density times spherical cell area summed, divided by valid area km2; density retained on original raster",
+    "rounding": "No numeric rounding during extraction. Display rounding only.",
+    "missing": "Blank Value preserved as null/missing; absent row null/unavailable; valid numeric zero remains zero.",
+    "licences": {
+      "crops": "CC BY-SA 4.0",
+      "livestock": "CC BY 4.0",
+      "qcl": "CC BY 4.0"
+    },
+    "licenceUrls": [
+      "https://cgiar-climate-data-hub.github.io/catalog/spam2020/",
+      "https://cgiar-climate-data-hub.github.io/catalog/glw4-2020/",
+      "https://www.fao.org/contact-us/terms/db-terms-of-use/en"
+    ]
+  },
+  "inputs": {
+    "data-source/atlas/latin-agriculture/raw/faostat-qcl-2024-selected.csv": {
+      "sha256": "12f1a5fd1d6fdfb38eb332b8054ee83d45ecb2ded9fe2473c5259c50c86737d9",
+      "bytes": 106081
+    }
+  },
+  "outputs": {
+    "src/data/atlas/latin-america/agriculture.json": {
+      "sha256": "6412dfa1082409025217d192780aa9dddeff801d09d0462f59b5a0bec70c304b",
+      "bytes": 72902
+    },
+    "public/assets/atlas/latin-agriculture-v2/agriculture.json": {
+      "sha256": "6412dfa1082409025217d192780aa9dddeff801d09d0462f59b5a0bec70c304b",
+      "bytes": 72902
+    },
+    "public/assets/atlas/latin-agriculture-v2/bana-validity.png": {
+      "sha256": "b4ab86ca4e6725e6e17c5d613ac3abdc57f580c5a148727cc7fea5750ade50de",
+      "bytes": 40809
+    },
+    "public/assets/atlas/latin-agriculture-v2/coff-validity.png": {
+      "sha256": "af71f6f583d708d05396f171a55177e40c0f79229daa703d81106ba203eb9802",
+      "bytes": 36209
+    },
+    "public/assets/atlas/latin-agriculture-v2/soyb-validity.png": {
+      "sha256": "03040ddf930c3f63de8484efed658a10958142ad5cbfe015cb89d9205e6b5115",
+      "bytes": 35850
+    },
+    "public/assets/atlas/latin-agriculture-v2/cattle-validity.png": {
+      "sha256": "a05a768623f07988e91484b7dab389041651c596b37e0710b969e34cfb6f150d",
+      "bytes": 21717
+    }
+  },
+  "validation": {
+    "layers": 4,
+    "countriesPerLayer": 34,
+    "statusCounts": {
+      "bana": {
+        "value": 29,
+        "zero": 0,
+        "missing": 0,
+        "unavailable": 5
+      },
+      "coff": {
+        "value": 23,
+        "zero": 0,
+        "missing": 1,
+        "unavailable": 10
+      },
+      "soyb": {
+        "value": 16,
+        "zero": 0,
+        "missing": 3,
+        "unavailable": 15
+      },
+      "cattle": {
+        "value": 32,
+        "zero": 0,
+        "missing": 0,
+        "unavailable": 2
+      }
+    }
+  }
+}

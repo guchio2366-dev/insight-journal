@@ -1,0 +1,51 @@
+import countries from '../data/atlas/latin-america/country-index.json';
+export const latinLearningFields = ['nature','agriculture','industry','population'] as const;
+export type LatinLearningField = typeof latinLearningFields[number];
+export type LatinLearningScope = 'all'|'central'|'south'|'country';
+export interface LatinLearningSelection {field:LatinLearningField;layer:string;place:string;scope:LatinLearningScope;only:boolean;fallback?:boolean;case?:string}
+export interface LatinLearningState extends LatinLearningSelection {fallback:boolean;source?:LatinLearningSelection}
+const scopes:LatinLearningScope[]=['all','central','south','country'];
+const places=new Set(countries.map(country=>country.code));
+const sourceLayers:Record<LatinLearningField,string[]>={nature:['climate','climate-detail','rivers'],agriculture:['banana','coffee','soy','cattle','bana','coff','soyb'],industry:['ores','manufactures','canal'],population:['density','population','scale']};
+const validPlace=(value:string|null)=>value&&places.has(value)?value:'all';
+const validScope=(value:string|null,place:string):LatinLearningScope=>scopes.includes(value as LatinLearningScope)&&!(value==='country'&&place==='all')?value as LatinLearningScope:'all';
+const validCase=(value:string|null)=>value&&/^[a-z0-9-]{1,60}$/.test(value)?value:undefined;
+export function readLatinLearningState(search:string,field:LatinLearningField,allowedLayers:readonly string[],defaultLayer:string):LatinLearningState {
+ const params=new URLSearchParams(search),place=validPlace(params.get('place'));
+ const layer=allowedLayers.includes(params.get('layer')??'')?params.get('layer')!:defaultLayer;
+ const state:LatinLearningState={field,layer,place,scope:validScope(params.get('scope'),place),only:params.get('only')==='1'&&place!=='all',fallback:params.get('fallback')==='1'||params.get('renderer')==='svg'};
+ if(field==='nature'&&validCase(params.get('case')))state.case=validCase(params.get('case'));
+ const from=params.get('from') as LatinLearningField, sourceLayer=params.get('sourceLayer');
+ if(latinLearningFields.includes(from)&&sourceLayer&&sourceLayers[from].includes(sourceLayer)){
+  const sourcePlace=validPlace(params.get('sourcePlace'));
+  state.source={field:from,layer:sourceLayer,place:sourcePlace,scope:validScope(params.get('sourceScope'),sourcePlace),only:params.get('sourceOnly')==='1'&&sourcePlace!=='all',fallback:params.has('sourceFallback')?params.get('sourceFallback')==='1':state.fallback};
+  if(from==='nature'&&validCase(params.get('sourceCase')))state.source.case=validCase(params.get('sourceCase'));
+ }
+ return state;
+}
+/** Canonical query string, without a leading '?'. */
+export function writeLatinLearningState(state:LatinLearningState):string {
+ const params=new URLSearchParams({layer:state.layer,place:state.place,scope:state.scope});
+ if(state.only&&state.place!=='all')params.set('only','1');
+ if(state.fallback)params.set('fallback','1');
+ if(state.field==='nature'&&state.case)params.set('case',state.case);
+ if(state.source){
+  params.set('from',state.source.field);params.set('sourceLayer',state.source.layer);
+  params.set('sourcePlace',state.source.place);params.set('sourceScope',state.source.scope);
+  params.set('sourceFallback',(state.source.fallback??state.fallback)?'1':'0');
+  if(state.source.field==='nature'&&state.source.case)params.set('sourceCase',state.source.case);
+  if(state.source.only&&state.source.place!=='all')params.set('sourceOnly','1');
+ }
+ return params.toString();
+}
+export function latinLearningUrl(base:string,state:LatinLearningState):string {
+ return `${base.replace(/\/?$/,'/')}${state.field}/?${writeLatinLearningState(state)}`;
+}
+export function latinSourceReturnUrl(base:string,state:LatinLearningState):string {
+ if(!state.source)return latinLearningUrl(base,{...state,source:undefined});
+ return latinLearningUrl(base,{...state.source,fallback:state.source.fallback??state.fallback});
+}
+export function latinComparisonState(state:LatinLearningState,targetField:LatinLearningField,targetLayer:string):LatinLearningState {
+ return {field:targetField,layer:targetLayer,place:state.place,scope:state.scope,only:state.only,fallback:state.fallback,
+  source:{field:state.field,layer:state.layer,place:state.place,scope:state.scope,only:state.only,fallback:state.fallback,...(state.field==='nature'&&state.case?{case:state.case}:{})}};
+}
