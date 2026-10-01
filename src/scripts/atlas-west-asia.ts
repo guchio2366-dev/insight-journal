@@ -1,6 +1,15 @@
 import {westFields,westTopics,statisticalColors,observation,westReading} from '../data/atlas/west-asia-topics.mjs';
 import {readWestState,westSearch,gridIndex,decodeWestGrid,zoomWestView,panWestView} from '../lib/atlas-west-asia-state.mjs';
 
+// All classes present in the national-mask grid (1991–2020), including Cwb's four cells.
+// Keep this region-wide key stable when the learner selects a country or pans the map.
+const westClimateNames:Record<string,string>={
+ BWh:'高温の砂漠',BWk:'低温の砂漠',BSh:'高温のステップ',BSk:'低温のステップ',
+ Csa:'地中海性（暑夏）',Csb:'地中海性（暖夏）',Cwb:'冬乾燥温帯（暖夏）',
+ Cfa:'温暖湿潤',Cfb:'西岸海洋性',Dsa:'夏乾燥冷帯（暑夏）',Dsb:'夏乾燥冷帯（暖夏）',Dsc:'夏乾燥冷帯（冷夏）',
+ Dfa:'湿潤冷帯（暑夏）',Dfb:'湿潤冷帯（暖夏）',Dfc:'湿潤冷帯（冷夏）',ET:'ツンドラ'
+};
+
 const root=document.querySelector<HTMLElement>('[data-west-atlas]');
 if(root) init(root);
 async function init(root:HTMLElement){
@@ -11,6 +20,11 @@ async function init(root:HTMLElement){
  const citySelect=$<HTMLSelectElement>('[data-west-city]'),urbanSelect=$<HTMLSelectElement>('[data-west-urban]');
  const basinSelect=$<HTMLSelectElement>('[data-west-basin]'),yearSelect=$<HTMLSelectElement>('[data-west-year]');
  const loading=$('[data-west-loading]'),retry=$<HTMLButtonElement>('[data-west-retry]');
+ const legendBox=$('[data-west-legend]'),mapExtras=$('[data-west-map-extras]'),agriSwitches=$('[data-west-agri-switches]');
+ const statControls=$('[data-west-stat-controls]'),comparisonKey=$('[data-west-comparison-key]'),comparisonDetails=$<HTMLDetailsElement>('[data-west-comparison-details]');
+ const anchor=(el:Element)=>{const a=document.createComment('west-comparison-home');el.before(a);return a;};
+ const legendHome=anchor(legendBox),mapExtrasHome=anchor(mapExtras),agriHome=anchor(agriSwitches),statHome=anchor(statControls);
+ const desktopComparison=window.matchMedia('(min-width:960px)');
  const cache=new Map<string,Promise<any>>(),grids=new Map<string,Promise<Float32Array>>();
  const esc=(v:unknown)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
  const format=(n:number|null,digits=1)=>n===null?'未収録':n.toLocaleString('ja-JP',{maximumFractionDigits:digits});
@@ -19,7 +33,7 @@ async function init(root:HTMLElement){
   return cache.get(name)!;
  };
  let data:any,geography:any,state:any,comparisonSource:any=null,cityExplicit=false,pointSide='target',split=50,renderVersion=0,pointVersion=0;
- const fail=(message:string)=>{loading.hidden=false;loading.textContent=message;retry.hidden=false;};
+ const fail=(message:string)=>{loading.hidden=false;loading.textContent=message;retry.hidden=false;const more=retry.closest<HTMLDetailsElement>('[data-west-comparison-details]');if(more)more.open=true;};
  const project=([lng,lat]:number[])=>[(lng*Math.PI/180*6378137-data.bounds3857[0])/(data.bounds3857[2]-data.bounds3857[0])*data.width,(data.bounds3857[3]-Math.log(Math.tan(Math.PI/4+lat*Math.PI/360))*6378137)/(data.bounds3857[2]-data.bounds3857[0])*data.width];
  const unproject=([x,y]:number[])=>[(data.bounds3857[0]+x/data.width*(data.bounds3857[2]-data.bounds3857[0]))/6378137*180/Math.PI,(2*Math.atan(Math.exp((data.bounds3857[3]-y/data.width*(data.bounds3857[2]-data.bounds3857[0]))/6378137))-Math.PI/2)*180/Math.PI];
  const path=(g:any):string=>{
@@ -95,11 +109,15 @@ async function init(root:HTMLElement){
   for(const marker of markers){
    const label=marker.querySelector<SVGGElement>('[data-marker-label]');if(!label)continue;
    const w=Number(label.dataset.width),h=44,x=(Number(marker.dataset.x)-b[0])/k+ox,y=(Number(marker.dataset.y)-b[1])/k+oy;
-   if(x<0||y<0||x>svg.clientWidth||y>svg.clientHeight){label.style.display='none';marker.querySelector('line')!.style.display='none';continue;}
+   const boundary=ox+b[2]*split/100/k;
+   const left=comparisonSource?ox:0,right=comparisonSource?ox+b[2]/k:svg.clientWidth;
+   const minX=comparisonSource&&marker.dataset.markerSide==='target'?boundary:left,maxX=comparisonSource&&marker.dataset.markerSide==='source'?boundary:right;
+   const minY=comparisonSource?oy:0,maxY=comparisonSource?oy+b[3]/k:svg.clientHeight;
+   if(x<minX||y<minY||x>maxX||y>maxY||maxX-minX<w+4||maxY-minY<h+4){label.style.display='none';marker.querySelector('line')!.style.display='none';continue;}
    const candidates=[[8,-h-7],[-w-8,-h-7],[8,8],[-w-8,8],[-w/2,-h-18],[-w/2,18],[15,-h/2],[-w-15,-h/2]];
    let best:number[]|null=null,bestScore=Infinity;
    for(const [dx,dy] of candidates){
-    const lx=Math.max(2,Math.min(svg.clientWidth-w-2,x+dx)),ly=Math.max(2,Math.min(svg.clientHeight-h-2,y+dy));
+    const lx=Math.max(minX+2,Math.min(maxX-w-2,x+dx)),ly=Math.max(minY+2,Math.min(maxY-h-2,y+dy));
     const score=placed.reduce((sum,r)=>sum+Math.max(0,Math.min(lx+w+3,r[0]+r[2])-Math.max(lx-3,r[0]))*Math.max(0,Math.min(ly+h+3,r[1]+r[3])-Math.max(ly-3,r[1])),0);
     if(score<bestScore){best=[lx,ly,w,h];bestScore=score;}
    }
@@ -166,7 +184,7 @@ async function init(root:HTMLElement){
      if(description)description.textContent=c?.description??'この観測地点を含む格子は未収録です。';
     }
    }else out.textContent=prefix+'：'+format(value,1)+' '+l.unit+'（'+l.year+'）。'+(value===0?'原資料の値は0です。未収録とは区別しています。':'格子の推計値・補間値であり、地点の実測値とは限りません。');
-  }catch{if(version===pointVersion){out.hidden=false;out.textContent='地点の数値を読み込めませんでした。地図の選択は続けられます。再読み込みで再試行できます。';const heading=root.querySelector('[data-west-climate-class]');if(heading&&l.id==='climate'&&label!=='選択地点')heading.textContent='気候区分を読み込めませんでした。';retry.hidden=false;}}
+  }catch{if(version===pointVersion){out.hidden=false;const message=label+'・'+selectedTopic.label+'の数値を読み込めませんでした。地図の選択は続けられます。「資料を再読み込みする」で再試行できます。';out.textContent=message;const heading=root.querySelector('[data-west-climate-class]');if(heading&&l.id==='climate'&&label!=='選択地点')heading.textContent='気候区分を読み込めませんでした。';fail(message);}}
  }
  async function cityClassification(city:any,version:number){
   try{
@@ -184,6 +202,7 @@ async function init(root:HTMLElement){
   let html=`<header><p class="atlas-eyebrow">${c?esc(c.name):'西アジア・中東'}</p><h2 id="west-detail-title">${esc(t.label)}</h2></header>`;
   html+=source?`<section class="west-comparison-reading"><h3>${esc(source.label)} × ${esc(t.label)}</h3><p class="atlas-reading-takeaway"><strong>${esc(comparison?.explanation)}</strong></p><p class="west-stat-note">左は元の主題、右は比較先です。地図の境目を動かすと、同じ場所の両方の分布を読めます。凡例の単位・時点も比べてください。</p></section>`:`<p class="atlas-reading-takeaway"><strong>${esc(reading.message)}</strong></p><p>${esc(reading.reason)}</p>`;
   html+='<div class="west-related west-reading-dock" data-west-related></div>';
+  html+='<div data-west-reading-extra>';
   $('[data-west-comparison]').hidden=true;
   if(state.city&&t.id!=='climate')html+=`<p class="west-persisted">${esc(city?.name)}の選択を保持しています。「気候区分」へ戻ると同じ雨温図を読めます。</p>`;
   if(t.id==='climate'){
@@ -215,18 +234,22 @@ async function init(root:HTMLElement){
   if(t.id==='basins')html+='<p>流域の識別番号はHydroATLASのNEXT_SINKに対応します。ナイル川など地域外に続く流域も切り取らず、選択すると全体を表示します。色は流域の区別で、水量の大小ではありません。</p>';
   if(t.id==='groundwater')html+='<p>涵養は雨などが地下へ浸透して補給されることです。個々の井戸の深さ・水質・持続可能な取水量は未収録です。</p>';
   if(t.id==='desalination')html+='<p>20か国・地域で同じ年・定義の淡水化施設一覧と供給量は未収録です。</p><p><a href="https://www.fao.org/aquastat/en/overview/methodology/">FAO AQUASTATの定義と方法</a></p>';
-  html+='</details>';
+  html+='</details></div>';
   $('[data-west-detail]').innerHTML=html;
   if(city&&t.id==='climate'){
    const tpl=root.querySelector<HTMLTemplateElement>(`template[data-west-chart="${city.id}"]`);
    if(tpl)$('[data-west-active-chart]').append(tpl.content.cloneNode(true));
   }
  }
- function legendHtml(t:any,year:number){
+ function legendHtml(t:any,year:number,complete=false){
   const l=layer(t);let html='';
   const swatches=(items:{color:string,label:string}[])=>'<div class="west-swatches">'+items.map(x=>`<span><i style="background:${esc(x.color)}"></i>${esc(x.label)}</span>`).join('')+'</div>';
   if(t.id==='climate'){
-   html='<div class="west-climate-key"><span>A 熱帯</span><span>B 乾燥帯</span><span>C 温帯</span><span>D 冷帯</span><span>E 寒帯</span><span><b class="atlas-city-dot"></b> 雨温図の都市</span></div><details class="west-complete-key"><summary>気候の全区分・色を読む（1991–2020年）</summary>'+swatches(data.classes.map((c:any)=>({color:c.color,label:c.code+' '+c.name})))+'</details>';
+   const classes=swatches(data.classes.map((c:any)=>({color:c.color,label:c.code+' '+c.name})));
+   const groups='<div class="west-climate-key"><span>A 熱帯</span><span>B 乾燥帯</span><span>C 温帯</span><span>D 冷帯</span><span>E 寒帯</span><span><b class="atlas-city-dot"></b> 雨温図の都市</span></div>';
+   const dictionary='<details class="west-complete-key" data-west-climate-dictionary><summary>世界の全30区分・正式名を読む（1991–2020年）</summary>'+classes+'</details>';
+   const regional=complete?'<div class="west-regional-climate-key"><p>対象20か国・地域の全16区分 · 1991–2020年</p><div class="west-swatches">'+data.classes.filter((c:any)=>westClimateNames[c.code]).map((c:any)=>`<span data-west-climate-key="${esc(c.code)}" title="${esc(c.name)}"><i style="background:${esc(c.color)}"></i>${esc(c.code+' '+westClimateNames[c.code])}</span>`).join('')+'</div></div>':'';
+   html=complete?regional+'<div class="west-climate-key"><span><b class="atlas-city-dot"></b> 雨温図の都市</span></div>'+dictionary:groups+dictionary;
   }else if(l?.id==='forest'){
    html=swatches([{color:'#008000',label:'森林の参考分布（2020年）'}]);
   }else if(l){
@@ -241,11 +264,55 @@ async function init(root:HTMLElement){
  }
  function legend(){
   const t=topic(),l=layer(),source=sourceTopic();
-  $('[data-west-legend]').innerHTML=source?`<section class="west-legend-subject"><h3>左｜${esc(source.label)}</h3>${legendHtml(source,comparisonSource.year)}</section><section class="west-legend-subject"><h3>右｜${esc(t.label)}</h3>${legendHtml(t,state.year)}</section>`:legendHtml(t,state.year);
+  $('[data-west-legend]').innerHTML=source?`<section class="west-legend-subject ${source.id==='climate'?'west-legend-climate':''}"><h3>左｜${esc(source.label)}</h3>${legendHtml(source,comparisonSource.year,desktopComparison.matches)}</section><section class="west-legend-subject ${t.id==='climate'?'west-legend-climate':''}"><h3>右｜${esc(t.label)}</h3>${legendHtml(t,state.year,desktopComparison.matches)}</section>`:legendHtml(t,state.year);
+  if(source&&desktopComparison.matches){
+   for(const subject of legendBox.querySelectorAll<HTMLElement>('.west-legend-subject')){
+    const heading=document.createElement('div');heading.className='west-legend-heading';heading.append(subject.querySelector('h3')!);
+    const period=subject.querySelector('.west-regional-climate-key>p')??subject.querySelector(':scope>p');if(period)heading.append(period);
+    subject.prepend(heading);
+    if(subject.classList.contains('west-legend-climate')){
+     const background=subject.querySelector(':scope>.west-swatches');if(background){subject.querySelector('.west-climate-key')!.append(...background.children);background.remove();}
+    }else{
+     const keys=document.createElement('div');keys.className='west-swatches';
+     for(const row of subject.querySelectorAll(':scope>.west-swatches')){keys.append(...row.children);row.remove();}subject.append(keys);
+    }
+   }
+  }
   $('[data-west-method]').textContent=l?.method??((t.indicator||t.faoItem)?'同じ年の国別統計を比較する図です。国内の位置や密度を表しません。未収録は灰色で示します。':t.id==='groundwater'?'WHYMAP：世界縮尺1:25,000,000の帯水層の広域区分です。取水量・貯留量・現在の渇水は示しません。':'Natural Earth v5.1.2の河川・湖。流域はHydroATLAS v1.0の同じ下流出口につながる区画を統合しています。');
   $('[data-west-source]').innerHTML=l?`出典：<a href="${esc(l.sourceUrl)}">${esc(l.source)}</a> · ${esc(l.year)} · ${esc(l.license)}${t.vector==='contours'?'。等高線は500m間隔です。':''}`:(t.indicator||t.faoItem)?`出典：<a href="${sourceLink(t)}">${t.indicator?'World Bank WDI':'FAOSTAT'}</a> · ${state.year}年 · CC BY 4.0`:`出典：<a href="${t.id==='groundwater'?'https://www.whymap.org/':t.id==='basins'?'https://www.hydrosheds.org/hydroatlas':'https://www.naturalearthdata.com/'}">${t.id==='groundwater'?'BGR / UNESCO WHYMAP（広域概況図）':t.id==='basins'?'HydroATLAS v1.0（地形による流域・CC BY 4.0）':'Natural Earth v5.1.2（パブリックドメイン）'}</a>。現在の観測値ではありません。`;
   if(source){const originalLayer=layer(source);$('[data-west-source]').innerHTML+=`<br>左の元図：${esc(source.label)} · ${originalLayer?`<a href="${esc(originalLayer.sourceUrl)}">${esc(originalLayer.source)}</a> · ${esc(originalLayer.year)} · ${esc(originalLayer.method)}`:(source.indicator||source.faoItem)?`<a href="${sourceLink(source)}">${source.indicator?'World Bank WDI':'FAOSTAT'}</a> · ${comparisonSource.year}年`:'自然環境資料（資料の範囲は下段の出典参照）'}`;}
   $('[data-west-period]').textContent=l?.year??((t.indicator||t.faoItem)?state.year+'年':'地理・地形資料');
+ }
+ function comparisonLayout(){
+  const compact=!!comparisonSource&&desktopComparison.matches;
+  root.dataset.comparisonWorkspace=String(compact);comparisonKey.hidden=!compact;comparisonDetails.hidden=!compact;
+  const extra=root.querySelector<HTMLElement>('[data-west-reading-extra]');
+  if(compact){
+   comparisonKey.append(legendBox);
+   const dictionaries=[...legendBox.querySelectorAll('[data-west-climate-dictionary]')];
+   comparisonDetails.querySelector('summary')!.textContent=(dictionaries.length?'全30気候区分の辞書・':'')+'選択した場所の詳細・雨温図・国別統計・出典';
+   $('[data-west-more-reading]').replaceChildren(...dictionaries,...(extra?[extra]:[]),statControls);
+   $('[data-west-more-map]').replaceChildren(agriSwitches,mapExtras);
+   comparisonDetails.open=cityExplicit||!!state.point||!!state.basin;
+   requestAnimationFrame(sizeComparisonMap);
+  }else{
+   legendHome.after(legendBox);mapExtrasHome.after(mapExtras);agriHome.after(agriSwitches);statHome.after(statControls);
+   if(extra)$('[data-west-detail]').append(extra);
+   $('[data-west-more-reading]').replaceChildren();$('[data-west-more-map]').replaceChildren();
+   root.style.removeProperty('--west-comparison-map-height');
+   root.dataset.comparisonColumns='false';
+  }
+ }
+ function sizeComparisonMap(){
+  if(root.dataset.comparisonWorkspace!=='true')return;
+  const grid=$('.atlas-primary-grid'),swipe=$('[data-west-swipe]');
+  const box=getComputedStyle(grid),inset=['paddingLeft','paddingRight','borderLeftWidth','borderRightWidth'].reduce((sum,key)=>sum+(parseFloat(box[key as keyof CSSStyleDeclaration] as string)||0),0);
+  const columns=grid.getBoundingClientRect().width-inset>=884;
+  root.dataset.comparisonColumns=String(columns);
+  const reserved=columns?0:comparisonKey.getBoundingClientRect().height;
+  const available=window.innerHeight-grid.getBoundingClientRect().top-reserved-16;
+  const height=Math.max(columns?300:330,Math.min(440,available-swipe.getBoundingClientRect().height-8));
+  root.style.setProperty('--west-comparison-map-height',height+'px');applyView();
  }
  async function sourceMarkup(){
   const t=sourceTopic();if(!t)return '';const l=layer(t),year=comparisonSource.year;
@@ -269,7 +336,7 @@ async function init(root:HTMLElement){
   }
   if(t.id==='climate')html+=data.cities.map((c:any)=>{
    const p=project(c.coordinates),name=c.name.replace(/（.*?）/g,''),width=Math.max(52,[...name].reduce((n:number,s:string)=>n+(s.charCodeAt(0)>255?12:7),0)+14);
-   return `<g class="west-station ${comparisonSource.city===c.id?'is-selected':''}" data-marker data-x="${p[0]}" data-y="${p[1]}"><title>${esc(c.name)}・元図の観測所</title><line x1="0" y1="0" x2="0" y2="0"/><circle r="4"/><g data-marker-label data-width="${width}"><rect width="${width}" height="44" rx="2"/><text x="${width/2}" y="27" text-anchor="middle">${esc(name)}</text></g></g>`;
+   return `<g class="west-station ${comparisonSource.city===c.id?'is-selected':''}" data-marker data-marker-side="source" data-x="${p[0]}" data-y="${p[1]}"><title>${esc(c.name)}・元図の観測所</title><line x1="0" y1="0" x2="0" y2="0"/><circle r="4"/><g data-marker-label data-width="${width}"><rect width="${width}" height="44" rx="2"/><text x="${width/2}" y="27" text-anchor="middle">${esc(name)}</text></g></g>`;
   }).join('');
   return html;
  }
@@ -319,7 +386,7 @@ async function init(root:HTMLElement){
   const points=t.id==='climate'?data.cities:t.id==='cities'?data.urban.cities:[];
   html+=`<g ${comparisonSource?'clip-path="url(#west-target-half)"':''}>`+points.map((c:any)=>{
    const p=project(c.coordinates),selected=state.city===c.id||state.urban===c.id,name=c.name.replace(/（.*?）/g,''),width=Math.max(52,[...name].reduce((n:number,s:string)=>n+(s.charCodeAt(0)>255?12:7),0)+14);
-   return `<g class="west-station ${selected?'is-selected':''}" data-marker data-x="${p[0]}" data-y="${p[1]}" data-${t.id==='climate'?'city':'urban'}="${c.id}" role="button" tabindex="0" aria-label="${esc(c.name)}を選択" aria-pressed="${selected}"><title>${esc(c.name)}</title><line x1="0" y1="0" x2="0" y2="0"/><circle r="4"/><g data-marker-label data-width="${width}"><rect width="${width}" height="44" rx="2"/><text x="${width/2}" y="27" text-anchor="middle">${esc(name)}</text></g></g>`;
+   return `<g class="west-station ${selected?'is-selected':''}" data-marker data-marker-side="target" data-x="${p[0]}" data-y="${p[1]}" data-${t.id==='climate'?'city':'urban'}="${c.id}" role="button" tabindex="0" aria-label="${esc(c.name)}を選択" aria-pressed="${selected}"><title>${esc(c.name)}</title><line x1="0" y1="0" x2="0" y2="0"/><circle r="4"/><g data-marker-label data-width="${width}"><rect width="${width}" height="44" rx="2"/><text x="${width/2}" y="27" text-anchor="middle">${esc(name)}</text></g></g>`;
   }).join('')+'</g>';
   scene.innerHTML=html;applyView();
   scene.querySelectorAll<SVGImageElement>('[data-west-raster]').forEach(raster=>raster.addEventListener('error',()=>{if(version===renderVersion)fail('分布画像を読み込めませんでした。国の選択と統計は利用できます。');}));
@@ -350,17 +417,18 @@ async function init(root:HTMLElement){
   $('[data-west-caption]').textContent=source?'左右で比較':t.id==='climate'?'ケッペン＝ガイガー区分':t.label;
   $('[data-west-guide]').textContent=t.id==='climate'?'都市名をタップすると、雨温図と気候の解説を表示します。':t.id==='cities'?'都市名をタップすると、人口と範囲の説明を表示します。':'地図の国・対象を選ぶと、解説と統計を表示します。';
   $('[data-west-point]').hidden=!state.point&&!state.basin&&!state.yearNotice;
-  $('#west-map-title').textContent=t.label;details();legend();links();loading.hidden=false;loading.textContent='地図資料を読み込んでいます。';
+  $('#west-map-title').textContent=t.label;details();legend();links();comparisonLayout();loading.hidden=false;loading.textContent='地図資料を読み込んでいます。';
   if(!state.point)$('[data-west-point]').textContent=state.yearNotice??(country()?country().name+'を選択しています。'+(layer()?'地図の場所を選ぶと、収録されている格子の値を確認できます。':'一覧や地図から、別の対象へ切り替えられます。'):'国・都市の一覧、または地図の場所を選択してください。');
   state.yearNotice=null;
   if(t.id==='climate'&&state.point){const city=data.cities.find((c:any)=>c.id===state.city);if(city)void cityClassification(city,version);}
   try{await draw(version);if(version!==renderVersion)return;if(restoreMapFocus)svg.focus({preventScroll:true});const city=data.cities.find((c:any)=>c.id===state.city);if(t.id==='climate'&&city&&!state.point)void readPoint(city.coordinates,city.name);else if(state.point){const selected=pointSide==='source'&&source?source:t;if(layer(selected))void readPoint(state.point,'選択地点',selected);}if(t.id==='basins'&&state.basin){const basins=await json('basins.json');const f=basins.features.find((f:any)=>f.properties.id===state.basin);if(f&&version===renderVersion)$('[data-west-point]').textContent=f.properties.name+'の全体を表示しています。地域の外に続く上流も含みます。';}}catch{if(version===renderVersion)fail('この地図の資料を読み込めませんでした。国別統計と分野の切替は利用できます。');}
  }
- async function start(){
+ async function start(explicitCity?:boolean){
   try{
    [data,geography]=await Promise.all([json('data.json'),json('geography.json')]);
    paths=geography.features.map((f:any)=>({...f.properties,d:path(f.geometry)}));
    state=readWestState(location.search,field,data);restoreComparison(location.search);if(!new URLSearchParams(location.search).has('year'))availableYear(topic());
+   if(explicitCity!==undefined)cityExplicit=explicitCity;
    if(topic().id==='climate'&&!state.city)state.city=data.cities.find((c:any)=>!state.country||c.countryCode===state.country)?.id??'';
    // An omitted map parameter means the regional extent, including across fields.
    // Only an explicit country-picker action changes the viewport to that country.
@@ -375,7 +443,7 @@ async function init(root:HTMLElement){
  basinSelect.addEventListener('change',()=>{if(data)void selectBasin(basinSelect.value).catch(()=>fail('流域を読み込めませんでした。'));});
  yearSelect.addEventListener('change',()=>{if(data){state.year=Number(yearSelect.value);commit();void render();}});
  $<HTMLInputElement>('[data-west-split]').addEventListener('input',event=>{split=Number((event.target as HTMLInputElement).value);applyView();});
- retry.addEventListener('click',()=>{cache.clear();grids.clear();void start();});
+ retry.addEventListener('click',()=>{cache.clear();grids.clear();void start(cityExplicit);});
  function zoom(factor:number){state.view=zoomWestView(view(),factor);applyView();commit();}
  root.addEventListener('click',event=>{
   if(!data)return;const target=event.target as Element;
@@ -427,5 +495,8 @@ async function init(root:HTMLElement){
  });
  window.addEventListener('popstate',()=>{if(data){state=readWestState(location.search,field,data);restoreComparison(location.search);const p=new URLSearchParams(location.search);if(p.has('lng')&&p.has('lat')){const lng=Number(p.get('lng')),lat=Number(p.get('lat'));if(Number.isFinite(lng)&&Number.isFinite(lat)&&lng>=23&&lng<=64&&lat>=10&&lat<=45)state.view=fit([lng-3,lat-2,lng+3,lat+2]);}void render();}});
  new ResizeObserver(()=>{if(data&&state)applyView();}).observe(svg);
+ new ResizeObserver(()=>{if(data&&state)sizeComparisonMap();}).observe($('.atlas-primary-grid'));
+ window.addEventListener('resize',()=>{if(data&&state)sizeComparisonMap();});
+ desktopComparison.addEventListener('change',()=>{if(data&&state){legend();comparisonLayout();}});
  await start();
 }

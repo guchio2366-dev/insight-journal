@@ -43,10 +43,10 @@ const climateSource='https://www.data.jma.go.jp/tcc/tcc/products/climate/climatv
       <p class="atlas-layer-caption"><span data-west-caption>{initial.label}</span> · <span data-west-period></span></p>
      </div>
      <div class="west-swipe" data-west-swipe hidden><div><strong data-west-source-name>左の元図</strong><strong data-west-target-name>右の比較先</strong></div><label>地図の境目<input type="range" min="0" max="100" value="50" data-west-split aria-label="元図と比較先の境目。左端で比較先、右端で元図の全体を表示"/></label></div>
-     {initialField==='agriculture'&&<div class="atlas-key west-agri-picker" aria-label="農林業の品目">{groups.map(g=><span class="agri-picker-group"><strong>{g==='土地・森林'?'林業・土地':g}</strong>{topics.filter(t=>t.group===g&&!t.id.endsWith('-irrigated')&&!t.id.endsWith('-rainfed')).map(t=><button type="button" data-west-topic-button={t.id} aria-pressed={t.id===initial.id}>{topicButton(t)}</button>)}</span>)}</div>}
-     {initialField==='agriculture'&&['wheat','barley'].map(id=><div class="atlas-water-tabs west-cultivation" aria-label="栽培方法" role="tablist" data-west-cultivation={id} hidden={id!==initial.id}>{topics.filter(t=>t.id===id||t.id.startsWith(id+'-')).map(t=><button type="button" role="tab" data-west-topic-button={t.id} aria-selected={t.id===initial.id} tabindex={t.id===initial.id?0:-1}>{t.id===id?'収穫面積':t.id.endsWith('irrigated')?'灌漑栽培':'天水栽培'}</button>)}</div>)}
+     <div data-west-agri-switches>{initialField==='agriculture'&&<div class="atlas-key west-agri-picker" aria-label="農林業の品目">{groups.map(g=><span class="agri-picker-group"><strong>{g==='土地・森林'?'林業・土地':g}</strong>{topics.filter(t=>t.group===g&&!t.id.endsWith('-irrigated')&&!t.id.endsWith('-rainfed')).map(t=><button type="button" data-west-topic-button={t.id} aria-pressed={t.id===initial.id}>{topicButton(t)}</button>)}</span>)}</div>}
+     {initialField==='agriculture'&&['wheat','barley'].map(id=><div class="atlas-water-tabs west-cultivation" aria-label="栽培方法" role="tablist" data-west-cultivation={id} hidden={id!==initial.id}>{topics.filter(t=>t.id===id||t.id.startsWith(id+'-')).map(t=><button type="button" role="tab" data-west-topic-button={t.id} aria-selected={t.id===initial.id} tabindex={t.id===initial.id?0:-1}>{t.id===id?'収穫面積':t.id.endsWith('irrigated')?'灌漑栽培':'天水栽培'}</button>)}</div>)}</div>
      <div class="west-legend" data-west-legend aria-label="地図の凡例"></div>
-     <p class="west-map-help" data-west-guide>地図の国・都市名を選ぶと、右側に解説を表示します。</p>
+     <div data-west-map-extras><p class="west-map-help" data-west-guide>地図の国・都市名を選ぶと、右側に解説を表示します。</p>
      <div class="west-map-lists">
       <details data-west-city-label><summary>都市の一覧から雨温図を選ぶ</summary><label>観測所<select data-west-city aria-label="雨温図の観測所"><option value="">観測所を選択</option>{data.cities.map(c=><option value={c.id}>{c.name}</option>)}</select></label></details>
       <details data-west-urban-label hidden><summary>都市の一覧から選ぶ</summary><select data-west-urban aria-label="人口を読む都市"><option value="">都市を選択</option>{data.urban.cities.map(c=><option value={c.id}>{c.name}</option>)}</select></details>
@@ -54,7 +54,7 @@ const climateSource='https://www.data.jma.go.jp/tcc/tcc/products/climate/climatv
      </div>
      <p class="west-point" data-west-point aria-live="polite" hidden>場所を選ぶと、ここに地図の値を表示します。</p>
      <details class="west-map-method"><summary>地図の出典・表示方法</summary><p class="west-method" data-west-method></p><p class="west-source" data-west-source></p><p>ドラッグ・矢印キーで移動できます。スマートフォンでは地図の上下の余白からページをスクロールできます。</p></details>
-     <button class="west-retry" data-west-retry hidden>資料を再読み込みする</button>
+     <button class="west-retry" data-west-retry hidden>資料を再読み込みする</button></div>
     </section>
     <aside class={`atlas-national west-reading ${initialField==='natural'?'atlas-nature-summary':initialField==='population'?'population-national':initialField==='industry'?'industry-national':'west-agri-reading'}`} data-field-national={initialField} aria-labelledby="west-detail-title">
      <div data-west-detail><h2 id="west-detail-title">{initial.label}</h2><p><strong>{westReading(initial).message}</strong></p><p>{westReading(initial).reason}</p><div class="west-related west-reading-dock" data-west-related><h3>この関係を地図で確かめる</h3>{westReading(initial).comparisons.map(c=><a href={withBase(`/atlas/west-asia/${westFields.find(f=>f.id===westTopics.find(t=>t.id===c.topic)!.field)!.route}/?topic=${c.topic}`)}>{c.label} →</a>)}</div></div>
@@ -63,6 +63,8 @@ const climateSource='https://www.data.jma.go.jp/tcc/tcc/products/climate/climatv
      </div>
      <a class="west-back-map" href="#west-map-title">地図へ戻る ↑</a>
     </aside>
+    <section class="west-comparison-key-slot" data-west-comparison-key hidden aria-label="比較する二つの地図の全凡例"></section>
+    <details class="west-comparison-details" data-west-comparison-details hidden><summary>選択した場所の詳細・雨温図・国別統計・出典</summary><div class="west-comparison-details-grid"><section data-west-more-reading></section><section data-west-more-map></section></div></details>
     {initialField==='natural'&&<details class="atlas-climate-overview" data-west-climate-overview><summary><h2>各気候区分の概説</h2></summary><p>色と区分は北米と共通です。分類は1991–2020年の平均的な気温・降水の組合せを表します。</p><div class="west-climate-codes">{data.classes.map(c=><section><h3><i style={`background:${c.color}`}></i>{c.code} {c.name}</h3><p>{c.description}</p></section>)}</div></details>}
    </div>
    </section>
