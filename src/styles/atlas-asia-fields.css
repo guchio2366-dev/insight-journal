@@ -239,7 +239,7 @@
 .asia-climate-choices button{display:inline-flex;align-items:center;gap:4px;min-height:32px;padding:4px;border:1px solid #c7ccbf;background:#fbfcf5;font-size:13px}
 .asia-climate-choices button i{display:inline-block;width:12px;height:10px;border:1px solid #738877}
 @media(min-width:960px){
- .atlas-desktop-shell .asia-atlas[data-field] .asia-map-legend:has([data-climate-legend]:not([hidden])){display:flex;flex-wrap:wrap;align-items:center;gap:0 4px;padding:2px 0}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-map-legend:has([data-climate-legend]:not([hidden])){display:flex;flex-wrap:wrap;align-items:center;gap:0 3px;padding:0}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-map-legend:has([data-climate-legend]:not([hidden])) :is(.asia-main-legend,.asia-main-legend>section,[data-climate-legend],.asia-climate-choices){display:contents}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-map-legend:has([data-climate-legend]:not([hidden])) .asia-main-legend :is(h4,.asia-comparison-key){display:none}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-map-legend:has([data-climate-legend]:not([hidden])) .asia-main-legend p{line-height:24px;margin-right:6px}
