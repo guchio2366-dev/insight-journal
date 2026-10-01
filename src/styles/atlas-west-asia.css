@@ -98,6 +98,15 @@
 .west-reading-dock{margin:10px 0 14px;padding-top:8px}
 .west-chart-details{margin-top:10px;border-top:1px solid #d4dbd0}
 .west-chart-details>summary{font-size:14px!important;line-height:1.7;min-height:44px;padding:10px 0;cursor:pointer}
+.west-comparison-details [data-west-more-reading] h3{font-size:18px;font-family:var(--serif);margin:0 0 10px}
+.west-comparison-details [data-west-more-reading] p{font-size:14px;line-height:1.85;margin:8px 0}
+.west-comparison-details [data-west-more-reading] .west-value{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;margin:12px 0 2px}
+.west-comparison-details [data-west-more-reading] .west-stat-note{font-size:11px;color:#5b706f;line-height:1.7}
+.west-comparison-details [data-west-more-reading] table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
+.west-comparison-details [data-west-more-reading] :is(th,td){padding:8px 5px;border-bottom:1px solid #dce2d8;text-align:right}
+.west-comparison-details [data-west-more-reading] th:first-child{text-align:left;font-weight:500}
+.west-comparison-details [data-west-more-reading] caption{font-size:11px;text-align:left;line-height:1.7;color:#5c716c;padding-block:8px}
+.west-comparison-details [data-west-more-reading] details summary{min-height:44px;padding:10px 0;cursor:pointer;font-size:12px}
 @media(min-width:1200px){.west-atlas .atlas-map-column{position:sticky;top:12px}}
 @media(max-width:1199px){.west-source-grid{gap:16px}}
 @media(max-width:959px){.west-back-map{display:inline-flex}}
