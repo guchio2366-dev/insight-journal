@@ -1,0 +1,23 @@
+{
+  "id": "province-boundaries-geojson",
+  "url": "https://geo.statcan.gc.ca/geo_wa/rest/services/2021/Cartographic_boundary_files/MapServer/0/query?where=1%3D1&outFields=PRUID,PRNAME,PRENAME,PRFNAME,DGUID&returnGeometry=true&outSR=4326&maxAllowableOffset=0.02&geometryPrecision=5&f=geojson",
+  "responseUrl": "https://geo.statcan.gc.ca/geo_wa/rest/services/2021/Cartographic_boundary_files/MapServer/0/query?where=1%3D1&outFields=PRUID,PRNAME,PRENAME,PRFNAME,DGUID&returnGeometry=true&outSR=4326&maxAllowableOffset=0.02&geometryPrecision=5&f=geojson",
+  "status": 200,
+  "elapsedMs": 42598,
+  "bytes": 16029828,
+  "headers": {
+    "cache-control": "must-revalidate,max-age=0,public",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-security-policy": "script-src 'self';",
+    "content-type": "application/geo+json; charset=UTF-8",
+    "date": "Wed, 30 Sep 2026 15:10:29 GMT",
+    "etag": "\"s81deiJDzjSooFCP_1695780066\"",
+    "request-context": "appId=cid-v1:17546c7c-8b34-4cf4-8efe-06521c63c57d",
+    "server": "nginx",
+    "strict-transport-security": "max-age=31536000; ",
+    "transfer-encoding": "chunked",
+    "vary": "Origin",
+    "x-content-type-options": "nosniff"
+  }
+}

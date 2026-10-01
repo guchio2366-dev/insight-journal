@@ -1,11 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile,access} from 'node:fs/promises';
-import {transform} from 'esbuild';
+import {build} from 'esbuild';
 import {Window} from 'happy-dom';
-const lib=await readFile('src/lib/atlas-canada-nature.ts','utf8');
-const controller=(await readFile('src/scripts/atlas-canada-nature.ts','utf8')).replace(/^import .*;\r?\n/,'');
-const code=(await transform(`${lib}\n${controller}\ninitCanadaNature(document.querySelector('[data-canada-nature]'));`,{loader:'ts',format:'iife'})).code;
+const code=(await build({stdin:{contents:"import {initCanadaNature} from './src/scripts/atlas-canada-nature';initCanadaNature(document.querySelector('[data-canada-nature]'));",resolveDir:process.cwd(),loader:'ts'},bundle:true,write:false,format:'iife'})).outputFiles[0].text;
 async function page(search='',interactive=false){const w=new Window({url:`https://example.com/insight-journal/atlas/north-america/canada/nature/${search}`,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:interactive,suppressInsecureJavaScriptEnvironmentWarning:true}});w.document.write((await readFile('dist/atlas/north-america/canada/nature/index.html','utf8')).replace(/<script(?![^>]*type="application\/json")[^>]*>[\s\S]*?<\/script>/g,''));if(interactive)w.eval(code);return w;}
 test('Canadian nature entry and dedicated route retain North America navigation, capital, numeric tables and complete sources',async()=>{
  await access('dist/atlas/north-america/canada/index.html');

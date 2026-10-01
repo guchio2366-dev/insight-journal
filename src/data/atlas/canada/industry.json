@@ -1,0 +1,1532 @@
+{
+  "years": [
+    2023,
+    2024,
+    2025
+  ],
+  "provinces": [
+    {
+      "code": "10",
+      "id": "Newfoundland and Labrador",
+      "name": "ニューファンドランド・ラブラドール",
+      "short": "NL",
+      "anchor": [
+        -59,
+        53
+      ]
+    },
+    {
+      "code": "11",
+      "id": "Prince Edward Island",
+      "name": "プリンスエドワードアイランド",
+      "short": "PE",
+      "anchor": [
+        -63.3,
+        46.4
+      ]
+    },
+    {
+      "code": "12",
+      "id": "Nova Scotia",
+      "name": "ノバスコシア",
+      "short": "NS",
+      "anchor": [
+        -63,
+        45
+      ]
+    },
+    {
+      "code": "13",
+      "id": "New Brunswick",
+      "name": "ニューブランズウィック",
+      "short": "NB",
+      "anchor": [
+        -66.5,
+        46.5
+      ]
+    },
+    {
+      "code": "24",
+      "id": "Quebec",
+      "name": "ケベック",
+      "short": "QC",
+      "anchor": [
+        -72,
+        53
+      ]
+    },
+    {
+      "code": "35",
+      "id": "Ontario",
+      "name": "オンタリオ",
+      "short": "ON",
+      "anchor": [
+        -85,
+        50
+      ]
+    },
+    {
+      "code": "46",
+      "id": "Manitoba",
+      "name": "マニトバ",
+      "short": "MB",
+      "anchor": [
+        -98,
+        54
+      ]
+    },
+    {
+      "code": "47",
+      "id": "Saskatchewan",
+      "name": "サスカチュワン",
+      "short": "SK",
+      "anchor": [
+        -106,
+        54
+      ]
+    },
+    {
+      "code": "48",
+      "id": "Alberta",
+      "name": "アルバータ",
+      "short": "AB",
+      "anchor": [
+        -114.5,
+        55
+      ]
+    },
+    {
+      "code": "59",
+      "id": "British Columbia",
+      "name": "ブリティッシュコロンビア",
+      "short": "BC",
+      "anchor": [
+        -126,
+        55
+      ]
+    },
+    {
+      "code": "60",
+      "id": "Yukon",
+      "name": "ユーコン",
+      "short": "YT",
+      "anchor": [
+        -136,
+        64
+      ]
+    },
+    {
+      "code": "61",
+      "id": "Northwest Territories",
+      "name": "ノースウエスト準州",
+      "short": "NT",
+      "anchor": [
+        -122,
+        65
+      ]
+    },
+    {
+      "code": "62",
+      "id": "Nunavut",
+      "name": "ヌナブト",
+      "short": "NU",
+      "anchor": [
+        -95,
+        65.5
+      ]
+    }
+  ],
+  "metrics": [
+    {
+      "id": "mining",
+      "name": "鉱業・採石・石油ガス採取",
+      "source": "Mining, quarrying, and oil and gas extraction [21]",
+      "code": "21"
+    },
+    {
+      "id": "manufacturing",
+      "name": "製造業",
+      "source": "Manufacturing [31-33]",
+      "code": "31–33"
+    },
+    {
+      "id": "services",
+      "name": "サービス生産産業",
+      "source": "Services-producing industries [T003]",
+      "code": "T003"
+    },
+    {
+      "id": "all",
+      "name": "全産業",
+      "source": "All industries [T001]",
+      "code": "T001"
+    }
+  ],
+  "data": [
+    {
+      "year": 2023,
+      "id": "Newfoundland and Labrador",
+      "name": "ニューファンドランド・ラブラドール",
+      "values": {
+        "mining": {
+          "value": 28.56,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255924",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 2.82,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255927",
+          "decimals": 2
+        },
+        "services": {
+          "value": 56.99,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356023",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255922",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "Prince Edward Island",
+      "name": "プリンスエドワードアイランド",
+      "values": {
+        "mining": {
+          "value": 0.03,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255943",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 12.84,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255946",
+          "decimals": 2
+        },
+        "services": {
+          "value": 72.52,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356031",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255941",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "Nova Scotia",
+      "name": "ノバスコシア",
+      "values": {
+        "mining": {
+          "value": 0.54,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255962",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 6.84,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255965",
+          "decimals": 2
+        },
+        "services": {
+          "value": 81.94,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356039",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255960",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "New Brunswick",
+      "name": "ニューブランズウィック",
+      "values": {
+        "mining": {
+          "value": 0.52,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255981",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 9.48,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255984",
+          "decimals": 2
+        },
+        "services": {
+          "value": 76.27,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356047",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255979",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "Quebec",
+      "name": "ケベック",
+      "values": {
+        "mining": {
+          "value": 1.98,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256000",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 13.15,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256003",
+          "decimals": 2
+        },
+        "services": {
+          "value": 73.63,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356055",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255998",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "Ontario",
+      "name": "オンタリオ",
+      "values": {
+        "mining": {
+          "value": 1.04,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256019",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 10.38,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256022",
+          "decimals": 2
+        },
+        "services": {
+          "value": 77.91,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356063",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256017",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "Manitoba",
+      "name": "マニトバ",
+      "values": {
+        "mining": {
+          "value": 2.38,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256038",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 9.87,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256041",
+          "decimals": 2
+        },
+        "services": {
+          "value": 73.06,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356071",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256036",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "Saskatchewan",
+      "name": "サスカチュワン",
+      "values": {
+        "mining": {
+          "value": 22.06,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256057",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 7.01,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256060",
+          "decimals": 2
+        },
+        "services": {
+          "value": 52.31,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356079",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256055",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "Alberta",
+      "name": "アルバータ",
+      "values": {
+        "mining": {
+          "value": 26.66,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256076",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 7.32,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256079",
+          "decimals": 2
+        },
+        "services": {
+          "value": 55.19,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356087",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256074",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "British Columbia",
+      "name": "ブリティッシュコロンビア",
+      "values": {
+        "mining": {
+          "value": 5.49,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256095",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 5.69,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256098",
+          "decimals": 2
+        },
+        "services": {
+          "value": 75.76,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356095",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256093",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "Yukon",
+      "name": "ユーコン",
+      "values": {
+        "mining": {
+          "value": 9.47,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256114",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 0.69,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256117",
+          "decimals": 2
+        },
+        "services": {
+          "value": 75.39,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356103",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256112",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "Northwest Territories",
+      "name": "ノースウエスト準州",
+      "values": {
+        "mining": {
+          "value": 21.67,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256133",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 0.29,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256136",
+          "decimals": 2
+        },
+        "services": {
+          "value": 69.26,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356111",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256131",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "id": "Nunavut",
+      "name": "ヌナブト",
+      "values": {
+        "mining": {
+          "value": 38.05,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256152",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 0.39,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256155",
+          "decimals": 2
+        },
+        "services": {
+          "value": 51.21,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356119",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256150",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "Newfoundland and Labrador",
+      "name": "ニューファンドランド・ラブラドール",
+      "values": {
+        "mining": {
+          "value": 27.88,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255924",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 3.16,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255927",
+          "decimals": 2
+        },
+        "services": {
+          "value": 57.55,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356023",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255922",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "Prince Edward Island",
+      "name": "プリンスエドワードアイランド",
+      "values": {
+        "mining": {
+          "value": 0.03,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255943",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 12.56,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255946",
+          "decimals": 2
+        },
+        "services": {
+          "value": 72.22,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356031",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255941",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "Nova Scotia",
+      "name": "ノバスコシア",
+      "values": {
+        "mining": {
+          "value": 0.38,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255962",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 6.9,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255965",
+          "decimals": 2
+        },
+        "services": {
+          "value": 81.85,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356039",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255960",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "New Brunswick",
+      "name": "ニューブランズウィック",
+      "values": {
+        "mining": {
+          "value": 0.44,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255981",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 9.3,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255984",
+          "decimals": 2
+        },
+        "services": {
+          "value": 77.34,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356047",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255979",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "Quebec",
+      "name": "ケベック",
+      "values": {
+        "mining": {
+          "value": 2.02,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256000",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 12.58,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256003",
+          "decimals": 2
+        },
+        "services": {
+          "value": 74.33,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356055",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255998",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "Ontario",
+      "name": "オンタリオ",
+      "values": {
+        "mining": {
+          "value": 1.1,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256019",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 9.52,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256022",
+          "decimals": 2
+        },
+        "services": {
+          "value": 79.04,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356063",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256017",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "Manitoba",
+      "name": "マニトバ",
+      "values": {
+        "mining": {
+          "value": 2.34,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256038",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 9.75,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256041",
+          "decimals": 2
+        },
+        "services": {
+          "value": 74.32,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356071",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256036",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "Saskatchewan",
+      "name": "サスカチュワン",
+      "values": {
+        "mining": {
+          "value": 19.9,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256057",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 6.43,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256060",
+          "decimals": 2
+        },
+        "services": {
+          "value": 55.15,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356079",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256055",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "Alberta",
+      "name": "アルバータ",
+      "values": {
+        "mining": {
+          "value": 26.03,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256076",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 6.9,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256079",
+          "decimals": 2
+        },
+        "services": {
+          "value": 56.62,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356087",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256074",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "British Columbia",
+      "name": "ブリティッシュコロンビア",
+      "values": {
+        "mining": {
+          "value": 4.78,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256095",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 5.25,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256098",
+          "decimals": 2
+        },
+        "services": {
+          "value": 77.69,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356095",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256093",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "Yukon",
+      "name": "ユーコン",
+      "values": {
+        "mining": {
+          "value": 7.27,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256114",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 0.67,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256117",
+          "decimals": 2
+        },
+        "services": {
+          "value": 78.99,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356103",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256112",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "Northwest Territories",
+      "name": "ノースウエスト準州",
+      "values": {
+        "mining": {
+          "value": 17.3,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256133",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 0.38,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256136",
+          "decimals": 2
+        },
+        "services": {
+          "value": 73.14,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356111",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256131",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "id": "Nunavut",
+      "name": "ヌナブト",
+      "values": {
+        "mining": {
+          "value": 40.93,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256152",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 0.35,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256155",
+          "decimals": 2
+        },
+        "services": {
+          "value": 47.46,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356119",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256150",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Newfoundland and Labrador",
+      "name": "ニューファンドランド・ラブラドール",
+      "values": {
+        "mining": {
+          "value": 28.72,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255924",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 3.02,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255927",
+          "decimals": 2
+        },
+        "services": {
+          "value": 57.61,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356023",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255922",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Prince Edward Island",
+      "name": "プリンスエドワードアイランド",
+      "values": {
+        "mining": {
+          "value": 0.03,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255943",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 12.62,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255946",
+          "decimals": 2
+        },
+        "services": {
+          "value": 71.99,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356031",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255941",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Nova Scotia",
+      "name": "ノバスコシア",
+      "values": {
+        "mining": {
+          "value": 0.38,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255962",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 6.78,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255965",
+          "decimals": 2
+        },
+        "services": {
+          "value": 81.66,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356039",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255960",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "New Brunswick",
+      "name": "ニューブランズウィック",
+      "values": {
+        "mining": {
+          "value": 0.45,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255981",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 8.75,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255984",
+          "decimals": 2
+        },
+        "services": {
+          "value": 77.59,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356047",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255979",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Quebec",
+      "name": "ケベック",
+      "values": {
+        "mining": {
+          "value": 2.22,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256000",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 11.64,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256003",
+          "decimals": 2
+        },
+        "services": {
+          "value": 75.22,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356055",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54255998",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Ontario",
+      "name": "オンタリオ",
+      "values": {
+        "mining": {
+          "value": 1.31,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256019",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 9.04,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256022",
+          "decimals": 2
+        },
+        "services": {
+          "value": 79.79,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356063",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256017",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Manitoba",
+      "name": "マニトバ",
+      "values": {
+        "mining": {
+          "value": 2.07,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256038",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 9.31,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256041",
+          "decimals": 2
+        },
+        "services": {
+          "value": 74.94,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356071",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256036",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Saskatchewan",
+      "name": "サスカチュワン",
+      "values": {
+        "mining": {
+          "value": 17.21,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256057",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 6.01,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256060",
+          "decimals": 2
+        },
+        "services": {
+          "value": 56.97,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356079",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256055",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Alberta",
+      "name": "アルバータ",
+      "values": {
+        "mining": {
+          "value": 24.08,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256076",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 6.67,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256079",
+          "decimals": 2
+        },
+        "services": {
+          "value": 58.33,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356087",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256074",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "British Columbia",
+      "name": "ブリティッシュコロンビア",
+      "values": {
+        "mining": {
+          "value": 4.44,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256095",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 5.11,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256098",
+          "decimals": 2
+        },
+        "services": {
+          "value": 78.21,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356095",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256093",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Yukon",
+      "name": "ユーコン",
+      "values": {
+        "mining": {
+          "value": 6.3,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256114",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 0.67,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256117",
+          "decimals": 2
+        },
+        "services": {
+          "value": 80.28,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356103",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256112",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Northwest Territories",
+      "name": "ノースウエスト準州",
+      "values": {
+        "mining": {
+          "value": 13.99,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256133",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 0.3,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256136",
+          "decimals": 2
+        },
+        "services": {
+          "value": 76.72,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356111",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256131",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "id": "Nunavut",
+      "name": "ヌナブト",
+      "values": {
+        "mining": {
+          "value": 46.9,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256152",
+          "decimals": 2
+        },
+        "manufacturing": {
+          "value": 0.3,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256155",
+          "decimals": 2
+        },
+        "services": {
+          "value": 41.53,
+          "status": "",
+          "symbol": "",
+          "vector": "v62356119",
+          "decimals": 2
+        },
+        "all": {
+          "value": 100,
+          "status": "",
+          "symbol": "",
+          "vector": "v54256150",
+          "decimals": 2
+        }
+      }
+    }
+  ]
+}

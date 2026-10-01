@@ -7,6 +7,8 @@ import climate from '../../data/atlas/canada/climate.json';
 import rivers from '../../data/atlas/canada/rivers.json';
 import lakes from '../../data/atlas/canada/lakes.json';
 import forestry from '../../data/atlas/canada/forestry.json';
+import industry from '../../data/atlas/canada/industry.json';
+import industryGeometry from '../../data/atlas/canada/industry-geometry.json';
 import {features} from '../../data/atlas/regional-atlas';
 import {climateCause,landReading,waterReading,geographySource,mechanismSource} from '../../data/atlas/canada/reading';
 import {withBase} from '../../lib/urls';
@@ -24,7 +26,7 @@ function geometryPath(g:any):string{
 const japaneseWater:Record<string,string>={'Mackenzie':'マッケンジー川','Fraser':'フレーザー川','Nelson':'ネルソン川','St. Lawrence':'セントローレンス川','Great Slave Lake':'グレートスレーブ湖','Great Bear Lake':'グレートベア湖','Lake Superior':'スペリオル湖','Lake Ontario':'オンタリオ湖','Lake Winnipeg':'ウィニペグ湖'};
 const waterNames=Object.keys(japaneseWater).filter(name=>[...rivers.features,...lakes.features].some(f=>f.properties.name===name));
 const fmt=(v:number|null)=>v===null?'未収録':v.toLocaleString('ja-JP',{minimumFractionDigits:1,maximumFractionDigits:1});
-const config={cities:climate.stations.map(s=>({id:s.id,name:s.name,point:project(s.coordinates)})),waters:waterNames,width,height};
+const config={cities:climate.stations.map(s=>({id:s.id,name:s.name,point:project(s.coordinates)})),waters:waterNames,width,height,industry:{...industry,geometry:industryGeometry.features}};
 ---
 <BaseLayout title="カナダの自然環境｜地形・気候・河川" description="首都オタワと沿岸・内陸・北部の気候を比べ、カナダの山地・平原・湖と河川のつながりを読む。" compactAtlas>
  <AtlasWorkspaceFrame region="north-america" mapActions={false}>
@@ -32,8 +34,9 @@ const config={cities:climate.stations.map(s=>({id:s.id,name:s.name,point:project
    <p class="canada-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / カナダ</p>
    <AtlasRegionNavigation group="americas" current="north-america" country="canada" />
    <header><p class="eyebrow">Canada · Natural environment</p><h1>カナダの自然環境</h1><p class="canada-lead">西岸の海と山地、内陸の平原、東部の楯状地、北部の島々。場所を確かめ、季節と水の違いを読む。</p></header>
-   <nav class="canada-fields" aria-label="カナダの分野"><a data-atlas-overview-link href={withBase('/atlas/north-america/overview/?country=CAN')}>概要</a><a href={withBase('/atlas/north-america/canada/nature/')} aria-current="page">自然環境</a><a href={withBase('/atlas/north-america/canada/agriculture/')}>農畜林業<small>カノーラ・小麦・肉牛・林業公開</small></a>{['主要産業','人口'].map(label=><span aria-disabled="true">{label}<small>準備中</small></span>)}</nav>
+   <nav class="canada-fields" aria-label="カナダの分野"><a data-atlas-overview-link href={withBase('/atlas/north-america/overview/?country=CAN')}>概要</a><a href={withBase('/atlas/north-america/canada/nature/')} aria-current="page">自然環境</a><a href={withBase('/atlas/north-america/canada/agriculture/')}>農畜林業<small>カノーラ・小麦・肉牛・林業公開</small></a><a href={withBase('/atlas/north-america/canada/industry/')}>主要産業</a><span aria-disabled="true">人口<small>準備中</small></span></nav>
    <p><a href={withBase('/atlas/north-america/canada/agriculture/forestry/')} data-canada-forestry-return hidden>林業の森林図・州比較へ戻る</a></p>
+   <p><a href={withBase('/atlas/north-america/canada/industry/')} data-canada-industry-return hidden>主要産業の州別構成・比較へ戻る</a></p>
    <nav class="canada-views" aria-label="自然環境の表示"><button data-canada-view="climate" aria-pressed="true">都市の気候</button><button data-canada-view="landform" aria-pressed="false">地形地域</button><button data-canada-view="water" aria-pressed="false">湖と河川</button></nav>
    <div class="canada-workspace">
     <section class="canada-map-column" aria-label="カナダの地図">
@@ -47,6 +50,7 @@ const config={cities:climate.stations.map(s=>({id:s.id,name:s.name,point:project
         <g data-canada-forest-context-map style="display:none">
          <image href={withBase('/assets/atlas/canada-forestry-v1/forest-needleleaf-2020.png')} x="0" y="0" width={width} height={height} preserveAspectRatio="none" />
         </g>
+        <g data-canada-industry-context-map style="display:none" />
         <g data-canada-water-layers hidden>
          {lakes.features.map(f=><path class="canada-lake" data-canada-water-shape={f.properties.name??''} d={geometryPath(f.geometry)} fill-rule="evenodd"><title>{japaneseWater[f.properties.name]??f.properties.name}</title></path>)}
          {rivers.features.map(f=><path class="canada-river" data-canada-water-shape={f.properties.name??''} d={geometryPath(f.geometry)}><title>{japaneseWater[f.properties.name]??f.properties.name}</title></path>)}
@@ -56,6 +60,7 @@ const config={cities:climate.stations.map(s=>({id:s.id,name:s.name,point:project
        </g>
       </svg>
       <p class="canada-caption" data-canada-forest-context-legend hidden><i style={`display:inline-block;width:18px;height:12px;background:rgb(${forestry.classes[0].color.join(',')})`} aria-hidden="true"/> 温帯・亜寒帯の針葉樹林（NRCan、2020年、元データ30m）。位置図と同じ範囲に重ねています。気候は点の位置の1991–2020年平年値です。<a href={withBase('/atlas/north-america/canada/agriculture/forestry/#canada-forestry-sources')}>森林分類・利用条件</a></p>
+      <p class="canada-caption" data-canada-industry-context-legend hidden></p>
       <div class="canada-map-actions"><button data-canada-zoom="in" aria-label="地図を拡大">＋</button><button data-canada-zoom="out" aria-label="地図を縮小">−</button><button data-canada-focus>選んだ都市の位置へ</button></div>
       <p class="canada-caption">点は観測地点の位置、灰色は周辺の陸地。位置図は等距円筒図法で、面積比較には使いません。都市を選んでも表示範囲を勝手に変えません。</p>
      </section>
@@ -67,6 +72,7 @@ const config={cities:climate.stations.map(s=>({id:s.id,name:s.name,point:project
     </section>
     <aside class="canada-reading" aria-label="地図と一緒に読む">
      <section class="canada-comparison-context" data-canada-forest-context hidden><h2>森林と沿岸気候を比べる</h2><p data-canada-forest-context-text></p><p class="canada-caption">Vancouverは沿岸1地点。BC全域平均ではありません。</p><details><summary>比較の年・範囲</summary><p class="canada-caption">Vancouverは沿岸1地点。BC全域平均ではありません。森林2020年／気候1991–2020年。</p></details></section>
+     <section class="canada-comparison-context" data-canada-industry-context hidden><h2 data-canada-industry-context-heading></h2><p data-canada-industry-context-text></p><svg class="canada-map" data-canada-industry-context-mini-map viewBox="0 0 900 580" role="img" aria-label="元の州内GDP割合分布：別投影の地形図と左右で照合" style="display:none"></svg><p class="canada-caption" data-canada-industry-context-mini-legend hidden></p><details><summary>比較の年・分母と出典</summary><p>州内GDP割合は基本価格・当年価格。境界2021年、気候1991–2020年、水系Natural Earth概形。地図の位置だけから産業の原因や輸送経路を確定しません。<a href={withBase('/atlas/north-america/canada/industry/#canada-industry-sources')}>公式構成比・境界・交通の根拠</a></p></details></section>
      <section data-canada-reading="climate">
       <div class="canada-city-controls"><label>読む都市<select data-canada-city>{climate.stations.map(s=><option value={s.id} selected={s.id==='ottawa'}>{s.name}</option>)}</select></label><label>比べる都市<select data-canada-compare><option value="">比較なし</option>{climate.stations.map(s=><option value={s.id}>{s.name}</option>)}</select></label></div>
       <p class="canada-period">ECCC 1991–2020年平年値 · 全地点を同じ尺度で比較</p>
