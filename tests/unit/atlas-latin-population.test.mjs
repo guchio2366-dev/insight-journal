@@ -66,3 +66,11 @@ test('Only hides data for other targets while all 34 context shapes remain, and 
  }finally{await w.happyDOM.close();}
  assert.equal(lib.latinPopulationScopeIncludes('BRA','central'),false);assert.equal(lib.latinPopulationScopeIncludes('GTM','central'),true);assert.equal(lib.latinPopulationScopeIncludes('JAM','central'),true);
 });
+
+test('Every population layer uses XML-compatible valued data attributes in fallback SVG',()=>{
+ for(const layer of ['density','population','scale']){
+  const svg=lib.renderLatinPopulationMap(state(layer,'JAM','central',true),'xml-test');
+  assert.equal((svg.match(/\sdata-[a-z-]+(?=\s|>)/g)??[]).length,0);
+  assert.match(svg,/data-latin-map=""/);if(layer!=='density')assert.match(svg,/data-lp-map-size-key=""/);
+ }
+});

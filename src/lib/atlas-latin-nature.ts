@@ -1,6 +1,7 @@
 import data from '../data/atlas/latin-america/nature.json';
 import {latinCountries,latinWidth,latinHeight,projectLatin,latinMapLayout} from './atlas-latin-america-geometry';
 import {withBase} from './urls';
+import {latinAgricultureReading} from '../data/atlas/latin-america/agriculture-reading';
 
 export interface LatinNatureMapState {layer:string;place:string;scope:string;only:boolean;case?:string}
 export const latinNatureData=data;
@@ -26,6 +27,20 @@ export function natureCaseForPlace(place:string,caseId?:string){
  return latinNatureCases[0];
 }
 export function natureCountryName(place:string){return latinCountries.find(c=>c.code===place)?.name??(place==='all'?'中南米全体':place);}
+export function natureComparisonReading(source:{field:string;layer:string;place:string}){
+ const name=natureCountryName(source.place);
+ if(source.field==='agriculture'&&Object.hasOwn(latinAgricultureReading,source.layer)){
+  const reading=latinAgricultureReading[source.layer as keyof typeof latinAgricultureReading];
+  return {title:`${name}：${reading.title}`,takeaway:reading.takeaway,explanation:`${reading.compare}。気候は1991–2020年、作物・牛の分布は2020年の格子推計で、年と粒度を区別して読みます。`,sources:reading.sources.map(s=>({name:s.label,url:s.url}))};
+ }
+ if(source.field==='population'){
+  const quantity=source.layer==='population',metric=quantity?'人口規模':source.layer==='scale'?'人口密度・規模':'人口密度';
+  return {title:`${name}の気候と${metric}`,takeaway:quantity?'水や農業を支える自然条件と、国・地域の人口規模を比べます。人口の多さは、生活用水・市場・交通への需要の規模を考える手掛かりになります。':'気候は水や農業の条件をつくり、人口の集まりは水供給や交通への需要につながります。気候群と国・地域平均の人口密度を並べ、その条件と暮らしを考えます。',explanation:'気候は1991–2020年の原0.1度区分、人口は2023年の国・地域全体の公表値です。国平均の密度は都市の位置、人口規模は水需要そのものを表していません。',sources:[{name:'世界銀行：国・地域の人口・人口密度',url:'https://data.worldbank.org/indicator/EN.POP.DNST'}]};
+ }
+ if(source.field==='industry'&&source.layer==='canal')return {title:`${name}の気候と淡水を使う運河`,takeaway:latinNatureCases.find(c=>c.id==='panama')!.takeaway,explanation:latinNatureCases.find(c=>c.id==='panama')!.compare,sources:latinNatureCases.find(c=>c.id==='panama')!.sources};
+ if(source.field==='industry')return {title:`${name}の気候と${source.layer==='manufactures'?'製造品':'鉱石・金属'}の輸出`,takeaway:source.layer==='manufactures'?'産業の立地は水・人材・交通・市場に支えられます。気候群と製造品の輸出比率を並べ、工場の環境条件と海外市場へのつながりを考えます。':'自然条件は資源を採掘する地域の水や交通にも関わります。気候群と鉱石・金属の輸出比率を並べ、資源の産地から加工・港・海外市場へのつながりを考えます。',explanation:'気候群は1991–2020年、商品輸出額に占める割合は2024年です。気候群は鉱床・工場の位置を表さず、輸出比率は生産量やサービスの規模とは異なります。',sources:[{name:'世界銀行：商品輸出の構成',url:'https://data.worldbank.org/indicator/TX.VAL.MANF.ZS.UN'}]};
+ return {title:`${name}の自然条件を比べる`,takeaway:'同じ地理範囲で気候群と元の分布を並べ、自然条件と暮らしのつながりを読みます。',explanation:'両図の年・単位・粒度を凡例で確かめます。',sources:[]};
+}
 export function natureScopeForPlace(place:string,scope:string):'all'|'central'|'south'|'country'{
  const country=latinCountries.find(c=>c.code===place);
  if(scope==='country')return country?'country':'all';

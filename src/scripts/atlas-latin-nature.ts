@@ -1,5 +1,5 @@
 import {latinCountries} from '../lib/atlas-latin-america-geometry';
-import {latinNatureCases,latinNatureLayers,renderLatinNatureMap,renderLatinNatureLegend,renderLatinNatureNormals,natureCaseForPlace,natureCountryName,natureScopeForPlace,escapeNatureHtml} from '../lib/atlas-latin-nature';
+import {latinNatureCases,latinNatureLayers,renderLatinNatureMap,renderLatinNatureLegend,renderLatinNatureNormals,natureCaseForPlace,natureCountryName,natureScopeForPlace,natureComparisonReading,escapeNatureHtml} from '../lib/atlas-latin-nature';
 import {renderLatinAgricultureMap,renderLatinAgricultureLegend,agricultureLayerTitle} from '../lib/atlas-latin-agriculture';
 import {renderLatinPopulationMap,renderLatinPopulationLegend} from '../lib/atlas-latin-america-population';
 import {renderLatinIndustryMap,renderLatinIndustryLegend} from '../lib/atlas-latin-industry';
@@ -51,6 +51,13 @@ if(workspace){
   if(source.field==='industry')return renderLatinIndustryLegend(source.layer);
   return renderLatinNatureLegend(source.layer);
  }
+ function alignMapCaptions(){
+  const captions=[q<HTMLElement>('[data-nature-primary-caption]'),q<HTMLElement>('[data-nature-source-caption]')];
+  captions.forEach(caption=>caption.style.removeProperty('min-height'));
+  if(!state.source)return;
+  const height=Math.ceil(Math.max(...captions.map(caption=>caption.getBoundingClientRect().height)));
+  captions.forEach(caption=>caption.style.minHeight=`${height}px`);
+ }
  async function inlineImage(url:string){
   if(!imageData.has(url))imageData.set(url,fetch(url).then(response=>{if(!response.ok)throw new Error('地図画像を取得できません');return response.blob();}).then(blob=>new Promise<string>((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result));reader.onerror=reject;reader.readAsDataURL(blob);})));return imageData.get(url)!;
  }
@@ -80,20 +87,23 @@ if(workspace){
   q<HTMLInputElement>('[data-nature-only]').checked=state.only;
   q<HTMLInputElement>('[data-nature-only]').disabled=state.place==='all';
   const returnLink=q<HTMLAnchorElement>('[data-nature-return]');returnLink.hidden=!comparison;
+  const comparisonReading=comparison?natureComparisonReading(state.source!):null;
+  q<HTMLElement>('[data-nature-comparison-header]').hidden=!comparison;
   if(comparison){
    q('[data-nature-source-caption]').textContent='元の分布：'+sourceTitle();
    q('[data-nature-source-map]').innerHTML=sourceMap();
    q('[data-nature-source-legend]').innerHTML=sourceLegend();
    returnLink.href=latinSourceReturnUrl(base,state);
    returnLink.textContent=sourceTitle()+'へ戻る';
-   q('[data-nature-map-title]').textContent='気候群と、元の分布を並べて読む';
+   q('[data-nature-map-title]').textContent=comparisonReading!.title;
+   q('[data-nature-comparison-takeaway]').textContent=comparisonReading!.takeaway;
   }else q('[data-nature-map-title]').textContent=`${natureCountryName(state.place)}の気候群と雨の季節`;
   q('[data-nature-primary-caption]').textContent=`${natureCountryName(state.place)} · 気候群 · 1991–2020年`;
   const representative=state.place!=='all'&&selected.place!==state.place;
-  q('[data-nature-reading-title]').textContent=representative?`${selected.title}（${natureCountryName(selected.place)}の代表例）`:selected.title;
-  q('[data-nature-takeaway]').textContent=representative?`${natureCountryName(state.place)}の分布を、同じ地域の代表例として読みます。${selected.takeaway}`:selected.takeaway;
-  q('[data-nature-comparison-explanation]').textContent=comparison?state.source?.field==='population'?'気候は1991–2020年の約11kmの原分類、人口は2023年の国・地域全体の公表値です。自然条件と人口の広がりを並べ、国平均の密度から都市の位置や水需要の大きさを直接計算せず読みます。':state.source?.field==='industry'?'気候は長期の自然条件、産業は2024年の商品輸出構成または運河の通航です。対象・年・量の意味を分け、資源や水と交通・市場のつながりを読みます。':selected.compare:selected.compare;
-  q('[data-nature-case-sources]').innerHTML=selected.sources.map(s=>`<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a></li>`).join('');
+  q('[data-nature-reading-title]').textContent=comparisonReading?.title??(representative?`${selected.title}（${natureCountryName(selected.place)}の代表例）`:selected.title);
+  q('[data-nature-takeaway]').textContent=comparisonReading?.takeaway??(representative?`${natureCountryName(state.place)}の分布を、同じ地域の代表例として読みます。${selected.takeaway}`:selected.takeaway);
+  q('[data-nature-comparison-explanation]').textContent=comparisonReading?.explanation??selected.compare;
+  q('[data-nature-case-sources]').innerHTML=(comparisonReading?.sources??selected.sources).map(s=>`<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a></li>`).join('');
   q('[data-nature-normals]').innerHTML=renderLatinNatureNormals(selected.city);
   workspace.querySelectorAll<HTMLButtonElement>('[data-nature-case]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.natureCase===selected.id)));
   const agriculture=q<HTMLAnchorElement>('[data-nature-agriculture]'),population=q<HTMLAnchorElement>('[data-nature-population]'),industry=q<HTMLAnchorElement>('[data-nature-industry]');
@@ -103,7 +113,8 @@ if(workspace){
   population.href=latinLearningUrl(base,latinComparisonState({...state,source:undefined},'population','density'));
   population.textContent=`${natureCountryName(state.place)}の気候と人口密度を比べる`;
   industry.hidden=state.place!=='PAN';industry.href=latinLearningUrl(base,latinComparisonState({...state,source:undefined},'industry','canal'));
-  q('[data-nature-map-description]').textContent=comparison?'両図は同じ地理範囲。元の分布・選択・凡例を維持しています。代表例を選ぶと、自然の通常表示に切り替わります。':'5気候群の中にも雨季・乾季の違いがあります。右の観測所の月別平年値で確かめます。';
+  q('[data-nature-map-description]').textContent=comparison?'同じ範囲で元の分布と比較。代表例を選ぶと自然の通常表示に戻ります。':'5気候群の中にも雨季・乾季の違いがあります。右の観測所の月別平年値で確かめます。';
+  alignMapCaptions();
   q('[data-nature-renderer]').textContent=state.fallback?'静的画像表示（地図と同じ分布・凡例）':'';
   workspace.dataset.natureReady='true';workspace.dataset.natureLayer=state.layer;workspace.dataset.naturePlace=state.place;workspace.dataset.natureScope=state.scope;workspace.dataset.natureRenderer=state.fallback?'fallback':'svg';
   write(push);
@@ -120,5 +131,7 @@ if(workspace){
  });
  workspace.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){const target=(event.target as Element).closest<SVGElement>('[data-nature-country]');if(target){event.preventDefault();target.dispatchEvent(new MouseEvent('click',{bubbles:true}));}}});
  window.addEventListener('popstate',()=>{read();render();});
+ window.addEventListener('resize',alignMapCaptions);
  read();render();
+ void document.fonts.ready.then(alignMapCaptions);
 }

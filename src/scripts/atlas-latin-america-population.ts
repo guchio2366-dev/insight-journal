@@ -20,7 +20,10 @@ export function initLatinPopulation(root:HTMLElement){
  const sourceName=(source:LatinLearningSelection)=>source.field==='population'?metricName(source.layer):source.field==='nature'?'気候1991–2020':source.field==='industry'?source.layer==='ores'?'鉱石・金属の輸出比率2024':source.layer==='canal'?'パナマ運河2024会計年度':'製造品の輸出比率2024':source.layer==='cattle'?'牛の飼育密度2020':'作物の収穫面積2020';
  function fallbackImage(svg:string,alt:string){
   const image=document.createElement('img');image.className='lp-fallback-map';image.width=900;image.height=580;image.alt=alt;image.dataset.lpFallbackImage='';
-  image.src=`data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg.replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" width="900" height="580" '))}`;return image;
+  const parsed=new DOMParser().parseFromString(svg,'text/html').querySelector('svg');
+  if(!parsed)throw new Error('Population SVG was not parsed');
+  parsed.setAttribute('width','900');parsed.setAttribute('height','580');
+  image.src=`data:image/svg+xml;charset=utf-8,${encodeURIComponent(new XMLSerializer().serializeToString(parsed))}`;return image;
  }
  function sourceRender(source:LatinLearningSelection){
   const selection={...source,place:state.place,scope:state.scope,only:state.only};
@@ -61,7 +64,7 @@ export function initLatinPopulation(root:HTMLElement){
   q<HTMLElement>('[data-lp-value-urban]').textContent=latinPopulationValue(example.urbanShare,example.urbanShareStatus,1);
   q<HTMLElement>('[data-lp-population-unit]').hidden=example.population===null;q<HTMLElement>('[data-lp-density-unit]').hidden=example.density===null;q<HTMLElement>('[data-lp-urban-unit]').hidden=example.urbanShare===null;
   q<HTMLElement>('[data-lp-reading-title]').textContent=reading.title;q<HTMLElement>('[data-lp-reading-text]').textContent=reading.text;q<HTMLElement>('[data-lp-reading-cause]').textContent=reading.cause;
-  q<HTMLElement>('[data-lp-cause-brief]').textContent=reading.cause;
+  q<HTMLElement>('[data-lp-cause-brief]').textContent=state.place==='all'&&state.scope==='all'?'高地・沿岸・河川の条件に港・産業・交通が重なり、人の集積と住宅・水・通勤の需要を生みます。':reading.cause;
   q<HTMLElement>('[data-lp-reading-short]').textContent=selected?example.population===null?`${example.nameJa}の2023年指標は対象統計なし。数値のある国・地域と区別して表示します。`:`${example.nameJa}は人口${latinPopulationValue(example.population)}人、密度${latinPopulationValue(example.density,'value',1)}人/陸地km²。国人口の規模と密度を分けて読みます。`:state.scope==='central'?'中米・カリブを拡大。グアテマラやジャマイカを選び、国人口と密度を比べます。':'ブラジルは約2.11億人、密度25.3人/陸地km²。バルバドスは約28.2万人、密度656.6人/陸地km²。';
   q<HTMLElement>('[data-lp-comparison-reading]').hidden=!(external||scale);
   q<HTMLElement>('[data-lp-comparison-title]').textContent=external?`${sourceName(state.source!)} × ${metricName(state.layer)}`:scale?'人口が多い国と、密度が高い国はどう違う？':'';

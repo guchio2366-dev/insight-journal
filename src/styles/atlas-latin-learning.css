@@ -34,8 +34,8 @@
  .atlas-desktop-shell:has([data-latin-workspace]) .atlas-news-header{padding:14px 12px}.atlas-desktop-shell:has([data-latin-workspace]) .atlas-news-header h2{font-size:20px}
  .atlas-desktop-shell:has([data-latin-workspace]) .atlas-news-list,.atlas-desktop-shell:has([data-latin-workspace]) .atlas-news-reader{padding-inline:12px}
  .atlas-desktop-shell:has([data-latin-workspace]) .atlas-news-empty{padding:12px 0}.atlas-desktop-shell:has([data-latin-workspace]) .atlas-news-empty>span{display:none}.atlas-desktop-shell:has([data-latin-workspace]) .atlas-news-empty h3{margin-top:8px}
- .latin-navigation .regional-navigation{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin:0 0 6px}.latin-navigation .regional-tabs,.latin-navigation .regional-countries{gap:4px;margin:0}
- .latin-workspace .latin-navigation .regional-navigation a{min-height:30px;padding:4px 8px;font-size:13px}
+ .latin-workspace[data-latin-workspace] .latin-navigation .regional-navigation{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin:0 0 6px}.latin-workspace[data-latin-workspace] .latin-navigation .regional-tabs,.latin-workspace[data-latin-workspace] .latin-navigation .regional-countries{gap:4px;margin:0}
+ .latin-workspace[data-latin-workspace] .latin-navigation .regional-navigation a{min-height:30px;padding:4px 8px;font-size:13px}
  .latin-map-column svg:is(.latin-map,[data-latin-map]){max-height:280px}
  .latin-workspace{padding:12px}.latin-reading{max-height:calc(100dvh - 227px);overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
  .latin-workspace.is-comparison .latin-header{display:none}.latin-workspace.is-comparison .latin-reading{max-height:calc(100dvh - 175px)}

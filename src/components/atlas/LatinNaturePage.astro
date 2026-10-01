@@ -14,6 +14,7 @@ const state={layer:'climate',place:selected.place,scope:selected.scope,only:fals
    <label>国・地域 <select data-nature-place aria-label="自然条件を読む国・地域"><option value="all">中南米全体</option>{latinCountries.map(c=><option value={c.code} selected={c.code===selected.place}>{c.name}</option>)}</select></label>
   </div>
   <h2 data-nature-map-title>気候群の分布と雨の季節</h2>
+  <div class="latin-nature-comparison-header" data-nature-comparison-header hidden><a class="latin-return" data-nature-return href={withBase('/atlas/latin-america/agriculture/')}></a><p class="latin-takeaway" data-nature-comparison-takeaway></p></div>
   <div class="latin-nature-map-panes" data-nature-panes>
    <figure class="latin-nature-pane"><figcaption data-nature-primary-caption>気候群 · 1991–2020年</figcaption><div data-nature-map-host set:html={renderLatinNatureMap(state,'nature-main')} /><div data-nature-legend-host set:html={renderLatinNatureLegend('climate')} /></figure>
    <figure class="latin-nature-source-pane" data-nature-source-pane hidden><figcaption data-nature-source-caption></figcaption><div data-nature-source-map></div><div data-nature-source-legend></div></figure>
@@ -23,7 +24,6 @@ const state={layer:'climate',place:selected.place,scope:selected.scope,only:fals
  </section>
  <div slot="items" class="latin-nature-cases" aria-label="自然条件の代表例">{latinNatureCases.map((c,i)=><button type="button" data-nature-case={c.id} aria-pressed={i===0}>{c.name}</button>)}</div>
  <div slot="reading">
-  <a class="latin-return" data-nature-return hidden href={withBase('/atlas/latin-america/agriculture/')}></a>
   <h2 data-nature-reading-title>{selected.title}</h2>
   <p class="latin-takeaway" data-nature-takeaway>{selected.takeaway}</p>
   <a class="latin-comparison-link" data-nature-agriculture href={withBase('/atlas/latin-america/agriculture/?layer=coff&place=CRI&scope=central&from=nature&sourceLayer=climate&sourcePlace=CRI&sourceScope=central')}>コスタリカの気候とコーヒー収穫面積を比べる</a>

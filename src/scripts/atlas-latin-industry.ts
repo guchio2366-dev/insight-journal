@@ -66,6 +66,7 @@ export function initLatinIndustry(root:HTMLElement){
   q<HTMLButtonElement>('[data-industry-only]').setAttribute('aria-pressed',String(state.only));q<HTMLButtonElement>('[data-industry-only]').disabled=state.place==='all';
   q<HTMLButtonElement>('[data-industry-fallback]').setAttribute('aria-pressed',String(state.fallback));
   shown('[data-industry-normal]',!source);shown('[data-industry-comparison]',!!source);shown('[data-industry-return]',!!source);
+  shown('[data-industry-source-attribution]',false);
   const reading=industryReadingForPlace(state.place,state.layer);
   for(const button of root.querySelectorAll<HTMLButtonElement>('[data-industry-topic]'))button.setAttribute('aria-pressed',String(button.dataset.industryTopic===reading.id));
   text('[data-industry-reading-title]',reading.title);text('[data-industry-takeaway]',reading.takeaway);text('[data-industry-selected]',state.layer==='canal'?'パナマ運河 · 2024会計年度 · 大型外航船9,944通航（前年比21%減）':valueText(state.place));
@@ -84,15 +85,17 @@ export function initLatinIndustry(root:HTMLElement){
    const original=renderSource(source,'latin-industry-original');
    text('[data-industry-source-title]',`元の分布：${original.title}`);text('[data-industry-source-period]',original.period);
    const sourceMap=q<HTMLElement>('[data-industry-source-map]');sourceMap.innerHTML=original.map;imageContainers.push(sourceMap);q('[data-industry-source-legend]').innerHTML=original.legend;
+   const sourceAttribution=q<HTMLElement>('[data-industry-source-legend] .latin-nature-period');
+   if(sourceAttribution){text('[data-industry-source-attribution]',sourceAttribution.textContent??'');shown('[data-industry-source-attribution]',true);sourceAttribution.remove();}
    text('[data-industry-target-title]',layerName(state.layer));text('[data-industry-target-period]',state.layer==='canal'?'2024会計年度（2023年10月–2024年9月） · パナマ運河・大型外航船の通航':'2024年 · 国単位 · 商品輸出額に占める割合（%）');
    const targetMap=q<HTMLElement>('[data-industry-target-map]');targetMap.innerHTML=renderLatinIndustryMap(state,'latin-industry-target');imageContainers.push(targetMap);q('[data-industry-target-legend]').innerHTML=renderLatinIndustryLegend(state.layer);targetMap.closest<HTMLElement>('.latin-industry-panel')!.dataset.layer=state.layer;
    text('[data-industry-comparison-title]',`${industryCountryName(state.place)}：${original.title}と${layerName(state.layer)}を比べる`);
    let explanation=reading.comparison,values=valueText(state.place);
    if(source.field==='population'){
-    explanation=`元の${populationTitle(source.layer)}（2023年）と、商品の輸出構成（2024年）を並べます。人口が集中する国・地域と製造品の比率を確かめ、労働力・消費市場・国際交通の関係を考えます。人口の規模と輸出の割合は分母が異なり、一人当たり生産や産業全体の大きさは求めていません。`;
+    explanation=`${populationTitle(source.layer)}（2023年）と${layerName(state.layer)}（2024年）を並べ、人口・市場と輸出産業の関係を読みます。単位・分母が異なり、人口から生産や産業全体の規模は求めていません。`;
     const row=latinPopulationRows.find(r=>r.countryCode===source.place);if(row)values=`${industryCountryName(source.place)} · 元人口2023年：${source.layer==='density'?`${latinPopulationValue(row.density,row.densityStatus,1)}人/km²`:`${latinPopulationValue(row.population,row.populationStatus)}人`} ／ ${valueText(state.place)}`;
    }else if(source.field==='nature'){
-    if(state.layer==='canal'){explanation=latinIndustryReadings.find(r=>r.id==='panama')!.comparison;values='パナマ · 元気候1991–2020年 ／ 運河2024会計年度：大型外航船9,944通航、前年比21%減。通航回数から商品輸出額や運河収入を推計していません。';}
+    if(state.layer==='canal'){explanation='パナマの気候（1991–2020年）と雨→貯水→閘門→通航を並べ、物流を支える淡水を読みます。2024会計年度の通航を示す説明図で、気候区分から水収支は計算していません。';values='パナマ · 元気候1991–2020年 ／ 運河2024会計年度：大型外航船9,944通航、前年比21%減。通航回数から商品輸出額や運河収入を推計していません。';}
     else explanation=`元の気候分布（1991–2020年）と、${layerName(state.layer)}（2024年）を並べます。自然条件・資源と、加工・交通・市場を結び付けて産業の成立を考えます。気候区分から個々の鉱床や工場の位置、輸出額は推計していません。`;
    }else if(source.field==='agriculture'){
     explanation=`元の${original.title}（2020年）と、商品輸出額に占める${layerName(state.layer)}（2024年）を並べます。原料を生む土地と、加工・交通・市場の関係を読み、産地の面積と国全体の輸出構成を別の指標として確かめます。収穫面積から輸出額や生産量を推計していません。`;

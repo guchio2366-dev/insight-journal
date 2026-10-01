@@ -76,3 +76,9 @@ test('South, central and Caribbean causes have official sources; highland statio
  const water=nature.renderLatinNatureNormals('');assert.match(water,/雨 → 貯水/);assert.equal(/polyline/.test(water),false);
  assert.equal(nature.natureScopeForPlace('BRA','central'),'south');assert.equal(nature.natureScopeForPlace('CRI','south'),'central');assert.equal(nature.natureScopeForPlace('JAM','south'),'central');assert.equal(nature.natureScopeForPlace('BRA','all'),'all');assert.equal(nature.natureScopeForPlace('all','country'),'all');
 });
+test('Comparison introductions match the original crop or population quantity and its country',()=>{
+ const banana=nature.natureComparisonReading({field:'agriculture',layer:'bana',place:'CRI'});assert.match(banana.title,/コスタリカ.*バナナ/);assert.match(banana.takeaway,/低地.*バナナ/);assert.doesNotMatch(banana.takeaway,/コーヒー/);
+ const coffee=nature.natureComparisonReading({field:'agriculture',layer:'coff',place:'HND'});assert.match(coffee.title,/ホンジュラス.*コーヒー/);assert.match(coffee.takeaway,/高地/);assert.doesNotMatch(coffee.takeaway,/コスタリカ/);
+ const density=nature.natureComparisonReading({field:'population',layer:'density',place:'BRA'});assert.match(density.title,/ブラジル.*人口密度/);assert.match(density.takeaway,/水供給.*交通/);assert.doesNotMatch(density.takeaway,/大豆/);
+ const population=nature.natureComparisonReading({field:'population',layer:'population',place:'GTM'});assert.match(population.title,/グアテマラ.*人口規模/);assert.match(population.takeaway,/人口規模/);
+});

@@ -17,7 +17,7 @@ async function page(search='',interactive=true){
  assert.ok(q(w,'[data-lp-config]'),'The integrated build must use LatinAmericaPopulationPage');if(interactive)w.eval(code);return w;
 }
 function change(w,selector,value){const element=q(w,selector);element.value=value;element.dispatchEvent(new w.Event('change'));}
-function click(w,selector){q(w,selector).dispatchEvent(new w.MouseEvent('click',{bubbles:true,button:0}));}
+function click(w,selector){q(w,selector).dispatchEvent(new w.MouseEvent('click',{bubbles:true,button:0,cancelable:true}));}
 
 test('No-JS SSR exposes main distribution, 34 values, comparison entries and separate 2020 settlement evidence',async()=>{
  const w=await page('',false);try{
@@ -79,6 +79,6 @@ test('Fallback is a separate static image with selected distribution; invalid UR
   const img=q(w,'[data-lp-fallback-image]');assert.ok(img);assert.equal(q(w,'[data-lp-target-map] svg'),null);assert.equal(q(w,'[data-latin-field=population]').dataset.lpRenderer,'static-image');
   const svg=decodeURIComponent(img.src.split(',')[1]);assert.match(svg,/data-lp-symbol="JAM"/);assert.match(svg,/data-lp-map-size-key/);assert.equal((svg.match(/class="lp-context"/g)??[]).length,34);
   change(w,'[data-lp-place-select]','GTM');assert.match(decodeURIComponent(q(w,'[data-lp-fallback-image]').src.split(',')[1]),/aria-pressed="true" aria-label="グアテマラ/);
-  assert.equal(q(invalid,'[data-lp-layer-select]').value,'density');assert.equal(q(invalid,'[data-lp-place-select]').value,'all');assert.equal(q(invalid,'[data-lp-only]').checked,false);assert.equal(new URL(invalid.location).searchParams.has('from'),false);
+  assert.equal(q(invalid,'[data-lp-layer-select]').value,'density');assert.equal(q(invalid,'[data-lp-place-select]').value,'all');assert.equal(q(invalid,'input[data-lp-only]').checked,false);assert.equal(new URL(invalid.location).searchParams.has('from'),false);
  }finally{await w.happyDOM.close();await invalid.happyDOM.close();}
 });
