@@ -50,14 +50,17 @@ entry; 1366×768 and mobile checks protect the existing layout. Built-CSS tests
 cover both edges of the new width range separately from the mobile/monitor
 contract and continue to protect access to expanded readings and sources.
 
-The West Asia comparison workspace keeps its comparison explanation and named
-return above the map, with the source and target distributions and complete keys
-visible together. The full key includes all 30 climate class names, missing-data
-colors, units and periods. The map and keys use the available workspace width
-to choose their arrangement, including when article expansion changes that width
-without a window resize. Detail controls and source text remain in a disclosure;
-failed point or map requests expose the error and retry control. Responsive
-changes move the existing controls back to their original homes without copies.
+The West Asia comparison workspace keeps its explanation and named return above
+a readable main map and complete distribution keys. The climate key includes
+all 16 classes present in the existing masked regional PNG and grid, including
+the four-cell Cwb class. It shows codes with short meaningful Japanese names;
+all 30 formal names and colors remain accessible in the closed dictionary.
+Country selection and panning do not remove classes from the regional key.
+Missing-data colors, units and periods remain visible. Map and key arrangement
+uses the workspace's content width, including article expansion without a window
+resize. Detail controls and source text remain in a disclosure; failed point or
+map requests expose the error and retry control. Responsive changes return the
+existing controls to their original homes without copies.
 
 ## Content and interaction contract
 

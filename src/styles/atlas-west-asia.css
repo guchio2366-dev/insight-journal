@@ -137,7 +137,10 @@
  .west-atlas[data-comparison-workspace=true] .west-legend-subject h3{font-size:13px;margin:0 0 3px}
  .west-atlas[data-comparison-workspace=true] .west-legend-subject+.west-legend-subject{margin-top:5px;padding-top:5px}
  .west-atlas[data-comparison-workspace=true] .west-swatches{justify-content:flex-start;gap:2px 14px}
- .west-atlas[data-comparison-workspace=true] .west-legend-climate .west-complete-key .west-swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:0 8px;padding:0}
+ .west-atlas[data-comparison-workspace=true] .west-regional-climate-key .west-swatches{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 8px;padding:0}
+ .west-atlas[data-comparison-workspace=true] .west-regional-climate-key .west-swatches span{align-items:baseline;font-size:13px;line-height:1.5}
+ .west-atlas[data-comparison-workspace=true] [data-west-climate-dictionary] .west-swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:4px 12px;justify-content:flex-start;font-size:13px}
+ .west-atlas[data-comparison-workspace=true] [data-west-climate-dictionary]>summary{font-size:14px;min-height:44px;padding:10px 0;cursor:pointer}
  .west-atlas[data-comparison-workspace=true] .west-legend p{margin:2px 0;line-height:1.5}
  .west-atlas[data-comparison-workspace=true] .west-climate-key{justify-content:flex-start;align-items:center;line-height:1.5}
  .west-comparison-details{grid-column:1/-1;grid-row:3;border-top:1px solid #c8cfc4;padding-top:4px}
@@ -145,9 +148,9 @@
  .west-comparison-details-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:12px;border:1px solid #c8cfc4;background:#fbfaf3}
  .west-atlas[data-comparison-workspace=true] .atlas-climate-overview{grid-column:1/-1;grid-row:4}
 }
-/* Full class names stay beside a readable map when the desktop has room. */
+/* A complete key for this region leaves the main map enough room to study. */
 @media(min-width:960px){
- .atlas-desktop-shell .west-atlas[data-field][data-comparison-workspace=true][data-comparison-columns=true] .atlas-primary-grid{grid-template-columns:minmax(260px,.55fr) minmax(640px,1fr)}
+ .atlas-desktop-shell .west-atlas[data-field][data-comparison-workspace=true][data-comparison-columns=true] .atlas-primary-grid{grid-template-columns:minmax(500px,1.4fr) minmax(370px,1fr)}
  .atlas-desktop-shell .west-atlas[data-field][data-comparison-workspace=true][data-comparison-columns=true] .west-reading{grid-column:1/-1;grid-row:1;padding:6px 12px}
  .west-atlas[data-comparison-workspace=true][data-comparison-columns=true] [data-west-detail]{display:grid;grid-template-columns:minmax(0,1.85fr) minmax(280px,1fr);gap:4px 16px}
  .west-atlas[data-comparison-workspace=true][data-comparison-columns=true] .west-reading header{grid-column:1/-1;padding-bottom:4px}

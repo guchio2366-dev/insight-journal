@@ -1,6 +1,15 @@
 import {westFields,westTopics,statisticalColors,observation,westReading} from '../data/atlas/west-asia-topics.mjs';
 import {readWestState,westSearch,gridIndex,decodeWestGrid,zoomWestView,panWestView} from '../lib/atlas-west-asia-state.mjs';
 
+// All classes present in the national-mask grid (1991–2020), including Cwb's four cells.
+// Keep this region-wide key stable when the learner selects a country or pans the map.
+const westClimateNames:Record<string,string>={
+ BWh:'高温の砂漠',BWk:'低温の砂漠',BSh:'高温のステップ',BSk:'低温のステップ',
+ Csa:'地中海性（暑夏）',Csb:'地中海性（暖夏）',Cwb:'冬乾燥温帯（暖夏）',
+ Cfa:'温暖湿潤',Cfb:'西岸海洋性',Dsa:'夏乾燥冷帯（暑夏）',Dsb:'夏乾燥冷帯（暖夏）',Dsc:'夏乾燥冷帯（冷夏）',
+ Dfa:'湿潤冷帯（暑夏）',Dfb:'湿潤冷帯（暖夏）',Dfc:'湿潤冷帯（冷夏）',ET:'ツンドラ'
+};
+
 const root=document.querySelector<HTMLElement>('[data-west-atlas]');
 if(root) init(root);
 async function init(root:HTMLElement){
@@ -234,7 +243,9 @@ async function init(root:HTMLElement){
   if(t.id==='climate'){
    const classes=swatches(data.classes.map((c:any)=>({color:c.color,label:c.code+' '+c.name})));
    const groups='<div class="west-climate-key"><span>A 熱帯</span><span>B 乾燥帯</span><span>C 温帯</span><span>D 冷帯</span><span>E 寒帯</span><span><b class="atlas-city-dot"></b> 雨温図の都市</span></div>';
-   html=complete?'<div class="west-complete-key west-complete-key-visible"><p>ケッペン＝ガイガー全30区分 · 1991–2020年（表示範囲外の区分も含む）</p>'+classes+'</div>'+groups:groups+'<details class="west-complete-key"><summary>気候の全区分・色を読む（1991–2020年）</summary>'+classes+'</details>';
+   const dictionary='<details class="west-complete-key" data-west-climate-dictionary><summary>世界の全30区分・正式名を読む（1991–2020年）</summary>'+classes+'</details>';
+   const regional=complete?'<div class="west-regional-climate-key"><p>対象20か国・地域の全16区分 · 1991–2020年</p><div class="west-swatches">'+data.classes.filter((c:any)=>westClimateNames[c.code]).map((c:any)=>`<span data-west-climate-key="${esc(c.code)}" title="${esc(c.name)}"><i style="background:${esc(c.color)}"></i>${esc(c.code+' '+westClimateNames[c.code])}</span>`).join('')+'</div></div>':'';
+   html=complete?regional+'<div class="west-climate-key"><span><b class="atlas-city-dot"></b> 雨温図の都市</span></div>'+dictionary:groups+dictionary;
   }else if(l?.id==='forest'){
    html=swatches([{color:'#008000',label:'森林の参考分布（2020年）'}]);
   }else if(l){
@@ -253,7 +264,7 @@ async function init(root:HTMLElement){
   if(source&&desktopComparison.matches){
    for(const subject of legendBox.querySelectorAll<HTMLElement>('.west-legend-subject')){
     const heading=document.createElement('div');heading.className='west-legend-heading';heading.append(subject.querySelector('h3')!);
-    const period=subject.querySelector('.west-complete-key>p')??subject.querySelector(':scope>p');if(period)heading.append(period);
+    const period=subject.querySelector('.west-regional-climate-key>p')??subject.querySelector(':scope>p');if(period)heading.append(period);
     subject.prepend(heading);
     if(subject.classList.contains('west-legend-climate')){
      const background=subject.querySelector(':scope>.west-swatches');if(background){subject.querySelector('.west-climate-key')!.append(...background.children);background.remove();}
@@ -274,7 +285,9 @@ async function init(root:HTMLElement){
   const extra=root.querySelector<HTMLElement>('[data-west-reading-extra]');
   if(compact){
    comparisonKey.append(legendBox);
-   $('[data-west-more-reading]').replaceChildren(...(extra?[extra]:[]),statControls);
+   const dictionaries=[...legendBox.querySelectorAll('[data-west-climate-dictionary]')];
+   comparisonDetails.querySelector('summary')!.textContent=(dictionaries.length?'全30気候区分の辞書・':'')+'選択した場所の詳細・雨温図・国別統計・出典';
+   $('[data-west-more-reading]').replaceChildren(...dictionaries,...(extra?[extra]:[]),statControls);
    $('[data-west-more-map]').replaceChildren(agriSwitches,mapExtras);
    comparisonDetails.open=cityExplicit||!!state.point||!!state.basin;
    requestAnimationFrame(sizeComparisonMap);
@@ -290,11 +303,11 @@ async function init(root:HTMLElement){
   if(root.dataset.comparisonWorkspace!=='true')return;
   const grid=$('.atlas-primary-grid'),swipe=$('[data-west-swipe]');
   const box=getComputedStyle(grid),inset=['paddingLeft','paddingRight','borderLeftWidth','borderRightWidth'].reduce((sum,key)=>sum+(parseFloat(box[key as keyof CSSStyleDeclaration] as string)||0),0);
-  const columns=grid.getBoundingClientRect().width-inset>=914;
+  const columns=grid.getBoundingClientRect().width-inset>=884;
   root.dataset.comparisonColumns=String(columns);
   const reserved=columns?$('.west-reading').getBoundingClientRect().height+8:comparisonKey.getBoundingClientRect().height;
   const available=window.innerHeight-grid.getBoundingClientRect().top-reserved-16;
-  const height=Math.max(180,Math.min(440,available-swipe.getBoundingClientRect().height-8));
+  const height=Math.max(columns?300:330,Math.min(440,available-swipe.getBoundingClientRect().height-8));
   root.style.setProperty('--west-comparison-map-height',height+'px');applyView();
  }
  async function sourceMarkup(){

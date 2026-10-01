@@ -3,6 +3,12 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {build} from 'esbuild';
 import {Window} from 'happy-dom';
+import {decodeWestGrid} from '../../src/lib/atlas-west-asia-state.mjs';
+const climateData=JSON.parse(await readFile('public/assets/atlas/west-asia-v1/data.json','utf8'));
+const climateLayer=climateData.layers.find(l=>l.id==='climate');
+const climateBytes=await readFile('public/assets/atlas/west-asia-v1/'+climateLayer.grid);
+const regionalIds=new Set(await decodeWestGrid(climateBytes.buffer.slice(climateBytes.byteOffset,climateBytes.byteOffset+climateBytes.byteLength),climateLayer));
+const regionalClasses=climateData.classes.filter(c=>regionalIds.has(c.id));
 const bundle=await build({entryPoints:['src/scripts/atlas-west-asia.ts'],bundle:true,write:false,format:'iife'});
 async function until(check){for(let i=0;i<200;i++){if(check())return;await new Promise(r=>setTimeout(r,10));}throw Error('West Asia controller did not settle');}
 async function setup(route,query='',failBasins=false,viewport={width:1024,height:768},fixture={}){
@@ -137,14 +143,16 @@ test('比較の全凡例・詳細操作は幅変更と通常主題への復帰�
  const {w,q,media,select}=await setup('nature','?topic=climate&country=TUR&year=2020&from='+encodeURIComponent(from),false,{width:1180,height:757});
  try{
   const root=q('[data-west-atlas]'),legend=q('[data-west-legend]'),extras=q('[data-west-map-extras]'),agri=q('[data-west-agri-switches]'),stats=q('[data-west-stat-controls]');
-  const labels=()=>[...legend.querySelectorAll('.west-swatches span,.west-climate-key span')].map(x=>x.textContent).sort();
-  const marks=()=>[...legend.querySelectorAll('.west-swatches span,.west-climate-key span')].map(x=>x.textContent+'|'+(x.querySelector('i')?.getAttribute('style')??'')).sort();
+  const dictionary=()=>q('[data-west-climate-dictionary]');
+  const labels=()=>[...dictionary().querySelectorAll('.west-swatches span')].map(x=>x.textContent).sort();
+  const marks=()=>[...dictionary().querySelectorAll('.west-swatches span')].map(x=>x.textContent+'|'+x.querySelector('i').getAttribute('style')).sort();
   const expected=labels(),expectedMarks=marks(),view=q('[data-west-map]').getAttribute('viewBox');
-  const classes=JSON.parse(await readFile('public/assets/atlas/west-asia-v1/data.json','utf8')).classes;
+  const classes=climateData.classes;
   for(const c of classes)assert.ok(expected.includes(c.code+' '+c.name),c.code);
   assert.equal(classes.length,30);assert.match(legend.textContent,/ha／原資料の格子 · 2020/);assert.match(legend.textContent,/1991–2020年/);
-  assert.ok(expected.includes('周辺国・未収録'));assert.ok(expected.includes('周辺国・未収録（区別は場所を選択）'));assert.ok(expected.some(x=>x.includes('雨温図の都市')));
-  const unique=()=>{for(const selector of ['[data-west-legend]','[data-west-map-extras]','[data-west-agri-switches]','[data-west-stat-controls]','[data-west-reading-extra]'])assert.equal(root.querySelectorAll(selector).length,1,selector);};
+  assert.match(legend.textContent,/周辺国・未収録/);assert.match(legend.textContent,/雨温図の都市/);
+  assert.equal(dictionary().open,false);assert.ok(dictionary().closest('[data-west-more-reading]'));
+  const unique=(climate=true)=>{for(const selector of ['[data-west-legend]','[data-west-map-extras]','[data-west-agri-switches]','[data-west-stat-controls]','[data-west-reading-extra]'])assert.equal(root.querySelectorAll(selector).length,1,selector);assert.equal(root.querySelectorAll('[data-west-climate-dictionary]').length,climate?1:0);};
   assert.equal(root.dataset.comparisonWorkspace,'true');assert.ok(legend.closest('[data-west-comparison-key]'));assert.ok(stats.closest('[data-west-more-reading]'));assert.ok(extras.closest('[data-west-more-map]'));
   assert.equal(q('[data-west-comparison-details]').open,false);unique();
   // HappyDOM starts each change listener at false instead of its initial match.
@@ -160,7 +168,7 @@ test('比較の全凡例・詳細操作は幅変更と通常主題への復帰�
   assert.equal(root.dataset.comparisonWorkspace,'false');assert.equal(new URL(w.location.href).searchParams.has('from'),false);
   assert.ok(legend.closest('.atlas-map-column'));assert.ok(stats.closest('.west-reading'));assert.ok(extras.closest('.atlas-map-column'));assert.ok(agri.closest('.atlas-map-column'));
   assert.equal(q('[data-west-map]').getAttribute('viewBox'),view);assert.equal(q('[data-west-country]').value,'TUR');assert.ok(q('[data-west-reading-extra]').closest('[data-west-detail]'));
-  assert.equal(q('[data-west-more-reading]').children.length,0);assert.equal(q('[data-west-more-map]').children.length,0);unique();
+  assert.equal(q('[data-west-more-reading]').children.length,0);assert.equal(q('[data-west-more-map]').children.length,0);unique(false);
  }finally{await w.happyDOM.close();}
 });
 
@@ -187,13 +195,35 @@ test('比較横配置はニュースによる実作業幅の変更へ追随し�
   const root=q('[data-west-atlas]'),grid=q('.atlas-primary-grid'),view=q('[data-west-map]').getAttribute('viewBox'),url=w.location.href;
   const keys=()=>[...q('[data-west-legend]').querySelectorAll('i')].map(x=>x.getAttribute('style')).sort();const expected=keys();
   let width=984;grid.getBoundingClientRect=()=>({width,top:249});
-  for(const [available,columns] of [[984,'true'],[916,'true'],[913,'false'],[873,'false'],[1050,'true']]){
+  for(const [available,columns] of [[984,'true'],[916,'true'],[884,'true'],[883,'false'],[873,'false'],[1050,'true']]){
    width=available;notifyResize('.atlas-primary-grid');assert.equal(root.dataset.comparisonColumns,columns);
    assert.equal(w.innerWidth,1366);assert.equal(w.location.href,url);assert.equal(q('[data-west-map]').getAttribute('viewBox'),view);assert.deepEqual(keys(),expected);
   }
-  width=916;grid.style.padding='0 7px';notifyResize('.atlas-primary-grid');assert.equal(root.dataset.comparisonColumns,'false','外寸ではなくpaddingを除いた作業幅を使う');
+  width=884;grid.style.padding='0 7px';notifyResize('.atlas-primary-grid');assert.equal(root.dataset.comparisonColumns,'false','外寸ではなくpaddingを除いた作業幅を使う');
   grid.style.padding='';notifyResize('.atlas-primary-grid');assert.equal(root.dataset.comparisonColumns,'true');
  }finally{await w.happyDOM.close();}
+});
+
+test('比較の常時気候凡例は描画格子の全実在区分を意味付きで保持し、正式30区分辞書は閉じる',async()=>{
+ assert.equal(regionalClasses.length,16);assert.ok(regionalClasses.some(c=>c.code==='Cwb'),'4セルの区分も落とさない');
+ for(const [route,target,source] of [['nature','climate','wheat'],['agriculture','wheat-rainfed','climate']]){
+  const from='?topic='+source+'&country=TUR&year=2020';
+  const {w,q,select}=await setup(route,'?topic='+target+'&country=TUR&year=2020&from='+encodeURIComponent(from),false,{width:1180,height:757});
+  try{
+   const keys=()=>[...q('[data-west-legend]').querySelectorAll('[data-west-climate-key]')];
+   const expected=regionalClasses.map(c=>c.code).sort();
+   assert.deepEqual(keys().map(x=>x.dataset.westClimateKey).sort(),expected,'PNGと同じ国境mask格子の全区分');
+   for(const c of regionalClasses){const key=keys().find(x=>x.dataset.westClimateKey===c.code);assert.equal(key.title,c.name);assert.ok(key.textContent.length>c.code.length+1,'略号だけを表示しない');assert.equal(key.querySelector('i').getAttribute('style'),'background:'+c.color);}
+   const dictionary=q('[data-west-climate-dictionary]');assert.equal(dictionary.open,false);assert.ok(dictionary.closest('[data-west-comparison-details]'));
+   assert.match(q('[data-west-comparison-details]>summary').textContent,/全30気候区分の辞書/);
+   assert.equal(dictionary.querySelectorAll('.west-swatches>span').length,30);
+   for(const c of climateData.classes)assert.ok(dictionary.textContent.includes(c.code+' '+c.name));
+   assert.match(q('[data-west-legend]').textContent,/1991–2020年/);assert.match(q('[data-west-legend]').textContent,/ha／原資料の格子 · 2020/);assert.match(q('[data-west-legend]').textContent,/周辺国・未収録/);
+   select('[data-west-country]','IRN');await until(()=>q('[data-west-loading]').hidden);assert.deepEqual(keys().map(x=>x.dataset.westClimateKey).sort(),expected,'国の選択で地域の凡例を減らさない');
+   const query=new URL(w.location.href).searchParams;query.set('map','100,120,400,300');w.history.replaceState({},'','?'+query.toString());w.dispatchEvent(new w.PopStateEvent('popstate'));await until(()=>q('[data-west-loading]').hidden);
+   assert.deepEqual(keys().map(x=>x.dataset.westClimateKey).sort(),expected,'表示範囲を変えても地域の凡例を減らさない');
+  }finally{await w.happyDOM.close();}
+ }
 });
 
 test('比較の地点格子取得失敗は閉じた詳細を開き対象名付きエラーから再試行できる',async()=>{
