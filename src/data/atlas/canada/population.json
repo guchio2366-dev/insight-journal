@@ -1,0 +1,1636 @@
+{
+  "years": [
+    2016,
+    2021
+  ],
+  "referenceYear": 2021,
+  "boundaryDate": "2021-01-01",
+  "censusDate": "2021-05-11",
+  "releaseDate": "2022-02-09",
+  "cmas": [
+    {
+      "id": "535",
+      "dguid": "2021S0503535",
+      "name": "Toronto（トロント）",
+      "sourceName": "Toronto",
+      "population": {
+        "2016": {
+          "value": 5928040,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 6202225,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 4.6,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 5902.75,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 1050.7,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "462",
+      "dguid": "2021S0503462",
+      "name": "Montréal（モントリオール）",
+      "sourceName": "Montréal",
+      "population": {
+        "2016": {
+          "value": 4104074,
+          "symbol": "r"
+        },
+        "2021": {
+          "value": 4291732,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 4.6,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 4670.1,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 919,
+        "symbol": ""
+      },
+      "notes": [
+        2
+      ]
+    },
+    {
+      "id": "933",
+      "dguid": "2021S0503933",
+      "name": "Vancouver（バンクーバー）",
+      "sourceName": "Vancouver",
+      "population": {
+        "2016": {
+          "value": 2463431,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 2642825,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 7.3,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 2878.93,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 918,
+        "symbol": ""
+      },
+      "notes": [
+        2
+      ]
+    },
+    {
+      "id": "505",
+      "dguid": "2021S0503505",
+      "name": "Ottawa–Gatineau（オタワ・ガティノー）",
+      "sourceName": "Ottawa - Gatineau",
+      "population": {
+        "2016": {
+          "value": 1371576,
+          "symbol": "r"
+        },
+        "2021": {
+          "value": 1488307,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 8.5,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 8046.99,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 185,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "825",
+      "dguid": "2021S0503825",
+      "name": "Calgary（カルガリー）",
+      "sourceName": "Calgary",
+      "population": {
+        "2016": {
+          "value": 1392609,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 1481806,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 6.4,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 5098.68,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 290.6,
+        "symbol": ""
+      },
+      "notes": [
+        2
+      ]
+    },
+    {
+      "id": "835",
+      "dguid": "2021S0503835",
+      "name": "Edmonton（エドモントン）",
+      "sourceName": "Edmonton",
+      "population": {
+        "2016": {
+          "value": 1321441,
+          "symbol": "r"
+        },
+        "2021": {
+          "value": 1418118,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 7.3,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 9416.19,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 150.6,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "421",
+      "dguid": "2021S0503421",
+      "name": "Québec",
+      "sourceName": "Québec",
+      "population": {
+        "2016": {
+          "value": 806406,
+          "symbol": "r"
+        },
+        "2021": {
+          "value": 839311,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 4.1,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 3499.46,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 239.8,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "602",
+      "dguid": "2021S0503602",
+      "name": "Winnipeg（ウィニペグ）",
+      "sourceName": "Winnipeg",
+      "population": {
+        "2016": {
+          "value": 783099,
+          "symbol": "r"
+        },
+        "2021": {
+          "value": 834678,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 6.6,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 5285.46,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 157.9,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "537",
+      "dguid": "2021S0503537",
+      "name": "Hamilton",
+      "sourceName": "Hamilton",
+      "population": {
+        "2016": {
+          "value": 747545,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 785184,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 5,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 1373.15,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 571.8,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "541",
+      "dguid": "2021S0503541",
+      "name": "Kitchener - Cambridge - Waterloo",
+      "sourceName": "Kitchener - Cambridge - Waterloo",
+      "population": {
+        "2016": {
+          "value": 523894,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 575847,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 9.9,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 1092.33,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 527.2,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "555",
+      "dguid": "2021S0503555",
+      "name": "London",
+      "sourceName": "London",
+      "population": {
+        "2016": {
+          "value": 494069,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 543551,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 10,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 2661.48,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 204.2,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "205",
+      "dguid": "2021S0503205",
+      "name": "Halifax（ハリファクス）",
+      "sourceName": "Halifax",
+      "population": {
+        "2016": {
+          "value": 426932,
+          "symbol": "r"
+        },
+        "2021": {
+          "value": 465703,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 9.1,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 7276.22,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 64,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "539",
+      "dguid": "2021S0503539",
+      "name": "St. Catharines - Niagara",
+      "sourceName": "St. Catharines - Niagara",
+      "population": {
+        "2016": {
+          "value": 406074,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 433604,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 6.8,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 1397.09,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 310.4,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "559",
+      "dguid": "2021S0503559",
+      "name": "Windsor",
+      "sourceName": "Windsor",
+      "population": {
+        "2016": {
+          "value": 398718,
+          "symbol": "r"
+        },
+        "2021": {
+          "value": 422630,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 6,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 1803.17,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 234.4,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "532",
+      "dguid": "2021S0503532",
+      "name": "Oshawa",
+      "sourceName": "Oshawa",
+      "population": {
+        "2016": {
+          "value": 379848,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 415311,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 9.3,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 903.25,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 459.8,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "935",
+      "dguid": "2021S0503935",
+      "name": "Victoria",
+      "sourceName": "Victoria",
+      "population": {
+        "2016": {
+          "value": 367770,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 397237,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 8,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 695.29,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 571.3,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "725",
+      "dguid": "2021S0503725",
+      "name": "Saskatoon",
+      "sourceName": "Saskatoon",
+      "population": {
+        "2016": {
+          "value": 295095,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 317480,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 7.6,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 5864.48,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 54.1,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "705",
+      "dguid": "2021S0503705",
+      "name": "Regina（レジャイナ）",
+      "sourceName": "Regina",
+      "population": {
+        "2016": {
+          "value": 236695,
+          "symbol": "r"
+        },
+        "2021": {
+          "value": 249217,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 5.3,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 4323.66,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 57.6,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "433",
+      "dguid": "2021S0503433",
+      "name": "Sherbrooke",
+      "sourceName": "Sherbrooke",
+      "population": {
+        "2016": {
+          "value": 212105,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 227398,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 7.2,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 1458.1,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 156,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "915",
+      "dguid": "2021S0503915",
+      "name": "Kelowna",
+      "sourceName": "Kelowna",
+      "population": {
+        "2016": {
+          "value": 194892,
+          "symbol": "r"
+        },
+        "2021": {
+          "value": 222162,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 14,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 2902.45,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 76.5,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "568",
+      "dguid": "2021S0503568",
+      "name": "Barrie",
+      "sourceName": "Barrie",
+      "population": {
+        "2016": {
+          "value": 197059,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 212856,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 8,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 897.26,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 237.2,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "001",
+      "dguid": "2021S0503001",
+      "name": "St. John's（セントジョンズ）",
+      "sourceName": "St. John's",
+      "population": {
+        "2016": {
+          "value": 208418,
+          "symbol": "r"
+        },
+        "2021": {
+          "value": 212579,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 2,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 931.56,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 228.2,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "932",
+      "dguid": "2021S0503932",
+      "name": "Abbotsford - Mission",
+      "sourceName": "Abbotsford - Mission",
+      "population": {
+        "2016": {
+          "value": 180518,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 195726,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 8.4,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 606.72,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 322.6,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "521",
+      "dguid": "2021S0503521",
+      "name": "Kingston",
+      "sourceName": "Kingston",
+      "population": {
+        "2016": {
+          "value": 161175,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 172546,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 7.1,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 1919.17,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 89.9,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "580",
+      "dguid": "2021S0503580",
+      "name": "Greater Sudbury / Grand Sudbury",
+      "sourceName": "Greater Sudbury / Grand Sudbury",
+      "population": {
+        "2016": {
+          "value": 165958,
+          "symbol": "r"
+        },
+        "2021": {
+          "value": 170605,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 2.8,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 4187.4,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 40.7,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "550",
+      "dguid": "2021S0503550",
+      "name": "Guelph",
+      "sourceName": "Guelph",
+      "population": {
+        "2016": {
+          "value": 151984,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 165588,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 9,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 595.08,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 278.3,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "408",
+      "dguid": "2021S0503408",
+      "name": "Saguenay",
+      "sourceName": "Saguenay",
+      "population": {
+        "2016": {
+          "value": 161520,
+          "symbol": "r"
+        },
+        "2021": {
+          "value": 161567,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 0,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 3133.53,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 51.6,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "442",
+      "dguid": "2021S0503442",
+      "name": "Trois-Rivières",
+      "sourceName": "Trois-Rivières",
+      "population": {
+        "2016": {
+          "value": 156042,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 161489,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 3.5,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 1038.64,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 155.5,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "305",
+      "dguid": "2021S0503305",
+      "name": "Moncton",
+      "sourceName": "Moncton",
+      "population": {
+        "2016": {
+          "value": 144810,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 157717,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 8.9,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 2562.47,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 61.5,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "543",
+      "dguid": "2021S0503543",
+      "name": "Brantford",
+      "sourceName": "Brantford",
+      "population": {
+        "2016": {
+          "value": 134203,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 144162,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 7.4,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 1074,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 134.2,
+        "symbol": ""
+      },
+      "notes": [
+        2
+      ]
+    },
+    {
+      "id": "310",
+      "dguid": "2021S0503310",
+      "name": "Saint John",
+      "sourceName": "Saint John",
+      "population": {
+        "2016": {
+          "value": 126202,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 130613,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 3.5,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 3505.66,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 37.3,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "529",
+      "dguid": "2021S0503529",
+      "name": "Peterborough",
+      "sourceName": "Peterborough",
+      "population": {
+        "2016": {
+          "value": 121721,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 128624,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 5.7,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 1508.44,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 85.3,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "810",
+      "dguid": "2021S0503810",
+      "name": "Lethbridge",
+      "sourceName": "Lethbridge",
+      "population": {
+        "2016": {
+          "value": 117394,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 123847,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 5.5,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 2958.96,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 41.9,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "595",
+      "dguid": "2021S0503595",
+      "name": "Thunder Bay",
+      "sourceName": "Thunder Bay",
+      "population": {
+        "2016": {
+          "value": 121621,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 123258,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 1.3,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 2550.79,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 48.3,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "938",
+      "dguid": "2021S0503938",
+      "name": "Nanaimo",
+      "sourceName": "Nanaimo",
+      "population": {
+        "2016": {
+          "value": 104936,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 115459,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 10,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 1279.28,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 90.3,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "925",
+      "dguid": "2021S0503925",
+      "name": "Kamloops",
+      "sourceName": "Kamloops",
+      "population": {
+        "2016": {
+          "value": 103811,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 114142,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 10,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 5654.08,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 20.2,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "930",
+      "dguid": "2021S0503930",
+      "name": "Chilliwack",
+      "sourceName": "Chilliwack",
+      "population": {
+        "2016": {
+          "value": 101512,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 113767,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 12.1,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 1444.02,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 78.8,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "522",
+      "dguid": "2021S0503522",
+      "name": "Belleville - Quinte West",
+      "sourceName": "Belleville - Quinte West",
+      "population": {
+        "2016": {
+          "value": 103401,
+          "symbol": "r"
+        },
+        "2021": {
+          "value": 111184,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 7.5,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 1337.5,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 83.1,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "320",
+      "dguid": "2021S0503320",
+      "name": "Fredericton",
+      "sourceName": "Fredericton",
+      "population": {
+        "2016": {
+          "value": 102690,
+          "symbol": "r"
+        },
+        "2021": {
+          "value": 108610,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 5.8,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 6014.66,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 18.1,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "447",
+      "dguid": "2021S0503447",
+      "name": "Drummondville",
+      "sourceName": "Drummondville",
+      "population": {
+        "2016": {
+          "value": 97149,
+          "symbol": "r"
+        },
+        "2021": {
+          "value": 101610,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 4.6,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 1094.36,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 92.8,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "830",
+      "dguid": "2021S0503830",
+      "name": "Red Deer",
+      "sourceName": "Red Deer",
+      "population": {
+        "2016": {
+          "value": 100418,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 100844,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 0.4,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 104.34,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 966.5,
+        "symbol": ""
+      },
+      "notes": []
+    }
+  ],
+  "national": [
+    {
+      "id": "Canada",
+      "dguid": "2021A000011124",
+      "name": "全国",
+      "sourceName": "Canada",
+      "population": {
+        "2016": {
+          "value": 35151728,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 36991981,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 5.2,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 8788702.8,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 4.2,
+        "symbol": ""
+      },
+      "notes": [
+        2
+      ]
+    },
+    {
+      "id": "Newfoundland and Labrador",
+      "dguid": "2021A000210",
+      "name": "ニューファンドランド・ラブラドール州",
+      "sourceName": "Newfoundland and Labrador",
+      "population": {
+        "2016": {
+          "value": 519716,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 510550,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": -1.8,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 358170.37,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 1.4,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "Prince Edward Island",
+      "dguid": "2021A000211",
+      "name": "プリンスエドワード島州",
+      "sourceName": "Prince Edward Island",
+      "population": {
+        "2016": {
+          "value": 142907,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 154331,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 8,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 5681.18,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 27.2,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "Nova Scotia",
+      "dguid": "2021A000212",
+      "name": "ノバスコシア州",
+      "sourceName": "Nova Scotia",
+      "population": {
+        "2016": {
+          "value": 923598,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 969383,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 5,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 52824.71,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 18.4,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "New Brunswick",
+      "dguid": "2021A000213",
+      "name": "ニューブランズウィック州",
+      "sourceName": "New Brunswick",
+      "population": {
+        "2016": {
+          "value": 747101,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 775610,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 3.8,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 71248.5,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 10.9,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "Quebec",
+      "dguid": "2021A000224",
+      "name": "ケベック州",
+      "sourceName": "Quebec",
+      "population": {
+        "2016": {
+          "value": 8164361,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 8501833,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 4.1,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 1298599.75,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 6.5,
+        "symbol": ""
+      },
+      "notes": [
+        2
+      ]
+    },
+    {
+      "id": "Ontario",
+      "dguid": "2021A000235",
+      "name": "オンタリオ州",
+      "sourceName": "Ontario",
+      "population": {
+        "2016": {
+          "value": 13448494,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 14223942,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 5.8,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 892411.76,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 15.9,
+        "symbol": ""
+      },
+      "notes": [
+        2
+      ]
+    },
+    {
+      "id": "Manitoba",
+      "dguid": "2021A000246",
+      "name": "マニトバ州",
+      "sourceName": "Manitoba",
+      "population": {
+        "2016": {
+          "value": 1278365,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 1342153,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 5,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 540310.19,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 2.5,
+        "symbol": ""
+      },
+      "notes": [
+        2
+      ]
+    },
+    {
+      "id": "Saskatchewan",
+      "dguid": "2021A000247",
+      "name": "サスカチュワン州",
+      "sourceName": "Saskatchewan",
+      "population": {
+        "2016": {
+          "value": 1098352,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 1132505,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 3.1,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 577060.4,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 2,
+        "symbol": ""
+      },
+      "notes": [
+        2
+      ]
+    },
+    {
+      "id": "Alberta",
+      "dguid": "2021A000248",
+      "name": "アルバータ州",
+      "sourceName": "Alberta",
+      "population": {
+        "2016": {
+          "value": 4067175,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 4262635,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 4.8,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 634658.27,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 6.7,
+        "symbol": ""
+      },
+      "notes": [
+        2
+      ]
+    },
+    {
+      "id": "British Columbia",
+      "dguid": "2021A000259",
+      "name": "BC（ブリティッシュコロンビア州）",
+      "sourceName": "British Columbia",
+      "population": {
+        "2016": {
+          "value": 4648055,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 5000879,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 7.6,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 920686.55,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 5.4,
+        "symbol": ""
+      },
+      "notes": [
+        2
+      ]
+    },
+    {
+      "id": "Yukon",
+      "dguid": "2021A000260",
+      "name": "ユーコン準州",
+      "sourceName": "Yukon",
+      "population": {
+        "2016": {
+          "value": 35874,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 40232,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 12.1,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 472345.44,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 0.1,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "Northwest Territories",
+      "dguid": "2021A000261",
+      "name": "北西準州",
+      "sourceName": "Northwest Territories",
+      "population": {
+        "2016": {
+          "value": 41786,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 41070,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": -1.7,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 1127711.92,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 0,
+        "symbol": ""
+      },
+      "notes": []
+    },
+    {
+      "id": "Nunavut",
+      "dguid": "2021A000262",
+      "name": "ヌナブト準州",
+      "sourceName": "Nunavut",
+      "population": {
+        "2016": {
+          "value": 35944,
+          "symbol": ""
+        },
+        "2021": {
+          "value": 36858,
+          "symbol": ""
+        }
+      },
+      "changePercent": {
+        "value": 2.5,
+        "symbol": ""
+      },
+      "landAreaKm2": {
+        "value": 1836993.78,
+        "symbol": ""
+      },
+      "density2021": {
+        "value": 0,
+        "symbol": ""
+      },
+      "notes": []
+    }
+  ],
+  "cmaTotal": {
+    "2016": 25716855,
+    "2021": 27281119
+  },
+  "cmaShare2021": 73.74873759802159
+}

@@ -8,11 +8,13 @@ import climate from '../../data/atlas/canada/climate.json';
 import {beefMaps,beefReading,beefSources} from '../../data/atlas/canada/beef-reading';
 import {formatCanadaBeefValue as fmt} from '../../lib/atlas-canada-beef';
 import {withBase} from '../../lib/urls';
+import {buildCanadaCropNatureUrl} from '../../lib/atlas-canada-crop-comparison';
 import '../../styles/atlas-canada-nature.css';
 import '../../styles/atlas-canada-agriculture.css';
 const assetRoot='/assets/atlas/canada-beef-v1',asset=(id:string)=>withBase(`${assetRoot}/${id}-map-2021.jpg`);
 const regina=climate.stations.find(s=>s.id==='regina')!;
-const nature=(q:string)=>withBase(`/atlas/north-america/canada/nature/${q}`);
+const sourceUrl=new URL(withBase('/atlas/north-america/canada/agriculture/beef/'),Astro.url);
+const nature=(query:string)=>{const q=new URLSearchParams(query),u=buildCanadaCropNatureUrl(sourceUrl,'beef',q.get('city')??'ottawa',(q.get('view')??'climate') as 'climate'|'landform'|'water');return u.pathname+u.search;};
 const beefMax=(year:number)=>Math.max(1,...data.data.filter(r=>r.year===year&&r.id!=='Canada').map(r=>r.values.beef.value??0));
 ---
 <BaseLayout title="カナダの農畜林業｜肉牛・放牧と飼料" description="肉用母牛・放牧地・乾草などの3図と州別頭数から、草の生育、放牧管理、冬の飼料、繁殖・育成・肥育をつないで読む。" compactAtlas>
@@ -21,9 +23,14 @@ const beefMax=(year:number)=>Math.max(1,...data.data.filter(r=>r.year===year&&r.
    <p class="canada-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / カナダ</p>
    <AtlasRegionNavigation group="americas" current="north-america" country="canada" />
    <header><p class="eyebrow">Canada · Agriculture and forestry</p><h1>肉牛・放牧と飼料から読む、カナダの農畜林業</h1><p class="canada-lead">自然条件から草の生育へ、放牧管理・冬の貯蔵飼料・繁殖・育成・肥育へ。分布と数値を分けてつなぐ。</p></header>
-   <nav class="canada-fields" aria-label="カナダの分野"><a href={withBase('/atlas/north-america/overview/?country=CAN')}>概説</a><a href={nature('')}>自然環境</a><a href={withBase('/atlas/north-america/canada/agriculture/')} aria-current="page">農畜林業</a><a href={withBase('/atlas/north-america/canada/industry/')}>主要産業</a><span aria-disabled="true">人口<small>準備中</small></span></nav>
+   <nav class="canada-fields" aria-label="カナダの分野"><a href={withBase('/atlas/north-america/overview/?country=CAN')}>概説</a><a data-canada-crop-nature href={nature('')}>自然環境</a><a href={withBase('/atlas/north-america/canada/agriculture/')} aria-current="page">農畜林業</a><a href={withBase('/atlas/north-america/canada/industry/')}>主要産業</a><a href={withBase('/atlas/north-america/canada/population/')}>人口</a></nav>
    <p class="canola-scope">公開項目：カノーラ・小麦・肉牛と放牧・林業の初回版。その他の主要作物・畜産、林業の伐採量比較は準備中です。農畜林業分野全体の完成を意味しません。</p>
    <nav class="canada-crop-tabs" aria-label="公開済みの農畜林業"><a href={withBase('/atlas/north-america/canada/agriculture/')}>カノーラ</a><a href={withBase('/atlas/north-america/canada/agriculture/wheat/')}>小麦</a><a href={withBase('/atlas/north-america/canada/agriculture/beef/')} aria-current="page">肉牛・放牧と飼料</a><a href={withBase('/atlas/north-america/canada/agriculture/forestry/')}>林業</a></nav>
+   <section class="canada-comparison-context" aria-label="肉牛と自然条件を比べる入口">
+    <h2>母牛・放牧地・冬の飼料をReginaの季節と比べる</h2>
+    <p>プレーリーの草が育つ季節と冬を照合します。放牧と貯蔵飼料を、人の管理で繁殖・育成・肥育の異なる段階へどうつなぐでしょうか。</p>
+    <p><a data-canada-crop-nature data-canada-crop-nature-primary href={nature('?city=regina')}>肉用母牛の2021年分布図とReginaの気候を並べる</a> ／ <a data-canada-crop-nature href={nature('?city=regina&view=landform')}>平原・山地と比べる</a> ／ <a data-canada-crop-nature href={nature('?city=regina&view=water')}>湖・川と比べる</a></p>
+   </section>
    <div class="canada-workspace">
     <section class="canada-map-column" aria-label="肉用母牛と飼料の分布・頭数比較">
      <h2>母牛と、草を使う土地はどこに広がる？</h2>
@@ -48,10 +55,10 @@ const beefMax=(year:number)=>Math.max(1,...data.data.filter(r=>r.year===year&&r.
     </section>
     <aside class="canada-reading" aria-label="自然条件から畜産へつなぐ説明">
      {beefReading.map((r,i)=><section class="canada-reading-section"><h2>{r.title}</h2><p>{r.body}</p><p class="canada-sources-inline"><a href={r.source}>この説明の資料</a>{r.extraSource&&<> ／ <a href={r.extraSource}>肥育飼料の資料</a></>}</p>
-      {i===0&&<p><a href={nature('?city=regina')}>Regina：図の場所と気温・降水を確認</a> ／ <a href={nature('?city=winnipeg')}>Winnipeg：東寄りのプレーリーの季節を比較</a></p>}
-      {i===1&&<div class="canola-climate-example"><h3>草が育つ季節を考える例：Regina Airport</h3><AtlasClimatePlot name="Regina（事例）" period="1991–2020" temperatureC={regina.temperatureC} precipitationMm={regina.precipitationMm} minTemperatureC={-30}/><p>月平均気温℃と降水mm。1観測所の平年値で、プレーリー全域の代表値や牧場の水収支ではありません。</p><a href={nature('?city=regina')}>12か月表・観測所・出典を読む</a> ／ <a href={nature('')}>首都Ottawaから自然環境を読む</a></div>}
-      {i===2&&<p><a href={nature('?city=regina&view=landform')}>地形：平原と山地の位置を確かめる</a> ／ <a href={nature('?city=regina&view=water')}>水：川と湖の位置を確かめる</a>（飲水可能量・水利の地図ではありません）</p>}
-      {i===3&&<p><a href={nature('?city=winnipeg')}>Winnipegの12か月表で冬と生育期を読む</a></p>}
+      {i===0&&<p><a data-canada-crop-nature href={nature('?city=regina')}>Regina：図の場所と気温・降水を確認</a> ／ <a data-canada-crop-nature href={nature('?city=winnipeg')}>Winnipeg：東寄りのプレーリーの季節を比較</a></p>}
+      {i===1&&<div class="canola-climate-example"><h3>草が育つ季節を考える例：Regina Airport</h3><AtlasClimatePlot name="Regina（事例）" period="1991–2020" temperatureC={regina.temperatureC} precipitationMm={regina.precipitationMm} minTemperatureC={-30}/><p>月平均気温℃と降水mm。1観測所の平年値で、プレーリー全域の代表値や牧場の水収支ではありません。</p><a data-canada-crop-nature href={nature('?city=regina')}>12か月表・観測所・出典を読む</a> ／ <a data-canada-crop-nature href={nature('')}>首都Ottawaから自然環境を読む</a></div>}
+      {i===2&&<p><a data-canada-crop-nature href={nature('?city=regina&view=landform')}>地形：平原と山地の位置を確かめる</a> ／ <a data-canada-crop-nature href={nature('?city=regina&view=water')}>水：川と湖の位置を確かめる</a>（飲水可能量・水利の地図ではありません）</p>}
+      {i===3&&<p><a data-canada-crop-nature href={nature('?city=winnipeg')}>Winnipegの12か月表で冬と生育期を読む</a></p>}
       {i===4&&<p><a href={withBase('/atlas/north-america/canada/agriculture/wheat/')}>小麦：穀物の生育・用途と輸送を読む</a> ／ <a href={withBase('/atlas/north-america/canada/agriculture/')}>カノーラ：油の加工と産地を読む</a></p>}
      </section>)}
      <section class="canada-reading-section"><h2>読み終えたら</h2><p>3図の単位を確かめる → 州別表で牛の役割を分ける → 草の生育と放牧管理を考える → 冬の貯蔵飼料と育成・肥育をつなぐ。自然条件に加え、飼料の確保・管理・加工が必要になる理由を説明してみましょう。</p></section>

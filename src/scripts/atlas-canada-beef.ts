@@ -1,4 +1,5 @@
 import {readCanadaBeefState,writeCanadaBeefState,formatCanadaBeefValue,type CanadaBeefState} from '../lib/atlas-canada-beef';
+import {buildCanadaCropNatureUrl} from '../lib/atlas-canada-crop-comparison';
 export function initCanadaBeef(root:HTMLElement){
  const config=JSON.parse(root.querySelector('[data-beef-config]')!.textContent!),ids=config.provinces.map((p:any)=>p.id);
  let state=readCanadaBeefState(new URL(location.href),config.years,ids);
@@ -17,6 +18,9 @@ export function initCanadaBeef(root:HTMLElement){
   for(const panel of root.querySelectorAll<HTMLElement>('[data-beef-map-panel]'))panel.hidden=panel.dataset.beefMapPanel!==state.map;
   for(const scroll of root.querySelectorAll<HTMLElement>('[data-beef-map-scroll]'))scroll.classList.toggle('is-zoomed',state.zoom);
   $('[data-beef-zoom]').setAttribute('aria-pressed',String(state.zoom));
+  const source=writeCanadaBeefState(new URL(location.href),state);
+  for(const link of root.querySelectorAll<HTMLAnchorElement>('[data-canada-crop-nature]')){const target=new URL(link.href,location.href);link.href=buildCanadaCropNatureUrl(source,'beef',target.searchParams.get('city')??'regina',(target.searchParams.get('view')??'climate') as 'climate'|'landform'|'water').href;}
+  const primary=root.querySelector<HTMLElement>('[data-canada-crop-nature-primary]');if(primary)primary.textContent=`${({beef:'肉用母牛',pasture:'放牧地',hay:'乾草など（Total hay）'})[state.map]}の2021年分布図とReginaの気候を並べる`;
  }
  function update(patch:Partial<CanadaBeefState>){state={...state,...patch};if(state.compare===state.province)state.compare=null;history.pushState(null,'',writeCanadaBeefState(new URL(location.href),state));render();}
  for(const key of ['year','province','compare','metric','map'])$<HTMLSelectElement>(`[data-beef-${key}]`).addEventListener('change',e=>{const value=(e.target as HTMLSelectElement).value;update({[key]:key==='year'?Number(value):value||null});});

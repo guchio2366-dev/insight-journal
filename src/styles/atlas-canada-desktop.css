@@ -50,6 +50,8 @@
  .atlas-desktop-shell .is-learning-comparison .canada-climate-card>svg{order:1}
  .atlas-desktop-shell .is-learning-comparison .canada-climate-card>p,.atlas-desktop-shell .is-learning-comparison .canada-climate-card>dl,.atlas-desktop-shell .is-learning-comparison .canada-climate-card>details{order:2}
  .atlas-desktop-shell .canada-nature .canada-comparison-context details{margin-top:4px;font-size:12px}
+ .canada-nature:not(.is-learning-comparison) .canada-general-reading>summary{display:none}
+ .canada-general-reading>summary{font-weight:700;cursor:pointer}
  /* Comparison keeps its question, source map and complete monthly chart together. */
  .atlas-desktop-shell .is-learning-comparison .canada-breadcrumb,
  .atlas-desktop-shell .is-learning-comparison .regional-navigation,
@@ -60,7 +62,19 @@
  .atlas-desktop-shell .is-learning-comparison>p:has([data-canada-forestry-return]),
  .atlas-desktop-shell .is-learning-comparison>p:has([data-canada-industry-return]),
  .atlas-desktop-shell .is-learning-comparison>p:has([data-canada-population-return]){margin:6px 0}
+ .atlas-desktop-shell .is-learning-comparison>p:has([data-canada-crop-return]){margin:6px 0}
  .atlas-desktop-shell .is-learning-comparison .canada-reading{max-height:calc(100dvh - 230px)}
+ .canada-crop-source{margin:0}
+ .canada-crop-source img,.canada-crop-mini-figure img{display:block;width:100%;height:auto}
+ .canada-crop-source figcaption,.canada-crop-mini-figure figcaption{font-size:12px;line-height:1.6}
+ .canada-crop-source h2,.canada-crop-mini-figure h3{font-size:18px;margin:0 0 5px}
+ .canada-crop-mini-figure{margin:7px 0}
+ .is-crop-comparison .canada-comparison-context{padding:6px 8px;margin-bottom:7px}
+ .is-crop-comparison .canada-comparison-context p{line-height:1.6;margin:4px 0}
+ .atlas-desktop-shell .is-crop-comparison .canada-reading{max-height:calc(100dvh - 200px)}
+ .is-crop-comparison .canada-city-list{margin:6px 0;gap:4px}
+ .is-crop-comparison .canada-city-list button{font-size:12px;min-height:30px;padding:4px 6px}
+ [data-canada-industry-water-labels] text{font-size:9px!important;stroke-width:2px}
 }
 @media(min-width:1600px){
  .atlas-desktop-shell:has(.canada-nature){grid-template-columns:clamp(300px,19vw,380px) minmax(0,1fr)}
