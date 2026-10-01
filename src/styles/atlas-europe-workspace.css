@@ -229,7 +229,9 @@
 .eu-workspace-root [data-eu-origin-legend]>div { display:flex; gap:5px; align-items:center; }
 .eu-workspace-root [data-eu-origin-map] { width:100%; height:145px; margin-top:6px; }
 @media(min-width:960px) {
- .eu-workspace-root[data-europe-detail] .eu-region-navigation { margin-bottom:7px; }
+ .eu-workspace-root[data-europe-detail] .eu-region-navigation { margin-bottom:4px; }
+ .eu-workspace-root[data-europe-detail] .eu-topic-above { padding:3px; }
+ .eu-workspace-root[data-europe-detail] .eu-origin-key { padding-block:6px; }
  .eu-workspace-root[data-europe-detail] .eu-region-top a { min-height:36px; padding:5px 12px; }
  .eu-workspace-root[data-europe-detail] .eu-region-buttons { margin-top:5px; }
  .eu-workspace-root[data-europe-detail] .eu-region-buttons button { min-height:34px; padding:4px 11px; }
