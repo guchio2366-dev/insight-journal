@@ -1,4 +1,6 @@
 ---
 import CountryOverviewPage from '../../../../components/atlas/CountryOverviewPage.astro';
+import '../../../../styles/atlas-regional-overview-layout.css';
 ---
 <CountryOverviewPage regionId="west-asia" />
+<script>import {initRegionalOverviewLayout} from '../../../../scripts/atlas-regional-overview-layout';document.querySelectorAll<HTMLElement>('[data-country-overview]').forEach(initRegionalOverviewLayout);</script>

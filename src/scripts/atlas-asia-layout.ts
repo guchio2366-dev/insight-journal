@@ -1,0 +1,37 @@
+import type {AsiaState} from '../lib/atlas-asia-state';
+
+/** Place existing controls and statistics in the same learning columns as the US atlas. */
+export function createAsiaLayout(root:HTMLElement){
+ const items=root.querySelector<HTMLElement>('[data-asia-map-items]');
+ const statistics=root.querySelector<HTMLElement>('[data-asia-statistics]');
+ if(!items||!statistics)return {render(_state:AsiaState){}};
+ const query=(s:string)=>root.querySelector<HTMLElement>(s);
+ const controls:{node:HTMLElement;owner:HTMLElement|null;wrapper:HTMLElement}[]=[];
+ for(const selector of ['[data-reading-map-legend]','[data-city-picker]','[data-farming-selector]','[data-industry-all]','[data-industry-detail-label]','[data-industry-search-label]','[data-social-metric-label]','[data-social-area-label]']){
+  const node=query(selector);if(!node)continue;
+  const owner=node.closest<HTMLElement>('[data-industry-panel],[data-social-panel]');
+  const wrapper=root.ownerDocument.createElement('div');wrapper.className='asia-map-item';wrapper.append(node);items.append(wrapper);
+  controls.push({node,owner,wrapper});
+ }
+ const groups:{node:HTMLElement;owner:HTMLElement|null;wrapper:HTMLElement}[]=[];
+ for(const selector of ['.farming-statistics','[data-farm-trade]','[data-industry-content]','[data-trade-content]','[data-social-content]','[data-population-city-facts]']){
+  const node=query(selector);if(!node)continue;
+  const owner=node.closest<HTMLElement>('[data-farming-panel],[data-industry-panel],[data-trade-panel],[data-social-panel],[data-population-reading]');
+  const wrapper=root.ownerDocument.createElement('section');wrapper.className='asia-statistics-panel';wrapper.hidden=true;
+  wrapper.append(node);statistics.append(wrapper);groups.push({node,owner,wrapper});
+ }
+ const details=root.querySelector<HTMLDetailsElement>('[data-reading-details]');if(details)details.open=true;
+ function synchronize(){
+  for(const {node,owner,wrapper} of controls){const hidden=node.hidden||!!owner?.hidden;if(wrapper.hidden!==hidden)wrapper.hidden=hidden;}
+  let visible=false;
+  for(const {node,owner,wrapper} of groups){
+   const hidden=node.hidden||!!owner?.hidden||!node.childElementCount;
+   if(wrapper.hidden!==hidden)wrapper.hidden=hidden;
+   visible ||= !hidden;
+  }
+  if(statistics.hidden===visible)statistics.hidden=!visible;
+ }
+ const observer=new root.ownerDocument.defaultView!.MutationObserver(synchronize);
+ observer.observe(root,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden']});
+ return {render(_state:AsiaState){synchronize();}};
+}

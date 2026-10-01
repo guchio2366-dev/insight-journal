@@ -49,7 +49,7 @@ const config = { farmingAreas, geography, climateWater, countries, cities: citie
     <nav class="eu-field-nav" aria-label="欧州地図の表示"><a data-atlas-overview-link href={withBase('/atlas/europe/overview/')}>概要</a>{[fields[1],fields[0],...fields.slice(2)].map(f=><a data-eu-field={f.initial} href={withBase(`/atlas/europe/${f.id}/`)} aria-current={field===f.id?'page':undefined}>{f.id==='industry'?'主要産業':f.label}</a>)}</nav>
     <EuropeLayoutControls position="above" {field} />
     <div class="eu-water-options" data-eu-water-options hidden role="group" aria-label="水資源の表示">
-      <button type="button" aria-pressed="true" data-eu-topic="water">河川・湖</button><details><summary>未収録の水データ</summary><button type="button" disabled>降水量 <small>分布未収録</small></button><button type="button" disabled>河川の流域 <small>分布未収録</small></button></details>
+      <button type="button" aria-pressed="true" data-eu-topic="water">河川・地下水 <small>河川・湖を収録／地下水未収録</small></button><button type="button" disabled>降水量 <small>分布未収録</small></button><button type="button" disabled>河川の流域 <small>分布未収録</small></button>
       <p>現在は河川・湖の位置を掲載しています。地下水・降水量・流域の分布は未収録です。</p>
     </div>
     <div class="eu-layout">
@@ -86,6 +86,13 @@ const config = { farmingAreas, geography, climateWater, countries, cities: citie
           <div class="eu-map-annotations" data-eu-annotations aria-label="地図の都市と地点"><svg aria-hidden="true"></svg></div>
         </div>
         <div class="eu-map-footer"><span data-eu-map-status>{initialClimateReader?'都市名を押すと、雨温図を表示します。':agriculture?'地図の作物名を押すと、品目別の分布を表示します。':'地図の分布と右側の説明を読み比べます。'}</span><button type="button" data-eu-render>簡易表示にする</button></div>
+        <div class="eu-item-list" data-eu-farming-list hidden={!agriculture} aria-label="農畜産物と林業を選ぶ">
+          {(['crop','livestock'] as const).map(kind=><section><h3>{kind==='crop'?'作物':'畜産'}</h3><div>{farmingAreas.features.filter(f=>f.properties.kind===kind).map(f=><button type="button" data-eu-layer={f.properties.id} aria-pressed="false"><span class:list={['eu-item-swatch',{'is-livestock':kind==='livestock'}]} style={{'--item-color':f.properties.color}}></span>{f.properties.name}</button>)}</div></section>)}
+          <section><h3>林業</h3><button type="button" data-eu-layer="forest" aria-pressed="false">森林面積比率</button></section>
+        </div>
+        <div class="eu-map-candidates" data-eu-farm-candidates hidden aria-live="polite"></div>
+        <div class="eu-item-list" data-eu-city-list hidden={!initialClimateReader} aria-label="雨温図の都市を選ぶ"><h3>都市を選ぶ</h3><div>{cities.map(city=><button type="button" data-eu-city-select={city.id} aria-pressed={city.id==='london'}>{city.name}<small>{countryName(city.country)}</small></button>)}</div></div>
+        <div class="eu-item-list" data-eu-feature-list hidden aria-label="地図の地点を選ぶ"><h3>地図の名称から選ぶ</h3><div data-eu-feature-options></div></div>
         <section class="eu-origin-key" data-eu-origin-key hidden aria-label="比較元の図と凡例"><div data-eu-origin-caption></div><div data-eu-origin-legend></div><svg data-eu-origin-map hidden viewBox={`0 0 ${frame.width} ${frame.height}`} role="img" aria-label="元の分布図"></svg></section>
 
         <details class="eu-legend" data-eu-climate-legend open hidden={field!=='nature'}><summary>気候区分の凡例 <span>17区分</span></summary><div class="eu-legend-grid">{legend.map(l => <div><span class="eu-swatch" style={`background:${l.color}`}></span><strong>{l.code}</strong><span>{l.name}</span></div>)}</div><details class="eu-legend-methods"><summary>対象範囲・出典</summary><p>区分はBeckほかのKöppen–Geiger分類。周辺の北アフリカ・西アジアも同じ色で表示します。掲載画像の元格子は0.05度で、細かな局地気候を表すものではありません。</p><p>カスピ海の水面には気候区分を表示しません。輪郭は<a href={climateWater.source.url}>Natural Earth 5.1.2（1:110m）</a>に基づきます。</p></details></details>
@@ -99,13 +106,6 @@ const config = { farmingAreas, geography, climateWater, countries, cities: citie
           <a href={withBase('/assets/atlas/europe/farming-overview-v2/manifest.json')}>出典・分布面の加工方法</a>
           </details>
         </div>
-        <div class="eu-item-list" data-eu-farming-list hidden={!agriculture} aria-label="農畜産物と林業を選ぶ">
-          {(['crop','livestock'] as const).map(kind=><section><h3>{kind==='crop'?'作物':'畜産'}</h3><div>{farmingAreas.features.filter(f=>f.properties.kind===kind).map(f=><button type="button" data-eu-layer={f.properties.id} aria-pressed="false"><span class:list={['eu-item-swatch',{'is-livestock':kind==='livestock'}]} style={{'--item-color':f.properties.color}}></span>{f.properties.name}</button>)}</div></section>)}
-          <section><h3>林業</h3><button type="button" data-eu-layer="forest" aria-pressed="false">森林面積比率</button></section>
-        </div>
-        <div class="eu-map-candidates" data-eu-farm-candidates hidden aria-live="polite"></div>
-        <div class="eu-item-list" data-eu-city-list hidden={!initialClimateReader} aria-label="雨温図の都市を選ぶ"><h3>都市を選ぶ</h3><div>{cities.map(city=><button type="button" data-eu-city-select={city.id} aria-pressed={city.id==='london'}>{city.name}<small>{countryName(city.country)}</small></button>)}</div></div>
-        <div class="eu-item-list" data-eu-feature-list hidden aria-label="地図の地点を選ぶ"><h3>地図の名称から選ぶ</h3><div data-eu-feature-options></div></div>
         <p class="eu-map-caption">線は国境です。ロシアは欧州側の表示枠内を掲載しています。境界は概略で、係争地の帰属を示すものではありません。</p>
         
         
@@ -118,7 +118,7 @@ const config = { farmingAreas, geography, climateWater, countries, cities: citie
           <a data-eu-comparison-return href={withBase('/atlas/europe/agriculture/')}>元の分布へ戻る</a>
           <details class="eu-comparison-origin"><summary>対象年・範囲・出典</summary><div data-eu-comparison-legend></div><p data-eu-comparison-scope></p><a data-eu-comparison-source>元の図の出典</a></details>
         </section>
-        <EuropeSubjectReader layer={initialLayer} hidden={initialClimateReader} />
+        <EuropeSubjectReader layer={initialLayer} />
         <div data-eu-climate-reader hidden={!initialClimateReader}>
         <div class="eu-reader-heading"><h2 id="eu-city-heading">ロンドンの雨温図</h2></div>
         <div class="eu-city-readings">{cities.map(city=><EuropeClimateReading city={city} country={countryName(city.country)} />)}</div>

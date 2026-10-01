@@ -8,6 +8,31 @@
 .west-atlas select,.west-region-country select{min-height:44px;max-width:100%;min-width:0;padding:7px 10px;background:#fffef8;border:1px solid #b8c5bd;border-radius:3px;font:inherit;color:#253e46}
 .west-region-country select{min-height:40px}
 .west-controls{grid-template-columns:1fr}
+.west-control-status{font-size:12px;margin:6px 0;color:#50656a}
+.west-agri-controls{margin:0;padding:0}
+.west-agri-controls .atlas-water-tabs{margin:0;border-bottom:0;min-height:44px}
+.west-item-picker,.west-water-items{display:flex;justify-content:flex-start;gap:6px;flex-wrap:wrap}
+.west-item-picker button,.west-water-items button{min-height:40px;padding:5px 8px;font:inherit;color:#254952;background:transparent;border:1px solid transparent;cursor:pointer}
+.west-item-picker button[aria-pressed=true],.west-water-items button[aria-pressed=true]{font-weight:700;border-color:#b8c8ba;background:#eaf0e3}
+.west-additional-topics summary{min-height:44px;padding:10px 0;font-size:13px;cursor:pointer}
+.west-reading-header button{min-height:40px;border:1px solid #bac9c6;background:#fffef8;padding:6px 10px;color:#254952;font-size:12px;cursor:pointer;margin:0 0 8px}
+.west-layout-statistics{grid-column:1/-1;max-width:none!important;width:100%;margin-top:10px!important;padding:20px;border:1px solid #c7ccbf;background:#fffef8}
+.west-layout-statistics[hidden]{display:none!important}
+.west-layout-statistics table{width:100%}
+.west-layout-statistics th,.west-layout-statistics td{font-size:13px}
+@media(min-width:960px){
+ .west-regional-navigation{display:block!important;margin:0 0 10px!important}
+ .west-atlas:not([data-comparing=true]) .atlas-primary-grid{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px;align-items:start}
+ .west-atlas:not([data-comparing=true]) .atlas-map-frame{height:auto!important;aspect-ratio:1.55;min-height:300px!important;max-height:640px}
+ .west-atlas:not([data-comparing=true]) .west-reading{display:flex;flex-direction:column;height:clamp(420px,calc(100dvh - 305px),580px)!important;overflow:hidden;padding:14px 16px}
+ .west-atlas:not([data-comparing=true]) [data-west-detail]{display:flex;flex-direction:column;min-height:0;flex:1;overflow:hidden}
+ .west-atlas:not([data-comparing=true]) [data-west-detail]>header,.west-atlas:not([data-comparing=true]) .atlas-reading-takeaway,.west-atlas:not([data-comparing=true]) .west-reading-dock{flex:none}
+ .west-atlas:not([data-comparing=true]) [data-west-reading-extra]{min-height:0;flex:1;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding-right:6px;border-top:1px solid #d4dbd0;margin-top:10px}
+ .west-atlas:not([data-comparing=true]) .west-reading-dock{margin-top:8px;padding-top:8px}
+ .west-atlas:not([data-comparing=true]) .west-reading-dock a{font-size:13px;min-height:40px;margin:2px 0;padding:5px 8px}
+ .west-atlas:not([data-comparing=true]) .west-detail-controls{flex:none;margin-top:10px;border-top:1px solid #d4dbd0;padding-top:8px}
+ .west-atlas:not([data-comparing=true]) .atlas-climate-overview{grid-column:1/-1}
+}
 .west-subtabs{padding:6px;margin:0;border:1px solid #c7ccbf;border-bottom:0;background:#fbfaf3}
 .west-atlas .atlas-map-frame{background:#e3eff0}
 .west-atlas [data-west-map]{display:block;width:100%;height:100%;touch-action:none;cursor:grab}

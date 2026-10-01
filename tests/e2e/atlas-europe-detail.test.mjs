@@ -21,7 +21,7 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
     assert.equal(doc.querySelector('meta[name="robots"]'),null);
     const climateReader=field==='nature';
     assert.equal(doc.querySelector('[data-eu-climate-reader]').hidden,!climateReader);
-    assert.equal(doc.querySelector('[data-eu-subject-reader]').hidden,climateReader);
+    assert.equal(doc.querySelector('[data-eu-subject-reader]').hidden,false,'気候の読み方も選択都市の上で読める');
     assert.equal(doc.querySelector('[data-eu-subject-legend]').hidden,climateReader||field==='agriculture');
     assert.equal(doc.querySelector('[data-eu-climate-legend]').hidden,field!=='nature');
     assert.equal(doc.querySelector('[data-eu-wheat-legend]').hidden,true);

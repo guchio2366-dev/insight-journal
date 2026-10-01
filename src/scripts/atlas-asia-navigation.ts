@@ -9,6 +9,7 @@ export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|un
  for(const b of all('[data-population-group]'))b.addEventListener('click',()=>{if(b.dataset.topic)choosePopulation(b.dataset.topic);});
  for(const b of all('[data-population-choice]'))b.addEventListener('click',()=>choosePopulation(b.dataset.populationChoice!));
  for(const b of all('[data-farm-choice]'))b.addEventListener('click',()=>chooseFarm(b.dataset.farmChoice!));
+ for(const b of all('[data-farm-group-topic]'))b.addEventListener('click',()=>{if(b.dataset.farmGroupTopic)chooseFarm(b.dataset.farmGroupTopic);});
  function selectIndustry(sector:IndustrySector,subsector:string){
   const state=getState(),matches=industry?.topics.filter(t=>{const group=industryTopicGroup(t);return group.sector===sector&&(subsector==='all'||group.subsector===subsector);})??[];
   const current=matches.find(t=>t.id===state.topic),target=current??matches.find(t=>!t.country)??matches[0];
@@ -23,6 +24,8 @@ export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|un
  });
  function render(){
   const state=getState(),natural=naturalGroup(state.topic??'climate');
+  const farms=$('[data-agriculture-topics]');if(farms)farms.hidden=state.field!=='agriculture';
+  for(const b of all('[data-farm-group]'))b.setAttribute('aria-pressed',String(b.dataset.farmGroup==='forestry'?state.topic===b.dataset.farmGroupTopic:state.topic!==all('[data-farm-group="forestry"]')[0]?.dataset.farmGroupTopic));
   for(const b of all('[data-natural-group]'))b.setAttribute('aria-pressed',String(b.dataset.naturalGroup===natural));
   const water=$('[data-water-topics]');if(water)water.hidden=state.field!=='natural'||!['water','precipitation'].includes(natural);
   const kinds=$('[data-water-kinds]');if(kinds)kinds.hidden=state.field!=='natural'||!['water','groundwater'].includes(state.topic??'');

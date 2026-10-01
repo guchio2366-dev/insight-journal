@@ -73,10 +73,11 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.equal(doc.querySelector('[data-eu-farming-statistics]').hidden,false);
     }
     if (field==='industry/') {
-      const chooser=doc.querySelector('.eu-map-stage [data-eu-layer-choice="industry"]');
+      const chooser=doc.querySelector('.eu-topic-measures [data-eu-layer-choice="industry"]');
       assert.ok(chooser);
       assert.deepEqual([...chooser.options].map(option=>option.value),['hubs','manufacturing','industry','services']);
       assert.equal(chooser.value,'hubs');
+      assert.equal(doc.querySelector('[data-eu-topic-field="industry"] button').textContent,'地域主要産業');
     }
     if (field==='population/') {
       const chooser=doc.querySelector('[data-eu-layer-choice="population"]');
@@ -85,6 +86,7 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.equal(chooser.value,'density');
       const planned=[...doc.querySelectorAll('[data-eu-topic-field="population"] button:disabled')];
       assert.equal(planned.length,2);
+      assert.deepEqual([...doc.querySelectorAll('[data-eu-topic-field="population"] button')].map(b=>b.textContent),['人口分布','人種・民族準備中','宗教準備中']);
       assert.ok(planned.every(b=>b.textContent.includes('準備中')));
       assert.ok(!doc.querySelector('[data-eu-topic-field="population"]').textContent.includes('投票'));
     }

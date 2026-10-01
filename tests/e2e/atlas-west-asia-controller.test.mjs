@@ -35,6 +35,28 @@ test('小国と観測所の選択、分野間リンク、履歴復元が同じ�
   await until(()=>q('[data-west-point]').textContent.includes('BWh'));assert.equal(q('[data-west-city]').value,'bahrain');
  }finally{await w.happyDOM.close();}
 });
+
+test('標準階層の未整備項目を明示し、説明だけの概論復帰と全列下の統計を更新できる',async()=>{
+ const population=await setup('population');
+ try{
+  const {w,q,select}=population,frame=q('[data-west-map]').getAttribute('viewBox');
+  assert.match(q('#west-detail-title').textContent,/人口の概論/);
+  const statistics=q('[data-west-comparison]');assert.equal(statistics.parentElement,q('[data-atlas-shell]'));assert.equal(q('[data-west-atlas]').contains(statistics),false);
+  q('[data-west-standard-group="人種・民族"]').click();await until(()=>q('[data-west-loading]').hidden);
+  assert.match(q('[data-west-detail]').textContent,/人種・民族は未整備/);assert.match(q('[data-west-caption]').textContent,/未整備.*参考図/);assert.equal(statistics.hidden,true);
+  q('[data-west-standard-group="人口分布"]').click();await until(()=>q('[data-west-loading]').hidden);assert.equal(q('[data-west-map]').getAttribute('viewBox'),frame);
+  select('[data-west-country]','TUR');await until(()=>q('[data-west-loading]').hidden);assert.match(q('[data-west-detail]').textContent,/トルコ/);assert.equal(statistics.hidden,false);
+  const location=w.location.href,view=q('[data-west-map]').getAttribute('viewBox');q('[data-west-reading-overview]').click();assert.match(q('#west-detail-title').textContent,/人口の概論/);assert.equal(w.location.href,location);assert.equal(q('[data-west-map]').getAttribute('viewBox'),view);
+  statistics.querySelector('[data-west-country-button="IRN"]').click();await until(()=>q('[data-west-loading]').hidden);assert.equal(q('[data-west-country]').value,'IRN');assert.match(q('[data-west-detail]').textContent,/イラン/);assert.equal(w.document.querySelectorAll('[data-west-comparison]').length,1);
+  select('[data-west-year]','2020');await until(()=>statistics.querySelector('caption').textContent.includes('2020年'));assert.equal(new URL(w.location.href).searchParams.get('year'),'2020');
+  w.history.replaceState({},'',location);w.dispatchEvent(new w.PopStateEvent('popstate'));await until(()=>q('[data-west-country]').value==='TUR');assert.match(statistics.querySelector('caption').textContent,/2024年/);
+ }finally{await population.w.happyDOM.close();}
+ const nature=await setup('nature');
+ try{
+  const {q}=nature;q('[data-west-standard-group="水資源"]').click();await until(()=>q('[data-west-loading]').hidden);q('[data-west-unavailable="降水量"]').click();await until(()=>q('[data-west-loading]').hidden);assert.match(q('[data-west-detail]').textContent,/降水量は未整備/);
+  q('[data-west-standard-group="気候区分"]').click();await until(()=>q('[data-west-loading]').hidden);assert.ok(q('[data-west-active-chart] svg'));assert.equal(q('[data-west-comparison]').parentElement,q('[data-atlas-shell]'));
+ }finally{await nature.w.happyDOM.close();}
+});
 test('資料取得に失敗しても国と主題を切り替えられる',async()=>{
  const {w,q,select}=await setup('nature','',true);
  try{
@@ -79,8 +101,8 @@ test('農林業の地図下の品目と栽培方法、人口の上部タブを�
  }finally{await agriculture.w.happyDOM.close();}
  const population=await setup('population');
  try{
-  const {q}=population;q('[data-west-group="年齢構成"]').click();q('[data-west-topic-button="age-older"]').click();
-  assert.equal(q('[data-west-topic-button="age-older"]').getAttribute('aria-selected'),'true');assert.match(q('[data-west-detail]').textContent,/65歳以上/);
+  const {q}=population;q('.west-additional-topics').open=true;q('[data-west-topic-button="age-older"]').click();
+  assert.equal(q('[data-west-topic-button="age-older"]').getAttribute('aria-pressed'),'true');assert.match(q('[data-west-detail]').textContent,/65歳以上/);
  }finally{await population.w.happyDOM.close();}
 });
 
