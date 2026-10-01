@@ -57,6 +57,7 @@ test('fixed displayed assets match the source manifests and keep missing/zero se
  const climate=json('public/assets/atlas/russia-climate-v1/manifest.json'),grid=gunzipSync(read('public/assets/atlas/russia-climate-v1/climate-grid.bin.gz'));assert.equal(grid.length,climate.width*climate.height);assert.ok(grid.includes(0));assert.ok(grid.includes(27));
 });
 test('copyright attribution and original time periods are visible in the layers',()=>{
+ const population=json('public/assets/atlas/russia-population-v1/manifest.json');for(const id of ['density','cities'])assert.ok(api.getRussiaLayer(id).sources.some(s=>s.url===population.referencePublicationDoi&&s.title===population.referencePublication));
  const wheat=api.getRussiaLayer('wheat');assert.equal(wheat.sources[0].note,json('public/assets/atlas/russia-crops-v1/attribution.json').requiredAdaptationText);assert.match(wheat.period,/2020/);assert.match(wheat.unit,/ha/);
  assert.match(api.getRussiaLayer('cattle').unit,/頭/);assert.match(api.getRussiaLayer('climate').period,/1991/);assert.equal(api.getRussiaLayer('climate').legend.length,18);
  assert.ok(api.russiaLayers.every(l=>l.period&&l.unit&&l.sources.length&&l.sources.every(s=>s.url.startsWith('https://'))));
