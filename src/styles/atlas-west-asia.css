@@ -102,3 +102,12 @@
 @media(max-width:1199px){.west-source-grid{gap:16px}}
 @media(max-width:959px){.west-back-map{display:inline-flex}}
 @media(max-width:600px){.west-region-country select{flex:1}.west-source-grid,.west-climate-codes{grid-template-columns:1fr}.west-reading h2{font-size:21px}.west-agri-picker button,.west-cultivation button,.west-subtabs button{min-height:44px}.west-climate-key{gap:4px 9px}}
+
+/* West Asia retains its map and reading beside the laptop news rail. */
+@media(min-width:960px) and (max-width:1199px){
+ .atlas-desktop-shell:not(.is-reading-news):has(> .west-atlas){display:grid;grid-template-columns:160px minmax(0,1fr);gap:12px;padding:10px 12px 24px}
+ .atlas-desktop-shell:not(.is-reading-news):has(> .west-atlas) .atlas-news{position:sticky;top:10px;width:auto;height:calc(100dvh - 72px);min-height:0}
+ .atlas-desktop-shell:has(> .west-atlas) .atlas-news-header{padding:12px}
+ .atlas-desktop-shell:has(> .west-atlas) .atlas-news-header h2{font-size:17px;line-height:1.6}
+ .atlas-desktop-shell:has(> .west-atlas) :is(.atlas-news-list,.atlas-news-reader){padding-inline:12px}
+}
