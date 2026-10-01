@@ -55,7 +55,7 @@ export function initLatinPopulation(root:HTMLElement){
    // references; a data-URI SVG used as an image cannot load external rasters.
    q<HTMLElement>('[data-lp-source-map]').innerHTML=original.map.replace(/\srole="button"/g,'').replace(/tabindex="0"/g,'tabindex="-1"');
    q<HTMLElement>('[data-lp-source-legend]').innerHTML=original.legend;
-   q<HTMLElement>('[data-lp-source-caption]').textContent=`元：${name(state.place)}・${sourceName(state.source!)}`;
+   q<HTMLElement>('[data-lp-source-caption]').textContent=state.source!.field==='industry'&&state.source!.layer==='canal'?`元：${sourceName(state.source!)}`:`元：${name(state.place)}・${sourceName(state.source!)}`;
    q<HTMLElement>('[data-lp-target-caption]').textContent=`比較先：${name(state.place)}・${metricName(state.layer)}`;
   }
   q<HTMLElement>('[data-lp-value-name]').textContent=selected?`${example.nameJa}・${example.countryCode}`:`${state.scope==='central'?'中米の例':'人口最多の例'}：${example.nameJa}`;
@@ -68,11 +68,11 @@ export function initLatinPopulation(root:HTMLElement){
   q<HTMLElement>('[data-lp-reading-short]').textContent=selected?example.population===null?`${example.nameJa}の2023年指標は対象統計なし。数値のある国・地域と区別して表示します。`:`${example.nameJa}は人口${latinPopulationValue(example.population)}人、密度${latinPopulationValue(example.density,'value',1)}人/陸地km²。国人口の規模と密度を分けて読みます。`:state.scope==='central'?'中米・カリブを拡大。グアテマラやジャマイカを選び、国人口と密度を比べます。':'ブラジルは約2.11億人、密度25.3人/陸地km²。バルバドスは約28.2万人、密度656.6人/陸地km²。';
   q<HTMLElement>('[data-lp-comparison-reading]').hidden=!(external||scale);
   q<HTMLElement>('[data-lp-comparison-title]').textContent=external?`${sourceName(state.source!)} × ${metricName(state.layer)}`:scale?'人口が多い国と、密度が高い国はどう違う？':'';
-  q<HTMLElement>('[data-lp-comparison-text]').textContent=external?(state.source?.field==='nature'?'1991–2020年の気候分類と、2023年の国・地域人口を同じ地理範囲で比べます。気候セルと国全体の人口は別の粒度。自然条件と人の集まりの位置関係を読みます。':state.source?.field==='industry'?'2024年商品輸出に占める製造品・鉱石金属の割合と、2023年の人口を比べます。輸出構成は%、人口は人数または人/陸地km²。市場や交通のつながりを読みます。':'2020年の生産分布と、2023年の国・地域人口を同じ範囲で比べます。生産地、暮らす場所、交通・市場との位置関係を読みます。'):'色と円は同じ2023年、同じ国・地域の値です。ブラジルの大人口と、中米・カリブの高い密度を、両方の凡例で読みます。';
+  q<HTMLElement>('[data-lp-comparison-text]').textContent=external?(state.source?.field==='nature'?'1991–2020年の気候分類と、2023年の国・地域人口を同じ地理範囲で比べます。気候セルと国全体の人口は別の粒度。自然条件と人の集まりの位置関係を読みます。':state.source?.field==='industry'?(state.source.layer==='canal'?'パナマ運河の2024会計年度の通航と、2023年の国・地域人口を比べます。通航隻数と人口は別の単位。国をまたぐ物流と港・都市のつながりを読みます。':'2024年商品輸出に占める製造品・鉱石金属の割合と、2023年の人口を比べます。輸出構成は%、人口は人数または人/陸地km²。市場や交通のつながりを読みます。'):'2020年の生産分布と、2023年の国・地域人口を同じ範囲で比べます。生産地、暮らす場所、交通・市場との位置関係を読みます。'):'色と円は同じ2023年、同じ国・地域の値です。ブラジルの大人口と、中米・カリブの高い密度を、両方の凡例で読みます。';
   const returnState=state.source?state:{...state,source:{field:'population' as const,layer:'density',place:state.place,scope:state.scope,only:state.only,fallback:state.fallback}};
   const back=q<HTMLAnchorElement>('[data-lp-return]');back.href=latinSourceReturnUrl(routes.base,returnState);back.textContent=`${name(returnState.source!.place)}の${sourceName(returnState.source!)}に戻る`;
   q<HTMLElement>('[data-lp-map-comparison-brief]').hidden=!(external||scale);
-  q<HTMLElement>('[data-lp-map-comparison-text]').textContent=external?(state.source?.field==='nature'?'気候の分類セルと国・地域の人口を、同じ地理範囲・各凡例で比べ、集まりの位置関係を読みます。':state.source?.field==='industry'?'2024年の輸出構成と2023年人口を、同じ国・地域で比べ、交通・市場と人口のつながりを読みます。':'2020年の生産分布と2023年人口を、同じ範囲で比べ、生産地・暮らす場所・市場の位置関係を読みます。'):'同じ2023年の人数と国平均密度を重ねます。ブラジルの大人口と、中米・カリブの高密度を二つの凡例で読みます。';
+  q<HTMLElement>('[data-lp-map-comparison-text]').textContent=external?(state.source?.field==='nature'?'気候の分類セルと国・地域の人口を、同じ地理範囲・各凡例で比べ、集まりの位置関係を読みます。':state.source?.field==='industry'?(state.source.layer==='canal'?'パナマ運河の通航条件と2023年人口を比べ、国をまたぐ物流と港・都市のつながりを読みます。':'2024年の輸出構成と2023年人口を、同じ国・地域で比べ、交通・市場と人口のつながりを読みます。'):'2020年の生産分布と2023年人口を、同じ範囲で比べ、生産地・暮らす場所・市場の位置関係を読みます。'):'同じ2023年の人数と国平均密度を重ねます。ブラジルの大人口と、中米・カリブの高密度を二つの凡例で読みます。';
   const mapBack=q<HTMLAnchorElement>('[data-lp-map-return]');mapBack.href=back.href;mapBack.textContent=back.textContent;
   q<HTMLAnchorElement>('[data-lp-scale-link]').href=latinLearningUrl(routes.base,latinComparisonState(state,'population','scale'));
   q<HTMLElement>('[data-lp-scale-link]').hidden=scale||external;

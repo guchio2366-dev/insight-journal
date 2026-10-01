@@ -87,7 +87,7 @@ export function initLatinIndustry(root:HTMLElement){
    const sourceMap=q<HTMLElement>('[data-industry-source-map]');sourceMap.innerHTML=original.map;imageContainers.push(sourceMap);q('[data-industry-source-legend]').innerHTML=original.legend;
    const sourceAttribution=q<HTMLElement>('[data-industry-source-legend] .latin-nature-period');
    if(sourceAttribution){text('[data-industry-source-attribution]',sourceAttribution.textContent??'');shown('[data-industry-source-attribution]',true);sourceAttribution.remove();}
-   text('[data-industry-target-title]',layerName(state.layer));text('[data-industry-target-period]',state.layer==='canal'?'2024会計年度（2023年10月–2024年9月） · パナマ運河・大型外航船の通航':'2024年 · 国単位 · 商品輸出額に占める割合（%）');
+   text('[data-industry-target-title]',layerName(state.layer));text('[data-industry-target-period]',state.layer==='canal'?'2024会計年度 · 大型外航船の通航（回）':'2024年 · 国単位 · 商品輸出額に占める割合（%）');
    const targetMap=q<HTMLElement>('[data-industry-target-map]');targetMap.innerHTML=renderLatinIndustryMap(state,'latin-industry-target');imageContainers.push(targetMap);q('[data-industry-target-legend]').innerHTML=renderLatinIndustryLegend(state.layer);targetMap.closest<HTMLElement>('.latin-industry-panel')!.dataset.layer=state.layer;
    text('[data-industry-comparison-title]',`${industryCountryName(state.place)}：${original.title}と${layerName(state.layer)}を比べる`);
    let explanation=reading.comparison,values=valueText(state.place);

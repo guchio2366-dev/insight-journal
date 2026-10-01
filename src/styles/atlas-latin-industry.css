@@ -37,6 +37,7 @@
 .latin-industry-comparison :is(.lp-map,.latin-nature-map,.latin-agriculture-map){display:block;width:100%;height:285px;max-height:285px;background:#edf4f4;border-radius:7px}
 .latin-industry-panel[data-layer=canal] .latin-industry-map-grid{grid-template-columns:1fr}
 .latin-industry-panel[data-layer=canal] .latin-industry-canal{height:280px}
+.latin-industry-comparison .latin-industry-panel[data-layer=canal] .latin-industry-canal{height:285px}
 .latin-industry :is(.lp-legend,.latin-nature-legend,.latin-agriculture-legend){display:grid;gap:.4rem;font-size:14px;line-height:1.35}
 .latin-industry :is(.lp-legend,.latin-nature-legend,.latin-agriculture-legend) span{display:flex;align-items:center;gap:.35rem}
 .latin-industry :is(.lp-legend,.latin-nature-legend,.latin-agriculture-legend) i{display:inline-block;width:18px;height:14px;border:1px solid #718a80;flex:none}
@@ -48,6 +49,7 @@
 .latin-industry .latin-industry-comparison-explanation{font-size:14px;line-height:1.6;margin:.3rem 0;padding:.35rem .65rem}
 .latin-industry-comparison-title{font-size:19px;margin:.3rem 0 .55rem;line-height:1.4}
 .latin-industry-canal-key{font-size:13px;line-height:1.5;margin:.45rem 0}
+.latin-industry .latin-industry-comparison .latin-industry-canal-key{font-size:14px;line-height:1.35;margin:0}
 .latin-industry-details{margin:.65rem 0;border:1px solid #d6e1dc;border-radius:7px;background:#fff;padding:.5rem .65rem;font-size:14px}
 .latin-industry-details summary{cursor:pointer;font-weight:700}
 .latin-industry-details p{line-height:1.65}

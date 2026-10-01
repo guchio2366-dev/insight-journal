@@ -64,10 +64,11 @@ test('Outbound comparisons retain original quantity/density, selected country, s
 });
 
 test('Incoming nature/industry preserve source maps, both legends, distinct periods and target-specific return',async()=>{
- for(const [field,layer,year] of [['nature','climate','1991'],['industry','manufactures','2024']]){
+ for(const [field,layer,year] of [['nature','climate','1991'],['industry','manufactures','2024'],['industry','canal','2024']]){
   const w=await page(`?layer=density&place=CRI&scope=central&only=1&from=${field}&sourceLayer=${layer}&sourcePlace=CRI&sourceScope=central&sourceOnly=1&sourceFallback=1&sourceCase=coffee`);try{
    assert.equal(q(w,'[data-lp-source-figure]').hidden,false);assert.ok(q(w,'[data-lp-source-map] svg'));assert.ok(q(w,'[data-lp-target-map] svg'));assert.match(q(w,'[data-lp-source-caption]').textContent,new RegExp(year));assert.match(q(w,'[data-lp-target-caption]').textContent,/2023/);
    assert.ok(q(w,'[data-lp-source-legend]').textContent.trim());assert.equal(q(w,'[data-lp-target-legend]').querySelectorAll('li').length,6);assert.match(q(w,'[data-lp-return]').textContent,/コスタリカ/);
+   if(layer==='canal'){assert.match(q(w,'[data-lp-comparison-text]').textContent,/通航隻数/);assert.equal(q(w,'[data-lp-comparison-text]').textContent.includes('商品輸出'),false);assert.match(q(w,'[data-lp-source-caption]').textContent,/パナマ運河2024会計年度/);}
    change(w,'[data-lp-place-select]','JAM');const href=new URL(q(w,'[data-lp-return]').href);assert.equal(href.pathname,`/insight-journal/atlas/latin-america/${field}/`);assert.equal(href.searchParams.get('place'),'JAM');assert.equal(href.searchParams.get('only'),'1');assert.equal(href.searchParams.get('fallback'),'1');if(field==='nature')assert.equal(href.searchParams.get('case'),'coffee');
    change(w,'[data-lp-layer-select]','scale');assert.match(q(w,'[data-lp-comparison-text]').textContent,new RegExp(year));
   }finally{await w.happyDOM.close();}

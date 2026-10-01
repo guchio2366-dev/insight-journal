@@ -83,6 +83,20 @@ test('Population density and quantity source maps use the original renderer and 
  }finally{await w.happyDOM.close();}}
 });
 
+test('Panama comparison preserves the climate key and attribution, fiscal dates, transit unit and named source return',async()=>{
+ const w=await page('?layer=canal&place=PAN&scope=central&only=1&from=nature&sourceLayer=climate&sourcePlace=PAN&sourceScope=central&sourceOnly=1');try{
+  assert.match(q(w,'[data-industry-source-period]').textContent,/1991–2020.*0\.1.*5/);
+  assert.equal(q(w,'[data-industry-source-legend]').querySelectorAll('.latin-nature-legend>span').length,7);
+  assert.equal(q(w,'[data-industry-source-legend]').querySelector('.latin-nature-period'),null);
+  assert.equal(q(w,'[data-industry-source-attribution]').hidden,false);assert.match(q(w,'[data-industry-source-attribution]').textContent,/Beck.*CC BY 4\.0/);
+  assert.match(q(w,'[data-industry-target-period]').textContent,/2024会計年度.*大型外航船.*回/);
+  assert.match(q(w,'[data-industry-target-map]').textContent,/9,944回/);assert.match(q(w,'[data-industry-target-map]').textContent,/2023年10月–2024年9月/);
+  assert.match(q(w,'[data-industry-target-legend]').textContent,/矢印.*淡水.*物流.*比例図/);
+  const back=new URL(q(w,'[data-industry-return]').href);assert.equal(back.pathname,'/insight-journal/atlas/latin-america/nature/');assert.equal(back.searchParams.get('layer'),'climate');assert.equal(back.searchParams.get('place'),'PAN');assert.equal(back.searchParams.get('only'),'1');
+  assert.match(q(w,'[data-industry-return]').textContent,/パナマ.*気候/);
+ }finally{await w.happyDOM.close();}
+});
+
 test('Explicit image fallback is made from the current selected distributions and remains usable by controls',async()=>{
  const w=await page('?layer=manufactures&place=DOM&scope=central&only=1&from=industry&sourceLayer=ores&sourcePlace=DOM&sourceScope=central&sourceOnly=1&fallback=1');try{
   await w.happyDOM.whenAsyncComplete();assert.equal(q(w,'[data-latin-industry]').dataset.renderer,'image');assert.equal(q(w,'[data-latin-industry]').dataset.latinReady,'true');

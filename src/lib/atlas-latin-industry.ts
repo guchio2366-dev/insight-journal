@@ -53,7 +53,7 @@ export function renderLatinIndustryMap(state:LatinIndustryMapState,idPrefix='lat
  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${latinWidth} ${latinHeight}" width="${latinWidth}" height="${latinHeight}" class="latin-industry-map" data-latin-industry-map role="group" aria-labelledby="${esc(idPrefix)}-title"><title id="${esc(idPrefix)}-title">${esc(metric.name)}の輸出比率 · 2024年 · 商品輸出額に占める割合（%）</title><g data-industry-context transform="${transform}" aria-hidden="true">${context}</g><g data-industry-values transform="${transform}">${foreground}</g><g aria-hidden="true">${labels}</g></svg>`;
 }
 export function renderLatinIndustryLegend(layer:string){
- if(layer==='canal')return '<p class="latin-industry-canal-key">矢印：淡水を使う仕組みと2024会計年度の影響。位置・流量・数量の比例を表す地図ではありません。</p>';
+ if(layer==='canal')return '<p class="latin-industry-canal-key">矢印：淡水と物流のつながり。位置・流量・数量の比例図ではありません。</p>';
  return `<div class="latin-industry-key" data-latin-industry-legend aria-label="2024年 商品輸出額に占める割合の凡例">${latinIndustryBins.map(b=>`<span><i style="background:${b.color}"></i>${b.label}</span>`).join('')}<span><i style="background:${industryMissingColor}"></i>欠測</span><span><i class="not-covered" style="background:${industryNotCoveredColor}"></i>対象統計なし</span></div>`;
 }
 export function renderLatinCanalDiagram(idPrefix='latin-canal'){
