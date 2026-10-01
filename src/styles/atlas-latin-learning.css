@@ -160,9 +160,9 @@
 .latin-workspace .latin-essential-legend p{font-size:13px!important;line-height:1.45!important;margin:3px 0}
 .latin-essential-legend-heading{font-weight:700}.latin-essential-legend-note{color:#405a56}
 .latin-workspace .latin-essential-legend :is(.latin-nature-legend,.latin-industry-key){display:flex;flex-wrap:wrap;gap:3px 9px;font-size:13px;line-height:1.5;margin:4px 0}
-.latin-workspace .latin-essential-legend .latin-agriculture-legend{display:block;position:static;margin-top:3px;font-size:13px}
-.latin-workspace .latin-essential-legend .latin-agriculture-legend strong{position:static;white-space:normal;width:auto;max-width:none;padding:0;background:none}
-.latin-workspace .latin-essential-legend .latin-agriculture-legend>div{display:flex;flex-wrap:wrap;gap:3px 9px}
+.latin-workspace.latin-agriculture:not(.is-comparison) .latin-essential-legend .latin-agriculture-legend{display:block;position:static;margin-top:3px;font-size:13px}
+.latin-workspace.latin-agriculture:not(.is-comparison) .latin-essential-legend .latin-agriculture-legend strong{position:static;white-space:normal;width:auto;max-width:none;padding:0;background:none}
+.latin-workspace.latin-agriculture:not(.is-comparison) .latin-essential-legend .latin-agriculture-legend>div{display:flex;flex-wrap:wrap;gap:3px 9px}
 .latin-essential-legend-spacer{flex:none;pointer-events:none}.latin-essential-legend .lp-legend{margin:0}
 .latin-workspace .latin-reading-fixed .latin-comparison-link{line-height:1.45;margin:4px 0;padding:5px 8px}
 .latin-workspace .latin-industry-reading-fixed .latin-industry-actions{display:grid;gap:4px;margin:5px 0}.latin-workspace .latin-industry-reading-fixed .latin-industry-actions a{font-size:14px;line-height:1.45;margin:0;padding:5px 8px}
