@@ -1,4 +1,4 @@
-import {readCanadaIndustryState,writeCanadaIndustryState,industryShareColor,formatCanadaIndustryValue,canadaIndustryColors} from '../lib/atlas-canada-industry';
+import {readCanadaIndustryState,canadaIndustryReturnUrl,industryShareColor,formatCanadaIndustryValue,canadaIndustryColors} from '../lib/atlas-canada-industry';
 import type {CanadaNatureState} from '../lib/atlas-canada-nature';
 
 /** Keep the source statistic and its geography beside the evidence being compared. */
@@ -7,7 +7,7 @@ export function renderIndustryNatureComparison(root:HTMLElement,config:any,natur
  const raw=new URL(location.href).searchParams.get('industryReturn'),context=root.querySelector<HTMLElement>('[data-canada-industry-context]')!,layer=root.querySelector<SVGElement>('[data-canada-industry-context-map]')!,legend=root.querySelector<HTMLElement>('[data-canada-industry-context-legend]')!,back=root.querySelector<HTMLAnchorElement>('[data-canada-industry-return]')!,mini=root.querySelector<SVGSVGElement>('[data-canada-industry-context-mini-map]')!;
  context.hidden=back.hidden=!raw;legend.hidden=!raw||nature.view==='landform';layer.style.display=raw&&nature.view!=='landform'?'':'none';mini.style.display=raw&&nature.view==='landform'?'':'none';
  if(!raw)return false;
- const data=config.industry,state=readCanadaIndustryState(new URL('?'+raw,location.href),data.years,data.provinces.map((p:any)=>p.id)),target=new URL(back.getAttribute('href')!,location.href);target.search=writeCanadaIndustryState(new URL(target.pathname,target),state).search;back.href=target.href;
+ const data=config.industry,state=readCanadaIndustryState(new URL('?'+raw,location.href),data.years,data.provinces.map((p:any)=>p.id)),target=new URL(back.getAttribute('href')!,location.href);target.search=canadaIndustryReturnUrl(new URL('?'+raw,new URL(target.pathname,target)),state,config.population.cmas.map((c:any)=>c.id)).search;back.href=target.href;
  const metric=data.metrics.find((m:any)=>m.id===state.metric),rows=data.data.filter((r:any)=>r.year===state.year),selected=[state.province,state.compare].filter(Boolean),row=rows.find((r:any)=>r.id===state.province),city=config.cities.find((c:any)=>c.id===nature.city).name;
  const label=`${state.year}年 ${metric.name}の州内GDP割合（%）。境界2021年。`;
  root.querySelector<HTMLElement>('[data-canada-industry-context-heading]')!.textContent=state.metric==='manufacturing'?'加工業の構成と水路の位置を比べる':state.metric==='services'?'サービスの構成と沿岸の位置を比べる':'採取の構成と山地・内陸を照合する';

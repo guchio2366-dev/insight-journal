@@ -2,28 +2,28 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {build} from 'esbuild';
 import {Window} from 'happy-dom';
+import {bundleCanadaSource} from '../fixtures/bundle-canada-source.mjs';
 
 const folder='atlas/north-america/canada',base=`https://example.com/insight-journal/${folder}`;
 const population=JSON.parse(await readFile('src/data/atlas/canada/population.json','utf8'));
 const sourceGeometry=JSON.parse(await readFile('src/data/atlas/canada/population-geometry.json','utf8')).features;
 const industry=JSON.parse(await readFile('src/data/atlas/canada/industry.json','utf8'));
 const stripScripts=html=>html.replace(/<script(?![^>]*type="application\/json")[^>]*>[\s\S]*?<\/script>/g,'');
-async function bundle(name){const init=name==='population'?'initCanadaPopulation':'initCanadaIndustry';return (await build({stdin:{contents:`import {${init}} from './src/scripts/atlas-canada-${name}';${init}(document.querySelector('[data-canada-${name}]'));`,resolveDir:process.cwd(),loader:'ts'},bundle:true,write:false,format:'iife'})).outputFiles[0].text;}
-const code={population:await bundle('population'),industry:await bundle('industry')};
+async function bundle(name){const init={population:'initCanadaPopulation',industry:'initCanadaIndustry',nature:'initCanadaNature'}[name],globalName=`CanadaPopulationIndustry_${name}`;return await bundleCanadaSource(`src/scripts/atlas-canada-${name}.ts`,{globalName})+`\n${globalName}.${init}(document.querySelector('[data-canada-${name}]'));`;}
+const code=Object.fromEntries(await Promise.all(['population','industry','nature'].map(async name=>[name,await bundle(name)])));
 
 async function page(name,search=''){
  const url=search instanceof URL?search.href:`${base}/${name}/${search}`;
  const w=new Window({url,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
  try{
   w.document.write(stripScripts(await readFile(`dist/${folder}/${name}/index.html`,'utf8')));
-  const element=w.document.querySelector(name==='population'?'[data-population-config]':'[data-industry-config]');
+  const element=w.document.querySelector({population:'[data-population-config]',industry:'[data-industry-config]',nature:'[data-canada-config]'}[name]);
   assert.ok(element,`Built ${name} HTML has its config`);
   if(name==='industry')assert.ok(w.document.querySelector('[data-canada-population-industry-scope]'),'Built industry HTML predates the population scope markup; a current build is required');
   const config=JSON.parse(element.textContent);
   // These tests exercise synchronous comparison rendering. Async geometry loading has its own tests.
-  if(name==='population'){assert.ok(Array.isArray(config.industryProvinces),'Built population HTML lacks the industry province mapping metadata; a current build is required');config.geometry=sourceGeometry;}else{assert.ok(config.population,'Built industry config includes population metadata');config.population.geometry=sourceGeometry;}
+  if(name==='population'){assert.ok(Array.isArray(config.industryProvinces),'Built population HTML lacks the industry province mapping metadata; a current build is required');config.geometry=sourceGeometry;}else{assert.ok(config.population,`Built ${name} config includes population metadata`);config.population.geometry=sourceGeometry;}
   element.textContent=JSON.stringify(config);w.eval(code[name]);await Promise.resolve();
   return w;
  }catch(error){await w.happyDOM.close();throw error;}
@@ -136,4 +136,57 @@ test('Return state rejects foreign navigation and invalid CMA fields while a dir
   direct=await page('industry');assert.equal(direct.document.querySelector('[data-canada-population-industry-context]').hidden,true);assert.equal(direct.document.querySelector('[data-canada-population-industry-return]').hidden,true);
   assert.equal(direct.document.querySelector('[data-canada-population-industry-map]').querySelectorAll('[data-population-industry-cma]').length,0);
  }finally{await w.happyDOM.close();if(direct)await direct.happyDOM.close();}
+});
+
+function assertIndustryHandoff(url,current,saved){
+ assert.equal(url.origin,'https://example.com');assert.equal(url.pathname,`/insight-journal/${folder}/industry/`);
+ assert.deepEqual(new Set(url.searchParams.keys()),new Set([...Object.keys(current),'populationReturn']));
+ for(const [key,value] of Object.entries(current))assert.equal(url.searchParams.get(key),value);
+ const original=new URLSearchParams(url.searchParams.get('populationReturn'));
+ assert.deepEqual(Object.fromEntries(original),saved);
+ assert.deepEqual(new Set(original.keys()),new Set(Object.keys(saved)),'Population return has exactly one flat, normalized state level');
+ return original;
+}
+
+test('Population → industry → Fraser → industry keeps the original 2016 source map, quantity scale and final population return',async()=>{
+ const saved={year:'2016',cma:'535',compare:'462',metric:'population',only:'1',zoom:'selected'},current={year:'2024',province:'Ontario',compare:'Quebec',metric:'services',only:'1',zoom:'1'};
+ const windows=[];const open=async(name,url)=>{const w=await page(name,url);windows.push(w);return w;};
+ try{
+  const populationPage=await open('population',`?${new URLSearchParams(saved)}`);
+  const firstIndustry=await open('industry',new URL(populationPage.document.querySelector('[data-population-industry-link]').href));
+  const originalMap=assertSource(firstIndustry,{year:2016,cma:'535',compare:'462'}),signature=createHash('sha256').update(originalMap.outerHTML).digest('hex');
+  change(firstIndustry,'[data-industry-year]',2024);change(firstIndustry,'[data-industry-metric]','services');
+  const only=firstIndustry.document.querySelector('[data-industry-only]');only.checked=true;only.dispatchEvent(new firstIndustry.Event('change'));
+  firstIndustry.document.querySelector('[data-industry-focus]').click();
+  const natureUrl=new URL(firstIndustry.document.querySelector('[data-industry-nature-link*="Fraser"]').href),handoff=new URL(`?${natureUrl.searchParams.get('industryReturn')}`,`${base}/industry/`);
+  assertIndustryHandoff(handoff,current,saved);assert.equal(natureUrl.searchParams.get('view'),'water');assert.equal(natureUrl.searchParams.get('water'),'Fraser');
+  const naturePage=await open('nature',natureUrl),natureDoc=naturePage.document;
+  assert.equal(natureDoc.querySelector('[data-canada-view=water]').getAttribute('aria-pressed'),'true');assert.equal(natureDoc.querySelector('[data-canada-water]').value,'Fraser');
+  const water=[...natureDoc.querySelectorAll('[data-canada-water-shape]')].filter(p=>p.style.display!=='none');assert.ok(water.length);assert.deepEqual(new Set(water.map(p=>p.dataset.canadaWaterShape)),new Set(['Fraser']));
+  assert.deepEqual(new Set([...natureDoc.querySelectorAll('[data-canada-industry-context-province]')].map(p=>p.dataset.canadaIndustryContextProvince)),new Set(['Ontario','Quebec']));
+  assert.equal(natureDoc.querySelector('[data-canada-industry-context-scale]').children.length,6);assert.match(natureDoc.querySelector('[data-canada-industry-context-legend]').textContent,/2024年.*州内GDP割合/s);
+  const back=natureDoc.querySelector('[data-canada-industry-return]');assert.equal(back.hidden,false);const industryUrl=new URL(back.href);assertIndustryHandoff(industryUrl,current,saved);
+  const restored=await open('industry',industryUrl),restoredMap=assertSource(restored,{year:2016,cma:'535',compare:'462'});
+  assert.equal(createHash('sha256').update(restoredMap.outerHTML).digest('hex'),signature,'The complete original source SVG, including its quantity scale, survives the third hop');
+  for(const key of ['year','province','compare','metric'])assert.equal(restored.document.querySelector(`[data-industry-${key}]`).value,current[key]);
+  assert.equal(restored.document.querySelector('[data-industry-only]').checked,true);assert.equal(restored.document.querySelector('[data-industry-focus]').getAttribute('aria-pressed'),'true');
+  assert.match(restored.document.querySelector('[data-canada-population-industry-text]').textContent,/元の2016年.*Toronto.*Montréal.*左は2024年/s);
+  const populationBack=restored.document.querySelector('[data-canada-population-industry-return]');for(const name of ['Toronto','Montréal'])assert.ok(populationBack.textContent.includes(name));
+  const finalPopulation=await open('population',assertReturn(restored,saved));
+  for(const key of ['year','cma','compare','metric','zoom'])assert.equal(finalPopulation.document.querySelector(`[data-population-${key}]`).value,saved[key]);
+  assert.equal(finalPopulation.document.querySelector('[data-population-only]').getAttribute('aria-pressed'),'true');
+ }finally{for(const w of windows)await w.happyDOM.close();}
+});
+
+test('Three-hop handoff strips nested return levels, foreign destinations and unknown fields while normalizing the source CMA state',async()=>{
+ const saved={year:'2021',cma:'535',metric:'density',only:'1',zoom:'south'},bad={year:'2016',cma:'unknown',compare:'unknown',metric:'density',only:'1',zoom:'bad',next:'https://evil.example/',href:'//evil.example/',returnTo:'https://evil.example/',populationReturn:'year=2016&cma=933&next=https://evil.example/',industryReturn:'year=2023&province=Alberta',forestryReturn:'province=Quebec'},current={year:'2025',province:'Ontario',compare:'Quebec',metric:'services'};
+ const windows=[];const open=async(name,url)=>{const w=await page(name,url);windows.push(w);return w;};
+ try{
+  const first=await open('industry',contextUrl(bad,{...current,next:'https://evil.example/',href:'/outside/',industryReturn:'href=https://evil.example/'}));
+  const target=new URL(first.document.querySelector('[data-industry-nature-link*="Fraser"]').href),raw=new URL(`?${target.searchParams.get('industryReturn')}`,`${base}/industry/`);assertIndustryHandoff(raw,current,saved);
+  const tampered=new URLSearchParams(target.searchParams.get('industryReturn'));tampered.set('next','https://evil.example/');tampered.set('href','//evil.example/');tampered.set('industryReturn','populationReturn=href=https://evil.example/');
+  const original=new URLSearchParams(tampered.get('populationReturn'));original.set('populationReturn','cma=933');original.set('industryReturn','href=https://evil.example/');original.set('href','https://evil.example/');original.set('unrecognized','discard');tampered.set('populationReturn',original.toString());target.searchParams.set('industryReturn',tampered.toString());
+  const nature=await open('nature',target),returnUrl=new URL(nature.document.querySelector('[data-canada-industry-return]').href);assertIndustryHandoff(returnUrl,current,saved);
+  const restored=await open('industry',returnUrl);assertSource(restored,{year:2021,cma:'535',metric:'density',zoom:'south'});assertReturn(restored,saved);
+ }finally{for(const w of windows)await w.happyDOM.close();}
 });
