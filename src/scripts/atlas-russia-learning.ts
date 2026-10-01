@@ -11,6 +11,11 @@ type RussiaSource={title:string;url:string;note?:string};
 const htmlEscape=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 const ownKeys=['theme','layer','place','scope','view','compare'];
 
+const climateShortNames:Record<string,string>={BWk:'低温砂漠',BSk:'低温半乾燥',Cfa:'温暖湿潤',Cfb:'西岸海洋性',Dsc:'冷帯夏乾冷夏',Dsd:'冷帯夏乾厳冬',Dwa:'冷帯冬乾暑夏',Dwb:'冷帯冬乾暖夏',Dwc:'冷帯冬乾冷夏',Dwd:'冷帯冬乾厳冬',Dfa:'冷帯湿潤暑夏',Dfb:'冷帯湿潤暖夏',Dfc:'冷帯湿潤冷夏',Dfd:'冷帯湿潤厳冬',ET:'ツンドラ',EF:'氷雪'};
+export function renderRussiaWorkspaceLegend(layer:ReturnType<typeof getRussiaLayer>):string {
+ return renderRussiaLegend(layer.id==='climate'?{...layer,legend:layer.legend.map(item=>{const code=item.label.split(' ')[0];return {...item,label:climateShortNames[code]?code+climateShortNames[code]:item.label};})}:layer);
+}
+
 export function initRussiaLearningAtlas(root:HTMLElement):void {
  if(root.dataset.russiaReady==='true')return;
  const field=root.dataset.field as RussiaField;
@@ -29,6 +34,7 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
   url.searchParams.set('place',s.place);url.searchParams.set('scope',s.scope);
   if(s.comparison)url.searchParams.set('view','comparison');
   url.searchParams.set('compare',s.compareLayer);
+  const params=new URLSearchParams(location.search);for(const flag of ['only','fallback']){const value=params.get(flag);if(value==='0'||value==='1')url.searchParams.set(flag,value);else url.searchParams.delete(flag);}
   return url;
  };
  const chooseRegionTheme=()=>{
@@ -64,7 +70,15 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
    text(prefix+'-title',(prefix==='original'?'元の分布：':'')+item.title+(state.scope==='region'?' ・ '+targetName():''));
    text(prefix+'-period',item.period);
    text(prefix+'-unit',item.unit+(item.resolution?' ・ '+item.resolution:''));
-   one(prefix+'-legend').innerHTML=renderRussiaLegend(item);
+   one(prefix+'-legend').innerHTML=prefix==='primary'&&!overview?renderRussiaWorkspaceLegend(item):renderRussiaLegend(item);
+  }
+  if(!overview){
+   one('primary-legend-spacer').innerHTML=renderRussiaLegend(layer);
+   text('current-legend-unit',layer.period+'・'+layer.unit);
+   text('legend-resolution',layer.resolution??'');one('legend-resolution').hidden=!layer.resolution;
+   one('key-legend').dataset.climateLegend=String(layer.id==='climate');
+   one('climate-dictionary').hidden=layer.id!=='climate';
+   one('primary-legend-definitions').innerHTML=renderRussiaLegend(layer);
   }
   text('reading-status',selected?'選んだ場所・分布の説明':'ロシアの概要');
   text('theme-title',overview&&!selected?'広い国土を、都市と分野の分布から読む':theme.title);text('takeaway',overview&&!selected?'欧州側・シベリア・極東を同じ表示枠で確かめ、自然条件に設備・交通・市場・社会を重ねて読む。都市中心の円は行政人口ではなく、固定された都市範囲の人口です。':theme.takeaway);
@@ -82,6 +96,7 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
    const nextTheme=available.find(item=>item.regionCodes.some(code=>code===state.place))??available[0];
    link.href=serialized({...state,field:nextField,theme:nextTheme.id,layer:nextTheme.defaultLayer,compareLayer:nextTheme.comparisonLayer,comparison:false},withBase(`/atlas/russia/${nextField}/`)).href;
   });
+  root.querySelectorAll<HTMLAnchorElement>('[data-russia-overview-link]').forEach(link=>{link.href=serialized({...state,comparison:false},link.href).href;});
   if(state.comparison){scene('original-map',state.layer);scene('comparison-map',state.compareLayer);}
   else scene('primary-map',state.layer);
  };

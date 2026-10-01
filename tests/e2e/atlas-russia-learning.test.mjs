@@ -42,6 +42,19 @@ function page(field,query='',interactive=true){
 }
 const legendLabels=element=>[...element.children].map(item=>item.textContent.trim());
 function assertLegend(element,layer){assert.deepEqual(legendLabels(element),Array.from(layer.legend,item=>item.label));}
+function assertPrimaryLegend(one,layer){
+ if(layer.id!=='climate'){assertLegend(one('primary-legend'),layer);return;}
+ const dictionary=one('primary-legend-definitions');assertLegend(dictionary,layer);
+ assert.equal(dictionary.closest('details').hidden,false);
+ const compact=[...one('primary-legend').children],full=[...dictionary.children];
+ assert.equal(compact.length,layer.legend.length);
+ for(let i=0;i<compact.length;i++){
+  const code=layer.legend[i].label.split(' ')[0],label=compact[i].textContent.trim();
+  assert.ok(label.startsWith(code));if(/^[A-Z][a-z]{1,2}$/.test(code))assert.ok(label.length>code.length,'Every climate code has a readable short meaning');
+  const color=compact[i].querySelector('[style]')?.getAttribute('style');assert.ok(color,'Every essential class has its color or boundary symbol');
+  assert.equal(color,full[i].querySelector('[style]')?.getAttribute('style'),'Essential and formal legends use the same class colors');
+ }
+}
 function assertSources(element,sources){
  const urls=new Set([...element.querySelectorAll('a')].map(link=>link.href));
  for(const source of sources)assert.ok(urls.has(source.url),`Visible source missing: ${source.title}`);
@@ -65,7 +78,7 @@ test('four built Russia fields show real initial distributions, complete legends
    assert.ok(one('primary-map').querySelector('svg'));
    if(layer.kind==='raster')assertRealImage(one('primary-map'));
    else assert.ok(one('primary-map').querySelector('title'),'Industry representatives retain named marks');
-   assertLegend(one('primary-legend'),layer);
+   assertPrimaryLegend(one,layer);
    assert.equal(one('primary-period').textContent,layer.period);assert.ok(one('primary-unit').textContent.includes(layer.unit));
    assert.ok(one('takeaway').textContent.length>15);assert.equal(one('social-context').textContent,D.getRussiaTheme(state).social);
    assertSources(one('source-list'),[...D.russiaBoundarySources,...layer.sources,...D.getRussiaTheme(state).sources]);
@@ -140,7 +153,7 @@ test('all four server-rendered Russia pages remain readable without JavaScript a
    assert.ok(root,'Server HTML contains the dedicated region workspace');assert.equal(root.dataset.russiaReady,undefined);
    assert.ok(one('primary-map').querySelector('svg'));
    const state=model.createRussiaState('',field),layer=model.getRussiaLayer(state.layer,state);
-   assertLegend(one('primary-legend'),layer);
+   assertPrimaryLegend(one,layer);
    assert.ok(one('takeaway').textContent.length>15);assert.ok(one('primary-period').textContent.length>0);assert.ok(one('primary-unit').textContent.length>0);
    assert.equal(one('normal-view').hidden,false);assert.equal(one('comparison-view').hidden,true);assert.equal(one('place').value,'all');
    assert.equal(root.querySelector('[data-scope="all"]').getAttribute('aria-pressed'),'true');
@@ -151,7 +164,7 @@ test('all four server-rendered Russia pages remain readable without JavaScript a
    for(const link of root.querySelectorAll('[data-field-link]')){
     const url=new URL(link.href);assert.ok(existsSync(path.join(repo,'dist',url.pathname.replace(/^\/insight-journal\//,''),'index.html')));
    }
-   assert.equal(root.querySelectorAll('[data-russia-overview-link],[data-russia-base-link]').length,0);
+   const overviewLinks=root.querySelectorAll('[data-russia-overview-link]');assert.equal(overviewLinks.length,1);assert.equal(new URL(overviewLinks[0].href).pathname,'/insight-journal/atlas/russia/');assert.equal(root.querySelectorAll('[data-russia-base-link]').length,0);
   }finally{win.happyDOM.abort();}
  }
 });

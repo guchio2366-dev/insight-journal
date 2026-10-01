@@ -229,3 +229,48 @@
 .russia-workspace .russia-learning[data-field=regional-overview]{--russia-reader-top:212px}
 @media(min-width:960px) and (max-width:1199px){.russia-workspace .russia-learning{--russia-reader-top:190px}.russia-workspace .russia-learning[data-field=nature]{--russia-reader-top:249px}.russia-workspace .russia-learning[data-field=industry]{--russia-reader-top:270.5px}.russia-workspace .russia-learning[data-field=population]{--russia-reader-top:293px}.russia-workspace .russia-learning[data-field=regional-overview]{--russia-reader-top:385px}.russia-workspace .russia-learning[data-field=regional-overview] .russia-learning-reading{max-height:none}}
 @media(max-width:959px){.russia-workspace .russia-learning-reading{max-height:none}}
+
+/* Keep every map colour and boundary visible beside the fixed learning message. */
+.russia-legend-spacer{visibility:hidden;pointer-events:none;user-select:none}
+.russia-workspace:not([data-russia-overview=true]) .russia-key-legend{flex:none;order:0;padding:4px 12px;border-top:1px solid #deded5;background:#fffefa}
+.russia-key-legend>p{font-size:13px;line-height:18px;margin:0 0 2px}
+.russia-workspace:not([data-russia-overview=true]) .russia-key-legend [data-primary-legend]{grid-template-columns:repeat(2,minmax(0,1fr));font-size:13px;line-height:18px;column-gap:10px;row-gap:1px;padding:0;order:0;flex:none}
+.russia-workspace:not([data-russia-overview=true]) .russia-key-legend[data-climate-legend=true] [data-primary-legend]{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:6px;row-gap:1px}
+.russia-key-legend[data-climate-legend=true] [data-primary-legend]>span{min-height:0;gap:3px}
+.russia-key-legend[data-climate-legend=true] .russia-legend-mark{width:10px}
+.russia-key-legend .russia-legend-mark{margin-top:2px}
+.russia-key-legend [data-primary-legend]>span{align-items:flex-start}
+.russia-workspace:not([data-russia-overview=true]) .russia-learning-coverage{padding:10px 0;max-height:none;overflow:visible}
+.russia-workspace:not([data-russia-overview=true]) .russia-reading-scroll{padding-top:0}
+.russia-climate-dictionary{border-top:1px solid #deded5;padding:0;background:transparent;font-size:13px;line-height:1.5}
+.russia-climate-dictionary>summary{min-height:44px;padding:10px 0;cursor:pointer}
+.russia-workspace .russia-climate-dictionary .russia-learning-legend{grid-template-columns:1fr;padding:8px 0;font-size:13px}
+.russia-legend-resolution{font-size:13px;line-height:1.5;padding-top:10px}
+.russia-workspace:not([data-russia-overview=true]) .russia-learning[data-field=population] .russia-key-legend{padding-block:2px}
+.russia-workspace:not([data-russia-overview=true]) .russia-learning[data-field=population] .russia-key-legend [data-primary-legend]{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:6px;row-gap:1px}
+.russia-workspace:not([data-russia-overview=true]) .russia-learning[data-field=population] .russia-key-legend [data-primary-legend]>span{gap:3px}
+.russia-workspace:not([data-russia-overview=true]) .russia-learning[data-field=population] .russia-key-legend .russia-legend-mark{width:10px}
+
+/* Match the approved US main and climate controls at desktop widths. */
+@media(min-width:960px){
+ .russia-learning-fields a{font-weight:700;color:#21343d}.russia-learning-fields a[aria-current]{background:#243b48;color:#fff}.russia-learning-fields a:last-child{border-right:0}
+ .russia-learning[data-field=nature] .russia-subtabs{width:calc(100% - 8px);height:46px;background:#f2f1e9;border-color:#c9cec4}
+ .russia-learning[data-field=nature] .russia-subtabs button{height:44px;min-height:44px;font-size:14px;font-weight:750;line-height:24.5px;padding:7px 4px;border:0;border-right:1px solid #d3d6cd;color:#344951}
+ .russia-learning[data-field=nature] .russia-subtabs button:last-child{border-right:0}
+ .russia-learning[data-field=nature] .russia-subtabs button[aria-pressed=true]{background:#35515d;color:#fff}
+ .russia-learning[data-field=nature] .russia-subtabs small{font-size:13px}
+}
+
+/* Match the approved US compact population buttons without moving the map. */
+@media(min-width:960px){
+ .russia-workspace .russia-learning[data-field=population] .russia-subcontrols{height:103px;padding:12px 0 0;border:0;background:transparent}
+ .russia-workspace .russia-learning[data-field=population] .russia-subtabs{display:flex;gap:8px;border:0;background:transparent}
+ .russia-workspace .russia-learning[data-field=population] .russia-subtabs button{flex:0 0 auto;box-sizing:border-box;height:46px;min-height:46px;padding:8px 10px;border:1px solid #bac9c6;border-radius:4px;background:#fff;color:#243f48;font-size:16px;font-weight:400;line-height:28px}
+ .russia-workspace .russia-learning[data-field=population] .russia-subtabs button:nth-child(1){width:86px}.russia-workspace .russia-learning[data-field=population] .russia-subtabs button:nth-child(2){width:94px}.russia-workspace .russia-learning[data-field=population] .russia-subtabs button:nth-child(3){width:54px}
+ .russia-workspace .russia-learning[data-field=population] .russia-subtabs button[aria-pressed=true]{background:#224c59;color:#fff}
+ .russia-workspace .russia-learning[data-field=population] .russia-subtabs button:disabled{opacity:1;color:#243f48}
+ .russia-workspace .russia-learning[data-field=population] .russia-subtabs small{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+ .russia-population-meta{display:flex;align-items:center;gap:12px;margin-top:6px;max-height:39px}
+ .russia-population-meta .russia-control-note{flex:1;margin:0;padding:0!important;font-size:13px;line-height:19.5px}
+ .russia-population-meta .russia-population-layer{flex:0 0 250px;margin:0}
+}

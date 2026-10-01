@@ -154,3 +154,45 @@
 @media(min-width:1200px){.latin-workspace .latin-industry-map,.latin-workspace .latin-industry-canal{height:620px!important;min-height:620px;aspect-ratio:auto}}
 .latin-workspace.is-comparison .latin-map-options,.latin-workspace.is-comparison .latin-industry>.latin-map-options{position:static;top:auto;right:auto;left:auto;transform:none;width:max-content;max-width:100%;margin:0 0 8px!important}
 @media(min-width:960px){.latin-workspace.latin-agriculture:not(.is-comparison) .latin-agriculture-legend{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px 8px}.latin-workspace.latin-agriculture:not(.is-comparison) .latin-agriculture-legend>div{display:contents}.latin-workspace.latin-agriculture:not(.is-comparison) .latin-agriculture-legend strong{position:absolute;top:-30px;left:8px;z-index:2;white-space:nowrap;width:max-content;max-width:calc(100% - 16px);padding:1px 6px;background:#fffefae6;border-radius:3px}}
+
+/* Essential decoding stays beside the map; detail dictionaries stay in the reader. */
+.latin-essential-legend{flex:none;border-top:1px solid #ccd4c6;padding-top:6px;font-size:13px;line-height:1.5;min-width:0}
+.latin-workspace .latin-essential-legend p{font-size:13px!important;line-height:1.45!important;margin:3px 0}
+.latin-essential-legend-heading{font-weight:700}.latin-essential-legend-note{color:#405a56}
+.latin-workspace .latin-essential-legend :is(.latin-nature-legend,.latin-industry-key){display:flex;flex-wrap:wrap;gap:3px 9px;font-size:13px;line-height:1.5;margin:4px 0}
+.latin-workspace .latin-essential-legend .latin-agriculture-legend{display:block;position:static;margin-top:3px;font-size:13px}
+.latin-workspace .latin-essential-legend .latin-agriculture-legend strong{position:static;white-space:normal;width:auto;max-width:none;padding:0;background:none}
+.latin-workspace .latin-essential-legend .latin-agriculture-legend>div{display:flex;flex-wrap:wrap;gap:3px 9px}
+.latin-essential-legend-spacer{flex:none;pointer-events:none}.latin-essential-legend .lp-legend{margin:0}
+.latin-workspace .latin-reading-fixed .latin-comparison-link{line-height:1.45;margin:4px 0;padding:5px 8px}
+.latin-workspace .latin-industry-reading-fixed .latin-industry-actions{display:grid;gap:4px;margin:5px 0}.latin-workspace .latin-industry-reading-fixed .latin-industry-actions a{font-size:14px;line-height:1.45;margin:0;padding:5px 8px}
+@media(min-width:960px){.latin-workspace .latin-reading,.latin-workspace .latin-industry-reading{height:calc(100dvh - var(--latin-map-top,298px) - 10px);max-height:calc(100dvh - var(--latin-map-top,298px) - 10px)}.latin-workspace.latin-agriculture{--latin-map-top:239px}.latin-workspace.latin-nature{--latin-map-top:298px}.latin-workspace.latin-industry{--latin-map-top:319.5px}.latin-workspace.latin-population{--latin-map-top:342px}.latin-workspace .latin-reading p,.latin-workspace .latin-industry-reading p{line-height:1.55}.latin-workspace.is-comparison .latin-reading,.latin-workspace.is-comparison .latin-industry-reading{height:auto;max-height:none}}
+@media(min-width:960px) and (max-width:1199px){.latin-workspace.latin-agriculture{--latin-map-top:190px}.latin-workspace.latin-nature{--latin-map-top:249px}.latin-workspace.latin-industry{--latin-map-top:270.5px}.latin-workspace.latin-population{--latin-map-top:293px}}
+
+.latin-workspace .latin-fields a[aria-current]{background:#243b48}
+
+/* Match the approved US main and climate controls at desktop widths. */
+@media(min-width:960px){
+ .latin-workspace .latin-fields a{color:#21343d;font-weight:700}.latin-workspace .latin-fields a[aria-current]{background:#243b48;color:#fff}.latin-workspace .latin-fields a:last-child{border-right:0}
+ .latin-workspace.latin-nature .latin-subfield-row{padding-right:15px}
+ .latin-workspace.latin-nature .latin-subfield-band button{height:44px;min-height:44px;font-size:14px;font-weight:750;line-height:24.5px;padding:7px 4px;color:#344951}
+ .latin-workspace.latin-nature .latin-subfield-band button[aria-pressed=true]{background:#35515d;color:#fff}
+}
+
+/* Leave a usable reading window after the complete current legend. */
+.latin-essential-legend-heading{display:none}
+.latin-workspace .latin-reading,.latin-workspace .latin-industry-reading{padding:8px 12px}
+.latin-workspace .latin-reading-fixed>p:not(.latin-reading-kicker),.latin-workspace .latin-industry-reading-fixed>p{margin:4px 0}
+.latin-workspace .latin-reading-fixed h2,.latin-workspace .latin-industry-reading-fixed h2{margin-bottom:5px}
+.latin-workspace .latin-reading-fixed .latin-comparison-link,.latin-workspace .latin-industry-reading-fixed .latin-industry-actions a{padding-block:4px}
+
+/* Match the approved US compact population buttons without moving the map. */
+@media(min-width:960px){
+ .latin-workspace.latin-population .latin-subfield-band{height:103px;padding:12px 0 0;border:0;background:transparent}
+ .latin-workspace.latin-population .latin-subfields{display:flex;gap:8px;border:0;background:transparent}
+ .latin-workspace.latin-population .latin-subfields button{flex:0 0 auto;box-sizing:border-box;height:46px;min-height:46px;padding:8px 10px;border:1px solid #bac9c6;border-radius:4px;background:#fff;color:#243f48;font-size:16px;font-weight:400;line-height:28px}
+ .latin-workspace.latin-population .latin-subfields button:nth-child(1){width:86px}.latin-workspace.latin-population .latin-subfields button:nth-child(2){width:94px}.latin-workspace.latin-population .latin-subfields button:nth-child(3){width:54px}
+ .latin-workspace.latin-population .latin-subfields button[aria-pressed=true]{background:#224c59;color:#fff}
+ .latin-workspace.latin-population .latin-field-status{height:auto;margin:7px 0 0;padding:0;font-size:13px;line-height:19.5px}
+ .latin-workspace.latin-nature .latin-subfield-band{width:calc(100% - 8px)}
+}

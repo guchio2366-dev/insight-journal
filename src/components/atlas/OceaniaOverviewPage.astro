@@ -111,6 +111,7 @@ const config = {
       return {place, city: legacyCity?.country === place ? legacyCity.id : '', scope: scope === 'country' && !place ? 'all' : scope};
     };
     let state = readState();
+    const retainFlags=(url:URL)=>{const params=new URLSearchParams(location.search);for(const flag of ['only','fallback']){const value=params.get(flag);if(value==='0'||value==='1')url.searchParams.set(flag,value);else url.searchParams.delete(flag);}};
     const syncLinks = () => {
       root.querySelectorAll<HTMLAnchorElement>('[data-oceania-field-link]').forEach(link => {
         const url = new URL(link.href);
@@ -124,14 +125,14 @@ const config = {
           url.searchParams.set('layer', theme.layer);
           url.searchParams.set('compare', theme.compare);
         }
-        link.href = url.href;
+        retainFlags(url);link.href = url.href;
       });
       root.querySelectorAll<HTMLAnchorElement>('[data-oceania-base-link]').forEach(link => {
         const url = new URL(link.href);
         url.search = '';
         if (state.place) url.searchParams.set('place', state.place);
         url.searchParams.set('scope', state.scope);
-        link.href = url.href;
+        retainFlags(url);link.href = url.href;
       });
       const current = root.querySelector<HTMLAnchorElement>('[data-oceania-overview-current]')!;
       const url = new URL(current.href);
@@ -139,7 +140,7 @@ const config = {
       url.searchParams.set('place', state.place || 'all');
       url.searchParams.set('scope', state.scope);
       if (state.city) url.searchParams.set('city', state.city);
-      current.href = url.href;
+      retainFlags(url);current.href = url.href;
     };
     const saveState = (replace: boolean) => {
       const url = new URL(location.href);

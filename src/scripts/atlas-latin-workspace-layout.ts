@@ -1,3 +1,4 @@
+import {initLatinEssentialLegends} from './atlas-latin-essential-legends.ts';
 export function initLatinWorkspaceLayout():void {
  for(const root of document.querySelectorAll<HTMLElement>('[data-latin-workspace]')){
   if(root.dataset.layoutReady==='true')continue;root.dataset.layoutReady='true';
@@ -6,7 +7,7 @@ export function initLatinWorkspaceLayout():void {
    const placeSelect=root.querySelector<HTMLSelectElement>('[data-latin-agriculture-place],[data-nature-place],[data-industry-place],[data-lp-place-select]'),scopeSelect=root.querySelector<HTMLSelectElement>('[data-latin-agriculture-scope],[data-nature-scope],[data-industry-scope],[data-lp-scope-select]'),params=new URLSearchParams(location.search),routePlace=params.get('place'),routeScope=params.get('scope');
    // Route selection is already available while field modules hydrate their SSR controls.
    const place=routePlace&&placeSelect&&Array.from(placeSelect.options).some(option=>option.value===routePlace)?routePlace:placeSelect?.value??'all',scope=routeScope&&['all','central','south','country'].includes(routeScope)?routeScope:scopeSelect?.value??'all';
-   for(const link of root.querySelectorAll<HTMLAnchorElement>('.latin-fields>a')){const url=new URL(link.href);if(url.pathname.endsWith('/overview/')){place==='all'?url.searchParams.delete('country'):url.searchParams.set('country',place);}else{url.searchParams.set('place',place);url.searchParams.set('scope',scope);}for(const flag of ['only','fallback']){const value=params.get(flag);if(value==='0'||value==='1')url.searchParams.set(flag,value);else url.searchParams.delete(flag);}link.href=url.href;}
+   for(const link of root.querySelectorAll<HTMLAnchorElement>('.latin-fields>a')){const url=new URL(link.href);if(url.pathname.endsWith('/overview/')){place==='all'?url.searchParams.delete('country'):url.searchParams.set('country',place);}else url.searchParams.set('place',place);url.searchParams.set('scope',scope);for(const flag of ['only','fallback']){const value=params.get(flag);if(value==='0'||value==='1')url.searchParams.set(flag,value);else url.searchParams.delete(flag);}link.href=url.href;}
   };
   const scheduleFieldLinks=()=>queueMicrotask(syncFieldLinks);root.addEventListener('change',scheduleFieldLinks);root.addEventListener('click',scheduleFieldLinks);window.addEventListener('popstate',scheduleFieldLinks);requestAnimationFrame(syncFieldLinks);
   const below=root.querySelector<HTMLElement>('[data-latin-below-workspace]');if(below){const extra=[...root.querySelectorAll<HTMLElement>('[data-nature-map-description],figure>[data-latin-agriculture-map-caption]')];if(extra.length){const detail=document.createElement('details'),summary=document.createElement('summary');summary.textContent='地図の分布・尺度と読み方';detail.append(summary,...extra);below.prepend(detail);}const actions=root.querySelector('[data-nature-renderer]')?.closest('.latin-actions'),options=root.querySelector('.latin-map-options-body');if(actions&&options)options.append(actions);}if(root.dataset.latinField==='industry'&&below)for(const detail of root.querySelectorAll<HTMLElement>('.latin-industry-details'))below.append(detail);
@@ -18,4 +19,5 @@ export function initLatinWorkspaceLayout():void {
   const select=(id:string)=>{const missing=id!==available;root.querySelectorAll<HTMLElement>('[data-latin-section]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.latinSection===id)));if(water)water.hidden=!['water','rivers','rainfall','basins'].includes(id);message.hidden=!missing;root.classList.toggle('has-unavailable-section',missing);const label=root.querySelector<HTMLElement>(`[data-latin-section="${id}"]`)?.textContent??id;message.textContent=`${label}の分布図は未整備です。推定値で補わず、出典と範囲を確認してから追加します。整備済みの項目へ戻ると、元の地図・選択を続けられます。`;};
   root.querySelectorAll<HTMLButtonElement>('[data-latin-section]').forEach(button=>button.addEventListener('click',()=>select(button.dataset.latinSection!)));
  }
+ initLatinEssentialLegends();
 }

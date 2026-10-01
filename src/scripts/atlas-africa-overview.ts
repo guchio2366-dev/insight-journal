@@ -18,7 +18,13 @@ export function initAfricaOverviewAdapter(){
   fixed.querySelector<HTMLElement>('.overview-reading-eyebrow')!.textContent=selected?'選択した国・地域の説明':'地域の概要';
   intro.textContent=selected?`${title}の位置を地図で確認しました。国別の詳細本文は未整備です。地域の分布・国別統計と合わせて読めます。`:regionIntro;
   regionContent.hidden=!!selected;
-  const href=root.querySelector<HTMLAnchorElement>('[data-overview-field="agriculture"]')!.href;const url=new URL(href);if(selected)url.searchParams.set('place',selected);link.href=url.href;
+  const params=new URLSearchParams(location.search);
+  for(const field of root.querySelectorAll<HTMLAnchorElement>('[data-overview-field]')){
+   const url=new URL(field.href);selected?url.searchParams.set('place',selected):url.searchParams.delete('place');
+   for(const key of ['region','zoom','only','fallback']){const value=params.get(key),valid=key==='region'?['all','north','west','central','east','south'].includes(value??''):key==='zoom'?['all','region','country','theme'].includes(value??''):value==='0'||value==='1';if(valid)url.searchParams.set(key,value!);else url.searchParams.delete(key);}
+   field.href=url.href;
+  }
+  link.href=root.querySelector<HTMLAnchorElement>('[data-overview-field="agriculture"]')!.href;
  };
  const source=root.querySelector<HTMLElement>('[data-overview-place-summary]')!;
  new MutationObserver(sync).observe(source,{childList:true,subtree:true,characterData:true});

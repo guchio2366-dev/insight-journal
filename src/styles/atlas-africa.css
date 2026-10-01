@@ -243,3 +243,48 @@
 }
 @media(max-width:959px){.africa-heading{min-height:0;padding-top:0}.africa-region-controls{display:flex;flex-wrap:wrap;min-height:0;gap:10px}.africa-region-navigation{flex:1;min-width:200px}.africa-subfields{height:auto;min-height:59px}.africa-atlas[data-field=industry] .africa-main>.africa-subfields,.africa-atlas[data-field=population] .africa-main>.africa-subfields{height:auto;min-height:59px}.africa-subfields small{display:block;margin:0}.africa-subfields button{height:auto}.africa-detail{max-height:none}}
 @media(min-width:1200px){.africa-atlas[data-field=industry] .africa-map{height:620px;min-height:620px;max-height:none;aspect-ratio:auto}}
+
+/* The complete current legend is fixed above the independently scrolling details. */
+.africa-essential-legend{flex:none;padding:6px 12px;border-bottom:1px solid #d8ddd5;background:#f7f5ec;font-size:13px;line-height:1.45}
+.africa-essential-legend p{margin:2px 0;font-size:13px;line-height:1.45}.africa-essential-legend-heading{font-weight:700}
+.africa-essential-legend .africa-legend,.africa-essential-legend .africa-theme-legend{padding:3px 0;border:0;gap:3px 10px;overflow:visible;font-size:13px;line-height:1.45}
+.africa-essential-legend .africa-legend>svg{width:100%;max-width:310px;height:auto}.africa-essential-legend-note{color:#405063}
+.africa-essential-legend-spacer{order:4;height:90px;pointer-events:none}
+.africa-right-fixed{padding:10px 12px 8px}.africa-theme-reading h2{font-size:19px;line-height:1.4;margin-bottom:5px}.africa-takeaway{line-height:1.55;margin-bottom:5px}.africa-theme-actions{margin-top:5px}
+.africa-detail-scroll{padding:8px 12px}.africa-country-controls,.africa-selected{margin-inline:-12px;padding-inline:12px}
+
+.africa-fields button[aria-pressed=true]{font-weight:700}
+
+/* Match the approved US main and climate controls at desktop widths. */
+@media(min-width:960px){
+ .africa-fields button{font-weight:700;color:#21343d}.africa-fields button[aria-pressed=true]{background:#243b48;color:#fff}.africa-fields button:last-child{border-right:0}
+ .africa-atlas[data-field=nature] .africa-main>.africa-subfields{position:relative;padding:7px 15px 6px 7px}
+ .africa-atlas[data-field=nature] .africa-main>.africa-subfields::before{content:"";position:absolute;left:6px;right:14px;top:6px;height:46px;box-sizing:border-box;border:1px solid #c9cec4;background:#f2f1e9;pointer-events:none}
+ .africa-atlas[data-field=nature] .africa-main>.africa-subfields button{position:relative;box-sizing:border-box;height:44px;min-height:44px;font-size:14px;font-weight:750;line-height:24.5px;padding:7px 4px;border:0;border-right:1px solid #d3d6cd;background:transparent;color:#344951}
+ .africa-atlas[data-field=nature] .africa-main>.africa-subfields button:last-child{border-right:0}
+ .africa-atlas[data-field=nature] .africa-main>.africa-subfields button[aria-pressed=true]{background:#35515d;color:#fff}
+ .africa-atlas[data-field=nature] .africa-main>.africa-subfields small{font-size:13px}
+}
+
+/* Concise fixed takeaways, with their full explanation in the scrolling reader. */
+.africa-right-fixed{padding:6px 12px}.africa-takeaway{line-height:1.45;margin:4px 0}
+.africa-essential-legend{padding-block:4px}.africa-essential-legend-note{font-size:13px;line-height:18px!important}
+.africa-theme-explanation{font-size:14px;line-height:1.75;margin:0 0 8px}
+
+/* Match the approved US compact population buttons without moving the map. */
+@media(min-width:960px){
+ .africa-atlas[data-field=population] .africa-main>.africa-subfields{height:103px;min-height:103px;padding:12px 0 0;border:0;background:transparent;gap:8px;align-items:flex-start;align-content:flex-start}
+ .africa-atlas[data-field=population] .africa-subfields button{flex:0 0 auto;box-sizing:border-box;height:46px;min-height:46px;padding:8px 10px;border:1px solid #bac9c6;border-radius:4px;background:#fff;color:#243f48;font-size:16px;font-weight:400;line-height:28px}
+ .africa-atlas[data-field=population] .africa-subfields button:nth-of-type(1){width:86px}.africa-atlas[data-field=population] .africa-subfields button:nth-of-type(2){width:94px}.africa-atlas[data-field=population] .africa-subfields button:nth-of-type(3){width:54px}
+ .africa-atlas[data-field=population] .africa-subfields button[aria-pressed=true]{background:#224c59;color:#fff}
+ .africa-atlas[data-field=population] .africa-subfields small{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+ .africa-atlas[data-field=population] .africa-subfield-caption{margin:0;font-size:13px;line-height:19.5px}
+ .africa-atlas[data-field=nature] .africa-main>.africa-subfields button{flex:0 0 25%;width:25%}
+}
+
+/* Match the measured US water hierarchy and water-state map frame. */
+.africa-main>.africa-subitems{box-sizing:border-box;height:50.5px;min-height:50.5px;padding:3.25px 6px;border-top:0;border-bottom:0;align-items:stretch}
+.africa-main>.africa-subitems button{box-sizing:border-box;height:44px;min-height:44px;font-size:13px;line-height:1.5}
+.africa-main>.africa-subitems small{font-size:13px}
+@media(min-width:960px) and (max-width:1199px){.africa-atlas[data-field=nature]:has(.africa-main>.africa-subitems) .africa-map{height:500px;min-height:500px;max-height:500px;aspect-ratio:auto}}
+@media(max-width:959px){.africa-main>.africa-subitems{height:auto;min-height:50.5px}.africa-main>.africa-subitems button{height:auto}}

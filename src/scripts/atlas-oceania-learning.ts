@@ -1,4 +1,5 @@
 import {withBase} from '../lib/urls';
+import {renderOceaniaRequiredLegend} from './atlas-oceania-legend';
 import {getOceaniaComparisonReading} from '../data/atlas/oceania-comparison-reading';
 import {oceaniaFields,oceaniaCountries,oceaniaLayers,oceaniaThemes,oceaniaPopulationReading,createOceaniaState,getOceaniaTheme,getOceaniaLayer,renderOceaniaScene,renderOceaniaLegend,oceaniaCoverage,oceaniaFocusName,type OceaniaField,type OceaniaState,type OceaniaSource} from '../data/atlas/oceania-learning';
 
@@ -21,7 +22,7 @@ export function initOceaniaLearningAtlas(root:HTMLElement):void{
  const serialized=(s:OceaniaState,href=location.href)=>{
   const url=new URL(href,location.href);for(const key of ownKeys)url.searchParams.delete(key);
   url.searchParams.set('theme',s.theme);url.searchParams.set('layer',s.layer);url.searchParams.set('place',s.place);url.searchParams.set('scope',s.scope);
-  if(s.comparison)url.searchParams.set('view','comparison');url.searchParams.set('compare',s.compareLayer);if(selectedReading)url.searchParams.set('reading','selection');return url;
+  if(s.comparison)url.searchParams.set('view','comparison');url.searchParams.set('compare',s.compareLayer);if(selectedReading)url.searchParams.set('reading','selection');const params=new URLSearchParams(location.search);for(const flag of ['only','fallback']){const value=params.get(flag);if(value==='0'||value==='1')url.searchParams.set(flag,value);else url.searchParams.delete(flag);}return url;
  };
  const chooseCountryTheme=()=>{
   if(state.place==='all')return;
@@ -48,7 +49,8 @@ export function initOceaniaLearningAtlas(root:HTMLElement):void{
   one('normal-view').hidden=state.comparison;one('comparison-view').hidden=!state.comparison;
   for(const [prefix,item] of [['primary',layer],['original',layer],['comparison',compare]] as const){
    text(prefix+'-title',(prefix==='original'?'元の分布：':'')+item.title+(state.scope==='country'?' · '+targetName()+(oceaniaFocusName(state)?'／'+oceaniaFocusName(state):''):''));
-   text(prefix+'-period',item.period);text(prefix+'-unit',item.unit+(item.resolution?' · '+item.resolution:''));one(prefix+'-legend').innerHTML=renderOceaniaLegend(item);
+   text(prefix+'-period',item.period);text(prefix+'-unit',item.unit+(item.resolution?' · '+item.resolution:''));const legend=renderOceaniaLegend(item);one(prefix+'-legend').innerHTML=prefix==='primary'?renderOceaniaRequiredLegend(item):legend;
+   if(prefix==='primary'){one('primary-legend-spacer').innerHTML=legend;one('primary-legend-dictionary-content').innerHTML=legend;one('primary-legend-dictionary').hidden=item.id!=='climate';text('primary-legend-unit',item.period+' ・ '+item.unit);root.querySelector<HTMLElement>('[data-required-legend-layer]')!.dataset.requiredLegendLayer=item.id;}
   }
   text('theme-title',selectedReading?theme.title:overview.title);text('takeaway',selectedReading?theme.takeaway:overview.takeaway);text('explanation',selectedReading?theme.explanation:overview.explanation);
   text('coverage',oceaniaCoverage(layer,state));text('comparison',compare.title+'と比べる →');text('return','← '+layer.title+'へ戻る：'+targetName()+(state.scope!=='country'&&state.place!=='all'?'／選択：'+oceaniaCountries.find(c=>c.code===state.place)?.name:''));text('comparison-explanation',comparisonText());

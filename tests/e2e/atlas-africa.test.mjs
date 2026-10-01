@@ -61,23 +61,24 @@ test('each thematic comparison retains the source marks, all legends and named r
    assert.equal(q('[data-theme-marks]').innerHTML,sourceMarks);
    assert.equal(q('[data-theme-legend]').children.length,theme.marks.length);
    assert.equal(q('[data-legend]').children.length,6);
-   assert.equal(q('[data-theme-takeaway]').textContent,theme.compareText);
+   assert.equal(q('[data-theme-takeaway-detail]').textContent,theme.compareText);
+   assert.ok(q('[data-theme-takeaway]').textContent.trim());
    assert.ok(q('[data-theme-return]').textContent.includes(theme.title));
    assert.ok(q('[data-theme-return]').textContent.includes('ガーナ'));
    assert.equal(q('[data-place]').value,'GHA');assert.equal(q('[data-compare]').value,'EGY');
    assert.equal(q('[data-metric]').value,sourceMetric);assert.equal(q('[data-year]').value,sourceYear);
    assert.equal(q('[data-source]').getAttribute('href'),`https://data.worldbank.org/indicator/${theme.compareMetric}`);
    w.dispatchEvent(new w.PopStateEvent('popstate'));
-   assert.equal(q('[data-theme-takeaway]').textContent,theme.compareText);
+   assert.equal(q('[data-theme-takeaway-detail]').textContent,theme.compareText);
    q('[data-theme-return]').click();
-   assert.equal(q('[data-theme-takeaway]').textContent,theme.takeaway);
+   assert.equal(q('[data-theme-takeaway-detail]').textContent,theme.takeaway);
    assert.equal(q('[data-metric]').value,sourceMetric);assert.equal(q('[data-year]').value,sourceYear);
    assert.equal(q('.africa-map').getAttribute('viewBox'),sourceView);
    assert.equal(new URL(w.location.href).searchParams.has('context'),false);
   }
   q('[data-theme-comparison]').click();q('[data-field="industry"]').click();
   assert.equal(new URL(w.location.href).searchParams.has('context'),false);
-  assert.equal(q('[data-theme-takeaway]').textContent,themes.find(t=>t.field==='industry').takeaway);
+  assert.equal(q('[data-theme-takeaway-detail]').textContent,themes.find(t=>t.field==='industry').takeaway);
  }finally{for(const k of Object.keys(previous))globalThis[k]=previous[k];w.happyDOM.abort();}
 });
 
