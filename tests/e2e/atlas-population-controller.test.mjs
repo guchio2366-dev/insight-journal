@@ -6,7 +6,7 @@ import {Window} from 'happy-dom';
 
 // Mock only WebGL's rendering boundary. The actual page, state codec, selectors,
 // card logic and data loaders execute unchanged; browser layout is tested separately.
-const stub=`export function setWorkerCount(){};export class Map {
+const stub=`export function setWorkerCount(){};export function setWorkerUrl(url){window.__workerUrl=url};export class Map {
  constructor(options){if(window.__failMap)throw Error('Test: WebGL unavailable');window.__map=this;window.__mapCount=(window.__mapCount??0)+1;this.options=options;this.layers={};this.events={};this.center={lng:-96,lat:38};this.zoom=3;this.sources=Object.fromEntries(Object.entries(options.style.sources).map(([id,s])=>[id,{data:s.data,setDataCalls:0,setData(d){this.data=d;this.setDataCalls++}}]));this.touchZoomRotate={disableRotation(){}};this.scrollZoom={disable(){}};this.cameraChanges=0;}
  addSource(id,s){this.sources[id]={data:s.data,setData(d){this.data=d}}}removeSource(id){delete this.sources[id]}addLayer(l){this.layers[l.id]=l}getLayer(id){return this.layers[id]}removeLayer(id){delete this.layers[id]}
  getSource(id){return this.sources[id]} getCenter(){return this.center} getZoom(){return this.zoom}
@@ -17,7 +17,7 @@ const stub=`export function setWorkerCount(){};export class Map {
  jumpTo(o){this.cameraChanges++;this.center={lng:o.center[0],lat:o.center[1]};this.zoom=o.zoom??this.zoom}fitBounds(bounds){this.cameraChanges++;this.lastFit=bounds}
  zoomIn(){this.zoom++}zoomOut(){this.zoom--}getCanvas(){return {getContext:()=>null}}
 }`;
-const bundle=await build({entryPoints:['src/scripts/atlas-explorer.ts'],bundle:true,write:false,format:'iife',globalName:'NatureTest',plugins:[{name:'map-boundary',setup(b){b.onResolve({filter:/^maplibre-gl$/},()=>({path:'maplibre',namespace:'stub'}));b.onLoad({filter:/.*/,namespace:'stub'},()=>({contents:stub,loader:'js'}));}}]});
+const bundle=await build({entryPoints:['src/scripts/atlas-explorer.ts'],bundle:true,write:false,format:'iife',globalName:'NatureTest',plugins:[{name:'map-boundary',setup(b){b.onResolve({filter:/^maplibre-gl\/dist\/maplibre-gl-worker\.mjs\?worker&url$/},()=>({path:'worker-url',namespace:'worker-url-stub'}));b.onLoad({filter:/.*/,namespace:'worker-url-stub'},()=>({contents:"export default '/insight-journal/_astro/maplibre-gl-worker.test.js'",loader:'js'}));b.onResolve({filter:/^maplibre-gl$/},()=>({path:'maplibre',namespace:'stub'}));b.onLoad({filter:/.*/,namespace:'stub'},()=>({contents:stub,loader:'js'}));}}]});
 const delay=()=>new Promise(resolve=>setTimeout(resolve,25));
 async function waitFor(check,label){for(let attempt=0;attempt<120;attempt++){if(check())return;await delay();}throw new Error('Timed out: '+label);}
 async function setup(query='',fail=false,field='population'){
@@ -33,7 +33,7 @@ async function setup(query='',fail=false,field='population'){
  const requests=[];
  window.fetch=async (url)=>{requests.push(String(url));return new Response(await readFile('public/'+String(url).replace(/^.*?\/insight-journal\//,'')));};
  window.Blob=Blob;window.Response=Response;window.DecompressionStream=DecompressionStream;
- const entry=window.eval(bundle.outputFiles[0].text+"; NatureTest;");await entry.startAtlas();if(field==='population')await waitFor(()=>/3,144|3,108/.test(window.document.querySelector('[data-pop-status]').textContent),'population ready').catch(error=>{console.log(window.document.querySelector('[data-pop-status]').textContent,requests,window.happyDOM.virtualConsolePrinter.readAsString());throw error;});await delay();
+ const entry=window.eval(bundle.outputFiles[0].text+"; NatureTest;");await entry.startAtlas();assert.equal(window.__workerUrl,'/insight-journal/_astro/maplibre-gl-worker.test.js');if(field==='population')await waitFor(()=>/3,144|3,108/.test(window.document.querySelector('[data-pop-status]').textContent),'population ready').catch(error=>{console.log(window.document.querySelector('[data-pop-status]').textContent,requests,window.happyDOM.virtualConsolePrinter.readAsString());throw error;});await delay();
  return {window,requests,root:window.document.querySelector('[data-atlas-explorer]'),q:s=>window.document.querySelector(s)};
 }
 
