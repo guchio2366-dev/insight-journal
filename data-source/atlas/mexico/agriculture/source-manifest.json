@@ -1,0 +1,196 @@
+{
+  "version": 1,
+  "retrieved": "2026-10-01",
+  "licence": "INEGI Términos de Libre Uso",
+  "licenceUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+  "sources": [
+    {
+      "id": "irrigation",
+      "table": "ca2022_11",
+      "columns": [
+        "SUP_AGRIC",
+        "SUP_RIEGO",
+        "SUP_TEMP"
+      ],
+      "unit": "ha; derived share %",
+      "transform": "SUP_RIEGO / SUP_AGRIC × 100",
+      "sourceUrl": "https://www.inegi.org.mx/contenidos/programas/ca/2022/tabulados/ca2022_11.xlsx",
+      "retainedWorkbook": "data-source/atlas/mexico/agriculture/raw/ca2022_11.xlsx",
+      "workbookSha256": "6f8e82926e483448dc36c7a9e39a4c1e73abd01bdd86c32bf5d0a922398fb1a7"
+    },
+    {
+      "id": "maize",
+      "table": "ca2022_agr02",
+      "columns": [
+        "TON_AGCA",
+        "TON_AGCA_R",
+        "TON_AGCA_T"
+      ],
+      "unit": "t",
+      "filter": "CULTIVO=Maíz grano blanco; NOM_MUN blank; national + state totals",
+      "sourceUrl": "https://www.inegi.org.mx/contenidos/programas/ca/2022/tabulados/ca2022_agr02.xlsx",
+      "retainedWorkbook": "data-source/atlas/mexico/agriculture/raw/ca2022_agr02.xlsx",
+      "workbookSha256": "bc44c2192edf034609dcca575ff6e67d220c5fa05cce31f41b5adcb6e863e322"
+    },
+    {
+      "id": "autumn-winter",
+      "table": "ca2022_agr04",
+      "columns": [
+        "TON_AGOI",
+        "TON_AGOI_R"
+      ],
+      "unit": "t",
+      "filter": "CULTIVO=Maíz grano blanco; NOM_MUN blank; ENT_FED starts 25; Sinaloa case only; no absent-state imputation",
+      "sourceUrl": "https://www.inegi.org.mx/contenidos/programas/ca/2022/tabulados/ca2022_agr04.xlsx",
+      "retainedWorkbook": "data-source/atlas/mexico/agriculture/raw/ca2022_agr04.xlsx",
+      "workbookSha256": "f6ce7ac0395fdf5072139a5e70e1d50887d98b6761d9ed05ed23113a1c6fe56e"
+    },
+    {
+      "id": "pine",
+      "table": "ca2022_for15",
+      "columns": [
+        "VOL_OBT_PINO"
+      ],
+      "unit": "m³",
+      "filter": "CVE_ENT=00–32",
+      "sourceUrl": "https://www.inegi.org.mx/contenidos/programas/ca/2022/tabulados/ca2022_for15.xlsx",
+      "retainedWorkbook": "data-source/atlas/mexico/agriculture/forestry/raw/ca2022_for15.xlsx",
+      "workbookSha256": "baefcc6edf1b2aebed81f7db3900aac0fc7c07869d8c15a79041c6c836421a37"
+    }
+  ],
+  "sourceArchives": [
+    {
+      "path": "data-source/atlas/mexico/agriculture/raw/ca_2022_upagro_csv.zip",
+      "sha256": "4cd4177b39e5e005cbe71796f17930e81406f99b6f606fa24ae6cc3641ec361d",
+      "url": "https://www.inegi.org.mx/contenidos/programas/ca/2022/datosabiertos/ca_2022_upagro_csv.zip",
+      "metadata": {
+        "identifier": "MEX-INEGI.EEC2.02-CA-2022",
+        "title": "Censo Agropecuario 2022. Cifras definitivas.",
+        "modified": "2023-11-21",
+        "license": "https://www.inegi.org.mx/inegi/terminos.html",
+        "temporal": "2021-10-01-2022-09-30"
+      }
+    },
+    {
+      "path": "data-source/atlas/mexico/agriculture/forestry/raw/ca_2022_upfores_csv.zip",
+      "sha256": "050ba3f33dc3ddf6b674d8a8479a2bade6001dd57f0aa2b3567f1a26de3b74c5",
+      "url": "https://www.inegi.org.mx/contenidos/programas/ca/2022/datosabiertos/ca_2022_upfores_csv.zip",
+      "metadata": {
+        "identifier": "MEX-INEGI.EEC2.02-CA-2022",
+        "title": "Censo Agropecuario 2022. Cifras definitivas.",
+        "modified": "2023-11-21",
+        "license": "https://www.inegi.org.mx/inegi/terminos.html",
+        "temporal": "2021-10-01-2022-09-30"
+      }
+    }
+  ],
+  "coverage": {
+    "states": 32,
+    "nationalRows": 1,
+    "stateCodes": [
+      "01",
+      "02",
+      "03",
+      "04",
+      "05",
+      "06",
+      "07",
+      "08",
+      "09",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "19",
+      "20",
+      "21",
+      "22",
+      "23",
+      "24",
+      "25",
+      "26",
+      "27",
+      "28",
+      "29",
+      "30",
+      "31",
+      "32"
+    ],
+    "missingMainIndicators": 0,
+    "suppressedMainIndicators": 0
+  },
+  "qualityChecks": {
+    "agriculturalAreaHa": {
+      "sumOfStates": 25703081.3591,
+      "publishedNational": 25703081.3591,
+      "difference": 0.0
+    },
+    "irrigatedAreaHa": {
+      "sumOfStates": 6683986.2835,
+      "publishedNational": 6683986.2835,
+      "difference": 0.0
+    },
+    "rainfedAreaHa": {
+      "sumOfStates": 19019095.0756,
+      "publishedNational": 19019095.0756,
+      "difference": 0.0
+    },
+    "maizeWhiteProductionT": {
+      "sumOfStates": 21926226.0479,
+      "publishedNational": 21926226.0479,
+      "difference": 0.0
+    },
+    "pineObtainedM3": {
+      "sumOfStates": 7528399.0691,
+      "publishedNational": 7528399.0691,
+      "difference": 0.0
+    }
+  },
+  "datasetSha256": "558866a49f1e27f9836e699a005d587f4d5a481915bd58560b29b6553e11e37c",
+  "selectedCsvSha256": "9c924ce3f8c692689adb32ba2cd6e710e1b5b5e66ef79011a4da608498d923ec",
+  "reproduce": "python scripts/prepare-mexico-agriculture.py",
+  "attribution": "Fuente: INEGI, Censo Agropecuario 2022. Independent extraction, ratio calculation and visualization by Insight Journal; not endorsed by INEGI.",
+  "definitions": {
+    "irrigationSharePct": "活動中の農業生産単位が持つ農業用地総面積（播種・非播種・休耕を含む）に占める灌漑面積。州全体の面積や生産単位数を分母にしない。",
+    "maizeWhiteProductionT": "露地栽培の一年生作物である白粒トウモロコシの穀粒生産量。黄粒・青粒・飼料用・生食用のトウモロコシを含めない。",
+    "pineObtainedM3": "活動中の林業生産単位が取得した松材の体積（丸太以外の形態も含む）。森林面積、蓄積、認可量、販売量、林業GDPとは異なる。",
+    "period": "センサスの参照期間は2021年10月～2022年9月。年次統計や気象平年値とは別の期間。",
+    "status": "選択した32州の主指標はすべて公表数値。0を維持する。原表の*は秘匿、NAは非該当。CSV空欄は原表・行の意味に照合し、一律に0や秘匿へ変換しない。"
+  },
+  "sourceFootnotes": {
+    "ca2022_11": "活動中の農業生産単位の農業用地。播種・非播種・休耕を含む。灌漑と天水の生産単位数は重複し得るためUP数から割合を計算しない。",
+    "ca2022_agr02": "露地の一年生作物。Maíz grano blanco行の州合計TON_AGCA。生産単位数の*を理由に数量の公表値を捨てない。",
+    "ca2022_agr04": "秋冬作・露地の一年生作物。シナロアの白粒生産量を採用。32州の追加指標としては配信しない。",
+    "ca2022_for15": "活動中の林業生産単位が取得した木材。松材VOL_OBT_PINOは丸太以外の形態も含む。認可量M3_MADER_AUTOや全樹種M3_MADER_TOTはこの指標に混合しない。",
+    "symbols": "原表の*は秘匿、NAは非該当。CSV空欄は両者や非掲載を区別するため原表照合を要する。原表の0.00は表示丸めによる微小値を含み得る。採用主指標は全32州数値公表。"
+  },
+  "contextReferences": [
+    {
+      "id": "wood-uses",
+      "sourceUrl": "https://www.inegi.org.mx/contenidos/programas/ca/2022/tabulados/ca2022_for18.xlsx",
+      "retainedWorkbook": "data-source/atlas/mexico/agriculture/forestry/raw/ca2022_for18.xlsx",
+      "workbookSha256": "ae0e72e8598482e604984daa22e446a553766f2ff13441872290d2a588071a71",
+      "licenceUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+      "use": "木材の形態・用途と取得量／販売量の区別を説明。地図の松材量はfor15のみ。for18の非掲載から0を補わず、オーク数量差3693m³を混合しない。"
+    },
+    {
+      "id": "temperate-forest",
+      "sourceUrl": "https://www.biodiversidad.gob.mx/ecosistemas/bosqueTemplado",
+      "pageUpdated": "2021-11-22",
+      "accessed": "2026-10-01",
+      "use": "CONABIOの山地・冷涼な気候・松／オーク林と森林の水・土壌・生息地機能を要約。森林被覆率や面積のデータとして使わず、写真・図を転載しない。"
+    },
+    {
+      "id": "maize-food-chain",
+      "sourceUrl": "https://www.gob.mx/agricultura/articulos/del-campo-al-comal-el-proceso-de-hacer-tortillas-de-maiz?idiom=es",
+      "published": "2025-09-26",
+      "accessed": "2026-10-01",
+      "use": "SADERの白粒から乾燥・貯蔵・集荷・輸送・加工・トルティーヤ販売への説明を要約。本文の数量を2022年統計に混合せず、写真・図を転載しない。"
+    }
+  ]
+}

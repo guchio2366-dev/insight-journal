@@ -1,0 +1,28 @@
+
+identifier: MEX-INEGI.EEC6.03-ETEF-2025
+
+title: Estadística de Exportaciones Anuales por Entidad Federativa 2007-2025, cifras definitivas, revisadas y preliminares.
+
+description: INEGI. Exportaciones anuales por Entidad Federativa. Ofrece información anual referente al valor de las exportaciones de mercancías de las 32 entidades federativas, que permite conocer la participación de cada una en la venta de mercancías que realiza México con el resto del mundo. Se presenta el desglose de 26 subsectores de actividad económica conforme al Sistema de Clasificación Industrial de América del Norte. En el 2025 las exportaciones por entidad federativa ascendieron a 602,421 millones de dólares representando el 90.6% del valor total de las exportaciones registradas en la Balanza Comercial de Mercancías de México. La información del sector 11 Agricultura, cría y explotación de animales, aprovechamiento forestal, pesca y caza, presenta una serie estadística que inicia el primer trimestre de 2018. Así mismo, a partir de la publicación del 31 de marzo de 2026 se ajustan las cifras del periodo 2024-2025 debido a la recuperación de información, así como a las actualizaciones en la información de los proyectos estadísticos utilizados para su generación. El 31 de marzo de 2026 se publica el ajuste de la información correspondiente al sector 21, Minería, del periodo 2024–2025, derivado de actualizaciones en los proyectos estadísticos utilizados para su elaboración. La información del año 2025 del subsector 211, Extracción de petróleo y gas, se generó con base en datos estadísticos de Petróleos Mexicanos, en sustitución de los provenientes de la Comisión Nacional de Hidrocarburos. El 31 de marzo de 2026, se publica el ajuste de información del sector 31-33 Industrias manufactureras para el periodo de 2024-2025 debido a las actualizaciones de información de los proyectos estadísticos utilizados para su generación. Si el contenido de la columna CODIGO_SCIAN es "000" corresponde a la suma de los montos de aquellos subsectores que no se presentan por confidencialidad; cuando el contenido de la variable ESTATUS_CIFRA es "No disponible" significa que no se cuenta con información para determinar si se realizan exportaciones en la entidad y subsector al que se hace referencia; en el caso de que el contenido sea “No Significativo" el monto de las exportaciones es menor a 500 dólares estadounidenses; en caso de que el contenido de la columna VALOR_USD sea 0 significa que no se realizan exportaciones en ese periodo por ninguno de los establecimientos en la entidad y subsector correspondiente. Cobertura geográfica: Estatal.
+
+modified: 2026-03-31T06:00
+
+publisher: Instituto Nacional de Estadística y Geografía, INEGI
+
+mbox: atencion.usuarios@inegi.org.mx
+
+license: https://www.inegi.org.mx/inegi/terminos.html
+
+dataDictionary: https://www.inegi.org.mx/rnm/index.php/catalog/995
+
+keyword: "comercio exterior", "exportaciones", "manufactura", "establecimiento", "petróleo", "minería"
+
+contactPoint: Mtro. J. Armando Aguiar Rodríguez, 800 111 4634
+
+temporal: 2007-01-01-2025-12-31
+
+spatial: Estados Unidos Mexicanos
+
+accrualPeriodicity: Anualmente
+
+distribution: https://www.inegi.org.mx/programas/exporta_ef/

@@ -86,7 +86,12 @@ test('北米の国を切り替えられ、中南米とメキシコの選択対�
   assert.ok(usa.querySelector('[data-atlas-explorer]'));
   assert.deepEqual([...usa.querySelectorAll('.regional-countries a')].map(a => a.textContent), ['カナダ','米国','メキシコ']);
   assert.deepEqual(selections(await page('atlas/north-america/canada')), ['CAN']);
-  assert.deepEqual(selections(await page('atlas/north-america/mexico')), ['MEX']);
+  const mexico = await page('atlas/north-america/mexico');
+  assert.equal(mexico.querySelector('[data-mexico-field]')?.dataset.mexicoField, 'nature');
+  assert.equal(mexico.querySelector('.regional-countries [aria-current="page"]')?.getAttribute('href'), '/insight-journal/atlas/north-america/mexico/');
+  const config = JSON.parse(mexico.querySelector('[data-mexico-nature-config]').textContent);
+  assert.deepEqual(config.states.map(state => state.code), Array.from({length:32}, (_,i) => String(i+1).padStart(2,'0')));
+  assert.ok(mexico.querySelector('svg[data-mexico-nature-main-map]'));
   const latin = selections(await page('atlas/latin-america'));
   assert.ok(latin.includes('BRA') && latin.includes('GTM') && latin.includes('CUB'));
   assert.ok(!latin.includes('MEX') && !latin.includes('USA') && !latin.includes('CAN'));

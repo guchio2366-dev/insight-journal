@@ -1,9 +1,9 @@
 ---
-import RegionalAtlasPage from '../../../components/atlas/RegionalAtlasPage.astro';
 import CanadaNaturePage from '../../../components/atlas/CanadaNaturePage.astro';
+import MexicoNaturePage from '../../../components/atlas/MexicoNaturePage.astro';
 export function getStaticPaths() {
   return ['canada', 'mexico'].map(regionId => ({params: {country: regionId}, props: {regionId}}));
 }
 const { regionId } = Astro.props;
 ---
-{regionId==='canada'?<CanadaNaturePage />:<RegionalAtlasPage {regionId} />}
+{regionId==='canada'?<CanadaNaturePage />:<MexicoNaturePage />}

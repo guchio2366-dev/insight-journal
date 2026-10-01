@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "accessed": "2026-10-01",
+  "referenceDate": "2020-03-15",
+  "referenceYear": 2020,
+  "sourceRecord": {
+    "accessed": "2026-10-01",
+    "populationArchive": {
+      "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/datosabiertos/iter/iter_00_cpv2020_csv.zip",
+      "bytes": 36615814,
+      "sha256": "9342fdbd45bda5897f2b827a12904843b6f8fb85d4e72da299e09e4d2422ab60",
+      "csvMember": "iter_00_cpv2020/conjunto_de_datos/conjunto_de_datos_iter_00CSV20.csv",
+      "csvOriginalSha256": "29e9bf43b7d22967d2bdc1ca0a3e47b0fd18802948f2ed42985ae1bc1e34151a"
+    },
+    "densityPdf": {
+      "url": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/nueva_estruc/702825197711.pdf",
+      "bytes": 10984344,
+      "sha256": "7a412a523f31dd109a4cd79fc317580c62f3cc70ec84a0c4b896847d9bd0d3be",
+      "storedFile": "panorama-2020-mexico.pdf.gz"
+    },
+    "selectedPopulationExtraction": {
+      "filter": "MUN=000 and LOC=0000; ENTIDAD=00 national row or 01..32 state rows",
+      "transformation": "Extracted seven original fields with original values; UTF-8 CSV serialization; all other locality records excluded.",
+      "rows": 33
+    },
+    "licenseMetadata": {
+      "file": "iter-2020-metadata.txt",
+      "field": "license",
+      "url": "https://www.inegi.org.mx/inegi/terminos.html"
+    },
+    "sourceMetadataModified": "2022-05-19",
+    "sourceReferenceDate": "2020-03-15"
+  },
+  "sourceArtifacts": [
+    {
+      "file": "iter-2020-state-extract.csv",
+      "bytes": 1639,
+      "sha256": "ea49f4bc048a1ebdf9e436d4cf62b2bf6b5cefce58649f31291fc8b5482747ff"
+    },
+    {
+      "file": "iter-2020-metadata.txt",
+      "bytes": 2105,
+      "sha256": "bd56f33f96ce1c22c8802e313fc1581f69aa1a195a8b4c7eb0a081f4363ca960"
+    },
+    {
+      "file": "iter-2020-dictionary.csv",
+      "bytes": 71632,
+      "sha256": "4f7d249c92564a2f49148f891e421a856248a463de8c04b3357c4d44d5572839"
+    },
+    {
+      "file": "panorama-2020-mexico.pdf.gz",
+      "bytes": 9933691,
+      "sha256": "af64093ba1e8fd9923ba4af536c8a6ac80a68ff0367e8aa0458f3bdfd4f9714d"
+    },
+    {
+      "file": "source-record.json",
+      "bytes": 1311,
+      "sha256": "1e7c8c0008f5d07e821027be646434fb8e09e7770e645043c60b8ac66a737c8b"
+    }
+  ],
+  "transformations": [
+    "Extract national and 32 state total population rows using MUN=000 / LOC=0000",
+    "Extract each state's original published density from the INEGI 2020 Panorama PDF",
+    "Add Japanese display names and unchanged two-digit state codes",
+    "Generate UTF-8 JSON/CSV; retain original population integers and density decimals"
+  ],
+  "validation": {
+    "states": 32,
+    "populationSum": 126014024,
+    "sumMatchesNational": true,
+    "allPdfPopulationMatchesIter": true,
+    "densityFromDisplayGeometry": false
+  },
+  "displayGeometry": {
+    "reference": "INEGI. Marco Geoestadístico, diciembre de 2025",
+    "joinKey": "cvegeo = ENTIDAD",
+    "statisticalReference": "INEGI. Censo de Población y Vivienda, 2020",
+    "densityAreaCalculation": false
+  },
+  "units": {
+    "population": "persons",
+    "density": "persons/km2"
+  },
+  "statusCounts": {
+    "value": 32,
+    "zero": 0,
+    "missing": 0,
+    "confidential": 0,
+    "unavailable": 0
+  },
+  "encoding": {
+    "populationSymbol": "Circle area proportional to population; radius proportional to square root of population",
+    "density": "Sequential choropleth with explicit persons/km2 intervals; published state averages"
+  },
+  "generated": {
+    "jsonSha256": "228997eae7b992f767b929016bd750d61a11644317b3f944350af1d24ebb5ba5",
+    "csvSha256": "cbc1cb7781252cd1fb5074cb587d0be82ae79914f37048ad774d724638af1ec3"
+  },
+  "license": {
+    "url": "https://www.inegi.org.mx/inegi/terminos.html",
+    "evidence": "Original ITER metadata license field",
+    "conditions": [
+      "Credit INEGI and original product",
+      "Retain metadata",
+      "Identify transformations as site author work",
+      "Do not imply INEGI endorsement"
+    ]
+  },
+  "staticMaps": {
+    "renderer": "SVG",
+    "projection": "same INEGI Lambert Conformal Conic as the primary map",
+    "encoding": "same density thresholds and population-area formula as primary map and legend",
+    "artifacts": [
+      {
+        "file": "density.svg",
+        "bytes": 3159467,
+        "sha256": "caac0cb5792ee9eb530d0d174f9715091061b8ad1660d913e56047e554242f6b",
+        "states": 32,
+        "referenceYear": 2020
+      },
+      {
+        "file": "population.svg",
+        "bytes": 3164912,
+        "sha256": "d44c3473be3321faaf6834b6e454de1e490f2b6e80c244eeba5dd1a0b23b5389",
+        "states": 32,
+        "referenceYear": 2020
+      },
+      {
+        "file": "density-population.svg",
+        "bytes": 3164927,
+        "sha256": "65f5120a748d45ffe9e82ec88c65091cf26f5c6246f49c8c51214c4a6eeefae1",
+        "states": 32,
+        "referenceYear": 2020
+      }
+    ]
+  }
+}

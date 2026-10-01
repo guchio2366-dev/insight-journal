@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "publisher": "INEGI",
+    "product": "Exportaciones por Entidad Federativa (ETEF)",
+    "url": "https://www.inegi.org.mx/programas/exporta_ef/",
+    "downloadUrl": "https://www.inegi.org.mx/contenidos/programas/exporta_ef/datosabiertos/conjunto_de_datos_eef_csv.zip",
+    "metadataUrl": "https://www.inegi.org.mx/rnm/index.php/catalog/1108",
+    "updated": "2026-03-31",
+    "accessed": "2026-10-01",
+    "licenseUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+    "sourceUnit": "thousands of US dollars, FOB",
+    "displayUnit": "billions of US dollars, FOB",
+    "classification": "SCIAN México 2018; subsectors 334 and 336",
+    "publicationStatus": "Cifras Preliminares.",
+    "geographicAssignment": "Origin of production, allocated using linked establishments; not border crossing or exporter headquarters."
+  },
+  "sourceFiles": [
+    {
+      "file": "etef-official-annual-2007-2025.zip",
+      "bytes": 203969,
+      "sha256": "4bb29b3ece7776d1c3fa1cf894e4ec77dfcae9b251f3002050783c0a08c9d75b"
+    },
+    {
+      "file": "etef-official-annual-2007-2025.csv",
+      "bytes": 2008293,
+      "sha256": "a120b1f1e7f7ce5a3bc61871d8d302bd104dfcdf65a044a89990353056b196bf"
+    },
+    {
+      "file": "official-metadata.txt",
+      "bytes": 3300,
+      "sha256": "7e17ac688f1d64cbee8889d28d16c2426ad37a8af372379d42e006a48857594b"
+    },
+    {
+      "file": "official-data-dictionary.csv",
+      "bytes": 2383,
+      "sha256": "dbbc2a94204df9fb9746f1f82d19fccf9d0b1057f8731344f7a6485c9050a5e9"
+    },
+    {
+      "file": "official-state-catalog.csv",
+      "bytes": 543,
+      "sha256": "a68b10f7df3e0c5959710e4a98c47c99ce16576ba0ef24aed61726bd41a7cdb3"
+    },
+    {
+      "file": "official-subsector-catalog.csv",
+      "bytes": 1526,
+      "sha256": "5a85313b4637975e273528ab9dd321484fa3b0ecffb0aa920d46c23c85c84927"
+    },
+    {
+      "file": "industry-selected-2025.csv",
+      "bytes": 8024,
+      "sha256": "9d736305a473f2da4fbe74727e0d38ec4a2246887f5577399586dd681cb7aa68"
+    }
+  ],
+  "normalized": {
+    "file": "src/data/atlas/mexico/industry.json",
+    "bytes": 23500,
+    "sha256": "d4a0723124b1c84e429775ff52d78b90925c3619fffc6216051eb8869925412b"
+  },
+  "records": 64,
+  "states": 32,
+  "year": 2025,
+  "statusCounts": {
+    "transport": {
+      "available": 24,
+      "zero": 0,
+      "confidential": 1,
+      "unknown": 7,
+      "notSignificant": 0,
+      "notApplicable": 0
+    },
+    "electronics": {
+      "available": 15,
+      "zero": 0,
+      "confidential": 5,
+      "unknown": 12,
+      "notSignificant": 0,
+      "notApplicable": 0
+    }
+  },
+  "conversionDivisor": 1000000,
+  "notes": {
+    "scope": "製造業等の生産地に配分した財の輸出統計。商業・サービスと RENEM に結合できない通関取引は対象外。",
+    "confidential": "秘匿された小業種の金額はコード000に合算される。000を特定業種へ配分しない。",
+    "unknown": "No disponible は輸出の有無を特定する情報がない状態。",
+    "zero": "Disponible の数値0は、その期間の該当州・業種で輸出がなかったことを示す。",
+    "notSignificant": "No Significativo は500米ドル未満。ゼロとして扱わない。",
+    "method": "原典の千米ドルを1,000,000で割って10億米ドルへ変換。各州を面積や人口で割らず、公開値の合計から全国シェアを計算しない。",
+    "classificationMetadata": "同梱旧カタログのVERSION欄は2007。現行2025年RNMのSCIAN México2018の定義で範囲を確認し、コードと正式業種名を保持する。"
+  }
+}

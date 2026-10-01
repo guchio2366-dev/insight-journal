@@ -1,0 +1,33 @@
+state_code,state_name,reference_date,population_persons,population_status,density_persons_per_km2,density_status,density_pdf_page
+01,Aguascalientes,2020-03-15,1425607,value,253.9,value,7
+02,Baja California,2020-03-15,3769020,value,52.8,value,8
+03,Baja California Sur,2020-03-15,798447,value,10.8,value,9
+04,Campeche,2020-03-15,928363,value,16.1,value,10
+05,Coahuila de Zaragoza,2020-03-15,3146771,value,20.8,value,11
+06,Colima,2020-03-15,731391,value,130.0,value,12
+07,Chiapas,2020-03-15,5543828,value,75.6,value,13
+08,Chihuahua,2020-03-15,3741869,value,15.1,value,14
+09,Ciudad de México,2020-03-15,9209944,value,6163.3,value,15
+10,Durango,2020-03-15,1832650,value,14.9,value,16
+11,Guanajuato,2020-03-15,6166934,value,201.5,value,17
+12,Guerrero,2020-03-15,3540685,value,55.7,value,18
+13,Hidalgo,2020-03-15,3082841,value,148.1,value,19
+14,Jalisco,2020-03-15,8348151,value,106.2,value,20
+15,México,2020-03-15,16992418,value,760.2,value,21
+16,Michoacán de Ocampo,2020-03-15,4748846,value,81.0,value,22
+17,Morelos,2020-03-15,1971520,value,404.1,value,23
+18,Nayarit,2020-03-15,1235456,value,44.4,value,24
+19,Nuevo León,2020-03-15,5784442,value,90.2,value,25
+20,Oaxaca,2020-03-15,4132148,value,44.1,value,26
+21,Puebla,2020-03-15,6583278,value,191.9,value,27
+22,Querétaro,2020-03-15,2368467,value,202.6,value,28
+23,Quintana Roo,2020-03-15,1857985,value,41.6,value,29
+24,San Luis Potosí,2020-03-15,2822255,value,46.2,value,30
+25,Sinaloa,2020-03-15,3026943,value,52.8,value,31
+26,Sonora,2020-03-15,2944840,value,16.4,value,32
+27,Tabasco,2020-03-15,2402598,value,97.1,value,33
+28,Tamaulipas,2020-03-15,3527735,value,44.0,value,34
+29,Tlaxcala,2020-03-15,1342977,value,336.0,value,35
+30,Veracruz de Ignacio de la Llave,2020-03-15,8062579,value,112.3,value,36
+31,Yucatán,2020-03-15,2320898,value,58.7,value,37
+32,Zacatecas,2020-03-15,1622138,value,21.5,value,38

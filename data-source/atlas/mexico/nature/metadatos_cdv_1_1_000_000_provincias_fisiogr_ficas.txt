@@ -1,0 +1,29 @@
+
+identifier:
+
+title: Conjunto de datos vectoriales Fisiográficos. Continuo Nacional. Escala 1:1 000 000. Serie I (Provincias fisiográficas)
+
+description: El conjunto de datos vectoriales fisiográficos continuo nacional escala 1 a 1´000,000, muestra las diferentes provincias fisiográficas, subprovincias y sistemas de topoformas, éstas delimitan una gran variedad de formas del relieve, definidas por su origen geológico y litológico. Es útil para estudios a nivel regional y local, desde el análisis e interpretación de áreas con geoformas que presentan características propias, así como, apoyo para estudios de ingenieria civil, hidráulicos, geológicos, ecológicos, planeación y de ordenamiento territorial. Para visualizar las imágenes es necesario contar con equipo de cómputo con las siguientes características. Computadora Personal con procesador Pentium o superior. Windows 95 o superior. Software de edición que acepte formato SHP. Espacio de trabajo en disco duro de 8 MB. Software para procesamiento que acepte archivos SHP, en este caso se requiere espacio en disco duro de 120 MB. 20 MB de memoria RAM. Unidad lectora de disco compacto (CD-ROM). Ratón. Monitor VGA.
+
+modified: 2001
+
+publisher: Instituto Nacional de Estadística y Geografía – INEGI
+
+mbox: atencion.usuarios@inegi.org.mx
+
+license: Términos de Libre Uso de la Información del INEGI http://www.inegi.org.mx/terminos/terminos_info.aspx
+
+datadictionary: 
+
+keyword: nones, provincias, fisiográficas, sistemas, topoformas, subprovincias, discontinuidades
+
+contactpoint: Lic. José de Jesús Esquivel de la Rosa, 01800 111 4634
+
+temporal: 2001
+
+spatial: Estados Unidos Mexicanos
+
+accrualperiodicity: 
+
+distribution: http://internet.contenidos.inegi.org.mx/contenidos/Productos/prod_serv/contenidos/espanol/bvinegi/productos/geografia/tematicas/FISIOGRAFIA/702825267575_s.zip
+
