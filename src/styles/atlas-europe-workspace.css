@@ -50,6 +50,9 @@
 .eu-workspace-root .eu-topic-tabs button:disabled { opacity:1; color:#79827b; cursor:default; }
 .eu-workspace-root .eu-topic-above { padding:6px; border:1px solid #c7ccbf; border-bottom:0; background:#fbfaf3; }
 .eu-workspace-root .eu-topic-above button { flex:1; }
+.eu-workspace-root .eu-layer-choice { display:flex; align-items:center; gap:8px; flex:2; min-width:0; min-height:36px; padding:3px 8px; color:#344951; font:700 13px/1.35 var(--sans); }
+.eu-workspace-root .eu-layer-choice select { width:100%; min-width:0; min-height:32px; padding:4px 6px; border:1px solid #9eaca3; background:#fffef5; color:#223b45; font:13px var(--sans); }
+.eu-workspace-root .eu-topic-map .eu-layer-choice { width:300px; max-width:100%; padding:0; }
 .eu-workspace-root .eu-topic-map { position:absolute; z-index:3; top:7px; left:8px; right:54px; max-width:max-content; padding:3px; border:1px solid #9eaca3; border-radius:5px; background:#fffef5ef; }
 .eu-workspace-root .eu-topic-map button { min-height:38px; padding:5px 8px; border:0; border-radius:3px; background:transparent; font-size:12px; }
 .eu-workspace-root .eu-read-panel,.eu-workspace-root .eu-workspace .europe-side { display:block; border:1px solid #d1d4c8; background:#fbfaf3; padding:14px; overflow-wrap:anywhere; }

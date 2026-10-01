@@ -1,15 +1,17 @@
 ---
-import type { EuropeField } from '../../data/atlas/europe/layers';
+import { europeLayers, type EuropeField } from '../../data/atlas/europe/layers';
 interface Props { position: 'above' | 'map'; field: EuropeField }
 const { position, field } = Astro.props;
-const groups = position === 'above' ? [
+type TopicGroup = { field: EuropeField; items: string[][]; choices?: string[] };
+const groups: TopicGroup[] = position === 'above' ? [
   {field:'nature',items:[['climate','気候区分'],['water','水資源'],['terrain','地形'],['contours','標高（等高線）']]},
-  {field:'population',items:[['density','人口分布'],['','宗教の分布'],['','民族の分布']]},
+  {field:'population',items:[['','宗教の分布'],['','民族の分布']],choices:['density','urban','age','growth']},
 ] : [
-  {field:'industry',items:[['hubs','産業拠点'],['','資源・エネルギー'],['services','サービス'],['','建設・不動産']]},
+  {field:'industry',items:[],choices:['hubs','manufacturing','industry','services']},
 ];
 ---
 {groups.map(group=><div class:list={['eu-topic-tabs',`eu-topic-${position}`]} data-eu-topic-field={group.field} hidden={field!==group.field} role="group" aria-label={`${group.field==='nature'?'自然環境':group.field==='agriculture'?'農林業':group.field==='industry'?'主要産業':'人口'}の区分`}>
+  {group.choices && <label class="eu-layer-choice">図<select data-eu-layer-choice={group.field} aria-label={`${group.field==='industry'?'主要産業':'人口'}の図`}>{group.choices.map(id=>{const layer=europeLayers.find(layer=>layer.id===id)!;return <option value={id}>{layer.title}</option>;})}</select></label>}
   {group.items.map(([id,label],i)=><button type="button" data-eu-topic={id||undefined} disabled={!id} aria-pressed={id?i===0:undefined}>{label}{!id&&<small>準備中</small>}</button>)}
 </div>)}
 

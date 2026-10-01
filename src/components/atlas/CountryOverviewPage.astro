@@ -12,7 +12,16 @@ const region = getOverviewRegion(Astro.props.regionId);
 const initialCountry = region.countries.find(country => country.code === region.defaultCountry) ?? region.countries[0];
 const map = getOverviewMap(region.id);
 const reading = getRegionOverview(region.id, region.label);
-const config = { countries: region.countries.map(country => ({ ...country, bounds: map.countries.find(item => item.code === country.code)?.bounds })), topics: overviewTopics.map(topic => ({ id: topic.id, label: topic.label })), regionLabel: region.label, width: map.width, height: map.height, cities: map.cities };
+const config = {
+  countries: region.countries.map(country => ({ ...country, bounds: map.countries.find(item => item.code === country.code)?.bounds })),
+  topics: overviewTopics.map(topic => ({ id: topic.id, label: topic.label })),
+  fields: region.fields.filter(field => field.href).map(field => ({
+    id: field.id,
+    href: withBase(field.href!),
+    ...(field.countryHrefs ? { countryHrefs: Object.fromEntries(Object.entries(field.countryHrefs).map(([code, href]) => [code, withBase(href)])) } : {}),
+  })),
+  regionLabel: region.label, width: map.width, height: map.height, cities: map.cities,
+};
 ---
 
 <BaseLayout title={`${region.label}の概要と白地図`} description={`${region.label}の国・地域と主要都市の位置を白地図で確かめ、地域の特徴や歴史・政治を読むページです。`} compactAtlas>
@@ -33,7 +42,7 @@ const config = { countries: region.countries.map(country => ({ ...country, bound
 
       <nav class="atlas-tabs country-overview-fields" aria-label="概要と分野別地図">
         <a href={withBase(region.path)} aria-current="page" data-overview-current-link>概要</a>
-        {region.fields.map(field => field.href ? <a href={withBase(field.href)}>{field.label}</a> : <span class="atlas-tab-planned" aria-disabled="true">{field.label}<small>準備中</small></span>)}
+        {region.fields.map(field => field.href ? <a href={withBase(field.href)} data-overview-field={field.id}>{field.label}</a> : <span class="atlas-tab-planned" aria-disabled="true">{field.label}<small>準備中</small></span>)}
       </nav>
 
       <h1 class="visually-hidden">{region.label}の概要と白地図</h1>

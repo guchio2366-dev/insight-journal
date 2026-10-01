@@ -4,6 +4,7 @@ import { initOverviewMap, type OverviewMapConfig } from './atlas-overview-map';
 interface OverviewConfig extends OverviewMapConfig {
   countries: OverviewCountry[];
   topics: { id: OverviewTopicId; label: string }[];
+  fields?: { id: Exclude<OverviewTopicId, 'politics'>; href: string; countryHrefs?: Record<string, string> }[];
   regionLabel: string;
 }
 interface OverviewState { country: string; city: string; topic: OverviewTopicId }
@@ -20,6 +21,7 @@ export function initCountryOverview(root: HTMLElement) {
   const announcement = root.querySelector<HTMLElement>('[data-overview-announcement]')!;
   const detail = root.querySelector<HTMLElement>('[data-overview-country-detail]')!;
   const detailLink = root.querySelector<HTMLAnchorElement>('[data-overview-detail-link]')!;
+  const fieldLinks = Array.from(root.querySelectorAll<HTMLAnchorElement>('[data-overview-field]'));
 
   const readState = (): OverviewState => {
     const params = new URLSearchParams(location.search);
@@ -42,6 +44,10 @@ export function initCountryOverview(root: HTMLElement) {
     const city = config.cities.find(city => city.id === state.city);
     const topic = config.topics.find(topic => topic.id === state.topic)!;
     picker.value = country?.code ?? '';
+    fieldLinks.forEach(link => {
+      const field = config.fields?.find(field => field.id === link.dataset.overviewField);
+      if (field) link.href = (country && field.countryHrefs?.[country.code]) || field.href;
+    });
     countryNames.forEach(element => { element.textContent = country?.name ?? ''; });
     detail.hidden = !country; detailLink.hidden = !country;
     root.querySelector<HTMLElement>('[data-overview-place-title]')!.textContent = city && country ? `${city.name} · ${country.name}` : country?.name ?? '国や都市を選んで、位置を確かめる';

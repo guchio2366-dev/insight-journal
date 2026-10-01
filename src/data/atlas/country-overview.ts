@@ -23,7 +23,7 @@ export interface OverviewRegion {
   newsRegion: AtlasNewsRegion;
   countries: OverviewCountry[];
   defaultCountry: string;
-  fields: { id: Exclude<OverviewTopicId, 'politics'>; label: string; href: string | null }[];
+  fields: { id: Exclude<OverviewTopicId, 'politics'>; label: string; href: string | null; countryHrefs?: Record<string, string> }[];
   peers: OverviewRegionId[];
 }
 
@@ -74,6 +74,11 @@ function makeRegion(input: RegionInput): OverviewRegion {
     fields: overviewTopics.filter(topic => topic.id !== 'politics').map(topic => ({
       id: topic.id as Exclude<OverviewTopicId, 'politics'>, label: topic.label,
       href: input.id === 'oceania' ? null : input.id === 'africa' ? `${mapPath}?field=${topic.id}` : `${mapPath}${topic.id}/`,
+      ...(input.id === 'north-america' ? { countryHrefs: {
+        USA: `${mapPath}${topic.id}/`,
+        CAN: `${mapPath}canada/${topic.id}/`,
+        MEX: `${mapPath}mexico/${topic.id}/`,
+      } } : {}),
     })),
   };
 }
