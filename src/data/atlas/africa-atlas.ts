@@ -58,16 +58,21 @@ export function fillFor(value:number|null,metric:Metric):string {
   return palette[index<0?palette.length-1:index];
 }
 export type State={field:Field;metric:string;year:number;place:string;compare:string;region:Region;zoom:'all'|'region'|'country'|'theme';theme:string;context:string};
+export function defaultThemeRegion(themeId:string):Region {
+  const theme=themes.find(t=>t.id===themeId)??themes[0];
+  const regions=[...new Set(theme.places.map(code=>countries.find(c=>c.code===code)!.region))];
+  return regions.length===1?regions[0] as Region:'all';
+}
 export function readState(search:string):State {
   const p=new URLSearchParams(search);
   const field=(p.get('field')??'nature') as Field;
   const safeField=Object.hasOwn(fields,field)?field:'nature';
   const metric=metrics.find(m=>m.id===p.get('metric')&&m.field===safeField)??metrics.find(m=>m.field===safeField)!;
   const exists=(code:string|null)=>countries.some(c=>c.code===code);
-  const region=p.get('region')??'all';
   const zoom=p.get('zoom')??'theme';
-  const place=exists(p.get('place'))?p.get('place')!:'EGY';
   const theme=themes.find(t=>t.id===p.get('theme')&&t.field===safeField)??themes.find(t=>t.field===safeField)!;
+  const place=exists(p.get('place'))?p.get('place')!:theme.places[0];
+  const region=p.get('region')??defaultThemeRegion(theme.id);
   const context=p.get('context')===theme.compareMetric?theme.compareMetric:'';
   return {field:safeField,metric:metric.id,year:years.includes(Number(p.get('year')))?Number(p.get('year')):2021,place,compare:exists(p.get('compare'))&&p.get('compare')!==place?p.get('compare')!:'',region:Object.hasOwn(regionNames,region)?region as Region:'all',zoom:['all','region','country','theme'].includes(zoom)?zoom as State['zoom']:'theme',theme:theme.id,context:context??''};
 }

@@ -68,3 +68,12 @@ test('comparison URLs preserve source selection and reject unrelated thematic co
  assert.equal(readState(query.replace(theme.compareMetric,'NY.GDP.PCAP.CD')).context,'');
  assert.equal(readState(`?field=industry&theme=${theme.id}&context=${theme.compareMetric}`).theme,themes.find(t=>t.field==='industry').id);
 });
+
+test('theme defaults use representative countries while explicit country and region remain authoritative',()=>{
+ assert.equal(readState('?field=agriculture').place,'CIV');
+ assert.equal(readState('?field=industry').place,'ZMB');
+ assert.equal(readState('?field=nature&theme=east-highlands').place,'ETH');
+ const explicit=readState('?field=industry&place=EGY&region=north&zoom=theme');
+ assert.equal(explicit.place,'EGY');assert.equal(explicit.region,'north');assert.equal(explicit.zoom,'theme');
+ assert.deepEqual(readState(writeState(explicit,new URL('https://example.com/atlas/africa/')).search),explicit);
+});

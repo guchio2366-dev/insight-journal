@@ -30,7 +30,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
 ---
 <BaseLayout title="アフリカ地図" description="アフリカの自然環境・農林業・主要産業・人口を、重要な分布と国別統計から読む。" compactAtlas>
  <div class="africa-atlas shell" data-africa-atlas>
-  <header class="africa-heading"><div><p class="africa-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / アフリカ</p><h1>アフリカ地図</h1></div>  <div class="africa-region-navigation"><label>地域<select data-region>{Object.entries(regionNames).map(([id,name])=><option value={id}>{name}</option>)}</select></label></div></header>
+  <header class="africa-heading"><div><p class="africa-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / アフリカ</p><h1>アフリカ地図</h1></div>  <div class="africa-region-navigation"><label>統計の地域<select data-region>{Object.entries(regionNames).map(([id,name])=><option value={id}>{name}</option>)}</select></label></div></header>
   <nav class="africa-fields" aria-label="分野を選ぶ"><a data-atlas-overview-link href={withBase('/atlas/africa/overview/')}>概要</a>{Object.entries(fields).map(([id,f])=><button type="button" data-field={id} aria-pressed={id==='nature'?'true':'false'}>{f.label}</button>)}</nav>
   <div class="africa-workspace">
    <section class="africa-map-card" aria-labelledby="africa-map-title">

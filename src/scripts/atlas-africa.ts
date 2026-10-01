@@ -1,4 +1,4 @@
-import {countries,fields,metrics,regionNames,years,readState,writeState,metricById,valueAt,formatValue,fillFor,rankedCountries,palette,sources,defaultYear,type Field,type Region,type Metric} from '../data/atlas/africa-atlas.ts';
+import {countries,fields,metrics,regionNames,years,readState,writeState,metricById,valueAt,formatValue,fillFor,rankedCountries,palette,sources,defaultYear,defaultThemeRegion,type Field,type Region,type Metric} from '../data/atlas/africa-atlas.ts';
 import {projectAfrica,africaWidth,africaHeight} from '../lib/atlas-africa-geometry.ts';
 import {themes,type AfricaTheme} from '../data/atlas/africa-themes.ts';
 
@@ -12,6 +12,14 @@ export function initializeAfricaAtlas() {
  const svgNS='http://www.w3.org/2000/svg';
  const svgEl=(tag:string,attrs:Record<string,string|number>,t?:string)=>{const n=document.createElementNS(svgNS,tag);for(const [k,v]of Object.entries(attrs))n.setAttribute(k,String(v));if(t!==undefined)n.textContent=t;return n;};
  let state=readState(location.search);
+ let countryPinned=false,regionPinned=false;
+ function readSelectionPins(){const p=new URLSearchParams(location.search);countryPinned=countries.some(c=>c.code===p.get('place'));regionPinned=Object.hasOwn(regionNames,p.get('region')??'');}
+ readSelectionPins();
+ function chooseTheme(id:string){
+  const theme=themes.find(t=>t.id===id)!;state.theme=id;state.context='';state.zoom='theme';
+  if(!countryPinned){state.place=theme.places[0];if(state.compare===state.place)state.compare='';}
+  if(!regionPinned)state.region=defaultThemeRegion(id);
+ }
  const paths=[...root.querySelectorAll<SVGPathElement>('[data-country-path]')];
  const map=query<SVGSVGElement>('.africa-map');
  function fitMap() {
@@ -101,12 +109,12 @@ export function initializeAfricaAtlas() {
   for(const option of query<HTMLSelectElement>('[data-compare]').options)option.disabled=option.value===state.place;
   text('[data-field-title]',fields[state.field].title);text('[data-field-summary]',fields[state.field].summary);
   text('[data-period]',period);text('[data-metric-title]',metric.label);text('[data-unit]',metric.unit);text('#africa-svg-title',`${metric.label}・${period}`);
-  for(const path of paths){const code=path.dataset.countryPath!;const c=countries.find(c=>c.code===code)!;const v=valueAt(metric.id,code,state.year);path.setAttribute('fill',fillFor(v,metric));path.classList.toggle('is-selected',code===state.place);path.classList.toggle('is-compared',code===state.compare);path.classList.toggle('is-muted',state.region!=='all'&&c.region!==state.region&&code!==state.place&&code!==state.compare);path.querySelector('title')!.textContent=`${c.name}：${formatValue(v,metric)}${v===null?'':` ${metric.unit}`}（${period}）`;}
+  for(const path of paths){const code=path.dataset.countryPath!;const c=countries.find(c=>c.code===code)!;const v=valueAt(metric.id,code,state.year);path.setAttribute('fill',fillFor(v,metric));path.classList.toggle('is-selected',code===state.place);path.classList.toggle('is-compared',code===state.compare);path.classList.toggle('is-muted',state.zoom!=='theme'&&state.region!=='all'&&c.region!==state.region&&code!==state.place&&code!==state.compare);path.querySelector('title')!.textContent=`${c.name}：${formatValue(v,metric)}${v===null?'':` ${metric.unit}`}（${period}）`;}
   fitMap();
   const view=map.getAttribute('viewBox')!.split(' ').map(Number),box=map.getBoundingClientRect();
   const symbolScale=Math.max(view[2]/(box.width||640),view[3]/(box.height||528));
   const symbols=query<SVGGElement>('[data-symbols]');symbols.replaceChildren();
-  if(metric.symbols)for(const c of [...countries].sort((a,b)=>(valueAt(metric.id,b.code,state.year)??0)-(valueAt(metric.id,a.code,state.year)??0))){const v=valueAt(metric.id,c.code,state.year);if(v===null||v<=0)continue;if(state.zoom==='country'&&c.code!==state.place&&c.code!==state.compare)continue;const [x,y]=projectAfrica(c.point);const circle=svgEl('circle',{cx:x,cy:y,r:Math.sqrt(v/1e6)*2.2*symbolScale,class:'africa-symbol','data-country-marker':c.code,opacity:state.region!=='all'&&c.region!==state.region&&c.code!==state.place&&c.code!==state.compare ? .25 : 1});circle.append(svgEl('title',{},`${c.name}：${formatValue(v,metric)}人`));symbols.append(circle);}
+  if(metric.symbols)for(const c of [...countries].sort((a,b)=>(valueAt(metric.id,b.code,state.year)??0)-(valueAt(metric.id,a.code,state.year)??0))){const v=valueAt(metric.id,c.code,state.year);if(v===null||v<=0)continue;if(state.zoom==='country'&&c.code!==state.place&&c.code!==state.compare)continue;const [x,y]=projectAfrica(c.point);const circle=svgEl('circle',{cx:x,cy:y,r:Math.sqrt(v/1e6)*2.2*symbolScale,class:'africa-symbol','data-country-marker':c.code,opacity:state.zoom!=='theme'&&state.region!=='all'&&c.region!==state.region&&c.code!==state.place&&c.code!==state.compare ? .25 : 1});circle.append(svgEl('title',{},`${c.name}：${formatValue(v,metric)}人`));symbols.append(circle);}
   for(const marker of root!.querySelectorAll<SVGGElement>('[data-island-marker]'))marker.style.display=metric.symbols?'none':'';
   for(const button of root!.querySelectorAll('[data-zoom]'))button.setAttribute('aria-pressed',String((button as HTMLElement).dataset.zoom===state.zoom));
   renderTheme(theme);
@@ -119,7 +127,7 @@ export function initializeAfricaAtlas() {
   text('[data-coverage]',`${regionNames[state.region]}：${ranked.length}の国・地域のうち${count}件を収録、${ranked.length-count}件は未収録。赤枠は選択国、青い破線は比較国。`);
   text('[data-selected-name]',country.name);text('[data-selected-region]',regionNames[country.region as Region]);text('[data-selected-value]',formatValue(valueAt(metric.id,country.code,state.year),metric));text('[data-selected-unit]',metric.unit);text('[data-selected-metric]',metric.label);
   text('[data-comparison]',comparison?`比較：${comparison.name}　${formatValue(valueAt(metric.id,comparison.code,state.year),metric)} ${metric.unit}`:'');
-  text('[data-place-note]',country.code==='ESH'?'西サハラの独立したWDI系列は未収録です。モロッコの値は転用しません。':country.code==='SOM'?'数値はソマリア全体の統計です。地図ではソマリランドも同じ選択対象に含めています。':`${period}。国全体の集計値です。`);
+  text('[data-place-note]',country.code==='ESH'?'西サハラの独立したWDI系列は未収録です。モロッコの値は転用しません。':country.code==='SOM'?'数値はソマリア全体の統計です。地図ではソマリランドも同じ選択対象に含めています。':`${period}。${country.name}全体の集計値です。${theme.places.includes(country.code)?'':'テーマの代表地点の数値ではありません。'}`);
   text('[data-column-place]',country.name);text('[data-column-compare]',comparison?.name??'比較国');query<HTMLElement>('[data-column-compare]').hidden=!comparison;
   const current=query<HTMLElement>('[data-current-metrics]');current.replaceChildren();
   for(const m of metrics.filter(m=>m.field===state.field)){const tr=make('tr');const th=make('th',m.label);th.append(make('small',m.unit));tr.append(th,make('td',formatValue(valueAt(m.id,state.place,state.year),m)));if(comparison)tr.append(make('td',formatValue(valueAt(m.id,state.compare,state.year),m)));current.append(tr);}
@@ -135,12 +143,12 @@ export function initializeAfricaAtlas() {
   for(const c of ranked){const tr=make('tr');tr.classList.toggle('is-selected',c.code===state.place);tr.classList.toggle('is-compared',c.code===state.compare);const th=make('th');const button=make('button',c.name);button.setAttribute('type','button');button.dataset.focusCountry=c.code;th.append(button);const compare=make('td');const compareButton=make('button',c.code===state.compare?'比較中':'比較に追加');compareButton.setAttribute('type','button');compareButton.dataset.compareCountry=c.code;compareButton.setAttribute('aria-label',`${c.name}を比較に追加`);(compareButton as HTMLButtonElement).disabled=c.code===state.place;compare.append(compareButton);tr.append(th,make('td',regionNames[c.region as Region]),make('td',formatValue(c.value,metric)),compare);rows.append(tr);}
   if(write){const url=writeState(state,new URL(location.href));if(url.href!==location.href)history.pushState(null,'',url);}
  }
- function chooseCountry(code:string){if(!countries.some(c=>c.code===code))return;state.place=code;if(state.compare===code)state.compare='';if(state.region!=='all')state.region=countries.find(c=>c.code===code)!.region as Region;if(state.zoom==='theme'&&!themes.find(t=>t.id===state.theme)!.places.includes(code))state.zoom='all';render(true);}
+ function chooseCountry(code:string){if(!countries.some(c=>c.code===code))return;countryPinned=true;state.place=code;if(state.compare===code)state.compare='';if(state.region!=='all')state.region=countries.find(c=>c.code===code)!.region as Region;if(state.zoom==='theme'&&!themes.find(t=>t.id===state.theme)!.places.includes(code))state.zoom='all';render(true);}
  root.addEventListener('click',event=>{
   const target=(event.target as Element).closest<HTMLElement>('[data-field],[data-focus-country],[data-compare-country],[data-country-path],[data-country-marker],[data-zoom],[data-reset],button[data-theme],[data-theme-comparison],[data-theme-return]');if(!target)return;
-  if(target.hasAttribute('data-reset')){state=readState('');render(true);return;}
-  if(target.dataset.field){if(target.dataset.field===state.field)return;state.field=target.dataset.field as Field;state.metric=metrics.find(m=>m.field===state.field)!.id;state.theme=themes.find(t=>t.field===state.field)!.id;state.context='';state.zoom='theme';render(true);return;}
-  if(target.dataset.theme){state.theme=target.dataset.theme;state.context='';state.zoom='theme';render(true);return;}
+  if(target.hasAttribute('data-reset')){state=readState('');countryPinned=false;regionPinned=false;render(true);return;}
+  if(target.dataset.field){if(target.dataset.field===state.field)return;state.field=target.dataset.field as Field;state.metric=metrics.find(m=>m.field===state.field)!.id;chooseTheme(themes.find(t=>t.field===state.field)!.id);render(true);return;}
+  if(target.dataset.theme){chooseTheme(target.dataset.theme);render(true);return;}
   if(target.hasAttribute('data-theme-comparison')){state.context=themes.find(t=>t.id===state.theme)!.compareMetric;render(true);return;}
   if(target.hasAttribute('data-theme-return')){state.context='';render(true);return;}
   if(target.dataset.zoom){state.zoom=target.dataset.zoom as typeof state.zoom;render(true);return;}
@@ -150,10 +158,10 @@ export function initializeAfricaAtlas() {
  query<HTMLButtonElement>('[data-latest]').addEventListener('click',()=>{state.year=defaultYear(state.context||state.metric);render(true);});
  query<HTMLSelectElement>('[data-metric]').addEventListener('change',event=>{state.metric=(event.target as HTMLSelectElement).value;state.context='';render(true);});
  query<HTMLSelectElement>('[data-year]').addEventListener('change',event=>{state.year=Number((event.target as HTMLSelectElement).value);render(true);});
- query<HTMLSelectElement>('[data-region]').addEventListener('change',event=>{state.region=(event.target as HTMLSelectElement).value as Region;state.zoom=state.region==='all'?'all':'region';render(true);});
+ query<HTMLSelectElement>('[data-region]').addEventListener('change',event=>{regionPinned=true;state.region=(event.target as HTMLSelectElement).value as Region;state.zoom=state.region==='all'?'all':'region';render(true);});
  query<HTMLSelectElement>('[data-place]').addEventListener('change',event=>chooseCountry((event.target as HTMLSelectElement).value));
  query<HTMLSelectElement>('[data-compare]').addEventListener('change',event=>{state.compare=(event.target as HTMLSelectElement).value;render(true);});
- window.addEventListener('popstate',()=>{state=readState(location.search);render();});
+ window.addEventListener('popstate',()=>{state=readState(location.search);readSelectionPins();render();});
  window.addEventListener('resize',()=>render());
  render();
 }

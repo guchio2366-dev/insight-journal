@@ -79,3 +79,29 @@ test('each thematic comparison retains the source marks, all legends and named r
   assert.equal(q('[data-theme-takeaway]').textContent,themes.find(t=>t.field==='industry').takeaway);
  }finally{for(const k of Object.keys(previous))globalThis[k]=previous[k];w.happyDOM.abort();}
 });
+
+test('theme entry aligns unselected countries and preserves explicit selection without muting the theme',()=>{
+ const w=new Window({url:'https://example.com/insight-journal/atlas/africa/'});
+ const previous=Object.fromEntries(['window','document','location','history'].map(k=>[k,globalThis[k]]));
+ try{
+  for(const k of Object.keys(previous))globalThis[k]=w[k];
+  w.document.write(html());
+  for(const path of w.document.querySelectorAll('[data-country-path]'))path.getBBox=()=>({x:10,y:10,width:100,height:100});
+  initializeAfricaAtlas();const q=s=>w.document.querySelector(s);
+  q('[data-field="agriculture"]').click();assert.equal(q('[data-place]').value,'CIV');
+  q('[data-field="industry"]').click();assert.equal(q('[data-place]').value,'ZMB');
+  q('[data-place]').value='EGY';q('[data-place]').dispatchEvent(new w.Event('change'));
+  q('[data-field="agriculture"]').click();assert.equal(q('[data-place]').value,'EGY');
+  w.history.replaceState(null,'','?field=population&theme=urban-connections&place=EGY&compare=GHA&region=north&year=2021&zoom=theme');
+  w.dispatchEvent(new w.PopStateEvent('popstate'));
+  assert.equal(w.document.querySelectorAll('.africa-country.is-muted').length,0);
+  assert.equal(q('[data-country-marker="NGA"]').getAttribute('opacity'),'1');
+  const sourceView=q('.africa-map').getAttribute('viewBox');
+  q('[data-theme-comparison]').click();q('[data-theme-return]').click();
+  assert.equal(q('[data-place]').value,'EGY');assert.equal(q('[data-compare]').value,'GHA');assert.equal(q('[data-region]').value,'north');
+  assert.equal(q('.africa-map').getAttribute('viewBox'),sourceView);
+  q('[data-field="industry"]').click();assert.equal(q('[data-place]').value,'EGY');assert.equal(q('[data-region]').value,'north');
+  assert.ok(q('[data-place-note]').textContent.includes('テーマの代表地点の数値ではありません'));
+  q('[data-zoom="region"]').click();assert.ok(w.document.querySelectorAll('.africa-country.is-muted').length>0);
+ }finally{for(const k of Object.keys(previous))globalThis[k]=previous[k];w.happyDOM.abort();}
+});
