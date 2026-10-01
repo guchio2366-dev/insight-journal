@@ -26,7 +26,7 @@ if(workspace){
   const params=new URLSearchParams(writeLatinLearningState(state));
   params.set('case',currentCaseId);
   const url=location.pathname+'?'+params.toString();
-  if(push)history.pushState(null,'',url);else history.replaceState(null,'',url);
+  if(push)history.pushState(null,'',url);else if(location.pathname+location.search!==url)history.replaceState(null,'',url);
  }
  function normalCase(){return natureCaseForPlace(state.place,currentCaseId);}
  function sourceTitle(){
@@ -130,7 +130,8 @@ if(workspace){
   else if(!state.source&&target.dataset.natureCountry){state={...state,place:target.dataset.natureCountry};currentCaseId=natureCaseForPlace(state.place).id;render(true);}
  });
  workspace.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){const target=(event.target as Element).closest<SVGElement>('[data-nature-country]');if(target){event.preventDefault();target.dispatchEvent(new MouseEvent('click',{bubbles:true}));}}});
- window.addEventListener('popstate',()=>{read();render();});
+ const restore=()=>{read();render();};
+ window.addEventListener('popstate',restore);window.addEventListener('latin-section-change',restore);
  window.addEventListener('resize',alignMapCaptions);
  read();render();
  void document.fonts.ready.then(alignMapCaptions);

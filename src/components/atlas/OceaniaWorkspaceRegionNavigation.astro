@@ -1,0 +1,8 @@
+---
+import {withBase} from '../../lib/urls';
+---
+<nav class="oceania-workspace-region-navigation" aria-label="オセアニアの地域と国">
+ <a href={withBase('/atlas/oceania/overview/')} data-oceania-overview-link aria-current="page">オセアニア</a>
+ <a href={withBase('/atlas/oceania/base-map/')} data-oceania-base-link>基礎地図</a>
+ <slot />
+</nav>

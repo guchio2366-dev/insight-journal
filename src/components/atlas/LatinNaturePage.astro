@@ -9,10 +9,11 @@ const state={layer:'climate',place:selected.place,scope:selected.scope,only:fals
 ---
 <LatinAmericaWorkspace field="nature" title="中南米の自然環境" lead="気候と雨の季節が、作物の産地・河川交通・運河の物流にどうつながるかを読みます。">
  <section slot="map" class="latin-nature-main" data-latin-nature>
-  <div class="latin-controls">
+  <details class="latin-map-options"><summary>地域・表示を選ぶ</summary><div class="latin-map-options-body">  <div class="latin-controls">
    <label>地域 <select data-nature-scope aria-label="地図の範囲"><option value="central" selected>中米・カリブ</option><option value="south">南米</option><option value="all">中南米全体</option><option value="country">選択国・地域</option></select></label>
    <label>国・地域 <select data-nature-place aria-label="自然条件を読む国・地域"><option value="all">中南米全体</option>{latinCountries.map(c=><option value={c.code} selected={c.code===selected.place}>{c.name}</option>)}</select></label>
   </div>
+</div></details>
   <h2 data-nature-map-title>気候群の分布と雨の季節</h2>
   <div class="latin-nature-comparison-header" data-nature-comparison-header hidden><a class="latin-return" data-nature-return href={withBase('/atlas/latin-america/agriculture/')}></a><p class="latin-takeaway" data-nature-comparison-takeaway></p></div>
   <div class="latin-nature-map-panes" data-nature-panes>

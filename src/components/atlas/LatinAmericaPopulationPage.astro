@@ -18,11 +18,12 @@ const routes={base,assets,spatialAssets};
  <Fragment slot="map">
   <h2 data-lp-map-heading>2023年、人口の規模と密度を比べる</h2>
   <div class="lp-map-comparison-brief" data-lp-map-comparison-brief hidden><p data-lp-map-comparison-text></p><a data-lp-map-return href={`${base}population/?layer=density&place=all&scope=all`}>元の人口分布に戻る</a></div>
-  <div class="latin-controls lp-controls">
+  <details class="latin-map-options"><summary>地域・表示を選ぶ</summary><div class="latin-map-options-body">  <div class="latin-controls lp-controls">
    <label>指標<select data-lp-layer-select disabled><option value="density">国平均密度2023</option><option value="population">人口規模2023</option><option value="scale">規模 × 密度2023</option></select></label>
    <label>地図の範囲<select data-lp-scope-select disabled><option value="all">中南米全体</option><option value="central">中米・カリブ</option><option value="south">南米</option><option value="country">選ぶ国・地域</option></select></label>
    <label>国・地域<select data-lp-place-select disabled><option value="all">全体を比べる</option>{population.countries.map(row=><option value={row.countryCode}>{row.nameJa}・{row.countryCode}</option>)}</select></label>
   </div>
+</div></details>
   <div class="lp-map-pair" data-lp-map-pair>
    <figure class="lp-source-figure" data-lp-source-figure hidden><figcaption data-lp-source-caption>元の分布</figcaption><div data-lp-source-map></div><div data-lp-source-legend></div></figure>
    <figure class="lp-target-figure"><figcaption data-lp-target-caption hidden>人口の比較先</figcaption><div data-lp-target-map set:html={renderLatinPopulationMap(initial,'lp-primary')} /><div data-lp-target-legend set:html={renderLatinPopulationLegend('density')} /></figure>
@@ -55,6 +56,7 @@ const routes={base,assets,spatialAssets};
  </Fragment>
  <Fragment slot="sources">
   <details><summary>原典・加工・配信値・利用条件</summary><ul>{population.sources.map(source=><li><a href={source.apiUrl}>世界銀行API：{source.indicator}（2023年を採用）</a> ／ <a href={source.metadataUrl}>個別指標の定義と利用条件</a>。API更新：{source.apiLastUpdated}。</li>)}<li>3指標それぞれの公式メタデータにCC BY4.0を指定。世界銀行・元指標提供機関を出典とし、対象・年の抽出、日本語名、表示丸め、地図表示はInsight Journalが加工。</li><li>国境：Natural Earth。人口密度は国境面積から再計算していません。</li><li><a href={`${assets}/countries-2023.csv`}>採用値CSV</a> ／ <a href={`${assets}/countries-2023.json`}>採用JSON</a> ／ <a href={`${assets}/manifest.json`}>原典レスポンス・個別メタデータ・加工・SHA256台帳</a></li></ul></details>
+  <details class="lp-ghsl-citation"><summary>GHSL別図の元データ・参考論文</summary><p>2020年の別図の元データ：欧州委員会JRC、<a href="https://human-settlement.emergency.copernicus.eu/ghs_pop2023.php">GHS-POP R2023A</a>。1km人口格子を10kmの等積格子に集約した図です。通常地図の2023年国別統計と年・目的が異なります。</p><p>GHSLの方法と検証の参考論文：<a href="https://doi.org/10.1080/17538947.2024.2390454">Pesaresi et al. (2024)、DOI: 10.1080/17538947.2024.2390454</a>。元データの採用年・加工・配信値は別図の台帳で確認できます。</p></details>
  </Fragment>
  <script type="application/json" data-lp-config set:html={JSON.stringify(routes).replace(/</g,'\\u003c')}/>
  <script>

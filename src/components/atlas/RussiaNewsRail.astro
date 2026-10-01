@@ -1,0 +1,17 @@
+---
+import {getCollection,render} from 'astro:content';
+import {withBase} from '../../lib/urls';
+const articles=(await getCollection('articles')).filter(({data})=>data.countries.includes('RU')).sort((a,b)=>Date.parse(b.data.publishedAt)-Date.parse(a.data.publishedAt));
+const rendered=await Promise.all(articles.map(async entry=>({entry,...await render(entry)})));
+---
+<aside class="atlas-news russia-news" aria-labelledby="russia-news-heading" data-news-rail data-pagefind-ignore="all">
+ <header class="atlas-news-header"><p>NEWS & CONTEXT</p><h2 id="russia-news-heading">ロシアのニュース</h2><span>記事と地域の背景を、並べて読む</span></header>
+ <div class="atlas-news-list" data-news-list tabindex="0" aria-label="ロシアのニュース一覧"><div class="atlas-news-count">新しい順 <span>{articles.length} 件</span></div>{articles.length===0&&<div class="atlas-news-empty"><span aria-hidden="true">＋</span><h3>記事の追加を待っています</h3><p>ロシアに関連する公開記事を、ここに新しい順で表示します。</p><p>地図と地域の概要は、右側で利用できます。</p></div>}{articles.map(({data})=><article class="atlas-news-card"><div class="atlas-news-meta"><time datetime={data.publishedAt}>{data.publishedAt.slice(0,10)}</time></div><h3><a href={withBase(`/articles/${data.slug}/`)} data-news-open={data.slug}>{data.title}</a></h3><p>{data.summary}</p><a class="atlas-news-read" href={withBase(`/articles/${data.slug}/`)} data-news-open={data.slug}>記事を読む →</a></article>)}</div>
+ <section class="atlas-news-reader" data-news-reader hidden aria-label="選んだニュース記事"><button type="button" data-news-close>← ニュース一覧へ</button><div data-news-body></div></section>
+ <footer class="atlas-news-footer">ニュース欄は独立してスクロールできます</footer>
+ {rendered.map(({entry:{data},Content})=><template data-news-template={data.slug}><time datetime={data.publishedAt}>{data.publishedAt.slice(0,10)}</time><h2 tabindex="-1">{data.title}</h2><p class="atlas-news-deck">{data.summary}</p><div class="atlas-news-prose"><Content /></div><h3>出典</h3><ul>{data.sources.map(source=><li><a href={source.url}>{source.title}</a> — {source.publisher}</li>)}</ul><a href={withBase(`/articles/${data.slug}/`)}>記事のページを開く</a></template>)}
+</aside>
+<script>
+ import {initAtlasNews} from '../../scripts/atlas-news';
+ document.querySelectorAll<HTMLElement>('.russia-news').forEach(initAtlasNews);
+</script>

@@ -106,7 +106,8 @@ export function initialiseLatinAgriculture():void {
  workspace.addEventListener('keydown',event=>{
   if((event.key==='Enter'||event.key===' ')&&event.target instanceof SVGElement&&(event.target.hasAttribute('data-latin-agriculture-country')||event.target.hasAttribute('data-nature-country'))){event.preventDefault();choose(event.target);}
  });
- window.addEventListener('popstate',()=>{state=readLatinLearningState(window.location.search,'agriculture',layers,'bana');hasChosenPlace=true;render();});
+ const restore=()=>{state=readLatinLearningState(window.location.search,'agriculture',layers,'bana');hasChosenPlace=true;render();};
+ window.addEventListener('popstate',restore);window.addEventListener('latin-section-change',restore);
  render();push(true);workspace.dataset.latinAgricultureReady='true';
 }
 initialiseLatinAgriculture();

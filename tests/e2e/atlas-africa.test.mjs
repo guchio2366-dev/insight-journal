@@ -5,6 +5,92 @@ import {Window} from 'happy-dom';
 import {initializeAfricaAtlas} from '../../src/scripts/atlas-africa.ts';
 import {themes} from '../../src/data/atlas/africa-themes.ts';
 const html=()=>readFileSync(new URL('../../dist/atlas/africa/index.html',import.meta.url),'utf8');
+function withAfricaPage(url,run){
+ const w=new Window({url});
+ const previous=Object.fromEntries(['window','document','location','history'].map(k=>[k,globalThis[k]]));
+ try{
+  for(const k of Object.keys(previous))globalThis[k]=w[k];
+  w.document.write(html());
+  for(const path of w.document.querySelectorAll('[data-country-path]'))path.getBBox=()=>({x:10,y:10,width:100,height:100});
+  initializeAfricaAtlas();return run(w,s=>w.document.querySelector(s));
+ }finally{for(const k of Object.keys(previous))globalThis[k]=previous[k];w.happyDOM.abort();}
+}
+
+test('actual industry entries change the theme, map and reader while preserving pinned selections',()=>{
+ withAfricaPage('https://example.com/insight-journal/atlas/africa/?field=industry&place=EGY&compare=GHA&year=2023&only=1&fallback=1',(w,q)=>{
+  const entries=[...q('[data-africa-subfields]').querySelectorAll('button[data-theme]')];
+  assert.deepEqual(entries.map(b=>b.dataset.theme),themes.filter(t=>t.field==='industry').map(t=>t.id));
+  assert.equal(w.document.querySelectorAll('button[data-theme]').length,2);
+  assert.equal(q('[data-africa-topic="regional"]'),null);
+  const copperView=q('.africa-map').getAttribute('viewBox');
+  q('button[data-theme="casablanca-manufacturing"]').click();
+  const casablanca=themes.find(t=>t.id==='casablanca-manufacturing');
+  assert.equal(q('.africa-map').dataset.theme,casablanca.id);
+  assert.notEqual(q('.africa-map').getAttribute('viewBox'),copperView);
+  assert.equal(q('button[data-theme="casablanca-manufacturing"]').getAttribute('aria-pressed'),'true');
+  assert.equal(q('button[data-theme="copperbelt-connections"]').getAttribute('aria-pressed'),'false');
+  assert.ok(q('[data-theme-title]').textContent.includes(casablanca.title));
+  assert.equal(q('[data-theme-takeaway-detail]').textContent,casablanca.takeaway);
+  assert.equal(q('[data-theme-legend]').children.length,casablanca.marks.length);
+  for(const [key,value] of Object.entries({place:'EGY',compare:'GHA',year:'2023',only:'1',fallback:'1'}))assert.equal(new URL(w.location.href).searchParams.get(key),value);
+  w.history.back();assert.equal(q('.africa-map').dataset.theme,'copperbelt-connections');
+  assert.equal(q('button[data-theme="copperbelt-connections"]').getAttribute('aria-pressed'),'true');
+ });
+});
+
+test('agriculture ready topics follow the actual metric through selection, history and reload',()=>{
+ const forestURL=withAfricaPage('https://example.com/insight-journal/atlas/africa/?field=agriculture&place=GHA&unknown=preserve',(w,q)=>{
+  assert.equal(q('[data-africa-topic="farming"]').getAttribute('aria-pressed'),'true');
+  assert.ok(q('[data-africa-map-subfields]').contains(q('[data-africa-subfields]')));
+  q('[data-africa-topic="forestry"]').click();
+  assert.equal(q('[data-metric]').value,'AG.LND.FRST.ZS');
+  assert.equal(new URL(w.location.href).searchParams.get('topic'),'forestry');
+  const saved=w.location.href;
+  w.history.back();assert.equal(q('[data-metric]').value,'AG.LND.ARBL.ZS');
+  assert.equal(q('[data-africa-topic="farming"]').getAttribute('aria-pressed'),'true');
+  assert.equal(q('[data-africa-topic="forestry"]').getAttribute('aria-pressed'),'false');
+  w.history.forward();assert.equal(q('[data-africa-topic="forestry"]').getAttribute('aria-pressed'),'true');
+  q('[data-metric]').value='AG.YLD.CREL.KG';q('[data-metric]').dispatchEvent(new w.Event('change'));
+  assert.equal(q('[data-africa-topic="farming"]').getAttribute('aria-pressed'),'true');
+  q('[data-metric]').value='AG.LND.FRST.ZS';q('[data-metric]').dispatchEvent(new w.Event('change'));
+  assert.equal(q('[data-africa-topic="forestry"]').getAttribute('aria-pressed'),'true');
+  assert.equal(new URL(w.location.href).searchParams.get('unknown'),'preserve');return saved;
+ });
+ withAfricaPage(forestURL,(_w,q)=>assert.equal(q('[data-africa-topic="forestry"]').getAttribute('aria-pressed'),'true'));
+ withAfricaPage('https://example.com/atlas/africa/?field=agriculture&metric=AG.LND.ARBL.ZS&topic=forestry',(_w,q)=>assert.equal(q('[data-africa-topic="farming"]').getAttribute('aria-pressed'),'true'));
+});
+
+test('planned categories and water depth persist across reload, country changes and back/forward',()=>{
+ for(const [field,planned,ready] of [['nature','climate','water'],['population','religion','distribution']]){
+  const saved=withAfricaPage(`https://example.com/insight-journal/atlas/africa/?field=${field}&place=EGY&unknown=preserve`,(w,q)=>{
+   q(`[data-africa-topic="${planned}"]`).click();
+   assert.equal(new URL(w.location.href).searchParams.get('topic'),planned);
+   assert.equal(q('[data-africa-subfield-status]').hidden,false);
+   const saved=w.location.href;
+   q('[data-place]').value='GHA';q('[data-place]').dispatchEvent(new w.Event('change'));
+   w.history.back();assert.equal(q('[data-place]').value,'EGY');
+   assert.equal(q(`[data-africa-topic="${planned}"]`).getAttribute('aria-pressed'),'true');
+   w.history.back();assert.equal(q(`[data-africa-topic="${ready}"]`).getAttribute('aria-pressed'),'true');
+   assert.equal(q('[data-africa-subfield-status]').hidden,true);
+   w.history.forward();assert.equal(q(`[data-africa-topic="${planned}"]`).getAttribute('aria-pressed'),'true');
+   w.history.forward();assert.equal(q('[data-place]').value,'GHA');
+   assert.equal(q('[data-africa-subfield-status]').hidden,false);return saved;
+  });
+  withAfricaPage(saved,(_w,q)=>{assert.equal(q(`[data-africa-topic="${planned}"]`).getAttribute('aria-pressed'),'true');assert.equal(q('[data-africa-subfield-status]').hidden,false);});
+ }
+ const basinURL=withAfricaPage('https://example.com/insight-journal/atlas/africa/?field=nature&place=EGY',(w,q)=>{
+  q('[data-africa-water="river"]').click();assert.equal(q('[data-metric]').value,'ER.H2O.INTR.PC');
+  q('[data-africa-water="basin"]').click();assert.equal(new URL(w.location.href).searchParams.get('water'),'basin');
+  const saved=w.location.href;assert.equal(q('[data-africa-subfield-status]').hidden,false);
+  q('[data-africa-water="rain"]').click();assert.equal(q('[data-metric]').value,'AG.LND.PRCP.MM');assert.equal(q('[data-africa-subfield-status]').hidden,true);
+  w.history.back();assert.equal(q('[data-africa-water="basin"]').getAttribute('aria-pressed'),'true');
+  w.history.back();assert.equal(q('[data-africa-water="river"]').getAttribute('aria-pressed'),'true');assert.equal(q('[data-africa-subfield-status]').hidden,true);
+  w.history.forward();assert.equal(q('[data-africa-water="basin"]').getAttribute('aria-pressed'),'true');
+  w.history.forward();assert.equal(q('[data-africa-water="rain"]').getAttribute('aria-pressed'),'true');return saved;
+ });
+ withAfricaPage(basinURL,(_w,q)=>{assert.equal(q('[data-africa-water="basin"]').getAttribute('aria-pressed'),'true');assert.equal(q('[data-africa-subfield-status]').hidden,false);});
+ withAfricaPage('https://example.com/atlas/africa/?field=population&topic=__proto__&water=bad',(_w,q)=>{assert.equal(q('[data-africa-topic="distribution"]').getAttribute('aria-pressed'),'true');assert.equal(q('[data-africa-subfield-status]').hidden,true);});
+});
 
 test('Africa build includes sitemap, all fields, countries, sources and CSV fallback',()=>{
  const w=new Window();w.document.write(html());const doc=w.document;
@@ -54,29 +140,31 @@ test('each thematic comparison retains the source marks, all legends and named r
    w.dispatchEvent(new w.PopStateEvent('popstate'));
    const sourceMetric=q('[data-metric]').value,sourceYear=q('[data-year]').value,sourceView=q('.africa-map').getAttribute('viewBox');
    const sourceMarks=q('[data-theme-marks]').innerHTML;
-   assert.equal(q('[data-theme-title]').textContent,theme.title);
+   assert.equal(q('[data-theme-title]').textContent,`ガーナ：${theme.title}`);
    assert.equal(q('[data-theme-legend]').children.length,theme.marks.length);
    assert.equal(q('[data-legend]').children.length,sourceMetric==='SP.POP.TOTL'?2:6);
    q('[data-theme-comparison]').click();
    assert.equal(q('[data-theme-marks]').innerHTML,sourceMarks);
    assert.equal(q('[data-theme-legend]').children.length,theme.marks.length);
    assert.equal(q('[data-legend]').children.length,6);
-   assert.equal(q('[data-theme-takeaway]').textContent,theme.compareText);
+   assert.equal(q('[data-theme-takeaway-detail]').textContent,theme.compareText);
+   assert.ok(q('[data-theme-takeaway]').textContent.trim());
    assert.ok(q('[data-theme-return]').textContent.includes(theme.title));
+   assert.ok(q('[data-theme-return]').textContent.includes('ガーナ'));
    assert.equal(q('[data-place]').value,'GHA');assert.equal(q('[data-compare]').value,'EGY');
    assert.equal(q('[data-metric]').value,sourceMetric);assert.equal(q('[data-year]').value,sourceYear);
    assert.equal(q('[data-source]').getAttribute('href'),`https://data.worldbank.org/indicator/${theme.compareMetric}`);
    w.dispatchEvent(new w.PopStateEvent('popstate'));
-   assert.equal(q('[data-theme-takeaway]').textContent,theme.compareText);
+   assert.equal(q('[data-theme-takeaway-detail]').textContent,theme.compareText);
    q('[data-theme-return]').click();
-   assert.equal(q('[data-theme-takeaway]').textContent,theme.takeaway);
+   assert.equal(q('[data-theme-takeaway-detail]').textContent,theme.takeaway);
    assert.equal(q('[data-metric]').value,sourceMetric);assert.equal(q('[data-year]').value,sourceYear);
    assert.equal(q('.africa-map').getAttribute('viewBox'),sourceView);
    assert.equal(new URL(w.location.href).searchParams.has('context'),false);
   }
   q('[data-theme-comparison]').click();q('[data-field="industry"]').click();
   assert.equal(new URL(w.location.href).searchParams.has('context'),false);
-  assert.equal(q('[data-theme-takeaway]').textContent,themes.find(t=>t.field==='industry').takeaway);
+  assert.equal(q('[data-theme-takeaway-detail]').textContent,themes.find(t=>t.field==='industry').takeaway);
  }finally{for(const k of Object.keys(previous))globalThis[k]=previous[k];w.happyDOM.abort();}
 });
 

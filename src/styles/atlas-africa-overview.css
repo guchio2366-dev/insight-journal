@@ -1,0 +1,24 @@
+.africa-overview-page .overview-region-reading{display:flex;flex-direction:column;padding:0;max-height:calc(100dvh - 174px);background:#fffefa;border-color:#c7ccbf}
+.africa-overview-fixed{flex:none;padding:14px 16px 12px;border-bottom:1px solid #d8ddd5}
+.africa-overview-scroll{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding:12px 16px;line-height:1.75}
+.africa-overview-page .overview-region-reading h2{font-size:20px;line-height:1.5;margin-bottom:9px}
+.africa-overview-page .overview-region-intro{font-size:15px;line-height:1.7}
+.africa-overview-page .overview-region-section{margin-top:14px;padding-top:12px}
+.africa-overview-page .overview-region-section p{font-size:14px;line-height:1.8}
+.africa-overview-page .overview-inline-sources,.africa-overview-page .overview-reading-date{font-size:12px}
+.africa-overview-page .overview-map-key,.africa-overview-page .overview-map-source{font-size:13px}
+.africa-overview-page .overview-place-summary strong{font:700 18px/1.5 var(--sans)}
+.africa-overview-page .overview-place-summary p{font-size:14px}
+.africa-overview-actions a{display:block;min-height:44px;margin-top:10px;padding:9px 11px;border:1px solid #bcc7b8;background:#eef2e8;font-size:13px;font-weight:700;text-decoration:none}
+.africa-overview-page [data-overview-country-detail]{border:0;margin:0}
+.africa-overview-page .country-overview-heading{padding:0 0 12px}
+.africa-overview-page .country-overview-title-row h2{font-size:18px}
+.africa-overview-page .country-overview-reading{display:block}
+.africa-overview-page .country-overview-contents{border:0;padding:0 0 12px}
+.africa-overview-page .country-overview-topic-tabs{grid-template-columns:1fr}
+.africa-overview-page .country-overview-topic-tabs button{min-height:44px}
+.africa-overview-page .country-overview-panel{padding:14px 0}
+.africa-overview-page .country-overview-introduction h2{font-size:18px}
+.africa-overview-page .country-overview-introduction p,.africa-overview-page .country-overview-section p{font-size:14px;line-height:1.8}
+@media(min-width:960px) and (max-width:1199px){.africa-overview-page .overview-region-reading{max-height:calc(100dvh - 395px)}}
+@media(max-width:959px){.africa-overview-page .overview-region-reading{max-height:none}.africa-overview-scroll{overflow:visible}}

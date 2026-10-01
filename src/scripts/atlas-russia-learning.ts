@@ -11,10 +11,18 @@ type RussiaSource={title:string;url:string;note?:string};
 const htmlEscape=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 const ownKeys=['theme','layer','place','scope','view','compare'];
 
+const climateShortNames:Record<string,string>={BWk:'低温砂漠',BSk:'低温半乾燥',Cfa:'温暖湿潤',Cfb:'西岸海洋性',Dsc:'冷帯夏乾冷夏',Dsd:'冷帯夏乾厳冬',Dwa:'冷帯冬乾暑夏',Dwb:'冷帯冬乾暖夏',Dwc:'冷帯冬乾冷夏',Dwd:'冷帯冬乾厳冬',Dfa:'冷帯湿潤暑夏',Dfb:'冷帯湿潤暖夏',Dfc:'冷帯湿潤冷夏',Dfd:'冷帯湿潤厳冬',ET:'ツンドラ',EF:'氷雪'};
+export function renderRussiaWorkspaceLegend(layer:ReturnType<typeof getRussiaLayer>):string {
+ return renderRussiaLegend(layer.id==='climate'?{...layer,legend:layer.legend.map(item=>{const code=item.label.split(' ')[0];return {...item,label:climateShortNames[code]?code+climateShortNames[code]:item.label};})}:layer);
+}
+
 export function initRussiaLearningAtlas(root:HTMLElement):void {
  if(root.dataset.russiaReady==='true')return;
  const field=root.dataset.field as RussiaField;
  let state=createRussiaState(location.search,field);
+ const overview=root.dataset.russiaOverview==='true';
+ if(overview){state.layer='cities';if(!new URLSearchParams(location.search).has('compare'))state.compareLayer='density';}
+ let selected=state.place!=='all'||state.scope!=='all';
  const one=<T extends HTMLElement=HTMLElement>(hook:string)=>root.querySelector<T>(`[data-${hook}]`)!;
  const text=(hook:string,value:string)=>{one(hook).textContent=value;};
  const selectedName=()=>russiaRegions.find(region=>region.code===state.place)?.name??'ロシア全域';
@@ -26,6 +34,7 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
   url.searchParams.set('place',s.place);url.searchParams.set('scope',s.scope);
   if(s.comparison)url.searchParams.set('view','comparison');
   url.searchParams.set('compare',s.compareLayer);
+  const params=new URLSearchParams(location.search);for(const flag of ['only','fallback']){const value=params.get(flag);if(value==='0'||value==='1')url.searchParams.set(flag,value);else url.searchParams.delete(flag);}
   return url;
  };
  const chooseRegionTheme=()=>{
@@ -35,7 +44,8 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
  };
  const scene=(hook:string,id:string)=>{
   const el=one(hook),bounds=el.getBoundingClientRect();
-  el.innerHTML=renderRussiaScene(getRussiaLayer(id,state),state,hook,{width:bounds.width||640,height:bounds.height||320});
+  const layer=getRussiaLayer(id,state);
+  el.innerHTML=renderRussiaScene(layer,state,hook,{width:bounds.width||640,height:bounds.height||320})+`<span class="russia-map-caption">${htmlEscape(layer.period+'・'+layer.unit)}</span>`;
  };
  const sources=(items:RussiaSource[])=>{
   const unique=[...new Map(items.map(source=>[source.url+'|'+source.title,source])).values()];
@@ -46,6 +56,8 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
   const comparisonReading=getRussiaComparisonReading(state);
   one<HTMLSelectElement>('place').value=state.place;
   one<HTMLSelectElement>('layer').value=state.layer;
+  const distribution=root.querySelector<HTMLSelectElement>('[data-distribution-layer]');if(distribution)distribution.value=state.layer;
+  root.querySelectorAll<HTMLButtonElement>('[data-region-option]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.regionOption===state.place)));
   one<HTMLSelectElement>('compare-layer').value=state.compareLayer;
   root.querySelectorAll<HTMLButtonElement>('[data-theme]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.theme===state.theme)));
   root.querySelectorAll<HTMLButtonElement>('[data-scope]').forEach(button=>{
@@ -58,9 +70,18 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
    text(prefix+'-title',(prefix==='original'?'元の分布：':'')+item.title+(state.scope==='region'?' ・ '+targetName():''));
    text(prefix+'-period',item.period);
    text(prefix+'-unit',item.unit+(item.resolution?' ・ '+item.resolution:''));
-   one(prefix+'-legend').innerHTML=renderRussiaLegend(item);
+   one(prefix+'-legend').innerHTML=prefix==='primary'&&!overview?renderRussiaWorkspaceLegend(item):renderRussiaLegend(item);
   }
-  text('theme-title',theme.title);text('takeaway',theme.takeaway);
+  if(!overview){
+   one('primary-legend-spacer').innerHTML=renderRussiaLegend(layer);
+   text('current-legend-unit',layer.period+'・'+layer.unit);
+   text('legend-resolution',layer.resolution??'');one('legend-resolution').hidden=!layer.resolution;
+   one('key-legend').dataset.climateLegend=String(layer.id==='climate');
+   one('climate-dictionary').hidden=layer.id!=='climate';
+   one('primary-legend-definitions').innerHTML=renderRussiaLegend(layer);
+  }
+  text('reading-status',selected?'選んだ場所・分布の説明':'ロシアの概要');
+  text('theme-title',overview&&!selected?'広い国土を、都市と分野の分布から読む':theme.title);text('takeaway',overview&&!selected?'欧州側・シベリア・極東を同じ表示枠で確かめ、自然条件に設備・交通・市場・社会を重ねて読む。都市中心の円は行政人口ではなく、固定された都市範囲の人口です。':theme.takeaway);
   text('explanation',theme.explanation);text('social-context',theme.social);
   text('coverage',russiaCoverage(layer,state));
   text('comparison',compare.title+'と比べる →');
@@ -75,11 +96,12 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
    const nextTheme=available.find(item=>item.regionCodes.some(code=>code===state.place))??available[0];
    link.href=serialized({...state,field:nextField,theme:nextTheme.id,layer:nextTheme.defaultLayer,compareLayer:nextTheme.comparisonLayer,comparison:false},withBase(`/atlas/russia/${nextField}/`)).href;
   });
+  root.querySelectorAll<HTMLAnchorElement>('[data-russia-overview-link]').forEach(link=>{link.href=serialized({...state,comparison:false},link.href).href;});
   if(state.comparison){scene('original-map',state.layer);scene('comparison-map',state.compareLayer);}
   else scene('primary-map',state.layer);
  };
  const update=(mutate:()=>void,focus?:string)=>{
-  mutate();history.pushState({},'',serialized(state));render();
+  mutate();selected=true;history.pushState({},'',serialized(state));render();
   if(focus)one(focus).focus();
  };
  one<HTMLSelectElement>('place').addEventListener('change',event=>update(()=>{
@@ -87,6 +109,7 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
   state.scope=state.place==='all'?'all':'region';chooseRegionTheme();
  }));
  one<HTMLSelectElement>('layer').addEventListener('change',event=>update(()=>{state.layer=(event.target as HTMLSelectElement).value;}));
+ root.querySelector<HTMLSelectElement>('[data-distribution-layer]')?.addEventListener('change',event=>update(()=>{state.layer=(event.target as HTMLSelectElement).value;}));
  one<HTMLSelectElement>('compare-layer').addEventListener('change',event=>update(()=>{state.compareLayer=(event.target as HTMLSelectElement).value;}));
  root.querySelectorAll<HTMLButtonElement>('[data-theme]').forEach(button=>button.addEventListener('click',()=>update(()=>{
   const theme=getRussiaTheme({...state,field,theme:button.dataset.theme!});
@@ -104,7 +127,7 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
    state.place=selected.dataset.mapPlace as RussiaState['place'];state.scope='region';chooseRegionTheme();
   });
  });
- window.addEventListener('popstate',()=>{state=createRussiaState(location.search,field);render();});
+ window.addEventListener('popstate',()=>{state=createRussiaState(location.search,field);if(overview){state.layer='cities';const requested=new URLSearchParams(location.search).get('compare');if(!requested||getRussiaLayer(requested).id!==requested)state.compareLayer='density';}selected=state.place!=='all'||state.scope!=='all';render();});
  history.replaceState({},'',serialized(state));render();
  let resizing=false;
  new ResizeObserver(()=>{

@@ -63,13 +63,16 @@ export function initLatinIndustry(root:HTMLElement){
   root.dataset.industryMode=source?'comparison':'normal';root.dataset.layer=state.layer;root.dataset.place=state.place;root.dataset.scope=state.scope;
   q<HTMLSelectElement>('[data-industry-layer]').value=state.layer;q<HTMLSelectElement>('[data-industry-place]').value=state.place;q<HTMLSelectElement>('[data-industry-scope]').value=state.scope;
   const canalOption=q<HTMLSelectElement>('[data-industry-layer]').querySelector<HTMLOptionElement>('option[value=canal]');if(canalOption)canalOption.disabled=!!source&&source.field!=='nature';
+  for(const button of root.querySelectorAll<HTMLButtonElement>('[data-industry-layer-option]')){button.setAttribute('aria-pressed',String(button.dataset.industryLayerOption===state.layer));button.disabled=button.dataset.industryLayerOption==='canal'&&!!source&&source.field!=='nature';}
+  text('[data-industry-layer-status]',state.layer==='canal'?'パナマ運河・2024会計年度。淡水・物流の仕組み図です。':'2024年・国別の輸出構成。代表地域を地図の下から選べます。');
   q<HTMLButtonElement>('[data-industry-only]').setAttribute('aria-pressed',String(state.only));q<HTMLButtonElement>('[data-industry-only]').disabled=state.place==='all';
   q<HTMLButtonElement>('[data-industry-fallback]').setAttribute('aria-pressed',String(state.fallback));
   shown('[data-industry-normal]',!source);shown('[data-industry-comparison]',!!source);shown('[data-industry-return]',!!source);
   shown('[data-industry-source-attribution]',false);
   const reading=industryReadingForPlace(state.place,state.layer);
   for(const button of root.querySelectorAll<HTMLButtonElement>('[data-industry-topic]'))button.setAttribute('aria-pressed',String(button.dataset.industryTopic===reading.id));
-  text('[data-industry-reading-title]',reading.title);text('[data-industry-takeaway]',reading.takeaway);text('[data-industry-selected]',state.layer==='canal'?'パナマ運河 · 2024会計年度 · 大型外航船9,944通航（前年比21%減）':valueText(state.place));
+   text('[data-industry-reading-title]',reading.title);text('[data-industry-takeaway]',reading.takeaway);text('[data-industry-selected]',state.layer==='canal'?'パナマ運河 · 2024会計年度 · 大型外航船9,944通航（前年比21%減）':valueText(state.place));
+   const brief=q<HTMLElement>('[data-industry-brief]');if(brief)brief.textContent=state.layer==='canal'?'流域の雨と貯水が閘門の通航を支え、干ばつ時は通航を調整する。':'鉱石・金属と製造品の輸出比率を分け、資源・技能・交通・市場を読む。';
   const imageContainers:HTMLElement[]=[];
   if(!source){
    text('[data-industry-title]',layerName(state.layer));text('[data-industry-period]',state.layer==='canal'?'2024会計年度（2023年10月–2024年9月） · パナマ運河の大型外航船通航':'2024年 · 国単位 · 商品輸出額に占める割合（%）');
@@ -78,8 +81,9 @@ export function initLatinIndustry(root:HTMLElement){
    map.closest<HTMLElement>('.latin-industry-panel')!.dataset.layer=state.layer;
    text('[data-industry-map-note]',state.layer==='canal'?'淡水を使う仕組みと活動の説明図です。運河サービスは商品の輸出構成比には含まれません。':'2024年固定 · 24国に値、9国・地域は原典欠測、1地域は対象統計なし。');
    const opposite=state.layer==='ores'?'manufactures':'ores';
-   const exportsLink=q<HTMLAnchorElement>('[data-industry-compare-exports]');exportsLink.href=latinLearningUrl(base,latinComparisonState(state,'industry',opposite));exportsLink.hidden=state.layer==='canal';exportsLink.textContent=`${layerName(state.layer)}と${layerName(opposite)}を並べ、輸出の重心を比べる →`;
-   const populationLink=q<HTMLAnchorElement>('[data-industry-compare-population]');populationLink.hidden=state.layer==='canal';populationLink.href=latinLearningUrl(base,latinComparisonState(state,'population','density'));populationLink.textContent=`${industryCountryName(state.place)}の輸出構成2024年と人口密度2023年を並べ、市場と産業の関係を読む →`;
+    const exportsLink=q<HTMLAnchorElement>('[data-industry-compare-exports]');exportsLink.href=latinLearningUrl(base,latinComparisonState(state,'industry',opposite));exportsLink.hidden=state.layer==='canal';exportsLink.textContent='鉱石・金属と製造品の輸出構成を比べる →';
+    const populationLink=q<HTMLAnchorElement>('[data-industry-compare-population]');populationLink.hidden=state.layer==='canal';populationLink.href=latinLearningUrl(base,latinComparisonState(state,'population','density'));populationLink.textContent=`${industryCountryName(state.place)}：輸出構成と人口密度を比べる →`;
+    q<HTMLAnchorElement>('[data-industry-compare-water]').textContent='パナマの気候・淡水と物流を比べる →';
    q<HTMLAnchorElement>('[data-industry-compare-water]').href=latinLearningUrl(base,{field:'industry',layer:'canal',place:'PAN',scope:'central',only:false,fallback:state.fallback,source:{field:'nature',layer:'climate',place:'PAN',scope:'central',only:false,fallback:state.fallback}});
   }else{
    const original=renderSource(source,'latin-industry-original');
@@ -116,6 +120,7 @@ export function initLatinIndustry(root:HTMLElement){
  q('[data-industry-fallback]').addEventListener('click',()=>update({fallback:!state.fallback}));
  root.addEventListener('click',event=>{
   const target=event.target as Element;
+  const layer=target.closest<HTMLButtonElement>('[data-industry-layer-option]');if(layer){if(!layer.disabled&&allowed.includes(layer.dataset.industryLayerOption!))update({layer:layer.dataset.industryLayerOption!});return;}
   const topic=target.closest<HTMLElement>('[data-industry-topic]');if(topic){const reading=latinIndustryReadings.find(r=>r.id===topic.dataset.industryTopic);if(reading)update({layer:reading.layer,place:reading.place,scope:reading.scope as LatinLearningState['scope'],only:false,source:undefined});return;}
   const country=target.closest<HTMLElement>('[data-industry-country],[data-lp-country],[data-lp-symbol],[data-nature-country],[data-latin-agriculture-country]');if(country){const place=country.dataset.industryCountry??country.dataset.lpCountry??country.dataset.lpSymbol??country.dataset.natureCountry??country.dataset.latinAgricultureCountry;if(place&&latinCountries.some(c=>c.code===place))update({place});}
  });

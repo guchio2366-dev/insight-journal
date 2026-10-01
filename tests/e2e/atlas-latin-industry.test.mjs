@@ -16,6 +16,43 @@ async function page(search='',interactive=true){
 const change=(w,selector,value)=>{const input=w.document.querySelector(selector);input.value=value;input.dispatchEvent(new w.Event('change'));};
 const q=(w,selector)=>w.document.querySelector(selector);
 
+test('Compact industry buttons drive the original map, legend, reader and URL while retaining selection',async()=>{
+ const w=await page('?layer=ores&place=PAN&scope=central&only=1');let reload;try{
+  const buttons=[...w.document.querySelectorAll('[data-industry-layer-option]')];
+  assert.deepEqual(buttons.map(button=>button.dataset.industryLayerOption),lib.latinIndustryLayers.map(layer=>layer.id));
+  assert.deepEqual(buttons.map(button=>button.textContent),lib.latinIndustryLayers.map(layer=>layer.name));
+  for(const layer of lib.latinIndustryLayers){
+   q(w,`[data-industry-layer-option=${layer.id}]`).click();
+   const params=new URL(w.location).searchParams;
+   assert.equal(params.get('layer'),layer.id);assert.equal(params.get('place'),'PAN');assert.equal(params.get('scope'),'central');assert.equal(params.get('only'),'1');
+   assert.equal(q(w,'[data-industry-layer]').value,layer.id);assert.equal(q(w,'[data-latin-industry]').dataset.layer,layer.id);
+   assert.deepEqual(buttons.filter(button=>button.getAttribute('aria-pressed')==='true').map(button=>button.dataset.industryLayerOption),[layer.id]);
+   assert.equal(q(w,'[data-industry-reading-title]').textContent,lib.industryReadingForPlace('PAN',layer.id).title);
+   assert.equal(q(w,'[data-industry-takeaway]').textContent,lib.industryReadingForPlace('PAN',layer.id).takeaway);
+   const expected=w.document.createElement('div');expected.innerHTML=lib.renderLatinIndustryLegend(layer.id);
+   assert.equal(q(w,'[data-industry-primary-legend]').textContent,expected.textContent);
+   if(layer.id==='canal')assert.ok(q(w,'[data-industry-primary-map] .latin-industry-canal'));
+   else assert.equal(q(w,'[data-industry-primary-map] [data-industry-country=PAN]').getAttribute('fill'),lib.latinIndustryColor(data.rows.find(row=>row.country==='PAN').values[layer.id].value,data.rows.find(row=>row.country==='PAN').values[layer.id].status));
+  }
+  change(w,'[data-industry-layer]','ores');assert.equal(q(w,'[data-industry-layer-option=ores]').getAttribute('aria-pressed'),'true');
+  w.history.replaceState(null,'','?layer=manufactures&place=PAN&scope=central&only=1');w.dispatchEvent(new w.PopStateEvent('popstate'));
+  assert.equal(q(w,'[data-industry-layer-option=manufactures]').getAttribute('aria-pressed'),'true');assert.equal(q(w,'[data-industry-layer]').value,'manufactures');
+  reload=await page(w.location.search);assert.equal(q(reload,'[data-industry-layer-option=manufactures]').getAttribute('aria-pressed'),'true');
+ }finally{await w.happyDOM.close();if(reload)await reload.happyDOM.close();}
+});
+
+test('Compact industry buttons obey the existing comparison layer restriction',async()=>{
+ const query='?layer=manufactures&place=CHL&scope=south&only=1&from=industry&sourceLayer=ores&sourcePlace=CHL&sourceScope=south&sourceOnly=1';
+ const w=await page(query);try{
+  const canal=q(w,'[data-industry-layer-option=canal]');assert.equal(canal.disabled,true);
+  const href=w.location.href;canal.click();assert.equal(w.location.href,href);assert.equal(q(w,'[data-industry-layer]').value,'manufactures');
+  q(w,'[data-industry-layer-option=ores]').click();
+  assert.equal(q(w,'[data-industry-target-map]').closest('.latin-industry-panel').dataset.layer,'ores');assert.equal(q(w,'[data-latin-industry]').dataset.industryMode,'comparison');
+  const params=new URL(w.location).searchParams;assert.equal(params.get('layer'),'ores');assert.equal(params.get('sourceLayer'),'ores');assert.equal(params.get('place'),'CHL');assert.equal(params.get('scope'),'south');assert.equal(params.get('only'),'1');
+  assert.equal(params.get('sourcePlace'),'CHL');assert.equal(params.get('sourceScope'),'south');assert.equal(params.get('sourceOnly'),'1');
+ }finally{await w.happyDOM.close();}
+});
+
 test('Industry SSR exposes 34 country values, a meaningful map and full common legend without expanding source details',async()=>{
  const w=await page('',false);try{
   assert.equal(w.document.querySelectorAll('[data-industry-primary-map] [data-industry-country]').length,34);

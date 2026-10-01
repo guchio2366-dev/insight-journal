@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
+import { getOverviewRegion, overviewTopics, type OverviewRegionId } from '../../data/atlas/country-overview';
+import { withBase } from '../../lib/urls';
+import { getOverviewMap } from '../../data/atlas/overview-map';
+import { getRegionOverview } from '../../data/atlas/region-overview';
+import '../../styles/atlas-country-overview.css';
+import '../../styles/atlas-latin-overview-layout.css';
+
+interface Props { regionId: OverviewRegionId }
+const region = getOverviewRegion(Astro.props.regionId);
+const initialCountry = region.countries.find(country => country.code === region.defaultCountry) ?? region.countries[0];
+const map = getOverviewMap(region.id);
+const reading = getRegionOverview(region.id, region.label);
+const config = {
+  countries: region.countries.map(country => ({ ...country, bounds: map.countries.find(item => item.code === country.code)?.bounds })),
+  topics: overviewTopics.map(topic => ({ id: topic.id, label: topic.label })),
+  fields: region.fields.filter(field => field.href).map(field => ({
+    id: field.id,
+    href: withBase(field.href!),
+    ...(field.countryHrefs ? { countryHrefs: Object.fromEntries(Object.entries(field.countryHrefs).map(([code, href]) => [code, withBase(href)])) } : {}),
+  })),
+  regionLabel: region.label, width: map.width, height: map.height, cities: map.cities,
+};
+---
+
+<BaseLayout title={`${region.label}の概要と白地図`} description={`${region.label}の国・地域と主要都市の位置を白地図で確かめ、地域の特徴や歴史・政治を読むページです。`} compactAtlas>
+  <div class="overview-workspace latin-overview-workspace">
+  <AtlasWorkspaceFrame region={region.newsRegion} mapActions={false}>
+    <article class="atlas-explorer country-overview" data-country-overview data-field="country-overview" data-overview-region={region.id}>
+      <nav class="country-overview-breadcrumb" aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a><span aria-hidden="true"> / </span><a href={withBase(region.mapPath)}>{region.label}</a><span aria-hidden="true"> / </span><span>概要</span></nav>
+
+      <div class="atlas-region-controls country-overview-controls">
+        <nav class="country-overview-regions" aria-label="地域を選ぶ">
+          <a href={withBase('/atlas/')}>世界の地域</a>
+          {region.peers.map(id => { const peer = getOverviewRegion(id); return <a href={withBase(peer.path)} aria-current={id === region.id ? 'page' : undefined}>{peer.label}</a>; })}
+        </nav>
+        <label class="country-overview-picker" for="overview-country">国・地域
+          <select id="overview-country" data-overview-country><option value="">{region.label}全体</option>{region.countries.map(country => <option value={country.code}>{country.name}</option>)}</select>
+        </label>
+      </div>
+
+      <nav class="atlas-tabs country-overview-fields" aria-label="概要と分野別地図">
+        <a href={withBase(region.path)} aria-current="page" data-overview-current-link>概要</a>
+        {region.fields.map(field => field.href ? <a href={withBase(field.href)} data-overview-field={field.id}>{field.label}</a> : <span class="atlas-tab-planned" aria-disabled="true">{field.label}<small>準備中</small></span>)}
+      </nav>
+
+      <h1 class="visually-hidden">{region.label}の概要と白地図</h1>
+      <p class="visually-hidden" data-overview-announcement aria-live="polite" aria-atomic="true"></p>
+      <div class="overview-map-reading">
+        <section class="overview-map-column" aria-label={`${region.label}の白地図`}>
+          <div class="overview-map-stage" data-overview-map-stage>
+            <svg class="overview-base-map" data-overview-map viewBox={`0 0 ${map.width} ${map.height}`} role="group" aria-label={`${region.label}の国境と主要都市`}>
+              {map.context.map(path => <path class="overview-context-land" d={path} fill-rule="evenodd" />)}
+              {map.countries.map(country => <path class="overview-country-shape" d={country.path} fill-rule="evenodd" data-overview-map-country={country.code} role="button" tabindex="-1" aria-label={country.name} aria-pressed="false"><title>{country.name}</title></path>)}
+              {map.lakes?.map(path => <path class="overview-map-water" d={path} />)}
+              {map.waters.map(water => <text class="overview-water-name" x={water.point[0]} y={water.point[1]}>{water.name}</text>)}
+              {map.cities.map(city => <circle class="overview-city-dot" cx={city.point[0]} cy={city.point[1]} r="3" data-overview-city-dot={city.id} />)}
+            </svg>
+            <div class="overview-map-labels" data-overview-labels>
+              {map.countries.map(country => <button type="button" class="overview-country-label" hidden={country.area<2500} data-overview-label-country={country.code} data-x={country.label[0]} data-y={country.label[1]} data-priority={country.area} style={`left:${country.label[0]/map.width*100}%;top:${country.label[1]/map.height*100}%`} aria-pressed="false">{country.name}</button>)}
+              {map.cities.map((city,index) => <button type="button" class="overview-city-label" hidden={index>11} data-overview-map-city={city.id} data-country={city.country} data-x={city.point[0]} data-y={city.point[1]} data-priority={city.rank} style={`left:${city.point[0]/map.width*100}%;top:${city.point[1]/map.height*100}%`} aria-label={`${city.name}（${region.countries.find(country=>country.code===city.country)?.name ?? city.country}）`} aria-pressed="false">{city.name}</button>)}
+            </div>
+            <div class="overview-map-controls" aria-label="地図の表示範囲">
+              <button type="button" data-overview-zoom="in" aria-label="地図を拡大">＋</button><button type="button" data-overview-zoom="out" aria-label="地図を縮小">−</button><button type="button" data-overview-reset>全体へ</button>
+            </div>
+            <span class="overview-map-badge">{region.label} · 国と主要都市</span>
+          </div>
+          <div class="overview-map-key"><span><i class="overview-key-border"></i> 国・地域の境界</span><span><i class="overview-key-city"></i> 主要都市</span><span><i class="overview-key-selected"></i> 選択中の国</span></div>
+          <div class="overview-place-summary" data-overview-place-summary aria-live="polite">
+            <strong data-overview-place-title>国や都市を選んで、位置を確かめる</strong>
+            <p data-overview-place-description>地図の国名・都市名、または上の一覧から国・地域を選べます。</p>
+            <a href="#overview-country-detail" data-overview-detail-link hidden><span data-overview-country-name>{initialCountry.name}</span>の詳しい解説へ ↓</a>
+          </div>
+          <details class="overview-map-source"><summary>地図の範囲・出典</summary><p>境界と都市はNatural Earthの概略データを用いています。小さな国や重なる地名は、上の国・地域の一覧から選択できます。都市は主要な地点を抜粋しており、すべての都市を示すものではありません。</p><p>境界・名称は出典の表示上の区分に基づきます。詳細な行政境界や領土の実効支配を示す地図ではありません。</p>{map.notes.map(note=><p>{note}</p>)}<p>{map.projection}</p>{map.sources.map(source=><p><a href={source.url}>{source.label}</a></p>)}</details>
+          <noscript><p class="country-overview-noscript">白地図と地域の概要を表示しています。国の選択・拡大にはJavaScriptが必要です。</p></noscript>
+        </section>
+        <aside class="overview-region-reading" aria-labelledby="overview-region-title">
+          <p class="overview-reading-eyebrow">地域の概要</p><h2 id="overview-region-title">{reading.title}</h2><p class="overview-region-intro">{reading.introduction}</p>
+          {reading.sections.map(section => <section class="overview-region-section"><h3>{section.heading}</h3><p>{section.body}</p>{section.sourceIds.length > 0 && <p class="overview-inline-sources">{section.sourceIds.map(id => {const source=reading.sources.find(source=>source.id===id);return source && <a href={source.url}>{source.label}</a>;})}</p>}</section>)}
+          {reading.checkedAt && <p class="overview-reading-date">説明の確認日：{reading.checkedAt}</p>}
+        </aside>
+      </div>
+      <section id="overview-country-detail" data-overview-country-detail hidden aria-labelledby="overview-country-title">
+      <header class="country-overview-heading">
+        <div class="country-overview-title-row"><h2 id="overview-country-title"><span data-overview-country-name>{initialCountry.name}</span>の詳しい解説</h2><span class="country-overview-status">国別の本文は準備中です</span></div>
+        <p>農林業・自然環境・主要産業・人口・政治の5つのテーマで、この国・地域を詳しく説明する予定です。</p>
+      </header>
+
+      <div class="country-overview-topic-tabs" role="tablist" aria-label="国・地域の解説テーマ">
+        {overviewTopics.map((topic, index) => <button type="button" id={`overview-tab-${topic.id}`} role="tab" aria-controls={`overview-panel-${topic.id}`} aria-selected={index === 0 ? 'true' : 'false'} tabindex={index === 0 ? 0 : -1} data-overview-topic={topic.id}>{topic.label}</button>)}
+      </div>
+
+      {overviewTopics.map((topic, topicIndex) => <section class="country-overview-panel" id={`overview-panel-${topic.id}`} role="tabpanel" aria-labelledby={`overview-tab-${topic.id}`} tabindex="0" hidden={topicIndex !== 0}>
+        <div class="country-overview-reading">
+          <nav class="country-overview-contents" aria-label={`${topic.label}の目次`}>
+            <h2>このテーマの内容</h2>
+            <ol>{topic.sections.map((section, index) => <li><a href={`#overview-${topic.id}-section-${index + 1}`}>{section.heading}</a></li>)}</ol>
+            <a class="country-overview-source-jump" href={`#overview-${topic.id}-sources`}>出典・参考資料</a>
+          </nav>
+          <div class="country-overview-copy">
+            <header class="country-overview-introduction"><h2><span data-overview-country-name>{initialCountry.name}</span>の{topic.label}</h2><p>{topic.introduction}</p></header>
+            {topic.sections.map((section, index) => <section class="country-overview-section" id={`overview-${topic.id}-section-${index + 1}`}>
+              <h3><span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>{section.heading}</h3>
+              <p>{section.placeholder}</p>
+              <p class="country-overview-placeholder">この項目の本文は準備中です。</p>
+            </section>)}
+            <footer class="country-overview-sources" id={`overview-${topic.id}-sources`}><h3>出典・参考資料</h3><p>本文の公開時に、資料名・発行機関・対象年・参照先を掲載します。現時点では、国別の本文や統計は掲載していません。</p></footer>
+          </div>
+        </div>
+      </section>)}
+      </section>
+      <script type="application/json" data-overview-config set:html={JSON.stringify(config).replace(/</g, '\u003c')} />
+    </article>
+  </AtlasWorkspaceFrame>
+  </div>
+</BaseLayout>
+
+<script>
+  import { initCountryOverview } from '../../scripts/atlas-country-overview';
+  import { initLatinOverviewLinks } from '../../scripts/atlas-latin-overview-layout';
+  document.querySelectorAll<HTMLElement>('[data-country-overview]').forEach(root=>{initCountryOverview(root);initLatinOverviewLinks(root);});
+</script>
