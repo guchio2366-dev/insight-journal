@@ -263,3 +263,10 @@
  .eu-workspace-root[data-europe-detail].has-eu-comparison .eu-reader-heading h2 { font-size:18px; }
  .eu-workspace-root[data-europe-detail].has-eu-comparison .eu-comparison-links { display:none; }
 }
+
+/* Leave room for the last climate-key row on short laptop screens. */
+@media(min-width:960px) and (max-width:1199px) and (max-height:820px) {
+ .eu-workspace-root[data-europe-detail].has-eu-comparison:has([data-eu-climate-reader]:not([hidden])) .eu-map-stage {
+  height:clamp(266px,calc(100dvh - 491px),516px);
+ }
+}
