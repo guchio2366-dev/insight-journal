@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-01",
+  "sources": [
+    {
+      "agency": "INEGI",
+      "product": "Conjunto de datos vectoriales escala 1:1 000 000. Unidades climáticas",
+      "edition": 2008,
+      "observedPeriod": null,
+      "periodNote": "作図期の約4,000観測所の資料を使用。統一された観測対象期間は同梱説明に記載なし。2008は刊行年。",
+      "scale": 1000000,
+      "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+      "downloadUrl": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/geografia/tematicas/CLIMAS/702825267568_s.zip",
+      "sha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+      "originalRecords": 1695,
+      "excludedRecords": 3,
+      "license": {
+        "name": "Términos de Libre Uso de la Información del INEGI",
+        "url": "https://www.inegi.org.mx/inegi/terminos.html",
+        "creditRequired": true,
+        "metadataPreserved": true,
+        "transformationsDisclosed": true
+      },
+      "correction": {
+        "date": "2021-05-21",
+        "objectId": 551,
+        "classCode": "BS0hw",
+        "featureCode": 22114,
+        "classLabel": "Seco semicalido"
+      }
+    },
+    {
+      "agency": "INEGI",
+      "product": "Conjunto de datos vectoriales Fisiográficos. Continuo Nacional serie I. Provincias fisiográficas",
+      "edition": 2001,
+      "observedPeriod": null,
+      "periodNote": "2001版の自然地理地域区分。標高の観測値を示す資料ではない。",
+      "scale": 1000000,
+      "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267575",
+      "downloadUrl": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/geografia/tematicas/FISIOGRAFIA/702825267575_s.zip",
+      "sha256": "23f106a3001a4bca916e0aab7f6ffb99810599895b0d00ae8b2dcc90272efb2a",
+      "originalRecords": 733,
+      "excludedRecords": 291,
+      "license": {
+        "name": "Términos de Libre Uso de la Información del INEGI",
+        "url": "https://www.inegi.org.mx/inegi/terminos.html",
+        "creditRequired": true,
+        "metadataPreserved": true,
+        "transformationsDisclosed": true
+      },
+      "individualUseConstraints": "None",
+      "individualLicenseFile": "metadatos/metadatos_cdv_1_1_000_000_provincias_fisiográficas.txt"
+    }
+  ],
+  "projection": {
+    "name": "Lambert Conformal Conic",
+    "datum": "ITRF92",
+    "ellipsoid": "GRS80",
+    "semiMajorM": 6378137,
+    "inverseFlattening": 298.257222101,
+    "standardParallel1": 17.5,
+    "standardParallel2": 29.5,
+    "latitudeOfOrigin": 12,
+    "centralMeridian": -102,
+    "falseEastingM": 2500000,
+    "falseNorthingM": 0,
+    "units": "m"
+  },
+  "processing": {
+    "simplificationToleranceM": 300,
+    "algorithm": "Ordered original-vertex Douglas-Peucker; adaptive smaller tolerance for new intersections, containment and orientation changes in the INEGI Lambert plane",
+    "coordinateRoundingM": 0,
+    "sourceRingsPreserved": true,
+    "topology": {
+      "climate": {
+        "validationPasses": 9,
+        "adaptedRings": 815,
+        "minimumToleranceM": 0,
+        "newProperIntersections": 0,
+        "newContainments": 0,
+        "orientationChanges": 0
+      },
+      "relief": {
+        "validationPasses": 14,
+        "adaptedRings": 38,
+        "minimumToleranceM": 0,
+        "newProperIntersections": 0,
+        "newContainments": 0,
+        "orientationChanges": 0
+      }
+    },
+    "categoryAggregation": "原分類を保持し、画面の凡例だけ6気候群に集約。数量・面積・水収支の推計なし。",
+    "displayOnly": true
+  },
+  "geometryFile": "nature-v1.json",
+  "geometrySha256": "e66b11a9ae297c71eae4a675ba22f700096fcd8f1b574069bf3414fe292d8c0b",
+  "assets": [
+    {
+      "file": "climate.svg",
+      "sha256": "f8ecbbaf5410920a243fe264ebb3f2a29429b9185f05ef45753adb1bc7a53009",
+      "viewBox": "0 0 900 580",
+      "boundsNative": [
+        911292.029449366,
+        319149.06252919696,
+        4083063.0952772293,
+        2349614.87171421
+      ],
+      "role": "Static fallback; same original thematic distribution as the interactive SVG"
+    },
+    {
+      "file": "relief.svg",
+      "sha256": "3dc26b165fb3dcb0f8d73f0536ccc8cdc2c0a7f0a9f938092b5d3b3c3468f3de",
+      "viewBox": "0 0 900 580",
+      "boundsNative": [
+        911292.029449366,
+        319149.06252919696,
+        4083063.0952772293,
+        2349614.87171421
+      ],
+      "role": "Static fallback; same original thematic distribution as the interactive SVG"
+    }
+  ],
+  "counts": {
+    "climateClasses": 21,
+    "climateFeatures": 1692,
+    "reliefClasses": 16,
+    "reliefFeatures": 442,
+    "reliefMissing": 5
+  }
+}

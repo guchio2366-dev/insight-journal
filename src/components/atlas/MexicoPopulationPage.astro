@@ -1,0 +1,102 @@
+---
+import MexicoWorkspace from './MexicoWorkspace.astro';
+import population from '../../data/atlas/mexico/population.json';
+import {mexicoPopulationReading, mexicoPopulationRegionReading, mexicoPopulationReadingSources} from '../../data/atlas/mexico/population-reading';
+import {geometryPath, stateFeatures, stateLabelPoint, mapViewBox} from '../../lib/atlas-mexico-geometry';
+import {mexicoDensityColor, mexicoDensityBins, mexicoPopulationRadius, mexicoPopulationLegendValues, formatMexicoPopulation, formatMexicoDensity} from '../../lib/atlas-mexico-population';
+import {withBase} from '../../lib/urls';
+import '../../styles/atlas-mexico-population.css';
+
+const initial = population.states.find(row => row.stateCode === '09')!;
+const initialReading = mexicoPopulationRegionReading('09');
+const assetRoot = withBase('/assets/atlas/mexico-population-v1');
+const routes = {
+ population: withBase('/atlas/north-america/mexico/population/'),
+ industry: withBase('/atlas/north-america/mexico/industry/'),
+ nature: withBase('/atlas/north-america/mexico/nature/'),
+ agriculture: withBase('/atlas/north-america/mexico/agriculture/'),
+ assets: assetRoot,
+ labelPoints: Object.fromEntries(population.states.map(row => [row.stateCode, stateLabelPoint(row.stateCode)])),
+};
+const labelCodes = ['02','03','05','08','14','19','25','26','31'];
+const shapes = stateFeatures.map(feature => {
+ const row = population.states.find(row => row.stateCode === feature.properties.code)!;
+ return {row, path: geometryPath(feature.geometry), point: stateLabelPoint(row.stateCode)};
+});
+const symbolShapes = [...shapes].sort((a,b) => b.row.population-a.row.population);
+const [selectedX, selectedY] = stateLabelPoint('09');
+---
+<MexicoWorkspace field="population" title="人口の規模と密度から読むメキシコ" lead="中央部の人口集積と北部の広い州を比べ、地形・輸出産業・交通とのつながりが分かります。" description="INEGIの2020年国勢調査による32州の人口と公表人口密度を地図で比較。人口規模、自然地理地域、2025年の州別輸出産業をつなげて読みます。">
+ <Fragment slot="map">
+  <h2 data-population-map-heading>2020年、人口はどこに集まる？</h2>
+  <div class="mexico-controls population-controls">
+   <label>地図の指標<select data-population-view disabled><option value="density" selected>人口密度（色）</option><option value="population">人口規模（円）</option></select></label>
+   <label>選ぶ州<select data-population-state disabled>{population.states.map(row => <option value={row.stateCode} selected={row.stateCode==='09'}>{row.nameJa}</option>)}</select></label>
+  </div>
+  <figure class="population-map-figure" data-population-normal>
+   <svg class="mexico-map population-map" data-mexico-map data-population-map viewBox={mapViewBox} role="group" aria-labelledby="mexico-population-map-title mexico-population-map-desc">
+    <title id="mexico-population-map-title">2020年の州別人口密度</title>
+    <desc id="mexico-population-map-desc">INEGIの32州の人口密度を色で表示。単位は人/km²、州全域の平均です。人口規模を選ぶと円の面積で州人口を表示します。選ぶ州のメニューと全州の表でも値を読めます。表示州境は2025年、統計は2020年です。</desc>
+    <defs><pattern id="mexico-population-missing" width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" fill="#eef0e7"/><path d="M-2,2L2,-2M0,9L9,0M7,11L11,7" stroke="#798c83" stroke-width="2"/></pattern></defs>
+    <g aria-hidden="true">{shapes.map(shape => <path d={shape.path} class="mexico-context population-context" fill-rule="evenodd" />)}</g>
+    <g>{shapes.map(({row,path}) => <path d={path} class:list={['population-state',{'is-selected-population':row.stateCode==='09'}]} data-population-state-shape={row.stateCode} fill={mexicoDensityColor(row.density)} fill-rule="evenodd" role="button" tabindex="0" aria-pressed={row.stateCode==='09'?'true':'false'} aria-label={`${row.nameJa}、2020年人口密度 ${formatMexicoDensity(row.density)}人/km²、人口 ${formatMexicoPopulation(row.population)}人`}><title>{row.nameJa}：{formatMexicoDensity(row.density)}人/km²、{formatMexicoPopulation(row.population)}人（2020年）</title></path>)}</g>
+    <g data-population-symbols hidden>{symbolShapes.map(({row,point}) => <g class="population-symbol" data-population-state-symbol={row.stateCode} role="button" tabindex="0" aria-pressed={row.stateCode==='09'?'true':'false'} aria-label={`${row.nameJa}、2020年人口 ${formatMexicoPopulation(row.population)}人`}><circle cx={point[0]} cy={point[1]} r={mexicoPopulationRadius(row.population)} /><title>{row.nameJa}：{formatMexicoPopulation(row.population)}人（円の面積、2020年）</title></g>)}</g>
+    <g aria-hidden="true" class="population-labels">{shapes.filter(shape => labelCodes.includes(shape.row.stateCode)).map(({row,point}) => <text x={point[0]} y={point[1]-6} text-anchor="middle" data-population-state-label={row.stateCode}>{row.short}</text>)}</g>
+    <g class="population-selected-label" data-population-selected-label aria-hidden="true"><path d={`M${selectedX},${selectedY}l20,-24`} /><text x={selectedX+25} y={selectedY-25} data-population-selected-label-text>メキシコ市</text></g>
+    <g class="population-map-context" aria-hidden="true"><text x="450" y="45">米国</text><text x="95" y="415">太平洋</text><text x="720" y="250">メキシコ湾</text><text x="800" y="540">グアテマラ</text></g>
+    <g class="population-map-symbol-key" data-population-map-symbol-key hidden role="img" aria-label="円の面積の凡例。人口100万人、500万人、1000万人。地図の人口円と同じ座標縮尺。"><text x="45" y="476" class="population-map-key-heading">円の面積＝州人口</text>{mexicoPopulationLegendValues.map((value,index) => <g><circle cx={70+index*135} cy="524" r={mexicoPopulationRadius(value)} /><text x={70+index*135} y="572" text-anchor="middle">{value===1_000_000?'100万':value===5_000_000?'500万':'1,000万'}人</text></g>)}</g>
+   </svg>
+  </figure>
+  <figure class="population-map-fallback" data-population-fallback hidden>
+   <img class="population-fallback-image" data-population-fallback-image src={`${assetRoot}/density.svg`} width="900" height="580" alt="2020年の32州の人口密度。全州の値は下の表でも確認できます。" />
+   <figcaption data-population-fallback-caption>地図の代替表示：全32州の分布。選んだ州の値は右側で確認できます。</figcaption>
+  </figure>
+  <div class="population-density-key" data-population-density-key>
+   <p class="population-key-title">色＝人口密度（2020年、人/km²）</p>
+   <ul class="mexico-legend" aria-label="人口密度の色の凡例">{mexicoDensityBins.map(bin => <li><i style={`background:${bin.color}`} aria-hidden="true"/>{bin.label}</li>)}</ul>
+  </div>
+  <div class="population-symbol-key" data-population-symbol-key hidden>
+   <p class="population-key-title">円の面積＝人口（2020年）</p>
+  </div>
+  <p class="mexico-caption" data-population-map-status aria-live="polite">2020年・全32州の平均密度。メキシコ市を選択。</p>
+  <p class="mexico-caption population-source-caption">統計：2020年3月15日 ／ 州境：2025年。密度は公表値。</p>
+ </Fragment>
+ <Fragment slot="items">
+  <label><input type="checkbox" data-population-only disabled /> 選んだ州のデータだけ</label>
+  <button type="button" data-population-reset disabled>全32州に戻す</button>
+  <a class="population-scale-entry" data-population-scale-link href={`${routes.population}?view=density&state=09&compare=scale&sourceView=density`}>人口規模と密度を比べる</a>
+ </Fragment>
+ <Fragment slot="reading">
+  <h2 data-population-reading-heading>{mexicoPopulationReading.title}</h2>
+  <div class="population-state-summary" aria-live="polite">
+   <p class="population-selected-name" data-population-selected-name>メキシコ市 <span>CDMX</span></p>
+   <dl><div><dt>人口・2020年</dt><dd><strong data-population-selected-population>{formatMexicoPopulation(initial.population)}</strong> 人</dd></div><div><dt>州全域の密度</dt><dd><strong data-population-selected-density>{formatMexicoDensity(initial.density)}</strong> 人/km²</dd></div></dl>
+  </div>
+  <div class="population-scale-reading" data-population-scale-reading hidden>
+   <h3>人口規模 × 人口密度</h3>
+   <p>{mexicoPopulationReading.scaleExplanation}</p>
+   <a class="mexico-return" data-population-return href={`${routes.population}?view=density&state=09`}>メキシコ市の人口密度に戻る</a>
+  </div>
+  <p class="mexico-takeaway" data-population-region-heading>{initialReading.heading}</p>
+  <p data-population-short-reading>メキシコ州は人口が最多、メキシコ市は密度が最高。人口規模と密度を重ねて読みます。</p>
+  <a class="mexico-comparison-link" data-population-nature-link href={`${routes.nature}?view=relief&compare=population&state=09&from=population&sourceView=density`}><strong data-population-nature-link-label>地形区分 × 人口密度</strong><br/><span data-population-nature-link-hint>中央部の高地・盆地と、人口が集まる州の位置を比べる</span></a>
+  <a class="mexico-comparison-link" data-population-industry-link href={`${routes.industry}?compare=population&state=09&from=population&sourceView=density`}><strong data-population-industry-link-label>州人口密度2020 × 州輸出額2025</strong><br/><span>人口の集積と、輸送機器・電子の輸出拠点が重なるかを比べる</span></a>
+  <details class="population-reading-detail"><summary>地形 → 仕事・交通 → 人口の集積を読む</summary><p class="mexico-takeaway">{mexicoPopulationReading.mechanism}</p><p data-population-region-text>{initialReading.text}</p><p data-population-region-cause>{initialReading.cause}</p><p><a href={mexicoPopulationReadingSources.manufacturing}>米国商務省ITA：製造業の地域的な集積（2026年2月）</a><br/><a href={mexicoPopulationReadingSources.transport}>ITA：工業中心地・港・米国国境を結ぶ貨物鉄道（2026年2月）</a></p><p><a href={routes.agriculture}>農林業の生産分布と、暮らしを支える生産地へ</a></p></details>
+  <details><summary>州平均・人口円・年をどう読む？</summary><p>{mexicoPopulationReading.densityMeaning}</p><p>{mexicoPopulationReading.populationMeaning}</p><p>人口と密度は2020年3月15日0時の州全域の値。密度は公表値を保持し、2025年表示州境の面積で再計算していません。</p><p>32州の人口・密度には欠測・秘匿値はありません。0、欠測、秘匿、未取得は別の状態として管理しています。</p></details>
+  <noscript><p class="population-no-script">全32州の値を下の表で確認できます。地図と表は2020年の統計です。</p></noscript>
+ </Fragment>
+ <Fragment slot="statistics">
+  <div class="population-national-summary"><h2>全国と州の値を確かめる</h2><p>メキシコ全国・2020年：<strong>{formatMexicoPopulation(population.nationalPopulation)}人</strong> ／ 公表密度 <strong>{formatMexicoDensity(population.nationalDensity)}人/km²</strong></p></div>
+  <details class="population-table-details" data-population-table open><summary>全32州の人口と公表密度を見る</summary><div class="mexico-table-scroll"><table><caption>INEGI 2020年国勢調査。人口は人、密度は人/km²。州全域。</caption><thead><tr><th scope="col">州</th><th scope="col">人口（人）</th><th scope="col">密度（人/km²）</th></tr></thead><tbody>{population.states.map(row => <tr data-population-row={row.stateCode} class:list={{'is-selected-population-row':row.stateCode==='09'}}><th scope="row">{row.nameJa} <span lang="es">{row.name}</span></th><td>{formatMexicoPopulation(row.population)}</td><td>{formatMexicoDensity(row.density)}</td></tr>)}</tbody></table></div></details>
+ </Fragment>
+ <Fragment slot="sources">
+  <details><summary>原典・加工・利用条件</summary><ul><li><a href={population.sources.population.url}>INEGI：Censo de Población y Vivienda 2020・ITER（公式CSV ZIP）</a>。POBTOT、州集計行 ENTIDAD 01–32・MUN 000・LOC 0000。元ファイル更新：2022年5月19日。</li><li><a href={population.sources.density.url}>INEGI：Panorama sociodemográfico de México 2020（2021年刊行）</a>。各州の人口密度公表値を抽出。全国・32州人口をITERと照合。</li><li><a href="https://www.inegi.org.mx/servicios/catalogounico.html">INEGI州境</a>：Marco Geoestadístico, diciembre de 2025。州コードを結合し位置表示に使用。</li><li><a href={population.sources.license.url}>INEGI情報の利用条件</a>：元ITERメタデータのlicense欄に指定。出典・メタデータを保持し、抽出・日本語表示・地図表示への加工は当サイトで実施。</li><li><a href={`${assetRoot}/population-density-2020.csv`}>配信値CSV</a> ／ <a href={`${assetRoot}/population-2020.json`}>配信JSON</a> ／ <a href={`${assetRoot}/manifest.json`}>原典・加工・照合記録</a></li></ul></details>
+ </Fragment>
+ <script type="application/json" data-population-config set:html={JSON.stringify(routes).replace(/</g,'\\u003c')} />
+ <script>
+  import {initMexicoPopulation} from '../../scripts/atlas-mexico-population';
+  const initialize = () => { for (const root of document.querySelectorAll<HTMLElement>('[data-mexico-field="population"]')) initMexicoPopulation(root); };
+  initialize();
+  document.addEventListener('astro:page-load', initialize);
+ </script>
+</MexicoWorkspace>

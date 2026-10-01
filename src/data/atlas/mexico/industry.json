@@ -1,0 +1,903 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "referencePeriod": [
+    "2025-01-01",
+    "2025-12-31"
+  ],
+  "source": {
+    "publisher": "INEGI",
+    "product": "Exportaciones por Entidad Federativa (ETEF)",
+    "url": "https://www.inegi.org.mx/programas/exporta_ef/",
+    "downloadUrl": "https://www.inegi.org.mx/contenidos/programas/exporta_ef/datosabiertos/conjunto_de_datos_eef_csv.zip",
+    "metadataUrl": "https://www.inegi.org.mx/rnm/index.php/catalog/1108",
+    "updated": "2026-03-31",
+    "accessed": "2026-10-01",
+    "licenseUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+    "sourceUnit": "thousands of US dollars, FOB",
+    "displayUnit": "billions of US dollars, FOB",
+    "classification": "SCIAN México 2018; subsectors 334 and 336",
+    "publicationStatus": "Cifras Preliminares.",
+    "geographicAssignment": "Origin of production, allocated using linked establishments; not border crossing or exporter headquarters."
+  },
+  "conversionDivisor": 1000000,
+  "metrics": [
+    {
+      "id": "transport",
+      "code": "336",
+      "name": "輸送機器",
+      "longName": "輸送機器（自動車・部品・航空機など）",
+      "sourceName": "Fabricación de equipo de transporte"
+    },
+    {
+      "id": "electronics",
+      "code": "334",
+      "name": "電子機器",
+      "longName": "電子機器（コンピューター・通信・計測機器など）",
+      "sourceName": "Fabricación de equipo de computación, comunicación, medición y de otros equipos, componentes y accesorios electrónicos"
+    }
+  ],
+  "states": [
+    {
+      "id": "01",
+      "name": "アグアスカリエンテス",
+      "short": "Ags",
+      "sourceName": "Aguascalientes"
+    },
+    {
+      "id": "02",
+      "name": "バハ・カリフォルニア",
+      "short": "BC",
+      "sourceName": "Baja California"
+    },
+    {
+      "id": "03",
+      "name": "バハ・カリフォルニア・スル",
+      "short": "BCS",
+      "sourceName": "Baja California Sur"
+    },
+    {
+      "id": "04",
+      "name": "カンペチェ",
+      "short": "Camp",
+      "sourceName": "Campeche"
+    },
+    {
+      "id": "05",
+      "name": "コアウイラ",
+      "short": "Coah",
+      "sourceName": "Coahuila de Zaragoza"
+    },
+    {
+      "id": "06",
+      "name": "コリマ",
+      "short": "Col",
+      "sourceName": "Colima"
+    },
+    {
+      "id": "07",
+      "name": "チアパス",
+      "short": "Chis",
+      "sourceName": "Chiapas"
+    },
+    {
+      "id": "08",
+      "name": "チワワ",
+      "short": "Chih",
+      "sourceName": "Chihuahua"
+    },
+    {
+      "id": "09",
+      "name": "メキシコ市",
+      "short": "CDMX",
+      "sourceName": "Ciudad de México"
+    },
+    {
+      "id": "10",
+      "name": "ドゥランゴ",
+      "short": "Dgo",
+      "sourceName": "Durango"
+    },
+    {
+      "id": "11",
+      "name": "グアナフアト",
+      "short": "Gto",
+      "sourceName": "Guanajuato"
+    },
+    {
+      "id": "12",
+      "name": "ゲレロ",
+      "short": "Gro",
+      "sourceName": "Guerrero"
+    },
+    {
+      "id": "13",
+      "name": "イダルゴ",
+      "short": "Hgo",
+      "sourceName": "Hidalgo"
+    },
+    {
+      "id": "14",
+      "name": "ハリスコ",
+      "short": "Jal",
+      "sourceName": "Jalisco"
+    },
+    {
+      "id": "15",
+      "name": "メヒコ州",
+      "short": "Méx",
+      "sourceName": "México"
+    },
+    {
+      "id": "16",
+      "name": "ミチョアカン",
+      "short": "Mich",
+      "sourceName": "Michoacán de Ocampo"
+    },
+    {
+      "id": "17",
+      "name": "モレロス",
+      "short": "Mor",
+      "sourceName": "Morelos"
+    },
+    {
+      "id": "18",
+      "name": "ナヤリット",
+      "short": "Nay",
+      "sourceName": "Nayarit"
+    },
+    {
+      "id": "19",
+      "name": "ヌエボ・レオン",
+      "short": "NL",
+      "sourceName": "Nuevo León"
+    },
+    {
+      "id": "20",
+      "name": "オアハカ",
+      "short": "Oax",
+      "sourceName": "Oaxaca"
+    },
+    {
+      "id": "21",
+      "name": "プエブラ",
+      "short": "Pue",
+      "sourceName": "Puebla"
+    },
+    {
+      "id": "22",
+      "name": "ケレタロ",
+      "short": "Qro",
+      "sourceName": "Querétaro"
+    },
+    {
+      "id": "23",
+      "name": "キンタナ・ロー",
+      "short": "QR",
+      "sourceName": "Quintana Roo"
+    },
+    {
+      "id": "24",
+      "name": "サン・ルイス・ポトシ",
+      "short": "SLP",
+      "sourceName": "San Luis Potosí"
+    },
+    {
+      "id": "25",
+      "name": "シナロア",
+      "short": "Sin",
+      "sourceName": "Sinaloa"
+    },
+    {
+      "id": "26",
+      "name": "ソノラ",
+      "short": "Son",
+      "sourceName": "Sonora"
+    },
+    {
+      "id": "27",
+      "name": "タバスコ",
+      "short": "Tab",
+      "sourceName": "Tabasco"
+    },
+    {
+      "id": "28",
+      "name": "タマウリパス",
+      "short": "Tamps",
+      "sourceName": "Tamaulipas"
+    },
+    {
+      "id": "29",
+      "name": "トラスカラ",
+      "short": "Tlax",
+      "sourceName": "Tlaxcala"
+    },
+    {
+      "id": "30",
+      "name": "ベラクルス",
+      "short": "Ver",
+      "sourceName": "Veracruz de Ignacio de la Llave"
+    },
+    {
+      "id": "31",
+      "name": "ユカタン",
+      "short": "Yuc",
+      "sourceName": "Yucatán"
+    },
+    {
+      "id": "32",
+      "name": "サカテカス",
+      "short": "Zac",
+      "sourceName": "Zacatecas"
+    }
+  ],
+  "rows": [
+    {
+      "id": "01",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 11.055264,
+          "sourceValue": 11055264,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": 1.451297,
+          "sourceValue": 1451297,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "02",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 11.518446,
+          "sourceValue": 11518446,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": 17.97248,
+          "sourceValue": 17972480,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "03",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "electronics": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "id": "04",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "electronics": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "id": "05",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 40.7852,
+          "sourceValue": 40785200,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": 0.691072,
+          "sourceValue": 691072,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "06",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "electronics": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "id": "07",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 0.130773,
+          "sourceValue": 130773,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "id": "08",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 17.527616,
+          "sourceValue": 17527616,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": 65.701302,
+          "sourceValue": 65701302,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "09",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 0.128315,
+          "sourceValue": 128315,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": 0.059681,
+          "sourceValue": 59681,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "10",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 1.181533,
+          "sourceValue": 1181533,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        }
+      }
+    },
+    {
+      "id": "11",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 27.84098,
+          "sourceValue": 27840980,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": 0.184667,
+          "sourceValue": 184667,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "12",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "electronics": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "id": "13",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 1.166563,
+          "sourceValue": 1166563,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "id": "14",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 3.969458,
+          "sourceValue": 3969458,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": 37.864161,
+          "sourceValue": 37864161,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "15",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 12.2646,
+          "sourceValue": 12264600,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": 0.341334,
+          "sourceValue": 341334,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "16",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "electronics": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "id": "17",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 2.111608,
+          "sourceValue": 2111608,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        }
+      }
+    },
+    {
+      "id": "18",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 0.12157,
+          "sourceValue": 121570,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "id": "19",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 18.868666,
+          "sourceValue": 18868666,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": 7.638457,
+          "sourceValue": 7638457,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "20",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "electronics": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "id": "21",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 13.894982,
+          "sourceValue": 13894982,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "id": "22",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 9.285805,
+          "sourceValue": 9285805,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": 1.354178,
+          "sourceValue": 1354178,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "23",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "electronics": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "id": "24",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 18.655641,
+          "sourceValue": 18655641,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": 0.332207,
+          "sourceValue": 332207,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "25",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 0.284628,
+          "sourceValue": 284628,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": 0.005648,
+          "sourceValue": 5648,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "26",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 9.826757,
+          "sourceValue": 9826757,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": 3.883329,
+          "sourceValue": 3883329,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "27",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "electronics": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "id": "28",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 10.175276,
+          "sourceValue": 10175276,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": 8.141064,
+          "sourceValue": 8141064,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "29",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 0.441479,
+          "sourceValue": 441479,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": 0.03883,
+          "sourceValue": 38830,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "30",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 0.000285,
+          "sourceValue": 285,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        }
+      }
+    },
+    {
+      "id": "31",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 0.873058,
+          "sourceValue": 873058,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        }
+      }
+    },
+    {
+      "id": "32",
+      "year": 2025,
+      "values": {
+        "transport": {
+          "value": 0.479175,
+          "sourceValue": 479175,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "electronics": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        }
+      }
+    }
+  ],
+  "statusCounts": {
+    "transport": {
+      "available": 24,
+      "zero": 0,
+      "confidential": 1,
+      "unknown": 7,
+      "notSignificant": 0,
+      "notApplicable": 0
+    },
+    "electronics": {
+      "available": 15,
+      "zero": 0,
+      "confidential": 5,
+      "unknown": 12,
+      "notSignificant": 0,
+      "notApplicable": 0
+    }
+  },
+  "notes": {
+    "scope": "製造業等の生産地に配分した財の輸出統計。商業・サービスと RENEM に結合できない通関取引は対象外。",
+    "confidential": "秘匿された小業種の金額はコード000に合算される。000を特定業種へ配分しない。",
+    "unknown": "No disponible は輸出の有無を特定する情報がない状態。",
+    "zero": "Disponible の数値0は、その期間の該当州・業種で輸出がなかったことを示す。",
+    "notSignificant": "No Significativo は500米ドル未満。ゼロとして扱わない。",
+    "method": "原典の千米ドルを1,000,000で割って10億米ドルへ変換。各州を面積や人口で割らず、公開値の合計から全国シェアを計算しない。",
+    "classificationMetadata": "同梱旧カタログのVERSION欄は2007。現行2025年RNMのSCIAN México2018の定義で範囲を確認し、コードと正式業種名を保持する。"
+  }
+}

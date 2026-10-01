@@ -1,0 +1,42 @@
+{
+  "sourceUrl": "https://gaia.inegi.org.mx/wscatgeo/v2/geo/mgee/",
+  "documentation": "https://www.inegi.org.mx/servicios/catalogounico.html",
+  "sourceMetadata": {
+    "Fuente_informacion_vectorial": "INEGI. Marco Geoestadístico, diciembre de 2025",
+    "Fuente_informacion_estadistica": "INEGI. Censo de Población y Vivienda, 2020"
+  },
+  "sourceSha256": "170c3ea5ff472f08ece97970dc90ad4ba8c6f503e33859655f315091c105cc91",
+  "license": "https://www.inegi.org.mx/inegi/terminos.html",
+  "projection": {
+    "name": "INEGI Lambert Conformal Conic",
+    "datum": "ITRF92",
+    "ellipsoid": "GRS80",
+    "semiMajorM": 6378137,
+    "inverseFlattening": 298.257222101,
+    "standardParallel1": 17.5,
+    "standardParallel2": 29.5,
+    "latitudeOrigin": 12,
+    "centralMeridian": -102,
+    "falseEastingM": 2500000,
+    "falseNorthingM": 0
+  },
+  "boundsNative": [
+    911292.029449366,
+    319149.06252919696,
+    4083063.0952772293,
+    2349614.87171421
+  ],
+  "simplification": {
+    "algorithm": "Shared-arc Douglas-Peucker in INEGI Lambert plane; graph junctions fixed; adaptive smaller tolerance for new intersections, containment or orientation changes against source chains",
+    "maximumToleranceM": 697.488255063554,
+    "minimumToleranceM": 0.002660706539396492,
+    "originalVertices": 1014750,
+    "outputVertices": 211825,
+    "sharedArcCount": 838,
+    "validationPasses": 6,
+    "newProperIntersections": 0,
+    "newContainments": 0,
+    "orientationChanges": 0
+  },
+  "coordinateNote": "GeoJSON geographical coordinates are plotted using the GRS80 Lambert parameters of the INEGI thematic .prj. No epoch-dependent datum transformation or cadastral precision is claimed."
+}

@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AtlasRegionNavigation from './AtlasRegionNavigation.astro';
+import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
+import {withBase} from '../../lib/urls';
+import '../../styles/atlas-mexico.css';
+interface Props {field:'nature'|'agriculture'|'industry'|'population';title:string;lead:string;description?:string}
+const {field,title,lead,description=lead}=Astro.props;
+const fields=[['nature','自然環境'],['agriculture','農林業'],['industry','主要産業'],['population','人口']];
+---
+<BaseLayout title={`${title}｜メキシコ地理`} {description} compactAtlas>
+ <AtlasWorkspaceFrame region="north-america" mapActions={false}>
+  <article class={`mexico-workspace mexico-${field}`} data-mexico-workspace data-mexico-field={field}>
+   <div class="mexico-navigation"><AtlasRegionNavigation group="americas" current="north-america" country="mexico" /></div>
+   <header class="mexico-header"><h1>{title}</h1><p class="mexico-lead">{lead}</p></header>
+   <nav class="mexico-fields" aria-label="メキシコの分野"><a data-atlas-overview-link href={withBase('/atlas/north-america/overview/?country=MEX')}>概説</a>{fields.map(([id,label])=><a href={withBase(`/atlas/north-america/mexico/${id}/`)} aria-current={field===id?'page':undefined}>{label}</a>)}</nav>
+   <div class="mexico-primary-grid">
+    <section class="mexico-map-column" aria-label="地図と項目"><slot name="map" /><div class="mexico-items"><slot name="items" /></div></section>
+    <aside class="mexico-reading" aria-label="分布の理由と比較"><slot name="reading" /></aside>
+   </div>
+   <section class="mexico-statistics" aria-label="地図の値を確かめる"><slot name="statistics" /></section>
+   <footer class="mexico-sources"><slot name="sources" /></footer>
+   <slot />
+  </article>
+ </AtlasWorkspaceFrame>
+</BaseLayout>

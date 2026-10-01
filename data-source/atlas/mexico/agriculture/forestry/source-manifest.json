@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "countryCode": "MX",
+  "topic": "forestry",
+  "titleJa": "林業生産単位の州別松材取得量",
+  "publisher": "Instituto Nacional de Estadística y Geografía (INEGI)",
+  "product": "Censo Agropecuario 2022. Cifras definitivas. Unidades de Producción Forestal",
+  "productUrl": "https://www.inegi.org.mx/programas/ca/2022/",
+  "retrievedDateUtc": "2026-10-01",
+  "verifiedDateUtc": "2026-10-01",
+  "referencePeriod": {
+    "start": "2021-10-01",
+    "end": "2022-09-30",
+    "displayJa": "2021年10月〜2022年9月",
+    "censusYear": 2022,
+    "frequency": "decennial",
+    "zipMetadataModified": "2023-11-21"
+  },
+  "geography": {
+    "level": "entidad federativa",
+    "stateRecordCount": 32,
+    "coverageJa": "31州とメキシコ市の32連邦構成主体。全国集計00を別に収録。",
+    "joinField": "CVE_ENT",
+    "joinKeyType": "zero-padded two-character string",
+    "stateCodes": "01–32",
+    "nationalCode": "00",
+    "nameField": "ENT_FED",
+    "nameHandlingJa": "表示時のみ前後の空白を除去。コードの先頭ゼロを保持して境界データと結合する。"
+  },
+  "primaryTable": {
+    "id": "ca2022_for15",
+    "zipEntry": "conjunto_datos/ca2022_for15.csv",
+    "titleEs": "Número de unidades de producción forestal activas con corte de árboles para aprovechamiento de madera según especies forestales cortadas y volumen de madera obtenida por entidad federativa",
+    "titleJa": "州別の林業生産単位数、伐採樹種別の単位数と木材取得量",
+    "mainIndicator": {
+      "column": "VOL_OBT_PINO",
+      "labelJa": "松材の取得量",
+      "species": "Pinus spp.",
+      "unit": "m3",
+      "unitLabelJa": "m³",
+      "type": "volume",
+      "xlsxColumn": "H",
+      "scopeJa": "このセンサスが把握した林業生産単位の松材取得量。森林面積・森林蓄積量・製材品生産量・林業GDPを表す指標ではない。",
+      "recommendedCaptionJa": "松材の取得量（2021年10月〜2022年9月、m³）。出典：INEGI, Censo Agropecuario 2022, ca2022_for15。"
+    },
+    "dataDictionaryZipEntry": "diccionario_datos/diccionario_datos_upfores_csv.csv",
+    "metadataZipEntry": "metadatos/metadatos_censo_agropecuario_2022.txt"
+  },
+  "columns": [
+    { "name": "CVE_ENT", "type": "string", "unit": null, "definitionJa": "連邦構成主体コード。00は全国、01〜32は州・メキシコ市。" },
+    { "name": "ENT_FED", "type": "string", "unit": null, "definitionJa": "連邦構成主体名。" },
+    { "name": "UPF_TOTAL", "type": "integer", "unit": "production units", "definitionJa": "活動中の林業生産単位の総数。森林の区画数や面積ではない。" },
+    { "name": "UPF_OF_SEMARN", "type": "integer", "unit": "production units", "definitionJa": "SEMARNATの文書を持つ生産単位数。Excel見出しでは木材利用のための伐採認可を持つ単位。" },
+    { "name": "UPF_CON_CORTE", "type": "integer", "unit": "production units", "definitionJa": "伐採を実施した生産単位数。" },
+    { "name": "M3_MADER_AUTO", "type": "decimal", "unit": "m3", "definitionJa": "認可された木材量。実際の取得量とは区別する。" },
+    { "name": "M3_MADER_TOT", "type": "decimal", "unit": "m3", "definitionJa": "樹種合計の木材取得量。辞書の表記はVolumen de madera cortada。" },
+    { "name": "UPF_CORTE_PINO", "type": "integer", "unit": "production units", "definitionJa": "マツ属を伐採した生産単位数。" },
+    { "name": "VOL_OBT_PINO", "type": "decimal", "unit": "m3", "definitionJa": "マツ属（Pinus spp.）の木材取得量。地図の主指標。" },
+    { "name": "UPF_CORTE_OYAM", "type": "integer", "unit": "production units", "definitionJa": "モミ属（Abies spp.、oyamel）を伐採した生産単位数。" },
+    { "name": "VOL_OBT_OYAM", "type": "decimal", "unit": "m3", "definitionJa": "モミ属の木材取得量。" },
+    { "name": "UPF_CORTE_ENCIN", "type": "integer", "unit": "production units", "definitionJa": "コナラ属（Quercus spp.、encino）を伐採した生産単位数。" },
+    { "name": "VOL_OBT_ENCINO", "type": "decimal", "unit": "m3", "definitionJa": "コナラ属の木材取得量。" },
+    { "name": "UPF_CORTE_JUNIP", "type": "integer", "unit": "production units", "definitionJa": "ビャクシン属（Juniperus spp.）を伐採した生産単位数。" },
+    { "name": "VOL_OBT_JUNIP", "type": "decimal", "unit": "m3", "definitionJa": "ビャクシン属の木材取得量。" },
+    { "name": "UPF_CORTE_TZALAM", "type": "integer", "unit": "production units", "definitionJa": "Lysiloma spp.（tzalamまたはtepemezquite）を伐採した生産単位数。" },
+    { "name": "VOL_OBT_TZALAM", "type": "decimal", "unit": "m3", "definitionJa": "Lysiloma spp.の木材取得量。" },
+    { "name": "UPF_CORTE_SPP", "type": "integer", "unit": "production units", "definitionJa": "その他の木材樹種を伐採した生産単位数。" },
+    { "name": "VOL_OBT_SPP", "type": "decimal", "unit": "m3", "definitionJa": "その他の木材樹種の取得量。" }
+  ],
+  "missingAndZeroPolicy": {
+    "emptyCellMeaning": "suppressed for statistical confidentiality",
+    "emptyCellHandling": "null / withheld; never coerce to zero",
+    "explicitZeroHandling": "preserve numeric zero",
+    "mainIndicatorMissingStateCount": 0,
+    "explicitZeroExamples": [
+      { "code": "05", "state": "Coahuila de Zaragoza", "VOL_OBT_PINO": 0 },
+      { "code": "17", "state": "Morelos", "VOL_OBT_PINO": 0 }
+    ],
+    "notesJa": "主表for15は32州を明記。補足表for18で州・樹種が非掲載でも、それだけを根拠に0を補わない。主表に明記された値を採用する。"
+  },
+  "license": {
+    "name": "Términos de Libre Uso de la Información del INEGI",
+    "url": "https://www.inegi.org.mx/inegi/terminos.html",
+    "declaredIn": "metadatos/metadatos_censo_agropecuario_2022.txt: license",
+    "permits": ["copy", "publish", "adapt", "reorder", "extract", "commercial use"],
+    "requirementsJa": "INEGIと製品名・出典を表示する。メタデータを削除・改変しない。独自分析・加工を明示し、INEGIの公式見解や推奨と受け取られる表示をしない。",
+    "creditJa": "出典：INEGI, Censo Agropecuario 2022, ca2022_for15。集計・地図表示は本サイトによる。"
+  },
+  "sources": [
+    {
+      "id": "inegi-forest-open-csv",
+      "role": "primary data and embedded dictionary/metadata",
+      "url": "https://www.inegi.org.mx/contenidos/programas/ca/2022/datosabiertos/ca_2022_upfores_csv.zip",
+      "localPath": "raw/ca_2022_upfores_csv.zip",
+      "retrievedDateUtc": "2026-10-01",
+      "bytes": 60078,
+      "sha256": "050ba3f33dc3ddf6b674d8a8479a2bade6001dd57f0aa2b3567f1a26de3b74c5"
+    },
+    {
+      "id": "inegi-forest-for15-xlsx",
+      "role": "primary table layout and units",
+      "url": "https://www.inegi.org.mx/contenidos/programas/ca/2022/tabulados/ca2022_for15.xlsx",
+      "localPath": "raw/ca2022_for15.xlsx",
+      "retrievedDateUtc": "2026-10-01",
+      "bytes": 17712,
+      "sha256": "baefcc6edf1b2aebed81f7db3900aac0fc7c07869d8c15a79041c6c836421a37"
+    },
+    {
+      "id": "inegi-forest-for18-xlsx",
+      "role": "supplementary timber presentation and sales",
+      "url": "https://www.inegi.org.mx/contenidos/programas/ca/2022/tabulados/ca2022_for18.xlsx",
+      "localPath": "raw/ca2022_for18.xlsx",
+      "retrievedDateUtc": "2026-10-01",
+      "bytes": 28234,
+      "sha256": "ae0e72e8598482e604984daa22e446a553766f2ff13441872290d2a588071a71",
+      "geography": "30 state records with species detail; Coahuila and Morelos are not listed",
+      "unit": "m3",
+      "period": "2021-10-01/2022-09-30",
+      "interpretationJa": "取得量と販売量を、製材向け・丸太・杭向け・薪向け・炭向け・セルロース向け・その他に分ける補足表。製材工場の製品生産量を意味しない。"
+    }
+  ],
+  "contextReferences": [
+    {
+      "id": "conabio-temperate-forest",
+      "publisher": "CONABIO",
+      "title": "Bosques templados",
+      "url": "https://www.biodiversidad.gob.mx/ecosistemas/bosqueTemplado",
+      "accessedDateUtc": "2026-10-01",
+      "pageUpdatedDate": "2021-11-22",
+      "sections": ["Descripción", "Distribución", "Servicios ambientales", "Impactos y amenazas"],
+      "useJa": "山地・冷涼な気候と松・オーク林の関係、森林の水循環・侵食抑制・生息地機能を説明する。本文の現在形の面積や過去年の消失率を2022年の州別指標へ転用しない。"
+    }
+  ],
+  "qa": {
+    "method": "Read ZIP CSV; use decimal arithmetic for state sum; inspect original XLSX headers; compare all for15 state pine values and all listed for18 state pine values to CSV at four decimal places; compare copied raw SHA-256 to original downloads",
+    "csvRowCountIncludingNational": 33,
+    "stateCount": 32,
+    "uniqueStateCodeCount": 32,
+    "stateCodeCoverage": "01–32",
+    "mainIndicatorMissingStateCount": 0,
+    "sumStatePineVolumeM3": 7528399.0691,
+    "nationalPineVolumeM3": 7528399.0691,
+    "differenceM3": 0,
+    "rawCopiesMatchOriginalHashes": true,
+    "for15XlsxPineStateChecks": 32,
+    "for18ListedPineStateChecks": 23,
+    "csvVsXlsxPineMismatches": 0,
+    "xlsxComparisonDecimalPlaces": 4,
+    "examples": [
+      { "code": "10", "state": "Durango", "pineVolumeM3": 4173803.736, "xlsxCell": "H21" },
+      { "code": "08", "state": "Chihuahua", "pineVolumeM3": 1800391.2751, "xlsxCell": "H19" }
+    ],
+    "derivedExample": {
+      "codes": ["08", "10"],
+      "combinedPineVolumeM3": 5974195.0111,
+      "nationalPineVolumeM3": 7528399.0691,
+      "sharePercentRounded1dp": 79.4,
+      "denominatorJa": "全国の松材取得量。国土・森林面積・林業全体の比率ではない。"
+    },
+    "tableDifferenceJa": "DurangoのEncino取得量はfor15で796386.088 m³、for18で792693.088 m³と3693 m³異なる。全国Encino値にも同じ差がある。原因は未確定。初回指標は両表で一致する松材量とし、総量やオーク量を表間で混合しない。",
+    "limitationsJa": "州別取得量の大小だけで、森林被覆、伐採圧、持続可能性、雇用規模、貧困、森林減少との因果関係を確定しない。"
+  }
+}
