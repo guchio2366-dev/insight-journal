@@ -5,8 +5,9 @@ import {build} from 'esbuild';
 import {Window} from 'happy-dom';
 const bundle=await build({entryPoints:['src/scripts/atlas-west-asia.ts'],bundle:true,write:false,format:'iife'});
 async function until(check){for(let i=0;i<200;i++){if(check())return;await new Promise(r=>setTimeout(r,10));}throw Error('West Asia controller did not settle');}
-async function setup(route,query='',failBasins=false){
+async function setup(route,query='',failBasins=false,viewport={width:1024,height:768}){
  const w=new Window({url:`https://example.com/insight-journal/atlas/west-asia/${route}/${query}`,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true}});
+ w.happyDOM.setWindowSize(viewport);
  w.document.body.innerHTML=(await readFile(`dist/atlas/west-asia/${route}/index.html`,'utf8')).replace(/<script\b[\s\S]*?<\/script>/g,'');
  w.ResizeObserver=class{observe(){} disconnect(){}};w.Response=Response;w.Blob=Blob;w.DecompressionStream=DecompressionStream;
  w.fetch=async url=>{if(failBasins&&String(url).endsWith('basins.json'))throw Error('Test: unavailable vector');return new Response(await readFile('public/'+String(url).replace('/insight-journal/','')));};
@@ -128,4 +129,33 @@ test('比較の戻りは雨温図より先にあり、自動都市の図は閉�
   select('[data-west-city]',id);assert.equal(q('.west-chart-details').open,true);
   assert.equal(new URL(q('[data-west-return]').href).searchParams.has('city'),false,'自動都市の明示選択後も比較元の選択は変えない');
  }finally{await source.w.happyDOM.close();if(comparison)await comparison.w.happyDOM.close();}
+});
+
+test('比較の全凡例・詳細操作は幅変更と通常主題への復帰で欠落も複製も起こさない',async()=>{
+ const from='?topic=wheat&country=TUR&year=2020&map=100,120,400,300';
+ const {w,q,select}=await setup('nature','?topic=climate&country=TUR&year=2020&from='+encodeURIComponent(from),false,{width:1180,height:757});
+ try{
+  const root=q('[data-west-atlas]'),legend=q('[data-west-legend]'),extras=q('[data-west-map-extras]'),agri=q('[data-west-agri-switches]'),stats=q('[data-west-stat-controls]');
+  const labels=()=>[...legend.querySelectorAll('.west-swatches span,.west-climate-key span')].map(x=>x.textContent).sort();
+  const marks=()=>[...legend.querySelectorAll('.west-swatches span,.west-climate-key span')].map(x=>x.textContent+'|'+(x.querySelector('i')?.getAttribute('style')??'')).sort();
+  const expected=labels(),expectedMarks=marks(),view=q('[data-west-map]').getAttribute('viewBox');
+  const classes=JSON.parse(await readFile('public/assets/atlas/west-asia-v1/data.json','utf8')).classes;
+  for(const c of classes)assert.ok(expected.includes(c.code+' '+c.name),c.code);
+  assert.equal(classes.length,30);assert.match(legend.textContent,/ha／原資料の格子 · 2020/);assert.match(legend.textContent,/1991–2020年/);
+  assert.ok(expected.includes('周辺国・未収録'));assert.ok(expected.includes('周辺国・未収録（区別は場所を選択）'));assert.ok(expected.some(x=>x.includes('雨温図の都市')));
+  const unique=()=>{for(const selector of ['[data-west-legend]','[data-west-map-extras]','[data-west-agri-switches]','[data-west-stat-controls]','[data-west-reading-extra]'])assert.equal(root.querySelectorAll(selector).length,1,selector);};
+  assert.equal(root.dataset.comparisonWorkspace,'true');assert.ok(legend.closest('[data-west-comparison-key]'));assert.ok(stats.closest('[data-west-more-reading]'));assert.ok(extras.closest('[data-west-more-map]'));
+  assert.equal(q('[data-west-comparison-details]').open,false);unique();
+  w.happyDOM.setWindowSize({width:600,height:844});w.dispatchEvent(new w.Event('resize'));await until(()=>root.dataset.comparisonWorkspace==='false');
+  assert.ok(legend.closest('.atlas-map-column'));assert.ok(extras.closest('.atlas-map-column'));assert.ok(agri.closest('.atlas-map-column'));assert.ok(stats.closest('.west-reading'));assert.equal(q('[data-west-comparison-details]').hidden,true);
+  assert.deepEqual(labels(),expected);assert.deepEqual(marks(),expectedMarks);unique();
+  w.happyDOM.setWindowSize({width:1366,height:768});w.dispatchEvent(new w.Event('resize'));await until(()=>root.dataset.comparisonWorkspace==='true');
+  assert.deepEqual(labels(),expected);assert.deepEqual(marks(),expectedMarks);assert.ok(legend.closest('[data-west-comparison-key]'));unique();
+  select('[data-west-year]','2024');assert.equal(new URL(w.location.href).searchParams.get('year'),'2024');assert.equal(new URL(q('[data-west-return]').href).searchParams.get('year'),'2020');
+  q('[data-west-group="地形"]').click();await until(()=>q('[data-west-loading]').hidden);
+  assert.equal(root.dataset.comparisonWorkspace,'false');assert.equal(new URL(w.location.href).searchParams.has('from'),false);
+  assert.ok(legend.closest('.atlas-map-column'));assert.ok(stats.closest('.west-reading'));assert.ok(extras.closest('.atlas-map-column'));assert.ok(agri.closest('.atlas-map-column'));
+  assert.equal(q('[data-west-map]').getAttribute('viewBox'),view);assert.equal(q('[data-west-country]').value,'TUR');assert.ok(q('[data-west-reading-extra]').closest('[data-west-detail]'));
+  assert.equal(q('[data-west-more-reading]').children.length,0);assert.equal(q('[data-west-more-map]').children.length,0);unique();
+ }finally{await w.happyDOM.close();}
 });

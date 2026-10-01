@@ -3,10 +3,16 @@ import { climateCities, natureModes, type NatureMode } from '../../data/atlas/na
 import WaterReading from './WaterReading.astro';
 import ClimateDiagram from './ClimateDiagram.astro';
 import NatureFeatureDetail from './NatureFeatureDetail.astro';
+import { withBase } from '../../lib/urls';
 interface Props { initialMode?:NatureMode }
 const { initialMode='climate' } = Astro.props;
 ---
 <aside class="atlas-national atlas-nature-summary" data-natural-summary>
+  <section class="atlas-us-natural-takeaway" aria-label="自然環境の要点と比較">
+    <h3>自然環境を読み比べる</h3>
+    <p class="atlas-reading-takeaway"><strong>山地が雨の分布を変え、川と地下水がその水を運ぶ。その組み合わせが、農地や都市で水を使える条件をつくります。</strong></p>
+    <a class="atlas-reading-action" href={withBase('/atlas/north-america/agriculture/')} data-cross-link="agriculture">同じ場所を農業で見る →</a>
+  </section>
   <div class="atlas-nature-overview-tabs">
     {natureModes.map(mode=><section data-nature-summary-panel={mode.id} hidden={mode.id!==initialMode}>
       {mode.id==='climate'&&<>
@@ -23,3 +29,6 @@ const { initialMode='climate' } = Astro.props;
   <WaterReading />
   <NatureFeatureDetail />
 </aside>
+<style>
+  .atlas-us-natural-takeaway { display:none; }
+</style>

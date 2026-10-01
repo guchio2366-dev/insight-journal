@@ -104,6 +104,38 @@
 @media(max-width:600px){.west-region-country select{flex:1}.west-source-grid,.west-climate-codes{grid-template-columns:1fr}.west-reading h2{font-size:21px}.west-agri-picker button,.west-cultivation button,.west-subtabs button{min-height:44px}.west-climate-key{gap:4px 9px}}
 
 /* West Asia retains its map and reading beside the laptop news rail. */
+@media(min-width:960px){
+ .atlas-desktop-shell .west-atlas[data-field][data-comparison-workspace=true] .west-regional-navigation{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-block:6px 10px}
+ .west-atlas[data-comparison-workspace=true] .west-region-country{margin-top:0}
+ .atlas-desktop-shell .west-atlas[data-field][data-comparison-workspace=true] .atlas-primary-grid{grid-template-columns:minmax(0,1.65fr) minmax(310px,1fr);grid-template-rows:auto auto auto;gap:8px 14px}
+ .atlas-desktop-shell .west-atlas[data-field][data-comparison-workspace=true] .atlas-map-column{position:static;grid-column:1;grid-row:1}
+ .atlas-desktop-shell .west-atlas[data-field][data-comparison-workspace=true] .atlas-map-frame{height:var(--west-comparison-map-height,220px);min-height:180px;max-height:none;aspect-ratio:auto}
+ .atlas-desktop-shell .west-atlas[data-field][data-comparison-workspace=true] .west-reading{grid-column:2;grid-row:1;padding:10px 12px}
+ .west-atlas[data-comparison-workspace=true] .west-reading header{display:flex;align-items:baseline;gap:10px;padding-bottom:6px}
+ .west-atlas[data-comparison-workspace=true] .west-reading h2{font-size:18px;line-height:1.5}
+ .west-atlas[data-comparison-workspace=true] .west-comparison-reading{margin:6px 0;padding:8px}
+ .west-atlas[data-comparison-workspace=true] .west-comparison-reading h3{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+ .west-atlas[data-comparison-workspace=true] .west-comparison-reading .west-stat-note{display:none}
+ .west-atlas[data-comparison-workspace=true] .west-reading-dock{margin:8px 0 0;padding-top:6px}
+ .west-atlas[data-comparison-workspace=true] .west-reading-dock h3{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+ .west-atlas[data-comparison-workspace=true] .west-swipe{padding:5px 8px}
+ .west-atlas[data-comparison-workspace=true] .west-swipe>div{font-size:12px}
+ .west-atlas[data-comparison-workspace=true] .west-swipe label{margin-top:0;white-space:nowrap}
+ .west-atlas[data-comparison-workspace=true] .west-swipe input{flex:1;width:auto}
+ .west-comparison-key-slot{grid-column:1/-1;grid-row:2}
+ .west-atlas[data-comparison-workspace=true] .west-legend{padding:6px 10px;font-size:13px;border-top:1px solid #c8cfc4}
+ .west-atlas[data-comparison-workspace=true] .west-legend-heading{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 16px;margin-bottom:3px}
+ .west-atlas[data-comparison-workspace=true] .west-legend-subject h3{font-size:13px;margin:0 0 3px}
+ .west-atlas[data-comparison-workspace=true] .west-legend-subject+.west-legend-subject{margin-top:5px;padding-top:5px}
+ .west-atlas[data-comparison-workspace=true] .west-swatches{justify-content:flex-start;gap:2px 14px}
+ .west-atlas[data-comparison-workspace=true] .west-legend-climate .west-complete-key .west-swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:0 8px;padding:0}
+ .west-atlas[data-comparison-workspace=true] .west-legend p{margin:2px 0;line-height:1.5}
+ .west-atlas[data-comparison-workspace=true] .west-climate-key{justify-content:flex-start;align-items:center;line-height:1.5}
+ .west-comparison-details{grid-column:1/-1;grid-row:3;border-top:1px solid #c8cfc4;padding-top:4px}
+ .west-comparison-details>summary{font-size:14px;min-height:44px;padding:10px 0;cursor:pointer}
+ .west-comparison-details-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:12px;border:1px solid #c8cfc4;background:#fbfaf3}
+ .west-atlas[data-comparison-workspace=true] .atlas-climate-overview{grid-column:1/-1;grid-row:4}
+}
 @media(min-width:960px) and (max-width:1199px){
  .atlas-desktop-shell:not(.is-reading-news):has(> .west-atlas){display:grid;grid-template-columns:160px minmax(0,1fr);gap:12px;padding:10px 12px 24px}
  .atlas-desktop-shell:not(.is-reading-news):has(> .west-atlas) .atlas-news{position:sticky;top:10px;width:auto;height:calc(100dvh - 72px);min-height:0}

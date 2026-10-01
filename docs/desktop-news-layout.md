@@ -33,6 +33,21 @@ focusable. On narrow or short screens the existing page scroll reaches the full
 text. This also removes the corn-only nested scroll layout that hid the text
 beyond the disclosure's visible edge.
 
+### Narrow desktop correction (US), 2026-10-01
+
+The current user-approved correction extends the US four-field idle news rail
+to 960–1199 CSS pixels. A US-only stylesheet imported by `AtlasPage.astro`
+places the compact 160px rail beside the workspace. The article-reading state
+retains its expanded reading layout. Below 960px, at 1366px, and in Canada,
+Mexico, Europe and Asia, existing layouts remain in effect.
+
+This supersedes the earlier below-1200 fallback for these US idle screens only.
+Data, explanation content, map semantics and chart axes stay unchanged. Browser
+review at 1180×757 checks the complete main map, message, legends and comparison
+entry; 1366×768 and mobile checks protect the existing layout. Built-CSS tests
+cover both edges of the new width range separately from the mobile/monitor
+contract and continue to protect access to expanded readings and sources.
+
 ## Content and interaction contract
 
 - Build the list from approved public `articles` only. Match North America or
