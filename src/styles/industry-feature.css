@@ -32,7 +32,7 @@
 .industry-feature .if-map-stage svg.industry-feature-map { display: block; width: 100%; height: clamp(250px,37vh,326px); }
 .if-map-key { display: flex; gap: 7px; align-items: center; position: absolute; bottom: 7px; left: 12px; font-size: 9px; padding: 3px 7px; background: #fbfaf6e8; pointer-events: none; }
 .if-map-key span { width: 8px; height: 8px; border: 1px solid #7c918f; margin-left: 4px; }
-.if-key-selected { background: #173c48; }.if-key-recorded { background: #d0ddd8; }.if-key-context { background: #edece5; }
+.if-key-selected { background: #94b5b3; border-color: #173c48 !important; }.if-key-recorded { background: #d0ddd8; }.if-key-context { background: #edece5; }
 .if-map-stage [data-feature-shape].is-recorded { fill: #d0ddd8; }
 .if-map-stage [data-feature-shape].is-selected { fill: #94b5b3; stroke: #173c48; stroke-width: 1.8; }
 .if-map-stage [data-feature-marker] { cursor: pointer; }
@@ -58,6 +58,7 @@
 .if-example > span { font-size: 9px; color: var(--ink-soft); }
 .if-example h4 { font-size: 12px; margin: 3px 0; }
 .if-example p { font-size: 11px; line-height: 1.7; margin: 0; }
+.if-example small { display: block; margin-top: 4px; font-size: 10px; line-height: 1.5; color: var(--ink-soft); }
 .if-missing { padding: 8px; border: 1px solid #b76749; background: #fff8ec; }
 .if-reader-links { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; font-size: 11px; }
 .if-reader-links button { padding: 7px 8px; text-align: left; background: white; }

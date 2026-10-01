@@ -219,9 +219,9 @@ export const sectors: IndustrySector[] = [
         why: '南北の日射の違いと、工場の工程構成は別の情報です。モジュールの能力だけで上流の自給は分かりません。',
         japan: '欧州の上流工程と完成品の差は、日本でも製造工程を分けて見るための比較例になります。',
         policy: '地域内に最終工程が増えても、上流の材料や装置まで独立したとは限りません。',
-        example: { title: '欧州の工程別製造能力', description: 'ポリシリコン27GW、ウエハー1.5GW、セル10GW、モジュール33GW。工程ごとに異なる能力です。', status: '原典の能力集計', period: '2025年末', scope: '原典の欧州集計。国別値や実生産量ではありません。', sourceIds: ['solar-europe'] },
+        example: { title: '欧州集計：工程別製造能力', description: 'ポリシリコン27GW、ウエハー1.5GW、セル10GW、モジュール33GW。工程ごとに異なる能力です。', status: '原典の欧州集計', period: '2025年末', scope: '原典の欧州集計。国別値や実生産量ではありません。', sourceIds: ['solar-europe'] },
         countries: [
-          { id: 'DEU', name: 'ドイツ', coordinates: [10.4, 51], marketLabel: '発電ポテンシャルの数値は未収録', manufacturingLabel: '欧州工程比較の入口。国別値は未収録', sourceIds: ['solar-potential', 'solar-europe'] },
+          { id: 'DEU', name: 'ドイツ', coordinates: [10.4, 51], marketLabel: '発電ポテンシャルの数値は未収録', manufacturingLabel: '国別工程能力は未収録', sourceIds: ['solar-potential', 'solar-europe'] },
           { id: 'ESP', name: 'スペイン', coordinates: [-3.7, 40], marketLabel: '南北の日射差を考える入口', manufacturingLabel: '国別工程能力は未収録', sourceIds: ['solar-potential', 'solar-europe'] },
           { id: 'FRA', name: 'フランス', coordinates: [2.4, 46.6], marketLabel: '日射・気温・設置条件を分けて読む', manufacturingLabel: '国別工程能力は未収録', sourceIds: ['solar-potential', 'solar-europe'] },
         ],
@@ -370,7 +370,7 @@ const mapLabels: Record<IndustrySectorId, Record<string, [string, string]>> = {
   },
   solar: {
     USA: ['日射と設置条件', '40ポイント増'], CAN: ['日射と設置条件', '能力未収録'], MEX: ['日射と設置条件', '能力未収録'],
-    DEU: ['日射の南北差', '欧州の工程比較'], ESP: ['日射の南北差', '能力未収録'], FRA: ['日射の南北差', '能力未収録'],
+    DEU: ['日射の南北差', '能力未収録'], ESP: ['日射の南北差', '能力未収録'], FRA: ['日射の南北差', '能力未収録'],
     CHN: ['日射と設置条件', 'ウエハー約95%'], JPN: ['2040年目標', '能力未収録'], IND: ['日射と設置条件', '能力未収録'],
   },
   battery: {

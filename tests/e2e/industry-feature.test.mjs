@@ -55,6 +55,20 @@ const activeMap = document => query(document, '[data-feature-map]:not([hidden])'
 const visibleMarkers = document => [...activeMap(document).querySelectorAll('[data-feature-marker]')]
   .filter(marker => marker.getAttribute('aria-hidden') === 'false');
 
+test('atlas entrance and sitemap expose the published feature route with the deployment base', async () => {
+  const window = new Window({ settings: { disableCSSFileLoading: true, disableJavaScriptFileLoading: true } });
+  try {
+    window.document.write(await readFile('dist/atlas/index.html', 'utf8'));
+    const entrances = window.document.querySelectorAll('[data-industry-feature-entry]');
+    assert.equal(entrances.length, 1);
+    assert.equal(entrances[0].getAttribute('href'), '/insight-journal/atlas/industry/');
+    assert.match(entrances[0].textContent, /自動車.*太陽光.*蓄電池.*半導体/);
+    assert.ok(window.document.querySelector('svg[data-atlas-world-map]'), 'existing regional navigation remains available');
+    const sitemap = await readFile('dist/sitemap.xml', 'utf8');
+    assert.equal((sitemap.match(/<loc>https:\/\/guchio2366-dev\.github\.io\/insight-journal\/atlas\/industry\/<\/loc>/g) ?? []).length, 1);
+  } finally { await window.happyDOM.close(); }
+});
+
 test('SSR supplies a usable initial map, separate classification axes and folded detailed sources', async () => {
   const { window, document } = page('', false);
   try {
@@ -94,6 +108,8 @@ test('four sectors and three regions keep country buttons, map labels and select
       for (const region of sector.regions) {
         click(document, `[data-if-region=${region.id}]`);
         assert.equal(activeMap(document).dataset.featureMap, region.id);
+        assert.equal(text(document, '[data-if-example-status]'), `${region.example.status} · ${region.example.period} · ${region.label}の代表事例`);
+        assert.equal(text(document, '[data-if-example-scope]'), region.example.scope);
         assert.equal(document.querySelectorAll('[data-feature-map]:not([hidden])').length, 1);
         assert.deepEqual(visibleMarkers(document).map(marker => marker.dataset.featureMarker).sort(), region.countries.map(country => country.id).sort());
         assert.deepEqual([...document.querySelectorAll('[data-if-country]')].map(button => button.dataset.ifCountry), region.countries.map(country => country.id));
@@ -126,6 +142,55 @@ test('four sectors and three regions keep country buttons, map labels and select
       }
     }
     assert.deepEqual(errors, []);
+  } finally { await window.happyDOM.close(); }
+});
+
+test('keyboard country activation retains focus through render without moving focus away from controls or the map', async () => {
+  const { window, document } = page();
+  try {
+    const country = query(document, '[data-if-country=CAN]');
+    country.focus();
+    // Native button keyboard activation emits a click with detail 0. Exercise
+    // that controller boundary, since happy-dom does not perform the UA action.
+    country.dispatchEvent(new window.MouseEvent('click', { bubbles: true, detail: 0 }));
+    const replacement = query(document, '[data-if-country=CAN]');
+    assert.notEqual(replacement, country);
+    assert.equal(document.activeElement, replacement);
+    assert.equal(replacement.getAttribute('aria-pressed'), 'true');
+    assert.equal(text(document, '[data-if-country-name]'), 'カナダ');
+    replacement.dispatchEvent(new window.MouseEvent('click', { bubbles: true, detail: 0 }));
+    assert.equal(document.activeElement, query(document, '[data-if-country=CAN]'));
+    assert.equal(query(document, '[data-if-country=CAN]').getAttribute('aria-pressed'), 'false');
+
+    const viewControl = query(document, '[data-if-view=manufacturing]');
+    viewControl.focus();
+    viewControl.click();
+    assert.equal(document.activeElement, viewControl);
+
+    const marker = activeMap(document).querySelector('[data-feature-marker=MEX]');
+    marker.focus();
+    marker.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    assert.equal(document.activeElement, marker);
+    assert.equal(marker.getAttribute('aria-pressed'), 'true');
+    assert.equal(query(document, '[data-if-country=MEX]').getAttribute('aria-pressed'), 'true');
+  } finally { await window.happyDOM.close(); }
+});
+
+test('regional manufacturing examples retain their scope when a representative country is selected', async () => {
+  const { window, document } = page('?sector=solar&region=europe&country=DEU&view=manufacturing');
+  try {
+    assert.equal(text(document, '[data-if-country-name]'), 'ドイツ');
+    assert.doesNotMatch(text(document, '[data-if-value]'), /\d+(?:%|GW)/);
+    assert.match(text(document, '[data-if-country-note]'), /国別(?:値|工程能力)は未収録/);
+    assert.match(text(document, '[data-if-example-status]'), /欧州の代表事例/);
+    assert.match(text(document, '[data-if-example-description]'), /27GW/);
+    assert.match(text(document, '[data-if-example-scope]'), /欧州集計/);
+    click(document, '[data-if-sector=semiconductor]');
+    click(document, '[data-if-region=asia]');
+    click(document, '[data-if-country=TWN]');
+    assert.equal(text(document, '[data-if-country-name]'), '台湾');
+    assert.match(text(document, '[data-if-example-status]'), /アジアの代表事例/);
+    assert.match(text(document, '[data-if-example-scope]'), /日本|熊本|代表/);
   } finally { await window.happyDOM.close(); }
 });
 

@@ -46,7 +46,8 @@ export function initializeIndustryFeature(root: HTMLElement) {
     set('[data-if-value]',!country?'選択を解除しました':missing?'該当データ未収録':shortValue);
     set('[data-if-country-note]',missing&&country?`全動力・全車型の比較値：${country.marketLabel}（2025年）`:state.sector==='automotive'&&state.view==='market'?(country?.countryNote??'2025年 · 新車販売（IEAのCars）'):`${fullValue}${country?.countryNote?'。'+country.countryNote:''}`);
     set('[data-if-summary]',state.view==='mechanism'?region.why:region.summary);
-    set('[data-if-example-status]',`${region.example.status} · ${region.example.period} · 地域の代表事例`);
+    set('[data-if-example-status]',`${region.example.status} · ${region.example.period} · ${region.label}の代表事例`);
+    set('[data-if-example-scope]',region.example.scope);
     set('[data-if-example-title]',region.example.title);
     set('[data-if-example-description]',region.example.description);
     const missingElement=el('[data-if-missing]');if(missingElement)missingElement.hidden=!missing;
@@ -59,7 +60,11 @@ export function initializeIndustryFeature(root: HTMLElement) {
     const deep=el('[data-if-deep-dive]') as HTMLDetailsElement;if(state.view==='mechanism'&&deep)deep.open=true;
 
     const buttons=el('[data-if-countries]');
-    if(buttons){buttons.replaceChildren(...region.countries.map(c=>{const b=node('button','') as HTMLButtonElement;b.type='button';b.dataset.ifCountry=c.id;b.setAttribute('aria-pressed',String(c.id===state.country));b.append(node('b',c.name),node('span',missing?'組合せ：未収録':state.view==='market'?(c.mapMarketLabel??c.marketLabel):(c.mapManufacturingLabel??c.manufacturingLabel)));return b;}));}
+    if(buttons){
+      const focusedCountry=buttons.contains(document.activeElement)?(document.activeElement as HTMLElement)?.dataset.ifCountry:undefined;
+      buttons.replaceChildren(...region.countries.map(c=>{const b=node('button','') as HTMLButtonElement;b.type='button';b.dataset.ifCountry=c.id;b.setAttribute('aria-pressed',String(c.id===state.country));b.append(node('b',c.name),node('span',missing?'組合せ：未収録':state.view==='market'?(c.mapMarketLabel??c.marketLabel):(c.mapManufacturingLabel??c.manufacturingLabel)));return b;}));
+      if(focusedCountry)buttons.querySelector<HTMLButtonElement>(`[data-if-country="${focusedCountry}"]`)?.focus({preventScroll:true});
+    }
     root.querySelectorAll<SVGSVGElement>('[data-feature-map]').forEach(map=>{
       const active=map.dataset.featureMap===state.region;map.style.display=active?'':'none';map.toggleAttribute('hidden',!active);
       map.querySelectorAll<SVGElement>('[data-feature-marker]').forEach(marker=>{

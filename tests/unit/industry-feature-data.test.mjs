@@ -105,6 +105,18 @@ test('半導体87%は上位5経済の合計であり、国別値や建設中の�
   assert.match(dresden.scope, /将来能力.*稼働実績.*合算しません/);
 });
 
+test('欧州の太陽光工程能力をドイツの国別能力や地図ラベルへ割り当てない', () => {
+  const europe = sector('solar').regions.find(item => item.id === 'europe');
+  const germany = europe.countries.find(item => item.id === 'DEU');
+  assert.match(germany.manufacturingLabel, /国別工程能力は未収録/);
+  assert.match(germany.mapManufacturingLabel, /能力未収録/);
+  assert.doesNotMatch(germany.manufacturingLabel + germany.mapManufacturingLabel, /欧州|\d+(?:\.\d+)?GW/);
+  assert.match(europe.example.title, /欧州.*工程別製造能力/);
+  assert.match(europe.example.description, /27GW.*1\.5GW.*10GW.*33GW/);
+  assert.equal(europe.example.period, '2025年末');
+  assert.match(europe.example.scope, /欧州集計.*国別値や実生産量ではありません/);
+});
+
 test('日本の蓄電池150GWh/年は2030年代半ばの将来目標で、旧2030年目標と混ぜない', () => {
   const asia = sector('battery').regions.find(item => item.id === 'asia');
   const japan = asia.countries.find(item => item.id === 'JPN');
