@@ -7,18 +7,29 @@ import '../../styles/atlas-latin-learning.css';
 import type {LatinLearningField} from '../../lib/atlas-latin-learning-state';
 interface Props {field:LatinLearningField;title:string;lead:string;description?:string}
 const {field,title,lead,description=lead}=Astro.props;
-const fields=[['nature','自然環境'],['agriculture','農畜産'],['industry','主要産業'],['population','人口']];
+const fields=[['agriculture','農林業'],['nature','自然環境'],['industry','主要産業'],['population','人口']];
+const sections=field==='agriculture'?[['agriculture','農畜産'],['forestry','林業']]:field==='nature'?[['climate','気候区分'],['water','水資源'],['terrain','地形'],['elevation','標高']]:field==='industry'?[['industry','地域主要産業']]:[['population','人口分布'],['ethnicity','人種・民族'],['religion','宗教']];
+const defaultSection=sections[0][0];
 ---
 <BaseLayout title={`${title}｜中南米地図`} {description} compactAtlas>
+ <article class={`latin-workspace latin-${field}`} data-latin-workspace data-latin-field={field} data-latin-industry={field==='industry'?'':undefined} data-base-path={field==='industry'?withBase('/atlas/latin-america/'):undefined}>
  <AtlasWorkspaceFrame region="latin-america" mapActions={false}>
-  <article class={`latin-workspace latin-${field}`} data-latin-workspace data-latin-field={field}>
-   <div class="latin-navigation"><AtlasRegionNavigation group="americas" current="latin-america" /></div>
+  <div class="latin-workspace-content">
+   <div class="latin-compact-heading"><nav aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a> / <a href={withBase('/atlas/latin-america/')}>中南米地図</a></nav><span>中米・カリブ・南米</span></div>
+   <div class="latin-navigation"><AtlasRegionNavigation group="americas" current="latin-america" /><div class="latin-navigation-selection" data-latin-navigation-selection aria-label="地図の地域と国を選ぶ"></div></div>
    <header class="latin-header"><h1>{title}</h1><p class="latin-lead">{lead}</p></header>
-   <nav class="latin-fields" aria-label="中南米の分野"><a href={withBase('/atlas/latin-america/overview/')}>概要</a>{fields.map(([id,label])=><a href={withBase(`/atlas/latin-america/${id}/`)} aria-current={field===id?'page':undefined}>{label}</a>)}<a href={withBase('/atlas/latin-america/base-map/')}>基礎地図</a></nav>
-   {Astro.slots.has('map')?<div class="latin-primary-grid"><section class="latin-map-column" data-map-surface tabindex="0" aria-label="地図と項目"><slot name="map" /><div class="latin-items"><slot name="items" /></div></section><aside class="latin-reading" aria-label="分布の理由と比較"><slot name="reading" /></aside></div>:null}
-   {Astro.slots.has('statistics')?<section class="latin-statistics" aria-label="地図の値を確かめる"><slot name="statistics" /></section>:null}
-   {Astro.slots.has('sources')?<footer class="latin-sources"><slot name="sources" /></footer>:null}
+   <nav class="latin-fields" aria-label="中南米の分野"><a href={withBase('/atlas/latin-america/overview/')}>概要</a>{fields.map(([id,label])=><a href={withBase(`/atlas/latin-america/${id}/`)} aria-current={field===id?'page':undefined}>{label}</a>)}</nav>
+   {field!=='agriculture'?<div class="latin-subfield-band"><nav class="latin-subfields" aria-label="分野の項目">{sections.map(([id,label])=><button type="button" data-latin-section={id} aria-pressed={id===defaultSection}>{label}</button>)}</nav>{field==='industry'?<p class="latin-field-status">2024年・国別の輸出構成。代表地域を地図の下から選べます。</p>:field==='population'?<p class="latin-field-status">2023年・国と地域の値。33対象を収録、FLKは対象統計なし。</p>:null}</div>:null}
+   {field==='nature'?<nav class="latin-water-items" data-latin-water-items aria-label="水資源の項目" hidden><button type="button" data-latin-section="rivers">河川・地下水</button><button type="button" data-latin-section="rainfall">降水量</button><button type="button" data-latin-section="basins">河川の流域</button></nav>:null}
+   <p class="latin-unavailable" data-latin-unavailable role="status" hidden></p>
+   {Astro.slots.has('map')?<div class="latin-primary-grid"><section class="latin-map-column" data-map-surface tabindex="0" aria-label="地図と項目"><slot name="map" /><div class="latin-items">{field==='agriculture'?<nav class="latin-subfields latin-agriculture-subfields" aria-label="農林業の項目">{sections.map(([id,label])=><button type="button" data-latin-section={id} aria-pressed={id===defaultSection}>{label}</button>)}</nav>:null}<slot name="items" /></div></section><aside class="latin-reading" aria-label="全体像から選択対象の解説へ"><div class="latin-reading-fixed" data-latin-reading-fixed><p class="latin-reading-kicker">中南米の全体像・選択した場所</p></div><div class="latin-reading-scroll"><slot name="reading" /></div></aside></div>:null}
    <slot />
-  </article>
+   <details class="latin-base-map-entry"><summary>基礎地図・既存の詳しい資料</summary><a href={withBase('/atlas/latin-america/base-map/')}>国境・河川・既存の解説を読む</a></details>
+  </div>
  </AtlasWorkspaceFrame>
+ <div class="latin-below-workspace" data-latin-below-workspace>   {Astro.slots.has('statistics')?<section class="latin-statistics" aria-label="地図の値を確かめる"><slot name="statistics" /></section>:null}
+   {Astro.slots.has('sources')?<footer class="latin-sources"><slot name="sources" /></footer>:null}
+</div>
+ </article>
 </BaseLayout>
+<script>import {initLatinWorkspaceLayout} from '../../scripts/atlas-latin-workspace-layout';initLatinWorkspaceLayout();document.addEventListener('astro:page-load',initLatinWorkspaceLayout);</script>

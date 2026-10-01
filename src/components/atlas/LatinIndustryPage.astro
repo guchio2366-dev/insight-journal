@@ -10,15 +10,16 @@ const base=withBase('/atlas/latin-america/');
 const sources=latinIndustryReadings.flatMap(r=>r.sources).filter((s,i,a)=>a.findIndex(v=>v.url===s.url)===i);
 ---
 <LatinAmericaWorkspace field="industry" title="輸出から読む、中南米の主要産業" lead="鉱石・金属と製造品の輸出構成を比べ、資源の産地・加工・交通・市場のつながりを読みます。">
- <div class="latin-industry" data-latin-industry data-latin-ready="false" data-base-path={base}>
+ <div class="latin-industry">
   <a class="latin-industry-return" data-industry-return hidden href={`${base}industry/`}>元の分布へ戻る</a>
-  <div class="latin-industry-toolbar" aria-label="地図の分布と範囲">
+  <details class="latin-map-options"><summary>地域・表示を選ぶ</summary><div class="latin-map-options-body">  <div class="latin-industry-toolbar" aria-label="地図の分布と範囲">
    <label>分布<select data-industry-layer>{latinIndustryLayers.map(l=><option value={l.id}>{l.name}</option>)}</select></label>
    <label>国・地域<select data-industry-place><option value="all">中南米全体</option>{latinCountries.map(c=><option value={c.code}>{c.name}</option>)}</select></label>
    <label>範囲<select data-industry-scope><option value="all">中南米全体</option><option value="central">中米・カリブ</option><option value="south">南米</option><option value="country">選択国</option></select></label>
    <button type="button" data-industry-only aria-pressed="false">選択国のデータだけ</button>
    <button type="button" data-industry-fallback aria-pressed="false">画像表示</button>
   </div>
+</div></details>
   <div class="latin-industry-grid" data-industry-normal>
    <section class="latin-industry-panel" aria-labelledby="latin-industry-main-title">
     <h2 id="latin-industry-main-title" data-industry-title>鉱石・金属の輸出比率</h2>

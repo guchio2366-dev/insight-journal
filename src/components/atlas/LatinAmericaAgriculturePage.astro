@@ -13,11 +13,12 @@ const reading=latinAgricultureReading.bana;
 <LatinAmericaWorkspace field="agriculture" title="中南米の農畜産" lead="熱帯のバナナ・高地のコーヒー・内陸の大豆・牛の飼育を、自然条件と市場へのつながりから読む。">
  <Fragment slot="map">
   <div class="latin-agriculture-heading"><h2 data-latin-agriculture-title>{agricultureLayerTitle('bana')}</h2><span>分布推計・2020年</span></div>
-  <div class="latin-controls">
+  <details class="latin-map-options"><summary>地域・表示を選ぶ</summary><div class="latin-map-options-body">  <div class="latin-controls">
    <label>地域 <select data-latin-agriculture-scope aria-label="地図の地域"><option value="central" selected>中米・カリブ</option><option value="south">南米</option><option value="all">中南米全体</option><option value="country">選択国を拡大</option></select></label>
    <label>読む国 <select data-latin-agriculture-place aria-label="読む国"><option value="all">中南米全体</option>{latinCountries34.map(c=><option value={c.code} selected={c.code==='CRI'}>{c.name}</option>)}</select></label>
    <label><input type="checkbox" data-latin-agriculture-only /> 選択国を強調</label><button type="button" data-latin-agriculture-fallback aria-pressed="false">数値一覧で読む</button>
   </div>
+</div></details>
   <div class="latin-agriculture-comparison-message" data-latin-agriculture-comparison-message hidden><p class="latin-takeaway" data-latin-agriculture-comparison-explanation></p><a class="latin-return" data-latin-agriculture-return hidden href={withBase('/atlas/latin-america/nature/')}>比較元に戻る</a></div>
   <figure data-latin-agriculture-normal-container>
    <div class="latin-agriculture-map-panes" data-latin-agriculture-map-panes>

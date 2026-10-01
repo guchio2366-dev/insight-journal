@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
+import OceaniaWorkspaceRegionNavigation from './OceaniaWorkspaceRegionNavigation.astro';
 import {getOverviewRegion} from '../../data/atlas/country-overview';
 import {getOverviewMap} from '../../data/atlas/overview-map';
 import {getRegionOverview} from '../../data/atlas/region-overview';
@@ -7,6 +9,7 @@ import {oceaniaFields, oceaniaThemes, type OceaniaField} from '../../data/atlas/
 import {withBase} from '../../lib/urls';
 import '../../styles/atlas-country-overview.css';
 import '../../styles/atlas-oceania-overview.css';
+import '../../styles/atlas-oceania-workspace.css';
 
 const region = getOverviewRegion('oceania');
 const map = getOverviewMap('oceania');
@@ -27,7 +30,8 @@ const reading = existingReading.status === 'ready' ? existingReading : {
     {id: 'forum-history', label: '太平洋諸島フォーラム：発足50周年と地域協議（2021）', url: 'https://forumsec.org/publications/forum-leaders-mark-50th-anniversary-virtual-meet'},
   ],
 };
-const fieldEntries = Object.entries(oceaniaFields) as [OceaniaField, {label: string; title: string}][];
+const fieldLabels={agriculture:'農林業',nature:'自然環境',industry:'主要産業',population:'人口'};
+const fieldEntries = (['agriculture','nature','industry','population'] as OceaniaField[]).map(id=>[id,{...oceaniaFields[id],label:fieldLabels[id]}] as const);
 const fieldHref = (field: OceaniaField) => withBase('/atlas/oceania/' + field + '/?place=all&scope=all');
 const baseHref = withBase('/atlas/oceania/base-map/?place=all');
 const config = {
@@ -38,15 +42,16 @@ const config = {
 ---
 
 <BaseLayout title="オセアニアの概要と白地図" description="25の国・地域と主要都市の位置を確かめ、自然・農林畜産・産業・人口の分布と歴史・制度をつなげて読む入口。" compactAtlas>
-  <article class="oceania-overview shell country-overview" data-oceania-overview>
+  <article class="oceania-workspace-root" data-oceania-overview>
+  <AtlasWorkspaceFrame region="oceania" mapActions={false}>
+  <div class="oceania-overview shell country-overview">
     <header class="oceania-overview-heading">
       <div><p class="country-overview-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / <a href={fieldHref('nature')} data-oceania-field-link="nature">オセアニア</a> / 概要</p><h1>オセアニアの概要と白地図</h1></div>
-      <label class="country-overview-picker" for="oceania-overview-country">国・地域<select id="oceania-overview-country" data-overview-country><option value="">オセアニア全体</option>{region.countries.map(country => <option value={country.code}>{country.name}</option>)}</select></label>
     </header>
+    <OceaniaWorkspaceRegionNavigation><label class="country-overview-picker" for="oceania-overview-country">国・地域<select id="oceania-overview-country" data-overview-country><option value="">オセアニア全体</option>{region.countries.map(country => <option value={country.code}>{country.name}</option>)}</select></label></OceaniaWorkspaceRegionNavigation>
     <nav class="oceania-overview-navigation" aria-label="概要と分野別地図">
       <a href={withBase('/atlas/oceania/overview/?place=all&scope=all')} data-oceania-overview-current aria-current="page">概要</a>
       {fieldEntries.map(([id, field]) => <a href={fieldHref(id)} data-oceania-field-link={id}>{field.label}</a>)}
-      <a href={baseHref} data-oceania-base-link>基礎地図</a>
     </nav>
     <p class="visually-hidden" data-overview-announcement aria-live="polite" aria-atomic="true"></p>
     <div class="overview-map-reading">
@@ -68,15 +73,20 @@ const config = {
         </div>
         <div class="overview-map-key"><span><i class="overview-key-border"></i>国・地域の境界</span><span><i class="overview-key-city"></i>主要都市</span><span><i class="overview-key-selected"></i>選択中の国・地域</span></div>
         <div class="overview-place-summary" aria-live="polite"><strong data-overview-place-title>25の国・地域を地図で確かめる</strong><p data-overview-place-description>地図の地名・都市名、または上の一覧から選べます。小さな島も一覧から拡大できます。</p></div>
+        <div class="oceania-overview-place-list" aria-label="国・地域の一覧">{region.countries.map(country=><button type="button" data-oceania-country-option={country.code}>{country.name}</button>)}</div>
       </section>
       <aside class="overview-region-reading" aria-labelledby="oceania-overview-message">
-        <p class="overview-reading-eyebrow">位置と理由をつなげる</p><h2 id="oceania-overview-message">{reading.title}</h2><p class="overview-region-intro">{reading.introduction}</p>
+        <div class="oceania-workspace-overview-message"><p class="overview-reading-eyebrow">位置と理由をつなげる</p><h2 id="oceania-overview-message" data-oceania-reading-title>{reading.title}</h2><p class="overview-region-intro" data-oceania-reading-intro>{reading.introduction}</p>
         <a class="oceania-overview-start" href={fieldHref('nature')} data-oceania-field-link="nature"><span data-oceania-entry-place>オセアニア全体</span>の自然分布から読む →</a>
         <p class="oceania-overview-field-guide">上の4分野から、作物・家畜、鉱山・港、人口の実分布へ進めます。</p>
+        </div><div class="oceania-workspace-reading-scroll" tabindex="0" aria-label="地域の詳しい説明">
         <details class="oceania-overview-background"><summary>歴史・政治・地域協力を読む</summary>{reading.sections.map(section => <section class="overview-region-section"><h3>{section.heading}</h3><p>{section.body}</p><p class="overview-inline-sources">{section.sourceIds.map(id => {const source = reading.sources.find(item => item.id === id); return source && <a href={source.url}>{source.label}</a>;})}</p></section>)}<p class="overview-reading-date">説明の確認日：{reading.checkedAt}</p></details>
-        <details class="oceania-overview-background"><summary>地図の範囲・出典</summary><p>境界と主要都市はNatural Earthの概略データです。25対象には国と海外領域が含まれ、地域区分や表示は出典に基づきます。小さな島や重なる地名は上の一覧から選べます。</p><p>すべての都市、詳細な行政境界、海域・EEZの境界を示す地図ではありません。</p>{map.notes.map(note => <p>{note}</p>)}<p>{map.projection}</p>{map.sources.map(source => <p><a href={source.url}>{source.label}</a></p>)}<a href={baseHref} data-oceania-base-link>基礎地図と境界の説明を開く →</a></details>
+        </div>
       </aside>
     </div>
+  </div>
+  </AtlasWorkspaceFrame>
+    <details class="oceania-overview-background oceania-workspace-below"><summary>地図の範囲・出典</summary><p>境界と主要都市はNatural Earthの概略データです。25対象には国と海外領域が含まれ、地域区分や表示は出典に基づきます。小さな島や重なる地名は上の一覧から選べます。</p><p>すべての都市、詳細な行政境界、海域・EEZの境界を示す地図ではありません。</p>{map.notes.map(note => <p>{note}</p>)}<p>{map.projection}</p>{map.sources.map(source => <p><a href={source.url}>{source.label}</a></p>)}<a href={baseHref} data-oceania-base-link>基礎地図と境界の説明を開く →</a></details>
     <noscript><p class="country-overview-noscript">白地図、4分野への入口、歴史・政治と出典はこのまま読めます。国・都市の選択と拡大にはJavaScriptが必要です。</p></noscript>
     <script type="application/json" data-overview-config set:html={JSON.stringify(config).replace(/</g, '\u003c')} />
   </article>
@@ -154,6 +164,9 @@ const config = {
       const cities = config.cities.filter(city => city.country === state.place).map(city => city.name);
       root!.querySelector<HTMLElement>('[data-overview-place-description]')!.textContent = country ? cities.length ? '地図に載せた主な都市：' + cities.join('、') + '。選んだ国・地域を保って4分野へ進めます。' : '選んだ国・地域を拡大しています。この選択を保って4分野へ進めます。' : '25の国・地域を地図の地名・都市名、または上の一覧から選べます。小さな島も一覧から拡大できます。';
       root!.querySelector<HTMLElement>('[data-oceania-entry-place]')!.textContent = name;
+      root!.querySelector<HTMLElement>('[data-oceania-reading-title]')!.textContent = country ? (city ? city.name + 'と' + name : name) + 'の位置と分布' : '大陸と島々を、海のつながりから読む';
+      root!.querySelector<HTMLElement>('[data-oceania-reading-intro]')!.textContent = country ? '地図では' + name + 'を選択しています。自然条件、作物・家畜、産業、人口を同じ場所で見比べ、交通・市場・制度とのつながりを確かめましょう。' : '広いオーストラリア大陸と、山地を持つNZ・PNG、海に隔てられた島々では、自然条件も市場への距離も異なります。資源や作物の分布に、加工・交通・公共サービスと歴史・制度を重ねて読みます。';
+      root!.querySelectorAll<HTMLButtonElement>('[data-oceania-country-option]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.oceaniaCountryOption===state.place)));
       document.title = country ? name + '｜オセアニアの概要｜Insight Journal' : 'オセアニアの概要と白地図｜Insight Journal';
       syncLinks();
       if (announce) root!.querySelector<HTMLElement>('[data-overview-announcement]')!.textContent = (city?.name ?? name) + 'を表示しました。4分野への入口に選択を引き継ぎました。';
@@ -163,6 +176,7 @@ const config = {
       state = {place, city: '', scope: place ? 'country' : 'all'};
       render(true); saveState(false);
     });
+    root.querySelectorAll<HTMLButtonElement>('[data-oceania-country-option]').forEach(button=>button.addEventListener('click',()=>{picker.value=button.dataset.oceaniaCountryOption!;picker.dispatchEvent(new Event('change'));}));
     window.addEventListener('popstate', () => {state = readState(); render(true);});
     render(); saveState(true);
     root.dataset.ready = 'true';

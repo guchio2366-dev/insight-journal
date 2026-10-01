@@ -6,6 +6,9 @@ import {africaPath,projectAfrica,africaWidth,africaHeight} from '../../../lib/at
 import {countries,fields,metrics,regionNames,years,readState,valueAt,formatValue,fillFor,palette,rankedCountries} from '../../../data/atlas/africa-atlas';
 import {reading} from '../../../data/atlas/africa-reading';
 import {themes} from '../../../data/atlas/africa-themes';
+import AtlasNewsRail from '../../../components/atlas/AtlasNewsRail.astro';
+import '../../../styles/atlas-explorer.css';
+import '../../../styles/atlas-desktop.css';
 import '../../../styles/atlas-africa.css';
 const state=readState('');
 const metric=metrics[0];
@@ -30,8 +33,16 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
 ---
 <BaseLayout title="アフリカ地図" description="アフリカの自然環境・農林業・主要産業・人口を、重要な分布と国別統計から読む。" compactAtlas>
  <div class="africa-atlas shell" data-africa-atlas>
-  <header class="africa-heading"><div><p class="africa-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / アフリカ</p><h1>アフリカ地図</h1></div>  <div class="africa-region-navigation"><label>統計の地域<select data-region>{Object.entries(regionNames).map(([id,name])=><option value={id}>{name}</option>)}</select></label></div></header>
-  <nav class="africa-fields" aria-label="分野を選ぶ"><a data-atlas-overview-link href={withBase('/atlas/africa/overview/')}>概要</a>{Object.entries(fields).map(([id,f])=><button type="button" data-field={id} aria-pressed={id==='nature'?'true':'false'}>{f.label}</button>)}</nav>
+  <div class="africa-desktop-shell" data-atlas-shell>
+  <AtlasNewsRail region="africa" mapActions={false} />
+  <article class="africa-main">
+  <header class="africa-heading">
+   <div class="africa-compact-heading"><p class="africa-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / アフリカ</p><span>アフリカ地域</span></div>
+   <h1>アフリカ地図</h1>
+   <div class="africa-region-controls"><nav class="africa-region-tabs" aria-label="地域の移動"><a href={withBase('/atlas/')}>世界の地域</a><a href={withBase('/atlas/africa/overview/')} aria-current="page">アフリカ</a></nav><div class="africa-region-navigation"><label>統計の地域<select data-region>{Object.entries(regionNames).map(([id,name])=><option value={id}>{name}</option>)}</select></label></div></div>
+  </header>
+  <nav class="africa-fields" aria-label="分野を選ぶ"><a data-atlas-overview-link href={withBase('/atlas/africa/overview/')}>概要</a>{(['agriculture','nature','industry','population'] as const).map(id=><button type="button" data-field={id} aria-pressed={id==='nature'?'true':'false'}>{fields[id].label}</button>)}</nav>
+  <nav class="africa-subfields" data-africa-subfields aria-label="分野内の項目"></nav>
   <div class="africa-workspace">
    <section class="africa-map-card" aria-labelledby="africa-map-title">
     <div class="africa-map-heading"><h2 id="africa-map-title" data-metric-title>{metric.label}</h2><span><span data-period>長期平均</span> · <span data-unit>{metric.unit}</span></span></div>
@@ -52,6 +63,8 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
       <title>{mark.number} {mark.label}：{mark.note}</title>
      </g>)}</g>
     </svg>
+    <div class="africa-map-subfields" data-africa-map-subfields></div>
+    <p class="africa-subfield-status" data-africa-subfield-status hidden aria-live="polite"></p>
     <div class="africa-theme-legend" data-theme-legend aria-label="分布テーマの凡例">{initialMarks.map(mark=><span><i style={`background:${mark.color}`}/>{mark.number} {mark.label}</span>)}</div>
     <div class="africa-legend" data-legend>{palette.map((color,i)=><span><i style={`background:${color}`}/>{i===0?'250未満':i===4?'1,500以上':`${metric.breaks[i-1].toLocaleString()}〜${metric.breaks[i].toLocaleString()}未満`}</span>)}<span><i class="africa-no-data"/>未収録</span></div>
     <div class="africa-themes" data-themes role="group" aria-label="分布テーマを選ぶ">{themes.filter(theme=>theme.field===state.field).map(theme=><button type="button" data-theme={theme.id} aria-pressed={theme.id===initialTheme.id?'true':'false'}>{theme.title}</button>)}</div>
@@ -62,18 +75,23 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
    </section>
    <aside class="africa-detail" aria-label="分布の読み方と国別比較">
     <section class="africa-theme-reading" aria-labelledby="africa-theme-title">
+     <div class="africa-right-fixed">
      <p class="africa-kicker">地図から持ち帰ること</p>
      <h2 id="africa-theme-title" data-theme-title>{initialTheme.title}</h2>
      <p class="africa-takeaway" data-theme-takeaway>{initialTheme.takeaway}</p>
+     <div class="africa-theme-actions"><button type="button" data-theme-comparison>国別統計と重ねる</button><button type="button" data-theme-return hidden>← {initialTheme.title}へ戻る</button></div>
+     </div>
+     <div class="africa-detail-scroll" tabindex="0" aria-label="選択内容の詳しい説明">
      <p class="africa-theme-caveat" data-theme-caveat>{initialTheme.caveat}</p>
      <a class="africa-theme-source" data-theme-source href={initialTheme.source}>{initialTheme.sourceLabel}</a>
-     <div class="africa-theme-actions"><button type="button" data-theme-comparison>国別統計と重ねる</button><button type="button" data-theme-return hidden>← {initialTheme.title}へ戻る</button></div>
      <details class="africa-theme-full"><summary>分布の詳しい読み方・出典</summary><div data-theme-details>{initialMarks.map(mark=><p>{mark.number} {mark.label} — {mark.note}</p>)}{initialTheme.evidenceSources?.map(source=><p><a href={source.url}>{source.label}</a></p>)}</div></details>
-    </section>
     <div class="africa-country-controls"><label>国・地域を選ぶ<select data-place>{ordered.map(c=><option value={c.code} selected={c.code===state.place}>{c.name}</option>)}</select></label><label>比較する国<select data-compare><option value="">比較なし</option>{ordered.map(c=><option value={c.code}>{c.name}</option>)}</select></label></div>
     <div aria-live="polite" class="africa-selected"><div class="africa-selected-heading"><h2 data-selected-name>エジプト</h2><span data-selected-region>北アフリカ</span></div><p class="africa-selected-metric" data-selected-metric>{metric.label}</p><p class="africa-big-value"><strong data-selected-value>{formatValue(valueAt(metric.id,'EGY',state.year),metric)}</strong><span data-selected-unit>{metric.unit}</span></p><p data-comparison></p><p data-place-note></p></div>
+     </div>
+    </section>
    </aside>
   </div>
+  </article>
   <div class="africa-secondary">
 <details class="africa-disclosure africa-statistics-controls"><summary>国別統計の指標・年を選ぶ</summary>  <div class="africa-controls">
    <label>指標<select data-metric>{metrics.map(m=><option value={m.id} hidden={m.field!=='nature'} selected={m.id===state.metric}>{m.label}</option>)}</select></label>
@@ -88,6 +106,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
 <details class="africa-disclosure"><summary>地図・統計の全出典と範囲・CSV</summary>  <footer class="africa-sources"><h2>地図・統計の出典と範囲</h2><p>境界：<a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/">Natural Earth Admin 0 Countries 1:50m</a>（public domain）。西経27度〜東経64度、南緯36度〜北緯39度を等距円筒図法で表示しています。面積を比較する地図ではありません。54か国と西サハラを選択でき、海外領土は選択対象に含みません。</p><p>境界は出典の概略表現で、現在の実効支配や主権を判定するものではありません。西サハラは別の地物として表示し、モロッコの統計を転用しません。ソマリアは統計対象に合わせ、出典のソマリランド地物も同じ選択対象に含めています。</p><p>統計：世界銀行 World Development Indicators（FAO、国民経済計算、人口推計等に由来）。<a href="https://datacatalog.worldbank.org/public-licenses">CC BY 4.0・データの利用条件</a>。国境地物と統計の集計範囲は完全には一致しません。数値は改訂される場合があります。</p><p><a href={withBase('/assets/atlas/africa/indicators.csv')} download>15指標の国別・年別データをCSVで保存</a></p><details><summary>15指標の定義・出典をすべて見る</summary>{metrics.map(m=><div class="africa-source-entry"><h3>{m.label}（{m.unit}）</h3><p>{m.note}</p><a href={`https://data.worldbank.org/indicator/${m.id}`}>{m.id} · 世界銀行</a></div>)}</details></footer></details>
   </div>
   <noscript><p class="africa-noscript">JavaScriptが無効のため、ナイルの分布テーマと長期平均降水量の地図を表示しています。分布の説明・出典と、国別の一覧は折畳みを開いて読めます。4分野すべての数値はCSVから確認できます。分野・選択・比較・年の切替にはJavaScriptが必要です。</p></noscript>
+  </div>
  </div>
 </BaseLayout>
 <script>import {initializeAfricaAtlas} from '../../../scripts/atlas-africa'; initializeAfricaAtlas();</script>

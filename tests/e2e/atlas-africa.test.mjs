@@ -54,7 +54,7 @@ test('each thematic comparison retains the source marks, all legends and named r
    w.dispatchEvent(new w.PopStateEvent('popstate'));
    const sourceMetric=q('[data-metric]').value,sourceYear=q('[data-year]').value,sourceView=q('.africa-map').getAttribute('viewBox');
    const sourceMarks=q('[data-theme-marks]').innerHTML;
-   assert.equal(q('[data-theme-title]').textContent,theme.title);
+   assert.equal(q('[data-theme-title]').textContent,`ガーナ：${theme.title}`);
    assert.equal(q('[data-theme-legend]').children.length,theme.marks.length);
    assert.equal(q('[data-legend]').children.length,sourceMetric==='SP.POP.TOTL'?2:6);
    q('[data-theme-comparison]').click();
@@ -63,6 +63,7 @@ test('each thematic comparison retains the source marks, all legends and named r
    assert.equal(q('[data-legend]').children.length,6);
    assert.equal(q('[data-theme-takeaway]').textContent,theme.compareText);
    assert.ok(q('[data-theme-return]').textContent.includes(theme.title));
+   assert.ok(q('[data-theme-return]').textContent.includes('ガーナ'));
    assert.equal(q('[data-place]').value,'GHA');assert.equal(q('[data-compare]').value,'EGY');
    assert.equal(q('[data-metric]').value,sourceMetric);assert.equal(q('[data-year]').value,sourceYear);
    assert.equal(q('[data-source]').getAttribute('href'),`https://data.worldbank.org/indicator/${theme.compareMetric}`);

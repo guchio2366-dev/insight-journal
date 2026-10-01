@@ -52,3 +52,105 @@
 
 .latin-map-column svg:is(.latin-map,[data-latin-map]){height:300px;max-height:300px}
 @media(min-width:960px){.latin-map-column svg:is(.latin-map,[data-latin-map]){height:280px;max-height:280px}}
+
+/* Latin America: match the published US map frame and three independent reading areas. */
+.latin-workspace[data-latin-workspace]{border:0;border-radius:0;padding:0;background:transparent}
+.latin-workspace .latin-header{display:none}
+.latin-workspace .latin-fields{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;margin:4px 0 0;padding:0;border:1px solid #c7cdc0}
+.latin-workspace .latin-fields a{justify-content:center;border:0;border-right:1px solid #d3d8cc;border-radius:0;min-height:42px;font-size:15px;background:#f0f0e7}
+.latin-workspace .latin-fields a[aria-current]{background:#233d49;color:#fff}
+.latin-subfields,.latin-water-items{display:flex;flex-wrap:wrap;gap:6px;padding:6px 8px;background:#f5f4eb;border-inline:1px solid #c7cdc0}
+.latin-workspace .latin-subfields button,.latin-workspace .latin-water-items button{min-height:34px}
+.latin-workspace .latin-primary-grid{gap:14px;align-items:start}
+.latin-workspace .latin-map-column{position:relative;min-width:0;padding:0;border:0}
+.latin-workspace .latin-reading{padding:12px 14px;border-radius:0;background:#fcfbf4;display:flex;flex-direction:column;overflow:hidden;max-height:none;min-width:0}
+.latin-reading-fixed{flex:none}.latin-reading-scroll{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding-right:4px}
+.latin-workspace .latin-reading-kicker{font-size:13px;color:#916747;letter-spacing:.05em;margin:0 0 5px}
+.latin-workspace .latin-reading p{font-size:15px;line-height:1.75}.latin-workspace .latin-reading h2{font-size:21px}
+.latin-workspace .latin-reading-fixed .latin-comparison-link{font-size:14px;margin:6px 0;padding:6px 9px}
+.latin-workspace .latin-map-column .latin-items{border:1px solid #c7cdc0;background:#f7f5ea;padding:8px;margin-top:6px}
+.latin-workspace .latin-unavailable{font-size:16px;padding:14px;background:#f7f5e9;border:1px solid #b7c8b5;margin:0}
+.latin-workspace.has-unavailable-section .latin-primary-grid,.latin-workspace.has-unavailable-section>[data-latin-industry]{display:none}
+.latin-base-map-entry{margin-top:12px}.latin-workspace .latin-statistics{margin-top:18px}
+@media(min-width:960px){
+ .atlas-desktop-shell:has([data-latin-workspace]){grid-template-columns:clamp(220px,19vw,340px) minmax(0,1fr);gap:16px;padding:12px 20px 36px}
+ .atlas-desktop-shell:has([data-latin-workspace]) .atlas-news{height:calc(100dvh - 72px);top:12px}
+ .latin-workspace .latin-primary-grid{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr)}
+ .latin-workspace .latin-reading{height:calc(100dvh - 198px);max-height:calc(100dvh - 198px)}
+ .latin-workspace .latin-map-column :is(.latin-agriculture-map,.latin-nature-map,.lp-map,.lp-fallback-map,.latin-nature-fallback){width:100%;height:auto!important;min-height:300px;max-height:none!important;aspect-ratio:1.55;border-radius:0;object-fit:contain}
+ .latin-workspace .latin-industry-grid{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px}
+ .latin-workspace .latin-industry-map-grid{grid-template-columns:1fr}
+ .latin-workspace .latin-industry-map,.latin-workspace .latin-industry-canal{height:auto!important;min-height:300px;aspect-ratio:1.55;border-radius:0}
+ .latin-workspace .latin-industry-reading{height:calc(100dvh - 228px);overflow-y:auto;padding:12px 14px;background:#fcfbf4}
+ .latin-workspace .latin-industry-key{display:flex;flex-wrap:wrap;gap:8px 12px;margin-top:6px}
+ .latin-workspace .latin-industry-panel{padding:0;border:0;border-radius:0;background:transparent}
+ .latin-workspace .latin-industry-topics{padding:8px;background:#f7f5ea;border:1px solid #c7cdc0}
+ .latin-workspace.is-comparison .latin-reading{height:auto;max-height:none}
+ .latin-workspace.is-comparison .latin-reading-scroll{overflow:visible}
+}
+@media(min-width:960px) and (max-width:1199px){
+ .atlas-desktop-shell:has([data-latin-workspace]){grid-template-columns:160px minmax(0,1fr);gap:12px;padding:10px 12px 28px}
+ .atlas-desktop-shell:has([data-latin-workspace]) .atlas-news{height:calc(100dvh - 82px)}
+ .latin-workspace .latin-primary-grid,.latin-workspace .latin-industry-grid{grid-template-columns:minmax(0,1fr) 318px;gap:14px}
+ .latin-workspace .latin-map-column :is(.latin-agriculture-map,.latin-nature-map,.lp-map,.lp-fallback-map,.latin-nature-fallback),.latin-workspace .latin-industry-map,.latin-workspace .latin-industry-canal{aspect-ratio:1.65}
+}
+@media(max-width:959px){.latin-workspace .latin-reading{height:auto}.latin-reading-scroll{overflow:visible}.latin-workspace .latin-fields a{font-size:14px;padding:4px 2px}.latin-workspace .latin-primary-grid{grid-template-columns:1fr}}
+
+.latin-below-workspace{padding:0 20px 24px;margin:0 auto;max-width:2048px}.latin-below-workspace .latin-statistics{margin-top:0}
+@media(min-width:960px){
+ .latin-workspace .atlas-desktop-shell{grid-template-columns:clamp(220px,19vw,340px) minmax(0,1fr);gap:16px;padding:12px 20px 20px}
+ .latin-workspace .atlas-desktop-shell .atlas-news{position:sticky;top:12px;height:calc(100dvh - 72px);min-height:0;width:auto}
+ .latin-workspace-content{min-width:0}.latin-workspace .latin-primary-grid{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr)}
+}
+@media(min-width:960px) and (max-width:1199px){
+ .latin-workspace .atlas-desktop-shell{display:grid;grid-template-columns:160px minmax(0,1fr);gap:12px;padding:10px 12px 20px}
+ .latin-workspace .atlas-desktop-shell .atlas-news{height:calc(100dvh - 82px)}
+ .latin-workspace .latin-primary-grid{grid-template-columns:minmax(0,1fr) 318px;gap:14px}
+ .latin-workspace.latin-nature .latin-primary-grid{grid-template-columns:minmax(0,1fr) 380px;gap:16px}
+ .latin-workspace.latin-population .latin-primary-grid{grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:12px}
+ .latin-workspace .latin-industry-grid{grid-template-columns:minmax(0,1fr) 318px;gap:12px}
+ .latin-workspace .latin-industry-map,.latin-workspace .latin-industry-canal{aspect-ratio:654/407}
+ .latin-below-workspace{padding-inline:12px}
+}
+
+/* Exact corresponding US field positions; source maps keep their own geographic viewBox. */
+.latin-compact-heading{display:flex;align-items:center;justify-content:space-between;height:28px;font-size:12px;line-height:1.5;color:#526570}.latin-compact-heading a{text-decoration:none}
+.latin-workspace .latin-navigation{box-sizing:border-box;height:56px;padding-top:6px}.latin-workspace .latin-navigation .regional-navigation{margin:0!important}.latin-workspace .latin-navigation .regional-navigation a{min-height:44px!important;border-radius:0;font-size:14px!important;padding:8px 14px!important}
+.latin-workspace .latin-fields{margin-top:4px;border-bottom:0}.latin-workspace .latin-fields a{box-sizing:border-box;min-height:42px;height:42px;padding:9px 5px;font-size:14px;font-weight:700;line-height:1.2}
+.latin-subfield-band{box-sizing:border-box;height:59px;padding:6px;border:1px solid #c7ccbf;border-bottom:0;background:#fbfaf3}
+.latin-workspace .latin-subfields{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding:0;border:1px solid #c9cec4;background:#f2f1e9}
+.latin-workspace .latin-subfields button{min-height:44px;padding:7px 4px;border:0;border-right:1px solid #d3d6cd;border-radius:0;background:transparent;font-size:14px;font-weight:750;line-height:1.5}
+.latin-workspace .latin-subfields button:last-child{border-right:0}.latin-workspace .latin-subfields button[aria-pressed=true]{background:#35515d;color:#fff}
+.latin-workspace.latin-population .latin-subfields{grid-template-columns:repeat(3,minmax(0,1fr))}.latin-workspace.latin-industry .latin-subfields{grid-template-columns:1fr}
+.latin-workspace .latin-water-items{display:flex;margin:0 0 10px;padding:0;gap:6px;background:transparent;border:0}.latin-workspace .latin-water-items button{font-size:14px;min-height:40px;padding:7px 16px}
+.latin-workspace .latin-field-status{height:21.5px;line-height:21.5px;margin:0;padding:0 6px;font-size:14px}
+.latin-workspace.latin-industry .latin-subfield-band{height:80.5px}.latin-workspace.latin-population .latin-subfield-band{height:103px}.latin-workspace.latin-population .latin-field-status{height:44px;line-height:44px}
+.latin-workspace .latin-items{display:block}.latin-workspace .latin-agriculture-subfields{grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:6px}
+.latin-map-options{position:absolute;z-index:4;right:8px;top:8px;max-width:calc(100% - 16px);margin:0!important;background:#fffefa;border:1px solid #b8c9bf;border-radius:4px;padding:0 8px;box-shadow:0 1px 3px #193e4220}
+.latin-map-options summary{font-size:14px;font-weight:700;min-height:34px;line-height:26px;white-space:nowrap}.latin-map-options[open]{width:min(460px,calc(100% - 16px))}.latin-map-options-body{padding:6px 0;max-height:260px;overflow:auto}
+.latin-map-options-body .latin-controls,.latin-map-options-body .lp-controls,.latin-map-options-body .latin-industry-toolbar{position:static!important;display:flex!important;flex-wrap:wrap;gap:8px;margin:0}
+.latin-map-options-body label{display:flex;align-items:center;gap:6px}.latin-map-options-body select{max-width:220px;width:auto}
+.latin-workspace .latin-agriculture-heading,.latin-workspace [data-nature-map-title],.latin-workspace [data-lp-map-heading],.latin-workspace [data-industry-title],.latin-workspace [data-industry-period]{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip-path:inset(50%);white-space:nowrap}
+.latin-nature-main,.latin-workspace-content>.latin-industry{position:relative}
+.latin-workspace .latin-industry-grid{margin:0}.latin-workspace .latin-industry-topics{margin:6px 0 0}
+.latin-workspace.has-unavailable-section .latin-primary-grid{display:grid}.latin-workspace.has-unavailable-section .latin-map-column>*:not(.latin-items),.latin-workspace.has-unavailable-section .latin-reading{display:none}
+.latin-workspace .atlas-news{font-size:16px}.latin-workspace .atlas-news-header h2{font-size:16px!important;line-height:1.5}.latin-workspace .atlas-news-list,.latin-workspace .atlas-news-reader{font-size:16px}
+@media(min-width:1200px){.latin-workspace .latin-navigation{height:103px}}
+@media(max-width:959px){.latin-workspace .latin-navigation{height:auto;padding:4px 0}.latin-compact-heading{height:auto;min-height:28px}.latin-workspace .latin-fields a{font-size:13px}.latin-workspace .latin-reading{height:auto}.latin-map-options{position:relative;top:auto;right:auto;margin-bottom:6px!important;max-width:none}}
+
+/* Reuse the existing controls and listeners in the regional navigation row. */
+.latin-workspace[data-latin-workspace]{font-size:16px}
+.latin-workspace .latin-navigation{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.latin-navigation-selection{display:flex;gap:8px;align-items:center;min-height:44px;min-width:0}
+.latin-navigation-selection label{display:flex;align-items:center;gap:5px;white-space:nowrap;font-size:14px}
+.latin-navigation-selection select{min-height:40px;max-width:220px;padding:5px 7px;font-size:14px}
+@media(min-width:1200px){.latin-workspace .latin-navigation{display:block}.latin-navigation-selection{margin-top:3px}}
+@media(max-width:959px){.latin-workspace .latin-navigation{display:block}.latin-navigation-selection{flex-wrap:wrap;margin-top:4px}.latin-navigation-selection select{max-width:calc(100vw - 120px)}}
+
+.latin-workspace .latin-industry-reading{display:flex;flex-direction:column;overflow:hidden}
+.latin-industry-reading-fixed{flex:none}.latin-industry-reading-scroll{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+@media(min-width:960px){.latin-workspace .latin-industry>.latin-map-options{right:auto;left:calc(62.2641509434% - 16.7169811321px);transform:translateX(-100%)}}
+@media(min-width:960px) and (max-width:1199px){.latin-workspace .latin-industry>.latin-map-options{left:calc(100% - 338px)}}
+@media(min-width:1200px){.latin-workspace .latin-industry-map,.latin-workspace .latin-industry-canal{height:620px!important;min-height:620px;aspect-ratio:auto}}
+.latin-workspace.is-comparison .latin-map-options,.latin-workspace.is-comparison .latin-industry>.latin-map-options{position:static;top:auto;right:auto;left:auto;transform:none;width:max-content;max-width:100%;margin:0 0 8px!important}
+@media(min-width:960px){.latin-workspace.latin-agriculture:not(.is-comparison) .latin-agriculture-legend{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px 8px}.latin-workspace.latin-agriculture:not(.is-comparison) .latin-agriculture-legend>div{display:contents}.latin-workspace.latin-agriculture:not(.is-comparison) .latin-agriculture-legend strong{position:absolute;top:-30px;left:8px;z-index:2;white-space:nowrap;width:max-content;max-width:calc(100% - 16px);padding:1px 6px;background:#fffefae6;border-radius:3px}}

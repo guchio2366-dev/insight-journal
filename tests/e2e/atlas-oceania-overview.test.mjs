@@ -25,7 +25,7 @@ const selectedCountries=d=>[...d.querySelectorAll('[data-overview-map-country][a
 function fieldLinks(d){return [...d.querySelectorAll('.oceania-overview-navigation [data-oceania-field-link]')];}
 function assertLinks(d,place,scope){
   const config=configuration(d),links=fieldLinks(d);
-  assert.deepEqual(links.map(a=>a.dataset.oceaniaFieldLink),['nature','agriculture','industry','population']);
+  assert.deepEqual(links.map(a=>a.dataset.oceaniaFieldLink),['agriculture','nature','industry','population']);
   for(const a of links){
     const url=new URL(a.href),field=config.fields.find(f=>f.id===a.dataset.oceaniaFieldLink);
     const theme=field.themes.find(t=>t.countryCodes.includes(place))??field.themes[0];
@@ -76,7 +76,7 @@ test('Oceania published overview SSR retains all 25 places, 16 cities, four read
     assert.ok(citations.some(a=>new URL(a.href).hostname==='www.dfat.gov.au'));
     assert.ok(citations.some(a=>new URL(a.href).hostname==='www.mfat.govt.nz'));
     assert.ok(citations.some(a=>new URL(a.href).hostname==='forumsec.org'));
-    assert.ok([...reading.querySelectorAll('a')].some(a=>a.href.startsWith('https://www.naturalearthdata.com/')));
+    assert.ok([...d.querySelectorAll('.oceania-workspace-below a')].some(a=>a.href.startsWith('https://www.naturalearthdata.com/')));
     assert.ok(citations.every(a=>a.textContent.trim()&&new URL(a.href).protocol==='https:'));
     assert.ok([...reading.querySelectorAll('details')].every(detail=>!detail.open));
     assert.equal(d.querySelectorAll('[data-news-location]').length,0);
