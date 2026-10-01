@@ -101,6 +101,19 @@ test('Both export classifications share bins; only mode preserves the complete g
  }finally{await w.happyDOM.close();}
 });
 
+test('Thinned overview labels preserve all country shapes and full country names, while selected Cuba remains visible',async()=>{
+ const lib=await industryLibrary(),w=new Window();try{
+  w.document.body.innerHTML=lib.renderLatinIndustryMap({layer:'ores',place:'all',scope:'all',only:false},'overview');
+  const labels=[...w.document.querySelectorAll('svg text')].map(node=>node.textContent);
+  assert.equal(labels.includes('CUB'),false);assert.equal(labels.includes('ARG'),false);assert.ok(labels.includes('GTM'));assert.ok(labels.includes('DOM'));assert.ok(labels.includes('CHL'));
+  assert.equal(w.document.querySelectorAll('[data-industry-country]').length,34);
+  const cuba=w.document.querySelector('[data-industry-country=CUB]');assert.match(cuba.getAttribute('aria-label'),/キューバ/);assert.match(cuba.querySelector('title').textContent,/キューバ.*2024/);
+  w.document.body.innerHTML=lib.renderLatinIndustryMap({layer:'ores',place:'CUB',scope:'all',only:false},'selected');
+  assert.deepEqual([...w.document.querySelectorAll('svg text')].map(node=>node.textContent),['CUB']);assert.equal(w.document.querySelectorAll('[data-industry-country]').length,34);
+  assert.equal(w.document.querySelector('[data-industry-country=CUB]').getAttribute('aria-pressed'),'true');assert.equal(w.document.querySelector('[data-industry-country=CUB]').getAttribute('stroke-width'),'2.4');
+ }finally{await w.happyDOM.close();}
+});
+
 test('Shared comparison codec retains original indicator, country, scope, only and fallback for a targeted return',async()=>{
  const lib=await industryLibrary();
  const original={field:'population',layer:'population',place:'CRI',scope:'central',only:true,fallback:true};
