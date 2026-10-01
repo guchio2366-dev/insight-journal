@@ -62,7 +62,7 @@ for (const field of ['agriculture', 'nature', 'industry', 'population']) {
     }
   });
   test(`${field}: monitor and mobile retain their existing layouts`, async () => {
-    for (const width of [390, 1199, 1600, 1920]) {
+    for (const width of [390, 959, 1600, 1920]) {
       const {window, css} = await openField(field, width);
       try {
         if (width < 1200) {
@@ -77,12 +77,17 @@ for (const field of ['agriculture', 'nature', 'industry', 'population']) {
   });
 }
 
-test('West Asia uses the North America layout rules in every field and screen size', async () => {
+test('West Asia preserves its normal layout across the US compact-laptop correction', async () => {
   for(const field of ['agriculture','nature','industry','population']) for(const width of [390, 1024, 1440, 1920]) {
     const north=await openField(field,width),west=await openField(field,width,{},768,'west-asia');
     try {
       for(const [selector,property] of [['.atlas-primary-grid','grid-template-columns'],['.atlas-map-frame','aspect-ratio'],['.atlas-map-frame','min-height'],['.atlas-tabs','grid-template-columns']]) {
-        assert.equal(west.css(selector,property),north.css(selector,property),`${field} ${width}px ${property}`);
+        // The compact US industry map resizes independently; West keeps its usual map.
+        if(width===1024 && field==='industry' && selector==='.atlas-map-frame') {
+          assert.equal(west.css(selector,property),property==='aspect-ratio'?'1.55/1':'430px',`${field} ${width}px usual West ${property}`);
+        } else {
+          assert.equal(west.css(selector,property),north.css(selector,property),`${field} ${width}px ${property}`);
+        }
       }
     } finally {await north.window.happyDOM.close();await west.window.happyDOM.close();}
   }
