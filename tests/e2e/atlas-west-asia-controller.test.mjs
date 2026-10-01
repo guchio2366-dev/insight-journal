@@ -48,7 +48,7 @@ test('北米と同じ読み順で初期雨温図が表示され、都市選択�
  const {w,q}=await setup('nature');
  try{
   await until(()=>q('[data-west-climate-class]')?.textContent.includes('BWh'));
-  assert.equal(q('[data-west-city]').value,'riyadh');assert.equal(q('[data-west-detail]').querySelector('h3').textContent,'都市の雨温図');
+  assert.equal(q('[data-west-city]').value,'riyadh');assert.equal(q('[data-west-detail] .atlas-city-climate h3').textContent,'都市の雨温図');
   assert.equal(q('[data-west-scene]').querySelectorAll('[data-city]').length,18);
   const before=q('[data-west-map]').getAttribute('viewBox');
   q('[data-city="tehran"]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
@@ -113,4 +113,19 @@ test('比較で系列の収録年が異なる場合も元の年へ戻り、不�
  }finally{await source.w.happyDOM.close();if(comparison)await comparison.w.happyDOM.close();}
  const invalid=await setup('nature','?topic=climate&from='+encodeURIComponent('?topic=oil&country=XXX&year=1800'));
  try{assert.equal(invalid.q('[data-west-atlas]').dataset.comparing,'false');assert.equal(invalid.q('[data-west-return]'),null);}finally{await invalid.w.happyDOM.close();}
+});
+
+test('比較の戻りは雨温図より先にあり、自動都市の図は閉じて明示選択で開く',async()=>{
+ const source=await setup('agriculture','?topic=wheat&country=TUR&year=2020');let comparison;
+ try{
+  comparison=await setup('nature',new URL(source.q('[data-west-compare="climate"]').href).search);
+  const {w,q,select}=comparison,chart=q('.west-chart-details'),back=q('[data-west-return]');
+  assert.equal(chart.open,false);
+  assert.ok(back.closest('[data-west-detail]'));
+  assert.ok(back.compareDocumentPosition(chart)&w.Node.DOCUMENT_POSITION_FOLLOWING);
+  assert.match(back.textContent,/トルコ/);
+  const id=[...q('[data-west-city]').options].find(o=>o.value)?.value;assert.ok(id);
+  select('[data-west-city]',id);assert.equal(q('.west-chart-details').open,true);
+  assert.equal(new URL(q('[data-west-return]').href).searchParams.has('city'),false,'自動都市の明示選択後も比較元の選択は変えない');
+ }finally{await source.w.happyDOM.close();if(comparison)await comparison.w.happyDOM.close();}
 });

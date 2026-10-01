@@ -114,6 +114,7 @@ function start(root:HTMLElement) {
   const placeReadings=createPlaceReadings(root,config.regionId,()=>state,navigate,camera);
   const comparison=createAsiaComparison(root,config,context,()=>state);
   const readingDock=createAsiaReadingDock(root);
+  let shownChartCity:string|null=null;
 
 
   function chooseFarm(topic:string){navigate({...state,field:'agriculture',topic,overlay:null,detail:null,story:null,point:state.point??config.cities.find(c=>c.id===state.city)?.coordinates??null,city:null,camera:camera()},false);}
@@ -189,6 +190,9 @@ function start(root:HTMLElement) {
 
   function render() {
     const city=config.cities.find(c=>c.id===state.city),country=config.countries.find(c=>c.code===state.place);
+    const chartCity=naturalTopic()==='climate'?city?.id??null:null;
+    if(chartCity&&chartCity!==shownChartCity){const details=root.querySelector<HTMLDetailsElement>('[data-reading-details]');if(details)details.open=true;}
+    shownChartCity=chartCity;
     countrySelect.value=state.place??'';
     citySelect.value=state.city??'';
     for(const option of citySelect.options){const allowed=!state.place||!option.value||option.dataset.country===state.place;option.hidden=!allowed;option.disabled=!allowed;}

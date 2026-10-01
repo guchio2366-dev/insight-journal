@@ -95,6 +95,9 @@
 .west-sources>summary{font-family:var(--serif);font-size:20px;line-height:1.5;min-height:44px;cursor:pointer}
 .west-related a{font-size:13px;line-height:1.6}
 .west-atlas[data-comparing=true] .west-legend{padding:8px}
+.west-reading-dock{margin:10px 0 14px;padding-top:8px}
+.west-chart-details{margin-top:10px;border-top:1px solid #d4dbd0}
+.west-chart-details>summary{font-size:14px!important;line-height:1.7;min-height:44px;padding:10px 0;cursor:pointer}
 @media(min-width:1200px){.west-atlas .atlas-map-column{position:sticky;top:12px}}
 @media(max-width:1199px){.west-source-grid{gap:16px}}
 @media(max-width:959px){.west-back-map{display:inline-flex}}

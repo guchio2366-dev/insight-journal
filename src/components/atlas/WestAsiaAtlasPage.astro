@@ -57,11 +57,10 @@ const climateSource='https://www.data.jma.go.jp/tcc/tcc/products/climate/climatv
      <button class="west-retry" data-west-retry hidden>資料を再読み込みする</button>
     </section>
     <aside class={`atlas-national west-reading ${initialField==='natural'?'atlas-nature-summary':initialField==='population'?'population-national':initialField==='industry'?'industry-national':'west-agri-reading'}`} data-field-national={initialField} aria-labelledby="west-detail-title">
-     <div data-west-detail><h2 id="west-detail-title">{initial.label}</h2><p><strong>{westReading(initial).message}</strong></p><p>{westReading(initial).reason}</p></div>
+     <div data-west-detail><h2 id="west-detail-title">{initial.label}</h2><p><strong>{westReading(initial).message}</strong></p><p>{westReading(initial).reason}</p><div class="west-related west-reading-dock" data-west-related><h3>この関係を地図で確かめる</h3>{westReading(initial).comparisons.map(c=><a href={withBase(`/atlas/west-asia/${westFields.find(f=>f.id===westTopics.find(t=>t.id===c.topic)!.field)!.route}/?topic=${c.topic}`)}>{c.label} →</a>)}</div></div>
      <div class="west-detail-controls" data-west-stat-controls>
       <label data-west-year-label>国別統計の年<select data-west-year aria-label="国別統計の年">{[2024,2023,2022,2021,2020].map(y=><option value={y}>{y}年</option>)}</select></label>
      </div>
-     <div class="west-related" data-west-related><h3>この関係を地図で確かめる</h3>{westReading(initial).comparisons.map(c=><a href={withBase(`/atlas/west-asia/${westFields.find(f=>f.id===westTopics.find(t=>t.id===c.topic)!.field)!.route}/?topic=${c.topic}`)}>{c.label} →</a>)}</div>
      <a class="west-back-map" href="#west-map-title">地図へ戻る ↑</a>
     </aside>
     {initialField==='natural'&&<details class="atlas-climate-overview" data-west-climate-overview><summary><h2>各気候区分の概説</h2></summary><p>色と区分は北米と共通です。分類は1991–2020年の平均的な気温・降水の組合せを表します。</p><div class="west-climate-codes">{data.classes.map(c=><section><h3><i style={`background:${c.color}`}></i>{c.code} {c.name}</h3><p>{c.description}</p></section>)}</div></details>}

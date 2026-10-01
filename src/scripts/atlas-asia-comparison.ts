@@ -103,11 +103,12 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
   function render(state:AsiaState){
     if(panel)panel.hidden=!state.back;
     if(!state.back){key='';reading=null;hide();return;}
-    const from=sourceState();if(back)back.textContent=`${subject(from)}へ戻る`;
+    const from=sourceState(),next=state.back+'|'+state.field+'|'+state.topic+'|'+state.detail;
+    if(back)back.textContent=next===key&&reading?.subject&&!from.story?`${reading.subject}の${topicName(from)}へ戻る`:`${subject(from)}へ戻る`;
     if(title)title.textContent=`${topicName(from)} × ${topicName(state)}`;
     const story=asiaPlaceReadings.find(r=>r.region===config.regionId&&r.id===from.story);
     if(summary)summary.textContent=(story?story.lead+' ':'')+comparisonQuestion(from.field,state.field);
-    const next=state.back+'|'+state.field+'|'+state.topic+'|'+state.detail;if(next===key)return;key=next;reading=null;hide();showFilled=false;const seq=++revision;
+    if(next===key)return;key=next;reading=null;hide();showFilled=false;const seq=++revision;
     if(legend)legend.textContent='元の分布と両方の凡例を読み込んでいます。';
     void Promise.all([describe(from),describe(state)]).then(([original,current])=>{if(seq!==revision||key!==next)return;reading=original;if(back&&original.subject&&!from.story)back.textContent=`${original.subject}の${topicName(from)}へ戻る`;if(legend){legend.replaceChildren();const toggle=document.createElement('button');toggle.type='button';toggle.dataset.comparisonOriginal='';toggle.textContent='元の色面を確認';toggle.setAttribute('aria-pressed','false');toggle.addEventListener('click',()=>{showFilled=!showFilled;toggle.setAttribute('aria-pressed',String(showFilled));toggle.textContent=showFilled?'比較の地図へ戻す':'元の色面を確認';if(map)void show(map);});legend.append(toggle);const detail=document.createElement('details'),label=document.createElement('summary');detail.open=true;label.textContent='元分布と比較先の全凡例';detail.append(label,Object.assign(document.createElement('p'),{textContent:'比較中の色付き輪郭は元の分布の色区分を示します。「元の色面を確認」で元の分布を同じ位置に表示します。比較先の数値は比較先の指標です。'}));appendKeys(detail,original);appendKeys(detail,current);legend.append(detail);}if(map)void show(map);}).catch(()=>{if(seq===revision&&legend)legend.textContent='元分布・凡例を取得できませんでした。対象名付きの戻るボタンで元の解説を確認できます。';});
   }
