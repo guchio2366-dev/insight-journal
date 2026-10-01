@@ -7,7 +7,7 @@ import {industryTopic,industryValues,industryScale,industryFuelColors,industryFu
 import {socialTopic,socialGroup,socialValue,socialColor,socialColors,type SocialRegion,type SocialData} from '../data/atlas/asia-social';
 import {leadingCategory,areaCategories} from '../data/atlas/asia-social-overview';
 import {isTradeTopic,tradeChapter,tradeFlow,tradeValue,tradeScale,tradeColors,type TradeRegion,type TradeData} from '../data/atlas/asia-trade';
-import {asiaPlaceReadings} from '../data/atlas/asia-place-readings';
+import {asiaPlaceReadings,selectedPlaceReading} from '../data/atlas/asia-place-readings';
 import {asiaWaterFocus} from '../data/atlas/asia-water-focus';
 import type {AsiaFarmingRegion} from '../data/atlas/asia-farming';
 import type {AsiaPresentation} from './atlas-asia-presentation';
@@ -21,15 +21,55 @@ const asset=(base:string,file:string)=>base+file.split('/').at(-1);
 const fmt=(n:number)=>n.toLocaleString('ja-JP',{maximumFractionDigits:2});
 const bins=(colors:string[],breaks:number[]):Key[]=>colors.map((color,i)=>({color:color.startsWith('#')?color:'#'+color,label:i===0?`${fmt(breaks[0])}未満`:i===breaks.length?`${fmt(breaks[i-1])}以上`:`${fmt(breaks[i-1])}以上${fmt(breaks[i])}未満`}));
 
-export function comparisonQuestion(from:AsiaField,to:AsiaField):string {
-  const pair=[from,to].sort().join(':');
-  if(pair==='agriculture:natural')return '作物・家畜の分布と、雨・気温・地形・水の位置を比べます。季節、灌漑、飼料や技術も生産を支えるため、自然条件だけで立地を決めつけずに読んでください。';
-  if(pair==='agriculture:industry')return '生産地と加工・輸送・市場を結ぶ地域を比べます。作物の面積や家畜の頭数と、産業の金額・貿易額は別の指標です。';
-  if(pair==='industry:population')return '人口の集中と産業の集積を比べます。雇用や市場、交通、人材の関係を考え、都市範囲の人口と行政区域の産業統計を区別してください。';
-  if(pair==='natural:population')return '人口の集中と平野・水系・気候の位置を比べます。土地条件に加え、交通・雇用・移動や歴史が居住の分布を形づくります。';
-  if(pair==='industry:natural')return '自然条件と産業の位置を比べます。資源や水の位置だけでなく、輸送、市場、技術や政策が立地を支える関係を考えてください。';
-  if(pair==='agriculture:population')return '生産地と人口・都市の位置を比べます。食料を供給する農地と消費する市場の関係を考え、重なりだけで調達先を断定しないでください。';
-  return '同じ地点・同じ縮尺で、二つの主題の分布を比べます。色の濃さを直接比べず、それぞれの単位・資料年・対象範囲を確認してください。';
+function comparisonMeaning(state:AsiaState,config:Config):{label:string;note:string} {
+  const topic=state.topic;
+  if(state.field==='natural'){
+    if(topic==='precipitation')return {label:'年降水量',note:'年間合計は季節配分や現在の雨を示しません。'};
+    if(topic==='basins')return {label:'流域',note:'色は集水域の区別で、現在の流量ではありません。'};
+    if(topic==='groundwater'||topic==='water')return {label:topic==='water'&&!config.water?'河川・湖':'地下水盆地と河川',note:'面色や近接から現在の水量・取水量は分かりません。'};
+    return {label:topic==='terrain'||topic==='landform'?'標高・地形':'気候区分',note:'自然条件だけで生産や居住は決まりません。'};
+  }
+  if(state.field==='agriculture'){
+    const selected=topic??(state.city?'rice':config.presentation?'overview':'rice'),layer=config.farming?.layers.find(t=>t.id===selected);
+    if(layer?.kind==='forest')return {label:'森林の分布',note:'森林分布は木材生産量・用途を示しません。'};
+    if(layer?.kind==='livestock')return {label:layer.title,note:'家畜密度は肉・乳の生産量や飼育方法を示しません。'};
+    if(selected==='overview')return {label:state.overlay==='water'?'米・雨・川の概略分布':state.farms==='none'?'農畜産の表示':state.farms==='livestock'?'家畜の代表地点':state.farms==='crop'?'作物の概略分布':'作物・家畜の概略分布',note:'分布の重なりだけで灌漑利用や飼料の調達先は分かりません。'};
+    return {label:layer?.title??'米の収穫面積',note:'収穫面積は生産量・収量と別で、灌漑や技術も関わります。'};
+  }
+  if(state.field==='population'){
+    if(topic==='ethnicity')return {label:'民族の居住域',note:'居住域は概略で、密度や個人の民族を示しません。'};
+    if(topic==='religion')return {label:'宗教と結びついた居住域',note:'居住域は概略で、密度や個人の信仰を示しません。'};
+    const social=config.social&&socialTopic(config.social,state);
+    if(social){const group=config.social?.groups?.find(g=>g.id===social.group),category=group?.id==='jp-nationality'?'外国人住民の国籍':group?.label.split('：').at(-1)?.replace(/の?構成$/,'');return {label:social.key==='overview'&&category?`${category}の最多区分`:social.title,note:social.key==='overview'?'色は区域内の最多区分で、人数や密度ではありません。':'資料の割合・分母を人数や人口密度と区別します。'};}
+    return topic==='urban'?{label:'都市範囲と人口密度',note:'都市範囲は行政区域・通勤圏と異なります。'}:{label:'人口密度',note:'密度から民族・信仰・勤務先は分かりません。'};
+  }
+  if(isTradeTopic(topic))return {label:topic==='trade-imports'?'商品輸入額':'商品輸出額',note:'国全体の金額で、生産地や港の取扱量は示しません。'};
+  const industry=config.industry&&industryTopic(config.industry,state);
+  if(!industry)return {label:'産業統計',note:'指標の単位と対象区域を確認します。'};
+  const label=industry.title;
+  if(industry.kind==='power')return {label,note:'MWは設備容量で、発電量ではありません。'};
+  if(industry.id==='cn-steel')return {label,note:'生産能力は実際の生産量・出荷額ではありません。'};
+  if(industry.kind==='admin')return {label,note:industry.id.startsWith('jp-')?'県の製造品出荷額は付加価値や工場の位置と異なります。':'州の付加価値は都市や工場ごとの値ではありません。'};
+  if(['manufacturing','industry','services','resource-rents'].includes(industry.id))return {label,note:industry.id==='resource-rents'?'生産費を差し引いたGDP比で、資源の売上額ではありません。':'GDP比は工場の集積や生産額の規模を示しません。'};
+  if(['industrial-employment','service-employment'].includes(industry.id))return {label,note:'全就業者に占める割合で、勤務先やGDP比ではありません。'};
+  if(['manufactured-exports','hightech-exports'].includes(industry.id))return {label,note:industry.id==='hightech-exports'?'製造品輸出に占める割合で、生産地や輸出額の規模ではありません。':'商品輸出に占める割合で、生産地や輸出額の規模ではありません。'};
+  if(industry.id==='gdp-growth')return {label,note:'前年比で、経済の規模や工場の位置を示しません。'};
+  if(industry.id==='real-gdp')return {label,note:'2015年価格のGDPで、現在の金額や工場の位置ではありません。'};
+  return {label,note:industry.kind==='steel'?'国全体の生産能力で、実際の生産量ではありません。':'国全体の値で、都市・工場の位置を示しません。'};
+}
+
+function comparisonStory(from:AsiaState,to:AsiaState,config:Config){
+  const samePoint=(a:readonly number[]|null|undefined,b:readonly number[]|null|undefined)=>!a&&!b||Boolean(a&&b&&a.every((v,i)=>Math.abs(v-b[i])<0.00001));
+  const selected=selectedPlaceReading(config.regionId,from),story=selected&&samePoint(from.point,selected.point??null)?selected:null;
+  const bridge=story?.bridges.find(b=>b.field===to.field&&b.topic===to.topic&&(b.detail??null)===(to.detail??null)&&to.place===from.place&&samePoint(to.point,b.point??(b.relocate?null:from.point)));
+  return bridge?story:null;
+}
+
+export function comparisonQuestion(from:AsiaState,to:AsiaState,config:Config):string {
+  const original=comparisonMeaning(from,config),current=comparisonMeaning(to,config),story=comparisonStory(from,to,config);
+  const lead=story?story.lead:`${original.label}と${current.label}を読み比べます。`;
+  if(story?.id==='north-china-wheat'&&to.field==='natural'&&to.topic==='precipitation')return lead+'収穫面積と灌漑を読むときは、年合計と雨の季節配分を分けます。';
+  return lead+[...new Set([original.note,current.note])].join('');
 }
 
 export function createAsiaComparison(root:HTMLElement,config:Config,context:AsiaStateContext,getState:()=>AsiaState){
@@ -50,7 +90,7 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
   function topicName(s:AsiaState){
     if(s.field==='natural')return asiaNaturalTopics.find(t=>t.id===(s.topic??'climate'))?.label??fieldNames[s.field];
     if(s.field==='agriculture')return s.topic==='overview'||!s.topic&&!s.city?'農畜産物の分布':config.farming?.layers.find(t=>t.id===(s.topic??'rice'))?.title??'米の収穫面積';
-    if(s.field==='industry')return config.industry?.topics.find(t=>t.id===s.topic)?.title??fieldNames[s.field];
+    if(s.field==='industry')return isTradeTopic(s.topic)?s.topic==='trade-imports'?'商品輸入額':'商品輸出額':config.industry?.topics.find(t=>t.id===s.topic)?.title??fieldNames[s.field];
     return config.social?.topics.find(t=>t.id===s.topic)?.title??(s.topic==='ethnicity'?'民族の居住域':s.topic==='religion'?'宗教と結びついた居住域':s.topic==='urban'?'都市の広がりと人口':'人口の分布');
   }
   function subject(s:AsiaState){
@@ -127,6 +167,9 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
     if(next===mainKey)return;mainKey=next;const seq=++mainRevision;mainLegend.textContent='地図の凡例を読み込んでいます。';
     void describe(state).then(current=>{if(seq!==mainRevision||next!==mainKey)return;mainLegend.replaceChildren();appendCompact(mainLegend,current,'main','地図');}).catch(()=>{if(seq===mainRevision)mainLegend.textContent='地図の凡例を取得できませんでした。詳細の資料を確認してください。';});
   }
+  function storyLead(story:ReturnType<typeof comparisonStory>){
+    const lead=document.createElement('p');lead.dataset.comparisonStoryLead='';lead.hidden=!story;lead.textContent=story?.lead??'';return lead;
+  }
   function render(state:AsiaState){
     renderMainLegend(state);
     if(panel)panel.hidden=!state.back;
@@ -136,12 +179,14 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
     const from=sourceState(),next=state.back+'|'+state.field+'|'+state.topic+'|'+state.detail+'|'+state.overlay+'|'+state.farms;
     if(back)back.textContent=next===key&&reading?.subject&&!from.story?`${reading.subject}の${topicName(from)}へ戻る`:`${subject(from)}へ戻る`;
     if(title)title.textContent=`${topicName(from)} × ${topicName(state)}`;
-    const story=asiaPlaceReadings.find(r=>r.region===config.regionId&&r.id===from.story);
-    if(summary)summary.textContent=comparisonQuestion(from.field,state.field);
+    const story=comparisonStory(from,state,config);
+    if(summary)summary.textContent=comparisonQuestion(from,state,config);
+    const existingLead=legend?.querySelector<HTMLElement>('[data-comparison-story-lead]');
+    if(existingLead){existingLead.hidden=!story;existingLead.textContent=story?.lead??'';}
     if(next===key)return;key=next;reading=null;hide();showFilled=false;const seq=++revision;
     if(legend)legend.textContent='元の分布と両方の凡例を読み込んでいます。';
     if(compact)compact.textContent='元と比較先の凡例を読み込んでいます。';
-    void Promise.all([describe(from),describe(state)]).then(([original,current])=>{if(seq!==revision||key!==next)return;reading=original;renderCompact(original,current);if(back&&original.subject&&!from.story)back.textContent=`${original.subject}の${topicName(from)}へ戻る`;if(legend){legend.replaceChildren();const toggle=document.createElement('button');toggle.type='button';toggle.dataset.comparisonOriginal='';toggle.textContent='元の色面を確認';toggle.setAttribute('aria-pressed','false');toggle.addEventListener('click',()=>{showFilled=!showFilled;toggle.setAttribute('aria-pressed',String(showFilled));toggle.textContent=showFilled?'比較の地図へ戻す':'元の色面を確認';if(map)void show(map);});legend.append(toggle);const detail=document.createElement('details'),label=document.createElement('summary');detail.open=true;label.textContent='元分布と比較先の全凡例';detail.append(label);if(story)detail.append(Object.assign(document.createElement('p'),{textContent:story.lead}));detail.append(Object.assign(document.createElement('p'),{textContent:'比較中の色付き輪郭は元の分布の色区分を示します。「元の色面を確認」で元の分布を同じ位置に表示します。比較先の数値は比較先の指標です。'}));appendKeys(detail,original);appendKeys(detail,current);legend.append(detail);}if(map)void show(map);}).catch(()=>{if(seq===revision){if(legend)legend.textContent='元分布・凡例を取得できませんでした。対象名付きの戻るボタンで元の解説を確認できます。';if(compact)compact.textContent='比較凡例を取得できませんでした。';}});
+    void Promise.all([describe(from),describe(state)]).then(([original,current])=>{if(seq!==revision||key!==next)return;reading=original;renderCompact(original,current);if(back&&original.subject&&!from.story)back.textContent=`${original.subject}の${topicName(from)}へ戻る`;if(legend){legend.replaceChildren();const toggle=document.createElement('button');toggle.type='button';toggle.dataset.comparisonOriginal='';toggle.textContent='元の色面を確認';toggle.setAttribute('aria-pressed','false');toggle.addEventListener('click',()=>{showFilled=!showFilled;toggle.setAttribute('aria-pressed',String(showFilled));toggle.textContent=showFilled?'比較の地図へ戻す':'元の色面を確認';if(map)void show(map);});legend.append(toggle);const detail=document.createElement('details'),label=document.createElement('summary');detail.open=true;label.textContent='元分布と比較先の全凡例';detail.append(label);detail.append(storyLead(comparisonStory(from,getState(),config)));detail.append(Object.assign(document.createElement('p'),{textContent:'比較中の色付き輪郭は元の分布の色区分を示します。「元の色面を確認」で元の分布を同じ位置に表示します。比較先の数値は比較先の指標です。'}));appendKeys(detail,original);appendKeys(detail,current);legend.append(detail);}if(map)void show(map);}).catch(()=>{if(seq===revision){if(legend)legend.textContent='元分布・凡例を取得できませんでした。対象名付きの戻るボタンで元の解説を確認できます。';if(compact)compact.textContent='比較凡例を取得できませんでした。';}});
   }
   function hide(){if(map?.getStyle())for(const id of ids)if(map.getLayer(id))map.setLayoutProperty(id,'visibility','none');}
   async function outlined(url:string):Promise<string>{
