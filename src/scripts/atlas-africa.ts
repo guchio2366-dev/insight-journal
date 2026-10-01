@@ -1,4 +1,4 @@
-import {countries,fields,metrics,regionNames,years,readState,writeState,metricById,valueAt,formatValue,fillFor,rankedCountries,palette,sources,defaultYear,defaultThemeRegion,type Field,type Region,type Metric} from '../data/atlas/africa-atlas.ts';
+import {countries,fields,metrics,regionNames,years,readState,writeState,canonicalTopic,canonicalWater,metricById,valueAt,formatValue,fillFor,rankedCountries,palette,sources,defaultYear,defaultThemeRegion,type Field,type Region,type Metric} from '../data/atlas/africa-atlas.ts';
 import {projectAfrica,africaWidth,africaHeight} from '../lib/atlas-africa-geometry.ts';
 import {themes,type AfricaTheme} from '../data/atlas/africa-themes.ts';
 
@@ -14,7 +14,6 @@ export function initializeAfricaAtlas() {
  const svgEl=(tag:string,attrs:Record<string,string|number>,t?:string)=>{const n=document.createElementNS(svgNS,tag);for(const [k,v]of Object.entries(attrs))n.setAttribute(k,String(v));if(t!==undefined)n.textContent=t;return n;};
  let state=readState(location.search);
  let countryPinned=false,regionPinned=false;
- let topic='';
  const topicItems={
   agriculture:[['farming','農畜産',false],['forestry','林業',false]],
   nature:[['climate','気候区分',true],['water','水資源',false],['terrain','地形',true],['elevation','標高',true]],
@@ -23,20 +22,27 @@ export function initializeAfricaAtlas() {
  } as const;
   function renderTopics(){
   const items=topicItems[state.field];
-  if(!items.some(item=>item[0]===topic))topic=state.field==='nature'?'water':state.field==='agriculture'&&state.metric==='AG.LND.FRST.ZS'?'forestry':items[0][0];
+  state.topic=canonicalTopic(state.field,state.metric,state.topic);
+  state.water=state.field==='nature'?canonicalWater(state.metric,state.water):'';
+  const topic=state.topic;
   const nav=query<HTMLElement>('[data-africa-subfields]');nav.replaceChildren();
+  nav.setAttribute('aria-label',state.field==='industry'?'収録済みの主要産業を選ぶ':'分野内の項目');
   root!.querySelectorAll('.africa-main>.africa-subitems').forEach(row=>row.remove());
   const belowMap=query<HTMLElement>('[data-africa-map-subfields]');belowMap.replaceChildren();
   if(state.field==='agriculture')belowMap.append(nav);else query<HTMLElement>('.africa-main').insertBefore(nav,query<HTMLElement>('.africa-workspace'));
-  for(const [id,label,planned] of items){const button=make('button',label) as HTMLButtonElement;button.type='button';button.dataset.africaTopic=id;button.setAttribute('aria-pressed',String(topic===id));if(planned)button.append(make('small','未整備'));nav.append(button);}
+  if(state.field==='industry'){
+   const labels:Record<string,string>={'copperbelt-connections':'銅鉱業','casablanca-manufacturing':'カサブランカの製造業'};
+   for(const theme of themes.filter(t=>t.field==='industry')){const button=make('button',labels[theme.id]??theme.title) as HTMLButtonElement;button.type='button';button.dataset.theme=theme.id;button.title=theme.title;button.setAttribute('aria-pressed',String(state.theme===theme.id));nav.append(button);}
+  }else for(const [id,label,planned] of items){const button=make('button',label) as HTMLButtonElement;button.type='button';button.dataset.africaTopic=id;button.setAttribute('aria-pressed',String(topic===id));if(planned)button.append(make('small','未整備'));nav.append(button);}
   if(state.field==='industry'||state.field==='population'){
    const caption=make('p',state.field==='industry'?'代表地点と国別統計から、産業と交通・市場のつながりを読む。':'人種・民族・宗教：未整備。代表地点の位置と国全体の人口を表示。都市別の人口密度分布は未整備。');caption.className='africa-subfield-caption';nav.append(caption);
   }
   if(state.field==='nature'&&topic==='water'){
    const row=make('div');row.className='africa-subitems';row.setAttribute('role','group');row.setAttribute('aria-label','水資源の項目');
-   for(const [id,label,planned] of [['river','河川・地下水',false],['rain','降水量',false],['basin','河川の流域',true]] as const){const button=make('button',label) as HTMLButtonElement;button.type='button';button.dataset.africaWater=id;button.setAttribute('aria-pressed',String(id===(state.metric==='ER.H2O.INTR.PC'?'river':'rain')));if(planned)button.append(make('small','未整備'));row.append(button);}nav.after(row);
+   for(const [id,label,planned] of [['river','河川・地下水',false],['rain','降水量',false],['basin','河川の流域',true]] as const){const button=make('button',label) as HTMLButtonElement;button.type='button';button.dataset.africaWater=id;button.setAttribute('aria-pressed',String(id===state.water));if(planned)button.append(make('small','未整備'));row.append(button);}nav.after(row);
   }
   const planned=items.find(item=>item[0]===topic)?.[2];const status=query<HTMLElement>('[data-africa-subfield-status]');status.hidden=!planned;if(planned)status.textContent=`${items.find(item=>item[0]===topic)?.[1]}の分布データは未整備です。下の地図は既存の国別統計と代表地点を補助表示しています。`;
+  if(state.field==='nature'&&topic==='water'&&state.water==='basin'){status.hidden=false;status.textContent='河川の流域分布は未整備です。表示している国の色やナイルの近似線は流域境界ではありません。';}
  }
  function readSelectionPins(){const p=new URLSearchParams(location.search);countryPinned=countries.some(c=>c.code===p.get('place'));regionPinned=Object.hasOwn(regionNames,p.get('region')??'');}
  readSelectionPins();
@@ -107,7 +113,7 @@ export function initializeAfricaAtlas() {
   const compare=query<HTMLButtonElement>('[data-theme-comparison]');compare.hidden=!!state.context;compare.textContent=`${metricById(theme.compareMetric).label}と重ねる`;
   const back=query<HTMLButtonElement>('[data-theme-return]');back.hidden=!state.context;back.textContent=`← ${theme.title}へ戻る${countryPinned?`：${countries.find(c=>c.code===state.place)?.name}`:''}`;
   const choices=query<HTMLElement>('[data-themes]');choices.replaceChildren();
-  for(const t of themes.filter(t=>t.field===state.field)){const button=make('button',t.title) as HTMLButtonElement;button.type='button';button.dataset.theme=t.id;button.setAttribute('aria-pressed',String(t.id===theme.id));choices.append(button);}
+  if(state.field!=='industry')for(const t of themes.filter(t=>t.field===state.field)){const button=make('button',t.title) as HTMLButtonElement;button.type='button';button.dataset.theme=t.id;button.setAttribute('aria-pressed',String(t.id===theme.id));choices.append(button);}
   map.dataset.theme=theme.id;map.dataset.context=state.context;
  }
  function renderTrend(metric:Metric) {
@@ -189,10 +195,10 @@ export function initializeAfricaAtlas() {
  function chooseCountry(code:string){if(!countries.some(c=>c.code===code))return;countryPinned=true;state.place=code;if(state.compare===code)state.compare='';if(state.region!=='all')state.region=countries.find(c=>c.code===code)!.region as Region;if(state.zoom==='theme'&&!themes.find(t=>t.id===state.theme)!.places.includes(code))state.zoom='all';render(true);}
  root.addEventListener('click',event=>{
   const target=(event.target as Element).closest<HTMLElement>('[data-field],[data-focus-country],[data-compare-country],[data-country-path],[data-country-marker],[data-zoom],[data-reset],button[data-theme],[data-theme-comparison],[data-theme-return],[data-africa-topic],[data-africa-water]');if(!target)return;
-  if(target.dataset.africaTopic){topic=target.dataset.africaTopic;if(topic==='forestry'){state.metric='AG.LND.FRST.ZS';state.context='';}if(topic==='farming'&&state.metric==='AG.LND.FRST.ZS'){state.metric='AG.LND.ARBL.ZS';state.context='';}render(true);return;}
-  if(target.dataset.africaWater){if(target.dataset.africaWater==='basin'){const status=query<HTMLElement>('[data-africa-subfield-status]');status.hidden=false;status.textContent='河川の流域分布は未整備です。表示している国の色やナイルの近似線は流域境界ではありません。';return;}state.metric=target.dataset.africaWater==='river'?'ER.H2O.INTR.PC':'AG.LND.PRCP.MM';state.context='';render(true);return;}
+  if(target.dataset.africaTopic){state.topic=target.dataset.africaTopic;if(state.topic==='forestry'){state.metric='AG.LND.FRST.ZS';state.context='';}if(state.topic==='farming'&&state.metric==='AG.LND.FRST.ZS'){state.metric='AG.LND.ARBL.ZS';state.context='';}render(true);return;}
+  if(target.dataset.africaWater){state.water=target.dataset.africaWater;if(state.water!=='basin'){state.metric=state.water==='river'?'ER.H2O.INTR.PC':'AG.LND.PRCP.MM';state.context='';}render(true);return;}
   if(target.hasAttribute('data-reset')){state=readState('');countryPinned=false;regionPinned=false;render(true);return;}
-  if(target.dataset.field){if(target.dataset.field===state.field)return;state.field=target.dataset.field as Field;state.metric=metrics.find(m=>m.field===state.field)!.id;chooseTheme(themes.find(t=>t.field===state.field)!.id);render(true);return;}
+  if(target.dataset.field){if(target.dataset.field===state.field)return;state.field=target.dataset.field as Field;state.metric=metrics.find(m=>m.field===state.field)!.id;state.topic='';state.water='';chooseTheme(themes.find(t=>t.field===state.field)!.id);render(true);return;}
   if(target.dataset.theme){chooseTheme(target.dataset.theme);render(true);return;}
   if(target.hasAttribute('data-theme-comparison')){state.context=themes.find(t=>t.id===state.theme)!.compareMetric;render(true);return;}
   if(target.hasAttribute('data-theme-return')){state.context='';render(true);return;}
@@ -201,7 +207,7 @@ export function initializeAfricaAtlas() {
   chooseCountry(target.dataset.focusCountry??target.dataset.countryPath??target.dataset.countryMarker??'');
  });
  query<HTMLButtonElement>('[data-latest]').addEventListener('click',()=>{state.year=defaultYear(state.context||state.metric);render(true);});
- query<HTMLSelectElement>('[data-metric]').addEventListener('change',event=>{state.metric=(event.target as HTMLSelectElement).value;state.context='';render(true);});
+ query<HTMLSelectElement>('[data-metric]').addEventListener('change',event=>{state.metric=(event.target as HTMLSelectElement).value;state.context='';state.topic='';state.water='';render(true);});
  query<HTMLSelectElement>('[data-year]').addEventListener('change',event=>{state.year=Number((event.target as HTMLSelectElement).value);render(true);});
  query<HTMLSelectElement>('[data-region]').addEventListener('change',event=>{regionPinned=true;state.region=(event.target as HTMLSelectElement).value as Region;state.zoom=state.region==='all'?'all':'region';render(true);});
  query<HTMLSelectElement>('[data-place]').addEventListener('change',event=>chooseCountry((event.target as HTMLSelectElement).value));

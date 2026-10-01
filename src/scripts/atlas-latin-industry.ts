@@ -63,6 +63,8 @@ export function initLatinIndustry(root:HTMLElement){
   root.dataset.industryMode=source?'comparison':'normal';root.dataset.layer=state.layer;root.dataset.place=state.place;root.dataset.scope=state.scope;
   q<HTMLSelectElement>('[data-industry-layer]').value=state.layer;q<HTMLSelectElement>('[data-industry-place]').value=state.place;q<HTMLSelectElement>('[data-industry-scope]').value=state.scope;
   const canalOption=q<HTMLSelectElement>('[data-industry-layer]').querySelector<HTMLOptionElement>('option[value=canal]');if(canalOption)canalOption.disabled=!!source&&source.field!=='nature';
+  for(const button of root.querySelectorAll<HTMLButtonElement>('[data-industry-layer-option]')){button.setAttribute('aria-pressed',String(button.dataset.industryLayerOption===state.layer));button.disabled=button.dataset.industryLayerOption==='canal'&&!!source&&source.field!=='nature';}
+  text('[data-industry-layer-status]',state.layer==='canal'?'パナマ運河・2024会計年度。淡水・物流の仕組み図です。':'2024年・国別の輸出構成。代表地域を地図の下から選べます。');
   q<HTMLButtonElement>('[data-industry-only]').setAttribute('aria-pressed',String(state.only));q<HTMLButtonElement>('[data-industry-only]').disabled=state.place==='all';
   q<HTMLButtonElement>('[data-industry-fallback]').setAttribute('aria-pressed',String(state.fallback));
   shown('[data-industry-normal]',!source);shown('[data-industry-comparison]',!!source);shown('[data-industry-return]',!!source);
@@ -118,6 +120,7 @@ export function initLatinIndustry(root:HTMLElement){
  q('[data-industry-fallback]').addEventListener('click',()=>update({fallback:!state.fallback}));
  root.addEventListener('click',event=>{
   const target=event.target as Element;
+  const layer=target.closest<HTMLButtonElement>('[data-industry-layer-option]');if(layer){if(!layer.disabled&&allowed.includes(layer.dataset.industryLayerOption!))update({layer:layer.dataset.industryLayerOption!});return;}
   const topic=target.closest<HTMLElement>('[data-industry-topic]');if(topic){const reading=latinIndustryReadings.find(r=>r.id===topic.dataset.industryTopic);if(reading)update({layer:reading.layer,place:reading.place,scope:reading.scope as LatinLearningState['scope'],only:false,source:undefined});return;}
   const country=target.closest<HTMLElement>('[data-industry-country],[data-lp-country],[data-lp-symbol],[data-nature-country],[data-latin-agriculture-country]');if(country){const place=country.dataset.industryCountry??country.dataset.lpCountry??country.dataset.lpSymbol??country.dataset.natureCountry??country.dataset.latinAgricultureCountry;if(place&&latinCountries.some(c=>c.code===place))update({place});}
  });

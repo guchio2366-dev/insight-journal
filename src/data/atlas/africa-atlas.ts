@@ -57,7 +57,16 @@ export function fillFor(value:number|null,metric:Metric):string {
   const index=metric.breaks.findIndex(b=>value<b);
   return palette[index<0?palette.length-1:index];
 }
-export type State={field:Field;metric:string;year:number;place:string;compare:string;region:Region;zoom:'all'|'region'|'country'|'theme';theme:string;context:string};
+export type State={field:Field;metric:string;year:number;place:string;compare:string;region:Region;zoom:'all'|'region'|'country'|'theme';theme:string;context:string;topic:string;water:string};
+export function canonicalTopic(field:Field,metric:string,requested=''):string {
+  if(field==='agriculture')return metric==='AG.LND.FRST.ZS'?'forestry':'farming';
+  if(field==='nature')return ['climate','terrain','elevation'].includes(requested)?requested:'water';
+  if(field==='population')return ['ethnicity','religion'].includes(requested)?requested:'distribution';
+  return 'regional';
+}
+export function canonicalWater(metric:string,requested=''):string {
+  return requested==='basin'?'basin':metric==='ER.H2O.INTR.PC'?'river':'rain';
+}
 export function defaultThemeRegion(themeId:string):Region {
   const theme=themes.find(t=>t.id===themeId)??themes[0];
   const regions=[...new Set(theme.places.map(code=>countries.find(c=>c.code===code)!.region))];
@@ -74,9 +83,11 @@ export function readState(search:string):State {
   const place=exists(p.get('place'))?p.get('place')!:theme.places[0];
   const region=p.get('region')??defaultThemeRegion(theme.id);
   const context=p.get('context')===theme.compareMetric?theme.compareMetric:'';
-  return {field:safeField,metric:metric.id,year:years.includes(Number(p.get('year')))?Number(p.get('year')):2021,place,compare:exists(p.get('compare'))&&p.get('compare')!==place?p.get('compare')!:'',region:Object.hasOwn(regionNames,region)?region as Region:'all',zoom:['all','region','country','theme'].includes(zoom)?zoom as State['zoom']:'theme',theme:theme.id,context:context??''};
+  return {field:safeField,metric:metric.id,year:years.includes(Number(p.get('year')))?Number(p.get('year')):2021,place,compare:exists(p.get('compare'))&&p.get('compare')!==place?p.get('compare')!:'',region:Object.hasOwn(regionNames,region)?region as Region:'all',zoom:['all','region','country','theme'].includes(zoom)?zoom as State['zoom']:'theme',theme:theme.id,context:context??'',topic:canonicalTopic(safeField,metric.id,p.get('topic')??''),water:safeField==='nature'?canonicalWater(metric.id,p.get('water')??''):''};
 }
 export function writeState(state:State,url:URL) {
+  state.topic=canonicalTopic(state.field,state.metric,state.topic);
+  state.water=state.field==='nature'?canonicalWater(state.metric,state.water):'';
   for(const [key,value] of Object.entries(state)) value===''?url.searchParams.delete(key):url.searchParams.set(key,String(value));
   return url;
 }

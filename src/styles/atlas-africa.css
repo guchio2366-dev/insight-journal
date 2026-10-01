@@ -288,3 +288,14 @@
 .africa-main>.africa-subitems small{font-size:13px}
 @media(min-width:960px) and (max-width:1199px){.africa-atlas[data-field=nature]:has(.africa-main>.africa-subitems) .africa-map{height:500px;min-height:500px;max-height:500px;aspect-ratio:auto}}
 @media(max-width:959px){.africa-main>.africa-subitems{height:auto;min-height:50.5px}.africa-main>.africa-subitems button{height:auto}}
+
+/* Actual industry entries use the existing row; agriculture controls sit inside the map. */
+.africa-atlas[data-field=industry] .africa-main>.africa-subfields{column-gap:8px;row-gap:0;align-items:flex-start;align-content:flex-start}
+.africa-atlas[data-field=industry] .africa-main>.africa-subfields button{flex:0 0 auto;box-sizing:border-box;height:44px;min-height:44px;padding:8px 10px;border:1px solid #bac9c6;border-radius:4px;background:#fff;color:#243f48;font-size:14px;font-weight:400;line-height:26px}
+.africa-atlas[data-field=industry] .africa-main>.africa-subfields button[aria-pressed=true]{background:#224c59;color:#fff}
+.africa-atlas[data-field=industry] .africa-subfield-caption{margin:0;font-size:13px;line-height:19.5px}
+.africa-atlas[data-field=agriculture] .africa-map-card{position:relative}
+.africa-atlas[data-field=agriculture] .africa-map-subfields{position:absolute;left:10px;top:10px;z-index:2;max-width:calc(100% - 20px)}
+.africa-atlas[data-field=agriculture] .africa-map-subfields .africa-subfields{height:44px;min-height:44px;width:auto;padding:0;border:0;background:transparent;gap:8px;flex-wrap:nowrap}
+.africa-atlas[data-field=agriculture] .africa-map-subfields button{flex:0 0 auto;box-sizing:border-box;height:44px;min-height:44px;padding:8px 10px;border:1px solid #bac9c6;border-radius:4px;background:#fff;color:#243f48;font-size:14px;font-weight:400;line-height:26px}
+.africa-atlas[data-field=agriculture] .africa-map-subfields button[aria-pressed=true]{background:#224c59;color:#fff}

@@ -110,7 +110,8 @@ export function initLatinPopulation(root:HTMLElement){
  primary.addEventListener('keydown',event=>{if(state.fallback||!['Enter',' '].includes(event.key))return;const target=(event.target as Element).closest<SVGElement>('[data-lp-country],[data-lp-symbol]');if(!target)return;event.preventDefault();const code=target.dataset.lpCountry??target.dataset.lpSymbol!;choose(code);root.querySelector<SVGGraphicsElement>(`[data-lp-${state.layer==='density'?'country':'symbol'}="${code}"]`)?.focus();});
  q<HTMLAnchorElement>('[data-lp-scale-link]').addEventListener('click',event=>{if(event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;event.preventDefault();state=latinComparisonState(state,'population','scale');update({});});
  for(const back of root.querySelectorAll<HTMLAnchorElement>('[data-lp-return],[data-lp-map-return]'))back.addEventListener('click',event=>{if(event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey||state.source?.field!=='population')return;event.preventDefault();const source=state.source;state={...source,field:'population',fallback:source.fallback??state.fallback,source:undefined};update({});});
- window.addEventListener('popstate',()=>{state=readLatinLearningState(location.search,'population',allowed,'density');render();});
+ const restore=()=>{state=readLatinLearningState(location.search,'population',allowed,'density');render();};
+ window.addEventListener('popstate',restore);window.addEventListener('latin-section-change',restore);
  render();history.replaceState(null,'',`?${writeLatinLearningState(state)}`);
  for(const control of root.querySelectorAll<HTMLSelectElement|HTMLButtonElement>('[data-lp-layer-select],[data-lp-scope-select],[data-lp-place-select],[data-lp-all],[data-lp-quick]'))control.disabled=false;
  q<HTMLDetailsElement>('[data-lp-country-table]').open=false;

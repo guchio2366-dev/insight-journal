@@ -18,6 +18,8 @@ const bundle=await build({stdin:{contents:`
  export {initCountryOverview} from './src/scripts/atlas-country-overview';
  export {initOverviewMap} from './src/scripts/atlas-overview-map';
  export {initLatinWorkspaceLayout} from './src/scripts/atlas-latin-workspace-layout';
+ export {initialiseLatinAgriculture as initLatinAgriculture} from './src/scripts/atlas-latin-agriculture';
+ export {initLatinPopulation} from './src/scripts/atlas-latin-america-population';
  export {initLatinOverviewLinks} from './src/scripts/atlas-latin-overview-layout';
  import './src/scripts/atlas-latin-nature';
  export {initOceaniaLearningAtlas} from './src/scripts/atlas-oceania-learning';`,loader:'ts',resolveDir:repo},bundle:true,write:false,format:'iife',globalName:'RegionalClient',platform:'browser',plugins:[localModules],logLevel:'silent',define:{'import.meta.env.BASE_URL':JSON.stringify('/insight-journal')}});
@@ -29,7 +31,7 @@ after(()=>stop());
 function open(relative,init){
  const url=new URL(relative,'https://example.test/insight-journal/atlas/'),win=new Window({url:url.href,settings:{enableJavaScriptEvaluation:true,disableCSSFileLoading:true,disableJavaScriptFileLoading:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
  const directory=url.pathname.replace(/^\/insight-journal\//,'');
- win.document.body.innerHTML=readFileSync(path.join(repo,'dist',directory,'index.html'),'utf8').replace(/<script(?![^>]*type="application\/json")[^>]*>[\s\S]*?<\/script>/g,'');
+ win.document.write(readFileSync(path.join(repo,'dist',directory,'index.html'),'utf8').replace(/<script(?![^>]*type="application\/json")[^>]*>[\s\S]*?<\/script>/g,'').replace(/<style>[\s\S]*?<\/style>/g,''));
  win.ResizeObserver=class{observe(){} disconnect(){}};
  Object.defineProperty(win.document,'fonts',{value:{ready:Promise.resolve()}});
  win.fetch=async href=>{const asset=new URL(href,url),file=path.join(repo,'dist',asset.pathname.replace(/^\/insight-journal\//,''));return {ok:true,blob:async()=>new win.Blob([readFileSync(file)],{type:'image/png'})};};
@@ -72,4 +74,47 @@ test('Latin overview preserves incoming regional scope, then updates scope when 
  const win=open('latin-america/overview/?country=CRI&scope=central&only=1&fallback=1',overviewInit['latin-america']);
  try{await win.happyDOM.waitUntilComplete();for(const link of win.document.querySelectorAll('[data-overview-field]'))assertParameters(link,{place:'CRI',scope:'central'});const picker=win.document.querySelector('[data-overview-country]');picker.value='BRA';picker.dispatchEvent(new win.Event('change',{bubbles:true}));await win.happyDOM.waitUntilComplete();for(const link of win.document.querySelectorAll('[data-overview-field]'))assertParameters(link,{place:'BRA',scope:'country'});win.history.replaceState({},'','?country=CRI&scope=central&only=1&fallback=1');win.dispatchEvent(new win.PopStateEvent('popstate'));await win.happyDOM.waitUntilComplete();for(const link of win.document.querySelectorAll('[data-overview-field]'))assertParameters(link,{place:'CRI',scope:'central'});}
  finally{await win.happyDOM.close();}
+});
+
+function assertLatinSection(win,section){
+ const root=win.document.querySelector('[data-latin-workspace]');
+ assert.equal(new URL(win.location).searchParams.get('section'),section==='climate'||section==='agriculture'||section==='population'?null:section);
+ assert.equal(root.classList.contains('has-unavailable-section'),!['climate','agriculture','population'].includes(section));
+ assert.equal(root.querySelector(`[data-latin-section="${section}"]`).getAttribute('aria-pressed'),'true');
+}
+
+test('Latin actual nature controller restores water and rainfall categories on reload and country history round trips',async()=>{
+ const win=open('latin-america/nature/?place=CRI&scope=country&only=1',fieldInit['latin-america']);
+ try{
+  await win.happyDOM.waitUntilComplete();
+  win.document.querySelector('[data-latin-section="water"]').click();
+  win.document.querySelector('[data-latin-section="rainfall"]').click();
+  await win.happyDOM.waitUntilComplete();assertLatinSection(win,'rainfall');
+  assert.equal(win.document.querySelector('[data-latin-section="water"]').getAttribute('aria-pressed'),'true');
+  const beforeCountry=win.location.href,reload=open(beforeCountry,fieldInit['latin-america']);
+  try{await reload.happyDOM.waitUntilComplete();assertLatinSection(reload,'rainfall');assert.equal(reload.document.querySelector('[data-latin-water-items]').hidden,false);}finally{await reload.happyDOM.close();}
+  const picker=win.document.querySelector('select[data-nature-place]');picker.value='BRA';picker.dispatchEvent(new win.Event('change',{bubbles:true}));await win.happyDOM.waitUntilComplete();assertLatinSection(win,'rainfall');assert.equal(new URL(win.location).searchParams.get('place'),'BRA');
+  const afterCountry=win.location.href;
+  win.history.back();await win.happyDOM.waitUntilComplete();assert.equal(win.location.href,beforeCountry);assertLatinSection(win,'rainfall');assert.equal(picker.value,'CRI');
+  win.history.forward();await win.happyDOM.waitUntilComplete();assert.equal(win.location.href,afterCountry);assertLatinSection(win,'rainfall');assert.equal(picker.value,'BRA');
+  win.document.querySelector('[data-latin-section="climate"]').click();await win.happyDOM.waitUntilComplete();assertLatinSection(win,'climate');
+  win.history.back();await win.happyDOM.waitUntilComplete();assertLatinSection(win,'rainfall');
+  win.history.forward();await win.happyDOM.waitUntilComplete();assertLatinSection(win,'climate');
+ }finally{await win.happyDOM.close();}
+});
+
+for(const [field,section,init,placeSelector,available] of [
+ ['agriculture','forestry','RegionalClient.initLatinAgriculture(document.querySelector("[data-latin-field=agriculture]"));RegionalClient.initLatinWorkspaceLayout();','[data-latin-agriculture-place]','agriculture'],
+ ['population','ethnicity','RegionalClient.initLatinPopulation(document.querySelector("[data-latin-field=population]"));RegionalClient.initLatinWorkspaceLayout();','[data-lp-place-select]','population'],
+])test(`Latin actual ${field} controller retains its unavailable category on reload and restores the ready map on history navigation`,async()=>{
+ const win=open(`latin-america/${field}/?place=CRI&scope=country&only=1`,init);
+ try{
+  await win.happyDOM.waitUntilComplete();win.document.querySelector(`[data-latin-section="${section}"]`).click();await win.happyDOM.waitUntilComplete();assertLatinSection(win,section);
+  const selectedUrl=win.location.href,reload=open(selectedUrl,init);
+  try{await reload.happyDOM.waitUntilComplete();assertLatinSection(reload,section);}finally{await reload.happyDOM.close();}
+  const picker=win.document.querySelector(placeSelector);picker.value='BRA';picker.dispatchEvent(new win.Event('change',{bubbles:true}));await win.happyDOM.waitUntilComplete();assertLatinSection(win,section);
+  win.history.back();await win.happyDOM.waitUntilComplete();assert.equal(win.location.href,selectedUrl);assertLatinSection(win,section);assert.equal(picker.value,'CRI');
+  win.document.querySelector(`[data-latin-section="${available}"]`).click();await win.happyDOM.waitUntilComplete();assertLatinSection(win,available);
+  assert.equal(win.document.querySelector('.latin-fields a[aria-current]').href.includes('section='),false);
+ }finally{await win.happyDOM.close();}
 });

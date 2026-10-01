@@ -196,3 +196,17 @@
  .latin-workspace.latin-population .latin-field-status{height:auto;margin:7px 0 0;padding:0;font-size:13px;line-height:19.5px}
  .latin-workspace.latin-nature .latin-subfield-band{width:calc(100% - 8px)}
 }
+
+/* Use the existing distributions as compact industry controls and keep the map frame. */
+@media(min-width:960px){
+ .latin-workspace.latin-industry .latin-subfield-band{height:80.5px;padding:6px 0 0;border:0;background:transparent}
+ .latin-workspace.latin-industry .latin-subfield-band .latin-subfields{display:flex;gap:4px;flex-wrap:nowrap;border:0;background:transparent;padding:0}
+ .latin-workspace.latin-industry .latin-subfield-band .latin-subfields button{flex:none;box-sizing:border-box;height:44px;min-height:44px;width:auto;padding:8px 15px;border:1px solid transparent;border-radius:4px;background:transparent;color:#344951;font:700 13px/1.3 var(--sans);white-space:nowrap}
+ .latin-workspace.latin-industry .latin-subfield-band .latin-subfields button[aria-pressed=true]{background:#35515d;color:#fff}
+ .latin-workspace.latin-industry .latin-subfield-band .latin-subfields button:hover{border-color:#829c94}
+ .latin-workspace.latin-industry .latin-subfield-band .latin-subfields button:disabled{opacity:.65;cursor:not-allowed}
+ .latin-workspace.latin-industry .latin-field-status{padding:0;font-size:13px}
+ .latin-workspace.latin-agriculture .latin-agriculture-subfields{position:absolute;top:10px;left:10px;z-index:5;display:flex;gap:4px;margin:0;border:0;background:transparent;padding:0;max-width:45%}
+ .latin-workspace.latin-agriculture .latin-agriculture-subfields button{flex:none;box-sizing:border-box;height:44px;min-height:44px;padding:8px 10px;border:1px solid #c9cec4;border-radius:4px;background:#fffefa;color:#344951;font-size:14px;font-weight:700;line-height:24.5px;white-space:nowrap}
+ .latin-workspace.latin-agriculture .latin-agriculture-subfields button[aria-pressed=true]{background:#35515d;color:#fff}
+}
