@@ -26,6 +26,21 @@ test('Latin agriculture: official source, output and original raster hashes agre
    assert.equal(sha(readFileSync(new URL(`../../public/assets/atlas/${directory}/${name}`,import.meta.url))),asset.sha256,name);
   }
  }
+ const precision=provenance.processing.rounding;
+ assert.equal(precision.qclExtraction.scope,'FAOSTAT 2024 country records only');assert.equal(precision.qclExtraction.numericRounding,false);
+ assert.equal(precision.inheritedSpatial.crops.countryTotalsDecimalPlaces,2);assert.equal(precision.inheritedSpatial.crops.queryValuesDecimalPlaces,2);
+ assert.equal(precision.inheritedSpatial.cattle.meanDensityDecimalPlaces,4);assert.equal(precision.inheritedSpatial.cattle.queryDensityDecimalPlaces,4);
+ assert.equal(precision.inheritedSpatial.cattle.estimatedHeadDecimalPlaces,2);assert.equal(precision.inheritedSpatial.cattle.validAreaKm2DecimalPlaces,2);
+ assert.match(precision.inheritedSpatial.currentPreparation,/does not recover/);assert.match(precision.display.method,/does not change downloadable quantities/);
+ let spatialRecords=0;
+ for(const l of data.layers){
+  const manifest=json(`public/assets/atlas/${l.id==='cattle'?'latin-america-livestock-v1':'latin-america-agriculture-v1'}/manifest.json`).layers.find(item=>item.id===l.id);
+  for(const c of l.countries){const original=manifest.countries.find(item=>item.code===c.code);assert.equal(c.spatial.value,l.id==='cattle'?original.meanDensity:original.value);spatialRecords++;}
+ }
+ assert.equal(spatialRecords,136);assert.equal(provenance.validation.independentReview.spatialRecordsComparedWithInheritedManifests,spatialRecords);
+ assert.equal(provenance.validation.independentReview.qclRecordsComparedWithSelectedCsv,204);
+ assert.equal(provenance.validation.independentReview.originalZipFullyReextracted,false);assert.equal(provenance.validation.independentReview.compressedSpatialShardsFullyReextracted,false);
+ assert.deepEqual(provenance,json('public/assets/atlas/latin-agriculture-v2/provenance.json'));
 });
 
 test('Latin agriculture: calendar-2024 production, stocks and source flags stay separate',()=>{

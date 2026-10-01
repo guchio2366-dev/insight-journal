@@ -1,0 +1,98 @@
+{
+  "version": 1,
+  "retrievedDate": "2026-10-01",
+  "datePrecision": "Original retrieval recorded to calendar date; exact download times were not recorded.",
+  "scope": "Minimal factual evidence for the existing learning text and Panama diagram. No article body, quotations, photographs or source maps are included.",
+  "retainedFiles": [
+    "industry-selected-2024.csv",
+    "manufactures-all-2023-2024.json",
+    "manufactures-glossary.html",
+    "manufactures-metadata.json",
+    "ores-all-2023-2024.json",
+    "ores-glossary.html",
+    "ores-metadata.json",
+    "provenance.json",
+    "reading-facts.json",
+    "wdi-catalog.html"
+  ],
+  "historicalRetentionNote": "The original HTML snapshots were committed before this source review. Excluding them from the new public tree does not erase earlier Git history; no history rewrite is performed.",
+  "articles": [
+    {
+      "id": "chile-minerals-2024",
+      "publisher": "U.S. Geological Survey",
+      "url": "https://www.usgs.gov/centers/national-minerals-information-center/chile",
+      "retrievedDate": "2026-10-01",
+      "originalSnapshot": {
+        "file": "chile-minerals-2024.html",
+        "bytes": 132212,
+        "sha256": "39c57c4798417215abe841281cf187518d1e9f843b3d71781f062eba699ccac8",
+        "retainedInCurrentPublicTree": false,
+        "localAuditCopyMayExist": true
+      },
+      "reuseDecision": "Retain cited official mineral facts, omit the full web snapshot to match the declared factual-only scope. This does not assert a restriction on USGS-authored government data; third-party media are not redistributed.",
+      "quantitativeFacts": [
+        {"measure": "China share of Chile copper exports", "referenceYear": 2024, "value": 52, "unit": "%", "precision": "approximately", "denominator": "Chile copper exports as reported by USGS; not all merchandise exports or the WDI map denominator"}
+      ],
+      "facts": ["Chile's copper mining and export trade connect mineral deposits, processing and transport with overseas demand."]
+    },
+    {
+      "id": "costa-rica-trade-2024",
+      "publisher": "Instituto Nacional de Estadistica y Censos, Costa Rica",
+      "url": "https://admin.inec.cr/en/node/56908",
+      "retrievedDate": "2026-10-01",
+      "referenceYear": 2024,
+      "originalSnapshot": {
+        "file": "costa-rica-trade-2024.html",
+        "bytes": 30189,
+        "sha256": "edf095d7e5274a70f37eb7b67da5f1f35aa79e21b7a4656af8beab8c41e0095d",
+        "retainedInCurrentPublicTree": false,
+        "localAuditCopyMayExist": true
+      },
+      "fullArticleRedistribution": "Not established by the source review; no blanket government-site reuse permission is inferred.",
+      "reuseDecision": "Keep the URL and a factual summary; exclude the full HTML article from the new public tree.",
+      "quantitativeFacts": [],
+      "facts": ["INEC's definitive 2024 customs summary identifies medical instruments and fruit among Costa Rica's main exports, a prominent free-zone export sector, and the United States as its main trading partner."],
+      "scopeNote": "These customs facts support the reading; they do not replace the WDI export-share observations."
+    },
+    {
+      "id": "dominican-supply-chain-2024",
+      "publisher": "Presidencia de la Republica Dominicana",
+      "url": "https://presidencia.gob.do/noticias/consejo-nacional-de-zonas-francas-de-exportacion-realiza-exitosa-ronda-de-negocios-con",
+      "retrievedDate": "2026-10-01",
+      "referenceYear": 2024,
+      "originalSnapshot": {
+        "file": "dominican-supply-chain-2024.html",
+        "bytes": 60353,
+        "sha256": "7a1921ee2748502ed8208f6bb24273f841b6ab875e115a8276753f6c9ec253a2",
+        "retainedInCurrentPublicTree": false,
+        "localAuditCopyMayExist": true
+      },
+      "fullArticleRedistribution": "Not established by the source review; no blanket government-site reuse permission is inferred.",
+      "reuseDecision": "Keep the URL and a factual summary; exclude the full HTML article from the new public tree.",
+      "quantitativeFacts": [],
+      "facts": ["The 2024 government supply-chain initiative connects local and international suppliers with free-zone manufacturers, including medical-device and electronic-component producers."]
+    },
+    {
+      "id": "panama-canal-fy2024",
+      "publisher": "Autoridad del Canal de Panama",
+      "url": "https://pancanal.com/en/the-canals-fy-2024-financial-results-reaffirm-its-focus-on-sustainability-and-vision-for-the-future/",
+      "retrievedDate": "2026-10-01",
+      "period": {"label": "Fiscal year 2024", "start": "2023-10-01", "end": "2024-09-30"},
+      "originalSnapshot": {
+        "file": "panama-canal-fy2024.html",
+        "bytes": 155114,
+        "sha256": "1624f6f13d337931a3059a1f9df3089e2c48c0ddbc843dae75c3f90dd6af6bb5",
+        "retainedInCurrentPublicTree": false,
+        "localAuditCopyMayExist": true
+      },
+      "fullArticleRedistribution": "Not established by the source review; no blanket government-site reuse permission is inferred.",
+      "reuseDecision": "Retain factual numbers and a newly drawn explanatory diagram; exclude the full HTML article from the new public tree.",
+      "quantitativeFacts": [
+        {"measure": "Deep-draft vessel transits", "referencePeriod": "Fiscal year 2024", "value": 9944, "unit": "transits", "coverage": "Deep-draft vessels; not all canal craft"},
+        {"measure": "Change in deep-draft transits from fiscal year 2023", "referencePeriod": "Fiscal year 2024", "value": -21, "unit": "%", "precision": "published whole-percent change"}
+      ],
+      "facts": ["Drought reduced water availability in the Gatun and Alhajuela reservoirs. Temporary water-saving measures adjusted transits while prioritising water supply for the population."],
+      "scopeNote": "A decline in transit count is not treated as a decline in canal revenue. Merchandise-export shares exclude canal services."
+    }
+  ]
+}

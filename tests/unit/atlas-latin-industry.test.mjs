@@ -1,8 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFile} from 'node:fs/promises';
+import {readFile,mkdir,mkdtemp,copyFile,access,rm} from 'node:fs/promises';
+import path from 'node:path';
 import {createHash} from 'node:crypto';
-import {decodeWdiValue} from '../../scripts/prepare-latin-industry.mjs';
+import {decodeWdiValue,prepareLatinIndustry} from '../../scripts/prepare-latin-industry.mjs';
 import {industryLibrary} from './atlas-latin-industry-helpers.mjs';
 import {Window} from 'happy-dom';
 const data=JSON.parse(await readFile('src/data/atlas/latin-america/industry.json','utf8'));
@@ -47,6 +48,34 @@ test('Source→normalization→public CSV SHA ledger and individual licence evid
  assert.deepEqual(await readFile(`${assets}/industry-selected-2024.csv`),await readFile(`${sourceDir}/industry-selected-2024.csv`));
  for(const id of ['ores','manufactures']){const glossary=await readFile(`${sourceDir}/${id}-glossary.html`,'utf8');assert.match(glossary,/CC BY-4\.0/);assert.match(glossary,/SITC/);}
  assert.equal(data.source.licence,'CC BY 4.0');assert.match(data.source.attribution,/UN Comtrade/);assert.match(data.notes.classification,/非鉄金属/);
+ const facts=JSON.parse(await readFile(`${sourceDir}/reading-facts.json`,'utf8'));
+ assert.deepEqual(manifest.sourceFiles.map(a=>a.file),[...facts.retainedFiles].sort());
+ assert.equal(manifest.nonRetainedSnapshots.length,4);
+ for(const snapshot of manifest.nonRetainedSnapshots){
+  assert.equal(snapshot.retainedInCurrentPublicTree,false);assert.match(snapshot.sha256,/^[a-f0-9]{64}$/);assert.equal(snapshot.retrievedDate,'2026-10-01');
+  assert.equal(manifest.sourceFiles.some(a=>a.file===snapshot.file),false);
+  try{const original=await readFile(`${sourceDir}/${snapshot.file}`);assert.equal(sha(original),snapshot.sha256);assert.equal(original.length,snapshot.bytes);}catch(error){if(error.code!=='ENOENT')throw error;}
+ }
+ assert.match(manifest.historicalRetentionNote,/earlier Git history/);
+ const panama=facts.articles.find(a=>a.id==='panama-canal-fy2024');assert.equal(panama.quantitativeFacts[0].value,9944);assert.equal(panama.quantitativeFacts[1].value,-21);
+});
+
+test('A retained-input-only checkout regenerates the identical manifest and values without any article HTML',async()=>{
+ const root=path.resolve(process.cwd()),temporary=await mkdtemp(path.join(root,'.latin-industry-regen-test-'));
+ try{
+  const facts=JSON.parse(await readFile(`${sourceDir}/reading-facts.json`,'utf8'));
+  await mkdir(path.join(temporary,sourceDir),{recursive:true});await mkdir(path.join(temporary,'src/data/atlas'),{recursive:true});
+  await copyFile('src/data/atlas/regional-countries.json',path.join(temporary,'src/data/atlas/regional-countries.json'));
+  for(const file of facts.retainedFiles)await copyFile(`${sourceDir}/${file}`,path.join(temporary,sourceDir,file));
+  for(const article of facts.articles)await assert.rejects(access(path.join(temporary,sourceDir,article.originalSnapshot.file)),{code:'ENOENT'});
+  await prepareLatinIndustry(temporary);
+  assert.deepEqual(await readFile(path.join(temporary,assets,'manifest.json')),await readFile(`${assets}/manifest.json`));
+  assert.deepEqual(await readFile(path.join(temporary,'src/data/atlas/latin-america/industry.json')),await readFile('src/data/atlas/latin-america/industry.json'));
+  assert.deepEqual(await readFile(path.join(temporary,assets,'industry-selected-2024.csv')),await readFile(`${assets}/industry-selected-2024.csv`));
+ }finally{
+  const resolved=path.resolve(temporary);assert.equal(path.dirname(resolved),root);assert.ok(path.basename(resolved).startsWith('.latin-industry-regen-test-'));
+  await rm(resolved,{recursive:true,force:true});
+ }
 });
 
 test('Both export classifications share bins; only mode preserves the complete geographic context',async()=>{

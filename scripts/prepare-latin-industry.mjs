@@ -20,6 +20,12 @@ const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const readJson=async file=>JSON.parse(await fs.readFile(file,'utf8'));
 export async function prepareLatinIndustry(root=process.cwd()){
  const read=relative=>readJson(path.join(root,relative));
+ const readingFacts=await read(`${sourceDir}/reading-facts.json`);
+ if(!Array.isArray(readingFacts.retainedFiles)||!Array.isArray(readingFacts.articles))throw new Error('Missing retained source registry or reading facts');
+ if(new Set(readingFacts.retainedFiles).size!==readingFacts.retainedFiles.length)throw new Error('Duplicate retained source file');
+ for(const file of readingFacts.retainedFiles){if(typeof file!=='string'||path.basename(file)!==file||file==='.'||file==='..')throw new Error('Retained source file must be a direct registry entry');}
+ const nonRetainedSnapshots=readingFacts.articles.map(article=>({id:article.id,url:article.url,retrievedDate:article.retrievedDate,...article.originalSnapshot}));
+ for(const snapshot of nonRetainedSnapshots){if(snapshot.retainedInCurrentPublicTree!==false||readingFacts.retainedFiles.includes(snapshot.file))throw new Error('A non-retained article snapshot must not enter the retained source registry');}
  const geometry=await read('src/data/atlas/regional-countries.json');
  const features=geometry.features.filter(f=>(f.properties.region==='South America'||['Central America','Caribbean'].includes(f.properties.subregion))&&f.properties.code!=='MEX');
  const raw=Object.fromEntries(await Promise.all(metrics.map(async m=>[m.id,await read(`${sourceDir}/${m.id}-all-2023-2024.json`)])));
@@ -38,10 +44,10 @@ export async function prepareLatinIndustry(root=process.cwd()){
  const attribution=source.attribution+'\n\n'+data.notes.scope+'\n'+data.notes.classification+'\n'+data.notes.missing+'\n';
  await fs.writeFile(path.join(root,assetDir,'ATTRIBUTION.txt'),attribution);
  const sourceFiles=[];
- for(const file of (await fs.readdir(path.join(root,sourceDir))).sort()){
+ for(const file of [...readingFacts.retainedFiles].sort()){
   const bytes=await fs.readFile(path.join(root,sourceDir,file));sourceFiles.push({file,bytes:bytes.length,sha256:hash(bytes)});
  }
- const manifest={version:1,year:referenceYear,countries:rows.length,records:rows.length*metrics.length,statusCounts,source,sourceFiles,normalized:{file:'src/data/atlas/latin-america/industry.json',bytes:Buffer.byteLength(normalized),sha256:hash(normalized)},published:[{file:'industry-selected-2024.csv',bytes:Buffer.byteLength(csv),sha256:hash(csv)},{file:'ATTRIBUTION.txt',bytes:Buffer.byteLength(attribution),sha256:hash(attribution)}],processing:['Read complete original API responses; retain source values and nulls.','Select calendar year 2024 and the 34 existing Latin America country/territory geometries; no imputation or latest-year mixing.','Keep unrounded source percentages; Japanese UI rounds only the displayed text.','Separate numeric zero, API null (missing) and absent country/year record (notCovered). No confidential flag is supplied by this API.','Apply identical 0–5, 5–20, 20–40, 40–60, 60–80, 80–100 percent bins to both export classifications.']};
+ const manifest={version:2,year:referenceYear,countries:rows.length,records:rows.length*metrics.length,statusCounts,source,sourceFiles,readingFactsFile:`${sourceDir}/reading-facts.json`,nonRetainedSnapshots,historicalRetentionNote:readingFacts.historicalRetentionNote,normalized:{file:'src/data/atlas/latin-america/industry.json',bytes:Buffer.byteLength(normalized),sha256:hash(normalized)},published:[{file:'industry-selected-2024.csv',bytes:Buffer.byteLength(csv),sha256:hash(csv)},{file:'ATTRIBUTION.txt',bytes:Buffer.byteLength(attribution),sha256:hash(attribution)}],processing:['Read complete original API responses; retain source values and nulls.','Select calendar year 2024 and the 34 existing Latin America country/territory geometries; no imputation or latest-year mixing.','Keep unrounded source percentages; Japanese UI rounds only the displayed text.','Separate numeric zero, API null (missing) and absent country/year record (notCovered). No confidential flag is supplied by this API.','Apply identical 0–5, 5–20, 20–40, 40–60, 60–80, 80–100 percent bins to both export classifications.','List retained inputs only from reading-facts.json. Local article HTML is not read or required for regeneration. Retain original snapshot hashes as non-retained audit records; earlier Git history is not rewritten.']};
  await fs.writeFile(path.join(root,assetDir,'manifest.json'),JSON.stringify(manifest,null,2)+'\n');
  return data;
 }

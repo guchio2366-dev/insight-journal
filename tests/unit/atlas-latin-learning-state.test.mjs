@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {loadLatinCommonModule} from './atlas-latin-common-helpers.mjs';
 const lib=await loadLatinCommonModule('state');
-const read=(query,field='industry')=>lib.readLatinLearningState(query,field,field==='nature'?['climate','rivers']:['ores','manufactures'],field==='nature'?'climate':'ores');
+const read=(query,field='industry')=>lib.readLatinLearningState(query,field,field==='nature'?['climate']:field==='agriculture'?['bana','coff','soyb','cattle']:['ores','manufactures'],field==='nature'?'climate':field==='agriculture'?'bana':'ores');
 
 test('invalid country, scope, layer and comparison inputs cannot invent a selection',()=>{
  const state=read('?layer=fake&place=XXX&scope=country&only=1&fallback=0&from=unknown&sourceLayer=density');
@@ -33,4 +33,24 @@ test('a standalone fallback is retained and an absent source cannot create a ret
  const returned=new URL(lib.latinSourceReturnUrl('/insight-journal/atlas/latin-america/',state),'https://example.test');
  assert.equal(returned.pathname,'/insight-journal/atlas/latin-america/industry/');
  assert.equal(returned.searchParams.get('fallback'),'1');assert.equal(returned.searchParams.has('from'),false);
+});
+
+test('agriculture aliases resolve to the rendered layer and canonical return URL',()=>{
+ for(const [alias,canonical] of [['banana','bana'],['coffee','coff'],['soy','soyb']]){
+  assert.equal(read(`?layer=${alias}`,'agriculture').layer,canonical);
+  const comparison=read(`?from=agriculture&sourceLayer=${alias}&sourcePlace=BRA&sourceScope=country&sourceOnly=1`);
+  assert.equal(comparison.source.layer,canonical);
+  const returned=new URL(lib.latinSourceReturnUrl('/insight-journal/atlas/latin-america/',comparison),'https://example.test');
+  assert.equal(returned.searchParams.get('layer'),canonical);
+  assert.equal(read(returned.search,'agriculture').layer,canonical);
+  assert.equal(new URLSearchParams(lib.writeLatinLearningState({...comparison,source:{...comparison.source,layer:alias}})).get('sourceLayer'),canonical);
+ }
+});
+
+test('unsupported nature source layers cannot create a misleading comparison',()=>{
+ for(const layer of ['climate-detail','rivers']){
+  assert.equal(read(`?from=nature&sourceLayer=${layer}&sourcePlace=PAN`).source,undefined);
+  assert.equal(read(`?layer=${layer}`,'nature').layer,'climate');
+ }
+ assert.equal(read('?from=nature&sourceLayer=climate&sourcePlace=PAN').source.layer,'climate');
 });

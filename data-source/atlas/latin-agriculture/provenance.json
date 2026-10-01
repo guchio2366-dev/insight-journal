@@ -418,8 +418,34 @@
       "ATG": "028"
     },
     "cropCountryValue": "sum of modeled annual harvested-area cells, ha",
-    "cattleCountryValue": "density times spherical cell area summed, divided by valid area km2; density retained on original raster",
-    "rounding": "No numeric rounding during extraction. Display rounding only.",
+    "cattleCountryValue": "density times spherical cell area summed, divided by valid area km2; inherited query/raster precision is described separately below",
+    "rounding": {
+      "qclExtraction": {
+        "scope": "FAOSTAT 2024 country records only",
+        "numericRounding": false,
+        "method": "Retain the original CSV Value text in sourceValue and parse its numeric value without decimal rounding."
+      },
+      "inheritedSpatial": {
+        "crops": {
+          "countryTotalsDecimalPlaces": 2,
+          "queryValuesDecimalPlaces": 2,
+          "method": "Reuse the existing MapSPAM manifests and query grids. The inherited extraction sums unrounded valid modeled cells before rounding country totals to two decimals; query values are rounded separately to two decimals. Raster color classes were generated from unrounded modeled cells.",
+          "script": "scripts/atlas-latin-america-agriculture.py"
+        },
+        "cattle": {
+          "meanDensityDecimalPlaces": 4,
+          "queryDensityDecimalPlaces": 4,
+          "estimatedHeadDecimalPlaces": 2,
+          "validAreaKm2DecimalPlaces": 2,
+          "method": "Reuse the existing GLW4 manifest and query grid. Mean density is rounded to four decimals after area-weighted aggregation of unrounded cells; estimated heads and valid area are rounded to two decimals. Raster classes use the query densities rounded to four decimals.",
+          "script": "scripts/atlas-latin-america-livestock.py"
+        },
+        "currentPreparation": "Copy the inherited spatial quantities without additional numeric rounding; this step does not recover their pre-rounding precision."
+      },
+      "display": {
+        "method": "Japanese UI text only: positive values below 0.01 are shown as <0.01; values below 1 use up to two decimals; densities of at least 1 use up to one decimal; other values of at least 1 use no fractional digits. Zero and missing statuses stay distinct. Display formatting does not change downloadable quantities."
+      }
+    },
     "missing": "Blank Value preserved as null/missing; absent row null/unavailable; valid numeric zero remains zero.",
     "licences": {
       "crops": "CC BY-SA 4.0",
@@ -492,6 +518,14 @@
         "missing": 0,
         "unavailable": 2
       }
+    },
+    "independentReview": {
+      "date": "2026-10-01",
+      "qclRecordsComparedWithSelectedCsv": 204,
+      "spatialRecordsComparedWithInheritedManifests": 136,
+      "originalZipFullyReextracted": false,
+      "compressedSpatialShardsFullyReextracted": false,
+      "limitation": "The independent review compared all 204 adopted FAOSTAT country/product records with the preserved selected CSV and all 136 spatial records with inherited manifests. It did not independently repeat the full extraction of the original FAOSTAT ZIP or compressed MapSPAM/GLW4 shards; source and adopted-asset hashes are preserved."
     }
   }
 }
