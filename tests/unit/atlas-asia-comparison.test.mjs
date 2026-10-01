@@ -6,7 +6,7 @@ import {resolve} from 'node:path';
 import {startAsiaComparison,restoreAsiaComparison,writeAsiaAtlasState} from '../../src/lib/atlas-asia-state.ts';
 
 const built=await build({entryPoints:[resolve('src/scripts/atlas-asia-comparison.ts')],bundle:true,format:'iife',globalName:'AsiaComparison',platform:'browser',write:false,logLevel:'silent'});
-const context={countries:['CHN','JPN'],cities:[],bounds:[72,17,147,55],fields:['natural','agriculture','industry','population'],topics:{natural:['climate'],agriculture:['wheat'],industry:['trade-exports','power'],population:['density','ethnicity']},details:{population:['tibetan'],industry:['plant']}};
+const context={countries:['CHN','JPN'],cities:[],bounds:[72,17,147,55],fields:['natural','agriculture','industry','population'],topics:{natural:['climate'],agriculture:['wheat','overview'],industry:['trade-exports','power'],population:['density','urban','ethnicity']},details:{population:['tibetan','uc-selected','uc-other'],industry:['plant']}};
 const originalUrl=new URL('https://example.org/atlas/asia/east-asia/');
 const base={field:'agriculture',topic:'wheat',place:'CHN',city:null,point:[115,37.8],camera:{lng:117,lat:35,zoom:4},back:null};
 
@@ -82,6 +82,7 @@ test('元区域と発電施設を比較し直しても、設備容量の半径�
   assert.match(JSON.stringify(map.layers[id].paint['circle-radius']),/capacity/);
   assert.equal(map.layers[id].paint['circle-opacity'],0);
   assert.equal(map.sources['asia-comparison-original'].data.features[0].properties.capacity,1000);
+  assert.match(root.querySelector('[data-comparison-legend]').textContent,/100MWで3px、1,000MWで9px、4,000MW以上で18px/);
   assert.match(root.querySelector('[data-comparison-back]').textContent,/資料中の発電施設/);
   controller.render(state);
   assert.match(root.querySelector('[data-comparison-back]').textContent,/資料中の発電施設/);
@@ -90,4 +91,40 @@ test('元区域と発電施設を比較し直しても、設備容量の半径�
   assert.equal(map.layers[id].paint['circle-radius'],4);
   assert.equal(map.layers[id].paint['circle-color'],'#fff');
   assert.equal(map.layers[id].paint['circle-opacity'],1);
+});
+
+test('都市人口から比較しても元の人口図と選択都市だけの境界を同時に残す',async()=>{
+  const cityFeature=id=>({type:'Feature',properties:{id},geometry:{type:'Polygon',coordinates:[[[100,30],[110,30],[110,40],[100,30]]]}});
+  const urban={type:'FeatureCollection',features:[cityFeature('uc-selected'),cityFeature('uc-other')]},requested=[];
+  const {root,window,controller,state,config}=setup({...base,field:'population',topic:'urban',detail:'uc-selected'},{field:'natural',topic:'climate'},async url=>{requested.push(url);return response(urban);});
+  config.population.urban='urban.json';config.population.cities=[{id:'uc-selected',name:'都市A',country:'CHN'},{id:'uc-other',name:'都市B',country:'CHN'}];
+  window.Image=class{naturalWidth=3;naturalHeight=3;async decode(){}};
+  const pixels=new Uint8ClampedArray(36);for(let i=0;i<pixels.length;i+=4){pixels[i]=120;pixels[i+1]=100;pixels[i+2]=80;pixels[i+3]=255;}
+  window.HTMLCanvasElement.prototype.getContext=()=>({drawImage(){},getImageData(){return {data:pixels};},createImageData(){return {data:new Uint8ClampedArray(36)};},putImageData(){}});
+  window.HTMLCanvasElement.prototype.toDataURL=()=>'data:image/png;base64,fixture';
+  const map={sources:{},layers:{},getStyle(){return {};},getSource(id){return this.sources[id];},getLayer(id){return this.layers[id];},addSource(id,source){this.sources[id]={...source,setData(data){this.data=data;}};},removeSource(id){delete this.sources[id];},addLayer(layer){this.layers[layer.id]=layer;},removeLayer(id){delete this.layers[id];},setLayoutProperty(id,name,value){(this.layers[id].layout??={})[name]=value;},setPaintProperty(id,name,value){this.layers[id].paint[name]=value;},setFilter(id,filter){this.layers[id].filter=filter;}};
+  controller.render(state);await waitForReading(root);await controller.show(map);
+  assert.deepEqual(requested,['/population/urban.json']);
+  assert.ok(map.layers['asia-comparison-original-raster']);
+  const selected=map.sources['asia-comparison-original'].data.features;
+  assert.equal(selected.length,1);assert.equal(selected[0].properties.id,'uc-selected');
+  assert.equal(map.layers['asia-comparison-original-line'].layout.visibility,'visible');
+  assert.equal(map.layers['asia-comparison-original-area'].layout.visibility,'none');
+  const legend=root.querySelector('[data-comparison-legend]').textContent;
+  assert.match(legend,/都市Aの都市範囲（2025年資料の固定境界）/);assert.ok(!legend.includes('都市B'));
+  root.querySelector('[data-comparison-original]').click();await controller.show(map);
+  assert.equal(map.sources['asia-comparison-original-raster'].url,'/population/population.png');
+  assert.equal(map.layers['asia-comparison-original-line'].layout.visibility,'visible');
+  assert.equal(map.layers['asia-comparison-original-area'].layout.visibility,'none');
+});
+
+test('比較先の米・雨・川と農畜産切替で、その表示に対応する凡例を更新する',async()=>{
+  const features=[{type:'Feature',properties:{kind:'crop',id:'rice',color:'#00ff00'},geometry:{type:'Polygon',coordinates:[]}},{type:'Feature',properties:{kind:'crop',id:'soybean',color:'#ffaa00'},geometry:{type:'Polygon',coordinates:[]}}];
+  const {root,controller,state,config}=setup(base,{field:'agriculture',topic:'overview'},async()=>response({type:'FeatureCollection',features}));
+  config.presentation.farming={file:'overview.json',products:[{id:'rice',title:'米',color:'#00ff00'},{id:'soybean',title:'大豆',color:'#ffaa00'}],labels:[]};config.presentation.rainfall={file:'rain.json'};
+  controller.render(state);await waitForReading(root);assert.match(root.querySelector('[data-comparison-legend]').textContent,/大豆/);
+  state.overlay='water';controller.render(state);await waitForReading(root);
+  let legend=root.querySelector('[data-comparison-legend]').textContent;assert.match(legend,/年降水量の等雨量線/);assert.ok(!legend.includes('大豆'));
+  state.overlay=null;state.farms='crop';controller.render(state);await waitForReading(root);assert.match(root.querySelector('[data-comparison-legend]').textContent,/大豆/);
+  state.farms='none';controller.render(state);assert.match(root.querySelector('[data-comparison-legend]').textContent,/読み込んでいます/);await waitForReading(root);
 });
