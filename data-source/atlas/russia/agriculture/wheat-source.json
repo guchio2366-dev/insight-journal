@@ -1,0 +1,153 @@
+{
+  "retrievedSource": "Existing open source snapshot reused 2026-10-01",
+  "sourceUrl": "https://dataverse.harvard.edu/api/access/datafile/13827040",
+  "sourceArchiveSha256": "34895a332ba7ff9d9732a81fe9da7063458d197f3c72ce3a405329c41f94ade2",
+  "sourceMember": "spam2020V2r2_global_harvested_area/spam2020_V2r2_global_H_WHEA_A.tif",
+  "sourceMemberSha256": "288f583e50e8237b0eaad880e5ef188383c97701c5015744cf6a62f2bf7dba9e",
+  "sourceYear": 2020,
+  "license": "CC BY 4.0",
+  "fixedVersion": "6.0",
+  "termsUrl": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/SWPENT&version=6.0",
+  "scope": "None in emitted data. Display clipping, if any, is a separate geometry convention; no national totals computed.",
+  "sourceCellCounts": {
+    "total": 1071216,
+    "valid": 148075,
+    "zero": 8792,
+    "positive": 139283,
+    "missing": 923141
+  },
+  "spotChecks": [
+    {
+      "name": "Rostov region",
+      "longitudeUnwrapped": 41,
+      "latitude": 47,
+      "outputRow": 432,
+      "outputColumn": 276,
+      "sourceRow": 516,
+      "sourceColumn": 2652,
+      "value": 2222.0,
+      "unit": "harvested ha per native source cell",
+      "missing": false
+    },
+    {
+      "name": "Central black-earth belt",
+      "longitudeUnwrapped": 40,
+      "latitude": 51,
+      "outputRow": 384,
+      "outputColumn": 264,
+      "sourceRow": 468,
+      "sourceColumn": 2640,
+      "value": 241.8000030517578,
+      "unit": "harvested ha per native source cell",
+      "missing": false
+    },
+    {
+      "name": "Middle Volga",
+      "longitudeUnwrapped": 50,
+      "latitude": 53,
+      "outputRow": 360,
+      "outputColumn": 384,
+      "sourceRow": 444,
+      "sourceColumn": 2760,
+      "value": 559.7000122070312,
+      "unit": "harvested ha per native source cell",
+      "missing": false
+    },
+    {
+      "name": "Omsk region",
+      "longitudeUnwrapped": 73,
+      "latitude": 55,
+      "outputRow": 336,
+      "outputColumn": 660,
+      "sourceRow": 420,
+      "sourceColumn": 3036,
+      "value": 2295.199951171875,
+      "unit": "harvested ha per native source cell",
+      "missing": false
+    },
+    {
+      "name": "Altai farmland",
+      "longitudeUnwrapped": 83,
+      "latitude": 52,
+      "outputRow": 372,
+      "outputColumn": 780,
+      "sourceRow": 456,
+      "sourceColumn": 3156,
+      "value": 684.5,
+      "unit": "harvested ha per native source cell",
+      "missing": false
+    },
+    {
+      "name": "Amur region",
+      "longitudeUnwrapped": 128,
+      "latitude": 50,
+      "outputRow": 396,
+      "outputColumn": 1320,
+      "sourceRow": 480,
+      "sourceColumn": 3696,
+      "value": 302.1000061035156,
+      "unit": "harvested ha per native source cell",
+      "missing": false
+    },
+    {
+      "name": "Yakutsk vicinity",
+      "longitudeUnwrapped": 129.7,
+      "latitude": 62,
+      "outputRow": 252,
+      "outputColumn": 1340,
+      "sourceRow": 336,
+      "sourceColumn": 3716,
+      "value": -1.0,
+      "unit": "harvested ha per native source cell",
+      "missing": true
+    },
+    {
+      "name": "Chukotka east of date line",
+      "longitudeUnwrapped": 185,
+      "latitude": 66,
+      "outputRow": 204,
+      "outputColumn": 2004,
+      "sourceRow": 288,
+      "sourceColumn": 60,
+      "value": -1.0,
+      "unit": "harvested ha per native source cell",
+      "missing": true
+    },
+    {
+      "name": "Crimea scope diagnostic only",
+      "longitudeUnwrapped": 34,
+      "latitude": 45,
+      "outputRow": 456,
+      "outputColumn": 192,
+      "sourceRow": 540,
+      "sourceColumn": 2568,
+      "value": 332.8999938964844,
+      "unit": "harvested ha per native source cell",
+      "missing": false
+    },
+    {
+      "name": "Kaliningrad",
+      "longitudeUnwrapped": 21,
+      "latitude": 54.7,
+      "outputRow": 339,
+      "outputColumn": 36,
+      "sourceRow": 423,
+      "sourceColumn": 2412,
+      "value": -1.0,
+      "unit": "harvested ha per native source cell",
+      "missing": true
+    }
+  ],
+  "verification": {
+    "sourceArchiveHash": "passed",
+    "sourceMemberHash": "passed",
+    "sourceTransformCrsAndSampleFormat": "passed",
+    "allPixelValidSourceCellIdentity": "passed",
+    "allPixelMissingSourceCellIdentity": "passed",
+    "allPixelNumericalGridIdentity": "passed",
+    "allPixelPngClassificationIdentity": "passed",
+    "zeroAndMissingSeparated": "passed",
+    "coverageArithmetic": "passed",
+    "dateLineNativeIndexSpotChecks": "passed"
+  }
+}

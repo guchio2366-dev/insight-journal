@@ -1,0 +1,281 @@
+{
+  "version": 1,
+  "region": "russia",
+  "field": "industry",
+  "dataset": "representative-industry-places",
+  "checkedAt": "2026-10-01",
+  "recordCount": 4,
+  "quantityEncoding": "none",
+  "production": false,
+  "reserves": false,
+  "capacity": false,
+  "routes": false,
+  "coordinateOrder": "longitude,latitude",
+  "coverage": "Four selected teaching examples: Norilsk mining/processing region, Moscow management/logistics city, Murmansk port and Vladivostok port. Not a Russia-wide inventory or a production, resources or employment distribution.",
+  "temporalCoverage": "Company operations descriptions are explicitly dated 2024 or 2025. Port coordinate pages have no displayed publication year and were checked on 2026-10-01. No current 2026 operating-status or output claim is inferred.",
+  "geographicCoverage": "The four representative locations lie away from disputed territories. These source pages are not used to construct national totals, national statistical boundaries or claims over Crimea and other disputed territories.",
+  "coordinateMethod": "Natural Earth v5.1.2 Point records unchanged for Norilsk and Moscow. Published Rosmorport degree/minute coordinates converted to decimal degrees for Murmansk and Vladivostok. City and port reference positions are approximate teaching positions, not industrial facility entrances or survey/navigation data.",
+  "fullBodiesStored": false,
+  "reuse": "Only metadata, URLs, retrieval dates, hashes, selected public-domain city coordinates and minimal paraphrased factual statements are stored. Corporate and port pages, diagrams, photographs and articles are not republished.",
+  "legend": [
+    {
+      "kind": "resource",
+      "label": "鉱業地域の代表位置",
+      "quantity": "none"
+    },
+    {
+      "kind": "port",
+      "label": "港の代表位置",
+      "quantity": "none"
+    },
+    {
+      "kind": "city",
+      "label": "管理・物流を読む都市の代表位置",
+      "quantity": "none"
+    }
+  ],
+  "locations": [
+    {
+      "id": "norilsk-resource-region",
+      "name": "ノリリスク：鉱業・加工地域",
+      "coordinates": [
+        88.224992,
+        69.340017
+      ],
+      "kind": "resource",
+      "sourceUrls": [
+        "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_50m_populated_places.geojson",
+        "https://ar2024.nornickel.com/en/business-overview/operational-performance.html"
+      ]
+    },
+    {
+      "id": "moscow-management-logistics",
+      "name": "モスクワ：管理・物流",
+      "coordinates": [
+        37.613577,
+        55.75411
+      ],
+      "kind": "city",
+      "sourceUrls": [
+        "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_50m_populated_places.geojson",
+        "https://ar2024.nornickel.com/en/about-company/geography.html",
+        "https://ar2025.fesco.com/strategic-report/operations-overview"
+      ]
+    },
+    {
+      "id": "murmansk-port",
+      "name": "ムルマンスク港",
+      "coordinates": [
+        33.05,
+        68.98333333333333
+      ],
+      "kind": "port",
+      "sourceUrls": [
+        "https://www.rosmorport.com/filials/mur_seaports/",
+        "https://ar2024.nornickel.com/en/business-overview/transport-logistics-assets.html"
+      ]
+    },
+    {
+      "id": "vladivostok-port",
+      "name": "ウラジオストク港",
+      "coordinates": [
+        131.9,
+        43.083333333333336
+      ],
+      "kind": "port",
+      "sourceUrls": [
+        "https://www.rosmorport.com/filials/vlf_seaports/",
+        "https://ar2025.fesco.com/strategic-report/operations-overview",
+        "https://ar2025.fesco.com/strategic-report/digitalization"
+      ]
+    }
+  ],
+  "readingIds": [
+    "northern-resources",
+    "markets-and-port"
+  ],
+  "sources": [
+    {
+      "id": "ne-50m-places",
+      "publisher": "Natural Earth",
+      "referenceYear": null,
+      "version": "5.1.2",
+      "license": "Public domain",
+      "locator": "Selected Point records, NE_ID 1159149617 and 1159151585",
+      "facts": [
+        "Norilsk and Moscow coordinates are retained unchanged from the fixed v5.1.2 point dataset. City representative positions, not industrial facility coordinates."
+      ],
+      "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_50m_populated_places.geojson",
+      "retrievedAt": "2026-10-01T11:47:18.866Z",
+      "responseSha256": "da4662b7bbfeb897d02f228c5839131dce27acff5717630f91ccff4f67828ee7",
+      "responseBytes": 3350885,
+      "fullBodyStored": false,
+      "selectedSourceRecords": [
+        {
+          "name": "Norilsk",
+          "coordinates": [
+            88.224992,
+            69.340017
+          ],
+          "neId": 1159149617
+        },
+        {
+          "name": "Moscow",
+          "coordinates": [
+            37.613577,
+            55.75411
+          ],
+          "neId": 1159151585
+        }
+      ]
+    },
+    {
+      "id": "natural-earth-license",
+      "publisher": "Natural Earth",
+      "referenceYear": null,
+      "license": "Public domain",
+      "locator": "Terms of Use",
+      "facts": [
+        "All Natural Earth vector and raster data versions are public domain."
+      ],
+      "url": "https://www.naturalearthdata.com/about/terms-of-use/",
+      "retrievedAt": "2026-10-01T11:47:19.400Z",
+      "responseSha256": "57ab35b5cf81f938372cdb2e281a644d8ab4229ee5f2c5d2dfe03da267820576",
+      "responseBytes": 37992,
+      "fullBodyStored": false
+    },
+    {
+      "id": "norilsk-2024-operations",
+      "publisher": "Nornickel",
+      "referenceYear": 2024,
+      "license": "No open redistribution license found; facts paraphrased and linked only.",
+      "locator": "Operational performance: Norilsk site / production flow / mining",
+      "facts": [
+        "Norilsk site mines copper-nickel sulphide ores and operates a metals production chain. The site is connected with other regions by the Yenisei River, Northern Sea Route and air."
+      ],
+      "url": "https://ar2024.nornickel.com/en/business-overview/operational-performance.html",
+      "retrievedAt": "2026-10-01T11:47:19.959Z",
+      "responseSha256": "bad0f582b8220531481c957aa4e75b504bc19961fba40dd0782de02340d7c3e3",
+      "responseBytes": 93615,
+      "fullBodyStored": false
+    },
+    {
+      "id": "norilsk-2024-transport",
+      "publisher": "Nornickel",
+      "referenceYear": 2024,
+      "license": "No open redistribution license found; facts paraphrased and linked only.",
+      "locator": "Transport and logistics assets: Dudinka and Murmansk Transport Divisions",
+      "facts": [
+        "Dudinka transships cargo for Taimyr businesses and residents, uses winter icebreaker services and suspends operations during spring flooding.",
+        "The Murmansk terminal handles finished metals and converter matte, with rail transport to the Kola site."
+      ],
+      "url": "https://ar2024.nornickel.com/en/business-overview/transport-logistics-assets.html",
+      "retrievedAt": "2026-10-01T11:47:21.362Z",
+      "responseSha256": "3754e1efbd5e4dda79c77a7ce140068118d311c0bc26d10f1d0f10e06b0a656d",
+      "responseBytes": 58615,
+      "fullBodyStored": false
+    },
+    {
+      "id": "norilsk-2024-footprint",
+      "publisher": "Nornickel",
+      "referenceYear": 2024,
+      "informationCurrentAt": "2024-12-31",
+      "license": "No open redistribution license found; facts paraphrased and linked only.",
+      "locator": "Footprint: Regions of operation across Russia",
+      "facts": [
+        "The parent company head office is based in Moscow as described for the end of 2024."
+      ],
+      "url": "https://ar2024.nornickel.com/en/about-company/geography.html",
+      "retrievedAt": "2026-10-01T11:47:21.405Z",
+      "responseSha256": "83639dff978eec07211c35195d5212997056dc17587d8324a0af1d42a8e2db49",
+      "responseBytes": 47094,
+      "fullBodyStored": false
+    },
+    {
+      "id": "vladivostok-position",
+      "publisher": "FSUE Rosmorport",
+      "referenceYear": null,
+      "license": "No open redistribution license found; location fact paraphrased and linked only.",
+      "locator": "Vladivostok Seaport: Location of the Sea Port",
+      "position": {
+        "latitude": "43 degrees 05 minutes N",
+        "longitude": "131 degrees 54 minutes E"
+      },
+      "facts": [
+        "The published coordinate is the reference position of the wider seaport area, not a coordinate for VMTP alone."
+      ],
+      "url": "https://www.rosmorport.com/filials/vlf_seaports/",
+      "retrievedAt": "2026-10-01T11:47:21.563Z",
+      "responseSha256": "85da0a9fdd4b70fb0e6b9385cc0f8e468260bd87459fb7863771b1a45c6b09d3",
+      "responseBytes": 391939,
+      "fullBodyStored": false
+    },
+    {
+      "id": "murmansk-position",
+      "publisher": "FSUE Rosmorport",
+      "referenceYear": null,
+      "license": "No open redistribution license found; location fact paraphrased and linked only.",
+      "locator": "Murmansk Seaport: Location of the Sea Port",
+      "position": {
+        "latitude": "68 degrees 59 minutes N",
+        "longitude": "33 degrees 03 minutes E"
+      },
+      "facts": [
+        "The published coordinate is the reference position of Murmansk Seaport in the southern Kola Gulf, not an individual berth."
+      ],
+      "url": "https://www.rosmorport.com/filials/mur_seaports/",
+      "retrievedAt": "2026-10-01T11:47:22.067Z",
+      "responseSha256": "4c9755da9abcc26f5b80281b01da077b79e43796993e3d152142f3e460252a36",
+      "responseBytes": 295806,
+      "fullBodyStored": false
+    },
+    {
+      "id": "fesco-2025-operations",
+      "publisher": "FESCO",
+      "referenceYear": 2025,
+      "license": "No open redistribution license found; facts paraphrased and linked only.",
+      "locator": "Core business activities and operational overview: Terminal operations / Supply chain management / LCL cargo",
+      "facts": [
+        "Terminal operations load and unload vessels, railcars and trucks.",
+        "LCL cargo is received, dispatched and processed at warehouses including Moscow and Vladivostok."
+      ],
+      "url": "https://ar2025.fesco.com/strategic-report/operations-overview",
+      "retrievedAt": "2026-10-01T11:47:22.731Z",
+      "responseSha256": "b894cf0afe7ed5ed31522789e340c74adea220a174131fa9d3bd18f5b585270f",
+      "responseBytes": 84726,
+      "fullBodyStored": false
+    },
+    {
+      "id": "fesco-2025-digitalization",
+      "publisher": "FESCO",
+      "referenceYear": 2025,
+      "license": "No open redistribution license found; facts paraphrased and linked only.",
+      "locator": "Digitalisation: VMTP / Rail service development / Container yard operations",
+      "facts": [
+        "VMTP introduced information systems for train information, track placement, cargo documentation and terminal-yard operations in 2025."
+      ],
+      "url": "https://ar2025.fesco.com/strategic-report/digitalization",
+      "retrievedAt": "2026-10-01T11:47:22.750Z",
+      "responseSha256": "57b2ed26978e298055e055178f713801aae08d8375f29b5c7714c8bece362c5d",
+      "responseBytes": 88733,
+      "fullBodyStored": false
+    }
+  ],
+  "limitations": [
+    "Selected fixed-size examples do not encode amounts or ranks. Missing symbols do not imply absent industry.",
+    "The resource symbol is a representative city in a mining region, not an exact mine or factory coordinate.",
+    "The broader Vladivostok port reference position must not be described as the VMTP berth.",
+    "Transport modes are described from sources; routes are not estimated or drawn.",
+    "Company reports are operator-reported descriptions with their stated reference years, not independently measured regional statistics.",
+    "Yamal oil/gas fields and Russia-wide industry output statistics are not mapped in this initial representative layer."
+  ],
+  "diagnostics": {
+    "invalidCoordinates": 0,
+    "duplicateIds": 0,
+    "quantityFields": 0,
+    "sourceVerifiedPositions": 4,
+    "readingSourceCoverage": true
+  },
+  "readingModule": "src/data/atlas/russia-industry-reading.ts",
+  "readingModuleSha256": "4f8c5c99bcf04d8073bad2d6fa46b8619c3e52f9a841245faf2d63aa732739bc"
+}

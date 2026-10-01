@@ -32,7 +32,7 @@ test('世界地図と地域名から、公開されている各地域の地図�
     ['south-central-asia', 'atlas/asia/south-central-asia/'],
     ['west-asia', 'atlas/west-asia/']
   ]);
-  for (const id of ['africa', 'oceania']) {
+  for (const id of ['africa', 'oceania', 'russia']) {
     let published = false;
     try {
       await access(fileURLToPath(new URL(`../../src/pages/atlas/${id}/index.astro`, import.meta.url)));
@@ -62,6 +62,7 @@ test('世界地図と地域名から、公開されている各地域の地図�
   assert.equal(regionFor('IRN'), 'west-asia', 'Iran opens the editorial West Asia / Middle East grouping');
   assert.equal(regionFor('GRL'), undefined, 'Greenland is not one of the three published North America countries');
   assert.equal(regionFor('RUS'), 'europe', 'the published western Russia shape opens Europe');
+  assert.equal(svg.querySelector('a[data-world-region="russia"] [data-world-country="RUS"]')?.closest('a').getAttribute('href'), '/insight-journal/atlas/russia/', 'the dedicated whole Russia shape opens its four fields');
   assert.equal(svg.querySelector('[data-world-country="ATA"]'), null, 'Antarctica is omitted from this navigation map');
 });
 

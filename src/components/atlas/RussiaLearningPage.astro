@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import {withBase} from '../../lib/urls';
+import {
+ russiaFields,russiaRegions,russiaLayers,russiaThemes,
+ createRussiaState,getRussiaLayer,getRussiaTheme,
+ renderRussiaScene,renderRussiaLegend,russiaCoverage,getRussiaComparisonReading,russiaBoundarySources,
+} from '../../data/atlas/russia-learning';
+import '../../styles/atlas-russia-learning.css';
+type RussiaField=keyof typeof russiaFields;
+interface Props {field?:RussiaField}
+const {field='nature'}=Astro.props;
+const state={...createRussiaState('',field),scope:'all' as const};
+const theme=getRussiaTheme(state);
+const layer=getRussiaLayer(state.layer,state);
+const comparison=getRussiaLayer(state.compareLayer,state);
+const fieldThemes=russiaThemes.filter(t=>t.field===field);
+const fieldLayers=russiaLayers.filter(l=>l.field===field);
+const scopeOptions=[{id:'all',label:'全体'},{id:'theme',label:'テーマ'},{id:'region',label:'選択地域'}];
+---
+<BaseLayout title={`ロシアの${russiaFields[field].label}`} description={russiaFields[field].title} compactAtlas>
+ <article class="russia-learning shell" data-russia-learning data-field={field}>
+  <header class="russia-learning-heading">
+   <div class="russia-learning-title"><p class="russia-learning-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / ロシア</p><h1>{russiaFields[field].title}</h1></div>
+   <button type="button" class="russia-learning-return" data-return>← {layer.title}へ戻る：ロシア全域</button>
+   <label class="russia-learning-place">学習地域<select data-place><option value="all" selected={state.place==='all'}>ロシア全域</option>{russiaRegions.map(region=><option value={region.code} selected={region.code===state.place}>{region.name}</option>)}</select></label>
+   <label class="russia-learning-compare-layer">並べる分布<select data-compare-layer>{russiaLayers.map(item=><option value={item.id} selected={item.id===comparison.id}>{item.title}</option>)}</select></label>
+  </header>
+  <nav class="russia-learning-fields" aria-label="ロシアの分野を選ぶ">
+   <a href={withBase('/atlas/')}>世界地図</a>
+   {Object.entries(russiaFields).map(([id,item])=><a href={withBase(`/atlas/russia/${id}/`)} data-field-link={id} aria-current={id===field?'page':undefined}>{item.label}</a>)}
+  </nav>
+  <div class="russia-learning-normal" data-normal-view>
+   <section class="russia-learning-map-panel" aria-labelledby="russia-primary-title">
+    <div class="russia-learning-map-heading"><div><h2 id="russia-primary-title" data-primary-title>{layer.title}</h2><p><span data-primary-period>{layer.period}</span><span data-primary-unit>{layer.unit}</span></p></div><label class="russia-learning-layer"><span class="visually-hidden">地図の分布を選ぶ</span><select data-layer>{fieldLayers.map(item=><option value={item.id} selected={item.id===layer.id}>{item.title}</option>)}</select></label></div>
+    <div class="russia-learning-scene" data-primary-map set:html={renderRussiaScene(layer,state,'primary')}></div>
+    <div class="russia-learning-legend" data-primary-legend aria-label="地図の全凡例" set:html={renderRussiaLegend(layer)}></div>
+   </section>
+   <aside class="russia-learning-reading" aria-label="地図から読み取ること">
+    <div class="russia-learning-toolbar"><div class="russia-learning-themes" aria-label="学ぶテーマ">{fieldThemes.map(item=><button type="button" data-theme={item.id} title={item.title} aria-pressed={item.id===theme.id?'true':'false'}>{item.title}</button>)}</div><div class="russia-learning-scope" aria-label="地図の範囲">{scopeOptions.map(item=><button type="button" data-scope={item.id} aria-pressed={item.id===state.scope?'true':'false'} disabled={item.id==='region'&&state.place==='all'}>{item.label}</button>)}</div></div>
+    <div class="russia-learning-message"><p class="russia-learning-kicker">場所と理由をつなげる</p><h2 data-theme-title>{theme.title}</h2><p class="russia-learning-takeaway" data-takeaway>{theme.takeaway}</p><button type="button" class="russia-learning-comparison-button" data-comparison>{comparison.title}と並べる →</button></div>
+    <div class="russia-learning-coverage"><h3>この地図で読める範囲</h3><p data-coverage>{russiaCoverage(layer,state)}</p></div>
+   </aside>
+  </div>
+  <section class="russia-learning-comparison" data-comparison-view hidden aria-label="元の分布と比較する">
+   <div class="russia-learning-comparison-grid">
+    <section class="russia-learning-map-panel" aria-labelledby="russia-original-title"><div class="russia-learning-map-heading"><div><h2 id="russia-original-title" data-original-title>元の分布：{layer.title}</h2><p><span data-original-period>{layer.period}</span><span data-original-unit>{layer.unit}</span></p></div></div><div class="russia-learning-scene" data-original-map set:html={renderRussiaScene(layer,state,'original')}></div><div class="russia-learning-legend" data-original-legend aria-label="元の分布の全凡例" set:html={renderRussiaLegend(layer)}></div></section>
+    <section class="russia-learning-map-panel" aria-labelledby="russia-comparison-title"><div class="russia-learning-map-heading"><div><h2 id="russia-comparison-title" data-comparison-title>{comparison.title}</h2><p><span data-comparison-period>{comparison.period}</span><span data-comparison-unit>{comparison.unit}</span></p></div></div><div class="russia-learning-scene" data-comparison-map set:html={renderRussiaScene(comparison,state,'comparison')}></div><div class="russia-learning-legend" data-comparison-legend aria-label="比較する分布の全凡例" set:html={renderRussiaLegend(comparison)}></div><p class="russia-learning-comparison-explanation" data-comparison-explanation>{getRussiaComparisonReading(state).message}</p></section>
+   </div>
+  </section>
+  <div class="russia-learning-detailed-readings"><details class="russia-learning-explanation"><summary>選んだ場所と分布を詳しく読む</summary><p data-explanation>{theme.explanation}</p></details><details class="russia-learning-social"><summary>社会・制度とのつながりを読む</summary><p data-social-context>{theme.social}</p></details></div>
+  <details class="russia-learning-sources"><summary>地図・分布の出典、帰属表示、資料の範囲</summary><p>地図では同じ学習地域と範囲を保ったまま分布を読み比べます。異なる資料の対象年・定義・解像度は各地図と次の出典に示しています。</p><section class="russia-learning-current-sources"><h2>表示中の地図・説明の出典</h2><div data-source-list>{[...russiaBoundarySources,...layer.sources,...theme.sources].map(source=><div class="russia-learning-citation"><a href={source.url}>{source.title}</a>{source.note&&<p>{source.note}</p>}</div>)}</div></section><section class="russia-learning-source-entry"><h2>基礎地図の境界・係争区分と資料の範囲</h2>{russiaBoundarySources.map(source=><div class="russia-learning-citation"><a href={source.url}>{source.title}</a>{source.note&&<p>{source.note}</p>}</div>)}</section>{russiaLayers.map(item=><section class="russia-learning-source-entry"><h2>{item.title}</h2><p>{item.period} · {item.unit}{item.resolution?` · ${item.resolution}`:''}</p>{item.sources.map(source=><div class="russia-learning-citation"><a href={source.url}>{source.title}</a>{source.note&&<p>{source.note}</p>}</div>)}<p>{item.coverage}</p></section>)}<section class="russia-learning-source-entry"><h2>場所と背景の説明</h2>{russiaThemes.map(item=><div class="russia-learning-citation"><h3>{item.title}</h3>{item.sources.map(source=><div><a href={source.url}>{source.title}</a>{source.note&&<p>{source.note}</p>}</div>)}</div>)}</section><p>西部・シベリア・極東の3区分は分布を読み比べるための学習地域です。行政区分とは異なります。境界や表示範囲の出典・扱いは各地図の説明で確認できます。</p></details>
+  <noscript><p class="russia-learning-noscript">最初の地図、全凡例、説明と出典を表示しています。地域・テーマ・分布の選択と比較には JavaScript が必要です。上の分野リンクから各分野の最初の地図を読めます。</p></noscript>
+ </article>
+</BaseLayout>
+<script>
+ import {initRussiaLearningAtlas} from '../../scripts/atlas-russia-learning';
+ const root=document.querySelector<HTMLElement>('[data-russia-learning]');
+ if(root)initRussiaLearningAtlas(root);
+</script>

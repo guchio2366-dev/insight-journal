@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "title": "FAO GIEWS Russian Federation Country Brief",
+  "url": "https://www.fao.org/giews/countrybrief/country.jsp?code=RUS",
+  "referenceDate": "2026-04-10",
+  "retrievedAt": "2026-10-01T12:37:16.862Z",
+  "responseSha256": "9b6b9501b45f931cd8d00b743d9b95ac4876bccc659b8960b9656cdc7f25c502",
+  "responseBytes": 67556,
+  "fullBodyStored": false,
+  "reuse": "URL, retrieval metadata and short paraphrases only; no article, figure or numerical national totals republished.",
+  "minimalFacts": [
+    "Dry weather affected soil moisture and winter-crop establishment.",
+    "Farmers choosing higher-margin crops changed wheat planting decisions.",
+    "Export quotas constrain shipments."
+  ],
+  "use": "Explain water, management, markets and policy alongside the 2020 MapSPAM distribution. No claim that source years or statistical territorial scopes match, and no inference of current 2026 production from the map."
+}

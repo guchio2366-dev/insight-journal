@@ -3,9 +3,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import AtlasWorldNavigation from '../../components/atlas/AtlasWorldNavigation.astro';
 import { withBase } from '../../lib/urls';
 
-// Enable the two new destinations when their independently maintained pages exist.
-const optionalPages = import.meta.glob('./{africa,oceania}/index.astro');
-const availableRegions = ['africa', 'oceania'].filter(id => `./${id}/index.astro` in optionalPages);
+// Enable independently maintained destinations only when their pages exist.
+const optionalPages = import.meta.glob('./{africa,oceania,russia}/index.astro');
+const availableRegions = ['africa', 'oceania', 'russia'].filter(id => `./${id}/index.astro` in optionalPages);
 ---
 <BaseLayout title="地図から見る" description="世界地図から地域を選んで、自然環境・農林業・産業・人口の地図へ。" compactAtlas>
   <div class="atlas-directory shell">
