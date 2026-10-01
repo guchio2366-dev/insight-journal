@@ -1,0 +1,83 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import IndustryFeatureMap from './IndustryFeatureMap.astro';
+import { sectors, sources, regionIds } from '../../data/atlas/industry-feature';
+import { withBase } from '../../lib/urls';
+import '../../styles/atlas.css';
+import '../../styles/industry-feature.css';
+const sector = sectors[0];
+const region = sector.regions[0];
+const country = region.countries[0];
+const mapCountries = (id: string) => [...new Map(sectors.flatMap(s => s.regions.find(r => r.id === id)?.countries ?? []).map(c => [c.id, c])).values()];
+const powertrains = [ ['all','すべて'], ['bev','EV（BEV）'], ['phev','PHEV'], ['hev','HEV'], ['ice','ガソリン／ディーゼル'], ['fcev','燃料電池車'] ];
+const bodies = [ ['all','すべて'], ['suv','SUV'], ['sedan','セダン／ハッチバック'], ['pickup','ピックアップ'], ['minivan','ミニバン'] ];
+---
+<BaseLayout title="産業を動かす地理｜自動車・太陽光・蓄電池・半導体" description="北米・欧州・アジアの代表国を切り替え、資源・工場・市場・制度のつながりを地図で読み解く。" compactAtlas>
+  <article class="industry-feature" data-industry-feature>
+    <header class="if-heading">
+      <p class="if-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a><span aria-hidden="true"> / </span>特集・産業の地理</p>
+      <div class="if-title-row"><h1>資源の場所、工場の場所、売れる場所</h1><span class="if-edition">初回版 · 確認 2026.10.01</span></div>
+    </header>
+    <nav class="if-sectors" aria-label="特集の分野">
+      {sectors.map((s,i) => <button type="button" data-if-sector={s.id} aria-pressed={i===0}><span class="if-number">0{i+1}</span>{s.label}</button>)}
+    </nav>
+    <div class="if-question"><h2 data-if-question>{sector.question}</h2><p data-if-takeaway>{sector.takeaway}</p></div>
+    <div class="if-controls">
+      <div class="if-regions" role="group" aria-label="見る地域">
+        {sector.regions.map((r,i)=><button type="button" data-if-region={r.id} aria-pressed={i===0}>{r.label}</button>)}
+      </div>
+      <div class="if-tools"><button type="button" data-if-reset>初期表示へ</button><button type="button" data-if-copy>この比較のリンク</button></div>
+    </div>
+    <div class="if-views" role="group" aria-label="比べる項目">
+      <button type="button" data-if-view="market" aria-pressed="true"><span>01</span><b data-if-market-title>売れる車</b></button>
+      <button type="button" data-if-view="manufacturing" aria-pressed="false"><span>02</span><b>作る場所</b></button>
+      <button type="button" data-if-view="mechanism" aria-pressed="false"><span>03</span><b>なぜ違う？</b></button>
+    </div>
+    <div class="if-workspace">
+      <section class="if-map-panel" aria-labelledby="if-map-title">
+        <div class="if-map-head"><h3 id="if-map-title" data-if-map-title>{sector.primaryMetric}</h3><span data-if-period>{sector.period}</span></div>
+        <div class="if-map-stage">
+          {regionIds.map((id,i)=><IndustryFeatureMap region={id} countries={mapCountries(id)} initialValues={Object.fromEntries(sector.regions.find(r=>r.id===id)!.countries.map(c=>[c.id,c.marketLabel]))} initialCountry={sector.regions.find(r=>r.id===id)!.countries[0].id} hidden={i!==0} />)}
+          <div class="if-map-key"><span class="if-key-selected"></span>選択中<span class="if-key-recorded"></span>収録国<span class="if-key-context"></span>背景・未収録</div>
+        </div>
+        <div class="if-map-caption"><p data-if-scope>{sector.scope}</p><p data-if-caution>{sector.caution}</p></div>
+        <div class="if-countries" role="group" aria-label="国・対象範囲を選ぶ" data-if-countries>
+          {region.countries.map((c,i)=><button type="button" data-if-country={c.id} aria-pressed={i===0}><b>{c.name}</b><span>{c.marketLabel}</span></button>)}
+        </div>
+      </section>
+      <aside class="if-reader" aria-labelledby="if-country-title" aria-live="polite">
+        <p class="if-reader-kicker" data-if-reader-kicker>代表国の市場 · 地域平均ではありません</p>
+        <h3 id="if-country-title" data-if-country-name>{country.name}</h3>
+        <p class="if-value" data-if-value>{country.marketLabel}</p>
+        <p class="if-country-note" data-if-country-note>2025年 · 新車販売（IEAのCars）</p>
+        <p data-if-summary>{region.summary}</p>
+        <div class="if-example"><span data-if-example-status>{region.example.status} · {region.example.period}</span><h4 data-if-example-title>{region.example.title}</h4><p data-if-example-description>{region.example.description}</p></div>
+        <p class="if-missing" data-if-missing hidden>該当データ未収録。動力と車型を交差させた国別販売比率は、この初回版にはありません。</p>
+        <div class="if-reader-links"><button type="button" data-if-why>資源・工場・制度から読む →</button><a href="#if-sources" data-if-source-open>根拠を見る</a></div>
+      </aside>
+    </div>
+    <div class="if-compare-entry"><button type="button" data-if-compare aria-expanded="false">3地域を並べて比べる ＋</button><p>代表国・工程の比較。米国は北米、EUは欧州全体の平均ではありません。</p></div>
+    <section class="if-comparison" data-if-comparison hidden aria-labelledby="if-compare-title"><h3 id="if-compare-title" data-if-compare-title>{sector.comparisonTitle}</h3><p data-if-compare-note>{sector.comparisonNote}</p><div data-if-comparison-cards></div></section>
+    <details class="if-classification" data-if-classification>
+      <summary>動力と車型は別の軸 <span data-if-filter-label>すべての動力 × すべての車型</span></summary>
+      <div class="if-classification-grid"><fieldset><legend>動力 · 何で走る？</legend><div>{powertrains.map(([id,label])=><button type="button" data-if-powertrain={id} aria-pressed={id==='all'}>{label}</button>)}</div></fieldset><fieldset><legend>車型 · どんな形？</legend><div>{bodies.map(([id,label])=><button type="button" data-if-body={id} aria-pressed={id==='all'}>{label}</button>)}</div></fieldset></div>
+      <p data-if-technology>SUVにはBEV・PHEV・HEV・ガソリン車などがあります。動力と車型を同じ分類にまとめず、二つの軸で選んでみましょう。</p>
+      <p class="if-small">主地図の割合はすべての車型のBEV＋PHEV。個別の組合せを選ぶと、比率は「未収録」と表示します。</p>
+    </details>
+    <details class="if-deep-dive" data-if-deep-dive>
+      <summary>なぜここ？ 自然条件から日本とのつながりへ</summary>
+      <div class="if-deep-grid"><section><h3>資源・電力・水 → 技術・工場 → 市場</h3><p data-if-why-text>{region.why}</p></section><section><h3>制度が変える選択肢</h3><p data-if-policy>{region.policy}</p><small>制度の確認日：2026-10-01。計画と実績は分けて読みます。</small></section><section><h3>日本にどうつながる？</h3><p data-if-japan>{region.japan}</p></section></div>
+      <div class="if-process"><p>仕組みの模式図 · 実際の納入・輸送ルートを示す線ではありません</p><ol data-if-steps>{sector.steps.map(step=><li><b>{step.title}</b><span>{step.text}</span></li>)}</ol></div>
+    </details>
+    <details class="if-sources" id="if-sources"><summary>出典・用語・対象年を確かめる</summary>
+      <p class="if-source-disclaimer">一次資料に明記された事実を、Insight Journalが日本語で短く整理した独自図です。IEA・OECDのCC BY 4.0資料を翻案しています。翻案は両機関の承認を受けたものではなく、内容・解釈はInsight Journalに責任があります。元データ製品、第三者図表、写真・ロゴは転載していません。</p>
+      <p>工場事例は代表例であり、全工場の一覧ではありません。国の目印は国を選ぶための代表点で、工場の正確な位置ではありません。地図の面積・色の濃さは生産量や割合を示しません。欠測・未収録を0として扱いません。</p>
+      <p>自動車：Carsの新車販売、2025年。BEV＋PHEVを「プラグイン車」と呼び、HEV・ICE・FCEVをその割合に含めません。SUVは動力ではなく車型です。ガソリン／ディーゼル車と水素の燃料電池車を区別します。</p>
+      <ul>{sources.map(source=><li data-if-source={source.id}><a href={source.url}>{source.publisher} · {source.title}</a><small>発行・更新：{source.publishedAt??'原典を参照'} / 確認：{source.checkedAt} / {source.licenseStatus}</small><p>{source.notes}</p></li>)}</ul>
+      <p>国境の背景：<a href="https://www.naturalearthdata.com/about/terms-of-use/">Natural Earth（パブリックドメイン）</a>、既存atlasの国境方針を継承。位置関係を見る概略図で、領土の帰属を主張するものではありません。</p>
+    </details>
+    <p class="if-live-status" data-if-live-status role="status"></p>
+    <noscript><p>JavaScriptが無効です。初期の北米・自動車の地図と出典を表示しています。切り替えにはJavaScriptが必要です。</p></noscript>
+  </article>
+</BaseLayout>
+<script>import '../../scripts/industry-feature';</script>
