@@ -2,6 +2,7 @@
 .atlas-desktop-shell .canada-nature{display:contents;padding:0;border:0;background:none}
 .canada-nature .canada-country-primary{min-width:0;margin:0;align-self:start;padding:8px 0 0;color:#21343d}
 .canada-nature .canada-country-primary{position:relative}
+.canada-nature .canada-country-primary>p:has(>a[hidden]){display:none}
 .canada-nature .canada-country-primary>.country-topic-tabs[aria-label="農林業の分野"]{position:absolute;z-index:5;transform:translate(8px,7px);display:flex;width:fit-content;gap:3px;padding:3px;border:1px solid #9eaca3;border-radius:6px;background:#fffef5ed;box-shadow:0 1px 4px #243b4820}
 .canada-nature .canada-country-primary>.country-topic-tabs[aria-label="農林業の分野"] a{min-height:36px;padding:0 9px;border:0;border-radius:4px;font-weight:750}
 .canada-nature[data-canola-reading-mode=overview] .canada-map-column>.canada-map-actions,.canada-nature[data-canola-reading-mode=overview] .canada-map-column>.canola-map-key{display:none}
