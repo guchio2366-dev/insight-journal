@@ -54,7 +54,7 @@ test('Display preparation preserves every source polygon part and the original f
       assert.equal(feature.geometry.coordinates.length, original.rings.length);
       for (let index = 0; index < feature.geometry.coordinates.length; index++) {
         const ring = feature.geometry.coordinates[index]; assert.ok(ring.length >= 4); assert.deepEqual(ring[0], ring.at(-1));
-        assert.deepEqual(ring[0], original.rings[index][0]);
+        assert.ok(original.rings[index].some(point => point[0] === ring[0][0] && point[1] === ring[0][1]));
         assert.ok(ring.every(point => point.length === 2 && point.every(Number.isFinite)));
       }
     }

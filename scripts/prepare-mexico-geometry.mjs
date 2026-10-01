@@ -1,9 +1,10 @@
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
+import {gunzipSync} from 'node:zlib';
 import {lambertForward,mexicoProjection} from '../src/lib/atlas-mexico-projection.mjs';
 import {geometryTopologyIssues} from './lib/mexico-geometry-topology.mjs';
-const input=process.argv[2]??'../research/inegi-geo-states-response.json';
-const raw=await readFile(input),source=JSON.parse(raw);
+const input=process.argv[2]??'data-source/atlas/mexico/common/inegi-geo-states-2025.json.gz';
+const inputBytes=await readFile(input),raw=input.endsWith('.gz')?gunzipSync(inputBytes):inputBytes,source=JSON.parse(raw);
 if(source.type!=='FeatureCollection'||source.features.length!==32)throw new Error('Expected 32 official state geometries');
 const names=['アグアスカリエンテス','バハ・カリフォルニア','バハ・カリフォルニア・スル','カンペチェ','コアウイラ','コリマ','チアパス','チワワ','メキシコ市','ドゥランゴ','グアナフアト','ゲレロ','イダルゴ','ハリスコ','メヒコ州','ミチョアカン','モレロス','ナヤリット','ヌエボ・レオン','オアハカ','プエブラ','ケレタロ','キンタナ・ロー','サン・ルイス・ポトシ','シナロア','ソノラ','タバスコ','タマウリパス','トラスカラ','ベラクルス','ユカタン','サカテカス'];
 const rings=g=>g.type==='MultiPolygon'?g.coordinates.flat():g.coordinates;
@@ -54,6 +55,19 @@ function simplifyRing(ring,id) {
   for(let i=1;i<closed.length;i++)if(i===closed.length-1||neighbors.get(key(closed[i]))?.size!==2){result.push(...arc(closed.slice(from,i+1)).slice(0,-1));from=i;}
   result.push(result[0]);return result.length>=4?result:ring;
 }
+function accidentalSharedChords(){
+ const owners=new Map(),badArcs=new Set();
+ for(const [canonical,points] of arcCache)for(let i=0;i<points.length-1;i++){
+  const a=key(points[i]),b=key(points[i+1]),edge=a<b?`${a};${b}`:`${b};${a}`,previous=owners.get(edge);
+  if(previous&&previous!==canonical){
+   const isOriginal=arc=>`;${arc};`.includes(`;${a};${b};`)||`;${arc};`.includes(`;${b};${a};`);
+   if(!isOriginal(canonical)||!isOriginal(previous)){badArcs.add(canonical);badArcs.add(previous);}
+  }else owners.set(edge,canonical);
+ }
+ const affected=[];
+ for(const [id,arcs] of ringArcs)if([...arcs].some(arc=>badArcs.has(arc)))affected.push(id);
+ return affected.length?[{kind:'shared-chord',rings:affected}]:[];
+}
 const ringArea=ring=>ring.slice(1).reduce((sum,p,i)=>sum+ring[i][0]*p[1]-p[0]*ring[i][1],0)/2;
 function labelPoint(g) {
   const outer=rings(g).reduce((a,b)=>Math.abs(ringArea(b))>Math.abs(ringArea(a))?b:a);
@@ -70,7 +84,7 @@ features=source.features.map(feature=>{
   for(const ring of rings(geometry))outputVertices+=ring.length;
   return {type:'Feature',properties:{code,cve_ent:code,cvegeo:code,name:feature.properties.nomgeo,nameJa:names[Number(code)-1],label:labelPoint(feature.geometry)},geometry};
 });
-const invalid=geometryTopologyIssues(source.features,features);validationPasses=pass+1;
+const invalid=[...geometryTopologyIssues(source.features,features),...accidentalSharedChords()];validationPasses=pass+1;
 console.log(JSON.stringify({pass,outputVertices,topologyIssues:invalid.length,kinds:invalid.reduce((o,x)=>(o[x.kind]=(o[x.kind]??0)+1,o),{})}));
 if(!invalid.length)break;
 if(pass===11)throw new Error('Geometry simplification introduced unresolved topology defects');

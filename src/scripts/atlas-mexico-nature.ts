@@ -1,4 +1,4 @@
-import {readMexicoNatureState, writeMexicoNatureState, mexicoNatureReturnUrl, mexicoNatureIndicator, indicatorColor, irrigationBins, densityBins, natureComparisonReading, type MexicoNatureState} from '../lib/atlas-mexico-nature';
+import {readMexicoNatureState, writeMexicoNatureState, mexicoNatureReturnUrl, mexicoNatureIndicator, mexicoNatureNormalView, indicatorColor, irrigationBins, densityBins, natureComparisonReading, type MexicoNatureState} from '../lib/atlas-mexico-nature';
 import {stateViewBox} from '../lib/atlas-mexico-geometry';
 import {agricultureMetrics, agricultureSymbolKeys, quantityRadius} from '../lib/atlas-mexico-agriculture';
 import {mexicoPopulationRadius, mexicoPopulationLegendValues, mexicoPopulationSymbolColor, mexicoPopulationSymbolOpacity, mexicoPopulationSymbolStroke, mexicoPopulationSelectedSymbolStroke, mexicoPopulationSelectedSymbolOpacity} from '../lib/atlas-mexico-population';
@@ -60,6 +60,7 @@ export function initMexicoNature(root: HTMLElement): void {
   function renderComparison(selected: NatureStateValue): void {
     const mode = mexicoNatureIndicator(state), populationMode = state.compare === 'population', bins = populationMode ? densityBins : irrigationBins;
     const quantity = mode === 'maize' || mode === 'pine' || mode === 'population';
+    const context = query<SVGGElement>('[data-mexico-nature-population-context]'); if (context) context.style.display = populationMode ? '' : 'none';
     root.dataset.mexicoNatureIndicator = mode;
     const labels = {density: '人口密度', irrigation: '灌漑農地率', maize: '白粒トウモロコシ生産量', pine: '松材取得量', population: '人口規模'};
     const unit = mode === 'density' ? ' 人/km²' : mode === 'irrigation' ? '%' : mode === 'pine' ? ' m³' : mode === 'maize' ? ' t' : ' 人';
@@ -128,7 +129,7 @@ export function initMexicoNature(root: HTMLElement): void {
     state = {...state, ...patch}; render(); window.history.pushState(null, '', writeMexicoNatureState(new URL(window.location.href), state));
     text('[data-mexico-nature-announcement]', `${values.get(state.state)!.name}の${naturalLabel()}${state.compare ? 'と専用比較' : ''}を表示しました。`);
   }
-  for (const button of all<HTMLButtonElement>('[data-mexico-nature-view]')) button.addEventListener('click', () => update({view: button.dataset.mexicoNatureView as 'climate' | 'relief', compare: null, only: false}));
+  for (const button of all<HTMLButtonElement>('[data-mexico-nature-view]')) button.addEventListener('click', () => update(mexicoNatureNormalView(state, button.dataset.mexicoNatureView as 'climate' | 'relief')));
   query<HTMLSelectElement>('[data-mexico-nature-state-select]')?.addEventListener('change', event => update({state: (event.currentTarget as HTMLSelectElement).value}));
   query<HTMLInputElement>('[data-mexico-nature-only]')?.addEventListener('change', event => update({only: (event.currentTarget as HTMLInputElement).checked}));
   for (const path of all<SVGElement>('[data-mexico-nature-state],[data-mexico-nature-compare-state],[data-mexico-nature-compare-symbol]')) {

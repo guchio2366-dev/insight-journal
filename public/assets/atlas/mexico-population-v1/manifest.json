@@ -113,22 +113,22 @@
     "artifacts": [
       {
         "file": "density.svg",
-        "bytes": 2849292,
-        "sha256": "ba96cfd5c0536d3a9b5b1d16a793ddb1b4153e99d736cfc0edce95f40957e5fd",
+        "bytes": 3159467,
+        "sha256": "caac0cb5792ee9eb530d0d174f9715091061b8ad1660d913e56047e554242f6b",
         "states": 32,
         "referenceYear": 2020
       },
       {
         "file": "population.svg",
-        "bytes": 2854737,
-        "sha256": "cbfb6208251c8b6a89ecc6e1783c1c7cb9d3e422b8e760d7510b21cc26e898d5",
+        "bytes": 3164912,
+        "sha256": "d44c3473be3321faaf6834b6e454de1e490f2b6e80c244eeba5dd1a0b23b5389",
         "states": 32,
         "referenceYear": 2020
       },
       {
         "file": "density-population.svg",
-        "bytes": 2854752,
-        "sha256": "6357311e67dc3522ed5c1bcd2cd60e1c57b2b79c434a9ad954c89232566bec59",
+        "bytes": 3164927,
+        "sha256": "65f5120a748d45ffe9e82ec88c65091cf26f5c6246f49c8c51214c4a6eeefae1",
         "states": 32,
         "referenceYear": 2020
       }

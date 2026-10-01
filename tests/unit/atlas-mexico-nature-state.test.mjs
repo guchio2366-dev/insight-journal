@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readMexicoNatureState, writeMexicoNatureState, mexicoNatureReturnUrl, mexicoNatureIndicator, indicatorColor, irrigationBins, densityBins, natureComparisonReading} from '../../src/lib/atlas-mexico-nature.ts';
+import {readMexicoNatureState, writeMexicoNatureState, mexicoNatureReturnUrl, mexicoNatureIndicator, mexicoNatureNormalView, indicatorColor, irrigationBins, densityBins, natureComparisonReading} from '../../src/lib/atlas-mexico-nature.ts';
 import {irrigationBins as agricultureBins, irrigationColor} from '../../src/lib/atlas-mexico-agriculture.ts';
 import {mexicoDensityBins, mexicoDensityColor} from '../../src/lib/atlas-mexico-population.ts';
 const codes = Array.from({length: 32}, (_, index) => String(index + 1).padStart(2, '0'));
@@ -38,6 +38,15 @@ test('Quantity-source comparisons retain the source metric and natural region ap
   assert.equal(mexicoNatureIndicator(population), 'population'); assert.equal(population.view, 'relief');
   const allStates = {...maize, only: false};
   assert.deepEqual(readMexicoNatureState(writeMexicoNatureState(new URL('https://example.test/'), allStates), codes), allStates);
+});
+test('Explicit natural-view selection clears source quantity provenance before following the irrigation comparison entry', () => {
+  const pine = readMexicoNatureState(new URL('https://example.test/?compare=irrigation&from=agriculture&sourceMetric=pine&state=10&sourceOnly=1'), codes);
+  const climate = mexicoNatureNormalView(pine, 'climate');
+  const saved = writeMexicoNatureState(new URL('https://example.test/'), climate);
+  assert.equal(saved.searchParams.has('from'), false); assert.equal(saved.searchParams.has('sourceMetric'), false);
+  assert.deepEqual(readMexicoNatureState(saved, codes), climate);
+  const next = readMexicoNatureState(writeMexicoNatureState(saved, {...climate, compare: 'irrigation'}), codes);
+  assert.equal(next.view, 'climate'); assert.equal(mexicoNatureIndicator(next), 'irrigation');
 });
 test('A public zero is a valid rate; an unknown value is distinct and density/rate bin boundaries are exact', () => {
   assert.equal(indicatorColor(0, irrigationBins), irrigationBins[0].color);

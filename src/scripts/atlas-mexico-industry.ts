@@ -4,7 +4,7 @@ import {formatMexicoDensity,formatMexicoPopulation,mexicoDensityColor,mexicoPopu
 type IndustryRow={id:string;values:Record<MexicoIndustryMetric,MexicoIndustryValue>};
 type IndustryPlace={id:string;name:string;short:string;sourceName:string};
 type Reading={comparison:{title:string;lead:string;text:string};populationComparison:{title:string;lead:string;text:string;periodNote:string};transport:{heading:string;text:string};electronics:{heading:string;text:string}};
-type Config={data:{year:number;states:IndustryPlace[];rows:IndustryRow[];metrics:{id:MexicoIndustryMetric;name:string}[]};population:{states:MexicoPopulationRow[]};reading:Reading;views:Record<string,string>;industryHref:string;populationHref:string;mapViewBox:string};
+type Config={data:{year:number;states:IndustryPlace[];rows:IndustryRow[];metrics:{id:MexicoIndustryMetric;name:string}[]};population:{states:MexicoPopulationRow[]};reading:Reading;labels:Record<string,[number,number]>;views:Record<string,string>;industryHref:string;populationHref:string;mapViewBox:string};
 
 export function initMexicoIndustry(root:HTMLElement):void {
  if(root.dataset.miInitialized==='true')return;
@@ -31,6 +31,7 @@ export function initMexicoIndustry(root:HTMLElement):void {
    const size=14/scale;
    for(const label of Array.from(svg.querySelectorAll<SVGTextElement>('[data-mi-label],[data-mi-context-label]'))) {
     label.style.fontSize=`${size}px`;label.style.strokeWidth=`${3/scale}px`;
+    if(label.dataset.miLabel){const code=label.dataset.miLabel;label.setAttribute('y',String(config.labels[code][1]-(svg.dataset.miKind==='population'?mexicoPopulationRadius(population.get(code)!.population)+6/scale:7)));}
    }
   }
   const source=one<SVGSVGElement>('[data-mi-map="secondary"]'),legend=one<SVGSVGElement>('.mi-circle-legend');
@@ -51,7 +52,7 @@ export function initMexicoIndustry(root:HTMLElement):void {
   heading.replaceChildren(document.createTextNode(title),sub);
   text(`#mi-${slot}-title`,title);
   text(`#mi-${slot}-desc`,isPopulation?(state.sourceView==='density'?'元の2020年人口密度分布。色は州平均の人/km²。':'元の2020年人口分布。円の面積は人口に比例。'):'色は州の生産地に配分されたFOB輸出額。両業種は共通階級。秘匿は斜線、未把握は点模様。');
-  const top=isPopulation?(state.sourceView==='density'?['09','15']:['15','09']):metric==='transport'?['05','11']:['08','14'];
+  const top=isPopulation?[]:metric==='transport'?['05','11']:['08','14'];
   for(const shape of Array.from(svg.querySelectorAll<SVGPathElement>('[data-mi-shape]'))) {
    const code=shape.dataset.miShape!,selected=code===state.state;
    shape.toggleAttribute('hidden',state.only&&!selected);shape.classList.toggle('is-selected',selected);
@@ -77,7 +78,7 @@ export function initMexicoIndustry(root:HTMLElement):void {
    show('[data-mi-population-legend]',isPopulation);show('[data-mi-density-legend]',isPopulation&&state.sourceView==='density');
    show('[data-mi-population-size-legend]',isPopulation&&state.sourceView==='population');show('[data-mi-population-circles]',isPopulation&&state.sourceView==='population');
   }
-  text(`[data-mi-map-caption="${slot}"]`,isPopulation?(state.sourceView==='density'?'2020年。元の人口密度の階級。':'2020年。元の人口の面積比例円。'):`2025年速報。${metricName(metric!)}の公開値 ${config.data.rows.filter(r=>['available','zero'].includes(r.values[metric!].status)).length}/32州。`);
+  text(`[data-mi-map-caption="${slot}"]`,state.only?(isPopulation?'2020年。灰色は位置の参照。':'全世界向け。灰色は位置の参照。'):(isPopulation?(state.sourceView==='density'?'2020年。元の人口密度の階級。':'2020年。元の人口の面積比例円。'):`全世界向け・2025年速報。公開値 ${config.data.rows.filter(r=>['available','zero'].includes(r.values[metric!].status)).length}/32州。`));
  }
 
  function render():void {

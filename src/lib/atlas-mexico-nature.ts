@@ -66,6 +66,9 @@ export function mexicoNatureIndicator(state: MexicoNatureState): MexicoNatureInd
   if (state.compare === 'population') return state.from === 'population' && state.sourceView === 'population' ? 'population' : 'density';
   return state.from === 'agriculture' ? state.sourceMetric : 'irrigation';
 }
+export function mexicoNatureNormalView(state: MexicoNatureState, view: MexicoNatureView): MexicoNatureState {
+  return {...state, view, compare: null, only: false, from: null, sourceState: state.state, sourceOnly: false, sourceFallback: state.fallback, sourceMetric: 'irrigation', sourceView: 'density'};
+}
 export const irrigationBins = sourceIrrigationBins.map(bin => ({...bin, minimum: bin.min}));
 export const densityBins = mexicoDensityBins.map(bin => ({...bin, minimum: bin.min}));
 export function indicatorColor(value: number | null, bins: {minimum: number; color: string}[]): string {

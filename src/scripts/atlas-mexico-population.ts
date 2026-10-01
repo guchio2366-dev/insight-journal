@@ -107,6 +107,8 @@ export function initMexicoPopulation(root: HTMLElement) {
     if (state.fallback) {
       const staticMap = query<SVGSVGElement>('[data-population-map]').cloneNode(true) as SVGSVGElement;
       staticMap.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+      staticMap.setAttribute('width', '900');
+      staticMap.setAttribute('height', '580');
       const style = document.createElementNS('http://www.w3.org/2000/svg', 'style');
       style.textContent = '[hidden]{display:none}svg{background:#eaf1ee}path{vector-effect:non-scaling-stroke}.population-context{fill:#e1e6dc;stroke:#a9b7ab;stroke-width:.6;fill-rule:evenodd}.population-state{stroke:#fffefa;stroke-width:.8;fill-rule:evenodd}.population-state.is-selected-population{stroke:#9c3b24;stroke-width:2.6}.population-symbol circle,.population-map-symbol-key circle{fill:#d68b38;fill-opacity:.58;stroke:#81511c;stroke-width:1.4}.population-symbol.is-selected-population circle{stroke:#862f21;stroke-width:3.2;fill-opacity:.76}.population-labels text,.population-selected-label text{font-family:system-ui,sans-serif;font-size:30px;font-weight:650;fill:#203d36;paint-order:stroke;stroke:#fffefa;stroke-width:5px;stroke-linejoin:round}.population-selected-label path{fill:none;stroke:#9c3b24;stroke-width:2}.population-selected-label text{fill:#772f21}.population-map-context text{font-family:system-ui,sans-serif;font-size:29px;fill:#57726c}.population-map-symbol-key text{font-family:system-ui,sans-serif;font-size:28px;fill:#384d42;paint-order:stroke;stroke:#eaf1ee;stroke-width:3px}';
       staticMap.prepend(style);

@@ -98,19 +98,54 @@ export function simplifyRing(ring, tolerance = 300) {
 export function validateNaturalTopology(features, originals) {
   const geographic = rings => ({type: 'Polygon', coordinates: rings.map(ring => ring.map(lambertInverse))});
   const sourceFeatures = features.map(feature => ({properties: {code: feature.id}, geometry: geographic(originals.get(feature.id))}));
-  const tolerances = new Map(features.map(feature => [feature.id, feature.geometry.coordinates.map(() => 300)]));
+  const key = point => point.join(','), neighbors = new Map(), arcCache = new Map(), arcTolerances = new Map(), ringArcs = new Map();
+  for (const feature of features) for (const ring of originals.get(feature.id)) for (let index = 0; index < ring.length - 1; index++) {
+    const a = key(ring[index]), b = key(ring[index + 1]); if (a === b) continue;
+    if (!neighbors.has(a)) neighbors.set(a, new Set()); if (!neighbors.has(b)) neighbors.set(b, new Set());
+    neighbors.get(a).add(b); neighbors.get(b).add(a);
+  }
+  let currentRing = '';
+  const arc = points => {
+    const forward = points.map(key).join(';'), reverse = [...points].reverse().map(key).join(';'), reversed = reverse < forward, canonical = reversed ? reverse : forward;
+    if (!ringArcs.has(currentRing)) ringArcs.set(currentRing, new Set()); ringArcs.get(currentRing).add(canonical);
+    if (!arcCache.has(canonical)) {
+      const ordered = reversed ? [...points].reverse() : points, tolerance = arcTolerances.get(canonical) ?? 300;
+      if (!tolerance || ordered.length < 3) arcCache.set(canonical, ordered);
+      else {
+        const keep = new Set([0, ordered.length - 1]), stack = [[0, ordered.length - 1]];
+        while (stack.length) {const [first, last] = stack.pop(); let maximum = tolerance ** 2, selected = -1; for (let index = first + 1; index < last; index++) {const distance = squaredDistanceToSegment(ordered[index], ordered[first], ordered[last]); if (distance > maximum) {maximum = distance; selected = index;}} if (selected >= 0) {keep.add(selected); stack.push([first, selected], [selected, last]);}}
+        arcCache.set(canonical, [...keep].sort((a, b) => a - b).map(index => ordered[index]));
+      }
+    }
+    const result = arcCache.get(canonical); return reversed ? [...result].reverse() : result;
+  };
+  const ring = (original, id) => {
+    currentRing = id;
+    const points = original.slice(0, -1), junctions = [];
+    for (let index = 0; index < points.length; index++) if (neighbors.get(key(points[index]))?.size !== 2) junctions.push(index);
+    if (!junctions.length) {
+      let anchor = 0; for (let index = 1; index < points.length; index++) if (key(points[index]) < key(points[anchor])) anchor = index;
+      points.push(...points.splice(0, anchor));
+      // Two canonical anchors also agree for oppositely oriented closed shared rings.
+      let split = 1, maximum = -1; for (let index = 1; index < points.length; index++) {const distance = (points[index][0] - points[0][0]) ** 2 + (points[index][1] - points[0][1]) ** 2; if (distance > maximum || (distance === maximum && key(points[index]) < key(points[split]))) {maximum = distance; split = index;}}
+      const closed = [...points, points[0]], result = [...arc(closed.slice(0, split + 1)).slice(0, -1), ...arc(closed.slice(split))];
+      return result.length >= 4 ? result : original;
+    }
+    const start = junctions[0], closed = [...points.slice(start), ...points.slice(0, start), points[start]], result = [];
+    let from = 0; for (let index = 1; index < closed.length; index++) if (index === closed.length - 1 || neighbors.get(key(closed[index]))?.size !== 2) {result.push(...arc(closed.slice(from, index + 1)).slice(0, -1)); from = index;}
+    result.push(result[0]); return result.length >= 4 ? result : original;
+  };
   let passes = 0;
   for (let pass = 0; pass < 25; pass++) {
+    arcCache.clear(); ringArcs.clear();
+    for (const feature of features) feature.geometry.coordinates = originals.get(feature.id).map((original, index) => ring(original, `${feature.id}:0:${index}`));
     const rendered = features.map(feature => ({properties: {code: feature.id}, geometry: geographic(feature.geometry.coordinates)}));
     const issues = geometryTopologyIssues(sourceFeatures, rendered); passes = pass + 1;
     console.log(JSON.stringify({layer: features[0].id.split('-')[0], pass, topologyIssues: issues.length}));
-    if (!issues.length) return {validationPasses: passes, adaptedRings: [...tolerances.values()].flat().filter(value => value < 300).length, minimumToleranceM: Math.min(...[...tolerances.values()].flat()), newProperIntersections: 0, newContainments: 0, orientationChanges: 0};
+    if (!issues.length) return {validationPasses: passes, sharedArcCount: arcCache.size, adaptedArcs: arcTolerances.size, minimumToleranceM: Math.min(300, ...arcTolerances.values()), newProperIntersections: 0, newContainments: 0, orientationChanges: 0};
     if (pass === 24) throw new Error(`Natural geometry simplification has unresolved topology changes: ${JSON.stringify(issues.slice(0, 8))}`);
     for (const ringId of new Set(issues.flatMap(issue => issue.rings))) {
-      const [id, polygon, ring] = ringId.split(':'), index = Number(ring);
-      if (polygon !== '0') throw new Error('Unexpected natural geometry polygon index');
-      const values = tolerances.get(id); values[index] = pass >= 7 ? 0 : values[index] / 4;
-      features.find(feature => feature.id === id).geometry.coordinates[index] = simplifyRing(originals.get(id)[index], values[index]);
+      for (const canonical of ringArcs.get(ringId) ?? []) arcTolerances.set(canonical, pass >= 7 ? 0 : (arcTolerances.get(canonical) ?? 300) / 4);
     }
   }
 }
@@ -164,7 +199,7 @@ export async function prepareNature(inputDir) {
   const license = {name: 'Términos de Libre Uso de la Información del INEGI', url: 'https://www.inegi.org.mx/inegi/terminos.html', creditRequired: true, metadataPreserved: true, transformationsDisclosed: true};
   const climateSource = {agency: 'INEGI', product: 'Conjunto de datos vectoriales escala 1:1 000 000. Unidades climáticas', edition: 2008, observedPeriod: null, periodNote: '作図期の約4,000観測所の資料を使用。統一された観測対象期間は同梱説明に記載なし。2008は刊行年。', scale: 1000000, url: 'https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568', downloadUrl: 'https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/geografia/tematicas/CLIMAS/702825267568_s.zip', sha256: sha256(climateBytes), originalRecords: climateRecords.length, excludedRecords: climateRecords.length - climateFeatures.length, license, correction: {date: '2021-05-21', objectId: 551, classCode: 'BS0hw', featureCode: 22114, classLabel: 'Seco semicalido'}};
   const reliefSource = {agency: 'INEGI', product: 'Conjunto de datos vectoriales Fisiográficos. Continuo Nacional serie I. Provincias fisiográficas', edition: 2001, observedPeriod: null, periodNote: '2001版の自然地理地域区分。標高の観測値を示す資料ではない。', scale: 1000000, url: 'https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267575', downloadUrl: 'https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/geografia/tematicas/FISIOGRAFIA/702825267575_s.zip', sha256: sha256(reliefBytes), originalRecords: reliefRecords.length, excludedRecords: reliefRecords.length - reliefFeatures.length, license, individualUseConstraints: 'None', individualLicenseFile: 'metadatos/metadatos_cdv_1_1_000_000_provincias_fisiográficas.txt'};
-  const data = {schemaVersion: 1, generatedAt: '2026-10-01', projection: {name: 'Lambert Conformal Conic', datum: 'ITRF92', ellipsoid: 'GRS80', semiMajorM: 6378137, inverseFlattening: 298.257222101, standardParallel1: 17.5, standardParallel2: 29.5, latitudeOfOrigin: 12, centralMeridian: -102, falseEastingM: 2500000, falseNorthingM: 0, units: 'm'}, processing: {simplificationToleranceM: 300, algorithm: 'Ordered original-vertex Douglas-Peucker; adaptive smaller tolerance for new intersections, containment and orientation changes in the INEGI Lambert plane', coordinateRoundingM: 0, sourceRingsPreserved: true, topology, categoryAggregation: '原分類を保持し、画面の凡例だけ6気候群に集約。数量・面積・水収支の推計なし。', displayOnly: true}, bounds, climate: {source: climateSource, groups: climateGroups, classes: climateClasses, features: climateFeatures}, relief: {source: reliefSource, classes: reliefClasses, features: reliefFeatures}};
+  const data = {schemaVersion: 1, generatedAt: '2026-10-01', projection: {name: 'Lambert Conformal Conic', datum: 'ITRF92', ellipsoid: 'GRS80', semiMajorM: 6378137, inverseFlattening: 298.257222101, standardParallel1: 17.5, standardParallel2: 29.5, latitudeOfOrigin: 12, centralMeridian: -102, falseEastingM: 2500000, falseNorthingM: 0, units: 'm'}, processing: {simplificationToleranceM: 300, algorithm: 'Shared-arc original-vertex Douglas-Peucker; fixed graph junctions and canonical closed-ring anchors; adaptive smaller tolerance for new intersections, containment and orientation changes in the INEGI Lambert plane', coordinateRoundingM: 0, sourceRingsPreserved: true, topology, categoryAggregation: '原分類を保持し、画面の凡例だけ6気候群に集約。数量・面積・水収支の推計なし。', displayOnly: true}, bounds, climate: {source: climateSource, groups: climateGroups, classes: climateClasses, features: climateFeatures}, relief: {source: reliefSource, classes: reliefClasses, features: reliefFeatures}};
   const output = JSON.stringify(data);
   await writeFile(dataPath, output + '\n');
   const geometryMetadata = JSON.parse(await readFile(resolve(repo, 'src/data/atlas/mexico/geometry-index.json'), 'utf8')).metadata;

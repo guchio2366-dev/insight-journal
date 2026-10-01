@@ -68,22 +68,24 @@
   },
   "processing": {
     "simplificationToleranceM": 300,
-    "algorithm": "Ordered original-vertex Douglas-Peucker; adaptive smaller tolerance for new intersections, containment and orientation changes in the INEGI Lambert plane",
+    "algorithm": "Shared-arc original-vertex Douglas-Peucker; fixed graph junctions and canonical closed-ring anchors; adaptive smaller tolerance for new intersections, containment and orientation changes in the INEGI Lambert plane",
     "coordinateRoundingM": 0,
     "sourceRingsPreserved": true,
     "topology": {
       "climate": {
-        "validationPasses": 9,
-        "adaptedRings": 815,
-        "minimumToleranceM": 0,
+        "validationPasses": 3,
+        "sharedArcCount": 4121,
+        "adaptedArcs": 31,
+        "minimumToleranceM": 18.75,
         "newProperIntersections": 0,
         "newContainments": 0,
         "orientationChanges": 0
       },
       "relief": {
-        "validationPasses": 14,
-        "adaptedRings": 38,
-        "minimumToleranceM": 0,
+        "validationPasses": 3,
+        "sharedArcCount": 1432,
+        "adaptedArcs": 50,
+        "minimumToleranceM": 18.75,
         "newProperIntersections": 0,
         "newContainments": 0,
         "orientationChanges": 0
@@ -93,11 +95,11 @@
     "displayOnly": true
   },
   "geometryFile": "nature-v1.json",
-  "geometrySha256": "e66b11a9ae297c71eae4a675ba22f700096fcd8f1b574069bf3414fe292d8c0b",
+  "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d",
   "assets": [
     {
       "file": "climate.svg",
-      "sha256": "f8ecbbaf5410920a243fe264ebb3f2a29429b9185f05ef45753adb1bc7a53009",
+      "sha256": "dbf179f430ee9cf3e2ac4ec034bd680655c1e36886fdde8d18bb8786bfbda4f5",
       "viewBox": "0 0 900 580",
       "boundsNative": [
         911292.029449366,
@@ -109,7 +111,7 @@
     },
     {
       "file": "relief.svg",
-      "sha256": "3dc26b165fb3dcb0f8d73f0536ccc8cdc2c0a7f0a9f938092b5d3b3c3468f3de",
+      "sha256": "05c2bb95b7ade2bf9faaa0db0d1790eed34396cfca3feec6a9ebb1d38fdba686",
       "viewBox": "0 0 900 580",
       "boundsNative": [
         911292.029449366,

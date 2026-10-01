@@ -51,7 +51,7 @@ test('Irrigation, pine zeros, fallback and focus retain every related geographic
     assert.equal(map.hasAttribute('hidden'), false);
     assert.equal(doc.querySelector('[data-agriculture-map-fallback]').hidden, true);
     doc.querySelector('[data-agriculture-metric="pine"]').click();
-    assert.equal(root.dataset.agricultureState, '10');
+    assert.equal(root.dataset.agricultureCurrentState, '10');
     assert.equal(doc.querySelector('[data-agriculture-selection-value]').textContent, '4,173,804 m³');
     doc.querySelector('[data-agriculture-state]').value = '05';
     doc.querySelector('[data-agriculture-state]').dispatchEvent(new window.Event('change'));
@@ -67,25 +67,25 @@ test('URL refresh, keyboard selection, history and comparison target restore fie
   const window = await page('?metric=pine&state=08&only=1&fallback=1&extra=keep', true);
   try {
     const doc = window.document, root = doc.querySelector('[data-mexico-field="agriculture"]');
-    assert.equal(root.dataset.agricultureMetric, 'pine');
-    assert.equal(root.dataset.agricultureState, '08');
+    assert.equal(root.dataset.agricultureCurrentMetric, 'pine');
+    assert.equal(root.dataset.agricultureCurrentState, '08');
     const link = new URL(doc.querySelector('[data-agriculture-nature-comparison]').href);
     assert.equal(link.searchParams.get('state'), '08');
     assert.equal(link.searchParams.get('sourceMetric'), 'pine');
     assert.equal(link.searchParams.get('sourceOnly'), '1');
     assert.equal(link.searchParams.get('sourceFallback'), '1');
     doc.querySelector('path[data-agriculture-state-code="25"]').dispatchEvent(new window.KeyboardEvent('keydown', {key:'Enter'}));
-    assert.equal(root.dataset.agricultureState, '25');
+    assert.equal(root.dataset.agricultureCurrentState, '25');
     assert.equal(new URL(window.location.href).searchParams.get('extra'), 'keep');
     window.history.replaceState(null, '', '?metric=irrigation&state=26&only=1');
     window.dispatchEvent(new window.PopStateEvent('popstate'));
-    assert.equal(root.dataset.agricultureMetric, 'irrigation');
-    assert.equal(root.dataset.agricultureState, '26');
+    assert.equal(root.dataset.agricultureCurrentMetric, 'irrigation');
+    assert.equal(root.dataset.agricultureCurrentState, '26');
     assert.equal(doc.querySelector('[data-agriculture-selection-value]').textContent, '84.7 %');
     assert.equal(doc.querySelector('[data-agriculture-map]').hasAttribute('hidden'), false);
     assert.equal(doc.querySelectorAll('path[data-agriculture-state-code][aria-pressed="true"]').length, 1);
     const reread = await page(new URL(window.location.href).search, true);
-    try {assert.equal(reread.document.querySelector('[data-mexico-field="agriculture"]').dataset.agricultureState, '26');}
+    try {assert.equal(reread.document.querySelector('[data-mexico-field="agriculture"]').dataset.agricultureCurrentState, '26');}
     finally {await reread.happyDOM.close();}
   } finally {await window.happyDOM.close();}
 });

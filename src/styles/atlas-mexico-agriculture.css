@@ -9,7 +9,7 @@
 .mexico-agriculture-selected-label{pointer-events:none}.mexico-agriculture-figure figcaption{margin-top:5px;min-height:42px}
 .mexico-agriculture-key{min-height:40px;margin-top:4px}.mexico-agriculture-symbol-key{display:flex;align-items:center;flex-wrap:wrap;gap:7px 13px;font-size:13px;line-height:1.45}
 .mexico-agriculture-symbol-key>span:first-child{font-weight:700}.mexico-agriculture-symbol-key-item{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
-.mexico-agriculture-symbol-key svg{display:block;width:100%;max-width:calc(280px * 900 / 580);height:auto;margin-inline:auto;overflow:visible}.mexico-agriculture-symbol-key circle{fill-opacity:.67;stroke:#54634c;stroke-width:1}.mexico-agriculture-symbol-key text{font-size:30px;fill:#344b3a}
+.mexico-agriculture-symbol-key svg{display:block;width:100%;max-width:calc((280px - 2px) * 900 / 580);height:auto;margin-inline:auto;overflow:visible}.mexico-agriculture-symbol-key circle{fill-opacity:.67;stroke:#54634c;stroke-width:1}.mexico-agriculture-symbol-key text{font-size:30px;fill:#344b3a}
 .mexico-agriculture-zero{color:#5a685c}.mexico-agriculture-tabs{display:flex;flex-wrap:wrap;gap:6px;width:100%}
 .mexico-agriculture-tabs a{display:inline-flex;align-items:center;gap:7px;border:1px solid #b8c7b9;border-radius:5px;background:#fffefa;padding:7px 9px;min-height:37px;color:#314b39;text-decoration:none;font-size:14px;font-weight:700}
 .mexico-agriculture-tabs a[aria-current]{background:#34533b;color:#fff;border-color:#34533b}.mexico-agriculture-tabs small{font-size:12px;font-weight:400}
@@ -25,6 +25,6 @@
 .mexico-agriculture-map-fallback table{width:100%;border-collapse:collapse;font-size:14px}.mexico-agriculture-map-fallback th,.mexico-agriculture-map-fallback td{padding:5px 8px;border-bottom:1px solid #dae2d4;text-align:right}
 .mexico-agriculture-map-fallback th:first-child{text-align:left}.mexico-agriculture-map-fallback caption{text-align:left;font-size:14px;font-weight:700;padding-bottom:5px}.mexico-agriculture-map-fallback tbody button{padding:0;border:0;background:transparent!important;color:#255f51!important;min-height:28px;font-size:14px;text-align:left;text-decoration:underline;text-underline-offset:3px}
 .mexico-agriculture-map-fallback tr.is-selected{background:#f0e6ce}.mexico-agriculture-map-fallback thead{position:sticky;top:0;background:#eef3e7}
-@media(min-width:1600px){.mexico-agriculture-symbol-key svg{max-width:calc(540px * 900 / 580)}}
+@media(min-width:1600px){.mexico-agriculture-symbol-key svg{max-width:calc((540px - 2px) * 900 / 580)}}
 @media(max-width:959px){.mexico-agriculture-selection strong{font-size:19px}.mexico-agriculture-key{margin:7px 0}.mexico-agriculture-symbol-key svg{max-width:none}.mexico-agriculture-tabs a{min-height:42px}.mexico-agriculture .mexico-controls{gap:6px 9px}.mexico-agriculture-figure figcaption{min-height:0}.mexico-agriculture-map-fallback{height:335px}}
 @media(max-width:430px){.mexico-agriculture .mexico-controls select{max-width:165px}.mexico-agriculture-tabs{gap:4px}.mexico-agriculture-tabs a{padding:6px 7px;font-size:13px}.mexico-agriculture-map-heading h2{font-size:17px}.mexico-agriculture-symbol-key{gap:6px 9px}}

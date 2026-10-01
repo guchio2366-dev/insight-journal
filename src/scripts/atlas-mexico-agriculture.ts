@@ -123,9 +123,9 @@ export function initMexicoAgriculture(root: HTMLElement): void {
       setText(`[data-agriculture-fallback-value="${item.code}"]`, formatAgricultureValue(agricultureValue(item, state.metric), state.metric));
       fallbackBody.append(row);
     }
-    root.dataset.agricultureMetric = state.metric;
-    root.dataset.agricultureState = state.state;
-    root.dataset.agricultureFallback = String(state.fallback);
+    root.dataset.agricultureCurrentMetric = state.metric;
+    root.dataset.agricultureCurrentState = state.state;
+    root.dataset.agricultureRenderMode = state.fallback ? 'fallback' : 'normal';
     root.dataset.agricultureReady = 'true';
   }
 

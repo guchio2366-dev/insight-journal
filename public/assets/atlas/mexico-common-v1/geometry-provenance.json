@@ -29,9 +29,9 @@
   "simplification": {
     "algorithm": "Shared-arc Douglas-Peucker in INEGI Lambert plane; graph junctions fixed; adaptive smaller tolerance for new intersections, containment or orientation changes against source chains",
     "maximumToleranceM": 697.488255063554,
-    "minimumToleranceM": 0.002660706539396492,
+    "minimumToleranceM": 0.000665176634849123,
     "originalVertices": 1014750,
-    "outputVertices": 211825,
+    "outputVertices": 227088,
     "sharedArcCount": 838,
     "validationPasses": 6,
     "newProperIntersections": 0,
