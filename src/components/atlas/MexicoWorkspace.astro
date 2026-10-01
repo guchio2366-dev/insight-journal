@@ -52,12 +52,16 @@ const initialReadingSelected=Astro.url.searchParams.get('reading')!=='overview'&
     const select=root.querySelector<HTMLSelectElement>('[data-agriculture-state]');
     if(select?.value)root.dataset.mexicoReadingState=select.value;
     if(select)select.value='';
-    for(const element of root.querySelectorAll<HTMLElement|SVGElement>('[data-agriculture-state-code], [data-agriculture-stat-row], [data-agriculture-fallback-row]')){
+    const only=root.querySelector<HTMLInputElement>('[data-agriculture-only]');
+    if(only){only.disabled=true;const control=only.closest<HTMLElement>('label');if(control)control.hidden=true;}
+    const map=root.querySelector('[data-agriculture-map]');
+    if(map?.classList.contains('is-only'))map.classList.remove('is-only');
+    for(const element of root.querySelectorAll<HTMLElement|SVGElement>('[data-agriculture-state-code], [data-agriculture-stat-row], [data-agriculture-fallback-row], [data-agriculture-pick]')){
      if(element.classList.contains('is-selected'))element.classList.remove('is-selected');
      if(element.hasAttribute('aria-pressed')&&element.getAttribute('aria-pressed')!=='false')element.setAttribute('aria-pressed','false');
     }
     const description=root.querySelector('#mexico-agriculture-svg-desc');
-    if(description)description.textContent='州を選ぶと値と説明を読めます。円は州合計の生産量に比例し、農地の場所や面積を表しません。州選択欄と下の32州表でも確認できます。';
+    if(description)description.textContent='全国32州の農林業指標の分布です。指標と単位は地図下の見出し・凡例に記載しています。州を選ぶと、その州の値と説明を読めます。';
     const url=new URL(location.href);url.searchParams.set('reading','overview');history.replaceState(null,'',url);root.dataset.mexicoOverviewUrl=url.href;
    };
    const choose='[data-agriculture-state],[data-agriculture-pick],[data-agriculture-state-code],[data-agriculture-metric],[data-mexico-nature-state-select],[data-mexico-nature-state],[data-mexico-nature-compare-state],[data-mexico-nature-compare-symbol],[data-mi-state-select],[data-mi-metric],[data-mi-shape],[data-mi-population-circle],[data-population-state],[data-population-state-shape],[data-population-state-symbol]';
@@ -75,8 +79,10 @@ const initialReadingSelected=Astro.url.searchParams.get('reading')!=='overview'&
       const select=root.querySelector<HTMLSelectElement>('[data-agriculture-state]');
       const code=select?.value||root.dataset.mexicoReadingState||'25';
       if(select)select.value=code;
-      for(const element of root.querySelectorAll<HTMLElement|SVGElement>('[data-agriculture-state-code], [data-agriculture-stat-row], [data-agriculture-fallback-row]')){
-       const current=(element.getAttribute('data-agriculture-state-code')??element.getAttribute('data-agriculture-stat-row')??element.getAttribute('data-agriculture-fallback-row'))===code;
+      const only=root.querySelector<HTMLInputElement>('[data-agriculture-only]');
+      if(only){only.disabled=false;const control=only.closest<HTMLElement>('label');if(control)control.hidden=false;root.querySelector('[data-agriculture-map]')?.classList.toggle('is-only',only.checked);}
+      for(const element of root.querySelectorAll<HTMLElement|SVGElement>('[data-agriculture-state-code], [data-agriculture-stat-row], [data-agriculture-fallback-row], [data-agriculture-pick]')){
+       const current=(element.getAttribute('data-agriculture-state-code')??element.getAttribute('data-agriculture-stat-row')??element.getAttribute('data-agriculture-fallback-row')??element.getAttribute('data-agriculture-pick'))===code;
        element.classList.toggle('is-selected',current);
        if(element.hasAttribute('aria-pressed'))element.setAttribute('aria-pressed',String(current));
       }

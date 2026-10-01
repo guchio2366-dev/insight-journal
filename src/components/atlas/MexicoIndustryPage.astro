@@ -24,13 +24,13 @@ const config={data,population,reading,labels,views,industryHref,populationHref,m
 const value=(v:unknown)=>industryValueText(v as MexicoIndustryValue);
 ---
 <MexicoWorkspace field="industry" title="輸出工業の立地を読む、メキシコの主要産業" lead={reading.lead}>
- <div slot="map" class="mi-map-panel">
-  <div data-mi-comparison-heading hidden><h2 data-mi-comparison-title>{reading.comparison.title}</h2><p class="mexico-caption" data-mi-comparison-lead>{reading.comparison.lead}</p></div>
-  <div class="mexico-controls mi-controls">
+  <div slot="controls" class="mexico-controls mi-controls">
    <label>輸出業種 <select data-mi-metric>{data.metrics.map(m=><option value={m.id} selected={m.id==='transport'}>{m.name}</option>)}</select></label>
    <label>州 <select data-mi-state-select>{data.states.map(s=><option value={s.id} selected={s.id===selected.id}>{s.name}</option>)}</select></label>
    <label data-mi-source-view-control hidden>元の分布 <select data-mi-source-view><option value="density">人口密度</option><option value="population">人口</option></select></label>
   </div>
+ <div slot="map" class="mi-map-panel">
+  <div data-mi-comparison-heading hidden><h2 data-mi-comparison-title>{reading.comparison.title}</h2><p class="mexico-caption" data-mi-comparison-lead>{reading.comparison.lead}</p></div>
   <div class="mi-map-grid" data-mi-map-grid>
    {['primary','secondary'].map((slot,i)=><figure class="mi-map-figure" data-mi-figure={slot} hidden={i===1}>
     <div class="atlas-map-frame mexico-map-frame">

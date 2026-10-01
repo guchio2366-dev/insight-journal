@@ -1,6 +1,12 @@
 /* Match the approved U.S. workspace while retaining Mexico's official geometry. */
 .atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field]{display:contents;color:#21343d}
 .mexico-workspace .mexico-learning-workspace{min-width:0;padding:8px 0 0;background:transparent;border:0;border-radius:0}
+.mexico-workspace .mexico-learning-workspace{position:relative}
+.mexico-workspace .mexico-learning-workspace>.mexico-controls{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:0;padding:6px;border:1px solid #c7ccbf;border-bottom:0;border-radius:0;background:#fbfaf3}
+.mexico-workspace.mexico-agriculture .mexico-topic-controls{position:absolute;z-index:5;transform:translate(8px,7px);width:fit-content;padding:3px;border:1px solid #9eaca3;border-radius:6px;background:#fffef5ed;box-shadow:0 1px 4px #243b4820}
+.mexico-workspace.mexico-agriculture .mexico-agriculture-topic-tabs{display:flex}
+.mexico-workspace.mexico-agriculture .mexico-agriculture-topic-tabs a{min-height:36px;padding:0 9px;border:0;border-radius:4px;font-size:12px;font-weight:750}
+.atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-controls{top:58px}
 .mexico-workspace .mexico-navigation{margin:0 0 10px}
 .mexico-workspace .mexico-navigation .regional-navigation{display:block;margin:0}
 .atlas-explorer.mexico-workspace .mexico-navigation .regional-navigation .regional-tabs,.atlas-explorer.mexico-workspace .mexico-navigation .regional-navigation .regional-countries{gap:6px}
@@ -80,6 +86,11 @@
 .mexico-workspace .mexico-topic-tabs a,.mexico-workspace .mexico-topic-tabs button{display:flex;justify-content:center;align-items:center;gap:6px;min-height:44px;padding:7px 4px;border:0;border-right:1px solid #d3d6cd;border-radius:0;background:transparent;color:#344951;font-size:13px;font-weight:750;text-decoration:none}
 .mexico-workspace .mexico-topic-tabs a[aria-current]{background:#35515d;color:#fff}
 .mexico-workspace .mexico-topic-tabs>:last-child,.mexico-workspace .mexico-nature-tabs>:last-child{border-right:0}
+.atlas-desktop-shell .mexico-workspace.mexico-population .mexico-topic-controls{display:block;padding:12px 0;margin:0;border:0;background:none}
+.atlas-desktop-shell .mexico-workspace.mexico-population .mexico-population-topic-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;border:0;background:none}
+.atlas-desktop-shell .mexico-workspace.mexico-population .mexico-population-topic-tabs>:is(a,button){display:inline-flex;flex-direction:row;gap:4px;min-height:40px;padding:8px 10px;border:1px solid #bac9c6;border-radius:4px;background:#fff;color:#243f48;font:400 16px/1.75 var(--sans)}
+.atlas-desktop-shell .mexico-workspace.mexico-population .mexico-population-topic-tabs>[aria-current]{background:#224c59;color:#fff}
+.atlas-desktop-shell .mexico-workspace.mexico-population .mexico-population-topic-tabs small{display:inline;margin:0;padding:0;border:0;font-size:10px;line-height:inherit}
 .mexico-workspace :is(.mexico-topic-tabs,.mexico-nature-tabs) button:disabled{color:#8c918b;cursor:default}
 .mexico-workspace :is(.mexico-topic-tabs,.mexico-nature-tabs) small{padding:2px;border:1px solid #cdd0c5;border-radius:3px;font-size:9px;font-weight:400}
 .mexico-workspace .mexico-water-pending-list{display:block;font-size:9px;line-height:1.4;font-weight:400;margin-top:3px}

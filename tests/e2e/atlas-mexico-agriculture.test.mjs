@@ -47,7 +47,11 @@ test('National agriculture overview opens first, same-default Sinaloa is selecta
   assert.equal(root.dataset.mexicoReadingSelected,'false');
   assert.equal(doc.querySelector('[data-agriculture-state]').value,'');
   assert.equal(doc.querySelectorAll('path[data-agriculture-state-code][aria-pressed="true"]').length,0);
+  assert.equal(doc.querySelectorAll('[data-agriculture-pick][aria-pressed="true"]').length,0);
   assert.equal(doc.querySelector('.mexico-reading-content').hidden,true);
+  assert.equal(doc.querySelector('[data-agriculture-only]').disabled,true);
+  assert.equal(doc.querySelector('[data-agriculture-only]').closest('label').hidden,true);
+  assert.equal(doc.querySelector('[data-agriculture-map]').classList.contains('is-only'),false);
   assert.match(doc.querySelector('[data-mexico-country-summary]').textContent,/全国.*白粒.*松材/s);
   const initialReload=await page(window.location.search,true);try{await initialReload.happyDOM.waitUntilComplete();assert.equal(initialReload.document.querySelector('[data-mexico-field="agriculture"]').dataset.mexicoReadingSelected,'false');assert.equal(initialReload.document.querySelector('[data-agriculture-state]').value,'');}finally{await initialReload.happyDOM.close();}
   doc.querySelector('path[data-agriculture-state-code="25"]').dispatchEvent(new window.MouseEvent('click',{bubbles:true}));
@@ -55,24 +59,65 @@ test('National agriculture overview opens first, same-default Sinaloa is selecta
   assert.equal(root.dataset.mexicoReadingSelected,'true');
   assert.equal(doc.querySelector('[data-agriculture-state]').value,'25');
   assert.equal(doc.querySelector('path[data-agriculture-state-code="25"]').getAttribute('aria-pressed'),'true');
+  assert.ok(doc.querySelector('[data-agriculture-pick="25"][aria-pressed="true"]'));
   assert.equal(doc.querySelector('.mexico-reading-content').hidden,false);
   assert.match(doc.querySelector('[data-agriculture-selection-name]').textContent,/シナロア/);
+  const only=doc.querySelector('[data-agriculture-only]');
+  assert.equal(only.disabled,false);
+  assert.equal(only.closest('label').hidden,false);
+  only.checked=true;only.dispatchEvent(new window.Event('change',{bubbles:true}));
+  await window.happyDOM.waitUntilComplete();
+  assert.equal(doc.querySelector('[data-agriculture-map]').classList.contains('is-only'),true);
   doc.querySelector('[data-mexico-overview-button]').click();
   await window.happyDOM.waitUntilComplete();
   assert.equal(root.dataset.mexicoReadingSelected,'false');
   assert.equal(doc.querySelector('[data-agriculture-state]').value,'');
   assert.equal(doc.querySelectorAll('path[data-agriculture-state-code][aria-pressed="true"]').length,0);
+  assert.equal(doc.querySelectorAll('[data-agriculture-pick][aria-pressed="true"]').length,0);
   assert.equal(doc.querySelector('.mexico-reading-content').hidden,true);
+  assert.equal(doc.querySelector('[data-agriculture-map]').classList.contains('is-only'),false);
+  assert.equal(only.checked,true,'The saved native focus mode remains available for the next selection');
+  assert.equal(only.disabled,true);
+  assert.equal(only.closest('label').hidden,true);
+  assert.equal(new URL(window.location.href).searchParams.get('only'),'1');
   assert.equal(new URL(window.location.href).searchParams.get('reading'),'overview');
   const reload=await page(window.location.search,true);try{
    await reload.happyDOM.waitUntilComplete();
    assert.equal(reload.document.querySelector('[data-mexico-field="agriculture"]').dataset.mexicoReadingSelected,'false');
+   assert.equal(reload.document.querySelector('[data-agriculture-map]').classList.contains('is-only'),false);
+   assert.equal(reload.document.querySelector('[data-agriculture-only]').disabled,true);
    const select=reload.document.querySelector('[data-agriculture-state]');select.value='08';select.dispatchEvent(new reload.Event('change',{bubbles:true}));
    await reload.happyDOM.waitUntilComplete();
    assert.equal(reload.document.querySelector('[data-mexico-field="agriculture"]').dataset.mexicoReadingSelected,'true');
    assert.equal(reload.document.querySelector('path[data-agriculture-state-code="08"]').getAttribute('aria-pressed'),'true');
+   assert.equal(reload.document.querySelector('[data-agriculture-only]').checked,true);
+   assert.equal(reload.document.querySelector('[data-agriculture-only]').disabled,false);
+   assert.equal(reload.document.querySelector('[data-agriculture-map]').classList.contains('is-only'),true);
+   assert.ok(reload.document.querySelector('[data-agriculture-pick="08"][aria-pressed="true"]'));
    assert.match(reload.document.querySelector('[data-agriculture-selection-name]').textContent,/チワワ/);
   }finally{await reload.happyDOM.close();}
+ }finally{await window.happyDOM.close();}
+});
+
+test('Escape returns a focused irrigation selection to an unfocused country map with a truthful description',async()=>{
+ const window=await page('?metric=irrigation&state=25&only=1',true);
+ try{
+  await window.happyDOM.waitUntilComplete();
+  const doc=window.document,root=doc.querySelector('[data-mexico-field="agriculture"]'),map=doc.querySelector('[data-agriculture-map]'),only=doc.querySelector('[data-agriculture-only]');
+  assert.equal(root.dataset.mexicoReadingSelected,'true');
+  assert.equal(map.classList.contains('is-only'),true);
+  root.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
+  await window.happyDOM.waitUntilComplete();
+  assert.equal(root.dataset.mexicoReadingSelected,'false');
+  assert.equal(map.classList.contains('is-only'),false);
+  assert.equal(only.disabled,true);
+  assert.equal(only.checked,true);
+  assert.equal(only.closest('label').hidden,true);
+  assert.equal(doc.querySelectorAll('[data-agriculture-pick][aria-pressed="true"]').length,0);
+  assert.equal(doc.querySelectorAll('path[data-agriculture-state-code][aria-pressed="true"]').length,0);
+  assert.doesNotMatch(doc.querySelector('#mexico-agriculture-svg-desc').textContent,/円.*生産量/);
+  assert.equal(new URL(window.location.href).searchParams.get('metric'),'irrigation');
+  assert.equal(new URL(window.location.href).searchParams.get('only'),'1');
  }finally{await window.happyDOM.close();}
 });
 
