@@ -35,6 +35,19 @@ test('配置ホストのない既存コントローラー画面はDOMを変え�
  assert.equal(root.innerHTML,before);window.happyDOM.abort();
 });
 
+test('都市選択を既存国toolbarへ移し、選択値・イベント・気候主題のhidden同期を維持する',()=>{
+ const window=new Window();window.document.body.innerHTML='<div data-asia-atlas><div class="asia-toolbar"><select data-country-select><option>全体</option></select></div><div data-asia-map-items><label data-city-picker>都市の雨温図<select data-city-select><option value="">都市を選ぶ</option><option value="tokyo">東京 · 日本</option></select></label></div><section data-asia-statistics hidden></section></div>';
+ const root=window.document.querySelector('[data-asia-atlas]'),picker=root.querySelector('[data-city-picker]'),select=picker.querySelector('select');let changed=0;
+ select.value='tokyo';select.addEventListener('change',()=>changed++);
+ const layout=createAsiaLayout(root);layout.render({field:'natural',topic:'climate',city:'tokyo'});
+ assert.equal(root.querySelector('.asia-toolbar [data-city-picker]'),picker);
+ assert.equal(root.querySelector('[data-asia-map-items] [data-city-picker]'),null);
+ assert.equal(select.value,'tokyo');select.dispatchEvent(new window.Event('change'));assert.equal(changed,1);
+ picker.hidden=true;layout.render({field:'agriculture'});assert.equal(picker.parentElement.hidden,true);
+ picker.hidden=false;layout.render({field:'natural',topic:'climate',city:'tokyo'});
+ assert.equal(picker.parentElement.hidden,false);assert.equal(select.value,'tokyo');window.happyDOM.abort();
+});
+
 test('社会区分・発電施設の選択欄は元分野を離れると隠れ、主題別のhiddenも保つ',()=>{
  const window=new Window();window.document.body.innerHTML='<div data-asia-atlas><div data-asia-map-items></div><section data-asia-statistics hidden></section><section data-social-panel hidden><label data-social-metric-label>年齢</label><label data-social-area-label hidden>区域</label></section><section data-industry-panel><label data-industry-search-label>発電施設</label></section></div>';
  const root=window.document.querySelector('[data-asia-atlas]'),layout=createAsiaLayout(root);

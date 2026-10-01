@@ -183,6 +183,8 @@
  .atlas-desktop-shell .asia-atlas[data-field] .asia-toolbar{display:flex;gap:12px;align-items:center;width:100%;margin:0;padding:0}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-toolbar label{display:flex;align-items:center;gap:8px;font-size:13px}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-toolbar :is(select,button){min-height:40px;font-size:13px;padding:7px 10px;border:1px solid #c7ccbf;border-radius:4px;background:#fbfcf5;color:#264c52}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-toolbar .asia-city-picker{margin:0;padding:0;font-size:13px;gap:8px;white-space:nowrap}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-toolbar .asia-city-picker select{width:176px;max-width:176px;min-width:0;flex:none;min-height:40px;font-size:13px}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-focus-navigation{width:auto;gap:8px;margin:0;flex:1}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-region-shell:has(.asia-focus-navigation) .asia-toolbar{width:auto;flex:none}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-focus-navigation a{min-height:40px;font-size:13px;padding:7px 10px;border-radius:4px}

@@ -24,12 +24,14 @@ export function createAsiaLayout(root:HTMLElement){
   else if(methods)methods.append(legend);
  }
  const controls:{node:HTMLElement;owner:HTMLElement|null;wrapper:HTMLElement}[]=[];
+ const toolbar=query('.asia-toolbar');
  const farmingNote=query('[data-farm-density-key]');
  if(methods&&farmingNote){const owner=farmingNote.closest<HTMLElement>('[data-farm-overview-legend]'),wrapper=root.ownerDocument.createElement('div');wrapper.append(farmingNote);methods.append(wrapper);controls.push({node:farmingNote,owner,wrapper});}
  for(const selector of [...(legendHost?[]:['[data-reading-map-legend]']),'[data-city-picker]','[data-industry-all]','[data-industry-detail-label]','[data-industry-search-label]','[data-social-metric-label]','[data-social-area-label]']){
   const node=query(selector);if(!node)continue;
   const owner=node.closest<HTMLElement>('[data-industry-panel],[data-social-panel]');
-  const wrapper=root.ownerDocument.createElement('div');wrapper.className='asia-map-item';wrapper.append(node);items.append(wrapper);
+  const wrapper=root.ownerDocument.createElement('div');wrapper.className='asia-map-item';wrapper.append(node);
+  if(selector==='[data-city-picker]'&&toolbar)toolbar.append(wrapper);else items.append(wrapper);
   controls.push({node,owner,wrapper});
  }
  const groups:{node:HTMLElement;owner:HTMLElement|null;wrapper:HTMLElement}[]=[];

@@ -47,7 +47,7 @@
  .west-atlas:not([data-comparing=true]) .west-reading:has([data-west-reading-overview]) .atlas-reading-takeaway{margin:4px 0}
  .west-atlas:not([data-comparing=true]) .west-reading:has([data-west-reading-overview]) .west-reading-dock{margin-bottom:0;padding-top:6px}
  .west-atlas:not([data-comparing=true]) .west-reading:has([data-west-reading-overview]) [data-west-reading-extra]{margin-top:6px}
- .west-atlas[data-field=population]:not([data-comparing=true]) .west-reading{height:calc(100dvh - 350px)!important;min-height:300px}
+ .west-atlas[data-field=population]:not([data-comparing=true]) .west-reading{height:calc(100dvh - 305px)!important;min-height:300px}
  .west-atlas:not([data-comparing=true]) [data-west-detail]{display:flex;flex-direction:column;min-height:0;flex:1;overflow:hidden}
  .west-atlas:not([data-comparing=true]) [data-west-detail]>header,.west-atlas:not([data-comparing=true]) .atlas-reading-takeaway,.west-atlas:not([data-comparing=true]) .west-reading-dock{flex:none}
  .west-atlas:not([data-comparing=true]) [data-west-reading-extra]{min-height:0;flex:1;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding-right:6px;border-top:1px solid #d4dbd0;margin-top:10px}
@@ -70,6 +70,14 @@
  .west-atlas:not([data-comparing=true]) [data-west-reading-extra]{margin-top:6px}
  .west-atlas:not([data-comparing=true]) [data-west-climate-dictionary]>summary{font-size:14px;min-height:44px;line-height:1.5}
  .west-atlas:not([data-comparing=true]) [data-west-climate-dictionary] .west-swatches{display:grid;grid-template-columns:1fr;font-size:13px}
+ .west-atlas:not([data-comparing=true]) .west-reading-header h2{margin:0}
+ .west-atlas:not([data-comparing=true]) .west-reading-header .atlas-eyebrow{margin:0 0 4px}
+ .west-atlas:not([data-comparing=true]) .west-reading-dock h3{font-family:var(--sans);font-size:13px;line-height:1.5;margin:0 0 4px}
+ .west-atlas:not([data-comparing=true]) .west-reading .west-regional-climate-key span{white-space:nowrap}
+ .west-atlas[data-field=population] .population-controls{display:flex;align-items:center;gap:8px;padding:6px;border:1px solid #c7ccbf;border-bottom:0;background:#fbfaf3;margin:0 0 6px}
+ .west-atlas[data-field=population] .population-tabs{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+ .west-atlas[data-field=population] .population-tabs button{font-size:14px;line-height:20px;min-height:40px;padding:9px 12px}
+ .west-atlas[data-field=population] .west-control-status{margin:0 0 0 auto;padding:0 6px;align-self:center}
 }
 .west-subtabs{padding:6px;margin:0;border:1px solid #c7ccbf;border-bottom:0;background:#fbfaf3}
 .west-atlas .atlas-map-frame{background:#e3eff0}

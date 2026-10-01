@@ -80,7 +80,7 @@ test('通常の気候16区分と人口密度全階級・時点は固定凡例に
   verify();for(const country of ['EGY','TUR']){select('[data-west-country]',country);await until(()=>q('[data-west-loading]').hidden);verify();}select('[data-west-year]','2020');await until(()=>q('[data-west-comparison] caption').textContent.includes('2020年'));verify();assert.equal(new URL(w.location.href).searchParams.get('year'),'2020');
  }finally{await population.w.happyDOM.close();}
  const rainfall=await setup('nature','?topic=climate&category=precipitation&country=TUR&year=2020&from='+encodeURIComponent('?topic=wheat&country=TUR&year=2020'));
- try{assert.equal(rainfall.q('[data-west-atlas]').dataset.comparing,'true');assert.match(rainfall.q('[data-west-detail]').textContent,/降水量は未整備/);assert.equal(new URL(rainfall.w.location.href).searchParams.get('category'),'precipitation');assert.ok(rainfall.q('[data-west-return]'));}finally{await rainfall.w.happyDOM.close();}
+ try{assert.equal(rainfall.q('[data-west-atlas]').dataset.comparing,'true');assert.match(rainfall.q('[data-west-detail]').textContent,/降水量は未整備/);assert.equal(new URL(rainfall.w.location.href).searchParams.get('category'),'precipitation');assert.ok(rainfall.q('[data-west-return]'));assert.equal(rainfall.q('[data-west-subgroup="水資源"]').hidden,false);assert.equal(rainfall.q('[data-west-unavailable="降水量"]').getAttribute('aria-selected'),'true');assert.equal(new URL(rainfall.w.location.href).searchParams.get('topic'),'climate');}finally{await rainfall.w.happyDOM.close();}
 });
 
 test('資料取得に失敗しても国と主題を切り替えられる',async()=>{

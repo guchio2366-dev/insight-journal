@@ -9,7 +9,7 @@ const westClimateNames:Record<string,string>={
  Cfa:'温暖湿潤',Cfb:'西岸海洋性',Dsa:'夏乾燥冷帯（暑夏）',Dsb:'夏乾燥冷帯（暖夏）',Dsc:'夏乾燥冷帯（冷夏）',
  Dfa:'湿潤冷帯（暑夏）',Dfb:'湿潤冷帯（暖夏）',Dfc:'湿潤冷帯（冷夏）',ET:'ツンドラ'
 };
-const westClimateCompactNames:Record<string,string>={BWh:'高温砂漠',BWk:'低温砂漠',BSh:'高温ステップ',BSk:'低温ステップ',Csa:'地中海暑夏',Csb:'地中海暖夏',Cwb:'冬乾燥暖夏',Cfa:'温暖湿潤',Cfb:'西岸海洋',Dsa:'夏乾暑夏',Dsb:'夏乾暖夏',Dsc:'夏乾冷夏',Dfa:'湿潤暑夏',Dfb:'湿潤暖夏',Dfc:'湿潤冷夏',ET:'ツンドラ'};
+const westClimateCompactNames:Record<string,string>={BWh:'高温砂漠',BWk:'低温砂漠',BSh:'高温草原',BSk:'低温草原',Csa:'夏乾暑夏',Csb:'夏乾暖夏',Cwb:'冬乾暖夏',Cfa:'温暖湿潤',Cfb:'西岸海洋',Dsa:'夏乾暑夏',Dsb:'夏乾暖夏',Dsc:'夏乾冷夏',Dfa:'湿潤暑夏',Dfb:'湿潤暖夏',Dfc:'湿潤冷夏',ET:'ツンドラ'};
 const categoryLabels:Record<string,string>={precipitation:'降水量',ethnicity:'人種・民族',religion:'宗教'};
 
 const root=document.querySelector<HTMLElement>('[data-west-atlas]');
@@ -287,6 +287,7 @@ async function init(root:HTMLElement){
  function legend(){
   const t=topic(),l=layer(),source=sourceTopic();
   legendBox.innerHTML=source?`<section class="west-legend-subject ${source.id==='climate'?'west-legend-climate':''}"><h3>左｜${esc(source.label)}</h3>${legendHtml(source,comparisonSource.year,desktopComparison.matches)}</section><section class="west-legend-subject ${t.id==='climate'?'west-legend-climate':''}"><h3>右｜${esc(t.label)}</h3>${legendHtml(t,state.year,desktopComparison.matches)}</section>`:legendHtml(t,state.year,t.id==='climate');
+  if(!source&&t.id==='climate'){const background=legendBox.querySelector(':scope>.west-swatches');if(background){legendBox.querySelector('.west-climate-key')!.append(...background.children);background.remove();}}
   if(source&&desktopComparison.matches){
    for(const subject of legendBox.querySelectorAll<HTMLElement>('.west-legend-subject')){
     const heading=document.createElement('div');heading.className='west-legend-heading';heading.append(subject.querySelector('h3')!);
@@ -443,7 +444,7 @@ async function init(root:HTMLElement){
   const waterItems=root.querySelector<HTMLElement>('[data-west-water-items]');if(waterItems)waterItems.hidden=t.group!=='水資源'||t.id==='basins'||!!unavailable;
   const status=root.querySelector<HTMLElement>('[data-west-control-status]');if(status)status.textContent=unavailable?unavailable+'は未整備です。':t.label+'を表示しています。';
   root.querySelectorAll<HTMLButtonElement>('[data-west-topic-button]').forEach(b=>{const selected=!unavailable&&(b.dataset.westTopicButton===t.id||(!!b.closest('.west-agri-picker')&&t.id.startsWith(b.dataset.westTopicButton+'-'))||(!!b.closest('[data-west-subgroup="水資源"]')&&b.dataset.westTopicButton==='rivers'&&['groundwater','desalination'].includes(t.id)));if(b.getAttribute('role')==='tab'){b.setAttribute('aria-selected',String(selected));b.tabIndex=selected?0:-1;}else b.setAttribute('aria-pressed',String(selected));});
-  root.querySelectorAll<HTMLElement>('[data-west-subgroup]').forEach(el=>el.hidden=el.dataset.westSubgroup!==t.group);
+  root.querySelectorAll<HTMLElement>('[data-west-subgroup]').forEach(el=>el.hidden=el.dataset.westSubgroup!==(state.category==='precipitation'?'水資源':t.group));
   root.querySelectorAll<HTMLElement>('[data-west-cultivation]').forEach(el=>el.hidden=!(t.id===el.dataset.westCultivation||t.id.startsWith(el.dataset.westCultivation+'-')));
   const overview=root.querySelector<HTMLElement>('[data-west-climate-overview]');if(overview)overview.hidden=t.id!=='climate';
   statControls.hidden=!(t.indicator||t.faoItem);

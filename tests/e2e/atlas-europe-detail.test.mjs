@@ -102,6 +102,7 @@ test('24都市の右側の気候・農畜産説明と、全体下の雨温図・
   const window=new Window();const doc=window.document;
   doc.write(readFileSync(new URL('../../dist/atlas/europe/nature/index.html',import.meta.url),'utf8'));
   const cities=JSON.parse(readFileSync(new URL('../../src/data/atlas/europe/climate-cities.json',import.meta.url),'utf8'));
+  const countries=JSON.parse(readFileSync(new URL('../../src/data/atlas/europe/countries.json',import.meta.url),'utf8'));
   const classes=JSON.parse(readFileSync(new URL('../../src/data/atlas/europe/map-labels.json',import.meta.url),'utf8')).cityClasses;
   const reading=doc.querySelector('[data-eu-climate-reader]');
   const statistics=doc.querySelector('[data-eu-climate-statistics]');
@@ -109,13 +110,17 @@ test('24都市の右側の気候・農畜産説明と、全体下の雨温図・
   const before=(first,second)=>Boolean(first.compareDocumentPosition(second)&window.Node.DOCUMENT_POSITION_FOLLOWING);
   assert.equal(cities.length,24);
   assert.deepEqual([...doc.querySelectorAll('[data-eu-point]')].map(point=>point.dataset.euPoint).sort(),ids);
-  assert.deepEqual([...doc.querySelectorAll('[data-eu-city-select]')].map(button=>button.dataset.euCitySelect).sort(),ids);
+  const cityChoice=doc.querySelector('[data-eu-city-choice]');
+  assert.ok(cityChoice);
+  assert.deepEqual([...cityChoice.options].map(option=>option.value).sort(),ids);
+  assert.equal(cityChoice.value,'london');
   assert.deepEqual([...reading.querySelectorAll('[data-city-reading]')].map(card=>card.dataset.cityReading).sort(),ids);
   assert.deepEqual([...statistics.querySelectorAll('[data-eu-city-chart]')].map(chart=>chart.dataset.euCityChart).sort(),ids);
   assert.deepEqual([...reading.querySelectorAll('[data-eu-climate-farming]')].map(section=>section.dataset.euClimateFarming).sort(),ids);
   assert.deepEqual([...statistics.querySelectorAll('[data-city-card]')].map(card=>card.dataset.cityCard).sort(),ids);
   assert.equal(reading.querySelector('svg,canvas,[data-eu-city-chart]'),null,'右の要約欄に雨温図を重複させない');
   for(const city of cities) {
+    assert.equal([...cityChoice.options].find(option=>option.value===city.id).textContent,`${city.name}（${countries.find(country=>country.code===city.country).name}）`,city.id);
     const card=reading.querySelector(`[data-city-reading="${city.id}"]`);
     const chart=statistics.querySelector(`[data-city-card="${city.id}"] [data-eu-city-chart="${city.id}"]`);
     const classification=card.querySelector('.eu-city-climate-description');
