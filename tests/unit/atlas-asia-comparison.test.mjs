@@ -17,10 +17,11 @@ test('比較を続けても最初の主題・地点・カメラへの復帰先�
   assert.deepEqual(restoreAsiaComparison(originalUrl,second,context),base);
 });
 
-function setup(from,to,fetcher){
+function setup(from,to,fetcher,withMainLegend=false){
   const state={...startAsiaComparison(originalUrl,from,to.field),...to};
   const url=writeAsiaAtlasState(originalUrl,state),window=new Window({url:url.href});
   window.document.body.innerHTML='<main data-asia-atlas><section data-comparison-reading hidden><h3 data-comparison-title></h3><p data-comparison-summary></p><div data-comparison-compact></div></section><details data-comparison-method hidden><summary>詳細</summary><div data-comparison-legend></div></details><button data-comparison-back>戻る</button></main>';
+  if(withMainLegend)window.document.querySelector('main').insertAdjacentHTML('afterbegin','<div data-reading-map-legend></div>');
   window.fetch=fetcher??(async()=>{throw Error('unexpected request')});window.eval(built.outputFiles[0].text+';window.createComparison=AsiaComparison.createAsiaComparison;');
   const config={regionId:'east-asia',label:'東アジア',countries:[{code:'CHN',name:'中国'},{code:'JPN',name:'日本'}],cities:[],classes:[{id:1,code:'Af',name:'熱帯雨林気候',color:'#0000ff'},{id:2,code:'Am',name:'熱帯季節風気候',color:'#0078ff'}],climate:{classIds:[1,2],image:'climate.png',imageCoordinates:[[72,55],[147,55],[147,17],[72,17]]},climateBase:'/climate/',agricultureBase:'/rice/',geographyUrl:'/geography.json',populationBase:'/population/',population:{image:'population.png',imageCoordinates:[[72,55],[147,55],[147,17],[72,17]],cities:[]},farmingBase:'/farm/',farming:{layers:[{id:'wheat',title:'小麦の収穫面積',kind:'crop',year:2020,unit:'ha/格子',image:'wheat.png',imageCoordinates:[[72,55],[147,55],[147,17],[72,17]],breaks:[10,100],colors:['eeeeee','aaaaaa','555555']}]},industry:{topics:[{id:'trade-exports',title:'商品輸出額',kind:'trade'}],countries:['CHN','JPN']},tradeBase:'/trade/',trade:{file:'trade.json',countries:['CHN','JPN']},presentation:{settlements:{ethnicity:{file:'ethnicity.json',categories:[{id:'tibetan',label:'チベット系',color:'#aabbcc'}]}}},presentationBase:'/asia-presentation-v1/'};
   const root=window.document.querySelector('main'),controller=window.createComparison(root,config,context,()=>state);
@@ -140,4 +141,16 @@ test('比較先の米・雨・川と農畜産切替で、その表示に対応�
   assert.deepEqual([...root.querySelectorAll('[data-comparison-compact-role="current"] .asia-comparison-compact-key>span')].map(e=>e.textContent),['米','大豆']);
   state.farms='none';controller.render(state);assert.match(root.querySelector('[data-comparison-legend]').textContent,/読み込んでいます/);await waitForReading(root);
   assert.equal(root.querySelectorAll('[data-comparison-compact-role="current"] .asia-comparison-compact-key>span').length,0);
+});
+
+test('初期の自然・人口・産業にも年・単位・全凡例を常時表示し、旧DOMでは追加取得しない',async()=>{
+  let fetches=0;
+  const fetcher=async url=>{fetches++;return response(url.includes('geography')?{type:'FeatureCollection',features:[]}:{countries:{CHN:{products:{TOTAL:{X:100000000}}},JPN:{products:{TOTAL:{X:null}}}}});};
+  const {root,controller,state}=setup(base,{field:'natural',topic:'climate'},fetcher,true);
+  async function showMain(field,topic){Object.assign(state,{field,topic,back:null,detail:null});controller.render(state);const deadline=Date.now()+5000;while(!root.querySelector('[data-reading-map-legend] [data-comparison-compact-role="main"]')){assert.ok(Date.now()<deadline);await new Promise(resolve=>setImmediate(resolve));}return root.querySelector('[data-reading-map-legend]');}
+  let main=await showMain('natural','climate');assert.equal(main.hidden,false);assert.equal(main.closest('details'),null);assert.match(main.textContent,/1991–2020年.*ケッペン＝ガイガー分類/);assert.equal(main.querySelectorAll('i').length,2);
+  main=await showMain('population','density');assert.match(main.textContent,/2020年の推計.*人\/km²/);assert.equal(main.querySelectorAll('i').length,7);
+  main=await showMain('industry','trade-exports');assert.match(main.textContent,/2023年.*百万米ドル/);assert.equal(main.querySelectorAll('i').length,6);assert.equal(fetches,2);
+  Object.assign(state,{field:'agriculture',topic:'wheat'});controller.render(state);assert.equal(main.hidden,true);assert.equal(main.children.length,0);
+  const legacy=setup(base,{field:'industry',topic:'trade-exports'},fetcher);legacy.controller.render({...legacy.state,back:null});await new Promise(resolve=>setImmediate(resolve));assert.equal(fetches,2);
 });

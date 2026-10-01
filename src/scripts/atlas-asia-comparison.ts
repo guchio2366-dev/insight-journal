@@ -40,9 +40,11 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
   const legend=root.querySelector<HTMLElement>('[data-comparison-legend]');
   const compact=root.querySelector<HTMLElement>('[data-comparison-compact]');
   const method=root.querySelector<HTMLElement>('[data-comparison-method]');
+  const mainLegend=root.querySelector<HTMLElement>('[data-reading-map-legend]');
   const back=root.querySelector<HTMLButtonElement>('[data-comparison-back]');
   const cache=new Map<string,Promise<any>>(),outlineCache=new Map<string,Promise<string>>();
   let revision=0,displayRevision=0,key='',showFilled=false,map:import('maplibre-gl').Map|null=null,reading:Reading|null=null;
+  let mainKey='',mainRevision=0;
   const ids=['asia-comparison-original-raster','asia-comparison-original-area','asia-comparison-original-line','asia-comparison-original-point'];
   const sourceState=()=>restoreAsiaComparison(new URL(location.href),getState(),context);
   function topicName(s:AsiaState){
@@ -105,18 +107,27 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
     return {...base,note:'この主題の元分布は戻るボタンから確認できます。'};
   }
   function appendKeys(parent:HTMLElement,r:Reading){parent.append(Object.assign(document.createElement('p'),{textContent:`${r.title} · ${r.period} · ${r.unit}`}));const list=document.createElement('div');list.className='asia-comparison-key';for(const k of r.keys){const item=document.createElement('span'),swatch=document.createElement('i');swatch.style.backgroundColor=k.color;swatch.setAttribute('aria-hidden','true');item.append(swatch,document.createTextNode(k.label));list.append(item);}parent.append(list,Object.assign(document.createElement('p'),{textContent:r.note}));}
-  function renderCompact(original:Reading,current:Reading){
-    if(!compact)return;compact.replaceChildren();
-    for(const [role,prefix,r] of [['original','元',original],['current','比較先',current]] as const){
+  function appendCompact(parent:HTMLElement,r:Reading,role:string,prefix:string){
       const section=document.createElement('section');section.className='asia-comparison-compact-panel';section.dataset.comparisonCompactRole=role;
       const heading=document.createElement('h4');heading.className='asia-comparison-compact-title';heading.textContent=`${prefix}：${r.title}`;
       const metadata=document.createElement('p');metadata.textContent=`${r.period} · ${r.unit}`;section.append(heading,metadata);
       const keys=document.createElement('div');keys.className='asia-comparison-key asia-comparison-compact-key';
       for(const key of r.keys){const item=document.createElement('span'),swatch=document.createElement('i');swatch.style.backgroundColor=key.color;swatch.setAttribute('aria-hidden','true');item.title=key.label;item.setAttribute('aria-label',key.label);item.append(swatch,document.createTextNode(key.shortLabel??key.label));keys.append(item);}
-      section.append(keys);if(r.compactNote){const caption=document.createElement('p');caption.className='asia-comparison-compact-caption';caption.textContent=r.compactNote;section.append(caption);}compact.append(section);
-    }
+      section.append(keys);if(r.compactNote){const caption=document.createElement('p');caption.className='asia-comparison-compact-caption';caption.textContent=r.compactNote;section.append(caption);}parent.append(section);
+  }
+  function renderCompact(original:Reading,current:Reading){
+    if(!compact)return;compact.replaceChildren();appendCompact(compact,original,'original','元');appendCompact(compact,current,'current','比較先');
+  }
+  function renderMainLegend(state:AsiaState){
+    if(!mainLegend)return;
+    const active=!state.back&&state.field!=='agriculture';mainLegend.hidden=!active;
+    if(!active){mainKey='';++mainRevision;mainLegend.replaceChildren();return;}
+    const next=[state.field,state.topic,state.detail,state.place,state.city,state.overlay,state.farms].join('|');
+    if(next===mainKey)return;mainKey=next;const seq=++mainRevision;mainLegend.textContent='地図の凡例を読み込んでいます。';
+    void describe(state).then(current=>{if(seq!==mainRevision||next!==mainKey)return;mainLegend.replaceChildren();appendCompact(mainLegend,current,'main','地図');}).catch(()=>{if(seq===mainRevision)mainLegend.textContent='地図の凡例を取得できませんでした。詳細の資料を確認してください。';});
   }
   function render(state:AsiaState){
+    renderMainLegend(state);
     if(panel)panel.hidden=!state.back;
     if(method)method.hidden=!state.back;
     if(compact)compact.hidden=!state.back;
@@ -125,11 +136,11 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
     if(back)back.textContent=next===key&&reading?.subject&&!from.story?`${reading.subject}の${topicName(from)}へ戻る`:`${subject(from)}へ戻る`;
     if(title)title.textContent=`${topicName(from)} × ${topicName(state)}`;
     const story=asiaPlaceReadings.find(r=>r.region===config.regionId&&r.id===from.story);
-    if(summary)summary.textContent=(story?story.lead+' ':'')+comparisonQuestion(from.field,state.field);
+    if(summary)summary.textContent=comparisonQuestion(from.field,state.field);
     if(next===key)return;key=next;reading=null;hide();showFilled=false;const seq=++revision;
     if(legend)legend.textContent='元の分布と両方の凡例を読み込んでいます。';
     if(compact)compact.textContent='元と比較先の凡例を読み込んでいます。';
-    void Promise.all([describe(from),describe(state)]).then(([original,current])=>{if(seq!==revision||key!==next)return;reading=original;renderCompact(original,current);if(back&&original.subject&&!from.story)back.textContent=`${original.subject}の${topicName(from)}へ戻る`;if(legend){legend.replaceChildren();const toggle=document.createElement('button');toggle.type='button';toggle.dataset.comparisonOriginal='';toggle.textContent='元の色面を確認';toggle.setAttribute('aria-pressed','false');toggle.addEventListener('click',()=>{showFilled=!showFilled;toggle.setAttribute('aria-pressed',String(showFilled));toggle.textContent=showFilled?'比較の地図へ戻す':'元の色面を確認';if(map)void show(map);});legend.append(toggle);const detail=document.createElement('details'),label=document.createElement('summary');detail.open=true;label.textContent='元分布と比較先の全凡例';detail.append(label,Object.assign(document.createElement('p'),{textContent:'比較中の色付き輪郭は元の分布の色区分を示します。「元の色面を確認」で元の分布を同じ位置に表示します。比較先の数値は比較先の指標です。'}));appendKeys(detail,original);appendKeys(detail,current);legend.append(detail);}if(map)void show(map);}).catch(()=>{if(seq===revision){if(legend)legend.textContent='元分布・凡例を取得できませんでした。対象名付きの戻るボタンで元の解説を確認できます。';if(compact)compact.textContent='比較凡例を取得できませんでした。';}});
+    void Promise.all([describe(from),describe(state)]).then(([original,current])=>{if(seq!==revision||key!==next)return;reading=original;renderCompact(original,current);if(back&&original.subject&&!from.story)back.textContent=`${original.subject}の${topicName(from)}へ戻る`;if(legend){legend.replaceChildren();const toggle=document.createElement('button');toggle.type='button';toggle.dataset.comparisonOriginal='';toggle.textContent='元の色面を確認';toggle.setAttribute('aria-pressed','false');toggle.addEventListener('click',()=>{showFilled=!showFilled;toggle.setAttribute('aria-pressed',String(showFilled));toggle.textContent=showFilled?'比較の地図へ戻す':'元の色面を確認';if(map)void show(map);});legend.append(toggle);const detail=document.createElement('details'),label=document.createElement('summary');detail.open=true;label.textContent='元分布と比較先の全凡例';detail.append(label);if(story)detail.append(Object.assign(document.createElement('p'),{textContent:story.lead}));detail.append(Object.assign(document.createElement('p'),{textContent:'比較中の色付き輪郭は元の分布の色区分を示します。「元の色面を確認」で元の分布を同じ位置に表示します。比較先の数値は比較先の指標です。'}));appendKeys(detail,original);appendKeys(detail,current);legend.append(detail);}if(map)void show(map);}).catch(()=>{if(seq===revision){if(legend)legend.textContent='元分布・凡例を取得できませんでした。対象名付きの戻るボタンで元の解説を確認できます。';if(compact)compact.textContent='比較凡例を取得できませんでした。';}});
   }
   function hide(){if(map?.getStyle())for(const id of ids)if(map.getLayer(id))map.setLayoutProperty(id,'visibility','none');}
   async function outlined(url:string):Promise<string>{
