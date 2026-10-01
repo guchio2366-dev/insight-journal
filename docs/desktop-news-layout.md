@@ -61,6 +61,11 @@ uses the workspace's content width, including article expansion without a window
 resize. Detail controls and source text remain in a disclosure; failed point or
 map requests expose the error and retry control. Responsive changes return the
 existing controls to their original homes without copies.
+Idle states at 1180x757, 1200x768 and 1366x768 are reviewed for a complete main
+map, message, distribution keys and named return within one viewport. Expanded
+news reading preserves the map and selected comparison, with the complete key
+and detail available through page scroll. That reader state is checked
+separately from the idle one-viewport contract.
 
 ## Content and interaction contract
 

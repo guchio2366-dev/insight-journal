@@ -110,12 +110,14 @@ async function init(root:HTMLElement){
    const label=marker.querySelector<SVGGElement>('[data-marker-label]');if(!label)continue;
    const w=Number(label.dataset.width),h=44,x=(Number(marker.dataset.x)-b[0])/k+ox,y=(Number(marker.dataset.y)-b[1])/k+oy;
    const boundary=ox+b[2]*split/100/k;
-   const minX=comparisonSource&&marker.dataset.markerSide==='target'?boundary:0,maxX=comparisonSource&&marker.dataset.markerSide==='source'?boundary:svg.clientWidth;
-   if(x<minX||y<0||x>maxX||y>svg.clientHeight||maxX-minX<w+4){label.style.display='none';marker.querySelector('line')!.style.display='none';continue;}
+   const left=comparisonSource?ox:0,right=comparisonSource?ox+b[2]/k:svg.clientWidth;
+   const minX=comparisonSource&&marker.dataset.markerSide==='target'?boundary:left,maxX=comparisonSource&&marker.dataset.markerSide==='source'?boundary:right;
+   const minY=comparisonSource?oy:0,maxY=comparisonSource?oy+b[3]/k:svg.clientHeight;
+   if(x<minX||y<minY||x>maxX||y>maxY||maxX-minX<w+4||maxY-minY<h+4){label.style.display='none';marker.querySelector('line')!.style.display='none';continue;}
    const candidates=[[8,-h-7],[-w-8,-h-7],[8,8],[-w-8,8],[-w/2,-h-18],[-w/2,18],[15,-h/2],[-w-15,-h/2]];
    let best:number[]|null=null,bestScore=Infinity;
    for(const [dx,dy] of candidates){
-    const lx=Math.max(minX+2,Math.min(maxX-w-2,x+dx)),ly=Math.max(2,Math.min(svg.clientHeight-h-2,y+dy));
+    const lx=Math.max(minX+2,Math.min(maxX-w-2,x+dx)),ly=Math.max(minY+2,Math.min(maxY-h-2,y+dy));
     const score=placed.reduce((sum,r)=>sum+Math.max(0,Math.min(lx+w+3,r[0]+r[2])-Math.max(lx-3,r[0]))*Math.max(0,Math.min(ly+h+3,r[1]+r[3])-Math.max(ly-3,r[1])),0);
     if(score<bestScore){best=[lx,ly,w,h];bestScore=score;}
    }

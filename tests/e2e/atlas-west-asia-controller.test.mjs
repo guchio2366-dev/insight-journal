@@ -219,18 +219,22 @@ test('比較の常時気候凡例は描画格子の全実在区分を意味付�
    assert.equal(dictionary.querySelectorAll('.west-swatches>span').length,30);
    for(const c of climateData.classes)assert.ok(dictionary.textContent.includes(c.code+' '+c.name));
    assert.match(q('[data-west-legend]').textContent,/1991–2020年/);assert.match(q('[data-west-legend]').textContent,/ha／原資料の格子 · 2020/);assert.match(q('[data-west-legend]').textContent,/周辺国・未収録/);
-   const svg=q('[data-west-map]');Object.defineProperties(svg,{clientWidth:{value:500,configurable:true},clientHeight:{value:420,configurable:true}});notifyResize('[data-west-map]');
-   for(const percent of [40,60]){
+   const svg=q('[data-west-map]');
+   for(const [screenWidth,screenHeight] of [[500,420],[500,800]]){
+    Object.defineProperties(svg,{clientWidth:{value:screenWidth,configurable:true},clientHeight:{value:screenHeight,configurable:true}});notifyResize('[data-west-map]');
+    for(const percent of [40,60]){
     const slider=q('[data-west-split]');slider.value=String(percent);slider.dispatchEvent(new w.Event('input'));
-    const [vx,vy,vw,vh]=svg.getAttribute('viewBox').split(' ').map(Number),k=Math.max(vw/500,vh/420),ox=(500-vw/k)/2,boundary=ox+vw*percent/100/k;
+    const [vx,vy,vw,vh]=svg.getAttribute('viewBox').split(' ').map(Number),k=Math.max(vw/screenWidth,vh/screenHeight),ox=(screenWidth-vw/k)/2,oy=(screenHeight-vh/k)/2,boundary=ox+vw*percent/100/k;
     let visible=0;
     for(const marker of q('[data-west-scene]').querySelectorAll('[data-marker]')){
      const label=marker.querySelector('[data-marker-label]');if(label.style.display==='none')continue;visible++;
-     const dx=Number(label.getAttribute('transform').match(/^translate\(([^,]+),/)[1]),left=(Number(marker.dataset.x)-vx)/k+ox+dx,right=left+Number(label.dataset.width);
-     const min=marker.dataset.markerSide==='target'?boundary:0,max=marker.dataset.markerSide==='source'?boundary:500;
-     assert.ok(left>=min-0.01&&right<=max+0.01,'都市名を自分の分布側に収めて比較境界で切らない');
+     const translate=label.getAttribute('transform').match(/^translate\(([^,]+),([^)]*)\)$/),left=(Number(marker.dataset.x)-vx)/k+ox+Number(translate[1]),right=left+Number(label.dataset.width),top=(Number(marker.dataset.y)-vy)/k+oy+Number(translate[2]),bottom=top+Number(label.querySelector('rect').getAttribute('height'));
+     const min=marker.dataset.markerSide==='target'?boundary:ox,max=marker.dataset.markerSide==='source'?boundary:ox+vw/k;
+     assert.ok(left>=min-0.01&&right<=max+0.01,'都市名を余白ではなく実投影された分布側に収める');
+     assert.ok(top>=oy-0.01&&bottom<=oy+vh/k+0.01,'上下の余白でも地理クリップ端で都市名を切らない');
     }
     assert.ok(visible>0,'境界を動かしても読める都市名が残る');
+    }
    }
    select('[data-west-country]','IRN');await until(()=>q('[data-west-loading]').hidden);assert.deepEqual(keys().map(x=>x.dataset.westClimateKey).sort(),expected,'国の選択で地域の凡例を減らさない');
    const query=new URL(w.location.href).searchParams;query.set('map','100,120,400,300');w.history.replaceState({},'','?'+query.toString());w.dispatchEvent(new w.PopStateEvent('popstate'));await until(()=>q('[data-west-loading]').hidden);
