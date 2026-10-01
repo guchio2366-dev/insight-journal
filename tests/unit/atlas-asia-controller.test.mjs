@@ -86,7 +86,7 @@ function fixture() {
     <div data-map-surface></div><div data-map-fallback><svg><path data-map-country="JPN"></path></svg></div>
     <div data-map-state></div><button data-map-retry hidden></button>
     <section data-overview><div class="asia-next"><p></p><div class="asia-city-links"></div></div></section>
-    ${['tokyo','beijing'].map(id=>`<article data-city-panel="${id}" hidden><h3><b data-city-class-code></b><span data-city-class-name></span></h3><p data-city-class-description></p></article>`).join('')}
+    <details data-reading-details><summary>詳しい解説</summary>${['tokyo','beijing'].map(id=>`<article data-city-panel="${id}" hidden><h3><b data-city-class-code></b><span data-city-class-name></span></h3><p data-city-class-description></p></article>`).join('')}</details>
     <section class="asia-rice-reading" data-rice-reading hidden><p class="asia-takeaway"></p></section>
     <section data-class-reading hidden></section><section data-climate-legend></section><section data-agriculture-legend hidden></section>
     <button data-climate-class="14"></button><button data-climate-class="21"></button>
@@ -917,5 +917,18 @@ test('分布の選択URLを復元し、右の説明と輪郭が同じ対象を�
  try{const {window,q}=app;await until(()=>window.__map.getLayer('asia-settlement-selected'),'outline');assert.equal(q('[data-settlement-detail=a]').hidden,false);assert.equal(q('.asia-point-marker').hidden,true);assert.equal(window.__map.layers['asia-settlement-selected'].filter[2],'a');
  q('[data-settlement-clear]').click();await delay();assert.equal(q('[data-settlement-detail=a]').hidden,true);assert.equal(new URL(window.location.href).searchParams.has('detail'),false);
  q('[data-settlement-choice=a]').click();await delay();assert.equal(q('[data-settlement-detail=a]').hidden,false);assert.equal(q('[data-settlement-choice=a]').getAttribute('aria-pressed'),'true');
+ }finally{await app.window.happyDOM.close();}
+});
+
+test('都市を選ぶと雨温図の詳細が開き、同じ都市では手動の折畳みを尊重する',async()=>{
+ const app=await setup('?city=tokyo');
+ try{const {window,q}=app;
+  await until(()=>!q('[data-city-panel="tokyo"]').hidden,'Tokyo selected');
+  const details=q('[data-reading-details]');assert.equal(details.open,true);
+  details.open=false;
+  q('[data-city-select]').dispatchEvent(new window.Event('change'));await delay();
+  assert.equal(details.open,false);
+  q('[data-city-select]').value='beijing';q('[data-city-select]').dispatchEvent(new window.Event('change'));await delay();
+  assert.equal(details.open,true);assert.equal(q('[data-city-panel="beijing"]').hidden,false);
  }finally{await app.window.happyDOM.close();}
 });
