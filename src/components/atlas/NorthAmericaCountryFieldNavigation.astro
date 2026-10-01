@@ -1,0 +1,11 @@
+---
+import {withBase} from '../../lib/urls';
+interface Props {country:'canada'|'mexico';field:'agriculture'|'nature'|'industry'|'population';natureHref?:string}
+const {country,field,natureHref}=Astro.props;
+const code=country==='canada'?'CAN':'MEX';
+const fields=[['agriculture','農林業'],['nature','自然環境'],['industry','主要産業'],['population','人口']] as const;
+---
+<nav class:list={['atlas-tabs','atlas-tabs-with-overview',`${country}-fields`]} aria-label="地図の分野">
+ <a data-atlas-overview-link href={withBase(`/atlas/north-america/overview/?country=${code}`)}>概要</a>
+ {fields.map(([id,label])=><a href={id==='nature'&&natureHref?natureHref:withBase(`/atlas/north-america/${country}/${id}/`)} data-canada-crop-nature={id==='nature'&&natureHref?'':undefined} aria-current={id===field?'page':undefined}>{label}</a>)}
+</nav>

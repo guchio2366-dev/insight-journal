@@ -10,6 +10,7 @@ const selected = agriculture.states.find(state => state.code === '25')!;
 const maxMaize = Math.max(...agriculture.states.map(state => state.maizeWhiteProductionT));
 const maxPine = Math.max(...agriculture.states.map(state => state.pineObtainedM3));
 const focusPoint = stateLabelPoint('25');
+const initialSelection=Astro.url.searchParams.get('reading')!=='overview'&&(Astro.url.searchParams.has('state')||Astro.url.searchParams.has('metric'));
 const config = {
   ...agriculture,
   naturePath: withBase('/atlas/north-america/mexico/nature/'),
@@ -19,24 +20,28 @@ const config = {
 };
 ---
 <MexicoWorkspace field="agriculture" title="メキシコの農林業" lead="乾燥する北西部の灌漑農業と山地の松材利用を、分布・生産量・市場へのつながりから読む。">
+  <nav slot="controls" class="atlas-nature-controls mexico-topic-controls" aria-label="農林業の項目"><div class="atlas-nature-tabs mexico-topic-tabs mexico-agriculture-topic-tabs">
+    <a data-agriculture-metric="maize" data-mexico-agriculture-topic="agriculture" href={withBase('/atlas/north-america/mexico/agriculture/?metric=maize&state=25')} aria-current="page">農畜産</a>
+    <a data-agriculture-metric="pine" data-mexico-agriculture-topic="forestry" href={withBase('/atlas/north-america/mexico/agriculture/?metric=pine&state=10')}>林業</a>
+  </div></nav>
   <Fragment slot="map">
-    <div class="mexico-agriculture-map-heading"><h2 data-agriculture-map-title>{agricultureMetrics[0].title}</h2><span class="mexico-agriculture-period">2022年農業センサス</span></div>
+    <figure class="mexico-agriculture-figure">
+      <div class="atlas-map-frame mexico-map-frame">
     <div class="mexico-controls">
-      <label for="mexico-agriculture-state">読む州 <select id="mexico-agriculture-state" data-agriculture-state>{agriculture.states.map(state => <option value={state.code} selected={state.code === '25'}>{state.nameJa}</option>)}</select></label>
+      <label for="mexico-agriculture-state">読む州 <select id="mexico-agriculture-state" data-agriculture-state><option value="" disabled selected={!initialSelection}>州を選ぶ</option>{agriculture.states.map(state => <option value={state.code} selected={initialSelection&&state.code === '25'}>{state.nameJa}</option>)}</select></label>
       <label class="mexico-agriculture-only"><input type="checkbox" data-agriculture-only /> 選択州を強調</label>
       <button type="button" data-agriculture-fallback aria-pressed="false">数値一覧で読む</button>
     </div>
-    <figure class="mexico-agriculture-figure">
       <svg class="mexico-map mexico-agriculture-map" data-mexico-map data-agriculture-map viewBox={mapViewBox} role="group" aria-labelledby="mexico-agriculture-svg-title mexico-agriculture-svg-desc">
         <title id="mexico-agriculture-svg-title" data-agriculture-svg-title>メキシコの州別白粒トウモロコシ生産量</title>
         <desc id="mexico-agriculture-svg-desc">州を選ぶと値と説明を読めます。円は州合計の生産量に比例し、農地の場所や面積を表しません。州選択欄と下の32州表でも確認できます。</desc>
         <text x="570" y="75" class="mexico-agriculture-sea" aria-hidden="true">アメリカ合衆国</text>
         <text x="190" y="415" class="mexico-agriculture-sea" aria-hidden="true">太平洋</text>
         <text x="747" y="354" class="mexico-agriculture-sea" aria-hidden="true">メキシコ湾</text>
-        <g data-agriculture-states>{stateFeatures.map(feature => <path class:list={['mexico-state', {'is-selected': feature.properties.code === '25'}]} d={geometryPath(feature.geometry)} data-agriculture-state-code={feature.properties.code} role="button" tabindex="0" aria-pressed={feature.properties.code === '25' ? 'true' : 'false'} aria-label={`${feature.properties.nameJa}を選ぶ`}><title>{feature.properties.nameJa}</title></path>)}</g>
+        <g data-agriculture-states>{stateFeatures.map(feature => <path class:list={['mexico-state', {'is-selected': initialSelection&&feature.properties.code === '25'}]} d={geometryPath(feature.geometry)} data-agriculture-state-code={feature.properties.code} role="button" tabindex="0" aria-pressed={initialSelection&&feature.properties.code === '25' ? 'true' : 'false'} aria-label={`${feature.properties.nameJa}を選ぶ`}><title>{feature.properties.nameJa}</title></path>)}</g>
         <g data-agriculture-symbols>{agriculture.states.map(state => {
           const [cx, cy] = stateLabelPoint(state.code);
-          return <circle class:list={['mexico-agriculture-symbol', {'is-selected': state.code === '25'}]} cx={cx} cy={cy} r={quantityRadius(state.maizeWhiteProductionT, maxMaize)} fill={agricultureMetrics[0].color} data-agriculture-symbol={state.code} data-agriculture-state-code={state.code} data-r-maize={quantityRadius(state.maizeWhiteProductionT, maxMaize)} data-r-pine={quantityRadius(state.pineObtainedM3, maxPine)} aria-hidden="true"><title>{state.nameJa}：{formatAgricultureValue(state.maizeWhiteProductionT, 'maize')}</title></circle>;
+          return <circle class:list={['mexico-agriculture-symbol', {'is-selected': initialSelection&&state.code === '25'}]} cx={cx} cy={cy} r={quantityRadius(state.maizeWhiteProductionT, maxMaize)} fill={agricultureMetrics[0].color} data-agriculture-symbol={state.code} data-agriculture-state-code={state.code} data-r-maize={quantityRadius(state.maizeWhiteProductionT, maxMaize)} data-r-pine={quantityRadius(state.pineObtainedM3, maxPine)} aria-hidden="true"><title>{state.nameJa}：{formatAgricultureValue(state.maizeWhiteProductionT, 'maize')}</title></circle>;
         })}</g>
         <g class="mexico-agriculture-selected-label" data-agriculture-selected-label transform={`translate(${focusPoint[0]},${focusPoint[1]})`} aria-hidden="true"><text class="mexico-state-label" x="40" y="-8" data-agriculture-label-name>シナロア</text><text class="mexico-state-label mexico-agriculture-label-value" x="40" y="29" data-agriculture-label-value>{formatAgricultureValue(selected.maizeWhiteProductionT, 'maize')}</text></g>
       </svg>
@@ -44,6 +49,8 @@ const config = {
         <p class="mexico-caption">同じ32州の公表値を、選んだ指標の大きい順で表示します。</p>
         <div class="mexico-table-scroll"><table><caption data-agriculture-fallback-caption>白粒トウモロコシ生産量（t）</caption><thead><tr><th>州</th><th data-agriculture-fallback-unit>生産量 t</th></tr></thead><tbody data-agriculture-fallback-body>{[...agriculture.states].sort((a,b) => b.maizeWhiteProductionT - a.maizeWhiteProductionT).map(state => <tr data-agriculture-fallback-row={state.code}><th><button type="button" data-agriculture-pick={state.code}>{state.nameJa}</button></th><td data-agriculture-fallback-value={state.code}>{formatAgricultureValue(state.maizeWhiteProductionT, 'maize')}</td></tr>)}</tbody></table></div>
       </div>
+      </div>
+    <div class="mexico-agriculture-map-heading"><h2 data-agriculture-map-title>{agricultureMetrics[0].title}</h2><span class="mexico-agriculture-period">2022年農業センサス</span></div>
       <figcaption><span data-agriculture-map-caption>{agricultureMetrics[0].caption}</span> <span class="mexico-agriculture-source-period">2021年10月～2022年9月。</span></figcaption>
     </figure>
     <div class="mexico-agriculture-key" aria-label="地図の凡例">
@@ -53,7 +60,15 @@ const config = {
   </Fragment>
   <Fragment slot="items">
     <nav class="mexico-agriculture-tabs" aria-label="農林業の地図項目">{agricultureMetrics.map(metric => <a data-agriculture-metric={metric.id} href={withBase(`/atlas/north-america/mexico/agriculture/?metric=${metric.id}&state=${metric.defaultState}`)} aria-current={metric.id === 'maize' ? 'page' : undefined}>{metric.name}<small>{metric.unit}</small></a>)}</nav>
+    <span class="mexico-unavailable-item">畜産 <small>未整備</small></span>
   </Fragment>
+  <section slot="overview" class="mexico-agriculture-country-overview">
+    <h2>全国の生産と農地</h2>
+    <dl>{agricultureMetrics.map(metric=><div><dt>{metric.name}</dt><dd>{formatAgricultureValue(metric.id==='maize'?agriculture.national.maizeWhiteProductionT:metric.id==='pine'?agriculture.national.pineObtainedM3:agriculture.national.irrigationSharePct,metric.id)}</dd></div>)}</dl>
+    <p>INEGI・2022年農業センサス。参照期間は2021年10月～2022年9月です。</p>
+    <p>地図の項目や州を選ぶと、分布の理由と加工・市場へのつながりを読めます。</p>
+    <p><a href={agricultureSources.census}>全国と州の公表値・原典</a></p>
+  </section>
   <Fragment slot="reading">
     <p class="mexico-takeaway" data-agriculture-takeaway>{agricultureReading.maize.takeaway}</p>
     <div class="mexico-agriculture-selection" aria-live="polite"><span data-agriculture-selection-name>{selected.nameJa}</span><strong data-agriculture-selection-value>{formatAgricultureValue(selected.maizeWhiteProductionT, 'maize')}</strong><span data-agriculture-selection-metric>白粒トウモロコシ生産量</span></div>

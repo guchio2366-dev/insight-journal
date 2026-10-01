@@ -1,0 +1,86 @@
+/* Country-only adapters reuse the approved US workspace classes and dimensions. */
+.atlas-desktop-shell .canada-nature{display:contents;padding:0;border:0;background:none}
+.canada-nature .canada-country-primary{min-width:0;padding:8px 0 0;color:#21343d}
+.canada-nature .canada-country-primary{position:relative}
+.canada-nature .canada-country-primary>.country-topic-tabs[aria-label="農林業の分野"]{position:absolute;z-index:5;transform:translate(8px,7px);display:flex;width:fit-content;gap:3px;padding:3px;border:1px solid #9eaca3;border-radius:6px;background:#fffef5ed;box-shadow:0 1px 4px #243b4820}
+.canada-nature .canada-country-primary>.country-topic-tabs[aria-label="農林業の分野"] a{min-height:36px;padding:0 9px;border:0;border-radius:4px;font-weight:750}
+.canada-nature[data-canola-reading-mode=overview] .canada-map-column>.canada-map-actions,.canada-nature[data-canola-reading-mode=overview] .canada-map-column>.canola-map-key{display:none}
+.canada-nature .canada-country-primary .canada-fields{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;margin:0;padding:0;min-height:42px;border:1px solid #c7ccbf;border-bottom:0;background:#f1f0e7}
+.canada-nature .canada-country-primary .canada-fields a{display:flex;justify-content:center;align-items:center;min-width:0;min-height:42px;padding:9px 5px;border-right:1px solid #d8d9ce;font-size:14px;line-height:1.2;font-weight:700;text-decoration:none}
+.canada-nature .canada-country-primary .canada-fields a:last-child{border-right:0}
+.canada-nature .canada-country-primary .canada-fields a[aria-current]{background:#243b48;color:white}
+.canada-nature .canada-country-primary .regional-navigation{display:block;gap:7px 16px;margin:0 0 10px}
+.canada-nature .canada-country-primary .regional-navigation .regional-countries{margin:7px 0 0;gap:6px}
+.canada-nature .canada-country-primary .regional-navigation .regional-tabs{gap:6px}
+.canada-nature .canada-country-primary .regional-navigation a{min-height:44px;padding:8px 15px;font-size:14px}
+.canada-nature .canada-country-primary .regional-navigation .regional-countries a{min-height:40px;padding:6px 13px;font-size:13px}
+.canada-nature .canada-country-primary .canada-workspace{gap:0;grid-template-columns:minmax(0,1fr)}
+.canada-nature .canada-country-primary .canada-reading{border:1px solid #c7ccbf;background:#fbfaf3;padding:15px 16px 13px;color:#31444b;font-size:13px;max-height:calc(100dvh - 220px);overflow:auto;scrollbar-gutter:stable;overscroll-behavior:contain}
+.canada-nature .canada-national-header{margin:0 0 11px;padding-bottom:11px;border-bottom:1px solid #d4d8cc}
+.canada-nature .canada-national-header h2{margin:0;font-size:23px;line-height:1.3;font-family:var(--serif)}
+.canada-nature .canada-national-header .canada-lead{margin:7px 0 0;font-size:12px;line-height:1.65}
+.canada-nature .canada-map-frame{width:100%;aspect-ratio:1.65;min-height:190px;max-height:640px;overflow:hidden;border:1px solid #abbfc2;background:#c1e1ed}
+.canada-nature .canada-country-primary .canada-map-frame>.canada-map{width:100%;height:100%;max-height:none;border:0;object-fit:contain}
+.canada-nature .canada-map-frame>a{display:block;width:100%;height:100%}
+.canada-nature .canada-map-frame>a>img{width:100%;height:100%;object-fit:contain;object-position:center;max-width:none}
+.canada-nature .canola-map-scroll.is-zoomed{overflow:auto}
+.canada-nature .canola-map-scroll.is-zoomed img{height:auto;width:160%;min-width:1133px}
+.canada-nature .canada-crop-tabs{display:flex;justify-content:center;gap:4px 16px;padding:6px;margin:0;border:1px solid #c8cfc4;border-top:0;border-radius:0;background:#f7f5ec;font-size:12px}
+.canada-nature .canada-crop-tabs a{display:inline-flex;align-items:center;min-height:32px;padding:0;border:0;border-radius:0;text-decoration:none}
+.canada-nature .canada-crop-tabs a[aria-current]{font-weight:800;text-decoration:underline;text-underline-offset:3px;background:none}
+.canada-nature :is(.canada-statistics,.industry-table-details,.population-tables,.canada-source-footer){grid-column:1/-1;min-width:0;margin-top:18px}
+.canada-nature .canada-country-primary .canada-national-header{margin:0 0 11px}
+.canada-nature .country-topic-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0;padding:6px;gap:0;border:1px solid #c7ccbf;border-bottom:0;background:#fbfaf3}
+.canada-nature .country-topic-tabs button,.canada-nature .country-topic-tabs a{display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:38px;padding:7px 4px;border:1px solid #d3d6cd;border-radius:0;background:#f2f1e9;font-size:12px;line-height:1.4;text-decoration:none}
+.canada-nature .country-topic-tabs [aria-pressed=true],.canada-nature .country-topic-tabs [aria-current]{background:#35515d;color:white}
+.canada-nature .country-topic-tabs small,.canada-nature .country-water-topics small{display:block;font-size:9px;font-weight:400;line-height:1.4}
+.canada-nature .country-topic-tabs button:disabled{cursor:default;color:#727970}
+.canada-nature .country-water-topics{display:none;grid-template-columns:repeat(3,minmax(0,1fr));padding:6px;border:1px solid #c7ccbf;background:#fbfaf3;font-size:12px;text-align:center}
+.canada-nature:has([data-canada-view=water][aria-pressed=true]) .country-water-topics{display:grid}
+.canada-nature .canada-map-column>h2{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.canada-nature .canada-country-primary .canada-views{margin:0;padding:6px;background:#fbfaf3;border:1px solid #c7ccbf;border-bottom:0;gap:4px}
+.canada-nature .canada-country-primary .canada-views button{min-height:38px;padding:7px 8px;font-size:12px;border-radius:0}
+.canada-nature .canada-map-column{position:relative}
+.canada-nature .canada-country-primary .canada-map-title{position:absolute;top:10px;right:10px;z-index:3}
+.canada-nature .canada-country-primary .canada-map-title h2{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.canada-nature .canada-country-primary>.industry-controls,.canada-nature .canada-country-primary>.population-controls{margin:0;padding:6px;border:1px solid #c7ccbf;border-bottom:0;background:#fbfaf3}
+.canada-nature .canada-country-primary>.industry-controls,.canada-nature .canada-country-primary>.population-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.canada-nature .canada-country-primary>.industry-controls label,.canada-nature .canada-country-primary>.population-controls label{font-size:12px;min-width:0}
+.canada-nature .canada-country-primary>.industry-controls select,.canada-nature .canada-country-primary>.population-controls select{min-height:32px;padding:4px 6px;font-size:12px;width:100%;min-width:0}
+.canada-nature .canada-country-primary .canada-map-frame{margin:0}
+.canada-nature [data-canada-reading=climate]{display:flex;flex-direction:column}
+.canada-nature [data-canada-reading=climate]>.canada-climate-cards{order:1}
+.canada-nature [data-canada-reading=climate]>.canada-period,.canada-nature [data-canada-reading=climate]>p{order:2}
+.canada-nature .canada-climate-card{display:flex;flex-direction:column;padding-top:8px;margin-top:8px}
+.canada-nature .canada-climate-card>h2{order:0}
+.canada-nature .canada-climate-card>svg{order:1}
+.canada-nature .canada-climate-card>p,.canada-nature .canada-climate-card>dl,.canada-nature .canada-climate-card>details{order:2}
+.canada-nature.is-learning-comparison .canada-country-primary .regional-navigation,.canada-nature.is-learning-comparison .atlas-compact-heading,.canada-nature.is-learning-comparison .canada-national-header{display:none}
+.canada-nature .country-topic-tabs[aria-label="農林業の分野"]{grid-template-columns:repeat(2,minmax(0,1fr))}
+.canada-nature .canada-comparison-context{margin:8px 0;padding:0;background:none;border:0}
+.canada-nature .canada-comparison-context h2{font-size:18px;margin-bottom:6px}
+.canada-nature .canada-comparison-context p{font-size:12px;line-height:1.65}
+@media(min-width:960px) and (max-width:1199px){
+ .atlas-desktop-shell:has(.canada-country-primary){display:grid;grid-template-columns:160px minmax(0,1fr);gap:12px;padding:10px 12px 24px}
+ .atlas-desktop-shell:has(.canada-country-primary) .atlas-news{position:sticky;top:10px;width:auto;height:calc(100dvh - 82px);min-height:0}
+ .atlas-desktop-shell:has(.canada-country-primary) :is(.atlas-news-header,.atlas-news-list,.atlas-news-reader){padding-inline:12px}
+ .canada-nature .canada-country-primary .canada-workspace{grid-template-columns:minmax(0,1.65fr) minmax(300px,1fr);gap:14px}
+ .canada-nature .canada-country-primary .canada-map-frame{aspect-ratio:1.65;min-height:190px}
+ .canada-nature .canada-country-primary[data-field=agriculture] .canada-workspace{grid-template-columns:minmax(0,2fr) minmax(318px,1fr);gap:14px}
+ .canada-nature .canada-country-primary[data-field=natural] .canada-workspace{grid-template-columns:minmax(0,1.5fr) minmax(380px,1fr);gap:16px}
+ .canada-nature .canada-country-primary[data-field=industry] .canada-workspace{grid-template-columns:minmax(0,2fr) minmax(318px,1fr);gap:12px}
+ .canada-nature .canada-country-primary[data-field=industry] .canada-map-frame{height:clamp(320px,calc(100dvh - 350px),430px);aspect-ratio:auto;min-height:0;max-height:none}
+ .canada-nature .canada-country-primary[data-field=population] .canada-workspace{grid-template-columns:minmax(0,1.65fr) minmax(360px,1fr);gap:12px}
+ .canada-nature .canada-country-primary .regional-navigation{display:flex;flex-wrap:wrap;align-items:center;gap:7px 16px}
+ .canada-nature .canada-country-primary .regional-navigation .regional-countries{margin-top:0}
+}
+@media(min-width:1200px){
+ .atlas-desktop-shell:has(.canada-country-primary){grid-template-columns:clamp(300px,23vw,380px) minmax(0,1fr);gap:20px;padding:12px 20px 36px}
+ .canada-nature .canada-country-primary .canada-workspace{grid-template-columns:minmax(0,1.8fr) minmax(280px,1fr);gap:16px}
+ .canada-nature .canada-country-primary .canada-map-frame{aspect-ratio:1.55;min-height:300px;max-height:640px}
+}
+@media(min-width:1200px) and (max-width:1599px){
+ .atlas-desktop-shell:has(.canada-country-primary){grid-template-columns:clamp(220px,19vw,340px) minmax(0,1fr);gap:16px}
+ .canada-nature .canada-country-primary .canada-workspace{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px}
+}
+@media(max-width:959px){.canada-nature .canada-country-primary{padding:8px 0}.canada-nature .canada-country-primary .canada-reading{max-height:none;overflow:visible}}

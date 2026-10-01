@@ -2,25 +2,104 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AtlasRegionNavigation from './AtlasRegionNavigation.astro';
 import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
+import NorthAmericaCountryFieldNavigation from './NorthAmericaCountryFieldNavigation.astro';
 import {withBase} from '../../lib/urls';
 import '../../styles/atlas-mexico.css';
+import '../../styles/atlas-mexico-parity.css';
 interface Props {field:'nature'|'agriculture'|'industry'|'population';title:string;lead:string;description?:string}
 const {field,title,lead,description=lead}=Astro.props;
-const fields=[['nature','自然環境'],['agriculture','農林業'],['industry','主要産業'],['population','人口']];
+const atlasField=field==='nature'?'natural':field;
+const initialReadingSelected=Astro.url.searchParams.get('reading')!=='overview'&&(Astro.url.searchParams.has('state')||Astro.url.searchParams.has('compare')||(field==='agriculture'&&Astro.url.searchParams.has('metric')));
 ---
 <BaseLayout title={`${title}｜メキシコ地理`} {description} compactAtlas>
  <AtlasWorkspaceFrame region="north-america" mapActions={false}>
-  <article class={`mexico-workspace mexico-${field}`} data-mexico-workspace data-mexico-field={field}>
-   <div class="mexico-navigation"><AtlasRegionNavigation group="americas" current="north-america" country="mexico" /></div>
-   <header class="mexico-header"><h1>{title}</h1><p class="mexico-lead">{lead}</p></header>
-   <nav class="mexico-fields" aria-label="メキシコの分野"><a data-atlas-overview-link href={withBase('/atlas/north-america/overview/?country=MEX')}>概説</a>{fields.map(([id,label])=><a href={withBase(`/atlas/north-america/mexico/${id}/`)} aria-current={field===id?'page':undefined}>{label}</a>)}</nav>
-   <div class="mexico-primary-grid">
-    <section class="mexico-map-column" aria-label="地図と項目"><slot name="map" /><div class="mexico-items"><slot name="items" /></div></section>
-    <aside class="mexico-reading" aria-label="分布の理由と比較"><slot name="reading" /></aside>
-   </div>
+  <article class={`atlas-explorer mexico-workspace mexico-${field}`} data-field={atlasField} data-mexico-workspace data-mexico-field={field} data-mexico-reading-selected={String(initialReadingSelected)}>
+   <script is:inline>
+    {const root=document.currentScript?.parentElement;if(root){const query=new URL(location.href).searchParams;root.dataset.mexicoInitialReadingSelected=String(query.get('reading')!=='overview'&&(query.has('state')||query.has('compare')||(root.dataset.mexicoField==='agriculture'&&query.has('metric'))));}}
+   </script>
+   <section class="atlas-workspace mexico-learning-workspace" aria-label="メキシコの分野別地図">
+    <div class="atlas-compact-heading"><nav aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a><span aria-hidden="true"> / </span><a href={withBase('/atlas/north-america/')}>北米地理</a></nav><span>メキシコ</span></div>
+    <div class="atlas-region-controls mexico-navigation"><AtlasRegionNavigation group="americas" current="north-america" country="mexico" /></div>
+    <NorthAmericaCountryFieldNavigation country="mexico" {field} />
+    <slot name="controls" />
+    <div class="atlas-primary-grid mexico-primary-grid">
+     <section class="atlas-map-column mexico-map-column" aria-label="地図と項目"><slot name="map" /><div class="atlas-key mexico-items"><slot name="items" /></div></section>
+     <aside class="atlas-national mexico-reading" aria-label="分布の理由と比較">
+      <header class="mexico-header" data-mexico-country-overview hidden={initialReadingSelected}><h1>{title}</h1><p class="mexico-lead">{lead}</p></header>
+      <div class="mexico-country-summary" data-mexico-country-summary hidden={initialReadingSelected}><slot name="overview" /></div>
+      <button type="button" class="mexico-overview-button" data-mexico-overview-button hidden={!initialReadingSelected}>← メキシコの概要</button>
+      <div class="mexico-reading-content" hidden={field==='agriculture'&&!initialReadingSelected}><slot name="reading" /></div>
+     </aside>
+    </div>
+   </section>
    <section class="mexico-statistics" aria-label="地図の値を確かめる"><slot name="statistics" /></section>
    <footer class="mexico-sources"><slot name="sources" /></footer>
    <slot />
   </article>
  </AtlasWorkspaceFrame>
 </BaseLayout>
+<script>
+ const initializeMexicoReading = () => {
+  for (const root of document.querySelectorAll<HTMLElement>('[data-mexico-workspace]')) {
+   if (root.dataset.mexicoReadingReady) continue;
+   const overview=root.querySelector<HTMLElement>('[data-mexico-country-overview]');
+   const back=root.querySelector<HTMLButtonElement>('[data-mexico-overview-button]');
+   const countrySummary=root.querySelector<HTMLElement>('[data-mexico-country-summary]');
+   const reading=root.querySelector<HTMLElement>('.mexico-reading-content');
+   const agriculture=root.dataset.mexicoField==='agriculture';
+   const clearAgricultureSelection=()=>{
+    if(!agriculture||root.dataset.mexicoReadingSelected==='true')return;
+    const select=root.querySelector<HTMLSelectElement>('[data-agriculture-state]');
+    if(select?.value)root.dataset.mexicoReadingState=select.value;
+    if(select)select.value='';
+    for(const element of root.querySelectorAll<HTMLElement|SVGElement>('[data-agriculture-state-code], [data-agriculture-stat-row], [data-agriculture-fallback-row]')){
+     if(element.classList.contains('is-selected'))element.classList.remove('is-selected');
+     if(element.hasAttribute('aria-pressed')&&element.getAttribute('aria-pressed')!=='false')element.setAttribute('aria-pressed','false');
+    }
+    const description=root.querySelector('#mexico-agriculture-svg-desc');
+    if(description)description.textContent='州を選ぶと値と説明を読めます。円は州合計の生産量に比例し、農地の場所や面積を表しません。州選択欄と下の32州表でも確認できます。';
+    const url=new URL(location.href);url.searchParams.set('reading','overview');history.replaceState(null,'',url);root.dataset.mexicoOverviewUrl=url.href;
+   };
+   const choose='[data-agriculture-state],[data-agriculture-pick],[data-agriculture-state-code],[data-agriculture-metric],[data-mexico-nature-state-select],[data-mexico-nature-state],[data-mexico-nature-compare-state],[data-mexico-nature-compare-symbol],[data-mi-state-select],[data-mi-metric],[data-mi-shape],[data-mi-population-circle],[data-population-state],[data-population-state-shape],[data-population-state-symbol]';
+   const showSelection=(selected:boolean)=>{
+    const wasOverview=root.dataset.mexicoReadingSelected==='false';
+    root.dataset.mexicoReadingSelected=String(selected);
+    if(overview)overview.hidden=selected;
+    if(countrySummary)countrySummary.hidden=selected;
+    if(back)back.hidden=!selected;
+    if(agriculture){
+     if(reading)reading.hidden=!selected;
+     if(!selected)clearAgricultureSelection();
+     else{
+      const url=new URL(location.href);url.searchParams.delete('reading');if(wasOverview&&location.href===root.dataset.mexicoOverviewUrl)history.pushState(null,'',url);else history.replaceState(null,'',url);
+      const select=root.querySelector<HTMLSelectElement>('[data-agriculture-state]');
+      const code=select?.value||root.dataset.mexicoReadingState||'25';
+      if(select)select.value=code;
+      for(const element of root.querySelectorAll<HTMLElement|SVGElement>('[data-agriculture-state-code], [data-agriculture-stat-row], [data-agriculture-fallback-row]')){
+       const current=(element.getAttribute('data-agriculture-state-code')??element.getAttribute('data-agriculture-stat-row')??element.getAttribute('data-agriculture-fallback-row'))===code;
+       element.classList.toggle('is-selected',current);
+       if(element.hasAttribute('aria-pressed'))element.setAttribute('aria-pressed',String(current));
+      }
+     }
+    }
+   };
+   root.addEventListener('change',event=>{if(event.target instanceof Element&&event.target.closest(choose))showSelection(true);});
+   root.addEventListener('click',event=>{if(event.target instanceof Element&&event.target.closest(choose)&&!event.target.closest('select'))showSelection(true);});
+   root.addEventListener('keydown',event=>{if(['Enter',' '].includes(event.key)&&event.target instanceof Element&&event.target.closest(choose)&&!event.target.closest('select'))showSelection(true);});
+   back?.addEventListener('click',()=>showSelection(false));
+   root.addEventListener('keydown',event=>{if(agriculture&&event.key==='Escape')showSelection(false);});
+   window.addEventListener('popstate',()=>{const query=new URL(location.href).searchParams;showSelection(query.get('reading')!=='overview'&&query.has('state'));});
+   root.dataset.mexicoReadingReady='true';
+   const query=new URL(location.href).searchParams;
+   showSelection((root.dataset.mexicoInitialReadingSelected??String(query.get('reading')!=='overview'&&(query.has('state')||query.has('compare')||(agriculture&&query.has('metric')))))==='true');
+   if(agriculture){
+    const updateTopics=()=>{const forestry=!!root.querySelector('[data-agriculture-reading="pine"]:not([hidden])');for(const link of root.querySelectorAll<HTMLElement>('[data-mexico-agriculture-topic]')){if((link.dataset.mexicoAgricultureTopic==='forestry')===forestry)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');}};
+    new MutationObserver(updateTopics).observe(root,{subtree:true,attributes:true,attributeFilter:['hidden']});
+    new MutationObserver(clearAgricultureSelection).observe(root,{subtree:true,attributes:true,attributeFilter:['class','aria-pressed']});
+    updateTopics();
+   }
+  }
+ };
+ initializeMexicoReading();
+ document.addEventListener('astro:page-load',initializeMexicoReading);
+</script>

@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AtlasRegionNavigation from './AtlasRegionNavigation.astro';
 import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
+import NorthAmericaCountryFieldNavigation from './NorthAmericaCountryFieldNavigation.astro';
 import data from '../../data/atlas/canada/forestry.json';
 import climate from '../../data/atlas/canada/climate.json';
 import rivers from '../../data/atlas/canada/rivers.json';
@@ -19,21 +20,24 @@ const regions=canadaForestRegions.map(r=>({...r,point:project(r.point)})),places
 const maxForYear=(year:number)=>Math.max(1,...data.data.filter(r=>r.year===year&&r.id!=='Canada').map(r=>r.values.wood.value??0)),initial=data.data.find(r=>r.year===2024&&r.id==='British Columbia')!;
 const valueText=(v:{value:number|null;status:string})=>v.status==='x'?'秘匿':fmt(v.value);
 const natureTargets={climate:nature('?city=vancouver'),landform:nature('?city=vancouver&view=landform'),water:nature('?city=vancouver&view=water&water=Fraser&only=1'),ottawa:nature('')};
+import '../../styles/atlas-canada-country-parity.css';
 ---
 <BaseLayout title="カナダの林業｜森林の分布から加工・輸送・需要へ" description="2020年の森林被覆4分類と州別加工業収入を区別し、BCの自然条件から管理・加工・輸送・住宅需要までつなぐ。" compactAtlas>
  <AtlasWorkspaceFrame region="north-america" mapActions={false}>
   <article class="canada-nature canada-agriculture" data-canada-forestry>
-   <p class="canada-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / カナダ</p>
+   <div class="atlas-explorer atlas-workspace canada-country-primary" data-field="agriculture">
+   <div class="atlas-compact-heading"><nav aria-label="パンくず"><a href={withBase('/atlas/')}>地図から見る</a> / <a href={withBase('/atlas/north-america/')}>北米地図</a></nav><span>カナダ</span></div>
    <AtlasRegionNavigation group="americas" current="north-america" country="canada" />
-   <header><p class="eyebrow">Canada · Agriculture and forestry</p><h1>森林から読む、カナダの林業</h1><p class="canada-lead">森林が育つ場所を確かめ、管理・伐採・加工・輸送へ。自然の分布と、木材を使う社会の活動を分けてつなぐ。</p></header>
-   <nav class="canada-fields" aria-label="カナダの分野"><a href={withBase('/atlas/north-america/overview/?country=CAN')}>概説</a><a href={nature('')}>自然環境</a><a href={withBase('/atlas/north-america/canada/agriculture/')} aria-current="page">農畜林業</a><a href={withBase('/atlas/north-america/canada/industry/')}>主要産業</a><a href={withBase('/atlas/north-america/canada/population/')}>人口</a></nav>
-   <p class="canola-scope">公開項目：カノーラ・小麦・肉牛と放牧・林業の初回版。その他の主要作物・畜産、林業の伐採量比較は準備中です。農畜林業分野全体の完成を意味しません。</p>
-   <nav class="canada-crop-tabs" aria-label="公開済みの農畜林業"><a href={withBase('/atlas/north-america/canada/agriculture/')}>カノーラ</a><a href={withBase('/atlas/north-america/canada/agriculture/wheat/')}>小麦</a><a href={withBase('/atlas/north-america/canada/agriculture/beef/')}>肉牛・放牧と飼料</a><a href={withBase('/atlas/north-america/canada/agriculture/forestry/')} aria-current="page">林業</a></nav>
-   <div class="canada-workspace">
-    <section class="canada-map-column" aria-label="森林の分布と加工業比較">
+   <h1 class="visually-hidden">森林から読む、カナダの林業</h1>
+   <NorthAmericaCountryFieldNavigation country="canada" field="agriculture" />
+   <nav class="country-topic-tabs" aria-label="農林業の分野"><a href={withBase('/atlas/north-america/canada/agriculture/')}>農畜産</a><a href={withBase('/atlas/north-america/canada/agriculture/forestry/')} aria-current="page">林業</a></nav>
+
+
+   <div class="canada-workspace atlas-primary-grid">
+    <section class="canada-map-column atlas-map-column" aria-label="森林の分布と加工業比較">
      <h2>森林は、州のどこに広がる？</h2>
      <div class="forestry-map-controls"><label>2020年の森林被覆<select data-forestry-cover><option value="all">森林4分類すべて</option>{data.classes.map(c=><option value={c.id}>{c.name}</option>)}</select></label><label>位置と説明を読む<select data-forestry-region>{regions.map(r=><option value={r.id}>{r.name}</option>)}</select></label></div>
-     <svg class="canada-map canada-forest-map" data-forestry-map viewBox="0 0 900 580" role="group" aria-labelledby="canada-forest-title canada-forest-desc">
+     <div class="atlas-map-frame canada-map-frame"><svg class="canada-map canada-forest-map" data-forestry-map viewBox="0 0 900 580" role="group" aria-labelledby="canada-forest-title canada-forest-desc">
       <title id="canada-forest-title">カナダの森林被覆4分類、2020年</title><desc id="canada-forest-desc">樹木が覆う場所を4分類で表示。州境・伐採区域・加工場の分布図ではありません。BC・ケベック・オンタリオの説明位置、Vancouver・Ottawa、Fraser川・セントローレンス川を示します。</desc>
       <defs><clipPath id="canada-forest-clip"><rect width={width} height={height}/></clipPath></defs>
       <g clip-path="url(#canada-forest-clip)">
@@ -45,24 +49,18 @@ const natureTargets={climate:nature('?city=vancouver'),landform:nature('?city=va
        <text x="228" y="445">Fraser川</text><text x="720" y="546">セントローレンス川</text>
        <text class="canada-ocean" x="55" y="440">太平洋</text><text class="canada-ocean" x="760" y="490">大西洋</text><text class="canada-ocean" x="400" y="40">北極海</text><text class="canada-ocean" x="550" y="265">ハドソン湾</text>
       </g>
-     </svg>
+     </svg></div>
+   <nav class="canada-crop-tabs atlas-key" aria-label="公開済みの農畜林業"><a href={withBase('/atlas/north-america/canada/agriculture/')}>カノーラ</a><a href={withBase('/atlas/north-america/canada/agriculture/wheat/')}>小麦</a><a href={withBase('/atlas/north-america/canada/agriculture/beef/')}>肉牛・放牧と飼料</a><a href={withBase('/atlas/north-america/canada/agriculture/forestry/')} aria-current="page">林業</a></nav>
      <div class="canada-map-actions"><button data-forestry-focus aria-pressed="false">選んだ州の位置を拡大</button><button data-forestry-map-reset>全体・森林4分類へ戻る</button></div>
      <p class="canada-caption" data-forestry-map-status aria-live="polite">2020年固定：森林4分類すべて。カナダ全体。</p>
      <ul class="forestry-legend" aria-label="森林被覆の凡例">{data.classes.map(c=><li><i style={`background:rgb(${c.color.join(',')})`} aria-hidden="true"/><span>{c.name}<small>（分類{c.code}）</small></span></li>)}</ul>
      <p class="canada-caption">NRCanの2020年土地被覆（原データ30m）から森林4分類だけを抽出。表示画像は1800×1160に縮約され、30mの細部を読める図ではありません。薄い陸地色はこの4分類以外で、樹木が全くないことを保証しません。湿地分類に含まれる樹木や一時的な被覆変化もあるため、森林土地面積とは一致しません。位置図は等緯度経度で、面積比較・面積推計に使いません。州名の丸は説明位置で、州境・林業施設・伐採地点ではありません。</p>
      <p class="beef-map-links">原寸の抽出図：<a href={asset('all')}>森林4分類</a>{data.classes.map(c=><a href={asset(c.id)}>{c.name}</a>)}<a href={forestrySources.cover}>原典・分類・精度</a></p>
      <details class="forestry-static-regions"><summary>図で追う場所</summary><p>BCは太平洋側の西部、Vancouverはその南西沿岸。Fraser川はBCを流れ海へ向かいます。ケベック州とオンタリオ州は東部で隣り合い、首都Ottawaはオンタリオ州東端、セントローレンス川は五大湖側から大西洋側へつながります。周辺の米国は南、グリーンランドは北東です。</p></details>
-     <section class="forestry-definitions" id="forestry-definitions"><h3>森林と林業を、数字の意味で分ける</h3><dl><dt>森林被覆</dt><dd>地表を樹木が覆う場所。この図の4分類。</dd><dt>森林土地面積</dt><dd>土地利用上の森林の広さ。一時的に樹木被覆が失われた土地を含む場合があり、この図の色面積とは別。</dd><dt>蓄積</dt><dd>立っている木の体積。</dd><dt>伐採量</dt><dd>一定期間に取り出した木材の量。初回版の比較対象外。</dd><dt>製造品収入</dt><dd>加工した製品などの金額。森林の広さ・伐採量・GDP・利益ではない。</dd></dl></section>
-     <h2>木材製品と紙製品の加工活動を比べる</h2>
-     <div class="canola-stat-controls"><label>年<select data-forestry-year>{data.years.map(y=><option value={y} selected={y===2024}>{y}年</option>)}</select></label><label>加工業<select data-forestry-metric>{data.metrics.map(m=><option value={m.id}>{m.name}</option>)}</select></label><label>読む地域<select data-forestry-province>{data.provinces.map(p=><option value={p.id} selected={p.id==='British Columbia'}>{p.name}</option>)}</select></label><label>比べる地域<select data-forestry-compare><option value="">比較なし</option>{data.provinces.map(p=><option value={p.id}>{p.name}</option>)}</select></label></div>
-     <p class="canola-comparison" data-forestry-comparison aria-live="polite">2024年 木材製品製造の名目製造品収入 — ブリティッシュコロンビア: {fmt(initial.values.wood.value)} 千CAD（{initial.values.wood.status}）</p>
-     <p class="forestry-stat-notes">単位は<strong>千CAD（カナダドル）</strong>、名目値です。1千CAD＝1,000 CAD。物価調整をしていないため、年をまたぐ金額の違いを生産量の変化とは言えません。NAICS 321は木材製品製造、322は紙製品製造で、伐採業は含めません。州の森林被覆ではなく、その州の加工業の製造品収入です。製造品の出荷に加え、他社向け加工・修理なども含む指標で、総収入とも区別します。</p>
-     <p class="forestry-stat-notes">森林図は2020年のままです。棒は選択年・加工業の公表された州最大値を100%とする相対表示で、全国値を基準にしません。秘匿州の真の値が最大でないとは保証できないため、棒だけで全州順位を確定しません。年や指標を切り替えた棒同士の長さを直接比較せず、金額も読みます。</p>
-     <div class="canola-table-scroll"><table class="canola-stats"><caption>製造品収入・品質記号（16-10-0117-01／千CAD・名目）</caption><thead><tr><th>年・地域</th>{data.metrics.map(m=><th>{m.name}<br/>千CAD</th>)}</tr></thead><tbody>{data.data.map(r=><tr data-forestry-row={r.id} data-year={r.year} hidden={r.year!==2024}><th>{r.year}年 {r.name}{r.id!=='Canada'&&<span class:list={['canola-bar-track',{'is-missing':r.values.wood.value===null}]} aria-label={`${r.name}: ${valueText(r.values.wood)} 千CAD`}><span data-forestry-bar={r.id} style={`width:${(r.values.wood.value??0)/maxForYear(r.year)*100}%`} /></span>}</th>{data.metrics.map(m=>{const v=r.values[m.id as keyof typeof r.values];return <td data-forestry-cell={m.id}>{valueText(v)}{(v.status||v.symbol)&&<small> {[v.status,v.symbol].filter(Boolean).join(' ')}</small>}</td>;})}</tr>)}</tbody></table></div>
-     <p class="forestry-stat-notes">66値のうち20値は<strong>x（統計法による秘匿）</strong>です。秘匿・欠測を0で埋めません。品質記号A＝非常に高い、B＝とても良い、C＝良い、D＝許容、E＝注意して利用、F＝信頼性が低く非公表。空欄は品質記号なし、rは改訂。公表された0は0として区別します。全国・10州だけを採用し、地方合計・3準州を重ねて加算していません。</p>
-     <p><a href={forestrySources.table}>元表・定義・脚注</a> / <a href={withBase(`${assetRoot}/forestry-selected.csv`)}>今回の抽出CSV</a></p>
     </section>
-    <aside class="canada-reading" aria-label="森林と林業をつなぐ説明">
+    <aside class="canada-reading atlas-national" aria-label="森林と林業をつなぐ説明">
+   <header class="canada-national-header"><p class="atlas-eyebrow">Canada · Agriculture and forestry</p><h2>森林から読む、カナダの林業</h2><p class="canada-lead">森林が育つ場所を確かめ、管理・伐採・加工・輸送へ。自然の分布と、木材を使う社会の活動を分けてつなぐ。</p></header>
+
      {regions.map(r=><section class="forestry-region-reading" data-forestry-region-reading={r.id}><h2>{r.name}</h2><p class="canada-takeaway">{r.takeaway}</p>
       {r.id==='bc'&&<><p>気温・水・土壌・地形が森林の違いをつくり、管理と交通が木材生産を支えます。</p><p class="canada-sources-inline"><a href={natureTargets.climate} data-forestry-nature-link={natureTargets.climate}>森林とVancouver気候を比べる：冬の気温・降水の季節配分</a><br/><a href={natureTargets.landform} data-forestry-nature-link={natureTargets.landform}>森林と地形を照合：西部の山地・海岸の位置</a><br/><a href={natureTargets.water} data-forestry-nature-link={natureTargets.water}>森林とFraser川を比べる：海へのつながりを位置で確認</a></p></>}
       <details><summary>この地域の森林・生態分類を詳しく読む</summary><p>{r.body}</p><a href={r.source}>森林・生態分類の根拠</a></details>
@@ -72,8 +70,20 @@ const natureTargets={climate:nature('?city=vancouver'),landform:nature('?city=va
       {i===2&&<p>Fraser川の位置図から、水量・航行条件や伐採地からの出荷経路は分かりません。</p>}
      </details>)}
      <details class="canada-reading-section"><summary>読み終えたら</summary><p>森林4分類を一つずつ見る → 州内でも分布が変わる場所を追う → 木材製品と紙製品の金額を比べる → 生育条件・管理・輸送・需要をつなぐ。森林が広いことだけでは加工業の規模が決まらない理由を説明してみましょう。</p><p><a href={natureTargets.ottawa} data-forestry-nature-link={natureTargets.ottawa}>自然環境の入口：首都Ottawaから読む</a> / <a href={withBase('/atlas/north-america/canada/agriculture/beef/')}>肉牛：草地・飼料・管理との関係</a> / <a href={withBase('/atlas/north-america/canada/agriculture/wheat/')}>小麦：用途・輸送・需要</a> / <a href={withBase('/atlas/north-america/canada/agriculture/')}>カノーラ：加工と輸出</a></p></details>
+     <details class="canada-scope-details"><summary>公開範囲</summary>   <p class="canola-scope">公開項目：カノーラ・小麦・肉牛と放牧・林業の初回版。その他の主要作物・畜産、林業の伐採量比較は準備中です。農畜林業分野全体の完成を意味しません。</p></details>
     </aside>
    </div>
+   </div>
+   <section class="canada-statistics">     <section class="forestry-definitions" id="forestry-definitions"><h3>森林と林業を、数字の意味で分ける</h3><dl><dt>森林被覆</dt><dd>地表を樹木が覆う場所。この図の4分類。</dd><dt>森林土地面積</dt><dd>土地利用上の森林の広さ。一時的に樹木被覆が失われた土地を含む場合があり、この図の色面積とは別。</dd><dt>蓄積</dt><dd>立っている木の体積。</dd><dt>伐採量</dt><dd>一定期間に取り出した木材の量。初回版の比較対象外。</dd><dt>製造品収入</dt><dd>加工した製品などの金額。森林の広さ・伐採量・GDP・利益ではない。</dd></dl></section>
+     <h2>木材製品と紙製品の加工活動を比べる</h2>
+     <div class="canola-stat-controls"><label>年<select data-forestry-year>{data.years.map(y=><option value={y} selected={y===2024}>{y}年</option>)}</select></label><label>加工業<select data-forestry-metric>{data.metrics.map(m=><option value={m.id}>{m.name}</option>)}</select></label><label>読む地域<select data-forestry-province>{data.provinces.map(p=><option value={p.id} selected={p.id==='British Columbia'}>{p.name}</option>)}</select></label><label>比べる地域<select data-forestry-compare><option value="">比較なし</option>{data.provinces.map(p=><option value={p.id}>{p.name}</option>)}</select></label></div>
+     <p class="canola-comparison" data-forestry-comparison aria-live="polite">2024年 木材製品製造の名目製造品収入 — ブリティッシュコロンビア: {fmt(initial.values.wood.value)} 千CAD（{initial.values.wood.status}）</p>
+     <p class="forestry-stat-notes">単位は<strong>千CAD（カナダドル）</strong>、名目値です。1千CAD＝1,000 CAD。物価調整をしていないため、年をまたぐ金額の違いを生産量の変化とは言えません。NAICS 321は木材製品製造、322は紙製品製造で、伐採業は含めません。州の森林被覆ではなく、その州の加工業の製造品収入です。製造品の出荷に加え、他社向け加工・修理なども含む指標で、総収入とも区別します。</p>
+     <p class="forestry-stat-notes">森林図は2020年のままです。棒は選択年・加工業の公表された州最大値を100%とする相対表示で、全国値を基準にしません。秘匿州の真の値が最大でないとは保証できないため、棒だけで全州順位を確定しません。年や指標を切り替えた棒同士の長さを直接比較せず、金額も読みます。</p>
+     <div class="canola-table-scroll"><table class="canola-stats"><caption>製造品収入・品質記号（16-10-0117-01／千CAD・名目）</caption><thead><tr><th>年・地域</th>{data.metrics.map(m=><th>{m.name}<br/>千CAD</th>)}</tr></thead><tbody>{data.data.map(r=><tr data-forestry-row={r.id} data-year={r.year} hidden={r.year!==2024}><th>{r.year}年 {r.name}{r.id!=='Canada'&&<span class:list={['canola-bar-track',{'is-missing':r.values.wood.value===null}]} aria-label={`${r.name}: ${valueText(r.values.wood)} 千CAD`}><span data-forestry-bar={r.id} style={`width:${(r.values.wood.value??0)/maxForYear(r.year)*100}%`} /></span>}</th>{data.metrics.map(m=>{const v=r.values[m.id as keyof typeof r.values];return <td data-forestry-cell={m.id}>{valueText(v)}{(v.status||v.symbol)&&<small> {[v.status,v.symbol].filter(Boolean).join(' ')}</small>}</td>;})}</tr>)}</tbody></table></div>
+     <p class="forestry-stat-notes">66値のうち20値は<strong>x（統計法による秘匿）</strong>です。秘匿・欠測を0で埋めません。品質記号A＝非常に高い、B＝とても良い、C＝良い、D＝許容、E＝注意して利用、F＝信頼性が低く非公表。空欄は品質記号なし、rは改訂。公表された0は0として区別します。全国・10州だけを採用し、地方合計・3準州を重ねて加算していません。</p>
+     <p><a href={forestrySources.table}>元表・定義・脚注</a> / <a href={withBase(`${assetRoot}/forestry-selected.csv`)}>今回の抽出CSV</a></p>
+</section>
    <footer class="canada-source-footer" id="canada-forestry-sources"><h2>出典・年・単位・利用条件</h2>
     <p lang="en">Contains information licensed under the Open Government Licence – Canada.</p><p>森林被覆：Natural Resources Canada / Canada Centre for Remote Sensing、<a href={forestrySources.cover}>2020 Land Cover of Canada</a>。原年2020、30m分類、検証832点で全分類の総合精度86.9%（森林4分類それぞれの精度ではありません）。2026年9月30日取得。<a href="https://open.canada.ca/en/open-government-licence-canada">OGL–Canada</a>。公式WMS画像から分類1・2・5・6のみを抽出し、他分類を透明化。凡例は元GeoTIFFと画像に一致する色で再作成しています。原図の政府ロゴを転載しておらず、政府による推奨を意味しません。</p>
     <p lang="en">Adapted from Statistics Canada, Table 16-10-0117-01, Principal statistics for manufacturing industries, by North American Industry Classification System (NAICS), reference years 2021, 2023 and 2024 (accessed September 30, 2026). This does not constitute an endorsement by Statistics Canada of this product.</p>

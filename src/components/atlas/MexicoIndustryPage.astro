@@ -33,7 +33,7 @@ const value=(v:unknown)=>industryValueText(v as MexicoIndustryValue);
   </div>
   <div class="mi-map-grid" data-mi-map-grid>
    {['primary','secondary'].map((slot,i)=><figure class="mi-map-figure" data-mi-figure={slot} hidden={i===1}>
-    <h3 class="mi-map-heading" data-mi-map-heading={slot}>{i===0?'輸送機器の輸出額':'電子機器の輸出額'} <span>2025年速報・10億米ドル</span></h3>
+    <div class="atlas-map-frame mexico-map-frame">
     <svg class="mexico-map mi-map" data-mexico-map data-mi-map={slot} viewBox={mapViewBox} role="group" aria-labelledby={`mi-${slot}-title mi-${slot}-desc`}>
      <title id={`mi-${slot}-title`}>{i===0?'輸送機器':'電子機器'}の州別輸出額、2025年速報</title>
      <desc id={`mi-${slot}-desc`}>色は州の生産地に配分したFOB輸出額。州を選ぶと数値と説明を読めます。秘匿は斜線、未把握は点模様です。</desc>
@@ -50,6 +50,8 @@ const value=(v:unknown)=>industryValueText(v as MexicoIndustryValue);
      <g class="mi-labels" aria-hidden="true">{geometry.map(g=>{const s=data.states.find(s=>s.id===g.id)!;return <text data-mi-label={g.id} x={g.point[0]} y={g.point[1]-7} text-anchor="middle" hidden={!['05','11','08','14'].includes(g.id)}>{s.short}</text>;})}</g>
      <text class="mi-context-label" data-mi-context-label x={usaLabel[0]} y={usaLabel[1]} text-anchor="middle" aria-hidden="true">米国</text>
     </svg>
+    </div>
+    <h3 class="mi-map-heading" data-mi-map-heading={slot}>{i===0?'輸送機器の輸出額':'電子機器の輸出額'} <span>2025年速報・10億米ドル</span></h3>
     <div data-mi-export-legend={slot}>
      <p class="mi-legend-unit">FOB輸出額・10億米ドル（両業種共通）</p>
      <ul class="mexico-legend mi-legend" aria-label="輸出額の色階級">{mexicoIndustryBins.map(bin=><li><i style={`background:${bin.color}`} aria-hidden="true"/>{bin.label}</li>)}<li><i class="mi-zero" aria-hidden="true"/>0</li><li><i class="mi-confidential" aria-hidden="true"/>秘匿</li><li><i class="mi-unknown" aria-hidden="true"/>未把握</li></ul>

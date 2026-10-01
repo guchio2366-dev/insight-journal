@@ -19,13 +19,17 @@ const routes = {nature: withBase('/atlas/north-america/mexico/nature/'), agricul
 const config = {routes, defaultViewBox: mapViewBox, states: statePaths.map(item => ({code: item.code, name: item.name, point: item.point, irrigationSharePct: irrigation.get(item.code)?.irrigationSharePct ?? null, irrigatedAreaHa: irrigation.get(item.code)?.irrigatedAreaHa ?? null, agriculturalAreaHa: irrigation.get(item.code)?.agriculturalAreaHa ?? null, maizeWhiteProductionT: irrigation.get(item.code)?.maizeWhiteProductionT ?? null, pineObtainedM3: irrigation.get(item.code)?.pineObtainedM3 ?? null, density: density.get(item.code)?.density ?? null, population: density.get(item.code)?.population ?? null})), sinaloaWinter: agriculture.caseStudies.sinaloaAutumnWinterWhiteMaize, staticMaps: {climate: withBase('/assets/atlas/mexico-nature-v1/climate.svg'), relief: withBase('/assets/atlas/mexico-nature-v1/relief.svg')}};
 ---
 <MexicoWorkspace field="nature" title="メキシコの自然環境" lead="北部の乾燥域、中央部の高原、南東部の湿潤域を読み分け、農業の水管理と人口分布とのつながりを見る。">
- <section slot="map" class="mexico-nature-primary" aria-label="気候と地形の全国分布">
-  <div class="mexico-controls" aria-label="自然環境の地図を選ぶ">
+ <div slot="controls" class="atlas-nature-controls mexico-nature-view-controls"><div class="atlas-nature-tabs mexico-nature-tabs">
    <button type="button" data-mexico-nature-view="climate" aria-pressed="true">気候区分</button>
-   <button type="button" data-mexico-nature-view="relief" aria-pressed="false">地形地域</button>
+   <button type="button" disabled aria-disabled="true"><span>水資源 <small>未整備</small><span class="mexico-water-pending-list">河川・地下水 / 降水量 / 河川の流域</span></span></button>
+   <button type="button" data-mexico-nature-view="relief" aria-pressed="false">地形</button>
+   <button type="button" disabled aria-disabled="true">標高 <small>未整備</small></button>
+ </div></div>
+ <section slot="map" class="mexico-nature-primary" aria-label="気候と地形の全国分布">
+  <div class="atlas-map-frame mexico-map-frame">
+   <div class="mexico-controls">
    <label class="mexico-nature-state-control">読む州<select data-mexico-nature-state-select>{statePaths.map(item => <option value={item.code} selected={item.code === '25'}>{item.name}</option>)}</select></label>
-  </div>
-  <div class="mexico-nature-map-title"><h2 data-mexico-nature-map-title>気候の分布</h2><span data-mexico-nature-map-edition>INEGI・2008版</span></div>
+   </div>
   <svg class="mexico-map mexico-nature-map" data-mexico-map data-mexico-nature-main-map data-mexico-nature-map-mode="interactive" viewBox={mapViewBox} role="group" aria-labelledby="mexico-nature-map-title mexico-nature-map-desc">
    <title id="mexico-nature-map-title">メキシコの気候・自然地理地域の全国分布</title>
    <desc id="mexico-nature-map-desc">気候の原分類を6群で色分け。地形への切替では15自然地理地域と分類欠測を示す。州をクリックまたは地図下の選択欄から選べる。比較中も元の自然分布を保持する。</desc>
@@ -38,6 +42,8 @@ const config = {routes, defaultViewBox: mapViewBox, states: statePaths.map(item 
    <g class="mexico-nature-state-outlines">{statePaths.map(item => <path class:list={['mexico-nature-state', {'is-selected': item.code === '25'}]} d={item.path} fill-rule="evenodd" data-mexico-nature-state={item.code} role="button" tabindex="0" aria-pressed={item.code === '25' ? 'true' : 'false'} aria-label={`${item.name}を選ぶ`}><title>{item.name}</title></path>)}</g>
    <g class="mexico-nature-target" data-mexico-nature-target transform={`translate(${stateLabelPoint('25').join(' ')})`} aria-hidden="true"><circle r="7"/><circle r="3"/></g>
   </svg>
+  </div>
+  <div class="mexico-nature-map-title"><h2 data-mexico-nature-map-title>気候の分布</h2><span data-mexico-nature-map-edition>INEGI・2008版</span></div>
   <ul class="mexico-legend mexico-nature-climate-legend" data-mexico-nature-legend="climate" aria-label="気候区分の凡例">{nature.climate.groups.map(group => <li><i style={`background:${group.color}`} aria-hidden="true"/>{group.label}</li>)}</ul>
   <ul class="mexico-legend mexico-nature-relief-legend" data-mexico-nature-legend="relief" aria-label="自然地理地域の凡例" hidden>{nature.relief.classes.map(category => <li><i class:list={{'is-missing': category.status === 'missing'}} style={`background:${category.color}`} aria-hidden="true"/>{category.labelJa}</li>)}</ul>
   <p class="mexico-caption" data-mexico-nature-period>2008は刊行年。気候区分は統一観測期間が原資料に未記載。原分類21を6群にまとめて表示。</p>
