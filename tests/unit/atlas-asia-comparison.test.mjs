@@ -114,7 +114,7 @@ test('密度・社会構成・GDP比・輸出比・貿易・MW・森林を別の
     assert.ok(!text.includes('人口の集中と産業の集積'),topic);
   }
   config.social.groups=[{id:'jp-nationality',label:'日本：都道府県の国籍'},{id:'my-ethnicity',label:'マレーシア：市民の民族構成'},{id:'in-religion',label:'インド：宗教の構成'},{id:'in-language',label:'インド：母語の言語群'}];
-  for(const [group,label] of [['jp-nationality','都道府県の国籍'],['my-ethnicity','市民の民族'],['in-religion','宗教'],['in-language','母語の言語群']]){
+  for(const [group,label] of [['jp-nationality','外国人住民の国籍'],['my-ethnicity','市民の民族'],['in-religion','宗教'],['in-language','母語の言語群']]){
     const id=group+'-overview';config.social.topics.push({id,group,key:'overview',title:'区域ごとの構成をまとめて見る'});
     assert.match(question({...base,field:'population',topic:id},{...base,field:'natural',topic:'climate'},config),new RegExp(label+'の最多区分'));
   }

@@ -40,7 +40,7 @@ function comparisonMeaning(state:AsiaState,config:Config):{label:string;note:str
     if(topic==='ethnicity')return {label:'民族の居住域',note:'居住域は概略で、密度や個人の民族を示しません。'};
     if(topic==='religion')return {label:'宗教と結びついた居住域',note:'居住域は概略で、密度や個人の信仰を示しません。'};
     const social=config.social&&socialTopic(config.social,state);
-    if(social){const group=config.social?.groups?.find(g=>g.id===social.group),category=group?.label.split('：').at(-1)?.replace(/の?構成$/,'');return {label:social.key==='overview'&&category?`${category}の最多区分`:social.title,note:social.key==='overview'?'色は区域内の最多区分で、人数や密度ではありません。':'資料の割合・分母を人数や人口密度と区別します。'};}
+    if(social){const group=config.social?.groups?.find(g=>g.id===social.group),category=group?.id==='jp-nationality'?'外国人住民の国籍':group?.label.split('：').at(-1)?.replace(/の?構成$/,'');return {label:social.key==='overview'&&category?`${category}の最多区分`:social.title,note:social.key==='overview'?'色は区域内の最多区分で、人数や密度ではありません。':'資料の割合・分母を人数や人口密度と区別します。'};}
     return topic==='urban'?{label:'都市範囲と人口密度',note:'都市範囲は行政区域・通勤圏と異なります。'}:{label:'人口密度',note:'密度から民族・信仰・勤務先は分かりません。'};
   }
   if(isTradeTopic(topic))return {label:topic==='trade-imports'?'商品輸入額':'商品輸出額',note:'国全体の金額で、生産地や港の取扱量は示しません。'};
