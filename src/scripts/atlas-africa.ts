@@ -102,11 +102,13 @@ export function initializeAfricaAtlas() {
   text('[data-field-title]',fields[state.field].title);text('[data-field-summary]',fields[state.field].summary);
   text('[data-period]',period);text('[data-metric-title]',metric.label);text('[data-unit]',metric.unit);text('#africa-svg-title',`${metric.label}・${period}`);
   for(const path of paths){const code=path.dataset.countryPath!;const c=countries.find(c=>c.code===code)!;const v=valueAt(metric.id,code,state.year);path.setAttribute('fill',fillFor(v,metric));path.classList.toggle('is-selected',code===state.place);path.classList.toggle('is-compared',code===state.compare);path.classList.toggle('is-muted',state.region!=='all'&&c.region!==state.region&&code!==state.place&&code!==state.compare);path.querySelector('title')!.textContent=`${c.name}：${formatValue(v,metric)}${v===null?'':` ${metric.unit}`}（${period}）`;}
+  fitMap();
+  const view=map.getAttribute('viewBox')!.split(' ').map(Number),box=map.getBoundingClientRect();
+  const symbolScale=Math.max(view[2]/(box.width||640),view[3]/(box.height||528));
   const symbols=query<SVGGElement>('[data-symbols]');symbols.replaceChildren();
-  if(metric.symbols)for(const c of [...countries].sort((a,b)=>(valueAt(metric.id,b.code,state.year)??0)-(valueAt(metric.id,a.code,state.year)??0))){const v=valueAt(metric.id,c.code,state.year);if(v===null||v<=0)continue;if(state.zoom==='country'&&c.code!==state.place&&c.code!==state.compare)continue;const [x,y]=projectAfrica(c.point);const circle=svgEl('circle',{cx:x,cy:y,r:Math.sqrt(v/1e6)*2.2,class:'africa-symbol','data-country-marker':c.code,opacity:state.region!=='all'&&c.region!==state.region&&c.code!==state.place&&c.code!==state.compare ? .25 : 1});circle.append(svgEl('title',{},`${c.name}：${formatValue(v,metric)}人`));symbols.append(circle);}
+  if(metric.symbols)for(const c of [...countries].sort((a,b)=>(valueAt(metric.id,b.code,state.year)??0)-(valueAt(metric.id,a.code,state.year)??0))){const v=valueAt(metric.id,c.code,state.year);if(v===null||v<=0)continue;if(state.zoom==='country'&&c.code!==state.place&&c.code!==state.compare)continue;const [x,y]=projectAfrica(c.point);const circle=svgEl('circle',{cx:x,cy:y,r:Math.sqrt(v/1e6)*2.2*symbolScale,class:'africa-symbol','data-country-marker':c.code,opacity:state.region!=='all'&&c.region!==state.region&&c.code!==state.place&&c.code!==state.compare ? .25 : 1});circle.append(svgEl('title',{},`${c.name}：${formatValue(v,metric)}人`));symbols.append(circle);}
   for(const marker of root!.querySelectorAll<SVGGElement>('[data-island-marker]'))marker.style.display=metric.symbols?'none':'';
   for(const button of root!.querySelectorAll('[data-zoom]'))button.setAttribute('aria-pressed',String((button as HTMLElement).dataset.zoom===state.zoom));
-  fitMap();
   renderTheme(theme);
   const legend=query<HTMLElement>('[data-legend]');legend.replaceChildren();
   if(metric.symbols){const key=svgEl('svg',{viewBox:'0 0 310 72',width:310,height:72,role:'img','aria-label':'人口の円面積。100万人、1000万人、1億人の大きさ。'});[1e6,1e7,1e8].forEach((v,i)=>{const r=Math.sqrt(v/1e6)*2.2;key.append(svgEl('circle',{cx:44+i*105,cy:30,r,fill:'#3c7968','fill-opacity':.6}));key.append(svgEl('text',{x:44+i*105,y:66,'text-anchor':'middle','font-size':11},`${v/1e4}万人`));});legend.append(key);}
@@ -152,6 +154,6 @@ export function initializeAfricaAtlas() {
  query<HTMLSelectElement>('[data-place]').addEventListener('change',event=>chooseCountry((event.target as HTMLSelectElement).value));
  query<HTMLSelectElement>('[data-compare]').addEventListener('change',event=>{state.compare=(event.target as HTMLSelectElement).value;render(true);});
  window.addEventListener('popstate',()=>{state=readState(location.search);render();});
- window.addEventListener('resize',()=>renderTheme(themes.find(t=>t.id===state.theme)!));
+ window.addEventListener('resize',()=>render());
  render();
 }

@@ -1,6 +1,6 @@
 /* Africa-only layout. The shared atlas styles and other regions are untouched. */
 .africa-atlas.shell{width:calc(100% - 40px);max-width:1560px;padding:10px 0 40px;color:var(--ink);font-size:14px;line-height:1.65}
-.atlas-layout:has(.africa-atlas) .header-inner{min-height:58px;padding-block:8px}
+.atlas-layout:has(.africa-atlas) .site-header .header-inner{min-height:58px;padding-block:8px}
 .atlas-layout:has(.africa-atlas) .site-brand small{display:none}
 .africa-atlas [hidden]{display:none!important}
 .africa-heading{display:flex;justify-content:space-between;align-items:center;gap:20px;margin:0 0 10px}
@@ -27,7 +27,7 @@
 .africa-map-tools{display:flex;flex-wrap:wrap;gap:6px;padding:0 12px 8px}
 .africa-map-tools button{border:1px solid #bbc8bd;background:#f8faf4;min-height:44px;border-radius:4px;font-size:13px;padding:7px 10px}
 .africa-map-tools button[aria-pressed=true]{background:#234b43;color:#fff}
-.africa-map{width:100%;height:clamp(300px,calc(100dvh - 420px),440px);display:block;background:#e9f0f0}
+.africa-map{width:100%;height:clamp(300px,calc(100dvh - 450px),440px);display:block;background:#e9f0f0}
 .africa-country{stroke:#fbfcf7;stroke-width:.7;vector-effect:non-scaling-stroke;cursor:pointer}
 .africa-country:hover,.africa-country.is-selected{stroke:#a44225;stroke-width:2.3}
 .africa-country.is-compared{stroke:#263e7c;stroke-width:2.3;stroke-dasharray:4 2}
