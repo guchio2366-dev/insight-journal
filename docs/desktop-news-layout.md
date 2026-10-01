@@ -42,11 +42,22 @@ retains its expanded reading layout. Below 960px, at 1366px, and in Canada,
 Mexico, Europe and Asia, existing layouts remain in effect.
 
 This supersedes the earlier below-1200 fallback for these US idle screens only.
-Data, explanation content, map semantics and chart axes stay unchanged. Browser
+Existing data, explanation text, map semantics and chart axes stay unchanged.
+The narrow US natural overview reuses the existing national takeaway and adds
+an agriculture link that preserves the current location and map selection. Browser
 review at 1180×757 checks the complete main map, message, legends and comparison
 entry; 1366×768 and mobile checks protect the existing layout. Built-CSS tests
 cover both edges of the new width range separately from the mobile/monitor
 contract and continue to protect access to expanded readings and sources.
+
+The West Asia comparison workspace keeps its comparison explanation and named
+return above the map, with the source and target distributions and complete keys
+visible together. The full key includes all 30 climate class names, missing-data
+colors, units and periods. The map and keys use the available workspace width
+to choose their arrangement, including when article expansion changes that width
+without a window resize. Detail controls and source text remain in a disclosure;
+failed point or map requests expose the error and retry control. Responsive
+changes move the existing controls back to their original homes without copies.
 
 ## Content and interaction contract
 
@@ -71,7 +82,8 @@ Synthetic article fixtures exist only in tests and are not published.
 Desktop browser review additionally checks rail/map/reading geometry, horizontal
 overflow, independent scroll, expanded reading, and tab switching.
 `tests/e2e/atlas-desktop-layout.test.mjs` checks the built CSS cascade at
-390, 1199, 1200, 1280, 1366, 1440, 1599, 1600, and 1920 CSS pixels. These are
+390, 959, 1200, 1280, 1366, 1440, 1599, 1600, and 1920 CSS pixels. The US-specific
+suite additionally covers 960, 1024, 1180 and 1199 pixels. These are
 style-contract checks, not browser geometry or GPU-rendering tests.
 Expanded-reading checks cover all 11 products at laptop, monitor, mobile and
 short-screen sizes, including the source links at the end of the text. Browser

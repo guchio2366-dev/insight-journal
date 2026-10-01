@@ -171,7 +171,7 @@ async function init(root:HTMLElement){
      if(description)description.textContent=c?.description??'この観測地点を含む格子は未収録です。';
     }
    }else out.textContent=prefix+'：'+format(value,1)+' '+l.unit+'（'+l.year+'）。'+(value===0?'原資料の値は0です。未収録とは区別しています。':'格子の推計値・補間値であり、地点の実測値とは限りません。');
-  }catch{if(version===pointVersion){out.hidden=false;out.textContent='地点の数値を読み込めませんでした。地図の選択は続けられます。再読み込みで再試行できます。';const heading=root.querySelector('[data-west-climate-class]');if(heading&&l.id==='climate'&&label!=='選択地点')heading.textContent='気候区分を読み込めませんでした。';retry.hidden=false;}}
+  }catch{if(version===pointVersion){out.hidden=false;const message=label+'・'+selectedTopic.label+'の数値を読み込めませんでした。地図の選択は続けられます。「資料を再読み込みする」で再試行できます。';out.textContent=message;const heading=root.querySelector('[data-west-climate-class]');if(heading&&l.id==='climate'&&label!=='選択地点')heading.textContent='気候区分を読み込めませんでした。';fail(message);}}
  }
  async function cityClassification(city:any,version:number){
   try{
@@ -283,12 +283,15 @@ async function init(root:HTMLElement){
    if(extra)$('[data-west-detail]').append(extra);
    $('[data-west-more-reading]').replaceChildren();$('[data-west-more-map]').replaceChildren();
    root.style.removeProperty('--west-comparison-map-height');
+   root.dataset.comparisonColumns='false';
   }
  }
  function sizeComparisonMap(){
   if(root.dataset.comparisonWorkspace!=='true')return;
   const grid=$('.atlas-primary-grid'),swipe=$('[data-west-swipe]');
-  const reserved=window.innerWidth>=1180?$('.west-reading').getBoundingClientRect().height+8:comparisonKey.getBoundingClientRect().height;
+  const columns=grid.getBoundingClientRect().width>=970;
+  root.dataset.comparisonColumns=String(columns);
+  const reserved=columns?$('.west-reading').getBoundingClientRect().height+8:comparisonKey.getBoundingClientRect().height;
   const available=window.innerHeight-grid.getBoundingClientRect().top-reserved-16;
   const height=Math.max(180,Math.min(440,available-swipe.getBoundingClientRect().height-8));
   root.style.setProperty('--west-comparison-map-height',height+'px');applyView();
@@ -402,11 +405,12 @@ async function init(root:HTMLElement){
   if(t.id==='climate'&&state.point){const city=data.cities.find((c:any)=>c.id===state.city);if(city)void cityClassification(city,version);}
   try{await draw(version);if(version!==renderVersion)return;if(restoreMapFocus)svg.focus({preventScroll:true});const city=data.cities.find((c:any)=>c.id===state.city);if(t.id==='climate'&&city&&!state.point)void readPoint(city.coordinates,city.name);else if(state.point){const selected=pointSide==='source'&&source?source:t;if(layer(selected))void readPoint(state.point,'選択地点',selected);}if(t.id==='basins'&&state.basin){const basins=await json('basins.json');const f=basins.features.find((f:any)=>f.properties.id===state.basin);if(f&&version===renderVersion)$('[data-west-point]').textContent=f.properties.name+'の全体を表示しています。地域の外に続く上流も含みます。';}}catch{if(version===renderVersion)fail('この地図の資料を読み込めませんでした。国別統計と分野の切替は利用できます。');}
  }
- async function start(){
+ async function start(explicitCity?:boolean){
   try{
    [data,geography]=await Promise.all([json('data.json'),json('geography.json')]);
    paths=geography.features.map((f:any)=>({...f.properties,d:path(f.geometry)}));
    state=readWestState(location.search,field,data);restoreComparison(location.search);if(!new URLSearchParams(location.search).has('year'))availableYear(topic());
+   if(explicitCity!==undefined)cityExplicit=explicitCity;
    if(topic().id==='climate'&&!state.city)state.city=data.cities.find((c:any)=>!state.country||c.countryCode===state.country)?.id??'';
    // An omitted map parameter means the regional extent, including across fields.
    // Only an explicit country-picker action changes the viewport to that country.
@@ -421,7 +425,7 @@ async function init(root:HTMLElement){
  basinSelect.addEventListener('change',()=>{if(data)void selectBasin(basinSelect.value).catch(()=>fail('流域を読み込めませんでした。'));});
  yearSelect.addEventListener('change',()=>{if(data){state.year=Number(yearSelect.value);commit();void render();}});
  $<HTMLInputElement>('[data-west-split]').addEventListener('input',event=>{split=Number((event.target as HTMLInputElement).value);applyView();});
- retry.addEventListener('click',()=>{cache.clear();grids.clear();void start();});
+ retry.addEventListener('click',()=>{cache.clear();grids.clear();void start(cityExplicit);});
  function zoom(factor:number){state.view=zoomWestView(view(),factor);applyView();commit();}
  root.addEventListener('click',event=>{
   if(!data)return;const target=event.target as Element;
@@ -473,6 +477,7 @@ async function init(root:HTMLElement){
  });
  window.addEventListener('popstate',()=>{if(data){state=readWestState(location.search,field,data);restoreComparison(location.search);const p=new URLSearchParams(location.search);if(p.has('lng')&&p.has('lat')){const lng=Number(p.get('lng')),lat=Number(p.get('lat'));if(Number.isFinite(lng)&&Number.isFinite(lat)&&lng>=23&&lng<=64&&lat>=10&&lat<=45)state.view=fit([lng-3,lat-2,lng+3,lat+2]);}void render();}});
  new ResizeObserver(()=>{if(data&&state)applyView();}).observe(svg);
+ new ResizeObserver(()=>{if(data&&state)sizeComparisonMap();}).observe($('.atlas-primary-grid'));
  window.addEventListener('resize',()=>{if(data&&state)sizeComparisonMap();});
  desktopComparison.addEventListener('change',()=>{if(data&&state){legend();comparisonLayout();}});
  await start();

@@ -5,15 +5,15 @@ import {build} from 'esbuild';
 import {Window} from 'happy-dom';
 const bundle=await build({entryPoints:['src/scripts/atlas-west-asia.ts'],bundle:true,write:false,format:'iife'});
 async function until(check){for(let i=0;i<200;i++){if(check())return;await new Promise(r=>setTimeout(r,10));}throw Error('West Asia controller did not settle');}
-async function setup(route,query='',failBasins=false,viewport={width:1024,height:768}){
+async function setup(route,query='',failBasins=false,viewport={width:1024,height:768},fixture={}){
  const w=new Window({url:`https://example.com/insight-journal/atlas/west-asia/${route}/${query}`,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true}});
  w.happyDOM.setWindowSize(viewport);
  const media=[],matchMedia=w.matchMedia.bind(w);w.matchMedia=query=>{const result=matchMedia(query);media.push(result);return result;};
  w.document.body.innerHTML=(await readFile(`dist/atlas/west-asia/${route}/index.html`,'utf8')).replace(/<script\b[\s\S]*?<\/script>/g,'');
- w.ResizeObserver=class{observe(){} disconnect(){}};w.Response=Response;w.Blob=Blob;w.DecompressionStream=DecompressionStream;
- w.fetch=async url=>{if(failBasins&&String(url).endsWith('basins.json'))throw Error('Test: unavailable vector');return new Response(await readFile('public/'+String(url).replace('/insight-journal/','')));};
+ const observed=[];w.ResizeObserver=class{constructor(callback){this.callback=callback;}observe(target){observed.push({target,callback:this.callback});}disconnect(){}};w.Response=Response;w.Blob=Blob;w.DecompressionStream=DecompressionStream;
+ w.fetch=async url=>{const injected=fixture.fetch?.(String(url));if(injected!==undefined)return injected;if(failBasins&&String(url).endsWith('basins.json'))throw Error('Test: unavailable vector');return new Response(await readFile('public/'+String(url).replace('/insight-journal/','')));};
  w.eval(bundle.outputFiles[0].text);const q=s=>w.document.querySelector(s);
- await until(()=>q('[data-west-loading]').hidden);return {w,q,media,select:(s,v)=>{q(s).value=v;q(s).dispatchEvent(new w.Event('change'));}};
+ await until(()=>fixture.expectFailure?!q('[data-west-retry]').hidden:q('[data-west-loading]').hidden);return {w,q,media,notifyResize:selector=>observed.filter(x=>x.target.matches(selector)).forEach(x=>x.callback([{target:x.target}])),select:(s,v)=>{q(s).value=v;q(s).dispatchEvent(new w.Event('change'));}};
 }
 test('小国と観測所の選択、分野間リンク、履歴復元が同じ場所を指す',async()=>{
  const {w,q,select}=await setup('nature','?country=BHR&city=bahrain&topic=climate&year=2024');
@@ -161,5 +161,61 @@ test('比較の全凡例・詳細操作は幅変更と通常主題への復帰�
   assert.ok(legend.closest('.atlas-map-column'));assert.ok(stats.closest('.west-reading'));assert.ok(extras.closest('.atlas-map-column'));assert.ok(agri.closest('.atlas-map-column'));
   assert.equal(q('[data-west-map]').getAttribute('viewBox'),view);assert.equal(q('[data-west-country]').value,'TUR');assert.ok(q('[data-west-reading-extra]').closest('[data-west-detail]'));
   assert.equal(q('[data-west-more-reading]').children.length,0);assert.equal(q('[data-west-more-map]').children.length,0);unique();
+ }finally{await w.happyDOM.close();}
+});
+
+test('比較詳細内の資料失敗は閉じたパネルを開き再試行へ到達できる',async()=>{
+ const initial='?topic=wheat-rainfed&country=TUR&year=2020&from='+encodeURIComponent('?topic=climate&country=TUR&year=2020');
+ const failed='?topic=wheat-irrigated&country=TUR&year=2020&from='+encodeURIComponent('?topic=basins&country=TUR&year=2020');
+ const {w,q}=await setup('agriculture',initial,true,{width:1180,height:757});
+ try{
+  const more=q('[data-west-comparison-details]'),retry=q('[data-west-retry]');
+  assert.equal(more.open,false);assert.ok(more.contains(retry));
+  w.history.replaceState({},'',failed);w.dispatchEvent(new w.PopStateEvent('popstate'));
+  await until(()=>!retry.hidden);
+  assert.equal(q('[data-west-atlas]').dataset.comparing,'true');
+  assert.match(q('[data-west-loading]').textContent,/読み込めません/);assert.ok(more.contains(retry));assert.equal(more.open,true);
+  w.history.replaceState({},'',initial);w.dispatchEvent(new w.PopStateEvent('popstate'));
+  await until(()=>q('[data-west-loading]').hidden);
+  assert.equal(retry.hidden,true);assert.equal(more.hidden,false);assert.ok(more.contains(retry));
+ }finally{await w.happyDOM.close();}
+});
+
+test('比較横配置はニュースによる実作業幅の変更へ追随し選択と凡例を保つ',async()=>{
+ const {w,q,notifyResize}=await setup('nature','?topic=climate&country=TUR&year=2020&from='+encodeURIComponent('?topic=wheat&country=TUR&year=2020'),false,{width:1366,height:768});
+ try{
+  const root=q('[data-west-atlas]'),grid=q('.atlas-primary-grid'),view=q('[data-west-map]').getAttribute('viewBox'),url=w.location.href;
+  const keys=()=>[...q('[data-west-legend]').querySelectorAll('i')].map(x=>x.getAttribute('style')).sort();const expected=keys();
+  let width=984;grid.getBoundingClientRect=()=>({width,top:249});
+  for(const [available,columns] of [[984,'true'],[916,'false'],[873,'false'],[1050,'true']]){
+   width=available;notifyResize('.atlas-primary-grid');assert.equal(root.dataset.comparisonColumns,columns);
+   assert.equal(w.innerWidth,1366);assert.equal(w.location.href,url);assert.equal(q('[data-west-map]').getAttribute('viewBox'),view);assert.deepEqual(keys(),expected);
+  }
+ }finally{await w.happyDOM.close();}
+});
+
+test('比較の地点格子取得失敗は閉じた詳細を開き対象名付きエラーから再試行できる',async()=>{
+ let rejectGrid,broken=true;const pending=new Promise((_,reject)=>{rejectGrid=reject;});
+ const query='?topic=climate&country=TUR&year=2020&at=35,39&side=source&from='+encodeURIComponent('?topic=wheat&country=TUR&year=2020');
+ const {w,q}=await setup('nature',query,false,{width:1180,height:757},{fetch:url=>broken&&url.endsWith('wheat.values.gz')?pending:undefined});
+ try{
+  const more=q('[data-west-comparison-details]'),view=q('[data-west-map]').getAttribute('viewBox'),before=w.location.href;more.open=false;
+  rejectGrid(Error('Test: point grid unavailable'));await until(()=>!q('[data-west-retry]').hidden);
+  assert.equal(more.open,true);assert.equal(q('[data-west-loading]').hidden,false);assert.match(q('[data-west-loading]').textContent,/選択地点・小麦の収穫面積/);
+  assert.match(q('[data-west-point]').textContent,/読み込めません/);assert.ok(more.contains(q('[data-west-retry]')));
+  broken=false;q('[data-west-retry]').click();await until(()=>q('[data-west-loading]').hidden&&q('[data-west-retry]').hidden&&!q('[data-west-point]').textContent.includes('読み込んでいます'));
+  assert.doesNotMatch(q('[data-west-point]').textContent,/読み込めません/);assert.equal(w.location.href,before);assert.equal(q('[data-west-map]').getAttribute('viewBox'),view);assert.equal(q('[data-west-atlas]').dataset.comparing,'true');
+ }finally{await w.happyDOM.close();}
+});
+
+test('比較の自動都市の気候格子decode失敗も見える再試行から復帰し詳細は閉じる',async()=>{
+ let broken=true;
+ const {w,q}=await setup('nature','?topic=climate&country=TUR&year=2020&from='+encodeURIComponent('?topic=wheat&country=TUR&year=2020'),false,{width:1180,height:757},{expectFailure:true,fetch:url=>broken&&url.endsWith('climate.values.gz')?new Response('invalid grid'):undefined});
+ try{
+  const more=q('[data-west-comparison-details]'),before=w.location.href;
+  assert.equal(more.open,true);assert.equal(q('[data-west-loading]').hidden,false);assert.ok(more.contains(q('[data-west-retry]')));
+  broken=false;q('[data-west-retry]').click();await until(()=>q('[data-west-loading]').hidden&&q('[data-west-retry]').hidden);
+  await until(()=>q('[data-west-point]').textContent.includes('イスタンブール'));
+  assert.equal(more.open,false);assert.equal(q('.west-chart-details').open,false);assert.equal(w.location.href,before);assert.equal(q('[data-west-country]').value,'TUR');assert.equal(q('[data-west-year]').value,'2020');
  }finally{await w.happyDOM.close();}
 });
