@@ -133,6 +133,7 @@
 .asia-atlas .asia-reading-dock:has([data-comparison-reading]:not([hidden]))>h2{font-size:20px;line-height:1.4;margin:0 0 5px}
 .asia-atlas .asia-reading-dock:has([data-comparison-reading]:not([hidden]))>.eyebrow{margin:0 0 4px}
 .asia-atlas .asia-comparison-reading>[data-comparison-title]{font-size:13px;line-height:1.5;margin:5px 0 3px}
+.asia-atlas .asia-reading-dock .asia-comparison-reading>[data-comparison-title]{margin:0 0 3px}
 .asia-atlas .asia-comparison-reading>[data-comparison-summary]{font-size:13px;line-height:1.6;margin:4px 0 6px}
 .asia-atlas .asia-comparison-compact{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:5px 0}
 .asia-atlas .asia-main-legend{grid-template-columns:minmax(0,1fr);margin:0 0 10px}
