@@ -4,6 +4,7 @@ import AtlasRegionNavigation from './AtlasRegionNavigation.astro';
 import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
 import data from '../../data/atlas/canada/population.json';
 import geometry from '../../data/atlas/canada/population-geometry.json';
+import industry from '../../data/atlas/canada/industry.json';
 import rivers from '../../data/atlas/canada/rivers.json';
 import lakes from '../../data/atlas/canada/lakes.json';
 import {features} from '../../data/atlas/regional-atlas';
@@ -50,7 +51,7 @@ const natureTargets={climate:nature('?city=ottawa&compare=vancouver'),water:natu
      <h2>規模と密度を分けて読む</h2>
      <p class="population-comparison" data-population-comparison aria-live="polite">2021年 都市圏人口 — {initial.name}: {fmt(initial.population[2021].value)} 人</p>
      <p class="population-change" data-population-change>2016→2021年の変化: {initial.name} +{initial.changePercent.value.toFixed(1)}%。2021年境界での比較。</p>
-     <p class="population-main-reading population-reading-links"><a href={withBase(`${path}industry/`)}>州別産業：資源・製造業・サービスと市場の関係を読む</a><br/><a href={natureTargets.water} data-population-nature-link={natureTargets.water}>自然環境：Ontario湖を分離し、南部の水域位置を確かめる</a></p>
+     <p class="population-main-reading population-reading-links"><a href={withBase(`${path}industry/?year=2025&province=Ontario&metric=services`)} data-population-industry-link={withBase(`${path}industry/`)}>都市圏人口と、対応する州の産業構成を照合する</a><br/><a href={natureTargets.water} data-population-nature-link={natureTargets.water}>自然環境：Ontario湖を分離し、南部の水域位置を確かめる</a></p>
      <p class="population-summary">2021年の全国人口は<strong>{fmt(canada.population[2021].value)}人</strong>。41都市圏に<strong>{data.cmaShare2021.toFixed(1)}%</strong>が住みます。密度は人を陸地面積で割った値で、広い郊外を含む都市圏平均です。</p>
      <details class="population-background"><summary>場所 → 交通と仕事 → 人口集中</summary><p>地図のTorontoとMontréalは五大湖・セントローレンス側、Vancouverは太平洋側にあります。オンタリオ・ケベックの交通回廊や西岸の港は、産業と市場をつなぐ場所です。人の集中は気候だけでなく、仕事への移動や住宅にも関わります。</p><div class="population-place-buttons"><button data-population-locate="535">Torontoを拡大</button><button data-population-locate="462">Montréalを拡大</button><button data-population-locate="933">Vancouverを拡大</button></div></details>
      <details class="population-more"><summary>都市の広がり・移動と、自然や農畜林業との関係</summary><p>2016–2019年に移住してきた人の9割超はCMAに居住しました。2016→2021年には中心部と郊外の両方で人口が増え、住宅供給・価格や通勤時間も居住場所に関わっています。人口が増えると交通・住宅・サービスの整備が必要になり、都市の拡大は農地などの利用へも影響します。これは当時の分析で、2026年現在の人口・移民動向を示す数値ではありません。</p><p><a href={sources.urban}>Statistics Canadaの2016→2021年分析</a> / <a href={sources.transport}>Transport Canada 2024年交通報告</a></p><p><button data-population-locate="505">Ottawa–Gatineauを拡大</button>は州をまたぐ1都市圏です。首都Ottawaの自治体だけの人口とは区別します。</p><p><a href={natureTargets.climate} data-population-nature-link={natureTargets.climate}>首都OttawaとVancouver：2地点の気温と雨の季節を比較</a>。観測所の気候と、都市圏全体の人口を同じ対象としません。<a href={natureTargets.landform} data-population-nature-link={natureTargets.landform}>地形：南部の低地・西部の山地の位置を確認</a>。</p><p><button data-population-locate="602">Winnipegの都市圏</button>と<button data-population-locate="705">Reginaの都市圏</button>を図で確かめ、<a href={withBase(`${path}agriculture/wheat/`)}>小麦の産地・輸送・需要</a>、<a href={withBase(`${path}agriculture/`)}>カノーラの生産と加工</a>へ。<a href={withBase(`${path}agriculture/beef/`)}>肉牛の草地・飼料・管理</a>、<a href={withBase(`${path}agriculture/forestry/`)}>森林と木材加工</a>も、自然条件と人の活動を分けて読みます。</p></details>
@@ -73,7 +74,7 @@ const natureTargets={climate:nature('?city=ottawa&compare=vancouver'),water:natu
     <p>説明：<a href={sources.definition}>2021 Census DictionaryのCMA定義</a>、<a href={sources.urban}>Statistics Canada 2022年2月9日分析（2016→2021年）</a>、<a href={sources.transport}>Transport Canada 2024年交通報告（2025年公表）</a>を要約。本文・地図・統計の対象年を区別し、人口の原因を地図の位置だけから推計していません。</p>
    </details>
    <noscript><p>南部41都市圏の2021年人口図、Torontoの比較、本文・全55地域の数値表・出典を読めます。選択・年・密度の切替、拡大、履歴や保存からの復帰にはJavaScriptが必要です。</p></noscript>
-   <script type="application/json" data-population-config set:html={JSON.stringify({...data,geometry:geometry.features.map(({id,point,bounds})=>({id,point,bounds}))}).replace(/</g,String.fromCharCode(92)+'u003c')} />
+   <script type="application/json" data-population-config set:html={JSON.stringify({...data,industryProvinces:industry.provinces.map(({id,code})=>({id,code})),geometry:geometry.features.map(({id,point,bounds,provinceCodes})=>({id,point,bounds,provinceCodes}))}).replace(/</g,String.fromCharCode(92)+'u003c')} />
   </article>
  </AtlasWorkspaceFrame>
 </BaseLayout>

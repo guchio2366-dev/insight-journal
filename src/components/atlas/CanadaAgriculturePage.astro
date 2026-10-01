@@ -9,6 +9,7 @@ import climate from '../../data/atlas/canada/climate.json';
 import {canolaReading as originalReading,canolaSources as originalSources} from '../../data/atlas/canada/agriculture-reading';
 import {wheatReading,wheatSources,wheatTypes} from '../../data/atlas/canada/wheat-reading';
 import {withBase} from '../../lib/urls';
+import {buildCanadaCropNatureUrl} from '../../lib/atlas-canada-crop-comparison';
 import '../../styles/atlas-canada-nature.css';
 import '../../styles/atlas-canada-agriculture.css';
 interface Props {crop?:'canola'|'wheat'}
@@ -22,17 +23,23 @@ const mapAsset=withBase(`${assetRoot}/${crop}-map-2021.jpg`);
 const regina=climate.stations.find(s=>s.id==='regina')!;
 const fmt=(v:number|null)=>v===null?'未収録':v.toLocaleString('ja-JP');
 const seededMax=(year:number)=>Math.max(1,...canola.data.filter(r=>r.year===year&&r.id!=='Canada').map(r=>r.values.seeded.value??0));
-const nature=(query:string)=>withBase(`/atlas/north-america/canada/nature/${query}`);
+const sourceUrl=new URL(withBase(`/atlas/north-america/canada/agriculture/${isWheat?'wheat/':''}`),Astro.url);
+const nature=(query:string)=>{const q=new URLSearchParams(query),u=buildCanadaCropNatureUrl(sourceUrl,crop,q.get('city')??'ottawa',(q.get('view')??'climate') as 'climate'|'landform'|'water');return u.pathname+u.search;};
 ---
 <BaseLayout title={`カナダの農林業｜${cropName}とプレーリー`} description={`${cropName}の面積分布を、気候・土地管理・機械化・用途・輸送・需要へつなげて読む。`} compactAtlas>
  <AtlasWorkspaceFrame region="north-america" mapActions={false}>
-  <article class="canada-nature canada-agriculture" data-canada-agriculture>
+  <article class="canada-nature canada-agriculture" data-canada-agriculture data-canada-crop={crop}>
    <p class="canada-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / カナダ</p>
    <AtlasRegionNavigation group="americas" current="north-america" country="canada" />
    <header><p class="eyebrow">Canada · Agriculture and forestry</p><h1>{cropName}から読む、カナダの農林業</h1><p class="canada-lead">自然条件から、育てる・収穫する・運ぶ・加工する・買う人へ。プレーリーの分布をたどる。</p></header>
-   <nav class="canada-fields" aria-label="カナダの分野"><a href={withBase('/atlas/north-america/overview/?country=CAN')}>概説</a><a href={nature('')}>自然環境</a><a href={withBase('/atlas/north-america/canada/agriculture/')} aria-current="page">農林業</a><a href={withBase('/atlas/north-america/canada/industry/')}>主要産業</a><a href={withBase('/atlas/north-america/canada/population/')}>人口</a></nav>
+   <nav class="canada-fields" aria-label="カナダの分野"><a href={withBase('/atlas/north-america/overview/?country=CAN')}>概説</a><a data-canada-crop-nature href={nature('')}>自然環境</a><a href={withBase('/atlas/north-america/canada/agriculture/')} aria-current="page">農林業</a><a href={withBase('/atlas/north-america/canada/industry/')}>主要産業</a><a href={withBase('/atlas/north-america/canada/population/')}>人口</a></nav>
    <p class="canola-scope">公開項目：カノーラ・小麦・肉牛と放牧・林業の初回版。その他の主要作物・畜産、林業の伐採量比較は準備中です。農畜林業分野全体の完成を意味しません。</p>
    <nav class="canada-crop-tabs" aria-label="公開済みの農畜林業"><a href={withBase('/atlas/north-america/canada/agriculture/')} aria-current={!isWheat?'page':undefined}>カノーラ</a><a href={withBase('/atlas/north-america/canada/agriculture/wheat/')} aria-current={isWheat?'page':undefined}>小麦</a><a href={withBase('/atlas/north-america/canada/agriculture/beef/')}>肉牛・放牧と飼料</a><a href={withBase('/atlas/north-america/canada/agriculture/forestry/')}>林業</a></nav>
+   <section class="canada-comparison-context" aria-label={`${cropName}と自然条件を比べる入口`}>
+    <h2>プレーリーの分布とReginaの季節を比べる</h2>
+    <p>{isWheat?'小麦面積の広がりと、生育する季節を照合します。春播きの生育期間と秋播きの越冬を、播種・土壌水分・刈株の管理でどう支えるでしょうか。':'カノーラ面積の広がりと、夏の熱・水の条件を照合します。生育・成熟に使える季節を、品種・輪作・排水の管理でどう支えるでしょうか。'}</p>
+    <p><a data-canada-crop-nature href={nature('?city=regina')}>{cropName}の2021年分布図とReginaの気候を並べる</a> ／ <a data-canada-crop-nature href={nature('?city=regina&view=landform')}>平原・山地と比べる</a> ／ <a data-canada-crop-nature href={nature('?city=regina&view=water')}>湖・川と比べる</a></p>
+   </section>
    <div class="canada-workspace">
     <section class="canada-map-column" aria-label={`${cropName}の分布と比較`}>
      <h2>どこに栽培面積が集まる？</h2>
@@ -51,10 +58,10 @@ const nature=(query:string)=>withBase(`/atlas/north-america/canada/nature/${quer
     </section>
     <aside class="canada-reading" aria-label="自然から社会へつながる説明">
      {canolaReading.map((r,i)=><section class="canada-reading-section"><h2>{r.title}</h2><p>{r.body}</p><p class="canada-sources-inline"><a href={r.source}>この説明の資料</a>{r.extraSource&&<> ／ <a href={r.extraSource}>{isWheat?'小麦の種類・越冬条件・用途の資料':'加工・制度の分析（2025年3月）'}</a></>}</p>
-      {i===0&&<p><a href={nature('?city=regina')}>Reginaの場所と気候へ</a> ／ <a href={nature('?city=winnipeg')}>Winnipegの場所と気候へ</a></p>}
-      {i===1&&<div class="canola-climate-example"><h3>気候の事例：Regina Airport</h3><AtlasClimatePlot name="Regina（事例）" period="1991–2020" temperatureC={regina.temperatureC} precipitationMm={regina.precipitationMm} minTemperatureC={-30}/><p>青い棒＝降水量 mm、赤い線＝平均気温 °C。雪を水量に換算した分も含みます。1観測地点であり、プレーリー全体の代表値ではありません。</p><a href={nature('?city=regina')}>12か月の数値・観測所・出典を見る</a> ／ <a href={nature('')}>首都Ottawaから自然環境を読む</a></div>}
-      {i===2&&<p><a href={nature('?city=regina&view=landform')}>山地と内陸平原を読む</a> ／ <a href={nature('?city=regina&view=water')}>湖と河川の位置を読む</a>（灌漑量や利用可能水量の地図ではありません）</p>}
-      {i===3&&<p><a href={nature('?city=vancouver')}>Vancouverの西岸の位置へ</a></p>}
+      {i===0&&<p><a data-canada-crop-nature href={nature('?city=regina')}>Reginaの場所と気候へ</a> ／ <a data-canada-crop-nature href={nature('?city=winnipeg')}>Winnipegの場所と気候へ</a></p>}
+      {i===1&&<div class="canola-climate-example"><h3>気候の事例：Regina Airport</h3><AtlasClimatePlot name="Regina（事例）" period="1991–2020" temperatureC={regina.temperatureC} precipitationMm={regina.precipitationMm} minTemperatureC={-30}/><p>青い棒＝降水量 mm、赤い線＝平均気温 °C。雪を水量に換算した分も含みます。1観測地点であり、プレーリー全体の代表値ではありません。</p><a data-canada-crop-nature href={nature('?city=regina')}>12か月の数値・観測所・出典を見る</a> ／ <a data-canada-crop-nature href={nature('')}>首都Ottawaから自然環境を読む</a></div>}
+      {i===2&&<p><a data-canada-crop-nature href={nature('?city=regina&view=landform')}>山地と内陸平原を読む</a> ／ <a data-canada-crop-nature href={nature('?city=regina&view=water')}>湖と河川の位置を読む</a>（灌漑量や利用可能水量の地図ではありません）</p>}
+      {i===3&&<p><a data-canada-crop-nature href={nature('?city=vancouver')}>Vancouverの西岸の位置へ</a></p>}
       {isWheat&&i===2&&<div class="canola-table-scroll"><table class="canola-stats" data-wheat-types><caption>播種時期と用途を分けて読む（種類別数量の表ではありません）</caption><thead><tr><th>種類</th><th>播種・生育</th><th>用途の例</th></tr></thead><tbody>{wheatTypes.map(t=><tr><th>{t.type}</th><td>{t.timing}<small>{t.note}</small></td><td>{t.example}</td></tr>)}</tbody></table><p><a href={wheatSources.classes}>CGCの品質・用途分類</a> ／ <a href={wheatSources.winter}>冬小麦の越冬と管理</a> ／ <a href={wheatSources.table}>年次統計の定義（注33）</a></p></div>}
      </section>)}
      <section class="canada-reading-section"><h2>読み終えたら</h2><p>図で栽培の集中地域を探す → 年次表で面積と生産量を分ける → 気温・水・土壌管理を読む → 加工・輸送・需要・制度が生産に戻る関係を説明する。この順に、自然だけで結果を決めつけずに考えます。</p></section>

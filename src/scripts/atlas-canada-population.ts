@@ -1,4 +1,4 @@
-import {readCanadaPopulationState,writeCanadaPopulationState,formatCanadaPopulationValue,canadaPopulationDensityColor,canadaPopulationNatureUrl,canadaPopulationFrame,populationStateKeys,populationStorageKey,type CanadaPopulationState} from '../lib/atlas-canada-population';
+import {readCanadaPopulationState,writeCanadaPopulationState,formatCanadaPopulationValue,canadaPopulationDensityColor,canadaPopulationNatureUrl,canadaPopulationIndustryUrl,canadaPopulationFrame,populationStateKeys,populationStorageKey,type CanadaPopulationState} from '../lib/atlas-canada-population';
 export function initCanadaPopulation(root:HTMLElement){
  const config=JSON.parse(root.querySelector('[data-population-config]')!.textContent!),ids=config.cmas.map((r:any)=>r.id),initialUrl=new URL(location.href);
  let initial=initialUrl;
@@ -31,6 +31,7 @@ export function initCanadaPopulation(root:HTMLElement){
   for(const row of root.querySelectorAll<HTMLElement>('[data-population-row]')){const r=config.cmas.find((r:any)=>r.id===row.dataset.populationRow),v=metricValue(r);row.classList.toggle('is-selected-province',[state.cma,state.compare].includes(r.id));const bar=row.querySelector<HTMLElement>('[data-population-bar]')!;bar.style.width=v.value===null?'0%':`${v.value/max*100}%`;bar.parentElement!.classList.toggle('is-missing',v.value===null);bar.parentElement!.setAttribute('aria-label',`${r.name}: ${formatCanadaPopulationValue(v.value,state.metric)} ${unit}`);}
   for(const td of root.querySelectorAll<HTMLElement>('[data-population-cell]'))td.classList.toggle('is-current-metric',td.dataset.populationCell===(state.metric==='density'?'density':String(state.year)));
   for(const a of root.querySelectorAll<HTMLAnchorElement>('[data-population-nature-link]'))a.href=canadaPopulationNatureUrl(new URL(location.href),new URL(a.dataset.populationNatureLink!,location.href),state).href;
+  for(const a of root.querySelectorAll<HTMLAnchorElement>('[data-population-industry-link]'))a.href=canadaPopulationIndustryUrl(new URL(location.href),new URL(a.dataset.populationIndustryLink!,location.href),state,config.geometry,config.industryProvinces).href;
   try{localStorage.setItem(populationStorageKey,writeCanadaPopulationState(new URL(location.href),state).searchParams.toString());}catch{}
   alignQuantityLegend();
  }

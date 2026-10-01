@@ -1,4 +1,5 @@
 import {readCanadaAgricultureState,writeCanadaAgricultureState,type CanadaAgricultureState} from '../lib/atlas-canada-agriculture';
+import {buildCanadaCropNatureUrl} from '../lib/atlas-canada-crop-comparison';
 export function initCanadaAgriculture(root:HTMLElement){
  const config=JSON.parse(root.querySelector('[data-canola-config]')!.textContent!),ids=config.provinces.map((p:any)=>p.id);
  let state=readCanadaAgricultureState(new URL(location.href),config.years,ids);
@@ -17,6 +18,8 @@ export function initCanadaAgriculture(root:HTMLElement){
   const values=data.filter((r:any)=>r.id!=='Canada').map((r:any)=>r.values[state.metric].value).filter((v:any)=>v!==null),max=Math.max(1,...values);
   for(const bar of root.querySelectorAll<HTMLElement>('[data-canola-bar]')){const r=data.find((r:any)=>r.id===bar.dataset.canolaBar),v=r.values[state.metric].value;bar.style.width=v===null?'0':`${v/max*100}%`;bar.parentElement!.classList.toggle('is-missing',v===null);bar.parentElement!.setAttribute('aria-label',`${r.name}: ${fmt(v)} ${metric.unit}`);}
   $('[data-canola-map-scroll]').classList.toggle('is-zoomed',state.zoom);$('[data-canola-zoom]').setAttribute('aria-pressed',String(state.zoom));
+  const source=writeCanadaAgricultureState(new URL(location.href),state),crop=root.dataset.canadaCrop==='wheat'||source.pathname.endsWith('/wheat/')?'wheat':'canola';
+  for(const link of root.querySelectorAll<HTMLAnchorElement>('[data-canada-crop-nature]')){const target=new URL(link.href,location.href);link.href=buildCanadaCropNatureUrl(source,crop,target.searchParams.get('city')??'regina',(target.searchParams.get('view')??'climate') as 'climate'|'landform'|'water').href;}
  }
  function update(patch:Partial<CanadaAgricultureState>){state={...state,...patch};if(state.compare===state.province)state.compare=null;history.pushState(null,'',writeCanadaAgricultureState(new URL(location.href),state));render();}
  for(const key of ['year','province','compare','metric'])$<HTMLSelectElement>(`[data-canola-${key}]`).addEventListener('change',e=>{const value=(e.target as HTMLSelectElement).value;update({[key]:key==='year'?Number(value):value||null});});

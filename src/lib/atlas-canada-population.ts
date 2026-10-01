@@ -9,6 +9,15 @@ export function readCanadaPopulationState(url:URL,ids:string[]):CanadaPopulation
 export function writeCanadaPopulationState(url:URL,state:CanadaPopulationState){const u=new URL(url);for(const key of populationStateKeys)u.searchParams.delete(key);for(const key of ['year','cma','metric','zoom'] as const)u.searchParams.set(key,String(state[key]));if(state.compare)u.searchParams.set('compare',state.compare);if(state.only)u.searchParams.set('only','1');return u;}
 export function formatCanadaPopulationValue(value:number|null,metric:CanadaPopulationMetric='population'){return value===null?'未公表':value.toLocaleString('ja-JP',{minimumFractionDigits:metric==='density'?1:0,maximumFractionDigits:metric==='density'?1:0});}
 export function canadaPopulationNatureUrl(source:URL,target:URL,state:CanadaPopulationState){const saved=writeCanadaPopulationState(new URL(source.pathname,source),state);target.searchParams.set('populationReturn',saved.searchParams.toString());return target;}
+export function canadaPopulationIndustryUrl(source:URL,target:URL,state:CanadaPopulationState,geometry:{id:string;provinceCodes:string[]}[],provinces:{code:string;id:string}[]){
+ const groups=[state.cma,state.compare].filter(Boolean).map(id=>geometry.find(g=>g.id===id)?.provinceCodes??[]);
+ const codes=[...new Set([...groups.map(codes=>codes[0]).filter(Boolean),...groups.flatMap(codes=>codes.slice(1))])];
+ const related=codes.map(code=>provinces.find(p=>p.code===code)?.id).filter((id):id is string=>Boolean(id));
+ target.searchParams.set('year','2025');target.searchParams.set('metric','services');
+ if(related[0])target.searchParams.set('province',related[0]);
+ if(related[1])target.searchParams.set('compare',related[1]);else target.searchParams.delete('compare');
+ return canadaPopulationNatureUrl(source,target,state);
+}
 export const populationDensityColors=['#e4ebcf','#aecb9b','#679b80','#2f735e','#144936'];
 export const populationDensityBreaks=[50,150,300,600];
 export function canadaPopulationDensityColor(value:number|null){if(value===null)return '#b7b7af';return populationDensityColors[populationDensityBreaks.filter(v=>value>=v).length];}

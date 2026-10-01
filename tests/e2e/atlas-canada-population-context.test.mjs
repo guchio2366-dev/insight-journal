@@ -1,13 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {build} from 'esbuild';
+import {bundleCanadaSource} from '../fixtures/bundle-canada-source.mjs';
 import {Window} from 'happy-dom';
 
 const population=JSON.parse(await readFile('src/data/atlas/canada/population.json','utf8'));
 const geometry=JSON.parse(await readFile('src/data/atlas/canada/population-geometry.json','utf8'));
-const bundled=await build({stdin:{contents:"import {initCanadaNature} from './src/scripts/atlas-canada-nature';initCanadaNature(document.querySelector('[data-canada-nature]'));",resolveDir:process.cwd(),loader:'ts'},bundle:true,write:false,format:'iife'});
-const code=bundled.outputFiles[0].text;
+const code=await bundleCanadaSource('src/scripts/atlas-canada-nature.ts',{globalName:'CanadaNatureController'})+"\nCanadaNatureController.initCanadaNature(document.querySelector('[data-canada-nature]'));";
 const sourceState={year:'2016',cma:'535',compare:'462',metric:'population',only:'1',zoom:'selected'};
 
 function query(patch={},nature={city:'ottawa',view:'water',water:'Lake Ontario',only:'1'}){
@@ -18,6 +17,13 @@ function query(patch={},nature={city:'ottawa',view:'water',water:'Lake Ontario',
 async function page(search=''){
  const w=new Window({url:`https://example.com/insight-journal/atlas/north-america/canada/nature/${search}`,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
  w.document.write((await readFile('dist/atlas/north-america/canada/nature/index.html','utf8')).replace(/<script(?![^>]*type="application\/json")[^>]*>[\s\S]*?<\/script>/g,''));
+ if(new URL(w.location.href).searchParams.get('populationReturn')){
+  const element=w.document.querySelector('[data-canada-config]');assert.ok(element,'Built nature HTML retains its configuration');
+  const config=JSON.parse(element.textContent);assert.ok(config.population,'Built nature HTML retains population comparison metadata');
+  // Model a completed static-asset hydration here; the loader suite independently
+  // verifies asynchronous loading, ordinary-page no-fetch and explicit failure.
+  config.population.geometry=geometry.features;element.textContent=JSON.stringify(config);
+ }
  w.eval(code);
  return w;
 }
@@ -144,4 +150,16 @@ test('Population density context uses 2021 original density and default nature k
   assert.equal(q('[data-canada-population-context-legend]').hidden,true);
   assert.equal(q('[data-canada-population-return]').hidden,true);
  }finally{await plain.happyDOM.close();}
+});
+
+test('Comparison keeps its specific question first while preserving general geography in an optional disclosure',async()=>{
+ const compared=await page(query());
+ try{
+  const d=compared.document,details=[...d.querySelectorAll('[data-canada-general-reading]')];assert.equal(details.length,2);
+  assert.ok(details.every(detail=>!detail.open));
+  assert.match(details[1].textContent,/Mackenzie/);assert.ok(d.querySelector('[data-canada-population-context-text]').textContent.includes('Ontario'));
+  details[1].open=true;d.querySelector('[data-canada-view="landform"]').click();assert.equal(details[1].open,true);
+  d.defaultView.history.replaceState(null,'','?view=water');d.defaultView.dispatchEvent(new d.defaultView.PopStateEvent('popstate'));
+  assert.ok(details.every(detail=>detail.open));assert.equal(d.querySelector('[data-canada-population-context]').hidden,true);
+ }finally{await compared.happyDOM.close();}
 });

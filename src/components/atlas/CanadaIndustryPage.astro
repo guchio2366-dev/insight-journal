@@ -5,6 +5,9 @@ import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
 import data from '../../data/atlas/canada/industry.json';
 import geometry from '../../data/atlas/canada/industry-geometry.json';
 import climate from '../../data/atlas/canada/climate.json';
+import population from '../../data/atlas/canada/population.json';
+import populationGeometry from '../../data/atlas/canada/population-geometry.json';
+import populationGeometryUrl from '../../data/atlas/canada/population-geometry.json?url';
 import {features} from '../../data/atlas/regional-atlas';
 import {forestrySources} from '../../data/atlas/canada/forestry-reading';
 import {canadaIndustryColors, industryShareColor, formatCanadaIndustryValue as fmt} from '../../lib/atlas-canada-industry';
@@ -16,7 +19,7 @@ import '../../styles/atlas-canada-industry.css';
 const assetRoot='/assets/atlas/canada-industry-v1';
 const nature=(query:string)=>withBase(`/atlas/north-america/canada/nature/${query}`);
 const sources={table:'https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3610040001',zip:'https://www150.statcan.gc.ca/n1/tbl/csv/36100400-eng.zip',boundary:'https://open.canada.ca/data/en/dataset/ef70dc3b-1069-4037-9bce-61f47e628a1d',boundaryLayer:'https://geo.statcan.gc.ca/geo_wa/rest/services/2021/Cartographic_boundary_files/MapServer/0',boundaryGuide:'https://www150.statcan.gc.ca/n1/pub/92-160-g/92-160-g2021001-eng.htm',energy:'https://www.cer-rec.gc.ca/en/data-analysis/energy-markets/province-territory-energy-profiles/alberta.html'};
-const targets={water:nature('?city=ottawa&view=water&water=St.%20Lawrence&only=1'),coast:nature('?city=vancouver&view=water&water=Fraser&only=1'),landform:nature('?city=ottawa&view=landform')};
+const targets={water:nature('?city=ottawa&view=water&water=St.%20Lawrence&only=1&frame=480,440,335,140'),coast:nature('?city=vancouver&view=water&water=Fraser&only=1'),landform:nature('?city=ottawa&view=landform')};
 const year=2025,metric='mining',initialRows=data.data.filter(r=>r.year===year),initial=initialRows.find(r=>r.id==='Alberta')!;
 const mapMetrics=data.metrics.filter(m=>m.id!=='all');
 const legend=['0–5%未満','5–15%未満','15–30%未満','30–60%未満','60–80%未満','80–100%'];
@@ -33,6 +36,7 @@ const valueText=(v:{value:number|null;status:string;symbol:string})=>`${fmt(v.va
    <AtlasRegionNavigation group="americas" current="north-america" country="canada" />
    <header><p class="eyebrow">Canada · Industry</p><h1>州ごとの構成から読む、カナダの産業</h1><p class="canada-lead">地下資源の立地に加工・輸送・市場が重なり、州ごとの産業構成が変わる。</p></header>
    <nav class="canada-fields" aria-label="カナダの分野"><a href={withBase('/atlas/north-america/overview/?country=CAN')}>概説</a><a href={nature('')}>自然環境</a><a href={withBase('/atlas/north-america/canada/agriculture/')}>農畜林業</a><a href={withBase('/atlas/north-america/canada/industry/')} aria-current="page">主要産業</a><a href={withBase('/atlas/north-america/canada/population/')}>人口</a></nav>
+   <p><a href={withBase('/atlas/north-america/canada/population/')} data-canada-population-industry-return hidden>元の都市圏人口・比較へ戻る</a></p>
    <div class="canada-workspace">
     <section class="canada-map-column" aria-label="州内GDP割合の地図と比較">
      <div class="canada-map-title"><h2>その州の経済で、どの産業が大きい？</h2></div>
@@ -66,6 +70,15 @@ const valueText=(v:{value:number|null;status:string;symbol:string})=>`${fmt(v.va
      </details>
     </section>
     <aside class="canada-reading industry-reading" aria-label="資源・加工・輸送・市場をつなぐ読み方">
+     <section class="canada-comparison-context" data-canada-population-industry-context hidden>
+      <h2>都市圏人口と州の産業構成を照合する</h2>
+      <p data-canada-population-industry-text></p>
+      <p class="canada-caption" data-canada-population-industry-scope hidden></p>
+      <svg class="canada-map population-industry-source-map" data-canada-population-industry-map viewBox="140 340 760 240" role="img" aria-label="元の都市圏人口分布と数量または密度の凡例"></svg>
+      <p class="canada-caption" data-canada-population-industry-legend></p>
+      <details><summary>人口と産業の対象・出典を分けて読む</summary><p>CMAは自治体と通勤によって結びつく都市圏です。元の人口は2016・2021年、密度と境界は2021年。産業は選択年の州・準州全体のGDP構成比で、都市雇用数や都市のGDPではありません。地図の重なりだけから人口集中の原因を決めません。</p><p><a href={withBase('/atlas/north-america/canada/population/#canada-population-sources')}>元の人口・境界・定義・出典</a> / <a href="#canada-industry-sources">州別産業構成の出典</a></p><p lang="en">Adapted from Statistics Canada, Tables 98-10-0003-01 and 98-10-0001-01, Census of Population 2021, and 2021 Census Cartographic Boundary Files, reference years 2016 and 2021 (accessed September 30, 2026). This does not constitute an endorsement by Statistics Canada of this product. Contains information licensed under the Open Government Licence – Canada.</p></details>
+     </section>
+     <details class="industry-context-general" data-industry-general-reading open><summary>産業の立地・比較を読む</summary>
      <h2>州を比べて、立地を読む</h2>
      <div class="industry-examples" aria-label="比較の入口"><button type="button" data-industry-example="mining" data-province="Alberta" data-compare="Ontario">採取：ABとON</button><button type="button" data-industry-example="manufacturing" data-province="Ontario" data-compare="Quebec">製造：ONとQC</button><button type="button" data-industry-example="services" data-province="Ontario" data-compare="British Columbia">サービス：ONとBC</button></div>
      <p class="industry-comparison" data-industry-comparison aria-live="polite">2025年 鉱業・採石・石油ガス採取の州内GDP割合 — アルバータ: {valueText(initial.values.mining)}</p>
@@ -93,6 +106,7 @@ const valueText=(v:{value:number|null;status:string;symbol:string})=>`${fmt(v.va
       <details><summary>港・道路と、州全体のサービスを分ける</summary><p>Transport Canadaの2024年報告は、BCの港・鉄道・道路・米国との陸上国境を結ぶ交通を説明しています。Vancouverの位置は沿岸事例です。この交通の説明だけで、BCのサービス割合全体の原因を確定することはできません。</p><p><a href={forestrySources.transport}>BCの輸送ネットワークの根拠</a> / <a href={sources.table}>サービス生産産業の元表・定義</a></p></details>
      </section>
      <details class="canada-reading-section"><summary>比較を保存して、同じ条件へ戻る</summary><p>年・産業・2州の比較・地図表示をこのブラウザーに保存できます。URLにも選択が残ります。</p><div class="industry-map-actions"><button type="button" data-industry-save>この比較を保存</button><button type="button" data-industry-restore>保存した比較へ</button></div><p class="canada-caption" data-industry-saved-status aria-live="polite"></p></details>
+     </details>
     </aside>
    </div>
    <details class="industry-table-details"><summary>選択年の13州・準州を、4指標の表で確かめる</summary>
@@ -110,7 +124,7 @@ const valueText=(v:{value:number|null;status:string;symbol:string})=>`${fmt(v.va
     <p><a href={sources.zip}>原典CSV ZIP</a> / <a href={withBase(`${assetRoot}/industry-selected.csv`)}>抽出CSV</a> / <a href={withBase(`${assetRoot}/manifest.json`)}>出典・定義・原典と表示図のSHA256台帳</a></p>
    </details></footer>
    <noscript><p>2025年の鉱業・採石・石油ガス採取の地図と表、アルバータの説明、定義・出典を読めます。年・産業・州比較・拡大・保存・選択を保った自然環境との往復にはJavaScriptが必要です。全156値は抽出CSVでも確認できます。</p></noscript>
-   <script type="application/json" data-industry-config set:html={JSON.stringify({...data,geometry:geometry.features}).replace(/</g,String.fromCharCode(92)+'u003c')} />
+   <script type="application/json" data-industry-config set:html={JSON.stringify({...data,geometry:geometry.features,population:{...population,geometryUrl:populationGeometryUrl,geometry:populationGeometry.features.map(({id,point,bounds,provinceCodes})=>({id,point,bounds,provinceCodes})),land:features.filter(f=>['CAN','USA','GRL'].includes(f.properties.code))}}).replace(/</g,String.fromCharCode(92)+'u003c')} />
   </article>
  </AtlasWorkspaceFrame>
 </BaseLayout>
