@@ -151,7 +151,8 @@ function controllerFixture(url,field='agriculture'){
     api.oceaniaThemes.filter(t=>t.field===field).map(t=>`<button data-theme="${t.id}"></button>`).join('')+
     ['all','theme','country'].map(scope=>`<button data-scope="${scope}"></button>`).join('')+
     '<button data-comparison></button><button data-return></button><div data-normal-view><div data-primary-map></div></div><div data-comparison-view><div data-original-map></div><div data-comparison-map></div></div>'+
-    ['primary','original','comparison'].flatMap(prefix=>['title','period','unit','legend'].map(suffix=>`<div data-${prefix}-${suffix}></div>`)).join('')+
+    ['primary','original','comparison'].flatMap(prefix=>['title','period','unit',...(prefix==='primary'?[]:['legend'])].map(suffix=>`<div data-${prefix}-${suffix}></div>`)).join('')+
+    '<div data-primary-legend-spacer></div><section data-required-legend-layer><p data-primary-legend-unit></p><div data-primary-legend></div></section><details data-primary-legend-dictionary><div data-primary-legend-dictionary-content></div></details>'+
     ['theme-title','takeaway','explanation','coverage','comparison-explanation','social-context','source-list'].map(hook=>`<div data-${hook}></div>`).join('')+
     Object.keys(api.oceaniaFields).map(field=>`<a data-field-link="${field}"></a>`).join('');
   window.document.body.append(root);
