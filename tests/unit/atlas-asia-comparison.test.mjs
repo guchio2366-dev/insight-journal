@@ -4,9 +4,10 @@ import {build} from 'esbuild';
 import {Window} from 'happy-dom';
 import {resolve} from 'node:path';
 import {startAsiaComparison,restoreAsiaComparison,writeAsiaAtlasState} from '../../src/lib/atlas-asia-state.ts';
+import {asiaPlaceReadings,choosePlaceReading,startPlaceComparison} from '../../src/data/atlas/asia-place-readings.ts';
 
 const built=await build({entryPoints:[resolve('src/scripts/atlas-asia-comparison.ts')],bundle:true,format:'iife',globalName:'AsiaComparison',platform:'browser',write:false,logLevel:'silent'});
-const context={countries:['CHN','JPN'],cities:[],bounds:[72,17,147,55],fields:['natural','agriculture','industry','population'],topics:{natural:['climate'],agriculture:['wheat','overview'],industry:['trade-exports','power'],population:['density','urban','ethnicity']},details:{population:['tibetan','uc-selected','uc-other'],industry:['plant']}};
+const context={countries:['CHN','JPN'],cities:[],bounds:[72,17,147,55],fields:['natural','agriculture','industry','population'],topics:{natural:['climate','precipitation'],agriculture:['wheat','overview'],industry:['trade-exports','power'],population:['density','urban','ethnicity']},details:{population:['tibetan','uc-selected','uc-other'],industry:['plant']},stories:{agriculture:['north-china-wheat']}};
 const originalUrl=new URL('https://example.org/atlas/asia/east-asia/');
 const base={field:'agriculture',topic:'wheat',place:'CHN',city:null,point:[115,37.8],camera:{lng:117,lat:35,zoom:4},back:null};
 
@@ -22,7 +23,7 @@ function setup(from,to,fetcher,withMainLegend=false){
   const url=writeAsiaAtlasState(originalUrl,state),window=new Window({url:url.href});
   window.document.body.innerHTML='<main data-asia-atlas><section data-comparison-reading hidden><h3 data-comparison-title></h3><p data-comparison-summary></p><div data-comparison-compact></div></section><details data-comparison-method hidden><summary>詳細</summary><div data-comparison-legend></div></details><button data-comparison-back>戻る</button></main>';
   if(withMainLegend)window.document.querySelector('main').insertAdjacentHTML('afterbegin','<div data-reading-map-legend></div>');
-  window.fetch=fetcher??(async()=>{throw Error('unexpected request')});window.eval(built.outputFiles[0].text+';window.createComparison=AsiaComparison.createAsiaComparison;');
+  window.fetch=fetcher??(async()=>{throw Error('unexpected request')});window.eval(built.outputFiles[0].text+';window.createComparison=AsiaComparison.createAsiaComparison;window.comparisonQuestion=AsiaComparison.comparisonQuestion;');
   const config={regionId:'east-asia',label:'東アジア',countries:[{code:'CHN',name:'中国'},{code:'JPN',name:'日本'}],cities:[],classes:[{id:1,code:'Af',name:'熱帯雨林気候',color:'#0000ff'},{id:2,code:'Am',name:'熱帯季節風気候',color:'#0078ff'}],climate:{classIds:[1,2],image:'climate.png',imageCoordinates:[[72,55],[147,55],[147,17],[72,17]]},climateBase:'/climate/',agricultureBase:'/rice/',geographyUrl:'/geography.json',populationBase:'/population/',population:{image:'population.png',imageCoordinates:[[72,55],[147,55],[147,17],[72,17]],cities:[]},farmingBase:'/farm/',farming:{layers:[{id:'wheat',title:'小麦の収穫面積',kind:'crop',year:2020,unit:'ha/格子',image:'wheat.png',imageCoordinates:[[72,55],[147,55],[147,17],[72,17]],breaks:[10,100],colors:['eeeeee','aaaaaa','555555']}]},industry:{topics:[{id:'trade-exports',title:'商品輸出額',kind:'trade'}],countries:['CHN','JPN']},tradeBase:'/trade/',trade:{file:'trade.json',countries:['CHN','JPN']},presentation:{settlements:{ethnicity:{file:'ethnicity.json',categories:[{id:'tibetan',label:'チベット系',color:'#aabbcc'}]}}},presentationBase:'/asia-presentation-v1/'};
   const root=window.document.querySelector('main'),controller=window.createComparison(root,config,context,()=>state);
   return {window,root,state,controller,config};
@@ -74,7 +75,89 @@ test('選択した居住集団の名前を比較の戻り先に含める',async(
   const {root,controller,state}=setup({...base,field:'population',topic:'ethnicity',place:null,detail:'tibetan'},{field:'natural',topic:'climate'},async()=>response({type:'FeatureCollection',features:[]}));
   controller.render(state);await waitForReading(root);
   assert.match(root.querySelector('[data-comparison-back]').textContent,/チベット系の民族の居住域へ戻る/);
+  assert.match(root.querySelector('[data-comparison-summary]').textContent,/民族の居住域と気候区分/);
+  assert.ok(!root.querySelector('[data-comparison-summary]').textContent.includes('人口の集中'));
   assert.ok(!root.querySelector('[data-comparison-legend]').textContent.includes('undefined'));
+});
+
+test('全6分野ペアの双方向で、選択主題の意味を説明する',()=>{
+  const {window,config}=setup(base,{field:'natural',topic:'climate'});
+  const question=window.comparisonQuestion;
+  config.industry.topics.push({id:'manufacturing',title:'製造業のGDP比',kind:'national',unit:'%'});
+  const choices=[{field:'natural',topic:'climate',label:'気候区分'},{field:'agriculture',topic:'wheat',label:'小麦の収穫面積'},{field:'industry',topic:'manufacturing',label:'製造業のGDP比'},{field:'population',topic:'ethnicity',label:'民族の居住域'}];
+  for(let a=0;a<choices.length;a++)for(let b=0;b<choices.length;b++)if(a!==b){
+    const text=question({...base,...choices[a]},{...base,...choices[b]},config);
+    assert.match(text,new RegExp(choices[a].label+'と'+choices[b].label));
+    assert.ok(!text.includes('人口の集中')&&!text.includes('産業の集積'),`${a}→${b}: ${text}`);
+    assert.ok(text.length<=115,`${a}→${b}: ${text.length}字`);
+  }
+});
+
+test('密度・社会構成・GDP比・輸出比・貿易・MW・森林を別の指標として説明する',()=>{
+  const {window,config}=setup(base,{field:'natural',topic:'climate'}),question=window.comparisonQuestion;
+  const topics=[['manufacturing','製造業のGDP比','national'],['power','発電施設の設備容量','power'],['steel-capacity','国別の粗鋼生産能力','steel'],['industrial-employment','工業の就業者比','national'],['manufactured-exports','商品輸出に占める製造品の割合','national'],['hightech-exports','製造品輸出に占める高技術製品の割合','national'],['resource-rents','天然資源レントのGDP比','national'],['real-gdp','実質GDP','national'],['gdp-growth','GDP成長率','national'],['jp-31','輸送用機械器具の製造品出荷額','admin'],['cn-steel','粗鋼の生産能力','admin'],['in-services','州のサービス業付加価値','admin']];
+  config.industry.topics.push(...topics.map(([id,title,kind])=>({id,title,kind,unit:'%'})));
+  config.farming.layers.push({id:'sheep',title:'羊の密度',kind:'livestock'},{id:'forest',title:'森林参考図',kind:'forest'});
+  config.social={topics:[{id:'age',title:'65歳以上の割合',key:'old'},{id:'nationality',title:'外国籍の割合',key:'foreign'},{id:'language',title:'母語の割合',key:'language'},{id:'religion-share',title:'宗教別の割合',key:'hindu'},{id:'growth',title:'人口増減率',key:'rate'},{id:'composition',title:'区域内の最多区分',key:'overview'}]};
+  const cases=[
+    ['population','density',/人口密度/,/民族・信仰・勤務先/],['population','urban',/都市範囲と人口密度/,/行政区域・通勤圏/],['population','religion',/宗教と結びついた居住域/,/個人の信仰/],
+    ...config.social.topics.map(t=>['population',t.id,new RegExp(t.title),t.key==='overview'?/最多区分で、人数や密度ではありません/:/割合・分母/]),
+    ['industry','manufacturing',/製造業のGDP比/,/GDP比は工場の集積や生産額の規模を示しません/],['industry','power',/発電施設の設備容量/,/MWは設備容量で、発電量ではありません/],
+    ['industry','steel-capacity',/国別の粗鋼生産能力/,/国全体の生産能力で、実際の生産量ではありません/],
+    ['industry','trade-exports',/商品輸出額/,/生産地や港の取扱量は示しません/],['industry','trade-imports',/商品輸入額/,/生産地や港の取扱量は示しません/],
+    ['industry','industrial-employment',/工業の就業者比/,/全就業者に占める割合/],['industry','manufactured-exports',/商品輸出に占める製造品/,/商品輸出に占める割合/],['industry','hightech-exports',/高技術製品/,/製造品輸出に占める割合/],['industry','resource-rents',/天然資源レント/,/生産費を差し引いたGDP比/],['industry','real-gdp',/実質GDP/,/2015年価格/],['industry','gdp-growth',/GDP成長率/,/前年比/],['industry','jp-31',/製造品出荷額/,/付加価値や工場の位置と異なります/],['industry','cn-steel',/生産能力/,/実際の生産量・出荷額/],['industry','in-services',/州のサービス業付加価値/,/都市や工場ごとの値ではありません/],
+    ['agriculture','forest',/森林の分布/,/木材生産量・用途/],['agriculture','sheep',/羊の密度/,/肉・乳の生産量/],['natural','precipitation',/年降水量/,/季節配分や現在の雨/],['natural','basins',/流域/,/現在の流量ではありません/],['natural','groundwater',/地下水盆地と河川/,/現在の水量・取水量/]
+  ];
+  for(const [field,topic,label,note] of cases)for(const reverse of [false,true]){
+    const selected={...base,field,topic},other={...base,field:'natural',topic:'terrain'},text=question(reverse?other:selected,reverse?selected:other,config);
+    assert.match(text,label,`${topic} label`);assert.match(text,note,`${topic} definition`);
+    assert.ok(!text.includes('人口の集中と産業の集積'),topic);
+  }
+  config.social.groups=[{id:'jp-nationality',label:'日本：都道府県の国籍'},{id:'my-ethnicity',label:'マレーシア：市民の民族構成'},{id:'in-religion',label:'インド：宗教の構成'},{id:'in-language',label:'インド：母語の言語群'}];
+  for(const [group,label] of [['jp-nationality','都道府県の国籍'],['my-ethnicity','市民の民族'],['in-religion','宗教'],['in-language','母語の言語群']]){
+    const id=group+'-overview';config.social.topics.push({id,group,key:'overview',title:'区域ごとの構成をまとめて見る'});
+    assert.match(question({...base,field:'population',topic:id},{...base,field:'natural',topic:'climate'},config),new RegExp(label+'の最多区分'));
+  }
+  const none=question({...base,field:'agriculture',topic:'overview',farms:'none'},{...base,field:'natural',topic:'climate'},config);
+  assert.match(none,/農畜産の表示と気候区分/);assert.ok(!none.includes('作物・家畜の概略分布'));
+  assert.match(question({...base,field:'agriculture',topic:'overview',farms:'none',overlay:'water'},{...base,field:'natural',topic:'climate'},config),/米・雨・川の概略分布/);
+});
+
+test('事例の要点は正規選択と適合する橋だけで使い、主題変更や連続比較へ持ち越さない',()=>{
+  const {window,config}=setup(base,{field:'natural',topic:'climate'}),question=window.comparisonQuestion;
+  const from={...base,story:'north-china-wheat'},to={...base,field:'natural',topic:'precipitation'};
+  const lead='冬小麦が育つ季節と、雨が多い季節のずれを読む。';
+  assert.ok(question(from,to,config).startsWith(lead));
+  assert.match(question(from,to,config),/年間合計は季節配分や現在の雨を示しません/);
+  for(const changed of [{...from,topic:'rice'},{...from,place:'JPN'},{...from,detail:'stale'},{...from,point:[116,38]},{...from,field:'population'}])assert.ok(!question(changed,to,config).includes(lead));
+  for(const changed of [{...to,topic:'climate'},{...to,field:'population',topic:'density'},{...to,place:'JPN'},{...to,point:[116,38]}])assert.ok(!question(from,changed,config).includes(lead));
+  assert.ok(!question(from,to,{...config,regionId:'southeast-asia'}).includes(lead));
+  for(const scene of asiaPlaceReadings)for(const bridge of scene.bridges){
+    const source=choosePlaceReading(base,scene),target=startPlaceComparison(originalUrl,source,bridge),regionConfig={...config,regionId:scene.region};
+    assert.ok(question(source,target,regionConfig).startsWith(scene.lead),`${scene.id}→${bridge.topic}`);
+    assert.ok(!question(source,{...target,point:[99,20]},regionConfig).startsWith(scene.lead),`${scene.id}: changed target point`);
+    assert.ok(!question({...source,point:[99,20]},target,regionConfig).startsWith(scene.lead),`${scene.id}: changed source point`);
+  }
+});
+
+test('比較先の地点・国だけ変えても、詳細の事例要点を同期し凡例と復帰先は保持する',async()=>{
+  const {root,controller,state}=setup({...base,story:'north-china-wheat'},{field:'natural',topic:'precipitation',point:base.point});
+  const lead='冬小麦が育つ季節と、雨が多い季節のずれを読む。';
+  controller.render(state);await waitForReading(root);
+  assert.ok(root.querySelector('[data-comparison-summary]').textContent.includes(lead));
+  assert.ok(root.querySelector('[data-comparison-legend]').textContent.includes(lead));
+  const compact=root.querySelector('[data-comparison-compact]').innerHTML,back=state.back;
+  for(const changed of [{point:[120,40]},{point:base.point,place:'JPN'}]){
+    Object.assign(state,changed);controller.render(state);
+    assert.ok(!root.querySelector('[data-comparison-summary]').textContent.includes(lead));
+    assert.ok(!root.querySelector('[data-comparison-legend]').textContent.includes(lead));
+    assert.equal(root.querySelector('[data-comparison-compact]').innerHTML,compact);assert.equal(state.back,back);
+  }
+  Object.assign(state,{point:base.point,place:'CHN'});controller.render(state);
+  assert.ok(root.querySelector('[data-comparison-legend]').textContent.includes(lead));
+  const pending=setup({...base,story:'north-china-wheat'},{field:'natural',topic:'precipitation',point:base.point});
+  pending.controller.render(pending.state);pending.state.point=[120,40];pending.controller.render(pending.state);await waitForReading(pending.root);
+  assert.ok(!pending.root.querySelector('[data-comparison-legend]').textContent.includes(lead),'async completion cannot restore the invalidated lead');
 });
 
 test('元区域と発電施設を比較し直しても、設備容量の半径と代表点の記号を混ぜない',async()=>{
