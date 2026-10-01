@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { Window } from 'happy-dom';
 import { initOceaniaAtlas } from '../../src/scripts/atlas-oceania.ts';
-const html = () => readFileSync(new URL('../../dist/atlas/oceania/index.html', import.meta.url),'utf8');
+const html = () => readFileSync(new URL('../../dist/atlas/oceania/base-map/index.html', import.meta.url),'utf8');
 function setup(query='') {
-  const win = new Window({url:'https://example.test/insight-journal/atlas/oceania/'+query});
+  const win = new Window({url:'https://example.test/insight-journal/atlas/oceania/base-map/'+query});
   win.document.write(html());
   const root = win.document.querySelector('[data-oceania-atlas]');
   const dispose = initOceaniaAtlas(root);
@@ -19,6 +19,7 @@ test('サイトマップに入口があり、静的HTMLでも国名と地図を�
   assert.ok(root.querySelector('noscript'));
   assert.ok(root.querySelector('a[href="/insight-journal/atlas/"]'));
   assert.ok(readFileSync(new URL('../../dist/sitemap.xml',import.meta.url),'utf8').includes('/insight-journal/atlas/oceania/'));
+  assert.ok(readFileSync(new URL('../../dist/sitemap.xml',import.meta.url),'utf8').includes('/insight-journal/atlas/oceania/base-map/'));
   dispose(); win.happyDOM.abort();
 });
 test('直接URL、矛盾する地域、小島の選択、全体復帰と履歴復元', () => {

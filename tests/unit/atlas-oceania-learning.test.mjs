@@ -12,8 +12,40 @@ async function bundled(relative){
 }
 const api=await bundled('src/data/atlas/oceania-learning.ts');
 const controller=await bundled('src/scripts/atlas-oceania-learning.ts');
+const comparison=await bundled('src/data/atlas/oceania-comparison-reading.ts');
 const cities=JSON.parse(readFileSync(new URL('../../public/assets/atlas/oceania-population-v1/centres.json',import.meta.url),'utf8')).centres;
 after(()=>stop());
+
+test('comparison readings explain the selected crop and geography and retain their primary sources in both directions',()=>{
+  const aus=api.createOceaniaState('?theme=wheat&place=AUS&scope=country&layer=wheat&compare=climate','agriculture');
+  const wheat=comparison.getOceaniaComparisonReading(aus);
+  assert.match(wheat.message,/南西部・南東部/);
+  assert.match(wheat.message,/冬の雨/);
+  assert.match(wheat.message,/半乾燥域/);
+  assert.ok(wheat.sources.some(source=>new URL(source.url).hostname==='www.dpird.wa.gov.au'));
+  assert.deepEqual(comparison.getOceaniaComparisonReading({...aus,layer:'climate',compareLayer:'wheat'}),wheat);
+  const png=api.createOceaniaState('?theme=tropical-crops&place=PNG&scope=country&layer=coconut&compare=climate','agriculture');
+  const coconut=comparison.getOceaniaComparisonReading(png);
+  assert.match(coconut.message,/沿岸/);assert.match(coconut.message,/中央高地/);assert.match(coconut.message,/集荷・加工/);
+  assert.ok(coconut.sources.some(source=>new URL(source.url).hostname==='www.fao.org'));
+  assert.ok(coconut.sources.some(source=>new URL(source.url).hostname==='www.kik.com.pg'));
+  assert.ok(coconut.supportNotes.some(note=>note.includes('欠測セル')));
+  assert.deepEqual(comparison.getOceaniaComparisonReading({...png,layer:'climate',compareLayer:'coconut'}),coconut);
+  const other=comparison.getOceaniaComparisonReading({...png,place:'NZL'});
+  assert.doesNotMatch(other.message,/PNGのココナツ/);
+  assert.notEqual(other.message,coconut.message);
+  const absent=comparison.getOceaniaComparisonReading({...png,place:'KIR',layer:'places',compareLayer:'density'});
+  assert.match(absent.message,/タラワ/);assert.match(absent.message,/港を収録していない/);
+  assert.doesNotMatch(absent.message,/ラエ|タウランガ/);
+  const points=comparison.getOceaniaComparisonReading({...png,layer:'places',compareLayer:'cities'});
+  assert.match(points.message,/円の面積/);assert.doesNotMatch(points.message,/内陸高地にも集まる/);
+  const restricted=comparison.getOceaniaComparisonReading({...png,field:'nature',place:'all',scope:'theme',theme:'altitude',layer:'climate',compareLayer:'sheep'});
+  assert.doesNotMatch(restricted.message,/豪州の南部|中央の砂漠/);
+  const nz=comparison.getOceaniaComparisonReading({...png,field:'industry',place:'all',scope:'theme',theme:'new-zealand-processing',layer:'places',compareLayer:'density'});
+  assert.match(nz.message,/タウランガ/);assert.doesNotMatch(nz.message,/ラエ|スバ/);
+  const offMap=comparison.getOceaniaComparisonReading({...png,field:'industry',place:'all',scope:'theme',theme:'png-resources-and-port',layer:'mines',compareLayer:'density'});
+  assert.match(offMap.message,/照合できない/);assert.doesNotMatch(offMap.message,/豪州では西部/);
+});
 
 test('invalid route state normalizes to valid same-field defaults and clears an invalid country scope',()=>{
   for(const field of Object.keys(api.oceaniaFields)){

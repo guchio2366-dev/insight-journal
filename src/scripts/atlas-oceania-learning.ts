@@ -1,4 +1,5 @@
 import {withBase} from '../lib/urls';
+import {getOceaniaComparisonReading} from '../data/atlas/oceania-comparison-reading';
 import {oceaniaFields,oceaniaCountries,oceaniaLayers,oceaniaThemes,oceaniaPopulationReading,createOceaniaState,getOceaniaTheme,getOceaniaLayer,renderOceaniaScene,renderOceaniaLegend,oceaniaCoverage,type OceaniaField,type OceaniaState,type OceaniaSource} from '../data/atlas/oceania-learning';
 
 const htmlEscape=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
@@ -21,13 +22,7 @@ export function initOceaniaLearningAtlas(root:HTMLElement):void{
   if(suitable){state.theme=suitable.id;state.layer=suitable.defaultLayer;state.compareLayer=suitable.comparisonLayer;}
  };
  const comparisonText=()=>{
-  const from=getOceaniaLayer(state.layer,state),to=getOceaniaLayer(state.compareLayer,state),theme=getOceaniaTheme(state);
-  let reading='';
-  if(from.field==='population')reading=to.field==='nature'?oceaniaPopulationReading.comparisons.climate.message:to.field==='agriculture'?oceaniaPopulationReading.comparisons.agriculture.message:to.field==='industry'?oceaniaPopulationReading.comparisons.industry.message:'格子の人口密度と都市中心の人口は、面積と範囲が異なります。点のない島も無人とは限りません。';
-  else if(to.field==='population')reading='生産・施設の分布と居住地を比べ、輸送・仕事・市場・公共サービスとのつながりを考えます。近いことだけで雇用量や所得は推定できません。';
-  else if(from.field==='nature'||to.field==='nature')reading='気候が生産を支える条件を比べます。分布の対応だけで原因を決めず、技術・水の管理・土地利用・交通・市場や制度も合わせて考えます。';
-  else reading='分布が重なる場所と異なる場所を読み、加工・輸送・市場の役割を考えます。資料の対象年と単位が異なるため、色の濃さや地点数を同じ量として比べません。';
-  return `${targetName()}：${reading}`;
+  return `${targetName()}：${getOceaniaComparisonReading(state).message}`;
  };
  const scene=(hook:string,id:string)=>{
   const el=one(hook),b=el.getBoundingClientRect();
@@ -53,7 +48,7 @@ export function initOceaniaLearningAtlas(root:HTMLElement):void{
   const keys:Record<string,keyof typeof oceaniaPopulationReading.contexts>={AUS:'australia',NZL:'new-zealand',PNG:'papua-new-guinea',FJI:'fiji',KIR:'tarawa',PYF:'tahiti',WSM:'samoa'};
   if(field==='population')text('explanation',(oceaniaPopulationReading.contexts[keys[state.place]??'overview'])+' '+theme.explanation);
   text('social-context',oceaniaPopulationReading.socialConnections.map(c=>c.title+'：'+c.text).join('\n\n'));
-  sources([...layer.sources,...theme.sources,...(state.comparison?compare.sources:[]),...oceaniaPopulationReading.sources.filter(s=>s.id.startsWith('world-bank')||s.id.startsWith('abs')).map(s=>({title:s.title,url:s.url}))]);
+  sources([...layer.sources,...theme.sources,...(state.comparison?[...compare.sources,...getOceaniaComparisonReading(state).sources]:[]),...oceaniaPopulationReading.sources.filter(s=>s.id.startsWith('world-bank')||s.id.startsWith('abs')).map(s=>({title:s.title,url:s.url}))]);
   root.querySelectorAll<HTMLAnchorElement>('[data-field-link]').forEach(a=>{
    const nextField=a.dataset.fieldLink as OceaniaField,available=oceaniaThemes.filter(t=>t.field===nextField),nextTheme=available.find(t=>t.countryCodes.includes(state.place))??available[0];
    a.href=serialized({...state,field:nextField,theme:nextTheme.id,layer:nextTheme.defaultLayer,compareLayer:nextTheme.comparisonLayer,comparison:false},withBase(`/atlas/oceania/${nextField}/`)).href;

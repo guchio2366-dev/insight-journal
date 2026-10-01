@@ -4,7 +4,8 @@ import {readFile,access} from 'node:fs/promises';
 import {transform} from 'esbuild';
 import {Window} from 'happy-dom';
 
-const regions=['north-america','europe','latin-america','west-asia','africa','oceania','asia/east-asia','asia/southeast-asia','asia/south-central-asia','asia/south-asia','asia/central-asia'];
+// Oceania's published four-field overview has its own contract in atlas-oceania-overview.test.mjs.
+const regions=['north-america','europe','latin-america','west-asia','africa','asia/east-asia','asia/southeast-asia','asia/south-central-asia','asia/south-asia','asia/central-asia'];
 const mapController=await readFile('src/scripts/atlas-overview-map.ts','utf8');
 const pageController=(await readFile('src/scripts/atlas-country-overview.ts','utf8')).replace(/^import .* from ['"]\.\/atlas-overview-map['"];?\r?\n/m,'');
 const controller=(await transform(`${mapController}\n${pageController}\ninitCountryOverview(document.querySelector('[data-country-overview]'));`,{loader:'ts',format:'iife'})).code;
@@ -24,7 +25,7 @@ const visiblePanels=d=>[...d.querySelectorAll('[role=tabpanel]')].filter(panel=>
 const selectedTopic=d=>d.querySelector('[role=tab][aria-selected=true]');
 const selectedCountries=d=>[...d.querySelectorAll('[data-overview-map-country][aria-pressed=true]')].map(country=>country.dataset.overviewMapCountry);
 
-test('11地域の初期HTMLは白地図と地域概況を示し、国別の本文は選択まで隠す',async()=>{
+test('共通概要10地域の初期HTMLは白地図と地域概況を示し、国別の本文は選択まで隠す',async()=>{
   const sitemap=await readFile('dist/sitemap.xml','utf8');
   for(const region of regions){
     const w=await page(region),d=w.document;
@@ -78,7 +79,7 @@ test('11地域の初期HTMLは白地図と地域概況を示し、国別の本�
   }
 });
 
-test('全地域で国名選択は地図と国別本文に連動し、全体へ戻すと選択を解除する',async()=>{
+test('共通概要10地域で国名選択は地図と国別本文に連動し、全体へ戻すと選択を解除する',async()=>{
   for(const region of regions){
     const w=await page(region,'',true),d=w.document;
     try{
