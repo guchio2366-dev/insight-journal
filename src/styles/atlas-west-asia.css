@@ -110,6 +110,4 @@
  .atlas-desktop-shell:has(> .west-atlas) .atlas-news-header{padding:12px}
  .atlas-desktop-shell:has(> .west-atlas) .atlas-news-header h2{font-size:17px;line-height:1.6}
  .atlas-desktop-shell:has(> .west-atlas) :is(.atlas-news-list,.atlas-news-reader){padding-inline:12px}
- .atlas-desktop-shell .west-atlas[data-field] .atlas-primary-grid{grid-template-columns:minmax(0,1fr) 390px;gap:12px;align-items:start}
- .atlas-desktop-shell .west-atlas[data-field] .atlas-map-frame{height:clamp(280px,calc(100dvh - 340px),420px);min-height:0;max-height:none;aspect-ratio:auto}
 }
