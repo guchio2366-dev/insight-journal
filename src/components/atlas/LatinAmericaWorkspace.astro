@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AtlasRegionNavigation from './AtlasRegionNavigation.astro';
+import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
+import {withBase} from '../../lib/urls';
+import '../../styles/atlas-latin-learning.css';
+import type {LatinLearningField} from '../../lib/atlas-latin-learning-state';
+interface Props {field:LatinLearningField;title:string;lead:string;description?:string}
+const {field,title,lead,description=lead}=Astro.props;
+const fields=[['nature','自然環境'],['agriculture','農畜産'],['industry','主要産業'],['population','人口']];
+---
+<BaseLayout title={`${title}｜中南米地図`} {description} compactAtlas>
+ <AtlasWorkspaceFrame region="latin-america" mapActions={false}>
+  <article class={`latin-workspace latin-${field}`} data-latin-workspace data-latin-field={field}>
+   <div class="latin-navigation"><AtlasRegionNavigation group="americas" current="latin-america" /></div>
+   <header class="latin-header"><h1>{title}</h1><p class="latin-lead">{lead}</p></header>
+   <nav class="latin-fields" aria-label="中南米の分野"><a href={withBase('/atlas/latin-america/overview/')}>概要</a>{fields.map(([id,label])=><a href={withBase(`/atlas/latin-america/${id}/`)} aria-current={field===id?'page':undefined}>{label}</a>)}<a href={withBase('/atlas/latin-america/base-map/')}>基礎地図</a></nav>
+   {Astro.slots.has('map')?<div class="latin-primary-grid"><section class="latin-map-column" data-map-surface tabindex="0" aria-label="地図と項目"><slot name="map" /><div class="latin-items"><slot name="items" /></div></section><aside class="latin-reading" aria-label="分布の理由と比較"><slot name="reading" /></aside></div>:null}
+   {Astro.slots.has('statistics')?<section class="latin-statistics" aria-label="地図の値を確かめる"><slot name="statistics" /></section>:null}
+   {Astro.slots.has('sources')?<footer class="latin-sources"><slot name="sources" /></footer>:null}
+   <slot />
+  </article>
+ </AtlasWorkspaceFrame>
+</BaseLayout>

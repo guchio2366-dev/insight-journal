@@ -11,8 +11,8 @@ import overviewManifest from '../../../public/assets/atlas/latin-america-overvie
 import {withBase} from '../../lib/urls';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import '../../styles/atlas-latin-america.css';
-const {initialField='overview'}=Astro.props as {initialField?:string};
-const basePath=withBase('/atlas/latin-america/');
+const {initialField='overview',legacyBasePath='/atlas/latin-america/'}=Astro.props as {initialField?:string;legacyBasePath?:string};
+const basePath=withBase(legacyBasePath);
 const topics=[...latinSocietyTopics,...latinEconomyTopics];
 const fields=[{id:'nature',name:'自然環境',subtitle:'雨・地形・水が地域差をつくる',summary:'赤道付近のアマゾンからアンデス、乾燥する太平洋岸、温帯のパンパへ。緯度だけでなく、標高・海流・風の向きが雨と気温を変え、その違いが産地や暮らしに結び付きます。'}, {id:'agriculture',name:'農林業',subtitle:'同じ熱帯でも、作物と生産条件は違う',summary:'ブラジル内陸の大豆、パンパの穀物、中米とアンデスのコーヒー。作物ごとの収穫面積と地域の解説を重ね、土地・雨・技術・輸送が産地を支える仕組みを読みます。'},{id:'industry',name:'主要産業',subtitle:'資源の場所と、加工・市場の場所を結ぶ',summary:'アンデスの鉱物、ブラジルの鉱山と工業地帯、パナマの物流。原料の産地から加工・輸出の拠点までを、国内の地域差と結び付けて読みます。'},{id:'population',name:'人口',subtitle:'海岸・高地・河川沿いに、人と都市が集まる',summary:'ブラジル南東部の都市群、アンデス高地の都市、ラプラタ河口の集積。自然条件に加え、植民地期以来の交通・経済・移動の歴史が、現在の人口分布につながっています。'}];
 const overviewField={id:'overview',name:'地理の概況',subtitle:'中南米の地理を読む',summary:'アンデス山脈、アマゾン流域、ブラジル高原、パンパ。国境と主な河川を共通の土台に、農林業・自然環境・主要産業・人口を同じ地図で読み比べます。'};

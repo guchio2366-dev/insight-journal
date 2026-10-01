@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-01",
+  "source": {
+    "period": "1991–2020",
+    "license": "CC BY 4.0",
+    "metadataUrl": "https://api.figshare.com/v2/articles/21789074/versions/1",
+    "metadataSha256": "ede23dbd2eafb743116fbb3367b38367eeafd043faf17338620be4f2f18b0924",
+    "archiveId": 45057352,
+    "archiveBytes": 130339513,
+    "archiveChecksum": {
+      "algorithm": "MD5",
+      "encoding": "base64",
+      "value": "sZxgssgzgL0QEJEfN3E55Q=="
+    },
+    "baselineManifest": "/assets/atlas/latin-america-climate-v1/manifest.json",
+    "baselineManifestSha256": "9ed784493200b5b872ad6fab799be4df3c2cfbbf96b267c4254dfc7969300618",
+    "baselineGridSha256": "e0efa44e94a0a65b7a0ffd302ef8a25fb630f7e9be2c62d6c3245b5e6d01b2e9",
+    "archiveVerification": "再取得したFigshare metadataのID・MD5・bytesを既存取得台帳と照合。今回130MB元archiveの再ダウンロードはしていない。"
+  },
+  "processing": {
+    "script": "scripts/prepare-latin-nature.mjs",
+    "scriptSha256": "ffb6a78a71e7cd3f8758abc71465fc85a82b0c5dc82230a680627535f24ee6ed",
+    "method": "既存EPSG:3857分類gridの各セルに原class→5group色を適用。寸法・範囲・透明マスク・セル配置を変更しない。補間なし。",
+    "groupMapping": {
+      "1": 1,
+      "2": 1,
+      "3": 1,
+      "4": 2,
+      "5": 2,
+      "6": 2,
+      "7": 2,
+      "8": 3,
+      "9": 3,
+      "10": 3,
+      "11": 3,
+      "12": 3,
+      "13": 3,
+      "14": 3,
+      "15": 3,
+      "16": 3,
+      "17": 4,
+      "18": 4,
+      "19": 4,
+      "20": 4,
+      "21": 4,
+      "22": 4,
+      "23": 4,
+      "24": 4,
+      "25": 4,
+      "26": 4,
+      "27": 4,
+      "28": 4,
+      "29": 5,
+      "30": 5
+    },
+    "counts": {
+      "1": 99524,
+      "2": 32674,
+      "3": 33218,
+      "4": 645,
+      "5": 8503
+    },
+    "countsMeaning": "画像セル数の整合検証。面積・国の割合ではない。",
+    "png": {
+      "width": 600,
+      "height": 971,
+      "bytes": 15258,
+      "sha256": "0056c43dbf68f8763e62f09678e87442ec2bc0b908ccd8a15e8b8130e6081c70"
+    },
+    "boundaries": "Natural Earth Admin 0 Countries, existing site 1:110m + selected 1:50m small-country geometry; public domain",
+    "boundarySha256": "bcc64013965f7253790fd296d1127f3f419c2a32255570b05c025a7a9048f1c0"
+  },
+  "stationNormals": {
+    "period": "1991–2020",
+    "unit": [
+      "°C",
+      "mm/月"
+    ],
+    "grain": "観測所1点・月別平年値",
+    "inheritedStations": 16,
+    "freshlyAuditedStations": [
+      {
+        "stationId": "78762",
+        "sourceUrl": "https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/graph_mkhtml.php?n=78762&y=2025&m=12&e=6&r=5&s=1&k=0",
+        "file": "climatview-78762.html",
+        "bytes": 17014,
+        "sha256": "6f66ec571abda1088504b55bc29a9d7d685866dbf77ff176b672296957cac1dc",
+        "longitude": -84.18,
+        "latitude": 9.98,
+        "elevationM": 908,
+        "comparedValues": 24,
+        "match": true
+      },
+      {
+        "stationId": "83377",
+        "sourceUrl": "https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/graph_mkhtml.php?n=83377&y=2025&m=12&e=6&r=5&s=1&k=0",
+        "file": "climatview-83377.html",
+        "bytes": 17504,
+        "sha256": "5710af6b319e37ca8a3a1802ca76d47a8d9d53e9e5564f5ca23723a9c2119f32",
+        "longitude": -47.93,
+        "latitude": -15.78,
+        "elevationM": 1159,
+        "comparedValues": 24,
+        "match": true
+      },
+      {
+        "stationId": "78325",
+        "sourceUrl": "https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/graph_mkhtml.php?n=78325&y=2025&m=12&e=6&r=5&s=1&k=0",
+        "file": "climatview-78325.html",
+        "bytes": 16782,
+        "sha256": "002c4ea290a8b1a2698584f43e735a6237cac5456a25e922d42a6e060b840143",
+        "longitude": -82.35,
+        "latitude": 23.17,
+        "elevationM": 50,
+        "comparedValues": 24,
+        "match": true
+      }
+    ],
+    "missing": "nullは未取得/欠測。正常な0mmは0のまま。",
+    "terms": "https://www.jma.go.jp/jma/kishou/info/coment.html"
+  },
+  "limitations": [
+    "Generalized country outlines and 0.1-degree climate cells omit some coasts and small islands.",
+    "A destination pixel count is not an area total, population weight or national statistic; EPSG:3857 cells are not equal-area on the ground.",
+    "The displayed climate class may differ from a nearby station's own monthly normals. Do not infer station observations from this raster.",
+    "1991–2020 is a climatological period, not today's weather or a future projection.",
+    "Country masks follow the site's source geometry; this is not an independent statement on disputed boundaries.",
+    "Scope matches the existing Latin America atlas (34 countries/territories including PRI and FLK, excluding Mexico). French Guiana is not a separate feature in the site source geometry."
+  ]
+}

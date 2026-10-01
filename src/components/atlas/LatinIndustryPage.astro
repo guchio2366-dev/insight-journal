@@ -1,0 +1,78 @@
+---
+import LatinAmericaWorkspace from './LatinAmericaWorkspace.astro';
+import {withBase} from '../../lib/urls';
+import {latinCountries} from '../../lib/atlas-latin-america-geometry';
+import {latinIndustryData,latinIndustryLayers,latinIndustryReadings,renderLatinIndustryMap,renderLatinIndustryLegend,formatLatinIndustryValue,industryCountryName} from '../../lib/atlas-latin-industry';
+import '../../styles/atlas-latin-industry.css';
+const initial={layer:'ores',place:'all',scope:'all',only:false};
+const reading=latinIndustryReadings[0];
+const base=withBase('/atlas/latin-america/');
+const sources=latinIndustryReadings.flatMap(r=>r.sources).filter((s,i,a)=>a.findIndex(v=>v.url===s.url)===i);
+---
+<LatinAmericaWorkspace field="industry" title="輸出から読む、中南米の主要産業" lead="鉱石・金属と製造品の輸出構成を比べ、資源の産地・加工・交通・市場のつながりを読みます。">
+ <div class="latin-industry" data-latin-industry data-latin-ready="false" data-base-path={base}>
+  <a class="latin-industry-return" data-industry-return hidden href={`${base}industry/`}>元の分布へ戻る</a>
+  <div class="latin-industry-toolbar" aria-label="地図の分布と範囲">
+   <label>分布<select data-industry-layer>{latinIndustryLayers.map(l=><option value={l.id}>{l.name}</option>)}</select></label>
+   <label>国・地域<select data-industry-place><option value="all">中南米全体</option>{latinCountries.map(c=><option value={c.code}>{c.name}</option>)}</select></label>
+   <label>範囲<select data-industry-scope><option value="all">中南米全体</option><option value="central">中米・カリブ</option><option value="south">南米</option><option value="country">選択国</option></select></label>
+   <button type="button" data-industry-only aria-pressed="false">選択国のデータだけ</button>
+   <button type="button" data-industry-fallback aria-pressed="false">画像表示</button>
+  </div>
+  <div class="latin-industry-grid" data-industry-normal>
+   <section class="latin-industry-panel" aria-labelledby="latin-industry-main-title">
+    <h2 id="latin-industry-main-title" data-industry-title>鉱石・金属の輸出比率</h2>
+    <p class="latin-industry-period" data-industry-period>2024年 · 国単位 · 商品輸出額に占める割合（%）</p>
+    <div class="latin-industry-map-grid">
+     <div data-industry-primary-map set:html={renderLatinIndustryMap(initial,'latin-industry-main')} />
+     <div data-industry-primary-legend set:html={renderLatinIndustryLegend('ores')} />
+    </div>
+    <p class="latin-industry-map-note" data-industry-map-note>同じ2024年で表示。24国に値、9国・地域は原典欠測、1地域は対象統計なし。0に置き換えていません。</p>
+    <div class="latin-industry-topics" aria-label="代表例">{latinIndustryReadings.map(r=><button type="button" data-industry-topic={r.id} aria-pressed={r.id==='andes'}>{r.name}</button>)}</div>
+   </section>
+   <aside class="latin-industry-reading" aria-label="成立条件と比較">
+    <h2 data-industry-reading-title>{reading.title}</h2>
+    <p data-industry-takeaway>{reading.takeaway}</p>
+    <div class="latin-industry-selected" data-industry-selected aria-live="polite">中南米全体 · 2024年の商品輸出構成。国を選ぶと二つの比率を確かめられます。</div>
+    <div class="latin-industry-actions" aria-label="何を比べて読むか">
+     <a data-industry-compare-exports href={`${base}industry/?layer=manufactures&from=industry&sourceLayer=ores`}>鉱石・金属と製造品の比率を並べ、輸出の重心を比べる →</a>
+     <a data-industry-compare-population href={`${base}population/?layer=density&from=industry&sourceLayer=ores`}>輸出構成2024年と人口密度2023年を並べ、人口・市場と産業の関係を読む →</a>
+     <a data-industry-compare-water href={`${base}industry/?layer=canal&place=PAN&scope=central&from=nature&sourceLayer=climate&sourcePlace=PAN&sourceScope=central`}>パナマの気候と淡水・物流を並べ、通航を支える水を読む →</a>
+    </div>
+   </aside>
+  </div>
+  <section data-industry-comparison hidden aria-label="元の分布と専用比較">
+   <h2 class="latin-industry-comparison-title" data-industry-comparison-title>元の分布と比べる</h2>
+   <p class="latin-industry-comparison-explanation" data-industry-comparison-explanation />
+   <div class="latin-industry-comparison">
+    <section class="latin-industry-panel" aria-labelledby="latin-industry-source-title">
+     <h2 id="latin-industry-source-title" data-industry-source-title>元の分布</h2>
+     <p class="latin-industry-period" data-industry-source-period />
+     <div class="latin-industry-map-grid"><div data-industry-source-map /><div data-industry-source-legend /></div>
+    </section>
+    <section class="latin-industry-panel" aria-labelledby="latin-industry-target-title">
+     <h2 id="latin-industry-target-title" data-industry-target-title>比べる分布</h2>
+     <p class="latin-industry-period" data-industry-target-period />
+     <div class="latin-industry-map-grid"><div data-industry-target-map /><div data-industry-target-legend /></div>
+    </section>
+   </div>
+   <div class="latin-industry-selected" data-industry-comparison-values aria-live="polite" />
+   <div class="latin-industry-actions"><a data-industry-comparison-return href={`${base}industry/`}>元の分布へ戻る</a></div>
+  </section>
+  <details class="latin-industry-details"><summary>指標の対象と分類を確かめる</summary><p>{latinIndustryData.notes.scope}</p><p>{latinIndustryData.notes.classification}</p><p>{latinIndustryData.metrics.map(m=>`${m.name}：${m.definition}`).join(' ')}</p><p>{latinIndustryData.notes.missing}</p></details>
+  <details class="latin-industry-details"><summary>34国・地域の値を見る（2024年）</summary><div class="latin-industry-statistics"><table><caption>商品輸出額に占める割合。各国の商品輸出額がそれぞれの分母です。</caption><thead><tr><th scope="col">国・地域</th><th scope="col">鉱石・金属</th><th scope="col">製造品</th></tr></thead><tbody>{latinIndustryData.rows.map(row=><tr><th scope="row">{industryCountryName(row.country)}</th><td>{formatLatinIndustryValue(row.values.ores.value,row.values.ores.status)}</td><td>{formatLatinIndustryValue(row.values.manufactures.value,row.values.manufactures.status)}</td></tr>)}</tbody></table></div></details>
+  <details class="latin-industry-details"><summary>原典・加工・再利用条件を確認する</summary>
+   <p data-industry-source-attribution hidden />
+   <p>World Bank WDI / UN Comtrade・WITS・World Bank推計。2024年、国・地域単位。取得：2026年10月1日、WDI更新：2026年7月13日。各指標の個別メタデータにCC BY 4.0を明記。</p>
+   <ul class="latin-industry-source-list"><li><a href="https://data.worldbank.org/indicator/TX.VAL.MMTL.ZS.UN">鉱石・金属の輸出比率：公式データ</a> / <a href="https://databank.worldbank.org/metadataglossary/world-development-indicators/series/TX.VAL.MMTL.ZS.UN">定義とライセンス</a></li><li><a href="https://data.worldbank.org/indicator/TX.VAL.MANF.ZS.UN">製造品の輸出比率：公式データ</a> / <a href="https://databank.worldbank.org/metadataglossary/world-development-indicators/series/TX.VAL.MANF.ZS.UN">定義とライセンス</a></li>{sources.map(s=><li><a href={s.url}>{s.name}</a></li>)}</ul>
+   <p><a href={withBase('/assets/atlas/latin-industry-v1/industry-selected-2024.csv')}>表示値と欠測状態のCSV</a> / <a href={withBase('/assets/atlas/latin-industry-v1/manifest.json')}>原典→加工→配信のSHA-256台帳</a> / <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></p>
+   <p>{latinIndustryData.source.attribution}</p>
+  </details>
+  <noscript><p>最初の地図・全凡例・値・出典を表示しています。分布・国・比較を切り替える操作にはJavaScriptを使います。</p></noscript>
+ </div>
+</LatinAmericaWorkspace>
+<script>
+ import {initLatinIndustry} from '../../scripts/atlas-latin-industry';
+ const root=document.querySelector<HTMLElement>('[data-latin-industry]');
+ if(root)initLatinIndustry(root);
+</script>

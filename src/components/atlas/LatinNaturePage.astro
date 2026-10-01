@@ -1,0 +1,49 @@
+---
+import LatinAmericaWorkspace from './LatinAmericaWorkspace.astro';
+import {latinCountries} from '../../lib/atlas-latin-america-geometry';
+import {latinNatureData,latinNatureCases,renderLatinNatureMap,renderLatinNatureLegend,renderLatinNatureNormals} from '../../lib/atlas-latin-nature';
+import {withBase} from '../../lib/urls';
+import '../../styles/atlas-latin-nature.css';
+const selected=latinNatureCases[0];
+const state={layer:'climate',place:selected.place,scope:selected.scope,only:false};
+---
+<LatinAmericaWorkspace field="nature" title="中南米の自然環境" lead="気候と雨の季節が、作物の産地・河川交通・運河の物流にどうつながるかを読みます。">
+ <section slot="map" class="latin-nature-main" data-latin-nature>
+  <div class="latin-controls">
+   <label>地域 <select data-nature-scope aria-label="地図の範囲"><option value="central" selected>中米・カリブ</option><option value="south">南米</option><option value="all">中南米全体</option><option value="country">選択国・地域</option></select></label>
+   <label>国・地域 <select data-nature-place aria-label="自然条件を読む国・地域"><option value="all">中南米全体</option>{latinCountries.map(c=><option value={c.code} selected={c.code===selected.place}>{c.name}</option>)}</select></label>
+  </div>
+  <h2 data-nature-map-title>気候群の分布と雨の季節</h2>
+  <div class="latin-nature-comparison-header" data-nature-comparison-header hidden><a class="latin-return" data-nature-return href={withBase('/atlas/latin-america/agriculture/')}></a><p class="latin-takeaway" data-nature-comparison-takeaway></p></div>
+  <div class="latin-nature-map-panes" data-nature-panes>
+   <figure class="latin-nature-pane"><figcaption data-nature-primary-caption>気候群 · 1991–2020年</figcaption><div data-nature-map-host set:html={renderLatinNatureMap(state,'nature-main')} /><div data-nature-legend-host set:html={renderLatinNatureLegend('climate')} /></figure>
+   <figure class="latin-nature-source-pane" data-nature-source-pane hidden><figcaption data-nature-source-caption></figcaption><div data-nature-source-map></div><div data-nature-source-legend></div></figure>
+  </div>
+  <p class="latin-caption" data-nature-map-description>5気候群の中にも雨季・乾季の違いがあります。右の観測所の月別平年値で確かめます。</p>
+  <div class="latin-actions"><label><input type="checkbox" data-nature-only /> 選択国の気候を強調（周辺は参考）</label><span data-nature-renderer role="status"></span></div>
+ </section>
+ <div slot="items" class="latin-nature-cases" aria-label="自然条件の代表例">{latinNatureCases.map((c,i)=><button type="button" data-nature-case={c.id} aria-pressed={i===0}>{c.name}</button>)}</div>
+ <div slot="reading">
+  <h2 data-nature-reading-title>{selected.title}</h2>
+  <p class="latin-takeaway" data-nature-takeaway>{selected.takeaway}</p>
+  <a class="latin-comparison-link" data-nature-agriculture href={withBase('/atlas/latin-america/agriculture/?layer=coff&place=CRI&scope=central&from=nature&sourceLayer=climate&sourcePlace=CRI&sourceScope=central')}>コスタリカの気候とコーヒー収穫面積を比べる</a>
+  <a class="latin-comparison-link" data-nature-population href={withBase('/atlas/latin-america/population/?layer=density&place=CRI&scope=central&from=nature&sourceLayer=climate&sourcePlace=CRI&sourceScope=central')}>コスタリカの気候と人口密度を比べる</a>
+  <a class="latin-comparison-link" data-nature-industry hidden href={withBase('/atlas/latin-america/industry/?layer=canal&place=PAN&scope=central')}>パナマの気候と、淡水を使う運河の物流を比べる</a>
+  <details><summary>この比較で分かること・地域の背景</summary><p data-nature-comparison-explanation>{selected.compare}</p><ul data-nature-case-sources>{selected.sources.map(s=><li><a href={s.url} target="_blank" rel="noopener">{s.name}</a></li>)}</ul></details>
+  <div data-nature-normals set:html={renderLatinNatureNormals(selected.city)} />
+ </div>
+ <div slot="statistics">
+  <details><summary>元の21気候区分と観測所の一覧</summary>
+   <p>地図は5大群にまとめています。熱帯雨林・モンスーン・サバナの違いなど、原区分を以下で確認できます。</p>
+   <div class="latin-table-scroll"><table><thead><tr><th>群</th><th>原配色・コード</th><th>区分</th><th>読み方</th></tr></thead><tbody>{latinNatureData.originalClasses.map(c=><tr><th>{c.group}</th><td><span style={`display:inline-block;width:16px;height:12px;margin-right:5px;border:1px solid #809082;background:${c.color}`} aria-hidden="true"></span>{c.code}</td><td>{c.name}</td><td>{c.description}</td></tr>)}</tbody></table></div>
+   <p><a href={withBase(latinNatureData.originalImage)} target="_blank">原21区分の配色を持つ地図画像</a> · <a href={withBase('/atlas/latin-america/base-map/?field=nature&view=climate')}>既存の詳細地図で観測所・原分類を読む</a></p>
+   <table><thead><tr><th>観測所</th><th>国</th><th>標高 m</th><th>平年値</th></tr></thead><tbody>{latinNatureData.cities.map(c=><tr><th>{c.name}</th><td>{c.countryCode}</td><td>{c.elevationM}</td><td><a href={c.sourceUrl} target="_blank" rel="noopener">気象庁の原表</a></td></tr>)}</tbody></table>
+  </details>
+ </div>
+ <div slot="sources"><details><summary>原典・加工・年・利用条件</summary>
+  <p>気候：Beck et al. (2023), 1991–2020年のKöppen–Geiger分類。元0.1度区分を5大群へ加工し、元分類・セル位置・透明マスクを保持しています。メルカトル投影は面積を一定に保たないため、画像セル数から国の面積割合を計算していません。小さな島や海岸は元格子と境界の精度で省略されます。未分類・対象外は透明で、正常な数値0と区別しています。</p>
+  <p>観測所：気象庁ClimatView、1991–2020年の月平均気温（°C）・月降水量（mm）。1地点の値で都市・国全体や流域の水収支を表しません。気象庁の公開データ利用条件に従い当サイトが図表化しています。</p>
+  <ul><li><a href="https://www.gloh2o.org/koppen/" target="_blank" rel="noopener">気候分類の発行元・CC BY 4.0</a></li><li><a href="https://doi.org/10.6084/m9.figshare.21789074.v1" target="_blank" rel="noopener">採用したFigshare版1（現況1991–2020）</a></li><li><a href="https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/outline.html" target="_blank" rel="noopener">気象庁ClimatView：平年期間とデータの説明</a></li><li><a href="https://www.jma.go.jp/jma/kishou/info/coment.html" target="_blank" rel="noopener">気象庁：公開データ利用条件</a></li><li><a href="https://www.naturalearthdata.com/about/terms-of-use/" target="_blank" rel="noopener">国境：Natural Earth・public domain</a></li><li><a href={withBase('/assets/atlas/latin-nature-v1/manifest.json')} target="_blank">原典→加工→表示の取得・ハッシュ台帳</a></li></ul>
+ </details></div>
+ <script>import '../../scripts/atlas-latin-nature';</script>
+</LatinAmericaWorkspace>

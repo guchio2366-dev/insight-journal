@@ -1,0 +1,733 @@
+{
+  "referenceYear": 2024,
+  "source": {
+    "name": "World Bank, World Development Indicators (UN Comtrade / WITS / World Bank estimates)",
+    "updated": "2026-07-13",
+    "downloadedAt": "2026-10-01T08:18:00Z",
+    "grain": "country / calendar year",
+    "sourceUnit": "percent of merchandise export value",
+    "displayUnit": "%",
+    "licence": "CC BY 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "catalogUrl": "https://datacatalog.worldbank.org/search/dataset/0037712/world-development-indicators",
+    "attribution": "Source: World Bank, World Development Indicators, based on UN Comtrade, WITS and World Bank staff estimates. Indicators TX.VAL.MMTL.ZS.UN and TX.VAL.MANF.ZS.UN, 2024. CC BY 4.0. Country subset, Japanese labels and thematic maps prepared by Insight Journal; no endorsement implied."
+  },
+  "metrics": [
+    {
+      "id": "ores",
+      "indicator": "TX.VAL.MMTL.ZS.UN",
+      "name": "鉱石・金属",
+      "unit": "%（商品輸出額に占める割合）",
+      "definition": "SITC Rev.3 の27（粗肥料・鉱物）、28（金属鉱石・くず）、68（非鉄金属）。精製銅などの非鉄金属も含む。"
+    },
+    {
+      "id": "manufactures",
+      "indicator": "TX.VAL.MANF.ZS.UN",
+      "name": "製造品",
+      "unit": "%（商品輸出額に占める割合）",
+      "definition": "SITC Rev.3 の5（化学製品）、6（基礎的な製造品）、7（機械・輸送機器）、8（その他の製造品）。68（非鉄金属）を除く。"
+    }
+  ],
+  "rows": [
+    {
+      "country": "ARG",
+      "name": "Argentina",
+      "subregion": "South America",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 0.170904833823205,
+          "status": "value",
+          "sourceValue": 0.170904833823205,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 13.3385762659227,
+          "status": "value",
+          "sourceValue": 13.3385762659227,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "ATG",
+      "name": "Antigua and Barbuda",
+      "subregion": "Caribbean",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 0.482961925425427,
+          "status": "value",
+          "sourceValue": 0.482961925425427,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 14.8136733322156,
+          "status": "value",
+          "sourceValue": 14.8136733322156,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "BHS",
+      "name": "The Bahamas",
+      "subregion": "Caribbean",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 16.0508789788562,
+          "status": "value",
+          "sourceValue": 16.0508789788562,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 31.1504127093612,
+          "status": "value",
+          "sourceValue": 31.1504127093612,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "BLZ",
+      "name": "Belize",
+      "subregion": "Central America",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 0.435202560735789,
+          "status": "value",
+          "sourceValue": 0.435202560735789,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 2.95919568096454,
+          "status": "value",
+          "sourceValue": 2.95919568096454,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "BOL",
+      "name": "Bolivia",
+      "subregion": "South America",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 43.5898503549869,
+          "status": "value",
+          "sourceValue": 43.5898503549869,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 6.52154085314657,
+          "status": "value",
+          "sourceValue": 6.52154085314657,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "BRA",
+      "name": "Brazil",
+      "subregion": "South America",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 12.6428158614818,
+          "status": "value",
+          "sourceValue": 12.6428158614818,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 23.2192423581155,
+          "status": "value",
+          "sourceValue": 23.2192423581155,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "BRB",
+      "name": "Barbados",
+      "subregion": "Caribbean",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 7.62916158715904,
+          "status": "value",
+          "sourceValue": 7.62916158715904,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 39.9334639863259,
+          "status": "value",
+          "sourceValue": 39.9334639863259,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "CHL",
+      "name": "Chile",
+      "subregion": "South America",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 56.1402892229553,
+          "status": "value",
+          "sourceValue": 56.1402892229553,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 13.0641862244463,
+          "status": "value",
+          "sourceValue": 13.0641862244463,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "COL",
+      "name": "Colombia",
+      "subregion": "South America",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 1.83962796660093,
+          "status": "value",
+          "sourceValue": 1.83962796660093,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 21.3773495922767,
+          "status": "value",
+          "sourceValue": 21.3773495922767,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "CRI",
+      "name": "Costa Rica",
+      "subregion": "Central America",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 1.39829772346223,
+          "status": "value",
+          "sourceValue": 1.39829772346223,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 64.8602779613311,
+          "status": "value",
+          "sourceValue": 64.8602779613311,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "CUB",
+      "name": "Cuba",
+      "subregion": "Caribbean",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": null,
+          "status": "missing",
+          "sourceValue": null,
+          "sourceStatus": "API value=null; reason not specified"
+        },
+        "manufactures": {
+          "value": null,
+          "status": "missing",
+          "sourceValue": null,
+          "sourceStatus": "API value=null; reason not specified"
+        }
+      }
+    },
+    {
+      "country": "DMA",
+      "name": "Dominica",
+      "subregion": "Caribbean",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": null,
+          "status": "missing",
+          "sourceValue": null,
+          "sourceStatus": "API value=null; reason not specified"
+        },
+        "manufactures": {
+          "value": null,
+          "status": "missing",
+          "sourceValue": null,
+          "sourceStatus": "API value=null; reason not specified"
+        }
+      }
+    },
+    {
+      "country": "DOM",
+      "name": "Dominican Republic",
+      "subregion": "Caribbean",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 3.28093047847441,
+          "status": "value",
+          "sourceValue": 3.28093047847441,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 58.15363861978,
+          "status": "value",
+          "sourceValue": 58.15363861978,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "ECU",
+      "name": "Ecuador",
+      "subregion": "South America",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 6.88594032491159,
+          "status": "value",
+          "sourceValue": 6.88594032491159,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 4.89030157469331,
+          "status": "value",
+          "sourceValue": 4.89030157469331,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "FLK",
+      "name": "Falkland Islands",
+      "subregion": "South America",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": null,
+          "status": "notCovered",
+          "sourceValue": null,
+          "sourceStatus": "No country/year record in the downloaded API response"
+        },
+        "manufactures": {
+          "value": null,
+          "status": "notCovered",
+          "sourceValue": null,
+          "sourceStatus": "No country/year record in the downloaded API response"
+        }
+      }
+    },
+    {
+      "country": "GRD",
+      "name": "Grenada",
+      "subregion": "Caribbean",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 1.48030890168803,
+          "status": "value",
+          "sourceValue": 1.48030890168803,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 28.5605897976002,
+          "status": "value",
+          "sourceValue": 28.5605897976002,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "GTM",
+      "name": "Guatemala",
+      "subregion": "Central America",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 0.800281678243913,
+          "status": "value",
+          "sourceValue": 0.800281678243913,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 45.8962980633734,
+          "status": "value",
+          "sourceValue": 45.8962980633734,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "GUY",
+      "name": "Guyana",
+      "subregion": "South America",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 0.694800191106439,
+          "status": "value",
+          "sourceValue": 0.694800191106439,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 0.504973100033652,
+          "status": "value",
+          "sourceValue": 0.504973100033652,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "HND",
+      "name": "Honduras",
+      "subregion": "Central America",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 3.18629943072344,
+          "status": "value",
+          "sourceValue": 3.18629943072344,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 39.0613491532702,
+          "status": "value",
+          "sourceValue": 39.0613491532702,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "HTI",
+      "name": "Haiti",
+      "subregion": "Caribbean",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": null,
+          "status": "missing",
+          "sourceValue": null,
+          "sourceStatus": "API value=null; reason not specified"
+        },
+        "manufactures": {
+          "value": null,
+          "status": "missing",
+          "sourceValue": null,
+          "sourceStatus": "API value=null; reason not specified"
+        }
+      }
+    },
+    {
+      "country": "JAM",
+      "name": "Jamaica",
+      "subregion": "Caribbean",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": null,
+          "status": "missing",
+          "sourceValue": null,
+          "sourceStatus": "API value=null; reason not specified"
+        },
+        "manufactures": {
+          "value": null,
+          "status": "missing",
+          "sourceValue": null,
+          "sourceStatus": "API value=null; reason not specified"
+        }
+      }
+    },
+    {
+      "country": "KNA",
+      "name": "Saint Kitts and Nevis",
+      "subregion": "Caribbean",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": null,
+          "status": "missing",
+          "sourceValue": null,
+          "sourceStatus": "API value=null; reason not specified"
+        },
+        "manufactures": {
+          "value": null,
+          "status": "missing",
+          "sourceValue": null,
+          "sourceStatus": "API value=null; reason not specified"
+        }
+      }
+    },
+    {
+      "country": "LCA",
+      "name": "Saint Lucia",
+      "subregion": "Caribbean",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": null,
+          "status": "missing",
+          "sourceValue": null,
+          "sourceStatus": "API value=null; reason not specified"
+        },
+        "manufactures": {
+          "value": null,
+          "status": "missing",
+          "sourceValue": null,
+          "sourceStatus": "API value=null; reason not specified"
+        }
+      }
+    },
+    {
+      "country": "NIC",
+      "name": "Nicaragua",
+      "subregion": "Central America",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 1.12278358190894,
+          "status": "value",
+          "sourceValue": 1.12278358190894,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 36.9711684565089,
+          "status": "value",
+          "sourceValue": 36.9711684565089,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "PAN",
+      "name": "Panama",
+      "subregion": "Central America",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 9.59331459466598,
+          "status": "value",
+          "sourceValue": 9.59331459466598,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 10.9309355998486,
+          "status": "value",
+          "sourceValue": 10.9309355998486,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "PER",
+      "name": "Peru",
+      "subregion": "South America",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 47.7744538607891,
+          "status": "value",
+          "sourceValue": 47.7744538607891,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 7.41282618696859,
+          "status": "value",
+          "sourceValue": 7.41282618696859,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "PRI",
+      "name": "Puerto Rico",
+      "subregion": "Caribbean",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": null,
+          "status": "missing",
+          "sourceValue": null,
+          "sourceStatus": "API value=null; reason not specified"
+        },
+        "manufactures": {
+          "value": null,
+          "status": "missing",
+          "sourceValue": null,
+          "sourceStatus": "API value=null; reason not specified"
+        }
+      }
+    },
+    {
+      "country": "PRY",
+      "name": "Paraguay",
+      "subregion": "South America",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 1.49687210638199,
+          "status": "value",
+          "sourceValue": 1.49687210638199,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 16.1949609473441,
+          "status": "value",
+          "sourceValue": 16.1949609473441,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "SLV",
+      "name": "El Salvador",
+      "subregion": "Central America",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 1.27838950619101,
+          "status": "value",
+          "sourceValue": 1.27838950619101,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 70.0059873824203,
+          "status": "value",
+          "sourceValue": 70.0059873824203,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "SUR",
+      "name": "Suriname",
+      "subregion": "South America",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 3.9843319988084,
+          "status": "value",
+          "sourceValue": 3.9843319988084,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 9.0820866551408,
+          "status": "value",
+          "sourceValue": 9.0820866551408,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "TTO",
+      "name": "Trinidad and Tobago",
+      "subregion": "Caribbean",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 0.773937569548522,
+          "status": "value",
+          "sourceValue": 0.773937569548522,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 59.0890627788272,
+          "status": "value",
+          "sourceValue": 59.0890627788272,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "URY",
+      "name": "Uruguay",
+      "subregion": "South America",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": 0.331132184653809,
+          "status": "value",
+          "sourceValue": 0.331132184653809,
+          "sourceStatus": "Published numeric value"
+        },
+        "manufactures": {
+          "value": 18.8855365781654,
+          "status": "value",
+          "sourceValue": 18.8855365781654,
+          "sourceStatus": "Published numeric value"
+        }
+      }
+    },
+    {
+      "country": "VCT",
+      "name": "Saint Vincent and the Grenadines",
+      "subregion": "Caribbean",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": null,
+          "status": "missing",
+          "sourceValue": null,
+          "sourceStatus": "API value=null; reason not specified"
+        },
+        "manufactures": {
+          "value": null,
+          "status": "missing",
+          "sourceValue": null,
+          "sourceStatus": "API value=null; reason not specified"
+        }
+      }
+    },
+    {
+      "country": "VEN",
+      "name": "Venezuela",
+      "subregion": "South America",
+      "year": 2024,
+      "values": {
+        "ores": {
+          "value": null,
+          "status": "missing",
+          "sourceValue": null,
+          "sourceStatus": "API value=null; reason not specified"
+        },
+        "manufactures": {
+          "value": null,
+          "status": "missing",
+          "sourceValue": null,
+          "sourceStatus": "API value=null; reason not specified"
+        }
+      }
+    }
+  ],
+  "statusCounts": {
+    "ores": {
+      "value": 24,
+      "zero": 0,
+      "missing": 9,
+      "notCovered": 1
+    },
+    "manufactures": {
+      "value": 24,
+      "zero": 0,
+      "missing": 9,
+      "notCovered": 1
+    }
+  },
+  "notes": {
+    "scope": "商品輸出額の構成比。国内産業全体の付加価値・雇用・工場数や輸出額の規模は表さない。サービス輸出（運河・観光など）は分母に入らない。",
+    "classification": "非鉄金属は鉱石・金属に含み、製造品から除く。分類されていない貿易があるため、各品目の比率の合計は100%と一致しない場合がある。",
+    "missing": "原典のnullは欠測（理由記載なし）として保持。秘匿と断定せず、0へ変換しない。国・年のレコードがないFLKは対象統計なしとして区別。",
+    "comparison": "両地図は2024年、国単位、商品輸出額を分母とする%で、同じ階級を使う。人口比較は元人口2023年と輸出構成2024年を別指標として並べる。"
+  }
+}

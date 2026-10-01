@@ -1,0 +1,113 @@
+{
+  "retrievedDate": "2026-10-01",
+  "quantitativeData": {
+    "yearSelected": 2024,
+    "grain": "country/territory, calendar year",
+    "unit": "percent of merchandise export value",
+    "sourceChain": "UN Comtrade → WITS / World Bank estimates → WDI API → 2024 country subset → Japanese map and CSV",
+    "noImputation": true,
+    "sources": [
+      {
+        "file": "ores-all-2023-2024.json",
+        "url": "https://api.worldbank.org/v2/country/all/indicator/TX.VAL.MMTL.ZS.UN?date=2023:2024&format=json&per_page=2000",
+        "licence": "CC BY 4.0"
+      },
+      {
+        "file": "manufactures-all-2023-2024.json",
+        "url": "https://api.worldbank.org/v2/country/all/indicator/TX.VAL.MANF.ZS.UN?date=2023:2024&format=json&per_page=2000",
+        "licence": "CC BY 4.0"
+      },
+      {
+        "file": "ores-metadata.json",
+        "url": "https://api.worldbank.org/v2/indicator/TX.VAL.MMTL.ZS.UN?format=json"
+      },
+      {
+        "file": "manufactures-metadata.json",
+        "url": "https://api.worldbank.org/v2/indicator/TX.VAL.MANF.ZS.UN?format=json"
+      },
+      {
+        "file": "ores-glossary.html",
+        "url": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/TX.VAL.MMTL.ZS.UN",
+        "licenceEvidence": "License Type CC BY-4.0, unit %, annual, SITC Rev.3 divisions 27/28/68"
+      },
+      {
+        "file": "manufactures-glossary.html",
+        "url": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/TX.VAL.MANF.ZS.UN",
+        "licenceEvidence": "License Type CC BY-4.0, unit %, annual, SITC Rev.3 sections 5/6/7/8 excluding 68"
+      },
+      {
+        "file": "wdi-catalog.html",
+        "url": "https://datacatalog.worldbank.org/search/dataset/0037712/world-development-indicators",
+        "licenceEvidence": "World Development Indicators dataset: Creative Commons Attribution 4.0"
+      }
+    ],
+    "statusRules": {
+      "value": "API published numeric >0",
+      "zero": "API published numeric exactly 0; no observations in selected 2024 subset",
+      "missing": "API value=null; reason not specified, do not label confidential",
+      "notCovered": "No country/year record in complete response: FLK",
+      "confidential": "Not supplied by this API; never inferred from null"
+    },
+    "displayRounding": "One decimal place only in labels. Source and CSV retain unrounded original percentages. A positive value below 0.05% is labelled less than 0.05%, never 0%."
+  },
+  "readingEvidence": [
+    {
+      "factsFile": "reading-facts.json",
+      "factId": "chile-minerals-2024",
+      "url": "https://www.usgs.gov/centers/national-minerals-information-center/chile",
+      "retrievedDate": "2026-10-01",
+      "originalSnapshot": {
+        "file": "chile-minerals-2024.html",
+        "bytes": 132212,
+        "sha256": "39c57c4798417215abe841281cf187518d1e9f843b3d71781f062eba699ccac8",
+        "retainedInCurrentPublicTree": false,
+        "localAuditCopyMayExist": true
+      },
+      "reuse": "Retain cited official mineral facts, omit the full web snapshot to match the declared factual-only scope. This does not assert a restriction on USGS-authored government data; third-party media are not redistributed."
+    },
+    {
+      "factsFile": "reading-facts.json",
+      "factId": "costa-rica-trade-2024",
+      "url": "https://admin.inec.cr/en/node/56908",
+      "retrievedDate": "2026-10-01",
+      "originalSnapshot": {
+        "file": "costa-rica-trade-2024.html",
+        "bytes": 30189,
+        "sha256": "edf095d7e5274a70f37eb7b67da5f1f35aa79e21b7a4656af8beab8c41e0095d",
+        "retainedInCurrentPublicTree": false,
+        "localAuditCopyMayExist": true
+      },
+      "reuse": "Keep the URL and a factual summary; exclude the full HTML article from the new public tree."
+    },
+    {
+      "factsFile": "reading-facts.json",
+      "factId": "dominican-supply-chain-2024",
+      "url": "https://presidencia.gob.do/noticias/consejo-nacional-de-zonas-francas-de-exportacion-realiza-exitosa-ronda-de-negocios-con",
+      "retrievedDate": "2026-10-01",
+      "originalSnapshot": {
+        "file": "dominican-supply-chain-2024.html",
+        "bytes": 60353,
+        "sha256": "7a1921ee2748502ed8208f6bb24273f841b6ab875e115a8276753f6c9ec253a2",
+        "retainedInCurrentPublicTree": false,
+        "localAuditCopyMayExist": true
+      },
+      "reuse": "Keep the URL and a factual summary; exclude the full HTML article from the new public tree."
+    },
+    {
+      "factsFile": "reading-facts.json",
+      "factId": "panama-canal-fy2024",
+      "url": "https://pancanal.com/en/the-canals-fy-2024-financial-results-reaffirm-its-focus-on-sustainability-and-vision-for-the-future/",
+      "retrievedDate": "2026-10-01",
+      "originalSnapshot": {
+        "file": "panama-canal-fy2024.html",
+        "bytes": 155114,
+        "sha256": "1624f6f13d337931a3059a1f9df3089e2c48c0ddbc843dae75c3f90dd6af6bb5",
+        "retainedInCurrentPublicTree": false,
+        "localAuditCopyMayExist": true
+      },
+      "reuse": "Retain factual numbers and a newly drawn explanatory diagram; exclude the full HTML article from the new public tree."
+    }
+  ],
+  "readingEvidenceFile": "reading-facts.json",
+  "historicalRetentionNote": "The original HTML snapshots were committed before this source review. Excluding them from the new public tree does not erase earlier Git history; no history rewrite is performed."
+}

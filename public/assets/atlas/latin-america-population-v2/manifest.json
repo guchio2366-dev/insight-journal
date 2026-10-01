@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "accessed": "2026-10-01",
+  "year": 2023,
+  "sources": [
+    {
+      "indicator": "SP.POP.TOTL",
+      "property": "population",
+      "unit": "persons",
+      "year": 2023,
+      "apiUrl": "https://api.worldbank.org/v2/country/all/indicator/SP.POP.TOTL?date=2023:2025&format=json&per_page=20000",
+      "apiFile": "wb-SP.POP.TOTL.json",
+      "metadataUrl": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/SP.POP.TOTL",
+      "metadataFile": "metadata-SP.POP.TOTL.html",
+      "apiLastUpdated": "2026-07-13",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://datacatalog.worldbank.org/int/public-licenses#cc-by"
+    },
+    {
+      "indicator": "EN.POP.DNST",
+      "property": "density",
+      "unit": "persons/km2 of land area",
+      "year": 2023,
+      "apiUrl": "https://api.worldbank.org/v2/country/all/indicator/EN.POP.DNST?date=2023:2025&format=json&per_page=20000",
+      "apiFile": "wb-EN.POP.DNST.json",
+      "metadataUrl": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/EN.POP.DNST",
+      "metadataFile": "metadata-EN.POP.DNST.html",
+      "apiLastUpdated": "2026-07-13",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://datacatalog.worldbank.org/int/public-licenses#cc-by"
+    },
+    {
+      "indicator": "SP.URB.TOTL.IN.ZS",
+      "property": "urbanShare",
+      "unit": "percent of total population",
+      "year": 2023,
+      "apiUrl": "https://api.worldbank.org/v2/country/all/indicator/SP.URB.TOTL.IN.ZS?date=2023:2025&format=json&per_page=20000",
+      "apiFile": "wb-SP.URB.TOTL.IN.ZS.json",
+      "metadataUrl": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/SP.URB.TOTL.IN.ZS",
+      "metadataFile": "metadata-SP.URB.TOTL.IN.ZS.html",
+      "apiLastUpdated": "2026-07-13",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://datacatalog.worldbank.org/int/public-licenses#cc-by"
+    }
+  ],
+  "sourceFiles": [
+    {
+      "file": "wb-SP.POP.TOTL.json",
+      "bytes": 159920,
+      "sha256": "7e5dd202f57ae859dfce1d2edc1834b3da598202ad72129fa4ca700782505549"
+    },
+    {
+      "file": "metadata-SP.POP.TOTL.html",
+      "bytes": 65885,
+      "sha256": "904c12c6a837f6022439e548acebb78ff619c9b11131fac2d5becf00279f0336"
+    },
+    {
+      "file": "wb-EN.POP.DNST.json",
+      "bytes": 187125,
+      "sha256": "6ee2f9a48bd5df43b5b404af543bd1b18bac7a0ec6460a1c5fc02ac7a91bca72"
+    },
+    {
+      "file": "metadata-EN.POP.DNST.html",
+      "bytes": 65436,
+      "sha256": "fcb4ecc5b1354153665588b00d09e6858123889a27d510a50d2f5f034d557d09"
+    },
+    {
+      "file": "wb-SP.URB.TOTL.IN.ZS.json",
+      "bytes": 189134,
+      "sha256": "08afb2e760bbb8dada6f401579de1413cfe9581995a020a0d1af3f71450389d3"
+    },
+    {
+      "file": "metadata-SP.URB.TOTL.IN.ZS.html",
+      "bytes": 56815,
+      "sha256": "c998e718eae3fa62aed77dc46f4385fa86da90219e978702ad8911c1aa176c95"
+    }
+  ],
+  "transformations": [
+    "Select exact year 2023 and the existing 34 geographic targets; retain all original numeric values",
+    "Join by ISO3 country/territory code; use the site Japanese country labels",
+    "Distinguish absent records, returned nulls, real zeros and confidential values",
+    "Display density/urban share rounded to one decimal in the UI; downloadable values retain original precision",
+    "Country population circle area is proportional to the original absolute population; no population-derived economic indicator"
+  ],
+  "validation": {
+    "countries": 34,
+    "availableCountries": 33,
+    "unavailableCountries": [
+      "FLK"
+    ],
+    "sameYear": true,
+    "populationSumAvailableCountries": 527281345,
+    "latestCommonYear": 2023,
+    "density2024And2025HaveNoValuesForAdoptedCountries": true,
+    "densityFromDisplayGeometry": false
+  },
+  "statusCounts": {
+    "population": {
+      "value": 33,
+      "zero": 0,
+      "missing": 0,
+      "confidential": 0,
+      "unavailable": 1
+    },
+    "density": {
+      "value": 33,
+      "zero": 0,
+      "missing": 0,
+      "confidential": 0,
+      "unavailable": 1
+    },
+    "urbanShare": {
+      "value": 33,
+      "zero": 0,
+      "missing": 0,
+      "confidential": 0,
+      "unavailable": 1
+    }
+  },
+  "units": {
+    "population": "persons",
+    "density": "persons/km2 of land area",
+    "urbanShare": "percent of total population"
+  },
+  "license": {
+    "name": "CC BY 4.0",
+    "url": "https://datacatalog.worldbank.org/int/public-licenses#cc-by",
+    "evidence": "The License Type and License URL in each of the three preserved indicator metadata pages",
+    "attribution": "World Bank World Development Indicators; original indicator providers named in metadata. Selection, Japanese labels, rounding and map encodings by Insight Journal."
+  },
+  "withinCountry2020": {
+    "manifest": "../latin-america-population-v1/manifest.json",
+    "image": "../latin-america-population-v1/latin-america.png",
+    "sourceInputs": "../latin-america-population-v1/source-inputs.json",
+    "source": {
+      "product": "GHS_POP_E2020_GLOBE_R2023A_54009_1000_V1_0",
+      "period": "2020",
+      "release": "R2023A V1-0",
+      "sourceCrs": "ESRI:54009",
+      "datasetUrl": "https://data.jrc.ec.europa.eu/dataset/2ff68a52-5b5b-4a22-8f40-c41da8332cfe",
+      "doi": "10.2905/2FF68A52-5B5B-4A22-8F40-C41DA8332CFE",
+      "citation": "Schiavina, Freire, Carioli and MacManus, GHS-POP R2023A, European Commission Joint Research Centre",
+      "resolutionMetres": 1000,
+      "valueUnit": "estimated persons per 1 km² cell",
+      "noData": -200,
+      "metadataUrl": "https://human-settlement.emergency.copernicus.eu/data/ghs_pop2023.json",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "licenseEvidenceUrl": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/copyright.txt",
+      "inputManifest": "source-inputs.json",
+      "tileCount": 42,
+      "retrievedAt": "2026-09-25"
+    },
+    "files": {
+      "latin-america.png": {
+        "sha256": "ef75518ca3b609915ede3036140c0146de45e4d4dceaee73e34e982911460811",
+        "bytes": 59088
+      },
+      "latin-america.grid.json": {
+        "sha256": "c6cf9fed6927e550f7cdcf5d224e1c30be54b791a27be9b5f2bc96c36ce497ee",
+        "bytes": 1302496
+      },
+      "source-inputs.json": {
+        "sha256": "9ee636d68e677f19bebf56d4995ca4617d0bea85c67acbf57ed0b18516acf072",
+        "bytes": 27490
+      }
+    },
+    "meaning": "Modelled settlement density, aggregated from 1km to 10km equal-area cells. A separate year, source and denominator from the 2023 national data."
+  },
+  "generated": {
+    "json": {
+      "file": "countries-2023.json",
+      "bytes": 15033,
+      "sha256": "9e573b496dc32fa3e6e2cbee344fe78c839366c9260aecffa3ea183739032c2b"
+    },
+    "csv": {
+      "file": "countries-2023.csv",
+      "bytes": 2832,
+      "sha256": "462fb51b0502f315b3e5af7a74ea6feaf61eb8afa3376c601dcff8082077883a"
+    }
+  }
+}
