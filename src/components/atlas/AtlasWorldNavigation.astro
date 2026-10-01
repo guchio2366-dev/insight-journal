@@ -16,6 +16,7 @@ const regions = [
   { id:'southeast-asia', label:'東南アジア', href:'/atlas/asia/southeast-asia/', x:83, y:61, color:'#a8bd83' },
   { id:'africa', label:'アフリカ', href:'/atlas/africa/', x:53, y:60, color:'#d6a38d', optional:true },
   { id:'oceania', label:'オセアニア', href:'/atlas/oceania/', x:87, y:85, color:'#96bacd', optional:true },
+  { id:'russia', label:'ロシア', href:'/atlas/russia/', x:73, y:14, color:'#afb9cc', optional:true },
 ].map((region, index) => ({ ...region, number:index + 1, available: !region.optional || availableRegions.includes(region.id) }));
 const width = 960;
 const height = 400;
@@ -34,6 +35,7 @@ function regionCountries(id: string) {
   if (id === 'europe') return europeCountries.map(feature => ({ code:feature.properties.code, d:path(europeRings(feature.geometry)) }));
   return features.filter(feature => {
     if (id === 'north-america') return ['CAN','USA','MEX'].includes(feature.properties.code);
+    if (id === 'russia') return feature.properties.code === 'RUS';
     if (id === 'west-asia') return ['ARM','AZE','BHR','CYP','CYN','GEO','IRQ','ISR','JOR','KWT','LBN','OMN','QAT','SAU','PSE','PSX','SYR','TUR','ARE','YEM','IRN','EGY'].includes(feature.properties.code);
     if (id === 'africa') return feature.properties.region === 'Africa';
     if (id === 'oceania') return feature.properties.region === 'Oceania';
@@ -81,7 +83,7 @@ function regionCountries(id: string) {
   </nav>
   <details class="world-notes">
     <summary>地域の区分・地図の出典</summary>
-    <p>北米はカナダ・米国・メキシコ。アジアは東アジア、東南アジア、南・中央アジア、西アジア・中東に分けています。西アジア・中東は国連M49の西アジアにイランとエジプトを加えた編集上の範囲です。欧州などと重なる入口があっても、同じ国を別の国として数えるものではありません。ロシア西部は欧州に含み、その他の地域は掲載対象外です。</p>
+    <p>北米はカナダ・米国・メキシコ。アジアは東アジア、東南アジア、南・中央アジア、西アジア・中東に分けています。西アジア・中東は国連M49の西アジアにイランとエジプトを加えた編集上の範囲です。欧州などと重なる入口があっても、同じ国を別の国として数えるものではありません。ロシアは専用入口で全域を、欧州では表示枠内の西部を掲載しています。</p>
     <p>境界：<a href="https://www.naturalearthdata.com/about/terms-of-use/">Natural Earth（パブリックドメイン）</a>。位置を選ぶための概略図で、小島などは省略しています。等距円筒図法を使用し、面積の比較には適しません。境界・名称は資料の表示上の区分に沿っています。</p>
   </details>
 </section>

@@ -1,0 +1,479 @@
+{
+  "schemaVersion": 1,
+  "region": "russia",
+  "year": 2020,
+  "generator": {
+    "file": "scripts/prepare-russia-livestock.py",
+    "sha256": "344648ef8d8da42bfc598d9e931374fd25504531de9675ab7f26bca894c3d133",
+    "helper": {
+      "file": "scripts/prepare-russia-crops.py",
+      "sha256": "29ba23ad183798e19c69a458b4bf6dbd4c24c6a011ce02c92050fd8b31026db0"
+    },
+    "digestMethod": "SHA256 of UTF-8 source with CRLF converted to LF"
+  },
+  "source": {
+    "name": "FAO Gridded Livestock of the World v4 (GLW4), 2020",
+    "edition": "CGIAR Climate Data Hub Float32 Zarr conversion, updated 2026-06-23",
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/",
+    "catalogUrl": "https://cgiar-climate-data-hub.github.io/catalog/glw4-2020/",
+    "originalCatalogUrl": "https://data.fao.org/catalog/dataset/9d1e149b-d63f-4213-978b-317a8eb42d02",
+    "citation": "FAO. 2024. Gridded Livestock of the World v4, reference year 2020. Accessed through the CGIAR Climate Data Hub on 2026-10-01. Licence: CC BY 4.0.",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "termsUrl": "https://www.fao.org/contact-us/terms/db-terms-of-use/en",
+    "metadataUrl": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/zarr.json",
+    "metadataSha256": "60849b62074ea823af210c0fe6beafa36e14de2b5c61b880557d468f023dc5e3",
+    "referenceYear": 2020,
+    "crs": "EPSG:4326",
+    "resolutionDegrees": 0.08333333333333333,
+    "width": 4320,
+    "height": 2160,
+    "chunkShape": [
+      1080,
+      1080
+    ],
+    "nativeNoData": "NaN",
+    "unit": "head/km2",
+    "measurementType": "modelled livestock density, dasymetric",
+    "chunks": [
+      {
+        "key": "cattle/c/0/2",
+        "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/cattle/c/0/2",
+        "sha256": "49707b2d1b7393f6158ceadeac520d6ed709e23f2116906f8278b1cd57a0ba7c",
+        "bytes": 2253605,
+        "decodedShape": [
+          1080,
+          1080
+        ]
+      },
+      {
+        "key": "cattle/c/0/3",
+        "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/cattle/c/0/3",
+        "sha256": "3b66ebfae7879afb3311137200709390a57a54d45dc5a5446aece39db12e5918",
+        "bytes": 1468674,
+        "decodedShape": [
+          1080,
+          1080
+        ]
+      },
+      {
+        "key": "cattle/c/0/0",
+        "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/cattle/c/0/0",
+        "sha256": "33583a1b7edd2a1d688b2d37a14fa8d1ccd5f6e7a35dfac74040870d28c2b40e",
+        "bytes": 980294,
+        "decodedShape": [
+          1080,
+          1080
+        ]
+      }
+    ]
+  },
+  "display": {
+    "crs": "EPSG:4326 with unwrapped east longitudes 18 to 191",
+    "projection": "Equirectangular display rectangle, not equal-area",
+    "boundsUnwrapped": [
+      18,
+      40,
+      191,
+      83
+    ],
+    "bounds4326Unwrapped": [
+      18,
+      40,
+      191,
+      83
+    ],
+    "width": 2076,
+    "height": 516,
+    "nominalTransform": [
+      18,
+      0.08333333333333333,
+      0,
+      83,
+      0,
+      -0.08333333333333333
+    ],
+    "sourceRowRange": [
+      84,
+      600
+    ],
+    "sourceColumnSpans": [
+      [
+        2376,
+        4320
+      ],
+      [
+        0,
+        132
+      ]
+    ],
+    "indexConvention": "Half-open source ranges; source columns wrap modulo 4320 at 180E; row 0 north",
+    "resampling": "None. Native 5-arcminute source cells retained.",
+    "countryMask": "None in emitted data. Display clipping, if any, is a separate geometry convention; no national totals computed."
+  },
+  "lookup": {
+    "encoding": "float32-le-gzip",
+    "noData": -1,
+    "validZero": 0
+  },
+  "legend": {
+    "breaks": [
+      1,
+      10,
+      50,
+      200,
+      1000
+    ],
+    "colors": [
+      "fff6e4",
+      "fee5be",
+      "f9c889",
+      "ee9960",
+      "cb653f",
+      "873c31"
+    ],
+    "zeroColor": "f6f5eb",
+    "missingAlpha": 0,
+    "positiveClassesHeadPerKm2": [
+      "0 < value < 1",
+      "1 <= value < 10",
+      "10 <= value < 50",
+      "50 <= value < 200",
+      "200 <= value < 1000",
+      "value >= 1000"
+    ]
+  },
+  "layers": [
+    {
+      "id": "cattle",
+      "sourceCode": "cattle",
+      "title": "牛",
+      "kind": "livestock",
+      "year": 2020,
+      "unit": "頭/km²",
+      "unitEnglish": "head/km2, modelled livestock density",
+      "image": "cattle.png",
+      "grid": "cattle.values.gz",
+      "width": 2076,
+      "height": 516,
+      "boundsUnwrapped": [
+        18,
+        40,
+        191,
+        83
+      ],
+      "bounds4326Unwrapped": [
+        18,
+        40,
+        191,
+        83
+      ],
+      "breaks": [
+        1,
+        10,
+        50,
+        200,
+        1000
+      ],
+      "colors": [
+        "fff6e4",
+        "fee5be",
+        "f9c889",
+        "ee9960",
+        "cb653f",
+        "873c31"
+      ],
+      "sourceURL": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/",
+      "sourceHash": "60849b62074ea823af210c0fe6beafa36e14de2b5c61b880557d468f023dc5e3",
+      "license": "CC BY 4.0",
+      "sourceChunks": [
+        {
+          "key": "cattle/c/0/2",
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/cattle/c/0/2",
+          "sha256": "49707b2d1b7393f6158ceadeac520d6ed709e23f2116906f8278b1cd57a0ba7c",
+          "bytes": 2253605,
+          "decodedShape": [
+            1080,
+            1080
+          ]
+        },
+        {
+          "key": "cattle/c/0/3",
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/cattle/c/0/3",
+          "sha256": "3b66ebfae7879afb3311137200709390a57a54d45dc5a5446aece39db12e5918",
+          "bytes": 1468674,
+          "decodedShape": [
+            1080,
+            1080
+          ]
+        },
+        {
+          "key": "cattle/c/0/0",
+          "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/cattle/c/0/0",
+          "sha256": "33583a1b7edd2a1d688b2d37a14fa8d1ccd5f6e7a35dfac74040870d28c2b40e",
+          "bytes": 980294,
+          "decodedShape": [
+            1080,
+            1080
+          ]
+        }
+      ],
+      "sourceArrayMetadata": {
+        "shape": [
+          2160,
+          4320
+        ],
+        "data_type": "float32",
+        "chunk_grid": {
+          "name": "regular",
+          "configuration": {
+            "chunk_shape": [
+              1080,
+              1080
+            ]
+          }
+        },
+        "chunk_key_encoding": {
+          "name": "default",
+          "configuration": {
+            "separator": "/"
+          }
+        },
+        "fill_value": "NaN",
+        "codecs": [
+          {
+            "name": "bytes",
+            "configuration": {
+              "endian": "little"
+            }
+          },
+          {
+            "name": "blosc",
+            "configuration": {
+              "typesize": 4,
+              "cname": "zstd",
+              "clevel": 9,
+              "shuffle": "noshuffle",
+              "blocksize": 0
+            }
+          }
+        ],
+        "attributes": {
+          "long_name": "Cattle density",
+          "units": "head/km2",
+          "source_url": "https://storage.googleapis.com/fao-gismgr-glw4-2020-data/DATA/GLW4-2020/MAPSET/D-DA/GLW4-2020.D-DA.CTL.tif",
+          "spatial:dimensions": [
+            "y",
+            "x"
+          ],
+          "spatial:bbox": [
+            -180.0,
+            -89.99999999999994,
+            179.99999999999983,
+            90.0
+          ],
+          "spatial:transform_type": "affine",
+          "spatial:transform": [
+            0.0833333333333333,
+            0.0,
+            -180.0,
+            0.0,
+            -0.0833333333333333,
+            90.0
+          ],
+          "spatial:shape": [
+            2160,
+            4320
+          ],
+          "spatial:registration": "pixel",
+          "proj:code": "EPSG:4326",
+          "zarr_conventions": [
+            {
+              "uuid": "689b58e2-cf7b-45e0-9fff-9cfc0883d6b4",
+              "schema_url": "https://raw.githubusercontent.com/zarr-conventions/spatial/refs/tags/v1/schema.json",
+              "spec_url": "https://github.com/zarr-conventions/spatial/blob/v1/README.md",
+              "name": "spatial:",
+              "description": "Spatial coordinate information"
+            },
+            {
+              "uuid": "f17cb550-5864-4468-aeb7-f3180cfb622f",
+              "schema_url": "https://raw.githubusercontent.com/zarr-experimental/geo-proj/refs/tags/v1/schema.json",
+              "spec_url": "https://github.com/zarr-experimental/geo-proj/blob/v1/README.md",
+              "name": "proj:",
+              "description": "Coordinate reference system information for geospatial data"
+            }
+          ],
+          "_FillValue": "AAAAAAAA+H8="
+        },
+        "dimension_names": [
+          "y",
+          "x"
+        ],
+        "zarr_format": 3,
+        "node_type": "array",
+        "storage_transformers": []
+      },
+      "missing": -1,
+      "validZero": 0,
+      "sourceCellCounts": {
+        "total": 1071216,
+        "valid": 606551,
+        "zero": 37617,
+        "positive": 568934,
+        "missing": 464665
+      },
+      "spotChecks": [
+        {
+          "name": "Rostov region",
+          "longitudeUnwrapped": 41,
+          "latitude": 47,
+          "outputRow": 432,
+          "outputColumn": 276,
+          "sourceRow": 516,
+          "sourceColumn": 2652,
+          "value": 7.199572563171387,
+          "unit": "head/km2, modelled livestock density",
+          "missing": false
+        },
+        {
+          "name": "Central black-earth belt",
+          "longitudeUnwrapped": 40,
+          "latitude": 51,
+          "outputRow": 384,
+          "outputColumn": 264,
+          "sourceRow": 468,
+          "sourceColumn": 2640,
+          "value": 8.289135932922363,
+          "unit": "head/km2, modelled livestock density",
+          "missing": false
+        },
+        {
+          "name": "Middle Volga",
+          "longitudeUnwrapped": 50,
+          "latitude": 53,
+          "outputRow": 360,
+          "outputColumn": 384,
+          "sourceRow": 444,
+          "sourceColumn": 2760,
+          "value": 3.709489345550537,
+          "unit": "head/km2, modelled livestock density",
+          "missing": false
+        },
+        {
+          "name": "Omsk region",
+          "longitudeUnwrapped": 73,
+          "latitude": 55,
+          "outputRow": 336,
+          "outputColumn": 660,
+          "sourceRow": 420,
+          "sourceColumn": 3036,
+          "value": 8.27166748046875,
+          "unit": "head/km2, modelled livestock density",
+          "missing": false
+        },
+        {
+          "name": "Altai farmland",
+          "longitudeUnwrapped": 83,
+          "latitude": 52,
+          "outputRow": 372,
+          "outputColumn": 780,
+          "sourceRow": 456,
+          "sourceColumn": 3156,
+          "value": 5.427624225616455,
+          "unit": "head/km2, modelled livestock density",
+          "missing": false
+        },
+        {
+          "name": "Amur region",
+          "longitudeUnwrapped": 128,
+          "latitude": 50,
+          "outputRow": 396,
+          "outputColumn": 1320,
+          "sourceRow": 480,
+          "sourceColumn": 3696,
+          "value": 0.8770678043365479,
+          "unit": "head/km2, modelled livestock density",
+          "missing": false
+        },
+        {
+          "name": "Yakutsk vicinity",
+          "longitudeUnwrapped": 129.7,
+          "latitude": 62,
+          "outputRow": 252,
+          "outputColumn": 1340,
+          "sourceRow": 336,
+          "sourceColumn": 3716,
+          "value": 0.789606511592865,
+          "unit": "head/km2, modelled livestock density",
+          "missing": false
+        },
+        {
+          "name": "Chukotka east of date line",
+          "longitudeUnwrapped": 185,
+          "latitude": 66,
+          "outputRow": 204,
+          "outputColumn": 2004,
+          "sourceRow": 288,
+          "sourceColumn": 60,
+          "value": 0.0,
+          "unit": "head/km2, modelled livestock density",
+          "missing": false
+        },
+        {
+          "name": "Crimea scope diagnostic only",
+          "longitudeUnwrapped": 34,
+          "latitude": 45,
+          "outputRow": 456,
+          "outputColumn": 192,
+          "sourceRow": 540,
+          "sourceColumn": 2568,
+          "value": 13.732789993286133,
+          "unit": "head/km2, modelled livestock density",
+          "missing": false
+        },
+        {
+          "name": "Kaliningrad",
+          "longitudeUnwrapped": 21,
+          "latitude": 54.7,
+          "outputRow": 339,
+          "outputColumn": 36,
+          "sourceRow": 423,
+          "sourceColumn": 2412,
+          "value": 10.803508758544922,
+          "unit": "head/km2, modelled livestock density",
+          "missing": false
+        }
+      ]
+    }
+  ],
+  "files": {
+    "cattle.png": {
+      "bytes": 73636,
+      "sha256": "38bcaea1a0d68c44c36acb139544eaa458131d4966ec85b231a83f8801fa0339"
+    },
+    "cattle.values.gz": {
+      "bytes": 2117810,
+      "sha256": "fba88fcf602c90e6a3998c52d649e442dd0be94fbd6b53966df3b54000937c30"
+    }
+  },
+  "limitations": [
+    "2020年基準の牛の推定密度で、現年の正確な頭数や牧場位置を示さない。",
+    "乳牛・肉牛の区分はなく、飼育形態や飼料供給を単独で特定できない。",
+    "CGIARのFloat32変換を利用し、FAO原配布Float64とビット単位で同じ資料とは表記しない。",
+    "欠測をゼロと解釈しない。国境で元格子値を変更せず、国別合計を算出しない。",
+    "等緯度経度の格子は高緯度で実面積が小さい。見た目の面積や密度値の単純和を頭数と解釈しない。",
+    "統計・国境それぞれの収録範囲は独立しており、係争地の所属や現国境を推定する資料として用いない。"
+  ],
+  "verification": {
+    "sourceMetadataHash": "passed",
+    "sourceChunkHashes": "passed",
+    "sourceTransformCrsUnitsAndCodecs": "passed",
+    "allPixelValidSourceCellIdentity": "passed",
+    "allPixelMissingSourceCellIdentity": "passed",
+    "allPixelNumericalGridIdentity": "passed",
+    "allPixelPngClassificationIdentity": "passed",
+    "zeroAndMissingSeparated": "passed",
+    "coverageArithmetic": "passed",
+    "dateLineNativeIndexSpotChecks": "passed"
+  }
+}

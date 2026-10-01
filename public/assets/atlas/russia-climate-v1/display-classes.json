@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "ids": [
+    5,
+    7,
+    14,
+    15,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+  ],
+  "actualClassIds": [
+    5,
+    7,
+    14,
+    15,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+  ],
+  "purpose": "Full UI legend for original source cells intersecting the displayed RUS boundary; no changes to source values",
+  "period": "1991-2020",
+  "sourceResolutionDegrees": 0.1,
+  "boundsUnwrapped": [
+    18,
+    40,
+    191,
+    83
+  ],
+  "width": 1730,
+  "height": 430,
+  "geometry": {
+    "file": "src/data/atlas/russia-countries.json",
+    "sha256": "ede9cbfd062912d7a10fff01b111ad9ca8fa4f8eb719cc28c9f4904a96da2d4f",
+    "digestMethod": "SHA256 of UTF-8 source text with CRLF/CR converted to LF",
+    "selection": "kind=russia, code=RUS; all exterior rings and holes retained",
+    "source": {
+      "title": "Natural Earth Admin 0 Countries",
+      "version": "5.1.2",
+      "targetScale": "1:50m",
+      "contextScale": "1:110m",
+      "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_50m_admin_0_countries.geojson",
+      "license": "Public domain",
+      "reusedSourcePath": "src/data/atlas/overview-europe-countries.json",
+      "reusedSourceSHA256": "8a3cdfda62709c9c50b314c43948da394509049cc1ca7d8ca8a83de817a5f1b6",
+      "boundaryPolicy": "Source default de facto geometry, fixed v5.1.2. Includes Crimea in RUS geometry; does not represent a current boundary verification or jurisdiction claim. UCDB city country assignment differs and remains unmodified."
+    },
+    "unwrappedBounds": [
+      19.604395,
+      41.199268,
+      190.27085,
+      81.854199
+    ]
+  },
+  "classGrid": {
+    "file": "climate-grid.bin.gz",
+    "sha256": "7092169d060e4f9d667a9b017c45d0cf15b996ff2f662912f6a0dc18b61123d7",
+    "uncompressedSha256": "1fb6abc1cea85e05b26881283aa027553cf84569c8f9e2581ee3a117728a0660",
+    "manifestSha256": "cdc9f863e5074c6d954dc43c1bfb4b3e1930a3315f1e753679f27e2bdcdc7ad7"
+  },
+  "algorithm": "Unwrap every ring continuously across 180 degrees, then shift by JavaScript Math.round((105-ringMeanLongitude)/360)*360. Construct polygons with holes, union, intersect with [18,40,191,83]. For all 743900 original source cells, construct their full source-affine rectangles (west columns1980..3599 then east columns0..109 +360) and use prepared Shapely GEOS intersects. Include any contact, including boundary-only touches. No centre test, buffer, imputation or numerical-value masking.",
+  "crossedCellCount": 299708,
+  "classifiedCrossedCellCount": 298768,
+  "noDataCrossedCellCount": 940,
+  "classCellCounts": [
+    {
+      "id": 0,
+      "cells": 940
+    },
+    {
+      "id": 5,
+      "cells": 595
+    },
+    {
+      "id": 7,
+      "cells": 6668
+    },
+    {
+      "id": 14,
+      "cells": 411
+    },
+    {
+      "id": 15,
+      "cells": 18
+    },
+    {
+      "id": 19,
+      "cells": 12784
+    },
+    {
+      "id": 20,
+      "cells": 200
+    },
+    {
+      "id": 21,
+      "cells": 351
+    },
+    {
+      "id": 22,
+      "cells": 8078
+    },
+    {
+      "id": 23,
+      "cells": 28264
+    },
+    {
+      "id": 24,
+      "cells": 4615
+    },
+    {
+      "id": 25,
+      "cells": 2448
+    },
+    {
+      "id": 26,
+      "cells": 45269
+    },
+    {
+      "id": 27,
+      "cells": 153301
+    },
+    {
+      "id": 28,
+      "cells": 2333
+    },
+    {
+      "id": 29,
+      "cells": 32038
+    },
+    {
+      "id": 30,
+      "cells": 1395
+    }
+  ],
+  "selectionMaskSha256": "9a5f0f0e9246be730daa0bb75ab7aa7591729c05c6dd383ff74015b8db49c3cb",
+  "verification": {
+    "allOriginalSourceCellsTested": 743900,
+    "classCountsSumToCrossedCells": true,
+    "allClimateAssetsUnchanged": true,
+    "shapelyVersion": "2.1.2",
+    "geosVersion": "3.13.1"
+  },
+  "processing": {
+    "script": "scripts/prepare-russia-climate-display.py",
+    "scriptSha256": "c2c4b6416b66fe2f704cf3b6d196b68e4ca0bc9bc3329e148d13db75244cd517",
+    "scriptDigestMethod": "SHA256 of UTF-8 source text normalized to LF"
+  },
+  "limitations": [
+    "Intersection is with the fixed displayed source boundary, not a current or internationally recognized border determination.",
+    "Counts are source-cell contact diagnostics, not land area or climate percentages.",
+    "NoData class 0 remains a separate missing legend entry. This record only filters unused nonzero class labels.",
+    "The UI must retain nearest-neighbour raster rendering and the same source geometry; interpolated edge colours are not additional classes."
+  ]
+}

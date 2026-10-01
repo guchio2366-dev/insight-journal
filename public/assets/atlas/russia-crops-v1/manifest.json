@@ -1,0 +1,465 @@
+{
+  "schemaVersion": 1,
+  "region": "russia",
+  "year": 2020,
+  "generator": {
+    "file": "scripts/prepare-russia-crops.py",
+    "sha256": "29ba23ad183798e19c69a458b4bf6dbd4c24c6a011ce02c92050fd8b31026db0",
+    "digestMethod": "SHA256 of UTF-8 source with CRLF converted to LF"
+  },
+  "source": {
+    "name": "IFPRI MapSPAM 2020 v2r2 harvested area",
+    "edition": "Harvard Dataverse V6.0, released 2026-05-05; fixed data file 13827040",
+    "url": "https://dataverse.harvard.edu/api/access/datafile/13827040",
+    "catalogUrl": "https://doi.org/10.7910/DVN/SWPENT",
+    "sha256": "34895a332ba7ff9d9732a81fe9da7063458d197f3c72ce3a405329c41f94ade2",
+    "license": "CC BY 4.0",
+    "citation": "International Food Policy Research Institute (IFPRI), 2026, \"Global Spatially-Disaggregated Crop Production Statistics Data for 2020 Version 2.0 Release 2\", Harvard Dataverse, V6, https://doi.org/10.7910/DVN/SWPENT.",
+    "termsUrl": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/SWPENT&version=6.0",
+    "adaptationAttribution": {
+      "requiredText": "This data was provided by the International Food Policy Research Institute (IFPRI). IFPRI bears no responsibility for the analyses or interpretations of the data presented here.",
+      "placement": "After complete source citation",
+      "record": "attribution.json"
+    },
+    "crs": "EPSG:4326",
+    "referenceYear": 2020,
+    "nominalResolutionDegrees": 0.08333333333333333,
+    "width": 4320,
+    "height": 2160,
+    "measurementType": "modelled harvested area",
+    "nativeGeoTiffTags": {
+      "pixelScale": [
+        0.0833333332727273,
+        0.0833333332727273,
+        0.0
+      ],
+      "modelTiepoint": [
+        0.0,
+        0.0,
+        0.0,
+        -180.0,
+        90.00000000000004,
+        0.0
+      ],
+      "geoKeyDirectory": [
+        1,
+        1,
+        0,
+        13,
+        1024,
+        0,
+        1,
+        2,
+        1025,
+        0,
+        1,
+        1,
+        2048,
+        0,
+        1,
+        4326,
+        2049,
+        34737,
+        84,
+        0,
+        2050,
+        0,
+        1,
+        6326,
+        2051,
+        0,
+        1,
+        8901,
+        2054,
+        0,
+        1,
+        9102,
+        2055,
+        34736,
+        1,
+        0,
+        2056,
+        0,
+        1,
+        7030,
+        2057,
+        34736,
+        1,
+        1,
+        2059,
+        34736,
+        1,
+        2,
+        2061,
+        34736,
+        1,
+        3,
+        3073,
+        34737,
+        163,
+        84
+      ],
+      "noData": -3.4028234663852886e+38
+    }
+  },
+  "display": {
+    "crs": "EPSG:4326 with unwrapped east longitudes 18 to 191",
+    "projection": "Equirectangular display rectangle, not equal-area",
+    "boundsUnwrapped": [
+      18,
+      40,
+      191,
+      83
+    ],
+    "bounds4326Unwrapped": [
+      18,
+      40,
+      191,
+      83
+    ],
+    "width": 2076,
+    "height": 516,
+    "nominalTransform": [
+      18,
+      0.08333333333333333,
+      0,
+      83,
+      0,
+      -0.08333333333333333
+    ],
+    "sourceRowRange": [
+      84,
+      600
+    ],
+    "sourceColumnSpans": [
+      [
+        2376,
+        4320
+      ],
+      [
+        0,
+        132
+      ]
+    ],
+    "indexConvention": "Half-open source ranges; source columns wrap modulo 4320 at 180E; row 0 north",
+    "resampling": "None. Native 5-arcminute source cells retained.",
+    "countryMask": "None in emitted data. Display clipping, if any, is a separate geometry convention; no national totals computed."
+  },
+  "lookup": {
+    "encoding": "float32-le-gzip",
+    "noData": -1,
+    "validZero": 0
+  },
+  "legend": {
+    "breaks": [
+      1,
+      10,
+      100,
+      1000,
+      5000
+    ],
+    "colors": [
+      "edf1e3",
+      "d7e7b4",
+      "afd08b",
+      "7fa95c",
+      "4f7e3d",
+      "23582d"
+    ],
+    "zeroColor": "f6f5eb",
+    "missingAlpha": 0,
+    "positiveClassesHaPerCell": [
+      "0 < value < 1",
+      "1 <= value < 10",
+      "10 <= value < 100",
+      "100 <= value < 1000",
+      "1000 <= value < 5000",
+      "value >= 5000"
+    ]
+  },
+  "layers": [
+    {
+      "id": "wheat",
+      "sourceCode": "WHEA",
+      "title": "小麦",
+      "kind": "crop",
+      "year": 2020,
+      "unit": "ha/5分格子",
+      "unitEnglish": "harvested hectares per native 5-arcminute source cell",
+      "image": "wheat.png",
+      "grid": "wheat.values.gz",
+      "width": 2076,
+      "height": 516,
+      "boundsUnwrapped": [
+        18,
+        40,
+        191,
+        83
+      ],
+      "bounds4326Unwrapped": [
+        18,
+        40,
+        191,
+        83
+      ],
+      "breaks": [
+        1,
+        10,
+        100,
+        1000,
+        5000
+      ],
+      "colors": [
+        "edf1e3",
+        "d7e7b4",
+        "afd08b",
+        "7fa95c",
+        "4f7e3d",
+        "23582d"
+      ],
+      "sourceURL": "https://dataverse.harvard.edu/api/access/datafile/13827040",
+      "sourceHash": "288f583e50e8237b0eaad880e5ef188383c97701c5015744cf6a62f2bf7dba9e",
+      "license": "CC BY 4.0",
+      "sourceMember": "spam2020V2r2_global_harvested_area/spam2020_V2r2_global_H_WHEA_A.tif",
+      "sourceMemberSha256": "288f583e50e8237b0eaad880e5ef188383c97701c5015744cf6a62f2bf7dba9e",
+      "nativeGeoTiffTags": {
+        "pixelScale": [
+          0.0833333332727273,
+          0.0833333332727273,
+          0.0
+        ],
+        "modelTiepoint": [
+          0.0,
+          0.0,
+          0.0,
+          -180.0,
+          90.00000000000004,
+          0.0
+        ],
+        "geoKeyDirectory": [
+          1,
+          1,
+          0,
+          13,
+          1024,
+          0,
+          1,
+          2,
+          1025,
+          0,
+          1,
+          1,
+          2048,
+          0,
+          1,
+          4326,
+          2049,
+          34737,
+          84,
+          0,
+          2050,
+          0,
+          1,
+          6326,
+          2051,
+          0,
+          1,
+          8901,
+          2054,
+          0,
+          1,
+          9102,
+          2055,
+          34736,
+          1,
+          0,
+          2056,
+          0,
+          1,
+          7030,
+          2057,
+          34736,
+          1,
+          1,
+          2059,
+          34736,
+          1,
+          2,
+          2061,
+          34736,
+          1,
+          3,
+          3073,
+          34737,
+          163,
+          84
+        ],
+        "noData": -3.4028234663852886e+38
+      },
+      "missing": -1,
+      "validZero": 0,
+      "sourceCellCounts": {
+        "total": 1071216,
+        "valid": 148075,
+        "zero": 8792,
+        "positive": 139283,
+        "missing": 923141
+      },
+      "spotChecks": [
+        {
+          "name": "Rostov region",
+          "longitudeUnwrapped": 41,
+          "latitude": 47,
+          "outputRow": 432,
+          "outputColumn": 276,
+          "sourceRow": 516,
+          "sourceColumn": 2652,
+          "value": 2222.0,
+          "unit": "harvested ha per native source cell",
+          "missing": false
+        },
+        {
+          "name": "Central black-earth belt",
+          "longitudeUnwrapped": 40,
+          "latitude": 51,
+          "outputRow": 384,
+          "outputColumn": 264,
+          "sourceRow": 468,
+          "sourceColumn": 2640,
+          "value": 241.8000030517578,
+          "unit": "harvested ha per native source cell",
+          "missing": false
+        },
+        {
+          "name": "Middle Volga",
+          "longitudeUnwrapped": 50,
+          "latitude": 53,
+          "outputRow": 360,
+          "outputColumn": 384,
+          "sourceRow": 444,
+          "sourceColumn": 2760,
+          "value": 559.7000122070312,
+          "unit": "harvested ha per native source cell",
+          "missing": false
+        },
+        {
+          "name": "Omsk region",
+          "longitudeUnwrapped": 73,
+          "latitude": 55,
+          "outputRow": 336,
+          "outputColumn": 660,
+          "sourceRow": 420,
+          "sourceColumn": 3036,
+          "value": 2295.199951171875,
+          "unit": "harvested ha per native source cell",
+          "missing": false
+        },
+        {
+          "name": "Altai farmland",
+          "longitudeUnwrapped": 83,
+          "latitude": 52,
+          "outputRow": 372,
+          "outputColumn": 780,
+          "sourceRow": 456,
+          "sourceColumn": 3156,
+          "value": 684.5,
+          "unit": "harvested ha per native source cell",
+          "missing": false
+        },
+        {
+          "name": "Amur region",
+          "longitudeUnwrapped": 128,
+          "latitude": 50,
+          "outputRow": 396,
+          "outputColumn": 1320,
+          "sourceRow": 480,
+          "sourceColumn": 3696,
+          "value": 302.1000061035156,
+          "unit": "harvested ha per native source cell",
+          "missing": false
+        },
+        {
+          "name": "Yakutsk vicinity",
+          "longitudeUnwrapped": 129.7,
+          "latitude": 62,
+          "outputRow": 252,
+          "outputColumn": 1340,
+          "sourceRow": 336,
+          "sourceColumn": 3716,
+          "value": -1.0,
+          "unit": "harvested ha per native source cell",
+          "missing": true
+        },
+        {
+          "name": "Chukotka east of date line",
+          "longitudeUnwrapped": 185,
+          "latitude": 66,
+          "outputRow": 204,
+          "outputColumn": 2004,
+          "sourceRow": 288,
+          "sourceColumn": 60,
+          "value": -1.0,
+          "unit": "harvested ha per native source cell",
+          "missing": true
+        },
+        {
+          "name": "Crimea scope diagnostic only",
+          "longitudeUnwrapped": 34,
+          "latitude": 45,
+          "outputRow": 456,
+          "outputColumn": 192,
+          "sourceRow": 540,
+          "sourceColumn": 2568,
+          "value": 332.8999938964844,
+          "unit": "harvested ha per native source cell",
+          "missing": false
+        },
+        {
+          "name": "Kaliningrad",
+          "longitudeUnwrapped": 21,
+          "latitude": 54.7,
+          "outputRow": 339,
+          "outputColumn": 36,
+          "sourceRow": 423,
+          "sourceColumn": 2412,
+          "value": -1.0,
+          "unit": "harvested ha per native source cell",
+          "missing": true
+        }
+      ]
+    }
+  ],
+  "files": {
+    "attribution.json": {
+      "bytes": 1001,
+      "sha256": "003996a98115955f963d1a7295ac5a0bb06c2d8efe51227603190bfcdde118c8"
+    },
+    "wheat.png": {
+      "bytes": 91685,
+      "sha256": "5a567f3cd6e3ae7f63540d452bd524512e91b2b352670ce4a09f78ad4a695cc7"
+    },
+    "wheat.values.gz": {
+      "bytes": 401075,
+      "sha256": "fb4e9291d1bd1bec4be66baac71c1c412218680d63865688653bed965b7e95b8"
+    }
+  },
+  "limitations": [
+    "2020年基準の収穫面積推計で、現在の作付や生産量を示さない。",
+    "収穫面積は複数作を含み、物理的な農地面積とは異なる。",
+    "欠測を作付ゼロと解釈しない。国境で元格子値を変更せず、国別合計を算出しない。",
+    "統計・国境それぞれの収録範囲は独立しており、係争地の所属や現国境を推定する資料として用いない。",
+    "表示は等面積図法ではなく、高緯度の見た目の面積で収穫面積を比較しない。"
+  ],
+  "verification": {
+    "sourceArchiveHash": "passed",
+    "sourceMemberHash": "passed",
+    "sourceTransformCrsAndSampleFormat": "passed",
+    "allPixelValidSourceCellIdentity": "passed",
+    "allPixelMissingSourceCellIdentity": "passed",
+    "allPixelNumericalGridIdentity": "passed",
+    "allPixelPngClassificationIdentity": "passed",
+    "zeroAndMissingSeparated": "passed",
+    "coverageArithmetic": "passed",
+    "dateLineNativeIndexSpotChecks": "passed"
+  }
+}

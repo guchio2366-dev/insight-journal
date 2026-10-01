@@ -33,6 +33,7 @@ export const GET: APIRoute = async ({ site }) => {
     { loc: absolute("/atlas/industry/"), lastmod: "2026-10-01" },
     ...overviewRegions.map(region=>({loc:absolute(region.path),lastmod:"2026-09-30"})),
     ...['','nature/','agriculture/','industry/','population/','base-map/'].map(field=>({loc:absolute(`/atlas/oceania/${field}`),lastmod:'2026-10-01'})),
+    ...['','nature/','agriculture/','industry/','population/'].map(field=>({loc:absolute(`/atlas/russia/${field}`),lastmod:'2026-10-01'})),
     { loc: absolute("/atlas/north-america/canada/population/"), lastmod: "2026-09-30" },
     { loc: absolute("/atlas/north-america/canada/industry/"), lastmod: "2026-09-30" },
     { loc: absolute("/atlas/north-america/canada/nature/"), lastmod: "2026-09-30" },

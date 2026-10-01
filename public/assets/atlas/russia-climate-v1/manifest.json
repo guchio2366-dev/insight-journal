@@ -1,0 +1,284 @@
+{
+  "schemaVersion": 1,
+  "region": "russia",
+  "version": "1.0.0",
+  "period": "1991-2020",
+  "unit": "Koppen-Geiger categorical class ID",
+  "boundsUnwrapped": [
+    18,
+    40,
+    191,
+    83
+  ],
+  "width": 1730,
+  "height": 430,
+  "actualClassIds": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+  ],
+  "actualClassIdsScope": "Nonzero IDs in the unmasked source cutout, before political-boundary clipping",
+  "image": "climate.png",
+  "grid": "climate-grid.bin.gz",
+  "legend": "legend.json",
+  "source": {
+    "dataset": "Beck et al. (2023), Koppen-Geiger maps",
+    "period": "1991-2020",
+    "archiveUrl": "https://ndownloader.figshare.com/files/45057352",
+    "archiveSha256": "d37b8d05b39b96e7cf6e9007b024c7d1ab301d6668409e3e792962a2408fc05d",
+    "member": "1991_2020/koppen_geiger_0p1.tif",
+    "memberSha256": "7db968672815435562b8428f0752c2e67af7e6bb235e2969eb2db28bce428361",
+    "memberBytes": 217452,
+    "citation": "https://doi.org/10.1038/s41597-023-02549-6",
+    "metadataUrl": "https://api.figshare.com/v2/articles/21789074/versions/1",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://www.gloh2o.org/koppen/",
+    "preservedMember": "data-source/atlas/russia/nature/koppen_geiger_0p1_1991_2020.tif",
+    "sourceGrid": {
+      "crs": "EPSG:4326",
+      "width": 3600,
+      "height": 1800,
+      "resolutionDegrees": 0.1,
+      "pixelScale": [
+        0.1,
+        0.1,
+        0.0
+      ],
+      "tiepoint": [
+        0.0,
+        0.0,
+        0.0,
+        -180.0,
+        90.0,
+        0.0
+      ],
+      "geoKeyDirectory": [
+        1,
+        1,
+        0,
+        7,
+        1024,
+        0,
+        1,
+        2,
+        1025,
+        0,
+        1,
+        1,
+        2048,
+        0,
+        1,
+        4326,
+        2049,
+        34737,
+        7,
+        0,
+        2054,
+        0,
+        1,
+        9102,
+        2057,
+        34736,
+        1,
+        1,
+        2059,
+        34736,
+        1,
+        0
+      ],
+      "noData": 0
+    },
+    "reproduction": "python scripts/prepare-russia-climate.py --source data-source/atlas/russia/nature/koppen_geiger_0p1_1991_2020.tif"
+  },
+  "lookup": {
+    "encoding": "uint8-gzip",
+    "width": 1730,
+    "height": 430,
+    "boundsUnwrapped": [
+      18,
+      40,
+      191,
+      83
+    ],
+    "noData": 0,
+    "unit": "categorical class ID, not a numerical magnitude"
+  },
+  "display": {
+    "crs": "EPSG:4326 with unwrapped east longitudes 18 to 191",
+    "projection": "Consumer must use the same frame and projection for raster and vector geometry; no map projection is baked into the source grid",
+    "resolutionDegrees": 0.1,
+    "sourceResolution": "Publisher 0.1-degree broad-view product, not the 1 km product",
+    "dateLineColumn": 1620,
+    "missing": "Class 0 is transparent and means unclassified/no-data; never a climate zone. Water and unclassified small land can both be 0.",
+    "clip": "UI boundary treatment belongs to the regional geometry owner. This asset does not clip, assign sovereignty or compute country totals.",
+    "palette": {
+      "reference": "scripts/refine-atlas-nature.py",
+      "referenceSha256": "1b6a55bdfc362b2d1f39d9e919fc40ddd7fd820ba9f4027a5534cb2f52f12ac9",
+      "legend": "public/assets/atlas/nature-v1/climate-legend.json",
+      "legendSha256": "a2be6f64e858736ef8095e607402ff580789df76973059b6773b70eb6f1a8fad",
+      "script": "scripts/atlas_asia_climate_palette.py",
+      "scriptSha256": "f56d887664f75de729c150f1a6b000907abad9a4786530407a5afbc75508bf55",
+      "method": "All 30 codes use the North America climate() palette. RGBA colors only; class IDs, masks and grids are unchanged.",
+      "digestMethod": "SHA256 of UTF-8 text normalized from CRLF/CR to LF"
+    }
+  },
+  "processing": {
+    "script": "scripts/prepare-russia-climate.py",
+    "scriptSha256": "7c8a5064745e2f758cc7ce742351df078b87028087877a4deb7a99831151ae39",
+    "scriptDigestMethod": "SHA256 of UTF-8 script normalized from CRLF/CR to LF",
+    "method": "Exact original array slices, half-open rows [70,500), columns [1980,3600) then [0,110). No interpolation, averaging, class merging, nearest-land imputation or replacement of missing values.",
+    "sourceRows": [
+      70,
+      500
+    ],
+    "sourceColumnSpans": [
+      [
+        1980,
+        3600
+      ],
+      [
+        0,
+        110
+      ]
+    ],
+    "jsonEncoding": "UTF-8, LF; binary hashes use exact bytes"
+  },
+  "verification": {
+    "pinnedMemberSha256": true,
+    "sourceTransformAndCrs": true,
+    "bothDateLineHalvesMatchSource": true,
+    "allPngPixelsMatchGrid": true,
+    "gridRoundTrip": true,
+    "knownSourceCellSamples": [
+      {
+        "name": "Kaliningrad",
+        "longitude": 20.51,
+        "latitude": 54.7,
+        "longitudeUnwrapped": 20.51,
+        "sourceRow": 353,
+        "sourceColumn": 2005,
+        "outputRow": 283,
+        "outputColumn": 25,
+        "classId": 26,
+        "code": "Dfb"
+      },
+      {
+        "name": "Moscow",
+        "longitude": 37.62,
+        "latitude": 55.75,
+        "longitudeUnwrapped": 37.62,
+        "sourceRow": 342,
+        "sourceColumn": 2176,
+        "outputRow": 272,
+        "outputColumn": 196,
+        "classId": 26,
+        "code": "Dfb"
+      },
+      {
+        "name": "Novosibirsk",
+        "longitude": 82.92,
+        "latitude": 55.03,
+        "longitudeUnwrapped": 82.92,
+        "sourceRow": 349,
+        "sourceColumn": 2629,
+        "outputRow": 279,
+        "outputColumn": 649,
+        "classId": 26,
+        "code": "Dfb"
+      },
+      {
+        "name": "Yakutsk",
+        "longitude": 129.73,
+        "latitude": 62.03,
+        "longitudeUnwrapped": 129.73,
+        "sourceRow": 279,
+        "sourceColumn": 3097,
+        "outputRow": 209,
+        "outputColumn": 1117,
+        "classId": 27,
+        "code": "Dfc"
+      },
+      {
+        "name": "Vladivostok",
+        "longitude": 131.89,
+        "latitude": 43.12,
+        "longitudeUnwrapped": 131.89,
+        "sourceRow": 468,
+        "sourceColumn": 3118,
+        "outputRow": 398,
+        "outputColumn": 1138,
+        "classId": 22,
+        "code": "Dwb"
+      },
+      {
+        "name": "Chukotka west of 180",
+        "longitude": 177.0,
+        "latitude": 66.0,
+        "longitudeUnwrapped": 177.0,
+        "sourceRow": 240,
+        "sourceColumn": 3570,
+        "outputRow": 170,
+        "outputColumn": 1590,
+        "classId": 27,
+        "code": "Dfc"
+      },
+      {
+        "name": "Chukotka east of 180",
+        "longitude": -173.0,
+        "latitude": 66.0,
+        "longitudeUnwrapped": 187.0,
+        "sourceRow": 240,
+        "sourceColumn": 70,
+        "outputRow": 170,
+        "outputColumn": 1690,
+        "classId": 27,
+        "code": "Dfc"
+      }
+    ]
+  },
+  "coverage": {
+    "classifiedCells": 437652,
+    "noDataCells": 306248,
+    "scope": "Rectangular source-window diagnostics, including surrounding countries; not Russia land area or population coverage"
+  },
+  "limitations": [
+    "0.1-degree source cells can omit narrow islands and coastlines; zooming the image cannot create finer climate information.",
+    "Any later detailed regional view needs the pinned 1 km product and fresh coverage checks. No detail is fabricated in this first edition.",
+    "The map describes long-term 1991-2020 climate classes, not current weather, temperature, rainfall totals or crop production.",
+    "Classification IDs are labels; never average or sum them, and never treat pixel counts as land area.",
+    "Political boundaries and disputed-territory presentation require separate evidence. The rectangular cutout contains context countries."
+  ],
+  "files": {
+    "climate.png": {
+      "bytes": 54521,
+      "sha256": "42c6e364ef6c311c62cf2bf9249d9dfd4d9e9a24fc2e0072bb0fd39804de5453"
+    },
+    "climate-grid.bin.gz": {
+      "bytes": 29874,
+      "sha256": "7092169d060e4f9d667a9b017c45d0cf15b996ff2f662912f6a0dc18b61123d7"
+    },
+    "legend.json": {
+      "bytes": 8225,
+      "sha256": "8fa339d2044bf3c0d7388168558372949beb793525da36b3b8c5bb97a32aff7b"
+    }
+  }
+}

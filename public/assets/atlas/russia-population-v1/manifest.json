@@ -1,0 +1,291 @@
+{
+  "schemaVersion": 2,
+  "populationYear": 2020,
+  "sourceEdition": "GHS-POP R2023A V1.0; 2020 1 km Mollweide",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://human-settlement.emergency.copernicus.eu/GHSLhowToCite.php",
+  "populationCitation": "Schiavina, M.; Freire, S.; Carioli, A.; MacManus, K. (2026). GHS-POP R2023A - GHS population grid multitemporal (1975-2030). European Commission, Joint Research Centre [Dataset].",
+  "populationDoi": "https://doi.org/10.2905/2FF68A52-5B5B-4A22-8F40-C41DA8332CFE",
+  "referencePublication": "Pesaresi, M. et al. (2024). Advances on the Global Human Settlement Layer by joint assessment of Earth Observation and population survey data. International Journal of Digital Earth 17(1).",
+  "referencePublicationDoi": "https://doi.org/10.1080/17538947.2024.2390454",
+  "decoderValidation": {
+    "implementation": "Fixed typed-buffer TIFF LZW through the public GeoTIFF.js addDecoder API; package files unchanged",
+    "full256x256Float64TilesExactlyEqualToOfficialDecoder": [
+      {
+        "name": "Moscow",
+        "window": [
+          20480,
+          2304,
+          20736,
+          2560
+        ],
+        "sha256": "0e4840a886a1f0faf2841a9426ad5b6c5c3d4a5d1fbb58ffc18f3df77f9864d7"
+      },
+      {
+        "name": "Novosibirsk",
+        "window": [
+          23808,
+          2560,
+          24064,
+          2816
+        ],
+        "sha256": "a93eb2f8cf36e6a3ed220a0511ea41dada26c94b6b0ab95f8a108b34ee636a9e"
+      },
+      {
+        "name": "Vladivostok",
+        "window": [
+          28672,
+          3840,
+          28928,
+          4096
+        ],
+        "sha256": "dbd0ce5aae86657f083a23f048d3285a37e11edc69bbc9a04959b5e03e36cebf"
+      }
+    ]
+  },
+  "input": {
+    "file": "GHS_POP_E2020_GLOBE_R2023A_54009_1000_V1_0.tif",
+    "sha256": "db25d12ab0851446af467a56eb1651d383867dc3fbf4aa6348ec8e3372225196",
+    "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2020_GLOBE_R2023A_54009_1000/V1-0/GHS_POP_E2020_GLOBE_R2023A_54009_1000_V1_0.zip",
+    "coordinateCrs": "ESRI:54009",
+    "sourceCellMetres": [
+      1000,
+      1000
+    ],
+    "noData": -200,
+    "unit": "people per 1 km equal-area source cell",
+    "dataNature": "census/administrative estimates disaggregated using built-up information; not a direct household count"
+  },
+  "displayProjection": "Russia-centred equirectangular with standard latitude 60; longitude 18 to 191 unwrapped",
+  "lookup": {
+    "encoding": "float32-le-gzip",
+    "unit": "people/km2 of valid source cells including water",
+    "noData": -1,
+    "zero": 0,
+    "validCountEncoding": "uint8-gzip",
+    "validCountMeaning": "number of valid original 1 km cells in the selected aligned 5x5 block (1 to 25); 0 means source missing"
+  },
+  "breaks": [
+    1,
+    10,
+    100,
+    500,
+    2000,
+    10000
+  ],
+  "colors": [
+    "f0f1e8",
+    "dce8df",
+    "b0d2cc",
+    "7ab5bb",
+    "438b9f",
+    "28627f",
+    "173b60"
+  ],
+  "method": "Original equal-area 1 km people/cell are read only in bounded 250x250 source windows with disabled tile cache and no workers. Aligned 5x5 blocks use sum of nonnegative finite population divided by valid original 1 km2 cell count, including zero/water cells. Display pixel centres are projected to source Mollweide and use the containing aligned source block (nearest-neighbour at the aggregated block scale). No bilinear smoothing, generalized land masks, nearest-land imputation or raster-derived urban-centre totals. PNG colors and Float32 lookup values are generated from one array.",
+  "limitations": [
+    "5 km overview cells can include water and cannot measure land-only population density. Zero cells include ocean; missing is separately stored as -1.",
+    "Equirectangular pixels have unequal areas; the displayed density comes from equal-area source cells. Never sum display pixels as population.",
+    "The overview display spacing can omit small or sparse source concentrations. Regional views change the viewport only; they do not increase source or display-grid resolution. No source-defined urban centre does not mean zero population.",
+    "Surrounding non-target countries can occur in rectangular source extents; keep them neutral in the map framework. Source-read sums are diagnostics only.",
+    "The 2020 distribution is modelled from census/administrative estimates and built-up information. Do not infer individual homes, exact contemporary population or municipal boundaries.",
+    "The source epoch is 2020, before current displacement and migration changes. It is not a current population estimate. No inferred contemporary values fill missing cells."
+  ],
+  "urbanCentres": {
+    "file": "centres.json",
+    "manifest": "urban-manifest.json",
+    "populationYears": [
+      2000,
+      2010,
+      2020
+    ],
+    "urbanBoundaryYear": 2025,
+    "scope": "All 253 source-defined centres assigned GC_CNT_GAD_2025=Russia. Ukraine-assigned Crimea centres are excluded; no-centre status never means zero population."
+  },
+  "views": {
+    "overview": {
+      "title": "ロシア全体",
+      "bounds4326": [
+        18,
+        40,
+        191,
+        83
+      ],
+      "boundsUnwrapped": [
+        18,
+        40,
+        191,
+        83
+      ],
+      "width": 1200,
+      "height": 597,
+      "image": "overview.png",
+      "grid": "overview.density.gz",
+      "validCountGrid": "overview.valid-count.gz",
+      "sourceCellKm": 5,
+      "sourceAggregation": [
+        5,
+        5
+      ],
+      "outputSpacingDegrees": [
+        0.14416666666666667,
+        0.07202680067001675
+      ],
+      "imageCoordinates": [
+        [
+          18,
+          83
+        ],
+        [
+          191,
+          83
+        ],
+        [
+          191,
+          40
+        ],
+        [
+          18,
+          40
+        ]
+      ],
+      "positivePixels": 117159,
+      "zeroPixels": 306110,
+      "missingPixels": 293131,
+      "minPositive": 5.060963417236053e-7,
+      "maxValue": 32439.91796875,
+      "sourceReadDiagnostics": {
+        "processedWindows": 792,
+        "maximumSourceWindowCells": 62500,
+        "sourceValidCells": 29206428,
+        "sourceMissingCells": 20293572,
+        "sourceZeroCells": 25893700,
+        "sourcePopulationSum": 662710461.6580254,
+        "aggregatedReconstitutedSum": 662710461.6580261,
+        "maximumWindowRelativeSumError": 2.461437856765183e-14,
+        "populationSumDifference": 7.152557373046875e-7,
+        "peakRssBytes": 112857088,
+        "elapsedSeconds": 11.469307800000001,
+        "outOfBoundsDisplayPixels": 0,
+        "note": "These source-read sums cover requested rectangular processing windows, including surrounding land/ocean. They verify aggregation only; they are not regional or national population totals."
+      },
+      "knownPlaceSamples": {
+        "Moscow": {
+          "coordinates4326": [
+            37.63786861381086,
+            55.748862156060426
+          ],
+          "displayPixel": [
+            136,
+            378
+          ],
+          "densityPeopleKm2": 12648.3701171875,
+          "validSourceCells": 25,
+          "populationYear": 2020
+        },
+        "Saint Petersburg": {
+          "coordinates4326": [
+            30.336421213424174,
+            59.93314942246161
+          ],
+          "displayPixel": [
+            85,
+            320
+          ],
+          "densityPeopleKm2": 8588.796875,
+          "validSourceCells": 25,
+          "populationYear": 2020
+        },
+        "Novosibirsk": {
+          "coordinates4326": [
+            82.93060820070036,
+            55.01726818243955
+          ],
+          "displayPixel": [
+            450,
+            388
+          ],
+          "densityPeopleKm2": 8484.2080078125,
+          "validSourceCells": 25,
+          "populationYear": 2020
+        },
+        "Vladivostok": {
+          "coordinates4326": [
+            131.9203545221523,
+            43.12737582118304
+          ],
+          "displayPixel": [
+            790,
+            553
+          ],
+          "densityPeopleKm2": 2352.070068359375,
+          "validSourceCells": 25,
+          "populationYear": 2020
+        },
+        "Yakutsk": {
+          "coordinates4326": [
+            129.7205764238439,
+            62.039937898006805
+          ],
+          "displayPixel": [
+            774,
+            291
+          ],
+          "densityPeopleKm2": 3256.96142578125,
+          "validSourceCells": 25,
+          "populationYear": 2020
+        }
+      },
+      "pixelValidation": {
+        "imageAndGridFromIdenticalFloat32Values": true,
+        "pngLosslessRoundtrip": true,
+        "gzipFloat32Roundtrip": true,
+        "zeroOpaqueWhiteAndMissingTransparent": true
+      }
+    }
+  },
+  "files": {
+    "overview.png": {
+      "bytes": 98195,
+      "sha256": "397b69787e6acc7a5672990d41037824fb8eef67a91fa89714713c2c7603ad08"
+    },
+    "overview.density.gz": {
+      "bytes": 513695,
+      "sha256": "a474473eaa18c808a91fe3c7d8485d6f793d9b453181018dca02060e491818a3"
+    },
+    "overview.valid-count.gz": {
+      "bytes": 20637,
+      "sha256": "1a137da52978584c781dded6d981d45541c1eadf3b308ce6121b4150f71b1da3"
+    },
+    "centres.json": {
+      "bytes": 97652,
+      "sha256": "1ec620c1247af29882556b4696c843229b887357e89e3ac9740ab6e0a1adf136"
+    },
+    "urban-manifest.json": {
+      "bytes": 6930,
+      "sha256": "546e51e6182267006bea7ab4c7a24bbe2b2813010ee023d9ba58efb08c8aa154"
+    }
+  },
+  "populationCitationCatalog": "https://data.jrc.ec.europa.eu/dataset/2ff68a52-5b5b-4a22-8f40-c41da8332cfe",
+  "populationCitationPersistentDoi": "https://doi.org/10.2905/JRC.CXKEDRR",
+  "sourceReleaseIssued": "2023-05-08",
+  "citationVerifiedAt": "2026-10-01",
+  "zeroColor": "#ffffff",
+  "displayZeroColor": "#ffffff",
+  "rasterZeroAlpha": 255,
+  "rasterMissingAlpha": 0,
+  "boundsUnwrapped": [
+    18,
+    40,
+    191,
+    83
+  ],
+  "coordinateCrs": "EPSG:4326 with eastern longitudes unwrapped beyond 180",
+  "geographicScope": {
+    "display": "18 to 191 degrees east, 40 to 83 degrees north; whole source window includes neighbouring-country cells",
+    "raster": "Global source clipped by source display boundaries only in the UI; no national total is calculated",
+    "urban": "GC_CNT_GAD_2025=Russia, 253 records; source-defined centres rather than all settlements",
+    "boundaryCaveat": "Adopted Natural Earth source display boundary includes Crimea within RUS, while the pinned UCDB assigns Sevastopol, Simferopol, Yalta, Kerch and Yevpatoriya to Ukraine. The city subset preserves that source assignment. Map outline, urban attribution and census-statistical territory must not be treated as identical.",
+    "politicalInterpretation": "Source conventions are recorded without adding a sovereignty claim."
+  }
+}

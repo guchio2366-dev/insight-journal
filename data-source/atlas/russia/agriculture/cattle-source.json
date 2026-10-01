@@ -1,0 +1,183 @@
+{
+  "retrievedSource": "Existing open source snapshot reused 2026-10-01",
+  "sourceUrl": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/",
+  "metadataSha256": "60849b62074ea823af210c0fe6beafa36e14de2b5c61b880557d468f023dc5e3",
+  "chunks": [
+    {
+      "key": "cattle/c/0/2",
+      "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/cattle/c/0/2",
+      "sha256": "49707b2d1b7393f6158ceadeac520d6ed709e23f2116906f8278b1cd57a0ba7c",
+      "bytes": 2253605,
+      "decodedShape": [
+        1080,
+        1080
+      ]
+    },
+    {
+      "key": "cattle/c/0/3",
+      "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/cattle/c/0/3",
+      "sha256": "3b66ebfae7879afb3311137200709390a57a54d45dc5a5446aece39db12e5918",
+      "bytes": 1468674,
+      "decodedShape": [
+        1080,
+        1080
+      ]
+    },
+    {
+      "key": "cattle/c/0/0",
+      "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/glw4-2020/glw4-2020.zarr/cattle/c/0/0",
+      "sha256": "33583a1b7edd2a1d688b2d37a14fa8d1ccd5f6e7a35dfac74040870d28c2b40e",
+      "bytes": 980294,
+      "decodedShape": [
+        1080,
+        1080
+      ]
+    }
+  ],
+  "sourceYear": 2020,
+  "license": "CC BY 4.0",
+  "edition": "CGIAR Climate Data Hub Float32 Zarr conversion, updated 2026-06-23",
+  "termsUrl": "https://www.fao.org/contact-us/terms/db-terms-of-use/en",
+  "scope": "None in emitted data. Display clipping, if any, is a separate geometry convention; no national totals computed.",
+  "sourceCellCounts": {
+    "total": 1071216,
+    "valid": 606551,
+    "zero": 37617,
+    "positive": 568934,
+    "missing": 464665
+  },
+  "spotChecks": [
+    {
+      "name": "Rostov region",
+      "longitudeUnwrapped": 41,
+      "latitude": 47,
+      "outputRow": 432,
+      "outputColumn": 276,
+      "sourceRow": 516,
+      "sourceColumn": 2652,
+      "value": 7.199572563171387,
+      "unit": "head/km2, modelled livestock density",
+      "missing": false
+    },
+    {
+      "name": "Central black-earth belt",
+      "longitudeUnwrapped": 40,
+      "latitude": 51,
+      "outputRow": 384,
+      "outputColumn": 264,
+      "sourceRow": 468,
+      "sourceColumn": 2640,
+      "value": 8.289135932922363,
+      "unit": "head/km2, modelled livestock density",
+      "missing": false
+    },
+    {
+      "name": "Middle Volga",
+      "longitudeUnwrapped": 50,
+      "latitude": 53,
+      "outputRow": 360,
+      "outputColumn": 384,
+      "sourceRow": 444,
+      "sourceColumn": 2760,
+      "value": 3.709489345550537,
+      "unit": "head/km2, modelled livestock density",
+      "missing": false
+    },
+    {
+      "name": "Omsk region",
+      "longitudeUnwrapped": 73,
+      "latitude": 55,
+      "outputRow": 336,
+      "outputColumn": 660,
+      "sourceRow": 420,
+      "sourceColumn": 3036,
+      "value": 8.27166748046875,
+      "unit": "head/km2, modelled livestock density",
+      "missing": false
+    },
+    {
+      "name": "Altai farmland",
+      "longitudeUnwrapped": 83,
+      "latitude": 52,
+      "outputRow": 372,
+      "outputColumn": 780,
+      "sourceRow": 456,
+      "sourceColumn": 3156,
+      "value": 5.427624225616455,
+      "unit": "head/km2, modelled livestock density",
+      "missing": false
+    },
+    {
+      "name": "Amur region",
+      "longitudeUnwrapped": 128,
+      "latitude": 50,
+      "outputRow": 396,
+      "outputColumn": 1320,
+      "sourceRow": 480,
+      "sourceColumn": 3696,
+      "value": 0.8770678043365479,
+      "unit": "head/km2, modelled livestock density",
+      "missing": false
+    },
+    {
+      "name": "Yakutsk vicinity",
+      "longitudeUnwrapped": 129.7,
+      "latitude": 62,
+      "outputRow": 252,
+      "outputColumn": 1340,
+      "sourceRow": 336,
+      "sourceColumn": 3716,
+      "value": 0.789606511592865,
+      "unit": "head/km2, modelled livestock density",
+      "missing": false
+    },
+    {
+      "name": "Chukotka east of date line",
+      "longitudeUnwrapped": 185,
+      "latitude": 66,
+      "outputRow": 204,
+      "outputColumn": 2004,
+      "sourceRow": 288,
+      "sourceColumn": 60,
+      "value": 0.0,
+      "unit": "head/km2, modelled livestock density",
+      "missing": false
+    },
+    {
+      "name": "Crimea scope diagnostic only",
+      "longitudeUnwrapped": 34,
+      "latitude": 45,
+      "outputRow": 456,
+      "outputColumn": 192,
+      "sourceRow": 540,
+      "sourceColumn": 2568,
+      "value": 13.732789993286133,
+      "unit": "head/km2, modelled livestock density",
+      "missing": false
+    },
+    {
+      "name": "Kaliningrad",
+      "longitudeUnwrapped": 21,
+      "latitude": 54.7,
+      "outputRow": 339,
+      "outputColumn": 36,
+      "sourceRow": 423,
+      "sourceColumn": 2412,
+      "value": 10.803508758544922,
+      "unit": "head/km2, modelled livestock density",
+      "missing": false
+    }
+  ],
+  "verification": {
+    "sourceMetadataHash": "passed",
+    "sourceChunkHashes": "passed",
+    "sourceTransformCrsUnitsAndCodecs": "passed",
+    "allPixelValidSourceCellIdentity": "passed",
+    "allPixelMissingSourceCellIdentity": "passed",
+    "allPixelNumericalGridIdentity": "passed",
+    "allPixelPngClassificationIdentity": "passed",
+    "zeroAndMissingSeparated": "passed",
+    "coverageArithmetic": "passed",
+    "dateLineNativeIndexSpotChecks": "passed"
+  }
+}
