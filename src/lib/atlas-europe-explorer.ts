@@ -416,7 +416,7 @@ export function initEuropeAtlas() {
     query<HTMLElement>('[data-eu-farm-candidates]').hidden=true;commit(false);
   }));
   query('[data-eu-single]').addEventListener('click',()=>{if(farmingView().item){state.single=true;commit(false);}});
-  query('[data-eu-reading-focus]').addEventListener('click',()=>{if(subject().id==='wheat'){state.place='GBR';state.region='west';state.single=true;commit(true);}});
+  query('[data-eu-reading-focus]').addEventListener('click',()=>{if(subject().id==='wheat'){state.single=true;selectCountry('GBR');}});
   query('[data-eu-return-multi]').addEventListener('click',()=>{delete state.single;commit(false);});
   query('[data-eu-overview]').addEventListener('click',returnOverview);
   root.addEventListener('keydown',event=>{if(event.key==='Escape'){
