@@ -23,7 +23,7 @@ const labels = [{name:'オーストラリア',point:[134,-25]}, {name:'ニュー
       <button type="button" data-region-button="all" aria-pressed="true">オセアニア全体</button>
       {Object.entries(oceaniaRegions).map(([id,name]) => <button type="button" data-region-button={id} aria-pressed="false">{name}</button>)}
     </nav>
-    <nav class="oceania-page-navigation" aria-label="オセアニアのページ"><a data-atlas-overview-link href={withBase('/atlas/oceania/overview/')}>概要</a><a href={withBase('/atlas/oceania/nature/')}>4分野の地図</a><span aria-current="page">基礎地図</span></nav>
+    <nav class="oceania-page-navigation" aria-label="オセアニアのページ"><a data-atlas-overview-link href={withBase('/atlas/oceania/overview/')}>概要</a><a data-oceania-learning-link href={withBase('/atlas/oceania/nature/?place=all&scope=all')}>4分野の地図</a><span aria-current="page">基礎地図</span></nav>
     <div class="oceania-layout">
       <section class="oceania-map-card" aria-labelledby="oceania-map-title">
         <div class="oceania-map-heading"><h2 id="oceania-map-title">大陸と島々の位置</h2><p>国・地域を選ぶと拡大します。</p></div>

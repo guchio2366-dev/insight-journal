@@ -93,9 +93,13 @@ function rasterDetail(layer:OceaniaLayer,state?:OceaniaState):OceaniaLayer{
 }
 export function getOceaniaLayer(id:string,state?:OceaniaState):OceaniaLayer{return rasterDetail(oceaniaLayers.find(l=>l.id===id)??oceaniaLayers[0],state);}
 const escape=(s:unknown)=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
+export function oceaniaFocusName(state:OceaniaState):string|undefined{
+ if(state.scope!=='country')return undefined;
+ return ({KIR:'タラワ周辺',PYF:'タヒチ周辺',NZL:'北島・南島周辺'} as Record<string,string>)[state.place];
+}
 export function oceaniaFrame(state:OceaniaState):number[]{
- if(state.scope==='country'&&['KIR','PYF'].includes(state.place)){
-  const b=(climateDetail as any).frames[state.place==='KIR'?'kir-tarawa':'pyf-tahiti'].boundsUnwrapped;
+ if(state.scope==='country'&&['KIR','PYF','NZL'].includes(state.place)){
+  const b=state.place==='NZL'?[165.5,-48.5,179.5,-33.5]:(climateDetail as any).frames[state.place==='KIR'?'kir-tarawa':'pyf-tahiti'].boundsUnwrapped;
   const [x,y]=projectOceania([b[0],b[3]]),[x2,y2]=projectOceania([b[2],b[1]]);
   const w=Math.max(x2-x,(y2-y)*oceaniaWidth/oceaniaHeight)*1.12,h=w*oceaniaHeight/oceaniaWidth;return [(x+x2-w)/2,(y+y2-h)/2,w,h];
  }
@@ -115,7 +119,7 @@ export function renderOceaniaScene(layer:OceaniaLayer,state:OceaniaState,sceneId
  if(layer.id==='density'||layer.kind==='cities')for(const c of cityData.centres){const [x,y]=projectOceania(c.coordinates);const r=layer.kind==='cities'?Math.sqrt(c.population/5000000)*16:3;marks+=`<circle cx="${x}" cy="${y}" r="${r*scale}" fill="#653e82" fill-opacity=".7" stroke="#fff" stroke-width=".6" vector-effect="non-scaling-stroke"><title>${escape(c.name+'：'+Math.round(c.population).toLocaleString()+'人、2020年・2025年都市範囲')}</title></circle>`;}
  const locators=oceaniaCountries.filter(c=>c.extent[2]-c.extent[0]<12&&c.extent[3]-c.extent[1]<12).map(c=>`<circle data-map-place="${c.code}" class="oceania-island-locator" cx="${(c.extent[0]+c.extent[2])/2}" cy="${(c.extent[1]+c.extent[3])/2}" r="${4*scale}"><title>${escape(c.name+'の位置の目印')}</title></circle>`).join('');
  const inset=state.scope==='country'?`<div class="oceania-context-inset"><svg viewBox="0 0 ${oceaniaWidth} ${oceaniaHeight}" aria-label="オセアニア全体の中の表示範囲">${oceaniaCountries.map(c=>`<path d="${c.path}" fill="${c.code===state.place?'#a15a35':'#d3dfda'}"/>`).join('')}<rect x="${frame[0]}" y="${frame[1]}" width="${frame[2]}" height="${frame[3]}" fill="none" stroke="#9c3d23" stroke-width="8"/></svg><span>全体の中の表示範囲</span></div>`:'';
- const labels=oceaniaCountries.filter(c=>state.scope==='country'?c.code===state.place:state.scope==='all'?['AUS','NZL','PNG','FJI','WSM','KIR','PYF'].includes(c.code):getOceaniaTheme(state).countryCodes.includes(c.code)).map(c=>{const [x,y]=labelCoordinates[c.code]?projectOceania(labelCoordinates[c.code]):[(c.extent[0]+c.extent[2])/2,(c.extent[1]+c.extent[3])/2];return x>=frame[0]&&x<=frame[0]+frame[2]&&y>=frame[1]&&y<=frame[1]+frame[3]?`<text x="${x}" y="${y-8*scale}" text-anchor="middle" font-size="${14*scale}">${escape(c.name)}</text>`:'';}).join('');
+ const labels=state.scope==='country'&&['KIR','PYF'].includes(state.place)?'':oceaniaCountries.filter(c=>state.scope==='country'?c.code===state.place:state.scope==='all'?['AUS','NZL','PNG','FJI','WSM','KIR','PYF'].includes(c.code):getOceaniaTheme(state).countryCodes.includes(c.code)).map(c=>{const [x,y]=labelCoordinates[c.code]?projectOceania(labelCoordinates[c.code]):[(c.extent[0]+c.extent[2])/2,(c.extent[1]+c.extent[3])/2];return x>=frame[0]&&x<=frame[0]+frame[2]&&y>=frame[1]&&y<=frame[1]+frame[3]?`<text x="${x}" y="${y-8*scale}" text-anchor="middle" font-size="${14*scale}">${escape(c.name)}</text>`:'';}).join('');
  return `<svg viewBox="${frame.join(' ')}" role="img" aria-label="${escape(layer.title+'・'+(oceaniaNames[state.place]??'オセアニア全体'))}" data-scene="${sceneId}"><defs><clipPath id="${clip}">${paths}</clipPath><pattern id="${missing}" width="${7*scale}" height="${7*scale}" patternUnits="userSpaceOnUse"><rect width="100%" height="100%" fill="#e6e3d6"/><path d="M0 ${7*scale}L${7*scale} 0" stroke="#b3b0a3" stroke-width="${scale}"/></pattern></defs>${context.map(p=>`<path d="${p}" class="oceania-context"/>`).join('')}<g fill="${layer.kind==='raster'?`url(#${missing})`:'#f0eee3'}">${paths}</g>${marks}${oceaniaCountries.map(c=>`<path data-map-place="${c.code}" class="oceania-country${c.code===state.place?' is-selected':''}" d="${c.path}" fill-rule="evenodd"><title>${escape(c.name)}</title></path>`).join('')}${locators}${labels}</svg>${inset}`;
 }
 export function oceaniaCoverage(layer:OceaniaLayer,state:OceaniaState):string{
@@ -125,7 +129,7 @@ export function oceaniaCoverage(layer:OceaniaLayer,state:OceaniaState):string{
   if(cov?.maskCells===0||cov?.validCells===0)text=`${country}：この粗い格子と境界の診断では有効値を確認できません。生産や家畜が0という意味ではありません。`;
  }
  if(country&&(layer.kind==='cities'||layer.id==='density')){const cov=cityData.countryCoverage[state.place as keyof typeof cityData.countryCoverage];if(cov?.sourceUrbanCentres===0)text+=` ${country}の定義を満たす都市中心は未収録です。人口ゼロを意味しません。`;}
- if(state.scope==='country'&&['KIR','PYF'].includes(state.place))text=`${country}：${state.place==='KIR'?'タラワ':'タヒチ'}周辺の代表範囲に拡大。国・地域全体は「全体」で確認できます。 `+text;
+ const focus=oceaniaFocusName(state);if(focus)text=`${country}：${focus}の代表範囲に拡大。離島を含む国・地域全体は「全体」で確認できます。 `+text;
  if(layer.id==='density'&&country){const keys:Record<string,string>={AUS:'australia',NZL:'new-zealand',PNG:'papua-new-guinea',FJI:'fiji',KIR:'tarawa',PYF:'tahiti',WSM:'samoa'};const key=state.scope==='country'?(keys[state.place]??'overview'):'overview';const cov=(populationManifest as any).views[key]?.countryCoverage?.[state.place];if(cov?.landPixels===0)text+=` ${country}は、この表示間隔と陸域境界では島内の画素中心を確保できません。人口ゼロを意味しません。`;}
  return text;
 }

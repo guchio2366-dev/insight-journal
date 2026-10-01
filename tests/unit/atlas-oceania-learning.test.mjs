@@ -13,6 +13,7 @@ async function bundled(relative){
 const api=await bundled('src/data/atlas/oceania-learning.ts');
 const controller=await bundled('src/scripts/atlas-oceania-learning.ts');
 const comparison=await bundled('src/data/atlas/oceania-comparison-reading.ts');
+const geometry=await bundled('src/lib/atlas-oceania-geometry.ts');
 const cities=JSON.parse(readFileSync(new URL('../../public/assets/atlas/oceania-population-v1/centres.json',import.meta.url),'utf8')).centres;
 after(()=>stop());
 
@@ -142,12 +143,12 @@ test('urban-centre circles scale their area with source population and keep dens
   }finally{window.happyDOM.abort();}
 });
 
-function controllerFixture(url){
+function controllerFixture(url,field='agriculture'){
   const window=new Window({url});
-  const root=window.document.createElement('section');root.dataset.field='agriculture';
+  const root=window.document.createElement('section');root.dataset.field=field;
   const options=values=>values.map(value=>`<option value="${value}">${value}</option>`).join('');
   root.innerHTML=`<select data-place>${options(['all',...api.oceaniaCountries.map(c=>c.code)])}</select><select data-layer>${options(api.oceaniaLayers.map(l=>l.id))}</select><select data-compare-layer>${options(api.oceaniaLayers.map(l=>l.id))}</select>`+
-    api.oceaniaThemes.filter(t=>t.field==='agriculture').map(t=>`<button data-theme="${t.id}"></button>`).join('')+
+    api.oceaniaThemes.filter(t=>t.field===field).map(t=>`<button data-theme="${t.id}"></button>`).join('')+
     ['all','theme','country'].map(scope=>`<button data-scope="${scope}"></button>`).join('')+
     '<button data-comparison></button><button data-return></button><div data-normal-view><div data-primary-map></div></div><div data-comparison-view><div data-original-map></div><div data-comparison-map></div></div>'+
     ['primary','original','comparison'].flatMap(prefix=>['title','period','unit','legend'].map(suffix=>`<div data-${prefix}-${suffix}></div>`)).join('')+
@@ -198,5 +199,39 @@ test('comparison reload and named return preserve original crop, country, legend
   }finally{
     for(const session of sessions)session.window.happyDOM.abort();
     for(const key of ['window','document','location','history','ResizeObserver','requestAnimationFrame'])delete globalThis[key];
+  }
+});
+
+test('small-island detail keeps the source raster unobstructed and the selected place in accessible titles',()=>{
+  for(const code of ['KIR','PYF']){
+    const state=api.createOceaniaState(`?place=${code}&scope=country`,'population');
+    const scene=api.renderOceaniaScene(api.getOceaniaLayer('density',state),state);
+    const window=new Window();try{
+      const holder=window.document.createElement('div');holder.innerHTML=scene;
+      assert.equal(holder.querySelectorAll('text[text-anchor="middle"]').length,0);
+      assert.ok(holder.querySelector('svg').getAttribute('aria-label').includes(api.oceaniaCountries.find(c=>c.code===code).name));
+      assert.ok(holder.querySelector('image'));assert.ok(holder.querySelector('.oceania-context-inset'));
+    }finally{window.happyDOM.abort();}
+    assert.match(api.oceaniaCoverage(api.getOceaniaLayer('density',state),state),/代表範囲/);
+  }
+});
+
+test('New Zealand detail focuses on the main islands and port while whole-region reset retains the national geometry',()=>{
+  const state=api.createOceaniaState('?place=NZL&scope=country','industry'),frame=api.oceaniaFrame(state);
+  for(const point of [[176.17,-37.67],[170.5,-45.9],[174.78,-41.29]]){
+    const [x,y]=geometry.projectOceania(point);assert.ok(x>=frame[0]&&x<=frame[0]+frame[2]&&y>=frame[1]&&y<=frame[1]+frame[3]);
+  }
+  assert.ok(frame[3]<200);assert.equal(api.oceaniaFocusName(state),'北島・南島周辺');
+  assert.match(api.oceaniaCoverage(api.getOceaniaLayer('places',state),state),/離島を含む/);
+  const whole=api.renderOceaniaScene(api.getOceaniaLayer('places'),{...state,scope:'all'});
+  assert.ok(whole.includes(api.oceaniaCountries.find(c=>c.code==='NZL').path));
+  assert.deepEqual(api.oceaniaFrame({...state,scope:'all'}),[0,0,geometry.oceaniaWidth,geometry.oceaniaHeight]);
+});
+
+test('selected population context occurs once in the expanded reading for Kiribati, Samoa, Australia and PNG',()=>{
+  for(const [country,key] of [['KIR','tarawa'],['WSM','samoa'],['AUS','australia'],['PNG','papua-new-guinea']]){
+    const {window,root}=controllerFixture(`https://example.test/insight-journal/atlas/oceania/population/?place=${country}&scope=country`,'population');
+    try{assert.equal(root.querySelector('[data-explanation]').textContent.split(api.oceaniaPopulationReading.contexts[key]).length-1,1);}
+    finally{window.happyDOM.abort();for(const key of ['window','document','location','history','ResizeObserver','requestAnimationFrame'])delete globalThis[key];}
   }
 });
