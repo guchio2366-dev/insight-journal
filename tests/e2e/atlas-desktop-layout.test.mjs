@@ -84,7 +84,7 @@ test('West Asia preserves its normal layout across the US compact-laptop correct
       for(const [selector,property] of [['.atlas-primary-grid','grid-template-columns'],['.atlas-map-frame','aspect-ratio'],['.atlas-map-frame','min-height'],['.atlas-tabs','grid-template-columns']]) {
         // The compact US industry map resizes independently; West keeps its usual map.
         if(width===1024 && field==='industry' && selector==='.atlas-map-frame') {
-          assert.equal(west.css(selector,property),property==='aspect-ratio'?'1.55':'430px',`${field} ${width}px usual West ${property}`);
+          assert.equal(west.css(selector,property),property==='aspect-ratio'?'1.55/1':'430px',`${field} ${width}px usual West ${property}`);
         } else {
           assert.equal(west.css(selector,property),north.css(selector,property),`${field} ${width}px ${property}`);
         }

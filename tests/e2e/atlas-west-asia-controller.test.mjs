@@ -8,11 +8,12 @@ async function until(check){for(let i=0;i<200;i++){if(check())return;await new P
 async function setup(route,query='',failBasins=false,viewport={width:1024,height:768}){
  const w=new Window({url:`https://example.com/insight-journal/atlas/west-asia/${route}/${query}`,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true}});
  w.happyDOM.setWindowSize(viewport);
+ const media=[],matchMedia=w.matchMedia.bind(w);w.matchMedia=query=>{const result=matchMedia(query);media.push(result);return result;};
  w.document.body.innerHTML=(await readFile(`dist/atlas/west-asia/${route}/index.html`,'utf8')).replace(/<script\b[\s\S]*?<\/script>/g,'');
  w.ResizeObserver=class{observe(){} disconnect(){}};w.Response=Response;w.Blob=Blob;w.DecompressionStream=DecompressionStream;
  w.fetch=async url=>{if(failBasins&&String(url).endsWith('basins.json'))throw Error('Test: unavailable vector');return new Response(await readFile('public/'+String(url).replace('/insight-journal/','')));};
  w.eval(bundle.outputFiles[0].text);const q=s=>w.document.querySelector(s);
- await until(()=>q('[data-west-loading]').hidden);return {w,q,select:(s,v)=>{q(s).value=v;q(s).dispatchEvent(new w.Event('change'));}};
+ await until(()=>q('[data-west-loading]').hidden);return {w,q,media,select:(s,v)=>{q(s).value=v;q(s).dispatchEvent(new w.Event('change'));}};
 }
 test('小国と観測所の選択、分野間リンク、履歴復元が同じ場所を指す',async()=>{
  const {w,q,select}=await setup('nature','?country=BHR&city=bahrain&topic=climate&year=2024');
@@ -133,7 +134,7 @@ test('比較の戻りは雨温図より先にあり、自動都市の図は閉�
 
 test('比較の全凡例・詳細操作は幅変更と通常主題への復帰で欠落も複製も起こさない',async()=>{
  const from='?topic=wheat&country=TUR&year=2020&map=100,120,400,300';
- const {w,q,select}=await setup('nature','?topic=climate&country=TUR&year=2020&from='+encodeURIComponent(from),false,{width:1180,height:757});
+ const {w,q,media,select}=await setup('nature','?topic=climate&country=TUR&year=2020&from='+encodeURIComponent(from),false,{width:1180,height:757});
  try{
   const root=q('[data-west-atlas]'),legend=q('[data-west-legend]'),extras=q('[data-west-map-extras]'),agri=q('[data-west-agri-switches]'),stats=q('[data-west-stat-controls]');
   const labels=()=>[...legend.querySelectorAll('.west-swatches span,.west-climate-key span')].map(x=>x.textContent).sort();
@@ -146,10 +147,13 @@ test('比較の全凡例・詳細操作は幅変更と通常主題への復帰�
   const unique=()=>{for(const selector of ['[data-west-legend]','[data-west-map-extras]','[data-west-agri-switches]','[data-west-stat-controls]','[data-west-reading-extra]'])assert.equal(root.querySelectorAll(selector).length,1,selector);};
   assert.equal(root.dataset.comparisonWorkspace,'true');assert.ok(legend.closest('[data-west-comparison-key]'));assert.ok(stats.closest('[data-west-more-reading]'));assert.ok(extras.closest('[data-west-more-map]'));
   assert.equal(q('[data-west-comparison-details]').open,false);unique();
-  w.happyDOM.setWindowSize({width:600,height:844});w.dispatchEvent(new w.Event('resize'));await until(()=>root.dataset.comparisonWorkspace==='false');
+  // HappyDOM starts each change listener at false instead of its initial match.
+  // Dispatch the native MQL event explicitly; the real-browser flow verifies it naturally.
+  const resize=(width,height)=>{w.happyDOM.setWindowSize({width,height});w.dispatchEvent(new w.Event('resize'));for(const mql of media)mql.dispatchEvent(new w.MediaQueryListEvent('change',{matches:mql.matches,media:mql.media}));};
+  resize(600,844);await until(()=>root.dataset.comparisonWorkspace==='false');
   assert.ok(legend.closest('.atlas-map-column'));assert.ok(extras.closest('.atlas-map-column'));assert.ok(agri.closest('.atlas-map-column'));assert.ok(stats.closest('.west-reading'));assert.equal(q('[data-west-comparison-details]').hidden,true);
   assert.deepEqual(labels(),expected);assert.deepEqual(marks(),expectedMarks);unique();
-  w.happyDOM.setWindowSize({width:1366,height:768});w.dispatchEvent(new w.Event('resize'));await until(()=>root.dataset.comparisonWorkspace==='true');
+  resize(1366,768);await until(()=>root.dataset.comparisonWorkspace==='true');
   assert.deepEqual(labels(),expected);assert.deepEqual(marks(),expectedMarks);assert.ok(legend.closest('[data-west-comparison-key]'));unique();
   select('[data-west-year]','2024');assert.equal(new URL(w.location.href).searchParams.get('year'),'2024');assert.equal(new URL(q('[data-west-return]').href).searchParams.get('year'),'2020');
   q('[data-west-group="地形"]').click();await until(()=>q('[data-west-loading]').hidden);

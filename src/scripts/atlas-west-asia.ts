@@ -288,7 +288,8 @@ async function init(root:HTMLElement){
  function sizeComparisonMap(){
   if(root.dataset.comparisonWorkspace!=='true')return;
   const grid=$('.atlas-primary-grid'),swipe=$('[data-west-swipe]');
-  const available=window.innerHeight-grid.getBoundingClientRect().top-comparisonKey.getBoundingClientRect().height-16;
+  const reserved=window.innerWidth>=1180?$('.west-reading').getBoundingClientRect().height+8:comparisonKey.getBoundingClientRect().height;
+  const available=window.innerHeight-grid.getBoundingClientRect().top-reserved-16;
   const height=Math.max(180,Math.min(440,available-swipe.getBoundingClientRect().height-8));
   root.style.setProperty('--west-comparison-map-height',height+'px');applyView();
  }
