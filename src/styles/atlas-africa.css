@@ -1,6 +1,7 @@
 /* Africa-only layout. The shared atlas styles and other regions are untouched. */
 .africa-atlas.shell{width:calc(100% - 40px);max-width:1560px;padding:10px 0 40px;color:var(--ink);font-size:14px;line-height:1.65}
 .atlas-layout:has(.africa-atlas) .site-header .header-inner{min-height:58px;padding-block:8px}
+.atlas-layout:has(.africa-atlas) .site-header nav a{padding-block:10px}
 .atlas-layout:has(.africa-atlas) .site-brand small{display:none}
 .africa-atlas [hidden]{display:none!important}
 .africa-heading{display:flex;justify-content:space-between;align-items:center;gap:20px;margin:0 0 10px}
@@ -43,12 +44,14 @@
 .africa-theme-legend span,.africa-legend span{display:inline-flex;gap:6px;align-items:center}
 .africa-theme-legend i,.africa-legend i{display:inline-block;flex:none;width:16px;height:12px;border:1px solid #526b58}
 .africa-theme-legend svg{flex:none}
-.africa-legend>svg{display:block;width:310px;max-width:100%;height:72px}
+.africa-legend>svg{display:block;width:310px;max-width:none;height:72px;flex:none}
+.africa-legend{overflow-x:auto}
 .africa-no-data{background:repeating-linear-gradient(135deg,#eeeae1 0px,#eeeae1 4px,#b5b0a3 4px,#b5b0a3 5px)}
 .africa-themes{display:flex;flex-wrap:wrap;gap:8px;padding:10px 14px}
 .africa-themes:empty{display:none}
 .africa-themes button{min-height:44px;border:1px solid #a1b8a5;border-radius:5px;background:#f5f8ee;padding:8px 13px;font-size:14px;font-weight:700}
 .africa-themes button[aria-pressed=true],.africa-themes button.is-selected{background:#234b43;color:#fff;border-color:#234b43}
+@media(min-width:1001px){.africa-themes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.africa-themes button{line-height:1.45}}
 .africa-map-notes{border-top:1px solid var(--rule);padding:0 14px;font-size:14px}
 .africa-map-notes summary{font-size:13px}
 .africa-caption,.africa-coverage{font-size:14px;line-height:1.7;color:var(--ink-soft);margin:0 0 12px}
