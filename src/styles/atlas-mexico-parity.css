@@ -2,6 +2,13 @@
 .atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field]{display:contents;color:#21343d}
 .mexico-workspace .mexico-learning-workspace{min-width:0;padding:8px 0 0;background:transparent;border:0;border-radius:0}
 .mexico-workspace .mexico-learning-workspace{position:relative}
+.atlas-desktop-shell .mexico-workspace.mexico-industry .country-industry-navigation{display:block;min-width:0;margin:0;padding:5px 8px 0;border:1px solid #c7ccbf;border-bottom:0;background:#fbfaf3}
+.atlas-desktop-shell .mexico-workspace .country-industry-navigation .industry-tab-row{display:flex;gap:4px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;padding-bottom:3px}
+.atlas-desktop-shell .mexico-workspace .country-industry-navigation .industry-tab-row button{flex:none;min-height:44px;padding:8px 15px;border:1px solid transparent;border-radius:4px;background:transparent;color:#344951;font:700 13px/1.3 var(--sans);cursor:pointer;white-space:nowrap}
+.atlas-desktop-shell .mexico-workspace .country-industry-navigation .industry-tab-row button:is([aria-selected=true],[aria-pressed=true]){background:#35515d;color:white}
+.atlas-desktop-shell .mexico-workspace .country-industry-navigation .industry-tab-row button:hover{border-color:#829c94}
+.atlas-desktop-shell .mexico-workspace .country-industry-navigation .industry-tab-row button:focus-visible{outline:3px solid #a94d32;outline-offset:2px}
+.atlas-desktop-shell .mexico-workspace.mexico-industry .country-industry-map-controls{position:absolute;z-index:5;top:7px;left:8px;display:flex;flex-wrap:wrap;align-items:center;gap:3px;max-width:calc(100% - 16px);margin:0;padding:3px;border:1px solid #9eaca3;border-radius:6px;background:#fffef5ed;box-shadow:0 1px 4px #243b4820}
 .mexico-workspace .mexico-learning-workspace>.mexico-controls{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:0;padding:6px;border:1px solid #c7ccbf;border-bottom:0;border-radius:0;background:#fbfaf3}
 .mexico-workspace.mexico-agriculture .mexico-topic-controls{position:absolute;z-index:5;transform:translate(8px,7px);width:fit-content;padding:3px;border:1px solid #9eaca3;border-radius:6px;background:#fffef5ed;box-shadow:0 1px 4px #243b4820}
 .mexico-workspace.mexico-agriculture .mexico-agriculture-topic-tabs{display:flex}
@@ -61,6 +68,9 @@
 .mexico-workspace .mi-map-figure .mi-legend-unit{position:static;width:auto;height:auto;padding:0;margin:5px 0 3px!important;overflow:visible;clip-path:none;white-space:normal;border:0}
 .mexico-workspace .mi-map-figure [data-mi-export-legend],.mexico-workspace .mi-map-figure [data-mi-population-legend]{padding:5px 8px;border:1px solid #c8cfc4;border-top:0;background:#f7f5ec}
 .mexico-workspace .mi-map-figure .mi-legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;line-height:1.4}
+.atlas-desktop-shell .mexico-workspace.mexico-industry .mi-map-figure .mi-legend{display:flex;flex-wrap:wrap;gap:4px 12px;margin:0;padding:0;list-style:none;font-size:12px;line-height:1.4}
+.atlas-desktop-shell .mexico-workspace.mexico-industry .mi-map-figure .mi-legend li{display:inline-flex;align-items:center;gap:4px;min-height:18px;white-space:nowrap}
+.atlas-desktop-shell .mexico-workspace.mexico-industry .mi-map-figure .mi-legend-unit{position:static;width:auto;height:auto;padding:0;margin:3px 0 4px!important;overflow:visible;clip-path:none;white-space:normal;border:0}
 .mexico-workspace .mexico-agriculture-map-heading,.mexico-workspace .mexico-nature-map-title,.mexico-workspace [data-population-map-heading]{margin:0;padding:6px 8px;border:1px solid #c8cfc4;border-top:0;background:#f7f5ec}
 .mexico-workspace .mexico-agriculture-map-heading h2,.mexico-workspace .mexico-nature-map-title h2,.mexico-workspace [data-population-map-heading]{font-size:13px;line-height:1.5}
 .mexico-workspace .mexico-agriculture-period,.mexico-workspace .mexico-nature-map-title span{font-size:11px}
@@ -112,6 +122,7 @@
  .atlas-desktop-shell:has([data-mexico-workspace]) .atlas-news-empty{padding:36px 0}
  .atlas-desktop-shell:has([data-mexico-workspace]) .atlas-news-empty>span{display:grid}
  .atlas-desktop-shell:has([data-mexico-workspace]) .atlas-news-empty h3{margin-top:20px}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field=industry] .mexico-map-frame{height:clamp(320px,calc(100dvh - 400px),480px);min-height:0;max-height:none;aspect-ratio:auto}
 }
 @media(min-width:1200px) and (max-width:1599px){
  .atlas-desktop-shell:not(.is-reading-news):has([data-mexico-workspace]){grid-template-columns:clamp(220px,19vw,340px) minmax(0,1fr);gap:16px}

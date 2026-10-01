@@ -100,7 +100,12 @@ export function initMexicoIndustry(root:HTMLElement):void {
   }
   for(const row of all('[data-mi-data-row]'))row.classList.toggle('is-selected',row.getAttribute('data-mi-data-row')===state.state);
   const reading=config.reading[state.metric];text('[data-mi-topic-heading]',reading.heading);text('[data-mi-topic-text]',reading.text);
-  one<HTMLSelectElement>('[data-mi-metric]')!.value=state.metric;one<HTMLSelectElement>('[data-mi-state-select]')!.value=state.state;one<HTMLSelectElement>('[data-mi-source-view]')!.value=state.sourceView;one<HTMLInputElement>('[data-mi-only]')!.checked=state.only;
+  one<HTMLSelectElement>('[data-mi-metric]')!.value=state.metric;
+  for(const button of all<HTMLButtonElement>('[data-mi-metric-button]')) {
+   const selected=button.dataset.miMetricButton===state.metric;
+   button.setAttribute('aria-selected',String(selected));button.tabIndex=selected?0:-1;
+  }
+  one<HTMLSelectElement>('[data-mi-state-select]')!.value=state.state;one<HTMLSelectElement>('[data-mi-source-view]')!.value=state.sourceView;one<HTMLInputElement>('[data-mi-only]')!.checked=state.only;
   one<HTMLButtonElement>('[data-mi-zoom]')!.setAttribute('aria-pressed',String(state.zoom));text('[data-mi-zoom]',popComparison?(state.zoom?'輸出図を全国の広さに戻す':'輸出の州を拡大'):(state.zoom?'全国の広さに戻す':'読む州を拡大'));
   const current=new URL(window.location.href);
   one<HTMLAnchorElement>('[data-mi-electronics-link]')!.href=industryComparisonUrl(current,state,'electronics').href;one<HTMLAnchorElement>('[data-mi-population-link]')!.href=industryComparisonUrl(current,state,'population').href;
@@ -134,6 +139,15 @@ export function initMexicoIndustry(root:HTMLElement):void {
  });
  one<HTMLSelectElement>('[data-mi-state-select]')!.addEventListener('change',event=>change({state:(event.target as HTMLSelectElement).value}));
  one<HTMLSelectElement>('[data-mi-metric]')!.addEventListener('change',event=>change({metric:(event.target as HTMLSelectElement).value as MexicoIndustryMetric}));
+ for(const button of all<HTMLButtonElement>('[data-mi-metric-button]'))button.addEventListener('click',()=>change({metric:button.dataset.miMetricButton as MexicoIndustryMetric}));
+ one('[data-mi-metric-tabs]')?.addEventListener('keydown',event=>{
+  const keyboard=event as KeyboardEvent;
+  if(!['ArrowLeft','ArrowRight','Home','End'].includes(keyboard.key))return;
+  const buttons=all<HTMLButtonElement>('[data-mi-metric-button]'),index=buttons.indexOf(keyboard.target as HTMLButtonElement);
+  if(index<0)return;
+  const next=keyboard.key==='Home'?0:keyboard.key==='End'?buttons.length-1:(index+(keyboard.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length;
+  keyboard.preventDefault();buttons[next].focus();buttons[next].click();
+ });
  one<HTMLSelectElement>('[data-mi-source-view]')!.addEventListener('change',event=>change({sourceView:(event.target as HTMLSelectElement).value as 'density'|'population'}));
  one<HTMLInputElement>('[data-mi-only]')!.addEventListener('change',event=>change({only:(event.target as HTMLInputElement).checked}));
  one<HTMLButtonElement>('[data-mi-zoom]')!.addEventListener('click',()=>change({zoom:!state.zoom}));

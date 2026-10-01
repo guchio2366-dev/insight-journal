@@ -40,17 +40,19 @@ import '../../styles/atlas-canada-country-parity.css';
    <h1 class="visually-hidden">州ごとの構成から読む、カナダの産業</h1>
    <NorthAmericaCountryFieldNavigation country="canada" field="industry" />
    <p><a href={withBase('/atlas/north-america/canada/population/')} data-canada-population-industry-return hidden>元の都市圏人口・比較へ戻る</a></p>
-<div class="industry-controls">
+<nav class="country-industry-navigation" aria-label="地図に表示する産業"><div class="industry-tab-row" role="tablist" aria-label="産業の分類">{mapMetrics.map(m=><button type="button" role="tab" id={`canada-industry-metric-${m.id}`} data-canada-industry-metric={m.id} aria-controls="canada-industry-map-panel" aria-selected={m.id===metric?'true':'false'} tabindex={m.id===metric?0:-1}>{m.name}</button>)}</div></nav>
+   <div class="canada-workspace atlas-primary-grid" id="canada-industry-map-panel" role="tabpanel" aria-labelledby="canada-industry-metric-mining">
+    <section class="canada-map-column atlas-map-column" aria-label="州内GDP割合の地図と比較">
+     <div class="canada-map-title"><h2 data-canada-industry-map-title>その州の経済で、どの産業が大きい？</h2></div>
+
+     <div class="atlas-map-frame canada-map-frame">
+     <div class="industry-controls country-industry-map-controls">
       <label>年<select data-industry-year>{data.years.map(y=><option value={y} selected={y===year}>{y}年</option>)}</select></label>
-      <label>地図の産業<select data-industry-metric>{mapMetrics.map(m=><option value={m.id} selected={m.id===metric}>{m.name}</option>)}</select></label>
+      <label hidden>地図の産業<select data-industry-metric>{mapMetrics.map(m=><option value={m.id} selected={m.id===metric}>{m.name}</option>)}</select></label>
       <label>読む州・準州<select data-industry-province>{data.provinces.map(p=><option value={p.id} selected={p.id==='Alberta'}>{p.name}</option>)}</select></label>
       <label>比べる州・準州<select data-industry-compare><option value="">比較なし</option>{data.provinces.map(p=><option value={p.id} disabled={p.id==='Alberta'}>{p.name}</option>)}</select></label>
      </div>
-   <div class="canada-workspace atlas-primary-grid">
-    <section class="canada-map-column atlas-map-column" aria-label="州内GDP割合の地図と比較">
-     <div class="canada-map-title"><h2>その州の経済で、どの産業が大きい？</h2></div>
-
-     <div class="atlas-map-frame canada-map-frame"><svg class="canada-map industry-map" data-industry-map viewBox="0 0 900 580" role="group" aria-labelledby="canada-industry-title canada-industry-desc">
+     <svg class="canada-map industry-map" data-industry-map viewBox="0 0 900 580" role="group" aria-labelledby="canada-industry-title canada-industry-desc">
       <title id="canada-industry-title">2025年、鉱業・採石・石油ガス採取の州内GDP割合</title>
       <desc id="canada-industry-desc">2021年の公式境界で13州・準州を表示。色はその州の全産業GDPに占める選択産業の割合です。州を選ぶと右側で値を読めます。ABはアルバータ、ONはオンタリオ、QCはケベック、BCはブリティッシュコロンビア。周辺の米国とグリーンランドは位置の参考です。</desc>
       <defs><clipPath id="industry-map-clip"><rect width="900" height="580" /></clipPath><pattern id="industry-missing" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#f7f4e9"/><path d="M-2,2L2,-2M0,8L8,0M6,10L10,6" stroke="#929a8e" stroke-width="2"/></pattern></defs>
@@ -62,7 +64,7 @@ import '../../styles/atlas-canada-country-parity.css';
        <text class="canada-ocean" x="45" y="440">太平洋</text><text class="canada-ocean" x="800" y="550">大西洋</text><text class="canada-ocean" x="400" y="35">北極海</text><text class="canada-ocean" x="555" y="292">ハドソン湾</text><text class="canada-ocean" x="440" y="555">米国</text>
       </g>
      </svg></div>
-     <ul class="industry-legend" aria-label="州内GDP割合の色の凡例">{legend.map((name,i)=><li><i style={`background:${canadaIndustryColors[i]}`} aria-hidden="true"/>{name}</li>)}</ul>
+     <ul class="industry-legend" data-canada-industry-legend aria-label="州内GDP割合の色の凡例">{legend.map((name,i)=><li><i style={`background:${canadaIndustryColors[i]}`} aria-hidden="true"/>{name}</li>)}</ul>
      <div class="industry-map-actions"><label><input type="checkbox" data-industry-only /> 選んだ州・比較州だけ</label><button type="button" data-industry-focus aria-pressed="false">読む州を拡大</button><button type="button" data-industry-reset>全13州・準州へ</button></div>
      <p class="canada-caption" data-industry-map-status aria-live="polite">2025年・州内GDP割合（%）。13州・準州を表示。</p>
      <p class="canada-caption">濃い色ほど、その州のGDPに占める割合が高い。州の絶対金額や雇用人数の比較ではありません。境界は2021年、統計は選択年です。</p>

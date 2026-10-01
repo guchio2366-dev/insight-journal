@@ -50,7 +50,7 @@ import '../../styles/atlas-canada-country-parity.css';
        <text class="canada-ocean" x="55" y="440">太平洋</text><text class="canada-ocean" x="760" y="490">大西洋</text><text class="canada-ocean" x="400" y="40">北極海</text><text class="canada-ocean" x="550" y="265">ハドソン湾</text>
       </g>
      </svg></div>
-   <nav class="canada-crop-tabs atlas-key" aria-label="公開済みの農畜林業"><a href={withBase('/atlas/north-america/canada/agriculture/')}>カノーラ</a><a href={withBase('/atlas/north-america/canada/agriculture/wheat/')}>小麦</a><a href={withBase('/atlas/north-america/canada/agriculture/beef/')}>肉牛・放牧と飼料</a><a href={withBase('/atlas/north-america/canada/agriculture/forestry/')} aria-current="page">林業</a></nav>
+   <nav class="canada-crop-tabs atlas-key" aria-label="公開済みの農畜林業"><a href={withBase('/atlas/north-america/canada/agriculture/?item=canola')}>カノーラ</a><a href={withBase('/atlas/north-america/canada/agriculture/wheat/')}>小麦</a><a href={withBase('/atlas/north-america/canada/agriculture/beef/')}>肉牛・放牧と飼料</a><a href={withBase('/atlas/north-america/canada/agriculture/forestry/')} aria-current="page">林業</a></nav>
      <div class="canada-map-actions"><button data-forestry-focus aria-pressed="false">選んだ州の位置を拡大</button><button data-forestry-map-reset>全体・森林4分類へ戻る</button></div>
      <p class="canada-caption" data-forestry-map-status aria-live="polite">2020年固定：森林4分類すべて。カナダ全体。</p>
      <ul class="forestry-legend" aria-label="森林被覆の凡例">{data.classes.map(c=><li><i style={`background:rgb(${c.color.join(',')})`} aria-hidden="true"/><span>{c.name}<small>（分類{c.code}）</small></span></li>)}</ul>
@@ -69,7 +69,7 @@ import '../../styles/atlas-canada-country-parity.css';
       {i===0&&<p>Vancouverは沿岸の1観測地点であり、BC全域・山地・森林生育地の代表平均ではありません。</p>}
       {i===2&&<p>Fraser川の位置図から、水量・航行条件や伐採地からの出荷経路は分かりません。</p>}
      </details>)}
-     <details class="canada-reading-section"><summary>読み終えたら</summary><p>森林4分類を一つずつ見る → 州内でも分布が変わる場所を追う → 木材製品と紙製品の金額を比べる → 生育条件・管理・輸送・需要をつなぐ。森林が広いことだけでは加工業の規模が決まらない理由を説明してみましょう。</p><p><a href={natureTargets.ottawa} data-forestry-nature-link={natureTargets.ottawa}>自然環境の入口：首都Ottawaから読む</a> / <a href={withBase('/atlas/north-america/canada/agriculture/beef/')}>肉牛：草地・飼料・管理との関係</a> / <a href={withBase('/atlas/north-america/canada/agriculture/wheat/')}>小麦：用途・輸送・需要</a> / <a href={withBase('/atlas/north-america/canada/agriculture/')}>カノーラ：加工と輸出</a></p></details>
+     <details class="canada-reading-section"><summary>読み終えたら</summary><p>森林4分類を一つずつ見る → 州内でも分布が変わる場所を追う → 木材製品と紙製品の金額を比べる → 生育条件・管理・輸送・需要をつなぐ。森林が広いことだけでは加工業の規模が決まらない理由を説明してみましょう。</p><p><a href={natureTargets.ottawa} data-forestry-nature-link={natureTargets.ottawa}>自然環境の入口：首都Ottawaから読む</a> / <a href={withBase('/atlas/north-america/canada/agriculture/beef/')}>肉牛：草地・飼料・管理との関係</a> / <a href={withBase('/atlas/north-america/canada/agriculture/wheat/')}>小麦：用途・輸送・需要</a> / <a href={withBase('/atlas/north-america/canada/agriculture/?item=canola')}>カノーラ：加工と輸出</a></p></details>
      <details class="canada-scope-details"><summary>公開範囲</summary>   <p class="canola-scope">公開項目：カノーラ・小麦・肉牛と放牧・林業の初回版。その他の主要作物・畜産、林業の伐採量比較は準備中です。農畜林業分野全体の完成を意味しません。</p></details>
     </aside>
    </div>

@@ -9,13 +9,14 @@ import '../../styles/atlas-mexico-parity.css';
 interface Props {field:'nature'|'agriculture'|'industry'|'population';title:string;lead:string;description?:string}
 const {field,title,lead,description=lead}=Astro.props;
 const atlasField=field==='nature'?'natural':field;
-const initialReadingSelected=Astro.url.searchParams.get('reading')!=='overview'&&(Astro.url.searchParams.has('state')||Astro.url.searchParams.has('compare')||(field==='agriculture'&&Astro.url.searchParams.has('metric')));
+const requestedReading=Astro.url.searchParams.get('reading');
+const initialReadingSelected=requestedReading==='item'||(requestedReading!=='overview'&&(Astro.url.searchParams.has('state')||Astro.url.searchParams.has('compare')||((field==='agriculture'||field==='industry')&&Astro.url.searchParams.has('metric'))));
 ---
 <BaseLayout title={`${title}｜メキシコ地理`} {description} compactAtlas>
  <AtlasWorkspaceFrame region="north-america" mapActions={false}>
   <article class={`atlas-explorer mexico-workspace mexico-${field}`} data-field={atlasField} data-mexico-workspace data-mexico-field={field} data-mexico-reading-selected={String(initialReadingSelected)}>
    <script is:inline>
-    {const root=document.currentScript?.parentElement;if(root){const query=new URL(location.href).searchParams;root.dataset.mexicoInitialReadingSelected=String(query.get('reading')!=='overview'&&(query.has('state')||query.has('compare')||(root.dataset.mexicoField==='agriculture'&&query.has('metric'))));}}
+    {const root=document.currentScript?.parentElement;if(root){const url=new URL(location.href),query=url.searchParams;const selected=query.get('reading')==='item'||(query.get('reading')!=='overview'&&(query.has('state')||query.has('compare')||(['agriculture','industry'].includes(root.dataset.mexicoField)&&query.has('metric'))));root.dataset.mexicoInitialReadingSelected=String(selected);if(query.get('reading')!=='overview'&&query.get('reading')!=='item'){query.set('reading',selected?'item':'overview');history.replaceState(history.state,'',url);}}}
    </script>
    <section class="atlas-workspace mexico-learning-workspace" aria-label="メキシコの分野別地図">
     <div class="atlas-compact-heading"><nav aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a><span aria-hidden="true"> / </span><a href={withBase('/atlas/north-america/')}>北米地理</a></nav><span>メキシコ</span></div>
@@ -47,6 +48,14 @@ const initialReadingSelected=Astro.url.searchParams.get('reading')!=='overview'&
    const countrySummary=root.querySelector<HTMLElement>('[data-mexico-country-summary]');
    const reading=root.querySelector<HTMLElement>('.mexico-reading-content');
    const agriculture=root.dataset.mexicoField==='agriculture';
+   const selectionFromURL=(query:URLSearchParams)=>query.get('reading')==='item'||(query.get('reading')!=='overview'&&(query.has('state')||query.has('compare')||((agriculture||root.dataset.mexicoField==='industry')&&query.has('metric'))));
+   const commitReadingMode=(selected:boolean,mode:'push'|'replace'|'none')=>{
+    if(mode==='none')return;
+    const url=new URL(location.href),readingMode=selected?'item':'overview';
+    if(url.searchParams.get('reading')===readingMode)return;
+    url.searchParams.set('reading',readingMode);
+    if(mode==='push')history.pushState(history.state,'',url);else history.replaceState(history.state,'',url);
+   };
    const clearAgricultureSelection=()=>{
     if(!agriculture||root.dataset.mexicoReadingSelected==='true')return;
     const select=root.querySelector<HTMLSelectElement>('[data-agriculture-state]');
@@ -62,20 +71,26 @@ const initialReadingSelected=Astro.url.searchParams.get('reading')!=='overview'&
     }
     const description=root.querySelector('#mexico-agriculture-svg-desc');
     if(description)description.textContent='全国32州の農林業指標の分布です。指標と単位は地図下の見出し・凡例に記載しています。州を選ぶと、その州の値と説明を読めます。';
-    const url=new URL(location.href);url.searchParams.set('reading','overview');history.replaceState(null,'',url);root.dataset.mexicoOverviewUrl=url.href;
    };
-   const choose='[data-agriculture-state],[data-agriculture-pick],[data-agriculture-state-code],[data-agriculture-metric],[data-mexico-nature-state-select],[data-mexico-nature-state],[data-mexico-nature-compare-state],[data-mexico-nature-compare-symbol],[data-mi-state-select],[data-mi-metric],[data-mi-shape],[data-mi-population-circle],[data-population-state],[data-population-state-shape],[data-population-state-symbol]';
-   const showSelection=(selected:boolean)=>{
-    const wasOverview=root.dataset.mexicoReadingSelected==='false';
+   const choose='[data-agriculture-state],[data-agriculture-pick],[data-agriculture-state-code],[data-agriculture-metric],[data-agriculture-nature-comparison],select[data-mexico-nature-state-select],path[data-mexico-nature-state],path[data-mexico-nature-compare-state],circle[data-mexico-nature-compare-symbol],button[data-mexico-nature-view],input[data-mexico-nature-only],button[data-mexico-nature-focus],a[data-mexico-nature-compare-link],a[data-mexico-nature-plain-return],a[data-mexico-nature-source-return],[data-mi-state-select],[data-mi-metric],[data-mi-metric-button],[data-mi-source-view],[data-mi-only],[data-mi-zoom],[data-mi-shape],[data-mi-population-circle],[data-mi-electronics-link],[data-mi-population-link],[data-mi-return],[data-population-state],[data-population-state-shape],[data-population-state-symbol],[data-population-view],[data-population-only],[data-population-scale-link],[data-population-industry-link],[data-population-nature-link],[data-population-return]';
+   const readingLinks='[data-agriculture-nature-comparison],[data-mexico-nature-compare-link],[data-mexico-nature-plain-return],[data-mexico-nature-source-return],[data-mi-electronics-link],[data-mi-population-link],[data-mi-return],[data-population-scale-link],[data-population-return],[data-population-industry-link],[data-population-nature-link]';
+   const prepareReadingLinks=()=>{
+    for(const link of root.querySelectorAll<HTMLAnchorElement>(readingLinks)){
+     const href=link.getAttribute('href');if(!href)continue;
+     const url=new URL(href,location.href);
+     if(url.origin===location.origin&&url.searchParams.get('reading')!=='item'){url.searchParams.set('reading','item');link.href=url.href;}
+    }
+   };
+   const showSelection=(selected:boolean,mode:'push'|'replace'|'none'='replace')=>{
+    commitReadingMode(selected,mode);
     root.dataset.mexicoReadingSelected=String(selected);
-    if(overview)overview.hidden=selected;
+    if(overview){overview.hidden=selected;overview.style.display=selected?'':'block';}
     if(countrySummary)countrySummary.hidden=selected;
     if(back)back.hidden=!selected;
     if(agriculture){
      if(reading)reading.hidden=!selected;
      if(!selected)clearAgricultureSelection();
      else{
-      const url=new URL(location.href);url.searchParams.delete('reading');if(wasOverview&&location.href===root.dataset.mexicoOverviewUrl)history.pushState(null,'',url);else history.replaceState(null,'',url);
       const select=root.querySelector<HTMLSelectElement>('[data-agriculture-state]');
       const code=select?.value||root.dataset.mexicoReadingState||'25';
       if(select)select.value=code;
@@ -88,16 +103,37 @@ const initialReadingSelected=Astro.url.searchParams.get('reading')!=='overview'&
       }
      }
     }
+    prepareReadingLinks();
    };
-   root.addEventListener('change',event=>{if(event.target instanceof Element&&event.target.closest(choose))showSelection(true);});
-   root.addEventListener('click',event=>{if(event.target instanceof Element&&event.target.closest(choose)&&!event.target.closest('select'))showSelection(true);});
-   root.addEventListener('keydown',event=>{if(['Enter',' '].includes(event.key)&&event.target instanceof Element&&event.target.closest(choose)&&!event.target.closest('select'))showSelection(true);});
-   back?.addEventListener('click',()=>showSelection(false));
-   root.addEventListener('keydown',event=>{if(agriculture&&event.key==='Escape')showSelection(false);});
-   window.addEventListener('popstate',()=>{const query=new URL(location.href).searchParams;showSelection(query.get('reading')!=='overview'&&query.has('state'));});
+   const beforeNative=new WeakMap<Event,{href:string;length:number}>();
+   const captureChoice=(event:Event)=>{
+    if(!(event.target instanceof Element)||!event.target.closest(choose))return;
+    beforeNative.set(event,{href:location.href,length:history.length});
+    const link=event.target.closest<HTMLAnchorElement>('a');
+    if(link){const url=new URL(link.href,location.href);if(url.origin===location.origin){url.searchParams.set('reading','item');link.href=url.href;}}
+   };
+   const chooseReading=(event:Event)=>{
+    if(!(event.target instanceof Element)||!event.target.closest(choose))return;
+    if(event.type!=='change'&&event.target.closest('select,input'))return;
+    if(event.type==='click'){const click=event as MouseEvent;if(click.button!==0||click.ctrlKey||click.metaKey||click.altKey||click.shiftKey)return;}
+    const before=beforeNative.get(event);
+    setTimeout(()=>{
+     const nativePushed=before&&(before.href!==location.href||before.length!==history.length);
+     showSelection(true,nativePushed?'replace':'push');
+    },0);
+   };
+   for(const type of ['change','click','keydown'])root.addEventListener(type,captureChoice,{capture:true});
+   root.addEventListener('change',chooseReading);
+   root.addEventListener('click',chooseReading);
+   const keyboardChoices='path[data-agriculture-state-code],path[data-mexico-nature-state],path[data-mexico-nature-compare-state],circle[data-mexico-nature-compare-symbol],[data-mi-shape],[data-mi-population-circle],[data-population-state-shape],[data-population-state-symbol]';
+   root.addEventListener('keydown',event=>{if(['Enter',' '].includes(event.key)&&event.target instanceof Element&&event.target.closest(keyboardChoices))chooseReading(event);});
+   back?.addEventListener('click',()=>showSelection(false,'push'));
+   root.addEventListener('keydown',event=>{if(agriculture&&event.key==='Escape')showSelection(false,'push');});
+   window.addEventListener('popstate',()=>showSelection(selectionFromURL(new URL(location.href).searchParams),'none'));
    root.dataset.mexicoReadingReady='true';
    const query=new URL(location.href).searchParams;
-   showSelection((root.dataset.mexicoInitialReadingSelected??String(query.get('reading')!=='overview'&&(query.has('state')||query.has('compare')||(agriculture&&query.has('metric')))))==='true');
+   showSelection((root.dataset.mexicoInitialReadingSelected??String(selectionFromURL(query)))==='true');
+   new MutationObserver(prepareReadingLinks).observe(root,{subtree:true,attributes:true,attributeFilter:['href']});
    if(agriculture){
     const updateTopics=()=>{const forestry=!!root.querySelector('[data-agriculture-reading="pine"]:not([hidden])');for(const link of root.querySelectorAll<HTMLElement>('[data-mexico-agriculture-topic]')){if((link.dataset.mexicoAgricultureTopic==='forestry')===forestry)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');}};
     new MutationObserver(updateTopics).observe(root,{subtree:true,attributes:true,attributeFilter:['hidden']});

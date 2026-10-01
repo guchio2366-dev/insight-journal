@@ -5,7 +5,7 @@ import path from 'node:path';
 import {build} from 'esbuild';
 import {Window} from 'happy-dom';
 import {industryExportColor,industryValueText} from '../../src/lib/atlas-mexico-industry.ts';
-import {mexicoDensityColor,mexicoPopulationRadius,mexicoPopulationSymbolColor,mexicoPopulationSymbolOpacity,mexicoPopulationSelectedSymbolOpacity} from '../../src/lib/atlas-mexico-population.ts';
+import {formatMexicoDensity,mexicoDensityColor,mexicoPopulationRadius,mexicoPopulationSymbolColor,mexicoPopulationSymbolOpacity,mexicoPopulationSelectedSymbolOpacity} from '../../src/lib/atlas-mexico-population.ts';
 
 const folder='atlas/north-america/mexico/industry',data=JSON.parse(await readFile('src/data/atlas/mexico/industry.json','utf8')),population=JSON.parse(await readFile('src/data/atlas/mexico/population.json','utf8'));
 // These three local TypeScript modules need no package lookup above the restricted checkout.
@@ -18,6 +18,11 @@ const visible=(d,slot,selector='[data-mi-shape]')=>[...d.querySelector(`[data-mi
 
 test('Industry SSR preserves 32 geography keys, both source columns, accessible state selection and closed long detail',async()=>{
  const w=await page('',false);try{const d=w.document;assert.equal(d.querySelectorAll('[data-mi-map]').length,2);assert.equal(d.querySelectorAll('[data-mi-shape]').length,64);assert.equal(d.querySelectorAll('[data-mi-context-state]').length,64);assert.equal(d.querySelectorAll('[data-mi-data-row]').length,32);assert.equal(d.querySelector('[data-mi-figure=secondary]').hidden,true);assert.equal(d.querySelector('[data-mi-reading-comparison]').hidden,true);assert.equal(d.querySelector('.mi-all-data').open,false);assert.equal(d.querySelector('.mexico-sources details').open,false);
+ assert.deepEqual([...d.querySelectorAll('[data-mi-metric-button]')].map(button=>({id:button.dataset.miMetricButton,label:button.textContent})),data.metrics.map(metric=>({id:metric.id,label:metric.name})));
+ assert.equal(d.querySelector('[data-mi-metric]').hidden,true);
+ assert.equal(d.querySelector('[data-mi-state-select]').closest('[data-mi-figure]').dataset.miFigure,'primary');
+ assert.equal(d.querySelector('[data-mi-source-view]').closest('[data-mi-figure]').dataset.miFigure,'primary');
+ assert.equal(d.querySelector('[data-mi-figure=secondary] [data-mi-supplementary-controls]'),null);
  for(const slot of ['primary','secondary'])for(const state of data.states){const shape=d.querySelector(`[data-mi-map=${slot}] [data-mi-shape="${state.id}"]`);assert.ok(shape.getAttribute('d').length>50);assert.equal(shape.getAttribute('role'),'button');assert.equal(shape.getAttribute('tabindex'),'0');assert.equal(shape.getAttribute('fill-rule'),'evenodd');assert.ok(shape.querySelector('title').textContent.includes(state.name));assert.ok(population.states.find(s=>s.stateCode===state.id));}
  for(const row of data.rows){const tr=d.querySelector(`[data-mi-data-row="${row.id}"]`);for(const metric of ['transport','electronics']){const v=row.values[metric];assert.ok(tr.textContent.includes(v.sourceStatus));assert.ok(tr.textContent.includes(industryValueText(v)));if(v.sourceValue!==null)assert.ok(tr.textContent.includes(v.sourceValue.toLocaleString('ja-JP')));}}
  for(const file of ['industry-selected-2025.csv','official-metadata.txt','official-data-dictionary.csv','manifest.json']){assert.ok(d.querySelector(`a[href$="${file}"]`));await access(`dist/assets/atlas/mexico-industry-v1/${file}`);}
@@ -26,16 +31,43 @@ test('Industry SSR preserves 32 geography keys, both source columns, accessible 
 });
 
 test('All 32 states and both industries show the original absolute amount, correct status colour and selected source table',async()=>{
- const w=await page();try{const d=w.document;for(const metric of ['transport','electronics']){change(w,'[data-mi-metric]',metric);for(const row of data.rows){change(w,'[data-mi-state-select]',row.id);const v=row.values[metric],shape=d.querySelector(`[data-mi-map=primary] [data-mi-shape="${row.id}"]`);assert.equal(shape.getAttribute('fill'),industryExportColor(v.value,v.status,'mi-primary'));assert.equal(shape.dataset.miStatus,v.status);assert.equal(shape.getAttribute('aria-pressed'),'true');assert.equal(shape.getAttribute('aria-label'),shape.querySelector('title').textContent);assert.equal(d.querySelector(`[data-mi-value="${metric}"]`).textContent,industryValueText(v));assert.equal(d.querySelector(`[data-mi-stats-status="${metric}"]`).textContent,v.sourceStatus);assert.equal(new URL(w.location).searchParams.get('state'),row.id);assert.equal(d.querySelectorAll('.mi-all-data tr.is-selected').length,1);assert.equal(visible(d,'primary').length,32);}}
+ const w=await page();try{const d=w.document;for(const metric of ['transport','electronics']){d.querySelector(`[data-mi-metric-button=${metric}]`).click();assert.equal(d.querySelector('[data-mi-metric]').value,metric);assert.equal(d.querySelector(`[data-mi-metric-button=${metric}]`).getAttribute('aria-selected'),'true');for(const row of data.rows){change(w,'[data-mi-state-select]',row.id);const v=row.values[metric],shape=d.querySelector(`[data-mi-map=primary] [data-mi-shape="${row.id}"]`);assert.equal(shape.getAttribute('fill'),industryExportColor(v.value,v.status,'mi-primary'));assert.equal(shape.dataset.miStatus,v.status);assert.equal(shape.getAttribute('aria-pressed'),'true');assert.equal(shape.getAttribute('aria-label'),shape.querySelector('title').textContent);assert.equal(d.querySelector(`[data-mi-value="${metric}"]`).textContent,industryValueText(v));assert.equal(d.querySelector(`[data-mi-stats-status="${metric}"]`).textContent,v.sourceStatus);assert.equal(new URL(w.location).searchParams.get('state'),row.id);assert.equal(d.querySelectorAll('.mi-all-data tr.is-selected').length,1);assert.equal(visible(d,'primary').length,32);}}
  assert.equal(d.querySelector('[data-mexico-field=industry]').dataset.miRenderer,'svg');assert.equal(d.querySelector('[data-mi-fallback-note]').hidden,true);
  }finally{await w.happyDOM.close();}
+});
+
+test('Category buttons keep keyboard, native selection, URL, reload and actual history in sync',async()=>{
+ const w=await page('?state=14&metric=electronics');let reload;
+ try{
+  const d=w.document,q=selector=>d.querySelector(selector),button=metric=>q(`[data-mi-metric-button=${metric}]`);
+  const assertMetric=metric=>{
+   const name=data.metrics.find(item=>item.id===metric).name;
+   assert.equal(q('[data-mi-metric]').value,metric);
+   assert.equal(q('[data-mi-map=primary]').dataset.miKind,metric);
+   assert.equal(new URL(w.location).searchParams.get('metric'),metric);
+   assert.match(q('#mi-primary-title').textContent,new RegExp(name));
+   assert.match(q('[data-mi-map-heading=primary]').textContent,new RegExp(name));
+   assert.match(q('[data-mi-topic-heading]').textContent,new RegExp(name));
+   assert.equal(q('[data-mi-export-legend=primary]').hidden,false);
+   for(const item of data.metrics){assert.equal(button(item.id).getAttribute('aria-selected'),String(item.id===metric));assert.equal(button(item.id).tabIndex,item.id===metric?0:-1);}
+  };
+  assertMetric('electronics');
+  button('transport').click();assertMetric('transport');assert.equal(q('[data-mi-state-select]').value,'14');
+  w.history.back();await w.happyDOM.waitUntilComplete();assertMetric('electronics');
+  w.history.forward();await w.happyDOM.waitUntilComplete();assertMetric('transport');
+  button('transport').focus();button('transport').dispatchEvent(new w.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));assertMetric('electronics');assert.equal(d.activeElement,button('electronics'));
+  button('electronics').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Home',bubbles:true}));assertMetric('transport');
+  button('transport').dispatchEvent(new w.KeyboardEvent('keydown',{key:'End',bubbles:true}));assertMetric('electronics');
+  change(w,'[data-mi-metric]','transport');assertMetric('transport');
+  reload=await page(w.location.search);assert.equal(reload.document.querySelector('[data-mi-metric-button=transport]').getAttribute('aria-selected'),'true');assert.equal(reload.document.querySelector('[data-mi-state-select]').value,'14');
+ }finally{await w.happyDOM.close();if(reload)await reload.happyDOM.close();}
 });
 
 test('The transport–electronics destination has a dedicated explanation, two common legends and two selected-state distributions',async()=>{
  const w=await page('?compare=electronics&state=05&metric=transport&only=1&zoom=1');let reload;try{const d=w.document,q=s=>d.querySelector(s);assert.equal(q('[data-mi-figure=secondary]').hidden,false);assert.equal(q('[data-mi-reading-comparison]').hidden,false);assert.equal(d.querySelectorAll('[data-mi-reading-normal]:not([hidden])').length,0);assert.match(q('[data-mi-reading-comparison-title]').textContent,/輸送機器.*電子機器/);assert.deepEqual([...d.querySelectorAll('[data-mi-export-legend]')].map(el=>el.querySelector('ul').textContent),[q('[data-mi-export-legend=primary] ul').textContent,q('[data-mi-export-legend=primary] ul').textContent]);
  for(const slot of ['primary','secondary']){assert.deepEqual(visible(d,slot).map(el=>el.dataset.miShape),['05']);assert.equal(visible(d,slot,'[data-mi-context-state]').length,32);assert.notEqual(q(`[data-mi-map=${slot}]`).getAttribute('viewBox'),'0 0 900 580');}
  change(w,'[data-mi-state-select]','06');assert.equal(q('[data-mi-map=primary] [data-mi-shape="06"]').getAttribute('fill'),'url(#mi-primary-confidential)');assert.equal(q('[data-mi-map=secondary] [data-mi-shape="06"]').getAttribute('fill'),'url(#mi-secondary-unknown)');
- q('[data-mi-map=primary] [data-mi-shape="14"]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));assert.equal(q('[data-mi-state-select]').value,'14');change(w,'[data-mi-metric]','electronics');assert.equal(q('[data-mi-map=primary]').dataset.miKind,'electronics');assert.equal(q('[data-mi-map=secondary]').dataset.miKind,'transport');reload=await page(w.location.search);assert.equal(reload.document.querySelector('[data-mi-state-select]').value,'14');assert.equal(reload.document.querySelector('[data-mi-only]').checked,true);const back=new URL(q('[data-mi-return]').href);assert.equal(back.searchParams.get('state'),'14');assert.equal(back.searchParams.get('metric'),'electronics');assert.equal(back.searchParams.has('compare'),false);assert.match(q('[data-mi-return]').textContent,/ハリスコ.*電子機器/);
+ q('[data-mi-map=primary] [data-mi-shape="14"]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));assert.equal(q('[data-mi-state-select]').value,'14');q('[data-mi-metric-button=electronics]').click();assert.equal(q('[data-mi-map=primary]').dataset.miKind,'electronics');assert.equal(q('[data-mi-map=secondary]').dataset.miKind,'transport');reload=await page(w.location.search);assert.equal(reload.document.querySelector('[data-mi-state-select]').value,'14');assert.equal(reload.document.querySelector('[data-mi-only]').checked,true);const back=new URL(q('[data-mi-return]').href);assert.equal(back.searchParams.get('state'),'14');assert.equal(back.searchParams.get('metric'),'electronics');assert.equal(back.searchParams.has('compare'),false);assert.match(q('[data-mi-return]').textContent,/ハリスコ.*電子機器/);
  q('[data-mi-all]').click();assert.equal(visible(d,'primary').length,32);assert.equal(visible(d,'secondary').length,32);assert.equal(q('[data-mi-map=primary]').getAttribute('viewBox'),'0 0 900 580');assert.equal(new URL(w.location).searchParams.get('compare'),'electronics');
  }finally{await w.happyDOM.close();if(reload)await reload.happyDOM.close();}
 });
@@ -43,6 +75,7 @@ test('The transport–electronics destination has a dedicated explanation, two c
 test('Population density is retained as the source distribution with original bins, year, units, selection and a targeted return',async()=>{
  const w=await page('?compare=population&state=08&from=population&sourceView=density&only=1&next=https://evil.example/');try{const d=w.document,q=s=>d.querySelector(s),source=population.states.find(s=>s.stateCode==='08');assert.equal(q('[data-mi-figure=secondary]').style.order,'0');assert.equal(q('[data-mi-figure=primary]').style.order,'1');assert.equal(q('[data-mi-map=secondary]').dataset.miKind,'density');assert.equal(q('[data-mi-map=secondary] [data-mi-shape="08"]').getAttribute('fill'),mexicoDensityColor(source.density,source.densityStatus));assert.equal(q('[data-mi-population-legend]').hidden,false);assert.equal(q('[data-mi-export-legend=secondary]').hidden,true);assert.equal(q('[data-mi-export-legend=primary]').hidden,false);assert.equal(q('[data-mi-population-circles]').hasAttribute('hidden'),true);assert.equal(q('[data-mi-density-legend]').hidden,false);assert.match(q('[data-mi-reading-comparison-title]').textContent,/人口.*輸出工業/);assert.match(q('[data-mi-period-note]').textContent,/2020.*2025/s);assert.match(q('[data-mi-population-card-value]').textContent,/人\/km²/);assert.equal(d.querySelectorAll('[data-mi-reading-normal]:not([hidden])').length,0);for(const slot of ['primary','secondary'])assert.deepEqual(visible(d,slot).map(el=>el.dataset.miShape),['08']);
  const back=new URL(q('[data-mi-return]').href);assert.equal(back.origin,'https://example.com');assert.equal(back.pathname,'/insight-journal/atlas/north-america/mexico/population/');assert.deepEqual(Object.fromEntries(back.searchParams),{view:'density',state:'08',only:'1'});assert.match(q('[data-mi-return]').textContent,/チワワ.*元の人口密度/);assert.equal(q('[data-mi-value-card=electronics]').hidden,true);
+ q('[data-mi-metric-button=electronics]').click();assert.equal(q('[data-mi-map=primary]').dataset.miKind,'electronics');assert.equal(q('[data-mi-map=secondary]').dataset.miKind,'density');assert.equal(q('[data-mi-source-view-control]').hidden,false);assert.equal(q('[data-mi-source-view]').closest('[data-mi-figure]').dataset.miFigure,'primary');assert.equal(q('[data-mi-value-card=electronics]').hidden,false);assert.equal(q('[data-mi-value-card=transport]').hidden,true);assert.equal(q('[data-mi-population-card-value]').textContent,`${formatMexicoDensity(source.density,source.densityStatus)} 人/km²`);assert.deepEqual(Object.fromEntries(new URL(q('[data-mi-return]').href).searchParams),{view:'density',state:'08',only:'1'});
  }finally{await w.happyDOM.close();}
 });
 
