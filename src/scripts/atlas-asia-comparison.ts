@@ -120,7 +120,8 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
   }
   function renderMainLegend(state:AsiaState){
     if(!mainLegend)return;
-    const active=!state.back&&state.field!=='agriculture';mainLegend.hidden=!active;
+    const agricultureTopic=state.topic??(state.city?'rice':config.presentation?'overview':'rice');
+    const active=!state.back&&(state.field!=='agriculture'||agricultureTopic!=='overview');mainLegend.hidden=!active;
     if(!active){mainKey='';++mainRevision;mainLegend.replaceChildren();return;}
     const next=[state.field,state.topic,state.detail,state.place,state.city,state.overlay,state.farms].join('|');
     if(next===mainKey)return;mainKey=next;const seq=++mainRevision;mainLegend.textContent='地図の凡例を読み込んでいます。';

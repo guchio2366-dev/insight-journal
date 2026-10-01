@@ -151,6 +151,30 @@ test('初期の自然・人口・産業にも年・単位・全凡例を常時�
   let main=await showMain('natural','climate');assert.equal(main.hidden,false);assert.equal(main.closest('details'),null);assert.match(main.textContent,/1991–2020年.*ケッペン＝ガイガー分類/);assert.equal(main.querySelectorAll('i').length,2);
   main=await showMain('population','density');assert.match(main.textContent,/2020年の推計.*人\/km²/);assert.equal(main.querySelectorAll('i').length,7);
   main=await showMain('industry','trade-exports');assert.match(main.textContent,/2023年.*百万米ドル/);assert.equal(main.querySelectorAll('i').length,6);assert.equal(fetches,2);
-  Object.assign(state,{field:'agriculture',topic:'wheat'});controller.render(state);assert.equal(main.hidden,true);assert.equal(main.children.length,0);
+  Object.assign(state,{field:'agriculture',topic:'overview'});controller.render(state);assert.equal(main.hidden,true);assert.equal(main.children.length,0);
   const legacy=setup(base,{field:'industry',topic:'trade-exports'},fetcher);legacy.controller.render({...legacy.state,back:null});await new Promise(resolve=>setImmediate(resolve));assert.equal(fetches,2);
+});
+
+test('米の個別図と都市選択には全色区分・年・単位を表示し、農畜産の全体図には重複させない',async()=>{
+  let fetches=0;
+  const {root,controller,state,config}=setup(base,{field:'agriculture',topic:'rice'},async()=>{fetches++;throw Error('米の凡例に取得は不要');},true);
+  config.regionId='southeast-asia';
+  const main=root.querySelector('[data-reading-map-legend]');
+  async function renderRice(topic,city){
+    Object.assign(state,{field:'agriculture',topic,city,back:null});controller.render(state);
+    const deadline=Date.now()+5000;
+    while(!main.querySelector('[data-comparison-compact-role="main"]')){assert.ok(Date.now()<deadline,main.textContent);await new Promise(resolve=>setImmediate(resolve));}
+    assert.equal(main.hidden,false);assert.equal(main.closest('details'),null);
+    assert.match(main.textContent,/米の収穫面積.*2020年の推計.*ha\/格子/);
+    assert.deepEqual([...main.querySelectorAll('.asia-comparison-compact-key>span')].map(e=>e.textContent),['1–10ha未満','10–100ha未満','100–1,000ha未満','1,000–5,000ha未満','5,000ha以上']);
+  }
+  await renderRice('rice',null);
+  for(const topic of ['overview',null]){
+    Object.assign(state,{topic,city:null});controller.render(state);assert.equal(main.hidden,true);assert.equal(main.children.length,0);
+    await renderRice(null,'bangkok');
+  }
+  Object.assign(state,{topic:'wheat',city:null});controller.render(state);
+  const deadline=Date.now()+5000;while(!main.querySelector('[data-comparison-compact-role="main"]')){assert.ok(Date.now()<deadline);await new Promise(resolve=>setImmediate(resolve));}
+  assert.match(main.textContent,/小麦の収穫面積.*2020年.*ha\/格子/);assert.equal(main.querySelectorAll('i').length,3);
+  assert.equal(fetches,0);
 });
