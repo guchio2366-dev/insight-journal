@@ -36,7 +36,7 @@ async function init(root:HTMLElement){
  };
  let data:any,geography:any,state:any,comparisonSource:any=null,cityExplicit=false,pointSide='target',split=50,renderVersion=0,pointVersion=0;
  let unavailable='',readingOverview=!new URLSearchParams(location.search).has('topic')&&!new URLSearchParams(location.search).has('country')&&!new URLSearchParams(location.search).has('city');
- const fieldIntroductions:Record<string,string>={natural:'気候・地形・水系を重ね、地域の自然条件を読みます。水の利用や暮らしは、灌漑・技術・交通・社会の制度によっても変わります。',agriculture:'作物・家畜・森林の分布を、水の確保と土地利用から読みます。加工・交通・市場が生産と食料供給をつなぎ、同じ自然条件でも農業の形は変わります。',industry:'資源、製造業、港湾、サービスを同じ国別資料で比べます。自然資源の有無だけで産業は決まらず、技術・交通・市場・政策も関わります。',population:'人口の集中を、水系・地形・都市の位置と合わせて読みます。仕事・交通・歴史・移動も分布に関わり、自然条件だけで説明できません。'};
+ const fieldIntroductions:Record<string,string>={natural:'気候・地形・水系を重ね、地域の自然条件を読みます。水の利用や暮らしは、灌漑・技術・交通・社会の制度によっても変わります。',agriculture:'作物・家畜・森林の分布を、水の確保と土地利用から読みます。加工・交通・市場が生産と食料供給をつなぎ、同じ自然条件でも農業の形は変わります。',industry:'資源、製造業、港湾、サービスを同じ国別資料で比べます。自然資源の有無だけで産業は決まらず、技術・交通・市場・政策も関わります。',population:'人口の分布を、水・地形と、仕事・交通・移動のつながりから読みます。'};
  const standardGroup=(t:any)=>field==='agriculture'?(t.id==='forest'?'林業':'農畜産'):field==='industry'?'地域主要産業':field==='population'?'人口分布':t.group;
  const fail=(message:string)=>{loading.hidden=false;loading.textContent=message;retry.hidden=false;const more=retry.closest<HTMLDetailsElement>('[data-west-comparison-details]');if(more)more.open=true;};
  const project=([lng,lat]:number[])=>[(lng*Math.PI/180*6378137-data.bounds3857[0])/(data.bounds3857[2]-data.bounds3857[0])*data.width,(data.bounds3857[3]-Math.log(Math.tan(Math.PI/4+lat*Math.PI/360))*6378137)/(data.bounds3857[2]-data.bounds3857[0])*data.width];
