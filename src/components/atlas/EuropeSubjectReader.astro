@@ -10,10 +10,11 @@ const copy=europeReaderCopy(layer);
   <button class="eu-reader-back" type="button" data-eu-overview hidden>← 欧州の農林業</button>
   <h2 id="eu-subject-title" data-eu-subject-title>{copy.title}</h2>
   <p class="eu-reader-takeaway" data-eu-subject-takeaway>{copy.takeaway}</p>
-  <nav class="eu-comparison-links" data-eu-comparison-links aria-label="分布の条件を比較する"></nav>
-  <p class="eu-visibility-note" data-eu-hidden-note hidden></p>
+  <button type="button" data-eu-reading-focus hidden>英国の小麦だけを表示して地域例を確かめる</button>
   <button type="button" data-eu-single hidden></button>
   <button type="button" data-eu-return-multi hidden>元の分布表示に戻る</button>
+  <nav class="eu-comparison-links" data-eu-comparison-links aria-label="分布の条件を比較する"></nav>
+  <p class="eu-visibility-note" data-eu-hidden-note hidden></p>
   </div>
   <details class="eu-reader-body"><summary>説明・対象範囲・出典</summary>
   <p data-eu-subject-intro>{copy.body}</p>

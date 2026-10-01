@@ -119,6 +119,17 @@ test('specific sourced readings select useful river, population, forestry and cl
   assert.doesNotMatch(changedRiver, /ライン川の水地図/);
 });
 
+test('national population and GDP indicators keep their own meaning in every comparison entrance',()=>{
+  for(const id of ['urban','age','growth','manufacturing','industry','services']) {
+    const layer=europeLayers.find(l=>l.id===id);
+    for(const entry of europeComparisonLinks(state(`?layer=${id}&feature=kiruna`))) {
+      assert.ok(entry.label.includes(layer.title));assert.ok(entry.question.includes(layer.title));
+      assert.match(entry.question,/2023年.*国全体/);
+      assert.doesNotMatch(entry.question,/人口密度と産業拠点の位置|ロッテルダム、ルートヴィヒスハーフェンの拠点/);
+    }
+  }
+});
+
 test('fixed route helpers discard credentials and refuse invalid target layers and non-web origins', () => {
   const original = state('?layer=overlay&returnLayer=hubs&feature=rotterdam&crops=off');
   const base = new URL('https://user:password@example.test/evil/?return=https://evil.test');

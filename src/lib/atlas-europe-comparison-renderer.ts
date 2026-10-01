@@ -29,9 +29,12 @@ export function renderEuropeOrigin(root:HTMLElement, source:EuropeState|null, ta
   const caption=root.querySelector<HTMLElement>('[data-eu-origin-caption]')!;
   const legend=root.querySelector<HTMLElement>('[data-eu-origin-legend]')!;
   const mini=root.querySelector<SVGSVGElement>('[data-eu-origin-map]')!;
-  overlay.replaceChildren();legend.replaceChildren();mini.replaceChildren();mini.hidden=true;key.hidden=!source;
-  for(const id of ['eu-origin-fill','eu-origin-line','eu-origin-livestock-line','eu-origin-points'])if(map?.getLayer(id))map.removeLayer(id);
+  const originImage=root.querySelector<SVGImageElement>('[data-eu-origin-image]');
+  if(originImage)originImage.style.display='none';
+  overlay.replaceChildren();legend.replaceChildren();mini.replaceChildren();mini.toggleAttribute('hidden',true);key.hidden=!source;
+  for(const id of ['eu-origin-raster','eu-origin-fill','eu-origin-line','eu-origin-livestock-line','eu-origin-points'])if(map?.getLayer(id))map.removeLayer(id);
   if(map?.getSource('eu-origin'))map.removeSource('eu-origin');
+  if(map?.getSource('eu-origin-image'))map.removeSource('eu-origin-image');
   if(!source)return;
   const layer=config.layers.find(l=>l.id===(source.layer==='overlay'?(source.returnLayer==='climate'?'wheat':source.returnLayer):source.layer));
   if(!layer){key.hidden=true;return;}
@@ -64,20 +67,34 @@ export function renderEuropeOrigin(root:HTMLElement, source:EuropeState|null, ta
     }
     addKey('#fff0ba',`${feature?.name??originalPoints.length+'産業拠点'}：代表位置（数量ではない）`);
   } else {
-    // Keep independent raster/indicator legends; overlapping their colours would
-    // change the meaning. The small source map is a separate comparison view.
-    mini.hidden=false;mini.append(svg('rect',{width:String(frame.width),height:String(frame.height),fill:'#e7eff1'}));
+    // Point locations can sit on the original density image. Two coloured
+    // raster/indicator layers instead keep separate maps and legends.
+    const densityBehindHubs=layer.id==='density'&&target.id==='hubs'&&!!originImage;
+    mini.toggleAttribute('hidden',densityBehindHubs);mini.append(svg('rect',{width:String(frame.width),height:String(frame.height),fill:'#e7eff1'}));
+    if(densityBehindHubs) {
+      originImage!.setAttribute('href',layer.image!);originImage!.style.display='';
+      if(map?.getLayer('land')) {
+        map.addSource('eu-origin-image',{type:'image',url:layer.image!,coordinates:[[-25,73],[65,73],[65,32],[-25,32]]});
+        map.addLayer({id:'eu-origin-raster',type:'raster',source:'eu-origin-image',paint:{'raster-resampling':'nearest','raster-opacity':1,'raster-fade-duration':0}},'context');
+      }
+    }
     const ind=config.statistics.indicators.find(i=>i.id===layer.indicator);
     for(const f of config.geography.features)mini.append(svg('path',{d:viewPath(f.geometry),fill:ind?layerColor(layer,ind.values[f.properties.code]?.['2023']??null):'#edece5',stroke:'#536a6f','stroke-width':'.7','fill-rule':'evenodd'}));
     if(layer.image)mini.append(svg('image',{href:layer.image,x:'0',y:'0',width:String(frame.width),height:String(frame.height),preserveAspectRatio:'none'}));
     if(layer.id==='climate')for(const f of config.climateWater.features)mini.append(svg('path',{d:viewPath(f.geometry),fill:'#e7eff1',stroke:'#8ca6aa','stroke-width':'.7','fill-rule':'evenodd'}));
     for(const f of config.geography.features)mini.append(svg('path',{d:viewPath(f.geometry),fill:'none',stroke:'#536a6f','stroke-width':'.7','fill-rule':'evenodd'}));
-    if(source.place)for(const f of config.geography.features.filter(f=>f.properties.code===source.place))mini.append(svg('path',{d:viewPath(f.geometry),fill:'none',stroke:'#173c48','stroke-width':'2.5','vector-effect':'non-scaling-stroke','data-eu-origin-place':source.place}));
+    const originalMap=densityBehindHubs?overlay:mini;
+    if(source.place)for(const f of config.geography.features.filter(f=>f.properties.code===source.place)) {
+      originalMap.append(svg('path',{d:viewPath(f.geometry),fill:'none',stroke:'#173c48','stroke-width':'2.5','vector-effect':'non-scaling-stroke','data-eu-origin-place':source.place}));
+      if(densityBehindHubs)marks.push({type:'Feature',properties:{color:'#173c48'},geometry:f.geometry});
+    }
     const point=layer.id==='climate'?config.cities.find(c=>c.id===source.city):layer.field==='population'?config.populationCities.find(c=>c.id===source.feature&&sourceVisible(c)):undefined;
     if(point) {
-      const [x,y]=project(point.coordinates),scale=Math.max(.01,Math.min((mini.clientWidth||350)/frame.width,145/frame.height));
-      mini.append(svg('circle',{cx:String(x),cy:String(y),r:String(6/scale),fill:'#fff0ba',stroke:'#173c48','stroke-width':'2','vector-effect':'non-scaling-stroke','data-eu-origin-point':point.id}));
-      mini.append(svg('text',{x:String(x+10/scale),y:String(y-8/scale),fill:'#173c48',stroke:'#fffdf2','stroke-width':String(3/scale),'paint-order':'stroke','font-size':String(12/scale)},point.name));
+      const matrix=densityBehindHubs?root.querySelector<SVGSVGElement>('[data-eu-static]')?.getScreenCTM?.():undefined;
+      const [x,y]=project(point.coordinates),scale=matrix?Math.max(.01,Math.hypot(matrix.a,matrix.b)):Math.max(.01,Math.min((mini.clientWidth||350)/frame.width,145/frame.height));
+      originalMap.append(svg('circle',{cx:String(x),cy:String(y),r:String(6/scale),fill:'#fff0ba',stroke:'#173c48','stroke-width':'2','vector-effect':'non-scaling-stroke','data-eu-origin-point':point.id}));
+      originalMap.append(svg('text',{x:String(x+10/scale),y:String(y-8/scale),fill:'#173c48',stroke:'#fffdf2','stroke-width':String(3/scale),'paint-order':'stroke','font-size':String(12/scale)},point.name));
+      if(densityBehindHubs)marks.push({type:'Feature',properties:{color:'#173c48'},geometry:{type:'Point',coordinates:point.coordinates}});
       caption.textContent+=` · 選択：${point.name}`;
       addKey('#fff0ba',`${point.name}：元の選択地点（位置）`);
     }

@@ -73,7 +73,7 @@ const link = (id: string, label: string, question: string, targetLayer: string, 
 
 /** Questions compare existing sourced layers; they do not assert causation. */
 export function europeComparisonLinks(state: EuropeState): EuropeComparisonLink[] {
-  const layer = sourceLayer(state), field = europeLayers.find(item => item.id === layer)?.field;
+  const layer = sourceLayer(state), definition=europeLayers.find(item => item.id === layer), field = definition?.field;
   if (!field) return [];
   if (field === 'agriculture') {
     if (layer === 'forest') return [
@@ -89,6 +89,10 @@ export function europeComparisonLinks(state: EuropeState): EuropeComparisonLink[
     ];
   }
   if (field === 'industry') {
+    if(layer!=='hubs')return [
+      link(`${layer}-rhine`, `${definition!.title}とライン川`, `${definition!.title}（2023年・国全体のGDP比）とライン川の位置を読み比べます。国単位の産業構成と河川の位置は粒度が異なり、比率から沿岸の生産量や輸送量を推定できません。`, 'water', {feature:'rhine'}),
+      link(`${layer}-density`, `${definition!.title}と人口密度`, `${definition!.title}（2023年・国全体のGDP比）と2020年の人口密度を読み比べます。国の産業構成と国内の人口分布を分けて読み、就業者数や都市の生産額として扱わないでください。`, 'density'),
+    ];
     if (state.feature === 'kaukas') return [
       link('kaukas-forest', 'カウカスと森林面積比率', 'UPMカウカスの加工拠点と国全体の森林面積比率を読み比べます。原料を加工する場所と、国の森林の割合を区別して確かめます。', 'forest'),
       link('kaukas-density', '加工拠点と人口の分布', 'カウカスの位置を人口密度の地図と比べます。拠点の点は位置を表し、生産量や雇用の大きさを表していません。', 'density'),
@@ -102,6 +106,10 @@ export function europeComparisonLinks(state: EuropeState): EuropeComparisonLink[
       link('hubs-density', '産業拠点と人口密度', '産業拠点と人口密度の分布を読み比べます。代表地点の位置と人口の集まりを確かめ、点の数から生産量や雇用を推定せずに読みます。', 'density'),
     ];
   }
+  if (field === 'population'&&layer!=='density')return [
+    link('population-hubs', `${definition!.title}と産業拠点`, `${definition!.title}（2023年・国全体）と産業拠点の代表位置を読み比べます。キルナの採掘拠点を確かめ、国の人口指標と個別拠点の位置を区別します。この比率から拠点の雇用数や人口変化の原因は判断できません。`, 'hubs', {feature:'kiruna'}),
+    link('population-terrain', `${definition!.title}と地形`, `${definition!.title}（2023年・国全体）とアルプス、周囲の低地を読み比べます。国の値を国内の分布として塗り分けず、地形との位置関係と資料の粒度を確かめます。`, 'terrain', {feature:'alps'}),
+  ];
   if (field === 'population') return [
     link('population-hubs', '人口と産業拠点を比べる', '人口密度と産業拠点の位置を読み比べます。キルナの採掘拠点や都市以外の製造拠点を確かめ、人口の集まりと工場立地の違いを読みます。', 'hubs', { feature: 'kiruna' }),
     link('population-terrain', '人口と地形を比べる', 'アルプスの北側の低地と南側のポー平原を地形図で確かめ、人口の分布と読み比べます。標高と人口はそれぞれの凡例で読みます。', 'terrain', { feature: 'alps' }),

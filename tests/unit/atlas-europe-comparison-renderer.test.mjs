@@ -11,7 +11,7 @@ const config={layers:europeLayers,farmingAreas:json('europe/farming-areas.json')
 const state=layer=>({region:'all',place:'',city:'london',compare:[],render:'static',layer,returnLayer:layer});
 function setup() {
   const window=new Window();globalThis.document=window.document;
-  const root=document.createElement('div');root.innerHTML='<svg data-eu-static><g data-eu-comparison-overlay></g></svg><section data-eu-origin-key><div data-eu-origin-caption></div><div data-eu-origin-legend></div><svg data-eu-origin-map></svg></section>';
+  const root=document.createElement('div');root.innerHTML='<svg data-eu-static><image data-eu-origin-image x="0" y="0" width="1200" height="1001" style="display:none"></image><g data-eu-comparison-overlay></g></svg><section data-eu-origin-key><div data-eu-origin-caption></div><div data-eu-origin-legend></div><svg data-eu-origin-map hidden></svg></section>';
   document.body.append(root);return {window,root};
 }
 
@@ -23,7 +23,7 @@ test('crop climate comparison carries the published crop geometry, not a quantit
     assert.equal(path.getAttribute('fill'),'none');
     assert.match(root.querySelector('[data-eu-origin-legend]').textContent,/小麦.*主な集中域/);
     assert.match(root.querySelector('[data-eu-origin-caption]').textContent,/2020年頃/);
-    assert.equal(root.querySelector('[data-eu-origin-map]').hidden,true);
+    assert.equal(root.querySelector('[data-eu-origin-map]').hasAttribute('hidden'),true);
   }finally{window.happyDOM.abort();delete globalThis.document;}
 });
 test('hidden original crop stays hidden; single selection overrides a saved crop toggle',()=>{
@@ -40,9 +40,10 @@ test('population comparison keeps every density interval, missing-data key and t
     renderEuropeOrigin(root,state('density'),europeLayers.find(l=>l.id==='hubs'),config);
     const rows=[...root.querySelectorAll('[data-eu-origin-legend]>div')];
     assert.deepEqual(rows.map(r=>r.textContent),[...europeLayers.find(l=>l.id==='density').labels,'データなし']);
-    const image=root.querySelector('[data-eu-origin-map] image');
+    const image=root.querySelector('[data-eu-origin-image]');
     assert.equal(image.getAttribute('href'),'/assets/atlas/europe/population-v1/density.png');
     assert.equal(image.getAttribute('width'),'1200');assert.equal(image.getAttribute('height'),'1001');
+    assert.equal(image.style.display,'');assert.equal(root.querySelector('[data-eu-origin-map]').hasAttribute('hidden'),true);
     assert.match(root.querySelector('[data-eu-origin-caption]').textContent,/2020.*人\/km²/);
   }finally{window.happyDOM.abort();delete globalThis.document;}
 });
@@ -61,7 +62,8 @@ test('national source comparison retains all numeric colour classes and its miss
   const {window,root}=setup();try {
     renderEuropeOrigin(root,state('forest'),europeLayers.find(l=>l.id==='hubs'),config);
     assert.deepEqual([...root.querySelectorAll('[data-eu-origin-legend]>div')].map(r=>r.textContent),['10未満','10〜20未満','20〜40未満','40〜60未満','60〜80未満','80以上','データなし']);
-    assert.equal(root.querySelector('[data-eu-origin-map]').hidden,false);
+    assert.equal(root.querySelector('[data-eu-origin-map]').hasAttribute('hidden'),false);
+    assert.equal(root.querySelector('[data-eu-origin-image]').style.display,'none');
   }finally{window.happyDOM.abort();delete globalThis.document;}
 });
 test('source hub positions follow the original country mask and never turn a river into an industrial site',()=>{
@@ -95,7 +97,9 @@ test('source mini preserves the selected observation, population-city and countr
     assert.equal(root.querySelector('[data-eu-origin-point]').getAttribute('data-eu-origin-point'),'paris');
     const city=config.populationCities.find(c=>c.name==='パリ');assert.ok(city);
     renderEuropeOrigin(root,{...state('density'),feature:city.id},europeLayers.find(l=>l.id==='hubs'),config);
-    assert.equal(root.querySelector('[data-eu-origin-point]').getAttribute('data-eu-origin-point'),city.id);
+    assert.equal(root.querySelector('[data-eu-comparison-overlay] [data-eu-origin-point]').getAttribute('data-eu-origin-point'),city.id);
+    renderEuropeOrigin(root,{...state('density'),place:'FRA',feature:city.id},europeLayers.find(l=>l.id==='hubs'),config);
+    assert.ok(root.querySelector('[data-eu-comparison-overlay] [data-eu-origin-place="FRA"]'));
     renderEuropeOrigin(root,{...state('forest'),place:'FIN'},europeLayers.find(l=>l.id==='hubs'),config);
     assert.ok(root.querySelector('[data-eu-origin-place="FIN"]'));
   }finally{window.happyDOM.abort();delete globalThis.document;}

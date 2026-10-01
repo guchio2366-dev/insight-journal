@@ -80,6 +80,7 @@ export function initEuropeAtlas() {
     query('[data-eu-subject-takeaway]').textContent=copy.takeaway;
     query('[data-eu-subject-intro]').textContent=copy.body;
     query('[data-eu-subject-note]').textContent=copy.note;
+    query<HTMLElement>('[data-eu-reading-focus]').hidden=layer.id!=='wheat'||state.place==='GBR';
     query<HTMLAnchorElement>('[data-eu-subject-source]').href=layer.source;
     const readingSources=query<HTMLElement>('[data-eu-reading-sources]');readingSources.replaceChildren();
     for(const source of europeReaderSources(layer)){const a=document.createElement('a');a.href=source.url;a.textContent=source.label;a.className='eu-source-link';readingSources.append(a);}
@@ -415,6 +416,7 @@ export function initEuropeAtlas() {
     query<HTMLElement>('[data-eu-farm-candidates]').hidden=true;commit(false);
   }));
   query('[data-eu-single]').addEventListener('click',()=>{if(farmingView().item){state.single=true;commit(false);}});
+  query('[data-eu-reading-focus]').addEventListener('click',()=>{if(subject().id==='wheat'){state.place='GBR';state.region='west';state.single=true;commit(true);}});
   query('[data-eu-return-multi]').addEventListener('click',()=>{delete state.single;commit(false);});
   query('[data-eu-overview]').addEventListener('click',returnOverview);
   root.addEventListener('keydown',event=>{if(event.key==='Escape'){
