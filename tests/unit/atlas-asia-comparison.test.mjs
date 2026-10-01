@@ -20,7 +20,7 @@ test('比較を続けても最初の主題・地点・カメラへの復帰先�
 function setup(from,to,fetcher){
   const state={...startAsiaComparison(originalUrl,from,to.field),...to};
   const url=writeAsiaAtlasState(originalUrl,state),window=new Window({url:url.href});
-  window.document.body.innerHTML='<main data-asia-atlas><section data-comparison-reading hidden><h3 data-comparison-title></h3><p data-comparison-summary></p><div data-comparison-legend></div></section><button data-comparison-back>戻る</button></main>';
+  window.document.body.innerHTML='<main data-asia-atlas><section data-comparison-reading hidden><h3 data-comparison-title></h3><p data-comparison-summary></p><div data-comparison-compact></div></section><details data-comparison-method hidden><summary>詳細</summary><div data-comparison-legend></div></details><button data-comparison-back>戻る</button></main>';
   window.fetch=fetcher??(async()=>{throw Error('unexpected request')});window.eval(built.outputFiles[0].text+';window.createComparison=AsiaComparison.createAsiaComparison;');
   const config={regionId:'east-asia',label:'東アジア',countries:[{code:'CHN',name:'中国'},{code:'JPN',name:'日本'}],cities:[],classes:[{id:1,code:'Af',name:'熱帯雨林気候',color:'#0000ff'},{id:2,code:'Am',name:'熱帯季節風気候',color:'#0078ff'}],climate:{classIds:[1,2],image:'climate.png',imageCoordinates:[[72,55],[147,55],[147,17],[72,17]]},climateBase:'/climate/',agricultureBase:'/rice/',geographyUrl:'/geography.json',populationBase:'/population/',population:{image:'population.png',imageCoordinates:[[72,55],[147,55],[147,17],[72,17]],cities:[]},farmingBase:'/farm/',farming:{layers:[{id:'wheat',title:'小麦の収穫面積',kind:'crop',year:2020,unit:'ha/格子',image:'wheat.png',imageCoordinates:[[72,55],[147,55],[147,17],[72,17]],breaks:[10,100],colors:['eeeeee','aaaaaa','555555']}]},industry:{topics:[{id:'trade-exports',title:'商品輸出額',kind:'trade'}],countries:['CHN','JPN']},tradeBase:'/trade/',trade:{file:'trade.json',countries:['CHN','JPN']},presentation:{settlements:{ethnicity:{file:'ethnicity.json',categories:[{id:'tibetan',label:'チベット系',color:'#aabbcc'}]}}},presentationBase:'/asia-presentation-v1/'};
   const root=window.document.querySelector('main'),controller=window.createComparison(root,config,context,()=>state);
@@ -43,6 +43,16 @@ test('比較元の全色区分と比較先の全色区分を、年・単位と�
   for(const expected of ['小麦の収穫面積','2020年','ha/格子','10未満','10以上100未満','100以上','Af 熱帯雨林気候','Am 熱帯季節風気候','1991–2020年'])assert.ok(legend.includes(expected),expected);
   assert.match(root.querySelector('[data-comparison-back]').textContent,/中国の小麦の収穫面積へ戻る/);
   assert.match(root.querySelector('[data-comparison-summary]').textContent,/灌漑/);
+  const compact=root.querySelector('[data-comparison-compact]');
+  assert.equal(compact.closest('details'),null);assert.equal(compact.hidden,false);
+  assert.equal(root.querySelector('[data-comparison-method]').hidden,false);
+  const original=compact.querySelector('[data-comparison-compact-role="original"]'),current=compact.querySelector('[data-comparison-compact-role="current"]');
+  assert.match(original.textContent,/2020年.*ha\/格子/);assert.equal(original.querySelectorAll('i').length,3);
+  assert.match(current.textContent,/1991–2020年.*ケッペン＝ガイガー分類/);assert.equal(current.querySelectorAll('i').length,2);
+  assert.deepEqual([...current.querySelectorAll('.asia-comparison-compact-key>span')].map(e=>e.textContent),['Af','Am']);
+  assert.equal(current.querySelector('.asia-comparison-compact-key>span').getAttribute('aria-label'),'Af 熱帯雨林気候');
+  controller.render({...state,back:null});assert.equal(compact.hidden,true);assert.equal(compact.children.length,0);
+  assert.equal(root.querySelector('[data-comparison-method]').hidden,true);
 });
 
 test('貿易凡例の百万米ドルと閾値の倍率を揃え、元区域の分布を描画する',async()=>{
@@ -83,6 +93,7 @@ test('元区域と発電施設を比較し直しても、設備容量の半径�
   assert.equal(map.layers[id].paint['circle-opacity'],0);
   assert.equal(map.sources['asia-comparison-original'].data.features[0].properties.capacity,1000);
   assert.match(root.querySelector('[data-comparison-legend]').textContent,/100MWで3px、1,000MWで9px、4,000MW以上で18px/);
+  assert.match(root.querySelector('[data-comparison-compact]').textContent,/100MW＝3px \/ 1,000MW＝9px \/ 4,000MW以上＝18px/);
   assert.match(root.querySelector('[data-comparison-back]').textContent,/資料中の発電施設/);
   controller.render(state);
   assert.match(root.querySelector('[data-comparison-back]').textContent,/資料中の発電施設/);
@@ -121,10 +132,12 @@ test('都市人口から比較しても元の人口図と選択都市だけの�
 test('比較先の米・雨・川と農畜産切替で、その表示に対応する凡例を更新する',async()=>{
   const features=[{type:'Feature',properties:{kind:'crop',id:'rice',color:'#00ff00'},geometry:{type:'Polygon',coordinates:[]}},{type:'Feature',properties:{kind:'crop',id:'soybean',color:'#ffaa00'},geometry:{type:'Polygon',coordinates:[]}}];
   const {root,controller,state,config}=setup(base,{field:'agriculture',topic:'overview'},async()=>response({type:'FeatureCollection',features}));
-  config.presentation.farming={file:'overview.json',products:[{id:'rice',title:'米',color:'#00ff00'},{id:'soybean',title:'大豆',color:'#ffaa00'}],labels:[]};config.presentation.rainfall={file:'rain.json'};
+  config.presentation.farming={file:'overview.json',products:[{id:'rice',title:'米',kind:'crop',color:'#00ff00'},{id:'soybean',title:'大豆',kind:'crop',color:'#ffaa00'},{id:'cattle',title:'牛',kind:'livestock',color:'#aabbcc'}],labels:[]};config.presentation.rainfall={file:'rain.json'};
   controller.render(state);await waitForReading(root);assert.match(root.querySelector('[data-comparison-legend]').textContent,/大豆/);
   state.overlay='water';controller.render(state);await waitForReading(root);
   let legend=root.querySelector('[data-comparison-legend]').textContent;assert.match(legend,/年降水量の等雨量線/);assert.ok(!legend.includes('大豆'));
   state.overlay=null;state.farms='crop';controller.render(state);await waitForReading(root);assert.match(root.querySelector('[data-comparison-legend]').textContent,/大豆/);
+  assert.deepEqual([...root.querySelectorAll('[data-comparison-compact-role="current"] .asia-comparison-compact-key>span')].map(e=>e.textContent),['米','大豆']);
   state.farms='none';controller.render(state);assert.match(root.querySelector('[data-comparison-legend]').textContent,/読み込んでいます/);await waitForReading(root);
+  assert.equal(root.querySelectorAll('[data-comparison-compact-role="current"] .asia-comparison-compact-key>span').length,0);
 });

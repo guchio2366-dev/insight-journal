@@ -123,12 +123,13 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
        <section class="asia-reading-dock" data-reading-dock aria-label="この地図の要点と比較">
         <p class="eyebrow">この地図の要点</p><h2 data-reading-dock-title>{reading.title}</h2><p data-reading-dock-summary>{reading.summary}</p>
         <div class="asia-reading-dock-links" data-reading-dock-links>{fieldTabs.map(f=><button type="button" data-compare={f.id} data-dock-compare={f.id} hidden={f.id===initialField}>{f.label}と比べる <span>→</span></button>)}</div>
-        <section class="asia-comparison-reading" data-comparison-reading hidden><h3 data-comparison-title></h3><p data-comparison-summary></p><details><summary>比較している分布と凡例</summary><div data-comparison-legend></div></details></section>
+        <section class="asia-comparison-reading" data-comparison-reading hidden><h3 data-comparison-title></h3><p data-comparison-summary></p><div class="asia-comparison-compact" data-comparison-compact aria-label="比較元と比較先の凡例・年・単位"></div></section>
         <div class="asia-comparison-return" data-comparison-return hidden><p>元の選択と地図の位置を保存しています。</p><button type="button" data-comparison-back>比較前の地図に戻る</button></div>
         <label class="asia-city-picker" data-city-picker hidden={initialField!=='natural'}>都市の雨温図<select data-city-select aria-label="都市の雨温図を選ぶ"><option value="">都市を選ぶ</option>{cities.map(c=><option value={c.id} data-country={c.countryCode}>{c.name} · {japaneseNames[c.countryCode]}</option>)}</select></label>
        </section>
        <details class="asia-reading-details" data-reading-details><summary>詳しい解説・数値・出典を読む</summary>
        <div class="atlas-national asia-reading-scroll" tabindex="0" role="region" aria-label="選択した場所の詳しい解説">
+        <details class="asia-comparison-method" data-comparison-method hidden><summary>比較区分の正式名称・説明・出典を読む</summary><div data-comparison-legend></div></details>
         <section data-focus-reading hidden><h3 data-focus-reading-title></h3><p data-focus-reading-body></p><p class="asia-small">出典：<a data-focus-reading-source></a></p></section>
         <AsiaPopulationPanel {regionId} {population} active={initialField==='population'} />
         <AsiaIndustryPanel active={initialField==='industry'} />
