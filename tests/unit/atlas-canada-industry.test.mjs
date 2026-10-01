@@ -3,13 +3,13 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {gunzipSync} from 'node:zlib';
-import {transform} from 'esbuild';
+import {bundleCanadaSource} from '../fixtures/bundle-canada-source.mjs';
 
 const sourceRoot='data-source/atlas/canada/industry',assetRoot='public/assets/atlas/canada-industry-v1';
 const data=JSON.parse(await readFile('src/data/atlas/canada/industry.json','utf8'));
 const geometry=JSON.parse(await readFile('src/data/atlas/canada/industry-geometry.json','utf8'));
 const manifest=JSON.parse(await readFile(`${assetRoot}/manifest.json`,'utf8'));
-const lib=await import(`data:text/javascript;base64,${Buffer.from((await transform(await readFile('src/lib/atlas-canada-industry.ts','utf8'),{loader:'ts',format:'esm'})).code).toString('base64')}`);
+const lib=await import(`data:text/javascript;base64,${Buffer.from(await bundleCanadaSource('src/lib/atlas-canada-industry.ts',{platform:'node',format:'esm'})).toString('base64')}`);
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const parse=line=>{const cells=[];let value='',quoted=false;for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'){if(quoted&&line[i+1]==='"'){value+='"';i++;}else quoted=!quoted;}else if(c===','&&!quoted){cells.push(value);value='';}else value+=c;}cells.push(value);return cells;};
 
@@ -57,4 +57,41 @@ test('Industry state validates years and industry scope, keeps unrelated page qu
  assert.deepEqual(state,{year:2023,province:'Ontario',compare:'Quebec',metric:'manufacturing',only:true,zoom:true});const saved=lib.writeCanadaIndustryState(source,state);assert.equal(saved.searchParams.get('keep'),'yes');assert.deepEqual(lib.readCanadaIndustryState(saved,data.years,ids),state);
  const target=lib.canadaIndustryComparisonUrl(source,new URL('https://example.com/insight-journal/atlas/north-america/canada/nature/?city=ottawa&view=water&water=St.+Lawrence&only=1'),state),back=new URLSearchParams(target.searchParams.get('industryReturn'));assert.equal(target.origin,source.origin);assert.equal(target.searchParams.get('city'),'ottawa');assert.equal(target.searchParams.get('water'),'St. Lawrence');assert.deepEqual([...back.keys()],['year','province','metric','compare','only','zoom']);assert.equal(back.get('compare'),'Quebec');assert.equal(back.has('keep'),false);assert.equal(back.has('next'),false);assert.equal(back.has('city'),false);
  assert.deepEqual(lib.readCanadaIndustryState(new URL('https://example.com/?year=2029&province=unknown&compare=Alberta&metric=all&only=true&zoom=country'),data.years,ids),{year:2025,province:'Alberta',compare:null,metric:'mining',only:false,zoom:false});assert.equal(lib.readCanadaIndustryState(new URL('https://example.com/?province=Ontario&compare=Ontario'),data.years,ids).compare,null);assert.equal(lib.readCanadaIndustryState(new URL('https://example.com/?metric=211&compare=unknown'),data.years,ids).metric,'mining');assert.equal(lib.formatCanadaIndustryValue(0),'0.00');assert.equal(lib.formatCanadaIndustryValue(null),'欠損');assert.notEqual(lib.industryShareColor(null),lib.industryShareColor(0));
+});
+
+test('Population to industry to nature preserves both canonical comparisons in one industry return',()=>{
+ const populationIds=['535','462','505','933'],population={year:'2016',cma:'535',compare:'462',metric:'population',only:'1',zoom:'selected'};
+ const state={year:2023,province:'Ontario',compare:'Quebec',metric:'manufacturing',only:true,zoom:true};
+ const source=new URL('https://example.com/insight-journal/atlas/north-america/canada/industry/?keep=yes&next=https://outside.example/');source.searchParams.set('populationReturn',new URLSearchParams(population).toString());
+ const nature=new URL('https://example.com/insight-journal/atlas/north-america/canada/nature/?city=ottawa&view=water&water=St.+Lawrence&only=1');
+ const target=lib.canadaIndustryComparisonUrl(source,nature,state,populationIds),back=new URLSearchParams(target.searchParams.get('industryReturn'));
+ assert.equal(target.origin,'https://example.com');assert.equal(target.pathname,'/insight-journal/atlas/north-america/canada/nature/');assert.equal(target.searchParams.get('water'),'St. Lawrence');
+ assert.deepEqual(new Set(back.keys()),new Set(['year','province','compare','metric','only','zoom','populationReturn']));
+ assert.deepEqual(Object.fromEntries([...back].filter(([key])=>key!=='populationReturn')),{year:'2023',province:'Ontario',metric:'manufacturing',compare:'Quebec',only:'1',zoom:'1'});
+ assert.deepEqual(Object.fromEntries(new URLSearchParams(back.get('populationReturn'))),population);
+ assert.equal(back.has('keep'),false);assert.equal(back.has('next'),false);assert.equal(back.has('industryReturn'),false);
+ const industrySource=new URL('/insight-journal/atlas/north-america/canada/industry/',target);industrySource.search=back.toString();
+ const returned=lib.canadaIndustryReturnUrl(industrySource,state,populationIds);
+ assert.equal(returned.origin,'https://example.com');assert.equal(returned.pathname,'/insight-journal/atlas/north-america/canada/industry/');assert.deepEqual(Object.fromEntries(returned.searchParams),Object.fromEntries(back));
+});
+
+test('Industry return strips unrelated outer and nested routes while retaining a flat local population comparison',()=>{
+ const populationIds=['535','462','505','933'],population={year:'2016',cma:'535',compare:'462',metric:'population',only:'1',zoom:'selected'};
+ const contaminated=new URLSearchParams({...population,next:'https://outside.example/next',returnTo:'/private',url:'https://outside.example/',populationReturn:'cma=933&returnTo=https://outside.example/recursive'});
+ const source=new URL('https://example.com/insight-journal/atlas/north-america/canada/industry/?next=https://outside.example/&returnTo=/private&url=https://outside.example/&industryReturn=recursive&keep=yes');source.searchParams.set('populationReturn',contaminated.toString());
+ const state={year:2025,province:'Ontario',compare:'Quebec',metric:'services',only:true,zoom:true},target=lib.canadaIndustryReturnUrl(source,state,populationIds);
+ assert.equal(target.origin,'https://example.com');assert.equal(target.pathname,'/insight-journal/atlas/north-america/canada/industry/');
+ assert.deepEqual(new Set(target.searchParams.keys()),new Set(['year','province','compare','metric','only','zoom','populationReturn']));
+ assert.deepEqual(Object.fromEntries(new URLSearchParams(target.searchParams.get('populationReturn'))),population);
+ for(const parameter of ['next','returnTo','url','industryReturn','keep'])assert.equal(target.searchParams.has(parameter),false);
+ assert.equal(target.href.includes('outside.example'),false);assert.equal(target.href.includes('private'),false);
+ assert.equal(new URLSearchParams(target.searchParams.get('populationReturn')).has('populationReturn'),false);
+});
+
+test('Industry return normalizes an unknown source CMA with the existing population defaults',()=>{
+ const populationIds=['535','462','505','933'],source=new URL('https://example.com/insight-journal/atlas/north-america/canada/industry/');
+ source.searchParams.set('populationReturn',new URLSearchParams({year:'2035',cma:'unknown',compare:'462',metric:'density',only:'true',zoom:'unknown',populationReturn:'cma=933',returnTo:'https://outside.example/'}).toString());
+ const target=lib.canadaIndustryReturnUrl(source,{year:2025,province:'Ontario',compare:null,metric:'services',only:false,zoom:false},populationIds);
+ assert.deepEqual(Object.fromEntries(new URLSearchParams(target.searchParams.get('populationReturn'))),{year:'2021',cma:'535',metric:'density',zoom:'south',compare:'462'});
+ assert.deepEqual(new Set(target.searchParams.keys()),new Set(['year','province','metric','populationReturn']));
 });
