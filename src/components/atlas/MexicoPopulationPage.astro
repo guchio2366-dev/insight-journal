@@ -27,12 +27,19 @@ const symbolShapes = [...shapes].sort((a,b) => b.row.population-a.row.population
 const [selectedX, selectedY] = stateLabelPoint('09');
 ---
 <MexicoWorkspace field="population" title="人口の規模と密度から読むメキシコ" lead="中央部の人口集積と北部の広い州を比べ、地形・輸出産業・交通とのつながりが分かります。" description="INEGIの2020年国勢調査による32州の人口と公表人口密度を地図で比較。人口規模、自然地理地域、2025年の州別輸出産業をつなげて読みます。">
- <Fragment slot="map">
-  <h2 data-population-map-heading>2020年、人口はどこに集まる？</h2>
+ <Fragment slot="controls">
+ <nav class="atlas-nature-controls mexico-topic-controls" aria-label="人口の項目"><div class="atlas-nature-tabs mexico-topic-tabs mexico-population-topic-tabs">
+  <a href="#mexico-population-distribution" aria-current="page">人口分布</a>
+  <button type="button" disabled aria-disabled="true">人種・民族 <small>未整備</small></button>
+  <button type="button" disabled aria-disabled="true">宗教 <small>未整備</small></button>
+ </div></nav>
   <div class="mexico-controls population-controls">
    <label>地図の指標<select data-population-view disabled><option value="density" selected>人口密度（色）</option><option value="population">人口規模（円）</option></select></label>
    <label>選ぶ州<select data-population-state disabled>{population.states.map(row => <option value={row.stateCode} selected={row.stateCode==='09'}>{row.nameJa}</option>)}</select></label>
   </div>
+ </Fragment>
+ <Fragment slot="map">
+  <div class="atlas-map-frame mexico-map-frame" id="mexico-population-distribution">
   <figure class="population-map-figure" data-population-normal>
    <svg class="mexico-map population-map" data-mexico-map data-population-map viewBox={mapViewBox} role="group" aria-labelledby="mexico-population-map-title mexico-population-map-desc">
     <title id="mexico-population-map-title">2020年の州別人口密度</title>
@@ -51,6 +58,8 @@ const [selectedX, selectedY] = stateLabelPoint('09');
    <img class="population-fallback-image" data-population-fallback-image src={`${assetRoot}/density.svg`} width="900" height="580" alt="2020年の32州の人口密度。全州の値は下の表でも確認できます。" />
    <figcaption data-population-fallback-caption>地図の代替表示：全32州の分布。選んだ州の値は右側で確認できます。</figcaption>
   </figure>
+  </div>
+  <h2 data-population-map-heading>2020年、人口はどこに集まる？</h2>
   <div class="population-density-key" data-population-density-key>
    <p class="population-key-title">色＝人口密度（2020年、人/km²）</p>
    <ul class="mexico-legend" aria-label="人口密度の色の凡例">{mexicoDensityBins.map(bin => <li><i style={`background:${bin.color}`} aria-hidden="true"/>{bin.label}</li>)}</ul>

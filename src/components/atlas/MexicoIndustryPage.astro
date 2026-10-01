@@ -24,16 +24,21 @@ const config={data,population,reading,labels,views,industryHref,populationHref,m
 const value=(v:unknown)=>industryValueText(v as MexicoIndustryValue);
 ---
 <MexicoWorkspace field="industry" title="輸出工業の立地を読む、メキシコの主要産業" lead={reading.lead}>
+  <div slot="controls" class="country-industry-navigation">
+   <div class="industry-tab-row mi-metric-tabs" role="tablist" aria-label="輸出業種" data-mi-metric-tabs>
+    {data.metrics.map(m=><button type="button" role="tab" id={`mi-category-${m.id}`} data-mi-metric-button={m.id} aria-selected={m.id==='transport'?'true':'false'} tabindex={m.id==='transport'?0:-1} aria-controls="mi-primary-map-panel">{m.name}</button>)}
+   </div>
+   <select data-mi-metric hidden aria-label="輸出業種" tabindex="-1">{data.metrics.map(m=><option value={m.id} selected={m.id==='transport'}>{m.name}</option>)}</select>
+  </div>
  <div slot="map" class="mi-map-panel">
   <div data-mi-comparison-heading hidden><h2 data-mi-comparison-title>{reading.comparison.title}</h2><p class="mexico-caption" data-mi-comparison-lead>{reading.comparison.lead}</p></div>
-  <div class="mexico-controls mi-controls">
-   <label>輸出業種 <select data-mi-metric>{data.metrics.map(m=><option value={m.id} selected={m.id==='transport'}>{m.name}</option>)}</select></label>
-   <label>州 <select data-mi-state-select>{data.states.map(s=><option value={s.id} selected={s.id===selected.id}>{s.name}</option>)}</select></label>
-   <label data-mi-source-view-control hidden>元の分布 <select data-mi-source-view><option value="density">人口密度</option><option value="population">人口</option></select></label>
-  </div>
   <div class="mi-map-grid" data-mi-map-grid>
    {['primary','secondary'].map((slot,i)=><figure class="mi-map-figure" data-mi-figure={slot} hidden={i===1}>
-    <h3 class="mi-map-heading" data-mi-map-heading={slot}>{i===0?'輸送機器の輸出額':'電子機器の輸出額'} <span>2025年速報・10億米ドル</span></h3>
+    <div class="atlas-map-frame mexico-map-frame" id={i===0?'mi-primary-map-panel':undefined}>
+    {i===0&&<div class="mexico-controls mi-controls country-industry-map-controls" aria-label="州と比較元の表示" data-mi-supplementary-controls>
+     <label>州 <select data-mi-state-select>{data.states.map(s=><option value={s.id} selected={s.id===selected.id}>{s.name}</option>)}</select></label>
+     <label data-mi-source-view-control hidden>元の分布 <select data-mi-source-view><option value="density">人口密度</option><option value="population">人口</option></select></label>
+    </div>}
     <svg class="mexico-map mi-map" data-mexico-map data-mi-map={slot} viewBox={mapViewBox} role="group" aria-labelledby={`mi-${slot}-title mi-${slot}-desc`}>
      <title id={`mi-${slot}-title`}>{i===0?'輸送機器':'電子機器'}の州別輸出額、2025年速報</title>
      <desc id={`mi-${slot}-desc`}>色は州の生産地に配分したFOB輸出額。州を選ぶと数値と説明を読めます。秘匿は斜線、未把握は点模様です。</desc>
@@ -50,6 +55,8 @@ const value=(v:unknown)=>industryValueText(v as MexicoIndustryValue);
      <g class="mi-labels" aria-hidden="true">{geometry.map(g=>{const s=data.states.find(s=>s.id===g.id)!;return <text data-mi-label={g.id} x={g.point[0]} y={g.point[1]-7} text-anchor="middle" hidden={!['05','11','08','14'].includes(g.id)}>{s.short}</text>;})}</g>
      <text class="mi-context-label" data-mi-context-label x={usaLabel[0]} y={usaLabel[1]} text-anchor="middle" aria-hidden="true">米国</text>
     </svg>
+    </div>
+    <h3 class="mi-map-heading" data-mi-map-heading={slot}>{i===0?'輸送機器の輸出額':'電子機器の輸出額'} <span>2025年速報・10億米ドル</span></h3>
     <div data-mi-export-legend={slot}>
      <p class="mi-legend-unit">FOB輸出額・10億米ドル（両業種共通）</p>
      <ul class="mexico-legend mi-legend" aria-label="輸出額の色階級">{mexicoIndustryBins.map(bin=><li><i style={`background:${bin.color}`} aria-hidden="true"/>{bin.label}</li>)}<li><i class="mi-zero" aria-hidden="true"/>0</li><li><i class="mi-confidential" aria-hidden="true"/>秘匿</li><li><i class="mi-unknown" aria-hidden="true"/>未把握</li></ul>
