@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {countries,metrics,readState,writeState,valueAt,defaultYear,fillFor,rankedCountries} from '../../src/data/atlas/africa-atlas.ts';
 import {africaPath,africaRings,clipAfricaRing,projectAfrica} from '../../src/lib/atlas-africa-geometry.ts';
+import {themes} from '../../src/data/atlas/africa-themes.ts';
 const geo=JSON.parse(readFileSync(new URL('../../src/data/atlas/africa-geography.json',import.meta.url)));
 
 test('Africa includes 54 countries plus Western Sahara, including island states and South Sudan',()=>{
@@ -42,4 +43,28 @@ test('fixed color thresholds distinguish zero, negative growth and missing; coun
  const state=readState('?field=population&region=west&year=2023');const rows=rankedCountries(state);
  assert.ok(rows.every(c=>c.region==='west'));assert.equal(rows[0].code,'NGA');
  assert.equal(metrics.length,15);assert.deepEqual(new Set(metrics.map(m=>m.field)),new Set(['nature','agriculture','industry','population']));
+});
+
+test('thematic maps identify their qualitative locations and comparison sources',()=>{
+ assert.equal(themes.length,8);assert.equal(new Set(themes.map(t=>t.id)).size,8);
+ for(const field of ['nature','agriculture','industry','population'])assert.equal(themes.filter(t=>t.field===field).length,2);
+ for(const theme of themes){
+  assert.ok(theme.takeaway&&theme.caveat&&theme.compareText);
+  assert.ok(metrics.some(m=>m.id===theme.compareMetric));
+  assert.match(theme.source,/^https:\/\//);
+  assert.ok(theme.places.every(code=>countries.some(c=>c.code===code)));
+  assert.ok(theme.bounds[0]<theme.bounds[2]&&theme.bounds[1]<theme.bounds[3]);
+  const points=theme.marks.flatMap(m=>Array.isArray(m.coordinates[0])?m.coordinates:[m.coordinates]);
+  assert.ok(points.every(([lon,lat])=>Number.isFinite(lon)&&Number.isFinite(lat)&&lon>=-27&&lon<=64&&lat>=-36&&lat<=39));
+ }
+});
+
+test('comparison URLs preserve source selection and reject unrelated thematic context',()=>{
+ const theme=themes.find(t=>t.field==='agriculture');
+ const query=`?field=agriculture&metric=AG.YLD.CREL.KG&place=GHA&compare=CIV&year=2023&region=west&zoom=theme&theme=${theme.id}&context=${theme.compareMetric}`;
+ const state=readState(query);
+ assert.equal(state.context,theme.compareMetric);assert.equal(state.metric,'AG.YLD.CREL.KG');assert.equal(state.year,2023);
+ assert.deepEqual(readState(writeState(state,new URL('https://example.com/atlas/africa/')).search),state);
+ assert.equal(readState(query.replace(theme.compareMetric,'NY.GDP.PCAP.CD')).context,'');
+ assert.equal(readState(`?field=industry&theme=${theme.id}&context=${theme.compareMetric}`).theme,themes.find(t=>t.field==='industry').id);
 });

@@ -1,26 +1,134 @@
-.africa-atlas{padding:20px 0 64px;color:var(--ink)}
-.africa-region-navigation{display:flex;margin-bottom:10px}
-.africa-atlas .africa-region-navigation label{flex-direction:row;align-items:center;gap:8px;max-width:100%}
-.africa-controls [data-latest]{align-self:center;min-height:44px;max-width:190px;border:1px solid #aeb8a2;background:#fff;padding:8px 12px;font-size:11px;line-height:1.6}
+/* Africa-only layout. The shared atlas styles and other regions are untouched. */
+.africa-atlas.shell{width:calc(100% - 40px);max-width:1560px;padding:10px 0 40px;color:var(--ink);font-size:14px;line-height:1.65}
+.atlas-layout:has(.africa-atlas) .header-inner{min-height:58px;padding-block:8px}
+.atlas-layout:has(.africa-atlas) .site-brand small{display:none}
 .africa-atlas [hidden]{display:none!important}
-.africa-breadcrumb{font-size:12px;color:var(--ink-soft)}
-.africa-heading{margin:30px 0 24px}.africa-heading h1{font-family:var(--serif);font-size:clamp(29px,4vw,46px);letter-spacing:-.04em;margin:4px 0 12px}.africa-heading>p:last-child{color:var(--ink-soft);font-size:15px;line-height:1.9}
-.africa-fields{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;border:1px solid var(--rule);background:var(--rule)}
-.africa-fields>a{display:flex;align-items:center;min-height:62px;background:#fff;padding:12px 18px;font-weight:700;text-decoration:none;color:inherit}
-.africa-atlas button,.africa-atlas select{font:inherit;color:inherit}.africa-atlas button{cursor:pointer}.africa-atlas button:focus-visible,.africa-atlas select:focus-visible,.africa-atlas a:focus-visible{outline:3px solid #bc5c35;outline-offset:3px}
-.africa-fields button{background:#fff;border:0;min-height:62px;text-align:left;padding:12px 18px;font-weight:700}.africa-fields button span{font-size:11px;margin-right:12px;color:#65776a}.africa-fields button[aria-pressed=true]{background:#234b43;color:#fff}.africa-fields button[aria-pressed=true] span{color:#dbe7da}
-.africa-intro{padding:24px 0 20px;max-width:880px}.africa-intro h2{font-family:var(--serif);font-size:24px;margin:0 0 10px}.africa-intro p{font-size:14px;line-height:1.9;margin:0;color:var(--ink-soft)}
-.africa-controls{display:flex;align-items:start;gap:16px;flex-wrap:wrap;background:#f2f1e9;border:1px solid var(--rule);padding:16px;margin-bottom:18px}.africa-atlas label{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:700}.africa-atlas select{min-height:44px;border:1px solid #b5b9ad;border-radius:2px;background:#fff;padding:8px 32px 8px 10px;font-size:14px;max-width:100%}.africa-controls label:first-child{min-width:270px}.africa-controls small{font-size:10px;font-weight:400;max-width:240px}.africa-atlas select:disabled{background:#e9e8df;color:#62675c}
-.africa-workspace{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,330px);gap:18px;align-items:start}.africa-map-card,.africa-detail{background:#fff;border:1px solid var(--rule);min-width:0}.africa-map-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:20px}.africa-map-heading h2{font-family:var(--serif);font-size:23px;margin:0}.africa-map-heading>span{font-size:12px}.africa-map-heading .eyebrow{margin:0 0 6px}
-.africa-map-tools{display:flex;flex-wrap:wrap;gap:6px;padding:0 18px 14px}.africa-map-tools button{border:1px solid #c6cabe;background:#f9f9f3;min-height:36px;font-size:11px;padding:6px 9px}.africa-map-tools button[aria-pressed=true]{background:#234b43;color:#fff}
-.africa-map{width:100%;height:auto;display:block;background:#e9f0f0;aspect-ratio:1100/907}.africa-country{stroke:#fbfcf7;stroke-width:.7;vector-effect:non-scaling-stroke;cursor:pointer}.africa-country:hover,.africa-country.is-selected{stroke:#a44225;stroke-width:2.3}.africa-country.is-compared{stroke:#263e7c;stroke-width:2.3;stroke-dasharray:4 2}.africa-country.is-muted{opacity:.22}.africa-graticule{stroke:#d1e0df;stroke-width:1}.africa-ocean{fill:#668785;font-family:var(--serif);font-size:20px;text-anchor:middle;pointer-events:none}.africa-map[data-detail=true] .africa-ocean,.africa-map[data-detail=true] .africa-island-label,.africa-map[data-detail=true] .africa-island{display:none}.africa-island{fill:#fff;stroke:#365b51;stroke-width:1.5;cursor:pointer}.africa-island-label{font-size:14px;fill:#33554c;pointer-events:none}.africa-symbol{fill:#3c7968;fill-opacity:.6;stroke:#173f35;stroke-width:1;vector-effect:non-scaling-stroke;cursor:pointer}
-.africa-legend{display:flex;gap:9px 14px;flex-wrap:wrap;padding:15px 18px 5px;font-size:11px}.africa-legend span{display:inline-flex;gap:5px;align-items:center}.africa-legend i{display:inline-block;width:16px;height:12px;border:1px solid #879b87}.africa-no-data{background:repeating-linear-gradient(135deg,#eeeae1 0px,#eeeae1 4px,#b5b0a3 4px,#b5b0a3 5px)}
-.africa-caption,.africa-coverage{font-size:11px;line-height:1.8;color:var(--ink-soft);padding:0 18px;margin:10px 0}.africa-coverage{padding-bottom:10px}
-.africa-country-controls{padding:18px;display:grid;gap:12px}.africa-selected{border-block:1px solid var(--rule);background:#f5f2e8;padding:18px}.africa-selected h2{margin:5px 0 10px;font-family:var(--serif);font-size:27px}.africa-big-value{display:flex;gap:8px;flex-wrap:wrap;align-items:baseline;margin:8px 0}.africa-big-value strong{font-size:30px;font-variant-numeric:tabular-nums}.africa-big-value span{font-size:12px}.africa-selected>p:not(.africa-big-value){font-size:12px;line-height:1.7}.africa-selected [data-comparison]{color:#263e7c}
-.africa-current-metrics,.africa-trend{padding:18px;border-bottom:1px solid var(--rule)}.africa-atlas h3{font-size:15px;line-height:1.6;margin:0 0 10px}.africa-atlas table{width:100%;border-collapse:collapse;font-size:12px}.africa-atlas th,.africa-atlas td{text-align:left;border-bottom:1px solid #e0e2d8;padding:9px 7px;vertical-align:top}.africa-atlas td{font-variant-numeric:tabular-nums}.africa-atlas th small{display:block;font-size:10px;font-weight:400;color:var(--ink-soft)}.africa-current-metrics td{white-space:nowrap}.africa-current-metrics>p,.africa-trend p{font-size:11px;color:var(--ink-soft);line-height:1.7}.africa-trend svg{display:block;width:100%;height:auto}.africa-trend text{font-size:11px;fill:#576153}.africa-trend details{font-size:12px;margin-top:10px}.africa-trend details table{margin-top:8px}.africa-trend details[open]{max-height:360px;overflow:auto}.africa-atlas summary{cursor:pointer;min-height:36px;padding:8px 0}
-.africa-method{background:#f0f2e9;padding:22px;margin:22px 0 36px;border-left:3px solid #537c64}.africa-method h2{font-size:16px;margin:0 0 8px}.africa-method p{font-size:12px;line-height:1.9;margin:8px 0;overflow-wrap:anywhere}.africa-method p:last-child{color:var(--ink-soft);font-size:11px}
-.africa-section-heading{border-bottom:2px solid #273e33;padding-bottom:14px;margin-bottom:18px}.africa-section-heading h2{font-family:var(--serif);font-size:25px;margin:4px 0 8px}.africa-section-heading>p:last-child{font-size:12px;color:var(--ink-soft);margin:0}.africa-reading-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.africa-reading article{display:flex;flex-direction:column;background:#fff;border:1px solid var(--rule);padding:22px}.africa-reading h3{font-family:var(--serif);font-size:20px}.africa-reading article>p{font-size:13px;line-height:1.9;margin:0 0 16px}.africa-place-links{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto}.africa-place-links button{border:0;border-bottom:1px solid #9dab94;background:#f0f3e8;min-height:44px;padding:8px;font-size:12px}.africa-reading-source{font-size:10px;margin-top:16px;color:var(--ink-soft)}
-.africa-ranking{margin-top:38px}.africa-table-scroll{max-height:480px;overflow:auto;background:#fff;border:1px solid var(--rule)}.africa-ranking thead{position:sticky;top:0;background:#edf0e6;z-index:1}.africa-ranking button{min-height:36px;border:0;background:transparent;text-decoration:underline;text-underline-offset:3px;text-align:left}.africa-ranking [data-compare-country]{font-size:11px}.africa-ranking tr.is-selected{background:#f9eee5}.africa-ranking tr.is-compared{background:#edf0fa}
-.africa-sources{margin-top:36px;border-top:1px solid var(--rule);padding-top:22px;font-size:12px;line-height:1.9}.africa-sources h2{font-family:var(--serif);font-size:24px}.africa-source-entry{padding:14px 0;border-top:1px solid var(--rule)}.africa-noscript{background:#fff3d8;padding:16px;font-size:13px}
-@media(max-width:900px){.africa-workspace{grid-template-columns:minmax(0,1fr)}.africa-detail{display:grid;grid-template-columns:1fr 1fr}.africa-country-controls{grid-column:1}.africa-selected{grid-column:2;grid-row:1}.africa-current-metrics,.africa-trend{border-top:1px solid var(--rule)}.africa-reading-grid{gap:10px}.africa-reading article{padding:16px}}
-@media(max-width:600px){.africa-heading{margin-top:22px}.africa-fields{grid-template-columns:repeat(2,1fr)}.africa-fields button{min-height:50px;padding:10px 13px}.africa-intro h2{font-size:21px}.africa-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;padding:12px}.africa-controls label:first-child{grid-column:1/-1;min-width:0}.africa-controls select{width:100%;font-size:13px;padding-right:16px}.africa-detail{display:block}.africa-map-heading{padding:16px;display:block}.africa-map-heading>span{display:block;margin-top:7px}.africa-map-heading h2{font-size:21px}.africa-map-tools{padding:0 12px 12px}.africa-map-tools button{min-height:44px}.africa-reading-grid{grid-template-columns:1fr}.africa-reading article{padding:20px}.africa-method{padding:16px}.africa-legend{gap:8px 12px;font-size:10px}.africa-ranking th,.africa-ranking td{font-size:11px;padding:6px}.africa-ranking th:nth-child(2),.africa-ranking td:nth-child(2){display:none}}
+.africa-heading{display:flex;justify-content:space-between;align-items:center;gap:20px;margin:0 0 10px}
+.africa-breadcrumb{font-size:13px;color:var(--ink-soft);margin:0 0 2px}
+.africa-heading h1{font-size:22px;line-height:1.3;letter-spacing:-.02em;margin:0}
+.africa-region-navigation{min-width:220px}
+.africa-atlas .africa-region-navigation label{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:10px}
+.africa-fields{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin-bottom:12px}
+.africa-fields>a,.africa-fields button{display:flex;align-items:center;justify-content:center;min-height:44px;background:#fff;border:0;padding:8px 12px;font-weight:700;font-size:14px;text-decoration:none;color:inherit}
+.africa-fields button[aria-pressed=true]{background:#234b43;color:#fff}
+.africa-atlas button,.africa-atlas select{font:inherit;color:inherit}
+.africa-atlas button{cursor:pointer}
+.africa-atlas button:focus-visible,.africa-atlas select:focus-visible,.africa-atlas a:focus-visible,.africa-atlas summary:focus-visible{outline:3px solid #bc5c35;outline-offset:3px}
+.africa-atlas button:disabled{cursor:default;opacity:.55}
+.africa-atlas label{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:700}
+.africa-atlas select{width:100%;min-height:44px;min-width:0;border:1px solid #a4b2a8;border-radius:4px;background:#fff;padding:8px 30px 8px 9px;font-size:14px;max-width:100%}
+.africa-atlas select:disabled{background:#e9e8df;color:#62675c}
+.africa-workspace{display:grid;grid-template-columns:minmax(0,1fr) minmax(330px,380px);gap:16px;align-items:start}
+.africa-map-card,.africa-detail{background:#fff;border:1px solid var(--rule);border-radius:8px;min-width:0;overflow:hidden}
+.africa-map-heading{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:10px 14px 6px}
+.africa-map-heading h2{font-size:17px;line-height:1.5;margin:0}
+.africa-map-heading>span{font-size:13px;color:var(--ink-soft);white-space:nowrap}
+.africa-map-heading .eyebrow{margin:0;font-size:13px}
+.africa-map-tools{display:flex;flex-wrap:wrap;gap:6px;padding:0 12px 8px}
+.africa-map-tools button{border:1px solid #bbc8bd;background:#f8faf4;min-height:44px;border-radius:4px;font-size:13px;padding:7px 10px}
+.africa-map-tools button[aria-pressed=true]{background:#234b43;color:#fff}
+.africa-map{width:100%;height:clamp(300px,calc(100dvh - 420px),440px);display:block;background:#e9f0f0}
+.africa-country{stroke:#fbfcf7;stroke-width:.7;vector-effect:non-scaling-stroke;cursor:pointer}
+.africa-country:hover,.africa-country.is-selected{stroke:#a44225;stroke-width:2.3}
+.africa-country.is-compared{stroke:#263e7c;stroke-width:2.3;stroke-dasharray:4 2}
+.africa-country.is-muted{opacity:.22}
+.africa-graticule{stroke:#d1e0df;stroke-width:1}
+.africa-ocean{fill:#526f6d;font-family:var(--serif);font-size:32px;text-anchor:middle;pointer-events:none}
+.africa-map[data-detail=true] .africa-ocean,.africa-map[data-detail=true] .africa-island-label,.africa-map[data-detail=true] .africa-island{display:none}
+.africa-island{fill:#fff;stroke:#365b51;stroke-width:1.5;cursor:pointer}
+.africa-island-label{font-size:30px;fill:#33554c;pointer-events:none}
+.africa-symbol{fill:#3c7968;fill-opacity:.6;stroke:#173f35;stroke-width:1;vector-effect:non-scaling-stroke;cursor:pointer}
+.africa-theme-legend,.africa-legend{display:flex;gap:5px 14px;flex-wrap:wrap;padding:8px 14px 0;font-size:13px;line-height:1.55}
+.africa-theme-legend:empty{display:none}
+.africa-theme-legend span,.africa-legend span{display:inline-flex;gap:6px;align-items:center}
+.africa-theme-legend i,.africa-legend i{display:inline-block;flex:none;width:16px;height:12px;border:1px solid #526b58}
+.africa-theme-legend svg{flex:none}
+.africa-legend>svg{display:block;width:310px;max-width:100%;height:72px}
+.africa-no-data{background:repeating-linear-gradient(135deg,#eeeae1 0px,#eeeae1 4px,#b5b0a3 4px,#b5b0a3 5px)}
+.africa-themes{display:flex;flex-wrap:wrap;gap:8px;padding:10px 14px}
+.africa-themes:empty{display:none}
+.africa-themes button{min-height:44px;border:1px solid #a1b8a5;border-radius:5px;background:#f5f8ee;padding:8px 13px;font-size:14px;font-weight:700}
+.africa-themes button[aria-pressed=true],.africa-themes button.is-selected{background:#234b43;color:#fff;border-color:#234b43}
+.africa-map-notes{border-top:1px solid var(--rule);padding:0 14px;font-size:14px}
+.africa-map-notes summary{font-size:13px}
+.africa-caption,.africa-coverage{font-size:14px;line-height:1.7;color:var(--ink-soft);margin:0 0 12px}
+.africa-theme-reading{padding:14px}
+.africa-kicker{font-size:13px;font-weight:700;color:#47715d;margin:0 0 5px}
+.africa-theme-reading h2{font-size:21px;line-height:1.45;margin:0 0 9px}
+.africa-takeaway{font-size:15px;line-height:1.75;margin:0 0 10px}
+.africa-theme-caveat{font-size:14px;line-height:1.65;color:#405063;background:#f2f4ea;border-left:3px solid #86a48c;padding:8px 10px;margin:0 0 8px}
+.africa-theme-source{display:inline-block;font-size:14px;line-height:1.6}
+.africa-theme-actions{display:grid;gap:7px;margin-top:10px}
+.africa-theme-actions button{min-height:44px;text-align:left;background:#edf3e7;border:1px solid #afc2ad;border-radius:4px;font-size:14px;font-weight:700;padding:8px 11px}
+.africa-theme-actions [data-theme-return]{background:#fff6ec;border-color:#c99777}
+.africa-theme-full{margin-top:7px;border-top:1px solid var(--rule);font-size:14px;line-height:1.75}
+.africa-theme-full summary{font-size:14px}
+.africa-theme-full p{margin:8px 0 14px}
+.africa-theme-full ul,.africa-theme-full ol{padding-left:22px}
+.africa-theme-full li{margin-bottom:12px}
+.africa-country-controls{padding:10px 14px;display:grid;grid-template-columns:1fr 1fr;gap:10px;background:#f8f8f2;border-top:1px solid var(--rule)}
+.africa-country-controls label{font-size:13px}
+.africa-selected{border-top:1px solid var(--rule);background:#f5f2e8;padding:10px 14px}
+.africa-selected-heading{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.africa-selected-heading h2{margin:0;font-size:21px;line-height:1.5}
+.africa-selected-heading>span{font-size:13px;color:var(--ink-soft)}
+.africa-selected-metric{font-size:13px;font-weight:700;margin:4px 0}
+.africa-big-value{display:flex;gap:8px;flex-wrap:wrap;align-items:baseline;margin:3px 0}
+.africa-big-value strong{font-size:26px;line-height:1.4;font-variant-numeric:tabular-nums}
+.africa-big-value span{font-size:14px}
+.africa-selected>p:not(.africa-big-value){font-size:14px;line-height:1.6;margin:4px 0}
+.africa-selected [data-comparison]{color:#263e7c}
+.africa-secondary{margin-top:18px}
+.africa-disclosure{background:#fff;border:1px solid var(--rule);border-radius:6px;margin-bottom:10px;padding:0 16px;font-size:14px}
+.africa-atlas summary{cursor:pointer;min-height:44px;padding:10px 0;font-size:14px;font-weight:700;line-height:1.6}
+.africa-disclosure>summary{padding:13px 0}
+.africa-disclosure[open]>summary{border-bottom:1px solid var(--rule);margin-bottom:14px}
+.africa-controls{display:flex;align-items:start;gap:16px;flex-wrap:wrap;background:#f2f1e9;padding:14px;margin-bottom:16px}
+.africa-controls label:first-child{min-width:270px}
+.africa-controls small{font-size:13px;font-weight:400;max-width:270px}
+.africa-controls [data-latest]{align-self:center;min-height:44px;border:1px solid #aeb8a2;border-radius:4px;background:#fff;padding:8px 12px;font-size:14px;line-height:1.6}
+.africa-statistics-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}
+.africa-current-metrics,.africa-trend{padding:4px 0 16px;min-width:0}
+.africa-atlas h3{font-size:16px;line-height:1.6;margin:0 0 10px}
+.africa-atlas table{width:100%;border-collapse:collapse;font-size:14px}
+.africa-atlas th,.africa-atlas td{text-align:left;border-bottom:1px solid #e0e2d8;padding:9px 7px;vertical-align:top}
+.africa-atlas td{font-variant-numeric:tabular-nums}
+.africa-atlas th small{display:block;font-size:13px;font-weight:400;color:var(--ink-soft)}
+.africa-current-metrics td{white-space:nowrap}
+.africa-current-metrics>p,.africa-trend p{font-size:14px;color:var(--ink-soft);line-height:1.7}
+.africa-trend svg{display:block;width:100%;max-height:300px;height:auto}
+.africa-trend text{font-size:13px;fill:#405063}
+.africa-trend details{font-size:14px;margin-top:10px}
+.africa-trend details table{margin-top:8px}
+.africa-trend details[open]{max-height:360px;overflow:auto}
+.africa-intro{padding:0 0 16px;max-width:880px}
+.africa-intro h2{font-size:21px;margin:0 0 10px}
+.africa-intro p{font-size:15px;line-height:1.8;margin:0;color:var(--ink-soft)}
+.africa-method{background:#f0f2e9;padding:16px;margin:0 0 16px;border-left:3px solid #537c64}
+.africa-method h2{font-size:17px;margin:0 0 8px}
+.africa-method p{font-size:14px;line-height:1.8;margin:8px 0;overflow-wrap:anywhere}
+.africa-section-heading{border-bottom:2px solid #273e33;padding-bottom:12px;margin-bottom:16px}
+.africa-section-heading h2{font-size:23px;margin:4px 0 8px}
+.africa-section-heading>p:last-child{font-size:14px;color:var(--ink-soft);margin:0}
+.africa-section-heading .eyebrow{font-size:13px}
+.africa-reading-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:16px}
+.africa-reading article{display:flex;flex-direction:column;background:#fff;border:1px solid var(--rule);padding:18px}
+.africa-reading h3{font-size:20px}
+.africa-reading article>p{font-size:14px;line-height:1.8;margin:0 0 16px}
+.africa-place-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+.africa-place-links button{border:1px solid #c7d2ba;background:#f0f3e8;border-radius:4px;min-height:44px;padding:8px 10px;font-size:14px}
+.africa-reading-source{font-size:14px;margin-top:16px;color:var(--ink-soft)}
+.africa-ranking{margin-bottom:16px}
+.africa-table-scroll{max-height:480px;overflow:auto;background:#fff;border:1px solid var(--rule)}
+.africa-ranking thead{position:sticky;top:0;background:#edf0e6;z-index:1}
+.africa-ranking button{min-height:44px;border:0;background:transparent;text-decoration:underline;text-underline-offset:3px;text-align:left;font-size:14px}
+.africa-ranking tr.is-selected{background:#f9eee5}
+.africa-ranking tr.is-compared{background:#edf0fa}
+.africa-sources{font-size:14px;line-height:1.8;margin-bottom:16px}
+.africa-sources h2{font-size:23px}
+.africa-source-entry{padding:14px 0;border-top:1px solid var(--rule)}
+.africa-noscript{background:#fff3d8;padding:16px;font-size:14px}
+@media(min-width:1800px){.africa-workspace{grid-template-columns:minmax(0,1fr) 430px}.africa-map{height:520px}}
+@media(max-width:1000px){.africa-atlas.shell{width:calc(100% - 32px)}.africa-workspace{grid-template-columns:minmax(0,1fr)}.africa-map{height:clamp(340px,55dvh,520px)}.africa-detail{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}.africa-theme-reading{grid-row:1/3}.africa-country-controls{align-self:start;border-top:0}.africa-selected{align-self:start}.africa-reading-grid{gap:10px}.africa-reading article{padding:14px}}
+@media(max-width:600px){.africa-atlas.shell{width:calc(100% - 24px);padding-top:8px}.africa-heading{align-items:start;gap:12px}.africa-heading h1{font-size:21px}.africa-breadcrumb{font-size:13px}.africa-region-navigation{min-width:0;max-width:190px}.africa-atlas .africa-region-navigation label{display:flex;gap:3px;font-size:13px}.africa-fields{grid-template-columns:repeat(5,minmax(0,1fr));margin-bottom:10px}.africa-fields>a,.africa-fields button{min-height:48px;font-size:13px;padding:6px 2px;line-height:1.5}.africa-map-heading{align-items:start;flex-direction:column;gap:2px;padding:10px 12px 8px}.africa-map-heading h2{font-size:17px}.africa-map-heading>span{font-size:13px}.africa-map-tools{gap:5px;padding-inline:10px}.africa-map-tools button{padding:7px 8px;font-size:13px}.africa-map{height:340px}.africa-theme-legend,.africa-legend{gap:5px 10px;font-size:13px;padding-inline:12px}.africa-themes{padding:10px 12px;gap:6px}.africa-themes button{font-size:14px;padding:8px 10px}.africa-detail{display:block}.africa-theme-reading{padding:16px}.africa-theme-reading h2{font-size:22px}.africa-country-controls{border-top:1px solid var(--rule);padding:12px 16px}.africa-selected{padding:12px 16px}.africa-statistics-grid{grid-template-columns:minmax(0,1fr);gap:16px}.africa-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;padding:12px}.africa-controls label:first-child{grid-column:1/-1;min-width:0}.africa-controls [data-latest]{align-self:start}.africa-reading-grid{grid-template-columns:1fr}.africa-reading article{padding:18px}.africa-method{padding:14px}.africa-disclosure{padding-inline:12px}.africa-ranking th,.africa-ranking td{font-size:14px;padding:6px}.africa-ranking th:nth-child(2),.africa-ranking td:nth-child(2){display:none}}
+@media(prefers-reduced-motion:reduce){.africa-atlas *{scroll-behavior:auto}}

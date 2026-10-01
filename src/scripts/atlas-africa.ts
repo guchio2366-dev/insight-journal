@@ -1,5 +1,6 @@
 import {countries,fields,metrics,regionNames,years,readState,writeState,metricById,valueAt,formatValue,fillFor,rankedCountries,palette,sources,defaultYear,type Field,type Region,type Metric} from '../data/atlas/africa-atlas.ts';
 import {projectAfrica,africaWidth,africaHeight} from '../lib/atlas-africa-geometry.ts';
+import {themes,type AfricaTheme} from '../data/atlas/africa-themes.ts';
 
 export function initializeAfricaAtlas() {
  const root=document.querySelector<HTMLElement>('[data-africa-atlas]');
@@ -15,6 +16,13 @@ export function initializeAfricaAtlas() {
  const map=query<SVGSVGElement>('.africa-map');
  function fitMap() {
   map.dataset.detail=String(state.zoom!=='all');
+  if(state.zoom==='theme'){
+   const theme=themes.find(t=>t.id===state.theme)!;
+   const [left,bottom]=projectAfrica([theme.bounds[0],theme.bounds[1]]),[right,top]=projectAfrica([theme.bounds[2],theme.bounds[3]]);
+   const width=Math.max(right-left,(bottom-top)*africaWidth/africaHeight)*1.12;
+   const height=width*africaHeight/africaWidth;
+   map.setAttribute('viewBox',`${(left+right-width)/2} ${(top+bottom-height)/2} ${width} ${height}`);return;
+  }
   if(state.zoom==='all'||state.zoom==='region'&&state.region==='all'){map.setAttribute('viewBox',`0 0 ${africaWidth} ${africaHeight}`);return;}
   const boxes=paths.filter(p=>state.zoom==='country'?p.dataset.countryPath===state.place:countries.find(c=>c.code===p.dataset.countryPath)?.region===state.region).map(p=>p.getBBox());
   if(!boxes.length)return;
@@ -23,6 +31,38 @@ export function initializeAfricaAtlas() {
   const width=Math.max(18,(right-left)*1.18,(bottom-top)*1.18*africaWidth/africaHeight);
   const height=width*africaHeight/africaWidth;
   map.setAttribute('viewBox',`${(left+right-width)/2} ${(top+bottom-height)/2} ${width} ${height}`);
+ }
+ function renderTheme(theme:AfricaTheme) {
+  const container=query<SVGGElement>('[data-theme-marks]');container.replaceChildren();
+  const view=map.getAttribute('viewBox')!.split(' ').map(Number);
+  const box=map.getBoundingClientRect();
+  const scale=Math.max(view[2]/(box.width||640),view[3]/(box.height||528));
+  const colors:Record<string,string>={river:'#236aa0','area-label':'#655037',crop:'#925b16',resource:'#9c365a',city:'#633898',port:'#164f69'};
+  const legend=query<HTMLElement>('[data-theme-legend]');legend.replaceChildren();
+  const details=query<HTMLElement>('[data-theme-details]');details.replaceChildren();
+  theme.marks.forEach((mark,i)=>{
+   const group=svgEl('g',{'data-theme-mark':mark.id});
+   const isLine=Array.isArray(mark.coordinates[0]);
+   const points=isLine?mark.coordinates as [number,number][]:[mark.coordinates as [number,number]];
+   const projected=points.map(projectAfrica);const [x,y]=projected[Math.floor(projected.length/2)];
+   const color=colors[mark.kind]??'#655037';
+   if(isLine)group.append(svgEl('path',{d:projected.map(([px,py],j)=>`${j?'L':'M'}${px},${py}`).join(''),fill:'none',stroke:color,'stroke-width':3,'vector-effect':'non-scaling-stroke'}));
+   group.append(svgEl(mark.kind==='resource'?'rect':'circle',mark.kind==='resource'?{x:x-7*scale,y:y-7*scale,width:14*scale,height:14*scale,fill:color,stroke:'#fff','stroke-width':1.5,'vector-effect':'non-scaling-stroke'}:{cx:x,cy:y,r:7*scale,fill:color,stroke:'#fff','stroke-width':1.5,'vector-effect':'non-scaling-stroke'}));
+   group.append(svgEl('text',{x:x+11*scale,y:y+5*scale,fill:color,'font-size':14*scale,'font-weight':700,stroke:'#fff','stroke-width':3*scale,'paint-order':'stroke','stroke-linejoin':'round'},String(i+1)));
+   group.append(svgEl('title',{},`${i+1} ${mark.label}：${mark.note}`));container.append(group);
+   const item=make('span',`${i+1} ${mark.label}`);const key=make('i');key.style.background=color;item.prepend(key);legend.append(item);
+   const p=make('p',`${i+1} ${mark.label} — ${mark.note}`);details.append(p);
+  });
+  if(theme.evidenceSources)for(const source of theme.evidenceSources){const p=make('p');const a=make('a',source.label) as HTMLAnchorElement;a.href=source.url;p.append(a);details.append(p);}
+  text('[data-theme-title]',theme.title);
+  text('[data-theme-takeaway]',state.context?theme.compareText:theme.takeaway);
+  text('[data-theme-caveat]',theme.caveat);
+  const source=query<HTMLAnchorElement>('[data-theme-source]');source.href=theme.source;source.textContent=theme.sourceLabel;
+  const compare=query<HTMLButtonElement>('[data-theme-comparison]');compare.hidden=!!state.context;compare.textContent=`${metricById(theme.compareMetric).label}と重ねる`;
+  const back=query<HTMLButtonElement>('[data-theme-return]');back.hidden=!state.context;back.textContent=`← ${theme.title}へ戻る`;
+  const choices=query<HTMLElement>('[data-themes]');choices.replaceChildren();
+  for(const t of themes.filter(t=>t.field===state.field)){const button=make('button',t.title) as HTMLButtonElement;button.type='button';button.dataset.theme=t.id;button.setAttribute('aria-pressed',String(t.id===theme.id));choices.append(button);}
+  map.dataset.theme=theme.id;map.dataset.context=state.context;
  }
  function renderTrend(metric:Metric) {
   const container=query<HTMLElement>('[data-trend]');container.replaceChildren();
@@ -47,7 +87,8 @@ export function initializeAfricaAtlas() {
   for(const year of years){const tr=make('tr');tr.append(make('th',String(year)),make('td',formatValue(valueAt(metric.id,state.place,year),metric)),make('td',state.compare?formatValue(valueAt(metric.id,state.compare,year),metric):'—'));body.append(tr);}
  }
  function render(write=false) {
-  const metric=metricById(state.metric);
+  const metric=metricById(state.context||state.metric);
+  const theme=themes.find(t=>t.id===state.theme)!;
   const country=countries.find(c=>c.code===state.place)!;
   const comparison=countries.find(c=>c.code===state.compare);
   const period=metric.timeless?'長期平均':`${state.year}年`;
@@ -66,14 +107,15 @@ export function initializeAfricaAtlas() {
   for(const marker of root!.querySelectorAll<SVGGElement>('[data-island-marker]'))marker.style.display=metric.symbols?'none':'';
   for(const button of root!.querySelectorAll('[data-zoom]'))button.setAttribute('aria-pressed',String((button as HTMLElement).dataset.zoom===state.zoom));
   fitMap();
+  renderTheme(theme);
   const legend=query<HTMLElement>('[data-legend]');legend.replaceChildren();
   if(metric.symbols){const key=svgEl('svg',{viewBox:'0 0 310 72',width:310,height:72,role:'img','aria-label':'人口の円面積。100万人、1000万人、1億人の大きさ。'});[1e6,1e7,1e8].forEach((v,i)=>{const r=Math.sqrt(v/1e6)*2.2;key.append(svgEl('circle',{cx:44+i*105,cy:30,r,fill:'#3c7968','fill-opacity':.6}));key.append(svgEl('text',{x:44+i*105,y:66,'text-anchor':'middle','font-size':11},`${v/1e4}万人`));});legend.append(key);}
   else palette.forEach((color,i)=>{const label=i===0?`${metric.breaks[0].toLocaleString()}未満`:i===4?`${metric.breaks[3].toLocaleString()}以上`:`${metric.breaks[i-1].toLocaleString()}〜${metric.breaks[i].toLocaleString()}未満`;const span=make('span');const swatch=make('i');swatch.style.background=color;span.append(swatch,document.createTextNode(label));legend.append(span);});
   const missing=make('span');const swatch=make('i');swatch.className='africa-no-data';missing.append(swatch,document.createTextNode('未収録'));legend.append(missing);
   text('[data-map-caption]',metric.symbols?'円の面積は人口に比例。国を示す位置に置いており、都市人口や居住範囲ではありません。':'色は国平均・国全体の割合です。国内の分布・産地・都市の境界を表しません。島の白丸は選択用の目印です。');
-  const ranked=rankedCountries(state);const count=ranked.filter(c=>c.value!==null).length;
+  const ranked=rankedCountries({...state,metric:metric.id});const count=ranked.filter(c=>c.value!==null).length;
   text('[data-coverage]',`${regionNames[state.region]}：${ranked.length}の国・地域のうち${count}件を収録、${ranked.length-count}件は未収録。赤枠は選択国、青い破線は比較国。`);
-  text('[data-selected-name]',country.name);text('[data-selected-region]',regionNames[country.region as Region]);text('[data-selected-value]',formatValue(valueAt(metric.id,country.code,state.year),metric));text('[data-selected-unit]',metric.unit);
+  text('[data-selected-name]',country.name);text('[data-selected-region]',regionNames[country.region as Region]);text('[data-selected-value]',formatValue(valueAt(metric.id,country.code,state.year),metric));text('[data-selected-unit]',metric.unit);text('[data-selected-metric]',metric.label);
   text('[data-comparison]',comparison?`比較：${comparison.name}　${formatValue(valueAt(metric.id,comparison.code,state.year),metric)} ${metric.unit}`:'');
   text('[data-place-note]',country.code==='ESH'?'西サハラの独立したWDI系列は未収録です。モロッコの値は転用しません。':country.code==='SOM'?'数値はソマリア全体の統計です。地図ではソマリランドも同じ選択対象に含めています。':`${period}。国全体の集計値です。`);
   text('[data-column-place]',country.name);text('[data-column-compare]',comparison?.name??'比較国');query<HTMLElement>('[data-column-compare]').hidden=!comparison;
@@ -83,7 +125,7 @@ export function initializeAfricaAtlas() {
   renderTrend(metric);
   text('[data-metric-note]',metric.note);query<HTMLAnchorElement>('[data-source]').href=`https://data.worldbank.org/indicator/${metric.id}`;
   const source=sources.find(s=>s.id===metric.id)!;
-  const credit=metric.id.startsWith('AG.')||metric.id==='ER.H2O.INTR.PC'?'FAOの統計（WDI収録）':state.field==='population'?'国連人口部・各国統計局等（WDI収録）':metric.id==='NY.GDP.TOTL.RT.ZS'?'世界銀行の資源レント推計':'各国の国民経済計算・世界銀行等';
+  const credit=metric.id.startsWith('AG.')||metric.id==='ER.H2O.INTR.PC'?'FAOの統計（WDI収録）':metric.field==='population'?'国連人口部・各国統計局等（WDI収録）':metric.id==='NY.GDP.TOTL.RT.ZS'?'世界銀行の資源レント推計':'各国の国民経済計算・世界銀行等';
   text('[data-source-organization]',`${credit} · WDI更新：${source.lastUpdated}`);
   for(const cards of root!.querySelectorAll<HTMLElement>('[data-reading-field]'))cards.hidden=cards.dataset.readingField!==state.field;
   text('[data-ranking-unit]',`${metric.unit}（${period}）`);text('[data-ranking-description]',`${regionNames[state.region]}・${metric.label}の大きい順。未収録は末尾に表示します。`);
@@ -91,21 +133,25 @@ export function initializeAfricaAtlas() {
   for(const c of ranked){const tr=make('tr');tr.classList.toggle('is-selected',c.code===state.place);tr.classList.toggle('is-compared',c.code===state.compare);const th=make('th');const button=make('button',c.name);button.setAttribute('type','button');button.dataset.focusCountry=c.code;th.append(button);const compare=make('td');const compareButton=make('button',c.code===state.compare?'比較中':'比較に追加');compareButton.setAttribute('type','button');compareButton.dataset.compareCountry=c.code;compareButton.setAttribute('aria-label',`${c.name}を比較に追加`);(compareButton as HTMLButtonElement).disabled=c.code===state.place;compare.append(compareButton);tr.append(th,make('td',regionNames[c.region as Region]),make('td',formatValue(c.value,metric)),compare);rows.append(tr);}
   if(write){const url=writeState(state,new URL(location.href));if(url.href!==location.href)history.pushState(null,'',url);}
  }
- function chooseCountry(code:string){if(!countries.some(c=>c.code===code))return;state.place=code;if(state.compare===code)state.compare='';if(state.region!=='all')state.region=countries.find(c=>c.code===code)!.region as Region;render(true);}
+ function chooseCountry(code:string){if(!countries.some(c=>c.code===code))return;state.place=code;if(state.compare===code)state.compare='';if(state.region!=='all')state.region=countries.find(c=>c.code===code)!.region as Region;if(state.zoom==='theme'&&!themes.find(t=>t.id===state.theme)!.places.includes(code))state.zoom='all';render(true);}
  root.addEventListener('click',event=>{
-  const target=(event.target as Element).closest<HTMLElement>('[data-field],[data-focus-country],[data-compare-country],[data-country-path],[data-country-marker],[data-zoom],[data-reset]');if(!target)return;
+  const target=(event.target as Element).closest<HTMLElement>('[data-field],[data-focus-country],[data-compare-country],[data-country-path],[data-country-marker],[data-zoom],[data-reset],button[data-theme],[data-theme-comparison],[data-theme-return]');if(!target)return;
   if(target.hasAttribute('data-reset')){state=readState('');render(true);return;}
-  if(target.dataset.field){state.field=target.dataset.field as Field;state.metric=metrics.find(m=>m.field===state.field)!.id;render(true);return;}
+  if(target.dataset.field){if(target.dataset.field===state.field)return;state.field=target.dataset.field as Field;state.metric=metrics.find(m=>m.field===state.field)!.id;state.theme=themes.find(t=>t.field===state.field)!.id;state.context='';state.zoom='theme';render(true);return;}
+  if(target.dataset.theme){state.theme=target.dataset.theme;state.context='';state.zoom='theme';render(true);return;}
+  if(target.hasAttribute('data-theme-comparison')){state.context=themes.find(t=>t.id===state.theme)!.compareMetric;render(true);return;}
+  if(target.hasAttribute('data-theme-return')){state.context='';render(true);return;}
   if(target.dataset.zoom){state.zoom=target.dataset.zoom as typeof state.zoom;render(true);return;}
   if(target.dataset.compareCountry){state.compare=target.dataset.compareCountry===state.place?'':target.dataset.compareCountry;render(true);return;}
   chooseCountry(target.dataset.focusCountry??target.dataset.countryPath??target.dataset.countryMarker??'');
  });
- query<HTMLButtonElement>('[data-latest]').addEventListener('click',()=>{state.year=defaultYear(state.metric);render(true);});
- query<HTMLSelectElement>('[data-metric]').addEventListener('change',event=>{state.metric=(event.target as HTMLSelectElement).value;render(true);});
+ query<HTMLButtonElement>('[data-latest]').addEventListener('click',()=>{state.year=defaultYear(state.context||state.metric);render(true);});
+ query<HTMLSelectElement>('[data-metric]').addEventListener('change',event=>{state.metric=(event.target as HTMLSelectElement).value;state.context='';render(true);});
  query<HTMLSelectElement>('[data-year]').addEventListener('change',event=>{state.year=Number((event.target as HTMLSelectElement).value);render(true);});
  query<HTMLSelectElement>('[data-region]').addEventListener('change',event=>{state.region=(event.target as HTMLSelectElement).value as Region;state.zoom=state.region==='all'?'all':'region';render(true);});
  query<HTMLSelectElement>('[data-place]').addEventListener('change',event=>chooseCountry((event.target as HTMLSelectElement).value));
  query<HTMLSelectElement>('[data-compare]').addEventListener('change',event=>{state.compare=(event.target as HTMLSelectElement).value;render(true);});
  window.addEventListener('popstate',()=>{state=readState(location.search);render();});
+ window.addEventListener('resize',()=>renderTheme(themes.find(t=>t.id===state.theme)!));
  render();
 }
