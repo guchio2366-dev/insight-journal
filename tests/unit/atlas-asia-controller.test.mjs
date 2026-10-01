@@ -674,6 +674,28 @@ test('事例の選択・比較・復帰・別地点選択を実コントロー�
  }finally{await window.happyDOM.close();}
 });
 
+test('農畜産と林業の子項目は選択・比較復帰・履歴復元に対応する',async()=>{
+ const {window,q}=await setup('?field=agriculture&topic=overview&farms=livestock&lng=118&lat=32&z=3.2',{farming:true,presentation:true});
+ try{
+  assert.equal(q('[data-farm-overview-legend]').hidden,false);
+  q('[data-farming-topic]').value='forest';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));
+  assert.equal(q('[data-farm-overview-legend]').hidden,true);
+  assert.equal(q('[data-farming-legend]').hidden,false);
+  const forestUrl=window.location.href;
+  q('[data-compare="natural"]').click();q('[data-comparison-back]').click();
+  assert.equal(new URL(window.location.href).searchParams.get('topic'),'forest');
+  assert.equal(q('[data-farm-overview-legend]').hidden,true);
+  assert.equal(q('[data-farming-legend]').hidden,false);
+  q('[data-farming-topic]').value='overview';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));
+  assert.equal(q('[data-farm-overview-legend]').hidden,false);
+  assert.equal(q('[data-farming-legend]').hidden,true);
+  window.history.replaceState({},'',forestUrl);window.dispatchEvent(new window.PopStateEvent('popstate'));
+  assert.equal(q('[data-farm-overview-legend]').hidden,true);
+  assert.equal(q('[data-farming-legend]').hidden,false);
+  assert.equal(new URL(window.location.href).searchParams.get('farms'),'livestock');
+ }finally{await window.happyDOM.close();}
+});
+
 test('農林業は品目・単位・地点を切り替え、国別統計と比較復帰を保持する',async()=>{
  const {window,q,requests}=await setup('?field=agriculture&topic=wheat&place=CHN&at=116,35',{farming:true,population:true});
  try{

@@ -18,6 +18,7 @@ import {createAsiaTrade} from './atlas-asia-trade';
 import {createPlaceReadings} from './atlas-asia-place-readings';
 import {createAsiaComparison} from './atlas-asia-comparison';
 import {createAsiaReadingDock} from './atlas-asia-reading-dock';
+import {createAsiaLayout} from './atlas-asia-layout';
 import {asiaPlaceReadings,normalizePlaceReading,selectedPlaceReading} from '../data/atlas/asia-place-readings';
 import {isTradeTopic,normalizeTradeState,type TradeRegion} from '../data/atlas/asia-trade';
 import {socialGroup,socialTopic,isSocialDetailId,normalizeSocialState,type SocialRegion} from '../data/atlas/asia-social';
@@ -114,6 +115,7 @@ function start(root:HTMLElement) {
   const placeReadings=createPlaceReadings(root,config.regionId,()=>state,navigate,camera);
   const comparison=createAsiaComparison(root,config,context,()=>state);
   const readingDock=createAsiaReadingDock(root);
+  const learningLayout=createAsiaLayout(root);
   let shownChartCity:string|null=null;
 
 
@@ -237,6 +239,7 @@ function start(root:HTMLElement) {
     renderClass();
     renderGridReading();
     readingDock.render(state);
+    learningLayout.render(state);
     for(const item of markers){item.button.hidden=!climate;item.button.setAttribute('aria-pressed',String(item.city.id===state.city));item.button.style.opacity=!state.place||item.city.countryCode===state.place?'1':'.45';}
     if(pointLabel){pointLabel.hidden=!selectedPoint||(state.field==='population'&&['ethnicity','religion'].includes(state.topic??''))||naturalTopic()==='climate';if(selectedPoint){pointMarker?.setLngLat(selectedPoint);pointLabel.textContent=config.countries.find(c=>c.code===state.place)?.name??'国・地域を確認できない地点';}}
     if(mapReady&&map){map.setFilter('asia-country-selected',['==',['get','code'],state.place??'']);void showField();}
@@ -379,7 +382,7 @@ function start(root:HTMLElement) {
     const active=state.field==='agriculture',layer=farmingLayer(),topic=farmingTopic();
     for(const key of farmingGrids.keys())if(key!==layer?.grid)farmingGrids.delete(key);
     optionalHidden('[data-farm-switches]',!active||topic!=='overview'||state.overlay==='water');
-    optionalHidden('[data-farming-topics]',true);optionalHidden('[data-farming-panel]',!active||topic==='overview');optionalHidden('[data-farm-overview-reading]',!active||topic!=='overview');optionalHidden('[data-farm-overview-legend]',!active);optionalHidden('[data-farming-legend]',!layer);
+    optionalHidden('[data-farming-topics]',true);optionalHidden('[data-farming-panel]',!active||topic==='overview');optionalHidden('[data-farm-overview-reading]',!active||topic!=='overview');optionalHidden('[data-farm-overview-legend]',!active||layer?.kind==='forest');optionalHidden('[data-farming-legend]',!layer);
     if(!active||!config.farming)return;
     const select=$<HTMLSelectElement>('[data-farming-topic]');if(select)select.value=topic!;
     for(const b of $$<HTMLButtonElement>('[data-farm-choice]'))b.setAttribute('aria-pressed',String(b.dataset.farmChoice===topic));
@@ -642,7 +645,7 @@ function start(root:HTMLElement) {
     // the map's aspect ratio nor a short article determines the pane height.
     for(const [selector,property] of [['.asia-reading-scroll','--asia-reading-height'],['.atlas-news','--asia-news-height']] as const){
       const pane=$(selector);if(!pane)continue;
-      const value=window.innerWidth>=1200?`${Math.max(0,Math.floor(window.innerHeight-Math.max(12,pane.getBoundingClientRect().top)-12))}px`:'';
+      const value=window.innerWidth>=960?`${Math.max(0,Math.floor(window.innerHeight-Math.max(12,pane.getBoundingClientRect().top)-12))}px`:'';
       if(root.style.getPropertyValue(property)!==value){if(value)root.style.setProperty(property,value);else root.style.removeProperty(property);}
     }
   }

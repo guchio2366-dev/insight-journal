@@ -4,9 +4,10 @@ import {type SocialRegion} from '../../data/atlas/asia-social';
 import {socialEntry} from '../../data/atlas/asia-social-overview';
 import {asiaPopulationTopics} from '../../data/atlas/asia-population';
 import type {AsiaField} from '../../lib/atlas-asia-state';
-const {initialField,social,regionId}=Astro.props as {initialField:AsiaField;social:SocialRegion;regionId:string};
+const {initialField,social,regionId,forestTopic}=Astro.props as {initialField:AsiaField;social:SocialRegion;regionId:string;forestTopic?:string};
 const populationTopics=[...asiaPopulationTopics,...social.groups.map(g=>({id:socialEntry(g.id),label:g.label}))];
 ---
+<nav class="asia-agriculture-tabs asia-primary-topics" data-agriculture-topics hidden={initialField!=='agriculture'} aria-label="農林業の主題"><button type="button" data-farm-group="agriculture" data-farm-group-topic="overview" aria-pressed="true">農畜産</button><button type="button" data-farm-group="forestry" data-farm-group-topic={forestTopic} aria-pressed="false" disabled={!forestTopic}>林業{!forestTopic&&<small>資料を整備中</small>}</button></nav>
 <div class="asia-natural-controls" data-natural-topics hidden={initialField!=='natural'}>
  <nav class="asia-primary-topics" aria-label="自然環境の主題">{naturalGroups.map(t=><button type="button" data-natural-group={t.id} aria-pressed={t.id==='climate'}>{t.label}</button>)}</nav>
  <nav class="asia-secondary-topics" data-water-topics hidden aria-label="水資源の種類">{[{id:'water',label:'河川・地下水'},{id:'precipitation',label:'降水量'},{id:'basins',label:'河川の流域'}].map(t=><button type="button" data-water-view={t.id} data-natural-topic={t.id} aria-pressed="false">{t.label}</button>)}</nav>

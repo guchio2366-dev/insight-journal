@@ -8,6 +8,87 @@
 .west-atlas select,.west-region-country select{min-height:44px;max-width:100%;min-width:0;padding:7px 10px;background:#fffef8;border:1px solid #b8c5bd;border-radius:3px;font:inherit;color:#253e46}
 .west-region-country select{min-height:40px}
 .west-controls{grid-template-columns:1fr}
+.west-control-status{font-size:12px;margin:6px 0;color:#50656a}
+.west-agri-controls{margin:0;padding:0}
+.west-agri-controls .atlas-water-tabs{margin:0;border-bottom:0;min-height:44px}
+.west-item-picker,.west-water-items{display:flex;justify-content:flex-start;gap:6px;flex-wrap:wrap}
+.west-item-picker button,.west-water-items button{min-height:40px;padding:5px 8px;font:inherit;color:#254952;background:transparent;border:1px solid transparent;cursor:pointer}
+.west-item-picker button[aria-pressed=true],.west-water-items button[aria-pressed=true]{font-weight:700;border-color:#b8c8ba;background:#eaf0e3}
+.west-additional-topics summary{min-height:44px;padding:10px 0;font-size:13px;cursor:pointer}
+.west-reading-header button{min-height:40px;border:1px solid #bac9c6;background:#fffef8;padding:6px 10px;color:#254952;font-size:12px;cursor:pointer;margin:0 0 8px}
+.west-layout-statistics{grid-column:1/-1;max-width:none!important;width:100%;margin-top:10px!important;padding:20px;border:1px solid #c7ccbf;background:#fffef8}
+.west-layout-statistics[hidden]{display:none!important}
+.west-layout-statistics table{width:100%}
+.west-layout-statistics th,.west-layout-statistics td{font-size:13px}
+.west-layout-statistics .atlas-climate-diagrams{grid-template-columns:minmax(0,1fr);max-width:720px}
+.west-layout-statistics .atlas-climate-diagram{margin:0;max-width:none}
+.west-layout-statistics p{font-size:14px;line-height:1.85}
+.west-layout-statistics .atlas-city-source{font-size:13px}
+.west-layout-statistics .west-detail-controls{margin:0 0 12px;padding:0}
+.west-layout-statistics [data-west-statistics-controls]:has(>[hidden]){display:none}
+@media(min-width:960px) and (max-width:1199px){
+ .atlas-desktop-shell .west-atlas[data-field]:not([data-comparing=true]) .atlas-primary-grid{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px}
+}
+@media(min-width:960px){
+ .west-agri-controls,.west-atlas .industry-controls{padding:6px;border:1px solid #c7ccbf;border-bottom:0;background:#fbfaf3;margin:0 0 6px}
+ .west-agri-controls .atlas-water-tabs,.west-atlas .industry-controls .industry-tab-row{min-height:40px;margin:0;padding:0;gap:6px}
+ .west-agri-controls .atlas-water-tabs button,.west-atlas .industry-controls button,.west-subtabs button{font-size:14px;line-height:20px;min-height:40px;padding:9px 12px}
+ .west-regional-navigation{display:block!important;margin:0 0 10px!important}
+ .west-atlas:not([data-comparing=true]) .atlas-primary-grid{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px;align-items:start}
+ .west-atlas:not([data-comparing=true]) .atlas-map-frame{height:auto!important;aspect-ratio:1.55;min-height:300px!important;max-height:640px}
+ .west-atlas:not([data-comparing=true]) .west-reading{display:flex;flex-direction:column;height:clamp(420px,calc(100dvh - 305px),580px)!important;overflow:hidden;padding:14px 16px}
+ .west-atlas:not([data-comparing=true]) .west-reading-header:has([data-west-reading-overview]){display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:8px;align-items:center}
+ .west-atlas:not([data-comparing=true]) .west-reading-header:has([data-west-reading-overview]) .atlas-eyebrow{grid-column:1/-1;grid-row:1}
+ .west-atlas:not([data-comparing=true]) .west-reading-header:has([data-west-reading-overview]) h2{grid-column:1;grid-row:2}
+ .west-atlas:not([data-comparing=true]) .west-reading-header [data-west-reading-overview]{grid-column:2;grid-row:2;margin:0;white-space:nowrap}
+ .west-atlas:not([data-comparing=true]) .west-reading-header:has([data-west-reading-overview]){padding-bottom:6px}
+ .west-atlas:not([data-comparing=true]) .west-reading-header:has([data-west-reading-overview]) h2{margin:0}
+ .west-atlas:not([data-comparing=true]) .west-reading-header:has([data-west-reading-overview]) .atlas-eyebrow{margin:0 0 4px}
+ .west-atlas:not([data-comparing=true]) .west-reading:has([data-west-reading-overview]) .atlas-reading-takeaway{margin:4px 0}
+ .west-atlas:not([data-comparing=true]) .west-reading:has([data-west-reading-overview]) .west-reading-dock{margin-bottom:0;padding-top:6px}
+ .west-atlas:not([data-comparing=true]) .west-reading:has([data-west-reading-overview]) [data-west-reading-extra]{margin-top:6px}
+ .west-atlas[data-field=population]:not([data-comparing=true]) .west-reading{height:calc(100dvh - 305px)!important;min-height:300px}
+ .west-atlas:not([data-comparing=true]) [data-west-detail]{display:flex;flex-direction:column;min-height:0;flex:1;overflow:hidden}
+ .west-atlas:not([data-comparing=true]) [data-west-detail]>header,.west-atlas:not([data-comparing=true]) .atlas-reading-takeaway,.west-atlas:not([data-comparing=true]) .west-reading-dock{flex:none}
+ .west-atlas:not([data-comparing=true]) [data-west-reading-extra]{min-height:0;flex:1;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding-right:6px;border-top:1px solid #d4dbd0;margin-top:10px}
+ .west-atlas:not([data-comparing=true]) .west-reading-dock{margin-top:8px;padding-top:8px}
+ .west-atlas:not([data-comparing=true]) .west-reading-dock a{font-size:13px;min-height:40px;margin:2px 0;padding:5px 8px}
+ .west-atlas:not([data-comparing=true]) .west-detail-controls{flex:none;margin-top:10px;border-top:1px solid #d4dbd0;padding-top:8px}
+ .west-atlas:not([data-comparing=true]) .atlas-climate-overview{grid-column:1/-1}
+ .west-atlas:not([data-comparing=true]) [data-west-reading-key]{flex:none}
+ .west-atlas:not([data-comparing=true]) [data-west-reading-key]:empty{display:none}
+ .west-atlas:not([data-comparing=true]) .west-reading .west-legend{border:1px solid #c8cfc4;border-radius:3px;padding:5px 6px;margin-top:6px;font-size:13px}
+ .west-atlas:not([data-comparing=true]) .west-reading .west-legend p{font-size:13px;line-height:1.5;margin:2px 0}
+ .west-atlas:not([data-comparing=true]) .west-reading .west-swatches{justify-content:flex-start;gap:2px 5px}
+ .west-atlas:not([data-comparing=true]) .west-reading .west-regional-climate-key .west-swatches{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px 5px}
+ .west-atlas:not([data-comparing=true]) .west-reading .west-regional-climate-key span{font-size:13px;line-height:1.5;gap:3px;align-items:baseline}
+ .west-atlas:not([data-comparing=true]) .west-reading .west-swatches i{width:11px;height:11px}
+ .west-atlas:not([data-comparing=true]) .west-reading .west-climate-key{justify-content:flex-start;font-size:13px;line-height:1.5;gap:2px 6px}
+ .west-atlas:not([data-comparing=true]) .west-reading-header{padding-bottom:4px}
+ .west-atlas:not([data-comparing=true]) .west-reading .atlas-reading-takeaway{margin:4px 0;font-size:15px;line-height:1.65}
+ .west-atlas:not([data-comparing=true]) .west-reading-dock{margin:4px 0 0;padding-top:4px}
+ .west-atlas:not([data-comparing=true]) [data-west-reading-extra]{margin-top:6px}
+ .west-atlas:not([data-comparing=true]) [data-west-climate-dictionary]>summary{font-size:14px;min-height:44px;line-height:1.5}
+ .west-atlas:not([data-comparing=true]) [data-west-climate-dictionary] .west-swatches{display:grid;grid-template-columns:1fr;font-size:13px}
+ .west-atlas:not([data-comparing=true]) .west-reading-header h2{margin:0}
+ .west-atlas:not([data-comparing=true]) .west-reading-header .atlas-eyebrow{margin:0 0 4px}
+ .west-atlas:not([data-comparing=true]) .west-reading-dock h3{font-family:var(--sans);font-size:13px;line-height:1.5;margin:0 0 4px}
+ .west-atlas:not([data-comparing=true]) .west-reading .west-regional-climate-key span{white-space:nowrap}
+ .west-atlas[data-field=population] .population-controls{display:flex;align-items:center;gap:8px;padding:6px;border:1px solid #c7ccbf;border-bottom:0;background:#fbfaf3;margin:0 0 6px}
+ .west-atlas[data-field=population] .population-tabs{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+ .west-atlas[data-field=population] .population-tabs button{font-size:14px;line-height:20px;min-height:40px;padding:9px 12px}
+ .west-atlas[data-field=population] .west-control-status{margin:0 0 0 auto;padding:0 6px;align-self:center}
+ .west-atlas[data-field=natural]:not([data-comparing=true]) .west-reading{padding-block:10px}
+ .west-atlas[data-field=natural]:not([data-comparing=true]) .west-reading-header,.west-atlas[data-field=natural]:not([data-comparing=true]) .west-reading-header:has([data-west-reading-overview]){display:flex;align-items:center;gap:8px;padding-bottom:2px}
+ .west-atlas[data-field=natural]:not([data-comparing=true]) .west-reading-header h2{order:-1;flex:none}
+ .west-atlas[data-field=natural]:not([data-comparing=true]) .west-reading-header .atlas-eyebrow{margin:0;white-space:nowrap}
+ .west-atlas[data-field=natural]:not([data-comparing=true]) .west-reading-header [data-west-reading-overview]{margin-left:auto}
+ .west-atlas[data-field=natural]:not([data-comparing=true]) .west-reading-dock>h3{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+ .west-atlas[data-field=natural]:not([data-comparing=true]) .west-reading .west-legend{margin-top:3px;padding:3px 6px}
+ .west-atlas[data-field=natural]:not([data-comparing=true]) .west-reading .west-regional-climate-key>p{margin:0}
+ .west-atlas[data-field=natural]:not([data-comparing=true]) .west-reading .west-regional-climate-key .west-swatches{row-gap:0}
+ .west-atlas[data-field=natural]:not([data-comparing=true]) .west-reading .west-climate-key{row-gap:0}
+}
 .west-subtabs{padding:6px;margin:0;border:1px solid #c7ccbf;border-bottom:0;background:#fbfaf3}
 .west-atlas .atlas-map-frame{background:#e3eff0}
 .west-atlas [data-west-map]{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
@@ -34,6 +115,8 @@
 .west-swatches,.west-climate-key{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 12px}
 .west-swatches span{display:inline-flex;align-items:center;gap:5px;line-height:1.5}
 .west-swatches i{display:inline-block;width:15px;height:12px;border:1px solid #52616b44;flex:none}
+.west-atlas .west-climate-key i{display:inline-block;width:15px;height:12px;border:1px solid #52616b44;flex:none}
+.west-atlas .west-climate-key span:has(i){display:inline-flex;align-items:center;gap:5px}
 .west-legend p{margin:4px 0;line-height:1.7}
 .west-agri-picker{justify-content:flex-start;gap:6px 14px}
 .west-agri-picker .agri-picker-group{display:flex;gap:5px;align-items:center;flex-wrap:wrap}

@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
 import WestAsiaClimateDiagram from './WestAsiaClimateDiagram.astro';
 import {withBase} from '../../lib/urls';
+import {getOverviewRegion} from '../../data/atlas/country-overview';
 import data from '../../data/atlas/west-asia.json';
 import {westFields,westTopics,observation,westReading} from '../../data/atlas/west-asia-topics.mjs';
 import '../../styles/atlas-west-asia.css';
@@ -14,9 +15,11 @@ const field=westFields.find(f=>f.id===initialField)!;
 const topics=westTopics.filter(t=>t.field===initialField);
 const initial=topics.find(t=>t.id===field.first)!;
 const groups=[...new Set(topics.map(t=>t.group))];
+const standardGroups=initialField==='natural'?[['気候区分','気候区分'],['水資源','水資源'],['地形','地形'],['標高（等高線）','標高']]:initialField==='agriculture'?[['農畜産','農畜産'],['林業','林業']]:initialField==='industry'?[['地域主要産業','地域主要産業']]:[['人口分布','人口分布'],['人種・民族','人種・民族'],['宗教','宗教']];
 const topicButton=(t:typeof initial)=>t.label.replace('の収穫面積','').replace('・国別生産量','').replace('の分布','');
 const assetBase=withBase('/assets/atlas/west-asia-v1/');
 const climateSource='https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/frame.php';
+const region=getOverviewRegion('west-asia');
 ---
 <BaseLayout title={`西アジア・中東の${field.label}`} description="20か国・地域の自然環境、農林業、産業、人口を、資料の対象年とともに読む地図。" compactAtlas>
  <AtlasWorkspaceFrame region="west-asia">
@@ -25,14 +28,15 @@ const climateSource='https://www.data.jma.go.jp/tcc/tcc/products/climate/climatv
    <div class="atlas-compact-heading"><nav aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a><span> / </span><a href={withBase('/atlas/west-asia/')}>西アジア・中東地図</a></nav><span data-west-scope>20か国・地域</span></div>
    <h1 class="visually-hidden">西アジア・中東地図から読む、農林業・自然環境・主要産業・人口</h1>
    <div class="atlas-region-controls west-regional-navigation">
-    <nav class="west-region-links" aria-label="世界の地域"><a data-west-other="north-america" href={withBase(`/atlas/north-america/${field.route}/`)}>北米</a><a href={withBase('/atlas/europe/')}>欧州</a><a href={withBase(`/atlas/west-asia/${field.route}/`)} aria-current="page">西アジア・中東</a></nav>
+    <nav class="west-region-links" aria-label="世界の地域"><a href={withBase('/atlas/')}>世界の地域</a>{region.peers.map(id=>{const peer=getOverviewRegion(id);return <a href={withBase(peer.path)} aria-current={id===region.id?'page':undefined}>{peer.label}</a>})}</nav>
     <label class="west-region-country">国・地域<select data-west-country aria-label="国・地域を選択"><option value="">地域全体</option>{data.countries.map(c=><option value={c.code}>{c.name}</option>)}</select></label>
    </div>
    <nav class="atlas-tabs atlas-tabs-with-overview" aria-label="地図の分野"><a data-atlas-overview-link href={withBase('/atlas/west-asia/overview/')}>概要</a>{westFields.map(f=><a data-west-field={f.id} href={withBase(`/atlas/west-asia/${f.route}/`)} aria-current={f.id===initialField?'page':undefined}>{f.label}</a>)}</nav>
-   {initialField!=='agriculture'&&<div class={initialField==='natural'?'atlas-nature-controls west-controls':initialField==='industry'?'industry-controls':'population-controls'}>
-    <div class={initialField==='natural'?'atlas-nature-tabs':initialField==='industry'?'industry-tab-row':'population-tabs'} role="tablist" aria-label={`${field.label}の表示切替`}>{groups.map(g=><button type="button" role="tab" id={`west-group-${groups.indexOf(g)}`} aria-controls="west-map-panel" data-west-group={g} aria-pressed={g===initial.group} aria-selected={g===initial.group} tabindex={g===initial.group?0:-1}>{g}</button>)}</div>
-   </div>}
-   {initialField!=='agriculture'&&groups.filter(g=>topics.filter(t=>t.group===g).length>1).map(g=><div class={initialField==='industry'?'industry-tab-row industry-subtabs west-subtabs':'atlas-water-tabs west-subtabs'} role="tablist" aria-label={`${g}の表示切替`} data-west-subgroup={g} hidden={g!==initial.group}>{topics.filter(t=>t.group===g).map(t=><button type="button" role="tab" data-west-topic-button={t.id} aria-controls="west-map-panel" aria-selected={t.id===initial.id} tabindex={t.id===initial.id?0:-1}>{topicButton(t)}</button>)}</div>)}
+   <div class={initialField==='natural'?'atlas-nature-controls west-controls':initialField==='industry'?'industry-controls':initialField==='population'?'population-controls':'west-agri-controls'}>
+    <div class={initialField==='natural'?'atlas-nature-tabs':initialField==='industry'?'industry-tab-row':initialField==='population'?'population-tabs':'atlas-water-tabs'} role="tablist" aria-label={`${field.label}の表示切替`}>{initialField==='industry'?topics.map(t=><button type="button" role="tab" data-west-topic-button={t.id} title={t.label} aria-controls="west-map-panel" aria-selected={t.id===initial.id} tabindex={t.id===initial.id?0:-1}>{t.label.replace('の付加価値','付加価値')}</button>):standardGroups.map(([g,label],i)=><button type="button" role="tab" id={`west-group-${i}`} aria-controls="west-map-panel" data-west-standard-group={g} data-west-group={initialField==='natural'?g:undefined} aria-pressed={i===0} aria-selected={i===0} tabindex={i===0?0:-1}>{label}</button>)}</div>
+    {initialField==='population'&&<p class="west-control-status" data-west-control-status>人口分布を表示しています。</p>}
+   </div>
+   {initialField==='natural'&&<div class="atlas-water-tabs west-subtabs" role="tablist" aria-label="水資源の表示切替" data-west-subgroup="水資源" hidden>{[['rivers','河川・地下水'],['precipitation','降水量'],['basins','河川の流域']].map(([id,label])=><button type="button" role="tab" data-west-topic-button={id==='precipitation'?undefined:id} data-west-unavailable={id==='precipitation'?label:undefined} aria-controls="west-map-panel" aria-selected="false" tabindex="-1">{label}</button>)}</div>}
    <div class="atlas-primary-grid" id="west-map-panel" role="tabpanel" aria-label={`${field.label}の地図と解説`}>
     <section class="atlas-map-column" aria-labelledby="west-map-title">
      <h2 id="west-map-title" class="visually-hidden">{initial.label}</h2>
@@ -43,7 +47,9 @@ const climateSource='https://www.data.jma.go.jp/tcc/tcc/products/climate/climatv
       <p class="atlas-layer-caption"><span data-west-caption>{initial.label}</span> · <span data-west-period></span></p>
      </div>
      <div class="west-swipe" data-west-swipe hidden><div><strong data-west-source-name>左の元図</strong><strong data-west-target-name>右の比較先</strong></div><label>地図の境目<input type="range" min="0" max="100" value="50" data-west-split aria-label="元図と比較先の境目。左端で比較先、右端で元図の全体を表示"/></label></div>
-     <div data-west-agri-switches>{initialField==='agriculture'&&<div class="atlas-key west-agri-picker" aria-label="農林業の品目">{groups.map(g=><span class="agri-picker-group"><strong>{g==='土地・森林'?'林業・土地':g}</strong>{topics.filter(t=>t.group===g&&!t.id.endsWith('-irrigated')&&!t.id.endsWith('-rainfed')).map(t=><button type="button" data-west-topic-button={t.id} aria-pressed={t.id===initial.id}>{topicButton(t)}</button>)}</span>)}</div>}
+     <div data-west-agri-switches>{initialField==='agriculture'&&<div class="atlas-key west-agri-picker" aria-label="農林業の品目">{groups.map(g=><span class="agri-picker-group" data-west-item-group={g}><strong>{g==='土地・森林'?'林業・土地':g}</strong>{topics.filter(t=>t.group===g&&!t.id.endsWith('-irrigated')&&!t.id.endsWith('-rainfed')).map(t=><button type="button" data-west-topic-button={t.id} aria-pressed={t.id===initial.id}>{topicButton(t)}</button>)}</span>)}</div>}
+     {initialField==='population'&&<details class="west-additional-topics"><summary>人口分布に関する追加指標</summary><div class="atlas-key west-item-picker">{topics.filter(t=>t.id!=='density').map(t=><button type="button" data-west-topic-button={t.id}>{topicButton(t)}</button>)}</div></details>}
+     {initialField==='natural'&&<div class="atlas-key west-water-items" data-west-water-items hidden><button type="button" data-west-topic-button="rivers">河川・湖</button><button type="button" data-west-topic-button="groundwater">地下水</button><button type="button" data-west-topic-button="desalination">淡水化と供給</button></div>}
      {initialField==='agriculture'&&['wheat','barley'].map(id=><div class="atlas-water-tabs west-cultivation" aria-label="栽培方法" role="tablist" data-west-cultivation={id} hidden={id!==initial.id}>{topics.filter(t=>t.id===id||t.id.startsWith(id+'-')).map(t=><button type="button" role="tab" data-west-topic-button={t.id} aria-selected={t.id===initial.id} tabindex={t.id===initial.id?0:-1}>{t.id===id?'収穫面積':t.id.endsWith('irrigated')?'灌漑栽培':'天水栽培'}</button>)}</div>)}</div>
      <div class="west-legend" data-west-legend aria-label="地図の凡例"></div>
      <div data-west-map-extras><p class="west-map-help" data-west-guide>地図の国・都市名を選ぶと、右側に解説を表示します。</p>

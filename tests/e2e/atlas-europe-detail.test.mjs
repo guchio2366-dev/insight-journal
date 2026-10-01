@@ -21,7 +21,7 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
     assert.equal(doc.querySelector('meta[name="robots"]'),null);
     const climateReader=field==='nature';
     assert.equal(doc.querySelector('[data-eu-climate-reader]').hidden,!climateReader);
-    assert.equal(doc.querySelector('[data-eu-subject-reader]').hidden,climateReader);
+    assert.equal(doc.querySelector('[data-eu-subject-reader]').hidden,false,'気候の読み方も選択都市の上で読める');
     assert.equal(doc.querySelector('[data-eu-subject-legend]').hidden,climateReader||field==='agriculture');
     assert.equal(doc.querySelector('[data-eu-climate-legend]').hidden,field!=='nature');
     assert.equal(doc.querySelector('[data-eu-wheat-legend]').hidden,true);
@@ -58,8 +58,8 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       const reading=doc.querySelector('[data-eu-climate-reader]');
       const statistics=doc.querySelector('[data-eu-climate-statistics]');
       assert.equal(reading.querySelector('table'),null);
-      assert.equal(reading.querySelectorAll('[data-eu-city-chart] svg').length,24);
-      assert.equal(statistics.querySelector('svg,canvas'),null);
+      assert.equal(reading.querySelector('[data-eu-city-chart],svg,canvas'),null);
+      assert.equal(statistics.querySelectorAll('[data-eu-city-chart] svg').length,24);
       assert.equal(statistics.hidden,false);
       assert.deepEqual([...reading.querySelectorAll('[data-city-reading]:not([hidden])')].map(card=>card.dataset.cityReading),['london']);
       assert.deepEqual([...statistics.querySelectorAll('[data-city-card]:not([hidden])')].map(card=>card.dataset.cityCard),['london']);
@@ -98,10 +98,11 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
   assert.ok(sitemap.includes('/atlas/europe/population/'));
 });
 
-test('24都市の右側は同じ都市の雨温図・気候説明・農畜産説明を順に表示し、下の数値表へ対応する', () => {
+test('24都市の右側の気候・農畜産説明と、全体下の雨温図・数値表は同じ観測地点へ対応する', () => {
   const window=new Window();const doc=window.document;
   doc.write(readFileSync(new URL('../../dist/atlas/europe/nature/index.html',import.meta.url),'utf8'));
   const cities=JSON.parse(readFileSync(new URL('../../src/data/atlas/europe/climate-cities.json',import.meta.url),'utf8'));
+  const countries=JSON.parse(readFileSync(new URL('../../src/data/atlas/europe/countries.json',import.meta.url),'utf8'));
   const classes=JSON.parse(readFileSync(new URL('../../src/data/atlas/europe/map-labels.json',import.meta.url),'utf8')).cityClasses;
   const reading=doc.querySelector('[data-eu-climate-reader]');
   const statistics=doc.querySelector('[data-eu-climate-statistics]');
@@ -109,15 +110,19 @@ test('24都市の右側は同じ都市の雨温図・気候説明・農畜産説
   const before=(first,second)=>Boolean(first.compareDocumentPosition(second)&window.Node.DOCUMENT_POSITION_FOLLOWING);
   assert.equal(cities.length,24);
   assert.deepEqual([...doc.querySelectorAll('[data-eu-point]')].map(point=>point.dataset.euPoint).sort(),ids);
-  assert.deepEqual([...doc.querySelectorAll('[data-eu-city-select]')].map(button=>button.dataset.euCitySelect).sort(),ids);
+  const cityChoice=doc.querySelector('[data-eu-city-choice]');
+  assert.ok(cityChoice);
+  assert.deepEqual([...cityChoice.options].map(option=>option.value).sort(),ids);
+  assert.equal(cityChoice.value,'london');
   assert.deepEqual([...reading.querySelectorAll('[data-city-reading]')].map(card=>card.dataset.cityReading).sort(),ids);
-  assert.deepEqual([...reading.querySelectorAll('[data-eu-city-chart]')].map(chart=>chart.dataset.euCityChart).sort(),ids);
+  assert.deepEqual([...statistics.querySelectorAll('[data-eu-city-chart]')].map(chart=>chart.dataset.euCityChart).sort(),ids);
   assert.deepEqual([...reading.querySelectorAll('[data-eu-climate-farming]')].map(section=>section.dataset.euClimateFarming).sort(),ids);
   assert.deepEqual([...statistics.querySelectorAll('[data-city-card]')].map(card=>card.dataset.cityCard).sort(),ids);
-  assert.equal(statistics.querySelector('svg,canvas,[data-eu-city-chart]'),null,'下の統計欄に雨温図を重複させない');
+  assert.equal(reading.querySelector('svg,canvas,[data-eu-city-chart]'),null,'右の要約欄に雨温図を重複させない');
   for(const city of cities) {
+    assert.equal([...cityChoice.options].find(option=>option.value===city.id).textContent,`${city.name}（${countries.find(country=>country.code===city.country).name}）`,city.id);
     const card=reading.querySelector(`[data-city-reading="${city.id}"]`);
-    const chart=card.querySelector(`[data-eu-city-chart="${city.id}"]`);
+    const chart=statistics.querySelector(`[data-city-card="${city.id}"] [data-eu-city-chart="${city.id}"]`);
     const classification=card.querySelector('.eu-city-climate-description');
     const farming=card.querySelector(`[data-eu-climate-farming="${city.id}"]`);
     const tableCard=statistics.querySelector(`[data-city-card="${city.id}"]`);
@@ -125,7 +130,8 @@ test('24都市の右側は同じ都市の雨温図・気候説明・農畜産説
     assert.equal(tableCard.hidden,city.id!=='london',city.id);
     assert.equal(chart.querySelector('svg .atlas-climate-city-name').textContent,city.name,city.id);
     assert.match(chart.querySelector('svg').getAttribute('aria-label'),new RegExp(city.name),city.id);
-    assert.ok(before(chart,classification)&&before(classification,farming),`${city.id}: 図→気候→農畜産の順で読む`);
+    assert.ok(before(classification,farming),`${city.id}: 右は気候→農畜産の順で読む`);
+    assert.ok(before(chart,tableCard.querySelector('table')),`${city.id}: 下は雨温図→月別表の順で読む`);
     assert.equal(farming.hidden,false,`${city.id}: 農畜産の説明を常時表示する`);
     assert.equal(farming.closest('details'),null,`${city.id}: 農畜産説明を開閉の中に隠さない`);
     assert.ok(farming.querySelector('h4')?.textContent.trim(),city.id);
