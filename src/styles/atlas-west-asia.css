@@ -79,6 +79,22 @@
 .west-atlas [data-west-map]:focus-visible{outline-offset:-3px}
 .west-static-data{max-width:660px}
 .west-persisted{font-size:11px!important;color:#647570}
+.west-swipe{padding:8px 10px;background:#fffdf3;border:1px solid #b6c7bf;font-size:13px}
+.west-swipe>div{display:flex;justify-content:space-between;gap:16px;line-height:1.6}
+.west-swipe label{display:flex;align-items:center;gap:12px;margin-top:4px}
+.west-swipe input{width:100%;min-width:0;min-height:36px;accent-color:#315b64;cursor:ew-resize}
+.west-comparison-reading{margin:12px 0;padding:12px;border-left:3px solid #477c74;background:#eff4ee}
+.west-comparison-reading h3{font:700 14px var(--sans);line-height:1.7;margin:0 0 6px}
+.west-reading .atlas-reading-takeaway{font-size:15px;line-height:1.8}
+.west-reading-definitions{margin-top:12px;border-top:1px solid #d4dbd0}
+.west-legend{font-size:12px}
+.west-legend-subject+.west-legend-subject{border-top:1px solid #c7d1c8;margin-top:7px;padding-top:7px}
+.west-legend-subject h3{font-size:13px;line-height:1.6;margin:0 0 5px}
+.west-complete-key summary{min-height:36px;cursor:pointer;padding:5px}
+.west-complete-key .west-swatches{justify-content:flex-start;padding:5px}
+.west-sources>summary{font-family:var(--serif);font-size:20px;line-height:1.5;min-height:44px;cursor:pointer}
+.west-related a{font-size:13px;line-height:1.6}
+.west-atlas[data-comparing=true] .west-legend{padding:8px}
 @media(min-width:1200px){.west-atlas .atlas-map-column{position:sticky;top:12px}}
 @media(max-width:1199px){.west-source-grid{gap:16px}}
 @media(max-width:959px){.west-back-map{display:inline-flex}}

@@ -4,7 +4,7 @@ import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
 import WestAsiaClimateDiagram from './WestAsiaClimateDiagram.astro';
 import {withBase} from '../../lib/urls';
 import data from '../../data/atlas/west-asia.json';
-import {westFields,westTopics,observation} from '../../data/atlas/west-asia-topics.mjs';
+import {westFields,westTopics,observation,westReading} from '../../data/atlas/west-asia-topics.mjs';
 import '../../styles/atlas-west-asia.css';
 import '../../styles/atlas-industry.css';
 import '../../styles/atlas-population.css';
@@ -42,6 +42,7 @@ const climateSource='https://www.data.jma.go.jp/tcc/tcc/products/climate/climatv
       <div class="west-map-loading" data-west-loading role="status">地図資料を読み込んでいます。</div>
       <p class="atlas-layer-caption"><span data-west-caption>{initial.label}</span> · <span data-west-period></span></p>
      </div>
+     <div class="west-swipe" data-west-swipe hidden><div><strong data-west-source-name>左の元図</strong><strong data-west-target-name>右の比較先</strong></div><label>地図の境目<input type="range" min="0" max="100" value="50" data-west-split aria-label="元図と比較先の境目。左端で比較先、右端で元図の全体を表示"/></label></div>
      {initialField==='agriculture'&&<div class="atlas-key west-agri-picker" aria-label="農林業の品目">{groups.map(g=><span class="agri-picker-group"><strong>{g==='土地・森林'?'林業・土地':g}</strong>{topics.filter(t=>t.group===g&&!t.id.endsWith('-irrigated')&&!t.id.endsWith('-rainfed')).map(t=><button type="button" data-west-topic-button={t.id} aria-pressed={t.id===initial.id}>{topicButton(t)}</button>)}</span>)}</div>}
      {initialField==='agriculture'&&['wheat','barley'].map(id=><div class="atlas-water-tabs west-cultivation" aria-label="栽培方法" role="tablist" data-west-cultivation={id} hidden={id!==initial.id}>{topics.filter(t=>t.id===id||t.id.startsWith(id+'-')).map(t=><button type="button" role="tab" data-west-topic-button={t.id} aria-selected={t.id===initial.id} tabindex={t.id===initial.id?0:-1}>{t.id===id?'収穫面積':t.id.endsWith('irrigated')?'灌漑栽培':'天水栽培'}</button>)}</div>)}
      <div class="west-legend" data-west-legend aria-label="地図の凡例"></div>
@@ -56,26 +57,27 @@ const climateSource='https://www.data.jma.go.jp/tcc/tcc/products/climate/climatv
      <button class="west-retry" data-west-retry hidden>資料を再読み込みする</button>
     </section>
     <aside class={`atlas-national west-reading ${initialField==='natural'?'atlas-nature-summary':initialField==='population'?'population-national':initialField==='industry'?'industry-national':'west-agri-reading'}`} data-field-national={initialField} aria-labelledby="west-detail-title">
-     <div data-west-detail><h2 id="west-detail-title">{initial.label}</h2><p>{initial.description}</p></div>
+     <div data-west-detail><h2 id="west-detail-title">{initial.label}</h2><p><strong>{westReading(initial).message}</strong></p><p>{westReading(initial).reason}</p></div>
      <div class="west-detail-controls" data-west-stat-controls>
       <label data-west-year-label>国別統計の年<select data-west-year aria-label="国別統計の年">{[2024,2023,2022,2021,2020].map(y=><option value={y}>{y}年</option>)}</select></label>
      </div>
-     <div class="west-related"><h3>同じ場所の別の分野へ</h3>{westFields.filter(f=>f.id!==initialField).map(f=><a data-west-field={f.id} href={withBase(`/atlas/west-asia/${f.route}/`)}>{f.label} →</a>)}</div>
+     <div class="west-related" data-west-related><h3>この関係を地図で確かめる</h3>{westReading(initial).comparisons.map(c=><a href={withBase(`/atlas/west-asia/${westFields.find(f=>f.id===westTopics.find(t=>t.id===c.topic)!.field)!.route}/?topic=${c.topic}`)}>{c.label} →</a>)}</div>
      <a class="west-back-map" href="#west-map-title">地図へ戻る ↑</a>
     </aside>
     {initialField==='natural'&&<details class="atlas-climate-overview" data-west-climate-overview><summary><h2>各気候区分の概説</h2></summary><p>色と区分は北米と共通です。分類は1991–2020年の平均的な気温・降水の組合せを表します。</p><div class="west-climate-codes">{data.classes.map(c=><section><h3><i style={`background:${c.color}`}></i>{c.code} {c.name}</h3><p>{c.description}</p></section>)}</div></details>}
    </div>
    </section>
    <section class="west-statistics" id="west-statistics" data-west-comparison hidden aria-label="国別統計"></section>
-   <section class="west-sources" id="west-sources"><h2>資料の範囲と読み方</h2>
+   <details class="west-sources" id="west-sources"><summary>資料の範囲と読み方・全出典</summary>
     <p>このページは、国連M49の西アジア18か国・地域にイランとエジプトを加えた編集上の範囲です。国連が「中東」をこの20と定めたものではありません。<a href="https://unstats.un.org/unsd/methodology/m49/overview">国連M49</a></p>
     <p>境界はNatural Earth v5.1.2の表示区分を採用しています。パレスチナは資料のPSXをPSEに対応させ、キプロスの2つの境界ポリゴンは選択項目をまとめています。境界・名称は現在の実効支配や領有権の確定を示しません。国別統計は各提供元の対象範囲に従い、境界図と厳密には一致しない場合があります。</p>
     <div class="west-source-grid"><section><h3>自然環境</h3><p><a href="https://www.nature.com/articles/s41597-023-02549-6">Beckほか（2023）</a>の1991–2020年の気候区分を使い、色は北米の定義を参照します。雨温図は<a href={climateSource}>気象庁ClimatView</a>の観測所平年値です。分類格子と観測所は別の資料です。</p><p><a href="https://www.ncei.noaa.gov/products/etopo-global-relief-model">NOAA ETOPO 2022</a>の標高、<a href="https://www.naturalearthdata.com/">Natural Earth</a>の河川・湖、<a href="https://www.hydrosheds.org/hydroatlas">HydroATLAS v1.0</a>の流域、BGR・UNESCOのWHYMAPを使います。水系・帯水層の図から、現在の水不足や使える水量は判断できません。</p></section>
     <section><h3>農林業・産業・人口</h3><p><a href="https://doi.org/10.7910/DVN/SWPENT">MapSPAM 2020</a>の収穫面積、<a href="https://www.fao.org/livestock-systems/global-distributions/en/">FAO GLW4</a>の家畜密度、<a href="https://www.fao.org/faostat/en/">FAOSTAT</a>の国別統計を区別して使います。空間分布は観測点の実数ではなく、統計を地理情報で配分した推計です。</p><p>国別比較は<a href="https://data.worldbank.org/">World Bank WDI</a>、人口分布は<a href="https://human-settlement.emergency.copernicus.eu/ghs_pop2023.php">GHSL R2023A</a>、都市は<a href="https://human-settlement.emergency.copernicus.eu/ucdb2024.php">GHSL UCDB R2024A</a>を使います。欠測は0に置き換えず、同じ年の値を比較します。2020〜2024年の収録状況は指標ごとに異なります。</p></section></div>
     <p>Webメルカトル図法を使っています。面積の直接比較には適しません。格子の値は元の解像度を超えて細かくなりません。海岸や小国では原資料の未収録があります。地図に点がない国でも、国の一覧と統計表から確認できます。</p>
+    <p>水の供給と管理の関係は、<a href="https://www.worldbank.org/en/topic/water/publication/beyond-scarcity-water-security-in-the-middle-east-and-north-africa">World Bank『Beyond Scarcity』（2017年）</a>も参照しています。中東・北アフリカを対象とした概説で、この地図の20対象と範囲は異なります。現在の水量や政策の評価を示すものではありません。</p>
     <p><a href={assetBase+'manifest.json'}>資料・加工方法・利用条件の台帳</a> · <a href={assetBase+'coverage.json'}>20か国・地域×4分野の収録状況</a></p>
     <details class="west-static-data"><summary>国別の基本人口と出典を読む（操作できない場合も利用できます）</summary><table><caption>2024年の人口／World Bank WDI。欠測は未収録と表示します。</caption><thead><tr><th>国・地域</th><th>人口</th></tr></thead><tbody>{data.countries.map(c=>{const r=observation(data,{indicator:'SP.POP.TOTL',unit:'人'},c.code,2024);return <tr><th>{c.name}</th><td>{r.value===null?'未収録':`${r.value.toLocaleString('ja-JP')}人`}</td></tr>})}</tbody></table></details>
-   </section>
+   </details>
    <noscript><p>地図の切替にはJavaScriptが必要です。上の国別人口表と出典はそのまま読めます。</p></noscript>
    {data.cities.map(c=><template data-west-chart={c.id}><WestAsiaClimateDiagram city={c}/></template>)}
   </article>

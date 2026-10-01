@@ -2,9 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
-import {asiaPlaceReadings,choosePlaceReading,selectedPlaceReading,normalizePlaceReading,startPlaceComparison} from '../../src/data/atlas/asia-place-readings.ts';
+import {asiaPlaceReadings,availablePlaceReadings,choosePlaceReading,selectedPlaceReading,normalizePlaceReading,startPlaceComparison} from '../../src/data/atlas/asia-place-readings.ts';
+import {asiaFocusFieldReadings,asiaFocusForPath} from '../../src/data/atlas/asia-focus.ts';
 import {waterContains} from '../../src/data/atlas/asia-water.ts';
-import {readAsiaAtlasState,writeAsiaAtlasState,startAsiaComparison,restoreAsiaComparison} from '../../src/lib/atlas-asia-state.ts';
+import {readAsiaAtlasState,writeAsiaAtlasState,startAsiaComparison,restoreAsiaComparison,gridCellAt} from '../../src/lib/atlas-asia-state.ts';
 import {asiaNaturalTopics} from '../../src/data/atlas/asia-physical-reading.ts';
 import {tradeTopics} from '../../src/data/atlas/asia-trade.ts';
 const asset=(type,file='manifest.json')=>JSON.parse(file.endsWith('.gz')?gunzipSync(readFileSync(`public/assets/atlas/asia-${type}-v1/${file}`)):readFileSync(`public/assets/atlas/asia-${type}-v1/${file}`,'utf8'));
@@ -16,7 +17,7 @@ test('全ての事例と比較先が、実在する主題・国・行政区域�
  for(const region of Object.keys(farm.regions)){
   const records=asiaPlaceReadings.filter(s=>s.region===region),r=industry.regions[region],p=population.regions[region];
   const data=asset('industry',r.data.split('/').at(-1));
-  assert.equal(records.filter(s=>s.field==='agriculture').length,3);
+  assert.ok(records.filter(s=>s.field==='agriculture').length>=3);
   assert.ok(records.some(s=>s.field==='population'));assert.ok(records.some(s=>s.field==='industry'));
   const validate=(s,country)=>{
    const ids=s.field==='agriculture'?['rice',...farm.regions[region].layers.map(t=>t.id)]:s.field==='natural'?asiaNaturalTopics.map(t=>t.id):s.field==='population'?['density','urban']:[...r.topics,...tradeTopics].map(t=>t.id);
@@ -29,11 +30,47 @@ test('全ての事例と比較先が、実在する主題・国・行政区域�
  }
 });
 
+test('中央アジアのfocusは南アジアの事例を混ぜず、4分野から収録済みの比較へ進める',()=>{
+ assert.equal(asiaFocusForPath('/insight-journal/atlas/asia/central-asia/industry/'),'central-asia');
+ assert.equal(asiaFocusForPath('/atlas/asia/south-central-asia/nature/'),undefined);
+ for(const field of ['natural','agriculture','industry','population'])assert.ok(asiaFocusFieldReadings['central-asia'][field].takeaway);
+ for(const field of ['agriculture','industry','population']){
+  const scenes=availablePlaceReadings('south-central-asia',field,'central-asia');
+  assert.ok(scenes.length>0,field);
+  assert.ok(scenes.every(s=>['KAZ','KGZ','TJK','TKM','UZB'].includes(s.country)));
+  assert.ok(availablePlaceReadings('south-central-asia',field,'south-asia').every(s=>!['KAZ','KGZ','TJK','TKM','UZB'].includes(s.country)));
+ }
+ const scene=asiaPlaceReadings.find(s=>s.id==='fergana-cotton'),selected=choosePlaceReading(base,scene);
+ const url=new URL('https://example.org/atlas/asia/central-asia/agriculture/');
+ const target=startPlaceComparison(url,selected,scene.bridges.find(b=>b.topic==='basins'));
+ assert.deepEqual(target.point,scene.point);
+ const context={countries:['UZB'],cities:[],bounds:[45,-2,99,57],fields:['natural','agriculture'],topics:{natural:['basins'],agriculture:['cotton']},stories:{agriculture:[scene.id]}};
+ const restored=restoreAsiaComparison(url,target,context);
+ assert.equal(restored.story,scene.id);assert.equal(restored.topic,'cotton');assert.deepEqual(restored.point,scene.point);
+});
+
 test('説明は国・分野・主題・詳細・着目地点と整合する場合だけ表示する',()=>{
  const scene=asiaPlaceReadings.find(s=>s.id==='north-china-wheat'),state=choosePlaceReading(base,scene);
  assert.equal(selectedPlaceReading(scene.region,state),scene);
  for(const change of [{field:'industry'},{place:'JPN'},{topic:'rice'},{detail:'unknown'},{point:[115,38]},{story:'<script>'}])assert.equal(normalizePlaceReading(scene.region,{...state,...change}).story,null);
  assert.equal(normalizePlaceReading('southeast-asia',state).story,null);
+});
+
+test('中央アジアの着目地点は掲載する作物の実格子と、対象国を含む実流域に対応する',()=>{
+ for(const id of ['fergana-cotton','kazakhstan-wheat']){
+  const s=asiaPlaceReadings.find(s=>s.id===id),layer=farm.regions[s.region].layers.find(l=>l.id===s.topic);
+  const bytes=gunzipSync(readFileSync(`public/assets/atlas/asia-farming-v1/${layer.grid}`));
+  const values=new Float32Array(bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength));
+  assert.ok(gridCellAt({...layer,values},...s.point)>0,id+' has a positive crop cell');
+ }
+ const basin=asset('water','south-central-asia.basins.json.gz');
+ for(const id of ['fergana-cotton','tashkent-city']){
+  const s=asiaPlaceReadings.find(s=>s.id===id),b=s.bridges.find(b=>b.topic==='basins');
+  const point=startPlaceComparison(new URL('https://example.org/atlas/asia/central-asia/population/'),choosePlaceReading(base,s),b).point;
+  const hit=basin.geometry.features.find(f=>waterContains(f.geometry,point));
+  assert.ok(hit,id+' is in a real basin');
+  assert.ok(basin.records.find(r=>r.id===hit.properties.id).countries.includes(s.country),id+' basin includes the source country');
+ }
 });
 
 test('事例→別分野→再読込→復帰で、説明・主題・地点・カメラを保持する',()=>{

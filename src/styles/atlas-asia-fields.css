@@ -98,3 +98,33 @@
 .asia-atlas .asia-settlement-key button[aria-pressed=true],.asia-atlas .asia-settlement-label[aria-pressed=true]{border:2px solid #203f4a;background:#fffdf4;font-weight:700}
 .asia-settlement-back{padding:8px;border:1px solid #abbcb4;background:#f3f6ed;color:#2d5059;cursor:pointer}.asia-atlas [data-settlement-detail] h2{font-size:24px;line-height:1.55}
 .asia-industry-all summary{cursor:pointer;padding:12px 0;font-size:13px}
+
+/* Asia's message stays beside the map while full readings remain reachable. */
+.asia-atlas .asia-reading-dock{padding:14px 16px;border:1px solid #c7ccbf;background:#fbfcf5;overflow-wrap:anywhere}
+.asia-atlas .asia-reading-dock>.eyebrow{font-size:11px;margin:0 0 5px;color:#506962}
+.asia-atlas .asia-reading-dock h2{font:700 20px/1.5 var(--serif);margin:0 0 10px}
+.asia-atlas .asia-reading-dock>p:not(.eyebrow){font-size:14px;line-height:1.8;margin:0 0 12px}
+.asia-atlas .asia-reading-dock-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.asia-atlas .asia-reading-dock-links button{display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:44px;padding:8px 10px;border:1px solid #9fb4ad;background:#eff4eb;color:#264f58;font:600 13px/1.45 var(--sans);text-align:left;cursor:pointer}
+.asia-atlas .asia-reading-dock .asia-city-picker{display:grid;grid-template-columns:1fr;gap:5px;font-size:13px;margin:12px 0 0}
+.asia-atlas .asia-reading-dock .asia-city-picker select{width:100%;max-width:100%;font-size:13px;min-height:36px}
+.asia-atlas .asia-reading-details{margin-top:8px;border:1px solid #c7ccbf;background:#fbfcf5}
+.asia-atlas .asia-reading-details>summary{display:list-item;list-style:disclosure-closed;cursor:pointer;min-height:44px;box-sizing:border-box;padding:12px 16px;font-size:13px;line-height:1.5;font-weight:600;color:#36565c}
+.asia-atlas .asia-reading-details[open]>summary{list-style:disclosure-open;border-bottom:1px solid #c7ccbf}
+.asia-atlas .asia-reading-details .asia-reading-scroll{border:0;padding:14px 16px;box-sizing:border-box}
+.asia-atlas .asia-source-fold{margin-top:18px;border-top:1px solid #c7ccbf}
+.asia-atlas .asia-source-fold>summary{cursor:pointer;font-size:13px;min-height:44px;padding:12px 0;box-sizing:border-box}
+.asia-atlas .asia-source-fold .asia-sources{margin-top:0}
+.asia-atlas .asia-comparison-reading h3{font-size:15px;line-height:1.6;margin:8px 0}
+.asia-atlas .asia-comparison-reading p{font-size:13px;line-height:1.8;margin:8px 0}
+.asia-atlas .asia-comparison-reading summary{cursor:pointer;font-size:12px;padding:10px 0;min-height:32px}
+.asia-atlas .asia-comparison-key{display:flex;flex-wrap:wrap;gap:5px 10px;margin:6px 0 12px}
+.asia-atlas .asia-comparison-key span{display:inline-flex;gap:5px;align-items:center;font-size:12px;line-height:1.5}
+.asia-atlas .asia-comparison-key i{display:inline-block;flex:none;width:16px;height:12px;border:1px solid #637c7088}
+.asia-atlas .asia-comparison-reading [data-comparison-legend]{max-height:250px;overflow:auto;padding:0 4px 0 0}
+.asia-atlas .asia-comparison-reading [data-comparison-legend] h4{font-size:13px;line-height:1.6;margin:10px 0 4px}
+.asia-atlas .asia-comparison-return{margin:8px 0 0;padding:8px;background:#ebece0}
+.asia-atlas .asia-comparison-return p{font-size:12px;line-height:1.5}
+.asia-atlas .asia-comparison-return button{font-size:13px;line-height:1.6;padding:7px 8px;min-height:40px;cursor:pointer}
+@media(min-width:1200px){.asia-atlas .asia-reading-details .asia-reading-scroll{max-height:var(--asia-reading-height,300px);height:auto;overflow:auto}}
+@media(max-width:1199px){.asia-atlas .asia-reading-details .asia-reading-scroll{height:auto;overflow:visible}}

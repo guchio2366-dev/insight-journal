@@ -75,3 +75,42 @@ test('農林業の地図下の品目と栽培方法、人口の上部タブを�
   assert.equal(q('[data-west-topic-button="age-older"]').getAttribute('aria-selected'),'true');assert.match(q('[data-west-detail]').textContent,/65歳以上/);
  }finally{await population.w.happyDOM.close();}
 });
+
+test('比較は元の分布・全凡例・対象名付き戻りと元の選択を保つ',async()=>{
+ const source=await setup('agriculture','?topic=wheat-rainfed&country=IRN&city=tehran&year=2020&map=100,120,400,300&at=51.4,35.7');
+ let comparison;
+ try{
+  const link=source.q('[data-west-compare="climate"]');assert.ok(link);
+  comparison=await setup('nature',new URL(link.href).search);const {w,q}=comparison;
+  await until(()=>q('[data-west-climate-class]')?.textContent.match(/^[ABCDE][A-Za-z]/));
+  assert.equal(q('[data-west-atlas]').dataset.comparing,'true');
+  assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-raster]').length,2);
+  assert.equal(q('[data-west-source-clip]').getAttribute('width'),'200');
+  assert.equal(q('[data-west-legend]').querySelectorAll('.west-legend-subject').length,2);
+  assert.match(q('[data-west-legend]').textContent,/小麦・天水栽培/);
+  assert.equal(q('.west-complete-key .west-swatches').querySelectorAll('span').length,30);
+  assert.match(q('[data-west-detail]').textContent,/栽培時期/);
+  assert.match(q('[data-west-return]').textContent,/小麦・天水栽培へ戻る/);
+  const back=new URL(q('[data-west-return]').href);
+  for(const [key,value] of Object.entries({topic:'wheat-rainfed',country:'IRN',city:'tehran',year:'2020',map:'100,120,400,300',at:'51.4,35.7'}))assert.equal(back.searchParams.get(key),value,key);
+  const slider=q('[data-west-split]');slider.value='70';slider.dispatchEvent(new w.Event('input'));
+  assert.equal(q('[data-west-source-clip]').getAttribute('width'),'280');
+  assert.equal(q('[data-west-target-clip]').getAttribute('width'),'120');
+  q('[data-west-group="地形"]').click();await until(()=>q('[data-west-loading]').hidden);
+  assert.equal(q('[data-west-swipe]').hidden,true);assert.equal(q('[data-west-return]'),null);
+  assert.equal(new URL(w.location.href).searchParams.has('from'),false);
+ }finally{await source.w.happyDOM.close();if(comparison)await comparison.w.happyDOM.close();}
+});
+
+test('比較で系列の収録年が異なる場合も元の年へ戻り、不正な比較元を採用しない',async()=>{
+ const source=await setup('industry','?topic=manufacturing&country=SAU&year=2024');let comparison;
+ try{
+  comparison=await setup('industry',new URL(source.q('[data-west-compare="oil"]').href).search);
+  assert.equal(comparison.q('[data-west-year]').value,'2021');
+  assert.match(comparison.q('[data-west-legend]').textContent,/2024年/);
+  assert.match(comparison.q('[data-west-legend]').textContent,/2021年/);
+  assert.equal(new URL(comparison.q('[data-west-return]').href).searchParams.get('year'),'2024');
+ }finally{await source.w.happyDOM.close();if(comparison)await comparison.w.happyDOM.close();}
+ const invalid=await setup('nature','?topic=climate&from='+encodeURIComponent('?topic=oil&country=XXX&year=1800'));
+ try{assert.equal(invalid.q('[data-west-atlas]').dataset.comparing,'false');assert.equal(invalid.q('[data-west-return]'),null);}finally{await invalid.w.happyDOM.close();}
+});

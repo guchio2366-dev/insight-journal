@@ -16,6 +16,8 @@ import {createAsiaWater} from './atlas-asia-water';
 import {createAsiaSocial} from './atlas-asia-social';
 import {createAsiaTrade} from './atlas-asia-trade';
 import {createPlaceReadings} from './atlas-asia-place-readings';
+import {createAsiaComparison} from './atlas-asia-comparison';
+import {createAsiaReadingDock} from './atlas-asia-reading-dock';
 import {asiaPlaceReadings,normalizePlaceReading,selectedPlaceReading} from '../data/atlas/asia-place-readings';
 import {isTradeTopic,normalizeTradeState,type TradeRegion} from '../data/atlas/asia-trade';
 import {socialGroup,socialTopic,isSocialDetailId,normalizeSocialState,type SocialRegion} from '../data/atlas/asia-social';
@@ -110,6 +112,8 @@ function start(root:HTMLElement) {
   social=config.social?createAsiaSocial(root,{social:config.social,socialBase:config.socialBase!,countries:config.countries},()=>state,navigate,camera,()=>{state=social!.normalize(state);selectedPoint=state.point??null;persist(false);render();fitSelection();}):null;
   trade=config.trade?createAsiaTrade(root,{trade:config.trade,tradeBase:config.tradeBase!,chapters:config.tradeChapters!,countries:config.countries,domesticTopics:config.industry?.topics??[]},()=>state,navigate,camera):null;
   const placeReadings=createPlaceReadings(root,config.regionId,()=>state,navigate,camera);
+  const comparison=createAsiaComparison(root,config,context,()=>state);
+  const readingDock=createAsiaReadingDock(root);
 
 
   function chooseFarm(topic:string){navigate({...state,field:'agriculture',topic,overlay:null,detail:null,story:null,point:state.point??config.cities.find(c=>c.id===state.city)?.coordinates??null,city:null,camera:camera()},false);}
@@ -223,11 +227,12 @@ function start(root:HTMLElement) {
     social?.render();
     trade?.render();
     placeReadings.render();
-    if(state.field==='population')optionalHidden('[data-place-reading]',true);
     navigation.render();
+    comparison.render(state);
     optionalHidden('[data-farming-selector]',state.field!=='agriculture');
     renderClass();
     renderGridReading();
+    readingDock.render(state);
     for(const item of markers){item.button.hidden=!climate;item.button.setAttribute('aria-pressed',String(item.city.id===state.city));item.button.style.opacity=!state.place||item.city.countryCode===state.place?'1':'.45';}
     if(pointLabel){pointLabel.hidden=!selectedPoint||(state.field==='population'&&['ethnicity','religion'].includes(state.topic??''))||naturalTopic()==='climate';if(selectedPoint){pointMarker?.setLngLat(selectedPoint);pointLabel.textContent=config.countries.find(c=>c.code===state.place)?.name??'国・地域を確認できない地点';}}
     if(mapReady&&map){map.setFilter('asia-country-selected',['==',['get','code'],state.place??'']);void showField();}
@@ -477,6 +482,7 @@ function start(root:HTMLElement) {
     if(revision===fieldRevision&&map)void hydrology?.show(map);
     if(revision===fieldRevision&&map)void social?.show(map);
     if(revision===fieldRevision&&map)void trade?.show(map);
+    if(revision===fieldRevision&&map)void comparison.show(map);
     if(population&&(urban||selectedUrban)&&!map.getSource('asia-urban')){
       try{
         urbanPromise??=fetchJson(asset(config.populationBase!,config.population!.urban)).catch(error=>{urbanPromise=null;throw error;});const data=await urbanPromise;
@@ -618,7 +624,7 @@ function start(root:HTMLElement) {
   $$<HTMLAnchorElement>('.atlas-tabs [data-field]').forEach(a=>a.addEventListener('click',event=>{if(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey||event.button!==0)return;event.preventDefault();navigate({...state,field:a.dataset.field as AsiaField,topic:a.dataset.field===state.field?state.topic:null,detail:a.dataset.field===state.field?state.detail:null,story:a.dataset.field===state.field?state.story:null,camera:camera(),back:null},false);}));
   $$<HTMLButtonElement>('[data-compare]').forEach(b=>b.addEventListener('click',()=>navigate({...startAsiaComparison(new URL(location.href),{...state,camera:camera()},b.dataset.compare as AsiaField),...(b.dataset.compare==='agriculture'?{topic:'rice'}:{})},false)));
   $('[data-comparison-back]').addEventListener('click',()=>navigate(restoreAsiaComparison(new URL(location.href),state,context)));
-  $$<HTMLButtonElement>('[data-climate-class]').forEach(b=>b.addEventListener('click',()=>{selectedClass=Number(b.dataset.climateClass);selectedPoint=null;state={...state,point:null};persist(false);renderClass();const c=config.classes.find(c=>c.id===selectedClass)!;$('[data-grid-reading]').textContent=`凡例：${c.code} ${c.name} · ${c.description}`;}));
+  $$<HTMLButtonElement>('[data-climate-class]').forEach(b=>b.addEventListener('click',()=>{selectedClass=Number(b.dataset.climateClass);selectedPoint=null;state={...state,point:null};persist(false);renderClass();readingDock.render(state);const c=config.classes.find(c=>c.id===selectedClass)!;$('[data-grid-reading]').textContent=`凡例：${c.code} ${c.name} · ${c.description}`;}));
   $('[data-reset]').addEventListener('click',()=>navigate({field:state.field,place:null,city:null,camera:null,back:null}));
   $('[data-map-fit]').addEventListener('click',()=>{state={...state,camera:null};persist(true);fitSelection();});
   $('[data-zoom-in]').addEventListener('click',()=>map?.zoomIn({duration:reduced?0:160}));
@@ -630,7 +636,7 @@ function start(root:HTMLElement) {
   function syncReadingLayout(){
     // Each reading pane uses its own distance to the viewport bottom. Neither
     // the map's aspect ratio nor a short article determines the pane height.
-    for(const [selector,property] of [['.asia-reading-panel','--asia-reading-height'],['.atlas-news','--asia-news-height']] as const){
+    for(const [selector,property] of [['.asia-reading-scroll','--asia-reading-height'],['.atlas-news','--asia-news-height']] as const){
       const pane=$(selector);if(!pane)continue;
       const value=window.innerWidth>=1200?`${Math.max(0,Math.floor(window.innerHeight-Math.max(12,pane.getBoundingClientRect().top)-12))}px`:'';
       if(root.style.getPropertyValue(property)!==value){if(value)root.style.setProperty(property,value);else root.style.removeProperty(property);}
@@ -648,5 +654,6 @@ function start(root:HTMLElement) {
   let readingLayoutFrame=0;
   window.addEventListener('scroll',()=>{if(!readingLayoutFrame)readingLayoutFrame=requestAnimationFrame(()=>{readingLayoutFrame=0;syncReadingLayout();});},{passive:true});
   window.addEventListener('resize',syncLayout);
+  for(const details of $$<HTMLDetailsElement>('details'))details.addEventListener('toggle',()=>requestAnimationFrame(syncLayout));
   sourceText();render();persist(false);syncLayout();void initialiseMap();
 }
