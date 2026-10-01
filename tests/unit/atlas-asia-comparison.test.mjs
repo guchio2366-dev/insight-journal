@@ -128,7 +128,8 @@ test('事例の要点は正規選択と適合する橋だけで使い、主題�
   const from={...base,story:'north-china-wheat'},to={...base,field:'natural',topic:'precipitation'};
   const lead='冬小麦が育つ季節と、雨が多い季節のずれを読む。';
   assert.ok(question(from,to,config).startsWith(lead));
-  assert.match(question(from,to,config),/年間合計は季節配分や現在の雨を示しません/);
+  assert.match(question(from,to,config),/収穫面積と灌漑.*年合計と雨の季節配分を分けます/);
+  assert.equal(question(from,to,config).length,53,'the approved story follow-up remains two short lines beside both complete legends');
   for(const changed of [{...from,topic:'rice'},{...from,place:'JPN'},{...from,detail:'stale'},{...from,point:[116,38]},{...from,field:'population'}])assert.ok(!question(changed,to,config).includes(lead));
   for(const changed of [{...to,topic:'climate'},{...to,field:'population',topic:'density'},{...to,place:'JPN'},{...to,point:[116,38]}])assert.ok(!question(from,changed,config).includes(lead));
   assert.ok(!question(from,to,{...config,regionId:'southeast-asia'}).includes(lead));

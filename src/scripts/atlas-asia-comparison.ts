@@ -68,6 +68,7 @@ function comparisonStory(from:AsiaState,to:AsiaState,config:Config){
 export function comparisonQuestion(from:AsiaState,to:AsiaState,config:Config):string {
   const original=comparisonMeaning(from,config),current=comparisonMeaning(to,config),story=comparisonStory(from,to,config);
   const lead=story?story.lead:`${original.label}と${current.label}を読み比べます。`;
+  if(story?.id==='north-china-wheat'&&to.field==='natural'&&to.topic==='precipitation')return lead+'収穫面積と灌漑を読むときは、年合計と雨の季節配分を分けます。';
   return lead+[...new Set([original.note,current.note])].join('');
 }
 

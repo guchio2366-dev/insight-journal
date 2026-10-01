@@ -25,6 +25,84 @@ const visiblePanels=d=>[...d.querySelectorAll('[role=tabpanel]')].filter(panel=>
 const selectedTopic=d=>d.querySelector('[role=tab][aria-selected=true]');
 const selectedCountries=d=>[...d.querySelectorAll('[data-overview-map-country][aria-pressed=true]')].map(country=>country.dataset.overviewMapCountry);
 
+const northAmericaFields=['agriculture','nature','industry','population'];
+const northAmericaCountryPaths={USA:'',CAN:'canada/',MEX:'mexico/'};
+function assertNorthAmericaFieldLinks(w,country){
+  for(const field of northAmericaFields){
+    const link=w.document.querySelector(`[data-overview-field="${field}"]`);
+    assert.ok(link,field);
+    assert.equal(new URL(link.href).pathname,`/insight-journal/atlas/north-america/${northAmericaCountryPaths[country]??''}${field}/`);
+    assert.equal(new URL(link.href).search,'');
+  }
+}
+
+test('North America overview resolves every country field route and returns to the same country',async()=>{
+  for(const country of ['CAN','MEX','USA']){
+    const overview=await page('north-america',`?country=${country}&topic=industry`,true);
+    try{
+      assertNorthAmericaFieldLinks(overview,country);
+      for(const field of northAmericaFields){
+        const destination=new URL(overview.document.querySelector(`[data-overview-field="${field}"]`).href);
+        const fieldWindow=new Window({url:destination.href,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true}});
+        let returnUrl;
+        try{
+          fieldWindow.document.body.innerHTML=(await readFile(`dist/${destination.pathname.replace('/insight-journal/','')}index.html`,'utf8')).replace(/<script(?![^>]*type="application\/json")[^>]*>[\s\S]*?<\/script>/g,'');
+          const selector=country==='CAN'?'.canada-fields a':country==='MEX'?'.mexico-fields a':'[data-atlas-overview-link]';
+          const link=[...fieldWindow.document.querySelectorAll(selector)].find(link=>new URL(link.href).pathname==='/insight-journal/atlas/north-america/overview/');
+          assert.ok(link,`${country} ${field}: overview return exists`);
+          returnUrl=new URL(link.href);
+          assert.equal(returnUrl.searchParams.get('country'),country,`${country} ${field}: country retained`);
+        }finally{await fieldWindow.happyDOM.close();}
+        const returned=await page('north-america',returnUrl.search,true);
+        try{assert.equal(returned.document.querySelector('[data-overview-country]').value,country);assertNorthAmericaFieldLinks(returned,country);}
+        finally{await returned.happyDOM.close();}
+      }
+    }finally{await overview.happyDOM.close();}
+  }
+});
+
+test('North America country changes and restored history update all field destinations safely',async()=>{
+  const w=await page('north-america','?country=CAN',true),picker=w.document.querySelector('[data-overview-country]');
+  try{
+    assertNorthAmericaFieldLinks(w,'CAN');
+    picker.value='MEX';picker.dispatchEvent(new w.Event('change'));
+    assertNorthAmericaFieldLinks(w,'MEX');
+    w.document.querySelector('[data-overview-label-country="USA"]').click();
+    assertNorthAmericaFieldLinks(w,'USA');
+    w.history.back();await w.happyDOM.waitUntilComplete();
+    assert.equal(picker.value,'MEX');assertNorthAmericaFieldLinks(w,'MEX');
+    w.history.back();await w.happyDOM.waitUntilComplete();
+    assert.equal(picker.value,'CAN');assertNorthAmericaFieldLinks(w,'CAN');
+    w.history.forward();await w.happyDOM.waitUntilComplete();
+    assert.equal(picker.value,'MEX');assertNorthAmericaFieldLinks(w,'MEX');
+    for(const country of ['CAN','MEX','XXX','FRA','']){
+      w.history.replaceState({},'',country?`?country=${country}`:w.location.pathname);
+      w.dispatchEvent(new w.PopStateEvent('popstate'));
+      assert.equal(picker.value,['CAN','MEX'].includes(country)?country:'');
+      assertNorthAmericaFieldLinks(w,['CAN','MEX'].includes(country)?country:'');
+    }
+    picker.value='CAN';picker.dispatchEvent(new w.Event('change'));
+    w.document.querySelector('[data-overview-reset]').click();
+    assert.equal(picker.value,'');assertNorthAmericaFieldLinks(w,'');
+  }finally{await w.happyDOM.close();}
+});
+
+test('Static North America overview keeps regionwide defaults until the client reads the country URL',async()=>{
+  const w=await page('north-america','?country=CAN');
+  try{
+    assert.equal(w.document.querySelector('[data-overview-country]').value,'');
+    assertNorthAmericaFieldLinks(w,'');
+    const config=configuration(w.document);
+    for(const field of config.fields){
+      assert.equal(field.href,`/insight-journal/atlas/north-america/${field.id}/`);
+      for(const [country,path] of Object.entries(northAmericaCountryPaths)){
+        assert.equal(field.countryHrefs[country],`/insight-journal/atlas/north-america/${path}${field.id}/`);
+        await access(`dist/atlas/north-america/${path}${field.id}/index.html`);
+      }
+    }
+  }finally{await w.happyDOM.close();}
+});
+
 test('共通概要10地域の初期HTMLは白地図と地域概況を示し、国別の本文は選択まで隠す',async()=>{
   const sitemap=await readFile('dist/sitemap.xml','utf8');
   for(const region of regions){
