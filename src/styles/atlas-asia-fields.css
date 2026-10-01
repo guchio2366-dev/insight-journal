@@ -148,3 +148,20 @@
 .asia-atlas .asia-comparison-method{margin:0 0 12px}
 .asia-atlas .asia-comparison-method>summary{font-size:13px;line-height:1.5;cursor:pointer;min-height:40px;padding:9px 0}
 .asia-atlas [data-comparison-legend]{max-height:320px;overflow:auto}
+
+/* Keep the learning workspace beside a compact news rail on laptop widths. */
+@media(min-width:960px) and (max-width:1199px){
+ .atlas-desktop-shell:not(.is-reading-news):has(> .asia-atlas){display:grid;grid-template-columns:160px minmax(0,1fr);gap:12px;padding:10px 12px 24px}
+ .atlas-desktop-shell:not(.is-reading-news):has(> .asia-atlas) .atlas-news{position:sticky;top:10px;width:auto;height:calc(100dvh - 72px);min-height:0}
+ .atlas-desktop-shell:has(> .asia-atlas) .atlas-news-header{padding:12px}
+ .atlas-desktop-shell:has(> .asia-atlas) .atlas-news-header h2{font-size:17px;line-height:1.6}
+ .atlas-desktop-shell:has(> .asia-atlas) :is(.atlas-news-list,.atlas-news-reader){padding-inline:12px}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-layout{grid-template-columns:minmax(0,1fr) 390px;gap:12px;align-items:start}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-map-frame{height:clamp(280px,calc(100dvh - 340px),420px);min-height:0;max-height:none;aspect-ratio:auto}
+ .atlas-desktop-shell .asia-atlas[data-field=agriculture] .asia-map-frame{height:clamp(270px,calc(100dvh - 420px),360px)!important;min-height:0!important;max-height:none!important}
+ .asia-atlas .asia-reading-details .asia-reading-scroll{max-height:calc(100dvh - 260px);height:auto;overflow:auto}
+ .asia-atlas .asia-reading-dock:has([data-comparison-reading]:not([hidden])){padding-block:8px}
+ .asia-atlas .asia-reading-dock:has([data-comparison-reading]:not([hidden]))>.eyebrow{margin-bottom:2px}
+ .asia-atlas .asia-reading-dock:has([data-comparison-reading]:not([hidden]))>h2{margin-bottom:3px}
+ .asia-atlas .asia-reading-dock:has([data-comparison-reading]:not([hidden])) .asia-comparison-return{margin-top:4px}
+}
