@@ -1,4 +1,5 @@
 import {createForestry} from './atlas-forestry';
+import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import {normalizeForestNavigation} from '../lib/atlas-forestry-state';
 import {loadAgricultureGeometry} from '../lib/atlas-agriculture-geometry';
 import {natureEditorial} from '../data/atlas/nature-editorial';
@@ -560,6 +561,7 @@ export async function startAtlas() {
     if(failed)return;
     fitBounds=[[-128,22],[-64,52]];landFeatures=land.features;cropFeatures=crops.features;baseFeatures=base.features;overlayFeatures=overlays.features;
     const style=createAtlasStyle(config,manifest,base,crops,land,{manifest:natureManifest,cities:config.climateCities,aquifers:empty,contours:empty,overlays});
+    lib.setWorkerUrl(workerUrl);
     lib.setWorkerCount(1);map=new lib.Map({container:surface,style,attributionControl:false,cooperativeGestures:true,locale:{'CooperativeGesturesHandler.MobileHelpText':'地図は２本指で動かせます'},renderWorldCopies:false,dragRotate:false,touchPitch:false,pitchWithRotate:false,rollEnabled:false,maxPitch:0,maxZoom:10,minZoom:1,pixelRatio:Math.min(devicePixelRatio,2),bounds:fitBounds,fitBoundsOptions:{padding:{top:30,bottom:14,left:12,right:12}},maxBounds:[[-137,16],[-56,58]],refreshExpiredTiles:false,fadeDuration:0});
     map.touchZoomRotate.disableRotation();map.scrollZoom.disable();if(savedCamera&&view==='custom')map.jumpTo({center:[savedCamera.lng,savedCamera.lat],zoom:savedCamera.zoom});
     surface.addEventListener('webglcontextlost',()=>fail('この端末の地図描画が停止しました。'),true);map.on('error',event=>{console.error('Atlas data/render error',event.error?.message);fail('地図の描画またはデータの読み込みに失敗しました。');});
