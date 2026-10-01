@@ -177,7 +177,7 @@
 @media(min-width:960px){
  .atlas-desktop-shell .asia-atlas[data-field] .asia-layout{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px;align-items:start}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-map-frame{height:auto!important;min-height:0!important;max-height:640px!important;aspect-ratio:1.55!important}
- .atlas-desktop-shell .asia-atlas[data-field] .asia-region-shell{display:flex;flex-wrap:wrap;gap:7px 16px;margin:0 0 10px;padding:0;align-items:center;flex-direction:row}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-region-shell{display:flex!important;flex-wrap:wrap;gap:7px 16px;margin:0 0 10px;padding:0;align-items:center;flex-direction:row}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-region-shell>.regional-navigation{width:100%;flex:0 0 100%}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-region-shell .regional-tabs{width:100%}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-toolbar{display:flex;gap:12px;align-items:center;width:100%;margin:0;padding:0}
