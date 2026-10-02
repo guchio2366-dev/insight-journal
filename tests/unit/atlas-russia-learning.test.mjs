@@ -46,7 +46,7 @@ test('every distribution offers named learning-region buttons without inventing 
    assert.equal(marker.getAttribute('role'),'button');assert.equal(marker.getAttribute('tabindex'),'0');
    assert.equal(marker.querySelector('text').textContent,region.name);
    assert.match(marker.getAttribute('aria-label'),/学習地域/);assert.equal(marker.getAttribute('aria-pressed'),'false');
-   assert.equal(marker.querySelectorAll('path').length,1,'only a locator leader, not a new boundary polygon');
+   assert.equal(marker.closest('.russia-region-marker').querySelectorAll('path').length,1,'only a locator leader, not a new boundary polygon');
   }
   assert.match(window.document.body.textContent,/行政境界ではありません/);
   for(const region of api.russiaRegions){

@@ -55,11 +55,11 @@
 .russia-learning-scene .russia-region-marker-label{fill:#fffefa;stroke:#35515d;stroke-width:1.5;vector-effect:non-scaling-stroke}
 .russia-learning-scene .russia-region-marker text{fill:#234b54;stroke:none;font-family:var(--sans);font-weight:700}
 .russia-learning-scene .russia-region-marker:hover .russia-region-marker-label{fill:#e4efec}
-.russia-learning-scene .russia-region-marker[aria-pressed=true] .russia-region-marker-label,
-.russia-learning-scene .russia-region-marker[aria-pressed=true] .russia-region-marker-point{fill:#234b54}
-.russia-learning-scene .russia-region-marker[aria-pressed=true] text{fill:#fff}
-.russia-learning-scene .russia-region-marker:focus-visible .russia-region-marker-label,
-.russia-learning-scene .russia-region-marker:focus-visible .russia-region-marker-point{stroke:#ab4b2d;stroke-width:3}
+.russia-learning-scene .russia-region-marker[data-selected=true] .russia-region-marker-label,
+.russia-learning-scene .russia-region-marker[data-selected=true] .russia-region-marker-point{fill:#234b54}
+.russia-learning-scene .russia-region-marker[data-selected=true] text{fill:#fff}
+.russia-learning-scene .russia-region-marker [data-region-marker]:focus-visible .russia-region-marker-label,
+.russia-learning-scene .russia-region-marker:has([data-region-marker]:focus-visible) .russia-region-marker-point{stroke:#ab4b2d;stroke-width:3}
 .russia-map-captions{position:absolute;left:8px;bottom:8px;max-width:calc(100% - 16px);display:flex;flex-direction:column;align-items:flex-start;gap:2px;pointer-events:none}
 .russia-region-marker-note{padding:3px 6px;background:#fffef5f2;color:#234b54;font-size:13px;line-height:1.4}
 .russia-map-captions .russia-map-caption{position:static;max-width:100%;padding:3px 6px;font-size:13px;line-height:1.4}
