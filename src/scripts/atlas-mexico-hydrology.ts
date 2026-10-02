@@ -16,6 +16,10 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
   const comparisonName = document.createElement('p'); comparisonName.className = 'mexico-water-comparison-selection'; comparisonName.setAttribute('data-mexico-water-comparison-selection','');
   const plainReturn = q<HTMLElement>('[data-mexico-nature-plain-return]'), returnHome = document.createComment('water-return-home'); plainReturn?.before(returnHome);
   const overview=q<HTMLElement>('[data-mexico-overview-button]'),overviewHome=document.createComment('water-overview-home');overview?.before(overviewHome);const actions=document.createElement('div');actions.className='mexico-water-reading-actions';actions.setAttribute('data-mexico-water-reading-actions','');
+  const readingAside=q<HTMLElement>('.mexico-reading');
+  const readingSummary=document.createElement('div');readingSummary.className='mexico-water-reading-summary';readingSummary.setAttribute('data-mexico-water-reading-summary','');
+  const waterLead=q<HTMLElement>('[data-mexico-hydrology-lead]'),waterLeadHome=document.createComment('water-lead-home');waterLead?.before(waterLeadHome);
+  const comparisonLead=q<HTMLElement>('[data-mexico-nature-comparison-lead]'),comparisonLeadHome=document.createComment('water-comparison-lead-home');comparisonLead?.before(comparisonLeadHome);
   const comparisonValue=q<HTMLElement>('[data-mexico-nature-comparison-value]'),valueHome=document.createComment('water-value-home');comparisonValue?.before(valueHome);
   const readingTitle=q<HTMLElement>('[data-mexico-hydrology-title]'),titleHome=document.createComment('water-title-home');readingTitle?.before(titleHome);
   const dock=q<HTMLElement>('.mexico-nature-comparison-dock'),dockHome=document.createComment('water-dock-home');dock?.before(dockHome);
@@ -40,16 +44,19 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
     show('[data-mexico-hydrology-reading]',active && !compared);
     if (compared && body && comparisonBody) {comparisonDetails.append(body); comparisonBody.prepend(comparisonDetails);if(retry)comparisonBody.prepend(retry);if(status)comparisonBody.prepend(status);comparisonBody.prepend(comparisonName);}
     else {if (body && bodyHome.parentNode) bodyHome.after(body);if(status && statusHome.parentNode)statusHome.after(status);if(retry && retryHome.parentNode)retryHome.after(retry); comparisonDetails.remove(); comparisonName.remove();}
-    if (compared && plainReturn && overviewHome.parentNode) {actions.append(plainReturn);overviewHome.after(actions);}
-    else if(compared && plainReturn)q('.mexico-nature-comparison-dock')?.after(plainReturn);
+    if(active){(readingAside ?? root).prepend(readingSummary);}
+    if(compared && comparisonLead){readingSummary.append(comparisonLead);if(waterLead && waterLeadHome.parentNode)waterLeadHome.after(waterLead);}
+    else {if(comparisonLead && comparisonLeadHome.parentNode)comparisonLeadHome.after(comparisonLead);if(active && waterLead)readingSummary.append(waterLead);else if(waterLead && waterLeadHome.parentNode)waterLeadHome.after(waterLead);}
+    if (compared && plainReturn) {actions.append(plainReturn);readingSummary.append(actions);}
     else {actions.remove();if (plainReturn && returnHome.parentNode)returnHome.after(plainReturn);}
     if(active && overview && (compared?comparisonBody:body))(compared?comparisonBody:body)!.append(overview);
     else if(overview && overviewHome.parentNode)overviewHome.after(overview);
     if(active && readingTitle && body)body.prepend(readingTitle);else if(readingTitle && titleHome.parentNode)titleHome.after(readingTitle);
-    if(compared && comparisonValue && actions.parentNode){actions.after(comparisonValue);comparisonValue.setAttribute('data-mexico-water-fixed-value','');}
+    if(compared && comparisonValue){readingSummary.append(comparisonValue);comparisonValue.setAttribute('data-mexico-water-fixed-value','');}
     else {if(comparisonValue && valueHome.parentNode)valueHome.after(comparisonValue);comparisonValue?.removeAttribute('data-mexico-water-fixed-value');}
     if(compared && dock && comparisonBody){alternativeComparisons.append(dock);comparisonBody.append(alternativeComparisons);}
-    else {if(dock && dockHome.parentNode)dockHome.after(dock);alternativeComparisons.remove();}
+    else {if(dock){if(active)readingSummary.append(dock);else if(dockHome.parentNode)dockHome.after(dock);}alternativeComparisons.remove();}
+    if(!active)readingSummary.remove();
   }
   function choose(layer: MexicoHydrologyLayer, id: string): void {
     selection = {...selection, feature: `${layer}:${id}`}; commit();
