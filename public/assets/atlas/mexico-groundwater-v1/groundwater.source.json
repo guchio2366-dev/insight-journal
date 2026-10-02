@@ -1,0 +1,1354 @@
+{
+  "id": "groundwater",
+  "publisher": "INEGI",
+  "edition": "Serie II（1996作成・2008改訂）",
+  "observedPeriod": null,
+  "retrievedAt": "2026-10-02",
+  "unit": "L/s yield class or qualitative occurrence potential (distinct source categories)",
+  "license": {
+    "name": "Términos de Libre Uso de la Información del INEGI",
+    "url": "https://www.inegi.org.mx/inegi/terminos.html",
+    "creditRequired": true,
+    "preserveMetadata": true,
+    "discloseTransformations": true
+  },
+  "sourceCrsWkt": "PROJCS[\"North_America_Lambert_Conformal_Conic\",GEOGCS[\"ITRF92\",DATUM[\"D_ITRF_1992\",SPHEROID[\"GRS_1980\",6378137.0,298.257222101]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Lambert_Conformal_Conic\"],PARAMETER[\"False_Easting\",2500000.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",-102.0],PARAMETER[\"Standard_Parallel_1\",17.5],PARAMETER[\"Standard_Parallel_2\",29.5],PARAMETER[\"Latitude_Of_Origin\",12.0],UNIT[\"Meter\",1.0]]",
+  "outputCrs": "EPSG:4326",
+  "sourceArchive": "inegi-national-groundwater-original.zip",
+  "sourceArchiveBytes": 148922652,
+  "sourceArchiveSha256": "ee94ce02297c9d910d3b1d20ea531cbdd11ca37d2c7baaf304fd68a0f08bcffe",
+  "name": "地下水の水理地質10分類",
+  "sourceUrl": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=889463598411",
+  "downloadUrl": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/geografia/tematicas/Aguas_sub_Serie_II/1_250_000/889463598411_s.zip",
+  "sourceCreationDate": "1996-03-01",
+  "sourceRevisionDate": "2008-12-01",
+  "periodNote": "1996年は原典作成、2008-12-01は原典改訂の日付。全国共通の観測期や現在の地下水量を示さない。",
+  "geometryMeaning": "INEGI continuo_u geohydrological units, classified by consolidated/unconsolidated materials and source yield/occurrence potential. Not legal aquifer boundaries.",
+  "scale": 250000,
+  "transform": {
+    "operation": "Inverse of unnamed + axis order change (2D) + Conversion from ITRF92 (geog2D) to ITRF92 (geocentric) + Inverse of WGS 84 (G730) to ITRF92 (1) + Conversion from WGS 84 (G730) (geocentric) to WGS 84 (G730) (geog2D) + Inverse of WGS 84 to WGS 84 (G730) (with axis order normalized for visualization)",
+    "accuracyMetres": 2.2,
+    "ballparkAllowed": false,
+    "alwaysXY": true
+  },
+  "sourceCrsEvidence": "Bundled national metadata section 5.1: ITRF92 epoch1988.0, GRS80, Lambert std17.5/29.5 lon0-102 lat0-12 falseE2500000 falseN0. Supplied continuo_a.prj matches these parameters; continuo_v NAD27 CRS is excluded.",
+  "originalRecordCount": 34551,
+  "selectedSourceRecordCount": 29479,
+  "excludedRecordCount": 5072,
+  "excludedBySourceClassAndDescription": [
+    {
+      "code": "H2O",
+      "description": "Cuerpo de agua perenne",
+      "count": 3500
+    },
+    {
+      "code": "H2O",
+      "description": "Cuerpo de agua intermitente",
+      "count": 1533
+    },
+    {
+      "code": "P/E",
+      "description": "Pais extranjero",
+      "count": 17
+    },
+    {
+      "code": "H2O",
+      "description": "Estanque",
+      "count": 7
+    },
+    {
+      "code": "H2O",
+      "description": "Salina Natural",
+      "count": 15
+    }
+  ],
+  "sourceVertexCount": 8704464,
+  "sourceRingCount": 48769,
+  "sourceClassCounts": {
+    "1A": 143,
+    "2M": 948,
+    "3B": 1190,
+    "4PM": 1084,
+    "5PB": 10733,
+    "6a": 246,
+    "7m": 934,
+    "8b": 1391,
+    "9pm": 3645,
+    "10pb": 9165
+  },
+  "sourceInvalidRecordOrdinals": [
+    7870,
+    15169,
+    19396,
+    22598,
+    29277,
+    9800,
+    11467,
+    15752,
+    21569,
+    23654,
+    7570,
+    8377,
+    9253,
+    22854,
+    10180,
+    12667,
+    13136,
+    22521,
+    29553,
+    33012,
+    601,
+    4077,
+    5251,
+    6610,
+    13597,
+    14437,
+    26015,
+    3658,
+    4727,
+    7255,
+    9131,
+    9554,
+    11022,
+    13149,
+    14762,
+    28836,
+    6792,
+    7211,
+    7426,
+    10459,
+    10995,
+    11005,
+    12319,
+    13020,
+    15225,
+    15600,
+    21358,
+    27014,
+    27589,
+    30051,
+    30089,
+    31876,
+    32591,
+    426,
+    1540,
+    4123,
+    5823,
+    6730,
+    8171,
+    11633,
+    12785,
+    12976,
+    27088,
+    33528,
+    2101,
+    2446,
+    2752,
+    3142,
+    3681,
+    3714,
+    4098,
+    4168,
+    4183,
+    4187,
+    7235,
+    7401,
+    7880,
+    9590,
+    9866,
+    10313,
+    12083,
+    15401,
+    15785,
+    16460,
+    18955,
+    19164,
+    21565,
+    22894,
+    23147,
+    31104,
+    31964,
+    33472
+  ],
+  "legend": [
+    {
+      "id": "groundwater-1A",
+      "label": "固結：産出収量高 >40 L/s",
+      "fullLabel": "固結材料・産出収量高（>40 L/s）",
+      "color": "#155e75",
+      "material": "consolidated",
+      "measure": "yield",
+      "sourceClass": "1A",
+      "sourceName": "Material consolidado con rendimiento alto > 40 lps"
+    },
+    {
+      "id": "groundwater-2M",
+      "label": "固結：産出収量中 10–40 L/s",
+      "fullLabel": "固結材料・産出収量中（10–40 L/s）",
+      "color": "#0891b2",
+      "material": "consolidated",
+      "measure": "yield",
+      "sourceClass": "2M",
+      "sourceName": "Material consolidado con rendimiento medio 10-40 lps"
+    },
+    {
+      "id": "groundwater-3B",
+      "label": "固結：産出収量低 <10 L/s",
+      "fullLabel": "固結材料・産出収量低（<10 L/s）",
+      "color": "#67e8f9",
+      "material": "consolidated",
+      "measure": "yield",
+      "sourceClass": "3B",
+      "sourceName": "Material consolidado con rendimiento bajo < 10 lps"
+    },
+    {
+      "id": "groundwater-4PM",
+      "label": "固結：可能性中",
+      "fullLabel": "固結材料・賦存可能性中",
+      "color": "#a16207",
+      "material": "consolidated",
+      "measure": "potential",
+      "sourceClass": "4PM",
+      "sourceName": "Material consolidado con posibilidades medias"
+    },
+    {
+      "id": "groundwater-5PB",
+      "label": "固結：可能性低",
+      "fullLabel": "固結材料・賦存可能性低",
+      "color": "#fde68a",
+      "material": "consolidated",
+      "measure": "potential",
+      "sourceClass": "5PB",
+      "sourceName": "Material consolidado con posibilidades bajas"
+    },
+    {
+      "id": "groundwater-6a",
+      "label": "非固結：産出収量高 >40 L/s",
+      "fullLabel": "非固結材料・産出収量高（>40 L/s）",
+      "color": "#3730a3",
+      "material": "unconsolidated",
+      "measure": "yield",
+      "sourceClass": "6a",
+      "sourceName": "Material no consolidado con rendimiento alto > 40 lps"
+    },
+    {
+      "id": "groundwater-7m",
+      "label": "非固結：産出収量中 10–40 L/s",
+      "fullLabel": "非固結材料・産出収量中（10–40 L/s）",
+      "color": "#818cf8",
+      "material": "unconsolidated",
+      "measure": "yield",
+      "sourceClass": "7m",
+      "sourceName": "Material no consolidado con rendimiento medio 10-40 lps"
+    },
+    {
+      "id": "groundwater-8b",
+      "label": "非固結：産出収量低 <10 L/s",
+      "fullLabel": "非固結材料・産出収量低（<10 L/s）",
+      "color": "#c7d2fe",
+      "material": "unconsolidated",
+      "measure": "yield",
+      "sourceClass": "8b",
+      "sourceName": "Material no consolidado con rendimiento bajo < 10 lps"
+    },
+    {
+      "id": "groundwater-9pm",
+      "label": "非固結：可能性中",
+      "fullLabel": "非固結材料・賦存可能性中",
+      "color": "#be185d",
+      "material": "unconsolidated",
+      "measure": "potential",
+      "sourceClass": "9pm",
+      "sourceName": "Material no consolidado con posibilidades medias"
+    },
+    {
+      "id": "groundwater-10pb",
+      "label": "非固結：可能性低",
+      "fullLabel": "非固結材料・賦存可能性低",
+      "color": "#fbcfe8",
+      "material": "unconsolidated",
+      "measure": "potential",
+      "sourceClass": "10pb",
+      "sourceName": "Material no consolidado con posibilidades bajas"
+    }
+  ],
+  "legendColorMeaning": "Display palette assigned by this site; formal ten source classes are unchanged. Colors are not claimed to be INEGI's original palette.",
+  "valueDefinitionSource": {
+    "url": "https://www.inegi.org.mx/contenidos/temas/mapas/hidrologia/metadatos/dd_hidrosub_v1_250k.pdf",
+    "printedPages": [
+      20,
+      21
+    ]
+  },
+  "coverage": "National source geohydrological unit layer, ten groundwater classes. Source water-body/foreign-area polygons are excluded and recorded.",
+  "displaySimplification": {
+    "toleranceDegrees": 0.002,
+    "preserveTopology": true,
+    "sourceRecordsSimplified": 29479,
+    "invalidSourceRecordsChanged": true,
+    "sourceRingsRetained": true,
+    "invalidSourceDisplayAudit": [
+      {
+        "sourceRecordOrdinal": 426,
+        "sourceClass": "9pm",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 5294,
+        "relativePlanarAreaChange": 0.015803779109102148
+      },
+      {
+        "sourceRecordOrdinal": 601,
+        "sourceClass": "6a",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 2438,
+        "relativePlanarAreaChange": 0.009085877393826275
+      },
+      {
+        "sourceRecordOrdinal": 1540,
+        "sourceClass": "9pm",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 462,
+        "relativePlanarAreaChange": 0.0005068400746734575
+      },
+      {
+        "sourceRecordOrdinal": 2101,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 310,
+        "relativePlanarAreaChange": -0.002031042577829647
+      },
+      {
+        "sourceRecordOrdinal": 2446,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 928,
+        "relativePlanarAreaChange": 0.003092050720760857
+      },
+      {
+        "sourceRecordOrdinal": 2752,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 347,
+        "relativePlanarAreaChange": 0.022404763775673756
+      },
+      {
+        "sourceRecordOrdinal": 3142,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 9270,
+        "relativePlanarAreaChange": 0.015144410710724827
+      },
+      {
+        "sourceRecordOrdinal": 3658,
+        "sourceClass": "7m",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 2951,
+        "relativePlanarAreaChange": 0.0008861770183913727
+      },
+      {
+        "sourceRecordOrdinal": 3681,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 17853,
+        "relativePlanarAreaChange": 0.008615909485512347
+      },
+      {
+        "sourceRecordOrdinal": 3714,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 92,
+        "relativePlanarAreaChange": -0.07492477056195705
+      },
+      {
+        "sourceRecordOrdinal": 4077,
+        "sourceClass": "6a",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 14189,
+        "relativePlanarAreaChange": 0.0013823345173433973
+      },
+      {
+        "sourceRecordOrdinal": 4098,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 93,
+        "relativePlanarAreaChange": -0.013362890307809357
+      },
+      {
+        "sourceRecordOrdinal": 4123,
+        "sourceClass": "9pm",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 1187,
+        "relativePlanarAreaChange": 0.002492022597153632
+      },
+      {
+        "sourceRecordOrdinal": 4168,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 1082,
+        "relativePlanarAreaChange": 0.008359088383824976
+      },
+      {
+        "sourceRecordOrdinal": 4183,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 1037,
+        "relativePlanarAreaChange": 0.003819520323046716
+      },
+      {
+        "sourceRecordOrdinal": 4187,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 3605,
+        "relativePlanarAreaChange": 0.00795817857905695
+      },
+      {
+        "sourceRecordOrdinal": 4727,
+        "sourceClass": "7m",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 611,
+        "relativePlanarAreaChange": -0.0006868176812568374
+      },
+      {
+        "sourceRecordOrdinal": 5251,
+        "sourceClass": "6a",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 960,
+        "relativePlanarAreaChange": 0.00156470480099763
+      },
+      {
+        "sourceRecordOrdinal": 5823,
+        "sourceClass": "9pm",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 1090,
+        "relativePlanarAreaChange": -0.00025485964724636406
+      },
+      {
+        "sourceRecordOrdinal": 6610,
+        "sourceClass": "6a",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 10539,
+        "relativePlanarAreaChange": 0.004323609433531395
+      },
+      {
+        "sourceRecordOrdinal": 6730,
+        "sourceClass": "9pm",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 77,
+        "relativePlanarAreaChange": 0.10126807007295159
+      },
+      {
+        "sourceRecordOrdinal": 6792,
+        "sourceClass": "8b",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 1930,
+        "relativePlanarAreaChange": 0.005477303089081949
+      },
+      {
+        "sourceRecordOrdinal": 7211,
+        "sourceClass": "8b",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 107,
+        "relativePlanarAreaChange": -0.0006080915106173671
+      },
+      {
+        "sourceRecordOrdinal": 7235,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 987,
+        "relativePlanarAreaChange": 0.024336576302391996
+      },
+      {
+        "sourceRecordOrdinal": 7255,
+        "sourceClass": "7m",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 7941,
+        "relativePlanarAreaChange": 0.005841636464173478
+      },
+      {
+        "sourceRecordOrdinal": 7401,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 220,
+        "relativePlanarAreaChange": -0.04080953642579875
+      },
+      {
+        "sourceRecordOrdinal": 7426,
+        "sourceClass": "8b",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 174,
+        "relativePlanarAreaChange": 0.033455070811216105
+      },
+      {
+        "sourceRecordOrdinal": 7570,
+        "sourceClass": "4PM",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 2782,
+        "relativePlanarAreaChange": 0.0020610772883401327
+      },
+      {
+        "sourceRecordOrdinal": 7870,
+        "sourceClass": "2M",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 27184,
+        "relativePlanarAreaChange": 0.0015346464536836004
+      },
+      {
+        "sourceRecordOrdinal": 7880,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 168,
+        "relativePlanarAreaChange": 0.026897773869252444
+      },
+      {
+        "sourceRecordOrdinal": 8171,
+        "sourceClass": "9pm",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 489,
+        "relativePlanarAreaChange": 0.02378427332622542
+      },
+      {
+        "sourceRecordOrdinal": 8377,
+        "sourceClass": "4PM",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 230,
+        "relativePlanarAreaChange": -0.047001353441199455
+      },
+      {
+        "sourceRecordOrdinal": 9131,
+        "sourceClass": "7m",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 9752,
+        "relativePlanarAreaChange": 0.00266569339811954
+      },
+      {
+        "sourceRecordOrdinal": 9253,
+        "sourceClass": "4PM",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 49,
+        "relativePlanarAreaChange": -0.021808652838591708
+      },
+      {
+        "sourceRecordOrdinal": 9554,
+        "sourceClass": "7m",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 1427,
+        "relativePlanarAreaChange": 0.0013695634139818356
+      },
+      {
+        "sourceRecordOrdinal": 9590,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 515,
+        "relativePlanarAreaChange": 0.0011354150404732513
+      },
+      {
+        "sourceRecordOrdinal": 9800,
+        "sourceClass": "3B",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 11119,
+        "relativePlanarAreaChange": 0.0018202415541042657
+      },
+      {
+        "sourceRecordOrdinal": 9866,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 97,
+        "relativePlanarAreaChange": 0.01723433318255124
+      },
+      {
+        "sourceRecordOrdinal": 10180,
+        "sourceClass": "5PB",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 74767,
+        "relativePlanarAreaChange": 0.0001773155457657242
+      },
+      {
+        "sourceRecordOrdinal": 10313,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 55,
+        "relativePlanarAreaChange": 0.0065865588122321055
+      },
+      {
+        "sourceRecordOrdinal": 10459,
+        "sourceClass": "8b",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 301,
+        "relativePlanarAreaChange": 0.0014826396029730727
+      },
+      {
+        "sourceRecordOrdinal": 10995,
+        "sourceClass": "8b",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 683,
+        "relativePlanarAreaChange": 0.012536202736537886
+      },
+      {
+        "sourceRecordOrdinal": 11005,
+        "sourceClass": "8b",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 5603,
+        "relativePlanarAreaChange": 0.002099659206725847
+      },
+      {
+        "sourceRecordOrdinal": 11022,
+        "sourceClass": "7m",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 7216,
+        "relativePlanarAreaChange": 0.005540888137762418
+      },
+      {
+        "sourceRecordOrdinal": 11467,
+        "sourceClass": "3B",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 310,
+        "relativePlanarAreaChange": 0.009767732650283831
+      },
+      {
+        "sourceRecordOrdinal": 11633,
+        "sourceClass": "9pm",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 3893,
+        "relativePlanarAreaChange": 0.013762240356777287
+      },
+      {
+        "sourceRecordOrdinal": 12083,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 13742,
+        "relativePlanarAreaChange": 0.008176636493076345
+      },
+      {
+        "sourceRecordOrdinal": 12319,
+        "sourceClass": "8b",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 3304,
+        "relativePlanarAreaChange": 0.0034042813893567425
+      },
+      {
+        "sourceRecordOrdinal": 12667,
+        "sourceClass": "5PB",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 5675,
+        "relativePlanarAreaChange": 0.0009310484613831728
+      },
+      {
+        "sourceRecordOrdinal": 12785,
+        "sourceClass": "9pm",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 298,
+        "relativePlanarAreaChange": -0.0023316427322402967
+      },
+      {
+        "sourceRecordOrdinal": 12976,
+        "sourceClass": "9pm",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 617,
+        "relativePlanarAreaChange": 0.05200875923495629
+      },
+      {
+        "sourceRecordOrdinal": 13020,
+        "sourceClass": "8b",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 9179,
+        "relativePlanarAreaChange": 0.0065846784200608525
+      },
+      {
+        "sourceRecordOrdinal": 13136,
+        "sourceClass": "5PB",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 527,
+        "relativePlanarAreaChange": -0.011127342016009054
+      },
+      {
+        "sourceRecordOrdinal": 13149,
+        "sourceClass": "7m",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 24687,
+        "relativePlanarAreaChange": 0.0035375757588472765
+      },
+      {
+        "sourceRecordOrdinal": 13597,
+        "sourceClass": "6a",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 17439,
+        "relativePlanarAreaChange": 0.0045709412841938215
+      },
+      {
+        "sourceRecordOrdinal": 14437,
+        "sourceClass": "6a",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 2607,
+        "relativePlanarAreaChange": 0.00024782617461770916
+      },
+      {
+        "sourceRecordOrdinal": 14762,
+        "sourceClass": "7m",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 5174,
+        "relativePlanarAreaChange": 0.0034846091112123953
+      },
+      {
+        "sourceRecordOrdinal": 15169,
+        "sourceClass": "2M",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 45967,
+        "relativePlanarAreaChange": 0.0008664722732723389
+      },
+      {
+        "sourceRecordOrdinal": 15225,
+        "sourceClass": "8b",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 2065,
+        "relativePlanarAreaChange": 0.007684364480056984
+      },
+      {
+        "sourceRecordOrdinal": 15401,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 1130,
+        "relativePlanarAreaChange": 0.024735319593942283
+      },
+      {
+        "sourceRecordOrdinal": 15600,
+        "sourceClass": "8b",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 810,
+        "relativePlanarAreaChange": -0.002081363744781773
+      },
+      {
+        "sourceRecordOrdinal": 15752,
+        "sourceClass": "3B",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 12464,
+        "relativePlanarAreaChange": 0.005829695307622489
+      },
+      {
+        "sourceRecordOrdinal": 15785,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 609,
+        "relativePlanarAreaChange": 0.03791700655643352
+      },
+      {
+        "sourceRecordOrdinal": 16460,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 4585,
+        "relativePlanarAreaChange": 0.010416864157242077
+      },
+      {
+        "sourceRecordOrdinal": 18955,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 154,
+        "relativePlanarAreaChange": -0.05496148768011025
+      },
+      {
+        "sourceRecordOrdinal": 19164,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 115,
+        "relativePlanarAreaChange": 0.08636672983091767
+      },
+      {
+        "sourceRecordOrdinal": 19396,
+        "sourceClass": "2M",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 7420,
+        "relativePlanarAreaChange": 0.0015388772484726003
+      },
+      {
+        "sourceRecordOrdinal": 21358,
+        "sourceClass": "8b",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 26310,
+        "relativePlanarAreaChange": 0.0031953746765213736
+      },
+      {
+        "sourceRecordOrdinal": 21565,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 367,
+        "relativePlanarAreaChange": 0.01584851609720538
+      },
+      {
+        "sourceRecordOrdinal": 21569,
+        "sourceClass": "3B",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 85,
+        "relativePlanarAreaChange": 0.013002217729258567
+      },
+      {
+        "sourceRecordOrdinal": 22521,
+        "sourceClass": "5PB",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 7197,
+        "relativePlanarAreaChange": -0.0027897516596634524
+      },
+      {
+        "sourceRecordOrdinal": 22598,
+        "sourceClass": "2M",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 10562,
+        "relativePlanarAreaChange": -0.0017533050241811557
+      },
+      {
+        "sourceRecordOrdinal": 22854,
+        "sourceClass": "4PM",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 8597,
+        "relativePlanarAreaChange": -0.0027309318208233375
+      },
+      {
+        "sourceRecordOrdinal": 22894,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 3599,
+        "relativePlanarAreaChange": 0.008680252208871784
+      },
+      {
+        "sourceRecordOrdinal": 23147,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 4865,
+        "relativePlanarAreaChange": 0.011339401508312577
+      },
+      {
+        "sourceRecordOrdinal": 23654,
+        "sourceClass": "3B",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 248,
+        "relativePlanarAreaChange": 0.004515892072446581
+      },
+      {
+        "sourceRecordOrdinal": 26015,
+        "sourceClass": "6a",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 122678,
+        "relativePlanarAreaChange": 0.005364689937803094
+      },
+      {
+        "sourceRecordOrdinal": 27014,
+        "sourceClass": "8b",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 956,
+        "relativePlanarAreaChange": 0.0032082056561448464
+      },
+      {
+        "sourceRecordOrdinal": 27088,
+        "sourceClass": "9pm",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 228,
+        "relativePlanarAreaChange": -0.02026908226689608
+      },
+      {
+        "sourceRecordOrdinal": 27589,
+        "sourceClass": "8b",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 69136,
+        "relativePlanarAreaChange": 0.005137742565806409
+      },
+      {
+        "sourceRecordOrdinal": 28836,
+        "sourceClass": "7m",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 142532,
+        "relativePlanarAreaChange": 0.0044758597467947185
+      },
+      {
+        "sourceRecordOrdinal": 29277,
+        "sourceClass": "2M",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 1997,
+        "relativePlanarAreaChange": -0.02471419026574704
+      },
+      {
+        "sourceRecordOrdinal": 29553,
+        "sourceClass": "5PB",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 644,
+        "relativePlanarAreaChange": -0.006679035572469184
+      },
+      {
+        "sourceRecordOrdinal": 30051,
+        "sourceClass": "8b",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 1709,
+        "relativePlanarAreaChange": 0.005002220932624342
+      },
+      {
+        "sourceRecordOrdinal": 30089,
+        "sourceClass": "8b",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 542,
+        "relativePlanarAreaChange": 0.002151399995106168
+      },
+      {
+        "sourceRecordOrdinal": 31104,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 1461,
+        "relativePlanarAreaChange": 0.00017585340306284673
+      },
+      {
+        "sourceRecordOrdinal": 31876,
+        "sourceClass": "8b",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 230,
+        "relativePlanarAreaChange": -0.01401793446791134
+      },
+      {
+        "sourceRecordOrdinal": 31964,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 10754,
+        "relativePlanarAreaChange": 0.006114497318170007
+      },
+      {
+        "sourceRecordOrdinal": 32591,
+        "sourceClass": "8b",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 78,
+        "relativePlanarAreaChange": -0.01897276264131015
+      },
+      {
+        "sourceRecordOrdinal": 33012,
+        "sourceClass": "5PB",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 802845,
+        "relativePlanarAreaChange": 0.00010550799809699418
+      },
+      {
+        "sourceRecordOrdinal": 33472,
+        "sourceClass": "10pb",
+        "sourceValid": false,
+        "displayValid": false,
+        "sourceVertices": 797,
+        "relativePlanarAreaChange": 0.000875178144407782
+      },
+      {
+        "sourceRecordOrdinal": 33528,
+        "sourceClass": "9pm",
+        "sourceValid": false,
+        "displayValid": true,
+        "sourceVertices": 111964,
+        "relativePlanarAreaChange": 0.004470653030882707
+      }
+    ]
+  },
+  "method": "Group by exact source CLAVE and whitespace-trimmed DESCRIPCIO into ten MultiPolygons without dissolve, make_valid, buffer repair or adding geometry. Preserve the original description variants/counts (three 10pb records have a leading space), every selected polygon, hole, part and record ordinal. Apply named ITRF92 Lambert to WGS84 PROJ datum operation with ballpark disabled. Display-only Shapely simplify at 0.002 degrees with preserve_topology=True for every source unit, including invalid inputs whose source/display validity and area change are independently recorded. Assert that every source ring remains. Round to six decimals. Complete unsimplified grouped geometry remains in runtime provenance. No interpolation, clipping or arbitrary aquifer construction.",
+  "limitations": [
+    "These hydrogeological units are not CONAGUA's 653 legal aquifer units.",
+    "Yield classes (>40,10–40,<10 L/s) and qualitative occurrence-potential classes are distinct source concepts; neither is reservoir volume or current water availability.",
+    "Source records have only class/description; record ordinals identify preserved archive records, not invented official feature IDs.",
+    "This is display generalization, not repaired analytical topology or a legal/local boundary. Invalid original polygons and source/display changes remain in the audit; original geometry is preserved separately."
+  ],
+  "featureCount": 10,
+  "bounds4326": [
+    -117.301043,
+    14.535065,
+    -86.710688,
+    32.718674
+  ],
+  "outputVertexCount": 1075193,
+  "deliveryMode": "national-overview-and-selected-class",
+  "file": "groundwater-overview.png",
+  "selectedDistributionNotice": "全国図は全10分類。分類選択時はその分類の全国分布だけを表示します。未着色は他分類や除外水面などで、水なし・欠測を意味しません。",
+  "defaultSelectedClassId": "all",
+  "classFiles": {
+    "groundwater-1A": {
+      "id": "groundwater-1A",
+      "classId": "groundwater-1A",
+      "sourceClass": "1A",
+      "label": "固結：産出収量高 >40 L/s",
+      "fullLabel": "固結材料・産出収量高（>40 L/s）",
+      "sourceName": "Material consolidado con rendimiento alto > 40 lps",
+      "color": "#155e75",
+      "material": "consolidated",
+      "measure": "yield",
+      "unit": "L/s yield class",
+      "file": "groundwater-1A.geojson.gz",
+      "compression": "gzip",
+      "featureCount": 1,
+      "bytes": 99094,
+      "sha256": "66262dd7fda5a0721e2b2ec1d3a22448876e7b98e36ccebe722226c4b682282d",
+      "decodedAsset": {
+        "bytes": 297914,
+        "sha256": "2955f93eb5715a733e161b93ac31244491ee9a5f68081d5fd9fd77c7b9c69af7"
+      },
+      "geometrySha256": "ee8c97578d5fcb4697fbf9bf3928c3a01d53a31759d2fc96cccee6011adb4066",
+      "sourceMemberCount": 143,
+      "sourceRingCount": 706,
+      "sourceRecordOrdinalsSha256": "d6a22b3d18c562d7e767a41b0a6fc784896f1b14aaa861b791b883a152176f0e"
+    },
+    "groundwater-2M": {
+      "id": "groundwater-2M",
+      "classId": "groundwater-2M",
+      "sourceClass": "2M",
+      "label": "固結：産出収量中 10–40 L/s",
+      "fullLabel": "固結材料・産出収量中（10–40 L/s）",
+      "sourceName": "Material consolidado con rendimiento medio 10-40 lps",
+      "color": "#0891b2",
+      "material": "consolidated",
+      "measure": "yield",
+      "unit": "L/s yield class",
+      "file": "groundwater-2M.geojson.gz",
+      "compression": "gzip",
+      "featureCount": 1,
+      "bytes": 443036,
+      "sha256": "f1b1da29a9dd38d4b07692c54b037b0d7ab135b4f09677cc79632b4fad8d4d1a",
+      "decodedAsset": {
+        "bytes": 1357636,
+        "sha256": "fe4bc6e89c276ed68deb615417a0fabf32c3987eba5f0f64bb5a9a5e90c00bf3"
+      },
+      "geometrySha256": "5986c2bafbdea9f83f90cd62fedcbb3279b4ceaeb6a3e07e05d185e6ff539274",
+      "sourceMemberCount": 948,
+      "sourceRingCount": 1926,
+      "sourceRecordOrdinalsSha256": "1bd0d5774dc0f2325b82eddb2d45aedbc0f12c8c0d7aebd6d77402ab8f40ea07"
+    },
+    "groundwater-3B": {
+      "id": "groundwater-3B",
+      "classId": "groundwater-3B",
+      "sourceClass": "3B",
+      "label": "固結：産出収量低 <10 L/s",
+      "fullLabel": "固結材料・産出収量低（<10 L/s）",
+      "sourceName": "Material consolidado con rendimiento bajo < 10 lps",
+      "color": "#67e8f9",
+      "material": "consolidated",
+      "measure": "yield",
+      "unit": "L/s yield class",
+      "file": "groundwater-3B.geojson.gz",
+      "compression": "gzip",
+      "featureCount": 1,
+      "bytes": 435310,
+      "sha256": "aa2990c8bc5854b82604edf5afd9fcded554d4f55c47734c726bedf76506fc08",
+      "decodedAsset": {
+        "bytes": 1345259,
+        "sha256": "29bcd537d9f57376bad42b7c7531a014e4c0ae9dec8b8a7706ffdcd76ef298f4"
+      },
+      "geometrySha256": "fe61151e3300f3b4c96438e1f608815354a4d76806d9e735c84db47313efc90a",
+      "sourceMemberCount": 1190,
+      "sourceRingCount": 1979,
+      "sourceRecordOrdinalsSha256": "cbfd8f2960bf9e819c25726d55022797c17c19371e84d2c0f05ff7251cbef86e"
+    },
+    "groundwater-4PM": {
+      "id": "groundwater-4PM",
+      "classId": "groundwater-4PM",
+      "sourceClass": "4PM",
+      "label": "固結：可能性中",
+      "fullLabel": "固結材料・賦存可能性中",
+      "sourceName": "Material consolidado con posibilidades medias",
+      "color": "#a16207",
+      "material": "consolidated",
+      "measure": "potential",
+      "unit": "occurrence potential class",
+      "file": "groundwater-4PM.geojson.gz",
+      "compression": "gzip",
+      "featureCount": 1,
+      "bytes": 226313,
+      "sha256": "8110e75bb9aa7fba4a9d6f851b10a13f2dd58c6a4a21c66a2eeceb45c783ad8f",
+      "decodedAsset": {
+        "bytes": 696364,
+        "sha256": "50a17695989c852cc3ad104515d9cbfa85ac771fd4e85a00153820558ccaf42e"
+      },
+      "geometrySha256": "d0c6aadcece00ff838de354eca461f897034d8924f59d6d6f9dbd20cefbd3543",
+      "sourceMemberCount": 1084,
+      "sourceRingCount": 1321,
+      "sourceRecordOrdinalsSha256": "d66cdc85b14f8f692019ac1e48618f2eaef3cc503251f56e7e641ec214bdac92"
+    },
+    "groundwater-5PB": {
+      "id": "groundwater-5PB",
+      "classId": "groundwater-5PB",
+      "sourceClass": "5PB",
+      "label": "固結：可能性低",
+      "fullLabel": "固結材料・賦存可能性低",
+      "sourceName": "Material consolidado con posibilidades bajas",
+      "color": "#fde68a",
+      "material": "consolidated",
+      "measure": "potential",
+      "unit": "occurrence potential class",
+      "file": "groundwater-5PB.geojson.gz",
+      "compression": "gzip",
+      "featureCount": 1,
+      "bytes": 2552848,
+      "sha256": "95a50be03553069efbc1715a546da773ac3b94fd2e32f31adeabd7aa565e91d5",
+      "decodedAsset": {
+        "bytes": 7961663,
+        "sha256": "787b0cda16ed94138ff1cae302c23d7cb6d3b59c97ff5c4e14f64e907c067077"
+      },
+      "geometrySha256": "0427ce465e9336ff4ff1c0ebb902ad8a152f4b6d964c6ee3046c44aea66e50fb",
+      "sourceMemberCount": 10733,
+      "sourceRingCount": 15277,
+      "sourceRecordOrdinalsSha256": "69cf05a7ecbdacb895eb4740e437b2dd5e1e8db26a336fd462cb2b32b90dae28"
+    },
+    "groundwater-6a": {
+      "id": "groundwater-6a",
+      "classId": "groundwater-6a",
+      "sourceClass": "6a",
+      "label": "非固結：産出収量高 >40 L/s",
+      "fullLabel": "非固結材料・産出収量高（>40 L/s）",
+      "sourceName": "Material no consolidado con rendimiento alto > 40 lps",
+      "color": "#3730a3",
+      "material": "unconsolidated",
+      "measure": "yield",
+      "unit": "L/s yield class",
+      "file": "groundwater-6a.geojson.gz",
+      "compression": "gzip",
+      "featureCount": 1,
+      "bytes": 395955,
+      "sha256": "e48442af711870b5fe1ed8709f7b0c2fe17a0b012808a4f5c392f160f3b0a7a4",
+      "decodedAsset": {
+        "bytes": 1224895,
+        "sha256": "89b86160217adce647f1d5a8e63c4e7e9c7f6649ea6afaeb939027d19580f453"
+      },
+      "geometrySha256": "587cf2b8ec8c211fe4996624be5f54a0fcf4103e57ccf137e64d51854ecede8f",
+      "sourceMemberCount": 246,
+      "sourceRingCount": 1845,
+      "sourceRecordOrdinalsSha256": "3f31e346b03cc9ee72f5aacf0e89ceabc36d0a9424941f0d6a7e55d711b59831"
+    },
+    "groundwater-7m": {
+      "id": "groundwater-7m",
+      "classId": "groundwater-7m",
+      "sourceClass": "7m",
+      "label": "非固結：産出収量中 10–40 L/s",
+      "fullLabel": "非固結材料・産出収量中（10–40 L/s）",
+      "sourceName": "Material no consolidado con rendimiento medio 10-40 lps",
+      "color": "#818cf8",
+      "material": "unconsolidated",
+      "measure": "yield",
+      "unit": "L/s yield class",
+      "file": "groundwater-7m.geojson.gz",
+      "compression": "gzip",
+      "featureCount": 1,
+      "bytes": 934412,
+      "sha256": "4b30c643cb5b7e429e3ec3cca24b7ba88af817adadb9583eecfa3f7fa1d9a841",
+      "decodedAsset": {
+        "bytes": 2901710,
+        "sha256": "ac0007ede911a8795ce6d5296b9c5f9e3ef151490e2dc104e670c1432a4381d2"
+      },
+      "geometrySha256": "82b3eac8c8d188a162c5c5d93042790e90c8448c27e41cb0cccf7fe8637cf6c2",
+      "sourceMemberCount": 934,
+      "sourceRingCount": 4468,
+      "sourceRecordOrdinalsSha256": "70a98f9fcfc0251693ccf0f1a28889d143c992672e25293abaf6ae8fe5d41952"
+    },
+    "groundwater-8b": {
+      "id": "groundwater-8b",
+      "classId": "groundwater-8b",
+      "sourceClass": "8b",
+      "label": "非固結：産出収量低 <10 L/s",
+      "fullLabel": "非固結材料・産出収量低（<10 L/s）",
+      "sourceName": "Material no consolidado con rendimiento bajo < 10 lps",
+      "color": "#c7d2fe",
+      "material": "unconsolidated",
+      "measure": "yield",
+      "unit": "L/s yield class",
+      "file": "groundwater-8b.geojson.gz",
+      "compression": "gzip",
+      "featureCount": 1,
+      "bytes": 705558,
+      "sha256": "3fdef7b440b4d3ac76b71f25b3b3a7916ec494c4556d2655c7b6b8f4e149a01a",
+      "decodedAsset": {
+        "bytes": 2183685,
+        "sha256": "3622ddf193003f087f139ceb8c682a3e025b5cfcb66370787d33405b24f9ca79"
+      },
+      "geometrySha256": "285b9cc329067f2fb2276a46bdcdbd72102ff67d349653ae3491320e3d1662c9",
+      "sourceMemberCount": 1391,
+      "sourceRingCount": 3224,
+      "sourceRecordOrdinalsSha256": "01c83e84f26bb3bb63cb4741a19f9b5c9db724c0f75ce01600d0e8fb10481f35"
+    },
+    "groundwater-9pm": {
+      "id": "groundwater-9pm",
+      "classId": "groundwater-9pm",
+      "sourceClass": "9pm",
+      "label": "非固結：可能性中",
+      "fullLabel": "非固結材料・賦存可能性中",
+      "sourceName": "Material no consolidado con posibilidades medias",
+      "color": "#be185d",
+      "material": "unconsolidated",
+      "measure": "potential",
+      "unit": "occurrence potential class",
+      "file": "groundwater-9pm.geojson.gz",
+      "compression": "gzip",
+      "featureCount": 1,
+      "bytes": 1031700,
+      "sha256": "47ba9d8051ce55338a87b4591d1174242a56859c07d5273c9360dc49615be500",
+      "decodedAsset": {
+        "bytes": 3202677,
+        "sha256": "4211b50eb5d2c669e244666bd9ad753c8f015b8190ce70e2d04c9ea9be3e959c"
+      },
+      "geometrySha256": "c63a236d1a2b8d4009a19c6bf3aedce4c6be4c2dd0846418624964e29334225e",
+      "sourceMemberCount": 3645,
+      "sourceRingCount": 5891,
+      "sourceRecordOrdinalsSha256": "5a0fc98698a6f95493d96032582a88cfbcca48120970fa31501c2f1b0aec2a3e"
+    },
+    "groundwater-10pb": {
+      "id": "groundwater-10pb",
+      "classId": "groundwater-10pb",
+      "sourceClass": "10pb",
+      "label": "非固結：可能性低",
+      "fullLabel": "非固結材料・賦存可能性低",
+      "sourceName": "Material no consolidado con posibilidades bajas",
+      "color": "#fbcfe8",
+      "material": "unconsolidated",
+      "measure": "potential",
+      "unit": "occurrence potential class",
+      "file": "groundwater-10pb.geojson.gz",
+      "compression": "gzip",
+      "featureCount": 1,
+      "bytes": 1419373,
+      "sha256": "b2ed3fe89abdf92d158bfffea947a03eb29dc9aeb6a46b67665b214db05ebf0a",
+      "decodedAsset": {
+        "bytes": 4436012,
+        "sha256": "153fd938813eb6fe2d698c965b7251c3d4fe2cc7a47a07f9379fe28b2fcef535"
+      },
+      "geometrySha256": "0eff984fa00b26cd5bcdd139a54c8d997a17231c23de71b293b3a1c3f3fa472f",
+      "sourceMemberCount": 9165,
+      "sourceRingCount": 12132,
+      "sourceRecordOrdinalsSha256": "f3d8a0c1201d95a97986cd9fdde2cd3757189f8c92bcd31307d86aaeaef4a162"
+    }
+  },
+  "yieldFootnote": "L/sは井戸の産出量について原典が定めた収量区分。現在の取水量・地下水の賦存量・面積平均ではない。賦存可能性中・低は別の定性的区分。",
+  "nationalDisplayMask": {
+    "required": true,
+    "method": "SVG clipPath from retained INEGI 32-state national union; no analytical intersection or repair of groundwater units.",
+    "boundarySource": "INEGI retained Marco Geoestadístico state geometry, December2025",
+    "boundarySha256": "193f700c8741c2752561de077c781383dcc28a95244fb60726f591f8af011faa"
+  },
+  "preservedCanonicalDataset": {
+    "bytes": 25607497,
+    "sha256": "89d5b14bab3aaa019071078019e4e27a1d95a3c7202f65d7539b6627cc9569e1"
+  },
+  "publicationStatus": "Prepared for the Mexico groundwater implementation; browser/performance and publication gates are required.",
+  "overviewAsset": {
+    "file": "groundwater-overview.png",
+    "width": 1800,
+    "height": 1160,
+    "viewBox": "0 0 900 580",
+    "bytes": 891332,
+    "sha256": "951cd5e291bd97688beadc1560da17b23a99d5536d39989d04b27402f3998ada",
+    "format": "PNG",
+    "geometrySourceSha256": "1c230f10400a35517b5335cbd48f2109934b2430f11063b315ea39e6f2081391",
+    "nationalBoundarySha256": "193f700c8741c2752561de077c781383dcc28a95244fb60726f591f8af011faa",
+    "projectionSourceSha256": "e8278aedc91ffd965714b189be7c072c7a61ac6cd1fc9820a071e9e4b4a6ba5e",
+    "geometryIndexSha256": "c18f61eb22816d9cb3b655df8a2aa71da2dcfc84b4bb4339308d0ea9d4d6689b",
+    "classCount": 10,
+    "sourceMemberCount": 29479,
+    "sourceRingCount": 48769,
+    "renderer": "sharp (Astro dependency)",
+    "method": "Render the identical reviewed class polygons in the existing Mexico Lambert map coordinates, even-odd fill, clipped only for display to retained 32-state boundary. The image has no administrative aquifer or present-water-volume meaning.",
+    "limitation": "A national display image; tiny parts may fall below image resolution. The selected-class vector retains all source members and rings. No area totals, local boundaries or water availability are inferred."
+  },
+  "countryMaskAsset": {
+    "file": "groundwater-country-mask.png",
+    "width": 1800,
+    "height": 1160,
+    "viewBox": "0 0 900 580",
+    "bytes": 43902,
+    "sha256": "2f0636a3083bf317d879603b3bca3c9994632ba5965b9958a00ea12b254d6e5a",
+    "format": "PNG",
+    "maskType": "alpha",
+    "nationalBoundarySha256": "193f700c8741c2752561de077c781383dcc28a95244fb60726f591f8af011faa",
+    "projectionSourceSha256": "e8278aedc91ffd965714b189be7c072c7a61ac6cd1fc9820a071e9e4b4a6ba5e",
+    "geometryIndexSha256": "c18f61eb22816d9cb3b655df8a2aa71da2dcfc84b4bb4339308d0ea9d4d6689b",
+    "stateCount": 32,
+    "method": "Rasterize the identical retained 32-state display boundary in the existing Mexico Lambert coordinates, even-odd fill and identical two-decimal display paths. Only the national display mask is rasterized; selected-class vector members, rings and coordinates remain unchanged.",
+    "limitation": "A display mask at 1800 by 1160 pixels; country edges may show raster antialiasing when magnified. It does not define legal aquifers or administrative boundaries for analysis."
+  },
+  "title": "地下水の水理地質：材質・産出収量／賦存可能性",
+  "meaning": "固結・非固結の材質ごとに、原典の産出収量区分（L/s）または地下水の賦存可能性を示します。現在の地下水量・取水量・法定帯水層境界ではありません。",
+  "sourceInput": {
+    "file": "groundwater.canonical.source.json",
+    "bytes": 41587,
+    "sha256": "1c230f10400a35517b5335cbd48f2109934b2430f11063b315ea39e6f2081391"
+  }
+}

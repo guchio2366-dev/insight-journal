@@ -65,6 +65,7 @@ const config = {routes, defaultViewBox: mapViewBox, states: statePaths.map(item 
  <div slot="items" class="mexico-nature-items">
   <label class="mexico-nature-item-picker">地図の項目<select data-mexico-nature-item-select aria-label="気候・地形の分類を選ぶ"><option value="">全国の概論</option>{items.climate.map(item => <option value={item.id}>{item.labelJa}</option>)}</select></label>
   <div class="mexico-hydrology-controls" data-mexico-hydrology-controls hidden><label>水・等高線の項目<select data-mexico-hydrology-item><option value="">全国の分布</option></select></label><label>背景<select data-mexico-hydrology-base><option value="plain">白地図</option><option value="climate">気候区分</option><option value="relief">地形地域</option></select></label></div>
+  <div class="mexico-groundwater-controls" data-mexico-groundwater-controls hidden><label>地下水の分類<select data-mexico-groundwater-class aria-label="地下水の全10分類または一つの分類を表示"><option value="all">全10分類（全国の概観）</option></select></label></div>
   <p class="mexico-caption" data-mexico-hydrology-picker-note hidden></p>
   <p class="mexico-caption" data-mexico-nature-reference hidden></p>
   <div class="mexico-actions"><span class="mexico-nature-state-badge" data-mexico-nature-selected-name>シナロア</span><button type="button" data-mexico-nature-focus>この州を拡大</button><button type="button" data-mexico-nature-reset>全国の分布へ</button></div>
@@ -122,7 +123,7 @@ const config = {routes, defaultViewBox: mapViewBox, states: statePaths.map(item 
   </details>
  </div>
  <span hidden data-mexico-nature />
- <script type="application/json" data-mexico-nature-config set:html={JSON.stringify({...config, states: config.states.map(state => ({...state, cattleHeads: livestock.states[state.code as keyof typeof livestock.states] ?? null})), items, waterAssetBase: withBase('/assets/atlas/mexico-water-v1/')}).replace(/</g, '\\u003c')} />
+ <script type="application/json" data-mexico-nature-config set:html={JSON.stringify({...config, states: config.states.map(state => ({...state, cattleHeads: livestock.states[state.code as keyof typeof livestock.states] ?? null})), items, waterAssetBase: withBase('/assets/atlas/mexico-water-v1/'), groundwaterAssetBase: withBase('/assets/atlas/mexico-groundwater-v1/')}).replace(/</g, '\\u003c')} />
  <p class="visually-hidden" data-mexico-nature-announcement aria-live="polite"></p>
  <noscript><p class="mexico-caption">気候の全国分布・凡例・原値表・出典を表示しています。地形・比較・州の切替にはJavaScriptが必要です。</p></noscript>
 </MexicoWorkspace>

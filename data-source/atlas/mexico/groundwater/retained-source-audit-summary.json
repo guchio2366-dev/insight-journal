@@ -1,0 +1,350 @@
+{
+  "checkedAt": "2026-10-02T13:00:23.022202+00:00",
+  "scope": "Independent retained official ZIP, direct DBF/SHP/SHX record audit and every selected gzip/decoded byte/feature comparison. No official download was repeated. No analytical area or browser performance assertion.",
+  "sealedDetailedAudit": {
+    "path": "C:\\Users\\guchi\\Documents\\Codex\\2026-10-01\\task-2\\runtime\\logs\\mexico-groundwater-retained-source-audit-20261002.json",
+    "bytes": 8420291,
+    "sha256": "626845264413a170f0ca7784f1dc62ecad29c03a29d9b5c225e780a3eb0354d8",
+    "checks": 98665,
+    "pass": 98665,
+    "fail": 0
+  },
+  "archive": {
+    "path": "C:\\Users\\guchi\\Documents\\Codex\\2026-10-01\\task-2\\runtime\\data\\mexico-water-relief\\inegi-national-groundwater-original.zip",
+    "bytes": 148922652,
+    "sha256": "ee94ce02297c9d910d3b1d20ea531cbdd11ca37d2c7baaf304fd68a0f08bcffe"
+  },
+  "originalRecordCount": 34551,
+  "selectedSourceRecordCount": 29479,
+  "sourceRingCount": 48769,
+  "sourceVertexCount": 8704464,
+  "excludedOriginalRecords": [
+    {
+      "code": "H2O",
+      "description": "Cuerpo de agua perenne",
+      "count": 3500
+    },
+    {
+      "code": "H2O",
+      "description": "Cuerpo de agua intermitente",
+      "count": 1533
+    },
+    {
+      "code": "P/E",
+      "description": "Pais extranjero",
+      "count": 17
+    },
+    {
+      "code": "H2O",
+      "description": "Estanque",
+      "count": 7
+    },
+    {
+      "code": "H2O",
+      "description": "Salina Natural",
+      "count": 15
+    }
+  ],
+  "sourceInvalidRecordCount": 92,
+  "displayInvalidRecordCount": 48,
+  "originalInvalidSourceRepair": false,
+  "commonObservationPeriod": null,
+  "totalTransportBytes": 8243599,
+  "maxClassTransportBytes": 2552848,
+  "defaultSelectedClassId": "groundwater-1A",
+  "classes": [
+    {
+      "id": "groundwater-1A",
+      "sourceClass": "1A",
+      "sourceName": "Material consolidado con rendimiento alto > 40 lps",
+      "material": "consolidated",
+      "measure": "yield",
+      "unit": "L/s yield class",
+      "fullLabel": "固結材料・収量高（>40 L/s）",
+      "color": "#155e75",
+      "file": "groundwater-1A.geojson.gz",
+      "bytes": 99094,
+      "sha256": "66262dd7fda5a0721e2b2ec1d3a22448876e7b98e36ccebe722226c4b682282d",
+      "decodedAsset": {
+        "bytes": 297914,
+        "sha256": "2955f93eb5715a733e161b93ac31244491ee9a5f68081d5fd9fd77c7b9c69af7"
+      },
+      "sourceMemberCount": 143,
+      "sourceRingCount": 706,
+      "geometrySha256": "ee8c97578d5fcb4697fbf9bf3928c3a01d53a31759d2fc96cccee6011adb4066"
+    },
+    {
+      "id": "groundwater-2M",
+      "sourceClass": "2M",
+      "sourceName": "Material consolidado con rendimiento medio 10-40 lps",
+      "material": "consolidated",
+      "measure": "yield",
+      "unit": "L/s yield class",
+      "fullLabel": "固結材料・収量中（10–40 L/s）",
+      "color": "#0891b2",
+      "file": "groundwater-2M.geojson.gz",
+      "bytes": 443036,
+      "sha256": "f1b1da29a9dd38d4b07692c54b037b0d7ab135b4f09677cc79632b4fad8d4d1a",
+      "decodedAsset": {
+        "bytes": 1357636,
+        "sha256": "fe4bc6e89c276ed68deb615417a0fabf32c3987eba5f0f64bb5a9a5e90c00bf3"
+      },
+      "sourceMemberCount": 948,
+      "sourceRingCount": 1926,
+      "geometrySha256": "5986c2bafbdea9f83f90cd62fedcbb3279b4ceaeb6a3e07e05d185e6ff539274"
+    },
+    {
+      "id": "groundwater-3B",
+      "sourceClass": "3B",
+      "sourceName": "Material consolidado con rendimiento bajo < 10 lps",
+      "material": "consolidated",
+      "measure": "yield",
+      "unit": "L/s yield class",
+      "fullLabel": "固結材料・収量低（<10 L/s）",
+      "color": "#67e8f9",
+      "file": "groundwater-3B.geojson.gz",
+      "bytes": 435310,
+      "sha256": "aa2990c8bc5854b82604edf5afd9fcded554d4f55c47734c726bedf76506fc08",
+      "decodedAsset": {
+        "bytes": 1345259,
+        "sha256": "29bcd537d9f57376bad42b7c7531a014e4c0ae9dec8b8a7706ffdcd76ef298f4"
+      },
+      "sourceMemberCount": 1190,
+      "sourceRingCount": 1979,
+      "geometrySha256": "fe61151e3300f3b4c96438e1f608815354a4d76806d9e735c84db47313efc90a"
+    },
+    {
+      "id": "groundwater-4PM",
+      "sourceClass": "4PM",
+      "sourceName": "Material consolidado con posibilidades medias",
+      "material": "consolidated",
+      "measure": "potential",
+      "unit": "occurrence potential class",
+      "fullLabel": "固結材料・賦存可能性中",
+      "color": "#a16207",
+      "file": "groundwater-4PM.geojson.gz",
+      "bytes": 226313,
+      "sha256": "8110e75bb9aa7fba4a9d6f851b10a13f2dd58c6a4a21c66a2eeceb45c783ad8f",
+      "decodedAsset": {
+        "bytes": 696364,
+        "sha256": "50a17695989c852cc3ad104515d9cbfa85ac771fd4e85a00153820558ccaf42e"
+      },
+      "sourceMemberCount": 1084,
+      "sourceRingCount": 1321,
+      "geometrySha256": "d0c6aadcece00ff838de354eca461f897034d8924f59d6d6f9dbd20cefbd3543"
+    },
+    {
+      "id": "groundwater-5PB",
+      "sourceClass": "5PB",
+      "sourceName": "Material consolidado con posibilidades bajas",
+      "material": "consolidated",
+      "measure": "potential",
+      "unit": "occurrence potential class",
+      "fullLabel": "固結材料・賦存可能性低",
+      "color": "#fde68a",
+      "file": "groundwater-5PB.geojson.gz",
+      "bytes": 2552848,
+      "sha256": "95a50be03553069efbc1715a546da773ac3b94fd2e32f31adeabd7aa565e91d5",
+      "decodedAsset": {
+        "bytes": 7961663,
+        "sha256": "787b0cda16ed94138ff1cae302c23d7cb6d3b59c97ff5c4e14f64e907c067077"
+      },
+      "sourceMemberCount": 10733,
+      "sourceRingCount": 15277,
+      "geometrySha256": "0427ce465e9336ff4ff1c0ebb902ad8a152f4b6d964c6ee3046c44aea66e50fb"
+    },
+    {
+      "id": "groundwater-6a",
+      "sourceClass": "6a",
+      "sourceName": "Material no consolidado con rendimiento alto > 40 lps",
+      "material": "unconsolidated",
+      "measure": "yield",
+      "unit": "L/s yield class",
+      "fullLabel": "非固結材料・収量高（>40 L/s）",
+      "color": "#3730a3",
+      "file": "groundwater-6a.geojson.gz",
+      "bytes": 395955,
+      "sha256": "e48442af711870b5fe1ed8709f7b0c2fe17a0b012808a4f5c392f160f3b0a7a4",
+      "decodedAsset": {
+        "bytes": 1224895,
+        "sha256": "89b86160217adce647f1d5a8e63c4e7e9c7f6649ea6afaeb939027d19580f453"
+      },
+      "sourceMemberCount": 246,
+      "sourceRingCount": 1845,
+      "geometrySha256": "587cf2b8ec8c211fe4996624be5f54a0fcf4103e57ccf137e64d51854ecede8f"
+    },
+    {
+      "id": "groundwater-7m",
+      "sourceClass": "7m",
+      "sourceName": "Material no consolidado con rendimiento medio 10-40 lps",
+      "material": "unconsolidated",
+      "measure": "yield",
+      "unit": "L/s yield class",
+      "fullLabel": "非固結材料・収量中（10–40 L/s）",
+      "color": "#818cf8",
+      "file": "groundwater-7m.geojson.gz",
+      "bytes": 934412,
+      "sha256": "4b30c643cb5b7e429e3ec3cca24b7ba88af817adadb9583eecfa3f7fa1d9a841",
+      "decodedAsset": {
+        "bytes": 2901710,
+        "sha256": "ac0007ede911a8795ce6d5296b9c5f9e3ef151490e2dc104e670c1432a4381d2"
+      },
+      "sourceMemberCount": 934,
+      "sourceRingCount": 4468,
+      "geometrySha256": "82b3eac8c8d188a162c5c5d93042790e90c8448c27e41cb0cccf7fe8637cf6c2"
+    },
+    {
+      "id": "groundwater-8b",
+      "sourceClass": "8b",
+      "sourceName": "Material no consolidado con rendimiento bajo < 10 lps",
+      "material": "unconsolidated",
+      "measure": "yield",
+      "unit": "L/s yield class",
+      "fullLabel": "非固結材料・収量低（<10 L/s）",
+      "color": "#c7d2fe",
+      "file": "groundwater-8b.geojson.gz",
+      "bytes": 705558,
+      "sha256": "3fdef7b440b4d3ac76b71f25b3b3a7916ec494c4556d2655c7b6b8f4e149a01a",
+      "decodedAsset": {
+        "bytes": 2183685,
+        "sha256": "3622ddf193003f087f139ceb8c682a3e025b5cfcb66370787d33405b24f9ca79"
+      },
+      "sourceMemberCount": 1391,
+      "sourceRingCount": 3224,
+      "geometrySha256": "285b9cc329067f2fb2276a46bdcdbd72102ff67d349653ae3491320e3d1662c9"
+    },
+    {
+      "id": "groundwater-9pm",
+      "sourceClass": "9pm",
+      "sourceName": "Material no consolidado con posibilidades medias",
+      "material": "unconsolidated",
+      "measure": "potential",
+      "unit": "occurrence potential class",
+      "fullLabel": "非固結材料・賦存可能性中",
+      "color": "#be185d",
+      "file": "groundwater-9pm.geojson.gz",
+      "bytes": 1031700,
+      "sha256": "47ba9d8051ce55338a87b4591d1174242a56859c07d5273c9360dc49615be500",
+      "decodedAsset": {
+        "bytes": 3202677,
+        "sha256": "4211b50eb5d2c669e244666bd9ad753c8f015b8190ce70e2d04c9ea9be3e959c"
+      },
+      "sourceMemberCount": 3645,
+      "sourceRingCount": 5891,
+      "geometrySha256": "c63a236d1a2b8d4009a19c6bf3aedce4c6be4c2dd0846418624964e29334225e"
+    },
+    {
+      "id": "groundwater-10pb",
+      "sourceClass": "10pb",
+      "sourceName": "Material no consolidado con posibilidades bajas",
+      "material": "unconsolidated",
+      "measure": "potential",
+      "unit": "occurrence potential class",
+      "fullLabel": "非固結材料・賦存可能性低",
+      "color": "#fbcfe8",
+      "file": "groundwater-10pb.geojson.gz",
+      "bytes": 1419373,
+      "sha256": "b2ed3fe89abdf92d158bfffea947a03eb29dc9aeb6a46b67665b214db05ebf0a",
+      "decodedAsset": {
+        "bytes": 4436012,
+        "sha256": "153fd938813eb6fe2d698c965b7251c3d4fe2cc7a47a07f9379fe28b2fcef535"
+      },
+      "sourceMemberCount": 9165,
+      "sourceRingCount": 12132,
+      "geometrySha256": "0eff984fa00b26cd5bcdd139a54c8d997a17231c23de71b293b3a1c3f3fa472f"
+    }
+  ],
+  "tenPbOriginalMultiExteriorRecord": [
+    {
+      "sourceRecordOrdinal": 26694,
+      "rings": 40,
+      "vertices": 26921,
+      "clockwiseExteriorRings": 2,
+      "counterclockwiseInteriorRings": 38,
+      "zeroAreaRings": 0
+    }
+  ],
+  "sourceMetadata": {
+    "TXT": {
+      "archiveEntry": "metadatos/continuonacionaldeaguassubterráneasescala 1_250000seriell.TXT",
+      "bytes": 37184,
+      "sha256": "80013e7371165df526beedf8da16b0b66cc0a355b1eb402b88dd9ff4b7788ca1",
+      "retainedPath": "C:\\Users\\guchi\\Documents\\Codex\\2026-10-01\\task-2\\runtime\\data\\mexico-water-relief\\inegi-national-groundwater-source-metadata.txt",
+      "exactByteMatch": true
+    },
+    "HTML": {
+      "archiveEntry": "metadatos/continuonacionaldeaguassubterráneasescala 1_250000seriell.HTML",
+      "bytes": 46184,
+      "sha256": "438914a63af94845d4cc7b8b1a0c45a37b00a522956bb3609d9c29805566cb71",
+      "retainedPath": "C:\\Users\\guchi\\Documents\\Codex\\2026-10-01\\task-2\\runtime\\data\\mexico-water-relief\\inegi-national-groundwater-source-metadata.html",
+      "exactByteMatch": true
+    },
+    "XML": {
+      "archiveEntry": "metadatos/continuonacionaldeaguassubterráneasescala 1_250000seriell.XML",
+      "bytes": 36631,
+      "sha256": "80fdc5f8535ee1a122f869f0b632a1079903928a0253e4693c4e262df2db51ed",
+      "retainedPath": "C:\\Users\\guchi\\Documents\\Codex\\2026-10-01\\task-2\\runtime\\data\\mexico-water-relief\\inegi-national-groundwater-source-metadata.xml",
+      "exactByteMatch": true
+    }
+  },
+  "exactBundledDateSection": "SECCIÓN 2. Fechas relacionadas con el conjunto de datos espaciales o producto:\n\r\n2.1 Fechas y eventos:\n\r\n     2.1.1 Fecha de referencia del conjunto de datos espaciales o producto: 1996-03-01\n\r\n     2.1.2 Tipo de fecha: 1. Creación: Indicador  de la fecha que especifica cuando fue creado el recurso.\n\r\n     2.1.1 Fecha de referencia del conjunto de datos espaciales o producto: 2008-12-01\n\r\n     2.1.2 Tipo de fecha: 3. Revisión: Identificador de la fecha que especifica cuando el recurso fue examinado o re-examinado y mejorado o corregido.\n\r\n2.2 Fechas de los insumos tomados para la elaboración del producto o conjunto de datos espaciales:\n\r\n     2.2.1 Fecha de creación de los insumos: 2000-01-01\n\r\n     2.2.2 Fecha de inicio de verificación de campo: \n\r\n     2.2.3 Fecha final de verificación de campo: \n\r\n     2.2.4 Nombre del insumo: CONJUNTO DE DATOS VECTORIALES DE LA CARTA TOPOGRÁFICA. CONTINUO NACIONAL ESCALA 1:250000. SERIE II. Fuente: INEGI, 2000.\n\r\n     2.2.1 Fecha de creación de los insumos: 2002-01-01\n\r\n     2.2.2 Fecha de inicio de verificación de campo: \n\r\n     2.2.3 Fecha final de verificación de campo: \n\r\n     2.2.4 Nombre del insumo: CONJUNTO DE DATOS VECTORIALES GEOLÓGICOS. CONTINUO NACIONAL ESCALA 1:250000. SERIE I. Fuente: INEGI, 2002.\n\r\n     2.2.1 Fecha de creación de los insumos: 2002-01-01\n\r\n     2.2.2 Fecha de inicio de verificación de campo: \n\r\n     2.2.3 Fecha final de verificación de campo: \n\r\n     2.2.4 Nombre del insumo: CONJUNTO DE DATOS VECTORIALES FISIOGRÁFICOS. CONTINUO NACIONAL ESCALA 1:1000000. Fuente: INEGI, 2002.",
+  "yearMeaning": {
+    "sourceCreation": "1996-03-01",
+    "sourceRevision": "2008-12-01",
+    "qualityControl": "2016, not common observation period",
+    "metadataDate": "2017-03-06, not common observation period",
+    "sourceInputDates": [
+      "2000-01-01 topographic",
+      "2002-01-01 geological",
+      "2002-01-01 physiographic"
+    ],
+    "commonObservationPeriod": null
+  },
+  "classificationDefinition": {
+    "definitionUrl": "https://www.inegi.org.mx/contenidos/temas/mapas/hidrologia/metadatos/dd_hidrosub_v1_250k.pdf",
+    "printedPages": [
+      20,
+      21
+    ],
+    "dictionaryDate": "1997-05-22",
+    "material": {
+      "consolidated": "massive, coherent, continuous rock",
+      "unconsolidated": "loose, disaggregated, uncemented material"
+    },
+    "yieldLps": {
+      "high": ">40",
+      "medium": "10–40",
+      "low": "<10"
+    },
+    "qualitativePotential": {
+      "medium": "favourable permeability/transmissibility permits inference of possible groundwater",
+      "low": "low permeability or limited thickness/extent makes economic extraction unlikely"
+    },
+    "yieldAndPotential": "Mutually exclusive source attributes, not a five-step common scale.",
+    "dates": {
+      "sourceCreation": "1996-03-01",
+      "sourceRevision": "2008-12-01",
+      "commonObservationPeriod": null
+    },
+    "notMeasured": [
+      "current groundwater volume",
+      "current availability",
+      "current withdrawal",
+      "a class-average well measurement",
+      "legal aquifer boundaries"
+    ],
+    "unpaintedMeaning": "When one class is selected, unpainted land means outside the selected display class, or retained source/display exclusions or missing geometry; it never means no groundwater.",
+    "boundary": "National SVG display mask from retained 32-state INEGI geometry; raw geohydrological units are not analytically clipped, repaired or asserted as local/legal boundaries."
+  },
+  "displayProposal": {
+    "initialNationalOverview": "Own derived PNG from the same ten canonical source classes, assigned class colors and retained 32-state national display mask; preserve source metadata and disclose national display generalization.",
+    "selectedRegion": "Fetch only selected class gzip on demand and retain it in cache. Do not fetch 25.6MB full JSON or 8.24MB all-class transfer as one initial request.",
+    "blankLegend": "選択した分類以外・原典の水面等・縮尺上の省略を含む。地下水がないことを示さない。",
+    "noAnalysisClaims": [
+      "No 100% land-area coverage or current availability assertion",
+      "No state class-area shares from unrepaired generalized polygons",
+      "No water volume, legal aquifer or current withdrawal inference"
+    ],
+    "notBrowserValidatedYet": true
+  }
+}
