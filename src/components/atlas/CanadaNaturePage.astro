@@ -45,7 +45,7 @@ import '../../styles/atlas-canada-country-parity.css';
 ---
 <BaseLayout title="カナダの自然環境｜地形・気候・河川" description="首都オタワと沿岸・内陸・北部の気候を比べ、カナダの山地・平原・湖と河川のつながりを読む。" compactAtlas>
  <AtlasWorkspaceFrame region="north-america" mapActions={false}>
-  <article class="canada-nature" data-canada-nature>
+  <article class="canada-nature is-classified-climate" data-canada-nature>
    <div class="atlas-explorer atlas-workspace canada-country-primary" data-field="natural">
    <div class="atlas-compact-heading"><nav aria-label="パンくず"><a href={withBase('/atlas/')}>地図から見る</a> / <a href={withBase('/atlas/north-america/')}>北米地図</a></nav><span>カナダ</span></div>
    <AtlasRegionNavigation group="americas" current="north-america" country="canada" />
@@ -60,9 +60,9 @@ import '../../styles/atlas-canada-country-parity.css';
    <div class="canada-workspace atlas-primary-grid">
     <section class="canada-map-column atlas-map-column" aria-label="カナダの地図">
      <CanadaCropNatureMap />
-     <CanadaNaturalLayerMap layer="climate" geometry={koppenGeometry} groups={climateGroups} geometryUrl={withBase('/assets/atlas/canada-climate-elevation-v1/koppen.geojson')} stations={climate.stations} source={(koppenManifest as any).source} />
+     <CanadaNaturalLayerMap layer="climate" hidden={false} geometry={koppenGeometry} groups={climateGroups} geometryUrl={withBase('/assets/atlas/canada-climate-elevation-v1/koppen.geojson')} stations={climate.stations} source={(koppenManifest as any).source} />
      <CanadaNaturalLayerMap layer="elevation" geometry={elevationGeometry} groups={elevationGroups} geometryUrl={withBase('/assets/atlas/canada-climate-elevation-v1/elevation-contours.geojson')} source={(elevationManifest as any).source} />
-     <section data-canada-locator>
+     <section data-canada-locator hidden>
       <div class="canada-map-title"><h2>観測地点と水の位置</h2></div>
       <div class="atlas-map-frame canada-map-frame"><svg class="canada-map" data-canada-map viewBox={fullFrame} role="group" aria-labelledby="canada-map-title canada-map-desc">
        <title id="canada-map-title">カナダの観測地点、湖、河川</title><desc id="canada-map-desc">首都オタワと比較4地点を表示。都市は地図下の一覧からも選べます。湖と河川の表示では実際の概略形状を示します。</desc>
@@ -97,7 +97,7 @@ import '../../styles/atlas-canada-country-parity.css';
       </figure></details>
      </section>
      <div class="canada-city-list" aria-label="観測地点を選ぶ">{climate.stations.map(s=><button data-canada-city-button={s.id} aria-pressed={s.id==='ottawa'?'true':'false'}>{s.name}{s.id==='ottawa'?'（首都）':''}</button>)}</div>
-     <div class="canada-water-controls" data-canada-water-controls hidden><label>水系・湖<select data-canada-water><option value="">全体を読む</option>{waterNames.map(name=><option value={name}>{japaneseWater[name]}</option>)}</select></label><label><input type="checkbox" data-canada-only /> <span data-canada-only-label>選んだ川・湖だけを表示</span></label><button data-canada-all-water>すべての水系へ戻す</button><p>川と湖はNatural Earth v5.1.2の1:50m概略形状。国境をまたぐ水系を含みます。国土は残り、製造業の五大湖比較では水域を読みやすくするため観測点を隠します。</p></div>
+
     </section>
     <aside class="canada-reading atlas-national" aria-label="地図と一緒に読む"><p data-population-geometry-status hidden></p>
    <header class="canada-national-header"><p class="atlas-eyebrow">Canada · Natural environment</p><h2>カナダの自然環境</h2><p class="canada-lead">西岸の海と山地、内陸の平原、東部の楯状地、北部の島々。場所を確かめ、季節と水の違いを読む。</p></header>
@@ -131,7 +131,7 @@ import '../../styles/atlas-canada-country-parity.css';
       <p class="canada-sources-inline"><a href={physiography.source.descriptionUrl}>地形区分の定義</a> ／ <a href={physiography.source.catalogueUrl}>公式GISの出典</a></p>
       <details class="canada-general-reading" data-canada-general-reading><summary>全国の地形と気候・水の関係</summary>{landReading.map(r=><section class="canada-reading-section"><h3>{r.title}</h3><p>{r.body}</p></section>)}<p>都市の気候や湖・河川は、上の表示タブから場所を照合できます。地域区分だけから作物・産業の立地を断定しません。</p></details>
      </section>
-     <section data-canada-reading="water" hidden><details class="canada-general-reading" data-canada-general-reading open><summary>全国の湖・河川と原典を読む</summary><h2>湖と川を、海までつなげて読む</h2>{waterReading.map(r=><section class="canada-reading-section"><h3>{r.title}</h3><p>{r.body}</p></section>)}<p><a href="https://www.naturalearthdata.com/downloads/50m-physical-vectors/">河川・湖の原典</a>。概略図のため小河川は省略されます。線の幅・湖の色は流量・水深・水質ではありません。</p></details></section>
+     <section data-canada-reading="water" hidden>     <div class="canada-water-controls" data-canada-water-controls hidden><label>水系・湖<select data-canada-water><option value="">全体を読む</option>{waterNames.map(name=><option value={name}>{japaneseWater[name]}</option>)}</select></label><label><input type="checkbox" data-canada-only /> <span data-canada-only-label>選んだ川・湖だけを表示</span></label><button data-canada-all-water>すべての水系へ戻す</button><details><summary>水系図の縮尺・範囲</summary><p>川と湖はNatural Earth v5.1.2の1:50m概略形状。国境をまたぐ水系を含みます。国土は残り、製造業の五大湖比較では水域を読みやすくするため観測点を隠します。</p></details></div><h2 data-canada-water-reading-title>湖と川を、海までつないで読む</h2><p class="canada-takeaway" data-canada-water-reading-text>湖や川を選び、内陸から海への出口と位置を確かめます。</p><p class="canada-caption" data-canada-water-reading-scope>線は川、面は湖の概略形状です。流量・水質・地下水・流域境界の地図ではありません。</p><details class="canada-general-reading" data-canada-general-reading><summary>全国の湖・河川と原典を読む</summary><h2>湖と川を、海までつなげて読む</h2>{waterReading.map(r=><section class="canada-reading-section"><h3>{r.title}</h3><p>{r.body}</p></section>)}<p><a href="https://www.naturalearthdata.com/downloads/50m-physical-vectors/">河川・湖の原典</a>。概略図のため小河川は省略されます。線の幅・湖の色は流量・水深・水質ではありません。</p></details></section>
     </aside>
    </div>
    </div>

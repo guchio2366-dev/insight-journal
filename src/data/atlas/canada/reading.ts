@@ -17,3 +17,15 @@ export const waterReading=[
  {title:'五大湖から大西洋側へ',body:'スペリオル湖（Lake Superior）やオンタリオ湖（Lake Ontario）は南東部の国境付近にあります。セントローレンス川（St. Lawrence）は五大湖側と大西洋側をつなぐ水系です。国境をまたぐ湖・川は切断せずに示し、国の範囲と水のつながりを区別します。'},
  {title:'海への出口が違う水系',body:'フレーザー川（Fraser）は西岸の太平洋側、ネルソン川（Nelson）はウィニペグ湖（Lake Winnipeg）からハドソン湾側へつながります。川名を選んで他の水系と位置を比べると、同じ内陸でも海への出口が異なることが分かります。概略河川図は流域境界・灌漑設備・利用可能水量を示していません。'},
 ];
+/** Named features in the Natural Earth overview, not watershed or water-availability estimates. */
+export const selectedWaterReading:Record<string,{name:string;body:string}>= {
+ Mackenzie:{name:'マッケンジー川',body:'北西部の川です。グレートスレーブ湖から北極海側へつながる位置を読みます。'},
+ Fraser:{name:'フレーザー川',body:'西部の川です。山地と太平洋岸の位置を比べ、北極海側やハドソン湾側とは海への出口が違うことを読みます。'},
+ Nelson:{name:'ネルソン川',body:'内陸のウィニペグ湖からハドソン湾側へつながる川です。湖と海への出口を一緒に確かめます。'},
+ 'St. Lawrence':{name:'セントローレンス川',body:'南東部で、五大湖側と大西洋側をつなぐ水系です。この概略図で選ぶのは上流の区間です。国境と水のつながりを分けて読みます。'},
+ 'Great Slave Lake':{name:'グレートスレーブ湖',body:'北西部の湖です。マッケンジー川と一緒に表示し、内陸の湖から北極海側へ向かう位置関係を確かめます。'},
+ 'Great Bear Lake':{name:'グレートベア湖',body:'北西部にある湖です。グレートスレーブ湖と位置を比べ、二つの湖を区別します。湖の輪郭は流域境界や利用できる水量ではありません。'},
+ 'Lake Superior':{name:'スペリオル湖',body:'南東部の国境をまたぐ五大湖の一つです。オンタリオ湖やセントローレンス川と位置を比べ、湖群と大西洋側のつながりを読みます。'},
+ 'Lake Ontario':{name:'オンタリオ湖',body:'南東部の国境付近にある五大湖の一つです。セントローレンス川と一緒に表示し、大西洋側へつながる位置を確かめます。'},
+ 'Lake Winnipeg':{name:'ウィニペグ湖',body:'内陸の湖です。ネルソン川と一緒に表示し、ハドソン湾側へ向かう位置関係を読みます。'},
+};
