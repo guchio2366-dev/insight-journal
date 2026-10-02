@@ -83,6 +83,8 @@ for(const action of ['choice','clear','popstate']){
       if(action==='choice')app.choose(id);
       if(action==='clear')app.q('[data-eu-drainage-clear]').click();
       if(action==='popstate')app.restore('drainage',id);
+      assert.doesNotMatch(app.q('[data-eu-subject-result]').textContent,/読み込んでいます/,'A cancelled grid read stops claiming to load immediately');
+      assert.equal(app.q('[data-eu-subject-result]').hasAttribute('aria-busy'),false);
       gate.resolve(new Response(bytes));
       if(action==='clear'){
         await tick();await tick();
@@ -99,6 +101,8 @@ for(const action of ['choice','clear','popstate']){
         assert.deepEqual(app.draws[0].rgba,europeDrainageOutline(values,b.index).rgba,'The production canvas receives only the newer selected section boundary');
       }
       assert.doesNotMatch(app.q('[data-eu-subject-result]').textContent,new RegExp(String(a.basin.HYBAS_ID)),'The superseded point result never replaces the current reading');
+      assert.doesNotMatch(app.q('[data-eu-subject-result]').textContent,/読み込んでいます/);
+      assert.equal(app.q('[data-eu-subject-result]').hasAttribute('aria-busy'),false);
     }finally{gate.resolve(new Response(bytes));await app.w.happyDOM.close();}
   });
 }

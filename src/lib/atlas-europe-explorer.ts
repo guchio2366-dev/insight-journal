@@ -337,7 +337,7 @@ export function initEuropeAtlas() {
     query<HTMLElement>('[data-eu-subject-grid]').hidden=layer.id==='wheat'||!layer.grid||farm.active&&!farm.selectedVisible;
     query('[data-eu-grid-title]').textContent=layer.title+' · '+layer.unit+' · '+layer.period;
     const layerKey=state.layer+'|'+state.returnLayer;
-    if(lastLayer!==layerKey){gridRequest++;query('[data-eu-subject-result]').textContent='地図を押すと、その位置に対応する格子の数値を表示します。';query('[data-eu-grid-result]').textContent='地図を押すと、その格子に割り当てられた収穫面積（ha）を表示します。';lastLayer=layerKey;}
+    if(lastLayer!==layerKey){invalidateGridReading();query('[data-eu-subject-result]').textContent='地図を押すと、その位置に対応する格子の数値を表示します。';query('[data-eu-grid-result]').textContent='地図を押すと、その格子に割り当てられた収穫面積（ha）を表示します。';lastLayer=layerKey;}
     query<HTMLElement>('[data-eu-wheat-reading]').hidden = !(layer.id==='wheat'&&(!farm.active||farm.selectedVisible));
     all<HTMLElement>('[data-eu-layer]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.euLayer === state.layer)));
     query('[data-eu-map-title]').textContent = farm.active?(farm.single?farm.item!.name+'のみの分布':'作物・畜産の主な分布'):layer.title+(state.layer==='overlay'?'と気候を重ねる':'');
@@ -353,6 +353,7 @@ export function initEuropeAtlas() {
     const request = ++gridRequest;
     const target = query<HTMLElement>(layer.id==='wheat'?'[data-eu-grid-result]':'[data-eu-subject-result]');
     target.textContent = '格子の数値を読み込んでいます…';
+    target.setAttribute('aria-busy','true');
     try {
       const values=await gridValues(layer);
       // Keep at most three numeric grids; switching subjects does not accumulate all datasets.
@@ -367,7 +368,8 @@ export function initEuropeAtlas() {
       }
       const valueText=!cell||cell.value===null?'データなし':layer.valueLabels?.[cell.value]??`${cell.value>0&&cell.value<.1?'0.1未満（0超）':cell.value.toLocaleString('ja-JP', { maximumFractionDigits: 1 })} ${layer.unit.replace('収穫面積 ','')}`;
       target.textContent = !cell ? '表示範囲外です。' : `${layer.gridType==='display'?'表示格子':'元格子'}中心 ${cell.center[1].toFixed(3)}°N, ${cell.center[0].toFixed(3)}°E：${valueText}（${layer.period}）`;
-    } catch (error) { console.warn('Europe grid unavailable', error); valueCache.delete(layer.grid); if (request === gridRequest) target.textContent = '数値を読み込めませんでした。地図の分布と凡例を確認できます。別の格子を押すと再試行します。'; }
+      target.removeAttribute('aria-busy');
+    } catch (error) { console.warn('Europe grid unavailable', error); valueCache.delete(layer.grid); if (request === gridRequest) { target.textContent = '数値を読み込めませんでした。地図の分布と凡例を確認できます。別の格子を押すと再試行します。'; target.removeAttribute('aria-busy'); } }
   }
 
   function selectionBounds() {
@@ -466,7 +468,15 @@ export function initEuropeAtlas() {
     all<HTMLElement>('[data-eu-extra-field]').forEach(el=>{el.hidden=el.dataset.euExtraField!==currentField.id;});
     requestAnimationFrame(() => { sizeReader(); map?.resize(); if (refit) fit(); annotations.refresh(); });
   }
-  function commit(refit = false) { gridRequest++;history.pushState({}, '', writeEuropeState(new URL(location.href), state)); render(refit); }
+  function invalidateGridReading() {
+    gridRequest++;
+    for(const selector of ['[data-eu-grid-result]','[data-eu-subject-result]']){
+      const result=query<HTMLElement>(selector);
+      if(result.getAttribute('aria-busy')==='true'||state.layer==='drainage'&&selector==='[data-eu-subject-result]')result.textContent=selector==='[data-eu-grid-result]'?'地図を押すと、その格子に割り当てられた収穫面積（ha）を表示します。':'地図を押すと、その位置に対応する格子の数値を表示します。';
+      result.removeAttribute('aria-busy');
+    }
+  }
+  function commit(refit = false) { invalidateGridReading();history.pushState({}, '', writeEuropeState(new URL(location.href), state)); render(refit); }
   function selectCountry(code: string) {
     const country = countries.find(c => c.code === code);
     state.place = country?.code ?? '';
@@ -602,7 +612,7 @@ export function initEuropeAtlas() {
     const h = w / box[2] * box[3]; box = [box[0] + (box[2] - w) / 2, box[1] + (box[3] - h) / 2, w, h]; staticMap.setAttribute('viewBox', box.join(' '));staticSymbols();annotations.refresh();
   }));
   query('[data-eu-render]').addEventListener('click', () => { state.render = failed || state.render === 'static' ? 'auto' : 'static'; disposeMap(); commit(true); void startMap(); });
-  window.addEventListener('popstate', () => { gridRequest++;const previousRender = state.render; state = readEuropeState(location.search, countries, ids, config.initialLayer); state.compare=[]; render(true); if (previousRender !== state.render) { disposeMap(); void startMap(); } });
+  window.addEventListener('popstate', () => { invalidateGridReading();const previousRender = state.render; state = readEuropeState(location.search, countries, ids, config.initialLayer); state.compare=[]; render(true); if (previousRender !== state.render) { disposeMap(); void startMap(); } });
   new ResizeObserver(()=>{staticSymbols();sizeReader();}).observe(staticMap);
   render(true); void startMap();
 }
