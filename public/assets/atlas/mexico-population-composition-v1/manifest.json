@@ -1,0 +1,826 @@
+{
+  "schemaVersion": 1,
+  "referenceYear": 2020,
+  "referenceDate": "2020-03-15",
+  "accessed": "2026-10-02",
+  "attribution": {
+    "ethnicityBasic": "INEGI, Censo de Población y Vivienda 2020, Cuestionario Básico",
+    "indigenousIdentity": "INPI. Sistema Nacional de Información y Estadística sobre los Pueblos y Comunidades Indígenas y Afromexicanas, con base en INEGI. Censo de Población y Vivienda 2020. Muestra censal. Microdatos.",
+    "religion": "INEGI, Censo de Población y Vivienda 2020, Tabulados del Cuestionario Básico"
+  },
+  "sourceArtifacts": [
+    {
+      "file": "ethnicity-basic-state-extract.json",
+      "bytes": 39837,
+      "sha256": "9f665b43c806e6476f247f349ee63b2a55c5b8f54f066e623b1e9a69d6d3e48a"
+    },
+    {
+      "file": "indigenous-identity-state-extract.json",
+      "bytes": 68220,
+      "sha256": "9dc370cb87a32ed3b062659735a420e83827c091d4d2c305be6842262d82857b"
+    },
+    {
+      "file": "religion-state-extract.json",
+      "bytes": 57644,
+      "sha256": "3b958ded9e0e708dad0368d807921c51221af151aea3d4d6664a835454795e8f"
+    },
+    {
+      "file": "religion-national-extract.json",
+      "bytes": 1642,
+      "sha256": "2796c8ca52f95af8e194c45428e4fb7738405a82870c2adac3af07426110e435"
+    },
+    {
+      "file": "religion-group-mapping.json",
+      "bytes": 1889,
+      "sha256": "a0c061261ee98af505e7516b90529a27b3c4a690058de54212b6e821031e1c08"
+    },
+    {
+      "file": "religion-provenance.json",
+      "bytes": 11039,
+      "sha256": "10513d52fefa1682190953b331607192db0977519b923463529f3795b9d4918b"
+    },
+    {
+      "file": "inegi-ethnicity-basic.xlsx",
+      "bytes": 877390,
+      "sha256": "60d618c4d439bd931c66408c3f2f7be4448b859277ee4b7d983faba205bd5b57"
+    },
+    {
+      "file": "inegi-religion-basic.xlsx",
+      "bytes": 290935,
+      "sha256": "af127bc8d398eb523f659bf8d7c29cecc10f773d7183dfd8f3f46896b17c4686"
+    },
+    {
+      "file": "inegi-free-use-evidence.json",
+      "bytes": 8126,
+      "sha256": "8a2fe242dd9df44bc02234c33fb80c61455a01fb9e8ef2c399593da43efd67a7"
+    },
+    {
+      "file": "inpi-reuse-evidence.json",
+      "bytes": 2801,
+      "sha256": "a36940fa732afe66b67fda7595bdef7cf6c47c377c4190b5fc13c6a11fbb750c"
+    }
+  ],
+  "transformations": [
+    "Extract official national and state totals; preserve original counts and denominators.",
+    "Use directly published INPI sample count estimates and their own 90% intervals; do not reconstruct counts from rounded shares.",
+    "Calculate unrounded share=100*count/metric-specific denominator; retain nonresponses in denominator.",
+    "Aggregate religious source leaves into eight exhaustive UI groups; retain component labels and original cells.",
+    "Translate labels and author map thresholds; bins are display choices, not INEGI categories."
+  ],
+  "metrics": [
+    {
+      "id": "indigenous_language",
+      "category": "ethnicity",
+      "label": "先住民言語を話す（3歳以上）",
+      "countDenominatorLabel": "年齢が判明している3歳以上人口",
+      "isEstimate": false,
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 1,
+          "color": "#f1f0d6",
+          "label": "0–1%未満"
+        },
+        {
+          "min": 1,
+          "max": 3,
+          "color": "#c6debe",
+          "label": "1–3%未満"
+        },
+        {
+          "min": 3,
+          "max": 6,
+          "color": "#8ec2b0",
+          "label": "3–6%未満"
+        },
+        {
+          "min": 6,
+          "max": 15,
+          "color": "#529f95",
+          "label": "6–15%未満"
+        },
+        {
+          "min": 15,
+          "max": 30,
+          "color": "#26786e",
+          "label": "15–30%未満"
+        },
+        {
+          "min": 30,
+          "max": null,
+          "color": "#174c49",
+          "label": "30%以上"
+        }
+      ],
+      "countRadiusReference": 2000000,
+      "countLegendValues": [
+        200000,
+        1000000,
+        2000000
+      ],
+      "source": {
+        "label": "INEGI：2020年国勢調査・基本票",
+        "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_05_etnicidad.xlsx",
+        "table": "Etnicidad 2／シート02・Total",
+        "periodNote": "2020年3月15日0時。表作成2021年1月25日。",
+        "methodNote": "人数は公表値。割合は公表人数÷同じ州の3歳以上人口×100として当サイトが計算。不詳も分母に含め、非話者へ付け替えません。",
+        "attribution": "Fuente: INEGI, Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html"
+      }
+    },
+    {
+      "id": "afro_identity",
+      "category": "ethnicity",
+      "label": "アフロ系の自己認識（全年齢）",
+      "countDenominatorLabel": "全年齢の通常居住人口",
+      "isEstimate": false,
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 0.5,
+          "color": "#f1f0d6",
+          "label": "0–0.5%未満"
+        },
+        {
+          "min": 0.5,
+          "max": 1,
+          "color": "#c6debe",
+          "label": "0.5–1%未満"
+        },
+        {
+          "min": 1,
+          "max": 2,
+          "color": "#8ec2b0",
+          "label": "1–2%未満"
+        },
+        {
+          "min": 2,
+          "max": 3,
+          "color": "#529f95",
+          "label": "2–3%未満"
+        },
+        {
+          "min": 3,
+          "max": 5,
+          "color": "#26786e",
+          "label": "3–5%未満"
+        },
+        {
+          "min": 5,
+          "max": null,
+          "color": "#174c49",
+          "label": "5%以上"
+        }
+      ],
+      "countRadiusReference": 400000,
+      "countLegendValues": [
+        40000,
+        200000,
+        400000
+      ],
+      "source": {
+        "label": "INEGI：2020年国勢調査・基本票",
+        "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_05_etnicidad.xlsx",
+        "table": "Etnicidad 14／シート14・Total",
+        "periodNote": "2020年3月15日0時。表作成2021年1月25日。",
+        "methodNote": "人数は公表値。割合は公表人数÷同じ州の総人口×100として当サイトが計算。不詳も分母に含めます。総人口には未情報住宅・未報告未成年の公式補完推計（全国6,337,751人）を含みます。",
+        "attribution": "Fuente: INEGI, Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html"
+      }
+    },
+    {
+      "id": "indigenous_identity_estimate",
+      "category": "ethnicity",
+      "label": "先住民の自己認識（公式推計）",
+      "countDenominatorLabel": "一般住宅の3歳以上人口（公式推計）",
+      "isEstimate": true,
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 5,
+          "color": "#f1f0d6",
+          "label": "0–5%未満"
+        },
+        {
+          "min": 5,
+          "max": 10,
+          "color": "#c6debe",
+          "label": "5–10%未満"
+        },
+        {
+          "min": 10,
+          "max": 20,
+          "color": "#8ec2b0",
+          "label": "10–20%未満"
+        },
+        {
+          "min": 20,
+          "max": 40,
+          "color": "#529f95",
+          "label": "20–40%未満"
+        },
+        {
+          "min": 40,
+          "max": 60,
+          "color": "#26786e",
+          "label": "40–60%未満"
+        },
+        {
+          "min": 60,
+          "max": null,
+          "color": "#174c49",
+          "label": "60%以上"
+        }
+      ],
+      "countRadiusReference": 3000000,
+      "countLegendValues": [
+        300000,
+        1500000,
+        3000000
+      ],
+      "source": {
+        "label": "INPI：INEGI 2020年拡大票に基づく公表推計",
+        "url": "https://www.inpi.gob.mx/indicadores2020/1-poblacion-indigena-autoadscrita-nacional-y-por-entidad-federativa-muestra-censal-2020.xlsx",
+        "table": "Población de 3 años y más según condición de autoadscripción indígena por entidad federativa, estimadores, 2020／Autoadscripción",
+        "periodNote": "2020年国勢調査・拡大票標本。対象は一般住宅の3歳以上。",
+        "methodNote": "推計人数・分母・90%信頼区間はINPI原表の直接公表値。割合は同じ表の人数÷分母×100。不詳を分母に含み、人数を丸めた割合から復元していません。区間は同じINPI表から採用し、別のINEGI公表区間と混ぜていません。",
+        "attribution": "INPI. Sistema Nacional de Información y Estadística sobre los Pueblos y Comunidades Indígenas y Afromexicanas, con base en INEGI. Censo de Población y Vivienda 2020. Muestra censal. Microdatos.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+        "reuseNote": "INPI公表表の数値事実を抽出して当サイトで表示。元Excelは再配信せず、公式ダウンロードへリンク。INPIのExcel再配布ライセンスを確認したとは扱いません。"
+      }
+    },
+    {
+      "id": "catholic",
+      "category": "religion",
+      "label": "カトリック",
+      "countDenominatorLabel": "全年齢の通常居住人口（不詳を含む）",
+      "isEstimate": false,
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 50,
+          "color": "#f1f0d6",
+          "label": "0–50%未満"
+        },
+        {
+          "min": 50,
+          "max": 60,
+          "color": "#c6debe",
+          "label": "50–60%未満"
+        },
+        {
+          "min": 60,
+          "max": 70,
+          "color": "#8ec2b0",
+          "label": "60–70%未満"
+        },
+        {
+          "min": 70,
+          "max": 80,
+          "color": "#529f95",
+          "label": "70–80%未満"
+        },
+        {
+          "min": 80,
+          "max": 90,
+          "color": "#26786e",
+          "label": "80–90%未満"
+        },
+        {
+          "min": 90,
+          "max": null,
+          "color": "#174c49",
+          "label": "90%以上"
+        }
+      ],
+      "countRadiusReference": 20000000,
+      "countLegendValues": [
+        2000000,
+        10000000,
+        20000000
+      ],
+      "source": {
+        "label": "INEGI：2020年国勢調査・宗教基本票表",
+        "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_12_religion.xlsx",
+        "table": "B2020_12_02_E／シート02・Sexo=Total",
+        "periodNote": "2020年3月15日0時。全年齢の通常居住者。",
+        "methodNote": "人数は原表の公表人数を保持し、記載した区分だけを合算。割合は人数÷同じ州の全年齢総人口×100として当サイトが計算。不詳を除いて再正規化しません。宗教は申告された信仰・精神的な選好で、実践の頻度や熱心さを測る指標ではありません。総人口には国勢調査の公式補完推計を含みます。",
+        "definitionUrl": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/nueva_estruc/702825197520.pdf",
+        "attribution": "Fuente: INEGI, Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+        "components": [
+          "Católica"
+        ]
+      }
+    },
+    {
+      "id": "protestant_evangelical",
+      "category": "religion",
+      "label": "プロテスタント・福音系（INEGI区分）",
+      "countDenominatorLabel": "全年齢の通常居住人口（不詳を含む）",
+      "isEstimate": false,
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 5,
+          "color": "#f1f0d6",
+          "label": "0–5%未満"
+        },
+        {
+          "min": 5,
+          "max": 10,
+          "color": "#c6debe",
+          "label": "5–10%未満"
+        },
+        {
+          "min": 10,
+          "max": 15,
+          "color": "#8ec2b0",
+          "label": "10–15%未満"
+        },
+        {
+          "min": 15,
+          "max": 20,
+          "color": "#529f95",
+          "label": "15–20%未満"
+        },
+        {
+          "min": 20,
+          "max": 30,
+          "color": "#26786e",
+          "label": "20–30%未満"
+        },
+        {
+          "min": 30,
+          "max": null,
+          "color": "#174c49",
+          "label": "30%以上"
+        }
+      ],
+      "countRadiusReference": 2000000,
+      "countLegendValues": [
+        200000,
+        1000000,
+        2000000
+      ],
+      "source": {
+        "label": "INEGI：2020年国勢調査・宗教基本票表",
+        "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_12_religion.xlsx",
+        "table": "B2020_12_02_E／シート02・Sexo=Total",
+        "periodNote": "2020年3月15日0時。全年齢の通常居住者。",
+        "methodNote": "人数は原表の公表人数を保持し、記載した区分だけを合算。割合は人数÷同じ州の全年齢総人口×100として当サイトが計算。不詳を除いて再正規化しません。宗教は申告された信仰・精神的な選好で、実践の頻度や熱心さを測る指標ではありません。総人口には国勢調査の公式補完推計を含みます。",
+        "definitionUrl": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/nueva_estruc/702825197520.pdf",
+        "attribution": "Fuente: INEGI, Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+        "components": [
+          "Bautista",
+          "Presbiteriana",
+          "Iglesia del Dios Vivo, Columna y Apoyo de la Verdad, la Luz del Mundo",
+          "Adventista del Séptimo Día",
+          "Iglesia de Jesucristo de los Santos de los Últimos Días (Mormón)",
+          "Testigo de Jehová",
+          "Cristiana",
+          "Evangélica",
+          "Pentecostal",
+          "Otro Protestante/cristiano evangélico"
+        ]
+      }
+    },
+    {
+      "id": "no_religion",
+      "category": "religion",
+      "label": "無宗教",
+      "countDenominatorLabel": "全年齢の通常居住人口（不詳を含む）",
+      "isEstimate": false,
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 3,
+          "color": "#f1f0d6",
+          "label": "0–3%未満"
+        },
+        {
+          "min": 3,
+          "max": 6,
+          "color": "#c6debe",
+          "label": "3–6%未満"
+        },
+        {
+          "min": 6,
+          "max": 9,
+          "color": "#8ec2b0",
+          "label": "6–9%未満"
+        },
+        {
+          "min": 9,
+          "max": 12,
+          "color": "#529f95",
+          "label": "9–12%未満"
+        },
+        {
+          "min": 12,
+          "max": 15,
+          "color": "#26786e",
+          "label": "12–15%未満"
+        },
+        {
+          "min": 15,
+          "max": null,
+          "color": "#174c49",
+          "label": "15%以上"
+        }
+      ],
+      "countRadiusReference": 2000000,
+      "countLegendValues": [
+        200000,
+        1000000,
+        2000000
+      ],
+      "source": {
+        "label": "INEGI：2020年国勢調査・宗教基本票表",
+        "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_12_religion.xlsx",
+        "table": "B2020_12_02_E／シート02・Sexo=Total",
+        "periodNote": "2020年3月15日0時。全年齢の通常居住者。",
+        "methodNote": "人数は原表の公表人数を保持し、記載した区分だけを合算。割合は人数÷同じ州の全年齢総人口×100として当サイトが計算。不詳を除いて再正規化しません。宗教は申告された信仰・精神的な選好で、実践の頻度や熱心さを測る指標ではありません。総人口には国勢調査の公式補完推計を含みます。",
+        "definitionUrl": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/nueva_estruc/702825197520.pdf",
+        "attribution": "Fuente: INEGI, Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+        "components": [
+          "Ninguna religión",
+          "Ateos/Agnósticos"
+        ]
+      }
+    },
+    {
+      "id": "unaffiliated_believer",
+      "category": "religion",
+      "label": "信仰あり・所属宗教なし",
+      "countDenominatorLabel": "全年齢の通常居住人口（不詳を含む）",
+      "isEstimate": false,
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 1,
+          "color": "#f1f0d6",
+          "label": "0–1%未満"
+        },
+        {
+          "min": 1,
+          "max": 2,
+          "color": "#c6debe",
+          "label": "1–2%未満"
+        },
+        {
+          "min": 2,
+          "max": 3,
+          "color": "#8ec2b0",
+          "label": "2–3%未満"
+        },
+        {
+          "min": 3,
+          "max": 4,
+          "color": "#529f95",
+          "label": "3–4%未満"
+        },
+        {
+          "min": 4,
+          "max": 5,
+          "color": "#26786e",
+          "label": "4–5%未満"
+        },
+        {
+          "min": 5,
+          "max": null,
+          "color": "#174c49",
+          "label": "5%以上"
+        }
+      ],
+      "countRadiusReference": 2000000,
+      "countLegendValues": [
+        200000,
+        1000000,
+        2000000
+      ],
+      "source": {
+        "label": "INEGI：2020年国勢調査・宗教基本票表",
+        "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_12_religion.xlsx",
+        "table": "B2020_12_02_E／シート02・Sexo=Total",
+        "periodNote": "2020年3月15日0時。全年齢の通常居住者。",
+        "methodNote": "人数は原表の公表人数を保持し、記載した区分だけを合算。割合は人数÷同じ州の全年齢総人口×100として当サイトが計算。不詳を除いて再正規化しません。宗教は申告された信仰・精神的な選好で、実践の頻度や熱心さを測る指標ではありません。総人口には国勢調査の公式補完推計を含みます。",
+        "definitionUrl": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/nueva_estruc/702825197520.pdf",
+        "attribution": "Fuente: INEGI, Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+        "components": [
+          "Sin adscripción religiosa (creyente)"
+        ]
+      }
+    },
+    {
+      "id": "jewish",
+      "category": "religion",
+      "label": "ユダヤ教",
+      "countDenominatorLabel": "全年齢の通常居住人口（不詳を含む）",
+      "isEstimate": false,
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 0.01,
+          "color": "#f1f0d6",
+          "label": "0–0.01%未満"
+        },
+        {
+          "min": 0.01,
+          "max": 0.03,
+          "color": "#c6debe",
+          "label": "0.01–0.03%未満"
+        },
+        {
+          "min": 0.03,
+          "max": 0.1,
+          "color": "#8ec2b0",
+          "label": "0.03–0.1%未満"
+        },
+        {
+          "min": 0.1,
+          "max": 0.3,
+          "color": "#529f95",
+          "label": "0.1–0.3%未満"
+        },
+        {
+          "min": 0.3,
+          "max": 1,
+          "color": "#26786e",
+          "label": "0.3–1%未満"
+        },
+        {
+          "min": 1,
+          "max": null,
+          "color": "#174c49",
+          "label": "1%以上"
+        }
+      ],
+      "countRadiusReference": 30000,
+      "countLegendValues": [
+        3000,
+        15000,
+        30000
+      ],
+      "source": {
+        "label": "INEGI：2020年国勢調査・宗教基本票表",
+        "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_12_religion.xlsx",
+        "table": "B2020_12_02_E／シート02・Sexo=Total",
+        "periodNote": "2020年3月15日0時。全年齢の通常居住者。",
+        "methodNote": "人数は原表の公表人数を保持し、記載した区分だけを合算。割合は人数÷同じ州の全年齢総人口×100として当サイトが計算。不詳を除いて再正規化しません。宗教は申告された信仰・精神的な選好で、実践の頻度や熱心さを測る指標ではありません。総人口には国勢調査の公式補完推計を含みます。",
+        "definitionUrl": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/nueva_estruc/702825197520.pdf",
+        "attribution": "Fuente: INEGI, Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+        "components": [
+          "Judía"
+        ]
+      }
+    },
+    {
+      "id": "islamic",
+      "category": "religion",
+      "label": "イスラム教",
+      "countDenominatorLabel": "全年齢の通常居住人口（不詳を含む）",
+      "isEstimate": false,
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 0.002,
+          "color": "#f1f0d6",
+          "label": "0–0.002%未満"
+        },
+        {
+          "min": 0.002,
+          "max": 0.005,
+          "color": "#c6debe",
+          "label": "0.002–0.005%未満"
+        },
+        {
+          "min": 0.005,
+          "max": 0.01,
+          "color": "#8ec2b0",
+          "label": "0.005–0.01%未満"
+        },
+        {
+          "min": 0.01,
+          "max": 0.02,
+          "color": "#529f95",
+          "label": "0.01–0.02%未満"
+        },
+        {
+          "min": 0.02,
+          "max": 0.05,
+          "color": "#26786e",
+          "label": "0.02–0.05%未満"
+        },
+        {
+          "min": 0.05,
+          "max": null,
+          "color": "#174c49",
+          "label": "0.05%以上"
+        }
+      ],
+      "countRadiusReference": 2000,
+      "countLegendValues": [
+        200,
+        1000,
+        2000
+      ],
+      "source": {
+        "label": "INEGI：2020年国勢調査・宗教基本票表",
+        "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_12_religion.xlsx",
+        "table": "B2020_12_02_E／シート02・Sexo=Total",
+        "periodNote": "2020年3月15日0時。全年齢の通常居住者。",
+        "methodNote": "人数は原表の公表人数を保持し、記載した区分だけを合算。割合は人数÷同じ州の全年齢総人口×100として当サイトが計算。不詳を除いて再正規化しません。宗教は申告された信仰・精神的な選好で、実践の頻度や熱心さを測る指標ではありません。総人口には国勢調査の公式補完推計を含みます。",
+        "definitionUrl": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/nueva_estruc/702825197520.pdf",
+        "attribution": "Fuente: INEGI, Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+        "components": [
+          "Islámica"
+        ]
+      }
+    },
+    {
+      "id": "other_religions_combined",
+      "category": "religion",
+      "label": "その他の宗教（合算）",
+      "countDenominatorLabel": "全年齢の通常居住人口（不詳を含む）",
+      "isEstimate": false,
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 0.05,
+          "color": "#f1f0d6",
+          "label": "0–0.05%未満"
+        },
+        {
+          "min": 0.05,
+          "max": 0.1,
+          "color": "#c6debe",
+          "label": "0.05–0.1%未満"
+        },
+        {
+          "min": 0.1,
+          "max": 0.2,
+          "color": "#8ec2b0",
+          "label": "0.1–0.2%未満"
+        },
+        {
+          "min": 0.2,
+          "max": 0.5,
+          "color": "#529f95",
+          "label": "0.2–0.5%未満"
+        },
+        {
+          "min": 0.5,
+          "max": 1,
+          "color": "#26786e",
+          "label": "0.5–1%未満"
+        },
+        {
+          "min": 1,
+          "max": null,
+          "color": "#174c49",
+          "label": "1%以上"
+        }
+      ],
+      "countRadiusReference": 40000,
+      "countLegendValues": [
+        4000,
+        20000,
+        40000
+      ],
+      "source": {
+        "label": "INEGI：2020年国勢調査・宗教基本票表",
+        "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_12_religion.xlsx",
+        "table": "B2020_12_02_E／シート02・Sexo=Total",
+        "periodNote": "2020年3月15日0時。全年齢の通常居住者。",
+        "methodNote": "人数は原表の公表人数を保持し、記載した区分だけを合算。割合は人数÷同じ州の全年齢総人口×100として当サイトが計算。不詳を除いて再正規化しません。宗教は申告された信仰・精神的な選好で、実践の頻度や熱心さを測る指標ではありません。総人口には国勢調査の公式補完推計を含みます。",
+        "definitionUrl": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/nueva_estruc/702825197520.pdf",
+        "attribution": "Fuente: INEGI, Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+        "components": [
+          "Raíces étnicas",
+          "Raíces afro",
+          "Espiritualista",
+          "Origen oriental2",
+          "New Age y Escuelas esotéricas",
+          "Cultos populares",
+          "Otras religiones o movimientos religiosos3"
+        ]
+      }
+    },
+    {
+      "id": "religion_unspecified",
+      "category": "religion",
+      "label": "宗教の回答不詳",
+      "countDenominatorLabel": "全年齢の通常居住人口（不詳を含む）",
+      "isEstimate": false,
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 0.1,
+          "color": "#f1f0d6",
+          "label": "0–0.1%未満"
+        },
+        {
+          "min": 0.1,
+          "max": 0.25,
+          "color": "#c6debe",
+          "label": "0.1–0.25%未満"
+        },
+        {
+          "min": 0.25,
+          "max": 0.5,
+          "color": "#8ec2b0",
+          "label": "0.25–0.5%未満"
+        },
+        {
+          "min": 0.5,
+          "max": 1,
+          "color": "#529f95",
+          "label": "0.5–1%未満"
+        },
+        {
+          "min": 1,
+          "max": 2,
+          "color": "#26786e",
+          "label": "1–2%未満"
+        },
+        {
+          "min": 2,
+          "max": null,
+          "color": "#174c49",
+          "label": "2%以上"
+        }
+      ],
+      "countRadiusReference": 70000,
+      "countLegendValues": [
+        7000,
+        35000,
+        70000
+      ],
+      "source": {
+        "label": "INEGI：2020年国勢調査・宗教基本票表",
+        "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_12_religion.xlsx",
+        "table": "B2020_12_02_E／シート02・Sexo=Total",
+        "periodNote": "2020年3月15日0時。全年齢の通常居住者。",
+        "methodNote": "人数は原表の公表人数を保持し、記載した区分だけを合算。割合は人数÷同じ州の全年齢総人口×100として当サイトが計算。不詳を除いて再正規化しません。宗教は申告された信仰・精神的な選好で、実践の頻度や熱心さを測る指標ではありません。総人口には国勢調査の公式補完推計を含みます。",
+        "definitionUrl": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/nueva_estruc/702825197520.pdf",
+        "attribution": "Fuente: INEGI, Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+        "components": [
+          "No especificado"
+        ]
+      }
+    }
+  ],
+  "validation": {
+    "states": 32,
+    "metrics": 11,
+    "missingStateRows": 0,
+    "allCountsAndDenominatorsSumToNational": true,
+    "religionEightGroupsSumToEachTotal": true,
+    "existingPopulationTotalsMatch": true
+  },
+  "scientificLimits": {
+    "ethnicityIndicatorsOverlap": true,
+    "universeDiffersByMetric": true,
+    "basicTotalIncludesOfficialCoverageEstimation": true,
+    "indigenousIdentityIsOfficialSampleEstimate": true,
+    "intervalsFromINPI": true,
+    "notUSRaceClassification": true,
+    "noIndividualInference": true
+  },
+  "reuse": {
+    "inegiTerms": "https://www.inegi.org.mx/inegi/terminos.html",
+    "requirements": [
+      "Credit INEGI and original products.",
+      "Retain metadata and identify all site calculations and aggregations.",
+      "Do not imply official endorsement."
+    ],
+    "inpi": "Numerical facts extracted with INPI/INEGI attribution and source link; full INPI workbook not hosted or included in repository, no unspecified redistribution license claimed."
+  },
+  "displayGeometry": {
+    "reference": "INEGI Marco Geoestadístico, diciembre de 2025",
+    "sameExisting32StateGeometry": true,
+    "joinKey": "Two-digit state code",
+    "densityRecalculated": false
+  },
+  "generated": {
+    "json": {
+      "file": "composition-2020.json",
+      "bytes": 177793,
+      "sha256": "88d8357a104d7d161ffdcfa283493436371dee5706b26f39e6090397e6906015"
+    },
+    "csv": {
+      "file": "composition-2020.csv",
+      "bytes": 33676,
+      "sha256": "ae45ceed10b39e0908c691072f53c97f86d702a055e8f1d27fd5f3d32a3e64bc"
+    }
+  },
+  "groundwaterIncluded": false
+}

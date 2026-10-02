@@ -1,0 +1,115 @@
+{
+  "publisher": "Instituto Nacional de Estadística y Geografía (INEGI)",
+  "product": "Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico",
+  "table": {
+    "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_12_religion.xlsx",
+    "localFile": "cpv2020_b_eum_12_religion.xlsx",
+    "sha256": "af127bc8d398eb523f659bf8d7c29cecc10f773d7183dfd8f3f46896b17c4686",
+    "bytes": 290935,
+    "sheetName": "02",
+    "xmlSheet": "xl/worksheets/sheet3.xml",
+    "referenceName": "B2020_12_02_E",
+    "title": "Población total por entidad federativa, sexo y denominación religiosa según grupos de edad",
+    "elaborationDate": "2021-01-25",
+    "columns": {
+      "A": "Entidad federativa",
+      "B": "Sexo",
+      "C": "Denominación religiosa",
+      "D": "Población total (todas las edades)",
+      "E-L": "Age breakdown; not used for religion share denominator"
+    },
+    "rowSelection": "Sexo = Total; 25 consecutive rows per entity: one Total row plus 24 mutually exclusive denomination/missingness rows. National group begins at row 9; state 01 begins at row 84; each entity block spans 75 rows including male/female rows.",
+    "geography": "32 entidades federativas, official codes 01-32, including Ciudad de México; national code 00 is stored separately",
+    "originalFootnote": "Incluye una estimación de población de 6 337 751 personas que corresponden a 1 588 422 viviendas sin información de ocupantes y menores omitidos.",
+    "coverageFootnoteInterpretation": "These are INEGI's published final census counts, which incorporate the official census coverage/imputation treatment. No external estimate, projection, interpolated state count, or sample-microdata estimate was introduced."
+  },
+  "time": {
+    "year": 2020,
+    "referenceDate": "2020-03-15",
+    "collectionPeriod": "2020-03-02 to 2020-03-27",
+    "retrievedDateUtc": "2026-10-02"
+  },
+  "universe": {
+    "label": "Residentes habituales / Población total",
+    "ageRestriction": null,
+    "scope": "All usual residents of all ages, including private and collective dwelling residents, Mexican Foreign Service population and people without housing in the official census total.",
+    "denominatorField": "populationTotal",
+    "denominatorFormula": "The Total denomination row, Sexo=Total, column D for the same entity",
+    "percentageFormula": "100 * category count / populationTotal",
+    "percentageUnits": "percent, 0-100; unrounded in JSON/CSV",
+    "displayRounding": "Recommend one decimal for principal groups; for very small selected groups retain enough decimals or show <0.1% while preserving exact count.",
+    "unknownTreatment": "Retain No especificado in populationTotal. Do not renormalize reported religion categories to 100% of specified responses."
+  },
+  "meaning": {
+    "measure": "Religion declared in the census, not intensity or practice",
+    "collection": "An eligible household informant could answer for household residents; describe as census-declared affiliation rather than every person's direct self-response.",
+    "religionEthnicRoots": "Raíces étnicas is a religious category, not an indicator of Indigenous ethnic self-identification.",
+    "religionAfroRoots": "Raíces afro is a religious category, not an indicator of Afro-Mexican or Afro-descendant self-identification."
+  },
+  "categories": [
+    {"key":"catholic","officialLabel":"Católico","classifierCodes":"1101","nationalCount":97864218},
+    {"key":"protestant_evangelical","officialLabel":"Protestante/Cristiano evangélico","classifierCodes":"Group 13, codes 1301-1344 where defined","nationalCount":14095307,"aggregation":"Bautista + Presbiteriana + La Luz del Mundo + Adventista del Séptimo Día + Iglesia de Jesucristo de los Santos de los Últimos Días (Mormón) + Testigo de Jehová + Cristiana + Evangélica + Pentecostal + Otro Protestante/cristiano evangélico","interpretation":"INEGI's statistical group includes Mormon and Jehovah's Witness denominations; do not reinterpret as a narrower theological Protestant category."},
+    {"key":"jewish","officialLabel":"Judaico","classifierCodes":"2101","nationalCount":58876},
+    {"key":"islamic","officialLabel":"Islámico","classifierCodes":"2201","nationalCount":7982},
+    {"key":"ethnic_roots","officialLabel":"Raíces étnicas","classifierCodes":"2501","nationalCount":33372},
+    {"key":"afro_roots","officialLabel":"Raíces afro","classifierCodes":"2601","nationalCount":40799},
+    {"key":"spiritualist","officialLabel":"Espiritualista","classifierCodes":"2701","nationalCount":36764},
+    {"key":"other_religions","officialLabel":"Otras religiones (narrow published group)","classifierCodes":"1201 + 2301-2303 + 2401 + 2801 + 2901","nationalCount":70376,"aggregation":"Origen oriental + New Age y Escuelas esotéricas + Cultos populares + Otras religiones o movimientos religiosos (the last includes Catholic Orthodox)","warning":"This field excludes Judaico, Islámico, Raíces étnicas, Raíces afro and Espiritualista. The presentation chart's same-named Otras religiones aggregate includes those five groups too."},
+    {"key":"no_religion","officialLabel":"Sin religión","classifierCodes":"3101 + 3102 + 3103","nationalCount":10211052,"aggregation":"Ninguna religión + Ateos/Agnósticos","excludes":"Sin adscripción religiosa (creyente), code 3104"},
+    {"key":"unaffiliated_believer","officialLabel":"Sin adscripción religiosa (creyente)","classifierCodes":"3104","nationalCount":3103464,"aggregation":"Direct workbook row; kept separate from Sin religión"},
+    {"key":"unspecified","officialLabel":"No especificado","classifierCodes":"9999","nationalCount":491814,"aggregation":"Direct workbook row, not calculated as a residual","interpretation":"Unspecified religion includes unrecoverable omissions or inconsistencies; do not describe every case as a refusal."}
+  ],
+  "optionalPresentationAggregate": {
+    "key": "other_religions_combined",
+    "labelRecommendation": "その他の宗教（合計） / Other religious groups, combined",
+    "formula": "jewish + islamic + ethnic_roots + afro_roots + spiritualist + other_religions",
+    "nationalCount": 248169,
+    "source": "Presentation page 80, chart footnote 1",
+    "warning": "Use a distinct name and do not sum this aggregate with its component fields in a composition chart."
+  },
+  "optionalEightCategoryAggregate": {
+    "key": "other_religions_except_jewish_islamic",
+    "labelRecommendation": "その他の宗教（民族系・アフリカ系・スピリチュアリズムなど）",
+    "formula": "ethnic_roots + afro_roots + spiritualist + other_religions",
+    "nationalCount": 181311,
+    "context": "Valid exhaustive eight-category presentation when Catholic, Protestant/Christian Evangelical, Judaico, Islámico, no religion, unaffiliated believer and unspecified remain separate.",
+    "warning": "This is an application aggregation, not the narrow INEGI Otras religiones field (70376) or INEGI's broad presentation chart aggregate (248169). Disclose its components."
+  },
+  "missingness": {
+    "all32StatesAvailable": true,
+    "suppressedStateCounts": false,
+    "nullStateCounts": false,
+    "religionUnspecifiedExplicitlyAvailable": true,
+    "unknownReligionRetainedInShareDenominator": true
+  },
+  "validation": {
+    "file": "religion-validation.json",
+    "status": "passed",
+    "completeStates": 32,
+    "rawTotalSexRows": 825,
+    "categorySumsEqualPopulationEveryEntity": true,
+    "stateSumsEqualNationalEveryCategory": true,
+    "independentIterCrosscheck": "All 32 entities match independently downloaded ITER: POBTOT=populationTotal, PCATOLICA=catholic, PRO_CRIEVA=protestant_evangelical, POTRAS_REL=sum(jewish,islamic,ethnic_roots,afro_roots,spiritualist,other_religions), PSIN_RELIG=no_religion+unaffiliated_believer. Reported by ethnicity research agent."
+  },
+  "indicatorRecommendation": {
+    "selector": "Make principal categories selectable: Catholic; INEGI Protestant/Christian Evangelical group; no religion; believer without affiliation. Other religious groups can be selectable separately or as an explicitly labelled combined aggregate.",
+    "map": "A selected group's population share with a numeric sequential scale and explicit legend; state click shows both exact count and share. Preserve the population site's existing selector, metric, state selection and comparison patterns.",
+    "stateDetail": "Show the complete religion composition including No especificado and total denominator; provide exact census year and source link.",
+    "avoid": "Do not color every state by its majority religion. Do not frame physical geography as determining religious identity, and do not imply every resident follows the mapped affiliation."
+  },
+  "reuse": {
+    "url": "https://www.inegi.org.mx/inegi/terminos.html",
+    "allowed": "Extraction, adaptation, redistribution, publication and commercial reuse are permitted under INEGI's free-use terms.",
+    "requirements": "Keep source metadata; credit INEGI and the original product; disclose aggregations and percentage calculations to the end user; do not imply INEGI performed or endorsed those transformations.",
+    "creditRecommendation": "Fuente: INEGI, Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico. Agrupaciones y porcentajes calculados a partir de los conteos publicados."
+  },
+  "supportingOfficialSources": [
+    {"role":"Download index","url":"https://www.inegi.org.mx/programas/ccpv/2020/#Tabulados","localEvidence":"tabulados-files.json","idArchivo":"296487"},
+    {"role":"Basic religion metadata and universe","url":"https://www.inegi.org.mx/rnm/index.php/catalog/632/variable/F15/V653?name=RELIGION","localFile":"RELIGION-basic-metadata.html"},
+    {"role":"Detailed grouping codes and total-population universe","url":"https://www.inegi.org.mx/contenidos/programas/ccpv/2020/doc/Censo2020_criterios_tabulados_CPV_nal_est.pdf","localFile":"Censo2020_criterios_tabulados_CPV_nal_est.pdf","pdfPagesOneBased":"262-265","printedPages":"273-276"},
+    {"role":"Official 2020 classification hierarchy","url":"https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/nueva_estruc/702825197261.pdf","localFile":"Clasificacion_religiones_2020.pdf","pdfPagesOneBased":"17-18","printedPages":"13-14"},
+    {"role":"Principal published groups, national counts, date, and broad-other chart footnote","url":"https://www.inegi.org.mx/contenidos/programas/ccpv/2020/doc/Censo2020_Principales_resultados_EUM.pdf","localFile":"Censo2020_Principales_resultados_EUM.pdf","religionPdfPageOneBased":80,"datePdfPageOneBased":5,"totalPopulationDefinitionPdfPageOneBased":11},
+    {"role":"All-age conceptual definition","url":"https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/nueva_estruc/702825197520.pdf","printedPages":"301, 304-305"},
+    {"role":"Reuse terms","url":"https://www.inegi.org.mx/inegi/terminos.html","localFile":"inegi-terminos.html"}
+  ]
+}

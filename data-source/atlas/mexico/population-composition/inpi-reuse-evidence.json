@@ -1,0 +1,41 @@
+{
+  "verification_date_utc": "2026-10-02",
+  "inpi_source": {
+    "url": "https://www.inpi.gob.mx/indicadores2020/",
+    "download_url": "https://www.inpi.gob.mx/indicadores2020/1-poblacion-indigena-autoadscrita-nacional-y-por-entidad-federativa-muestra-censal-2020.xlsx",
+    "local_html": "../inpi-indicadores2020.html",
+    "local_workbook": "../inpi-self-identification-state-counts-2020.xlsx",
+    "source_declaration_location": "Autoadscripción!A342",
+    "declared_underlying_source": "INPI tabulation, based on INEGI Censo de Población y Vivienda 2020. Muestra censal. Microdatos.",
+    "explicit_workbook_reuse_license_located": false,
+    "explicit_license_status": "No dataset-specific reuse license found in the downloaded landing page or workbook. Do not label the INPI XLSX as CC-BY or as covered by a separately verified INPI open-data license."
+  },
+  "underlying_inegi_data": {
+    "terms_url": "https://www.inegi.org.mx/inegi/terminos.html",
+    "verified_evidence": "definitions-evidence.json",
+    "permits_extraction_publication_transformation": true,
+    "required_practices": [
+      "Attribute INEGI and the original census product.",
+      "Retain metadata and acknowledge changes, analysis and transformations.",
+      "Do not imply INEGI endorsement."
+    ]
+  },
+  "portal_terms_attempt": {
+    "url": "https://www.gob.mx/terminos",
+    "browser_fetch_result": "403 Forbidden",
+    "direct_public_download_result": "Challenge Validation HTML, not terms content",
+    "local_receipt": "../gobmx-terminos.html",
+    "applies_to_inpi_workbook_confirmed": false
+  },
+  "publication_handling": {
+    "recommended": "Publish extracted numerical facts and independently authored visualization/metadata; attribute INPI based on INEGI; link to the official workbook download. Keep downloaded source XLSX locally as audit evidence.",
+    "full_inpi_workbook_redistribution_license_confirmed": false,
+    "source_attribution": "INPI, Sistema Nacional de Información y Estadística sobre los Pueblos y Comunidades Indígenas y Afromexicanas, based on INEGI, Censo de Población y Vivienda 2020, Muestra censal, Microdatos.",
+    "count_handling": "All counts are directly published sample estimates extracted from INPI cells. No counts are inferred from rounded percentages.",
+    "share_handling": "Shares are calculated as count / corresponding published private-dwelling age 3+ denominator. All percentages and confidence intervals identify the INPI source."
+  },
+  "remaining_limitations": [
+    "A license allowing full republication of the INPI workbook has not been verified.",
+    "INEGI and INPI publish slightly different 90% interval endpoints despite identical denominators and matching rounded point estimates. The extraction retains each publication separately."
+  ]
+}

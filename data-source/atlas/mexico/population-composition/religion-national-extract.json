@@ -1,0 +1,75 @@
+{
+  "entityCode": "00",
+  "entityName": "Estados Unidos Mexicanos",
+  "year": 2020,
+  "populationTotal": 126014024,
+  "sourceTotalCell": "D9",
+  "catholic": 97864218,
+  "catholic_pct": 77.66137045191097,
+  "catholic_sourceCells": [
+    "D10"
+  ],
+  "protestant_evangelical": 14095307,
+  "protestant_evangelical_pct": 11.185506622659712,
+  "protestant_evangelical_sourceCells": [
+    "D11",
+    "D12",
+    "D13",
+    "D14",
+    "D15",
+    "D16",
+    "D17",
+    "D18",
+    "D19",
+    "D20"
+  ],
+  "jewish": 58876,
+  "jewish_pct": 0.04672178391827246,
+  "jewish_sourceCells": [
+    "D21"
+  ],
+  "islamic": 7982,
+  "islamic_pct": 0.0063342156266670765,
+  "islamic_sourceCells": [
+    "D22"
+  ],
+  "ethnic_roots": 33372,
+  "ethnic_roots_pct": 0.02648276671174313,
+  "ethnic_roots_sourceCells": [
+    "D25"
+  ],
+  "afro_roots": 40799,
+  "afro_roots_pct": 0.032376555168177154,
+  "afro_roots_sourceCells": [
+    "D26"
+  ],
+  "spiritualist": 36764,
+  "spiritualist_pct": 0.02917453060621253,
+  "spiritualist_sourceCells": [
+    "D27"
+  ],
+  "other_religions": 70376,
+  "other_religions_pct": 0.05584775231048887,
+  "other_religions_sourceCells": [
+    "D23",
+    "D24",
+    "D28",
+    "D29"
+  ],
+  "no_religion": 10211052,
+  "no_religion_pct": 8.103107635067666,
+  "no_religion_sourceCells": [
+    "D30",
+    "D31"
+  ],
+  "unaffiliated_believer": 3103464,
+  "unaffiliated_believer_pct": 2.462792553946218,
+  "unaffiliated_believer_sourceCells": [
+    "D32"
+  ],
+  "unspecified": 491814,
+  "unspecified_pct": 0.3902851320738714,
+  "unspecified_sourceCells": [
+    "D33"
+  ]
+}

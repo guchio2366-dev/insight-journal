@@ -1,0 +1,1311 @@
+{
+  "year": 2020,
+  "censusReferenceDate": "2020-03-15",
+  "fetchedDate": "2026-10-02",
+  "source": {
+    "publisher": "INEGI",
+    "program": "Censo de Población y Vivienda 2020",
+    "questionnaire": "Cuestionario Básico",
+    "tableDownloadUrl": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_05_etnicidad.xlsx",
+    "iterDownloadUrl": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/datosabiertos/iter/iter_00_cpv2020_csv.zip",
+    "programUrl": "https://www.inegi.org.mx/programas/ccpv/2020/",
+    "tablePreparedDate": "2021-01-25",
+    "iterModifiedDate": "2022-05-19",
+    "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html"
+  },
+  "definitions": {
+    "indigenousLanguageAge3Plus": {
+      "label": "Speaks an Indigenous language (age 3+)",
+      "universe": "Population aged 3 years and over (known age 3–130)",
+      "countField": "P3YM_HLI",
+      "denominatorField": "P_3YMAS",
+      "table": "Etnicidad 2",
+      "sheet": "02",
+      "definition": "People aged 3 years and over reported as speaking an Indigenous language.",
+      "percentageFormula": "100 * count / populationAge3Plus",
+      "missingness": "The denominator includes people with unspecified Indigenous-language speaking status. That unspecified count is included separately, not recoded as No."
+    },
+    "afroMexicanSelfIdentificationAllAges": {
+      "label": "Identifies as Afro-Mexican or Afrodescendant (all ages)",
+      "universe": "Total usual resident population, all ages",
+      "countField": "POB_AFRO",
+      "denominatorField": "POBTOT",
+      "table": "Etnicidad 14",
+      "sheet": "14",
+      "definition": "People reported as considering themselves Afro-Mexican or Afrodescendant.",
+      "percentageFormula": "100 * count / totalPopulation",
+      "missingness": "The denominator includes unspecified identity responses and estimated population in dwellings without occupant information and omitted minors. Unspecified identity is included separately, not recoded as No.",
+      "tableFootnote": "1 Incluye una estimación de población de 6 337 751 personas que corresponden a 1 588 422 viviendas sin información de ocupantes y menores omitidos."
+    }
+  },
+  "comparability": "These are separate language and identity indicators. They can overlap and do not partition the population into mutually exclusive racial groups. They must not be equated with US race categories.",
+  "validation": {
+    "uniqueStates": 32,
+    "stateCodes": "01–32",
+    "stateCountSumsMatchNational": true,
+    "stateDenominatorSumsMatchNational": true,
+    "responseCategoriesSumToDenominator": true,
+    "independentOfficialIterMatchesWorkbookAllStates": true,
+    "nullStateRows": 0
+  },
+  "fileHashes": {
+    "cpv2020_b_eum_05_etnicidad.xlsx": "60d618c4d439bd931c66408c3f2f7be4448b859277ee4b7d983faba205bd5b57",
+    "iter_00_cpv2020_csv.zip": "9342fdbd45bda5897f2b827a12904843b6f8fb85d4e72da299e09e4d2422ab60"
+  },
+  "national": {
+    "stateCode": "00",
+    "stateName": "Estados Unidos Mexicanos",
+    "indigenousLanguageAge3Plus": {
+      "count": 7364645,
+      "denominator": 119976584,
+      "percentage": 6.138401973505097,
+      "doesNotSpeakCount": 112497368,
+      "unspecifiedCount": 114571,
+      "unspecifiedPercentage": 0.09549446748708898,
+      "dataMissing": false,
+      "responseUnknown": true,
+      "sourceSheet": "02",
+      "sourceRow": 11,
+      "sourceCells": {
+        "count": "E11",
+        "denominator": "D11",
+        "unspecified": "J11"
+      }
+    },
+    "afroMexicanSelfIdentificationAllAges": {
+      "count": 2576213,
+      "denominator": 126014024,
+      "percentage": 2.044385948662349,
+      "doesNotIdentifyCount": 122961223,
+      "unspecifiedCount": 476588,
+      "unspecifiedPercentage": 0.37820234992257684,
+      "dataMissing": false,
+      "responseUnknown": true,
+      "sourceSheet": "14",
+      "sourceRow": 9,
+      "sourceCells": {
+        "count": "E9",
+        "denominator": "D9",
+        "unspecified": "G9"
+      }
+    }
+  },
+  "states": [
+    {
+      "stateCode": "01",
+      "stateName": "Aguascalientes",
+      "indigenousLanguageAge3Plus": {
+        "count": 2539,
+        "denominator": 1352235,
+        "percentage": 0.18776322162937653,
+        "doesNotSpeakCount": 1349023,
+        "unspecifiedCount": 673,
+        "unspecifiedPercentage": 0.04976945575288319,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 68,
+        "sourceCells": {
+          "count": "E68",
+          "denominator": "D68",
+          "unspecified": "J68"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 22425,
+        "denominator": 1425607,
+        "percentage": 1.5730141616869167,
+        "doesNotIdentifyCount": 1400869,
+        "unspecifiedCount": 2313,
+        "unspecifiedPercentage": 0.1622466780816873,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 69,
+        "sourceCells": {
+          "count": "E69",
+          "denominator": "D69",
+          "unspecified": "G69"
+        }
+      }
+    },
+    {
+      "stateCode": "02",
+      "stateName": "Baja California",
+      "indigenousLanguageAge3Plus": {
+        "count": 49130,
+        "denominator": 3610844,
+        "percentage": 1.3606237212131014,
+        "doesNotSpeakCount": 3555153,
+        "unspecifiedCount": 6561,
+        "unspecifiedPercentage": 0.18170267117604638,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 125,
+        "sourceCells": {
+          "count": "E125",
+          "denominator": "D125",
+          "unspecified": "J125"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 64362,
+        "denominator": 3769020,
+        "percentage": 1.7076587547956763,
+        "doesNotIdentifyCount": 3676433,
+        "unspecifiedCount": 28225,
+        "unspecifiedPercentage": 0.7488684061108722,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 129,
+        "sourceCells": {
+          "count": "E129",
+          "denominator": "D129",
+          "unspecified": "G129"
+        }
+      }
+    },
+    {
+      "stateCode": "03",
+      "stateName": "Baja California Sur",
+      "indigenousLanguageAge3Plus": {
+        "count": 13581,
+        "denominator": 758642,
+        "percentage": 1.7901724397014664,
+        "doesNotSpeakCount": 743914,
+        "unspecifiedCount": 1147,
+        "unspecifiedPercentage": 0.1511912074469908,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 182,
+        "sourceCells": {
+          "count": "E182",
+          "denominator": "D182",
+          "unspecified": "J182"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 26330,
+        "denominator": 798447,
+        "percentage": 3.297651566102697,
+        "doesNotIdentifyCount": 767149,
+        "unspecifiedCount": 4968,
+        "unspecifiedPercentage": 0.622207861010186,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 189,
+        "sourceCells": {
+          "count": "E189",
+          "denominator": "D189",
+          "unspecified": "G189"
+        }
+      }
+    },
+    {
+      "stateCode": "04",
+      "stateName": "Campeche",
+      "indigenousLanguageAge3Plus": {
+        "count": 91801,
+        "denominator": 878528,
+        "percentage": 10.44941083266555,
+        "doesNotSpeakCount": 786341,
+        "unspecifiedCount": 386,
+        "unspecifiedPercentage": 0.04393713120128214,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 239,
+        "sourceCells": {
+          "count": "E239",
+          "denominator": "D239",
+          "unspecified": "J239"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 19319,
+        "denominator": 928363,
+        "percentage": 2.0809747911108047,
+        "doesNotIdentifyCount": 904206,
+        "unspecifiedCount": 4838,
+        "unspecifiedPercentage": 0.5211323587863799,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 249,
+        "sourceCells": {
+          "count": "E249",
+          "denominator": "D249",
+          "unspecified": "G249"
+        }
+      }
+    },
+    {
+      "stateCode": "05",
+      "stateName": "Coahuila de Zaragoza",
+      "indigenousLanguageAge3Plus": {
+        "count": 5527,
+        "denominator": 2980244,
+        "percentage": 0.18545461378330097,
+        "doesNotSpeakCount": 2972636,
+        "unspecifiedCount": 2081,
+        "unspecifiedPercentage": 0.0698264974277274,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 296,
+        "sourceCells": {
+          "count": "E296",
+          "denominator": "D296",
+          "unspecified": "J296"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 45976,
+        "denominator": 3146771,
+        "percentage": 1.4610532510945347,
+        "doesNotIdentifyCount": 3092074,
+        "unspecifiedCount": 8721,
+        "unspecifiedPercentage": 0.27714123461796236,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 309,
+        "sourceCells": {
+          "count": "E309",
+          "denominator": "D309",
+          "unspecified": "G309"
+        }
+      }
+    },
+    {
+      "stateCode": "06",
+      "stateName": "Colima",
+      "indigenousLanguageAge3Plus": {
+        "count": 5210,
+        "denominator": 699821,
+        "percentage": 0.7444760874566496,
+        "doesNotSpeakCount": 694277,
+        "unspecifiedCount": 334,
+        "unspecifiedPercentage": 0.04772649005960095,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 353,
+        "sourceCells": {
+          "count": "E353",
+          "denominator": "D353",
+          "unspecified": "J353"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 13574,
+        "denominator": 731391,
+        "percentage": 1.8559156456669552,
+        "doesNotIdentifyCount": 715479,
+        "unspecifiedCount": 2338,
+        "unspecifiedPercentage": 0.319664857784687,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 369,
+        "sourceCells": {
+          "count": "E369",
+          "denominator": "D369",
+          "unspecified": "G369"
+        }
+      }
+    },
+    {
+      "stateCode": "07",
+      "stateName": "Chiapas",
+      "indigenousLanguageAge3Plus": {
+        "count": 1459648,
+        "denominator": 5181929,
+        "percentage": 28.16804321325128,
+        "doesNotSpeakCount": 3720235,
+        "unspecifiedCount": 2046,
+        "unspecifiedPercentage": 0.039483366136432975,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 410,
+        "sourceCells": {
+          "count": "E410",
+          "denominator": "D410",
+          "unspecified": "J410"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 56532,
+        "denominator": 5543828,
+        "percentage": 1.0197286062987525,
+        "doesNotIdentifyCount": 5456790,
+        "unspecifiedCount": 30506,
+        "unspecifiedPercentage": 0.5502695971087126,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 429,
+        "sourceCells": {
+          "count": "E429",
+          "denominator": "D429",
+          "unspecified": "G429"
+        }
+      }
+    },
+    {
+      "stateCode": "08",
+      "stateName": "Chihuahua",
+      "indigenousLanguageAge3Plus": {
+        "count": 110498,
+        "denominator": 3570280,
+        "percentage": 3.0949393324893286,
+        "doesNotSpeakCount": 3455995,
+        "unspecifiedCount": 3787,
+        "unspecifiedPercentage": 0.10607011214806683,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 467,
+        "sourceCells": {
+          "count": "E467",
+          "denominator": "D467",
+          "unspecified": "J467"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 60918,
+        "denominator": 3741869,
+        "percentage": 1.628009959728681,
+        "doesNotIdentifyCount": 3666116,
+        "unspecifiedCount": 14835,
+        "unspecifiedPercentage": 0.39645963020084346,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 489,
+        "sourceCells": {
+          "count": "E489",
+          "denominator": "D489",
+          "unspecified": "G489"
+        }
+      }
+    },
+    {
+      "stateCode": "09",
+      "stateName": "Ciudad de México",
+      "indigenousLanguageAge3Plus": {
+        "count": 125153,
+        "denominator": 8933167,
+        "percentage": 1.4009925035544504,
+        "doesNotSpeakCount": 8800395,
+        "unspecifiedCount": 7619,
+        "unspecifiedPercentage": 0.08528890146126229,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 524,
+        "sourceCells": {
+          "count": "E524",
+          "denominator": "D524",
+          "unspecified": "J524"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 186914,
+        "denominator": 9209944,
+        "percentage": 2.0294803095436844,
+        "doesNotIdentifyCount": 8979922,
+        "unspecifiedCount": 43108,
+        "unspecifiedPercentage": 0.4680593063323729,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 549,
+        "sourceCells": {
+          "count": "E549",
+          "denominator": "D549",
+          "unspecified": "G549"
+        }
+      }
+    },
+    {
+      "stateCode": "10",
+      "stateName": "Durango",
+      "indigenousLanguageAge3Plus": {
+        "count": 47242,
+        "denominator": 1733682,
+        "percentage": 2.72495186545168,
+        "doesNotSpeakCount": 1685395,
+        "unspecifiedCount": 1045,
+        "unspecifiedPercentage": 0.060276336721497945,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 581,
+        "sourceCells": {
+          "count": "E581",
+          "denominator": "D581",
+          "unspecified": "J581"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 17311,
+        "denominator": 1832650,
+        "percentage": 0.944588437508526,
+        "doesNotIdentifyCount": 1810619,
+        "unspecifiedCount": 4720,
+        "unspecifiedPercentage": 0.2575505415654926,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 609,
+        "sourceCells": {
+          "count": "E609",
+          "denominator": "D609",
+          "unspecified": "G609"
+        }
+      }
+    },
+    {
+      "stateCode": "11",
+      "stateName": "Guanajuato",
+      "indigenousLanguageAge3Plus": {
+        "count": 14048,
+        "denominator": 5840957,
+        "percentage": 0.2405085331051059,
+        "doesNotSpeakCount": 5820802,
+        "unspecifiedCount": 6107,
+        "unspecifiedPercentage": 0.1045547844300172,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 638,
+        "sourceCells": {
+          "count": "E638",
+          "denominator": "D638",
+          "unspecified": "J638"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 108806,
+        "denominator": 6166934,
+        "percentage": 1.7643451348757746,
+        "doesNotIdentifyCount": 6038032,
+        "unspecifiedCount": 20096,
+        "unspecifiedPercentage": 0.3258669543082511,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 669,
+        "sourceCells": {
+          "count": "E669",
+          "denominator": "D669",
+          "unspecified": "G669"
+        }
+      }
+    },
+    {
+      "stateCode": "12",
+      "stateName": "Guerrero",
+      "indigenousLanguageAge3Plus": {
+        "count": 515487,
+        "denominator": 3328762,
+        "percentage": 15.485847290974844,
+        "doesNotSpeakCount": 2811880,
+        "unspecifiedCount": 1395,
+        "unspecifiedPercentage": 0.04190747190697322,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 695,
+        "sourceCells": {
+          "count": "E695",
+          "denominator": "D695",
+          "unspecified": "J695"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 303923,
+        "denominator": 3540685,
+        "percentage": 8.583734503351753,
+        "doesNotIdentifyCount": 3220363,
+        "unspecifiedCount": 16399,
+        "unspecifiedPercentage": 0.4631589650025348,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 729,
+        "sourceCells": {
+          "count": "E729",
+          "denominator": "D729",
+          "unspecified": "G729"
+        }
+      }
+    },
+    {
+      "stateCode": "13",
+      "stateName": "Hidalgo",
+      "indigenousLanguageAge3Plus": {
+        "count": 362629,
+        "denominator": 2944897,
+        "percentage": 12.313809277540097,
+        "doesNotSpeakCount": 2580967,
+        "unspecifiedCount": 1301,
+        "unspecifiedPercentage": 0.044178115567369586,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 752,
+        "sourceCells": {
+          "count": "E752",
+          "denominator": "D752",
+          "unspecified": "J752"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 48693,
+        "denominator": 3082841,
+        "percentage": 1.579484637709178,
+        "doesNotIdentifyCount": 3029286,
+        "unspecifiedCount": 4862,
+        "unspecifiedPercentage": 0.15771166920382856,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 789,
+        "sourceCells": {
+          "count": "E789",
+          "denominator": "D789",
+          "unspecified": "G789"
+        }
+      }
+    },
+    {
+      "stateCode": "14",
+      "stateName": "Jalisco",
+      "indigenousLanguageAge3Plus": {
+        "count": 66963,
+        "denominator": 7912955,
+        "percentage": 0.8462451764227145,
+        "doesNotSpeakCount": 7837241,
+        "unspecifiedCount": 8751,
+        "unspecifiedPercentage": 0.11059079699050481,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 809,
+        "sourceCells": {
+          "count": "E809",
+          "denominator": "D809",
+          "unspecified": "J809"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 139676,
+        "denominator": 8348151,
+        "percentage": 1.673136961705652,
+        "doesNotIdentifyCount": 8148814,
+        "unspecifiedCount": 59661,
+        "unspecifiedPercentage": 0.7146612465442946,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 849,
+        "sourceCells": {
+          "count": "E849",
+          "denominator": "D849",
+          "unspecified": "G849"
+        }
+      }
+    },
+    {
+      "stateCode": "15",
+      "stateName": "México",
+      "indigenousLanguageAge3Plus": {
+        "count": 417603,
+        "denominator": 16260058,
+        "percentage": 2.568274971712893,
+        "doesNotSpeakCount": 15818076,
+        "unspecifiedCount": 24379,
+        "unspecifiedPercentage": 0.14993181451136275,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 866,
+        "sourceCells": {
+          "count": "E866",
+          "denominator": "D866",
+          "unspecified": "J866"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 296264,
+        "denominator": 16992418,
+        "percentage": 1.7435070158937946,
+        "doesNotIdentifyCount": 16631867,
+        "unspecifiedCount": 64287,
+        "unspecifiedPercentage": 0.37832755762011033,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 909,
+        "sourceCells": {
+          "count": "E909",
+          "denominator": "D909",
+          "unspecified": "G909"
+        }
+      }
+    },
+    {
+      "stateCode": "16",
+      "stateName": "Michoacán de Ocampo",
+      "indigenousLanguageAge3Plus": {
+        "count": 154943,
+        "denominator": 4493516,
+        "percentage": 3.4481461732861303,
+        "doesNotSpeakCount": 4332912,
+        "unspecifiedCount": 5661,
+        "unspecifiedPercentage": 0.1259815253801255,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 923,
+        "sourceCells": {
+          "count": "E923",
+          "denominator": "D923",
+          "unspecified": "J923"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 73424,
+        "denominator": 4748846,
+        "percentage": 1.5461440526814303,
+        "doesNotIdentifyCount": 4665680,
+        "unspecifiedCount": 9742,
+        "unspecifiedPercentage": 0.20514457617703333,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 969,
+        "sourceCells": {
+          "count": "E969",
+          "denominator": "D969",
+          "unspecified": "G969"
+        }
+      }
+    },
+    {
+      "stateCode": "17",
+      "stateName": "Morelos",
+      "indigenousLanguageAge3Plus": {
+        "count": 38110,
+        "denominator": 1887763,
+        "percentage": 2.018791553812634,
+        "doesNotSpeakCount": 1848291,
+        "unspecifiedCount": 1362,
+        "unspecifiedPercentage": 0.07214888733384434,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 980,
+        "sourceCells": {
+          "count": "E980",
+          "denominator": "D980",
+          "unspecified": "J980"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 38331,
+        "denominator": 1971520,
+        "percentage": 1.9442359194935885,
+        "doesNotIdentifyCount": 1930593,
+        "unspecifiedCount": 2596,
+        "unspecifiedPercentage": 0.13167505275117675,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 1029,
+        "sourceCells": {
+          "count": "E1029",
+          "denominator": "D1029",
+          "unspecified": "G1029"
+        }
+      }
+    },
+    {
+      "stateCode": "18",
+      "stateName": "Nayarit",
+      "indigenousLanguageAge3Plus": {
+        "count": 69069,
+        "denominator": 1174739,
+        "percentage": 5.879518769701185,
+        "doesNotSpeakCount": 1105152,
+        "unspecifiedCount": 518,
+        "unspecifiedPercentage": 0.044094901080154826,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 1037,
+        "sourceCells": {
+          "count": "E1037",
+          "denominator": "D1037",
+          "unspecified": "J1037"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 10416,
+        "denominator": 1235456,
+        "percentage": 0.8430895151263986,
+        "doesNotIdentifyCount": 1223115,
+        "unspecifiedCount": 1925,
+        "unspecifiedPercentage": 0.15581291442188147,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 1089,
+        "sourceCells": {
+          "count": "E1089",
+          "denominator": "D1089",
+          "unspecified": "G1089"
+        }
+      }
+    },
+    {
+      "stateCode": "19",
+      "stateName": "Nuevo León",
+      "indigenousLanguageAge3Plus": {
+        "count": 77945,
+        "denominator": 5508144,
+        "percentage": 1.4150864610656513,
+        "doesNotSpeakCount": 5417169,
+        "unspecifiedCount": 13030,
+        "unspecifiedPercentage": 0.23655881182481794,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 1094,
+        "sourceCells": {
+          "count": "E1094",
+          "denominator": "D1094",
+          "unspecified": "J1094"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 97603,
+        "denominator": 5784442,
+        "percentage": 1.6873364794737333,
+        "doesNotIdentifyCount": 5655449,
+        "unspecifiedCount": 31390,
+        "unspecifiedPercentage": 0.5426625420394914,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 1149,
+        "sourceCells": {
+          "count": "E1149",
+          "denominator": "D1149",
+          "unspecified": "G1149"
+        }
+      }
+    },
+    {
+      "stateCode": "20",
+      "stateName": "Oaxaca",
+      "indigenousLanguageAge3Plus": {
+        "count": 1221555,
+        "denominator": 3917300,
+        "percentage": 31.18359584407628,
+        "doesNotSpeakCount": 2694268,
+        "unspecifiedCount": 1477,
+        "unspecifiedPercentage": 0.03770454139330662,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 1151,
+        "sourceCells": {
+          "count": "E1151",
+          "denominator": "D1151",
+          "unspecified": "J1151"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 194474,
+        "denominator": 4132148,
+        "percentage": 4.706365793287172,
+        "doesNotIdentifyCount": 3925545,
+        "unspecifiedCount": 12129,
+        "unspecifiedPercentage": 0.2935277245635926,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 1209,
+        "sourceCells": {
+          "count": "E1209",
+          "denominator": "D1209",
+          "unspecified": "G1209"
+        }
+      }
+    },
+    {
+      "stateCode": "21",
+      "stateName": "Puebla",
+      "indigenousLanguageAge3Plus": {
+        "count": 615622,
+        "denominator": 6238582,
+        "percentage": 9.867979614598317,
+        "doesNotSpeakCount": 5619623,
+        "unspecifiedCount": 3337,
+        "unspecifiedPercentage": 0.053489719298391844,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 1208,
+        "sourceCells": {
+          "count": "E1208",
+          "denominator": "D1208",
+          "unspecified": "J1208"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 113945,
+        "denominator": 6583278,
+        "percentage": 1.7308246742732114,
+        "doesNotIdentifyCount": 6459666,
+        "unspecifiedCount": 9667,
+        "unspecifiedPercentage": 0.14684174054323695,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 1269,
+        "sourceCells": {
+          "count": "E1269",
+          "denominator": "D1269",
+          "unspecified": "G1269"
+        }
+      }
+    },
+    {
+      "stateCode": "22",
+      "stateName": "Querétaro",
+      "indigenousLanguageAge3Plus": {
+        "count": 31383,
+        "denominator": 2253414,
+        "percentage": 1.392686829850174,
+        "doesNotSpeakCount": 2220230,
+        "unspecifiedCount": 1801,
+        "unspecifiedPercentage": 0.07992317434790057,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 1265,
+        "sourceCells": {
+          "count": "E1265",
+          "denominator": "D1265",
+          "unspecified": "J1265"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 43436,
+        "denominator": 2368467,
+        "percentage": 1.8339288662244397,
+        "doesNotIdentifyCount": 2316250,
+        "unspecifiedCount": 8781,
+        "unspecifiedPercentage": 0.3707461408582007,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 1329,
+        "sourceCells": {
+          "count": "E1329",
+          "denominator": "D1329",
+          "unspecified": "G1329"
+        }
+      }
+    },
+    {
+      "stateCode": "23",
+      "stateName": "Quintana Roo",
+      "indigenousLanguageAge3Plus": {
+        "count": 204949,
+        "denominator": 1752570,
+        "percentage": 11.694197664002008,
+        "doesNotSpeakCount": 1544849,
+        "unspecifiedCount": 2772,
+        "unspecifiedPercentage": 0.15816771940635752,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 1322,
+        "sourceCells": {
+          "count": "E1322",
+          "denominator": "D1322",
+          "unspecified": "J1322"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 52265,
+        "denominator": 1857985,
+        "percentage": 2.8129936463426777,
+        "doesNotIdentifyCount": 1781374,
+        "unspecifiedCount": 24346,
+        "unspecifiedPercentage": 1.3103442708095059,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 1389,
+        "sourceCells": {
+          "count": "E1389",
+          "denominator": "D1389",
+          "unspecified": "G1389"
+        }
+      }
+    },
+    {
+      "stateCode": "24",
+      "stateName": "San Luis Potosí",
+      "indigenousLanguageAge3Plus": {
+        "count": 231213,
+        "denominator": 2687679,
+        "percentage": 8.60270143867627,
+        "doesNotSpeakCount": 2453551,
+        "unspecifiedCount": 2915,
+        "unspecifiedPercentage": 0.10845789247897536,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 1379,
+        "sourceCells": {
+          "count": "E1379",
+          "denominator": "D1379",
+          "unspecified": "J1379"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 55337,
+        "denominator": 2822255,
+        "percentage": 1.9607370701796967,
+        "doesNotIdentifyCount": 2761083,
+        "unspecifiedCount": 5835,
+        "unspecifiedPercentage": 0.20674956727864774,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 1449,
+        "sourceCells": {
+          "count": "E1449",
+          "denominator": "D1449",
+          "unspecified": "G1449"
+        }
+      }
+    },
+    {
+      "stateCode": "25",
+      "stateName": "Sinaloa",
+      "indigenousLanguageAge3Plus": {
+        "count": 35539,
+        "denominator": 2885315,
+        "percentage": 1.2317199335254556,
+        "doesNotSpeakCount": 2848277,
+        "unspecifiedCount": 1499,
+        "unspecifiedPercentage": 0.05195273306380759,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 1436,
+        "sourceCells": {
+          "count": "E1436",
+          "denominator": "D1436",
+          "unspecified": "J1436"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 42196,
+        "denominator": 3026943,
+        "percentage": 1.394013696326624,
+        "doesNotIdentifyCount": 2980356,
+        "unspecifiedCount": 4391,
+        "unspecifiedPercentage": 0.14506384824557317,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 1509,
+        "sourceCells": {
+          "count": "E1509",
+          "denominator": "D1509",
+          "unspecified": "G1509"
+        }
+      }
+    },
+    {
+      "stateCode": "26",
+      "stateName": "Sonora",
+      "indigenousLanguageAge3Plus": {
+        "count": 62808,
+        "denominator": 2817821,
+        "percentage": 2.2289563460560484,
+        "doesNotSpeakCount": 2752543,
+        "unspecifiedCount": 2470,
+        "unspecifiedPercentage": 0.08765638413511717,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 1493,
+        "sourceCells": {
+          "count": "E1493",
+          "denominator": "D1493",
+          "unspecified": "J1493"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 43510,
+        "denominator": 2944840,
+        "percentage": 1.4774996264652749,
+        "doesNotIdentifyCount": 2895573,
+        "unspecifiedCount": 5757,
+        "unspecifiedPercentage": 0.1954944920606892,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 1569,
+        "sourceCells": {
+          "count": "E1569",
+          "denominator": "D1569",
+          "unspecified": "G1569"
+        }
+      }
+    },
+    {
+      "stateCode": "27",
+      "stateName": "Tabasco",
+      "indigenousLanguageAge3Plus": {
+        "count": 91025,
+        "denominator": 2283383,
+        "percentage": 3.986409638680852,
+        "doesNotSpeakCount": 2191437,
+        "unspecifiedCount": 921,
+        "unspecifiedPercentage": 0.04033488906591667,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 1550,
+        "sourceCells": {
+          "count": "E1550",
+          "denominator": "D1550",
+          "unspecified": "J1550"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 37553,
+        "denominator": 2402598,
+        "percentage": 1.563016368114849,
+        "doesNotIdentifyCount": 2363118,
+        "unspecifiedCount": 1927,
+        "unspecifiedPercentage": 0.08020484492203855,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 1629,
+        "sourceCells": {
+          "count": "E1629",
+          "denominator": "D1629",
+          "unspecified": "G1629"
+        }
+      }
+    },
+    {
+      "stateCode": "28",
+      "stateName": "Tamaulipas",
+      "indigenousLanguageAge3Plus": {
+        "count": 22651,
+        "denominator": 3367123,
+        "percentage": 0.6727107979126394,
+        "doesNotSpeakCount": 3341279,
+        "unspecifiedCount": 3193,
+        "unspecifiedPercentage": 0.09482873064037162,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 1607,
+        "sourceCells": {
+          "count": "E1607",
+          "denominator": "D1607",
+          "unspecified": "J1607"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 43621,
+        "denominator": 3527735,
+        "percentage": 1.236515781372467,
+        "doesNotIdentifyCount": 3474830,
+        "unspecifiedCount": 9284,
+        "unspecifiedPercentage": 0.2631716951528389,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 1689,
+        "sourceCells": {
+          "count": "E1689",
+          "denominator": "D1689",
+          "unspecified": "G1689"
+        }
+      }
+    },
+    {
+      "stateCode": "29",
+      "stateName": "Tlaxcala",
+      "indigenousLanguageAge3Plus": {
+        "count": 27174,
+        "denominator": 1258093,
+        "percentage": 2.159935712224772,
+        "doesNotSpeakCount": 1230069,
+        "unspecifiedCount": 850,
+        "unspecifiedPercentage": 0.06756257287815766,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 1664,
+        "sourceCells": {
+          "count": "E1664",
+          "denominator": "D1664",
+          "unspecified": "J1664"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 18094,
+        "denominator": 1342977,
+        "percentage": 1.3473052777523369,
+        "doesNotIdentifyCount": 1303068,
+        "unspecifiedCount": 21815,
+        "unspecifiedPercentage": 1.624376292371351,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 1749,
+        "sourceCells": {
+          "count": "E1749",
+          "denominator": "D1749",
+          "unspecified": "G1749"
+        }
+      }
+    },
+    {
+      "stateCode": "30",
+      "stateName": "Veracruz de Ignacio de la Llave",
+      "indigenousLanguageAge3Plus": {
+        "count": 663503,
+        "denominator": 7716363,
+        "percentage": 8.59864938961529,
+        "doesNotSpeakCount": 7050155,
+        "unspecifiedCount": 2705,
+        "unspecifiedPercentage": 0.03505537518128683,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 1721,
+        "sourceCells": {
+          "count": "E1721",
+          "denominator": "D1721",
+          "unspecified": "J1721"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 215435,
+        "denominator": 8062579,
+        "percentage": 2.6720358336953973,
+        "doesNotIdentifyCount": 7838580,
+        "unspecifiedCount": 8564,
+        "unspecifiedPercentage": 0.10621911425612077,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 1809,
+        "sourceCells": {
+          "count": "E1809",
+          "denominator": "D1809",
+          "unspecified": "G1809"
+        }
+      }
+    },
+    {
+      "stateCode": "31",
+      "stateName": "Yucatán",
+      "indigenousLanguageAge3Plus": {
+        "count": 525092,
+        "denominator": 2215931,
+        "percentage": 23.696225198347783,
+        "doesNotSpeakCount": 1689200,
+        "unspecifiedCount": 1639,
+        "unspecifiedPercentage": 0.07396439690586033,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 1778,
+        "sourceCells": {
+          "count": "E1778",
+          "denominator": "D1778",
+          "unspecified": "J1778"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 69599,
+        "denominator": 2320898,
+        "percentage": 2.998796155625969,
+        "doesNotIdentifyCount": 2245586,
+        "unspecifiedCount": 5713,
+        "unspecifiedPercentage": 0.24615472114672857,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 1869,
+        "sourceCells": {
+          "count": "E1869",
+          "denominator": "D1869",
+          "unspecified": "G1869"
+        }
+      }
+    },
+    {
+      "stateCode": "32",
+      "stateName": "Zacatecas",
+      "indigenousLanguageAge3Plus": {
+        "count": 5005,
+        "denominator": 1531847,
+        "percentage": 0.3267297582591473,
+        "doesNotSpeakCount": 1526033,
+        "unspecifiedCount": 809,
+        "unspecifiedPercentage": 0.05281206282350653,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "02",
+        "sourceRow": 1835,
+        "sourceCells": {
+          "count": "E1835",
+          "denominator": "D1835",
+          "unspecified": "J1835"
+        }
+      },
+      "afroMexicanSelfIdentificationAllAges": {
+        "count": 15951,
+        "denominator": 1622138,
+        "percentage": 0.9833318743534767,
+        "doesNotIdentifyCount": 1603338,
+        "unspecifiedCount": 2849,
+        "unspecifiedPercentage": 0.1756324061208109,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "sourceSheet": "14",
+        "sourceRow": 1929,
+        "sourceCells": {
+          "count": "E1929",
+          "denominator": "D1929",
+          "unspecified": "G1929"
+        }
+      }
+    }
+  ]
+}

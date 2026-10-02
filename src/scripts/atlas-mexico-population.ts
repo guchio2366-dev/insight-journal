@@ -5,6 +5,8 @@ import {
   mexicoPopulationScaleUrl, mexicoPopulationReturnUrl, mexicoPopulationIndustryUrl, mexicoPopulationNatureUrl,
   formatMexicoPopulation, formatMexicoDensity, type MexicoPopulationState,
 } from '../lib/atlas-mexico-population';
+import {readMexicoCompositionSelection,writeMexicoCompositionSelection,mexicoCompositionMetric,type MexicoCompositionData} from '../lib/atlas-mexico-population-composition';
+import {captureMexicoPopulationComposition,restoreMexicoPopulationComposition,renderMexicoPopulationComposition} from './atlas-mexico-population-composition';
 
 interface PopulationRoutes {
   population: string; nature: string; industry: string; agriculture: string; assets: string;
@@ -19,8 +21,14 @@ export function initMexicoPopulation(root: HTMLElement) {
   const codes = population.states.map(row => row.stateCode);
   const query = <T extends Element = HTMLElement>(selector: string) => root.querySelector<T>(selector)!;
   let state = readMexicoPopulationState(new URL(location.href), codes);
+  const compositionJSON=root.querySelector('[data-population-composition-config]')?.textContent;
+  const compositionData:MexicoCompositionData=compositionJSON?JSON.parse(compositionJSON):{referenceYear:2020,metrics:[]};
+  let composition=readMexicoCompositionSelection(new URL(location.href),compositionData,state.category);
+  captureMexicoPopulationComposition(root);
 
   function render() {
+    const compositionMetric=mexicoCompositionMetric(compositionData,state.category,composition.metric);
+    if(!compositionMetric)restoreMexicoPopulationComposition(root);
     const selected = population.states.find(row => row.stateCode === state.state)!;
     const region = mexicoPopulationRegionReading(state.state);
     const comparison = state.compare === 'scale';
@@ -135,19 +143,25 @@ export function initMexicoPopulation(root: HTMLElement) {
         ? '2020年の全32州の人口密度。色の凡例と全州の表で値を確認できます。'
         : '2020年の全32州の人口。円の面積の凡例と全州の表で値を確認できます。');
     query<HTMLElement>('[data-population-map-status]').textContent = referencePrefix + `2020年・${comparison ? '人口密度と人口規模' : state.view === 'density' ? '州全域の平均密度' : '州人口の規模'}。${state.only ? '選択州のデータのみ（州境は位置の参考）' : '全32州'}。${selected.nameJa}を選択。`;
+    renderMexicoPopulationComposition(root,compositionData,state,composition,population.states);
   }
 
   function update(patch: Partial<MexicoPopulationState>) {
     state = { ...state, ...patch };
-    history.pushState(null, '', writeMexicoPopulationState(new URL(location.href), state));
+    composition={...composition,metric:mexicoCompositionMetric(compositionData,state.category,composition.metric)?.id??''};
+    const next=writeMexicoCompositionSelection(writeMexicoPopulationState(new URL(location.href),state),composition,state.category);
+    composition=readMexicoCompositionSelection(next,compositionData,state.category);history.pushState(null,'',next);
     render();
   }
 
   for (const button of root.querySelectorAll<HTMLButtonElement>('[data-population-category]')) {
-    button.addEventListener('click', () => update({category: button.dataset.populationCategory as MexicoPopulationState['category']}));
+    button.addEventListener('click', () => {composition={...composition,compare:false,sourceQuery:null};update({category: button.dataset.populationCategory as MexicoPopulationState['category']});});
   }
 
-  query<HTMLSelectElement>('[data-population-view]').addEventListener('change', event => update({view:(event.target as HTMLSelectElement).value as MexicoPopulationState['view']}));
+  query<HTMLSelectElement>('[data-population-view]').addEventListener('change', event => {const value=(event.target as HTMLSelectElement).value;if(mexicoCompositionMetric(compositionData,state.category,composition.metric)){composition={...composition,measure:value==='count'?'count':'share'};update({});}else update({view:value as MexicoPopulationState['view']});});
+  root.querySelector<HTMLSelectElement>('[data-population-composition-metric]')?.addEventListener('change',event=>{composition={...composition,metric:(event.target as HTMLSelectElement).value,compare:false,sourceQuery:null};update({});});
+  root.querySelector<HTMLAnchorElement>('[data-population-composition-compare]')?.addEventListener('click',event=>{if(event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;event.preventDefault();composition=readMexicoCompositionSelection(new URL((event.currentTarget as HTMLAnchorElement).href),compositionData,state.category);update({});});
+  root.querySelector<HTMLAnchorElement>('[data-population-composition-return]')?.addEventListener('click',event=>{if(event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;event.preventDefault();const next=new URL((event.currentTarget as HTMLAnchorElement).href);state=readMexicoPopulationState(next,codes);composition=readMexicoCompositionSelection(next,compositionData,state.category);history.pushState(null,'',next);render();});
   query<HTMLSelectElement>('[data-population-state]').addEventListener('change', event => update({state:(event.target as HTMLSelectElement).value}));
   query<HTMLInputElement>('[data-population-only]').addEventListener('change', event => update({only:(event.target as HTMLInputElement).checked}));
   query<HTMLButtonElement>('[data-population-reset]').addEventListener('click', () => update({only:false}));
@@ -168,10 +182,11 @@ export function initMexicoPopulation(root: HTMLElement) {
     event.preventDefault();
     update({view:state.sourceView,compare:null});
   });
-  window.addEventListener('popstate', () => {state = readMexicoPopulationState(new URL(location.href), codes);render();});
+  window.addEventListener('popstate', () => {state = readMexicoPopulationState(new URL(location.href), codes);composition=readMexicoCompositionSelection(new URL(location.href),compositionData,state.category);const normalized=writeMexicoCompositionSelection(writeMexicoPopulationState(new URL(location.href),state),composition,state.category);if(normalized.href!==location.href)history.replaceState(history.state,'',normalized);render();});
+  history.replaceState(null,'',writeMexicoCompositionSelection(writeMexicoPopulationState(new URL(location.href),state),composition,state.category));
   render();
-  history.replaceState(null, '', writeMexicoPopulationState(new URL(location.href), state));
   for (const control of root.querySelectorAll<HTMLButtonElement | HTMLInputElement | HTMLSelectElement>('[data-population-view],[data-population-state],[data-population-only],[data-population-reset]')) control.disabled = false;
+  if(mexicoCompositionMetric(compositionData,state.category,composition.metric))query<HTMLSelectElement>('[data-population-view]').disabled=composition.compare;
   query<HTMLDetailsElement>('[data-population-table]').open = false;
   root.dataset.populationReady = '1';
 }
