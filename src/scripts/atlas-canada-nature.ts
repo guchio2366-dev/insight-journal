@@ -27,7 +27,7 @@ export function initCanadaNature(root:HTMLElement){
   const industryComparison=renderIndustryNatureComparison(root,config,state),populationComparison=renderPopulationNatureComparison(root,config,state),cropComparison=renderCanadaCropNatureComparison(root,state);root.classList.toggle('is-learning-comparison',!!savedForestry||industryComparison||populationComparison||cropComparison);root.classList.toggle('is-crop-comparison',cropComparison);
   const comparison=!!savedForestry||industryComparison||populationComparison||cropComparison;
   root.classList.toggle('is-landform-reading',state.view==='landform');
-  for(const detail of root.querySelectorAll<HTMLDetailsElement>('[data-canada-general-reading]')){const context=`${comparison}:${state.view}`;if(detail.dataset.comparison!==context){detail.open=!comparison&&state.view!=='landform';detail.dataset.comparison=context;}}
+  for(const detail of root.querySelectorAll<HTMLDetailsElement>('[data-canada-general-reading]')){const context=String(comparison);if(detail.dataset.comparison!==context){detail.open=!comparison&&!detail.closest('[data-canada-reading="landform"]');detail.dataset.comparison=context;}}
   $<HTMLSelectElement>('[data-canada-city]').value=state.city;
   $<HTMLSelectElement>('[data-canada-compare]').value=state.compare??'';
   for(const option of $<HTMLSelectElement>('[data-canada-compare]').options)option.disabled=option.value===state.city;

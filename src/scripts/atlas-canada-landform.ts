@@ -27,6 +27,8 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
   const focusButton = root.querySelector<HTMLButtonElement>('[data-canada-landform-focus]')!;
   const labels = [...root.querySelectorAll<HTMLButtonElement>('[data-canada-landform-label]')];
   const fullFrame: Frame = [0, 0, canadaLandformSize.width, canadaLandformSize.height];
+  const [worldLeft, worldTop] = projectCanadaLandform([-180, 85.051]);
+  const [worldRight, worldBottom] = projectCanadaLandform([180, -85.051]);
   const abort = new AbortController();
   root.dataset.canadaLandformRender = 'svg';
   let state: CanadaLandformState = { selected: null, only: false };
@@ -41,25 +43,42 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
   const select = (id: string) => { if (config.regions.some(region => region.id === id)) emit('canada-landform-select', { id }); };
   const listen = (target: EventTarget, name: string, handler: EventListener, options: AddEventListenerOptions = {}) => target.addEventListener(name, handler, { ...options, signal: abort.signal });
 
+  /** Move the complete Mercator viewport into the world; never clip its four edges separately. */
+  function clampFrame(next: Frame): Frame {
+    if (!next.every(Number.isFinite) || next[2] <= 0 || next[3] <= 0) return [...fullFrame];
+    const scale = Math.min(1, (worldRight - worldLeft) / next[2], (worldBottom - worldTop) / next[3]);
+    const width = next[2] * scale, height = next[3] * scale;
+    if (!(width > 0 && height > 0)) return [...fullFrame];
+    return [
+      Math.max(worldLeft, Math.min(worldRight - width, next[0] + (next[2] - width) / 2)),
+      Math.max(worldTop, Math.min(worldBottom - height, next[1] + (next[3] - height) / 2)),
+      width, height,
+    ];
+  }
   function cameraBounds(): CanadaLandformCameraBounds {
+    frame = clampFrame(frame);
     const [west, north] = unprojectCanadaLandform([frame[0], frame[1]]);
     const [east, south] = unprojectCanadaLandform([frame[0] + frame[2], frame[1] + frame[3]]);
-    return [Math.max(-180, west), Math.max(-85.051, south), Math.min(180, east), Math.min(85.051, north)].map(value => Math.round(value * 100000) / 100000) as CanadaLandformCameraBounds;
+    const bounds = [west, south, east, north].map(value => Math.round(value * 100000) / 100000) as CanadaLandformCameraBounds;
+    // Keep unusually small, restored cameras ordered at the host's five-decimal URL precision.
+    if (bounds[0] === bounds[2]) { bounds[0] = Math.floor(west * 100000) / 100000; bounds[2] = Math.ceil(east * 100000) / 100000; }
+    if (bounds[1] === bounds[3]) { bounds[1] = Math.floor(south * 100000) / 100000; bounds[3] = Math.ceil(north * 100000) / 100000; }
+    return bounds;
   }
   function setFrame(bounds: CanadaLandformCameraBounds) {
+    if (!bounds.every(Number.isFinite) || bounds[0] >= bounds[2] || bounds[1] >= bounds[3]) { frame = [...fullFrame]; return false; }
     const [left, bottom] = projectCanadaLandform([bounds[0], bounds[1]]), [right, top] = projectCanadaLandform([bounds[2], bounds[3]]);
-    frame = [left, top, Math.max(.001, right - left), Math.max(.001, bottom - top)];
+    frame = clampFrame([left, top, right - left, bottom - top]);
+    return true;
   }
   function syncMapFrame() {
     if (!ready || !map) return;
     const bounds = map.getBounds();
-    setFrame([Math.max(-180, bounds.getWest()), Math.max(-85.051, bounds.getSouth()), Math.min(180, bounds.getEast()), Math.min(85.051, bounds.getNorth())]);
+    setFrame([bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()]);
   }
   function commitCamera() {
     syncMapFrame();
     const bounds = cameraBounds();
-    // The fallback cannot pan beyond the geographic camera range serialized by the host.
-    if (!ready) setFrame(bounds);
     cameraKey = bounds.join(','); cameraCommitPending = false;
     draw(); emit('canada-landform-camera', { bounds });
   }
@@ -68,10 +87,13 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
     if (key === cameraKey) return;
     cameraKey = key; cameraCommitPending = false;
     if (!bounds) { fit(); return; }
-    fitted = false; setFrame(bounds);
+    if (!setFrame(bounds)) { fit(); return; }
+    fitted = false;
+    const normalized = cameraBounds(); cameraKey = normalized.join(',');
     if (ready && map) {
       programmaticCamera = true;
-      map.fitBounds([[bounds[0], bounds[1]], [bounds[2], bounds[3]]], { padding: 0, duration: 0 });
+      map.fitBounds([[normalized[0], normalized[1]], [normalized[2], normalized[3]]], { padding: 0, duration: 0 });
+      syncMapFrame();
       programmaticCamera = false;
     }
     draw();
@@ -101,6 +123,7 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
   }
 
   function draw() {
+    frame = clampFrame(frame);
     fallback.setAttribute('viewBox', frame.join(' '));
     for (const element of root.querySelectorAll<HTMLElement | SVGElement>('[data-canada-landform-shape],[data-canada-landform-label],[data-canada-landform-legend]')) {
       const id = element.getAttribute('data-canada-landform-shape') ?? element.getAttribute('data-canada-landform-label') ?? element.getAttribute('data-canada-landform-legend');
@@ -126,15 +149,15 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
   }
 
   function fit() {
-    fitted = true; frame = [...fullFrame]; cameraKey = 'fit'; cameraCommitPending = false;
-    if (ready && map) { programmaticCamera = true; map.fitBounds(canadaLandformBounds, { padding: { top: 18, right: 18, bottom: 18, left: 18 }, duration: 0 }); programmaticCamera = false; }
+    fitted = true; frame = clampFrame([...fullFrame]); cameraKey = 'fit'; cameraCommitPending = false;
+    if (ready && map) { programmaticCamera = true; map.fitBounds(canadaLandformBounds, { padding: { top: 18, right: 18, bottom: 18, left: 18 }, duration: 0 }); syncMapFrame(); programmaticCamera = false; }
     draw();
   }
   function zoom(direction: 'in' | 'out') {
     fitted = false;
     if (ready && map) { cameraCommitPending = true; direction === 'in' ? map.zoomIn({ duration: reducedMotion() ? 0 : 150 }) : map.zoomOut({ duration: reducedMotion() ? 0 : 150 }); return; }
     const factor = direction === 'in' ? .7 : 1 / .7;
-    const width = Math.max(30, Math.min(fullFrame[2] * 2, frame[2] * factor));
+    const width = Math.max(30, frame[2] * factor);
     const height = frame[3] * width / frame[2];
     frame = [frame[0] + (frame[2] - width) / 2, frame[1] + (frame[3] - height) / 2, width, height];
     commitCamera();
@@ -187,14 +210,14 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
           { id: 'canada-landform-fill', type: 'fill', source: 'canada-landform-regions', paint: { 'fill-color': ['get', 'color'], 'fill-opacity': 1 } },
           { id: 'canada-landform-boundaries', type: 'line', source: 'canada-landform-regions', paint: { 'line-color': '#69796e', 'line-width': .7 } },
           { id: 'canada-landform-selected', type: 'line', source: 'canada-landform-regions', filter: ['==', ['get', 'id'], '__none__'], paint: { 'line-color': '#243f4c', 'line-width': 3 } },
-        ] }, bounds: canadaLandformBounds, fitBoundsOptions: { padding: 18 }, maxBounds: [[-170, 20], [-30, 85]],
+        ] }, bounds: canadaLandformBounds, fitBoundsOptions: { padding: 18 },
         minZoom: .5, maxZoom: 9, attributionControl: false, renderWorldCopies: false, scrollZoom: false,
         cooperativeGestures: true, locale: { 'CooperativeGesturesHandler.MobileHelpText': '地図は２本指で動かせます' },
         dragRotate: false, pitchWithRotate: false, touchPitch: false, maxPitch: 0, fadeDuration: 0,
       });
       map.touchZoomRotate.disableRotation();
       loadTimer = setTimeout(fail, 15000);
-      map.on('error', fail);
+      map.on('error', event => { console.warn('Canada landform map switched to the same-source SVG fallback:', event.error?.message); fail(); });
       map.on('dragstart', () => { dragged = true; fitted = false; cameraCommitPending = true; });
       map.on('movestart', event => { if ('originalEvent' in event && event.originalEvent && !programmaticCamera) { fitted = false; cameraCommitPending = true; } });
       map.on('move', () => { syncMapFrame(); drawLabels(); });
@@ -210,10 +233,11 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
         if (fitted) fit(); else {
           const bounds = cameraBounds(); programmaticCamera = true;
           map.fitBounds([[bounds[0], bounds[1]], [bounds[2], bounds[3]]], { padding: 0, duration: 0 });
+          syncMapFrame();
           programmaticCamera = false; draw();
         }
       });
-    } catch { fail(); }
+    } catch (error) { console.warn('Canada landform renderer could not start:', error instanceof Error ? error.stack : String(error)); fail(); }
   }
 
   listen(root, 'click', event => {
