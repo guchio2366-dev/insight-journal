@@ -1,0 +1,108 @@
+{
+  "checks": {
+    "allCoordinatesFinite": true,
+    "allLineGeometriesValid": true,
+    "allContoursSimple": true,
+    "allVerticesWithinLandAtRoundingTolerance": true,
+    "uniqueFeatureIds": true,
+    "levelPropertiesMatch": true,
+    "nationalClipBoundsWithinWindow": true,
+    "groupedPartsPreserveAllSegments": true,
+    "uniqueGroupedFeatureIds": true
+  },
+  "allChecksPass": true,
+  "outsideVertices": 0,
+  "nonfiniteVertices": 0,
+  "invalidLineGeometries": 0,
+  "selfCrossingLines": 0,
+  "droppedDegenerateSegments": 2,
+  "featureCount": 6,
+  "contourSegmentCount": 19026,
+  "vertexCount": 245322,
+  "levelCounts": {
+    "500": 10639,
+    "1000": 5690,
+    "2000": 2613,
+    "3000": 73,
+    "4000": 10,
+    "5000": 1
+  },
+  "spots": [
+    {
+      "name": "Vancouver",
+      "requestedLonLat": [
+        -123.1207,
+        49.2827
+      ],
+      "nativeCellCentreLonLat": [
+        -123.125,
+        49.275
+      ],
+      "gridColumn": 1132,
+      "gridRow": 2083,
+      "elevationM": 19.764,
+      "insideLandMask": false
+    },
+    {
+      "name": "Winnipeg",
+      "requestedLonLat": [
+        -97.1384,
+        49.8951
+      ],
+      "nativeCellCentreLonLat": [
+        -97.14166667,
+        49.89166667
+      ],
+      "gridColumn": 2691,
+      "gridRow": 2046,
+      "elevationM": 232.101,
+      "insideLandMask": true
+    },
+    {
+      "name": "Toronto",
+      "requestedLonLat": [
+        -79.3832,
+        43.6532
+      ],
+      "nativeCellCentreLonLat": [
+        -79.375,
+        43.65833333
+      ],
+      "gridColumn": 3757,
+      "gridRow": 2420,
+      "elevationM": 94.332,
+      "insideLandMask": true
+    },
+    {
+      "name": "Mount Logan vicinity",
+      "requestedLonLat": [
+        -140.4058,
+        60.5672
+      ],
+      "nativeCellCentreLonLat": [
+        -140.40833333,
+        60.575
+      ],
+      "gridColumn": 95,
+      "gridRow": 1405,
+      "elevationM": 5640.728,
+      "insideLandMask": true
+    },
+    {
+      "name": "Banff",
+      "requestedLonLat": [
+        -115.5708,
+        51.1784
+      ],
+      "nativeCellCentreLonLat": [
+        -115.575,
+        51.175
+      ],
+      "gridColumn": 1585,
+      "gridRow": 1969,
+      "elevationM": 1391.348,
+      "insideLandMask": true
+    }
+  ],
+  "spotInterpretation": "Nearest native cell centres; these are coarse DEM spot checks, not exact city or summit heights."
+}

@@ -1,4 +1,4 @@
-export const canadaViews=['climate','landform','water'] as const;
+export const canadaViews=['climate','landform','water','elevation'] as const;
 export type CanadaView=typeof canadaViews[number];
 export const canadaLandformIds=['cordillera','interior-plains','canadian-shield','great-lakes-st-lawrence-lowlands','appalachian-uplands','hudson-bay-lowland','arctic-lands'] as const;
 export interface CanadaNatureState{city:string;compare:string|null;view:CanadaView;water:string|null;only:boolean;frame:number[]|null;landform:string|null;landformOnly:boolean;landformBounds:[number,number,number,number]|null}

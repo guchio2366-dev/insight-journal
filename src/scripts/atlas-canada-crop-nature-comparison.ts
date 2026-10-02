@@ -11,6 +11,7 @@ const maps=new WeakMap<HTMLElement,CropMap>();
 
 function question(crop:CanadaCropId,label:string,state:CanadaNatureState){
  const city=cityNames[state.city]??'選んだ観測点';
+ if(state.view==='elevation')return '地域別申告値と同じ標高を結ぶ等高線を左右で照合します。山地の高さと平原の位置は生育・機械作業・交通の条件を考える手掛かりで、作付けや飼養の原因を高さだけで決めません。';
  if(state.view==='landform')return crop==='beef'?'プレーリーの平原と西部の山地を、母牛・放牧地・飼料作物の地域別申告値と別図で照合します。草の生育する場所と季節を、放牧の頭数・期間や冬の貯蔵飼料の管理へどうつなぐでしょうか。':'プレーリー南部の地域別申告面積を、内陸平原と山地の位置に照合します。生育条件を、播種・収穫・貯蔵をつなぐ機械と人の管理へどう結び付けるでしょうか。';
  if(state.view==='water'){
   const water=state.water?`${state.water}${state.only?'だけ':'を選んだ全水系'}`:'湖・川の全体';
@@ -74,11 +75,11 @@ export function renderCanadaCropNatureComparison(root:HTMLElement,state:CanadaNa
  back.href=comparison.returnUrl.href;back.textContent=comparison.returnLabel;
  title.textContent=`${product.label}：2021年の地域別申告値（${product.unit}）`;
  key.textContent=`全国公表値 ${product.national.value?.toLocaleString('ja-JP')??'非公表'} ${product.unit}。CCS境界は実際の畑・放牧地・牛の所在地ではありません。`;
- heading.textContent=`${product.label}と${state.view==='climate'?`${cityNames[state.city]??'観測点'}の季節`:state.view==='landform'?'平原・山地':'湖・川'}を比べる`;
+ heading.textContent=`${product.label}と${state.view==='climate'?`${cityNames[state.city]??'観測点'}の季節`:state.view==='landform'?'平原・山地':state.view==='elevation'?'標高の等高線':'湖・川'}を比べる`;
  const mechanism=$('[data-canada-crop-mechanism]');
  if(mechanism)mechanism.textContent=question(comparison.crop,product.label,state);
- text.textContent=state.view==='climate'?(state.city==='regina'||state.city==='winnipeg'?`${cityNames[state.city]}の気温・降水の季節配分を、${product.label}の申告値の場所と比べます。`:`現在は${cityNames[state.city]??'別の観測点'}。元の問いはReginaの季節と${product.label}の地域分布です。`):state.view==='landform'?`地形地域の位置を、${product.label}の地域別申告値と比べます。`:`${state.water?state.water+(state.only?'だけ':'と全水系'):'湖・川'}の位置を、${product.label}の地域別申告値と比べます。位置は使える水量を示しません。`;
- scope.textContent=state.view==='climate'?`申告値2021年／気候1991–2020年。${cityNames[state.city]??'観測点'}は1地点で、地域平均・土壌水分ではありません。`:state.view==='landform'?'申告値2021年／地形GIS公開2019年。地形の色は標高・農地ではありません。':'申告値2021年／水系はNatural Earth v5.1.2の概形。流量の測定ではありません。';
+ text.textContent=state.view==='climate'?(state.city==='regina'||state.city==='winnipeg'?`${cityNames[state.city]}の気温・降水の季節配分を、${product.label}の申告値の場所と比べます。`:`現在は${cityNames[state.city]??'別の観測点'}。元の問いはReginaの季節と${product.label}の地域分布です。`):state.view==='elevation'?`標高の等高線を、${product.label}の地域別申告値と左右で照合します。高さは生産の可否を単独で決めません。`:state.view==='landform'?`地形地域の位置を、${product.label}の地域別申告値と比べます。`:`${state.water?state.water+(state.only?'だけ':'と全水系'):'湖・川'}の位置を、${product.label}の地域別申告値と比べます。位置は使える水量を示しません。`;
+ scope.textContent=state.view==='climate'?`申告値2021年／気候1991–2020年。${cityNames[state.city]??'観測点'}は1地点で、地域平均・土壌水分ではありません。`:state.view==='elevation'?'申告値2021年／ETOPO2022の60秒格子から等高線（m・EGM2008）。農地の起伏や道路勾配を直接測った図ではありません。':state.view==='landform'?'申告値2021年／地形GIS公開2019年。地形の色は標高・農地ではありません。':'申告値2021年／水系はNatural Earth v5.1.2の概形。流量の測定ではありません。';
  if(origin)originText(origin,comparison);
  return true;
 }

@@ -1,0 +1,52 @@
+---
+import geography from '../../data/atlas/regional-countries.json';
+import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import { canadaLandformSize, projectCanadaLandform } from '../../lib/atlas-canada-landform-map';
+import { canadaNaturalPath, canadaNaturalIsLine, prepareCanadaNaturalLayer, type CanadaNaturalCollection, type CanadaNaturalGeometry, type CanadaNaturalGroup, type CanadaNaturalLayer, type CanadaNaturalSource, type CanadaNaturalStation } from '../../lib/atlas-canada-natural-layer';
+import '../../styles/atlas-canada-natural-layer.css';
+
+interface Props {
+  layer: CanadaNaturalLayer; geometry: CanadaNaturalCollection | string; groups: CanadaNaturalGroup[]; geometryUrl: string;
+  stations?: CanadaNaturalStation[]; source?: CanadaNaturalSource; hidden?: boolean; selected?: string | null; only?: boolean; city?: string | null;
+}
+const { layer, geometry: input, groups, geometryUrl, stations = [], source = {}, hidden = true, selected = null, only = false, city = null } = Astro.props;
+const geometry = prepareCanadaNaturalLayer(typeof input === 'string' ? JSON.parse(input) : input, groups);
+const context = { type: 'FeatureCollection', features: geography.features.filter(feature => ['CAN', 'USA', 'GRL'].includes(feature.properties.code)) };
+const config = { layer, groups, geometryUrl, stations, context, workerUrl };
+const fullFrame = `0 0 ${canadaLandformSize.width} ${canadaLandformSize.height}`;
+const heading = layer === 'climate' ? 'カナダの気候区分' : 'カナダの標高と等高線';
+const titleId = `canada-natural-${layer}-title`, descId = `canada-natural-${layer}-desc`;
+const paths = groups.map(group => ({ group, fill: geometry.features.filter(feature => feature.properties.id === group.id && !canadaNaturalIsLine(feature.geometry)).map(feature => canadaNaturalPath(feature.geometry)).join(''), line: geometry.features.filter(feature => feature.properties.id === group.id && canadaNaturalIsLine(feature.geometry)).map(feature => canadaNaturalPath(feature.geometry)).join('') }));
+---
+<section class="canada-natural-layer" data-canada-natural-layer={layer} hidden={hidden} aria-label={heading}>
+  <h2 class="visually-hidden">{heading}</h2>
+  <div class="atlas-map-frame canada-natural-frame" data-canada-natural-stage>
+    <svg class="canada-natural-fallback" data-canada-natural-fallback viewBox={fullFrame} width={canadaLandformSize.width} height={canadaLandformSize.height} role="group" tabindex="0" aria-labelledby={`${titleId} ${descId}`}>
+      <title id={titleId}>{heading}</title>
+      <desc id={descId}>{layer === 'climate' ? '気候区分を原データの境界で色分けします。丸印は別の気候平年値観測地点です。' : '標高区分と原データから作成した等高線を表示します。線の凡例を選ぶとその標高を確認できます。'} 地図か凡例で区分を選択し、拡大ボタンと矢印キーで移動できます。</desc>
+      <rect x="-2000" y="-2000" width="5000" height="5000" fill="#e4eff0" />
+      <g aria-hidden="true">{context.features.map(feature => <path class="canada-natural-context" d={canadaNaturalPath(feature.geometry as CanadaNaturalGeometry)} fill-rule="evenodd" vector-effect="non-scaling-stroke" />)}</g>
+      <g>{paths.map(({group, fill, line}) => <g class:list={['canada-natural-shape', {'is-selected': selected === group.id}]} data-canada-natural-shape={group.id} role="button" tabindex="0" aria-label={`${group.name}を選ぶ`} aria-pressed={String(selected === group.id)} hidden={only && !!selected && selected !== group.id}>
+        <title>{group.name}：{group.description}</title>
+        {fill && <path class="canada-natural-area" d={fill} fill={group.color} fill-rule="evenodd" vector-effect="non-scaling-stroke" />}
+        {line && <><path class="canada-natural-line" d={line} fill="none" stroke={group.color} vector-effect="non-scaling-stroke" /><path class="canada-natural-line-hit" d={line} fill="none" stroke="transparent" vector-effect="non-scaling-stroke" /></>}
+      </g>)}</g>
+      <g class="canada-natural-static-stations" data-canada-natural-static-stations>{stations.map(station => { const [x,y] = projectCanadaLandform(station.coordinates); return <g class:list={['canada-natural-static-station',{'is-selected':city===station.id}]} data-canada-natural-static-city={station.id} role="button" tabindex="0" aria-label={`${station.name}の気候平年値を読む`} aria-pressed={String(city===station.id)}><title>{station.name}：気候平年値の観測地点</title><circle cx={x} cy={y} r="5" vector-effect="non-scaling-stroke" /><text x={x+9} y={y+4}>{station.name}</text></g>; })}</g>
+    </svg>
+    <div class="canada-natural-live" data-canada-natural-live aria-label={`${heading}の操作できる地図`} hidden></div>
+    <div class="canada-natural-stations" data-canada-natural-stations>{stations.map(station => <button type="button" class:list={['canada-natural-station', {'is-selected':city===station.id}]} data-canada-natural-city={station.id} aria-label={`${station.name}の気候平年値を読む`} aria-pressed={String(city===station.id)} hidden><i aria-hidden="true"></i><span>{station.name}</span></button>)}</div>
+    <div class="canada-natural-tools" aria-label="地図の操作">
+      <button type="button" data-canada-natural-reset aria-label="カナダ全体を表示">全体</button>
+      <button type="button" data-canada-natural-zoom="in" aria-label="地図を拡大">＋</button>
+      <button type="button" data-canada-natural-zoom="out" aria-label="地図を縮小">−</button>
+      <button type="button" data-canada-natural-focus aria-label="選んだ区分へ移動" disabled={!selected}>選択へ</button>
+    </div>
+  </div>
+  <div class="canada-natural-key" aria-label={`${heading}の凡例`}>{groups.map(group => <button type="button" data-canada-natural-legend={group.id} aria-pressed={String(selected===group.id)} aria-label={`${group.id} ${group.name}を選ぶ`} title={`${group.name}：${group.description}`}><i style={`background:${group.color}`} aria-hidden="true"></i><span>{layer==='climate'?group.id:group.name}</span>{layer==='climate'&&<small>{({BSk:'ステップ',Csb:'夏乾燥',Cfb:'西岸海洋',Cfc:'冷夏',Dsb:'夏乾燥',Dsc:'夏乾燥冷夏',Dwb:'冬乾燥',Dwc:'冬乾燥冷夏',Dfa:'高温夏',Dfb:'温暖夏',Dfc:'冷夏',Dfd:'厳冬',ET:'ツンドラ',EF:'氷雪'} as Record<string,string>)[group.id]}</small>}</button>)}</div>
+  <div class="canada-natural-options"><label class="canada-natural-only"><input type="checkbox" data-canada-natural-only checked={only && !!selected} disabled={!selected} /> 選んだ区分だけ表示</label><p class="canada-natural-status" data-canada-natural-status role="status" aria-live="polite">地図か凡例で区分を選べます。</p></div>
+  <p class="canada-natural-caption">{layer === 'climate' ? '色は気候区分、丸は気候平年値の観測地点です。地域の分類と一点の観測を分けて読みます。' : '色と線は標高（m）です。等高線は原データの地形から作成しています。'} {source.catalogueUrl && <a href={source.catalogueUrl}>出典・利用条件</a>} <a href={geometryUrl}>地図データ</a></p>
+  {(source.title || source.attribution) && <details class="canada-natural-sources"><summary>{heading}の出典</summary><p>{source.publisher} {source.title}。{source.brief}</p><p>{source.licenceUrl && <a href={source.licenceUrl}>{source.licence || '利用条件'}</a>} {source.attribution}</p></details>}
+  <noscript><p class="canada-natural-caption">境界・等高線と凡例をこの地図で確認できます。区分の選択・移動には JavaScript が必要です。</p></noscript>
+  <script type="application/json" data-canada-natural-config set:html={JSON.stringify(config).replace(/</g, '\\u003c')} />
+</section>
