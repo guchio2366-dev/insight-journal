@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile,access} from 'node:fs/promises';
-import {transform} from 'esbuild';
+import {transform,build} from 'esbuild';
 import {Window} from 'happy-dom';
 
 // Asia and Oceania's published overviews have dedicated contracts in their overview test files.
@@ -9,6 +9,7 @@ const regions=['north-america','europe','latin-america','africa'];
 const mapController=await readFile('src/scripts/atlas-overview-map.ts','utf8');
 const pageController=(await readFile('src/scripts/atlas-country-overview.ts','utf8')).replace(/^import .* from ['"]\.\/atlas-overview-map['"];?\r?\n/m,'');
 const controller=(await transform(`${mapController}\n${pageController}\ninitCountryOverview(document.querySelector('[data-country-overview]'));`,{loader:'ts',format:'iife'})).code;
+const europeController=(await build({entryPoints:['src/scripts/atlas-europe-country-overview.ts'],bundle:true,write:false,format:'iife',globalName:'EuropeOverview'})).outputFiles[0].text+';EuropeOverview.initEuropeCountryOverview(document.querySelector("[data-country-overview]"));';
 async function page(region,search='',interactive=false){
   const w=new Window({url:`https://example.com/insight-journal/atlas/${region}/overview/${search}`,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:interactive,suppressInsecureJavaScriptEnvironmentWarning:true}});
   w.document.body.innerHTML=(await readFile(`dist/atlas/${region}/overview/index.html`,'utf8')).replace(/<script(?![^>]*type="application\/json")[^>]*>[\s\S]*?<\/script>/g,'');
@@ -16,7 +17,7 @@ async function page(region,search='',interactive=false){
     const stage=w.document.querySelector('[data-overview-map-stage]');
     Object.defineProperty(stage,'clientWidth',{value:1000});
     Object.defineProperty(stage,'clientHeight',{value:680});
-    w.eval(controller);
+    w.eval(region==='europe'?europeController:controller);
   }
   return w;
 }
@@ -269,12 +270,13 @@ test('共通概要4地域の初期HTMLは白地図と地域概況を示し、国
       const mapSources=[...d.querySelectorAll('.overview-map-source a')];
       assert.ok(mapSources.some(link=>link.href.startsWith('https://www.naturalearthdata.com/')||link.href.startsWith('https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/')),region);
       assert.ok(mapSources.every(link=>link.textContent.trim()&&new URL(link.href).protocol==='https:'));
-      assert.deepEqual([...d.querySelectorAll('[role=tab]')].map(t=>t.textContent),['農林業','自然環境','主要産業','人口','政治']);
+      assert.deepEqual([...d.querySelectorAll('[role=tab]')].map(t=>t.textContent),['農林業','自然環境',region==='europe'?'産業':'主要産業','人口','政治']);
       assert.equal(d.querySelector('[data-overview-country-detail]').hidden,true);
       assert.equal(d.querySelector('[data-overview-detail-link]').hidden,true);
       assert.equal(visiblePanels(d).length,0);
       assert.match(d.querySelector('h1').textContent,/の概要と白地図/);
-      assert.match(d.querySelector('.country-overview-status').textContent,/準備中/);
+      if(region==='europe')assert.equal(d.querySelector('.country-overview-status'),null);
+      else assert.match(d.querySelector('.country-overview-status').textContent,/準備中/);
       assert.equal(d.querySelectorAll('[data-news-location]').length,0,'記事側の分野地図用操作を概要では表示しない');
       const reading=d.querySelector('.overview-region-reading');
       assert.ok(reading&&!reading.closest('[hidden]'));
@@ -346,7 +348,7 @@ test('国とテーマの直接指定・国変更・キーボード操作・履�
     selected().dispatchEvent(new w.KeyboardEvent('keydown',{key:'End',bubbles:true}));assert.equal(selected().dataset.overviewTopic,'politics');assert.equal(d.activeElement,selected());
     w.history.replaceState({},'','?country=GBR&topic=population');w.dispatchEvent(new w.PopStateEvent('popstate'));
     assert.equal(picker.value,'GBR');assert.equal(selected().dataset.overviewTopic,'population');
-    assert.match(visiblePanels(d)[0].querySelector('.country-overview-introduction h2').textContent,/イギリスの人口/);assert.deepEqual(selectedCountries(d),['GBR']);
+    assert.ok(visiblePanels(d)[0].querySelector('[data-eu-country-takeaway]').textContent.trim());assert.match(d.querySelector('#overview-country-title').textContent,/イギリス/);assert.deepEqual(selectedCountries(d),['GBR']);
     w.history.replaceState({},'','?country=XXX&topic=unknown');w.dispatchEvent(new w.PopStateEvent('popstate'));
     assert.equal(picker.value,'');assert.equal(visiblePanels(d).length,0);assert.deepEqual(selectedCountries(d),[]);
   }finally{await w.happyDOM.close();}
@@ -362,8 +364,10 @@ test('都市選択と直接リンクが所属国を選び、国を変更する�
     assert.equal(d.querySelector('[data-overview-country]').value,city.country);assert.equal(new URL(w.location.href).searchParams.get('city'),city.id);
     assert.deepEqual(selectedCountries(d),[city.country]);assert.equal(d.querySelector('[data-overview-country-detail]').hidden,false);
     assert.ok(d.querySelector('[data-overview-place-title]').textContent.includes(city.name));assert.equal(target.getAttribute('aria-pressed'),'true');
+    const cityLabel=d.querySelector('[data-eu-country-selected-city]');assert.equal(cityLabel.closest('[hidden]'),null);assert.ok(cityLabel.textContent.includes(city.name),'selected city is named in the visible country heading');
     const picker=d.querySelector('[data-overview-country]');picker.value=city.country==='FRA'?'DEU':'FRA';picker.dispatchEvent(new w.Event('change'));
     assert.equal(new URL(w.location.href).searchParams.has('city'),false);assert.equal(d.querySelectorAll('[data-overview-map-city][aria-pressed=true]').length,0);
+    assert.equal(cityLabel.hidden,true);
   }finally{await w.happyDOM.close();}
   const direct=await page('europe',`?city=${encodeURIComponent(city.id)}&topic=nature`,true);
   try{

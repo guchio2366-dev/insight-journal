@@ -1,0 +1,2164 @@
+{
+  "countries": {
+    "RUS": {
+      "industry": {
+        "takeaway": "ロシア全土の産業構成と、西部だけの表示範囲を分けて読む。",
+        "body": "2023年のGDPに占める鉱工業・建設業は30.8%、その内数である製造業は13.0%です。アジア側を含む全国値なので、欧州側に見える都市や施設だけの産業構成には置き換えられません。",
+        "sourceIds": [
+          "society-wdi-industry",
+          "society-wdi-manufacturing"
+        ],
+        "links": [
+          {
+            "label": "鉱工業・建設業のGDP比率",
+            "href": "/atlas/europe/industry/?place=RUS&layer=industry"
+          },
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=RUS&layer=manufacturing"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "モスクワ周辺の密度と、ロシア全土の人口を同じ範囲で比べない。",
+        "body": "2023年の全国人口は143,826,130人で、アジア側も含みます。2020年の5km人口密度図ではモスクワとサンクトペテルブルク周辺を見比べ、表示枠の外の人口を図から推定しません。",
+        "sourceIds": [
+          "society-wdi-population",
+          "society-ghsl",
+          "society-ne-cities"
+        ],
+        "links": [
+          {
+            "label": "モスクワ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=RUS&layer=density&feature=city-1159151585"
+          },
+          {
+            "label": "サンクトペテルブルク周辺の人口密度",
+            "href": "/atlas/europe/population/?place=RUS&layer=density&feature=city-1159151291"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=RUS&layer=urban"
+          }
+        ]
+      }
+    },
+    "NOR": {
+      "industry": {
+        "takeaway": "製造業だけでは、ノルウェーの産業部門をどこまで読めるか。",
+        "body": "2023年のGDP比は、製造業5.6%に対し鉱工業・建設業が37.9%です。後者には鉱業・電気ガス水道・建設も含まれるので、この差を製造施設の多少とは読み替えません。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-industry"
+        ],
+        "links": [
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=NOR&layer=manufacturing"
+          },
+          {
+            "label": "鉱工業・建設業のGDP比率",
+            "href": "/atlas/europe/industry/?place=NOR&layer=industry"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "オスロとトロムソの間で、都市の間隔と人口密度を追う。",
+        "body": "2023年の都市人口比率は83.1%です。2020年の5km密度図でオスロとトロムソの周辺、さらに都市の間の地域を比べ、全国の都市比率から北部の密度を決めつけないようにします。",
+        "sourceIds": [
+          "society-wdi-urban",
+          "society-ghsl",
+          "society-ne-cities"
+        ],
+        "links": [
+          {
+            "label": "オスロ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=NOR&layer=density&feature=city-1159151281"
+          },
+          {
+            "label": "トロムソ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=NOR&layer=density&feature=city-1159150639"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=NOR&layer=urban"
+          }
+        ]
+      }
+    },
+    "FRA": {
+      "industry": {
+        "takeaway": "サービス業の大きい国で、航空機の最終組立はどこにあるか。",
+        "body": "2023年のGDP比はサービス業70.2%、製造業9.8%です。Airbusのトゥールーズの最終組立拠点を選び、全国の産業構成と国際的な生産網の一地点を読み分けます。",
+        "sourceIds": [
+          "society-wdi-services",
+          "society-wdi-manufacturing",
+          "society-hub-toulouse"
+        ],
+        "evidenceNote": "全国値の海外領土の算入は原統計の範囲に従います。欧州側だけの地図と全国値の分母は一致しません。",
+        "links": [
+          {
+            "label": "トゥールーズの拠点",
+            "href": "/atlas/europe/industry/?place=FRA&layer=hubs&feature=toulouse"
+          },
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=FRA&layer=services"
+          },
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=FRA&layer=manufacturing"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "パリとマルセイユでは、人口の連続する範囲をどう比べられるか。",
+        "body": "パリとマルセイユを2020年の5km人口密度図で見比べ、都市点の外側に広がる濃淡も確認します。2023年の都市人口比率78.8%は全国値で、表示枠にあるフランスの欧州部分だけを分母にした割合ではありません。",
+        "sourceIds": [
+          "society-ne-cities",
+          "society-ghsl",
+          "society-wdi-urban"
+        ],
+        "links": [
+          {
+            "label": "パリ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=FRA&layer=density&feature=city-1159151613"
+          },
+          {
+            "label": "マルセイユ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=FRA&layer=density&feature=city-1159150037"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=FRA&layer=urban"
+          }
+        ]
+      }
+    },
+    "SWE": {
+      "industry": {
+        "takeaway": "北部の鉄鉱石拠点と、全国の製造業比率を結びつけて読む。",
+        "body": "LKABが紹介するキルナの鉄鉱石採掘拠点は、都市の人口集中とは別の立地を確かめる例です。2023年の製造業GDP比13.4%は国全体の付加価値で、鉱石の生産量やキルナの雇用数ではありません。",
+        "sourceIds": [
+          "society-hub-kiruna",
+          "society-wdi-manufacturing"
+        ],
+        "links": [
+          {
+            "label": "キルナの拠点",
+            "href": "/atlas/europe/industry/?place=SWE&layer=hubs&feature=kiruna"
+          },
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=SWE&layer=manufacturing"
+          },
+          {
+            "label": "鉱工業・建設業のGDP比率",
+            "href": "/atlas/europe/industry/?place=SWE&layer=industry"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "ストックホルムとルレオで、都市周辺と都市の間を見比べる。",
+        "body": "2023年の都市人口比率は88.6%です。2020年の5km密度図でストックホルムとルレオを選び、全国の都市比率の高さと、南北のどこに人が分布するかを別の問いとして扱います。",
+        "sourceIds": [
+          "society-wdi-urban",
+          "society-ghsl",
+          "society-ne-cities"
+        ],
+        "links": [
+          {
+            "label": "ストックホルム周辺の人口密度",
+            "href": "/atlas/europe/population/?place=SWE&layer=density&feature=city-1159151507"
+          },
+          {
+            "label": "ルレオ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=SWE&layer=density&feature=city-1159149399"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=SWE&layer=urban"
+          }
+        ]
+      }
+    },
+    "BLR": {
+      "industry": {
+        "takeaway": "製造業2割超とサービス業5割未満の構成を、国別図で比べる。",
+        "body": "2023年のGDP比は製造業22.2%、サービス業48.8%です。製造業の比率を地図で近隣国と比べ、工場の分布や就業者比率とは異なる国単位の指標を読みます。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-services"
+        ],
+        "links": [
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=BLR&layer=manufacturing"
+          },
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=BLR&layer=services"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "都市人口比率が高い年でも、全国人口は増えるとは限らない。",
+        "body": "2023年は都市人口比率78.8%、人口増加率-0.5%でした。ミンスクとブレストの2020年5km密度図を比べ、都市の配置と、別年の全国人口の変化を切り分けます。",
+        "sourceIds": [
+          "society-wdi-urban",
+          "society-wdi-growth",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "ミンスク周辺の人口密度",
+            "href": "/atlas/europe/population/?place=BLR&layer=density&feature=city-1159151149"
+          },
+          {
+            "label": "ブレスト周辺の人口密度",
+            "href": "/atlas/europe/population/?place=BLR&layer=density&feature=city-1159150351"
+          },
+          {
+            "label": "人口増加率",
+            "href": "/atlas/europe/population/?place=BLR&layer=growth"
+          }
+        ]
+      }
+    },
+    "UKR": {
+      "industry": {
+        "takeaway": "ウクライナの2023年の経済指標と、地図の対象年をそろえて考える。",
+        "body": "2023年のGDP比では製造業が8.3%、サービス業が61.2%です。国単位の付加価値を確認してから2020年の人口図へ移り、異なる年の資料を現在の工場稼働や需要の説明に使わないようにします。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-services",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=UKR&layer=manufacturing"
+          },
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=UKR&layer=services"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "大きな人口変化を、2020年の密度図で説明しない。",
+        "body": "2023年の全国人口増加率は-8.4%です。キーウとハルキウを示す2020年の5km密度図は、その後の移動・避難状況を表していないため、現在の居住分布とは区別して読みます。",
+        "sourceIds": [
+          "society-wdi-growth",
+          "society-ghsl",
+          "society-ne-cities"
+        ],
+        "links": [
+          {
+            "label": "キーウ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=UKR&layer=density&feature=city-1159151495"
+          },
+          {
+            "label": "ハルキウ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=UKR&layer=density&feature=city-1159149333"
+          },
+          {
+            "label": "人口増加率",
+            "href": "/atlas/europe/population/?place=UKR&layer=growth"
+          }
+        ]
+      }
+    },
+    "POL": {
+      "industry": {
+        "takeaway": "ポーランドの製造業の比重を、サービス業の比重と見比べる。",
+        "body": "2023年の製造業GDP比は17.5%、サービス業は58.2%です。製造業の国別図でドイツ・チェコとの比率差を確認し、同じ色の国にも異なる都市配置があることを人口図で考えます。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-services",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=POL&layer=manufacturing"
+          },
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=POL&layer=services"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "ワルシャワ、グダニスク、クラクフの間で分布の連続性を追う。",
+        "body": "2020年の5km人口密度図で、ワルシャワとグダニスクの都市周辺から、都市間の濃淡へ視線を広げます。2023年の都市人口比率59.9%は各国の都市定義による値で、市街地が占める面積の割合ではありません。",
+        "sourceIds": [
+          "society-ne-cities",
+          "society-ghsl",
+          "society-wdi-urban"
+        ],
+        "links": [
+          {
+            "label": "ワルシャワ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=POL&layer=density&feature=city-1159151299"
+          },
+          {
+            "label": "グダニスク周辺の人口密度",
+            "href": "/atlas/europe/population/?place=POL&layer=density&feature=city-1159149707"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=POL&layer=urban"
+          }
+        ]
+      }
+    },
+    "AUT": {
+      "industry": {
+        "takeaway": "オーストリアとスイスで、製造業の比率はどう違うか。",
+        "body": "2023年の製造業GDP比はオーストリア15.9%、スイス19.4%です。オーストリアのサービス業は62.6%で、首都ウィーンの機能とは分けて国全体の構成を読みます。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-services",
+          "society-ne-cities"
+        ],
+        "links": [
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=AUT&layer=manufacturing"
+          },
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=AUT&layer=services"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "ウィーンの周辺から、全国の都市比率とは異なる地域差を読む。",
+        "body": "2023年の都市人口比率は69.2%で、65歳以上の割合は20.2%です。2020年の5km密度図をウィーンから国内各地へたどり、全国平均から地域ごとの年齢構成を推定せずに人口の濃淡を比べます。",
+        "sourceIds": [
+          "society-wdi-urban",
+          "society-wdi-age",
+          "society-ghsl",
+          "society-ne-cities"
+        ],
+        "links": [
+          {
+            "label": "ウィーン周辺の人口密度",
+            "href": "/atlas/europe/population/?place=AUT&layer=density&feature=city-1159151563"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=AUT&layer=urban"
+          },
+          {
+            "label": "65歳以上の割合",
+            "href": "/atlas/europe/population/?place=AUT&layer=age"
+          }
+        ]
+      }
+    },
+    "HUN": {
+      "industry": {
+        "takeaway": "ハンガリーとポーランドで、近い製造業比率の構成を比較する。",
+        "body": "2023年の製造業GDP比はハンガリー17.2%、ポーランド17.5%です。ハンガリーの鉱工業・建設業25.4%は製造業を内包する区分なので、比率を足し合わせずに全国の構成を読みます。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-industry",
+          "society-wdi-services"
+        ],
+        "links": [
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=HUN&layer=manufacturing"
+          },
+          {
+            "label": "鉱工業・建設業のGDP比率",
+            "href": "/atlas/europe/industry/?place=HUN&layer=industry"
+          },
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=HUN&layer=services"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "ブダペスト周辺の密度と、全国の高齢化を別の尺度で読む。",
+        "body": "2023年の65歳以上の割合は20.8%です。ブダペストの周辺を2020年の5km密度図で確認し、全国の年齢割合を首都やドナウ川沿いの地域別の値には置き換えません。",
+        "sourceIds": [
+          "society-wdi-age",
+          "society-ghsl",
+          "society-ne-cities"
+        ],
+        "links": [
+          {
+            "label": "ブダペスト周辺の人口密度",
+            "href": "/atlas/europe/population/?place=HUN&layer=density&feature=city-1159151257"
+          },
+          {
+            "label": "65歳以上の割合",
+            "href": "/atlas/europe/population/?place=HUN&layer=age"
+          }
+        ]
+      }
+    },
+    "MDA": {
+      "industry": {
+        "takeaway": "製造業が1割を下回る構成を、ルーマニアと比較する。",
+        "body": "2023年の製造業GDP比はモルドバ8.4%、ルーマニア13.9%です。モルドバのサービス業61.5%も国別図で確認し、製造業の比率だけでは捉えられない全国の構成を読みます。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-services"
+        ],
+        "links": [
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=MDA&layer=manufacturing"
+          },
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=MDA&layer=services"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "キシナウの位置と、全国人口が減った年の指標を読み分ける。",
+        "body": "2023年の都市人口比率は43.0%、人口増加率は-2.8%でした。キシナウ周辺の2020年5km密度図は、2023年の減少が起きた地域や理由を示すものではありません。",
+        "sourceIds": [
+          "society-wdi-urban",
+          "society-wdi-growth",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "キシナウ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=MDA&layer=density&feature=city-1159150677"
+          },
+          {
+            "label": "人口増加率",
+            "href": "/atlas/europe/population/?place=MDA&layer=growth"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=MDA&layer=urban"
+          }
+        ]
+      }
+    },
+    "ROU": {
+      "industry": {
+        "takeaway": "西欧の最終組立だけでなく、ルーマニアの航空機部材拠点も読む。",
+        "body": "Airbus Aerostructuresが紹介するブラショフの生産拠点は、国境を越えた生産体制の一地点です。2023年の全国の製造業GDP比13.9%と併せて見て、施設の立地と国の構成を分けて考えます。",
+        "sourceIds": [
+          "society-hub-brasov",
+          "society-wdi-manufacturing"
+        ],
+        "links": [
+          {
+            "label": "ブラショフの拠点",
+            "href": "/atlas/europe/industry/?place=ROU&layer=hubs&feature=brasov"
+          },
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=ROU&layer=manufacturing"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "ブカレストとコンスタンツァで、都市周辺と都市間を確かめる。",
+        "body": "2023年の都市人口比率は52.2%です。2020年の5km密度図でブカレストとコンスタンツァを選び、都市点の位置と周囲の人口分布を別々に確認します。",
+        "sourceIds": [
+          "society-wdi-urban",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "ブカレスト周辺の人口密度",
+            "href": "/atlas/europe/population/?place=ROU&layer=density&feature=city-1159151263"
+          },
+          {
+            "label": "コンスタンツァ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=ROU&layer=density&feature=city-1159149397"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=ROU&layer=urban"
+          }
+        ]
+      }
+    },
+    "LTU": {
+      "industry": {
+        "takeaway": "バルト3国で、製造業がGDPに占める比重を比べる。",
+        "body": "2023年の製造業GDP比はリトアニア14.9%、ラトビア10.9%、エストニア11.4%です。同じ年・同じ分母で国別図を見比べ、工場の数や生産品目の順位とは区別します。",
+        "sourceIds": [
+          "society-wdi-manufacturing"
+        ],
+        "links": [
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=LTU&layer=manufacturing"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "人口が増えた年の全国指標と、ヴィリニュス周辺の密度を重ねて考える。",
+        "body": "2023年の人口増加率は1.4%、都市人口比率は68.6%です。ヴィリニュスを2020年の5km密度図で選び、別年の人口増加がどの地域で起きたかは、この図だけでは決められないことを確認します。",
+        "sourceIds": [
+          "society-wdi-growth",
+          "society-wdi-urban",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "ヴィリニュス周辺の人口密度",
+            "href": "/atlas/europe/population/?place=LTU&layer=density&feature=city-1159150809"
+          },
+          {
+            "label": "人口増加率",
+            "href": "/atlas/europe/population/?place=LTU&layer=growth"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=LTU&layer=urban"
+          }
+        ]
+      }
+    },
+    "LVA": {
+      "industry": {
+        "takeaway": "ラトビアとリトアニアで、サービスと製造の比重を別々に読む。",
+        "body": "2023年のサービス業GDP比はラトビア63.9%、リトアニア63.2%です。製造業はラトビア10.9%、リトアニア14.9%で、一つの部門が近くても全体の構成は同じとは限りません。",
+        "sourceIds": [
+          "society-wdi-services",
+          "society-wdi-manufacturing"
+        ],
+        "links": [
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=LVA&layer=services"
+          },
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=LVA&layer=manufacturing"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "リガ周辺の人口の濃淡と、全国の年齢構成を読み分ける。",
+        "body": "2023年の65歳以上の割合は21.3%で、都市人口比率は68.4%です。2020年の5km密度図でリガ周辺から国内へ視線を広げ、全国の年齢割合を密度の濃い地域へ割り当てないようにします。",
+        "sourceIds": [
+          "society-wdi-age",
+          "society-wdi-urban",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "リガ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=LVA&layer=density&feature=city-1159150811"
+          },
+          {
+            "label": "65歳以上の割合",
+            "href": "/atlas/europe/population/?place=LVA&layer=age"
+          }
+        ]
+      }
+    },
+    "EST": {
+      "industry": {
+        "takeaway": "エストニアの産業構成と1人当たりGDPは、何を別々に示すか。",
+        "body": "2023年の製造業GDP比は11.4%、1人当たりGDPは当年価格で30,264米ドルです。前者は国の産業構成、後者はGDPを人口で割った指標なので、就業者比率や個人の所得とは分けて読みます。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-gdp"
+        ],
+        "links": [
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=EST&layer=manufacturing"
+          },
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=EST&layer=services"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "タリンの周辺図から、全国人口の増加の理由までは決めない。",
+        "body": "2023年の人口増加率は1.6%、都市人口比率は70.7%です。2020年の5km密度図でタリンの位置と周囲の人口を確かめ、増加率だけから自然増と移動の内訳を推定しません。",
+        "sourceIds": [
+          "society-wdi-growth",
+          "society-wdi-urban",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "タリン周辺の人口密度",
+            "href": "/atlas/europe/population/?place=EST&layer=density&feature=city-1159150877"
+          },
+          {
+            "label": "人口増加率",
+            "href": "/atlas/europe/population/?place=EST&layer=growth"
+          }
+        ]
+      }
+    },
+    "DEU": {
+      "industry": {
+        "takeaway": "化学・自動車・金融の拠点を、製造業比率だけで説明できるか。",
+        "body": "2023年のGDPに占める製造業は18.9%、サービス業は63.6%です。ライン川沿いのルートヴィヒスハーフェンと、ミュンヘン、フランクフルトを選び、素材加工・製造・金融の立地を比べます。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-services",
+          "society-hub-ludwigshafen",
+          "society-hub-munich",
+          "society-hub-frankfurt"
+        ],
+        "links": [
+          {
+            "label": "ルートヴィヒスハーフェンの拠点",
+            "href": "/atlas/europe/industry/?place=DEU&layer=hubs&feature=ludwigshafen"
+          },
+          {
+            "label": "ミュンヘンの拠点",
+            "href": "/atlas/europe/industry/?place=DEU&layer=hubs&feature=munich"
+          },
+          {
+            "label": "フランクフルトの拠点",
+            "href": "/atlas/europe/industry/?place=DEU&layer=hubs&feature=frankfurt"
+          },
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=DEU&layer=manufacturing"
+          },
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=DEU&layer=services"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "首都と港湾都市で、人口の集まり方はどう違うか。",
+        "body": "都市人口比率は2023年に81.9%です。2020年の5km人口密度図でベルリンとハンブルクの周辺を比較し、都市の点と人口が連続する範囲を分けて読みます。",
+        "sourceIds": [
+          "society-wdi-urban",
+          "society-ghsl",
+          "society-ne-cities"
+        ],
+        "links": [
+          {
+            "label": "ベルリン周辺の人口密度",
+            "href": "/atlas/europe/population/?place=DEU&layer=density&feature=city-1159151529"
+          },
+          {
+            "label": "ハンブルク周辺の人口密度",
+            "href": "/atlas/europe/population/?place=DEU&layer=density&feature=city-1159151353"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=DEU&layer=urban"
+          }
+        ]
+      }
+    },
+    "BGR": {
+      "industry": {
+        "takeaway": "鉱工業・建設業2割強とサービス業6割超の構成を読む。",
+        "body": "ブルガリアの2023年のGDP比は、鉱工業・建設業22.7%、サービス業62.4%です。両者の国別図を比べ、製造業だけの比率は別の指標として扱います。",
+        "sourceIds": [
+          "society-wdi-industry",
+          "society-wdi-services"
+        ],
+        "evidenceNote": "2023年の製造業比率は欠測です。鉱工業・建設業の値で代用しません。",
+        "links": [
+          {
+            "label": "鉱工業・建設業のGDP比率",
+            "href": "/atlas/europe/industry/?place=BGR&layer=industry"
+          },
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=BGR&layer=services"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "ソフィア周辺の密度と、高齢化・人口変化の全国値を並べる。",
+        "body": "2023年の65歳以上の割合は21.8%、人口増加率は-0.3%です。2020年の5km密度図でソフィアの周辺を確かめ、人口減少の原因や地域別の年齢構成は別の資料が必要だと読み分けます。",
+        "sourceIds": [
+          "society-wdi-age",
+          "society-wdi-growth",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "ソフィア周辺の人口密度",
+            "href": "/atlas/europe/population/?place=BGR&layer=density&feature=city-1159151147"
+          },
+          {
+            "label": "65歳以上の割合",
+            "href": "/atlas/europe/population/?place=BGR&layer=age"
+          },
+          {
+            "label": "人口増加率",
+            "href": "/atlas/europe/population/?place=BGR&layer=growth"
+          }
+        ]
+      }
+    },
+    "GRC": {
+      "industry": {
+        "takeaway": "ギリシャのサービス業比率から、観光だけの規模を読めるか。",
+        "body": "2023年のGDPに占めるサービス業は68.7%、製造業は8.9%です。サービス業は観光だけの区分ではないため、国別比率を特定のサービスや観光客数へ換算することはできません。",
+        "sourceIds": [
+          "society-wdi-services",
+          "society-wdi-manufacturing"
+        ],
+        "links": [
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=GRC&layer=services"
+          },
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=GRC&layer=manufacturing"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "アテネとテッサロニキの周辺を、年齢構成とは別に読む。",
+        "body": "2020年の5km密度図でアテネとテッサロニキを見比べ、都市点を取り囲む人口の濃淡を確かめます。2023年の65歳以上の割合23.5%は全国値で、両都市の高齢者割合を比較する指標ではありません。",
+        "sourceIds": [
+          "society-ne-cities",
+          "society-ghsl",
+          "society-wdi-age"
+        ],
+        "links": [
+          {
+            "label": "アテネ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=GRC&layer=density&feature=city-1159151545"
+          },
+          {
+            "label": "テッサロニキ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=GRC&layer=density&feature=city-1159150955"
+          },
+          {
+            "label": "65歳以上の割合",
+            "href": "/atlas/europe/population/?place=GRC&layer=age"
+          }
+        ]
+      }
+    },
+    "ALB": {
+      "industry": {
+        "takeaway": "アルバニアの製造業と、それを含む産業部門の幅を確かめる。",
+        "body": "2023年のGDP比は製造業7.2%、鉱工業・建設業23.2%、サービス業47.7%です。製造業を内数として読み、広い産業部門の比率と足し合わせないようにします。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-industry",
+          "society-wdi-services"
+        ],
+        "links": [
+          {
+            "label": "鉱工業・建設業のGDP比率",
+            "href": "/atlas/europe/industry/?place=ALB&layer=industry"
+          },
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=ALB&layer=manufacturing"
+          },
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=ALB&layer=services"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "ティラナの都市位置と、全国人口が減った年の指標を分ける。",
+        "body": "2023年の都市人口比率は58.2%、人口増加率は-1.6%です。2020年の5km密度図でティラナ周辺を確認しても、その後の全国の減少を首都の人口変化だけに結びつけることはできません。",
+        "sourceIds": [
+          "society-wdi-urban",
+          "society-wdi-growth",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "ティラナ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=ALB&layer=density&feature=city-1159151117"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=ALB&layer=urban"
+          },
+          {
+            "label": "人口増加率",
+            "href": "/atlas/europe/population/?place=ALB&layer=growth"
+          }
+        ]
+      }
+    },
+    "HRV": {
+      "industry": {
+        "takeaway": "クロアチアとスロベニアで、製造業の比重を比べる。",
+        "body": "2023年の製造業GDP比はクロアチア12.2%、スロベニア19.5%です。クロアチアのサービス業59.8%も確認し、沿岸の特定産業だけの規模とはみなさず全国の構成として読みます。",
+        "sourceIds": [
+          "society-wdi-services",
+          "society-wdi-manufacturing"
+        ],
+        "links": [
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=HRV&layer=services"
+          },
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=HRV&layer=manufacturing"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "ザグレブ周辺の分布と、全国の都市化・高齢化を読み分ける。",
+        "body": "2023年の都市人口比率は57.2%、65歳以上の割合は22.8%です。ザグレブを2020年の5km密度図で選び、首都周辺の濃淡と全国平均の年齢構成が異なる情報であることを確かめます。",
+        "sourceIds": [
+          "society-wdi-urban",
+          "society-wdi-age",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "ザグレブ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=HRV&layer=density&feature=city-1159150875"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=HRV&layer=urban"
+          },
+          {
+            "label": "65歳以上の割合",
+            "href": "/atlas/europe/population/?place=HRV&layer=age"
+          }
+        ]
+      }
+    },
+    "CHE": {
+      "industry": {
+        "takeaway": "スイスとドイツで、製造業が近くてもサービス業の比重は同じか。",
+        "body": "2023年の製造業GDP比はスイス19.4%、ドイツ18.9%です。サービス業はスイス71.0%、ドイツ63.6%で、同じ指標を同じ年・国単位で並べて比較します。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-services"
+        ],
+        "links": [
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=CHE&layer=manufacturing"
+          },
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=CHE&layer=services"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "首都ベルンと、ジュネーヴ・チューリッヒの分布を比べる。",
+        "body": "2020年の5km人口密度図でベルンとチューリッヒの周辺を見比べ、首都かどうかと人口の濃さを切り分けます。2023年の都市人口比率85.2%は国の都市定義に基づくため、密度図の濃い部分の面積比ではありません。",
+        "sourceIds": [
+          "society-ne-cities",
+          "society-ghsl",
+          "society-wdi-urban"
+        ],
+        "links": [
+          {
+            "label": "ベルン周辺の人口密度",
+            "href": "/atlas/europe/population/?place=CHE&layer=density&feature=city-1159149737"
+          },
+          {
+            "label": "チューリッヒ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=CHE&layer=density&feature=city-1159151271"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=CHE&layer=urban"
+          }
+        ]
+      }
+    },
+    "LUX": {
+      "industry": {
+        "takeaway": "GDPの8割超を占めるサービスと、1人当たりGDPを読み分ける。",
+        "body": "ルクセンブルクの2023年のサービス業GDP比は81.8%、製造業は4.1%です。1人当たりGDPは当年価格で133,231米ドルですが、サービス業の雇用比率や居住者の所得とは別の指標です。",
+        "sourceIds": [
+          "society-wdi-services",
+          "society-wdi-manufacturing",
+          "society-wdi-gdp"
+        ],
+        "links": [
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=LUX&layer=services"
+          },
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=LUX&layer=manufacturing"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "都市人口比率の高い小国で、人口変化と首都の周辺分布を読む。",
+        "body": "2023年の全国人口は666,430人、都市人口比率は94.8%です。ルクセンブルク市を2020年の5km密度図で選び、首都の点を国の人口総数や市の人口規模とは読み替えません。",
+        "sourceIds": [
+          "society-wdi-population",
+          "society-wdi-urban",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "ルクセンブルク市周辺の人口密度",
+            "href": "/atlas/europe/population/?place=LUX&layer=density&feature=city-1159146437"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=LUX&layer=urban"
+          },
+          {
+            "label": "人口増加率",
+            "href": "/atlas/europe/population/?place=LUX&layer=growth"
+          }
+        ]
+      }
+    },
+    "BEL": {
+      "industry": {
+        "takeaway": "ベルギーとオランダで、製造業のGDP比率を見比べる。",
+        "body": "2023年の製造業GDP比はベルギー12.0%、オランダ10.5%です。ベルギーのサービス業は70.3%で、国別図の違いを就業者の割合や個別工場の規模とは区別して読みます。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-services"
+        ],
+        "links": [
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=BEL&layer=manufacturing"
+          },
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=BEL&layer=services"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "ブリュッセルの都市点より広い範囲で、人口密度の連続性を追う。",
+        "body": "2023年の都市人口比率は87.6%です。2020年の5km密度図でブリュッセル＝ヴィルの周辺から国境方面まで見渡し、都市の点と市街地・人口の分布範囲を同一視しないようにします。",
+        "sourceIds": [
+          "society-wdi-urban",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "ブリュッセル＝ヴィル周辺の人口密度",
+            "href": "/atlas/europe/population/?place=BEL&layer=density&feature=city-1159151465"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=BEL&layer=urban"
+          }
+        ]
+      }
+    },
+    "NLD": {
+      "industry": {
+        "takeaway": "海港の素材産業と、半導体製造装置の技術拠点を比べる。",
+        "body": "ロッテルダム港では化学・石油化学が港湾立地と結びつき、フェルトホーフェンにはASMLの本社・研究開発・製造拠点があります。2023年の製造業GDP比10.5%とは別に、原料搬入と技術開発の立地条件を確かめます。",
+        "sourceIds": [
+          "society-hub-rotterdam",
+          "society-hub-veldhoven",
+          "society-wdi-manufacturing"
+        ],
+        "links": [
+          {
+            "label": "ロッテルダムの拠点",
+            "href": "/atlas/europe/industry/?place=NLD&layer=hubs&feature=rotterdam"
+          },
+          {
+            "label": "フェルトホーフェンの拠点",
+            "href": "/atlas/europe/industry/?place=NLD&layer=hubs&feature=veldhoven"
+          },
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=NLD&layer=manufacturing"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "アムステルダムとハーグの間で、点ではない人口分布を読む。",
+        "body": "2023年の都市人口比率は95.3%です。2020年の5km密度図でアムステルダムとハーグの周辺を見比べ、都市間の濃淡まで追うことで、首都の点だけでは捉えられない分布を確かめます。",
+        "sourceIds": [
+          "society-wdi-urban",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "アムステルダム周辺の人口密度",
+            "href": "/atlas/europe/population/?place=NLD&layer=density&feature=city-1159151519"
+          },
+          {
+            "label": "ハーグ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=NLD&layer=density&feature=city-1159149457"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=NLD&layer=urban"
+          }
+        ]
+      }
+    },
+    "PRT": {
+      "industry": {
+        "takeaway": "ポルトガルとスペインで、サービス業のGDP比率を比較する。",
+        "body": "2023年のサービス業GDP比はポルトガル66.3%、スペイン68.7%です。ポルトガルの製造業は12.1%で、隣国との比率差を生産品目や観光客数の違いに置き換えずに読みます。",
+        "sourceIds": [
+          "society-wdi-services",
+          "society-wdi-manufacturing"
+        ],
+        "links": [
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=PRT&layer=services"
+          },
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=PRT&layer=manufacturing"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "リスボン周辺の分布と、全国の高齢化・都市化を合わせて読む。",
+        "body": "2023年の65歳以上の割合は24.1%、都市人口比率は61.2%です。2020年の5km密度図でリスボンの周辺を確かめ、全国の年齢構成と首都周辺の人口分布を別々に比べます。",
+        "sourceIds": [
+          "society-wdi-age",
+          "society-wdi-urban",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "リスボン周辺の人口密度",
+            "href": "/atlas/europe/population/?place=PRT&layer=density&feature=city-1159151273"
+          },
+          {
+            "label": "65歳以上の割合",
+            "href": "/atlas/europe/population/?place=PRT&layer=age"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=PRT&layer=urban"
+          }
+        ]
+      }
+    },
+    "ESP": {
+      "industry": {
+        "takeaway": "スペインとフランスで、製造業が占める比重を見比べる。",
+        "body": "2023年の製造業GDP比はスペイン11.0%、フランス9.8%です。スペインのサービス業は68.7%で、国単位の構成を特定の都市や工場の規模とは分けて考えます。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-services"
+        ],
+        "links": [
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=ESP&layer=manufacturing"
+          },
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=ESP&layer=services"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "マドリードとバルセロナを、都市の点より広い人口分布で比較する。",
+        "body": "2020年の5km密度図でマドリードとバルセロナの周辺を見比べ、都市間の濃淡にも目を向けます。2023年の都市人口比率80.1%は全国値で、2都市の人口を足した割合でも市街地の面積比でもありません。",
+        "sourceIds": [
+          "society-ne-cities",
+          "society-ghsl",
+          "society-wdi-urban"
+        ],
+        "links": [
+          {
+            "label": "マドリード周辺の人口密度",
+            "href": "/atlas/europe/population/?place=ESP&layer=density&feature=city-1159151503"
+          },
+          {
+            "label": "バルセロナ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=ESP&layer=density&feature=city-1159151261"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=ESP&layer=urban"
+          }
+        ]
+      }
+    },
+    "IRL": {
+      "industry": {
+        "takeaway": "GDPの3割近い製造業を、1人当たりGDPとは別の尺度で読む。",
+        "body": "アイルランドの2023年の製造業GDP比は29.8%、サービス業は60.3%です。1人当たりGDPは当年価格で106,819米ドルですが、GDPの構成・就業者の割合・個人の所得はそれぞれ異なる指標です。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-services",
+          "society-wdi-gdp"
+        ],
+        "links": [
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=IRL&layer=manufacturing"
+          },
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=IRL&layer=services"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "ダブリン周辺の分布と、人口が増加した年の全国指標を読む。",
+        "body": "2023年の都市人口比率は64.1%、人口増加率は1.9%です。ダブリンを2020年の5km密度図で選び、全国人口の増加が首都だけで起きたと推定しないようにします。",
+        "sourceIds": [
+          "society-wdi-urban",
+          "society-wdi-growth",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "ダブリン周辺の人口密度",
+            "href": "/atlas/europe/population/?place=IRL&layer=density&feature=city-1159151309"
+          },
+          {
+            "label": "人口増加率",
+            "href": "/atlas/europe/population/?place=IRL&layer=growth"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=IRL&layer=urban"
+          }
+        ]
+      }
+    },
+    "ITA": {
+      "industry": {
+        "takeaway": "イタリアとイギリスの製造業比率を、同じGDP分母で比べる。",
+        "body": "2023年の製造業GDP比はイタリア15.5%、イギリス8.2%です。イタリアのサービス業は64.3%で、この全国値だけから北部・南部の産業格差や特定都市の生産額は説明できません。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-services"
+        ],
+        "links": [
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=ITA&layer=manufacturing"
+          },
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=ITA&layer=services"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "ローマ、ミラノ、ナポリを、首都の点だけに頼らず比較する。",
+        "body": "2020年の5km密度図でローマとミラノの周辺を比較し、ナポリなど他の都市位置へも視線を広げます。2023年の65歳以上の割合24.2%は全国の年齢構成で、都市別の高齢化の順位ではありません。",
+        "sourceIds": [
+          "society-ne-cities",
+          "society-ghsl",
+          "society-wdi-age"
+        ],
+        "links": [
+          {
+            "label": "ローマ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=ITA&layer=density&feature=city-1159151593"
+          },
+          {
+            "label": "ミラノ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=ITA&layer=density&feature=city-1159151315"
+          },
+          {
+            "label": "65歳以上の割合",
+            "href": "/atlas/europe/population/?place=ITA&layer=age"
+          }
+        ]
+      }
+    },
+    "DNK": {
+      "industry": {
+        "takeaway": "医薬品原薬の製造を、首都以外の拠点から読む。",
+        "body": "Novo Nordiskの2024年報は、カロンボーの医薬品原薬生産の役割を紹介しています。2023年の全国の製造業GDP比16.4%と比べ、原薬の工場と製剤化・充填など別工程の位置を同一視しないようにします。",
+        "sourceIds": [
+          "society-hub-kalundborg",
+          "society-wdi-manufacturing"
+        ],
+        "links": [
+          {
+            "label": "カロンボーの拠点",
+            "href": "/atlas/europe/industry/?place=DNK&layer=hubs&feature=kalundborg"
+          },
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=DNK&layer=manufacturing"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "コペンハーゲン周辺で、都市の濃淡と海域を区別する。",
+        "body": "2023年の都市人口比率は88.6%です。2020年の5km密度図でコペンハーゲン周辺を確かめ、海域の数値なしと人口0の陸地を分けて読みます。",
+        "sourceIds": [
+          "society-wdi-urban",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "コペンハーゲン周辺の人口密度",
+            "href": "/atlas/europe/population/?place=DNK&layer=density&feature=city-1159151437"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=DNK&layer=urban"
+          }
+        ]
+      }
+    },
+    "GBR": {
+      "industry": {
+        "takeaway": "イギリスのサービス業7割超と、製造業の比重を読み分ける。",
+        "body": "2023年のGDP比はサービス業72.4%、製造業8.2%です。ロンドンの都市点から国全体の産業を推定せず、全国の比率をイタリアなど他国と同じ年で比べます。",
+        "sourceIds": [
+          "society-wdi-services",
+          "society-wdi-manufacturing",
+          "society-ne-cities"
+        ],
+        "links": [
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=GBR&layer=services"
+          },
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=GBR&layer=manufacturing"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "ロンドンとグラスゴーを、英国全体の人口図で見比べる。",
+        "body": "2020年の5km密度図でロンドンとグラスゴー周辺の分布を比べ、北アイルランドの都市位置も含めて読めます。2023年の都市人口比率83.2%はイギリス全国の値で、イングランド・ウェールズだけの国勢調査事例とは範囲が異なります。",
+        "sourceIds": [
+          "society-ne-cities",
+          "society-ghsl",
+          "society-wdi-urban"
+        ],
+        "links": [
+          {
+            "label": "ロンドン周辺の人口密度",
+            "href": "/atlas/europe/population/?place=GBR&layer=density&feature=city-1159151577"
+          },
+          {
+            "label": "グラスゴー周辺の人口密度",
+            "href": "/atlas/europe/population/?place=GBR&layer=density&feature=city-1159150591"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=GBR&layer=urban"
+          }
+        ]
+      }
+    },
+    "ISL": {
+      "industry": {
+        "takeaway": "人口の小さいアイスランドで、産業構成と国の人口規模を分ける。",
+        "body": "2023年のGDP比はサービス業65.5%、製造業8.5%で、全国人口は385,663人です。人口の大小と産業のGDP比率は別の尺度なので、比率から工場や雇用の絶対規模は分かりません。",
+        "sourceIds": [
+          "society-wdi-services",
+          "society-wdi-manufacturing",
+          "society-wdi-population"
+        ],
+        "links": [
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=ISL&layer=services"
+          },
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=ISL&layer=manufacturing"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "都市人口比率が9割を超えても、島全体が高密度とは限らない。",
+        "body": "2023年の都市人口比率は94.2%です。2020年の5km密度図でレイキャヴィーク周辺から島全体へ広げ、都市に住む人口の割合と人口が分布する面積を読み分けます。",
+        "sourceIds": [
+          "society-wdi-urban",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "レイキャヴィーク周辺の人口密度",
+            "href": "/atlas/europe/population/?place=ISL&layer=density&feature=city-1159150587"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=ISL&layer=urban"
+          }
+        ]
+      }
+    },
+    "SVN": {
+      "industry": {
+        "takeaway": "スロベニアの製造業比率を、オーストリア・イタリアと並べる。",
+        "body": "2023年の製造業GDP比はスロベニア19.5%、オーストリア15.9%、イタリア15.5%です。隣接する国の構成を同じ年で比較し、国境近くの特定施設の規模をこの比率から推定しません。",
+        "sourceIds": [
+          "society-wdi-manufacturing"
+        ],
+        "links": [
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=SVN&layer=manufacturing"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "リュブリャナの周辺と、都市人口比率が半分ほどの全国値を読む。",
+        "body": "2023年の都市人口比率は55.5%、65歳以上の割合は21.3%です。リュブリャナ周辺の2020年5km密度図で濃淡を確かめ、都市の定義による割合を農業従事者比率に読み替えません。",
+        "sourceIds": [
+          "society-wdi-urban",
+          "society-wdi-age",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "リュブリャナ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=SVN&layer=density&feature=city-1159149461"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=SVN&layer=urban"
+          },
+          {
+            "label": "65歳以上の割合",
+            "href": "/atlas/europe/population/?place=SVN&layer=age"
+          }
+        ]
+      }
+    },
+    "FIN": {
+      "industry": {
+        "takeaway": "通信技術と木材加工は、首都の周りだけに立地するのか。",
+        "body": "Nokiaの2022年資料にあるオウルの無線技術拠点と、UPMのラッペーンランタのパルプ・バイオ燃料拠点を比べます。2023年の製造業比率14.5%は国全体のGDP比で、この2地点の規模順位を表しません。",
+        "sourceIds": [
+          "society-hub-oulu",
+          "society-hub-kaukas",
+          "society-wdi-manufacturing"
+        ],
+        "links": [
+          {
+            "label": "オウルの拠点",
+            "href": "/atlas/europe/industry/?place=FIN&layer=hubs&feature=oulu"
+          },
+          {
+            "label": "ラッペーンランタの拠点",
+            "href": "/atlas/europe/industry/?place=FIN&layer=hubs&feature=kaukas"
+          },
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=FIN&layer=manufacturing"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "ヘルシンキから北へ進むと、都市間の人口分布はどう変わるか。",
+        "body": "ヘルシンキとロヴァニエミを2020年の5km人口密度図で見比べ、都市の間の濃淡も確かめます。全国の65歳以上の割合は2023年に23.6%ですが、その数値だけでは南北の年齢構成の差は分かりません。",
+        "sourceIds": [
+          "society-ne-cities",
+          "society-ghsl",
+          "society-wdi-age"
+        ],
+        "links": [
+          {
+            "label": "ヘルシンキ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=FIN&layer=density&feature=city-1159151419"
+          },
+          {
+            "label": "ロヴァニエミ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=FIN&layer=density&feature=city-1159150099"
+          },
+          {
+            "label": "65歳以上の割合",
+            "href": "/atlas/europe/population/?place=FIN&layer=age"
+          }
+        ]
+      }
+    },
+    "SVK": {
+      "industry": {
+        "takeaway": "スロバキアとチェコで、製造業がGDPに占める割合を比べる。",
+        "body": "2023年の製造業GDP比はスロバキア16.8%、チェコ20.4%です。スロバキアの鉱工業・建設業は29.2%で、製造業を含む広い区分として別々の図を読みます。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-industry"
+        ],
+        "links": [
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=SVK&layer=manufacturing"
+          },
+          {
+            "label": "鉱工業・建設業のGDP比率",
+            "href": "/atlas/europe/industry/?place=SVK&layer=industry"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "ブラチスラヴァの都市点と、都市人口の全国比率を区別する。",
+        "body": "2023年の都市人口比率は53.2%です。2020年の5km密度図でブラチスラヴァ周辺から国内へたどり、収録する首都1点が国の都市人口全体を表すわけではないことを確かめます。",
+        "sourceIds": [
+          "society-wdi-urban",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "ブラチスラヴァ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=SVK&layer=density&feature=city-1159149463"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=SVK&layer=urban"
+          },
+          {
+            "label": "65歳以上の割合",
+            "href": "/atlas/europe/population/?place=SVK&layer=age"
+          }
+        ]
+      }
+    },
+    "CZE": {
+      "industry": {
+        "takeaway": "首都の外にある自動車生産拠点と、全国の製造業比率を読む。",
+        "body": "Škodaの2022年資料にあるムラダー・ボレスラフとクヴァシニを選び、生産拠点がプラハだけではないことを確かめます。2023年の製造業GDP比20.4%は全国の付加価値で、2工場の生産額を表しません。",
+        "sourceIds": [
+          "society-hub-mlada",
+          "society-hub-kvasiny",
+          "society-wdi-manufacturing",
+          "society-ne-cities"
+        ],
+        "links": [
+          {
+            "label": "ムラダー・ボレスラフの拠点",
+            "href": "/atlas/europe/industry/?place=CZE&layer=hubs&feature=mlada"
+          },
+          {
+            "label": "クヴァシニの拠点",
+            "href": "/atlas/europe/industry/?place=CZE&layer=hubs&feature=kvasiny"
+          },
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=CZE&layer=manufacturing"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "プラハ周辺の分布と、人口が増えた年の全国指標を比べる。",
+        "body": "2023年の人口増加率は1.8%、都市人口比率は72.7%です。プラハの2020年5km密度図からは、その後の増加が起きた場所や自然増・移動の内訳までは分かりません。",
+        "sourceIds": [
+          "society-wdi-growth",
+          "society-wdi-urban",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "プラハ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=CZE&layer=density&feature=city-1159151359"
+          },
+          {
+            "label": "人口増加率",
+            "href": "/atlas/europe/population/?place=CZE&layer=growth"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=CZE&layer=urban"
+          }
+        ]
+      }
+    },
+    "BIH": {
+      "industry": {
+        "takeaway": "ボスニア・ヘルツェゴビナとセルビアの製造業比率を比較する。",
+        "body": "2023年の製造業GDP比は両地域とも丸めると13.3%ですが、サービス業はボスニア・ヘルツェゴビナ55.9%、セルビア57.8%です。一つの指標が近くても、経済全体の構成や個別拠点が同じとは限りません。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-services"
+        ],
+        "links": [
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=BIH&layer=manufacturing"
+          },
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=BIH&layer=services"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "サラエヴォ周辺の人口と、全国人口の減少を別の年で読む。",
+        "body": "2023年の都市人口比率は51.6%、人口増加率は-0.6%です。サラエヴォを2020年の5km密度図で選び、濃い地域の存在と全国の人口減少を直接の原因・結果には結びつけません。",
+        "sourceIds": [
+          "society-wdi-urban",
+          "society-wdi-growth",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "サラエヴォ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=BIH&layer=density&feature=city-1159151177"
+          },
+          {
+            "label": "人口増加率",
+            "href": "/atlas/europe/population/?place=BIH&layer=growth"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=BIH&layer=urban"
+          }
+        ]
+      }
+    },
+    "MKD": {
+      "industry": {
+        "takeaway": "北マケドニアとアルバニアで、広い産業部門と製造業を比較する。",
+        "body": "2023年の鉱工業・建設業GDP比は北マケドニア24.0%、アルバニア23.2%です。内数の製造業は北マケドニア14.4%、アルバニア7.2%で、広い部門が近くても内訳は異なると読めます。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-industry",
+          "society-wdi-services"
+        ],
+        "links": [
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=MKD&layer=manufacturing"
+          },
+          {
+            "label": "鉱工業・建設業のGDP比率",
+            "href": "/atlas/europe/industry/?place=MKD&layer=industry"
+          },
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=MKD&layer=services"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "スコピエ周辺の密度と、近隣国の年齢構成を別々に比較する。",
+        "body": "2023年の65歳以上の割合は北マケドニア17.5%、ブルガリア21.8%です。スコピエの2020年5km密度図で人口の位置を確かめ、全国の年齢割合を都市ごとの値には置き換えません。",
+        "sourceIds": [
+          "society-wdi-age",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "スコピエ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=MKD&layer=density&feature=city-1159150073"
+          },
+          {
+            "label": "65歳以上の割合",
+            "href": "/atlas/europe/population/?place=MKD&layer=age"
+          }
+        ]
+      }
+    },
+    "SRB": {
+      "industry": {
+        "takeaway": "セルビアの製造業とサービス業を、同じ年のGDP比で比較する。",
+        "body": "2023年の製造業GDP比は13.3%、サービス業は57.8%です。製造業比率が近いボスニア・ヘルツェゴビナとサービス業の比率も見比べ、一つの比率だけで産業全体を評価しません。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-services"
+        ],
+        "links": [
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=SRB&layer=services"
+          },
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=SRB&layer=manufacturing"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "ベオグラード周辺の濃淡と、全国の年齢構成・人口変化を読む。",
+        "body": "2023年の65歳以上の割合は22.3%、人口増加率は-0.6%です。ベオグラードの2020年5km密度図は人口の分布を示しますが、2023年の人口減少をどの年代や地域が担ったかは示しません。",
+        "sourceIds": [
+          "society-wdi-age",
+          "society-wdi-growth",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "ベオグラード周辺の人口密度",
+            "href": "/atlas/europe/population/?place=SRB&layer=density&feature=city-1159151079"
+          },
+          {
+            "label": "65歳以上の割合",
+            "href": "/atlas/europe/population/?place=SRB&layer=age"
+          },
+          {
+            "label": "人口増加率",
+            "href": "/atlas/europe/population/?place=SRB&layer=growth"
+          }
+        ]
+      }
+    },
+    "MNE": {
+      "industry": {
+        "takeaway": "製造業のGDP比が数%でも、産業部門全体とは範囲が異なる。",
+        "body": "モンテネグロの2023年のGDP比は製造業2.9%、鉱工業・建設業12.7%、サービス業64.0%です。製造業の小さい比率を、産業施設や建設活動が存在しないという意味にはしません。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-industry",
+          "society-wdi-services"
+        ],
+        "links": [
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=MNE&layer=manufacturing"
+          },
+          {
+            "label": "鉱工業・建設業のGDP比率",
+            "href": "/atlas/europe/industry/?place=MNE&layer=industry"
+          },
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=MNE&layer=services"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "ポドゴリツァ周辺と、人口約62万人の全国値を読み分ける。",
+        "body": "2023年の全国人口は623,529人、都市人口比率は65.5%です。2020年の5km密度図でポドゴリツァ周辺を確かめ、首都の点を都市人口総数と同一視しないようにします。",
+        "sourceIds": [
+          "society-wdi-population",
+          "society-wdi-urban",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "ポドゴリツァ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=MNE&layer=density&feature=city-1159149511"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=MNE&layer=urban"
+          },
+          {
+            "label": "65歳以上の割合",
+            "href": "/atlas/europe/population/?place=MNE&layer=age"
+          }
+        ]
+      }
+    },
+    "KOS": {
+      "industry": {
+        "takeaway": "コソボのサービス業5割未満と、製造業を含む産業部門を読む。",
+        "body": "2023年のGDP比はサービス業46.6%、鉱工業・建設業26.3%、製造業12.9%です。製造業は鉱工業・建設業の内数であり、残りのGDPをこの3比率だけから特定の産業へ割り当てることはできません。",
+        "sourceIds": [
+          "society-wdi-services",
+          "society-wdi-industry",
+          "society-wdi-manufacturing"
+        ],
+        "links": [
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=KOS&layer=services"
+          },
+          {
+            "label": "鉱工業・建設業のGDP比率",
+            "href": "/atlas/europe/industry/?place=KOS&layer=industry"
+          },
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=KOS&layer=manufacturing"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "65歳以上が1割未満の全国構成と、プリシュティナ周辺を比較する。",
+        "body": "2023年の65歳以上の割合は9.6%、都市人口比率は49.1%です。プリシュティナを2020年の5km密度図で選び、全国の年齢割合を都市別の値や将来の人口増加の予測には使いません。",
+        "sourceIds": [
+          "society-wdi-age",
+          "society-wdi-urban",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "プリシュティナ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=KOS&layer=density&feature=city-1159149757"
+          },
+          {
+            "label": "65歳以上の割合",
+            "href": "/atlas/europe/population/?place=KOS&layer=age"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=KOS&layer=urban"
+          }
+        ]
+      }
+    },
+    "VAT": {
+      "industry": {
+        "takeaway": "美術館の文化サービスを、国の産業比率へ換算せず読む。",
+        "body": "バチカン美術館の公式案内は、ローマのViale Vaticanoにある所在地と来館サービスを示しています。施設の働きと周辺都市の位置関係を入口にし、国全体の産業構成とは別に考えます。",
+        "sourceIds": [
+          "society-vatican-museums",
+          "society-wdi-services",
+          "society-ne-cities"
+        ],
+        "evidenceNote": "2023年WDIの産業構成は欠測です。美術館の施設点は既存14拠点に追加せず、存在をGDPや雇用規模へ換算しません。",
+        "links": [
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=VAT&layer=services"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "国籍を持つ人数と、国内に住む人数は同じではない。",
+        "body": "政府の2024年末の公表では、国籍の有無を問わない国内居住者は882人です。国籍保持者には国外居住者も含まれるため、居住者と国民を分けて数え、地図ではローマ周辺にある国の位置を確かめます。",
+        "sourceIds": [
+          "society-vatican-population",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "evidenceNote": "2024年の公式値は、欠測の2023年WDIを補完しません。2020年の5km格子から、この小国だけの住民数を切り出せません。",
+        "links": [
+          {
+            "label": "バチカン周辺の人口密度",
+            "href": "/atlas/europe/population/?place=VAT&layer=density&feature=city-1159127243"
+          }
+        ]
+      }
+    },
+    "SMR": {
+      "industry": {
+        "takeaway": "国土の小さいサンマリノでも、製造業はGDPの3割を超える。",
+        "body": "2023年の製造業GDP比は31.8%、鉱工業・建設業は35.8%です。小国の産業構成を全国の比率で比較し、表示枠の小ささを生産額や施設規模の小ささと同一視しません。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-industry"
+        ],
+        "links": [
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=SMR&layer=manufacturing"
+          },
+          {
+            "label": "鉱工業・建設業のGDP比率",
+            "href": "/atlas/europe/industry/?place=SMR&layer=industry"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "サンマリノ市の位置と、全国約3.4万人の人口を別々に確認する。",
+        "body": "2023年の全国人口は33,860人、都市人口比率は97.1%です。首都の都市点は位置を示し、2020年の5km密度格子から小国だけの人口総数を切り出すことはできません。",
+        "sourceIds": [
+          "society-wdi-population",
+          "society-wdi-urban",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "サンマリノ市周辺の人口密度",
+            "href": "/atlas/europe/population/?place=SMR&layer=density&feature=city-1159146051"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=SMR&layer=urban"
+          }
+        ]
+      }
+    },
+    "MCO": {
+      "industry": {
+        "takeaway": "モナコのサービス業9割近い構成を、所得とは別に読む。",
+        "body": "2023年のサービス業GDP比は88.5%、鉱工業・建設業は11.5%です。1人当たりGDPは当年価格で256,800米ドルですが、住民一人ひとりの所得や購買力を示す数値ではありません。",
+        "sourceIds": [
+          "society-wdi-services",
+          "society-wdi-industry",
+          "society-wdi-gdp"
+        ],
+        "evidenceNote": "製造業比率の2023年値は欠測です。鉱工業・建設業の値で代用しません。",
+        "links": [
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=MCO&layer=services"
+          },
+          {
+            "label": "鉱工業・建設業のGDP比率",
+            "href": "/atlas/europe/industry/?place=MCO&layer=industry"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "都市人口比率100%でも、国境と人口格子は同じ単位ではない。",
+        "body": "2023年のモナコの都市人口比率は100.0%、65歳以上の割合は36.4%です。2020年の5km密度図は国境より粗いため、その格子からモナコだけの住民数は求めません。",
+        "sourceIds": [
+          "society-wdi-urban",
+          "society-wdi-age",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "モナコ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=MCO&layer=density&feature=city-1159149077"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=MCO&layer=urban"
+          },
+          {
+            "label": "65歳以上の割合",
+            "href": "/atlas/europe/population/?place=MCO&layer=age"
+          }
+        ]
+      }
+    },
+    "MLT": {
+      "industry": {
+        "takeaway": "マルタのサービス業8割超と製造業の比率を読み分ける。",
+        "body": "2023年のGDP比はサービス業81.7%、製造業5.8%です。サービス業には複数の活動が含まれるので、島の位置や全国比率だけから観光一分野の規模とは判断しません。",
+        "sourceIds": [
+          "society-wdi-services",
+          "society-wdi-manufacturing"
+        ],
+        "links": [
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=MLT&layer=services"
+          },
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=MLT&layer=manufacturing"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "人口増加率4%と高い都市人口比率を、バレッタの地図と合わせて読む。",
+        "body": "2023年の人口増加率は4.0%、都市人口比率は95.6%です。バレッタを2020年の5km密度図で選び、小さな島の粗い格子から2023年の人口増加の場所や原因は推定しません。",
+        "sourceIds": [
+          "society-wdi-growth",
+          "society-wdi-urban",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "バレッタ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=MLT&layer=density&feature=city-1159151199"
+          },
+          {
+            "label": "人口増加率",
+            "href": "/atlas/europe/population/?place=MLT&layer=growth"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=MLT&layer=urban"
+          }
+        ]
+      }
+    },
+    "LIE": {
+      "industry": {
+        "takeaway": "リヒテンシュタインの製造業3割超を、小国の産業構成として読む。",
+        "body": "2023年の製造業GDP比は34.2%、鉱工業・建設業は39.1%です。国の面積や首都の点の小ささと産業のGDP比率を分け、製造業を含む広い区分とは足し合わせずに比べます。",
+        "sourceIds": [
+          "society-wdi-manufacturing",
+          "society-wdi-industry",
+          "society-ne-cities"
+        ],
+        "links": [
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=LIE&layer=manufacturing"
+          },
+          {
+            "label": "鉱工業・建設業のGDP比率",
+            "href": "/atlas/europe/industry/?place=LIE&layer=industry"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "低い都市人口比率を、農業人口の多さに読み替えない。",
+        "body": "リヒテンシュタインの2023年の都市人口比率は14.7%で、各国の都市定義に従う値です。ファドゥーツ周辺の2020年5km密度図と比べ、都市比率から農業従事者の割合や居住地の疎密を推定しないようにします。",
+        "sourceIds": [
+          "society-wdi-urban",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "ファドゥーツ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=LIE&layer=density&feature=city-1159146061"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=LIE&layer=urban"
+          }
+        ]
+      }
+    },
+    "AND": {
+      "industry": {
+        "takeaway": "アンドラのサービス業8割近い構成を、産業図で比較する。",
+        "body": "2023年のGDP比はサービス業78.3%、製造業3.4%です。アンドラ・ラ・ベリャの位置と全国の比率を読み分け、首都の点を特定のサービス施設や産業の総量とはみなしません。",
+        "sourceIds": [
+          "society-wdi-services",
+          "society-wdi-manufacturing",
+          "society-ne-cities"
+        ],
+        "links": [
+          {
+            "label": "サービス業のGDP比率",
+            "href": "/atlas/europe/industry/?place=AND&layer=services"
+          },
+          {
+            "label": "製造業のGDP比率",
+            "href": "/atlas/europe/industry/?place=AND&layer=manufacturing"
+          }
+        ]
+      },
+      "population": {
+        "takeaway": "首都の位置と、アンドラの約8万人という全国人口を読み分ける。",
+        "body": "2023年の全国人口は80,856人、都市人口比率は88.8%です。2020年の5km密度図でアンドラ・ラ・ベリャを選び、都市点の位置と、小国を表す人口格子の粗さを確かめます。",
+        "sourceIds": [
+          "society-wdi-population",
+          "society-wdi-urban",
+          "society-ne-cities",
+          "society-ghsl"
+        ],
+        "links": [
+          {
+            "label": "アンドラ・ラ・ベリャ周辺の人口密度",
+            "href": "/atlas/europe/population/?place=AND&layer=density&feature=city-1159149089"
+          },
+          {
+            "label": "都市人口比率",
+            "href": "/atlas/europe/population/?place=AND&layer=urban"
+          }
+        ]
+      }
+    }
+  },
+  "sources": [
+    {
+      "id": "society-wdi-population",
+      "label": "World Bank WDI・人口（2023年・国全体、人）",
+      "url": "https://data.worldbank.org/indicator/SP.POP.TOTL",
+      "period": "2023",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-wdi-urban",
+      "label": "World Bank WDI・都市人口比率（2023年・国全体、%）",
+      "url": "https://data.worldbank.org/indicator/SP.URB.TOTL.IN.ZS",
+      "period": "2023",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-wdi-age",
+      "label": "World Bank WDI・65歳以上の人口比率（2023年・国全体、%）",
+      "url": "https://data.worldbank.org/indicator/SP.POP.65UP.TO.ZS",
+      "period": "2023",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-wdi-growth",
+      "label": "World Bank WDI・人口増加率（2023年・国全体、% / 年）",
+      "url": "https://data.worldbank.org/indicator/SP.POP.GROW",
+      "period": "2023",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-wdi-manufacturing",
+      "label": "World Bank WDI・製造業の付加価値（2023年・国全体、GDP比 %）",
+      "url": "https://data.worldbank.org/indicator/NV.IND.MANF.ZS",
+      "period": "2023",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-wdi-industry",
+      "label": "World Bank WDI・鉱工業・建設業の付加価値（2023年・国全体、GDP比 %）",
+      "url": "https://data.worldbank.org/indicator/NV.IND.TOTL.ZS",
+      "period": "2023",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-wdi-services",
+      "label": "World Bank WDI・サービス業の付加価値（2023年・国全体、GDP比 %）",
+      "url": "https://data.worldbank.org/indicator/NV.SRV.TOTL.ZS",
+      "period": "2023",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-wdi-gdp",
+      "label": "World Bank WDI・1人当たりGDP（2023年・国全体、米ドル（当年価格））",
+      "url": "https://data.worldbank.org/indicator/NY.GDP.PCAP.CD",
+      "period": "2023",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-ne-cities",
+      "label": "Natural Earth 5.1.2・都市の位置（132地点、人口規模は示さない）",
+      "url": "https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-populated-places/",
+      "period": "Natural Earth 5.1.2",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-ghsl",
+      "label": "欧州委員会JRC・GHSL R2023A人口密度（2020年、5km集計、人/km²）",
+      "url": "https://ghsl.jrc.ec.europa.eu/ghs_pop2023.php",
+      "period": "2020（R2023A）",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-hub-rotterdam",
+      "label": "ロッテルダム港・プロセス産業",
+      "url": "https://www.portofrotterdam.com/en/setting/industry-port/process-industry",
+      "period": "2026-09-25参照",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-hub-ludwigshafen",
+      "label": "BASF・Ludwigshafen",
+      "url": "https://www.basf.com/global/en/who-we-are/organization/locations/europe/german-sites/ludwigshafen",
+      "period": "2026-09-25参照",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-hub-kiruna",
+      "label": "LKAB・Kiruna",
+      "url": "https://lkab.com/en/community-development/lkab-in-kiruna/",
+      "period": "2026-09-25参照",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-hub-munich",
+      "label": "BMW・ミュンヘン工場",
+      "url": "https://www.bmwgroup-werke.com/muenchen/en.html",
+      "period": "2026-09-25参照",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-hub-mlada",
+      "label": "Škoda・工場紹介",
+      "url": "https://www.skoda-storyboard.com/en/press-releases/skoda-auto-production-sites-reopen-for-tours/",
+      "period": "2022年資料",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-hub-kvasiny",
+      "label": "Škoda・工場紹介",
+      "url": "https://www.skoda-storyboard.com/en/press-releases/skoda-auto-production-sites-reopen-for-tours/",
+      "period": "2022年資料",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-hub-toulouse",
+      "label": "Airbus・航空機の生産",
+      "url": "https://www.airbus.com/en/products-services/commercial-aircraft/the-life-cycle-of-an-aircraft/production",
+      "period": "2026-09-25参照",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-hub-hamburg",
+      "label": "Airbus・ドイツの拠点",
+      "url": "https://www.airbus.com/en/about-us/our-worldwide-presence/airbus-in-europe/airbus-in-germany",
+      "period": "2026-09-25参照",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-hub-brasov",
+      "label": "Airbus Aerostructures・拠点紹介",
+      "url": "https://www.airbus.com/en/products-services/commercial-aircraft/airframes/airbus-aerostructures",
+      "period": "2026-09-25参照",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-hub-veldhoven",
+      "label": "ASML・Veldhoven",
+      "url": "https://www.asml.com/en/company/about-asml/locations/veldhoven",
+      "period": "2026-09-25参照",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-hub-kalundborg",
+      "label": "Novo Nordisk・2024年報",
+      "url": "https://annualreport.novonordisk.com/2024/_assets/downloads/novo-nordisk-form-20-f-2024.pdf",
+      "period": "2024年",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-hub-oulu",
+      "label": "Nokia・Oulu Radio World",
+      "url": "https://events.nokia.com/ehome/nrw22f2f/home/",
+      "period": "2022年資料",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-hub-kaukas",
+      "label": "UPM・Kaukas",
+      "url": "https://www.upmpulp.com/pulp-production/kaukas/",
+      "period": "2026-09-25参照",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-hub-frankfurt",
+      "label": "ECB・所在地",
+      "url": "https://www.ecb.europa.eu/ecb/contacts/address/html/index.en.html",
+      "period": "2026-09-25参照",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-vatican-museums",
+      "label": "バチカン美術館・所在地と来館サービスの公式案内",
+      "url": "https://www.museivaticani.va/content/museivaticani/en/info.html",
+      "period": "2026-10-02参照（GDP・雇用の統計ではない）",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "society-vatican-population",
+      "label": "バチカン市国政府・国籍保持者と居住者の公表人口",
+      "url": "https://www.vaticanstate.va/en/state-and-government/general-informations/population.html",
+      "period": "2024-12-31",
+      "checkedAt": "2026-10-02"
+    }
+  ]
+}
