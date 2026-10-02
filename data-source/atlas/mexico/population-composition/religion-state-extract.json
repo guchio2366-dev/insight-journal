@@ -1,0 +1,2402 @@
+[
+  {
+    "entityCode": "01",
+    "entityName": "Aguascalientes",
+    "year": 2020,
+    "populationTotal": 1425607,
+    "sourceTotalCell": "D84",
+    "catholic": 1272419,
+    "catholic_pct": 89.25454210031236,
+    "catholic_sourceCells": [
+      "D85"
+    ],
+    "protestant_evangelical": 73359,
+    "protestant_evangelical_pct": 5.145808066318417,
+    "protestant_evangelical_sourceCells": [
+      "D86",
+      "D87",
+      "D88",
+      "D89",
+      "D90",
+      "D91",
+      "D92",
+      "D93",
+      "D94",
+      "D95"
+    ],
+    "jewish": 259,
+    "jewish_pct": 0.018167699793842203,
+    "jewish_sourceCells": [
+      "D96"
+    ],
+    "islamic": 110,
+    "islamic_pct": 0.007716011495454217,
+    "islamic_sourceCells": [
+      "D97"
+    ],
+    "ethnic_roots": 41,
+    "ethnic_roots_pct": 0.0028759679210329354,
+    "ethnic_roots_sourceCells": [
+      "D100"
+    ],
+    "afro_roots": 158,
+    "afro_roots_pct": 0.011082998329834238,
+    "afro_roots_sourceCells": [
+      "D101"
+    ],
+    "spiritualist": 82,
+    "spiritualist_pct": 0.005751935842065871,
+    "spiritualist_sourceCells": [
+      "D102"
+    ],
+    "other_religions": 1250,
+    "other_religions_pct": 0.08768194881197974,
+    "other_religions_sourceCells": [
+      "D98",
+      "D99",
+      "D103",
+      "D104"
+    ],
+    "no_religion": 63205,
+    "no_religion_pct": 4.433550059728944,
+    "no_religion_sourceCells": [
+      "D105",
+      "D106"
+    ],
+    "unaffiliated_believer": 11234,
+    "unaffiliated_believer_pct": 0.7880152103630244,
+    "unaffiliated_believer_sourceCells": [
+      "D107"
+    ],
+    "unspecified": 3490,
+    "unspecified_pct": 0.24480800108304743,
+    "unspecified_sourceCells": [
+      "D108"
+    ]
+  },
+  {
+    "entityCode": "02",
+    "entityName": "Baja California",
+    "year": 2020,
+    "populationTotal": 3769020,
+    "sourceTotalCell": "D159",
+    "catholic": 2336986,
+    "catholic_pct": 62.005136613761664,
+    "catholic_sourceCells": [
+      "D160"
+    ],
+    "protestant_evangelical": 616812,
+    "protestant_evangelical_pct": 16.365315121702725,
+    "protestant_evangelical_sourceCells": [
+      "D161",
+      "D162",
+      "D163",
+      "D164",
+      "D165",
+      "D166",
+      "D167",
+      "D168",
+      "D169",
+      "D170"
+    ],
+    "jewish": 1319,
+    "jewish_pct": 0.03499583446094741,
+    "jewish_sourceCells": [
+      "D171"
+    ],
+    "islamic": 404,
+    "islamic_pct": 0.010718966734058191,
+    "islamic_sourceCells": [
+      "D172"
+    ],
+    "ethnic_roots": 70,
+    "ethnic_roots_pct": 0.001857246711346716,
+    "ethnic_roots_sourceCells": [
+      "D175"
+    ],
+    "afro_roots": 670,
+    "afro_roots_pct": 0.01777650423717571,
+    "afro_roots_sourceCells": [
+      "D176"
+    ],
+    "spiritualist": 549,
+    "spiritualist_pct": 0.014566120636133531,
+    "spiritualist_sourceCells": [
+      "D177"
+    ],
+    "other_religions": 2666,
+    "other_religions_pct": 0.0707345676064335,
+    "other_religions_sourceCells": [
+      "D173",
+      "D174",
+      "D178",
+      "D179"
+    ],
+    "no_religion": 714650,
+    "no_religion_pct": 18.961162318056154,
+    "no_religion_sourceCells": [
+      "D180",
+      "D181"
+    ],
+    "unaffiliated_believer": 74527,
+    "unaffiliated_believer_pct": 1.9773575093790958,
+    "unaffiliated_believer_sourceCells": [
+      "D182"
+    ],
+    "unspecified": 20367,
+    "unspecified_pct": 0.5403791967142653,
+    "unspecified_sourceCells": [
+      "D183"
+    ]
+  },
+  {
+    "entityCode": "03",
+    "entityName": "Baja California Sur",
+    "year": 2020,
+    "populationTotal": 798447,
+    "sourceTotalCell": "D234",
+    "catholic": 587796,
+    "catholic_pct": 73.61740979676797,
+    "catholic_sourceCells": [
+      "D235"
+    ],
+    "protestant_evangelical": 88010,
+    "protestant_evangelical_pct": 11.022647714876504,
+    "protestant_evangelical_sourceCells": [
+      "D236",
+      "D237",
+      "D238",
+      "D239",
+      "D240",
+      "D241",
+      "D242",
+      "D243",
+      "D244",
+      "D245"
+    ],
+    "jewish": 296,
+    "jewish_pct": 0.03707196595390803,
+    "jewish_sourceCells": [
+      "D246"
+    ],
+    "islamic": 49,
+    "islamic_pct": 0.00613691328291045,
+    "islamic_sourceCells": [
+      "D247"
+    ],
+    "ethnic_roots": 40,
+    "ethnic_roots_pct": 0.00500972512890649,
+    "ethnic_roots_sourceCells": [
+      "D250"
+    ],
+    "afro_roots": 100,
+    "afro_roots_pct": 0.012524312822266225,
+    "afro_roots_sourceCells": [
+      "D251"
+    ],
+    "spiritualist": 167,
+    "spiritualist_pct": 0.020915602413184596,
+    "spiritualist_sourceCells": [
+      "D252"
+    ],
+    "other_religions": 473,
+    "other_religions_pct": 0.05923999964931924,
+    "other_religions_sourceCells": [
+      "D248",
+      "D249",
+      "D253",
+      "D254"
+    ],
+    "no_religion": 97519,
+    "no_religion_pct": 12.213584621145799,
+    "no_religion_sourceCells": [
+      "D255",
+      "D256"
+    ],
+    "unaffiliated_believer": 18622,
+    "unaffiliated_believer_pct": 2.3322775337624164,
+    "unaffiliated_believer_sourceCells": [
+      "D257"
+    ],
+    "unspecified": 5375,
+    "unspecified_pct": 0.6731818141968096,
+    "unspecified_sourceCells": [
+      "D258"
+    ]
+  },
+  {
+    "entityCode": "04",
+    "entityName": "Campeche",
+    "year": 2020,
+    "populationTotal": 928363,
+    "sourceTotalCell": "D309",
+    "catholic": 558124,
+    "catholic_pct": 60.11915597670308,
+    "catholic_sourceCells": [
+      "D310"
+    ],
+    "protestant_evangelical": 226028,
+    "protestant_evangelical_pct": 24.346941875107042,
+    "protestant_evangelical_sourceCells": [
+      "D311",
+      "D312",
+      "D313",
+      "D314",
+      "D315",
+      "D316",
+      "D317",
+      "D318",
+      "D319",
+      "D320"
+    ],
+    "jewish": 117,
+    "jewish_pct": 0.012602828850352717,
+    "jewish_sourceCells": [
+      "D321"
+    ],
+    "islamic": 40,
+    "islamic_pct": 0.004308659436018023,
+    "islamic_sourceCells": [
+      "D322"
+    ],
+    "ethnic_roots": 97,
+    "ethnic_roots_pct": 0.010448499132343705,
+    "ethnic_roots_sourceCells": [
+      "D325"
+    ],
+    "afro_roots": 85,
+    "afro_roots_pct": 0.009155901301538299,
+    "afro_roots_sourceCells": [
+      "D326"
+    ],
+    "spiritualist": 459,
+    "spiritualist_pct": 0.049441867028306816,
+    "spiritualist_sourceCells": [
+      "D327"
+    ],
+    "other_religions": 227,
+    "other_religions_pct": 0.02445164229940228,
+    "other_religions_sourceCells": [
+      "D323",
+      "D324",
+      "D328",
+      "D329"
+    ],
+    "no_religion": 131943,
+    "no_religion_pct": 14.212436299163151,
+    "no_religion_sourceCells": [
+      "D330",
+      "D331"
+    ],
+    "unaffiliated_believer": 5941,
+    "unaffiliated_believer_pct": 0.6399436427345769,
+    "unaffiliated_believer_sourceCells": [
+      "D332"
+    ],
+    "unspecified": 5302,
+    "unspecified_pct": 0.571112808244189,
+    "unspecified_sourceCells": [
+      "D333"
+    ]
+  },
+  {
+    "entityCode": "05",
+    "entityName": "Coahuila de Zaragoza",
+    "year": 2020,
+    "populationTotal": 3146771,
+    "sourceTotalCell": "D384",
+    "catholic": 2357324,
+    "catholic_pct": 74.91247377073196,
+    "catholic_sourceCells": [
+      "D385"
+    ],
+    "protestant_evangelical": 421206,
+    "protestant_evangelical_pct": 13.385340083533247,
+    "protestant_evangelical_sourceCells": [
+      "D386",
+      "D387",
+      "D388",
+      "D389",
+      "D390",
+      "D391",
+      "D392",
+      "D393",
+      "D394",
+      "D395"
+    ],
+    "jewish": 453,
+    "jewish_pct": 0.014395709125322434,
+    "jewish_sourceCells": [
+      "D396"
+    ],
+    "islamic": 157,
+    "islamic_pct": 0.004989241352484817,
+    "islamic_sourceCells": [
+      "D397"
+    ],
+    "ethnic_roots": 12,
+    "ethnic_roots_pct": 0.0003813432880880115,
+    "ethnic_roots_sourceCells": [
+      "D400"
+    ],
+    "afro_roots": 91,
+    "afro_roots_pct": 0.0028918532680007538,
+    "afro_roots_sourceCells": [
+      "D401"
+    ],
+    "spiritualist": 163,
+    "spiritualist_pct": 0.005179912996528823,
+    "spiritualist_sourceCells": [
+      "D402"
+    ],
+    "other_religions": 1423,
+    "other_religions_pct": 0.04522095824577003,
+    "other_religions_sourceCells": [
+      "D398",
+      "D399",
+      "D403",
+      "D404"
+    ],
+    "no_religion": 342245,
+    "no_religion_pct": 10.876069469306792,
+    "no_religion_sourceCells": [
+      "D405",
+      "D406"
+    ],
+    "unaffiliated_believer": 13553,
+    "unaffiliated_believer_pct": 0.4306954652880683,
+    "unaffiliated_believer_sourceCells": [
+      "D407"
+    ],
+    "unspecified": 10144,
+    "unspecified_pct": 0.32236219286373236,
+    "unspecified_sourceCells": [
+      "D408"
+    ]
+  },
+  {
+    "entityCode": "06",
+    "entityName": "Colima",
+    "year": 2020,
+    "populationTotal": 731391,
+    "sourceTotalCell": "D459",
+    "catholic": 610645,
+    "catholic_pct": 83.49090978696758,
+    "catholic_sourceCells": [
+      "D460"
+    ],
+    "protestant_evangelical": 57884,
+    "protestant_evangelical_pct": 7.914234656975544,
+    "protestant_evangelical_sourceCells": [
+      "D461",
+      "D462",
+      "D463",
+      "D464",
+      "D465",
+      "D466",
+      "D467",
+      "D468",
+      "D469",
+      "D470"
+    ],
+    "jewish": 134,
+    "jewish_pct": 0.018321253611269486,
+    "jewish_sourceCells": [
+      "D471"
+    ],
+    "islamic": 52,
+    "islamic_pct": 0.007109740207358307,
+    "islamic_sourceCells": [
+      "D472"
+    ],
+    "ethnic_roots": 15,
+    "ethnic_roots_pct": 0.002050886598276435,
+    "ethnic_roots_sourceCells": [
+      "D475"
+    ],
+    "afro_roots": 63,
+    "afro_roots_pct": 0.008613723712761026,
+    "afro_roots_sourceCells": [
+      "D476"
+    ],
+    "spiritualist": 38,
+    "spiritualist_pct": 0.005195579382300302,
+    "spiritualist_sourceCells": [
+      "D477"
+    ],
+    "other_religions": 510,
+    "other_religions_pct": 0.06973014434139879,
+    "other_religions_sourceCells": [
+      "D473",
+      "D474",
+      "D478",
+      "D479"
+    ],
+    "no_religion": 53401,
+    "no_religion_pct": 7.301293015637326,
+    "no_religion_sourceCells": [
+      "D480",
+      "D481"
+    ],
+    "unaffiliated_believer": 5853,
+    "unaffiliated_believer_pct": 0.8002559506474649,
+    "unaffiliated_believer_sourceCells": [
+      "D482"
+    ],
+    "unspecified": 2796,
+    "unspecified_pct": 0.38228526191872747,
+    "unspecified_sourceCells": [
+      "D483"
+    ]
+  },
+  {
+    "entityCode": "07",
+    "entityName": "Chiapas",
+    "year": 2020,
+    "populationTotal": 5543828,
+    "sourceTotalCell": "D534",
+    "catholic": 2985644,
+    "catholic_pct": 53.855278338361146,
+    "catholic_sourceCells": [
+      "D535"
+    ],
+    "protestant_evangelical": 1795861,
+    "protestant_evangelical_pct": 32.39388018531599,
+    "protestant_evangelical_sourceCells": [
+      "D536",
+      "D537",
+      "D538",
+      "D539",
+      "D540",
+      "D541",
+      "D542",
+      "D543",
+      "D544",
+      "D545"
+    ],
+    "jewish": 477,
+    "jewish_pct": 0.008604163044019402,
+    "jewish_sourceCells": [
+      "D546"
+    ],
+    "islamic": 365,
+    "islamic_pct": 0.006583898346052583,
+    "islamic_sourceCells": [
+      "D547"
+    ],
+    "ethnic_roots": 11427,
+    "ethnic_roots_pct": 0.20612111342559689,
+    "ethnic_roots_sourceCells": [
+      "D550"
+    ],
+    "afro_roots": 189,
+    "afro_roots_pct": 0.003409196677819009,
+    "afro_roots_sourceCells": [
+      "D551"
+    ],
+    "spiritualist": 345,
+    "spiritualist_pct": 0.006223136792844222,
+    "spiritualist_sourceCells": [
+      "D552"
+    ],
+    "other_religions": 2626,
+    "other_religions_pct": 0.047367991936257764,
+    "other_religions_sourceCells": [
+      "D548",
+      "D549",
+      "D553",
+      "D554"
+    ],
+    "no_religion": 695496,
+    "no_religion_pct": 12.545410860510103,
+    "no_religion_sourceCells": [
+      "D555",
+      "D556"
+    ],
+    "unaffiliated_believer": 17966,
+    "unaffiliated_believer_pct": 0.3240721032470704,
+    "unaffiliated_believer_sourceCells": [
+      "D557"
+    ],
+    "unspecified": 33432,
+    "unspecified_pct": 0.6030490123430958,
+    "unspecified_sourceCells": [
+      "D558"
+    ]
+  },
+  {
+    "entityCode": "08",
+    "entityName": "Chihuahua",
+    "year": 2020,
+    "populationTotal": 3741869,
+    "sourceTotalCell": "D609",
+    "catholic": 2712366,
+    "catholic_pct": 72.48693099624813,
+    "catholic_sourceCells": [
+      "D610"
+    ],
+    "protestant_evangelical": 475603,
+    "protestant_evangelical_pct": 12.71030599948849,
+    "protestant_evangelical_sourceCells": [
+      "D611",
+      "D612",
+      "D613",
+      "D614",
+      "D615",
+      "D616",
+      "D617",
+      "D618",
+      "D619",
+      "D620"
+    ],
+    "jewish": 692,
+    "jewish_pct": 0.018493432025546593,
+    "jewish_sourceCells": [
+      "D621"
+    ],
+    "islamic": 278,
+    "islamic_pct": 0.0074294423455230525,
+    "islamic_sourceCells": [
+      "D622"
+    ],
+    "ethnic_roots": 451,
+    "ethnic_roots_pct": 0.0120528003519097,
+    "ethnic_roots_sourceCells": [
+      "D625"
+    ],
+    "afro_roots": 265,
+    "afro_roots_pct": 0.0070820223797252125,
+    "afro_roots_sourceCells": [
+      "D626"
+    ],
+    "spiritualist": 176,
+    "spiritualist_pct": 0.004703531844647688,
+    "spiritualist_sourceCells": [
+      "D627"
+    ],
+    "other_religions": 1444,
+    "other_religions_pct": 0.03859034081631399,
+    "other_religions_sourceCells": [
+      "D623",
+      "D624",
+      "D628",
+      "D629"
+    ],
+    "no_religion": 505891,
+    "no_religion_pct": 13.519741070571952,
+    "no_religion_sourceCells": [
+      "D630",
+      "D631"
+    ],
+    "unaffiliated_believer": 27438,
+    "unaffiliated_believer_pct": 0.7332699247354731,
+    "unaffiliated_believer_sourceCells": [
+      "D632"
+    ],
+    "unspecified": 17265,
+    "unspecified_pct": 0.461400439192286,
+    "unspecified_sourceCells": [
+      "D633"
+    ]
+  },
+  {
+    "entityCode": "09",
+    "entityName": "Ciudad de México",
+    "year": 2020,
+    "populationTotal": 9209944,
+    "sourceTotalCell": "D684",
+    "catholic": 6988016,
+    "catholic_pct": 75.87468501437142,
+    "catholic_sourceCells": [
+      "D685"
+    ],
+    "protestant_evangelical": 668246,
+    "protestant_evangelical_pct": 7.25570101186283,
+    "protestant_evangelical_sourceCells": [
+      "D686",
+      "D687",
+      "D688",
+      "D689",
+      "D690",
+      "D691",
+      "D692",
+      "D693",
+      "D694",
+      "D695"
+    ],
+    "jewish": 17981,
+    "jewish_pct": 0.19523462900534466,
+    "jewish_sourceCells": [
+      "D696"
+    ],
+    "islamic": 1636,
+    "islamic_pct": 0.01776340876774061,
+    "islamic_sourceCells": [
+      "D697"
+    ],
+    "ethnic_roots": 584,
+    "ethnic_roots_pct": 0.006340972322958749,
+    "ethnic_roots_sourceCells": [
+      "D700"
+    ],
+    "afro_roots": 13850,
+    "afro_roots_pct": 0.1503809360838676,
+    "afro_roots_sourceCells": [
+      "D701"
+    ],
+    "spiritualist": 7130,
+    "spiritualist_pct": 0.07741632305256145,
+    "spiritualist_sourceCells": [
+      "D702"
+    ],
+    "other_religions": 14064,
+    "other_religions_pct": 0.15270451155837647,
+    "other_religions_sourceCells": [
+      "D698",
+      "D699",
+      "D703",
+      "D704"
+    ],
+    "no_religion": 1010417,
+    "no_religion_pct": 10.97093532816269,
+    "no_religion_sourceCells": [
+      "D705",
+      "D706"
+    ],
+    "unaffiliated_believer": 462431,
+    "unaffiliated_believer_pct": 5.020996870339276,
+    "unaffiliated_believer_sourceCells": [
+      "D707"
+    ],
+    "unspecified": 25589,
+    "unspecified_pct": 0.27784099447293054,
+    "unspecified_sourceCells": [
+      "D708"
+    ]
+  },
+  {
+    "entityCode": "10",
+    "entityName": "Durango",
+    "year": 2020,
+    "populationTotal": 1832650,
+    "sourceTotalCell": "D759",
+    "catholic": 1521197,
+    "catholic_pct": 83.0053201647887,
+    "catholic_sourceCells": [
+      "D760"
+    ],
+    "protestant_evangelical": 168665,
+    "protestant_evangelical_pct": 9.20333942651352,
+    "protestant_evangelical_sourceCells": [
+      "D761",
+      "D762",
+      "D763",
+      "D764",
+      "D765",
+      "D766",
+      "D767",
+      "D768",
+      "D769",
+      "D770"
+    ],
+    "jewish": 169,
+    "jewish_pct": 0.009221618967069543,
+    "jewish_sourceCells": [
+      "D771"
+    ],
+    "islamic": 68,
+    "islamic_pct": 0.003710473903909639,
+    "islamic_sourceCells": [
+      "D772"
+    ],
+    "ethnic_roots": 436,
+    "ethnic_roots_pct": 0.023790685619185334,
+    "ethnic_roots_sourceCells": [
+      "D775"
+    ],
+    "afro_roots": 160,
+    "afro_roots_pct": 0.008730526832728562,
+    "afro_roots_sourceCells": [
+      "D776"
+    ],
+    "spiritualist": 82,
+    "spiritualist_pct": 0.004474395001773389,
+    "spiritualist_sourceCells": [
+      "D777"
+    ],
+    "other_religions": 653,
+    "other_religions_pct": 0.03563146263607345,
+    "other_religions_sourceCells": [
+      "D773",
+      "D774",
+      "D778",
+      "D779"
+    ],
+    "no_religion": 124909,
+    "no_religion_pct": 6.815758600933075,
+    "no_religion_sourceCells": [
+      "D780",
+      "D781"
+    ],
+    "unaffiliated_believer": 10216,
+    "unaffiliated_believer_pct": 0.5574441382697187,
+    "unaffiliated_believer_sourceCells": [
+      "D782"
+    ],
+    "unspecified": 6095,
+    "unspecified_pct": 0.3325785065342537,
+    "unspecified_sourceCells": [
+      "D783"
+    ]
+  },
+  {
+    "entityCode": "11",
+    "entityName": "Guanajuato",
+    "year": 2020,
+    "populationTotal": 6166934,
+    "sourceTotalCell": "D834",
+    "catholic": 5601990,
+    "catholic_pct": 90.8391430814729,
+    "catholic_sourceCells": [
+      "D835"
+    ],
+    "protestant_evangelical": 255840,
+    "protestant_evangelical_pct": 4.148576910341508,
+    "protestant_evangelical_sourceCells": [
+      "D836",
+      "D837",
+      "D838",
+      "D839",
+      "D840",
+      "D841",
+      "D842",
+      "D843",
+      "D844",
+      "D845"
+    ],
+    "jewish": 788,
+    "jewish_pct": 0.01277782444242147,
+    "jewish_sourceCells": [
+      "D846"
+    ],
+    "islamic": 239,
+    "islamic_pct": 0.003875507667181131,
+    "islamic_sourceCells": [
+      "D847"
+    ],
+    "ethnic_roots": 56,
+    "ethnic_roots_pct": 0.000908068742101018,
+    "ethnic_roots_sourceCells": [
+      "D850"
+    ],
+    "afro_roots": 392,
+    "afro_roots_pct": 0.006356481194707127,
+    "afro_roots_sourceCells": [
+      "D851"
+    ],
+    "spiritualist": 409,
+    "spiritualist_pct": 0.006632144919987793,
+    "spiritualist_sourceCells": [
+      "D852"
+    ],
+    "other_religions": 3359,
+    "other_religions_pct": 0.05446790901280928,
+    "other_religions_sourceCells": [
+      "D848",
+      "D849",
+      "D853",
+      "D854"
+    ],
+    "no_religion": 208991,
+    "no_religion_pct": 3.3888963300077477,
+    "no_religion_sourceCells": [
+      "D855",
+      "D856"
+    ],
+    "unaffiliated_believer": 74634,
+    "unaffiliated_believer_pct": 1.2102286160351319,
+    "unaffiliated_believer_sourceCells": [
+      "D857"
+    ],
+    "unspecified": 20236,
+    "unspecified_pct": 0.3281371261635036,
+    "unspecified_sourceCells": [
+      "D858"
+    ]
+  },
+  {
+    "entityCode": "12",
+    "entityName": "Guerrero",
+    "year": 2020,
+    "populationTotal": 3540685,
+    "sourceTotalCell": "D909",
+    "catholic": 2845506,
+    "catholic_pct": 80.36597438066363,
+    "catholic_sourceCells": [
+      "D910"
+    ],
+    "protestant_evangelical": 358158,
+    "protestant_evangelical_pct": 10.115500249245555,
+    "protestant_evangelical_sourceCells": [
+      "D911",
+      "D912",
+      "D913",
+      "D914",
+      "D915",
+      "D916",
+      "D917",
+      "D918",
+      "D919",
+      "D920"
+    ],
+    "jewish": 324,
+    "jewish_pct": 0.009150771672713049,
+    "jewish_sourceCells": [
+      "D921"
+    ],
+    "islamic": 62,
+    "islamic_pct": 0.001751073591692003,
+    "islamic_sourceCells": [
+      "D922"
+    ],
+    "ethnic_roots": 443,
+    "ethnic_roots_pct": 0.01251170324386383,
+    "ethnic_roots_sourceCells": [
+      "D925"
+    ],
+    "afro_roots": 233,
+    "afro_roots_pct": 0.006580647530068334,
+    "afro_roots_sourceCells": [
+      "D926"
+    ],
+    "spiritualist": 1148,
+    "spiritualist_pct": 0.0324231045687487,
+    "spiritualist_sourceCells": [
+      "D927"
+    ],
+    "other_religions": 670,
+    "other_religions_pct": 0.018922892039252293,
+    "other_religions_sourceCells": [
+      "D923",
+      "D924",
+      "D928",
+      "D929"
+    ],
+    "no_religion": 156224,
+    "no_religion_pct": 4.412253561104701,
+    "no_religion_sourceCells": [
+      "D930",
+      "D931"
+    ],
+    "unaffiliated_believer": 159788,
+    "unaffiliated_believer_pct": 4.512912049504545,
+    "unaffiliated_believer_sourceCells": [
+      "D932"
+    ],
+    "unspecified": 18129,
+    "unspecified_pct": 0.5120195668352311,
+    "unspecified_sourceCells": [
+      "D933"
+    ]
+  },
+  {
+    "entityCode": "13",
+    "entityName": "Hidalgo",
+    "year": 2020,
+    "populationTotal": 3082841,
+    "sourceTotalCell": "D984",
+    "catholic": 2475984,
+    "catholic_pct": 80.31500813697495,
+    "catholic_sourceCells": [
+      "D985"
+    ],
+    "protestant_evangelical": 301786,
+    "protestant_evangelical_pct": 9.789217153917441,
+    "protestant_evangelical_sourceCells": [
+      "D986",
+      "D987",
+      "D988",
+      "D989",
+      "D990",
+      "D991",
+      "D992",
+      "D993",
+      "D994",
+      "D995"
+    ],
+    "jewish": 981,
+    "jewish_pct": 0.031821297303364006,
+    "jewish_sourceCells": [
+      "D996"
+    ],
+    "islamic": 182,
+    "islamic_pct": 0.005903645371266309,
+    "islamic_sourceCells": [
+      "D997"
+    ],
+    "ethnic_roots": 479,
+    "ethnic_roots_pct": 0.015537616114486605,
+    "ethnic_roots_sourceCells": [
+      "D1000"
+    ],
+    "afro_roots": 1091,
+    "afro_roots_pct": 0.03538943461566782,
+    "afro_roots_sourceCells": [
+      "D1001"
+    ],
+    "spiritualist": 2647,
+    "spiritualist_pct": 0.08586235877880176,
+    "spiritualist_sourceCells": [
+      "D1002"
+    ],
+    "other_religions": 1405,
+    "other_religions_pct": 0.04557484476169871,
+    "other_religions_sourceCells": [
+      "D998",
+      "D999",
+      "D1003",
+      "D1004"
+    ],
+    "no_religion": 141682,
+    "no_religion_pct": 4.595825733471171,
+    "no_religion_sourceCells": [
+      "D1005",
+      "D1006"
+    ],
+    "unaffiliated_believer": 150061,
+    "unaffiliated_believer_pct": 4.867620483832932,
+    "unaffiliated_believer_sourceCells": [
+      "D1007"
+    ],
+    "unspecified": 6543,
+    "unspecified_pct": 0.21223929485821683,
+    "unspecified_sourceCells": [
+      "D1008"
+    ]
+  },
+  {
+    "entityCode": "14",
+    "entityName": "Jalisco",
+    "year": 2020,
+    "populationTotal": 8348151,
+    "sourceTotalCell": "D1059",
+    "catholic": 7448776,
+    "catholic_pct": 89.22665629790357,
+    "catholic_sourceCells": [
+      "D1060"
+    ],
+    "protestant_evangelical": 396295,
+    "protestant_evangelical_pct": 4.747099088169344,
+    "protestant_evangelical_sourceCells": [
+      "D1061",
+      "D1062",
+      "D1063",
+      "D1064",
+      "D1065",
+      "D1066",
+      "D1067",
+      "D1068",
+      "D1069",
+      "D1070"
+    ],
+    "jewish": 1654,
+    "jewish_pct": 0.01981277051648922,
+    "jewish_sourceCells": [
+      "D1071"
+    ],
+    "islamic": 698,
+    "islamic_pct": 0.00836113290236365,
+    "islamic_sourceCells": [
+      "D1072"
+    ],
+    "ethnic_roots": 12494,
+    "ethnic_roots_pct": 0.14966188321222268,
+    "ethnic_roots_sourceCells": [
+      "D1075"
+    ],
+    "afro_roots": 705,
+    "afro_roots_pct": 0.00844498380539595,
+    "afro_roots_sourceCells": [
+      "D1076"
+    ],
+    "spiritualist": 685,
+    "spiritualist_pct": 0.008205409796732234,
+    "spiritualist_sourceCells": [
+      "D1077"
+    ],
+    "other_religions": 5328,
+    "other_religions_pct": 0.06382251590801365,
+    "other_religions_sourceCells": [
+      "D1073",
+      "D1074",
+      "D1078",
+      "D1079"
+    ],
+    "no_religion": 384118,
+    "no_religion_pct": 4.601234452994442,
+    "no_religion_sourceCells": [
+      "D1080",
+      "D1081"
+    ],
+    "unaffiliated_believer": 33125,
+    "unaffiliated_believer_pct": 0.39679445184927775,
+    "unaffiliated_believer_sourceCells": [
+      "D1082"
+    ],
+    "unspecified": 64273,
+    "unspecified_pct": 0.7699070129421474,
+    "unspecified_sourceCells": [
+      "D1083"
+    ]
+  },
+  {
+    "entityCode": "15",
+    "entityName": "México",
+    "year": 2020,
+    "populationTotal": 16992418,
+    "sourceTotalCell": "D1134",
+    "catholic": 13363922,
+    "catholic_pct": 78.64638216880023,
+    "catholic_sourceCells": [
+      "D1135"
+    ],
+    "protestant_evangelical": 1344725,
+    "protestant_evangelical_pct": 7.913676558568651,
+    "protestant_evangelical_sourceCells": [
+      "D1136",
+      "D1137",
+      "D1138",
+      "D1139",
+      "D1140",
+      "D1141",
+      "D1142",
+      "D1143",
+      "D1144",
+      "D1145"
+    ],
+    "jewish": 21685,
+    "jewish_pct": 0.12761574014951846,
+    "jewish_sourceCells": [
+      "D1146"
+    ],
+    "islamic": 1101,
+    "islamic_pct": 0.006479360382966097,
+    "islamic_sourceCells": [
+      "D1147"
+    ],
+    "ethnic_roots": 563,
+    "ethnic_roots_pct": 0.003313242411998104,
+    "ethnic_roots_sourceCells": [
+      "D1150"
+    ],
+    "afro_roots": 17594,
+    "afro_roots_pct": 0.10354029661935106,
+    "afro_roots_sourceCells": [
+      "D1151"
+    ],
+    "spiritualist": 9763,
+    "spiritualist_pct": 0.05745503671107902,
+    "spiritualist_sourceCells": [
+      "D1152"
+    ],
+    "other_religions": 10781,
+    "other_religions_pct": 0.06344594394982515,
+    "other_religions_sourceCells": [
+      "D1148",
+      "D1149",
+      "D1153",
+      "D1154"
+    ],
+    "no_religion": 1142086,
+    "no_religion_pct": 6.721150574332623,
+    "no_religion_sourceCells": [
+      "D1155",
+      "D1156"
+    ],
+    "unaffiliated_believer": 1021824,
+    "unaffiliated_believer_pct": 6.013411393246094,
+    "unaffiliated_believer_sourceCells": [
+      "D1157"
+    ],
+    "unspecified": 58374,
+    "unspecified_pct": 0.34352968482766844,
+    "unspecified_sourceCells": [
+      "D1158"
+    ]
+  },
+  {
+    "entityCode": "16",
+    "entityName": "Michoacán de Ocampo",
+    "year": 2020,
+    "populationTotal": 4748846,
+    "sourceTotalCell": "D1209",
+    "catholic": 4221742,
+    "catholic_pct": 88.9003770600268,
+    "catholic_sourceCells": [
+      "D1210"
+    ],
+    "protestant_evangelical": 248750,
+    "protestant_evangelical_pct": 5.238114691442932,
+    "protestant_evangelical_sourceCells": [
+      "D1211",
+      "D1212",
+      "D1213",
+      "D1214",
+      "D1215",
+      "D1216",
+      "D1217",
+      "D1218",
+      "D1219",
+      "D1220"
+    ],
+    "jewish": 713,
+    "jewish_pct": 0.015014173969844464,
+    "jewish_sourceCells": [
+      "D1221"
+    ],
+    "islamic": 117,
+    "islamic_pct": 0.0024637564578847155,
+    "islamic_sourceCells": [
+      "D1222"
+    ],
+    "ethnic_roots": 103,
+    "ethnic_roots_pct": 0.002168947992838681,
+    "ethnic_roots_sourceCells": [
+      "D1225"
+    ],
+    "afro_roots": 302,
+    "afro_roots_pct": 0.006359439745993027,
+    "afro_roots_sourceCells": [
+      "D1226"
+    ],
+    "spiritualist": 310,
+    "spiritualist_pct": 0.0065279017260193315,
+    "spiritualist_sourceCells": [
+      "D1227"
+    ],
+    "other_religions": 1879,
+    "other_religions_pct": 0.039567507558678466,
+    "other_religions_sourceCells": [
+      "D1223",
+      "D1224",
+      "D1228",
+      "D1229"
+    ],
+    "no_religion": 183880,
+    "no_religion_pct": 3.872098610904628,
+    "no_religion_sourceCells": [
+      "D1230",
+      "D1231"
+    ],
+    "unaffiliated_believer": 79040,
+    "unaffiliated_believer_pct": 1.6644043626598968,
+    "unaffiliated_believer_sourceCells": [
+      "D1232"
+    ],
+    "unspecified": 12010,
+    "unspecified_pct": 0.2529035475144909,
+    "unspecified_sourceCells": [
+      "D1233"
+    ]
+  },
+  {
+    "entityCode": "17",
+    "entityName": "Morelos",
+    "year": 2020,
+    "populationTotal": 1971520,
+    "sourceTotalCell": "D1284",
+    "catholic": 1399556,
+    "catholic_pct": 70.98867878591138,
+    "catholic_sourceCells": [
+      "D1285"
+    ],
+    "protestant_evangelical": 282384,
+    "protestant_evangelical_pct": 14.32316182437916,
+    "protestant_evangelical_sourceCells": [
+      "D1286",
+      "D1287",
+      "D1288",
+      "D1289",
+      "D1290",
+      "D1291",
+      "D1292",
+      "D1293",
+      "D1294",
+      "D1295"
+    ],
+    "jewish": 951,
+    "jewish_pct": 0.048236893361467297,
+    "jewish_sourceCells": [
+      "D1296"
+    ],
+    "islamic": 132,
+    "islamic_pct": 0.0066953416653140726,
+    "islamic_sourceCells": [
+      "D1297"
+    ],
+    "ethnic_roots": 69,
+    "ethnic_roots_pct": 0.0034998376886869013,
+    "ethnic_roots_sourceCells": [
+      "D1300"
+    ],
+    "afro_roots": 359,
+    "afro_roots_pct": 0.018209300438240546,
+    "afro_roots_sourceCells": [
+      "D1301"
+    ],
+    "spiritualist": 955,
+    "spiritualist_pct": 0.04843978250284045,
+    "spiritualist_sourceCells": [
+      "D1302"
+    ],
+    "other_religions": 1236,
+    "other_religions_pct": 0.0626927446843045,
+    "other_religions_sourceCells": [
+      "D1298",
+      "D1299",
+      "D1303",
+      "D1304"
+    ],
+    "no_religion": 165736,
+    "no_religion_pct": 8.40650868365525,
+    "no_religion_sourceCells": [
+      "D1305",
+      "D1306"
+    ],
+    "unaffiliated_believer": 116682,
+    "unaffiliated_believer_pct": 5.91837769842558,
+    "unaffiliated_believer_sourceCells": [
+      "D1307"
+    ],
+    "unspecified": 3460,
+    "unspecified_pct": 0.17549910728777796,
+    "unspecified_sourceCells": [
+      "D1308"
+    ]
+  },
+  {
+    "entityCode": "18",
+    "entityName": "Nayarit",
+    "year": 2020,
+    "populationTotal": 1235456,
+    "sourceTotalCell": "D1359",
+    "catholic": 1028909,
+    "catholic_pct": 83.28171946228761,
+    "catholic_sourceCells": [
+      "D1360"
+    ],
+    "protestant_evangelical": 98696,
+    "protestant_evangelical_pct": 7.9886292996270205,
+    "protestant_evangelical_sourceCells": [
+      "D1361",
+      "D1362",
+      "D1363",
+      "D1364",
+      "D1365",
+      "D1366",
+      "D1367",
+      "D1368",
+      "D1369",
+      "D1370"
+    ],
+    "jewish": 298,
+    "jewish_pct": 0.02412064857024451,
+    "jewish_sourceCells": [
+      "D1371"
+    ],
+    "islamic": 56,
+    "islamic_pct": 0.004532739328636552,
+    "islamic_sourceCells": [
+      "D1372"
+    ],
+    "ethnic_roots": 2819,
+    "ethnic_roots_pct": 0.228174860132615,
+    "ethnic_roots_sourceCells": [
+      "D1375"
+    ],
+    "afro_roots": 58,
+    "afro_roots_pct": 0.0046946228760878575,
+    "afro_roots_sourceCells": [
+      "D1376"
+    ],
+    "spiritualist": 167,
+    "spiritualist_pct": 0.013517276212184003,
+    "spiritualist_sourceCells": [
+      "D1377"
+    ],
+    "other_religions": 464,
+    "other_religions_pct": 0.03755698300870286,
+    "other_religions_sourceCells": [
+      "D1373",
+      "D1374",
+      "D1378",
+      "D1379"
+    ],
+    "no_religion": 93265,
+    "no_religion_pct": 7.549034526523,
+    "no_religion_sourceCells": [
+      "D1380",
+      "D1381"
+    ],
+    "unaffiliated_believer": 7831,
+    "unaffiliated_believer_pct": 0.6338550300455864,
+    "unaffiliated_believer_sourceCells": [
+      "D1382"
+    ],
+    "unspecified": 2893,
+    "unspecified_pct": 0.2341645513883133,
+    "unspecified_sourceCells": [
+      "D1383"
+    ]
+  },
+  {
+    "entityCode": "19",
+    "entityName": "Nuevo León",
+    "year": 2020,
+    "populationTotal": 5784442,
+    "sourceTotalCell": "D1434",
+    "catholic": 4492947,
+    "catholic_pct": 77.67295445265074,
+    "catholic_sourceCells": [
+      "D1435"
+    ],
+    "protestant_evangelical": 690097,
+    "protestant_evangelical_pct": 11.930225940548803,
+    "protestant_evangelical_sourceCells": [
+      "D1436",
+      "D1437",
+      "D1438",
+      "D1439",
+      "D1440",
+      "D1441",
+      "D1442",
+      "D1443",
+      "D1444",
+      "D1445"
+    ],
+    "jewish": 1189,
+    "jewish_pct": 0.02055513738403808,
+    "jewish_sourceCells": [
+      "D1446"
+    ],
+    "islamic": 395,
+    "islamic_pct": 0.006828662125058908,
+    "islamic_sourceCells": [
+      "D1447"
+    ],
+    "ethnic_roots": 49,
+    "ethnic_roots_pct": 0.0008470998585516113,
+    "ethnic_roots_sourceCells": [
+      "D1450"
+    ],
+    "afro_roots": 414,
+    "afro_roots_pct": 0.007157129417150349,
+    "afro_roots_sourceCells": [
+      "D1451"
+    ],
+    "spiritualist": 151,
+    "spiritualist_pct": 0.00261045058451619,
+    "spiritualist_sourceCells": [
+      "D1452"
+    ],
+    "other_religions": 2896,
+    "other_religions_pct": 0.050065330415621764,
+    "other_religions_sourceCells": [
+      "D1448",
+      "D1449",
+      "D1453",
+      "D1454"
+    ],
+    "no_religion": 520941,
+    "no_religion_pct": 9.005898926810918,
+    "no_religion_sourceCells": [
+      "D1455",
+      "D1456"
+    ],
+    "unaffiliated_believer": 40643,
+    "unaffiliated_believer_pct": 0.7026261132880233,
+    "unaffiliated_believer_sourceCells": [
+      "D1457"
+    ],
+    "unspecified": 34720,
+    "unspecified_pct": 0.6002307569165704,
+    "unspecified_sourceCells": [
+      "D1458"
+    ]
+  },
+  {
+    "entityCode": "20",
+    "entityName": "Oaxaca",
+    "year": 2020,
+    "populationTotal": 4132148,
+    "sourceTotalCell": "D1509",
+    "catholic": 3118763,
+    "catholic_pct": 75.47558799926817,
+    "catholic_sourceCells": [
+      "D1510"
+    ],
+    "protestant_evangelical": 653533,
+    "protestant_evangelical_pct": 15.81581782646701,
+    "protestant_evangelical_sourceCells": [
+      "D1511",
+      "D1512",
+      "D1513",
+      "D1514",
+      "D1515",
+      "D1516",
+      "D1517",
+      "D1518",
+      "D1519",
+      "D1520"
+    ],
+    "jewish": 846,
+    "jewish_pct": 0.020473613239409626,
+    "jewish_sourceCells": [
+      "D1521"
+    ],
+    "islamic": 68,
+    "islamic_pct": 0.001645633215460821,
+    "islamic_sourceCells": [
+      "D1522"
+    ],
+    "ethnic_roots": 39,
+    "ethnic_roots_pct": 0.0009438190500437061,
+    "ethnic_roots_sourceCells": [
+      "D1525"
+    ],
+    "afro_roots": 74,
+    "afro_roots_pct": 0.0017908361462367756,
+    "afro_roots_sourceCells": [
+      "D1526"
+    ],
+    "spiritualist": 1315,
+    "spiritualist_pct": 0.03182364232839675,
+    "spiritualist_sourceCells": [
+      "D1527"
+    ],
+    "other_religions": 898,
+    "other_religions_pct": 0.021732038639467897,
+    "other_religions_sourceCells": [
+      "D1523",
+      "D1524",
+      "D1528",
+      "D1529"
+    ],
+    "no_religion": 252527,
+    "no_religion_pct": 6.111276750009922,
+    "no_religion_sourceCells": [
+      "D1530",
+      "D1531"
+    ],
+    "unaffiliated_believer": 90500,
+    "unaffiliated_believer_pct": 2.1901442058706513,
+    "unaffiliated_believer_sourceCells": [
+      "D1532"
+    ],
+    "unspecified": 13585,
+    "unspecified_pct": 0.32876363576522427,
+    "unspecified_sourceCells": [
+      "D1533"
+    ]
+  },
+  {
+    "entityCode": "21",
+    "entityName": "Puebla",
+    "year": 2020,
+    "populationTotal": 6583278,
+    "sourceTotalCell": "D1584",
+    "catholic": 5547167,
+    "catholic_pct": 84.26147277997374,
+    "catholic_sourceCells": [
+      "D1585"
+    ],
+    "protestant_evangelical": 555536,
+    "protestant_evangelical_pct": 8.438592445890938,
+    "protestant_evangelical_sourceCells": [
+      "D1586",
+      "D1587",
+      "D1588",
+      "D1589",
+      "D1590",
+      "D1591",
+      "D1592",
+      "D1593",
+      "D1594",
+      "D1595"
+    ],
+    "jewish": 2079,
+    "jewish_pct": 0.03158001226744488,
+    "jewish_sourceCells": [
+      "D1596"
+    ],
+    "islamic": 346,
+    "islamic_pct": 0.005255740377362159,
+    "islamic_sourceCells": [
+      "D1597"
+    ],
+    "ethnic_roots": 783,
+    "ethnic_roots_pct": 0.011893770853972748,
+    "ethnic_roots_sourceCells": [
+      "D1600"
+    ],
+    "afro_roots": 471,
+    "afro_roots_pct": 0.007154490513692419,
+    "afro_roots_sourceCells": [
+      "D1601"
+    ],
+    "spiritualist": 4685,
+    "spiritualist_pct": 0.07116515510965814,
+    "spiritualist_sourceCells": [
+      "D1602"
+    ],
+    "other_religions": 2154,
+    "other_religions_pct": 0.032719262349243036,
+    "other_religions_sourceCells": [
+      "D1598",
+      "D1599",
+      "D1603",
+      "D1604"
+    ],
+    "no_religion": 233982,
+    "no_religion_pct": 3.554186835190615,
+    "no_religion_sourceCells": [
+      "D1605",
+      "D1606"
+    ],
+    "unaffiliated_believer": 224057,
+    "unaffiliated_believer_pct": 3.403426074365992,
+    "unaffiliated_believer_sourceCells": [
+      "D1607"
+    ],
+    "unspecified": 12018,
+    "unspecified_pct": 0.1825534331073365,
+    "unspecified_sourceCells": [
+      "D1608"
+    ]
+  },
+  {
+    "entityCode": "22",
+    "entityName": "Querétaro",
+    "year": 2020,
+    "populationTotal": 2368467,
+    "sourceTotalCell": "D1659",
+    "catholic": 2025357,
+    "catholic_pct": 85.51341437309449,
+    "catholic_sourceCells": [
+      "D1660"
+    ],
+    "protestant_evangelical": 131596,
+    "protestant_evangelical_pct": 5.556167765900897,
+    "protestant_evangelical_sourceCells": [
+      "D1661",
+      "D1662",
+      "D1663",
+      "D1664",
+      "D1665",
+      "D1666",
+      "D1667",
+      "D1668",
+      "D1669",
+      "D1670"
+    ],
+    "jewish": 566,
+    "jewish_pct": 0.02389731416988288,
+    "jewish_sourceCells": [
+      "D1671"
+    ],
+    "islamic": 251,
+    "islamic_pct": 0.01059757218487739,
+    "islamic_sourceCells": [
+      "D1672"
+    ],
+    "ethnic_roots": 40,
+    "ethnic_roots_pct": 0.0016888561250800623,
+    "ethnic_roots_sourceCells": [
+      "D1675"
+    ],
+    "afro_roots": 496,
+    "afro_roots_pct": 0.020941815950992773,
+    "afro_roots_sourceCells": [
+      "D1676"
+    ],
+    "spiritualist": 264,
+    "spiritualist_pct": 0.011146450425528412,
+    "spiritualist_sourceCells": [
+      "D1677"
+    ],
+    "other_religions": 2335,
+    "other_religions_pct": 0.09858697630154864,
+    "other_religions_sourceCells": [
+      "D1673",
+      "D1674",
+      "D1678",
+      "D1679"
+    ],
+    "no_religion": 149220,
+    "no_religion_pct": 6.300277774611173,
+    "no_religion_sourceCells": [
+      "D1680",
+      "D1681"
+    ],
+    "unaffiliated_believer": 48104,
+    "unaffiliated_believer_pct": 2.031018376021283,
+    "unaffiliated_believer_sourceCells": [
+      "D1682"
+    ],
+    "unspecified": 10238,
+    "unspecified_pct": 0.43226272521424197,
+    "unspecified_sourceCells": [
+      "D1683"
+    ]
+  },
+  {
+    "entityCode": "23",
+    "entityName": "Quintana Roo",
+    "year": 2020,
+    "populationTotal": 1857985,
+    "sourceTotalCell": "D1734",
+    "catholic": 1016131,
+    "catholic_pct": 54.68994636662836,
+    "catholic_sourceCells": [
+      "D1735"
+    ],
+    "protestant_evangelical": 384207,
+    "protestant_evangelical_pct": 20.67869223917308,
+    "protestant_evangelical_sourceCells": [
+      "D1736",
+      "D1737",
+      "D1738",
+      "D1739",
+      "D1740",
+      "D1741",
+      "D1742",
+      "D1743",
+      "D1744",
+      "D1745"
+    ],
+    "jewish": 896,
+    "jewish_pct": 0.048224285987238866,
+    "jewish_sourceCells": [
+      "D1746"
+    ],
+    "islamic": 233,
+    "islamic_pct": 0.01254046722659225,
+    "islamic_sourceCells": [
+      "D1747"
+    ],
+    "ethnic_roots": 238,
+    "ethnic_roots_pct": 0.012809575965360323,
+    "ethnic_roots_sourceCells": [
+      "D1750"
+    ],
+    "afro_roots": 924,
+    "afro_roots_pct": 0.04973129492434008,
+    "afro_roots_sourceCells": [
+      "D1751"
+    ],
+    "spiritualist": 236,
+    "spiritualist_pct": 0.012701932469853093,
+    "spiritualist_sourceCells": [
+      "D1752"
+    ],
+    "other_religions": 1965,
+    "other_religions_pct": 0.10575973433585309,
+    "other_religions_sourceCells": [
+      "D1748",
+      "D1749",
+      "D1753",
+      "D1754"
+    ],
+    "no_religion": 407417,
+    "no_religion_pct": 21.92789500453448,
+    "no_religion_sourceCells": [
+      "D1755",
+      "D1756"
+    ],
+    "unaffiliated_believer": 19692,
+    "unaffiliated_believer_pct": 1.0598578567641828,
+    "unaffiliated_believer_sourceCells": [
+      "D1757"
+    ],
+    "unspecified": 26046,
+    "unspecified_pct": 1.4018412419906512,
+    "unspecified_sourceCells": [
+      "D1758"
+    ]
+  },
+  {
+    "entityCode": "24",
+    "entityName": "San Luis Potosí",
+    "year": 2020,
+    "populationTotal": 2822255,
+    "sourceTotalCell": "D1809",
+    "catholic": 2416597,
+    "catholic_pct": 85.62645827538617,
+    "catholic_sourceCells": [
+      "D1810"
+    ],
+    "protestant_evangelical": 227847,
+    "protestant_evangelical_pct": 8.07322513380258,
+    "protestant_evangelical_sourceCells": [
+      "D1811",
+      "D1812",
+      "D1813",
+      "D1814",
+      "D1815",
+      "D1816",
+      "D1817",
+      "D1818",
+      "D1819",
+      "D1820"
+    ],
+    "jewish": 264,
+    "jewish_pct": 0.009354222067105913,
+    "jewish_sourceCells": [
+      "D1821"
+    ],
+    "islamic": 92,
+    "islamic_pct": 0.0032598046597490304,
+    "islamic_sourceCells": [
+      "D1822"
+    ],
+    "ethnic_roots": 284,
+    "ethnic_roots_pct": 0.010062875254007876,
+    "ethnic_roots_sourceCells": [
+      "D1825"
+    ],
+    "afro_roots": 163,
+    "afro_roots_pct": 0.0057755234732509994,
+    "afro_roots_sourceCells": [
+      "D1826"
+    ],
+    "spiritualist": 178,
+    "spiritualist_pct": 0.006307013363427472,
+    "spiritualist_sourceCells": [
+      "D1827"
+    ],
+    "other_religions": 1537,
+    "other_religions_pct": 0.05445999741341587,
+    "other_religions_sourceCells": [
+      "D1823",
+      "D1824",
+      "D1828",
+      "D1829"
+    ],
+    "no_religion": 125379,
+    "no_religion_pct": 4.442511396029062,
+    "no_religion_sourceCells": [
+      "D1830",
+      "D1831"
+    ],
+    "unaffiliated_believer": 43578,
+    "unaffiliated_believer_pct": 1.5440844289406874,
+    "unaffiliated_believer_sourceCells": [
+      "D1832"
+    ],
+    "unspecified": 6336,
+    "unspecified_pct": 0.22450132961054192,
+    "unspecified_sourceCells": [
+      "D1833"
+    ]
+  },
+  {
+    "entityCode": "25",
+    "entityName": "Sinaloa",
+    "year": 2020,
+    "populationTotal": 3026943,
+    "sourceTotalCell": "D1884",
+    "catholic": 2372823,
+    "catholic_pct": 78.39007870316686,
+    "catholic_sourceCells": [
+      "D1885"
+    ],
+    "protestant_evangelical": 260384,
+    "protestant_evangelical_pct": 8.602210216710391,
+    "protestant_evangelical_sourceCells": [
+      "D1886",
+      "D1887",
+      "D1888",
+      "D1889",
+      "D1890",
+      "D1891",
+      "D1892",
+      "D1893",
+      "D1894",
+      "D1895"
+    ],
+    "jewish": 201,
+    "jewish_pct": 0.006640362900788023,
+    "jewish_sourceCells": [
+      "D1896"
+    ],
+    "islamic": 77,
+    "islamic_pct": 0.002543820613734715,
+    "islamic_sourceCells": [
+      "D1897"
+    ],
+    "ethnic_roots": 127,
+    "ethnic_roots_pct": 0.00419565218109492,
+    "ethnic_roots_sourceCells": [
+      "D1900"
+    ],
+    "afro_roots": 215,
+    "afro_roots_pct": 0.00710287573964888,
+    "afro_roots_sourceCells": [
+      "D1901"
+    ],
+    "spiritualist": 484,
+    "spiritualist_pct": 0.015989729572046783,
+    "spiritualist_sourceCells": [
+      "D1902"
+    ],
+    "other_religions": 724,
+    "other_religions_pct": 0.023918521095375764,
+    "other_religions_sourceCells": [
+      "D1898",
+      "D1899",
+      "D1903",
+      "D1904"
+    ],
+    "no_religion": 374252,
+    "no_religion_pct": 12.364025354953826,
+    "no_religion_sourceCells": [
+      "D1905",
+      "D1906"
+    ],
+    "unaffiliated_believer": 11659,
+    "unaffiliated_believer_pct": 0.3851740848770525,
+    "unaffiliated_believer_sourceCells": [
+      "D1907"
+    ],
+    "unspecified": 5997,
+    "unspecified_pct": 0.19812067818918294,
+    "unspecified_sourceCells": [
+      "D1908"
+    ]
+  },
+  {
+    "entityCode": "26",
+    "entityName": "Sonora",
+    "year": 2020,
+    "populationTotal": 2944840,
+    "sourceTotalCell": "D1959",
+    "catholic": 2252402,
+    "catholic_pct": 76.48639654446421,
+    "catholic_sourceCells": [
+      "D1960"
+    ],
+    "protestant_evangelical": 329449,
+    "protestant_evangelical_pct": 11.187331060431127,
+    "protestant_evangelical_sourceCells": [
+      "D1961",
+      "D1962",
+      "D1963",
+      "D1964",
+      "D1965",
+      "D1966",
+      "D1967",
+      "D1968",
+      "D1969",
+      "D1970"
+    ],
+    "jewish": 250,
+    "jewish_pct": 0.008489425571508129,
+    "jewish_sourceCells": [
+      "D1971"
+    ],
+    "islamic": 160,
+    "islamic_pct": 0.0054332323657652025,
+    "islamic_sourceCells": [
+      "D1972"
+    ],
+    "ethnic_roots": 30,
+    "ethnic_roots_pct": 0.0010187310685809755,
+    "ethnic_roots_sourceCells": [
+      "D1975"
+    ],
+    "afro_roots": 169,
+    "afro_roots_pct": 0.005738851686339495,
+    "afro_roots_sourceCells": [
+      "D1976"
+    ],
+    "spiritualist": 210,
+    "spiritualist_pct": 0.0071311174800668285,
+    "spiritualist_sourceCells": [
+      "D1977"
+    ],
+    "other_religions": 750,
+    "other_religions_pct": 0.02546827671452439,
+    "other_religions_sourceCells": [
+      "D1973",
+      "D1974",
+      "D1978",
+      "D1979"
+    ],
+    "no_religion": 338215,
+    "no_religion_pct": 11.485004278670488,
+    "no_religion_sourceCells": [
+      "D1980",
+      "D1981"
+    ],
+    "unaffiliated_believer": 15648,
+    "unaffiliated_believer_pct": 0.5313701253718368,
+    "unaffiliated_believer_sourceCells": [
+      "D1982"
+    ],
+    "unspecified": 7557,
+    "unspecified_pct": 0.25661835617554773,
+    "unspecified_sourceCells": [
+      "D1983"
+    ]
+  },
+  {
+    "entityCode": "27",
+    "entityName": "Tabasco",
+    "year": 2020,
+    "populationTotal": 2402598,
+    "sourceTotalCell": "D2034",
+    "catholic": 1493962,
+    "catholic_pct": 62.1811056198332,
+    "catholic_sourceCells": [
+      "D2035"
+    ],
+    "protestant_evangelical": 648724,
+    "protestant_evangelical_pct": 27.00093815111808,
+    "protestant_evangelical_sourceCells": [
+      "D2036",
+      "D2037",
+      "D2038",
+      "D2039",
+      "D2040",
+      "D2041",
+      "D2042",
+      "D2043",
+      "D2044",
+      "D2045"
+    ],
+    "jewish": 174,
+    "jewish_pct": 0.007242160361408775,
+    "jewish_sourceCells": [
+      "D2046"
+    ],
+    "islamic": 25,
+    "islamic_pct": 0.0010405402818116057,
+    "islamic_sourceCells": [
+      "D2047"
+    ],
+    "ethnic_roots": 36,
+    "ethnic_roots_pct": 0.001498378005808712,
+    "ethnic_roots_sourceCells": [
+      "D2050"
+    ],
+    "afro_roots": 70,
+    "afro_roots_pct": 0.0029135127890724958,
+    "afro_roots_sourceCells": [
+      "D2051"
+    ],
+    "spiritualist": 398,
+    "spiritualist_pct": 0.01656540128644076,
+    "spiritualist_sourceCells": [
+      "D2052"
+    ],
+    "other_religions": 332,
+    "other_religions_pct": 0.013818374942458122,
+    "other_religions_sourceCells": [
+      "D2048",
+      "D2049",
+      "D2053",
+      "D2054"
+    ],
+    "no_religion": 244552,
+    "no_religion_pct": 10.17864827990367,
+    "no_religion_sourceCells": [
+      "D2055",
+      "D2056"
+    ],
+    "unaffiliated_believer": 10041,
+    "unaffiliated_believer_pct": 0.41792259878681326,
+    "unaffiliated_believer_sourceCells": [
+      "D2057"
+    ],
+    "unspecified": 4284,
+    "unspecified_pct": 0.17830698269123674,
+    "unspecified_sourceCells": [
+      "D2058"
+    ]
+  },
+  {
+    "entityCode": "28",
+    "entityName": "Tamaulipas",
+    "year": 2020,
+    "populationTotal": 3527735,
+    "sourceTotalCell": "D2109",
+    "catholic": 2394619,
+    "catholic_pct": 67.8797868887544,
+    "catholic_sourceCells": [
+      "D2110"
+    ],
+    "protestant_evangelical": 615505,
+    "protestant_evangelical_pct": 17.447597396062914,
+    "protestant_evangelical_sourceCells": [
+      "D2111",
+      "D2112",
+      "D2113",
+      "D2114",
+      "D2115",
+      "D2116",
+      "D2117",
+      "D2118",
+      "D2119",
+      "D2120"
+    ],
+    "jewish": 611,
+    "jewish_pct": 0.017319895060144825,
+    "jewish_sourceCells": [
+      "D2121"
+    ],
+    "islamic": 127,
+    "islamic_pct": 0.0036000436540726557,
+    "islamic_sourceCells": [
+      "D2122"
+    ],
+    "ethnic_roots": 15,
+    "ethnic_roots_pct": 0.0004252020063865341,
+    "ethnic_roots_sourceCells": [
+      "D2125"
+    ],
+    "afro_roots": 206,
+    "afro_roots_pct": 0.005839440887708402,
+    "afro_roots_sourceCells": [
+      "D2126"
+    ],
+    "spiritualist": 353,
+    "spiritualist_pct": 0.010006420550296437,
+    "spiritualist_sourceCells": [
+      "D2127"
+    ],
+    "other_religions": 1260,
+    "other_religions_pct": 0.035716968536468864,
+    "other_religions_sourceCells": [
+      "D2123",
+      "D2124",
+      "D2128",
+      "D2129"
+    ],
+    "no_religion": 437794,
+    "no_religion_pct": 12.410059145599089,
+    "no_religion_sourceCells": [
+      "D2130",
+      "D2131"
+    ],
+    "unaffiliated_believer": 65273,
+    "unaffiliated_believer_pct": 1.8502807041912162,
+    "unaffiliated_believer_sourceCells": [
+      "D2132"
+    ],
+    "unspecified": 11972,
+    "unspecified_pct": 0.33936789469730577,
+    "unspecified_sourceCells": [
+      "D2133"
+    ]
+  },
+  {
+    "entityCode": "29",
+    "entityName": "Tlaxcala",
+    "year": 2020,
+    "populationTotal": 1342977,
+    "sourceTotalCell": "D2184",
+    "catholic": 1142076,
+    "catholic_pct": 85.0406224380611,
+    "catholic_sourceCells": [
+      "D2185"
+    ],
+    "protestant_evangelical": 84419,
+    "protestant_evangelical_pct": 6.285960221210043,
+    "protestant_evangelical_sourceCells": [
+      "D2186",
+      "D2187",
+      "D2188",
+      "D2189",
+      "D2190",
+      "D2191",
+      "D2192",
+      "D2193",
+      "D2194",
+      "D2195"
+    ],
+    "jewish": 399,
+    "jewish_pct": 0.02971011417172446,
+    "jewish_sourceCells": [
+      "D2196"
+    ],
+    "islamic": 54,
+    "islamic_pct": 0.0040209177074514305,
+    "islamic_sourceCells": [
+      "D2197"
+    ],
+    "ethnic_roots": 35,
+    "ethnic_roots_pct": 0.002606150365940742,
+    "ethnic_roots_sourceCells": [
+      "D2200"
+    ],
+    "afro_roots": 90,
+    "afro_roots_pct": 0.006701529512419051,
+    "afro_roots_sourceCells": [
+      "D2201"
+    ],
+    "spiritualist": 805,
+    "spiritualist_pct": 0.05994145841663707,
+    "spiritualist_sourceCells": [
+      "D2202"
+    ],
+    "other_religions": 316,
+    "other_religions_pct": 0.02352981473249356,
+    "other_religions_sourceCells": [
+      "D2198",
+      "D2199",
+      "D2203",
+      "D2204"
+    ],
+    "no_religion": 32854,
+    "no_religion_pct": 2.4463561177890614,
+    "no_religion_sourceCells": [
+      "D2205",
+      "D2206"
+    ],
+    "unaffiliated_believer": 59460,
+    "unaffiliated_believer_pct": 4.427477164538186,
+    "unaffiliated_believer_sourceCells": [
+      "D2207"
+    ],
+    "unspecified": 22469,
+    "unspecified_pct": 1.6730740734949296,
+    "unspecified_sourceCells": [
+      "D2208"
+    ]
+  },
+  {
+    "entityCode": "30",
+    "entityName": "Veracruz de Ignacio de la Llave",
+    "year": 2020,
+    "populationTotal": 8062579,
+    "sourceTotalCell": "D2259",
+    "catholic": 6053044,
+    "catholic_pct": 75.07577910244352,
+    "catholic_sourceCells": [
+      "D2260"
+    ],
+    "protestant_evangelical": 1191127,
+    "protestant_evangelical_pct": 14.773523459429049,
+    "protestant_evangelical_sourceCells": [
+      "D2261",
+      "D2262",
+      "D2263",
+      "D2264",
+      "D2265",
+      "D2266",
+      "D2267",
+      "D2268",
+      "D2269",
+      "D2270"
+    ],
+    "jewish": 1666,
+    "jewish_pct": 0.02066336342254755,
+    "jewish_sourceCells": [
+      "D2271"
+    ],
+    "islamic": 215,
+    "islamic_pct": 0.0026666405377237233,
+    "islamic_sourceCells": [
+      "D2272"
+    ],
+    "ethnic_roots": 877,
+    "ethnic_roots_pct": 0.010877412798063747,
+    "ethnic_roots_sourceCells": [
+      "D2275"
+    ],
+    "afro_roots": 508,
+    "afro_roots_pct": 0.0063007134565751235,
+    "afro_roots_sourceCells": [
+      "D2276"
+    ],
+    "spiritualist": 2099,
+    "spiritualist_pct": 0.026033853435730676,
+    "spiritualist_sourceCells": [
+      "D2277"
+    ],
+    "other_religions": 2547,
+    "other_religions_pct": 0.031590388137592205,
+    "other_religions_sourceCells": [
+      "D2273",
+      "D2274",
+      "D2278",
+      "D2279"
+    ],
+    "no_religion": 640829,
+    "no_religion_pct": 7.94818878673933,
+    "no_religion_sourceCells": [
+      "D2280",
+      "D2281"
+    ],
+    "unaffiliated_believer": 159596,
+    "unaffiliated_believer_pct": 1.9794658756211878,
+    "unaffiliated_believer_sourceCells": [
+      "D2282"
+    ],
+    "unspecified": 10071,
+    "unspecified_pct": 0.1249104039786773,
+    "unspecified_sourceCells": [
+      "D2283"
+    ]
+  },
+  {
+    "entityCode": "31",
+    "entityName": "Yucatán",
+    "year": 2020,
+    "populationTotal": 2320898,
+    "sourceTotalCell": "D2334",
+    "catholic": 1724057,
+    "catholic_pct": 74.28404867426315,
+    "catholic_sourceCells": [
+      "D2335"
+    ],
+    "protestant_evangelical": 370398,
+    "protestant_evangelical_pct": 15.959253702661643,
+    "protestant_evangelical_sourceCells": [
+      "D2336",
+      "D2337",
+      "D2338",
+      "D2339",
+      "D2340",
+      "D2341",
+      "D2342",
+      "D2343",
+      "D2344",
+      "D2345"
+    ],
+    "jewish": 353,
+    "jewish_pct": 0.015209630065603916,
+    "jewish_sourceCells": [
+      "D2346"
+    ],
+    "islamic": 155,
+    "islamic_pct": 0.0066784494622340144,
+    "islamic_sourceCells": [
+      "D2347"
+    ],
+    "ethnic_roots": 534,
+    "ethnic_roots_pct": 0.023008335566664283,
+    "ethnic_roots_sourceCells": [
+      "D2350"
+    ],
+    "afro_roots": 613,
+    "afro_roots_pct": 0.026412190453867425,
+    "afro_roots_sourceCells": [
+      "D2351"
+    ],
+    "spiritualist": 242,
+    "spiritualist_pct": 0.010426998515229881,
+    "spiritualist_sourceCells": [
+      "D2352"
+    ],
+    "other_religions": 1815,
+    "other_religions_pct": 0.07820248886422411,
+    "other_religions_sourceCells": [
+      "D2348",
+      "D2349",
+      "D2353",
+      "D2354"
+    ],
+    "no_religion": 199018,
+    "no_religion_pct": 8.575042935967026,
+    "no_religion_sourceCells": [
+      "D2355",
+      "D2356"
+    ],
+    "unaffiliated_believer": 16396,
+    "unaffiliated_believer_pct": 0.7064506927921864,
+    "unaffiliated_believer_sourceCells": [
+      "D2357"
+    ],
+    "unspecified": 7317,
+    "unspecified_pct": 0.31526590138816957,
+    "unspecified_sourceCells": [
+      "D2358"
+    ]
+  },
+  {
+    "entityCode": "32",
+    "entityName": "Zacatecas",
+    "year": 2020,
+    "populationTotal": 1622138,
+    "sourceTotalCell": "D2409",
+    "catholic": 1497371,
+    "catholic_pct": 92.30848423500343,
+    "catholic_sourceCells": [
+      "D2410"
+    ],
+    "protestant_evangelical": 74177,
+    "protestant_evangelical_pct": 4.572792203869215,
+    "protestant_evangelical_sourceCells": [
+      "D2411",
+      "D2412",
+      "D2413",
+      "D2414",
+      "D2415",
+      "D2416",
+      "D2417",
+      "D2418",
+      "D2419",
+      "D2420"
+    ],
+    "jewish": 91,
+    "jewish_pct": 0.005609880293785115,
+    "jewish_sourceCells": [
+      "D2421"
+    ],
+    "islamic": 38,
+    "islamic_pct": 0.0023425873754267515,
+    "islamic_sourceCells": [
+      "D2422"
+    ],
+    "ethnic_roots": 86,
+    "ethnic_roots_pct": 0.005301645112807911,
+    "ethnic_roots_sourceCells": [
+      "D2425"
+    ],
+    "afro_roots": 21,
+    "afro_roots_pct": 0.0012945877601042576,
+    "afro_roots_sourceCells": [
+      "D2426"
+    ],
+    "spiritualist": 69,
+    "spiritualist_pct": 0.004253645497485418,
+    "spiritualist_sourceCells": [
+      "D2427"
+    ],
+    "other_religions": 389,
+    "other_religions_pct": 0.023980697080026484,
+    "other_religions_sourceCells": [
+      "D2423",
+      "D2424",
+      "D2428",
+      "D2429"
+    ],
+    "no_religion": 38414,
+    "no_religion_pct": 2.368109248411664,
+    "no_religion_sourceCells": [
+      "D2430",
+      "D2431"
+    ],
+    "unaffiliated_believer": 8051,
+    "unaffiliated_believer_pct": 0.49632028840949416,
+    "unaffiliated_believer_sourceCells": [
+      "D2432"
+    ],
+    "unspecified": 3431,
+    "unspecified_pct": 0.2115109811865575,
+    "unspecified_sourceCells": [
+      "D2433"
+    ]
+  }
+]

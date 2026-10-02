@@ -1,0 +1,6385 @@
+{
+  "schemaVersion": 1,
+  "referenceYear": 2020,
+  "referenceDate": "2020-03-15",
+  "displayGeometryYear": 2025,
+  "generatedFrom": "Official state and national table counts; source cells and transformations retained.",
+  "noGeographicDeterminism": "地図は回答・言語・自己認識の地域差を示します。自然条件だけで民族や宗教を説明しません。",
+  "metrics": [
+    {
+      "id": "indigenous_language",
+      "category": "ethnicity",
+      "referenceYear": 2020,
+      "label": "先住民言語を話す（3歳以上）",
+      "isEstimate": false,
+      "sharePrecision": 1,
+      "definition": "先住民言語を話すと報告された3歳以上の人口。先住民としての自己認識とは別の質問です。",
+      "takeaway": "言語を話す人数と人口に占める割合を、州ごとに分けて読みます。",
+      "countDenominatorLabel": "年齢が判明している3歳以上人口",
+      "countLabel": "公表人数",
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 1,
+          "color": "#f1f0d6",
+          "label": "0–1%未満"
+        },
+        {
+          "min": 1,
+          "max": 3,
+          "color": "#c6debe",
+          "label": "1–3%未満"
+        },
+        {
+          "min": 3,
+          "max": 6,
+          "color": "#8ec2b0",
+          "label": "3–6%未満"
+        },
+        {
+          "min": 6,
+          "max": 15,
+          "color": "#529f95",
+          "label": "6–15%未満"
+        },
+        {
+          "min": 15,
+          "max": 30,
+          "color": "#26786e",
+          "label": "15–30%未満"
+        },
+        {
+          "min": 30,
+          "max": null,
+          "color": "#174c49",
+          "label": "30%以上"
+        }
+      ],
+      "source": {
+        "label": "INEGI：2020年国勢調査・基本票",
+        "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_05_etnicidad.xlsx",
+        "table": "Etnicidad 2／シート02・Total",
+        "periodNote": "2020年3月15日0時。表作成2021年1月25日。",
+        "methodNote": "人数は公表値。割合は公表人数÷同じ州の3歳以上人口×100として当サイトが計算。不詳も分母に含め、非話者へ付け替えません。",
+        "attribution": "Fuente: INEGI, Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html"
+      },
+      "nationalCount": 7364645,
+      "nationalDenominator": 119976584,
+      "nationalStatus": "value",
+      "nationalUnknownCount": 114571,
+      "states": {
+        "10": {
+          "count": 47242,
+          "denominator": 1733682,
+          "status": "value",
+          "unknownCount": 1045,
+          "sourceCells": {
+            "count": "E581",
+            "denominator": "D581",
+            "unspecified": "J581"
+          },
+          "sourceSheet": "02"
+        },
+        "11": {
+          "count": 14048,
+          "denominator": 5840957,
+          "status": "value",
+          "unknownCount": 6107,
+          "sourceCells": {
+            "count": "E638",
+            "denominator": "D638",
+            "unspecified": "J638"
+          },
+          "sourceSheet": "02"
+        },
+        "12": {
+          "count": 515487,
+          "denominator": 3328762,
+          "status": "value",
+          "unknownCount": 1395,
+          "sourceCells": {
+            "count": "E695",
+            "denominator": "D695",
+            "unspecified": "J695"
+          },
+          "sourceSheet": "02"
+        },
+        "13": {
+          "count": 362629,
+          "denominator": 2944897,
+          "status": "value",
+          "unknownCount": 1301,
+          "sourceCells": {
+            "count": "E752",
+            "denominator": "D752",
+            "unspecified": "J752"
+          },
+          "sourceSheet": "02"
+        },
+        "14": {
+          "count": 66963,
+          "denominator": 7912955,
+          "status": "value",
+          "unknownCount": 8751,
+          "sourceCells": {
+            "count": "E809",
+            "denominator": "D809",
+            "unspecified": "J809"
+          },
+          "sourceSheet": "02"
+        },
+        "15": {
+          "count": 417603,
+          "denominator": 16260058,
+          "status": "value",
+          "unknownCount": 24379,
+          "sourceCells": {
+            "count": "E866",
+            "denominator": "D866",
+            "unspecified": "J866"
+          },
+          "sourceSheet": "02"
+        },
+        "16": {
+          "count": 154943,
+          "denominator": 4493516,
+          "status": "value",
+          "unknownCount": 5661,
+          "sourceCells": {
+            "count": "E923",
+            "denominator": "D923",
+            "unspecified": "J923"
+          },
+          "sourceSheet": "02"
+        },
+        "17": {
+          "count": 38110,
+          "denominator": 1887763,
+          "status": "value",
+          "unknownCount": 1362,
+          "sourceCells": {
+            "count": "E980",
+            "denominator": "D980",
+            "unspecified": "J980"
+          },
+          "sourceSheet": "02"
+        },
+        "18": {
+          "count": 69069,
+          "denominator": 1174739,
+          "status": "value",
+          "unknownCount": 518,
+          "sourceCells": {
+            "count": "E1037",
+            "denominator": "D1037",
+            "unspecified": "J1037"
+          },
+          "sourceSheet": "02"
+        },
+        "19": {
+          "count": 77945,
+          "denominator": 5508144,
+          "status": "value",
+          "unknownCount": 13030,
+          "sourceCells": {
+            "count": "E1094",
+            "denominator": "D1094",
+            "unspecified": "J1094"
+          },
+          "sourceSheet": "02"
+        },
+        "20": {
+          "count": 1221555,
+          "denominator": 3917300,
+          "status": "value",
+          "unknownCount": 1477,
+          "sourceCells": {
+            "count": "E1151",
+            "denominator": "D1151",
+            "unspecified": "J1151"
+          },
+          "sourceSheet": "02"
+        },
+        "21": {
+          "count": 615622,
+          "denominator": 6238582,
+          "status": "value",
+          "unknownCount": 3337,
+          "sourceCells": {
+            "count": "E1208",
+            "denominator": "D1208",
+            "unspecified": "J1208"
+          },
+          "sourceSheet": "02"
+        },
+        "22": {
+          "count": 31383,
+          "denominator": 2253414,
+          "status": "value",
+          "unknownCount": 1801,
+          "sourceCells": {
+            "count": "E1265",
+            "denominator": "D1265",
+            "unspecified": "J1265"
+          },
+          "sourceSheet": "02"
+        },
+        "23": {
+          "count": 204949,
+          "denominator": 1752570,
+          "status": "value",
+          "unknownCount": 2772,
+          "sourceCells": {
+            "count": "E1322",
+            "denominator": "D1322",
+            "unspecified": "J1322"
+          },
+          "sourceSheet": "02"
+        },
+        "24": {
+          "count": 231213,
+          "denominator": 2687679,
+          "status": "value",
+          "unknownCount": 2915,
+          "sourceCells": {
+            "count": "E1379",
+            "denominator": "D1379",
+            "unspecified": "J1379"
+          },
+          "sourceSheet": "02"
+        },
+        "25": {
+          "count": 35539,
+          "denominator": 2885315,
+          "status": "value",
+          "unknownCount": 1499,
+          "sourceCells": {
+            "count": "E1436",
+            "denominator": "D1436",
+            "unspecified": "J1436"
+          },
+          "sourceSheet": "02"
+        },
+        "26": {
+          "count": 62808,
+          "denominator": 2817821,
+          "status": "value",
+          "unknownCount": 2470,
+          "sourceCells": {
+            "count": "E1493",
+            "denominator": "D1493",
+            "unspecified": "J1493"
+          },
+          "sourceSheet": "02"
+        },
+        "27": {
+          "count": 91025,
+          "denominator": 2283383,
+          "status": "value",
+          "unknownCount": 921,
+          "sourceCells": {
+            "count": "E1550",
+            "denominator": "D1550",
+            "unspecified": "J1550"
+          },
+          "sourceSheet": "02"
+        },
+        "28": {
+          "count": 22651,
+          "denominator": 3367123,
+          "status": "value",
+          "unknownCount": 3193,
+          "sourceCells": {
+            "count": "E1607",
+            "denominator": "D1607",
+            "unspecified": "J1607"
+          },
+          "sourceSheet": "02"
+        },
+        "29": {
+          "count": 27174,
+          "denominator": 1258093,
+          "status": "value",
+          "unknownCount": 850,
+          "sourceCells": {
+            "count": "E1664",
+            "denominator": "D1664",
+            "unspecified": "J1664"
+          },
+          "sourceSheet": "02"
+        },
+        "30": {
+          "count": 663503,
+          "denominator": 7716363,
+          "status": "value",
+          "unknownCount": 2705,
+          "sourceCells": {
+            "count": "E1721",
+            "denominator": "D1721",
+            "unspecified": "J1721"
+          },
+          "sourceSheet": "02"
+        },
+        "31": {
+          "count": 525092,
+          "denominator": 2215931,
+          "status": "value",
+          "unknownCount": 1639,
+          "sourceCells": {
+            "count": "E1778",
+            "denominator": "D1778",
+            "unspecified": "J1778"
+          },
+          "sourceSheet": "02"
+        },
+        "32": {
+          "count": 5005,
+          "denominator": 1531847,
+          "status": "value",
+          "unknownCount": 809,
+          "sourceCells": {
+            "count": "E1835",
+            "denominator": "D1835",
+            "unspecified": "J1835"
+          },
+          "sourceSheet": "02"
+        },
+        "01": {
+          "count": 2539,
+          "denominator": 1352235,
+          "status": "value",
+          "unknownCount": 673,
+          "sourceCells": {
+            "count": "E68",
+            "denominator": "D68",
+            "unspecified": "J68"
+          },
+          "sourceSheet": "02"
+        },
+        "02": {
+          "count": 49130,
+          "denominator": 3610844,
+          "status": "value",
+          "unknownCount": 6561,
+          "sourceCells": {
+            "count": "E125",
+            "denominator": "D125",
+            "unspecified": "J125"
+          },
+          "sourceSheet": "02"
+        },
+        "03": {
+          "count": 13581,
+          "denominator": 758642,
+          "status": "value",
+          "unknownCount": 1147,
+          "sourceCells": {
+            "count": "E182",
+            "denominator": "D182",
+            "unspecified": "J182"
+          },
+          "sourceSheet": "02"
+        },
+        "04": {
+          "count": 91801,
+          "denominator": 878528,
+          "status": "value",
+          "unknownCount": 386,
+          "sourceCells": {
+            "count": "E239",
+            "denominator": "D239",
+            "unspecified": "J239"
+          },
+          "sourceSheet": "02"
+        },
+        "05": {
+          "count": 5527,
+          "denominator": 2980244,
+          "status": "value",
+          "unknownCount": 2081,
+          "sourceCells": {
+            "count": "E296",
+            "denominator": "D296",
+            "unspecified": "J296"
+          },
+          "sourceSheet": "02"
+        },
+        "06": {
+          "count": 5210,
+          "denominator": 699821,
+          "status": "value",
+          "unknownCount": 334,
+          "sourceCells": {
+            "count": "E353",
+            "denominator": "D353",
+            "unspecified": "J353"
+          },
+          "sourceSheet": "02"
+        },
+        "07": {
+          "count": 1459648,
+          "denominator": 5181929,
+          "status": "value",
+          "unknownCount": 2046,
+          "sourceCells": {
+            "count": "E410",
+            "denominator": "D410",
+            "unspecified": "J410"
+          },
+          "sourceSheet": "02"
+        },
+        "08": {
+          "count": 110498,
+          "denominator": 3570280,
+          "status": "value",
+          "unknownCount": 3787,
+          "sourceCells": {
+            "count": "E467",
+            "denominator": "D467",
+            "unspecified": "J467"
+          },
+          "sourceSheet": "02"
+        },
+        "09": {
+          "count": 125153,
+          "denominator": 8933167,
+          "status": "value",
+          "unknownCount": 7619,
+          "sourceCells": {
+            "count": "E524",
+            "denominator": "D524",
+            "unspecified": "J524"
+          },
+          "sourceSheet": "02"
+        }
+      },
+      "countRadiusReference": 2000000,
+      "countMaximumRadius": 33,
+      "countLegendValues": [
+        200000,
+        1000000,
+        2000000
+      ],
+      "distributionSummary": "割合が高い州：オアハカ 31.2%、チアパス 28.2%、ユカタン 23.7%（2020年）。",
+      "comparabilityNote": "3つの指標は重複可能で、同じ分母でもなく、合計100%の排他的な人種分類ではありません。米国のrace分類とは対応しません。"
+    },
+    {
+      "id": "afro_identity",
+      "category": "ethnicity",
+      "referenceYear": 2020,
+      "label": "アフロ系の自己認識（全年齢）",
+      "isEstimate": false,
+      "sharePrecision": 1,
+      "definition": "祖先・慣習・伝統を通してアフロメキシコ人・アフロ系と認識すると報告された人口。肌の色・毛髪や米国のrace分類で分けた指標ではありません。",
+      "takeaway": "アフロ系の自己認識を、全年齢人口に占める割合と人数で読みます。",
+      "countDenominatorLabel": "全年齢の通常居住人口",
+      "countLabel": "公表人数",
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 0.5,
+          "color": "#f1f0d6",
+          "label": "0–0.5%未満"
+        },
+        {
+          "min": 0.5,
+          "max": 1,
+          "color": "#c6debe",
+          "label": "0.5–1%未満"
+        },
+        {
+          "min": 1,
+          "max": 2,
+          "color": "#8ec2b0",
+          "label": "1–2%未満"
+        },
+        {
+          "min": 2,
+          "max": 3,
+          "color": "#529f95",
+          "label": "2–3%未満"
+        },
+        {
+          "min": 3,
+          "max": 5,
+          "color": "#26786e",
+          "label": "3–5%未満"
+        },
+        {
+          "min": 5,
+          "max": null,
+          "color": "#174c49",
+          "label": "5%以上"
+        }
+      ],
+      "source": {
+        "label": "INEGI：2020年国勢調査・基本票",
+        "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_05_etnicidad.xlsx",
+        "table": "Etnicidad 14／シート14・Total",
+        "periodNote": "2020年3月15日0時。表作成2021年1月25日。",
+        "methodNote": "人数は公表値。割合は公表人数÷同じ州の総人口×100として当サイトが計算。不詳も分母に含めます。総人口には未情報住宅・未報告未成年の公式補完推計（全国6,337,751人）を含みます。",
+        "attribution": "Fuente: INEGI, Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html"
+      },
+      "nationalCount": 2576213,
+      "nationalDenominator": 126014024,
+      "nationalStatus": "value",
+      "nationalUnknownCount": 476588,
+      "states": {
+        "10": {
+          "count": 17311,
+          "denominator": 1832650,
+          "status": "value",
+          "unknownCount": 4720,
+          "sourceCells": {
+            "count": "E609",
+            "denominator": "D609",
+            "unspecified": "G609"
+          },
+          "sourceSheet": "14"
+        },
+        "11": {
+          "count": 108806,
+          "denominator": 6166934,
+          "status": "value",
+          "unknownCount": 20096,
+          "sourceCells": {
+            "count": "E669",
+            "denominator": "D669",
+            "unspecified": "G669"
+          },
+          "sourceSheet": "14"
+        },
+        "12": {
+          "count": 303923,
+          "denominator": 3540685,
+          "status": "value",
+          "unknownCount": 16399,
+          "sourceCells": {
+            "count": "E729",
+            "denominator": "D729",
+            "unspecified": "G729"
+          },
+          "sourceSheet": "14"
+        },
+        "13": {
+          "count": 48693,
+          "denominator": 3082841,
+          "status": "value",
+          "unknownCount": 4862,
+          "sourceCells": {
+            "count": "E789",
+            "denominator": "D789",
+            "unspecified": "G789"
+          },
+          "sourceSheet": "14"
+        },
+        "14": {
+          "count": 139676,
+          "denominator": 8348151,
+          "status": "value",
+          "unknownCount": 59661,
+          "sourceCells": {
+            "count": "E849",
+            "denominator": "D849",
+            "unspecified": "G849"
+          },
+          "sourceSheet": "14"
+        },
+        "15": {
+          "count": 296264,
+          "denominator": 16992418,
+          "status": "value",
+          "unknownCount": 64287,
+          "sourceCells": {
+            "count": "E909",
+            "denominator": "D909",
+            "unspecified": "G909"
+          },
+          "sourceSheet": "14"
+        },
+        "16": {
+          "count": 73424,
+          "denominator": 4748846,
+          "status": "value",
+          "unknownCount": 9742,
+          "sourceCells": {
+            "count": "E969",
+            "denominator": "D969",
+            "unspecified": "G969"
+          },
+          "sourceSheet": "14"
+        },
+        "17": {
+          "count": 38331,
+          "denominator": 1971520,
+          "status": "value",
+          "unknownCount": 2596,
+          "sourceCells": {
+            "count": "E1029",
+            "denominator": "D1029",
+            "unspecified": "G1029"
+          },
+          "sourceSheet": "14"
+        },
+        "18": {
+          "count": 10416,
+          "denominator": 1235456,
+          "status": "value",
+          "unknownCount": 1925,
+          "sourceCells": {
+            "count": "E1089",
+            "denominator": "D1089",
+            "unspecified": "G1089"
+          },
+          "sourceSheet": "14"
+        },
+        "19": {
+          "count": 97603,
+          "denominator": 5784442,
+          "status": "value",
+          "unknownCount": 31390,
+          "sourceCells": {
+            "count": "E1149",
+            "denominator": "D1149",
+            "unspecified": "G1149"
+          },
+          "sourceSheet": "14"
+        },
+        "20": {
+          "count": 194474,
+          "denominator": 4132148,
+          "status": "value",
+          "unknownCount": 12129,
+          "sourceCells": {
+            "count": "E1209",
+            "denominator": "D1209",
+            "unspecified": "G1209"
+          },
+          "sourceSheet": "14"
+        },
+        "21": {
+          "count": 113945,
+          "denominator": 6583278,
+          "status": "value",
+          "unknownCount": 9667,
+          "sourceCells": {
+            "count": "E1269",
+            "denominator": "D1269",
+            "unspecified": "G1269"
+          },
+          "sourceSheet": "14"
+        },
+        "22": {
+          "count": 43436,
+          "denominator": 2368467,
+          "status": "value",
+          "unknownCount": 8781,
+          "sourceCells": {
+            "count": "E1329",
+            "denominator": "D1329",
+            "unspecified": "G1329"
+          },
+          "sourceSheet": "14"
+        },
+        "23": {
+          "count": 52265,
+          "denominator": 1857985,
+          "status": "value",
+          "unknownCount": 24346,
+          "sourceCells": {
+            "count": "E1389",
+            "denominator": "D1389",
+            "unspecified": "G1389"
+          },
+          "sourceSheet": "14"
+        },
+        "24": {
+          "count": 55337,
+          "denominator": 2822255,
+          "status": "value",
+          "unknownCount": 5835,
+          "sourceCells": {
+            "count": "E1449",
+            "denominator": "D1449",
+            "unspecified": "G1449"
+          },
+          "sourceSheet": "14"
+        },
+        "25": {
+          "count": 42196,
+          "denominator": 3026943,
+          "status": "value",
+          "unknownCount": 4391,
+          "sourceCells": {
+            "count": "E1509",
+            "denominator": "D1509",
+            "unspecified": "G1509"
+          },
+          "sourceSheet": "14"
+        },
+        "26": {
+          "count": 43510,
+          "denominator": 2944840,
+          "status": "value",
+          "unknownCount": 5757,
+          "sourceCells": {
+            "count": "E1569",
+            "denominator": "D1569",
+            "unspecified": "G1569"
+          },
+          "sourceSheet": "14"
+        },
+        "27": {
+          "count": 37553,
+          "denominator": 2402598,
+          "status": "value",
+          "unknownCount": 1927,
+          "sourceCells": {
+            "count": "E1629",
+            "denominator": "D1629",
+            "unspecified": "G1629"
+          },
+          "sourceSheet": "14"
+        },
+        "28": {
+          "count": 43621,
+          "denominator": 3527735,
+          "status": "value",
+          "unknownCount": 9284,
+          "sourceCells": {
+            "count": "E1689",
+            "denominator": "D1689",
+            "unspecified": "G1689"
+          },
+          "sourceSheet": "14"
+        },
+        "29": {
+          "count": 18094,
+          "denominator": 1342977,
+          "status": "value",
+          "unknownCount": 21815,
+          "sourceCells": {
+            "count": "E1749",
+            "denominator": "D1749",
+            "unspecified": "G1749"
+          },
+          "sourceSheet": "14"
+        },
+        "30": {
+          "count": 215435,
+          "denominator": 8062579,
+          "status": "value",
+          "unknownCount": 8564,
+          "sourceCells": {
+            "count": "E1809",
+            "denominator": "D1809",
+            "unspecified": "G1809"
+          },
+          "sourceSheet": "14"
+        },
+        "31": {
+          "count": 69599,
+          "denominator": 2320898,
+          "status": "value",
+          "unknownCount": 5713,
+          "sourceCells": {
+            "count": "E1869",
+            "denominator": "D1869",
+            "unspecified": "G1869"
+          },
+          "sourceSheet": "14"
+        },
+        "32": {
+          "count": 15951,
+          "denominator": 1622138,
+          "status": "value",
+          "unknownCount": 2849,
+          "sourceCells": {
+            "count": "E1929",
+            "denominator": "D1929",
+            "unspecified": "G1929"
+          },
+          "sourceSheet": "14"
+        },
+        "01": {
+          "count": 22425,
+          "denominator": 1425607,
+          "status": "value",
+          "unknownCount": 2313,
+          "sourceCells": {
+            "count": "E69",
+            "denominator": "D69",
+            "unspecified": "G69"
+          },
+          "sourceSheet": "14"
+        },
+        "02": {
+          "count": 64362,
+          "denominator": 3769020,
+          "status": "value",
+          "unknownCount": 28225,
+          "sourceCells": {
+            "count": "E129",
+            "denominator": "D129",
+            "unspecified": "G129"
+          },
+          "sourceSheet": "14"
+        },
+        "03": {
+          "count": 26330,
+          "denominator": 798447,
+          "status": "value",
+          "unknownCount": 4968,
+          "sourceCells": {
+            "count": "E189",
+            "denominator": "D189",
+            "unspecified": "G189"
+          },
+          "sourceSheet": "14"
+        },
+        "04": {
+          "count": 19319,
+          "denominator": 928363,
+          "status": "value",
+          "unknownCount": 4838,
+          "sourceCells": {
+            "count": "E249",
+            "denominator": "D249",
+            "unspecified": "G249"
+          },
+          "sourceSheet": "14"
+        },
+        "05": {
+          "count": 45976,
+          "denominator": 3146771,
+          "status": "value",
+          "unknownCount": 8721,
+          "sourceCells": {
+            "count": "E309",
+            "denominator": "D309",
+            "unspecified": "G309"
+          },
+          "sourceSheet": "14"
+        },
+        "06": {
+          "count": 13574,
+          "denominator": 731391,
+          "status": "value",
+          "unknownCount": 2338,
+          "sourceCells": {
+            "count": "E369",
+            "denominator": "D369",
+            "unspecified": "G369"
+          },
+          "sourceSheet": "14"
+        },
+        "07": {
+          "count": 56532,
+          "denominator": 5543828,
+          "status": "value",
+          "unknownCount": 30506,
+          "sourceCells": {
+            "count": "E429",
+            "denominator": "D429",
+            "unspecified": "G429"
+          },
+          "sourceSheet": "14"
+        },
+        "08": {
+          "count": 60918,
+          "denominator": 3741869,
+          "status": "value",
+          "unknownCount": 14835,
+          "sourceCells": {
+            "count": "E489",
+            "denominator": "D489",
+            "unspecified": "G489"
+          },
+          "sourceSheet": "14"
+        },
+        "09": {
+          "count": 186914,
+          "denominator": 9209944,
+          "status": "value",
+          "unknownCount": 43108,
+          "sourceCells": {
+            "count": "E549",
+            "denominator": "D549",
+            "unspecified": "G549"
+          },
+          "sourceSheet": "14"
+        }
+      },
+      "countRadiusReference": 400000,
+      "countMaximumRadius": 33,
+      "countLegendValues": [
+        40000,
+        200000,
+        400000
+      ],
+      "distributionSummary": "割合が高い州：ゲレロ 8.6%、オアハカ 4.7%、バハ・カリフォルニア・スル 3.3%（2020年）。",
+      "comparabilityNote": "3つの指標は重複可能で、同じ分母でもなく、合計100%の排他的な人種分類ではありません。米国のrace分類とは対応しません。"
+    },
+    {
+      "id": "indigenous_identity_estimate",
+      "category": "ethnicity",
+      "referenceYear": 2020,
+      "label": "先住民の自己認識（公式推計）",
+      "isEstimate": true,
+      "sharePrecision": 1,
+      "definition": "一般住宅に住む3歳以上で、先住民と認識すると報告された人口。拡大票の標本調査に基づく公式推計で、言語話者の全数集計とは母集団が異なります。",
+      "takeaway": "言語を話すことと先住民の自己認識は別です。公式推計と90%信頼区間を一緒に読みます。",
+      "countDenominatorLabel": "一般住宅の3歳以上人口（公式推計）",
+      "countLabel": "公式推計人数",
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 5,
+          "color": "#f1f0d6",
+          "label": "0–5%未満"
+        },
+        {
+          "min": 5,
+          "max": 10,
+          "color": "#c6debe",
+          "label": "5–10%未満"
+        },
+        {
+          "min": 10,
+          "max": 20,
+          "color": "#8ec2b0",
+          "label": "10–20%未満"
+        },
+        {
+          "min": 20,
+          "max": 40,
+          "color": "#529f95",
+          "label": "20–40%未満"
+        },
+        {
+          "min": 40,
+          "max": 60,
+          "color": "#26786e",
+          "label": "40–60%未満"
+        },
+        {
+          "min": 60,
+          "max": null,
+          "color": "#174c49",
+          "label": "60%以上"
+        }
+      ],
+      "source": {
+        "label": "INPI：INEGI 2020年拡大票に基づく公表推計",
+        "url": "https://www.inpi.gob.mx/indicadores2020/1-poblacion-indigena-autoadscrita-nacional-y-por-entidad-federativa-muestra-censal-2020.xlsx",
+        "table": "Población de 3 años y más según condición de autoadscripción indígena por entidad federativa, estimadores, 2020／Autoadscripción",
+        "periodNote": "2020年国勢調査・拡大票標本。対象は一般住宅の3歳以上。",
+        "methodNote": "推計人数・分母・90%信頼区間はINPI原表の直接公表値。割合は同じ表の人数÷分母×100。不詳を分母に含み、人数を丸めた割合から復元していません。区間は同じINPI表から採用し、別のINEGI公表区間と混ぜていません。",
+        "attribution": "INPI. Sistema Nacional de Información y Estadística sobre los Pueblos y Comunidades Indígenas y Afromexicanas, con base en INEGI. Censo de Población y Vivienda 2020. Muestra censal. Microdatos.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+        "reuseNote": "INPI公表表の数値事実を抽出して当サイトで表示。元Excelは再配信せず、公式ダウンロードへリンク。INPIのExcel再配布ライセンスを確認したとは扱いません。"
+      },
+      "nationalCount": 23229089,
+      "nationalDenominator": 119692898,
+      "nationalStatus": "value",
+      "nationalUnknownCount": 449272,
+      "nationalConfidenceInterval90": {
+        "lower": 19.171819552493435,
+        "upper": 19.644850413334947
+      },
+      "nationalCountConfidenceInterval90": {
+        "lower": 22895223.632953312,
+        "upper": 23562954.367046688
+      },
+      "states": {
+        "10": {
+          "count": 152793,
+          "denominator": 1723495,
+          "status": "value",
+          "unknownCount": 5249,
+          "sourceCells": {
+            "count": "G105",
+            "denominator": "F105",
+            "unspecified": "I105",
+            "doesNotIdentify": "H105",
+            "countLower90": "G107",
+            "countUpper90": "G108",
+            "percentageLower90": "G112",
+            "percentageUpper90": "G113"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 8.195023492140471,
+            "upper": 9.584675002045296
+          },
+          "countConfidenceInterval90": {
+            "lower": 139902.974469515,
+            "upper": 165683.025530485
+          },
+          "countCVPercentage": 5.128869075163596,
+          "percentageCVPercentage": 4.761880651241556
+        },
+        "11": {
+          "count": 372169,
+          "denominator": 5825265,
+          "status": "value",
+          "unknownCount": 26134,
+          "sourceCells": {
+            "count": "G115",
+            "denominator": "F115",
+            "unspecified": "I115",
+            "doesNotIdentify": "H115",
+            "countLower90": "G117",
+            "countUpper90": "G118",
+            "percentageLower90": "G122",
+            "percentageUpper90": "G123"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 5.914689779261027,
+            "upper": 6.898292428535379
+          },
+          "countConfidenceInterval90": {
+            "lower": 341945.9144729568,
+            "upper": 402392.0855270432
+          },
+          "countCVPercentage": 4.93707697134704,
+          "percentageCVPercentage": 4.6765253143946355
+        },
+        "12": {
+          "count": 1102334,
+          "denominator": 3326321,
+          "status": "value",
+          "unknownCount": 13464,
+          "sourceCells": {
+            "count": "G125",
+            "denominator": "F125",
+            "unspecified": "I125",
+            "doesNotIdentify": "H125",
+            "countLower90": "G127",
+            "countUpper90": "G128",
+            "percentageLower90": "G132",
+            "percentageUpper90": "G133"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 31.92165296853436,
+            "upper": 34.380826020157976
+          },
+          "countConfidenceInterval90": {
+            "lower": 1059871.6003045058,
+            "upper": 1144796.3996954942
+          },
+          "countCVPercentage": 2.3418691450954774,
+          "percentageCVPercentage": 2.256081578727678
+        },
+        "13": {
+          "count": 1077386,
+          "denominator": 2939604,
+          "status": "value",
+          "unknownCount": 8095,
+          "sourceCells": {
+            "count": "G135",
+            "denominator": "F135",
+            "unspecified": "I135",
+            "doesNotIdentify": "H135",
+            "countLower90": "G137",
+            "countUpper90": "G138",
+            "percentageLower90": "G142",
+            "percentageUpper90": "G143"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 35.22504401366503,
+            "upper": 38.10015589631835
+          },
+          "countConfidenceInterval90": {
+            "lower": 1017913.1051413432,
+            "upper": 1136858.8948586567
+          },
+          "countCVPercentage": 3.3559775279968243,
+          "percentageCVPercentage": 2.3851882590288285
+        },
+        "14": {
+          "count": 557864,
+          "denominator": 7919382,
+          "status": "value",
+          "unknownCount": 25913,
+          "sourceCells": {
+            "count": "G145",
+            "denominator": "F145",
+            "unspecified": "I145",
+            "doesNotIdentify": "H145",
+            "countLower90": "G147",
+            "countUpper90": "G148",
+            "percentageLower90": "G152",
+            "percentageUpper90": "G153"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 6.503926064234035,
+            "upper": 7.625880686004108
+          },
+          "countConfidenceInterval90": {
+            "lower": 508949.24857677496,
+            "upper": 606778.751423225
+          },
+          "countCVPercentage": 5.3306823961385685,
+          "percentageCVPercentage": 4.8379090621562
+        },
+        "15": {
+          "count": 2553429,
+          "denominator": 16213422,
+          "status": "value",
+          "unknownCount": 84920,
+          "sourceCells": {
+            "count": "G155",
+            "denominator": "F155",
+            "unspecified": "I155",
+            "doesNotIdentify": "H155",
+            "countLower90": "G157",
+            "countUpper90": "G158",
+            "percentageLower90": "G162",
+            "percentageUpper90": "G163"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 15.096706087423078,
+            "upper": 16.42373463945518
+          },
+          "countConfidenceInterval90": {
+            "lower": 2428663.911164224,
+            "upper": 2678194.088835776
+          },
+          "countCVPercentage": 2.9705754476041966,
+          "percentageCVPercentage": 2.5611533869031504
+        },
+        "16": {
+          "count": 929003,
+          "denominator": 4476355,
+          "status": "value",
+          "unknownCount": 16117,
+          "sourceCells": {
+            "count": "G165",
+            "denominator": "F165",
+            "unspecified": "I165",
+            "doesNotIdentify": "H165",
+            "countLower90": "G167",
+            "countUpper90": "G168",
+            "percentageLower90": "G172",
+            "percentageUpper90": "G173"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 20.090545643231774,
+            "upper": 21.432585205022654
+          },
+          "countConfidenceInterval90": {
+            "lower": 888001.0732307003,
+            "upper": 970004.9267692997
+          },
+          "countCVPercentage": 2.6832333471957854,
+          "percentageCVPercentage": 1.9656782670284763
+        },
+        "17": {
+          "count": 461105,
+          "denominator": 1878497,
+          "status": "value",
+          "unknownCount": 6265,
+          "sourceCells": {
+            "count": "G175",
+            "denominator": "F175",
+            "unspecified": "I175",
+            "doesNotIdentify": "H175",
+            "countLower90": "G177",
+            "countUpper90": "G178",
+            "percentageLower90": "G182",
+            "percentageUpper90": "G183"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 23.583726618145313,
+            "upper": 25.535414314743974
+          },
+          "countConfidenceInterval90": {
+            "lower": 432179.19472664327,
+            "upper": 490030.80527335673
+          },
+          "countCVPercentage": 3.813791269457995,
+          "percentageCVPercentage": 2.4170446319180234
+        },
+        "18": {
+          "count": 186079,
+          "denominator": 1167186,
+          "status": "value",
+          "unknownCount": 3410,
+          "sourceCells": {
+            "count": "G185",
+            "denominator": "F185",
+            "unspecified": "I185",
+            "doesNotIdentify": "H185",
+            "countLower90": "G187",
+            "countUpper90": "G188",
+            "percentageLower90": "G192",
+            "percentageUpper90": "G193"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 14.72308203628509,
+            "upper": 17.242561450726683
+          },
+          "countConfidenceInterval90": {
+            "lower": 169950.50482787422,
+            "upper": 202207.49517212578
+          },
+          "countCVPercentage": 5.269480219424745,
+          "percentageCVPercentage": 4.802527049205824
+        },
+        "19": {
+          "count": 352790,
+          "denominator": 5508078,
+          "status": "value",
+          "unknownCount": 29224,
+          "sourceCells": {
+            "count": "G195",
+            "denominator": "F195",
+            "unspecified": "I195",
+            "doesNotIdentify": "H195",
+            "countLower90": "G197",
+            "countUpper90": "G198",
+            "percentageLower90": "G202",
+            "percentageUpper90": "G203"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 6.057635704779889,
+            "upper": 6.770756024212514
+          },
+          "countConfidenceInterval90": {
+            "lower": 331127.7571446367,
+            "upper": 374452.2428553633
+          },
+          "countCVPercentage": 3.7330039336507115,
+          "percentageCVPercentage": 3.383172398517505
+        },
+        "20": {
+          "count": 2702749,
+          "denominator": 3906788,
+          "status": "value",
+          "unknownCount": 11609,
+          "sourceCells": {
+            "count": "G205",
+            "denominator": "F205",
+            "unspecified": "I205",
+            "doesNotIdentify": "H205",
+            "countLower90": "G207",
+            "countUpper90": "G208",
+            "percentageLower90": "G212",
+            "percentageUpper90": "G213"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 68.4715756658194,
+            "upper": 69.88117952303303
+          },
+          "countConfidenceInterval90": {
+            "lower": 2643722.510286749,
+            "upper": 2761775.489713251
+          },
+          "countCVPercentage": 1.3277384580573226,
+          "percentageCVPercentage": 0.6194048444523386
+        },
+        "21": {
+          "count": 2067247,
+          "denominator": 6222339,
+          "status": "value",
+          "unknownCount": 19721,
+          "sourceCells": {
+            "count": "G215",
+            "denominator": "F215",
+            "unspecified": "I215",
+            "doesNotIdentify": "H215",
+            "countLower90": "G217",
+            "countUpper90": "G218",
+            "percentageLower90": "G222",
+            "percentageUpper90": "G223"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 32.058045242629426,
+            "upper": 34.40882609816025
+          },
+          "countConfidenceInterval90": {
+            "lower": 1979900.9834625444,
+            "upper": 2154593.0165374554
+          },
+          "countCVPercentage": 2.568751108888308,
+          "percentageCVPercentage": 2.1512061676339975
+        },
+        "22": {
+          "count": 296372,
+          "denominator": 2253500,
+          "status": "value",
+          "unknownCount": 7609,
+          "sourceCells": {
+            "count": "G225",
+            "denominator": "F225",
+            "unspecified": "I225",
+            "doesNotIdentify": "H225",
+            "countLower90": "G227",
+            "countUpper90": "G228",
+            "percentageLower90": "G232",
+            "percentageUpper90": "G233"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 12.062930573846478,
+            "upper": 14.322584651212336
+          },
+          "countConfidenceInterval90": {
+            "lower": 269877.0675778586,
+            "upper": 322866.9324221414
+          },
+          "countCVPercentage": 5.434967341312266,
+          "percentageCVPercentage": 5.22013055329296
+        },
+        "23": {
+          "count": 586723,
+          "denominator": 1765783,
+          "status": "value",
+          "unknownCount": 8204,
+          "sourceCells": {
+            "count": "G235",
+            "denominator": "F235",
+            "unspecified": "I235",
+            "doesNotIdentify": "H235",
+            "countLower90": "G237",
+            "countUpper90": "G238",
+            "percentageLower90": "G242",
+            "percentageUpper90": "G243"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 30.172456456319587,
+            "upper": 36.4301892856747
+          },
+          "countConfidenceInterval90": {
+            "lower": 503591.8091062874,
+            "upper": 669854.1908937126
+          },
+          "countCVPercentage": 8.61394674216163,
+          "percentageCVPercentage": 5.731130063033067
+        },
+        "24": {
+          "count": 545491,
+          "denominator": 2682817,
+          "status": "value",
+          "unknownCount": 11018,
+          "sourceCells": {
+            "count": "G245",
+            "denominator": "F245",
+            "unspecified": "I245",
+            "doesNotIdentify": "H245",
+            "countLower90": "G247",
+            "countUpper90": "G248",
+            "percentageLower90": "G252",
+            "percentageUpper90": "G253"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 18.6534372202697,
+            "upper": 22.122173768453454
+          },
+          "countConfidenceInterval90": {
+            "lower": 491524.6879020451,
+            "upper": 599457.3120979549
+          },
+          "countCVPercentage": 6.014595770576749,
+          "percentageCVPercentage": 5.185529496897321
+        },
+        "25": {
+          "count": 266215,
+          "denominator": 2846488,
+          "status": "value",
+          "unknownCount": 5155,
+          "sourceCells": {
+            "count": "G255",
+            "denominator": "F255",
+            "unspecified": "I255",
+            "doesNotIdentify": "H255",
+            "countLower90": "G257",
+            "countUpper90": "G258",
+            "percentageLower90": "G262",
+            "percentageUpper90": "G263"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 8.583809094319744,
+            "upper": 10.182149246183757
+          },
+          "countConfidenceInterval90": {
+            "lower": 237486.63837822631,
+            "upper": 294943.3616217737
+          },
+          "countCVPercentage": 6.560691702881126,
+          "percentageCVPercentage": 5.191251588718964
+        },
+        "26": {
+          "count": 372543,
+          "denominator": 2798802,
+          "status": "value",
+          "unknownCount": 4786,
+          "sourceCells": {
+            "count": "G265",
+            "denominator": "F265",
+            "unspecified": "I265",
+            "doesNotIdentify": "H265",
+            "countLower90": "G267",
+            "countUpper90": "G268",
+            "percentageLower90": "G272",
+            "percentageUpper90": "G273"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 12.31821461131471,
+            "upper": 14.370263228657851
+          },
+          "countConfidenceInterval90": {
+            "lower": 341059.8622446681,
+            "upper": 404026.1377553319
+          },
+          "countCVPercentage": 5.137749144963517,
+          "percentageCVPercentage": 4.684346557642248
+        },
+        "27": {
+          "count": 486527,
+          "denominator": 2278148,
+          "status": "value",
+          "unknownCount": 4921,
+          "sourceCells": {
+            "count": "G275",
+            "denominator": "F275",
+            "unspecified": "I275",
+            "doesNotIdentify": "H275",
+            "countLower90": "G277",
+            "countUpper90": "G278",
+            "percentageLower90": "G282",
+            "percentageUpper90": "G283"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 18.4368299056567,
+            "upper": 24.59853473849539
+          },
+          "countConfidenceInterval90": {
+            "lower": 405573.9061395629,
+            "upper": 567480.0938604372
+          },
+          "countCVPercentage": 10.115743256233067,
+          "percentageCVPercentage": 8.770788773254235
+        },
+        "28": {
+          "count": 224210,
+          "denominator": 3363567,
+          "status": "value",
+          "unknownCount": 6122,
+          "sourceCells": {
+            "count": "G285",
+            "denominator": "F285",
+            "unspecified": "I285",
+            "doesNotIdentify": "H285",
+            "countLower90": "G287",
+            "countUpper90": "G288",
+            "percentageLower90": "G292",
+            "percentageUpper90": "G293"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 6.168502400192552,
+            "upper": 7.200199025461849
+          },
+          "countConfidenceInterval90": {
+            "lower": 204461.2083553433,
+            "upper": 243958.7916446567
+          },
+          "countCVPercentage": 5.354967541397427,
+          "percentageCVPercentage": 4.701399795244188
+        },
+        "29": {
+          "count": 209908,
+          "denominator": 1275470,
+          "status": "value",
+          "unknownCount": 21306,
+          "sourceCells": {
+            "count": "G295",
+            "denominator": "F295",
+            "unspecified": "I295",
+            "doesNotIdentify": "H295",
+            "countLower90": "G297",
+            "countUpper90": "G298",
+            "percentageLower90": "G302",
+            "percentageUpper90": "G303"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 15.731805675628355,
+            "upper": 17.209431119660977
+          },
+          "countConfidenceInterval90": {
+            "lower": 197563.4252682585,
+            "upper": 222252.5747317415
+          },
+          "countCVPercentage": 3.5753489592458805,
+          "percentageCVPercentage": 2.729042875215597
+        },
+        "30": {
+          "count": 2071265,
+          "denominator": 7699502,
+          "status": "value",
+          "unknownCount": 22221,
+          "sourceCells": {
+            "count": "G305",
+            "denominator": "F305",
+            "unspecified": "I305",
+            "doesNotIdentify": "H305",
+            "countLower90": "G307",
+            "countUpper90": "G308",
+            "percentageLower90": "G312",
+            "percentageUpper90": "G313"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 26.006510202977818,
+            "upper": 27.81527314673957
+          },
+          "countConfidenceInterval90": {
+            "lower": 1979864.6683577364,
+            "upper": 2162665.3316422636
+          },
+          "countCVPercentage": 2.6827697361228635,
+          "percentageCVPercentage": 2.043983876928737
+        },
+        "31": {
+          "count": 1445078,
+          "denominator": 2217158,
+          "status": "value",
+          "unknownCount": 5973,
+          "sourceCells": {
+            "count": "G315",
+            "denominator": "F315",
+            "unspecified": "I315",
+            "doesNotIdentify": "H315",
+            "countLower90": "G317",
+            "countUpper90": "G318",
+            "percentageLower90": "G322",
+            "percentageUpper90": "G323"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 63.3955939545908,
+            "upper": 66.91703491510293
+          },
+          "countConfidenceInterval90": {
+            "lower": 1388680.4771524565,
+            "upper": 1501475.5228475435
+          },
+          "countCVPercentage": 2.3726847177838124,
+          "percentageCVPercentage": 1.6429515518674795
+        },
+        "32": {
+          "count": 74582,
+          "denominator": 1527247,
+          "status": "value",
+          "unknownCount": 3999,
+          "sourceCells": {
+            "count": "G325",
+            "denominator": "F325",
+            "unspecified": "I325",
+            "doesNotIdentify": "H325",
+            "countLower90": "G327",
+            "countUpper90": "G328",
+            "percentageLower90": "G332",
+            "percentageUpper90": "G333"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 4.523815007968399,
+            "upper": 5.270048820482122
+          },
+          "countConfidenceInterval90": {
+            "lower": 68797.95490679536,
+            "upper": 80366.04509320464
+          },
+          "countCVPercentage": 4.714861484639368,
+          "percentageCVPercentage": 4.641466983941458
+        },
+        "01": {
+          "count": 83200,
+          "denominator": 1348472,
+          "status": "value",
+          "unknownCount": 421,
+          "sourceCells": {
+            "count": "G15",
+            "denominator": "F15",
+            "unspecified": "I15",
+            "doesNotIdentify": "H15",
+            "countLower90": "G17",
+            "countUpper90": "G18",
+            "percentageLower90": "G22",
+            "percentageUpper90": "G23"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 5.433932467377493,
+            "upper": 6.998274256101386
+          },
+          "countConfidenceInterval90": {
+            "lower": 71354.13287283429,
+            "upper": 95045.86712716571
+          },
+          "countCVPercentage": 8.655951694847245,
+          "percentageCVPercentage": 7.691904507927122
+        },
+        "02": {
+          "count": 285679,
+          "denominator": 3586020,
+          "status": "value",
+          "unknownCount": 10103,
+          "sourceCells": {
+            "count": "G25",
+            "denominator": "F25",
+            "unspecified": "I25",
+            "doesNotIdentify": "H25",
+            "countLower90": "G27",
+            "countUpper90": "G28",
+            "percentageLower90": "G32",
+            "percentageUpper90": "G33"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 7.295918660681745,
+            "upper": 8.692858720522413
+          },
+          "countConfidenceInterval90": {
+            "lower": 252337.0779045333,
+            "upper": 319020.9220954667
+          },
+          "countCVPercentage": 7.095509877721893,
+          "percentageCVPercentage": 5.32581985580272
+        },
+        "03": {
+          "count": 89817,
+          "denominator": 756761,
+          "status": "value",
+          "unknownCount": 2845,
+          "sourceCells": {
+            "count": "G35",
+            "denominator": "F35",
+            "unspecified": "I35",
+            "doesNotIdentify": "H35",
+            "countLower90": "G37",
+            "countUpper90": "G38",
+            "percentageLower90": "G42",
+            "percentageUpper90": "G43"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 10.972657134780244,
+            "upper": 12.827176373192145
+          },
+          "countConfidenceInterval90": {
+            "lower": 81685.41301743426,
+            "upper": 97948.58698256574
+          },
+          "countCVPercentage": 5.504122113024466,
+          "percentageCVPercentage": 4.747461486414351
+        },
+        "04": {
+          "count": 416187,
+          "denominator": 880668,
+          "status": "value",
+          "unknownCount": 16547,
+          "sourceCells": {
+            "count": "G45",
+            "denominator": "F45",
+            "unspecified": "I45",
+            "doesNotIdentify": "H45",
+            "countLower90": "G47",
+            "countUpper90": "G48",
+            "percentageLower90": "G52",
+            "percentageUpper90": "G53"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 45.29592582319549,
+            "upper": 49.228789883111105
+          },
+          "countConfidenceInterval90": {
+            "lower": 387088.106784457,
+            "upper": 445285.893215543
+          },
+          "countCVPercentage": 4.2506882432048,
+          "percentageCVPercentage": 2.531030175727185
+        },
+        "05": {
+          "count": 63417,
+          "denominator": 2974979,
+          "status": "value",
+          "unknownCount": 11576,
+          "sourceCells": {
+            "count": "G55",
+            "denominator": "F55",
+            "unspecified": "I55",
+            "doesNotIdentify": "H55",
+            "countLower90": "G57",
+            "countUpper90": "G58",
+            "percentageLower90": "G62",
+            "percentageUpper90": "G63"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 1.8631037247031146,
+            "upper": 2.438008652026741
+          },
+          "countConfidenceInterval90": {
+            "lower": 54740.64373951756,
+            "upper": 72093.35626048244
+          },
+          "countCVPercentage": 8.317694714408391,
+          "percentageCVPercentage": 8.175627171831184
+        },
+        "06": {
+          "count": 91921,
+          "denominator": 698161,
+          "status": "value",
+          "unknownCount": 1008,
+          "sourceCells": {
+            "count": "G65",
+            "denominator": "F65",
+            "unspecified": "I65",
+            "doesNotIdentify": "H65",
+            "countLower90": "G67",
+            "countUpper90": "G68",
+            "percentageLower90": "G72",
+            "percentageUpper90": "G73"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 12.114865435756746,
+            "upper": 14.293847139118137
+          },
+          "countConfidenceInterval90": {
+            "lower": 83938.93484110916,
+            "upper": 99903.06515889084
+          },
+          "countCVPercentage": 5.279245055502794,
+          "percentageCVPercentage": 5.02839979008504
+        },
+        "07": {
+          "count": 1906686,
+          "denominator": 5182887,
+          "status": "value",
+          "unknownCount": 19661,
+          "sourceCells": {
+            "count": "G75",
+            "denominator": "F75",
+            "unspecified": "I75",
+            "doesNotIdentify": "H75",
+            "countLower90": "G77",
+            "countUpper90": "G78",
+            "percentageLower90": "G82",
+            "percentageUpper90": "G83"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 34.3987484983178,
+            "upper": 39.24414642959142
+          },
+          "countConfidenceInterval90": {
+            "lower": 1717788.794381818,
+            "upper": 2095583.205618182
+          },
+          "countCVPercentage": 6.02306637487209,
+          "percentageCVPercentage": 4.006583349478221
+        },
+        "08": {
+          "count": 372995,
+          "denominator": 3558510,
+          "status": "value",
+          "unknownCount": 7537,
+          "sourceCells": {
+            "count": "G85",
+            "denominator": "F85",
+            "unspecified": "I85",
+            "doesNotIdentify": "H85",
+            "countLower90": "G87",
+            "countUpper90": "G88",
+            "percentageLower90": "G92",
+            "percentageUpper90": "G93"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 9.762987818322717,
+            "upper": 11.246885485235685
+          },
+          "countConfidenceInterval90": {
+            "lower": 346056.61355640367,
+            "upper": 399933.38644359633
+          },
+          "countCVPercentage": 4.390761648504542,
+          "percentageCVPercentage": 4.301431205289199
+        },
+        "09": {
+          "count": 825325,
+          "denominator": 8891226,
+          "status": "value",
+          "unknownCount": 28139,
+          "sourceCells": {
+            "count": "G95",
+            "denominator": "F95",
+            "unspecified": "I95",
+            "doesNotIdentify": "H95",
+            "countLower90": "G97",
+            "countUpper90": "G98",
+            "percentageLower90": "G102",
+            "percentageUpper90": "G103"
+          },
+          "sourceSheet": "Autoadscripción",
+          "isEstimate": true,
+          "confidenceInterval90": {
+            "lower": 8.801034491304646,
+            "upper": 9.787405644874804
+          },
+          "countConfidenceInterval90": {
+            "lower": 770466.7169583963,
+            "upper": 880183.2830416037
+          },
+          "countCVPercentage": 4.040996775062782,
+          "percentageCVPercentage": 3.2292047863144617
+        }
+      },
+      "countRadiusReference": 3000000,
+      "countMaximumRadius": 33,
+      "countLegendValues": [
+        300000,
+        1500000,
+        3000000
+      ],
+      "distributionSummary": "割合が高い州：オアハカ 69.2%、ユカタン 65.2%、カンペチェ 47.3%（2020年）。",
+      "comparabilityNote": "3つの指標は重複可能で、同じ分母でもなく、合計100%の排他的な人種分類ではありません。米国のrace分類とは対応しません。"
+    },
+    {
+      "id": "catholic",
+      "category": "religion",
+      "referenceYear": 2020,
+      "label": "カトリック",
+      "definition": "カトリックと報告された人口。",
+      "isEstimate": false,
+      "sharePrecision": 1,
+      "takeaway": "信仰・所属・無宗教は別の回答区分です。選んだ区分の人数と州内割合を比べます。",
+      "countDenominatorLabel": "全年齢の通常居住人口（不詳を含む）",
+      "countLabel": "公表人数",
+      "nationalCount": 97864218,
+      "nationalDenominator": 126014024,
+      "nationalStatus": "value",
+      "nationalUnknownCount": 491814,
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 50,
+          "color": "#f1f0d6",
+          "label": "0–50%未満"
+        },
+        {
+          "min": 50,
+          "max": 60,
+          "color": "#c6debe",
+          "label": "50–60%未満"
+        },
+        {
+          "min": 60,
+          "max": 70,
+          "color": "#8ec2b0",
+          "label": "60–70%未満"
+        },
+        {
+          "min": 70,
+          "max": 80,
+          "color": "#529f95",
+          "label": "70–80%未満"
+        },
+        {
+          "min": 80,
+          "max": 90,
+          "color": "#26786e",
+          "label": "80–90%未満"
+        },
+        {
+          "min": 90,
+          "max": null,
+          "color": "#174c49",
+          "label": "90%以上"
+        }
+      ],
+      "states": {
+        "10": {
+          "count": 1521197,
+          "denominator": 1832650,
+          "status": "value",
+          "unknownCount": 6095,
+          "sourceCells": {
+            "count": [
+              "D760"
+            ],
+            "denominator": "D759"
+          },
+          "sourceSheet": "02"
+        },
+        "11": {
+          "count": 5601990,
+          "denominator": 6166934,
+          "status": "value",
+          "unknownCount": 20236,
+          "sourceCells": {
+            "count": [
+              "D835"
+            ],
+            "denominator": "D834"
+          },
+          "sourceSheet": "02"
+        },
+        "12": {
+          "count": 2845506,
+          "denominator": 3540685,
+          "status": "value",
+          "unknownCount": 18129,
+          "sourceCells": {
+            "count": [
+              "D910"
+            ],
+            "denominator": "D909"
+          },
+          "sourceSheet": "02"
+        },
+        "13": {
+          "count": 2475984,
+          "denominator": 3082841,
+          "status": "value",
+          "unknownCount": 6543,
+          "sourceCells": {
+            "count": [
+              "D985"
+            ],
+            "denominator": "D984"
+          },
+          "sourceSheet": "02"
+        },
+        "14": {
+          "count": 7448776,
+          "denominator": 8348151,
+          "status": "value",
+          "unknownCount": 64273,
+          "sourceCells": {
+            "count": [
+              "D1060"
+            ],
+            "denominator": "D1059"
+          },
+          "sourceSheet": "02"
+        },
+        "15": {
+          "count": 13363922,
+          "denominator": 16992418,
+          "status": "value",
+          "unknownCount": 58374,
+          "sourceCells": {
+            "count": [
+              "D1135"
+            ],
+            "denominator": "D1134"
+          },
+          "sourceSheet": "02"
+        },
+        "16": {
+          "count": 4221742,
+          "denominator": 4748846,
+          "status": "value",
+          "unknownCount": 12010,
+          "sourceCells": {
+            "count": [
+              "D1210"
+            ],
+            "denominator": "D1209"
+          },
+          "sourceSheet": "02"
+        },
+        "17": {
+          "count": 1399556,
+          "denominator": 1971520,
+          "status": "value",
+          "unknownCount": 3460,
+          "sourceCells": {
+            "count": [
+              "D1285"
+            ],
+            "denominator": "D1284"
+          },
+          "sourceSheet": "02"
+        },
+        "18": {
+          "count": 1028909,
+          "denominator": 1235456,
+          "status": "value",
+          "unknownCount": 2893,
+          "sourceCells": {
+            "count": [
+              "D1360"
+            ],
+            "denominator": "D1359"
+          },
+          "sourceSheet": "02"
+        },
+        "19": {
+          "count": 4492947,
+          "denominator": 5784442,
+          "status": "value",
+          "unknownCount": 34720,
+          "sourceCells": {
+            "count": [
+              "D1435"
+            ],
+            "denominator": "D1434"
+          },
+          "sourceSheet": "02"
+        },
+        "20": {
+          "count": 3118763,
+          "denominator": 4132148,
+          "status": "value",
+          "unknownCount": 13585,
+          "sourceCells": {
+            "count": [
+              "D1510"
+            ],
+            "denominator": "D1509"
+          },
+          "sourceSheet": "02"
+        },
+        "21": {
+          "count": 5547167,
+          "denominator": 6583278,
+          "status": "value",
+          "unknownCount": 12018,
+          "sourceCells": {
+            "count": [
+              "D1585"
+            ],
+            "denominator": "D1584"
+          },
+          "sourceSheet": "02"
+        },
+        "22": {
+          "count": 2025357,
+          "denominator": 2368467,
+          "status": "value",
+          "unknownCount": 10238,
+          "sourceCells": {
+            "count": [
+              "D1660"
+            ],
+            "denominator": "D1659"
+          },
+          "sourceSheet": "02"
+        },
+        "23": {
+          "count": 1016131,
+          "denominator": 1857985,
+          "status": "value",
+          "unknownCount": 26046,
+          "sourceCells": {
+            "count": [
+              "D1735"
+            ],
+            "denominator": "D1734"
+          },
+          "sourceSheet": "02"
+        },
+        "24": {
+          "count": 2416597,
+          "denominator": 2822255,
+          "status": "value",
+          "unknownCount": 6336,
+          "sourceCells": {
+            "count": [
+              "D1810"
+            ],
+            "denominator": "D1809"
+          },
+          "sourceSheet": "02"
+        },
+        "25": {
+          "count": 2372823,
+          "denominator": 3026943,
+          "status": "value",
+          "unknownCount": 5997,
+          "sourceCells": {
+            "count": [
+              "D1885"
+            ],
+            "denominator": "D1884"
+          },
+          "sourceSheet": "02"
+        },
+        "26": {
+          "count": 2252402,
+          "denominator": 2944840,
+          "status": "value",
+          "unknownCount": 7557,
+          "sourceCells": {
+            "count": [
+              "D1960"
+            ],
+            "denominator": "D1959"
+          },
+          "sourceSheet": "02"
+        },
+        "27": {
+          "count": 1493962,
+          "denominator": 2402598,
+          "status": "value",
+          "unknownCount": 4284,
+          "sourceCells": {
+            "count": [
+              "D2035"
+            ],
+            "denominator": "D2034"
+          },
+          "sourceSheet": "02"
+        },
+        "28": {
+          "count": 2394619,
+          "denominator": 3527735,
+          "status": "value",
+          "unknownCount": 11972,
+          "sourceCells": {
+            "count": [
+              "D2110"
+            ],
+            "denominator": "D2109"
+          },
+          "sourceSheet": "02"
+        },
+        "29": {
+          "count": 1142076,
+          "denominator": 1342977,
+          "status": "value",
+          "unknownCount": 22469,
+          "sourceCells": {
+            "count": [
+              "D2185"
+            ],
+            "denominator": "D2184"
+          },
+          "sourceSheet": "02"
+        },
+        "30": {
+          "count": 6053044,
+          "denominator": 8062579,
+          "status": "value",
+          "unknownCount": 10071,
+          "sourceCells": {
+            "count": [
+              "D2260"
+            ],
+            "denominator": "D2259"
+          },
+          "sourceSheet": "02"
+        },
+        "31": {
+          "count": 1724057,
+          "denominator": 2320898,
+          "status": "value",
+          "unknownCount": 7317,
+          "sourceCells": {
+            "count": [
+              "D2335"
+            ],
+            "denominator": "D2334"
+          },
+          "sourceSheet": "02"
+        },
+        "32": {
+          "count": 1497371,
+          "denominator": 1622138,
+          "status": "value",
+          "unknownCount": 3431,
+          "sourceCells": {
+            "count": [
+              "D2410"
+            ],
+            "denominator": "D2409"
+          },
+          "sourceSheet": "02"
+        },
+        "01": {
+          "count": 1272419,
+          "denominator": 1425607,
+          "status": "value",
+          "unknownCount": 3490,
+          "sourceCells": {
+            "count": [
+              "D85"
+            ],
+            "denominator": "D84"
+          },
+          "sourceSheet": "02"
+        },
+        "02": {
+          "count": 2336986,
+          "denominator": 3769020,
+          "status": "value",
+          "unknownCount": 20367,
+          "sourceCells": {
+            "count": [
+              "D160"
+            ],
+            "denominator": "D159"
+          },
+          "sourceSheet": "02"
+        },
+        "03": {
+          "count": 587796,
+          "denominator": 798447,
+          "status": "value",
+          "unknownCount": 5375,
+          "sourceCells": {
+            "count": [
+              "D235"
+            ],
+            "denominator": "D234"
+          },
+          "sourceSheet": "02"
+        },
+        "04": {
+          "count": 558124,
+          "denominator": 928363,
+          "status": "value",
+          "unknownCount": 5302,
+          "sourceCells": {
+            "count": [
+              "D310"
+            ],
+            "denominator": "D309"
+          },
+          "sourceSheet": "02"
+        },
+        "05": {
+          "count": 2357324,
+          "denominator": 3146771,
+          "status": "value",
+          "unknownCount": 10144,
+          "sourceCells": {
+            "count": [
+              "D385"
+            ],
+            "denominator": "D384"
+          },
+          "sourceSheet": "02"
+        },
+        "06": {
+          "count": 610645,
+          "denominator": 731391,
+          "status": "value",
+          "unknownCount": 2796,
+          "sourceCells": {
+            "count": [
+              "D460"
+            ],
+            "denominator": "D459"
+          },
+          "sourceSheet": "02"
+        },
+        "07": {
+          "count": 2985644,
+          "denominator": 5543828,
+          "status": "value",
+          "unknownCount": 33432,
+          "sourceCells": {
+            "count": [
+              "D535"
+            ],
+            "denominator": "D534"
+          },
+          "sourceSheet": "02"
+        },
+        "08": {
+          "count": 2712366,
+          "denominator": 3741869,
+          "status": "value",
+          "unknownCount": 17265,
+          "sourceCells": {
+            "count": [
+              "D610"
+            ],
+            "denominator": "D609"
+          },
+          "sourceSheet": "02"
+        },
+        "09": {
+          "count": 6988016,
+          "denominator": 9209944,
+          "status": "value",
+          "unknownCount": 25589,
+          "sourceCells": {
+            "count": [
+              "D685"
+            ],
+            "denominator": "D684"
+          },
+          "sourceSheet": "02"
+        }
+      },
+      "source": {
+        "label": "INEGI：2020年国勢調査・宗教基本票表",
+        "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_12_religion.xlsx",
+        "table": "B2020_12_02_E／シート02・Sexo=Total",
+        "periodNote": "2020年3月15日0時。全年齢の通常居住者。",
+        "methodNote": "人数は原表の公表人数を保持し、記載した区分だけを合算。割合は人数÷同じ州の全年齢総人口×100として当サイトが計算。不詳を除いて再正規化しません。宗教は申告された信仰・精神的な選好で、実践の頻度や熱心さを測る指標ではありません。総人口には国勢調査の公式補完推計を含みます。",
+        "definitionUrl": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/nueva_estruc/702825197520.pdf",
+        "attribution": "Fuente: INEGI, Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+        "components": [
+          "Católica"
+        ]
+      },
+      "countRadiusReference": 20000000,
+      "countMaximumRadius": 33,
+      "countLegendValues": [
+        2000000,
+        10000000,
+        20000000
+      ],
+      "distributionSummary": "割合が高い州：サカテカス 92.3%、グアナフアト 90.8%、アグアスカリエンテス 89.3%（2020年）。",
+      "comparabilityNote": "この8表示区分は原表の全宗教回答と不詳を分けたものです。地域の割合から個人の信仰・行動を推定しません。"
+    },
+    {
+      "id": "protestant_evangelical",
+      "category": "religion",
+      "referenceYear": 2020,
+      "label": "プロテスタント・福音系（INEGI区分）",
+      "definition": "公式のProtestante/Cristiano evangélico区分。バプテスト、長老派、福音派、ペンテコステ派、末日聖徒、エホバの証人など原表10区分を含みます。",
+      "isEstimate": false,
+      "sharePrecision": 1,
+      "takeaway": "信仰・所属・無宗教は別の回答区分です。選んだ区分の人数と州内割合を比べます。",
+      "countDenominatorLabel": "全年齢の通常居住人口（不詳を含む）",
+      "countLabel": "公表人数",
+      "nationalCount": 14095307,
+      "nationalDenominator": 126014024,
+      "nationalStatus": "value",
+      "nationalUnknownCount": 491814,
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 5,
+          "color": "#f1f0d6",
+          "label": "0–5%未満"
+        },
+        {
+          "min": 5,
+          "max": 10,
+          "color": "#c6debe",
+          "label": "5–10%未満"
+        },
+        {
+          "min": 10,
+          "max": 15,
+          "color": "#8ec2b0",
+          "label": "10–15%未満"
+        },
+        {
+          "min": 15,
+          "max": 20,
+          "color": "#529f95",
+          "label": "15–20%未満"
+        },
+        {
+          "min": 20,
+          "max": 30,
+          "color": "#26786e",
+          "label": "20–30%未満"
+        },
+        {
+          "min": 30,
+          "max": null,
+          "color": "#174c49",
+          "label": "30%以上"
+        }
+      ],
+      "states": {
+        "10": {
+          "count": 168665,
+          "denominator": 1832650,
+          "status": "value",
+          "unknownCount": 6095,
+          "sourceCells": {
+            "count": [
+              "D761",
+              "D762",
+              "D763",
+              "D764",
+              "D765",
+              "D766",
+              "D767",
+              "D768",
+              "D769",
+              "D770"
+            ],
+            "denominator": "D759"
+          },
+          "sourceSheet": "02"
+        },
+        "11": {
+          "count": 255840,
+          "denominator": 6166934,
+          "status": "value",
+          "unknownCount": 20236,
+          "sourceCells": {
+            "count": [
+              "D836",
+              "D837",
+              "D838",
+              "D839",
+              "D840",
+              "D841",
+              "D842",
+              "D843",
+              "D844",
+              "D845"
+            ],
+            "denominator": "D834"
+          },
+          "sourceSheet": "02"
+        },
+        "12": {
+          "count": 358158,
+          "denominator": 3540685,
+          "status": "value",
+          "unknownCount": 18129,
+          "sourceCells": {
+            "count": [
+              "D911",
+              "D912",
+              "D913",
+              "D914",
+              "D915",
+              "D916",
+              "D917",
+              "D918",
+              "D919",
+              "D920"
+            ],
+            "denominator": "D909"
+          },
+          "sourceSheet": "02"
+        },
+        "13": {
+          "count": 301786,
+          "denominator": 3082841,
+          "status": "value",
+          "unknownCount": 6543,
+          "sourceCells": {
+            "count": [
+              "D986",
+              "D987",
+              "D988",
+              "D989",
+              "D990",
+              "D991",
+              "D992",
+              "D993",
+              "D994",
+              "D995"
+            ],
+            "denominator": "D984"
+          },
+          "sourceSheet": "02"
+        },
+        "14": {
+          "count": 396295,
+          "denominator": 8348151,
+          "status": "value",
+          "unknownCount": 64273,
+          "sourceCells": {
+            "count": [
+              "D1061",
+              "D1062",
+              "D1063",
+              "D1064",
+              "D1065",
+              "D1066",
+              "D1067",
+              "D1068",
+              "D1069",
+              "D1070"
+            ],
+            "denominator": "D1059"
+          },
+          "sourceSheet": "02"
+        },
+        "15": {
+          "count": 1344725,
+          "denominator": 16992418,
+          "status": "value",
+          "unknownCount": 58374,
+          "sourceCells": {
+            "count": [
+              "D1136",
+              "D1137",
+              "D1138",
+              "D1139",
+              "D1140",
+              "D1141",
+              "D1142",
+              "D1143",
+              "D1144",
+              "D1145"
+            ],
+            "denominator": "D1134"
+          },
+          "sourceSheet": "02"
+        },
+        "16": {
+          "count": 248750,
+          "denominator": 4748846,
+          "status": "value",
+          "unknownCount": 12010,
+          "sourceCells": {
+            "count": [
+              "D1211",
+              "D1212",
+              "D1213",
+              "D1214",
+              "D1215",
+              "D1216",
+              "D1217",
+              "D1218",
+              "D1219",
+              "D1220"
+            ],
+            "denominator": "D1209"
+          },
+          "sourceSheet": "02"
+        },
+        "17": {
+          "count": 282384,
+          "denominator": 1971520,
+          "status": "value",
+          "unknownCount": 3460,
+          "sourceCells": {
+            "count": [
+              "D1286",
+              "D1287",
+              "D1288",
+              "D1289",
+              "D1290",
+              "D1291",
+              "D1292",
+              "D1293",
+              "D1294",
+              "D1295"
+            ],
+            "denominator": "D1284"
+          },
+          "sourceSheet": "02"
+        },
+        "18": {
+          "count": 98696,
+          "denominator": 1235456,
+          "status": "value",
+          "unknownCount": 2893,
+          "sourceCells": {
+            "count": [
+              "D1361",
+              "D1362",
+              "D1363",
+              "D1364",
+              "D1365",
+              "D1366",
+              "D1367",
+              "D1368",
+              "D1369",
+              "D1370"
+            ],
+            "denominator": "D1359"
+          },
+          "sourceSheet": "02"
+        },
+        "19": {
+          "count": 690097,
+          "denominator": 5784442,
+          "status": "value",
+          "unknownCount": 34720,
+          "sourceCells": {
+            "count": [
+              "D1436",
+              "D1437",
+              "D1438",
+              "D1439",
+              "D1440",
+              "D1441",
+              "D1442",
+              "D1443",
+              "D1444",
+              "D1445"
+            ],
+            "denominator": "D1434"
+          },
+          "sourceSheet": "02"
+        },
+        "20": {
+          "count": 653533,
+          "denominator": 4132148,
+          "status": "value",
+          "unknownCount": 13585,
+          "sourceCells": {
+            "count": [
+              "D1511",
+              "D1512",
+              "D1513",
+              "D1514",
+              "D1515",
+              "D1516",
+              "D1517",
+              "D1518",
+              "D1519",
+              "D1520"
+            ],
+            "denominator": "D1509"
+          },
+          "sourceSheet": "02"
+        },
+        "21": {
+          "count": 555536,
+          "denominator": 6583278,
+          "status": "value",
+          "unknownCount": 12018,
+          "sourceCells": {
+            "count": [
+              "D1586",
+              "D1587",
+              "D1588",
+              "D1589",
+              "D1590",
+              "D1591",
+              "D1592",
+              "D1593",
+              "D1594",
+              "D1595"
+            ],
+            "denominator": "D1584"
+          },
+          "sourceSheet": "02"
+        },
+        "22": {
+          "count": 131596,
+          "denominator": 2368467,
+          "status": "value",
+          "unknownCount": 10238,
+          "sourceCells": {
+            "count": [
+              "D1661",
+              "D1662",
+              "D1663",
+              "D1664",
+              "D1665",
+              "D1666",
+              "D1667",
+              "D1668",
+              "D1669",
+              "D1670"
+            ],
+            "denominator": "D1659"
+          },
+          "sourceSheet": "02"
+        },
+        "23": {
+          "count": 384207,
+          "denominator": 1857985,
+          "status": "value",
+          "unknownCount": 26046,
+          "sourceCells": {
+            "count": [
+              "D1736",
+              "D1737",
+              "D1738",
+              "D1739",
+              "D1740",
+              "D1741",
+              "D1742",
+              "D1743",
+              "D1744",
+              "D1745"
+            ],
+            "denominator": "D1734"
+          },
+          "sourceSheet": "02"
+        },
+        "24": {
+          "count": 227847,
+          "denominator": 2822255,
+          "status": "value",
+          "unknownCount": 6336,
+          "sourceCells": {
+            "count": [
+              "D1811",
+              "D1812",
+              "D1813",
+              "D1814",
+              "D1815",
+              "D1816",
+              "D1817",
+              "D1818",
+              "D1819",
+              "D1820"
+            ],
+            "denominator": "D1809"
+          },
+          "sourceSheet": "02"
+        },
+        "25": {
+          "count": 260384,
+          "denominator": 3026943,
+          "status": "value",
+          "unknownCount": 5997,
+          "sourceCells": {
+            "count": [
+              "D1886",
+              "D1887",
+              "D1888",
+              "D1889",
+              "D1890",
+              "D1891",
+              "D1892",
+              "D1893",
+              "D1894",
+              "D1895"
+            ],
+            "denominator": "D1884"
+          },
+          "sourceSheet": "02"
+        },
+        "26": {
+          "count": 329449,
+          "denominator": 2944840,
+          "status": "value",
+          "unknownCount": 7557,
+          "sourceCells": {
+            "count": [
+              "D1961",
+              "D1962",
+              "D1963",
+              "D1964",
+              "D1965",
+              "D1966",
+              "D1967",
+              "D1968",
+              "D1969",
+              "D1970"
+            ],
+            "denominator": "D1959"
+          },
+          "sourceSheet": "02"
+        },
+        "27": {
+          "count": 648724,
+          "denominator": 2402598,
+          "status": "value",
+          "unknownCount": 4284,
+          "sourceCells": {
+            "count": [
+              "D2036",
+              "D2037",
+              "D2038",
+              "D2039",
+              "D2040",
+              "D2041",
+              "D2042",
+              "D2043",
+              "D2044",
+              "D2045"
+            ],
+            "denominator": "D2034"
+          },
+          "sourceSheet": "02"
+        },
+        "28": {
+          "count": 615505,
+          "denominator": 3527735,
+          "status": "value",
+          "unknownCount": 11972,
+          "sourceCells": {
+            "count": [
+              "D2111",
+              "D2112",
+              "D2113",
+              "D2114",
+              "D2115",
+              "D2116",
+              "D2117",
+              "D2118",
+              "D2119",
+              "D2120"
+            ],
+            "denominator": "D2109"
+          },
+          "sourceSheet": "02"
+        },
+        "29": {
+          "count": 84419,
+          "denominator": 1342977,
+          "status": "value",
+          "unknownCount": 22469,
+          "sourceCells": {
+            "count": [
+              "D2186",
+              "D2187",
+              "D2188",
+              "D2189",
+              "D2190",
+              "D2191",
+              "D2192",
+              "D2193",
+              "D2194",
+              "D2195"
+            ],
+            "denominator": "D2184"
+          },
+          "sourceSheet": "02"
+        },
+        "30": {
+          "count": 1191127,
+          "denominator": 8062579,
+          "status": "value",
+          "unknownCount": 10071,
+          "sourceCells": {
+            "count": [
+              "D2261",
+              "D2262",
+              "D2263",
+              "D2264",
+              "D2265",
+              "D2266",
+              "D2267",
+              "D2268",
+              "D2269",
+              "D2270"
+            ],
+            "denominator": "D2259"
+          },
+          "sourceSheet": "02"
+        },
+        "31": {
+          "count": 370398,
+          "denominator": 2320898,
+          "status": "value",
+          "unknownCount": 7317,
+          "sourceCells": {
+            "count": [
+              "D2336",
+              "D2337",
+              "D2338",
+              "D2339",
+              "D2340",
+              "D2341",
+              "D2342",
+              "D2343",
+              "D2344",
+              "D2345"
+            ],
+            "denominator": "D2334"
+          },
+          "sourceSheet": "02"
+        },
+        "32": {
+          "count": 74177,
+          "denominator": 1622138,
+          "status": "value",
+          "unknownCount": 3431,
+          "sourceCells": {
+            "count": [
+              "D2411",
+              "D2412",
+              "D2413",
+              "D2414",
+              "D2415",
+              "D2416",
+              "D2417",
+              "D2418",
+              "D2419",
+              "D2420"
+            ],
+            "denominator": "D2409"
+          },
+          "sourceSheet": "02"
+        },
+        "01": {
+          "count": 73359,
+          "denominator": 1425607,
+          "status": "value",
+          "unknownCount": 3490,
+          "sourceCells": {
+            "count": [
+              "D86",
+              "D87",
+              "D88",
+              "D89",
+              "D90",
+              "D91",
+              "D92",
+              "D93",
+              "D94",
+              "D95"
+            ],
+            "denominator": "D84"
+          },
+          "sourceSheet": "02"
+        },
+        "02": {
+          "count": 616812,
+          "denominator": 3769020,
+          "status": "value",
+          "unknownCount": 20367,
+          "sourceCells": {
+            "count": [
+              "D161",
+              "D162",
+              "D163",
+              "D164",
+              "D165",
+              "D166",
+              "D167",
+              "D168",
+              "D169",
+              "D170"
+            ],
+            "denominator": "D159"
+          },
+          "sourceSheet": "02"
+        },
+        "03": {
+          "count": 88010,
+          "denominator": 798447,
+          "status": "value",
+          "unknownCount": 5375,
+          "sourceCells": {
+            "count": [
+              "D236",
+              "D237",
+              "D238",
+              "D239",
+              "D240",
+              "D241",
+              "D242",
+              "D243",
+              "D244",
+              "D245"
+            ],
+            "denominator": "D234"
+          },
+          "sourceSheet": "02"
+        },
+        "04": {
+          "count": 226028,
+          "denominator": 928363,
+          "status": "value",
+          "unknownCount": 5302,
+          "sourceCells": {
+            "count": [
+              "D311",
+              "D312",
+              "D313",
+              "D314",
+              "D315",
+              "D316",
+              "D317",
+              "D318",
+              "D319",
+              "D320"
+            ],
+            "denominator": "D309"
+          },
+          "sourceSheet": "02"
+        },
+        "05": {
+          "count": 421206,
+          "denominator": 3146771,
+          "status": "value",
+          "unknownCount": 10144,
+          "sourceCells": {
+            "count": [
+              "D386",
+              "D387",
+              "D388",
+              "D389",
+              "D390",
+              "D391",
+              "D392",
+              "D393",
+              "D394",
+              "D395"
+            ],
+            "denominator": "D384"
+          },
+          "sourceSheet": "02"
+        },
+        "06": {
+          "count": 57884,
+          "denominator": 731391,
+          "status": "value",
+          "unknownCount": 2796,
+          "sourceCells": {
+            "count": [
+              "D461",
+              "D462",
+              "D463",
+              "D464",
+              "D465",
+              "D466",
+              "D467",
+              "D468",
+              "D469",
+              "D470"
+            ],
+            "denominator": "D459"
+          },
+          "sourceSheet": "02"
+        },
+        "07": {
+          "count": 1795861,
+          "denominator": 5543828,
+          "status": "value",
+          "unknownCount": 33432,
+          "sourceCells": {
+            "count": [
+              "D536",
+              "D537",
+              "D538",
+              "D539",
+              "D540",
+              "D541",
+              "D542",
+              "D543",
+              "D544",
+              "D545"
+            ],
+            "denominator": "D534"
+          },
+          "sourceSheet": "02"
+        },
+        "08": {
+          "count": 475603,
+          "denominator": 3741869,
+          "status": "value",
+          "unknownCount": 17265,
+          "sourceCells": {
+            "count": [
+              "D611",
+              "D612",
+              "D613",
+              "D614",
+              "D615",
+              "D616",
+              "D617",
+              "D618",
+              "D619",
+              "D620"
+            ],
+            "denominator": "D609"
+          },
+          "sourceSheet": "02"
+        },
+        "09": {
+          "count": 668246,
+          "denominator": 9209944,
+          "status": "value",
+          "unknownCount": 25589,
+          "sourceCells": {
+            "count": [
+              "D686",
+              "D687",
+              "D688",
+              "D689",
+              "D690",
+              "D691",
+              "D692",
+              "D693",
+              "D694",
+              "D695"
+            ],
+            "denominator": "D684"
+          },
+          "sourceSheet": "02"
+        }
+      },
+      "source": {
+        "label": "INEGI：2020年国勢調査・宗教基本票表",
+        "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_12_religion.xlsx",
+        "table": "B2020_12_02_E／シート02・Sexo=Total",
+        "periodNote": "2020年3月15日0時。全年齢の通常居住者。",
+        "methodNote": "人数は原表の公表人数を保持し、記載した区分だけを合算。割合は人数÷同じ州の全年齢総人口×100として当サイトが計算。不詳を除いて再正規化しません。宗教は申告された信仰・精神的な選好で、実践の頻度や熱心さを測る指標ではありません。総人口には国勢調査の公式補完推計を含みます。",
+        "definitionUrl": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/nueva_estruc/702825197520.pdf",
+        "attribution": "Fuente: INEGI, Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+        "components": [
+          "Bautista",
+          "Presbiteriana",
+          "Iglesia del Dios Vivo, Columna y Apoyo de la Verdad, la Luz del Mundo",
+          "Adventista del Séptimo Día",
+          "Iglesia de Jesucristo de los Santos de los Últimos Días (Mormón)",
+          "Testigo de Jehová",
+          "Cristiana",
+          "Evangélica",
+          "Pentecostal",
+          "Otro Protestante/cristiano evangélico"
+        ]
+      },
+      "countRadiusReference": 2000000,
+      "countMaximumRadius": 33,
+      "countLegendValues": [
+        200000,
+        1000000,
+        2000000
+      ],
+      "distributionSummary": "割合が高い州：チアパス 32.4%、タバスコ 27.0%、カンペチェ 24.3%（2020年）。",
+      "comparabilityNote": "この8表示区分は原表の全宗教回答と不詳を分けたものです。地域の割合から個人の信仰・行動を推定しません。"
+    },
+    {
+      "id": "no_religion",
+      "category": "religion",
+      "referenceYear": 2020,
+      "label": "無宗教",
+      "definition": "Ninguna religiónとAteos/Agnósticosの公表人数の合計。信仰はあるが所属宗教なし、とは別です。",
+      "isEstimate": false,
+      "sharePrecision": 1,
+      "takeaway": "信仰・所属・無宗教は別の回答区分です。選んだ区分の人数と州内割合を比べます。",
+      "countDenominatorLabel": "全年齢の通常居住人口（不詳を含む）",
+      "countLabel": "公表人数",
+      "nationalCount": 10211052,
+      "nationalDenominator": 126014024,
+      "nationalStatus": "value",
+      "nationalUnknownCount": 491814,
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 3,
+          "color": "#f1f0d6",
+          "label": "0–3%未満"
+        },
+        {
+          "min": 3,
+          "max": 6,
+          "color": "#c6debe",
+          "label": "3–6%未満"
+        },
+        {
+          "min": 6,
+          "max": 9,
+          "color": "#8ec2b0",
+          "label": "6–9%未満"
+        },
+        {
+          "min": 9,
+          "max": 12,
+          "color": "#529f95",
+          "label": "9–12%未満"
+        },
+        {
+          "min": 12,
+          "max": 15,
+          "color": "#26786e",
+          "label": "12–15%未満"
+        },
+        {
+          "min": 15,
+          "max": null,
+          "color": "#174c49",
+          "label": "15%以上"
+        }
+      ],
+      "states": {
+        "10": {
+          "count": 124909,
+          "denominator": 1832650,
+          "status": "value",
+          "unknownCount": 6095,
+          "sourceCells": {
+            "count": [
+              "D780",
+              "D781"
+            ],
+            "denominator": "D759"
+          },
+          "sourceSheet": "02"
+        },
+        "11": {
+          "count": 208991,
+          "denominator": 6166934,
+          "status": "value",
+          "unknownCount": 20236,
+          "sourceCells": {
+            "count": [
+              "D855",
+              "D856"
+            ],
+            "denominator": "D834"
+          },
+          "sourceSheet": "02"
+        },
+        "12": {
+          "count": 156224,
+          "denominator": 3540685,
+          "status": "value",
+          "unknownCount": 18129,
+          "sourceCells": {
+            "count": [
+              "D930",
+              "D931"
+            ],
+            "denominator": "D909"
+          },
+          "sourceSheet": "02"
+        },
+        "13": {
+          "count": 141682,
+          "denominator": 3082841,
+          "status": "value",
+          "unknownCount": 6543,
+          "sourceCells": {
+            "count": [
+              "D1005",
+              "D1006"
+            ],
+            "denominator": "D984"
+          },
+          "sourceSheet": "02"
+        },
+        "14": {
+          "count": 384118,
+          "denominator": 8348151,
+          "status": "value",
+          "unknownCount": 64273,
+          "sourceCells": {
+            "count": [
+              "D1080",
+              "D1081"
+            ],
+            "denominator": "D1059"
+          },
+          "sourceSheet": "02"
+        },
+        "15": {
+          "count": 1142086,
+          "denominator": 16992418,
+          "status": "value",
+          "unknownCount": 58374,
+          "sourceCells": {
+            "count": [
+              "D1155",
+              "D1156"
+            ],
+            "denominator": "D1134"
+          },
+          "sourceSheet": "02"
+        },
+        "16": {
+          "count": 183880,
+          "denominator": 4748846,
+          "status": "value",
+          "unknownCount": 12010,
+          "sourceCells": {
+            "count": [
+              "D1230",
+              "D1231"
+            ],
+            "denominator": "D1209"
+          },
+          "sourceSheet": "02"
+        },
+        "17": {
+          "count": 165736,
+          "denominator": 1971520,
+          "status": "value",
+          "unknownCount": 3460,
+          "sourceCells": {
+            "count": [
+              "D1305",
+              "D1306"
+            ],
+            "denominator": "D1284"
+          },
+          "sourceSheet": "02"
+        },
+        "18": {
+          "count": 93265,
+          "denominator": 1235456,
+          "status": "value",
+          "unknownCount": 2893,
+          "sourceCells": {
+            "count": [
+              "D1380",
+              "D1381"
+            ],
+            "denominator": "D1359"
+          },
+          "sourceSheet": "02"
+        },
+        "19": {
+          "count": 520941,
+          "denominator": 5784442,
+          "status": "value",
+          "unknownCount": 34720,
+          "sourceCells": {
+            "count": [
+              "D1455",
+              "D1456"
+            ],
+            "denominator": "D1434"
+          },
+          "sourceSheet": "02"
+        },
+        "20": {
+          "count": 252527,
+          "denominator": 4132148,
+          "status": "value",
+          "unknownCount": 13585,
+          "sourceCells": {
+            "count": [
+              "D1530",
+              "D1531"
+            ],
+            "denominator": "D1509"
+          },
+          "sourceSheet": "02"
+        },
+        "21": {
+          "count": 233982,
+          "denominator": 6583278,
+          "status": "value",
+          "unknownCount": 12018,
+          "sourceCells": {
+            "count": [
+              "D1605",
+              "D1606"
+            ],
+            "denominator": "D1584"
+          },
+          "sourceSheet": "02"
+        },
+        "22": {
+          "count": 149220,
+          "denominator": 2368467,
+          "status": "value",
+          "unknownCount": 10238,
+          "sourceCells": {
+            "count": [
+              "D1680",
+              "D1681"
+            ],
+            "denominator": "D1659"
+          },
+          "sourceSheet": "02"
+        },
+        "23": {
+          "count": 407417,
+          "denominator": 1857985,
+          "status": "value",
+          "unknownCount": 26046,
+          "sourceCells": {
+            "count": [
+              "D1755",
+              "D1756"
+            ],
+            "denominator": "D1734"
+          },
+          "sourceSheet": "02"
+        },
+        "24": {
+          "count": 125379,
+          "denominator": 2822255,
+          "status": "value",
+          "unknownCount": 6336,
+          "sourceCells": {
+            "count": [
+              "D1830",
+              "D1831"
+            ],
+            "denominator": "D1809"
+          },
+          "sourceSheet": "02"
+        },
+        "25": {
+          "count": 374252,
+          "denominator": 3026943,
+          "status": "value",
+          "unknownCount": 5997,
+          "sourceCells": {
+            "count": [
+              "D1905",
+              "D1906"
+            ],
+            "denominator": "D1884"
+          },
+          "sourceSheet": "02"
+        },
+        "26": {
+          "count": 338215,
+          "denominator": 2944840,
+          "status": "value",
+          "unknownCount": 7557,
+          "sourceCells": {
+            "count": [
+              "D1980",
+              "D1981"
+            ],
+            "denominator": "D1959"
+          },
+          "sourceSheet": "02"
+        },
+        "27": {
+          "count": 244552,
+          "denominator": 2402598,
+          "status": "value",
+          "unknownCount": 4284,
+          "sourceCells": {
+            "count": [
+              "D2055",
+              "D2056"
+            ],
+            "denominator": "D2034"
+          },
+          "sourceSheet": "02"
+        },
+        "28": {
+          "count": 437794,
+          "denominator": 3527735,
+          "status": "value",
+          "unknownCount": 11972,
+          "sourceCells": {
+            "count": [
+              "D2130",
+              "D2131"
+            ],
+            "denominator": "D2109"
+          },
+          "sourceSheet": "02"
+        },
+        "29": {
+          "count": 32854,
+          "denominator": 1342977,
+          "status": "value",
+          "unknownCount": 22469,
+          "sourceCells": {
+            "count": [
+              "D2205",
+              "D2206"
+            ],
+            "denominator": "D2184"
+          },
+          "sourceSheet": "02"
+        },
+        "30": {
+          "count": 640829,
+          "denominator": 8062579,
+          "status": "value",
+          "unknownCount": 10071,
+          "sourceCells": {
+            "count": [
+              "D2280",
+              "D2281"
+            ],
+            "denominator": "D2259"
+          },
+          "sourceSheet": "02"
+        },
+        "31": {
+          "count": 199018,
+          "denominator": 2320898,
+          "status": "value",
+          "unknownCount": 7317,
+          "sourceCells": {
+            "count": [
+              "D2355",
+              "D2356"
+            ],
+            "denominator": "D2334"
+          },
+          "sourceSheet": "02"
+        },
+        "32": {
+          "count": 38414,
+          "denominator": 1622138,
+          "status": "value",
+          "unknownCount": 3431,
+          "sourceCells": {
+            "count": [
+              "D2430",
+              "D2431"
+            ],
+            "denominator": "D2409"
+          },
+          "sourceSheet": "02"
+        },
+        "01": {
+          "count": 63205,
+          "denominator": 1425607,
+          "status": "value",
+          "unknownCount": 3490,
+          "sourceCells": {
+            "count": [
+              "D105",
+              "D106"
+            ],
+            "denominator": "D84"
+          },
+          "sourceSheet": "02"
+        },
+        "02": {
+          "count": 714650,
+          "denominator": 3769020,
+          "status": "value",
+          "unknownCount": 20367,
+          "sourceCells": {
+            "count": [
+              "D180",
+              "D181"
+            ],
+            "denominator": "D159"
+          },
+          "sourceSheet": "02"
+        },
+        "03": {
+          "count": 97519,
+          "denominator": 798447,
+          "status": "value",
+          "unknownCount": 5375,
+          "sourceCells": {
+            "count": [
+              "D255",
+              "D256"
+            ],
+            "denominator": "D234"
+          },
+          "sourceSheet": "02"
+        },
+        "04": {
+          "count": 131943,
+          "denominator": 928363,
+          "status": "value",
+          "unknownCount": 5302,
+          "sourceCells": {
+            "count": [
+              "D330",
+              "D331"
+            ],
+            "denominator": "D309"
+          },
+          "sourceSheet": "02"
+        },
+        "05": {
+          "count": 342245,
+          "denominator": 3146771,
+          "status": "value",
+          "unknownCount": 10144,
+          "sourceCells": {
+            "count": [
+              "D405",
+              "D406"
+            ],
+            "denominator": "D384"
+          },
+          "sourceSheet": "02"
+        },
+        "06": {
+          "count": 53401,
+          "denominator": 731391,
+          "status": "value",
+          "unknownCount": 2796,
+          "sourceCells": {
+            "count": [
+              "D480",
+              "D481"
+            ],
+            "denominator": "D459"
+          },
+          "sourceSheet": "02"
+        },
+        "07": {
+          "count": 695496,
+          "denominator": 5543828,
+          "status": "value",
+          "unknownCount": 33432,
+          "sourceCells": {
+            "count": [
+              "D555",
+              "D556"
+            ],
+            "denominator": "D534"
+          },
+          "sourceSheet": "02"
+        },
+        "08": {
+          "count": 505891,
+          "denominator": 3741869,
+          "status": "value",
+          "unknownCount": 17265,
+          "sourceCells": {
+            "count": [
+              "D630",
+              "D631"
+            ],
+            "denominator": "D609"
+          },
+          "sourceSheet": "02"
+        },
+        "09": {
+          "count": 1010417,
+          "denominator": 9209944,
+          "status": "value",
+          "unknownCount": 25589,
+          "sourceCells": {
+            "count": [
+              "D705",
+              "D706"
+            ],
+            "denominator": "D684"
+          },
+          "sourceSheet": "02"
+        }
+      },
+      "source": {
+        "label": "INEGI：2020年国勢調査・宗教基本票表",
+        "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_12_religion.xlsx",
+        "table": "B2020_12_02_E／シート02・Sexo=Total",
+        "periodNote": "2020年3月15日0時。全年齢の通常居住者。",
+        "methodNote": "人数は原表の公表人数を保持し、記載した区分だけを合算。割合は人数÷同じ州の全年齢総人口×100として当サイトが計算。不詳を除いて再正規化しません。宗教は申告された信仰・精神的な選好で、実践の頻度や熱心さを測る指標ではありません。総人口には国勢調査の公式補完推計を含みます。",
+        "definitionUrl": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/nueva_estruc/702825197520.pdf",
+        "attribution": "Fuente: INEGI, Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+        "components": [
+          "Ninguna religión",
+          "Ateos/Agnósticos"
+        ]
+      },
+      "countRadiusReference": 2000000,
+      "countMaximumRadius": 33,
+      "countLegendValues": [
+        200000,
+        1000000,
+        2000000
+      ],
+      "distributionSummary": "割合が高い州：キンタナ・ロー 21.9%、バハ・カリフォルニア 19.0%、カンペチェ 14.2%（2020年）。",
+      "comparabilityNote": "この8表示区分は原表の全宗教回答と不詳を分けたものです。地域の割合から個人の信仰・行動を推定しません。"
+    },
+    {
+      "id": "unaffiliated_believer",
+      "category": "religion",
+      "referenceYear": 2020,
+      "label": "信仰あり・所属宗教なし",
+      "definition": "Sin adscripción religiosa (creyente)。信仰はあるが特定の宗教に所属しないと報告された人口。無宗教へ含めません。",
+      "isEstimate": false,
+      "sharePrecision": 1,
+      "takeaway": "信仰・所属・無宗教は別の回答区分です。選んだ区分の人数と州内割合を比べます。",
+      "countDenominatorLabel": "全年齢の通常居住人口（不詳を含む）",
+      "countLabel": "公表人数",
+      "nationalCount": 3103464,
+      "nationalDenominator": 126014024,
+      "nationalStatus": "value",
+      "nationalUnknownCount": 491814,
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 1,
+          "color": "#f1f0d6",
+          "label": "0–1%未満"
+        },
+        {
+          "min": 1,
+          "max": 2,
+          "color": "#c6debe",
+          "label": "1–2%未満"
+        },
+        {
+          "min": 2,
+          "max": 3,
+          "color": "#8ec2b0",
+          "label": "2–3%未満"
+        },
+        {
+          "min": 3,
+          "max": 4,
+          "color": "#529f95",
+          "label": "3–4%未満"
+        },
+        {
+          "min": 4,
+          "max": 5,
+          "color": "#26786e",
+          "label": "4–5%未満"
+        },
+        {
+          "min": 5,
+          "max": null,
+          "color": "#174c49",
+          "label": "5%以上"
+        }
+      ],
+      "states": {
+        "10": {
+          "count": 10216,
+          "denominator": 1832650,
+          "status": "value",
+          "unknownCount": 6095,
+          "sourceCells": {
+            "count": [
+              "D782"
+            ],
+            "denominator": "D759"
+          },
+          "sourceSheet": "02"
+        },
+        "11": {
+          "count": 74634,
+          "denominator": 6166934,
+          "status": "value",
+          "unknownCount": 20236,
+          "sourceCells": {
+            "count": [
+              "D857"
+            ],
+            "denominator": "D834"
+          },
+          "sourceSheet": "02"
+        },
+        "12": {
+          "count": 159788,
+          "denominator": 3540685,
+          "status": "value",
+          "unknownCount": 18129,
+          "sourceCells": {
+            "count": [
+              "D932"
+            ],
+            "denominator": "D909"
+          },
+          "sourceSheet": "02"
+        },
+        "13": {
+          "count": 150061,
+          "denominator": 3082841,
+          "status": "value",
+          "unknownCount": 6543,
+          "sourceCells": {
+            "count": [
+              "D1007"
+            ],
+            "denominator": "D984"
+          },
+          "sourceSheet": "02"
+        },
+        "14": {
+          "count": 33125,
+          "denominator": 8348151,
+          "status": "value",
+          "unknownCount": 64273,
+          "sourceCells": {
+            "count": [
+              "D1082"
+            ],
+            "denominator": "D1059"
+          },
+          "sourceSheet": "02"
+        },
+        "15": {
+          "count": 1021824,
+          "denominator": 16992418,
+          "status": "value",
+          "unknownCount": 58374,
+          "sourceCells": {
+            "count": [
+              "D1157"
+            ],
+            "denominator": "D1134"
+          },
+          "sourceSheet": "02"
+        },
+        "16": {
+          "count": 79040,
+          "denominator": 4748846,
+          "status": "value",
+          "unknownCount": 12010,
+          "sourceCells": {
+            "count": [
+              "D1232"
+            ],
+            "denominator": "D1209"
+          },
+          "sourceSheet": "02"
+        },
+        "17": {
+          "count": 116682,
+          "denominator": 1971520,
+          "status": "value",
+          "unknownCount": 3460,
+          "sourceCells": {
+            "count": [
+              "D1307"
+            ],
+            "denominator": "D1284"
+          },
+          "sourceSheet": "02"
+        },
+        "18": {
+          "count": 7831,
+          "denominator": 1235456,
+          "status": "value",
+          "unknownCount": 2893,
+          "sourceCells": {
+            "count": [
+              "D1382"
+            ],
+            "denominator": "D1359"
+          },
+          "sourceSheet": "02"
+        },
+        "19": {
+          "count": 40643,
+          "denominator": 5784442,
+          "status": "value",
+          "unknownCount": 34720,
+          "sourceCells": {
+            "count": [
+              "D1457"
+            ],
+            "denominator": "D1434"
+          },
+          "sourceSheet": "02"
+        },
+        "20": {
+          "count": 90500,
+          "denominator": 4132148,
+          "status": "value",
+          "unknownCount": 13585,
+          "sourceCells": {
+            "count": [
+              "D1532"
+            ],
+            "denominator": "D1509"
+          },
+          "sourceSheet": "02"
+        },
+        "21": {
+          "count": 224057,
+          "denominator": 6583278,
+          "status": "value",
+          "unknownCount": 12018,
+          "sourceCells": {
+            "count": [
+              "D1607"
+            ],
+            "denominator": "D1584"
+          },
+          "sourceSheet": "02"
+        },
+        "22": {
+          "count": 48104,
+          "denominator": 2368467,
+          "status": "value",
+          "unknownCount": 10238,
+          "sourceCells": {
+            "count": [
+              "D1682"
+            ],
+            "denominator": "D1659"
+          },
+          "sourceSheet": "02"
+        },
+        "23": {
+          "count": 19692,
+          "denominator": 1857985,
+          "status": "value",
+          "unknownCount": 26046,
+          "sourceCells": {
+            "count": [
+              "D1757"
+            ],
+            "denominator": "D1734"
+          },
+          "sourceSheet": "02"
+        },
+        "24": {
+          "count": 43578,
+          "denominator": 2822255,
+          "status": "value",
+          "unknownCount": 6336,
+          "sourceCells": {
+            "count": [
+              "D1832"
+            ],
+            "denominator": "D1809"
+          },
+          "sourceSheet": "02"
+        },
+        "25": {
+          "count": 11659,
+          "denominator": 3026943,
+          "status": "value",
+          "unknownCount": 5997,
+          "sourceCells": {
+            "count": [
+              "D1907"
+            ],
+            "denominator": "D1884"
+          },
+          "sourceSheet": "02"
+        },
+        "26": {
+          "count": 15648,
+          "denominator": 2944840,
+          "status": "value",
+          "unknownCount": 7557,
+          "sourceCells": {
+            "count": [
+              "D1982"
+            ],
+            "denominator": "D1959"
+          },
+          "sourceSheet": "02"
+        },
+        "27": {
+          "count": 10041,
+          "denominator": 2402598,
+          "status": "value",
+          "unknownCount": 4284,
+          "sourceCells": {
+            "count": [
+              "D2057"
+            ],
+            "denominator": "D2034"
+          },
+          "sourceSheet": "02"
+        },
+        "28": {
+          "count": 65273,
+          "denominator": 3527735,
+          "status": "value",
+          "unknownCount": 11972,
+          "sourceCells": {
+            "count": [
+              "D2132"
+            ],
+            "denominator": "D2109"
+          },
+          "sourceSheet": "02"
+        },
+        "29": {
+          "count": 59460,
+          "denominator": 1342977,
+          "status": "value",
+          "unknownCount": 22469,
+          "sourceCells": {
+            "count": [
+              "D2207"
+            ],
+            "denominator": "D2184"
+          },
+          "sourceSheet": "02"
+        },
+        "30": {
+          "count": 159596,
+          "denominator": 8062579,
+          "status": "value",
+          "unknownCount": 10071,
+          "sourceCells": {
+            "count": [
+              "D2282"
+            ],
+            "denominator": "D2259"
+          },
+          "sourceSheet": "02"
+        },
+        "31": {
+          "count": 16396,
+          "denominator": 2320898,
+          "status": "value",
+          "unknownCount": 7317,
+          "sourceCells": {
+            "count": [
+              "D2357"
+            ],
+            "denominator": "D2334"
+          },
+          "sourceSheet": "02"
+        },
+        "32": {
+          "count": 8051,
+          "denominator": 1622138,
+          "status": "value",
+          "unknownCount": 3431,
+          "sourceCells": {
+            "count": [
+              "D2432"
+            ],
+            "denominator": "D2409"
+          },
+          "sourceSheet": "02"
+        },
+        "01": {
+          "count": 11234,
+          "denominator": 1425607,
+          "status": "value",
+          "unknownCount": 3490,
+          "sourceCells": {
+            "count": [
+              "D107"
+            ],
+            "denominator": "D84"
+          },
+          "sourceSheet": "02"
+        },
+        "02": {
+          "count": 74527,
+          "denominator": 3769020,
+          "status": "value",
+          "unknownCount": 20367,
+          "sourceCells": {
+            "count": [
+              "D182"
+            ],
+            "denominator": "D159"
+          },
+          "sourceSheet": "02"
+        },
+        "03": {
+          "count": 18622,
+          "denominator": 798447,
+          "status": "value",
+          "unknownCount": 5375,
+          "sourceCells": {
+            "count": [
+              "D257"
+            ],
+            "denominator": "D234"
+          },
+          "sourceSheet": "02"
+        },
+        "04": {
+          "count": 5941,
+          "denominator": 928363,
+          "status": "value",
+          "unknownCount": 5302,
+          "sourceCells": {
+            "count": [
+              "D332"
+            ],
+            "denominator": "D309"
+          },
+          "sourceSheet": "02"
+        },
+        "05": {
+          "count": 13553,
+          "denominator": 3146771,
+          "status": "value",
+          "unknownCount": 10144,
+          "sourceCells": {
+            "count": [
+              "D407"
+            ],
+            "denominator": "D384"
+          },
+          "sourceSheet": "02"
+        },
+        "06": {
+          "count": 5853,
+          "denominator": 731391,
+          "status": "value",
+          "unknownCount": 2796,
+          "sourceCells": {
+            "count": [
+              "D482"
+            ],
+            "denominator": "D459"
+          },
+          "sourceSheet": "02"
+        },
+        "07": {
+          "count": 17966,
+          "denominator": 5543828,
+          "status": "value",
+          "unknownCount": 33432,
+          "sourceCells": {
+            "count": [
+              "D557"
+            ],
+            "denominator": "D534"
+          },
+          "sourceSheet": "02"
+        },
+        "08": {
+          "count": 27438,
+          "denominator": 3741869,
+          "status": "value",
+          "unknownCount": 17265,
+          "sourceCells": {
+            "count": [
+              "D632"
+            ],
+            "denominator": "D609"
+          },
+          "sourceSheet": "02"
+        },
+        "09": {
+          "count": 462431,
+          "denominator": 9209944,
+          "status": "value",
+          "unknownCount": 25589,
+          "sourceCells": {
+            "count": [
+              "D707"
+            ],
+            "denominator": "D684"
+          },
+          "sourceSheet": "02"
+        }
+      },
+      "source": {
+        "label": "INEGI：2020年国勢調査・宗教基本票表",
+        "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_12_religion.xlsx",
+        "table": "B2020_12_02_E／シート02・Sexo=Total",
+        "periodNote": "2020年3月15日0時。全年齢の通常居住者。",
+        "methodNote": "人数は原表の公表人数を保持し、記載した区分だけを合算。割合は人数÷同じ州の全年齢総人口×100として当サイトが計算。不詳を除いて再正規化しません。宗教は申告された信仰・精神的な選好で、実践の頻度や熱心さを測る指標ではありません。総人口には国勢調査の公式補完推計を含みます。",
+        "definitionUrl": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/nueva_estruc/702825197520.pdf",
+        "attribution": "Fuente: INEGI, Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+        "components": [
+          "Sin adscripción religiosa (creyente)"
+        ]
+      },
+      "countRadiusReference": 2000000,
+      "countMaximumRadius": 33,
+      "countLegendValues": [
+        200000,
+        1000000,
+        2000000
+      ],
+      "distributionSummary": "割合が高い州：メキシコ州 6.0%、モレロス 5.9%、メキシコ市 5.0%（2020年）。",
+      "comparabilityNote": "この8表示区分は原表の全宗教回答と不詳を分けたものです。地域の割合から個人の信仰・行動を推定しません。"
+    },
+    {
+      "id": "jewish",
+      "category": "religion",
+      "referenceYear": 2020,
+      "label": "ユダヤ教",
+      "definition": "Judíaの公表人数。宗教についての回答区分で、民族の自己認識を示しません。",
+      "isEstimate": false,
+      "sharePrecision": 3,
+      "takeaway": "信仰・所属・無宗教は別の回答区分です。選んだ区分の人数と州内割合を比べます。",
+      "countDenominatorLabel": "全年齢の通常居住人口（不詳を含む）",
+      "countLabel": "公表人数",
+      "nationalCount": 58876,
+      "nationalDenominator": 126014024,
+      "nationalStatus": "value",
+      "nationalUnknownCount": 491814,
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 0.01,
+          "color": "#f1f0d6",
+          "label": "0–0.01%未満"
+        },
+        {
+          "min": 0.01,
+          "max": 0.03,
+          "color": "#c6debe",
+          "label": "0.01–0.03%未満"
+        },
+        {
+          "min": 0.03,
+          "max": 0.1,
+          "color": "#8ec2b0",
+          "label": "0.03–0.1%未満"
+        },
+        {
+          "min": 0.1,
+          "max": 0.3,
+          "color": "#529f95",
+          "label": "0.1–0.3%未満"
+        },
+        {
+          "min": 0.3,
+          "max": 1,
+          "color": "#26786e",
+          "label": "0.3–1%未満"
+        },
+        {
+          "min": 1,
+          "max": null,
+          "color": "#174c49",
+          "label": "1%以上"
+        }
+      ],
+      "states": {
+        "10": {
+          "count": 169,
+          "denominator": 1832650,
+          "status": "value",
+          "unknownCount": 6095,
+          "sourceCells": {
+            "count": [
+              "D771"
+            ],
+            "denominator": "D759"
+          },
+          "sourceSheet": "02"
+        },
+        "11": {
+          "count": 788,
+          "denominator": 6166934,
+          "status": "value",
+          "unknownCount": 20236,
+          "sourceCells": {
+            "count": [
+              "D846"
+            ],
+            "denominator": "D834"
+          },
+          "sourceSheet": "02"
+        },
+        "12": {
+          "count": 324,
+          "denominator": 3540685,
+          "status": "value",
+          "unknownCount": 18129,
+          "sourceCells": {
+            "count": [
+              "D921"
+            ],
+            "denominator": "D909"
+          },
+          "sourceSheet": "02"
+        },
+        "13": {
+          "count": 981,
+          "denominator": 3082841,
+          "status": "value",
+          "unknownCount": 6543,
+          "sourceCells": {
+            "count": [
+              "D996"
+            ],
+            "denominator": "D984"
+          },
+          "sourceSheet": "02"
+        },
+        "14": {
+          "count": 1654,
+          "denominator": 8348151,
+          "status": "value",
+          "unknownCount": 64273,
+          "sourceCells": {
+            "count": [
+              "D1071"
+            ],
+            "denominator": "D1059"
+          },
+          "sourceSheet": "02"
+        },
+        "15": {
+          "count": 21685,
+          "denominator": 16992418,
+          "status": "value",
+          "unknownCount": 58374,
+          "sourceCells": {
+            "count": [
+              "D1146"
+            ],
+            "denominator": "D1134"
+          },
+          "sourceSheet": "02"
+        },
+        "16": {
+          "count": 713,
+          "denominator": 4748846,
+          "status": "value",
+          "unknownCount": 12010,
+          "sourceCells": {
+            "count": [
+              "D1221"
+            ],
+            "denominator": "D1209"
+          },
+          "sourceSheet": "02"
+        },
+        "17": {
+          "count": 951,
+          "denominator": 1971520,
+          "status": "value",
+          "unknownCount": 3460,
+          "sourceCells": {
+            "count": [
+              "D1296"
+            ],
+            "denominator": "D1284"
+          },
+          "sourceSheet": "02"
+        },
+        "18": {
+          "count": 298,
+          "denominator": 1235456,
+          "status": "value",
+          "unknownCount": 2893,
+          "sourceCells": {
+            "count": [
+              "D1371"
+            ],
+            "denominator": "D1359"
+          },
+          "sourceSheet": "02"
+        },
+        "19": {
+          "count": 1189,
+          "denominator": 5784442,
+          "status": "value",
+          "unknownCount": 34720,
+          "sourceCells": {
+            "count": [
+              "D1446"
+            ],
+            "denominator": "D1434"
+          },
+          "sourceSheet": "02"
+        },
+        "20": {
+          "count": 846,
+          "denominator": 4132148,
+          "status": "value",
+          "unknownCount": 13585,
+          "sourceCells": {
+            "count": [
+              "D1521"
+            ],
+            "denominator": "D1509"
+          },
+          "sourceSheet": "02"
+        },
+        "21": {
+          "count": 2079,
+          "denominator": 6583278,
+          "status": "value",
+          "unknownCount": 12018,
+          "sourceCells": {
+            "count": [
+              "D1596"
+            ],
+            "denominator": "D1584"
+          },
+          "sourceSheet": "02"
+        },
+        "22": {
+          "count": 566,
+          "denominator": 2368467,
+          "status": "value",
+          "unknownCount": 10238,
+          "sourceCells": {
+            "count": [
+              "D1671"
+            ],
+            "denominator": "D1659"
+          },
+          "sourceSheet": "02"
+        },
+        "23": {
+          "count": 896,
+          "denominator": 1857985,
+          "status": "value",
+          "unknownCount": 26046,
+          "sourceCells": {
+            "count": [
+              "D1746"
+            ],
+            "denominator": "D1734"
+          },
+          "sourceSheet": "02"
+        },
+        "24": {
+          "count": 264,
+          "denominator": 2822255,
+          "status": "value",
+          "unknownCount": 6336,
+          "sourceCells": {
+            "count": [
+              "D1821"
+            ],
+            "denominator": "D1809"
+          },
+          "sourceSheet": "02"
+        },
+        "25": {
+          "count": 201,
+          "denominator": 3026943,
+          "status": "value",
+          "unknownCount": 5997,
+          "sourceCells": {
+            "count": [
+              "D1896"
+            ],
+            "denominator": "D1884"
+          },
+          "sourceSheet": "02"
+        },
+        "26": {
+          "count": 250,
+          "denominator": 2944840,
+          "status": "value",
+          "unknownCount": 7557,
+          "sourceCells": {
+            "count": [
+              "D1971"
+            ],
+            "denominator": "D1959"
+          },
+          "sourceSheet": "02"
+        },
+        "27": {
+          "count": 174,
+          "denominator": 2402598,
+          "status": "value",
+          "unknownCount": 4284,
+          "sourceCells": {
+            "count": [
+              "D2046"
+            ],
+            "denominator": "D2034"
+          },
+          "sourceSheet": "02"
+        },
+        "28": {
+          "count": 611,
+          "denominator": 3527735,
+          "status": "value",
+          "unknownCount": 11972,
+          "sourceCells": {
+            "count": [
+              "D2121"
+            ],
+            "denominator": "D2109"
+          },
+          "sourceSheet": "02"
+        },
+        "29": {
+          "count": 399,
+          "denominator": 1342977,
+          "status": "value",
+          "unknownCount": 22469,
+          "sourceCells": {
+            "count": [
+              "D2196"
+            ],
+            "denominator": "D2184"
+          },
+          "sourceSheet": "02"
+        },
+        "30": {
+          "count": 1666,
+          "denominator": 8062579,
+          "status": "value",
+          "unknownCount": 10071,
+          "sourceCells": {
+            "count": [
+              "D2271"
+            ],
+            "denominator": "D2259"
+          },
+          "sourceSheet": "02"
+        },
+        "31": {
+          "count": 353,
+          "denominator": 2320898,
+          "status": "value",
+          "unknownCount": 7317,
+          "sourceCells": {
+            "count": [
+              "D2346"
+            ],
+            "denominator": "D2334"
+          },
+          "sourceSheet": "02"
+        },
+        "32": {
+          "count": 91,
+          "denominator": 1622138,
+          "status": "value",
+          "unknownCount": 3431,
+          "sourceCells": {
+            "count": [
+              "D2421"
+            ],
+            "denominator": "D2409"
+          },
+          "sourceSheet": "02"
+        },
+        "01": {
+          "count": 259,
+          "denominator": 1425607,
+          "status": "value",
+          "unknownCount": 3490,
+          "sourceCells": {
+            "count": [
+              "D96"
+            ],
+            "denominator": "D84"
+          },
+          "sourceSheet": "02"
+        },
+        "02": {
+          "count": 1319,
+          "denominator": 3769020,
+          "status": "value",
+          "unknownCount": 20367,
+          "sourceCells": {
+            "count": [
+              "D171"
+            ],
+            "denominator": "D159"
+          },
+          "sourceSheet": "02"
+        },
+        "03": {
+          "count": 296,
+          "denominator": 798447,
+          "status": "value",
+          "unknownCount": 5375,
+          "sourceCells": {
+            "count": [
+              "D246"
+            ],
+            "denominator": "D234"
+          },
+          "sourceSheet": "02"
+        },
+        "04": {
+          "count": 117,
+          "denominator": 928363,
+          "status": "value",
+          "unknownCount": 5302,
+          "sourceCells": {
+            "count": [
+              "D321"
+            ],
+            "denominator": "D309"
+          },
+          "sourceSheet": "02"
+        },
+        "05": {
+          "count": 453,
+          "denominator": 3146771,
+          "status": "value",
+          "unknownCount": 10144,
+          "sourceCells": {
+            "count": [
+              "D396"
+            ],
+            "denominator": "D384"
+          },
+          "sourceSheet": "02"
+        },
+        "06": {
+          "count": 134,
+          "denominator": 731391,
+          "status": "value",
+          "unknownCount": 2796,
+          "sourceCells": {
+            "count": [
+              "D471"
+            ],
+            "denominator": "D459"
+          },
+          "sourceSheet": "02"
+        },
+        "07": {
+          "count": 477,
+          "denominator": 5543828,
+          "status": "value",
+          "unknownCount": 33432,
+          "sourceCells": {
+            "count": [
+              "D546"
+            ],
+            "denominator": "D534"
+          },
+          "sourceSheet": "02"
+        },
+        "08": {
+          "count": 692,
+          "denominator": 3741869,
+          "status": "value",
+          "unknownCount": 17265,
+          "sourceCells": {
+            "count": [
+              "D621"
+            ],
+            "denominator": "D609"
+          },
+          "sourceSheet": "02"
+        },
+        "09": {
+          "count": 17981,
+          "denominator": 9209944,
+          "status": "value",
+          "unknownCount": 25589,
+          "sourceCells": {
+            "count": [
+              "D696"
+            ],
+            "denominator": "D684"
+          },
+          "sourceSheet": "02"
+        }
+      },
+      "source": {
+        "label": "INEGI：2020年国勢調査・宗教基本票表",
+        "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_12_religion.xlsx",
+        "table": "B2020_12_02_E／シート02・Sexo=Total",
+        "periodNote": "2020年3月15日0時。全年齢の通常居住者。",
+        "methodNote": "人数は原表の公表人数を保持し、記載した区分だけを合算。割合は人数÷同じ州の全年齢総人口×100として当サイトが計算。不詳を除いて再正規化しません。宗教は申告された信仰・精神的な選好で、実践の頻度や熱心さを測る指標ではありません。総人口には国勢調査の公式補完推計を含みます。",
+        "definitionUrl": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/nueva_estruc/702825197520.pdf",
+        "attribution": "Fuente: INEGI, Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+        "components": [
+          "Judía"
+        ]
+      },
+      "countRadiusReference": 30000,
+      "countMaximumRadius": 33,
+      "countLegendValues": [
+        3000,
+        15000,
+        30000
+      ],
+      "distributionSummary": "割合が高い州：メキシコ市 0.195%、メキシコ州 0.128%、モレロス 0.048%（2020年）。",
+      "comparabilityNote": "この8表示区分は原表の全宗教回答と不詳を分けたものです。地域の割合から個人の信仰・行動を推定しません。"
+    },
+    {
+      "id": "islamic",
+      "category": "religion",
+      "referenceYear": 2020,
+      "label": "イスラム教",
+      "definition": "Islámicaの公表人数。少人数の州も実数と小さい割合を省略せず示します。",
+      "isEstimate": false,
+      "sharePrecision": 3,
+      "takeaway": "信仰・所属・無宗教は別の回答区分です。選んだ区分の人数と州内割合を比べます。",
+      "countDenominatorLabel": "全年齢の通常居住人口（不詳を含む）",
+      "countLabel": "公表人数",
+      "nationalCount": 7982,
+      "nationalDenominator": 126014024,
+      "nationalStatus": "value",
+      "nationalUnknownCount": 491814,
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 0.002,
+          "color": "#f1f0d6",
+          "label": "0–0.002%未満"
+        },
+        {
+          "min": 0.002,
+          "max": 0.005,
+          "color": "#c6debe",
+          "label": "0.002–0.005%未満"
+        },
+        {
+          "min": 0.005,
+          "max": 0.01,
+          "color": "#8ec2b0",
+          "label": "0.005–0.01%未満"
+        },
+        {
+          "min": 0.01,
+          "max": 0.02,
+          "color": "#529f95",
+          "label": "0.01–0.02%未満"
+        },
+        {
+          "min": 0.02,
+          "max": 0.05,
+          "color": "#26786e",
+          "label": "0.02–0.05%未満"
+        },
+        {
+          "min": 0.05,
+          "max": null,
+          "color": "#174c49",
+          "label": "0.05%以上"
+        }
+      ],
+      "states": {
+        "10": {
+          "count": 68,
+          "denominator": 1832650,
+          "status": "value",
+          "unknownCount": 6095,
+          "sourceCells": {
+            "count": [
+              "D772"
+            ],
+            "denominator": "D759"
+          },
+          "sourceSheet": "02"
+        },
+        "11": {
+          "count": 239,
+          "denominator": 6166934,
+          "status": "value",
+          "unknownCount": 20236,
+          "sourceCells": {
+            "count": [
+              "D847"
+            ],
+            "denominator": "D834"
+          },
+          "sourceSheet": "02"
+        },
+        "12": {
+          "count": 62,
+          "denominator": 3540685,
+          "status": "value",
+          "unknownCount": 18129,
+          "sourceCells": {
+            "count": [
+              "D922"
+            ],
+            "denominator": "D909"
+          },
+          "sourceSheet": "02"
+        },
+        "13": {
+          "count": 182,
+          "denominator": 3082841,
+          "status": "value",
+          "unknownCount": 6543,
+          "sourceCells": {
+            "count": [
+              "D997"
+            ],
+            "denominator": "D984"
+          },
+          "sourceSheet": "02"
+        },
+        "14": {
+          "count": 698,
+          "denominator": 8348151,
+          "status": "value",
+          "unknownCount": 64273,
+          "sourceCells": {
+            "count": [
+              "D1072"
+            ],
+            "denominator": "D1059"
+          },
+          "sourceSheet": "02"
+        },
+        "15": {
+          "count": 1101,
+          "denominator": 16992418,
+          "status": "value",
+          "unknownCount": 58374,
+          "sourceCells": {
+            "count": [
+              "D1147"
+            ],
+            "denominator": "D1134"
+          },
+          "sourceSheet": "02"
+        },
+        "16": {
+          "count": 117,
+          "denominator": 4748846,
+          "status": "value",
+          "unknownCount": 12010,
+          "sourceCells": {
+            "count": [
+              "D1222"
+            ],
+            "denominator": "D1209"
+          },
+          "sourceSheet": "02"
+        },
+        "17": {
+          "count": 132,
+          "denominator": 1971520,
+          "status": "value",
+          "unknownCount": 3460,
+          "sourceCells": {
+            "count": [
+              "D1297"
+            ],
+            "denominator": "D1284"
+          },
+          "sourceSheet": "02"
+        },
+        "18": {
+          "count": 56,
+          "denominator": 1235456,
+          "status": "value",
+          "unknownCount": 2893,
+          "sourceCells": {
+            "count": [
+              "D1372"
+            ],
+            "denominator": "D1359"
+          },
+          "sourceSheet": "02"
+        },
+        "19": {
+          "count": 395,
+          "denominator": 5784442,
+          "status": "value",
+          "unknownCount": 34720,
+          "sourceCells": {
+            "count": [
+              "D1447"
+            ],
+            "denominator": "D1434"
+          },
+          "sourceSheet": "02"
+        },
+        "20": {
+          "count": 68,
+          "denominator": 4132148,
+          "status": "value",
+          "unknownCount": 13585,
+          "sourceCells": {
+            "count": [
+              "D1522"
+            ],
+            "denominator": "D1509"
+          },
+          "sourceSheet": "02"
+        },
+        "21": {
+          "count": 346,
+          "denominator": 6583278,
+          "status": "value",
+          "unknownCount": 12018,
+          "sourceCells": {
+            "count": [
+              "D1597"
+            ],
+            "denominator": "D1584"
+          },
+          "sourceSheet": "02"
+        },
+        "22": {
+          "count": 251,
+          "denominator": 2368467,
+          "status": "value",
+          "unknownCount": 10238,
+          "sourceCells": {
+            "count": [
+              "D1672"
+            ],
+            "denominator": "D1659"
+          },
+          "sourceSheet": "02"
+        },
+        "23": {
+          "count": 233,
+          "denominator": 1857985,
+          "status": "value",
+          "unknownCount": 26046,
+          "sourceCells": {
+            "count": [
+              "D1747"
+            ],
+            "denominator": "D1734"
+          },
+          "sourceSheet": "02"
+        },
+        "24": {
+          "count": 92,
+          "denominator": 2822255,
+          "status": "value",
+          "unknownCount": 6336,
+          "sourceCells": {
+            "count": [
+              "D1822"
+            ],
+            "denominator": "D1809"
+          },
+          "sourceSheet": "02"
+        },
+        "25": {
+          "count": 77,
+          "denominator": 3026943,
+          "status": "value",
+          "unknownCount": 5997,
+          "sourceCells": {
+            "count": [
+              "D1897"
+            ],
+            "denominator": "D1884"
+          },
+          "sourceSheet": "02"
+        },
+        "26": {
+          "count": 160,
+          "denominator": 2944840,
+          "status": "value",
+          "unknownCount": 7557,
+          "sourceCells": {
+            "count": [
+              "D1972"
+            ],
+            "denominator": "D1959"
+          },
+          "sourceSheet": "02"
+        },
+        "27": {
+          "count": 25,
+          "denominator": 2402598,
+          "status": "value",
+          "unknownCount": 4284,
+          "sourceCells": {
+            "count": [
+              "D2047"
+            ],
+            "denominator": "D2034"
+          },
+          "sourceSheet": "02"
+        },
+        "28": {
+          "count": 127,
+          "denominator": 3527735,
+          "status": "value",
+          "unknownCount": 11972,
+          "sourceCells": {
+            "count": [
+              "D2122"
+            ],
+            "denominator": "D2109"
+          },
+          "sourceSheet": "02"
+        },
+        "29": {
+          "count": 54,
+          "denominator": 1342977,
+          "status": "value",
+          "unknownCount": 22469,
+          "sourceCells": {
+            "count": [
+              "D2197"
+            ],
+            "denominator": "D2184"
+          },
+          "sourceSheet": "02"
+        },
+        "30": {
+          "count": 215,
+          "denominator": 8062579,
+          "status": "value",
+          "unknownCount": 10071,
+          "sourceCells": {
+            "count": [
+              "D2272"
+            ],
+            "denominator": "D2259"
+          },
+          "sourceSheet": "02"
+        },
+        "31": {
+          "count": 155,
+          "denominator": 2320898,
+          "status": "value",
+          "unknownCount": 7317,
+          "sourceCells": {
+            "count": [
+              "D2347"
+            ],
+            "denominator": "D2334"
+          },
+          "sourceSheet": "02"
+        },
+        "32": {
+          "count": 38,
+          "denominator": 1622138,
+          "status": "value",
+          "unknownCount": 3431,
+          "sourceCells": {
+            "count": [
+              "D2422"
+            ],
+            "denominator": "D2409"
+          },
+          "sourceSheet": "02"
+        },
+        "01": {
+          "count": 110,
+          "denominator": 1425607,
+          "status": "value",
+          "unknownCount": 3490,
+          "sourceCells": {
+            "count": [
+              "D97"
+            ],
+            "denominator": "D84"
+          },
+          "sourceSheet": "02"
+        },
+        "02": {
+          "count": 404,
+          "denominator": 3769020,
+          "status": "value",
+          "unknownCount": 20367,
+          "sourceCells": {
+            "count": [
+              "D172"
+            ],
+            "denominator": "D159"
+          },
+          "sourceSheet": "02"
+        },
+        "03": {
+          "count": 49,
+          "denominator": 798447,
+          "status": "value",
+          "unknownCount": 5375,
+          "sourceCells": {
+            "count": [
+              "D247"
+            ],
+            "denominator": "D234"
+          },
+          "sourceSheet": "02"
+        },
+        "04": {
+          "count": 40,
+          "denominator": 928363,
+          "status": "value",
+          "unknownCount": 5302,
+          "sourceCells": {
+            "count": [
+              "D322"
+            ],
+            "denominator": "D309"
+          },
+          "sourceSheet": "02"
+        },
+        "05": {
+          "count": 157,
+          "denominator": 3146771,
+          "status": "value",
+          "unknownCount": 10144,
+          "sourceCells": {
+            "count": [
+              "D397"
+            ],
+            "denominator": "D384"
+          },
+          "sourceSheet": "02"
+        },
+        "06": {
+          "count": 52,
+          "denominator": 731391,
+          "status": "value",
+          "unknownCount": 2796,
+          "sourceCells": {
+            "count": [
+              "D472"
+            ],
+            "denominator": "D459"
+          },
+          "sourceSheet": "02"
+        },
+        "07": {
+          "count": 365,
+          "denominator": 5543828,
+          "status": "value",
+          "unknownCount": 33432,
+          "sourceCells": {
+            "count": [
+              "D547"
+            ],
+            "denominator": "D534"
+          },
+          "sourceSheet": "02"
+        },
+        "08": {
+          "count": 278,
+          "denominator": 3741869,
+          "status": "value",
+          "unknownCount": 17265,
+          "sourceCells": {
+            "count": [
+              "D622"
+            ],
+            "denominator": "D609"
+          },
+          "sourceSheet": "02"
+        },
+        "09": {
+          "count": 1636,
+          "denominator": 9209944,
+          "status": "value",
+          "unknownCount": 25589,
+          "sourceCells": {
+            "count": [
+              "D697"
+            ],
+            "denominator": "D684"
+          },
+          "sourceSheet": "02"
+        }
+      },
+      "source": {
+        "label": "INEGI：2020年国勢調査・宗教基本票表",
+        "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_12_religion.xlsx",
+        "table": "B2020_12_02_E／シート02・Sexo=Total",
+        "periodNote": "2020年3月15日0時。全年齢の通常居住者。",
+        "methodNote": "人数は原表の公表人数を保持し、記載した区分だけを合算。割合は人数÷同じ州の全年齢総人口×100として当サイトが計算。不詳を除いて再正規化しません。宗教は申告された信仰・精神的な選好で、実践の頻度や熱心さを測る指標ではありません。総人口には国勢調査の公式補完推計を含みます。",
+        "definitionUrl": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/nueva_estruc/702825197520.pdf",
+        "attribution": "Fuente: INEGI, Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+        "components": [
+          "Islámica"
+        ]
+      },
+      "countRadiusReference": 2000,
+      "countMaximumRadius": 33,
+      "countLegendValues": [
+        200,
+        1000,
+        2000
+      ],
+      "distributionSummary": "割合が高い州：メキシコ市 0.018%、キンタナ・ロー 0.013%、バハ・カリフォルニア 0.011%（2020年）。",
+      "comparabilityNote": "この8表示区分は原表の全宗教回答と不詳を分けたものです。地域の割合から個人の信仰・行動を推定しません。"
+    },
+    {
+      "id": "other_religions_combined",
+      "category": "religion",
+      "referenceYear": 2020,
+      "label": "その他の宗教（合算）",
+      "definition": "原表のRaíces étnicas、Raíces afro、Espiritualistaとその他4区分を当サイトが合算。カトリック、公式プロテスタント区分、ユダヤ教、イスラム教は含みません。民族・アフロ系自己認識の人数でもありません。",
+      "isEstimate": false,
+      "sharePrecision": 2,
+      "takeaway": "信仰・所属・無宗教は別の回答区分です。選んだ区分の人数と州内割合を比べます。",
+      "countDenominatorLabel": "全年齢の通常居住人口（不詳を含む）",
+      "countLabel": "公表人数",
+      "nationalCount": 181311,
+      "nationalDenominator": 126014024,
+      "nationalStatus": "value",
+      "nationalUnknownCount": 491814,
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 0.05,
+          "color": "#f1f0d6",
+          "label": "0–0.05%未満"
+        },
+        {
+          "min": 0.05,
+          "max": 0.1,
+          "color": "#c6debe",
+          "label": "0.05–0.1%未満"
+        },
+        {
+          "min": 0.1,
+          "max": 0.2,
+          "color": "#8ec2b0",
+          "label": "0.1–0.2%未満"
+        },
+        {
+          "min": 0.2,
+          "max": 0.5,
+          "color": "#529f95",
+          "label": "0.2–0.5%未満"
+        },
+        {
+          "min": 0.5,
+          "max": 1,
+          "color": "#26786e",
+          "label": "0.5–1%未満"
+        },
+        {
+          "min": 1,
+          "max": null,
+          "color": "#174c49",
+          "label": "1%以上"
+        }
+      ],
+      "states": {
+        "10": {
+          "count": 1331,
+          "denominator": 1832650,
+          "status": "value",
+          "unknownCount": 6095,
+          "sourceCells": {
+            "count": [
+              "D775",
+              "D776",
+              "D777",
+              "D773",
+              "D774",
+              "D778",
+              "D779"
+            ],
+            "denominator": "D759"
+          },
+          "sourceSheet": "02"
+        },
+        "11": {
+          "count": 4216,
+          "denominator": 6166934,
+          "status": "value",
+          "unknownCount": 20236,
+          "sourceCells": {
+            "count": [
+              "D850",
+              "D851",
+              "D852",
+              "D848",
+              "D849",
+              "D853",
+              "D854"
+            ],
+            "denominator": "D834"
+          },
+          "sourceSheet": "02"
+        },
+        "12": {
+          "count": 2494,
+          "denominator": 3540685,
+          "status": "value",
+          "unknownCount": 18129,
+          "sourceCells": {
+            "count": [
+              "D925",
+              "D926",
+              "D927",
+              "D923",
+              "D924",
+              "D928",
+              "D929"
+            ],
+            "denominator": "D909"
+          },
+          "sourceSheet": "02"
+        },
+        "13": {
+          "count": 5622,
+          "denominator": 3082841,
+          "status": "value",
+          "unknownCount": 6543,
+          "sourceCells": {
+            "count": [
+              "D1000",
+              "D1001",
+              "D1002",
+              "D998",
+              "D999",
+              "D1003",
+              "D1004"
+            ],
+            "denominator": "D984"
+          },
+          "sourceSheet": "02"
+        },
+        "14": {
+          "count": 19212,
+          "denominator": 8348151,
+          "status": "value",
+          "unknownCount": 64273,
+          "sourceCells": {
+            "count": [
+              "D1075",
+              "D1076",
+              "D1077",
+              "D1073",
+              "D1074",
+              "D1078",
+              "D1079"
+            ],
+            "denominator": "D1059"
+          },
+          "sourceSheet": "02"
+        },
+        "15": {
+          "count": 38701,
+          "denominator": 16992418,
+          "status": "value",
+          "unknownCount": 58374,
+          "sourceCells": {
+            "count": [
+              "D1150",
+              "D1151",
+              "D1152",
+              "D1148",
+              "D1149",
+              "D1153",
+              "D1154"
+            ],
+            "denominator": "D1134"
+          },
+          "sourceSheet": "02"
+        },
+        "16": {
+          "count": 2594,
+          "denominator": 4748846,
+          "status": "value",
+          "unknownCount": 12010,
+          "sourceCells": {
+            "count": [
+              "D1225",
+              "D1226",
+              "D1227",
+              "D1223",
+              "D1224",
+              "D1228",
+              "D1229"
+            ],
+            "denominator": "D1209"
+          },
+          "sourceSheet": "02"
+        },
+        "17": {
+          "count": 2619,
+          "denominator": 1971520,
+          "status": "value",
+          "unknownCount": 3460,
+          "sourceCells": {
+            "count": [
+              "D1300",
+              "D1301",
+              "D1302",
+              "D1298",
+              "D1299",
+              "D1303",
+              "D1304"
+            ],
+            "denominator": "D1284"
+          },
+          "sourceSheet": "02"
+        },
+        "18": {
+          "count": 3508,
+          "denominator": 1235456,
+          "status": "value",
+          "unknownCount": 2893,
+          "sourceCells": {
+            "count": [
+              "D1375",
+              "D1376",
+              "D1377",
+              "D1373",
+              "D1374",
+              "D1378",
+              "D1379"
+            ],
+            "denominator": "D1359"
+          },
+          "sourceSheet": "02"
+        },
+        "19": {
+          "count": 3510,
+          "denominator": 5784442,
+          "status": "value",
+          "unknownCount": 34720,
+          "sourceCells": {
+            "count": [
+              "D1450",
+              "D1451",
+              "D1452",
+              "D1448",
+              "D1449",
+              "D1453",
+              "D1454"
+            ],
+            "denominator": "D1434"
+          },
+          "sourceSheet": "02"
+        },
+        "20": {
+          "count": 2326,
+          "denominator": 4132148,
+          "status": "value",
+          "unknownCount": 13585,
+          "sourceCells": {
+            "count": [
+              "D1525",
+              "D1526",
+              "D1527",
+              "D1523",
+              "D1524",
+              "D1528",
+              "D1529"
+            ],
+            "denominator": "D1509"
+          },
+          "sourceSheet": "02"
+        },
+        "21": {
+          "count": 8093,
+          "denominator": 6583278,
+          "status": "value",
+          "unknownCount": 12018,
+          "sourceCells": {
+            "count": [
+              "D1600",
+              "D1601",
+              "D1602",
+              "D1598",
+              "D1599",
+              "D1603",
+              "D1604"
+            ],
+            "denominator": "D1584"
+          },
+          "sourceSheet": "02"
+        },
+        "22": {
+          "count": 3135,
+          "denominator": 2368467,
+          "status": "value",
+          "unknownCount": 10238,
+          "sourceCells": {
+            "count": [
+              "D1675",
+              "D1676",
+              "D1677",
+              "D1673",
+              "D1674",
+              "D1678",
+              "D1679"
+            ],
+            "denominator": "D1659"
+          },
+          "sourceSheet": "02"
+        },
+        "23": {
+          "count": 3363,
+          "denominator": 1857985,
+          "status": "value",
+          "unknownCount": 26046,
+          "sourceCells": {
+            "count": [
+              "D1750",
+              "D1751",
+              "D1752",
+              "D1748",
+              "D1749",
+              "D1753",
+              "D1754"
+            ],
+            "denominator": "D1734"
+          },
+          "sourceSheet": "02"
+        },
+        "24": {
+          "count": 2162,
+          "denominator": 2822255,
+          "status": "value",
+          "unknownCount": 6336,
+          "sourceCells": {
+            "count": [
+              "D1825",
+              "D1826",
+              "D1827",
+              "D1823",
+              "D1824",
+              "D1828",
+              "D1829"
+            ],
+            "denominator": "D1809"
+          },
+          "sourceSheet": "02"
+        },
+        "25": {
+          "count": 1550,
+          "denominator": 3026943,
+          "status": "value",
+          "unknownCount": 5997,
+          "sourceCells": {
+            "count": [
+              "D1900",
+              "D1901",
+              "D1902",
+              "D1898",
+              "D1899",
+              "D1903",
+              "D1904"
+            ],
+            "denominator": "D1884"
+          },
+          "sourceSheet": "02"
+        },
+        "26": {
+          "count": 1159,
+          "denominator": 2944840,
+          "status": "value",
+          "unknownCount": 7557,
+          "sourceCells": {
+            "count": [
+              "D1975",
+              "D1976",
+              "D1977",
+              "D1973",
+              "D1974",
+              "D1978",
+              "D1979"
+            ],
+            "denominator": "D1959"
+          },
+          "sourceSheet": "02"
+        },
+        "27": {
+          "count": 836,
+          "denominator": 2402598,
+          "status": "value",
+          "unknownCount": 4284,
+          "sourceCells": {
+            "count": [
+              "D2050",
+              "D2051",
+              "D2052",
+              "D2048",
+              "D2049",
+              "D2053",
+              "D2054"
+            ],
+            "denominator": "D2034"
+          },
+          "sourceSheet": "02"
+        },
+        "28": {
+          "count": 1834,
+          "denominator": 3527735,
+          "status": "value",
+          "unknownCount": 11972,
+          "sourceCells": {
+            "count": [
+              "D2125",
+              "D2126",
+              "D2127",
+              "D2123",
+              "D2124",
+              "D2128",
+              "D2129"
+            ],
+            "denominator": "D2109"
+          },
+          "sourceSheet": "02"
+        },
+        "29": {
+          "count": 1246,
+          "denominator": 1342977,
+          "status": "value",
+          "unknownCount": 22469,
+          "sourceCells": {
+            "count": [
+              "D2200",
+              "D2201",
+              "D2202",
+              "D2198",
+              "D2199",
+              "D2203",
+              "D2204"
+            ],
+            "denominator": "D2184"
+          },
+          "sourceSheet": "02"
+        },
+        "30": {
+          "count": 6031,
+          "denominator": 8062579,
+          "status": "value",
+          "unknownCount": 10071,
+          "sourceCells": {
+            "count": [
+              "D2275",
+              "D2276",
+              "D2277",
+              "D2273",
+              "D2274",
+              "D2278",
+              "D2279"
+            ],
+            "denominator": "D2259"
+          },
+          "sourceSheet": "02"
+        },
+        "31": {
+          "count": 3204,
+          "denominator": 2320898,
+          "status": "value",
+          "unknownCount": 7317,
+          "sourceCells": {
+            "count": [
+              "D2350",
+              "D2351",
+              "D2352",
+              "D2348",
+              "D2349",
+              "D2353",
+              "D2354"
+            ],
+            "denominator": "D2334"
+          },
+          "sourceSheet": "02"
+        },
+        "32": {
+          "count": 565,
+          "denominator": 1622138,
+          "status": "value",
+          "unknownCount": 3431,
+          "sourceCells": {
+            "count": [
+              "D2425",
+              "D2426",
+              "D2427",
+              "D2423",
+              "D2424",
+              "D2428",
+              "D2429"
+            ],
+            "denominator": "D2409"
+          },
+          "sourceSheet": "02"
+        },
+        "01": {
+          "count": 1531,
+          "denominator": 1425607,
+          "status": "value",
+          "unknownCount": 3490,
+          "sourceCells": {
+            "count": [
+              "D100",
+              "D101",
+              "D102",
+              "D98",
+              "D99",
+              "D103",
+              "D104"
+            ],
+            "denominator": "D84"
+          },
+          "sourceSheet": "02"
+        },
+        "02": {
+          "count": 3955,
+          "denominator": 3769020,
+          "status": "value",
+          "unknownCount": 20367,
+          "sourceCells": {
+            "count": [
+              "D175",
+              "D176",
+              "D177",
+              "D173",
+              "D174",
+              "D178",
+              "D179"
+            ],
+            "denominator": "D159"
+          },
+          "sourceSheet": "02"
+        },
+        "03": {
+          "count": 780,
+          "denominator": 798447,
+          "status": "value",
+          "unknownCount": 5375,
+          "sourceCells": {
+            "count": [
+              "D250",
+              "D251",
+              "D252",
+              "D248",
+              "D249",
+              "D253",
+              "D254"
+            ],
+            "denominator": "D234"
+          },
+          "sourceSheet": "02"
+        },
+        "04": {
+          "count": 868,
+          "denominator": 928363,
+          "status": "value",
+          "unknownCount": 5302,
+          "sourceCells": {
+            "count": [
+              "D325",
+              "D326",
+              "D327",
+              "D323",
+              "D324",
+              "D328",
+              "D329"
+            ],
+            "denominator": "D309"
+          },
+          "sourceSheet": "02"
+        },
+        "05": {
+          "count": 1689,
+          "denominator": 3146771,
+          "status": "value",
+          "unknownCount": 10144,
+          "sourceCells": {
+            "count": [
+              "D400",
+              "D401",
+              "D402",
+              "D398",
+              "D399",
+              "D403",
+              "D404"
+            ],
+            "denominator": "D384"
+          },
+          "sourceSheet": "02"
+        },
+        "06": {
+          "count": 626,
+          "denominator": 731391,
+          "status": "value",
+          "unknownCount": 2796,
+          "sourceCells": {
+            "count": [
+              "D475",
+              "D476",
+              "D477",
+              "D473",
+              "D474",
+              "D478",
+              "D479"
+            ],
+            "denominator": "D459"
+          },
+          "sourceSheet": "02"
+        },
+        "07": {
+          "count": 14587,
+          "denominator": 5543828,
+          "status": "value",
+          "unknownCount": 33432,
+          "sourceCells": {
+            "count": [
+              "D550",
+              "D551",
+              "D552",
+              "D548",
+              "D549",
+              "D553",
+              "D554"
+            ],
+            "denominator": "D534"
+          },
+          "sourceSheet": "02"
+        },
+        "08": {
+          "count": 2336,
+          "denominator": 3741869,
+          "status": "value",
+          "unknownCount": 17265,
+          "sourceCells": {
+            "count": [
+              "D625",
+              "D626",
+              "D627",
+              "D623",
+              "D624",
+              "D628",
+              "D629"
+            ],
+            "denominator": "D609"
+          },
+          "sourceSheet": "02"
+        },
+        "09": {
+          "count": 35628,
+          "denominator": 9209944,
+          "status": "value",
+          "unknownCount": 25589,
+          "sourceCells": {
+            "count": [
+              "D700",
+              "D701",
+              "D702",
+              "D698",
+              "D699",
+              "D703",
+              "D704"
+            ],
+            "denominator": "D684"
+          },
+          "sourceSheet": "02"
+        }
+      },
+      "source": {
+        "label": "INEGI：2020年国勢調査・宗教基本票表",
+        "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_12_religion.xlsx",
+        "table": "B2020_12_02_E／シート02・Sexo=Total",
+        "periodNote": "2020年3月15日0時。全年齢の通常居住者。",
+        "methodNote": "人数は原表の公表人数を保持し、記載した区分だけを合算。割合は人数÷同じ州の全年齢総人口×100として当サイトが計算。不詳を除いて再正規化しません。宗教は申告された信仰・精神的な選好で、実践の頻度や熱心さを測る指標ではありません。総人口には国勢調査の公式補完推計を含みます。",
+        "definitionUrl": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/nueva_estruc/702825197520.pdf",
+        "attribution": "Fuente: INEGI, Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+        "components": [
+          "Raíces étnicas",
+          "Raíces afro",
+          "Espiritualista",
+          "Origen oriental2",
+          "New Age y Escuelas esotéricas",
+          "Cultos populares",
+          "Otras religiones o movimientos religiosos3"
+        ]
+      },
+      "countRadiusReference": 40000,
+      "countMaximumRadius": 33,
+      "countLegendValues": [
+        4000,
+        20000,
+        40000
+      ],
+      "distributionSummary": "割合が高い州：メキシコ市 0.39%、ナヤリト 0.28%、チアパス 0.26%（2020年）。",
+      "comparabilityNote": "この8表示区分は原表の全宗教回答と不詳を分けたものです。地域の割合から個人の信仰・行動を推定しません。"
+    },
+    {
+      "id": "religion_unspecified",
+      "category": "religion",
+      "referenceYear": 2020,
+      "label": "宗教の回答不詳",
+      "definition": "原表No especificadoの人数。不詳は無宗教やゼロへ付け替えず、各指標の総人口分母に含めます。",
+      "isEstimate": false,
+      "sharePrecision": 2,
+      "takeaway": "信仰・所属・無宗教は別の回答区分です。選んだ区分の人数と州内割合を比べます。",
+      "countDenominatorLabel": "全年齢の通常居住人口（不詳を含む）",
+      "countLabel": "公表人数",
+      "nationalCount": 491814,
+      "nationalDenominator": 126014024,
+      "nationalStatus": "value",
+      "nationalUnknownCount": 491814,
+      "shareBins": [
+        {
+          "min": 0,
+          "max": 0.1,
+          "color": "#f1f0d6",
+          "label": "0–0.1%未満"
+        },
+        {
+          "min": 0.1,
+          "max": 0.25,
+          "color": "#c6debe",
+          "label": "0.1–0.25%未満"
+        },
+        {
+          "min": 0.25,
+          "max": 0.5,
+          "color": "#8ec2b0",
+          "label": "0.25–0.5%未満"
+        },
+        {
+          "min": 0.5,
+          "max": 1,
+          "color": "#529f95",
+          "label": "0.5–1%未満"
+        },
+        {
+          "min": 1,
+          "max": 2,
+          "color": "#26786e",
+          "label": "1–2%未満"
+        },
+        {
+          "min": 2,
+          "max": null,
+          "color": "#174c49",
+          "label": "2%以上"
+        }
+      ],
+      "states": {
+        "10": {
+          "count": 6095,
+          "denominator": 1832650,
+          "status": "value",
+          "unknownCount": 6095,
+          "sourceCells": {
+            "count": [
+              "D783"
+            ],
+            "denominator": "D759"
+          },
+          "sourceSheet": "02"
+        },
+        "11": {
+          "count": 20236,
+          "denominator": 6166934,
+          "status": "value",
+          "unknownCount": 20236,
+          "sourceCells": {
+            "count": [
+              "D858"
+            ],
+            "denominator": "D834"
+          },
+          "sourceSheet": "02"
+        },
+        "12": {
+          "count": 18129,
+          "denominator": 3540685,
+          "status": "value",
+          "unknownCount": 18129,
+          "sourceCells": {
+            "count": [
+              "D933"
+            ],
+            "denominator": "D909"
+          },
+          "sourceSheet": "02"
+        },
+        "13": {
+          "count": 6543,
+          "denominator": 3082841,
+          "status": "value",
+          "unknownCount": 6543,
+          "sourceCells": {
+            "count": [
+              "D1008"
+            ],
+            "denominator": "D984"
+          },
+          "sourceSheet": "02"
+        },
+        "14": {
+          "count": 64273,
+          "denominator": 8348151,
+          "status": "value",
+          "unknownCount": 64273,
+          "sourceCells": {
+            "count": [
+              "D1083"
+            ],
+            "denominator": "D1059"
+          },
+          "sourceSheet": "02"
+        },
+        "15": {
+          "count": 58374,
+          "denominator": 16992418,
+          "status": "value",
+          "unknownCount": 58374,
+          "sourceCells": {
+            "count": [
+              "D1158"
+            ],
+            "denominator": "D1134"
+          },
+          "sourceSheet": "02"
+        },
+        "16": {
+          "count": 12010,
+          "denominator": 4748846,
+          "status": "value",
+          "unknownCount": 12010,
+          "sourceCells": {
+            "count": [
+              "D1233"
+            ],
+            "denominator": "D1209"
+          },
+          "sourceSheet": "02"
+        },
+        "17": {
+          "count": 3460,
+          "denominator": 1971520,
+          "status": "value",
+          "unknownCount": 3460,
+          "sourceCells": {
+            "count": [
+              "D1308"
+            ],
+            "denominator": "D1284"
+          },
+          "sourceSheet": "02"
+        },
+        "18": {
+          "count": 2893,
+          "denominator": 1235456,
+          "status": "value",
+          "unknownCount": 2893,
+          "sourceCells": {
+            "count": [
+              "D1383"
+            ],
+            "denominator": "D1359"
+          },
+          "sourceSheet": "02"
+        },
+        "19": {
+          "count": 34720,
+          "denominator": 5784442,
+          "status": "value",
+          "unknownCount": 34720,
+          "sourceCells": {
+            "count": [
+              "D1458"
+            ],
+            "denominator": "D1434"
+          },
+          "sourceSheet": "02"
+        },
+        "20": {
+          "count": 13585,
+          "denominator": 4132148,
+          "status": "value",
+          "unknownCount": 13585,
+          "sourceCells": {
+            "count": [
+              "D1533"
+            ],
+            "denominator": "D1509"
+          },
+          "sourceSheet": "02"
+        },
+        "21": {
+          "count": 12018,
+          "denominator": 6583278,
+          "status": "value",
+          "unknownCount": 12018,
+          "sourceCells": {
+            "count": [
+              "D1608"
+            ],
+            "denominator": "D1584"
+          },
+          "sourceSheet": "02"
+        },
+        "22": {
+          "count": 10238,
+          "denominator": 2368467,
+          "status": "value",
+          "unknownCount": 10238,
+          "sourceCells": {
+            "count": [
+              "D1683"
+            ],
+            "denominator": "D1659"
+          },
+          "sourceSheet": "02"
+        },
+        "23": {
+          "count": 26046,
+          "denominator": 1857985,
+          "status": "value",
+          "unknownCount": 26046,
+          "sourceCells": {
+            "count": [
+              "D1758"
+            ],
+            "denominator": "D1734"
+          },
+          "sourceSheet": "02"
+        },
+        "24": {
+          "count": 6336,
+          "denominator": 2822255,
+          "status": "value",
+          "unknownCount": 6336,
+          "sourceCells": {
+            "count": [
+              "D1833"
+            ],
+            "denominator": "D1809"
+          },
+          "sourceSheet": "02"
+        },
+        "25": {
+          "count": 5997,
+          "denominator": 3026943,
+          "status": "value",
+          "unknownCount": 5997,
+          "sourceCells": {
+            "count": [
+              "D1908"
+            ],
+            "denominator": "D1884"
+          },
+          "sourceSheet": "02"
+        },
+        "26": {
+          "count": 7557,
+          "denominator": 2944840,
+          "status": "value",
+          "unknownCount": 7557,
+          "sourceCells": {
+            "count": [
+              "D1983"
+            ],
+            "denominator": "D1959"
+          },
+          "sourceSheet": "02"
+        },
+        "27": {
+          "count": 4284,
+          "denominator": 2402598,
+          "status": "value",
+          "unknownCount": 4284,
+          "sourceCells": {
+            "count": [
+              "D2058"
+            ],
+            "denominator": "D2034"
+          },
+          "sourceSheet": "02"
+        },
+        "28": {
+          "count": 11972,
+          "denominator": 3527735,
+          "status": "value",
+          "unknownCount": 11972,
+          "sourceCells": {
+            "count": [
+              "D2133"
+            ],
+            "denominator": "D2109"
+          },
+          "sourceSheet": "02"
+        },
+        "29": {
+          "count": 22469,
+          "denominator": 1342977,
+          "status": "value",
+          "unknownCount": 22469,
+          "sourceCells": {
+            "count": [
+              "D2208"
+            ],
+            "denominator": "D2184"
+          },
+          "sourceSheet": "02"
+        },
+        "30": {
+          "count": 10071,
+          "denominator": 8062579,
+          "status": "value",
+          "unknownCount": 10071,
+          "sourceCells": {
+            "count": [
+              "D2283"
+            ],
+            "denominator": "D2259"
+          },
+          "sourceSheet": "02"
+        },
+        "31": {
+          "count": 7317,
+          "denominator": 2320898,
+          "status": "value",
+          "unknownCount": 7317,
+          "sourceCells": {
+            "count": [
+              "D2358"
+            ],
+            "denominator": "D2334"
+          },
+          "sourceSheet": "02"
+        },
+        "32": {
+          "count": 3431,
+          "denominator": 1622138,
+          "status": "value",
+          "unknownCount": 3431,
+          "sourceCells": {
+            "count": [
+              "D2433"
+            ],
+            "denominator": "D2409"
+          },
+          "sourceSheet": "02"
+        },
+        "01": {
+          "count": 3490,
+          "denominator": 1425607,
+          "status": "value",
+          "unknownCount": 3490,
+          "sourceCells": {
+            "count": [
+              "D108"
+            ],
+            "denominator": "D84"
+          },
+          "sourceSheet": "02"
+        },
+        "02": {
+          "count": 20367,
+          "denominator": 3769020,
+          "status": "value",
+          "unknownCount": 20367,
+          "sourceCells": {
+            "count": [
+              "D183"
+            ],
+            "denominator": "D159"
+          },
+          "sourceSheet": "02"
+        },
+        "03": {
+          "count": 5375,
+          "denominator": 798447,
+          "status": "value",
+          "unknownCount": 5375,
+          "sourceCells": {
+            "count": [
+              "D258"
+            ],
+            "denominator": "D234"
+          },
+          "sourceSheet": "02"
+        },
+        "04": {
+          "count": 5302,
+          "denominator": 928363,
+          "status": "value",
+          "unknownCount": 5302,
+          "sourceCells": {
+            "count": [
+              "D333"
+            ],
+            "denominator": "D309"
+          },
+          "sourceSheet": "02"
+        },
+        "05": {
+          "count": 10144,
+          "denominator": 3146771,
+          "status": "value",
+          "unknownCount": 10144,
+          "sourceCells": {
+            "count": [
+              "D408"
+            ],
+            "denominator": "D384"
+          },
+          "sourceSheet": "02"
+        },
+        "06": {
+          "count": 2796,
+          "denominator": 731391,
+          "status": "value",
+          "unknownCount": 2796,
+          "sourceCells": {
+            "count": [
+              "D483"
+            ],
+            "denominator": "D459"
+          },
+          "sourceSheet": "02"
+        },
+        "07": {
+          "count": 33432,
+          "denominator": 5543828,
+          "status": "value",
+          "unknownCount": 33432,
+          "sourceCells": {
+            "count": [
+              "D558"
+            ],
+            "denominator": "D534"
+          },
+          "sourceSheet": "02"
+        },
+        "08": {
+          "count": 17265,
+          "denominator": 3741869,
+          "status": "value",
+          "unknownCount": 17265,
+          "sourceCells": {
+            "count": [
+              "D633"
+            ],
+            "denominator": "D609"
+          },
+          "sourceSheet": "02"
+        },
+        "09": {
+          "count": 25589,
+          "denominator": 9209944,
+          "status": "value",
+          "unknownCount": 25589,
+          "sourceCells": {
+            "count": [
+              "D708"
+            ],
+            "denominator": "D684"
+          },
+          "sourceSheet": "02"
+        }
+      },
+      "source": {
+        "label": "INEGI：2020年国勢調査・宗教基本票表",
+        "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/cpv2020_b_eum_12_religion.xlsx",
+        "table": "B2020_12_02_E／シート02・Sexo=Total",
+        "periodNote": "2020年3月15日0時。全年齢の通常居住者。",
+        "methodNote": "人数は原表の公表人数を保持し、記載した区分だけを合算。割合は人数÷同じ州の全年齢総人口×100として当サイトが計算。不詳を除いて再正規化しません。宗教は申告された信仰・精神的な選好で、実践の頻度や熱心さを測る指標ではありません。総人口には国勢調査の公式補完推計を含みます。",
+        "definitionUrl": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/nueva_estruc/702825197520.pdf",
+        "attribution": "Fuente: INEGI, Censo de Población y Vivienda 2020. Tabulados del Cuestionario Básico.",
+        "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+        "components": [
+          "No especificado"
+        ]
+      },
+      "countRadiusReference": 70000,
+      "countMaximumRadius": 33,
+      "countLegendValues": [
+        7000,
+        35000,
+        70000
+      ],
+      "distributionSummary": "割合が高い州：トラスカラ 1.67%、キンタナ・ロー 1.40%、ハリスコ 0.77%（2020年）。",
+      "comparabilityNote": "この8表示区分は原表の全宗教回答と不詳を分けたものです。地域の割合から個人の信仰・行動を推定しません。"
+    }
+  ]
+}
