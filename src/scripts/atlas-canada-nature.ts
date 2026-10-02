@@ -46,7 +46,7 @@ export function initCanadaNature(root:HTMLElement){
   const elevation=config.layers?.elevation?.groups?.find((g:any)=>g.id===naturalStates.elevation.selected);
   const elevationTitle=root.querySelector<HTMLElement>('[data-canada-elevation-title]'),elevationText=root.querySelector<HTMLElement>('[data-canada-elevation-text]');
   if(elevationTitle)elevationTitle.textContent=elevation?`${elevation.name}の等高線を読む`:'西部山地と内陸の高さを、等高線で読む';
-  if(elevationText)elevationText.textContent=elevation?.description??'等高線は同じ標高を結ぶ線です。西部の高い山地と内陸・海岸の位置を比べ、斜面や山越えが交通・水の流れに関わる場所を確かめます。';
+  if(elevationText)elevationText.textContent=elevation?.id==='500'?`500 mの地点は西部の山地にも内陸の平原にもあります。西部でより高い等高線が近づく所と比べます。${elevation.description}`:elevation?.description??'等高線は同じ標高を結ぶ線です。西部の高い山地と内陸・海岸の位置を比べ、斜面や山越えが交通・水の流れに関わる場所を確かめます。';
   root.classList.toggle('is-landform-reading',state.view==='landform');
   for(const detail of root.querySelectorAll<HTMLDetailsElement>('[data-canada-general-reading]')){const context=String(comparison);if(detail.dataset.comparison!==context){detail.open=!comparison&&!detail.closest('[data-canada-reading="landform"]');detail.dataset.comparison=context;}}
   $<HTMLSelectElement>('[data-canada-city]').value=state.city;

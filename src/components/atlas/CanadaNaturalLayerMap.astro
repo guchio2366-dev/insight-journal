@@ -3,7 +3,7 @@ import geography from '../../data/atlas/regional-countries.json';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { canadaLandformSize, projectCanadaLandform } from '../../lib/atlas-canada-landform-map';
-import { canadaNaturalPath, canadaNaturalIsLine, prepareCanadaNaturalLayer, type CanadaNaturalCollection, type CanadaNaturalGeometry, type CanadaNaturalGroup, type CanadaNaturalLayer, type CanadaNaturalSource, type CanadaNaturalStation } from '../../lib/atlas-canada-natural-layer';
+import { canadaNaturalPath, canadaNaturalIsLine, canadaNaturalContourLabels, canadaNaturalContourWidth, canadaNaturalContourOpacity, prepareCanadaNaturalLayer, type CanadaNaturalCollection, type CanadaNaturalGeometry, type CanadaNaturalGroup, type CanadaNaturalLayer, type CanadaNaturalSource, type CanadaNaturalStation } from '../../lib/atlas-canada-natural-layer';
 import '../../styles/atlas-canada-natural-layer.css';
 
 interface Props {
@@ -13,7 +13,15 @@ interface Props {
 const { layer, geometry: input, groups, geometryUrl, stations = [], source = {}, hidden = true, selected = null, only = false, city = null } = Astro.props;
 const geometry = prepareCanadaNaturalLayer(typeof input === 'string' ? JSON.parse(input) : input, groups);
 const context = { type: 'FeatureCollection', features: geography.features.filter(feature => ['CAN', 'USA', 'GRL'].includes(feature.properties.code)) };
-const config = { layer, groups, geometryUrl, stations, context, workerUrl };
+const contourLabels = layer === 'elevation' ? canadaNaturalContourLabels(geometry) : [];
+const config = { layer, groups, geometryUrl, stations, contourLabels, context, workerUrl };
+const labelBoxes: number[][] = [];
+const staticContourLabels = [...contourLabels].sort((a,b) => Number(b.id===selected)-Number(a.id===selected) || Number(a.elevationM===500)-Number(b.elevationM===500)).filter(label => {
+  if (only && selected && label.id !== selected) return false;
+  const [x,y] = projectCanadaLandform(label.coordinates), box = [x-30,y-11,x+30,y+11];
+  if (box[0]<3 || box[1]<3 || box[2]>canadaLandformSize.width-3 || box[3]>canadaLandformSize.height-3 || labelBoxes.some(([x1,y1,x2,y2]) => box[0]<x2+5 && box[2]>x1-5 && box[1]<y2+5 && box[3]>y1-5)) return false;
+  labelBoxes.push(box); return true;
+});
 const fullFrame = `0 0 ${canadaLandformSize.width} ${canadaLandformSize.height}`;
 const heading = layer === 'climate' ? 'カナダの気候区分' : 'カナダの標高と等高線';
 const titleId = `canada-natural-${layer}-title`, descId = `canada-natural-${layer}-desc`;
@@ -30,10 +38,12 @@ const paths = groups.map(group => ({ group, fill: geometry.features.filter(featu
       <g>{paths.map(({group, fill, line}) => <g class:list={['canada-natural-shape', {'is-selected': selected === group.id}]} data-canada-natural-shape={group.id} role="button" tabindex="0" aria-label={`${group.name}を選ぶ`} aria-pressed={String(selected === group.id)} hidden={only && !!selected && selected !== group.id}>
         <title>{group.name}：{group.description}</title>
         {fill && <path class="canada-natural-area" d={fill} fill={group.color} fill-rule="evenodd" vector-effect="non-scaling-stroke" />}
-        {line && <><path class="canada-natural-line" d={line} fill="none" stroke={group.color} vector-effect="non-scaling-stroke" /><path class="canada-natural-line-hit" d={line} fill="none" stroke="transparent" vector-effect="non-scaling-stroke" /></>}
+        {line && <><path class="canada-natural-line" d={line} fill="none" stroke={group.color} stroke-width={layer==='elevation'?canadaNaturalContourWidth(Number(group.id)):1.2} stroke-opacity={layer==='elevation'?canadaNaturalContourOpacity(Number(group.id)):1} vector-effect="non-scaling-stroke" /><path class="canada-natural-line-hit" d={line} fill="none" stroke="transparent" vector-effect="non-scaling-stroke" /></>}
       </g>)}</g>
+      <g class="canada-natural-static-contours" data-canada-natural-static-contours aria-hidden="true">{staticContourLabels.map(label => { const [x,y] = projectCanadaLandform(label.coordinates); return <text x={x} y={y} text-anchor="middle" dominant-baseline="central" data-canada-natural-static-contour={label.id}>{label.elevationM} m</text>; })}</g>
       <g class="canada-natural-static-stations" data-canada-natural-static-stations>{stations.map(station => { const [x,y] = projectCanadaLandform(station.coordinates); return <g class:list={['canada-natural-static-station',{'is-selected':city===station.id}]} data-canada-natural-static-city={station.id} role="button" tabindex="0" aria-label={`${station.name}の気候平年値を読む`} aria-pressed={String(city===station.id)}><title>{station.name}：気候平年値の観測地点</title><circle cx={x} cy={y} r="5" vector-effect="non-scaling-stroke" /><text x={x+9} y={y+4}>{station.name}</text></g>; })}</g>
     </svg>
+    <div class="canada-natural-contour-labels" data-canada-natural-contour-labels aria-hidden="true">{contourLabels.map(label => <span class:list={['canada-natural-contour-label', {'is-selected':selected===label.id}]} data-canada-natural-contour-label={label.key} data-canada-natural-contour-id={label.id} hidden>{label.elevationM} m</span>)}</div>
     <div class="canada-natural-live" data-canada-natural-live aria-label={`${heading}の操作できる地図`} hidden></div>
     <div class="canada-natural-stations" data-canada-natural-stations>{stations.map(station => <button type="button" class:list={['canada-natural-station', {'is-selected':city===station.id}]} data-canada-natural-city={station.id} aria-label={`${station.name}の気候平年値を読む`} aria-pressed={String(city===station.id)} hidden><i aria-hidden="true"></i><span>{station.name}</span></button>)}</div>
     <div class="canada-natural-tools" aria-label="地図の操作">

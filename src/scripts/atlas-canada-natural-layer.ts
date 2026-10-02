@@ -5,7 +5,7 @@ import {
 } from '../lib/atlas-canada-landform-map';
 import {
   canadaNaturalGroupBounds, prepareCanadaNaturalLayer,
-  type CanadaNaturalCollection, type CanadaNaturalGroup, type CanadaNaturalLayer, type CanadaNaturalStation,
+  type CanadaNaturalCollection, type CanadaNaturalContourLabel, type CanadaNaturalGroup, type CanadaNaturalLayer, type CanadaNaturalStation,
 } from '../lib/atlas-canada-natural-layer';
 
 export type CanadaNaturalCameraBounds = [number, number, number, number];
@@ -18,7 +18,7 @@ export interface CanadaNaturalController {
   destroy(): void;
 }
 type Frame = [number, number, number, number];
-interface Config { layer: CanadaNaturalLayer; geometryUrl: string; groups: CanadaNaturalGroup[]; stations: CanadaNaturalStation[]; context: unknown; workerUrl: string; }
+interface Config { layer: CanadaNaturalLayer; geometryUrl: string; groups: CanadaNaturalGroup[]; stations: CanadaNaturalStation[]; contourLabels?: CanadaNaturalContourLabel[]; context: unknown; workerUrl: string; }
 
 /** Selection belongs to the host page. Camera gestures stay local to this map. */
 export function initCanadaNaturalLayer(root: HTMLElement): CanadaNaturalController {
@@ -30,6 +30,7 @@ export function initCanadaNaturalLayer(root: HTMLElement): CanadaNaturalControll
   const onlyControl = root.querySelector<HTMLInputElement>('[data-canada-natural-only]')!;
   const focusButton = root.querySelector<HTMLButtonElement>('[data-canada-natural-focus]')!;
   const labels = [...root.querySelectorAll<HTMLButtonElement>('[data-canada-natural-city]')];
+  const contourLabels = [...root.querySelectorAll<HTMLElement>('[data-canada-natural-contour-label]')];
   const fullFrame: Frame = [0, 0, canadaNaturalSize.width, canadaNaturalSize.height];
   const [worldLeft, worldTop] = projectCanadaNatural([-180, 85.051]);
   const [worldRight, worldBottom] = projectCanadaNatural([180, -85.051]);
@@ -111,12 +112,14 @@ export function initCanadaNaturalLayer(root: HTMLElement): CanadaNaturalControll
     const ratio = Math.min(width / frame[2], height / frame[3]);
     const left = (width - frame[2] * ratio) / 2, top = (height - frame[3] * ratio) / 2;
     const occupied: number[][] = [[width - 60, 0, width, 183]];
+    const positions = new Map(config.stations.map(station => {
+      const projected = ready && map ? map.project(station.coordinates as [number, number]) : null, point = projectCanadaNatural(station.coordinates);
+      return [station.id, [projected?.x ?? (point[0] - frame[0]) * ratio + left, projected?.y ?? (point[1] - frame[1]) * ratio + top]];
+    }));
+    const markerBoxes = [...positions].map(([id, [x,y]]) => ({ id, box: [x-6,y-15,x+12,y+15] }));
     for (const label of [...labels].sort((a, b) => Number(b.dataset.canadaNaturalCity === state.city) - Number(a.dataset.canadaNaturalCity === state.city))) {
       const station = config.stations.find(item => item.id === label.dataset.canadaNaturalCity)!;
-      const projected = ready && map ? map.project(station.coordinates as [number, number]) : null;
-      const point = projectCanadaNatural(station.coordinates);
-      const x = projected?.x ?? (point[0] - frame[0]) * ratio + left;
-      const y = projected?.y ?? (point[1] - frame[1]) * ratio + top;
+      const [x,y] = positions.get(station.id)!;
       label.hidden = false;
       const text = label.querySelector<HTMLElement>('span');
       // Measure the full name on every redraw; a previously hidden name must
@@ -126,7 +129,8 @@ export function initCanadaNaturalLayer(root: HTMLElement): CanadaNaturalControll
       const box = [x - 6, y - h / 2, x + w - 6, y + h / 2];
       // The circle remains at the real observation coordinate at every scale.
       label.hidden = x < 3 || y < 3 || x > width - 3 || y > height - 3;
-      const collision = box[2] > width - 3 || occupied.some(([x1, y1, x2, y2]) => box[0] < x2 + 3 && box[2] > x1 - 3 && box[1] < y2 + 3 && box[3] > y1 - 3);
+      const collisionBoxes = [...occupied, ...markerBoxes.filter(marker => marker.id !== station.id).map(marker => marker.box)];
+      const collision = box[2] > width - 3 || collisionBoxes.some(([x1, y1, x2, y2]) => box[0] < x2 + 3 && box[2] > x1 - 3 && box[1] < y2 + 3 && box[3] > y1 - 3);
       if (text) text.hidden = collision && station.id !== state.city;
       label.style.zIndex = station.id === state.city ? '2' : '1';
       label.style.left = `${x}px`; label.style.top = `${y}px`;
@@ -135,6 +139,23 @@ export function initCanadaNaturalLayer(root: HTMLElement): CanadaNaturalControll
         // name-sized rectangle that could suppress unrelated city names.
         occupied.push(text?.hidden ? [x - 6, y - h / 2, x + 12, y + h / 2] : box);
       }
+    }
+    const byKey = new Map((config.contourLabels ?? []).map(label => [label.key,label]));
+    const ordered = [...contourLabels].sort((a,b) => {
+      const first = byKey.get(a.dataset.canadaNaturalContourLabel!)!, second = byKey.get(b.dataset.canadaNaturalContourLabel!)!;
+      return Number(second.id===state.selected)-Number(first.id===state.selected) || Number(first.elevationM===500)-Number(second.elevationM===500);
+    });
+    for (const element of ordered) {
+      const label = byKey.get(element.dataset.canadaNaturalContourLabel!);
+      if (!label || state.only && state.selected && label.id !== state.selected) { element.hidden = true; continue; }
+      const projected = ready && map ? map.project(label.coordinates) : null, point = projectCanadaNatural(label.coordinates);
+      const x = projected?.x ?? (point[0]-frame[0])*ratio+left, y = projected?.y ?? (point[1]-frame[1])*ratio+top;
+      element.hidden = false;
+      const w = element.offsetWidth || 58, h = element.offsetHeight || 20, box = [x-w/2,y-h/2,x+w/2,y+h/2];
+      element.classList.toggle('is-selected',label.id===state.selected);
+      element.style.left = `${x}px`; element.style.top = `${y}px`;
+      element.hidden = box[0]<3 || box[1]<3 || box[2]>width-3 || box[3]>height-3 || occupied.some(([x1,y1,x2,y2]) => box[0]<x2+5 && box[2]>x1-5 && box[1]<y2+5 && box[3]>y1-5);
+      if (!element.hidden) occupied.push(box);
     }
   }
 
@@ -233,7 +254,7 @@ export function initCanadaNaturalLayer(root: HTMLElement): CanadaNaturalControll
           { id: 'canada-natural-context-line', type: 'line', source: 'canada-natural-context', paint: { 'line-color': '#94aaaa', 'line-width': .7 } },
           { id: 'canada-natural-fill', type: 'fill', source: 'canada-natural-groups', filter: ['==', ['geometry-type'], 'Polygon'], paint: { 'fill-color': ['get', 'color'], 'fill-opacity': 1 } },
           { id: 'canada-natural-boundaries', type: 'line', source: 'canada-natural-groups', filter: ['==', ['geometry-type'], 'Polygon'], paint: { 'line-color': '#69796e', 'line-width': .35 } },
-          { id: 'canada-natural-lines', type: 'line', source: 'canada-natural-groups', filter: ['==', ['geometry-type'], 'LineString'], paint: { 'line-color': ['get', 'color'], 'line-width': 1.2 } },
+          { id: 'canada-natural-lines', type: 'line', source: 'canada-natural-groups', filter: ['==', ['geometry-type'], 'LineString'], paint: { 'line-color': ['get', 'color'], 'line-width': ['case',['==',['get','elevation_m'],500],.7,1.8], 'line-opacity': ['case',['==',['get','elevation_m'],500],.45,.9] } },
           { id: 'canada-natural-lines-hit', type: 'line', source: 'canada-natural-groups', filter: ['==', ['geometry-type'], 'LineString'], paint: { 'line-color': '#fff', 'line-width': 9, 'line-opacity': 0 } },
           { id: 'canada-natural-selected', type: 'line', source: 'canada-natural-groups', filter: ['==', ['get', 'id'], '__none__'], paint: { 'line-color': ['case', ['==', ['geometry-type'], 'LineString'], ['get', 'color'], '#243f4c'], 'line-width': 3 } },
         ] }, bounds: canadaNaturalBounds, fitBoundsOptions: { padding: 18 },
@@ -343,6 +364,7 @@ export function initCanadaNaturalLayer(root: HTMLElement): CanadaNaturalControll
   const visibility = typeof MutationObserver === 'undefined' ? undefined : new MutationObserver(() => { if (!root.hidden) { map?.resize(); if (ready && fitted) fit(); else draw(); void start(); } });
   visibility?.observe(root, { attributes: true, attributeFilter: ['hidden'] });
   root.querySelector('[data-canada-natural-static-stations]')?.setAttribute('hidden', '');
+  root.querySelector('[data-canada-natural-static-contours]')?.setAttribute('hidden', '');
   draw(); void start();
   return {
     render(next) { const selected = config.groups.some(group => group.id === next.selected) ? next.selected : null; state = { selected, only: !!next.only && !!selected, city: next.city ?? state.city ?? null }; if ('bounds' in next) restoreCamera(next.bounds ?? null); draw(); if (!root.hidden) { map?.resize(); if (ready && fitted) fit(); void start(); } },
