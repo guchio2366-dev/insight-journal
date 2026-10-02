@@ -313,7 +313,7 @@ test('共通概要4地域で国名選択は地図と国別本文に連動し、�
       d.querySelector(`[data-overview-label-country="${country.code}"]`).click();
       assert.equal(d.querySelector('[data-overview-country]').value,country.code);
       assert.equal(d.querySelector('[data-overview-country-detail]').hidden,false);
-      assert.equal(d.querySelector('[data-overview-detail-link]').hidden,false);
+      assert.equal(d.querySelector('[data-overview-detail-link]').hidden,region==='europe','European country text is already beside the map; generic pages keep the jump');
       assert.equal(visiblePanels(d).length,1);
       assert.deepEqual(selectedCountries(d),[country.code]);
       assert.equal(d.querySelector('[data-overview-place-title]').textContent,country.name);

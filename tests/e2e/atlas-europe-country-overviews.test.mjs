@@ -34,5 +34,5 @@ test('all 225 selections in built HTML expose their own copy, source fold and co
 
 test('only European learning routes load the new country return controller',async()=>{
  for(const field of ['agriculture','nature','industry','population']){const page=await readFile(`src/pages/atlas/europe/${field}/index.astro`,'utf8');assert.match(page,/initEuropeCountryOverviewReturn/);}
- for(const route of ['north-america/canada/nature','north-america/mexico/nature','east-asia/overview']){const page=await readFile(`dist/atlas/${route}/index.html`,'utf8');assert.doesNotMatch(page,/eu-country-overview-return|data-europe-country-overview/);}
+ for(const route of ['north-america/canada/nature','north-america/mexico/nature','asia/east-asia/overview']){const page=await readFile(`dist/atlas/${route}/index.html`,'utf8');assert.doesNotMatch(page,/eu-country-overview-return|data-europe-country-overview/);}
 });
