@@ -1,0 +1,1886 @@
+{
+  "topic": "ethnicity",
+  "version": "canada-demographics-v1",
+  "source": {
+    "tableId": "98-10-0324-01",
+    "pid": "9810032401",
+    "url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=9810032401",
+    "title": "Visible minority and population group by generation status: Canada, provinces and territories, census metropolitan areas and census agglomerations with parts",
+    "releaseDate": "2022-10-26",
+    "accessedAt": "2026-10-02T11:09:46.901Z",
+    "referenceYear": 2021,
+    "censusDate": "2021-05-11",
+    "boundaryDate": "2021-01-01",
+    "universe": "Persons in private households in occupied private dwellings",
+    "sample": "2021 Census — 25% Sample data",
+    "totalAge": "Total - Age",
+    "totalGender": "All persons; this table has no gender dimension",
+    "generationStatus": "Total - Generation status",
+    "statistics": "Count",
+    "visibleMinority": "Total - Visible minority (unfiltered population group counts)",
+    "denominator": "Total - Population group from the same geography and selected dimensions; population in private households, not the population-and-dwelling-counts total.",
+    "licenceUrl": "https://www.statcan.gc.ca/en/terms-conditions/open-licence",
+    "attribution": "Adapted from Statistics Canada, Visible minority and population group by generation status: Canada, provinces and territories, census metropolitan areas and census agglomerations with parts, 2021. This does not constitute an endorsement by Statistics Canada of this product.",
+    "rounding": "Census counts and totals are randomly rounded independently to multiples of 5 or 10. The sum of categories can differ from the published total; percentages calculated from rounded counts need not sum to 100%.",
+    "roundingUrl": "https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/dt-td/about.cfm#rr-aa",
+    "definitions": {
+      "populationGroup": "Population-group responses to Question 25; this variable differs from both ethnic or cultural origin and the derived visible minority variable.",
+      "singleResponse": "IDs 3–14 are single-response categories. Multiple answers are retained in ID 15 instead of counted again in individual groups.",
+      "indigenousPeoples": "ID 87 reflects Yes to Question 24. It is not the Indigenous identity variable."
+    },
+    "footnotes": [
+      {
+        "id": 8,
+        "groupId": "1",
+        "englishText": "\"Population group\" refers to whether the person reports being White, South Asian, Chinese, Black, Filipino, Arab, Latin American, Southeast Asian, West Asian, Korean, Japanese or another population group. These specific groups are the mark-in categories used in the population group question (Question 25), which collects data to derive the visible minority population for employment equity purposes."
+      },
+      {
+        "id": 9,
+        "groupId": "1",
+        "englishText": "The population group variable provides a distribution of single and selected combinations of multiple responses to the population group question. For estimates of the visible minority population, please use the variable \"Visible minority.\""
+      },
+      {
+        "id": 10,
+        "groupId": "1",
+        "englishText": "For more information on visible minority and population group variables, including information on their classifications, the questions from which they are derived, data quality and their comparability with other sources of data, please refer to the Visible Minority and Population Group Reference Guide, Census of Population, 2021."
+      },
+      {
+        "id": 11,
+        "groupId": "14",
+        "englishText": "The abbreviation \"n.i.e.\" means \"not included elsewhere.\" This category includes persons who provided a response that is not associated with any of the other population groups. Examples of such responses include, for example, \"Algerian,\" \"Armenian,\" \"Brazilian,\" \"Coptic,\" \"Cuban,\" \"Guyanese,\" \"Israeli,\" \"Jamaican,\" \"Jewish,\" \"Kurdish,\" \"Mongolian,\" \"Pacific Islander,\" \"Polynesian,\" \"South African,\" \"Tibetan\" and \"West Indian.\""
+      },
+      {
+        "id": 28,
+        "groupId": "87",
+        "englishText": "This category includes respondents who reported “Yes” to Question 24 (“Is this person First Nations, Métis or Inuk (Inuit)?”). These respondents were not asked the population group question (Question 25). However, their information is included in the population group variable so that it reflects the entire Canadian population."
+      },
+      {
+        "id": 29,
+        "groupId": "87",
+        "englishText": "Please note that this category provides a different estimate of the Indigenous population than the variable “Indigenous identity,” which is used in many 2021 Census tables. Indigenous identity includes those who identify as First Nations (North American Indian), Métis and/or Inuk (Inuit), and/or those who report being Registered or Treaty Indians (that is, registered under the Indian Act of Canada), and/or those who have membership in a First Nation or Indian band."
+      },
+      {
+        "id": 30,
+        "groupId": "87",
+        "englishText": "For more information on variables specific to Indigenous peoples, including information on their classifications, the questions from which they are derived, data quality and their comparability with other sources of data, please refer to the Indigenous Peoples Reference Guide, Census of Population, 2021."
+      },
+      {
+        "id": 7,
+        "groupId": "0",
+        "englishText": "Population group  Population group refers to whether the person reports being White, South Asian, Chinese, Black, Filipino, Arab, Latin American, Southeast Asian, West Asian, Korean, Japanese and/or another population group. These specific groups are the mark-in categories used in a question which collects data on the visible minority population for employment equity purposes."
+      }
+    ],
+    "zeroCellRecovery": {
+      "dguid": "2021S0503447",
+      "groupId": "13",
+      "coordinate": "32.1.1.1.13.1",
+      "value": 0,
+      "reason": "The WDS API and database-loading CSV omit this cell. The official table display explicitly supplies value 0.0, formatted 0, with no symbol.",
+      "sourceUrl": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=9810032401&pickMembers%5B0%5D=1.32&pickMembers%5B1%5D=2.1&pickMembers%5B2%5D=3.1&pickMembers%5B3%5D=4.1",
+      "accessedAt": "2026-10-02T11:13:00.074Z"
+    }
+  },
+  "reproductionNotice": "Source: Statistics Canada, Visible minority and population group by generation status: Canada, provinces and territories, census metropolitan areas and census agglomerations with parts, 2021. Reproduced and distributed on an \"as is\" basis with the permission of Statistics Canada.",
+  "attribution": "Adapted from Statistics Canada, Visible minority and population group by generation status: Canada, provinces and territories, census metropolitan areas and census agglomerations with parts, 2021. This does not constitute an endorsement by Statistics Canada of this product.",
+  "geographyJoin": "Exact DGUIDs from official cube geoAttribute; full CMA geoLevel 503, not provincial parts.",
+  "geographyMapping": [
+    {
+      "id": "Canada",
+      "dguid": "2021A000011124",
+      "name": "カナダ",
+      "memberId": 1,
+      "sourceName": "Canada",
+      "classificationCode": "11124",
+      "attributes": {
+        "ALT_GEO_CODE": "01",
+        "GEO_LEVEL_DESC": "Country",
+        "GEO_TYPE_ABBR": "Country",
+        "PROV_ABBR": "...",
+        "PR_CODE": "01",
+        "GEO_NAME": "Canada",
+        "DQF_CODE": "20000",
+        "DQF_NOTE": "Excludes census data for one or more incompletely enumerated reserves or settlements.",
+        "GEO_TYPE_DESC": "Country",
+        "DGUID": "2021A000011124",
+        "TNR_SHORT_FORM": "3.1",
+        "TNR_LONG_FORM": "4.3"
+      }
+    },
+    {
+      "id": "535",
+      "dguid": "2021S0503535",
+      "name": "Toronto（トロント）",
+      "memberId": 100,
+      "sourceName": "Toronto (CMA), Ont.",
+      "classificationCode": "535",
+      "attributes": {
+        "ALT_GEO_CODE": "535",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Ont.",
+        "PR_CODE": "35",
+        "GEO_NAME": "Toronto",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503535",
+        "TNR_SHORT_FORM": "2.7",
+        "TNR_LONG_FORM": "3.6"
+      }
+    },
+    {
+      "id": "462",
+      "dguid": "2021S0503462",
+      "name": "Montréal（モントリオール）",
+      "memberId": 37,
+      "sourceName": "Montréal (CMA), Que.",
+      "classificationCode": "462",
+      "attributes": {
+        "ALT_GEO_CODE": "462",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Que.",
+        "PR_CODE": "24",
+        "GEO_NAME": "Montréal",
+        "DQF_CODE": "20000",
+        "DQF_NOTE": "Excludes census data for one or more incompletely enumerated reserves or settlements.",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503462",
+        "TNR_SHORT_FORM": "2.6",
+        "TNR_LONG_FORM": "3.4"
+      }
+    },
+    {
+      "id": "933",
+      "dguid": "2021S0503933",
+      "name": "Vancouver（バンクーバー）",
+      "memberId": 166,
+      "sourceName": "Vancouver (CMA), B.C.",
+      "classificationCode": "933",
+      "attributes": {
+        "ALT_GEO_CODE": "933",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "B.C.",
+        "PR_CODE": "59",
+        "GEO_NAME": "Vancouver",
+        "DQF_CODE": "20000",
+        "DQF_NOTE": "Excludes census data for one or more incompletely enumerated reserves or settlements.",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503933",
+        "TNR_SHORT_FORM": "3.0",
+        "TNR_LONG_FORM": "3.9"
+      }
+    },
+    {
+      "id": "505",
+      "dguid": "2021S0503505",
+      "name": "Ottawa–Gatineau（オタワ・ガティノー）",
+      "memberId": 85,
+      "sourceName": "Ottawa - Gatineau (CMA), Ont./Que.",
+      "classificationCode": "505",
+      "attributes": {
+        "ALT_GEO_CODE": "505",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Ont. / Que.",
+        "PR_CODE": "35",
+        "GEO_NAME": "Ottawa - Gatineau",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503505",
+        "TNR_SHORT_FORM": "2.6",
+        "TNR_LONG_FORM": "3.4"
+      }
+    },
+    {
+      "id": "825",
+      "dguid": "2021S0503825",
+      "name": "Calgary（カルガリー）",
+      "memberId": 123,
+      "sourceName": "Calgary (CMA), Alta.",
+      "classificationCode": "825",
+      "attributes": {
+        "ALT_GEO_CODE": "825",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Alta.",
+        "PR_CODE": "48",
+        "GEO_NAME": "Calgary",
+        "DQF_CODE": "20000",
+        "DQF_NOTE": "Excludes census data for one or more incompletely enumerated reserves or settlements.",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503825",
+        "TNR_SHORT_FORM": "2.5",
+        "TNR_LONG_FORM": "3.7"
+      }
+    },
+    {
+      "id": "835",
+      "dguid": "2021S0503835",
+      "name": "Edmonton（エドモントン）",
+      "memberId": 126,
+      "sourceName": "Edmonton (CMA), Alta.",
+      "classificationCode": "835",
+      "attributes": {
+        "ALT_GEO_CODE": "835",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Alta.",
+        "PR_CODE": "48",
+        "GEO_NAME": "Edmonton",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503835",
+        "TNR_SHORT_FORM": "3.2",
+        "TNR_LONG_FORM": "5.3"
+      }
+    },
+    {
+      "id": "421",
+      "dguid": "2021S0503421",
+      "name": "Québec",
+      "memberId": 38,
+      "sourceName": "Québec (CMA), Que.",
+      "classificationCode": "421",
+      "attributes": {
+        "ALT_GEO_CODE": "421",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Que.",
+        "PR_CODE": "24",
+        "GEO_NAME": "Québec",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503421",
+        "TNR_SHORT_FORM": "2.5",
+        "TNR_LONG_FORM": "3.2"
+      }
+    },
+    {
+      "id": "602",
+      "dguid": "2021S0503602",
+      "name": "Winnipeg（ウィニペグ）",
+      "memberId": 110,
+      "sourceName": "Winnipeg (CMA), Man.",
+      "classificationCode": "602",
+      "attributes": {
+        "ALT_GEO_CODE": "602",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Man.",
+        "PR_CODE": "46",
+        "GEO_NAME": "Winnipeg",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503602",
+        "TNR_SHORT_FORM": "2.8",
+        "TNR_LONG_FORM": "4.1"
+      }
+    },
+    {
+      "id": "537",
+      "dguid": "2021S0503537",
+      "name": "Hamilton",
+      "memberId": 70,
+      "sourceName": "Hamilton (CMA), Ont.",
+      "classificationCode": "537",
+      "attributes": {
+        "ALT_GEO_CODE": "537",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Ont.",
+        "PR_CODE": "35",
+        "GEO_NAME": "Hamilton",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503537",
+        "TNR_SHORT_FORM": "2.2",
+        "TNR_LONG_FORM": "3.0"
+      }
+    },
+    {
+      "id": "541",
+      "dguid": "2021S0503541",
+      "name": "Kitchener - Cambridge - Waterloo",
+      "memberId": 78,
+      "sourceName": "Kitchener - Cambridge - Waterloo (CMA), Ont.",
+      "classificationCode": "541",
+      "attributes": {
+        "ALT_GEO_CODE": "541",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Ont.",
+        "PR_CODE": "35",
+        "GEO_NAME": "Kitchener - Cambridge - Waterloo",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503541",
+        "TNR_SHORT_FORM": "2.3",
+        "TNR_LONG_FORM": "3.3"
+      }
+    },
+    {
+      "id": "555",
+      "dguid": "2021S0503555",
+      "name": "London",
+      "memberId": 79,
+      "sourceName": "London (CMA), Ont.",
+      "classificationCode": "555",
+      "attributes": {
+        "ALT_GEO_CODE": "555",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Ont.",
+        "PR_CODE": "35",
+        "GEO_NAME": "London",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503555",
+        "TNR_SHORT_FORM": "2.6",
+        "TNR_LONG_FORM": "3.3"
+      }
+    },
+    {
+      "id": "205",
+      "dguid": "2021S0503205",
+      "name": "Halifax（ハリファクス）",
+      "memberId": 12,
+      "sourceName": "Halifax (CMA), N.S.",
+      "classificationCode": "205",
+      "attributes": {
+        "ALT_GEO_CODE": "205",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "N.S.",
+        "PR_CODE": "12",
+        "GEO_NAME": "Halifax",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503205",
+        "TNR_SHORT_FORM": "2.8",
+        "TNR_LONG_FORM": "3.6"
+      }
+    },
+    {
+      "id": "539",
+      "dguid": "2021S0503539",
+      "name": "St. Catharines - Niagara",
+      "memberId": 95,
+      "sourceName": "St. Catharines - Niagara (CMA), Ont.",
+      "classificationCode": "539",
+      "attributes": {
+        "ALT_GEO_CODE": "539",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Ont.",
+        "PR_CODE": "35",
+        "GEO_NAME": "St. Catharines - Niagara",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503539",
+        "TNR_SHORT_FORM": "3.0",
+        "TNR_LONG_FORM": "4.1"
+      }
+    },
+    {
+      "id": "559",
+      "dguid": "2021S0503559",
+      "name": "Windsor",
+      "memberId": 102,
+      "sourceName": "Windsor (CMA), Ont.",
+      "classificationCode": "559",
+      "attributes": {
+        "ALT_GEO_CODE": "559",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Ont.",
+        "PR_CODE": "35",
+        "GEO_NAME": "Windsor",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503559",
+        "TNR_SHORT_FORM": "2.4",
+        "TNR_LONG_FORM": "3.1"
+      }
+    },
+    {
+      "id": "532",
+      "dguid": "2021S0503532",
+      "name": "Oshawa",
+      "memberId": 84,
+      "sourceName": "Oshawa (CMA), Ont.",
+      "classificationCode": "532",
+      "attributes": {
+        "ALT_GEO_CODE": "532",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Ont.",
+        "PR_CODE": "35",
+        "GEO_NAME": "Oshawa",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503532",
+        "TNR_SHORT_FORM": "1.9",
+        "TNR_LONG_FORM": "3.3"
+      }
+    },
+    {
+      "id": "935",
+      "dguid": "2021S0503935",
+      "name": "Victoria",
+      "memberId": 168,
+      "sourceName": "Victoria (CMA), B.C.",
+      "classificationCode": "935",
+      "attributes": {
+        "ALT_GEO_CODE": "935",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "B.C.",
+        "PR_CODE": "59",
+        "GEO_NAME": "Victoria",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503935",
+        "TNR_SHORT_FORM": "2.9",
+        "TNR_LONG_FORM": "4.2"
+      }
+    },
+    {
+      "id": "725",
+      "dguid": "2021S0503725",
+      "name": "Saskatoon",
+      "memberId": 117,
+      "sourceName": "Saskatoon (CMA), Sask.",
+      "classificationCode": "725",
+      "attributes": {
+        "ALT_GEO_CODE": "725",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Sask.",
+        "PR_CODE": "47",
+        "GEO_NAME": "Saskatoon",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503725",
+        "TNR_SHORT_FORM": "3.5",
+        "TNR_LONG_FORM": "5.1"
+      }
+    },
+    {
+      "id": "705",
+      "dguid": "2021S0503705",
+      "name": "Regina（レジャイナ）",
+      "memberId": 116,
+      "sourceName": "Regina (CMA), Sask.",
+      "classificationCode": "705",
+      "attributes": {
+        "ALT_GEO_CODE": "705",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Sask.",
+        "PR_CODE": "47",
+        "GEO_NAME": "Regina",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503705",
+        "TNR_SHORT_FORM": "2.9",
+        "TNR_LONG_FORM": "3.6"
+      }
+    },
+    {
+      "id": "433",
+      "dguid": "2021S0503433",
+      "name": "Sherbrooke",
+      "memberId": 50,
+      "sourceName": "Sherbrooke (CMA), Que.",
+      "classificationCode": "433",
+      "attributes": {
+        "ALT_GEO_CODE": "433",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Que.",
+        "PR_CODE": "24",
+        "GEO_NAME": "Sherbrooke",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503433",
+        "TNR_SHORT_FORM": "2.6",
+        "TNR_LONG_FORM": "3.7"
+      }
+    },
+    {
+      "id": "915",
+      "dguid": "2021S0503915",
+      "name": "Kelowna",
+      "memberId": 151,
+      "sourceName": "Kelowna (CMA), B.C.",
+      "classificationCode": "915",
+      "attributes": {
+        "ALT_GEO_CODE": "915",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "B.C.",
+        "PR_CODE": "59",
+        "GEO_NAME": "Kelowna",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503915",
+        "TNR_SHORT_FORM": "4.2",
+        "TNR_LONG_FORM": "5.8"
+      }
+    },
+    {
+      "id": "568",
+      "dguid": "2021S0503568",
+      "name": "Barrie",
+      "memberId": 57,
+      "sourceName": "Barrie (CMA), Ont.",
+      "classificationCode": "568",
+      "attributes": {
+        "ALT_GEO_CODE": "568",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Ont.",
+        "PR_CODE": "35",
+        "GEO_NAME": "Barrie",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503568",
+        "TNR_SHORT_FORM": "2.6",
+        "TNR_LONG_FORM": "4.0"
+      }
+    },
+    {
+      "id": "001",
+      "dguid": "2021S0503001",
+      "name": "St. John's（セントジョンズ）",
+      "memberId": 6,
+      "sourceName": "St. John's (CMA), N.L.",
+      "classificationCode": "001",
+      "attributes": {
+        "ALT_GEO_CODE": "001",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "N.L.",
+        "PR_CODE": "10",
+        "GEO_NAME": "St. John's",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503001",
+        "TNR_SHORT_FORM": "2.9",
+        "TNR_LONG_FORM": "4.1"
+      }
+    },
+    {
+      "id": "932",
+      "dguid": "2021S0503932",
+      "name": "Abbotsford - Mission",
+      "memberId": 142,
+      "sourceName": "Abbotsford - Mission (CMA), B.C.",
+      "classificationCode": "932",
+      "attributes": {
+        "ALT_GEO_CODE": "932",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "B.C.",
+        "PR_CODE": "59",
+        "GEO_NAME": "Abbotsford - Mission",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503932",
+        "TNR_SHORT_FORM": "2.7",
+        "TNR_LONG_FORM": "3.7"
+      }
+    },
+    {
+      "id": "521",
+      "dguid": "2021S0503521",
+      "name": "Kingston",
+      "memberId": 77,
+      "sourceName": "Kingston (CMA), Ont.",
+      "classificationCode": "521",
+      "attributes": {
+        "ALT_GEO_CODE": "521",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Ont.",
+        "PR_CODE": "35",
+        "GEO_NAME": "Kingston",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503521",
+        "TNR_SHORT_FORM": "4.0",
+        "TNR_LONG_FORM": "5.5"
+      }
+    },
+    {
+      "id": "580",
+      "dguid": "2021S0503580",
+      "name": "Greater Sudbury / Grand Sudbury",
+      "memberId": 68,
+      "sourceName": "Greater Sudbury (CMA), Ont.",
+      "classificationCode": "580",
+      "attributes": {
+        "ALT_GEO_CODE": "580",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Ont.",
+        "PR_CODE": "35",
+        "GEO_NAME": "Greater Sudbury",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503580",
+        "TNR_SHORT_FORM": "3.6",
+        "TNR_LONG_FORM": "5.0"
+      }
+    },
+    {
+      "id": "550",
+      "dguid": "2021S0503550",
+      "name": "Guelph",
+      "memberId": 69,
+      "sourceName": "Guelph (CMA), Ont.",
+      "classificationCode": "550",
+      "attributes": {
+        "ALT_GEO_CODE": "550",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Ont.",
+        "PR_CODE": "35",
+        "GEO_NAME": "Guelph",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503550",
+        "TNR_SHORT_FORM": "2.4",
+        "TNR_LONG_FORM": "3.2"
+      }
+    },
+    {
+      "id": "408",
+      "dguid": "2021S0503408",
+      "name": "Saguenay",
+      "memberId": 42,
+      "sourceName": "Saguenay (CMA), Que.",
+      "classificationCode": "408",
+      "attributes": {
+        "ALT_GEO_CODE": "408",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Que.",
+        "PR_CODE": "24",
+        "GEO_NAME": "Saguenay",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503408",
+        "TNR_SHORT_FORM": "2.8",
+        "TNR_LONG_FORM": "3.8"
+      }
+    },
+    {
+      "id": "442",
+      "dguid": "2021S0503442",
+      "name": "Trois-Rivières",
+      "memberId": 53,
+      "sourceName": "Trois-Rivières (CMA), Que.",
+      "classificationCode": "442",
+      "attributes": {
+        "ALT_GEO_CODE": "442",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Que.",
+        "PR_CODE": "24",
+        "GEO_NAME": "Trois-Rivières",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503442",
+        "TNR_SHORT_FORM": "2.5",
+        "TNR_LONG_FORM": "3.0"
+      }
+    },
+    {
+      "id": "305",
+      "dguid": "2021S0503305",
+      "name": "Moncton",
+      "memberId": 24,
+      "sourceName": "Moncton (CMA), N.B.",
+      "classificationCode": "305",
+      "attributes": {
+        "ALT_GEO_CODE": "305",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "N.B.",
+        "PR_CODE": "13",
+        "GEO_NAME": "Moncton",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503305",
+        "TNR_SHORT_FORM": "3.3",
+        "TNR_LONG_FORM": "4.8"
+      }
+    },
+    {
+      "id": "543",
+      "dguid": "2021S0503543",
+      "name": "Brantford",
+      "memberId": 59,
+      "sourceName": "Brantford (CMA), Ont.",
+      "classificationCode": "543",
+      "attributes": {
+        "ALT_GEO_CODE": "543",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Ont.",
+        "PR_CODE": "35",
+        "GEO_NAME": "Brantford",
+        "DQF_CODE": "20000",
+        "DQF_NOTE": "Excludes census data for one or more incompletely enumerated reserves or settlements.",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503543",
+        "TNR_SHORT_FORM": "2.5",
+        "TNR_LONG_FORM": "3.7"
+      }
+    },
+    {
+      "id": "310",
+      "dguid": "2021S0503310",
+      "name": "Saint John",
+      "memberId": 25,
+      "sourceName": "Saint John (CMA), N.B.",
+      "classificationCode": "310",
+      "attributes": {
+        "ALT_GEO_CODE": "310",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "N.B.",
+        "PR_CODE": "13",
+        "GEO_NAME": "Saint John",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503310",
+        "TNR_SHORT_FORM": "4.0",
+        "TNR_LONG_FORM": "4.9"
+      }
+    },
+    {
+      "id": "529",
+      "dguid": "2021S0503529",
+      "name": "Peterborough",
+      "memberId": 91,
+      "sourceName": "Peterborough (CMA), Ont.",
+      "classificationCode": "529",
+      "attributes": {
+        "ALT_GEO_CODE": "529",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Ont.",
+        "PR_CODE": "35",
+        "GEO_NAME": "Peterborough",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503529",
+        "TNR_SHORT_FORM": "3.6",
+        "TNR_LONG_FORM": "5.0"
+      }
+    },
+    {
+      "id": "810",
+      "dguid": "2021S0503810",
+      "name": "Lethbridge",
+      "memberId": 130,
+      "sourceName": "Lethbridge (CMA), Alta.",
+      "classificationCode": "810",
+      "attributes": {
+        "ALT_GEO_CODE": "810",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Alta.",
+        "PR_CODE": "48",
+        "GEO_NAME": "Lethbridge",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503810",
+        "TNR_SHORT_FORM": "2.4",
+        "TNR_LONG_FORM": "4.1"
+      }
+    },
+    {
+      "id": "595",
+      "dguid": "2021S0503595",
+      "name": "Thunder Bay",
+      "memberId": 97,
+      "sourceName": "Thunder Bay (CMA), Ont.",
+      "classificationCode": "595",
+      "attributes": {
+        "ALT_GEO_CODE": "595",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Ont.",
+        "PR_CODE": "35",
+        "GEO_NAME": "Thunder Bay",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503595",
+        "TNR_SHORT_FORM": "3.3",
+        "TNR_LONG_FORM": "5.7"
+      }
+    },
+    {
+      "id": "938",
+      "dguid": "2021S0503938",
+      "name": "Nanaimo",
+      "memberId": 153,
+      "sourceName": "Nanaimo (CMA), B.C.",
+      "classificationCode": "938",
+      "attributes": {
+        "ALT_GEO_CODE": "938",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "B.C.",
+        "PR_CODE": "59",
+        "GEO_NAME": "Nanaimo",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503938",
+        "TNR_SHORT_FORM": "2.7",
+        "TNR_LONG_FORM": "3.9"
+      }
+    },
+    {
+      "id": "925",
+      "dguid": "2021S0503925",
+      "name": "Kamloops",
+      "memberId": 150,
+      "sourceName": "Kamloops (CMA), B.C.",
+      "classificationCode": "925",
+      "attributes": {
+        "ALT_GEO_CODE": "925",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "B.C.",
+        "PR_CODE": "59",
+        "GEO_NAME": "Kamloops",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503925",
+        "TNR_SHORT_FORM": "3.9",
+        "TNR_LONG_FORM": "4.9"
+      }
+    },
+    {
+      "id": "930",
+      "dguid": "2021S0503930",
+      "name": "Chilliwack",
+      "memberId": 144,
+      "sourceName": "Chilliwack (CMA), B.C.",
+      "classificationCode": "930",
+      "attributes": {
+        "ALT_GEO_CODE": "930",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "B.C.",
+        "PR_CODE": "59",
+        "GEO_NAME": "Chilliwack",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503930",
+        "TNR_SHORT_FORM": "3.4",
+        "TNR_LONG_FORM": "5.7"
+      }
+    },
+    {
+      "id": "522",
+      "dguid": "2021S0503522",
+      "name": "Belleville - Quinte West",
+      "memberId": 58,
+      "sourceName": "Belleville - Quinte West (CMA), Ont.",
+      "classificationCode": "522",
+      "attributes": {
+        "ALT_GEO_CODE": "522",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Ont.",
+        "PR_CODE": "35",
+        "GEO_NAME": "Belleville - Quinte West",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503522",
+        "TNR_SHORT_FORM": "2.6",
+        "TNR_LONG_FORM": "4.0"
+      }
+    },
+    {
+      "id": "320",
+      "dguid": "2021S0503320",
+      "name": "Fredericton",
+      "memberId": 22,
+      "sourceName": "Fredericton (CMA), N.B.",
+      "classificationCode": "320",
+      "attributes": {
+        "ALT_GEO_CODE": "320",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "N.B.",
+        "PR_CODE": "13",
+        "GEO_NAME": "Fredericton",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503320",
+        "TNR_SHORT_FORM": "3.3",
+        "TNR_LONG_FORM": "4.2"
+      }
+    },
+    {
+      "id": "447",
+      "dguid": "2021S0503447",
+      "name": "Drummondville",
+      "memberId": 32,
+      "sourceName": "Drummondville (CMA), Que.",
+      "classificationCode": "447",
+      "attributes": {
+        "ALT_GEO_CODE": "447",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Que.",
+        "PR_CODE": "24",
+        "GEO_NAME": "Drummondville",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503447",
+        "TNR_SHORT_FORM": "1.5",
+        "TNR_LONG_FORM": "2.5"
+      }
+    },
+    {
+      "id": "830",
+      "dguid": "2021S0503830",
+      "name": "Red Deer",
+      "memberId": 136,
+      "sourceName": "Red Deer (CMA), Alta.",
+      "classificationCode": "830",
+      "attributes": {
+        "ALT_GEO_CODE": "830",
+        "GEO_LEVEL_DESC": "Census metropolitan area",
+        "GEO_TYPE_ABBR": "CMA",
+        "PROV_ABBR": "Alta.",
+        "PR_CODE": "48",
+        "GEO_NAME": "Red Deer",
+        "DQF_CODE": "00000",
+        "DQF_NOTE": "...",
+        "GEO_TYPE_DESC": "Census metropolitan area",
+        "DGUID": "2021S0503830",
+        "TNR_SHORT_FORM": "3.0",
+        "TNR_LONG_FORM": "4.3"
+      }
+    }
+  ],
+  "categoryHierarchy": [
+    {
+      "id": "1",
+      "parentId": null,
+      "englishName": "Total - Population group"
+    },
+    {
+      "id": "2",
+      "parentId": "1",
+      "englishName": "Single population groups"
+    },
+    {
+      "id": "3",
+      "parentId": "2",
+      "englishName": "White"
+    },
+    {
+      "id": "4",
+      "parentId": "2",
+      "englishName": "South Asian"
+    },
+    {
+      "id": "5",
+      "parentId": "2",
+      "englishName": "Chinese"
+    },
+    {
+      "id": "6",
+      "parentId": "2",
+      "englishName": "Black"
+    },
+    {
+      "id": "7",
+      "parentId": "2",
+      "englishName": "Filipino"
+    },
+    {
+      "id": "8",
+      "parentId": "2",
+      "englishName": "Arab"
+    },
+    {
+      "id": "9",
+      "parentId": "2",
+      "englishName": "Latin American"
+    },
+    {
+      "id": "10",
+      "parentId": "2",
+      "englishName": "Southeast Asian"
+    },
+    {
+      "id": "11",
+      "parentId": "2",
+      "englishName": "West Asian"
+    },
+    {
+      "id": "12",
+      "parentId": "2",
+      "englishName": "Korean"
+    },
+    {
+      "id": "13",
+      "parentId": "2",
+      "englishName": "Japanese"
+    },
+    {
+      "id": "14",
+      "parentId": "2",
+      "englishName": "Other population groups, n.i.e."
+    },
+    {
+      "id": "15",
+      "parentId": "1",
+      "englishName": "Multiple population groups"
+    },
+    {
+      "id": "16",
+      "parentId": "15",
+      "englishName": "Two population groups"
+    },
+    {
+      "id": "17",
+      "parentId": "16",
+      "englishName": "White and South Asian"
+    },
+    {
+      "id": "18",
+      "parentId": "16",
+      "englishName": "White and Chinese"
+    },
+    {
+      "id": "19",
+      "parentId": "16",
+      "englishName": "White and Black"
+    },
+    {
+      "id": "20",
+      "parentId": "16",
+      "englishName": "White and Filipino"
+    },
+    {
+      "id": "21",
+      "parentId": "16",
+      "englishName": "White and Arab"
+    },
+    {
+      "id": "22",
+      "parentId": "16",
+      "englishName": "White and Latin American"
+    },
+    {
+      "id": "23",
+      "parentId": "16",
+      "englishName": "White and Southeast Asian"
+    },
+    {
+      "id": "24",
+      "parentId": "16",
+      "englishName": "White and West Asian"
+    },
+    {
+      "id": "25",
+      "parentId": "16",
+      "englishName": "White and Korean"
+    },
+    {
+      "id": "26",
+      "parentId": "16",
+      "englishName": "White and Japanese"
+    },
+    {
+      "id": "27",
+      "parentId": "16",
+      "englishName": "White and other population groups, n.i.e."
+    },
+    {
+      "id": "28",
+      "parentId": "16",
+      "englishName": "South Asian and Chinese"
+    },
+    {
+      "id": "29",
+      "parentId": "16",
+      "englishName": "South Asian and Black"
+    },
+    {
+      "id": "30",
+      "parentId": "16",
+      "englishName": "South Asian and Filipino"
+    },
+    {
+      "id": "31",
+      "parentId": "16",
+      "englishName": "South Asian and Arab"
+    },
+    {
+      "id": "32",
+      "parentId": "16",
+      "englishName": "South Asian and Latin American"
+    },
+    {
+      "id": "33",
+      "parentId": "16",
+      "englishName": "South Asian and Southeast Asian"
+    },
+    {
+      "id": "34",
+      "parentId": "16",
+      "englishName": "South Asian and West Asian"
+    },
+    {
+      "id": "35",
+      "parentId": "16",
+      "englishName": "South Asian and Korean"
+    },
+    {
+      "id": "36",
+      "parentId": "16",
+      "englishName": "South Asian and Japanese"
+    },
+    {
+      "id": "37",
+      "parentId": "16",
+      "englishName": "South Asian and other population groups, n.i.e."
+    },
+    {
+      "id": "38",
+      "parentId": "16",
+      "englishName": "Chinese and Black"
+    },
+    {
+      "id": "39",
+      "parentId": "16",
+      "englishName": "Chinese and Filipino"
+    },
+    {
+      "id": "40",
+      "parentId": "16",
+      "englishName": "Chinese and Arab"
+    },
+    {
+      "id": "41",
+      "parentId": "16",
+      "englishName": "Chinese and Latin American"
+    },
+    {
+      "id": "42",
+      "parentId": "16",
+      "englishName": "Chinese and Southeast Asian"
+    },
+    {
+      "id": "43",
+      "parentId": "16",
+      "englishName": "Chinese and West Asian"
+    },
+    {
+      "id": "44",
+      "parentId": "16",
+      "englishName": "Chinese and Korean"
+    },
+    {
+      "id": "45",
+      "parentId": "16",
+      "englishName": "Chinese and Japanese"
+    },
+    {
+      "id": "46",
+      "parentId": "16",
+      "englishName": "Chinese and other population groups, n.i.e."
+    },
+    {
+      "id": "47",
+      "parentId": "16",
+      "englishName": "Black and Filipino"
+    },
+    {
+      "id": "48",
+      "parentId": "16",
+      "englishName": "Black and Arab"
+    },
+    {
+      "id": "49",
+      "parentId": "16",
+      "englishName": "Black and Latin American"
+    },
+    {
+      "id": "50",
+      "parentId": "16",
+      "englishName": "Black and Southeast Asian"
+    },
+    {
+      "id": "51",
+      "parentId": "16",
+      "englishName": "Black and West Asian"
+    },
+    {
+      "id": "52",
+      "parentId": "16",
+      "englishName": "Black and Korean"
+    },
+    {
+      "id": "53",
+      "parentId": "16",
+      "englishName": "Black and Japanese"
+    },
+    {
+      "id": "54",
+      "parentId": "16",
+      "englishName": "Black and other population groups, n.i.e."
+    },
+    {
+      "id": "55",
+      "parentId": "16",
+      "englishName": "Filipino and Arab"
+    },
+    {
+      "id": "56",
+      "parentId": "16",
+      "englishName": "Filipino and Latin American"
+    },
+    {
+      "id": "57",
+      "parentId": "16",
+      "englishName": "Filipino and Southeast Asian"
+    },
+    {
+      "id": "58",
+      "parentId": "16",
+      "englishName": "Filipino and West Asian"
+    },
+    {
+      "id": "59",
+      "parentId": "16",
+      "englishName": "Filipino and Korean"
+    },
+    {
+      "id": "60",
+      "parentId": "16",
+      "englishName": "Filipino and Japanese"
+    },
+    {
+      "id": "61",
+      "parentId": "16",
+      "englishName": "Filipino and other population groups, n.i.e."
+    },
+    {
+      "id": "62",
+      "parentId": "16",
+      "englishName": "Arab and Latin American"
+    },
+    {
+      "id": "63",
+      "parentId": "16",
+      "englishName": "Arab and Southeast Asian"
+    },
+    {
+      "id": "64",
+      "parentId": "16",
+      "englishName": "Arab and West Asian"
+    },
+    {
+      "id": "65",
+      "parentId": "16",
+      "englishName": "Arab and Korean"
+    },
+    {
+      "id": "66",
+      "parentId": "16",
+      "englishName": "Arab and Japanese"
+    },
+    {
+      "id": "67",
+      "parentId": "16",
+      "englishName": "Arab and other population groups, n.i.e."
+    },
+    {
+      "id": "68",
+      "parentId": "16",
+      "englishName": "Latin American and Southeast Asian"
+    },
+    {
+      "id": "69",
+      "parentId": "16",
+      "englishName": "Latin American and West Asian"
+    },
+    {
+      "id": "70",
+      "parentId": "16",
+      "englishName": "Latin American and Korean"
+    },
+    {
+      "id": "71",
+      "parentId": "16",
+      "englishName": "Latin American and Japanese"
+    },
+    {
+      "id": "72",
+      "parentId": "16",
+      "englishName": "Latin American and other population groups, n.i.e."
+    },
+    {
+      "id": "73",
+      "parentId": "16",
+      "englishName": "Southeast Asian and West Asian"
+    },
+    {
+      "id": "74",
+      "parentId": "16",
+      "englishName": "Southeast Asian and Korean"
+    },
+    {
+      "id": "75",
+      "parentId": "16",
+      "englishName": "Southeast Asian and Japanese"
+    },
+    {
+      "id": "76",
+      "parentId": "16",
+      "englishName": "Southeast Asian and other population groups, n.i.e."
+    },
+    {
+      "id": "77",
+      "parentId": "16",
+      "englishName": "West Asian and Korean"
+    },
+    {
+      "id": "78",
+      "parentId": "16",
+      "englishName": "West Asian and Japanese"
+    },
+    {
+      "id": "79",
+      "parentId": "16",
+      "englishName": "West Asian and other population groups, n.i.e."
+    },
+    {
+      "id": "80",
+      "parentId": "16",
+      "englishName": "Korean and Japanese"
+    },
+    {
+      "id": "81",
+      "parentId": "16",
+      "englishName": "Korean and other population groups, n.i.e."
+    },
+    {
+      "id": "82",
+      "parentId": "16",
+      "englishName": "Japanese and other population groups, n.i.e."
+    },
+    {
+      "id": "83",
+      "parentId": "16",
+      "englishName": "Two other population groups, n.i.e."
+    },
+    {
+      "id": "84",
+      "parentId": "15",
+      "englishName": "Three or more population groups"
+    },
+    {
+      "id": "85",
+      "parentId": "84",
+      "englishName": "White and multiple population groups"
+    },
+    {
+      "id": "86",
+      "parentId": "84",
+      "englishName": "Multiple population groups, n.i.e."
+    },
+    {
+      "id": "87",
+      "parentId": "1",
+      "englishName": "Indigenous peoples"
+    }
+  ],
+  "selection": {
+    "generationStatus": 1,
+    "age": 1,
+    "statistics": 1,
+    "populationGroups": [
+      1,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      87
+    ],
+    "visibleMinority": 1
+  },
+  "unit": {
+    "label": "Count of persons (weighted long-form estimate)",
+    "uom": "",
+    "uomId": 0,
+    "scalarFactor": "units",
+    "scalarId": 0
+  },
+  "originalFiles": [
+    {
+      "file": "selected-original.csv",
+      "bytes": 124940,
+      "sha256": "3047bfc929168102e74c7ee873bb3fbb945217ae80bb498487134f768f110bde"
+    },
+    {
+      "file": "selected-original.request.json",
+      "bytes": 1230,
+      "sha256": "3af3c737025ff992f33e495d5148c1da53581de46a94b4b696556a7221380240"
+    },
+    {
+      "file": "cube-metadata-original.json",
+      "bytes": 737426,
+      "sha256": "89a27278023e9c0ccc381ca185c3a3e5b87f10529a011c500a62dc815a0276bd"
+    },
+    {
+      "file": "cube-metadata-original.request.json",
+      "bytes": 289,
+      "sha256": "b571a0432167b42fa6209eaac954bf7c85ee14682d49d9076c3f4c395a0278ae"
+    },
+    {
+      "file": "drummondville-display-original.html",
+      "bytes": 257653,
+      "sha256": "399194ca80c5247b8e61470792b30fbe3f88bd2fbfc464bc292d2f29f9b6fb78"
+    },
+    {
+      "file": "drummondville-display-original.request.json",
+      "bytes": 431,
+      "sha256": "7ed2d5bc7e22b190e82b2d50be7a13d6a49e6b536c700763d962ffeb351362e3"
+    },
+    {
+      "file": "open-licence-original.html",
+      "bytes": 27005,
+      "sha256": "2e9cfa14534c14c27fcfc75c20a3dfcf447ad5d6e379e37ef765607d69587c88"
+    },
+    {
+      "file": "open-licence-original.request.json",
+      "bytes": 251,
+      "sha256": "8f9b812b173788ce9ede0ec8403dd6688b3eaeb2e3ba417b07d69452935dafca"
+    },
+    {
+      "file": "about-data-tables-original.html",
+      "bytes": 71786,
+      "sha256": "a8f208bfb18e0c53ec4bbc71f90ddc3b91c39aa7e297e8ba320f63918ab06a3e"
+    },
+    {
+      "file": "about-data-tables-original.request.json",
+      "bytes": 262,
+      "sha256": "b39b09baa34cbe298eb8e1db6487202869dfe18516aba6b9387d10e316875e46"
+    },
+    {
+      "file": "population-group-guide-original.html",
+      "bytes": 65445,
+      "sha256": "e23493eb285742a483a91cf9b04f8d6ec8e2b25d31d555e2edd6d9ba1c94a4ca"
+    },
+    {
+      "file": "population-group-guide-original.request.json",
+      "bytes": 296,
+      "sha256": "665ae71bdc7845c60ee3eaddc864da0dbbe3a898a52edbd4c0f1bad19fd3413d"
+    },
+    {
+      "file": "daily-ethnocultural-diversity-original.html",
+      "bytes": 92651,
+      "sha256": "cbc129741ca7b70b607682c37e0068c7515aaef17e56db011be2f596fbfdd599"
+    },
+    {
+      "file": "daily-ethnocultural-diversity-original.request.json",
+      "bytes": 260,
+      "sha256": "9447d1084df414ae29f388d8b21af3b49f7363d2b47778cf1ed5cb727cf81f24"
+    }
+  ],
+  "audit": {
+    "geographies": 42,
+    "cmas": 41,
+    "groupCategories": 14,
+    "expectedCells": 630,
+    "originalCsvCells": 629,
+    "recoveredOfficialDisplayZeroCells": 1,
+    "adoptedCells": 630,
+    "nullCells": 0,
+    "zeroCells": 1,
+    "statusValues": [
+      ""
+    ],
+    "symbolValues": [
+      ""
+    ],
+    "vectorValues": [
+      ""
+    ],
+    "decimals": [
+      "0"
+    ],
+    "roundingDifferences": [
+      {
+        "id": "Canada",
+        "dguid": "2021A000011124",
+        "denominator": 36328475,
+        "sumOfGroups": 36328465,
+        "difference": -10
+      },
+      {
+        "id": "535",
+        "dguid": "2021S0503535",
+        "denominator": 6142885,
+        "sumOfGroups": 6142875,
+        "difference": -10
+      },
+      {
+        "id": "462",
+        "dguid": "2021S0503462",
+        "denominator": 4206455,
+        "sumOfGroups": 4206455,
+        "difference": 0
+      },
+      {
+        "id": "933",
+        "dguid": "2021S0503933",
+        "denominator": 2607015,
+        "sumOfGroups": 2607005,
+        "difference": -10
+      },
+      {
+        "id": "505",
+        "dguid": "2021S0503505",
+        "denominator": 1464495,
+        "sumOfGroups": 1464505,
+        "difference": 10
+      },
+      {
+        "id": "825",
+        "dguid": "2021S0503825",
+        "denominator": 1465180,
+        "sumOfGroups": 1465165,
+        "difference": -15
+      },
+      {
+        "id": "835",
+        "dguid": "2021S0503835",
+        "denominator": 1397750,
+        "sumOfGroups": 1397740,
+        "difference": -10
+      },
+      {
+        "id": "421",
+        "dguid": "2021S0503421",
+        "denominator": 817105,
+        "sumOfGroups": 817100,
+        "difference": -5
+      },
+      {
+        "id": "602",
+        "dguid": "2021S0503602",
+        "denominator": 819715,
+        "sumOfGroups": 819720,
+        "difference": 5
+      },
+      {
+        "id": "537",
+        "dguid": "2021S0503537",
+        "denominator": 773440,
+        "sumOfGroups": 773450,
+        "difference": 10
+      },
+      {
+        "id": "541",
+        "dguid": "2021S0503541",
+        "denominator": 568065,
+        "sumOfGroups": 568070,
+        "difference": 5
+      },
+      {
+        "id": "555",
+        "dguid": "2021S0503555",
+        "denominator": 535780,
+        "sumOfGroups": 535775,
+        "difference": -5
+      },
+      {
+        "id": "205",
+        "dguid": "2021S0503205",
+        "denominator": 461140,
+        "sumOfGroups": 461125,
+        "difference": -15
+      },
+      {
+        "id": "539",
+        "dguid": "2021S0503539",
+        "denominator": 425480,
+        "sumOfGroups": 425480,
+        "difference": 0
+      },
+      {
+        "id": "559",
+        "dguid": "2021S0503559",
+        "denominator": 415505,
+        "sumOfGroups": 415510,
+        "difference": 5
+      },
+      {
+        "id": "532",
+        "dguid": "2021S0503532",
+        "denominator": 411405,
+        "sumOfGroups": 411410,
+        "difference": 5
+      },
+      {
+        "id": "935",
+        "dguid": "2021S0503935",
+        "denominator": 388470,
+        "sumOfGroups": 388485,
+        "difference": 15
+      },
+      {
+        "id": "725",
+        "dguid": "2021S0503725",
+        "denominator": 311515,
+        "sumOfGroups": 311505,
+        "difference": -10
+      },
+      {
+        "id": "705",
+        "dguid": "2021S0503705",
+        "denominator": 244950,
+        "sumOfGroups": 244950,
+        "difference": 0
+      },
+      {
+        "id": "433",
+        "dguid": "2021S0503433",
+        "denominator": 220105,
+        "sumOfGroups": 220095,
+        "difference": -10
+      },
+      {
+        "id": "915",
+        "dguid": "2021S0503915",
+        "denominator": 218525,
+        "sumOfGroups": 218530,
+        "difference": 5
+      },
+      {
+        "id": "568",
+        "dguid": "2021S0503568",
+        "denominator": 210150,
+        "sumOfGroups": 210155,
+        "difference": 5
+      },
+      {
+        "id": "001",
+        "dguid": "2021S0503001",
+        "denominator": 208815,
+        "sumOfGroups": 208825,
+        "difference": 10
+      },
+      {
+        "id": "932",
+        "dguid": "2021S0503932",
+        "denominator": 192115,
+        "sumOfGroups": 192110,
+        "difference": -5
+      },
+      {
+        "id": "521",
+        "dguid": "2021S0503521",
+        "denominator": 168075,
+        "sumOfGroups": 168065,
+        "difference": -10
+      },
+      {
+        "id": "580",
+        "dguid": "2021S0503580",
+        "denominator": 167615,
+        "sumOfGroups": 167615,
+        "difference": 0
+      },
+      {
+        "id": "550",
+        "dguid": "2021S0503550",
+        "denominator": 163485,
+        "sumOfGroups": 163490,
+        "difference": 5
+      },
+      {
+        "id": "408",
+        "dguid": "2021S0503408",
+        "denominator": 157895,
+        "sumOfGroups": 157900,
+        "difference": 5
+      },
+      {
+        "id": "442",
+        "dguid": "2021S0503442",
+        "denominator": 155535,
+        "sumOfGroups": 155540,
+        "difference": 5
+      },
+      {
+        "id": "305",
+        "dguid": "2021S0503305",
+        "denominator": 154245,
+        "sumOfGroups": 154245,
+        "difference": 0
+      },
+      {
+        "id": "543",
+        "dguid": "2021S0503543",
+        "denominator": 141905,
+        "sumOfGroups": 141905,
+        "difference": 0
+      },
+      {
+        "id": "310",
+        "dguid": "2021S0503310",
+        "denominator": 128385,
+        "sumOfGroups": 128405,
+        "difference": 20
+      },
+      {
+        "id": "529",
+        "dguid": "2021S0503529",
+        "denominator": 125995,
+        "sumOfGroups": 125985,
+        "difference": -10
+      },
+      {
+        "id": "810",
+        "dguid": "2021S0503810",
+        "denominator": 120500,
+        "sumOfGroups": 120500,
+        "difference": 0
+      },
+      {
+        "id": "595",
+        "dguid": "2021S0503595",
+        "denominator": 120960,
+        "sumOfGroups": 120950,
+        "difference": -10
+      },
+      {
+        "id": "938",
+        "dguid": "2021S0503938",
+        "denominator": 112405,
+        "sumOfGroups": 112410,
+        "difference": 5
+      },
+      {
+        "id": "925",
+        "dguid": "2021S0503925",
+        "denominator": 110545,
+        "sumOfGroups": 110560,
+        "difference": 15
+      },
+      {
+        "id": "930",
+        "dguid": "2021S0503930",
+        "denominator": 111560,
+        "sumOfGroups": 111570,
+        "difference": 10
+      },
+      {
+        "id": "522",
+        "dguid": "2021S0503522",
+        "denominator": 109245,
+        "sumOfGroups": 109250,
+        "difference": 5
+      },
+      {
+        "id": "320",
+        "dguid": "2021S0503320",
+        "denominator": 107160,
+        "sumOfGroups": 107165,
+        "difference": 5
+      },
+      {
+        "id": "447",
+        "dguid": "2021S0503447",
+        "denominator": 98570,
+        "sumOfGroups": 98560,
+        "difference": -10
+      },
+      {
+        "id": "830",
+        "dguid": "2021S0503830",
+        "denominator": 98045,
+        "sumOfGroups": 98030,
+        "difference": -15
+      }
+    ],
+    "maxAbsoluteRoundingDifference": 20
+  },
+  "zeroCellRecovery": {
+    "dguid": "2021S0503447",
+    "groupId": "13",
+    "coordinate": "32.1.1.1.13.1",
+    "value": 0,
+    "reason": "The WDS API and database-loading CSV omit this cell. The official table display explicitly supplies value 0.0, formatted 0, with no symbol.",
+    "sourceUrl": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=9810032401&pickMembers%5B0%5D=1.32&pickMembers%5B1%5D=2.1&pickMembers%5B2%5D=3.1&pickMembers%5B3%5D=4.1",
+    "accessedAt": "2026-10-02T11:13:00.074Z"
+  },
+  "narrativeSource": {
+    "url": "https://www150.statcan.gc.ca/n1/daily-quotidien/221026/dq221026b-eng.htm",
+    "title": "The Canadian census: A rich portrait of the country’s religious and ethnocultural diversity",
+    "releaseDate": "2022-10-26",
+    "note": "The article discusses the derived visible-minority variable and inclusive group counts in places. Do not copy those counts into this single-response population-group snapshot."
+  }
+}

@@ -1,0 +1,19 @@
+---
+import ethnicity from '../../data/atlas/canada/demographics-ethnicity.json';
+import religion from '../../data/atlas/canada/demographics-religion.json';
+import {withBase} from '../../lib/urls';
+const asset='/assets/atlas/canada-demographics-v1/';
+const count=(v:number|null)=>v===null?'未公表':v.toLocaleString('ja-JP');
+---
+<details class="population-tables" data-demographic-tables hidden><summary>選んだ集団：41都市圏・全国の人数、分母と割合</summary><p data-demographic-table-caption></p><div class="canola-table-scroll"><table class="canola-stats demographic-stats" data-demographic-table><thead><tr><th>都市圏・全国</th><th>集団の人数（人）</th><th>同じ表の分母（人）</th><th>割合（%）</th><th>品質・未回答率</th></tr></thead><tbody></tbody></table></div></details>
+<details class="canada-source-footer population-source-footer" id="canada-demographic-sources"><summary>人口集団・宗教の出典、定義・丸め・抽出方法</summary>
+ <p>2021年、居住されている私的住宅の私的世帯人口、長形式25%標本の加重推計。全住民の人口総数、都市の雇用数、現在の移民・信仰の動向を示す表ではありません。地理はCanadaと2021年の41完全CMA。地理IDとDGUIDで既存の都市圏境界に結合し、Ottawa–Gatineauは州別の部分を足さず、全体の1都市圏を採用しました。</p>
+ <h3>人種・民族タブ：人口集団（Population group）</h3>
+ <p><a href={ethnicity.source.url}>{ethnicity.source.tableId}：原表</a>、2022年10月26日公表。民族的・文化的出自（ethnic or cultural origin）、国籍、出生国とは異なる変数です。全世代・Total - Visible minorityを選び、Population groupの単一回答12群（原member ID 3–14）、複数回答の公式小計（15）、質問24で先住民と回答した人（87）を、サイトの14表示区分として選択しています。複数回答を個々の単一回答に再加算せず、Not a visible minorityを白人へ改名していません。質問24由来の先住民は、別変数Indigenous identityと範囲が異なります。</p>
+ <p>全国の分母は{count(ethnicity.national.denominator.value)}人。分類計は独立した丸めにより分母と最大20人異なります。CSVの省略セル1件（Drummondville・Japanese）は、公式表示が明示する0から回復し、座標・地理ID・証拠をmanifestに記録しています。<a href="https://www12-2021.statcan.gc.ca/census-recensement/2021/ref/98-500/006/98-500-x2021006-eng.pdf">変数の公式ガイド</a> / <a href="https://www150.statcan.gc.ca/n1/daily-quotidien/221026/dq221026b-eng.htm">2021年の構成と都市圏についての公式解説</a>。</p>
+ <h3>宗教タブ：自己申告の所属</h3>
+ <p><a href={religion.source.url}>{religion.source.tableId}：原表</a>、2023年6月21日公表。全年齢・全ジェンダー・2021 Countsの9上位分類を表示。キリスト教の下位教派を親分類に重複加算しません。所属の自己申告には現在実践していない人も含まれ、教団の登録会員数や礼拝者数ではありません。全国の分母は{count(religion.national.denominator.value)}人。9分類計と分母の丸め差は−15〜+10人で、そのまま保持しています。原CSVの省略17セルは公式表示の明示的0を照合して回復しました。<a href={religion.source.definitionUrl}>宗教変数の公式ガイド</a>。</p>
+ <p>両表の0は公表された丸め0を含みます。値の秘匿x・欠測・記号は保持し、0への補完は行いません。今回の選択セルに秘匿・欠測はありません。不完全に調査された保留地・集落を除外する地理の注記と、長形式の総未回答率（TNR）を比較表・原本に保持しています。分類合計や計算した割合を100%へ調整しません。集団を変えると色の目盛も変わるため、異なる集団の色だけを直接比較せず、凡例と数値を読みます。</p>
+ {([ethnicity,religion]).map(d=><div><p lang="en">Adapted from Statistics Canada, {d.source.title} (Table {d.source.tableId}), 2021 Census of Population (accessed October 2, 2026). This does not constitute an endorsement by Statistics Canada of this product.</p><p><a href={d.source.licenceUrl}>Statistics Canada Open Licence</a>に基づく抽出・日本語化・割合計算。<a href={withBase(`${asset}${d.topic}-selected.csv`)}>採用セルCSV</a> / <a href={withBase(`${asset}${d.topic}-manifest.json`)}>原本・分類ID・省略0の証拠・ハッシュ</a>。</p></div>)}
+ <details><summary>JavaScriptなしでも読む：全国の原人数</summary>{([ethnicity,religion]).map(d=><table class="canola-stats"><caption>{d.topic==='ethnicity'?'人口集団':'宗教'}・2021年・全国（分母{count(d.national.denominator.value)}人）</caption><thead><tr><th>分類</th><th>人</th></tr></thead><tbody>{d.groups.map(g=><tr><th>{g.name}</th><td>{count(d.national.values[g.id].value)}</td></tr>)}</tbody></table>)}</details>
+</details>

@@ -1,0 +1,5996 @@
+{
+  "topic": "ethnicity",
+  "year": 2021,
+  "source": {
+    "tableId": "98-10-0324-01",
+    "pid": "9810032401",
+    "url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=9810032401",
+    "title": "Visible minority and population group by generation status: Canada, provinces and territories, census metropolitan areas and census agglomerations with parts",
+    "releaseDate": "2022-10-26",
+    "accessedAt": "2026-10-02T11:09:46.901Z",
+    "referenceYear": 2021,
+    "censusDate": "2021-05-11",
+    "boundaryDate": "2021-01-01",
+    "universe": "Persons in private households in occupied private dwellings",
+    "sample": "2021 Census — 25% Sample data",
+    "totalAge": "Total - Age",
+    "totalGender": "All persons; this table has no gender dimension",
+    "generationStatus": "Total - Generation status",
+    "statistics": "Count",
+    "visibleMinority": "Total - Visible minority (unfiltered population group counts)",
+    "denominator": "Total - Population group from the same geography and selected dimensions; population in private households, not the population-and-dwelling-counts total.",
+    "licenceUrl": "https://www.statcan.gc.ca/en/terms-conditions/open-licence",
+    "attribution": "Adapted from Statistics Canada, Visible minority and population group by generation status: Canada, provinces and territories, census metropolitan areas and census agglomerations with parts, 2021. This does not constitute an endorsement by Statistics Canada of this product.",
+    "rounding": "Census counts and totals are randomly rounded independently to multiples of 5 or 10. The sum of categories can differ from the published total; percentages calculated from rounded counts need not sum to 100%.",
+    "roundingUrl": "https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/dt-td/about.cfm#rr-aa",
+    "definitions": {
+      "populationGroup": "Population-group responses to Question 25; this variable differs from both ethnic or cultural origin and the derived visible minority variable.",
+      "singleResponse": "IDs 3–14 are single-response categories. Multiple answers are retained in ID 15 instead of counted again in individual groups.",
+      "indigenousPeoples": "ID 87 reflects Yes to Question 24. It is not the Indigenous identity variable."
+    },
+    "footnotes": [
+      {
+        "id": 8,
+        "groupId": "1",
+        "englishText": "\"Population group\" refers to whether the person reports being White, South Asian, Chinese, Black, Filipino, Arab, Latin American, Southeast Asian, West Asian, Korean, Japanese or another population group. These specific groups are the mark-in categories used in the population group question (Question 25), which collects data to derive the visible minority population for employment equity purposes."
+      },
+      {
+        "id": 9,
+        "groupId": "1",
+        "englishText": "The population group variable provides a distribution of single and selected combinations of multiple responses to the population group question. For estimates of the visible minority population, please use the variable \"Visible minority.\""
+      },
+      {
+        "id": 10,
+        "groupId": "1",
+        "englishText": "For more information on visible minority and population group variables, including information on their classifications, the questions from which they are derived, data quality and their comparability with other sources of data, please refer to the Visible Minority and Population Group Reference Guide, Census of Population, 2021."
+      },
+      {
+        "id": 11,
+        "groupId": "14",
+        "englishText": "The abbreviation \"n.i.e.\" means \"not included elsewhere.\" This category includes persons who provided a response that is not associated with any of the other population groups. Examples of such responses include, for example, \"Algerian,\" \"Armenian,\" \"Brazilian,\" \"Coptic,\" \"Cuban,\" \"Guyanese,\" \"Israeli,\" \"Jamaican,\" \"Jewish,\" \"Kurdish,\" \"Mongolian,\" \"Pacific Islander,\" \"Polynesian,\" \"South African,\" \"Tibetan\" and \"West Indian.\""
+      },
+      {
+        "id": 28,
+        "groupId": "87",
+        "englishText": "This category includes respondents who reported “Yes” to Question 24 (“Is this person First Nations, Métis or Inuk (Inuit)?”). These respondents were not asked the population group question (Question 25). However, their information is included in the population group variable so that it reflects the entire Canadian population."
+      },
+      {
+        "id": 29,
+        "groupId": "87",
+        "englishText": "Please note that this category provides a different estimate of the Indigenous population than the variable “Indigenous identity,” which is used in many 2021 Census tables. Indigenous identity includes those who identify as First Nations (North American Indian), Métis and/or Inuk (Inuit), and/or those who report being Registered or Treaty Indians (that is, registered under the Indian Act of Canada), and/or those who have membership in a First Nation or Indian band."
+      },
+      {
+        "id": 30,
+        "groupId": "87",
+        "englishText": "For more information on variables specific to Indigenous peoples, including information on their classifications, the questions from which they are derived, data quality and their comparability with other sources of data, please refer to the Indigenous Peoples Reference Guide, Census of Population, 2021."
+      },
+      {
+        "id": 7,
+        "groupId": "0",
+        "englishText": "Population group  Population group refers to whether the person reports being White, South Asian, Chinese, Black, Filipino, Arab, Latin American, Southeast Asian, West Asian, Korean, Japanese and/or another population group. These specific groups are the mark-in categories used in a question which collects data on the visible minority population for employment equity purposes."
+      }
+    ],
+    "zeroCellRecovery": {
+      "dguid": "2021S0503447",
+      "groupId": "13",
+      "coordinate": "32.1.1.1.13.1",
+      "value": 0,
+      "reason": "The WDS API and database-loading CSV omit this cell. The official table display explicitly supplies value 0.0, formatted 0, with no symbol.",
+      "sourceUrl": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=9810032401&pickMembers%5B0%5D=1.32&pickMembers%5B1%5D=2.1&pickMembers%5B2%5D=3.1&pickMembers%5B3%5D=4.1",
+      "accessedAt": "2026-10-02T11:13:00.074Z"
+    }
+  },
+  "defaultGroup": "4",
+  "groups": [
+    {
+      "id": "3",
+      "englishName": "White",
+      "name": "白人（単一回答）",
+      "parentId": "2",
+      "definition": "この人口集団のみを回答した人。対応する記入回答も含む。",
+      "footnotes": [
+        8,
+        9,
+        10,
+        7
+      ]
+    },
+    {
+      "id": "4",
+      "englishName": "South Asian",
+      "name": "南アジア系（単一回答）",
+      "parentId": "2",
+      "definition": "この人口集団のみを回答した人。対応する記入回答も含む。",
+      "footnotes": [
+        8,
+        9,
+        10,
+        7
+      ]
+    },
+    {
+      "id": "5",
+      "englishName": "Chinese",
+      "name": "中国系（単一回答）",
+      "parentId": "2",
+      "definition": "この人口集団のみを回答した人。対応する記入回答も含む。",
+      "footnotes": [
+        8,
+        9,
+        10,
+        7
+      ]
+    },
+    {
+      "id": "6",
+      "englishName": "Black",
+      "name": "黒人（単一回答）",
+      "parentId": "2",
+      "definition": "この人口集団のみを回答した人。対応する記入回答も含む。",
+      "footnotes": [
+        8,
+        9,
+        10,
+        7
+      ]
+    },
+    {
+      "id": "7",
+      "englishName": "Filipino",
+      "name": "フィリピン系（単一回答）",
+      "parentId": "2",
+      "definition": "この人口集団のみを回答した人。対応する記入回答も含む。",
+      "footnotes": [
+        8,
+        9,
+        10,
+        7
+      ]
+    },
+    {
+      "id": "8",
+      "englishName": "Arab",
+      "name": "アラブ系（単一回答）",
+      "parentId": "2",
+      "definition": "この人口集団のみを回答した人。対応する記入回答も含む。",
+      "footnotes": [
+        8,
+        9,
+        10,
+        7
+      ]
+    },
+    {
+      "id": "9",
+      "englishName": "Latin American",
+      "name": "ラテンアメリカ系（単一回答）",
+      "parentId": "2",
+      "definition": "この人口集団のみを回答した人。対応する記入回答も含む。",
+      "footnotes": [
+        8,
+        9,
+        10,
+        7
+      ]
+    },
+    {
+      "id": "10",
+      "englishName": "Southeast Asian",
+      "name": "東南アジア系（単一回答）",
+      "parentId": "2",
+      "definition": "この人口集団のみを回答した人。対応する記入回答も含む。",
+      "footnotes": [
+        8,
+        9,
+        10,
+        7
+      ]
+    },
+    {
+      "id": "11",
+      "englishName": "West Asian",
+      "name": "西アジア系（単一回答）",
+      "parentId": "2",
+      "definition": "この人口集団のみを回答した人。対応する記入回答も含む。",
+      "footnotes": [
+        8,
+        9,
+        10,
+        7
+      ]
+    },
+    {
+      "id": "12",
+      "englishName": "Korean",
+      "name": "韓国系（単一回答）",
+      "parentId": "2",
+      "definition": "この人口集団のみを回答した人。対応する記入回答も含む。",
+      "footnotes": [
+        8,
+        9,
+        10,
+        7
+      ]
+    },
+    {
+      "id": "13",
+      "englishName": "Japanese",
+      "name": "日本系（単一回答）",
+      "parentId": "2",
+      "definition": "この人口集団のみを回答した人。対応する記入回答も含む。",
+      "footnotes": [
+        8,
+        9,
+        10,
+        7
+      ]
+    },
+    {
+      "id": "14",
+      "englishName": "Other population groups, n.i.e.",
+      "name": "その他の人口集団（単一回答）",
+      "parentId": "2",
+      "definition": "この人口集団のみを回答した人。対応する記入回答も含む。",
+      "footnotes": [
+        8,
+        9,
+        10,
+        11,
+        7
+      ]
+    },
+    {
+      "id": "15",
+      "englishName": "Multiple population groups",
+      "name": "複数の人口集団",
+      "parentId": "1",
+      "definition": "2つ以上の人口集団を回答した人。",
+      "footnotes": [
+        8,
+        9,
+        10,
+        7
+      ]
+    },
+    {
+      "id": "87",
+      "englishName": "Indigenous peoples",
+      "name": "先住民族（人口集団表）",
+      "parentId": "1",
+      "definition": "質問24でFirst Nations、Métis、Inuk（Inuit）に「はい」と回答した人。人口集団質問25には回答しない。Indigenous identityとは定義が異なる。",
+      "footnotes": [
+        8,
+        9,
+        10,
+        28,
+        29,
+        30,
+        7
+      ]
+    }
+  ],
+  "national": {
+    "id": "Canada",
+    "dguid": "2021A000011124",
+    "name": "カナダ",
+    "englishName": "Canada",
+    "denominator": {
+      "value": 36328475,
+      "symbol": "",
+      "status": "",
+      "vector": "",
+      "decimals": 0,
+      "coordinate": "1.1.1.1.1.1"
+    },
+    "values": {
+      "3": {
+        "value": 24493090,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.3.1"
+      },
+      "4": {
+        "value": 2496000,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.4.1"
+      },
+      "5": {
+        "value": 1625010,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.5.1"
+      },
+      "6": {
+        "value": 1389765,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.6.1"
+      },
+      "7": {
+        "value": 899300,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.7.1"
+      },
+      "8": {
+        "value": 674125,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.8.1"
+      },
+      "9": {
+        "value": 579010,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.9.1"
+      },
+      "10": {
+        "value": 359235,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.10.1"
+      },
+      "11": {
+        "value": 359340,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.11.1"
+      },
+      "12": {
+        "value": 206085,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.12.1"
+      },
+      "13": {
+        "value": 61675,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.13.1"
+      },
+      "14": {
+        "value": 251750,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.14.1"
+      },
+      "15": {
+        "value": 1162055,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.15.1"
+      },
+      "87": {
+        "value": 1772025,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.87.1"
+      }
+    },
+    "quality": {
+      "codes": {
+        "dataQualityFlag": "20000"
+      },
+      "notes": [
+        "Excludes census data for one or more incompletely enumerated reserves or settlements."
+      ],
+      "tnrLongFormPercent": 4.3,
+      "tnrShortFormPercent": 3.1
+    }
+  },
+  "cmas": [
+    {
+      "id": "535",
+      "dguid": "2021S0503535",
+      "name": "Toronto（トロント）",
+      "englishName": "Toronto (CMA), Ont.",
+      "denominator": {
+        "value": 6142885,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "100.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 2499745,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.3.1"
+        },
+        "4": {
+          "value": 1160985,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.4.1"
+        },
+        "5": {
+          "value": 657900,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.5.1"
+        },
+        "6": {
+          "value": 450910,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.6.1"
+        },
+        "7": {
+          "value": 267765,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.7.1"
+        },
+        "8": {
+          "value": 122620,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.8.1"
+        },
+        "9": {
+          "value": 156080,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.9.1"
+        },
+        "10": {
+          "value": 98175,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.10.1"
+        },
+        "11": {
+          "value": 159855,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.11.1"
+        },
+        "12": {
+          "value": 71100,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.12.1"
+        },
+        "13": {
+          "value": 14065,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.13.1"
+        },
+        "14": {
+          "value": 110840,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.14.1"
+        },
+        "15": {
+          "value": 329900,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.15.1"
+        },
+        "87": {
+          "value": 42935,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 3.6,
+        "tnrShortFormPercent": 2.7
+      }
+    },
+    {
+      "id": "462",
+      "dguid": "2021S0503462",
+      "name": "Montréal（モントリオール）",
+      "englishName": "Montréal (CMA), Que.",
+      "denominator": {
+        "value": 4206455,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "37.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 2888380,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.3.1"
+        },
+        "4": {
+          "value": 116625,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.4.1"
+        },
+        "5": {
+          "value": 98245,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.5.1"
+        },
+        "6": {
+          "value": 319125,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.6.1"
+        },
+        "7": {
+          "value": 37575,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.7.1"
+        },
+        "8": {
+          "value": 238485,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.8.1"
+        },
+        "9": {
+          "value": 137645,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.9.1"
+        },
+        "10": {
+          "value": 55270,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.10.1"
+        },
+        "11": {
+          "value": 39265,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.11.1"
+        },
+        "12": {
+          "value": 8265,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.12.1"
+        },
+        "13": {
+          "value": 2515,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.13.1"
+        },
+        "14": {
+          "value": 48800,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.14.1"
+        },
+        "15": {
+          "value": 172665,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.15.1"
+        },
+        "87": {
+          "value": 43595,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "20000"
+        },
+        "notes": [
+          "Excludes census data for one or more incompletely enumerated reserves or settlements."
+        ],
+        "tnrLongFormPercent": 3.4,
+        "tnrShortFormPercent": 2.6
+      }
+    },
+    {
+      "id": "933",
+      "dguid": "2021S0503933",
+      "name": "Vancouver（バンクーバー）",
+      "englishName": "Vancouver (CMA), B.C.",
+      "denominator": {
+        "value": 2607015,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "166.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 1095160,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.3.1"
+        },
+        "4": {
+          "value": 359960,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.4.1"
+        },
+        "5": {
+          "value": 491115,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.5.1"
+        },
+        "6": {
+          "value": 32900,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.6.1"
+        },
+        "7": {
+          "value": 133020,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.7.1"
+        },
+        "8": {
+          "value": 21920,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.8.1"
+        },
+        "9": {
+          "value": 51355,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.9.1"
+        },
+        "10": {
+          "value": 53325,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.10.1"
+        },
+        "11": {
+          "value": 64540,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.11.1"
+        },
+        "12": {
+          "value": 61370,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.12.1"
+        },
+        "13": {
+          "value": 21780,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.13.1"
+        },
+        "14": {
+          "value": 16450,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.14.1"
+        },
+        "15": {
+          "value": 141845,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.15.1"
+        },
+        "87": {
+          "value": 62265,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "20000"
+        },
+        "notes": [
+          "Excludes census data for one or more incompletely enumerated reserves or settlements."
+        ],
+        "tnrLongFormPercent": 3.9,
+        "tnrShortFormPercent": 3
+      }
+    },
+    {
+      "id": "505",
+      "dguid": "2021S0503505",
+      "name": "Ottawa–Gatineau（オタワ・ガティノー）",
+      "englishName": "Ottawa - Gatineau (CMA), Ont./Que.",
+      "denominator": {
+        "value": 1464495,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "85.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 1007275,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.3.1"
+        },
+        "4": {
+          "value": 56225,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.4.1"
+        },
+        "5": {
+          "value": 45235,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.5.1"
+        },
+        "6": {
+          "value": 105330,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.6.1"
+        },
+        "7": {
+          "value": 14345,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.7.1"
+        },
+        "8": {
+          "value": 67995,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.8.1"
+        },
+        "9": {
+          "value": 20550,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.9.1"
+        },
+        "10": {
+          "value": 15145,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.10.1"
+        },
+        "11": {
+          "value": 14450,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.11.1"
+        },
+        "12": {
+          "value": 3860,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.12.1"
+        },
+        "13": {
+          "value": 1375,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.13.1"
+        },
+        "14": {
+          "value": 7805,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.14.1"
+        },
+        "15": {
+          "value": 59455,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.15.1"
+        },
+        "87": {
+          "value": 45460,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 3.4,
+        "tnrShortFormPercent": 2.6
+      }
+    },
+    {
+      "id": "825",
+      "dguid": "2021S0503825",
+      "name": "Calgary（カルガリー）",
+      "englishName": "Calgary (CMA), Alta.",
+      "denominator": {
+        "value": 1465180,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "123.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 834960,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.3.1"
+        },
+        "4": {
+          "value": 148900,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.4.1"
+        },
+        "5": {
+          "value": 86580,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.5.1"
+        },
+        "6": {
+          "value": 69745,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.6.1"
+        },
+        "7": {
+          "value": 84445,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.7.1"
+        },
+        "8": {
+          "value": 32020,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.8.1"
+        },
+        "9": {
+          "value": 34310,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.9.1"
+        },
+        "10": {
+          "value": 26470,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.10.1"
+        },
+        "11": {
+          "value": 15660,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.11.1"
+        },
+        "12": {
+          "value": 12170,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.12.1"
+        },
+        "13": {
+          "value": 3550,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.13.1"
+        },
+        "14": {
+          "value": 6960,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.14.1"
+        },
+        "15": {
+          "value": 61740,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.15.1"
+        },
+        "87": {
+          "value": 47655,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "20000"
+        },
+        "notes": [
+          "Excludes census data for one or more incompletely enumerated reserves or settlements."
+        ],
+        "tnrLongFormPercent": 3.7,
+        "tnrShortFormPercent": 2.5
+      }
+    },
+    {
+      "id": "835",
+      "dguid": "2021S0503835",
+      "name": "Edmonton（エドモントン）",
+      "englishName": "Edmonton (CMA), Alta.",
+      "denominator": {
+        "value": 1397750,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "126.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 837630,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.3.1"
+        },
+        "4": {
+          "value": 119605,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.4.1"
+        },
+        "5": {
+          "value": 57545,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.5.1"
+        },
+        "6": {
+          "value": 74765,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.6.1"
+        },
+        "7": {
+          "value": 76515,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.7.1"
+        },
+        "8": {
+          "value": 31285,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.8.1"
+        },
+        "9": {
+          "value": 21930,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.9.1"
+        },
+        "10": {
+          "value": 18950,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.10.1"
+        },
+        "11": {
+          "value": 7950,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.11.1"
+        },
+        "12": {
+          "value": 8020,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.12.1"
+        },
+        "13": {
+          "value": 1445,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.13.1"
+        },
+        "14": {
+          "value": 6955,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.14.1"
+        },
+        "15": {
+          "value": 48500,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.15.1"
+        },
+        "87": {
+          "value": 86645,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 5.3,
+        "tnrShortFormPercent": 3.2
+      }
+    },
+    {
+      "id": "421",
+      "dguid": "2021S0503421",
+      "name": "Québec",
+      "englishName": "Québec (CMA), Que.",
+      "denominator": {
+        "value": 817105,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "38.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 736980,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.3.1"
+        },
+        "4": {
+          "value": 1485,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.4.1"
+        },
+        "5": {
+          "value": 2930,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.5.1"
+        },
+        "6": {
+          "value": 23785,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.6.1"
+        },
+        "7": {
+          "value": 510,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.7.1"
+        },
+        "8": {
+          "value": 10830,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.8.1"
+        },
+        "9": {
+          "value": 10190,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.9.1"
+        },
+        "10": {
+          "value": 2680,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.10.1"
+        },
+        "11": {
+          "value": 895,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.11.1"
+        },
+        "12": {
+          "value": 220,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.12.1"
+        },
+        "13": {
+          "value": 190,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.13.1"
+        },
+        "14": {
+          "value": 1815,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.14.1"
+        },
+        "15": {
+          "value": 10550,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.15.1"
+        },
+        "87": {
+          "value": 14040,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 3.2,
+        "tnrShortFormPercent": 2.5
+      }
+    },
+    {
+      "id": "602",
+      "dguid": "2021S0503602",
+      "name": "Winnipeg（ウィニペグ）",
+      "englishName": "Winnipeg (CMA), Man.",
+      "denominator": {
+        "value": 819715,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "110.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 453210,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.3.1"
+        },
+        "4": {
+          "value": 62440,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.4.1"
+        },
+        "5": {
+          "value": 21465,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.5.1"
+        },
+        "6": {
+          "value": 37300,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.6.1"
+        },
+        "7": {
+          "value": 81360,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.7.1"
+        },
+        "8": {
+          "value": 6840,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.8.1"
+        },
+        "9": {
+          "value": 9125,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.9.1"
+        },
+        "10": {
+          "value": 9745,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.10.1"
+        },
+        "11": {
+          "value": 3310,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.11.1"
+        },
+        "12": {
+          "value": 3740,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.12.1"
+        },
+        "13": {
+          "value": 955,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.13.1"
+        },
+        "14": {
+          "value": 4095,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.14.1"
+        },
+        "15": {
+          "value": 24850,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.15.1"
+        },
+        "87": {
+          "value": 101285,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 4.1,
+        "tnrShortFormPercent": 2.8
+      }
+    },
+    {
+      "id": "537",
+      "dguid": "2021S0503537",
+      "name": "Hamilton",
+      "englishName": "Hamilton (CMA), Ont.",
+      "denominator": {
+        "value": 773440,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "70.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 568325,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.3.1"
+        },
+        "4": {
+          "value": 45250,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.4.1"
+        },
+        "5": {
+          "value": 13995,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.5.1"
+        },
+        "6": {
+          "value": 28085,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.6.1"
+        },
+        "7": {
+          "value": 13415,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.7.1"
+        },
+        "8": {
+          "value": 19335,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.8.1"
+        },
+        "9": {
+          "value": 14575,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.9.1"
+        },
+        "10": {
+          "value": 8985,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.10.1"
+        },
+        "11": {
+          "value": 8875,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.11.1"
+        },
+        "12": {
+          "value": 3320,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.12.1"
+        },
+        "13": {
+          "value": 945,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.13.1"
+        },
+        "14": {
+          "value": 4870,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.14.1"
+        },
+        "15": {
+          "value": 28615,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.15.1"
+        },
+        "87": {
+          "value": 14860,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 3,
+        "tnrShortFormPercent": 2.2
+      }
+    },
+    {
+      "id": "541",
+      "dguid": "2021S0503541",
+      "name": "Kitchener - Cambridge - Waterloo",
+      "englishName": "Kitchener - Cambridge - Waterloo (CMA), Ont.",
+      "denominator": {
+        "value": 568065,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "78.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 393155,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.3.1"
+        },
+        "4": {
+          "value": 53650,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.4.1"
+        },
+        "5": {
+          "value": 15885,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.5.1"
+        },
+        "6": {
+          "value": 23290,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.6.1"
+        },
+        "7": {
+          "value": 5190,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.7.1"
+        },
+        "8": {
+          "value": 10690,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.8.1"
+        },
+        "9": {
+          "value": 12765,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.9.1"
+        },
+        "10": {
+          "value": 9660,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.10.1"
+        },
+        "11": {
+          "value": 6025,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.11.1"
+        },
+        "12": {
+          "value": 2980,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.12.1"
+        },
+        "13": {
+          "value": 680,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.13.1"
+        },
+        "14": {
+          "value": 4630,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.14.1"
+        },
+        "15": {
+          "value": 19905,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.15.1"
+        },
+        "87": {
+          "value": 9565,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 3.3,
+        "tnrShortFormPercent": 2.3
+      }
+    },
+    {
+      "id": "555",
+      "dguid": "2021S0503555",
+      "name": "London",
+      "englishName": "London (CMA), Ont.",
+      "denominator": {
+        "value": 535780,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "79.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 391275,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.3.1"
+        },
+        "4": {
+          "value": 27135,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.4.1"
+        },
+        "5": {
+          "value": 11470,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.5.1"
+        },
+        "6": {
+          "value": 15525,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.6.1"
+        },
+        "7": {
+          "value": 5705,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.7.1"
+        },
+        "8": {
+          "value": 22055,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.8.1"
+        },
+        "9": {
+          "value": 13250,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.9.1"
+        },
+        "10": {
+          "value": 5925,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.10.1"
+        },
+        "11": {
+          "value": 5450,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.11.1"
+        },
+        "12": {
+          "value": 4250,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.12.1"
+        },
+        "13": {
+          "value": 420,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.13.1"
+        },
+        "14": {
+          "value": 2755,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.14.1"
+        },
+        "15": {
+          "value": 17230,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.15.1"
+        },
+        "87": {
+          "value": 13330,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 3.3,
+        "tnrShortFormPercent": 2.6
+      }
+    },
+    {
+      "id": "205",
+      "dguid": "2021S0503205",
+      "name": "Halifax（ハリファクス）",
+      "englishName": "Halifax (CMA), N.S.",
+      "denominator": {
+        "value": 461140,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "12.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 365570,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.3.1"
+        },
+        "4": {
+          "value": 15940,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.4.1"
+        },
+        "5": {
+          "value": 8890,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.5.1"
+        },
+        "6": {
+          "value": 15530,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.6.1"
+        },
+        "7": {
+          "value": 4265,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.7.1"
+        },
+        "8": {
+          "value": 9435,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.8.1"
+        },
+        "9": {
+          "value": 2280,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.9.1"
+        },
+        "10": {
+          "value": 1600,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.10.1"
+        },
+        "11": {
+          "value": 1675,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.11.1"
+        },
+        "12": {
+          "value": 2255,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.12.1"
+        },
+        "13": {
+          "value": 385,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.13.1"
+        },
+        "14": {
+          "value": 950,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.14.1"
+        },
+        "15": {
+          "value": 14005,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.15.1"
+        },
+        "87": {
+          "value": 18345,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 3.6,
+        "tnrShortFormPercent": 2.8
+      }
+    },
+    {
+      "id": "539",
+      "dguid": "2021S0503539",
+      "name": "St. Catharines - Niagara",
+      "englishName": "St. Catharines - Niagara (CMA), Ont.",
+      "denominator": {
+        "value": 425480,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "95.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 350240,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.3.1"
+        },
+        "4": {
+          "value": 12095,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.4.1"
+        },
+        "5": {
+          "value": 5730,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.5.1"
+        },
+        "6": {
+          "value": 10050,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.6.1"
+        },
+        "7": {
+          "value": 5735,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.7.1"
+        },
+        "8": {
+          "value": 3370,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.8.1"
+        },
+        "9": {
+          "value": 6610,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.9.1"
+        },
+        "10": {
+          "value": 2705,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.10.1"
+        },
+        "11": {
+          "value": 900,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.11.1"
+        },
+        "12": {
+          "value": 1795,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.12.1"
+        },
+        "13": {
+          "value": 400,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.13.1"
+        },
+        "14": {
+          "value": 1715,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.14.1"
+        },
+        "15": {
+          "value": 11430,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.15.1"
+        },
+        "87": {
+          "value": 12705,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 4.1,
+        "tnrShortFormPercent": 3
+      }
+    },
+    {
+      "id": "559",
+      "dguid": "2021S0503559",
+      "name": "Windsor",
+      "englishName": "Windsor (CMA), Ont.",
+      "denominator": {
+        "value": 415505,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "102.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 300190,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.3.1"
+        },
+        "4": {
+          "value": 20100,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.4.1"
+        },
+        "5": {
+          "value": 8150,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.5.1"
+        },
+        "6": {
+          "value": 12775,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.6.1"
+        },
+        "7": {
+          "value": 4120,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.7.1"
+        },
+        "8": {
+          "value": 25705,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.8.1"
+        },
+        "9": {
+          "value": 6540,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.9.1"
+        },
+        "10": {
+          "value": 4970,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.10.1"
+        },
+        "11": {
+          "value": 4570,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.11.1"
+        },
+        "12": {
+          "value": 600,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.12.1"
+        },
+        "13": {
+          "value": 165,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.13.1"
+        },
+        "14": {
+          "value": 1410,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.14.1"
+        },
+        "15": {
+          "value": 14465,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.15.1"
+        },
+        "87": {
+          "value": 11750,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 3.1,
+        "tnrShortFormPercent": 2.4
+      }
+    },
+    {
+      "id": "532",
+      "dguid": "2021S0503532",
+      "name": "Oshawa",
+      "englishName": "Oshawa (CMA), Ont.",
+      "denominator": {
+        "value": 411405,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "84.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 283060,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.3.1"
+        },
+        "4": {
+          "value": 36260,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.4.1"
+        },
+        "5": {
+          "value": 7870,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.5.1"
+        },
+        "6": {
+          "value": 27845,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.6.1"
+        },
+        "7": {
+          "value": 8000,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.7.1"
+        },
+        "8": {
+          "value": 3055,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.8.1"
+        },
+        "9": {
+          "value": 4645,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.9.1"
+        },
+        "10": {
+          "value": 1600,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.10.1"
+        },
+        "11": {
+          "value": 4960,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.11.1"
+        },
+        "12": {
+          "value": 1010,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.12.1"
+        },
+        "13": {
+          "value": 245,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.13.1"
+        },
+        "14": {
+          "value": 4385,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.14.1"
+        },
+        "15": {
+          "value": 18735,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.15.1"
+        },
+        "87": {
+          "value": 9740,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 3.3,
+        "tnrShortFormPercent": 1.9
+      }
+    },
+    {
+      "id": "935",
+      "dguid": "2021S0503935",
+      "name": "Victoria",
+      "englishName": "Victoria (CMA), B.C.",
+      "denominator": {
+        "value": 388470,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "168.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 300630,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.3.1"
+        },
+        "4": {
+          "value": 12285,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.4.1"
+        },
+        "5": {
+          "value": 15095,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.5.1"
+        },
+        "6": {
+          "value": 3485,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.6.1"
+        },
+        "7": {
+          "value": 7445,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.7.1"
+        },
+        "8": {
+          "value": 1915,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.8.1"
+        },
+        "9": {
+          "value": 3935,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.9.1"
+        },
+        "10": {
+          "value": 3040,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.10.1"
+        },
+        "11": {
+          "value": 1510,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.11.1"
+        },
+        "12": {
+          "value": 2170,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.12.1"
+        },
+        "13": {
+          "value": 1835,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.13.1"
+        },
+        "14": {
+          "value": 1075,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.14.1"
+        },
+        "15": {
+          "value": 15015,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.15.1"
+        },
+        "87": {
+          "value": 19050,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 4.2,
+        "tnrShortFormPercent": 2.9
+      }
+    },
+    {
+      "id": "725",
+      "dguid": "2021S0503725",
+      "name": "Saskatoon",
+      "englishName": "Saskatoon (CMA), Sask.",
+      "denominator": {
+        "value": 311515,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "117.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 208195,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.3.1"
+        },
+        "4": {
+          "value": 18865,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.4.1"
+        },
+        "5": {
+          "value": 8725,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.5.1"
+        },
+        "6": {
+          "value": 8005,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.6.1"
+        },
+        "7": {
+          "value": 14250,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.7.1"
+        },
+        "8": {
+          "value": 3035,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.8.1"
+        },
+        "9": {
+          "value": 2735,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.9.1"
+        },
+        "10": {
+          "value": 3320,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.10.1"
+        },
+        "11": {
+          "value": 1750,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.11.1"
+        },
+        "12": {
+          "value": 480,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.12.1"
+        },
+        "13": {
+          "value": 180,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.13.1"
+        },
+        "14": {
+          "value": 995,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.14.1"
+        },
+        "15": {
+          "value": 6370,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.15.1"
+        },
+        "87": {
+          "value": 34600,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 5.1,
+        "tnrShortFormPercent": 3.5
+      }
+    },
+    {
+      "id": "705",
+      "dguid": "2021S0503705",
+      "name": "Regina（レジャイナ）",
+      "englishName": "Regina (CMA), Sask.",
+      "denominator": {
+        "value": 244950,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "116.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 161390,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.3.1"
+        },
+        "4": {
+          "value": 19065,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.4.1"
+        },
+        "5": {
+          "value": 5495,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.5.1"
+        },
+        "6": {
+          "value": 9180,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.6.1"
+        },
+        "7": {
+          "value": 11795,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.7.1"
+        },
+        "8": {
+          "value": 1960,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.8.1"
+        },
+        "9": {
+          "value": 1430,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.9.1"
+        },
+        "10": {
+          "value": 3395,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.10.1"
+        },
+        "11": {
+          "value": 925,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.11.1"
+        },
+        "12": {
+          "value": 575,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.12.1"
+        },
+        "13": {
+          "value": 150,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.13.1"
+        },
+        "14": {
+          "value": 595,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.14.1"
+        },
+        "15": {
+          "value": 4700,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.15.1"
+        },
+        "87": {
+          "value": 24295,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 3.6,
+        "tnrShortFormPercent": 2.9
+      }
+    },
+    {
+      "id": "433",
+      "dguid": "2021S0503433",
+      "name": "Sherbrooke",
+      "englishName": "Sherbrooke (CMA), Que.",
+      "denominator": {
+        "value": 220105,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "50.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 197355,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.3.1"
+        },
+        "4": {
+          "value": 650,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.4.1"
+        },
+        "5": {
+          "value": 840,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.5.1"
+        },
+        "6": {
+          "value": 5090,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.6.1"
+        },
+        "7": {
+          "value": 215,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.7.1"
+        },
+        "8": {
+          "value": 2855,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.8.1"
+        },
+        "9": {
+          "value": 3575,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.9.1"
+        },
+        "10": {
+          "value": 505,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.10.1"
+        },
+        "11": {
+          "value": 1640,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.11.1"
+        },
+        "12": {
+          "value": 70,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.12.1"
+        },
+        "13": {
+          "value": 50,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.13.1"
+        },
+        "14": {
+          "value": 615,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.14.1"
+        },
+        "15": {
+          "value": 2925,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.15.1"
+        },
+        "87": {
+          "value": 3710,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 3.7,
+        "tnrShortFormPercent": 2.6
+      }
+    },
+    {
+      "id": "915",
+      "dguid": "2021S0503915",
+      "name": "Kelowna",
+      "englishName": "Kelowna (CMA), B.C.",
+      "denominator": {
+        "value": 218525,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "151.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 179530,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.3.1"
+        },
+        "4": {
+          "value": 6845,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.4.1"
+        },
+        "5": {
+          "value": 2735,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.5.1"
+        },
+        "6": {
+          "value": 1735,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.6.1"
+        },
+        "7": {
+          "value": 2650,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.7.1"
+        },
+        "8": {
+          "value": 675,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.8.1"
+        },
+        "9": {
+          "value": 1785,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.9.1"
+        },
+        "10": {
+          "value": 1035,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.10.1"
+        },
+        "11": {
+          "value": 825,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.11.1"
+        },
+        "12": {
+          "value": 790,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.12.1"
+        },
+        "13": {
+          "value": 790,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.13.1"
+        },
+        "14": {
+          "value": 470,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.14.1"
+        },
+        "15": {
+          "value": 5445,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.15.1"
+        },
+        "87": {
+          "value": 13220,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 5.8,
+        "tnrShortFormPercent": 4.2
+      }
+    },
+    {
+      "id": "568",
+      "dguid": "2021S0503568",
+      "name": "Barrie",
+      "englishName": "Barrie (CMA), Ont.",
+      "denominator": {
+        "value": 210150,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "57.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 168985,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.3.1"
+        },
+        "4": {
+          "value": 7390,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.4.1"
+        },
+        "5": {
+          "value": 2560,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.5.1"
+        },
+        "6": {
+          "value": 5460,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.6.1"
+        },
+        "7": {
+          "value": 2030,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.7.1"
+        },
+        "8": {
+          "value": 1045,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.8.1"
+        },
+        "9": {
+          "value": 4125,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.9.1"
+        },
+        "10": {
+          "value": 1300,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.10.1"
+        },
+        "11": {
+          "value": 1540,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.11.1"
+        },
+        "12": {
+          "value": 895,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.12.1"
+        },
+        "13": {
+          "value": 125,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.13.1"
+        },
+        "14": {
+          "value": 1245,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.14.1"
+        },
+        "15": {
+          "value": 6680,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.15.1"
+        },
+        "87": {
+          "value": 6775,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 4,
+        "tnrShortFormPercent": 2.6
+      }
+    },
+    {
+      "id": "001",
+      "dguid": "2021S0503001",
+      "name": "St. John's（セントジョンズ）",
+      "englishName": "St. John's (CMA), N.L.",
+      "denominator": {
+        "value": 208815,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "6.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 188960,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.3.1"
+        },
+        "4": {
+          "value": 3080,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.4.1"
+        },
+        "5": {
+          "value": 1385,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.5.1"
+        },
+        "6": {
+          "value": 2495,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.6.1"
+        },
+        "7": {
+          "value": 960,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.7.1"
+        },
+        "8": {
+          "value": 1470,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.8.1"
+        },
+        "9": {
+          "value": 640,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.9.1"
+        },
+        "10": {
+          "value": 305,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.10.1"
+        },
+        "11": {
+          "value": 495,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.11.1"
+        },
+        "12": {
+          "value": 140,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.12.1"
+        },
+        "13": {
+          "value": 35,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.13.1"
+        },
+        "14": {
+          "value": 230,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.14.1"
+        },
+        "15": {
+          "value": 1985,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.15.1"
+        },
+        "87": {
+          "value": 6645,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 4.1,
+        "tnrShortFormPercent": 2.9
+      }
+    },
+    {
+      "id": "932",
+      "dguid": "2021S0503932",
+      "name": "Abbotsford - Mission",
+      "englishName": "Abbotsford - Mission (CMA), B.C.",
+      "denominator": {
+        "value": 192115,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "142.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 112660,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.3.1"
+        },
+        "4": {
+          "value": 49060,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.4.1"
+        },
+        "5": {
+          "value": 2395,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.5.1"
+        },
+        "6": {
+          "value": 1675,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.6.1"
+        },
+        "7": {
+          "value": 2665,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.7.1"
+        },
+        "8": {
+          "value": 740,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.8.1"
+        },
+        "9": {
+          "value": 1855,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.9.1"
+        },
+        "10": {
+          "value": 2275,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.10.1"
+        },
+        "11": {
+          "value": 730,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.11.1"
+        },
+        "12": {
+          "value": 1490,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.12.1"
+        },
+        "13": {
+          "value": 370,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.13.1"
+        },
+        "14": {
+          "value": 445,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.14.1"
+        },
+        "15": {
+          "value": 5350,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.15.1"
+        },
+        "87": {
+          "value": 10400,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 3.7,
+        "tnrShortFormPercent": 2.7
+      }
+    },
+    {
+      "id": "521",
+      "dguid": "2021S0503521",
+      "name": "Kingston",
+      "englishName": "Kingston (CMA), Ont.",
+      "denominator": {
+        "value": 168075,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "77.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 141540,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.3.1"
+        },
+        "4": {
+          "value": 4275,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.4.1"
+        },
+        "5": {
+          "value": 2860,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.5.1"
+        },
+        "6": {
+          "value": 2105,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.6.1"
+        },
+        "7": {
+          "value": 920,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.7.1"
+        },
+        "8": {
+          "value": 1575,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.8.1"
+        },
+        "9": {
+          "value": 1355,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.9.1"
+        },
+        "10": {
+          "value": 625,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.10.1"
+        },
+        "11": {
+          "value": 740,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.11.1"
+        },
+        "12": {
+          "value": 580,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.12.1"
+        },
+        "13": {
+          "value": 135,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.13.1"
+        },
+        "14": {
+          "value": 475,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.14.1"
+        },
+        "15": {
+          "value": 4040,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.15.1"
+        },
+        "87": {
+          "value": 6840,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 5.5,
+        "tnrShortFormPercent": 4
+      }
+    },
+    {
+      "id": "580",
+      "dguid": "2021S0503580",
+      "name": "Greater Sudbury / Grand Sudbury",
+      "englishName": "Greater Sudbury (CMA), Ont.",
+      "denominator": {
+        "value": 167615,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "68.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 137390,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.3.1"
+        },
+        "4": {
+          "value": 2945,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.4.1"
+        },
+        "5": {
+          "value": 840,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.5.1"
+        },
+        "6": {
+          "value": 3520,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.6.1"
+        },
+        "7": {
+          "value": 355,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.7.1"
+        },
+        "8": {
+          "value": 340,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.8.1"
+        },
+        "9": {
+          "value": 705,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.9.1"
+        },
+        "10": {
+          "value": 355,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.10.1"
+        },
+        "11": {
+          "value": 140,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.11.1"
+        },
+        "12": {
+          "value": 130,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.12.1"
+        },
+        "13": {
+          "value": 55,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.13.1"
+        },
+        "14": {
+          "value": 205,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.14.1"
+        },
+        "15": {
+          "value": 1825,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.15.1"
+        },
+        "87": {
+          "value": 18810,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 5,
+        "tnrShortFormPercent": 3.6
+      }
+    },
+    {
+      "id": "550",
+      "dguid": "2021S0503550",
+      "name": "Guelph",
+      "englishName": "Guelph (CMA), Ont.",
+      "denominator": {
+        "value": 163485,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "69.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 121245,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.3.1"
+        },
+        "4": {
+          "value": 10845,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.4.1"
+        },
+        "5": {
+          "value": 4030,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.5.1"
+        },
+        "6": {
+          "value": 5315,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.6.1"
+        },
+        "7": {
+          "value": 3580,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.7.1"
+        },
+        "8": {
+          "value": 1680,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.8.1"
+        },
+        "9": {
+          "value": 2150,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.9.1"
+        },
+        "10": {
+          "value": 3055,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.10.1"
+        },
+        "11": {
+          "value": 2095,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.11.1"
+        },
+        "12": {
+          "value": 375,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.12.1"
+        },
+        "13": {
+          "value": 155,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.13.1"
+        },
+        "14": {
+          "value": 890,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.14.1"
+        },
+        "15": {
+          "value": 5600,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.15.1"
+        },
+        "87": {
+          "value": 2475,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 3.2,
+        "tnrShortFormPercent": 2.4
+      }
+    },
+    {
+      "id": "408",
+      "dguid": "2021S0503408",
+      "name": "Saguenay",
+      "englishName": "Saguenay (CMA), Que.",
+      "denominator": {
+        "value": 157895,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "42.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 148645,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.3.1"
+        },
+        "4": {
+          "value": 60,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.4.1"
+        },
+        "5": {
+          "value": 230,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.5.1"
+        },
+        "6": {
+          "value": 1135,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.6.1"
+        },
+        "7": {
+          "value": 50,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.7.1"
+        },
+        "8": {
+          "value": 415,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.8.1"
+        },
+        "9": {
+          "value": 435,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.9.1"
+        },
+        "10": {
+          "value": 85,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.10.1"
+        },
+        "11": {
+          "value": 45,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.11.1"
+        },
+        "12": {
+          "value": 15,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.12.1"
+        },
+        "13": {
+          "value": 10,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.13.1"
+        },
+        "14": {
+          "value": 85,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.14.1"
+        },
+        "15": {
+          "value": 805,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.15.1"
+        },
+        "87": {
+          "value": 5885,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 3.8,
+        "tnrShortFormPercent": 2.8
+      }
+    },
+    {
+      "id": "442",
+      "dguid": "2021S0503442",
+      "name": "Trois-Rivières",
+      "englishName": "Trois-Rivières (CMA), Que.",
+      "denominator": {
+        "value": 155535,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "53.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 143560,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.3.1"
+        },
+        "4": {
+          "value": 160,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.4.1"
+        },
+        "5": {
+          "value": 425,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.5.1"
+        },
+        "6": {
+          "value": 3515,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.6.1"
+        },
+        "7": {
+          "value": 120,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.7.1"
+        },
+        "8": {
+          "value": 1350,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.8.1"
+        },
+        "9": {
+          "value": 1665,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.9.1"
+        },
+        "10": {
+          "value": 220,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.10.1"
+        },
+        "11": {
+          "value": 55,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.11.1"
+        },
+        "12": {
+          "value": 25,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.12.1"
+        },
+        "13": {
+          "value": 15,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.13.1"
+        },
+        "14": {
+          "value": 260,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.14.1"
+        },
+        "15": {
+          "value": 1325,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.15.1"
+        },
+        "87": {
+          "value": 2845,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 3,
+        "tnrShortFormPercent": 2.5
+      }
+    },
+    {
+      "id": "305",
+      "dguid": "2021S0503305",
+      "name": "Moncton",
+      "englishName": "Moncton (CMA), N.B.",
+      "denominator": {
+        "value": 154245,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "24.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 133110,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.3.1"
+        },
+        "4": {
+          "value": 3050,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.4.1"
+        },
+        "5": {
+          "value": 755,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.5.1"
+        },
+        "6": {
+          "value": 4715,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.6.1"
+        },
+        "7": {
+          "value": 1485,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.7.1"
+        },
+        "8": {
+          "value": 1740,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.8.1"
+        },
+        "9": {
+          "value": 855,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.9.1"
+        },
+        "10": {
+          "value": 795,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.10.1"
+        },
+        "11": {
+          "value": 140,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.11.1"
+        },
+        "12": {
+          "value": 835,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.12.1"
+        },
+        "13": {
+          "value": 60,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.13.1"
+        },
+        "14": {
+          "value": 220,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.14.1"
+        },
+        "15": {
+          "value": 2580,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.15.1"
+        },
+        "87": {
+          "value": 3905,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 4.8,
+        "tnrShortFormPercent": 3.3
+      }
+    },
+    {
+      "id": "543",
+      "dguid": "2021S0503543",
+      "name": "Brantford",
+      "englishName": "Brantford (CMA), Ont.",
+      "denominator": {
+        "value": 141905,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "59.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 116580,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.3.1"
+        },
+        "4": {
+          "value": 6770,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.4.1"
+        },
+        "5": {
+          "value": 665,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.5.1"
+        },
+        "6": {
+          "value": 3390,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.6.1"
+        },
+        "7": {
+          "value": 1180,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.7.1"
+        },
+        "8": {
+          "value": 730,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.8.1"
+        },
+        "9": {
+          "value": 1105,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.9.1"
+        },
+        "10": {
+          "value": 1145,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.10.1"
+        },
+        "11": {
+          "value": 285,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.11.1"
+        },
+        "12": {
+          "value": 290,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.12.1"
+        },
+        "13": {
+          "value": 50,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.13.1"
+        },
+        "14": {
+          "value": 470,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.14.1"
+        },
+        "15": {
+          "value": 3105,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.15.1"
+        },
+        "87": {
+          "value": 6140,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "20000"
+        },
+        "notes": [
+          "Excludes census data for one or more incompletely enumerated reserves or settlements."
+        ],
+        "tnrLongFormPercent": 3.7,
+        "tnrShortFormPercent": 2.5
+      }
+    },
+    {
+      "id": "310",
+      "dguid": "2021S0503310",
+      "name": "Saint John",
+      "englishName": "Saint John (CMA), N.B.",
+      "denominator": {
+        "value": 128385,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "25.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 115090,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.3.1"
+        },
+        "4": {
+          "value": 1755,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.4.1"
+        },
+        "5": {
+          "value": 1335,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.5.1"
+        },
+        "6": {
+          "value": 1470,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.6.1"
+        },
+        "7": {
+          "value": 705,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.7.1"
+        },
+        "8": {
+          "value": 1110,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.8.1"
+        },
+        "9": {
+          "value": 435,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.9.1"
+        },
+        "10": {
+          "value": 260,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.10.1"
+        },
+        "11": {
+          "value": 275,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.11.1"
+        },
+        "12": {
+          "value": 325,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.12.1"
+        },
+        "13": {
+          "value": 10,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.13.1"
+        },
+        "14": {
+          "value": 240,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.14.1"
+        },
+        "15": {
+          "value": 2270,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.15.1"
+        },
+        "87": {
+          "value": 3125,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 4.9,
+        "tnrShortFormPercent": 4
+      }
+    },
+    {
+      "id": "529",
+      "dguid": "2021S0503529",
+      "name": "Peterborough",
+      "englishName": "Peterborough (CMA), Ont.",
+      "denominator": {
+        "value": 125995,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "91.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 110240,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.3.1"
+        },
+        "4": {
+          "value": 2670,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.4.1"
+        },
+        "5": {
+          "value": 840,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.5.1"
+        },
+        "6": {
+          "value": 1000,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.6.1"
+        },
+        "7": {
+          "value": 505,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.7.1"
+        },
+        "8": {
+          "value": 505,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.8.1"
+        },
+        "9": {
+          "value": 500,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.9.1"
+        },
+        "10": {
+          "value": 540,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.10.1"
+        },
+        "11": {
+          "value": 305,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.11.1"
+        },
+        "12": {
+          "value": 325,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.12.1"
+        },
+        "13": {
+          "value": 60,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.13.1"
+        },
+        "14": {
+          "value": 235,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.14.1"
+        },
+        "15": {
+          "value": 2075,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.15.1"
+        },
+        "87": {
+          "value": 6185,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 5,
+        "tnrShortFormPercent": 3.6
+      }
+    },
+    {
+      "id": "810",
+      "dguid": "2021S0503810",
+      "name": "Lethbridge",
+      "englishName": "Lethbridge (CMA), Alta.",
+      "denominator": {
+        "value": 120500,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "130.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 95895,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.3.1"
+        },
+        "4": {
+          "value": 2910,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.4.1"
+        },
+        "5": {
+          "value": 1105,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.5.1"
+        },
+        "6": {
+          "value": 2860,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.6.1"
+        },
+        "7": {
+          "value": 2210,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.7.1"
+        },
+        "8": {
+          "value": 435,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.8.1"
+        },
+        "9": {
+          "value": 2390,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.9.1"
+        },
+        "10": {
+          "value": 700,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.10.1"
+        },
+        "11": {
+          "value": 305,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.11.1"
+        },
+        "12": {
+          "value": 185,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.12.1"
+        },
+        "13": {
+          "value": 975,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.13.1"
+        },
+        "14": {
+          "value": 250,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.14.1"
+        },
+        "15": {
+          "value": 3170,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.15.1"
+        },
+        "87": {
+          "value": 7110,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 4.1,
+        "tnrShortFormPercent": 2.4
+      }
+    },
+    {
+      "id": "595",
+      "dguid": "2021S0503595",
+      "name": "Thunder Bay",
+      "englishName": "Thunder Bay (CMA), Ont.",
+      "denominator": {
+        "value": 120960,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "97.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 95595,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.3.1"
+        },
+        "4": {
+          "value": 2645,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.4.1"
+        },
+        "5": {
+          "value": 865,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.5.1"
+        },
+        "6": {
+          "value": 870,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.6.1"
+        },
+        "7": {
+          "value": 355,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.7.1"
+        },
+        "8": {
+          "value": 460,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.8.1"
+        },
+        "9": {
+          "value": 400,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.9.1"
+        },
+        "10": {
+          "value": 710,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.10.1"
+        },
+        "11": {
+          "value": 190,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.11.1"
+        },
+        "12": {
+          "value": 135,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.12.1"
+        },
+        "13": {
+          "value": 145,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.13.1"
+        },
+        "14": {
+          "value": 265,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.14.1"
+        },
+        "15": {
+          "value": 1615,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.15.1"
+        },
+        "87": {
+          "value": 16700,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 5.7,
+        "tnrShortFormPercent": 3.3
+      }
+    },
+    {
+      "id": "938",
+      "dguid": "2021S0503938",
+      "name": "Nanaimo",
+      "englishName": "Nanaimo (CMA), B.C.",
+      "denominator": {
+        "value": 112405,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "153.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 87960,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.3.1"
+        },
+        "4": {
+          "value": 2980,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.4.1"
+        },
+        "5": {
+          "value": 2515,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.5.1"
+        },
+        "6": {
+          "value": 885,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.6.1"
+        },
+        "7": {
+          "value": 1360,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.7.1"
+        },
+        "8": {
+          "value": 430,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.8.1"
+        },
+        "9": {
+          "value": 725,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.9.1"
+        },
+        "10": {
+          "value": 1100,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.10.1"
+        },
+        "11": {
+          "value": 315,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.11.1"
+        },
+        "12": {
+          "value": 645,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.12.1"
+        },
+        "13": {
+          "value": 405,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.13.1"
+        },
+        "14": {
+          "value": 375,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.14.1"
+        },
+        "15": {
+          "value": 3070,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.15.1"
+        },
+        "87": {
+          "value": 9645,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 3.9,
+        "tnrShortFormPercent": 2.7
+      }
+    },
+    {
+      "id": "925",
+      "dguid": "2021S0503925",
+      "name": "Kamloops",
+      "englishName": "Kamloops (CMA), B.C.",
+      "denominator": {
+        "value": 110545,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "150.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 87055,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.3.1"
+        },
+        "4": {
+          "value": 4140,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.4.1"
+        },
+        "5": {
+          "value": 1145,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.5.1"
+        },
+        "6": {
+          "value": 765,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.6.1"
+        },
+        "7": {
+          "value": 905,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.7.1"
+        },
+        "8": {
+          "value": 170,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.8.1"
+        },
+        "9": {
+          "value": 500,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.9.1"
+        },
+        "10": {
+          "value": 295,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.10.1"
+        },
+        "11": {
+          "value": 150,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.11.1"
+        },
+        "12": {
+          "value": 265,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.12.1"
+        },
+        "13": {
+          "value": 485,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.13.1"
+        },
+        "14": {
+          "value": 130,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.14.1"
+        },
+        "15": {
+          "value": 2455,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.15.1"
+        },
+        "87": {
+          "value": 12100,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 4.9,
+        "tnrShortFormPercent": 3.9
+      }
+    },
+    {
+      "id": "930",
+      "dguid": "2021S0503930",
+      "name": "Chilliwack",
+      "englishName": "Chilliwack (CMA), B.C.",
+      "denominator": {
+        "value": 111560,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "144.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 88505,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.3.1"
+        },
+        "4": {
+          "value": 2920,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.4.1"
+        },
+        "5": {
+          "value": 1270,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.5.1"
+        },
+        "6": {
+          "value": 675,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.6.1"
+        },
+        "7": {
+          "value": 1350,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.7.1"
+        },
+        "8": {
+          "value": 240,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.8.1"
+        },
+        "9": {
+          "value": 1115,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.9.1"
+        },
+        "10": {
+          "value": 990,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.10.1"
+        },
+        "11": {
+          "value": 295,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.11.1"
+        },
+        "12": {
+          "value": 580,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.12.1"
+        },
+        "13": {
+          "value": 205,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.13.1"
+        },
+        "14": {
+          "value": 345,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.14.1"
+        },
+        "15": {
+          "value": 2755,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.15.1"
+        },
+        "87": {
+          "value": 10325,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 5.7,
+        "tnrShortFormPercent": 3.4
+      }
+    },
+    {
+      "id": "522",
+      "dguid": "2021S0503522",
+      "name": "Belleville - Quinte West",
+      "englishName": "Belleville - Quinte West (CMA), Ont.",
+      "denominator": {
+        "value": 109245,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "58.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 95560,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.3.1"
+        },
+        "4": {
+          "value": 2350,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.4.1"
+        },
+        "5": {
+          "value": 600,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.5.1"
+        },
+        "6": {
+          "value": 980,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.6.1"
+        },
+        "7": {
+          "value": 570,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.7.1"
+        },
+        "8": {
+          "value": 235,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.8.1"
+        },
+        "9": {
+          "value": 610,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.9.1"
+        },
+        "10": {
+          "value": 220,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.10.1"
+        },
+        "11": {
+          "value": 100,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.11.1"
+        },
+        "12": {
+          "value": 250,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.12.1"
+        },
+        "13": {
+          "value": 70,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.13.1"
+        },
+        "14": {
+          "value": 295,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.14.1"
+        },
+        "15": {
+          "value": 1600,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.15.1"
+        },
+        "87": {
+          "value": 5810,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 4,
+        "tnrShortFormPercent": 2.6
+      }
+    },
+    {
+      "id": "320",
+      "dguid": "2021S0503320",
+      "name": "Fredericton",
+      "englishName": "Fredericton (CMA), N.B.",
+      "denominator": {
+        "value": 107160,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "22.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 91970,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.3.1"
+        },
+        "4": {
+          "value": 1815,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.4.1"
+        },
+        "5": {
+          "value": 1160,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.5.1"
+        },
+        "6": {
+          "value": 1595,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.6.1"
+        },
+        "7": {
+          "value": 655,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.7.1"
+        },
+        "8": {
+          "value": 1605,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.8.1"
+        },
+        "9": {
+          "value": 575,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.9.1"
+        },
+        "10": {
+          "value": 330,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.10.1"
+        },
+        "11": {
+          "value": 440,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.11.1"
+        },
+        "12": {
+          "value": 240,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.12.1"
+        },
+        "13": {
+          "value": 35,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.13.1"
+        },
+        "14": {
+          "value": 225,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.14.1"
+        },
+        "15": {
+          "value": 1580,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.15.1"
+        },
+        "87": {
+          "value": 4940,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 4.2,
+        "tnrShortFormPercent": 3.3
+      }
+    },
+    {
+      "id": "447",
+      "dguid": "2021S0503447",
+      "name": "Drummondville",
+      "englishName": "Drummondville (CMA), Que.",
+      "denominator": {
+        "value": 98570,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "32.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 92095,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.3.1"
+        },
+        "4": {
+          "value": 10,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.4.1"
+        },
+        "5": {
+          "value": 180,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.5.1"
+        },
+        "6": {
+          "value": 1540,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.6.1"
+        },
+        "7": {
+          "value": 60,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.7.1"
+        },
+        "8": {
+          "value": 985,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.8.1"
+        },
+        "9": {
+          "value": 1205,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.9.1"
+        },
+        "10": {
+          "value": 150,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.10.1"
+        },
+        "11": {
+          "value": 10,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.11.1"
+        },
+        "12": {
+          "value": 15,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.12.1"
+        },
+        "13": {
+          "value": 0,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.13.1"
+        },
+        "14": {
+          "value": 85,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.14.1"
+        },
+        "15": {
+          "value": 695,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.15.1"
+        },
+        "87": {
+          "value": 1530,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 2.5,
+        "tnrShortFormPercent": 1.5
+      }
+    },
+    {
+      "id": "830",
+      "dguid": "2021S0503830",
+      "name": "Red Deer",
+      "englishName": "Red Deer (CMA), Alta.",
+      "denominator": {
+        "value": 98045,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "136.1.1.1.1.1"
+      },
+      "values": {
+        "3": {
+          "value": 72265,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.3.1"
+        },
+        "4": {
+          "value": 2055,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.4.1"
+        },
+        "5": {
+          "value": 795,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.5.1"
+        },
+        "6": {
+          "value": 1640,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.6.1"
+        },
+        "7": {
+          "value": 7765,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.7.1"
+        },
+        "8": {
+          "value": 695,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.8.1"
+        },
+        "9": {
+          "value": 1715,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.9.1"
+        },
+        "10": {
+          "value": 755,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.10.1"
+        },
+        "11": {
+          "value": 390,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.11.1"
+        },
+        "12": {
+          "value": 300,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.12.1"
+        },
+        "13": {
+          "value": 105,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.13.1"
+        },
+        "14": {
+          "value": 295,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.14.1"
+        },
+        "15": {
+          "value": 2875,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.15.1"
+        },
+        "87": {
+          "value": 6380,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.87.1"
+        }
+      },
+      "quality": {
+        "codes": {
+          "dataQualityFlag": "00000"
+        },
+        "notes": [],
+        "tnrLongFormPercent": 4.3,
+        "tnrShortFormPercent": 3
+      }
+    }
+  ]
+}

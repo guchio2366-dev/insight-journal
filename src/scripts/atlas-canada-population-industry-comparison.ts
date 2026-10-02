@@ -1,9 +1,10 @@
 import {readCanadaPopulationState,writeCanadaPopulationState,canadaPopulationFrame,formatCanadaPopulationValue,canadaPopulationDensityColor,populationDensityColors} from '../lib/atlas-canada-population';
 import {formatCanadaIndustryValue,type CanadaIndustryState} from '../lib/atlas-canada-industry';
+import {isCanadaDemographicTopic} from '../lib/atlas-canada-demographics';
 
 /** The source question stays visible; CMA population and provincial GDP have separate denominators. */
 export function renderPopulationIndustryComparison(root:HTMLElement,config:any,industry:CanadaIndustryState){
- const raw=new URL(location.href).searchParams.get('populationReturn'),context=root.querySelector<HTMLElement>('[data-canada-population-industry-context]'),back=root.querySelector<HTMLAnchorElement>('[data-canada-population-industry-return]');
+ const requested=new URL(location.href).searchParams.get('populationReturn'),raw=requested&&!isCanadaDemographicTopic(new URL('?'+requested,location.href).searchParams.get('topic'))?requested:null,context=root.querySelector<HTMLElement>('[data-canada-population-industry-context]'),back=root.querySelector<HTMLAnchorElement>('[data-canada-population-industry-return]');
  if(!context||!back)return false;context.hidden=back.hidden=!raw;if(!raw)return false;
  const data=config.population,state=readCanadaPopulationState(new URL('?'+raw,location.href),data.cmas.map((r:any)=>r.id)),selected=[state.cma,state.compare].filter(Boolean),records=data.cmas.filter((r:any)=>selected.includes(r.id)),map=root.querySelector<SVGSVGElement>('[data-canada-population-industry-map]')!;
  const target=writeCanadaPopulationState(new URL(back.getAttribute('href')!,location.href),state);back.href=target.href;back.textContent=`${records.map((r:any)=>r.name.split('（')[0]).join('・')}の${state.year}年${state.metric==='density'?'人口密度':'人口'}比較へ戻る`;

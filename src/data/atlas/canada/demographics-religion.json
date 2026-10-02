@@ -1,0 +1,4230 @@
+{
+  "topic": "religion",
+  "year": 2021,
+  "source": {
+    "tableId": "98-10-0353-02",
+    "pid": "98100353",
+    "viewPid": "9810035302",
+    "url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=9810035302",
+    "title": "Religion by gender and age: Census metropolitan areas and census agglomerations",
+    "releaseDate": "2023-06-21",
+    "accessedAt": "2026-10-02T11:07:38.6649985Z",
+    "universe": "Persons in private households in occupied private dwellings, 2021 Census — 25% Sample data",
+    "sample": "2021 Census long-form 25% sample, weighted estimates of persons in private households; all ages and total gender.",
+    "licenceUrl": "https://www.statcan.gc.ca/en/terms-conditions/open-licence",
+    "attribution": "Adapted from Statistics Canada, Religion by gender and age: Census metropolitan areas and census agglomerations (Table 98-10-0353-02), 2021. This does not constitute an endorsement by Statistics Canada of this product.",
+    "rounding": "Census tabulation counts undergo random rounding. Derived percentages use this table’s Total - Religion denominator; category totals and percentages may differ slightly from the denominator and 100%. A published rounded zero is preserved as zero.",
+    "roundingUrl": "https://www12.statcan.gc.ca/census-recensement/2021/ref/98-304/2021001/chap10-eng.cfm",
+    "definitionUrl": "https://www12.statcan.gc.ca/census-recensement/2021/ref/98-500/016/98-500-x2021016-eng.pdf",
+    "definitions": {
+      "affiliation": "Religion is a person’s self-identified connection or affiliation with a religious denomination, group, body, community or belief system. It is not limited to formal membership. Respondents were asked to report their affiliation even if they were not currently practising.",
+      "denominator": "The published Total - Religion count for the same geography, 2021, Total - Age, Total - Gender and 2021 Counts. This differs from whole-population census counts.",
+      "children": "For infants and children, religion refers to the religion or denomination in which they are being raised, if any.",
+      "hierarchy": "The nine displayed categories are immediate children of Total - Religion. Christian includes its denominations; denominations are retained only in the extraction CSV and are not added to the Christian parent."
+    },
+    "footnotes": [
+      {
+        "id": "6",
+        "text": "Religion  Religion refers to the person's self-identification as having a connection or affiliation with any religious denomination, group, body, or other religiously defined community or system of belief. Religion is not limited to formal membership in a religious organization or group.  For infants or children, religion refers to the specific religious group or denomination in which they are being raised, if any.  Persons without a religious connection or affiliation can self-identify as atheist, agnostic or humanist, or can provide another applicable response."
+      },
+      {
+        "id": "7",
+        "text": "For more information on religion variables, including information on their classifications, the questions from which they are derived, data quality and their comparability with other sources of data, please refer to the Religion Reference Guide, Census of Population, 2021."
+      }
+    ]
+  },
+  "defaultGroup": "25",
+  "groups": [
+    {
+      "id": "2",
+      "englishName": "Buddhist",
+      "name": "仏教",
+      "parentId": "1",
+      "footnotes": []
+    },
+    {
+      "id": "3",
+      "englishName": "Christian",
+      "name": "キリスト教",
+      "parentId": "1",
+      "footnotes": []
+    },
+    {
+      "id": "19",
+      "englishName": "Hindu",
+      "name": "ヒンドゥー教",
+      "parentId": "1",
+      "footnotes": []
+    },
+    {
+      "id": "20",
+      "englishName": "Jewish",
+      "name": "ユダヤ教",
+      "parentId": "1",
+      "footnotes": []
+    },
+    {
+      "id": "21",
+      "englishName": "Muslim",
+      "name": "イスラム教",
+      "parentId": "1",
+      "footnotes": []
+    },
+    {
+      "id": "22",
+      "englishName": "Sikh",
+      "name": "シク教",
+      "parentId": "1",
+      "footnotes": []
+    },
+    {
+      "id": "23",
+      "englishName": "Traditional (North American Indigenous) spirituality",
+      "name": "伝統的な北米先住民の精神的信仰",
+      "parentId": "1",
+      "footnotes": []
+    },
+    {
+      "id": "24",
+      "englishName": "Other religions and spiritual traditions",
+      "name": "その他の宗教・精神的伝統",
+      "parentId": "1",
+      "footnotes": []
+    },
+    {
+      "id": "25",
+      "englishName": "No religion and secular perspectives",
+      "name": "無宗教・世俗的な考え方",
+      "parentId": "1",
+      "footnotes": []
+    }
+  ],
+  "national": {
+    "id": "Canada",
+    "dguid": "2021A000011124",
+    "name": "全国",
+    "sourceName": "Canada",
+    "denominator": {
+      "value": 36328480,
+      "symbol": "",
+      "status": "",
+      "vector": "",
+      "decimals": 0,
+      "coordinate": "1.1.1.1.1"
+    },
+    "values": {
+      "2": {
+        "value": 356975,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.2"
+      },
+      "3": {
+        "value": 19373330,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.3"
+      },
+      "19": {
+        "value": 828195,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.19"
+      },
+      "20": {
+        "value": 335295,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.20"
+      },
+      "21": {
+        "value": 1775715,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.21"
+      },
+      "22": {
+        "value": 771790,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.22"
+      },
+      "23": {
+        "value": 80690,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.23"
+      },
+      "24": {
+        "value": 229015,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.24"
+      },
+      "25": {
+        "value": 12577475,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "1.1.1.1.25"
+      }
+    },
+    "quality": {
+      "codes": [
+        "20000"
+      ],
+      "notes": [
+        "Excludes census data for one or more incompletely enumerated reserves or settlements."
+      ],
+      "tnr": {
+        "longForm": 4.3,
+        "shortForm": 3.1
+      }
+    }
+  },
+  "cmas": [
+    {
+      "id": "535",
+      "dguid": "2021S0503535",
+      "name": "Toronto（トロント）",
+      "sourceName": "Toronto (CMA), Ont.",
+      "denominator": {
+        "value": 6142880,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "100.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 120865,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.2"
+        },
+        "3": {
+          "value": 2851285,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.3"
+        },
+        "19": {
+          "value": 457825,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.19"
+        },
+        "20": {
+          "value": 165765,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.20"
+        },
+        "21": {
+          "value": 626010,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.21"
+        },
+        "22": {
+          "value": 244240,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.22"
+        },
+        "23": {
+          "value": 1285,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.23"
+        },
+        "24": {
+          "value": 38745,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.24"
+        },
+        "25": {
+          "value": 1636865,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "100.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 3.6,
+          "shortForm": 2.7
+        }
+      }
+    },
+    {
+      "id": "462",
+      "dguid": "2021S0503462",
+      "name": "Montréal（モントリオール）",
+      "sourceName": "Montréal (CMA), Que.",
+      "denominator": {
+        "value": 4206450,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "37.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 42540,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.2"
+        },
+        "3": {
+          "value": 2431435,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.3"
+        },
+        "19": {
+          "value": 45565,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.19"
+        },
+        "20": {
+          "value": 82080,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.20"
+        },
+        "21": {
+          "value": 365670,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.21"
+        },
+        "22": {
+          "value": 22990,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.22"
+        },
+        "23": {
+          "value": 295,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.23"
+        },
+        "24": {
+          "value": 15785,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.24"
+        },
+        "25": {
+          "value": 1200085,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "37.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "20000"
+        ],
+        "notes": [
+          "Excludes census data for one or more incompletely enumerated reserves or settlements."
+        ],
+        "tnr": {
+          "longForm": 3.4,
+          "shortForm": 2.6
+        }
+      }
+    },
+    {
+      "id": "933",
+      "dguid": "2021S0503933",
+      "name": "Vancouver（バンクーバー）",
+      "sourceName": "Vancouver (CMA), B.C.",
+      "denominator": {
+        "value": 2607010,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "166.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 70670,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.2"
+        },
+        "3": {
+          "value": 863055,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.3"
+        },
+        "19": {
+          "value": 66535,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.19"
+        },
+        "20": {
+          "value": 20125,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.20"
+        },
+        "21": {
+          "value": 110645,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.21"
+        },
+        "22": {
+          "value": 222165,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.22"
+        },
+        "23": {
+          "value": 1865,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.23"
+        },
+        "24": {
+          "value": 24205,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.24"
+        },
+        "25": {
+          "value": 1227755,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "166.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "20000"
+        ],
+        "notes": [
+          "Excludes census data for one or more incompletely enumerated reserves or settlements."
+        ],
+        "tnr": {
+          "longForm": 3.9,
+          "shortForm": 3
+        }
+      }
+    },
+    {
+      "id": "505",
+      "dguid": "2021S0503505",
+      "name": "Ottawa–Gatineau（オタワ・ガティノー）",
+      "sourceName": "Ottawa - Gatineau (CMA), Ont./Que.",
+      "denominator": {
+        "value": 1464500,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "85.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 12185,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.2"
+        },
+        "3": {
+          "value": 824655,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.3"
+        },
+        "19": {
+          "value": 21205,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.19"
+        },
+        "20": {
+          "value": 11395,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.20"
+        },
+        "21": {
+          "value": 114780,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.21"
+        },
+        "22": {
+          "value": 6735,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.22"
+        },
+        "23": {
+          "value": 745,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.23"
+        },
+        "24": {
+          "value": 10250,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.24"
+        },
+        "25": {
+          "value": 462555,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "85.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 3.4,
+          "shortForm": 2.6
+        }
+      }
+    },
+    {
+      "id": "825",
+      "dguid": "2021S0503825",
+      "name": "Calgary（カルガリー）",
+      "sourceName": "Calgary (CMA), Alta.",
+      "denominator": {
+        "value": 1465175,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "123.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 22125,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.2"
+        },
+        "3": {
+          "value": 656310,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.3"
+        },
+        "19": {
+          "value": 34920,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.19"
+        },
+        "20": {
+          "value": 6705,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.20"
+        },
+        "21": {
+          "value": 100825,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.21"
+        },
+        "22": {
+          "value": 56060,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.22"
+        },
+        "23": {
+          "value": 1480,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.23"
+        },
+        "24": {
+          "value": 10725,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.24"
+        },
+        "25": {
+          "value": 576025,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "123.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "20000"
+        ],
+        "notes": [
+          "Excludes census data for one or more incompletely enumerated reserves or settlements."
+        ],
+        "tnr": {
+          "longForm": 3.7,
+          "shortForm": 2.5
+        }
+      }
+    },
+    {
+      "id": "835",
+      "dguid": "2021S0503835",
+      "name": "Edmonton（エドモントン）",
+      "sourceName": "Edmonton (CMA), Alta.",
+      "denominator": {
+        "value": 1397750,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "126.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 16465,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.2"
+        },
+        "3": {
+          "value": 655715,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.3"
+        },
+        "19": {
+          "value": 35830,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.19"
+        },
+        "20": {
+          "value": 3820,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.20"
+        },
+        "21": {
+          "value": 86120,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.21"
+        },
+        "22": {
+          "value": 44440,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.22"
+        },
+        "23": {
+          "value": 3495,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.23"
+        },
+        "24": {
+          "value": 12785,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.24"
+        },
+        "25": {
+          "value": 539075,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "126.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 5.3,
+          "shortForm": 3.2
+        }
+      }
+    },
+    {
+      "id": "421",
+      "dguid": "2021S0503421",
+      "name": "Québec",
+      "sourceName": "Québec (CMA), Que.",
+      "denominator": {
+        "value": 817110,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "38.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 1925,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.2"
+        },
+        "3": {
+          "value": 551560,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.3"
+        },
+        "19": {
+          "value": 535,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.19"
+        },
+        "20": {
+          "value": 335,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.20"
+        },
+        "21": {
+          "value": 19815,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.21"
+        },
+        "22": {
+          "value": 25,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.22"
+        },
+        "23": {
+          "value": 195,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.23"
+        },
+        "24": {
+          "value": 1780,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.24"
+        },
+        "25": {
+          "value": 240945,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "38.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 3.2,
+          "shortForm": 2.5
+        }
+      }
+    },
+    {
+      "id": "602",
+      "dguid": "2021S0503602",
+      "name": "Winnipeg（ウィニペグ）",
+      "sourceName": "Winnipeg (CMA), Man.",
+      "denominator": {
+        "value": 819715,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "110.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 7010,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.2"
+        },
+        "3": {
+          "value": 419665,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.3"
+        },
+        "19": {
+          "value": 14925,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.19"
+        },
+        "20": {
+          "value": 11165,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.20"
+        },
+        "21": {
+          "value": 24560,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.21"
+        },
+        "22": {
+          "value": 33435,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.22"
+        },
+        "23": {
+          "value": 3010,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.23"
+        },
+        "24": {
+          "value": 5755,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.24"
+        },
+        "25": {
+          "value": 300195,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "110.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 4.1,
+          "shortForm": 2.8
+        }
+      }
+    },
+    {
+      "id": "537",
+      "dguid": "2021S0503537",
+      "name": "Hamilton",
+      "sourceName": "Hamilton (CMA), Ont.",
+      "denominator": {
+        "value": 773440,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "70.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 5960,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.2"
+        },
+        "3": {
+          "value": 434730,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.3"
+        },
+        "19": {
+          "value": 14690,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.19"
+        },
+        "20": {
+          "value": 3885,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.20"
+        },
+        "21": {
+          "value": 46435,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.21"
+        },
+        "22": {
+          "value": 9585,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.22"
+        },
+        "23": {
+          "value": 385,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.23"
+        },
+        "24": {
+          "value": 4575,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.24"
+        },
+        "25": {
+          "value": 253190,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "70.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 3,
+          "shortForm": 2.2
+        }
+      }
+    },
+    {
+      "id": "541",
+      "dguid": "2021S0503541",
+      "name": "Kitchener - Cambridge - Waterloo",
+      "sourceName": "Kitchener - Cambridge - Waterloo (CMA), Ont.",
+      "denominator": {
+        "value": 568065,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "78.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 5585,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.2"
+        },
+        "3": {
+          "value": 298560,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.3"
+        },
+        "19": {
+          "value": 19595,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.19"
+        },
+        "20": {
+          "value": 1480,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.20"
+        },
+        "21": {
+          "value": 38655,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.21"
+        },
+        "22": {
+          "value": 12295,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.22"
+        },
+        "23": {
+          "value": 125,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.23"
+        },
+        "24": {
+          "value": 4440,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.24"
+        },
+        "25": {
+          "value": 187335,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "78.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 3.3,
+          "shortForm": 2.3
+        }
+      }
+    },
+    {
+      "id": "555",
+      "dguid": "2021S0503555",
+      "name": "London",
+      "sourceName": "London (CMA), Ont.",
+      "denominator": {
+        "value": 535775,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "79.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 3975,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.2"
+        },
+        "3": {
+          "value": 273195,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.3"
+        },
+        "19": {
+          "value": 9065,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.19"
+        },
+        "20": {
+          "value": 2085,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.20"
+        },
+        "21": {
+          "value": 35875,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.21"
+        },
+        "22": {
+          "value": 4265,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.22"
+        },
+        "23": {
+          "value": 485,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.23"
+        },
+        "24": {
+          "value": 4680,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.24"
+        },
+        "25": {
+          "value": 202160,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "79.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 3.3,
+          "shortForm": 2.6
+        }
+      }
+    },
+    {
+      "id": "205",
+      "dguid": "2021S0503205",
+      "name": "Halifax（ハリファクス）",
+      "sourceName": "Halifax (CMA), N.S.",
+      "denominator": {
+        "value": 461140,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "12.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 2205,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.2"
+        },
+        "3": {
+          "value": 245770,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.3"
+        },
+        "19": {
+          "value": 6855,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.19"
+        },
+        "20": {
+          "value": 1775,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.20"
+        },
+        "21": {
+          "value": 13265,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.21"
+        },
+        "22": {
+          "value": 3540,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.22"
+        },
+        "23": {
+          "value": 380,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.23"
+        },
+        "24": {
+          "value": 3455,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.24"
+        },
+        "25": {
+          "value": 183885,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "12.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 3.6,
+          "shortForm": 2.8
+        }
+      }
+    },
+    {
+      "id": "539",
+      "dguid": "2021S0503539",
+      "name": "St. Catharines - Niagara",
+      "sourceName": "St. Catharines - Niagara (CMA), Ont.",
+      "denominator": {
+        "value": 425480,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "95.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 2235,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.2"
+        },
+        "3": {
+          "value": 259080,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.3"
+        },
+        "19": {
+          "value": 3540,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.19"
+        },
+        "20": {
+          "value": 1175,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.20"
+        },
+        "21": {
+          "value": 10435,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.21"
+        },
+        "22": {
+          "value": 2170,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.22"
+        },
+        "23": {
+          "value": 200,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.23"
+        },
+        "24": {
+          "value": 2435,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.24"
+        },
+        "25": {
+          "value": 144205,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "95.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 4.1,
+          "shortForm": 3
+        }
+      }
+    },
+    {
+      "id": "559",
+      "dguid": "2021S0503559",
+      "name": "Windsor",
+      "sourceName": "Windsor (CMA), Ont.",
+      "denominator": {
+        "value": 415500,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "102.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 2830,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.2"
+        },
+        "3": {
+          "value": 259130,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.3"
+        },
+        "19": {
+          "value": 7375,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.19"
+        },
+        "20": {
+          "value": 985,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.20"
+        },
+        "21": {
+          "value": 30140,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.21"
+        },
+        "22": {
+          "value": 4340,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.22"
+        },
+        "23": {
+          "value": 85,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.23"
+        },
+        "24": {
+          "value": 1665,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.24"
+        },
+        "25": {
+          "value": 108950,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "102.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 3.1,
+          "shortForm": 2.4
+        }
+      }
+    },
+    {
+      "id": "532",
+      "dguid": "2021S0503532",
+      "name": "Oshawa",
+      "sourceName": "Oshawa (CMA), Ont.",
+      "denominator": {
+        "value": 411405,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "84.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 2055,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.2"
+        },
+        "3": {
+          "value": 218010,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.3"
+        },
+        "19": {
+          "value": 15880,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.19"
+        },
+        "20": {
+          "value": 1120,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.20"
+        },
+        "21": {
+          "value": 22160,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.21"
+        },
+        "22": {
+          "value": 1550,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.22"
+        },
+        "23": {
+          "value": 140,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.23"
+        },
+        "24": {
+          "value": 2170,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.24"
+        },
+        "25": {
+          "value": 148325,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "84.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 3.3,
+          "shortForm": 1.9
+        }
+      }
+    },
+    {
+      "id": "935",
+      "dguid": "2021S0503935",
+      "name": "Victoria",
+      "sourceName": "Victoria (CMA), B.C.",
+      "denominator": {
+        "value": 388475,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "168.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 4090,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.2"
+        },
+        "3": {
+          "value": 126860,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.3"
+        },
+        "19": {
+          "value": 3100,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.19"
+        },
+        "20": {
+          "value": 2740,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.20"
+        },
+        "21": {
+          "value": 4980,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.21"
+        },
+        "22": {
+          "value": 5160,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.22"
+        },
+        "23": {
+          "value": 750,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.23"
+        },
+        "24": {
+          "value": 5940,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.24"
+        },
+        "25": {
+          "value": 234850,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "168.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 4.2,
+          "shortForm": 2.9
+        }
+      }
+    },
+    {
+      "id": "725",
+      "dguid": "2021S0503725",
+      "name": "Saskatoon",
+      "sourceName": "Saskatoon (CMA), Sask.",
+      "denominator": {
+        "value": 311515,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "117.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 2000,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.2"
+        },
+        "3": {
+          "value": 164170,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.3"
+        },
+        "19": {
+          "value": 5255,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.19"
+        },
+        "20": {
+          "value": 595,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.20"
+        },
+        "21": {
+          "value": 13100,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.21"
+        },
+        "22": {
+          "value": 3365,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.22"
+        },
+        "23": {
+          "value": 1880,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.23"
+        },
+        "24": {
+          "value": 2390,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.24"
+        },
+        "25": {
+          "value": 118755,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "117.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 5.1,
+          "shortForm": 3.5
+        }
+      }
+    },
+    {
+      "id": "705",
+      "dguid": "2021S0503705",
+      "name": "Regina（レジャイナ）",
+      "sourceName": "Regina (CMA), Sask.",
+      "denominator": {
+        "value": 244945,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "116.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 1790,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.2"
+        },
+        "3": {
+          "value": 130610,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.3"
+        },
+        "19": {
+          "value": 6595,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.19"
+        },
+        "20": {
+          "value": 365,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.20"
+        },
+        "21": {
+          "value": 10460,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.21"
+        },
+        "22": {
+          "value": 4455,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.22"
+        },
+        "23": {
+          "value": 1215,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.23"
+        },
+        "24": {
+          "value": 1625,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.24"
+        },
+        "25": {
+          "value": 87835,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "116.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 3.6,
+          "shortForm": 2.9
+        }
+      }
+    },
+    {
+      "id": "433",
+      "dguid": "2021S0503433",
+      "name": "Sherbrooke",
+      "sourceName": "Sherbrooke (CMA), Que.",
+      "denominator": {
+        "value": 220110,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "50.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 415,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.2"
+        },
+        "3": {
+          "value": 141005,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.3"
+        },
+        "19": {
+          "value": 260,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.19"
+        },
+        "20": {
+          "value": 165,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.20"
+        },
+        "21": {
+          "value": 6330,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.21"
+        },
+        "22": {
+          "value": 70,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.22"
+        },
+        "23": {
+          "value": 0,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.23"
+        },
+        "24": {
+          "value": 920,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.24"
+        },
+        "25": {
+          "value": 70930,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "50.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 3.7,
+          "shortForm": 2.6
+        }
+      }
+    },
+    {
+      "id": "915",
+      "dguid": "2021S0503915",
+      "name": "Kelowna",
+      "sourceName": "Kelowna (CMA), B.C.",
+      "denominator": {
+        "value": 218530,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "151.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 1150,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.2"
+        },
+        "3": {
+          "value": 88195,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.3"
+        },
+        "19": {
+          "value": 1275,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.19"
+        },
+        "20": {
+          "value": 720,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.20"
+        },
+        "21": {
+          "value": 1755,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.21"
+        },
+        "22": {
+          "value": 4200,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.22"
+        },
+        "23": {
+          "value": 190,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.23"
+        },
+        "24": {
+          "value": 2100,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.24"
+        },
+        "25": {
+          "value": 118940,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "151.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 5.8,
+          "shortForm": 4.2
+        }
+      }
+    },
+    {
+      "id": "568",
+      "dguid": "2021S0503568",
+      "name": "Barrie",
+      "sourceName": "Barrie (CMA), Ont.",
+      "denominator": {
+        "value": 210150,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "57.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 935,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.2"
+        },
+        "3": {
+          "value": 113635,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.3"
+        },
+        "19": {
+          "value": 2815,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.19"
+        },
+        "20": {
+          "value": 1790,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.20"
+        },
+        "21": {
+          "value": 4520,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.21"
+        },
+        "22": {
+          "value": 1260,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.22"
+        },
+        "23": {
+          "value": 170,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.23"
+        },
+        "24": {
+          "value": 1335,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.24"
+        },
+        "25": {
+          "value": 83690,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "57.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 4,
+          "shortForm": 2.6
+        }
+      }
+    },
+    {
+      "id": "001",
+      "dguid": "2021S0503001",
+      "name": "St. John's（セントジョンズ）",
+      "sourceName": "St. John's (CMA), N.L.",
+      "denominator": {
+        "value": 208820,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "6.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 360,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.2"
+        },
+        "3": {
+          "value": 158570,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.3"
+        },
+        "19": {
+          "value": 945,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.19"
+        },
+        "20": {
+          "value": 205,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.20"
+        },
+        "21": {
+          "value": 3345,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.21"
+        },
+        "22": {
+          "value": 530,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.22"
+        },
+        "23": {
+          "value": 25,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.23"
+        },
+        "24": {
+          "value": 665,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.24"
+        },
+        "25": {
+          "value": 44180,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "6.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 4.1,
+          "shortForm": 2.9
+        }
+      }
+    },
+    {
+      "id": "932",
+      "dguid": "2021S0503932",
+      "name": "Abbotsford - Mission",
+      "sourceName": "Abbotsford - Mission (CMA), B.C.",
+      "denominator": {
+        "value": 192115,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "142.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 1275,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.2"
+        },
+        "3": {
+          "value": 69990,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.3"
+        },
+        "19": {
+          "value": 3995,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.19"
+        },
+        "20": {
+          "value": 145,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.20"
+        },
+        "21": {
+          "value": 2410,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.21"
+        },
+        "22": {
+          "value": 41665,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.22"
+        },
+        "23": {
+          "value": 150,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.23"
+        },
+        "24": {
+          "value": 1330,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.24"
+        },
+        "25": {
+          "value": 71155,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "142.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 3.7,
+          "shortForm": 2.7
+        }
+      }
+    },
+    {
+      "id": "521",
+      "dguid": "2021S0503521",
+      "name": "Kingston",
+      "sourceName": "Kingston (CMA), Ont.",
+      "denominator": {
+        "value": 168075,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "77.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 520,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.2"
+        },
+        "3": {
+          "value": 87950,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.3"
+        },
+        "19": {
+          "value": 1730,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.19"
+        },
+        "20": {
+          "value": 935,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.20"
+        },
+        "21": {
+          "value": 3420,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.21"
+        },
+        "22": {
+          "value": 525,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.22"
+        },
+        "23": {
+          "value": 105,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.23"
+        },
+        "24": {
+          "value": 1505,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.24"
+        },
+        "25": {
+          "value": 71390,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "77.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 5.5,
+          "shortForm": 4
+        }
+      }
+    },
+    {
+      "id": "580",
+      "dguid": "2021S0503580",
+      "name": "Greater Sudbury / Grand Sudbury",
+      "sourceName": "Greater Sudbury (CMA), Ont.",
+      "denominator": {
+        "value": 167620,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "68.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 310,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.2"
+        },
+        "3": {
+          "value": 106790,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.3"
+        },
+        "19": {
+          "value": 1330,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.19"
+        },
+        "20": {
+          "value": 185,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.20"
+        },
+        "21": {
+          "value": 1550,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.21"
+        },
+        "22": {
+          "value": 535,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.22"
+        },
+        "23": {
+          "value": 485,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.23"
+        },
+        "24": {
+          "value": 950,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.24"
+        },
+        "25": {
+          "value": 55480,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "68.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 5,
+          "shortForm": 3.6
+        }
+      }
+    },
+    {
+      "id": "550",
+      "dguid": "2021S0503550",
+      "name": "Guelph",
+      "sourceName": "Guelph (CMA), Ont.",
+      "denominator": {
+        "value": 163485,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "69.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 2105,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.2"
+        },
+        "3": {
+          "value": 83120,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.3"
+        },
+        "19": {
+          "value": 4000,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.19"
+        },
+        "20": {
+          "value": 710,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.20"
+        },
+        "21": {
+          "value": 6875,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.21"
+        },
+        "22": {
+          "value": 2490,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.22"
+        },
+        "23": {
+          "value": 70,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.23"
+        },
+        "24": {
+          "value": 1315,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.24"
+        },
+        "25": {
+          "value": 62795,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "69.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 3.2,
+          "shortForm": 2.4
+        }
+      }
+    },
+    {
+      "id": "408",
+      "dguid": "2021S0503408",
+      "name": "Saguenay",
+      "sourceName": "Saguenay (CMA), Que.",
+      "denominator": {
+        "value": 157900,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "42.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 75,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.2"
+        },
+        "3": {
+          "value": 123165,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.3"
+        },
+        "19": {
+          "value": 15,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.19"
+        },
+        "20": {
+          "value": 10,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.20"
+        },
+        "21": {
+          "value": 740,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.21"
+        },
+        "22": {
+          "value": 0,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.22"
+        },
+        "23": {
+          "value": 10,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.23"
+        },
+        "24": {
+          "value": 365,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.24"
+        },
+        "25": {
+          "value": 33515,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "42.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 3.8,
+          "shortForm": 2.8
+        }
+      }
+    },
+    {
+      "id": "442",
+      "dguid": "2021S0503442",
+      "name": "Trois-Rivières",
+      "sourceName": "Trois-Rivières (CMA), Que.",
+      "denominator": {
+        "value": 155530,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "53.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 160,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.2"
+        },
+        "3": {
+          "value": 111390,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.3"
+        },
+        "19": {
+          "value": 65,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.19"
+        },
+        "20": {
+          "value": 35,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.20"
+        },
+        "21": {
+          "value": 2240,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.21"
+        },
+        "22": {
+          "value": 0,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.22"
+        },
+        "23": {
+          "value": 10,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.23"
+        },
+        "24": {
+          "value": 460,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.24"
+        },
+        "25": {
+          "value": 41170,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "53.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 3,
+          "shortForm": 2.5
+        }
+      }
+    },
+    {
+      "id": "305",
+      "dguid": "2021S0503305",
+      "name": "Moncton",
+      "sourceName": "Moncton (CMA), N.B.",
+      "denominator": {
+        "value": 154250,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "24.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 330,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.2"
+        },
+        "3": {
+          "value": 96225,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.3"
+        },
+        "19": {
+          "value": 1325,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.19"
+        },
+        "20": {
+          "value": 265,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.20"
+        },
+        "21": {
+          "value": 3515,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.21"
+        },
+        "22": {
+          "value": 865,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.22"
+        },
+        "23": {
+          "value": 15,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.23"
+        },
+        "24": {
+          "value": 940,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.24"
+        },
+        "25": {
+          "value": 50755,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "24.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 4.8,
+          "shortForm": 3.3
+        }
+      }
+    },
+    {
+      "id": "543",
+      "dguid": "2021S0503543",
+      "name": "Brantford",
+      "sourceName": "Brantford (CMA), Ont.",
+      "denominator": {
+        "value": 141905,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "59.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 545,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.2"
+        },
+        "3": {
+          "value": 75960,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.3"
+        },
+        "19": {
+          "value": 1895,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.19"
+        },
+        "20": {
+          "value": 175,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.20"
+        },
+        "21": {
+          "value": 2475,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.21"
+        },
+        "22": {
+          "value": 3065,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.22"
+        },
+        "23": {
+          "value": 335,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.23"
+        },
+        "24": {
+          "value": 845,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.24"
+        },
+        "25": {
+          "value": 56600,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "59.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "20000"
+        ],
+        "notes": [
+          "Excludes census data for one or more incompletely enumerated reserves or settlements."
+        ],
+        "tnr": {
+          "longForm": 3.7,
+          "shortForm": 2.5
+        }
+      }
+    },
+    {
+      "id": "310",
+      "dguid": "2021S0503310",
+      "name": "Saint John",
+      "sourceName": "Saint John (CMA), N.B.",
+      "denominator": {
+        "value": 128385,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "25.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 190,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.2"
+        },
+        "3": {
+          "value": 78465,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.3"
+        },
+        "19": {
+          "value": 695,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.19"
+        },
+        "20": {
+          "value": 300,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.20"
+        },
+        "21": {
+          "value": 2290,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.21"
+        },
+        "22": {
+          "value": 240,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.22"
+        },
+        "23": {
+          "value": 20,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.23"
+        },
+        "24": {
+          "value": 720,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.24"
+        },
+        "25": {
+          "value": 45470,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "25.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 4.9,
+          "shortForm": 4
+        }
+      }
+    },
+    {
+      "id": "529",
+      "dguid": "2021S0503529",
+      "name": "Peterborough",
+      "sourceName": "Peterborough (CMA), Ont.",
+      "denominator": {
+        "value": 125990,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "91.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 430,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.2"
+        },
+        "3": {
+          "value": 67020,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.3"
+        },
+        "19": {
+          "value": 1210,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.19"
+        },
+        "20": {
+          "value": 330,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.20"
+        },
+        "21": {
+          "value": 1355,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.21"
+        },
+        "22": {
+          "value": 360,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.22"
+        },
+        "23": {
+          "value": 300,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.23"
+        },
+        "24": {
+          "value": 1235,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.24"
+        },
+        "25": {
+          "value": 53755,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "91.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 5,
+          "shortForm": 3.6
+        }
+      }
+    },
+    {
+      "id": "810",
+      "dguid": "2021S0503810",
+      "name": "Lethbridge",
+      "sourceName": "Lethbridge (CMA), Alta.",
+      "denominator": {
+        "value": 120500,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "130.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 1080,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.2"
+        },
+        "3": {
+          "value": 64385,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.3"
+        },
+        "19": {
+          "value": 1260,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.19"
+        },
+        "20": {
+          "value": 130,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.20"
+        },
+        "21": {
+          "value": 1825,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.21"
+        },
+        "22": {
+          "value": 335,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.22"
+        },
+        "23": {
+          "value": 415,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.23"
+        },
+        "24": {
+          "value": 810,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.24"
+        },
+        "25": {
+          "value": 50250,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "130.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 4.1,
+          "shortForm": 2.4
+        }
+      }
+    },
+    {
+      "id": "595",
+      "dguid": "2021S0503595",
+      "name": "Thunder Bay",
+      "sourceName": "Thunder Bay (CMA), Ont.",
+      "denominator": {
+        "value": 120960,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "97.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 270,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.2"
+        },
+        "3": {
+          "value": 67785,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.3"
+        },
+        "19": {
+          "value": 1225,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.19"
+        },
+        "20": {
+          "value": 115,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.20"
+        },
+        "21": {
+          "value": 1005,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.21"
+        },
+        "22": {
+          "value": 250,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.22"
+        },
+        "23": {
+          "value": 640,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.23"
+        },
+        "24": {
+          "value": 995,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.24"
+        },
+        "25": {
+          "value": 48680,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "97.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 5.7,
+          "shortForm": 3.3
+        }
+      }
+    },
+    {
+      "id": "938",
+      "dguid": "2021S0503938",
+      "name": "Nanaimo",
+      "sourceName": "Nanaimo (CMA), B.C.",
+      "denominator": {
+        "value": 112410,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "153.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 715,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.2"
+        },
+        "3": {
+          "value": 35450,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.3"
+        },
+        "19": {
+          "value": 805,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.19"
+        },
+        "20": {
+          "value": 265,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.20"
+        },
+        "21": {
+          "value": 1000,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.21"
+        },
+        "22": {
+          "value": 1355,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.22"
+        },
+        "23": {
+          "value": 635,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.23"
+        },
+        "24": {
+          "value": 1525,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.24"
+        },
+        "25": {
+          "value": 70660,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "153.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 3.9,
+          "shortForm": 2.7
+        }
+      }
+    },
+    {
+      "id": "925",
+      "dguid": "2021S0503925",
+      "name": "Kamloops",
+      "sourceName": "Kamloops (CMA), B.C.",
+      "denominator": {
+        "value": 110540,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "150.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 485,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.2"
+        },
+        "3": {
+          "value": 37230,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.3"
+        },
+        "19": {
+          "value": 1015,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.19"
+        },
+        "20": {
+          "value": 105,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.20"
+        },
+        "21": {
+          "value": 910,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.21"
+        },
+        "22": {
+          "value": 2070,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.22"
+        },
+        "23": {
+          "value": 405,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.23"
+        },
+        "24": {
+          "value": 1075,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.24"
+        },
+        "25": {
+          "value": 67245,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "150.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 4.9,
+          "shortForm": 3.9
+        }
+      }
+    },
+    {
+      "id": "930",
+      "dguid": "2021S0503930",
+      "name": "Chilliwack",
+      "sourceName": "Chilliwack (CMA), B.C.",
+      "denominator": {
+        "value": 111560,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "144.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 605,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.2"
+        },
+        "3": {
+          "value": 51030,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.3"
+        },
+        "19": {
+          "value": 605,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.19"
+        },
+        "20": {
+          "value": 135,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.20"
+        },
+        "21": {
+          "value": 810,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.21"
+        },
+        "22": {
+          "value": 1675,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.22"
+        },
+        "23": {
+          "value": 425,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.23"
+        },
+        "24": {
+          "value": 1135,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.24"
+        },
+        "25": {
+          "value": 55145,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "144.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 5.7,
+          "shortForm": 3.4
+        }
+      }
+    },
+    {
+      "id": "522",
+      "dguid": "2021S0503522",
+      "name": "Belleville - Quinte West",
+      "sourceName": "Belleville - Quinte West (CMA), Ont.",
+      "denominator": {
+        "value": 109250,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "58.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 250,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.2"
+        },
+        "3": {
+          "value": 59215,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.3"
+        },
+        "19": {
+          "value": 900,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.19"
+        },
+        "20": {
+          "value": 210,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.20"
+        },
+        "21": {
+          "value": 650,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.21"
+        },
+        "22": {
+          "value": 555,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.22"
+        },
+        "23": {
+          "value": 120,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.23"
+        },
+        "24": {
+          "value": 685,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.24"
+        },
+        "25": {
+          "value": 46655,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "58.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 4,
+          "shortForm": 2.6
+        }
+      }
+    },
+    {
+      "id": "320",
+      "dguid": "2021S0503320",
+      "name": "Fredericton",
+      "sourceName": "Fredericton (CMA), N.B.",
+      "denominator": {
+        "value": 107165,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "22.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 255,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.2"
+        },
+        "3": {
+          "value": 58635,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.3"
+        },
+        "19": {
+          "value": 880,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.19"
+        },
+        "20": {
+          "value": 215,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.20"
+        },
+        "21": {
+          "value": 2395,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.21"
+        },
+        "22": {
+          "value": 190,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.22"
+        },
+        "23": {
+          "value": 170,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.23"
+        },
+        "24": {
+          "value": 945,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.24"
+        },
+        "25": {
+          "value": 43470,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "22.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 4.2,
+          "shortForm": 3.3
+        }
+      }
+    },
+    {
+      "id": "447",
+      "dguid": "2021S0503447",
+      "name": "Drummondville",
+      "sourceName": "Drummondville (CMA), Que.",
+      "denominator": {
+        "value": 98565,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "32.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 70,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.2"
+        },
+        "3": {
+          "value": 71435,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.3"
+        },
+        "19": {
+          "value": 0,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.19"
+        },
+        "20": {
+          "value": 10,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.20"
+        },
+        "21": {
+          "value": 1340,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.21"
+        },
+        "22": {
+          "value": 0,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.22"
+        },
+        "23": {
+          "value": 15,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.23"
+        },
+        "24": {
+          "value": 195,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.24"
+        },
+        "25": {
+          "value": 25500,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "32.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 2.5,
+          "shortForm": 1.5
+        }
+      }
+    },
+    {
+      "id": "830",
+      "dguid": "2021S0503830",
+      "name": "Red Deer",
+      "sourceName": "Red Deer (CMA), Alta.",
+      "denominator": {
+        "value": 98045,
+        "symbol": "",
+        "status": "",
+        "vector": "",
+        "decimals": 0,
+        "coordinate": "136.1.1.1.1"
+      },
+      "values": {
+        "2": {
+          "value": 575,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.2"
+        },
+        "3": {
+          "value": 50345,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.3"
+        },
+        "19": {
+          "value": 790,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.19"
+        },
+        "20": {
+          "value": 105,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.20"
+        },
+        "21": {
+          "value": 2055,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.21"
+        },
+        "22": {
+          "value": 285,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.22"
+        },
+        "23": {
+          "value": 165,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.23"
+        },
+        "24": {
+          "value": 675,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.24"
+        },
+        "25": {
+          "value": 43045,
+          "symbol": "",
+          "status": "",
+          "vector": "",
+          "decimals": 0,
+          "coordinate": "136.1.1.1.25"
+        }
+      },
+      "quality": {
+        "codes": [
+          "00000"
+        ],
+        "notes": [],
+        "tnr": {
+          "longForm": 4.3,
+          "shortForm": 3
+        }
+      }
+    }
+  ]
+}
