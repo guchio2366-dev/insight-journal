@@ -28,6 +28,9 @@ test('Tiny positive percentages remain distinct from a true zero at the publishe
  assert.equal(lib.formatMexicoCompositionShare({count:32,denominator:1_000_000,status:'value'},minor),'0.003%');
  assert.equal(lib.formatMexicoCompositionShare({count:null,denominator:1_000_000,status:'missing'},minor),'欠測');
 });
+test('Compact circle-key labels convert published integers exactly without changing the count or circle radius',()=>{
+ for(const [count,label]of [[200,'200人'],[1000,'1,000人'],[15000,'1.5万人'],[300000,'30万人'],[1500000,'150万人'],[3000000,'300万人'],[10001,'1.0001万人']])assert.equal(lib.formatMexicoCompositionCountKey(count),label);
+});
 test('A composition comparison returns the exact originating metric, measure and state without overwriting unrelated source flags',()=>{
  const source=new URL('https://example.test/population/?category=ethnicity&compositionMetric=indigenous_language&compositionMeasure=count&view=population&state=08&only=1&fallback=1&metric=cattle&measure=quantity&from=agriculture&sourceMetric=cattle&sourceCrops=0&sourceLivestock=1&reading=item');
  const parsed=lib.readMexicoCompositionSelection(source,data,'ethnicity');const written=lib.writeMexicoCompositionSelection(source,parsed,'ethnicity');

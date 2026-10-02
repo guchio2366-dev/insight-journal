@@ -45,6 +45,9 @@ export function mexicoCompositionRadius(record:MexicoCompositionRecord,metric:Me
   const reference=metric.countRadiusReference??10_000_000,maximum=metric.countMaximumRadius??33;
   return ['value','zero'].includes(record.status)&&record.count!==null&&Number.isFinite(record.count)&&record.count>=0&&reference>0&&maximum>0?maximum*Math.sqrt(record.count/reference):0;
 }
+export function formatMexicoCompositionCountKey(count:number):string {
+  return count>=10_000?`${(count/10_000).toLocaleString('ja-JP',{maximumFractionDigits:4})}万人`:`${count.toLocaleString('ja-JP')}人`;
+}
 export function mexicoCompositionMetric(data:MexicoCompositionData,category:MexicoPopulationCategory,id:string):MexicoCompositionMetric|undefined {
   return data.metrics.find(metric=>metric.category===category&&metric.id===id)??data.metrics.find(metric=>metric.category===category);
 }
