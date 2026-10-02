@@ -4,8 +4,8 @@ import {readFile,access} from 'node:fs/promises';
 import {transform} from 'esbuild';
 import {Window} from 'happy-dom';
 
-// Asia and Oceania's published overviews have dedicated contracts in their overview test files.
-const regions=['north-america','europe','latin-america','africa'];
+// Asia, Africa and Oceania have dedicated contracts in their overview test files.
+const regions=['north-america','europe','latin-america'];
 const mapController=await readFile('src/scripts/atlas-overview-map.ts','utf8');
 const pageController=(await readFile('src/scripts/atlas-country-overview.ts','utf8')).replace(/^import .* from ['"]\.\/atlas-overview-map['"];?\r?\n/m,'');
 const controller=(await transform(`${mapController}\n${pageController}\ninitCountryOverview(document.querySelector('[data-country-overview]'));`,{loader:'ts',format:'iife'})).code;

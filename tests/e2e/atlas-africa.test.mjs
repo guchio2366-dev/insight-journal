@@ -41,8 +41,12 @@ test('actual industry entries change the theme, map and reader while preserving 
 test('agriculture ready topics follow the actual metric through selection, history and reload',()=>{
  const forestURL=withAfricaPage('https://example.com/insight-journal/atlas/africa/?field=agriculture&place=GHA&unknown=preserve',(w,q)=>{
   assert.equal(q('[data-africa-topic="farming"]').getAttribute('aria-pressed'),'true');
-  assert.ok(q('[data-africa-map-subfields]').contains(q('[data-africa-subfields]')));
+  assert.ok(q('.africa-main').contains(q('[data-africa-subfields]')));
+  assert.ok(q('[data-africa-subfields]').compareDocumentPosition(q('.africa-workspace')) & 4);
   q('[data-africa-topic="forestry"]').click();
+  assert.equal(q('[data-theme-marks]').children.length,0);
+  assert.equal(q('[data-theme-legend]').children.length,0);
+  assert.ok(q('[data-theme-title]').textContent.includes('森林'));
   assert.equal(q('[data-metric]').value,'AG.LND.FRST.ZS');
   assert.equal(new URL(w.location.href).searchParams.get('topic'),'forestry');
   const saved=w.location.href;
@@ -60,9 +64,9 @@ test('agriculture ready topics follow the actual metric through selection, histo
  withAfricaPage('https://example.com/atlas/africa/?field=agriculture&metric=AG.LND.ARBL.ZS&topic=forestry',(_w,q)=>assert.equal(q('[data-africa-topic="farming"]').getAttribute('aria-pressed'),'true'));
 });
 
-test('planned categories and water depth persist across reload, country changes and back/forward',()=>{
+test('spatial categories and water depth persist across reload, country changes and back/forward',()=>{
  for(const [field,planned,ready] of [['nature','climate','water'],['population','religion','distribution']]){
-  const saved=withAfricaPage(`https://example.com/insight-journal/atlas/africa/?field=${field}&place=EGY&unknown=preserve`,(w,q)=>{
+  const saved=withAfricaPage(`https://example.com/insight-journal/atlas/africa/?field=${field}&topic=${ready}&place=EGY&unknown=preserve`,(w,q)=>{
    q(`[data-africa-topic="${planned}"]`).click();
    assert.equal(new URL(w.location.href).searchParams.get('topic'),planned);
    assert.equal(q('[data-africa-subfield-status]').hidden,false);
@@ -71,25 +75,25 @@ test('planned categories and water depth persist across reload, country changes 
    w.history.back();assert.equal(q('[data-place]').value,'EGY');
    assert.equal(q(`[data-africa-topic="${planned}"]`).getAttribute('aria-pressed'),'true');
    w.history.back();assert.equal(q(`[data-africa-topic="${ready}"]`).getAttribute('aria-pressed'),'true');
-   assert.equal(q('[data-africa-subfield-status]').hidden,true);
+   assert.equal(q('[data-africa-subfield-status]').hidden,field==='nature');
    w.history.forward();assert.equal(q(`[data-africa-topic="${planned}"]`).getAttribute('aria-pressed'),'true');
    w.history.forward();assert.equal(q('[data-place]').value,'GHA');
    assert.equal(q('[data-africa-subfield-status]').hidden,false);return saved;
   });
   withAfricaPage(saved,(_w,q)=>{assert.equal(q(`[data-africa-topic="${planned}"]`).getAttribute('aria-pressed'),'true');assert.equal(q('[data-africa-subfield-status]').hidden,false);});
  }
- const basinURL=withAfricaPage('https://example.com/insight-journal/atlas/africa/?field=nature&place=EGY',(w,q)=>{
+ const basinURL=withAfricaPage('https://example.com/insight-journal/atlas/africa/?field=nature&topic=water&place=EGY',(w,q)=>{
   q('[data-africa-water="river"]').click();assert.equal(q('[data-metric]').value,'ER.H2O.INTR.PC');
   q('[data-africa-water="basin"]').click();assert.equal(new URL(w.location.href).searchParams.get('water'),'basin');
   const saved=w.location.href;assert.equal(q('[data-africa-subfield-status]').hidden,false);
   q('[data-africa-water="rain"]').click();assert.equal(q('[data-metric]').value,'AG.LND.PRCP.MM');assert.equal(q('[data-africa-subfield-status]').hidden,true);
   w.history.back();assert.equal(q('[data-africa-water="basin"]').getAttribute('aria-pressed'),'true');
-  w.history.back();assert.equal(q('[data-africa-water="river"]').getAttribute('aria-pressed'),'true');assert.equal(q('[data-africa-subfield-status]').hidden,true);
+  w.history.back();assert.equal(q('[data-africa-water="river"]').getAttribute('aria-pressed'),'true');assert.equal(q('[data-africa-subfield-status]').hidden,false);
   w.history.forward();assert.equal(q('[data-africa-water="basin"]').getAttribute('aria-pressed'),'true');
   w.history.forward();assert.equal(q('[data-africa-water="rain"]').getAttribute('aria-pressed'),'true');return saved;
  });
  withAfricaPage(basinURL,(_w,q)=>{assert.equal(q('[data-africa-water="basin"]').getAttribute('aria-pressed'),'true');assert.equal(q('[data-africa-subfield-status]').hidden,false);});
- withAfricaPage('https://example.com/atlas/africa/?field=population&topic=__proto__&water=bad',(_w,q)=>{assert.equal(q('[data-africa-topic="distribution"]').getAttribute('aria-pressed'),'true');assert.equal(q('[data-africa-subfield-status]').hidden,true);});
+ withAfricaPage('https://example.com/atlas/africa/?field=population&topic=__proto__&water=bad',(_w,q)=>{assert.equal(q('[data-africa-topic="distribution"]').getAttribute('aria-pressed'),'true');assert.equal(q('[data-africa-subfield-status]').hidden,false);});
 });
 
 test('Africa build includes sitemap, all fields, countries, sources and CSV fallback',()=>{
@@ -123,7 +127,7 @@ test('Africa controller retains country across fields, compares, restores URL hi
  w.history.replaceState(null,'','?field=agriculture&metric=AG.YLD.CREL.KG&place=EGY&compare=NGA&year=2023&zoom=country');w.dispatchEvent(new w.PopStateEvent('popstate'));
  assert.equal(q('[data-selected-value]').textContent,'7,402');assert.ok(q('[data-comparison]').textContent.includes('1,549'));assert.notEqual(q('.africa-map').getAttribute('viewBox'),'0 0 1100 907');
  q('[data-field="nature"]').click();assert.ok(q('[data-year]').disabled);assert.ok(q('[data-trend]').textContent.includes('長期平均'));
- q('[data-reset]').click();assert.equal(q('[data-place]').value,'EGY');assert.equal(q('[data-compare]').value,'');assert.equal(q('.africa-map').dataset.theme,'nile-water');assert.notEqual(q('.africa-map').getAttribute('viewBox'),'0 0 1100 907');
+ q('[data-reset]').click();assert.equal(q('[data-place]').value,'EGY');assert.equal(q('[data-compare]').value,'');assert.equal(q('[data-africa-topic="climate"]').getAttribute('aria-pressed'),'true');assert.equal(q('.africa-map').getAttribute('viewBox'),'0 0 1100 907');
  } finally {for(const k of Object.keys(previous))globalThis[k]=previous[k];w.happyDOM.abort();}
 });
 
@@ -140,7 +144,8 @@ test('each thematic comparison retains the source marks, all legends and named r
    w.dispatchEvent(new w.PopStateEvent('popstate'));
    const sourceMetric=q('[data-metric]').value,sourceYear=q('[data-year]').value,sourceView=q('.africa-map').getAttribute('viewBox');
    const sourceMarks=q('[data-theme-marks]').innerHTML;
-   assert.equal(q('[data-theme-title]').textContent,`ガーナ：${theme.title}`);
+   assert.equal(q('[data-theme-title]').textContent,theme.title);
+   assert.ok(q('.africa-kicker').textContent.includes('ガーナ'));
    assert.equal(q('[data-theme-legend]').children.length,theme.marks.length);
    assert.equal(q('[data-legend]').children.length,sourceMetric==='SP.POP.TOTL'?2:6);
    q('[data-theme-comparison]').click();
@@ -185,6 +190,7 @@ test('theme entry aligns unselected countries and preserves explicit selection w
   assert.equal(w.document.querySelectorAll('.africa-country.is-muted').length,0);
   assert.equal(q('[data-country-marker="NGA"]').getAttribute('opacity'),'1');
   const sourceView=q('.africa-map').getAttribute('viewBox');
+  const overview=new URL(q('[data-africa-overview-link]').href);for(const [key,value]of Object.entries({place:'EGY',compare:'GHA',region:'north',year:'2021',zoom:'theme',field:'population',view:'statistics'}))assert.equal(overview.searchParams.get(key),value);assert.equal(overview.searchParams.has('country'),false);
   q('[data-theme-comparison]').click();q('[data-theme-return]').click();
   assert.equal(q('[data-place]').value,'EGY');assert.equal(q('[data-compare]').value,'GHA');assert.equal(q('[data-region]').value,'north');
   assert.equal(q('.africa-map').getAttribute('viewBox'),sourceView);

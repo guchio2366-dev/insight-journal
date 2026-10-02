@@ -1,24 +1,73 @@
-.africa-overview-page .overview-region-reading{display:flex;flex-direction:column;padding:0;max-height:calc(100dvh - 174px);background:#fffefa;border-color:#c7ccbf}
-.africa-overview-fixed{flex:none;padding:14px 16px 12px;border-bottom:1px solid #d8ddd5}
-.africa-overview-scroll{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding:12px 16px;line-height:1.75}
-.africa-overview-page .overview-region-reading h2{font-size:20px;line-height:1.5;margin-bottom:9px}
-.africa-overview-page .overview-region-intro{font-size:15px;line-height:1.7}
-.africa-overview-page .overview-region-section{margin-top:14px;padding-top:12px}
-.africa-overview-page .overview-region-section p{font-size:14px;line-height:1.8}
-.africa-overview-page .overview-inline-sources,.africa-overview-page .overview-reading-date{font-size:12px}
-.africa-overview-page .overview-map-key,.africa-overview-page .overview-map-source{font-size:13px}
-.africa-overview-page .overview-place-summary strong{font:700 18px/1.5 var(--sans)}
-.africa-overview-page .overview-place-summary p{font-size:14px}
-.africa-overview-actions a{display:block;min-height:44px;margin-top:10px;padding:9px 11px;border:1px solid #bcc7b8;background:#eef2e8;font-size:13px;font-weight:700;text-decoration:none}
-.africa-overview-page [data-overview-country-detail]{border:0;margin:0}
-.africa-overview-page .country-overview-heading{padding:0 0 12px}
-.africa-overview-page .country-overview-title-row h2{font-size:18px}
-.africa-overview-page .country-overview-reading{display:block}
-.africa-overview-page .country-overview-contents{border:0;padding:0 0 12px}
-.africa-overview-page .country-overview-topic-tabs{grid-template-columns:1fr}
-.africa-overview-page .country-overview-topic-tabs button{min-height:44px}
-.africa-overview-page .country-overview-panel{padding:14px 0}
-.africa-overview-page .country-overview-introduction h2{font-size:18px}
-.africa-overview-page .country-overview-introduction p,.africa-overview-page .country-overview-section p{font-size:14px;line-height:1.8}
-@media(min-width:960px) and (max-width:1199px){.africa-overview-page .overview-region-reading{max-height:calc(100dvh - 395px)}}
-@media(max-width:959px){.africa-overview-page .overview-region-reading{max-height:none}.africa-overview-scroll{overflow:visible}}
+.africa-overview{min-width:0;color:var(--ink)}
+.africa-overview [hidden]{display:none!important}
+.ao-breadcrumb{margin:0 0 13px;font-size:12px;color:var(--ink-soft)}
+.ao-regions{display:flex;flex-wrap:wrap;gap:6px;min-height:44px;align-items:center}
+.ao-regions a{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px;border:1px solid var(--rule);background:var(--white);font-size:14px;text-decoration:none}
+.ao-regions a[aria-current]{background:#162638;color:white;border-color:#162638}
+.ao-country-row{display:flex;align-items:center;gap:12px;min-height:40px;margin:7px 0 10px;font-size:12px}
+.ao-country-row label,.ao-topic-picker{display:flex;align-items:center;gap:10px}
+.ao-country-row select,.ao-topic-picker select{height:40px;min-height:40px;background:var(--white);border:1px solid #bcc7c8;border-radius:0;color:var(--ink);padding:7px 28px 7px 10px;font-size:14px;max-width:100%}
+.ao-country-row select{width:240px}
+.africa-overview .ao-fields{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));height:44px;margin:0;border-bottom:1px solid #c7ccbf}
+.ao-fields a{display:flex;align-items:center;justify-content:center;min-width:0;min-height:44px;padding:8px 4px;font-size:14px;text-decoration:none;border:1px solid #c7ccbf;background:#f3f3ec;color:#2c454e}
+.ao-fields a[aria-current]{background:#35515d;color:white}
+.ao-title{font:600 18px/1.5 var(--serif);margin:8px 0 10px}
+.ao-title span{font:400 12px/1.5 var(--sans);color:var(--ink-soft);margin-left:12px}
+.ao-map-reading{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px;align-items:start}
+.ao-map-column{min-width:0}
+.ao-map-stage{position:relative;aspect-ratio:1.55;overflow:hidden;border:1px solid #b5c8c9;background:#eaf2f3;isolation:isolate;user-select:none}
+.ao-map{display:block;width:100%;height:100%;cursor:grab}
+.ao-context{fill:#eaece5;stroke:#bac5bf;stroke-width:.8;vector-effect:non-scaling-stroke}
+.ao-country{fill:#fffef8;stroke:#91a6a5;stroke-width:1;vector-effect:non-scaling-stroke;cursor:pointer}
+.ao-country:hover{fill:#eef0db;stroke:#4e7675}
+.ao-country[aria-pressed=true]{fill:#efe6bb;stroke:#557a6d;stroke-width:2}
+.ao-water{fill:#eaf2f3;stroke:#b7ced0;stroke-width:.65;vector-effect:non-scaling-stroke;pointer-events:none}
+.africa-overview .overview-water-name{fill:#7c999f;text-anchor:middle;pointer-events:none}
+.ao-city-dot{fill:#607e7a;stroke:#fffefa;stroke-width:.8;vector-effect:non-scaling-stroke;pointer-events:none}
+.ao-city-dot.is-selected{fill:#ac5134}
+.ao-map-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.ao-map-labels button{position:absolute;display:block;min-height:0;padding:2px 4px;border:0;background:transparent;white-space:nowrap;pointer-events:auto;cursor:pointer;color:#284646;text-shadow:0 1px 3px #fffefa,1px 0 3px #fffefa,-1px 0 3px #fffefa}
+.ao-country-label{font:700 13px/21px var(--sans)}
+.ao-city-label{font:500 12px/19px var(--sans)}
+.ao-map-labels button:hover,.ao-map-labels button[aria-pressed=true]{background:#fffae1;box-shadow:0 0 0 1px #728f83}
+.ao-map-controls{position:absolute;z-index:2;right:10px;top:10px;display:grid;gap:5px}
+.ao-map-controls button{width:44px;min-height:40px;padding:5px;border:1px solid #b3c4be;background:#fffef7ef;color:#335953;font:18px var(--sans);cursor:pointer}
+.ao-map-controls button:last-child{font-size:12px}
+.ao-map-badge{position:absolute;bottom:8px;left:10px;padding:5px 8px;background:#fffef7e8;color:#577371;font-size:12px;pointer-events:none}
+.ao-map-key{display:flex;gap:12px;flex-wrap:wrap;padding:7px 9px;border:1px solid #c8d2c8;border-top:0;background:#f6f7ef;font-size:12px}
+.ao-map-key span{display:inline-flex;gap:6px;align-items:center}
+.ao-map-key i{display:inline-block;width:14px;height:10px}
+.ao-border-key{border:1px solid #91a6a5;background:#fffef8}
+.ao-map-key .ao-city-key{width:5px;height:5px;border-radius:50%;background:#607e7a}
+.ao-selected-key{border:1px solid #557a6d;background:#efe6bb}
+.ao-map-note,.ao-map-sources{font-size:12px;line-height:1.7;margin:7px 0}
+.ao-reading{padding:14px;border:1px solid #d1d6ca;background:#fbfaf3;min-width:0;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+.ao-reading h2{font:600 22px/1.5 var(--serif);margin:0 0 10px}
+.ao-eyebrow{font-size:12px;color:#58766c;margin:0 0 6px}
+.ao-reading p{font-size:14px;line-height:1.8;margin:0 0 12px}
+.ao-reading .ao-takeaway{padding-left:10px;border-left:3px solid #35515d}
+.ao-reading-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:12px 0}
+.ao-reading-links a{display:flex;align-items:center;min-height:40px;padding:6px 8px;background:#f0f3e9;border:1px solid #bdcbbf;font-size:13px;text-decoration:none}
+.ao-topic-picker{font-size:13px;margin:12px 0;flex-wrap:wrap}
+.ao-topic-picker select{flex:1;min-width:150px}
+.ao-section{border-top:1px solid #d8dccf;padding-top:12px;margin-top:14px}
+.ao-section h3{font-size:16px;line-height:1.6;margin:0 0 8px;color:#30534c}
+.ao-reading details{font-size:12px;line-height:1.7}
+.ao-reading ul,.ao-map-sources ul{padding-left:18px}
+.ao-reading li{margin:6px 0}
+.ao-reading a{overflow-wrap:anywhere}
+.ao-announcement{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.africa-overview :focus-visible{outline:3px solid #ad5232;outline-offset:3px}
+@media(min-width:960px){
+ .africa-overview-workspace .atlas-desktop-shell:not(.is-reading-news){display:grid;grid-template-columns:clamp(190px,19vw,280px) minmax(0,1fr);gap:16px;padding:12px 20px 36px}
+ .africa-overview-workspace .atlas-desktop-shell>.africa-overview{align-self:start;margin:0;padding:0}
+ .africa-overview-workspace .atlas-desktop-shell:not(.is-reading-news) .atlas-news{position:sticky;top:12px;height:calc(100dvh - 72px);max-height:calc(100dvh - 72px);min-height:0}
+ .ao-reading{height:calc(100dvh - 308px);min-height:320px}
+ .africa-overview-workspace .is-reading-news .ao-reading{height:auto;max-height:none}
+}
+@media(min-width:960px) and (max-width:1199px){
+ .africa-overview-workspace .atlas-desktop-shell:not(.is-reading-news){grid-template-columns:160px minmax(0,1fr);gap:12px;padding:10px 12px 24px}
+ .ao-map-reading{grid-template-columns:minmax(0,1.65fr) minmax(280px,1fr);gap:12px}
+ .ao-regions a{padding:8px;font-size:13px}
+}
+@media(max-width:959px){.ao-map-reading{grid-template-columns:minmax(0,1fr)}.ao-reading{height:auto;overflow:visible}.ao-country-row{flex-wrap:wrap}.ao-regions a{font-size:13px}.ao-title span{display:block;margin:3px 0}.ao-map-stage{min-height:260px}.ao-country-row select{width:220px}.ao-fields a{font-size:13px}}
