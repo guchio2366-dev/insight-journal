@@ -58,6 +58,7 @@ const config = {routes, defaultViewBox: mapViewBox, states: statePaths.map(item 
   <ul class="mexico-legend mexico-nature-climate-legend" data-mexico-nature-legend="climate" aria-label="気候区分の凡例">{nature.climate.groups.map(group => <li><i style={`background:${group.color}`} aria-hidden="true"/>{group.label}</li>)}</ul>
   <ul class="mexico-legend mexico-nature-relief-legend" data-mexico-nature-legend="relief" aria-label="自然地理地域の凡例" hidden>{nature.relief.classes.map(category => <li><i class:list={{'is-missing': category.status === 'missing'}} style={`background:${category.color}`} aria-hidden="true"/>{category.labelJa}</li>)}</ul>
   <ul class="mexico-legend mexico-hydrology-legend" data-mexico-hydrology-legend aria-label="水資源・等高線の凡例" hidden />
+  <div class="mexico-water-background-key" data-mexico-water-background-key hidden><p class="mexico-caption" data-mexico-water-background-key-title></p><div data-mexico-water-background-key-host></div></div>
   <p class="mexico-caption" data-mexico-nature-period>2008＝刊行年・統一観測期未記載。21原分類→6群。</p>
   <p class="mexico-caption" data-mexico-nature-static-note hidden>原典の静的地図。自然分布と州の選択を保ち、同じ範囲で比較します。</p>
  </div>

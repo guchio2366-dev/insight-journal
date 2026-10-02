@@ -108,9 +108,9 @@ export function initMexicoNature(root: HTMLElement): void {
     text('[data-mexico-nature-comparison-body]', mode === 'pine' ? 'ドゥランゴ・チワワ側の西シエラマドレには松・オークの温帯林があり、松材取得が集中する。山地の位置と州別の取得量を合わせ、森林資源から加工・市場への供給を読む。' : mode === 'maize' ? `${selected.name}の灌漑農地率は${number(selected.irrigationSharePct)}%。${winter}気候分布と白粒の生産量を見比べ、用水から耕作、貯蔵・集荷・輸送を経て主食へ届く流れを読む。` : reading.body);
     text('[data-mexico-nature-comparison-consequence]', mode === 'pine' ? '木材の供給と、水の浸透・侵食の抑制・生息地を支える森林管理を結び付ける。取得量は森林の面積や伐採率を示す値ではない。' : reading.consequence);
     if (state.category || mode === 'cattle' || state.view !== (populationMode || mode === 'pine' ? 'relief' : 'climate')) {
-      text('[data-mexico-nature-comparison-lead]', `${naturalName}と、州別の${labels[mode]}を同じ範囲で読み比べる。`);
+      text('[data-mexico-nature-comparison-lead]', state.category && hydrology ? `${state.category==='rivers-groundwater'?'小流域内で同じ次数の支流の合流により1つ増える分類。流量・川幅ではない。 ':''}主図に${labels[mode]}分布は重ねず、州の値で照合。全州の別図は詳細。` : `${naturalName}と、州別の${labels[mode]}を同じ範囲で読み比べる。`);
       const definition = state.category === 'elevation' ? '等高線は同じ標高m（EGM2008）を結ぶ線で、州の平均標高ではありません' : state.category === 'precipitation' ? '等雨量線は原資料の同じ年平均降水量mmを結ぶ線で、隣接する面全体の値や州平均ではありません' : state.category === 'basins' ? '流域は原資料の河川の集水域で、州境や地下水の流動区域とは異なります' : state.category === 'rivers-groundwater' ? '原河川ネットワーク（間欠・仮想流を含む）の次数は小流域内の階層で、水量・幅を表しません。地下水の分類は配信状態を別記しています' : `${naturalName}は自然地域の分類です`;
-      text('[data-mexico-nature-comparison-body]', `${definition}。${labels[mode]}は州単位の公表値です。自然条件の線・面と州境を区別し、水管理・仕事・交通・市場と合わせて分布を読みます。自然条件だけで数量や人口は決まりません。`);
+      text('[data-mexico-nature-comparison-body]', `${definition}。${labels[mode]}は州単位の公表値です。${state.category && hydrology?`主図には${labels[mode]}の分布を重ねていません。主図の面は選択した背景の自然区分、線は水資源・等高線です。全州の${labels[mode]}は、この詳細内の同じ範囲の別図で確認できます。`:''}自然条件の線・面と州境を区別し、水管理・仕事・交通・市場と合わせて分布を読みます。自然条件だけで数量や人口は決まりません。`);
     }
     if (mode === 'density') text('[data-mexico-nature-comparison-definition]', `人口密度は2020年の州平均。${naturalName}の原資料の線・面とは異なる粒度です。`);
     if (mode === 'cattle') {text('[data-mexico-nature-comparison-definition]', '円の面積＝2022年9月の牛頭数。生産単位と住宅の合計。肉や乳の生産量とは別の数値。'); text('[data-mexico-nature-comparison-period]', `${state.category && hydrology ? `${naturalName}は原典・対象期間を別記` : state.view === 'relief' ? '自然地理地域2001版' : '気候区分2008版'} / 牛頭数2022年9月`);}
