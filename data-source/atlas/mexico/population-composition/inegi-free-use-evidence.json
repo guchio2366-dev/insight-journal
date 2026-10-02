@@ -1,0 +1,129 @@
+{
+  "dataset": "INEGI Censo de Poblacion y Vivienda 2020",
+  "reference_date": "2020-03-15",
+  "verification_date_utc": "2026-10-02",
+  "scope": "Official definitions and reuse terms. Exact state tabulation extraction is performed separately by the parent agent.",
+  "census_catalog": {
+    "url": "https://www.inegi.org.mx/rnm/index.php/catalog/632",
+    "local_file": "census2020-catalog.html",
+    "findings": [
+      "The basic questionnaire results were published on 25 January 2021; expanded questionnaire complementary results on 16 March 2021.",
+      "Expanded questionnaire results are sample estimates. The catalog identifies FACTOR as the data weight, alongside ESTRATO and UPM.",
+      "The catalog describes a stratified cluster design with one selection stage and adjustment of expansion factors for non-response.",
+      "Published expanded estimates have sampling precision information. These should not be presented as exact enumerated counts."
+    ]
+  },
+  "indicators": [
+    {
+      "id": "indigenous_language",
+      "label": "Speaks an Indigenous language (age 3+)",
+      "variable": "HLENGUA",
+      "instrument": "Cuestionario Basico",
+      "table": "Personas",
+      "definition_summary": "Whether a person aged three years or older reports speaking an Indigenous language.",
+      "universe_summary": "Usual residents aged three completed years or older.",
+      "source_url": "https://www.inegi.org.mx/rnm/index.php/catalog/632/datafile/F15/V502",
+      "metadata_json_url": "https://www.inegi.org.mx/rnm/index.php/metadata/export_variable/632/V502/json",
+      "local_metadata_file": "indigenous-language-basic-variable.json",
+      "categories": { "1": "Si", "3": "No", "9": "No especificado" },
+      "missing_code": 9,
+      "interpretation_notes": [
+        "Includes people who say they speak little, speak imperfectly, cannot write the language, or do not use it every day.",
+        "The interview instructions describe languages historically originating among Indigenous peoples of Mexico; foreign languages are excluded.",
+        "Language is a separate measure from Indigenous self-identification."
+      ]
+    },
+    {
+      "id": "afromexican_self_identification",
+      "label": "Identifies as Afro-Mexican or Afrodescendant (all ages)",
+      "variable": "AFRODES",
+      "instrument": "Cuestionario Basico",
+      "table": "Personas",
+      "definition_summary": "Self-recognition as descended from people originating in Africa who arrived in Mexico in colonial times or later, including current arrivals.",
+      "universe_summary": "Usual residents, all ages.",
+      "source_url": "https://www.inegi.org.mx/rnm/index.php/catalog/632/variable/F15/V491?name=AFRODES",
+      "metadata_json_url": "https://www.inegi.org.mx/rnm/index.php/metadata/export_variable/632/V491/json",
+      "local_metadata_file": "afromexican-basic-variable.json",
+      "categories": { "1": "Si", "3": "No", "9": "No especificado" },
+      "missing_code": 9,
+      "interpretation_notes": [
+        "The question uses ancestry, customs and traditions. It is not a skin-color or hair-texture classification.",
+        "The questionnaire includes the local identification term negro alongside afromexicano and afrodescendiente.",
+        "This measure may overlap Indigenous language or Indigenous self-identification."
+      ]
+    },
+    {
+      "id": "indigenous_self_identification",
+      "label": "Identifies as Indigenous (age 3+, sample estimate)",
+      "variable": "PERTE_INDIGENA",
+      "instrument": "Cuestionario Ampliado",
+      "table": "Personas_CA",
+      "definition_summary": "Self-recognition as Indigenous according to culture, customs and traditions.",
+      "universe_summary": "Usual residents of private dwellings aged three completed years or older.",
+      "source_url": "https://www.inegi.org.mx/rnm/index.php/catalog/632/datafile/F13/V343",
+      "metadata_json_url": "https://www.inegi.org.mx/rnm/index.php/metadata/export_variable/632/V343/json",
+      "local_metadata_file": "indigenous-self-identification-variable.json",
+      "categories": { "1": "Si", "3": "No", "9": "No especificado" },
+      "missing_code": 9,
+      "interpretation_notes": [
+        "Results derive from the expanded questionnaire's probabilistic sample and require weights when calculated from microdata.",
+        "The interviewer instructions explicitly allow an Indigenous-language speaker to identify as non-Indigenous and an Indigenous-identified person not to speak an Indigenous language.",
+        "Its denominator differs from the all-age Afro-Mexican measure and should be shown visibly."
+      ]
+    }
+  ],
+  "missingness": {
+    "supported_by": [
+      "indigenous-language-basic-variable.json",
+      "afromexican-basic-variable.json",
+      "indigenous-self-identification-variable.json"
+    ],
+    "official_rule_summary": "Unresolved response omission or inconsistency is assigned No especificado when related sections or variables cannot recover or correct the response.",
+    "implementation_implications": [
+      "Do not recode No especificado as No.",
+      "No and No especificado are separate categories.",
+      "Use each published table's stated population total as its denominator; do not silently renormalize over known responses.",
+      "The variable catalog's displayed Valid=0 and Invalid=0 values are documentation placeholders, not population statistics."
+    ]
+  },
+  "questionnaire_sources": [
+    {
+      "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/doc/Censo2020_cuest_basico.pdf",
+      "local_file": "Censo2020_cuest_basico.pdf",
+      "page_evidence": "PDF page 4 (zero-based index 3): Afrodescendant question is in the all-person section; language question follows the age-three filter."
+    },
+    {
+      "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/doc/Censo2020_cuest_ampliado.pdf",
+      "local_file": "Censo2020_cuest_ampliado.pdf",
+      "page_evidence": "PDF page 8 (zero-based index 7): Indigenous language and Indigenous self-identification questions are under the age-three-or-older filter."
+    }
+  ],
+  "reuse": {
+    "license_name": "Terminos de Libre Uso de la Informacion del INEGI",
+    "url": "https://www.inegi.org.mx/inegi/terminos.html",
+    "local_file": "inegi-terminos.html",
+    "permitted": [
+      "Copy and distribute the information while retaining metadata.",
+      "Disseminate and publish the information.",
+      "Adapt and reorder the information.",
+      "Extract all or part of the information.",
+      "Use it commercially as an input to other products or services."
+    ],
+    "conditions": [
+      "Credit INEGI as author and identify the extraction product and update date where technically possible.",
+      "Notify the end user of analysis or transformation and avoid presenting it as produced by INEGI.",
+      "Do not imply official INEGI endorsement, support or sponsorship."
+    ],
+    "official_attribution_template": "Fuente: INEGI, nombre del producto de donde se extrae la informacion",
+    "suggested_attribution": "Source: INEGI, Censo de Poblacion y Vivienda 2020. Basic questionnaire tables; expanded questionnaire sample estimates for Indigenous self-identification. Percentages and English labels calculated or translated for this visualization.",
+    "precision_note": "INEGI's terms disclaim responsibility for differences caused by precision, rounding or numerical truncation."
+  },
+  "presentation_limitations": [
+    "These three indicators do not form a mutually exclusive ethnicity partition; do not stack or sum them as a complete ethnic composition.",
+    "The census questionnaires do not provide a mutually exclusive White/Mestizo/Indigenous/Black race distribution.",
+    "Every chart or detail view should identify age coverage and distinguish basic-questionnaire census results from expanded-questionnaire sample estimates.",
+    "Aggregate footnotes and missing counts must be retained from the specific workbook selected for extraction."
+  ],
+  "workbook_universe_evidence": "workbook-universes.json",
+  "receipt_file": "source-receipts.json"
+}

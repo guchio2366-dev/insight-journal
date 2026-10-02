@@ -1,0 +1,1869 @@
+{
+  "year": 2020,
+  "censusReferenceDate": "2020-03-15",
+  "fetchedDate": "2026-10-02",
+  "source": {
+    "publisher": "INPI",
+    "underlyingDataPublisher": "INEGI",
+    "program": "Censo de Población y Vivienda 2020. Muestra censal. Microdatos.",
+    "attribution": "INPI. Sistema Nacional de Información y Estadística sobre los Pueblos y Comunidades Indígenas y Afromexicanas, con base en INEGI. Censo de Población y Vivienda 2020. Muestra censal. Microdatos.",
+    "tableTitle": "Población de 3 años y más según condición de autoadscripción indígena por entidad federativa, estimadores, 2020",
+    "tableDownloadUrl": "https://www.inpi.gob.mx/indicadores2020/1-poblacion-indigena-autoadscrita-nacional-y-por-entidad-federativa-muestra-censal-2020.xlsx",
+    "landingUrl": "https://www.inpi.gob.mx/indicadores2020/",
+    "crosscheckDownloadUrl": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/ampliado/cpv2020_a_eum_05_etnicidad.xlsx",
+    "definitionUrl": "https://www.inegi.org.mx/rnm/index.php/catalog/632/datafile/F13/V343",
+    "underlyingDataReuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html"
+  },
+  "definition": {
+    "label": "Identifies as Indigenous (age 3+, private dwellings, sample estimate)",
+    "variable": "PERTE_INDIGENA",
+    "universe": "Usual residents of private dwellings aged 3 years and over",
+    "questionnaire": "Cuestionario Ampliado",
+    "sampleEstimate": true,
+    "denominatorDifferentFromBasicCensusAge3Plus": true,
+    "percentageFormula": "100 * official INPI count estimate / official INPI age 3+ population estimate",
+    "missingness": "Unspecified identity responses remain in the denominator and are reported separately; none are recoded as No.",
+    "confidenceLevel": 0.9,
+    "precisionBands": "High CV < 15%; moderate 15% <= CV < 30%; low CV >= 30%.",
+    "overlappingIndicators": "Indigenous identity may overlap Indigenous language and Afro-Mexican or Afrodescendant identity. These measures do not form an exclusive racial partition."
+  },
+  "transformations": [
+    "Exact count estimates, denominators and unspecified counts are extracted directly from INPI XLSX; no counts are inferred from rounded percentages.",
+    "Percentage = 100 * directly published count / directly published denominator.",
+    "INPI proportion/confidence interval/CV cells are fraction-valued Excel percentages; multiply by 100 for percentage units.",
+    "All confidence intervals shown in main indicator object come from INPI, the same publication as counts.",
+    "INEGI rounded shares/90% intervals are retained separately in inegiCrosscheck. Point estimates agree to 6-decimal percentage rounding; confidence limits differ slightly between publications. Do not mix the interval endpoints silently."
+  ],
+  "validation": {
+    "uniqueStates": 32,
+    "noMissingStateRows": true,
+    "responseCategoriesSumToDenominator": true,
+    "stateCountAndDenominatorSumsMatchNational": true,
+    "inegiExpandedDenominatorsMatchAll32": true,
+    "inegiRoundedPointSharesMatchAll32": true,
+    "intervalPublicationsDiffer": true,
+    "maxAbsoluteIntervalDifferencePercentagePoints": 0.0018867143253018526
+  },
+  "fileHashes": {
+    "inpi-self-identification-state-counts-2020.xlsx": "1962baf5e37744cb60afb9c1bc409da5e57bc3dde5a8ba37b633e45716e3fb06",
+    "cpv2020_a_eum_05_etnicidad.xlsx": "99d658a5eb3796478451afeb5e921cdc33c6c1a929a5210af9179f898b79571a",
+    "inpi-indicadores2020.html": "8099bd4e8f98edda9fc2645d9f829301aef7b472f1dfed6b0a4d52f71acf753e"
+  },
+  "national": {
+    "stateCode": "00",
+    "stateName": "Estados Unidos Mexicanos",
+    "year": 2020,
+    "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+      "count": 23229089,
+      "denominator": 119692898,
+      "percentage": 19.407240854006226,
+      "doesNotIdentifyCount": 96014537,
+      "unspecifiedCount": 449272,
+      "unspecifiedPercentage": 0.375353932862416,
+      "dataMissing": false,
+      "responseUnknown": true,
+      "isEstimate": true,
+      "instrument": "Cuestionario Ampliado",
+      "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+      "countStandardError": 202975.0532950455,
+      "countConfidenceInterval90": {
+        "lower": 22895223.632953312,
+        "upper": 23562954.367046688
+      },
+      "percentageConfidenceInterval90": {
+        "lower": 19.171819552493435,
+        "upper": 19.644850413334947
+      },
+      "countCVPercentage": 0.8737968729425658,
+      "percentageCVPercentage": 0.7409108571132819,
+      "countPrecision": "high",
+      "percentagePrecision": "high",
+      "sourceSheet": "Autoadscripción",
+      "sourceRow": 5,
+      "sourceCells": {
+        "count": "G5",
+        "denominator": "F5",
+        "unspecified": "I5",
+        "doesNotIdentify": "H5",
+        "countLower90": "G7",
+        "countUpper90": "G8",
+        "percentageLower90": "G12",
+        "percentageUpper90": "G13"
+      },
+      "inegiCrosscheck": {
+        "sourceSheet": "02",
+        "sourceRow": 9,
+        "publishedPercentage": 19.407241,
+        "percentageConfidenceInterval90": {
+          "lower": 19.17182,
+          "upper": 19.64485
+        },
+        "shareDifferencePercentagePoints": -1.459937735148742e-7,
+        "lowerIntervalDifferencePercentagePoints": -4.475065651377008e-7,
+        "upperIntervalDifferencePercentagePoints": 4.1333494493756007e-7
+      }
+    }
+  },
+  "states": [
+    {
+      "stateCode": "01",
+      "stateName": "Aguascalientes",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 83200,
+        "denominator": 1348472,
+        "percentage": 6.169946428253609,
+        "doesNotIdentifyCount": 1264851,
+        "unspecifiedCount": 421,
+        "unspecifiedPercentage": 0.031220522191042897,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 7201.751810112907,
+        "countConfidenceInterval90": {
+          "lower": 71354.13287283429,
+          "upper": 95045.86712716571
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 5.433932467377493,
+          "upper": 6.998274256101386
+        },
+        "countCVPercentage": 8.655951694847245,
+        "percentageCVPercentage": 7.691904507927122,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 15,
+        "sourceCells": {
+          "count": "G15",
+          "denominator": "F15",
+          "unspecified": "I15",
+          "doesNotIdentify": "H15",
+          "countLower90": "G17",
+          "countUpper90": "G18",
+          "percentageLower90": "G22",
+          "percentageUpper90": "G23"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 69,
+          "publishedPercentage": 6.169946,
+          "percentageConfidenceInterval90": {
+            "lower": 5.433492,
+            "upper": 6.998833
+          },
+          "shareDifferencePercentagePoints": 4.2825360857534633e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.00044046737749248166,
+          "upperIntervalDifferencePercentagePoints": -0.0005587438986145443
+        }
+      }
+    },
+    {
+      "stateCode": "02",
+      "stateName": "Baja California",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 285679,
+        "denominator": 3586020,
+        "percentage": 7.966464213808066,
+        "doesNotIdentifyCount": 3290238,
+        "unspecifiedCount": 10103,
+        "unspecifiedPercentage": 0.2817329518519138,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 20270.38166357713,
+        "countConfidenceInterval90": {
+          "lower": 252337.0779045333,
+          "upper": 319020.9220954667
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 7.295918660681745,
+          "upper": 8.692858720522413
+        },
+        "countCVPercentage": 7.095509877721893,
+        "percentageCVPercentage": 5.32581985580272,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 25,
+        "sourceCells": {
+          "count": "G25",
+          "denominator": "F25",
+          "unspecified": "I25",
+          "doesNotIdentify": "H25",
+          "countLower90": "G27",
+          "countUpper90": "G28",
+          "percentageLower90": "G32",
+          "percentageUpper90": "G33"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 129,
+          "publishedPercentage": 7.966464,
+          "percentageConfidenceInterval90": {
+            "lower": 7.295524,
+            "upper": 8.693322
+          },
+          "shareDifferencePercentagePoints": 2.1380806547455222e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.0003946606817448739,
+          "upperIntervalDifferencePercentagePoints": -0.0004632794775876192
+        }
+      }
+    },
+    {
+      "stateCode": "03",
+      "stateName": "Baja California Sur",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 89817,
+        "denominator": 756761,
+        "percentage": 11.8686084510169,
+        "doesNotIdentifyCount": 664099,
+        "unspecifiedCount": 2845,
+        "unspecifiedPercentage": 0.37594432059791666,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 4943.637358255185,
+        "countConfidenceInterval90": {
+          "lower": 81685.41301743426,
+          "upper": 97948.58698256574
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 10.972657134780244,
+          "upper": 12.827176373192145
+        },
+        "countCVPercentage": 5.504122113024466,
+        "percentageCVPercentage": 4.747461486414351,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 35,
+        "sourceCells": {
+          "count": "G35",
+          "denominator": "F35",
+          "unspecified": "I35",
+          "doesNotIdentify": "H35",
+          "countLower90": "G37",
+          "countUpper90": "G38",
+          "percentageLower90": "G42",
+          "percentageUpper90": "G43"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 189,
+          "publishedPercentage": 11.868608,
+          "percentageConfidenceInterval90": {
+            "lower": 10.971979,
+            "upper": 12.827953
+          },
+          "shareDifferencePercentagePoints": 4.5101690027138375e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.000678134780244477,
+          "upperIntervalDifferencePercentagePoints": -0.0007766268078555072
+        }
+      }
+    },
+    {
+      "stateCode": "04",
+      "stateName": "Campeche",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 416187,
+        "denominator": 880668,
+        "percentage": 47.258104075542654,
+        "doesNotIdentifyCount": 447934,
+        "unspecifiedCount": 16547,
+        "unspecifiedPercentage": 1.878914642067158,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 17690.81187874676,
+        "countConfidenceInterval90": {
+          "lower": 387088.106784457,
+          "upper": 445285.893215543
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 45.29592582319549,
+          "upper": 49.228789883111105
+        },
+        "countCVPercentage": 4.2506882432048,
+        "percentageCVPercentage": 2.531030175727185,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 45,
+        "sourceCells": {
+          "count": "G45",
+          "denominator": "F45",
+          "unspecified": "I45",
+          "doesNotIdentify": "H45",
+          "countLower90": "G47",
+          "countUpper90": "G48",
+          "percentageLower90": "G52",
+          "percentageUpper90": "G53"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 249,
+          "publishedPercentage": 47.258104,
+          "percentageConfidenceInterval90": {
+            "lower": 45.294855,
+            "upper": 49.229871
+          },
+          "shareDifferencePercentagePoints": 7.554265124554149e-8,
+          "lowerIntervalDifferencePercentagePoints": 0.0010708231954907887,
+          "upperIntervalDifferencePercentagePoints": -0.0010811168888977818
+        }
+      }
+    },
+    {
+      "stateCode": "05",
+      "stateName": "Coahuila de Zaragoza",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 63417,
+        "denominator": 2974979,
+        "percentage": 2.1316789126914846,
+        "doesNotIdentifyCount": 2899986,
+        "unspecifiedCount": 11576,
+        "unspecifiedPercentage": 0.3891119903703522,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 5274.832457036369,
+        "countConfidenceInterval90": {
+          "lower": 54740.64373951756,
+          "upper": 72093.35626048244
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 1.8631037247031146,
+          "upper": 2.438008652026741
+        },
+        "countCVPercentage": 8.317694714408391,
+        "percentageCVPercentage": 8.175627171831184,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 55,
+        "sourceCells": {
+          "count": "G55",
+          "denominator": "F55",
+          "unspecified": "I55",
+          "doesNotIdentify": "H55",
+          "countLower90": "G57",
+          "countUpper90": "G58",
+          "percentageLower90": "G62",
+          "percentageUpper90": "G63"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 309,
+          "publishedPercentage": 2.131679,
+          "percentageConfidenceInterval90": {
+            "lower": 1.863068,
+            "upper": 2.438055
+          },
+          "shareDifferencePercentagePoints": -8.73085155284059e-8,
+          "lowerIntervalDifferencePercentagePoints": 0.000035724703114636824,
+          "upperIntervalDifferencePercentagePoints": -0.00004634797325886453
+        }
+      }
+    },
+    {
+      "stateCode": "06",
+      "stateName": "Colima",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 91921,
+        "denominator": 698161,
+        "percentage": 13.166160813909686,
+        "doesNotIdentifyCount": 605232,
+        "unspecifiedCount": 1008,
+        "unspecifiedPercentage": 0.14437930506000765,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 4852.734847468723,
+        "countConfidenceInterval90": {
+          "lower": 83938.93484110916,
+          "upper": 99903.06515889084
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 12.114865435756746,
+          "upper": 14.293847139118137
+        },
+        "countCVPercentage": 5.279245055502794,
+        "percentageCVPercentage": 5.02839979008504,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 65,
+        "sourceCells": {
+          "count": "G65",
+          "denominator": "F65",
+          "unspecified": "I65",
+          "doesNotIdentify": "H65",
+          "countLower90": "G67",
+          "countUpper90": "G68",
+          "percentageLower90": "G72",
+          "percentageUpper90": "G73"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 369,
+          "publishedPercentage": 13.166161,
+          "percentageConfidenceInterval90": {
+            "lower": 12.114196,
+            "upper": 14.294618
+          },
+          "shareDifferencePercentagePoints": -1.8609031471328308e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.0006694357567464948,
+          "upperIntervalDifferencePercentagePoints": -0.0007708608818628448
+        }
+      }
+    },
+    {
+      "stateCode": "07",
+      "stateName": "Chiapas",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 1906686,
+        "denominator": 5182887,
+        "percentage": 36.78810670578,
+        "doesNotIdentifyCount": 3256540,
+        "unspecifiedCount": 19661,
+        "unspecifiedPercentage": 0.3793445622102122,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 114840.96334039366,
+        "countConfidenceInterval90": {
+          "lower": 1717788.794381818,
+          "upper": 2095583.205618182
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 34.3987484983178,
+          "upper": 39.24414642959142
+        },
+        "countCVPercentage": 6.02306637487209,
+        "percentageCVPercentage": 4.006583349478221,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 75,
+        "sourceCells": {
+          "count": "G75",
+          "denominator": "F75",
+          "unspecified": "I75",
+          "doesNotIdentify": "H75",
+          "countLower90": "G77",
+          "countUpper90": "G78",
+          "percentageLower90": "G82",
+          "percentageUpper90": "G83"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 429,
+          "publishedPercentage": 36.788107,
+          "percentageConfidenceInterval90": {
+            "lower": 34.39861,
+            "upper": 39.244293
+          },
+          "shareDifferencePercentagePoints": -2.942199941458057e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.000138498317802771,
+          "upperIntervalDifferencePercentagePoints": -0.00014657040858168102
+        }
+      }
+    },
+    {
+      "stateCode": "08",
+      "stateName": "Chihuahua",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 372995,
+        "denominator": 3558510,
+        "percentage": 10.481774675355696,
+        "doesNotIdentifyCount": 3177978,
+        "unspecifiedCount": 7537,
+        "unspecifiedPercentage": 0.21180213066704884,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 16377.321410839517,
+        "countConfidenceInterval90": {
+          "lower": 346056.61355640367,
+          "upper": 399933.38644359633
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 9.762987818322717,
+          "upper": 11.246885485235685
+        },
+        "countCVPercentage": 4.390761648504542,
+        "percentageCVPercentage": 4.301431205289199,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 85,
+        "sourceCells": {
+          "count": "G85",
+          "denominator": "F85",
+          "unspecified": "I85",
+          "doesNotIdentify": "H85",
+          "countLower90": "G87",
+          "countUpper90": "G88",
+          "percentageLower90": "G92",
+          "percentageUpper90": "G93"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 489,
+          "publishedPercentage": 10.481775,
+          "percentageConfidenceInterval90": {
+            "lower": 9.762943,
+            "upper": 11.246936
+          },
+          "shareDifferencePercentagePoints": -3.246443043281033e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.00004481832271707731,
+          "upperIntervalDifferencePercentagePoints": -0.0000505147643146131
+        }
+      }
+    },
+    {
+      "stateCode": "09",
+      "stateName": "Ciudad de México",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 825325,
+        "denominator": 8891226,
+        "percentage": 9.282465657716944,
+        "doesNotIdentifyCount": 8037762,
+        "unspecifiedCount": 28139,
+        "unspecifiedPercentage": 0.3164805393541903,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 33351.356633786905,
+        "countConfidenceInterval90": {
+          "lower": 770466.7169583963,
+          "upper": 880183.2830416037
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 8.801034491304646,
+          "upper": 9.787405644874804
+        },
+        "countCVPercentage": 4.040996775062782,
+        "percentageCVPercentage": 3.2292047863144617,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 95,
+        "sourceCells": {
+          "count": "G95",
+          "denominator": "F95",
+          "unspecified": "I95",
+          "doesNotIdentify": "H95",
+          "countLower90": "G97",
+          "countUpper90": "G98",
+          "percentageLower90": "G102",
+          "percentageUpper90": "G103"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 549,
+          "publishedPercentage": 9.282466,
+          "percentageConfidenceInterval90": {
+            "lower": 8.800821,
+            "upper": 9.787641
+          },
+          "shareDifferencePercentagePoints": -3.422830552324285e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.00021349130464720645,
+          "upperIntervalDifferencePercentagePoints": -0.00023535512519679003
+        }
+      }
+    },
+    {
+      "stateCode": "10",
+      "stateName": "Durango",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 152793,
+        "denominator": 1723495,
+        "percentage": 8.865299870321643,
+        "doesNotIdentifyCount": 1565453,
+        "unspecifiedCount": 5249,
+        "unspecifiedPercentage": 0.30455556877159495,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 7836.552926014713,
+        "countConfidenceInterval90": {
+          "lower": 139902.974469515,
+          "upper": 165683.025530485
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 8.195023492140471,
+          "upper": 9.584675002045296
+        },
+        "countCVPercentage": 5.128869075163596,
+        "percentageCVPercentage": 4.761880651241556,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 105,
+        "sourceCells": {
+          "count": "G105",
+          "denominator": "F105",
+          "unspecified": "I105",
+          "doesNotIdentify": "H105",
+          "countLower90": "G107",
+          "countUpper90": "G108",
+          "percentageLower90": "G112",
+          "percentageUpper90": "G113"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 609,
+          "publishedPercentage": 8.8653,
+          "percentageConfidenceInterval90": {
+            "lower": 8.194949,
+            "upper": 9.584761
+          },
+          "shareDifferencePercentagePoints": -1.2967835694155383e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.00007449214047205999,
+          "upperIntervalDifferencePercentagePoints": -0.00008599795470409788
+        }
+      }
+    },
+    {
+      "stateCode": "11",
+      "stateName": "Guanajuato",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 372169,
+        "denominator": 5825265,
+        "percentage": 6.388876729213178,
+        "doesNotIdentifyCount": 5426962,
+        "unspecifiedCount": 26134,
+        "unspecifiedPercentage": 0.44863195064945544,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 18374.269993492566,
+        "countConfidenceInterval90": {
+          "lower": 341945.9144729568,
+          "upper": 402392.0855270432
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 5.914689779261027,
+          "upper": 6.898292428535379
+        },
+        "countCVPercentage": 4.93707697134704,
+        "percentageCVPercentage": 4.6765253143946355,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 115,
+        "sourceCells": {
+          "count": "G115",
+          "denominator": "F115",
+          "unspecified": "I115",
+          "doesNotIdentify": "H115",
+          "countLower90": "G117",
+          "countUpper90": "G118",
+          "percentageLower90": "G122",
+          "percentageUpper90": "G123"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 669,
+          "publishedPercentage": 6.388877,
+          "percentageConfidenceInterval90": {
+            "lower": 5.914619,
+            "upper": 6.898374
+          },
+          "shareDifferencePercentagePoints": -2.707868222984189e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.00007077926102727616,
+          "upperIntervalDifferencePercentagePoints": -0.00008157146462028919
+        }
+      }
+    },
+    {
+      "stateCode": "12",
+      "stateName": "Guerrero",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 1102334,
+        "denominator": 3326321,
+        "percentage": 33.13973606275522,
+        "doesNotIdentifyCount": 2210523,
+        "unspecifiedCount": 13464,
+        "unspecifiedPercentage": 0.40477151784208437,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 25815.219821896782,
+        "countConfidenceInterval90": {
+          "lower": 1059871.6003045058,
+          "upper": 1144796.3996954942
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 31.92165296853436,
+          "upper": 34.380826020157976
+        },
+        "countCVPercentage": 2.3418691450954774,
+        "percentageCVPercentage": 2.256081578727678,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 125,
+        "sourceCells": {
+          "count": "G125",
+          "denominator": "F125",
+          "unspecified": "I125",
+          "doesNotIdentify": "H125",
+          "countLower90": "G127",
+          "countUpper90": "G128",
+          "percentageLower90": "G132",
+          "percentageUpper90": "G133"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 729,
+          "publishedPercentage": 33.139736,
+          "percentageConfidenceInterval90": {
+            "lower": 31.92157,
+            "upper": 34.380912
+          },
+          "shareDifferencePercentagePoints": 6.275521968746034e-8,
+          "lowerIntervalDifferencePercentagePoints": 0.00008296853436107199,
+          "upperIntervalDifferencePercentagePoints": -0.00008597984202651787
+        }
+      }
+    },
+    {
+      "stateCode": "13",
+      "stateName": "Hidalgo",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 1077386,
+        "denominator": 2939604,
+        "percentage": 36.65071894037428,
+        "doesNotIdentifyCount": 1854123,
+        "unspecifiedCount": 8095,
+        "unspecifiedPercentage": 0.27537722768100736,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 36156.832049783865,
+        "countConfidenceInterval90": {
+          "lower": 1017913.1051413432,
+          "upper": 1136858.8948586567
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 35.22504401366503,
+          "upper": 38.10015589631835
+        },
+        "countCVPercentage": 3.3559775279968243,
+        "percentageCVPercentage": 2.3851882590288285,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 135,
+        "sourceCells": {
+          "count": "G135",
+          "denominator": "F135",
+          "unspecified": "I135",
+          "doesNotIdentify": "H135",
+          "countLower90": "G137",
+          "countUpper90": "G138",
+          "percentageLower90": "G142",
+          "percentageUpper90": "G143"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 789,
+          "publishedPercentage": 36.650719,
+          "percentageConfidenceInterval90": {
+            "lower": 35.224887,
+            "upper": 38.100319
+          },
+          "shareDifferencePercentagePoints": -5.962571947293327e-8,
+          "lowerIntervalDifferencePercentagePoints": 0.00015701366502440806,
+          "upperIntervalDifferencePercentagePoints": -0.0001631036816505116
+        }
+      }
+    },
+    {
+      "stateCode": "14",
+      "stateName": "Jalisco",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 557864,
+        "denominator": 7919382,
+        "percentage": 7.044287041589861,
+        "doesNotIdentifyCount": 7335605,
+        "unspecifiedCount": 25913,
+        "unspecifiedPercentage": 0.3272098757201004,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 29737.958042394464,
+        "countConfidenceInterval90": {
+          "lower": 508949.24857677496,
+          "upper": 606778.751423225
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 6.503926064234035,
+          "upper": 7.625880686004108
+        },
+        "countCVPercentage": 5.3306823961385685,
+        "percentageCVPercentage": 4.8379090621562,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 145,
+        "sourceCells": {
+          "count": "G145",
+          "denominator": "F145",
+          "unspecified": "I145",
+          "doesNotIdentify": "H145",
+          "countLower90": "G147",
+          "countUpper90": "G148",
+          "percentageLower90": "G152",
+          "percentageUpper90": "G153"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 849,
+          "publishedPercentage": 7.044287,
+          "percentageConfidenceInterval90": {
+            "lower": 6.503896,
+            "upper": 7.625915
+          },
+          "shareDifferencePercentagePoints": 4.158986133262488e-8,
+          "lowerIntervalDifferencePercentagePoints": 0.00003006423403473235,
+          "upperIntervalDifferencePercentagePoints": -0.00003431399589182149
+        }
+      }
+    },
+    {
+      "stateCode": "15",
+      "stateName": "México",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 2553429,
+        "denominator": 16213422,
+        "percentage": 15.748859185926326,
+        "doesNotIdentifyCount": 13575073,
+        "unspecifiedCount": 84920,
+        "unspecifiedPercentage": 0.5237635830363263,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 75851.53494600535,
+        "countConfidenceInterval90": {
+          "lower": 2428663.911164224,
+          "upper": 2678194.088835776
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 15.096706087423078,
+          "upper": 16.42373463945518
+        },
+        "countCVPercentage": 2.9705754476041966,
+        "percentageCVPercentage": 2.5611533869031504,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 155,
+        "sourceCells": {
+          "count": "G155",
+          "denominator": "F155",
+          "unspecified": "I155",
+          "doesNotIdentify": "H155",
+          "countLower90": "G157",
+          "countUpper90": "G158",
+          "percentageLower90": "G162",
+          "percentageUpper90": "G163"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 909,
+          "publishedPercentage": 15.748859,
+          "percentageConfidenceInterval90": {
+            "lower": 15.096655,
+            "upper": 16.423789
+          },
+          "shareDifferencePercentagePoints": 1.8592632677894017e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.00005108742307768921,
+          "upperIntervalDifferencePercentagePoints": -0.000054360544819331835
+        }
+      }
+    },
+    {
+      "stateCode": "16",
+      "stateName": "Michoacán de Ocampo",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 929003,
+        "denominator": 4476355,
+        "percentage": 20.753559536721284,
+        "doesNotIdentifyCount": 3531235,
+        "unspecifiedCount": 16117,
+        "unspecifiedPercentage": 0.36004740464060603,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 24927.31829244926,
+        "countConfidenceInterval90": {
+          "lower": 888001.0732307003,
+          "upper": 970004.9267692997
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 20.090545643231774,
+          "upper": 21.432585205022654
+        },
+        "countCVPercentage": 2.6832333471957854,
+        "percentageCVPercentage": 1.9656782670284763,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 165,
+        "sourceCells": {
+          "count": "G165",
+          "denominator": "F165",
+          "unspecified": "I165",
+          "doesNotIdentify": "H165",
+          "countLower90": "G167",
+          "countUpper90": "G168",
+          "percentageLower90": "G172",
+          "percentageUpper90": "G173"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 969,
+          "publishedPercentage": 20.75356,
+          "percentageConfidenceInterval90": {
+            "lower": 20.090503,
+            "upper": 21.43263
+          },
+          "shareDifferencePercentagePoints": -4.6327871672247056e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.00004264323177594065,
+          "upperIntervalDifferencePercentagePoints": -0.00004479497734521942
+        }
+      }
+    },
+    {
+      "stateCode": "17",
+      "stateName": "Morelos",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 461105,
+        "denominator": 1878497,
+        "percentage": 24.546485834153582,
+        "doesNotIdentifyCount": 1411127,
+        "unspecifiedCount": 6265,
+        "unspecifiedPercentage": 0.3335113125014307,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 17585.58223303429,
+        "countConfidenceInterval90": {
+          "lower": 432179.19472664327,
+          "upper": 490030.80527335673
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 23.583726618145313,
+          "upper": 25.535414314743974
+        },
+        "countCVPercentage": 3.813791269457995,
+        "percentageCVPercentage": 2.4170446319180234,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 175,
+        "sourceCells": {
+          "count": "G175",
+          "denominator": "F175",
+          "unspecified": "I175",
+          "doesNotIdentify": "H175",
+          "countLower90": "G177",
+          "countUpper90": "G178",
+          "percentageLower90": "G182",
+          "percentageUpper90": "G183"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 1029,
+          "publishedPercentage": 24.546486,
+          "percentageConfidenceInterval90": {
+            "lower": 23.583504,
+            "upper": 25.535649
+          },
+          "shareDifferencePercentagePoints": -1.65846419264426e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.00022261814531177038,
+          "upperIntervalDifferencePercentagePoints": -0.00023468525602510226
+        }
+      }
+    },
+    {
+      "stateCode": "18",
+      "stateName": "Nayarit",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 186079,
+        "denominator": 1167186,
+        "percentage": 15.942531867243096,
+        "doesNotIdentifyCount": 977697,
+        "unspecifiedCount": 3410,
+        "unspecifiedPercentage": 0.2921556632790318,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 9805.396097503371,
+        "countConfidenceInterval90": {
+          "lower": 169950.50482787422,
+          "upper": 202207.49517212578
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 14.72308203628509,
+          "upper": 17.242561450726683
+        },
+        "countCVPercentage": 5.269480219424745,
+        "percentageCVPercentage": 4.802527049205824,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 185,
+        "sourceCells": {
+          "count": "G185",
+          "denominator": "F185",
+          "unspecified": "I185",
+          "doesNotIdentify": "H185",
+          "countLower90": "G187",
+          "countUpper90": "G188",
+          "percentageLower90": "G192",
+          "percentageUpper90": "G193"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 1089,
+          "publishedPercentage": 15.942532,
+          "percentageConfidenceInterval90": {
+            "lower": 14.722861,
+            "upper": 17.242813
+          },
+          "shareDifferencePercentagePoints": -1.3275690413649954e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.0002210362850902925,
+          "upperIntervalDifferencePercentagePoints": -0.0002515492733188296
+        }
+      }
+    },
+    {
+      "stateCode": "19",
+      "stateName": "Nuevo León",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 352790,
+        "denominator": 5508078,
+        "percentage": 6.4049565020684165,
+        "doesNotIdentifyCount": 5126064,
+        "unspecifiedCount": 29224,
+        "unspecifiedPercentage": 0.5305661975011974,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 13169.664577526346,
+        "countConfidenceInterval90": {
+          "lower": 331127.7571446367,
+          "upper": 374452.2428553633
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 6.057635704779889,
+          "upper": 6.770756024212514
+        },
+        "countCVPercentage": 3.7330039336507115,
+        "percentageCVPercentage": 3.383172398517505,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 195,
+        "sourceCells": {
+          "count": "G195",
+          "denominator": "F195",
+          "unspecified": "I195",
+          "doesNotIdentify": "H195",
+          "countLower90": "G197",
+          "countUpper90": "G198",
+          "percentageLower90": "G202",
+          "percentageUpper90": "G203"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 1149,
+          "publishedPercentage": 6.404957,
+          "percentageConfidenceInterval90": {
+            "lower": 6.057598,
+            "upper": 6.770798
+          },
+          "shareDifferencePercentagePoints": -4.979315830766495e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.00003770477988940257,
+          "upperIntervalDifferencePercentagePoints": -0.00004197578748588171
+        }
+      }
+    },
+    {
+      "stateCode": "20",
+      "stateName": "Oaxaca",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 2702749,
+        "denominator": 3906788,
+        "percentage": 69.18084626040624,
+        "doesNotIdentifyCount": 1192430,
+        "unspecifiedCount": 11609,
+        "unspecifiedPercentage": 0.29714947419721777,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 35885.43789775971,
+        "countConfidenceInterval90": {
+          "lower": 2643722.510286749,
+          "upper": 2761775.489713251
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 68.4715756658194,
+          "upper": 69.88117952303303
+        },
+        "countCVPercentage": 1.3277384580573226,
+        "percentageCVPercentage": 0.6194048444523386,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 205,
+        "sourceCells": {
+          "count": "G205",
+          "denominator": "F205",
+          "unspecified": "I205",
+          "doesNotIdentify": "H205",
+          "countLower90": "G207",
+          "countUpper90": "G208",
+          "percentageLower90": "G212",
+          "percentageUpper90": "G213"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 1209,
+          "publishedPercentage": 69.180846,
+          "percentageConfidenceInterval90": {
+            "lower": 68.471559,
+            "upper": 69.881196
+          },
+          "shareDifferencePercentagePoints": 2.604062387945305e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.000016665819401850968,
+          "upperIntervalDifferencePercentagePoints": -0.000016476966976597396
+        }
+      }
+    },
+    {
+      "stateCode": "21",
+      "stateName": "Puebla",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 2067247,
+        "denominator": 6222339,
+        "percentage": 33.22298897568905,
+        "doesNotIdentifyCount": 4135371,
+        "unspecifiedCount": 19721,
+        "unspecifiedPercentage": 0.31693869459699964,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 53102.43023596028,
+        "countConfidenceInterval90": {
+          "lower": 1979900.9834625444,
+          "upper": 2154593.0165374554
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 32.058045242629426,
+          "upper": 34.40882609816025
+        },
+        "countCVPercentage": 2.568751108888308,
+        "percentageCVPercentage": 2.1512061676339975,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 215,
+        "sourceCells": {
+          "count": "G215",
+          "denominator": "F215",
+          "unspecified": "I215",
+          "doesNotIdentify": "H215",
+          "countLower90": "G217",
+          "countUpper90": "G218",
+          "percentageLower90": "G222",
+          "percentageUpper90": "G223"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 1269,
+          "publishedPercentage": 33.222989,
+          "percentageConfidenceInterval90": {
+            "lower": 32.057993,
+            "upper": 34.40888
+          },
+          "shareDifferencePercentagePoints": -2.431094969779224e-8,
+          "lowerIntervalDifferencePercentagePoints": 0.00005224262942249425,
+          "upperIntervalDifferencePercentagePoints": -0.00005390183975606533
+        }
+      }
+    },
+    {
+      "stateCode": "22",
+      "stateName": "Querétaro",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 296372,
+        "denominator": 2253500,
+        "percentage": 13.151630796538717,
+        "doesNotIdentifyCount": 1949519,
+        "unspecifiedCount": 7609,
+        "unspecifiedPercentage": 0.3376525404925671,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 16107.721408793988,
+        "countConfidenceInterval90": {
+          "lower": 269877.0675778586,
+          "upper": 322866.9324221414
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 12.062930573846478,
+          "upper": 14.322584651212336
+        },
+        "countCVPercentage": 5.434967341312266,
+        "percentageCVPercentage": 5.22013055329296,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 225,
+        "sourceCells": {
+          "count": "G225",
+          "denominator": "F225",
+          "unspecified": "I225",
+          "doesNotIdentify": "H225",
+          "countLower90": "G227",
+          "countUpper90": "G228",
+          "percentageLower90": "G232",
+          "percentageUpper90": "G233"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 1329,
+          "publishedPercentage": 13.151631,
+          "percentageConfidenceInterval90": {
+            "lower": 12.062498,
+            "upper": 14.323085
+          },
+          "shareDifferencePercentagePoints": -2.0346128337678238e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.00043257384647787944,
+          "upperIntervalDifferencePercentagePoints": -0.000500348787664251
+        }
+      }
+    },
+    {
+      "stateCode": "23",
+      "stateName": "Quintana Roo",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 586723,
+        "denominator": 1765783,
+        "percentage": 33.227355796267155,
+        "doesNotIdentifyCount": 1170856,
+        "unspecifiedCount": 8204,
+        "unspecifiedPercentage": 0.4646097510282974,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 50540.00674401298,
+        "countConfidenceInterval90": {
+          "lower": 503591.8091062874,
+          "upper": 669854.1908937126
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 30.172456456319587,
+          "upper": 36.4301892856747
+        },
+        "countCVPercentage": 8.61394674216163,
+        "percentageCVPercentage": 5.731130063033067,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 235,
+        "sourceCells": {
+          "count": "G235",
+          "denominator": "F235",
+          "unspecified": "I235",
+          "doesNotIdentify": "H235",
+          "countLower90": "G237",
+          "countUpper90": "G238",
+          "percentageLower90": "G242",
+          "percentageUpper90": "G243"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 1389,
+          "publishedPercentage": 33.227356,
+          "percentageConfidenceInterval90": {
+            "lower": 30.17074,
+            "upper": 36.432076
+          },
+          "shareDifferencePercentagePoints": -2.0373284570496253e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.0017164563195883886,
+          "upperIntervalDifferencePercentagePoints": -0.0018867143253018526
+        }
+      }
+    },
+    {
+      "stateCode": "24",
+      "stateName": "San Luis Potosí",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 545491,
+        "denominator": 2682817,
+        "percentage": 20.33276962237827,
+        "doesNotIdentifyCount": 2126308,
+        "unspecifiedCount": 11018,
+        "unspecifiedPercentage": 0.41068772115280316,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 32809.07861487682,
+        "countConfidenceInterval90": {
+          "lower": 491524.6879020451,
+          "upper": 599457.3120979549
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 18.6534372202697,
+          "upper": 22.122173768453454
+        },
+        "countCVPercentage": 6.014595770576749,
+        "percentageCVPercentage": 5.185529496897321,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 245,
+        "sourceCells": {
+          "count": "G245",
+          "denominator": "F245",
+          "unspecified": "I245",
+          "doesNotIdentify": "H245",
+          "countLower90": "G247",
+          "countUpper90": "G248",
+          "percentageLower90": "G252",
+          "percentageUpper90": "G253"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 1449,
+          "publishedPercentage": 20.33277,
+          "percentageConfidenceInterval90": {
+            "lower": 18.653236,
+            "upper": 22.122402
+          },
+          "shareDifferencePercentagePoints": -3.776217312179142e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.00020122026970170737,
+          "upperIntervalDifferencePercentagePoints": -0.00022823154654716404
+        }
+      }
+    },
+    {
+      "stateCode": "25",
+      "stateName": "Sinaloa",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 266215,
+        "denominator": 2846488,
+        "percentage": 9.352401977454322,
+        "doesNotIdentifyCount": 2575118,
+        "unspecifiedCount": 5155,
+        "unspecifiedPercentage": 0.1811003594605001,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 17465.54541682499,
+        "countConfidenceInterval90": {
+          "lower": 237486.63837822631,
+          "upper": 294943.3616217737
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 8.583809094319744,
+          "upper": 10.182149246183757
+        },
+        "countCVPercentage": 6.560691702881126,
+        "percentageCVPercentage": 5.191251588718964,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 255,
+        "sourceCells": {
+          "count": "G255",
+          "denominator": "F255",
+          "unspecified": "I255",
+          "doesNotIdentify": "H255",
+          "countLower90": "G257",
+          "countUpper90": "G258",
+          "percentageLower90": "G262",
+          "percentageUpper90": "G263"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 1509,
+          "publishedPercentage": 9.352402,
+          "percentageConfidenceInterval90": {
+            "lower": 8.583618,
+            "upper": 10.182373
+          },
+          "shareDifferencePercentagePoints": -2.2545677325069846e-8,
+          "lowerIntervalDifferencePercentagePoints": 0.00019109431974406732,
+          "upperIntervalDifferencePercentagePoints": -0.00022375381624328838
+        }
+      }
+    },
+    {
+      "stateCode": "26",
+      "stateName": "Sonora",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 372543,
+        "denominator": 2798802,
+        "percentage": 13.310802264683247,
+        "doesNotIdentifyCount": 2421473,
+        "unspecifiedCount": 4786,
+        "unspecifiedPercentage": 0.1710017357426499,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 19140.324797121437,
+        "countConfidenceInterval90": {
+          "lower": 341059.8622446681,
+          "upper": 404026.1377553319
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 12.31821461131471,
+          "upper": 14.370263228657851
+        },
+        "countCVPercentage": 5.137749144963517,
+        "percentageCVPercentage": 4.684346557642248,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 265,
+        "sourceCells": {
+          "count": "G265",
+          "denominator": "F265",
+          "unspecified": "I265",
+          "doesNotIdentify": "H265",
+          "countLower90": "G267",
+          "countUpper90": "G268",
+          "percentageLower90": "G272",
+          "percentageUpper90": "G273"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 1569,
+          "publishedPercentage": 13.310802,
+          "percentageConfidenceInterval90": {
+            "lower": 12.318127,
+            "upper": 14.370363
+          },
+          "shareDifferencePercentagePoints": 2.646832459873849e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.00008761131470969019,
+          "upperIntervalDifferencePercentagePoints": -0.00009977134214800287
+        }
+      }
+    },
+    {
+      "stateCode": "27",
+      "stateName": "Tabasco",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 486527,
+        "denominator": 2278148,
+        "percentage": 21.356250779141654,
+        "doesNotIdentifyCount": 1786700,
+        "unspecifiedCount": 4921,
+        "unspecifiedPercentage": 0.21600879310738372,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 49215.82219225306,
+        "countConfidenceInterval90": {
+          "lower": 405573.9061395629,
+          "upper": 567480.0938604372
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 18.4368299056567,
+          "upper": 24.59853473849539
+        },
+        "countCVPercentage": 10.115743256233067,
+        "percentageCVPercentage": 8.770788773254235,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 275,
+        "sourceCells": {
+          "count": "G275",
+          "denominator": "F275",
+          "unspecified": "I275",
+          "doesNotIdentify": "H275",
+          "countLower90": "G277",
+          "countUpper90": "G278",
+          "percentageLower90": "G282",
+          "percentageUpper90": "G283"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 1629,
+          "publishedPercentage": 21.356251,
+          "percentageConfidenceInterval90": {
+            "lower": 18.435345,
+            "upper": 24.600367
+          },
+          "shareDifferencePercentagePoints": -2.2085834672225246e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.0014849056566994534,
+          "upperIntervalDifferencePercentagePoints": -0.0018322615046102442
+        }
+      }
+    },
+    {
+      "stateCode": "28",
+      "stateName": "Tamaulipas",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 224210,
+        "denominator": 3363567,
+        "percentage": 6.6658401631363375,
+        "doesNotIdentifyCount": 3133235,
+        "unspecifiedCount": 6122,
+        "unspecifiedPercentage": 0.1820091587294084,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 12006.372724567169,
+        "countConfidenceInterval90": {
+          "lower": 204461.2083553433,
+          "upper": 243958.7916446567
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 6.168502400192552,
+          "upper": 7.200199025461849
+        },
+        "countCVPercentage": 5.354967541397427,
+        "percentageCVPercentage": 4.701399795244188,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 285,
+        "sourceCells": {
+          "count": "G285",
+          "denominator": "F285",
+          "unspecified": "I285",
+          "doesNotIdentify": "H285",
+          "countLower90": "G287",
+          "countUpper90": "G288",
+          "percentageLower90": "G292",
+          "percentageUpper90": "G293"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 1689,
+          "publishedPercentage": 6.66584,
+          "percentageConfidenceInterval90": {
+            "lower": 6.168441,
+            "upper": 7.20027
+          },
+          "shareDifferencePercentagePoints": 1.6313633732778499e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.00006140019255251872,
+          "upperIntervalDifferencePercentagePoints": -0.00007097453815063659
+        }
+      }
+    },
+    {
+      "stateCode": "29",
+      "stateName": "Tlaxcala",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 209908,
+        "denominator": 1275470,
+        "percentage": 16.45730593428305,
+        "doesNotIdentifyCount": 1044256,
+        "unspecifiedCount": 21306,
+        "unspecifiedPercentage": 1.6704430523650105,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 7504.943493373842,
+        "countConfidenceInterval90": {
+          "lower": 197563.4252682585,
+          "upper": 222252.5747317415
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 15.731805675628355,
+          "upper": 17.209431119660977
+        },
+        "countCVPercentage": 3.5753489592458805,
+        "percentageCVPercentage": 2.729042875215597,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 295,
+        "sourceCells": {
+          "count": "G295",
+          "denominator": "F295",
+          "unspecified": "I295",
+          "doesNotIdentify": "H295",
+          "countLower90": "G297",
+          "countUpper90": "G298",
+          "percentageLower90": "G302",
+          "percentageUpper90": "G303"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 1749,
+          "publishedPercentage": 16.457306,
+          "percentageConfidenceInterval90": {
+            "lower": 15.731675,
+            "upper": 17.209572
+          },
+          "shareDifferencePercentagePoints": -6.571695010393341e-8,
+          "lowerIntervalDifferencePercentagePoints": 0.00013067562835544777,
+          "upperIntervalDifferencePercentagePoints": -0.0001408803390248181
+        }
+      }
+    },
+    {
+      "stateCode": "30",
+      "stateName": "Veracruz de Ignacio de la Llave",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 2071265,
+        "denominator": 7699502,
+        "percentage": 26.90128530390667,
+        "doesNotIdentifyCount": 5606016,
+        "unspecifiedCount": 22221,
+        "unspecifiedPercentage": 0.2886030810823869,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 55567.270574905226,
+        "countConfidenceInterval90": {
+          "lower": 1979864.6683577364,
+          "upper": 2162665.3316422636
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 26.006510202977818,
+          "upper": 27.81527314673957
+        },
+        "countCVPercentage": 2.6827697361228635,
+        "percentageCVPercentage": 2.043983876928737,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 305,
+        "sourceCells": {
+          "count": "G305",
+          "denominator": "F305",
+          "unspecified": "I305",
+          "doesNotIdentify": "H305",
+          "countLower90": "G307",
+          "countUpper90": "G308",
+          "percentageLower90": "G312",
+          "percentageUpper90": "G313"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 1809,
+          "publishedPercentage": 26.901285,
+          "percentageConfidenceInterval90": {
+            "lower": 26.006474,
+            "upper": 27.815311
+          },
+          "shareDifferencePercentagePoints": 3.0390666694302126e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.00003620297781736781,
+          "upperIntervalDifferencePercentagePoints": -0.00003785326043015402
+        }
+      }
+    },
+    {
+      "stateCode": "31",
+      "stateName": "Yucatán",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 1445078,
+        "denominator": 2217158,
+        "percentage": 65.17704196092475,
+        "doesNotIdentifyCount": 766107,
+        "unspecifiedCount": 5973,
+        "unspecifiedPercentage": 0.26939893322893543,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 34287.14486605596,
+        "countConfidenceInterval90": {
+          "lower": 1388680.4771524565,
+          "upper": 1501475.5228475435
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 63.3955939545908,
+          "upper": 66.91703491510293
+        },
+        "countCVPercentage": 2.3726847177838124,
+        "percentageCVPercentage": 1.6429515518674795,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 315,
+        "sourceCells": {
+          "count": "G315",
+          "denominator": "F315",
+          "unspecified": "I315",
+          "doesNotIdentify": "H315",
+          "countLower90": "G317",
+          "countUpper90": "G318",
+          "percentageLower90": "G322",
+          "percentageUpper90": "G323"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 1869,
+          "publishedPercentage": 65.177042,
+          "percentageConfidenceInterval90": {
+            "lower": 63.395427,
+            "upper": 66.917194
+          },
+          "shareDifferencePercentagePoints": -3.9075246149877785e-8,
+          "lowerIntervalDifferencePercentagePoints": 0.00016695459080295905,
+          "upperIntervalDifferencePercentagePoints": -0.0001590848970636216
+        }
+      }
+    },
+    {
+      "stateCode": "32",
+      "stateName": "Zacatecas",
+      "year": 2020,
+      "indigenousSelfIdentificationAge3PlusPrivateDwellings": {
+        "count": 74582,
+        "denominator": 1527247,
+        "percentage": 4.883427500594206,
+        "doesNotIdentifyCount": 1448666,
+        "unspecifiedCount": 3999,
+        "unspecifiedPercentage": 0.26184369653369755,
+        "dataMissing": false,
+        "responseUnknown": true,
+        "isEstimate": true,
+        "instrument": "Cuestionario Ampliado",
+        "populationUniverse": "Usual residents of private dwellings aged 3 years and over",
+        "countStandardError": 3516.437992473733,
+        "countConfidenceInterval90": {
+          "lower": 68797.95490679536,
+          "upper": 80366.04509320464
+        },
+        "percentageConfidenceInterval90": {
+          "lower": 4.523815007968399,
+          "upper": 5.270048820482122
+        },
+        "countCVPercentage": 4.714861484639368,
+        "percentageCVPercentage": 4.641466983941458,
+        "countPrecision": "high",
+        "percentagePrecision": "high",
+        "sourceSheet": "Autoadscripción",
+        "sourceRow": 325,
+        "sourceCells": {
+          "count": "G325",
+          "denominator": "F325",
+          "unspecified": "I325",
+          "doesNotIdentify": "H325",
+          "countLower90": "G327",
+          "countUpper90": "G328",
+          "percentageLower90": "G332",
+          "percentageUpper90": "G333"
+        },
+        "inegiCrosscheck": {
+          "sourceSheet": "02",
+          "sourceRow": 1929,
+          "publishedPercentage": 4.883428,
+          "percentageConfidenceInterval90": {
+            "lower": 4.523778,
+            "upper": 5.270091
+          },
+          "shareDifferencePercentagePoints": -4.994057940521657e-7,
+          "lowerIntervalDifferencePercentagePoints": 0.000037007968399116464,
+          "upperIntervalDifferencePercentagePoints": -0.0000421795178775497
+        }
+      }
+    }
+  ]
+}

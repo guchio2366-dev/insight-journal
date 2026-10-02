@@ -1,0 +1,92 @@
+[
+  {
+    "key": "catholic",
+    "denominations": [
+      "Católica"
+    ],
+    "nationalCount": 97864218
+  },
+  {
+    "key": "protestant_evangelical",
+    "denominations": [
+      "Bautista",
+      "Presbiteriana",
+      "Iglesia del Dios Vivo, Columna y Apoyo de la Verdad, la Luz del Mundo",
+      "Adventista del Séptimo Día",
+      "Iglesia de Jesucristo de los Santos de los Últimos Días (Mormón)",
+      "Testigo de Jehová",
+      "Cristiana",
+      "Evangélica",
+      "Pentecostal",
+      "Otro Protestante/cristiano evangélico"
+    ],
+    "nationalCount": 14095307
+  },
+  {
+    "key": "jewish",
+    "denominations": [
+      "Judía"
+    ],
+    "nationalCount": 58876
+  },
+  {
+    "key": "islamic",
+    "denominations": [
+      "Islámica"
+    ],
+    "nationalCount": 7982
+  },
+  {
+    "key": "ethnic_roots",
+    "denominations": [
+      "Raíces étnicas"
+    ],
+    "nationalCount": 33372
+  },
+  {
+    "key": "afro_roots",
+    "denominations": [
+      "Raíces afro"
+    ],
+    "nationalCount": 40799
+  },
+  {
+    "key": "spiritualist",
+    "denominations": [
+      "Espiritualista"
+    ],
+    "nationalCount": 36764
+  },
+  {
+    "key": "other_religions",
+    "denominations": [
+      "Origen oriental2",
+      "New Age y Escuelas esotéricas",
+      "Cultos populares",
+      "Otras religiones o movimientos religiosos3"
+    ],
+    "nationalCount": 70376
+  },
+  {
+    "key": "no_religion",
+    "denominations": [
+      "Ninguna religión",
+      "Ateos/Agnósticos"
+    ],
+    "nationalCount": 10211052
+  },
+  {
+    "key": "unaffiliated_believer",
+    "denominations": [
+      "Sin adscripción religiosa (creyente)"
+    ],
+    "nationalCount": 3103464
+  },
+  {
+    "key": "unspecified",
+    "denominations": [
+      "No especificado"
+    ],
+    "nationalCount": 491814
+  }
+]

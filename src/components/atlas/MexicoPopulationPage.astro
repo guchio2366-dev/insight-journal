@@ -1,6 +1,7 @@
 ---
 import MexicoWorkspace from './MexicoWorkspace.astro';
 import population from '../../data/atlas/mexico/population.json';
+import composition from '../../data/atlas/mexico/population-composition.json';
 import {mexicoPopulationReading, mexicoPopulationRegionReading, mexicoPopulationReadingSources} from '../../data/atlas/mexico/population-reading';
 import {geometryPath, stateFeatures, stateLabelPoint, mapViewBox} from '../../lib/atlas-mexico-geometry';
 import {mexicoDensityColor, mexicoDensityBins, mexicoPopulationRadius, mexicoPopulationLegendValues, formatMexicoPopulation, formatMexicoDensity} from '../../lib/atlas-mexico-population';
@@ -10,6 +11,7 @@ import '../../styles/atlas-mexico-population.css';
 const initial = population.states.find(row => row.stateCode === '09')!;
 const initialReading = mexicoPopulationRegionReading('09');
 const assetRoot = withBase('/assets/atlas/mexico-population-v1');
+const compositionAssetRoot = withBase('/assets/atlas/mexico-population-composition-v1');
 const routes = {
  population: withBase('/atlas/north-america/mexico/population/'),
  industry: withBase('/atlas/north-america/mexico/industry/'),
@@ -30,8 +32,8 @@ const [selectedX, selectedY] = stateLabelPoint('09');
  <Fragment slot="controls">
  <nav class="atlas-nature-controls mexico-topic-controls" aria-label="人口の項目"><div class="atlas-nature-tabs mexico-topic-tabs mexico-population-topic-tabs">
    <button type="button" data-population-category="distribution" aria-pressed="true">人口分布</button>
-   <button type="button" data-population-category="ethnicity" aria-pressed="false">人種・民族 <small>未整備</small></button>
-   <button type="button" data-population-category="religion" aria-pressed="false">宗教 <small>未整備</small></button>
+   <button type="button" data-population-category="ethnicity" aria-pressed="false">民族・自己認識</button>
+   <button type="button" data-population-category="religion" aria-pressed="false">宗教</button>
  </div></nav>
  </Fragment>
  <Fragment slot="map">
@@ -61,7 +63,23 @@ const [selectedX, selectedY] = stateLabelPoint('09');
   </figure>
   </div>
   </Fragment>
-  <Fragment slot="legend">
+ <Fragment slot="legend">
+  <section class="population-composition-hero" data-population-composition-hero hidden aria-live="polite">
+   <p class="mexico-takeaway" data-population-composition-takeaway></p>
+   <a class="mexico-comparison-link" data-population-composition-compare href={routes.population}>人数と割合を比べる</a>
+   <a class="mexico-return" data-population-composition-return href={routes.population} hidden>元の指標に戻る</a>
+   <div class="population-composition-selected">
+    <h2 data-population-composition-selected-name></h2>
+    <dl><div><dt data-population-composition-count-label>選択指標の人数</dt><dd><strong data-population-composition-count></strong> 人</dd></div><div><dt>州内の割合</dt><dd><strong data-population-composition-share></strong></dd></div><div><dt>割合の分母</dt><dd><span data-population-composition-denominator></span> 人</dd></div></dl>
+    <p data-population-composition-confidence hidden></p>
+   </div>
+  </section>
+  <div class="population-composition-key" data-population-composition-key hidden>
+   <p class="population-key-title" data-population-composition-key-title></p>
+   <div data-population-composition-share-key><p class="mexico-caption">色＝州内の割合（%）</p><ul class="mexico-legend" data-population-composition-color-key aria-label="選択指標の割合の凡例"></ul></div>
+   <div data-population-composition-count-key><p class="mexico-caption" data-population-composition-count-note></p></div>
+   <p class="mexico-caption" data-population-composition-key-universe></p>
+  </div>
    <h2 data-population-map-heading>2020年、人口はどこに集まる？</h2>
   <div class="population-density-key" data-population-density-key>
    <p class="population-key-title">色＝人口密度（2020年、人/km²）</p>
@@ -73,11 +91,24 @@ const [selectedX, selectedY] = stateLabelPoint('09');
    <details class="population-key-notes"><summary>表示州・統計と州境</summary><p class="mexico-caption" data-population-map-status aria-live="polite">2020年・全32州の平均密度。メキシコ市を選択。</p><p class="mexico-caption population-source-caption">統計：2020年3月15日 ／ 州境：2025年。密度は公表値。</p></details>
  </Fragment>
  <Fragment slot="items">
-  <label><input type="checkbox" data-population-only disabled /> 選んだ州のデータだけ</label>
+  <label class="population-composition-selector" data-population-composition-selector hidden>統計の項目 <select data-population-composition-metric aria-label="民族・宗教の統計指標"></select></label>
+  <label><input type="checkbox" data-population-only disabled /> <span data-population-only-label>選んだ州のデータだけ</span></label>
   <button type="button" data-population-reset disabled>全32州に戻す</button>
   <a class="population-scale-entry" data-population-scale-link href={`${routes.population}?view=density&state=09&compare=scale&sourceView=density`}>人口規模と密度を比べる</a>
  </Fragment>
  <Fragment slot="reading">
+   <section class="population-composition-reading" data-population-composition-reading hidden aria-live="polite">
+    <p class="population-composition-comparison-note" data-population-composition-comparison-note></p>
+    <p data-population-composition-definition></p>
+    <p class="mexico-caption">対象：<span data-population-composition-universe></span></p>
+    <p data-population-composition-national></p>
+    <details class="population-composition-source"><summary>定義・推計の精度・原典と加工</summary>
+     <p data-population-composition-period></p><p data-population-composition-method></p><p data-population-composition-confidence-detail></p>
+     <p>人数の円は同じ指標の全32州で共通の尺度です。指標が変わると人数の基準も変わるため、別の指標の円の大きさを直接比べません。0人・0%は有効な値です。欠測・秘匿・未取得は斜線で区別します。</p>
+     <p><a data-population-composition-source href={compositionAssetRoot}>公式原典</a></p>
+     <p><a href={`${compositionAssetRoot}/composition-2020.csv`}>全指標の配信値CSV</a> ／ <a href={`${compositionAssetRoot}/composition-2020.json`}>配信JSON（公式区間を含む）</a> ／ <a href={`${compositionAssetRoot}/manifest.json`}>原典・加工・照合記録</a></p>
+    </details>
+   </section>
    <h2 data-population-reading-heading>{mexicoPopulationReading.title}</h2>
    <section class="population-unavailable-reading" data-population-unavailable hidden aria-live="polite">
     <p class="mexico-takeaway" data-population-unavailable-heading>人種・民族の分布は未整備です。</p>
@@ -104,6 +135,7 @@ const [selectedX, selectedY] = stateLabelPoint('09');
    </div>
  </Fragment>
  <Fragment slot="statistics">
+  <details class="population-table-details" data-population-composition-table hidden><summary>選択指標の全32州の人数・分母・割合を見る</summary><div class="mexico-table-scroll"><table><caption data-population-composition-table-caption></caption><thead><tr><th scope="col">州</th><th scope="col">人数（人）</th><th scope="col">分母（人）</th><th scope="col">割合（%）</th><th scope="col" data-population-composition-ci-heading>公式90%区間</th></tr></thead><tbody data-population-composition-rows></tbody></table></div></details>
   <div class="population-national-summary"><h2>全国と州の値を確かめる</h2><p>メキシコ全国・2020年：<strong>{formatMexicoPopulation(population.nationalPopulation)}人</strong> ／ 公表密度 <strong>{formatMexicoDensity(population.nationalDensity)}人/km²</strong></p></div>
   <details class="population-table-details" data-population-table open><summary>全32州の人口と公表密度を見る</summary><div class="mexico-table-scroll"><table><caption>INEGI 2020年国勢調査。人口は人、密度は人/km²。州全域。</caption><thead><tr><th scope="col">州</th><th scope="col">人口（人）</th><th scope="col">密度（人/km²）</th></tr></thead><tbody>{population.states.map(row => <tr data-population-row={row.stateCode} class:list={{'is-selected-population-row':row.stateCode==='09'}}><th scope="row">{row.nameJa} <span lang="es">{row.name}</span></th><td>{formatMexicoPopulation(row.population)}</td><td>{formatMexicoDensity(row.density)}</td></tr>)}</tbody></table></div></details>
  </Fragment>
@@ -111,6 +143,7 @@ const [selectedX, selectedY] = stateLabelPoint('09');
   <details><summary>原典・加工・利用条件</summary><ul><li><a href={population.sources.population.url}>INEGI：Censo de Población y Vivienda 2020・ITER（公式CSV ZIP）</a>。POBTOT、州集計行 ENTIDAD 01–32・MUN 000・LOC 0000。元ファイル更新：2022年5月19日。</li><li><a href={population.sources.density.url}>INEGI：Panorama sociodemográfico de México 2020（2021年刊行）</a>。各州の人口密度公表値を抽出。全国・32州人口をITERと照合。</li><li><a href="https://www.inegi.org.mx/servicios/catalogounico.html">INEGI州境</a>：Marco Geoestadístico, diciembre de 2025。州コードを結合し位置表示に使用。</li><li><a href={population.sources.license.url}>INEGI情報の利用条件</a>：元ITERメタデータのlicense欄に指定。出典・メタデータを保持し、抽出・日本語表示・地図表示への加工は当サイトで実施。</li><li><a href={`${assetRoot}/population-density-2020.csv`}>配信値CSV</a> ／ <a href={`${assetRoot}/population-2020.json`}>配信JSON</a> ／ <a href={`${assetRoot}/manifest.json`}>原典・加工・照合記録</a></li></ul></details>
  </Fragment>
  <script type="application/json" data-population-config set:html={JSON.stringify(routes).replace(/</g,'\\u003c')} />
+ <script type="application/json" data-population-composition-config set:html={JSON.stringify(composition).replace(/</g,'\\u003c')} />
  <script>
   import {initMexicoPopulation} from '../../scripts/atlas-mexico-population';
   const initialize = () => { for (const root of document.querySelectorAll<HTMLElement>('[data-mexico-field="population"]')) initMexicoPopulation(root); };

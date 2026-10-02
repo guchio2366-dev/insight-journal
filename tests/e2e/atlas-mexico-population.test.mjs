@@ -5,9 +5,11 @@ import path from 'node:path';
 import {build} from 'esbuild';
 import {Window} from 'happy-dom';
 import {mexicoDensityColor,mexicoPopulationRadius,mexicoPopulationLegendValues} from '../../src/lib/atlas-mexico-population.ts';
+import {mexicoCompositionColor,mexicoCompositionRadius,formatMexicoCompositionShare} from '../../src/lib/atlas-mexico-population-composition.ts';
 
 const folder='atlas/north-america/mexico/population';
 const population=JSON.parse(await readFile('src/data/atlas/mexico/population.json','utf8'));
+const compositionData=JSON.parse(await readFile('src/data/atlas/mexico/population-composition.json','utf8'));
 const localModules={name:'mexico-population-local-modules',setup(b){
  b.onResolve({filter:/^\./},args=>{const resolved=path.resolve(args.resolveDir,args.path);return {path:resolved+(path.extname(resolved)?'':'.ts')};});
  b.onLoad({filter:/\.ts$/},async args=>({contents:await readFile(args.path,'utf8'),loader:'ts',resolveDir:path.dirname(args.path)}));
@@ -74,21 +76,62 @@ test('Invalid URLs normalize, keyboard selection remains accessible, and history
   w.history.replaceState(null,'','?view=population&state=15&only=1&compare=scale&sourceView=density&fallback=1');w.dispatchEvent(new w.PopStateEvent('popstate'));assert.equal(q('[data-population-state]').value,'15');assert.equal(q('[data-population-view]').value,'population');assert.equal(q('[data-population-only]').checked,true);assert.equal(q('[data-population-fallback]').hidden,false);assert.equal(q('[data-population-scale-reading]').hidden,false);assert.equal(new URL(q('[data-population-return]').href).searchParams.get('view'),'density');
  }finally{await w.happyDOM.close();}
 });
-
-test('Unprepared ethnicity and religion entries preserve URL, source data, reload and history while naming the reference map',async()=>{
- const w=await page('?view=population&state=08&only=1&compare=scale&sourceView=density&fallback=1');const reloads=[];
- try{const d=w.document,q=s=>d.querySelector(s);
-  assert.equal(q('[data-population-view]').closest('.mexico-map-frame'),q('.mexico-map-frame'));
-  for(const category of ['ethnicity','religion']){
-   const button=q(`button[data-population-category="${category}"]`);assert.equal(button.disabled,false);button.click();
-   const url=new URL(w.location);assert.equal(url.searchParams.get('category'),category);assert.equal(url.searchParams.get('view'),'population');assert.equal(url.searchParams.get('state'),'08');assert.equal(url.searchParams.get('compare'),'scale');assert.equal(url.searchParams.get('only'),'1');assert.equal(url.searchParams.get('fallback'),'1');
-   assert.equal(button.getAttribute('aria-pressed'),'true');assert.equal(q('[data-population-unavailable]').hidden,false);assert.equal(q('[data-population-distribution-reading]').hidden,true);assert.equal(q('[data-population-reference]').hidden,false);assert.match(q('[data-population-unavailable-heading]').textContent,/未整備/);assert.match(q('[data-population-unavailable-text]').textContent,/構成や分布を示していません/);assert.match(q('[data-population-map] title').textContent,/参考：人口分布/);assert.match(q('[data-population-fallback-image]').alt,/参考：人口分布/);
-   assert.equal(q('[data-population-selected-population]').textContent,population.states.find(s=>s.stateCode==='08').population.toLocaleString('ja-JP'));assert.equal(q('[data-population-state-shape="08"]').getAttribute('fill'),mexicoDensityColor(15.1));assert.equal(q('[data-population-symbols]').hasAttribute('hidden'),false);assert.equal(q('[data-population-density-key]').hidden,false);assert.equal(q('[data-population-symbol-key]').hidden,false);
-   const reload=await page(w.location.search);reloads.push(reload);assert.equal(reload.document.querySelector(`button[data-population-category="${category}"]`).getAttribute('aria-pressed'),'true');assert.equal(reload.document.querySelector('[data-population-unavailable]').hidden,false);assert.equal(reload.document.querySelector('[data-population-state]').value,'08');
+test('All eleven official ethnicity and religion metrics render every state count, denominator, color, area and full keys',async()=>{
+ const w=await page('?category=ethnicity&state=20');try{const d=w.document,q=s=>d.querySelector(s);
+  for(const metric of compositionData.metrics){q(`[data-population-category="${metric.category}"]`).click();change(w,'[data-population-composition-metric]',metric.id);
+   assert.equal(new URL(w.location).searchParams.get('compositionMetric'),metric.id);assert.equal(q('[data-population-unavailable]').hidden,true);assert.equal(q('[data-population-distribution-reading]').hidden,true);assert.equal(q('[data-population-density-key]').hidden,true);
+   assert.equal(d.querySelectorAll('[data-population-composition-row]').length,32);assert.equal(q('[data-population-composition-table]').hidden,false);assert.ok(q('[data-population-map] title').textContent.includes(metric.label));
+   for(const row of population.states){const record=metric.states[row.stateCode],shape=q(`[data-population-state-shape="${row.stateCode}"]`),circle=q(`[data-population-state-symbol="${row.stateCode}"] circle`);
+    assert.equal(shape.getAttribute('fill'),mexicoCompositionColor(record,metric));assert.equal(Number(circle.getAttribute('r')),mexicoCompositionRadius(record,metric));assert.match(shape.getAttribute('aria-label'),new RegExp(record.count.toLocaleString('ja-JP')));
+    const cells=q(`[data-population-composition-row="${row.stateCode}"]`).querySelectorAll('td');assert.equal(cells[0].textContent,record.count.toLocaleString('ja-JP'));assert.equal(cells[1].textContent,record.denominator.toLocaleString('ja-JP'));assert.equal(cells[2].textContent,formatMexicoCompositionShare(record,metric));
+   }
+   assert.deepEqual([...q('[data-population-composition-color-key]').querySelectorAll('i')].slice(0,-1).map(i=>i.style.background),metric.shareBins.map(bin=>{const el=d.createElement('i');el.style.background=bin.color;return el.style.background;}));
+   change(w,'[data-population-view]','count');assert.equal(q('[data-population-symbols]').hasAttribute('hidden'),false);assert.equal(q('[data-population-composition-share-key]').hidden,true);assert.equal(q('[data-population-composition-count-key]').hidden,false);
+   assert.deepEqual([...q('[data-population-map-symbol-key]').querySelectorAll('circle')].map(c=>Number(c.getAttribute('r'))),metric.countLegendValues.map(count=>mexicoCompositionRadius({count,denominator:count,status:'value'},metric)));
+   assert.match(q('[data-population-composition-count-note]').textContent,/他指標の円とは直接比べません/);change(w,'[data-population-view]','share');
   }
-  assert.equal(q('[data-population-return]').closest('[data-population-distribution-reading]'),null);assert.match(q('[data-population-scale-heading]').textContent,/参考：人口分布/);q('[data-population-return]').click();assert.equal(new URL(w.location).searchParams.get('category'),'religion');assert.equal(q('[data-population-scale-reading]').hidden,true);assert.equal(q('[data-population-view]').value,'density');q('[data-population-scale-link]').click();assert.equal(q('[data-population-scale-reading]').hidden,false);
-  q('button[data-population-category="distribution"]').click();assert.equal(new URL(w.location).searchParams.has('category'),false);assert.equal(q('[data-population-unavailable]').hidden,true);assert.equal(q('[data-population-distribution-reading]').hidden,false);assert.equal(q('[data-population-scale-reading]').hidden,false);assert.equal(q('[data-population-reference]').hidden,true);
-  w.history.replaceState(null,'','?category=ethnicity&view=density&state=15&only=1');w.dispatchEvent(new w.PopStateEvent('popstate'));assert.equal(q('button[data-population-category="ethnicity"]').getAttribute('aria-pressed'),'true');assert.equal(q('[data-population-state]').value,'15');assert.equal(q('[data-population-view]').value,'density');assert.equal(q('[data-population-unavailable]').hidden,false);
-  w.history.replaceState(null,'','?category=religion&view=population&state=19');w.dispatchEvent(new w.PopStateEvent('popstate'));assert.equal(q('button[data-population-category="religion"]').getAttribute('aria-pressed'),'true');assert.equal(q('[data-population-state]').value,'19');assert.equal(q('[data-population-view]').value,'population');assert.equal(q('[data-population-unavailable]').hidden,false);
- }finally{await w.happyDOM.close();for(const reload of reloads)await reload.happyDOM.close();}
+ }finally{await w.happyDOM.close();}
+});
+
+test('Bare category URLs and category transitions normalize before comparison, preserving the original state and source flags',async()=>{
+ const w=await page('?category=ethnicity&view=population&state=08&only=1&metric=cattle&measure=quantity&from=agriculture&sourceMetric=cattle&sourceCrops=0&sourceLivestock=1');let reload;
+ try{const d=w.document,q=s=>d.querySelector(s);
+  for(const category of ['ethnicity','religion','ethnicity']){q(`[data-population-category="${category}"]`).click();change(w,'[data-population-view]','count');const original=w.location.href;const currentMetric=q('[data-population-composition-metric]').value;
+   assert.equal(new URL(original).searchParams.get('compositionMetric'),currentMetric);q('[data-population-composition-compare]').click();assert.equal(q('[data-population-composition-return]').hidden,false);assert.equal(q('[data-population-view]').disabled,true);assert.equal(q('[data-population-composition-metric]').disabled,true);
+   change(w,'[data-population-state]','09');assert.deepEqual(visible(d,'[data-population-state-symbol]').map(el=>el.dataset.populationStateSymbol),['08']);assert.deepEqual(visible(d,'[data-population-state-shape]').map(el=>el.dataset.populationStateShape),['09']);assert.equal(q('[data-population-composition-return]').href,original);
+   reload=await page(w.location.search);assert.equal(reload.document.querySelector('[data-population-composition-return]').href,original);assert.equal(reload.document.querySelector('[data-population-view]').disabled,true);await reload.happyDOM.close();reload=null;
+   q('[data-population-composition-return]').click();assert.equal(w.location.href,original);assert.equal(q('[data-population-state]').value,'08');assert.equal(q('[data-population-view]').value,'count');assert.equal(q('[data-population-only]').checked,true);
+   for(const [key,value]of Object.entries({metric:'cattle',measure:'quantity',from:'agriculture',sourceMetric:'cattle',sourceCrops:'0',sourceLivestock:'1'}))assert.equal(new URL(w.location).searchParams.get(key),value);
+  }
+  w.history.replaceState(null,'','?category=ethnicity');w.dispatchEvent(new w.PopStateEvent('popstate'));q('[data-population-composition-compare]').click();assert.equal(q('[data-population-composition-return]').hidden,false);
+ }finally{await w.happyDOM.close();if(reload)await reload.happyDOM.close();}
+ const bare=await page('?category=ethnicity');try{bare.document.querySelector('[data-population-composition-compare]').click();assert.equal(bare.document.querySelector('[data-population-composition-return]').hidden,false);}finally{await bare.happyDOM.close();}
+});
+
+test('Source share distribution and exact return survive target selection, history and fallback without substituting density',async()=>{
+ const w=await page('?category=religion&compositionMetric=islamic&compositionMeasure=share&state=20&only=1&fallback=1');let reload;
+ try{const d=w.document,q=s=>d.querySelector(s),metric=compositionData.metrics.find(m=>m.id==='islamic'),original=w.location.href;
+  q('[data-population-composition-compare]').click();change(w,'[data-population-state]','09');assert.deepEqual(visible(d,'[data-population-state-shape]').map(el=>el.dataset.populationStateShape),['20']);assert.deepEqual(visible(d,'[data-population-state-symbol]').map(el=>el.dataset.populationStateSymbol),['09']);
+  assert.match(q('[data-population-composition-takeaway]').textContent,/色は州内の割合、円の面積は人数/);assert.ok(q('[data-population-composition-comparison-note]').textContent.includes(metric.takeaway));
+  const source=q('[data-population-fallback-image]').src;assert.match(source,/^data:image\/svg\+xml/);const svg=new w.DOMParser().parseFromString(decodeURIComponent(source.slice(source.indexOf(',')+1)),'image/svg+xml');assert.match(svg.querySelector('title').textContent,/イスラム/);assert.equal(svg.querySelector('[data-population-state-shape="20"]').getAttribute('fill'),mexicoCompositionColor(metric.states['20'],metric));
+  const compared=w.location.href;reload=await page(w.location.search);assert.equal(reload.document.querySelector('[data-population-composition-return]').href,original);q('[data-population-composition-return]').click();assert.equal(w.location.href,original);
+  w.history.replaceState(null,'',compared);w.dispatchEvent(new w.PopStateEvent('popstate'));assert.equal(q('[data-population-state]').value,'09');assert.equal(q('[data-population-composition-return]').href,original);assert.equal(q('[data-population-composition-share-key]').hidden,false);assert.equal(q('[data-population-composition-count-key]').hidden,false);
+ }finally{await w.happyDOM.close();if(reload)await reload.happyDOM.close();}
+});
+
+test('Official estimates expose original percentage intervals without deriving them from the count interval',async()=>{
+ const metric=compositionData.metrics.find(m=>m.id==='indigenous_identity_estimate'),w=await page('?category=ethnicity&compositionMetric=indigenous_identity_estimate&state=20');try{const d=w.document,q=s=>d.querySelector(s),record=metric.states['20'];
+  assert.match(q('[data-population-map] title').textContent,/公式推計/);assert.match(q('[data-population-composition-key-title]').textContent,/公式推計/);assert.match(q('[data-population-composition-count-label]').textContent,/公式推計/);assert.equal(q('[data-population-composition-confidence]').hidden,false);
+  for(const bound of [record.confidenceInterval90.lower,record.confidenceInterval90.upper])assert.ok(q('[data-population-composition-confidence]').textContent.includes(bound.toLocaleString('ja-JP',{maximumFractionDigits:Math.min(3,metric.sharePrecision+1)})));
+  assert.match(q('[data-population-composition-confidence-detail]').textContent,/再計算していません/);assert.match(q('[data-population-composition-confidence-detail]').textContent,/人数CV/);assert.equal(q('[data-population-composition-ci-heading]').hidden,false);assert.ok(q('[data-population-composition-row="20"] td:last-child').textContent.includes(record.confidenceInterval90.lower.toLocaleString('ja-JP',{maximumFractionDigits:6})));
+  assert.equal(q('[data-population-composition-return]').closest('[data-population-composition-hero]')!==null,true);assert.equal(q('[data-population-composition-hero]').parentElement,q('.mexico-reading-legend'));
+ }finally{await w.happyDOM.close();}
+});
+
+test('Returning to population distribution restores the original option and legend nodes, radii and remembered density mode',async()=>{
+ const w=await page('?view=population&state=20');try{const d=w.document,q=s=>d.querySelector(s),options=[...q('[data-population-view]').children],keys=[...q('[data-population-map-symbol-key]').children];
+  q('[data-population-category="ethnicity"]').click();change(w,'[data-population-composition-metric]','afro_identity');change(w,'[data-population-view]','share');q('[data-population-category="distribution"]').click();
+  assert.deepEqual([...q('[data-population-view]').children],options);assert.deepEqual([...q('[data-population-map-symbol-key]').children],keys);assert.equal(q('[data-population-view]').value,'population');assert.equal(q('[data-population-composition-key]').hidden,true);assert.equal(q('[data-population-composition-hero]').hidden,true);assert.equal(q('[data-population-distribution-reading]').hidden,false);assert.equal(q('[data-population-table]').hidden,false);
+  for(const row of population.states)assert.equal(Number(q(`[data-population-state-symbol="${row.stateCode}"] circle`).getAttribute('r')),mexicoPopulationRadius(row.population));change(w,'[data-population-view]','density');assert.equal(q('[data-population-density-key]').hidden,false);assert.equal(q('[data-population-state-shape="20"]').getAttribute('fill'),mexicoDensityColor(population.states.find(s=>s.stateCode==='20').density));
+ }finally{await w.happyDOM.close();}
 });
