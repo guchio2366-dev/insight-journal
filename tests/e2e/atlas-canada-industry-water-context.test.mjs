@@ -38,7 +38,7 @@ function assertReturn(w){
  const url=new URL(q(w,'[data-canada-industry-return]').href);assert.equal(url.origin,'https://example.com');assert.equal(url.pathname,'/insight-journal/atlas/north-america/canada/industry/');
  assert.deepEqual(Object.fromEntries(url.searchParams),saved);
 }
-function assertGeneralReading(w,open){const details=[...w.document.querySelectorAll('[data-canada-general-reading]')];assert.ok(details.length);assert.ok(details.every(detail=>detail.open===open));}
+function assertGeneralReading(w,open){const details=[...w.document.querySelectorAll('[data-canada-general-reading]')];assert.ok(details.length);for(const detail of details)assert.equal(detail.open,detail.closest('[data-canada-reading="landform"]')?false:open,'landform background stays optional while water follows comparison context');}
 
 test('Manufacturing comparison shows all five Great Lakes plus St. Lawrence and names the actual comparison group',async()=>{
  const w=await page(query({}, {...saved,next:'https://evil.example/',href:'/outside/'}));

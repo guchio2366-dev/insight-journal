@@ -15,3 +15,19 @@ test('Canadian climate comparison, keyboard city selection and history preserve 
 test('Canadian only-selected water actually removes every other distribution and return/history restore all',async()=>{
  const w=await page('',true);try{const d=w.document,q=s=>d.querySelector(s);q('[data-canada-view=water]').click();assert.equal(q('[data-canada-water-layers]').getAttribute('display'),'');const picker=q('[data-canada-water]');picker.value='Mackenzie';picker.dispatchEvent(new w.Event('change'));const only=q('[data-canada-only]');only.checked=true;only.dispatchEvent(new w.Event('change'));const shapes=[...d.querySelectorAll('[data-canada-water-shape]')];assert.ok(shapes.filter(s=>s.style.display!=='none').every(s=>s.dataset.canadaWaterShape==='Mackenzie'));assert.ok(shapes.some(s=>s.style.display==='none'));const saved=new URL(w.location).search;q('[data-canada-all-water]').click();assert.ok(shapes.every(s=>s.style.display!== 'none'));assert.equal(only.checked,false);w.history.replaceState(null,'',saved);w.dispatchEvent(new w.PopStateEvent('popstate'));assert.equal(only.checked,true);assert.ok(shapes.filter(s=>s.style.display!=='none').every(s=>s.dataset.canadaWaterShape==='Mackenzie'));q('[data-canada-reset]').click();assert.equal(q('[data-canada-map]').getAttribute('viewBox'),'0 0 900 580');}finally{await w.happyDOM.close();}
 });
+test('Official landform polygons, complete Japanese legend and selection text stay synchronized through isolate, history and mode changes',async()=>{
+ const w=await page('?view=landform&cropReturn=product%3Dwheat',true);try{
+  const d=w.document,q=s=>d.querySelector(s),host=q('[data-canada-landform]');
+  assert.equal(host.hidden,false);assert.equal(host.querySelectorAll('[data-canada-landform-shape]').length,7);assert.equal(host.querySelectorAll('[data-canada-landform-legend]').length,7);
+  assert.equal(host.querySelector('img'),null);assert.equal(q('.canada-landform-original').open,false);
+  for(const button of host.querySelectorAll('[data-canada-landform-legend]')){
+   button.click();const id=button.dataset.canadaLandformLegend;
+   assert.equal(new URL(w.location).searchParams.get('landform'),id);assert.equal(button.getAttribute('aria-pressed'),'true');assert.match(q('[data-canada-landform-reading-title]').textContent,new RegExp(button.textContent.trim().replace(/[()]/g,'\\$&')));
+   const only=q('[data-canada-landform-only]');only.checked=true;only.dispatchEvent(new w.Event('change'));
+   assert.deepEqual([...host.querySelectorAll('[data-canada-landform-shape]:not([hidden])')].map(s=>s.dataset.canadaLandformShape),[id]);
+  }
+  const saved=new URL(w.location).search;q('[data-canada-view=water]').click();assert.equal(host.hidden,true);q('[data-canada-view=landform]').click();assert.equal(q('[data-canada-landform-only]').checked,true);
+  q('[data-canada-landform-reset]').click();assert.equal(q('[data-canada-landform-only]').checked,false);assert.equal(host.querySelectorAll('[data-canada-landform-shape]:not([hidden])').length,7);
+  w.history.replaceState(null,'',saved);w.dispatchEvent(new w.PopStateEvent('popstate'));assert.equal(q('[data-canada-landform-only]').checked,true);assert.equal(new URL(w.location).searchParams.get('cropReturn'),'product=wheat');assert.equal(host.querySelectorAll('[data-canada-landform-shape]:not([hidden])').length,1);
+ }finally{await w.happyDOM.close();}
+});
