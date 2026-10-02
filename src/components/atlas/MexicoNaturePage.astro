@@ -28,9 +28,9 @@ const config = {routes, defaultViewBox: mapViewBox, states: statePaths.map(item 
    <button type="button" data-mexico-nature-view="relief" aria-pressed="false">地形</button>
    <button type="button" data-mexico-nature-category="elevation" aria-pressed="false">標高</button>
  </div><div class="atlas-water-tabs mexico-nature-water-tabs" data-mexico-nature-water-tabs hidden>
-   <button type="button" data-mexico-nature-category="rivers-groundwater" aria-pressed="false">河川・地下水 <small>未整備</small></button>
-   <button type="button" data-mexico-nature-category="precipitation" aria-pressed="false">降水量 <small>未整備</small></button>
-   <button type="button" data-mexico-nature-category="basins" aria-pressed="false">河川の流域 <small>未整備</small></button>
+   <button type="button" data-mexico-nature-category="rivers-groundwater" aria-pressed="false">河川・地下水</button>
+   <button type="button" data-mexico-nature-category="precipitation" aria-pressed="false">降水量</button>
+   <button type="button" data-mexico-nature-category="basins" aria-pressed="false">河川の流域</button>
  </div></div>
  <section slot="map" class="mexico-nature-primary" aria-label="気候と地形の全国分布">
   <div class="atlas-map-frame mexico-map-frame">
@@ -41,11 +41,13 @@ const config = {routes, defaultViewBox: mapViewBox, states: statePaths.map(item 
    <title id="mexico-nature-map-title">メキシコの気候・自然地理地域の全国分布</title>
    <desc id="mexico-nature-map-desc">気候21原分類を6群で色分け。地形は15自然地理地域と分類欠測。色の面をクリックすると個別の解説へ、州境の線または州選択欄で読む州へ。地図下の項目選択はキーボードで操作でき、比較元と表示範囲を保持する。</desc>
    <defs><pattern id="mexico-nature-missing" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#edf0ed"/><path d="M0 7L7 0" stroke="#919ba2" stroke-width="1"/></pattern></defs>
+   <g data-mexico-nature-neutral style="display:none" aria-hidden="true">{statePaths.map(item => <path d={item.path} fill="#eff0e8" stroke="none" fill-rule="evenodd" />)}</g>
    <g data-mexico-nature-vector>
     <g data-mexico-nature-layer="climate">{nature.climate.features.map(feature => {const category = climateClasses.get(feature.classId)!; const group = climateGroups.get(category.groupId)!; return <path data-nature-class={category.id} data-mexico-nature-feature={feature.id} role="button" tabindex="-1" aria-pressed="false" aria-label={`${category.labelJa}を読む`} fill={group.color} stroke={group.color} stroke-width=".2" fill-rule="evenodd" d={geometryPath(feature.geometry, projectNative)}><title>{category.labelJa}（原分類：{category.labelSource}、{feature.sourceCode}）</title></path>;})}</g>
     <g data-mexico-nature-layer="relief" hidden>{nature.relief.features.map(feature => {const category = reliefClasses.get(feature.classId)!; return <path data-nature-class={category.id} data-mexico-nature-feature={feature.id} role="button" tabindex="-1" aria-pressed="false" aria-label={`${category.labelJa}を読む`} data-nature-status={feature.status} fill={feature.status === 'missing' ? 'url(#mexico-nature-missing)' : category.color} stroke={category.color} stroke-width=".2" fill-rule="evenodd" d={geometryPath(feature.geometry, projectNative)}><title>{category.labelJa}（原分類：{category.labelSource}）</title></path>;})}</g>
    </g>
    <g data-mexico-nature-static hidden><image href={config.staticMaps.climate} width="900" height="580" preserveAspectRatio="none" data-mexico-nature-static-image /></g>
+   <g data-mexico-hydrology-overlay style="display:none" />
    <g class="mexico-nature-state-outlines">{statePaths.map(item => <path class:list={['mexico-nature-state', {'is-selected': item.code === '25'}]} d={item.path} fill-rule="evenodd" pointer-events="stroke" data-mexico-nature-state={item.code} role="button" tabindex="0" aria-pressed={item.code === '25' ? 'true' : 'false'} aria-label={`${item.name}を選ぶ`}><title>{item.name}</title></path>)}</g>
    <g class="mexico-nature-target" data-mexico-nature-target transform={`translate(${stateLabelPoint('25').join(' ')})`} aria-hidden="true"><circle r="7"/><circle r="3"/></g>
   </svg>
@@ -55,11 +57,14 @@ const config = {routes, defaultViewBox: mapViewBox, states: statePaths.map(item 
   <div class="mexico-nature-map-title"><h2 data-mexico-nature-map-title>気候の分布</h2><span data-mexico-nature-map-edition>INEGI・2008版</span></div>
   <ul class="mexico-legend mexico-nature-climate-legend" data-mexico-nature-legend="climate" aria-label="気候区分の凡例">{nature.climate.groups.map(group => <li><i style={`background:${group.color}`} aria-hidden="true"/>{group.label}</li>)}</ul>
   <ul class="mexico-legend mexico-nature-relief-legend" data-mexico-nature-legend="relief" aria-label="自然地理地域の凡例" hidden>{nature.relief.classes.map(category => <li><i class:list={{'is-missing': category.status === 'missing'}} style={`background:${category.color}`} aria-hidden="true"/>{category.labelJa}</li>)}</ul>
+  <ul class="mexico-legend mexico-hydrology-legend" data-mexico-hydrology-legend aria-label="水資源・等高線の凡例" hidden />
   <p class="mexico-caption" data-mexico-nature-period>2008＝刊行年・統一観測期未記載。21原分類→6群。</p>
   <p class="mexico-caption" data-mexico-nature-static-note hidden>原典の静的地図。自然分布と州の選択を保ち、同じ範囲で比較します。</p>
  </div>
  <div slot="items" class="mexico-nature-items">
   <label class="mexico-nature-item-picker">地図の項目<select data-mexico-nature-item-select aria-label="気候・地形の分類を選ぶ"><option value="">全国の概論</option>{items.climate.map(item => <option value={item.id}>{item.labelJa}</option>)}</select></label>
+  <div class="mexico-hydrology-controls" data-mexico-hydrology-controls hidden><label>水・等高線の項目<select data-mexico-hydrology-item><option value="">全国の分布</option></select></label><label>背景<select data-mexico-hydrology-base><option value="plain">白地図</option><option value="climate">気候区分</option><option value="relief">地形地域</option></select></label></div>
+  <p class="mexico-caption" data-mexico-hydrology-picker-note hidden></p>
   <p class="mexico-caption" data-mexico-nature-reference hidden></p>
   <div class="mexico-actions"><span class="mexico-nature-state-badge" data-mexico-nature-selected-name>シナロア</span><button type="button" data-mexico-nature-focus>この州を拡大</button><button type="button" data-mexico-nature-reset>全国の分布へ</button></div>
   <label data-mexico-nature-only-control hidden><input type="checkbox" data-mexico-nature-only /> <span data-mexico-nature-only-label>比較先は選んだ州を強調</span></label>
@@ -71,6 +76,7 @@ const config = {routes, defaultViewBox: mapViewBox, states: statePaths.map(item 
    <a class="mexico-comparison-link" data-mexico-nature-compare-link="irrigation" href={`${routes.nature}?view=climate&compare=irrigation&state=25`}>乾燥気候と灌漑農地率を比べる</a>
    <a class="mexico-comparison-link" data-mexico-nature-compare-link="population" href={`${routes.nature}?view=relief&compare=population&state=25`}>地形地域と人口密度を比べる</a>
   </nav>
+  <section data-mexico-hydrology-reading hidden><h2 data-mexico-hydrology-title></h2><p class="mexico-takeaway" data-mexico-hydrology-lead></p><p class="mexico-water-status" data-mexico-hydrology-status role="status"></p><button type="button" data-mexico-hydrology-retry hidden>地図資料を再読み込み</button><div class="mexico-nature-reading-body"><p data-mexico-hydrology-value></p><p data-mexico-hydrology-definition></p><p data-mexico-hydrology-limitations></p><details data-mexico-hydrology-base-key><summary data-mexico-hydrology-base-key-title>背景地図の凡例と版</summary><p data-mexico-hydrology-base-source></p><div data-mexico-hydrology-base-key-host></div></details><details><summary>原典・対象期間・加工・利用条件</summary><div data-mexico-hydrology-source></div><a href={withBase('/assets/atlas/mexico-water-v1/manifest.json')}>原典と配信ファイルの台帳</a></details></div></section>
   <section data-mexico-nature-feature-reading hidden><h2 data-mexico-nature-feature-title></h2><p class="mexico-takeaway" data-mexico-nature-feature-lead></p><div class="mexico-nature-reading-body"><p data-mexico-nature-feature-body></p><button type="button" data-mexico-nature-clear-item>全国の概論へ</button></div></section>
   <section data-mexico-nature-overview>
    <h2 data-mexico-nature-reading-title>気候の違いが水管理を変える</h2>
@@ -115,7 +121,7 @@ const config = {routes, defaultViewBox: mapViewBox, states: statePaths.map(item 
   </details>
  </div>
  <span hidden data-mexico-nature />
- <script type="application/json" data-mexico-nature-config set:html={JSON.stringify({...config, states: config.states.map(state => ({...state, cattleHeads: livestock.states[state.code as keyof typeof livestock.states] ?? null})), items}).replace(/</g, '\\u003c')} />
+ <script type="application/json" data-mexico-nature-config set:html={JSON.stringify({...config, states: config.states.map(state => ({...state, cattleHeads: livestock.states[state.code as keyof typeof livestock.states] ?? null})), items, waterAssetBase: withBase('/assets/atlas/mexico-water-v1/')}).replace(/</g, '\\u003c')} />
  <p class="visually-hidden" data-mexico-nature-announcement aria-live="polite"></p>
  <noscript><p class="mexico-caption">気候の全国分布・凡例・原値表・出典を表示しています。地形・比較・州の切替にはJavaScriptが必要です。</p></noscript>
 </MexicoWorkspace>
