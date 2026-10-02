@@ -146,13 +146,13 @@ test('Selected city names win collisions on every redraw while all real coordina
     const western = ['vancouver', 'winnipeg', 'regina'];
     const buttons = [...p.host('climate').querySelectorAll('[data-canada-natural-city]')];
     const positions = new Map(buttons.map(button => [button.dataset.canadaNaturalCity, [button.style.left, button.style.top]]));
-    for (const button of buttons) Object.defineProperty(button, 'offsetWidth', { configurable: true, get: () => button.querySelector('span').hidden ? 20 : 70 });
+    for (const button of buttons) Object.defineProperty(button.querySelector('span'), 'offsetWidth', { configurable: true, value: 70 });
     p.controllers.climate.render({selected:null,only:false,city:'ottawa'});
     assert.equal(p.q('climate','[data-canada-natural-city="vancouver"] span').hidden,true,'an initial nonselected name must not run under a marker drawn later in DOM order');
     for (const button of buttons) {
       // Browser widths collapse when a span is hidden. Mimic that to detect
       // stale measurements when a previously hidden city is selected.
-      Object.defineProperty(button, 'offsetWidth', { get: () => button.querySelector('span').hidden ? 20 : 250 });
+      Object.defineProperty(button.querySelector('span'), 'offsetWidth', { value: 250 });
       Object.defineProperty(button, 'offsetHeight', { value: 30 });
     }
     for (const city of western) for (let redraw = 0; redraw < 3; redraw++) {
@@ -160,6 +160,12 @@ test('Selected city names win collisions on every redraw while all real coordina
       const selected = p.q('climate', `[data-canada-natural-city="${city}"]`);
       assert.equal(selected.querySelector('span').hidden, false, 'the selected name is always visible');
       assert.equal(selected.style.zIndex, '2', 'the selected name is above neighboring label backgrounds');
+      const text=selected.querySelector('span'), x=parseFloat(selected.style.left), y=parseFloat(selected.style.top);
+      const textBox=[x-6+parseFloat(text.style.left),y-12+parseFloat(text.style.top)-11,x-6+parseFloat(text.style.left)+250,y-12+parseFloat(text.style.top)+11];
+      for (const button of buttons.filter(button=>button!==selected)) {
+        const mx=parseFloat(button.style.left),my=parseFloat(button.style.top);
+        assert.ok(!(textBox[0]<mx+6&&textBox[2]>mx-6&&textBox[1]<my+12&&textBox[3]>my-12),'selected text does not cover any other real marker button');
+      }
       for (const id of western.filter(id => id !== city)) assert.equal(p.q('climate', `[data-canada-natural-city="${id}"] span`).hidden, true, 'collisions hide only other text');
       for (const button of buttons) {
         assert.equal(button.hidden, false, 'in-frame coordinate markers remain interactive');

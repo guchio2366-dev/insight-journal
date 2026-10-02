@@ -116,7 +116,7 @@ export function initCanadaNaturalLayer(root: HTMLElement): CanadaNaturalControll
       const projected = ready && map ? map.project(station.coordinates as [number, number]) : null, point = projectCanadaNatural(station.coordinates);
       return [station.id, [projected?.x ?? (point[0] - frame[0]) * ratio + left, projected?.y ?? (point[1] - frame[1]) * ratio + top]];
     }));
-    const markerBoxes = [...positions].map(([id, [x,y]]) => ({ id, box: [x-6,y-15,x+12,y+15] }));
+    const markerBoxes = [...positions].map(([id, [x,y]]) => ({ id, box: [x-6,y-12,x+6,y+12] }));
     for (const label of [...labels].sort((a, b) => Number(b.dataset.canadaNaturalCity === state.city) - Number(a.dataset.canadaNaturalCity === state.city))) {
       const station = config.stations.find(item => item.id === label.dataset.canadaNaturalCity)!;
       const [x,y] = positions.get(station.id)!;
@@ -125,19 +125,27 @@ export function initCanadaNaturalLayer(root: HTMLElement): CanadaNaturalControll
       // Measure the full name on every redraw; a previously hidden name must
       // still reserve its full width when its city becomes selected.
       if (text) text.hidden = false;
-      const w = label.offsetWidth || Math.min(185, (label.textContent?.length ?? 0) * 12 + 14), h = label.offsetHeight || 30;
-      const box = [x - 6, y - h / 2, x + w - 6, y + h / 2];
+      const w = text?.offsetWidth || Math.min(185, (label.textContent?.length ?? 0) * 12 + 8), h = text?.offsetHeight || 22;
       // The circle remains at the real observation coordinate at every scale.
       label.hidden = x < 3 || y < 3 || x > width - 3 || y > height - 3;
       const collisionBoxes = [...occupied, ...markerBoxes.filter(marker => marker.id !== station.id).map(marker => marker.box)];
-      const collision = box[2] > width - 3 || collisionBoxes.some(([x1, y1, x2, y2]) => box[0] < x2 + 3 && box[2] > x1 - 3 && box[1] < y2 + 3 && box[3] > y1 - 3);
-      if (text) text.hidden = collision && station.id !== state.city;
+      const candidates = station.id===state.city ? [[x+8,y],[x+8,y-28],[x+8,y+28],[x+8,y-50],[x+8,y+50],[x-w-8,y-28],[x-w-8,y+28]] : [[x+8,y]];
+      const available = ([left,centerY]:number[]) => {
+        const box=[left,centerY-h/2,left+w,centerY+h/2];
+        return box[0]>=3 && box[1]>=3 && box[2]<=width-3 && box[3]<=height-3 && !collisionBoxes.some(([x1,y1,x2,y2]) => box[0]<x2+3 && box[2]>x1-3 && box[1]<y2+3 && box[3]>y1-3);
+      };
+      const placement = candidates.find(available);
+      const [textLeft,textY] = placement ?? [Math.max(3,Math.min(width-w-3,x+8)),Math.max(h/2+3,Math.min(height-h/2-3,y-28))];
+      if (text) {
+        text.hidden = !placement && station.id!==state.city;
+        text.style.left = `${textLeft-x+6}px`;
+        text.style.top = `${12+textY-y}px`;
+      }
       label.style.zIndex = station.id === state.city ? '2' : '1';
       label.style.left = `${x}px`; label.style.top = `${y}px`;
       if (!label.hidden) {
-        // Hidden text occupies only its coordinate marker, not an invisible
-        // name-sized rectangle that could suppress unrelated city names.
-        occupied.push(text?.hidden ? [x - 6, y - h / 2, x + 12, y + h / 2] : box);
+        occupied.push([x-6,y-12,x+6,y+12]);
+        if (text && !text.hidden) occupied.push([textLeft,textY-h/2,textLeft+w,textY+h/2]);
       }
     }
     const byKey = new Map((config.contourLabels ?? []).map(label => [label.key,label]));
