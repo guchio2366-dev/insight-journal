@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "title": "Physiographic Regions of Canada — official Regions layer",
+  "accessedAt": "2026-10-02T03:35:58.801Z",
+  "source": {
+    "catalogueId": "a3dfbaf4-1b20-4061-aa0a-e7a79953f52d",
+    "publisher": "Government of Canada; Natural Resources Canada",
+    "catalogueUrl": "https://open.canada.ca/data/en/dataset/a3dfbaf4-1b20-4061-aa0a-e7a79953f52d",
+    "created": "2019-01",
+    "published": "2019-04-01",
+    "temporalCoverageStart": "2017-09-01",
+    "catalogueModified": "2022-01-12",
+    "licence": "Open Government Licence - Canada 2.0",
+    "licenceUrl": "https://open.canada.ca/en/open-government-licence-canada",
+    "attribution": "Contains information licensed under the Open Government Licence – Canada."
+  },
+  "geometry": {
+    "filename": "regions.geojson",
+    "sourceCrs": "EPSG:3978",
+    "sourceCrsName": "NAD83 / Canada Atlas Lambert",
+    "deliveryCrs": "EPSG:4326",
+    "type": "FeatureCollection",
+    "featureCount": 7,
+    "polygonCount": 750,
+    "ringCount": 750,
+    "vertexCount": 32042,
+    "featureJoinField": "RegionEn",
+    "sourceOverviewScale": {
+      "minimum": 50000000,
+      "maximum": 15000001
+    },
+    "simplificationApplied": false,
+    "coordinateRoundingApplied": false,
+    "originalResponseBytesPreserved": true,
+    "method": "Official NRCan API response using outSR=4326 and f=geojson. No maxAllowableOffset, geometryPrecision, clipping, simplification, coordinate rounding or image tracing has been applied."
+  },
+  "validation": {
+    "finiteCoordinates": true,
+    "closedRings": true,
+    "polygonSelfCrossings": 0,
+    "polygonHoleErrors": 0,
+    "betweenPolygonProperCrossings": 0,
+    "betweenPolygonFilledContainments": 0,
+    "originalSharedEdgeSegmentPairs": 1641,
+    "originalEndpointContactPairs": 3598,
+    "note": "Shared edges and endpoint contacts belong to the original region partition and are preserved. Shared-edge counts are segment-pair counts, not positive-area overlaps."
+  },
+  "limitations": [
+    "These are broad national physiographic regions, not elevations, terrain observations, agricultural land or administrative regions.",
+    "Catalogue publication, temporal coverage and catalogue modification dates are distinct. The separately linked 1970 raster guide does not establish a 1970 reference year for this vector.",
+    "Label anchors are cartographic positions verified inside the original region geometry, not observation stations."
+  ],
+  "files": [
+    {
+      "file": "regions.geojson",
+      "url": "https://maps-cartes.services.geo.ca/server_serveur/rest/services/NRCan/phys_reg_en/MapServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson",
+      "sha256": "26b0d3cde98e66167a2fa122cf73c2d098b5c8f24c225610df145e8c98004866",
+      "contentType": "application/geo+json;charset=UTF-8",
+      "bytes": 1310663
+    },
+    {
+      "file": "source-layer.json",
+      "url": "https://maps-cartes.services.geo.ca/server_serveur/rest/services/NRCan/phys_reg_en/MapServer/0?f=pjson",
+      "sha256": "b6e9470e8cd02dbbdd7e34d4e9ae83c7181b15182baf812709edb7e6c4d01c02",
+      "contentType": "text/plain;charset=UTF-8",
+      "bytes": 6907
+    },
+    {
+      "file": "source-catalogue.json",
+      "url": "https://open.canada.ca/data/api/action/package_show?id=a3dfbaf4-1b20-4061-aa0a-e7a79953f52d",
+      "sha256": "4e4dc7c0bc74893827779a4987fd26932dbe07b8939a42b1dacc6a3a9a9b99d7",
+      "contentType": "application/json;charset=utf-8",
+      "bytes": 13829
+    },
+    {
+      "file": "source-license.html",
+      "url": "https://open.canada.ca/en/open-government-licence-canada",
+      "sha256": "d7648d6d694d66a0891502f85c3383f9263d5e541b47e14fbf33450974af158f",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 23079
+    }
+  ]
+}

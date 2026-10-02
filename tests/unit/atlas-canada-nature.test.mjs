@@ -18,11 +18,24 @@ test('Canadian composites retain official independent monthly/annual values and 
 });
 test('Canadian state round trips comparison, water isolation and camera without losing unrelated query',()=>{
  const initial=new URL('https://example.com/insight-journal/atlas/north-america/canada/nature/?news=one');
- const expected={city:'regina',compare:'ottawa',view:'water',water:'Mackenzie',only:true,frame:[250,200,300,200]};
+ const expected={city:'regina',compare:'ottawa',view:'water',water:'Mackenzie',only:true,frame:[250,200,300,200],landform:null,landformOnly:false,landformBounds:null};
  const saved=writeCanadaNatureState(initial,expected);assert.equal(saved.searchParams.get('news'),'one');
  assert.deepEqual(readCanadaNatureState(saved,cities,waters),expected);
- assert.deepEqual(readCanadaNatureState(new URL('https://example.com/?city=unknown&compare=unknown&view=unknown&water=unknown&frame=NaN,1,2,3'),cities,waters),{city:'ottawa',compare:null,view:'climate',water:null,only:false,frame:null});
+ assert.deepEqual(readCanadaNatureState(new URL('https://example.com/?city=unknown&compare=unknown&view=unknown&water=unknown&frame=NaN,1,2,3'),cities,waters),{city:'ottawa',compare:null,view:'climate',water:null,only:false,frame:null,landform:null,landformOnly:false,landformBounds:null});
  assert.equal(readCanadaNatureState(new URL('https://example.com/?city=regina&compare=regina'),cities,waters).compare,null);
+});
+test('landform geographic camera accepts finite ordered bounds and restores them without changing the water camera',()=>{
+ const original=new URL('https://example.com/?view=landform&landformBounds=-125,45,-100,60&frame=200,200,400,250');
+ const state=readCanadaNatureState(original,cities,waters);assert.deepEqual(state.landformBounds,[-125,45,-100,60]);assert.deepEqual(readCanadaNatureState(writeCanadaNatureState(original,state),cities,waters),state);
+ for(const invalid of ['NaN,45,-100,60','-125,90,-100,95','-125,60,-100,45','-100,45,-125,60','-181,45,-100,60','-125,45,-100'])assert.equal(readCanadaNatureState(new URL('https://example.com/?landformBounds='+invalid),cities,waters).landformBounds,null);
+});
+test('landform selection and isolation round trip independently from water and retain comparison return context',()=>{
+ const original=new URL('https://example.com/?view=landform&landform=interior-plains&landformOnly=1&water=Mackenzie&only=1&cropReturn=product%3Dwheat');
+ const state=readCanadaNatureState(original,cities,waters);
+ assert.equal(state.landform,'interior-plains');assert.equal(state.landformOnly,true);assert.equal(state.water,'Mackenzie');assert.equal(state.only,true);
+ const saved=writeCanadaNatureState(original,state);assert.equal(saved.searchParams.get('cropReturn'),'product=wheat');assert.deepEqual(readCanadaNatureState(saved,cities,waters),state);
+ const invalid=readCanadaNatureState(new URL('https://example.com/?landform=imagined&landformOnly=1'),cities,waters);assert.equal(invalid.landform,null);assert.equal(invalid.landformOnly,false);
+ const clear=writeCanadaNatureState(saved,{...state,landform:null,landformOnly:false});assert.equal(clear.searchParams.has('landform'),false);assert.equal(clear.searchParams.has('landformOnly'),false);assert.equal(clear.searchParams.get('water'),'Mackenzie');
 });
 test('Canadian water geometry is an unchanged subset of fixed Natural Earth sources and public assets match hashes',async()=>{
  const manifest=JSON.parse(await readFile('public/assets/atlas/canada-nature-v1/manifest.json','utf8'));

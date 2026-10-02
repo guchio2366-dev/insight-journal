@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "geometryUrl": "/insight-journal/assets/atlas/canada-physiography-v1/regions.geojson",
+  "manifestUrl": "/insight-journal/assets/atlas/canada-physiography-v1/manifest.json",
+  "source": {
+    "title": "Physiographic Regions of Canada — Regions",
+    "publisher": "Government of Canada; Natural Resources Canada",
+    "catalogueUrl": "https://open.canada.ca/data/en/dataset/a3dfbaf4-1b20-4061-aa0a-e7a79953f52d",
+    "metadataUrl": "https://www.app.geo.ca/en-ca/map-browser/record/a3dfbaf4-1b20-4061-aa0a-e7a79953f52d",
+    "descriptionUrl": "https://atlas.gc.ca/phys/en/index.html",
+    "queryUrl": "https://maps-cartes.services.geo.ca/server_serveur/rest/services/NRCan/phys_reg_en/MapServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson",
+    "licence": "Open Government Licence - Canada 2.0",
+    "licenceUrl": "https://open.canada.ca/en/open-government-licence-canada",
+    "attribution": "Contains information licensed under the Open Government Licence – Canada.",
+    "created": "2019-01",
+    "published": "2019-04-01",
+    "temporalCoverageStart": "2017-09-01",
+    "catalogueModified": "2022-01-12",
+    "checkedAt": "2026-10-02",
+    "sourceCrs": "EPSG:3978",
+    "deliveryCrs": "EPSG:4326",
+    "geometrySha256": "26b0d3cde98e66167a2fa122cf73c2d098b5c8f24c225610df145e8c98004866",
+    "brief": "NRCanの全国的な地形区分。公式の七地域の輪郭をそのまま使い、標高や局地的な地形を示す地図とは区別する。"
+  },
+  "labelAnchorMethod": "Cartographic placement in longitude/latitude; every anchor is verified inside its official region polygon. Anchors are labels, not observation stations.",
+  "regions": [
+    {
+      "id": "cordillera",
+      "sourceName": "Cordillera",
+      "name": "西部山地（コルディレラ）",
+      "color": "#b68d68",
+      "labelAnchor": [-126, 58],
+      "description": "山脈・高原・谷が並ぶ西部の地形帯。ロッキー山地は、その一部に含まれる。"
+    },
+    {
+      "id": "interior-plains",
+      "sourceName": "Interior Plains",
+      "name": "内陸平原",
+      "color": "#dbcba2",
+      "labelAnchor": [-110, 57],
+      "description": "カナダ盾状地と西部山地の間に広がる平原。南から北へ、半乾燥の草原・森林・ツンドラが移る。"
+    },
+    {
+      "id": "canadian-shield",
+      "sourceName": "Canadian Shield",
+      "name": "カナダ盾状地",
+      "color": "#b4bd98",
+      "labelAnchor": [-93, 54],
+      "description": "氷河による侵食の影響が大きく、起伏の丸い高地と多数の湖沼が広がる。"
+    },
+    {
+      "id": "great-lakes-st-lawrence-lowlands",
+      "sourceName": "Great Lakes - St. Lawrence Lowlands",
+      "name": "五大湖・セントローレンス低地",
+      "color": "#d3d8b8",
+      "labelAnchor": [-80.4, 43.4],
+      "description": "盾状地の南東側に沿う低地。氷河期の堆積物に覆われ、西部・中央部・東部に分かれる。"
+    },
+    {
+      "id": "appalachian-uplands",
+      "sourceName": "Appalachian Uplands",
+      "name": "アパラチア高地",
+      "color": "#bda287",
+      "labelAnchor": [-66.5, 46.5],
+      "description": "ケベック南部から大西洋諸州・ニューファンドランド島へ続く地域。山地と低地が含まれる。"
+    },
+    {
+      "id": "hudson-bay-lowland",
+      "sourceName": "Hudson Bay Lowland",
+      "name": "ハドソン湾低地",
+      "color": "#c2d9d1",
+      "labelAnchor": [-84.5, 53.5],
+      "description": "ハドソン湾沿岸の低く湿地の多い平原。氷河地形と、隆起した旧海浜がみられる。"
+    },
+    {
+      "id": "arctic-lands",
+      "sourceName": "Arctic Lands",
+      "name": "北極地域",
+      "color": "#c2c2d4",
+      "labelAnchor": [-110, 75],
+      "description": "北極域の山地・沿岸平原・低地をまとめた地形帯。イヌイティアン地域、北極海沿岸平原、北極低地に分かれる。"
+    }
+  ]
+}
