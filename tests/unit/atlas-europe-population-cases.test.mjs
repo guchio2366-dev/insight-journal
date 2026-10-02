@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { europePopulationCases, populationCaseShare, normalisePopulationCaseChoice } from '../../src/data/atlas/europe/population-cases.ts';
@@ -207,8 +208,33 @@ test('Croatia is an explicit national source row with distinct original response
   assert.deepEqual(outline.features[0].geometry, originalBasemap.features.find(feature => feature.properties.code === 'HRV').geometry);
 });
 
-test('offline preparation reproduces the checked assets from selected canonical inputs', async () => {
-  const before = await fs.readFile(path.join(sourcePath, 'manifest.json'), 'utf8');
-  execFileSync(process.execPath, [path.join(root, 'scripts/europe/prepare-population-cases.mjs')], { cwd: root, stdio: 'pipe' });
-  assert.equal(await fs.readFile(path.join(sourcePath, 'manifest.json'), 'utf8'), before);
+test('offline preparation reproduces every frozen asset without rewriting shared test inputs', async () => {
+  const temporaryOutput = await fs.mkdtemp(path.join(tmpdir(), 'europe-population-cases-test-'));
+  try {
+    const files = [
+      ...manifest.assets.map(item => ({ file: item.file, source: path.join(assetPath, item.file), asset: item })),
+      { file: 'manifest.json', source: path.join(sourcePath, 'manifest.json') },
+    ];
+    const frozen = await Promise.all(files.map(async item => ({
+      ...item,
+      bytes: await fs.readFile(item.source),
+      modifiedAt: (await fs.stat(item.source, { bigint: true })).mtimeNs,
+    })));
+    execFileSync(process.execPath, [path.join(root, 'scripts/europe/prepare-population-cases.mjs'), '--output-dir', temporaryOutput], { cwd: root, stdio: 'pipe', timeout: 30000 });
+    assert.deepEqual((await fs.readdir(temporaryOutput)).sort(), files.map(item => item.file).sort());
+    for (const item of frozen) {
+      const generated = await fs.readFile(path.join(temporaryOutput, item.file));
+      assert.deepEqual(generated, item.bytes, `${item.file}: isolated output differs from frozen output`);
+      assert.equal(sha(generated), sha(item.bytes), `${item.file}: isolated SHA-256 differs`);
+      if (item.asset) {
+        assert.equal(generated.length, item.asset.bytes);
+        assert.equal(sha(generated), item.asset.sha256);
+      }
+      assert.deepEqual(await fs.readFile(item.source), item.bytes, `${item.file}: shared bytes changed`);
+      assert.equal((await fs.stat(item.source, { bigint: true })).mtimeNs, item.modifiedAt, `${item.file}: shared file was rewritten`);
+    }
+  } finally {
+    // This is the unique directory created above, never the published asset directory.
+    await fs.rm(temporaryOutput, { recursive: true, force: true });
+  }
 });

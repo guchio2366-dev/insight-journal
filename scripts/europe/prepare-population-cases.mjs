@@ -1,6 +1,8 @@
 /** Official census cases; no network requests, inferred polygons or harmonised ethnicity.
  * First preparation: node scripts/europe/prepare-population-cases.mjs --cache <private-source-cache>
  * Rebuild from the retained selected extracts: node scripts/europe/prepare-population-cases.mjs
+ * Isolated rebuild: append --output-dir <directory> to write all assets and manifest there.
+ * Isolated rebuilds read retained inputs only and cannot be combined with --cache.
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -10,9 +12,14 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const canonical = path.join(root, 'data-source/atlas/europe/population-cases');
-const output = path.join(root, 'public/assets/atlas/europe/population-cases-v1');
+const outputIndex = process.argv.indexOf('--output-dir');
+const outputArgument = outputIndex >= 0 ? process.argv[outputIndex + 1] : null;
+if (outputIndex >= 0 && (!outputArgument || outputArgument.startsWith('--'))) throw new Error('--output-dir requires a directory');
+const output = outputArgument ? path.resolve(outputArgument) : path.join(root, 'public/assets/atlas/europe/population-cases-v1');
 const cacheIndex = process.argv.indexOf('--cache');
+if (outputArgument && cacheIndex >= 0) throw new Error('--output-dir is a read-only rebuild of retained inputs; do not combine it with --cache');
 const cache = cacheIndex >= 0 ? path.resolve(process.argv[cacheIndex + 1]) : null;
+const manifestOutput = path.join(outputArgument ? output : canonical, 'manifest.json');
 const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const boundaryURL = 'https://services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services/Local_Authority_Districts_December_2021_UK_BUC_2022/FeatureServer/0/query?where=LAD21CD%20LIKE%20%27E%25%27%20OR%20LAD21CD%20LIKE%20%27W%25%27&outFields=LAD21CD,LAD21NM,LAD21NMW&outSR=4326&returnGeometry=true&f=geojson';
 const sourceLedger = {
@@ -112,7 +119,7 @@ export function parseCsv(text) {
   return rows;
 }
 
-await fs.mkdir(canonical, { recursive: true });
+if (!outputArgument) await fs.mkdir(canonical, { recursive: true });
 await fs.mkdir(output, { recursive: true });
 if (cache) {
   for (const topicId of ['ts021', 'ts030']) {
@@ -279,5 +286,5 @@ const manifest = {
   ],
   checks: { exactCensusBoundaryJoin: true, areaCount: 331, englandAreas: 309, walesAreas: 22, ethnicDetailCategories: topics[0].partitionCategoryIds.length, religiousCategories: topics[1].partitionCategoryIds.length, preservesTopicSpecificDenominators: true, croatiaNationalRowsOnly: true, croatiaDenominator: 3871833, croatiaEthnicityCategories: croatiaTopics[0].categories.length, croatiaReligionCategories: croatiaTopics[1].categories.length, mixedGrainsNeverHarmonised: true },
 };
-await fs.writeFile(path.join(canonical, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
+await fs.writeFile(manifestOutput, `${JSON.stringify(manifest, null, 2)}\n`);
 console.log(JSON.stringify({ cases: manifest.caseIds, checks: manifest.checks, assets: manifest.assets }, null, 2));

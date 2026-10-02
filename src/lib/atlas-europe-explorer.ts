@@ -103,8 +103,9 @@ export function initEuropeAtlas() {
     }
     drainageChoice.value=selected??'';
     const image=query<SVGImageElement>('[data-eu-drainage-selection]');
-    image.style.display=active&&selected?'':'none';
-    if(map?.getLayer('drainage-selected'))map.setLayoutProperty('drainage-selected','visibility',active&&selected?'visible':'none');
+    const matching=active&&!!selected&&drainageDrawn===selected&&!!drainageImage;
+    image.style.display=matching?'':'none';
+    if(map?.getLayer('drainage-selected'))map.setLayoutProperty('drainage-selected','visibility',matching?'visible':'none');
     if(!active||!selected){
       drainageRequest++;
       if(!selected)query('[data-eu-basin-summary]').textContent='色は区画を見分けるための識別色です。量の大小ではありません。';
@@ -123,13 +124,20 @@ export function initEuropeAtlas() {
         if(outline.transparent)query('[data-eu-basin-summary]').textContent+= ' この区画は表示範囲内に有効な画素がありません。';
       }
       image.setAttribute('href',drainageImage);
+      image.style.display='';
       if(map?.getLayer('land')){
         const source=map.getSource('drainage-selected') as any;
         if(source)source.updateImage({url:drainageImage});
         else {map.addSource('drainage-selected',{type:'image',url:drainageImage,coordinates:[[-25,73],[65,73],[65,32],[-25,32]]});map.addLayer({id:'drainage-selected',type:'raster',source:'drainage-selected',paint:{'raster-resampling':'nearest','raster-fade-duration':0}},'context');}
+        // The subject raster is recreated on topic changes; keep its selection above it.
+        map.moveLayer('drainage-selected','context');
         map.setLayoutProperty('drainage-selected','visibility','visible');
       }
-    }catch(error){if(token===drainageRequest)query('[data-eu-basin-summary]').textContent='選択区画の輪郭を取得できませんでした。区画を選び直して再試行できます。';}
+    }catch(error){if(token===drainageRequest){
+      image.style.display='none';
+      if(map?.getLayer('drainage-selected'))map.setLayoutProperty('drainage-selected','visibility','none');
+      query('[data-eu-basin-summary]').textContent='選択区画の輪郭を取得できませんでした。区画を選び直して再試行できます。';
+    }}
   }
 
   const subject = () => config.layers.find(l=>l.id===(state.layer==='overlay'?(state.returnLayer==='climate'?'wheat':state.returnLayer):state.layer)) ?? config.layers[0];
@@ -458,7 +466,7 @@ export function initEuropeAtlas() {
     all<HTMLElement>('[data-eu-extra-field]').forEach(el=>{el.hidden=el.dataset.euExtraField!==currentField.id;});
     requestAnimationFrame(() => { sizeReader(); map?.resize(); if (refit) fit(); annotations.refresh(); });
   }
-  function commit(refit = false) { history.pushState({}, '', writeEuropeState(new URL(location.href), state)); render(refit); }
+  function commit(refit = false) { gridRequest++;history.pushState({}, '', writeEuropeState(new URL(location.href), state)); render(refit); }
   function selectCountry(code: string) {
     const country = countries.find(c => c.code === code);
     state.place = country?.code ?? '';
@@ -594,7 +602,7 @@ export function initEuropeAtlas() {
     const h = w / box[2] * box[3]; box = [box[0] + (box[2] - w) / 2, box[1] + (box[3] - h) / 2, w, h]; staticMap.setAttribute('viewBox', box.join(' '));staticSymbols();annotations.refresh();
   }));
   query('[data-eu-render]').addEventListener('click', () => { state.render = failed || state.render === 'static' ? 'auto' : 'static'; disposeMap(); commit(true); void startMap(); });
-  window.addEventListener('popstate', () => { const previousRender = state.render; state = readEuropeState(location.search, countries, ids, config.initialLayer); state.compare=[]; render(true); if (previousRender !== state.render) { disposeMap(); void startMap(); } });
+  window.addEventListener('popstate', () => { gridRequest++;const previousRender = state.render; state = readEuropeState(location.search, countries, ids, config.initialLayer); state.compare=[]; render(true); if (previousRender !== state.render) { disposeMap(); void startMap(); } });
   new ResizeObserver(()=>{staticSymbols();sizeReader();}).observe(staticMap);
   render(true); void startMap();
 }

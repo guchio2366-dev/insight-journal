@@ -9,7 +9,9 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
     const window=new Window();const doc=window.document;
     doc.write(readFileSync(new URL(`../../dist/atlas/europe/${field}/index.html`,import.meta.url),'utf8'));
     assert.ok(doc.querySelector('[data-eu-static]'));
-    assert.equal(doc.querySelectorAll('.eu-read-panel select').length,0);
+    assert.equal(doc.querySelectorAll('.eu-read-panel select').length,3);
+    assert.equal(doc.querySelector('[data-eu-culture-host]').hidden,true,'The bounded census case does not replace the default whole-Europe map');
+    assert.ok([...doc.querySelectorAll('.eu-read-panel select')].every(select=>select.disabled));
     assert.equal(doc.querySelectorAll('[data-city-card]').length,24);
     assert.equal(doc.querySelectorAll('[data-city-card="kyiv"] tbody tr').length,12);
     assert.ok(doc.querySelector('[data-city-card="rome"]').textContent.includes('欠測'));
@@ -72,8 +74,9 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       assert.match(reading.querySelector('[data-city-reading="london"]').textContent,/HEATHROW/);
       assert.match(reading.textContent,/都市や国全体の平均ではありません/);
       const unavailable=[...doc.querySelectorAll('[data-eu-water-options] button:disabled')];
-      assert.equal(unavailable.length,1);
-      assert.match(unavailable[0].textContent,/河川の流域.*利用条件を確認中/);
+      assert.equal(unavailable.length,0);
+      assert.equal(doc.querySelector('[data-eu-water-options] [data-eu-topic="drainage"]').disabled,false);
+      assert.match(doc.querySelector('[data-eu-water-options]').textContent,/地下水.*未確認.*未収録/);
       assert.equal(doc.querySelector('[data-eu-water-options] [data-eu-topic="precipitation"]').disabled,false);
     }
     if(field==='industry'||field==='population'){
