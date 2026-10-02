@@ -61,7 +61,8 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
     for (const [legend, anchor] of legendHomes) {if (active && keyHost) {keyHost.append(legend); legend.hidden = selection.base !== legend.dataset.mexicoNatureLegend;} else {anchor.after(legend); legend.hidden = current().view !== legend.dataset.mexicoNatureLegend;}}
     text('[data-mexico-hydrology-base-key-title]', `背景：${selection.base === 'plain' ? '白地図・州境' : selection.base === 'climate' ? '気候区分' : '地形地域'}の凡例と版`);
     show('[data-mexico-water-background-key]',active && selection.base !== 'plain');
-    text('[data-mexico-water-background-key-title]',selection.base==='climate'?'背景の面＝気候6群（2008刊行版）':selection.base==='relief'?'背景の面＝自然地理地域（2001版）':'');
+    const basinCover=current().category==='basins'?'（流域面が上に重なる背景）':'';
+    text('[data-mexico-water-background-key-title]',selection.base==='climate'?`背景：気候6群・2008刊行版${basinCover}`:selection.base==='relief'?`背景：自然地理地域・2001版${basinCover}`:'');
     text('[data-mexico-hydrology-base-source]', selection.base === 'plain' ? '背景の州境はINEGI・2025年12月版です。水資源や標高の境界とは分けて読みます。' : selection.base === 'climate' ? '背景はINEGI・2008刊行の気候原分類21を6群で表示。統一観測対象期間は未記載です。水資源の期間と異なります。' : '背景はINEGI・2001版の15自然地理地域＋原資料の分類なしです。標高mの区分ではありません。');
     root.dataset.mexicoWaterBase = selection.base;
   }
