@@ -50,13 +50,21 @@ const paths=collections.map(({entry,feature})=>`<path fill="${entry.color}" fill
 const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1160" viewBox="0 0 900 580"><defs><clipPath id="national"><path fill-rule="evenodd" clip-rule="evenodd" d="${mask}"/></clipPath></defs><g clip-path="url(#national)">${paths}</g></svg>`;
 const png=await sharp(Buffer.from(svg),{unlimited:true}).png({compressionLevel:9,adaptiveFiltering:false}).toBuffer();
 await writeFile(resolve(output,'groundwater-overview.png'),png);
+// Apply the identical display boundary as an alpha image, without browser path unions.
+const maskSvg=`<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1160" viewBox="0 0 900 580"><path fill="#ffffff" fill-rule="evenodd" d="${mask}"/></svg>`;
+const maskPng=await sharp(Buffer.from(maskSvg),{unlimited:true}).png({compressionLevel:9,adaptiveFiltering:false}).toBuffer();
+await writeFile(resolve(output,'groundwater-country-mask.png'),maskPng);
+const countryMaskAsset={file:'groundwater-country-mask.png',width:1800,height:1160,viewBox:'0 0 900 580',bytes:maskPng.length,sha256:hash(maskPng),format:'PNG',maskType:'alpha',
+ nationalBoundarySha256:hash(geometryBytes),projectionSourceSha256:hash(projectionBytes),geometryIndexSha256:hash(indexBytes),stateCount:states.features.length,
+ method:'Rasterize the identical retained 32-state display boundary in the existing Mexico Lambert coordinates, even-odd fill and identical two-decimal display paths. Only the national display mask is rasterized; selected-class vector members, rings and coordinates remain unchanged.',
+ limitation:'A display mask at 1800 by 1160 pixels; country edges may show raster antialiasing when magnified. It does not define legal aquifers or administrative boundaries for analysis.'};
 const overviewAsset={file:'groundwater-overview.png',width:1800,height:1160,viewBox:'0 0 900 580',bytes:png.length,sha256:hash(png),format:'PNG',
  geometrySourceSha256:hash(canonicalBytes),nationalBoundarySha256:hash(geometryBytes),projectionSourceSha256:hash(projectionBytes),geometryIndexSha256:hash(indexBytes),
  classCount:10,sourceMemberCount:members,sourceRingCount:rings,renderer:'sharp (Astro dependency)',
  method:'Render the identical reviewed class polygons in the existing Mexico Lambert map coordinates, even-odd fill, clipped only for display to retained 32-state boundary. The image has no administrative aquifer or present-water-volume meaning.',
  limitation:'A national display image; tiny parts may fall below image resolution. The selected-class vector retains all source members and rings. No area totals, local boundaries or water availability are inferred.'};
 const metadata={...canonical,name:'地下水の水理地質10分類',edition:'Serie II（1996作成・2008改訂）',
- file:overviewAsset.file,deliveryMode:'national-overview-and-selected-class',defaultSelectedClassId:'all',classFiles,overviewAsset,
+ file:overviewAsset.file,deliveryMode:'national-overview-and-selected-class',defaultSelectedClassId:'all',classFiles,overviewAsset,countryMaskAsset,
  legend:Object.values(classFiles).map(({id,label,fullLabel,color,material,measure,sourceClass,sourceName})=>({id,label,fullLabel,color,material,measure,sourceClass,sourceName})),
  title:'地下水の水理地質：材質・産出収量／賦存可能性',
  meaning:'固結・非固結の材質ごとに、原典の産出収量区分（L/s）または地下水の賦存可能性を示します。現在の地下水量・取水量・法定帯水層境界ではありません。',
@@ -66,4 +74,4 @@ const metadata={...canonical,name:'地下水の水理地質10分類',edition:'Se
 await writeFile(resolve(output,'groundwater.source.json'),JSON.stringify(metadata,null,2)+'\n');
 const manifest={schemaVersion:1,regionId:'mexico',coverage:canonical.coverage,coordinateReference:'EPSG:4326 vectors; pre-rendered image in existing Mexico Lambert coordinates.',layers:{groundwater:metadata}};
 await writeFile(resolve(output,'manifest.json'),JSON.stringify(manifest,null,2)+'\n');
-console.log(JSON.stringify({classCount:10,sourceMemberCount:members,sourceRingCount:rings,overviewBytes:png.length,overviewSha256:hash(png),largestClassBytes:Math.max(...Object.values(classFiles).map(entry=>entry.bytes)),totalClassBytes:Object.values(classFiles).reduce((sum,entry)=>sum+entry.bytes,0)}));
+console.log(JSON.stringify({classCount:10,sourceMemberCount:members,sourceRingCount:rings,overviewBytes:png.length,overviewSha256:hash(png),countryMaskBytes:maskPng.length,countryMaskSha256:hash(maskPng),largestClassBytes:Math.max(...Object.values(classFiles).map(entry=>entry.bytes)),totalClassBytes:Object.values(classFiles).reduce((sum,entry)=>sum+entry.bytes,0)}));

@@ -10,6 +10,8 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
   let groundwaterManifest: MexicoWaterManifest | null = null, loadedGroundwaterClass: MexicoGroundwaterClass | null = null;
   let loadedGroundwaterFile = '';
   let overviewPending: Promise<void> | null = null;
+  let countryMaskPending: Promise<void> | null = null, countryMaskKey = '';
+  let countryMaskNode: SVGMaskElement | null = null;
   const cache = new Map<string, Promise<unknown>>(), collections = new Map<MexicoHydrologyLayer, MexicoWaterCollection>();
   const layerGroups = new Map<MexicoHydrologyLayer, SVGGElement>();
   const overlay = q<SVGGElement>('[data-mexico-hydrology-overlay]');
@@ -140,17 +142,31 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
     if (!asset?.file || !groundwaterAssetBase) throw new Error('全国の全10分類図がありません');
     let group = layerGroups.get('groundwater');
     if (group?.dataset.groundwaterView === 'all') {overlay?.append(group); if(overviewPending)await overviewPending;return;}
-    group?.remove(); group = document.createElementNS(ns,'g'); group.setAttribute('data-mexico-hydrology-layer','groundwater'); group.setAttribute('data-groundwater-view','all'); group.setAttribute('clip-path','url(#mexico-groundwater-country-clip)');
+    // The delivered overview is already masked to these same 32-state paths by its generator.
+    group?.remove(); group = document.createElementNS(ns,'g'); group.setAttribute('data-mexico-hydrology-layer','groundwater'); group.setAttribute('data-groundwater-view','all');
     const image = document.createElementNS(ns,'image'); image.setAttribute('data-mexico-groundwater-overview',''); image.setAttribute('x','0'); image.setAttribute('y','0'); image.setAttribute('width','900'); image.setAttribute('height','580'); image.setAttribute('preserveAspectRatio','none'); image.setAttribute('role','img'); image.setAttribute('aria-label','原資料の全10水理地質区分の全国概観。地図下で分類を選ぶと元のベクトル分布を表示します。'); image.classList.add('mexico-groundwater-overview'); group.append(image); overlay?.append(group); layerGroups.set('groundwater',group);
     overviewPending = new Promise<void>((resolve,reject) => {image.addEventListener('load',() => {group?.setAttribute('data-groundwater-image-ready','true');resolve();},{once:true}); image.addEventListener('error',() => {group?.remove();if(layerGroups.get('groundwater')===group)layerGroups.delete('groundwater');reject(new Error('全国概観図を取得できません'));},{once:true});image.setAttribute('href',groundwaterAssetBase + asset.file);});
     await overviewPending;
+  }
+  async function ensureGroundwaterCountryMask(): Promise<void> {
+    const metadata = manifest?.layers.groundwater, asset = metadata?.countryMaskAsset, overview = metadata?.overviewAsset;
+    if (!asset || !groundwaterAssetBase || !/^[a-zA-Z0-9._-]+\.png$/.test(asset.file) || asset.width !== 1800 || asset.height !== 1160 || asset.viewBox !== '0 0 900 580' || !Number.isSafeInteger(asset.bytes) || asset.bytes <= 0 || !/^[a-f0-9]{64}$/i.test(asset.sha256) || !overview || ['nationalBoundarySha256','projectionSourceSha256','geometryIndexSha256'].some(key => !/^[a-f0-9]{64}$/i.test(asset[key]) || asset[key] !== overview[key])) throw new Error('同じ国土・投影の表示マスクがありません');
+    const key = groundwaterAssetBase + asset.file + '#' + asset.sha256;
+    if (countryMaskKey === key && countryMaskPending) {await countryMaskPending;return;}
+    countryMaskNode?.remove();
+    const svg = q<SVGSVGElement>('[data-mexico-nature-main-map]'); if (!svg) throw new Error('国土マスクの地図がありません');
+    let defs = svg.querySelector('defs'); if (!defs) {defs = document.createElementNS(ns,'defs');svg.prepend(defs);}
+    const mask = document.createElementNS(ns,'mask');mask.id='mexico-groundwater-country-mask';mask.setAttribute('maskUnits','userSpaceOnUse');mask.setAttribute('maskContentUnits','userSpaceOnUse');mask.setAttribute('x','0');mask.setAttribute('y','0');mask.setAttribute('width','900');mask.setAttribute('height','580');mask.style.setProperty('mask-type','alpha');
+    const image = document.createElementNS(ns,'image');image.setAttribute('data-mexico-groundwater-country-mask','');image.setAttribute('x','0');image.setAttribute('y','0');image.setAttribute('width','900');image.setAttribute('height','580');image.setAttribute('preserveAspectRatio','none');mask.append(image);defs.append(mask);countryMaskNode=mask;countryMaskKey=key;
+    countryMaskPending = new Promise<void>((resolve,reject) => {image.addEventListener('load',() => {mask.setAttribute('data-country-mask-ready','true');resolve();},{once:true});image.addEventListener('error',() => {mask.remove();if(countryMaskNode===mask){countryMaskNode=null;countryMaskPending=null;countryMaskKey='';}reject(new Error('国土の表示マスクを取得できません'));},{once:true});image.setAttribute('href',groundwaterAssetBase + asset.file);});
+    await countryMaskPending;
   }
   function draw(layer: MexicoHydrologyLayer): void {
     const collection = collections.get(layer)!, metadata = manifest!.layers[layer]!;
     let group = layerGroups.get(layer);
     if (!group) {
       group = document.createElementNS(ns, 'g'); group.setAttribute('data-mexico-hydrology-layer', layer); overlay?.append(group); layerGroups.set(layer, group);
-      if (layer === 'groundwater') {group.setAttribute('clip-path','url(#mexico-groundwater-country-clip)');group.setAttribute('data-groundwater-view',groundwaterClass());}
+      if (layer === 'groundwater') {group.setAttribute('mask','url(#mexico-groundwater-country-mask)');group.setAttribute('data-groundwater-view',groundwaterClass());}
       const features = layer === 'contours' ? [...mexicoContourGroups(collection.features).values()] : collection.features.map(feature => [feature]);
       group.setAttribute('data-source-feature-count', String(collection.features.length));
       for (const members of features) {
@@ -206,7 +222,7 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
     text('[data-mexico-nature-map-title]', `${titles[state.category]}の分布`); text('[data-mexico-nature-map-edition]', '原資料を確認中'); text('[data-mexico-nature-period]', '');
     q('[data-mexico-hydrology-legend]')?.replaceChildren(); root.dataset.mexicoHydrologyReady = 'loading';
     text('[data-mexico-hydrology-status]', '地図資料を読み込んでいます。'); show('[data-mexico-hydrology-retry]', false);
-    for (const [layer, group] of layerGroups) group.style.display = layers.includes(layer) && !(layer === 'groundwater' && loadedGroundwaterClass !== requestedGroundwaterClass) ? '' : 'none';
+    for (const [layer, group] of layerGroups) group.style.display = layers.includes(layer) && !(layer === 'groundwater' && (loadedGroundwaterClass !== requestedGroundwaterClass || requestedGroundwaterClass !== 'all')) ? '' : 'none';
     try {
       if (!manifest) manifest = await json('manifest.json');
       if (!manifest?.layers) throw new Error('資料台帳がありません');
@@ -218,6 +234,8 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
       }
       const present = layers.filter(layer => !!manifest!.layers[layer]);
       if (!present.length) throw new Error('この主題の実資料がまだ収録されていません');
+      if (present.includes('groundwater') && isSelectedGroundwater(manifest.layers.groundwater) && requestedGroundwaterClass !== 'all') await ensureGroundwaterCountryMask();
+      if (generation !== version || current().category !== state.category) return;
       const fetched = await Promise.all(present.map(async layer => {
         const metadata = manifest!.layers[layer]!, split = layer === 'groundwater' && isSelectedGroundwater(metadata);
         if (split && requestedGroundwaterClass === 'all') return {layer,collection:null,file:''};

@@ -15,6 +15,7 @@ export interface MexicoWaterLayer {
   source?: {publisher?: string; url?: string; license?: string; credit?: string};
   legend?: MexicoWaterKey[]; intervalM?: number; displayIntervalM?: number; crs?: string;
   deliveryMode?: string; classFiles?: Record<string, MexicoGroundwaterFile>; overviewAsset?: {file: string; width: number; height: number; [key: string]: any};
+  countryMaskAsset?: {file: string; width: number; height: number; viewBox: string; bytes: number; sha256: string; nationalBoundarySha256: string; projectionSourceSha256: string; geometryIndexSha256: string; [key: string]: any};
   [key: string]: any;
 }
 export interface MexicoWaterManifest {layers: Partial<Record<MexicoHydrologyLayer, MexicoWaterLayer>>; crs?: string; [key: string]: any}

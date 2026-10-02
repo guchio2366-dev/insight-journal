@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {gunzipSync} from 'node:zlib';
+import sharp from 'sharp';
 
 const base=new URL('../../public/assets/atlas/mexico-groundwater-v1/',import.meta.url);
 const manifest=JSON.parse(await readFile(new URL('manifest.json',base),'utf8'));
@@ -48,6 +49,24 @@ test('Mexico groundwater national overview has the same projection and reviewed 
  const projection=await readFile(new URL('../../src/lib/atlas-mexico-projection.mjs',import.meta.url));
  assert.equal(sha(geometry),layer.overviewAsset.nationalBoundarySha256);assert.equal(sha(projection),layer.overviewAsset.projectionSourceSha256);
  assert.ok(image.length<1_000_000);assert.equal(layer.defaultSelectedClassId,'all');
+});
+
+test('Mexico groundwater alpha mask preserves the reviewed display boundary and projection',async()=>{
+ const record=layer.countryMaskAsset,image=await readFile(new URL(record.file,base));
+ assert.equal(image.length,record.bytes);assert.equal(sha(image),record.sha256);
+ assert.equal(record.maskType,'alpha');assert.equal(record.stateCount,32);assert.equal(record.viewBox,'0 0 900 580');
+ for(const key of ['nationalBoundarySha256','projectionSourceSha256','geometryIndexSha256'])assert.equal(record[key],layer.overviewAsset[key]);
+ assert.equal(image.readUInt32BE(16),1800);assert.equal(image.readUInt32BE(20),1160);
+ const {data,info}=await sharp(image).ensureAlpha().raw().toBuffer({resolveWithObject:true});
+ assert.equal(info.channels,4);let visible=0,transparent=0,antialiased=0;
+ for(let i=0;i<data.length;i+=4){
+  const alpha=data[i+3];
+  if(alpha===0){transparent++;continue;}
+  visible++;assert.equal(data[i],data[i+1]);assert.equal(data[i+1],data[i+2]);assert.ok(data[i]>240);
+  if(alpha<255)antialiased++;
+ }
+ assert.ok(visible>100000);assert.ok(transparent>100000);assert.ok(antialiased>0);
+ assert.match(record.method,/selected-class vector members, rings and coordinates remain unchanged/);
 });
 
 test('Mexico groundwater records archival dates and unknown observation period honestly',()=>{
