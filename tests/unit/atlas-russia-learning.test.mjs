@@ -5,6 +5,7 @@ import {gunzipSync} from 'node:zlib';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {build,stop} from 'esbuild';
+import {Window} from 'happy-dom';
 async function bundled(relative){const result=await build({entryPoints:[fileURLToPath(new URL('../../'+relative,import.meta.url))],bundle:true,write:false,format:'esm',platform:'node',logLevel:'silent',define:{'import.meta.env.BASE_URL':JSON.stringify('/insight-journal')}});return import('data:text/javascript;base64,'+Buffer.from(result.outputFiles[0].text).toString('base64'));}
 const api=await bundled('src/data/atlas/russia-learning.ts'),geo=await bundled('src/lib/atlas-russia-geometry.ts');
 const read=p=>readFileSync(new URL('../../'+p,import.meta.url));
@@ -32,6 +33,30 @@ test('all three learning windows are finite and preserve a shared comparison fra
   assert.equal(first.match(/viewBox="([^"]+)/)[1],second.match(/viewBox="([^"]+)/)[1]);
   assert.match(api.russiaCoverage(api.getRussiaLayer(state.layer),state),/行政境界ではありません/);
  }
+});
+test('every distribution offers named learning-region buttons without inventing region boundaries',()=>{
+ const window=new Window();
+ for(const layer of api.russiaLayers){
+  const state=api.createRussiaState('',layer.field);
+  window.document.body.innerHTML=api.renderRussiaScene(layer,state,'primary');
+  const svg=window.document.querySelector('svg');assert.equal(svg.getAttribute('role'),'group');
+  const markers=[...svg.querySelectorAll('[data-region-marker]')];assert.equal(markers.length,3,layer.id);
+  for(const region of api.russiaRegions){
+   const marker=markers.find(item=>item.dataset.mapPlace===region.code);assert.ok(marker,region.code);
+   assert.equal(marker.getAttribute('role'),'button');assert.equal(marker.getAttribute('tabindex'),'0');
+   assert.equal(marker.querySelector('text').textContent,region.name);
+   assert.match(marker.getAttribute('aria-label'),/学習地域/);assert.equal(marker.getAttribute('aria-pressed'),'false');
+   assert.equal(marker.closest('.russia-region-marker').querySelectorAll('path').length,1,'only a locator leader, not a new boundary polygon');
+  }
+  assert.match(window.document.body.textContent,/行政境界ではありません/);
+  for(const region of api.russiaRegions){
+   const selected={...state,place:region.code,scope:'region'};
+   window.document.body.innerHTML=api.renderRussiaScene(layer,selected,'comparison');
+   const shown=[...window.document.querySelectorAll('[data-region-marker]')];assert.equal(shown.length,1);
+   assert.equal(shown[0].dataset.mapPlace,region.code);assert.equal(shown[0].getAttribute('aria-pressed'),'true');
+  }
+ }
+ window.happyDOM.abort();
 });
 test('wheat/climate explanation names the visible region and does not equate missing cells with zero',()=>{
  for(const [place,visible,absent] of [['west','ロストフ','アムール'],['siberia','オムスク','ロストフ'],['far-east','アムール','ロストフ']]){
