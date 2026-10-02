@@ -1,0 +1,508 @@
+{
+  "countries": {
+    "RUS": {
+      "politics": {
+        "takeaway": "憲法上、共和制の連邦国家で、大統領を国家元首とします。",
+        "body": "連邦会議は連邦院と国家院の二院で構成され、立法を担います。大統領は憲法上、内政・外交の基本方針を定めます。",
+        "sourceIds": [
+          "politics-other-rus-constitution"
+        ],
+        "links": [
+          {
+            "label": "ロシア憲法裁判所提供英訳：欧州評議会掲載",
+            "href": "https://rm.coe.int/constitution-of-the-russian-federation-en/1680a1a237"
+          }
+        ]
+      }
+    },
+    "NOR": {
+      "politics": {
+        "takeaway": "国王を国家元首とし、政府が議会の信任に基づいて統治します。",
+        "body": "ストーティングが立法と予算、政府が行政、裁判所が司法を担います。政府の存続には議会の信任が必要です。",
+        "sourceIds": [
+          "politics-other-nor-government"
+        ],
+        "links": [
+          {
+            "label": "ノルウェー政府：統治の仕組み",
+            "href": "https://www.regjeringen.no/en/the-government/the-government-at-work1/the-government-at-work1/id2564958/"
+          }
+        ]
+      }
+    },
+    "BLR": {
+      "politics": {
+        "takeaway": "公式の制度規定では、大統領を国家元首とし、二院制の国民議会を置きます。",
+        "body": "国民議会は下院の代表者院と上院の共和国院で構成されます。首相は代表者院の事前同意を得て大統領が任命します。",
+        "sourceIds": [
+          "politics-other-blr-president",
+          "politics-other-blr-legislature"
+        ],
+        "links": [
+          {
+            "label": "ベラルーシ大統領府：大統領の地位と権限",
+            "href": "https://president.gov.by/en/president/status-i-polnomochiya"
+          },
+          {
+            "label": "ベラルーシ大統領府：立法機関",
+            "href": "https://president.gov.by/en/gosudarstvo/ustrojstvo/zakonodatelnaja"
+          }
+        ]
+      }
+    },
+    "UKR": {
+      "politics": {
+        "takeaway": "憲法上、大統領を国家元首とし、最高会議が立法、内閣が行政を担います。",
+        "body": "首相は、大統領の提案に基づいて最高会議が任命します。内閣は大統領と最高会議に責任を負い、最高会議の監督を受けます。",
+        "sourceIds": [
+          "politics-other-ukr-constitution"
+        ],
+        "links": [
+          {
+            "label": "ウクライナ最高会議：憲法英訳",
+            "href": "https://zakonst.rada.gov.ua/docs/en/constitution.pdf"
+          }
+        ]
+      }
+    },
+    "MDA": {
+      "politics": {
+        "takeaway": "議会が立法を担い、政府は議会の信任を得て成立します。",
+        "body": "大統領が国家元首を務め、議会会派との協議を経て首相候補を指名します。候補が示す政府の政策と閣僚名簿には、議会の信任が必要です。",
+        "sourceIds": [
+          "politics-other-mda-constitution"
+        ],
+        "links": [
+          {
+            "label": "モルドバ大統領府掲載：憲法英訳",
+            "href": "https://presedinte.md/app/webroot/Constitutia_RM/Constitutia_RM_EN.pdf"
+          }
+        ]
+      }
+    },
+    "ALB": {
+      "politics": {
+        "takeaway": "憲法に基づく議会制の共和国です。",
+        "body": "大統領は議会が選ぶ国家元首で、首相が閣僚会議を率います。政府の政策と構成には、議会の承認が必要です。",
+        "sourceIds": [
+          "politics-other-alb-constitution"
+        ],
+        "links": [
+          {
+            "label": "アルバニア公式法令出版局：共和国憲法",
+            "href": "https://qbz.gov.al/preview/635d44bd-96ee-4bc5-8d93-d928cf6f2abd"
+          }
+        ]
+      }
+    },
+    "CHE": {
+      "politics": {
+        "takeaway": "連邦制と直接民主制を組み合わせ、7人の連邦参事会が政府を担います。",
+        "body": "国民を代表する国民議会と、州を代表する全州議会が連邦議会を構成します。国民は選挙に加え、個別の政策や制度について投票できます。",
+        "sourceIds": [
+          "politics-other-che-system"
+        ],
+        "links": [
+          {
+            "label": "スイス連邦外務省：政治制度",
+            "href": "https://www.aboutswitzerland.eda.admin.ch/en/political-system"
+          }
+        ]
+      }
+    },
+    "GBR": {
+      "politics": {
+        "takeaway": "立憲君主制のもとで、政府が議会に責任を負います。",
+        "body": "議会は庶民院と貴族院、国王から構成されます。首相と政府が行政を担い、議会が法制定と政府の監視を行います。",
+        "sourceIds": [
+          "politics-other-gbr-democracy",
+          "politics-other-gbr-crown"
+        ],
+        "links": [
+          {
+            "label": "英国議会上院図書館：議会制民主主義",
+            "href": "https://lordslibrary.parliament.uk/parliamentary-democracy-in-the-uk/"
+          },
+          {
+            "label": "英国議会：議会と国王",
+            "href": "https://www.parliament.uk/about/how/role/relations-with-other-institutions/parliament-crown/"
+          }
+        ]
+      }
+    },
+    "ISL": {
+      "politics": {
+        "takeaway": "憲法は、議会制に基づく共和国と定めています。",
+        "body": "アルシングと大統領が立法権を担い、行政権と司法権の役割も憲法で分けられています。大統領は国民によって選ばれます。",
+        "sourceIds": [
+          "politics-other-isl-constitution"
+        ],
+        "links": [
+          {
+            "label": "アイスランド議会：共和国憲法",
+            "href": "https://www.althingi.is/lagas/nuna/1944033.html"
+          }
+        ]
+      }
+    },
+    "BIH": {
+      "politics": {
+        "takeaway": "二つの構成体に加え、国家レベルに三人の大統領評議会と二院制議会を置きます。",
+        "body": "構成体はボスニア・ヘルツェゴビナ連邦とスルプスカ共和国です。国家レベルの閣僚評議会は議会に報告し、その不信任決議で辞職します。",
+        "sourceIds": [
+          "politics-other-bih-constitution"
+        ],
+        "links": [
+          {
+            "label": "上級代表事務所：ボスニア・ヘルツェゴビナ憲法",
+            "href": "https://www.ohr.int/dayton-peace-agreement/annex-4/?print=print"
+          }
+        ]
+      }
+    },
+    "MKD": {
+      "politics": {
+        "takeaway": "議会が政府を選び、政府と各閣僚が議会に責任を負います。",
+        "body": "憲法では議会が立法、首相と閣僚からなる政府が行政を担います。大統領は直接選挙で選ばれ、政府を組織する候補者に組閣を委ねます。",
+        "sourceIds": [
+          "politics-other-mkd-constitution"
+        ],
+        "links": [
+          {
+            "label": "北マケドニア議会：共和国憲法",
+            "href": "https://www.sobranie.mk/the-constitution-of-the-republic-of-macedonia-ns_article-constitution-of-the-republic-of-north-macedonia.nspx"
+          }
+        ]
+      }
+    },
+    "SRB": {
+      "politics": {
+        "takeaway": "国民議会が立法を担い、議会が政府を選出します。",
+        "body": "国民議会は憲法の改正、法律の制定、予算の承認を行います。行政権を担う政府の活動も、国民議会が監督します。",
+        "sourceIds": [
+          "politics-other-srb-assembly",
+          "politics-other-srb-constitution"
+        ],
+        "links": [
+          {
+            "label": "セルビア国民議会：権限と職務",
+            "href": "https://www.parlament.gov.rs/national-assembly/role-and-mode-of-operation/jurisdiction.501.html"
+          },
+          {
+            "label": "セルビア国民議会掲載：憲法英訳",
+            "href": "https://www.parlament.gov.rs/upload/documents/Constitution_%20of_Serbia_pdf.pdf"
+          }
+        ]
+      }
+    },
+    "MNE": {
+      "politics": {
+        "takeaway": "共和国の制度として、議会が首相と政府を選びます。",
+        "body": "大統領が議会の会派と協議して首相候補を提案し、議会が政府の政策と構成を承認します。政府は内政・外交を運営し、議会は不信任を決議できます。",
+        "sourceIds": [
+          "politics-other-mne-constitution"
+        ],
+        "links": [
+          {
+            "label": "モンテネグロ政府掲載：憲法",
+            "href": "https://wapi.gov.me/download/2489436c-8a43-4c6b-9981-8af44719f19f?version=1.0"
+          }
+        ]
+      }
+    },
+    "KOS": {
+      "politics": {
+        "takeaway": "憲法上、議会が立法を担い、政府は議会の統制を受けます。",
+        "body": "大統領は議会が選び、首相が政府を率います。本図鑑の表示区分は、国家承認に関する立場を示しません。",
+        "sourceIds": [
+          "politics-other-kos-constitution",
+          "politics-other-kos-designation"
+        ],
+        "links": [
+          {
+            "label": "コソボ官報：憲法",
+            "href": "https://gzk.rks-gov.net/ActDocumentDetail.aspx?ActID=3702"
+          },
+          {
+            "label": "欧州委員会：コソボの名称と地位に関する注記",
+            "href": "https://enlargement.ec.europa.eu/funding-technical-assistance/overview-instrument-pre-accession-assistance_en"
+          }
+        ]
+      }
+    },
+    "VAT": {
+      "politics": {
+        "takeaway": "教皇のもとで、基本法が国家の統治機関を定めています。",
+        "body": "バチカン市国は聖座の独立を支える国家で、総督府が国家行政を担います。2026年7月の新基本法では、総督府は教皇に直接責任を負います。",
+        "sourceIds": [
+          "politics-other-vat-basiclaw",
+          "politics-other-vat-governorate"
+        ],
+        "links": [
+          {
+            "label": "聖座報道局：2026年基本法の説明",
+            "href": "https://press.vatican.va/content/salastampa/en/info/2026/07/31/260731b.html"
+          },
+          {
+            "label": "バチカン市国総督府：政府の構造",
+            "href": "https://vaticanstate.va/en/state-and-government/structure-of-the-government.html"
+          }
+        ]
+      }
+    },
+    "SMR": {
+      "politics": {
+        "takeaway": "二人の執政官が、任期6か月で共同の国家元首を務めます。",
+        "body": "執政官は議会の大評議会が選びます。大評議会が立法、国家会議が行政を担います。",
+        "sourceIds": [
+          "politics-other-smr-declaration",
+          "politics-other-smr-regents"
+        ],
+        "links": [
+          {
+            "label": "サンマリノ大評議会：市民の権利と憲法秩序の基本原則宣言",
+            "href": "https://www.consigliograndeegenerale.sm/on-line/documento17159382.html"
+          },
+          {
+            "label": "サンマリノ大評議会：執政官に関する特別法",
+            "href": "https://www.consigliograndeegenerale.sm/on-line/documento17134131.html"
+          }
+        ]
+      }
+    },
+    "MCO": {
+      "politics": {
+        "takeaway": "世襲の公を国家元首とする立憲君主制です。",
+        "body": "行政は公の権限のもとで国務大臣と閣僚が担います。立法権は公と国民議会が共同で行使します。",
+        "sourceIds": [
+          "politics-other-mco-institutions"
+        ],
+        "links": [
+          {
+            "label": "モナコ政府：国家の制度",
+            "href": "https://www.gouv.mc/en/government-institutions/institutions"
+          }
+        ]
+      }
+    },
+    "LIE": {
+      "politics": {
+        "takeaway": "世襲の侯を国家元首とする立憲君主制で、侯と国民に国家権力を置きます。",
+        "body": "法律の成立には侯の承認に加え、議会または国民投票を通じた国民の承認が必要です。議会が立法、政府が行政を担います。",
+        "sourceIds": [
+          "politics-other-lie-monarchy",
+          "politics-other-lie-system"
+        ],
+        "links": [
+          {
+            "label": "リヒテンシュタイン侯家：君主制と憲法",
+            "href": "https://fuerstenhaus.li/en/the-monarchy/"
+          },
+          {
+            "label": "リヒテンシュタイン公式国紹介：政治制度",
+            "href": "https://www.liechtenstein.li/en"
+          }
+        ]
+      }
+    },
+    "AND": {
+      "politics": {
+        "takeaway": "二人の共同公を国家元首とする、議会制の共同公国です。",
+        "body": "共同公はウルヘル司教とフランス共和国大統領で、憲法上の権限は同等です。政府首班は議会の総評議会が選び、共同公が任命します。",
+        "sourceIds": [
+          "politics-other-and-constitution"
+        ],
+        "links": [
+          {
+            "label": "アンドラ総評議会：公国憲法",
+            "href": "https://www.consellgeneral.ad/ca/el-consell-dandorra/constitucio-i-reglament/la-constitucio-del-principat-d-andorra"
+          }
+        ]
+      }
+    }
+  },
+  "sources": [
+    {
+      "id": "politics-other-vat-basiclaw",
+      "label": "聖座報道局：2026年基本法の説明",
+      "url": "https://press.vatican.va/content/salastampa/en/info/2026/07/31/260731b.html",
+      "checkedAt": "2026-10-02",
+      "period": "2026-07-31：国家の立法・行政・司法と総督府の責任"
+    },
+    {
+      "id": "politics-other-vat-governorate",
+      "label": "バチカン市国総督府：政府の構造",
+      "url": "https://vaticanstate.va/en/state-and-government/structure-of-the-government.html",
+      "checkedAt": "2026-10-02",
+      "period": "公式制度説明：国家行政と聖座の独立を支える役割"
+    },
+    {
+      "id": "politics-other-nor-government",
+      "label": "ノルウェー政府：統治の仕組み",
+      "url": "https://www.regjeringen.no/en/the-government/the-government-at-work1/the-government-at-work1/id2564958/",
+      "checkedAt": "2026-10-02",
+      "period": "2017-07-25更新の制度説明：三権と議会の信任"
+    },
+    {
+      "id": "politics-other-che-system",
+      "label": "スイス連邦外務省：政治制度",
+      "url": "https://www.aboutswitzerland.eda.admin.ch/en/political-system",
+      "checkedAt": "2026-10-02",
+      "period": "2026-04-29公開：連邦制・直接民主制・連邦参事会・二院制"
+    },
+    {
+      "id": "politics-other-gbr-democracy",
+      "label": "英国議会上院図書館：議会制民主主義",
+      "url": "https://lordslibrary.parliament.uk/parliamentary-democracy-in-the-uk/",
+      "checkedAt": "2026-10-02",
+      "period": "2023-04-18：立憲君主と議会に責任を負う政府"
+    },
+    {
+      "id": "politics-other-gbr-crown",
+      "label": "英国議会：議会と国王",
+      "url": "https://www.parliament.uk/about/how/role/relations-with-other-institutions/parliament-crown/",
+      "checkedAt": "2026-10-02",
+      "period": "公式制度説明：庶民院・貴族院・国王の構成と役割"
+    },
+    {
+      "id": "politics-other-blr-president",
+      "label": "ベラルーシ大統領府：大統領の地位と権限",
+      "url": "https://president.gov.by/en/president/status-i-polnomochiya",
+      "checkedAt": "2026-10-02",
+      "period": "公式制度説明：国家元首と首相任命の規定"
+    },
+    {
+      "id": "politics-other-blr-legislature",
+      "label": "ベラルーシ大統領府：立法機関",
+      "url": "https://president.gov.by/en/gosudarstvo/ustrojstvo/zakonodatelnaja",
+      "checkedAt": "2026-10-02",
+      "period": "公式制度説明：国民議会の二院構成"
+    },
+    {
+      "id": "politics-other-mda-constitution",
+      "label": "モルドバ大統領府掲載：憲法英訳",
+      "url": "https://presedinte.md/app/webroot/Constitutia_RM/Constitutia_RM_EN.pdf",
+      "checkedAt": "2026-10-02",
+      "period": "2022年版：第60・77・96～98条の制度規定"
+    },
+    {
+      "id": "politics-other-isl-constitution",
+      "label": "アイスランド議会：共和国憲法",
+      "url": "https://www.althingi.is/lagas/nuna/1944033.html",
+      "checkedAt": "2026-10-02",
+      "period": "公式の現行法掲載文：1944年憲法、第1～5条"
+    },
+    {
+      "id": "politics-other-bih-constitution",
+      "label": "上級代表事務所：ボスニア・ヘルツェゴビナ憲法",
+      "url": "https://www.ohr.int/dayton-peace-agreement/annex-4/?print=print",
+      "checkedAt": "2026-10-02",
+      "period": "デイトン和平合意附属書4：第I・IV・V条の制度規定"
+    },
+    {
+      "id": "politics-other-and-constitution",
+      "label": "アンドラ総評議会：公国憲法",
+      "url": "https://www.consellgeneral.ad/ca/el-consell-dandorra/constitucio-i-reglament/la-constitucio-del-principat-d-andorra",
+      "checkedAt": "2026-10-02",
+      "period": "1993年憲法の公式掲載文：第1・43・68・73条"
+    },
+    {
+      "id": "politics-other-rus-constitution",
+      "label": "ロシア憲法裁判所提供英訳：欧州評議会掲載",
+      "url": "https://rm.coe.int/constitution-of-the-russian-federation-en/1680a1a237",
+      "checkedAt": "2026-10-02",
+      "period": "2021-02-04掲載・2020年改正反映：第1・80・94～95条"
+    },
+    {
+      "id": "politics-other-mkd-constitution",
+      "label": "北マケドニア議会：共和国憲法",
+      "url": "https://www.sobranie.mk/the-constitution-of-the-republic-of-macedonia-ns_article-constitution-of-the-republic-of-north-macedonia.nspx",
+      "checkedAt": "2026-10-02",
+      "period": "公式憲法掲載文：第61・80・88～92条の制度規定"
+    },
+    {
+      "id": "politics-other-srb-assembly",
+      "label": "セルビア国民議会：権限と職務",
+      "url": "https://www.parlament.gov.rs/national-assembly/role-and-mode-of-operation/jurisdiction.501.html",
+      "checkedAt": "2026-10-02",
+      "period": "公式制度説明：立法・予算・政府選出と監督"
+    },
+    {
+      "id": "politics-other-srb-constitution",
+      "label": "セルビア国民議会掲載：憲法英訳",
+      "url": "https://www.parlament.gov.rs/upload/documents/Constitution_%20of_Serbia_pdf.pdf",
+      "checkedAt": "2026-10-02",
+      "period": "2006年憲法の掲載文：第122条（政府の行政権）"
+    },
+    {
+      "id": "politics-other-mne-constitution",
+      "label": "モンテネグロ政府掲載：憲法",
+      "url": "https://wapi.gov.me/download/2489436c-8a43-4c6b-9981-8af44719f19f?version=1.0",
+      "checkedAt": "2026-10-02",
+      "period": "2007年憲法の公式掲載文：第1・82・95・100～107条の統治機関"
+    },
+    {
+      "id": "politics-other-kos-constitution",
+      "label": "コソボ官報：憲法",
+      "url": "https://gzk.rks-gov.net/ActDocumentDetail.aspx?ActID=3702",
+      "checkedAt": "2026-10-02",
+      "period": "公式憲法掲載文：第4・83・86・94～95条"
+    },
+    {
+      "id": "politics-other-kos-designation",
+      "label": "欧州委員会：コソボの名称と地位に関する注記",
+      "url": "https://enlargement.ec.europa.eu/funding-technical-assistance/overview-instrument-pre-accession-assistance_en",
+      "checkedAt": "2026-10-02",
+      "period": "IPA公式説明：名称は地位に関する立場を予断しないという注記"
+    },
+    {
+      "id": "politics-other-smr-declaration",
+      "label": "サンマリノ大評議会：市民の権利と憲法秩序の基本原則宣言",
+      "url": "https://www.consigliograndeegenerale.sm/on-line/documento17159382.html",
+      "checkedAt": "2026-10-02",
+      "period": "公式掲載統合文：第3条の二人の国家元首・立法と行政"
+    },
+    {
+      "id": "politics-other-smr-regents",
+      "label": "サンマリノ大評議会：執政官に関する特別法",
+      "url": "https://www.consigliograndeegenerale.sm/on-line/documento17134131.html",
+      "checkedAt": "2026-10-02",
+      "period": "2005-12-16特別法第186号：第1・5条の選出と任期6か月"
+    },
+    {
+      "id": "politics-other-mco-institutions",
+      "label": "モナコ政府：国家の制度",
+      "url": "https://www.gouv.mc/en/government-institutions/institutions",
+      "checkedAt": "2026-10-02",
+      "period": "1962年憲法・2002年改正に基づく公式制度説明：公・行政・国民議会"
+    },
+    {
+      "id": "politics-other-lie-monarchy",
+      "label": "リヒテンシュタイン侯家：君主制と憲法",
+      "url": "https://fuerstenhaus.li/en/the-monarchy/",
+      "checkedAt": "2026-10-02",
+      "period": "公式制度説明：侯と国民の国家権力・法律への承認"
+    },
+    {
+      "id": "politics-other-lie-system",
+      "label": "リヒテンシュタイン公式国紹介：政治制度",
+      "url": "https://www.liechtenstein.li/en",
+      "checkedAt": "2026-10-02",
+      "period": "公式国紹介：立憲世襲君主制・議会と政府の役割"
+    },
+    {
+      "id": "politics-other-ukr-constitution",
+      "label": "ウクライナ最高会議：憲法英訳",
+      "url": "https://zakonst.rada.gov.ua/docs/en/constitution.pdf",
+      "checkedAt": "2026-10-02",
+      "period": "公式憲法英訳：第5・75・102・113～114条の制度規定（2026-10-02取得）"
+    },
+    {
+      "id": "politics-other-alb-constitution",
+      "label": "アルバニア公式法令出版局：共和国憲法",
+      "url": "https://qbz.gov.al/preview/635d44bd-96ee-4bc5-8d93-d928cf6f2abd",
+      "checkedAt": "2026-10-02",
+      "period": "2022-02-10までの改正を反映した公式統合掲載文：第1・86～87・95～97・102条"
+    }
+  ]
+}

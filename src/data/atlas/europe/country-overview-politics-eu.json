@@ -1,0 +1,488 @@
+{
+  "countries": {
+    "AUT": {
+      "politics": {
+        "takeaway": "オーストリアでは、連邦と9州が行政を担い、州も連邦の立法に参加します。",
+        "body": "議院内閣制の連邦共和国で、首相が政府を率い、大統領が国家元首を務めます。国の議会は、国民が直接選ぶ国民議会と州議会が選ぶ連邦参議院の二院からなります。",
+        "sourceIds": [
+          "eu-politics-aut"
+        ],
+        "links": [
+          {
+            "label": "EU：オーストリアの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/austria_en"
+          }
+        ]
+      }
+    },
+    "BEL": {
+      "politics": {
+        "takeaway": "ベルギーでは、連邦・言語共同体・地域が、それぞれの分野の権限を持ちます。",
+        "body": "国王が国家元首、首相が政府を率いる連邦制の立憲君主国です。言語に基づく3共同体と、フランドル・ワロン・ブリュッセル首都の3地域が、異なる分野を担当します。",
+        "sourceIds": [
+          "eu-politics-bel"
+        ],
+        "links": [
+          {
+            "label": "EU：ベルギーの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/belgium_en"
+          }
+        ]
+      }
+    },
+    "BGR": {
+      "politics": {
+        "takeaway": "ブルガリアでは、一院制の国会と首相が率いる政府を中心に意思決定します。",
+        "body": "比例代表で国会を選び、首相が行政を率いる議院内閣制の共和国です。大統領は国家元首で、主に代表的役割を担うほか、限定された拒否権を持ちます。",
+        "sourceIds": [
+          "eu-politics-bgr"
+        ],
+        "links": [
+          {
+            "label": "EU：ブルガリアの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/bulgaria_en"
+          }
+        ]
+      }
+    },
+    "HRV": {
+      "politics": {
+        "takeaway": "クロアチアでは、国会が法律をつくり、首相が率いる政府を監督します。",
+        "body": "立法・行政・司法の権力を分ける議院内閣制の共和国で、首相が政府を率い、大統領が国家元首を務めます。国会議員の任期は4年です。",
+        "sourceIds": [
+          "eu-politics-hrv"
+        ],
+        "links": [
+          {
+            "label": "EU：クロアチアの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/croatia_en"
+          }
+        ]
+      }
+    },
+    "CZE": {
+      "politics": {
+        "takeaway": "チェコでは、代議院と上院が法律を審議し、政府の信任は代議院が担います。",
+        "body": "首相が政府を率い、大統領が国家元首を務める議院内閣制の共和国です。政府は任命後に代議院の信任を求め、代議院は政府全体への不信任を議決できます。",
+        "sourceIds": [
+          "eu-politics-cze",
+          "cze-parliament-guide"
+        ],
+        "links": [
+          {
+            "label": "EU：チェコの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/czechia_en"
+          },
+          {
+            "label": "チェコ代議院：二院の役割と政府への信任",
+            "href": "https://www.psp.cz/eknih/cdrom/ic/pdf/skladacka_remake2023-podzim_EN.pdf"
+          }
+        ]
+      }
+    },
+    "DNK": {
+      "politics": {
+        "takeaway": "デンマークでは、国会が首相を不信任とすると、内閣の退陣か総選挙が必要になります。",
+        "body": "君主が国家を代表し、首相が政府を率いる立憲君主制です。国会（フォルケティング）に対する政府の責任を憲法が定めています。",
+        "sourceIds": [
+          "eu-politics-dnk",
+          "dnk-constitutional-act"
+        ],
+        "links": [
+          {
+            "label": "EU：デンマークの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/denmark_en"
+          },
+          {
+            "label": "デンマーク国会：憲法と不信任手続",
+            "href": "https://www.ft.dk/~/media/pdf/publikationer/english/the-constitutional-act-of-denmark_web,-d-,pdf.ashx"
+          }
+        ]
+      }
+    },
+    "EST": {
+      "politics": {
+        "takeaway": "エストニアでは、大統領が首相候補を指名し、国会の承認を経て政府をつくります。",
+        "body": "首相が行政を担う議院内閣制の共和国です。国家元首の大統領は国会または選挙人団が選び、国会議員の選挙とは手続が異なります。",
+        "sourceIds": [
+          "eu-politics-est"
+        ],
+        "links": [
+          {
+            "label": "EU：エストニアの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/estonia_en"
+          }
+        ]
+      }
+    },
+    "FRA": {
+      "politics": {
+        "takeaway": "フランスは、直接選挙の大統領と政府を率いる首相を置く半大統領制の共和国です。",
+        "body": "大統領が首相を任命し、議会は国民議会と元老院からなります。政府は国民議会に責任を負い、国民議会は政府への不信任決議を採決できます。",
+        "sourceIds": [
+          "eu-politics-fra",
+          "fra-constitution"
+        ],
+        "links": [
+          {
+            "label": "EU：フランスの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/france_en"
+          },
+          {
+            "label": "フランス大統領府：議会と政府の憲法上の役割",
+            "href": "https://www.elysee.fr/en/french-presidency/constitution-of-4-october-1958"
+          }
+        ]
+      }
+    },
+    "GRC": {
+      "politics": {
+        "takeaway": "ギリシャでは、国会が大統領を選び、政府への信任も判断します。",
+        "body": "首相が政府の行政を率い、大統領は主に儀礼的役割を担う議院内閣制の共和国です。新しい政府は国会で信任を求め、国会は政府への不信任を採決できます。",
+        "sourceIds": [
+          "eu-politics-grc",
+          "grc-parliament-institution"
+        ],
+        "links": [
+          {
+            "label": "EU：ギリシャの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/greece_en"
+          },
+          {
+            "label": "ギリシャ議会：国会の権限",
+            "href": "https://www.hellenicparliament.gr/en/Vouli-ton-Ellinon/O-Thesmos/"
+          }
+        ]
+      }
+    },
+    "HUN": {
+      "politics": {
+        "takeaway": "ハンガリーでは、国会が大統領と首相を選ぶ仕組みを採ります。",
+        "body": "首相が行政を率い、大統領は主に国家を代表する議院内閣制の共和国です。首相の選出には、国会議員の過半数の賛成が必要です。",
+        "sourceIds": [
+          "eu-politics-hun",
+          "hun-fundamental-law"
+        ],
+        "links": [
+          {
+            "label": "EU：ハンガリーの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/hungary_en"
+          },
+          {
+            "label": "ハンガリー法令データベース：基本法",
+            "href": "https://njt.hu/jogszabaly/en/2011-4301-02-00"
+          }
+        ]
+      }
+    },
+    "IRL": {
+      "politics": {
+        "takeaway": "アイルランドの首相（ティーショク）は、下院の指名を受けて大統領が任命します。",
+        "body": "議会は上院と下院（ドイル）の二院制です。首相が行政を率い、国家元首の大統領は主に儀礼的な役割を担う議院内閣制の共和国です。",
+        "sourceIds": [
+          "eu-politics-irl"
+        ],
+        "links": [
+          {
+            "label": "EU：アイルランドの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/ireland_en"
+          }
+        ]
+      }
+    },
+    "ITA": {
+      "politics": {
+        "takeaway": "イタリアの議会は、代議院と共和国上院の二院で構成されます。",
+        "body": "首相が政府を率い、大統領が国家元首として首相を任命する議院内閣制の共和国です。20州のうち5州には、特別な自治権が認められています。",
+        "sourceIds": [
+          "eu-politics-ita"
+        ],
+        "links": [
+          {
+            "label": "EU：イタリアの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/italy_en"
+          }
+        ]
+      }
+    },
+    "LVA": {
+      "politics": {
+        "takeaway": "ラトビアでは、大統領が首相を指名し、政府は国会の承認を受けて運営されます。",
+        "body": "首相が閣僚を選んで政府を率い、国家元首の大統領は主に儀礼的な役割を担う議院内閣制の共和国です。政府は任期中も国会の信任を必要とします。",
+        "sourceIds": [
+          "eu-politics-lva"
+        ],
+        "links": [
+          {
+            "label": "EU：ラトビアの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/latvia_en"
+          }
+        ]
+      }
+    },
+    "LTU": {
+      "politics": {
+        "takeaway": "リトアニアでは、国会（セイマス）の承認を得て、大統領が首相を任命します。",
+        "body": "大統領が国家元首、首相が政府の長を務め、国会は一院制です。新しい政府は、政策方針について国会の承認を受けてから職務を始めます。",
+        "sourceIds": [
+          "eu-politics-ltu",
+          "ltu-constitution"
+        ],
+        "links": [
+          {
+            "label": "EU：リトアニアの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/lithuania_en"
+          },
+          {
+            "label": "リトアニア国会：憲法と政府の成立",
+            "href": "https://www.lrs.lt/home/Konstitucija/Constitution.htm"
+          }
+        ]
+      }
+    },
+    "LUX": {
+      "politics": {
+        "takeaway": "ルクセンブルクでは、首相が政府を率い、大公は国家を代表する役割を担います。",
+        "body": "議院内閣制を採る立憲君主国（大公国）で、立法を担う代議院は一院制です。60人の議員を選ぶ総選挙は5年ごとに行われます。",
+        "sourceIds": [
+          "eu-politics-lux"
+        ],
+        "links": [
+          {
+            "label": "EU：ルクセンブルクの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/luxembourg_en"
+          }
+        ]
+      }
+    },
+    "MLT": {
+      "politics": {
+        "takeaway": "マルタでは、一院制の代議院が立法を担い、首相が政府を率います。",
+        "body": "国家元首の大統領は主に儀礼的な役割を担う議院内閣制の共和国です。",
+        "sourceIds": [
+          "eu-politics-mlt",
+          "mlt-parliament-standing-orders"
+        ],
+        "links": [
+          {
+            "label": "EU：マルタの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/malta_en"
+          },
+          {
+            "label": "マルタ議会：代議院の議事規則",
+            "href": "https://www.parlament.mt/media/82187/standing-orders-online-en.pdf"
+          }
+        ]
+      }
+    },
+    "NLD": {
+      "politics": {
+        "takeaway": "オランダの議会は、第一院と第二院が政府を監督する二院制です。",
+        "body": "首相が政府を率い、国王が国家元首を務める議院内閣制の立憲君主国です。第二院が法律づくりと政府の監督を担い、第一院は法案を可決・否決します。",
+        "sourceIds": [
+          "eu-politics-nld",
+          "nld-parliament-democracy"
+        ],
+        "links": [
+          {
+            "label": "EU：オランダの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/netherlands_en"
+          },
+          {
+            "label": "オランダ第二院：二院の役割",
+            "href": "https://www.houseofrepresentatives.nl/how-parliament-works/democracy-netherlands"
+          }
+        ]
+      }
+    },
+    "POL": {
+      "politics": {
+        "takeaway": "ポーランドの地方行政は、国が任命する知事と、選挙で選ぶ県議会が権限を分け合います。",
+        "body": "首相が政府を率い、大統領が国家元首を務める共和国で、国の行政は閣僚会議を中心に運営されます。16県では、県議会が選ぶ執行機関も地方行政を担います。",
+        "sourceIds": [
+          "eu-politics-pol"
+        ],
+        "links": [
+          {
+            "label": "EU：ポーランドの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/poland_en"
+          }
+        ]
+      }
+    },
+    "PRT": {
+      "politics": {
+        "takeaway": "ポルトガルでは、大統領による首相の任命と共和国議会による政府の監督が組み合わされています。",
+        "body": "大統領が国家元首、首相が政府の長を務める半大統領制の共和国です。首相の任命では議会各党への相談と選挙結果が考慮され、政府の政策方針は共和国議会で審議されます。",
+        "sourceIds": [
+          "eu-politics-prt",
+          "prt-parliament-competences"
+        ],
+        "links": [
+          {
+            "label": "EU：ポルトガルの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/portugal_en"
+          },
+          {
+            "label": "ポルトガル共和国議会：政府との関係",
+            "href": "https://www.parlamento.pt/sites/EN/Parliament/Paginas/Competences.aspx"
+          }
+        ]
+      }
+    },
+    "ROU": {
+      "politics": {
+        "takeaway": "ルーマニアでは、大統領と首相が率いる政府が行政の役割を分担します。",
+        "body": "大統領が国家元首、首相が政府の長を務める半大統領制の共和国です。県では、地方の課題を担う県議会と、国の事務を担う県知事の役割を分けています。",
+        "sourceIds": [
+          "eu-politics-rou"
+        ],
+        "links": [
+          {
+            "label": "EU：ルーマニアの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/romania_en"
+          }
+        ]
+      }
+    },
+    "SVK": {
+      "politics": {
+        "takeaway": "スロバキアでは、150人で構成される一院制の国民議会が政府を監督します。",
+        "body": "首相が行政を率い、大統領が国家元首を務める議院内閣制の共和国です。国民議会は法律や憲法の改正を決め、政府や個々の閣僚への不信任も議決できます。",
+        "sourceIds": [
+          "eu-politics-svk",
+          "svk-parliament-guide"
+        ],
+        "links": [
+          {
+            "label": "EU：スロバキアの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/slovakia_en"
+          },
+          {
+            "label": "スロバキア国民議会：議会の構成と監督権",
+            "href": "https://www.nrsr.sk/web/Dynamic/Download.aspx?DocID=570735"
+          }
+        ]
+      }
+    },
+    "SVN": {
+      "politics": {
+        "takeaway": "スロベニアでは、国民議会が首相と閣僚を選び、大統領は国民が直接選びます。",
+        "body": "政府が行政を担う議院内閣制の共和国です。90議席の国民議会では、イタリア系とハンガリー系の共同体に各1議席が保障されています。",
+        "sourceIds": [
+          "eu-politics-svn",
+          "svn-political-system"
+        ],
+        "links": [
+          {
+            "label": "EU：スロベニアの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/slovenia_en"
+          },
+          {
+            "label": "スロベニア政府：政治制度と国民議会",
+            "href": "https://www.gov.si/en/topics/political-system/"
+          }
+        ]
+      }
+    },
+    "ESP": {
+      "politics": {
+        "takeaway": "スペインでは、国の政府と自治州・自治都市がそれぞれの権限で行政を担います。",
+        "body": "国王が国家元首、首相が政府の長を務める議院内閣制の君主国です。17の自治州と2つの自治都市があり、自治権の範囲は地域によって異なります。",
+        "sourceIds": [
+          "eu-politics-esp"
+        ],
+        "links": [
+          {
+            "label": "EU：スペインの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/spain_en"
+          }
+        ]
+      }
+    },
+    "SWE": {
+      "politics": {
+        "takeaway": "スウェーデンでは、国会議長が首相候補を提案し、国会が承認を判断します。",
+        "body": "国王が国家元首、首相が政府の長を務める立憲君主国で、国会は一院制です。首相候補への反対が国会議員の過半数に達しなければ、その候補は承認されます。",
+        "sourceIds": [
+          "eu-politics-swe",
+          "swe-government-formation"
+        ],
+        "links": [
+          {
+            "label": "EU：スウェーデンの政治制度",
+            "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/sweden_en"
+          },
+          {
+            "label": "スウェーデン国会：首相の承認と政府の成立",
+            "href": "https://www.riksdagen.se/en/how-the-riksdag-works/democracy/forming-a-government/"
+          }
+        ]
+      }
+    },
+    "DEU": {
+      "politics": {
+        "takeaway": "ドイツでは、連邦政府と16の州が権限を分けて政治を担います。",
+        "body": "議院内閣制の連邦共和国で、首相が政府を率い、大統領は主に国家を代表する役割を担います。連邦議会が首相を選び、法律づくりには州を代表する連邦参議院も参加します。",
+        "sourceIds": ["eu-politics-deu", "deu-bundestag-functions"],
+        "links": [
+          { "label": "EU：ドイツの政治制度", "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/germany_en" },
+          { "label": "ドイツ連邦議会：議会と州の役割", "href": "https://www.bundestag.de/en/parliament/function-197608" }
+        ]
+      }
+    },
+    "FIN": {
+      "politics": {
+        "takeaway": "フィンランドでは、国会が首相を選び、政府への信任を判断します。",
+        "body": "首相が政府を率い、大統領が国家元首を務める議院内閣制の共和国です。政党間の交渉で政府の政策方針をまとめ、国会で選ばれた首相と閣僚を大統領が正式に任命します。",
+        "sourceIds": ["eu-politics-fin", "fin-government-formation"],
+        "links": [
+          { "label": "EU：フィンランドの政治制度", "href": "https://european-union.europa.eu/principles-countries-history/eu-countries/finland_en" },
+          { "label": "フィンランド政府：政府の成立と国会の信任", "href": "https://valtioneuvosto.fi/en/about-the-government/appointment-and-organisation-of-the-government" }
+        ]
+      }
+    }
+  },
+  "sources": [
+    {"id":"eu-politics-aut","label":"欧州連合：オーストリアの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/austria_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"eu-politics-bel","label":"欧州連合：ベルギーの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/belgium_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"eu-politics-bgr","label":"欧州連合：ブルガリアの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/bulgaria_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"eu-politics-hrv","label":"欧州連合：クロアチアの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/croatia_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"eu-politics-cze","label":"欧州連合：チェコの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/czechia_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"cze-parliament-guide","label":"チェコ代議院：Czech Parliamentarism","url":"https://www.psp.cz/eknih/cdrom/ic/pdf/skladacka_remake2023-podzim_EN.pdf","checkedAt":"2026-10-02","period":"議会の構成と政府への信任（2023年案内・2026-10-02確認）"},
+    {"id":"eu-politics-dnk","label":"欧州連合：デンマークの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/denmark_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"dnk-constitutional-act","label":"デンマーク国会：The Constitutional Act of Denmark","url":"https://www.ft.dk/~/media/pdf/publikationer/english/the-constitutional-act-of-denmark_web,-d-,pdf.ashx","checkedAt":"2026-10-02","period":"憲法第15条の政府責任（1953年憲法・2013年英訳・2026-10-02確認）"},
+    {"id":"eu-politics-est","label":"欧州連合：エストニアの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/estonia_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"eu-politics-fra","label":"欧州連合：フランスの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/france_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"fra-constitution","label":"フランス大統領府：第五共和国憲法","url":"https://www.elysee.fr/en/french-presidency/constitution-of-4-october-1958","checkedAt":"2026-10-02","period":"憲法第24・49・50条の議会と政府（2026-10-02確認）"},
+    {"id":"eu-politics-grc","label":"欧州連合：ギリシャの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/greece_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"grc-parliament-institution","label":"ギリシャ議会：The Institution","url":"https://www.hellenicparliament.gr/en/Vouli-ton-Ellinon/O-Thesmos/","checkedAt":"2026-10-02","period":"国会による大統領選出と政府への信任（2026-10-02確認）"},
+    {"id":"eu-politics-hun","label":"欧州連合：ハンガリーの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/hungary_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"hun-fundamental-law","label":"ハンガリー法令データベース：The Fundamental Law of Hungary","url":"https://njt.hu/jogszabaly/en/2011-4301-02-00","checkedAt":"2026-10-02","period":"基本法の大統領・首相選出（2026-10-02確認）"},
+    {"id":"eu-politics-irl","label":"欧州連合：アイルランドの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/ireland_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"eu-politics-ita","label":"欧州連合：イタリアの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/italy_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"eu-politics-lva","label":"欧州連合：ラトビアの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/latvia_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"eu-politics-ltu","label":"欧州連合：リトアニアの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/lithuania_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"ltu-constitution","label":"リトアニア国会：共和国憲法第92条","url":"https://www.lrs.lt/home/Konstitucija/Constitution.htm","checkedAt":"2026-10-02","period":"首相の任命と政府の政策方針の承認（2026-10-02確認）"},
+    {"id":"eu-politics-lux","label":"欧州連合：ルクセンブルクの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/luxembourg_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"eu-politics-mlt","label":"欧州連合：マルタの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/malta_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"mlt-parliament-standing-orders","label":"マルタ議会：Standing Orders of the House of Representatives","url":"https://www.parlament.mt/media/82187/standing-orders-online-en.pdf","checkedAt":"2026-10-02","period":"代議院の制度と議事規則（2026-10-02確認）"},
+    {"id":"eu-politics-nld","label":"欧州連合：オランダの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/netherlands_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"nld-parliament-democracy","label":"オランダ第二院：Democracy in the Netherlands","url":"https://www.houseofrepresentatives.nl/how-parliament-works/democracy-netherlands","checkedAt":"2026-10-02","period":"第一院・第二院の役割（2026-10-02確認）"},
+    {"id":"eu-politics-pol","label":"欧州連合：ポーランドの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/poland_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"eu-politics-prt","label":"欧州連合：ポルトガルの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/portugal_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"prt-parliament-competences","label":"ポルトガル共和国議会：Competences","url":"https://www.parlamento.pt/sites/EN/Parliament/Paginas/Competences.aspx","checkedAt":"2026-10-02","period":"首相任命と政府の政策方針への議会監督（2026-10-02確認）"},
+    {"id":"eu-politics-rou","label":"欧州連合：ルーマニアの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/romania_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"eu-politics-svk","label":"欧州連合：スロバキアの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/slovakia_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"svk-parliament-guide","label":"スロバキア国民議会：A Quick Guide to the National Council","url":"https://www.nrsr.sk/web/Dynamic/Download.aspx?DocID=570735","checkedAt":"2026-10-02","period":"国民議会の構成と権限（2025年案内・2026-10-02確認）"},
+    {"id":"eu-politics-svn","label":"欧州連合：スロベニアの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/slovenia_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"svn-political-system","label":"スロベニア政府：Political system","url":"https://www.gov.si/en/topics/political-system/","checkedAt":"2026-10-02","period":"国民議会と政府の権限（2026-10-02確認）"},
+    {"id":"eu-politics-esp","label":"欧州連合：スペインの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/spain_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"eu-politics-swe","label":"欧州連合：スウェーデンの政治制度","url":"https://european-union.europa.eu/principles-countries-history/eu-countries/sweden_en","checkedAt":"2026-10-02","period":"政治制度（2026-10-02確認）"},
+    {"id":"swe-government-formation","label":"スウェーデン国会：Forming a government","url":"https://www.riksdagen.se/en/how-the-riksdag-works/democracy/forming-a-government/","checkedAt":"2026-10-02","period":"国会議長の提案と首相の承認手続（2026-10-02確認）"},
+    { "id": "eu-politics-deu", "label": "欧州連合：ドイツの政治制度", "url": "https://european-union.europa.eu/principles-countries-history/eu-countries/germany_en", "checkedAt": "2026-10-02", "period": "政治制度（2026-10-02確認）" },
+    { "id": "deu-bundestag-functions", "label": "ドイツ連邦議会：Function and role", "url": "https://www.bundestag.de/en/parliament/function-197608", "checkedAt": "2026-10-02", "period": "連邦議会の職務と州の立法参加（2026-10-02確認）" },
+    { "id": "eu-politics-fin", "label": "欧州連合：フィンランドの政治制度", "url": "https://european-union.europa.eu/principles-countries-history/eu-countries/finland_en", "checkedAt": "2026-10-02", "period": "政治制度（2026-10-02確認）" },
+    { "id": "fin-government-formation", "label": "フィンランド政府：Appointment and organisation of the Government", "url": "https://valtioneuvosto.fi/en/about-the-government/appointment-and-organisation-of-the-government", "checkedAt": "2026-10-02", "period": "政府の任命と国会の信任手続（2026-10-02確認）" }
+  ]
+}
