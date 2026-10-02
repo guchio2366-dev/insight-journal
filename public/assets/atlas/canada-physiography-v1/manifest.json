@@ -57,27 +57,36 @@
       "sha256": "26b0d3cde98e66167a2fa122cf73c2d098b5c8f24c225610df145e8c98004866",
       "contentType": "application/geo+json;charset=UTF-8",
       "bytes": 1310663
-    },
+    }
+  ],
+  "sourceEvidence": [
     {
       "file": "source-layer.json",
       "url": "https://maps-cartes.services.geo.ca/server_serveur/rest/services/NRCan/phys_reg_en/MapServer/0?f=pjson",
       "sha256": "b6e9470e8cd02dbbdd7e34d4e9ae83c7181b15182baf812709edb7e6c4d01c02",
       "contentType": "text/plain;charset=UTF-8",
-      "bytes": 6907
+      "bytes": 6907,
+      "repositoryPath": "data-source/atlas/canada-physiography-v1/source-layer.json",
+      "published": false
     },
     {
       "file": "source-catalogue.json",
       "url": "https://open.canada.ca/data/api/action/package_show?id=a3dfbaf4-1b20-4061-aa0a-e7a79953f52d",
       "sha256": "4e4dc7c0bc74893827779a4987fd26932dbe07b8939a42b1dacc6a3a9a9b99d7",
       "contentType": "application/json;charset=utf-8",
-      "bytes": 13829
+      "bytes": 13829,
+      "repositoryPath": "data-source/atlas/canada-physiography-v1/source-catalogue.json",
+      "published": false
     },
     {
       "file": "source-license.html",
       "url": "https://open.canada.ca/en/open-government-licence-canada",
       "sha256": "d7648d6d694d66a0891502f85c3383f9263d5e541b47e14fbf33450974af158f",
       "contentType": "text/html; charset=utf-8",
-      "bytes": 23079
+      "bytes": 23079,
+      "repositoryPath": "data-source/atlas/canada-physiography-v1/source-license.html",
+      "published": false
     }
-  ]
+  ],
+  "sourceEvidenceNote": "Unmodified source metadata and licence responses are retained in the repository evidence directory. The site serves the exact geometry and this extraction manifest; readers can inspect the official metadata and licence through their source URLs."
 }
