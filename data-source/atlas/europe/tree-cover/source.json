@@ -1,0 +1,17 @@
+{
+  "dataset": "ESA WorldCover 10 m 2021 v200",
+  "doi": "https://doi.org/10.5281/zenodo.7254221",
+  "publisher": "ESA WorldCover consortium",
+  "sourceUrl": "https://esa-worldcover.org/en/data-access",
+  "manualUrl": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/docs/WorldCover_PUM_V2.0.pdf",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "period": "2021-01-01/2021-12-31",
+  "originalResolution": "1/12000 degree (approximately 10 m at equator)",
+  "sourceCRS": "EPSG:4326",
+  "sourceTreeClass": 10,
+  "sourceNoData": 0,
+  "treeDefinition": "Tree cover class includes areas dominated by trees with cover of 10% or more, including planted trees, plantations and olive trees. It is not a FAO forest, forestry production, timber availability or tree-volume classification.",
+  "sourceCoverage": "Sentinel-2-observed land except Antarctica; northern limit 82.75°N. Current Europe frame is 32–73°N and includes western Russia.",
+  "attribution": "© ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium"
+}

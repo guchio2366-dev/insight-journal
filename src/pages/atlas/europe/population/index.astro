@@ -1,4 +1,6 @@
 ---
 import EuropeAtlasPage from '../../../../components/atlas/EuropeAtlasPage.astro';
+import '../../../../styles/atlas-europe-country-overview-return.css';
 ---
 <EuropeAtlasPage field="population" />
+<script>import {initEuropeCountryOverviewReturn} from '../../../../scripts/atlas-europe-country-overview-return';document.querySelectorAll<HTMLElement>('[data-europe-detail]').forEach(initEuropeCountryOverviewReturn);</script>

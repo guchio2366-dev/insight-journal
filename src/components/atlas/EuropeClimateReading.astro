@@ -3,10 +3,12 @@ import { climateSummary } from '../../lib/atlas-europe-view';
 import mapLabels from '../../data/atlas/europe/map-labels.json';
 import legend from '../../data/atlas/europe/climate-legend.json';
 import { climateFarming, cityFarming } from '../../data/atlas/europe/climate-farming';
+import EuropeClimateDiagram from './EuropeClimateDiagram.astro';
 
 interface Props {
   city: {
-    id: string; name: string; stationName: string; sourceUrl: string; period: string;
+    id: string; name: string; stationId: string; stationName: string; sourceUrl: string; period: string;
+    coordinates: number[]; elevationM: number;
     months: { month: number; temperature: number | null; precipitation: number | null }[];
   };
   country: string;
@@ -42,9 +44,16 @@ const dryMonths = city.months.filter(month => month.precipitation !== null && mo
   <header class="eu-city-reading-head">
     <h3 class="eu-city-reading-title" id={`city-reading-${city.id}`}>{city.name}の気候と農畜産</h3>
     <p class="eu-statistic-note eu-city-chart-meta">{country}{city.id === 'london' && ' · 首都ロンドン'} · {city.period}年の平年値<br />観測所 {station}{city.id === 'london' && '（ヒースロー）'}</p>
-    {missingRain && <p class="eu-statistic-missing">下段の雨温図の×は降水量の欠測です。0 mmを示すものではありません。</p>}
-    {missingTemperature && <p class="eu-statistic-missing">気温の欠測月では線を途切れさせています。</p>}
   </header>
+  <EuropeClimateDiagram city={city} country={country} mode="plot" />
+  <p class="eu-city-selected-note">
+    {classification && <strong>{classification.code} {classification.name} ／ </strong>}
+    {summary.coldest !== null && summary.warmest !== null ? `月平均気温：最寒${coldMonths} ${summary.coldest.toFixed(1)} ℃、最暖${warmMonths} ${summary.warmest.toFixed(1)} ℃。` : '気温に欠測があるため、年間の寒暖差は算出していません。'}
+    {missingRain && ' ×は降水量の欠測（0 mmではありません）。'}
+    {missingTemperature && ' 気温の欠測月では線が途切れます。'}
+  </p>
+  <details class="eu-city-reading-details">
+    <summary>季節・農畜産との関係・出典</summary>
   <div class="eu-city-reading-body">
     <section class="eu-city-climate-description" aria-labelledby={`city-classification-${city.id}`}>
       <h4 class="eu-city-climate" id={`city-classification-${city.id}`}>{classification ? <><strong>{classification.code}</strong> {classification.name}</> : '気候区分：観測地点の分類は未収録です'}</h4>
@@ -61,4 +70,5 @@ const dryMonths = city.months.filter(month => month.precipitation !== null && mo
     <p class="eu-statistic-note">雨温図は1観測所の値で、都市や国全体の平均ではありません。気候区分は地図の格子の分類で、下段の月別値から計算したものではありません。{!classification && '分類を近隣地点の値で補っていません。'}</p>
     <p class="eu-statistic-source">原典：<a href={city.sourceUrl} target="_blank" rel="noopener noreferrer">気象庁の観測所平年値 ↗</a> ／ <a href="https://www.gloh2o.org/koppen/" target="_blank" rel="noopener noreferrer">Beckほかの気候区分 ↗</a></p>
   </div>
+  </details>
 </article>

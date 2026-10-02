@@ -18,6 +18,21 @@ const forbiddenPatterns = [
   { name: "Notion形式のID", pattern: /(?<![a-z0-9])[0-9a-f]{32}(?![a-z0-9])/i }
 ];
 
+function privateIdScanText(filename, text) {
+  const relative = path.relative(dist, filename).split(path.sep).join("/");
+  if (!/^assets\/atlas\/(?:[^/]+\/)+manifest\.json$/.test(relative)) return text;
+  try {
+    const manifest = JSON.parse(text);
+    if (!manifest || typeof manifest !== "object" || Array.isArray(manifest)) return text;
+  } catch {
+    return text;
+  }
+  // MD5 is also 32 hex characters. Exclude only exact checksum-field values in
+  // atlas JSON manifests from the ID heuristic, retaining every other byte for
+  // scanning (including duplicate keys and the same value in unrelated fields).
+  return text.replace(/("(?:inputMd5|publisherMd5|md5)"\s*:\s*")[0-9a-f]{32}(")/gi, "$1$2");
+}
+
 function assertReleaseShape(value) {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("_release.jsonはオブジェクトである必要があります");
   const keys = Object.keys(value).sort();
@@ -91,9 +106,10 @@ async function verifyLocalFiles(release) {
     const numeric=(path.dirname(filename)===farmingDirectory&&isVerifiedFarmingGrid(path.basename(filename),bytes,farmingManifest))
       ||(path.dirname(filename)===oceaniaCropDirectory&&isVerifiedOceaniaCropGrid(path.basename(filename),bytes,oceaniaCropManifest));
     const text = filename.endsWith(".gz") ? gunzipSync(bytes).toString("utf8") : bytes.toString("utf8");
+    const privateIdText = numeric ? text : privateIdScanText(filename, text);
     for (const rule of forbiddenPatterns) {
       if(numeric&&rule.name==='Notion形式のID')continue;
-      if (rule.pattern.test(text)) throw new Error(`${path.relative(root, filename)}に${rule.name}が含まれています`);
+      if (rule.pattern.test(rule.name === 'Notion形式のID' ? privateIdText : text)) throw new Error(`${path.relative(root, filename)}に${rule.name}が含まれています`);
     }
   }
 }

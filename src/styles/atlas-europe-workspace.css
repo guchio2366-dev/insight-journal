@@ -24,6 +24,7 @@
 .eu-workspace-root .eu-map-heading { position:absolute; z-index:2; inset:auto 0 0; display:flex; justify-content:space-between; gap:6px; padding:4px 8px; background:#fbfaf2eb; border-top:1px solid #c2cbc0; pointer-events:none; }
 .eu-workspace-root .eu-map-heading h2,.eu-workspace-root .eu-map-heading p { margin:0; font:11px/1.5 var(--sans); }
 .eu-workspace-root .eu-live-map .maplibregl-ctrl-bottom-right { bottom:25px; }
+.eu-workspace-root .eu-live-map { position:absolute; inset:0; }
 .eu-workspace-root .eu-live-map .maplibregl-ctrl-attrib { max-width:calc(100% - 10px); font-size:10px; }
 .eu-workspace-root .eu-map-annotations { position:absolute; inset:0; z-index:2; pointer-events:none; overflow:hidden; }
 .eu-workspace-root .eu-map-annotations>svg { position:absolute; inset:0; width:100%; height:100%; overflow:hidden; }
@@ -65,6 +66,11 @@
 .eu-workspace-root .eu-city-card { border-radius:0; padding:12px; }
 .eu-workspace-root .eu-reader-heading h2 { font-size:24px; }
 .eu-workspace-root .eu-map-footer { padding:4px 0; }
+.eu-drainage-choice { display:flex; align-items:center; flex-wrap:wrap; gap:6px 10px; padding-top:5px; font:13px/1.5 var(--sans); }
+.eu-drainage-choice[hidden] { display:none; }
+.eu-drainage-choice label { display:flex; align-items:center; gap:6px; }
+.eu-drainage-choice select,.eu-drainage-choice button { min-height:32px; max-width:100%; font:13px/1.4 var(--sans); color:#173c48; background:#fffdf2; border:1px solid #98aaa4; padding:4px 6px; }
+.eu-drainage-choice p { flex-basis:100%; margin:0; }
 .eu-workspace-root .eu-map-caption,.eu-workspace-root .eu-workspace .europe-map-caption { padding:8px; font-size:11px; }
 .eu-workspace-root .eu-legend { border:1px solid #d1d4c8; margin-top:6px; padding:8px; background:#f8f6ed; }
 .eu-workspace-root .eu-grid-value { padding:10px; margin-top:6px; }
@@ -359,4 +365,29 @@
  .eu-workspace-root[data-europe-detail] .eu-read-panel,
  .eu-workspace-root[data-europe-detail] .eu-read-panel:has([data-eu-climate-reader]:not([hidden])) { padding-inline:10px; }
  .eu-workspace-root[data-europe-detail] .eu-climate-primary-key .eu-legend-grid { row-gap:0; }
+}
+
+/* Climate evidence stays in the first reading view; disclosures use page scroll. */
+@media(min-width:960px) {
+ .eu-workspace-root[data-europe-detail].has-eu-comparison .eu-region-navigation { margin-bottom:4px; }
+ .eu-workspace-root[data-europe-detail].has-eu-comparison .eu-topic-above { padding-top:2px; padding-bottom:4px; }
+ .eu-workspace-root[data-europe-detail].has-eu-comparison .eu-breadcrumb { margin-bottom:2px; }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-read-panel { position:static; max-height:none; }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-subject-reader { order:0; display:block; flex:none; }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-reader-summary>h2,
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading [data-eu-subject-takeaway] { display:none; }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-comparison-links { margin:0 0 4px; gap:6px; }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading [data-eu-climate-reader] { order:1; flex:none; overflow:visible; padding:0; scrollbar-gutter:auto; }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-reader-heading { margin:3px 0; }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-reader-heading h2 { margin:0; font:700 17px/1.5 var(--sans); }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-reader-body { overflow:visible; max-height:none; }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-climate-primary-key { order:2; margin-top:6px; }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-climate-primary-key>summary { min-height:32px; padding:6px 0; margin:0; font:700 13px/1.5 var(--sans); }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-climate-primary-key .eu-legend-grid { gap:5px 8px; }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-climate-primary-key .eu-legend-grid>div { font:13px/1.5 var(--sans); }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-statistics-jump { min-height:32px; padding-block:6px; font:13px/1.5 var(--sans); }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-comparison-context { margin-bottom:4px; padding-bottom:4px; }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-comparison-context h2 { font:700 15px/1.5 var(--sans); }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-comparison-context>a { padding:3px 0; }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-comparison-origin { margin-top:3px; }
 }

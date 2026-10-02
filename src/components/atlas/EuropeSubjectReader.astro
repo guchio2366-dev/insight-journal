@@ -1,6 +1,7 @@
 ---
 import type { EuropeLayer } from '../../data/atlas/europe/layers';
 import { europeReaderCopy, europeReaderSources } from '../../lib/atlas-europe-reader';
+import { withBase } from '../../lib/urls';
 interface Props { layer:EuropeLayer; hidden?:boolean }
 const { layer, hidden=false }=Astro.props;
 const copy=europeReaderCopy(layer);
@@ -21,6 +22,9 @@ const copy=europeReaderCopy(layer);
   <p data-eu-subject-intro>{copy.body}</p>
   <div class="eu-feature-reading" data-eu-feature-card aria-live="polite" hidden></div>
   <p class="eu-data-note" data-eu-subject-note>{copy.note}</p>
+  <p class="eu-data-note" data-eu-layer-attribution hidden={!layer.attribution}>{layer.attribution}</p>
+  <a class="eu-source-link" data-eu-layer-licence hidden={!layer.licence} href={layer.licence}>利用条件（CC BY 4.0）</a>
+  <a class="eu-source-link" data-eu-layer-manifest hidden={!layer.manifest} href={layer.manifest?withBase(layer.manifest):undefined}>取得・加工記録</a>
   <div class="eu-reading-sources" data-eu-reading-sources>{europeReaderSources(layer).map(source=><a class="eu-source-link" href={source.url}>{source.label}</a>)}</div>
   <a class="eu-source-link" data-eu-subject-source href={layer.source}>地図データの原典</a>
   </details>

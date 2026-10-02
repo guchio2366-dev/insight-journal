@@ -1,0 +1,58 @@
+---
+import { europeCultureData, normaliseCultureState, cultureSelection, cultureCaseNote, cultureLegend, formatCultureCount, formatCultureShare, type CultureState, type CultureTopicKind } from '../../lib/atlas-europe-population-cases';
+import '../../styles/atlas-europe-population-cases.css';
+interface Props { topic?: CultureTopicKind; initialState?: Partial<CultureState>; id?: string; }
+const { topic = 'ethnicity', initialState = {}, id = 'eu-culture-reader' } = Astro.props;
+const state = normaliseCultureState(initialState, topic);
+const selected = cultureSelection(state, topic);
+const levels = ['aggregate', 'detail'] as const;
+---
+<section class="eu-culture" data-eu-culture-reader data-culture-topic={topic} data-culture-initial-case={state.cultureCase} data-culture-initial-category={state.cultureCategory} data-culture-initial-area={state.cultureArea} aria-labelledby={`${id}-title`}>
+  <header class="eu-culture-head">
+    <p class="eu-culture-kicker">国勢調査の地域事例</p>
+    <h3 id={`${id}-title`} data-culture-title>{selected.topic.titleJa}</h3>
+    <p class="eu-culture-takeaway" data-culture-takeaway>2021年の自己申告分類を、同じ公表表の総人口に占める割合で読みます。</p>
+  </header>
+  <div class="eu-culture-controls">
+    <label for={`${id}-case`}>対象の事例</label>
+    <select id={`${id}-case`} data-culture-case disabled>
+      {europeCultureData.cases.map(item => <option value={item.id} selected={item.id === state.cultureCase}>{item.grain === 'national' ? 'クロアチア・全国値' : 'イングランド・ウェールズ・行政区'}</option>)}
+    </select>
+    <label for={`${id}-category`}>元の回答分類</label>
+    <select id={`${id}-category`} data-culture-category disabled>
+      {levels.map(level => {
+        const categories = selected.topic.categories.filter(category => category.level === level);
+        return categories.length > 0 && <optgroup label={level === 'aggregate' ? '元表の大分類' : selected.topic.kind === 'ethnicity' && selected.censusCase.grain === 'LAD' ? '元表の細分類' : '元表の回答分類'}>
+          {categories.map(category => <option value={category.id} selected={category.id === state.cultureCategory}>{category.label}</option>)}
+        </optgroup>;
+      })}
+    </select>
+    <label for={`${id}-area`}>選択する地域</label>
+    <select id={`${id}-area`} data-culture-area disabled>
+      {selected.topic.areas.slice().sort((left, right) => left.name.localeCompare(right.name, 'en')).map(area => <option value={area.code} selected={area.code === state.cultureArea}>{area.name}</option>)}
+    </select>
+  </div>
+  <div class="eu-culture-context"><span data-culture-grain>{selected.censusCase.grain === 'national' ? '全国値 · 1地域' : '行政区（LAD2021）· 331地域'}</span><span data-culture-year>{selected.topic.year}年国勢調査 · {selected.topic.censusDate}</span></div>
+  <div class="eu-culture-value" role="status" aria-live="polite" aria-atomic="true">
+    <p class="eu-culture-area-name" data-culture-area-name>{selected.area.name}</p>
+    <p class="eu-culture-category-name" data-culture-category-name>{selected.category.label}</p>
+    <p class="eu-culture-number"><strong data-culture-share>{formatCultureShare(selected.share)}</strong><span data-culture-count>{formatCultureCount(selected.count)}</span></p>
+    <p class="eu-culture-denominator" data-culture-denominator>分母：この表の総人口 {formatCultureCount(selected.area.denominator)}</p>
+  </div>
+  <div class="eu-culture-legend" aria-label="同じ表の総人口を分母とする割合の凡例">
+    {cultureLegend.map(item => <span><i style={`background:${item.color}`} aria-hidden="true"></i>{item.label}</span>)}
+  </div>
+  <details class="eu-culture-details"><summary>分類の意味・対象範囲・出典</summary>
+  <p class="eu-culture-note" data-culture-note>{cultureCaseNote(selected.censusCase, topic)}</p>
+  <p class="eu-culture-small" data-culture-classification-note>{selected.category.level === 'aggregate' ? '元表の大分類です。細分類と足し合わせません。' : selected.censusCase.grain === 'national' ? 'クロアチアの元分類です。他国の分類と同一化しません。' : '元表の回答分類です。大分類に含まれる人数を重ねて合計しません。'}</p>
+  <button type="button" class="eu-culture-fit" data-culture-fit disabled>事例の範囲を表示</button>
+  <p class="eu-culture-small" data-culture-map-status>未掲載地域は数値なしです。白い地域を0%と読まないでください。</p>
+  <p class="eu-culture-small" data-culture-outline-note>{selected.censusCase.grain === 'national' ? '国の輪郭は位置を示すための概略です。2021年の県境ではありません。' : 'ONSの2021年行政区境界です。海岸線を500mで概略化しています。'}</p>
+  <p class="eu-culture-small" data-culture-disclosure>{selected.censusCase.grain === 'LAD' ? '秘匿処理により、民族表と宗教表の総人口がわずかに異なる場合があります。各表の公表値をそのまま使います。' : '全国の公表行を使います。無宗教・不可知論・未申告・不明を区別し、宗教団体への所属で回答を組み替えません。'}</p>
+  <footer class="eu-culture-sources">
+    <a data-culture-source href={selected.topic.documentationURL}>分類・調査の定義</a><a data-culture-original href={selected.topic.sourceURL}>公表表</a><a data-culture-licence href={selected.censusCase.licence.url}><span data-culture-licence-name>{selected.censusCase.licence.name}</span></a>
+    <p data-culture-attribution>{selected.censusCase.attribution.join('\n')}</p>
+  </footer>
+  </details>
+  <noscript><p class="eu-culture-small">初期選択の数値を表示しています。出典リンクから公表表を確認できます。</p></noscript>
+</section>

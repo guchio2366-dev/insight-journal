@@ -68,7 +68,12 @@ test('regional agriculture, nature/water and population controls preserve the le
         const buttons=[...group.querySelectorAll('button')];
         assert.equal(buttons.length,field==='agriculture'?2:field==='nature'?4:3);
         if(field==='nature')assert.ok(d.querySelectorAll('[data-eu-water-options] button').length>=3);
-        if(field==='population')assert.equal(buttons.filter(b=>b.disabled).length,2,'unrecorded identity/religion stay explicit');
+        if(field==='population'){
+          assert.equal(buttons.filter(b=>b.disabled).length,0,'Published bounded case studies are enabled');
+          assert.deepEqual(buttons.slice(1).map(button=>button.textContent),['人種・民族（事例）','宗教（事例）']);
+          assert.equal(d.querySelector('[data-culture-case]').options.length,2,'Two source cases do not imply complete European coverage');
+          assert.equal(d.querySelector('[data-eu-culture-host]').hidden,true,'Default European population remains the density map');
+        }
       }else if(region==='west-asia'){
         assert.equal(d.querySelectorAll('[data-west-standard-group]').length,field==='agriculture'?2:field==='nature'?4:3);
         if(field==='nature'){

@@ -1,0 +1,1888 @@
+{
+  "countries": {
+    "RUS": {
+      "nature": {
+        "takeaway": "西部の平原からウラル山地へ、長い東西の地形の変化が見えます。",
+        "body": "モスクワ周辺の低い地形に対し、東側のウラルでは標高が上がります。表示は東経65度で切れており、ロシア全土の地形や気候を示しません。",
+        "sourceIds": [
+          "terrain",
+          "climate",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "西部からウラルの地形",
+            "href": "/atlas/europe/nature/?place=RUS&layer=terrain"
+          },
+          {
+            "label": "モスクワと周辺の気候",
+            "href": "/atlas/europe/nature/?place=RUS&layer=climate&city=moscow"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "南西部の穀物・油料作物と、北側の樹木被覆を対照できます。",
+        "body": "南西部には小麦・ヒマワリの格子があり、モスクワ北方には2021年の樹木被覆が見られます。東経65度までの地図と、アジア部分も含む全国の森林比率では対象範囲が異なります。",
+        "sourceIds": [
+          "farming",
+          "treecover",
+          "statistics"
+        ],
+        "links": [
+          {
+            "label": "南西部の小麦",
+            "href": "/atlas/europe/agriculture/?place=RUS&layer=wheat"
+          },
+          {
+            "label": "北側の樹木被覆",
+            "href": "/atlas/europe/agriculture/?place=RUS&layer=treecover"
+          }
+        ],
+        "evidenceNote": "作物・家畜は2020年頃、樹木被覆は2021年の保持済み資料です。表示枠からロシア全国の面積や生産量を推計していません。"
+      }
+    },
+    "NOR": {
+      "nature": {
+        "takeaway": "海に面する西岸と内陸では、雨量と地形の条件が大きく異なります。",
+        "body": "西岸は海岸近くまで山地が続き、ベルゲン側とオスロ側の降水分布に違いが見られます。2地点の平年値はそれぞれの観測所の値で、長い南北の国土全体を代表しません。",
+        "sourceIds": [
+          "terrain",
+          "precipitation",
+          "climate",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "西岸と内陸の降水",
+            "href": "/atlas/europe/nature/?place=NOR&layer=precipitation"
+          },
+          {
+            "label": "ベルゲンの平年値",
+            "href": "/atlas/europe/nature/?place=NOR&layer=climate&city=bergen"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "南東部の穀物と、西岸の牛・羊を別々の分布として読めます。",
+        "body": "オスロ北方には小麦の推計格子があり、西岸には牛・羊の飼養密度が見られます。山地と谷の細かな農場位置は、この2020年頃の概略格子では確定できません。",
+        "sourceIds": [
+          "farming",
+          "terrain",
+          "livestock"
+        ],
+        "links": [
+          {
+            "label": "南東部の小麦",
+            "href": "/atlas/europe/agriculture/?place=NOR&layer=wheat"
+          },
+          {
+            "label": "羊の飼養密度",
+            "href": "/atlas/europe/agriculture/?place=NOR&layer=sheep"
+          }
+        ]
+      }
+    },
+    "FRA": {
+      "nature": {
+        "takeaway": "北部の盆地と東・南部の山地が、広い国土に地域差をつくります。",
+        "body": "パリ盆地の低い地形に対し、東部のアルプスと南西端のピレネーでは標高が上がります。大西洋側と地中海側の違いは、パリ1地点の平年値だけでは読み切れません。",
+        "sourceIds": [
+          "terrain",
+          "climate",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "盆地と山地の地形",
+            "href": "/atlas/europe/nature/?place=FRA&layer=terrain"
+          },
+          {
+            "label": "パリと各地の気候区分",
+            "href": "/atlas/europe/nature/?place=FRA&layer=climate&city=paris"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "パリ盆地の穀物とブルターニュの畜産には、分布の違いがあります。",
+        "body": "パリ盆地には大麦・菜種などの格子があり、ブルターニュには牛・豚・鶏の密度が重なります。表示は欧州部分で、海外領土を含む場合がある全国統計とは範囲を揃えていません。",
+        "sourceIds": [
+          "farming",
+          "statistics",
+          "livestock"
+        ],
+        "links": [
+          {
+            "label": "大麦と穀物の分布",
+            "href": "/atlas/europe/agriculture/?place=FRA&layer=barley"
+          },
+          {
+            "label": "西部の牛の分布",
+            "href": "/atlas/europe/agriculture/?place=FRA&layer=cattle"
+          },
+          {
+            "label": "ブルターニュの鶏の分布",
+            "href": "/atlas/europe/agriculture/?place=FRA&layer=chicken"
+          }
+        ]
+      }
+    },
+    "SWE": {
+      "nature": {
+        "takeaway": "南部の低地から北西部の山地へ、長い南北の変化を読めます。",
+        "body": "スコーネの低い地形に対し、ノルウェーとの国境側には山地が続きます。収録したヴィスビューの観測点はゴトランド島にあり、北部や首都の気候を代わりに示す地点ではありません。",
+        "sourceIds": [
+          "terrain",
+          "climate",
+          "context",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "南部と北西部の地形",
+            "href": "/atlas/europe/nature/?place=SWE&layer=terrain"
+          },
+          {
+            "label": "ゴトランド島の観測点",
+            "href": "/atlas/europe/nature/?place=SWE&layer=climate&city=visby"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "スコーネの大麦・菜種と、中北部の樹木被覆が対照をなします。",
+        "body": "南部には大麦・菜種の推計分布が重なり、中部には2021年の樹木被覆が広がる場所があります。2023年の森林面積比率68.7%は全国値で、穀物の生産量や木材供給量ではありません。",
+        "sourceIds": [
+          "farming",
+          "treecover",
+          "statistics"
+        ],
+        "links": [
+          {
+            "label": "南部の大麦",
+            "href": "/atlas/europe/agriculture/?place=SWE&layer=barley"
+          },
+          {
+            "label": "中北部の樹木被覆",
+            "href": "/atlas/europe/agriculture/?place=SWE&layer=treecover"
+          }
+        ]
+      }
+    },
+    "BLR": {
+      "nature": {
+        "takeaway": "大きな山地の少ない内陸で、河川と低い起伏を合わせて読めます。",
+        "body": "西部と東部の地形はともに低い丘陵・平野が中心で、アルプスのような高い山地とは異なります。ミンスクの季節変化は内陸の一観測点の例として読み、全国平均にはしません。",
+        "sourceIds": [
+          "terrain",
+          "climate",
+          "context",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "低い起伏と河川の位置",
+            "href": "/atlas/europe/nature/?place=BLR&layer=terrain"
+          },
+          {
+            "label": "ミンスクの季節変化",
+            "href": "/atlas/europe/nature/?place=BLR&layer=climate&city=minsk"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "西部の穀物と東部のジャガイモを、家畜の分布と合わせて読めます。",
+        "body": "西部には小麦・大麦、東部にはジャガイモを含む複数の作物の格子が見られます。牛・豚の密度図を並べると、作物の収穫面積と家畜の飼養密度が別の情報であることを確かめられます。",
+        "sourceIds": [
+          "farming",
+          "livestock"
+        ],
+        "links": [
+          {
+            "label": "穀物と他の作物",
+            "href": "/atlas/europe/agriculture/?place=BLR&layer=wheat"
+          },
+          {
+            "label": "ジャガイモの分布",
+            "href": "/atlas/europe/agriculture/?place=BLR&layer=potato"
+          },
+          {
+            "label": "牛の飼養密度",
+            "href": "/atlas/europe/agriculture/?place=BLR&layer=cattle"
+          }
+        ]
+      }
+    },
+    "UKR": {
+      "nature": {
+        "takeaway": "広い平野と西部のカルパチア山地を対照できます。",
+        "body": "中央部の低い起伏に対し、西端にはカルパチア山地が見えます。キーウの観測点と黒海側では位置が異なり、1地点の気温・降水を国全体へ広げません。",
+        "sourceIds": [
+          "terrain",
+          "climate",
+          "context",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "平野と西端の山地",
+            "href": "/atlas/europe/nature/?place=UKR&layer=terrain"
+          },
+          {
+            "label": "キーウと気候区分",
+            "href": "/atlas/europe/nature/?place=UKR&layer=climate&city=kyiv"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "中央部では小麦・トウモロコシ・ヒマワリの推計分布が重なります。",
+        "body": "中央部の穀物・油料作物と北部の樹木被覆を比べると、農地と樹木の位置の違いが見えます。農畜産図は2020年頃の推計で、現在の耕作や収穫の状況まで示していません。",
+        "sourceIds": [
+          "farming",
+          "treecover"
+        ],
+        "links": [
+          {
+            "label": "中央部の穀物と家畜",
+            "href": "/atlas/europe/agriculture/?place=UKR&layer=crops"
+          },
+          {
+            "label": "ヒマワリの分布",
+            "href": "/atlas/europe/agriculture/?place=UKR&layer=sunflower"
+          }
+        ]
+      }
+    },
+    "POL": {
+      "nature": {
+        "takeaway": "中部の低地から南部の山地へ、地形と雨量が変わります。",
+        "body": "ワルシャワを含む中部の低地に対し、南部のカルパチア側では標高と年降水量が大きくなる場所があります。平年の降水格子とワルシャワの月別観測値は、異なる範囲の資料です。",
+        "sourceIds": [
+          "terrain",
+          "precipitation",
+          "climate",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "中部と南部の地形",
+            "href": "/atlas/europe/nature/?place=POL&layer=terrain"
+          },
+          {
+            "label": "降水とワルシャワ",
+            "href": "/atlas/europe/nature/?place=POL&layer=climate&city=warsaw"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "中部の牛・豚と南部の穀物に、農畜産の分布の違いが見えます。",
+        "body": "中部には牛・豚の飼養密度が重なり、南部にも小麦などの推計格子があります。牛の図は乳用・肉用を分けておらず、地形図との重なりだけで営農の理由を確定できません。",
+        "sourceIds": [
+          "farming",
+          "terrain",
+          "livestock"
+        ],
+        "links": [
+          {
+            "label": "牛の分布",
+            "href": "/atlas/europe/agriculture/?place=POL&layer=cattle"
+          },
+          {
+            "label": "小麦の分布",
+            "href": "/atlas/europe/agriculture/?place=POL&layer=wheat"
+          }
+        ]
+      }
+    },
+    "AUT": {
+      "nature": {
+        "takeaway": "アルプスの高地とウィーン東方の低地が、はっきり対照をなします。",
+        "body": "チロルの山地に対し、ウィーン東方のドナウ沿いは低い地形です。降水図では山地と東部の違いが見られ、ウィーンの平年値をアルプス全体の値として扱いません。",
+        "sourceIds": [
+          "terrain",
+          "precipitation",
+          "climate",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "チロルと東部低地",
+            "href": "/atlas/europe/nature/?place=AUT&layer=terrain"
+          },
+          {
+            "label": "ウィーンの平年値",
+            "href": "/atlas/europe/nature/?place=AUT&layer=climate&city=vienna"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "東部の穀物畑とアルプス側の牛を、起伏の違いと合わせて読めます。",
+        "body": "ウィーン東方には小麦・トウモロコシ・大麦の格子が重なり、チロルにも牛の飼養密度が見られます。収穫面積と家畜密度は単位が異なり、色の濃さから生産量を比べません。",
+        "sourceIds": [
+          "farming",
+          "terrain",
+          "livestock"
+        ],
+        "links": [
+          {
+            "label": "東部の小麦",
+            "href": "/atlas/europe/agriculture/?place=AUT&layer=wheat"
+          },
+          {
+            "label": "牛と他の家畜",
+            "href": "/atlas/europe/agriculture/?place=AUT&layer=cattle"
+          }
+        ]
+      }
+    },
+    "HUN": {
+      "nature": {
+        "takeaway": "東部の低い平原と西部の丘陵を、ドナウ川の位置と合わせて読めます。",
+        "body": "東部には低い地形が広がり、西部にはより高い丘陵があります。ブダペストを通るドナウ川は国境を越える水系で、河道の線だけでは流域全体の範囲を表せません。",
+        "sourceIds": [
+          "terrain",
+          "context",
+          "context-danube-basin"
+        ],
+        "links": [
+          {
+            "label": "東部平原と西部丘陵",
+            "href": "/atlas/europe/nature/?place=HUN&layer=terrain"
+          },
+          {
+            "label": "ドナウ川の位置",
+            "href": "/atlas/europe/nature/?place=HUN&layer=water&feature=danube"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "東部平原では穀物・油料作物が重なり、西部には樹木も見られます。",
+        "body": "東部に小麦・トウモロコシ・ヒマワリの推計分布が重なり、西部には2021年の樹木被覆もあります。農畜産図は2020年頃のモデル推計で、2024年の干ばつや毎年の収穫変動をそのまま表しません。",
+        "sourceIds": [
+          "farming",
+          "treecover",
+          "context-hungary-farming"
+        ],
+        "links": [
+          {
+            "label": "穀物・家畜の分布",
+            "href": "/atlas/europe/agriculture/?place=HUN&layer=crops"
+          },
+          {
+            "label": "西部の樹木被覆",
+            "href": "/atlas/europe/agriculture/?place=HUN&layer=treecover"
+          }
+        ]
+      }
+    },
+    "MDA": {
+      "nature": {
+        "takeaway": "内陸の低い丘陵で、北部と南部の位置の違いを読めます。",
+        "body": "北部から中部にはなだらかな丘陵が続き、海岸を持つ隣国ルーマニアとは位置条件が異なります。キシナウの季節変化は一観測点の値で、国内のすべての斜面を代表しません。",
+        "sourceIds": [
+          "terrain",
+          "climate",
+          "context",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "北部と中部の起伏",
+            "href": "/atlas/europe/nature/?place=MDA&layer=terrain"
+          },
+          {
+            "label": "キシナウの季節変化",
+            "href": "/atlas/europe/nature/?place=MDA&layer=climate&city=chisinau"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "北部から中部に、穀物・ヒマワリ・温帯果樹の分布が見られます。",
+        "body": "トウモロコシやヒマワリの格子に、温帯果樹の集約区分も重なります。温帯果樹の図はブドウ単独の産地を示すものではなく、品目の色から生産量の順位を読み取りません。",
+        "sourceIds": [
+          "farming"
+        ],
+        "links": [
+          {
+            "label": "ヒマワリの分布",
+            "href": "/atlas/europe/agriculture/?place=MDA&layer=sunflower"
+          },
+          {
+            "label": "温帯果樹の集約区分",
+            "href": "/atlas/europe/agriculture/?place=MDA&layer=temperatefruit"
+          }
+        ]
+      }
+    },
+    "ROU": {
+      "nature": {
+        "takeaway": "カルパチアの山地とドナウ側の低地が、国土の大きな対照です。",
+        "body": "中央部のカルパチア周辺では起伏が大きく、南部のドナウ沿いは低い地形です。ブカレストの観測点は南部にあり、山地の気温・降水をそのまま代表しません。",
+        "sourceIds": [
+          "terrain",
+          "climate",
+          "context",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "カルパチアと南部低地",
+            "href": "/atlas/europe/nature/?place=ROU&layer=terrain"
+          },
+          {
+            "label": "ブカレストの平年値",
+            "href": "/atlas/europe/nature/?place=ROU&layer=climate&city=bucharest"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "ドナウ側の穀物と、山地側の牛・羊を読み比べられます。",
+        "body": "南部低地には小麦・トウモロコシ・ヒマワリが重なり、カルパチア周辺には牛・羊の推計密度が見られます。作物と家畜は別の単位で、山地の格子も実際の農場境界ではありません。",
+        "sourceIds": [
+          "farming",
+          "terrain",
+          "livestock"
+        ],
+        "links": [
+          {
+            "label": "南部低地の作物",
+            "href": "/atlas/europe/agriculture/?place=ROU&layer=crops"
+          },
+          {
+            "label": "羊の飼養密度",
+            "href": "/atlas/europe/agriculture/?place=ROU&layer=sheep"
+          }
+        ]
+      }
+    },
+    "LTU": {
+      "nature": {
+        "takeaway": "バルト海沿岸の低地と、東部の丘陵の違いを読めます。",
+        "body": "中部は低い起伏が目立ち、東部にはより標高の高い場所があります。首都の観測点はこの版に収録していないため、気候区分と格子の年降水量から地域差を確かめます。",
+        "sourceIds": [
+          "terrain",
+          "precipitation",
+          "climate",
+          "context"
+        ],
+        "links": [
+          {
+            "label": "沿岸・中部・東部の地形",
+            "href": "/atlas/europe/nature/?place=LTU&layer=terrain"
+          },
+          {
+            "label": "格子の年降水量",
+            "href": "/atlas/europe/nature/?place=LTU&layer=precipitation"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "中部の小麦・菜種と東部の樹木被覆が、土地利用の対照を示します。",
+        "body": "中部には小麦・菜種・大麦の推計分布が重なり、東部には2021年の樹木被覆が見られます。農地の収穫面積と樹木の被覆区分を分け、面の広さを生産量に読み替えません。",
+        "sourceIds": [
+          "farming",
+          "treecover"
+        ],
+        "links": [
+          {
+            "label": "中部の小麦",
+            "href": "/atlas/europe/agriculture/?place=LTU&layer=wheat"
+          },
+          {
+            "label": "東部の樹木被覆",
+            "href": "/atlas/europe/agriculture/?place=LTU&layer=treecover"
+          }
+        ]
+      }
+    },
+    "LVA": {
+      "nature": {
+        "takeaway": "リガ湾側と南部の低地から、東部内陸へ起伏が変わります。",
+        "body": "ゼムガレの低い地形に対し、東部には標高が上がる場所があります。年降水量にも地域差が見られますが、リガの観測点は未収録なので、他国の都市値で補いません。",
+        "sourceIds": [
+          "terrain",
+          "precipitation",
+          "context"
+        ],
+        "links": [
+          {
+            "label": "ゼムガレと東部の地形",
+            "href": "/atlas/europe/nature/?place=LVA&layer=terrain"
+          },
+          {
+            "label": "内陸までの年降水量",
+            "href": "/atlas/europe/nature/?place=LVA&layer=precipitation"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "ゼムガレの穀物と国内の森林を、違う資料の分布として読めます。",
+        "body": "南部のゼムガレには小麦・菜種・大麦の格子が重なります。2023年の森林面積比率55.0%は国全体の陸地に対する値で、2021年の樹木被覆の場所とは別に確かめます。",
+        "sourceIds": [
+          "farming",
+          "treecover",
+          "statistics"
+        ],
+        "links": [
+          {
+            "label": "ゼムガレの小麦",
+            "href": "/atlas/europe/agriculture/?place=LVA&layer=wheat"
+          },
+          {
+            "label": "樹木がある場所",
+            "href": "/atlas/europe/agriculture/?place=LVA&layer=treecover"
+          },
+          {
+            "label": "全国の森林比率",
+            "href": "/atlas/europe/agriculture/?place=LVA&layer=forest"
+          }
+        ]
+      }
+    },
+    "EST": {
+      "nature": {
+        "takeaway": "バルト海の島々と、本土の低い起伏が国土を形づくります。",
+        "body": "西側には島々が並び、本土の北部・南部も大きな山地より低い地形が目立ちます。タリンの平年値は北岸の一観測点で、島や南部の条件をすべて表しません。",
+        "sourceIds": [
+          "terrain",
+          "climate",
+          "context",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "島々と本土の位置",
+            "href": "/atlas/europe/nature/?place=EST&layer=terrain"
+          },
+          {
+            "label": "タリンの平年値",
+            "href": "/atlas/europe/nature/?place=EST&layer=climate&city=tallinn"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "北部の穀物と南部の樹木被覆を、同じ国の中で対照できます。",
+        "body": "北部には小麦・大麦・菜種の推計格子があり、南部には2021年の樹木被覆が見られます。森林面積比率は2023年57.1%ですが、国内のどこが森林かを示す値ではありません。",
+        "sourceIds": [
+          "farming",
+          "treecover",
+          "statistics"
+        ],
+        "links": [
+          {
+            "label": "北部の大麦",
+            "href": "/atlas/europe/agriculture/?place=EST&layer=barley"
+          },
+          {
+            "label": "南部までの樹木被覆",
+            "href": "/atlas/europe/agriculture/?place=EST&layer=treecover"
+          }
+        ]
+      }
+    },
+    "DEU": {
+      "nature": {
+        "takeaway": "北ドイツ平原と南部の山地が、地形の大きな対照をつくります。",
+        "body": "北部の低地に対し、シュヴァルツヴァルトや南端のアルプスでは起伏が大きくなります。西部のライン川は国境を越える水系で、沿岸と内陸を結んでいます。",
+        "sourceIds": [
+          "terrain",
+          "context",
+          "context-rhine-management"
+        ],
+        "links": [
+          {
+            "label": "ドイツの地形",
+            "href": "/atlas/europe/nature/?place=DEU&layer=terrain"
+          },
+          {
+            "label": "ライン川と周辺の水系",
+            "href": "/atlas/europe/nature/?place=DEU&layer=water&feature=rhine"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "北部の穀物畑と、南西部の樹木被覆を対照できます。",
+        "body": "北ドイツ平原には小麦・大麦・テンサイの分布が重なり、シュヴァルツヴァルトには2021年の樹木被覆が見えます。穀物図は収穫面積、樹木図は被覆区分で、生産量を比べる図ではありません。",
+        "sourceIds": [
+          "farming",
+          "treecover"
+        ],
+        "links": [
+          {
+            "label": "小麦と他の農畜産物",
+            "href": "/atlas/europe/agriculture/?place=DEU&layer=wheat"
+          },
+          {
+            "label": "南西部の樹木被覆",
+            "href": "/atlas/europe/agriculture/?place=DEU&layer=treecover"
+          }
+        ],
+        "evidenceNote": "2020年頃の農畜産格子と2021年の樹木被覆による地域の対比です。北ドイツ平原・シュヴァルツヴァルトの格子を照合し、国内合計や品目別生産順位は算出していません。"
+      }
+    },
+    "BGR": {
+      "nature": {
+        "takeaway": "北部の低地と南部の山地に、標高の大きな違いがあります。",
+        "body": "ドナウ側の北部低地に対し、ロドピ山地などの南部では標高が上がります。ソフィアは西部の観測点で、北部平原や黒海岸の気候を代わりに表す地点ではありません。",
+        "sourceIds": [
+          "terrain",
+          "climate",
+          "context",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "北部低地とロドピ山地",
+            "href": "/atlas/europe/nature/?place=BGR&layer=terrain"
+          },
+          {
+            "label": "ソフィアの季節変化",
+            "href": "/atlas/europe/nature/?place=BGR&layer=climate&city=sofia"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "北部の小麦・ヒマワリと南部山地の樹木被覆が対照をなします。",
+        "body": "北部には小麦・ヒマワリ・トウモロコシの分布が重なり、ロドピ山地には2021年の樹木被覆が見られます。作物の面積と樹木の被覆は、生産量を共通の尺度で示す資料ではありません。",
+        "sourceIds": [
+          "farming",
+          "treecover"
+        ],
+        "links": [
+          {
+            "label": "北部のヒマワリ",
+            "href": "/atlas/europe/agriculture/?place=BGR&layer=sunflower"
+          },
+          {
+            "label": "山地側の樹木被覆",
+            "href": "/atlas/europe/agriculture/?place=BGR&layer=treecover"
+          }
+        ]
+      }
+    },
+    "GRC": {
+      "nature": {
+        "takeaway": "山地が海岸まで迫り、島々にも国土が広がっています。",
+        "body": "本土の山地とテッサリアの低地、ペロポネソスやエーゲ海の島々を対照できます。アテネの月別値は一観測点で、海に囲まれた各島や山地の気候まで代表しません。",
+        "sourceIds": [
+          "terrain",
+          "climate",
+          "context",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "本土・半島・島々の地形",
+            "href": "/atlas/europe/nature/?place=GRC&layer=terrain"
+          },
+          {
+            "label": "アテネの月別気候",
+            "href": "/atlas/europe/nature/?place=GRC&layer=climate&city=athens"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "テッサリアの羊の分布は、畜産と加工を合わせて考える入口です。",
+        "body": "国内の既存事例には、羊乳を主原料とするフェタチーズがあります。羊の地図は2020年の飼養密度の推計で、チーズの生産量や原料の調達範囲を示していません。",
+        "sourceIds": [
+          "livestock",
+          "context-greece-feta"
+        ],
+        "links": [
+          {
+            "label": "羊の飼養密度",
+            "href": "/atlas/europe/agriculture/?place=GRC&layer=sheep"
+          },
+          {
+            "label": "他の作物・家畜と比べる",
+            "href": "/atlas/europe/agriculture/?place=GRC&layer=crops"
+          }
+        ]
+      }
+    },
+    "ALB": {
+      "nature": {
+        "takeaway": "アドリア海側の低い平野と、内陸の山地が近接しています。",
+        "body": "西側の沿岸平野に対し、北部や東側には起伏の大きい山地があります。海岸から内陸への違いを地形・降水の格子で読み、未収録の都市観測値を近隣国の値で補いません。",
+        "sourceIds": [
+          "terrain",
+          "precipitation",
+          "context"
+        ],
+        "links": [
+          {
+            "label": "沿岸平野と北部山地",
+            "href": "/atlas/europe/nature/?place=ALB&layer=terrain"
+          },
+          {
+            "label": "海岸から内陸の降水",
+            "href": "/atlas/europe/nature/?place=ALB&layer=precipitation"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "沿岸平野の作物と北部山地の樹木被覆に、分布の違いが見えます。",
+        "body": "沿岸平野ではトウモロコシと「その他の野菜」の推計格子が重なり、北部山地には樹木被覆が見られます。この野菜区分は全野菜の合計ではなく、品目の色から全国生産量を比べません。",
+        "sourceIds": [
+          "farming",
+          "treecover"
+        ],
+        "links": [
+          {
+            "label": "沿岸側のトウモロコシ",
+            "href": "/atlas/europe/agriculture/?place=ALB&layer=maize"
+          },
+          {
+            "label": "北部の樹木被覆",
+            "href": "/atlas/europe/agriculture/?place=ALB&layer=treecover"
+          }
+        ]
+      }
+    },
+    "HRV": {
+      "nature": {
+        "takeaway": "内陸の低地とアドリア海側の山地が、細長い国土の対照をつくります。",
+        "body": "北東部のスラヴォニアに対し、海岸側にはディナル山地が続きます。年降水量図にも内陸と山地側の違いが見え、同じ国でも海岸と内陸の条件は一様ではありません。",
+        "sourceIds": [
+          "terrain",
+          "precipitation",
+          "context"
+        ],
+        "links": [
+          {
+            "label": "スラヴォニアとディナル山地",
+            "href": "/atlas/europe/nature/?place=HRV&layer=terrain"
+          },
+          {
+            "label": "海岸側と内陸の降水",
+            "href": "/atlas/europe/nature/?place=HRV&layer=precipitation"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "スラヴォニアでは、穀物・大豆と家畜の推計分布が重なります。",
+        "body": "北東部にはトウモロコシ・小麦・大豆の格子があり、豚などの飼養密度も見られます。海岸側の山地と位置を比べても、作付けの理由や畜産の飼料の供給先はこの図だけでは決まりません。",
+        "sourceIds": [
+          "farming",
+          "terrain",
+          "livestock"
+        ],
+        "links": [
+          {
+            "label": "北東部の大豆",
+            "href": "/atlas/europe/agriculture/?place=HRV&layer=soybean"
+          },
+          {
+            "label": "豚の飼養密度",
+            "href": "/atlas/europe/agriculture/?place=HRV&layer=pig"
+          }
+        ]
+      }
+    },
+    "CHE": {
+      "nature": {
+        "takeaway": "スイス高原とアルプスの高地が、近い距離で対照をなします。",
+        "body": "中北部の高原から南側のアルプスへ標高が上がり、細かな谷と峰が重なります。収録したチューリヒの観測点は首都ベルンの代替ではなく、全国や山地の平均でもありません。",
+        "sourceIds": [
+          "terrain",
+          "climate",
+          "context",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "高原とアルプスの地形",
+            "href": "/atlas/europe/nature/?place=CHE&layer=terrain"
+          },
+          {
+            "label": "チューリヒの観測点",
+            "href": "/atlas/europe/nature/?place=CHE&layer=climate&city=zurich"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "スイス高原とアルプスで、牛の飼養密度に地域差が見られます。",
+        "body": "高原の牛の推計格子と山地の地形を並べると、起伏の大きな国の土地利用を読めます。2023年の森林面積比率32.4%は全国値で、牛の図も乳用・肉用を分離していません。",
+        "sourceIds": [
+          "livestock",
+          "terrain",
+          "statistics"
+        ],
+        "links": [
+          {
+            "label": "牛の飼養密度",
+            "href": "/atlas/europe/agriculture/?place=CHE&layer=cattle"
+          },
+          {
+            "label": "全国の森林面積比率",
+            "href": "/atlas/europe/agriculture/?place=CHE&layer=forest"
+          }
+        ]
+      }
+    },
+    "LUX": {
+      "nature": {
+        "takeaway": "小さな内陸国でも、北部の高地と南部の低い地形を対照できます。",
+        "body": "北部の丘陵に対し、南部ではより標高の低い場所が見られます。国内の細かな谷は概略地形で省略され、首都の未収録の観測値をベルギーやドイツの都市値で補いません。",
+        "sourceIds": [
+          "terrain",
+          "climate",
+          "context"
+        ],
+        "links": [
+          {
+            "label": "北部と南部の地形",
+            "href": "/atlas/europe/nature/?place=LUX&layer=terrain"
+          },
+          {
+            "label": "周辺とつながる気候区分",
+            "href": "/atlas/europe/nature/?place=LUX&layer=climate"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "北部の樹木被覆と牛・豚の分布を、南部と対照できます。",
+        "body": "北部には2021年の樹木被覆と牛・豚の推計格子が見られます。2023年の森林面積比率34.5%は全国値で、小さな国の農場や林区の境界をこの格子で確定することはできません。",
+        "sourceIds": [
+          "livestock",
+          "treecover",
+          "statistics"
+        ],
+        "links": [
+          {
+            "label": "北部までの樹木被覆",
+            "href": "/atlas/europe/agriculture/?place=LUX&layer=treecover"
+          },
+          {
+            "label": "牛の飼養密度",
+            "href": "/atlas/europe/agriculture/?place=LUX&layer=cattle"
+          }
+        ]
+      }
+    },
+    "BEL": {
+      "nature": {
+        "takeaway": "フランドルの低地とアルデンヌの丘陵が、地形と雨量の対照です。",
+        "body": "北西側のフランドルに対し、南東側のアルデンヌでは標高が上がります。年降水量も地域で異なり、欧州の格子図からブリュッセル1地点の月別値を作ることはできません。",
+        "sourceIds": [
+          "terrain",
+          "precipitation",
+          "context"
+        ],
+        "links": [
+          {
+            "label": "フランドルとアルデンヌ",
+            "href": "/atlas/europe/nature/?place=BEL&layer=terrain"
+          },
+          {
+            "label": "低地と丘陵の降水",
+            "href": "/atlas/europe/nature/?place=BEL&layer=precipitation"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "フランドルではジャガイモなどの作物と豚・鶏が重なります。",
+        "body": "北部にはジャガイモ・小麦・トウモロコシの分布と豚・鶏の推計密度が見られます。アルデンヌ側の牛の分布も合わせると、作物と家畜の種類による位置の違いを読めます。",
+        "sourceIds": [
+          "farming",
+          "livestock"
+        ],
+        "links": [
+          {
+            "label": "ジャガイモの分布",
+            "href": "/atlas/europe/agriculture/?place=BEL&layer=potato"
+          },
+          {
+            "label": "豚と他の家畜",
+            "href": "/atlas/europe/agriculture/?place=BEL&layer=pig"
+          }
+        ]
+      }
+    },
+    "NLD": {
+      "nature": {
+        "takeaway": "海面近くの低地と河川の位置が、国土を読む手がかりです。",
+        "body": "フリースラントを含む低地では、海抜0m未満を含む標高の格子があります。河川の概略図は位置を示しますが、堤防・排水設備の範囲や洪水の危険度を表していません。",
+        "sourceIds": [
+          "terrain",
+          "context"
+        ],
+        "links": [
+          {
+            "label": "海面近くの低い地形",
+            "href": "/atlas/europe/nature/?place=NLD&layer=terrain"
+          },
+          {
+            "label": "河川と海岸の位置",
+            "href": "/atlas/europe/nature/?place=NLD&layer=water"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "北部の牛と東部の作物・家畜を、低い地形の中で読み比べられます。",
+        "body": "フリースラントには牛の推計密度が見られ、東部には小麦・ジャガイモと豚・鶏の格子もあります。森林面積比率11.1%は2023年の全国値で、農地や市街地の割合から逆算していません。",
+        "sourceIds": [
+          "farming",
+          "statistics",
+          "livestock"
+        ],
+        "links": [
+          {
+            "label": "北部から東部の牛",
+            "href": "/atlas/europe/agriculture/?place=NLD&layer=cattle"
+          },
+          {
+            "label": "東部のジャガイモ",
+            "href": "/atlas/europe/agriculture/?place=NLD&layer=potato"
+          }
+        ]
+      }
+    },
+    "PRT": {
+      "nature": {
+        "takeaway": "北部とアレンテージョでは、起伏と年降水量に違いが見られます。",
+        "body": "北部には雨の多い格子があり、南側のアレンテージョと対照できます。リスボンの平年値は大西洋岸の一観測点で、北部の山地や内陸まで代表しません。",
+        "sourceIds": [
+          "terrain",
+          "precipitation",
+          "climate",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "北部と南部の年降水量",
+            "href": "/atlas/europe/nature/?place=PRT&layer=precipitation"
+          },
+          {
+            "label": "リスボンの季節変化",
+            "href": "/atlas/europe/nature/?place=PRT&layer=climate&city=lisbon"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "北部のトウモロコシと南部の米を、樹木や家畜の分布と比べられます。",
+        "body": "北部にはトウモロコシ、アレンテージョには米を含む推計格子があり、両地域には樹木被覆も見られます。米の面は収穫面積の配分で、灌漑施設や利用できる水量を表しません。",
+        "sourceIds": [
+          "farming",
+          "treecover",
+          "livestock"
+        ],
+        "links": [
+          {
+            "label": "トウモロコシの分布",
+            "href": "/atlas/europe/agriculture/?place=PRT&layer=maize"
+          },
+          {
+            "label": "米の分布",
+            "href": "/atlas/europe/agriculture/?place=PRT&layer=rice"
+          }
+        ]
+      }
+    },
+    "ESP": {
+      "nature": {
+        "takeaway": "高い内陸台地と海岸、北部山地を対照できます。",
+        "body": "メセタの台地に対し、バレンシア側には低い沿岸地域があります。内陸と海岸では気候区分も異なり、マドリード1地点の平年値を全土の乾燥度として使いません。",
+        "sourceIds": [
+          "terrain",
+          "climate",
+          "context",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "メセタと沿岸の地形",
+            "href": "/atlas/europe/nature/?place=ESP&layer=terrain"
+          },
+          {
+            "label": "マドリードと気候区分",
+            "href": "/atlas/europe/nature/?place=ESP&layer=climate&city=madrid"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "内陸の大麦・小麦とバレンシア側の柑橘類が、作物の地域差を示します。",
+        "body": "メセタには大麦・小麦の格子が重なり、東岸側には柑橘類の推計分布が見られます。果樹の集約区分と柑橘類を分け、地図から灌漑の範囲や収穫の品質を判断しません。",
+        "sourceIds": [
+          "farming"
+        ],
+        "links": [
+          {
+            "label": "内陸の大麦",
+            "href": "/atlas/europe/agriculture/?place=ESP&layer=barley"
+          },
+          {
+            "label": "東岸側の柑橘類",
+            "href": "/atlas/europe/agriculture/?place=ESP&layer=citrus"
+          }
+        ]
+      }
+    },
+    "IRL": {
+      "nature": {
+        "takeaway": "西部の起伏と中部の低地を、年降水量の違いと合わせて読めます。",
+        "body": "中部の低い地形に対し、西側には山地があり、年降水量の大きい格子も見られます。ダブリンの観測点は未収録なので、ロンドンの月別値を国内の値として代用しません。",
+        "sourceIds": [
+          "terrain",
+          "precipitation",
+          "context",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "西部と中部の地形",
+            "href": "/atlas/europe/nature/?place=IRL&layer=terrain"
+          },
+          {
+            "label": "西岸から中部の降水",
+            "href": "/atlas/europe/nature/?place=IRL&layer=precipitation"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "中部の牛と西部の羊に、畜産の分布の違いが見られます。",
+        "body": "中部には牛、西部には羊の推計密度があり、同じ国の中でも位置を読み比べられます。森林面積比率11.5%は2023年の全国値で、草地の割合や畜産の生産量を表すものではありません。",
+        "sourceIds": [
+          "livestock",
+          "statistics"
+        ],
+        "links": [
+          {
+            "label": "牛の飼養密度",
+            "href": "/atlas/europe/agriculture/?place=IRL&layer=cattle"
+          },
+          {
+            "label": "羊の飼養密度",
+            "href": "/atlas/europe/agriculture/?place=IRL&layer=sheep"
+          }
+        ]
+      }
+    },
+    "ITA": {
+      "nature": {
+        "takeaway": "アルプス・ポー平原・アペニンが、南北に異なる地形をつくります。",
+        "body": "北部のアルプスとその南側のポー平原に対し、半島にはアペニンの山地が続きます。ローマは中部の観測点で、この版では降水の欠測を他地点の値や0で補っていません。",
+        "sourceIds": [
+          "terrain",
+          "climate",
+          "context",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "山地とポー平原",
+            "href": "/atlas/europe/nature/?place=ITA&layer=terrain"
+          },
+          {
+            "label": "ローマの気温と欠測",
+            "href": "/atlas/europe/nature/?place=ITA&layer=climate&city=rome"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "ポー平原西部の米と、シチリアの小麦・果樹を対照できます。",
+        "body": "北部低地には米とトウモロコシが重なり、シチリアには小麦や柑橘類を含む格子があります。収穫面積の推計から、灌漑の範囲や品目別の生産量を決めることはできません。",
+        "sourceIds": [
+          "farming",
+          "terrain"
+        ],
+        "links": [
+          {
+            "label": "ポー平原側の米",
+            "href": "/atlas/europe/agriculture/?place=ITA&layer=rice"
+          },
+          {
+            "label": "半島・島の小麦",
+            "href": "/atlas/europe/agriculture/?place=ITA&layer=wheat"
+          }
+        ]
+      }
+    },
+    "DNK": {
+      "nature": {
+        "takeaway": "ユトランドと島々の低い地形にも、東西の降水の違いがあります。",
+        "body": "ユトランドとシェランはともに低い起伏が目立ちますが、年降水量は一様ではありません。半島と島の位置は国境・海岸図で確かめ、首都の未収録の月別値を作りません。",
+        "sourceIds": [
+          "terrain",
+          "precipitation",
+          "context"
+        ],
+        "links": [
+          {
+            "label": "半島と島々の地形",
+            "href": "/atlas/europe/nature/?place=DNK&layer=terrain"
+          },
+          {
+            "label": "ユトランドと島の降水",
+            "href": "/atlas/europe/nature/?place=DNK&layer=precipitation"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "ユトランドとシェランで、穀物と豚の分布の重なりを読めます。",
+        "body": "両地域には大麦・小麦と豚の推計格子があり、ユトランドにはジャガイモの分布も見られます。作物の収穫面積と豚の頭数密度は別の尺度で、飼料の供給先までは示しません。",
+        "sourceIds": [
+          "farming",
+          "livestock"
+        ],
+        "links": [
+          {
+            "label": "大麦と他の作物",
+            "href": "/atlas/europe/agriculture/?place=DNK&layer=barley"
+          },
+          {
+            "label": "豚の飼養密度",
+            "href": "/atlas/europe/agriculture/?place=DNK&layer=pig"
+          }
+        ]
+      }
+    },
+    "GBR": {
+      "nature": {
+        "takeaway": "西側の高地と東側の低地を、降水の違いと合わせて読めます。",
+        "body": "ウェールズなどの西側は起伏が大きく、イングランド東部は低い地形が目立ちます。西側の雨の多い格子とロンドンの平年値は範囲が異なり、ロンドンを英国全土の平均にしません。",
+        "sourceIds": [
+          "terrain",
+          "precipitation",
+          "climate",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "西側と東側の地形",
+            "href": "/atlas/europe/nature/?place=GBR&layer=terrain"
+          },
+          {
+            "label": "ロンドンの平年値",
+            "href": "/atlas/europe/nature/?place=GBR&layer=climate&city=london"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "イングランド東部の穀物と西部の牛・羊には、分布の対照があります。",
+        "body": "イングランドの公式地域資料は、東部の小麦・大麦と西部の乳牛・肉牛・羊の違いを説明しています。2020年頃の推計地図と読む例で、イングランドの説明を英国全土へ広げません。",
+        "sourceIds": [
+          "farming",
+          "context-england-farming",
+          "livestock"
+        ],
+        "links": [
+          {
+            "label": "東部の小麦",
+            "href": "/atlas/europe/agriculture/?place=GBR&layer=wheat"
+          },
+          {
+            "label": "西側までの羊の分布",
+            "href": "/atlas/europe/agriculture/?place=GBR&layer=sheep"
+          }
+        ]
+      }
+    },
+    "ISL": {
+      "nature": {
+        "takeaway": "高い内陸と沿岸低地が近接し、雨量にも地域差があります。",
+        "body": "南部の沿岸低地に対し、内陸には標高の高い場所が広がります。年降水量の南北の違いを格子で読み、レイキャビク1地点の平年値を島全体の平均にしません。",
+        "sourceIds": [
+          "terrain",
+          "precipitation",
+          "climate",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "内陸と沿岸の地形",
+            "href": "/atlas/europe/nature/?place=ISL&layer=terrain"
+          },
+          {
+            "label": "レイキャビクの平年値",
+            "href": "/atlas/europe/nature/?place=ISL&layer=climate&city=reykjavik"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "牛・羊の分布と、小さい全国の森林比率を分けて読めます。",
+        "body": "公式統計は酪農と羊飼養を農業の主要部門として扱っています。2023年の森林面積比率は0.5%で、2020年の牛・羊の密度図から森林面積や肉・乳の生産量を推計しません。",
+        "sourceIds": [
+          "livestock",
+          "statistics",
+          "context-iceland-farming"
+        ],
+        "links": [
+          {
+            "label": "牛の飼養密度",
+            "href": "/atlas/europe/agriculture/?place=ISL&layer=cattle"
+          },
+          {
+            "label": "羊の飼養密度",
+            "href": "/atlas/europe/agriculture/?place=ISL&layer=sheep"
+          },
+          {
+            "label": "全国の森林比率",
+            "href": "/atlas/europe/agriculture/?place=ISL&layer=forest"
+          }
+        ]
+      }
+    },
+    "SVN": {
+      "nature": {
+        "takeaway": "西側のアルプスと東部の低い地形に、雨量の違いも見られます。",
+        "body": "ユリアンアルプス側では起伏が大きく、東部にはより低い地域があります。年降水量の格子も対照を示し、未収録のリュブリャナの月別値を他国の観測所で埋めません。",
+        "sourceIds": [
+          "terrain",
+          "precipitation",
+          "context"
+        ],
+        "links": [
+          {
+            "label": "西側の山地と東部",
+            "href": "/atlas/europe/nature/?place=SVN&layer=terrain"
+          },
+          {
+            "label": "東西の年降水量",
+            "href": "/atlas/europe/nature/?place=SVN&layer=precipitation"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "東部のトウモロコシ・牛と、西側山地の樹木被覆を対照できます。",
+        "body": "東部にはトウモロコシ・小麦と牛の推計格子が重なり、ユリアンアルプス側にも樹木被覆が見られます。森林面積比率61.2%は2023年の全国値で、山地の木材生産量ではありません。",
+        "sourceIds": [
+          "farming",
+          "treecover",
+          "statistics",
+          "livestock"
+        ],
+        "links": [
+          {
+            "label": "東部のトウモロコシ",
+            "href": "/atlas/europe/agriculture/?place=SVN&layer=maize"
+          },
+          {
+            "label": "山地側までの樹木被覆",
+            "href": "/atlas/europe/agriculture/?place=SVN&layer=treecover"
+          }
+        ]
+      }
+    },
+    "FIN": {
+      "nature": {
+        "takeaway": "南東部の湖の分布と北西部の高地が、国土の違いを示します。",
+        "body": "南東部には湖と低い起伏が重なる地域があり、北西部には標高の高い場所があります。南岸のヘルシンキの平年値は一観測点の値で、北部の冬まで代表しません。",
+        "sourceIds": [
+          "terrain",
+          "context",
+          "climate",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "湖と河川の分布",
+            "href": "/atlas/europe/nature/?place=FIN&layer=water"
+          },
+          {
+            "label": "気候区分とヘルシンキ",
+            "href": "/atlas/europe/nature/?place=FIN&layer=climate&city=helsinki"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "穀物栽培・酪農と広い森林が、異なる土地利用として共存します。",
+        "body": "大麦の栽培と酪農が行われ、2023年の森林面積比率は73.7%です。サヴォ地方などの樹木被覆図は2021年の土地被覆で、全国の森林定義や木材生産量とは異なります。",
+        "sourceIds": [
+          "farming",
+          "treecover",
+          "statistics",
+          "context-fin-cereal",
+          "context-fin-milk"
+        ],
+        "links": [
+          {
+            "label": "大麦と農畜産の分布",
+            "href": "/atlas/europe/agriculture/?place=FIN&layer=barley"
+          },
+          {
+            "label": "樹木がある場所",
+            "href": "/atlas/europe/agriculture/?place=FIN&layer=treecover"
+          },
+          {
+            "label": "全国の森林面積比率",
+            "href": "/atlas/europe/agriculture/?place=FIN&layer=forest"
+          }
+        ],
+        "evidenceNote": "大麦・酪農の例は既存の公式地域資料に基づきます。森林面積比率は保持済みWDIの2023年値を小数1桁に丸め、表示格子から森林面積を推計していません。"
+      }
+    },
+    "SVK": {
+      "nature": {
+        "takeaway": "ドナウ低地からタトラの山地へ、標高と降水の変化を読めます。",
+        "body": "南西部のドナウ低地に対し、北側のタトラでは標高が上がります。平年の年降水量にも違いが見られますが、ブラチスラヴァの月別観測点はこの版に未収録です。",
+        "sourceIds": [
+          "terrain",
+          "precipitation",
+          "context"
+        ],
+        "links": [
+          {
+            "label": "ドナウ低地とタトラ",
+            "href": "/atlas/europe/nature/?place=SVK&layer=terrain"
+          },
+          {
+            "label": "低地と山地の降水",
+            "href": "/atlas/europe/nature/?place=SVK&layer=precipitation"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "南西部の穀物・菜種と北側の樹木被覆が、農林業の地域差を示します。",
+        "body": "ドナウ低地には小麦・トウモロコシ・菜種が重なり、タトラ側には2021年の樹木被覆が見られます。地形との位置関係は読めますが、農地の生産性や森林の伐採量までは分かりません。",
+        "sourceIds": [
+          "farming",
+          "treecover",
+          "terrain"
+        ],
+        "links": [
+          {
+            "label": "低地の菜種",
+            "href": "/atlas/europe/agriculture/?place=SVK&layer=rapeseed"
+          },
+          {
+            "label": "北側の樹木被覆",
+            "href": "/atlas/europe/agriculture/?place=SVK&layer=treecover"
+          }
+        ]
+      }
+    },
+    "CZE": {
+      "nature": {
+        "takeaway": "ボヘミアとモラヴィアの起伏を、周囲の山地と合わせて読めます。",
+        "body": "国内の盆地・低い丘陵に対し、周縁には標高の高い場所があります。プラハの観測点は未収録なので、隣国の都市値を国内の月別気候として示しません。",
+        "sourceIds": [
+          "terrain",
+          "climate",
+          "context"
+        ],
+        "links": [
+          {
+            "label": "国内の盆地と周縁の地形",
+            "href": "/atlas/europe/nature/?place=CZE&layer=terrain"
+          },
+          {
+            "label": "周辺と続く気候区分",
+            "href": "/atlas/europe/nature/?place=CZE&layer=climate"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "ボヘミアの小麦・菜種と、モラヴィアのトウモロコシを読み比べられます。",
+        "body": "ボヘミアには小麦・菜種・大麦、モラヴィアにはトウモロコシも重なる格子があります。品目が同じ地域に見えても、地図から輪作の順序やその年の収穫量は分かりません。",
+        "sourceIds": [
+          "farming"
+        ],
+        "links": [
+          {
+            "label": "小麦と穀物の分布",
+            "href": "/atlas/europe/agriculture/?place=CZE&layer=wheat"
+          },
+          {
+            "label": "菜種の分布",
+            "href": "/atlas/europe/agriculture/?place=CZE&layer=rapeseed"
+          }
+        ]
+      }
+    },
+    "BIH": {
+      "nature": {
+        "takeaway": "北部の低地から中南部の山地へ、起伏が大きくなります。",
+        "body": "サヴァ川側の北部に対し、国内の中部にはより高い地形が続きます。年降水量にも場所による違いがあり、国境で地形や降水が途切れるわけではありません。",
+        "sourceIds": [
+          "terrain",
+          "precipitation",
+          "context"
+        ],
+        "links": [
+          {
+            "label": "北部と中部山地の地形",
+            "href": "/atlas/europe/nature/?place=BIH&layer=terrain"
+          },
+          {
+            "label": "山地周辺の降水分布",
+            "href": "/atlas/europe/nature/?place=BIH&layer=precipitation"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "山地の樹木被覆と北部の家畜を、異なる分布として読めます。",
+        "body": "中部には2021年の樹木被覆があり、北部にも牛・豚などの推計密度が見られます。森林面積比率42.7%は2023年の全国値で、林業や畜産の生産額を示していません。",
+        "sourceIds": [
+          "livestock",
+          "treecover",
+          "statistics"
+        ],
+        "links": [
+          {
+            "label": "中部までの樹木被覆",
+            "href": "/atlas/europe/agriculture/?place=BIH&layer=treecover"
+          },
+          {
+            "label": "豚の飼養密度",
+            "href": "/atlas/europe/agriculture/?place=BIH&layer=pig"
+          }
+        ]
+      }
+    },
+    "MKD": {
+      "nature": {
+        "takeaway": "中部の低い地域と西部の山地に、標高と降水の対照があります。",
+        "body": "ヴァルダル沿いの地域に対し、西部には標高の高い山地が見られます。年降水量の格子も地域差を示しますが、スコピエの観測点は未収録です。",
+        "sourceIds": [
+          "terrain",
+          "precipitation",
+          "context"
+        ],
+        "links": [
+          {
+            "label": "中部と西部山地の地形",
+            "href": "/atlas/europe/nature/?place=MKD&layer=terrain"
+          },
+          {
+            "label": "山地と内陸の降水",
+            "href": "/atlas/europe/nature/?place=MKD&layer=precipitation"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "中部の小麦・大麦・果樹と西部山地の樹木被覆を対照できます。",
+        "body": "ヴァルダル沿いには小麦・大麦・温帯果樹の推計分布があり、西部山地には樹木被覆が見られます。果樹の集約区分を個別の果実やブドウの産地へ置き換えません。",
+        "sourceIds": [
+          "farming",
+          "treecover"
+        ],
+        "links": [
+          {
+            "label": "小麦と他の作物",
+            "href": "/atlas/europe/agriculture/?place=MKD&layer=wheat"
+          },
+          {
+            "label": "西部の樹木被覆",
+            "href": "/atlas/europe/agriculture/?place=MKD&layer=treecover"
+          }
+        ]
+      }
+    },
+    "SRB": {
+      "nature": {
+        "takeaway": "北部の低い平原と南部の山地が、国土の地形の対照です。",
+        "body": "ヴォイヴォディナは低い地形が目立ち、南側には標高の高い場所が続きます。ベオグラードの平年値は北部側の一観測点で、南部山地の条件まで代表しません。",
+        "sourceIds": [
+          "terrain",
+          "climate",
+          "context",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "北部平原と南部の地形",
+            "href": "/atlas/europe/nature/?place=SRB&layer=terrain"
+          },
+          {
+            "label": "ベオグラードの平年値",
+            "href": "/atlas/europe/nature/?place=SRB&layer=climate&city=belgrade"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "ヴォイヴォディナでは穀物・大豆・ヒマワリが重なっています。",
+        "body": "北部にトウモロコシ・小麦・大豆・ヒマワリの推計格子があり、南部には樹木被覆も見られます。ベオグラードの観測点の説明と、これらの農地の分布は異なる範囲の情報です。",
+        "sourceIds": [
+          "farming",
+          "treecover",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "北部の大豆",
+            "href": "/atlas/europe/agriculture/?place=SRB&layer=soybean"
+          },
+          {
+            "label": "南部までの樹木被覆",
+            "href": "/atlas/europe/agriculture/?place=SRB&layer=treecover"
+          }
+        ]
+      }
+    },
+    "MNE": {
+      "nature": {
+        "takeaway": "ゼタ平野と北部山地では、近い距離で標高が大きく変わります。",
+        "body": "ポドゴリツァ側の低い地形に対し、北部には標高の高い山地があります。海岸から山地の年降水量を比較しても、観測点未収録の都市の月別値を新たに作ることはできません。",
+        "sourceIds": [
+          "terrain",
+          "precipitation",
+          "context"
+        ],
+        "links": [
+          {
+            "label": "ゼタ平野から北部山地",
+            "href": "/atlas/europe/nature/?place=MNE&layer=terrain"
+          },
+          {
+            "label": "海岸と山地の降水",
+            "href": "/atlas/europe/nature/?place=MNE&layer=precipitation"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "ゼタ平野と北部山地で、牛・羊と森林を別々に読めます。",
+        "body": "低地と山地の両方に牛・羊の推計格子があり、森林面積比率は2023年61.5%です。全国の森林の割合から、家畜が利用する草地や木材を調達する範囲を推定しません。",
+        "sourceIds": [
+          "livestock",
+          "statistics"
+        ],
+        "links": [
+          {
+            "label": "羊の飼養密度",
+            "href": "/atlas/europe/agriculture/?place=MNE&layer=sheep"
+          },
+          {
+            "label": "全国の森林比率",
+            "href": "/atlas/europe/agriculture/?place=MNE&layer=forest"
+          }
+        ]
+      }
+    },
+    "KOS": {
+      "nature": {
+        "takeaway": "中部の盆地と周囲の山地を、隣接地域までつなげて読めます。",
+        "body": "プリシュティナ側の盆地に対し、西側の国境周辺には標高の高い場所があります。地形・降水の格子は表示できますが、プリシュティナの月別観測点は未収録です。",
+        "sourceIds": [
+          "terrain",
+          "precipitation",
+          "context"
+        ],
+        "links": [
+          {
+            "label": "盆地と周囲の山地",
+            "href": "/atlas/europe/nature/?place=KOS&layer=terrain"
+          },
+          {
+            "label": "西部までの年降水量",
+            "href": "/atlas/europe/nature/?place=KOS&layer=precipitation"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "盆地の家畜と西部の樹木を読めますが、全国の森林比率は欠測です。",
+        "body": "中部から西部には牛・羊の推計密度があり、西部には2021年の樹木被覆も見られます。2023年の森林全国値は欠測で、隣国の値や樹木の表示画素から補完していません。",
+        "sourceIds": [
+          "livestock",
+          "treecover",
+          "statistics"
+        ],
+        "links": [
+          {
+            "label": "羊の飼養密度",
+            "href": "/atlas/europe/agriculture/?place=KOS&layer=sheep"
+          },
+          {
+            "label": "西部の樹木被覆",
+            "href": "/atlas/europe/agriculture/?place=KOS&layer=treecover"
+          },
+          {
+            "label": "森林全国値の欠測",
+            "href": "/atlas/europe/agriculture/?place=KOS&layer=forest"
+          }
+        ],
+        "evidenceNote": "KOSの保持済み森林2023年値はnullです。家畜格子は飼養密度モデルで、公式の全国頭数や現在の農場観測に置き換えていません。"
+      }
+    },
+    "VAT": {
+      "nature": {
+        "takeaway": "バチカンの小さな丘は、ローマ周辺の地形の中に位置します。",
+        "body": "公式の地理説明はテヴェレ川右岸近くの丘にあるとしています。欧州の概略格子では国内の高低差を分離できず、ローマの観測値もバチカンの全国値ではありません。",
+        "sourceIds": [
+          "terrain",
+          "context-vatican-geography",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "ローマ周辺との位置関係",
+            "href": "/atlas/europe/nature/?place=VAT&layer=terrain"
+          }
+        ],
+        "evidenceNote": "国内の細かな地形を周辺格子で補完していません。位置の説明はバチカン市国公式資料によります。"
+      },
+      "agriculture": {
+        "takeaway": "バチカンの農地や樹木を、この欧州格子だけで判別することはできません。",
+        "body": "国土が小さく、2021年の樹木被覆図には国内を表す表示画素がありません。2023年の森林面積比率も欠測で、近隣の農畜産格子や色のない表示を国内の生産ゼロと読み替えません。",
+        "sourceIds": [
+          "farming",
+          "treecover",
+          "statistics"
+        ],
+        "links": [
+          {
+            "label": "樹木被覆図の表示範囲",
+            "href": "/atlas/europe/agriculture/?place=VAT&layer=treecover"
+          },
+          {
+            "label": "森林面積比率の欠測",
+            "href": "/atlas/europe/agriculture/?place=VAT&layer=forest"
+          }
+        ],
+        "evidenceNote": "樹木被覆manifestのVAT表示画素中心数は0です。WDIの森林2023年値はnullで、数値0とは区別しています。"
+      }
+    },
+    "SMR": {
+      "nature": {
+        "takeaway": "アペニン山麓の小さな国を、周辺イタリアの起伏と合わせて読めます。",
+        "body": "アドリア海側に近い丘陵に位置しますが、欧州の概略格子では国内の細かな峰と谷を分けられません。近隣のイタリアの格子やローマの観測値を国内の値として転用しません。",
+        "sourceIds": [
+          "terrain",
+          "context",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "周辺イタリアとの地形の位置",
+            "href": "/atlas/europe/nature/?place=SMR&layer=terrain"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "小さな丘陵国では、森林の全国値と格子の粗さを分けて読む必要があります。",
+        "body": "森林面積比率は2023年16.7%で、樹木被覆図は国内を数画素で表します。5分角の農畜産格子から、国境内の農場や品目の細かな分布を確定しません。",
+        "sourceIds": [
+          "farming",
+          "treecover",
+          "statistics"
+        ],
+        "links": [
+          {
+            "label": "全国の森林面積比率",
+            "href": "/atlas/europe/agriculture/?place=SMR&layer=forest"
+          },
+          {
+            "label": "樹木被覆の概略表示",
+            "href": "/atlas/europe/agriculture/?place=SMR&layer=treecover"
+          }
+        ],
+        "evidenceNote": "樹木被覆manifestの国内表示画素中心数は4です。表示が粗いことと、農林業の生産がないことは区別しています。"
+      }
+    },
+    "MCO": {
+      "nature": {
+        "takeaway": "地中海岸の小さな国を、背後の高い地形との位置関係で読めます。",
+        "body": "海岸と背後の丘陵が近接する場所に位置します。欧州の概略格子は周辺の起伏を示しますが、国内の街区や斜面ごとの気候を分離していません。",
+        "sourceIds": [
+          "terrain",
+          "climate",
+          "context"
+        ],
+        "links": [
+          {
+            "label": "海岸と背後の地形",
+            "href": "/atlas/europe/nature/?place=MCO&layer=terrain"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "森林全国値の0と、国内の樹木を表示できないことは意味が異なります。",
+        "body": "2023年の森林面積比率は実際に0で、欠測ではありません。一方、2021年の樹木被覆図には国内を表す表示画素がなく、街路樹や庭園の有無や農業生産ゼロを判断できません。",
+        "sourceIds": [
+          "treecover",
+          "statistics",
+          "farming"
+        ],
+        "links": [
+          {
+            "label": "実値0の森林面積比率",
+            "href": "/atlas/europe/agriculture/?place=MCO&layer=forest"
+          },
+          {
+            "label": "樹木被覆図の表示範囲",
+            "href": "/atlas/europe/agriculture/?place=MCO&layer=treecover"
+          }
+        ],
+        "evidenceNote": "MCOのWDI森林2023年値は数値0、樹木被覆manifestの国内画素中心数は0です。FAO森林の全国値と土地被覆・表示解像度を混同していません。"
+      }
+    },
+    "MLT": {
+      "nature": {
+        "takeaway": "地中海の小さな島々で、低い起伏と海岸の位置を読めます。",
+        "body": "マルタ島などの低い地形は、アルプスのような高い山地とは異なります。国土が小さく、概略格子からバレッタや海岸ごとの月別観測値を作ることはできません。",
+        "sourceIds": [
+          "terrain",
+          "climate",
+          "context"
+        ],
+        "links": [
+          {
+            "label": "島々と海岸の地形",
+            "href": "/atlas/europe/nature/?place=MLT&layer=terrain"
+          },
+          {
+            "label": "周辺までの気候区分",
+            "href": "/atlas/europe/nature/?place=MLT&layer=climate"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "島の作物格子と小さい森林比率を、別の尺度で読めます。",
+        "body": "ジャガイモの推計格子が島に見られ、森林面積比率は2023年1.4%です。国土を少数の表示画素で描くため、果樹や農場の細かな位置は確定できません。",
+        "sourceIds": [
+          "farming",
+          "treecover",
+          "statistics"
+        ],
+        "links": [
+          {
+            "label": "ジャガイモの推計分布",
+            "href": "/atlas/europe/agriculture/?place=MLT&layer=potato"
+          },
+          {
+            "label": "全国の森林面積比率",
+            "href": "/atlas/europe/agriculture/?place=MLT&layer=forest"
+          }
+        ],
+        "evidenceNote": "樹木被覆manifestの国内表示画素中心数は14です。作物の格子は収穫面積のモデル推計で、島の全国生産量を算出していません。"
+      }
+    },
+    "LIE": {
+      "nature": {
+        "takeaway": "幅の狭いライン谷と東側のアルプスが、国内の地形の対照です。",
+        "body": "西側の谷から東側の山地へ標高が上がります。小さな国の谷や峰を概略格子で細分せず、チューリヒの観測値をファドゥーツの値として扱いません。",
+        "sourceIds": [
+          "terrain",
+          "context",
+          "observations"
+        ],
+        "links": [
+          {
+            "label": "ライン谷と東側の山地",
+            "href": "/atlas/europe/nature/?place=LIE&layer=terrain"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "ライン谷と山地の土地利用は、全国の森林比率とは別に読めます。",
+        "body": "森林面積比率は2023年41.9%で、樹木被覆図では山地側との位置関係を確かめられます。幅の狭い谷の農地や家畜の飼養場所を、5分角格子から確定しません。",
+        "sourceIds": [
+          "treecover",
+          "statistics",
+          "farming"
+        ],
+        "links": [
+          {
+            "label": "山地側の樹木被覆",
+            "href": "/atlas/europe/agriculture/?place=LIE&layer=treecover"
+          },
+          {
+            "label": "全国の森林面積比率",
+            "href": "/atlas/europe/agriculture/?place=LIE&layer=forest"
+          }
+        ],
+        "evidenceNote": "樹木被覆manifestの国内表示画素中心数は9です。個々の農場や林区の境界を原データ以上の精度で表現していません。"
+      }
+    },
+    "AND": {
+      "nature": {
+        "takeaway": "ピレネーの高い山地に位置し、谷と周囲の稜線を対照できます。",
+        "body": "国内は標高の高い地形に囲まれ、低い海岸を持つ国とは位置条件が異なります。細かな峰・谷は概略表示で省略され、首都の未収録の月別観測値を近隣国で補いません。",
+        "sourceIds": [
+          "terrain",
+          "climate",
+          "context"
+        ],
+        "links": [
+          {
+            "label": "ピレネーの谷と山地",
+            "href": "/atlas/europe/nature/?place=AND&layer=terrain"
+          }
+        ]
+      },
+      "agriculture": {
+        "takeaway": "ピレネーの樹木と牛・羊の推計格子を、全国の森林比率と分けて読めます。",
+        "body": "山地には樹木被覆と牛・羊の推計格子が見られ、森林面積比率は2023年34.0%です。これらの図は牧草地や農場の境界、林業・畜産の生産量を確定するものではありません。",
+        "sourceIds": [
+          "livestock",
+          "treecover",
+          "statistics"
+        ],
+        "links": [
+          {
+            "label": "山地の樹木被覆",
+            "href": "/atlas/europe/agriculture/?place=AND&layer=treecover"
+          },
+          {
+            "label": "羊の飼養密度",
+            "href": "/atlas/europe/agriculture/?place=AND&layer=sheep"
+          }
+        ],
+        "evidenceNote": "樹木被覆manifestの国内表示画素中心数は26です。少数の概略格子による観察で、山地の細かな土地利用は補完していません。"
+      }
+    }
+  },
+  "sources": [
+    {
+      "id": "context-rhine-management",
+      "label": "ICPR：ライン川の国際的な水管理",
+      "url": "https://www.iksr.org/en/icpr/rhine-2040",
+      "period": "Rhine 2040流域計画",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "context-fin-cereal",
+      "label": "Eurostat：地域別の大麦・オート麦と用途",
+      "url": "https://ec.europa.eu/eurostat/web/interactive-publications/regions-2023",
+      "period": "2021年の作物データ／2023年刊行の地域紹介",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "context-fin-milk",
+      "label": "フィンランド自然資源研究所：地域別の牛乳生産",
+      "url": "https://www.luke.fi/en/statistics/milk-and-milkproducts-statistics/milk-production-by-area-2024",
+      "period": "2024年の牛乳生産／2025年公表",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "context-vatican-geography",
+      "label": "バチカン市国：国土の地理",
+      "url": "https://www.vaticanstate.va/en/state-and-government/general-informations/geography.html",
+      "period": "2026-10-02参照",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "context-danube-basin",
+      "label": "ICPDR：ドナウ流域の国々",
+      "url": "https://www.icpdr.org/danube-basin/countries",
+      "period": "既存の国際流域解説（2026-09-25参照）",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "context-hungary-farming",
+      "label": "ハンガリー中央統計局：農業生産と干ばつ",
+      "url": "https://www.ksh.hu/en/first-releases/mgt/emgt24.html",
+      "period": "2024年",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "context-greece-feta",
+      "label": "欧州委員会：フェタの原料となる羊乳・ヤギ乳",
+      "url": "https://agriculture.ec.europa.eu/farming/geographical-indications-and-quality-schemes/geographical-indications-food-and-drink/feta-pdo_en",
+      "period": "既存のPDO製品解説（2026-09-30確認）",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "context-england-farming",
+      "label": "英国Defra：イングランド地域別の作物・家畜",
+      "url": "https://www.gov.uk/government/statistics/agricultural-facts-england-regional-profiles/agricultural-facts-summary",
+      "period": "2024年の地域資料",
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "id": "context-iceland-farming",
+      "label": "アイスランド統計局：酪農・羊飼養の経済的位置",
+      "url": "https://www.statice.is/publications/news-archive/agriculture/income-statement-and-balance-sheet-for-agriculture-2022/",
+      "period": "2022年",
+      "checkedAt": "2026-10-02"
+    }
+  ]
+}

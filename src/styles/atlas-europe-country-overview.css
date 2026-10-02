@@ -1,0 +1,28 @@
+[data-europe-country-overview] .overview-europe-country-slot{min-width:0;padding:14px;border:1px solid #c8cdbf;background:#fbfaf5;align-self:start}
+[data-europe-country-overview] #overview-country-detail{margin:0;border:0}
+[data-europe-country-overview] [data-eu-country-selected-city]{font-size:12px;letter-spacing:normal}
+[data-europe-country-overview] .eu-country-heading h2{font-family:var(--serif);font-size:24px;line-height:1.5;margin:0 0 9px}
+[data-europe-country-overview] .country-overview-topic-tabs button{font-size:14px;min-height:40px;padding:5px 2px}
+[data-europe-country-overview] .eu-country-topic{padding-top:12px}
+[data-europe-country-overview] .eu-country-takeaway{font-size:15px;font-weight:700;line-height:1.8;border-left:3px solid #35515d;padding-left:11px;margin:0 0 9px}
+[data-europe-country-overview] .eu-country-copy{font-size:14px;line-height:1.8;margin:0 0 10px}
+[data-europe-country-overview] .eu-country-topic-links{display:grid;gap:6px}
+[data-europe-country-overview] .eu-country-topic-links a{display:block;padding:8px 10px;min-height:38px;font-size:14px;line-height:1.6;border:1px solid #b5c9bf;background:#f2f5ec;text-decoration:none;color:#274d4b;overflow-wrap:anywhere}
+[data-europe-country-overview] .eu-country-facts h3{font-size:12px;color:var(--ink-soft);font-weight:400;margin:12px 0 6px}
+[data-europe-country-overview] .eu-country-facts dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:0}
+[data-europe-country-overview] .eu-country-facts dl>div{border-top:1px solid var(--rule);padding-top:5px;min-width:0}
+[data-europe-country-overview] dt{font-size:12px;line-height:1.7;color:var(--ink-soft)}
+[data-europe-country-overview] dd{font-size:14px;line-height:1.7;margin:2px 0;overflow-wrap:anywhere}
+[data-europe-country-overview] dl a{font-size:12px}
+[data-europe-country-overview] .eu-country-details,[data-europe-country-overview] .eu-country-all-statistics{font-size:12px;line-height:1.8;border-top:1px solid var(--rule);margin-top:10px;padding-top:7px}
+[data-europe-country-overview] summary{cursor:pointer;min-height:24px}
+[data-europe-country-overview] .eu-country-details ul{padding-left:18px;overflow-wrap:anywhere}
+[data-europe-country-overview] .eu-country-all-statistics dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+[data-europe-country-overview] .eu-country-topic-links a:focus-visible,[data-europe-country-overview] button:focus-visible{outline:3px solid #36727d;outline-offset:2px}
+@media(min-width:960px){
+ [data-europe-country-overview] .country-overview-controls{grid-template-columns:minmax(0,1fr) auto;align-items:center;margin-bottom:9px}
+ [data-europe-country-overview] .country-overview-picker{justify-self:end}
+ [data-europe-country-overview] .country-overview-picker select{width:200px}
+ [data-europe-country-overview] .overview-region-reading{min-height:340px}
+ [data-europe-country-overview] .overview-map-reading{align-items:start}
+}
