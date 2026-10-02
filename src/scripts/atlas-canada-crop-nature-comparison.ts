@@ -78,7 +78,7 @@ export function renderCanadaCropNatureComparison(root:HTMLElement,state:CanadaNa
  const mechanism=$('[data-canada-crop-mechanism]');
  if(mechanism)mechanism.textContent=question(comparison.crop,product.label,state);
  text.textContent=state.view==='climate'?(state.city==='regina'||state.city==='winnipeg'?`${cityNames[state.city]}の気温・降水の季節配分を、${product.label}の申告値の場所と比べます。`:`現在は${cityNames[state.city]??'別の観測点'}。元の問いはReginaの季節と${product.label}の地域分布です。`):state.view==='landform'?`地形地域の位置を、${product.label}の地域別申告値と比べます。`:`${state.water?state.water+(state.only?'だけ':'と全水系'):'湖・川'}の位置を、${product.label}の地域別申告値と比べます。位置は使える水量を示しません。`;
- scope.textContent=`申告値2021年／気候1991–2020年。${cityNames[state.city]??'観測点'}は1地点で、地域平均・土壌水分ではありません。`;
+ scope.textContent=state.view==='climate'?`申告値2021年／気候1991–2020年。${cityNames[state.city]??'観測点'}は1地点で、地域平均・土壌水分ではありません。`:state.view==='landform'?'申告値2021年／地形GIS公開2019年。地形の色は標高・農地ではありません。':'申告値2021年／水系はNatural Earth v5.1.2の概形。流量の測定ではありません。';
  if(origin)originText(origin,comparison);
  return true;
 }

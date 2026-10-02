@@ -78,6 +78,8 @@
  .atlas-desktop-shell .is-crop-comparison .canada-climate-card{margin-top:6px;padding-top:6px}
  .atlas-desktop-shell .is-crop-comparison .canada-climate-card>h2{margin-bottom:4px}
  .atlas-desktop-shell .is-crop-comparison .canada-city-controls select{min-height:36px;padding-block:6px}
+ .atlas-desktop-shell .is-crop-comparison [data-canada-crop-mini] .canada-census-frame{height:200px;min-height:200px;max-height:none;aspect-ratio:auto}
+ .atlas-desktop-shell .is-crop-comparison [data-canada-crop-mini] .canada-census-selector{top:10px}
  .atlas-desktop-shell .is-crop-comparison .canada-reading{max-height:calc(100dvh - 200px)}
  .is-crop-comparison .canada-city-list{margin:6px 0;gap:4px}
  .is-crop-comparison .canada-city-list button{font-size:12px;min-height:30px;padding:4px 6px}
