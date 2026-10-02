@@ -7,7 +7,7 @@ import {mexicoPopulationRadius, mexicoPopulationLegendValues, mexicoPopulationSy
 
 interface NatureStateValue {code: string; name: string; point: number[]; irrigationSharePct: number | null; irrigatedAreaHa: number | null; agriculturalAreaHa: number | null; maizeWhiteProductionT: number | null; cattleHeads?: number | null; pineObtainedM3: number | null; density: number | null; population: number | null}
 interface NatureItem {id: string; labelJa: string; title: string; lead: string; body: string}
-interface NatureConfig {routes: {nature: string; agriculture: string; population: string}; defaultViewBox: string; states: NatureStateValue[]; sinaloaWinter: {productionT: number; irrigatedProductionSharePct: number}; staticMaps: {climate: string; relief: string}; items?: {climate: NatureItem[]; relief: NatureItem[]}; waterAssetBase?: string}
+interface NatureConfig {routes: {nature: string; agriculture: string; population: string}; defaultViewBox: string; states: NatureStateValue[]; sinaloaWinter: {productionT: number; irrigatedProductionSharePct: number}; staticMaps: {climate: string; relief: string}; items?: {climate: NatureItem[]; relief: NatureItem[]}; waterAssetBase?: string; groundwaterAssetBase?: string}
 export function initMexicoNature(root: HTMLElement): void {
   const configNode = root.querySelector('[data-mexico-nature-config]');
   if (!configNode?.textContent || root.dataset.mexicoNatureReady === 'true') return;
@@ -17,7 +17,7 @@ export function initMexicoNature(root: HTMLElement): void {
   const query = <T extends Element = HTMLElement>(selector: string) => root.querySelector<T>(selector);
   const all = <T extends Element = HTMLElement>(selector: string) => Array.from(root.querySelectorAll<T>(selector));
   let state = readMexicoNatureState(new URL(window.location.href), codes);
-  const hydrology = config.waterAssetBase ? initMexicoHydrology(root, config.waterAssetBase, () => state, () => update({})) : null;
+  const hydrology = config.waterAssetBase ? initMexicoHydrology(root, config.waterAssetBase, () => state, () => update({}), config.groundwaterAssetBase) : null;
   const number = (value: number | null, places = 1) => value === null ? '未取得' : value.toLocaleString('ja-JP', {minimumFractionDigits: places, maximumFractionDigits: places});
   const text = (selector: string, value: string) => {const element = query(selector); if (element) element.textContent = value;};
   const visible = (selector: string, value: boolean) => {for (const element of all(selector)) element.hidden = !value;};

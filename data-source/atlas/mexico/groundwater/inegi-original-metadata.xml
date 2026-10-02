@@ -1,0 +1,356 @@
+<?xml version = "1.0" encoding = "ISO-8859-1"?>
+<Metadata>
+<MD_DataIdentification>
+<title>CONTINUO NACIONAL DE AGUAS SUBTERRÁNEAS ESCALA 1:250 000 SERIE II
+</title>
+<purpose>Proporcionar a la sociedad información estructurada bajo el concepto de Sistema de Información Geográfica, referente a la distribución territorial de unidades geohidrológicas, a manera de exponer el estado que guarda el recurso hídrico en la zona estudiada. La información hidrológica de aguas subterránea es un insumo fundamental para la planeación de desarrollos urbanos, industriales y agropecuarios, así como un apoyo a los programas académicos de nivel medio y superior.
+
+
+</purpose>
+<abstract>Este producto contiene información digital estructurada en formato vectorial, la cual está codificada de acuerdo al Diccionario de Datos Hidrológicos de Aguas Subterráneas (Vectorial), Escala 1:250 000
+
+La información está organizada en capas que contienen información vectorial de tipo puntual, lineal y poligonal. Dichas capas son las siguientes:
+
+Continuo_a: contiene los datos de los aprovechamientos de agua subterránea muestreados durante los trabajos de campo. Los componentes de la capa tienen los siguientes atributos: número consecutivo identificador de objeto (FID); tipo de elemento vectorial (Shape*); número consecutivo identificador del aprovechamiento (NUM); ángulo que indica la dirección con respecto al norte geográfico medido en dirección de las manecillas del reloj, en la que fluye el agua naturalmente una vez que surge a la superficie del terreno, aplica únicamente en el caso de los manantiales (AZIMUT); fecha en que se tomó la muestra de agua en el aprovechamiento (FECHA); concentración de ion calcio en la muestra de agua subterránea expresada en miligramos/litro (CA); concentración de ion magnesio en mg/L (MG); concentración de ion sodio en mg/L (NA); concentración de ion potasio en mg/L (K); dureza del agua expresada como concentración de carbonato de calcio en mg/L (DZA_CACO3); valor adimensional de la Relación de Adsorción de Sodio (RAS); valor del potencial de hidrógeno (pH) obtenido en campo (PH_CAMPO); valor del potencial de hidrógeno (pH) obtenido en laboratorio (PH_LAB); valor de conductividad eléctrica de la muestra obtenido en campo, expresado en microsiemens/centímetro (CE_CAMPO); valor de la conductividad eléctrica de la muestra obtenido en laboratorio expresado en microsiemens/centímetro (CE_LAB); concentración de ion sulfato en mg/L (SO4); concentración de ion bicarbonato en mg/L (HCO3); concentración de ion carbonato en mg/L (CO3); concentración de ion cloruro en mg/L (CL); concentración de ion nitrato en mg/L (NO3); concentración de sólidos totales disueltos medida en campo expresada en mg/L (STD_CAMPO); concentración de sólidos totales disueltos medida en laboratorio expresada en mg/L (STD_LAB); calidad del agua para fines de riego en función del contenido de sales y sodio (CAL_RIEGO); agresividad del agua (AGRESIVIDA); diámetro de la tubería de descarga expresado en pulgadas (DTD); caudal o gasto que rinde el aprovechamiento expresado en litros/segundo (Q); profundidad total de la obra expresada en metros (PT); profundidad al nivel estático del agua subterránea expresada en metros (NE); profundidad al nivel dinámico o de trabajo cuando el equipo de bombeo está funcionando, expresada en metros (ND); tipo de bomba instalada en el aprovechamiento (EQUIPO); uso que se le da al agua del aprovechamiento (USO); temperatura del agua medida en el aprovechamiento, expresada en grados Celsius (TEMP); condición de termalismo que indica si existe temperatura anómala y condiciones asociadas a eventos magmáticos, volcánicos o tectónicos (TERMALISMO); tipo de acuífero en función de su presurización (ACUIFERO); clasificación del agua para consumo humano de acuerdo a la norma oficial correspondiente, en función del contenido de sólidos totales disueltos (CALIDAD); clasificación hidrogeoquímica del agua en función del contenido de iones mayores (FAMILIA); observaciones de campo relacionadas con el aprovechamiento (OBSERVACIO).
+
+Continuo_c: contiene las curvas resultado de la configuración de los datos de elevación del nivel estático sobre el nivel del mar, obtenidos de algunos de los aprovechamientos con ese tipo de información, presentes en el área de trabajo. Los componentes de la capa tienen los siguientes atributos: número consecutivo identificador de objeto (FID); tipo de elemento vectorial (Shape*); elevación del nivel estático del agua subterránea (ELEV_NE), en metros sobre el nivel del mar; descripción del elemento vectorial (DESCRIPCIO); mes y año a los que corresponde la medición del nivel estático (FECHA). El asterisco después del nombre del atributo, denota que es un elemento del software y que no es susceptible de modificación por parte del usuario.
+
+Continuo_e: contiene la representación vectorial tipo lineal de las estructuras geológicas que pueden influir tanto en la delimitación de unidades geohidrológicas, como en el comportamiento hidráulico del agua subterránea en el medio acuífero. Los componentes de la capa tienen los siguientes atributos: número consecutivo identificador de objeto (FID); tipo de elemento vectorial (Shape*); descripción de la estructura geológica (DESCRIPCIO).
+
+Continuo_f: contiene la representación vectorial tipo puntual de la dirección del flujo subterráneo, estimada a partir de las curvas de igual elevación del nivel estático. Los componentes de la capa tienen los siguientes atributos: número consecutivo identificador de objeto (FID); tipo de elemento vectorial (Shape*); ángulo medido a partir del norte geográfico en la dirección de las manecillas del reloj, que indica la dirección del flujo subterráneo (AZIMUT); descripción del elemento vectorial (DESCRIPCIO).
+
+Continuo_l: contiene la representación vectorial tipo lineal de la traza en planta de la o las secciones (cortes o vistas de perfil), utilizada (s) para ilustrar las relaciones que guardan las distintas unidades geohidrológicas entre sí, así como la zona de saturación en las unidades acuíferas, geometría de las mismas y accidentes geológicos o topográficos de importancia en la zona hidrogeológica. Los componentes de la capa tienen los siguientes atributos: número consecutivo identificador de objeto (FID); tipo de elemento vectorial (Shape*); letra que identifica la sección (CLAVE); nombre del archivo gráfico que contiene la vista de perfil mostrada y extensión que denota el formato del mencionado archivo (SECCION); descripción del elemento vectorial (DESCRIPCIO).
+
+Continuo_n: incluye la representación vectorial tipo puntual de aprovechamientos de agua subterránea existentes, de los que no se tienen análisis físico-químicos, sea porque no se visitaron o porque no fue posible la toma de la muestra de agua subterránea. Los componentes de la capa tienen los siguientes atributos: número consecutivo identificador de objeto (FID); tipo de elemento vectorial (Shape*); tipo de aprovechamiento (APROVECHAM); ángulo que indica la dirección con respecto al norte geográfico medido en dirección de las manecillas del reloj, en la que fluye el agua naturalmente una vez que surge a la superficie del terreno, aplica únicamente en el caso de los manantiales (AZIMUT); caudal de extracción, también conocido como gasto del aprovechamiento en litros por segundo (Q); profundidad total de la obra en metros (PT); profundidad en metros al nivel estático del agua subterránea medida en el aprovechamiento (NE); uso que se le da al agua extraída del aprovechamiento (USO); temperatura del agua medida en el aprovechamiento, expresada en grados Celsius (TEMP); condición de termalismo que indica si existe temperatura anómala y condiciones asociadas a eventos magmáticos, volcánicos o tectónicos (TERMALISMO); tipo de acuífero en función de su presurización (ACUIFERO).
+
+Continuo_p: contiene la representación vectorial tipo polígono de las áreas en donde existe una concentración de pozos tal que no es práctico representar evitando la saturación de la cobertura. Los componentes de la capa tienen los siguientes atributos: número consecutivo identificador de objeto (FID); tipo de elemento vectorial(Shape*); clave que identifica el tipo de polígono representado (CLAVE); descripción del elemento vectorial (DESCRIPCIO).
+
+Continuo_u: incluye la representación vectorial tipo polígono, de las unidades geohidrológicas definidas con base en los rendimientos de aprovechamientos y posibilidades de explotación del agua subterránea. Los componentes de la capa tienen los siguientes atributos: número consecutivo identificador de objeto (FID); tipo de elemento vectorial (Shape*); clave que identifica la clasificación de la unidad geohidrológica (CLAVE); descripción de la unidad geohidrológica (DESCRIPCIO).
+
+Continuo_v: incluye la representación vectorial tipo polígono de las áreas vedadas para el libre alumbramiento de agua subterránea, mediante decreto publicado en el Diario Oficial de la Federación. Los componentes de la capa tienen los siguientes atributos: número consecutivo identificador de objeto (FID); tipo de elemento vectorial (Shape*); número de veda (NUM_VEDA); entidad federativa en donde queda comprendida la veda (ESTADO); número que identifica a la entidad federativa en la que se localiza la veda (CVE_EDO); nombre corto del área de veda (NOM_CORTO); fecha de publicación del decreto de veda en el Diario Oficial de la Federación (FECH_DOF); nombre oficial y completo del área de veda (NOM_OF); clasificación de las áreas de veda de acuerdo con el artículo 11 de la Ley Reglamentaria del 29 de diciembre de 1956, en Materia de Aguas del Subsuelo, publicada el 27 de febrero de 1958 en el Diario Oficial de la Federación (CLASIF); clasificación de las áreas de veda de acuerdo con el artículo 108 de la Ley Federal de Aguas de 1972, reformada en 1986 (CLASIF_LEY); descripción textual de las especificaciones de las áreas de veda (DES_CLASIF); área del polígono representado en kilómetros cuadrados (Area_Km2); objeto específico representado (objeto_esp).
+</abstract>
+<MD_DataIdentification_language>ES - Español.</MD_DataIdentification_language>
+<topicCategory>
+<principalTopic>  5. Medio ambiente: Recursos medio ambientales, protección y conservación. </principalTopic>
+<principalTopic>  6. Información geocientífica: Información perteneciente a las ciencias de la tierra.   </principalTopic>
+<groupCategory>1. Grupo de datos de recursos naturales y clima: Subdivisión de la Infraestructura de Datos Espaciales de México que representan espacialmente la distribución y naturaleza de los recursos naturales que existen en el territorio nacional, así como la configuración de sus diversos climas. A través de ellos puede obtenerse información del estado, presión y respuesta de la interacción humana con su medio ambiente.</groupCategory>
+</topicCategory>
+<keyword>Aprovechamiento</keyword>
+<type>5. Tema: La palabra clave que identifica un tema o materia particular.</type>
+<keyword>Curva de igual elevación del nivel estático</keyword>
+<type>5. Tema: La palabra clave que identifica un tema o materia particular.</type>
+<keyword>Estructura geológica</keyword>
+<type>5. Tema: La palabra clave que identifica un tema o materia particular.</type>
+<keyword>Dirección de flujo subterráneo</keyword>
+<type>5. Tema: La palabra clave que identifica un tema o materia particular.</type>
+<keyword>Línea de sección</keyword>
+<type>5. Tema: La palabra clave que identifica un tema o materia particular.</type>
+<keyword>Aprovechamientos no ubicados</keyword>
+<type>5. Tema: La palabra clave que identifica un tema o materia particular.</type>
+<keyword>Pozo</keyword>
+<type>5. Tema: La palabra clave que identifica un tema o materia particular.</type>
+<keyword>Unidades de rendimiento</keyword>
+<type>5. Tema: La palabra clave que identifica un tema o materia particular.</type>
+<keyword>Zona de veda</keyword>
+<type>5. Tema: La palabra clave que identifica un tema o materia particular.</type>
+<keyword>Noria</keyword>
+<type>5. Tema: La palabra clave que identifica un tema o materia particular.</type>
+<keyword>País extranjero</keyword>
+<type>5. Tema: La palabra clave que identifica un tema o materia particular.</type>
+<thesaurusName>Ninguno</thesaurusName>
+<edition>1a.</edition>
+<presentationForm>  1. Documento digital: Representación digital de un ítem en principio textual, pero que puede contener también ilustraciones.</presentationForm>
+<presentationForm>  5. Mapa digital: Mapa representado en formato raster o vector.</presentationForm>
+<presentationForm>  9. Perfil digital: Sección transversal vertical en formato digital.</presentationForm>
+<CI_OnlineResource>
+<CI_OnlineResource_linkage>http://www.inegi.org.mx/ </CI_OnlineResource_linkage>
+<CI_OnlineResource_description>Página web donde se encuentra información para obtener el recurso en base a las políticas y en los centros de venta autorizados. </CI_OnlineResource_description>
+</CI_OnlineResource>
+<maintenanceAndUpdateFrequency>11. 10 años.</maintenanceAndUpdateFrequency>
+<MD_DataIdentification_characterSet>  4. Utf8: Formato de Transferencia UCS de tamaño variable de 8-bit, basado en ISO/IEC 10646.</MD_DataIdentification_characterSet>
+<graphfilename>CONTINUO NACIONAL DE AGUAS SUBTERRÁNEAS ESCALA 1_250 000 SERIE II_.pdf</graphfilename>
+<specuse>Uso 1 (externo): Especialistas en Ingeniería y Ciencias de la Tierra utilizan la información hidrogeológica para la caracterización de los acuíferos, exploración del agua subterránea, evaluación económica de sistemas de riego, evaluación técnica y económica de riesgos constructivos en obras de ingeniería civil, estudios de subsidencia del terreno, etcétera. La información se incorpora a sistemas de información geográfica de donde es posible obtener mapas de distribución espacial de parámetros hidrogeológicos, extensión y límites de acuíferos, potencialidad hidráulica, bases conceptuales y numéricas para modelación matemática de acuíferos, entre otros. Diferentes instancias públicas y privadas usan la información para dirigir y eficientizar sus actividades tales como Organismos Municipales Operadores de Agua Potable y Saneamiento, Instituciones de Educación Superior, Empresas Constructoras, Mineras y Consultoras.
+</specuse>
+</MD_DataIdentification>
+<CI_Date>
+<Dates_Events>
+<date>1996-03-01</date>
+<dateType>1. Creación: Indicador  de la fecha que especifica cuando fue creado el recurso.</dateType>
+<date>2008-12-01</date>
+<dateType>3. Revisión: Identificador de la fecha que especifica cuando el recurso fue examinado o re-examinado y mejorado o corregido.</dateType>
+</Dates_Events>
+<Ad_Date>
+<date_creation>2000-01-01</date_creation>
+<date_begin></date_begin>
+<date_end></date_end>
+<inpname>CONJUNTO DE DATOS VECTORIALES DE LA CARTA TOPOGRÁFICA. CONTINUO NACIONAL ESCALA 1:250000. SERIE II. Fuente: INEGI, 2000.</inpname>
+<date_creation>2002-01-01</date_creation>
+<date_begin></date_begin>
+<date_end></date_end>
+<inpname>CONJUNTO DE DATOS VECTORIALES GEOLÓGICOS. CONTINUO NACIONAL ESCALA 1:250000. SERIE I. Fuente: INEGI, 2002.</inpname>
+<date_creation>2002-01-01</date_creation>
+<date_begin></date_begin>
+<date_end></date_end>
+<inpname>CONJUNTO DE DATOS VECTORIALES FISIOGRÁFICOS. CONTINUO NACIONAL ESCALA 1:1000000. Fuente: INEGI, 2002.</inpname>
+</Ad_Date>
+</CI_Date>
+<CI_ResponsibleParty>
+<CI_ResponsibleParty_individualName>Lic. José de Jesús Esquivel de la Rosa </CI_ResponsibleParty_individualName>
+<CI_ResponsibleParty_organisationName>Instituto Nacional de Estadística y Geografía - INEGI </CI_ResponsibleParty_organisationName>
+<CI_ResponsibleParty_positionName>Subdirector de Atención a Usuarios. </CI_ResponsibleParty_positionName>
+<CI_ResponsibleParty_voice>(52) (449) 910 53 00. Ext. 5301. Lada 01 800 111 46 34 (sin costo).</CI_ResponsibleParty_voice>
+<CI_ResponsibleParty_facsimile></CI_ResponsibleParty_facsimile>
+<CI_ResponsibleParty_deliveryPoint>Avenida Héroe de Nacozari Sur Num. 2301. Fraccionamiento Jardines del Parque, entre Calle INEGI, Avenida del Lago y Avenida Paseo de las Garzas.</CI_ResponsibleParty_deliveryPoint>
+<CI_ResponsibleParty_city>Aguascalientes.</CI_ResponsibleParty_city>
+<CI_ResponsibleParty_administrativeArea>Aguascalientes.</CI_ResponsibleParty_administrativeArea>
+<CI_ResponsibleParty_postalCode>20276</CI_ResponsibleParty_postalCode>
+<CI_ResponsibleParty_country>México</CI_ResponsibleParty_country>
+<CI_ResponsibleParty_electronicMailAddress>atencion.usuarios@inegi.org.mx</CI_ResponsibleParty_electronicMailAddress>
+<CI_ResponsibleParty_linkage>http://www.inegi.org.mx/</CI_ResponsibleParty_linkage>
+<CI_ResponsibleParty_role>  5. Distribuidor: Parte que distribuye el recurso.</CI_ResponsibleParty_role>
+</CI_ResponsibleParty>
+<geographicElement>
+<EX_GeographicBoundingBox>
+<westBoundLongitude>-118.393098</westBoundLongitude>
+<eastBoundLongitude>-84.057229</eastBoundLongitude>
+<southBoundLatitude>13.401348</southBoundLatitude>
+<northBoundLatitude>33.750510</northBoundLatitude>
+</EX_GeographicBoundingBox>
+<spatialRepresentationType>1. Vector: Los datos vectoriales se utilizan para representar datos espaciales.</spatialRepresentationType>
+</geographicElement>
+<MD_ReferenceSystem>
+<ReferenceHorizontalSystem>
+<geograph>
+<latres></latres>
+<longres></longres>
+<geogunit></geogunit>
+</geograph>
+<planar>
+<mapprojn>
+<lambertc>
+<lambertc_stdparll>17.5</lambertc_stdparll>
+<lambertc_stdparll>29.5</lambertc_stdparll>
+<lambertc_longcm>-102.0</lambertc_longcm>
+<lambertc_latprjo>12.0</lambertc_latprjo>
+<lambertc_feast>2500000.0</lambertc_feast>
+<lambertc_fnorth>0.0</lambertc_fnorth>
+</lambertc>
+<mercatort>
+<mercatort_sfctrmer> </mercatort_sfctrmer>
+<mercatort_longcm> </mercatort_longcm>
+<mercatort_latprjo> </mercatort_latprjo>
+<mercatort_feast> </mercatort_feast>
+<mercatort_fnorth> </mercatort_fnorth>
+</mercatort>
+<mercator>
+<mercator_stdparll> </mercator_stdparll>
+<mercator_sfec> </mercator_sfec>
+<mercator_longcm> </mercator_longcm>
+<mercator_feast> </mercator_feast>
+<mercator_fnorth> </mercator_fnorth>
+</mercator>
+<tme>
+<tme_sfctrmer> </tme_sfctrmer>
+<tme_longcm> </tme_longcm>
+<tme_latprjo> </tme_latprjo>
+<tme_feast> </tme_feast>
+<tme_fnorth> </tme_fnorth>
+</tme>
+<anoth_proj_def>
+</anoth_proj_def>
+</mapprojn>
+<gridcoordinatessystem>
+<utm>
+<utm_zone></utm_zone>
+<utm_sfctrmer></utm_sfctrmer>
+<utm_longcm></utm_longcm>
+<utm_latprjo></utm_latprjo>
+<utm_feast></utm_feast>
+<utm_fnorth></utm_fnorth>
+</utm>
+</gridcoordinatessystem>
+<local_planar>
+<local_planar_desc></local_planar_desc>
+<local_planar_geo_inf></local_planar_geo_inf>
+</local_planar>
+<planci>
+<plance>Par coordenado.</plance>
+<coord_repres>
+<absres>1.0</absres>
+<ordres>1.0</ordres>
+</coord_repres>
+<distance_and_bearing_repres>
+<distance_res></distance_res>
+<bearing_res></bearing_res>
+<bearing_uni></bearing_uni>
+<ref_bearing_dir></ref_bearing_dir>
+<ref_bearing_mer></ref_bearing_mer>
+</distance_and_bearing_repres>
+<plandu>Metros.</plandu>
+</planci>
+</planar>
+<local_coordinates>
+<local_desc></local_desc>
+<local_geo_inf></local_geo_inf>
+</local_coordinates>
+<geodetic>
+<horizdn>ITRF92 época 1988.0.</horizdn>
+<ellips>Sistema Geodésico de Referencia de 1980 (GRS80).</ellips>
+<semiaxis>6378137.0</semiaxis>
+<denflat>298.257222101</denflat>
+</geodetic>
+</ReferenceHorizontalSystem>
+<ReferenceVerticalSystem>
+<altsys>
+<altdatum></altdatum>
+<altres></altres>
+<altunits></altunits>
+<altenc> </altenc>
+</altsys>
+<depthsys>
+<depthdn></depthdn>
+<depthres></depthres>
+<depthdu></depthdu>
+<depthem> </depthem>
+</depthsys>
+</ReferenceVerticalSystem>
+</MD_ReferenceSystem>
+<DQ_DataQuality>
+<DQ_Scope>
+<level>  5. Conjunto de datos espaciales: Información aplicada al conjunto de datos espaciales.</level>
+</DQ_Scope>
+<report>
+<DQ_Completeness>
+<DQ_Completeness_evalqualsubname>
+<DQ_Completeness_nameOfMeasure></DQ_Completeness_nameOfMeasure>
+<DQ_Completeness_measureDescription></DQ_Completeness_measureDescription>
+<DQ_Completeness_result>
+<DQ_Completeness_DQ_QuantitativeResult>
+<DQ_Completeness_valueUnit></DQ_Completeness_valueUnit>
+<DQ_Completeness_value></DQ_Completeness_value></DQ_Completeness_DQ_QuantitativeResult>
+</DQ_Completeness_result>
+</DQ_Completeness_evalqualsubname>
+</DQ_Completeness>
+<DQ_LogicConsistency>
+<DQ_LogicConsistency_evalqualsubname>
+<DQ_LogicConsistency_nameOfMeasure></DQ_LogicConsistency_nameOfMeasure>
+<DQ_LogicConsistency_measureDescription></DQ_LogicConsistency_measureDescription>
+<DQ_LogicConsistency_result>
+<DQ_LogicConsistency_DQ_QuantitativeResult>
+<DQ_LogicConsistency_valueUnit></DQ_LogicConsistency_valueUnit>
+<DQ_LogicConsistency_value></DQ_LogicConsistency_value></DQ_LogicConsistency_DQ_QuantitativeResult>
+</DQ_LogicConsistency_result>
+</DQ_LogicConsistency_evalqualsubname>
+</DQ_LogicConsistency>
+<PositionalAccuracy>
+<PositionalAccuracy_evalqualsubname>
+<PositionalAccuracy_nameOfMeasure></PositionalAccuracy_nameOfMeasure>
+<PositionalAccuracy_measureDescription></PositionalAccuracy_measureDescription>
+<PositionalAccuracy_result>
+<PositionalAccuracy_DQ_QuantitativeResult>
+<PositionalAccuracy_valueUnit></PositionalAccuracy_valueUnit>
+<PositionalAccuracy_value></PositionalAccuracy_value></PositionalAccuracy_DQ_QuantitativeResult>
+</PositionalAccuracy_result>
+</PositionalAccuracy_evalqualsubname>
+</PositionalAccuracy>
+<TemporalAccuracy>
+<TemporalAccuracy_evalqualsubname>
+<TemporalAccuracy_nameOfMeasure></TemporalAccuracy_nameOfMeasure>
+<TemporalAccuracy_measureDescription></TemporalAccuracy_measureDescription>
+<TemporalAccuracy_result>
+<TemporalAccuracy_DQ_QuantitativeResult>
+<TemporalAccuracy_valueUnit></TemporalAccuracy_valueUnit>
+<TemporalAccuracy_value></TemporalAccuracy_value></TemporalAccuracy_DQ_QuantitativeResult>
+</TemporalAccuracy_result>
+</TemporalAccuracy_evalqualsubname>
+</TemporalAccuracy>
+<ThematicAccuracy>
+<ThematicAccuracy_evalqualsubname>
+<ThematicAccuracy_nameOfMeasure></ThematicAccuracy_nameOfMeasure>
+<ThematicAccuracy_measureDescription></ThematicAccuracy_measureDescription>
+<ThematicAccuracy_result>
+<ThematicAccuracy_DQ_QuantitativeResult>
+<ThematicAccuracy_valueUnit></ThematicAccuracy_valueUnit>
+<ThematicAccuracy_value></ThematicAccuracy_value></ThematicAccuracy_DQ_QuantitativeResult>
+</ThematicAccuracy_result>
+</ThematicAccuracy_evalqualsubname>
+</ThematicAccuracy>
+</report>
+<LI_Lineage>
+<statement>La información hidrológica de aguas subterráneas Serie II, es el resultado de la compilación de datos y análisis de información hidrológica subterránea, tanto analógica como digital existente tanto en el INEGI como en otras instituciones relacionadas con el tema. Es el producto de la aplicación de la metodología correspondiente desarrollada por el Departamento de Hidrología. Esta información corresponde a la actualización de la Carta Hidrológica Escala 1: 250 000. Serie I, editada por el INEGI.</statement>
+<LI_ProcessStep>
+<LI_ProcessStep_description>1) COMPILACIÓN.
+Proceso en el cual se recopila información bibliográfica y cartográfica, referente a las unidades geológicas presentes en el área de trabajo, información de estudios previos tanto del mismo INEGI, como de fuentes externas, pueden ser la CONAGUA o instituciones académicas, buscando datos de extensión, piezometría, hidrogeoquímica y parámetros hidrogeológicos de los acuíferos; se obtienen o generan curvas de nivel topográfico que en conjunto con imágenes de satélite, son de utilidad para la revisión y en su caso corrección de la posición de contactos y estructuras geológicas; se utilizan los continuos de información geológica, subcuencas y de acuíferos, para auxiliarse en la definición de los límites de las unidades geohidrológicas, se formula el modelo conceptual de los acuíferos presentes dentro de la zona, así como hipótesis de trabajo para validarse o corregirse después de la etapa de trabajo en el campo.
+2) MUESTREO.
+Actividad en el campo que consiste en la obtención de muestras de agua para su envío a laboratorio y posterior análisis químico. Además se utiliza un medidor multiparamétrico para efectuar determinaciones físico - químicas del agua, tales como pH, conductividad eléctrica, temperatura y sólidos totales disueltos. Adicionalmente se recopila información referente a las características constructivas de las obras de extracción y aprovechamiento.
+3) INTEGRACIÓN DE LA INFORMACIÓN.
+Una vez recopilada y analizada la información, se procede a procesarla, ordenarla e integrarla para la elaboración de coberturas, texto descriptivo y gráficos. El análisis consiste en la revisión de aspectos tales como la exactitud de la ubicación geográfica, datum de las coordenadas, consistencia de los datos (valores congruentes con el sistema de unidades manejado, con las observaciones de campo, etc.) 
+4) ELABORACIÓN DE COBERTURAS.
+A partir de insumos digitales, como los ya mencionados, se procede a derivar las nueve coberturas; tres de polígonos, tres de líneas y tres de información puntual. Las coberturas se editan para que sus elementos tengan consistencia espacial. A partir de las coberturas se elaboran los gráficos de las secciones. Finalmente se elabora el informe técnico.
+5) REVISIÓN Y VALIDACIÓN.
+Se procede a la revisión visual y a la validación de manera semiautomatizada de todas las entidades presentes en las coberturas, usando las herramientas informáticas que garantizan el cumplimiento de reglas topológicas preestablecidas (ver control de calidad).
+6) GENERACIÓN DE SALIDA GRÁFICA.
+Es la representación de toda la información que desde los documentos fuente ha sido analizada e integrada en gabinete y campo, mediante la verificación de unidades geohidrológicas y el muestreo del agua de los aprovechamientos subterráneos.
+
+TECNOLOGÍA EMPLEADA: a) Sistema de Información Geográfica y gestor de base de datos. b) Computadora Personal con procesador CORE I 7, Windoows 8 Enterprise.
+
+CONTROL DE CALIDAD. CRITERIO: completitud. SUBCRITERIO: omisión. ÁMBITO DE LA REVISIÓN: todas los objetos espaciales del Continuo Nacional de Aguas Subterráneas Escala 1:250 000. INSPECCIÖN: completa. EXPLICACIÓN DE LA REVISIÓN: Se verificó de manera visual, que todos los campos tengan un atributo capturado de acuerdo con el Diccionario de Datos Hidrológicos de Aguas Subterráneas (Vectorial), Escala 1:250 000. RESULTADO: No se encontraron elementos sin atributo (cumple). NIVEL DE CONFORMIDAD DE CALIDAD: No se aplica. DATOS DE REFERENCIA: No se aplica. FECHA O PERIODO DE REALIZACIÓN: 7 de marzo 2016. EVALUADORES: Departamento de Hidrología. Departamento de Procesamiento y Modelado. OBSERVACIONES: La revisión visual fue realizada por varias personas, de manera que se pudiera validar la totalidad de atributos en las capas de información.
+ 
+CONTROL DE CALIDAD. CRITERIO: completitud. SUBCRITERIO: comisión. ÁMBITO DE LA REVISIÓN: todas los objetos espaciales del Continuo Nacional de Aguas Subterráneas Escala 1:250 000. INSPECCIÓN: completa. EXPLICACIÓN DE LA REVISIÓN: Se verificó de manera visual que los objetos poligonales y lineales cumplan con las dimensiones mínimas cartografiables establecidas en el Diccionario de Datos Hidrológicos de Aguas Subterráneas (Vectorial), Escala 1:250 000. RESULTADO: 15.57%  de las unidades geohidrológicas no cumple con el área mínima establecida en el diccionario de datos; el 8% de las curvas de igual elevación del nivel estático no cumple con la longitud mínima establecida en el diccionario de datos; 3.95% de las líneas de sección no cumplen con la longitud mínima establecida en el diccionario de datos; 75.71% de las áreas de concentración de pozos no cumple con el área mínima establecida en el Diccionario de Datos Hidrológicos de Aguas Subterráneas (Vectorial), Escala 1:250 000. NIVEL DE CONFORMIDAD DE CALIDAD: no se aplica. DATOS DE REFERENCIA: No se aplica. FECHA O PERIODO DE REALIZACIÓN: 7 de marzo 2016. EVALUADORES: Departamento de Hidrología. Departamento de Procesamiento y Modelado. OBSERVACIONES: La revisión visual fue realizada por varias personas, de manera que se pudiera validar la totalidad de atributos en las capas de información.
+
+CONTROL DE CALIDAD. CRITERIO: consistencia conceptual. SUBCRITERIO: consistencia conceptual. ÁMBITO DE LA REVISIÓN: todas los objetos espaciales del Continuo Nacional de Aguas Subterráneas Escala 1:250 000. INSPECCIÓN: completa. EXPLICACIÓN DE LA REVISIÓN: mediante inspección semiautomatizada se verificó el cumplimiento de los criterios de compartición y conexión definidos en el Diccionario de Datos Hidrológicos de Aguas Subterráneas (Vectorial), Escala 1:250 000. RESULTADO: No se encontraron errores topológicos (cumple). NIVEL DE CONFORMIDAD DE CALIDAD: no se aplica. DATOS DE REFERENCIA: No se aplica. FECHA O PERIODO DE REALIZACIÓN: 7 de marzo 2016. EVALUADORES: Departamento de Hidrología. Departamento de Procesamiento y Modelado. OBSERVACIONES: Ninguna. 
+
+CONTROL DE CALIDAD. CRITERIO: consistencia lógica. SUBCRITERIO: consistencia de formato. ÁMBITO DE LA REVISIÓN: todas los objetos espaciales del Continuo Nacional de Aguas Subterráneas Escala 1:250 000. INSPECCIÓN: completa. EXPLICACIÓN DE LA REVISIÓN: Visualmente se verificó que los formatos de los campos sean acordes con los dados de alta en el Diccionario de Datos Hidrológicos de Aguas Subterráneas (Vectorial), Escala 1:250 000. RESULTADO: No se encontraron inconsistencias (cumple). NIVEL DE CONFORMIDAD DE CALIDAD: no se aplica. DATOS DE REFERENCIA: No se aplica. FECHA O PERIODO DE REALIZACIÓN: 7 de marzo 2016. EVALUADORES: Departamento de Hidrología. Departamento de Procesamiento y Modelado. OBSERVACIONES: La revisión visual fue realizada por varias personas, de manera que se pudiera validar la totalidad de campos en las capas de información. 
+
+CONTROL DE CALIDAD. CRITERIO: consistencia lógica. SUBCRITERIO: consistencia de dominio. ÁMBITO DE LA REVISIÓN: todas los objetos espaciales del Continuo Nacional de Aguas Subterráneas Escala 1:250 000. INSPECCIÓN: completa. EXPLICACIÓN DE LA REVISIÓN: mediante análisis visual se verificó la concordancia entre los atributos de cada capa y los dados de alta en el Diccionario de Datos Hidrológicos de Aguas Subterráneas (Vectorial), Escala 1:250 000. RESULTADO: No se encontraron inconsistencias (cumple). NIVEL DE CONFORMIDAD DE CALIDAD: no se aplica. DATOS DE REFERENCIA: No se aplica. FECHA O PERIODO DE REALIZACIÓN: 7 de marzo 2016. EVALUADORES: Departamento de Hidrología. Departamento de Procesamiento y Modelado. OBSERVACIONES: La revisión visual fue realizada por varias personas, de manera que se pudiera validar la totalidad de atributos en las capas de información. 
+
+CONTROL DE CALIDAD. CRITERIO: consistencia lógica. SUBCRITERIO: consistencia topológica. ÁMBITO DE LA REVISIÓN: todas los objetos espaciales del Continuo Nacional de Aguas Subterráneas Escala 1:250 000. INSPECCIÓN: completa. EXPLICACIÓN DE LA REVISIÓN: mediante análisis semiautomatizado se verificó que todos los objetos espaciales cumplieran con las reglas topológicas definidas para cada capa (sin sobrepasos, sin huecos, sin elementos multiparte y sin elementos duplicados). RESULTADO: el 100% de los objetos revisados presentó consistencia topológica (cumple). NIVEL DE CONFORMIDAD DE CALIDAD: la tolerancia en los archivos shape es de 0.001 m. DATOS DE REFERENCIA: No se aplica. FECHA O PERIODO DE REALIZACIÓN: 7 de marzo 2016. EVALUADORES: Departamento de Hidrología. Departamento de Procesamiento y Modelado. OBSERVACIONES: Ninguna.
+
+CONTROL DE CALIDAD. CRITERIO: exactitud temática. SUBCRITERIO: corrección de clasificación. ÁMBITO DE LA REVISIÓN: todas los objetos espaciales del Continuo Nacional de Aguas Subterráneas Escala 1:250 000. INSPECCIÓN: completa. EXPLICACIÓN DE LA REVISIÓN: Visualmente se verificó la concordancia entre claves de clasificación y descripciones de cada objeto espacial, la correspondencia entre éstos últimos con el tipo de material o rasgo geológico representado, así como la ortografía. RESULTADO: No se encontraron inconsistencias (cumple). NIVEL DE CONFORMIDAD DE CALIDAD: no se aplica. DATOS DE REFERENCIA: CONJUNTO DE DATOS VECTORIALES GEOLÓGICOS. CONTINUO NACIONAL ESCALA 1:250000. SERIE I. FECHA O PERIODO DE REALIZACIÓN: 7 de febrero al 7 de marzo de 2016. EVALUADORES: Departamento de Hidrología. Departamento de Procesamiento y Modelado. OBSERVACIONES: La revisión visual fue realizada por varias personas, de manera que se pudiera validar la totalidad de atributos en las capas de información. 
+</LI_ProcessStep_description>
+</LI_ProcessStep>
+<LI_Source>
+<LI_Source_description>FUENTE 1. CONJUNTO DE DATOS VECTORIALES GEOLÓGICOS. CONTINUO NACIONAL ESCALA 1:250000. SERIE I. Fuente: INEGI, 2002.
+FUENTE 5. CONJUNTO DE DATOS VECTORIALES FISIOGRÁFICOS. CONTINUO NACIONAL ESCALA 1:1000000. Fuente: INEGI, 2002.
+FUENTE 6. CONJUNTO DE DATOS VECTORIALES DE LA CARTA TOPOGRÁFICA. CONTINUO NACIONAL ESCALA 1:250000. SERIE II. Fuente: INEGI, 2000.
+
+</LI_Source_description>
+</LI_Source>
+</LI_Lineage>
+</DQ_DataQuality>
+<Attributes>
+<schemaAscii>Los rasgos geográficos representados se definen como objetos espaciales con un componente de representación geométrica y un componente con atributos que los describen. Se le asocia un nombre con el fin de distinguirla de otras entidades (ejemplos: curvas de igual profundidad del nivel estático, dirección de flujo del agua subterránea, etc.) Las entidades están descritas en el Diccionario de Datos de acuerdo con el tema y la escala.</schemaAscii>
+<entity_detail>El Diccionario de Datos Hidrológicos de Aguas Subterráneas (Vectorial), Escala 1:250 000, contiene una descripción completa de las entidades y atributos representados http://www.inegi.org.mx/geo/contenidos/recnat/hidrologia/doc/dd_hidrosub_v1_250k.pdf. Base de Datos Geográficos de la Dirección General de Geografía y Medio Ambiente del Instituto Nacional de Estadística y Geografía-INEGI.
+</entity_detail>
+</Attributes>
+<MD_Distribution>
+<accessConstraints>8. Acceso al público a través de Internet y los Centros de Información del Instituto Nacional de Estadística y Geografía - INEGI.</accessConstraints>
+<useConstraints>8. Ninguna.</useConstraints>
+<otherConstraints>El Instituto Nacional de Estadística y Geografía no se hace responsable por el uso que usted le dé a los datos.</otherConstraints>
+<MD_Format>
+<name>Shape y pdf.</name>
+<version>No aplica.</version>
+</MD_Format>
+</MD_Distribution>
+<Inf_Metadata>
+<metadataStandardName>ISO 19115 Información Geográfica - Metadatos (Norma Técnica para Metadatos).</metadataStandardName>
+<metadataStandardVersion>2003 (1.0).</metadataStandardVersion>
+<Inf_Metadata_language>ES - Español.</Inf_Metadata_language>
+<CI_ResponsibleParty>
+<Inf_Metadata_CI_ResponsibleParty_individualName>Lic. Rafael Arrioja Urzúa.</Inf_Metadata_CI_ResponsibleParty_individualName>
+<Inf_Metadata_CI_ResponsibleParty_organisationName>Instituto Nacional de Estadística y Geografía - INEGI. </Inf_Metadata_CI_ResponsibleParty_organisationName>
+<Inf_Metadata_CI_ResponsibleParty_positionName>Jefe del Departamento de Administración de Metadatos. </Inf_Metadata_CI_ResponsibleParty_positionName>
+<Inf_Metadata_CI_ResponsibleParty_voice>: (52)(449) 910 53 00 Ext. 1750 y 5631</Inf_Metadata_CI_ResponsibleParty_voice>
+<Inf_Metadata_CI_ResponsibleParty_facsimile>(449)4424145</Inf_Metadata_CI_ResponsibleParty_facsimile>
+<Inf_Metadata_CI_ResponsibleParty_deliveryPoint>Avenida Héroe de Nacozari Sur Núm. 2301. Fraccionamiento Jardines del Parque, entre Calle INEGI, Avenida del Lago y Avenida Paseo de las Garzas. </Inf_Metadata_CI_ResponsibleParty_deliveryPoint>
+<Inf_Metadata_CI_ResponsibleParty_city>Aguascalientes.</Inf_Metadata_CI_ResponsibleParty_city>
+<Inf_Metadata_CI_ResponsibleParty_administrativeArea>Aguascalientes.</Inf_Metadata_CI_ResponsibleParty_administrativeArea>
+<Inf_Metadata_CI_ResponsibleParty_postalCode>20276</Inf_Metadata_CI_ResponsibleParty_postalCode>
+<Inf_Metadata_CI_ResponsibleParty_country>México.</Inf_Metadata_CI_ResponsibleParty_country>
+<Inf_Metadata_CI_ResponsibleParty_electronicMailAddress>rafael.arrioja@inegi.org.mx</Inf_Metadata_CI_ResponsibleParty_electronicMailAddress>
+<Inf_Metadata_CI_ResponsibleParty_role>  1. Proveedor del recurso: Parte que suministra el recurso.</Inf_Metadata_CI_ResponsibleParty_role>
+</CI_ResponsibleParty>
+<dateStamp>2017-03-06</dateStamp>
+<Inf_Metadata_characterSet>  4. Utf8: Formato de Transferencia UCS de tamaño variable de 8-bit, basado en ISO/IEC 10646.</Inf_Metadata_characterSet>
+</Inf_Metadata>
+</Metadata>
