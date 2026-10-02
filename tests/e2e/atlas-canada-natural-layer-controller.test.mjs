@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { Window } from 'happy-dom';
 import { bundleCanadaSource } from '../fixtures/bundle-canada-source.mjs';
+import { transform } from '@astrojs/compiler-rs';
+import { experimental_AstroContainer } from 'astro/container';
 
 const native = await bundleCanadaSource('src/scripts/atlas-canada-natural-layer.ts', { globalName: 'NaturalLayerNative' });
 const projectionCode = await bundleCanadaSource('src/lib/atlas-canada-landform-map.ts', { format: 'esm', platform: 'node' });
@@ -13,6 +15,29 @@ const contourGeometry = JSON.parse(await readFile('public/assets/atlas/canada-cl
 const contourAnchors = contourHelper.canadaNaturalContourLabels(contourGeometry);
 const stations = JSON.parse(await readFile('src/data/atlas/canada/climate.json', 'utf8')).stations;
 const width = 600, height = 367;
+const dataModule = code => `data:text/javascript;base64,${Buffer.from(code).toString('base64')}`;
+let ssrComponent;
+async function renderNaturalSSR(props) {
+  if (!ssrComponent) {
+    const compiled = transform(await readFile('src/components/atlas/CanadaNaturalLayerMap.astro', 'utf8'), { filename: 'CanadaNaturalLayerMap.astro' });
+    assert.ok(!compiled.diagnostics.some(item => item.severity === 'error'));
+    const modules = new Map([
+      ['astro/runtime/server/index.js', import.meta.resolve('astro/runtime/server/index.js')],
+      ['../../data/atlas/regional-countries.json', dataModule(`export default ${await readFile('src/data/atlas/regional-countries.json', 'utf8')};`)],
+      ['maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url', dataModule('export default "/worker.js";')],
+      ['../../lib/atlas-canada-landform-map', dataModule(projectionCode)],
+      ['../../lib/atlas-canada-natural-layer', dataModule(contourCode)],
+    ]);
+    // Standalone SSR has no Vite CSS/worker asset pipeline. Geometry and
+    // component rendering run unchanged; unused compiler import metadata is inert.
+    let code = compiled.code.replace(', createMetadata as $$createMetadata', '').replace(/^import ".*\.css";\n/gm, '');
+    code = 'const $$createMetadata = () => ({});\n' + code;
+    for (const [from, to] of modules) code = code.split(JSON.stringify(from)).join(JSON.stringify(to));
+    ssrComponent = (await import(dataModule(code))).default;
+  }
+  const container = await experimental_AstroContainer.create();
+  return container.renderToString(ssrComponent, { props });
+}
 const groupSets = {
   climate: [{ id: 'Dfb', name: 'Dfb', color: '#6aa45b', description: 'Continental climate' }, { id: 'ET', name: 'ET', color: '#b5adc9', description: 'Tundra climate' }],
   elevation: [{ id: '500', name: '500 m', color: '#8a734e', description: '500 m contour' }, { id: '1000', name: '1000 m', color: '#5c4838', description: '1000 m contour' }],
@@ -57,6 +82,65 @@ const validBounds = bounds => {
   assert.ok(bounds[0] < bounds[2] && bounds[1] < bounds[3]);
   assert.ok(bounds[0] >= -180 && bounds[2] <= 180 && bounds[1] >= -85.051 && bounds[3] <= 85.051);
 };
+
+test('No-JS contour SVG defines every original projected vertex once and references it for visible and 9px hit strokes', async () => {
+  const manifest = JSON.parse(await readFile('public/assets/atlas/canada-climate-elevation-v1/elevation-manifest.json','utf8'));
+  const html = await renderNaturalSSR({ layer:'elevation', geometry:contourGeometry, groups:manifest.levels, geometryUrl:'/elevation-contours.geojson', hidden:false, selected:'500', only:true });
+  const w = new Window({url:'https://example.com/?render=static',settings:{enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
+  try {
+    w.document.body.innerHTML = html;
+    const root = w.document.querySelector('[data-canada-natural-layer="elevation"]'), svg = root.querySelector('svg');
+    assert.equal(root.hidden,false);
+    assert.equal(svg.querySelectorAll('defs path[data-canada-natural-geometry]').length,manifest.levels.length);
+    let vertices = 0;
+    for (const group of manifest.levels) {
+      const shape = root.querySelector(`[data-canada-natural-shape="${group.id}"]`), visual = shape.querySelector('.canada-natural-line'), hit = shape.querySelector('.canada-natural-line-hit');
+      assert.equal(visual.localName,'use'); assert.equal(hit.localName,'use');
+      assert.equal(visual.getAttribute('href'),hit.getAttribute('href'));
+      const definition = w.document.getElementById(visual.getAttribute('href').slice(1));
+      assert.equal(definition.closest('defs'),svg.querySelector('defs'));
+      assert.equal(definition.dataset.canadaNaturalGeometry,group.id);
+      const expected = contourGeometry.features.filter(feature=>String(feature.properties.id)===group.id).map(feature=>contourHelper.canadaNaturalPath(feature.geometry)).join('');
+      assert.equal(definition.getAttribute('d'),expected);
+      assert.equal(html.split(expected).length-1,1,'the coordinate string is serialized once, including with JavaScript disabled');
+      assert.equal(shape.querySelectorAll('[d]').length,0,'instances reference geometry instead of repeating a path');
+      assert.equal(hit.getAttribute('stroke-width'),'9'); assert.equal(hit.getAttribute('pointer-events'),'stroke');
+      assert.equal(visual.getAttribute('stroke'),group.color);
+      assert.equal(Number(visual.getAttribute('stroke-width')),contourHelper.canadaNaturalContourWidth(Number(group.id)));
+      assert.equal(Number(visual.getAttribute('stroke-opacity')),contourHelper.canadaNaturalContourOpacity(Number(group.id)));
+      for (const element of [definition,visual,hit]) assert.equal(element.getAttribute('vector-effect'),'non-scaling-stroke');
+      assert.equal(shape.hasAttribute('hidden'),group.id!=='500');
+      vertices += (definition.getAttribute('d').match(/[ML]/g)??[]).length;
+    }
+    const sourceVertices = contourGeometry.features.flatMap(feature=>contourHelper.canadaNaturalParts(feature.geometry)).reduce((total,part)=>total+part.length,0);
+    assert.equal(vertices,sourceVertices,'every source contour vertex is retained');
+    const config = JSON.parse(root.querySelector('[data-canada-natural-config]').textContent);
+    assert.ok(!('geometry' in config)); assert.equal(config.geometryUrl,'/elevation-contours.geojson');
+    const stage=root.querySelector('[data-canada-natural-stage]');Object.defineProperty(stage,'clientWidth',{value:width});Object.defineProperty(stage,'clientHeight',{value:height});
+    w.eval(native);const controller=w.NaturalLayerNative.initCanadaNaturalLayer(root), events=[];root.addEventListener('canada-natural-select',event=>events.push(event.detail));
+    root.querySelector('[data-canada-natural-shape="1000"] .canada-natural-line-hit').dispatchEvent(new w.MouseEvent('click',{bubbles:true}));
+    assert.equal(events.at(-1).id,'1000','a use hit instance delegates selection to its owning group');
+    const group=root.querySelector('[data-canada-natural-shape="500"]');group.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));assert.equal(events.at(-1).id,'500');
+    controller.render({selected:'1000',only:true});assert.equal(root.querySelectorAll('[data-canada-natural-shape]:not([hidden])').length,1);
+    assert.equal(root.querySelector('[data-canada-natural-shape="1000"]').classList.contains('is-selected'),true);
+    controller.destroy();
+  } finally { await w.happyDOM.close(); }
+});
+
+test('Natural SSR keeps station coordinates and names while excluding repeated monthly chart values from map configuration', async () => {
+  const geometry = {type:'FeatureCollection',features:[{type:'Feature',properties:{id:'Dfb'},geometry:{type:'Polygon',coordinates:[[[-100,50],[-90,50],[-90,60],[-100,50]]]}}]};
+  const html = await renderNaturalSSR({layer:'climate',geometry,groups:[groupSets.climate[0]],geometryUrl:'/koppen.geojson',stations,hidden:false});
+  const w = new Window();
+  try {
+    w.document.body.innerHTML=html;
+    const config=JSON.parse(w.document.querySelector('[data-canada-natural-config]').textContent);
+    assert.deepEqual(config.stations,stations.map(({id,name,coordinates})=>({id,name,coordinates})));
+    assert.ok(config.stations.every(station=>Object.keys(station).length===3));
+    assert.equal(w.document.querySelectorAll('[data-canada-natural-static-city]').length,5);
+    assert.ok(!('geometry' in config));assert.equal(w.document.querySelectorAll('.canada-natural-area').length,1);
+    assert.equal(w.document.querySelectorAll('defs [data-canada-natural-geometry]').length,0,'polygon geometry is unchanged');
+  } finally { await w.happyDOM.close(); }
+});
 
 test('Sparse contour labels are exact source vertices at the original EGM2008 height, with 500 m visually lighter than major lines', () => {
   assert.equal(contourAnchors.length, 8);

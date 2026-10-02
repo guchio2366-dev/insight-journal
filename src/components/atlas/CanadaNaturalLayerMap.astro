@@ -14,7 +14,7 @@ const { layer, geometry: input, groups, geometryUrl, stations = [], source = {},
 const geometry = prepareCanadaNaturalLayer(typeof input === 'string' ? JSON.parse(input) : input, groups);
 const context = { type: 'FeatureCollection', features: geography.features.filter(feature => ['CAN', 'USA', 'GRL'].includes(feature.properties.code)) };
 const contourLabels = layer === 'elevation' ? canadaNaturalContourLabels(geometry) : [];
-const config = { layer, groups, geometryUrl, stations, contourLabels, context, workerUrl };
+const config = { layer, groups, geometryUrl, stations: stations.map(({id,name,coordinates}) => ({id,name,coordinates})), contourLabels, context, workerUrl };
 const labelBoxes: number[][] = [];
 const staticContourLabels = [...contourLabels].sort((a,b) => Number(b.id===selected)-Number(a.id===selected) || Number(a.elevationM===500)-Number(b.elevationM===500)).filter(label => {
   if (only && selected && label.id !== selected) return false;
@@ -34,11 +34,12 @@ const paths = groups.map(group => ({ group, fill: geometry.features.filter(featu
       <title id={titleId}>{heading}</title>
       <desc id={descId}>{layer === 'climate' ? '気候区分を原データの境界で色分けします。丸印は別の気候平年値観測地点です。' : '標高区分と原データから作成した等高線を表示します。線の凡例を選ぶとその標高を確認できます。'} 地図か凡例で区分を選択し、拡大ボタンと矢印キーで移動できます。</desc>
       <rect x="-2000" y="-2000" width="5000" height="5000" fill="#e4eff0" />
+      <defs data-canada-natural-definitions>{paths.filter(item => item.line).map(({group,line}) => <path id={`canada-natural-${layer}-line-${group.id}`} data-canada-natural-geometry={group.id} d={line} vector-effect="non-scaling-stroke" />)}</defs>
       <g aria-hidden="true">{context.features.map(feature => <path class="canada-natural-context" d={canadaNaturalPath(feature.geometry as CanadaNaturalGeometry)} fill-rule="evenodd" vector-effect="non-scaling-stroke" />)}</g>
       <g>{paths.map(({group, fill, line}) => <g class:list={['canada-natural-shape', {'is-selected': selected === group.id}]} data-canada-natural-shape={group.id} role="button" tabindex="0" aria-label={`${group.name}を選ぶ`} aria-pressed={String(selected === group.id)} hidden={only && !!selected && selected !== group.id}>
         <title>{group.name}：{group.description}</title>
         {fill && <path class="canada-natural-area" d={fill} fill={group.color} fill-rule="evenodd" vector-effect="non-scaling-stroke" />}
-        {line && <><path class="canada-natural-line" d={line} fill="none" stroke={group.color} stroke-width={layer==='elevation'?canadaNaturalContourWidth(Number(group.id)):1.2} stroke-opacity={layer==='elevation'?canadaNaturalContourOpacity(Number(group.id)):1} vector-effect="non-scaling-stroke" /><path class="canada-natural-line-hit" d={line} fill="none" stroke="transparent" vector-effect="non-scaling-stroke" /></>}
+        {line && <><use class="canada-natural-line" href={`#canada-natural-${layer}-line-${group.id}`} fill="none" stroke={group.color} stroke-width={layer==='elevation'?canadaNaturalContourWidth(Number(group.id)):1.2} stroke-opacity={layer==='elevation'?canadaNaturalContourOpacity(Number(group.id)):1} vector-effect="non-scaling-stroke" /><use class="canada-natural-line-hit" href={`#canada-natural-${layer}-line-${group.id}`} fill="none" stroke="transparent" stroke-width="9" pointer-events="stroke" vector-effect="non-scaling-stroke" /></>}
       </g>)}</g>
       <g class="canada-natural-static-contours" data-canada-natural-static-contours aria-hidden="true">{staticContourLabels.map(label => { const [x,y] = projectCanadaLandform(label.coordinates); return <text x={x} y={y} text-anchor="middle" dominant-baseline="central" data-canada-natural-static-contour={label.id}>{label.elevationM} m</text>; })}</g>
       <g class="canada-natural-static-stations" data-canada-natural-static-stations>{stations.map(station => { const [x,y] = projectCanadaLandform(station.coordinates); return <g class:list={['canada-natural-static-station',{'is-selected':city===station.id}]} data-canada-natural-static-city={station.id} role="button" tabindex="0" aria-label={`${station.name}の気候平年値を読む`} aria-pressed={String(city===station.id)}><title>{station.name}：気候平年値の観測地点</title><circle cx={x} cy={y} r="5" vector-effect="non-scaling-stroke" /><text x={x+9} y={y+4}>{station.name}</text></g>; })}</g>

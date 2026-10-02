@@ -31,3 +31,38 @@ test('Official landform polygons, complete Japanese legend and selection text st
   w.history.replaceState(null,'',saved);w.dispatchEvent(new w.PopStateEvent('popstate'));assert.equal(q('[data-canada-landform-only]').checked,true);assert.equal(new URL(w.location).searchParams.get('cropReturn'),'product=wheat');assert.equal(host.querySelectorAll('[data-canada-landform-shape]:not([hidden])').length,1);
  }finally{await w.happyDOM.close();}
 });
+test('Every named water selection carries a matching explanation, isolated-view scope and history return',async()=>{
+ const w=await page('?view=water',true);try{
+  const d=w.document,q=s=>d.querySelector(s),picker=q('[data-canada-water]');
+  assert.equal(q('[data-canada-reading="water"] [data-canada-general-reading]').open,false);
+  for(const option of [...picker.options].filter(option=>option.value)){
+   picker.value=option.value;picker.dispatchEvent(new w.Event('change'));
+   assert.equal(q('[data-canada-water-reading-title]').textContent,option.textContent);
+   assert.ok(q('[data-canada-water-reading-text]').textContent.length>20);
+   assert.ok([...d.querySelectorAll('[data-canada-water-shape].is-selected')].every(shape=>shape.dataset.canadaWaterShape===option.value));
+  }
+  picker.value='Great Bear Lake';picker.dispatchEvent(new w.Event('change'));
+  const only=q('[data-canada-only]');only.checked=true;only.dispatchEvent(new w.Event('change'));
+  assert.match(q('[data-canada-water-reading-scope]').textContent,/選択水域だけ.*他の湖・川.*「すべての水系へ戻す」/);
+  const saved=new URL(w.location).search;
+  q('[data-canada-all-water]').click();
+  assert.match(q('[data-canada-water-reading-title]').textContent,/湖と川/);
+  assert.match(q('[data-canada-water-reading-scope]').textContent,/流域境界/);
+  w.history.replaceState(null,'',saved);w.dispatchEvent(new w.PopStateEvent('popstate'));
+  assert.equal(q('[data-canada-water-reading-title]').textContent,'グレートベア湖');
+  assert.equal(only.checked,true);
+  assert.match(q('[data-canada-water-reading-text]').textContent,/グレートスレーブ湖.*区別/);
+ }finally{await w.happyDOM.close();}
+});
+test('Initial HTML exposes the classified climate SVG and all its legends beside the capital chart without controller execution',async()=>{
+ const w=await page();try{
+  const d=w.document,host=d.querySelector('[data-canada-natural-layer="climate"]');
+  assert.equal(host.hidden,false);
+  assert.equal(d.querySelector('[data-canada-locator]').hidden,true);
+  assert.equal(host.querySelectorAll('[data-canada-natural-shape]').length,14);
+  assert.equal(host.querySelectorAll('[data-canada-natural-legend]').length,14);
+  assert.equal(d.querySelector('[data-canada-natural-layer="elevation"]').hidden,true);
+  assert.deepEqual([...d.querySelectorAll('[data-canada-climate-card]:not([hidden])')].map(card=>card.dataset.canadaClimateCard),['ottawa']);
+  assert.equal(d.querySelector('[data-canada-climate-card="ottawa"]').querySelectorAll('tbody tr').length,12);
+ }finally{await w.happyDOM.close();}
+});

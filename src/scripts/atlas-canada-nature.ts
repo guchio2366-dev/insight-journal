@@ -5,6 +5,7 @@ import {renderCanadaCropNatureComparison} from './atlas-canada-crop-nature-compa
 import {readCanadaNatureState,writeCanadaNatureState,type CanadaNatureState} from '../lib/atlas-canada-nature';
 import {initCanadaLandform} from './atlas-canada-landform';
 import physiography from '../data/atlas/canada/physiography.json';
+import {selectedWaterReading} from '../data/atlas/canada/reading';
 import {initCanadaNaturalLayer} from './atlas-canada-natural-layer';
 import {readCanadaNaturalLayerState,writeCanadaNaturalLayerState,type NaturalLayer,type NaturalLayerState} from '../lib/atlas-canada-natural-state';
 export function initCanadaNature(root:HTMLElement){
@@ -48,7 +49,8 @@ export function initCanadaNature(root:HTMLElement){
   if(elevationTitle)elevationTitle.textContent=elevation?`${elevation.name}の等高線を読む`:'西部山地と内陸の高さを、等高線で読む';
   if(elevationText)elevationText.textContent=elevation?.id==='500'?`500 mの地点は西部の山地にも内陸の平原にもあります。西部でより高い等高線が近づく所と比べます。${elevation.description}`:elevation?.description??'等高線は同じ標高を結ぶ線です。西部の高い山地と内陸・海岸の位置を比べ、斜面や山越えが交通・水の流れに関わる場所を確かめます。';
   root.classList.toggle('is-landform-reading',state.view==='landform');
-  for(const detail of root.querySelectorAll<HTMLDetailsElement>('[data-canada-general-reading]')){const context=String(comparison);if(detail.dataset.comparison!==context){detail.open=!comparison&&!detail.closest('[data-canada-reading="landform"]');detail.dataset.comparison=context;}}
+  root.classList.toggle('is-water-reading',state.view==='water');
+  for(const detail of root.querySelectorAll<HTMLDetailsElement>('[data-canada-general-reading]')){const context=String(comparison);if(detail.dataset.comparison!==context){detail.open=!comparison&&!detail.closest('[data-canada-reading="landform"],[data-canada-reading="water"]');detail.dataset.comparison=context;}}
   $<HTMLSelectElement>('[data-canada-city]').value=state.city;
   $<HTMLSelectElement>('[data-canada-compare]').value=state.compare??'';
   for(const option of $<HTMLSelectElement>('[data-canada-compare]').options)option.disabled=option.value===state.city;
@@ -64,7 +66,7 @@ export function initCanadaNature(root:HTMLElement){
   const landformTitle=root.querySelector<HTMLElement>('[data-canada-landform-reading-title]'),landformText=root.querySelector<HTMLElement>('[data-canada-landform-reading-text]');
   if(landformTitle)landformTitle.textContent=landform?.name??'山地・平原・低地を、場所で見分ける';
   if(landformText)landformText.textContent=landform?.description??'西部の山地、中央の平原、東部の盾状地を比較します。地図か凡例で地域を選ぶと、その範囲と説明が対応します。';
-  const cityList=root.querySelector<HTMLElement>('.canada-city-list');if(cityList)cityList.hidden=classifiedClimate||state.view==='landform'||state.view==='elevation';
+  const cityList=root.querySelector<HTMLElement>('.canada-city-list');if(cityList)cityList.hidden=classifiedClimate||state.view==='water'||state.view==='landform'||state.view==='elevation';
   $('[data-canada-water-controls]').hidden=state.view!=='water';
   const group=$<SVGGElement>('[data-canada-water-layers]');group.setAttribute('display',state.view==='water'?'':'none');group.removeAttribute('hidden');
   $<HTMLSelectElement>('[data-canada-water]').value=state.water??'';
@@ -72,6 +74,11 @@ export function initCanadaNature(root:HTMLElement){
   $<HTMLInputElement>('[data-canada-only]').disabled=!state.water;
   const waterGroup=root.dataset.canadaIndustryWaterGroup==='great-lakes',comparisonWaters=['St. Lawrence','Lake Superior','Lake Ontario','Lake Huron','Lake Erie','Lake Michigan'];
   const onlyLabel=root.querySelector<HTMLElement>('[data-canada-only-label]');if(onlyLabel)onlyLabel.textContent=waterGroup?'比較する五大湖5湖・St. Lawrence上流だけを表示':'選んだ川・湖だけを表示';
+  const selectedWater=state.water?selectedWaterReading[state.water]:null;
+  const waterTitle=root.querySelector<HTMLElement>('[data-canada-water-reading-title]'),waterText=root.querySelector<HTMLElement>('[data-canada-water-reading-text]'),waterScope=root.querySelector<HTMLElement>('[data-canada-water-reading-scope]');
+  if(waterTitle)waterTitle.textContent=waterGroup?'五大湖・セントローレンス上流と大西洋側':selectedWater?selectedWater.name:'湖と川を、海までつないで読む';
+  if(waterText)waterText.textContent=waterGroup?'五大湖とセントローレンス上流の位置を、産業の州別構成と比べます。この図は航路や輸送量を示しません。':selectedWater?.body??'湖や川を選び、内陸から海への出口と位置を確かめます。';
+  if(waterScope)waterScope.textContent=state.only&&state.water?'選択水域だけを表示中です。つながる他の湖・川は「すべての水系へ戻す」で照合できます。線の太さは流量、湖の色は水質ではありません。':'線は川、面は湖の概略形状です。流量・水質・地下水・流域境界の地図ではありません。';
   const waterLabels=root.querySelector<SVGElement>('[data-canada-industry-water-labels]');if(waterLabels)waterLabels.style.display=waterGroup?'':'none';
   for(const ocean of root.querySelectorAll<SVGElement>('.canada-ocean'))ocean.style.display=waterGroup?'none':'';
   const mapHeading=root.querySelector<HTMLElement>('.canada-map-title h2');if(mapHeading){mapHeading.dataset.original??=mapHeading.textContent!;mapHeading.textContent=waterGroup?'五大湖・川上流・大西洋側':mapHeading.dataset.original;}
