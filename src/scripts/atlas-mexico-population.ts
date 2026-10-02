@@ -182,7 +182,7 @@ export function initMexicoPopulation(root: HTMLElement) {
     event.preventDefault();
     update({view:state.sourceView,compare:null});
   });
-  window.addEventListener('popstate', () => {state = readMexicoPopulationState(new URL(location.href), codes);composition=readMexicoCompositionSelection(new URL(location.href),compositionData,state.category);history.replaceState(null,'',writeMexicoCompositionSelection(writeMexicoPopulationState(new URL(location.href),state),composition,state.category));render();});
+  window.addEventListener('popstate', () => {state = readMexicoPopulationState(new URL(location.href), codes);composition=readMexicoCompositionSelection(new URL(location.href),compositionData,state.category);const normalized=writeMexicoCompositionSelection(writeMexicoPopulationState(new URL(location.href),state),composition,state.category);if(normalized.href!==location.href)history.replaceState(history.state,'',normalized);render();});
   history.replaceState(null,'',writeMexicoCompositionSelection(writeMexicoPopulationState(new URL(location.href),state),composition,state.category));
   render();
   for (const control of root.querySelectorAll<HTMLButtonElement | HTMLInputElement | HTMLSelectElement>('[data-population-view],[data-population-state],[data-population-only],[data-population-reset]')) control.disabled = false;
