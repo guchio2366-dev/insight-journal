@@ -5,6 +5,7 @@ import { getOverviewRegion, overviewTopics, type OverviewRegionId } from '../../
 import { withBase } from '../../lib/urls';
 import { getOverviewMap } from '../../data/atlas/overview-map';
 import { getRegionOverview } from '../../data/atlas/region-overview';
+import { canadaOverview } from '../../data/atlas/canada/overview';
 import '../../styles/atlas-country-overview.css';
 
 interface Props { regionId: OverviewRegionId }
@@ -70,21 +71,23 @@ const config = {
           <div class="overview-place-summary" data-overview-place-summary aria-live="polite">
             <strong data-overview-place-title>国や都市を選んで、位置を確かめる</strong>
             <p data-overview-place-description>地図の国名・都市名、または上の一覧から国・地域を選べます。</p>
-            <a href="#overview-country-detail" data-overview-detail-link hidden><span data-overview-country-name>{initialCountry.name}</span>の詳しい解説へ ↓</a>
+            <a href="#overview-country-detail" data-overview-detail-link hidden><span data-overview-country-name>{initialCountry.name}</span><span data-overview-detail-label>の詳しい解説へ ↓</span></a>
           </div>
           <details class="overview-map-source"><summary>地図の範囲・出典</summary><p>境界と都市はNatural Earthの概略データを用いています。小さな国や重なる地名は、上の国・地域の一覧から選択できます。都市は主要な地点を抜粋しており、すべての都市を示すものではありません。</p><p>境界・名称は出典の表示上の区分に基づきます。詳細な行政境界や領土の実効支配を示す地図ではありません。</p>{map.notes.map(note=><p>{note}</p>)}<p>{map.projection}</p>{map.sources.map(source=><p><a href={source.url}>{source.label}</a></p>)}</details>
           <noscript><p class="country-overview-noscript">白地図と地域の概要を表示しています。国の選択・拡大にはJavaScriptが必要です。</p></noscript>
         </section>
-        <aside class="overview-region-reading" aria-labelledby="overview-region-title">
+        <aside class="overview-region-reading" data-overview-region-reading aria-labelledby="overview-region-title">
           <p class="overview-reading-eyebrow">地域の概要</p><h2 id="overview-region-title">{reading.title}</h2><p class="overview-region-intro">{reading.introduction}</p>
           {reading.sections.map(section => <section class="overview-region-section"><h3>{section.heading}</h3><p>{section.body}</p>{section.sourceIds.length > 0 && <p class="overview-inline-sources">{section.sourceIds.map(id => {const source=reading.sources.find(source=>source.id===id);return source && <a href={source.url}>{source.label}</a>;})}</p>}</section>)}
           {reading.checkedAt && <p class="overview-reading-date">説明の確認日：{reading.checkedAt}</p>}
         </aside>
+        {region.id === 'north-america' && <div class="overview-canada-slot" data-overview-canada-slot hidden />}
       </div>
+      <span data-overview-country-detail-home hidden />
       <section id="overview-country-detail" data-overview-country-detail hidden aria-labelledby="overview-country-title">
       <header class="country-overview-heading">
-        <div class="country-overview-title-row"><h2 id="overview-country-title"><span data-overview-country-name>{initialCountry.name}</span>の詳しい解説</h2><span class="country-overview-status">国別の本文は準備中です</span></div>
-        <p>農林業・自然環境・主要産業・人口・政治の5つのテーマで、この国・地域を詳しく説明する予定です。</p>
+        <div class="country-overview-title-row"><h2 id="overview-country-title"><span data-overview-country-name>{initialCountry.name}</span><span data-overview-title-label>の詳しい解説</span></h2><span class="country-overview-status" data-overview-status>国別の本文は準備中です</span></div>
+        <p data-overview-description>農林業・自然環境・主要産業・人口・政治の5つのテーマで、この国・地域を詳しく説明する予定です。</p>
       </header>
 
       <div class="country-overview-topic-tabs" role="tablist" aria-label="国・地域の解説テーマ">
@@ -92,7 +95,16 @@ const config = {
       </div>
 
       {overviewTopics.map((topic, topicIndex) => <section class="country-overview-panel" id={`overview-panel-${topic.id}`} role="tabpanel" aria-labelledby={`overview-tab-${topic.id}`} tabindex="0" hidden={topicIndex !== 0}>
-        <div class="country-overview-reading">
+        {region.id === 'north-america' && (() => { const canadaTopic = canadaOverview.topics.find(item => item.id === topic.id)!; return <div class="country-overview-canada-compact" data-overview-canada-topic={topic.id} hidden>
+          <p class="country-overview-canada-takeaway">{canadaTopic.takeaway}</p>
+          <nav class="country-overview-canada-links" aria-label={`${canadaTopic.label}の関連ページ`}>{canadaTopic.links.map(link => <a href={withBase(link.href)}>{link.label}<span aria-hidden="true"> →</span></a>)}</nav>
+          <details class="country-overview-canada-details">
+            <summary>詳しく読む・出典</summary>
+            {canadaTopic.sections.map(section => <section class="country-overview-canada-section"><h3>{section.heading}</h3><p>{section.body}</p></section>)}
+            <footer class="country-overview-canada-sources"><h3>出典・対象年・利用条件</h3><ul>{canadaTopic.sources.map(source => <li><a href={withBase(source.href)}>{source.label}</a></li>)}</ul><p>内容の確認日：{canadaOverview.checkedAt}</p></footer>
+          </details>
+        </div>; })()}
+        <div class="country-overview-reading" data-overview-generic-reading>
           <nav class="country-overview-contents" aria-label={`${topic.label}の目次`}>
             <h2>このテーマの内容</h2>
             <ol>{topic.sections.map((section, index) => <li><a href={`#overview-${topic.id}-section-${index + 1}`}>{section.heading}</a></li>)}</ol>

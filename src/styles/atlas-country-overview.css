@@ -115,3 +115,35 @@
 @media(min-width:1600px){.overview-workspace .atlas-desktop-shell:not(.is-reading-news){grid-template-columns:260px minmax(0,1fr)}.overview-region-reading{padding:25px}.overview-region-section p{font-size:15px}}
 @media(max-width:1199px){.overview-workspace .atlas-desktop-shell:not(.is-reading-news){grid-template-columns:minmax(0,1fr)}.overview-workspace .atlas-desktop-shell:not(.is-reading-news) .atlas-news{height:155px}.overview-map-reading{grid-template-columns:minmax(0,1.65fr) minmax(300px,1fr)}.overview-map-stage{height:600px}}
 @media(max-width:760px){.overview-map-reading{grid-template-columns:minmax(0,1fr);gap:20px}.overview-map-stage{height:500px}.overview-region-reading{padding:20px}.overview-map-labels .overview-country-label{font-size:12px}}
+
+/* Canada uses the same five topic panels beside the map. */
+.country-overview[data-overview-selected-country=CAN] .overview-canada-slot{min-width:0;padding:14px;border:1px solid #d1d6ca;background:#fbfaf3}
+.country-overview[data-overview-selected-country=CAN] #overview-country-detail{margin:0;border:0;scroll-margin-top:20px}
+.country-overview[data-overview-selected-country=CAN] .country-overview-heading{padding:0 0 12px}
+.country-overview[data-overview-selected-country=CAN] .country-overview-title-row{gap:8px}
+.country-overview[data-overview-selected-country=CAN] .country-overview-title-row h2{font-size:24px;line-height:1.5}
+.country-overview[data-overview-selected-country=CAN] .country-overview-heading>p{display:none}
+.country-overview[data-overview-selected-country=CAN] .country-overview-topic-tabs button{min-height:44px;font-size:14px;padding:7px 2px}
+.country-overview[data-overview-selected-country=CAN] .country-overview-panel{padding:14px 0 0}
+.country-overview[data-overview-selected-country=CAN] .country-overview-canada-takeaway{font-size:16px;line-height:1.85;margin:0 0 14px}
+.country-overview[data-overview-selected-country=CAN] .country-overview-canada-links{display:grid;gap:7px}
+.country-overview[data-overview-selected-country=CAN] .country-overview-canada-links a{display:block;min-height:44px;padding:9px 11px;border:1px solid #c8d2c8;background:#fffef8;color:#30534c;font-size:14px;line-height:1.65;text-decoration:none;overflow-wrap:anywhere}
+.country-overview[data-overview-selected-country=CAN] .country-overview-canada-links a:hover{text-decoration:underline;background:#eef0e4}
+.country-overview[data-overview-selected-country=CAN] .country-overview-canada-details{margin-top:14px;border-top:1px solid var(--rule);font-size:14px;line-height:1.85}
+.country-overview[data-overview-selected-country=CAN] .country-overview-canada-details summary{min-height:44px;padding:11px 0;cursor:pointer;color:#365c53}
+.country-overview[data-overview-selected-country=CAN] .country-overview-canada-section{padding:16px 0;border-top:1px solid var(--rule)}
+.country-overview[data-overview-selected-country=CAN] .country-overview-canada-section h3{font-size:16px;line-height:1.6;margin:0 0 8px;color:#30534c}
+.country-overview[data-overview-selected-country=CAN] .country-overview-canada-section p{margin:0}
+.country-overview[data-overview-selected-country=CAN] .country-overview-canada-sources{padding:16px 0 0;border-top:1px solid var(--rule);overflow-wrap:anywhere}
+.country-overview[data-overview-selected-country=CAN] .country-overview-canada-sources h3{font-size:14px;margin:0 0 8px}
+.country-overview[data-overview-selected-country=CAN] .country-overview-canada-sources ul{padding-left:1.3em;margin:0}
+.country-overview[data-overview-selected-country=CAN] .country-overview-canada-sources li{margin:0 0 8px}
+.country-overview[data-overview-selected-country=CAN] .country-overview-canada-sources p{font-size:12px;color:var(--ink-soft);margin:12px 0 0}
+@media(min-width:1200px){.country-overview[data-overview-selected-country=CAN] .overview-map-stage{height:clamp(330px,calc(100vh - 330px),560px)}}
+@media(min-width:761px) and (max-width:1199px){.country-overview[data-overview-selected-country=CAN] .overview-map-stage{height:clamp(280px,calc(100vh - 435px),500px)}}
+@media(min-width:960px) and (max-width:1199px){
+ .overview-workspace .atlas-desktop-shell:not(.is-reading-news):has(.country-overview[data-overview-selected-country=CAN]){display:grid;grid-template-columns:160px minmax(0,1fr);gap:12px;padding:10px 12px}
+ .overview-workspace .atlas-desktop-shell:not(.is-reading-news):has(.country-overview[data-overview-selected-country=CAN]) .atlas-news{height:calc(100dvh - 82px);min-height:0;position:sticky;top:10px}
+ .overview-workspace .atlas-desktop-shell:not(.is-reading-news) .country-overview[data-overview-selected-country=CAN] .overview-map-stage{height:clamp(330px,calc(100vh - 330px),560px)}
+}
+@media(max-width:760px){.country-overview[data-overview-selected-country=CAN] .overview-map-stage{height:380px}}

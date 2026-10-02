@@ -24,6 +24,135 @@ const configuration=d=>JSON.parse(d.querySelector('[data-overview-config]').text
 const visiblePanels=d=>[...d.querySelectorAll('[role=tabpanel]')].filter(panel=>!panel.closest('[hidden]'));
 const selectedTopic=d=>d.querySelector('[role=tab][aria-selected=true]');
 const selectedCountries=d=>[...d.querySelectorAll('[data-overview-map-country][aria-pressed=true]')].map(country=>country.dataset.overviewMapCountry);
+const canadaTopics=['agriculture','nature','industry','population','politics'];
+const visibleCanadaReading=d=>visiblePanels(d)[0]?.querySelector('[data-overview-canada-topic]');
+
+function assertCanadaPlacement(d,detail){
+  assert.equal(d.querySelector('[data-overview-country-detail]'),detail,'the original detail node is reused');
+  assert.equal(d.querySelectorAll('#overview-country-detail').length,1);
+  assert.equal(detail.parentElement,d.querySelector('[data-overview-canada-slot]'));
+  assert.equal(detail.hidden,false);
+  assert.equal(d.querySelector('[data-overview-canada-slot]').hidden,false);
+  assert.equal(d.querySelector('[data-overview-region-reading]').hidden,true);
+  assert.ok([...d.querySelectorAll('[data-overview-generic-reading]')].every(reading=>reading.hidden));
+  assert.equal(visiblePanels(d).length,1);
+  assert.equal(visibleCanadaReading(d).hidden,false);
+  assert.doesNotMatch(d.querySelector('.country-overview-heading').textContent,/準備中|予定/);
+  assert.doesNotMatch(d.querySelector('[data-overview-detail-link]').textContent,/↓|下/);
+  assert.ok([...d.querySelectorAll('[data-overview-country-name]')].every(name=>name.textContent==='カナダ'));
+}
+
+function assertGenericPlacement(d,detail,country){
+  assert.equal(d.querySelector('[data-overview-country-detail]'),detail);
+  assert.equal(detail.previousElementSibling,d.querySelector('[data-overview-country-detail-home]'));
+  assert.equal(d.querySelector('[data-overview-canada-slot]').hidden,true);
+  assert.equal(d.querySelector('[data-overview-region-reading]').hidden,false);
+  assert.ok([...d.querySelectorAll('[data-overview-canada-topic]')].every(reading=>reading.hidden));
+  assert.ok([...d.querySelectorAll('[data-overview-generic-reading]')].every(reading=>!reading.hidden));
+  assert.equal(detail.hidden,!country);
+  assert.equal(visiblePanels(d).length,country?1:0);
+  assert.match(d.querySelector('[data-overview-status]').textContent,/準備中/);
+}
+
+test('Canada five topics use the built overview tabs with published links and folded sections and sources',async()=>{
+  for(const topic of canadaTopics){
+    const w=await page('north-america',`?country=CAN&topic=${topic}`,true),d=w.document;
+    try{
+      const detail=d.querySelector('[data-overview-country-detail]');
+      assertCanadaPlacement(d,detail);
+      assert.equal(selectedTopic(d).dataset.overviewTopic,topic);
+      assert.deepEqual(selectedCountries(d),['CAN']);
+      assert.deepEqual([...d.querySelectorAll('[role=tab]')].map(tab=>tab.dataset.overviewTopic),canadaTopics);
+      assert.equal(d.querySelectorAll('[role=tabpanel]').length,5);
+      const ids=[...d.querySelector('[data-country-overview]').querySelectorAll('[id]')].map(element=>element.id);
+      assert.equal(new Set(ids).size,ids.length,'all overview IDs stay unique');
+      for(const tab of d.querySelectorAll('[role=tab]'))assert.equal(d.getElementById(tab.getAttribute('aria-controls')).getAttribute('aria-labelledby'),tab.id);
+      const compact=visibleCanadaReading(d),details=compact.querySelector('details');
+      assert.equal(compact.dataset.overviewCanadaTopic,topic);
+      assert.ok(compact.querySelector('.country-overview-canada-takeaway').textContent.trim().length>20);
+      assert.doesNotMatch(compact.textContent,/準備中|説明する予定/);
+      assert.equal(compact.querySelectorAll('.country-overview-canada-links a').length,3);
+      assert.equal(details.open,false);
+      assert.ok(details.querySelector('summary').textContent.includes('出典'));
+      assert.equal(details.querySelectorAll('.country-overview-canada-section').length,3);
+      assert.ok([...details.querySelectorAll('.country-overview-canada-section')].every(section=>section.querySelector('h3').textContent.trim()&&section.querySelector('p').textContent.trim()));
+      assert.ok(details.querySelectorAll('.country-overview-canada-sources a').length>0);
+      assert.match(details.querySelector('.country-overview-canada-sources').textContent,/2026-10-02/);
+      for(const link of compact.querySelectorAll('a')){
+        const url=new URL(link.href);
+        assert.equal(url.protocol,'https:');assert.equal(url.username,'');assert.equal(url.password,'');
+        assert.ok(link.textContent.trim());
+        if(url.origin===w.location.origin){
+          assert.ok(url.pathname.startsWith('/insight-journal/atlas/north-america/canada/'),link.href);
+          const destination=await readFile(`dist/${url.pathname.replace('/insight-journal/','')}index.html`,'utf8');
+          if(url.hash){
+            const source=new Window({settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true}});
+            try{source.document.body.innerHTML=destination;assert.ok(source.document.getElementById(decodeURIComponent(url.hash.slice(1))),link.href);}
+            finally{await source.happyDOM.close();}
+          }
+        }
+      }
+      if(topic==='nature'){
+        const water=new URL(compact.querySelectorAll('.country-overview-canada-links a')[2].href);
+        assert.equal(water.searchParams.get('view'),'water');assert.equal(water.searchParams.get('waterTopic'),'precipitation');
+      }
+      assertNorthAmericaFieldLinks(w,'CAN');
+    }finally{await w.happyDOM.close();}
+  }
+});
+
+test('Canada, Mexico, USA, region and history restore the original reading node and generic content',async()=>{
+  const w=await page('north-america','?country=CAN&topic=nature',true),d=w.document,picker=d.querySelector('[data-overview-country]'),detail=d.querySelector('[data-overview-country-detail]');
+  try{
+    assertCanadaPlacement(d,detail);
+    picker.value='MEX';picker.dispatchEvent(new w.Event('change'));
+    assertGenericPlacement(d,detail,'MEX');assertNorthAmericaFieldLinks(w,'MEX');
+    assert.equal(selectedTopic(d).dataset.overviewTopic,'nature');
+    d.querySelector('[data-overview-label-country="USA"]').click();
+    assertGenericPlacement(d,detail,'USA');assertNorthAmericaFieldLinks(w,'USA');
+    d.querySelector('[data-overview-reset]').click();
+    assertGenericPlacement(d,detail,'');assertNorthAmericaFieldLinks(w,'');
+    for(const country of ['USA','MEX','CAN']){
+      w.history.back();await w.happyDOM.waitUntilComplete();
+      assert.equal(picker.value,country);assertNorthAmericaFieldLinks(w,country);
+      country==='CAN'?assertCanadaPlacement(d,detail):assertGenericPlacement(d,detail,country);
+      assert.equal(selectedTopic(d).dataset.overviewTopic,'nature');
+    }
+    assert.doesNotMatch(d.querySelector('[data-overview-announcement]').textContent,/地図の下/);
+    w.history.forward();await w.happyDOM.waitUntilComplete();
+    assert.equal(picker.value,'MEX');assertGenericPlacement(d,detail,'MEX');
+    picker.value='CAN';picker.dispatchEvent(new w.Event('change'));
+    const city=configuration(d).cities.find(city=>city.country==='CAN');
+    assert.ok(city);
+    d.querySelector(`[data-overview-map-city="${city.id}"]`).click();
+    assertCanadaPlacement(d,detail);assert.equal(new URL(w.location.href).searchParams.get('city'),city.id);
+    assert.ok(d.querySelector('[data-overview-place-title]').textContent.includes(city.name));
+    d.querySelector('[data-overview-reset]').click();assertGenericPlacement(d,detail,'');
+    w.history.replaceState({},'','?country=XXX&topic=unknown');w.dispatchEvent(new w.PopStateEvent('popstate'));
+    assert.equal(picker.value,'');assertGenericPlacement(d,detail,'');
+  }finally{await w.happyDOM.close();}
+});
+
+test('Canada reuses five-tab keyboard focus, URL updates and panel ARIA relationships',async()=>{
+  const w=await page('north-america','?country=CAN&topic=nature',true),d=w.document;
+  try{
+    for(const [key,topic] of [['End','politics'],['Home','agriculture'],['ArrowLeft','politics'],['ArrowRight','agriculture']]){
+      selectedTopic(d).dispatchEvent(new w.KeyboardEvent('keydown',{key,bubbles:true}));
+      const selected=selectedTopic(d);
+      assert.equal(selected.dataset.overviewTopic,topic);assert.equal(d.activeElement,selected);
+      assert.equal(new URL(w.location.href).searchParams.get('topic'),topic);
+      assert.equal(new URL(w.location.href).searchParams.get('country'),'CAN');
+      assert.equal(visiblePanels(d).length,1);assert.equal(visiblePanels(d)[0].getAttribute('aria-labelledby'),selected.id);
+      assert.equal(visibleCanadaReading(d).dataset.overviewCanadaTopic,topic);
+    }
+    const compact=visibleCanadaReading(d),details=compact.querySelector('details');
+    assert.equal(details.open,false);
+    details.open=true;
+    assert.equal(details.querySelectorAll('.country-overview-canada-section').length,3);
+    assert.equal(d.querySelectorAll('[role=tab]').length,5,'opening the native fold adds no extra tabs');
+    assertNorthAmericaFieldLinks(w,'CAN');
+  }finally{await w.happyDOM.close();}
+});
 
 const northAmericaFields=['agriculture','nature','industry','population'];
 const northAmericaCountryPaths={USA:'',CAN:'canada/',MEX:'mexico/'};
