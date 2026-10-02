@@ -44,7 +44,6 @@ export function createAsiaLayout(root:HTMLElement){
   const wrapper=root.ownerDocument.createElement('section');wrapper.className='asia-statistics-panel';wrapper.hidden=true;
   wrapper.append(node);statistics.append(wrapper);groups.push({node,owner,wrapper});
  }
- const details=root.querySelector<HTMLDetailsElement>('[data-reading-details]');if(details)details.open=true;
  function synchronize(){
   for(const {node,owner,wrapper} of controls){const hidden=node.hidden||!!owner?.hidden;if(wrapper.hidden!==hidden)wrapper.hidden=hidden;}
   let visible=false;

@@ -252,3 +252,7 @@
  .atlas-desktop-shell .asia-atlas[data-field] .asia-map-items .asia-settlement-key button{min-height:24px;padding:2px 4px;font-size:13px;line-height:18px}
 }
 @media(min-width:1600px){.atlas-desktop-shell .asia-atlas[data-field] .asia-layout{grid-template-columns:minmax(0,1.8fr) minmax(280px,1fr);gap:16px}}
+@media(min-width:960px){
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-reading-panel{height:var(--asia-reading-height,460px);max-height:none;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-gutter:stable}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-reading-details .asia-reading-scroll{height:auto;max-height:none;overflow:visible;scrollbar-gutter:auto}
+}

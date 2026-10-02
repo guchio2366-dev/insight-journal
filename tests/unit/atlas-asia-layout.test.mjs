@@ -12,7 +12,9 @@ test('項目を地図直下へ、既存統計をニュース・地図・説明�
  const previous=globalThis.MutationObserver;globalThis.MutationObserver=window.MutationObserver;
  try{
   const layout=createAsiaLayout(root);layout.render({field:'industry'});
-  assert.equal(root.querySelector('[data-reading-details]').open,true);
+  const details=root.querySelector('[data-reading-details]');assert.equal(details.open,false);
+  details.open=true;layout.render({field:'natural'});assert.equal(details.open,true);
+  details.open=false;layout.render({field:'industry'});assert.equal(details.open,false);
   assert.equal(root.querySelector('[data-asia-map-items] [data-reading-map-legend]').textContent,'年と単位');
   assert.equal(root.querySelector('[data-asia-map-items] [data-city-select]'),city);
   city.dispatchEvent(new window.Event('change'));assert.equal(selected,1);

@@ -1,11 +1,9 @@
 ---
-import CountryOverviewPage from '../../../../../components/atlas/CountryOverviewPage.astro';
-import '../../../../../styles/atlas-regional-overview-layout.css';
+import AsiaOverviewPage from '../../../../../components/atlas/AsiaOverviewPage.astro';
 import { overviewRegions } from '../../../../../data/atlas/country-overview';
 export function getStaticPaths() {
   return overviewRegions.filter(region=>region.path.startsWith('/atlas/asia/')).map(region=>({params:{region:region.id},props:{regionId:region.id}}));
 }
 const {regionId}=Astro.props;
 ---
-<CountryOverviewPage {regionId} />
-<script>import {initRegionalOverviewLayout} from '../../../../../scripts/atlas-regional-overview-layout';document.querySelectorAll<HTMLElement>('[data-country-overview]').forEach(initRegionalOverviewLayout);</script>
+<AsiaOverviewPage {regionId} />

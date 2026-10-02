@@ -252,3 +252,19 @@
  .atlas-desktop-shell:has(> .west-atlas) .atlas-news-header h2{font-size:17px;line-height:1.6}
  .atlas-desktop-shell:has(> .west-atlas) :is(.atlas-news-list,.atlas-news-reader){padding-inline:12px}
 }
+/* Keep all reading and keys in one accessible scroll, without shrinking text. */
+@media(min-width:960px){
+ .atlas-desktop-shell .west-atlas[data-field] .west-reading{display:block!important;height:var(--west-reading-height,460px)!important;min-height:0!important;max-height:none!important;overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior:contain;scrollbar-gutter:stable}
+ .west-atlas[data-field] .west-reading [data-west-detail],.west-atlas[data-field] .west-reading [data-west-reading-extra]{display:block!important;flex:none!important;height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important}
+ .west-atlas .west-reading .west-comparison-details-grid{display:block;padding:10px 0;border:0}
+ .west-atlas .west-reading [data-west-more-reading],.west-atlas .west-reading [data-west-more-map]{overflow:visible;max-height:none;height:auto}
+ .atlas-desktop-shell .west-atlas[data-field][data-comparison-workspace=true] .atlas-map-column{grid-column:1;grid-row:1}
+ .west-atlas .west-reading .west-comparison-key-slot,.west-atlas .west-reading .west-comparison-details{margin-top:10px}
+}
+.west-settlement-picker{display:grid;gap:5px;font-size:14px}
+.west-settlement-key{display:grid;gap:4px}
+.west-settlement-key button{display:flex;align-items:center;gap:7px;text-align:left;background:transparent;border:1px solid transparent;min-height:40px;font:inherit;color:inherit;cursor:pointer}
+.west-settlement-key button[aria-pressed=true]{border-color:#607d7c;background:#eef3e7}
+.west-settlement-key [data-west-settlement-source-key]{display:flex;align-items:center;gap:7px;min-height:40px}
+.west-settlement-key i{display:inline-block;width:15px;height:12px;flex:none;border:1px solid #78918c}
+.west-atlas .west-rain-station circle{stroke:#284f60;stroke-width:1.3}

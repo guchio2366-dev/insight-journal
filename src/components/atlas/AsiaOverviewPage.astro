@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
+import {getOverviewMap} from '../../data/atlas/overview-map';
+import {getOverviewRegion} from '../../data/atlas/country-overview';
+import {getAsiaOverview,asiaOverviewRegionIds,asiaOverviewTopics,type AsiaOverviewRegionId} from '../../data/atlas/asia-overview';
+import {withBase} from '../../lib/urls';
+import '../../styles/atlas-asia-overview.css';
+interface Props {regionId:AsiaOverviewRegionId}
+const {regionId}=Astro.props;
+const {region,reading,countries}=getAsiaOverview(regionId);
+const map=getOverviewMap(regionId);
+const fields=[{id:'overview',label:'概要',href:region.path},...region.fields];
+const config={regionId,regionLabel:region.label,bounds:map.bounds,countries,width:map.width,height:map.height,cities:map.cities,fields:fields.map(f=>({...f,href:withBase(f.href!)})),topics:asiaOverviewTopics,peers:asiaOverviewRegionIds.map(id=>({id,href:withBase(getOverviewRegion(id).path),countries:getOverviewRegion(id).countries.map(c=>c.code),cities:getOverviewMap(id).cities.map(c=>c.id)}))};
+---
+<BaseLayout title={`${region.label}の概要と白地図`} description={reading.takeaway} compactAtlas>
+ <div class="asia-overview-workspace">
+  <AtlasWorkspaceFrame region={region.newsRegion} mapActions={false}>
+   <article class="atlas-explorer asia-overview" data-asia-overview data-overview-region={regionId}>
+    <p class="ao-breadcrumb"><a href={withBase('/atlas/')}>ATLAS</a> / {region.label}</p>
+    <nav class="ao-regions" aria-label="アジアの地域"><a href={withBase('/atlas/#atlas-world-map')}>世界地域</a>{asiaOverviewRegionIds.map(id=><a data-ao-peer={id} href={withBase(getOverviewRegion(id).path)} aria-current={id===regionId?'page':undefined}>{getOverviewRegion(id).label}</a>)}</nav>
+    <div class="ao-country-row"><label>国・地域 <select data-ao-country><option value="">{region.label}全体</option>{countries.map(c=><option value={c.code}>{c.name}</option>)}</select></label><span data-ao-location>国名・都市名からも選べます</span></div>
+    <nav class="atlas-field-tabs ao-fields" aria-label={`${region.label}の分野`}>{fields.map(f=><a href={withBase(f.href!)} data-ao-field={f.id} aria-current={f.id==='overview'?'page':undefined}>{f.label}</a>)}</nav>
+    <h1 class="ao-title">{region.label}の概要 <span>自然・生産・都市・制度をつなぐ</span></h1>
+    <div class="ao-map-reading">
+     <div class="ao-map-column">
+      <div class="ao-map-stage" data-overview-map-stage>
+       <svg class="ao-map" data-overview-map viewBox={`0 0 ${map.width} ${map.height}`} role="group" aria-label={`${region.label}の白地図。国や都市を選ぶと解説を更新します。`}>
+        <g aria-hidden="true">{map.context.map(path=><path class="ao-context" d={path} fill-rule="evenodd" />)}</g>
+        {map.countries.map(c=><path class="ao-country" d={c.path} data-overview-map-country={c.code} role="button" tabindex="0" aria-label={`${c.name}を選ぶ`} aria-pressed="false" fill-rule="evenodd"><title>{c.name}</title></path>)}
+        <g aria-hidden="true">{map.lakes.map(path=><path class="ao-water" d={path} />)}{map.waters.map(w=><text class="overview-water-name" x={w.point[0]} y={w.point[1]}>{w.name}</text>)}{map.cities.map(c=><circle class="ao-city-dot" data-overview-city-dot={c.id} cx={c.point[0]} cy={c.point[1]} r="3" />)}</g>
+       </svg>
+       <div class="ao-map-labels">{map.countries.map(c=><button type="button" class="ao-country-label" data-overview-label-country={c.code} data-x={c.label[0]} data-y={c.label[1]} data-priority={c.area}>{c.name}</button>)}{map.cities.map(c=><button type="button" class="ao-city-label" data-overview-map-city={c.id} data-country={c.country} data-x={c.point[0]} data-y={c.point[1]} data-priority={c.rank}>{c.name}</button>)}</div>
+       <div class="ao-map-controls"><button type="button" data-overview-zoom="in" aria-label="地図を拡大">＋</button><button type="button" data-overview-zoom="out" aria-label="地図を縮小">−</button><button type="button" data-overview-reset>全体へ</button></div>
+       <span class="ao-map-badge">白地図：位置を確認する図</span>
+      </div>
+      <div class="ao-map-key"><span><i class="ao-border-key"></i>国・地域の境界</span><span><i class="ao-city-key"></i>主な都市</span><span><i class="ao-selected-key"></i>選択した国・地域</span></div>
+      <p class="ao-map-note">白地図の色は人口や生産量を表しません。各分野で分布・凡例・年を確認します。</p>
+      <details class="ao-map-sources"><summary>白地図の出典・範囲</summary><p>Natural Earthの国境・湖・都市。境界は位置の目安で、法的地位・領有権の判断を示しません。投影：{map.projection}。</p>{map.notes.map(note=><p>{note}</p>)}<ul>{map.sources.map(s=><li><a href={s.url}>{s.label}</a></li>)}</ul></details>
+     </div>
+     <aside class="ao-reading" data-ao-reading tabindex="0" aria-label={`${region.label}の解説`}>
+      <div data-ao-region-reading>
+       <p class="ao-eyebrow">地域の持ち帰るメッセージ</p><h2>{reading.title}</h2><p class="ao-takeaway">{reading.takeaway}</p>
+       <nav class="ao-reading-links" aria-label="分布を見て確かめる">{region.fields.map(f=><a href={withBase(f.href!)} data-ao-field={f.id}>{f.label}の地図 →</a>)}</nav>
+       {reading.readings.map(r=><section class="ao-section"><h3>{r.title}</h3>{r.paragraphs.map(p=><p>{p}</p>)}<details><summary>この説明の出典</summary><ul>{r.sources.map(s=><li><a href={s.url}>{s.label}</a></li>)}</ul></details></section>)}
+      </div>
+      <div data-ao-country-reading hidden>
+       <p class="ao-eyebrow">選択した国・地域を読む</p><h2 data-ao-country-name></h2><p class="ao-takeaway" data-ao-takeaway></p>
+       <nav class="ao-reading-links" aria-label="選択した国の分布を確かめる">{region.fields.map(f=><a href={withBase(f.href!)} data-ao-field={f.id}>{f.label}の地図 →</a>)}</nav>
+       <label class="ao-topic-picker">解説のテーマ <select data-ao-topic>{asiaOverviewTopics.map(t=><option value={t.id}>{t.label}</option>)}</select></label>
+       {asiaOverviewTopics.map(t=><section class="ao-section" data-ao-panel={t.id} hidden><h3 data-ao-panel-title></h3><div data-ao-panel-copy></div><details><summary>この説明の出典・対象年</summary><ul data-ao-panel-sources></ul></details></section>)}
+      </div>
+     </aside>
+    </div>
+    <p class="ao-announcement" role="status" data-ao-announcement></p>
+    <noscript><p>JavaScriptを有効にすると国・都市を選べます。地域全体の解説と各分野のリンクはそのまま読めます。</p></noscript>
+    <script type="application/json" data-ao-config set:html={JSON.stringify(config).replace(/</g,'\\u003c')} />
+   </article>
+  </AtlasWorkspaceFrame>
+ </div>
+</BaseLayout>
+<script>
+ import {initAsiaOverview} from '../../scripts/atlas-asia-overview';
+ document.querySelectorAll<HTMLElement>('[data-asia-overview]').forEach(initAsiaOverview);
+</script>

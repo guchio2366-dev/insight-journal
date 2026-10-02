@@ -75,7 +75,7 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.equal(mainLegend.nextElementSibling,q('[data-farm-overview-legend]'),'the crop/livestock keys follow the active-map legend');
       assert.equal(q('[data-asia-statistics]').parentElement,q('[data-atlas-shell]'),'statistics span the complete news/map/reading shell');
       assert.equal(q('[data-asia-statistics]').previousElementSibling,q('[data-asia-explorer]'),'statistics follow the main map and right reading');
-      assert.equal(q('[data-reading-details]').open,true,'the right reading is open by default');
+      assert.equal(q('[data-reading-details]').open,false,'details and sources are folded until explicitly requested');
       assert.equal(config.presentation.rainfall.interval,250);assert.equal(config.presentation.terrain.interval,500);
       assert.ok(config.farmInsight.rivers.length>=2);assert.equal(q('[data-farm-water]'),null);
       assert.ok(config.social.topics.some(t=>t.key==='overview'));

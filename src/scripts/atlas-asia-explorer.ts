@@ -117,6 +117,7 @@ function start(root:HTMLElement) {
   const readingDock=createAsiaReadingDock(root);
   const learningLayout=createAsiaLayout(root);
   let shownChartCity:string|null=null;
+  let shownUrbanDetail:string|null=null;
 
 
   function chooseFarm(topic:string){navigate({...state,field:'agriculture',topic,overlay:null,detail:null,story:null,point:state.point??config.cities.find(c=>c.id===state.city)?.coordinates??null,city:null,camera:camera()},false);}
@@ -187,7 +188,7 @@ function start(root:HTMLElement) {
   function selectCity(id:string) {const city=config.cities.find(c=>c.id===id);if(!city)return;navigate({...state,field:'natural',topic:null,detail:null,place:city.countryCode,city:id,camera:camera(),back:null,point:null},false);}
   function selectNaturalTopic(topic:string) {navigate({...state,field:'natural',topic:topic==='climate'?null:topic,detail:null,city:topic==='climate'?state.city:null,point:state.point??config.cities.find(c=>c.id===state.city)?.coordinates??null,camera:camera()},false);}
   function clearDetail() {navigate({...state,detail:null,point:null,city:null,camera:camera()},false);}
-  function selectUrban(id:string){if(!id){clearDetail();return;}const city=config.population?.cities.find(c=>c.id===id);if(city)navigate({...state,field:'population',topic:'density',detail:null,place:city.country,city:null,point:city.coordinates,camera:camera()},false);}
+  function selectUrban(id:string){if(!id){clearDetail();return;}const city=config.population?.cities.find(c=>c.id===id);if(city)navigate({...state,field:'population',topic:'urban',detail:city.id,place:city.country,city:null,point:city.coordinates,camera:camera()},false);}
   function selectWater(id:string) {if(!id){clearDetail();return;}const water=config.physical?.waterFeatures.find((f:any)=>f.id===id);if(!water)return;navigate({...state,field:'natural',topic:'water',detail:id,city:null,point:null,camera:camera(),place:state.place&&water.countries.includes(state.place)?state.place:water.countries.length===1?water.countries[0]:null});}
 
   function render() {
@@ -195,6 +196,8 @@ function start(root:HTMLElement) {
     const chartCity=naturalTopic()==='climate'?city?.id??null:null;
     if(chartCity&&chartCity!==shownChartCity){const details=root.querySelector<HTMLDetailsElement>('[data-reading-details]');if(details)details.open=true;}
     shownChartCity=chartCity;
+    const urbanDetail=state.field==='population'&&state.topic==='urban'?state.detail:null;
+    if(urbanDetail&&urbanDetail!==shownUrbanDetail){const details=root.querySelector<HTMLDetailsElement>('[data-reading-details]');if(details)details.open=true;shownUrbanDetail=urbanDetail;}
     countrySelect.value=state.place??'';
     citySelect.value=state.city??'';
     for(const option of citySelect.options){const allowed=!state.place||!option.value||option.dataset.country===state.place;option.hidden=!allowed;option.disabled=!allowed;}
@@ -643,7 +646,7 @@ function start(root:HTMLElement) {
   function syncReadingLayout(){
     // Each reading pane uses its own distance to the viewport bottom. Neither
     // the map's aspect ratio nor a short article determines the pane height.
-    for(const [selector,property] of [['.asia-reading-scroll','--asia-reading-height'],['.atlas-news','--asia-news-height']] as const){
+    for(const [selector,property] of [['.asia-reading-panel','--asia-reading-height'],['.atlas-news','--asia-news-height']] as const){
       const pane=$(selector);if(!pane)continue;
       const value=window.innerWidth>=960?`${Math.max(0,Math.floor(window.innerHeight-Math.max(12,pane.getBoundingClientRect().top)-12))}px`:'';
       if(root.style.getPropertyValue(property)!==value){if(value)root.style.setProperty(property,value);else root.style.removeProperty(property);}

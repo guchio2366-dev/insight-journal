@@ -4,8 +4,8 @@ import {readFile,access} from 'node:fs/promises';
 import {transform} from 'esbuild';
 import {Window} from 'happy-dom';
 
-// Oceania's published four-field overview has its own contract in atlas-oceania-overview.test.mjs.
-const regions=['north-america','europe','latin-america','west-asia','africa','asia/east-asia','asia/southeast-asia','asia/south-central-asia','asia/south-asia','asia/central-asia'];
+// Asia and Oceania's published overviews have dedicated contracts in their overview test files.
+const regions=['north-america','europe','latin-america','africa'];
 const mapController=await readFile('src/scripts/atlas-overview-map.ts','utf8');
 const pageController=(await readFile('src/scripts/atlas-country-overview.ts','utf8')).replace(/^import .* from ['"]\.\/atlas-overview-map['"];?\r?\n/m,'');
 const controller=(await transform(`${mapController}\n${pageController}\ninitCountryOverview(document.querySelector('[data-country-overview]'));`,{loader:'ts',format:'iife'})).code;
@@ -245,7 +245,7 @@ test('Static North America overview keeps regionwide defaults until the client r
   }finally{await w.happyDOM.close();}
 });
 
-test('共通概要10地域の初期HTMLは白地図と地域概況を示し、国別の本文は選択まで隠す',async()=>{
+test('共通概要4地域の初期HTMLは白地図と地域概況を示し、国別の本文は選択まで隠す',async()=>{
   const sitemap=await readFile('dist/sitemap.xml','utf8');
   for(const region of regions){
     const w=await page(region),d=w.document;
@@ -299,7 +299,7 @@ test('共通概要10地域の初期HTMLは白地図と地域概況を示し、�
   }
 });
 
-test('共通概要10地域で国名選択は地図と国別本文に連動し、全体へ戻すと選択を解除する',async()=>{
+test('共通概要4地域で国名選択は地図と国別本文に連動し、全体へ戻すと選択を解除する',async()=>{
   for(const region of regions){
     const w=await page(region,'',true),d=w.document;
     try{
@@ -375,14 +375,12 @@ test('都市選択と直接リンクが所属国を選び、国を変更する�
   finally{await conflicting.happyDOM.close();}
 });
 
-test('対象外の国は地域全体に戻り、南アジアと中央アジアの選択肢を混ぜない',async()=>{
-  for(const region of ['europe','asia/south-asia','asia/central-asia']){
+test('対象外の国は地域全体に戻り、不明なテーマを既定へ戻す',async()=>{
+  for(const region of ['europe']){
     const w=await page(region,'?country=XXX&topic=unknown',true),d=w.document;
     try{
       assert.equal(d.querySelector('[data-overview-country]').value,'');assert.equal(d.querySelector('[data-overview-country-detail]').hidden,true);
       assert.equal(selectedTopic(d).dataset.overviewTopic,'agriculture');assert.equal(new URL(w.location.href).searchParams.has('country'),false);assert.equal(new URL(w.location.href).searchParams.has('topic'),false);
-      if(region==='asia/south-asia')assert.equal(d.querySelector('option[value=KAZ]'),null);
-      if(region==='asia/central-asia')assert.equal(d.querySelector('option[value=IND]'),null);
     }finally{await w.happyDOM.close();}
   }
   const w=await page('europe','?country=FRA&topic=unknown',true);

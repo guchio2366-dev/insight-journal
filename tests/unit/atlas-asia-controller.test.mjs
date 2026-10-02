@@ -397,6 +397,22 @@ test('人口は都市の輪郭・1km格子・統計を表示し、比較復帰�
   assert.equal(q('[data-population-city-facts]').hidden,true);assert.equal(new URL(window.location.href).searchParams.has('at'),false);assert.equal(window.__map.layers['asia-population-uc-tokyo'].layout.visibility,'none');assert.equal(window.__maps.length,1);
  }finally{await window.happyDOM.close();}
 });
+test('都市一覧の実選択から都市主題・詳細格子・人口履歴へ到達して比較後も選択を戻せる',async()=>{
+ const {window,q}=await setup('?field=population&topic=density',{population:true,hitCountry:'JPN'});
+ try{
+  assert.equal(q('[data-population-city-facts]').hidden,true);
+  assert.equal(q('[data-reading-details]').open,false);
+  const frame={...window.__map.center,zoom:window.__map.zoom};q('[data-population-city]').value='uc-tokyo';q('[data-population-city]').dispatchEvent(new window.Event('change'));
+  const p=new URL(window.location.href).searchParams;assert.equal(p.get('topic'),'urban');assert.equal(p.get('detail'),'uc-tokyo');assert.equal(p.get('place'),'JPN');
+  assert.deepEqual({...window.__map.center,zoom:window.__map.zoom},frame);
+  await until(()=>q('[data-population-value]').textContent.includes('15,000'),'selected city numerical grid');
+  assert.equal(q('[data-population-city-facts]').hidden,false);assert.match(q('[data-urban-history]').textContent,/2000年.*30,000,000.*2020年.*33,447,551/);
+  assert.equal(q('[data-reading-details]').open,true);q('[data-reading-details]').open=false;
+  q('[data-population-city]').dispatchEvent(new window.Event('change'));assert.equal(q('[data-reading-details]').open,false);
+  q('[data-compare="natural"]').click();q('[data-comparison-back]').click();
+  assert.equal(new URL(window.location.href).searchParams.get('detail'),'uc-tokyo');assert.equal(q('[data-population-city-facts]').hidden,false);
+ }finally{await window.happyDOM.close();}
+});
 
 test('人口の推計0と取得失敗を区別し、密度図に都市の人口履歴を混ぜない',async()=>{
  for(const opts of [{populationZero:true},{populationFailure:true,mapFailure:true}]){
