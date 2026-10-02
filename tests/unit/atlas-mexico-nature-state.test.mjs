@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readMexicoNatureState, writeMexicoNatureState, mexicoNatureReturnUrl, mexicoNatureIndicator, mexicoNatureNormalView, indicatorColor, irrigationBins, densityBins, natureComparisonReading} from '../../src/lib/atlas-mexico-nature.ts';
+import {readMexicoNatureState, writeMexicoNatureState, mexicoNatureReturnUrl, mexicoNatureIndicator, mexicoNatureNormalView, mexicoNatureSelectView, natureClassIds, indicatorColor, irrigationBins, densityBins, natureComparisonReading} from '../../src/lib/atlas-mexico-nature.ts';
 import {irrigationBins as agricultureBins, irrigationColor} from '../../src/lib/atlas-mexico-agriculture.ts';
 import {mexicoDensityBins, mexicoDensityColor} from '../../src/lib/atlas-mexico-population.ts';
 const codes = Array.from({length: 32}, (_, index) => String(index + 1).padStart(2, '0'));
@@ -17,7 +17,7 @@ test('Agriculture comparison preserves the original metric, state, only and fall
 });
 test('Population comparison restores density or scale independently from the current comparison target', () => {
   const initial = readMexicoNatureState(new URL('https://example.test/?compare=population&view=climate&state=09&from=population&sourceView=population&sourceState=09&sourceOnly=1'), codes);
-  assert.equal(initial.view, 'relief');
+  assert.equal(initial.view, 'climate', 'An explicit natural target survives reload while the original population indicator is retained');
   const updated = {...initial, state: '15'};
   const saved = writeMexicoNatureState(new URL('https://example.test/'), updated);
   assert.deepEqual(readMexicoNatureState(saved, codes), updated);
@@ -65,4 +65,23 @@ test('Dedicated comparisons provide different causal readings and a consequence 
   assert.match(natureComparisonReading('irrigation', '25').body, /川や貯水池/);
   assert.match(natureComparisonReading('population', '09').body, /都市・交通・市場/);
   assert.match(natureComparisonReading('population', '09').consequence, /水供給・交通・住宅/);
+});
+test('Feature, pending category and target-layer choices retain comparison provenance and camera across URL restoration', () => {
+  const url = new URL('https://example.test/?compare=irrigation&from=agriculture&sourceMetric=pine&sourceState=10&state=26&sourceOnly=1&sourceFallback=1&fallback=1&only=0&frame=210,100,350,220&side=source');
+  const original = readMexicoNatureState(url, codes);
+  const selected = {...original, item: 'III', feature: 'relief-5', category: 'precipitation'};
+  assert.deepEqual(readMexicoNatureState(writeMexicoNatureState(url, selected), codes), selected);
+  assert.equal(writeMexicoNatureState(url, selected).searchParams.get('side'), 'source');
+  const switched = mexicoNatureSelectView(selected, 'climate');
+  assert.equal(switched.compare, 'irrigation'); assert.equal(switched.from, 'agriculture'); assert.equal(switched.sourceMetric, 'pine');
+  assert.equal(switched.item, 'III'); assert.equal(switched.feature, 'relief-5'); assert.equal(switched.category, '');
+  assert.deepEqual(switched.frame, original.frame); assert.deepEqual(readMexicoNatureState(writeMexicoNatureState(url, switched), codes), switched);
+  assert.match(mexicoNatureReturnUrl('/agriculture/', switched), /metric=pine/);
+  const invalid = readMexicoNatureState(new URL('https://example.test/?view=climate&item=unknown&feature=unknown&category=unknown'), codes);
+  assert.equal(invalid.item, ''); assert.equal(invalid.feature, ''); assert.equal(invalid.category, '');
+});
+test('Selectable item identifiers exactly match the original INEGI classes including missing classification', async () => {
+  const {readFile} = await import('node:fs/promises');
+  const nature = JSON.parse(await readFile('src/data/atlas/mexico/nature-v1.json', 'utf8'));
+  for (const view of ['climate', 'relief']) assert.deepEqual([...natureClassIds[view]].sort(), nature[view].classes.map(item => item.id).sort());
 });

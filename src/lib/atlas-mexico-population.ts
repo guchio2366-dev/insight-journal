@@ -1,6 +1,8 @@
 export type MexicoPopulationView = 'density' | 'population';
+export type MexicoPopulationCategory = 'distribution' | 'ethnicity' | 'religion';
 export type MexicoPopulationValueStatus = 'value' | 'zero' | 'missing' | 'confidential' | 'unavailable';
 export interface MexicoPopulationState {
+  category: MexicoPopulationCategory;
   view: MexicoPopulationView;
   state: string;
   only: boolean;
@@ -20,7 +22,7 @@ export interface MexicoPopulationRow {
   densityUnit: string;
   publishedAreaKm2: number;
 }
-export const mexicoPopulationKeys = ['view', 'state', 'only', 'compare', 'sourceView', 'fallback'] as const;
+export const mexicoPopulationKeys = ['category', 'view', 'state', 'only', 'compare', 'sourceView', 'fallback'] as const;
 export const mexicoDensityBins = [
   { min: 0, max: 25, color: '#f1f0d6', label: '25未満' },
   { min: 25, max: 50, color: '#c6debe', label: '25–50未満' },
@@ -69,7 +71,9 @@ export function readMexicoPopulationState(url: URL, stateCodes: readonly string[
   const p = url.searchParams;
   const view = validView(p.get('view'));
   const selected = p.get('state') ?? '';
+  const category = p.get('category');
   return {
+    category: category === 'ethnicity' || category === 'religion' ? category : 'distribution',
     view, state: stateCodes.includes(selected) ? selected : '09', only: p.get('only') === '1',
     compare: p.get('compare') === 'scale' ? 'scale' : null,
     sourceView: p.has('sourceView') ? validView(p.get('sourceView')) : view,
@@ -80,6 +84,7 @@ export function readMexicoPopulationState(url: URL, stateCodes: readonly string[
 export function writeMexicoPopulationState(url: URL, state: MexicoPopulationState): URL {
   const next = new URL(url);
   for (const key of mexicoPopulationKeys) next.searchParams.delete(key);
+  if (state.category !== 'distribution') next.searchParams.set('category', state.category);
   next.searchParams.set('view', state.view);
   next.searchParams.set('state', state.state);
   if (state.only) next.searchParams.set('only', '1');

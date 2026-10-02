@@ -68,7 +68,17 @@ test('URL state survives refresh, comparison and targeted return; malformed para
  const comparison=lib.mexicoPopulationScaleUrl(source,state);assert.equal(comparison.searchParams.get('compare'),'scale');assert.equal(comparison.searchParams.get('sourceView'),'population');
  const comparisonState=lib.readMexicoPopulationState(comparison,codes);const back=lib.mexicoPopulationReturnUrl(comparison,comparisonState);assert.equal(back.searchParams.get('view'),'population');assert.equal(back.searchParams.get('state'),'08');assert.equal(back.searchParams.get('only'),'1');assert.equal(back.searchParams.get('fallback'),'1');assert.equal(back.searchParams.get('compare'),null);
  for(const route of ['industry','nature']){const target=new URL(`/insight-journal/atlas/north-america/mexico/${route}/`,source);const result=(route==='industry'?lib.mexicoPopulationIndustryUrl:lib.mexicoPopulationNatureUrl)(target,state);assert.equal(result.pathname,target.pathname);assert.equal(result.searchParams.get('compare'),'population');assert.equal(result.searchParams.get('from'),'population');assert.equal(result.searchParams.get('state'),'08');assert.equal(result.searchParams.get('only'),'1');assert.equal(result.searchParams.get('sourceView'),'population');assert.equal(result.searchParams.get('fallback'),'1');if(route==='nature')assert.equal(result.searchParams.get('view'),'relief');}
- const invalid=lib.readMexicoPopulationState(new URL('https://example.test/?view=bad&state=999&compare=https://evil.test&only=true&sourceView=bad&fallback=true'),codes);assert.deepEqual(invalid,{view:'density',state:'09',compare:null,sourceView:'density',only:false,fallback:false});
+ const invalid=lib.readMexicoPopulationState(new URL('https://example.test/?category=bad&view=bad&state=999&compare=https://evil.test&only=true&sourceView=bad&fallback=true'),codes);assert.deepEqual(invalid,{category:'distribution',view:'density',state:'09',compare:null,sourceView:'density',only:false,fallback:false});
+});
+
+test('Unprepared population categories round-trip independently of source population data and comparison',()=>{
+ for(const category of ['ethnicity','religion']){
+  const source=new URL(`https://example.test/population/?category=${category}&view=population&state=08&only=1&fallback=1&compare=scale&sourceView=density&extra=keep`);
+  const state=lib.readMexicoPopulationState(source,codes);assert.equal(state.category,category);
+  const written=lib.writeMexicoPopulationState(source,state);assert.deepEqual(lib.readMexicoPopulationState(written,codes),state);assert.equal(written.searchParams.get('extra'),'keep');
+  const back=lib.mexicoPopulationReturnUrl(written,state);assert.equal(back.searchParams.get('category'),category);assert.equal(back.searchParams.get('view'),'density');assert.equal(back.searchParams.get('state'),'08');assert.equal(back.searchParams.get('only'),'1');assert.equal(back.searchParams.get('fallback'),'1');
+  const distribution=lib.writeMexicoPopulationState(written,{...state,category:'distribution'});assert.equal(distribution.searchParams.has('category'),false);assert.equal(distribution.searchParams.get('compare'),'scale');assert.equal(distribution.searchParams.get('view'),'population');
+ }
 });
 
 test('Each static SVG substitute retains the 32 actual state outlines and matching encodings',async()=>{

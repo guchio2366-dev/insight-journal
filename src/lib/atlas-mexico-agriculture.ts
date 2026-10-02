@@ -1,9 +1,12 @@
-export type MexicoAgricultureMetric = 'maize' | 'irrigation' | 'pine';
+export type MexicoAgricultureMetric = 'maize' | 'irrigation' | 'pine' | 'cattle';
 export interface MexicoAgricultureState {
   metric: MexicoAgricultureMetric;
   state: string;
   only: boolean;
   fallback: boolean;
+  crops: boolean;
+  livestock: boolean;
+  onlyItem: boolean;
 }
 export interface MexicoAgricultureRecord {
   code: string;
@@ -17,6 +20,7 @@ export interface MexicoAgricultureRecord {
   maizeWhiteIrrigatedProductionT: number;
   maizeWhiteRainfedProductionT: number;
   pineObtainedM3: number;
+  cattleHeads?: number | null;
   status: string;
 }
 export const agricultureMetrics = [
@@ -38,8 +42,14 @@ export const agricultureMetrics = [
     comparisonTitle: '松材取得と山地を比べる',
     comparisonDescription: '地形と元の松材取得量を並べ、冷涼な山地の森林資源が木材供給につながる背景を読む。',
     table: 'ca2022_for15'},
+  {id: 'cattle' as const, name: '牛の飼養頭数', unit: '頭', defaultState: '30',
+    title: '牛の頭数は、どの州に多い？', color: '#8f4d6a',
+    caption: '2022年9月の牛の頭数。農業生産単位と住宅を含み、肉・乳の生産量や飼養域の面積ではありません。',
+    comparisonTitle: '牛の頭数と気候を比べる',
+    comparisonDescription: '気候と州別の牛の頭数を読み分けます。頭数だけで飼養地や生産方法は決まりません。',
+    table: 'ca2022_gan02'},
 ];
-export const agricultureSymbolKeys = {maize: [100000, 1000000, 5000000], pine: [100000, 1000000, 4000000]};
+export const agricultureSymbolKeys = {maize: [100000, 1000000, 5000000], pine: [100000, 1000000, 4000000], cattle:[100000,1000000,2500000]};
 export const irrigationBins = [
   {min: 0, max: 25, label: '0～25%未満', color: '#e8f1d8'},
   {min: 25, max: 50, label: '25～50%未満', color: '#c0d991'},
@@ -56,7 +66,7 @@ export function quantityRadius(value: number, maximum: number, maximumRadius = 3
   return maximumRadius * Math.sqrt(value / maximum);
 }
 export function agricultureValue(record: MexicoAgricultureRecord, metric: MexicoAgricultureMetric): number {
-  return metric === 'irrigation' ? record.irrigationSharePct : metric === 'pine' ? record.pineObtainedM3 : record.maizeWhiteProductionT;
+  return metric === 'irrigation' ? record.irrigationSharePct : metric === 'pine' ? record.pineObtainedM3 : metric==='cattle' ? record.cattleHeads??NaN : record.maizeWhiteProductionT;
 }
 export function formatAgricultureValue(value: number, metric: MexicoAgricultureMetric, includeUnit = true): string {
   if (!Number.isFinite(value)) return '未取得';
@@ -73,7 +83,8 @@ export function readMexicoAgricultureState(url: URL, codes: string[] = Array.fro
   const code = /^\d{1,2}$/.test(rawCode) ? rawCode.padStart(2, '0') : '';
   return {metric, state: codes.includes(code) ? code : defaultState,
     only: ['1', 'true'].includes(url.searchParams.get('only') ?? ''),
-    fallback: ['1', 'true'].includes(url.searchParams.get('fallback') ?? '')};
+    fallback: ['1', 'true'].includes(url.searchParams.get('fallback') ?? ''),
+    crops:url.searchParams.get('crops')!=='0',livestock:url.searchParams.get('livestock')!=='0',onlyItem:url.searchParams.get('onlyItem')==='1'};
 }
 export function writeMexicoAgricultureState(url: URL, state: MexicoAgricultureState): URL {
   const result = new URL(url.href);
@@ -83,6 +94,8 @@ export function writeMexicoAgricultureState(url: URL, state: MexicoAgricultureSt
     if (state[key]) result.searchParams.set(key, '1');
     else result.searchParams.delete(key);
   }
+  for(const key of ['crops','livestock'] as const){if(state[key]===false)result.searchParams.set(key,'0');else result.searchParams.delete(key);}
+  if(state.onlyItem)result.searchParams.set('onlyItem','1');else result.searchParams.delete('onlyItem');
   return result;
 }
 export function agricultureNatureComparisonUrl(naturePath: string, state: MexicoAgricultureState, origin = 'https://example.invalid'): URL {
@@ -94,5 +107,8 @@ export function agricultureNatureComparisonUrl(naturePath: string, state: Mexico
   result.searchParams.set('sourceState', state.state);
   result.searchParams.set('sourceOnly', state.only ? '1' : '0');
   result.searchParams.set('sourceFallback', state.fallback ? '1' : '0');
+  result.searchParams.set('sourceCrops',state.crops===false?'0':'1');
+  result.searchParams.set('sourceLivestock',state.livestock===false?'0':'1');
+  result.searchParams.set('sourceOnlyItem',state.onlyItem?'1':'0');
   return result;
 }

@@ -24,6 +24,19 @@ export function initMexicoPopulation(root: HTMLElement) {
     const selected = population.states.find(row => row.stateCode === state.state)!;
     const region = mexicoPopulationRegionReading(state.state);
     const comparison = state.compare === 'scale';
+    const unavailable = state.category !== 'distribution';
+    const categoryLabel = state.category === 'religion' ? '宗教' : '人種・民族';
+    const referencePrefix = unavailable ? '参考：人口分布 · ' : '';
+    root.dataset.populationCategory = state.category;
+    for (const button of root.querySelectorAll<HTMLButtonElement>('[data-population-category]')) {
+      button.setAttribute('aria-pressed', String(button.dataset.populationCategory === state.category));
+    }
+    query<HTMLElement>('[data-population-unavailable]').hidden = !unavailable;
+    query<HTMLElement>('[data-population-distribution-reading]').hidden = unavailable;
+    query<HTMLElement>('[data-population-reference]').hidden = !unavailable;
+    query<HTMLElement>('[data-population-reference-values]').hidden = !unavailable;
+    query<HTMLElement>('[data-population-unavailable-heading]').textContent = `${categoryLabel}の分布は未整備です。`;
+    query<HTMLElement>('[data-population-unavailable-text]').textContent = `現在の地図は、2020年の州別人口を示す参考図です。${categoryLabel}の構成や分布を示していません。`;
     const showPopulation = state.view === 'population' || comparison;
     const showDensity = state.view === 'density' || comparison;
     root.classList.toggle('is-comparison', comparison);
@@ -37,12 +50,13 @@ export function initMexicoPopulation(root: HTMLElement) {
     query<HTMLElement>('[data-population-density-key]').hidden = !showDensity;
     query<HTMLElement>('[data-population-symbol-key]').hidden = !showPopulation;
     query<HTMLElement>('[data-population-scale-reading]').hidden = !comparison;
-    query<HTMLElement>('[data-population-reading-heading]').textContent = comparison
+    query<HTMLElement>('[data-population-scale-heading]').textContent = referencePrefix + '人口規模 × 人口密度';
+    query<HTMLElement>('[data-population-reading-heading]').textContent = unavailable ? `${categoryLabel}（未整備）` : comparison
       ? '人口の多さと密度は、どこで違う？' : mexicoPopulationReading.title;
-    query<HTMLElement>('[data-population-map-heading]').textContent = comparison
-      ? '人口規模 × 人口密度（2020年）' : state.view === 'density' ? '2020年、人口はどこに集まる？' : '2020年、州人口の規模を比べる';
-    query('[data-population-map] title').textContent = comparison
-      ? '2020年の州別人口密度と面積比例の州人口' : state.view === 'density' ? '2020年の州別人口密度' : '2020年の州人口。円の面積で規模を表示。';
+    query<HTMLElement>('[data-population-map-heading]').textContent = referencePrefix + (comparison
+      ? '人口規模 × 人口密度（2020年）' : state.view === 'density' ? '2020年、人口はどこに集まる？' : '2020年、州人口の規模を比べる');
+    query('[data-population-map] title').textContent = referencePrefix + (comparison
+      ? '2020年の州別人口密度と面積比例の州人口' : state.view === 'density' ? '2020年の州別人口密度' : '2020年の州人口。円の面積で規模を表示。');
 
     for (const shape of root.querySelectorAll<SVGPathElement>('[data-population-state-shape]')) {
       const code = shape.dataset.populationStateShape!;
@@ -114,19 +128,23 @@ export function initMexicoPopulation(root: HTMLElement) {
       staticMap.prepend(style);
       fallbackImage.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(new XMLSerializer().serializeToString(staticMap))}`;
     }
-    query<HTMLElement>('[data-population-fallback-caption]').textContent = `地図の代替表示：${state.only ? `${selected.nameJa}のデータのみ（州境は位置の参考）` : '全32州の分布'}。選んだ州の値は右側で確認できます。`;
-    fallbackImage.alt = comparison
+    query<HTMLElement>('[data-population-fallback-caption]').textContent = referencePrefix + `地図の代替表示：${state.only ? `${selected.nameJa}のデータのみ（州境は位置の参考）` : '全32州の分布'}。選んだ州の値は右側で確認できます。`;
+    fallbackImage.alt = referencePrefix + (comparison
       ? '2020年の全32州の人口密度と州人口。色は密度、円の面積は人口。両凡例と全州の表で値を確認できます。'
       : state.view === 'density'
         ? '2020年の全32州の人口密度。色の凡例と全州の表で値を確認できます。'
-        : '2020年の全32州の人口。円の面積の凡例と全州の表で値を確認できます。';
-    query<HTMLElement>('[data-population-map-status]').textContent = `2020年・${comparison ? '人口密度と人口規模' : state.view === 'density' ? '州全域の平均密度' : '州人口の規模'}。${state.only ? '選択州のデータのみ（州境は位置の参考）' : '全32州'}。${selected.nameJa}を選択。`;
+        : '2020年の全32州の人口。円の面積の凡例と全州の表で値を確認できます。');
+    query<HTMLElement>('[data-population-map-status]').textContent = referencePrefix + `2020年・${comparison ? '人口密度と人口規模' : state.view === 'density' ? '州全域の平均密度' : '州人口の規模'}。${state.only ? '選択州のデータのみ（州境は位置の参考）' : '全32州'}。${selected.nameJa}を選択。`;
   }
 
   function update(patch: Partial<MexicoPopulationState>) {
     state = { ...state, ...patch };
     history.pushState(null, '', writeMexicoPopulationState(new URL(location.href), state));
     render();
+  }
+
+  for (const button of root.querySelectorAll<HTMLButtonElement>('[data-population-category]')) {
+    button.addEventListener('click', () => update({category: button.dataset.populationCategory as MexicoPopulationState['category']}));
   }
 
   query<HTMLSelectElement>('[data-population-view]').addEventListener('change', event => update({view:(event.target as HTMLSelectElement).value as MexicoPopulationState['view']}));
