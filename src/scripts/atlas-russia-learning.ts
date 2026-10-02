@@ -45,13 +45,19 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
  const scene=(hook:string,id:string)=>{
   const el=one(hook),bounds=el.getBoundingClientRect();
   const layer=getRussiaLayer(id,state);
-  el.innerHTML=renderRussiaScene(layer,state,hook,{width:bounds.width||640,height:bounds.height||320})+`<span class="russia-map-caption">${htmlEscape(layer.period+'・'+layer.unit)}</span>`;
+   el.innerHTML=renderRussiaScene(layer,state,hook,{width:bounds.width||640,height:bounds.height||320});
+   el.querySelector('.russia-map-captions')!.insertAdjacentHTML('beforeend',`<span class="russia-map-caption">${htmlEscape(layer.period+'・'+layer.unit)}</span>`);
  };
  const sources=(items:RussiaSource[])=>{
   const unique=[...new Map(items.map(source=>[source.url+'|'+source.title,source])).values()];
   one('source-list').innerHTML=unique.map(source=>`<div class="russia-learning-citation"><a href="${htmlEscape(source.url)}">${htmlEscape(source.title)}</a>${source.note?`<p>${htmlEscape(source.note)}</p>`:''}</div>`).join('');
  };
- const render=()=>{
+  const render=()=>{
+   const active=document.activeElement as Element|null;
+   const focusedMarker=active&&root.contains(active)?active.closest<SVGElement>('[data-region-marker]'):null;
+   const focusedScene=focusedMarker?.closest<HTMLElement>('[data-primary-map],[data-original-map],[data-comparison-map]');
+   const focusedHook=focusedScene?.hasAttribute('data-primary-map')?'primary-map':focusedScene?.hasAttribute('data-original-map')?'original-map':focusedScene?'comparison-map':undefined;
+   const focusedPlace=focusedMarker?.dataset.mapPlace;
   const theme=getRussiaTheme(state),layer=getRussiaLayer(state.layer,state),compare=getRussiaLayer(state.compareLayer,state);
   const comparisonReading=getRussiaComparisonReading(state);
   one<HTMLSelectElement>('place').value=state.place;
@@ -97,8 +103,9 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
    link.href=serialized({...state,field:nextField,theme:nextTheme.id,layer:nextTheme.defaultLayer,compareLayer:nextTheme.comparisonLayer,comparison:false},withBase(`/atlas/russia/${nextField}/`)).href;
   });
   root.querySelectorAll<HTMLAnchorElement>('[data-russia-overview-link]').forEach(link=>{link.href=serialized({...state,comparison:false},link.href).href;});
-  if(state.comparison){scene('original-map',state.layer);scene('comparison-map',state.compareLayer);}
-  else scene('primary-map',state.layer);
+   if(state.comparison){scene('original-map',state.layer);scene('comparison-map',state.compareLayer);}
+   else scene('primary-map',state.layer);
+   if(focusedHook&&focusedPlace)one(focusedHook).querySelector<SVGElement>(`[data-region-marker][data-map-place="${focusedPlace}"]`)?.focus({preventScroll:true});
  };
  const update=(mutate:()=>void,focus?:string)=>{
   mutate();selected=true;history.pushState({},'',serialized(state));render();
@@ -121,12 +128,23 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
  })));
  one('comparison').addEventListener('click',()=>update(()=>{state.comparison=true;},'return'));
  one('return').addEventListener('click',()=>update(()=>{state.comparison=false;},'comparison'));
- root.addEventListener('click',event=>{
-  const selected=(event.target as Element).closest<SVGElement>('[data-map-place]');
-  if(selected&&russiaRegions.some(region=>region.code===selected.dataset.mapPlace))update(()=>{
-   state.place=selected.dataset.mapPlace as RussiaState['place'];state.scope='region';chooseRegionTheme();
+  const selectMapRegion=(selected:HTMLElement|SVGElement)=>{
+   if(!russiaRegions.some(region=>region.code===selected.dataset.mapPlace))return;
+   const scene=selected.closest<HTMLElement>('[data-primary-map],[data-original-map],[data-comparison-map]');
+   const hook=scene?.hasAttribute('data-primary-map')?'primary-map':scene?.hasAttribute('data-original-map')?'original-map':scene?'comparison-map':undefined;
+   const place=selected.dataset.mapPlace!;
+   update(()=>{state.place=place;state.scope='region';chooseRegionTheme();});
+   if(hook)one(hook).querySelector<SVGElement>(`[data-region-marker][data-map-place="${place}"]`)?.focus({preventScroll:true});
+  };
+  root.addEventListener('click',event=>{
+   const selected=(event.target as Element).closest<HTMLElement|SVGElement>('[data-map-place]');
+   if(selected)selectMapRegion(selected);
   });
- });
+  root.addEventListener('keydown',event=>{
+   const selected=(event.target as Element).closest<SVGElement>('[data-region-marker]');
+   if(!selected||(event.key!=='Enter'&&event.key!==' '))return;
+   event.preventDefault();if(!event.repeat)selectMapRegion(selected);
+  });
  window.addEventListener('popstate',()=>{state=createRussiaState(location.search,field);if(overview){state.layer='cities';const requested=new URLSearchParams(location.search).get('compare');if(!requested||getRussiaLayer(requested).id!==requested)state.compareLayer='density';}selected=state.place!=='all'||state.scope!=='all';render();});
  history.replaceState({},'',serialized(state));render();
  let resizing=false;
