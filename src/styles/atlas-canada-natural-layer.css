@@ -27,6 +27,7 @@
 .canada-natural-key button { display: inline-flex; align-items: center; gap: 5px; min-height: 32px; padding: 4px 7px; border: 1px solid #bac9c6; border-radius: 4px; background: #fff; color: #243f48; font: 600 12px/1.4 var(--sans, sans-serif); cursor: pointer; }
 .canada-natural-key button[aria-pressed="true"] { border-color: #243f4c; outline: 1px solid #243f4c; background: #f4f5ed; }
 .canada-natural-key i { flex: 0 0 14px; width: 14px; height: 10px; border: 1px solid #758275; }
+.canada-natural-layer[data-canada-natural-layer="elevation"] .canada-natural-key i { flex-basis: 18px; width: 18px; height: 2px; border: 0; }
 .canada-natural-options { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; }
 .canada-natural-only { display: flex; align-items: center; gap: 5px; min-height: 30px; color: #334a4d; font: 13px/1.5 var(--sans, sans-serif); }
 .canada-natural-status, .canada-natural-caption, .canada-natural-sources { margin: 3px 0; color: #526765; font: 12px/1.6 var(--sans, sans-serif); }
