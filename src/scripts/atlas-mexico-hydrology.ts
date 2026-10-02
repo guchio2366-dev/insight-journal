@@ -17,6 +17,7 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
   const plainReturn = q<HTMLElement>('[data-mexico-nature-plain-return]'), returnHome = document.createComment('water-return-home'); plainReturn?.before(returnHome);
   const overview=q<HTMLElement>('[data-mexico-overview-button]'),overviewHome=document.createComment('water-overview-home');overview?.before(overviewHome);const actions=document.createElement('div');actions.className='mexico-water-reading-actions';actions.setAttribute('data-mexico-water-reading-actions','');
   const comparisonValue=q<HTMLElement>('[data-mexico-nature-comparison-value]'),valueHome=document.createComment('water-value-home');comparisonValue?.before(valueHome);
+  const readingTitle=q<HTMLElement>('[data-mexico-hydrology-title]'),titleHome=document.createComment('water-title-home');readingTitle?.before(titleHome);
   const dock=q<HTMLElement>('.mexico-nature-comparison-dock'),dockHome=document.createComment('water-dock-home');dock?.before(dockHome);
   const alternativeComparisons=document.createElement('details');alternativeComparisons.setAttribute('data-mexico-water-other-comparisons','');const alternativeSummary=document.createElement('summary');alternativeSummary.textContent='別の指標との比較';alternativeComparisons.append(alternativeSummary);
   const status=q<HTMLElement>('[data-mexico-hydrology-status]'),statusHome=document.createComment('water-status-home');status?.before(statusHome);
@@ -39,9 +40,12 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
     show('[data-mexico-hydrology-reading]',active && !compared);
     if (compared && body && comparisonBody) {comparisonDetails.append(body); comparisonBody.prepend(comparisonDetails);if(retry)comparisonBody.prepend(retry);if(status)comparisonBody.prepend(status);comparisonBody.prepend(comparisonName);}
     else {if (body && bodyHome.parentNode) bodyHome.after(body);if(status && statusHome.parentNode)statusHome.after(status);if(retry && retryHome.parentNode)retryHome.after(retry); comparisonDetails.remove(); comparisonName.remove();}
-    if (compared && plainReturn && overview && overviewHome.parentNode) {actions.append(overview,plainReturn);overviewHome.after(actions);}
+    if (compared && plainReturn && overviewHome.parentNode) {actions.append(plainReturn);overviewHome.after(actions);}
     else if(compared && plainReturn)q('.mexico-nature-comparison-dock')?.after(plainReturn);
-    else {if(overview && overviewHome.parentNode)overviewHome.after(overview);actions.remove();if (plainReturn && returnHome.parentNode)returnHome.after(plainReturn);}
+    else {actions.remove();if (plainReturn && returnHome.parentNode)returnHome.after(plainReturn);}
+    if(active && overview && (compared?comparisonBody:body))(compared?comparisonBody:body)!.append(overview);
+    else if(overview && overviewHome.parentNode)overviewHome.after(overview);
+    if(active && readingTitle && body)body.prepend(readingTitle);else if(readingTitle && titleHome.parentNode)titleHome.after(readingTitle);
     if(compared && comparisonValue && actions.parentNode){actions.after(comparisonValue);comparisonValue.setAttribute('data-mexico-water-fixed-value','');}
     else {if(comparisonValue && valueHome.parentNode)valueHome.after(comparisonValue);comparisonValue?.removeAttribute('data-mexico-water-fixed-value');}
     if(compared && dock && comparisonBody){alternativeComparisons.append(dock);comparisonBody.append(alternativeComparisons);}
@@ -77,7 +81,7 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
     const name = selected ? mexicoWaterFeatureName(selected.feature) : titles[category];
     const riverOrder=selected?.layer==='rivers' ? /^rivers-order-([789])$/.exec(String(selected.feature.properties.classId ?? ''))?.[1] : null;
     text('[data-mexico-hydrology-title]',riverOrder ? `小流域内次数${riverOrder}の河川` : name);q('[data-mexico-hydrology-title]')?.setAttribute('title',name);
-    const lead = category === 'elevation' ? selected ? `原DEMから作成した${selected.feature.properties.elevationM.toLocaleString('ja-JP')} mの等高線を選択しています。` : '同じ標高の線をたどり、山地・高原・沿岸低地の高さを比べる。' : category === 'precipitation' ? '降水の地域差を、河川・地下水の供給と農地の水管理につなげる。' : category === 'basins' ? '水が集まる地域の境と、州境を区別して読む。' : available.includes('groundwater') ? '川の次数と水文地質区分を分け、農業・都市への水供給を読む。' : '同じ小流域内で同じ次数の支流が合流すると1つ増える分類。流量・川幅ではない（地下水未配信）。';
+    const lead = category === 'elevation' ? selected ? `原DEMから作成した${selected.feature.properties.elevationM.toLocaleString('ja-JP')} mの等高線を選択しています。` : '同じ標高の線をたどり、山地・高原・沿岸低地の高さを比べる。' : category === 'precipitation' ? '降水の地域差を、河川・地下水の供給と農地の水管理につなげる。' : category === 'basins' ? '水が集まる地域の境と、州境を区別して読む。' : available.includes('groundwater') ? '川の次数と水文地質区分を分け、農業・都市への水供給を読む。' : '地下水は未配信。河川網と水供給を読む。';
     text('[data-mexico-hydrology-lead]', lead);
     text('[data-mexico-hydrology-definition]', meanings[subject]);
     text('[data-mexico-hydrology-limitations]',limitations[subject]+(category==='rivers-groundwater'&&!available.includes('groundwater')?' 地下水の地質分類は、分類別表示の負荷検証が未完のため未配信です。':''));
@@ -88,8 +92,8 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
     if (source) source.replaceChildren(...available.map(layer => {const record = manifest!.layers[layer]!, p = document.createElement('p'), link = document.createElement('a'); const url = record.url ?? record.sourceUrl ?? record.source?.url; if (url && /^https?:\/\//.test(url)) {link.href = url; link.target = '_blank'; link.rel = 'noopener'; link.textContent = mexicoWaterSourceText(record); p.append(link);} else p.textContent = mexicoWaterSourceText(record); p.append(document.createTextNode(`。${methods[layer]}。${layer === 'contours' ? 'NOAA・CC0。原DEMの鉛直基準はEGM2008。' : 'INEGI自由使用条件に基づき、出典・加工・原metadataを保存しています。'}`)); const details = document.createElement('a'); details.href = assetBase + 'manifest.json'; details.textContent = '原metadata・利用条件・加工方法とSHA'; p.append(document.createTextNode(' '),details); return p;}));
     text('[data-mexico-nature-map-title]', `${category === 'precipitation' ? '年平均降水量' : titles[category]}の分布`);
     text('#mexico-nature-map-title',`メキシコの${titles[category]}の全国分布`); text('#mexico-nature-map-desc',`${meanings[category]}。${category === 'elevation' || category === 'precipitation' ? '数値ラベルは原線上の代表値です。全原線は保持し、地図下の項目から各値・区間を選択できます。' : '原区域・原区間を保持し、地図下の項目から流域や局所次数を選択できます。'}`);
-    text('[data-mexico-nature-map-edition]', metadata.edition ? `${metadata.publisher ?? metadata.source?.publisher ?? '原資料'}・${metadata.edition}版` : metadata.publisher ?? metadata.source?.publisher ?? '原資料');
-    text('[data-mexico-nature-period]', available.includes('basins') && available.includes('rivers') ? 'INEGI：国内流域158区分／小流域内Strahler次数7〜9。版・観測期未確認。' : category==='rivers-groundwater'&&available.length===1&&available[0]==='rivers'?'INEGI：小流域内Strahler次数7〜9。図版年・観測期は未確認。':available.map(layer => mexicoWaterSourceText(manifest!.layers[layer]!)).join(' / '));
+    text('[data-mexico-nature-map-edition]', metadata.edition ? `${metadata.publisher ?? metadata.source?.publisher ?? '原資料'}・${metadata.edition}版` : available.includes('rivers')?'INEGI・版/期未確認':metadata.publisher ?? metadata.source?.publisher ?? '原資料');
+    text('[data-mexico-nature-period]', available.includes('rivers') ? '小流域内：同じ次数の合流で+1。流量・川幅ではない。' : available.map(layer => mexicoWaterSourceText(manifest!.layers[layer]!)).join(' / '));
   }
   function keys(layers: MexicoHydrologyLayer[]): void {
     const legend = q<HTMLUListElement>('[data-mexico-hydrology-legend]'); if (!legend) return;
