@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "preparedAt": "2026-10-02",
+  "scope": "Selected official census cases, not Europe-wide cultural coverage; LAD and national grains differ",
+  "caseIds": [
+    "england-wales-2021",
+    "croatia-national-2021"
+  ],
+  "sources": {
+    "ts021": {
+      "file": "census2021-ts021.zip",
+      "bytes": 5891579,
+      "sha256": "ca2301d72a2de7e91c495695b6dceddb4dd318b580ae530b61582f851144fc78",
+      "retrievedAt": "2026-10-02T16:33:08.587Z",
+      "url": "https://www.nomisweb.co.uk/output/census/2021/census2021-ts021.zip"
+    },
+    "ts030": {
+      "file": "census2021-ts030.zip",
+      "bytes": 3560319,
+      "sha256": "7b587bd7069030d96c1e7ce943cb5924c197e9e0420338967f6dda8cc29bb41a",
+      "retrievedAt": "2026-10-02T16:33:01.392Z",
+      "url": "https://www.nomisweb.co.uk/output/census/2021/census2021-ts030.zip"
+    },
+    "boundary": {
+      "file": "ons-lad-december-2021-ew-buc.geojson",
+      "bytes": 684711,
+      "sha256": "192749be043f56da246c5266f40e9c284c4070d18dd3161cc41ea5c20eb3d92c",
+      "retrievedAt": "2026-10-02T16:34:43.487Z",
+      "url": "https://services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services/Local_Authority_Districts_December_2021_UK_BUC_2022/FeatureServer/0/query?where=LAD21CD%20LIKE%20%27E%25%27%20OR%20LAD21CD%20LIKE%20%27W%25%27&outFields=LAD21CD,LAD21NM,LAD21NMW&outSR=4326&returnGeometry=true&f=geojson"
+    },
+    "croatia": {
+      "file": "croatia-2021-municipalities.xlsx",
+      "bytes": 18279747,
+      "sha256": "c2b1cff240a19b5bfbf6dcb5e919a264284dfa444a326adae5517bf39b6d7d42",
+      "retrievedAt": "2026-10-02T16:33:55.597Z",
+      "lastModifiedAt": "2025-06-13T09:04:57Z",
+      "url": "https://podaci.dzs.hr/media/td3jvrbu/popis_2021-stanovnistvo_po_gradovima_opcinama.xlsx"
+    },
+    "croatiaOutline": {
+      "file": "src/data/atlas/europe-countries.json",
+      "bytes": 78871,
+      "sha256": "74188768119719459793e99eebdc29a90abe85881bdfc15d76ab144ec6320237",
+      "publisher": "Natural Earth",
+      "licence": "Public domain",
+      "method": "Existing HRV national outline, unchanged coordinates; display only"
+    }
+  },
+  "selectedExtracts": [
+    {
+      "file": "census2021-ts021-ltla.csv",
+      "bytes": 49271,
+      "sha256": "a343c70e6662a4a6d18c3bed28f6e3163254e6963e1f5bb1ccd8b802211dea3f"
+    },
+    {
+      "file": "census2021-ts021-ctry.csv",
+      "bytes": 2055,
+      "sha256": "41f1e30981ecfb508d0cfe654b2e76d797698d5c6e84eb03c086fcae239a5766"
+    },
+    {
+      "file": "census2021-ts030-ltla.csv",
+      "bytes": 25781,
+      "sha256": "e78f850af029875563134f209c3d986d7c1859e1aaf39b3a5216b54dfc2d7189"
+    },
+    {
+      "file": "census2021-ts030-ctry.csv",
+      "bytes": 541,
+      "sha256": "cb2909c52770deb499d4275509b9f1747c310a419a59222f76481d7ed5322415"
+    },
+    {
+      "file": "ts021-source-metadata.txt",
+      "bytes": 3974,
+      "sha256": "4e408a59e7827d7b2f69aa3954504047bf8b1f7e6d60638fa604a275f0163aac"
+    },
+    {
+      "file": "ts030-source-metadata.txt",
+      "bytes": 3983,
+      "sha256": "719bbbb06757b87071cc78511166dc81d9fb390ce564e83cbb9382b36b0d92ee"
+    },
+    {
+      "file": "england-wales-lad2021-source.geojson",
+      "bytes": 684711,
+      "sha256": "192749be043f56da246c5266f40e9c284c4070d18dd3161cc41ea5c20eb3d92c"
+    },
+    {
+      "file": "croatia-national-2021-source.json",
+      "bytes": 9234,
+      "sha256": "f6ccbee82550944743c9026edd71cc9138193e5d18f92f44f6cc6b58a35eaf77"
+    }
+  ],
+  "assets": [
+    {
+      "file": "cases.json",
+      "bytes": 143689,
+      "sha256": "939a8bd3b9738ec45265cef00ac3453ca15030b09eecb3d415e76c7d82919a56"
+    },
+    {
+      "file": "england-wales-lad2021.geojson",
+      "bytes": 699176,
+      "sha256": "08b72d6c554c2476f9e61f93f7eec1dd0d9304a3e074f27ee7219c120a64cfdc"
+    },
+    {
+      "file": "croatia-national-outline.geojson",
+      "bytes": 1165,
+      "sha256": "5fd2a676c38517ed8ff52db6519e3d80a2f9b0662ed34ef4078c1e4a1b3aeda7"
+    }
+  ],
+  "checks": {
+    "exactCensusBoundaryJoin": true,
+    "areaCount": 331,
+    "englandAreas": 309,
+    "walesAreas": 22,
+    "ethnicDetailCategories": 19,
+    "religiousCategories": 9,
+    "preservesTopicSpecificDenominators": true,
+    "croatiaNationalRowsOnly": true,
+    "croatiaDenominator": 3871833,
+    "croatiaEthnicityCategories": 29,
+    "croatiaReligionCategories": 12,
+    "mixedGrainsNeverHarmonised": true
+  }
+}

@@ -53,3 +53,14 @@
   .eu-workspace-root .eu-climate-statistic-layout { grid-template-columns:minmax(0,1fr); gap:18px; }
   .eu-workspace-root .eu-statistics-availability { grid-template-columns:minmax(0,1fr); }
 }
+
+/* The selected station uses the shared plot once, beside the map. */
+.eu-workspace-root .eu-inline-climate-plot { width:100%; max-width:320px; margin:4px auto 0; }
+.eu-workspace-root .eu-inline-climate-plot :is(.atlas-climate-grid text,.atlas-climate-unit,.atlas-climate-month,.atlas-climate-temp-label,.atlas-climate-axis-title) { font-size:12px; }
+.eu-workspace-root .eu-inline-climate-plot .eu-chart-key { display:flex; flex-wrap:wrap; justify-content:space-between; gap:4px 8px; margin:3px 0 0; font:12px/1.5 var(--sans); }
+.eu-workspace-root .eu-city-reading .eu-city-chart-meta { margin:2px 0 3px; font:12px/1.5 var(--sans); }
+.eu-workspace-root .eu-city-reading .eu-city-selected-note { margin:5px 0; font:13px/1.5 var(--sans); }
+.eu-workspace-root .eu-city-selected-note strong { font-weight:600; }
+.eu-workspace-root .eu-city-reading-details { border-top:1px solid #c7cec3; margin-top:6px; }
+.eu-workspace-root .eu-city-reading-details>summary { min-height:32px; padding:6px 0; font:13px/1.5 var(--sans); cursor:pointer; }
+.eu-workspace-root .eu-city-reading-details>summary:focus-visible { outline:3px solid #176f89; outline-offset:3px; }

@@ -1,0 +1,123 @@
+/* Source and target use independent registered maps and complete colour keys. */
+@media(min-width:960px) {
+ .eu-workspace-root[data-europe-detail].has-eu-source-map .eu-map-panel {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) clamp(240px,40%,264px);
+  gap:8px;
+  align-items:start;
+ }
+ .eu-workspace-root[data-europe-detail].has-eu-source-map .eu-map-panel>* { grid-column:1 / -1; }
+ .eu-workspace-root[data-europe-detail].has-eu-comparison.has-eu-source-map .eu-map-panel .eu-map-stage {
+  grid-column:1;
+  grid-row:1;
+  width:100%;
+  height:auto;
+  min-height:clamp(360px,calc(100dvh - 390px),390px);
+  max-height:none;
+  aspect-ratio:auto;
+  align-self:stretch;
+ }
+ .eu-workspace-root[data-europe-detail].has-eu-source-map .eu-map-panel>.eu-origin-reference-map {
+  grid-column:2;
+  grid-row:1;
+  min-width:0;
+  margin:0;
+  padding:6px;
+  border:1px solid #abbfc2;
+  background:#fbfaf3;
+  font:13px/1.5 var(--sans);
+ }
+ .eu-workspace-root[data-europe-detail].has-eu-source-map .eu-origin-reference-map [data-eu-origin-caption] {
+  margin:0 0 5px;
+  font:700 13px/1.5 var(--sans);
+ }
+ .eu-workspace-root[data-europe-detail].has-eu-source-map .eu-origin-reference-map [data-eu-origin-map] {
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:1200 / 1001;
+  margin:0 0 6px;
+  border:1px solid #c0ccca;
+  background:#e7eff1;
+ }
+ .eu-workspace-root[data-europe-detail].has-eu-source-map .eu-origin-reference-map [data-eu-origin-legend] {
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:3px 5px;
+ }
+ .eu-workspace-root[data-europe-detail].has-eu-source-map .eu-origin-reference-map [data-eu-origin-legend]>div {
+  min-width:0;
+  gap:4px;
+  align-items:start;
+  font:13px/1.5 var(--sans);
+ }
+ .eu-workspace-root[data-europe-detail].has-eu-source-map .eu-origin-reference-map .eu-swatch {
+  flex:none;
+  width:11px;
+  height:11px;
+  margin-top:4px;
+ }
+ .eu-workspace-root[data-europe-detail].has-eu-source-map [data-eu-origin-question] {
+  margin:6px 0 0;
+  padding-top:5px;
+  border-top:1px solid #c0ccca;
+  font:13px/1.5 var(--sans);
+ }
+ .eu-workspace-root[data-europe-detail].has-eu-source-map .eu-origin-culture-reference [data-eu-origin-map] {
+  height:220px;
+  aspect-ratio:auto;
+ }
+ .eu-workspace-root[data-europe-detail].has-eu-source-map [data-eu-origin-status] {
+  margin:0 0 6px;
+  font:13px/1.5 var(--sans);
+ }
+ /* The17-class climate key needs the full map-column width, keeping labels readable. */
+ .eu-workspace-root[data-europe-detail].has-eu-comparison.has-eu-source-map.has-eu-wide-source-key .eu-map-panel .eu-map-stage {
+  min-height:260px;
+  height:260px;
+  align-self:start;
+ }
+ .eu-workspace-root[data-europe-detail].has-eu-wide-source-key .eu-map-panel>.eu-origin-wide-legend {
+  grid-column:1 / -1;
+  grid-row:2;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:2px 7px;
+  padding:5px 6px;
+  border:1px solid #abbfc2;
+  background:#fbfaf3;
+ }
+ .eu-workspace-root[data-europe-detail].has-eu-wide-source-key .eu-origin-wide-legend::before {
+  content:'元の図の全凡例';
+  grid-column:1 / -1;
+  font:700 13px/1.4 var(--sans);
+ }
+ .eu-workspace-root[data-europe-detail].has-eu-wide-source-key .eu-origin-wide-legend>div {
+  min-width:0;
+  display:flex;
+  gap:4px;
+  align-items:start;
+  font:13px/1.4 var(--sans);
+ }
+ .eu-workspace-root[data-europe-detail].has-eu-wide-source-key .eu-origin-wide-legend .eu-swatch {
+  flex:none;
+  width:11px;
+  height:11px;
+  margin-top:3px;
+ }
+ .eu-workspace-root[data-europe-detail].has-eu-wide-source-key .eu-map-panel>.eu-origin-wide-question {
+  grid-column:1 / -1;
+  grid-row:3;
+  margin:0;
+  padding:0;
+  border:0;
+ }
+}
+
+@media(max-width:959px) {
+ .eu-workspace-root.has-eu-source-map .eu-origin-reference-map { margin:8px 0; }
+ .eu-workspace-root.has-eu-source-map .eu-origin-reference-map [data-eu-origin-map] {
+  height:auto;
+  max-width:480px;
+  aspect-ratio:1200 / 1001;
+  display:block;
+ }
+}

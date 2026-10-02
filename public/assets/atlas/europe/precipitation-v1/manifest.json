@@ -1,0 +1,421 @@
+{
+  "schemaVersion": 1,
+  "retrievedAt": "2026-10-02",
+  "dataset": "GPCC Precipitation Analysis Climatology Version 2025 at 0.25°, reference period 1991–2020",
+  "publisher": "Global Precipitation Climatology Centre (GPCC) at Deutscher Wetterdienst (DWD)",
+  "sourceUrl": "https://opendata.dwd.de/climate_environment/GPCC/html/gpcc_precipitation_analysis_climatology_v2025_doi_download.html",
+  "downloadUrl": "https://opendata.dwd.de/climate_environment/GPCC/GPCC_Precipitation_Analysis_Climatology/Version_2025/gpcc_precipitation_analysis_climatology_1991_2020_v2025_025.nc.gz",
+  "checksumUrl": "https://opendata.dwd.de/climate_environment/GPCC/GPCC_Precipitation_Analysis_Climatology/Version_2025/readme_md5_gpcc_precipitation_analysis_climatology_1991_2020_v2025.txt",
+  "doi": "https://doi.org/10.5676/DWD_GPCC/CLIMAT_V2025_025",
+  "period": "1991-01-01/2020-12-31",
+  "edition": "2025",
+  "inputBytes": 28442738,
+  "inputSha256": "3bd80d05df52572f6409b594ae26b43e9045147cb3c25254cddb5a934c16e5c5",
+  "inputMd5": "d701c717e08ce6ad457c9f4004984d65",
+  "originalResolution": "0.25° regular latitude/longitude grid",
+  "sourceCRS": "geographic latitude/longitude",
+  "sourceVariable": "gpcc_precip",
+  "sourceUnit": "mm/month",
+  "sourceNoData": -99999.9921875,
+  "sourceMethod": "Rain-gauge-based interpolated monthly climatology. The fixed reference-period product uses stations with at least 20 complete years, according to the publisher.",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://www.dwd.de/EN/service/legal_notice/legal_notice.html",
+  "licenseEvidence": {
+    "publisherProductLinksToLegalNotice": true,
+    "officialIndexedLegalNoticeStatesCcBy40": true,
+    "officialIndexedQuote": "Re-use is permitted solely under the terms of the Creative Commons license BY 4.0 (CC BY 4.0) providing the source is duly acknowledged.",
+    "checkedAt": "2026-10-02",
+    "directLegalNoticeStatus": 403,
+    "dataCiteDoi": "10.5676/dwd_gpcc/climat_v2025_025",
+    "dataCiteRightsList": [],
+    "note": "DataCite confirms the exact publisher and product URL but supplies no registered rights. The license evidence is the official DWD indexed legal-notice text linked by the product page, not a DataCite rights claim. No access bypass used."
+  },
+  "attribution": "Rustemeier, Elke; Finger, Peter; Schirmeister, Zora; Ziese, Markus (2025): GPCC Precipitation Analysis Climatology Version 2025 at 0.25°. DOI: 10.5676/DWD_GPCC/CLIMAT_V2025_025. GPCC/DWD, CC BY 4.0. Modified: 12-month annual sum, target-country display masking, nearest-neighbour Web Mercator display and colour classes.",
+  "bounds": [
+    -25,
+    32,
+    65,
+    73
+  ],
+  "width": 1800,
+  "height": 1502,
+  "projection": "EPSG:3857",
+  "frame": {
+    "width": 1200,
+    "height": 1001,
+    "west": -25,
+    "south": 32,
+    "east": 65,
+    "north": 73
+  },
+  "unit": "mm/year",
+  "breaks": [
+    250,
+    500,
+    750,
+    1000,
+    1500,
+    2000
+  ],
+  "colors": [
+    "#f5f0dd",
+    "#d9e6df",
+    "#b6d7df",
+    "#86bdd2",
+    "#529abc",
+    "#2877a5",
+    "#14537d"
+  ],
+  "lookup": {
+    "width": 1800,
+    "height": 1502,
+    "encoding": "little-endian float32 row-major gzip",
+    "nodata": -1,
+    "gridType": "display",
+    "valueMeaning": "Annual precipitation normal of the nearest original 0.25° source cell. Zero is valid; -1 is missing or outside target-country land."
+  },
+  "processing": {
+    "annualSum": "Sum all 12 monthly normals only where every source month is finite, nonnegative and not nodata. Any missing month makes the annual normal missing.",
+    "reprojection": "Nearest original source-cell sampling at EPSG:3857 display pixel centres; no additional spatial interpolation.",
+    "displayMask": "Existing 45 target-country outlines, with holes preserved; source ocean/missing cells stay missing. Source mask is not expanded into coastal gaps or microstates.",
+    "displayGridIsOriginalResolution": false,
+    "latitudeOrientation": {
+      "firstLongitude": -179.875,
+      "lastLongitude": 179.875,
+      "firstLatitude": 89.875,
+      "lastLatitude": -89.875,
+      "declaredLatitudeUnit": "degrees_south",
+      "usedConvention": "Actual north-positive coordinate array; the inconsistent degrees_south attribute is retained here, not used to flip data."
+    },
+    "rawSourceIncludedInRepository": false,
+    "sourceMutation": false,
+    "numericStorage": "Monthly source float32 values summed in float64, then rounded once with Math.fround; PNG colour classification and the float32 display lookup use that same rounded value.",
+    "colorClassificationBasis": "Stored float32 display lookup value"
+  },
+  "limitations": [
+    "A 0.25° source grid cannot resolve local rainfall within small countries or individual mountain valleys; the 1800×1502 rendering does not increase source resolution.",
+    "Annual precipitation is not river discharge, groundwater recharge, available water supply or freshwater availability.",
+    "Different source cells have different station support. Rain-gauge interpolation and the source baseline are retained; no uncertainty interval is invented.",
+    "Ocean cells, source missing values, incomplete 12-month cells and land outside the 45-country display mask are transparent/missing; zero precipitation is distinct.",
+    "Country display geometry only clips the map. No national average, area-weighted statistic, water volume or country-specific quantity is calculated.",
+    "The longitude 65° east display limit clips the Russian Federation; this map does not represent all of Russia."
+  ],
+  "validation": {
+    "sourceRecords": 12,
+    "completeSourceCells": 291340,
+    "validDisplayPixels": 1091163,
+    "displayRangeMmPerYear": [
+      162.8800048828125,
+      3180.35986328125
+    ],
+    "unresolvedDisplayCountries": [
+      "VAT",
+      "MCO"
+    ],
+    "allMissingDisplayCountries": []
+  },
+  "countryCoverage": [
+    {
+      "code": "RUS",
+      "displayPixelCenters": 541169,
+      "validDisplayPixelCenters": 541114,
+      "missingDisplayPixelCenters": 55
+    },
+    {
+      "code": "NOR",
+      "displayPixelCenters": 58861,
+      "validDisplayPixelCenters": 58861,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "FRA",
+      "displayPixelCenters": 38264,
+      "validDisplayPixelCenters": 38264,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "SWE",
+      "displayPixelCenters": 70692,
+      "validDisplayPixelCenters": 70692,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "BLR",
+      "displayPixelCenters": 19056,
+      "validDisplayPixelCenters": 19056,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "UKR",
+      "displayPixelCenters": 43217,
+      "validDisplayPixelCenters": 43217,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "POL",
+      "displayPixelCenters": 26607,
+      "validDisplayPixelCenters": 26607,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "AUT",
+      "displayPixelCenters": 6029,
+      "validDisplayPixelCenters": 6029,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "HUN",
+      "displayPixelCenters": 6467,
+      "validDisplayPixelCenters": 6467,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "MDA",
+      "displayPixelCenters": 2257,
+      "validDisplayPixelCenters": 2257,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "ROU",
+      "displayPixelCenters": 15870,
+      "validDisplayPixelCenters": 15870,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "LTU",
+      "displayPixelCenters": 6339,
+      "validDisplayPixelCenters": 6339,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "LVA",
+      "displayPixelCenters": 6883,
+      "validDisplayPixelCenters": 6883,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "EST",
+      "displayPixelCenters": 5301,
+      "validDisplayPixelCenters": 5301,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "DEU",
+      "displayPixelCenters": 29333,
+      "validDisplayPixelCenters": 29333,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "BGR",
+      "displayPixelCenters": 6600,
+      "validDisplayPixelCenters": 6600,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "GRC",
+      "displayPixelCenters": 7096,
+      "validDisplayPixelCenters": 7096,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "ALB",
+      "displayPixelCenters": 1693,
+      "validDisplayPixelCenters": 1693,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "HRV",
+      "displayPixelCenters": 3727,
+      "validDisplayPixelCenters": 3727,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "CHE",
+      "displayPixelCenters": 3176,
+      "validDisplayPixelCenters": 3176,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "LUX",
+      "displayPixelCenters": 188,
+      "validDisplayPixelCenters": 188,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "BEL",
+      "displayPixelCenters": 2412,
+      "validDisplayPixelCenters": 2412,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "NLD",
+      "displayPixelCenters": 3446,
+      "validDisplayPixelCenters": 3446,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "PRT",
+      "displayPixelCenters": 5105,
+      "validDisplayPixelCenters": 5105,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "ESP",
+      "displayPixelCenters": 27994,
+      "validDisplayPixelCenters": 27994,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "IRL",
+      "displayPixelCenters": 5243,
+      "validDisplayPixelCenters": 5243,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "ITA",
+      "displayPixelCenters": 18951,
+      "validDisplayPixelCenters": 18951,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "DNK",
+      "displayPixelCenters": 4421,
+      "validDisplayPixelCenters": 4421,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "GBR",
+      "displayPixelCenters": 23328,
+      "validDisplayPixelCenters": 23328,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "ISL",
+      "displayPixelCenters": 19533,
+      "validDisplayPixelCenters": 19533,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "SVN",
+      "displayPixelCenters": 1290,
+      "validDisplayPixelCenters": 1290,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "FIN",
+      "displayPixelCenters": 59937,
+      "validDisplayPixelCenters": 59937,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "SVK",
+      "displayPixelCenters": 3486,
+      "validDisplayPixelCenters": 3486,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "CZE",
+      "displayPixelCenters": 6282,
+      "validDisplayPixelCenters": 6282,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "BIH",
+      "displayPixelCenters": 3178,
+      "validDisplayPixelCenters": 3178,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "MKD",
+      "displayPixelCenters": 1451,
+      "validDisplayPixelCenters": 1451,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "SRB",
+      "displayPixelCenters": 4811,
+      "validDisplayPixelCenters": 4811,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "MNE",
+      "displayPixelCenters": 804,
+      "validDisplayPixelCenters": 804,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "KOS",
+      "displayPixelCenters": 668,
+      "validDisplayPixelCenters": 668,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "VAT",
+      "displayPixelCenters": 0,
+      "validDisplayPixelCenters": 0,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "SMR",
+      "displayPixelCenters": 4,
+      "validDisplayPixelCenters": 4,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "MCO",
+      "displayPixelCenters": 0,
+      "validDisplayPixelCenters": 0,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "MLT",
+      "displayPixelCenters": 14,
+      "validDisplayPixelCenters": 14,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "LIE",
+      "displayPixelCenters": 9,
+      "validDisplayPixelCenters": 9,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "AND",
+      "displayPixelCenters": 26,
+      "validDisplayPixelCenters": 26,
+      "missingDisplayPixelCenters": 0
+    }
+  ],
+  "inputs": [
+    {
+      "path": "src/data/atlas/europe-countries.json",
+      "sha256": "74188768119719459793e99eebdc29a90abe85881bdfc15d76ab144ec6320237",
+      "role": "Existing 45 target-country display mask"
+    },
+    {
+      "path": "data-source/atlas/europe/precipitation/datacite-registration.json",
+      "sha256": "4a190fce229086644299adcde256fee7f06562dd110c08908648c45fcb1167be",
+      "role": "Actual exact-DOI DataCite registration excerpt; empty registered rights retained"
+    },
+    {
+      "path": "data-source/atlas/europe/precipitation/source.json",
+      "sha256": "eef8711e54ef8a3c28c40dbcf3bd79b89b69a2f348a3385ea6cecec12cafdc78",
+      "role": "Pinned source identity, baseline, license evidence and raw input hash"
+    },
+    {
+      "path": "data-source/atlas/europe/precipitation/validation.json",
+      "sha256": "c8aa5ef204d3cc95177dea83c2ce3d185a730a6cbc78fc55bb77bc6c25db9a08",
+      "role": "Actual NetCDF source metadata, coordinates and monthly orientation samples"
+    }
+  ],
+  "files": {
+    "precipitation.png": {
+      "sha256": "0e23be4c45385222a53b03b2071b31f133fa8af663fbe7844c63db831c12b314",
+      "bytes": 40393
+    },
+    "values.bin.gz": {
+      "sha256": "84b2d7e502b3e529e57f6e3e3331ec7980518d144ed7574ee49d4ffc3f9875cc",
+      "bytes": 144211
+    }
+  }
+}

@@ -1,0 +1,412 @@
+{
+  "schemaVersion": 1,
+  "retrievedAt": "2026-10-02T16:33:31.052Z",
+  "dataset": "ESA WorldCover 10 m 2021 v200",
+  "doi": "https://doi.org/10.5281/zenodo.7254221",
+  "publisher": "ESA WorldCover consortium",
+  "sourceUrl": "https://esa-worldcover.org/en/data-access",
+  "manualUrl": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/docs/WorldCover_PUM_V2.0.pdf",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "period": "2021-01-01/2021-12-31",
+  "originalResolution": "1/12000 degree (approximately 10 m at equator)",
+  "sourceCRS": "EPSG:4326",
+  "sourceTreeClass": 10,
+  "sourceNoData": 0,
+  "treeDefinition": "Tree cover class includes areas dominated by trees with cover of 10% or more, including planted trees, plantations and olive trees. It is not a FAO forest, forestry production, timber availability or tree-volume classification.",
+  "sourceCoverage": "Sentinel-2-observed land except Antarctica; northern limit 82.75°N. Current Europe frame is 32–73°N and includes western Russia.",
+  "attribution": "© ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium",
+  "bounds": [
+    -25,
+    32,
+    65,
+    73
+  ],
+  "width": 1800,
+  "height": 1502,
+  "projection": "EPSG:3857",
+  "frame": {
+    "width": 1200,
+    "height": 1001,
+    "west": -25,
+    "east": 65,
+    "south": 32,
+    "north": 73
+  },
+  "lookup": {
+    "width": 1800,
+    "height": 1502,
+    "encoding": "little-endian float32 row-major gzip",
+    "nodata": -1,
+    "values": {
+      "0": "Other valid land-cover class",
+      "1": "Tree cover (source class 10)",
+      "-1": "Source missing or outside selected Europe target-country land"
+    }
+  },
+  "extraction": {
+    "tileCount": 247,
+    "overviewWidth": 562,
+    "overviewHeight": 562,
+    "originalWidth": 36000,
+    "originalHeight": 36000,
+    "supplierOverviewLevels": [
+      2,
+      4,
+      8,
+      16,
+      32,
+      64
+    ],
+    "supplierOverviewResampling": "Not specified in the source product metadata or user manual; no quantitative aggregation claim is made.",
+    "reprojection": "Nearest-neighbour categorical sampling at Web Mercator display pixel centres; no interpolation between class codes.",
+    "clipping": "Existing 45 target-country Natural Earth outlines, with polygon holes preserved; countries remain selectable separately. Small countries can be unresolved by display pixel centres.",
+    "originalResolutionIsDisplayPrecision": false
+  },
+  "limitations": [
+    "This is a generalized tree-cover distribution map, not an exact forest or stand boundary.",
+    "Tree cover includes plantations and olive trees; it does not identify wood supply, commercial forestry, forest type, biomass, tree volume or national forest area.",
+    "Provider overviews and display sampling omit small patches; no tree-cover percentage or area statistic is computed.",
+    "Other valid cover is different from missing data. Source code 0 and land outside the 45-country target mask remain missing/transparent.",
+    "The 2021 tree-cover map and the WDI 2023 national forest-area share use different definitions, dates and geographic units and are shown separately."
+  ],
+  "countryCoverage": [
+    {
+      "code": "RUS",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 541169,
+      "validDisplayPixelCentres": 541169,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "NOR",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 58861,
+      "validDisplayPixelCentres": 58861,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "FRA",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 38264,
+      "validDisplayPixelCentres": 38264,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "SWE",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 70692,
+      "validDisplayPixelCentres": 70692,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "BLR",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 19056,
+      "validDisplayPixelCentres": 19056,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "UKR",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 43217,
+      "validDisplayPixelCentres": 43217,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "POL",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 26607,
+      "validDisplayPixelCentres": 26607,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "AUT",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 6029,
+      "validDisplayPixelCentres": 6029,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "HUN",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 6467,
+      "validDisplayPixelCentres": 6467,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "MDA",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 2257,
+      "validDisplayPixelCentres": 2257,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "ROU",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 15870,
+      "validDisplayPixelCentres": 15870,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "LTU",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 6339,
+      "validDisplayPixelCentres": 6339,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "LVA",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 6883,
+      "validDisplayPixelCentres": 6883,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "EST",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 5301,
+      "validDisplayPixelCentres": 5301,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "DEU",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 29333,
+      "validDisplayPixelCentres": 29333,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "BGR",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 6600,
+      "validDisplayPixelCentres": 6600,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "GRC",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 7096,
+      "validDisplayPixelCentres": 7096,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "ALB",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 1693,
+      "validDisplayPixelCentres": 1693,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "HRV",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 3727,
+      "validDisplayPixelCentres": 3727,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "CHE",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 3176,
+      "validDisplayPixelCentres": 3176,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "LUX",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 188,
+      "validDisplayPixelCentres": 188,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "BEL",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 2412,
+      "validDisplayPixelCentres": 2412,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "NLD",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 3446,
+      "validDisplayPixelCentres": 3446,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "PRT",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 5105,
+      "validDisplayPixelCentres": 5105,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "ESP",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 27994,
+      "validDisplayPixelCentres": 27994,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "IRL",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 5243,
+      "validDisplayPixelCentres": 5243,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "ITA",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 18951,
+      "validDisplayPixelCentres": 18951,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "DNK",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 4421,
+      "validDisplayPixelCentres": 4421,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "GBR",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 23328,
+      "validDisplayPixelCentres": 23328,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "ISL",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 19533,
+      "validDisplayPixelCentres": 19533,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "SVN",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 1290,
+      "validDisplayPixelCentres": 1290,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "FIN",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 59937,
+      "validDisplayPixelCentres": 59937,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "SVK",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 3486,
+      "validDisplayPixelCentres": 3486,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "CZE",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 6282,
+      "validDisplayPixelCentres": 6282,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "BIH",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 3178,
+      "validDisplayPixelCentres": 3178,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "MKD",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 1451,
+      "validDisplayPixelCentres": 1451,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "SRB",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 4811,
+      "validDisplayPixelCentres": 4811,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "MNE",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 804,
+      "validDisplayPixelCentres": 804,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "KOS",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 668,
+      "validDisplayPixelCentres": 668,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "VAT",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 0,
+      "validDisplayPixelCentres": 0,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "SMR",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 4,
+      "validDisplayPixelCentres": 4,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "MCO",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 0,
+      "validDisplayPixelCentres": 0,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "MLT",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 14,
+      "validDisplayPixelCentres": 14,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "LIE",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 9,
+      "validDisplayPixelCentres": 9,
+      "missingDisplayPixelCentres": 0
+    },
+    {
+      "code": "AND",
+      "sourceGeographicCoverage": "Within WorldCover 2021 global land extent and Europe display frame",
+      "displayPixelCentres": 26,
+      "validDisplayPixelCentres": 26,
+      "missingDisplayPixelCentres": 0
+    }
+  ],
+  "inputs": [
+    {
+      "path": "src/data/atlas/europe-countries.json",
+      "sha256": "74188768119719459793e99eebdc29a90abe85881bdfc15d76ab144ec6320237",
+      "role": "45 target-country land mask"
+    },
+    {
+      "path": "data-source/atlas/europe/tree-cover/range-inputs.json",
+      "sha256": "6320488dbeb0aa6c87a978223bd8510d3154112b8051981070a9626887c0cb36",
+      "role": "Exact bounded COG input range hashes and categorical validation"
+    }
+  ],
+  "files": {
+    "tree-cover.png": {
+      "sha256": "0b506f7703783b7b1edc217cf10a99b5f81e50ac62a3c1bb47a867732cc43903",
+      "bytes": 191241
+    },
+    "mask.bin.gz": {
+      "sha256": "1c47ebf4debf896cc5c6723dbfd45e0eb8a6606128714570840784feb3d2347a",
+      "bytes": 194141
+    }
+  }
+}

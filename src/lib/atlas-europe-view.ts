@@ -1,5 +1,8 @@
 import { europeRings, type Geometry } from './atlas-europe-geometry.ts';
 import { europeLayers } from '../data/atlas/europe/layers.ts';
+import censusCases from '../../public/assets/atlas/europe/population-cases-v1/cases.json' with { type:'json' };
+import { normalisePopulationCaseChoice, type PopulationCensusCasePackage, type PopulationCaseChoiceState } from '../data/atlas/europe/population-cases.ts';
+import { normaliseEuropeDrainageBasin, type EuropeDrainageState } from './atlas-europe-drainage.ts';
 
 export const frame = { width: 1200, height: 1001, west: -25, east: 65, south: 32, north: 73 };
 const mercator = (lat: number) => Math.log(Math.tan(Math.PI / 4 + lat * Math.PI / 360));
@@ -18,7 +21,7 @@ export function visibleBounds(geometries: Geometry[]): [[number, number], [numbe
   if (!points.length) return [[-25, 32], [65, 73]];
   return [[Math.min(...points.map(p => p[0])), Math.min(...points.map(p => p[1]))], [Math.max(...points.map(p => p[0])), Math.max(...points.map(p => p[1]))]];
 }
-export type EuropeState = { region: string; place: string; city: string; compare: string[]; render: string; layer: string; returnLayer: string; feature?: string; showCrops?: boolean; showLivestock?: boolean; single?: boolean };
+export type EuropeState = { region: string; place: string; city: string; compare: string[]; render: string; layer: string; returnLayer: string; feature?: string; showCrops?: boolean; showLivestock?: boolean; single?: boolean } & Partial<PopulationCaseChoiceState> & EuropeDrainageState;
 const europeCapitalCities: Record<string, string> = {
   GBR:'london', FRA:'paris', DEU:'berlin', POL:'warsaw', UKR:'kyiv', BLR:'minsk',
   MDA:'chisinau', RUS:'moscow', SRB:'belgrade', ROU:'bucharest', BGR:'sofia',
@@ -29,7 +32,7 @@ export function defaultEuropeCity(country: string, ids: string[]): string {
   const city = country ? europeCapitalCities[country] : 'london';
   return city && ids.includes(city) ? city : '';
 }
-const isIndividualFarmingLayer = (id: string) => europeLayers.some(layer => layer.id === id && layer.field === 'agriculture' && !!layer.grid);
+const isIndividualFarmingLayer = (id: string) => europeLayers.some(layer => layer.id === id && layer.field === 'agriculture' && layer.gridType === 'source' && !!layer.grid);
 export function readEuropeState(search: string, countries: { code: string; region: string }[], cityIds: string[], initialLayer = 'climate'): EuropeState {
   const p = new URLSearchParams(search);
   const place = countries.find(c => c.code === p.get('place'));
@@ -40,6 +43,17 @@ export function readEuropeState(search: string, countries: { code: string; regio
   const layer = [...allowed, 'overlay'].includes(p.get('layer') ?? '') ? p.get('layer')! : initialLayer;
   const returnLayer = allowed.includes(p.get('returnLayer') ?? '') ? p.get('returnLayer')! : initialLayer;
   const state: EuropeState = { region, place: place?.code ?? '', city, compare, render: p.get('render') === 'static' ? 'static' : 'auto', layer, returnLayer };
+  const basin = normaliseEuropeDrainageBasin(p.get('basin'));
+  if (basin) state.basin = basin;
+  if(layer==='ethnicity'||layer==='religion')Object.assign(state,normalisePopulationCaseChoice(p,layer,censusCases as PopulationCensusCasePackage));
+  else {
+    const censusCase=censusCases.cases.find(item=>item.id===p.get('cultureCase'));
+    if(censusCase){
+      state.cultureCase=censusCase.id;
+      if(censusCase.topics.some(topic=>topic.categories.some(category=>category.id===p.get('cultureCategory'))))state.cultureCategory=p.get('cultureCategory')!;
+      if(censusCase.topics.some(topic=>topic.areas.some(area=>area.code===p.get('cultureArea'))))state.cultureArea=p.get('cultureArea')!;
+    }
+  }
   if (/^[a-z0-9-]{1,60}$/.test(p.get('feature') ?? '')) state.feature = p.get('feature')!;
   if (p.get('crops') === 'off') state.showCrops = false;
   if (p.get('livestock') === 'off') state.showLivestock = false;
@@ -51,7 +65,7 @@ export function writeEuropeState(url: URL, state: EuropeState): URL {
   const displayedLayer=state.layer==='overlay'?(state.returnLayer==='climate'?'wheat':state.returnLayer):state.layer;
   const field=europeLayers.find(layer=>layer.id===displayedLayer)?.field;
   if(field)next.pathname=next.pathname.replace(/(\/atlas\/europe\/)(nature|agriculture|industry|population)\/?$/,`$1${field}/`);
-  for (const key of ['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'crops', 'livestock', 'single']) next.searchParams.delete(key);
+  for (const key of ['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin']) next.searchParams.delete(key);
   if (state.region !== 'all') next.searchParams.set('region', state.region);
   if (state.place) next.searchParams.set('place', state.place);
   if (state.city) next.searchParams.set('city', state.city);
@@ -60,9 +74,12 @@ export function writeEuropeState(url: URL, state: EuropeState): URL {
   if (state.layer) next.searchParams.set('layer', state.layer);
   if (state.layer === 'overlay') next.searchParams.set('returnLayer', state.returnLayer);
   if (state.feature) next.searchParams.set('feature', state.feature);
+  const basin = normaliseEuropeDrainageBasin(state.basin);
+  if (basin) next.searchParams.set('basin', basin);
   if (state.showCrops === false) next.searchParams.set('crops', 'off');
   if (state.showLivestock === false) next.searchParams.set('livestock', 'off');
   if (state.single === true && isIndividualFarmingLayer(state.layer)) next.searchParams.set('single', '1');
+  for(const key of ['cultureCase','cultureCategory','cultureArea'] as const)if(state[key])next.searchParams.set(key,state[key]!);
   return next;
 }
 export function displayCell(values: Float32Array, point: number[], nodata = -1) {
