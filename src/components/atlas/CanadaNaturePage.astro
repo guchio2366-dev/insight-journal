@@ -5,6 +5,7 @@ import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
 import NorthAmericaCountryFieldNavigation from './NorthAmericaCountryFieldNavigation.astro';
 import AtlasClimatePlot from './AtlasClimatePlot.astro';
 import CanadaLandformMap from './CanadaLandformMap.astro';
+import CanadaCropNatureMap from './CanadaCropNatureMap.astro';
 import climate from '../../data/atlas/canada/climate.json';
 import rivers from '../../data/atlas/canada/rivers.json';
 import lakes from '../../data/atlas/canada/lakes.json';
@@ -51,7 +52,7 @@ import '../../styles/atlas-canada-country-parity.css';
    <nav class="country-water-topics" aria-label="水資源の内訳"><span>河川・地下水<small>河川を収録・地下水は未整備</small></span><button disabled>降水量<small>分布図は未整備</small></button><button disabled>河川の流域<small>未整備</small></button></nav>
    <div class="canada-workspace atlas-primary-grid">
     <section class="canada-map-column atlas-map-column" aria-label="カナダの地図">
-     <figure class="canada-crop-source" data-canada-crop-source hidden><h2 data-canada-crop-map-title></h2><a data-canada-crop-image-link href={withBase('/atlas/north-america/canada/agriculture/')}><img data-canada-crop-image width="1133" height="814" alt="" /></a><figcaption data-canada-crop-map-key></figcaption><p class="canada-caption">原図をクリックすると凡例まで原寸で読めます。自然地図とは投影が異なるため、位置を重ねず並べて照合します。</p></figure>
+     <CanadaCropNatureMap />
      <section data-canada-locator>
       <div class="canada-map-title"><h2>観測地点と水の位置</h2></div>
       <div class="atlas-map-frame canada-map-frame"><svg class="canada-map" data-canada-map viewBox={fullFrame} role="group" aria-labelledby="canada-map-title canada-map-desc">
@@ -92,7 +93,7 @@ import '../../styles/atlas-canada-country-parity.css';
     <aside class="canada-reading atlas-national" aria-label="地図と一緒に読む"><p data-population-geometry-status hidden></p>
    <header class="canada-national-header"><p class="atlas-eyebrow">Canada · Natural environment</p><h2>カナダの自然環境</h2><p class="canada-lead">西岸の海と山地、内陸の平原、東部の楯状地、北部の島々。場所を確かめ、季節と水の違いを読む。</p></header>
 
-     <section class="canada-comparison-context" data-canada-crop-context hidden><h2 data-canada-crop-context-title></h2><p data-canada-crop-context-text></p><p class="canada-caption" data-canada-crop-scope></p><div data-canada-crop-mini hidden></div><details><summary>元の図・比較年・利用条件</summary><p data-canada-crop-origin></p><p>図は2021年農業センサス、州比較は元ページで選んだ年次統計です。面積や頭数の量を示す点は農場の所在地ではありません。<a href="https://www.statcan.gc.ca/en/terms-conditions/open-licence">Statistics Canada Open Licence</a>。Adapted from Statistics Canada, 2021 Census of Agriculture, Thematic maps (Canola area / Total wheat area / Beef cows / Pasture / Total hay), accessed September 30, 2026. This does not constitute an endorsement by Statistics Canada of this product. 各図の原典・定義は元の農畜産ページに保持しています。</p></details></section>
+     <section class="canada-comparison-context" data-canada-crop-context hidden><h2 data-canada-crop-context-title></h2><p data-canada-crop-context-text></p><p class="canada-caption" data-canada-crop-scope></p><div data-canada-crop-mini hidden></div><details><summary>元の図・比較年・利用条件</summary><p data-canada-crop-origin></p><p data-canada-crop-mechanism></p><p>地域地図は2021年農業センサスのCCS別申告値で固定し、州比較は元ページで選んだ別の年次統計です。農場本拠地に集計した面積・頭数で、輪郭は実際の畑・放牧地・牛の所在地ではありません。非公表Fと未収録をゼロに変えません。<a href="https://www.statcan.gc.ca/en/terms-conditions/open-licence">Statistics Canada Open Licence</a>。Adapted from Statistics Canada, 2021 Census of Agriculture, Tables 32-10-0309-01, 32-10-0370-01 and 32-10-0249-01, accessed October 2, 2026. This does not constitute an endorsement by Statistics Canada of this product. 境界の原典・利用条件、各指標の定義と品質は元の農畜産ページに保持しています。</p></details></section>
      <section class="canada-comparison-context" data-canada-forest-context hidden><h2>森林と沿岸気候を比べる</h2><p data-canada-forest-context-text></p><p class="canada-caption">Vancouverは沿岸1地点。BC全域平均ではありません。</p><details><summary>比較の年・範囲</summary><p class="canada-caption">Vancouverは沿岸1地点。BC全域平均ではありません。森林2020年／気候1991–2020年。</p></details></section>
      <section class="canada-comparison-context" data-canada-industry-context hidden><h2 data-canada-industry-context-heading></h2><p data-canada-industry-context-text></p><svg class="canada-map" data-canada-industry-context-mini-map viewBox="0 0 900 580" role="img" aria-label="元の州内GDP割合分布：別投影の地形図と左右で照合" style="display:none"></svg><p class="canada-caption" data-canada-industry-context-mini-legend hidden></p><details><summary>比較の年・分母と出典</summary><p>州内GDP割合は基本価格・当年価格。境界2021年、気候1991–2020年、水系Natural Earth概形。地図の位置だけから産業の原因や輸送経路を確定しません。<a href={withBase('/atlas/north-america/canada/industry/#canada-industry-sources')}>公式構成比・境界・交通の根拠</a></p></details></section>
      <section class="canada-comparison-context" data-canada-population-context hidden><h2>都市圏の集中と自然条件を比べる</h2><p data-canada-population-context-text></p><svg class="canada-map" data-canada-population-context-mini-map viewBox="0 0 900 580" role="img" aria-label="元の都市圏分布：別投影の地形図と左右で照合" style="display:none"></svg><p class="canada-caption" data-canada-population-context-mini-legend hidden></p><details><summary>都市圏・気候・水域の対象と出典</summary><p>CMAは自治体と通勤等で結びついた都市圏です。地図は2021年境界で固定し、人口は2016/2021年、密度は2021年です。気候は1991–2020年の観測地点で都市圏全体平均ではありません。<a href={withBase('/atlas/north-america/canada/population/#canada-population-sources')}>定義・公式数値・境界・交通の根拠</a></p></details></section>
@@ -104,7 +105,7 @@ import '../../styles/atlas-canada-country-parity.css';
        {climate.stations.map(s=><section class="canada-climate-card" data-canada-climate-card={s.id} hidden={s.id!=='ottawa'}>
         <h2>{s.name}</h2><p class="canada-takeaway">{climateCause[s.id].lead}</p>
         <AtlasClimatePlot name={s.name} period="1991–2020" temperatureC={s.temperatureC} precipitationMm={s.precipitationMm} minTemperatureC={-30} />
-        <p class="canada-plot-key">青の棒：降水量 mm ／ 赤の線：平均気温 ℃。×：未収録。</p>
+        <p class="canada-plot-key">青棒：降水量mm ／ 赤線：平均気温℃ ／ ×：未収録</p>
         <p>{climateCause[s.id].body}</p>
         <dl class="canada-climate-facts"><div><dt>年平均気温</dt><dd>{fmt(s.annualTemperatureC)} ℃</dd></div><div><dt>年降水量</dt><dd>{fmt(s.annualPrecipitationMm)} mm</dd></div><div><dt>1月／7月の平均気温</dt><dd>{fmt(s.temperatureC[0])} ／ {fmt(s.temperatureC[6])} ℃</dd></div></dl>
         <p class="canada-sources-inline"><a href={s.sourceUrl}>月別値・合成観測系列の原典</a> ／ <a href={mechanismSource}>気候の地域差を読む資料</a></p>

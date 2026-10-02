@@ -160,6 +160,6 @@ test('Comparison keeps its specific question first while preserving general geog
   assert.match(details[1].textContent,/Mackenzie/);assert.ok(d.querySelector('[data-canada-population-context-text]').textContent.includes('Ontario'));
   details[1].open=true;d.querySelector('[data-canada-view="landform"]').click();assert.equal(details[1].open,true);
   d.defaultView.history.replaceState(null,'','?view=water');d.defaultView.dispatchEvent(new d.defaultView.PopStateEvent('popstate'));
-  assert.ok(details.every(detail=>detail.open));assert.equal(d.querySelector('[data-canada-population-context]').hidden,true);
+  assert.equal(details[0].open,false,'landform background stays optional beside its new region-specific reading');assert.equal(details[1].open,true,'standalone water keeps its full general explanation');assert.equal(d.querySelector('[data-canada-population-context]').hidden,true);
  }finally{await compared.happyDOM.close();}
 });

@@ -1,0 +1,51 @@
+---
+import census from '../../data/atlas/canada/census-agriculture.json';
+import geography from '../../data/atlas/regional-countries.json';
+import rawGeometry from '../../../public/assets/atlas/canada-census-agriculture-v1/ccs.geojson?raw';
+import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import '../../styles/atlas-canada-census-map.css';
+import { withBase } from '../../lib/urls';
+import { canadaCensusPath, canadaCensusLegend, canadaCensusProvinceNames, canadaCensusValueText, canadaCensusGeographicLabels, projectCanadaCensus, joinCanadaCensusGeometry, type CanadaCensusCollection, type CanadaCensusGeometry, type CanadaCensusProductId } from '../../lib/atlas-canada-census-map';
+interface Props { product?: CanadaCensusProductId; products?: CanadaCensusProductId[]; hidden?: boolean; }
+const { product = 'canola', products = ['beef','pasture','hay'].includes(product) ? ['beef','pasture','hay'] : [product], hidden = false } = Astro.props;
+const original = JSON.parse(rawGeometry) as CanadaCensusCollection;
+const geometry = joinCanadaCensusGeometry(original, census.records, product);
+const definition = census.products[product], patternF = `canada-census-f-${product}`, patternMissing = `canada-census-uncovered-${product}`;
+const context = { type: 'FeatureCollection', features: geography.features.filter(feature => ['CAN', 'USA', 'GRL'].includes(feature.properties.code)) };
+const geographicLabels = canadaCensusGeographicLabels(original);
+const displayRecords = Object.fromEntries(Object.entries(census.records).map(([id, record]) => [id, { uid: record.uid, name: record.name, provinceCode: record.provinceCode, covered: record.covered, cells: Object.fromEntries(products.map(id => { const cell = record.cells[id]; return [id, { value: cell.value, quality: cell.quality, status: cell.status, components: cell.components.map(({id,variable,value,quality}) => ({id,variable,value,quality})) }]; })) }]));
+const displayProducts = Object.fromEntries(products.map(id => { const item=census.products[id]; return [id, {id:item.id,label:item.label,unit:item.unit,definition:item.definition,notes:item.notes,sourceTableUrl:item.sourceTableUrl,sourceTableId:item.sourceTableId}]; }));
+const config = { geometry: { url: withBase(census.geometry.url) }, records: displayRecords, products: displayProducts, productId: product, context, geographicLabels, workerUrl, patternF, patternMissing };
+const records = Object.entries(census.records).sort(([, a], [, b]) => a.provinceCode.localeCompare(b.provinceCode) || a.name.localeCompare(b.name));
+---
+<section class="canada-census-map" data-canada-census hidden={hidden} aria-label="2021年農業センサスの地域別申告値">
+  <h2 class="visually-hidden"><span data-canada-census-product-title>{definition.label}</span>：2021年の地域別申告値</h2>
+  <div class="atlas-map-frame canada-census-frame" data-canada-census-stage>
+    <svg class="canada-census-fallback" data-canada-census-fallback viewBox="0 0 900 580" width="900" height="580" role="group" tabindex="0" aria-labelledby={`canada-census-title-${product} canada-census-desc-${product}`}>
+      <title id={`canada-census-title-${product}`} data-canada-census-map-title>{definition.label}：2021年、地域別申告値（{definition.unit}）</title>
+      <desc id={`canada-census-desc-${product}`}>農場の本拠地がある統計地域（CCS）に集計された申告値です。実際の圃場や牛の所在地ではありません。地域や地域選択から選べます。ゼロ、非公表、未収録を区別しています。</desc>
+      <defs>
+        <pattern id={patternF} width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#e7e0d3"/><path d="M-2,2L2,-2M0,8L8,0M6,10L10,6" stroke="#8d8172" stroke-width="1.4"/></pattern>
+        <pattern id={patternMissing} width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="#d7dcdb"/><path d="M3,3L7,7M7,3L3,7" stroke="#919d9b" stroke-width="1.2"/></pattern>
+      </defs>
+      <rect width="900" height="580" fill="#e4eff0" />
+      <g aria-hidden="true">{context.features.map(feature => <path class="canada-census-context" d={canadaCensusPath(feature.geometry as CanadaCensusGeometry)} fill-rule="evenodd" vector-effect="non-scaling-stroke" />)}</g>
+      <g>{geometry.features.map(feature => { const id = String(feature.properties.id), record = census.records[id], cell = record.cells[product]; return <path class="canada-census-region" data-canada-census-shape={id} data-canada-census-cell-status={cell.status} d={canadaCensusPath(feature.geometry)} fill={cell.status === 'not-covered' ? `url(#${patternMissing})` : cell.value === null ? `url(#${patternF})` : String(feature.properties.color)} fill-rule="evenodd" vector-effect="non-scaling-stroke" role="button" tabindex="-1" aria-pressed="false" aria-label={`${record.name}（${canadaCensusProvinceNames[record.provinceCode]}）2021年 ${definition.label} ${canadaCensusValueText(cell, definition.unit)}`}><title>{record.name}（{record.uid}）：{canadaCensusValueText(cell, definition.unit)}</title></path>; })}</g>
+      <g class="canada-census-fallback-labels" data-canada-census-fallback-labels aria-hidden="true">{geographicLabels.map(label => { const [x,y]=projectCanadaCensus(label.labelAnchor); return <text x={x} y={y} text-anchor="middle">{label.name}</text>; })}</g>
+    </svg>
+    <div class="canada-census-live" data-canada-census-live aria-label="2021年農業センサスの操作できる地域地図" hidden></div>
+    <div class="canada-census-labels" aria-hidden="true">{geographicLabels.map(label => <span class="canada-census-label" data-canada-census-label={label.id} hidden>{label.name}</span>)}</div>
+    <div class="canada-census-observation" data-canada-census-observation hidden role="img"><i aria-hidden="true"></i><span class="canada-census-observation-label" data-canada-census-observation-label></span></div>
+    <label class="canada-census-selector">2021年／農場本拠地の集計（CCS）<select data-canada-census-region aria-label="地図から読む統計地域"><option value="">全国の分布を読む</option>{Object.entries(canadaCensusProvinceNames).map(([code, name]) => <optgroup label={name}>{records.filter(([, record]) => record.provinceCode === code).map(([id, record]) => <option value={id}>{record.name}（{record.uid}）</option>)}</optgroup>)}</select><span class="canada-census-selected-value" data-canada-census-selected-value hidden></span></label>
+    <div class="canada-census-tools" aria-label="地域地図の操作"><button type="button" data-canada-census-reset aria-label="カナダ全体の分布を表示">全体</button><button type="button" data-canada-census-zoom="in" aria-label="地域地図を拡大">＋</button><button type="button" data-canada-census-zoom="out" aria-label="地域地図を縮小">−</button><button type="button" data-canada-census-focus aria-label="選んだ地域へ" disabled>地域へ</button></div>
+  </div>
+  <div class="canada-census-legend" data-canada-census-legend aria-label={`${definition.label}、2021年の地域別申告値（${definition.unit}）`}><strong data-canada-census-legend-title>{definition.label}／2021年／{definition.unit}</strong><ul data-canada-census-scale>{canadaCensusLegend(product, definition.unit).map(item => <li><i style={`background:${item.color}`} aria-hidden="true"></i>{item.label}</li>)}</ul><ul class="canada-census-missing-key"><li><i class="is-quality-f" aria-hidden="true"></i>非公表 F</li><li><i class="is-not-covered" aria-hidden="true"></i>対象外・未収録</li></ul></div>
+  <p class="canada-census-observation-key" data-canada-census-observation-key hidden><i aria-hidden="true"></i><span>気候観測点（面積・頭数ではない）：<span data-canada-census-observation-name></span><strong data-canada-census-observation-outside hidden>／現在の表示範囲外</strong></span></p>
+  <label class="canada-census-only"><input type="checkbox" data-canada-census-only disabled /> 選んだ統計地域だけを表示</label>
+  <p class="canada-census-status" data-canada-census-status role="status" aria-live="polite">地域別の申告値を表示しています。地域や地域選択から選べます。</p>
+  <p class="canada-census-caption">農場の本拠地に集計された値です。塗られた範囲が実際の畑・放牧地を表すものではありません。地図は2021年固定で、年別の州比較とは別の統計です。</p>
+  <details class="canada-census-sources"><summary>地域地図の定義・品質・出典</summary><p data-canada-census-definition>{definition.definition} {definition.notes}</p><p>地図は申告された総量の階級表示で、面積密度ではありません。公表ゼロは0の色、品質Fは斜線、対象外・未収録は交差線で表示します。品質A～Eを保持し、Eは注意して利用します。合算指標は成分ごとの品質を残し、成分の一つでもFなら合計を非公表とします。</p><p>{census.source.geographicMeaning} {census.source.randomTabularAdjustment} {census.source.nationalCoverage}</p><p><a data-canada-census-table-source href={definition.sourceTableUrl}>2021年の原表・定義</a> / <a href={census.source.qualityUrl}>品質等級</a> / <a href={census.source.geographicRuleUrl}>地域集計の意味</a>。統計公表日：{census.source.releasedAt}、参照日：{census.source.referenceDate}、取得日：{census.source.accessedAt}。</p><p>境界：{census.geometry.sourceName}。境界公表日：{census.geometry.releasedAt}、基準日：{census.geometry.referenceDate}。{census.geometry.sourceCrs}から配信{census.geometry.crs}。原資料で5km一般化されたCCS境界をDGUIDで結合し、1,757地域を保持しています。地域名は原資料の名称です。<a href={census.geometry.sourceUrl}>境界の説明</a> / <a href={withBase(census.geometry.url)}>GeoJSON</a> / <a href={withBase('/assets/atlas/canada-census-agriculture-v1/manifest.json')}>処理・結合・ハッシュ台帳</a></p><p lang="en">{census.attribution}</p><p lang="en">{census.geometry.attribution}</p><p><a href={census.licence.url}>{census.licence.name}</a> / <a href={census.geometry.licence.url}>{census.geometry.licence.name}</a></p></details>
+  <noscript><p class="canada-census-caption">地域の選択・拡大にはJavaScriptが必要です。2021年の地図と凡例、閉じた詳細内の原図と出典はそのまま読めます。</p></noscript>
+  <script type="application/json" data-canada-census-config set:html={JSON.stringify(config).replace(/</g, '\\u003c')} />
+</section>

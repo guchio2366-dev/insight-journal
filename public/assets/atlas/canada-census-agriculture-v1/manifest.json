@@ -1,0 +1,414 @@
+{
+  "id": "canada-census-agriculture-2021",
+  "schemaVersion": 1,
+  "accessedAt": "2026-10-02",
+  "referenceYear": 2021,
+  "source": {
+    "name": "Statistics Canada, Census of Agriculture, 2021",
+    "url": "https://www150.statcan.gc.ca/n1/pub/32-26-0004/322600042021001-eng.htm",
+    "releasedAt": "2022-05-11",
+    "referenceDate": "2021-05-11",
+    "accessedAt": "2026-10-02",
+    "licence": {
+      "name": "Statistics Canada Open Licence",
+      "url": "https://www.statcan.gc.ca/en/terms-conditions/open-licence"
+    },
+    "attribution": "Adapted from Statistics Canada, Census of Agriculture, 2021. This does not constitute an endorsement by Statistics Canada of this product.",
+    "geographicMeaning": "農場の本拠地があるCCSに集計された申告面積・頭数。複数地域にまたがる圃場も本拠地域に集計され、実際の畑・農場・牛の所在地を表すものではない。",
+    "geographicRuleUrl": "https://www150.statcan.gc.ca/n1/pub/32-26-0002/322600022021001-eng.htm",
+    "randomTabularAdjustment": "2021年農業センサスのRTA調整済み公表値。地域値から全国・州の公表値を再計算しない。",
+    "qualityUrl": "https://www150.statcan.gc.ca/n1/pub/32-26-0007/322600072021001-eng.htm",
+    "nationalCoverage": "カナダ全国の公表値に準州は含まれない。"
+  },
+  "statistics": {
+    "tables": [
+      {
+        "id": "32100309",
+        "tableId": "32-10-0309-01",
+        "url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210030901",
+        "download": "https://www150.statcan.gc.ca/n1/tbl/csv/32100309-eng.zip",
+        "releasedAt": "2022-05-11",
+        "referenceYear": 2021,
+        "licence": {
+          "name": "Statistics Canada Open Licence",
+          "url": "https://www.statcan.gc.ca/en/terms-conditions/open-licence"
+        },
+        "archive": {
+          "file": "32100309-eng.zip",
+          "bytes": 2465360,
+          "sha256": "4347084c6262bc27262a14ab0a52f826115ee733dedc3644c30c623da716476f"
+        },
+        "csv": {
+          "sha256": "e732ad595a50cd5085828905b134a86af29dd33283bd64298e356a249230d22f",
+          "rows": 228204
+        },
+        "selected": {
+          "file": "32100309-selected.csv",
+          "rows": 7044,
+          "sha256": "7a08d4132a82d90613380428359457ec81151fdff7209510132eeacf331c9447"
+        },
+        "metadata": {
+          "file": "32100309-metadata.csv",
+          "sha256": "bc9e96118d0c7df91c85a17942550e1e363af6749291cd54d434be1189d66244"
+        }
+      },
+      {
+        "id": "32100370",
+        "tableId": "32-10-0370-01",
+        "url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210037001",
+        "download": "https://www150.statcan.gc.ca/n1/tbl/csv/32100370-eng.zip",
+        "releasedAt": "2022-05-11",
+        "referenceYear": 2021,
+        "licence": {
+          "name": "Statistics Canada Open Licence",
+          "url": "https://www.statcan.gc.ca/en/terms-conditions/open-licence"
+        },
+        "archive": {
+          "file": "32100370-eng.zip",
+          "bytes": 611914,
+          "sha256": "14be0e54bba7a17326e69dc005e4560750ad5d499556a51abcd519fae9b7c563"
+        },
+        "csv": {
+          "sha256": "391dc6a843b98dad18aa3c49def51b926994cb68c0cc76718743cd1894f0e850",
+          "rows": 46486
+        },
+        "selected": {
+          "file": "32100370-selected.csv",
+          "rows": 1761,
+          "sha256": "b93c9a629848ee0cd8c60c3b547fb15fa1e1044852e7a40c89dedc785386d46c"
+        },
+        "metadata": {
+          "file": "32100370-metadata.csv",
+          "sha256": "c60dd538f7a4f2adf7c87005f866b640a145407f1063e35a3bab20d26cd8431b"
+        }
+      },
+      {
+        "id": "32100249",
+        "tableId": "32-10-0249-01",
+        "url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210024901",
+        "download": "https://www150.statcan.gc.ca/n1/tbl/csv/32100249-eng.zip",
+        "releasedAt": "2022-05-11",
+        "referenceYear": 2021,
+        "licence": {
+          "name": "Statistics Canada Open Licence",
+          "url": "https://www.statcan.gc.ca/en/terms-conditions/open-licence"
+        },
+        "archive": {
+          "file": "32100249-eng.zip",
+          "bytes": 870133,
+          "sha256": "4720e70a693140d791842522d3c87dd2aa7b1eda80c59c3c4dfbd9aade9dcd40"
+        },
+        "csv": {
+          "sha256": "3e63668d69f669b4ce11417d2b668defe3be28bacc6760da9e6b233ac5de49de",
+          "rows": 69729
+        },
+        "selected": {
+          "file": "32100249-selected.csv",
+          "rows": 3522,
+          "sha256": "99869cb53865e994fe5dd9edab54171014da2817843bce9a896312e86ce821de"
+        },
+        "metadata": {
+          "file": "32100249-metadata.csv",
+          "sha256": "5346c12a6f5af500605f7238934c54a64801f4b4b4a9606f2073fd998f07df1d"
+        }
+      }
+    ],
+    "dimensionFilter": {
+      "referenceDate": "2021",
+      "unitDimension": "Unit of measure",
+      "areaUnit": "Hectares",
+      "animalUnit": "Number of animals",
+      "uomColumn": "Number",
+      "scalarFactor": "units"
+    },
+    "selectionMethod": "Retain original CSV row text for 2021 official Canada, province and CCS source cells of the seven explicitly named variables. Join CCS by DGUID only; retain exact numeric values, zero, quality, vector and coordinate. Never derive values from map dots or aggregate regions into government totals.",
+    "counts": {
+      "canola": {
+        "published": 1604,
+        "qualityF": 143,
+        "notCovered": 10,
+        "zero": 1046
+      },
+      "wheat": {
+        "published": 1356,
+        "qualityF": 391,
+        "notCovered": 10,
+        "zero": 389
+      },
+      "beef": {
+        "published": 1318,
+        "qualityF": 429,
+        "notCovered": 10,
+        "zero": 164
+      },
+      "pasture": {
+        "published": 791,
+        "qualityF": 956,
+        "notCovered": 10,
+        "zero": 89
+      },
+      "hay": {
+        "published": 1157,
+        "qualityF": 590,
+        "notCovered": 10,
+        "zero": 88
+      }
+    },
+    "publishedRegionCount": 1747,
+    "geometryRegionCount": 1757,
+    "unmatchedPublishedDguids": []
+  },
+  "geometry": {
+    "url": "/assets/atlas/canada-census-agriculture-v1/ccs.geojson",
+    "idProperty": "DGUID",
+    "featureCount": 1757,
+    "sourceName": "2021 Census Consolidated Subdivision Generalized Cartographic Boundary File",
+    "sourceUrl": "https://www150.statcan.gc.ca/n1/pub/92-639-g/92-639-g2021001-eng.htm",
+    "serviceUrl": "https://geo.statcan.gc.ca/geo_wa/rest/services/2021/Agricultural_ecumene_boundary_files/MapServer/1",
+    "queryUrl": "https://geo.statcan.gc.ca/geo_wa/rest/services/2021/Agricultural_ecumene_boundary_files/MapServer/1/query?where=1%3D1&outFields=CCSUID,CCSNAME,DGUID,PRUID&returnGeometry=true&outSR=4326&f=geojson",
+    "downloadUrl": "https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/files-fichiers/leca000e21a_e.zip",
+    "sourceCrs": "EPSG:3347",
+    "crs": "EPSG:4326",
+    "releasedAt": "2022-09-27",
+    "referenceDate": "2021-01-01",
+    "accessedAt": "2026-10-02",
+    "sourceGeneralizationMetres": 5000,
+    "bytes": 6615415,
+    "sha256": "8af9e387fe7087e3692ce07942b9cff96bd8c229a6bb753f5d4cd20b7af447a9",
+    "vertexCount": 154854,
+    "vertexMethod": "Count every original position in all Polygon/MultiPolygon rings, including closing positions; no coordinate rounding or simplification.",
+    "bounds": [
+      -141.00726326354865,
+      41.70699869882555,
+      -52.66660392518449,
+      83.11660605307753
+    ],
+    "method": "Official REST output in WGS84 copied byte-for-byte. No additional simplification, tracing, coordinate approximation or invented points. Polygons represent statistical administrative regions, not cultivated parcels.",
+    "licence": {
+      "name": "Open Government Licence - Canada",
+      "url": "https://open.canada.ca/en/open-government-licence-canada"
+    },
+    "attribution": "Contains information licensed under the Open Government Licence – Canada. Source: Statistics Canada, Agricultural Ecumene Boundary File, 2021.",
+    "archive": {
+      "file": "leca000e21a_e.zip",
+      "bytes": 1710426,
+      "sha256": "6a22c3d5d777bc6dff07a373007d345e3303cd95f88dff836de9c5e384d414b3"
+    }
+  },
+  "products": {
+    "canola": {
+      "id": "canola",
+      "label": "カノーラ",
+      "displayName": "カノーラ",
+      "unit": "ha",
+      "unitLabel": "申告面積（ha）",
+      "sourceTableId": "32100309",
+      "sourceTableUrl": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210030901",
+      "sourceVariables": [
+        "Canola (rapeseed)"
+      ],
+      "releasedAt": "2022-05-11",
+      "definition": "カノーラ（なたね）の地域別申告面積。",
+      "national": {
+        "value": 9012449,
+        "quality": "A",
+        "status": "published",
+        "components": [
+          {
+            "id": "canola",
+            "variable": "Canola (rapeseed)",
+            "value": 9012449,
+            "quality": "A",
+            "vector": "v1325942213",
+            "coordinate": "1.15.3",
+            "unit": "Hectares",
+            "symbol": "",
+            "decimals": 0
+          }
+        ]
+      },
+      "derived": false,
+      "notes": "公表値と公式品質等級を保持する。"
+    },
+    "wheat": {
+      "id": "wheat",
+      "label": "小麦",
+      "displayName": "小麦",
+      "unit": "ha",
+      "unitLabel": "申告面積（ha）",
+      "sourceTableId": "32100309",
+      "sourceTableUrl": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210030901",
+      "sourceVariables": [
+        "Wheat, total"
+      ],
+      "releasedAt": "2022-05-11",
+      "definition": "春小麦（デュラムを除く）・デュラム小麦・冬小麦を含む小麦の地域別申告面積。",
+      "national": {
+        "value": 9413876,
+        "quality": "A",
+        "status": "published",
+        "components": [
+          {
+            "id": "wheat",
+            "variable": "Wheat, total",
+            "value": 9413876,
+            "quality": "A",
+            "vector": "v1325942174",
+            "coordinate": "1.2.3",
+            "unit": "Hectares",
+            "symbol": "",
+            "decimals": 0
+          }
+        ]
+      },
+      "derived": false,
+      "notes": "公表値と公式品質等級を保持する。"
+    },
+    "beef": {
+      "id": "beef",
+      "label": "肉用母牛",
+      "displayName": "肉用母牛",
+      "unit": "頭",
+      "unitLabel": "母牛頭数（頭）",
+      "sourceTableId": "32100370",
+      "sourceTableUrl": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210037001",
+      "sourceVariables": [
+        "Cows, beef"
+      ],
+      "releasedAt": "2022-05-11",
+      "definition": "肉用の母牛頭数。子牛・育成牛・肥育牛・乳牛を含む牛の総頭数ではない。",
+      "national": {
+        "value": 3776389,
+        "quality": "A",
+        "status": "published",
+        "components": [
+          {
+            "id": "beef",
+            "variable": "Cows, beef",
+            "value": 3776389,
+            "quality": "A",
+            "vector": "v1326984290",
+            "coordinate": "1.9.2",
+            "unit": "Number of animals",
+            "symbol": "",
+            "decimals": 0
+          }
+        ]
+      },
+      "derived": false,
+      "notes": "公表値と公式品質等級を保持する。"
+    },
+    "pasture": {
+      "id": "pasture",
+      "label": "放牧地",
+      "displayName": "放牧地",
+      "unit": "ha",
+      "unitLabel": "申告面積（ha）",
+      "sourceTableId": "32100249",
+      "sourceTableUrl": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210024901",
+      "sourceVariables": [
+        "Tame or seeded pasture",
+        "Natural land for pasture"
+      ],
+      "releasedAt": "2022-05-11",
+      "definition": "栽培・播種した放牧地と自然の放牧地の申告面積を合算。",
+      "national": {
+        "value": 18559652,
+        "quality": null,
+        "status": "published",
+        "components": [
+          {
+            "id": "tame-pasture",
+            "variable": "Tame or seeded pasture",
+            "value": 4828538,
+            "quality": "A",
+            "vector": "v1326597219",
+            "coordinate": "1.7.3",
+            "unit": "Hectares",
+            "symbol": "",
+            "decimals": 0
+          },
+          {
+            "id": "natural-pasture",
+            "variable": "Natural land for pasture",
+            "value": 13731114,
+            "quality": "A",
+            "vector": "v1326597222",
+            "coordinate": "1.8.3",
+            "unit": "Hectares",
+            "symbol": "",
+            "decimals": 0
+          }
+        ]
+      },
+      "derived": true,
+      "notes": "公表された成分を合算。いずれかが品質Fなら合算値も不公表。合算値に公式品質等級は付与せず、各成分の品質を保持する。"
+    },
+    "hay": {
+      "id": "hay",
+      "label": "干草・栽培牧草（アルファルファ＋その他）",
+      "displayName": "干草・栽培牧草（アルファルファ＋その他）",
+      "unit": "ha",
+      "unitLabel": "申告面積（ha）",
+      "sourceTableId": "32100309",
+      "sourceTableUrl": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210030901",
+      "sourceVariables": [
+        "Alfalfa and alfalfa mixtures",
+        "All other tame hay and fodder crops"
+      ],
+      "releasedAt": "2022-05-11",
+      "definition": "アルファルファおよびその混播牧草と、その他の栽培干草・飼料作物の申告面積を合算。採種用牧草は含めない。",
+      "national": {
+        "value": 5238906,
+        "quality": null,
+        "status": "published",
+        "components": [
+          {
+            "id": "alfalfa-hay",
+            "variable": "Alfalfa and alfalfa mixtures",
+            "value": 3056486,
+            "quality": "A",
+            "vector": "v1325942240",
+            "coordinate": "1.24.3",
+            "unit": "Hectares",
+            "symbol": "",
+            "decimals": 0
+          },
+          {
+            "id": "other-hay",
+            "variable": "All other tame hay and fodder crops",
+            "value": 2182420,
+            "quality": "A",
+            "vector": "v1325942243",
+            "coordinate": "1.25.3",
+            "unit": "Hectares",
+            "symbol": "",
+            "decimals": 0
+          }
+        ]
+      },
+      "derived": true,
+      "notes": "公表された成分を合算。いずれかが品質Fなら合算値も不公表。合算値に公式品質等級は付与せず、各成分の品質を保持する。",
+      "originalTotalHay": {
+        "value": 5394265,
+        "unit": "ha",
+        "year": 2021,
+        "source": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-037-eng.htm",
+        "comparable": false,
+        "note": "原図のTotal hayとは定義の異なる2成分合算。原図の全国値をこの指標へ流用しない。"
+      }
+    }
+  },
+  "output": {
+    "data": {
+      "file": "census-agriculture.json",
+      "bytes": 2954440,
+      "sha256": "df88f6305822a3e61e7db751665c76b8a806c0697219417c8a5ed0e4e3bedfe2"
+    },
+    "geometry": {
+      "file": "ccs.geojson",
+      "bytes": 6615415,
+      "sha256": "8af9e387fe7087e3692ce07942b9cff96bd8c229a6bb753f5d4cd20b7af447a9"
+    }
+  }
+}
