@@ -25,7 +25,7 @@ function hostMarkup(layer) {
   const config = { layer, groups, stations: cities, geometryUrl: '/source.geojson', workerUrl: '/worker.js', context: { type: 'FeatureCollection', features: [] } };
   return `<section data-canada-natural-layer="${layer}"><div data-canada-natural-stage>
     <svg data-canada-natural-fallback tabindex="0">${groups.map(group => `<g data-canada-natural-shape="${group.id}" tabindex="0" role="button"><path d="M100,100L200,100L200,200Z"></path></g>`).join('')}<g data-canada-natural-static-stations></g></svg>
-    <div data-canada-natural-live hidden></div>${cities.map(city => `<button data-canada-natural-city="${city.id}"><i></i><span>${escape(city.name)}</span></button>`).join('')}
+    <div data-canada-natural-live hidden></div>${cities.map(city => `<button data-canada-natural-city="${city.id}" aria-label="${escape(city.name)} climate normals"><i></i><span>${escape(city.name)}</span></button>`).join('')}
     <button data-canada-natural-reset>Reset</button><button data-canada-natural-zoom="in">+</button><button data-canada-natural-zoom="out">-</button><button data-canada-natural-focus>Focus</button>
     </div>${groups.map(group => `<button data-canada-natural-legend="${group.id}">${group.name}</button>`).join('')}
     <input type="checkbox" data-canada-natural-only><p data-canada-natural-status></p><script type="application/json" data-canada-natural-config>${JSON.stringify(config).replace(/</g, '\\u003c')}</script></section>`;
@@ -91,6 +91,34 @@ test('Natural layer selection, isolation and city events stay host-owned and kee
     assert.equal(p.host('climate').querySelectorAll('[data-canada-natural-shape]:not([hidden])').length, 2);
     p.controllers.climate.destroy(); const count = p.events.length;
     p.q('climate', '[data-canada-natural-legend="ET"]').click(); assert.equal(p.events.length, count);
+  } finally { await p.close(); }
+});
+
+test('Selected city names win collisions on every redraw while all real coordinate markers and accessible names remain', async () => {
+  const p = page();
+  try {
+    const western = ['vancouver', 'winnipeg', 'regina'];
+    const buttons = [...p.host('climate').querySelectorAll('[data-canada-natural-city]')];
+    const positions = new Map(buttons.map(button => [button.dataset.canadaNaturalCity, [button.style.left, button.style.top]]));
+    for (const button of buttons) {
+      // Browser widths collapse when a span is hidden. Mimic that to detect
+      // stale measurements when a previously hidden city is selected.
+      Object.defineProperty(button, 'offsetWidth', { get: () => button.querySelector('span').hidden ? 20 : 250 });
+      Object.defineProperty(button, 'offsetHeight', { value: 30 });
+    }
+    for (const city of western) for (let redraw = 0; redraw < 3; redraw++) {
+      p.controllers.climate.render({ selected: 'Dfb', only: false, city });
+      const selected = p.q('climate', `[data-canada-natural-city="${city}"]`);
+      assert.equal(selected.querySelector('span').hidden, false, 'the selected name is always visible');
+      assert.equal(selected.style.zIndex, '2', 'the selected name is above neighboring label backgrounds');
+      for (const id of western.filter(id => id !== city)) assert.equal(p.q('climate', `[data-canada-natural-city="${id}"] span`).hidden, true, 'collisions hide only other text');
+      for (const button of buttons) {
+        assert.equal(button.hidden, false, 'in-frame coordinate markers remain interactive');
+        assert.equal(button.querySelector('i').hidden, false, 'the point glyph remains visible');
+        assert.deepEqual([button.style.left, button.style.top], positions.get(button.dataset.canadaNaturalCity), 'label priority never moves a geographic point');
+        assert.ok(button.getAttribute('aria-label').includes(stations.find(station => station.id === button.dataset.canadaNaturalCity).name));
+      }
+    }
   } finally { await p.close(); }
 });
 

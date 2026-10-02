@@ -118,15 +118,23 @@ export function initCanadaNaturalLayer(root: HTMLElement): CanadaNaturalControll
       const x = projected?.x ?? (point[0] - frame[0]) * ratio + left;
       const y = projected?.y ?? (point[1] - frame[1]) * ratio + top;
       label.hidden = false;
+      const text = label.querySelector<HTMLElement>('span');
+      // Measure the full name on every redraw; a previously hidden name must
+      // still reserve its full width when its city becomes selected.
+      if (text) text.hidden = false;
       const w = label.offsetWidth || Math.min(185, (label.textContent?.length ?? 0) * 12 + 14), h = label.offsetHeight || 30;
       const box = [x - 6, y - h / 2, x + w - 6, y + h / 2];
       // The circle remains at the real observation coordinate at every scale.
       label.hidden = x < 3 || y < 3 || x > width - 3 || y > height - 3;
-      const text = label.querySelector<HTMLElement>('span');
       const collision = box[2] > width - 3 || occupied.some(([x1, y1, x2, y2]) => box[0] < x2 + 3 && box[2] > x1 - 3 && box[1] < y2 + 3 && box[3] > y1 - 3);
       if (text) text.hidden = collision && station.id !== state.city;
+      label.style.zIndex = station.id === state.city ? '2' : '1';
       label.style.left = `${x}px`; label.style.top = `${y}px`;
-      if (!label.hidden) occupied.push(box);
+      if (!label.hidden) {
+        // Hidden text occupies only its coordinate marker, not an invisible
+        // name-sized rectangle that could suppress unrelated city names.
+        occupied.push(text?.hidden ? [x - 6, y - h / 2, x + 12, y + h / 2] : box);
+      }
     }
   }
 
