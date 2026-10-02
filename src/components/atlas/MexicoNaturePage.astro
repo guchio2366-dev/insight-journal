@@ -76,7 +76,7 @@ const config = {routes, defaultViewBox: mapViewBox, states: statePaths.map(item 
    <a class="mexico-comparison-link" data-mexico-nature-compare-link="irrigation" href={`${routes.nature}?view=climate&compare=irrigation&state=25`}>乾燥気候と灌漑農地率を比べる</a>
    <a class="mexico-comparison-link" data-mexico-nature-compare-link="population" href={`${routes.nature}?view=relief&compare=population&state=25`}>地形地域と人口密度を比べる</a>
   </nav>
-  <section data-mexico-hydrology-reading hidden><h2 data-mexico-hydrology-title></h2><p class="mexico-takeaway" data-mexico-hydrology-lead></p><p class="mexico-water-status" data-mexico-hydrology-status role="status"></p><button type="button" data-mexico-hydrology-retry hidden>地図資料を再読み込み</button><div class="mexico-nature-reading-body"><p data-mexico-hydrology-value></p><p data-mexico-hydrology-definition></p><p data-mexico-hydrology-limitations></p><details data-mexico-hydrology-base-key><summary data-mexico-hydrology-base-key-title>背景地図の凡例と版</summary><p data-mexico-hydrology-base-source></p><div data-mexico-hydrology-base-key-host></div></details><details><summary>原典・対象期間・加工・利用条件</summary><div data-mexico-hydrology-source></div><a href={withBase('/assets/atlas/mexico-water-v1/manifest.json')}>原典と配信ファイルの台帳</a></details></div></section>
+  <section data-mexico-hydrology-reading hidden><h2 data-mexico-hydrology-title></h2><p class="mexico-takeaway" data-mexico-hydrology-lead></p><p class="mexico-water-status" data-mexico-hydrology-status role="status"></p><button type="button" data-mexico-hydrology-retry hidden>地図資料を再読み込み</button><div class="mexico-nature-reading-body" data-mexico-hydrology-body><p data-mexico-hydrology-value></p><p data-mexico-hydrology-definition></p><p data-mexico-hydrology-limitations></p><details data-mexico-hydrology-base-key><summary data-mexico-hydrology-base-key-title>背景地図の凡例と版</summary><p data-mexico-hydrology-base-source></p><div data-mexico-hydrology-base-key-host></div></details><details><summary>原典・対象期間・加工・利用条件</summary><div data-mexico-hydrology-source></div><a href={withBase('/assets/atlas/mexico-water-v1/manifest.json')}>原典と配信ファイルの台帳</a></details></div></section>
   <section data-mexico-nature-feature-reading hidden><h2 data-mexico-nature-feature-title></h2><p class="mexico-takeaway" data-mexico-nature-feature-lead></p><div class="mexico-nature-reading-body"><p data-mexico-nature-feature-body></p><button type="button" data-mexico-nature-clear-item>全国の概論へ</button></div></section>
   <section data-mexico-nature-overview>
    <h2 data-mexico-nature-reading-title>気候の違いが水管理を変える</h2>
@@ -104,7 +104,7 @@ const config = {routes, defaultViewBox: mapViewBox, states: statePaths.map(item 
     <p class="mexico-caption" data-mexico-nature-comparison-period></p>
    </figure>
    <p data-mexico-nature-comparison-body></p>
-   <details><summary>社会活動へのつながりと比較の範囲</summary><p data-mexico-nature-comparison-consequence></p><p>両地図は同じ投影・表示範囲です。自然分布は地域区分、比較先は州平均または州の農地面積割合として読みます。</p></details>
+   <details><summary>社会活動へのつながりと比較の範囲</summary><p data-mexico-nature-comparison-consequence></p><p data-mexico-nature-comparison-granularity>両地図は同じ投影・表示範囲です。自然分布は地域区分、比較先は州平均または州の農地面積割合として読みます。</p></details>
    <a class="mexico-return" data-mexico-nature-plain-return href={`${routes.nature}?view=climate&state=25`}>シナロアの気候分布に戻る</a>
    </div>
   </section>

@@ -16,6 +16,9 @@ function fixture(search, water = false) {
     const label=window.document.createElement('label'),nativePicker=root.querySelector('[data-mexico-nature-item-select]');nativePicker.before(label);label.append(nativePicker);
     const group=window.document.createElementNS('http://www.w3.org/2000/svg','g');group.setAttribute('data-mexico-hydrology-overlay','');root.querySelector('[data-mexico-nature-main-map]').append(group);
     root.insertAdjacentHTML('beforeend','<ul data-mexico-hydrology-legend></ul><div data-mexico-hydrology-reading><h2 data-mexico-hydrology-title></h2><p data-mexico-hydrology-lead></p><p data-mexico-hydrology-status></p><button data-mexico-hydrology-retry></button></div><select data-mexico-hydrology-item></select><a data-mexico-nature-plain-return></a><a data-mexico-nature-compare-link="population"></a><p data-mexico-nature-comparison-body></p><p data-mexico-nature-comparison-definition></p>');
+    const body=window.document.createElement('div');body.className='mexico-nature-reading-body';body.setAttribute('data-mexico-hydrology-body','');body.innerHTML='<p data-mexico-hydrology-value></p><p data-mexico-hydrology-definition></p><p data-mexico-hydrology-limitations></p><div data-mexico-hydrology-source></div>';root.querySelector('[data-mexico-hydrology-reading]').append(body);
+    const comparison=window.document.createElement('section');comparison.setAttribute('data-mexico-nature-comparison','');comparison.innerHTML='<h2 data-mexico-nature-comparison-title></h2><p data-mexico-nature-comparison-lead></p><div class="mexico-nature-reading-body"></div>';root.append(comparison);for(const selector of ['[data-mexico-nature-comparison-body]','[data-mexico-nature-comparison-definition]','[data-mexico-nature-plain-return]'])comparison.lastElementChild.append(root.querySelector(selector));
+    const dock=window.document.createElement('nav');dock.className='mexico-nature-comparison-dock';root.querySelector('[data-mexico-hydrology-reading]').before(dock);
     window.fetch=async url=>({ok:true,json:async()=>String(url).endsWith('manifest.json')?{layers:{contours:{file:'contours.json',publisher:'NOAA NCEI',edition:2022,displayIntervalM:500}}}:{type:'FeatureCollection',features:[{type:'Feature',properties:{id:'contours-1000-1',name:'1000 m',elevationM:1000},geometry:{type:'LineString',coordinates:[[-104,24],[-102,25]]}}]}});
   }
   window.eval(code); return window;
@@ -28,10 +31,17 @@ test('Water target comparison and named natural return retain the actual segment
     await wait(window);const document=window.document,link=new URL(document.querySelector('[data-mexico-nature-plain-return]').href);
     assert.equal(link.searchParams.get('waterFeature'),'contours:contours-1000-1');assert.equal(link.searchParams.get('waterBase'),'relief');assert.equal(link.searchParams.get('compare'),null);
     assert.equal(link.searchParams.get('sourceState'),'10');assert.equal(link.searchParams.get('frame'),'210,100,350,220');
-    assert.match(document.querySelector('[data-mexico-nature-comparison-body]').textContent,/等高線は同じ標高mを結ぶ線/);assert.doesNotMatch(document.querySelector('[data-mexico-nature-comparison-body]').textContent,/地域の分類|自然地域の境/);
+    assert.match(document.querySelector('[data-mexico-nature-comparison-body]').textContent,/等高線は同じ標高m（EGM2008）を結ぶ線/);assert.doesNotMatch(document.querySelector('[data-mexico-nature-comparison-body]').textContent,/地域の分類|自然地域の境/);
+    assert.equal(document.querySelector('[data-mexico-hydrology-reading]').hidden,true,'A water comparison shows one reading section');
+    assert.ok(document.querySelector('[data-mexico-water-comparison-details]').contains(document.querySelector('[data-mexico-hydrology-body]')),'Original water body and sources remain reachable inside comparison');
+    assert.equal(document.querySelectorAll('[data-mexico-hydrology-body]').length,1);assert.equal(document.querySelectorAll('[data-mexico-hydrology-source]').length,1);
+    assert.ok(!document.querySelector('[data-mexico-nature-comparison]').contains(document.querySelector('[data-mexico-nature-plain-return]')),'Named return is fixed outside the scrolling comparison body');
+    assert.match(document.querySelector('[data-mexico-nature-compare-link="population"]').textContent,/標高・等高線と人口密度/);
     const target=new URL(document.querySelector('[data-mexico-nature-compare-link="population"]').href);assert.equal(target.searchParams.get('waterFeature'),'contours:contours-1000-1');assert.equal(target.searchParams.get('waterBase'),'relief');
     restored=fixture(link.search,true);await wait(restored);assert.equal(restored.document.querySelector('[data-mexico-workspace]').dataset.mexicoWaterFeature,'contours:contours-1000-1');
     assert.match(restored.document.querySelector('[data-mexico-hydrology-lead]').textContent,/原DEMから作成した1,000 m/);
+    window.history.replaceState(null,'',link);window.dispatchEvent(new window.PopStateEvent('popstate'));await wait(window);
+    assert.equal(document.querySelector('[data-mexico-hydrology-reading]').hidden,false);assert.ok(document.querySelector('[data-mexico-hydrology-reading]').contains(document.querySelector('[data-mexico-hydrology-body]')));assert.ok(document.querySelector('[data-mexico-nature-comparison]').contains(document.querySelector('[data-mexico-nature-plain-return]')));
   }finally{await window.happyDOM.close();await restored?.happyDOM.close();}
 });
 test('Actual feature click and item selection synchronize description and URL without replacing source quantities', async () => {

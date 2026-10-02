@@ -3,6 +3,7 @@ import {readFile, writeFile, stat} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {dirname, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {gunzipSync} from 'node:zlib';
 
 const folder = resolve(dirname(fileURLToPath(import.meta.url)), '../public/assets/atlas/mexico-water-v1');
 const layers = {};
@@ -11,12 +12,14 @@ for (const id of ['rivers', 'groundwater', 'precipitation', 'basins', 'contours'
   try {metadata = JSON.parse(await readFile(resolve(folder, `${id}.source.json`), 'utf8'));}
   catch (error) {if (error.code === 'ENOENT') continue; throw error;}
   const file = metadata.file ?? metadata.asset?.file;
-  if (!file || file !== `${id}.geojson`) throw new Error(`Unexpected ${id} asset file`);
+  if (!file || ![`${id}.geojson`, `${id}.geojson.gz`].includes(file)) throw new Error(`Unexpected ${id} asset file`);
   const bytes = await readFile(resolve(folder, file));
   const sha256 = createHash('sha256').update(bytes).digest('hex');
   const expectedHash = metadata.asset?.sha256 ?? metadata.assetSha256;
   if (expectedHash && expectedHash !== sha256) throw new Error(`${id} source/asset hash mismatch`);
-  const data = JSON.parse(bytes);
+  const decoded = file.endsWith('.gz') ? gunzipSync(bytes) : bytes;
+  if (metadata.decodedAsset?.sha256 && metadata.decodedAsset.sha256 !== createHash('sha256').update(decoded).digest('hex')) throw new Error(`${id} decoded hash mismatch`);
+  const data = JSON.parse(decoded);
   if (data.type !== 'FeatureCollection' || !data.features.length) throw new Error(`${id} requires actual vector features`);
   await stat(resolve(folder, file));
   const normalized = id === 'contours' ? {

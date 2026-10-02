@@ -109,7 +109,7 @@ def main():
         "publisher": "INEGI", "product": catalog["titulo"], "productUpc": catalog["upc"],
         "sourceUrl": PRODUCT_URL, "downloadUrl": "https://www.inegi.org.mx" + catalog["formatos"][0]["url"]["valor"],
         "edition": 2006, "observedPeriod": None,
-        "periodNote": "2006年は刊行年。同梱原典は作図期の約4,000観測所の資料を説明するが、統一された観測対象期間を明記していない。近年の降水量や1991–2020平年値として扱わない。",
+        "periodNote": "2006年は刊行年。関連する2005年作成ガイド§3.3（印刷15頁）は1921–1975年の観測を説明するが、この配布版の統一観測期間との対応は未確認。近年の降水量や1991–2020平年値として扱わない。",
         "unit": "mm/year", "geometryMeaning": "Actual source isohyet lines; not rainfall polygons or station observations.",
         "scale": 1000000, "sourceCrsWkt": original_wkt, "outputCrs": "EPSG:4326",
         "transform": {"operation": transform.description, "accuracyMetres": transform.accuracy, "ballparkAllowed": False, "alwaysXY": True},
@@ -118,10 +118,11 @@ def main():
         "sourceMetadataSha256": digest((args.input / "precipitation-2006-metadata.json").read_bytes()),
         "featureCount": len(features), "originalRecordCount": len(reader), "excludedRecordCount": sum(excluded.values()),
         "excludedBySourceClass": excluded, "sourceVertexCount": source_points,
-        "method": "Read original PolyLine parts. Select only FC=30301 actual isohyet features. Reproject ITRF92 Lambert to WGS84 using the named PROJ datum operation with ballpark disabled. Retain every part, vertex, original OBJECTID and line value; round output coordinates to six decimals. No simplification, interpolation, area generation, clipping or connector lines.",
+        "method": "Read original PolyLine parts. Select only FC=30301 actual isohyet features. Reproject ITRF92 Lambert to WGS84 using the named PROJ datum operation with ballpark disabled. Retain every part, vertex, original OBJECTID and line value; round output coordinates to six decimals. No simplification, interpolation, area generation, clipping or connector lines. Temporal evidence: related 2005 guide section3.3 printed page15 states 1921–1975 observations, but its correspondence to this 2006 archive is unconfirmed; do not assign that period to every vector feature.",
         "valueDefinitionSource": {"url": GUIDE_URL, "printedPage": 14, "meaning": "CLAVE is the total annual precipitation value of the isohyet, in mm."},
+        "observationPeriodEvidence": {"url": GUIDE_URL, "guideEdition": 2005, "section": "3.3 Metodología de elaboración", "printedPage": 15, "pdfPage": 19, "reportedPeriod": "1921–1975", "thisArchiveCorrespondence": "unconfirmed", "bundledExplanation": "climas1m.htm refers to approximately 4000 stations during cartographic compilation but gives no numerical observation period."},
         "license": {"name": "Términos de Libre Uso de la Información del INEGI", "url": LICENSE_URL, "creditRequired": True, "preserveMetadata": True, "discloseTransformations": True},
-        "limitations": ["Line values apply to the corresponding source isohyet, not every point in an adjacent area.", "National cartographic scale 1:1,000,000; storage decimals do not imply local measurement precision.", "No unified observation period is stated in the bundled source explanation."],
+        "limitations": ["Line values apply to the corresponding source isohyet, not every point in an adjacent area.", "National cartographic scale 1:1,000,000; storage decimals do not imply local measurement precision.", "The related 2005 primary guide explicitly describes 1921–1975 observations for annual precipitation. Correspondence between that period and this 2006 distributed vector archive is not established; observedPeriod remains null. These data are not current rainfall or 1991–2020 normals."],
         "asset": asset,
     }
     source_asset = save(out / "precipitation.source.json", metadata)

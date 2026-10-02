@@ -3,6 +3,7 @@ from pathlib import Path
 import argparse
 from collections import Counter
 import hashlib
+import gzip
 import io
 import json
 import math
@@ -13,11 +14,10 @@ WORKSPACE = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(WORKSPACE / "runtime" / "python-geodata"))
 import shapefile
 from pyproj import CRS, Transformer
-from shapely.geometry import shape, mapping
+from shapely.geometry import shape, mapping, LineString
 from shapely.ops import transform as geometry_transform
 
-REPO = Path(__file__).resolve().parents[1]
-OUT = REPO / "public/assets/atlas/mexico-water-v1"
+OUT = Path(__file__).resolve().parents[1] / "public/assets/atlas/mexico-water-v1"
 TERMS = "https://www.inegi.org.mx/inegi/terminos.html"
 LICENSE = {"name": "Términos de Libre Uso de la Información del INEGI", "url": TERMS,
            "creditRequired": True, "preserveMetadata": True, "discloseTransformations": True}
@@ -104,6 +104,13 @@ def common(kind, wkt, source):
 def write_layer(kind, features, metadata):
     bounds = bbox(features)
     asset = save(OUT / (kind + ".geojson"), {"type": "FeatureCollection", "bbox": bounds, "features": features})
+    if kind in ("rivers", "groundwater"):
+        decoded_asset = asset
+        compressed = gzip.compress((OUT / asset["file"]).read_bytes(), compresslevel=9, mtime=0)
+        compressed_file = kind + ".geojson.gz"
+        (OUT / compressed_file).write_bytes(compressed)
+        asset = {"file": compressed_file, "bytes": len(compressed), "sha256": sha(compressed)}
+        metadata.update({"file": compressed_file, "compression": "gzip", "decodedAsset": decoded_asset})
     metadata.update({"asset": asset, "featureCount": len(features), "bounds4326": bounds,
                      "outputVertexCount": sum(vertex_count(f["geometry"]["coordinates"]) for f in features)})
     source_asset = save(OUT / (kind + ".source.json"), metadata)
@@ -162,7 +169,10 @@ def prepare_rivers(folder):
         starts = list(raw.parts) + [len(raw.points)]
         for start, end in zip(starts, starts[1:]):
             assert end - start >= 2
-            group["lines"].append(round_coords(raw.points[start:end]))
+            original_line = round_coords(raw.points[start:end])
+            display_line = round_coords(mapping(LineString(original_line).simplify(0.002, preserve_topology=True))["coordinates"])
+            assert display_line[0] == original_line[0] and display_line[-1] == original_line[-1], "Endpoint changed"
+            group["lines"].append(display_line)
             source_vertices += end - start
             source_parts += 1
         group["sourceIds"].append(rec["id"])
@@ -176,13 +186,13 @@ def prepare_rivers(folder):
         identifier = f"rivers-order-{order}"
         label = f"小流域内Strahler次数{order}（{len(group['sourceIds']):,}セグメント）"
         color = {7: "#0284c7", 8: "#0369a1", 9: "#075985"}[order]
-        properties = {"id": identifier, "name": label, "nameJa": label, "order": order,
+        properties = {"id": identifier, "classId": identifier, "name": label, "nameJa": label, "order": order,
                       "sourceIds": group["sourceIds"], "sourceSegmentCount": len(group["sourceIds"]),
                       "sourcePartCount": len(group["lines"]), "sourceSubbasins": sorted(group["subbasins"]),
                       "conditionCounts": dict(group["conditions"]), "color": color, "unit": "subbasin Strahler order"}
         features.append({"type": "Feature", "id": identifier, "properties": properties,
                          "geometry": {"type": "MultiLineString", "coordinates": group["lines"]}})
-        legend.append({"id": identifier, "label": label, "color": color})
+        legend.append({"id": identifier, "label": f"小流域内Strahler次数{order}", "fullLabel": label, "color": color})
     metadata = common("rivers", wkt, source)
     metadata.update({"name": "河川線（小流域内次数7以上）", "sourceUrl": "https://antares.inegi.org.mx/analisis/red_hidro/siatl/",
         "downloadUrl": "https://antares.inegi.org.mx/geoserver/inegiRedHidro_wfs/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=inegiRedHidro_wfs:RedHidrografica&outputFormat=shape-zip&srsName=EPSG:4326&CQL_FILTER=order_1%3E%3D7",
@@ -194,7 +204,8 @@ def prepare_rivers(folder):
         "periodNote": "原セグメントの日付属性は統一観測期ではない。図版年・観測対象期間を取得年で補わない。",
         "coverage": "National INEGI source query, limited to subbasin ORDER_1 >= 7. Lower-order rivers are outside the displayed selection.",
         "valueDefinitionSource": {"url": "https://antares.inegi.org.mx/analisis/red_hidro/PDF/Doc.pdf", "printedPages": [23, 35]},
-        "method": "Retain every source line part and vertex; group separate parts into three MultiLineString features by exact ORDER_1=7,8,9. Preserve all original segment IDs, source subbasin codes and condition counts. Round coordinates to six decimals. No snapping, union, line joining, simplification, clipping or connector creation.",
+        "method": "Retain every source line part and segment ID; group separate parts into three MultiLineString features by exact ORDER_1=7,8,9. Display-only Shapely line simplification at 0.002 degrees, preserving topology and each original part endpoint. Preserve original segment IDs, source subbasin codes and condition counts. Round coordinates to six decimals. No snapping, union, line joining, clipping or connector creation. Complete unsimplified grouped GeoJSON remains in runtime provenance alongside the pinned original archive.",
+        "displaySimplification": {"toleranceDegrees": 0.002, "preserveTopology": True, "partEndpointsRetained": True, "sourcePartsRetained": True},
         "limitations": ["Strahler order restarts within source subbasins; it is not a continuous national or whole-river order.", "Source attributes have no river-name field. Display labels name the source classification, not inferred rivers.", "Order is network hierarchy, not discharge, available water, navigability or flood risk.", "Selected orders omit lower-order streams, including streams in areas with no displayed selected lines."]})
     write_layer("rivers", features, metadata)
 
@@ -206,8 +217,10 @@ def prepare_groundwater(folder):
     # The supplied continuo_a.prj matches that declaration; continuo_v.prj is NAD27 and is not used.
     transformer = Transformer.from_crs(CRS.from_wkt(wkt), CRS.from_epsg(4326), always_xy=True, allow_ballpark=False)
     assert transformer.accuracy >= 0
-    groups = {c[0]: {"polygons": [], "sourceOrdinals": [], "description": None, "invalid": []} for c in GROUND_CLASSES}
+    groups = {c[0]: {"polygons": [], "sourceOrdinals": [], "description": None, "descriptionVariants": Counter(), "invalid": []} for c in GROUND_CLASSES}
     excluded, source_vertices, source_rings = Counter(), 0, 0
+    simplified_records = 0
+    invalid_display_audit = []
     shapefile.VERBOSE = False
     for index, item in enumerate(r.iterShapeRecords()):
         rec = item.record.as_dict()
@@ -217,13 +230,25 @@ def prepare_groundwater(folder):
             continue
         group = groups[code]
         if group["description"] is None:
-            group["description"] = rec["DESCRIPCIO"]
-        assert group["description"] == rec["DESCRIPCIO"], "Same code has multiple meanings; split by description"
+            group["description"] = rec["DESCRIPCIO"].strip()
+        assert group["description"] == rec["DESCRIPCIO"].strip(), "Same code has multiple meanings; split by description"
+        group["descriptionVariants"][rec["DESCRIPCIO"]] += 1
         raw_geom = item.shape.__geo_interface__
         geom = shape(raw_geom)
         if not geom.is_valid:
             group["invalid"].append(index + 1)
         transformed = geometry_transform(transformer.transform, geom)
+        if geom.is_valid:
+            transformed = transformed.simplify(0.002, preserve_topology=True)
+            assert transformed.is_valid, "Display simplification invalidated a source polygon"
+            simplified_records += 1
+        else:
+            original_area = transformed.area
+            transformed = transformed.simplify(0.002, preserve_topology=True)
+            invalid_display_audit.append({"sourceRecordOrdinal": index + 1, "sourceClass": code, "sourceValid": False,
+                "displayValid": transformed.is_valid, "sourceVertices": len(item.shape.points),
+                "relativePlanarAreaChange": (transformed.area - original_area) / original_area if original_area else None})
+            simplified_records += 1
         mapped = mapping(transformed)
         assert mapped["type"] in ("Polygon", "MultiPolygon")
         polygons = [mapped["coordinates"]] if mapped["type"] == "Polygon" else mapped["coordinates"]
@@ -237,13 +262,14 @@ def prepare_groundwater(folder):
         group = groups[code]
         identifier = "groundwater-" + code
         class_counts[code] = len(group["sourceOrdinals"])
-        props = {"id": identifier, "name": label, "nameJa": label, "sourceClass": code,
-                 "sourceName": group["description"], "material": material, "measure": measure, "band": band,
+        props = {"id": identifier, "classId": identifier, "name": label, "nameJa": label, "sourceClass": code,
+                 "sourceName": group["description"], "sourceDescriptionVariants": dict(group["descriptionVariants"]), "material": material, "measure": measure, "band": band,
                  "color": color, "unit": "L/s yield class" if measure == "yield" else "occurrence potential class",
                  "sourceMemberCount": len(group["sourceOrdinals"]), "sourceRecordOrdinals": group["sourceOrdinals"]}
         features.append({"type": "Feature", "id": identifier, "properties": props,
                          "geometry": {"type": "MultiPolygon", "coordinates": group["polygons"]}})
-        legend.append({"id": identifier, "label": label, "color": color})
+        short_label = label.replace("非固結材料・", "非固結：").replace("固結材料・", "固結：").replace("賦存可能性", "可能性").replace("（", " ").replace("）", "")
+        legend.append({"id": identifier, "label": short_label, "fullLabel": label, "color": color})
     assert sum(sum(len(polygon) for polygon in g["polygons"]) for g in groups.values()) == source_rings, "Source rings lost"
     metadata = common("groundwater", wkt, source)
     metadata.update({"name": "地下水の水文地質区分（収量・賦存可能性）",
@@ -262,15 +288,16 @@ def prepare_groundwater(folder):
         "legend": legend, "legendColorMeaning": "Display palette assigned by this site; formal ten source classes are unchanged. Colors are not claimed to be INEGI's original palette.",
         "valueDefinitionSource": {"url": "https://www.inegi.org.mx/contenidos/temas/mapas/hidrologia/metadatos/dd_hidrosub_v1_250k.pdf", "printedPages": [20, 21]},
         "coverage": "National source geohydrological unit layer, ten groundwater classes. Source water-body/foreign-area polygons are excluded and recorded.",
-        "method": "Group by exact source CLAVE and DESCRIPCIO into ten MultiPolygons without dissolve, repair or adding geometry. Preserve every selected original polygon, hole, part and record ordinal. Apply named ITRF92 Lambert to WGS84 PROJ datum operation with ballpark disabled; round to six decimals. No simplification, interpolation, clipping or arbitrary aquifer construction.",
-        "limitations": ["These hydrogeological units are not CONAGUA's 653 legal aquifer units.", "Yield classes (>40,10–40,<10 L/s) and qualitative occurrence-potential classes are distinct source concepts; neither is reservoir volume or current water availability.", "Source records have only class/description; record ordinals identify preserved archive records, not invented official feature IDs.", "Original invalid polygons remain unchanged in topology rather than silently repaired."]})
+        "displaySimplification": {"toleranceDegrees": 0.002, "preserveTopology": True, "sourceRecordsSimplified": simplified_records, "invalidSourceRecordsChanged": True, "sourceRingsRetained": True, "invalidSourceDisplayAudit": invalid_display_audit},
+        "method": "Group by exact source CLAVE and whitespace-trimmed DESCRIPCIO into ten MultiPolygons without dissolve, make_valid, buffer repair or adding geometry. Preserve the original description variants/counts (three 10pb records have a leading space), every selected polygon, hole, part and record ordinal. Apply named ITRF92 Lambert to WGS84 PROJ datum operation with ballpark disabled. Display-only Shapely simplify at 0.002 degrees with preserve_topology=True for every source unit, including invalid inputs whose source/display validity and area change are independently recorded. Assert that every source ring remains. Round to six decimals. Complete unsimplified grouped geometry remains in runtime provenance. No interpolation, clipping or arbitrary aquifer construction.",
+        "limitations": ["These hydrogeological units are not CONAGUA's 653 legal aquifer units.", "Yield classes (>40,10–40,<10 L/s) and qualitative occurrence-potential classes are distinct source concepts; neither is reservoir volume or current water availability.", "Source records have only class/description; record ordinals identify preserved archive records, not invented official feature IDs.", "This is display generalization, not repaired analytical topology or a legal/local boundary. Invalid original polygons and source/display changes remain in the audit; original geometry is preserved separately."]})
     write_layer("groundwater", features, metadata)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, required=True)
-    parser.add_argument("--layer", choices=["basins", "rivers", "groundwater", "all"], default="all")
+    parser.add_argument("--layer", choices=["basins", "rivers", "groundwater", "all"], required=True)
     args = parser.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
     handlers = {"basins": prepare_basins, "rivers": prepare_rivers, "groundwater": prepare_groundwater}

@@ -4,7 +4,7 @@ import {build} from 'esbuild';
 import {Window} from 'happy-dom';
 import fs from 'node:fs';
 import crypto from 'node:crypto';
-import {readMexicoWaterSelection,writeMexicoWaterSelection,validateMexicoWaterCollection,mexicoWaterFeatureFill,mexicoWaterLayersForCategory,mexicoContourGroups,closestMexicoContour} from '../../src/lib/atlas-mexico-hydrology.ts';
+import {readMexicoWaterSelection,writeMexicoWaterSelection,validateMexicoWaterCollection,mexicoWaterFeatureFill,mexicoWaterFeatureStroke,mexicoWaterUnit,mexicoWaterSourceText,mexicoWaterLineLabels,mexicoWaterLayersForCategory,mexicoContourGroups,closestMexicoContour} from '../../src/lib/atlas-mexico-hydrology.ts';
 import {readMexicoNatureState,writeMexicoNatureState,mexicoNatureReturnUrl} from '../../src/lib/atlas-mexico-nature.ts';
 
 const line = (id, value = 1000) => ({type:'Feature', properties:{id,name:`${value} mm/年`,value,unit:'mm/年'},geometry:{type:'LineString',coordinates:[[-105,25],[-102,24],[-100,22]]}});
@@ -46,6 +46,19 @@ test('Contour level grouping preserves separate original segments and returns th
   assert.equal(closestMexicoContour(groups.get(500),[5,9],p=>p).properties.id,'500-b');
   assert.equal(closestMexicoContour(groups.get(500),[5,1],p=>p).properties.id,'500-a');
   assert.deepEqual(features[0].geometry.coordinates,[[0,0],[10,0]],'Grouping does not add a connector between separate contours');
+});
+test('Actual class strokes match river keys, basin boundary keys use line color, and source units are localized without inventing dates',()=>{
+  const metadata={file:'rivers.json',unit:'subbasin Strahler order',legend:[{id:'rivers-order-7',label:'小流域内次数7',color:'#0284c7'},{id:'rivers-order-8',label:'小流域内次数8',color:'#0369a1'}]};
+  assert.equal(mexicoWaterFeatureStroke({...line('order-8'),properties:{id:'order-8',classId:'rivers-order-8'}},'rivers',metadata),'#0369a1');
+  assert.equal(mexicoWaterFeatureStroke(line('basin'),'basins',{file:'basins.json',legend:[{label:'国内流域界',color:'#0e7490'}]}),'#0e7490');
+  assert.equal(mexicoWaterUnit(metadata),'小流域内Strahler次数');assert.equal(mexicoWaterUnit({file:'contours.json',unit:'m',verticalDatum:'EGM2008 geoid'}),'m（EGM2008）');
+  assert.match(mexicoWaterSourceText({id:'precipitation',file:'rain.json',publisher:'INEGI',unit:'mm/year',edition:2006,observedPeriod:null}),/2006刊行版.*観測期間との対応未確認.*mm\/年/);
+});
+test('Number labels retain real source vertices and values and omit anchors that collide with labels, controls or the camera edge',()=>{
+  const features=[{...line('rain-100',100),geometry:{type:'LineString',coordinates:[[50,50],[100,100],[150,150]]}},{...line('rain-500',500),geometry:{type:'LineString',coordinates:[[60,50],[100,100],[180,160]]}},{...line('rain-1000',1000),geometry:{type:'LineString',coordinates:[[250,200],[300,250],[350,300]]}}];
+  const labels=mexicoWaterLineLabels(features,[100,500,1000],p=>p,[0,0,400,350],13,'mm',[[80,80,50,50]]);
+  assert.ok(labels.length>=1);for(const label of labels){const feature=features.find(feature=>feature.properties.id===label.id);assert.equal(label.value,feature.properties.value);assert.ok(feature.geometry.coordinates.some(point=>point[0]===label.point[0]&&point[1]===label.point[1]));assert.ok(label.box[0]>=3&&label.box[1]>=3&&label.box[0]+label.box[2]<=397&&label.box[1]+label.box[3]<=347);assert.ok(!(label.box[0]<130&&label.box[0]+label.box[2]>80&&label.box[1]<130&&label.box[1]+label.box[3]>80));}
+  for(let a=0;a<labels.length;a++)for(let b=a+1;b<labels.length;b++){const x=labels[a].box,y=labels[b].box;assert.ok(!(x[0]<y[0]+y[2]&&x[0]+x[2]>y[0]&&x[1]<y[1]+y[3]&&x[1]+x[3]>y[1]));}
 });
 
 const bundle = await build({stdin:{contents:"import {initMexicoHydrology} from './src/scripts/atlas-mexico-hydrology.ts';window.initTestWater=initMexicoHydrology;",resolveDir:process.cwd(),loader:'ts'},bundle:true,platform:'browser',format:'iife',write:false});
@@ -108,4 +121,9 @@ test('HTTP 200 malformed geometry is discarded so Retry obtains the corrected or
     root.querySelector('[data-mexico-hydrology-retry]').click();await waitFor(()=>root.dataset.mexicoHydrologyReady==='true');
     assert.equal(reads,2);assert.equal(root.querySelectorAll('[data-mexico-water-feature="precipitation:corrected"]').length,1);
   }finally{await window.happyDOM.close();}
+});
+test('Changing to an unavailable subject clears the previous values, limitations, source links and picker',async()=>{
+  const window=setup(),root=window.document.querySelector('article');let state={category:'precipitation',view:'climate',fallback:false};
+  window.fetch=async url=>({ok:true,json:async()=>String(url).endsWith('manifest.json')?{layers:{precipitation:{id:'precipitation',file:'rain.json',publisher:'INEGI',edition:2006,unit:'mm/year'}}}:collection([line('rain-current')])});
+  const controller=window.initTestWater(root,'/data/',()=>state,()=>{});try{controller.render();await waitFor(()=>root.dataset.mexicoHydrologyReady==='true');assert.match(root.querySelector('[data-mexico-hydrology-limitations]').textContent,/関連2005.*1921〜1975.*対応は未確認/);assert.ok(root.querySelector('[data-mexico-hydrology-source]').textContent);state={...state,category:'rivers-groundwater'};controller.render();await waitFor(()=>root.dataset.mexicoHydrologyReady==='false');for(const selector of ['[data-mexico-hydrology-value]','[data-mexico-hydrology-definition]','[data-mexico-hydrology-limitations]','[data-mexico-hydrology-source]'])assert.equal(root.querySelector(selector).textContent,'');assert.equal(root.querySelector('[data-mexico-hydrology-item]').options.length,0);assert.equal(root.querySelector('[data-mexico-hydrology-retry]').hidden,false);}finally{await window.happyDOM.close();}
 });

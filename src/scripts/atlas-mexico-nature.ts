@@ -57,6 +57,8 @@ export function initMexicoNature(root: HTMLElement): void {
     query<SVGSVGElement>('[data-mexico-nature-main-map]')?.setAttribute('data-mexico-nature-map-mode', state.fallback ? 'static-fallback' : 'interactive');
     visible('[data-mexico-nature-static-note]', state.fallback);
     text('[data-mexico-nature-map-title]', state.view === 'climate' ? '気候の分布' : '自然地理地域の分布');
+    text('#mexico-nature-map-title', state.view === 'climate' ? 'メキシコの気候区分の全国分布' : 'メキシコの自然地理地域の全国分布');
+    text('#mexico-nature-map-desc', state.view === 'climate' ? '気候21原分類を6群で色分け。面または地図下の分類から選択すると解説を表示します。州境と気候の境界は異なります。' : '15自然地理地域と分類なしを原資料の面で表示。面または地図下の分類から選択すると解説を表示します。標高mの区分ではありません。');
     text('[data-mexico-nature-map-edition]', state.view === 'climate' ? 'INEGI・2008版' : 'INEGI・2001版');
     text('[data-mexico-nature-period]', state.view === 'climate' ? '2008＝刊行年・統一観測期未記載。21原分類→6群。' : '15自然地理地域＋分類なし。標高の数値ではありません。');
     text('[data-mexico-nature-selected-name]', selected.name);
@@ -68,7 +70,7 @@ export function initMexicoNature(root: HTMLElement): void {
     text('[data-mexico-nature-reading-title]', state.view === 'climate' ? '気候の違いが水管理を変える' : '山系・高原・沿岸の位置を読む');
     text('[data-mexico-nature-reading-lead]', state.view === 'climate' ? '北部・北西部に乾燥系、中央部に温帯系、南東部に高温・湿潤系が広がる。' : '西・東シエラマドレ、中央高原、火山帯、沿岸平原を全国で位置付ける。');
     text('[data-mexico-nature-reading-body]', state.view === 'climate' ? '乾燥する地域では、農地へ水を配る灌漑が作期を支える。山地と高原の気温条件、沿岸平原の位置を合わせると、農業や都市が成立する場所を読める。' : '地質と地形の成り立ちによる15の自然地理地域。中央部の都市集積と、沿岸・北部の交通や市場をつなぐ場所を人口分布と見比べる。');
-    for (const link of all<HTMLAnchorElement>('[data-mexico-nature-compare-link]')) link.href = makeComparisonURL(link.dataset.mexicoNatureCompareLink as 'irrigation' | 'population');
+    for (const link of all<HTMLAnchorElement>('[data-mexico-nature-compare-link]')) {const comparison = link.dataset.mexicoNatureCompareLink as 'irrigation' | 'population'; link.href = makeComparisonURL(comparison); link.textContent = `${naturalLabel()}と${comparison === 'population' ? '人口密度' : '灌漑農地率'}を比べる`;}
     const sourceReturn = query<HTMLAnchorElement>('[data-mexico-nature-source-return]');
     if (sourceReturn) {
       sourceReturn.hidden = state.from === null;
@@ -93,6 +95,7 @@ export function initMexicoNature(root: HTMLElement): void {
     const value = valueOf(selected);
     const reading = natureComparisonReading(state.compare, state.state);
     const naturalName = naturalLabel();
+    text('[data-mexico-nature-comparison-granularity]', state.category ? '両地図は同じ投影・表示範囲です。水資源・標高の原線や原区域と、比較先の州平均・州数量は異なる単位の分布です。線や面の値を州平均へ置き換えません。' : '両地図は同じ投影・表示範囲です。自然分布は地域区分、比較先は州平均または州の公表数量として読みます。');
     text('[data-mexico-nature-comparison-title]', `${naturalName}と${labels[mode]}`);
     text('[data-mexico-nature-comparison-lead]', mode === 'pine' ? '西シエラマドレなどの山地と、松材取得の集中を比べる。' : mode === 'maize' ? '北西部の白粒生産を、気候と灌漑の条件につなげる。' : mode === 'population' ? '中央部の高地・盆地と、人口が多い州の位置を比べる。' : reading.lead);
     text('[data-mexico-nature-comparison-value]', `${selected.name}：${labels[mode]} ${number(value, quantity ? 0 : 1)}${unit}`);
@@ -106,7 +109,7 @@ export function initMexicoNature(root: HTMLElement): void {
     text('[data-mexico-nature-comparison-consequence]', mode === 'pine' ? '木材の供給と、水の浸透・侵食の抑制・生息地を支える森林管理を結び付ける。取得量は森林の面積や伐採率を示す値ではない。' : reading.consequence);
     if (state.category || mode === 'cattle' || state.view !== (populationMode || mode === 'pine' ? 'relief' : 'climate')) {
       text('[data-mexico-nature-comparison-lead]', `${naturalName}と、州別の${labels[mode]}を同じ範囲で読み比べる。`);
-      const definition = state.category === 'elevation' ? '等高線は同じ標高mを結ぶ線で、州の平均標高ではありません' : state.category === 'precipitation' ? '等雨量線は原資料の同じ年降水量mmを結ぶ線で、隣接する面全体の値や州平均ではありません' : state.category === 'basins' ? '流域は原資料の河川の集水域で、州境や地下水の流動区域とは異なります' : state.category === 'rivers-groundwater' ? '川の線は流路、水文地質の面は原資料の分類で、水量や法定の帯水層境界ではありません' : `${naturalName}は自然地域の分類です`;
+      const definition = state.category === 'elevation' ? '等高線は同じ標高m（EGM2008）を結ぶ線で、州の平均標高ではありません' : state.category === 'precipitation' ? '等雨量線は原資料の同じ年平均降水量mmを結ぶ線で、隣接する面全体の値や州平均ではありません' : state.category === 'basins' ? '流域は原資料の河川の集水域で、州境や地下水の流動区域とは異なります' : state.category === 'rivers-groundwater' ? '原河川ネットワーク（間欠・仮想流を含む）の次数は小流域内の階層で、水量・幅を表しません。地下水の分類は配信状態を別記しています' : `${naturalName}は自然地域の分類です`;
       text('[data-mexico-nature-comparison-body]', `${definition}。${labels[mode]}は州単位の公表値です。自然条件の線・面と州境を区別し、水管理・仕事・交通・市場と合わせて分布を読みます。自然条件だけで数量や人口は決まりません。`);
     }
     if (mode === 'density') text('[data-mexico-nature-comparison-definition]', `人口密度は2020年の州平均。${naturalName}の原資料の線・面とは異なる粒度です。`);
