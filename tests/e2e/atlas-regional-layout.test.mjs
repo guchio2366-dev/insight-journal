@@ -51,7 +51,7 @@ test('all seven regional workspaces retain five main destinations and one map/re
       if(region==='europe')assert.equal(stats.previousElementSibling,d.querySelector('[data-atlas-shell]'),'Europe statistics follow all three columns');
       if(region.startsWith('asia/')){
         assert.equal(stats.parentElement,d.querySelector('[data-atlas-shell]'),'Asia statistics span the news/map/reading shell');
-        assert.equal(root.querySelector('[data-reading-details]').open,true,'right-hand detail is available by default');
+        assert.equal(root.querySelector('[data-reading-details]').open,false,'details and sources are folded until explicitly requested');
         assert.equal(root.querySelector('.asia-reading-scroll').tabIndex,0);
       }
     }finally{await w.happyDOM.close();}
@@ -73,8 +73,10 @@ test('regional agriculture, nature/water and population controls preserve the le
         assert.equal(d.querySelectorAll('[data-west-standard-group]').length,field==='agriculture'?2:field==='nature'?4:3);
         if(field==='nature'){
           assert.equal(d.querySelectorAll('[data-west-subgroup] button').length,3);
-          const absent=d.querySelector('[data-west-unavailable="降水量"]');
-          assert.ok(absent&&!absent.hasAttribute('data-west-topic-button'),'unrecorded rainfall cannot masquerade as a measured layer');
+          const rainfall=d.querySelector('[data-west-topic-button="precipitation"]');
+          assert.ok(rainfall&&!rainfall.disabled,'measured station rainfall is available as a water topic');
+          assert.equal(d.querySelector('[data-west-unavailable="降水量"]'),null,'measured rainfall no longer uses the unavailable placeholder');
+          assert.equal(d.querySelectorAll('[data-west-chart]').length,18,'the topic retains all 18 original station normal series');
         }
       }else{
         const selector=field==='agriculture'?'[data-farm-group]':field==='nature'?'[data-natural-group]':'[data-population-group]';
@@ -101,8 +103,9 @@ const mapController=await readFile('src/scripts/atlas-overview-map.ts','utf8');
 const overviewController=(await readFile('src/scripts/atlas-country-overview.ts','utf8')).replace(/^import .* from ['"]\.\/atlas-overview-map['"];?\r?\n/m,'');
 const overviewLayout=(await readFile('src/scripts/atlas-regional-overview-layout.ts','utf8')).replace('export function','function');
 const interactiveOverview=(await transform(`${mapController}\n${overviewController}\n${overviewLayout}\nconst root=document.querySelector('[data-country-overview]');initRegionalOverviewLayout(root);initCountryOverview(root);`,{loader:'ts',format:'iife'})).code;
-test('regional overview relocation preserves original country summary, destinations and restored selection',async()=>{
-  for(const region of regions){
+// Asia's six dedicated overviews are exercised by atlas-asia-overview.test.mjs.
+test('Europe shared overview relocation preserves original country summary, destinations and restored selection',async()=>{
+  for(const region of ['europe']){
     const w=new Window({width:1366,height:768,url:`https://example.com/insight-journal/atlas/${region}/overview/`,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
     try{
       w.document.body.innerHTML=(await readFile(`dist/atlas/${region}/overview/index.html`,'utf8')).replace(/<script(?![^>]*type="application\/json")[^>]*>[\s\S]*?<\/script>/g,'');
