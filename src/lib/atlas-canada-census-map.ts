@@ -81,8 +81,9 @@ export function canadaCensusGeographicLabels(collection: CanadaCensusCollection)
 
 export function readCanadaCensusMapState(url: URL, ids: string[]): CanadaCensusMapState {
   const id = url.searchParams.get('ccs'), selected = id && ids.includes(id) ? id : null;
-  const values = (url.searchParams.get('ccsBounds') ?? '').split(',').map(Number);
-  const valid = values.length === 4 && values.every(Number.isFinite) && values[0] >= -180 && values[2] <= 180 && values[1] >= -85.051 && values[3] <= 85.051 && values[0] < values[2] && values[1] < values[3];
+  const parts = (url.searchParams.get('ccsBounds') ?? '').split(',');
+  const values = parts.map(Number);
+  const valid = parts.length === 4 && parts.every(part => part.trim() !== '') && values.every(Number.isFinite) && values[0] >= -180 && values[2] <= 180 && values[1] >= -85.051 && values[3] <= 85.051 && values[0] < values[2] && values[1] < values[3];
   return { selected, only: !!selected && url.searchParams.get('ccsOnly') === '1', bounds: valid ? values as CanadaCensusBounds : null };
 }
 export function writeCanadaCensusMapState(url: URL, state: CanadaCensusMapState) {

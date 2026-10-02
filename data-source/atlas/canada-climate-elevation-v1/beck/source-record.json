@@ -1,0 +1,46 @@
+{
+  "publisher": "Beck et al. (2023)",
+  "dataset": "Köppen-Geiger maps for 1901–2099",
+  "title": "Köppen-Geiger 気候区分（1991–2020、0.1°）",
+  "brief": "公式 GeoTIFF の元の分類をカナダ陸域で切り出した広域向けの図。",
+  "period": "1991-2020",
+  "sourceUrl": "https://www.gloh2o.org/koppen/",
+  "citation": "https://doi.org/10.1038/s41597-023-02549-6",
+  "metadataUrl": "https://api.figshare.com/v2/articles/21789074/versions/1",
+  "catalogueUrl": "https://figshare.com/articles/dataset/21789074/1",
+  "datasetDoi": "https://doi.org/10.6084/m9.figshare.21789074.v1",
+  "archiveUrl": "https://ndownloader.figshare.com/files/45057352",
+  "archiveSha256": "d37b8d05b39b96e7cf6e9007b024c7d1ab301d6668409e3e792962a2408fc05d",
+  "member": "1991_2020/koppen_geiger_0p1.tif",
+  "raw": {
+    "path": "data-source/atlas/russia/nature/koppen_geiger_0p1_1991_2020.tif",
+    "bytes": 217452,
+    "sha256": "7db968672815435562b8428f0752c2e67af7e6bb235e2969eb2db28bce428361"
+  },
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "licence": "CC BY 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "attribution": "Beck, H.E. et al. (2023), Scientific Data 10, 724. Adapted into clipped polygons by Insight Journal.",
+  "reuse": "Existing preserved original global source member; no second download. Archive hash retained from prior source acquisition, member hash verified in this run.",
+  "crs": "EPSG:4326",
+  "sourceWidth": 3600,
+  "sourceHeight": 1800,
+  "resolutionDegrees": 0.1,
+  "resolutionDescription": "Publisher 0.1-degree broad-view product; this overlay is not the 1 km (0.01-degree) product.",
+  "pixelScale": [
+    0.1,
+    0.1,
+    0.0
+  ],
+  "tiepoint": [
+    0.0,
+    0.0,
+    0.0,
+    -180.0,
+    90.0,
+    0.0
+  ],
+  "pixelInterpretation": "area",
+  "noData": 0
+}

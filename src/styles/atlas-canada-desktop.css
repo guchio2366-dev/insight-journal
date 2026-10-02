@@ -89,3 +89,16 @@
  .atlas-desktop-shell:has(.canada-nature){grid-template-columns:clamp(300px,19vw,380px) minmax(0,1fr)}
  .atlas-desktop-shell .canada-nature .canada-workspace{grid-template-columns:minmax(0,1.65fr) minmax(360px,1fr)}
 }
+@media(min-width:960px){
+ .atlas-desktop-shell .canada-nature [data-canada-reading=climate]>details{order:3}
+ .atlas-desktop-shell .canada-nature .canada-climate-card>.canada-plot-key{order:1;margin:4px 0;line-height:1.4}
+ .atlas-desktop-shell .canada-nature.is-classified-climate .canada-climate-class-reading h2{font-size:17px;margin:0 0 4px}
+ .atlas-desktop-shell .canada-nature.is-classified-climate .canada-climate-class-reading p{line-height:1.5;margin:4px 0}
+ .atlas-desktop-shell .canada-nature.is-classified-climate .canada-climate-class-reading .canada-takeaway{font-size:14px}
+ .atlas-desktop-shell .canada-nature.is-classified-climate .canada-natural-frame{height:clamp(290px,calc(100dvh - 435px),540px)}
+ .atlas-desktop-shell .canada-nature [data-canada-natural-layer=climate] .canada-natural-key{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+ .atlas-desktop-shell .canada-nature [data-canada-natural-layer=climate] .canada-natural-key button{display:grid;grid-template-columns:14px 1fr;gap:1px 3px;min-height:40px;padding:3px 4px;font-size:13px;line-height:1.3;text-align:left}
+ .atlas-desktop-shell .canada-nature .canada-natural-key small{grid-column:1 / -1;font-size:12px;white-space:nowrap}
+ .atlas-desktop-shell .canada-nature .canada-natural-tools button{padding:0;line-height:1.2}
+ .atlas-desktop-shell .canada-nature .canada-natural-station{min-height:30px;padding:3px 5px 3px 0;font-size:12px;line-height:1.35}
+}

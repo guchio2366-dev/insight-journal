@@ -5,6 +5,8 @@ import {renderCanadaCropNatureComparison} from './atlas-canada-crop-nature-compa
 import {readCanadaNatureState,writeCanadaNatureState,type CanadaNatureState} from '../lib/atlas-canada-nature';
 import {initCanadaLandform} from './atlas-canada-landform';
 import physiography from '../data/atlas/canada/physiography.json';
+import {initCanadaNaturalLayer} from './atlas-canada-natural-layer';
+import {readCanadaNaturalLayerState,writeCanadaNaturalLayerState,type NaturalLayer,type NaturalLayerState} from '../lib/atlas-canada-natural-state';
 export function initCanadaNature(root:HTMLElement){
  const config=JSON.parse(root.querySelector('[data-canada-config]')!.textContent!);
  const ids=config.cities.map((c:any)=>c.id),waters=config.waters;
@@ -13,6 +15,10 @@ export function initCanadaNature(root:HTMLElement){
  let state=readCanadaNatureState(new URL(location.href),ids,waters);
  const landformHost=root.querySelector<HTMLElement>('[data-canada-landform]');
  const landformMap=landformHost?initCanadaLandform(landformHost):null;
+ const naturalLayers=['climate','elevation'] as const;
+ const naturalHosts=Object.fromEntries(naturalLayers.map(layer=>[layer,root.querySelector<HTMLElement>(`[data-canada-natural-layer="${layer}"]`)]));
+ const naturalMaps=Object.fromEntries(naturalLayers.map(layer=>[layer,naturalHosts[layer]?initCanadaNaturalLayer(naturalHosts[layer]!):null]));
+ let naturalStates=Object.fromEntries(naturalLayers.map(layer=>[layer,readCanadaNaturalLayerState(new URL(location.href),layer,(config.layers?.[layer]?.groups??[]).map((g:any)=>g.id))])) as Record<NaturalLayer,NaturalLayerState>;
  const full=[0,0,config.width,config.height];
  function render(){
   const forestryBack=root.querySelector<HTMLAnchorElement>('[data-canada-forestry-return]'),savedForestry=new URL(location.href).searchParams.get('forestryReturn');
@@ -22,10 +28,25 @@ export function initCanadaNature(root:HTMLElement){
    forestContext.hidden=!savedForestry;root.classList.toggle('is-learning-comparison',!!savedForestry);forestMap.style.display=savedForestry&&state.view!=='landform'?'':'none';forestLegend.hidden=!savedForestry||state.view==='landform';
    const text=forestContext.querySelector<HTMLElement>('[data-canada-forest-context-text]')!;
    const waterText=state.water&&state.water!=='Fraser'?`現在は${state.water}${state.only?'だけ':'を選択して全水系'}を表示しています。林業の比較入口はFraser川とBCの針葉樹林です。Fraserを選ぶと、森林と海岸の位置関係へ戻れます。`:'針葉樹林とFraser川の位置を重ね、森林と海岸のつながりを照合します。木材輸送には道路・港も必要です。';
-   text.textContent=state.view==='landform'?'山地と海岸を地形図で確かめます。針葉樹林と観測点の重ね図へは「都市の気候」で戻れます。':state.view==='water'?waterText:state.city==='vancouver'?'Vancouverの温和な冬・秋冬の雨を、沿岸の針葉樹林と比べます。':'観測点を切り替えています。元の問いはVancouverの沿岸気候と針葉樹林の関係です。Vancouverで沿岸の事例へ戻れます。';
+   text.textContent=state.view==='elevation'?'山地の高さをETOPOの等高線で確かめます。森林の重ね図と沿岸の観測点へは「気候区分・都市」で戻れます。':state.view==='landform'?'山地と海岸を地形図で確かめます。針葉樹林と観測点の重ね図へは「都市の気候」で戻れます。':state.view==='water'?waterText:state.city==='vancouver'?'Vancouverの温和な冬・秋冬の雨を、沿岸の針葉樹林と比べます。':'観測点を切り替えています。元の問いはVancouverの沿岸気候と針葉樹林の関係です。Vancouverで沿岸の事例へ戻れます。';
   }
   const industryComparison=renderIndustryNatureComparison(root,config,state),populationComparison=renderPopulationNatureComparison(root,config,state),cropComparison=renderCanadaCropNatureComparison(root,state);root.classList.toggle('is-learning-comparison',!!savedForestry||industryComparison||populationComparison||cropComparison);root.classList.toggle('is-crop-comparison',cropComparison);
   const comparison=!!savedForestry||industryComparison||populationComparison||cropComparison;
+  const classifiedClimate=state.view==='climate'&&!comparison&&!!naturalMaps.climate;
+  root.classList.toggle('is-classified-climate',classifiedClimate);
+  root.classList.toggle('is-elevation-reading',state.view==='elevation');
+  for(const layer of naturalLayers){const host=naturalHosts[layer];if(host){host.hidden=layer==='climate'?!classifiedClimate:state.view!=='elevation';naturalMaps[layer]?.render({...naturalStates[layer],city:state.city});}}
+  const zoneReading=root.querySelector<HTMLElement>('[data-canada-zone-reading]');if(zoneReading)zoneReading.hidden=!classifiedClimate;
+  const zone=config.layers?.climate?.groups?.find((g:any)=>g.id===naturalStates.climate.selected);
+  const zoneTitle=root.querySelector<HTMLElement>('[data-canada-zone-title]'),zoneText=root.querySelector<HTMLElement>('[data-canada-zone-text]'),zoneCity=root.querySelector<HTMLElement>('[data-canada-zone-city]');
+  if(zoneTitle)zoneTitle.textContent=zone?`${zone.id} ${zone.name}`:'気候区分と都市の季節を比べる';
+  if(zoneText)zoneText.textContent=zone?.description??'色は1991–2020年のケッペン区分。冬の寒さ・夏の長さ・雨の季節配分を、都市の雨温図と照合します。';
+  const citySample=config.layers?.climate?.stations?.find((s:any)=>s.id===state.city);
+  if(zoneCity)zoneCity.textContent=`${config.cities.find((c:any)=>c.id===state.city).name}の元0.1°格子：${citySample?.class??citySample?.code??'未収録'}${citySample?.boundaryCandidates?.length>1?`（${citySample.boundaryCandidates.join('/')}の格子境界）`:''}。雨温図はECCCの一点の平年値です。`;
+  const elevation=config.layers?.elevation?.groups?.find((g:any)=>g.id===naturalStates.elevation.selected);
+  const elevationTitle=root.querySelector<HTMLElement>('[data-canada-elevation-title]'),elevationText=root.querySelector<HTMLElement>('[data-canada-elevation-text]');
+  if(elevationTitle)elevationTitle.textContent=elevation?`${elevation.name}の等高線を読む`:'西部山地と内陸の高さを、等高線で読む';
+  if(elevationText)elevationText.textContent=elevation?.id==='500'?`500 mの地点は西部の山地にも内陸の平原にもあります。西部でより高い等高線が近づく所と比べます。${elevation.description}`:elevation?.description??'等高線は同じ標高を結ぶ線です。西部の高い山地と内陸・海岸の位置を比べ、斜面や山越えが交通・水の流れに関わる場所を確かめます。';
   root.classList.toggle('is-landform-reading',state.view==='landform');
   for(const detail of root.querySelectorAll<HTMLDetailsElement>('[data-canada-general-reading]')){const context=String(comparison);if(detail.dataset.comparison!==context){detail.open=!comparison&&!detail.closest('[data-canada-reading="landform"]');detail.dataset.comparison=context;}}
   $<HTMLSelectElement>('[data-canada-city]').value=state.city;
@@ -36,14 +57,14 @@ export function initCanadaNature(root:HTMLElement){
   for(const panel of root.querySelectorAll<HTMLElement>('[data-canada-reading]'))panel.hidden=panel.dataset.canadaReading!==state.view;
   for(const card of root.querySelectorAll<HTMLElement>('[data-canada-climate-card]'))card.hidden=![state.city,state.compare].includes(card.dataset.canadaClimateCard!);
   $('.canada-climate-cards').classList.toggle('is-comparing',!!state.compare);
-  $('[data-canada-locator]').hidden=state.view==='landform'||cropComparison&&state.view==='climate';
+  $('[data-canada-locator]').hidden=classifiedClimate||state.view==='elevation'||state.view==='landform'||cropComparison&&state.view==='climate';
   $('[data-canada-physical]').hidden=state.view!=='landform';
   if(landformHost){landformHost.hidden=state.view!=='landform';landformMap?.render({selected:state.landform,only:state.landformOnly,bounds:state.landformBounds});}
   const landform=physiography.regions.find(region=>region.id===state.landform);
   const landformTitle=root.querySelector<HTMLElement>('[data-canada-landform-reading-title]'),landformText=root.querySelector<HTMLElement>('[data-canada-landform-reading-text]');
   if(landformTitle)landformTitle.textContent=landform?.name??'山地・平原・低地を、場所で見分ける';
   if(landformText)landformText.textContent=landform?.description??'西部の山地、中央の平原、東部の盾状地を比較します。地図か凡例で地域を選ぶと、その範囲と説明が対応します。';
-  const cityList=root.querySelector<HTMLElement>('.canada-city-list');if(cityList)cityList.hidden=state.view==='landform';
+  const cityList=root.querySelector<HTMLElement>('.canada-city-list');if(cityList)cityList.hidden=classifiedClimate||state.view==='landform'||state.view==='elevation';
   $('[data-canada-water-controls]').hidden=state.view!=='water';
   const group=$<SVGGElement>('[data-canada-water-layers]');group.setAttribute('display',state.view==='water'?'':'none');group.removeAttribute('hidden');
   $<HTMLSelectElement>('[data-canada-water]').value=state.water??'';
@@ -63,10 +84,18 @@ export function initCanadaNature(root:HTMLElement){
   }
   map.setAttribute('viewBox',(state.frame??full).join(' '));
   const name=config.cities.find((c:any)=>c.id===state.city).name;
-  $('[data-canada-announcement]').textContent=state.view==='landform'?`${landform?.name??'七つの地形地域'}${state.landformOnly?'だけ':''}を表示。`:`${name}${state.compare?'と比較':''}。${({climate:'都市の気候',landform:'地形地域',water:'湖と河川'})[state.view]}を表示。`;
+  $('[data-canada-announcement]').textContent=state.view==='landform'?`${landform?.name??'七つの地形地域'}${state.landformOnly?'だけ':''}を表示。`:state.view==='elevation'?`${elevation?.name??'標高の等高線'}を表示。`:`${name}${state.compare?'と比較':''}。${({climate:'都市の気候',landform:'地形地域',water:'湖と河川'})[state.view]}を表示。`;
  }
  function update(patch:Partial<CanadaNatureState>){state={...state,...patch};if(state.compare===state.city)state.compare=null;history.pushState(null,'',writeCanadaNatureState(new URL(location.href),state));render();}
  const select=(city:string)=>update({city});
+ function updateNatural(layer:NaturalLayer,patch:Partial<NaturalLayerState>){naturalStates[layer]={...naturalStates[layer],...patch};history.pushState(null,'',writeCanadaNaturalLayerState(new URL(location.href),layer,naturalStates[layer]));render();}
+ for(const layer of naturalLayers){const host=naturalHosts[layer];if(!host)continue;
+  host.addEventListener('canada-natural-select',event=>updateNatural(layer,{selected:(event as CustomEvent).detail.id}));
+  host.addEventListener('canada-natural-only',event=>updateNatural(layer,{only:(event as CustomEvent).detail.only}));
+  host.addEventListener('canada-natural-camera',event=>updateNatural(layer,{bounds:(event as CustomEvent).detail.bounds}));
+  host.addEventListener('canada-natural-reset',()=>updateNatural(layer,{selected:null,only:false,bounds:null}));
+  host.addEventListener('canada-natural-city',event=>select((event as CustomEvent).detail.id));
+ }
  landformHost?.addEventListener('canada-landform-select',event=>update({landform:(event as CustomEvent<{id:string}>).detail.id}));
  landformHost?.addEventListener('canada-landform-only',event=>update({landformOnly:(event as CustomEvent<{only:boolean}>).detail.only}));
  landformHost?.addEventListener('canada-landform-camera',event=>update({landformBounds:(event as CustomEvent<{bounds:[number,number,number,number]|null}>).detail.bounds}));
@@ -89,7 +118,7 @@ export function initCanadaNature(root:HTMLElement){
   const nw=Math.min(config.width,Math.max(30,w*factor)),nh=Math.min(config.height,Math.max(20,h*factor));
   update({frame:nw===config.width?null:[Math.max(0,Math.min(config.width-nw,x+(w-nw)/2)),Math.max(0,Math.min(config.height-nh,y+(h-nh)/2)),nw,nh]});
  });
- window.addEventListener('popstate',()=>{state=readCanadaNatureState(new URL(location.href),ids,waters);render();void hydrateCanadaPopulationGeometry(root,'[data-canada-config]',{config,onReady:render,onError:render});});
+ window.addEventListener('popstate',()=>{state=readCanadaNatureState(new URL(location.href),ids,waters);naturalStates=Object.fromEntries(naturalLayers.map(layer=>[layer,readCanadaNaturalLayerState(new URL(location.href),layer,(config.layers?.[layer]?.groups??[]).map((g:any)=>g.id))])) as Record<NaturalLayer,NaturalLayerState>;render();void hydrateCanadaPopulationGeometry(root,'[data-canada-config]',{config,onReady:render,onError:render});});
  render();
  void hydrateCanadaPopulationGeometry(root,'[data-canada-config]',{config,onReady:render,onError:render});
 }

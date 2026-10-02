@@ -7,3 +7,11 @@
 .canada-landform-original figure { margin: 8px 0; }
 .canada-landform-original img { display: block; width: 100%; height: auto; }
 .canada-nature.is-landform-reading .canada-national-header { display: none; }
+.canada-nature.is-classified-climate .canada-national-header,
+.canada-nature.is-elevation-reading .canada-national-header { display: none; }
+.canada-climate-class-reading h2 { font-size: 17px; margin: 0 0 5px; }
+.canada-climate-class-reading p { margin: 5px 0; line-height: 1.6; }
+.canada-climate-class-reading .canada-takeaway { font-size: 14px; }
+.canada-nature.is-classified-climate .canada-climate-card { margin-top: 6px; padding-top: 6px; }
+.canada-nature.is-classified-climate .canada-climate-card > h2 { display: none; }
+.canada-nature.is-classified-climate .canada-climate-card > .canada-takeaway { font-size: 14px; line-height: 1.6; margin: 5px 0; }

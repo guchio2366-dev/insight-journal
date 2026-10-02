@@ -1,0 +1,707 @@
+{
+  "schemaVersion": 1,
+  "region": "canada",
+  "version": "1.0.0",
+  "period": "1991-2020",
+  "crs": "EPSG:4326",
+  "sourceResolutionDegrees": 0.1,
+  "bounds": [
+    -141.0181,
+    41.73823835308173,
+    -52.61941,
+    83.11132
+  ],
+  "unit": "Köppen-Geiger categorical class, not numerical magnitude",
+  "source": {
+    "publisher": "Beck et al. (2023)",
+    "dataset": "Köppen-Geiger maps for 1901–2099",
+    "title": "Köppen-Geiger 気候区分（1991–2020、0.1°）",
+    "brief": "公式 GeoTIFF の元の分類をカナダ陸域で切り出した広域向けの図。",
+    "period": "1991-2020",
+    "sourceUrl": "https://www.gloh2o.org/koppen/",
+    "citation": "https://doi.org/10.1038/s41597-023-02549-6",
+    "metadataUrl": "https://api.figshare.com/v2/articles/21789074/versions/1",
+    "catalogueUrl": "https://figshare.com/articles/dataset/21789074/1",
+    "datasetDoi": "https://doi.org/10.6084/m9.figshare.21789074.v1",
+    "archiveUrl": "https://ndownloader.figshare.com/files/45057352",
+    "archiveSha256": "d37b8d05b39b96e7cf6e9007b024c7d1ab301d6668409e3e792962a2408fc05d",
+    "member": "1991_2020/koppen_geiger_0p1.tif",
+    "raw": {
+      "path": "data-source/atlas/russia/nature/koppen_geiger_0p1_1991_2020.tif",
+      "bytes": 217452,
+      "sha256": "7db968672815435562b8428f0752c2e67af7e6bb235e2969eb2db28bce428361"
+    },
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "licence": "CC BY 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "attribution": "Beck, H.E. et al. (2023), Scientific Data 10, 724. Adapted into clipped polygons by Insight Journal.",
+    "reuse": "Existing preserved original global source member; no second download. Archive hash retained from prior source acquisition, member hash verified in this run.",
+    "crs": "EPSG:4326",
+    "sourceWidth": 3600,
+    "sourceHeight": 1800,
+    "resolutionDegrees": 0.1,
+    "resolutionDescription": "Publisher 0.1-degree broad-view product; this overlay is not the 1 km (0.01-degree) product.",
+    "pixelScale": [
+      0.1,
+      0.1,
+      0
+    ],
+    "tiepoint": [
+      0,
+      0,
+      0,
+      -180,
+      90,
+      0
+    ],
+    "pixelInterpretation": "area",
+    "noData": 0
+  },
+  "mask": {
+    "schemaVersion": 1,
+    "region": "canada",
+    "crs": "EPSG:4326",
+    "mask": {
+      "path": "data-source/atlas/canada-climate-elevation-v1/beck/land-mask.geojson.gz",
+      "bytes": 3078187,
+      "sha256": "f54908964f6e451137bb50b4a21fb0ada82fbaeea5c8438d3d204046a663644e"
+    },
+    "bounds": [
+      -141.0181,
+      41.73823835308173,
+      -52.61941,
+      83.13656
+    ],
+    "boundary": {
+      "path": "data-source/atlas/canada/industry/province-boundaries-2021.geojson.gz",
+      "bytes": 4622448,
+      "sha256": "ac235592e071ceb79655bba82d9bae17c7d1d80894e62df72a42bce39428245b",
+      "uncompressedSha256": "28966276a200b7c88f97cc4d1e770588e161e2fe63aa85ca9b736015aaeddd57",
+      "source": "Statistics Canada 2021 Census Cartographic Boundary Files, PR - lpr_000b21s_e",
+      "sourceUrl": "https://geo.statcan.gc.ca/geo_wa/rest/services/2021/Cartographic_boundary_files/MapServer/0",
+      "requestRecord": "data-source/atlas/canada/industry/boundary-request.json",
+      "referenceDate": "2021-01-01",
+      "license": "Open Government Licence - Canada",
+      "licenseUrl": "https://open.canada.ca/en/open-government-licence-canada",
+      "guideUrl": "https://www150.statcan.gc.ca/n1/pub/92-160-g/92-160-g2021001-eng.htm",
+      "sourceQueryGeneralization": "Existing official Esri query used maxAllowableOffset=0.02 and geometryPrecision=5; no further simplification performed here.",
+      "provinceCount": 13,
+      "repairedProvinceIds": [
+        "10",
+        "11",
+        "12",
+        "13",
+        "24",
+        "35",
+        "46",
+        "59",
+        "60",
+        "61",
+        "62"
+      ],
+      "repair": "Shapely make_valid(method='structure', keep_collapsed=False) on source invalid rings; retain polygonal land, discard only collapsed zero-area geometry."
+    },
+    "water": {
+      "path": "data-source/atlas/canada/lakes.geojson",
+      "bytes": 876018,
+      "sha256": "d350b75978b26fe839b797c2c529b2fb8f47fb3983c03f4964e36d5df9378a52",
+      "publisher": "Natural Earth",
+      "version": "5.1.2",
+      "sourceUrl": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_50m_lakes.geojson",
+      "license": "Public domain",
+      "sourceScale": "1:50m",
+      "intersectingLakeFeatures": 117,
+      "method": "Subtract all preserved 1:50m lake polygons intersecting Canadian cartographic boundaries, including cross-border lakes. Smaller water bodies absent from this source are unresolved."
+    },
+    "method": "Union all 13 Canadian cartographic province/territory polygons; subtract intersecting preserved lake polygons. Coastal waters, neighboring countries and represented lakes excluded.",
+    "limitations": [
+      "Boundary and water scales do not support cadastral precision.",
+      "Natural Earth 1:50m lake data do not resolve every small water body."
+    ],
+    "geometry": {
+      "polygonParts": 119614,
+      "coordinateCount": 527102
+    }
+  },
+  "classes": [
+    {
+      "id": "BSk",
+      "code": 7,
+      "name": "低温のステップ気候",
+      "color": "#ffdc64",
+      "description": "乾燥帯のうち、低温の半乾燥気候に当たる区分。",
+      "sourceLabel": "Arid, steppe, cold"
+    },
+    {
+      "id": "Csb",
+      "code": 9,
+      "name": "夏に乾燥する温暖夏の温帯",
+      "color": "#c8c800",
+      "description": "夏に乾燥し、夏が温暖な温帯の区分。",
+      "sourceLabel": "Temperate, dry summer, warm summer"
+    },
+    {
+      "id": "Cfb",
+      "code": 15,
+      "name": "西岸海洋性気候",
+      "color": "#64ff50",
+      "description": "明瞭な乾季がなく、夏が温暖な温帯の区分。名称は海岸からの距離を示すものではない。",
+      "sourceLabel": "Temperate, no dry season, warm summer"
+    },
+    {
+      "id": "Cfc",
+      "code": 16,
+      "name": "乾季のない冷夏の温帯",
+      "color": "#32c800",
+      "description": "明瞭な乾季がなく、夏が短く涼しい温帯の区分。",
+      "sourceLabel": "Temperate, no dry season, cold summer"
+    },
+    {
+      "id": "Dsb",
+      "code": 18,
+      "name": "夏に乾燥する温暖夏の冷帯",
+      "color": "#c800c8",
+      "description": "寒い冬と温暖な夏を持ち、夏に乾燥する冷帯の区分。",
+      "sourceLabel": "Cold, dry summer, warm summer"
+    },
+    {
+      "id": "Dsc",
+      "code": 19,
+      "name": "夏に乾燥する冷夏の冷帯",
+      "color": "#963296",
+      "description": "寒い冬と短く涼しい夏を持ち、夏に乾燥する冷帯の区分。",
+      "sourceLabel": "Cold, dry summer, cold summer"
+    },
+    {
+      "id": "Dwb",
+      "code": 22,
+      "name": "冬に乾燥する温暖夏の冷帯",
+      "color": "#5a78dc",
+      "description": "寒く乾燥する冬と、温暖な夏を持つ冷帯の区分。",
+      "sourceLabel": "Cold, dry winter, warm summer"
+    },
+    {
+      "id": "Dwc",
+      "code": 23,
+      "name": "冬に乾燥する冷夏の冷帯",
+      "color": "#4b50b4",
+      "description": "寒く乾燥する冬と、短く涼しい夏を持つ冷帯の区分。",
+      "sourceLabel": "Cold, dry winter, cold summer"
+    },
+    {
+      "id": "Dfa",
+      "code": 25,
+      "name": "乾季のない高温夏の冷帯",
+      "color": "#00ffff",
+      "description": "明瞭な乾季がなく、寒い冬と高温の夏を持つ冷帯の区分。",
+      "sourceLabel": "Cold, no dry season, hot summer"
+    },
+    {
+      "id": "Dfb",
+      "code": 26,
+      "name": "乾季のない温暖夏の冷帯",
+      "color": "#37c8ff",
+      "description": "明瞭な乾季がなく、寒い冬と温暖な夏を持つ冷帯の区分。",
+      "sourceLabel": "Cold, no dry season, warm summer"
+    },
+    {
+      "id": "Dfc",
+      "code": 27,
+      "name": "乾季のない冷夏の冷帯",
+      "color": "#007d7d",
+      "description": "明瞭な乾季がなく、寒い冬と短く涼しい夏を持つ冷帯の区分。",
+      "sourceLabel": "Cold, no dry season, cold summer"
+    },
+    {
+      "id": "Dfd",
+      "code": 28,
+      "name": "乾季のない厳冬の冷帯",
+      "color": "#00465f",
+      "description": "明瞭な乾季がなく、とくに厳しい冬を持つ冷帯の区分。",
+      "sourceLabel": "Cold, no dry season, very cold winter"
+    },
+    {
+      "id": "ET",
+      "code": 29,
+      "name": "ツンドラ気候",
+      "color": "#b2b2b2",
+      "description": "短い夏に気温が上がるが、樹木の生育に適した暖かさに達しない寒帯の区分。",
+      "sourceLabel": "Polar, tundra"
+    },
+    {
+      "id": "EF",
+      "code": 30,
+      "name": "氷雪気候",
+      "color": "#666666",
+      "description": "最も暖かい月も平均気温が0℃未満となる寒帯の区分。",
+      "sourceLabel": "Polar, frost"
+    }
+  ],
+  "stationSamples": [
+    {
+      "stationId": "ottawa",
+      "name": "オタワ",
+      "station": "OTTAWA CDA",
+      "climateId": "6105976",
+      "coordinates": [
+        -75.72,
+        45.38
+      ],
+      "sourceRow": 446,
+      "sourceColumn": 1042,
+      "code": "Dfb",
+      "id": "ottawa",
+      "overlayMatchesRawCell": true,
+      "coordinateSourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=6105976&dispBack=0",
+      "boundaryCandidates": [
+        "Dfb"
+      ],
+      "interiorProbe": [
+        -75.71999999,
+        45.37999999
+      ],
+      "interiorProbeMatchesRawCell": true,
+      "class": "Dfb",
+      "classCode": 26
+    },
+    {
+      "stationId": "vancouver",
+      "name": "バンクーバー",
+      "station": "VANCOUVER INT'L A",
+      "climateId": "1108447",
+      "coordinates": [
+        -123.18,
+        49.2
+      ],
+      "sourceRow": 408,
+      "sourceColumn": 568,
+      "code": "Csb",
+      "id": "vancouver",
+      "overlayMatchesRawCell": true,
+      "coordinateSourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=1108447&dispBack=0",
+      "boundaryCandidates": [
+        "Csb",
+        "Cfb"
+      ],
+      "interiorProbe": [
+        -123.17999999000001,
+        49.19999999
+      ],
+      "interiorProbeMatchesRawCell": true,
+      "class": "Csb",
+      "classCode": 9
+    },
+    {
+      "stationId": "winnipeg",
+      "name": "ウィニペグ",
+      "station": "WINNIPEG RICHARDSON INT'L A",
+      "climateId": "5023222",
+      "coordinates": [
+        -97.23,
+        49.92
+      ],
+      "sourceRow": 400,
+      "sourceColumn": 827,
+      "code": "Dfb",
+      "id": "winnipeg",
+      "overlayMatchesRawCell": true,
+      "coordinateSourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=5023222&dispBack=0",
+      "boundaryCandidates": [
+        "Dfb"
+      ],
+      "interiorProbe": [
+        -97.22999999000001,
+        49.91999999
+      ],
+      "interiorProbeMatchesRawCell": true,
+      "class": "Dfb",
+      "classCode": 26
+    },
+    {
+      "stationId": "iqaluit",
+      "name": "イカルイト",
+      "station": "IQALUIT A",
+      "climateId": "2402590",
+      "coordinates": [
+        -68.55,
+        63.75
+      ],
+      "sourceRow": 262,
+      "sourceColumn": 1114,
+      "code": "ET",
+      "id": "iqaluit",
+      "overlayMatchesRawCell": true,
+      "coordinateSourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=2402590&dispBack=0",
+      "boundaryCandidates": [
+        "ET"
+      ],
+      "interiorProbe": [
+        -68.54999999,
+        63.74999999
+      ],
+      "interiorProbeMatchesRawCell": true,
+      "class": "ET",
+      "classCode": 29
+    },
+    {
+      "stationId": "regina",
+      "name": "レジャイナ",
+      "station": "REGINA INT'L A",
+      "climateId": "4016560",
+      "coordinates": [
+        -104.67,
+        50.43
+      ],
+      "sourceRow": 395,
+      "sourceColumn": 753,
+      "code": "Dfb",
+      "id": "regina",
+      "overlayMatchesRawCell": true,
+      "coordinateSourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=4016560&dispBack=0",
+      "boundaryCandidates": [
+        "Dfb"
+      ],
+      "interiorProbe": [
+        -104.66999999000001,
+        50.42999999
+      ],
+      "interiorProbeMatchesRawCell": true,
+      "class": "Dfb",
+      "classCode": 26
+    }
+  ],
+  "file": "koppen.geojson",
+  "files": {
+    "koppen.geojson": {
+      "path": "public/assets/atlas/canada-climate-elevation-v1/koppen.geojson",
+      "bytes": 12042203,
+      "sha256": "4466a38767a3710c4571db0718a2a04f77922b6a889dff0e0dda51bc785cb8ad"
+    }
+  },
+  "processing": {
+    "script": "scripts/prepare-canada-koppen-geooverlay.py",
+    "scriptSha256": "09a53f92fc5849140d2130c617e1572524b5d50b39081348d89f73a292674aba",
+    "scriptDigestMethod": "UTF-8 text normalized from CRLF/CR to LF",
+    "method": "Read exact original 0.1-degree categorical cells; form horizontal runs of identical IDs; losslessly union cell rectangles by ID; intersect with Canadian land-minus-lakes mask. No interpolation, averaging, class merging, coordinate rounding, polygon simplification, minimum-area filtering or imputation.",
+    "sourceRows": [
+      68,
+      483
+    ],
+    "sourceColumns": [
+      389,
+      1274
+    ],
+    "rowRunCount": 15837,
+    "shapelyVersion": "2.1.2",
+    "legendReference": {
+      "path": "public/assets/atlas/asia-climate-v1/legend.json",
+      "bytes": 6784,
+      "sha256": "707303acdb0c63d002c50e322217ea1a6c5e37dd9c989b975269399134e9066a"
+    },
+    "palette": "Original publisher RGB colors retained; no recoloring.",
+    "sharedGridEdges": "All rectangle corners use the same global integer grid indices: longitude=-180+column/10, latitude=90-row/10. No repeated x+0.1 or y-0.1 accumulation; adjacent same-class source cell edges dissolve in the union.",
+    "classGeometryCounts": [
+      {
+        "id": "BSk",
+        "rawWindowCells": 10182,
+        "rowRuns": 977,
+        "preMaskUnionParts": 132,
+        "postMaskParts": 63
+      },
+      {
+        "id": "Csb",
+        "rawWindowCells": 1685,
+        "rowRuns": 178,
+        "preMaskUnionParts": 32,
+        "postMaskParts": 918
+      },
+      {
+        "id": "Cfb",
+        "rawWindowCells": 1810,
+        "rowRuns": 344,
+        "preMaskUnionParts": 55,
+        "postMaskParts": 21240
+      },
+      {
+        "id": "Cfc",
+        "rawWindowCells": 46,
+        "rowRuns": 30,
+        "preMaskUnionParts": 20,
+        "postMaskParts": 209
+      },
+      {
+        "id": "Dsb",
+        "rawWindowCells": 2136,
+        "rowRuns": 517,
+        "preMaskUnionParts": 116,
+        "postMaskParts": 50
+      },
+      {
+        "id": "Dsc",
+        "rawWindowCells": 10438,
+        "rowRuns": 1482,
+        "preMaskUnionParts": 291,
+        "postMaskParts": 2808
+      },
+      {
+        "id": "Dwb",
+        "rawWindowCells": 242,
+        "rowRuns": 64,
+        "preMaskUnionParts": 16,
+        "postMaskParts": 1
+      },
+      {
+        "id": "Dwc",
+        "rawWindowCells": 272,
+        "rowRuns": 65,
+        "preMaskUnionParts": 23,
+        "postMaskParts": 37
+      },
+      {
+        "id": "Dfa",
+        "rawWindowCells": 6256,
+        "rowRuns": 352,
+        "preMaskUnionParts": 33,
+        "postMaskParts": 870
+      },
+      {
+        "id": "Dfb",
+        "rawWindowCells": 45478,
+        "rowRuns": 2542,
+        "preMaskUnionParts": 485,
+        "postMaskParts": 17910
+      },
+      {
+        "id": "Dfc",
+        "rawWindowCells": 77487,
+        "rowRuns": 4142,
+        "preMaskUnionParts": 672,
+        "postMaskParts": 18956
+      },
+      {
+        "id": "Dfd",
+        "rawWindowCells": 5,
+        "rowRuns": 3,
+        "preMaskUnionParts": 3,
+        "postMaskParts": 12
+      },
+      {
+        "id": "ET",
+        "rawWindowCells": 59283,
+        "rowRuns": 4387,
+        "preMaskUnionParts": 745,
+        "postMaskParts": 53705
+      },
+      {
+        "id": "EF",
+        "rawWindowCells": 10202,
+        "rowRuns": 450,
+        "preMaskUnionParts": 97,
+        "postMaskParts": 94
+      }
+    ],
+    "classGeometryCountsScope": "Raw window cell/run/pre-mask counts may include neighboring countries and water; post-mask parts chiefly represent real islands and coast/lake fragmentation. These are geometry diagnostics, not Canadian land-area statistics."
+  },
+  "verification": {
+    "rawSourceHashVerified": true,
+    "sourceTransformAndCrsVerified": true,
+    "allOutputPolygonsValid": true,
+    "allPolygonsWithinCanadaLandMask": true,
+    "representedLakesExcluded": true,
+    "neighborAndWaterSpotchecks": [
+      {
+        "name": "Alaska",
+        "coordinates": [
+          -149.9,
+          61.2
+        ],
+        "excluded": true
+      },
+      {
+        "name": "Contiguous United States",
+        "coordinates": [
+          -100,
+          48
+        ],
+        "excluded": true
+      },
+      {
+        "name": "Greenland",
+        "coordinates": [
+          -45,
+          70
+        ],
+        "excluded": true
+      },
+      {
+        "name": "Hudson Bay",
+        "coordinates": [
+          -85,
+          60
+        ],
+        "excluded": true
+      },
+      {
+        "name": "Great Bear Lake",
+        "coordinates": [
+          -120,
+          66
+        ],
+        "excluded": true
+      },
+      {
+        "name": "Lake Winnipeg",
+        "coordinates": [
+          -97,
+          52
+        ],
+        "excluded": true
+      },
+      {
+        "name": "Lake Superior",
+        "coordinates": [
+          -88,
+          47.8
+        ],
+        "excluded": true
+      }
+    ],
+    "allGeojsonGeometriesRoundTripUnchanged": true,
+    "classAreasDoNotOverlap": true,
+    "stationSpotchecks": [
+      {
+        "stationId": "ottawa",
+        "name": "オタワ",
+        "station": "OTTAWA CDA",
+        "climateId": "6105976",
+        "coordinates": [
+          -75.72,
+          45.38
+        ],
+        "sourceRow": 446,
+        "sourceColumn": 1042,
+        "code": 26,
+        "id": "Dfb",
+        "overlayMatchesRawCell": true,
+        "coordinateSourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=6105976&dispBack=0",
+        "boundaryCandidates": [
+          "Dfb"
+        ],
+        "interiorProbe": [
+          -75.71999999,
+          45.37999999
+        ],
+        "interiorProbeMatchesRawCell": true
+      },
+      {
+        "stationId": "vancouver",
+        "name": "バンクーバー",
+        "station": "VANCOUVER INT'L A",
+        "climateId": "1108447",
+        "coordinates": [
+          -123.18,
+          49.2
+        ],
+        "sourceRow": 408,
+        "sourceColumn": 568,
+        "code": 9,
+        "id": "Csb",
+        "overlayMatchesRawCell": true,
+        "coordinateSourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=1108447&dispBack=0",
+        "boundaryCandidates": [
+          "Csb",
+          "Cfb"
+        ],
+        "interiorProbe": [
+          -123.17999999000001,
+          49.19999999
+        ],
+        "interiorProbeMatchesRawCell": true
+      },
+      {
+        "stationId": "winnipeg",
+        "name": "ウィニペグ",
+        "station": "WINNIPEG RICHARDSON INT'L A",
+        "climateId": "5023222",
+        "coordinates": [
+          -97.23,
+          49.92
+        ],
+        "sourceRow": 400,
+        "sourceColumn": 827,
+        "code": 26,
+        "id": "Dfb",
+        "overlayMatchesRawCell": true,
+        "coordinateSourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=5023222&dispBack=0",
+        "boundaryCandidates": [
+          "Dfb"
+        ],
+        "interiorProbe": [
+          -97.22999999000001,
+          49.91999999
+        ],
+        "interiorProbeMatchesRawCell": true
+      },
+      {
+        "stationId": "iqaluit",
+        "name": "イカルイト",
+        "station": "IQALUIT A",
+        "climateId": "2402590",
+        "coordinates": [
+          -68.55,
+          63.75
+        ],
+        "sourceRow": 262,
+        "sourceColumn": 1114,
+        "code": 29,
+        "id": "ET",
+        "overlayMatchesRawCell": true,
+        "coordinateSourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=2402590&dispBack=0",
+        "boundaryCandidates": [
+          "ET"
+        ],
+        "interiorProbe": [
+          -68.54999999,
+          63.74999999
+        ],
+        "interiorProbeMatchesRawCell": true
+      },
+      {
+        "stationId": "regina",
+        "name": "レジャイナ",
+        "station": "REGINA INT'L A",
+        "climateId": "4016560",
+        "coordinates": [
+          -104.67,
+          50.43
+        ],
+        "sourceRow": 395,
+        "sourceColumn": 753,
+        "code": 26,
+        "id": "Dfb",
+        "overlayMatchesRawCell": true,
+        "coordinateSourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=4016560&dispBack=0",
+        "boundaryCandidates": [
+          "Dfb"
+        ],
+        "interiorProbe": [
+          -104.66999999000001,
+          50.42999999
+        ],
+        "interiorProbeMatchesRawCell": true
+      }
+    ]
+  },
+  "lookup": {
+    "cellRule": "Original raster half-open cells: column=floor((longitude+180)*10), row=floor((90-latitude)*10). On an exact east/south grid boundary the east/south cell wins.",
+    "polygonBoundary": "Closed GeoJSON rings can touch adjacent classes at an exact cell edge. Station samples use the original raster cell rule and disclose all touching polygon candidates."
+  },
+  "limitations": [
+    "0.1-degree cells describe broad regional climate; narrow islands and coasts may have source no-data. Zooming does not create finer data.",
+    "No-data 0 is omitted and never assigned a climate class. Land not classified by the source remains uncolored.",
+    "Canada boundaries are 2021 cartographic statistical boundaries; small lakes not represented by Natural Earth 1:50m remain unresolved.",
+    "Grid class at an ECCC station coordinate is independent of the station monthly normal. It is not a classification recalculated from that station's temperatures or precipitation.",
+    "Classes describe the 1991–2020 reference climate, not current weather, rainfall totals, temperatures, crop suitability or national averages."
+  ]
+}

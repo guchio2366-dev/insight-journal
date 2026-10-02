@@ -1,0 +1,45 @@
+.canada-natural-layer[hidden], .canada-natural-layer [hidden] { display: none !important; }
+.canada-natural-layer .canada-natural-frame { position: relative; width: 100%; height: clamp(290px, calc(100dvh - 390px), 580px); min-height: 290px; overflow: hidden; background: #e4eff0; border: 1px solid #bfd0cf; border-radius: 5px; overscroll-behavior: contain; }
+.canada-natural-fallback, .canada-natural-live { position: absolute; inset: 0; width: 100%; height: 100%; }
+.canada-natural-fallback { display: block; touch-action: pan-y; }
+.canada-natural-context { fill: #edece5; stroke: #94aaaa; stroke-width: .7; }
+.canada-natural-shape { cursor: pointer; }
+.canada-natural-area { stroke: #69796e; stroke-width: .35; }
+.canada-natural-line { stroke-linecap: round; stroke-linejoin: round; }
+.canada-natural-line-hit { stroke-width: 9; pointer-events: stroke; }
+.canada-natural-shape.is-selected .canada-natural-area, .canada-natural-shape:focus-visible .canada-natural-area { stroke: #173b51; stroke-width: 2.5; }
+.canada-natural-shape.is-selected .canada-natural-line, .canada-natural-shape:focus-visible .canada-natural-line { stroke-width: 3; }
+.canada-natural-shape.is-selected .canada-natural-line, .canada-natural-shape:focus-visible .canada-natural-line { stroke-opacity: 1; }
+.canada-natural-contour-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 2; }
+.canada-natural-contour-label { position: absolute; transform: translate(-50%, -50%); padding: 1px 3px; border: 1px solid transparent; border-radius: 2px; background: rgb(255 253 246 / 94%); color: #493b30; font: 700 12px/1.25 var(--sans, sans-serif); white-space: nowrap; }
+.canada-natural-contour-label.is-selected { border-color: #493b30; color: #30251e; }
+.canada-natural-static-contours text { fill: #493b30; stroke: #fffdf6; stroke-width: 4; paint-order: stroke; font: 700 13px var(--sans, sans-serif); }
+.canada-natural-shape:focus-visible { outline: none; }
+.canada-natural-stations { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.canada-natural-station { position: absolute; display: inline-flex; align-items: center; gap: 5px; transform: translate(-6px, -50%); pointer-events: auto; min-height: 30px; padding: 3px 5px 3px 0; border: 1px solid transparent; border-radius: 4px; background: rgb(255 253 246 / 89%); color: #263f48; font: 700 12px/1.35 var(--sans, sans-serif); cursor: pointer; white-space: nowrap; }
+.canada-natural-station i { width: 10px; height: 10px; border: 2px solid #fff; outline: 1px solid #263f48; border-radius: 50%; background: #263f48; }
+.canada-natural-station.is-selected { border-color: #263f48; background: #fffdf4; }
+.canada-natural-station.is-selected i { background: #fff; border-color: #263f48; }
+.canada-natural-layer .canada-natural-stations .canada-natural-station { display: grid; place-items: center; width: 12px; height: 24px; min-height: 24px; padding: 0; border: 0; background: transparent; transform: translate(-6px, -50%); }
+.canada-natural-layer .canada-natural-stations .canada-natural-station span { position: absolute; left: 14px; top: 12px; transform: translateY(-50%); padding: 2px 4px; border: 1px solid transparent; border-radius: 3px; color: #263f48; background: rgb(255 253 246 / 94%); }
+.canada-natural-layer .canada-natural-stations .canada-natural-station.is-selected span { border-color: #263f48; background: #fffdf4; }
+.canada-natural-static-station { cursor: pointer; }
+.canada-natural-static-station circle { fill: #263f48; stroke: #fff; stroke-width: 2; }
+.canada-natural-static-station.is-selected circle { fill: #fff; stroke: #263f48; stroke-width: 3; }
+.canada-natural-static-station text { fill: #263f48; stroke: #fffdf6; stroke-width: 3; paint-order: stroke; font: 700 13px var(--sans, sans-serif); }
+.canada-natural-tools { position: absolute; z-index: 3; top: 8px; right: 8px; display: grid; gap: 3px; }
+.canada-natural-tools button { width: 44px; height: 40px; min-height: 40px; padding: 0; border: 1px solid #a4b8b9; border-radius: 4px; background: #fff; color: #253e42; font: 700 12px/1.2 var(--sans, sans-serif); cursor: pointer; box-shadow: 0 1px 3px rgb(34 58 56 / 14%); }
+.canada-natural-tools button[data-canada-natural-zoom] { font-size: 22px; }
+.canada-natural-tools button:disabled { opacity: .45; cursor: default; }
+.canada-natural-key { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0; }
+.canada-natural-key button { display: inline-flex; align-items: center; gap: 5px; min-height: 32px; padding: 4px 7px; border: 1px solid #bac9c6; border-radius: 4px; background: #fff; color: #243f48; font: 600 12px/1.4 var(--sans, sans-serif); cursor: pointer; }
+.canada-natural-key button[aria-pressed="true"] { border-color: #243f4c; outline: 1px solid #243f4c; background: #f4f5ed; }
+.canada-natural-key i { flex: 0 0 14px; width: 14px; height: 10px; border: 1px solid #758275; }
+.canada-natural-layer[data-canada-natural-layer="elevation"] .canada-natural-key i { flex-basis: 18px; width: 18px; height: 2px; border: 0; }
+.canada-natural-layer[data-canada-natural-layer="elevation"] .canada-natural-key button[data-canada-natural-legend="500"] i { height: 1px; opacity: .45; }
+.canada-natural-options { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; }
+.canada-natural-only { display: flex; align-items: center; gap: 5px; min-height: 30px; color: #334a4d; font: 13px/1.5 var(--sans, sans-serif); }
+.canada-natural-status, .canada-natural-caption, .canada-natural-sources { margin: 3px 0; color: #526765; font: 12px/1.6 var(--sans, sans-serif); }
+.canada-natural-sources summary { cursor: pointer; }
+.canada-natural-layer button:focus-visible, .canada-natural-static-station:focus-visible { outline: 2px solid #173b51; outline-offset: 2px; }
+@media (max-width: 700px) { .canada-natural-layer .canada-natural-frame { height: clamp(320px, 54dvh, 460px); min-height: 320px; } .canada-natural-key button { min-height: 40px; } .canada-natural-tools button { height: 44px; min-height: 44px; } }
