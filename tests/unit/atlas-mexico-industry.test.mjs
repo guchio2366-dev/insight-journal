@@ -65,12 +65,28 @@ test('Dedicated comparison URLs round-trip state, source population view and sel
  const ids=data.states.map(s=>s.id);
  const original=new URL('https://example.com/insight-journal/atlas/north-america/mexico/industry/?compare=population&state=08&metric=electronics&sourceView=population&from=population&only=1&zoom=1&fallback=1');
  const state=lib.readMexicoIndustryState(original,ids);
- assert.deepEqual(state,{state:'08',metric:'electronics',compare:'population',sourceView:'population',from:'population',only:true,zoom:true,fallback:true});
+ assert.deepEqual(state,{state:'08',sourceState:'08',metric:'electronics',compare:'population',sourceView:'population',from:'population',only:true,zoom:true,fallback:true});
  const serialized=lib.writeMexicoIndustryState(original,state);assert.deepEqual(lib.readMexicoIndustryState(serialized,ids),state);
  const back=lib.industryPopulationReturnUrl('/insight-journal/atlas/north-america/mexico/population/',original,state);
  assert.equal(back.origin,original.origin);assert.equal(back.pathname,'/insight-journal/atlas/north-america/mexico/population/');
  assert.equal(back.searchParams.get('view'),'population');assert.equal(back.searchParams.get('state'),'08');assert.equal(back.searchParams.get('only'),'1');assert.equal(back.searchParams.get('fallback'),'1');
  assert.equal(back.searchParams.has('metric'),false);assert.equal(back.searchParams.has('compare'),false);
- const pair=lib.industryComparisonUrl(original,state,'electronics');assert.equal(pair.searchParams.get('state'),'08');assert.equal(pair.searchParams.get('compare'),'electronics');assert.equal(pair.searchParams.has('sourceView'),false);
- assert.deepEqual(lib.readMexicoIndustryState(new URL('https://example.com/?state=33&metric=all&compare=bad&from=population&only=yes&sourceView=bad&zoom=true'),ids),{state:'05',metric:'transport',compare:null,sourceView:'density',from:'industry',only:false,zoom:false,fallback:false});
+ const pair=lib.industryComparisonUrl(original,state,'electronics');assert.equal(pair.searchParams.get('state'),'08');assert.equal(pair.searchParams.get('compare'),'electronics');assert.equal(pair.searchParams.has('sourceView'),false);assert.equal(pair.searchParams.has('sourceState'),false);
+ assert.deepEqual(lib.readMexicoIndustryState(new URL('https://example.com/?state=33&sourceState=invalid&metric=all&compare=bad&from=population&only=yes&sourceView=bad&zoom=true'),ids),{state:'05',sourceState:'05',metric:'transport',compare:null,sourceView:'density',from:'industry',only:false,zoom:false,fallback:false});
+});
+
+test('Population returns keep the original state when the industry target changes and the URL is restored',()=>{
+ const ids=data.states.map(s=>s.id),origin='https://example.com';
+ for(const view of ['density','population']){
+  const entered=new URL(`${origin}/insight-journal/atlas/north-america/mexico/industry/?compare=population&state=09&from=population&sourceView=${view}&only=1&fallback=1`);
+  const changed={...lib.readMexicoIndustryState(entered,ids),state:'05'};
+  const back=lib.industryPopulationReturnUrl('/insight-journal/atlas/north-america/mexico/population/',entered,changed);
+  assert.equal(back.searchParams.get('state'),'09');
+  assert.equal(back.searchParams.get('view'),view);assert.equal(back.searchParams.get('only'),'1');assert.equal(back.searchParams.get('fallback'),'1');
+  const saved=lib.writeMexicoIndustryState(entered,changed);
+  assert.equal(saved.searchParams.get('state'),'05');assert.equal(saved.searchParams.get('sourceState'),'09');
+  const restored=lib.readMexicoIndustryState(saved,ids);
+  assert.equal(restored.state,'05');assert.equal(restored.sourceState,'09');
+  assert.equal(lib.industryPopulationReturnUrl('/population/',saved,{...restored,state:'10'}).searchParams.get('state'),'09');
+ }
 });

@@ -83,7 +83,7 @@ export function initMexicoIndustry(root:HTMLElement):void {
 
  function render():void {
   const selected=places.get(state.state)!,comparison=state.compare!==null,popComparison=state.compare==='population';
-  root.classList.toggle('is-comparison',comparison);root.dataset.miRenderer=state.fallback?'static-fallback':'svg';root.dataset.miCompare=state.compare??'none';root.dataset.miSelected=state.state;
+  root.classList.toggle('is-comparison',comparison);root.dataset.miRenderer=state.fallback?'static-fallback':'svg';root.dataset.miCompare=state.compare??'none';root.dataset.miSelected=state.state;root.dataset.miSourceState=state.sourceState;
   one('[data-mi-map-grid]')!.classList.toggle('mi-comparison-grid',comparison);
   show('[data-mi-figure="secondary"]',comparison);
   one<HTMLElement>('[data-mi-figure="secondary"]')!.style.order=popComparison?'0':'1';one<HTMLElement>('[data-mi-figure="primary"]')!.style.order=popComparison?'1':'0';
@@ -112,7 +112,7 @@ export function initMexicoIndustry(root:HTMLElement):void {
   text('[data-mi-population-link]',`${state.sourceView==='density'?'人口密度':'人口'}2020 × 輸出額2025：人と生産拠点の位置を比べる`);
   const back=one<HTMLAnchorElement>('[data-mi-return]')!;
   if(popComparison&&state.from==='population') {
-   back.href=industryPopulationReturnUrl(config.populationHref,current,state).href;back.textContent=`${selected.name}の元の${state.sourceView==='density'?'人口密度':'人口'}地図へ戻る`;
+   back.href=industryPopulationReturnUrl(config.populationHref,current,state).href;back.textContent=`${places.get(state.sourceState)!.name}の元の${state.sourceView==='density'?'人口密度':'人口'}地図へ戻る`;
   } else {
    back.href=writeMexicoIndustryState(current,{...state,compare:null,from:'industry'}).href;back.textContent=`${selected.name}の${metricName(state.metric)}地図へ戻る`;
   }

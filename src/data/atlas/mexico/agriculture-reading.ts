@@ -4,12 +4,22 @@ export const agricultureSources = {
   maize: 'https://www.inegi.org.mx/contenidos/programas/ca/2022/tabulados/ca2022_agr02.xlsx',
   autumnWinter: 'https://www.inegi.org.mx/contenidos/programas/ca/2022/tabulados/ca2022_agr04.xlsx',
   pine: 'https://www.inegi.org.mx/contenidos/programas/ca/2022/tabulados/ca2022_for15.xlsx',
+  cattle: 'https://www.inegi.org.mx/contenidos/programas/ca/2022/datosabiertos/ca_2022_upagro_csv.zip',
+  cattleDefinition: 'https://www.inegi.org.mx/contenidos/programas/ca/2022/doc/ca2022_rdnal.pdf',
   woodUses: 'https://www.inegi.org.mx/contenidos/programas/ca/2022/tabulados/ca2022_for18.xlsx',
   temperateForest: 'https://www.biodiversidad.gob.mx/ecosistemas/bosqueTemplado',
   maizeFoodChain: 'https://www.gob.mx/agricultura/articulos/del-campo-al-comal-el-proceso-de-hacer-tortillas-de-maiz?idiom=es',
   licence: 'https://www.inegi.org.mx/inegi/terminos.html',
 };
 export const agricultureReading = {
+  cattle:{
+    title:'牛の飼養頭数を、州ごとに読み分ける',
+    takeaway:'牛の頭数は州によって異なります。飼養する場所の面積や、肉・乳の生産量とは別の指標です。',
+    steps:[
+      {title:'何を数えているか',body:'2022年9月の牛の飼養頭数です。農業生産単位と住宅で飼養する牛を合わせています。円は州合計を示し、飼養域の位置を示しません。',source:agricultureSources.cattleDefinition},
+      {title:'数量と生産を分けて読む',body:'牛は肉や乳の生産につながりますが、頭数だけから州の生産量や飼養方法は分かりません。気候の分布と比べるときも、頭数と飼養の条件を区別します。',source:'https://www.inegi.org.mx/contenidos/saladeprensa/aproposito/2025/EAP_Ganaderia.pdf'},
+    ],
+  },
   maize: {
     title: '主食の原料を、灌漑農業が支える',
     takeaway: '白粒の生産は太平洋側のシナロアに集中。灌漑率と秋冬作を重ねて読む。',

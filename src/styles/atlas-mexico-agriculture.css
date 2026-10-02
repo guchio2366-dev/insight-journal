@@ -28,3 +28,29 @@
 @media(min-width:1600px){.mexico-agriculture-symbol-key svg{max-width:calc((540px - 2px) * 900 / 580)}}
 @media(max-width:959px){.mexico-agriculture-selection strong{font-size:19px}.mexico-agriculture-key{margin:7px 0}.mexico-agriculture-symbol-key svg{max-width:none}.mexico-agriculture-tabs a{min-height:42px}.mexico-agriculture .mexico-controls{gap:6px 9px}.mexico-agriculture-figure figcaption{min-height:0}.mexico-agriculture-map-fallback{height:335px}}
 @media(max-width:430px){.mexico-agriculture .mexico-controls select{max-width:165px}.mexico-agriculture-tabs{gap:4px}.mexico-agriculture-tabs a{padding:6px 7px;font-size:13px}.mexico-agriculture-map-heading h2{font-size:17px}.mexico-agriculture-symbol-key{gap:6px 9px}}
+
+.atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-reading-legend .mexico-agriculture-key{margin:0 0 8px;padding:6px 8px;border:1px solid #c8cfc4;background:#f7f5ec;font-size:12px}
+.atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-agriculture-symbol-key{display:flex;gap:2px 8px;font-size:13px;line-height:1.4;padding:3px 0}
+.atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-agriculture-symbol-key>span:first-child{flex:1 1 auto}
+.atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-agriculture-zero{font-size:12px}
+.atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-agriculture-quantity-keys{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;gap:5px}
+.atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-agriculture-symbol-key-item{display:flex;flex-direction:column;justify-content:flex-end;gap:1px;font-size:12px;line-height:1.4}
+.atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-agriculture-symbol-key-item svg{width:48px;height:48px;max-width:none;flex-shrink:0;margin:0}
+.atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-agriculture-symbol-key small{display:block;width:100%;font-size:12px;line-height:1.4}
+.atlas-desktop-shell .mexico-workspace.mexico-agriculture [data-agriculture-legend=irrigation]{font-size:13px}
+.atlas-desktop-shell .mexico-workspace.mexico-agriculture [data-agriculture-legend=irrigation] small{display:block;font-size:12px}
+.atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-agriculture-national-values{margin:3px 0 7px;font-size:13px}
+.atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-agriculture-country-overview{padding-top:0}
+@media(min-width:960px){
+ .atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-map-column{display:flex;flex-direction:column;gap:0}
+ .atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-agriculture-figure{display:contents}
+ .atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-map-frame{order:0}
+ .atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-items{order:1;padding:4px 8px;display:flex;flex-wrap:wrap;gap:2px 12px;border:1px solid #c8cfc4;border-top:0}
+ .atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-items .mexico-agriculture-tabs{justify-content:flex-start;gap:4px 12px;width:auto;flex:1 1 auto}
+ .atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-items .mexico-agriculture-tabs a{min-height:24px;padding:0 4px;font-size:13px}
+ .atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-items .mexico-agriculture-tabs small{font-size:12px}
+ .atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-items .mexico-agriculture-tabs a[aria-current]{background:#34533b;color:#fff}
+ .atlas-desktop-shell .mexico-workspace.mexico-agriculture [data-agriculture-only-item-label]{display:inline-flex;align-items:center;min-height:24px;font-size:13px}
+ .atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-agriculture-map-heading{order:2;padding:4px 8px}
+ .atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-agriculture-figure figcaption{order:3;padding:3px 8px}
+}

@@ -64,13 +64,13 @@ test('Map encodes quantity with circle area and rates with complete non-overlapp
 });
 
 test('Field URL and dedicated nature comparison preserve target, metric, focus and fallback', () => {
-  const desired = {metric:'pine', state:'08', only:true, fallback:true};
+  const desired = {metric:'pine', state:'08', only:true, fallback:true,crops:true,livestock:true,onlyItem:false};
   const original = new URL('https://example.com/insight-journal/atlas/north-america/mexico/agriculture/?extra=keep');
   const encoded = lib.writeMexicoAgricultureState(original, desired);
   assert.deepEqual(lib.readMexicoAgricultureState(encoded), desired);
   assert.equal(encoded.searchParams.get('extra'), 'keep');
   assert.equal(original.searchParams.has('metric'), false);
-  assert.deepEqual(lib.readMexicoAgricultureState(new URL('https://example.com/?metric=bad&state=99&only=yes')), {metric:'maize', state:'25', only:false, fallback:false});
+  assert.deepEqual(lib.readMexicoAgricultureState(new URL('https://example.com/?metric=bad&state=99&only=yes')), {metric:'maize', state:'25', only:false, fallback:false,crops:true,livestock:true,onlyItem:false});
   assert.equal(lib.readMexicoAgricultureState(new URL('https://example.com/?metric=pine&state=8')).state, '08');
   const compare = lib.agricultureNatureComparisonUrl('/insight-journal/atlas/north-america/mexico/nature/', desired, original.origin);
   assert.equal(compare.searchParams.get('compare'), 'irrigation');
@@ -80,6 +80,29 @@ test('Field URL and dedicated nature comparison preserve target, metric, focus a
   assert.equal(compare.searchParams.get('sourceState'), '08');
   assert.equal(compare.searchParams.get('sourceOnly'), '1');
   assert.equal(compare.searchParams.get('sourceFallback'), '1');
+});
+
+test('Retained livestock totals include production units and households, reconcile nationally and keep source hashes',async()=>{
+ const cattle=JSON.parse(await readFile('src/data/atlas/mexico/livestock.json','utf8'));
+ assert.equal(cattle.unit,'頭');assert.equal(cattle.period,'2022年9月');assert.match(cattle.scope,/生産単位.*住宅/);
+ assert.deepEqual(Object.keys(cattle.states).sort(),Array.from({length:32},(_,i)=>String(i+1).padStart(2,'0')));
+ assert.ok(Object.values(cattle.states).every(value=>Number.isSafeInteger(value)&&value>=0));
+ assert.equal(Object.values(cattle.states).reduce((a,b)=>a+b,0),24808075);assert.equal(cattle.national,24808075);
+ assert.equal(cattle.states['30'],2723963);assert.equal(cattle.states['08'],1746817);
+ assert.equal(cattle.provenance.archiveSha256,sha(await readFile(cattle.provenance.archive)));
+ assert.match(cattle.provenance.filter,/TIPO_UNIDAD/);assert.match(cattle.provenance.periodUnitUrl,/inegi\.org\.mx/);
+ assert.equal(lib.agricultureValue({...state('08'),cattleHeads:cattle.states['08']},'cattle'),1746817);
+ assert.equal(lib.formatAgricultureValue(1746817,'cattle'),'1,746,817 頭');
+ assert.ok(Number.isNaN(lib.agricultureValue(state('08'),'cattle')),'unprovided livestock is not silently zero');
+});
+
+test('Independent crop/livestock switches and item-only mode round-trip without changing the selected state or units',()=>{
+ const desired={metric:'cattle',state:'08',only:true,fallback:false,crops:false,livestock:true,onlyItem:true};
+ const url=lib.writeMexicoAgricultureState(new URL('https://example.com/?extra=keep'),desired);
+ assert.deepEqual(lib.readMexicoAgricultureState(url),desired);assert.equal(url.searchParams.get('extra'),'keep');
+ const comparison=lib.agricultureNatureComparisonUrl('/nature/',desired);
+ assert.equal(comparison.searchParams.get('sourceMetric'),'cattle');assert.equal(comparison.searchParams.get('sourceCrops'),'0');
+ assert.equal(comparison.searchParams.get('sourceLivestock'),'1');assert.equal(comparison.searchParams.get('sourceOnlyItem'),'1');
 });
 
 test('Release ledger hashes retained sources and public outputs, with metadata reuse terms', async () => {

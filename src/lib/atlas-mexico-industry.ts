@@ -1,7 +1,7 @@
 export type MexicoIndustryMetric = 'transport' | 'electronics';
 export type MexicoIndustryStatus = 'available' | 'zero' | 'confidential' | 'unknown' | 'notSignificant' | 'notApplicable' | 'unretrieved';
 export type MexicoIndustryValue = {value:number|null;sourceValue:number|null;sourceStatus:string;publicationStatus:string;status:MexicoIndustryStatus};
-export type MexicoIndustryState = {state:string;metric:MexicoIndustryMetric;compare:'electronics'|'population'|null;sourceView:'density'|'population';from:'industry'|'population';only:boolean;zoom:boolean;fallback:boolean};
+export type MexicoIndustryState = {state:string;sourceState:string;metric:MexicoIndustryMetric;compare:'electronics'|'population'|null;sourceView:'density'|'population';from:'industry'|'population';only:boolean;zoom:boolean;fallback:boolean};
 
 export const mexicoIndustryColors=['#eef1e3','#d4e2c1','#a9ca91','#75a76e','#427e58','#205b45'];
 export const mexicoIndustryBins=[{label:'0超–1未満',color:mexicoIndustryColors[0]},{label:'1–5未満',color:mexicoIndustryColors[1]},{label:'5–10未満',color:mexicoIndustryColors[2]},{label:'10–20未満',color:mexicoIndustryColors[3]},{label:'20–40未満',color:mexicoIndustryColors[4]},{label:'40以上',color:mexicoIndustryColors[5]}];
@@ -23,22 +23,23 @@ export function industryValueText(value:MexicoIndustryValue):string {
  return mexicoIndustryStatusLabels[value.status];
 }
 
-const keys=['state','metric','compare','sourceView','from','only','zoom','fallback'] as const;
+const keys=['state','sourceState','metric','compare','sourceView','from','only','zoom','fallback'] as const;
 export function readMexicoIndustryState(url:URL,stateIds:readonly string[]):MexicoIndustryState {
  const p=url.searchParams,code=p.get('state')??'',compare=p.get('compare'),sourceView=p.get('sourceView');
- return {state:stateIds.includes(code)?code:'05',metric:p.get('metric')==='electronics'?'electronics':'transport',compare:compare==='electronics'||compare==='population'?compare:null,sourceView:sourceView==='population'?'population':'density',from:compare==='population'&&p.get('from')==='population'?'population':'industry',only:p.get('only')==='1',zoom:p.get('zoom')==='1',fallback:p.get('fallback')==='1'};
+ const state=stateIds.includes(code)?code:'05',sourceCode=p.get('sourceState')??'';
+ return {state,sourceState:compare==='population'&&p.get('from')==='population'&&stateIds.includes(sourceCode)?sourceCode:state,metric:p.get('metric')==='electronics'?'electronics':'transport',compare:compare==='electronics'||compare==='population'?compare:null,sourceView:sourceView==='population'?'population':'density',from:compare==='population'&&p.get('from')==='population'?'population':'industry',only:p.get('only')==='1',zoom:p.get('zoom')==='1',fallback:p.get('fallback')==='1'};
 }
 export function writeMexicoIndustryState(url:URL,state:MexicoIndustryState):URL {
  const target=new URL(url);for(const key of keys)target.searchParams.delete(key);
  target.searchParams.set('state',state.state);target.searchParams.set('metric',state.metric);
  if(state.compare)target.searchParams.set('compare',state.compare);
- if(state.compare==='population'){target.searchParams.set('sourceView',state.sourceView);target.searchParams.set('from',state.from);}
+ if(state.compare==='population'){target.searchParams.set('sourceView',state.sourceView);target.searchParams.set('from',state.from);if(state.from==='population')target.searchParams.set('sourceState',state.sourceState);}
  if(state.only)target.searchParams.set('only','1');if(state.zoom)target.searchParams.set('zoom','1');if(state.fallback)target.searchParams.set('fallback','1');
  return target;
 }
 export function industryPopulationReturnUrl(populationHref:string,current:URL,state:MexicoIndustryState):URL {
  const target=new URL(populationHref,current);
- target.searchParams.set('view',state.sourceView);target.searchParams.set('state',state.state);
+ target.searchParams.set('view',state.sourceView);target.searchParams.set('state',state.sourceState);
  if(state.only)target.searchParams.set('only','1');if(state.fallback)target.searchParams.set('fallback','1');
  return target;
 }

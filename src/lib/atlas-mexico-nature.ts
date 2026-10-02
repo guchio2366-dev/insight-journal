@@ -4,9 +4,15 @@ import {mexicoDensityBins} from './atlas-mexico-population.ts';
 export const natureViews = ['climate', 'relief'] as const;
 export type MexicoNatureView = typeof natureViews[number];
 export type MexicoNatureComparison = 'irrigation' | 'population' | null;
-export type MexicoNatureIndicator = 'irrigation' | 'density' | 'maize' | 'pine' | 'population';
+export type MexicoNatureIndicator = 'irrigation' | 'density' | 'maize' | 'cattle' | 'pine' | 'population';
+export const natureCategories = ['rivers-groundwater', 'precipitation', 'basins', 'elevation'] as const;
+export type MexicoNatureCategory = '' | typeof natureCategories[number];
+export const natureClassIds = {climate: ['11','12','21','22','31','32','42','51','52','53','54','55','56','57','58','59','61','62','63','64','70'], relief: ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','S/It']} as const;
 export interface MexicoNatureState {
   view: MexicoNatureView;
+  category: MexicoNatureCategory;
+  item: string;
+  feature: string;
   state: string;
   compare: MexicoNatureComparison;
   only: boolean;
@@ -16,7 +22,10 @@ export interface MexicoNatureState {
   sourceState: string;
   sourceOnly: boolean;
   sourceFallback: boolean;
-  sourceMetric: 'maize' | 'irrigation' | 'pine';
+  sourceMetric: 'maize' | 'cattle' | 'irrigation' | 'pine';
+  sourceCrops: boolean;
+  sourceLivestock: boolean;
+  sourceOnlyItem: boolean;
   sourceView: 'density' | 'population';
 }
 const validState = (value: string | null, codes: readonly string[], fallback: string) => value && codes.includes(value) ? value : fallback;
@@ -27,19 +36,28 @@ export function readMexicoNatureState(url: URL, codes: readonly string[]): Mexic
   const frame = q.get('frame')?.split(',').map(Number);
   const validFrame = frame?.length === 4 && frame.every(Number.isFinite) && frame[0] >= -100 && frame[0] <= 900 && frame[1] >= -100 && frame[1] <= 580 && frame[2] >= 35 && frame[2] <= 1000 && frame[3] >= 25 && frame[3] <= 700;
   const metric = q.get('sourceMetric'), view = q.get('view'), from = q.get('from');
+  const selectedView: MexicoNatureView = natureViews.includes(view as MexicoNatureView) ? view as MexicoNatureView : comparison === 'population' || (comparison === 'irrigation' && from === 'agriculture' && metric === 'pine') ? 'relief' : 'climate';
+  const item = q.get('item') ?? '', feature = q.get('feature') ?? '';
   return {
-    view: comparison === 'population' || (comparison === 'irrigation' && from === 'agriculture' && metric === 'pine') ? 'relief' : comparison === 'irrigation' ? 'climate' : natureViews.includes(view as MexicoNatureView) ? view as MexicoNatureView : 'climate',
+    view: selectedView,
+    category: natureCategories.includes(q.get('category') as typeof natureCategories[number]) ? q.get('category') as MexicoNatureCategory : '',
+    item: [...natureClassIds.climate, ...natureClassIds.relief].includes(item as never) ? item : '',
+    feature: /^(climate|relief)-[1-9][0-9]*$/.test(feature) ? feature : '',
     state, compare: comparison, only: q.get('only') === '1' || (!q.has('only') && q.get('sourceOnly') === '1'), fallback: q.get('fallback') === '1', frame: validFrame ? frame! : null,
     from: from === 'agriculture' || from === 'population' ? from : null,
     sourceState: validState(q.get('sourceState'), codes, state), sourceOnly: q.get('sourceOnly') === '1' || (!q.has('sourceOnly') && q.get('only') === '1'),
     sourceFallback: q.get('sourceFallback') === '1' || (!q.has('sourceFallback') && q.get('fallback') === '1'),
-    sourceMetric: metric === 'maize' || metric === 'pine' || metric === 'irrigation' ? metric : 'irrigation', sourceView: q.get('sourceView') === 'population' ? 'population' : 'density',
+    sourceMetric: metric === 'maize' || metric === 'cattle' || metric === 'pine' || metric === 'irrigation' ? metric : 'irrigation', sourceView: q.get('sourceView') === 'population' ? 'population' : 'density',
+    sourceCrops: q.get('sourceCrops') !== '0', sourceLivestock: q.get('sourceLivestock') !== '0', sourceOnlyItem: q.get('sourceOnlyItem') === '1',
   };
 }
 export function writeMexicoNatureState(url: URL, state: MexicoNatureState): URL {
   const next = new URL(url);
-  for (const key of ['view', 'state', 'compare', 'only', 'fallback', 'frame', 'from', 'sourceState', 'sourceOnly', 'sourceFallback', 'sourceMetric', 'sourceView']) next.searchParams.delete(key);
+  for (const key of ['view', 'category', 'item', 'feature', 'state', 'compare', 'only', 'fallback', 'frame', 'from', 'sourceState', 'sourceOnly', 'sourceFallback', 'sourceMetric', 'sourceView', 'sourceCrops', 'sourceLivestock', 'sourceOnlyItem']) next.searchParams.delete(key);
   next.searchParams.set('view', state.view); next.searchParams.set('state', state.state);
+  if (state.category && natureCategories.includes(state.category)) next.searchParams.set('category', state.category);
+  if (state.item && [...natureClassIds.climate, ...natureClassIds.relief].includes(state.item as never)) next.searchParams.set('item', state.item);
+  if (state.feature && /^(climate|relief)-[1-9][0-9]*$/.test(state.feature)) next.searchParams.set('feature', state.feature);
   if (state.compare) next.searchParams.set('compare', state.compare);
   if (state.only) next.searchParams.set('only', '1');
   else if (state.from && state.sourceOnly) next.searchParams.set('only', '0');
@@ -48,14 +66,14 @@ export function writeMexicoNatureState(url: URL, state: MexicoNatureState): URL 
   if (state.from) {
     next.searchParams.set('from', state.from); next.searchParams.set('sourceState', state.sourceState); next.searchParams.set('sourceOnly', state.sourceOnly ? '1' : '0');
     next.searchParams.set('sourceFallback', state.sourceFallback ? '1' : '0');
-    if (state.from === 'agriculture') next.searchParams.set('sourceMetric', state.sourceMetric);
+    if (state.from === 'agriculture') {next.searchParams.set('sourceMetric', state.sourceMetric); next.searchParams.set('sourceCrops', state.sourceCrops ? '1' : '0'); next.searchParams.set('sourceLivestock', state.sourceLivestock ? '1' : '0'); next.searchParams.set('sourceOnlyItem', state.sourceOnlyItem ? '1' : '0');}
     if (state.from === 'population') next.searchParams.set('sourceView', state.sourceView);
   }
   return next;
 }
 export function mexicoNatureReturnUrl(base: string, state: MexicoNatureState): string {
   const q = new URLSearchParams({state: state.from ? state.sourceState : state.state});
-  if (state.from === 'agriculture') q.set('metric', state.sourceMetric);
+  if (state.from === 'agriculture') {q.set('metric', state.sourceMetric); if (!state.sourceCrops) q.set('crops', '0'); if (!state.sourceLivestock) q.set('livestock', '0'); if (state.sourceOnlyItem) q.set('onlyItem', '1');}
   if (state.from === 'population') q.set('view', state.sourceView);
   if (state.sourceOnly) q.set('only', '1');
   if (state.sourceFallback) q.set('fallback', '1');
@@ -67,7 +85,11 @@ export function mexicoNatureIndicator(state: MexicoNatureState): MexicoNatureInd
   return state.from === 'agriculture' ? state.sourceMetric : 'irrigation';
 }
 export function mexicoNatureNormalView(state: MexicoNatureState, view: MexicoNatureView): MexicoNatureState {
-  return {...state, view, compare: null, only: false, from: null, sourceState: state.state, sourceOnly: false, sourceFallback: state.fallback, sourceMetric: 'irrigation', sourceView: 'density'};
+  return {...state, view, category: '', item: '', feature: '', compare: null, only: false, from: null, sourceState: state.state, sourceOnly: false, sourceFallback: state.fallback, sourceMetric: 'irrigation', sourceView: 'density'};
+}
+// A natural-layer choice changes the target while keeping the original comparison.
+export function mexicoNatureSelectView(state: MexicoNatureState, view: MexicoNatureView): MexicoNatureState {
+  return {...state, view, category: ''};
 }
 export const irrigationBins = sourceIrrigationBins.map(bin => ({...bin, minimum: bin.min}));
 export const densityBins = mexicoDensityBins.map(bin => ({...bin, minimum: bin.min}));

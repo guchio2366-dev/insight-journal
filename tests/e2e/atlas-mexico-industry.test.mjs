@@ -88,6 +88,28 @@ test('Population quantities retain area-proportional circles through selection, 
  }finally{await w.happyDOM.close();if(reload)await reload.happyDOM.close();}
 });
 
+test('Population source state and named return survive changing the industry target, reload and history',async()=>{
+ for(const view of ['density','population']){
+  const w=await page(`?compare=population&state=09&from=population&sourceView=${view}&only=1&fallback=1`);let reload;
+  try{
+   const q=s=>w.document.querySelector(s);
+   const assertReturn=(document)=>{
+    const link=document.querySelector('[data-mi-return]'),back=new URL(link.href);
+    assert.equal(back.searchParams.get('state'),'09');assert.equal(back.searchParams.get('view'),view);
+    assert.equal(back.searchParams.get('only'),'1');assert.equal(back.searchParams.get('fallback'),'1');
+    assert.match(link.textContent,/メキシコ市.*元の/);
+   };
+   change(w,'[data-mi-state-select]','05');
+   assert.equal(q('[data-mi-state-select]').value,'05');assert.equal(new URL(w.location).searchParams.get('sourceState'),'09');assertReturn(w.document);
+   reload=await page(w.location.search);assert.equal(reload.document.querySelector('[data-mi-state-select]').value,'05');assertReturn(reload.document);
+   change(w,'[data-mi-state-select]','10');assertReturn(w.document);
+   w.history.back();await w.happyDOM.waitUntilComplete();assert.equal(q('[data-mi-state-select]').value,'05');assertReturn(w.document);
+   w.history.back();await w.happyDOM.waitUntilComplete();assert.equal(q('[data-mi-state-select]').value,'09');assertReturn(w.document);
+   w.history.forward();await w.happyDOM.waitUntilComplete();assert.equal(q('[data-mi-state-select]').value,'05');assertReturn(w.document);
+  }finally{await w.happyDOM.close();if(reload)await reload.happyDOM.close();}
+ }
+});
+
 test('Explicit fallback retains both data distributions and status patterns, while the state selector and return remain usable',async()=>{
  const w=await page('?compare=population&state=06&from=population&sourceView=density&only=1&fallback=1');try{const d=w.document,q=s=>d.querySelector(s);assert.equal(q('[data-mexico-field=industry]').dataset.miRenderer,'static-fallback');assert.equal(q('[data-mi-fallback-note]').hidden,false);assert.equal(q('[data-mi-map=primary] [data-mi-shape="06"]').getAttribute('fill'),'url(#mi-primary-confidential)');assert.equal(q('[data-mi-map=primary] [data-mi-shape="06"]').getAttribute('tabindex'),'-1');q('[data-mi-map=primary] [data-mi-shape="08"]').dispatchEvent(new w.MouseEvent('click',{bubbles:true}));assert.equal(q('[data-mi-state-select]').value,'06');change(w,'[data-mi-state-select]','08');assert.equal(q('[data-mi-state-select]').value,'08');assert.equal(new URL(q('[data-mi-return]').href).searchParams.get('fallback'),'1');for(const slot of ['primary','secondary'])assert.deepEqual(visible(d,slot).map(el=>el.dataset.miShape),['08']);
  }finally{await w.happyDOM.close();}

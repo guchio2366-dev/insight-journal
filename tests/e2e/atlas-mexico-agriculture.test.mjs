@@ -24,7 +24,8 @@ test('Static agriculture HTML contains 32-state distribution, all statistics, fo
     assert.equal(doc.querySelectorAll('[data-agriculture-symbol]').length, 32);
     assert.equal(doc.querySelectorAll('[data-agriculture-stat-row]').length, 33);
     assert.equal(doc.querySelectorAll('[data-agriculture-fallback-row]').length, 32);
-    assert.equal(doc.querySelectorAll('.mexico-items [data-agriculture-metric]').length, 3);
+    assert.equal(doc.querySelectorAll('.mexico-items [data-agriculture-metric]').length, 4);
+    assert.equal(doc.querySelectorAll('[data-agriculture-cattle-symbol]').length,32);
     assert.equal(doc.querySelector('[data-agriculture-state]').value,'');
     assert.equal(doc.querySelectorAll('path[data-agriculture-state-code][aria-pressed="true"]').length,0);
     assert.equal(doc.querySelector('.mexico-reading-content').hidden,true);
@@ -138,16 +139,57 @@ test('Irrigation, pine zeros, fallback and focus retain every related geographic
     assert.equal(map.hasAttribute('hidden'), false);
     assert.equal(doc.querySelector('[data-agriculture-map-fallback]').hidden, true);
     doc.querySelector('[data-agriculture-metric="pine"]').click();
-    assert.equal(root.dataset.agricultureCurrentState, '10');
-    assert.equal(doc.querySelector('[data-agriculture-selection-value]').textContent, '4,173,804 m³');
+    assert.equal(root.dataset.agricultureCurrentState, '25','changing the indicator preserves the selected state');
+    const data=JSON.parse(await readFile('src/data/atlas/mexico/agriculture.json','utf8'));
+    assert.equal(doc.querySelector('[data-agriculture-selection-value]').textContent,Math.round(data.states.find(s=>s.code==='25').pineObtainedM3).toLocaleString('ja-JP')+' m³');
     doc.querySelector('[data-agriculture-state]').value = '05';
     doc.querySelector('[data-agriculture-state]').dispatchEvent(new window.Event('change'));
     assert.equal(doc.querySelector('[data-agriculture-selection-value]').textContent, '0 m³');
     assert.equal(doc.querySelector('[data-agriculture-symbol="05"]').getAttribute('r'), '0');
     assert.equal(doc.querySelector('[data-agriculture-legend="pine"]').hidden, false);
+    assert.match(doc.querySelector('[data-agriculture-legend="irrigation"]').textContent,/灌漑農地率（%）.*2021年10月～2022年9月/s);
     assert.equal(doc.querySelector('[data-agriculture-reading="pine"]').hidden, false);
     assert.match(doc.querySelector('[data-agriculture-comparison-label]').textContent, /松材取得と山地/);
   } finally {await window.happyDOM.close();}
+});
+
+test('Crop and livestock quantities open together; independent switches, item-only view, forest grouping and source flags survive history',async()=>{
+ const window=await page('',true);
+ try{
+  await window.happyDOM.waitUntilComplete();const doc=window.document,root=doc.querySelector('[data-mexico-field="agriculture"]');
+  const crop=doc.querySelector('[data-agriculture-symbol="08"]'),cattle=doc.querySelector('[data-agriculture-cattle-symbol="08"]');
+  assert.notEqual(crop.style.display,'none');assert.notEqual(cattle.style.display,'none');
+  assert.equal(doc.querySelector('[data-agriculture-legend="maize"]').hidden,false);assert.equal(doc.querySelector('[data-agriculture-legend="cattle"]').hidden,false);
+  assert.equal(doc.querySelector('[data-agriculture-legend="maize"]').closest('.mexico-reading-legend')?.closest('.mexico-reading'),doc.querySelector('.mexico-reading'),'quantity keys remain visible outside selection-only reading');
+  assert.equal(doc.querySelector('[data-agriculture-legend="cattle"]').querySelectorAll('.mexico-agriculture-symbol-key-item').length,3);
+  assert.match(doc.querySelector('[data-agriculture-legend="cattle"]').textContent,/2022年9月/);
+  const map=doc.querySelector('[data-agriculture-map]'),key=doc.querySelector('[data-agriculture-legend-size]');
+  const radius=key.querySelector('circle').getAttribute('r');
+  map.getBoundingClientRect=()=>({width:900,height:580});window.dispatchEvent(new window.Event('resize'));assert.equal(key.style.width,'68px');
+  map.getBoundingClientRect=()=>({width:450,height:290});window.dispatchEvent(new window.Event('resize'));assert.equal(key.style.width,'34px');assert.equal(key.querySelector('circle').getAttribute('r'),radius,'legend circles retain their quantity radius while following the map display scale');
+  assert.equal(doc.querySelector('.mexico-agriculture-source-period'),null,'a static crop period must not be attached to cattle or mixed indicators');
+  doc.querySelector('[data-agriculture-layer="livestock"]').click();assert.equal(cattle.style.display,'none');assert.notEqual(crop.style.display,'none');
+  doc.querySelector('[data-agriculture-metric="cattle"]').click();
+  const only=doc.querySelector('input[data-agriculture-only-item]');only.checked=true;only.dispatchEvent(new window.Event('change',{bubbles:true}));
+  assert.equal(crop.style.display,'none');assert.notEqual(cattle.style.display,'none');
+  assert.equal(new URL(window.location.href).searchParams.get('livestock'),'0','item-only mode preserves the previous independent switch');
+  doc.querySelector('[data-agriculture-layer="livestock"]').click();
+  assert.equal(cattle.style.display,'none','switching OFF the visible item acts on its effective display, not the saved pre-item flag');
+  assert.equal(only.checked,false);assert.notEqual(crop.style.display,'none');
+  only.checked=true;only.dispatchEvent(new window.Event('change',{bubbles:true}));
+  assert.notEqual(cattle.style.display,'none');assert.equal(crop.style.display,'none');
+  const source=new URL(doc.querySelector('[data-agriculture-nature-comparison]').href);
+  assert.equal(source.searchParams.get('sourceMetric'),'cattle');assert.equal(source.searchParams.get('sourceLivestock'),'0');assert.equal(source.searchParams.get('sourceOnlyItem'),'1');
+  window.history.replaceState(null,'','?metric=cattle&state=08&livestock=0&onlyItem=1&reading=item');window.dispatchEvent(new window.PopStateEvent('popstate'));
+  assert.equal(root.dataset.agricultureCurrentState,'08');assert.equal(only.checked,true);assert.notEqual(cattle.style.display,'none');
+  doc.querySelector('[data-agriculture-group="forestry"]').click();await window.happyDOM.waitUntilComplete();
+  assert.equal(root.dataset.agricultureCurrentState,'08');assert.equal(root.dataset.agricultureCurrentMetric,'pine');
+  assert.equal(doc.querySelector('[data-agriculture-group-items="agriculture"]').hidden,true);assert.equal(doc.querySelector('[data-agriculture-group-items="forestry"]').hidden,false);
+  assert.equal(cattle.style.display,'none');assert.equal(doc.querySelector('[data-agriculture-legend="pine"]').hidden,false);
+  doc.querySelector('[data-agriculture-group="agriculture"]').click();await window.happyDOM.waitUntilComplete();
+  assert.equal(root.dataset.agricultureCurrentState,'08');assert.equal(only.checked,false);assert.notEqual(crop.style.display,'none');assert.equal(cattle.style.display,'none');
+  assert.equal(root.dataset.mexicoReadingSelected,'false','group navigation opens the existing national overview');
+ }finally{await window.happyDOM.close();}
 });
 
 test('URL refresh, keyboard selection, history and comparison target restore field state', async () => {

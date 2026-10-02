@@ -1,0 +1,50 @@
+---
+import MexicoWorkspace from './MexicoWorkspace.astro';
+import population from '../../data/atlas/mexico/population.json';
+import {mexicoPopulationReading,mexicoPopulationRegionReading,mexicoPopulationReadingSources} from '../../data/atlas/mexico/population-reading';
+import {mexicoIndustryReading} from '../../data/atlas/mexico/industry-reading';
+import {stateFeatures,geometryPath,stateLabelPoint,stateViewBox,mapViewBox,geometryMetadata} from '../../lib/atlas-mexico-geometry';
+import {withBase} from '../../lib/urls';
+const first=population.states.find(s=>s.stateCode==='09')!;
+const shapes=stateFeatures.map(f=>({code:f.properties.code,path:geometryPath(f.geometry),point:stateLabelPoint(f.properties.code)}));
+const fields=[['agriculture','農林業：生産と水管理'],['nature','自然環境：気候と地形'],['industry','主要産業：輸出拠点'],['population','人口：規模と密度']];
+const states=population.states.map(row=>({...row,reading:mexicoPopulationRegionReading(row.stateCode),viewBox:stateViewBox(row.stateCode)}));
+const firstReading=mexicoPopulationRegionReading('09');
+const config={states,fields:Object.fromEntries(fields.map(([id])=>[id,withBase(`/atlas/north-america/mexico/${id}/`)])),viewBox:mapViewBox};
+---
+<MexicoWorkspace field="overview" title="地形・生産・人口をつないで読むメキシコ" lead="北部の乾燥地域、中央の高地、南部の湿潤地域を、農業・工業・都市と結び付けて読みます。">
+ <Fragment slot="map">
+  <div class="atlas-map-frame mexico-map-frame">
+   <div class="mexico-controls"><label>州 <select data-mexico-overview-state><option value="">メキシコ全体</option>{population.states.map(row=><option value={row.stateCode}>{row.nameJa}</option>)}</select></label><button type="button" data-mexico-overview-focus>選択州へ</button><button type="button" data-mexico-overview-reset>全体へ</button></div>
+   <svg class="mexico-map mexico-overview-map" data-mexico-map data-mexico-overview-map viewBox={mapViewBox} role="group" aria-label="メキシコの32州。州を選ぶと右側の解説を更新します。">
+    {shapes.map(shape=><path d={shape.path} data-mexico-overview-shape={shape.code} class="mexico-state" fill-rule="evenodd" role="button" tabindex="0" aria-pressed="false" aria-label={population.states.find(s=>s.stateCode===shape.code)!.nameJa}><title>{population.states.find(s=>s.stateCode===shape.code)!.nameJa}</title></path>)}
+    <g pointer-events="none" aria-hidden="true">{shapes.filter(s=>['02','03','05','08','14','19','25','26','31','09'].includes(s.code)).map(s=><text class="mexico-overview-label" x={s.point[0]} y={s.point[1]} text-anchor="middle">{population.states.find(row=>row.stateCode===s.code)!.short}</text>)}</g>
+   </svg>
+  </div>
+  <p class="mexico-caption">INEGIの州境（2025年）。色は位置を確認する白地図で、人口や生産量を表しません。</p>
+ </Fragment>
+ <Fragment slot="items"><span>境界線＝州境 · 太枠＝選択州。地図または一覧から州を選べます。</span></Fragment>
+ <div slot="overview" class="mexico-overview-intro">
+  <h2>自然条件と、人・物の移動を重ねる</h2>
+  <p>北部・北西部の乾燥地域では灌漑が農業を支え、中央部の高地には大きな都市が集まります。自然条件に加え、道路・鉄道、部品企業、国内外の市場が生産の場所を形づくります。</p>
+  <p>人口は<strong>{population.nationalPopulation.toLocaleString('ja-JP')}人</strong>（2020年）。州の人口規模と密度を分けて読むと、広い北部の州と中央部の集積を比べられます。</p>
+  <nav class="mexico-overview-field-links" aria-label="メキシコの各分野">{fields.map(([id,label])=><a href={withBase(`/atlas/north-america/mexico/${id}/`)}>{label} →</a>)}</nav>
+  <details><summary>北部・内陸と輸出産業のつながり</summary>{mexicoIndustryReading.causal.map(text=><p>{text}</p>)}</details>
+ </div>
+ <div slot="reading" data-mexico-overview-reading hidden>
+  <h2 data-mexico-overview-name>{first.nameJa}</h2>
+  <p data-mexico-overview-values>人口 {first.population.toLocaleString('ja-JP')}人 · 密度 {first.density}人/km²（2020年）</p>
+  <h3 data-mexico-overview-heading>{firstReading.heading}</h3>
+  <p data-mexico-overview-text>{firstReading.text}</p>
+  <nav class="mexico-overview-field-links" aria-label="選択州を各分野で見る">{fields.map(([id,label])=><a data-mexico-overview-field={id} href={withBase(`/atlas/north-america/mexico/${id}/?state=09&reading=item`)}>{label} →</a>)}</nav>
+  <details><summary>仕事・交通とのつながり</summary><p data-mexico-overview-cause>{firstReading.cause}</p></details>
+ </div>
+ <div slot="statistics"><details><summary>読み方：州の値と州内部の分布を区別する</summary><p>{mexicoPopulationReading.densityMeaning} 州の境界は農地・工場・都市の範囲ではありません。農林業の生産量、産業の輸出額、人口は対象年と単位をそれぞれ確認します。</p></details></div>
+ <div slot="sources"><details><summary>概要・白地図の出典</summary><p>州境：INEGI Marco Geoestadístico（2025年）、投影：{geometryMetadata.projection.name}。人口と密度：INEGI 2020年国勢調査。</p><ul><li><a href={population.sources.population.url}>INEGI：人口原典</a></li><li><a href={population.sources.density.url}>INEGI：人口密度</a></li><li><a href={mexicoPopulationReadingSources.geography}>INEGI：自然環境と地理</a></li><li><a href={mexicoPopulationReadingSources.manufacturing}>ITA：メキシコの製造業</a></li><li><a href={mexicoPopulationReadingSources.transport}>ITA：交通と物流</a></li></ul><p>気候・地形・農林業・輸出額の個別資料は各分野で確認できます。概要の白地図は州の位置を示します。</p></details></div>
+ <script type="application/json" data-mexico-overview-config set:html={JSON.stringify(config)} />
+</MexicoWorkspace>
+<script>
+ import {initMexicoOverview} from '../../scripts/atlas-mexico-overview';
+ const root=document.querySelector<HTMLElement>('[data-mexico-field="overview"]');
+ if(root)initMexicoOverview(root);
+</script>
