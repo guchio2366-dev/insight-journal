@@ -14,7 +14,7 @@ const localModules={name:'regional-navigation-local-modules',setup(builder){
 const bundle=await build({stdin:{contents:`
  export {initRussiaLearningAtlas} from './src/scripts/atlas-russia-learning';
  export {initializeAfricaAtlas} from './src/scripts/atlas-africa';
- export {initAfricaOverviewAdapter} from './src/scripts/atlas-africa-overview';
+ export {initAfricaOverview} from './src/scripts/atlas-africa-overview';
  export {initCountryOverview} from './src/scripts/atlas-country-overview';
  export {initOverviewMap} from './src/scripts/atlas-overview-map';
  export {initLatinWorkspaceLayout} from './src/scripts/atlas-latin-workspace-layout';
@@ -49,13 +49,13 @@ const fieldInit={
 };
 const overviewInit={
  russia:fieldInit.russia,
- africa:'RegionalClient.initCountryOverview(document.querySelector("[data-country-overview]"));RegionalClient.initAfricaOverviewAdapter();',
+ africa:'RegionalClient.initAfricaOverview(document.querySelector("[data-africa-overview]"));',
  'latin-america':'const root=document.querySelector("[data-country-overview]");RegionalClient.initCountryOverview(root);RegionalClient.initLatinOverviewLinks(root);',
  oceania:overviewCode,
 };
 const cases=[
  {region:'russia',field:'agriculture/',query:'place=west&scope=region',overviewSelector:'[data-russia-overview-link]',overviewExpected:{place:'west',scope:'region'},fieldExpected:{place:'west',scope:'region'},links:'.russia-learning-fields [data-field-link],.russia-overview-entries [data-field-link]'},
- {region:'africa',field:'',query:'field=agriculture&place=GHA&region=west&zoom=country',overviewSelector:'[data-africa-overview-link]',overviewExpected:{country:'GHA',region:'west',zoom:'country'},fieldExpected:{place:'GHA',region:'west',zoom:'country'},links:'[data-overview-field],.africa-overview-actions a'},
+ {region:'africa',field:'',query:'field=agriculture&place=GHA&region=west&zoom=country',overviewSelector:'[data-africa-overview-link]',overviewExpected:{place:'GHA',region:'west',zoom:'country'},fieldExpected:{place:'GHA',region:'west',zoom:'country'},links:'.ao-fields [data-ao-field]:not([data-ao-field="overview"]),.ao-reading-links [data-ao-field]'},
  {region:'latin-america',field:'nature/',query:'place=CRI&scope=central',overviewSelector:'.latin-fields a',overviewExpected:{country:'CRI',scope:'central'},fieldExpected:{place:'CRI',scope:'central'},links:'.country-overview-fields [data-overview-field]'},
  {region:'oceania',field:'agriculture/',query:'place=AUS&scope=all',overviewSelector:'[data-oceania-overview-link]',overviewExpected:{place:'AUS',scope:'all'},fieldExpected:{place:'AUS',scope:'all'},links:'[data-oceania-field-link]'},
 ];

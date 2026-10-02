@@ -21,9 +21,9 @@ test('Africa55対象の概論は5テーマの実本文、全4分野入口、出�
  finally{await w.happyDOM.close();}
 });
 test('legacy国URLをplaceへ復元し、比較国・年・地域・zoomを4分野へ保持',async()=>{
- const w=await page('?country=EGY&reading=industry&compare=SDN&year=2023&region=north&zoom=country'),d=w.document;
+ const w=await page('?country=EGY&reading=industry&compare=SDN&year=2023&region=north&zoom=country&only=1&fallback=1'),d=w.document;
  try{assert.equal(d.querySelector('[data-ao-country]').value,'EGY');assert.equal(d.querySelector('[data-ao-topic]').value,'industry');assert.equal(d.querySelector('[data-ao-panel=industry]').hidden,false);assert.match(d.querySelector('[data-ao-panel=industry]').textContent,/2021年/);assert.equal(new URL(w.location.href).searchParams.get('country'),null);assert.equal(new URL(w.location.href).searchParams.get('place'),'EGY');
- for(const a of d.querySelectorAll('.ao-fields a')){const url=new URL(a.href);assert.equal(url.searchParams.get('place'),'EGY');assert.equal(url.searchParams.get('compare'),'SDN');assert.equal(url.searchParams.get('year'),'2023');assert.equal(url.searchParams.get('region'),'north');assert.equal(url.searchParams.get('zoom'),'country');if(a.dataset.aoField!=='overview')assert.equal(url.searchParams.get('field'),a.dataset.aoField);}
+ for(const a of d.querySelectorAll('.ao-fields a')){const url=new URL(a.href);assert.equal(url.searchParams.get('place'),'EGY');assert.equal(url.searchParams.get('compare'),'SDN');assert.equal(url.searchParams.get('year'),'2023');assert.equal(url.searchParams.get('region'),'north');assert.equal(url.searchParams.get('zoom'),'country');assert.equal(url.searchParams.get('only'),'1');assert.equal(url.searchParams.get('fallback'),'1');if(a.dataset.aoField!=='overview')assert.equal(url.searchParams.get('field'),a.dataset.aoField);}
  choose(w,'[data-ao-country]','SDN');assert.equal(new URL(w.location.href).searchParams.get('compare'),null);assert.ok([...d.querySelectorAll('.ao-fields a')].every(a=>new URL(a.href).searchParams.get('compare')===null));}
  finally{await w.happyDOM.close();}
 });
