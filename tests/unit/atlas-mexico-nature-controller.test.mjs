@@ -36,7 +36,7 @@ test('Water target comparison and named natural return retain the actual segment
     assert.ok(document.querySelector('[data-mexico-water-comparison-details]').contains(document.querySelector('[data-mexico-hydrology-body]')),'Original water body and sources remain reachable inside comparison');
     assert.equal(document.querySelectorAll('[data-mexico-hydrology-body]').length,1);assert.equal(document.querySelectorAll('[data-mexico-hydrology-source]').length,1);
     assert.ok(!document.querySelector('[data-mexico-nature-comparison]').contains(document.querySelector('[data-mexico-nature-plain-return]')),'Named return is fixed outside the scrolling comparison body');
-    assert.match(document.querySelector('[data-mexico-nature-compare-link="population"]').textContent,/標高・等高線と人口密度/);
+    assert.match(document.querySelector('[data-mexico-nature-compare-link="population"]').textContent,/標高・等高線と人口規模/);
     const target=new URL(document.querySelector('[data-mexico-nature-compare-link="population"]').href);assert.equal(target.searchParams.get('waterFeature'),'contours:contours-1000-1');assert.equal(target.searchParams.get('waterBase'),'relief');
     restored=fixture(link.search,true);await wait(restored);assert.equal(restored.document.querySelector('[data-mexico-workspace]').dataset.mexicoWaterFeature,'contours:contours-1000-1');
     assert.match(restored.document.querySelector('[data-mexico-hydrology-lead]').textContent,/原DEMから作成した1,000 m/);
@@ -91,4 +91,7 @@ test('The source crop/livestock layers retain independent domains, offsets, flag
     assert.equal(maize.style.display,'none'); assert.equal(cattle.getAttribute('cx'),'100');
     assert.match(document.querySelector('[data-mexico-nature-source-return]').href,/crops=0.*onlyItem=1/);
   }finally{await window.happyDOM.close();}
+});
+test('Comparison entry names follow the metric retained by their destination URL',async()=>{
+  for(const [metric,label] of [['cattle','牛頭数'],['maize','白粒トウモロコシ生産量'],['pine','松材取得量']]){const window=fixture(`?category=elevation&compare=irrigation&from=agriculture&sourceMetric=${metric}&sourceState=10&state=25`,true);try{const root=window.document.querySelector('[data-mexico-workspace]'),link=window.document.createElement('a');link.setAttribute('data-mexico-nature-compare-link','irrigation');root.append(link);window.dispatchEvent(new window.PopStateEvent('popstate'));assert.match(link.textContent,new RegExp(label));assert.equal(new URL(link.href).searchParams.get('sourceMetric'),metric);}finally{await window.happyDOM.close();}}
 });
