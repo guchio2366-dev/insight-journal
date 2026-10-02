@@ -37,6 +37,8 @@
 .atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-agriculture-symbol-key-item{display:flex;flex-direction:column;justify-content:flex-end;gap:1px;font-size:12px;line-height:1.4}
 .atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-agriculture-symbol-key-item svg{width:48px;height:48px;max-width:none;flex-shrink:0;margin:0}
 .atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-agriculture-symbol-key small{display:block;width:100%;font-size:12px;line-height:1.4}
+.atlas-desktop-shell .mexico-workspace.mexico-agriculture [data-agriculture-legend=irrigation]{font-size:13px}
+.atlas-desktop-shell .mexico-workspace.mexico-agriculture [data-agriculture-legend=irrigation] small{display:block;font-size:12px}
 .atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-agriculture-national-values{margin:3px 0 7px;font-size:13px}
 .atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-agriculture-country-overview{padding-top:0}
 @media(min-width:960px){

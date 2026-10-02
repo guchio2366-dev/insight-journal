@@ -14,6 +14,7 @@
 .mexico-workspace.mexico-agriculture .mexico-agriculture-topic-tabs{display:flex}
 .mexico-workspace.mexico-agriculture .mexico-agriculture-topic-tabs a{min-height:36px;padding:0 9px;border:0;border-radius:4px;font-size:12px;font-weight:750}
 .atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-controls{top:58px}
+@media(min-width:960px){.atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-map-frame:has([data-agriculture-map]:not([hidden]))>.mexico-controls{top:auto;bottom:7px;max-width:min(370px,calc(100% - 16px))}}
 .mexico-workspace .mexico-navigation{margin:0 0 10px}
 .mexico-workspace .mexico-navigation .regional-navigation{display:block;margin:0}
 .atlas-explorer.mexico-workspace .mexico-navigation .regional-navigation .regional-tabs,.atlas-explorer.mexico-workspace .mexico-navigation .regional-navigation .regional-countries{gap:6px}
@@ -67,6 +68,9 @@
 .mexico-workspace.mexico-industry:not(.is-comparison) [data-mi-legend-slot=secondary]{display:none}
 .mexico-workspace.mexico-industry[data-mexico-reading-selected=false] .mi-overview-repeat-title{display:none}
 .mexico-workspace.mexico-industry .mi-reading>.mi-items{margin:8px 0}
+.mexico-workspace.mexico-industry .mi-reading-keys .mi-legend{display:flex;flex-wrap:wrap;gap:3px 10px;margin:0;padding:0;list-style:none;font-size:12px;line-height:1.4}
+.mexico-workspace.mexico-industry .mi-reading-keys .mi-legend li{display:inline-flex;align-items:center;gap:4px;min-height:18px}
+.mexico-workspace.mexico-industry .mi-reading>.mi-items a{font-size:12px;line-height:1.45;padding:6px 8px}
 .mexico-workspace .mi-map-panel:has([data-mi-comparison-heading]:not([hidden]))>.mi-controls{position:relative;top:auto;left:auto;width:fit-content;margin-bottom:7px}
 .atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field] .mi-map-grid .mi-map-figure{display:block;grid-template-columns:none;width:100%;max-width:none}
 .mexico-workspace .mi-map-figure .mi-map-heading{margin:0;padding:6px 8px;font-size:13px;line-height:1.5;border-inline:1px solid #c8cfc4;background:#f7f5ec}

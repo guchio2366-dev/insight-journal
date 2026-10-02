@@ -147,6 +147,7 @@ test('Irrigation, pine zeros, fallback and focus retain every related geographic
     assert.equal(doc.querySelector('[data-agriculture-selection-value]').textContent, '0 m³');
     assert.equal(doc.querySelector('[data-agriculture-symbol="05"]').getAttribute('r'), '0');
     assert.equal(doc.querySelector('[data-agriculture-legend="pine"]').hidden, false);
+    assert.match(doc.querySelector('[data-agriculture-legend="irrigation"]').textContent,/灌漑農地率（%）.*2021年10月～2022年9月/s);
     assert.equal(doc.querySelector('[data-agriculture-reading="pine"]').hidden, false);
     assert.match(doc.querySelector('[data-agriculture-comparison-label]').textContent, /松材取得と山地/);
   } finally {await window.happyDOM.close();}
