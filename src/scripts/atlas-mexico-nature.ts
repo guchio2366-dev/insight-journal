@@ -56,7 +56,7 @@ export function initMexicoNature(root: HTMLElement): void {
     visible('[data-mexico-nature-static-note]', state.fallback);
     text('[data-mexico-nature-map-title]', state.view === 'climate' ? '気候の分布' : '自然地理地域の分布');
     text('[data-mexico-nature-map-edition]', state.view === 'climate' ? 'INEGI・2008版' : 'INEGI・2001版');
-    text('[data-mexico-nature-period]', state.view === 'climate' ? '2008は刊行年。気候区分は統一観測期間が原資料に未記載。原分類21を6群にまとめて表示。' : '2001版の自然地理地域15区分。色は地形地域、網掛けは原資料の分類なし。');
+    text('[data-mexico-nature-period]', state.view === 'climate' ? '2008＝刊行年・統一観測期未記載。21原分類→6群。' : '15自然地理地域＋分類なし。標高の数値ではありません。');
     text('[data-mexico-nature-selected-name]', selected.name);
     for (const path of all<SVGPathElement>('[data-mexico-nature-state]')) {const isSelected = path.dataset.mexicoNatureState === state.state; path.classList.toggle('is-selected', isSelected); path.setAttribute('aria-pressed', String(isSelected));}
     for (const target of all<SVGGElement>('[data-mexico-nature-target]')) target.setAttribute('transform', `translate(${selected.point.join(' ')})`);

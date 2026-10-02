@@ -27,6 +27,16 @@ export function initMexicoAgriculture(root: HTMLElement): void {
     return element;
   };
   const setText = (selector: string, value: string) => { $(selector).textContent = value; };
+  const syncLegendScale = () => {
+    const map = $<SVGSVGElement>('[data-agriculture-map]');
+    const rect = map.getBoundingClientRect();
+    const viewBox = map.getAttribute('viewBox')!.trim().split(/\s+/).map(Number);
+    const scale = Math.min(rect.width / viewBox[2], rect.height / viewBox[3]);
+    if (!(scale > 0)) return;
+    for (const key of root.querySelectorAll<SVGSVGElement>('[data-agriculture-legend-size]')) {
+      key.style.width = `${68 * scale}px`;key.style.height = `${68 * scale}px`;
+    }
+  };
 
   function render(): void {
     const record = config.states.find(item => item.code === state.state)!;
@@ -58,7 +68,7 @@ export function initMexicoAgriculture(root: HTMLElement): void {
     fallbackButton.setAttribute('aria-pressed', String(state.fallback));
     fallbackButton.textContent = state.fallback ? '地図で読む' : '数値一覧で読む';
     setText('[data-agriculture-map-title]', dual?'白粒生産量と牛の頭数（州別）':metric.title);
-    setText('[data-agriculture-map-caption]', dual?'州別の量を2種の円で表示。品目ごとに円の基準が異なり、栽培域・飼養域の面ではありません。':metric.caption);
+    setText('[data-agriculture-map-caption]', dual?'州別数量を表示。白粒tと牛の頭数は別尺度で、栽培域・飼養域の面ではありません。':metric.caption);
     setText('[data-agriculture-svg-title]', `メキシコの州別${metric.name}（${metric.unit}）`);
     setText('#mexico-agriculture-svg-desc', `${record.nameJa}を選択。${metric.name}は${formatted}。${metric.caption}州選択欄と32州表でも同じ公表値を確認できます。`);
     setText('[data-agriculture-selection-name]', record.nameJa);
@@ -152,6 +162,7 @@ export function initMexicoAgriculture(root: HTMLElement): void {
     root.dataset.agricultureRenderMode = state.fallback ? 'fallback' : 'normal';
     root.dataset.agricultureCrops=String(showMaize);root.dataset.agricultureLivestock=String(showCattle);root.dataset.agricultureOnlyItem=String(state.onlyItem);
     root.dataset.agricultureReady = 'true';
+    syncLegendScale();
   }
 
   function update(patch: Partial<MexicoAgricultureState>): void {
@@ -202,5 +213,7 @@ export function initMexicoAgriculture(root: HTMLElement): void {
     render();
   });
   history.replaceState(null, '', writeMexicoAgricultureState(new URL(location.href), state));
+  window.addEventListener('resize',syncLegendScale);
+  new ResizeObserver(syncLegendScale).observe($('[data-agriculture-map]'));
   render();
 }

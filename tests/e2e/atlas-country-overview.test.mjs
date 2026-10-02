@@ -48,13 +48,26 @@ test('North America overview resolves every country field route and returns to t
         try{
           fieldWindow.document.body.innerHTML=(await readFile(`dist/${destination.pathname.replace('/insight-journal/','')}index.html`,'utf8')).replace(/<script(?![^>]*type="application\/json")[^>]*>[\s\S]*?<\/script>/g,'');
           const selector=country==='CAN'?'.canada-fields a':country==='MEX'?'.mexico-fields a':'[data-atlas-overview-link]';
-          const link=[...fieldWindow.document.querySelectorAll(selector)].find(link=>new URL(link.href).pathname==='/insight-journal/atlas/north-america/overview/');
+          const overviewPath=country==='MEX'?'/insight-journal/atlas/north-america/mexico/overview/':'/insight-journal/atlas/north-america/overview/';
+          const link=[...fieldWindow.document.querySelectorAll(selector)].find(link=>new URL(link.href).pathname===overviewPath);
           assert.ok(link,`${country} ${field}: overview return exists`);
           returnUrl=new URL(link.href);
           assert.equal(returnUrl.searchParams.get('country'),country,`${country} ${field}: country retained`);
         }finally{await fieldWindow.happyDOM.close();}
-        const returned=await page('north-america',returnUrl.search,true);
-        try{assert.equal(returned.document.querySelector('[data-overview-country]').value,country);assertNorthAmericaFieldLinks(returned,country);}
+        const returned=country==='MEX'
+          ? new Window({url:returnUrl.href,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true}})
+          : await page('north-america',returnUrl.search,true);
+        try{
+          if(country==='MEX'){
+            returned.document.body.innerHTML=(await readFile('dist/atlas/north-america/mexico/overview/index.html','utf8')).replace(/<script(?![^>]*type="application\/json")[^>]*>[\s\S]*?<\/script>/g,'');
+            assert.equal(returned.document.querySelector('[data-mexico-workspace]').dataset.mexicoField,'overview');
+            assert.equal(returned.document.querySelectorAll('[data-mexico-overview-shape]').length,32);
+            assert.match(returned.document.querySelector('.mexico-overview-intro').textContent,/126,014,024/);
+            const links=[...returned.document.querySelectorAll('.mexico-overview-intro .mexico-overview-field-links a')];
+            assert.equal(links.length,northAmericaFields.length);
+            for(const field of northAmericaFields)assert.ok(links.some(link=>new URL(link.href).pathname===`/insight-journal/atlas/north-america/mexico/${field}/`),`${country} ${field}: dedicated overview field route`);
+          }else{assert.equal(returned.document.querySelector('[data-overview-country]').value,country);assertNorthAmericaFieldLinks(returned,country);}
+        }
         finally{await returned.happyDOM.close();}
       }
     }finally{await overview.happyDOM.close();}

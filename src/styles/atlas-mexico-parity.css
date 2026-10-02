@@ -61,6 +61,12 @@
 .mexico-workspace .mexico-map-frame [data-agriculture-map-fallback]>.mexico-table-scroll{height:calc(100% - 40px)}
 .mexico-workspace .population-map-fallback figcaption{position:absolute;bottom:0;left:0;right:0;margin:0;padding:5px 8px;background:#fbfaf2eb;font-size:11px;line-height:1.5;text-align:center}
 .mexico-workspace .mi-map-panel{position:relative}
+.mexico-workspace.mexico-industry .mi-map-frame-actions{position:absolute;right:8px;bottom:7px;z-index:5;display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:4px;max-width:calc(100% - 16px);padding:3px 5px;border:1px solid #b7c5bb;border-radius:5px;background:#fffef5ed}
+.mexico-workspace.mexico-industry .mi-map-frame-actions :is(label,button){font-size:12px;line-height:1.4}
+.mexico-workspace.mexico-industry .mi-map-frame-actions button{min-height:32px;padding:4px 6px}
+.mexico-workspace.mexico-industry:not(.is-comparison) [data-mi-legend-slot=secondary]{display:none}
+.mexico-workspace.mexico-industry[data-mexico-reading-selected=false] .mi-overview-repeat-title{display:none}
+.mexico-workspace.mexico-industry .mi-reading>.mi-items{margin:8px 0}
 .mexico-workspace .mi-map-panel:has([data-mi-comparison-heading]:not([hidden]))>.mi-controls{position:relative;top:auto;left:auto;width:fit-content;margin-bottom:7px}
 .atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field] .mi-map-grid .mi-map-figure{display:block;grid-template-columns:none;width:100%;max-width:none}
 .mexico-workspace .mi-map-figure .mi-map-heading{margin:0;padding:6px 8px;font-size:13px;line-height:1.5;border-inline:1px solid #c8cfc4;background:#f7f5ec}
@@ -112,6 +118,8 @@
 .mexico-overview-label{font:600 22px var(--sans);fill:#294641;paint-order:stroke;stroke:#fffefa;stroke-width:4px}
 .mexico-overview-field-links{display:grid;gap:7px;margin-top:12px}
 .mexico-overview-field-links a{display:block;padding:7px 9px;border:1px solid #b8c8bc;background:#fffefa;text-decoration:none;font-size:13px;line-height:1.6}
+.mexico-workspace[data-mexico-field=overview] .mexico-reading h2{font-size:18px;line-height:1.4}
+.mexico-workspace[data-mexico-field=overview] .mexico-reading p{line-height:1.65}
 .mexico-workspace[data-mexico-field=overview][data-mexico-reading-selected=false] .mexico-reading-content{display:none}
 .mexico-workspace[data-mexico-field=overview][data-mexico-reading-selected=false] .mexico-overview-map .mexico-state{stroke:#fffefa;stroke-width:.8}
 .mexico-workspace [data-population-reference]{position:absolute;left:8px;bottom:7px;right:8px;z-index:4;padding:7px 9px;border:1px solid #b7c5bb;background:#fffdf0ed;font-size:13px;line-height:1.5}

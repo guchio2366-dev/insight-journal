@@ -28,16 +28,16 @@ const config={states,fields:Object.fromEntries(fields.map(([id])=>[id,withBase(`
   <h2>自然条件と、人・物の移動を重ねる</h2>
   <p>北部・北西部の乾燥地域では灌漑が農業を支え、中央部の高地には大きな都市が集まります。自然条件に加え、道路・鉄道、部品企業、国内外の市場が生産の場所を形づくります。</p>
   <p>人口は<strong>{population.nationalPopulation.toLocaleString('ja-JP')}人</strong>（2020年）。州の人口規模と密度を分けて読むと、広い北部の州と中央部の集積を比べられます。</p>
-  <details><summary>北部・内陸と輸出産業のつながり</summary>{mexicoIndustryReading.causal.map(text=><p>{text}</p>)}</details>
   <nav class="mexico-overview-field-links" aria-label="メキシコの各分野">{fields.map(([id,label])=><a href={withBase(`/atlas/north-america/mexico/${id}/`)}>{label} →</a>)}</nav>
+  <details><summary>北部・内陸と輸出産業のつながり</summary>{mexicoIndustryReading.causal.map(text=><p>{text}</p>)}</details>
  </div>
  <div slot="reading" data-mexico-overview-reading hidden>
   <h2 data-mexico-overview-name>{first.nameJa}</h2>
   <p data-mexico-overview-values>人口 {first.population.toLocaleString('ja-JP')}人 · 密度 {first.density}人/km²（2020年）</p>
   <h3 data-mexico-overview-heading>{firstReading.heading}</h3>
   <p data-mexico-overview-text>{firstReading.text}</p>
-  <details><summary>仕事・交通とのつながり</summary><p data-mexico-overview-cause>{firstReading.cause}</p></details>
   <nav class="mexico-overview-field-links" aria-label="選択州を各分野で見る">{fields.map(([id,label])=><a data-mexico-overview-field={id} href={withBase(`/atlas/north-america/mexico/${id}/?state=09&reading=item`)}>{label} →</a>)}</nav>
+  <details><summary>仕事・交通とのつながり</summary><p data-mexico-overview-cause>{firstReading.cause}</p></details>
  </div>
  <div slot="statistics"><details><summary>読み方：州の値と州内部の分布を区別する</summary><p>{mexicoPopulationReading.densityMeaning} 州の境界は農地・工場・都市の範囲ではありません。農林業の生産量、産業の輸出額、人口は対象年と単位をそれぞれ確認します。</p></details></div>
  <div slot="sources"><details><summary>概要・白地図の出典</summary><p>州境：INEGI Marco Geoestadístico（2025年）、投影：{geometryMetadata.projection.name}。人口と密度：INEGI 2020年国勢調査。</p><ul><li><a href={population.sources.population.url}>INEGI：人口原典</a></li><li><a href={population.sources.density.url}>INEGI：人口密度</a></li><li><a href={mexicoPopulationReadingSources.geography}>INEGI：自然環境と地理</a></li><li><a href={mexicoPopulationReadingSources.manufacturing}>ITA：メキシコの製造業</a></li><li><a href={mexicoPopulationReadingSources.transport}>ITA：交通と物流</a></li></ul><p>気候・地形・農林業・輸出額の個別資料は各分野で確認できます。概要の白地図は州の位置を示します。</p></details></div>

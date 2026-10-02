@@ -60,7 +60,9 @@ const [selectedX, selectedY] = stateLabelPoint('09');
    <figcaption data-population-fallback-caption>地図の代替表示：全32州の分布。選んだ州の値は右側で確認できます。</figcaption>
   </figure>
   </div>
-  <h2 data-population-map-heading>2020年、人口はどこに集まる？</h2>
+  </Fragment>
+  <Fragment slot="legend">
+   <h2 data-population-map-heading>2020年、人口はどこに集まる？</h2>
   <div class="population-density-key" data-population-density-key>
    <p class="population-key-title">色＝人口密度（2020年、人/km²）</p>
    <ul class="mexico-legend" aria-label="人口密度の色の凡例">{mexicoDensityBins.map(bin => <li><i style={`background:${bin.color}`} aria-hidden="true"/>{bin.label}</li>)}</ul>
@@ -68,8 +70,7 @@ const [selectedX, selectedY] = stateLabelPoint('09');
   <div class="population-symbol-key" data-population-symbol-key hidden>
    <p class="population-key-title">円の面積＝人口（2020年）</p>
   </div>
-  <p class="mexico-caption" data-population-map-status aria-live="polite">2020年・全32州の平均密度。メキシコ市を選択。</p>
-  <p class="mexico-caption population-source-caption">統計：2020年3月15日 ／ 州境：2025年。密度は公表値。</p>
+   <details class="population-key-notes"><summary>表示州・統計と州境</summary><p class="mexico-caption" data-population-map-status aria-live="polite">2020年・全32州の平均密度。メキシコ市を選択。</p><p class="mexico-caption population-source-caption">統計：2020年3月15日 ／ 州境：2025年。密度は公表値。</p></details>
  </Fragment>
  <Fragment slot="items">
   <label><input type="checkbox" data-population-only disabled /> 選んだ州のデータだけ</label>

@@ -39,6 +39,7 @@ const value=(v:unknown)=>industryValueText(v as MexicoIndustryValue);
      <label>州 <select data-mi-state-select>{data.states.map(s=><option value={s.id} selected={s.id===selected.id}>{s.name}</option>)}</select></label>
      <label data-mi-source-view-control hidden>元の分布 <select data-mi-source-view><option value="density">人口密度</option><option value="population">人口</option></select></label>
     </div>}
+    {i===0&&<div class="mexico-actions mi-actions mi-map-frame-actions"><label><input type="checkbox" data-mi-only/> 読む州だけ</label><button type="button" data-mi-zoom aria-pressed="false">読む州を拡大</button><button type="button" data-mi-all>全32州へ</button></div>}
     <svg class="mexico-map mi-map" data-mexico-map data-mi-map={slot} viewBox={mapViewBox} role="group" aria-labelledby={`mi-${slot}-title mi-${slot}-desc`}>
      <title id={`mi-${slot}-title`}>{i===0?'輸送機器':'電子機器'}の州別輸出額、2025年速報</title>
      <desc id={`mi-${slot}-desc`}>色は州の生産地に配分したFOB輸出額。州を選ぶと数値と説明を読めます。秘匿は斜線、未把握は点模様です。</desc>
@@ -57,40 +58,43 @@ const value=(v:unknown)=>industryValueText(v as MexicoIndustryValue);
     </svg>
     </div>
     <h3 class="mi-map-heading" data-mi-map-heading={slot}>{i===0?'輸送機器の輸出額':'電子機器の輸出額'} <span>2025年速報・10億米ドル</span></h3>
-    <div data-mi-export-legend={slot}>
-     <p class="mi-legend-unit">FOB輸出額・10億米ドル（両業種共通）</p>
-     <ul class="mexico-legend mi-legend" aria-label="輸出額の色階級">{mexicoIndustryBins.map(bin=><li><i style={`background:${bin.color}`} aria-hidden="true"/>{bin.label}</li>)}<li><i class="mi-zero" aria-hidden="true"/>0</li><li><i class="mi-confidential" aria-hidden="true"/>秘匿</li><li><i class="mi-unknown" aria-hidden="true"/>未把握</li></ul>
-    </div>
-    {i===1&&<div data-mi-population-legend hidden>
-     <div data-mi-density-legend><p class="mi-legend-unit">人口密度・人/km²（2020年）</p><ul class="mexico-legend mi-legend" aria-label="元の人口密度の色階級">{mexicoDensityBins.map(bin=><li><i style={`background:${bin.color}`} aria-hidden="true"/>{bin.label}</li>)}</ul></div>
-     <div data-mi-population-size-legend hidden><p class="mi-legend-unit">人口・円の面積が人数に比例（2020年）</p><svg class="mi-circle-legend" viewBox="0 0 330 75" role="img" aria-label="人口の円の大きさ、100万人・500万人・1000万人">{mexicoPopulationLegendValues.map((n,j)=><g><circle data-mi-size-reference={n} cx={55+j*110} cy="28" r={mexicoPopulationRadius(n)} class="mi-population-circle"/><text x={55+j*110} y="69" text-anchor="middle">{(n/10000).toLocaleString('ja-JP')}万人</text></g>)}</svg></div>
-    </div>}
     <figcaption data-mi-map-caption={slot}>2025年速報。太枠は読む州。略号は州の位置案内。</figcaption>
    </figure>)}
   </div>
-  <div class="mexico-actions mi-actions"><label><input type="checkbox" data-mi-only/> 読む州だけ</label><button type="button" data-mi-zoom aria-pressed="false">読む州を拡大</button><button type="button" data-mi-all>全32州へ</button></div>
   <p class="mexico-caption" data-mi-map-status aria-live="polite">2025年速報・輸送機器の輸出額。32州の公開状態を表示。</p>
  </div>
- <div slot="items" class="mi-items">
-  <a class="mexico-comparison-link" data-mi-electronics-link href={`${industryHref}?compare=electronics&state=05&metric=transport`}>輸送機器 × 電子機器：集中する州を比べる</a>
-  <a class="mexico-comparison-link" data-mi-population-link href={`${industryHref}?compare=population&state=05&metric=transport&sourceView=density&from=industry`}>人口・密度 × 輸出額：人と生産拠点の位置を比べる</a>
+ <div slot="legend" class="mi-reading-keys">
+  {['primary','secondary'].map((slot,i)=><div data-mi-legend-slot={slot}>
+   <div data-mi-export-legend={slot}>
+    <p class="mi-legend-unit">FOB輸出額・10億米ドル（2025年速報・両業種共通）</p>
+    <ul class="mexico-legend mi-legend" aria-label={`${i===0?'主図':'比較図'}の輸出額の色階級`}>{mexicoIndustryBins.map(bin=><li><i style={`background:${bin.color}`} aria-hidden="true"/>{bin.label}</li>)}<li><i class="mi-zero" aria-hidden="true"/>0</li><li><i class="mi-confidential" aria-hidden="true"/>秘匿</li><li><i class="mi-unknown" aria-hidden="true"/>未把握</li></ul>
+   </div>
+   {i===1&&<div data-mi-population-legend hidden>
+    <div data-mi-density-legend><p class="mi-legend-unit">人口密度・人/km²（2020年）</p><ul class="mexico-legend mi-legend" aria-label="元の人口密度の色階級">{mexicoDensityBins.map(bin=><li><i style={`background:${bin.color}`} aria-hidden="true"/>{bin.label}</li>)}</ul></div>
+    <div data-mi-population-size-legend hidden><p class="mi-legend-unit">人口・円の面積が人数に比例（2020年）</p><svg class="mi-circle-legend" viewBox="0 0 330 75" role="img" aria-label="人口の円の大きさ、100万人・500万人・1000万人">{mexicoPopulationLegendValues.map((n,j)=><g><circle data-mi-size-reference={n} cx={55+j*110} cy="28" r={mexicoPopulationRadius(n)} class="mi-population-circle"/><text x={55+j*110} y="69" text-anchor="middle">{(n/10000).toLocaleString('ja-JP')}万人</text></g>)}</svg></div>
+   </div>}
+  </div>)}
  </div>
  <div slot="reading" class="mi-reading">
   <section data-mi-reading-comparison hidden><h2 data-mi-reading-comparison-title>{reading.comparison.title}</h2><p class="mexico-takeaway" data-mi-reading-comparison-text>{reading.comparison.text}</p><p class="mexico-caption" data-mi-period-note hidden>{reading.populationComparison.periodNote}</p><a class="mexico-return" data-mi-return href={`${industryHref}?state=05&metric=transport`}>コアウイラの輸送機器地図へ戻る</a></section>
   <p class="mexico-caption mi-fallback-note" data-mi-fallback-note hidden>簡易表示。州は上の選択欄で選べます。</p>
-  <section data-mi-reading-normal><h2>{reading.title}</h2><p class="mexico-takeaway">米国への近さ・部品集積 → 国境・港への交通 → 輸出向けの生産網</p></section>
+  <section data-mi-reading-normal><h2 class="mi-overview-repeat-title">{reading.title}</h2><p class="mexico-takeaway">米国への近さ・部品集積 → 国境・港への交通 → 輸出向けの生産網</p></section>
+  <div class="mi-items">
+   <a class="mexico-comparison-link" data-mi-electronics-link href={`${industryHref}?compare=electronics&state=05&metric=transport`}>輸送機器 × 電子機器：集中する州を比べる</a>
+   <a class="mexico-comparison-link" data-mi-population-link href={`${industryHref}?compare=population&state=05&metric=transport&sourceView=density&from=industry`}>人口・密度 × 輸出額：人と生産拠点の位置を比べる</a>
+  </div>
   <section class="mi-selected" aria-labelledby="mi-selected-state"><h3 id="mi-selected-state" data-mi-selected-name>{selected.name}</h3><div class="mi-value-cards">
    <div data-mi-population-card hidden><span data-mi-population-card-label>人口密度・2020年</span><strong data-mi-population-card-value>—</strong></div>
    {data.metrics.map(m=><div data-mi-value-card={m.id}><span>{m.name}・2025年速報</span><strong data-mi-value={m.id}>{value(initial.values[m.id as 'transport'|'electronics'])}</strong></div>)}
   </div></section>
-  <section data-mi-reading-normal><h3 data-mi-topic-heading>{reading.transport.heading}</h3><p data-mi-topic-text>{reading.transport.text}</p><details><summary>位置・交通・市場から成立を読む</summary>{reading.causal.map(p=><p>{p}</p>)}<p><a href={reading.sources[4].url}>ITA：北部・バヒオの工業集積</a> / <a href={reading.sources[5].url}>工業地域を国境・港につなぐ貨物鉄道</a></p></details></section>
+  <details class="mi-topic-reading" data-mi-reading-normal><summary>選んだ業種の立地・交通・市場を読む</summary><h3 data-mi-topic-heading>{reading.transport.heading}</h3><p data-mi-topic-text>{reading.transport.text}</p><details><summary>位置・交通・市場から成立を読む</summary>{reading.causal.map(p=><p>{p}</p>)}<p><a href={reading.sources[4].url}>ITA：北部・バヒオの工業集積</a> / <a href={reading.sources[5].url}>工業地域を国境・港につなぐ貨物鉄道</a></p></details></details>
   <details><summary>業種と公開状態の意味</summary><p>{reading.transport.note}</p><p>{reading.electronics.note}</p><p>FOB型の輸出額は、輸出国の国境まで届ける費用を含む価額。国境から先の運賃・保険料は含みません。<a href={reading.sources[9].url}>国連の貿易統計の定義</a></p><p>秘匿：個別業種の値を公表しない。未把握：輸出の有無を特定する情報がない。数値0：輸出なし。500米ドル未満、対象外、未取得もゼロと分けます。</p><p>{data.notes.scope}</p><p>{data.notes.confidential}</p><p>表示は千米ドルを1,000,000で割った10億米ドル。州別GDPや工場数への換算はしていません。</p></details>
  </div>
- <div slot="statistics" class="mi-statistics">
+ <details slot="statistics" class="mi-statistics"><summary>選択州・全32州の輸出額と人口値を確かめる</summary>
   <h2><span data-mi-stats-state>{selected.name}</span>の値を確認</h2>
   <div class="mexico-table-scroll"><table class="mi-selected-table"><caption>選択州・輸出額2025年速報／人口・密度2020年</caption><thead><tr><th scope="col">指標</th><th scope="col">値</th><th scope="col">原典の公開状態</th></tr></thead><tbody>{data.metrics.map(m=><tr><th scope="row">{m.name}輸出額・10億米ドル</th><td data-mi-stats-value={m.id}>{value(initial.values[m.id as 'transport'|'electronics'])}</td><td data-mi-stats-status={m.id}>{initial.values[m.id as 'transport'|'electronics'].sourceStatus}</td></tr>)}<tr data-mi-population-stats hidden><th scope="row" data-mi-population-stats-label>人口密度・人/km²</th><td data-mi-population-stats-value>—</td><td>INEGI 公表値</td></tr></tbody></table></div>
   <details class="mi-all-data"><summary>全32州の輸出額・公開状態を原典と照合する</summary><div class="mexico-table-scroll"><table><caption>INEGI ETEF・2025年年次速報。原典はFOB千米ドル、表示は10億米ドル。</caption><thead><tr><th scope="col">州</th>{data.metrics.map(m=><Fragment><th scope="col">{m.name}<br/>10億米ドル</th><th scope="col">原典・千米ドル<br/>公開状態</th></Fragment>)}</tr></thead><tbody>{data.states.map(s=>{const r=rows.get(s.id)!;return <tr data-mi-data-row={s.id}><th scope="row">{s.name}<small>{s.sourceName}</small></th>{data.metrics.map(m=>{const v=r.values[m.id as 'transport'|'electronics'];return <Fragment><td>{value(v)}</td><td>{v.sourceValue===null?'—':v.sourceValue.toLocaleString('ja-JP')}<small>{v.sourceStatus}</small></td></Fragment>;})}</tr>;})}</tbody></table></div></details>
- </div>
+ </details>
  <div slot="sources">
   <details><summary>原典・加工・配信と利用条件</summary><p>出典：INEGI, Exportaciones por Entidad Federativa (ETEF)。2025年年次速報、原典更新2026年3月31日、取得2026年10月1日。32州×2業種の64原典行を抽出し、単位変換と日本語表記を本サイトで行いました。</p><p>{data.notes.method}</p><p>{data.notes.classificationMetadata}</p><p>州境：INEGI Marco Geoestadístico, diciembre de 2025。2020年人口と2025年輸出額を州コードで結合。投影と表示用一般化：{geometryMetadata.projection.name}。</p><p>{reading.national}</p><p><a href={`${assets}/industry-selected-2025.csv`} download>採用した64行の原典CSV</a> / <a href={`${assets}/official-metadata.txt`}>個別メタデータ</a> / <a href={`${assets}/official-data-dictionary.csv`}>データ辞書・単位</a> / <a href={`${assets}/manifest.json`}>取得・加工のSHA-256台帳</a></p><ul>{reading.sources.map(s=><li><a href={s.url}>{s.label}</a></li>)}</ul><p>INEGIの自由利用条件に基づき、原典メタデータを保持して出典と独自加工を明示しています。</p></details>
  </div>

@@ -159,9 +159,17 @@ test('Crop and livestock quantities open together; independent switches, item-on
   const crop=doc.querySelector('[data-agriculture-symbol="08"]'),cattle=doc.querySelector('[data-agriculture-cattle-symbol="08"]');
   assert.notEqual(crop.style.display,'none');assert.notEqual(cattle.style.display,'none');
   assert.equal(doc.querySelector('[data-agriculture-legend="maize"]').hidden,false);assert.equal(doc.querySelector('[data-agriculture-legend="cattle"]').hidden,false);
+  assert.equal(doc.querySelector('[data-agriculture-legend="maize"]').closest('.mexico-reading-legend')?.closest('.mexico-reading'),doc.querySelector('.mexico-reading'),'quantity keys remain visible outside selection-only reading');
+  assert.equal(doc.querySelector('[data-agriculture-legend="cattle"]').querySelectorAll('.mexico-agriculture-symbol-key-item').length,3);
+  assert.match(doc.querySelector('[data-agriculture-legend="cattle"]').textContent,/2022年9月/);
+  const map=doc.querySelector('[data-agriculture-map]'),key=doc.querySelector('[data-agriculture-legend-size]');
+  const radius=key.querySelector('circle').getAttribute('r');
+  map.getBoundingClientRect=()=>({width:900,height:580});window.dispatchEvent(new window.Event('resize'));assert.equal(key.style.width,'68px');
+  map.getBoundingClientRect=()=>({width:450,height:290});window.dispatchEvent(new window.Event('resize'));assert.equal(key.style.width,'34px');assert.equal(key.querySelector('circle').getAttribute('r'),radius,'legend circles retain their quantity radius while following the map display scale');
+  assert.equal(doc.querySelector('.mexico-agriculture-source-period'),null,'a static crop period must not be attached to cattle or mixed indicators');
   doc.querySelector('[data-agriculture-layer="livestock"]').click();assert.equal(cattle.style.display,'none');assert.notEqual(crop.style.display,'none');
   doc.querySelector('[data-agriculture-metric="cattle"]').click();
-  const only=doc.querySelector('[data-agriculture-only-item]');only.checked=true;only.dispatchEvent(new window.Event('change',{bubbles:true}));
+  const only=doc.querySelector('input[data-agriculture-only-item]');only.checked=true;only.dispatchEvent(new window.Event('change',{bubbles:true}));
   assert.equal(crop.style.display,'none');assert.notEqual(cattle.style.display,'none');
   assert.equal(new URL(window.location.href).searchParams.get('livestock'),'0','item-only mode preserves the previous independent switch');
   doc.querySelector('[data-agriculture-layer="livestock"]').click();
