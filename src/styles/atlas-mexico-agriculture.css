@@ -41,6 +41,10 @@
 .atlas-desktop-shell .mexico-workspace.mexico-agriculture [data-agriculture-legend=irrigation] small{display:block;font-size:12px}
 .atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-agriculture-national-values{margin:3px 0 7px;font-size:13px}
 .atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-agriculture-country-overview{padding-top:0}
+@media(min-width:1200px){
+ .atlas-desktop-shell .mexico-workspace.mexico-agriculture[data-mexico-field=agriculture] .mexico-map-frame:has([data-agriculture-map]:not([hidden]))>.mexico-controls{width:200px;max-width:min(200px,calc(100% - 16px))}
+ .atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-map-frame>.mexico-controls select[data-agriculture-state]{width:130px;max-width:130px}
+}
 @media(min-width:960px){
  .atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-map-column{display:flex;flex-direction:column;gap:0}
  .atlas-desktop-shell .mexico-workspace.mexico-agriculture .mexico-agriculture-figure{display:contents}
