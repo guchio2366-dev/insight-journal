@@ -22,6 +22,16 @@ export function initCountryOverview(root: HTMLElement) {
   const detail = root.querySelector<HTMLElement>('[data-overview-country-detail]')!;
   const detailLink = root.querySelector<HTMLAnchorElement>('[data-overview-detail-link]')!;
   const fieldLinks = Array.from(root.querySelectorAll<HTMLAnchorElement>('[data-overview-field]'));
+  const canadaSlot = root.querySelector<HTMLElement>('[data-overview-canada-slot]');
+  const detailHome = root.querySelector<HTMLElement>('[data-overview-country-detail-home]');
+  const regionReading = root.querySelector<HTMLElement>('[data-overview-region-reading]');
+  const genericReadings = Array.from(root.querySelectorAll<HTMLElement>('[data-overview-generic-reading]'));
+  const canadaReadings = Array.from(root.querySelectorAll<HTMLElement>('[data-overview-canada-topic]'));
+  const titleLabel = root.querySelector<HTMLElement>('[data-overview-title-label]');
+  const detailLabel = root.querySelector<HTMLElement>('[data-overview-detail-label]');
+  const status = root.querySelector<HTMLElement>('[data-overview-status]');
+  const description = root.querySelector<HTMLElement>('[data-overview-description]');
+  const genericLabels = { title: titleLabel?.textContent, detail: detailLabel?.textContent, status: status?.textContent, description: description?.textContent };
 
   const readState = (): OverviewState => {
     const params = new URLSearchParams(location.search);
@@ -43,6 +53,20 @@ export function initCountryOverview(root: HTMLElement) {
     const country = config.countries.find(country => country.code === state.country);
     const city = config.cities.find(city => city.id === state.city);
     const topic = config.topics.find(topic => topic.id === state.topic)!;
+    const isCanada = country?.code === 'CAN' && !!canadaSlot;
+    root.dataset.overviewSelectedCountry = country?.code ?? '';
+    if (canadaSlot) {
+      canadaSlot.hidden = !isCanada;
+      if (isCanada && detail.parentElement !== canadaSlot) canadaSlot.append(detail);
+      else if (!isCanada && detailHome && detail.previousElementSibling !== detailHome) detailHome.after(detail);
+    }
+    if (regionReading) regionReading.hidden = isCanada;
+    genericReadings.forEach(reading => { reading.hidden = isCanada; });
+    canadaReadings.forEach(reading => { reading.hidden = !isCanada; });
+    if (titleLabel) titleLabel.textContent = isCanada ? 'の概要' : genericLabels.title ?? '';
+    if (detailLabel) detailLabel.textContent = isCanada ? 'の概要へ' : genericLabels.detail ?? '';
+    if (status) status.textContent = isCanada ? '概要' : genericLabels.status ?? '';
+    if (description) description.textContent = isCanada ? '地図と5つのテーマで、カナダの特徴と暮らしのつながりを確かめます。' : genericLabels.description ?? '';
     picker.value = country?.code ?? '';
     fieldLinks.forEach(link => {
       const field = config.fields?.find(field => field.id === link.dataset.overviewField);
@@ -71,7 +95,7 @@ export function initCountryOverview(root: HTMLElement) {
       currentLink.href = url.href;
     }
     document.title = country ? `${country.name}｜${config.regionLabel}の概要｜Insight Journal` : `${config.regionLabel}の概要と白地図｜Insight Journal`;
-    if (announce) announcement.textContent = country ? `${city?.name ?? country.name}を選択しました。地図の下から国別の解説へ進めます。` : `${config.regionLabel}全体を表示しました。`;
+    if (announce) announcement.textContent = country ? `${city?.name ?? country.name}を選択しました。${isCanada ? `カナダの${topic.label}の概要を表示しています。` : '地図の下から国別の解説へ進めます。'}` : `${config.regionLabel}全体を表示しました。`;
   };
   const updateUrl = (replace: boolean) => {
     const url = new URL(location.href);
