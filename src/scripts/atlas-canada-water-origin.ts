@@ -6,6 +6,7 @@ interface Origin {
  back: HTMLAnchorElement;
  layer: SVGElement | null;
  legends: Element[];
+ brief: string;
  summary: string;
  question: string;
 }
@@ -35,18 +36,21 @@ function origins(root: HTMLElement, topic: WaterDatasetTopic): Origin[] {
  for (const kind of ['forestry', 'industry', 'population', 'crop'] as const) {
   const back = $<HTMLAnchorElement>(`[data-canada-${kind}-return]`);
   if (!back || back.hidden || !back.getAttribute('href')) continue;
+  const saved = new URL(back.href, root.ownerDocument.defaultView!.location.href).searchParams;
+  const savedYear = saved.get('year'), year = savedYear ? savedYear + '年' : '';
   if (kind === 'forestry') {
-   result.push({kind, back, layer: $('[data-canada-forest-context-map]'), legends: [...root.querySelectorAll('[data-canada-forest-context-legend]')], summary: '元の比較：2020年の針葉樹林とFraser川・BC沿岸', question: `針葉樹林とFraser川・BC沿岸を、${target}と照合します。森林から港への木材の搬出・輸送には、どんな水と土地の条件が関わるでしょうか。`});
+   result.push({kind, back, layer: $('[data-canada-forest-context-map]'), legends: [...root.querySelectorAll('[data-canada-forest-context-legend]')], brief: `元の比較：2020年の針葉樹林（NRCan）。Fraser川・BC沿岸と、${target}を比べます。`, summary: '元の比較：2020年の針葉樹林とFraser川・BC沿岸', question: `針葉樹林とFraser川・BC沿岸を、${target}と照合します。森林から港への木材の搬出・輸送には、どんな水と土地の条件が関わるでしょうか。`});
   } else if (kind === 'industry') {
-   const metric = new URL(back.href, root.ownerDocument.defaultView!.location.href).searchParams.get('metric');
+   const metric = saved.get('metric');
    const subject = metric === 'manufacturing' ? '五大湖・St. Lawrence沿いのON・QCと製造業割合' : metric === 'services' ? 'BC沿岸・Vancouverとサービス業割合' : 'Albertaの内陸・西部山地と採取業割合';
-   result.push({kind, back, layer: $('[data-canada-industry-context-map]'), legends: [...root.querySelectorAll('[data-canada-industry-context-legend], [data-canada-industry-context] details')], summary: firstSentence($('[data-canada-industry-context-text]')), question: `${subject}を、${target}と照合します。生産・交通・市場を結ぶ条件をどう読みますか。色は州内GDP割合で、工場・鉱床の位置ではありません。`});
+   result.push({kind, back, layer: $('[data-canada-industry-context-map]'), legends: [...root.querySelectorAll('[data-canada-industry-context-legend], [data-canada-industry-context] details')], brief: `元の比較：${year ? year + 'の' : ''}州内GDP割合（%）。${subject}を、${target}と比べます。`, summary: firstSentence($('[data-canada-industry-context-text]')), question: `${subject}を、${target}と照合します。生産・交通・市場を結ぶ条件をどう読みますか。色は州内GDP割合で、工場・鉱床の位置ではありません。`});
   } else if (kind === 'population') {
-   result.push({kind, back, layer: $('[data-canada-population-context-map]'), legends: [...root.querySelectorAll('[data-canada-population-context-legend], [data-canada-population-context] details')], summary: firstSentence($('[data-canada-population-context-text]')), question: `都市圏の集積と南部の位置を、${target}と照合します。水と交通・居住の条件はどう関わるでしょうか。境界は2021年のCMAで、都市圏全体の気候平均は示しません。`});
+   const metric = saved.get('metric') === 'density' ? '人口密度（人/km²）' : '人口（人）';
+   result.push({kind, back, layer: $('[data-canada-population-context-map]'), legends: [...root.querySelectorAll('[data-canada-population-context-legend], [data-canada-population-context] details')], brief: `元の比較：${year}${metric}・2021年CMA境界。都市圏の集積と、${target}を比べます。`, summary: firstSentence($('[data-canada-population-context-text]')), question: `都市圏の集積と南部の位置を、${target}と照合します。水と交通・居住の条件はどう関わるでしょうか。境界は2021年のCMAで、都市圏全体の気候平均は示しません。`});
   } else {
    const livestock = new URL(root.ownerDocument.defaultView!.location.href).searchParams.get('crop') === 'beef';
    const product = $('[data-canada-crop-gis] [data-canada-census-product-title]')?.textContent?.trim() || '農畜産';
-   result.push({kind, back, layer: $('[data-canada-crop-gis] [data-canada-census-fallback]'), legends: [...root.querySelectorAll('[data-canada-crop-map-key], [data-canada-crop-gis] [data-canada-census-legend], [data-canada-crop-gis] .canada-census-sources')], summary: firstSentence($('[data-canada-crop-origin]')), question: `2021年の${product}の地域別申告値を、${target}と照合します。${livestock ? '草の生育・家畜の飲水・冬の飼料を、放牧と貯蔵の管理でどうつなぐでしょうか。' : '根が使う水と排水を、播種・生育・収穫の管理でどうつなぐでしょうか。'}CCSへの集計で、実際の畑・放牧地・牛の所在地を示しません。`});
+   result.push({kind, back, layer: $('[data-canada-crop-gis] [data-canada-census-fallback]'), legends: [...root.querySelectorAll('[data-canada-crop-map-key], [data-canada-crop-gis] [data-canada-census-legend], [data-canada-crop-gis] .canada-census-sources')], brief: `元の比較：${year ? year + 'の' : ''}州比較／2021年の${product}（CCS申告値）。申告値の分布と、${target}を比べます。`, summary: firstSentence($('[data-canada-crop-origin]')), question: `2021年の${product}の地域別申告値を、${target}と照合します。${livestock ? '草の生育・家畜の飲水・冬の飼料を、放牧と貯蔵の管理でどうつなぐでしょうか。' : '根が使う水と排水を、播種・生育・収穫の管理でどうつなぐでしょうか。'}CCSへの集計で、実際の畑・放牧地・牛の所在地を示しません。`});
   }
  }
  return result;
@@ -85,12 +89,14 @@ export function renderCanadaWaterOrigin(root: HTMLElement, state: CanadaWaterSta
  const host = root.querySelector<HTMLElement>('[data-water-origin]');
  if (!host) return false;
  const text = host.querySelector<HTMLElement>('[data-water-origin-text]');
+ const detail = host.querySelector<HTMLElement>('[data-water-origin-detail]');
  const map = host.querySelector<SVGSVGElement>('[data-water-origin-map]');
  const legend = host.querySelector<HTMLElement>('[data-water-origin-legend]');
  const back = host.querySelector<HTMLAnchorElement>('[data-water-origin-return]');
  map?.replaceChildren();
  legend?.replaceChildren();
  if (text) text.textContent = '';
+ if (detail) detail.textContent = '';
  if (back) { back.hidden = true; back.removeAttribute('href'); }
  delete host.dataset.waterOriginKind;
  const active = state.topic !== 'surface' && root.classList.contains('is-water-resource') ? origins(root, state.topic) : [];
@@ -99,7 +105,8 @@ export function renderCanadaWaterOrigin(root: HTMLElement, state: CanadaWaterSta
  if (!active.length) return false;
  const doc = root.ownerDocument;
  host.dataset.waterOriginKind = active.map(origin => origin.kind).join(' ');
- if (text) text.textContent = active.map(origin => `${origin.summary ? origin.summary + '。' : ''}${origin.question}`).join(' ') + ' ' + scopes[state.topic as WaterDatasetTopic];
+ if (text) text.textContent = active.map(origin => origin.brief).join(' ');
+ if (detail) detail.textContent = active.map(origin => `${origin.summary ? origin.summary + '。' : ''}${origin.question}`).join(' ') + ' ' + scopes[state.topic as WaterDatasetTopic];
  if (back) { back.href = active[0].back.href; back.textContent = active[0].back.textContent; back.hidden = false; }
  if (map) {
   map.toggleAttribute('hidden', !active.some(origin => origin.layer?.querySelector('path,circle,image')));

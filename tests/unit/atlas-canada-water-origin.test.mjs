@@ -17,7 +17,7 @@ const q=(root,selector)=>root.querySelector(selector);
 function page(search=''){
  const w=new Window({url:base+'nature/'+search,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
  w.document.body.innerHTML=`<article class="canada-nature is-water-resource" data-root>
- <div data-water-origin hidden><p data-water-origin-text></p><a data-water-origin-return hidden></a><details><summary>分布・凡例</summary><svg data-water-origin-map viewBox="0 0 900 580" role="img"></svg><div data-water-origin-legend></div></details></div>
+ <div data-water-origin hidden><p data-water-origin-text></p><a data-water-origin-return hidden></a><details><summary>分布・凡例</summary><p data-water-origin-detail></p><svg data-water-origin-map viewBox="0 0 900 580" role="img"></svg><div data-water-origin-legend></div></details></div>
  <a data-canada-forestry-return hidden href="${base}agriculture/forestry/">林業の森林図・州比較へ戻る</a>
  <a data-canada-industry-return hidden href="${base}industry/">主要産業の州別構成・比較へ戻る</a>
  <a data-canada-population-return hidden href="${base}population/">人口の都市圏分布・比較へ戻る</a>
@@ -51,6 +51,9 @@ test('actual manufacturing renderer retains exact selected province distribution
    assert.match(q(root,'[data-water-origin-legend]').textContent,/水資源の新しい図とは別図で照合/);
    assert.equal(q(root,'[data-water-origin-legend]').querySelectorAll('i').length,6);
    assert.match(q(root,'[data-water-origin-text]').textContent,/五大湖・St\. Lawrence.*ON・QC/);
+   assert.match(q(root,'[data-water-origin-text]').textContent,/2024年の州内GDP割合（%）/);
+   assert.equal(q(root,'[data-water-origin-text]').textContent.split('。').filter(Boolean).length,2);
+   assert.match(q(root,'[data-water-origin-detail]').textContent,/生産・交通・市場.*工場・鉱床の位置ではありません/s);
    assert.equal(q(root,'[data-water-origin-return]').href,sourceReturn.href);
    assert.equal(q(root,'[data-water-origin-return]').textContent,sourceReturn.textContent);
    assert.deepEqual(Object.fromEntries(new URL(q(root,'[data-water-origin-return]').href).searchParams),saved);
@@ -59,7 +62,7 @@ test('actual manufacturing renderer retains exact selected province distribution
    renderSource(w,'industry');
    assert.deepEqual(mapSignature(original),signature);
   }
-  assert.match(q(root,'[data-water-origin-text]').textContent,/BC州南西部.*全国の水文地質区分とは対象・縮尺/s);
+  assert.match(q(root,'[data-water-origin-detail]').textContent,/BC州南西部.*全国の水文地質区分とは対象・縮尺/s);
  }finally{await w.happyDOM.close();}
 });
 
@@ -74,7 +77,8 @@ test('actual CMA population and density output, labels and matching scales survi
    assert.deepEqual(mapSignature(q(root,'[data-water-origin-source="population"]')),signature);
    assert.equal(q(root,'[data-water-origin-map]').getAttribute('viewBox'),'0 0 900 580');
    assert.equal(q(root,'[data-water-origin-return]').href,q(root,'[data-canada-population-return]').href);
-   assert.match(q(root,'[data-water-origin-text]').textContent,/一点の平年値.*利用可能水量・土壌水分/);
+   assert.match(q(root,'[data-water-origin-detail]').textContent,/一点の平年値.*利用可能水量・土壌水分/);
+   assert.match(q(root,'[data-water-origin-text]').textContent,metric==='population'?/2016年人口（人）・2021年CMA境界/:/2021年人口密度（人\/km²）・2021年CMA境界/);
    const mapText=q(root,'[data-water-origin-map]').textContent;
    assert.match(mapText,metric==='population'?/100万人.*500万人/s:/50未満.*600以上.*人\/km²/s);
    assert.match(q(root,'[data-water-origin-legend]').textContent,/境界2021年.*人口2016\/2021年/s);
@@ -91,11 +95,30 @@ test('forestry copies the original 2020 image and green key, preserves source li
   assert.equal(q(root,'[data-water-origin-map] image').getAttribute('href'),q(root,'[data-canada-forest-context-map] image').getAttribute('href'));
   assert.equal(q(root,'[data-water-origin-legend] i').style.background,q(root,'[data-canada-forest-context-legend] i').style.background);
   assert.match(q(root,'[data-water-origin-text]').textContent,/Fraser川・BC沿岸.*統計排水地域/s);
-  assert.match(q(root,'[data-water-origin-text]').textContent,/流量・利用可能水量・灌漑量は示しません/);
+  assert.match(q(root,'[data-water-origin-detail]').textContent,/流量・利用可能水量・灌漑量は示しません/);
+  assert.match(q(root,'[data-water-origin-detail]').textContent,/森林から港への木材の搬出・輸送/);
+  assert.match(q(root,'[data-water-origin-text]').textContent,/2020年の針葉樹林（NRCan）/);
+  assert.ok(q(root,'[data-water-origin-text]').textContent.length<100);
   assert.equal(q(root,'[data-water-origin-return]').href,source.href);
   assert.equal(q(root,'[data-water-origin] details').open,false);
   assert.ok(q(root,'[data-water-origin-legend] a').href.endsWith('#canada-forestry-sources'));
  }finally{await w.happyDOM.close();}
+});
+
+test('actual source renderers supply missing source years before captions and incomplete links never print null years',async()=>{
+ for(const kind of ['industry','population']){
+  const saved=kind==='industry'?{province:'Ontario',metric:'manufacturing'}:{cma:'535',metric:'population'};
+  const {w,root}=page('?'+new URLSearchParams({[kind+'Return']:new URLSearchParams(saved).toString()}));
+  try{
+   renderSource(w,kind);
+   const back=q(root,`[data-canada-${kind}-return]`),year=new URL(back.href).searchParams.get('year');
+   assert.match(year,/^\d{4}$/);renderCanadaWaterOrigin(root,water('precipitation'));
+   assert.ok(q(root,'[data-water-origin-text]').textContent.includes(year+'年'));
+   back.href=base+(kind==='industry'?'industry/':'population/');
+   renderCanadaWaterOrigin(root,water('precipitation'));
+   assert.doesNotMatch(q(root,'[data-water-origin-text]').textContent,/null年|undefined年/);
+  }finally{await w.happyDOM.close();}
+ }
 });
 
 test('crop readonly fallback retains camera, selected visibility, F and unrecorded patterns, complete legend and exact return without cloning live canvas',async()=>{
@@ -116,8 +139,10 @@ test('crop readonly fallback retains camera, selected visibility, F and unrecord
   assert.match(q(root,'[data-water-origin-legend]').textContent,/非公表 F.*対象外・未収録.*公表ゼロ 0/s);
   assert.equal(q(root,'[data-water-origin-legend] a').href,'https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210037001');
   assert.equal(q(root,'[data-water-origin-return]').href,source.href);assert.equal(q(root,'[data-water-origin-return]').textContent,source.textContent);
-  assert.match(q(root,'[data-water-origin-text]').textContent,/2024年肉牛.*2021年のアルファルファ.*冬の飼料/s);
-  assert.match(q(root,'[data-water-origin-text]').textContent,/実際の畑・放牧地・牛の所在地/);
+  assert.match(q(root,'[data-water-origin-detail]').textContent,/2024年肉牛.*2021年のアルファルファ.*冬の飼料/s);
+  assert.match(q(root,'[data-water-origin-detail]').textContent,/実際の畑・放牧地・牛の所在地/);
+  assert.match(q(root,'[data-water-origin-text]').textContent,/2024年の州比較.*2021年のアルファルファ.*CCS申告値/s);
+  assert.equal(q(root,'[data-water-origin-text]').textContent.split('。').filter(Boolean).length,2);
  }finally{await w.happyDOM.close();}
 });
 
@@ -127,6 +152,7 @@ test('plain and rejected comparison returns hide origin; surface and other views
   assert.equal(renderCanadaWaterOrigin(root,water('precipitation')),false);assert.equal(q(root,'[data-water-origin]').hidden,true);
   q(root,'[data-canada-forestry-return]').hidden=false;renderCanadaWaterOrigin(root,water('aquifers'));
   assert.equal(renderCanadaWaterOrigin(root,water('surface')),false);assert.equal(q(root,'[data-water-origin-map]').childNodes.length,0);assert.equal(q(root,'[data-water-origin-return]').hasAttribute('href'),false);
+  assert.equal(q(root,'[data-water-origin-detail]').textContent,'');
   assert.equal(q(root,'[data-canada-forest-context-map] image').getAttribute('href'),'/assets/forest-needleleaf-2020.png');
   root.classList.remove('is-water-resource');assert.equal(renderCanadaWaterOrigin(root,water('drainage')),false);
  }finally{await w.happyDOM.close();}
