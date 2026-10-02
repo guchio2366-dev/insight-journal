@@ -21,7 +21,7 @@ const initialReadingSelected=requestedReading==='item'||(requestedReading!=='ove
     <div class="atlas-compact-heading"><nav aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a><span aria-hidden="true"> / </span><a href={withBase('/atlas/north-america/')}>北米地理</a></nav><span>メキシコ</span></div>
     <div class="atlas-region-controls mexico-navigation"><AtlasRegionNavigation group="americas" current="north-america" country="mexico" /></div>
     <nav class="atlas-tabs atlas-tabs-with-overview mexico-fields" aria-label="地図の分野">
-     {([['overview','概要'],['agriculture','農林業'],['nature','自然環境'],['industry','主要産業'],['population','人口']] as const).map(([id,label])=><a href={withBase(`/atlas/north-america/mexico/${id}/${id==='overview'?'?country=MEX':''}`)} data-atlas-overview-link={id==='overview'?'':undefined} aria-current={field===id?'page':undefined}>{label}</a>)}
+     {([['overview','概要'],['agriculture','農林業'],['nature','自然環境'],['industry','主要産業'],['population','人口']] as const).map(([id,label])=><a href={withBase(`/atlas/north-america/mexico/${id}/${id==='overview'?'?country=MEX':''}`)} aria-current={field===id?'page':undefined}>{label}</a>)}
     </nav>
     <slot name="controls" />
     <div class="atlas-primary-grid mexico-primary-grid">
@@ -51,6 +51,20 @@ const initialReadingSelected=requestedReading==='item'||(requestedReading!=='ove
    const reading=root.querySelector<HTMLElement>('.mexico-reading-content');
    const agriculture=root.dataset.mexicoField==='agriculture';
    const selectionFromURL=(query:URLSearchParams)=>query.get('reading')==='item'||(query.get('reading')!=='overview'&&(query.has('state')||query.has('compare')||query.has('item')||query.has('feature')||query.has('category')||((agriculture||root.dataset.mexicoField==='industry')&&query.has('metric'))));
+   const mainFields=new Map(Array.from(root.querySelectorAll<HTMLAnchorElement>('.mexico-fields>a')).map(link=>[link,link.href]));
+   // Mexico owns these links so the generic overview adapter cannot replace their state context.
+   for(const link of mainFields.keys())link.removeAttribute('data-atlas-overview-link');
+   const syncMainFields=()=>{
+    const query=new URL(location.href).searchParams,code=query.get('state')??'';
+    const mode=query.get('reading')==='item'?'item':query.get('reading')==='overview'?'overview':root.dataset.mexicoReadingSelected==='true'?'item':'overview';
+    for(const [link,target] of mainFields){
+     const url=new URL(target,location.href);
+     for(const key of [...url.searchParams.keys()])if(key!=='country')url.searchParams.delete(key);
+     if(/^(0[1-9]|[12][0-9]|3[0-2])$/.test(code))url.searchParams.set('state',code);
+     url.searchParams.set('reading',mode);
+     if(link.href!==url.href)link.href=url.href;
+    }
+   };
    const commitReadingMode=(selected:boolean,mode:'push'|'replace'|'none')=>{
     if(mode==='none')return;
     const url=new URL(location.href),readingMode=selected?'item':'overview';
@@ -105,7 +119,7 @@ const initialReadingSelected=requestedReading==='item'||(requestedReading!=='ove
       }
      }
     }
-    prepareReadingLinks();
+    prepareReadingLinks();syncMainFields();
    };
    const beforeNative=new WeakMap<Event,{href:string;length:number}>();
    const captureChoice=(event:Event)=>{
@@ -128,6 +142,7 @@ const initialReadingSelected=requestedReading==='item'||(requestedReading!=='ove
    for(const type of ['change','click','keydown'])root.addEventListener(type,captureChoice,{capture:true});
    root.addEventListener('change',chooseReading);
    root.addEventListener('click',chooseReading);
+   for(const type of ['click','auxclick','focusin'])root.addEventListener(type,event=>{if(event.target instanceof Element&&event.target.closest('.mexico-fields>a'))syncMainFields();},{capture:true});
    const keyboardChoices='path[data-mexico-nature-feature],[data-mexico-overview-shape],path[data-agriculture-state-code],path[data-mexico-nature-state],path[data-mexico-nature-compare-state],circle[data-mexico-nature-compare-symbol],[data-mi-shape],[data-mi-population-circle],[data-population-state-shape],[data-population-state-symbol]';
    root.addEventListener('keydown',event=>{if(['Enter',' '].includes(event.key)&&event.target instanceof Element&&event.target.closest(keyboardChoices))chooseReading(event);});
    back?.addEventListener('click',()=>showSelection(false,'push'));
@@ -142,6 +157,7 @@ const initialReadingSelected=requestedReading==='item'||(requestedReading!=='ove
    const query=new URL(location.href).searchParams;
    showSelection((root.dataset.mexicoInitialReadingSelected??String(selectionFromURL(query)))==='true');
    new MutationObserver(prepareReadingLinks).observe(root,{subtree:true,attributes:true,attributeFilter:['href']});
+   new MutationObserver(syncMainFields).observe(root,{attributes:true});
    if(agriculture){
     const updateTopics=()=>{const forestry=!!root.querySelector('[data-agriculture-reading="pine"]:not([hidden])');for(const link of root.querySelectorAll<HTMLElement>('[data-mexico-agriculture-topic]')){if((link.dataset.mexicoAgricultureTopic==='forestry')===forestry)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');}};
     new MutationObserver(updateTopics).observe(root,{subtree:true,attributes:true,attributeFilter:['hidden']});

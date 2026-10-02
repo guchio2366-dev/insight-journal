@@ -17,7 +17,8 @@ const imports=`import {initMexicoAgriculture} from './src/scripts/atlas-mexico-a
 import {initMexicoNature} from './src/scripts/atlas-mexico-nature.ts';
 import {initMexicoIndustry} from './src/scripts/atlas-mexico-industry.ts';
 import {initMexicoPopulation} from './src/scripts/atlas-mexico-population.ts';
-const initializeNative=()=>{const root=document.querySelector('[data-mexico-workspace]');({agriculture:initMexicoAgriculture,nature:initMexicoNature,industry:initMexicoIndustry,population:initMexicoPopulation})[root.dataset.mexicoField](root);};`;
+import {initMexicoOverview} from './src/scripts/atlas-mexico-overview.ts';
+const initializeNative=()=>{const root=document.querySelector('[data-mexico-workspace]');({overview:initMexicoOverview,agriculture:initMexicoAgriculture,nature:initMexicoNature,industry:initMexicoIndustry,population:initMexicoPopulation})[root.dataset.mexicoField](root);};`;
 const codes={};
 for(const nativeFirst of [false,true]){
  const result=await build({stdin:{contents:`${imports}\n${initialIntent}\n${nativeFirst?'initializeNative();':''}\n${adapter}\n${nativeFirst?'':'initializeNative();'}`,resolveDir:process.cwd(),sourcefile:'mexico-reading-entry.ts',loader:'ts'},absWorkingDir:process.cwd(),tsconfigRaw:{},plugins:[modules],bundle:true,format:'iife',platform:'browser',write:false});
@@ -158,4 +159,42 @@ test('Adapter-first map choice waits through trusted listener checkpoints and ne
   assert.equal(window.history.length,initialLength+1);
   window.history.back();await window.happyDOM.waitUntilComplete();assertMode(window,false);
  }finally{await window.happyDOM.close();}
+});
+
+test('All five Mexico main tabs retain state and reading intent without leaking field-specific comparison parameters',async()=>{
+ const mainFields=['overview',...Object.keys(fields)];
+ for(const [index,field] of mainFields.entries()){
+  for(const mode of ['item','overview']){
+   const suffix=field==='industry'?'&compare=population&from=population&sourceState=09&sourceView=density':'';
+   const window=await page(field,`?state=08&reading=${mode}&only=1&fallback=1${suffix}`);let destination;
+   try{
+    const links=[...window.document.querySelectorAll('.mexico-fields>a')];assert.equal(links.length,5);
+    for(const link of links){
+     const target=new URL(link.href);
+     assert.equal(target.searchParams.get('state'),'08');assert.equal(target.searchParams.get('reading'),mode);
+     assert.ok([...target.searchParams.keys()].every(key=>['country','state','reading'].includes(key)));
+    }
+    if(field==='industry'&&mode==='item')assert.equal(new URL(window.document.querySelector('[data-mi-return]').href).searchParams.get('state'),'09');
+    const next=mainFields[(index+1)%mainFields.length],target=new URL(links.find(link=>new URL(link.href).pathname.endsWith(`/${next}/`)).href);
+    destination=await page(next,target.search,true);assertMode(destination,mode==='item');assert.equal(query(destination).get('state'),'08');
+    const select=destination.document.querySelector(next==='overview'?'[data-mexico-overview-state]':fields[next].select);
+    if(mode==='item')assert.equal(select.value,'08');
+   }finally{if(destination)await destination.happyDOM.close();await window.happyDOM.close();}
+  }
+ }
+});
+
+test('National overview normalization and last-moment main-tab activation keep the saved reading mode',async()=>{
+ const window=await page('agriculture');let destination;
+ try{
+  assertMode(window,false);
+  for(const link of window.document.querySelectorAll('.mexico-fields>a'))assert.equal(new URL(link.href).searchParams.get('reading'),'overview');
+  const overview=new URL([...window.document.querySelectorAll('.mexico-fields>a')].find(link=>new URL(link.href).pathname.endsWith('/overview/')).href);
+  destination=await page('overview',overview.search,true);assertMode(destination,false);
+  const initialLength=window.history.length;
+  window.history.replaceState(null,'','?state=14&reading=item&metric=cattle&compare=irrigation&feature=climate-3');
+  const link=[...window.document.querySelectorAll('.mexico-fields>a')].find(link=>new URL(link.href).pathname.endsWith('/population/'));
+  link.addEventListener('click',event=>event.preventDefault(),{once:true});link.dispatchEvent(new window.MouseEvent('click',{bubbles:true,cancelable:true}));
+  assert.deepEqual(Object.fromEntries(new URL(link.href).searchParams),{state:'14',reading:'item'});assert.equal(window.history.length,initialLength);
+ }finally{if(destination)await destination.happyDOM.close();await window.happyDOM.close();}
 });

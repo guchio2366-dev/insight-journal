@@ -20,6 +20,7 @@ test('Mexico overview has official state geometry, a national reading and five s
  assert.match(d.querySelector('.mexico-overview-intro').textContent,/126,014,024/);
  assert.deepEqual([...d.querySelectorAll('.mexico-fields>a')].map(a=>a.textContent.trim()),['概要','農林業','自然環境','主要産業','人口']);
  assert.ok([...d.querySelectorAll('.mexico-fields>a')].every(a=>a.href.includes('/mexico/')));
+ assert.ok([...d.querySelectorAll('.mexico-fields>a')].every(a=>new URL(a.href).searchParams.get('reading')==='overview'&&!new URL(a.href).searchParams.has('state')));
  assert.ok(!d.querySelector('.mexico-reading').textContent.includes('準備しています'));
  }finally{await w.happyDOM.close();}
 });
@@ -32,6 +33,7 @@ test('Mexico state selection, keyboard, focus and history restore the same readi
  assert.match(q('[data-mexico-overview-values]').textContent,/3,741,869/);
  assert.equal(q('[data-mexico-overview-shape="08"]').getAttribute('aria-pressed'),'true');
  for(const a of d.querySelectorAll('[data-mexico-overview-field]'))assert.equal(new URL(a.href).searchParams.get('state'),'08');
+ for(const a of d.querySelectorAll('.mexico-fields>a')){assert.equal(new URL(a.href).searchParams.get('state'),'08');assert.equal(new URL(a.href).searchParams.get('reading'),'item');}
  q('[data-mexico-overview-focus]').click();const frame=q('[data-mexico-overview-map]').getAttribute('viewBox');assert.notEqual(frame,'0 0 900 580');
  reload=await page(w.location.search);assert.equal(reload.document.querySelector('[data-mexico-overview-map]').getAttribute('viewBox'),frame);
  q('[data-mexico-overview-reset]').click();assert.equal(q('[data-mexico-overview-map]').getAttribute('viewBox'),'0 0 900 580');

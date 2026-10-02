@@ -109,7 +109,7 @@
 .atlas-desktop-shell .mexico-workspace.mexico-population .mexico-topic-controls{display:block;padding:12px 0;margin:0;border:0;background:none}
 .atlas-desktop-shell .mexico-workspace.mexico-population .mexico-population-topic-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;border:0;background:none}
 .atlas-desktop-shell .mexico-workspace.mexico-population .mexico-population-topic-tabs>:is(a,button){display:inline-flex;flex-direction:row;gap:4px;min-height:40px;padding:8px 10px;border:1px solid #bac9c6;border-radius:4px;background:#fff;color:#243f48;font:400 16px/1.75 var(--sans)}
-.atlas-desktop-shell .mexico-workspace.mexico-population .mexico-population-topic-tabs>[aria-current]{background:#224c59;color:#fff}
+.atlas-desktop-shell .mexico-workspace.mexico-population .mexico-population-topic-tabs>:is([aria-current],[aria-pressed=true]){background:#224c59;color:#fff}
 .atlas-desktop-shell .mexico-workspace.mexico-population .mexico-population-topic-tabs small{display:inline;margin:0;padding:0;border:0;font-size:10px;line-height:inherit}
 .mexico-workspace :is(.mexico-topic-tabs,.mexico-nature-tabs) button:disabled{color:#8c918b;cursor:default}
 .mexico-workspace :is(.mexico-topic-tabs,.mexico-nature-tabs) small{padding:2px;border:1px solid #cdd0c5;border-radius:3px;font-size:9px;font-weight:400}

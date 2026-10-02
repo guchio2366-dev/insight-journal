@@ -4,11 +4,13 @@ import {withBase} from '../../../../lib/urls';
 ---
 <CountryOverviewPage regionId="north-america" />
 <script is:inline define:vars={{mexicoOverview:withBase('/atlas/north-america/mexico/overview/')}}>
- const routeMexicoOverview=()=>{const current=new URL(location.href);if(current.searchParams.get('country')!=='MEX')return;const target=new URL(mexicoOverview,location.origin);target.searchParams.set('country','MEX');const state=current.searchParams.get('state');if(state)target.searchParams.set('state',state);location.replace(target.href);};
+ const overviewRoot=document.querySelector('[data-country-overview]');
+ const overviewConfig=JSON.parse(overviewRoot?.querySelector('[data-overview-config]')?.textContent??'{}');
+ const routeMexicoOverview=()=>{const current=new URL(location.href);const country=overviewConfig.countries?.find(country=>country.code===current.searchParams.get('country'));const city=overviewConfig.cities?.find(city=>city.id===current.searchParams.get('city'));if((country?.code??city?.country)!=='MEX')return;const target=new URL(mexicoOverview,location.origin);target.searchParams.set('country','MEX');const state=current.searchParams.get('state');if(state)target.searchParams.set('state',state);location.replace(target.href);};
  routeMexicoOverview();
  document.querySelector('[data-overview-country]')?.addEventListener('change',()=>setTimeout(routeMexicoOverview,0));
- const overviewRoot=document.querySelector('[data-country-overview]');
  const routeMapChoice=event=>{if(event.target instanceof Element&&event.target.closest('[data-overview-map-country],[data-overview-label-country],[data-overview-map-city]'))setTimeout(routeMexicoOverview,0);};
  overviewRoot?.addEventListener('click',routeMapChoice);
  overviewRoot?.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' ')routeMapChoice(event);});
+ window.addEventListener('popstate',()=>setTimeout(routeMexicoOverview,0));
 </script>
