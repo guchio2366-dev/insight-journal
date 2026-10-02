@@ -23,7 +23,7 @@ const region=getOverviewRegion('west-asia');
 ---
 <BaseLayout title={`西アジア・中東の${field.label}`} description="20か国・地域の自然環境、農林業、産業、人口を、資料の対象年とともに読む地図。" compactAtlas>
  <AtlasWorkspaceFrame region="west-asia">
-  <article class="atlas-explorer west-atlas" data-west-atlas data-field={initialField} data-assets={assetBase}>
+  <article class="atlas-explorer west-atlas" data-west-atlas data-field={initialField} data-assets={assetBase} data-settlements-assets={withBase('/assets/atlas/west-asia-settlements-v1/')}>
    <section class="atlas-workspace" aria-label="西アジア・中東の分野別地図">
    <div class="atlas-compact-heading"><nav aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a><span> / </span><a href={withBase('/atlas/west-asia/')}>西アジア・中東地図</a></nav><span data-west-scope>20か国・地域</span></div>
    <h1 class="visually-hidden">西アジア・中東地図から読む、農林業・自然環境・主要産業・人口</h1>
@@ -36,7 +36,7 @@ const region=getOverviewRegion('west-asia');
     <div class={initialField==='natural'?'atlas-nature-tabs':initialField==='industry'?'industry-tab-row':initialField==='population'?'population-tabs':'atlas-water-tabs'} role="tablist" aria-label={`${field.label}の表示切替`}>{initialField==='industry'?topics.map(t=><button type="button" role="tab" data-west-topic-button={t.id} title={t.label} aria-controls="west-map-panel" aria-selected={t.id===initial.id} tabindex={t.id===initial.id?0:-1}>{t.label.replace('の付加価値','付加価値')}</button>):standardGroups.map(([g,label],i)=><button type="button" role="tab" id={`west-group-${i}`} aria-controls="west-map-panel" data-west-standard-group={g} data-west-group={initialField==='natural'?g:undefined} aria-pressed={i===0} aria-selected={i===0} tabindex={i===0?0:-1}>{label}</button>)}</div>
     {initialField==='population'&&<p class="west-control-status" data-west-control-status>人口分布を表示しています。</p>}
    </div>
-   {initialField==='natural'&&<div class="atlas-water-tabs west-subtabs" role="tablist" aria-label="水資源の表示切替" data-west-subgroup="水資源" hidden>{[['rivers','河川・地下水'],['precipitation','降水量'],['basins','河川の流域']].map(([id,label])=><button type="button" role="tab" data-west-topic-button={id==='precipitation'?undefined:id} data-west-unavailable={id==='precipitation'?label:undefined} aria-controls="west-map-panel" aria-selected="false" tabindex="-1">{label}</button>)}</div>}
+   {initialField==='natural'&&<div class="atlas-water-tabs west-subtabs" role="tablist" aria-label="水資源の表示切替" data-west-subgroup="水資源" hidden>{[['rivers','河川・地下水'],['precipitation','降水量'],['basins','河川の流域']].map(([id,label])=><button type="button" role="tab" data-west-topic-button={id} aria-controls="west-map-panel" aria-selected="false" tabindex="-1">{label}</button>)}</div>}
    <div class="atlas-primary-grid" id="west-map-panel" role="tabpanel" aria-label={`${field.label}の地図と解説`}>
     <section class="atlas-map-column" aria-labelledby="west-map-title">
      <h2 id="west-map-title" class="visually-hidden">{initial.label}</h2>
@@ -53,6 +53,7 @@ const region=getOverviewRegion('west-asia');
      {initialField==='agriculture'&&['wheat','barley'].map(id=><div class="atlas-water-tabs west-cultivation" aria-label="栽培方法" role="tablist" data-west-cultivation={id} hidden={id!==initial.id}>{topics.filter(t=>t.id===id||t.id.startsWith(id+'-')).map(t=><button type="button" role="tab" data-west-topic-button={t.id} aria-selected={t.id===initial.id} tabindex={t.id===initial.id?0:-1}>{t.id===id?'収穫面積':t.id.endsWith('irrigated')?'灌漑栽培':'天水栽培'}</button>)}</div>)}</div>
      <div class="west-legend" data-west-legend aria-label="地図の凡例"></div>
      <div data-west-map-extras><p class="west-map-help" data-west-guide>地図の国・都市名を選ぶと、右側に解説を表示します。</p>
+     <label class="west-settlement-picker" data-west-settlement-label hidden>掲載居住域<select data-west-settlement aria-label="掲載された集団・宗教を選択"><option value="">掲載域全体</option></select></label>
      <div class="west-map-lists">
       <details data-west-city-label><summary>都市の一覧から雨温図を選ぶ</summary><label>観測所<select data-west-city aria-label="雨温図の観測所"><option value="">観測所を選択</option>{data.cities.map(c=><option value={c.id}>{c.name}</option>)}</select></label></details>
       <details data-west-urban-label hidden><summary>都市の一覧から選ぶ</summary><select data-west-urban aria-label="人口を読む都市"><option value="">都市を選択</option>{data.urban.cities.map(c=><option value={c.id}>{c.name}</option>)}</select></details>

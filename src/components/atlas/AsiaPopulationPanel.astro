@@ -8,7 +8,7 @@ const {regionId,population,active}=Astro.props;
 <section data-population-reading hidden={!active}>
  <p class="eyebrow">Population · 2020</p><h2 data-population-title>人口の分布を読む</h2>
  <p class="asia-takeaway" data-population-takeaway>{asiaPopulationReading[regionId].takeaway}</p>
- <label class="population-picker" hidden>都市を選ぶ<select data-population-city aria-label="人口を見る都市を選ぶ"><option value="">地域の分布を見る</option>{population.cities.map(c=><option value={c.id} data-country={c.country}>{c.name} · {japaneseNames[c.country]}{c.detail?'（詳細図あり）':''}</option>)}</select></label>
+ <label class="population-picker">都市を選ぶ<select data-population-city aria-label="人口を見る都市を選ぶ"><option value="">地域の分布を見る</option>{population.cities.map(c=><option value={c.id} data-country={c.country}>{c.name} · {japaneseNames[c.country]}{c.detail?'（詳細図あり）':''}</option>)}</select></label>
  <p data-population-coverage hidden></p>
  <div class="population-point" data-population-value aria-live="polite">地図上の地点を選ぶと、格子面積当たりの推計人口を表示します。</div>
  <div data-population-city-facts hidden>

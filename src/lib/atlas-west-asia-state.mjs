@@ -4,8 +4,10 @@ const categoryForField=(value,field)=>unavailableCategories[field]?.includes(val
 export function readWestState(search, field, data) {
   const p=new URLSearchParams(search);const fallback=westFields.find(f=>f.id===field)??westFields[1];
   field=fallback.id;
-  const topic=westTopics.find(t=>t.field===field&&t.id===p.get('topic'))?.id??fallback.first;
-  const category=categoryForField(p.get('category'),field);
+  const legacy=categoryForField(p.get('category'),field);
+  const topic=westTopics.find(t=>t.field===field&&t.id===(legacy||p.get('topic')))?.id??fallback.first;
+  const category='';
+  const group=/^[a-zA-Z0-9_.:-]{1,120}$/.test(p.get('group')??'')?p.get('group'):'';
   const country=data.countries.some(c=>c.code===p.get('country'))?p.get('country'):'';
   const city=data.cities.find(c=>c.id===p.get('city')&&(!country||c.countryCode===country))?.id??'';
   const urban=data.urban.cities.find(c=>c.id===p.get('urban')&&(!country||c.countryCode===country))?.id??'';
@@ -14,16 +16,14 @@ export function readWestState(search, field, data) {
   const year=[2020,2021,2022,2023,2024].includes(Number(p.get('year')))?Number(p.get('year')):2024;
   const at=(p.get('at')??'').split(',').map(Number);
   const point=at.length===2&&at.every(Number.isFinite)&&at[0]>=23&&at[0]<=64&&at[1]>=10&&at[1]<=45?at:null;
-  return {field,topic,category,country,city,urban,year,view,basin:p.get('basin')??'',point};
+  return {field,topic,category,group,country,city,urban,year,view,basin:p.get('basin')??'',point};
 }
 export function westSearch(state,targetField=state.field) {
   const p=new URLSearchParams();
   const destination=westFields.find(f=>f.id===targetField)??westFields.find(f=>f.id===state.field)??westFields[1];
   const sameField=destination.id===state.field;
-  p.set('topic',sameField?state.topic:destination.first);
-  const category=sameField?categoryForField(state.category,destination.id):'';
-  if(category)p.set('category',category);
-  for(const key of ['country','city','urban','basin'])if(state[key])p.set(key,state[key]);
+  p.set('topic',sameField?(categoryForField(state.category,destination.id)||state.topic):destination.first);
+  for(const key of ['country','city','urban','basin','group'])if(state[key])p.set(key,state[key]);
   p.set('year',String(state.year));
   if(state.view)p.set('map',state.view.map(n=>Number(n.toFixed(3))).join(','));
   if(state.point)p.set('at',state.point.map(n=>Number(n.toFixed(5))).join(','));
