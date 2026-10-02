@@ -1,0 +1,24 @@
+---
+import CanadaCensusAgricultureMap from './CanadaCensusAgricultureMap.astro';
+import {withBase} from '../../lib/urls';
+---
+<section class="canada-crop-source" data-canada-crop-source hidden>
+ <h2 data-canada-crop-map-title>2021年農業センサスの地域別申告値</h2>
+ <div data-canada-crop-native-slot>
+  <div data-canada-crop-gis>
+   <CanadaCensusAgricultureMap product="canola" products={['canola','wheat','beef','pasture','hay']} hidden />
+   <section data-canada-census-reading hidden aria-label="選んだ統計地域の申告値">
+    <h3 data-canada-census-reading-title></h3>
+    <p data-canada-census-reading-value></p>
+    <details><summary>成分・品質・地域コード</summary><p data-canada-census-reading-quality></p><p data-canada-census-reading-components></p><p data-canada-census-reading-id></p><p><a data-canada-census-reading-source href={withBase('/atlas/north-america/canada/agriculture/')}>2021年の原表</a></p></details>
+   </section>
+  </div>
+ </div>
+ <p class="canada-caption" data-canada-crop-map-key></p>
+</section>
+<style>
+ [data-canada-crop-gis]{min-width:0;width:100%}
+ [data-canada-census-reading]{margin-top:.5rem}
+ [data-canada-census-reading] h3{font-size:1rem;margin:.25rem 0}
+ [data-canada-census-reading] p{margin:.25rem 0}
+</style>

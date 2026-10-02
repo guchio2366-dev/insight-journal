@@ -2,7 +2,9 @@ import canola from '../data/atlas/canada/canola.json';
 import wheat from '../data/atlas/canada/wheat.json';
 import beef from '../data/atlas/canada/beef.json';
 import climate from '../data/atlas/canada/climate.json';
+import census from '../data/atlas/canada/census-agriculture.json';
 import {beefMaps} from '../data/atlas/canada/beef-reading';
+import {readCanadaCensusMapState,writeCanadaCensusMapState,type CanadaCensusMapState,type CanadaCensusProductId} from './atlas-canada-census-map';
 import {readCanadaAgricultureState,writeCanadaAgricultureState,type CanadaAgricultureState} from './atlas-canada-agriculture';
 import {readCanadaBeefState,writeCanadaBeefState,type CanadaBeefState} from './atlas-canada-beef';
 
@@ -14,12 +16,19 @@ export interface CanadaCropComparisonMap {
 }
 export interface CanadaCropComparison {
  crop:CanadaCropId;name:string;state:CanadaCropSourceState;returnUrl:URL;returnLabel:string;sourceLabel:string;maps:CanadaCropComparisonMap[];selectedMap:CanadaCropComparisonMap;
+ censusState:CanadaCensusMapState;product:typeof census.products.canola;productId:CanadaCensusProductId;selectedRegion:typeof census.records[keyof typeof census.records]|null;
 }
 
 const root='/atlas/north-america/canada/';
 const paths:Record<CanadaCropId,string>={canola:root+'agriculture/',wheat:root+'agriculture/wheat/',beef:root+'agriculture/beef/'};
 const names:Record<CanadaCropId,string>={canola:'カノーラ',wheat:'小麦',beef:'肉牛・放牧と飼料'};
-const sourceKeys=['year','province','compare','metric','map','zoom'];
+const sourceKeys=['year','province','compare','metric','map','zoom','ccs','ccsOnly','ccsBounds'];
+const censusIds=Object.keys(census.records);
+function censusState(url:URL){
+ const safe=new URL(url),bounds=safe.searchParams.get('ccsBounds');
+ if(bounds&&(!bounds.split(',').every(value=>value.trim()!==''&&Number.isFinite(Number(value)))||bounds.split(',').length!==4))safe.searchParams.delete('ccsBounds');
+ return readCanadaCensusMapState(safe,censusIds);
+}
 function prefixFor(pathname:string,suffix:string){return pathname.endsWith(suffix)?pathname.slice(0,-suffix.length):null;}
 function sourceState(url:URL,crop:CanadaCropId):CanadaCropSourceState {
  const data=crop==='beef'?beef:crop==='wheat'?wheat:canola,ids=data.provinces.map(p=>p.id);
@@ -27,7 +36,8 @@ function sourceState(url:URL,crop:CanadaCropId):CanadaCropSourceState {
 }
 function cleanSource(url:URL,crop:CanadaCropId){
  const clean=new URL(url.pathname,url),state=sourceState(url,crop);
- return crop==='beef'?writeCanadaBeefState(clean,state as CanadaBeefState):writeCanadaAgricultureState(clean,state as CanadaAgricultureState);
+ const annual=crop==='beef'?writeCanadaBeefState(clean,state as CanadaBeefState):writeCanadaAgricultureState(clean,state as CanadaAgricultureState);
+ return writeCanadaCensusMapState(annual,censusState(url));
 }
 
 /** Carry only the published crop choices. Source comparison and nature comparison use separate URLs. */
@@ -63,7 +73,20 @@ export function readCanadaCropComparison(url:URL):CanadaCropComparison|null {
   description:crop==='wheat'?'全小麦の面積量です。種類別の分布や収量を示しません。':'カノーラの面積量です。生産量や収量を示しません。',
  }];
  const selectedMap=maps.find(m=>m.id===(crop==='beef'?(state as CanadaBeefState).map:crop))!;
- return {crop,name:names[crop],state,returnUrl,sourceLabel,returnLabel:`${sourceLabel}${crop==='beef'?`・${selectedMap.name}図`:''}の比較へ戻る`,maps,selectedMap};
+ const savedCensus=censusState(returnUrl),productId=selectedMap.id as CanadaCensusProductId,product=census.products[productId];
+ const selectedRegion=savedCensus.selected?census.records[savedCensus.selected as keyof typeof census.records]:null;
+ const regionLabel=selectedRegion?`・${selectedRegion.name}（CCS ${selectedRegion.uid}）${savedCensus.only?'のみ':''}`:'';
+ return {crop,name:names[crop],state,returnUrl,sourceLabel,returnLabel:`${sourceLabel}・2021年${product.label}${regionLabel}の比較へ戻る`,maps,selectedMap,censusState:savedCensus,product,productId,selectedRegion};
+}
+
+/** Keep native GIS selection/camera in the sanitized crop return, independent of nature controls. */
+export function writeCanadaCropComparisonCensusState(url:URL,patch:Partial<CanadaCensusMapState>):URL {
+ const comparison=readCanadaCropComparison(url),next=new URL(url);
+ if(!comparison)return next;
+ const changed=writeCanadaCensusMapState(comparison.returnUrl,{...comparison.censusState,...patch});
+ const saved=cleanSource(changed,comparison.crop);
+ next.searchParams.set('cropReturn',saved.pathname+saved.search);
+ return next;
 }
 
 /** Keep the source question short and specific while readers change nature views. */

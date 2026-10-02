@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {bundleCanadaSource} from '../fixtures/bundle-canada-source.mjs';
+import {bundleCanadaCropComparison as bundleCanadaSource} from '../fixtures/bundle-canada-crop-comparison.mjs';
 import {Window} from 'happy-dom';
 const bundled=(file,globalName)=>bundleCanadaSource(file,{globalName});
 const agricultureCode=await bundled('src/scripts/atlas-canada-agriculture.ts','CropController');

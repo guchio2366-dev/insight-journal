@@ -1,0 +1,46 @@
+.canada-census-map[hidden], .canada-census-map [hidden] { display: none !important; }
+.canada-census-map .canada-census-frame { position: relative; width: 100%; height: clamp(320px, calc(100dvh - 420px), 650px); min-height: 320px; overflow: hidden; background: #e4eff0; border: 1px solid #bfd0cf; border-radius: 5px; }
+.canada-census-map .canada-census-fallback, .canada-census-map .canada-census-live { position: absolute; inset: 0; width: 100%; height: 100%; }
+.canada-census-map .canada-census-fallback { display: block; touch-action: pan-y; }
+.canada-census-map .canada-census-context { fill: #edece5; stroke: #94aaaa; stroke-width: .7; }
+.canada-census-map .canada-census-fallback-labels text { fill: #253e42; stroke: #fffdf6; stroke-width: 3; paint-order: stroke; font: 600 16px/1.3 var(--sans, sans-serif); pointer-events: none; }
+.canada-census-map .canada-census-region { cursor: pointer; stroke: #728277; stroke-width: .35; }
+.canada-census-map .canada-census-region.is-selected, .canada-census-map .canada-census-region:focus-visible { stroke: #243f4c; stroke-width: 3; outline: none; }
+.canada-census-map .canada-census-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.canada-census-map .canada-census-label { position: absolute; transform: translate(-50%, -50%); padding: 2px 4px; max-width: 155px; border-radius: 3px; background: rgb(255 253 246 / 86%); color: #253e42; font: 600 11px/1.35 var(--sans, sans-serif); text-align: center; }
+.canada-census-map .canada-census-selector { position: absolute; z-index: 3; top: 62px; left: 10px; width: min(260px, calc(100% - 80px)); padding: 6px; border: 1px solid #a4b8b9; border-radius: 4px; background: rgb(255 255 255 / 95%); color: #253e42; font: 600 12px/1.4 var(--sans, sans-serif); }
+.canada-census-map .canada-census-selector select { display: block; width: 100%; min-height: 36px; margin-top: 3px; color: #253e42; background: white; font: 13px/1.4 var(--sans, sans-serif); }
+.canada-census-map .canada-census-tools { position: absolute; z-index: 3; top: 10px; right: 10px; display: grid; gap: 4px; }
+.canada-census-map .canada-census-tools button { width: 44px; height: 44px; min-height: 44px; padding: 0; border: 1px solid #a4b8b9; border-radius: 4px; background: #fff; color: #253e42; font: 700 13px/1.2 var(--sans, sans-serif); cursor: pointer; box-shadow: 0 1px 3px rgb(34 58 56 / 14%); }
+.canada-census-map .canada-census-tools button[data-canada-census-zoom] { font-size: 22px; }
+.canada-census-map .canada-census-tools button:disabled { opacity: .45; cursor: default; }
+.canada-census-map .canada-census-legend { margin: 8px 0; color: #334a46; font: 12px/1.4 var(--sans, sans-serif); }
+.canada-census-map .canada-census-legend strong { display: block; margin-bottom: 5px; font-weight: 700; }
+.canada-census-map .canada-census-legend ul { display: flex; flex-wrap: wrap; gap: 5px 12px; margin: 0; padding: 0; list-style: none; }
+.canada-census-map .canada-census-legend li { display: inline-flex; align-items: center; gap: 4px; }
+.canada-census-map .canada-census-legend i { flex: 0 0 18px; width: 18px; height: 11px; border: 1px solid #758275; }
+.canada-census-map .canada-census-missing-key { margin-top: 5px !important; }
+.canada-census-map .is-quality-f { background: repeating-linear-gradient(135deg, #e7e0d3 0 4px, #8d8172 4px 5px); }
+.canada-census-map .is-not-covered { background: repeating-linear-gradient(45deg, transparent 0 5px, #919d9b 5px 6px), repeating-linear-gradient(135deg, #d7dcdb 0 5px, #919d9b 5px 6px); }
+.canada-census-map .canada-census-only { display: flex; align-items: center; gap: 6px; min-height: 34px; color: #334a4d; font: 13px/1.5 var(--sans, sans-serif); }
+.canada-census-map .canada-census-status, .canada-census-map .canada-census-caption, .canada-census-map .canada-census-sources { margin: 6px 0; color: #526765; font: 12px/1.65 var(--sans, sans-serif); }
+.canada-census-map .canada-census-sources summary, .canada-census-original summary { cursor: pointer; }
+.canada-census-original { margin-top: 10px; color: #526765; font: 12px/1.65 var(--sans, sans-serif); }
+.canada-census-original .canola-distribution { margin-top: 8px; }
+.canada-census-original .canola-map-scroll { max-height: none; }
+[data-canada-census-reading][hidden] { display: none !important; }
+@media (max-width: 700px) { .canada-census-map .canada-census-frame { height: clamp(360px, 60dvh, 500px); min-height: 360px; } .canada-census-map .canada-census-selector { width: min(220px, calc(100% - 80px)); } }
+
+[data-canada-census-national-header][hidden] { display: none !important; }
+.canada-census-reading-details { margin: 8px 0; color: #526765; font: 12px/1.65 var(--sans, sans-serif); }
+.canada-census-reading-details summary { cursor: pointer; }
+
+.canada-census-map .canada-census-observation { position: absolute; z-index: 2; width: 14px; height: 14px; transform: translate(-50%, -50%); pointer-events: none; }
+.canada-census-map .canada-census-observation > i, .canada-census-map .canada-census-observation-key > i { display: block; width: 14px; height: 14px; border: 2px solid white; border-radius: 50%; background: #254f94; box-shadow: 0 0 0 1px #183860; }
+.canada-census-map .canada-census-observation-label { position: absolute; top: 50%; left: 19px; width: max-content; max-width: 210px; padding: 3px 5px; border: 1px solid #8b9bb1; border-radius: 3px; background: rgb(255 255 255 / 96%); color: #183860; font: 600 12px/1.35 var(--sans, sans-serif); transform: translateY(-50%); }
+.canada-census-map .canada-census-observation.is-left .canada-census-observation-label { left: auto; right: 19px; }
+.canada-census-map .canada-census-observation-key { display: flex; align-items: flex-start; gap: 7px; margin: 6px 0; color: #183860; font: 12px/1.4 var(--sans, sans-serif); }
+.canada-census-map .canada-census-observation-key > i { flex: 0 0 14px; margin: 2px 1px; }
+.canada-census-map .canada-census-observation-key strong { font-weight: 600; }
+
+.canada-census-map .canada-census-selector .canada-census-selected-value { display: block; margin-top: 5px; color: #243f4c; font: 600 13px/1.35 var(--sans, sans-serif); }
