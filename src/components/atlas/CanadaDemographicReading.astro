@@ -1,0 +1,11 @@
+---
+import {withBase} from '../../lib/urls';
+---
+<div data-demographic-reading hidden>
+ <header class="canada-national-header"><p class="atlas-eyebrow">Canada · 2021 Census</p><h2 data-demographic-heading>都市圏ごとの人口集団</h2><p class="canada-lead" data-demographic-lead>同じ集団を選び、都市圏ごとの割合の違いを比べる。</p></header>
+ <p class="population-comparison" data-demographic-comparison aria-live="polite"></p>
+ <p class="demographic-national" data-demographic-national></p>
+ <p class="population-main-reading population-reading-links"><a data-demographic-population-link href={withBase('/atlas/north-america/canada/population/?year=2021')}>2021年の都市圏人口と照合：割合と人数を分けて読む</a></p>
+ <p class="demographic-definition" data-demographic-definition></p>
+ <details><summary>分布の読み方と、分類の定義</summary><p data-demographic-explanation></p><p data-demographic-classification></p><p>割合は、選んだ集団の人数を同じ表・同じ都市圏の私的世帯人口で割った値です。全住民の人口総数とは分母が異なります。25%標本の加重推計値を使用し、公表時の丸めを調整していません。公表0には丸めによる0も含まれ、欠測・秘匿を0に置き換えません。</p><p data-demographic-quality></p></details>
+</div>

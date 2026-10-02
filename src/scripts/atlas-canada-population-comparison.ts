@@ -1,9 +1,10 @@
 import {readCanadaPopulationState,writeCanadaPopulationState,formatCanadaPopulationValue,canadaPopulationDensityColor,canadaPopulationFrame,populationDensityColors} from '../lib/atlas-canada-population';
 import type {CanadaNatureState} from '../lib/atlas-canada-nature';
+import {isCanadaDemographicTopic} from '../lib/atlas-canada-demographics';
 
 export function renderPopulationNatureComparison(root:HTMLElement,config:any,nature:CanadaNatureState){
  const physical=nature.view==='landform'||nature.view==='elevation';
- const raw=new URL(location.href).searchParams.get('populationReturn'),context=root.querySelector<HTMLElement>('[data-canada-population-context]')!,layer=root.querySelector<SVGElement>('[data-canada-population-context-map]')!,legend=root.querySelector<HTMLElement>('[data-canada-population-context-legend]')!,back=root.querySelector<HTMLAnchorElement>('[data-canada-population-return]')!,mini=root.querySelector<SVGSVGElement>('[data-canada-population-context-mini-map]')!;
+ const requested=new URL(location.href).searchParams.get('populationReturn'),raw=requested&&!isCanadaDemographicTopic(new URL('?'+requested,location.href).searchParams.get('topic'))?requested:null,context=root.querySelector<HTMLElement>('[data-canada-population-context]')!,layer=root.querySelector<SVGElement>('[data-canada-population-context-map]')!,legend=root.querySelector<HTMLElement>('[data-canada-population-context-legend]')!,back=root.querySelector<HTMLAnchorElement>('[data-canada-population-return]')!,mini=root.querySelector<SVGSVGElement>('[data-canada-population-context-mini-map]')!;
  context.hidden=back.hidden=!raw;legend.hidden=!raw||physical;layer.style.display=raw&&!physical?'':'none';mini.style.display=raw&&physical?'':'none';
  const position=root.querySelector<HTMLElement>('[data-canada-position-caption]')!;position.dataset.originalCaption??=position.textContent!;position.textContent=raw?'小さい点は気候観測地点。人口円の中心は都市圏の表示用位置で、都心や居住地点ではありません。位置図は等緯度経度表示で、面積の測定には使いません。':position.dataset.originalCaption;
  if(!raw)return false;

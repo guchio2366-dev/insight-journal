@@ -1,0 +1,12 @@
+{
+  "url": "https://www150.statcan.gc.ca/t1/wds/rest/getCubeMetadata",
+  "responseUrl": "https://www150.statcan.gc.ca/t1/wds/rest/getCubeMetadata",
+  "status": 200,
+  "bytes": 737426,
+  "accessedAt": "2026-10-02T11:05:39.285Z",
+  "payload": [
+    {
+      "productId": 98100324
+    }
+  ]
+}

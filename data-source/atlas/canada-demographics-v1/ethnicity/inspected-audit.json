@@ -1,0 +1,320 @@
+{
+  "geographies": 42,
+  "cmas": 41,
+  "groupCategories": 14,
+  "expectedCells": 630,
+  "originalCsvCells": 629,
+  "recoveredOfficialDisplayZeroCells": 1,
+  "adoptedCells": 630,
+  "nullCells": 0,
+  "zeroCells": 1,
+  "statusValues": [
+    ""
+  ],
+  "symbolValues": [
+    ""
+  ],
+  "vectorValues": [
+    ""
+  ],
+  "decimals": [
+    "0"
+  ],
+  "roundingDifferences": [
+    {
+      "id": "Canada",
+      "dguid": "2021A000011124",
+      "denominator": 36328475,
+      "sumOfGroups": 36328465,
+      "difference": -10
+    },
+    {
+      "id": "535",
+      "dguid": "2021S0503535",
+      "denominator": 6142885,
+      "sumOfGroups": 6142875,
+      "difference": -10
+    },
+    {
+      "id": "462",
+      "dguid": "2021S0503462",
+      "denominator": 4206455,
+      "sumOfGroups": 4206455,
+      "difference": 0
+    },
+    {
+      "id": "933",
+      "dguid": "2021S0503933",
+      "denominator": 2607015,
+      "sumOfGroups": 2607005,
+      "difference": -10
+    },
+    {
+      "id": "505",
+      "dguid": "2021S0503505",
+      "denominator": 1464495,
+      "sumOfGroups": 1464505,
+      "difference": 10
+    },
+    {
+      "id": "825",
+      "dguid": "2021S0503825",
+      "denominator": 1465180,
+      "sumOfGroups": 1465165,
+      "difference": -15
+    },
+    {
+      "id": "835",
+      "dguid": "2021S0503835",
+      "denominator": 1397750,
+      "sumOfGroups": 1397740,
+      "difference": -10
+    },
+    {
+      "id": "421",
+      "dguid": "2021S0503421",
+      "denominator": 817105,
+      "sumOfGroups": 817100,
+      "difference": -5
+    },
+    {
+      "id": "602",
+      "dguid": "2021S0503602",
+      "denominator": 819715,
+      "sumOfGroups": 819720,
+      "difference": 5
+    },
+    {
+      "id": "537",
+      "dguid": "2021S0503537",
+      "denominator": 773440,
+      "sumOfGroups": 773450,
+      "difference": 10
+    },
+    {
+      "id": "541",
+      "dguid": "2021S0503541",
+      "denominator": 568065,
+      "sumOfGroups": 568070,
+      "difference": 5
+    },
+    {
+      "id": "555",
+      "dguid": "2021S0503555",
+      "denominator": 535780,
+      "sumOfGroups": 535775,
+      "difference": -5
+    },
+    {
+      "id": "205",
+      "dguid": "2021S0503205",
+      "denominator": 461140,
+      "sumOfGroups": 461125,
+      "difference": -15
+    },
+    {
+      "id": "539",
+      "dguid": "2021S0503539",
+      "denominator": 425480,
+      "sumOfGroups": 425480,
+      "difference": 0
+    },
+    {
+      "id": "559",
+      "dguid": "2021S0503559",
+      "denominator": 415505,
+      "sumOfGroups": 415510,
+      "difference": 5
+    },
+    {
+      "id": "532",
+      "dguid": "2021S0503532",
+      "denominator": 411405,
+      "sumOfGroups": 411410,
+      "difference": 5
+    },
+    {
+      "id": "935",
+      "dguid": "2021S0503935",
+      "denominator": 388470,
+      "sumOfGroups": 388485,
+      "difference": 15
+    },
+    {
+      "id": "725",
+      "dguid": "2021S0503725",
+      "denominator": 311515,
+      "sumOfGroups": 311505,
+      "difference": -10
+    },
+    {
+      "id": "705",
+      "dguid": "2021S0503705",
+      "denominator": 244950,
+      "sumOfGroups": 244950,
+      "difference": 0
+    },
+    {
+      "id": "433",
+      "dguid": "2021S0503433",
+      "denominator": 220105,
+      "sumOfGroups": 220095,
+      "difference": -10
+    },
+    {
+      "id": "915",
+      "dguid": "2021S0503915",
+      "denominator": 218525,
+      "sumOfGroups": 218530,
+      "difference": 5
+    },
+    {
+      "id": "568",
+      "dguid": "2021S0503568",
+      "denominator": 210150,
+      "sumOfGroups": 210155,
+      "difference": 5
+    },
+    {
+      "id": "001",
+      "dguid": "2021S0503001",
+      "denominator": 208815,
+      "sumOfGroups": 208825,
+      "difference": 10
+    },
+    {
+      "id": "932",
+      "dguid": "2021S0503932",
+      "denominator": 192115,
+      "sumOfGroups": 192110,
+      "difference": -5
+    },
+    {
+      "id": "521",
+      "dguid": "2021S0503521",
+      "denominator": 168075,
+      "sumOfGroups": 168065,
+      "difference": -10
+    },
+    {
+      "id": "580",
+      "dguid": "2021S0503580",
+      "denominator": 167615,
+      "sumOfGroups": 167615,
+      "difference": 0
+    },
+    {
+      "id": "550",
+      "dguid": "2021S0503550",
+      "denominator": 163485,
+      "sumOfGroups": 163490,
+      "difference": 5
+    },
+    {
+      "id": "408",
+      "dguid": "2021S0503408",
+      "denominator": 157895,
+      "sumOfGroups": 157900,
+      "difference": 5
+    },
+    {
+      "id": "442",
+      "dguid": "2021S0503442",
+      "denominator": 155535,
+      "sumOfGroups": 155540,
+      "difference": 5
+    },
+    {
+      "id": "305",
+      "dguid": "2021S0503305",
+      "denominator": 154245,
+      "sumOfGroups": 154245,
+      "difference": 0
+    },
+    {
+      "id": "543",
+      "dguid": "2021S0503543",
+      "denominator": 141905,
+      "sumOfGroups": 141905,
+      "difference": 0
+    },
+    {
+      "id": "310",
+      "dguid": "2021S0503310",
+      "denominator": 128385,
+      "sumOfGroups": 128405,
+      "difference": 20
+    },
+    {
+      "id": "529",
+      "dguid": "2021S0503529",
+      "denominator": 125995,
+      "sumOfGroups": 125985,
+      "difference": -10
+    },
+    {
+      "id": "810",
+      "dguid": "2021S0503810",
+      "denominator": 120500,
+      "sumOfGroups": 120500,
+      "difference": 0
+    },
+    {
+      "id": "595",
+      "dguid": "2021S0503595",
+      "denominator": 120960,
+      "sumOfGroups": 120950,
+      "difference": -10
+    },
+    {
+      "id": "938",
+      "dguid": "2021S0503938",
+      "denominator": 112405,
+      "sumOfGroups": 112410,
+      "difference": 5
+    },
+    {
+      "id": "925",
+      "dguid": "2021S0503925",
+      "denominator": 110545,
+      "sumOfGroups": 110560,
+      "difference": 15
+    },
+    {
+      "id": "930",
+      "dguid": "2021S0503930",
+      "denominator": 111560,
+      "sumOfGroups": 111570,
+      "difference": 10
+    },
+    {
+      "id": "522",
+      "dguid": "2021S0503522",
+      "denominator": 109245,
+      "sumOfGroups": 109250,
+      "difference": 5
+    },
+    {
+      "id": "320",
+      "dguid": "2021S0503320",
+      "denominator": 107160,
+      "sumOfGroups": 107165,
+      "difference": 5
+    },
+    {
+      "id": "447",
+      "dguid": "2021S0503447",
+      "denominator": 98570,
+      "sumOfGroups": 98560,
+      "difference": -10
+    },
+    {
+      "id": "830",
+      "dguid": "2021S0503830",
+      "denominator": 98045,
+      "sumOfGroups": 98030,
+      "difference": -15
+    }
+  ],
+  "maxAbsoluteRoundingDifference": 20
+}

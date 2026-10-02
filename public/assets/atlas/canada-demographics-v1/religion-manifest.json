@@ -1,0 +1,574 @@
+{
+  "version": "canada-demographics-v1",
+  "topic": "religion",
+  "year": 2021,
+  "source": {
+    "tableId": "98-10-0353-02",
+    "pid": "98100353",
+    "viewPid": "9810035302",
+    "url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=9810035302",
+    "title": "Religion by gender and age: Census metropolitan areas and census agglomerations",
+    "releaseDate": "2023-06-21",
+    "accessedAt": "2026-10-02T11:07:38.6649985Z",
+    "universe": "Persons in private households in occupied private dwellings, 2021 Census — 25% Sample data",
+    "sample": "2021 Census long-form 25% sample, weighted estimates of persons in private households; all ages and total gender.",
+    "licenceUrl": "https://www.statcan.gc.ca/en/terms-conditions/open-licence",
+    "attribution": "Adapted from Statistics Canada, Religion by gender and age: Census metropolitan areas and census agglomerations (Table 98-10-0353-02), 2021. This does not constitute an endorsement by Statistics Canada of this product.",
+    "rounding": "Census tabulation counts undergo random rounding. Derived percentages use this table’s Total - Religion denominator; category totals and percentages may differ slightly from the denominator and 100%. A published rounded zero is preserved as zero.",
+    "roundingUrl": "https://www12.statcan.gc.ca/census-recensement/2021/ref/98-304/2021001/chap10-eng.cfm",
+    "definitionUrl": "https://www12.statcan.gc.ca/census-recensement/2021/ref/98-500/016/98-500-x2021016-eng.pdf",
+    "definitions": {
+      "affiliation": "Religion is a person’s self-identified connection or affiliation with a religious denomination, group, body, community or belief system. It is not limited to formal membership. Respondents were asked to report their affiliation even if they were not currently practising.",
+      "denominator": "The published Total - Religion count for the same geography, 2021, Total - Age, Total - Gender and 2021 Counts. This differs from whole-population census counts.",
+      "children": "For infants and children, religion refers to the religion or denomination in which they are being raised, if any.",
+      "hierarchy": "The nine displayed categories are immediate children of Total - Religion. Christian includes its denominations; denominations are retained only in the extraction CSV and are not added to the Christian parent."
+    },
+    "footnotes": [
+      {
+        "id": "6",
+        "text": "Religion  Religion refers to the person's self-identification as having a connection or affiliation with any religious denomination, group, body, or other religiously defined community or system of belief. Religion is not limited to formal membership in a religious organization or group.  For infants or children, religion refers to the specific religious group or denomination in which they are being raised, if any.  Persons without a religious connection or affiliation can self-identify as atheist, agnostic or humanist, or can provide another applicable response."
+      },
+      {
+        "id": "7",
+        "text": "For more information on religion variables, including information on their classifications, the questions from which they are derived, data quality and their comparability with other sources of data, please refer to the Religion Reference Guide, Census of Population, 2021."
+      }
+    ]
+  },
+  "selection": {
+    "geographies": 42,
+    "cmas": 41,
+    "national": 1,
+    "ageId": 1,
+    "genderId": 1,
+    "statisticsId": 1,
+    "religionIds": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "19",
+      "20",
+      "21",
+      "22",
+      "23",
+      "24",
+      "25"
+    ],
+    "displayedGroupIds": [
+      "2",
+      "3",
+      "19",
+      "20",
+      "21",
+      "22",
+      "23",
+      "24",
+      "25"
+    ],
+    "rows": 1050,
+    "originalSelectedCsvRows": 1033
+  },
+  "missingPolicy": "Empty or unavailable numeric values remain null. Published zero remains zero. Seventeen CSV-omitted coordinates are retained only after matching the exact official geography/religion table cell with value 0.0, formattedValue 0 and empty reference. This is not zero imputation. All status/symbol, coordinate, DGUID and official geographic quality attributes are retained.",
+  "geographyJoin": "Exact official 2021 classificationCode and geoLevel 503, then exact DGUID against existing population atlas. Ottawa - Gatineau is member 85 / CMA 505 / DGUID 2021S0503505; provincial part members 86 and 87 are excluded.",
+  "checks": {
+    "uniqueCmas": 41,
+    "selectedCells": 1050,
+    "rawCsvCellsCrossCheckedAgainstOfficialHtml": 1033,
+    "verifiedExplicitZeros": 17,
+    "displayedGroupExplicitZeros": 5,
+    "missingValues": 0,
+    "flaggedGeographies": [
+      {
+        "id": "Canada",
+        "dguid": "2021A000011124",
+        "codes": [
+          "20000"
+        ],
+        "notes": [
+          "Excludes census data for one or more incompletely enumerated reserves or settlements."
+        ],
+        "tnr": {
+          "longForm": 4.3,
+          "shortForm": 3.1
+        }
+      },
+      {
+        "id": "462",
+        "dguid": "2021S0503462",
+        "codes": [
+          "20000"
+        ],
+        "notes": [
+          "Excludes census data for one or more incompletely enumerated reserves or settlements."
+        ],
+        "tnr": {
+          "longForm": 3.4,
+          "shortForm": 2.6
+        }
+      },
+      {
+        "id": "933",
+        "dguid": "2021S0503933",
+        "codes": [
+          "20000"
+        ],
+        "notes": [
+          "Excludes census data for one or more incompletely enumerated reserves or settlements."
+        ],
+        "tnr": {
+          "longForm": 3.9,
+          "shortForm": 3
+        }
+      },
+      {
+        "id": "825",
+        "dguid": "2021S0503825",
+        "codes": [
+          "20000"
+        ],
+        "notes": [
+          "Excludes census data for one or more incompletely enumerated reserves or settlements."
+        ],
+        "tnr": {
+          "longForm": 3.7,
+          "shortForm": 2.5
+        }
+      },
+      {
+        "id": "543",
+        "dguid": "2021S0503543",
+        "codes": [
+          "20000"
+        ],
+        "notes": [
+          "Excludes census data for one or more incompletely enumerated reserves or settlements."
+        ],
+        "tnr": {
+          "longForm": 3.7,
+          "shortForm": 2.5
+        }
+      }
+    ],
+    "categorySumResidualRange": [
+      -15,
+      10
+    ],
+    "categorySumResiduals": [
+      {
+        "id": "Canada",
+        "difference": 0
+      },
+      {
+        "id": "535",
+        "difference": 5
+      },
+      {
+        "id": "462",
+        "difference": -5
+      },
+      {
+        "id": "933",
+        "difference": 10
+      },
+      {
+        "id": "505",
+        "difference": 5
+      },
+      {
+        "id": "825",
+        "difference": 0
+      },
+      {
+        "id": "835",
+        "difference": -5
+      },
+      {
+        "id": "421",
+        "difference": 5
+      },
+      {
+        "id": "602",
+        "difference": 5
+      },
+      {
+        "id": "537",
+        "difference": -5
+      },
+      {
+        "id": "541",
+        "difference": 5
+      },
+      {
+        "id": "555",
+        "difference": 10
+      },
+      {
+        "id": "205",
+        "difference": -10
+      },
+      {
+        "id": "539",
+        "difference": -5
+      },
+      {
+        "id": "559",
+        "difference": 0
+      },
+      {
+        "id": "532",
+        "difference": 5
+      },
+      {
+        "id": "935",
+        "difference": -5
+      },
+      {
+        "id": "725",
+        "difference": -5
+      },
+      {
+        "id": "705",
+        "difference": 5
+      },
+      {
+        "id": "433",
+        "difference": -15
+      },
+      {
+        "id": "915",
+        "difference": -5
+      },
+      {
+        "id": "568",
+        "difference": 0
+      },
+      {
+        "id": "001",
+        "difference": 5
+      },
+      {
+        "id": "932",
+        "difference": 0
+      },
+      {
+        "id": "521",
+        "difference": 5
+      },
+      {
+        "id": "580",
+        "difference": -5
+      },
+      {
+        "id": "550",
+        "difference": -5
+      },
+      {
+        "id": "408",
+        "difference": -5
+      },
+      {
+        "id": "442",
+        "difference": 0
+      },
+      {
+        "id": "305",
+        "difference": -15
+      },
+      {
+        "id": "543",
+        "difference": -10
+      },
+      {
+        "id": "310",
+        "difference": 5
+      },
+      {
+        "id": "529",
+        "difference": 5
+      },
+      {
+        "id": "810",
+        "difference": -10
+      },
+      {
+        "id": "595",
+        "difference": 5
+      },
+      {
+        "id": "938",
+        "difference": 0
+      },
+      {
+        "id": "925",
+        "difference": 0
+      },
+      {
+        "id": "930",
+        "difference": 5
+      },
+      {
+        "id": "522",
+        "difference": -10
+      },
+      {
+        "id": "320",
+        "difference": -10
+      },
+      {
+        "id": "447",
+        "difference": 0
+      },
+      {
+        "id": "830",
+        "difference": -5
+      }
+    ]
+  },
+  "explicitZeroEvidence": [
+    {
+      "coordinate": "50.1.1.1.16",
+      "dguid": "2021S0503433",
+      "geography": "Sherbrooke (CMA), Que.",
+      "religionId": "16",
+      "religion": "Reformed",
+      "displayedValue": "0.0",
+      "formattedValue": "0",
+      "reference": ""
+    },
+    {
+      "coordinate": "50.1.1.1.23",
+      "dguid": "2021S0503433",
+      "geography": "Sherbrooke (CMA), Que.",
+      "religionId": "23",
+      "religion": "Traditional (North American Indigenous) spirituality",
+      "displayedValue": "0.0",
+      "formattedValue": "0",
+      "reference": ""
+    },
+    {
+      "coordinate": "42.1.1.1.5",
+      "dguid": "2021S0503408",
+      "geography": "Saguenay (CMA), Que.",
+      "religionId": "5",
+      "religion": "Anabaptist",
+      "displayedValue": "0.0",
+      "formattedValue": "0",
+      "reference": ""
+    },
+    {
+      "coordinate": "42.1.1.1.12",
+      "dguid": "2021S0503408",
+      "geography": "Saguenay (CMA), Que.",
+      "religionId": "12",
+      "religion": "Lutheran",
+      "displayedValue": "0.0",
+      "formattedValue": "0",
+      "reference": ""
+    },
+    {
+      "coordinate": "42.1.1.1.13",
+      "dguid": "2021S0503408",
+      "geography": "Saguenay (CMA), Que.",
+      "religionId": "13",
+      "religion": "Methodist and Wesleyan (Holiness)",
+      "displayedValue": "0.0",
+      "formattedValue": "0",
+      "reference": ""
+    },
+    {
+      "coordinate": "42.1.1.1.16",
+      "dguid": "2021S0503408",
+      "geography": "Saguenay (CMA), Que.",
+      "religionId": "16",
+      "religion": "Reformed",
+      "displayedValue": "0.0",
+      "formattedValue": "0",
+      "reference": ""
+    },
+    {
+      "coordinate": "42.1.1.1.22",
+      "dguid": "2021S0503408",
+      "geography": "Saguenay (CMA), Que.",
+      "religionId": "22",
+      "religion": "Sikh",
+      "displayedValue": "0.0",
+      "formattedValue": "0",
+      "reference": ""
+    },
+    {
+      "coordinate": "53.1.1.1.22",
+      "dguid": "2021S0503442",
+      "geography": "Trois-Rivières (CMA), Que.",
+      "religionId": "22",
+      "religion": "Sikh",
+      "displayedValue": "0.0",
+      "formattedValue": "0",
+      "reference": ""
+    },
+    {
+      "coordinate": "24.1.1.1.16",
+      "dguid": "2021S0503305",
+      "geography": "Moncton (CMA), N.B.",
+      "religionId": "16",
+      "religion": "Reformed",
+      "displayedValue": "0.0",
+      "formattedValue": "0",
+      "reference": ""
+    },
+    {
+      "coordinate": "25.1.1.1.5",
+      "dguid": "2021S0503310",
+      "geography": "Saint John (CMA), N.B.",
+      "religionId": "5",
+      "religion": "Anabaptist",
+      "displayedValue": "0.0",
+      "formattedValue": "0",
+      "reference": ""
+    },
+    {
+      "coordinate": "25.1.1.1.16",
+      "dguid": "2021S0503310",
+      "geography": "Saint John (CMA), N.B.",
+      "religionId": "16",
+      "religion": "Reformed",
+      "displayedValue": "0.0",
+      "formattedValue": "0",
+      "reference": ""
+    },
+    {
+      "coordinate": "32.1.1.1.5",
+      "dguid": "2021S0503447",
+      "geography": "Drummondville (CMA), Que.",
+      "religionId": "5",
+      "religion": "Anabaptist",
+      "displayedValue": "0.0",
+      "formattedValue": "0",
+      "reference": ""
+    },
+    {
+      "coordinate": "32.1.1.1.13",
+      "dguid": "2021S0503447",
+      "geography": "Drummondville (CMA), Que.",
+      "religionId": "13",
+      "religion": "Methodist and Wesleyan (Holiness)",
+      "displayedValue": "0.0",
+      "formattedValue": "0",
+      "reference": ""
+    },
+    {
+      "coordinate": "32.1.1.1.15",
+      "dguid": "2021S0503447",
+      "geography": "Drummondville (CMA), Que.",
+      "religionId": "15",
+      "religion": "Presbyterian",
+      "displayedValue": "0.0",
+      "formattedValue": "0",
+      "reference": ""
+    },
+    {
+      "coordinate": "32.1.1.1.16",
+      "dguid": "2021S0503447",
+      "geography": "Drummondville (CMA), Que.",
+      "religionId": "16",
+      "religion": "Reformed",
+      "displayedValue": "0.0",
+      "formattedValue": "0",
+      "reference": ""
+    },
+    {
+      "coordinate": "32.1.1.1.19",
+      "dguid": "2021S0503447",
+      "geography": "Drummondville (CMA), Que.",
+      "religionId": "19",
+      "religion": "Hindu",
+      "displayedValue": "0.0",
+      "formattedValue": "0",
+      "reference": ""
+    },
+    {
+      "coordinate": "32.1.1.1.22",
+      "dguid": "2021S0503447",
+      "geography": "Drummondville (CMA), Que.",
+      "religionId": "22",
+      "religion": "Sikh",
+      "displayedValue": "0.0",
+      "formattedValue": "0",
+      "reference": ""
+    }
+  ],
+  "sources": [
+    {
+      "file": "selected-counts-9810035302.csv",
+      "url": "https://www150.statcan.gc.ca/t1/tbl1/en/dtl!downloadDbLoadingData-nonTraduit.action?pid=9810035302&latestN=1&startDate=&endDate=&csvLocale=en&selectedMembers=%5B%5B1%2C100%2C37%2C166%2C85%2C123%2C126%2C38%2C110%2C70%2C78%2C79%2C12%2C95%2C102%2C84%2C168%2C117%2C116%2C50%2C151%2C57%2C6%2C142%2C77%2C68%2C69%2C42%2C53%2C24%2C59%2C25%2C91%2C130%2C97%2C153%2C150%2C144%2C58%2C22%2C32%2C136%5D%2C%5B1%5D%2C%5B1%5D%2C%5B1%5D%2C%5B1%2C2%2C3%2C4%2C5%2C6%2C7%2C8%2C9%2C10%2C11%2C12%2C13%2C14%2C15%2C16%2C17%2C18%2C19%2C20%2C21%2C22%2C23%2C24%2C25%5D%5D&checkedLevels=",
+      "bytes": 174965,
+      "sha256": "3ca68c718ec4d6436efea86a025c58baf643318208da27a063f5bf31d2a1a4eb"
+    },
+    {
+      "file": "table-9810035302.html",
+      "url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=9810035302",
+      "bytes": 774743,
+      "sha256": "c48166fc7b113e250eaeff8df84e56898bfc3fa09cb79c94d4c60d46715de166"
+    },
+    {
+      "file": "wds-metadata-98100353.json",
+      "url": "https://www150.statcan.gc.ca/t1/wds/rest/getCubeMetadata",
+      "method": "POST",
+      "body": [
+        {
+          "productId": 98100353
+        }
+      ],
+      "bytes": 703016,
+      "sha256": "89c983aaaeaa1398d057c7465bc94996861eccbc5a05d4878b05ab71a7f8da7a"
+    },
+    {
+      "file": "selected-request.json",
+      "url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=9810035302",
+      "bytes": 24261,
+      "sha256": "82748eea3c81da0c45dcb3bd7f46edaf877e43d6a3e31d6273f2e3318ea54e32"
+    },
+    {
+      "file": "religion-reference-guide.pdf",
+      "url": "https://www12.statcan.gc.ca/census-recensement/2021/ref/98-500/016/98-500-x2021016-eng.pdf",
+      "bytes": 429220,
+      "sha256": "55a85c7a012b03c2141f2f9f304419b0d853ff323d4c56e228de8df399d47211"
+    },
+    {
+      "file": "statcan-open-licence.html",
+      "url": "https://www.statcan.gc.ca/en/terms-conditions/open-licence",
+      "bytes": 27005,
+      "sha256": "2e9cfa14534c14c27fcfc75c20a3dfcf447ad5d6e379e37ef765607d69587c88"
+    },
+    {
+      "file": "census-guide-dissem-chap10.html",
+      "url": "https://www12.statcan.gc.ca/census-recensement/2021/ref/98-304/2021001/chap10-eng.cfm",
+      "bytes": 68508,
+      "sha256": "bba59b240442435326f3774178e9b8cfc6a176fa828ab955aa737830e44c7e25"
+    }
+  ],
+  "assets": [
+    {
+      "file": "religion-selected.csv",
+      "bytes": 202100,
+      "sha256": "2452799b01dbd6eab86e288e6ed85d5377d57a2189386f4a0e8bb8de3ff0fbfe"
+    }
+  ],
+  "output": {
+    "file": "src/data/atlas/canada/demographics-religion.json",
+    "sha256": "bd5da6aae8c9e09ba7fcbfde0fb33e95883fd5ad8079237ce3922bc136f5de2c"
+  }
+}
