@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "product": "BasinATLAS version 1.0, level 04, global source sub-basins contributing to the 45-country display frame",
+  "officialProductUrl": "https://www.hydrosheds.org/hydroatlas",
+  "doi": "https://doi.org/10.6084/m9.figshare.9890531.v1",
+  "officialApiUrl": "https://api.figshare.com/v2/articles/9890531",
+  "metadataSha256": "87ed43e0dd02e6fba1228566878b17e1ad35d9a903f1ef4d26eb9dc2a9a45e38",
+  "officialArchive": {
+    "id": 20087237,
+    "name": "BasinATLAS_Data_v10_shp.zip",
+    "bytes": 4276492333,
+    "publisherMd5": "ce5013294bdcb6f884ff6cdf1a1acae0",
+    "wholeArchiveRetrieved": false,
+    "wholeArchiveMd5Verified": false
+  },
+  "acquisition": "Normal HTTP GET with exact bounded Range via the official Figshare download_url; only level 03/04 SHP, DBF, PRJ, SHX entries and 64 KiB archive tail obtained",
+  "centralDirectory": {
+    "offset": 4276482885,
+    "bytes": 9426,
+    "tailRange": [
+      4276426797,
+      4276492332
+    ],
+    "tailBytes": 65536,
+    "tailSha256": "21931ba32ee4f30c1a514c6d918edd59c18822829c7a41d1c2c9ea16d1862fd0"
+  },
+  "files": [
+    {
+      "name": "BasinATLAS_v10_shp/BasinATLAS_v10_lev04.dbf",
+      "sourceFilename": "BasinATLAS_v10_lev04.dbf",
+      "bytes": 1874822,
+      "compressedBytes": 435483,
+      "localHeaderOffset": 131262904,
+      "fetchedRanges": [
+        [
+          131262904,
+          131262933
+        ],
+        [
+          131262934,
+          131698459
+        ]
+      ],
+      "crc32": "c75b760b",
+      "crc32Verified": true,
+      "sha256": "bbfe321f47bea310fac2331091e145f4c96dccdab9013025db66e6c72973d48a",
+      "compressedSha256": "6a63784a1e8b0207b370815c5228b945c594df4697717382e4b8d95b2541744d"
+    },
+    {
+      "name": "BasinATLAS_v10_shp/BasinATLAS_v10_lev04.prj",
+      "sourceFilename": "BasinATLAS_v10_lev04.prj",
+      "bytes": 145,
+      "compressedBytes": 121,
+      "localHeaderOffset": 131698460,
+      "fetchedRanges": [
+        [
+          131698460,
+          131698489
+        ],
+        [
+          131698490,
+          131698653
+        ]
+      ],
+      "crc32": "af437f55",
+      "crc32Verified": true,
+      "sha256": "a02a27b1d1982c8516d83398e85a3c8b1aef1713c13ef4d84d7bde17430c07c4",
+      "compressedSha256": "90cd7a8c7245e341d429f5f33be416b0e38bc146acdbc2d35782319cbac1d7f3"
+    },
+    {
+      "name": "BasinATLAS_v10_shp/BasinATLAS_v10_lev04.shp",
+      "sourceFilename": "BasinATLAS_v10_lev04.shp",
+      "bytes": 75437640,
+      "compressedBytes": 49979529,
+      "localHeaderOffset": 131708508,
+      "fetchedRanges": [
+        [
+          131708508,
+          131708537
+        ],
+        [
+          131708538,
+          181688109
+        ]
+      ],
+      "crc32": "b0d7ca67",
+      "crc32Verified": true,
+      "sha256": "8eaf6b93575654dfedcae985a0c592c534e5cb2239fe5ad9daeba3355f6057ad",
+      "compressedSha256": "05d07135e199475782bf668b7276c161250dfcd772381e6dbdcda544112db228"
+    },
+    {
+      "name": "BasinATLAS_v10_shp/BasinATLAS_v10_lev04.shx",
+      "sourceFilename": "BasinATLAS_v10_lev04.shx",
+      "bytes": 10836,
+      "compressedBytes": 8653,
+      "localHeaderOffset": 181688110,
+      "fetchedRanges": [
+        [
+          181688110,
+          181688139
+        ],
+        [
+          181688140,
+          181696835
+        ]
+      ],
+      "crc32": "6620fc4f",
+      "crc32Verified": true,
+      "sha256": "44614539176b73e4cfbff12cc035375eb62c63fe2c9233ac1036a1a91cd2bd97",
+      "compressedSha256": "aaa1fb17b0d4be19072d18944e3099474364f560c7473677f402924f8c77445d"
+    }
+  ],
+  "noSourceSubstitution": "Actual BasinATLAS archive entries were acquired and independently checked; no earlier HydroBASINS bytes were renamed or re-licensed.",
+  "licenseEvidence": {
+    "officialProductStatesCcBy40": true,
+    "figshareArticle": {
+      "id": 9890531,
+      "title": "HydroATLAS version 1.0",
+      "doi": "10.6084/m9.figshare.9890531.v1",
+      "authors": [
+        "Bernhard Lehner",
+        "Simon Linke",
+        "Michele Thieme"
+      ],
+      "license": {
+        "value": 1,
+        "name": "CC BY 4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "publishedDate": "2019-12-07T00:50:22Z"
+    },
+    "documentSection": "HydroATLAS Technical Documentation v1.0.1, section 4.1",
+    "checkedAt": "2026-10-02"
+  }
+}

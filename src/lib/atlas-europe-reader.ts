@@ -1,6 +1,9 @@
 import type { EuropeLayer } from '../data/atlas/europe/layers';
 import { climateFarming, cityFarming } from '../data/atlas/europe/climate-farming.ts';
 import { europeReadings } from '../data/atlas/europe/readings.ts';
+import { europeTreeCoverReading } from '../data/atlas/europe/tree-cover-reading.ts';
+import { europePrecipitationReading } from '../data/atlas/europe/water-reading.ts';
+import { drainageReading } from '../data/atlas/europe/drainage-reading.ts';
 
 type ReaderMessage = { takeaway: string; body: string };
 type ReaderSource = { url: string; label: string };
@@ -41,6 +44,9 @@ const factualSources: Record<string, ReaderSource[]> = {
 
 /** Sources for the reader's factual examples, separate from the map-data link. */
 export function europeReaderSources(layer: EuropeLayer): ReaderSource[] {
+  if(layer.id==='treecover')return europeTreeCoverReading.sources;
+  if(layer.id==='precipitation')return europePrecipitationReading.sources;
+  if(layer.id==='drainage')return drainageReading.sources;
   const sources=factualSources[layer.id]??[];
   const needsDataSource=Boolean(layer.indicator)||['rice','contours','vegetables','temperatefruit','cattle','chicken'].includes(layer.id)||sources.length===0;
   const dataSource:ReaderSource={url:layer.source,label:layer.indicator?'World Bank：'+layer.title+'（'+layer.period+'年）':layer.title+'のデータ原典'};
@@ -151,6 +157,9 @@ const countryMessages: Record<string, ReaderMessage> = {
 
 /** A geographic takeaway and brief explanation; definitions stay in the note. */
 export function europeReaderCopy(layer:EuropeLayer) {
+  if(layer.id==='treecover')return {title:europeTreeCoverReading.title,takeaway:europeTreeCoverReading.takeaway,body:europeTreeCoverReading.body,note:europeTreeCoverReading.note};
+  if(layer.id==='precipitation')return {title:europePrecipitationReading.title,takeaway:europePrecipitationReading.takeaway,body:europePrecipitationReading.body,note:europePrecipitationReading.note};
+  if(layer.id==='drainage')return {title:drainageReading.title,takeaway:drainageReading.takeaway,body:drainageReading.body,note:drainageReading.note};
   if(layer.id==='climate')return {
     title:'気候区分',takeaway:'欧州の気温・降水の違いは農業の条件に関わりますが、同じ気候区分でも土地利用や水管理は異なります。',
     body:'イングランドの穀物と草地、ハンガリーの干ばつ、マドリード州の灌漑は、気候と人の水利用をあわせて考える例です。地域の農業例は、選んだ観測所周辺すべての作付けを表しません。',
@@ -164,7 +173,7 @@ export function europeReaderCopy(layer:EuropeLayer) {
   if(layer.id==='water')return {
     title:'河川・湖',takeaway:'国境を越える河川は複数の国をつなぎ、水利用・洪水・生態系の管理にも協力が必要になります。',
     body:'ドナウ川の流域は19か国にまたがります。ライン川では流域の国々が水利用や洪水への対応を協力して進め、海港のロッテルダムと内陸の産業拠点も同じ水系に位置します。',
-    note:'線の太さは流量を表しません。小さな河川や湖は省略しています。流域界・地下水・灌漑の範囲は収録していません。',
+    note:'線の太さは流量を表しません。小さな河川や湖は省略しています。この河川・湖の図は流域界を表示せず、別の「流域の区画」で確認します。地下水・灌漑の範囲は収録していません。',
   };
   if(layer.id==='terrain')return {
     title:'地形・標高',takeaway:'国境をまたぐアルプスと周辺の低地をあわせて見ると、山地と農地・都市の位置関係を捉えられます。',
@@ -185,6 +194,11 @@ export function europeReaderCopy(layer:EuropeLayer) {
     title:'人口分布',takeaway:'人が集まる場所と資源・技術の拠点は、必ずしも同じ場所ではありません。',
     body:'北部スウェーデンのキルナは鉄鉱石採掘、フィンランドのオウルは無線技術の研究・設計・製造の拠点です。人口の集中は地域の役割を考える手がかりですが、産業の機能まで決めるものではありません。',
     note:'2020年の格子ごとのモデル推計です。現在の人口移動・避難状況を表すものではありません。都市の点は位置のみを示します。',
+  };
+  if(layer.id==='ethnicity'||layer.id==='religion')return {
+    title:layer.title,takeaway:'イングランド・ウェールズの行政区とクロアチアの全国値で、自己申告の回答構成を読む事例です。',
+    body:'2021年の国勢調査が公表した分類、人数、表ごとの総人口を使います。地域による回答の違いと、資料の対象範囲を分けて読みます。',
+    note:layer.note,
   };
   if(layer.field==='agriculture'&&layer.grid) {
     const livestock=['cattle','pig','sheep','chicken'].includes(layer.id);

@@ -1,0 +1,244 @@
+{
+  "sourceShapeType": 5,
+  "originalVerticesRetained": true,
+  "globalFeatures": 1342,
+  "selectedFeatures": 131,
+  "selectedSourceRegions": {
+    "2": 125,
+    "3": 5,
+    "4": 1
+  },
+  "sourceGlobalBounds": [
+    -179.99999999990004,
+    -55.98750000042463,
+    180.00064290384705,
+    83.62564277629316
+  ],
+  "sourcePolygonPointCount": 4697860,
+  "sourcePolygonRingCount": 50499,
+  "overlapPixelsBeforeCountryClipping": 0,
+  "overlapRule": "Lowest HYBAS_ID takes precedence at an overlapping pixel centre; no gap filling or boundary dilation.",
+  "geometrySamples": [
+    {
+      "name": "London",
+      "point": [
+        -0.1,
+        51.5
+      ],
+      "displayCenter": [
+        -0.07499999999999929,
+        51.50168311827808
+      ],
+      "column": 498,
+      "row": 972,
+      "sourcePointHYBAS_ID": 2040048790,
+      "sourceDisplayCenterHYBAS_ID": 2040048790,
+      "lookupIndex": 81,
+      "displayedHYBAS_ID": 2040048790
+    },
+    {
+      "name": "Paris",
+      "point": [
+        2.35,
+        48.85
+      ],
+      "displayCenter": [
+        2.3749999999999964,
+        48.844634493459466
+      ],
+      "column": 547,
+      "row": 1055,
+      "sourcePointHYBAS_ID": 2040022150,
+      "sourceDisplayCenterHYBAS_ID": 2040022150,
+      "lookupIndex": 25,
+      "displayedHYBAS_ID": 2040022150
+    },
+    {
+      "name": "Berlin",
+      "point": [
+        13.405,
+        52.52
+      ],
+      "displayCenter": [
+        13.425000000000004,
+        52.51726162311089
+      ],
+      "column": 768,
+      "row": 939,
+      "sourcePointHYBAS_ID": 2040024170,
+      "sourceDisplayCenterHYBAS_ID": 2040024170,
+      "lookupIndex": 29,
+      "displayedHYBAS_ID": 2040024170
+    },
+    {
+      "name": "Warsaw",
+      "point": [
+        21.01,
+        52.23
+      ],
+      "displayCenter": [
+        21.025,
+        52.24257007295342
+      ],
+      "column": 920,
+      "row": 948,
+      "sourcePointHYBAS_ID": 2040026550,
+      "sourceDisplayCenterHYBAS_ID": 2040026550,
+      "lookupIndex": 35,
+      "displayedHYBAS_ID": 2040026550
+    },
+    {
+      "name": "Moscow",
+      "point": [
+        37.62,
+        55.75
+      ],
+      "displayCenter": [
+        37.625,
+        55.73813523503884
+      ],
+      "column": 1252,
+      "row": 829,
+      "sourcePointHYBAS_ID": 2040315940,
+      "sourceDisplayCenterHYBAS_ID": 2040315940,
+      "lookupIndex": 100,
+      "displayedHYBAS_ID": 2040315940
+    },
+    {
+      "name": "Helsinki",
+      "point": [
+        24.94,
+        60.17
+      ],
+      "displayCenter": [
+        24.924999999999997,
+        60.16241697524662
+      ],
+      "column": 998,
+      "row": 662,
+      "sourcePointHYBAS_ID": 2040028670,
+      "sourceDisplayCenterHYBAS_ID": 2040028670,
+      "lookupIndex": 45,
+      "displayedHYBAS_ID": 2040028670
+    },
+    {
+      "name": "Reykjavik",
+      "point": [
+        -21.94,
+        64.15
+      ],
+      "displayCenter": [
+        -21.925,
+        64.14929386033616
+      ],
+      "column": 61,
+      "row": 491,
+      "sourcePointHYBAS_ID": null,
+      "sourceDisplayCenterHYBAS_ID": 2040057170,
+      "lookupIndex": 83,
+      "displayedHYBAS_ID": 2040057170
+    },
+    {
+      "name": "Oslo",
+      "point": [
+        10.75,
+        59.91
+      ],
+      "displayCenter": [
+        10.774999999999999,
+        59.91270006812221
+      ],
+      "column": 715,
+      "row": 672,
+      "sourcePointHYBAS_ID": 2040033480,
+      "sourceDisplayCenterHYBAS_ID": 2040033480,
+      "lookupIndex": 59,
+      "displayedHYBAS_ID": 2040033480
+    },
+    {
+      "name": "Rome",
+      "point": [
+        12.5,
+        41.9
+      ],
+      "displayCenter": [
+        12.524999999999999,
+        41.90304743573169
+      ],
+      "column": 750,
+      "row": 1253,
+      "sourcePointHYBAS_ID": 2040014550,
+      "sourceDisplayCenterHYBAS_ID": 2040014550,
+      "lookupIndex": 11,
+      "displayedHYBAS_ID": 2040014550
+    },
+    {
+      "name": "Madrid",
+      "point": [
+        -3.7,
+        40.42
+      ],
+      "displayCenter": [
+        -3.674999999999997,
+        40.43523542432423
+      ],
+      "column": 426,
+      "row": 1292,
+      "sourcePointHYBAS_ID": 2040018840,
+      "sourceDisplayCenterHYBAS_ID": 2040018840,
+      "lookupIndex": 18,
+      "displayedHYBAS_ID": 2040018840
+    },
+    {
+      "name": "Russia 60E/60N",
+      "point": [
+        60,
+        60
+      ],
+      "displayCenter": [
+        60.025000000000006,
+        59.987813443304304
+      ],
+      "column": 1700,
+      "row": 669,
+      "sourcePointHYBAS_ID": 3040481930,
+      "sourceDisplayCenterHYBAS_ID": 3040481930,
+      "lookupIndex": 130,
+      "displayedHYBAS_ID": 3040481930
+    },
+    {
+      "name": "Russia 64E/55N",
+      "point": [
+        64,
+        55
+      ],
+      "displayCenter": [
+        64.02499999999999,
+        54.99937501305013
+      ],
+      "column": 1780,
+      "row": 855,
+      "sourcePointHYBAS_ID": 3040481930,
+      "sourceDisplayCenterHYBAS_ID": 3040481930,
+      "lookupIndex": 130,
+      "displayedHYBAS_ID": 3040481930
+    },
+    {
+      "name": "Russia 61E/65N",
+      "point": [
+        61,
+        65
+      ],
+      "displayCenter": [
+        61.02499999999999,
+        65.00776942834014
+      ],
+      "column": 1720,
+      "row": 451,
+      "sourcePointHYBAS_ID": 3040203170,
+      "sourceDisplayCenterHYBAS_ID": 3040203170,
+      "lookupIndex": 127,
+      "displayedHYBAS_ID": 3040203170
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "dataset": "BasinATLAS version 1.0, level 04, global source sub-basins contributing to the 45-country display frame",
+  "publisher": "HydroATLAS / Linke et al.",
+  "creators": [
+    "Bernhard Lehner",
+    "Simon Linke",
+    "Michele Thieme"
+  ],
+  "edition": "1.0",
+  "publicationYear": 2019,
+  "sourceUrl": "https://www.hydrosheds.org/hydroatlas",
+  "doi": "https://doi.org/10.6084/m9.figshare.9890531.v1",
+  "scientificReference": "Linke et al. (2019), Global hydro-environmental sub-basin and river reach characteristics at high spatial resolution, Scientific Data 6:283, https://doi.org/10.1038/s41597-019-0300-6",
+  "downloadUrl": "https://ndownloader.figshare.com/files/20087237",
+  "archiveFilename": "BasinATLAS_Data_v10_shp.zip",
+  "archiveBytes": 4276492333,
+  "wholeArchiveRetrieved": false,
+  "wholeArchiveMd5Verified": false,
+  "sourceCRS": "Geographic WGS84 (GCS_WGS_1984)",
+  "originalDerivationResolution": "15 arc-seconds, approximately 500 m at the equator; not the rendered pixel resolution",
+  "sourceMethod": "Level-04 Pfafstetter sub-basin delineation derived from the HydroSHEDS terrain and drainage model. Publication year 2019 identifies the product release, not a 2019 observation of river boundaries or water quantities.",
+  "sourceRegion": "Global: no HydroSHEDS continental-region digit is excluded",
+  "sourceRegionFeatures": 131,
+  "sourceGlobalFeatures": 1342,
+  "sourceSelection": "All 1342 global level-04 source polygons are rasterized; only units with at least one original-polygon pixel centre inside the existing 45-country/frame display mask are published in the identifier package.",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "technicalDocumentUrl": "https://data.hydrosheds.org/file/technical-documentation/HydroATLAS_TechDoc_v10_1.pdf",
+  "attribution": "BasinATLAS v1.0 / HydroATLAS, Bernhard Lehner; Simon Linke; Michele Thieme. Scientific reference: Linke et al. (2019). CC BY 4.0. Sub-basin delineation derives from HydroSHEDS/WWF (Lehner et al. 2008; Lehner and Grill 2013). Modified: Global level-04 polygons selected by target-country/frame pixel-centre coverage, Web Mercator cartographic rasterization and categorical colors.",
+  "disclaimer": "HydroATLAS data are provided as is, without warranty; the authors disclaim suitability, accuracy, uninterrupted use and liability as described in technical documentation sections 4.2-4.3 and CC BY 4.0 section 5.",
+  "attributeScope": "Only HYBAS_ID, PFAF_ID, NEXT_DOWN and MAIN_BAS identifiers are published. The 281 hydro-environmental attributes are excluded. The collective database is CC BY 4.0; individual environmental columns can be CC BY 4.0 or ODbL and must be checked before any future use. Original-format underpinning source licenses are not changed."
+}

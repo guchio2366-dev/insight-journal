@@ -3,11 +3,18 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { Window } from 'happy-dom';
 
+const europeHtml = async field => {
+  if (!process.env.EUROPE_TEST_BASE) return readFileSync(new URL(`../../dist/atlas/europe/${field}index.html`, import.meta.url), 'utf8');
+  const response = await fetch(new URL(field, process.env.EUROPE_TEST_BASE));
+  assert.equal(response.status, 200);
+  return response.text();
+};
+
 for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/']) {
-  test(`欧州 ${field || '概況'} はニュース・地図・解説と共通の分野移動を備える`, () => {
+  test(`欧州 ${field || '概況'} はニュース・地図・解説と共通の分野移動を備える`, async () => {
     const window = new Window();
     const doc = window.document;
-    doc.write(readFileSync(new URL(`../../dist/atlas/europe/${field}index.html`, import.meta.url), 'utf8'));
+    doc.write(await europeHtml(field));
     assert.equal(doc.querySelectorAll('[data-news-region="europe"]').length, 1);
     assert.equal(doc.querySelector('[data-news-rail] h2').textContent, '欧州のニュース');
     assert.deepEqual([...doc.querySelectorAll('.eu-field-nav a:not([data-atlas-overview-link])')].map(a=>a.textContent), ['農林業','自然環境','主要産業','人口']);
@@ -21,7 +28,8 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
     assert.ok(doc.querySelector('.eu-read-panel,.europe-side'));
     if (!field) assert.equal(doc.querySelectorAll('[data-europe-country-select] option').length,46);
     if (field) {
-      assert.equal(doc.querySelectorAll('.eu-read-panel select').length, 0);
+      assert.equal(doc.querySelectorAll('.eu-read-panel select').length, 3,'Case controls move to the map only when the runtime activates the census case');
+      assert.equal(doc.querySelector('[data-eu-culture-host]').hidden,true);
       assert.equal(doc.querySelector('[data-eu-country]'),null);
       assert.equal(doc.querySelector('[data-eu-subject]'),null);
       assert.ok(doc.querySelector('.eu-map-stage [data-eu-annotations]'));
@@ -37,14 +45,23 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.equal(statistics.parentElement,shell.parentElement);
       assert.ok([...shell.parentElement.children].indexOf(statistics)>[...shell.parentElement.children].indexOf(shell));
       assert.equal(doc.querySelector('.eu-read-panel [data-eu-statistics]'),null);
-      assert.equal(doc.querySelectorAll('[data-eu-climate-statistics] [data-eu-city-chart] svg').length,24);
-      assert.equal(doc.querySelector('.eu-read-panel [data-eu-city-chart]'),null);
+      assert.equal(doc.querySelectorAll('[data-eu-climate-statistics] [data-eu-city-chart] svg').length,0);
+      assert.equal(doc.querySelectorAll('.eu-read-panel [data-eu-city-chart] svg').length,24);
+      assert.equal(doc.querySelectorAll('[data-eu-city-chart]').length,24,'Each station has one chart beside its selected reading');
+      assert.equal(doc.querySelectorAll('[data-eu-climate-statistics] [data-city-card] table').length,24,'Monthly tables remain synchronized below the workspace');
+      const ids=[...doc.querySelectorAll('[id]')].map(element=>element.id);
+      assert.equal(new Set(ids).size,ids.length,'Station/chart and source headings retain unique IDs');
       assert.ok(doc.querySelector('.eu-breadcrumb [data-base-map]'));
     }
     if (field==='nature/') {
       assert.deepEqual([...doc.querySelectorAll('[data-eu-topic-field="nature"] button')].map(b=>b.textContent), ['気候区分','水資源','地形','標高（等高線）']);
       assert.equal(doc.querySelector('[data-eu-climate-reader] h2').textContent,'ロンドンの気候と農畜産');
-      assert.ok(doc.querySelector('[data-eu-climate-statistics] [data-city-card="london"] [data-eu-city-chart="london"] svg'));
+      const londonChart=doc.querySelector('.eu-read-panel [data-city-reading="london"] [data-eu-city-chart="london"] svg');
+      assert.ok(londonChart);
+      assert.deepEqual([...londonChart.querySelectorAll('.atlas-climate-month')].map(label=>label.textContent),Array.from({length:12},(_,i)=>String(i+1)));
+      assert.equal(londonChart.querySelector('.atlas-climate-axis-title').textContent,'月');
+      assert.match(doc.querySelector('[data-city-reading="london"] .eu-city-selected-note').textContent,/Cfb.*最寒1月.*5\.7.*最暖7月.*19\.0/);
+      assert.equal(doc.querySelector('[data-city-reading="london"] .eu-city-reading-details').open,false);
       assert.match(doc.querySelector('[data-eu-climate-statistics] h2').textContent,/月別の数値.*年間の要約/);
       assert.ok(doc.querySelector('[data-eu-climate-statistics] [data-city-card="london"] table'));
       assert.ok(doc.querySelector('[data-eu-climate-statistics] [data-city-card="london"] .eu-summary'));
@@ -55,7 +72,7 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.equal(cityList.querySelectorAll('[data-eu-city-choice] option').length,24);
       assert.equal(cityList.querySelector('[data-eu-city-choice]').value,'london');
       const key=doc.querySelector('.eu-read-panel [data-eu-climate-legend]');
-      assert.ok(key.open);
+      assert.equal(key.open,false,'Full 17-class key is available in a native disclosure without displacing the selected station plot');
       assert.equal(key.querySelectorAll('.eu-legend-grid>div').length,17);
       assert.match(key.querySelector('summary').textContent,/1991–2020.*17/);
       const jump=doc.querySelector('[data-eu-climate-statistics-link]');
@@ -92,9 +109,9 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.ok(chooser.closest('[data-eu-topic-field="population"]'));
       assert.ok(doc.querySelector('.eu-reader-body').open);
       const planned=[...doc.querySelectorAll('[data-eu-topic-field="population"] button:disabled')];
-      assert.equal(planned.length,2);
-      assert.deepEqual([...doc.querySelectorAll('[data-eu-topic-field="population"] button')].map(b=>b.textContent),['人口分布','人種・民族準備中','宗教準備中']);
-      assert.ok(planned.every(b=>b.textContent.includes('準備中')));
+      assert.equal(planned.length,0);
+      assert.deepEqual([...doc.querySelectorAll('[data-eu-topic-field="population"] button')].map(b=>b.textContent),['人口分布','人種・民族（事例）','宗教（事例）']);
+      assert.match(doc.querySelector('[data-culture-takeaway]').textContent,/欧州全域|事例/);
       assert.ok(!doc.querySelector('[data-eu-topic-field="population"]').textContent.includes('投票'));
     }
     window.happyDOM.abort();

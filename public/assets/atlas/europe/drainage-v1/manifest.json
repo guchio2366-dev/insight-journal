@@ -1,0 +1,1064 @@
+{
+  "schemaVersion": 1,
+  "retrievedAt": "2026-10-02",
+  "dataset": "BasinATLAS version 1.0, level 04, global source sub-basins contributing to the 45-country display frame",
+  "publisher": "HydroATLAS / Linke et al.",
+  "creators": [
+    "Bernhard Lehner",
+    "Simon Linke",
+    "Michele Thieme"
+  ],
+  "edition": "1.0",
+  "publicationYear": 2019,
+  "sourceUrl": "https://www.hydrosheds.org/hydroatlas",
+  "doi": "https://doi.org/10.6084/m9.figshare.9890531.v1",
+  "scientificReference": "Linke et al. (2019), Global hydro-environmental sub-basin and river reach characteristics at high spatial resolution, Scientific Data 6:283, https://doi.org/10.1038/s41597-019-0300-6",
+  "downloadUrl": "https://ndownloader.figshare.com/files/20087237",
+  "archiveFilename": "BasinATLAS_Data_v10_shp.zip",
+  "archiveBytes": 4276492333,
+  "wholeArchiveRetrieved": false,
+  "wholeArchiveMd5Verified": false,
+  "sourceCRS": "Geographic WGS84 (GCS_WGS_1984)",
+  "originalDerivationResolution": "15 arc-seconds, approximately 500 m at the equator; not the rendered pixel resolution",
+  "sourceMethod": "Level-04 Pfafstetter sub-basin delineation derived from the HydroSHEDS terrain and drainage model. Publication year 2019 identifies the product release, not a 2019 observation of river boundaries or water quantities.",
+  "sourceRegion": "Global: no HydroSHEDS continental-region digit is excluded",
+  "sourceRegionFeatures": 131,
+  "sourceGlobalFeatures": 1342,
+  "sourceSelection": "All 1342 global level-04 source polygons are rasterized; only units with at least one original-polygon pixel centre inside the existing 45-country/frame display mask are published in the identifier package.",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "technicalDocumentUrl": "https://data.hydrosheds.org/file/technical-documentation/HydroATLAS_TechDoc_v10_1.pdf",
+  "attribution": "BasinATLAS v1.0 / HydroATLAS, Bernhard Lehner; Simon Linke; Michele Thieme. Scientific reference: Linke et al. (2019). CC BY 4.0. Sub-basin delineation derives from HydroSHEDS/WWF (Lehner et al. 2008; Lehner and Grill 2013). Modified: Global level-04 polygons selected by target-country/frame pixel-centre coverage, Web Mercator cartographic rasterization and categorical colors.",
+  "disclaimer": "HydroATLAS data are provided as is, without warranty; the authors disclaim suitability, accuracy, uninterrupted use and liability as described in technical documentation sections 4.2-4.3 and CC BY 4.0 section 5.",
+  "attributeScope": "Only HYBAS_ID, PFAF_ID, NEXT_DOWN and MAIN_BAS identifiers are published. The 281 hydro-environmental attributes are excluded. The collective database is CC BY 4.0; individual environmental columns can be CC BY 4.0 or ODbL and must be checked before any future use. Original-format underpinning source licenses are not changed.",
+  "bounds": [
+    -25,
+    32,
+    65,
+    73
+  ],
+  "width": 1800,
+  "height": 1502,
+  "projection": "EPSG:3857",
+  "frame": {
+    "width": 1200,
+    "height": 1001,
+    "west": -25,
+    "south": 32,
+    "east": 65,
+    "north": 73
+  },
+  "lookup": {
+    "width": 1800,
+    "height": 1502,
+    "encoding": "little-endian float32 row-major gzip",
+    "nodata": -1,
+    "gridType": "display",
+    "valueMeaning": "Exact integer 1..131 indexes basins.json; -1 is missing/outside the 45-country display mask. HYBAS_ID is never encoded as a float32 value."
+  },
+  "colors": [
+    "#86b6cf",
+    "#e2bb80",
+    "#a6c69c",
+    "#c4a9cb",
+    "#d69e95",
+    "#aab8b9",
+    "#ced19e",
+    "#96c9c2"
+  ],
+  "colorAssignments": [
+    {
+      "index": 1,
+      "color": "#a6c69c",
+      "displayPixelCenters": 70
+    },
+    {
+      "index": 2,
+      "color": "#86b6cf",
+      "displayPixelCenters": 6758
+    },
+    {
+      "index": 3,
+      "color": "#a6c69c",
+      "displayPixelCenters": 541
+    },
+    {
+      "index": 4,
+      "color": "#e2bb80",
+      "displayPixelCenters": 4961
+    },
+    {
+      "index": 5,
+      "color": "#a6c69c",
+      "displayPixelCenters": 13295
+    },
+    {
+      "index": 6,
+      "color": "#86b6cf",
+      "displayPixelCenters": 11842
+    },
+    {
+      "index": 7,
+      "color": "#e2bb80",
+      "displayPixelCenters": 2763
+    },
+    {
+      "index": 8,
+      "color": "#c4a9cb",
+      "displayPixelCenters": 1344
+    },
+    {
+      "index": 9,
+      "color": "#a6c69c",
+      "displayPixelCenters": 14816
+    },
+    {
+      "index": 10,
+      "color": "#e2bb80",
+      "displayPixelCenters": 10507
+    },
+    {
+      "index": 11,
+      "color": "#a6c69c",
+      "displayPixelCenters": 4923
+    },
+    {
+      "index": 12,
+      "color": "#86b6cf",
+      "displayPixelCenters": 18402
+    },
+    {
+      "index": 13,
+      "color": "#a6c69c",
+      "displayPixelCenters": 293
+    },
+    {
+      "index": 14,
+      "color": "#e2bb80",
+      "displayPixelCenters": 2942
+    },
+    {
+      "index": 15,
+      "color": "#86b6cf",
+      "displayPixelCenters": 261
+    },
+    {
+      "index": 16,
+      "color": "#a6c69c",
+      "displayPixelCenters": 3571
+    },
+    {
+      "index": 17,
+      "color": "#86b6cf",
+      "displayPixelCenters": 1172
+    },
+    {
+      "index": 18,
+      "color": "#e2bb80",
+      "displayPixelCenters": 3936
+    },
+    {
+      "index": 19,
+      "color": "#c4a9cb",
+      "displayPixelCenters": 821
+    },
+    {
+      "index": 20,
+      "color": "#a6c69c",
+      "displayPixelCenters": 5629
+    },
+    {
+      "index": 21,
+      "color": "#e2bb80",
+      "displayPixelCenters": 3582
+    },
+    {
+      "index": 22,
+      "color": "#a6c69c",
+      "displayPixelCenters": 7970
+    },
+    {
+      "index": 23,
+      "color": "#e2bb80",
+      "displayPixelCenters": 8084
+    },
+    {
+      "index": 24,
+      "color": "#86b6cf",
+      "displayPixelCenters": 3421
+    },
+    {
+      "index": 25,
+      "color": "#a6c69c",
+      "displayPixelCenters": 5437
+    },
+    {
+      "index": 26,
+      "color": "#e2bb80",
+      "displayPixelCenters": 6047
+    },
+    {
+      "index": 27,
+      "color": "#a6c69c",
+      "displayPixelCenters": 12387
+    },
+    {
+      "index": 28,
+      "color": "#86b6cf",
+      "displayPixelCenters": 7750
+    },
+    {
+      "index": 29,
+      "color": "#e2bb80",
+      "displayPixelCenters": 11429
+    },
+    {
+      "index": 30,
+      "color": "#a6c69c",
+      "displayPixelCenters": 85
+    },
+    {
+      "index": 31,
+      "color": "#c4a9cb",
+      "displayPixelCenters": 6589
+    },
+    {
+      "index": 32,
+      "color": "#e2bb80",
+      "displayPixelCenters": 40
+    },
+    {
+      "index": 33,
+      "color": "#a6c69c",
+      "displayPixelCenters": 10054
+    },
+    {
+      "index": 34,
+      "color": "#86b6cf",
+      "displayPixelCenters": 1777
+    },
+    {
+      "index": 35,
+      "color": "#e2bb80",
+      "displayPixelCenters": 16282
+    },
+    {
+      "index": 36,
+      "color": "#a6c69c",
+      "displayPixelCenters": 2442
+    },
+    {
+      "index": 37,
+      "color": "#86b6cf",
+      "displayPixelCenters": 8844
+    },
+    {
+      "index": 38,
+      "color": "#e2bb80",
+      "displayPixelCenters": 4499
+    },
+    {
+      "index": 39,
+      "color": "#a6c69c",
+      "displayPixelCenters": 8793
+    },
+    {
+      "index": 40,
+      "color": "#e2bb80",
+      "displayPixelCenters": 12543
+    },
+    {
+      "index": 41,
+      "color": "#a6c69c",
+      "displayPixelCenters": 211
+    },
+    {
+      "index": 42,
+      "color": "#86b6cf",
+      "displayPixelCenters": 38928
+    },
+    {
+      "index": 43,
+      "color": "#e2bb80",
+      "displayPixelCenters": 1243
+    },
+    {
+      "index": 44,
+      "color": "#c4a9cb",
+      "displayPixelCenters": 4043
+    },
+    {
+      "index": 45,
+      "color": "#a6c69c",
+      "displayPixelCenters": 14130
+    },
+    {
+      "index": 46,
+      "color": "#e2bb80",
+      "displayPixelCenters": 4534
+    },
+    {
+      "index": 47,
+      "color": "#86b6cf",
+      "displayPixelCenters": 4006
+    },
+    {
+      "index": 48,
+      "color": "#e2bb80",
+      "displayPixelCenters": 11644
+    },
+    {
+      "index": 49,
+      "color": "#a6c69c",
+      "displayPixelCenters": 55
+    },
+    {
+      "index": 50,
+      "color": "#e2bb80",
+      "displayPixelCenters": 9
+    },
+    {
+      "index": 51,
+      "color": "#86b6cf",
+      "displayPixelCenters": 9175
+    },
+    {
+      "index": 52,
+      "color": "#a6c69c",
+      "displayPixelCenters": 25217
+    },
+    {
+      "index": 53,
+      "color": "#c4a9cb",
+      "displayPixelCenters": 5419
+    },
+    {
+      "index": 54,
+      "color": "#86b6cf",
+      "displayPixelCenters": 10934
+    },
+    {
+      "index": 55,
+      "color": "#e2bb80",
+      "displayPixelCenters": 3933
+    },
+    {
+      "index": 56,
+      "color": "#86b6cf",
+      "displayPixelCenters": 12153
+    },
+    {
+      "index": 57,
+      "color": "#a6c69c",
+      "displayPixelCenters": 6352
+    },
+    {
+      "index": 58,
+      "color": "#c4a9cb",
+      "displayPixelCenters": 732
+    },
+    {
+      "index": 59,
+      "color": "#e2bb80",
+      "displayPixelCenters": 34260
+    },
+    {
+      "index": 60,
+      "color": "#a6c69c",
+      "displayPixelCenters": 18851
+    },
+    {
+      "index": 61,
+      "color": "#86b6cf",
+      "displayPixelCenters": 4468
+    },
+    {
+      "index": 62,
+      "color": "#e2bb80",
+      "displayPixelCenters": 2160
+    },
+    {
+      "index": 63,
+      "color": "#a6c69c",
+      "displayPixelCenters": 6345
+    },
+    {
+      "index": 64,
+      "color": "#86b6cf",
+      "displayPixelCenters": 25986
+    },
+    {
+      "index": 65,
+      "color": "#a6c69c",
+      "displayPixelCenters": 7699
+    },
+    {
+      "index": 66,
+      "color": "#c4a9cb",
+      "displayPixelCenters": 281
+    },
+    {
+      "index": 67,
+      "color": "#e2bb80",
+      "displayPixelCenters": 5099
+    },
+    {
+      "index": 68,
+      "color": "#86b6cf",
+      "displayPixelCenters": 1549
+    },
+    {
+      "index": 69,
+      "color": "#e2bb80",
+      "displayPixelCenters": 172
+    },
+    {
+      "index": 70,
+      "color": "#a6c69c",
+      "displayPixelCenters": 9482
+    },
+    {
+      "index": 71,
+      "color": "#e2bb80",
+      "displayPixelCenters": 2106
+    },
+    {
+      "index": 72,
+      "color": "#86b6cf",
+      "displayPixelCenters": 50314
+    },
+    {
+      "index": 73,
+      "color": "#a6c69c",
+      "displayPixelCenters": 6210
+    },
+    {
+      "index": 74,
+      "color": "#e2bb80",
+      "displayPixelCenters": 13349
+    },
+    {
+      "index": 75,
+      "color": "#86b6cf",
+      "displayPixelCenters": 10538
+    },
+    {
+      "index": 76,
+      "color": "#a6c69c",
+      "displayPixelCenters": 58332
+    },
+    {
+      "index": 77,
+      "color": "#86b6cf",
+      "displayPixelCenters": 13863
+    },
+    {
+      "index": 78,
+      "color": "#86b6cf",
+      "displayPixelCenters": 383
+    },
+    {
+      "index": 79,
+      "color": "#86b6cf",
+      "displayPixelCenters": 1273
+    },
+    {
+      "index": 80,
+      "color": "#86b6cf",
+      "displayPixelCenters": 1720
+    },
+    {
+      "index": 81,
+      "color": "#86b6cf",
+      "displayPixelCenters": 20292
+    },
+    {
+      "index": 82,
+      "color": "#86b6cf",
+      "displayPixelCenters": 6183
+    },
+    {
+      "index": 83,
+      "color": "#86b6cf",
+      "displayPixelCenters": 17263
+    },
+    {
+      "index": 84,
+      "color": "#86b6cf",
+      "displayPixelCenters": 9467
+    },
+    {
+      "index": 85,
+      "color": "#a6c69c",
+      "displayPixelCenters": 10100
+    },
+    {
+      "index": 86,
+      "color": "#e2bb80",
+      "displayPixelCenters": 3342
+    },
+    {
+      "index": 87,
+      "color": "#86b6cf",
+      "displayPixelCenters": 19105
+    },
+    {
+      "index": 88,
+      "color": "#a6c69c",
+      "displayPixelCenters": 2
+    },
+    {
+      "index": 89,
+      "color": "#e2bb80",
+      "displayPixelCenters": 3515
+    },
+    {
+      "index": 90,
+      "color": "#a6c69c",
+      "displayPixelCenters": 3876
+    },
+    {
+      "index": 91,
+      "color": "#e2bb80",
+      "displayPixelCenters": 2544
+    },
+    {
+      "index": 92,
+      "color": "#86b6cf",
+      "displayPixelCenters": 1783
+    },
+    {
+      "index": 93,
+      "color": "#a6c69c",
+      "displayPixelCenters": 56
+    },
+    {
+      "index": 94,
+      "color": "#e2bb80",
+      "displayPixelCenters": 27358
+    },
+    {
+      "index": 95,
+      "color": "#86b6cf",
+      "displayPixelCenters": 6585
+    },
+    {
+      "index": 96,
+      "color": "#c4a9cb",
+      "displayPixelCenters": 1504
+    },
+    {
+      "index": 97,
+      "color": "#e2bb80",
+      "displayPixelCenters": 6381
+    },
+    {
+      "index": 98,
+      "color": "#a6c69c",
+      "displayPixelCenters": 9980
+    },
+    {
+      "index": 99,
+      "color": "#e2bb80",
+      "displayPixelCenters": 58481
+    },
+    {
+      "index": 100,
+      "color": "#a6c69c",
+      "displayPixelCenters": 12534
+    },
+    {
+      "index": 101,
+      "color": "#c4a9cb",
+      "displayPixelCenters": 4668
+    },
+    {
+      "index": 102,
+      "color": "#e2bb80",
+      "displayPixelCenters": 2309
+    },
+    {
+      "index": 103,
+      "color": "#86b6cf",
+      "displayPixelCenters": 3051
+    },
+    {
+      "index": 104,
+      "color": "#c4a9cb",
+      "displayPixelCenters": 230
+    },
+    {
+      "index": 105,
+      "color": "#a6c69c",
+      "displayPixelCenters": 3834
+    },
+    {
+      "index": 106,
+      "color": "#a6c69c",
+      "displayPixelCenters": 10029
+    },
+    {
+      "index": 107,
+      "color": "#86b6cf",
+      "displayPixelCenters": 354
+    },
+    {
+      "index": 108,
+      "color": "#e2bb80",
+      "displayPixelCenters": 7635
+    },
+    {
+      "index": 109,
+      "color": "#c4a9cb",
+      "displayPixelCenters": 1584
+    },
+    {
+      "index": 110,
+      "color": "#a6c69c",
+      "displayPixelCenters": 5134
+    },
+    {
+      "index": 111,
+      "color": "#86b6cf",
+      "displayPixelCenters": 9048
+    },
+    {
+      "index": 112,
+      "color": "#e2bb80",
+      "displayPixelCenters": 31
+    },
+    {
+      "index": 113,
+      "color": "#c4a9cb",
+      "displayPixelCenters": 2855
+    },
+    {
+      "index": 114,
+      "color": "#c4a9cb",
+      "displayPixelCenters": 7538
+    },
+    {
+      "index": 115,
+      "color": "#a6c69c",
+      "displayPixelCenters": 4149
+    },
+    {
+      "index": 116,
+      "color": "#86b6cf",
+      "displayPixelCenters": 1519
+    },
+    {
+      "index": 117,
+      "color": "#c4a9cb",
+      "displayPixelCenters": 3369
+    },
+    {
+      "index": 118,
+      "color": "#86b6cf",
+      "displayPixelCenters": 15330
+    },
+    {
+      "index": 119,
+      "color": "#c4a9cb",
+      "displayPixelCenters": 2759
+    },
+    {
+      "index": 120,
+      "color": "#c4a9cb",
+      "displayPixelCenters": 3143
+    },
+    {
+      "index": 121,
+      "color": "#86b6cf",
+      "displayPixelCenters": 12739
+    },
+    {
+      "index": 122,
+      "color": "#a6c69c",
+      "displayPixelCenters": 10818
+    },
+    {
+      "index": 123,
+      "color": "#e2bb80",
+      "displayPixelCenters": 389
+    },
+    {
+      "index": 124,
+      "color": "#c4a9cb",
+      "displayPixelCenters": 42
+    },
+    {
+      "index": 125,
+      "color": "#d69e95",
+      "displayPixelCenters": 6133
+    },
+    {
+      "index": 126,
+      "color": "#86b6cf",
+      "displayPixelCenters": 118
+    },
+    {
+      "index": 127,
+      "color": "#e2bb80",
+      "displayPixelCenters": 20405
+    },
+    {
+      "index": 128,
+      "color": "#86b6cf",
+      "displayPixelCenters": 343
+    },
+    {
+      "index": 129,
+      "color": "#a6c69c",
+      "displayPixelCenters": 3422
+    },
+    {
+      "index": 130,
+      "color": "#86b6cf",
+      "displayPixelCenters": 28835
+    },
+    {
+      "index": 131,
+      "color": "#e2bb80",
+      "displayPixelCenters": 292
+    }
+  ],
+  "processing": {
+    "displayMask": "Original BasinATLAS polygon pixel-centre containment, intersected with the existing 45 target-country outlines; all polygon holes preserved.",
+    "imageAndPickingUseSameMask": true,
+    "originalGeometrySimplified": false,
+    "boundaryDilation": false,
+    "gapFilling": false,
+    "quantityDerived": false,
+    "rawSourceIncludedInRepository": false,
+    "sourceMutation": false,
+    "displayResolutionIsSourceResolution": false,
+    "colors": "Categorical adjacency colors; nearby four-neighbor display units have different colors. Color has no quantitative order and can repeat in separated units.",
+    "adjacencyEdges": 292
+  },
+  "limitations": [
+    "Level-04 sub-basin units are not the complete catchments of every named river; some coastal units combine several small catchments.",
+    "Publication year 2019 is a product release date, not a common observation year; boundaries derive from a terrain/drainage model.",
+    "HydroSHEDS delineation quality is lower north of 60 degrees latitude because a coarser HYDRO1k elevation source replaces SRTM there.",
+    "The map does not display river discharge, groundwater quantity, precipitation, available water supply or any area-derived water quantity.",
+    "Small countries or narrow/coastal areas may have no display pixel centres or source coverage. Gaps stay missing; no polygon is invented.",
+    "The map clips original sub-basin units to the 45-country display extent, and longitude 65 degrees east clips Russia."
+  ],
+  "validation": {
+    "validDisplayPixels": 1066516,
+    "visibleBasinUnits": 131,
+    "unresolvedDisplayCountries": [
+      "VAT",
+      "MCO"
+    ],
+    "allMissingDisplayCountries": []
+  },
+  "countryCoverage": [
+    {
+      "code": "RUS",
+      "displayPixelCenters": 541169,
+      "validDisplayPixelCenters": 535917,
+      "missingDisplayPixelCenters": 5252
+    },
+    {
+      "code": "NOR",
+      "displayPixelCenters": 58861,
+      "validDisplayPixelCenters": 51911,
+      "missingDisplayPixelCenters": 6950
+    },
+    {
+      "code": "FRA",
+      "displayPixelCenters": 38264,
+      "validDisplayPixelCenters": 37202,
+      "missingDisplayPixelCenters": 1062
+    },
+    {
+      "code": "SWE",
+      "displayPixelCenters": 70692,
+      "validDisplayPixelCenters": 69901,
+      "missingDisplayPixelCenters": 791
+    },
+    {
+      "code": "BLR",
+      "displayPixelCenters": 19056,
+      "validDisplayPixelCenters": 19056,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "UKR",
+      "displayPixelCenters": 43217,
+      "validDisplayPixelCenters": 43051,
+      "missingDisplayPixelCenters": 166
+    },
+    {
+      "code": "POL",
+      "displayPixelCenters": 26607,
+      "validDisplayPixelCenters": 26339,
+      "missingDisplayPixelCenters": 268
+    },
+    {
+      "code": "AUT",
+      "displayPixelCenters": 6029,
+      "validDisplayPixelCenters": 6029,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "HUN",
+      "displayPixelCenters": 6467,
+      "validDisplayPixelCenters": 6467,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "MDA",
+      "displayPixelCenters": 2257,
+      "validDisplayPixelCenters": 2257,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "ROU",
+      "displayPixelCenters": 15870,
+      "validDisplayPixelCenters": 15867,
+      "missingDisplayPixelCenters": 3
+    },
+    {
+      "code": "LTU",
+      "displayPixelCenters": 6339,
+      "validDisplayPixelCenters": 6332,
+      "missingDisplayPixelCenters": 7
+    },
+    {
+      "code": "LVA",
+      "displayPixelCenters": 6883,
+      "validDisplayPixelCenters": 6781,
+      "missingDisplayPixelCenters": 102
+    },
+    {
+      "code": "EST",
+      "displayPixelCenters": 5301,
+      "validDisplayPixelCenters": 5141,
+      "missingDisplayPixelCenters": 160
+    },
+    {
+      "code": "DEU",
+      "displayPixelCenters": 29333,
+      "validDisplayPixelCenters": 28931,
+      "missingDisplayPixelCenters": 402
+    },
+    {
+      "code": "BGR",
+      "displayPixelCenters": 6600,
+      "validDisplayPixelCenters": 6567,
+      "missingDisplayPixelCenters": 33
+    },
+    {
+      "code": "GRC",
+      "displayPixelCenters": 7096,
+      "validDisplayPixelCenters": 6167,
+      "missingDisplayPixelCenters": 929
+    },
+    {
+      "code": "ALB",
+      "displayPixelCenters": 1693,
+      "validDisplayPixelCenters": 1627,
+      "missingDisplayPixelCenters": 66
+    },
+    {
+      "code": "HRV",
+      "displayPixelCenters": 3727,
+      "validDisplayPixelCenters": 3611,
+      "missingDisplayPixelCenters": 116
+    },
+    {
+      "code": "CHE",
+      "displayPixelCenters": 3176,
+      "validDisplayPixelCenters": 3176,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "LUX",
+      "displayPixelCenters": 188,
+      "validDisplayPixelCenters": 188,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "BEL",
+      "displayPixelCenters": 2412,
+      "validDisplayPixelCenters": 2399,
+      "missingDisplayPixelCenters": 13
+    },
+    {
+      "code": "NLD",
+      "displayPixelCenters": 3446,
+      "validDisplayPixelCenters": 2950,
+      "missingDisplayPixelCenters": 496
+    },
+    {
+      "code": "PRT",
+      "displayPixelCenters": 5105,
+      "validDisplayPixelCenters": 4756,
+      "missingDisplayPixelCenters": 349
+    },
+    {
+      "code": "ESP",
+      "displayPixelCenters": 27994,
+      "validDisplayPixelCenters": 27373,
+      "missingDisplayPixelCenters": 621
+    },
+    {
+      "code": "IRL",
+      "displayPixelCenters": 5243,
+      "validDisplayPixelCenters": 5089,
+      "missingDisplayPixelCenters": 154
+    },
+    {
+      "code": "ITA",
+      "displayPixelCenters": 18951,
+      "validDisplayPixelCenters": 17893,
+      "missingDisplayPixelCenters": 1058
+    },
+    {
+      "code": "DNK",
+      "displayPixelCenters": 4421,
+      "validDisplayPixelCenters": 3811,
+      "missingDisplayPixelCenters": 610
+    },
+    {
+      "code": "GBR",
+      "displayPixelCenters": 23328,
+      "validDisplayPixelCenters": 21386,
+      "missingDisplayPixelCenters": 1942
+    },
+    {
+      "code": "ISL",
+      "displayPixelCenters": 19533,
+      "validDisplayPixelCenters": 17263,
+      "missingDisplayPixelCenters": 2270
+    },
+    {
+      "code": "SVN",
+      "displayPixelCenters": 1290,
+      "validDisplayPixelCenters": 1290,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "FIN",
+      "displayPixelCenters": 59937,
+      "validDisplayPixelCenters": 59060,
+      "missingDisplayPixelCenters": 877
+    },
+    {
+      "code": "SVK",
+      "displayPixelCenters": 3486,
+      "validDisplayPixelCenters": 3486,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "CZE",
+      "displayPixelCenters": 6282,
+      "validDisplayPixelCenters": 6282,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "BIH",
+      "displayPixelCenters": 3178,
+      "validDisplayPixelCenters": 3178,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "MKD",
+      "displayPixelCenters": 1451,
+      "validDisplayPixelCenters": 1451,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "SRB",
+      "displayPixelCenters": 4811,
+      "validDisplayPixelCenters": 4811,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "MNE",
+      "displayPixelCenters": 804,
+      "validDisplayPixelCenters": 799,
+      "missingDisplayPixelCenters": 5
+    },
+    {
+      "code": "KOS",
+      "displayPixelCenters": 668,
+      "validDisplayPixelCenters": 668,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "VAT",
+      "displayPixelCenters": 0,
+      "validDisplayPixelCenters": 0,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "SMR",
+      "displayPixelCenters": 4,
+      "validDisplayPixelCenters": 4,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "MCO",
+      "displayPixelCenters": 0,
+      "validDisplayPixelCenters": 0,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "MLT",
+      "displayPixelCenters": 14,
+      "validDisplayPixelCenters": 14,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "LIE",
+      "displayPixelCenters": 9,
+      "validDisplayPixelCenters": 9,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "AND",
+      "displayPixelCenters": 26,
+      "validDisplayPixelCenters": 26,
+      "missingDisplayPixelCenters": 0
+    }
+  ],
+  "inputs": [
+    {
+      "path": "src/data/atlas/europe-countries.json",
+      "sha256": "74188768119719459793e99eebdc29a90abe85881bdfc15d76ab144ec6320237",
+      "role": "Existing 45-country display mask"
+    },
+    {
+      "path": "data-source/atlas/europe/drainage/source.json",
+      "sha256": "10892a19dd02dd73993853dfb6f6ebf0ede51aa2c9262e89bec48c8b8228df0d",
+      "role": "Source metadata or independent geometry samples"
+    },
+    {
+      "path": "data-source/atlas/europe/drainage/selected-inputs.json",
+      "sha256": "613253e3cec40ce22040f90661aa562a236e89cf9bc63693fd8c912482a2c582",
+      "role": "Verified actual BasinATLAS selected-file provenance and license evidence"
+    },
+    {
+      "path": "data-source/atlas/europe/drainage/validation.json",
+      "sha256": "4aeaff9a98ab7988c0fd5567176e2441ff44aa17840d80dcd73c66bc1ec96547",
+      "role": "Source metadata or independent geometry samples"
+    }
+  ],
+  "files": {
+    "drainage.png": {
+      "sha256": "61fe6026896050355656da01927b5dc61e1a340e188c4ffd59b400037255d0f4",
+      "bytes": 63874
+    },
+    "values.bin.gz": {
+      "sha256": "6c1afeb901ccb1b264aca2883ffecbca2cbb1dc8dceb2cc8eea9bde80bfa5567",
+      "bytes": 60942
+    },
+    "basins.json": {
+      "sha256": "50cd4c300b8519f64cd154332afcfac1a2273a581d82534bc293466bdf4ef233",
+      "bytes": 11615
+    }
+  }
+}

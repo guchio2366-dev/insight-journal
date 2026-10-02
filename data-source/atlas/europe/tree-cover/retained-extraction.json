@@ -1,0 +1,59 @@
+{
+  "sourceCRS": "EPSG:4326",
+  "encoding": "TIFF DEFLATE uint8 categorical overview block, predictor 1",
+  "treeClass": 10,
+  "allowedCodes": [
+    0,
+    10,
+    20,
+    30,
+    40,
+    50,
+    60,
+    70,
+    80,
+    90,
+    95,
+    100
+  ],
+  "samples": [
+    {
+      "tile": "N60E027",
+      "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N60E027_Map.tif",
+      "bounds": [
+        27,
+        60,
+        30,
+        63
+      ],
+      "width": 562,
+      "height": 562,
+      "storedRowStride": 1024,
+      "storedHeight": 1024,
+      "sourceNoData": 0,
+      "file": "N60E027-overview.deflate",
+      "sha256": "1943e3c226f8d6c3676a0e62332dbea66759cbdada995a2117dc26cd3d2dc513",
+      "bytes": 36304,
+      "sourceRange": "bytes=27560-63863"
+    },
+    {
+      "tile": "N54E036",
+      "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N54E036_Map.tif",
+      "bounds": [
+        36,
+        54,
+        39,
+        57
+      ],
+      "width": 562,
+      "height": 562,
+      "storedRowStride": 1024,
+      "storedHeight": 1024,
+      "sourceNoData": 0,
+      "file": "N54E036-overview.deflate",
+      "sha256": "9529799ad3e26adeed238f80f586f6a27deee9b0ef2e7e618ec1af6e86074a0e",
+      "bytes": 57731,
+      "sourceRange": "bytes=27560-85290"
+    }
+  ]
+}
