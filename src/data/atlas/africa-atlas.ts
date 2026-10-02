@@ -57,7 +57,7 @@ export function fillFor(value:number|null,metric:Metric):string {
   const index=metric.breaks.findIndex(b=>value<b);
   return palette[index<0?palette.length-1:index];
 }
-export type State={field:Field;metric:string;year:number;place:string;compare:string;region:Region;zoom:'all'|'region'|'country'|'theme';theme:string;context:string;topic:string;water:string};
+export type State={field:Field;metric:string;year:number;place:string;compare:string;region:Region;zoom:'all'|'region'|'country'|'theme';theme:string;context:string;topic:string;water:string;layerClass:string;layerPoint:string;sourceState:string;view:'distribution'|'statistics'};
 export function canonicalTopic(field:Field,metric:string,requested=''):string {
   if(field==='agriculture')return metric==='AG.LND.FRST.ZS'?'forestry':'farming';
   if(field==='nature')return ['climate','terrain','elevation'].includes(requested)?requested:'water';
@@ -78,16 +78,27 @@ export function readState(search:string):State {
   const safeField=Object.hasOwn(fields,field)?field:'nature';
   const metric=metrics.find(m=>m.id===p.get('metric')&&m.field===safeField)??metrics.find(m=>m.field===safeField)!;
   const exists=(code:string|null)=>countries.some(c=>c.code===code);
-  const zoom=p.get('zoom')??'theme';
+  const defaultClimate=safeField==='nature'&&!p.has('metric')&&!p.has('theme')&&!p.has('topic');
+  const zoom=p.get('zoom')??(defaultClimate?'all':'theme');
   const theme=themes.find(t=>t.id===p.get('theme')&&t.field===safeField)??themes.find(t=>t.field===safeField)!;
   const place=exists(p.get('place'))?p.get('place')!:theme.places[0];
-  const region=p.get('region')??defaultThemeRegion(theme.id);
-  const context=p.get('context')===theme.compareMetric?theme.compareMetric:'';
-  return {field:safeField,metric:metric.id,year:years.includes(Number(p.get('year')))?Number(p.get('year')):2021,place,compare:exists(p.get('compare'))&&p.get('compare')!==place?p.get('compare')!:'',region:Object.hasOwn(regionNames,region)?region as Region:'all',zoom:['all','region','country','theme'].includes(zoom)?zoom as State['zoom']:'theme',theme:theme.id,context:context??'',topic:canonicalTopic(safeField,metric.id,p.get('topic')??''),water:safeField==='nature'?canonicalWater(metric.id,p.get('water')??''):''};
+  const region=p.get('region')??(defaultClimate?'all':defaultThemeRegion(theme.id));
+  const context=metrics.some(m=>m.id===p.get('context'))&&(p.get('context')===theme.compareMetric||p.has('sourceState')||safeField==='agriculture'&&metric.id==='AG.LND.FRST.ZS'&&p.get('context')===metric.id)?p.get('context')!:'';
+  const layerClass=/^[a-zA-Z0-9_:.-]{1,100}$/.test(p.get('layerClass')??'')?p.get('layerClass')!:'';
+  const point=(p.get('layerPoint')??'').split(',').map(Number);
+  const layerPoint=point.length===2&&point.every(Number.isFinite)&&point[0]>=-27&&point[0]<=64&&point[1]>=-36&&point[1]<=39?point.join(','):'';
+  const snapshot=p.get('sourceState')??'';
+  const sourceState=snapshot.length<=1800&&!/(?:^|&)sourceState=/.test(snapshot)?snapshot:'';
+  const topic=canonicalTopic(safeField,metric.id,p.get('topic')??(defaultClimate?'climate':'')),culture=safeField==='population'&&(topic==='ethnicity'||topic==='religion');
+  return {field:safeField,metric:metric.id,year:years.includes(Number(p.get('year')))?Number(p.get('year')):2021,place,compare:exists(p.get('compare'))&&p.get('compare')!==place?p.get('compare')!:'',region:Object.hasOwn(regionNames,region)?region as Region:'all',zoom:['all','region','country','theme'].includes(zoom)?zoom as State['zoom']:'theme',theme:theme.id,context:culture?'':context??'',topic,water:safeField==='nature'?canonicalWater(metric.id,p.get('water')??''):'',layerClass:culture?'':layerClass,layerPoint:culture?'':layerPoint,sourceState:culture?'':sourceState,view:culture?'distribution':p.get('view')==='statistics'||!p.has('view')&&p.has('theme')&&!p.has('topic')?'statistics':'distribution'};
+}
+export function africaComparisonSnapshot(state:State):string {
+  return writeState({...state,context:'',sourceState:''},new URL('https://atlas.invalid/')).searchParams.toString();
 }
 export function writeState(state:State,url:URL) {
   state.topic=canonicalTopic(state.field,state.metric,state.topic);
   state.water=state.field==='nature'?canonicalWater(state.metric,state.water):'';
+  if(state.field==='population'&&(state.topic==='ethnicity'||state.topic==='religion')){state.context='';state.layerClass='';state.layerPoint='';state.sourceState='';state.view='distribution';}
   for(const [key,value] of Object.entries(state)) value===''?url.searchParams.delete(key):url.searchParams.set(key,String(value));
   return url;
 }

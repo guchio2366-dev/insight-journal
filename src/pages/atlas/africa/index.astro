@@ -39,20 +39,25 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
   <header class="africa-heading">
    <div class="africa-compact-heading"><p class="africa-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / アフリカ</p><span>アフリカ地域</span></div>
    <h1>アフリカ地図</h1>
-   <div class="africa-region-controls"><nav class="africa-region-tabs" aria-label="地域の移動"><a href={withBase('/atlas/')}>世界の地域</a><a href={withBase('/atlas/africa/overview/')} aria-current="page">アフリカ</a></nav><div class="africa-region-navigation"><label>統計の地域<select data-region>{Object.entries(regionNames).map(([id,name])=><option value={id}>{name}</option>)}</select></label></div></div>
+   <div class="africa-region-controls">
+    <div class="africa-region-row"><nav class="africa-region-tabs" aria-label="地域の移動"><a href={withBase('/atlas/')}>世界の地域</a><a href={withBase('/atlas/africa/overview/')} aria-current="page">アフリカ</a></nav><label>地域<select data-region>{Object.entries(regionNames).map(([id,name])=><option value={id}>{name}</option>)}</select></label></div>
+    <div class="africa-country-controls"><label>国・地域<select data-place>{ordered.map(c=><option value={c.code} selected={c.code===state.place}>{c.name}</option>)}</select></label><label>比較国<select data-compare><option value="">比較なし</option>{ordered.map(c=><option value={c.code}>{c.name}</option>)}</select></label><label>統計年<select data-year disabled>{[...years].reverse().map(y=><option value={y} selected={y===state.year}>{y}年</option>)}</select></label></div>
+   </div>
   </header>
   <nav class="africa-fields" aria-label="分野を選ぶ"><a data-africa-overview-link href={withBase('/atlas/africa/overview/')}>概要</a>{(['agriculture','nature','industry','population'] as const).map(id=><button type="button" data-field={id} aria-pressed={id==='nature'?'true':'false'}>{fields[id].label}</button>)}</nav>
   <nav class="africa-subfields" data-africa-subfields aria-label="分野内の項目"></nav>
   <div class="africa-workspace">
    <section class="africa-map-card" aria-labelledby="africa-map-title">
+    <div class="africa-map-frame">
     <div class="africa-map-heading"><h2 id="africa-map-title" data-metric-title>{metric.label}</h2><span><span data-period>長期平均</span> · <span data-unit>{metric.unit}</span></span></div>
-    <div class="africa-map-tools" aria-label="地図の表示範囲"><button data-zoom="all" type="button">アフリカ全体</button><button data-zoom="theme" type="button">テーマの範囲</button><button data-zoom="region" type="button">選択地域</button><button data-zoom="country" type="button">選択国</button><button data-reset type="button">リセット</button></div>
     <svg class="africa-map" viewBox={initialViewBox.join(' ')} data-theme={initialTheme.id} data-detail={state.zoom!=='all'?'true':'false'} role="img" aria-labelledby="africa-svg-title africa-svg-desc">
       <title id="africa-svg-title">{initialTheme.title}・国別の年降水量（長期平均）</title><desc id="africa-svg-desc">分布テーマと国別統計を重ねた地図。右の凡例と説明から、表示した分布を読み取れます。国は選択欄や一覧からも選べます。</desc>
      <defs><pattern id="africa-missing" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#eeeae1"/><path d="M0 7L7 0" stroke="#b5b0a3" stroke-width="1"/></pattern></defs>
      <rect width={africaWidth} height={africaHeight} fill="#e9f0f0"/>
      {[-20,0,20].map(lat=><line x1="0" x2={africaWidth} y1={projectAfrica([0,lat])[1]} y2={projectAfrica([0,lat])[1]} class="africa-graticule"/>)}
      {geography.features.map(f=>{const c=countries.find(c=>c.code===f.properties.code)!;const v=valueAt(metric.id,c.code,state.year);return <path d={africaPath(f.geometry)} data-country-path={c.code} fill={fillFor(v,metric)} fill-rule="evenodd" class:list={['africa-country',{'is-selected':c.code===state.place}]}><title>{c.name}：{formatValue(v,metric)} {v===null?'':metric.unit}</title></path>})}
+     <g data-africa-actual-layer></g>
+     <g data-africa-comparison-layer></g>
      <g data-symbols></g>
      {[{name:'大西洋',point:[-18,-12]},{name:'インド洋',point:[56,-8]},{name:'地中海',point:[18,36]}].map(l=><text class="africa-ocean" x={projectAfrica(l.point)[0]} y={projectAfrica(l.point)[1]}>{l.name}</text>)}
      {countries.filter(c=>['CPV','STP','COM','SYC','MUS'].includes(c.code)).map(c=><g data-island-marker={c.code}><circle data-country-marker={c.code} cx={projectAfrica(c.point)[0]} cy={projectAfrica(c.point)[1]} r="5" class="africa-island"/><text class="africa-island-label" x={projectAfrica(c.point)[0]+9} y={projectAfrica(c.point)[1]+4}>{c.name}</text></g>)}
@@ -63,16 +68,17 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
       <title>{mark.number} {mark.label}：{mark.note}</title>
      </g>)}</g>
     </svg>
+    <div class="africa-map-tools" aria-label="地図の表示範囲"><button data-zoom="all" type="button">全体</button><button data-zoom="theme" type="button">事例</button><button data-zoom="region" type="button">地域</button><button data-zoom="country" type="button">選択国</button><button data-reset type="button">リセット</button></div>
+    </div>
     <div class="africa-map-subfields" data-africa-map-subfields></div>
     <p class="africa-subfield-status" data-africa-subfield-status hidden aria-live="polite"></p>
-     <div class="africa-essential-legend-spacer" data-africa-legend-spacer aria-hidden="true"></div>
     <div class="africa-themes" data-themes role="group" aria-label="分布テーマを選ぶ">{themes.filter(theme=>theme.field===state.field).map(theme=><button type="button" data-theme={theme.id} aria-pressed={theme.id===initialTheme.id?'true':'false'}>{theme.title}</button>)}</div>
     <details class="africa-map-notes"><summary>地図の表示方法と収録状況</summary>
     <p class="africa-caption" data-map-caption>国平均の色です。国内の気候区分・雨の分布ではありません。島の白丸は選択用の目印です。</p>
     <p class="africa-coverage" data-coverage></p>
 </details>
    </section>
-   <aside class="africa-detail" aria-label="分布の読み方と国別比較">
+    <aside class="africa-detail" aria-label="分布の読み方と国別比較" tabindex="0">
     <section class="africa-theme-reading" aria-labelledby="africa-theme-title">
      <div class="africa-right-fixed">
      <p class="africa-kicker">地図から持ち帰ること</p>
@@ -80,18 +86,19 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
      <p class="africa-takeaway" data-theme-takeaway>{initialTheme.takeaway}</p>
       <div class="africa-theme-actions"><button type="button" data-theme-comparison>国別統計と重ねる</button><button type="button" data-theme-return hidden>← {initialTheme.title}へ戻る</button></div>
       </div>
-      <section class="africa-essential-legend" aria-label="現在の地図の凡例">
+       <section class="africa-essential-legend africa-actual-key" data-africa-actual-key hidden aria-label="元分布の全凡例"><p data-africa-layer-caption></p><div data-africa-layer-legend></div><p data-africa-layer-scope></p></section>
+       <section class="africa-essential-legend" data-africa-statistics-key aria-label="国別統計の凡例">
        <p class="africa-essential-legend-heading" data-essential-metric>{metric.label} · 長期平均 · {metric.unit}</p>
        <div class="africa-legend" data-legend>{palette.map((color,i)=><span><i style={`background:${color}`}/>{i===0?'250未満':i===4?'1,500以上':`${metric.breaks[i-1].toLocaleString()}〜${metric.breaks[i].toLocaleString()}未満`}</span>)}<span><i class="africa-no-data"/>未収録</span></div>
        <div class="africa-theme-legend" data-theme-legend aria-label="分布テーマの凡例">{initialMarks.map(mark=><span><i style={`background:${mark.color}`}/>{mark.number} {mark.label}</span>)}</div>
        <p class="africa-essential-legend-note" data-essential-boundary>細線：国境。赤枠：選択国。青い破線：比較国。</p>
       </section>
-      <div class="africa-detail-scroll" tabindex="0" aria-label="選択内容の詳しい説明">
+       <div class="africa-detail-scroll">
+       <div class="africa-layer-selection" data-africa-layer-selection hidden><label>表示・読解する分類<select data-africa-layer-category></select></label><p data-africa-point-reading aria-live="polite"></p><button type="button" data-africa-layer-retry hidden>分布データを再読込</button></div>
       <p class="africa-theme-explanation" data-theme-takeaway-detail>{initialTheme.takeaway}</p>
       <p class="africa-theme-caveat" data-theme-caveat>{initialTheme.caveat}</p>
      <a class="africa-theme-source" data-theme-source href={initialTheme.source}>{initialTheme.sourceLabel}</a>
      <details class="africa-theme-full"><summary>分布の詳しい読み方・出典</summary><div data-theme-details>{initialMarks.map(mark=><p>{mark.number} {mark.label} — {mark.note}</p>)}{initialTheme.evidenceSources?.map(source=><p><a href={source.url}>{source.label}</a></p>)}</div></details>
-    <div class="africa-country-controls"><label>国・地域を選ぶ<select data-place>{ordered.map(c=><option value={c.code} selected={c.code===state.place}>{c.name}</option>)}</select></label><label>比較する国<select data-compare><option value="">比較なし</option>{ordered.map(c=><option value={c.code}>{c.name}</option>)}</select></label></div>
     <div aria-live="polite" class="africa-selected"><div class="africa-selected-heading"><h2 data-selected-name>エジプト</h2><span data-selected-region>北アフリカ</span></div><p class="africa-selected-metric" data-selected-metric>{metric.label}</p><p class="africa-big-value"><strong data-selected-value>{formatValue(valueAt(metric.id,'EGY',state.year),metric)}</strong><span data-selected-unit>{metric.unit}</span></p><p data-comparison></p><p data-place-note></p></div>
      </div>
     </section>
@@ -101,7 +108,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
   <div class="africa-secondary">
 <details class="africa-disclosure africa-statistics-controls"><summary>国別統計の指標・年を選ぶ</summary>  <div class="africa-controls">
    <label>指標<select data-metric>{metrics.map(m=><option value={m.id} hidden={m.field!=='nature'} selected={m.id===state.metric}>{m.label}</option>)}</select></label>
-   <label>年<select data-year disabled>{[...years].reverse().map(y=><option value={y} selected={y===state.year}>{y}年</option>)}</select><small data-year-note>長期平均のため年による切替はありません</small></label>
+   <p data-year-note>長期平均のため年による切替はありません</p>
    <button type="button" data-latest title="54か国のうち40か国以上の値がある最新年（上限2024年）に切り替えます">収録国が多い最新年</button>
   </div></details>
 <details class="africa-disclosure"><summary>選択国の指標と2000〜2024年の推移</summary><div class="africa-statistics-grid">    <div class="africa-current-metrics"><h3>この分野の指標</h3><table><thead><tr><th>指標</th><th data-column-place>エジプト</th><th data-column-compare hidden>比較国</th></tr></thead><tbody data-current-metrics>{metrics.filter(m=>m.field==='nature').map(m=><tr><th>{m.label}<small>{m.unit}</small></th><td>{formatValue(valueAt(m.id,'EGY',state.year),m)}</td></tr>)}</tbody></table><p data-metric-year></p></div>

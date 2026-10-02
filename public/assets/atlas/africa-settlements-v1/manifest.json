@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "status": "guidance-only",
+  "available": false,
+  "disabled": true,
+  "reason": "公開利用・派生データ配信の明示許諾を確認できていないため、分布図は掲載していません。",
+  "sourceVersion": 2021,
+  "title": "民族・宗教資料の案内",
+  "description": "資料の対象と限界、公式の参照先を案内します。民族・宗教の分布図や割合は提供していません。",
+  "year": 2020,
+  "yearMeaning": "GeoEPR 2021資料が扱う居住域の有効年。表示中の分布・人口割合の年ではありません。",
+  "nonExhaustive": true,
+  "derivedGeometryPublished": false,
+  "topics": {
+    "ethnicity": {
+      "status": "guidance-only",
+      "available": false,
+      "disabled": true,
+      "reason": "公開利用・派生データ配信の明示許諾を確認できていないため、分布図は掲載していません。",
+      "sourceVersion": 2021,
+      "title": "民族集団の資料案内",
+      "description": "GeoEPR2021は政治的に関連する掲載集団の居住域を扱う資料です。全住民の民族割合や網羅的な民族分布ではありません。",
+      "scope": "2021版（2020年に有効な居住域）。この画面に分布図はありません。"
+    },
+    "religion": {
+      "status": "guidance-only",
+      "available": false,
+      "disabled": true,
+      "reason": "公開利用・派生データ配信の明示許諾を確認できていないため、分布図は掲載していません。",
+      "sourceVersion": 2021,
+      "title": "宗教の資料案内",
+      "description": "EPR-ED2021は掲載集団内の最大3つの宗教区分と相対規模を扱う資料です。地域住民や個人の信仰割合ではありません。",
+      "scope": "2021版の集団資料。2020年の局所観測ではなく、この画面に分布図はありません。"
+    }
+  },
+  "sources": [
+    {
+      "name": "GeoEPR 2021",
+      "sourceVersion": 2021,
+      "url": "https://icr.ethz.ch/data/epr/geoepr/",
+      "codebook": "https://icr.ethz.ch/data/epr/geoepr/EPR_2021_Codebook_GeoEPR.pdf",
+      "citation": "Vogt et al. (2015), Integrating Data on Ethnicity, Geography, and Conflict: The Ethnic Power Relations Data Set Family; Wucherpfennig et al. (2011), Politically Relevant Ethnic Groups across Space and Time: Introducing the GeoEPR Dataset.",
+      "originalSha256": "346e9329a136b2a1d3fbe4334d3dc8ae7775c84bf2ec6d91cdcc81935d763964",
+      "reuse": {
+        "status": "unresolved",
+        "publicDerivedMapPermissionConfirmed": false,
+        "note": "Official 2021 download and research citation notices have been confirmed. An explicit grant for public derived maps or redistribution has not been confirmed; download availability and citation do not establish that grant."
+      }
+    },
+    {
+      "name": "EPR-ED 2021",
+      "sourceVersion": 2021,
+      "url": "https://icr.ethz.ch/data/epr/ed/",
+      "codebook": "https://icr.ethz.ch/data/epr/ed/EPR_2021_Codebook_ED.pdf",
+      "citation": "Bormann, Cederman and Vogt (2017), Language, Religion, and Ethnic Civil War.",
+      "originalSha256": "fce287a94b54ae8c9f8a556332f654e127b5b912ed0a7a3b15c61876d5ec2672",
+      "reuse": {
+        "status": "unresolved",
+        "publicDerivedMapPermissionConfirmed": false,
+        "note": "Official 2021 download and research citation notices have been confirmed. An explicit grant for public derived maps or redistribution has not been confirmed; download availability and citation do not establish that grant."
+      }
+    }
+  ]
+}

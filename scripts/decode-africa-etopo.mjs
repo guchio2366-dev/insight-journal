@@ -1,0 +1,25 @@
+/** Private preparation: exact native Africa window of the immutable global DEM. */
+import {createReadStream} from 'node:fs';
+import {mkdir,writeFile,stat} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {pathToFileURL} from 'node:url';
+import path from 'node:path';
+const opt=n=>process.argv.includes(n)?process.argv[process.argv.indexOf(n)+1]:undefined;
+const source=opt('--source'),out=opt('--out'),pkg=opt('--geotiff-package');
+if(!source||!out||!pkg)throw Error('--source, --out and --geotiff-package required');
+const expected='9d27d4b8ea8e76977e2988bca667d7c8fa68b927355feffcddd6b4875a7fd08e',h=createHash('sha256');
+for await(const b of createReadStream(source))h.update(b);
+if(h.digest('hex')!==expected)throw Error('Immutable NOAA source hash mismatch');
+const {fromFile}=await import(pathToFileURL(path.join(pkg,'dist-module/geotiff.js')).href);
+const tif=await fromFile(source),image=await tif.getImage(),origin=image.getOrigin(),resolution=image.getResolution(),keys=image.getGeoKeys();
+if(image.getWidth()!==21600||image.getHeight()!==10800||keys.GeographicTypeGeoKey!==4326||keys.VerticalCSTypeGeoKey!==3855||Math.abs(resolution[0]-1/60)>1e-12)throw Error('Unexpected DEM geometry');
+const bounds=[-27,-36,64,39],window=[9180,3060,14640,7560];
+console.log(JSON.stringify({stage:'decode',bounds,window}));
+const values=await image.readRasters({window,samples:[0],interleave:true});
+if(!(values instanceof Float32Array))throw Error('Expected original float32 values');
+const bytes=Buffer.from(values.buffer,values.byteOffset,values.byteLength);
+await mkdir(out,{recursive:true});
+await writeFile(path.join(out,'africa-etopo-native.f32'),bytes);
+const meta={sourceSha256:expected,sourceBytes:(await stat(source)).size,file:'africa-etopo-native.f32',bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),width:5460,height:4500,bounds,window,origin:[origin[0]+window[0]*resolution[0],origin[1]+window[1]*resolution[1]],resolution,dtype:'float32-little-endian',noData:image.getGDALNoData(),geoKeys:keys,method:'Exact source cell window; no resampling, interpolation or integer casting'};
+await writeFile(path.join(out,'africa-etopo-native.json'),JSON.stringify(meta,null,2)+'\n');
+await tif.close();console.log(JSON.stringify({stage:'decoded',...meta}));
