@@ -1,0 +1,153 @@
+{
+  "validator": "Shapely 2.1.2",
+  "geos": "3.13.1",
+  "validation_scope": "Per-feature topological validity and original/prepared WKB equality; overlapping aquifers do not form a planar partition. No repairs or filtering.",
+  "results": [
+    {
+      "original": {
+        "file": "gin-regions-source.geojson",
+        "feature_count": 1176,
+        "valid_geometry_count": 1169,
+        "invalid_geometry_count": 7,
+        "empty_geometry_count": 0,
+        "invalid_geometries": [
+          {
+            "index": 45,
+            "feature_id": null,
+            "aquifer_id": null,
+            "region": "Appalachain Mountains",
+            "reason": "Self-intersection[-65.387175157085 43.6478221145416]"
+          },
+          {
+            "index": 65,
+            "feature_id": null,
+            "aquifer_id": null,
+            "region": "Appalachain Mountains",
+            "reason": "Self-intersection[-66.096247350638 45.6718963402015]"
+          },
+          {
+            "index": 97,
+            "feature_id": null,
+            "aquifer_id": null,
+            "region": "Magdalen Basin",
+            "reason": "Self-intersection[-61.9988046478697 45.8578234141178]"
+          },
+          {
+            "index": 112,
+            "feature_id": null,
+            "aquifer_id": null,
+            "region": "Magdalen Basin",
+            "reason": "Self-intersection[-60.9881923935828 46.6911364334658]"
+          },
+          {
+            "index": 150,
+            "feature_id": null,
+            "aquifer_id": null,
+            "region": "Magdalen Basin",
+            "reason": "Self-intersection[-60.8531060533837 46.8158216726136]"
+          },
+          {
+            "index": 237,
+            "feature_id": null,
+            "aquifer_id": null,
+            "region": "St. Lawrence Platform",
+            "reason": "Self-intersection[-58.6664329228832 48.7617393844333]"
+          },
+          {
+            "index": 441,
+            "feature_id": null,
+            "aquifer_id": null,
+            "region": "Appalachain Mountains",
+            "reason": "Self-intersection[-55.7927991266149 51.489662106858]"
+          }
+        ],
+        "sha256": "b84a218cc53c1b7201c29c2a2d9ad02a2d3d6b6edb5b424bce414698523183b2"
+      },
+      "prepared": {
+        "file": "canada-hydrogeological-regions.geojson",
+        "feature_count": 1176,
+        "valid_geometry_count": 1169,
+        "invalid_geometry_count": 7,
+        "empty_geometry_count": 0,
+        "invalid_geometries": [
+          {
+            "index": 45,
+            "feature_id": 45,
+            "aquifer_id": null,
+            "region": "Appalachain Mountains",
+            "reason": "Self-intersection[-65.387175157085 43.6478221145416]"
+          },
+          {
+            "index": 65,
+            "feature_id": 65,
+            "aquifer_id": null,
+            "region": "Appalachain Mountains",
+            "reason": "Self-intersection[-66.096247350638 45.6718963402015]"
+          },
+          {
+            "index": 97,
+            "feature_id": 97,
+            "aquifer_id": null,
+            "region": "Magdalen Basin",
+            "reason": "Self-intersection[-61.9988046478697 45.8578234141178]"
+          },
+          {
+            "index": 112,
+            "feature_id": 112,
+            "aquifer_id": null,
+            "region": "Magdalen Basin",
+            "reason": "Self-intersection[-60.9881923935828 46.6911364334658]"
+          },
+          {
+            "index": 150,
+            "feature_id": 150,
+            "aquifer_id": null,
+            "region": "Magdalen Basin",
+            "reason": "Self-intersection[-60.8531060533837 46.8158216726136]"
+          },
+          {
+            "index": 237,
+            "feature_id": 237,
+            "aquifer_id": null,
+            "region": "St. Lawrence Platform",
+            "reason": "Self-intersection[-58.6664329228832 48.7617393844333]"
+          },
+          {
+            "index": 441,
+            "feature_id": 441,
+            "aquifer_id": null,
+            "region": "Appalachain Mountains",
+            "reason": "Self-intersection[-55.7927991266149 51.489662106858]"
+          }
+        ],
+        "sha256": "4c98b23247f082d1da225e3153f4d760ca72913efb391dfb43fbcd6a74c603c4"
+      },
+      "same_feature_count": true,
+      "unchanged_geometry_wkb_count": 1176,
+      "repairs_or_dropped_features": false
+    },
+    {
+      "original": {
+        "file": "bc-fraser-aquifers-source.geojson",
+        "feature_count": 149,
+        "valid_geometry_count": 149,
+        "invalid_geometry_count": 0,
+        "empty_geometry_count": 0,
+        "invalid_geometries": [],
+        "sha256": "0c01d39e23df3d09213de1a8218433013fa965e629f3b16dfc44141b23029cc3"
+      },
+      "prepared": {
+        "file": "bc-fraser-aquifers.geojson",
+        "feature_count": 149,
+        "valid_geometry_count": 149,
+        "invalid_geometry_count": 0,
+        "empty_geometry_count": 0,
+        "invalid_geometries": [],
+        "sha256": "f3a91a8a26d7008d95e57bb386f0ff3292c3dc95fabbd281a221f46423beda21"
+      },
+      "same_feature_count": true,
+      "unchanged_geometry_wkb_count": 149,
+      "repairs_or_dropped_features": false
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "verifiedAtUtc": "2026-10-02T14:12:54.000Z",
+  "readableAlias": "https://www2.gov.bc.ca/gov/content/data/open-data/open-government-licence-bc",
+  "finalUrl": "https://www2.gov.bc.ca/gov/content/data/policy-standards/data-policies/open-data/open-government-licence-bc",
+  "status": 200,
+  "title": "Open Government Licence - British Columbia - Province of British Columbia",
+  "responseBytes": 145001,
+  "responseSha256": "b913baf2b66ae7ea155937237ad608905ed6329dd3d7a38af3b60b1aae6a5a17",
+  "sameContentAsOriginalLicence": true,
+  "method": "Read-only HTTP GET requests to the original documented licence URL and the readable official alias returned the same final URL and byte-identical response bodies. Original acquisition URL and full response headers remain in private research evidence."
+}

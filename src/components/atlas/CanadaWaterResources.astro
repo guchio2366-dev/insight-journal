@@ -1,0 +1,56 @@
+---
+import geography from '../../data/atlas/regional-countries.json';
+import climate from '../../data/atlas/canada/climate.json';
+import industryGeometry from '../../data/atlas/canada/industry-geometry.json';
+import {canadaWaterDatasets, canadaWaterPath, projectCanadaWater, type CanadaWaterConfig, type CanadaWaterGeometry} from '../../lib/atlas-canada-water-state';
+import '../../styles/atlas-canada-water-resources.css';
+interface Props { config: CanadaWaterConfig; hidden?: boolean; }
+const {config, hidden = true} = Astro.props;
+const datasets = canadaWaterDatasets(config);
+const context = geography.features.filter(feature => ['CAN','USA','GRL'].includes(feature.properties.code));
+const nationalPath = context.filter(feature => feature.properties.code === 'CAN').map(feature => canadaWaterPath(feature.geometry as CanadaWaterGeometry)).join('');
+const bcPath = industryGeometry.features.find(feature => feature.code === '59')?.path;
+const labels = {precipitation:'降水量',drainage:'河川の流域',groundwater:'全国の地下水地域',aquifers:'BC州の帯水層'};
+const conciseNote = (topic: string, dataset: typeof datasets.precipitation) => topic === 'groundwater' ? `地下水量の地図ではありません。${dataset.invalidGeometryCount ? `原資料で輪郭が交差する${dataset.invalidGeometryCount}区域は塗りを除外し、輪郭のみ表示。` : ''}` : topic === 'aquifers' ? '色は地下水の量・利用可能量や取水の持続可能性を示しません。' : dataset.note ? dataset.note.split('。')[0] + '。' : '';
+---
+<section class="canada-water-resources" data-canada-water-resources hidden={hidden} aria-label="カナダの水資源分布">
+ <div class="canada-water-map-column">
+  <div class="canada-water-heading"><h2 data-canada-water-map-title>水資源の分布</h2><span data-canada-water-map-period></span></div>
+  <div class="canada-water-groundwater-modes" data-canada-water-groundwater-modes hidden aria-label="地下水の表示範囲">
+   <button type="button" data-canada-water-topic="groundwater" aria-pressed="false">全国の地域区分</button><button type="button" data-canada-water-topic="aquifers" aria-pressed="false">BC州南西部の帯水層</button>
+  </div>
+  <div class="atlas-map-frame canada-water-frame">
+   <svg class="canada-water-map" data-canada-water-resource-map viewBox="0 0 900 580" width="900" height="580" role="group" tabindex="0" aria-labelledby="canada-water-resource-title canada-water-resource-desc">
+    <title id="canada-water-resource-title">カナダの水資源分布</title><desc id="canada-water-resource-desc">地図データは表示時に読み込みます。色の区分と説明は地図下の凡例と右の文章でも確認できます。矢印キーで移動、拡大・縮小ボタンで範囲を変えられます。</desc>
+    <defs><clipPath id="canada-water-national-clip"><path d={nationalPath} fill-rule="evenodd" clip-rule="evenodd" /></clipPath></defs>
+    <rect x="0" y="0" width="900" height="580" fill="#e8f0f1" />
+    <g aria-hidden="true">{context.map(feature => <path class:list={['canada-water-context',{'is-canada':feature.properties.code==='CAN'}]} data-canada-water-context-country={feature.properties.code} d={canadaWaterPath(feature.geometry as CanadaWaterGeometry)} fill-rule="evenodd" vector-effect="non-scaling-stroke" />)}{bcPath && <path class="canada-water-context is-canada" data-canada-water-bc-context d={bcPath} fill-rule="evenodd" vector-effect="non-scaling-stroke" hidden />}</g>
+    <g data-canada-water-resource-raster clip-path="url(#canada-water-national-clip)"></g>
+    <g data-canada-water-resource-vectors></g>
+    <path class="canada-water-national-outline" data-canada-water-national-outline d={nationalPath} fill="none" vector-effect="non-scaling-stroke" aria-hidden="true" />
+    <g class="canada-water-references" aria-label="位置の目印に使う既存のECCC観測点">{climate.stations.map(station => {const [x,y] = projectCanadaWater(station.coordinates);return <g data-canada-water-reference={station.id} data-reference-x={x} data-reference-y={y} transform={`translate(${x} ${y})`}><title>{station.name}：ECCC観測点の位置。帯水層の測定点ではありません。</title><g data-canada-water-reference-glyph><circle r="5" vector-effect="non-scaling-stroke" /><text x="10" y="-8" vector-effect="non-scaling-stroke">{station.id === 'vancouver' ? 'Vancouver' : station.name}（観測点）</text></g></g>;})}</g>
+   </svg>
+   <p class="canada-water-loading" data-canada-water-load role="status">分布図は表示時に読み込みます。</p>
+   <div class="canada-water-map-tools" aria-label="水資源地図の操作"><button type="button" data-canada-water-zoom="in" aria-label="地図を拡大">＋</button><button type="button" data-canada-water-zoom="out" aria-label="地図を縮小">−</button><button type="button" data-canada-water-focus disabled>選択へ</button><button type="button" data-canada-water-full>全国へ</button></div>
+  </div>
+  <div class="canada-water-selection"><label>区分を選ぶ <select data-canada-water-area aria-label="水資源の区分を選ぶ"><option value="">すべて</option></select></label><label class="canada-water-only"><input type="checkbox" data-canada-water-resource-only disabled /> 選んだ区分だけ表示</label><button type="button" data-canada-water-resource-reset>選択と範囲を戻す</button></div>
+  <p class="canada-water-status" data-canada-water-resource-status aria-live="polite">色の区分と表示範囲を確認できます。</p>
+  <button class="canada-water-retry" type="button" data-canada-water-retry hidden>地図を再読み込み</button>
+  <p class="canada-water-scope" data-canada-water-resource-scope>各資料の範囲と時点は右の説明を参照してください。</p>
+ </div>
+ <aside class="canada-water-reading" aria-label="水資源地図の読み方">
+  <div class="canada-water-origin" data-water-origin hidden><p data-water-origin-text></p><a data-water-origin-return hidden>元の比較へ戻る</a><details><summary>比較元の分布図と凡例</summary><p data-water-origin-detail></p><svg class="canada-water-origin-map" data-water-origin-map viewBox="0 0 900 580" width="900" height="580" role="img" aria-label="比較元の分布図"></svg><div data-water-origin-legend></div></details></div>
+  {Object.entries(datasets).map(([topic,dataset]) => <section data-canada-water-resource-reading={topic} hidden>
+   <p class="canada-water-eyebrow">{labels[topic as keyof typeof labels]}</p><h2>{dataset.title}</h2><p class="canada-water-takeaway">{dataset.reading}</p>
+   <div class="canada-water-legend" data-canada-water-resource-legend={topic} aria-label={`${labels[topic as keyof typeof labels]}の凡例`}>{(dataset.legendGroups ?? dataset.groups).map(group => dataset.legendGroups ? <span class="canada-water-static-key"><i style={`background:${group.color}`} aria-hidden="true"></i><span>{group.name}</span></span> : <button type="button" data-canada-water-group={group.id} data-canada-water-group-topic={topic} aria-pressed="false"><i style={`background:${group.color}`} aria-hidden="true"></i><span>{group.name}</span></button>)}</div>
+   <div class="canada-water-selected-reading" data-canada-water-selected-reading={topic} hidden><h3 data-canada-water-selected-title></h3><p data-canada-water-selected-description></p><a data-canada-water-selected-link hidden>帯水層の原資料を見る</a></div>
+   <p class="canada-water-reading-scope">{dataset.scope}</p><p class="canada-water-reading-note">{conciseNote(topic,dataset)}</p>
+   <details class="canada-water-source-details"><summary>出典・方法と区分一覧</summary>{dataset.method && <p>{dataset.method}</p>}{dataset.note && <p>{dataset.note}</p>}<p>丸と地名は、既存の都市の気候図と同じECCC観測点の座標を使った位置の目印です。市街地の範囲や帯水層の測定点を示しません。BC州の拡大図の背景は、既存の2021年公式行政界を用いています。</p>
+    <ul>{dataset.sources.map(source => <li><a href={source.url}>{source.title}</a>{source.publisher && <> — {source.publisher}</>}{source.year && <>（{source.year}）</>}{source.note && <p>{source.note}</p>}{source.licenceUrl && <p><a href={source.licenceUrl}>{source.licence || '利用条件'}</a>{source.attribution && <> · {source.attribution}</>}</p>}</li>)}</ul>
+    <table><caption>地図の色の区分</caption><thead><tr><th scope="col">区分</th><th scope="col">説明</th></tr></thead><tbody>{dataset.groups.map(group => <tr><th scope="row">{group.name}</th><td>{group.description || '原資料の分類'}</td></tr>)}</tbody></table>
+   </details>
+  </section>)}
+  <noscript><p>分布図の読み込みと選択には JavaScript が必要です。出典・方法と区分一覧から、各資料の分類と表示範囲を確認できます。</p><style>.canada-water-reading [data-canada-water-resource-reading][hidden]{display:block!important}</style></noscript>
+ </aside>
+ <script type="application/json" data-canada-water-resource-config set:html={JSON.stringify(config).replace(/</g,'\\u003c')} />
+</section>

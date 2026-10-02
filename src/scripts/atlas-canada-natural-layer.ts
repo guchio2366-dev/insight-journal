@@ -21,7 +21,7 @@ type Frame = [number, number, number, number];
 interface Config { layer: CanadaNaturalLayer; geometryUrl: string; groups: CanadaNaturalGroup[]; stations: CanadaNaturalStation[]; contourLabels?: CanadaNaturalContourLabel[]; context: unknown; workerUrl: string; }
 
 /** Selection belongs to the host page. Camera gestures stay local to this map. */
-export function initCanadaNaturalLayer(root: HTMLElement): CanadaNaturalController {
+export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?: boolean } = {}): CanadaNaturalController {
   const config: Config = JSON.parse(root.querySelector('[data-canada-natural-config]')!.textContent!);
   const stage = root.querySelector<HTMLElement>('[data-canada-natural-stage]')!;
   const fallback = root.querySelector<SVGSVGElement>('[data-canada-natural-fallback]')!;
@@ -373,7 +373,7 @@ export function initCanadaNaturalLayer(root: HTMLElement): CanadaNaturalControll
   visibility?.observe(root, { attributes: true, attributeFilter: ['hidden'] });
   root.querySelector('[data-canada-natural-static-stations]')?.setAttribute('hidden', '');
   root.querySelector('[data-canada-natural-static-contours]')?.setAttribute('hidden', '');
-  draw(); void start();
+  draw(); if (!options.deferStart) void start();
   return {
     render(next) { const selected = config.groups.some(group => group.id === next.selected) ? next.selected : null; state = { selected, only: !!next.only && !!selected, city: next.city ?? state.city ?? null }; if ('bounds' in next) restoreCamera(next.bounds ?? null); draw(); if (!root.hidden) { map?.resize(); if (ready && fitted) fit(); void start(); } },
     reset: fit, zoom, focusSelected,

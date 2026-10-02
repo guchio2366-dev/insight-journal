@@ -133,3 +133,17 @@
 @media(max-width:959px){.canada-nature .canada-country-primary{padding:8px 0}.canada-nature .canada-country-primary .canada-reading{max-height:none;overflow:visible}}
 
 @media(min-width:900px){.atlas-desktop-shell [data-canada-nature].canada-nature .canada-general-reading>summary{display:list-item}}
+
+/* Preserve the shared three-family hierarchy and place river/groundwater datasets inside it. */
+.canada-nature[data-canada-nature] .country-water-topics{grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;padding:3px}
+.canada-nature[data-canada-nature] .country-water-topics button{min-height:34px;padding:4px 5px;font-size:12px;line-height:1.4}
+.canada-nature[data-canada-nature] .country-water-subtopics{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 7px}
+.canada-nature[data-canada-nature] .country-water-subtopics button{min-height:32px;padding:4px 8px;font-size:12px;line-height:1.4}
+@media(min-width:960px){
+ .canada-nature[data-canada-nature].is-water-resource .atlas-compact-heading{display:none}
+ .canada-nature[data-canada-nature].is-water-resource .canada-water-resources{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px}
+ .canada-nature[data-canada-nature].is-water-resource .canada-water-frame{height:clamp(235px,calc(100dvh - 470px),540px);min-height:0;max-height:none;aspect-ratio:auto}
+ .canada-nature[data-canada-nature].is-water-resource .canada-water-map{height:100%;max-height:none;aspect-ratio:auto}
+ .canada-nature[data-canada-nature].is-water-resource [data-canada-water-groundwater-modes]{display:none}
+ .canada-nature[data-canada-nature].is-water-resource.is-water-river-family .canada-water-frame{height:clamp(235px,calc(100dvh - 510px),500px)}
+}

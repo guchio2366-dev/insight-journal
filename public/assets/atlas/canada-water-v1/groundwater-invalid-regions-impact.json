@@ -1,0 +1,611 @@
+{
+  "scope": "Diagnose original seven self-intersecting source polygons only; no repaired geometry or new boundaries generated. All geometries remain unchanged.",
+  "recommended_display": "Fill valid 1169 polygon parts. Show seven original polygon parts as outlines with label 原資料の形状不整合で塗り表示を除外. Keep the parts in data and counts.",
+  "invalid_count": 7,
+  "invalid_vertices": 5954,
+  "total_vertices": 114278,
+  "invalid_vertex_fraction": 0.05210101681863526,
+  "records": [
+    {
+      "prepared_feature_id": 45,
+      "original_index": 45,
+      "original_properties": {
+        "AREA": 29254245014.7,
+        "PERIMETER": 2001963.58364,
+        "AQUIFER_DI": 47,
+        "AQUIFER__1": 46,
+        "PRIMARY_": "Appalachain Mountains"
+      },
+      "region": "Appalachain Mountains",
+      "bbox_wgs84": [
+        -66.23773018459791,
+        43.44806914878676,
+        -61.010751198544334,
+        45.36909296064167
+      ],
+      "bbox_width_height_km_approx": [
+        415.6673127853411,
+        213.8483707356892
+      ],
+      "vertices": 2027,
+      "ring_count": 4,
+      "source_feature_json_bytes": 79800,
+      "prepared_feature_json_bytes": 79729,
+      "invalid_reason": "Self-intersection[-65.387175157085 43.6478221145416]",
+      "nonadjacent_intersection_pair_count": 5,
+      "proper_crossing_pair_count": 1,
+      "intersection_details": [
+        {
+          "ring_segment_a": [
+            0,
+            0
+          ],
+          "ring_segment_b": [
+            1,
+            93
+          ],
+          "intersection": "{\"type\":\"Point\",\"coordinates\":[-65.38717515708497,43.64782211454158]}",
+          "proper_crossing": true,
+          "segment_a_coordinates": [
+            [
+              -65.39871073697284,
+              43.70521305300839
+            ],
+            [
+              -65.38403207791119,
+              43.632184906424385
+            ]
+          ],
+          "segment_b_coordinates": [
+            [
+              -65.38805447624205,
+              43.64677068903516
+            ],
+            [
+              -65.38717275859,
+              43.64782498248638
+            ]
+          ]
+        },
+        {
+          "ring_segment_a": [
+            0,
+            0
+          ],
+          "ring_segment_b": [
+            1,
+            94
+          ],
+          "intersection": "{\"type\":\"Point\",\"coordinates\":[-65.39871073697284,43.70521305300839]}",
+          "proper_crossing": false,
+          "segment_a_coordinates": [
+            [
+              -65.39871073697284,
+              43.70521305300839
+            ],
+            [
+              -65.38403207791119,
+              43.632184906424385
+            ]
+          ],
+          "segment_b_coordinates": [
+            [
+              -65.38717275859,
+              43.64782498248638
+            ],
+            [
+              -65.39871073697284,
+              43.70521305300839
+            ]
+          ]
+        },
+        {
+          "ring_segment_a": [
+            0,
+            0
+          ],
+          "ring_segment_b": [
+            1,
+            0
+          ],
+          "intersection": "{\"type\":\"Point\",\"coordinates\":[-65.39871073697284,43.70521305300839]}",
+          "proper_crossing": false,
+          "segment_a_coordinates": [
+            [
+              -65.39871073697284,
+              43.70521305300839
+            ],
+            [
+              -65.38403207791119,
+              43.632184906424385
+            ]
+          ],
+          "segment_b_coordinates": [
+            [
+              -65.39871073697284,
+              43.70521305300839
+            ],
+            [
+              -65.39566130679584,
+              43.70897175664255
+            ]
+          ]
+        },
+        {
+          "ring_segment_a": [
+            0,
+            1595
+          ],
+          "ring_segment_b": [
+            1,
+            94
+          ],
+          "intersection": "{\"type\":\"Point\",\"coordinates\":[-65.39871073697284,43.70521305300839]}",
+          "proper_crossing": false,
+          "segment_a_coordinates": [
+            [
+              -65.39168731951983,
+              43.713864117727056
+            ],
+            [
+              -65.39871073697284,
+              43.70521305300839
+            ]
+          ],
+          "segment_b_coordinates": [
+            [
+              -65.38717275859,
+              43.64782498248638
+            ],
+            [
+              -65.39871073697284,
+              43.70521305300839
+            ]
+          ]
+        },
+        {
+          "ring_segment_a": [
+            0,
+            1595
+          ],
+          "ring_segment_b": [
+            1,
+            0
+          ],
+          "intersection": "{\"type\":\"Point\",\"coordinates\":[-65.39871073697284,43.70521305300839]}",
+          "proper_crossing": false,
+          "segment_a_coordinates": [
+            [
+              -65.39168731951983,
+              43.713864117727056
+            ],
+            [
+              -65.39871073697284,
+              43.70521305300839
+            ]
+          ],
+          "segment_b_coordinates": [
+            [
+              -65.39871073697284,
+              43.70521305300839
+            ],
+            [
+              -65.39566130679584,
+              43.70897175664255
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "prepared_feature_id": 65,
+      "original_index": 65,
+      "original_properties": {
+        "AREA": 5892510451.54,
+        "PERIMETER": 685913.65131,
+        "AQUIFER_DI": 67,
+        "AQUIFER__1": 66,
+        "PRIMARY_": "Appalachain Mountains"
+      },
+      "region": "Appalachain Mountains",
+      "bbox_wgs84": [
+        -66.23730123175335,
+        45.255104608987786,
+        -64.50662411734538,
+        46.24668920594539
+      ],
+      "bbox_width_height_km_approx": [
+        134.43343541980016,
+        110.38319733332015
+      ],
+      "vertices": 1543,
+      "ring_count": 1,
+      "source_feature_json_bytes": 60444,
+      "prepared_feature_json_bytes": 60374,
+      "invalid_reason": "Self-intersection[-66.096247350638 45.6718963402015]",
+      "nonadjacent_intersection_pair_count": 1,
+      "proper_crossing_pair_count": 1,
+      "intersection_details": [
+        {
+          "ring_segment_a": [
+            0,
+            2
+          ],
+          "ring_segment_b": [
+            0,
+            1541
+          ],
+          "intersection": "{\"type\":\"Point\",\"coordinates\":[-66.09624735063798,45.67189634020146]}",
+          "proper_crossing": true,
+          "segment_a_coordinates": [
+            [
+              -66.09624801742756,
+              45.67189596189057
+            ],
+            [
+              -65.98148899418209,
+              45.737005839123476
+            ]
+          ],
+          "segment_b_coordinates": [
+            [
+              -66.0996836436266,
+              45.668500892169924
+            ],
+            [
+              -66.07838846149969,
+              45.68954295245793
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "prepared_feature_id": 97,
+      "original_index": 97,
+      "original_properties": {
+        "AREA": 196878656.23,
+        "PERIMETER": 90970.5416769,
+        "AQUIFER_DI": 99,
+        "AQUIFER__1": 98,
+        "PRIMARY_": "Magdalen Basin"
+      },
+      "region": "Magdalen Basin",
+      "bbox_wgs84": [
+        -62.148087545612746,
+        45.608133032223435,
+        -61.91575002764406,
+        45.87868132046086
+      ],
+      "bbox_width_height_km_approx": [
+        18.049653254371933,
+        30.117435446590527
+      ],
+      "vertices": 70,
+      "ring_count": 1,
+      "source_feature_json_bytes": 2934,
+      "prepared_feature_json_bytes": 2864,
+      "invalid_reason": "Self-intersection[-61.9988046478697 45.8578234141178]",
+      "nonadjacent_intersection_pair_count": 1,
+      "proper_crossing_pair_count": 1,
+      "intersection_details": [
+        {
+          "ring_segment_a": [
+            0,
+            47
+          ],
+          "ring_segment_b": [
+            0,
+            50
+          ],
+          "intersection": "{\"type\":\"Point\",\"coordinates\":[-61.99880464786971,45.857823414117846]}",
+          "proper_crossing": true,
+          "segment_a_coordinates": [
+            [
+              -61.96513511213849,
+              45.82998333157593
+            ],
+            [
+              -61.998804783618105,
+              45.85782352636313
+            ]
+          ],
+          "segment_b_coordinates": [
+            [
+              -62.015760998583,
+              45.84853513420895
+            ],
+            [
+              -61.991713608912654,
+              45.86170771421234
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "prepared_feature_id": 112,
+      "original_index": 112,
+      "original_properties": {
+        "AREA": 3040769916.42,
+        "PERIMETER": 760626.679155,
+        "AQUIFER_DI": 114,
+        "AQUIFER__1": 113,
+        "PRIMARY_": "Magdalen Basin"
+      },
+      "region": "Magdalen Basin",
+      "bbox_wgs84": [
+        -61.59606841741287,
+        45.55061462220284,
+        -60.61322650200719,
+        46.70697846828413
+      ],
+      "bbox_width_height_km_approx": [
+        75.82543584247868,
+        128.72642334576852
+      ],
+      "vertices": 1872,
+      "ring_count": 2,
+      "source_feature_json_bytes": 73982,
+      "prepared_feature_json_bytes": 73910,
+      "invalid_reason": "Self-intersection[-60.9881923935828 46.6911364334658]",
+      "nonadjacent_intersection_pair_count": 1,
+      "proper_crossing_pair_count": 1,
+      "intersection_details": [
+        {
+          "ring_segment_a": [
+            0,
+            1
+          ],
+          "ring_segment_b": [
+            0,
+            1579
+          ],
+          "intersection": "{\"type\":\"Point\",\"coordinates\":[-60.98819239358283,46.69113643346577]}",
+          "proper_crossing": true,
+          "segment_a_coordinates": [
+            [
+              -60.98819572182071,
+              46.69114392057384
+            ],
+            [
+              -60.98516554069314,
+              46.68432731238413
+            ]
+          ],
+          "segment_b_coordinates": [
+            [
+              -61.01318616579687,
+              46.65768873489515
+            ],
+            [
+              -60.97635444279465,
+              46.70697846828413
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "prepared_feature_id": 150,
+      "original_index": 150,
+      "original_properties": {
+        "AREA": 168398998.384,
+        "PERIMETER": 102542.890259,
+        "AQUIFER_DI": 152,
+        "AQUIFER__1": 151,
+        "PRIMARY_": "Magdalen Basin"
+      },
+      "region": "Magdalen Basin",
+      "bbox_wgs84": [
+        -60.859015760736064,
+        46.58450296899868,
+        -60.70940106357968,
+        46.9399709978381
+      ],
+      "bbox_width_height_km_approx": [
+        11.409205596323723,
+        39.57070097040481
+      ],
+      "vertices": 154,
+      "ring_count": 1,
+      "source_feature_json_bytes": 6269,
+      "prepared_feature_json_bytes": 6197,
+      "invalid_reason": "Self-intersection[-60.8531060533837 46.8158216726136]",
+      "nonadjacent_intersection_pair_count": 2,
+      "proper_crossing_pair_count": 2,
+      "intersection_details": [
+        {
+          "ring_segment_a": [
+            0,
+            1
+          ],
+          "ring_segment_b": [
+            0,
+            152
+          ],
+          "intersection": "{\"type\":\"Point\",\"coordinates\":[-60.72075213043995,46.92555398001357]}",
+          "proper_crossing": true,
+          "segment_a_coordinates": [
+            [
+              -60.72075505569253,
+              46.92556367682037
+            ],
+            [
+              -60.71878083632487,
+              46.91901941328399
+            ]
+          ],
+          "segment_b_coordinates": [
+            [
+              -60.75347421036951,
+              46.883993586139766
+            ],
+            [
+              -60.70940106357968,
+              46.9399709978381
+            ]
+          ]
+        },
+        {
+          "ring_segment_a": [
+            0,
+            148
+          ],
+          "ring_segment_b": [
+            0,
+            150
+          ],
+          "intersection": "{\"type\":\"Point\",\"coordinates\":[-60.853106053383655,46.81582167261359]}",
+          "proper_crossing": true,
+          "segment_a_coordinates": [
+            [
+              -60.84667411938274,
+              46.814433499267224
+            ],
+            [
+              -60.85310890996413,
+              46.815822289135596
+            ]
+          ],
+          "segment_b_coordinates": [
+            [
+              -60.859015760736064,
+              46.8127425628806
+            ],
+            [
+              -60.80864945422199,
+              46.838984705740486
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "prepared_feature_id": 237,
+      "original_index": 237,
+      "original_properties": {
+        "AREA": 663137937.963,
+        "PERIMETER": 218505.540347,
+        "AQUIFER_DI": 239,
+        "AQUIFER__1": 238,
+        "PRIMARY_": "St. Lawrence Platform"
+      },
+      "region": "St. Lawrence Platform",
+      "bbox_wgs84": [
+        -59.30675945937004,
+        48.44930362543626,
+        -58.54359523522267,
+        48.77084022906558
+      ],
+      "bbox_width_height_km_approx": [
+        56.170838287122116,
+        35.79345471601579
+      ],
+      "vertices": 108,
+      "ring_count": 1,
+      "source_feature_json_bytes": 4463,
+      "prepared_feature_json_bytes": 4391,
+      "invalid_reason": "Self-intersection[-58.6664329228832 48.7617393844333]",
+      "nonadjacent_intersection_pair_count": 1,
+      "proper_crossing_pair_count": 1,
+      "intersection_details": [
+        {
+          "ring_segment_a": [
+            0,
+            1
+          ],
+          "ring_segment_b": [
+            0,
+            106
+          ],
+          "intersection": "{\"type\":\"Point\",\"coordinates\":[-58.66643292288322,48.761739384433284]}",
+          "proper_crossing": true,
+          "segment_a_coordinates": [
+            [
+              -58.666434350206785,
+              48.76174102187298
+            ],
+            [
+              -58.66562297006052,
+              48.76081019855595
+            ]
+          ],
+          "segment_b_coordinates": [
+            [
+              -58.69933651916108,
+              48.731683219373735
+            ],
+            [
+              -58.660178550731594,
+              48.76745251196335
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "prepared_feature_id": 441,
+      "original_index": 441,
+      "original_properties": {
+        "AREA": 651275371.894,
+        "PERIMETER": 147453.6091,
+        "AQUIFER_DI": 443,
+        "AQUIFER__1": 442,
+        "PRIMARY_": "Appalachain Mountains"
+      },
+      "region": "Appalachain Mountains",
+      "bbox_wgs84": [
+        -56.00884297062786,
+        51.3032603835944,
+        -55.44490007061457,
+        51.610379826546165
+      ],
+      "bbox_width_height_km_approx": [
+        39.11731613221804,
+        34.1885363893906
+      ],
+      "vertices": 180,
+      "ring_count": 1,
+      "source_feature_json_bytes": 7283,
+      "prepared_feature_json_bytes": 7213,
+      "invalid_reason": "Self-intersection[-55.7927991266149 51.489662106858]",
+      "nonadjacent_intersection_pair_count": 1,
+      "proper_crossing_pair_count": 1,
+      "intersection_details": [
+        {
+          "ring_segment_a": [
+            0,
+            117
+          ],
+          "ring_segment_b": [
+            0,
+            119
+          ],
+          "intersection": "{\"type\":\"Point\",\"coordinates\":[-55.79279912661488,51.48966210685801]}",
+          "proper_crossing": true,
+          "segment_a_coordinates": [
+            [
+              -55.793773261102835,
+              51.48896041982715
+            ],
+            [
+              -55.79279814969395,
+              51.48966281055217
+            ]
+          ],
+          "segment_b_coordinates": [
+            [
+              -55.79939215446024,
+              51.49068413292833
+            ],
+            [
+              -55.7608306197131,
+              51.48470647065429
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

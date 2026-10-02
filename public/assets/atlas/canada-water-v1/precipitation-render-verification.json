@@ -1,0 +1,24 @@
+{
+  "xAdjacentLandSpacing": {
+    "pairCount": 98052,
+    "minKm": 8.941842714348965,
+    "medianKm": 9.822500700032178,
+    "maxKm": 10.68127712050996
+  },
+  "yAdjacentLandSpacing": {
+    "pairCount": 98036,
+    "minKm": 8.945065654015794,
+    "medianKm": 9.821993103587523,
+    "maxKm": 10.68351991686162
+  },
+  "spacingMethod": "Great-circle center distances from provided latitude/longitude, spherical Earth radius6371.0088km; approximate verification, not a CRS definition.",
+  "gridAreaRangeKm2": [
+    80.1500015258789,
+    115.04000091552734
+  ],
+  "rasterSourceCellCenterColorsMatch": 100910,
+  "rasterSourceCellCenterCount": 100945,
+  "rasterCenterMatchPercent": 99.9653276536728,
+  "rasterCellCenterAllOpaque": true,
+  "rasterOpaquePixels": 685139
+}

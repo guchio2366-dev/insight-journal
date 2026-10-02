@@ -1,0 +1,1397 @@
+{
+  "id": "canada-water-v1",
+  "projection": {
+    "type": "affine-epsg4326",
+    "bounds": [
+      -145,
+      40,
+      -50,
+      85
+    ],
+    "width": 900,
+    "height": 580,
+    "transform": "x=(longitude+145)/95*900; y=(85-latitude)/45*580"
+  },
+  "datasets": {
+    "precipitation": {
+      "title": "年降水量（1991〜2020年平均）",
+      "groups": [
+        {
+          "id": "p0",
+          "name": "250未満 mm/年",
+          "color": "#ffffcc",
+          "sourceName": "<250 mm/year",
+          "lowerBoundMm": 0,
+          "upperBoundExclusiveMm": 250,
+          "sourceCellCount": 6841
+        },
+        {
+          "id": "p1",
+          "name": "250〜500未満 mm/年",
+          "color": "#c7e9b4",
+          "sourceName": "250–<500 mm/year",
+          "lowerBoundMm": 250,
+          "upperBoundExclusiveMm": 500,
+          "sourceCellCount": 34612
+        },
+        {
+          "id": "p2",
+          "name": "500〜750未満 mm/年",
+          "color": "#7fcdbb",
+          "sourceName": "500–<750 mm/year",
+          "lowerBoundMm": 500,
+          "upperBoundExclusiveMm": 750,
+          "sourceCellCount": 27489
+        },
+        {
+          "id": "p3",
+          "name": "750〜1,000未満 mm/年",
+          "color": "#41b6c4",
+          "sourceName": "750–<1000 mm/year",
+          "lowerBoundMm": 750,
+          "upperBoundExclusiveMm": 1000,
+          "sourceCellCount": 13132
+        },
+        {
+          "id": "p4",
+          "name": "1,000〜1,500未満 mm/年",
+          "color": "#2c7fb8",
+          "sourceName": "1000–<1500 mm/year",
+          "lowerBoundMm": 1000,
+          "upperBoundExclusiveMm": 1500,
+          "sourceCellCount": 16269
+        },
+        {
+          "id": "p5",
+          "name": "1,500以上 mm/年",
+          "color": "#253494",
+          "sourceName": "≥1500 mm/year",
+          "lowerBoundMm": 1500,
+          "upperBoundExclusiveMm": null,
+          "sourceCellCount": 2602
+        }
+      ],
+      "imageUrl": "/assets/atlas/canada-water-v1/annual-precipitation-1991-2020-locator.png",
+      "images": [
+        {
+          "id": "p0",
+          "url": "/assets/atlas/canada-water-v1/annual-precipitation-1991-2020-class-0.png"
+        },
+        {
+          "id": "p1",
+          "url": "/assets/atlas/canada-water-v1/annual-precipitation-1991-2020-class-1.png"
+        },
+        {
+          "id": "p2",
+          "url": "/assets/atlas/canada-water-v1/annual-precipitation-1991-2020-class-2.png"
+        },
+        {
+          "id": "p3",
+          "url": "/assets/atlas/canada-water-v1/annual-precipitation-1991-2020-class-3.png"
+        },
+        {
+          "id": "p4",
+          "url": "/assets/atlas/canada-water-v1/annual-precipitation-1991-2020-class-4.png"
+        },
+        {
+          "id": "p5",
+          "url": "/assets/atlas/canada-water-v1/annual-precipitation-1991-2020-class-5.png"
+        }
+      ],
+      "scope": "全国の陸域・約10 km格子。雨と雪の水当量を合わせた年降水量の30年平均。",
+      "reading": "湿った空気が山地に当たる太平洋岸は多雨で、内陸・北極圏は少雨の傾向です。",
+      "method": "1991〜2020年の各月を30年間平均し、12か月を合計。360か月すべてが有効な陸域セルだけを分類し、海域と欠測は透明に保持。",
+      "period": [
+        1991,
+        2020
+      ],
+      "units": "mm/year",
+      "sourceCellCount": 100945,
+      "missingLandCellCount": 0,
+      "nativeResolution": "approximately 10 km",
+      "imageBounds": [
+        -145,
+        40,
+        -50,
+        85
+      ],
+      "imageSize": [
+        1900,
+        900
+      ],
+      "imageFit": "preserveAspectRatio=none",
+      "clipToCanada": true,
+      "note": "公開月別系列から計算した値。ECCC配布の1991〜2020年平年値ファイルではありません。表示セル数は面積や観測所数ではありません。",
+      "sources": [
+        {
+          "title": "CanGridP mlyV2",
+          "publisher": "Environment and Climate Change Canada",
+          "url": "https://open.canada.ca/data/en/dataset/203cdcbf-19a8-4493-8ee9-c8a56ddb1783",
+          "year": "1991–2020 derived; product published 2026",
+          "licence": "Open Government Licence - Canada 2.0",
+          "licenceUrl": "https://open.canada.ca/en/open-government-licence-canada",
+          "accessed": "2026-10-02",
+          "attribution": "Source: Environment and Climate Change Canada, CanGridP mlyV2. Annual 1991–2020 averages calculated from monthly gridded total precipitation. Contains information licensed under the Open Government Licence - Canada.",
+          "note": "調整・均質化した観測所系列を空間内挿した格子資料。原データは1948〜2023年の月別系列。"
+        }
+      ]
+    },
+    "drainage": {
+      "title": "統計排水地域（25地域）",
+      "groupProperty": "group",
+      "geometryUrl": "/assets/atlas/canada-water-v1/drainage-regions.geojson",
+      "groups": [
+        {
+          "id": "01",
+          "name": "太平洋沿岸",
+          "sourceId": "01",
+          "sourceName": "Pacific Coastal",
+          "color": "#2166ac",
+          "oceanAreaId": "1",
+          "oceanAreaName": "Pacific Ocean",
+          "description": "太平洋側。Pacific Coastal（原資料ID 01）。"
+        },
+        {
+          "id": "02",
+          "name": "フレーザー–ローワー・メインランド",
+          "sourceId": "02",
+          "sourceName": "Fraser–Lower Mainland",
+          "color": "#2166ac",
+          "oceanAreaId": "1",
+          "oceanAreaName": "Pacific Ocean",
+          "description": "太平洋側。Fraser–Lower Mainland（原資料ID 02）。"
+        },
+        {
+          "id": "03",
+          "name": "オカナガン–シミルカミーン",
+          "sourceId": "03",
+          "sourceName": "Okanagan–Similkameen",
+          "color": "#2166ac",
+          "oceanAreaId": "1",
+          "oceanAreaName": "Pacific Ocean",
+          "description": "太平洋側。Okanagan–Similkameen（原資料ID 03）。"
+        },
+        {
+          "id": "04",
+          "name": "コロンビア",
+          "sourceId": "04",
+          "sourceName": "Columbia",
+          "color": "#2166ac",
+          "oceanAreaId": "1",
+          "oceanAreaName": "Pacific Ocean",
+          "description": "太平洋側。Columbia（原資料ID 04）。"
+        },
+        {
+          "id": "05",
+          "name": "ユーコン",
+          "sourceId": "05",
+          "sourceName": "Yukon",
+          "color": "#2166ac",
+          "oceanAreaId": "1",
+          "oceanAreaName": "Pacific Ocean",
+          "description": "太平洋側。Yukon（原資料ID 05）。"
+        },
+        {
+          "id": "06",
+          "name": "ピース–アサバスカ",
+          "sourceId": "06",
+          "sourceName": "Peace–Athabasca",
+          "color": "#762a83",
+          "oceanAreaId": "2",
+          "oceanAreaName": "Arctic Ocean",
+          "description": "北極海側。Peace–Athabasca（原資料ID 06）。"
+        },
+        {
+          "id": "07",
+          "name": "マッケンジー下流",
+          "sourceId": "07",
+          "sourceName": "Lower Mackenzie",
+          "color": "#762a83",
+          "oceanAreaId": "2",
+          "oceanAreaName": "Arctic Ocean",
+          "description": "北極海側。Lower Mackenzie（原資料ID 07）。"
+        },
+        {
+          "id": "08",
+          "name": "北極海沿岸・諸島",
+          "sourceId": "08",
+          "sourceName": "Arctic Coast–Islands",
+          "color": "#762a83",
+          "oceanAreaId": "2",
+          "oceanAreaName": "Arctic Ocean",
+          "description": "北極海側。Arctic Coast–Islands（原資料ID 08）。"
+        },
+        {
+          "id": "09",
+          "name": "ミズーリ",
+          "sourceId": "09",
+          "sourceName": "Missouri",
+          "color": "#e66101",
+          "oceanAreaId": "3",
+          "oceanAreaName": "Gulf of Mexico",
+          "description": "メキシコ湾側。Missouri（原資料ID 09）。"
+        },
+        {
+          "id": "10",
+          "name": "北サスカチュワン",
+          "sourceId": "10",
+          "sourceName": "North Saskatchewan",
+          "color": "#1b9e77",
+          "oceanAreaId": "4",
+          "oceanAreaName": "Hudson Bay",
+          "description": "ハドソン湾側。North Saskatchewan（原資料ID 10）。"
+        },
+        {
+          "id": "11",
+          "name": "南サスカチュワン",
+          "sourceId": "11",
+          "sourceName": "South Saskatchewan",
+          "color": "#1b9e77",
+          "oceanAreaId": "4",
+          "oceanAreaName": "Hudson Bay",
+          "description": "ハドソン湾側。South Saskatchewan（原資料ID 11）。"
+        },
+        {
+          "id": "12",
+          "name": "アシニボイン–レッド",
+          "sourceId": "12",
+          "sourceName": "Assiniboine-Red",
+          "color": "#1b9e77",
+          "oceanAreaId": "4",
+          "oceanAreaName": "Hudson Bay",
+          "description": "ハドソン湾側。Assiniboine-Red（原資料ID 12）。"
+        },
+        {
+          "id": "13",
+          "name": "ウィニペグ",
+          "sourceId": "13",
+          "sourceName": "Winnipeg",
+          "color": "#1b9e77",
+          "oceanAreaId": "4",
+          "oceanAreaName": "Hudson Bay",
+          "description": "ハドソン湾側。Winnipeg（原資料ID 13）。"
+        },
+        {
+          "id": "14",
+          "name": "サスカチュワン下流–ネルソン",
+          "sourceId": "14",
+          "sourceName": "Lower Saskatchewan–Nelson",
+          "color": "#1b9e77",
+          "oceanAreaId": "4",
+          "oceanAreaName": "Hudson Bay",
+          "description": "ハドソン湾側。Lower Saskatchewan–Nelson（原資料ID 14）。"
+        },
+        {
+          "id": "15",
+          "name": "チャーチル",
+          "sourceId": "15",
+          "sourceName": "Churchill",
+          "color": "#1b9e77",
+          "oceanAreaId": "4",
+          "oceanAreaName": "Hudson Bay",
+          "description": "ハドソン湾側。Churchill（原資料ID 15）。"
+        },
+        {
+          "id": "16",
+          "name": "キーウェティン–バフィン島南部",
+          "sourceId": "16",
+          "sourceName": "Keewatin–Southern Baffin Island",
+          "color": "#1b9e77",
+          "oceanAreaId": "4",
+          "oceanAreaName": "Hudson Bay",
+          "description": "ハドソン湾側。Keewatin–Southern Baffin Island（原資料ID 16）。"
+        },
+        {
+          "id": "17",
+          "name": "オンタリオ北部",
+          "sourceId": "17",
+          "sourceName": "Northern Ontario",
+          "color": "#1b9e77",
+          "oceanAreaId": "4",
+          "oceanAreaName": "Hudson Bay",
+          "description": "ハドソン湾側。Northern Ontario（原資料ID 17）。"
+        },
+        {
+          "id": "18",
+          "name": "ケベック北部",
+          "sourceId": "18",
+          "sourceName": "Northern Quebec",
+          "color": "#1b9e77",
+          "oceanAreaId": "4",
+          "oceanAreaName": "Hudson Bay",
+          "description": "ハドソン湾側。Northern Quebec（原資料ID 18）。"
+        },
+        {
+          "id": "19",
+          "name": "五大湖",
+          "sourceId": "19",
+          "sourceName": "Great Lakes",
+          "color": "#b2182b",
+          "oceanAreaId": "5",
+          "oceanAreaName": "Atlantic Ocean",
+          "description": "大西洋側。Great Lakes（原資料ID 19）。"
+        },
+        {
+          "id": "20",
+          "name": "オタワ",
+          "sourceId": "20",
+          "sourceName": "Ottawa",
+          "color": "#b2182b",
+          "oceanAreaId": "5",
+          "oceanAreaName": "Atlantic Ocean",
+          "description": "大西洋側。Ottawa（原資料ID 20）。"
+        },
+        {
+          "id": "21",
+          "name": "セントローレンス",
+          "sourceId": "21",
+          "sourceName": "St. Lawrence",
+          "color": "#b2182b",
+          "oceanAreaId": "5",
+          "oceanAreaName": "Atlantic Ocean",
+          "description": "大西洋側。St. Lawrence（原資料ID 21）。"
+        },
+        {
+          "id": "22",
+          "name": "ノースショア–ガスペ",
+          "sourceId": "22",
+          "sourceName": "North Shore–Gaspé",
+          "color": "#b2182b",
+          "oceanAreaId": "5",
+          "oceanAreaName": "Atlantic Ocean",
+          "description": "大西洋側。North Shore–Gaspé（原資料ID 22）。"
+        },
+        {
+          "id": "23",
+          "name": "セントジョン–セントクロワ",
+          "sourceId": "23",
+          "sourceName": "Saint John–St. Croix",
+          "color": "#b2182b",
+          "oceanAreaId": "5",
+          "oceanAreaName": "Atlantic Ocean",
+          "description": "大西洋側。Saint John–St. Croix（原資料ID 23）。"
+        },
+        {
+          "id": "24",
+          "name": "沿海地方沿岸",
+          "sourceId": "24",
+          "sourceName": "Maritime Coastal",
+          "color": "#b2182b",
+          "oceanAreaId": "5",
+          "oceanAreaName": "Atlantic Ocean",
+          "description": "大西洋側。Maritime Coastal（原資料ID 24）。"
+        },
+        {
+          "id": "25",
+          "name": "ニューファンドランド–ラブラドール",
+          "sourceId": "25",
+          "sourceName": "Newfoundland–Labrador",
+          "color": "#b2182b",
+          "oceanAreaId": "5",
+          "oceanAreaName": "Atlantic Ocean",
+          "description": "大西洋側。Newfoundland–Labrador（原資料ID 25）。"
+        }
+      ],
+      "oceanAreas": [
+        {
+          "id": "1",
+          "name": "太平洋",
+          "color": "#2166ac"
+        },
+        {
+          "id": "2",
+          "name": "北極海",
+          "color": "#762a83"
+        },
+        {
+          "id": "3",
+          "name": "メキシコ湾",
+          "color": "#e66101"
+        },
+        {
+          "id": "4",
+          "name": "ハドソン湾",
+          "color": "#1b9e77"
+        },
+        {
+          "id": "5",
+          "name": "大西洋",
+          "color": "#b2182b"
+        }
+      ],
+      "legendGroups": [
+        {
+          "id": "1",
+          "name": "太平洋",
+          "color": "#2166ac",
+          "description": "太平洋側へ流れる統計排水地域。"
+        },
+        {
+          "id": "2",
+          "name": "北極海",
+          "color": "#762a83",
+          "description": "北極海側へ流れる統計排水地域。"
+        },
+        {
+          "id": "3",
+          "name": "メキシコ湾",
+          "color": "#e66101",
+          "description": "メキシコ湾側へ流れる統計排水地域。"
+        },
+        {
+          "id": "4",
+          "name": "ハドソン湾",
+          "color": "#1b9e77",
+          "description": "ハドソン湾側へ流れる統計排水地域。"
+        },
+        {
+          "id": "5",
+          "name": "大西洋",
+          "color": "#b2182b",
+          "description": "大西洋側へ流れる統計排水地域。"
+        }
+      ],
+      "scope": "カナダ国内の25統計排水地域。海岸部・島を含む2003年分類、2017年刊行。",
+      "reading": "分水界で分けた地域を、太平洋・北極海・ハドソン湾・大西洋・メキシコ湾の5流出先で読みます。",
+      "method": "公式25地域の全成分と穴を保持。共有境界をまとめて簡略化した表示用形状を使用し、原資料ID・名称・流出先を維持。",
+      "note": "国境をまたぐ河川の完全な流域ではありません。面積・流量の測定には使用しません。",
+      "featureCount": 25,
+      "classification": "SDAC 2003 variant",
+      "publicationDate": "2017-03-21",
+      "sources": [
+        {
+          "title": "Drainage regions of Canada",
+          "publisher": "Statistics Canada",
+          "url": "https://www150.statcan.gc.ca/n1/pub/16-201-x/2017000/sec-1/m-c/m-c-1.1-eng.htm",
+          "year": "SDAC 2003; published 2017",
+          "licence": "Open Government Licence - Canada 2.0",
+          "licenceUrl": "https://open.canada.ca/en/open-government-licence-canada",
+          "accessed": "2026-10-02",
+          "attribution": "Source: Statistics Canada, Drainage regions of Canada (SDAC 2003 variant), 2017. Contains information licensed under the Open Government Licence - Canada.",
+          "note": "カナダ部分と隣接海岸・島を含む統計地域。"
+        }
+      ]
+    },
+    "groundwater": {
+      "title": "全国の水文地質地域（9区分）",
+      "groups": [
+        {
+          "id": "c1",
+          "name": "オンタリオ南部低地",
+          "sourceName": "Southern Ontario Lowlands",
+          "color": "#fdbf6f",
+          "description": "堆積層が広がる南部の低地。",
+          "sourceFeatureCount": 22
+        },
+        {
+          "id": "c2",
+          "name": "カナダ楯状地",
+          "sourceName": "Canadian Shield",
+          "color": "#cab2d6",
+          "description": "古い結晶質岩盤を主体とする地域。",
+          "sourceFeatureCount": 166
+        },
+        {
+          "id": "c3",
+          "name": "セントローレンス・プラットフォーム",
+          "sourceName": "St. Lawrence Platform",
+          "color": "#b2df8a",
+          "description": "セントローレンス沿いの堆積岩地域。",
+          "sourceFeatureCount": 41
+        },
+        {
+          "id": "c4",
+          "name": "アパラチア山地",
+          "sourceName": "Appalachain Mountains",
+          "color": "#fb9a99",
+          "description": "東部の褶曲した岩盤地域。原資料の綴りを保持。",
+          "sourceFeatureCount": 105
+        },
+        {
+          "id": "c5",
+          "name": "マグダレン堆積盆地",
+          "sourceName": "Magdalen Basin",
+          "color": "#e31a1c",
+          "description": "セントローレンス湾周辺の堆積盆地。",
+          "sourceFeatureCount": 60
+        },
+        {
+          "id": "c6",
+          "name": "西カナダ堆積盆地",
+          "sourceName": "Western Canada Sedimentary Basin",
+          "color": "#33a02c",
+          "description": "内陸平原の厚い堆積層の地域。",
+          "sourceFeatureCount": 2
+        },
+        {
+          "id": "c7",
+          "name": "ハドソン湾低地",
+          "sourceName": "Hudson Bay Lowlands",
+          "color": "#a6cee3",
+          "description": "ハドソン湾沿いの低地。",
+          "sourceFeatureCount": 12
+        },
+        {
+          "id": "c8",
+          "name": "コルディエラ山系",
+          "sourceName": "Cordillera",
+          "color": "#ff7f00",
+          "description": "西部の山地と山間の堆積層。",
+          "sourceFeatureCount": 154
+        },
+        {
+          "id": "c9",
+          "name": "永久凍土地帯",
+          "sourceName": "Permafrost",
+          "color": "#1f78b4",
+          "description": "永久凍土が地下水の流れに影響する北部。",
+          "sourceFeatureCount": 614
+        }
+      ],
+      "groupProperty": "group",
+      "geometryUrl": "/assets/atlas/canada-water-v1/hydrogeological-regions.geojson",
+      "scope": "2008年の全国水文地質区分。地域ごとの岩盤・堆積層・永久凍土の違い。",
+      "reading": "堆積層・岩盤の割れ目・永久凍土の違いが、地下水のたまり方と流れ方に関係します。",
+      "method": "原資料の1,176ポリゴン成分を座標変更なく使用。正常な1,169成分を塗り、自己交差のある7成分は原形の輪郭だけを表示。",
+      "note": "全国の個別帯水層一覧や地下水量の資料ではありません。貯水量・涵養量・取水量・利用可能量は示しません。",
+      "excludedFillNotice": "原資料の形状不整合で塗り表示を除外",
+      "invalidGeometryCount": 7,
+      "validGeometryCount": 1169,
+      "featureCount": 1176,
+      "year": 2008,
+      "invalidSourcePartIndexes": [
+        45,
+        65,
+        97,
+        112,
+        150,
+        237,
+        441
+      ],
+      "sources": [
+        {
+          "title": "Hydrogeological regions of Canada",
+          "publisher": "Natural Resources Canada / Geological Survey of Canada",
+          "url": "https://app.geo.ca/en-ca/map-browser/record/0fdca476-23c8-6c11-0f61-6fb73f6acc3e",
+          "year": "2008; catalogue published 2023",
+          "licence": "Open Government Licence - Canada 2.0",
+          "licenceUrl": "https://open.canada.ca/en/open-government-licence-canada",
+          "accessed": "2026-10-02",
+          "attribution": "Source: Natural Resources Canada / Geological Survey of Canada, Hydrogeological regions of Canada. Contains information licensed under the Open Government Licence - Canada.",
+          "note": "原資料の英語区分名とIDを保持。旧GIN配布の一般免責とは別に、現行のデータ固有カタログで利用条件を確認。"
+        }
+      ]
+    },
+    "aquifers": {
+      "title": "帯水層の地域例（BC州南西部）",
+      "groupProperty": "group",
+      "geometryUrl": "/assets/atlas/canada-water-v1/bc-fraser-aquifers.geojson",
+      "groups": [
+        {
+          "id": "sand-gravel",
+          "name": "砂礫の帯水層",
+          "sourceName": "Sand and Gravel",
+          "color": "#2c7fb8",
+          "description": "砂と礫のすき間に地下水を含む調査済みの帯水層。",
+          "sourceFeatureCount": 117
+        },
+        {
+          "id": "bedrock",
+          "name": "岩盤の帯水層",
+          "sourceName": "Bedrock",
+          "color": "#d95f0e",
+          "description": "岩盤の割れ目などに地下水を含む調査済みの帯水層。",
+          "sourceFeatureCount": 32
+        }
+      ],
+      "areas": [
+        {
+          "id": "550",
+          "name": "Carmelo Point, Gambier Island（ID 550）",
+          "group": "bedrock"
+        },
+        {
+          "id": "551",
+          "name": "Northeast portion of Gambier Island（ID 551）",
+          "group": "bedrock"
+        },
+        {
+          "id": "422",
+          "name": "Porteau Cove, Howe Sound（ID 422）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "67",
+          "name": "Seymour River/Lynn Creek（ID 67）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "925",
+          "name": "925（ID 925）",
+          "group": "bedrock"
+        },
+        {
+          "id": "927",
+          "name": "927（ID 927）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "924",
+          "name": "924（ID 924）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "66",
+          "name": "Capilano River（ID 66）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "68",
+          "name": "Belcarra（ID 68）",
+          "group": "bedrock"
+        },
+        {
+          "id": "747",
+          "name": "Bowen Island - South and SE（ID 747）",
+          "group": "bedrock"
+        },
+        {
+          "id": "746",
+          "name": "Central Bowen Island（ID 746）",
+          "group": "bedrock"
+        },
+        {
+          "id": "749",
+          "name": "Bowen Island - SW（ID 749）",
+          "group": "bedrock"
+        },
+        {
+          "id": "744",
+          "name": "Bowen Island - SW（ID 744）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "743",
+          "name": "Bowen Island, Gafton Lake Valley（ID 743）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "748",
+          "name": "Bowen Island - west（ID 748）",
+          "group": "bedrock"
+        },
+        {
+          "id": "745",
+          "name": "Bowen Island - North（ID 745）",
+          "group": "bedrock"
+        },
+        {
+          "id": "58",
+          "name": "Nicomekl-Serpentine（ID 58）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1192",
+          "name": "Aldergrove CD（ID 1192）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "59",
+          "name": "Clayton Heights（ID 59）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "30",
+          "name": "North of Dennison（ID 30）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "24",
+          "name": "Glen Valley（ID 24）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "880",
+          "name": "880（ID 880）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "37",
+          "name": "Fort Langley AC（ID 37）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1103",
+          "name": "Silverdale（ID 1103）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "36",
+          "name": "Fort Langley B（ID 36）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1235",
+          "name": "West Langley（ID 1235）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "72",
+          "name": "McMillan Island（ID 72）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "970",
+          "name": "970（ID 970）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "19",
+          "name": "Grant Hill（ID 19）",
+          "group": "bedrock"
+        },
+        {
+          "id": "971",
+          "name": "971（ID 971）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1104",
+          "name": "Silvermere Lake Island（ID 1104）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "40",
+          "name": "Barnston Island（ID 40）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "26",
+          "name": "Kanaka/Whonnock Creek（ID 26）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "39",
+          "name": "East Pitt River（ID 39）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1102",
+          "name": "Maple Ridge（ID 1102）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "154",
+          "name": "NW of Whonnock Lake（ID 154）",
+          "group": "bedrock"
+        },
+        {
+          "id": "884",
+          "name": "884（ID 884）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1101",
+          "name": "North Kanata Creek（ID 1101）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1100",
+          "name": "Whonnock Lake / Creek（ID 1100）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "38",
+          "name": "Alouette（ID 38）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "897",
+          "name": "897（ID 897）",
+          "group": "bedrock"
+        },
+        {
+          "id": "1197",
+          "name": "Greendale Deep（ID 1197）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "6",
+          "name": "Chilliwack-Rosedale（ID 6）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1218",
+          "name": "East Cultus Columbia Bedrock（ID 1218）",
+          "group": "bedrock"
+        },
+        {
+          "id": "1203",
+          "name": "Cultus Lake Fan Delta D（ID 1203）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1204",
+          "name": "Cultus Lake Dan Delta E（ID 1204）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1206",
+          "name": "Chilliwack River Subtill（ID 1206）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "9",
+          "name": "Chilliwack River Shallow（ID 9）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1202",
+          "name": "Cultus Lake Fan Delta C（ID 1202）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1201",
+          "name": "Cultus Lake Fan Delta B（ID 1201）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1205",
+          "name": "Vedder Crossing（ID 1205）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "7",
+          "name": "Harrison Mills（ID 7）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "5",
+          "name": "Chehalis（ID 5）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1200",
+          "name": "Cultus Lake Fan Delta A（ID 1200）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "890",
+          "name": "Mount Tom Bedrock（ID 890）",
+          "group": "bedrock"
+        },
+        {
+          "id": "1210",
+          "name": "Mount Tom Unconsolidated（ID 1210）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1208",
+          "name": "Ryder Upland B（ID 1208）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1207",
+          "name": "Ryder Upland A（ID 1207）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1209",
+          "name": "Ryder Upland C（ID 1209）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "4",
+          "name": "Aggasiz（ID 4）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1196",
+          "name": "Elk Creek Fan（ID 1196）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1212",
+          "name": "Elkview Road Shallow（ID 1212）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "899",
+          "name": "899（ID 899）",
+          "group": "bedrock"
+        },
+        {
+          "id": "1211",
+          "name": "Lookout Ridge（ID 1211）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1213",
+          "name": "Marble Hill Unconsolidated（ID 1213）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1198",
+          "name": "Cheam Slide（ID 1198）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "10",
+          "name": "Mouth of Sleese Creek（ID 10）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "3",
+          "name": "Laidlaw（ID 3）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "2",
+          "name": "Chawathil（ID 2）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "28",
+          "name": "Northwest of Clearbrook（ID 28）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "18",
+          "name": "Mission（ID 18）",
+          "group": "bedrock"
+        },
+        {
+          "id": "886",
+          "name": "886（ID 886）",
+          "group": "bedrock"
+        },
+        {
+          "id": "17",
+          "name": "Mission Floodplain（ID 17）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "73",
+          "name": "Matsqui Island（ID 73）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "887",
+          "name": "887（ID 887）",
+          "group": "bedrock"
+        },
+        {
+          "id": "22",
+          "name": "Matsqui Prairie（ID 22）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "881",
+          "name": "881（ID 881）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "888",
+          "name": "888（ID 888）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "23",
+          "name": "North of Abbotsford（ID 23）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "969",
+          "name": "969（ID 969）",
+          "group": "bedrock"
+        },
+        {
+          "id": "14",
+          "name": "Hatzic Prairie（ID 14）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "25",
+          "name": "Miracle Valley（ID 25）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "21",
+          "name": "Sumas Prairie（ID 21）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "889",
+          "name": "889（ID 889）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "12",
+          "name": "Nicomen Slough（ID 12）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1106",
+          "name": "East of Hatzic Prairie（ID 1106）",
+          "group": "bedrock"
+        },
+        {
+          "id": "987",
+          "name": "987（ID 987）",
+          "group": "bedrock"
+        },
+        {
+          "id": "1105",
+          "name": "South of Davis Lake（ID 1105）",
+          "group": "bedrock"
+        },
+        {
+          "id": "13",
+          "name": "Norrish Creek（ID 13）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1216",
+          "name": "Vedder Mountain NW Bedrock（ID 1216）",
+          "group": "bedrock"
+        },
+        {
+          "id": "1199",
+          "name": "Sumas Prairie North（ID 1199）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1217",
+          "name": "Vedder Mountain SE Bedrock（ID 1217）",
+          "group": "bedrock"
+        },
+        {
+          "id": "20",
+          "name": "Columbia Valley（ID 20）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "11",
+          "name": "Lake Erroch/Deroche Creek（ID 11）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "8",
+          "name": "Sardis-Vedder（ID 8）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1215",
+          "name": "Cannor Road North（ID 1215）",
+          "group": "bedrock"
+        },
+        {
+          "id": "1214",
+          "name": "Chilliwack Mountain Bedrock（ID 1214）",
+          "group": "bedrock"
+        },
+        {
+          "id": "1230",
+          "name": "Border B（ID 1230）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1229",
+          "name": "Border A（ID 1229）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "52",
+          "name": "Langley Upland Intertill（ID 52）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1236",
+          "name": "Border C（ID 1236）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1232",
+          "name": "Campbell River B（ID 1232）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "50",
+          "name": "South of Hopington（ID 50）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1193",
+          "name": "Aldergrove Quadra（ID 1193）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1297",
+          "name": "Abbotsford Shallow West（ID 1297）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1228",
+          "name": "O Avenue Aquifer（ID 1228）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "41",
+          "name": "Brookswood（ID 41）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "15",
+          "name": "Abbotsford Shallow（ID 15）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1233",
+          "name": "South of Aldergrove（ID 1233）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1231",
+          "name": "Campbell River A（ID 1231）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "27",
+          "name": "Aldergrove AB（ID 27）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "33",
+          "name": "West of Aldergrove（ID 33）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1296",
+          "name": "Aldergrove Shallow（ID 1296）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "51",
+          "name": "Murrayville AC（ID 51）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1144",
+          "name": "Hopington C（ID 1144）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "35",
+          "name": "Hopington AB（ID 35）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1195",
+          "name": "Murrayville B（ID 1195）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "32",
+          "name": "Beaver River（ID 32）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "16",
+          "name": "Mount Lehman（ID 16）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1194",
+          "name": "Salmon River（ID 1194）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "1234",
+          "name": "Sperling（ID 1234）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "29",
+          "name": "North of Mt. Lehman（ID 29）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "721",
+          "name": "North Salt Spring Island（ID 721）",
+          "group": "bedrock"
+        },
+        {
+          "id": "320",
+          "name": "Galiano Island（ID 320）",
+          "group": "bedrock"
+        },
+        {
+          "id": "62",
+          "name": "Tsawwassen（ID 62）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "42",
+          "name": "South Fraser River Delta（ID 42）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "53",
+          "name": "Hazelmere Valley（ID 53）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "57",
+          "name": "White Rock（ID 57）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "54",
+          "name": "Hazelmere（ID 54）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "55",
+          "name": "Grandview（ID 55）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "56",
+          "name": "NE of White Rock A（ID 56）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "63",
+          "name": "Westham Island（ID 63）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "61",
+          "name": "Newton Upland（ID 61）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "44",
+          "name": "Lulu Island（ID 44）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "43",
+          "name": "Annacis Island（ID 43）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "48",
+          "name": "Fraser River Junction（ID 48）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "65",
+          "name": "Sea Island（ID 65）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "45",
+          "name": "North Arm Delta（ID 45）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "64",
+          "name": "Mitchel Island（ID 64）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "49",
+          "name": "Vancouver-Quadra Sands（ID 49）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "46",
+          "name": "Coquitlam River Floodplain（ID 46）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "70",
+          "name": "Coquitlam River（ID 70）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "71",
+          "name": "West Pitt River（ID 71）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "69",
+          "name": "Port Moody（ID 69）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "926",
+          "name": "926（ID 926）",
+          "group": "sand-gravel"
+        },
+        {
+          "id": "722",
+          "name": "North-Central Salt Spring Island（ID 722）",
+          "group": "bedrock"
+        },
+        {
+          "id": "619",
+          "name": "Mayne Island（ID 619）",
+          "group": "bedrock"
+        },
+        {
+          "id": "620",
+          "name": "Mayne Island（ID 620）",
+          "group": "bedrock"
+        },
+        {
+          "id": "447",
+          "name": "Georgina Pt - Hall Hill, Mayne Island N.（ID 447）",
+          "group": "bedrock"
+        }
+      ],
+      "defaultFrame": [
+        197.749,
+        451.777,
+        29.876,
+        19.857
+      ],
+      "bbox": [
+        -123.59867553,
+        48.79565394,
+        -121.50060196,
+        49.56042335
+      ],
+      "queryBbox": [
+        -123.4,
+        48.85,
+        -121.6,
+        49.5
+      ],
+      "scope": "BC州南西部の検索枠に交差する149の公的な帯水層形状。全国・BC州全域の網羅図ではありません。",
+      "reading": "砂礫層と岩盤の違いを149の調査済み帯水層で比べます。空白は地下水が存在しない場所を意味しません。",
+      "method": "公式WFSの検索枠と交差する全ポリゴンを、切り抜き・簡略化・修正せず表示。地質材料で2分類し、個別ID・名称・調査年を保持。",
+      "note": "境界は地質・井戸などに基づく解釈図。地図の色は地下水の量・利用可能量や取水の持続可能性を示しません。",
+      "featureCount": 149,
+      "mappingYearRange": [
+        1993,
+        2025
+      ],
+      "mappingYearDefinition": "Year initially mapped or last updated",
+      "sources": [
+        {
+          "title": "Ground Water Aquifers",
+          "publisher": "Government of British Columbia",
+          "url": "https://catalogue.data.gov.bc.ca/dataset/099d69c5-1401-484d-9e19-c121ccb7977c",
+          "year": "Mapping years 1993–2025; retrieved 2026-10-02",
+          "licence": "Open Government Licence - British Columbia",
+          "licenceUrl": "https://www2.gov.bc.ca/gov/content/data/policy-standards/data-policies/open-data/open-government-licence-bc",
+          "accessed": "2026-10-02",
+          "attribution": "Source: Government of British Columbia, Ground Water Aquifers. Contains information licensed under the Open Government Licence - British Columbia.",
+          "note": "検索枠に交差する全形状を取得。調査範囲の空白は帯水層の不存在を示さず、58件の未設定名称はLOCATIONで表示。"
+        }
+      ]
+    }
+  }
+}

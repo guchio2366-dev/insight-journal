@@ -1,0 +1,133 @@
+{
+  "retrieved_date_utc": "2026-10-02",
+  "inspection_file": "inspection.json",
+  "topology_validation_file": "topology-validation.json",
+  "preparation_script": "prepare_data.py",
+  "validation_script": "validate_topology.py",
+  "geometry_policy": "Original geometry coordinates retained unchanged. No simplification, rounding, repair or dropping. Only unused fields/whitespace removed.",
+  "adopted_layers": [
+    {
+      "file": "canada-hydrogeological-regions.geojson",
+      "title": "Hydrogeological regions of Canada",
+      "scope": "National hydrogeological context, nine broad regional classes. Not a complete local-aquifer inventory or a quantitative groundwater resource/availability layer.",
+      "catalogue_url": "https://app.geo.ca/en-ca/map-browser/record/0fdca476-23c8-6c11-0f61-6fb73f6acc3e",
+      "inventory_url": "https://gin.geosciences.ca/service/api_ngwds:gin2/en/data/standard.download.html?THEME=1",
+      "map_context_url": "https://gin.geosciences.ca/service/ngwds/en/wmc/standard.wmc?APP=GIN",
+      "export_api": "https://gin.geosciences.ca/SpatialConversionEngine/gw_data/do",
+      "export_request_file": "gin-export-request.json",
+      "export_response_file": "gin-export-status.json",
+      "export_source_id": "195",
+      "source_archive": "gin-regions-export.zip",
+      "source_archive_member": "d195/hgr.json",
+      "source_file": "gin-regions-source.geojson",
+      "source_data_temporal_coverage": [
+        "2008-01-01",
+        "2008-11-10"
+      ],
+      "catalogue_created_published": "2023-08-08",
+      "output_crs": "EPSG:4326 explicitly requested in export. Response omits a crs member; longitude/latitude coordinate ranges are consistent with that request.",
+      "licence": "Open Government Licence - Canada, explicitly stated by current GEO.ca metadata for this dataset.",
+      "licence_url": "https://open.canada.ca/en/open-government-licence-canada",
+      "attribution": "Contains information licensed under the Open Government Licence – Canada.",
+      "legacy_export_read_me": "gin-regions-read-me.txt retains GIN Crown copyright/original-source ownership wording; current dataset-specific GEO.ca licence is recorded separately.",
+      "limitations": [
+        "First-order regional geological/permafrost classes only; no groundwater storage volume, extraction, recharge amount, scarcity, quality or sustainable-yield measurements.",
+        "Source PRIMARY_ names differ from modern metadata terminology; raw labels retained.",
+        "Seven source polygon parts have self-intersections, preserved unchanged. See topology-validation.json for indices/reasons/coordinates.",
+        "Legacy AREA and PERIMETER fields removed from prepared file; they are not new measurements derived from longitude/latitude geometry."
+      ]
+    },
+    {
+      "file": "bc-fraser-aquifers.geojson",
+      "title": "Ground Water Aquifers — selected southwestern BC example",
+      "scope": "149 mapped aquifers intersecting the selected southwestern BC query window; not national or full-provincial coverage.",
+      "catalogue_url": "https://catalogue.data.gov.bc.ca/dataset/099d69c5-1401-484d-9e19-c121ccb7977c",
+      "metadata_api": "https://catalogue.data.gov.bc.ca/api/3/action/package_show?id=099d69c5-1401-484d-9e19-c121ccb7977c",
+      "source_data_url": "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=pub%3AWHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW&outputFormat=application%2Fjson&srsName=EPSG%3A4326&bbox=-123.4%2C48.85%2C-121.6%2C49.5%2CEPSG%3A4326&maxFeatures=1000",
+      "capabilities_url": "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW/ows?service=WFS&request=GetCapabilities&version=2.0.0",
+      "source_file": "bc-fraser-aquifers-source.geojson",
+      "source_metadata_file": "bc-aquifers-catalogue.json",
+      "source_capabilities_file": "bc-aquifers-wfs-capabilities.xml",
+      "response_timestamp_utc": "2026-10-02T13:07:47.638Z",
+      "native_crs": "EPSG:3005",
+      "output_crs": "EPSG:4326; explicitly returned in source GeoJSON crs member.",
+      "query_bbox_wgs84": [
+        -123.4,
+        48.85,
+        -121.6,
+        49.5
+      ],
+      "selection": "Whole polygons intersecting bbox, not clipped. Bbox is a query window, not a complete-survey footprint.",
+      "mapping_year_range": [
+        1993,
+        2025
+      ],
+      "mapping_year_definition": "Year aquifer was initially mapped or last updated.",
+      "metadata_modified_utc": "2026-10-02T12:51:53.237977",
+      "catalogue_custom_download_last_modified": "2026-10-02T03:07:08",
+      "catalogue_lineage_source_data_model_update": "2020-01-15",
+      "licence": "Open Government Licence - British Columbia; expressly specified by this catalogue record.",
+      "licence_url": "https://www2.gov.bc.ca/gov/content/data/policy-standards/data-policies/open-data/open-government-licence-bc",
+      "licence_snapshot": "bc-open-government-licence.html",
+      "attribution": "Contains information licensed under the Open Government Licence – British Columbia.",
+      "definition": "Developed ground water aquifers that have been mapped. Boundaries are mainly interpretive, using geology, hydrology, topography, well records, reports, air photographs and geological maps.",
+      "limitations": [
+        "Some boundaries stop at BC mapsheet borders because of data/resource constraints at mapping time. Blank areas are not evidence of absent groundwater.",
+        "Geological material/subtype is not groundwater abundance or availability.",
+        "Source PRODUCTIVITY is qualitative ability to transmit/yield groundwater; source DEMAND describes use level when mapped. Both omitted from prepared file to prevent quantity/withdrawal implications.",
+        "58 source NAME values are null; LOCATION/AQUIFER_ID provide label fallback.",
+        "An earlier independent ArcGIS count returned 146 for this bbox and 1176 for BC; actual downloaded WFS response contains149. Do not infer whole-BC count/completeness from selected WFS sample."
+      ]
+    }
+  ],
+  "excluded_layer": {
+    "title": "Key aquifers of Canada",
+    "source_id": "185",
+    "source_archive": "gin-key_aquifers-export.zip",
+    "feature_count": 38,
+    "geometry_type": "MultiPolygon",
+    "metadata_url": "https://gin.geosciences.ca/service/api_ngwds:gin2/en/metadata/nap/5f130a20-123a-11de-8c30-0800200c9a66.html",
+    "metadata_snapshot": "gin-key-aquifers-metadata.html",
+    "reason": "Legacy metadata Constraints field is blank, original-source ownership is retained in the GIN disclaimer, and lineage combines provincial/watershed/university sources. No explicit blanket reuse licence verified; excluded from recommended adoption."
+  },
+  "invalid_regions_diagnostic_file": "invalid-regions-impact.json",
+  "source_geometry_validity": {
+    "national_regions": {
+      "features": 1176,
+      "valid": 1169,
+      "invalid": 7,
+      "invalid_prepared_feature_ids": [
+        45,
+        65,
+        97,
+        112,
+        150,
+        237,
+        441
+      ]
+    },
+    "bc_aquifers": {
+      "features": 149,
+      "valid": 149,
+      "invalid": 0
+    }
+  },
+  "prepared_geometry_fidelity": {
+    "national_regions": {
+      "wkb_identical_to_original": 1176,
+      "repairs": 0,
+      "dropped": 0
+    },
+    "bc_aquifers": {
+      "wkb_identical_to_original": 149,
+      "repairs": 0,
+      "dropped": 0
+    }
+  },
+  "recommended_display_policy": {
+    "national_regions_valid_parts": "Fill 1169 valid original parts.",
+    "national_regions_invalid_parts": "Keep seven unchanged source parts as outlines; exclude fill; disclose 原資料の形状不整合で塗り表示を除外.",
+    "invalid_source_impact": "Seven affected parts contain5954of114278vertices, including large Atlantic regional footprints; not merely tiny islands. Eight proper nonadjacent edge crossing pairs identified. No repaired areas or invented boundaries generated.",
+    "bc_aquifers": "All149parts individually valid; overlapping aquifers are not a planar-partition error."
+  }
+}
