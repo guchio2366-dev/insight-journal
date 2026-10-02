@@ -1,0 +1,39 @@
+{
+  "sourceSha256": "9d27d4b8ea8e76977e2988bca667d7c8fa68b927355feffcddd6b4875a7fd08e",
+  "sourceBytes": 465969062,
+  "file": "canada-etopo-window.f32",
+  "sha256": "779fbc97ee041d58ee09c87b6d5bbe07bd79d240cd01fc2328f22c562206526d",
+  "bytes": 57657600,
+  "width": 5460,
+  "height": 2640,
+  "bounds": [
+    -142,
+    40,
+    -51,
+    84
+  ],
+  "window": [
+    2280,
+    360,
+    7740,
+    3000
+  ],
+  "origin": [
+    -142,
+    84
+  ],
+  "resolution": [
+    0.016666666666666666,
+    -0.016666666666666666
+  ],
+  "dtype": "float32-little-endian",
+  "noData": -99999,
+  "geoKeys": {
+    "GTModelTypeGeoKey": 2,
+    "GTRasterTypeGeoKey": 1,
+    "GTCitationGeoKey": "WGS 84 + EGM2008 height",
+    "GeographicTypeGeoKey": 4326,
+    "VerticalCSTypeGeoKey": 3855
+  },
+  "method": "GeoTIFF.js 3.0.5 exact native window read; no resampling or integer casting"
+}

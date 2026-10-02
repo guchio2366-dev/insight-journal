@@ -1,0 +1,180 @@
+{
+  "title": "Canada elevation contours — NOAA ETOPO 2022",
+  "publisher": "NOAA National Centers for Environmental Information",
+  "sourceUrl": "https://www.ncei.noaa.gov/products/etopo-global-relief-model",
+  "downloadUrl": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/60s/60s_surface_elev_gtif/ETOPO_2022_v1_60s_N90W180_surface.tif",
+  "metadataUrl": "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ngdc.mgg.dem%3Aetopo_2022/html",
+  "userGuideUrl": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/docs/1.2%20ETOPO%202022%20User%20Guide.pdf",
+  "sourceEdition": "ETOPO 2022 v1 60 arc-second surface",
+  "edition": 2022,
+  "editionNotObservationYear": true,
+  "citation": "NOAA National Centers for Environmental Information. 2022: ETOPO 2022 15 Arc-Second Global Relief Model. DOI:10.25921/fd45-gt74. Accessed 2026-10-02.",
+  "license": "CC0-1.0",
+  "licenseUrl": "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ngdc.mgg.dem%3Aetopo_2022/html",
+  "sourceRetrievedAt": "2026-09-25",
+  "verifiedAt": "2026-10-02",
+  "sourceSha256": "9d27d4b8ea8e76977e2988bca667d7c8fa68b927355feffcddd6b4875a7fd08e",
+  "sourceBytes": 465969062,
+  "originalSourceReused": true,
+  "decodedGridSha256": "779fbc97ee041d58ee09c87b6d5bbe07bd79d240cd01fc2328f22c562206526d",
+  "decodedGridBytes": 57657600,
+  "decoderMethod": "GeoTIFF.js 3.0.5 exact native window read; no resampling or integer casting",
+  "horizontalCrs": "EPSG:4326",
+  "verticalDatum": "EGM2008 geoid",
+  "verticalCrs": "EPSG:3855",
+  "unit": "m",
+  "sourceResolution": "60 arc-seconds (1/60 degree)",
+  "sourceNoData": -99999,
+  "file": "elevation-contours.geojson",
+  "assetSha256": "c7e39aac2e25669dee98254458641379c355af9878920cdb90f10f2a4ef4fb7e",
+  "assetBytes": 5553828,
+  "featureCount": 6,
+  "vertexCount": 245322,
+  "levelCounts": {
+    "500": 10639,
+    "1000": 5690,
+    "2000": 2613,
+    "3000": 73,
+    "4000": 10,
+    "5000": 1
+  },
+  "levelsM": [
+    500,
+    1000,
+    2000,
+    3000,
+    4000,
+    5000
+  ],
+  "levels": [
+    {
+      "id": "500",
+      "name": "500 m",
+      "color": "#6a8d53",
+      "description": "EGM2008基準の標高500 mを結ぶETOPO 2022の等高線。地域平均や山頂標高ではありません。"
+    },
+    {
+      "id": "1000",
+      "name": "1,000 m",
+      "color": "#9a914e",
+      "description": "EGM2008基準の標高1,000 mを結ぶETOPO 2022の等高線。地域平均や山頂標高ではありません。"
+    },
+    {
+      "id": "2000",
+      "name": "2,000 m",
+      "color": "#ba7950",
+      "description": "EGM2008基準の標高2,000 mを結ぶETOPO 2022の等高線。地域平均や山頂標高ではありません。"
+    },
+    {
+      "id": "3000",
+      "name": "3,000 m",
+      "color": "#a45b43",
+      "description": "EGM2008基準の標高3,000 mを結ぶETOPO 2022の等高線。地域平均や山頂標高ではありません。"
+    },
+    {
+      "id": "4000",
+      "name": "4,000 m",
+      "color": "#854f4a",
+      "description": "EGM2008基準の標高4,000 mを結ぶETOPO 2022の等高線。地域平均や山頂標高ではありません。"
+    },
+    {
+      "id": "5000",
+      "name": "5,000 m",
+      "color": "#644755",
+      "description": "EGM2008基準の標高5,000 mを結ぶETOPO 2022の等高線。地域平均や山頂標高ではありません。"
+    }
+  ],
+  "bbox": [
+    -141.0181,
+    41.738238,
+    -52.61941,
+    83.13656
+  ],
+  "geometry": "MultiLineString",
+  "boundary": {
+    "file": "data-source/atlas/canada/industry/province-boundaries-2021.geojson.gz",
+    "compressedSha256": "ac235592e071ceb79655bba82d9bae17c7d1d80894e62df72a42bce39428245b",
+    "uncompressedSha256": "28966276a200b7c88f97cc4d1e770588e161e2fe63aa85ca9b736015aaeddd57",
+    "source": "Statistics Canada 2021 Census Cartographic Boundary Files, 13 provinces/territories",
+    "sourceUrl": "https://geo.statcan.gc.ca/geo_wa/rest/services/2021/Cartographic_boundary_files/MapServer/0",
+    "queryMetadata": "data-source/atlas/canada/industry/boundary-request.json",
+    "license": "Open Government Licence — Canada",
+    "licenseUrl": "https://open.canada.ca/en/open-government-licence-canada",
+    "sourceInvalidGeometriesRepaired": 11,
+    "repairMethod": "Shapely make_valid(method=structure, keep_collapsed=False) before union",
+    "sharedLandMask": {
+      "file": "data-source/atlas/canada-climate-elevation-v1/beck/land-mask.geojson.gz",
+      "sha256": "f54908964f6e451137bb50b4a21fb0ada82fbaeea5c8438d3d204046a663644e",
+      "uncompressedSha256": "43d447fe326990c6d45187a8fdc8910721b69d68b868163f872a94f432cf3ef2",
+      "provenanceFile": "data-source/atlas/canada-climate-elevation-v1/beck/land-mask-provenance.json"
+    }
+  },
+  "grid": {
+    "bounds": [
+      -142,
+      40,
+      -51,
+      84
+    ],
+    "width": 5460,
+    "height": 2640,
+    "window": [
+      2280,
+      360,
+      7740,
+      3000
+    ],
+    "origin": [
+      -142,
+      84
+    ],
+    "resolution": [
+      0.016666666666666666,
+      -0.016666666666666666
+    ],
+    "cellRegistration": "cell centre",
+    "dtype": "float32-little-endian",
+    "noDataCells": 0,
+    "validCanadaLandCells": 5935998,
+    "sampledMinM": -563.125,
+    "sampledMaxM": 5653.321,
+    "validBelowZeroCells": 9368
+  },
+  "method": "Exact native 60 arc-second surface float32 window, no resampling. ContourPy cell-centre linear interpolation at listed levels, cell-centre national land mask with corner_mask=False. Simplify lines by 0.003 degrees with topology preservation, then intersect with original shared land union. Round coordinates to six decimals. No negative/bathymetric contour levels are exported.",
+  "limitations": [
+    "2022 is the model edition; source observations span different years.",
+    "60 arc-second cells and simplified contours support a national overview. They do not provide exact summit or local survey elevations.",
+    "The elevation grid contains land and bathymetry. The national land clip excludes the sea; inland waters are removed when the shared lake mask is used.",
+    "The separate ETOPO geoid-height layer is not an elevation layer and is not used here. Elevations remain relative to EGM2008, approximately mean sea level.",
+    "Selected line values are contour heights, not provincial averages or arbitrary point measurements.",
+    "Native grid min/max are sampled values, not national extrema. Coastal cells can mix land and marine elevations.",
+    "Contours near coastlines stop at the cell-centre mask or retained cartographic boundary. Very small islands and features narrower than a source cell may be absent.",
+    "The shared land boundary retains the official query generalization (maxAllowableOffset=0.02 degrees, geometryPrecision=5); Natural Earth 1:50m lakes do not resolve every small water body."
+  ],
+  "processingVersions": {
+    "numpy": "2.5.3",
+    "contourpy": "1.4.0",
+    "shapely": "2.1.2",
+    "geotiffjs": "3.0.5"
+  },
+  "contourSegmentCount": 19026,
+  "sourceFile": "ETOPO_2022_v1_60s_N90W180_surface.tif",
+  "source": {
+    "publisher": "NOAA National Centers for Environmental Information",
+    "title": "ETOPO 2022 — 標高等高線",
+    "brief": "原格子60秒。EGM2008基準の高さを結ぶ線で、カナダの陸域に限定しています。",
+    "catalogueUrl": "https://www.ncei.noaa.gov/products/etopo-global-relief-model",
+    "descriptionUrl": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/docs/1.2%20ETOPO%202022%20User%20Guide.pdf",
+    "licenceUrl": "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ngdc.mgg.dem%3Aetopo_2022/html",
+    "licence": "CC0-1.0",
+    "attribution": "NOAA NCEI ETOPO 2022 (DOI:10.25921/fd45-gt74). Boundary: Statistics Canada, Open Government Licence — Canada. Lakes: Natural Earth v5.1.2, public domain."
+  },
+  "reproduction": {
+    "decoderScript": "scripts/decode-canada-etopo.mjs",
+    "contourScript": "scripts/prepare-canada-elevation.py",
+    "decoderCommand": "node scripts/decode-canada-etopo.mjs --source <downloaded-original.tif> --out <private-cache> --geotiff-package <geotiff-package>",
+    "contourCommand": "python scripts/prepare-canada-elevation.py --source <downloaded-original.tif> --grid <private-cache>/canada-etopo-window.json --land-mask data-source/atlas/canada-climate-elevation-v1/beck/land-mask.geojson.gz",
+    "dependencies": "GeoTIFF.js 3.0.5; Python numpy 2.5.3, shapely 2.1.2, contourpy 1.4.0",
+    "cachePolicy": "Original global source and native float32 window stay in a private preparation cache; the normal site build uses checked-in GeoJSON only."
+  }
+}

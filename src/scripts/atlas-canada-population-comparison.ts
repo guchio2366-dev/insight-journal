@@ -2,15 +2,16 @@ import {readCanadaPopulationState,writeCanadaPopulationState,formatCanadaPopulat
 import type {CanadaNatureState} from '../lib/atlas-canada-nature';
 
 export function renderPopulationNatureComparison(root:HTMLElement,config:any,nature:CanadaNatureState){
+ const physical=nature.view==='landform'||nature.view==='elevation';
  const raw=new URL(location.href).searchParams.get('populationReturn'),context=root.querySelector<HTMLElement>('[data-canada-population-context]')!,layer=root.querySelector<SVGElement>('[data-canada-population-context-map]')!,legend=root.querySelector<HTMLElement>('[data-canada-population-context-legend]')!,back=root.querySelector<HTMLAnchorElement>('[data-canada-population-return]')!,mini=root.querySelector<SVGSVGElement>('[data-canada-population-context-mini-map]')!;
- context.hidden=back.hidden=!raw;legend.hidden=!raw||nature.view==='landform';layer.style.display=raw&&nature.view!=='landform'?'':'none';mini.style.display=raw&&nature.view==='landform'?'':'none';
+ context.hidden=back.hidden=!raw;legend.hidden=!raw||physical;layer.style.display=raw&&!physical?'':'none';mini.style.display=raw&&physical?'':'none';
  const position=root.querySelector<HTMLElement>('[data-canada-position-caption]')!;position.dataset.originalCaption??=position.textContent!;position.textContent=raw?'小さい点は気候観測地点。人口円の中心は都市圏の表示用位置で、都心や居住地点ではありません。位置図は等緯度経度表示で、面積の測定には使いません。':position.dataset.originalCaption;
  if(!raw)return false;
  const data=config.population,state=readCanadaPopulationState(new URL('?'+raw,location.href),data.cmas.map((c:any)=>c.id)),target=new URL(back.getAttribute('href')!,location.href);target.search=writeCanadaPopulationState(new URL(target.pathname,target),state).search;back.href=target.href;
  const chosen=[state.cma,state.compare].filter(Boolean),records=data.cmas.filter((c:any)=>chosen.includes(c.id)),city=config.cities.find((c:any)=>c.id===nature.city).name;
  const values=records.map((r:any)=>{const v=state.metric==='density'?r.density2021:r.population[state.year];return `${r.name} ${formatCanadaPopulationValue(v.value,state.metric)}${state.metric==='density'?'人/km²':'人'}${v.symbol?' '+v.symbol:''}`;}).join(' / ');
  const water=nature.water?`現在は${nature.water}${nature.only?'だけ':'を選び全水系'}を表示。${nature.water!=='Lake Ontario'?'元の比較入口はOntario湖です。':''}`:'現在は全水系を表示。';
- const question=nature.view==='water'?`${water} 都市圏の集中と南部の水域位置を比べます。水路の位置は交通の条件で、人口の原因を単独で決めません。`:nature.view==='landform'?'都市圏の元分布と、地形図の南部・山地・沿岸を左右で照合します。地形図は別投影のため重ねません。':`${city}は1観測点。都市圏全体の平均気候ではありません。人口の分布と冬の気温・季節降水を比べます。`;
+ const question=nature.view==='water'?`${water} 都市圏の集中と南部の水域位置を比べます。水路の位置は交通の条件で、人口の原因を単独で決めません。`:physical?'都市圏の元分布と、地形・標高図の南部・山地・沿岸を左右で照合します。地形・標高図は別投影のため重ねません。':`${city}は1観測点。都市圏全体の平均気候ではありません。人口の分布と冬の気温・季節降水を比べます。`;
  root.querySelector<HTMLElement>('[data-canada-population-context-text]')!.textContent=`${state.year}年 ${values}。${question}`;
  if(!data.geometry?.every((g:any)=>Array.isArray(g.rings))){layer.replaceChildren();mini.replaceChildren();const message=root.dataset.populationGeometryState==='error'?'元の都市圏境界を取得できませんでした。元の人口ページと出典を確認できます。':'元の都市圏分布を読み込んでいます。';legend.textContent=message;root.querySelector<HTMLElement>('[data-canada-population-context-mini-legend]')!.textContent=message;return true;}
  const ns='http://www.w3.org/2000/svg',max=Math.max(...data.cmas.flatMap((r:any)=>[r.population[2016].value??0,r.population[2021].value??0])),frame=nature.frame??[0,0,900,580],scale=frame[2]/760,project=([lon,lat]:number[])=>[(lon+145)/95*900,(85-lat)/45*580];layer.replaceChildren();
@@ -20,6 +21,6 @@ export function renderPopulationNatureComparison(root:HTMLElement,config:any,nat
  labelMarkers(layer,scale);addScale(layer,frame);
  const copy=layer.cloneNode(true) as SVGElement;copy.style.display='';copy.querySelector('[data-canada-population-context-scale]')?.remove();const miniFrame=canadaPopulationFrame({...state,zoom:state.only?'selected':'south'},data.geometry);mini.setAttribute('viewBox',miniFrame.join(' '));labelMarkers(copy,miniFrame[2]/760);addScale(copy,miniFrame);mini.replaceChildren(...[...root.querySelectorAll('[data-canada-map] .canada-land')].map(p=>p.cloneNode(true)),copy);
  const note=`元の分布：${state.metric==='density'?'2021年人口密度（人/km²）':'人口 '+state.year+'年（円の面積）'}。都市圏境界2021年固定。水域：Natural Earth 1:50m。気候：ECCC 1991–2020年平年値（点）。`;
- legend.textContent=note;const miniLegend=root.querySelector<HTMLElement>('[data-canada-population-context-mini-legend]')!;miniLegend.hidden=nature.view!=='landform';miniLegend.textContent=note+' 地形図は別投影です。';
+ legend.textContent=note;const miniLegend=root.querySelector<HTMLElement>('[data-canada-population-context-mini-legend]')!;miniLegend.hidden=!physical;miniLegend.textContent=note+' 地形・標高図は別投影です。';
  return true;
 }

@@ -1,6 +1,7 @@
 export function initCanadaAgricultureOverview(root:HTMLElement){
  if(root.dataset.canadaCrop==='wheat')return;
- const selected=()=>{const q=new URL(location.href).searchParams;return q.get('item')==='overview'?false:q.get('item')==='canola'||['year','province','compare','metric','zoom'].some(key=>q.has(key));};
+ const censusIds=new Set([...root.querySelectorAll<HTMLOptionElement>('[data-canada-census-region] option')].map(option=>option.value).filter(Boolean));
+ const selected=()=>{const q=new URL(location.href).searchParams;return q.get('item')==='overview'?false:q.get('item')==='canola'||censusIds.has(q.get('ccs')??'')||['year','province','compare','metric','zoom'].some(key=>q.has(key));};
  const render=(active=selected())=>{
   root.dataset.canolaReadingMode=active?'selected':'overview';
   for(const node of root.querySelectorAll<HTMLElement>('[data-canola-overview-reading],[data-canola-country-map]'))node.hidden=active;

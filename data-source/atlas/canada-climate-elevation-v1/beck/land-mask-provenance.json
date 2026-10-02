@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "region": "canada",
+  "crs": "EPSG:4326",
+  "mask": {
+    "path": "data-source/atlas/canada-climate-elevation-v1/beck/land-mask.geojson.gz",
+    "bytes": 3078187,
+    "sha256": "f54908964f6e451137bb50b4a21fb0ada82fbaeea5c8438d3d204046a663644e"
+  },
+  "bounds": [
+    -141.0181,
+    41.73823835308173,
+    -52.61941,
+    83.13656
+  ],
+  "boundary": {
+    "path": "data-source/atlas/canada/industry/province-boundaries-2021.geojson.gz",
+    "bytes": 4622448,
+    "sha256": "ac235592e071ceb79655bba82d9bae17c7d1d80894e62df72a42bce39428245b",
+    "uncompressedSha256": "28966276a200b7c88f97cc4d1e770588e161e2fe63aa85ca9b736015aaeddd57",
+    "source": "Statistics Canada 2021 Census Cartographic Boundary Files, PR - lpr_000b21s_e",
+    "sourceUrl": "https://geo.statcan.gc.ca/geo_wa/rest/services/2021/Cartographic_boundary_files/MapServer/0",
+    "requestRecord": "data-source/atlas/canada/industry/boundary-request.json",
+    "referenceDate": "2021-01-01",
+    "license": "Open Government Licence - Canada",
+    "licenseUrl": "https://open.canada.ca/en/open-government-licence-canada",
+    "guideUrl": "https://www150.statcan.gc.ca/n1/pub/92-160-g/92-160-g2021001-eng.htm",
+    "sourceQueryGeneralization": "Existing official Esri query used maxAllowableOffset=0.02 and geometryPrecision=5; no further simplification performed here.",
+    "provinceCount": 13,
+    "repairedProvinceIds": [
+      "10",
+      "11",
+      "12",
+      "13",
+      "24",
+      "35",
+      "46",
+      "59",
+      "60",
+      "61",
+      "62"
+    ],
+    "repair": "Shapely make_valid(method='structure', keep_collapsed=False) on source invalid rings; retain polygonal land, discard only collapsed zero-area geometry."
+  },
+  "water": {
+    "path": "data-source/atlas/canada/lakes.geojson",
+    "bytes": 876018,
+    "sha256": "d350b75978b26fe839b797c2c529b2fb8f47fb3983c03f4964e36d5df9378a52",
+    "publisher": "Natural Earth",
+    "version": "5.1.2",
+    "sourceUrl": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_50m_lakes.geojson",
+    "license": "Public domain",
+    "sourceScale": "1:50m",
+    "intersectingLakeFeatures": 117,
+    "method": "Subtract all preserved 1:50m lake polygons intersecting Canadian cartographic boundaries, including cross-border lakes. Smaller water bodies absent from this source are unresolved."
+  },
+  "method": "Union all 13 Canadian cartographic province/territory polygons; subtract intersecting preserved lake polygons. Coastal waters, neighboring countries and represented lakes excluded.",
+  "limitations": [
+    "Boundary and water scales do not support cadastral precision.",
+    "Natural Earth 1:50m lake data do not resolve every small water body."
+  ],
+  "geometry": {
+    "polygonParts": 119614,
+    "coordinateCount": 527102
+  }
+}
