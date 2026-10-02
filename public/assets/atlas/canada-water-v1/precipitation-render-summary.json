@@ -1,0 +1,80 @@
+{
+  "width": 1900,
+  "height": 900,
+  "boundsLonLat": [
+    -145,
+    40,
+    -50,
+    85
+  ],
+  "targetCRS": "EPSG:4326 equirectangular affine locator, y decreasing with latitude",
+  "targetParentSize": [
+    900,
+    580
+  ],
+  "parentTransform": "x=(longitude+145)/95*900; y=(85-latitude)/45*580",
+  "imageFit": "Draw full image at x=0,y=0,width=900,height=580, preserveAspectRatio=none; coordinate extent matches parent exactly.",
+  "nativeResolution": "Approximately10km; rendering does not increase scientific resolution.",
+  "resampling": "Categorical source-cell footprint painting; no interpolated or fabricated precipitation values. Pixel alpha0 outside valid source land cells.",
+  "clipRequirement": "Apply the existing trustworthy Canadian outline clip in parent SVG/canvas. Source land mask is preserved, but no additional national outline was available to this script.",
+  "classThresholdsMm": [
+    250,
+    500,
+    750,
+    1000,
+    1500
+  ],
+  "classColors": [
+    "#ffffcc",
+    "#c7e9b4",
+    "#7fcdbb",
+    "#41b6c4",
+    "#2c7fb8",
+    "#253494"
+  ],
+  "classSourceCellCounts": [
+    6841,
+    34612,
+    27489,
+    13132,
+    16269,
+    2602
+  ],
+  "outputs": [
+    {
+      "name": "annual-precipitation-1991-2020-locator.png",
+      "bytes": 36881,
+      "sha256": "a653269436e52924841b08615c5e131bf503cc921db7e47cdc606ff32544cf35"
+    },
+    {
+      "name": "annual-precipitation-1991-2020-class-0.png",
+      "bytes": 13300,
+      "sha256": "bb6492e415018d94ebe05f704dc86737c41039454e9239aed0c63d046bde2db0"
+    },
+    {
+      "name": "annual-precipitation-1991-2020-class-1.png",
+      "bytes": 15569,
+      "sha256": "57cb8b73ec79afa6a05e3fa4a5581f2e5f1e59b998c2730f5684f73e060675c6"
+    },
+    {
+      "name": "annual-precipitation-1991-2020-class-2.png",
+      "bytes": 13547,
+      "sha256": "a4fd73144187be5806d23649f8b003221ed7b366e8c0a145d1d2b5f33d5f4776"
+    },
+    {
+      "name": "annual-precipitation-1991-2020-class-3.png",
+      "bytes": 11525,
+      "sha256": "a43dcc8e1ea315e06fce813c49bc690b324ae3d1b9cce941a1d01d7694b4fd74"
+    },
+    {
+      "name": "annual-precipitation-1991-2020-class-4.png",
+      "bytes": 13161,
+      "sha256": "625b856cc34118e88973828e376dbfaefdd03785cf2759db1c24a5eb664e87d6"
+    },
+    {
+      "name": "annual-precipitation-1991-2020-class-5.png",
+      "bytes": 10580,
+      "sha256": "ac2e4484dafcc10770df8262e7ede6cd244bfa3e3b13abed14b9b74328d19e96"
+    }
+  ]
+}

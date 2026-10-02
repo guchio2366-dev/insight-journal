@@ -1,0 +1,169 @@
+[
+  {
+    "file": "bc-fraser-aquifers-source.geojson",
+    "bytes": 3386226,
+    "sha256": "0c01d39e23df3d09213de1a8218433013fa965e629f3b16dfc44141b23029cc3",
+    "feature_count": 149,
+    "vertex_count": 117894,
+    "geometry_types": {
+      "Polygon": 136,
+      "MultiPolygon": 13
+    },
+    "bbox": [
+      -123.59867553,
+      48.79565394,
+      -121.50060196,
+      49.56042335
+    ],
+    "response_crs": {
+      "type": "name",
+      "properties": {
+        "name": "urn:ogc:def:crs:EPSG::4326"
+      }
+    },
+    "fields": [
+      "AQUIFER_DETAILS_URL",
+      "AQUIFER_ID",
+      "DEMAND",
+      "FEATURE_AREA_SQM",
+      "FEATURE_LENGTH_M",
+      "GW_A_SYSID",
+      "LITHO_STRATOGRAPHIC_UNIT",
+      "LOCATION",
+      "MAPPING_YEAR",
+      "MATERIAL",
+      "NAME",
+      "NOTES",
+      "OBJECTID",
+      "PRODUCTIVITY",
+      "QUALITY_CONCERN",
+      "SE_ANNO_CAD_DATA",
+      "SUBTYPE",
+      "VULNERABILITY",
+      "WATER_USE"
+    ],
+    "MATERIAL": {
+      "Bedrock": 32,
+      "Sand and Gravel": 117
+    },
+    "SUBTYPE": {
+      "Fractured crystalline bedrock": 20,
+      "Unconfined sand and gravel - alluvial or colluvial fan": 11,
+      "Unconfined sand and gravel - deltaic": 2,
+      "Confined sand and gravel - glacial": 44,
+      "Confined sand and gravel - glacio-marine": 11,
+      "Unconfined sand and gravel - late glacial outwash": 16,
+      "Unconfined sand and gravel - large river system": 29,
+      "Fractured sedimentary rock": 12,
+      "Unconfined sand and gravel aquifer - small stream system": 1,
+      "Unconfined sand and gravel aquifer - medium stream system": 3
+    },
+    "MAPPING_YEAR": {
+      "2001": 1,
+      "2002": 1,
+      "2000": 1,
+      "2007": 13,
+      "2006": 10,
+      "2020": 20,
+      "2018": 4,
+      "2012": 6,
+      "2016": 24,
+      "2015": 4,
+      "2019": 37,
+      "1993": 16,
+      "2025": 11,
+      "1999": 1
+    },
+    "null_fields": {
+      "AQUIFER_DETAILS_URL": 0,
+      "AQUIFER_ID": 0,
+      "DEMAND": 43,
+      "FEATURE_AREA_SQM": 0,
+      "FEATURE_LENGTH_M": 0,
+      "GW_A_SYSID": 0,
+      "LITHO_STRATOGRAPHIC_UNIT": 8,
+      "LOCATION": 0,
+      "MAPPING_YEAR": 0,
+      "MATERIAL": 0,
+      "NAME": 58,
+      "NOTES": 143,
+      "OBJECTID": 0,
+      "PRODUCTIVITY": 36,
+      "QUALITY_CONCERN": 73,
+      "SE_ANNO_CAD_DATA": 149,
+      "SUBTYPE": 0,
+      "VULNERABILITY": 0,
+      "WATER_USE": 40
+    },
+    "prepared_file": "bc-fraser-aquifers.geojson",
+    "prepared_bytes": 3336412,
+    "prepared_sha256": "f3a91a8a26d7008d95e57bb386f0ff3292c3dc95fabbd281a221f46423beda21",
+    "gzip_bytes": 1037337,
+    "derivation": "Only fields/whitespace removed; geometry coordinates preserved without rounding or simplification.",
+    "topology_validation": {
+      "validator": "Shapely 2.1.2",
+      "geos": "3.13.1",
+      "original_invalid_count": 0,
+      "prepared_invalid_count": 0,
+      "geometry_wkb_unchanged_count": 149,
+      "details_file": "topology-validation.json",
+      "repairs_or_dropped_features": false
+    }
+  },
+  {
+    "file": "gin-regions-source.geojson",
+    "bytes": 5415294,
+    "sha256": "b84a218cc53c1b7201c29c2a2d9ad02a2d3d6b6edb5b424bce414698523183b2",
+    "feature_count": 1176,
+    "vertex_count": 114278,
+    "geometry_types": {
+      "Polygon": 1176
+    },
+    "bbox": [
+      -141.00000277322675,
+      41.72291716374477,
+      -52.66936492852568,
+      83.1895773351248
+    ],
+    "response_crs": null,
+    "fields": [
+      "AQUIFER_DI",
+      "AQUIFER__1",
+      "AREA",
+      "PERIMETER",
+      "PRIMARY_"
+    ],
+    "PRIMARY_": {
+      "Southern Ontario Lowlands": 22,
+      "Canadian Shield": 166,
+      "St. Lawrence Platform": 41,
+      "Appalachain Mountains": 105,
+      "Magdalen Basin": 60,
+      "Western Canada Sedimentary Basin": 2,
+      "Hudson Bay Lowlands": 12,
+      "Cordillera": 154,
+      "Permafrost": 614
+    },
+    "null_fields": {
+      "AQUIFER_DI": 0,
+      "AQUIFER__1": 0,
+      "AREA": 0,
+      "PERIMETER": 0,
+      "PRIMARY_": 0
+    },
+    "prepared_file": "canada-hydrogeological-regions.geojson",
+    "prepared_bytes": 4627451,
+    "prepared_sha256": "4c98b23247f082d1da225e3153f4d760ca72913efb391dfb43fbcd6a74c603c4",
+    "gzip_bytes": 1890433,
+    "derivation": "Only fields/whitespace removed; geometry coordinates preserved without rounding or simplification.",
+    "topology_validation": {
+      "validator": "Shapely 2.1.2",
+      "geos": "3.13.1",
+      "original_invalid_count": 7,
+      "prepared_invalid_count": 7,
+      "geometry_wkb_unchanged_count": 1176,
+      "details_file": "topology-validation.json",
+      "repairs_or_dropped_features": false
+    }
+  }
+]

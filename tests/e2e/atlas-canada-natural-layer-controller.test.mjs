@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { build } from 'esbuild';
 import { Window } from 'happy-dom';
 import { bundleCanadaSource } from '../fixtures/bundle-canada-source.mjs';
 import { transform } from '@astrojs/compiler-rs';
@@ -140,6 +142,77 @@ test('Natural SSR keeps station coordinates and names while excluding repeated m
     assert.ok(!('geometry' in config));assert.equal(w.document.querySelectorAll('.canada-natural-area').length,1);
     assert.equal(w.document.querySelectorAll('defs [data-canada-natural-geometry]').length,0,'polygon geometry is unchanged');
   } finally { await w.happyDOM.close(); }
+});
+
+test('Deferred climate startup preserves visible SSR without a request until the parent activates the layer', async () => {
+  const geometry = { type: 'FeatureCollection', features: groupSets.climate.map((group, index) => ({
+    type: 'Feature', properties: { id: group.id },
+    geometry: { type: 'Polygon', coordinates: [[[-100 + index * 10, 50], [-90 + index * 10, 50], [-90 + index * 10, 60], [-100 + index * 10, 50]]] },
+  })) };
+  const geometryUrl = '/insight-journal/assets/atlas/canada-climate-elevation-v1/koppen.geojson';
+  const html = await renderNaturalSSR({ layer: 'climate', geometry, groups: groupSets.climate, geometryUrl, stations, hidden: false });
+  // Only WebGL is replaced. The real SSR component, controller and geometry
+  // loader run on a water URL, before the parent applies its restored mode.
+  const mapStub = `export function setWorkerUrl(){}; export function setWorkerCount(){};
+    export class Map {
+      constructor(options){this.options=options;this.bounds=options.bounds;this.canvas=document.createElement('canvas');options.container.append(this.canvas);(window.__naturalMaps??=[]).push(this);this.touchZoomRotate={disableRotation(){}};this.keyboard={disableRotation(){}};}
+      on(){return this;} once(name,listener){if(name==='load')queueMicrotask(listener);return this;}
+      getCanvas(){return this.canvas;} setFilter(){} resize(){} remove(){}
+      fitBounds(bounds){this.bounds=bounds;}
+      getBounds(){return {getWest:()=>this.bounds[0][0],getSouth:()=>this.bounds[0][1],getEast:()=>this.bounds[1][0],getNorth:()=>this.bounds[1][1]};}
+      project(coordinates){return {x:(coordinates[0]+145)/95*600,y:(85-coordinates[1])/45*367};}
+    }`;
+  const filename = path.resolve('src/scripts/atlas-canada-natural-layer.ts');
+  const bundle = await build({
+    stdin: { contents: await readFile(filename, 'utf8'), resolveDir: path.dirname(filename), sourcefile: filename, loader: 'ts' },
+    tsconfigRaw: { compilerOptions: {} }, bundle: true, write: false, platform: 'browser', format: 'iife', globalName: 'DeferredNaturalLayer',
+    plugins: [{ name: 'natural-layer-webgl-boundary', setup(builder) {
+      builder.onResolve({ filter: /^maplibre-gl$/ }, () => ({ path: 'maplibre', namespace: 'natural-map-stub' }));
+      builder.onLoad({ filter: /.*/, namespace: 'natural-map-stub' }, () => ({ contents: mapStub, loader: 'js' }));
+      builder.onResolve({ filter: /^\./ }, args => ({ path: path.resolve(args.resolveDir, args.path + '.ts'), namespace: 'natural-local-source' }));
+      builder.onLoad({ filter: /.*/, namespace: 'natural-local-source' }, async args => ({ contents: await readFile(args.path, 'utf8'), loader: 'ts', resolveDir: path.dirname(args.path) }));
+    } }],
+  });
+  const w = new Window({ url: 'https://example.com/insight-journal/atlas/north-america/canada/nature/?view=water', settings: { disableCSSFileLoading: true, disableJavaScriptFileLoading: true, enableJavaScriptEvaluation: true, suppressInsecureJavaScriptEnvironmentWarning: true } });
+  let controller;
+  try {
+    w.document.body.innerHTML = html;
+    const root = w.document.querySelector('[data-canada-natural-layer="climate"]');
+    const stage = root.querySelector('[data-canada-natural-stage]'), fallback = root.querySelector('[data-canada-natural-fallback]');
+    Object.defineProperties(stage, { clientWidth: { value: width }, clientHeight: { value: height } });
+    const sourcePath = fallback.querySelector('.canada-natural-area').getAttribute('d'), requests = [];
+    w.fetch = async url => { requests.push(String(url)); return { ok: true, json: async () => geometry }; };
+    w.eval(bundle.outputFiles[0].text);
+    assert.equal(root.hidden, false, 'the server initially exposes climate even for a restored water URL');
+    controller = w.DeferredNaturalLayer.initCanadaNaturalLayer(root, { deferStart: true });
+    assert.deepEqual(requests, [], 'construction must not request climate geometry before the parent chooses its mode');
+    assert.equal(root.dataset.canadaNaturalRender, 'svg');
+    assert.equal(fallback.querySelector('.canada-natural-area').getAttribute('d'), sourcePath, 'deferred startup retains the server geometry');
+    assert.ok(frame(fallback).every(Number.isFinite), 'the visible SSR map is drawn at positive layout dimensions');
+
+    root.hidden = true;
+    const selection = { selected: 'Dfb', only: true, city: 'ottawa' };
+    controller.render(selection);
+    await new Promise(resolve => setTimeout(resolve, 0));
+    assert.deepEqual(requests, [], 'a hidden climate render during water restoration must not fetch');
+    assert.equal(w.__naturalMaps, undefined);
+
+    root.hidden = false;
+    controller.render(selection);
+    controller.render(selection);
+    for (let attempt = 0; attempt < 100 && root.dataset.canadaNaturalRender !== 'maplibre'; attempt++) await new Promise(resolve => setTimeout(resolve, 5));
+    assert.deepEqual(requests, ['https://example.com' + geometryUrl], 'activation requests the configured climate geometry once');
+    assert.equal(root.dataset.canadaNaturalRender, 'maplibre', w.happyDOM.virtualConsolePrinter.readAsString());
+    assert.equal(w.__naturalMaps.length, 1, 'render and visibility changes share one renderer');
+    assert.deepEqual(JSON.parse(JSON.stringify(w.__naturalMaps[0].options.style.sources['canada-natural-groups'].data.features.map(feature => feature.properties.id))), ['Dfb', 'ET']);
+    assert.equal(root.querySelector('[data-canada-natural-shape="Dfb"]').getAttribute('aria-pressed'), 'true');
+    assert.equal(root.querySelector('[data-canada-natural-shape="ET"]').hasAttribute('hidden'), true, 'the parent selection survives asynchronous activation');
+    assert.equal(root.querySelector('[data-canada-natural-live]').hidden, false);
+    assert.equal(fallback.getAttribute('aria-hidden'), 'true');
+    controller.render(selection);
+    await new Promise(resolve => setTimeout(resolve, 0));
+    assert.equal(requests.length, 1, 'later redraws do not refetch the active layer');
+  } finally { controller?.destroy(); await w.happyDOM.close(); }
 });
 
 test('Sparse contour labels are exact source vertices at the original EGM2008 height, with 500 m visually lighter than major lines', () => {

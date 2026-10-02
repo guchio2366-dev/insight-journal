@@ -6,6 +6,8 @@ import NorthAmericaCountryFieldNavigation from './NorthAmericaCountryFieldNaviga
 import AtlasClimatePlot from './AtlasClimatePlot.astro';
 import CanadaLandformMap from './CanadaLandformMap.astro';
 import CanadaNaturalLayerMap from './CanadaNaturalLayerMap.astro';
+import CanadaWaterResources from './CanadaWaterResources.astro';
+import waterResources from '../../data/atlas/canada/water-resources.json';
 import koppenGeometry from '../../../public/assets/atlas/canada-climate-elevation-v1/koppen.geojson?raw';
 import elevationGeometry from '../../../public/assets/atlas/canada-climate-elevation-v1/elevation-contours.geojson?raw';
 import koppenManifest from '../../../public/assets/atlas/canada-climate-elevation-v1/koppen-manifest.json';
@@ -41,6 +43,12 @@ const fmt=(v:number|null)=>v===null?'未収録':v.toLocaleString('ja-JP',{minimu
 const climateGroups=(koppenManifest as any).classes;
 const elevationGroups=(elevationManifest as any).levels;
 const config={cities:climate.stations.map(s=>({id:s.id,name:s.name,point:project(s.coordinates)})),waters:waterNames,width,height,layers:{climate:{groups:climateGroups,stations:(koppenManifest as any).stationSamples},elevation:{groups:elevationGroups}},industry:{...industry,geometry:industryGeometry.features},population:{...population,geometryUrl:populationGeometryUrl,geometry:populationGeometry.features.map(({id,point,bounds,provinceCodes})=>({id,point,bounds,provinceCodes}))}};
+const waterConfig=JSON.parse(JSON.stringify(waterResources));
+for(const layer of Object.values(waterConfig.datasets??waterConfig.layers) as any[]){
+ if(layer.geometryUrl)layer.geometryUrl=withBase(layer.geometryUrl);
+ if(layer.imageUrl)layer.imageUrl=withBase(layer.imageUrl);
+ for(const image of [...(layer.images??[]),...(layer.classImages??[])])if(image.url)image.url=withBase(image.url);
+}
 import '../../styles/atlas-canada-country-parity.css';
 ---
 <BaseLayout title="カナダの自然環境｜地形・気候・河川" description="首都オタワと沿岸・内陸・北部の気候を比べ、カナダの山地・平原・湖と河川のつながりを読む。" compactAtlas>
@@ -56,9 +64,11 @@ import '../../styles/atlas-canada-country-parity.css';
    <p><a href={withBase('/atlas/north-america/canada/population/')} data-canada-population-return hidden>人口の都市圏分布・比較へ戻る</a></p>
    <p><a href={withBase('/atlas/north-america/canada/agriculture/')} data-canada-crop-return hidden>農畜産の分布・比較へ戻る</a></p>
    <nav class="canada-views country-topic-tabs" aria-label="自然環境の表示"><button data-canada-view="climate" aria-pressed="true">気候区分・都市</button><button data-canada-view="water" aria-pressed="false">水資源</button><button data-canada-view="landform" aria-pressed="false">地形</button><button data-canada-view="elevation" aria-pressed="false">標高</button></nav>
-   <nav class="country-water-topics" aria-label="水資源の内訳"><span>河川・地下水<small>河川を収録・地下水は未整備</small></span><button disabled>降水量<small>分布図は未整備</small></button><button disabled>河川の流域<small>未整備</small></button></nav>
+   <nav class="country-water-topics" aria-label="水資源の内訳"><button data-canada-water-family="surface" aria-pressed="true">河川・地下水</button><button data-canada-water-family="precipitation" aria-pressed="false">降水量</button><button data-canada-water-family="drainage" aria-pressed="false">河川の流域</button></nav>
+   <nav class="country-water-subtopics" data-canada-water-subtopics hidden aria-label="河川・地下水の資料"><button data-canada-water-topic="surface" aria-pressed="true">湖・河川</button><button data-canada-water-topic="groundwater" aria-pressed="false">全国の地下水区分</button><button data-canada-water-topic="aquifers" aria-pressed="false">BCの帯水層事例</button></nav>
    <div class="canada-workspace atlas-primary-grid">
-    <section class="canada-map-column atlas-map-column" aria-label="カナダの地図">
+    <CanadaWaterResources config={waterConfig} />
+    <section class="canada-map-column atlas-map-column" data-canada-original-map-column aria-label="カナダの地図">
      <CanadaCropNatureMap />
      <CanadaNaturalLayerMap layer="climate" hidden={false} geometry={koppenGeometry} groups={climateGroups} geometryUrl={withBase('/assets/atlas/canada-climate-elevation-v1/koppen.geojson')} stations={climate.stations} source={(koppenManifest as any).source} />
      <CanadaNaturalLayerMap layer="elevation" geometry={elevationGeometry} groups={elevationGroups} geometryUrl={withBase('/assets/atlas/canada-climate-elevation-v1/elevation-contours.geojson')} source={(elevationManifest as any).source} />
@@ -99,7 +109,7 @@ import '../../styles/atlas-canada-country-parity.css';
      <div class="canada-city-list" aria-label="観測地点を選ぶ">{climate.stations.map(s=><button data-canada-city-button={s.id} aria-pressed={s.id==='ottawa'?'true':'false'}>{s.name}{s.id==='ottawa'?'（首都）':''}</button>)}</div>
 
     </section>
-    <aside class="canada-reading atlas-national" aria-label="地図と一緒に読む"><p data-population-geometry-status hidden></p>
+    <aside class="canada-reading atlas-national" data-canada-original-reading aria-label="地図と一緒に読む"><p data-population-geometry-status hidden></p>
    <header class="canada-national-header"><p class="atlas-eyebrow">Canada · Natural environment</p><h2>カナダの自然環境</h2><p class="canada-lead">西岸の海と山地、内陸の平原、東部の楯状地、北部の島々。場所を確かめ、季節と水の違いを読む。</p></header>
 
      <section class="canada-comparison-context" data-canada-crop-context hidden><h2 data-canada-crop-context-title></h2><p data-canada-crop-context-text></p><p class="canada-caption" data-canada-crop-scope></p><div data-canada-crop-mini hidden></div><details><summary>元の図・比較年・利用条件</summary><p data-canada-crop-origin></p><p data-canada-crop-mechanism></p><p>地域地図は2021年農業センサスのCCS別申告値で固定し、州比較は元ページで選んだ別の年次統計です。農場本拠地に集計した面積・頭数で、輪郭は実際の畑・放牧地・牛の所在地ではありません。非公表Fと未収録をゼロに変えません。<a href="https://www.statcan.gc.ca/en/terms-conditions/open-licence">Statistics Canada Open Licence</a>。Adapted from Statistics Canada, 2021 Census of Agriculture, Tables 32-10-0309-01, 32-10-0370-01 and 32-10-0249-01, accessed October 2, 2026. This does not constitute an endorsement by Statistics Canada of this product. 境界の原典・利用条件、各指標の定義と品質は元の農畜産ページに保持しています。</p></details></section>
@@ -135,6 +145,7 @@ import '../../styles/atlas-canada-country-parity.css';
     </aside>
    </div>
    </div>
+   <details class="canada-source-footer" id="canada-water-sources"><summary>水資源の取得記録・配布データ・利用条件</summary><p>降水はECCC CanGridP mlyV2の1991–2020年360か月から算出した雨・雪の水当量の年平均です。統計集水域はカナダ国内25地域の2003年分類（2017年刊行）。地下水は2008年の広域区分と、1993–2025年に地図化されたBC南西部の帯水層事例です。地下水量・取水量・利用可能量は示しません。</p><p><a href={withBase('/assets/atlas/canada-water-v1/manifest.json')}>原典・利用条件・形状検証・加工とハッシュの台帳</a> ／ <a href={withBase('/assets/atlas/canada-water-v1/annual-valid-grid-points.csv.gz')}>年降水量の有効格子CSV（gzip）</a></p><p>全国地下水の原資料で輪郭が交差する7区域は、座標を補正せず輪郭のみ表示します。BCの空白は帯水層がないことを意味しません。日本語名・色と降水量の計算は本サイトによる加工です。Contains information licensed under the Open Government Licence – Canada and the Open Government Licence – British Columbia. 提供機関による本サイトの承認を意味しません。</p></details>
 
    <footer class="canada-source-footer" id="canada-nature-sources"><h2>出典・対象期間・読み方</h2><ul><li>気候：Environment and Climate Change Canada、1991–2020年平年値。公式表の数値を抽出し、未収録値を補間しません。取得日2026年9月30日。<a href="https://climate.weather.gc.ca/climate_normals/index_e.html">計算方法と観測所一覧</a> ／ <a href="https://www.canada.ca/en/transparency/terms.html">政府サイト利用条件</a>。公式グラフの転載ではなく数値から作図しています。</li><li>主地図：Natural Resources Canadaの公式GIS「Physiographic Regions of Canada」。7地域の全頂点を保持し、EPSG:3978から公式サービスでEPSG:4326へ変換。カタログ公開2019年4月1日、対象期間開始2017年9月1日、確認2026年10月2日。<a href={physiography.source.catalogueUrl}>原典</a> ／ <a href={physiography.manifestUrl}>取得・座標系・ハッシュ台帳</a>。Contains information licensed under the Open Government Licence – Canada. 色と日本語ラベルは本サイトが付け、提供機関の承認を意味しません。</li><li>資料用の旧版紙地図：Natural Resources Canada、Atlas第6版の2009年保存版。地形分類の基礎資料は1967年。<a href={geographySource}>データカタログ</a> ／ <a href="https://open.canada.ca/en/open-government-licence-canada">Open Government Licence – Canada</a>。原図を縮小し、分類・配置を変更していません。提供機関による本サイトの承認を意味しません。</li><li>境界・河川・湖：Natural Earth v5.1.2、public domain。既存国境データは1:110m、河川・湖は1:50m。国土の周辺を含む表示範囲で抽出。詳細な境界・現在の実効支配・流域境界を示すものではありません。</li><li>本文の気候説明：<a href={mechanismSource}>Canada's Changing Climate Report（2019年）、第4章</a>と、各観測地点の平年値。地域の仕組みと一点の観測値を区別します。</li></ul><p><a href={withBase('/assets/atlas/canada-nature-v1/manifest.json')}>加工方法・固定版・ファイルハッシュの台帳</a></p></footer>
    <details class="canada-source-footer"><summary>気候区分・標高の原典と加工</summary><p>Beck et al.の1991–2020年ケッペン区分、元格子0.1°。格子の分類を同区分ごとに結合し、カナダ境界で切り出しています。ECCCの一点の月別平年値から国土の区分を推定したものではありません。<a href={withBase('/assets/atlas/canada-climate-elevation-v1/koppen-manifest.json')}>原典・CC BY 4.0・原データと加工のハッシュ</a></p><p>NOAA ETOPO2022、元格子60秒、標高m・EGM2008。格子から等高線を生成し、カナダ境界で切り出しました。<a href={withBase('/assets/atlas/canada-climate-elevation-v1/elevation-manifest.json')}>原典・利用条件・解像度・加工のハッシュ</a></p><p>国境の切り出しにはStatistics Canada 2021年州準州のcartographic境界を利用します。元境界の出典と帰属は各台帳に保持しています。</p></details>

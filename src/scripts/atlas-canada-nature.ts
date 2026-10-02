@@ -8,20 +8,39 @@ import physiography from '../data/atlas/canada/physiography.json';
 import {selectedWaterReading} from '../data/atlas/canada/reading';
 import {initCanadaNaturalLayer} from './atlas-canada-natural-layer';
 import {readCanadaNaturalLayerState,writeCanadaNaturalLayerState,type NaturalLayer,type NaturalLayerState} from '../lib/atlas-canada-natural-state';
+import {initCanadaWaterResources} from './atlas-canada-water-resources';
+import {readCanadaWaterState,writeCanadaWaterState,type CanadaWaterState} from '../lib/atlas-canada-water-state';
+import {renderCanadaWaterOrigin} from './atlas-canada-water-origin';
 export function initCanadaNature(root:HTMLElement){
  const config=JSON.parse(root.querySelector('[data-canada-config]')!.textContent!);
  const ids=config.cities.map((c:any)=>c.id),waters=config.waters;
  const $=<T extends Element=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const map=$<SVGSVGElement>('[data-canada-map]');
  let state=readCanadaNatureState(new URL(location.href),ids,waters);
+ const waterHost=root.querySelector<HTMLElement>('[data-canada-water-resources]');
+ const waterConfig=waterHost?JSON.parse(waterHost.querySelector('[data-canada-water-resource-config]')!.textContent!):null;
+ const waterGroups=Object.fromEntries(Object.entries(waterConfig?.datasets??waterConfig?.layers??{}).map(([topic,value]:[string,any])=>[topic,[...value.groups,...(value.areas??[])].map((g:any)=>g.id)]));
+ let waterState=readCanadaWaterState(new URL(location.href),waterGroups);
+ const waterMap=waterHost?initCanadaWaterResources(waterHost):null;
  const landformHost=root.querySelector<HTMLElement>('[data-canada-landform]');
  const landformMap=landformHost?initCanadaLandform(landformHost):null;
  const naturalLayers=['climate','elevation'] as const;
  const naturalHosts=Object.fromEntries(naturalLayers.map(layer=>[layer,root.querySelector<HTMLElement>(`[data-canada-natural-layer="${layer}"]`)]));
- const naturalMaps=Object.fromEntries(naturalLayers.map(layer=>[layer,naturalHosts[layer]?initCanadaNaturalLayer(naturalHosts[layer]!):null]));
+ const naturalMaps=Object.fromEntries(naturalLayers.map(layer=>[layer,naturalHosts[layer]?initCanadaNaturalLayer(naturalHosts[layer]!,{deferStart:true}):null]));
  let naturalStates=Object.fromEntries(naturalLayers.map(layer=>[layer,readCanadaNaturalLayerState(new URL(location.href),layer,(config.layers?.[layer]?.groups??[]).map((g:any)=>g.id))])) as Record<NaturalLayer,NaturalLayerState>;
  const full=[0,0,config.width,config.height];
  function render(){
+  const waterResource=state.view==='water'&&waterState.topic!=='surface';
+  root.classList.toggle('is-water-resource',waterResource);
+  const waterFamily=['precipitation','drainage'].includes(waterState.topic)?waterState.topic:'surface';
+  root.classList.toggle('is-water-river-family',state.view==='water'&&waterFamily==='surface');
+  const waterSubtopics=root.querySelector<HTMLElement>('[data-canada-water-subtopics]');if(waterSubtopics)waterSubtopics.hidden=state.view!=='water'||waterFamily!=='surface';
+  for(const button of root.querySelectorAll<HTMLElement>('[data-canada-water-family]'))button.setAttribute('aria-pressed',String(button.dataset.canadaWaterFamily===waterFamily));
+  if(waterHost)waterHost.hidden=!waterResource;
+  const originalMap=root.querySelector<HTMLElement>('[data-canada-original-map-column]'),originalReading=root.querySelector<HTMLElement>('[data-canada-original-reading]');
+  if(originalMap)originalMap.hidden=waterResource;if(originalReading)originalReading.hidden=waterResource;
+  for(const button of root.querySelectorAll<HTMLElement>('[data-canada-water-topic]'))button.setAttribute('aria-pressed',String(button.dataset.canadaWaterTopic===waterState.topic));
+  waterMap?.render(waterResource?waterState:{...waterState,topic:'surface'});
   const forestryBack=root.querySelector<HTMLAnchorElement>('[data-canada-forestry-return]'),savedForestry=new URL(location.href).searchParams.get('forestryReturn');
   if(forestryBack){forestryBack.hidden=!savedForestry;if(savedForestry){const back=new URL(forestryBack.getAttribute('href')!,location.href),params=new URLSearchParams(savedForestry);back.search='';for(const key of ['year','province','compare','metric','cover','region','zoom']){const value=params.get(key);if(value)back.searchParams.set(key,value);}forestryBack.href=back.href;}}
   const forestContext=root.querySelector<HTMLElement>('[data-canada-forest-context]'),forestMap=root.querySelector<SVGElement>('[data-canada-forest-context-map]'),forestLegend=root.querySelector<HTMLElement>('[data-canada-forest-context-legend]');
@@ -32,6 +51,7 @@ export function initCanadaNature(root:HTMLElement){
    text.textContent=state.view==='elevation'?'山地の高さをETOPOの等高線で確かめます。森林の重ね図と沿岸の観測点へは「気候区分・都市」で戻れます。':state.view==='landform'?'山地と海岸を地形図で確かめます。針葉樹林と観測点の重ね図へは「都市の気候」で戻れます。':state.view==='water'?waterText:state.city==='vancouver'?'Vancouverの温和な冬・秋冬の雨を、沿岸の針葉樹林と比べます。':'観測点を切り替えています。元の問いはVancouverの沿岸気候と針葉樹林の関係です。Vancouverで沿岸の事例へ戻れます。';
   }
   const industryComparison=renderIndustryNatureComparison(root,config,state),populationComparison=renderPopulationNatureComparison(root,config,state),cropComparison=renderCanadaCropNatureComparison(root,state);root.classList.toggle('is-learning-comparison',!!savedForestry||industryComparison||populationComparison||cropComparison);root.classList.toggle('is-crop-comparison',cropComparison);
+  renderCanadaWaterOrigin(root,waterState);
   const comparison=!!savedForestry||industryComparison||populationComparison||cropComparison;
   const classifiedClimate=state.view==='climate'&&!comparison&&!!naturalMaps.climate;
   root.classList.toggle('is-classified-climate',classifiedClimate);
@@ -94,6 +114,10 @@ export function initCanadaNature(root:HTMLElement){
   $('[data-canada-announcement]').textContent=state.view==='landform'?`${landform?.name??'七つの地形地域'}${state.landformOnly?'だけ':''}を表示。`:state.view==='elevation'?`${elevation?.name??'標高の等高線'}を表示。`:`${name}${state.compare?'と比較':''}。${({climate:'都市の気候',landform:'地形地域',water:'湖と河川'})[state.view]}を表示。`;
  }
  function update(patch:Partial<CanadaNatureState>){state={...state,...patch};if(state.compare===state.city)state.compare=null;history.pushState(null,'',writeCanadaNatureState(new URL(location.href),state));render();}
+ function updateWater(patch:Partial<CanadaWaterState>){waterState={...waterState,...patch};state={...state,view:'water'};history.pushState(null,'',writeCanadaWaterState(writeCanadaNatureState(new URL(location.href),state),waterState));render();}
+ waterHost?.addEventListener('canada-water-update',event=>updateWater((event as CustomEvent<Partial<CanadaWaterState>>).detail));
+ for(const button of root.querySelectorAll<HTMLElement>('[data-canada-water-family]'))button.addEventListener('click',()=>{const family=button.dataset.canadaWaterFamily!,currentFamily=['precipitation','drainage'].includes(waterState.topic)?waterState.topic:'surface';if(state.view==='water'&&family===currentFamily)return;const topic=family==='surface'&&['surface','groundwater','aquifers'].includes(waterState.topic)?waterState.topic:family as CanadaWaterState['topic'];updateWater({topic,area:null,only:false,frame:null});});
+ for(const button of root.querySelectorAll<HTMLElement>('.country-water-subtopics [data-canada-water-topic]'))button.addEventListener('click',()=>{const topic=button.dataset.canadaWaterTopic as CanadaWaterState['topic'];if(state.view==='water'&&topic===waterState.topic)return;updateWater({topic,area:null,only:false,frame:null});});
  const select=(city:string)=>update({city});
  function updateNatural(layer:NaturalLayer,patch:Partial<NaturalLayerState>){naturalStates[layer]={...naturalStates[layer],...patch};history.pushState(null,'',writeCanadaNaturalLayerState(new URL(location.href),layer,naturalStates[layer]));render();}
  for(const layer of naturalLayers){const host=naturalHosts[layer];if(!host)continue;
@@ -125,7 +149,7 @@ export function initCanadaNature(root:HTMLElement){
   const nw=Math.min(config.width,Math.max(30,w*factor)),nh=Math.min(config.height,Math.max(20,h*factor));
   update({frame:nw===config.width?null:[Math.max(0,Math.min(config.width-nw,x+(w-nw)/2)),Math.max(0,Math.min(config.height-nh,y+(h-nh)/2)),nw,nh]});
  });
- window.addEventListener('popstate',()=>{state=readCanadaNatureState(new URL(location.href),ids,waters);naturalStates=Object.fromEntries(naturalLayers.map(layer=>[layer,readCanadaNaturalLayerState(new URL(location.href),layer,(config.layers?.[layer]?.groups??[]).map((g:any)=>g.id))])) as Record<NaturalLayer,NaturalLayerState>;render();void hydrateCanadaPopulationGeometry(root,'[data-canada-config]',{config,onReady:render,onError:render});});
+ window.addEventListener('popstate',()=>{state=readCanadaNatureState(new URL(location.href),ids,waters);waterState=readCanadaWaterState(new URL(location.href),waterGroups);naturalStates=Object.fromEntries(naturalLayers.map(layer=>[layer,readCanadaNaturalLayerState(new URL(location.href),layer,(config.layers?.[layer]?.groups??[]).map((g:any)=>g.id))])) as Record<NaturalLayer,NaturalLayerState>;render();void hydrateCanadaPopulationGeometry(root,'[data-canada-config]',{config,onReady:render,onError:render});});
  render();
  void hydrateCanadaPopulationGeometry(root,'[data-canada-config]',{config,onReady:render,onError:render});
 }
