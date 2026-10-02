@@ -19,11 +19,18 @@ export function initCanadaPopulation(root:HTMLElement){
  const longTnr=(r:any)=>r.quality?.tnrLongFormPercent??r.quality?.tnr?.longForm;
  const qualityText=(r:any)=>`${r.quality?.notes?.length?'不完全調査の保留地・集落を除外 / ':''}長形式TNR ${longTnr(r)??'未公表'}%`;
  function alignQuantityLegend(){const map=root.querySelector<SVGSVGElement>('[data-population-map]')!,legend=root.querySelector<SVGSVGElement>(demographic.topic==='distribution'?'[data-population-population-legend] svg':'[data-demographic-count-legend] svg');const matrix=map.getScreenCTM?.();if(legend&&matrix&&Number.isFinite(matrix.a)&&matrix.a>0){const frame=canadaPopulationFrame(state,config.geometry);legend.style.width=`${280*matrix.a*frame[2]/760}px`;}}
- function showDistributionReturn(){
-  const raw=new URL(location.href).searchParams.get('demographicsReturn'),wrapper=$('[data-demographic-return-container]');wrapper.hidden=true;
-  if(!raw)return;const source=new URL('?'+raw,location.href),saved=readCanadaDemographicsState(source,catalog);if(saved.topic==='distribution')return;
-  const savedPopulation=readCanadaPopulationState(source,ids),group=config.demographics[saved.topic].groups.find((g:any)=>g.id===saved.group),cma=config.cmas.find((r:any)=>r.id===savedPopulation.cma);
-  const target=combinedUrl(new URL(location.pathname,location.href),savedPopulation,saved);$<HTMLAnchorElement>('[data-demographic-return]').href=target.href;$('[data-demographic-return]').textContent=`${cma.name}・${group.name}の比較へ戻る`;wrapper.hidden=false;
+ function demographicOrigin(){
+  const raw=new URL(location.href).searchParams.get('demographicsReturn');if(!raw)return null;
+  const source=new URL('?'+raw,location.href),saved=readCanadaDemographicsState(source,catalog);if(saved.topic==='distribution')return null;
+  const savedPopulation=readCanadaPopulationState(source,ids),data=config.demographics[saved.topic],group=data.groups.find((g:any)=>g.id===saved.group);
+  return {saved,savedPopulation,data,group};
+ }
+ function showDistributionReturn(origin:ReturnType<typeof demographicOrigin>){
+  const wrapper=$('[data-demographic-return-container]');wrapper.hidden=!origin;if(!origin)return;
+  const {saved,savedPopulation,data,group}=origin,cma=config.cmas.find((r:any)=>r.id===savedPopulation.cma),target=combinedUrl(new URL(location.pathname,location.href),savedPopulation,saved);
+  $<HTMLAnchorElement>('[data-demographic-return]').href=target.href;$('[data-demographic-return]').textContent=`${cma.name}・${group.name}の比較へ戻る`;
+  const close=combinedUrl(new URL(location.href));close.searchParams.delete('demographicsReturn');$<HTMLAnchorElement>('[data-demographic-context-clear]').href=close.href;
+  const records=data.cmas.filter((r:any)=>[state.cma,state.compare].includes(r.id));$('[data-demographic-origin-comparison]').textContent=`元の集団・2021年 ${group.name}：${records.map((r:any)=>`${r.name} ${shareText(r.values[group.id],r.denominator)} / ${countText(r.values[group.id])}`).join(' / ')}。`;
  }
  function renderDemographics(data:any,selected:any,compare:any){
   const group=data.groups.find((g:any)=>g.id===demographic.group),select=$<HTMLSelectElement>('[data-demographic-group]');
@@ -45,27 +52,33 @@ export function initCanadaPopulation(root:HTMLElement){
   $('[data-demographic-table-caption]').textContent=`2021年 ${group.name} / ${data.source.tableId}。人数・分母は同じ表の原値。割合だけを原値から計算。丸め0と欠測・秘匿を区別します。`;
  }
  function render(){
-  const isDistribution=demographic.topic==='distribution',data=isDistribution?null:config.demographics[demographic.topic];
+  const isDistribution=demographic.topic==='distribution',data=isDistribution?null:config.demographics[demographic.topic],origin=isDistribution?demographicOrigin():null;
+  if(origin&&(state.year!==2021||state.metric!=='population')){state={...state,year:2021,metric:'population'};history.replaceState(null,'',combinedUrl(new URL(location.href)));}
+  root.classList.toggle('has-demographic-context',Boolean(origin));
+  for(const element of root.querySelectorAll<HTMLElement>('[data-population-change],[data-population-comparison-links],.population-summary,.population-background,.population-more'))element.hidden=Boolean(origin);
+  const lead=$('[data-population-distribution-lead]'),heading=$('[data-population-distribution-heading]');lead.dataset.originalText??=lead.textContent!;heading.dataset.originalText??=heading.textContent!;
+  lead.textContent=origin?'同じ都市圏で、集団の構成（色）と全人口の規模（円）を照合する。':lead.dataset.originalText;heading.textContent=origin?'集団の構成と、都市圏の規模':heading.dataset.originalText;
   for(const button of root.querySelectorAll<HTMLElement>('[data-population-topic]'))button.setAttribute('aria-pressed',String(button.dataset.populationTopic===demographic.topic));
   for(const element of root.querySelectorAll<HTMLElement>('[data-population-distribution-control]'))element.hidden=!isDistribution;
   for(const element of root.querySelectorAll<HTMLElement>('[data-demographic-control]'))element.hidden=isDistribution;
   $('[data-population-distribution-reading]').hidden=!isDistribution;$('[data-demographic-reading]').hidden=isDistribution;
   $('[data-population-distribution-table]').hidden=!isDistribution;$('[data-demographic-tables]').hidden=isDistribution;
   for(const key of ['year','cma','compare','metric','zoom'])$<HTMLSelectElement>(`[data-population-${key}]`).value=String(state[key as keyof CanadaPopulationState]??'');
-  $<HTMLSelectElement>('[data-population-year]').disabled=state.metric==='density';
+  $<HTMLSelectElement>('[data-population-year]').disabled=Boolean(origin)||state.metric==='density';$<HTMLSelectElement>('[data-population-metric]').disabled=Boolean(origin);
   for(const option of $<HTMLSelectElement>('[data-population-compare]').options)option.disabled=option.value===state.cma;
   $('[data-population-only]').setAttribute('aria-pressed',String(state.only));
-  const selected=(data??config).cmas.find((r:any)=>r.id===state.cma),compare=(data??config).cmas.find((r:any)=>r.id===state.compare),group=data?.groups.find((g:any)=>g.id===demographic.group),frame=canadaPopulationFrame(state,config.geometry),scale=frame[2]/760;
-  const density=isDistribution&&state.metric==='density',share=!isDistribution&&demographic.measure==='share',max=isDistribution?density?Math.max(1,...config.cmas.map((r:any)=>r.density2021.value??0)):distributionMax:demographicMax;
-  const shareScale=data?canadaDemographicShareScale(data.cmas.map((r:any)=>canadaDemographicShare(r.values[group.id].value,r.denominator.value)).filter((v:any)=>v!==null)):null;
+  const selected=(data??config).cmas.find((r:any)=>r.id===state.cma),compare=(data??config).cmas.find((r:any)=>r.id===state.compare),colorData=data??origin?.data,group=data?.groups.find((g:any)=>g.id===demographic.group)??origin?.group,frame=canadaPopulationFrame(state,config.geometry),scale=frame[2]/760;
+  const density=isDistribution&&state.metric==='density',share=Boolean(origin)||!isDistribution&&demographic.measure==='share',max=isDistribution?density?Math.max(1,...config.cmas.map((r:any)=>r.density2021.value??0)):distributionMax:demographicMax;
+  const shareScale=colorData?canadaDemographicShareScale(colorData.cmas.map((r:any)=>canadaDemographicShare(r.values[group.id].value,r.denominator.value)).filter((v:any)=>v!==null)):null;
   root.querySelector('[data-population-map]')!.setAttribute('viewBox',frame.join(' '));
-  root.querySelector('#canada-population-title')!.textContent=isDistribution?`カナダの41都市圏、${state.year}年${density?'人口密度':'人口'}`:`カナダの41都市圏、2021年 ${group.name}の${share?'割合':'人数'}`;
-  root.querySelector('#canada-population-desc')!.textContent=isDistribution?'円の面積は都市圏人口、色は密度。輪郭は2021年CMA境界で自治体境界ではありません。':`輪郭は2021年CMA境界。${share?'色は同じ都市圏の私的世帯人口に占める選択集団の割合。集団を変えると色の目盛も変わります。':'円の面積は選択集団の人数。集団間で共通尺度。'}CMA外の白い地域を0とはしません。`;
+  root.querySelector('#canada-population-title')!.textContent=origin?`カナダの41都市圏、2021年 ${group.name}の割合（色）と全人口（円）`:isDistribution?`カナダの41都市圏、${state.year}年${density?'人口密度':'人口'}`:`カナダの41都市圏、2021年 ${group.name}の${share?'割合':'人数'}`;
+  root.querySelector('#canada-population-desc')!.textContent=origin?'色は選択集団の私的世帯人口に占める割合、円の面積は全住民の2021年人口です。分母が異なる2変数を同じ2021年CMA境界で照合します。':isDistribution?'円の面積は都市圏人口、色は密度。輪郭は2021年CMA境界で自治体境界ではありません。':`輪郭は2021年CMA境界。${share?'色は同じ都市圏の私的世帯人口に占める選択集団の割合。集団を変えると色の目盛も変わります。':'円の面積は選択集団の人数。集団間で共通尺度。'}CMA外の白い地域を0とはしません。`;
   for(const g of root.querySelectorAll<SVGElement>('[data-population-map-cma]')){
    const id=g.dataset.populationMapCma!,r=(data??config).cmas.find((r:any)=>r.id===id),v=isDistribution?metricValue(r):r.values[group.id],isSelected=[state.cma,state.compare].includes(id);g.style.display=state.only&&!isSelected?'none':'';g.setAttribute('aria-pressed',String(id===state.cma));g.classList.toggle('is-selected-cma',id===state.cma);g.classList.toggle('is-comparing-cma',id===state.compare);
-   const polygon=g.querySelector<SVGPathElement>('[data-population-boundary]')!;polygon.style.fill=density?canadaPopulationDensityColor(v.value):share?canadaDemographicShareColor(canadaDemographicShare(v.value,r.denominator.value),shareScale!.breaks):v.value===null?'#b7b7af':'#c7d9bc';
-   const circle=g.querySelector<SVGCircleElement>('[data-population-symbol]')!;circle.style.display=!density&&!share&&v.value!==null?'':'none';circle.setAttribute('r',String(v.value===null?0:Math.sqrt(v.value/max)*22*scale));
-   const title=isDistribution?`${r.name}都市圏、${state.year}年 ${formatCanadaPopulationValue(v.value,state.metric)} ${density?'人/km²':'人'}${v.symbol?' '+v.symbol:''}`:`${r.name}都市圏、2021年 ${group.name}：${countText(v)}、${shareText(v,r.denominator)}。分母 ${r.denominator.value??'未公表'}人`;
+   const colorRecord=origin?colorData.cmas.find((r:any)=>r.id===id):r,colorCell=origin?colorRecord.values[group.id]:v;
+   const polygon=g.querySelector<SVGPathElement>('[data-population-boundary]')!;polygon.style.fill=density?canadaPopulationDensityColor(v.value):share?canadaDemographicShareColor(canadaDemographicShare(colorCell.value,colorRecord.denominator.value),shareScale!.breaks):v.value===null?'#b7b7af':'#c7d9bc';
+   const circle=g.querySelector<SVGCircleElement>('[data-population-symbol]')!;circle.style.display=!density&&(!share||Boolean(origin))&&v.value!==null?'':'none';circle.setAttribute('r',String(v.value===null?0:Math.sqrt(v.value/max)*22*scale));
+   const title=isDistribution?`${r.name}都市圏、${state.year}年 ${formatCanadaPopulationValue(v.value,state.metric)} ${density?'人/km²':'人'}${v.symbol?' '+v.symbol:''}${origin?` / ${group.name} ${shareText(colorCell,colorRecord.denominator)}、${countText(colorCell)}`:''}`:`${r.name}都市圏、2021年 ${group.name}：${countText(v)}、${shareText(v,r.denominator)}。分母 ${r.denominator.value??'未公表'}人`;
    g.querySelector('title')!.textContent=title;g.setAttribute('aria-label',title+'。この都市圏を選ぶ');
    const label=g.querySelector<SVGTextElement>('[data-population-label]')!;label.style.display=isSelected||['535','462','933'].includes(id)&&!state.only?'':'none';label.style.fontSize=`${18*scale}px`;
   }
@@ -74,11 +87,12 @@ export function initCanadaPopulation(root:HTMLElement){
    $('[data-population-comparison]').textContent=`${state.year}年 ${density?'都市圏全体の人口密度':'都市圏人口'} — ${cards.join(' / ')}`;
    const growth=(r:any)=>r.changePercent.value===null?'未公表':`${r.changePercent.value>0?'+':''}${r.changePercent.value.toFixed(1)}%${r.changePercent.symbol?' '+r.changePercent.symbol:''}`;
    $('[data-population-change]').textContent=`2016→2021年の変化: ${selected.name} ${growth(selected)}${compare?' / '+compare.name+' '+growth(compare):''}。2021年境界での比較。`;
-   showDistributionReturn();
+   showDistributionReturn(origin);
   }else renderDemographics(data,selected,compare);
-  $('[data-population-map-status]').textContent=`境界は2021年固定 / ${isDistribution?density?'2021年密度を色で表示':state.year+'年人口を円の面積で表示':`2021年 ${group.name} ${share?'割合%（色）':'人数（円の面積）'}`} / ${state.only?'選択した都市圏だけ':'41都市圏'} / ${state.zoom==='country'?'カナダ全体':state.zoom==='selected'?'選択都市圏を拡大':'南部'}`;
+  $('[data-population-map-status]').textContent=`境界は2021年固定 / ${origin?`2021年 ${group.name}の割合（色）+全人口（円）`:isDistribution?density?'2021年密度を色で表示':state.year+'年人口を円の面積で表示':`2021年 ${group.name} ${share?'割合%（色）':'人数（円の面積）'}`} / ${state.only?'選択した都市圏だけ':'41都市圏'} / ${state.zoom==='country'?'カナダ全体':state.zoom==='selected'?'選択都市圏を拡大':'南部'}`;
   $('[data-population-population-legend]').hidden=!isDistribution||density;$('[data-population-density-legend]').hidden=!density;
   $('[data-demographic-share-legend]').hidden=!share;$('[data-demographic-count-legend]').hidden=isDistribution||share;
+  $('[data-demographic-origin-legend]').hidden=!origin;if(origin)$('[data-demographic-origin-legend]').textContent=`元の集団：${group.name}の割合（色）${origin.saved.measure==='count'?'。元の人数指定は、照合では割合へ変換。':''}`;
   if(share){const list=$('[data-demographic-share-classes]'),threshold=shareScale!.breaks,fmt=(v:number)=>v.toLocaleString('ja-JP',{maximumFractionDigits:Math.max(2,shareScale!.decimals)});list.replaceChildren();for(let i=0;i<6;i++){const li=document.createElement('li'),swatch=document.createElement('i');swatch.style.background=canadaDemographicShareColors[i];swatch.setAttribute('aria-hidden','true');li.append(swatch,i===0?`${fmt(threshold[0])}未満`:i===5?`${fmt(threshold[4])}以上`:`${fmt(threshold[i-1])}–${fmt(threshold[i])}未満`);list.append(li);}}
   for(const circle of root.querySelectorAll<SVGCircleElement>('[data-demographic-legend-count]'))circle.setAttribute('r',String(Math.sqrt(Number(circle.dataset.demographicLegendCount)/demographicMax)*22));
   for(const row of root.querySelectorAll<HTMLElement>('[data-population-row]')){const r=config.cmas.find((r:any)=>r.id===row.dataset.populationRow),v=metricValue(r);row.classList.toggle('is-selected-province',[state.cma,state.compare].includes(r.id));const bar=row.querySelector<HTMLElement>('[data-population-bar]')!;bar.style.width=v.value===null?'0%':`${v.value/(density?max:distributionMax)*100}%`;bar.parentElement!.classList.toggle('is-missing',v.value===null);bar.parentElement!.setAttribute('aria-label',`${r.name}: ${formatCanadaPopulationValue(v.value,state.metric)} ${density?'人/km²':'人'}`);}
@@ -94,7 +108,7 @@ export function initCanadaPopulation(root:HTMLElement){
  for(const button of root.querySelectorAll<HTMLElement>('[data-population-topic]'))button.addEventListener('click',()=>{const topic=button.dataset.populationTopic as CanadaDemographicsState['topic'];if(topic===demographic.topic)return;demographic=topic==='distribution'?{topic,group:null,measure:'share'}:{topic,group:catalog[topic as CanadaDemographicTopic].defaultId,measure:'share'};commitUrl(combinedUrl(new URL(location.href)));});
  $<HTMLSelectElement>('[data-demographic-group]').addEventListener('change',e=>{demographic={...demographic,group:(e.target as HTMLSelectElement).value};commitUrl(combinedUrl(new URL(location.href)));});
  $<HTMLSelectElement>('[data-demographic-measure]').addEventListener('change',e=>{demographic={...demographic,measure:(e.target as HTMLSelectElement).value==='count'?'count':'share'};commitUrl(combinedUrl(new URL(location.href)));});
- for(const a of root.querySelectorAll<HTMLAnchorElement>('[data-demographic-population-link],[data-demographic-return]'))a.addEventListener('click',e=>{if(e.button===0&&!e.metaKey&&!e.ctrlKey&&!e.shiftKey&&!e.altKey){e.preventDefault();commitUrl(new URL(a.href));}});
+ for(const a of root.querySelectorAll<HTMLAnchorElement>('[data-demographic-population-link],[data-demographic-return],[data-demographic-context-clear]'))a.addEventListener('click',e=>{if(e.button===0&&!e.metaKey&&!e.ctrlKey&&!e.shiftKey&&!e.altKey){e.preventDefault();commitUrl(new URL(a.href));}});
  for(const marker of root.querySelectorAll<SVGElement>('[data-population-map-cma]')){const choose=()=>update({cma:marker.dataset.populationMapCma});marker.addEventListener('click',choose);marker.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose();}});}
  for(const button of root.querySelectorAll<HTMLElement>('[data-population-locate]'))button.addEventListener('click',()=>update({cma:button.dataset.populationLocate,zoom:'selected'}));
  $('[data-population-only]').addEventListener('click',()=>update({only:!state.only}));$('[data-population-reset]').addEventListener('click',()=>update({only:false,zoom:'south'}));

@@ -215,6 +215,52 @@ test('The actual population-scale link and named return retain exactly the nine-
  }finally{await w.happyDOM.close();if(reloaded)await reloaded.happyDOM.close();}
 });
 
+test('Population-scale comparison retains the original group share map and both legends even when the source requested counts',async()=>{
+ for(const [name,group]of [['ethnicity','13'],['religion','21']]){
+  const saved={year:'2016',cma:'535',compare:'462',metric:'population',only:'1',zoom:'selected',topic:name,group,measure:'count'};
+  const sharePage=await page('?'+new URLSearchParams({...saved,measure:'share'}));let w;
+  try{
+   const originalColors=Object.fromEntries(population.cmas.map(r=>[r.id,mapGroup(sharePage,r.id).querySelector('[data-population-boundary]').style.fill]));
+   const originalClasses=[...q(sharePage,'[data-demographic-share-classes]').children].map(li=>li.textContent);
+   w=await page('?'+new URLSearchParams(saved));q(w,'[data-demographic-population-link]').click();
+   assert.equal(q(w,'[data-population-topic="distribution"]').getAttribute('aria-pressed'),'true');
+   assert.equal(q(w,'[data-population-population-legend]').hidden,false);assert.equal(q(w,'[data-demographic-share-legend]').hidden,false);assert.equal(q(w,'[data-demographic-count-legend]').hidden,true);
+   const legend=q(w,'[data-demographic-origin-legend]').textContent;assert.ok(legend.includes(data[name].groups.find(g=>g.id===group).name));assert.match(legend,/割合/);assert.match(q(w,'[data-demographic-share-legend]').textContent,/%/);assert.match(legend,/人数/);assert.match(legend,/照合|比較/);
+   assert.deepEqual([...q(w,'[data-demographic-share-classes]').children].map(li=>li.textContent),originalClasses,'Bridge colors retain the original group thresholds');assert.equal(originalClasses.length,6);
+   assert.equal(q(w,'[data-population-year]').disabled,true);assert.equal(q(w,'[data-population-metric]').disabled,true);
+   for(const r of population.cmas){
+    const marker=mapGroup(w,r.id);assert.equal(marker.querySelector('[data-population-boundary]').style.fill,originalColors[r.id],`${name}/${r.id}: original group share color is retained`);
+    assert.notEqual(marker.querySelector('[data-population-symbol]').style.display,'none');assert.ok(marker.querySelector('title').textContent.includes(format(r.population[2021].value)),`${r.id}: circles and accessible titles describe full2021 population`);
+   }
+   const radius=id=>Number(mapGroup(w,id).querySelector('[data-population-symbol]').getAttribute('r')),fullCount=id=>population.cmas.find(r=>r.id===id).population[2021].value;
+   assert.ok(Math.abs((radius('535')/radius('462'))**2-fullCount('535')/fullCount('462'))<1e-9,'The circle area ratio follows whole-population counts');
+   const assertOrigin=id=>{const r=record(name,id),text=q(w,'[data-demographic-origin-comparison]').textContent;assert.ok(text.includes(r.name));assert.ok(text.includes(format(r.values[group].value)));assert.ok(text.includes(percent(r.values[group].value,r.denominator.value)));};
+   assertOrigin('535');assertOrigin('462');change(w,'[data-population-cma]','933');assertOrigin('933');assertOrigin('462');
+   assert.equal(mapGroup(w,'933').querySelector('[data-population-boundary]').style.fill,originalColors['933']);
+   assert.deepEqual(Object.fromEntries(new URL(q(w,'[data-demographic-return]').href).searchParams),saved,'Changing the comparison geography does not replace the saved original question');
+   q(w,'[data-demographic-return]').click();assert.deepEqual(Object.fromEntries(new URL(w.location.href).searchParams),saved);assert.equal(q(w,'[data-demographic-measure]').value,'count');assertOriginalDemographicReading(w,name,group,'535');
+  }finally{await sharePage.happyDOM.close();if(w)await w.happyDOM.close();}
+ }
+});
+
+test('A valid demographic source normalizes a reloaded population comparison to2021 and can be cleared back to ordinary density',async()=>{
+ const saved={year:'2016',cma:'535',compare:'462',metric:'population',only:'1',zoom:'selected',topic:'ethnicity',group:'13',measure:'count'};
+ const query=new URLSearchParams({year:'2016',cma:'535',compare:'462',metric:'density',only:'1',zoom:'selected',keep:'yes',demographicsReturn:new URLSearchParams(saved).toString()});
+ const w=await page('?'+query);let ordinary,reloaded;
+ try{
+  assert.equal(q(w,'[data-population-year]').value,'2021');assert.equal(q(w,'[data-population-metric]').value,'population');assert.equal(q(w,'[data-population-year]').disabled,true);assert.equal(q(w,'[data-population-metric]').disabled,true);
+  const normalized=new URL(w.location.href).searchParams;assert.equal(normalized.get('year'),'2021');assert.equal(normalized.get('metric'),'population');assert.equal(normalized.get('keep'),'yes');assert.equal(normalized.get('demographicsReturn'),new URLSearchParams(saved).toString());
+  reloaded=await page(w.location.search);assert.equal(q(reloaded,'[data-population-year]').value,'2021');assert.equal(q(reloaded,'[data-population-metric]').value,'population');assert.equal(q(reloaded,'[data-demographic-share-legend]').hidden,false);
+  assert.deepEqual(Object.fromEntries(new URL(q(reloaded,'[data-demographic-return]').href).searchParams),saved);
+  q(w,'[data-demographic-context-clear]').click();
+  const cleared=new URL(w.location.href).searchParams;assert.equal(cleared.has('demographicsReturn'),false);assert.deepEqual(Object.fromEntries(cleared),Object.fromEntries([...normalized].filter(([key])=>key!=='demographicsReturn')),'Closing only removes the saved comparison context');
+  assert.equal(q(w,'[data-demographic-return-container]').hidden,true);assert.equal(q(w,'[data-demographic-share-legend]').hidden,true);assert.equal(q(w,'[data-population-year]').disabled,false);assert.equal(q(w,'[data-population-metric]').disabled,false);
+  change(w,'[data-population-metric]','density');ordinary=await page(w.location.search);
+  assert.equal(q(w,'[data-population-density-legend]').hidden,false);assert.equal(q(w,'[data-population-population-legend]').hidden,true);assert.equal(q(w,'[data-demographic-share-legend]').hidden,true);
+  for(const r of population.cmas){assert.equal(mapGroup(w,r.id).querySelector('[data-population-boundary]').style.fill,mapGroup(ordinary,r.id).querySelector('[data-population-boundary]').style.fill,'Cleared density uses the ordinary population density classes');assert.equal(mapGroup(w,r.id).querySelector('[data-population-symbol]').style.display,'none');}
+ }finally{await w.happyDOM.close();if(ordinary)await ordinary.happyDOM.close();if(reloaded)await reloaded.happyDOM.close();}
+});
+
 test('Saved demographic topics cannot render the legacy whole-population Nature or Industry comparison',async()=>{
  const nature=await bundleCanadaSource('src/scripts/atlas-canada-population-comparison.ts',{globalName:'DemographicNatureGuard'});
  const industry=await bundleCanadaSource('src/scripts/atlas-canada-population-industry-comparison.ts',{globalName:'DemographicIndustryGuard'});
