@@ -1,11 +1,12 @@
 import {withBase} from '../lib/urls.ts';
 import {projectAfrica,africaWidth,africaHeight} from '../lib/atlas-africa-geometry.ts';
 import type {State} from '../data/atlas/africa-atlas.ts';
+import {africaCultureGuides,africaCultureGuideReason} from '../data/atlas/africa-culture-guide.ts';
 
 type Row=Record<string,any>;
 type Feature={type:string;geometry:Row;properties:Row};
 export type AfricaLayerKey={id:string;label:string;color:string;code?:string;description?:string};
-export type AfricaLayerView={key:string;ready:boolean;loading:boolean;error:string;title:string;period:string;unit:string;scope:string;method:string;sourceUrl:string;sourceLabel:string;legend:AfricaLayerKey[];takeaway:string;description:string};
+export type AfricaLayerView={key:string;ready:boolean;loading:boolean;error:string;title:string;period:string;unit:string;scope:string;method:string;sourceUrl:string;sourceLabel:string;legend:AfricaLayerKey[];takeaway:string;description:string;guide?:boolean};
 type Loaded={value?:any;error?:string;promise?:Promise<void>};
 const SVG='http://www.w3.org/2000/svg';
 const text=(v:any,fallback=''):string=>typeof v==='string'?v:v===null||v===undefined?fallback:String(v);
@@ -60,6 +61,7 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
  };
  function render(state:State):AfricaLayerView|null {
   const key=africaActualLayerKey(state),config=setup(key);currentKey=key;
+  if(key==='ethnicity'||key==='religion'){const guide=africaCultureGuides[key];group.replaceChildren();lastPaint='';return {key,guide:true,ready:true,loading:false,error:'',title:guide.title,period:'2021年公開版',unit:'資料案内（分布は未配信）',scope:guide.scope,method:africaCultureGuideReason,sourceUrl:guide.source.url,sourceLabel:guide.source.label,legend:[],takeaway:guide.description,description:africaCultureGuideReason};}
   if(!config||state.view==='statistics'){group.replaceChildren();lastPaint='';return null;}
   const manifestResult=request(config.base+'manifest.json');
   const empty: AfricaLayerView={key,ready:false,loading:!!manifestResult.promise,error:manifestResult.error??'',title:({climate:'気候区分',terrain:'標高区分と等高線',elevation:'標高',ethnicity:'掲載集団の居住範囲',religion:'掲載集団の宗教的特徴',distribution:'人口の格子分布','water-rain':'降水量の分布','water-river':'河川・湖の中心線','water-basin':'河川の流域'} as Row)[key]??key,period:'',unit:'',scope:'分布データを読み込んでいます。国別統計は下の比較欄で確認できます。',method:'',sourceUrl:'',sourceLabel:'',legend:[],takeaway:'',description:''};

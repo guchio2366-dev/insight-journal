@@ -2,6 +2,7 @@ import {countries,fields,metrics,regionNames,years,readState,writeState,africaCo
 import {projectAfrica,africaWidth,africaHeight} from '../lib/atlas-africa-geometry.ts';
 import {themes,type AfricaTheme} from '../data/atlas/africa-themes.ts';
 import {africaForestryReading} from '../data/atlas/africa-forestry-reading.ts';
+import {africaCultureGuideSources} from '../data/atlas/africa-culture-guide.ts';
 import {createAfricaLayerRenderer,africaActualLayerKey,type AfricaLayerView} from './atlas-africa-layers.ts';
 
 export function initializeAfricaAtlas() {
@@ -83,7 +84,7 @@ export function initializeAfricaAtlas() {
   const colors:Record<string,string>={river:'#236aa0','area-label':'#655037',crop:'#925b16',resource:'#9c365a',city:'#633898',port:'#164f69'};
   const legend=query<HTMLElement>('[data-theme-legend]');legend.replaceChildren();
   const details=query<HTMLElement>('[data-theme-details]');details.replaceChildren();
-  (forest?[]:theme.marks).forEach((mark,i)=>{
+  (forest||actual?.guide?[]:theme.marks).forEach((mark,i)=>{
    const group=svgEl('g',{'data-theme-mark':mark.id});
    const isLine=Array.isArray(mark.coordinates[0]);
    const points=isLine?mark.coordinates as [number,number][]:[mark.coordinates as [number,number]];
@@ -121,8 +122,9 @@ export function initializeAfricaAtlas() {
   map.dataset.theme=theme.id;map.dataset.context=state.context;
  }
  function renderActualReading(){
+  root!.querySelector('[data-africa-culture-source]')?.remove();
   const keys=query<HTMLElement>('[data-africa-actual-key]'),selection=query<HTMLElement>('[data-africa-layer-selection]');
-  keys.hidden=!actual?.ready;selection.hidden=!actual;query<HTMLElement>('[data-africa-statistics-key]').hidden=!!actual?.ready&&!state.context;
+  keys.hidden=!actual?.ready||!!actual.guide;selection.hidden=!actual||!!actual.guide;query<HTMLElement>('[data-africa-statistics-key]').hidden=!!actual?.ready&&!state.context;
   const retry=query<HTMLButtonElement>('[data-africa-layer-retry]');retry.hidden=!actual?.error;
   if(!actual)return;
   const takeaways:Record<string,string>={climate:'湿潤な赤道付近、サハラの乾燥帯、高地や南北端の違いを気候区分で読みます。作物や暮らしには、水の管理・技術・交通・市場も関わります。',terrain:'標高の区分と等高線から、高地と低地の起伏を読みます。地質や地形の成因を分類した地図ではありません。',elevation:'高地と低地の位置を標高で比べます。国平均には表れない起伏と、農地・交通・水の利用条件を考える入口です。',ethnicity:'原資料に掲載された集団の居住範囲を読みます。民族は人口密度や国籍と別の情報で、掲載範囲だけから全住民の構成は分かりません。',religion:'掲載された集団の宗教的特徴を居住範囲と合わせて読みます。地域住民全体の信仰割合や、一人ひとりの信仰を示す地図ではありません。',distribution:'人口の格子分布から、国平均に隠れる居住の集中を読みます。水・農地に加え、住宅・交通・仕事・公共サービスの条件も考えます。','water-basin':'流域は、雨水が同じ川へ集まる範囲です。国境と異なる境界を読み、上流・下流の水利用と管理の関係を考えます。','water-river':'実際の河川の位置を読みます。下の国別淡水統計は国内で生まれる河川水と地下水の合計で、川の流量や帯水層の範囲ではありません。'};
@@ -131,6 +133,7 @@ export function initializeAfricaAtlas() {
   text('[data-theme-caveat]',actual.scope);text('[data-africa-layer-caption]',`${actual.title} · ${actual.period} · ${actual.unit}`);text('[data-africa-layer-scope]',actual.scope);
   const source=query<HTMLAnchorElement>('[data-theme-source]');source.hidden=!actual.sourceUrl;if(actual.sourceUrl){source.href=actual.sourceUrl;source.textContent=actual.sourceLabel;}
   query<HTMLElement>('[data-theme-details]').replaceChildren(make('p',actual.method));
+  if(actual.guide){query<HTMLElement>('.africa-kicker').textContent=`選択国：${countries.find(c=>c.code===state.place)?.name} · 資料案内（分布は未配信）`;const additional=africaCultureGuideSources.find(row=>row.url!==actual.sourceUrl)!;const link=make('a',additional.label) as HTMLAnchorElement;link.href=additional.url;link.className='africa-theme-source';link.dataset.africaCultureSource='';source.after(link);const compare=query<HTMLButtonElement>('[data-theme-comparison]');compare.hidden=true;compare.disabled=true;query<HTMLElement>('[data-theme-return]').hidden=true;text('[data-metric-title]',actual.title);text('[data-period]',actual.period);text('[data-unit]',actual.unit);text('#africa-svg-title',`${actual.title}・国境の参照図`);return;}
   const legend=query<HTMLElement>('[data-africa-layer-legend]');legend.replaceChildren();
   const picker=query<HTMLSelectElement>('[data-africa-layer-category]');picker.replaceChildren();const all=make('option','全ての区分') as HTMLOptionElement;all.value='';picker.append(all);
   const climateShort:Record<string,string>={Af:'雨林',Am:'モンスーン',Aw:'サバナ',BWh:'高温砂漠',BWk:'低温砂漠',BSh:'高温ステップ',BSk:'低温ステップ',Csa:'夏乾燥・高温夏',Csb:'夏乾燥・温暖夏',Cwa:'冬乾燥・高温夏',Cwb:'冬乾燥・温暖夏',Cfa:'温暖湿潤',Cfb:'西岸海洋性',Dsb:'冷帯・夏乾燥',Dwb:'冷帯・冬乾燥',ET:'ツンドラ',EF:'氷雪'};
@@ -144,7 +147,7 @@ export function initializeAfricaAtlas() {
  }
  function renderComparisonOverlay(metric:Metric){
   const layer=query<SVGGElement>('[data-africa-comparison-layer]');layer.replaceChildren();
-  if(!actual?.ready||!state.context)return;
+  if(!actual?.ready||actual.guide||!state.context)return;
   const view=map.getAttribute('viewBox')!.split(' ').map(Number),rect=map.getBoundingClientRect(),scale=Math.max(view[2]/(rect.width||645),view[3]/(rect.height||416));
   for(const code of [state.place,state.compare].filter(Boolean)){const country=countries.find(c=>c.code===code)!,value=valueAt(metric.id,code,state.year),[x,y]=projectAfrica(country.point);const color=value===null?'#777':fillFor(value,metric);const g=svgEl('g',{'data-africa-comparison-country':code});if(metric.symbols&&value!==null&&value>0)g.append(svgEl('circle',{cx:x,cy:y,r:Math.sqrt(value/1e6)*2.2*scale,fill:'#3c7968','fill-opacity':.45,'data-africa-comparison-population':code}));const labelY=metric.symbols?y+40*scale:y;g.append(svgEl('rect',{x:x-45*scale,y:labelY-18*scale,width:90*scale,height:36*scale,fill:'#fffefa',stroke:color,'stroke-width':3,'vector-effect':'non-scaling-stroke',rx:3*scale}));g.append(svgEl('text',{x,y:labelY-2*scale,'text-anchor':'middle','font-size':12*scale,fill:'#203a42'},country.name),svgEl('text',{x,y:labelY+12*scale,'text-anchor':'middle','font-size':12*scale,fill:'#203a42'},`${formatValue(value,metric)} ${metric.unit}`));layer.append(g);}
  }
@@ -173,8 +176,9 @@ export function initializeAfricaAtlas() {
  function render(write=false) {
   root!.dataset.field=state.field;
   actual=layerRenderer.render(state);
+  if(actual?.guide){state.context='';state.layerClass='';state.layerPoint='';state.sourceState='';}
   if(actual?.ready&&state.layerClass&&!actual.legend.some(row=>row.id===state.layerClass)){state.layerClass='';actual=layerRenderer.render(state);}
-  root!.dataset.actualLayer=actual?.ready?'true':'false';
+  root!.dataset.actualLayer=actual?.ready&&!actual.guide?'true':'false';root!.dataset.layerMode=actual?.guide?'guide':actual?.ready?'distribution':'statistics';
   renderTopics();
    const metric=metricById(state.context||state.metric);
   const theme=themes.find(t=>t.id===state.theme)!;
@@ -241,7 +245,7 @@ export function initializeAfricaAtlas() {
   if(target.hasAttribute('data-reset')){state=readState('');countryPinned=false;regionPinned=false;render(true);return;}
   if(target.dataset.field){if(target.dataset.field===state.field)return;state.field=target.dataset.field as Field;state.metric=metrics.find(m=>m.field===state.field)!.id;state.topic=state.field==='nature'?'climate':'';state.water='';state.view='distribution';chooseTheme(themes.find(t=>t.field===state.field)!.id);render(true);return;}
   if(target.dataset.theme){state.view='statistics';chooseTheme(target.dataset.theme);render(true);return;}
-  if(target.hasAttribute('data-theme-comparison')){state.sourceState=africaComparisonSnapshot(state);state.context=state.field==='agriculture'&&state.topic==='forestry'?africaForestryReading.compareMetric:actual?.ready?state.metric:themes.find(t=>t.id===state.theme)!.compareMetric;render(true);return;}
+  if(target.hasAttribute('data-theme-comparison')){if(actual?.guide)return;state.sourceState=africaComparisonSnapshot(state);state.context=state.field==='agriculture'&&state.topic==='forestry'?africaForestryReading.compareMetric:actual?.ready?state.metric:themes.find(t=>t.id===state.theme)!.compareMetric;render(true);return;}
   if(target.hasAttribute('data-theme-return')){state=state.sourceState?readState('?'+state.sourceState):{...state,context:'',sourceState:''};readSelectionPins();render(true);return;}
   if(target.dataset.zoom){state.zoom=target.dataset.zoom as typeof state.zoom;render(true);return;}
   if(target.dataset.compareCountry){state.compare=target.dataset.compareCountry===state.place?'':target.dataset.compareCountry;render(true);return;}
@@ -254,7 +258,7 @@ export function initializeAfricaAtlas() {
  query<HTMLSelectElement>('[data-place]').addEventListener('change',event=>chooseCountry((event.target as HTMLSelectElement).value));
  query<HTMLSelectElement>('[data-compare]').addEventListener('change',event=>{state.compare=(event.target as HTMLSelectElement).value;render(true);});
  query<HTMLSelectElement>('[data-africa-layer-category]').addEventListener('change',event=>{state.layerClass=(event.target as HTMLSelectElement).value;state.layerPoint='';render(true);});
- map.addEventListener('click',event=>{if(!actual?.ready)return;const box=map.getBoundingClientRect();if(!box.width||!box.height)return;const view=map.getAttribute('viewBox')!.split(' ').map(Number),scale=Math.min(box.width/view[2],box.height/view[3]),offsetX=(box.width-view[2]*scale)/2,offsetY=(box.height-view[3]*scale)/2;const x=view[0]+(event.clientX-box.left-offsetX)/scale,y=view[1]+(event.clientY-box.top-offsetY)/scale,lon=x/africaWidth*91-27,lat=39-y/africaHeight*75;if(lon<-27||lon>64||lat<-36||lat>39)return;state.layerPoint=`${lon.toFixed(4)},${lat.toFixed(4)}`;render(true);});
+ map.addEventListener('click',event=>{if(!actual?.ready||actual.guide)return;const box=map.getBoundingClientRect();if(!box.width||!box.height)return;const view=map.getAttribute('viewBox')!.split(' ').map(Number),scale=Math.min(box.width/view[2],box.height/view[3]),offsetX=(box.width-view[2]*scale)/2,offsetY=(box.height-view[3]*scale)/2;const x=view[0]+(event.clientX-box.left-offsetX)/scale,y=view[1]+(event.clientY-box.top-offsetY)/scale,lon=x/africaWidth*91-27,lat=39-y/africaHeight*75;if(lon<-27||lon>64||lat<-36||lat>39)return;state.layerPoint=`${lon.toFixed(4)},${lat.toFixed(4)}`;render(true);});
  window.addEventListener('popstate',()=>{state=readState(location.search);readSelectionPins();render();});
  window.addEventListener('resize',()=>render());
  render();

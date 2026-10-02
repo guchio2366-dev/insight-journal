@@ -12,12 +12,12 @@ async function withLayers(search,run){
  const window=new Window(),previous=globalThis.document;globalThis.document=window.document;
  try{
   window.document.body.innerHTML='<div data-africa-atlas><svg><path data-country-path="EGY" d="M1 1L2 1L2 2Z"></path><g data-africa-actual-layer></g></svg></div>';
-  const root=window.document.querySelector('[data-africa-atlas]');let state=readState(search),view;
-  const fetcher=async url=>{const path=new URL(url,'https://example.com').pathname.replace(/^\/insight-journal/,'');return new Response(readFileSync(new URL('../../public'+path,import.meta.url)),{status:200});};
+  const root=window.document.querySelector('[data-africa-atlas]');let state=readState(search),view;const requests=[];
+  const fetcher=async url=>{requests.push(url);const path=new URL(url,'https://example.com').pathname.replace(/^\/insight-journal/,'');return new Response(readFileSync(new URL('../../public'+path,import.meta.url)),{status:200});};
   const renderer=createAfricaLayerRenderer(root,()=>{view=renderer.render(state);},fetcher);view=renderer.render(state);
   for(let i=0;i<60&&(view.loading||!view.ready);i++)await new Promise(resolve=>setTimeout(resolve,5));
   assert.equal(view.error,'');assert.equal(view.ready,true);assert.equal(view.loading,false);
-  await run({root,renderer,get view(){return view;},setState(next){state=readState(next);view=renderer.render(state);return view;}});
+  await run({root,renderer,requests,get view(){return view;},setState(next){state=readState(next);view=renderer.render(state);return view;}});
  }finally{globalThis.document=previous;await window.happyDOM.abort();}
 }
 test('actual climate raster and point query read the same stored classification and retain every key',async()=>{
@@ -28,13 +28,11 @@ test('actual climate raster and point query read the same stored classification 
   assert.match(renderer.inspect(31.2,30),/表示格子/);assert.match(renderer.inspect(-26,-35),/未収録/);
  });
 });
-test('social keys and shapes follow source-country examples while missing original geometry is preserved as missing',async()=>{
- await withLayers('?field=population&topic=ethnicity&place=EGY&zoom=all',({root,view,setState})=>{
-  assert.equal(view.legend.filter(row=>!row.id.endsWith('-shared')).length,2);assert.match(view.scope,/全住民/);assert.doesNotMatch(view.scope,/\[object Object\]/);
-  assert.equal(root.querySelectorAll('[data-africa-layer-feature]').length,3);
-  const missing=setState('?field=population&topic=ethnicity&place=MUS&zoom=all');
-  assert.equal(missing.legend.length,1);assert.match(missing.legend[0].label,/原典形状なし/);assert.equal(root.querySelectorAll('[data-africa-layer-feature]').length,0);
-});
+test('both cultural topics provide source guidance immediately without requesting or rendering derived distributions',async()=>{
+ for(const topic of ['ethnicity','religion'])await withLayers(`?field=population&topic=${topic}&place=EGY&zoom=all`,({root,view,requests})=>{
+  assert.equal(view.guide,true);assert.equal(view.ready,true);assert.equal(view.loading,false);assert.equal(view.legend.length,0);assert.match(view.scope,/この画面に分布図はありません/);assert.match(view.method,/明示許諾/);assert.match(view.sourceUrl,/^https:\/\/icr\.ethz\.ch\/data\/epr\/(?:geoepr|ed)\/$/);
+  assert.equal(root.querySelectorAll('[data-africa-layer-feature],[data-africa-raster]').length,0);assert.deepEqual(requests,[]);
+ });
 });
 test('the river key selects the actual source lines without discarding their original feature IDs',async()=>{
  await withLayers('?field=nature&topic=water&water=river&metric=ER.H2O.INTR.PC&zoom=all',({root,view,setState})=>{
@@ -64,5 +62,6 @@ test('actual map point survives the bubbling country selection and the overview 
   assert.doesNotMatch(root.querySelector('[data-map-caption]').textContent,/色は国平均/);root.querySelector('[data-theme-comparison]').click();assert.equal(root.querySelector('[data-theme-legend]').hidden,true);assert.equal(root.querySelector('[data-africa-statistics-key]').hidden,false);
   const href=new URL(root.querySelector('[data-africa-overview-link]').href);assert.equal(href.searchParams.get('layerPoint'),point);assert.equal(href.searchParams.get('place'),'DZA');assert.equal(href.searchParams.get('compare'),'GHA');assert.equal(href.searchParams.get('year'),'2023');assert.ok(href.searchParams.get('sourceState'));
   root.querySelector('[data-theme-return]').click();assert.equal(new URL(window.location.href).searchParams.get('layerPoint'),'5.05,24.95');const picker=root.querySelector('[data-place]');picker.value='EGY';picker.dispatchEvent(new window.Event('change'));assert.equal(new URL(window.location.href).searchParams.has('layerPoint'),false);
+  for(const topic of ['ethnicity','religion']){window.history.replaceState(null,'',`?field=population&topic=${topic}&place=EGY&compare=GHA&year=2023&zoom=all&context=EN.POP.DNST&layerClass=old&layerPoint=7,10&sourceState=old`);window.dispatchEvent(new window.PopStateEvent('popstate'));assert.equal(root.dataset.layerMode,'guide');assert.equal(root.dataset.actualLayer,'false');assert.equal(root.querySelectorAll('[data-africa-layer-feature],[data-africa-raster],[data-theme-mark],[data-africa-comparison-country],[data-symbols] [data-country-marker]').length,0);assert.equal(root.querySelector('[data-theme-comparison]').hidden,true);assert.equal(root.querySelector('[data-theme-comparison]').disabled,true);assert.equal(root.querySelector('[data-africa-subfield-status]').hidden,true);assert.equal(root.querySelector('[data-africa-layer-selection]').hidden,true);assert.match(root.querySelector('[data-theme-takeaway-detail]').textContent,/明示許諾/);const links=[root.querySelector('[data-theme-source]').href,root.querySelector('[data-africa-culture-source]').href];assert.ok(links.includes('https://icr.ethz.ch/data/epr/geoepr/'));assert.ok(links.includes('https://icr.ethz.ch/data/epr/ed/'));for(const path of root.querySelectorAll('[data-country-path]'))assert.equal(path.getAttribute('fill'),'#f3f1e9');picker.value='NGA';picker.dispatchEvent(new window.Event('change'));assert.equal(root.querySelector('[data-compare]').value,'GHA');assert.equal(root.querySelector('[data-year]').value,'2023');for(const key of ['context','layerClass','layerPoint','sourceState'])assert.equal(new URL(window.location.href).searchParams.has(key),false);}
  }finally{for(const [key,value]of Object.entries(previous))globalThis[key]=value;await window.happyDOM.abort();}
 });

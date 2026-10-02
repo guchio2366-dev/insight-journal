@@ -69,7 +69,7 @@ test('spatial categories and water depth persist across reload, country changes 
   const saved=withAfricaPage(`https://example.com/insight-journal/atlas/africa/?field=${field}&topic=${ready}&place=EGY&unknown=preserve`,(w,q)=>{
    q(`[data-africa-topic="${planned}"]`).click();
    assert.equal(new URL(w.location.href).searchParams.get('topic'),planned);
-   assert.equal(q('[data-africa-subfield-status]').hidden,false);
+   assert.equal(q('[data-africa-subfield-status]').hidden,field==='population');
    const saved=w.location.href;
    q('[data-place]').value='GHA';q('[data-place]').dispatchEvent(new w.Event('change'));
    w.history.back();assert.equal(q('[data-place]').value,'EGY');
@@ -78,9 +78,9 @@ test('spatial categories and water depth persist across reload, country changes 
    assert.equal(q('[data-africa-subfield-status]').hidden,field==='nature');
    w.history.forward();assert.equal(q(`[data-africa-topic="${planned}"]`).getAttribute('aria-pressed'),'true');
    w.history.forward();assert.equal(q('[data-place]').value,'GHA');
-   assert.equal(q('[data-africa-subfield-status]').hidden,false);return saved;
+   assert.equal(q('[data-africa-subfield-status]').hidden,field==='population');return saved;
   });
-  withAfricaPage(saved,(_w,q)=>{assert.equal(q(`[data-africa-topic="${planned}"]`).getAttribute('aria-pressed'),'true');assert.equal(q('[data-africa-subfield-status]').hidden,false);});
+  withAfricaPage(saved,(_w,q)=>{assert.equal(q(`[data-africa-topic="${planned}"]`).getAttribute('aria-pressed'),'true');assert.equal(q('[data-africa-subfield-status]').hidden,field==='population');});
  }
  const basinURL=withAfricaPage('https://example.com/insight-journal/atlas/africa/?field=nature&topic=water&place=EGY',(w,q)=>{
   q('[data-africa-water="river"]').click();assert.equal(q('[data-metric]').value,'ER.H2O.INTR.PC');

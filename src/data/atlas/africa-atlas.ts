@@ -89,7 +89,8 @@ export function readState(search:string):State {
   const layerPoint=point.length===2&&point.every(Number.isFinite)&&point[0]>=-27&&point[0]<=64&&point[1]>=-36&&point[1]<=39?point.join(','):'';
   const snapshot=p.get('sourceState')??'';
   const sourceState=snapshot.length<=1800&&!/(?:^|&)sourceState=/.test(snapshot)?snapshot:'';
-  return {field:safeField,metric:metric.id,year:years.includes(Number(p.get('year')))?Number(p.get('year')):2021,place,compare:exists(p.get('compare'))&&p.get('compare')!==place?p.get('compare')!:'',region:Object.hasOwn(regionNames,region)?region as Region:'all',zoom:['all','region','country','theme'].includes(zoom)?zoom as State['zoom']:'theme',theme:theme.id,context:context??'',topic:canonicalTopic(safeField,metric.id,p.get('topic')??(defaultClimate?'climate':'')),water:safeField==='nature'?canonicalWater(metric.id,p.get('water')??''):'',layerClass,layerPoint,sourceState,view:p.get('view')==='statistics'||!p.has('view')&&p.has('theme')&&!p.has('topic')?'statistics':'distribution'};
+  const topic=canonicalTopic(safeField,metric.id,p.get('topic')??(defaultClimate?'climate':'')),culture=safeField==='population'&&(topic==='ethnicity'||topic==='religion');
+  return {field:safeField,metric:metric.id,year:years.includes(Number(p.get('year')))?Number(p.get('year')):2021,place,compare:exists(p.get('compare'))&&p.get('compare')!==place?p.get('compare')!:'',region:Object.hasOwn(regionNames,region)?region as Region:'all',zoom:['all','region','country','theme'].includes(zoom)?zoom as State['zoom']:'theme',theme:theme.id,context:culture?'':context??'',topic,water:safeField==='nature'?canonicalWater(metric.id,p.get('water')??''):'',layerClass:culture?'':layerClass,layerPoint:culture?'':layerPoint,sourceState:culture?'':sourceState,view:culture?'distribution':p.get('view')==='statistics'||!p.has('view')&&p.has('theme')&&!p.has('topic')?'statistics':'distribution'};
 }
 export function africaComparisonSnapshot(state:State):string {
   return writeState({...state,context:'',sourceState:''},new URL('https://atlas.invalid/')).searchParams.toString();
@@ -97,6 +98,7 @@ export function africaComparisonSnapshot(state:State):string {
 export function writeState(state:State,url:URL) {
   state.topic=canonicalTopic(state.field,state.metric,state.topic);
   state.water=state.field==='nature'?canonicalWater(state.metric,state.water):'';
+  if(state.field==='population'&&(state.topic==='ethnicity'||state.topic==='religion')){state.context='';state.layerClass='';state.layerPoint='';state.sourceState='';state.view='distribution';}
   for(const [key,value] of Object.entries(state)) value===''?url.searchParams.delete(key):url.searchParams.set(key,String(value));
   return url;
 }
