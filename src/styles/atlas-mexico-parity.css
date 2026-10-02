@@ -115,6 +115,10 @@
 .mexico-workspace[data-mexico-field=overview][data-mexico-reading-selected=false] .mexico-reading-content{display:none}
 .mexico-workspace[data-mexico-field=overview][data-mexico-reading-selected=false] .mexico-overview-map .mexico-state{stroke:#fffefa;stroke-width:.8}
 .mexico-workspace [data-population-reference]{position:absolute;left:8px;bottom:7px;right:8px;z-index:4;padding:7px 9px;border:1px solid #b7c5bb;background:#fffdf0ed;font-size:13px;line-height:1.5}
+@media(min-width:960px){
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field=overview] .mexico-primary-grid>.mexico-map-column{grid-column:1;grid-row:1}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace[data-field=overview] .mexico-primary-grid>.mexico-reading{grid-column:2;grid-row:1;align-self:start}
+}
 @media(min-width:1200px){
  .atlas-desktop-shell:has([data-mexico-workspace]){display:grid;grid-template-columns:clamp(300px,23vw,380px) minmax(0,1fr);gap:20px;padding:12px 20px 36px}
  .atlas-desktop-shell:has([data-mexico-workspace])>.atlas-news{grid-column:1;grid-row:1;position:sticky;top:12px;height:calc(100dvh - 72px);min-height:320px;width:auto}
