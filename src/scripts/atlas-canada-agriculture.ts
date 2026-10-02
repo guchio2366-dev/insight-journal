@@ -1,8 +1,13 @@
+import {initCanadaCensusMap} from './atlas-canada-census-map';
+import {readCanadaCensusMapState,writeCanadaCensusMapState,type CanadaCensusMapState} from '../lib/atlas-canada-census-map';
 import {readCanadaAgricultureState,writeCanadaAgricultureState,type CanadaAgricultureState} from '../lib/atlas-canada-agriculture';
 import {buildCanadaCropNatureUrl} from '../lib/atlas-canada-crop-comparison';
 export function initCanadaAgriculture(root:HTMLElement){
  const config=JSON.parse(root.querySelector('[data-canola-config]')!.textContent!),ids=config.provinces.map((p:any)=>p.id);
  let state=readCanadaAgricultureState(new URL(location.href),config.years,ids);
+ const censusRoot=root.querySelector<HTMLElement>('[data-canada-census]'),censusConfig=censusRoot?JSON.parse(censusRoot.querySelector('[data-canada-census-config]')!.textContent!):null,censusIds=Object.keys(censusConfig?.records??{}),censusMap=censusRoot?initCanadaCensusMap(censusRoot):undefined;
+ let censusState=readCanadaCensusMapState(new URL(location.href),censusIds);
+ const sourceUrl=()=>writeCanadaCensusMapState(writeCanadaAgricultureState(new URL(location.href),state),censusState);
  const $=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const fmt=(v:number|null)=>v===null?'未収録':v.toLocaleString('ja-JP');
  function render(){
@@ -18,12 +23,18 @@ export function initCanadaAgriculture(root:HTMLElement){
   const values=data.filter((r:any)=>r.id!=='Canada').map((r:any)=>r.values[state.metric].value).filter((v:any)=>v!==null),max=Math.max(1,...values);
   for(const bar of root.querySelectorAll<HTMLElement>('[data-canola-bar]')){const r=data.find((r:any)=>r.id===bar.dataset.canolaBar),v=r.values[state.metric].value;bar.style.width=v===null?'0':`${v/max*100}%`;bar.parentElement!.classList.toggle('is-missing',v===null);bar.parentElement!.setAttribute('aria-label',`${r.name}: ${fmt(v)} ${metric.unit}`);}
   $('[data-canola-map-scroll]').classList.toggle('is-zoomed',state.zoom);$('[data-canola-zoom]').setAttribute('aria-pressed',String(state.zoom));
-  const source=writeCanadaAgricultureState(new URL(location.href),state),crop=root.dataset.canadaCrop==='wheat'||source.pathname.endsWith('/wheat/')?'wheat':'canola';
+  censusMap?.render({product:root.dataset.canadaCrop==='wheat'?'wheat':'canola',...censusState});
+  const source=sourceUrl(),crop=root.dataset.canadaCrop==='wheat'||source.pathname.endsWith('/wheat/')?'wheat':'canola';
   for(const link of root.querySelectorAll<HTMLAnchorElement>('[data-canada-crop-nature]')){const target=new URL(link.href,location.href);link.href=buildCanadaCropNatureUrl(source,crop,target.searchParams.get('city')??'regina',(target.searchParams.get('view')??'climate') as 'climate'|'landform'|'water').href;}
  }
- function update(patch:Partial<CanadaAgricultureState>){state={...state,...patch};if(state.compare===state.province)state.compare=null;history.pushState(null,'',writeCanadaAgricultureState(new URL(location.href),state));render();}
+ function update(patch:Partial<CanadaAgricultureState>){state={...state,...patch};if(state.compare===state.province)state.compare=null;history.pushState(null,'',sourceUrl());render();}
+ function updateCensus(patch:Partial<CanadaCensusMapState>){censusState={...censusState,...patch};if(!censusState.selected)censusState.only=false;const url=sourceUrl();if(root.dataset.canadaCrop!=='wheat')url.searchParams.set('item','canola');history.pushState(null,'',url);render();}
+ censusRoot?.addEventListener('canada-census-select',event=>updateCensus({selected:(event as CustomEvent<{id:string|null}>).detail.id}));
+ censusRoot?.addEventListener('canada-census-only',event=>updateCensus({only:(event as CustomEvent<{only:boolean}>).detail.only}));
+ censusRoot?.addEventListener('canada-census-camera',event=>updateCensus({bounds:(event as CustomEvent<{bounds:CanadaCensusMapState['bounds']}>).detail.bounds}));
+ censusRoot?.addEventListener('canada-census-reset',()=>updateCensus({selected:null,only:false,bounds:null}));
  for(const key of ['year','province','compare','metric'])$<HTMLSelectElement>(`[data-canola-${key}]`).addEventListener('change',e=>{const value=(e.target as HTMLSelectElement).value;update({[key]:key==='year'?Number(value):value||null});});
  for(const button of root.querySelectorAll<HTMLElement>('[data-canola-province-button]'))button.addEventListener('click',()=>update({province:button.dataset.canolaProvinceButton!}));
  $('[data-canola-zoom]').addEventListener('click',()=>update({zoom:!state.zoom}));$('[data-canola-map-reset]').addEventListener('click',()=>{update({zoom:false});$('[data-canola-map-scroll]').scrollTo?.(0,0);});
- window.addEventListener('popstate',()=>{state=readCanadaAgricultureState(new URL(location.href),config.years,ids);render();});render();
+ window.addEventListener('popstate',()=>{state=readCanadaAgricultureState(new URL(location.href),config.years,ids);censusState=readCanadaCensusMapState(new URL(location.href),censusIds);render();});render();
 }
