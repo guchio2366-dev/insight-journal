@@ -1,0 +1,23 @@
+.canada-landform[hidden], .canada-landform [hidden] { display: none !important; }
+.canada-landform .canada-landform-frame { position: relative; width: 100%; height: clamp(320px, calc(100dvh - 420px), 650px); min-height: 320px; overflow: hidden; background: #e4eff0; border: 1px solid #bfd0cf; border-radius: 5px; }
+.canada-landform .canada-landform-fallback, .canada-landform .canada-landform-live { position: absolute; inset: 0; width: 100%; height: 100%; }
+.canada-landform .canada-landform-fallback { display: block; touch-action: pan-y; }
+.canada-landform .canada-landform-context { fill: #edece5; stroke: #94aaaa; stroke-width: .7; }
+.canada-landform .canada-landform-fallback-labels text { fill: #253e42; stroke: #fffdf6; stroke-width: 3; paint-order: stroke; font: 700 16px/1.3 var(--sans, sans-serif); pointer-events: none; }
+.canada-landform .canada-landform-region { cursor: pointer; stroke: #69796e; stroke-width: .7; }
+.canada-landform .canada-landform-region.is-selected, .canada-landform .canada-landform-region:focus-visible { stroke: #243f4c; stroke-width: 3; outline: none; }
+.canada-landform .canada-landform-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.canada-landform .canada-landform-label { position: absolute; transform: translate(-50%, -50%); pointer-events: auto; min-height: 28px; padding: 3px 6px; max-width: 185px; border: 1px solid transparent; border-radius: 3px; background: rgb(255 253 246 / 88%); color: #253e42; font: 700 12px/1.35 var(--sans, sans-serif); text-align: center; box-shadow: 0 1px 2px rgb(34 58 56 / 12%); cursor: pointer; }
+.canada-landform .canada-landform-label.is-selected, .canada-landform .canada-landform-label:focus-visible { border-color: #243f4c; background: #fffdf4; color: #243f4c; outline: 2px solid #243f4c; outline-offset: 2px; }
+.canada-landform .canada-landform-tools { position: absolute; z-index: 3; top: 10px; right: 10px; display: grid; gap: 4px; }
+.canada-landform .canada-landform-tools button { width: 44px; height: 44px; min-height: 44px; padding: 0; border: 1px solid #a4b8b9; border-radius: 4px; background: #fff; color: #253e42; font: 700 13px/1.2 var(--sans, sans-serif); cursor: pointer; box-shadow: 0 1px 3px rgb(34 58 56 / 14%); }
+.canada-landform .canada-landform-tools button[data-canada-landform-zoom] { font-size: 22px; }
+.canada-landform .canada-landform-tools button:disabled { opacity: .45; cursor: default; }
+.canada-landform .canada-landform-key { display: flex; flex-wrap: wrap; gap: 5px; margin: 8px 0; }
+.canada-landform .canada-landform-key button { display: inline-flex; align-items: center; gap: 5px; min-height: 34px; padding: 5px 8px; border: 1px solid #bac9c6; border-radius: 4px; background: #fff; color: #243f48; font: 600 12px/1.4 var(--sans, sans-serif); cursor: pointer; }
+.canada-landform .canada-landform-key button[aria-pressed="true"] { border-color: #243f4c; outline: 1px solid #243f4c; background: #f4f5ed; color: #243f4c; }
+.canada-landform .canada-landform-key i { flex: 0 0 15px; width: 15px; height: 11px; border: 1px solid #758275; }
+.canada-landform .canada-landform-only { display: flex; align-items: center; gap: 6px; min-height: 34px; color: #334a4d; font: 13px/1.5 var(--sans, sans-serif); }
+.canada-landform .canada-landform-status, .canada-landform .canada-landform-caption, .canada-landform .canada-landform-sources { margin: 6px 0; font: 12px/1.65 var(--sans, sans-serif); color: #526765; }
+.canada-landform .canada-landform-sources summary { cursor: pointer; }
+@media (max-width: 700px) { .canada-landform .canada-landform-frame { height: clamp(360px, 60dvh, 500px); min-height: 360px; } .canada-landform .canada-landform-label { font-size: 11px; max-width: 145px; } .canada-landform .canada-landform-key button { min-height: 40px; } }

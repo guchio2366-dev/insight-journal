@@ -4,10 +4,12 @@ import AtlasRegionNavigation from './AtlasRegionNavigation.astro';
 import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
 import NorthAmericaCountryFieldNavigation from './NorthAmericaCountryFieldNavigation.astro';
 import AtlasClimatePlot from './AtlasClimatePlot.astro';
+import CanadaLandformMap from './CanadaLandformMap.astro';
 import climate from '../../data/atlas/canada/climate.json';
 import rivers from '../../data/atlas/canada/rivers.json';
 import lakes from '../../data/atlas/canada/lakes.json';
 import forestry from '../../data/atlas/canada/forestry.json';
+import physiography from '../../data/atlas/canada/physiography.json';
 import industry from '../../data/atlas/canada/industry.json';
 import industryGeometry from '../../data/atlas/canada/industry-geometry.json';
 import population from '../../data/atlas/canada/population.json';
@@ -78,9 +80,12 @@ import '../../styles/atlas-canada-country-parity.css';
       <p class="canada-caption" data-canada-population-context-legend hidden></p>
       <p class="canada-caption" data-canada-position-caption>点は観測地点の位置、灰色は周辺の陸地。位置図は等距円筒図法で、面積比較には使いません。都市を選んでも表示範囲を勝手に変えません。</p>
      </section>
-     <figure class="canada-physical-map" data-canada-physical hidden>
-      <h2>山地・平原・楯状地の分布</h2><a href={withBase('/assets/atlas/canada-nature-v1/physiographic-regions-full.jpg')}><img src={withBase('/assets/atlas/canada-nature-v1/physiographic-regions.jpg')} alt="カナダ政府の地形地域図。西部のコルディレラ、中央の内陸平原、東部の楯状地、セントローレンス低地、北部の地形地域を色分け。" width="1600" height="1433" loading="lazy" /></a><figcaption>クリックで原寸図。NRCan『Atlas of Canada』第6版、2009年の保存版。地形分類の基礎資料は1967年。ランベルト正角円錐図法で、別の位置図とは投影が異なります。現在の行政境界の確認には使いません。<a href={geographySource}>原典と利用条件</a></figcaption>
-     </figure>
+     <section data-canada-physical hidden aria-label="地形地域の分布">
+      <CanadaLandformMap />
+      <details class="canada-landform-original"><summary>旧版の公式紙地図を資料として読む</summary><figure>
+       <a href={withBase('/assets/atlas/canada-nature-v1/physiographic-regions-full.jpg')}><img src={withBase('/assets/atlas/canada-nature-v1/physiographic-regions.jpg')} alt="NRCanの2009年保存版の紙地図。主地図とは別版の出典資料。" width="1600" height="1433" loading="lazy" /></a><figcaption>NRCan『Atlas of Canada』第6版、2009年の保存版。地形分類の基礎資料は1967年。ランベルト正角円錐図法で、主地図とは投影が異なります。主地図の輪郭はこの画像をトレースせず、別の公式GISを使います。<a href={geographySource}>原典と利用条件</a></figcaption>
+      </figure></details>
+     </section>
      <div class="canada-city-list" aria-label="観測地点を選ぶ">{climate.stations.map(s=><button data-canada-city-button={s.id} aria-pressed={s.id==='ottawa'?'true':'false'}>{s.name}{s.id==='ottawa'?'（首都）':''}</button>)}</div>
      <div class="canada-water-controls" data-canada-water-controls hidden><label>水系・湖<select data-canada-water><option value="">全体を読む</option>{waterNames.map(name=><option value={name}>{japaneseWater[name]}</option>)}</select></label><label><input type="checkbox" data-canada-only /> <span data-canada-only-label>選んだ川・湖だけを表示</span></label><button data-canada-all-water>すべての水系へ戻す</button><p>川と湖はNatural Earth v5.1.2の1:50m概略形状。国境をまたぐ水系を含みます。国土は残り、製造業の五大湖比較では水域を読みやすくするため観測点を隠します。</p></div>
     </section>
@@ -107,13 +112,19 @@ import '../../styles/atlas-canada-country-parity.css';
        </section>)}
       </div>
      </section>
-     <section data-canada-reading="landform" hidden><details class="canada-general-reading" data-canada-general-reading open><summary>全国の地形地域と原典を読む</summary><h2>同じ国の中で、地形が変わる</h2>{landReading.map(r=><section class="canada-reading-section"><h3>{r.title}</h3><p>{r.body}</p><a href={geographySource}>地形地域の原典</a></section>)}<p>英語の地名と日本語説明を対応させ、公式図の分布を読みます。都市の位置へ戻るには「都市の気候」を選べます。</p></details></section>
+     <section data-canada-reading="landform" hidden>
+      <h2 data-canada-landform-reading-title>山地・平原・低地を、場所で見分ける</h2>
+      <p class="canada-takeaway" data-canada-landform-reading-text>西部の山地、中央の平原、東部の盾状地を比較します。地図か凡例で地域を選ぶと、その範囲と説明が対応します。</p>
+      <p class="canada-caption">色は7つの地形区分。標高・農地・州の区分ではありません。全国的な概略区分で、局地的な起伏は省略されます。</p>
+      <p class="canada-sources-inline"><a href={physiography.source.descriptionUrl}>地形区分の定義</a> ／ <a href={physiography.source.catalogueUrl}>公式GISの出典</a></p>
+      <details class="canada-general-reading" data-canada-general-reading><summary>全国の地形と気候・水の関係</summary>{landReading.map(r=><section class="canada-reading-section"><h3>{r.title}</h3><p>{r.body}</p></section>)}<p>都市の気候や湖・河川は、上の表示タブから場所を照合できます。地域区分だけから作物・産業の立地を断定しません。</p></details>
+     </section>
      <section data-canada-reading="water" hidden><details class="canada-general-reading" data-canada-general-reading open><summary>全国の湖・河川と原典を読む</summary><h2>湖と川を、海までつなげて読む</h2>{waterReading.map(r=><section class="canada-reading-section"><h3>{r.title}</h3><p>{r.body}</p></section>)}<p><a href="https://www.naturalearthdata.com/downloads/50m-physical-vectors/">河川・湖の原典</a>。概略図のため小河川は省略されます。線の幅・湖の色は流量・水深・水質ではありません。</p></details></section>
     </aside>
    </div>
    </div>
 
-   <footer class="canada-source-footer" id="canada-nature-sources"><h2>出典・対象期間・読み方</h2><ul><li>気候：Environment and Climate Change Canada、1991–2020年平年値。公式表の数値を抽出し、未収録値を補間しません。取得日2026年9月30日。<a href="https://climate.weather.gc.ca/climate_normals/index_e.html">計算方法と観測所一覧</a> ／ <a href="https://www.canada.ca/en/transparency/terms.html">政府サイト利用条件</a>。公式グラフの転載ではなく数値から作図しています。</li><li>地形地域図：Natural Resources Canada、Atlas第6版の2009年保存版。地形分類の基礎資料は1967年。<a href={geographySource}>データカタログ</a> ／ <a href="https://open.canada.ca/en/open-government-licence-canada">Open Government Licence – Canada</a>。原図を縮小し、分類・配置を変更していません。提供機関による本サイトの承認を意味しません。</li><li>境界・河川・湖：Natural Earth v5.1.2、public domain。既存国境データは1:110m、河川・湖は1:50m。国土の周辺を含む表示範囲で抽出。詳細な境界・現在の実効支配・流域境界を示すものではありません。</li><li>本文の気候説明：<a href={mechanismSource}>Canada's Changing Climate Report（2019年）、第4章</a>と、各観測地点の平年値。地域の仕組みと一点の観測値を区別します。</li></ul><p><a href={withBase('/assets/atlas/canada-nature-v1/manifest.json')}>加工方法・固定版・ファイルハッシュの台帳</a></p></footer>
+   <footer class="canada-source-footer" id="canada-nature-sources"><h2>出典・対象期間・読み方</h2><ul><li>気候：Environment and Climate Change Canada、1991–2020年平年値。公式表の数値を抽出し、未収録値を補間しません。取得日2026年9月30日。<a href="https://climate.weather.gc.ca/climate_normals/index_e.html">計算方法と観測所一覧</a> ／ <a href="https://www.canada.ca/en/transparency/terms.html">政府サイト利用条件</a>。公式グラフの転載ではなく数値から作図しています。</li><li>主地図：Natural Resources Canadaの公式GIS「Physiographic Regions of Canada」。7地域の全頂点を保持し、EPSG:3978から公式サービスでEPSG:4326へ変換。カタログ公開2019年4月1日、対象期間開始2017年9月1日、確認2026年10月2日。<a href={physiography.source.catalogueUrl}>原典</a> ／ <a href={physiography.manifestUrl}>取得・座標系・ハッシュ台帳</a>。Contains information licensed under the Open Government Licence – Canada. 色と日本語ラベルは本サイトが付け、提供機関の承認を意味しません。</li><li>資料用の旧版紙地図：Natural Resources Canada、Atlas第6版の2009年保存版。地形分類の基礎資料は1967年。<a href={geographySource}>データカタログ</a> ／ <a href="https://open.canada.ca/en/open-government-licence-canada">Open Government Licence – Canada</a>。原図を縮小し、分類・配置を変更していません。提供機関による本サイトの承認を意味しません。</li><li>境界・河川・湖：Natural Earth v5.1.2、public domain。既存国境データは1:110m、河川・湖は1:50m。国土の周辺を含む表示範囲で抽出。詳細な境界・現在の実効支配・流域境界を示すものではありません。</li><li>本文の気候説明：<a href={mechanismSource}>Canada's Changing Climate Report（2019年）、第4章</a>と、各観測地点の平年値。地域の仕組みと一点の観測値を区別します。</li></ul><p><a href={withBase('/assets/atlas/canada-nature-v1/manifest.json')}>加工方法・固定版・ファイルハッシュの台帳</a></p></footer>
    <noscript><p>地図、首都オタワの雨温図、数値・本文・出典を読めます。地点・表示・比較の切替にはJavaScriptが必要です。</p></noscript>
    <p class="visually-hidden" data-canada-announcement aria-live="polite"></p>
    <script type="application/json" data-canada-config set:html={JSON.stringify(config).replace(/</g,'\\u003c')} />
