@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {africaLayerPath,africaGridValue,africaActualLayerKey,africaRasterCategory} from '../../src/scripts/atlas-africa-layers.ts';
+import {africaLayerPath,africaGridValue,africaGridValueLabel,africaActualLayerKey,africaRasterCategory} from '../../src/scripts/atlas-africa-layers.ts';
 import {readState,writeState,africaComparisonSnapshot} from '../../src/data/atlas/africa-atlas.ts';
 
 test('display grids preserve zero, negative elevation and missing values with north-first cell indexing',()=>{
@@ -45,4 +45,13 @@ test('agriculture thresholds keep zero, small positive values, boundaries and mi
  for(const value of [-1,NaN,Infinity])assert.equal(africaRasterCategory(value,layer),null);
  const bytes=new Uint8Array(8),floats=new DataView(bytes.buffer);floats.setFloat32(0,0,true);floats.setFloat32(4,NaN,true);const metadata={bounds:[0,0,2,1],width:2,height:1,encoding:'float32-le-gzip',noData:-1};
  assert.equal(africaGridValue(bytes,metadata,.5,.5),0);assert.equal(africaGridValue(bytes,metadata,1.5,.5),null);
+});
+
+test('point labels keep actual tiny crop and cattle values positive while using readable rounded precision',()=>{
+ assert.equal(africaGridValueLabel(0),'0');
+ assert.equal(africaGridValueLabel(0.00010143596591660753),'0.0001014');
+ assert.equal(africaGridValueLabel(4.657324268e-7),'0.0000004657');
+ for(const value of [Number.MIN_VALUE,1.401298464324817e-45,1e-20,.00099999])assert.ok(Number(africaGridValueLabel(value).replaceAll(',',''))>0);
+ assert.equal(africaGridValueLabel(1200.123456),'1,200.123');
+ assert.equal(africaGridValueLabel(1.123456),'1.123');
 });

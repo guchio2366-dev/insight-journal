@@ -24,8 +24,8 @@ test('Africa crop provenance identifies the fixed commercially reusable official
  for(const layer of Object.values(manifest.layers)){
   assert.equal(layer.referenceYear,2020);assert.equal(layer.releaseDate,'2026-05-05');assert.equal(layer.sourceEdition,'V2r2');assert.equal(layer.productionSystem,'A (all technologies)');
   assert.equal(layer.sourceUrl,'https://doi.org/10.7910/DVN/SWPENT');assert.equal(layer.license,'CC BY 4.0');
-  if(layer.measure==='harvested'){assert.equal(layer.sourceDataFileId,13827040);assert.equal(layer.sourceArchiveBytes,68007241);assert.equal(layer.sourceArchiveMd5,'dd9ac5def086fcae26d28423b2b31f8b');}
-  else {assert.equal(layer.sourceDataFileId,13827043);assert.equal(layer.sourceArchiveBytes,75175570);assert.equal(layer.sourceArchiveMd5,'8ce3956c25860ae9960155b8382518de');}
+  if(layer.measure==='harvested'){assert.equal(layer.sourceDataFileId,13827040);assert.equal(layer.sourceArchiveBytes,68007241);assert.equal(layer.publisherMd5,'dd9ac5def086fcae26d28423b2b31f8b');}
+  else {assert.equal(layer.sourceDataFileId,13827043);assert.equal(layer.sourceArchiveBytes,75175570);assert.equal(layer.publisherMd5,'8ce3956c25860ae9960155b8382518de');}
  }
 });
 

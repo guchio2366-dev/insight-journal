@@ -57,7 +57,7 @@ test('all crop quantities and livestock species render their source grid, year, 
    assert.equal(root.querySelector('[data-africa-raster]').getAttribute('data-africa-raster'),key);assert.equal(view.unit,layer.unit);assert.equal(view.period,layer.period);assert.match(view.period,/2020/);assert.equal(view.legend.length,layer.legend.length);assert.equal(view.legend[0].id,layer.zeroId);assert.match(view.sourceUrl,/^https:\/\//);
    const grid=gunzipSync(readFileSync(new URL(`../../public/assets/atlas/africa-${family}-v1/${layer.grid}`,import.meta.url))),indices={zero:-1,positive:-1,missing:-1};
    for(let i=0;i<grid.length/4;i++){const value=grid.readFloatLE(i*4);if(value===0&&indices.zero<0)indices.zero=i;if(value>0&&indices.positive<0)indices.positive=i;if(value===layer.noData&&indices.missing<0)indices.missing=i;if(Object.values(indices).every(index=>index>=0))break;}
-   for(const [kind,index] of Object.entries(indices)){assert.ok(index>=0,`${key} ${kind} available`);const lon=layer.bounds[0]+(index%layer.width+.5)*(layer.bounds[2]-layer.bounds[0])/layer.width,lat=layer.bounds[3]-(Math.floor(index/layer.width)+.5)*(layer.bounds[3]-layer.bounds[1])/layer.height,reading=renderer.inspect(lon,lat);if(kind==='missing')assert.match(reading,/未収録/);else{const number=new Intl.NumberFormat('ja-JP',{maximumSignificantDigits:6}).format(grid.readFloatLE(index*4));assert.ok(reading.includes(`：${number} ${layer.unit}`));assert.match(reading,/表示格子/);}}
+   for(const [kind,index] of Object.entries(indices)){assert.ok(index>=0,`${key} ${kind} available`);const lon=layer.bounds[0]+(index%layer.width+.5)*(layer.bounds[2]-layer.bounds[0])/layer.width,lat=layer.bounds[3]-(Math.floor(index/layer.width)+.5)*(layer.bounds[3]-layer.bounds[1])/layer.height,reading=renderer.inspect(lon,lat);if(kind==='missing')assert.match(reading,/未収録/);else{const value=grid.readFloatLE(index*4),number=value>0&&value<.001?new Intl.NumberFormat('ja-JP',{maximumSignificantDigits:4}).format(value):value.toLocaleString('ja-JP');assert.ok(reading.includes(`：${number} ${layer.unit}`));assert.match(reading,/表示格子/);}}
    const comparison=setState(search+'&context=NV.AGR.TOTL.ZS&sourceState='+encodeURIComponent(search.slice(1)));assert.equal(comparison.key,key);assert.deepEqual(comparison.legend,view.legend);assert.equal(root.querySelector('[data-africa-raster]').getAttribute('data-africa-raster'),key);
   });
  }
@@ -69,6 +69,11 @@ test('livestock source details keep input census years separate from the 2020 mo
   const kenya=setState('?field=agriculture&topic=livestock&livestock=goats&place=KEN&zoom=all');assert.match(kenya.method,/入力統計年：2019/);assert.match(kenya.period,/2020/);
  });
  await withLayers('?field=agriculture&topic=livestock&livestock=sheep&place=SDN&zoom=all',({view})=>{assert.match(view.method,/入力統計年：未記載/);assert.doesNotMatch(view.method,/入力統計年：2017/);});
+});
+
+test('actual tiny crop and cattle grid readings retain positive values instead of a zero label',async()=>{
+ await withLayers('?field=agriculture&topic=farming&crop=maize&cropMeasure=harvested&zoom=all',({renderer})=>{const reading=renderer.inspect(-2.291666,9.125);assert.match(reading,/：0\.0001014 ha/);assert.doesNotMatch(reading,/：0 ha/);assert.match(reading,/推定値、表示桁は丸め/);});
+ await withLayers('?field=agriculture&topic=livestock&livestock=cattle&zoom=all',({renderer})=>{const reading=renderer.inspect(12.208333,25.625);assert.match(reading,/：0\.0000004657 頭\/km²/);assert.doesNotMatch(reading,/：0 頭/);assert.match(reading,/推定値、表示桁は丸め/);});
 });
 test('actual map point survives the bubbling country selection and the overview preserves its source state',async()=>{
  const window=new Window({url:'https://example.com/insight-journal/atlas/africa/?field=nature&topic=climate&place=EGY&compare=GHA&year=2023&zoom=all'}),previous=Object.fromEntries(['window','document','location','history','fetch'].map(key=>[key,globalThis[key]]));

@@ -12,6 +12,9 @@ const SVG='http://www.w3.org/2000/svg';
 const text=(v:any,fallback=''):string=>typeof v==='string'?v:v===null||v===undefined?fallback:String(v);
 const note=(v:any,fallback=''):string=>typeof v==='string'?v:Array.isArray(v)?v.map(item=>note(item)).filter(Boolean).join(' '):v&&typeof v==='object'?text(v.note??v.description??v.label,fallback):fallback;
 const label=(r:Row)=>text(r.label??r.nameJa??r.name??r.code??r.id);
+export function africaGridValueLabel(value:number):string {
+ return value>0&&value<.001?new Intl.NumberFormat('ja-JP',{maximumSignificantDigits:4}).format(value):value.toLocaleString('ja-JP');
+}
 export function africaActualLayerKey(state:Pick<State,'field'|'topic'|'water'> & Partial<Pick<State,'crop'|'livestock'|'cropMeasure'>>):string {
  if(state.field==='nature')return state.topic==='water'?`water-${state.water}`:state.topic;
  if(state.field==='agriculture')return state.topic==='farming'?`crop-${state.crop??'maize'}-${state.cropMeasure??'harvested'}`:state.topic==='livestock'?`livestock-${state.livestock??'cattle'}`:'';
@@ -105,7 +108,7 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   const current=viewCache.get(currentKey);if(!current)return 'この地点の分布値はまだ読み込まれていません。';
   const {layer,manifest,view,grid}=current;if(!grid)return '元資料の分類・範囲は凡例と出典で確認できます。';
   const value=africaGridValue(grid,{...manifest,...layer},lon,lat);if(value===null)return 'この表示格子は未収録です。';
-  const category=layer.classes?view.legend.find(row=>Number(row.id)===value):undefined;return `${lon.toFixed(2)}°E / ${lat.toFixed(2)}°N：${category?`${category.code??''} ${category.label}`:`${new Intl.NumberFormat('ja-JP',{maximumSignificantDigits:6}).format(value)} ${view.unit}`}（表示格子）`;
+  const category=layer.classes?view.legend.find(row=>Number(row.id)===value):undefined,model=currentKey.startsWith('crop-')||currentKey.startsWith('livestock-');return `${lon.toFixed(2)}°E / ${lat.toFixed(2)}°N：${category?`${category.code??''} ${category.label}`:`${africaGridValueLabel(value)} ${view.unit}`}（表示格子${model?'・推定値、表示桁は丸め':''}）`;
  }
  function retry(){for(const [url,result]of cache)if(result.error)cache.delete(url);lastPaint='';onReady();}
  return {render,inspect,retry};
