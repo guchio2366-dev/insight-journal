@@ -61,6 +61,30 @@
 .eu-workspace-root .eu-city-reading .eu-city-chart-meta { margin:2px 0 3px; font:12px/1.5 var(--sans); }
 .eu-workspace-root .eu-city-reading .eu-city-selected-note { margin:5px 0; font:13px/1.5 var(--sans); }
 .eu-workspace-root .eu-city-selected-note strong { font-weight:600; }
+
+/* National quantities keep the existing map / explanation workspace intact. */
+.eu-workspace-root .eu-farm-numbers { margin-block:14px 24px; }
+.eu-workspace-root .eu-farm-numbers h3 { font:700 20px/1.5 var(--serif); }
+.eu-workspace-root .eu-farm-stat-controls { display:flex; flex-wrap:wrap; gap:10px 18px; margin:12px 0; }
+.eu-workspace-root .eu-farm-stat-controls label { display:grid; gap:4px; min-width:140px; font:14px/1.5 var(--sans); }
+.eu-workspace-root .eu-farm-stat-controls select { max-width:100%; min-height:38px; font:14px/1.5 var(--sans); }
+.eu-workspace-root .eu-farm-stat-summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin:16px 0; }
+.eu-workspace-root .eu-farm-stat-summary section { padding:12px; border:1px solid #bdcec6; background:#f5f6ef; }
+.eu-workspace-root .eu-farm-stat-summary h4 { margin:0 0 5px; font:700 16px/1.5 var(--sans); }
+.eu-workspace-root .eu-farm-stat-summary p { margin:4px 0; font:14px/1.6 var(--sans); }
+.eu-workspace-root :is(.eu-farm-stat-table,.eu-farm-stat-source) { border-top:1px solid #bdcec6; margin-top:12px; }
+.eu-workspace-root :is(.eu-farm-stat-table,.eu-farm-stat-source)>summary { cursor:pointer; min-height:40px; padding:9px 0; font:700 15px/1.5 var(--sans); }
+.eu-workspace-root .eu-farm-table-scroll { max-width:100%; overflow-x:auto; }
+.eu-workspace-root .eu-farm-table-scroll table { width:100%; border-collapse:collapse; font:14px/1.5 var(--sans); font-variant-numeric:tabular-nums; }
+.eu-workspace-root .eu-farm-table-scroll caption { text-align:left; padding:8px 0; font:13px/1.6 var(--sans); }
+.eu-workspace-root .eu-farm-table-scroll :is(td,th) { padding:7px 10px; text-align:left; border-bottom:1px solid #d3ddd5; vertical-align:top; }
+.eu-workspace-root .eu-farm-table-scroll tr.is-selected { background:#e7f0e8; }
+.eu-workspace-root .eu-farm-table-scroll button { border:0; background:none; color:#1d6172; text-decoration:underline; text-underline-offset:3px; cursor:pointer; padding:3px 0; font:inherit; }
+.eu-workspace-root .eu-farm-table-scroll small { display:block; font:12px/1.6 var(--sans); overflow-wrap:anywhere; }
+.eu-workspace-root .eu-farm-stat-source :is(p,a) { font:13px/1.7 var(--sans); overflow-wrap:anywhere; }
+.eu-workspace-root .eu-farm-quick-summary { margin:6px 0; font:13px/1.6 var(--sans); }
+.eu-workspace-root .eu-farm-quick-summary a { display:block; color:#1d6172; }
+.eu-workspace-root .eu-farm-numbers :is(button,select,summary):focus-visible { outline:3px solid #176f89; outline-offset:3px; }
 .eu-workspace-root .eu-city-reading-details { border-top:1px solid #c7cec3; margin-top:6px; }
 .eu-workspace-root .eu-city-reading-details>summary { min-height:32px; padding:6px 0; font:13px/1.5 var(--sans); cursor:pointer; }
 .eu-workspace-root .eu-city-reading-details>summary:focus-visible { outline:3px solid #176f89; outline-offset:3px; }

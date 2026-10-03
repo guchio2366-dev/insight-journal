@@ -1,0 +1,2217 @@
+{
+  "schemaVersion": 1,
+  "preparedAt": "2026-10-03T14:50:48.905Z",
+  "preparationScript": "scripts/europe/prepare-farming-statistics.mjs",
+  "sources": [
+    {
+      "id": "QCL",
+      "publisher": "FAO",
+      "dataset": "Production: Crops and livestock products",
+      "releaseDate": "2025-12-31",
+      "url": "https://bulks-faostat.fao.org/production/Production_Crops_Livestock_E_All_Data_(Normalized).zip",
+      "landingUrl": "https://www.fao.org/faostat/en/#data/QCL",
+      "archive": {
+        "file": "Production_Crops_Livestock_E_All_Data_(Normalized).zip",
+        "bytes": 33921825,
+        "sha256": "c5835418c18f9322e7decbd6800f93a216eaae3cdfa31acb08f0518c0c6d6853"
+      },
+      "sourceMember": "Production_Crops_Livestock_E_All_Data_(Normalized).csv",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://www.fao.org/contact-us/terms/db-terms-of-use/",
+      "cacheReusedAt": "2026-10-03T14:50:48.905Z",
+      "licenseVerifiedAt": "2026-10-03T14:50:48.905Z",
+      "originalRetrievedAt": null
+    },
+    {
+      "id": "FO",
+      "publisher": "FAO",
+      "dataset": "Forestry: Forestry Production and Trade",
+      "releaseDate": "2026-01-09",
+      "url": "https://bulks-faostat.fao.org/production/Forestry_E_All_Data_(Normalized).zip",
+      "landingUrl": "https://www.fao.org/faostat/en/#data/FO",
+      "archive": {
+        "file": "Forestry_E_All_Data_(Normalized).zip",
+        "bytes": 18122620,
+        "sha256": "c2f7fc99651f620b6c0a16ff07f6c1d80c153fa01d5a3422413d9c89e0d61444"
+      },
+      "sourceMember": "Forestry_E_All_Data_(Normalized).csv",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://www.fao.org/contact-us/terms/db-terms-of-use/",
+      "cacheReusedAt": "2026-10-03T14:50:48.905Z",
+      "licenseVerifiedAt": "2026-10-03T14:50:48.905Z",
+      "originalRetrievedAt": null
+    },
+    {
+      "id": "RL",
+      "publisher": "FAO",
+      "dataset": "Land, Inputs and Sustainability: Land Use",
+      "releaseDate": "2026-07-17",
+      "url": "https://bulks-faostat.fao.org/production/Inputs_LandUse_E_All_Data_(Normalized).zip",
+      "landingUrl": "https://www.fao.org/faostat/en/#data/RL",
+      "archive": {
+        "file": "Inputs_LandUse_E_All_Data_(Normalized).zip",
+        "bytes": 2971760,
+        "sha256": "f6ccf002c3e83a32613d84f032e002b77ac80c8f871c454b12104815f36a9ad5"
+      },
+      "sourceMember": "Inputs_LandUse_E_All_Data_(Normalized).csv",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://www.fao.org/contact-us/terms/db-terms-of-use/",
+      "cacheReusedAt": "2026-10-03T14:50:48.905Z",
+      "licenseVerifiedAt": "2026-10-03T14:50:48.905Z",
+      "originalRetrievedAt": null
+    }
+  ],
+  "counts": {
+    "QCL": {
+      "selectedRows": 6904,
+      "sourceUncompressedBytes": 545005770
+    },
+    "FO": {
+      "selectedRows": 840,
+      "sourceUncompressedBytes": 318557132
+    },
+    "RL": {
+      "selectedRows": 430,
+      "sourceUncompressedBytes": 49970463
+    }
+  },
+  "coverage": {
+    "RUS": {
+      "m49": 643,
+      "rowCount": 220,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-eggs",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "NOR": {
+      "m49": 578,
+      "rowCount": 170,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-eggs",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "FRA": {
+      "m49": 250,
+      "rowCount": 213,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "SWE": {
+      "m49": 752,
+      "rowCount": 190,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-eggs",
+        "chicken-meat",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "sugarbeet-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "BLR": {
+      "m49": 112,
+      "rowCount": 200,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-eggs",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "UKR": {
+      "m49": 804,
+      "rowCount": 220,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-eggs",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "POL": {
+      "m49": 616,
+      "rowCount": 210,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "AUT": {
+      "m49": 40,
+      "rowCount": 203,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "HUN": {
+      "m49": 348,
+      "rowCount": 213,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "MDA": {
+      "m49": 498,
+      "rowCount": 210,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-eggs",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "ROU": {
+      "m49": 642,
+      "rowCount": 213,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-meat",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "LTU": {
+      "m49": 440,
+      "rowCount": 199,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "LVA": {
+      "m49": 428,
+      "rowCount": 202,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "EST": {
+      "m49": 233,
+      "rowCount": 208,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-eggs",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "DEU": {
+      "m49": 276,
+      "rowCount": 212,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-eggs",
+        "chicken-meat",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "BGR": {
+      "m49": 100,
+      "rowCount": 206,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-meat",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "GRC": {
+      "m49": 300,
+      "rowCount": 212,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-meat",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "ALB": {
+      "m49": 8,
+      "rowCount": 205,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-eggs",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "HRV": {
+      "m49": 191,
+      "rowCount": 210,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "CHE": {
+      "m49": 756,
+      "rowCount": 210,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-eggs",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "LUX": {
+      "m49": 442,
+      "rowCount": 204,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-eggs",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "BEL": {
+      "m49": 56,
+      "rowCount": 184,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-meat",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sugarbeet-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "NLD": {
+      "m49": 528,
+      "rowCount": 190,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "sugarbeet-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "PRT": {
+      "m49": 620,
+      "rowCount": 192,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-eggs",
+        "chicken-meat",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "ESP": {
+      "m49": 724,
+      "rowCount": 214,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-eggs",
+        "chicken-meat",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "IRL": {
+      "m49": 372,
+      "rowCount": 187,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-stocks",
+        "chicken-meat",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "sugarbeet-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "ITA": {
+      "m49": 380,
+      "rowCount": 213,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-meat",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "DNK": {
+      "m49": 208,
+      "rowCount": 211,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-eggs",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "GBR": {
+      "m49": 826,
+      "rowCount": 180,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-eggs",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "sugarbeet-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "ISL": {
+      "m49": 352,
+      "rowCount": 150,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-eggs",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks"
+      ],
+      "missingMapping": false
+    },
+    "SVN": {
+      "m49": 705,
+      "rowCount": 211,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "FIN": {
+      "m49": 246,
+      "rowCount": 202,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-eggs",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "SVK": {
+      "m49": 703,
+      "rowCount": 207,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "CZE": {
+      "m49": 203,
+      "rowCount": 211,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "BIH": {
+      "m49": 70,
+      "rowCount": 210,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-eggs",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "MKD": {
+      "m49": 807,
+      "rowCount": 220,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-eggs",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "SRB": {
+      "m49": 688,
+      "rowCount": 210,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-eggs",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "MNE": {
+      "m49": 499,
+      "rowCount": 170,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-eggs",
+        "chicken-meat",
+        "chicken-stocks",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "KOS": {
+      "m49": null,
+      "rowCount": 0,
+      "comparisonYearMeasures": [],
+      "missingMapping": true
+    },
+    "VAT": {
+      "m49": 336,
+      "rowCount": 0,
+      "comparisonYearMeasures": [],
+      "missingMapping": false
+    },
+    "SMR": {
+      "m49": 674,
+      "rowCount": 10,
+      "comparisonYearMeasures": [
+        "forest-area"
+      ],
+      "missingMapping": false
+    },
+    "MCO": {
+      "m49": 492,
+      "rowCount": 0,
+      "comparisonYearMeasures": [],
+      "missingMapping": false
+    },
+    "MLT": {
+      "m49": 470,
+      "rowCount": 192,
+      "comparisonYearMeasures": [
+        "barley-production",
+        "cattle-meat",
+        "cattle-milk",
+        "cattle-stocks",
+        "chicken-meat",
+        "forest-area",
+        "maize-production",
+        "pig-meat",
+        "pig-stocks",
+        "potato-production",
+        "rapeseed-production",
+        "rice-production",
+        "roundwood-production",
+        "sawnwood-production",
+        "sheep-meat",
+        "sheep-stocks",
+        "soybean-production",
+        "sugarbeet-production",
+        "sunflower-production",
+        "wheat-production"
+      ],
+      "missingMapping": false
+    },
+    "LIE": {
+      "m49": 438,
+      "rowCount": 30,
+      "comparisonYearMeasures": [
+        "forest-area",
+        "roundwood-production",
+        "sawnwood-production"
+      ],
+      "missingMapping": false
+    },
+    "AND": {
+      "m49": 20,
+      "rowCount": 30,
+      "comparisonYearMeasures": [
+        "forest-area",
+        "roundwood-production",
+        "sawnwood-production"
+      ],
+      "missingMapping": false
+    }
+  },
+  "worldRowCount": 220,
+  "sourceItems": {
+    "QCL": {
+      "15": "Wheat",
+      "27": "Rice",
+      "44": "Barley",
+      "56": "Maize (corn)",
+      "116": "Potatoes",
+      "157": "Sugar beet",
+      "236": "Soya beans",
+      "267": "Sunflower seed",
+      "270": "Rape or colza seed",
+      "866": "Cattle",
+      "867": "Meat of cattle with the bone; fresh or chilled",
+      "882": "Raw milk of cattle",
+      "976": "Sheep",
+      "977": "Meat of sheep; fresh or chilled",
+      "1034": "Swine / pigs",
+      "1035": "Meat of pig with the bone; fresh or chilled",
+      "1057": "Chickens",
+      "1058": "Meat of chickens; fresh or chilled",
+      "1062": "Hen eggs in shell; fresh"
+    },
+    "FO": {
+      "1861": "Roundwood",
+      "1872": "Sawnwood"
+    },
+    "RL": {
+      "6646": "Forest land"
+    }
+  },
+  "flags": {
+    "QCL": {
+      "A": "Official figure",
+      "E": "Estimated value",
+      "I": "Value imputed by a receiving agency",
+      "M": "Missing value; data cannot exist",
+      "X": "Figure from external organization"
+    },
+    "FO": {
+      "A": "Official figure",
+      "E": "Estimated value",
+      "F": "Forecast value",
+      "I": "Value imputed by a receiving agency",
+      "X": "Figure from external organization"
+    },
+    "RL": {
+      "A": "Official value",
+      "E": "Estimated value",
+      "I": "Value imputed by a receiving agency",
+      "L": "Missing value; data exist but were not collected",
+      "X": "Value from external organization"
+    }
+  },
+  "files": {
+    "statistics.json": {
+      "bytes": 422409,
+      "sha256": "6451860ea753bb88c3f41d868769a614a4f38fe46b28bb777124d5a6e5908569"
+    },
+    "statistics.json.gz": {
+      "bytes": 53222,
+      "sha256": "1c4a34074f0df258dfd87e2fe85cea8963775a32f78c556b2b480df124028b63"
+    }
+  },
+  "sourceAccess": "Previously downloaded source archives reused read-only. Original archive download timestamp is unknown; cache reuse and online license verification times are separately recorded.",
+  "licenseVerification": {
+    "url": "https://www.fao.org/contact-us/terms/db-terms-of-use/",
+    "verifiedAt": "2026-10-03T14:50:48.905Z",
+    "license": "CC BY 4.0 unless identified third-party exceptions apply",
+    "exceptions": "No third-party reuse exception is identified in the retained FAOSTAT domain metadata or archive code tables.",
+    "attribution": [
+      "FAO. 2025. FAOSTAT: Production: Crops and livestock products. [Cache reused on 2026-10-03; licence verified on 2026-10-03]. https://www.fao.org/faostat/en/#data/QCL Licence: CC-BY-4.0.",
+      "FAO. 2026. FAOSTAT: Forestry: Forestry Production and Trade. [Cache reused on 2026-10-03; licence verified on 2026-10-03]. https://www.fao.org/faostat/en/#data/FO Licence: CC-BY-4.0.",
+      "FAO. 2026. FAOSTAT: Land, Inputs and Sustainability: Land Use. [Cache reused on 2026-10-03; licence verified on 2026-10-03]. https://www.fao.org/faostat/en/#data/RL Licence: CC-BY-4.0."
+    ]
+  },
+  "countryMapping": [
+    {
+      "code": "RUS",
+      "name": "ロシア",
+      "m49": 643,
+      "sourceNames": {
+        "QCL": {
+          "name": "Russian Federation",
+          "areaCode": "185",
+          "m49Raw": "'643"
+        },
+        "FO": {
+          "name": "Russian Federation",
+          "areaCode": "185",
+          "m49Raw": "'643"
+        },
+        "RL": {
+          "name": "Russian Federation",
+          "areaCode": "185",
+          "m49Raw": "'643"
+        }
+      }
+    },
+    {
+      "code": "NOR",
+      "name": "ノルウェー",
+      "m49": 578,
+      "sourceNames": {
+        "QCL": {
+          "name": "Norway",
+          "areaCode": "162",
+          "m49Raw": "'578"
+        },
+        "FO": {
+          "name": "Norway",
+          "areaCode": "162",
+          "m49Raw": "'578"
+        },
+        "RL": {
+          "name": "Norway",
+          "areaCode": "162",
+          "m49Raw": "'578"
+        }
+      }
+    },
+    {
+      "code": "FRA",
+      "name": "フランス",
+      "m49": 250,
+      "sourceNames": {
+        "QCL": {
+          "name": "France",
+          "areaCode": "68",
+          "m49Raw": "'250"
+        },
+        "FO": {
+          "name": "France",
+          "areaCode": "68",
+          "m49Raw": "'250"
+        },
+        "RL": {
+          "name": "France",
+          "areaCode": "68",
+          "m49Raw": "'250"
+        }
+      }
+    },
+    {
+      "code": "SWE",
+      "name": "スウェーデン",
+      "m49": 752,
+      "sourceNames": {
+        "QCL": {
+          "name": "Sweden",
+          "areaCode": "210",
+          "m49Raw": "'752"
+        },
+        "FO": {
+          "name": "Sweden",
+          "areaCode": "210",
+          "m49Raw": "'752"
+        },
+        "RL": {
+          "name": "Sweden",
+          "areaCode": "210",
+          "m49Raw": "'752"
+        }
+      }
+    },
+    {
+      "code": "BLR",
+      "name": "ベラルーシ",
+      "m49": 112,
+      "sourceNames": {
+        "QCL": {
+          "name": "Belarus",
+          "areaCode": "57",
+          "m49Raw": "'112"
+        },
+        "FO": {
+          "name": "Belarus",
+          "areaCode": "57",
+          "m49Raw": "'112"
+        },
+        "RL": {
+          "name": "Belarus",
+          "areaCode": "57",
+          "m49Raw": "'112"
+        }
+      }
+    },
+    {
+      "code": "UKR",
+      "name": "ウクライナ",
+      "m49": 804,
+      "sourceNames": {
+        "QCL": {
+          "name": "Ukraine",
+          "areaCode": "230",
+          "m49Raw": "'804"
+        },
+        "FO": {
+          "name": "Ukraine",
+          "areaCode": "230",
+          "m49Raw": "'804"
+        },
+        "RL": {
+          "name": "Ukraine",
+          "areaCode": "230",
+          "m49Raw": "'804"
+        }
+      }
+    },
+    {
+      "code": "POL",
+      "name": "ポーランド",
+      "m49": 616,
+      "sourceNames": {
+        "QCL": {
+          "name": "Poland",
+          "areaCode": "173",
+          "m49Raw": "'616"
+        },
+        "FO": {
+          "name": "Poland",
+          "areaCode": "173",
+          "m49Raw": "'616"
+        },
+        "RL": {
+          "name": "Poland",
+          "areaCode": "173",
+          "m49Raw": "'616"
+        }
+      }
+    },
+    {
+      "code": "AUT",
+      "name": "オーストリア",
+      "m49": 40,
+      "sourceNames": {
+        "QCL": {
+          "name": "Austria",
+          "areaCode": "11",
+          "m49Raw": "'040"
+        },
+        "FO": {
+          "name": "Austria",
+          "areaCode": "11",
+          "m49Raw": "'040"
+        },
+        "RL": {
+          "name": "Austria",
+          "areaCode": "11",
+          "m49Raw": "'040"
+        }
+      }
+    },
+    {
+      "code": "HUN",
+      "name": "ハンガリー",
+      "m49": 348,
+      "sourceNames": {
+        "QCL": {
+          "name": "Hungary",
+          "areaCode": "97",
+          "m49Raw": "'348"
+        },
+        "FO": {
+          "name": "Hungary",
+          "areaCode": "97",
+          "m49Raw": "'348"
+        },
+        "RL": {
+          "name": "Hungary",
+          "areaCode": "97",
+          "m49Raw": "'348"
+        }
+      }
+    },
+    {
+      "code": "MDA",
+      "name": "モルドバ",
+      "m49": 498,
+      "sourceNames": {
+        "QCL": {
+          "name": "Republic of Moldova",
+          "areaCode": "146",
+          "m49Raw": "'498"
+        },
+        "FO": {
+          "name": "Republic of Moldova",
+          "areaCode": "146",
+          "m49Raw": "'498"
+        },
+        "RL": {
+          "name": "Republic of Moldova",
+          "areaCode": "146",
+          "m49Raw": "'498"
+        }
+      }
+    },
+    {
+      "code": "ROU",
+      "name": "ルーマニア",
+      "m49": 642,
+      "sourceNames": {
+        "QCL": {
+          "name": "Romania",
+          "areaCode": "183",
+          "m49Raw": "'642"
+        },
+        "FO": {
+          "name": "Romania",
+          "areaCode": "183",
+          "m49Raw": "'642"
+        },
+        "RL": {
+          "name": "Romania",
+          "areaCode": "183",
+          "m49Raw": "'642"
+        }
+      }
+    },
+    {
+      "code": "LTU",
+      "name": "リトアニア",
+      "m49": 440,
+      "sourceNames": {
+        "QCL": {
+          "name": "Lithuania",
+          "areaCode": "126",
+          "m49Raw": "'440"
+        },
+        "FO": {
+          "name": "Lithuania",
+          "areaCode": "126",
+          "m49Raw": "'440"
+        },
+        "RL": {
+          "name": "Lithuania",
+          "areaCode": "126",
+          "m49Raw": "'440"
+        }
+      }
+    },
+    {
+      "code": "LVA",
+      "name": "ラトビア",
+      "m49": 428,
+      "sourceNames": {
+        "QCL": {
+          "name": "Latvia",
+          "areaCode": "119",
+          "m49Raw": "'428"
+        },
+        "FO": {
+          "name": "Latvia",
+          "areaCode": "119",
+          "m49Raw": "'428"
+        },
+        "RL": {
+          "name": "Latvia",
+          "areaCode": "119",
+          "m49Raw": "'428"
+        }
+      }
+    },
+    {
+      "code": "EST",
+      "name": "エストニア",
+      "m49": 233,
+      "sourceNames": {
+        "QCL": {
+          "name": "Estonia",
+          "areaCode": "63",
+          "m49Raw": "'233"
+        },
+        "FO": {
+          "name": "Estonia",
+          "areaCode": "63",
+          "m49Raw": "'233"
+        },
+        "RL": {
+          "name": "Estonia",
+          "areaCode": "63",
+          "m49Raw": "'233"
+        }
+      }
+    },
+    {
+      "code": "DEU",
+      "name": "ドイツ",
+      "m49": 276,
+      "sourceNames": {
+        "QCL": {
+          "name": "Germany",
+          "areaCode": "79",
+          "m49Raw": "'276"
+        },
+        "FO": {
+          "name": "Germany",
+          "areaCode": "79",
+          "m49Raw": "'276"
+        },
+        "RL": {
+          "name": "Germany",
+          "areaCode": "79",
+          "m49Raw": "'276"
+        }
+      }
+    },
+    {
+      "code": "BGR",
+      "name": "ブルガリア",
+      "m49": 100,
+      "sourceNames": {
+        "QCL": {
+          "name": "Bulgaria",
+          "areaCode": "27",
+          "m49Raw": "'100"
+        },
+        "FO": {
+          "name": "Bulgaria",
+          "areaCode": "27",
+          "m49Raw": "'100"
+        },
+        "RL": {
+          "name": "Bulgaria",
+          "areaCode": "27",
+          "m49Raw": "'100"
+        }
+      }
+    },
+    {
+      "code": "GRC",
+      "name": "ギリシャ",
+      "m49": 300,
+      "sourceNames": {
+        "QCL": {
+          "name": "Greece",
+          "areaCode": "84",
+          "m49Raw": "'300"
+        },
+        "FO": {
+          "name": "Greece",
+          "areaCode": "84",
+          "m49Raw": "'300"
+        },
+        "RL": {
+          "name": "Greece",
+          "areaCode": "84",
+          "m49Raw": "'300"
+        }
+      }
+    },
+    {
+      "code": "ALB",
+      "name": "アルバニア",
+      "m49": 8,
+      "sourceNames": {
+        "QCL": {
+          "name": "Albania",
+          "areaCode": "3",
+          "m49Raw": "'008"
+        },
+        "FO": {
+          "name": "Albania",
+          "areaCode": "3",
+          "m49Raw": "'008"
+        },
+        "RL": {
+          "name": "Albania",
+          "areaCode": "3",
+          "m49Raw": "'008"
+        }
+      }
+    },
+    {
+      "code": "HRV",
+      "name": "クロアチア",
+      "m49": 191,
+      "sourceNames": {
+        "QCL": {
+          "name": "Croatia",
+          "areaCode": "98",
+          "m49Raw": "'191"
+        },
+        "FO": {
+          "name": "Croatia",
+          "areaCode": "98",
+          "m49Raw": "'191"
+        },
+        "RL": {
+          "name": "Croatia",
+          "areaCode": "98",
+          "m49Raw": "'191"
+        }
+      }
+    },
+    {
+      "code": "CHE",
+      "name": "スイス",
+      "m49": 756,
+      "sourceNames": {
+        "QCL": {
+          "name": "Switzerland",
+          "areaCode": "211",
+          "m49Raw": "'756"
+        },
+        "FO": {
+          "name": "Switzerland",
+          "areaCode": "211",
+          "m49Raw": "'756"
+        },
+        "RL": {
+          "name": "Switzerland",
+          "areaCode": "211",
+          "m49Raw": "'756"
+        }
+      }
+    },
+    {
+      "code": "LUX",
+      "name": "ルクセンブルク",
+      "m49": 442,
+      "sourceNames": {
+        "QCL": {
+          "name": "Luxembourg",
+          "areaCode": "256",
+          "m49Raw": "'442"
+        },
+        "FO": {
+          "name": "Luxembourg",
+          "areaCode": "256",
+          "m49Raw": "'442"
+        },
+        "RL": {
+          "name": "Luxembourg",
+          "areaCode": "256",
+          "m49Raw": "'442"
+        }
+      }
+    },
+    {
+      "code": "BEL",
+      "name": "ベルギー",
+      "m49": 56,
+      "sourceNames": {
+        "QCL": {
+          "name": "Belgium",
+          "areaCode": "255",
+          "m49Raw": "'056"
+        },
+        "FO": {
+          "name": "Belgium",
+          "areaCode": "255",
+          "m49Raw": "'056"
+        },
+        "RL": {
+          "name": "Belgium",
+          "areaCode": "255",
+          "m49Raw": "'056"
+        }
+      }
+    },
+    {
+      "code": "NLD",
+      "name": "オランダ",
+      "m49": 528,
+      "sourceNames": {
+        "QCL": {
+          "name": "Netherlands (Kingdom of the)",
+          "areaCode": "150",
+          "m49Raw": "'528"
+        },
+        "FO": {
+          "name": "Netherlands (Kingdom of the)",
+          "areaCode": "150",
+          "m49Raw": "'528"
+        },
+        "RL": {
+          "name": "Netherlands (Kingdom of the)",
+          "areaCode": "150",
+          "m49Raw": "'528"
+        }
+      }
+    },
+    {
+      "code": "PRT",
+      "name": "ポルトガル",
+      "m49": 620,
+      "sourceNames": {
+        "QCL": {
+          "name": "Portugal",
+          "areaCode": "174",
+          "m49Raw": "'620"
+        },
+        "FO": {
+          "name": "Portugal",
+          "areaCode": "174",
+          "m49Raw": "'620"
+        },
+        "RL": {
+          "name": "Portugal",
+          "areaCode": "174",
+          "m49Raw": "'620"
+        }
+      }
+    },
+    {
+      "code": "ESP",
+      "name": "スペイン",
+      "m49": 724,
+      "sourceNames": {
+        "QCL": {
+          "name": "Spain",
+          "areaCode": "203",
+          "m49Raw": "'724"
+        },
+        "FO": {
+          "name": "Spain",
+          "areaCode": "203",
+          "m49Raw": "'724"
+        },
+        "RL": {
+          "name": "Spain",
+          "areaCode": "203",
+          "m49Raw": "'724"
+        }
+      }
+    },
+    {
+      "code": "IRL",
+      "name": "アイルランド",
+      "m49": 372,
+      "sourceNames": {
+        "QCL": {
+          "name": "Ireland",
+          "areaCode": "104",
+          "m49Raw": "'372"
+        },
+        "FO": {
+          "name": "Ireland",
+          "areaCode": "104",
+          "m49Raw": "'372"
+        },
+        "RL": {
+          "name": "Ireland",
+          "areaCode": "104",
+          "m49Raw": "'372"
+        }
+      }
+    },
+    {
+      "code": "ITA",
+      "name": "イタリア",
+      "m49": 380,
+      "sourceNames": {
+        "QCL": {
+          "name": "Italy",
+          "areaCode": "106",
+          "m49Raw": "'380"
+        },
+        "FO": {
+          "name": "Italy",
+          "areaCode": "106",
+          "m49Raw": "'380"
+        },
+        "RL": {
+          "name": "Italy",
+          "areaCode": "106",
+          "m49Raw": "'380"
+        }
+      }
+    },
+    {
+      "code": "DNK",
+      "name": "デンマーク",
+      "m49": 208,
+      "sourceNames": {
+        "QCL": {
+          "name": "Denmark",
+          "areaCode": "54",
+          "m49Raw": "'208"
+        },
+        "FO": {
+          "name": "Denmark",
+          "areaCode": "54",
+          "m49Raw": "'208"
+        },
+        "RL": {
+          "name": "Denmark",
+          "areaCode": "54",
+          "m49Raw": "'208"
+        }
+      }
+    },
+    {
+      "code": "GBR",
+      "name": "イギリス",
+      "m49": 826,
+      "sourceNames": {
+        "QCL": {
+          "name": "United Kingdom of Great Britain and Northern Ireland",
+          "areaCode": "229",
+          "m49Raw": "'826"
+        },
+        "FO": {
+          "name": "United Kingdom of Great Britain and Northern Ireland",
+          "areaCode": "229",
+          "m49Raw": "'826"
+        },
+        "RL": {
+          "name": "United Kingdom of Great Britain and Northern Ireland",
+          "areaCode": "229",
+          "m49Raw": "'826"
+        }
+      }
+    },
+    {
+      "code": "ISL",
+      "name": "アイスランド",
+      "m49": 352,
+      "sourceNames": {
+        "QCL": {
+          "name": "Iceland",
+          "areaCode": "99",
+          "m49Raw": "'352"
+        },
+        "FO": {
+          "name": "Iceland",
+          "areaCode": "99",
+          "m49Raw": "'352"
+        },
+        "RL": {
+          "name": "Iceland",
+          "areaCode": "99",
+          "m49Raw": "'352"
+        }
+      }
+    },
+    {
+      "code": "SVN",
+      "name": "スロベニア",
+      "m49": 705,
+      "sourceNames": {
+        "QCL": {
+          "name": "Slovenia",
+          "areaCode": "198",
+          "m49Raw": "'705"
+        },
+        "FO": {
+          "name": "Slovenia",
+          "areaCode": "198",
+          "m49Raw": "'705"
+        },
+        "RL": {
+          "name": "Slovenia",
+          "areaCode": "198",
+          "m49Raw": "'705"
+        }
+      }
+    },
+    {
+      "code": "FIN",
+      "name": "フィンランド",
+      "m49": 246,
+      "sourceNames": {
+        "QCL": {
+          "name": "Finland",
+          "areaCode": "67",
+          "m49Raw": "'246"
+        },
+        "FO": {
+          "name": "Finland",
+          "areaCode": "67",
+          "m49Raw": "'246"
+        },
+        "RL": {
+          "name": "Finland",
+          "areaCode": "67",
+          "m49Raw": "'246"
+        }
+      }
+    },
+    {
+      "code": "SVK",
+      "name": "スロバキア",
+      "m49": 703,
+      "sourceNames": {
+        "QCL": {
+          "name": "Slovakia",
+          "areaCode": "199",
+          "m49Raw": "'703"
+        },
+        "FO": {
+          "name": "Slovakia",
+          "areaCode": "199",
+          "m49Raw": "'703"
+        },
+        "RL": {
+          "name": "Slovakia",
+          "areaCode": "199",
+          "m49Raw": "'703"
+        }
+      }
+    },
+    {
+      "code": "CZE",
+      "name": "チェコ",
+      "m49": 203,
+      "sourceNames": {
+        "QCL": {
+          "name": "Czechia",
+          "areaCode": "167",
+          "m49Raw": "'203"
+        },
+        "FO": {
+          "name": "Czechia",
+          "areaCode": "167",
+          "m49Raw": "'203"
+        },
+        "RL": {
+          "name": "Czechia",
+          "areaCode": "167",
+          "m49Raw": "'203"
+        }
+      }
+    },
+    {
+      "code": "BIH",
+      "name": "ボスニア・ヘルツェゴビナ",
+      "m49": 70,
+      "sourceNames": {
+        "QCL": {
+          "name": "Bosnia and Herzegovina",
+          "areaCode": "80",
+          "m49Raw": "'070"
+        },
+        "FO": {
+          "name": "Bosnia and Herzegovina",
+          "areaCode": "80",
+          "m49Raw": "'070"
+        },
+        "RL": {
+          "name": "Bosnia and Herzegovina",
+          "areaCode": "80",
+          "m49Raw": "'070"
+        }
+      }
+    },
+    {
+      "code": "MKD",
+      "name": "北マケドニア",
+      "m49": 807,
+      "sourceNames": {
+        "QCL": {
+          "name": "North Macedonia",
+          "areaCode": "154",
+          "m49Raw": "'807"
+        },
+        "FO": {
+          "name": "North Macedonia",
+          "areaCode": "154",
+          "m49Raw": "'807"
+        },
+        "RL": {
+          "name": "North Macedonia",
+          "areaCode": "154",
+          "m49Raw": "'807"
+        }
+      }
+    },
+    {
+      "code": "SRB",
+      "name": "セルビア",
+      "m49": 688,
+      "sourceNames": {
+        "QCL": {
+          "name": "Serbia",
+          "areaCode": "272",
+          "m49Raw": "'688"
+        },
+        "FO": {
+          "name": "Serbia",
+          "areaCode": "272",
+          "m49Raw": "'688"
+        },
+        "RL": {
+          "name": "Serbia",
+          "areaCode": "272",
+          "m49Raw": "'688"
+        }
+      }
+    },
+    {
+      "code": "MNE",
+      "name": "モンテネグロ",
+      "m49": 499,
+      "sourceNames": {
+        "QCL": {
+          "name": "Montenegro",
+          "areaCode": "273",
+          "m49Raw": "'499"
+        },
+        "FO": {
+          "name": "Montenegro",
+          "areaCode": "273",
+          "m49Raw": "'499"
+        },
+        "RL": {
+          "name": "Montenegro",
+          "areaCode": "273",
+          "m49Raw": "'499"
+        }
+      }
+    },
+    {
+      "code": "KOS",
+      "name": "コソボ",
+      "m49": null,
+      "sourceNames": {}
+    },
+    {
+      "code": "VAT",
+      "name": "バチカン",
+      "m49": 336,
+      "sourceNames": {
+        "FO": {
+          "name": "Holy See",
+          "areaCode": "94",
+          "m49Raw": "'336"
+        },
+        "RL": {
+          "name": "Holy See",
+          "areaCode": "94",
+          "m49Raw": "'336"
+        }
+      }
+    },
+    {
+      "code": "SMR",
+      "name": "サンマリノ",
+      "m49": 674,
+      "sourceNames": {
+        "FO": {
+          "name": "San Marino",
+          "areaCode": "192",
+          "m49Raw": "'674"
+        },
+        "RL": {
+          "name": "San Marino",
+          "areaCode": "192",
+          "m49Raw": "'674"
+        }
+      }
+    },
+    {
+      "code": "MCO",
+      "name": "モナコ",
+      "m49": 492,
+      "sourceNames": {
+        "FO": {
+          "name": "Monaco",
+          "areaCode": "140",
+          "m49Raw": "'492"
+        },
+        "RL": {
+          "name": "Monaco",
+          "areaCode": "140",
+          "m49Raw": "'492"
+        }
+      }
+    },
+    {
+      "code": "MLT",
+      "name": "マルタ",
+      "m49": 470,
+      "sourceNames": {
+        "QCL": {
+          "name": "Malta",
+          "areaCode": "134",
+          "m49Raw": "'470"
+        },
+        "FO": {
+          "name": "Malta",
+          "areaCode": "134",
+          "m49Raw": "'470"
+        },
+        "RL": {
+          "name": "Malta",
+          "areaCode": "134",
+          "m49Raw": "'470"
+        }
+      }
+    },
+    {
+      "code": "LIE",
+      "name": "リヒテンシュタイン",
+      "m49": 438,
+      "sourceNames": {
+        "FO": {
+          "name": "Liechtenstein",
+          "areaCode": "125",
+          "m49Raw": "'438"
+        },
+        "RL": {
+          "name": "Liechtenstein",
+          "areaCode": "125",
+          "m49Raw": "'438"
+        }
+      }
+    },
+    {
+      "code": "AND",
+      "name": "アンドラ",
+      "m49": 20,
+      "sourceNames": {
+        "FO": {
+          "name": "Andorra",
+          "areaCode": "6",
+          "m49Raw": "'020"
+        },
+        "RL": {
+          "name": "Andorra",
+          "areaCode": "6",
+          "m49Raw": "'020"
+        }
+      }
+    }
+  ],
+  "method": "Explicit publisher M49 and item/element matching. Only 2015–2024 published rows are included. No missing rows, countries or years are filled. Blank/M/L values are missing; published zero remains zero. RUS is the entire Russian Federation. KOS has no independent M49 mapping in these releases. Spatial model cells are not read, summed, calibrated or used to infer national totals. World rows are preserved from source Area Code 5000; shares require the same item, element, year and unit. No custom vegetable/fruit grouping, species aggregation, head-unit conversion or forest-product addition.",
+  "publicationLimitations": [
+    "Publisher estimates/imputation/external figures retain their flags.",
+    "2024 is a fixed comparison year; absent observations remain missing.",
+    "Source decimals and notes remain exactly as read by the CSV parser.",
+    "Country selection uses the published national territory, including all of Russia.",
+    "Geographic display limits do not clip or redefine the national statistical territory.",
+    "Roundwood, sawnwood and forest area are separate measures and are not added.",
+    "VEGE, TEMF and CITR map model groups do not receive independently assembled statistical totals."
+  ]
+}

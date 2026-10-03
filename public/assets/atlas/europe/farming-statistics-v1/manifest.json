@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "comparisonYear": 2024,
+  "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "countryCount": 45,
+  "measureCount": 22,
+  "files": {
+    "statistics.json": {
+      "bytes": 422409,
+      "sha256": "6451860ea753bb88c3f41d868769a614a4f38fe46b28bb777124d5a6e5908569"
+    },
+    "statistics.json.gz": {
+      "bytes": 53222,
+      "sha256": "1c4a34074f0df258dfd87e2fe85cea8963775a32f78c556b2b480df124028b63"
+    }
+  },
+  "sources": [
+    {
+      "id": "QCL",
+      "publisher": "FAO",
+      "dataset": "Production: Crops and livestock products",
+      "releaseDate": "2025-12-31",
+      "url": "https://bulks-faostat.fao.org/production/Production_Crops_Livestock_E_All_Data_(Normalized).zip",
+      "landingUrl": "https://www.fao.org/faostat/en/#data/QCL",
+      "sourceMember": "Production_Crops_Livestock_E_All_Data_(Normalized).csv",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://www.fao.org/contact-us/terms/db-terms-of-use/",
+      "cacheReusedAt": "2026-10-03T14:50:48.905Z",
+      "licenseVerifiedAt": "2026-10-03T14:50:48.905Z",
+      "originalRetrievedAt": null,
+      "archiveSha256": "c5835418c18f9322e7decbd6800f93a216eaae3cdfa31acb08f0518c0c6d6853"
+    },
+    {
+      "id": "FO",
+      "publisher": "FAO",
+      "dataset": "Forestry: Forestry Production and Trade",
+      "releaseDate": "2026-01-09",
+      "url": "https://bulks-faostat.fao.org/production/Forestry_E_All_Data_(Normalized).zip",
+      "landingUrl": "https://www.fao.org/faostat/en/#data/FO",
+      "sourceMember": "Forestry_E_All_Data_(Normalized).csv",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://www.fao.org/contact-us/terms/db-terms-of-use/",
+      "cacheReusedAt": "2026-10-03T14:50:48.905Z",
+      "licenseVerifiedAt": "2026-10-03T14:50:48.905Z",
+      "originalRetrievedAt": null,
+      "archiveSha256": "c2f7fc99651f620b6c0a16ff07f6c1d80c153fa01d5a3422413d9c89e0d61444"
+    },
+    {
+      "id": "RL",
+      "publisher": "FAO",
+      "dataset": "Land, Inputs and Sustainability: Land Use",
+      "releaseDate": "2026-07-17",
+      "url": "https://bulks-faostat.fao.org/production/Inputs_LandUse_E_All_Data_(Normalized).zip",
+      "landingUrl": "https://www.fao.org/faostat/en/#data/RL",
+      "sourceMember": "Inputs_LandUse_E_All_Data_(Normalized).csv",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://www.fao.org/contact-us/terms/db-terms-of-use/",
+      "cacheReusedAt": "2026-10-03T14:50:48.905Z",
+      "licenseVerifiedAt": "2026-10-03T14:50:48.905Z",
+      "originalRetrievedAt": null,
+      "archiveSha256": "f6ccf002c3e83a32613d84f032e002b77ac80c8f871c454b12104815f36a9ad5"
+    }
+  ],
+  "method": "Explicit publisher M49 and item/element matching. Only 2015–2024 published rows are included. No missing rows, countries or years are filled. Blank/M/L values are missing; published zero remains zero. RUS is the entire Russian Federation. KOS has no independent M49 mapping in these releases. Spatial model cells are not read, summed, calibrated or used to infer national totals. World rows are preserved from source Area Code 5000; shares require the same item, element, year and unit. No custom vegetable/fruit grouping, species aggregation, head-unit conversion or forest-product addition."
+}

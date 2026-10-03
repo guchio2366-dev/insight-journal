@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { europeLayers } from '../../src/data/atlas/europe/layers.ts';
 import { readEuropeState } from '../../src/lib/atlas-europe-view.ts';
+import { readEuropeFarmingFocus } from '../../src/data/atlas/europe/farming-water-comparisons.ts';
 import {
   europeComparisonLinks, encodeEuropeReturn, readEuropeReturn,
   europeComparisonUrl, europeNamedReturnUrl, europeComparisonQuestion,
@@ -101,7 +102,8 @@ test('all field selections expose two or three distinct registered cross-field l
 
 test('specific sourced readings select useful river, population, forestry and climate comparisons', () => {
   const wheat = europeComparisonLinks(state('?layer=wheat'));
-  assert.equal(wheat.find(item => item.targetLayer === 'climate').city, 'paris');
+  assert.equal(wheat.find(item => item.targetLayer === 'climate').city, 'warsaw');
+  assert.ok(wheat.some(item => item.targetLayer === 'precipitation'));
   const cattle = europeComparisonLinks(state('?layer=cattle'));
   assert.equal(cattle.find(item => item.targetLayer === 'climate').city, 'london');
   const rotterdam = europeComparisonLinks(state('?layer=hubs&feature=rotterdam'));
@@ -113,10 +115,50 @@ test('specific sourced readings select useful river, population, forestry and cl
   assert.ok(europeComparisonLinks(state('?layer=hubs&feature=kaukas')).some(item => item.targetLayer === 'forest'));
   const changedClimate = europeComparisonQuestion(state('?layer=wheat'), 'climate', 'london');
   assert.match(changedClimate, /現在の選択は別の地点/);
-  assert.doesNotMatch(changedClimate, /パリの月別/);
+  assert.doesNotMatch(changedClimate, /ワルシャワの月別/);
   const changedRiver = europeComparisonQuestion(state('?layer=hubs&feature=rotterdam'), 'water', 'london', 'danube');
   assert.match(changedRiver, /現在の選択は別の地点/);
   assert.doesNotMatch(changedRiver, /ライン川の水地図/);
+});
+
+test('a focused crop entrance restores the source selection and rejects stale comparison text', () => {
+  const original = state('?layer=rice&place=ITA&render=static&crops=off&livestock=off&single=1&city=rome&basin=2040048790');
+  for (const entry of europeComparisonLinks(original)) {
+    const target = europeComparisonUrl(new URL('https://example.test/atlas/europe/agriculture/?europeFocus=pig-german-density'), original, entry);
+    assert.equal(target.searchParams.get('europeFocus'), entry.id);
+    assert.equal(readEuropeFarmingFocus(target.search, entry.targetLayer)?.id, entry.id);
+    assert.equal(target.searchParams.get('basin'), entry.basin ?? null, 'old source basin cannot select a different target unit');
+    assert.equal(target.searchParams.get('feature'), entry.feature ?? null, 'old source feature cannot select a different target point');
+    const saved = readEuropeReturn(target.searchParams.get('europeReturn'), countries, cities);
+    assert.deepEqual(saved, original);
+    assert.deepEqual(state(europeNamedReturnUrl(target, saved).search), original);
+    assert.equal(europeComparisonQuestion(saved, entry.targetLayer, entry.city, entry.feature, entry.id, entry.basin), entry.question);
+    for (const stale of ['unknown-focus', 'rice-portugal-drainage', 'pig-german-density']) {
+      if (stale === entry.id) continue;
+      assert.equal(europeComparisonQuestion(saved, entry.targetLayer, entry.city, entry.feature, stale, entry.basin), '元の分布と現在の地図を読み比べ、位置、単位、対象年をそれぞれの資料で確かめます。');
+    }
+    if (entry.basin) assert.doesNotMatch(europeComparisonQuestion(saved, entry.targetLayer, entry.city, entry.feature, entry.id, '2040048790'), /ポー|2040012730/);
+    if (entry.feature) assert.doesNotMatch(europeComparisonQuestion(saved, entry.targetLayer, entry.city, 'danube', entry.id), /ポー|アルプス/);
+    const second = europeComparisonLinks(state(target.search))[0];
+    const secondUrl = europeComparisonUrl(target, state(target.search), second);
+    assert.equal(secondUrl.searchParams.has('europeFocus'), false, 'an ordinary second entrance cannot retain the old farming focus');
+  }
+});
+
+test('farming statistical choices survive the comparison and named return', () => {
+  const original = state('?layer=cattle&place=FIN&farmYear=2020&farmMeasure=cattle-milk&farmCompare=DEU,FRA&crops=off&livestock=off&single=1');
+  assert.equal(original.farmYear, 2020);
+  assert.equal(original.farmMeasure, 'cattle-milk');
+  assert.deepEqual(original.farmCompare, ['DEU', 'FRA']);
+  // These keys are normalized by the Europe state codec, and the comparison
+  // snapshot must accept the same keys without accepting arbitrary URL state.
+  for (const entry of europeComparisonLinks(original)) {
+    const target = europeComparisonUrl(new URL('https://example.test/atlas/europe/agriculture/'), original, entry);
+    const saved = readEuropeReturn(target.searchParams.get('europeReturn'), countries, cities);
+    assert.deepEqual(saved, original);
+    assert.deepEqual(state(europeNamedReturnUrl(target, saved).search), original);
+  }
+  assert.equal(readEuropeReturn('layer=cattle&farmYear=2020&farmMeasure=cattle-milk&farmCompare=DEU,FRA&unknown=1', countries, cities), null);
 });
 
 test('national population and GDP indicators keep their own meaning in every comparison entrance',()=>{

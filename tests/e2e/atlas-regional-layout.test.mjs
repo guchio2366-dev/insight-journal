@@ -77,7 +77,10 @@ test('regional agriculture, nature/water and population controls preserve the le
       }else if(region==='west-asia'){
         assert.equal(d.querySelectorAll('[data-west-standard-group]').length,field==='agriculture'?2:field==='nature'?4:3);
         if(field==='nature'){
-          assert.equal(d.querySelectorAll('[data-west-subgroup] button').length,3);
+          const waterTopics=[...d.querySelectorAll('[data-west-subgroup="水資源"] button')];
+          assert.deepEqual(waterTopics.map(button=>button.textContent),['河川・地下水','年降水量の分布','観測所の降水量','河川の流域']);
+          assert.deepEqual(waterTopics.map(button=>button.dataset.westTopicButton),['rivers','annual-precipitation','precipitation','basins']);
+          assert.ok(waterTopics.every(button=>!button.disabled),'annual precipitation grid and the original station topic are separately available');
           const rainfall=d.querySelector('[data-west-topic-button="precipitation"]');
           assert.ok(rainfall&&!rainfall.disabled,'measured station rainfall is available as a water topic');
           assert.equal(d.querySelector('[data-west-unavailable="降水量"]'),null,'measured rainfall no longer uses the unavailable placeholder');
