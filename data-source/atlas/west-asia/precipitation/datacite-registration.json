@@ -1,0 +1,23 @@
+{
+  "requestUrl": "https://api.datacite.org/dois/10.5676/DWD_GPCC/CLIMAT_V2025_025",
+  "checkedAt": "2026-10-02",
+  "httpStatus": 200,
+  "doi": "10.5676/dwd_gpcc/climat_v2025_025",
+  "publisher": "Global Precipitation Climatology Centre (GPCC, https://gpcc.dwd.de/) at Deutscher Wetterdienst ",
+  "publicationYear": 2025,
+  "url": "https://opendata.dwd.de/climate_environment/GPCC/html/gpcc_precipitation_analysis_climatology_v2025_doi_download.html",
+  "rightsList": [],
+  "titles": [
+    {
+      "lang": "en",
+      "title": "GPCC Precipitation Analysis Climatology Version 2025 (at 0.25°, 0.5°, 1.0°, 2.5°)",
+      "titleType": null
+    },
+    {
+      "lang": "en",
+      "title": "Monthly Land-Surface Precipitation Analysis Climatology for 12 Month from Rain-Gauges built on GTS-based and Historical Data",
+      "titleType": "Subtitle"
+    }
+  ],
+  "updated": "2025-11-20T11:35:40.000Z"
+}

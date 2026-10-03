@@ -55,8 +55,38 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       const statistics=doc.querySelector('[data-eu-farming-statistics]');
       assert.match(statistics.textContent,/販売総額（米ドル）/);
       assert.match(statistics.textContent,/世界生産.*分母/);
+      assert.match(statistics.textContent,/FAOSTAT.*World/,'世界比の分母を出版社のWorld行としてJavaScriptなしでも説明する');
       assert.match(statistics.textContent,/ゼロという意味ではありません/);
-      assert.ok([...statistics.querySelectorAll('dd')].every(value=>value.textContent.includes('未収録')));
+      const availability=[...statistics.querySelectorAll('.eu-statistics-availability > div')];
+      const unavailable=['販売総額（米ドル）','需給・用途別消費','輸出額・輸出相手国'];
+      for(const label of unavailable){
+        const entry=availability.find(row=>row.querySelector('dt').textContent===label);
+        assert.ok(entry,label);
+        assert.match(entry.querySelector('dd').textContent,/未収録/,`${label}は数量統計で代用しない`);
+      }
+      const scope=availability.find(row=>row.querySelector('dt').textContent==='地図と数量の対象');
+      assert.match(scope.querySelector('dd').textContent,/格子の収穫面積・家畜密度.*国全体の生産量・頭羽数.*別の資料/);
+      assert.match(scope.querySelector('dd').textContent,/集合的な作物区分.*個別品目の統計に置き換えません/);
+      const quantities=statistics.querySelector('[data-eu-farm-numbers]');
+      assert.equal(quantities.dataset.statisticsUrl,'/insight-journal/assets/atlas/europe/farming-statistics-v1/statistics.json.gz');
+      assert.equal(doc.getElementById(quantities.getAttribute('aria-labelledby')),quantities.querySelector('h3'));
+      const message=quantities.querySelector('[data-eu-farm-statistics-message]');
+      assert.equal(message.getAttribute('role'),'status');
+      assert.match(message.textContent,/品目を選ぶと.*数量.*国別比較.*読み込めます/,'概覧では品目選択後の遅延取得を案内する');
+      assert.equal(quantities.querySelector('[data-eu-farm-stat-controls]').hidden,true);
+      assert.equal(quantities.querySelector('[data-eu-farm-measure]').options.length,0,'概覧から特定品目の数量を先に表示しない');
+      const year=quantities.querySelector('[data-eu-farm-year]');
+      assert.deepEqual([...year.options].map(option=>option.value),Array.from({length:10},(_,i)=>String(2024-i)));
+      assert.equal(year.value,'2024');
+      const comparisons=[...quantities.querySelectorAll('[data-eu-farm-compare]')];
+      assert.equal(comparisons.length,2);
+      for(const comparison of comparisons){
+        assert.equal(comparison.value,'');
+        assert.deepEqual([...comparison.options].map(option=>option.value),['',...config.countries.map(country=>country.code)]);
+      }
+      for(const target of ['stat-summary','country-table','series','stat-source','measure-definition'])assert.equal(quantities.querySelector(`[data-eu-farm-${target}]`).hidden,true,target);
+      assert.equal(quantities.querySelector('[data-eu-farm-country-rows]').children.length,0,'取得前に公表値や未収録表を作らない');
+      assert.equal(quantities.querySelector('[data-eu-farm-statistics-retry]').hidden,true);
       assert.equal(statistics.querySelector('svg,canvas'),null);
     }
     if(field==='nature'){

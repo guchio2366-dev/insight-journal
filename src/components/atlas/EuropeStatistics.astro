@@ -3,6 +3,7 @@ import EuropeClimateDiagram from './EuropeClimateDiagram.astro';
 import cities from '../../data/atlas/europe/climate-cities.json';
 import countries from '../../data/atlas/europe/countries.json';
 import type { EuropeField } from '../../data/atlas/europe/layers';
+import { withBase } from '../../lib/urls';
 import '../../styles/atlas-europe-statistics.css';
 
 interface Props { field: EuropeField }
@@ -20,13 +21,39 @@ const countryName = (code: string) => countries.find(country => country.code ===
   <section data-eu-farming-statistics hidden={field !== 'agriculture'} aria-labelledby="europe-farming-statistics-title">
     <header class="eu-statistics-heading">
       <h2 id="europe-farming-statistics-title" data-eu-statistics-title>欧州の農林業の統計</h2>
-      <p>対象：<strong data-eu-statistics-item>欧州の農畜産物</strong>。下の数値は未収録です。地図の収穫面積や家畜密度から、販売総額や生産量を推計していません。</p>
+      <p>対象：<strong data-eu-statistics-item>欧州の農畜産物</strong>。国全体の公表統計と、地図の格子推計を分けて読みます。ロシアの統計は全土です。</p>
     </header>
+    <section class="eu-farm-numbers" data-eu-farm-numbers data-statistics-url={withBase('/assets/atlas/europe/farming-statistics-v1/statistics.json.gz')} aria-labelledby="eu-farm-numbers-title">
+      <h3 id="eu-farm-numbers-title">生産・飼養・木材を国別に比べる</h3>
+      <p data-eu-farm-statistics-message role="status">品目を選ぶと、その品目の数量と国別比較を読み込めます。</p>
+      <p class="eu-statistic-note">世界生産量比・飼養数比・森林面積比の分母は、同年・同品目・同単位でFAOSTATが公表するWorld行です。</p>
+      <button type="button" data-eu-farm-statistics-retry hidden>数量統計を再読み込み</button>
+      <div class="eu-farm-stat-controls" data-eu-farm-stat-controls hidden>
+        <label>数値の対象<select data-eu-farm-measure aria-label="農林業の数値の対象"></select></label>
+        <label>比較年<select data-eu-farm-year aria-label="農林業の比較年">{Array.from({length:10},(_,i)=>2024-i).map(year=><option value={year} selected={year===2024}>{year}年</option>)}</select></label>
+        <label>比較する国 1<select data-eu-farm-compare="0" aria-label="農林業の比較する国1"><option value="">比較しない</option>{countries.map(country=><option value={country.code}>{country.name}</option>)}</select></label>
+        <label>比較する国 2<select data-eu-farm-compare="1" aria-label="農林業の比較する国2"><option value="">比較しない</option>{countries.map(country=><option value={country.code}>{country.name}</option>)}</select></label>
+      </div>
+      <p class="eu-statistic-note" data-eu-farm-measure-definition hidden></p>
+      <div class="eu-farm-stat-summary" data-eu-farm-stat-summary hidden></div>
+      <details class="eu-farm-stat-table" data-eu-farm-country-table hidden open>
+        <summary>同じ年・品目で欧州の国を比べる</summary>
+        <div class="eu-farm-table-scroll" data-eu-farm-country-rows></div>
+      </details>
+      <details class="eu-farm-stat-table" data-eu-farm-series hidden>
+        <summary>2015〜2024年の推移と出典記号</summary>
+        <div class="eu-farm-table-scroll" data-eu-farm-series-rows></div>
+      </details>
+      <details class="eu-farm-stat-source" data-eu-farm-stat-source hidden>
+        <summary>定義・年・出典・利用条件</summary>
+        <div data-eu-farm-stat-source-content></div>
+      </details>
+    </section>
     <dl class="eu-statistics-availability">
       <div><dt>販売総額（米ドル）</dt><dd><span data-eu-statistics-item>欧州の農畜産物</span>の販売総額は未収録です。</dd></div>
       <div><dt>需給・用途別消費</dt><dd><span data-eu-statistics-item>欧州の農畜産物</span>の需給・用途別消費は未収録です。</dd></div>
       <div><dt>輸出額・輸出相手国</dt><dd><span data-eu-statistics-item>欧州の農畜産物</span>の輸出額と相手国別の内訳は未収録です。</dd></div>
-      <div><dt>生産量・世界生産シェア</dt><dd><span data-eu-statistics-item>欧州の農畜産物</span>の生産量と、対応する世界生産量を分母にしたシェアは未収録です。</dd></div>
+      <div><dt>地図と数量の対象</dt><dd>格子の収穫面積・家畜密度と、国全体の生産量・頭羽数は別の資料です。集合的な作物区分を個別品目の統計に置き換えません。</dd></div>
     </dl>
     <p class="eu-statistic-note">「未収録」は、このサイトに数値を収録していないことを示します。販売・生産・輸出がゼロという意味ではありません。</p>
   </section>

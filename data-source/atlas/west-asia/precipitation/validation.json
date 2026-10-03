@@ -1,0 +1,156 @@
+{
+  "sourceTitle": "GPCC Global Precipitation Climatology (1991-2020) version 2025, 0.25 degree",
+  "sourceStart": "1991-01-01",
+  "sourceEnd": "2020-12-31",
+  "sourceRecords": 12,
+  "sourceDimensions": [
+    1440,
+    720
+  ],
+  "completeSourceCells": 291340,
+  "sourceCoordinates": {
+    "firstLongitude": -179.875,
+    "lastLongitude": 179.875,
+    "firstLatitude": 89.875,
+    "lastLatitude": -89.875,
+    "declaredLatitudeUnit": "degrees_south",
+    "usedConvention": "Actual north-positive coordinate array; the inconsistent degrees_south attribute is retained here, not used to flip data."
+  },
+  "orientationSamples": [
+    {
+      "name": "Istanbul",
+      "sampleCoordinate": [
+        28.97,
+        41.01
+      ],
+      "sourceCellCenter": [
+        28.875,
+        41.125
+      ],
+      "monthlyNormals": [
+        77.06999969482422,
+        72.86000061035156,
+        66.44999694824219,
+        44.150001525878906,
+        35.869998931884766,
+        32.790000915527344,
+        27.709999084472656,
+        36.75,
+        64.66000366210938,
+        82.7300033569336,
+        81.25,
+        101.37999725341797
+      ],
+      "annualNormal": 723.6700019836426,
+      "flippedLatitudeAnnual": -1
+    },
+    {
+      "name": "Tehran",
+      "sampleCoordinate": [
+        51.4,
+        35.7
+      ],
+      "sourceCellCenter": [
+        51.375,
+        35.625
+      ],
+      "monthlyNormals": [
+        33.63999938964844,
+        35.099998474121094,
+        43.040000915527344,
+        37.779998779296875,
+        16.579999923706055,
+        3.700000047683716,
+        3.190000057220459,
+        2.640000104904175,
+        2.5,
+        15.119999885559082,
+        33.400001525878906,
+        34.15999984741211
+      ],
+      "annualNormal": 260.84999895095825,
+      "flippedLatitudeAnnual": -1
+    },
+    {
+      "name": "Riyadh",
+      "sampleCoordinate": [
+        46.72,
+        24.63
+      ],
+      "sourceCellCenter": [
+        46.625,
+        24.625
+      ],
+      "monthlyNormals": [
+        17.780000686645508,
+        7.510000228881836,
+        23.170000076293945,
+        21.190000534057617,
+        6.110000133514404,
+        0,
+        0,
+        0.23999999463558197,
+        0,
+        1,
+        13.069999694824219,
+        13.819999694824219
+      ],
+      "annualNormal": 103.89000104367733,
+      "flippedLatitudeAnnual": 1671.030014038086
+    },
+    {
+      "name": "Beirut",
+      "sampleCoordinate": [
+        35.49,
+        33.87
+      ],
+      "sourceCellCenter": [
+        35.375,
+        33.875
+      ],
+      "monthlyNormals": [
+        170.3699951171875,
+        131.19000244140625,
+        76.33999633789062,
+        35.33000183105469,
+        13.010000228881836,
+        1.2000000476837158,
+        0.25999999046325684,
+        0.11999999731779099,
+        9.6899995803833,
+        57.22999954223633,
+        104.02999877929688,
+        155.97000122070312
+      ],
+      "annualNormal": 754.7399951145053,
+      "flippedLatitudeAnnual": -1
+    },
+    {
+      "name": "Muscat",
+      "sampleCoordinate": [
+        58.59,
+        23.58
+      ],
+      "sourceCellCenter": [
+        58.625,
+        23.625
+      ],
+      "monthlyNormals": [
+        11.140000343322754,
+        6.670000076293945,
+        8.899999618530273,
+        7.909999847412109,
+        1.5700000524520874,
+        9.1899995803833,
+        1.649999976158142,
+        1.149999976158142,
+        1.5299999713897705,
+        0.9800000190734863,
+        6.809999942779541,
+        7.090000152587891
+      ],
+      "annualNormal": 64.58999955654144,
+      "flippedLatitudeAnnual": -1
+    }
+  ]
+}

@@ -12,6 +12,9 @@ import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import { createEuropePopulationCases, cultureSelection, cultureColor, cultureBounds, type CultureMapData, type CultureBounds } from './atlas-europe-population-cases';
 import { europeDrainageBasins, europeDrainageBasinByIndex, europeDrainageIndexForBasin, normaliseEuropeDrainageBasin, europeDrainageOutline } from './atlas-europe-drainage';
 import drainageManifest from '../../public/assets/atlas/europe/drainage-v1/manifest.json' with {type:'json'};
+import { readEuropeFarmingFocus, writeEuropeFarmingFocus } from '../data/atlas/europe/farming-water-comparisons';
+import { createEuropeFarmingStatistics } from '../scripts/atlas-europe-farming-statistics';
+import { europeFarmAvailableMetrics } from '../data/atlas/europe/farming-statistics';
 type Country = { code: string; name: string; region: string };
 type City = { id: string; name: string; country: string; coordinates: [number, number] };
 type Feature = { type: 'Feature'; properties: { code: string; kind: string }; geometry: Geometry };
@@ -34,6 +37,7 @@ export function initEuropeAtlas() {
   state.compare=[]; // Legacy comparison URLs retain the primary city's statistics.
   const valueCache = new Map<string, Promise<Float32Array>>();
   let gridRequest = 0;
+  let focusRequest = 0;
   let drainageRequest=0;
   let drainageDrawn='';
   let drainageImage='';
@@ -46,6 +50,17 @@ export function initEuropeAtlas() {
   let loadTimer: ReturnType<typeof setTimeout> | undefined;
   const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? true;
   const regionNames: Record<string, string> = { all: '欧州全体', north: '北欧', west: '西欧', south: '南欧', east: '東欧' };
+  const comparisonDetails=query<HTMLDetailsElement>('.eu-comparison-origin');
+  const comparisonDetailsHome=document.createComment('Europe comparison methods');comparisonDetails.before(comparisonDetailsHome);
+  const farmStatistics=createEuropeFarmingStatistics(root,{
+    countries,onCountry:selectCountry,
+    onChange:choice=>{
+      Object.assign(state,choice);
+      const compare=[...new Set(choice.farmCompare??[])].filter(code=>code!==state.place&&countries.some(country=>country.code===code)).slice(0,2);
+      if(compare.length)state.farmCompare=compare;else delete state.farmCompare;
+      commit(false);
+    },
+  });
   const cultureActive=()=>state.layer==='ethnicity'||state.layer==='religion';
   let cultureData:CultureMapData={type:'FeatureCollection',features:[]};
   let cultureRunning=false;
@@ -167,6 +182,7 @@ export function initEuropeAtlas() {
   function setLayer(id:string) {
     if(id==='overlay' && state.layer!=='overlay')state.returnLayer=state.layer;
     state.layer=id;
+    if(state.farmMeasure&&!europeFarmAvailableMetrics(id).some(metric=>metric.id===state.farmMeasure))delete state.farmMeasure;
     if(!farmingItems.some(item=>item.id===id))delete state.single;
     query<HTMLElement>('[data-eu-farm-candidates]').hidden=true;
     commit(false);
@@ -208,10 +224,11 @@ export function initEuropeAtlas() {
     single.textContent=farm.item?`${farm.item.name}のみの表示に切り替える`:'';
     query<HTMLElement>('[data-eu-return-multi]').hidden=!farm.single;
     query<HTMLElement>('[data-eu-climate-statistics]').hidden=!climateReader()||!state.city;
-    query<HTMLElement>('[data-eu-farming-statistics]').hidden=!farm.active;
-    const statisticsName=farm.item?.name??'欧州の農畜産物';
+    query<HTMLElement>('[data-eu-farming-statistics]').hidden=layer.field!=='agriculture';
+    const statisticsName=farm.item?.name??(['forest','treecover'].includes(layer.id)?'林業':'欧州の農畜産物');
     query('[data-eu-statistics-title]').textContent=statisticsName+'の統計';
     all<HTMLElement>('[data-eu-statistics-item]').forEach(el=>{el.textContent=statisticsName;});
+    void farmStatistics.update(state);
     query<HTMLElement>('[data-eu-subject-intro]').hidden=!!feature;
     const card=query<HTMLElement>('[data-eu-feature-card]');card.replaceChildren();card.hidden=!feature;
     if(feature){
@@ -238,6 +255,22 @@ export function initEuropeAtlas() {
   function updateComparison() {
     const source=readEuropeReturn(new URL(location.href).searchParams.get('europeReturn')??'',countries,ids);
     const layer=subject(),panel=query<HTMLElement>('[data-eu-comparison-context]');
+    const focus=comparisonFocus();
+    const focusPanel=query<HTMLElement>('[data-eu-farming-comparison-focus]');
+    focusPanel.hidden=!focus;
+    root!.classList.toggle('has-eu-farming-focus',!!focus);
+    query<HTMLElement>('.eu-reader-summary').hidden=!!focus;
+    if(focus)focusPanel.querySelector('details')!.append(comparisonDetails);
+    else comparisonDetailsHome.after(comparisonDetails);
+    const focusValue=query<HTMLElement>('[data-eu-farming-focus-value]');
+    focusValue.hidden=!focus||!layer.grid||layer.id==='drainage';
+    if(focus){
+      query('[data-eu-farming-focus-description]').textContent=focus.description;
+      query('[data-eu-farming-focus-scope]').textContent=`${focus.period}。${focus.question}`;
+      const sources=query('[data-eu-farming-focus-sources]');sources.replaceChildren();
+      for(const source of focus.sources){const a=document.createElement('a');a.href=source.url;a.textContent=source.label;a.className='eu-source-link';sources.append(a);}
+      if(layer.grid&&layer.id!=='drainage')void showFocusValue();
+    }else focusRequest++;
     panel.hidden=!source;root!.classList.toggle('has-eu-comparison',!!source);
     const links=query<HTMLElement>('[data-eu-comparison-links]');links.replaceChildren();
     query(cultureActive()?'[data-culture-takeaway]':'[data-eu-subject-takeaway]').after(links);
@@ -247,8 +280,8 @@ export function initEuropeAtlas() {
     if(source) {
       const sourceLayer=config.layers.find(l=>l.id===(source.layer==='overlay'?(source.returnLayer==='climate'?'wheat':source.returnLayer):source.layer))!;
       const current=climateReader()?cities.find(c=>c.id===state.city)?.name:visibleFeatures().find(f=>f.id===state.feature&&featureVisible(f.id))?.name;
-      query('[data-eu-comparison-heading]').textContent=`${europeComparisonSourceLabel(source)} × ${current??layer.title}`;
-      query('[data-eu-comparison-question]').textContent=europeComparisonQuestion(source,layer.id,state.city,state.feature);
+      query('[data-eu-comparison-heading]').textContent=`${europeComparisonSourceLabel(source)} × ${focus?.title??current??layer.title}`;
+      query('[data-eu-comparison-question]').textContent=europeComparisonQuestion(source,layer.id,state.city,state.feature,focus?.id,state.basin);
       const back=query<HTMLAnchorElement>('[data-eu-comparison-return]');back.href=europeNamedReturnUrl(new URL(location.href),source).href;back.textContent=`${europeComparisonSourceLabel(source)}の元の選択へ戻る`;
       const originalFarm=farmingPresentation(source,farmingItems);
       query('[data-eu-comparison-scope]').textContent=originalFarm.active
@@ -259,6 +292,49 @@ export function initEuropeAtlas() {
       const attribution=query<HTMLAnchorElement>('[data-eu-comparison-source]');attribution.href=originalFarm.active?new URL(location.pathname.split('/atlas/europe/')[0]+'/assets/atlas/europe/farming-overview-v2/manifest.json',location.origin).href:sourceLayer.source;attribution.textContent=originalFarm.active?'元分布の出典・抽出方法':'元の図の原典';
     }
     renderEuropeOrigin(root!,source,layer,config,map);
+    // The original concentration key belongs immediately under its overlay.
+    // Basin controls remain available below, without displacing that colour key.
+    if(focus)query<HTMLElement>('.eu-map-stage').after(query('[data-eu-origin-key]'));
+    updateFocusMarker();
+  }
+
+  function comparisonFocus(){
+    const focus=readEuropeFarmingFocus(location.search,subject().id);
+    if(!focus)return undefined;
+    const source=readEuropeReturn(new URL(location.href).searchParams.get('europeReturn')??'',countries,ids);
+    return source&&europeComparisonLinks(source).some(item=>item.id===focus.id)?focus:undefined;
+  }
+  async function showFocusValue(){
+    const focus=comparisonFocus(),layer=subject(),token=++focusRequest;
+    if(!focus||!layer.grid)return;
+    const target=query<HTMLElement>('[data-eu-farming-focus-value]');
+    target.textContent='比較地点の格子を確認しています…';
+    try{
+      const values=await gridValues(layer);
+      if(token!==focusRequest||comparisonFocus()?.id!==focus.id)return;
+      while(valueCache.size>3)valueCache.delete(valueCache.keys().next().value!);
+      const cell=layer.gridType==='display'?displayCell(values,[...focus.point],layer.nodata):wheatCell(values,[...focus.point]);
+      const text=!cell||cell.value===null?'データなし':`${cell.value.toLocaleString('ja-JP',{maximumFractionDigits:1})} ${layer.unit}`;
+      target.textContent=`比較地点：${text}（${layer.period}）${cell?` · ${layer.gridType==='display'?'表示':'原'}格子中心 ${cell.center[1].toFixed(3)}°N, ${cell.center[0].toFixed(3)}°E`:''}`;
+    }catch{
+      if(token===focusRequest)target.textContent='比較地点の数値を取得できませんでした。表示を切り替えると再確認します。';
+    }
+  }
+  function updateFocusMarker(){
+    const marker=query<HTMLElement>('[data-eu-farming-focus-marker]'),focus=comparisonFocus();
+    marker.hidden=!focus;
+    if(!focus)return;
+    const stage=query<HTMLElement>('.eu-map-stage').getBoundingClientRect();
+    let position:{x:number;y:number};
+    if(map&&liveMap.classList.contains('is-ready'))position=map.project([...focus.point] as [number,number]);
+    else {
+      const matrix=staticMap.getScreenCTM();if(!matrix){marker.hidden=true;return;}
+      const [x,y]=project([...focus.point]),point=new DOMPoint(x,y).matrixTransform(matrix);
+      position={x:point.x-stage.left,y:point.y-stage.top};
+    }
+    if(position.x<0||position.y<0||position.x>stage.width||position.y>stage.height){marker.hidden=true;return;}
+    marker.style.left=`${position.x}px`;marker.style.top=`${position.y}px`;
+    query('[data-eu-farming-focus-point-label]').textContent=focus.pointLabel;
   }
 
   function layers() {
@@ -373,6 +449,8 @@ export function initEuropeAtlas() {
   }
 
   function selectionBounds() {
+    const focus=comparisonFocus();
+    if(focus)return [[focus.focusBounds[0],focus.focusBounds[1]],[focus.focusBounds[2],focus.focusBounds[3]]] as [[number,number],[number,number]];
     const codes = countries.filter(c => state.place ? c.code === state.place : state.region === 'all' || c.region === state.region).map(c => c.code);
     if (state.region === 'all' && !state.place) return [[-25, 32], [65, 73]] as [[number, number], [number, number]];
     return visibleBounds(geography.features.filter(f => codes.includes(f.properties.code)).map(f => f.geometry));
@@ -388,11 +466,12 @@ export function initEuropeAtlas() {
     const [right, top] = project(bounds[1]);
     const width = Math.max(right - left, 24), height = Math.max(bottom - top, 24);
     box = [(left + right - width) / 2 - width * .12, (top + bottom - height) / 2 - height * .12, width * 1.24, height * 1.24];
-    if (state.region === 'all' && !state.place) box = [0, 0, frame.width, frame.height];
+    if (state.region === 'all' && !state.place&&!comparisonFocus()) box = [0, 0, frame.width, frame.height];
     staticMap.setAttribute('viewBox', box.join(' '));
     staticSymbols();
     map?.fitBounds(bounds, { padding: {top:20,bottom:42,left:14,right:14}, maxZoom: 7, duration: reduced ? 0 : 450 });
     annotations.refresh();
+    updateFocusMarker();
   }
   function render(refit = false) {
     query<HTMLElement>('[data-eu-farm-candidates]').hidden=true;
@@ -476,10 +555,11 @@ export function initEuropeAtlas() {
       result.removeAttribute('aria-busy');
     }
   }
-  function commit(refit = false) { invalidateGridReading();history.pushState({}, '', writeEuropeState(new URL(location.href), state)); render(refit); }
+  function commit(refit = false, keepFocus = false) { invalidateGridReading();const focus=keepFocus?comparisonFocus():undefined;history.pushState({}, '', writeEuropeFarmingFocus(writeEuropeState(new URL(location.href), state),focus?.id)); render(refit); }
   function selectCountry(code: string) {
     const country = countries.find(c => c.code === code);
     state.place = country?.code ?? '';
+    if(state.farmCompare){state.farmCompare=state.farmCompare.filter(code=>code!==state.place);if(!state.farmCompare.length)delete state.farmCompare;}
     delete state.feature;
     if (country) {
       state.region = country.region;
@@ -541,8 +621,8 @@ export function initEuropeAtlas() {
       loadTimer = setTimeout(() => { if (token === generation) fallback(); }, 15000);
       if (matchMedia('(pointer: coarse)').matches) map.dragPan.disable();
       // The map footer and source sections provide attribution for the local datasets.
-      map.on('move',()=>annotations.refresh(false));
-      map.on('moveend',()=>annotations.refresh());
+      map.on('move',()=>{annotations.refresh(false);updateFocusMarker();});
+      map.on('moveend',()=>{annotations.refresh();updateFocusMarker();});
       map.on('error', () => { if (!failed && token === generation) fallback(); });
       map.getCanvas().addEventListener('webglcontextlost', fallback, { once: true });
       map.on('load', () => {
@@ -609,10 +689,10 @@ export function initEuropeAtlas() {
     const factor = button.dataset.euZoom === 'in' ? .7 : 1 / .7;
     if (map) { factor < 1 ? map.zoomIn() : map.zoomOut(); return; }
     const w = Math.min(frame.width * 2, Math.max(24, box[2] * factor));
-    const h = w / box[2] * box[3]; box = [box[0] + (box[2] - w) / 2, box[1] + (box[3] - h) / 2, w, h]; staticMap.setAttribute('viewBox', box.join(' '));staticSymbols();annotations.refresh();
+    const h = w / box[2] * box[3]; box = [box[0] + (box[2] - w) / 2, box[1] + (box[3] - h) / 2, w, h]; staticMap.setAttribute('viewBox', box.join(' '));staticSymbols();annotations.refresh();updateFocusMarker();
   }));
-  query('[data-eu-render]').addEventListener('click', () => { state.render = failed || state.render === 'static' ? 'auto' : 'static'; disposeMap(); commit(true); void startMap(); });
+  query('[data-eu-render]').addEventListener('click', () => { state.render = failed || state.render === 'static' ? 'auto' : 'static'; disposeMap(); commit(true,true); void startMap(); });
   window.addEventListener('popstate', () => { invalidateGridReading();const previousRender = state.render; state = readEuropeState(location.search, countries, ids, config.initialLayer); state.compare=[]; render(true); if (previousRender !== state.render) { disposeMap(); void startMap(); } });
-  new ResizeObserver(()=>{staticSymbols();sizeReader();}).observe(staticMap);
+  new ResizeObserver(()=>{staticSymbols();sizeReader();updateFocusMarker();}).observe(staticMap);
   render(true); void startMap();
 }

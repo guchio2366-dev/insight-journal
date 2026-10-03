@@ -5,9 +5,12 @@ import {createHash} from 'node:crypto';
 import {gzipSync,gunzipSync} from 'node:zlib';
 import {readWestState,westSearch,gridIndex,decodeWestGrid,zoomWestView,panWestView} from '../../src/lib/atlas-west-asia-state.mjs';
 import {westFields,westTopics,observation} from '../../src/data/atlas/west-asia-topics.mjs';
+import {westPrecipitationLayer} from '../../src/lib/atlas-west-asia-precipitation.mjs';
 const base=new URL('../../public/assets/atlas/west-asia-v1/',import.meta.url);
 const json=async f=>JSON.parse(await readFile(new URL(f,base),'utf8'));
-const data=await json('data.json');
+const snapshot=await json('data.json');
+const annualManifest=JSON.parse(await readFile(new URL('../west-asia-precipitation-v1/manifest.json',base),'utf8'));
+const data={...snapshot,layers:[...snapshot.layers,westPrecipitationLayer(annualManifest,snapshot)]};
 
 test('西アジア18とイラン・エジプトの20対象を全4分野で扱い、未収録を0にしない',()=>{
  assert.deepEqual(data.countries.map(c=>c.code).sort(),'ARM AZE BHR CYP GEO IRQ ISR JOR KWT LBN OMN QAT SAU PSE SYR TUR ARE YEM IRN EGY'.split(' ').sort());

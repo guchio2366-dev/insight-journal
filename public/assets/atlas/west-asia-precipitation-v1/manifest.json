@@ -1,0 +1,278 @@
+{
+  "schemaVersion": 1,
+  "retrievedAt": "2026-10-02",
+  "dataset": "GPCC Precipitation Analysis Climatology Version 2025 at 0.25°, reference period 1991–2020",
+  "publisher": "Global Precipitation Climatology Centre (GPCC) at Deutscher Wetterdienst (DWD)",
+  "sourceUrl": "https://opendata.dwd.de/climate_environment/GPCC/html/gpcc_precipitation_analysis_climatology_v2025_doi_download.html",
+  "downloadUrl": "https://opendata.dwd.de/climate_environment/GPCC/GPCC_Precipitation_Analysis_Climatology/Version_2025/gpcc_precipitation_analysis_climatology_1991_2020_v2025_025.nc.gz",
+  "checksumUrl": "https://opendata.dwd.de/climate_environment/GPCC/GPCC_Precipitation_Analysis_Climatology/Version_2025/readme_md5_gpcc_precipitation_analysis_climatology_1991_2020_v2025.txt",
+  "doi": "https://doi.org/10.5676/DWD_GPCC/CLIMAT_V2025_025",
+  "period": "1991-01-01/2020-12-31",
+  "edition": "2025",
+  "inputBytes": 28442738,
+  "inputSha256": "3bd80d05df52572f6409b594ae26b43e9045147cb3c25254cddb5a934c16e5c5",
+  "inputMd5": "d701c717e08ce6ad457c9f4004984d65",
+  "originalResolution": "0.25° regular latitude/longitude grid",
+  "sourceCRS": "geographic latitude/longitude",
+  "sourceVariable": "gpcc_precip",
+  "sourceUnit": "mm/month",
+  "sourceNoData": -99999.9921875,
+  "sourceMethod": "Rain-gauge-based interpolated monthly climatology. The fixed reference-period product uses stations with at least 20 complete years, according to the publisher.",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://www.dwd.de/EN/service/legal_notice/legal_notice.html",
+  "licenseEvidence": {
+    "publisherProductLinksToLegalNotice": true,
+    "officialIndexedLegalNoticeStatesCcBy40": true,
+    "officialIndexedQuote": "Re-use is permitted solely under the terms of the Creative Commons license BY 4.0 (CC BY 4.0) providing the source is duly acknowledged.",
+    "checkedAt": "2026-10-02",
+    "directLegalNoticeStatus": 403,
+    "dataCiteDoi": "10.5676/dwd_gpcc/climat_v2025_025",
+    "dataCiteRightsList": [],
+    "note": "DataCite confirms the exact publisher and product URL but supplies no registered rights. The license evidence is the official DWD indexed legal-notice text linked by the product page, not a DataCite rights claim. No access bypass used."
+  },
+  "attribution": "Rustemeier, Elke; Finger, Peter; Schirmeister, Zora; Ziese, Markus (2025): GPCC Precipitation Analysis Climatology Version 2025 at 0.25°. DOI: 10.5676/DWD_GPCC/CLIMAT_V2025_025. GPCC/DWD, CC BY 4.0. Modified: 12-month annual sum, target-country display masking, nearest-neighbour Web Mercator display and colour classes.",
+  "bounds": [
+    23,
+    10,
+    64,
+    45
+  ],
+  "width": 1000,
+  "height": 987,
+  "projection": "EPSG:3857",
+  "frame": {
+    "width": 1000,
+    "height": 987,
+    "west": 23,
+    "south": 10,
+    "east": 64,
+    "north": 45
+  },
+  "bounds3857": [
+    2560348.288245292,
+    1118889.9748579597,
+    7124447.410769508,
+    5621521.486192066
+  ],
+  "unit": "mm/year",
+  "breaks": [
+    100,
+    250,
+    500,
+    750,
+    1000,
+    1500,
+    2000
+  ],
+  "colors": [
+    "#f3ead6",
+    "#e2e5c7",
+    "#c8dbc8",
+    "#a6cfcf",
+    "#7ab9cb",
+    "#4c9abd",
+    "#2778a5",
+    "#14537d"
+  ],
+  "lookup": {
+    "width": 1000,
+    "height": 987,
+    "encoding": "little-endian float32 row-major gzip",
+    "nodata": -1,
+    "uncompressedBytes": 3948000,
+    "uncompressedSha256": "e22c55d9fd4a3d8c33425c88a42616374e109ccd11491749e3d36dbe44d1b74d",
+    "gridType": "display",
+    "valueMeaning": "Annual precipitation normal of the nearest original 0.25° source cell. Zero is valid; -1 is missing or outside target-country land."
+  },
+  "processing": {
+    "annualSum": "Sum all 12 monthly normals only where every source month is finite, nonnegative and not nodata. Any missing month makes the annual normal missing.",
+    "reprojection": "Nearest original source-cell sampling at EPSG:3857 display pixel centres; no additional spatial interpolation.",
+    "displayMask": "Existing 20 target-country outlines, with holes preserved; source ocean/missing cells stay missing. Source mask is not expanded into coastal gaps or microstates.",
+    "displayGridIsOriginalResolution": false,
+    "latitudeOrientation": {
+      "firstLongitude": -179.875,
+      "lastLongitude": 179.875,
+      "firstLatitude": 89.875,
+      "lastLatitude": -89.875,
+      "declaredLatitudeUnit": "degrees_south",
+      "usedConvention": "Actual north-positive coordinate array; the inconsistent degrees_south attribute is retained here, not used to flip data."
+    },
+    "rawSourceIncludedInRepository": false,
+    "sourceMutation": false,
+    "numericStorage": "Monthly source float32 values summed in float64, then rounded once with Math.fround; PNG colour classification and the float32 display lookup use that same rounded value.",
+    "colorClassificationBasis": "Stored float32 display lookup value"
+  },
+  "limitations": [
+    "A 0.25° source grid cannot resolve local rainfall within small countries or individual mountain valleys; the 1000×987 rendering does not increase source resolution.",
+    "Annual precipitation is not river discharge, groundwater recharge, available water supply or freshwater availability.",
+    "Different source cells have different station support. Rain-gauge interpolation and the source baseline are retained; no uncertainty interval is invented.",
+    "Ocean cells, source missing values, incomplete 12-month cells and land outside the 20-country display mask are transparent/missing; zero precipitation is distinct.",
+    "Country display geometry only clips the map. No national average, area-weighted statistic, water volume or country-specific quantity is calculated.",
+    "Small countries and coastal slivers can have display land pixels without a valid original source cell. Nearby cells or other countries are never substituted."
+  ],
+  "validation": {
+    "sourceRecords": 12,
+    "completeSourceCells": 291340,
+    "validDisplayPixels": 460165,
+    "displayRangeMmPerYear": [
+      0.4000000059604645,
+      2322.030029296875
+    ],
+    "unresolvedDisplayCountries": [],
+    "allMissingDisplayCountries": []
+  },
+  "countryCoverage": [
+    {
+      "code": "ARE",
+      "displayPixelCenters": 4079,
+      "validDisplayPixelCenters": 4079,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "ARM",
+      "displayPixelCenters": 2451,
+      "validDisplayPixelCenters": 2451,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "AZE",
+      "displayPixelCenters": 7131,
+      "validDisplayPixelCenters": 7131,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "BHR",
+      "displayPixelCenters": 41,
+      "validDisplayPixelCenters": 41,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "CYP",
+      "displayPixelCenters": 627,
+      "validDisplayPixelCenters": 627,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "EGY",
+      "displayPixelCenters": 60562,
+      "validDisplayPixelCenters": 60562,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "GEO",
+      "displayPixelCenters": 6081,
+      "validDisplayPixelCenters": 6081,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "IRN",
+      "displayPixelCenters": 110605,
+      "validDisplayPixelCenters": 110605,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "IRQ",
+      "displayPixelCenters": 30017,
+      "validDisplayPixelCenters": 30017,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "ISR",
+      "displayPixelCenters": 1464,
+      "validDisplayPixelCenters": 1464,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "JOR",
+      "displayPixelCenters": 5849,
+      "validDisplayPixelCenters": 5849,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "KWT",
+      "displayPixelCenters": 1102,
+      "validDisplayPixelCenters": 1102,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "LBN",
+      "displayPixelCenters": 706,
+      "validDisplayPixelCenters": 706,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "OMN",
+      "displayPixelCenters": 17197,
+      "validDisplayPixelCenters": 17197,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "PSE",
+      "displayPixelCenters": 409,
+      "validDisplayPixelCenters": 409,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "QAT",
+      "displayPixelCenters": 659,
+      "validDisplayPixelCenters": 659,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "SAU",
+      "displayPixelCenters": 111846,
+      "validDisplayPixelCenters": 111846,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "SYR",
+      "displayPixelCenters": 13362,
+      "validDisplayPixelCenters": 13362,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "TUR",
+      "displayPixelCenters": 62303,
+      "validDisplayPixelCenters": 62303,
+      "missingDisplayPixelCenters": 0
+    },
+    {
+      "code": "YEM",
+      "displayPixelCenters": 23674,
+      "validDisplayPixelCenters": 23674,
+      "missingDisplayPixelCenters": 0
+    }
+  ],
+  "inputs": [
+    {
+      "path": "public/assets/atlas/west-asia-v1/geography.json",
+      "sha256": "0f88169c471a3943751f1a665cb37df20cf7808b3462edc439484853f8c0a163",
+      "role": "Existing 20 target-country display mask"
+    },
+    {
+      "path": "data-source/atlas/west-asia/precipitation/datacite-registration.json",
+      "sha256": "4a190fce229086644299adcde256fee7f06562dd110c08908648c45fcb1167be",
+      "role": "Actual exact-DOI DataCite registration excerpt; empty registered rights retained"
+    },
+    {
+      "path": "data-source/atlas/west-asia/precipitation/source.json",
+      "sha256": "eef8711e54ef8a3c28c40dbcf3bd79b89b69a2f348a3385ea6cecec12cafdc78",
+      "role": "Pinned source identity, baseline, license evidence and raw input hash"
+    },
+    {
+      "path": "data-source/atlas/west-asia/precipitation/validation.json",
+      "sha256": "5d5bc93b5bdebbe39a3a99e51df6827d3e61566d4a9add9c7a92b506ede8b219",
+      "role": "Actual NetCDF source metadata, coordinates and monthly orientation samples"
+    }
+  ],
+  "files": {
+    "precipitation.png": {
+      "sha256": "16adfcff04425f42f371745ea8da4efa85de643ed0ad4946a49d7a9d2a3f5edb",
+      "bytes": 17393
+    },
+    "values.bin.gz": {
+      "sha256": "a38c40a4c9b81b59c4fc16eef047e18fef61aa2fd0d2d3d4f37336bc92d8373a",
+      "bytes": 65402
+    }
+  }
+}
