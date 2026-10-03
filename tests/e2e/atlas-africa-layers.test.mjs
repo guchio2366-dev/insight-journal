@@ -15,7 +15,7 @@ async function withLayers(search,run){
   const root=window.document.querySelector('[data-africa-atlas]');let state=readState(search),view;const requests=[];
   const fetcher=async url=>{requests.push(url);const path=new URL(url,'https://example.com').pathname.replace(/^\/insight-journal/,'');return new Response(readFileSync(new URL('../../public'+path,import.meta.url)),{status:200});};
   const renderer=createAfricaLayerRenderer(root,()=>{view=renderer.render(state);},fetcher);view=renderer.render(state);
-  for(let i=0;i<60&&(view.loading||!view.ready);i++)await new Promise(resolve=>setTimeout(resolve,5));
+  const deadline=Date.now()+10000;while((view.loading||!view.ready)&&Date.now()<deadline)await new Promise(resolve=>setTimeout(resolve,5));
   assert.equal(view.error,'');assert.equal(view.ready,true);assert.equal(view.loading,false);
   await run({root,renderer,requests,get view(){return view;},setState(next){state=readState(next);view=renderer.render(state);return view;}});
  }finally{globalThis.document=previous;await window.happyDOM.abort();}

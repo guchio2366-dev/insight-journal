@@ -144,7 +144,7 @@ export function initializeAfricaAtlas() {
   const source=query<HTMLAnchorElement>('[data-theme-source]');source.hidden=!actual.sourceUrl;if(actual.sourceUrl){source.href=actual.sourceUrl;source.textContent=actual.sourceLabel;}
   query<HTMLElement>('[data-theme-details]').replaceChildren(make('p',actual.method));
   if(agriculture){
-   text('[data-theme-title]',agriculture.title);text('[data-theme-takeaway]',actual.ready?agriculture.takeaway:actual.error?'分布の取得に失敗しました。再読込できます。':'2020年のモデル分布を読み込んでいます。');
+   text('[data-theme-title]',agriculture.title);text('[data-theme-takeaway]',actual.ready?state.context?agriculture.compareTakeaway:agriculture.takeaway:actual.error?'分布の取得に失敗しました。再読込できます。':'2020年のモデル分布を読み込んでいます。');
    text('[data-theme-takeaway-detail]',state.context?agriculture.compareText:agriculture.reading);text('[data-theme-caveat]',agriculture.scope);
    text('[data-africa-layer-scope]','モデル推計。0は値のある格子、値なしは0と区別します。');
    if(!actual.sourceUrl){source.hidden=false;source.href=agriculture.source;source.textContent=agriculture.sourceLabel;}
