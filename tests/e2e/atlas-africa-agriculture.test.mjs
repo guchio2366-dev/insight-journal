@@ -1,0 +1,29 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {Window} from 'happy-dom';
+import {initializeAfricaAtlas} from '../../src/scripts/atlas-africa.ts';
+
+test('agriculture controls preserve independent products and restore the original map after comparison and reload',async()=>{
+ const window=new Window({url:'https://example.com/insight-journal/atlas/africa/?field=agriculture&topic=farming&crop=rice&cropMeasure=production&livestock=goats&place=KEN&compare=ETH&year=2023&zoom=all'});
+ const previous=Object.fromEntries(['window','document','location','history','fetch'].map(key=>[key,globalThis[key]]));
+ const wait=async condition=>{const deadline=Date.now()+5000;while(!condition()&&Date.now()<deadline)await new Promise(resolve=>setTimeout(resolve,5));assert.ok(condition(),'expected UI ready');};
+ try{
+  for(const key of ['window','document','location','history'])globalThis[key]=window[key];
+  globalThis.fetch=async url=>new Response(readFileSync(new URL('../../public'+new URL(url,'https://example.com').pathname.replace(/^\/insight-journal/,''),import.meta.url)),{status:200});
+  window.document.write(readFileSync(new URL('../../dist/atlas/africa/index.html',import.meta.url),'utf8').replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,''));
+  const root=window.document.querySelector('[data-africa-atlas]'),map=root.querySelector('.africa-map');map.getBoundingClientRect=()=>({left:0,top:0,width:645,height:416});
+  for(const path of root.querySelectorAll('[data-country-path]'))path.getBBox=()=>({x:10,y:10,width:100,height:100});
+  initializeAfricaAtlas();await wait(()=>root.querySelector('[data-africa-raster="crop-rice-production"]')&&root.querySelector('[data-africa-layer-category]').options.length>2);
+  assert.equal(root.querySelectorAll('[data-africa-commodity]').length,4);assert.equal(root.querySelectorAll('[data-africa-crop-measure]').length,2);assert.equal(root.querySelector('[data-africa-commodity="rice"]').getAttribute('aria-pressed'),'true');assert.equal(root.querySelector('[data-africa-crop-measure="production"]').getAttribute('aria-pressed'),'true');
+  const legend=[...root.querySelectorAll('[data-africa-layer-class]')].map(button=>button.getAttribute('aria-label'));
+  const period=root.querySelector('[data-period]').textContent;assert.match(period,/2020/);assert.match(root.querySelector('[data-unit]').textContent,/t/);assert.match(root.querySelector('[data-africa-layer-legend]').textContent,/0とは断定しません/);
+  root.querySelector('[data-theme-comparison]').click();assert.equal(new URL(window.location.href).searchParams.get('context'),'AG.LND.ARBL.ZS');assert.ok(root.querySelector('[data-africa-raster="crop-rice-production"]'));assert.deepEqual([...root.querySelectorAll('[data-africa-layer-class]')].map(button=>button.getAttribute('aria-label')),legend);assert.equal(root.querySelector('[data-africa-statistics-key]').hidden,false);assert.match(root.querySelector('[data-theme-takeaway-detail]').textContent,/耕地割合は選んだ作物の/);assert.match(root.querySelector('[data-theme-return]').textContent,/ケニア/);
+  const overview=new URL(root.querySelector('[data-africa-overview-link]').href);assert.equal(overview.searchParams.get('crop'),'rice');assert.equal(overview.searchParams.get('cropMeasure'),'production');assert.equal(overview.searchParams.get('livestock'),'goats');assert.ok(overview.searchParams.get('sourceState'));
+  window.dispatchEvent(new window.PopStateEvent('popstate'));const place=root.querySelector('[data-place]');place.value='TZA';place.dispatchEvent(new window.Event('change'));assert.match(root.querySelector('[data-theme-return]').textContent,/ケニア/);root.querySelector('[data-theme-return]').click();assert.equal(new URL(window.location.href).searchParams.has('context'),false);assert.equal(new URL(window.location.href).searchParams.get('place'),'KEN');assert.equal(new URL(window.location.href).searchParams.get('cropMeasure'),'production');assert.ok(root.querySelector('[data-africa-raster="crop-rice-production"]'));
+  const year=root.querySelector('[data-year]');year.value='2024';year.dispatchEvent(new window.Event('change'));assert.equal(root.querySelector('[data-period]').textContent,period);assert.match(root.querySelector('[data-year-note]').textContent,/2020年固定/);
+  root.querySelector('[data-africa-topic="livestock"]').click();await wait(()=>root.querySelector('[data-africa-raster="livestock-goats"]'));assert.equal(root.querySelectorAll('[data-africa-commodity]').length,3);assert.equal(root.querySelectorAll('[data-africa-crop-measure]').length,0);assert.match(root.querySelector('[data-unit]').textContent,/頭\/km²/);
+  root.querySelector('[data-theme-comparison]').click();assert.equal(new URL(window.location.href).searchParams.get('context'),'NV.AGR.TOTL.ZS');assert.ok(root.querySelector('[data-africa-raster="livestock-goats"]'));assert.match(root.querySelector('[data-theme-takeaway-detail]').textContent,/畜産だけの価値や家畜の頭数ではありません/);
+  root.querySelector('[data-theme-return]').click();root.querySelector('[data-africa-topic="farming"]').click();await wait(()=>root.querySelector('[data-africa-raster="crop-rice-production"]'));assert.equal(root.querySelector('[data-africa-commodity="rice"]').getAttribute('aria-pressed'),'true');assert.equal(root.querySelector('[data-africa-crop-measure="production"]').getAttribute('aria-pressed'),'true');
+ }finally{for(const [key,value]of Object.entries(previous))globalThis[key]=value;await window.happyDOM.abort();}
+});

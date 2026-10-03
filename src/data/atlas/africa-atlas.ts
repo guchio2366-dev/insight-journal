@@ -7,7 +7,7 @@ export const countries = countryData;
 export const regionNames: Record<Region,string> = {all:'アフリカ全体',north:'北アフリカ',west:'西アフリカ',central:'中部アフリカ',east:'東アフリカ',south:'南部アフリカ'};
 export const fields: Record<Field,{label:string;title:string;summary:string}> = {
   nature:{label:'自然環境',title:'雨の量と、利用できる水は同じではない',summary:'国土に降る雨と、国内で生まれる再生可能な淡水を読み比べます。乾燥地域でも、国外を水源とする川や灌漑が暮らしを支える場合があります。'},
-  agriculture:{label:'農林業',title:'耕地の広さ、森林、収量を分けて読む',summary:'農地が広い国と、穀物の単位面積当たり収量が高い国は一致しません。耕地・森林・生産性・経済への寄与を切り替え、土地利用と農業の役割を確かめます。'},
+  agriculture:{label:'農林業',title:'作物と家畜の分布から、生産を支える条件を読む',summary:'作物の収穫面積・生産量と家畜密度は2020年のモデル分布です。自然条件に加え、管理・交通・市場・土地の制度を考え、国全体の統計とは分けて読みます。'},
   industry:{label:'主要産業',title:'資源の豊かさと、産業の構成を読み比べる',summary:'製造業、鉱業や建設を含む工業、サービス業、天然資源レントを比較します。割合だけでは経済の規模を表せないため、一人当たりGDPも併せて確認できます。'},
   population:{label:'人口',title:'人口の規模、密度、都市化には違う地理がある',summary:'人数は円の面積、人口密度や都市人口率は国の色で表します。広い国の平均密度から都市の混雑を推測せず、人数と割合を切り替えて読みます。'}
 };
@@ -57,9 +57,15 @@ export function fillFor(value:number|null,metric:Metric):string {
   const index=metric.breaks.findIndex(b=>value<b);
   return palette[index<0?palette.length-1:index];
 }
-export type State={field:Field;metric:string;year:number;place:string;compare:string;region:Region;zoom:'all'|'region'|'country'|'theme';theme:string;context:string;topic:string;water:string;layerClass:string;layerPoint:string;sourceState:string;view:'distribution'|'statistics'};
+export const cropChoices=[{id:'maize',label:'とうもろこし'},{id:'rice',label:'稲'},{id:'wheat',label:'小麦'},{id:'cassava',label:'キャッサバ'}] as const;
+export const livestockChoices=[{id:'cattle',label:'牛'},{id:'goats',label:'ヤギ'},{id:'sheep',label:'羊'}] as const;
+export const cropMeasureChoices=[{id:'harvested',label:'収穫面積'},{id:'production',label:'生産量'}] as const;
+export type Crop=typeof cropChoices[number]['id'];
+export type Livestock=typeof livestockChoices[number]['id'];
+export type CropMeasure=typeof cropMeasureChoices[number]['id'];
+export type State={field:Field;metric:string;year:number;place:string;compare:string;region:Region;zoom:'all'|'region'|'country'|'theme';theme:string;context:string;topic:string;water:string;crop:Crop;livestock:Livestock;cropMeasure:CropMeasure;layerClass:string;layerPoint:string;sourceState:string;view:'distribution'|'statistics'};
 export function canonicalTopic(field:Field,metric:string,requested=''):string {
-  if(field==='agriculture')return metric==='AG.LND.FRST.ZS'?'forestry':'farming';
+  if(field==='agriculture')return metric==='AG.LND.FRST.ZS'?'forestry':requested==='livestock'?'livestock':'farming';
   if(field==='nature')return ['climate','terrain','elevation'].includes(requested)?requested:'water';
   if(field==='population')return ['ethnicity','religion'].includes(requested)?requested:'distribution';
   return 'regional';
@@ -76,13 +82,14 @@ export function readState(search:string):State {
   const p=new URLSearchParams(search);
   const field=(p.get('field')??'nature') as Field;
   const safeField=Object.hasOwn(fields,field)?field:'nature';
-  const metric=metrics.find(m=>m.id===p.get('metric')&&m.field===safeField)??metrics.find(m=>m.field===safeField)!;
+  const metric=metrics.find(m=>m.id===p.get('metric')&&m.field===safeField)??metrics.find(m=>safeField==='agriculture'&&p.get('topic')==='livestock'?m.id==='NV.AGR.TOTL.ZS':m.field===safeField)!;
   const exists=(code:string|null)=>countries.some(c=>c.code===code);
   const defaultClimate=safeField==='nature'&&!p.has('metric')&&!p.has('theme')&&!p.has('topic');
-  const zoom=p.get('zoom')??(defaultClimate?'all':'theme');
+  const defaultAgriculture=safeField==='agriculture'&&!p.has('theme')&&p.get('view')!=='statistics';
+  const zoom=p.get('zoom')??(defaultClimate||defaultAgriculture?'all':'theme');
   const theme=themes.find(t=>t.id===p.get('theme')&&t.field===safeField)??themes.find(t=>t.field===safeField)!;
   const place=exists(p.get('place'))?p.get('place')!:theme.places[0];
-  const region=p.get('region')??(defaultClimate?'all':defaultThemeRegion(theme.id));
+  const region=p.get('region')??(defaultClimate||defaultAgriculture?'all':defaultThemeRegion(theme.id));
   const context=metrics.some(m=>m.id===p.get('context'))&&(p.get('context')===theme.compareMetric||p.has('sourceState')||safeField==='agriculture'&&metric.id==='AG.LND.FRST.ZS'&&p.get('context')===metric.id)?p.get('context')!:'';
   const layerClass=/^[a-zA-Z0-9_:.-]{1,100}$/.test(p.get('layerClass')??'')?p.get('layerClass')!:'';
   const point=(p.get('layerPoint')??'').split(',').map(Number);
@@ -90,7 +97,10 @@ export function readState(search:string):State {
   const snapshot=p.get('sourceState')??'';
   const sourceState=snapshot.length<=1800&&!/(?:^|&)sourceState=/.test(snapshot)?snapshot:'';
   const topic=canonicalTopic(safeField,metric.id,p.get('topic')??(defaultClimate?'climate':'')),culture=safeField==='population'&&(topic==='ethnicity'||topic==='religion');
-  return {field:safeField,metric:metric.id,year:years.includes(Number(p.get('year')))?Number(p.get('year')):2021,place,compare:exists(p.get('compare'))&&p.get('compare')!==place?p.get('compare')!:'',region:Object.hasOwn(regionNames,region)?region as Region:'all',zoom:['all','region','country','theme'].includes(zoom)?zoom as State['zoom']:'theme',theme:theme.id,context:culture?'':context??'',topic,water:safeField==='nature'?canonicalWater(metric.id,p.get('water')??''):'',layerClass:culture?'':layerClass,layerPoint:culture?'':layerPoint,sourceState:culture?'':sourceState,view:culture?'distribution':p.get('view')==='statistics'||!p.has('view')&&p.has('theme')&&!p.has('topic')?'statistics':'distribution'};
+  const crop=cropChoices.find(row=>row.id===p.get('crop'))?.id??'maize';
+  const livestock=livestockChoices.find(row=>row.id===p.get('livestock'))?.id??'cattle';
+  const cropMeasure=cropMeasureChoices.find(row=>row.id===p.get('cropMeasure'))?.id??'harvested';
+  return {field:safeField,metric:metric.id,year:years.includes(Number(p.get('year')))?Number(p.get('year')):2021,place,compare:exists(p.get('compare'))&&p.get('compare')!==place?p.get('compare')!:'',region:Object.hasOwn(regionNames,region)?region as Region:'all',zoom:['all','region','country','theme'].includes(zoom)?zoom as State['zoom']:'theme',theme:theme.id,context:culture?'':context??'',topic,water:safeField==='nature'?canonicalWater(metric.id,p.get('water')??''):'',crop,livestock,cropMeasure,layerClass:culture?'':layerClass,layerPoint:culture?'':layerPoint,sourceState:culture?'':sourceState,view:culture?'distribution':p.get('view')==='statistics'||!p.has('view')&&p.has('theme')&&!p.has('topic')?'statistics':'distribution'};
 }
 export function africaComparisonSnapshot(state:State):string {
   return writeState({...state,context:'',sourceState:''},new URL('https://atlas.invalid/')).searchParams.toString();

@@ -46,6 +46,30 @@ test('real zero and low elevations are metres rather than similarly numbered leg
   for(const metres of [0,2,7]){let index=-1;for(let i=0;i<grid.length/2;i++)if(grid.readInt16LE(i*2)===metres){index=i;break;}assert.ok(index>=0);const lon=layer.bounds[0]+(index%layer.width+.5)*.1,lat=layer.bounds[3]-(Math.floor(index/layer.width)+.5)*.1;assert.match(renderer.inspect(lon,lat),new RegExp(`：${metres} m（表示格子）`));}
  });
 });
+
+test('all crop quantities and livestock species render their source grid, year, unit and complete zero-aware legend',async()=>{
+ const crops=JSON.parse(readFileSync(new URL('../../public/assets/atlas/africa-crops-v1/manifest.json',import.meta.url),'utf8'));
+ const livestock=JSON.parse(readFileSync(new URL('../../public/assets/atlas/africa-livestock-v1/manifest.json',import.meta.url),'utf8'));
+ for(const [family,manifest] of [['crops',crops],['livestock',livestock]])for(const [id,layer] of Object.entries(manifest.layers)){
+  const [crop,cropMeasure]=id.split('-'),search=family==='crops'?`?field=agriculture&topic=farming&crop=${crop}&cropMeasure=${cropMeasure}&year=2023&zoom=all`:`?field=agriculture&topic=livestock&livestock=${id}&year=2023&zoom=all`;
+  await withLayers(search,({root,renderer,view,setState})=>{
+   const key=family==='crops'?`crop-${id}`:`livestock-${id}`;
+   assert.equal(root.querySelector('[data-africa-raster]').getAttribute('data-africa-raster'),key);assert.equal(view.unit,layer.unit);assert.equal(view.period,layer.period);assert.match(view.period,/2020/);assert.equal(view.legend.length,layer.legend.length);assert.equal(view.legend[0].id,layer.zeroId);assert.match(view.sourceUrl,/^https:\/\//);
+   const grid=gunzipSync(readFileSync(new URL(`../../public/assets/atlas/africa-${family}-v1/${layer.grid}`,import.meta.url))),indices={zero:-1,positive:-1,missing:-1};
+   for(let i=0;i<grid.length/4;i++){const value=grid.readFloatLE(i*4);if(value===0&&indices.zero<0)indices.zero=i;if(value>0&&indices.positive<0)indices.positive=i;if(value===layer.noData&&indices.missing<0)indices.missing=i;if(Object.values(indices).every(index=>index>=0))break;}
+   for(const [kind,index] of Object.entries(indices)){assert.ok(index>=0,`${key} ${kind} available`);const lon=layer.bounds[0]+(index%layer.width+.5)*(layer.bounds[2]-layer.bounds[0])/layer.width,lat=layer.bounds[3]-(Math.floor(index/layer.width)+.5)*(layer.bounds[3]-layer.bounds[1])/layer.height,reading=renderer.inspect(lon,lat);if(kind==='missing')assert.match(reading,/未収録/);else{const number=new Intl.NumberFormat('ja-JP',{maximumSignificantDigits:6}).format(grid.readFloatLE(index*4));assert.ok(reading.includes(`：${number} ${layer.unit}`));assert.match(reading,/表示格子/);}}
+   const comparison=setState(search+'&context=NV.AGR.TOTL.ZS&sourceState='+encodeURIComponent(search.slice(1)));assert.equal(comparison.key,key);assert.deepEqual(comparison.legend,view.legend);assert.equal(root.querySelector('[data-africa-raster]').getAttribute('data-africa-raster'),key);
+  });
+ }
+});
+
+test('livestock source details keep input census years separate from the 2020 model and retain missing input metadata',async()=>{
+ await withLayers('?field=agriculture&topic=livestock&livestock=goats&place=ETH&zoom=all',({view,setState})=>{
+  assert.match(view.period,/2020/);assert.match(view.method,/入力統計年：2002/);assert.match(view.method,/平均空間解像度：約45.5 km/);assert.match(view.method,/表示格子の5分角とは別/);
+  const kenya=setState('?field=agriculture&topic=livestock&livestock=goats&place=KEN&zoom=all');assert.match(kenya.method,/入力統計年：2019/);assert.match(kenya.period,/2020/);
+ });
+ await withLayers('?field=agriculture&topic=livestock&livestock=sheep&place=SDN&zoom=all',({view})=>{assert.match(view.method,/入力統計年：未記載/);assert.doesNotMatch(view.method,/入力統計年：2017/);});
+});
 test('actual map point survives the bubbling country selection and the overview preserves its source state',async()=>{
  const window=new Window({url:'https://example.com/insight-journal/atlas/africa/?field=nature&topic=climate&place=EGY&compare=GHA&year=2023&zoom=all'}),previous=Object.fromEntries(['window','document','location','history','fetch'].map(key=>[key,globalThis[key]]));
  try{

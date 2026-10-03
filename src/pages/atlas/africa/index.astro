@@ -70,6 +70,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
     </svg>
     <div class="africa-map-tools" aria-label="地図の表示範囲"><button data-zoom="all" type="button">全体</button><button data-zoom="theme" type="button">事例</button><button data-zoom="region" type="button">地域</button><button data-zoom="country" type="button">選択国</button><button data-reset type="button">リセット</button></div>
     </div>
+    <div class="africa-commodities" data-africa-commodities role="group" hidden></div>
     <div class="africa-map-subfields" data-africa-map-subfields></div>
     <p class="africa-subfield-status" data-africa-subfield-status hidden aria-live="polite"></p>
     <div class="africa-themes" data-themes role="group" aria-label="分布テーマを選ぶ">{themes.filter(theme=>theme.field===state.field).map(theme=><button type="button" data-theme={theme.id} aria-pressed={theme.id===initialTheme.id?'true':'false'}>{theme.title}</button>)}</div>

@@ -1,0 +1,2160 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "bounds": [
+    -27,
+    -36,
+    64,
+    39
+  ],
+  "crs": "EPSG:4326",
+  "width": 1092,
+  "height": 900,
+  "resolutionDegrees": 0.08333333333333333,
+  "gridOrder": "row-major north-to-south, west-to-east",
+  "referenceYear": 2020,
+  "scope": "FAO GLW4-2020 modelled livestock density; Africa country-boundary native cell mask",
+  "layers": {
+    "cattle": {
+      "title": "牛の推定飼養密度",
+      "image": "cattle.png",
+      "grid": "cattle.values.gz",
+      "encoding": "float32-le-gzip",
+      "noData": -1,
+      "bounds": [
+        -27,
+        -36,
+        64,
+        39
+      ],
+      "width": 1092,
+      "height": 900,
+      "resolutionDegrees": 0.08333333333333333,
+      "crs": "EPSG:4326",
+      "gridOrder": "row-major north-to-south, west-to-east",
+      "unit": "頭/km²",
+      "sourceUnit": "head/km²",
+      "period": "2020年に整合した推定分布",
+      "referenceYear": 2020,
+      "sourceName": "FAO Gridded Livestock of the World version 4, 2020 density",
+      "sourceLabel": "FAO GLW4：原典・推定方法",
+      "sourceUrl": "https://data.apps.fao.org/catalog/iso/9d1e149b-d63f-4213-978b-317a8eb42d02",
+      "downloadUrl": "https://storage.googleapis.com/fao-gismgr-glw4-2020-data/DATA/GLW4-2020/MAPSET/D-DA/GLW4-2020.D-DA.CTL.tif",
+      "publisher": "Food and Agriculture Organization of the United Nations (FAO)",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "citation": "FAO (2024). Gridded livestock density (Global – 2020 – 10 km) – GLW4. Published 2024-07-15. CC BY 4.0.",
+      "publishedAt": "2024-07-15",
+      "sourceRetrievedAt": "2026-10-03T14:40:37.619Z",
+      "sourceSha256": "2bcbf3b57dec7d6f45f2dcfb9cf61d04f22fae1d636934fb8c41a6a7742be3b5",
+      "sourceBytes": 12667017,
+      "sourceFile": "GLW4-2020.D-DA.CTL.tif",
+      "sourceResolutionDegrees": 0.08333333333333333,
+      "sourceWidth": 4320,
+      "sourceHeight": 2160,
+      "sourceNoData": -3.4028234663852886e+38,
+      "sourceActualType": "Float32",
+      "catalogueReportedType": "Float64",
+      "sourceWindow": [
+        1836,
+        612,
+        2928,
+        1512
+      ],
+      "breaks": [
+        1,
+        10,
+        50,
+        100,
+        250
+      ],
+      "colors": [
+        "#e4ebd2",
+        "#c3d7ac",
+        "#96bc86",
+        "#639d72",
+        "#347d65",
+        "#15594f"
+      ],
+      "zeroValue": 0,
+      "zeroId": "density-zero",
+      "zeroColor": "#f4f1e9",
+      "positiveLegend": [
+        {
+          "id": "density-0",
+          "color": "#e4ebd2",
+          "label": "0超–1未満 頭/km²"
+        },
+        {
+          "id": "density-1",
+          "color": "#c3d7ac",
+          "label": "1–10未満 頭/km²"
+        },
+        {
+          "id": "density-2",
+          "color": "#96bc86",
+          "label": "10–50未満 頭/km²"
+        },
+        {
+          "id": "density-3",
+          "color": "#639d72",
+          "label": "50–100未満 頭/km²"
+        },
+        {
+          "id": "density-4",
+          "color": "#347d65",
+          "label": "100–250未満 頭/km²"
+        },
+        {
+          "id": "density-5",
+          "color": "#15594f",
+          "label": "250以上 頭/km²"
+        }
+      ],
+      "legend": [
+        {
+          "id": "density-zero",
+          "label": "0 頭/km²（推定値）",
+          "color": "#f4f1e9"
+        },
+        {
+          "id": "density-0",
+          "color": "#e4ebd2",
+          "label": "0超–1未満 頭/km²"
+        },
+        {
+          "id": "density-1",
+          "color": "#c3d7ac",
+          "label": "1–10未満 頭/km²"
+        },
+        {
+          "id": "density-2",
+          "color": "#96bc86",
+          "label": "10–50未満 頭/km²"
+        },
+        {
+          "id": "density-3",
+          "color": "#639d72",
+          "label": "50–100未満 頭/km²"
+        },
+        {
+          "id": "density-4",
+          "color": "#347d65",
+          "label": "100–250未満 頭/km²"
+        },
+        {
+          "id": "density-5",
+          "color": "#15594f",
+          "label": "250以上 頭/km²"
+        }
+      ],
+      "missing": {
+        "value": -1,
+        "color": "transparent",
+        "label": "未収録・表示対象外（0頭とは別）"
+      },
+      "validPixels": 365022,
+      "positivePixels": 275326,
+      "zeroPixels": 89696,
+      "missingPixels": 617778,
+      "missingLandPixels": 3323,
+      "min": 0,
+      "max": 1317.7503662109375,
+      "categoryCounts": {
+        "density-zero": 89696,
+        "density-0": 91167,
+        "density-1": 85530,
+        "density-2": 77284,
+        "density-3": 14122,
+        "density-4": 6415,
+        "density-5": 808
+      },
+      "scope": "2020年の国別統計に整合させた推定密度。元の地域別統計は異なる年の資料を含む。農場の位置・生産量・放牧地そのものの分布ではない。",
+      "description": "地域別の家畜統計を、植生・地形・人口などの情報で格子へ配分した推定。自然条件との重なりだけでは、その効果を独立に検証できない。",
+      "takeaway": "牛の分布は草地と水だけで決まらず、飼料・農耕との組合せ・市場への接続にも左右される。",
+      "method": "元の5分角密度セルをそのまま切出し、現行アフリカ境界のセル中心判定で表示範囲を絞った。補間・平滑化・欠測補完・年の置換はしない。0は有効な推定値、元noDataと境界外は-1としてPNG透明。PNGと値照会は同一Float32配列を使用。",
+      "queryMethod": "floor((lon-west)/(east-west)*width), floor((north-lat)/(north-south)*height); bounds: west≤lon<east, south<lat≤north; noData -1 returns unavailable",
+      "countryInputs": {
+        "AGO": {
+          "sourceCountryCode": "AGO",
+          "sourceCountryName": "Angola",
+          "censusYear": 2013,
+          "averageSpatialResolutionKm": 264,
+          "inputSource": "CountrySTAT - Food and agriculture data network",
+          "status": "listed"
+        },
+        "BDI": {
+          "sourceCountryCode": "BDI",
+          "sourceCountryName": "Burundi",
+          "censusYear": 2005,
+          "averageSpatialResolutionKm": 15.2,
+          "inputSource": "Direction Provinciale de lâ€™Agriculture et de lâ€™Ã‰levage, Burundi",
+          "status": "listed"
+        },
+        "BEN": {
+          "sourceCountryCode": "BEN",
+          "sourceCountryName": "Benin",
+          "censusYear": 2013,
+          "averageSpatialResolutionKm": 38.9,
+          "inputSource": "CountrySTAT - Food and agriculture data network",
+          "status": "listed"
+        },
+        "BFA": {
+          "sourceCountryCode": "BFA",
+          "sourceCountryName": "Burkina Faso",
+          "censusYear": 2014,
+          "averageSpatialResolutionKm": 79.2,
+          "inputSource": "Conseil National de la Satistique, Burkina Faso",
+          "status": "listed"
+        },
+        "BWA": {
+          "sourceCountryCode": "BWA",
+          "sourceCountryName": "Botswana",
+          "censusYear": 2015,
+          "averageSpatialResolutionKm": 171,
+          "inputSource": "Central Statistics Office of Botswana",
+          "status": "listed"
+        },
+        "CAF": {
+          "sourceCountryCode": "CAF",
+          "sourceCountryName": "Central African Republic",
+          "censusYear": null,
+          "averageSpatialResolutionKm": null,
+          "inputSource": null,
+          "status": "input-year-unlisted"
+        },
+        "CIV": {
+          "sourceCountryCode": "CIV",
+          "sourceCountryName": "Cote d’Ivoire",
+          "censusYear": 2001,
+          "averageSpatialResolutionKm": 130.6,
+          "inputSource": "MinistÃ¨re de l’Agriculture et des Ressources Animales, Direction de la Programmation, CÃ´te d’Ivoire",
+          "status": "listed"
+        },
+        "CMR": {
+          "sourceCountryCode": "CMR",
+          "sourceCountryName": "Cameroon",
+          "censusYear": 2007,
+          "averageSpatialResolutionKm": 283.3,
+          "inputSource": "CountrySTAT - Food and agriculture data network",
+          "status": "listed"
+        },
+        "COD": {
+          "sourceCountryCode": "COD",
+          "sourceCountryName": "Democratic Republic of the Congo",
+          "censusYear": 2015,
+          "averageSpatialResolutionKm": 119.1,
+          "inputSource": "ECTAD DRC",
+          "status": "listed"
+        },
+        "COG": {
+          "sourceCountryCode": "COG",
+          "sourceCountryName": "Congo",
+          "censusYear": 2014,
+          "averageSpatialResolutionKm": 169,
+          "inputSource": "Centre National de la Statistique et des Ã‰tudes Ã‰conomiques, Congo",
+          "status": "listed"
+        },
+        "COM": {
+          "sourceCountryCode": "COM",
+          "sourceCountryName": "Comoros",
+          "censusYear": 2010,
+          "averageSpatialResolutionKm": 23.7,
+          "inputSource": "World Organisation for Animal Health - OIE",
+          "status": "listed"
+        },
+        "CPV": {
+          "sourceCountryCode": "CPV",
+          "sourceCountryName": "Cape Verde",
+          "censusYear": 2004,
+          "averageSpatialResolutionKm": 15.4,
+          "inputSource": "Directorate of Livestock, Cape Verde",
+          "status": "listed"
+        },
+        "DJI": {
+          "sourceCountryCode": "DJI",
+          "sourceCountryName": "Djibouti",
+          "censusYear": null,
+          "averageSpatialResolutionKm": null,
+          "inputSource": null,
+          "status": "input-year-unlisted"
+        },
+        "DZA": {
+          "sourceCountryCode": "DZA",
+          "sourceCountryName": "Algeria",
+          "censusYear": 2001,
+          "averageSpatialResolutionKm": 220.1,
+          "inputSource": "Direction des Services VÃ©tÃ©rinaires - MinistÃ¨re de l’Agriculture et du DÃ©veloppement rural",
+          "status": "listed"
+        },
+        "EGY": {
+          "sourceCountryCode": "EGY",
+          "sourceCountryName": "Egypt",
+          "censusYear": 2018,
+          "averageSpatialResolutionKm": 191,
+          "inputSource": "World Organisation for Animal Health - OIE",
+          "status": "listed"
+        },
+        "ERI": {
+          "sourceCountryCode": "ERI",
+          "sourceCountryName": "Eritrea",
+          "censusYear": 2002,
+          "averageSpatialResolutionKm": 45.9,
+          "inputSource": "Environmental Research Group Oxford (ERGO)",
+          "status": "listed"
+        },
+        "ESH": {
+          "sourceCountryCode": "ESH",
+          "sourceCountryName": "Western Sahara",
+          "censusYear": 2009,
+          "averageSpatialResolutionKm": 367.3,
+          "inputSource": "Direction de la Statistique du Maroc",
+          "status": "listed"
+        },
+        "ETH": {
+          "sourceCountryCode": "ETH",
+          "sourceCountryName": "Ethiopia",
+          "censusYear": 2002,
+          "averageSpatialResolutionKm": 45,
+          "inputSource": "Central Statistical Authority, Ethiopia",
+          "status": "listed"
+        },
+        "GAB": {
+          "sourceCountryCode": "GAB",
+          "sourceCountryName": "Gabon",
+          "censusYear": null,
+          "averageSpatialResolutionKm": null,
+          "inputSource": null,
+          "status": "input-year-unlisted"
+        },
+        "GHA": {
+          "sourceCountryCode": "GHA",
+          "sourceCountryName": "Ghana",
+          "censusYear": 2005,
+          "averageSpatialResolutionKm": 46.7,
+          "inputSource": "FAO-RIGA",
+          "status": "listed"
+        },
+        "GIN": {
+          "sourceCountryCode": "GIN",
+          "sourceCountryName": "Guinea",
+          "censusYear": 2016,
+          "averageSpatialResolutionKm": 86.3,
+          "inputSource": "Institut National de la Statistique - RÃ©publique de GuinÃ©e",
+          "status": "listed"
+        },
+        "GMB": {
+          "sourceCountryCode": "GMB",
+          "sourceCountryName": "Gambia",
+          "censusYear": 2011,
+          "averageSpatialResolutionKm": 17.5,
+          "inputSource": "Agricultural Statistics and Resources Economics Unit (ASRE), Government of the Gambia",
+          "status": "listed"
+        },
+        "GNB": {
+          "sourceCountryCode": "GNB",
+          "sourceCountryName": "Guinea-Bissau",
+          "censusYear": 2011,
+          "averageSpatialResolutionKm": 65.3,
+          "inputSource": "CountrySTAT - Food and agriculture data network",
+          "status": "listed"
+        },
+        "GNQ": {
+          "sourceCountryCode": "GNQ",
+          "sourceCountryName": "Equatorial Guinea",
+          "censusYear": null,
+          "averageSpatialResolutionKm": null,
+          "inputSource": null,
+          "status": "input-year-unlisted"
+        },
+        "KEN": {
+          "sourceCountryCode": "KEN",
+          "sourceCountryName": "Kenya",
+          "censusYear": 2019,
+          "averageSpatialResolutionKm": 46.1,
+          "inputSource": "Kenya National Bureau of Statistics",
+          "status": "listed"
+        },
+        "LBR": {
+          "sourceCountryCode": "LBR",
+          "sourceCountryName": "Liberia",
+          "censusYear": 2012,
+          "averageSpatialResolutionKm": 80.2,
+          "inputSource": "Ministry of Agriculture, Liberia",
+          "status": "listed"
+        },
+        "LBY": {
+          "sourceCountryCode": "LBY",
+          "sourceCountryName": "Libya",
+          "censusYear": 2013,
+          "averageSpatialResolutionKm": 260.1,
+          "inputSource": "Ministry of Agriculture, Animal & Marine Wealth,Libya",
+          "status": "listed"
+        },
+        "LSO": {
+          "sourceCountryCode": "LSO",
+          "sourceCountryName": "Lesotho",
+          "censusYear": 2019,
+          "averageSpatialResolutionKm": 55.3,
+          "inputSource": "Bureau of Statistics of Lesotho",
+          "status": "listed"
+        },
+        "MAR": {
+          "sourceCountryCode": "MAR",
+          "sourceCountryName": "Morocco",
+          "censusYear": 2015,
+          "averageSpatialResolutionKm": 94.5,
+          "inputSource": "MinistÃ¨re de l’Agriculture, du DÃ©veloppement Rural et des PÃªches Maritimes du Maroc",
+          "status": "listed"
+        },
+        "MDG": {
+          "sourceCountryCode": "MDG",
+          "sourceCountryName": "Madagascar",
+          "censusYear": 2005,
+          "averageSpatialResolutionKm": 75.5,
+          "inputSource": "MinistÃ¨re de l’Agriculture, SecrÃ©tariat General, Direction de la PrÃ©vision et des Etudes Economiques, Madagascar",
+          "status": "listed"
+        },
+        "MLI": {
+          "sourceCountryCode": "MLI",
+          "sourceCountryName": "Mali",
+          "censusYear": 2006,
+          "averageSpatialResolutionKm": 158.6,
+          "inputSource": "MinistÃ¨re de l’Agriculture de L’Elevage et del a PÃªche - RÃ©publique du Mali",
+          "status": "listed"
+        },
+        "MOZ": {
+          "sourceCountryCode": "MOZ",
+          "sourceCountryName": "Mozambique",
+          "censusYear": 2002,
+          "averageSpatialResolutionKm": 74.4,
+          "inputSource": "Direccao Nacional de Pecuaria, Mozambique",
+          "status": "listed"
+        },
+        "MRT": {
+          "sourceCountryCode": "MRT",
+          "sourceCountryName": "Mauritania",
+          "censusYear": 2007,
+          "averageSpatialResolutionKm": 219,
+          "inputSource": "Office of National Statistics, Mauritania",
+          "status": "listed"
+        },
+        "MUS": {
+          "sourceCountryCode": "MUS",
+          "sourceCountryName": "Mauritius",
+          "censusYear": 2012,
+          "averageSpatialResolutionKm": 15.2,
+          "inputSource": "Ministry of Finance & Economic Development, Mauritius",
+          "status": "listed"
+        },
+        "MWI": {
+          "sourceCountryCode": "MWI",
+          "sourceCountryName": "Malawi",
+          "censusYear": 2018,
+          "averageSpatialResolutionKm": 58.6,
+          "inputSource": "National Statistical Office. Malawi",
+          "status": "listed"
+        },
+        "NAM": {
+          "sourceCountryCode": "NAM",
+          "sourceCountryName": "Namibia",
+          "censusYear": 2015,
+          "averageSpatialResolutionKm": 252.4,
+          "inputSource": "World Organisation for Animal Health - OIE",
+          "status": "listed"
+        },
+        "NER": {
+          "sourceCountryCode": "NER",
+          "sourceCountryName": "Niger",
+          "censusYear": 2017,
+          "averageSpatialResolutionKm": 143.5,
+          "inputSource": "Institut National de la Statistique, Niger",
+          "status": "listed"
+        },
+        "NGA": {
+          "sourceCountryCode": "NGA",
+          "sourceCountryName": "Nigeria",
+          "censusYear": 2017,
+          "averageSpatialResolutionKm": 203.9,
+          "inputSource": "Federal Ministry of Agriculture and Rural Development, Nigeria",
+          "status": "listed"
+        },
+        "RWA": {
+          "sourceCountryCode": "RWA",
+          "sourceCountryName": "Rwanda",
+          "censusYear": 2012,
+          "averageSpatialResolutionKm": 28.5,
+          "inputSource": "World Organisation for Animal Health - OIE",
+          "status": "listed"
+        },
+        "SDN": {
+          "sourceCountryCode": "SDN",
+          "sourceCountryName": "Sudan",
+          "censusYear": 2017,
+          "averageSpatialResolutionKm": 320.9,
+          "inputSource": "Ministry of Animal Resources, Sudan",
+          "status": "listed"
+        },
+        "SEN": {
+          "sourceCountryCode": "SEN",
+          "sourceCountryName": "Senegal",
+          "censusYear": 2019,
+          "averageSpatialResolutionKm": 67,
+          "inputSource": "MinistÃ¨re de l’Elevage et des Productions Animales, SÃ©nÃ©gal",
+          "status": "listed"
+        },
+        "SLE": {
+          "sourceCountryCode": "SLE",
+          "sourceCountryName": "Sierra Leone",
+          "censusYear": 2015,
+          "averageSpatialResolutionKm": 74.8,
+          "inputSource": "Statistics Sierra Leone",
+          "status": "listed"
+        },
+        "SOM": {
+          "sourceCountryCode": "SOM",
+          "sourceCountryName": "Somalia",
+          "censusYear": 2015,
+          "averageSpatialResolutionKm": 199.6,
+          "inputSource": "World Organisation for Animal Health - OIE",
+          "status": "listed"
+        },
+        "SSD": {
+          "sourceCountryCode": "SSD",
+          "sourceCountryName": "South Sudan",
+          "censusYear": null,
+          "averageSpatialResolutionKm": null,
+          "inputSource": null,
+          "status": "input-year-unlisted"
+        },
+        "STP": {
+          "sourceCountryCode": "STP",
+          "sourceCountryName": "Sao Tome and Principe",
+          "censusYear": null,
+          "averageSpatialResolutionKm": null,
+          "inputSource": null,
+          "status": "input-year-unlisted"
+        },
+        "SWZ": {
+          "sourceCountryCode": "SWZ",
+          "sourceCountryName": "Eswatini",
+          "censusYear": 2019,
+          "averageSpatialResolutionKm": 65.9,
+          "inputSource": "Ministry of Agriculture, Eswatini",
+          "status": "listed"
+        },
+        "SYC": {
+          "sourceCountryCode": "SYC",
+          "sourceCountryName": "Seychelles",
+          "censusYear": 2011,
+          "averageSpatialResolutionKm": 2.7,
+          "inputSource": "National Bureau of Statistics, Republic of Seychelles",
+          "status": "listed"
+        },
+        "TCD": {
+          "sourceCountryCode": "TCD",
+          "sourceCountryName": "Chad",
+          "censusYear": 2013,
+          "averageSpatialResolutionKm": 225.4,
+          "inputSource": "World Organisation for Animal Health - OIE",
+          "status": "listed"
+        },
+        "TGO": {
+          "sourceCountryCode": "TGO",
+          "sourceCountryName": "Togo",
+          "censusYear": 2016,
+          "averageSpatialResolutionKm": 107.1,
+          "inputSource": "World Organisation for Animal Health - OIE",
+          "status": "listed"
+        },
+        "TUN": {
+          "sourceCountryCode": "TUN",
+          "sourceCountryName": "Tunisia",
+          "censusYear": 2012,
+          "averageSpatialResolutionKm": 80.5,
+          "inputSource": "Observatoire National de l’Agriculture, MinistÃ¨re de l’Agriculture de l’Environnement et des Ressources Hydrauliques, Tunisia",
+          "status": "listed"
+        },
+        "TZA": {
+          "sourceCountryCode": "TZA",
+          "sourceCountryName": "United Republic of Tanzania",
+          "censusYear": 2020,
+          "averageSpatialResolutionKm": 69.3,
+          "inputSource": "National Bureau of Statistics, Tanzania",
+          "status": "listed"
+        },
+        "UGA": {
+          "sourceCountryCode": "UGA",
+          "sourceCountryName": "Uganda",
+          "censusYear": 2008,
+          "averageSpatialResolutionKm": 6.5,
+          "inputSource": "Uganda Bureau of Statistics",
+          "status": "listed"
+        },
+        "ZAF": {
+          "sourceCountryCode": "ZAF",
+          "sourceCountryName": "South Africa",
+          "censusYear": 2017,
+          "averageSpatialResolutionKm": 368.9,
+          "inputSource": "World Organisation for Animal Health - OIE",
+          "status": "listed"
+        },
+        "ZMB": {
+          "sourceCountryCode": "ZMB",
+          "sourceCountryName": "Zambia",
+          "censusYear": 2017,
+          "averageSpatialResolutionKm": 274.9,
+          "inputSource": "Central Statistical Office, Republic of Zambia",
+          "status": "listed"
+        },
+        "ZWE": {
+          "sourceCountryCode": "ZWE",
+          "sourceCountryName": "Zimbabwe",
+          "censusYear": 2008,
+          "averageSpatialResolutionKm": 82,
+          "inputSource": "Department of Livestock and Veterinary Services",
+          "status": "listed"
+        }
+      },
+      "countryInputMetadataUrl": "https://data.apps.fao.org/catalog/dataset/cfaa6aab-a8d0-41b9-a4a9-dd2da7449599/resource/88004282-e291-4a5e-9b1b-9442d126fda4/download/cattle_metadata.html",
+      "countryInputMetadataNote": "公式種別メタデータの国コードを同じISO3だけで照合。未掲載・年未記載はnull。元表の値を掲載年と区別して保持し、他国の値で補わない。"
+    },
+    "goats": {
+      "title": "山羊の推定飼養密度",
+      "image": "goats.png",
+      "grid": "goats.values.gz",
+      "encoding": "float32-le-gzip",
+      "noData": -1,
+      "bounds": [
+        -27,
+        -36,
+        64,
+        39
+      ],
+      "width": 1092,
+      "height": 900,
+      "resolutionDegrees": 0.08333333333333333,
+      "crs": "EPSG:4326",
+      "gridOrder": "row-major north-to-south, west-to-east",
+      "unit": "頭/km²",
+      "sourceUnit": "head/km²",
+      "period": "2020年に整合した推定分布",
+      "referenceYear": 2020,
+      "sourceName": "FAO Gridded Livestock of the World version 4, 2020 density",
+      "sourceLabel": "FAO GLW4：原典・推定方法",
+      "sourceUrl": "https://data.apps.fao.org/catalog/iso/9d1e149b-d63f-4213-978b-317a8eb42d02",
+      "downloadUrl": "https://storage.googleapis.com/fao-gismgr-glw4-2020-data/DATA/GLW4-2020/MAPSET/D-DA/GLW4-2020.D-DA.GTS.tif",
+      "publisher": "Food and Agriculture Organization of the United Nations (FAO)",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "citation": "FAO (2024). Gridded livestock density (Global – 2020 – 10 km) – GLW4. Published 2024-07-15. CC BY 4.0.",
+      "publishedAt": "2024-07-15",
+      "sourceRetrievedAt": "2026-10-03T14:40:37.619Z",
+      "sourceSha256": "f5c0372e0bf9631c284615e256e6dc81b7c2b8ebee6808cf1427c7edc8a9b169",
+      "sourceBytes": 12071177,
+      "sourceFile": "GLW4-2020.D-DA.GTS.tif",
+      "sourceResolutionDegrees": 0.08333333333333333,
+      "sourceWidth": 4320,
+      "sourceHeight": 2160,
+      "sourceNoData": -3.4028234663852886e+38,
+      "sourceActualType": "Float32",
+      "catalogueReportedType": "Float64",
+      "sourceWindow": [
+        1836,
+        612,
+        2928,
+        1512
+      ],
+      "breaks": [
+        1,
+        10,
+        50,
+        100,
+        250
+      ],
+      "colors": [
+        "#e4ebd2",
+        "#c3d7ac",
+        "#96bc86",
+        "#639d72",
+        "#347d65",
+        "#15594f"
+      ],
+      "zeroValue": 0,
+      "zeroId": "density-zero",
+      "zeroColor": "#f4f1e9",
+      "positiveLegend": [
+        {
+          "id": "density-0",
+          "color": "#e4ebd2",
+          "label": "0超–1未満 頭/km²"
+        },
+        {
+          "id": "density-1",
+          "color": "#c3d7ac",
+          "label": "1–10未満 頭/km²"
+        },
+        {
+          "id": "density-2",
+          "color": "#96bc86",
+          "label": "10–50未満 頭/km²"
+        },
+        {
+          "id": "density-3",
+          "color": "#639d72",
+          "label": "50–100未満 頭/km²"
+        },
+        {
+          "id": "density-4",
+          "color": "#347d65",
+          "label": "100–250未満 頭/km²"
+        },
+        {
+          "id": "density-5",
+          "color": "#15594f",
+          "label": "250以上 頭/km²"
+        }
+      ],
+      "legend": [
+        {
+          "id": "density-zero",
+          "label": "0 頭/km²（推定値）",
+          "color": "#f4f1e9"
+        },
+        {
+          "id": "density-0",
+          "color": "#e4ebd2",
+          "label": "0超–1未満 頭/km²"
+        },
+        {
+          "id": "density-1",
+          "color": "#c3d7ac",
+          "label": "1–10未満 頭/km²"
+        },
+        {
+          "id": "density-2",
+          "color": "#96bc86",
+          "label": "10–50未満 頭/km²"
+        },
+        {
+          "id": "density-3",
+          "color": "#639d72",
+          "label": "50–100未満 頭/km²"
+        },
+        {
+          "id": "density-4",
+          "color": "#347d65",
+          "label": "100–250未満 頭/km²"
+        },
+        {
+          "id": "density-5",
+          "color": "#15594f",
+          "label": "250以上 頭/km²"
+        }
+      ],
+      "missing": {
+        "value": -1,
+        "color": "transparent",
+        "label": "未収録・表示対象外（0頭とは別）"
+      },
+      "validPixels": 365020,
+      "positivePixels": 278645,
+      "zeroPixels": 86375,
+      "missingPixels": 617780,
+      "missingLandPixels": 3325,
+      "min": 0,
+      "max": 2608.393798828125,
+      "categoryCounts": {
+        "density-zero": 86375,
+        "density-0": 65952,
+        "density-1": 96581,
+        "density-2": 84473,
+        "density-3": 20636,
+        "density-4": 9246,
+        "density-5": 1757
+      },
+      "scope": "2020年の国別統計に整合させた推定密度。元の地域別統計は異なる年の資料を含む。農場の位置・生産量・放牧地そのものの分布ではない。",
+      "description": "地域別の家畜統計を、植生・地形・人口などの情報で格子へ配分した推定。自然条件との重なりだけでは、その効果を独立に検証できない。",
+      "takeaway": "山羊は多様な植生を利用する。密度の差は乾燥への適応に加え、飼養方法・水・市場と合わせて読む。",
+      "method": "元の5分角密度セルをそのまま切出し、現行アフリカ境界のセル中心判定で表示範囲を絞った。補間・平滑化・欠測補完・年の置換はしない。0は有効な推定値、元noDataと境界外は-1としてPNG透明。PNGと値照会は同一Float32配列を使用。",
+      "queryMethod": "floor((lon-west)/(east-west)*width), floor((north-lat)/(north-south)*height); bounds: west≤lon<east, south<lat≤north; noData -1 returns unavailable",
+      "countryInputs": {
+        "AGO": {
+          "sourceCountryCode": "AGO",
+          "sourceCountryName": "Angola",
+          "censusYear": 2013,
+          "averageSpatialResolutionKm": 264,
+          "inputSource": "CountrySTAT - Food and agriculture data network",
+          "status": "listed"
+        },
+        "BDI": {
+          "sourceCountryCode": "BDI",
+          "sourceCountryName": "Burundi",
+          "censusYear": 2005,
+          "averageSpatialResolutionKm": 15.2,
+          "inputSource": "Direction Provinciale de l’Agriculture et de l’Elevage, Burundi (DPEA)",
+          "status": "listed"
+        },
+        "BEN": {
+          "sourceCountryCode": "BEN",
+          "sourceCountryName": "Benin",
+          "censusYear": 2013,
+          "averageSpatialResolutionKm": 38.9,
+          "inputSource": "CountrySTAT - Food and agriculture data network",
+          "status": "listed"
+        },
+        "BFA": {
+          "sourceCountryCode": "BFA",
+          "sourceCountryName": "Burkina Faso",
+          "censusYear": 2014,
+          "averageSpatialResolutionKm": 80.8,
+          "inputSource": "Conseil National de la Satistique, Burkina Faso",
+          "status": "listed"
+        },
+        "BWA": {
+          "sourceCountryCode": "BWA",
+          "sourceCountryName": "Botswana",
+          "censusYear": 2015,
+          "averageSpatialResolutionKm": 171,
+          "inputSource": "Central Statistics Office Republic of Botswana",
+          "status": "listed"
+        },
+        "CAF": {
+          "sourceCountryCode": "CAF",
+          "sourceCountryName": "Central African Republic",
+          "censusYear": null,
+          "averageSpatialResolutionKm": null,
+          "inputSource": null,
+          "status": "input-year-unlisted"
+        },
+        "CIV": {
+          "sourceCountryCode": "CIV",
+          "sourceCountryName": "Cote d’Ivoire",
+          "censusYear": 2001,
+          "averageSpatialResolutionKm": 130.6,
+          "inputSource": "Ministere de l’Agriculture et de Ressources Animales, Direction de la Programmation, CÃ´te d’Ivoire",
+          "status": "listed"
+        },
+        "CMR": {
+          "sourceCountryCode": "CMR",
+          "sourceCountryName": "Cameroon",
+          "censusYear": 2006,
+          "averageSpatialResolutionKm": 235.2,
+          "inputSource": "CountrySTAT - Food and agriculture data network",
+          "status": "listed"
+        },
+        "COD": {
+          "sourceCountryCode": "COD",
+          "sourceCountryName": "Democratic Republic of the Congo",
+          "censusYear": 2015,
+          "averageSpatialResolutionKm": 112.4,
+          "inputSource": "ECTAD DRC",
+          "status": "listed"
+        },
+        "COG": {
+          "sourceCountryCode": "COG",
+          "sourceCountryName": "Congo",
+          "censusYear": 2014,
+          "averageSpatialResolutionKm": 169,
+          "inputSource": "Centre National de la Statistique et des Ã‰tudes Ã‰conomiques, Congo Republic",
+          "status": "listed"
+        },
+        "COM": {
+          "sourceCountryCode": "COM",
+          "sourceCountryName": "Comoros",
+          "censusYear": 2004,
+          "averageSpatialResolutionKm": 23.7,
+          "inputSource": "FAO Animal Production and Health Division, Emergency Centre for Transboundary Animal Diseases, Socio Economics, Production and Biodiversity Unit",
+          "status": "listed"
+        },
+        "CPV": {
+          "sourceCountryCode": "CPV",
+          "sourceCountryName": "Cape Verde",
+          "censusYear": 2004,
+          "averageSpatialResolutionKm": 15.4,
+          "inputSource": "Directorate of livestock",
+          "status": "listed"
+        },
+        "DJI": {
+          "sourceCountryCode": "DJI",
+          "sourceCountryName": "Djibouti",
+          "censusYear": null,
+          "averageSpatialResolutionKm": null,
+          "inputSource": null,
+          "status": "input-year-unlisted"
+        },
+        "DZA": {
+          "sourceCountryCode": "DZA",
+          "sourceCountryName": "Algeria",
+          "censusYear": 2002,
+          "averageSpatialResolutionKm": 220.1,
+          "inputSource": "Direction des Services VÃ©tÃ©rinaires - MinistÃ¨re de lâ€™Agriculture et du DÃ©veloppement rural, 2003",
+          "status": "listed"
+        },
+        "EGY": {
+          "sourceCountryCode": "EGY",
+          "sourceCountryName": "Egypt",
+          "censusYear": 2018,
+          "averageSpatialResolutionKm": 191,
+          "inputSource": "World Organisation for Animal Health - OIE",
+          "status": "listed"
+        },
+        "ERI": {
+          "sourceCountryCode": "ERI",
+          "sourceCountryName": "Eritrea",
+          "censusYear": 2002,
+          "averageSpatialResolutionKm": 45.9,
+          "inputSource": "Environmental Research Group Oxford (ERGO)",
+          "status": "listed"
+        },
+        "ESH": {
+          "sourceCountryCode": "ESH",
+          "sourceCountryName": "Western Sahara",
+          "censusYear": 2009,
+          "averageSpatialResolutionKm": 367.3,
+          "inputSource": "Direction de la Statistique du Maroc",
+          "status": "listed"
+        },
+        "ETH": {
+          "sourceCountryCode": "ETH",
+          "sourceCountryName": "Ethiopia",
+          "censusYear": 2002,
+          "averageSpatialResolutionKm": 45.5,
+          "inputSource": "Central Statistical Authority, Ethiopia",
+          "status": "listed"
+        },
+        "GAB": {
+          "sourceCountryCode": "GAB",
+          "sourceCountryName": "Gabon",
+          "censusYear": 2002,
+          "averageSpatialResolutionKm": 172.1,
+          "inputSource": "Environmental Research Group Oxford, ERGO",
+          "status": "listed"
+        },
+        "GHA": {
+          "sourceCountryCode": "GHA",
+          "sourceCountryName": "Ghana",
+          "censusYear": 2005,
+          "averageSpatialResolutionKm": 46.7,
+          "inputSource": "FAO-RIGA",
+          "status": "listed"
+        },
+        "GIN": {
+          "sourceCountryCode": "GIN",
+          "sourceCountryName": "Guinea",
+          "censusYear": 2016,
+          "averageSpatialResolutionKm": 86.3,
+          "inputSource": "Institut National de la Statistique - RÃ©publique de GuinÃ©e",
+          "status": "listed"
+        },
+        "GMB": {
+          "sourceCountryCode": "GMB",
+          "sourceCountryName": "Gambia",
+          "censusYear": 2011,
+          "averageSpatialResolutionKm": 17.5,
+          "inputSource": "Agricultural Statistics and Resources Economics Unit (ASRE), Government of the Gambia",
+          "status": "listed"
+        },
+        "GNB": {
+          "sourceCountryCode": "GNB",
+          "sourceCountryName": "Guinea-Bissau",
+          "censusYear": 2011,
+          "averageSpatialResolutionKm": 65.3,
+          "inputSource": "MinistÃ¨re de lâ€™Agriculture et du DÃ©veloppement Rural, GuinÃ©e-Bissau",
+          "status": "listed"
+        },
+        "GNQ": {
+          "sourceCountryCode": "GNQ",
+          "sourceCountryName": "Equatorial Guinea",
+          "censusYear": null,
+          "averageSpatialResolutionKm": null,
+          "inputSource": null,
+          "status": "input-year-unlisted"
+        },
+        "KEN": {
+          "sourceCountryCode": "KEN",
+          "sourceCountryName": "Kenya",
+          "censusYear": 2019,
+          "averageSpatialResolutionKm": 46.1,
+          "inputSource": "Kenya National Bureau of Statistics",
+          "status": "listed"
+        },
+        "LBR": {
+          "sourceCountryCode": "LBR",
+          "sourceCountryName": "Liberia",
+          "censusYear": 2012,
+          "averageSpatialResolutionKm": 80.2,
+          "inputSource": "Ministry of Agriculture, Liberia",
+          "status": "listed"
+        },
+        "LBY": {
+          "sourceCountryCode": "LBY",
+          "sourceCountryName": "Libya",
+          "censusYear": 2013,
+          "averageSpatialResolutionKm": 260.1,
+          "inputSource": "Ministry of Agriculture, Animal & Marine Wealth",
+          "status": "listed"
+        },
+        "LSO": {
+          "sourceCountryCode": "LSO",
+          "sourceCountryName": "Lesotho",
+          "censusYear": 2019,
+          "averageSpatialResolutionKm": 55.3,
+          "inputSource": "Bureau of Statistics of Lesotho",
+          "status": "listed"
+        },
+        "MAR": {
+          "sourceCountryCode": "MAR",
+          "sourceCountryName": "Morocco",
+          "censusYear": 2015,
+          "averageSpatialResolutionKm": 94.5,
+          "inputSource": "MinistÃ¨re de l’Agriculture, du DÃ©veloppement Rural et des PÃªches Maritimes du Maroc",
+          "status": "listed"
+        },
+        "MDG": {
+          "sourceCountryCode": "MDG",
+          "sourceCountryName": "Madagascar",
+          "censusYear": 2005,
+          "averageSpatialResolutionKm": 75.5,
+          "inputSource": "Ministere de l’Agriculture, Secretariat General, Direction de la Prevision et des Etudes Economiques, Madagascar",
+          "status": "listed"
+        },
+        "MLI": {
+          "sourceCountryCode": "MLI",
+          "sourceCountryName": "Mali",
+          "censusYear": 2006,
+          "averageSpatialResolutionKm": 158.6,
+          "inputSource": "MinistÃ¨re de l’Agriculture de L’Elevage et del a PÃªche - RÃ©publique du Mali",
+          "status": "listed"
+        },
+        "MOZ": {
+          "sourceCountryCode": "MOZ",
+          "sourceCountryName": "Mozambique",
+          "censusYear": 2002,
+          "averageSpatialResolutionKm": 74.4,
+          "inputSource": "Direccao Nacional De Pecuaria",
+          "status": "listed"
+        },
+        "MRT": {
+          "sourceCountryCode": "MRT",
+          "sourceCountryName": "Mauritania",
+          "censusYear": 2007,
+          "averageSpatialResolutionKm": 91.1,
+          "inputSource": "Office of National Statistics, Mauritania",
+          "status": "listed"
+        },
+        "MUS": {
+          "sourceCountryCode": "MUS",
+          "sourceCountryName": "Mauritius",
+          "censusYear": 2012,
+          "averageSpatialResolutionKm": 15.2,
+          "inputSource": "Ministry of Finance & Economic Development, Mauritius",
+          "status": "listed"
+        },
+        "MWI": {
+          "sourceCountryCode": "MWI",
+          "sourceCountryName": "Malawi",
+          "censusYear": 2018,
+          "averageSpatialResolutionKm": 58.6,
+          "inputSource": "National Statistical Office. Malawi",
+          "status": "listed"
+        },
+        "NAM": {
+          "sourceCountryCode": "NAM",
+          "sourceCountryName": "Namibia",
+          "censusYear": 2015,
+          "averageSpatialResolutionKm": 252.4,
+          "inputSource": "World Organisation for Animal Health - OIE",
+          "status": "listed"
+        },
+        "NER": {
+          "sourceCountryCode": "NER",
+          "sourceCountryName": "Niger",
+          "censusYear": 2017,
+          "averageSpatialResolutionKm": 143.5,
+          "inputSource": "Institut National de la Statistique, Niger",
+          "status": "listed"
+        },
+        "NGA": {
+          "sourceCountryCode": "NGA",
+          "sourceCountryName": "Nigeria",
+          "censusYear": 2011,
+          "averageSpatialResolutionKm": 158.7,
+          "inputSource": "National Bureau of Statistics, Nigeria",
+          "status": "listed"
+        },
+        "RWA": {
+          "sourceCountryCode": "RWA",
+          "sourceCountryName": "Rwanda",
+          "censusYear": 2012,
+          "averageSpatialResolutionKm": 28.5,
+          "inputSource": "World Organisation for Animal Health - OIE",
+          "status": "listed"
+        },
+        "SDN": {
+          "sourceCountryCode": "SDN",
+          "sourceCountryName": "Sudan",
+          "censusYear": 2017,
+          "averageSpatialResolutionKm": 320.9,
+          "inputSource": "Ministry of Animal Resources, Sudan",
+          "status": "listed"
+        },
+        "SEN": {
+          "sourceCountryCode": "SEN",
+          "sourceCountryName": "Senegal",
+          "censusYear": 2019,
+          "averageSpatialResolutionKm": 67,
+          "inputSource": "MinistÃ¨re de l’Elevage et des Productions Animales, SÃ©nÃ©gal",
+          "status": "listed"
+        },
+        "SLE": {
+          "sourceCountryCode": "SLE",
+          "sourceCountryName": "Sierra Leone",
+          "censusYear": 2015,
+          "averageSpatialResolutionKm": 74.8,
+          "inputSource": "Statistics Sierra Leone",
+          "status": "listed"
+        },
+        "SOM": {
+          "sourceCountryCode": "SOM",
+          "sourceCountryName": "Somalia",
+          "censusYear": 2005,
+          "averageSpatialResolutionKm": 92.8,
+          "inputSource": "Food security and Nutrition Analysis Unit (FSAU)",
+          "status": "listed"
+        },
+        "SSD": {
+          "sourceCountryCode": "SSD",
+          "sourceCountryName": "South Sudan",
+          "censusYear": null,
+          "averageSpatialResolutionKm": null,
+          "inputSource": null,
+          "status": "input-year-unlisted"
+        },
+        "STP": {
+          "sourceCountryCode": "STP",
+          "sourceCountryName": "Sao Tome and Principe",
+          "censusYear": null,
+          "averageSpatialResolutionKm": null,
+          "inputSource": null,
+          "status": "input-year-unlisted"
+        },
+        "SWZ": {
+          "sourceCountryCode": "SWZ",
+          "sourceCountryName": "Eswatini",
+          "censusYear": 2019,
+          "averageSpatialResolutionKm": 65.9,
+          "inputSource": "Ministry of Agriculture, Eswatini",
+          "status": "listed"
+        },
+        "SYC": {
+          "sourceCountryCode": "SYC",
+          "sourceCountryName": "Seychelles",
+          "censusYear": 2011,
+          "averageSpatialResolutionKm": 2.9,
+          "inputSource": "National Bureau of Statistics, Republic of Seychelles",
+          "status": "listed"
+        },
+        "TCD": {
+          "sourceCountryCode": "TCD",
+          "sourceCountryName": "Chad",
+          "censusYear": 2013,
+          "averageSpatialResolutionKm": 246.8,
+          "inputSource": "World Organisation for Animal Health - OIE",
+          "status": "listed"
+        },
+        "TGO": {
+          "sourceCountryCode": "TGO",
+          "sourceCountryName": "Togo",
+          "censusYear": 2016,
+          "averageSpatialResolutionKm": 107.1,
+          "inputSource": "World Organisation for Animal Health - OIE",
+          "status": "listed"
+        },
+        "TUN": {
+          "sourceCountryCode": "TUN",
+          "sourceCountryName": "Tunisia",
+          "censusYear": 2012,
+          "averageSpatialResolutionKm": 80.5,
+          "inputSource": "Observatoire National de l’Agriculture, MinistÃ¨re de l’Agriculture de l’Environnement et des Ressources Hydrauliques, Tunisia",
+          "status": "listed"
+        },
+        "TZA": {
+          "sourceCountryCode": "TZA",
+          "sourceCountryName": "United Republic of Tanzania",
+          "censusYear": 2009,
+          "averageSpatialResolutionKm": 83.1,
+          "inputSource": "CountryStat FAO United Republic of Tanzania",
+          "status": "listed"
+        },
+        "UGA": {
+          "sourceCountryCode": "UGA",
+          "sourceCountryName": "Uganda",
+          "censusYear": 2008,
+          "averageSpatialResolutionKm": 6.5,
+          "inputSource": "Uganda Bureau of Statistics",
+          "status": "listed"
+        },
+        "ZAF": {
+          "sourceCountryCode": "ZAF",
+          "sourceCountryName": "South Africa",
+          "censusYear": 2017,
+          "averageSpatialResolutionKm": 368.9,
+          "inputSource": "World Organisation for Animal Health - OIE",
+          "status": "listed"
+        },
+        "ZMB": {
+          "sourceCountryCode": "ZMB",
+          "sourceCountryName": "Zambia",
+          "censusYear": 2017,
+          "averageSpatialResolutionKm": 289.8,
+          "inputSource": "Central Statistical Office, Republic of Zambia",
+          "status": "listed"
+        },
+        "ZWE": {
+          "sourceCountryCode": "ZWE",
+          "sourceCountryName": "Zimbabwe",
+          "censusYear": 2008,
+          "averageSpatialResolutionKm": 82.6,
+          "inputSource": "Department of Livestock and Veterinary Services",
+          "status": "listed"
+        }
+      },
+      "countryInputMetadataUrl": "https://data.apps.fao.org/catalog/dataset/cfaa6aab-a8d0-41b9-a4a9-dd2da7449599/resource/5bac1cf8-b968-48c2-8dc1-a2f89d4db020/download/goats_metadata.html",
+      "countryInputMetadataNote": "公式種別メタデータの国コードを同じISO3だけで照合。未掲載・年未記載はnull。元表の値を掲載年と区別して保持し、他国の値で補わない。"
+    },
+    "sheep": {
+      "title": "羊の推定飼養密度",
+      "image": "sheep.png",
+      "grid": "sheep.values.gz",
+      "encoding": "float32-le-gzip",
+      "noData": -1,
+      "bounds": [
+        -27,
+        -36,
+        64,
+        39
+      ],
+      "width": 1092,
+      "height": 900,
+      "resolutionDegrees": 0.08333333333333333,
+      "crs": "EPSG:4326",
+      "gridOrder": "row-major north-to-south, west-to-east",
+      "unit": "頭/km²",
+      "sourceUnit": "head/km²",
+      "period": "2020年に整合した推定分布",
+      "referenceYear": 2020,
+      "sourceName": "FAO Gridded Livestock of the World version 4, 2020 density",
+      "sourceLabel": "FAO GLW4：原典・推定方法",
+      "sourceUrl": "https://data.apps.fao.org/catalog/iso/9d1e149b-d63f-4213-978b-317a8eb42d02",
+      "downloadUrl": "https://storage.googleapis.com/fao-gismgr-glw4-2020-data/DATA/GLW4-2020/MAPSET/D-DA/GLW4-2020.D-DA.SHP.tif",
+      "publisher": "Food and Agriculture Organization of the United Nations (FAO)",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "citation": "FAO (2024). Gridded livestock density (Global – 2020 – 10 km) – GLW4. Published 2024-07-15. CC BY 4.0.",
+      "publishedAt": "2024-07-15",
+      "sourceRetrievedAt": "2026-10-03T14:40:37.619Z",
+      "sourceSha256": "42a6e641b7cc6f1beabd535f4afce1aca896f4e6a398d688072ccfe36174a47f",
+      "sourceBytes": 12175665,
+      "sourceFile": "GLW4-2020.D-DA.SHP.tif",
+      "sourceResolutionDegrees": 0.08333333333333333,
+      "sourceWidth": 4320,
+      "sourceHeight": 2160,
+      "sourceNoData": -3.4028234663852886e+38,
+      "sourceActualType": "Float32",
+      "catalogueReportedType": "Float64",
+      "sourceWindow": [
+        1836,
+        612,
+        2928,
+        1512
+      ],
+      "breaks": [
+        1,
+        10,
+        50,
+        100,
+        250
+      ],
+      "colors": [
+        "#e4ebd2",
+        "#c3d7ac",
+        "#96bc86",
+        "#639d72",
+        "#347d65",
+        "#15594f"
+      ],
+      "zeroValue": 0,
+      "zeroId": "density-zero",
+      "zeroColor": "#f4f1e9",
+      "positiveLegend": [
+        {
+          "id": "density-0",
+          "color": "#e4ebd2",
+          "label": "0超–1未満 頭/km²"
+        },
+        {
+          "id": "density-1",
+          "color": "#c3d7ac",
+          "label": "1–10未満 頭/km²"
+        },
+        {
+          "id": "density-2",
+          "color": "#96bc86",
+          "label": "10–50未満 頭/km²"
+        },
+        {
+          "id": "density-3",
+          "color": "#639d72",
+          "label": "50–100未満 頭/km²"
+        },
+        {
+          "id": "density-4",
+          "color": "#347d65",
+          "label": "100–250未満 頭/km²"
+        },
+        {
+          "id": "density-5",
+          "color": "#15594f",
+          "label": "250以上 頭/km²"
+        }
+      ],
+      "legend": [
+        {
+          "id": "density-zero",
+          "label": "0 頭/km²（推定値）",
+          "color": "#f4f1e9"
+        },
+        {
+          "id": "density-0",
+          "color": "#e4ebd2",
+          "label": "0超–1未満 頭/km²"
+        },
+        {
+          "id": "density-1",
+          "color": "#c3d7ac",
+          "label": "1–10未満 頭/km²"
+        },
+        {
+          "id": "density-2",
+          "color": "#96bc86",
+          "label": "10–50未満 頭/km²"
+        },
+        {
+          "id": "density-3",
+          "color": "#639d72",
+          "label": "50–100未満 頭/km²"
+        },
+        {
+          "id": "density-4",
+          "color": "#347d65",
+          "label": "100–250未満 頭/km²"
+        },
+        {
+          "id": "density-5",
+          "color": "#15594f",
+          "label": "250以上 頭/km²"
+        }
+      ],
+      "missing": {
+        "value": -1,
+        "color": "transparent",
+        "label": "未収録・表示対象外（0頭とは別）"
+      },
+      "validPixels": 365020,
+      "positivePixels": 278817,
+      "zeroPixels": 86203,
+      "missingPixels": 617780,
+      "missingLandPixels": 3325,
+      "min": 0,
+      "max": 3002.599853515625,
+      "categoryCounts": {
+        "density-zero": 86203,
+        "density-0": 102726,
+        "density-1": 76352,
+        "density-2": 74661,
+        "density-3": 16780,
+        "density-4": 7247,
+        "density-5": 1051
+      },
+      "scope": "2020年の国別統計に整合させた推定密度。元の地域別統計は異なる年の資料を含む。農場の位置・生産量・放牧地そのものの分布ではない。",
+      "description": "地域別の家畜統計を、植生・地形・人口などの情報で格子へ配分した推定。自然条件との重なりだけでは、その効果を独立に検証できない。",
+      "takeaway": "羊は乾燥地域から高地まで飼われる。同じ密度でも、草地・飼料・移動・市場の条件は異なる。",
+      "method": "元の5分角密度セルをそのまま切出し、現行アフリカ境界のセル中心判定で表示範囲を絞った。補間・平滑化・欠測補完・年の置換はしない。0は有効な推定値、元noDataと境界外は-1としてPNG透明。PNGと値照会は同一Float32配列を使用。",
+      "queryMethod": "floor((lon-west)/(east-west)*width), floor((north-lat)/(north-south)*height); bounds: west≤lon<east, south<lat≤north; noData -1 returns unavailable",
+      "countryInputs": {
+        "AGO": {
+          "sourceCountryCode": "AGO",
+          "sourceCountryName": "Angola",
+          "censusYear": 2013,
+          "averageSpatialResolutionKm": 264,
+          "inputSource": "CountrySTAT - Food and agriculture data network",
+          "status": "listed"
+        },
+        "BDI": {
+          "sourceCountryCode": "BDI",
+          "sourceCountryName": "Burundi",
+          "censusYear": 2005,
+          "averageSpatialResolutionKm": 15.2,
+          "inputSource": "Direction Provinciale de l’Agriculture et de l’Ã‰levage, Burundi",
+          "status": "listed"
+        },
+        "BEN": {
+          "sourceCountryCode": "BEN",
+          "sourceCountryName": "Benin",
+          "censusYear": 2013,
+          "averageSpatialResolutionKm": 38.9,
+          "inputSource": "CountrySTAT - Food and agriculture data network",
+          "status": "listed"
+        },
+        "BFA": {
+          "sourceCountryCode": "BFA",
+          "sourceCountryName": "Burkina Faso",
+          "censusYear": 2014,
+          "averageSpatialResolutionKm": 80.8,
+          "inputSource": "Conseil National de la Satistique, Burkina Faso",
+          "status": "listed"
+        },
+        "BWA": {
+          "sourceCountryCode": "BWA",
+          "sourceCountryName": "Botswana",
+          "censusYear": 2015,
+          "averageSpatialResolutionKm": 171,
+          "inputSource": "Central Statistics Office of Botswana",
+          "status": "listed"
+        },
+        "CAF": {
+          "sourceCountryCode": "CAF",
+          "sourceCountryName": "Central African Republic",
+          "censusYear": null,
+          "averageSpatialResolutionKm": null,
+          "inputSource": null,
+          "status": "input-year-unlisted"
+        },
+        "CIV": {
+          "sourceCountryCode": "CIV",
+          "sourceCountryName": "Cote d’Ivoire",
+          "censusYear": 2001,
+          "averageSpatialResolutionKm": 130.6,
+          "inputSource": "MinistÃ¨re de l’Agriculture et des Ressources Animales, Direction de la Programmation, CÃ´te d’Ivoire",
+          "status": "listed"
+        },
+        "CMR": {
+          "sourceCountryCode": "CMR",
+          "sourceCountryName": "Cameroon",
+          "censusYear": 2007,
+          "averageSpatialResolutionKm": 283.3,
+          "inputSource": "CountrySTAT - Food and agriculture data network",
+          "status": "listed"
+        },
+        "COD": {
+          "sourceCountryCode": "COD",
+          "sourceCountryName": "Democratic Republic of the Congo",
+          "censusYear": 2015,
+          "averageSpatialResolutionKm": 119.4,
+          "inputSource": "ECTAD DRC",
+          "status": "listed"
+        },
+        "COG": {
+          "sourceCountryCode": "COG",
+          "sourceCountryName": "Congo",
+          "censusYear": 2014,
+          "averageSpatialResolutionKm": 169,
+          "inputSource": "Centre National de la Statistique et des Ã‰tudes Ã‰conomiques, Congo Republic",
+          "status": "listed"
+        },
+        "COM": {
+          "sourceCountryCode": "COM",
+          "sourceCountryName": "Comoros",
+          "censusYear": 2004,
+          "averageSpatialResolutionKm": 23.7,
+          "inputSource": "FAO Animal Production and Health Division, Emergency Centre for Transboundary Animal Diseases, Socio Economics, Production and Biodiversity Unit",
+          "status": "listed"
+        },
+        "CPV": {
+          "sourceCountryCode": "CPV",
+          "sourceCountryName": "Cape Verde",
+          "censusYear": 2004,
+          "averageSpatialResolutionKm": 15.4,
+          "inputSource": "Directorate of Livestock",
+          "status": "listed"
+        },
+        "DJI": {
+          "sourceCountryCode": "DJI",
+          "sourceCountryName": "Djibouti",
+          "censusYear": null,
+          "averageSpatialResolutionKm": null,
+          "inputSource": null,
+          "status": "input-year-unlisted"
+        },
+        "DZA": {
+          "sourceCountryCode": "DZA",
+          "sourceCountryName": "Algeria",
+          "censusYear": 2002,
+          "averageSpatialResolutionKm": 220.1,
+          "inputSource": "Direction des Services VÃ©tÃ©rinaires - MinistÃ¨re de l’Agriculture et du DÃ©veloppement rural",
+          "status": "listed"
+        },
+        "EGY": {
+          "sourceCountryCode": "EGY",
+          "sourceCountryName": "Egypt",
+          "censusYear": 2018,
+          "averageSpatialResolutionKm": 191,
+          "inputSource": "World Organisation for Animal Health - OIE",
+          "status": "listed"
+        },
+        "ERI": {
+          "sourceCountryCode": "ERI",
+          "sourceCountryName": "Eritrea",
+          "censusYear": 2002,
+          "averageSpatialResolutionKm": 45.9,
+          "inputSource": "Environmental Research Group Oxford (ERGO)",
+          "status": "listed"
+        },
+        "ESH": {
+          "sourceCountryCode": "ESH",
+          "sourceCountryName": "Western Sahara",
+          "censusYear": 2009,
+          "averageSpatialResolutionKm": 367.3,
+          "inputSource": "Direction de la Statistique du Maroc",
+          "status": "listed"
+        },
+        "ETH": {
+          "sourceCountryCode": "ETH",
+          "sourceCountryName": "Ethiopia",
+          "censusYear": 2002,
+          "averageSpatialResolutionKm": 45,
+          "inputSource": "Central Statistical Authority, Ethiopia",
+          "status": "listed"
+        },
+        "GAB": {
+          "sourceCountryCode": "GAB",
+          "sourceCountryName": "Gabon",
+          "censusYear": 2002,
+          "averageSpatialResolutionKm": 172.1,
+          "inputSource": "Environmental Research Group Oxford (ERGO)",
+          "status": "listed"
+        },
+        "GHA": {
+          "sourceCountryCode": "GHA",
+          "sourceCountryName": "Ghana",
+          "censusYear": 2005,
+          "averageSpatialResolutionKm": 46.7,
+          "inputSource": "FAO-RIGA",
+          "status": "listed"
+        },
+        "GIN": {
+          "sourceCountryCode": "GIN",
+          "sourceCountryName": "Guinea",
+          "censusYear": 2016,
+          "averageSpatialResolutionKm": 86.3,
+          "inputSource": "Institut National de la Statistique - RÃ©publique de GuinÃ©e",
+          "status": "listed"
+        },
+        "GMB": {
+          "sourceCountryCode": "GMB",
+          "sourceCountryName": "Gambia",
+          "censusYear": 2011,
+          "averageSpatialResolutionKm": 17.8,
+          "inputSource": "Agricultural Statistics and Resources Economics Unit (ASRE), Government of the Gambia",
+          "status": "listed"
+        },
+        "GNB": {
+          "sourceCountryCode": "GNB",
+          "sourceCountryName": "Guinea-Bissau",
+          "censusYear": 2011,
+          "averageSpatialResolutionKm": 61.6,
+          "inputSource": "CountrySTAT - Food and agriculture data network",
+          "status": "listed"
+        },
+        "GNQ": {
+          "sourceCountryCode": "GNQ",
+          "sourceCountryName": "Equatorial Guinea",
+          "censusYear": null,
+          "averageSpatialResolutionKm": null,
+          "inputSource": null,
+          "status": "input-year-unlisted"
+        },
+        "KEN": {
+          "sourceCountryCode": "KEN",
+          "sourceCountryName": "Kenya",
+          "censusYear": 2019,
+          "averageSpatialResolutionKm": 46.1,
+          "inputSource": "Kenya National Bureau of Statistics",
+          "status": "listed"
+        },
+        "LBR": {
+          "sourceCountryCode": "LBR",
+          "sourceCountryName": "Liberia",
+          "censusYear": 2012,
+          "averageSpatialResolutionKm": 80.2,
+          "inputSource": "Ministry of Agriculture, Liberia",
+          "status": "listed"
+        },
+        "LBY": {
+          "sourceCountryCode": "LBY",
+          "sourceCountryName": "Libya",
+          "censusYear": 2013,
+          "averageSpatialResolutionKm": 260.1,
+          "inputSource": "Ministry of Agriculture, Animal & Marine Wealth",
+          "status": "listed"
+        },
+        "LSO": {
+          "sourceCountryCode": "LSO",
+          "sourceCountryName": "Lesotho",
+          "censusYear": 2019,
+          "averageSpatialResolutionKm": 55.3,
+          "inputSource": "Bureau of Statistics of Lesotho",
+          "status": "listed"
+        },
+        "MAR": {
+          "sourceCountryCode": "MAR",
+          "sourceCountryName": "Morocco",
+          "censusYear": 2015,
+          "averageSpatialResolutionKm": 94.5,
+          "inputSource": "MinistÃ¨re de l’Agriculture, du DÃ©veloppement Rural et des PÃªches Maritimes du Maroc",
+          "status": "listed"
+        },
+        "MDG": {
+          "sourceCountryCode": "MDG",
+          "sourceCountryName": "Madagascar",
+          "censusYear": 2005,
+          "averageSpatialResolutionKm": 75.5,
+          "inputSource": "MinistÃ¨re de l’Agriculture, SecrÃ©tariat General, Direction de la PrÃ©vision et des Etudes Economiques, Madagascar",
+          "status": "listed"
+        },
+        "MLI": {
+          "sourceCountryCode": "MLI",
+          "sourceCountryName": "Mali",
+          "censusYear": 2006,
+          "averageSpatialResolutionKm": 151.3,
+          "inputSource": "MinistÃ¨re de l’Agriculture de L’Elevage et del a PÃªche - RÃ©publique du Mali",
+          "status": "listed"
+        },
+        "MOZ": {
+          "sourceCountryCode": "MOZ",
+          "sourceCountryName": "Mozambique",
+          "censusYear": 2002,
+          "averageSpatialResolutionKm": 74.4,
+          "inputSource": "Direccao Nacional De Pecuaria",
+          "status": "listed"
+        },
+        "MRT": {
+          "sourceCountryCode": "MRT",
+          "sourceCountryName": "Mauritania",
+          "censusYear": 2007,
+          "averageSpatialResolutionKm": 91.1,
+          "inputSource": "Office of National Statistics, Mauritania",
+          "status": "listed"
+        },
+        "MUS": {
+          "sourceCountryCode": "MUS",
+          "sourceCountryName": "Mauritius",
+          "censusYear": 2012,
+          "averageSpatialResolutionKm": 15.2,
+          "inputSource": "Ministry of Finance & Economic Development, Mauritius",
+          "status": "listed"
+        },
+        "MWI": {
+          "sourceCountryCode": "MWI",
+          "sourceCountryName": "Malawi",
+          "censusYear": 2018,
+          "averageSpatialResolutionKm": 58.6,
+          "inputSource": "National Statistical Office. Malawi",
+          "status": "listed"
+        },
+        "NAM": {
+          "sourceCountryCode": "NAM",
+          "sourceCountryName": "Namibia",
+          "censusYear": 2015,
+          "averageSpatialResolutionKm": 252.4,
+          "inputSource": "World Organisation for Animal Health - OIE",
+          "status": "listed"
+        },
+        "NER": {
+          "sourceCountryCode": "NER",
+          "sourceCountryName": "Niger",
+          "censusYear": 2017,
+          "averageSpatialResolutionKm": 143.5,
+          "inputSource": "Institut National de la Statistique, Niger",
+          "status": "listed"
+        },
+        "NGA": {
+          "sourceCountryCode": "NGA",
+          "sourceCountryName": "Nigeria",
+          "censusYear": 2011,
+          "averageSpatialResolutionKm": 160.5,
+          "inputSource": "National Bureau of Statistics, Nigeria",
+          "status": "listed"
+        },
+        "RWA": {
+          "sourceCountryCode": "RWA",
+          "sourceCountryName": "Rwanda",
+          "censusYear": 2012,
+          "averageSpatialResolutionKm": 28.5,
+          "inputSource": "World Organisation for Animal Health - OIE",
+          "status": "listed"
+        },
+        "SDN": {
+          "sourceCountryCode": "SDN",
+          "censusYear": null,
+          "averageSpatialResolutionKm": null,
+          "inputSource": null,
+          "status": "country-not-listed-in-source-metadata"
+        },
+        "SEN": {
+          "sourceCountryCode": "SEN",
+          "sourceCountryName": "Senegal",
+          "censusYear": 2019,
+          "averageSpatialResolutionKm": 67,
+          "inputSource": "MinistÃ¨re de l’Elevage et des Productions Animales, SÃ©nÃ©gal",
+          "status": "listed"
+        },
+        "SLE": {
+          "sourceCountryCode": "SLE",
+          "sourceCountryName": "Sierra Leone",
+          "censusYear": 2015,
+          "averageSpatialResolutionKm": 74.8,
+          "inputSource": "Statistics Sierra Leone",
+          "status": "listed"
+        },
+        "SOM": {
+          "sourceCountryCode": "SOM",
+          "sourceCountryName": "Somalia",
+          "censusYear": 2005,
+          "averageSpatialResolutionKm": 92.8,
+          "inputSource": "Food security and Nutrition Analysis Unit (FSAU)",
+          "status": "listed"
+        },
+        "SSD": {
+          "sourceCountryCode": "SSD",
+          "sourceCountryName": "South Sudan",
+          "censusYear": 2017,
+          "averageSpatialResolutionKm": 320.9,
+          "inputSource": null,
+          "status": "listed"
+        },
+        "STP": {
+          "sourceCountryCode": "STP",
+          "sourceCountryName": "Sao Tome and Principe",
+          "censusYear": 2010,
+          "averageSpatialResolutionKm": null,
+          "inputSource": null,
+          "status": "listed"
+        },
+        "SWZ": {
+          "sourceCountryCode": "SWZ",
+          "sourceCountryName": "Eswatini",
+          "censusYear": 2018,
+          "averageSpatialResolutionKm": 65.9,
+          "inputSource": "Ministry of Agriculture, Eswatini",
+          "status": "listed"
+        },
+        "SYC": {
+          "sourceCountryCode": "SYC",
+          "censusYear": null,
+          "averageSpatialResolutionKm": null,
+          "inputSource": null,
+          "status": "country-not-listed-in-source-metadata"
+        },
+        "TCD": {
+          "sourceCountryCode": "TCD",
+          "sourceCountryName": "Chad",
+          "censusYear": 2013,
+          "averageSpatialResolutionKm": 246.8,
+          "inputSource": "World Organisation for Animal Health - OIE",
+          "status": "listed"
+        },
+        "TGO": {
+          "sourceCountryCode": "TGO",
+          "sourceCountryName": "Togo",
+          "censusYear": 2016,
+          "averageSpatialResolutionKm": 107.1,
+          "inputSource": "World Organisation for Animal Health - OIE",
+          "status": "listed"
+        },
+        "TUN": {
+          "sourceCountryCode": "TUN",
+          "sourceCountryName": "Tunisia",
+          "censusYear": 2012,
+          "averageSpatialResolutionKm": 80.5,
+          "inputSource": "Observatoire National de l’Agriculture, MinistÃ¨re de l’Agriculture de l’Environnement et des Ressources Hydrauliques, Tunisia",
+          "status": "listed"
+        },
+        "TZA": {
+          "sourceCountryCode": "TZA",
+          "sourceCountryName": "United Republic of Tanzania",
+          "censusYear": 2008,
+          "averageSpatialResolutionKm": 88.7,
+          "inputSource": "Ministry of Water and Livestock Development of Tanzania",
+          "status": "listed"
+        },
+        "UGA": {
+          "sourceCountryCode": "UGA",
+          "sourceCountryName": "Uganda",
+          "censusYear": 2008,
+          "averageSpatialResolutionKm": 6.5,
+          "inputSource": "Uganda Bureau of Statistics",
+          "status": "listed"
+        },
+        "ZAF": {
+          "sourceCountryCode": "ZAF",
+          "sourceCountryName": "South Africa",
+          "censusYear": 2017,
+          "averageSpatialResolutionKm": 368.9,
+          "inputSource": "World Organisation for Animal Health - OIE",
+          "status": "listed"
+        },
+        "ZMB": {
+          "sourceCountryCode": "ZMB",
+          "sourceCountryName": "Zambia",
+          "censusYear": 2017,
+          "averageSpatialResolutionKm": 274.9,
+          "inputSource": "Central Statistical Office, Republic of Zambia",
+          "status": "listed"
+        },
+        "ZWE": {
+          "sourceCountryCode": "ZWE",
+          "sourceCountryName": "Zimbabwe",
+          "censusYear": 2008,
+          "averageSpatialResolutionKm": 81.8,
+          "inputSource": "Department of Livestock and Veterinary Services",
+          "status": "listed"
+        }
+      },
+      "countryInputMetadataUrl": "https://data.apps.fao.org/catalog/dataset/cfaa6aab-a8d0-41b9-a4a9-dd2da7449599/resource/a4d976ae-bdc6-43d7-830d-b8d90a0fd5b2/download/sheep_metadata.html",
+      "countryInputMetadataNote": "公式種別メタデータの国コードを同じISO3だけで照合。未掲載・年未記載はnull。元表の値を掲載年と区別して保持し、他国の値で補わない。"
+    }
+  },
+  "sourceLedger": "source-ledger.json",
+  "boundary": {
+    "file": "src/data/atlas/africa-geography.json",
+    "sha256": "cefce22f53e415d7a13e2ca514d36a6ec8c6a6ef22454734fdb7b6c8f334d9db",
+    "features": 55,
+    "license": "Natural Earth public domain",
+    "method": "Even-odd native cell-centre scanlines; supplied country/disputed-area geometry retained unchanged"
+  },
+  "processing": {
+    "script": "scripts/prepare-africa-livestock.mjs",
+    "scriptSha256": "20b66609bd4ff1dfab0fdef0bdab70695623ec48de814f9971d31672de1748ee",
+    "node": "v24.19.0",
+    "zlib": "1.3.2.1-motley-3246f1b",
+    "sourceWindow": [
+      1836,
+      612,
+      2928,
+      1512
+    ],
+    "interpolation": "none",
+    "gapFill": "none",
+    "nativeValuesRetained": true,
+    "files": {
+      "cattle.png": {
+        "bytes": 61462,
+        "sha256": "eb3422b6e88845379fbfac170422bb972bb2c9a56c6e312eadd10ae242df1ee4"
+      },
+      "cattle.values.gz": {
+        "bytes": 1051388,
+        "sha256": "1feea653a905ac08ee3a48613f577a342686e2dbc4fbef3c08fdafe75d0aebba",
+        "decodedBytes": 3931200,
+        "decodedSha256": "1037a1082ce8c8174fd858c5f0a77afa328b240aadca55dd3f936faf40b2ce09"
+      },
+      "goats.png": {
+        "bytes": 70450,
+        "sha256": "2feb11b29a8e9e7a6587455586f677fc57eb21370066759759dde047236b70a3"
+      },
+      "goats.values.gz": {
+        "bytes": 1056738,
+        "sha256": "0c844be6a8b43b43aee1e8e3cc523640d2fd100836e744394c460262eb932624",
+        "decodedBytes": 3931200,
+        "decodedSha256": "8479f9bef7898c8a9685837e260db8178e4fe7bf00379238e16b4c6e35de2c39"
+      },
+      "sheep.png": {
+        "bytes": 63631,
+        "sha256": "60ae27fb3c5d7083901f30f5720a37c7255b72a08674f863b9a4c924a0a43cf7"
+      },
+      "sheep.values.gz": {
+        "bytes": 1061796,
+        "sha256": "4224a8aa8e2ef956d9d807864163a9d3a9a879eaadeb876fe0eab47822e3a7f7",
+        "decodedBytes": 3931200,
+        "decodedSha256": "1ec5757e46780aac5610d984848317b38ff74e4e95b4087ec9ce96e30a8a22e7"
+      },
+      "source-ledger.json": {
+        "bytes": 4664,
+        "sha256": "bab00848d4ecbf5713edbae310b9f0d7d0be85b1c5032ec1ae4dd8dbbeed88cd"
+      }
+    },
+    "reproduction": "node scripts/prepare-africa-livestock.mjs --source-dir <immutable-FAO2020-cache-with-source-receipt.json> --geotiff-package <GeoTIFF.js-3.0.5-package-directory>"
+  },
+  "representativeSpots": {
+    "cattle": [
+      {
+        "name": "Sahel-Niger",
+        "lon": 7.5,
+        "lat": 14,
+        "sourceColumn": 2250,
+        "sourceRow": 912,
+        "value": 60.164363861083984,
+        "displayColumn": 414,
+        "displayRow": 300,
+        "landAtCellCentre": true,
+        "displayValue": 60.164363861083984,
+        "classId": "density-3",
+        "retainedExactly": true
+      },
+      {
+        "name": "Ethiopia-highlands",
+        "lon": 38.5,
+        "lat": 9,
+        "sourceColumn": 2622,
+        "sourceRow": 972,
+        "value": 135.56336975097656,
+        "displayColumn": 786,
+        "displayRow": 360,
+        "landAtCellCentre": true,
+        "displayValue": 135.56336975097656,
+        "classId": "density-4",
+        "retainedExactly": true
+      },
+      {
+        "name": "Kenya-savanna",
+        "lon": 36.5,
+        "lat": -1.5,
+        "sourceColumn": 2598,
+        "sourceRow": 1098,
+        "value": 34.467472076416016,
+        "displayColumn": 762,
+        "displayRow": 486,
+        "landAtCellCentre": true,
+        "displayValue": 34.467472076416016,
+        "classId": "density-2",
+        "retainedExactly": true
+      },
+      {
+        "name": "Egypt-Nile",
+        "lon": 31,
+        "lat": 30,
+        "sourceColumn": 2532,
+        "sourceRow": 720,
+        "value": 1.682855248451233,
+        "displayColumn": 696,
+        "displayRow": 108,
+        "landAtCellCentre": true,
+        "displayValue": 1.682855248451233,
+        "classId": "density-1",
+        "retainedExactly": true
+      },
+      {
+        "name": "South-Africa-interior",
+        "lon": 25,
+        "lat": -29,
+        "sourceColumn": 2460,
+        "sourceRow": 1428,
+        "value": 8.204351425170898,
+        "displayColumn": 624,
+        "displayRow": 816,
+        "landAtCellCentre": true,
+        "displayValue": 8.204351425170898,
+        "classId": "density-1",
+        "retainedExactly": true
+      },
+      {
+        "name": "Atlantic-ocean",
+        "lon": -20,
+        "lat": 0,
+        "sourceColumn": 1920,
+        "sourceRow": 1080,
+        "value": null,
+        "displayColumn": 84,
+        "displayRow": 468,
+        "landAtCellCentre": false,
+        "displayValue": null,
+        "classId": null,
+        "retainedExactly": true
+      }
+    ],
+    "goats": [
+      {
+        "name": "Sahel-Niger",
+        "lon": 7.5,
+        "lat": 14,
+        "sourceColumn": 2250,
+        "sourceRow": 912,
+        "value": 110.67816925048828,
+        "displayColumn": 414,
+        "displayRow": 300,
+        "landAtCellCentre": true,
+        "displayValue": 110.67816925048828,
+        "classId": "density-4",
+        "retainedExactly": true
+      },
+      {
+        "name": "Ethiopia-highlands",
+        "lon": 38.5,
+        "lat": 9,
+        "sourceColumn": 2622,
+        "sourceRow": 972,
+        "value": 19.329038619995117,
+        "displayColumn": 786,
+        "displayRow": 360,
+        "landAtCellCentre": true,
+        "displayValue": 19.329038619995117,
+        "classId": "density-2",
+        "retainedExactly": true
+      },
+      {
+        "name": "Kenya-savanna",
+        "lon": 36.5,
+        "lat": -1.5,
+        "sourceColumn": 2598,
+        "sourceRow": 1098,
+        "value": 50.671390533447266,
+        "displayColumn": 762,
+        "displayRow": 486,
+        "landAtCellCentre": true,
+        "displayValue": 50.671390533447266,
+        "classId": "density-3",
+        "retainedExactly": true
+      },
+      {
+        "name": "Egypt-Nile",
+        "lon": 31,
+        "lat": 30,
+        "sourceColumn": 2532,
+        "sourceRow": 720,
+        "value": 0.7922702431678772,
+        "displayColumn": 696,
+        "displayRow": 108,
+        "landAtCellCentre": true,
+        "displayValue": 0.7922702431678772,
+        "classId": "density-0",
+        "retainedExactly": true
+      },
+      {
+        "name": "South-Africa-interior",
+        "lon": 25,
+        "lat": -29,
+        "sourceColumn": 2460,
+        "sourceRow": 1428,
+        "value": 1.2801244258880615,
+        "displayColumn": 624,
+        "displayRow": 816,
+        "landAtCellCentre": true,
+        "displayValue": 1.2801244258880615,
+        "classId": "density-1",
+        "retainedExactly": true
+      },
+      {
+        "name": "Atlantic-ocean",
+        "lon": -20,
+        "lat": 0,
+        "sourceColumn": 1920,
+        "sourceRow": 1080,
+        "value": null,
+        "displayColumn": 84,
+        "displayRow": 468,
+        "landAtCellCentre": false,
+        "displayValue": null,
+        "classId": null,
+        "retainedExactly": true
+      }
+    ],
+    "sheep": [
+      {
+        "name": "Sahel-Niger",
+        "lon": 7.5,
+        "lat": 14,
+        "sourceColumn": 2250,
+        "sourceRow": 912,
+        "value": 58.79475784301758,
+        "displayColumn": 414,
+        "displayRow": 300,
+        "landAtCellCentre": true,
+        "displayValue": 58.79475784301758,
+        "classId": "density-3",
+        "retainedExactly": true
+      },
+      {
+        "name": "Ethiopia-highlands",
+        "lon": 38.5,
+        "lat": 9,
+        "sourceColumn": 2622,
+        "sourceRow": 972,
+        "value": 60.47866439819336,
+        "displayColumn": 786,
+        "displayRow": 360,
+        "landAtCellCentre": true,
+        "displayValue": 60.47866439819336,
+        "classId": "density-3",
+        "retainedExactly": true
+      },
+      {
+        "name": "Kenya-savanna",
+        "lon": 36.5,
+        "lat": -1.5,
+        "sourceColumn": 2598,
+        "sourceRow": 1098,
+        "value": 76.70087432861328,
+        "displayColumn": 762,
+        "displayRow": 486,
+        "landAtCellCentre": true,
+        "displayValue": 76.70087432861328,
+        "classId": "density-3",
+        "retainedExactly": true
+      },
+      {
+        "name": "Egypt-Nile",
+        "lon": 31,
+        "lat": 30,
+        "sourceColumn": 2532,
+        "sourceRow": 720,
+        "value": 2.3269500732421875,
+        "displayColumn": 696,
+        "displayRow": 108,
+        "landAtCellCentre": true,
+        "displayValue": 2.3269500732421875,
+        "classId": "density-1",
+        "retainedExactly": true
+      },
+      {
+        "name": "South-Africa-interior",
+        "lon": 25,
+        "lat": -29,
+        "sourceColumn": 2460,
+        "sourceRow": 1428,
+        "value": 29.765853881835938,
+        "displayColumn": 624,
+        "displayRow": 816,
+        "landAtCellCentre": true,
+        "displayValue": 29.765853881835938,
+        "classId": "density-2",
+        "retainedExactly": true
+      },
+      {
+        "name": "Atlantic-ocean",
+        "lon": -20,
+        "lat": 0,
+        "sourceColumn": 1920,
+        "sourceRow": 1080,
+        "value": null,
+        "displayColumn": 84,
+        "displayRow": 468,
+        "landAtCellCentre": false,
+        "displayValue": null,
+        "classId": null,
+        "retainedExactly": true
+      }
+    ]
+  },
+  "limitations": [
+    "2020 is the aligned reference year, not a simultaneous 2020 census of every cell or country. Source census years vary; national reporting also has gaps.",
+    "GLW4 dasymetric distribution is a model-informed estimate, not independent observed farm coordinates, grazing areas, livestock output or present-day conditions.",
+    "Vegetation, topography and human population are allocation predictors. Overlay agreement is not independent proof of their causal effect on livestock.",
+    "5 arcminute geographic cells are approximately 10 km at the equator; their areas differ by latitude. Values are head/km², not head/cell. Do not sum density pixels to infer totals.",
+    "The site retains its Plate Carree location map, which is not equal-area. FAO recommends equal-area display for density interpretation. The coloured surface area is not total livestock abundance; higher-latitude cells appear larger relative to their true surface area.",
+    "Native zero is retained as a modelled zero, not proof that no animal exists. Missing and country-mask excluded cells remain unavailable, without nearest-land filling.",
+    "Generalized country outlines and cell-centre clipping can omit small islands or coastlines. Metadata not listing a country does not by itself mean the raster has no values there.",
+    "The 2024 FAO catalogue calls these D-DA download files density in head/km². Its linked species reports describe earlier per-cell-count products. This release uses the explicitly identified density files and units.",
+    "The catalogue generic datatype says Float64; actual retained TIFF decodes Float32. The output retains the exact native Float32 values."
+  ]
+}
