@@ -1,0 +1,8 @@
+SPAM 2020 V2r2 — International Food Policy Research Institute (IFPRI).
+Reference year: 2020. Distribution: 2026-05-05. Harvard Dataverse dataset version6.0.
+Global Spatially-Disaggregated Crop Production Statistics Data for 2020 Version 2.0 Release 2. DOI:10.7910/DVN/SWPENT.
+License: Creative Commons Attribution 4.0 International (CC BY 4.0), https://creativecommons.org/licenses/by/4.0/
+Dataset-specific grant: fixed dataset Terms of Use, section4, https://dataverse.harvard.edu/api/datasets/10094351/versions/6.0
+Changes: native Africa window, country-polygon cell-centre mask, noData encoded as -1, thematic PNG coloring. Original retained numeric cells are unchanged.
+This data was provided by the International Food Policy Research Institute (IFPRI). IFPRI bears no responsibility for the analyses or interpretations of the data presented here.
+The data provider does not endorse this website.

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {africaLayerPath,africaGridValue,africaActualLayerKey,africaRasterCategory} from '../../src/scripts/atlas-africa-layers.ts';
+import {africaLayerPath,africaGridValue,africaGridValueLabel,africaActualLayerKey,africaRasterCategory} from '../../src/scripts/atlas-africa-layers.ts';
 import {readState,writeState,africaComparisonSnapshot} from '../../src/data/atlas/africa-atlas.ts';
 
 test('display grids preserve zero, negative elevation and missing values with north-first cell indexing',()=>{
@@ -26,4 +26,32 @@ test('comparison snapshot restores source topic, class, point, countries, year a
  const initial=readState('?field=nature&place=KEN');assert.equal(initial.topic,'climate');assert.equal(initial.zoom,'all');assert.equal(initial.region,'all');assert.equal(initial.place,'KEN');
  const legacy=readState('?field=nature&theme=nile-water');assert.equal(legacy.topic,'water');assert.equal(legacy.view,'statistics');assert.equal(legacy.zoom,'theme');assert.equal(readState('?field=nature&metric=ER.H2O.INTR.PC').water,'river');
  for(const topic of ['ethnicity','religion']){const culture=readState(`?field=population&topic=${topic}&place=NGA&compare=EGY&year=2023&region=west&zoom=country&context=EN.POP.DNST&layerClass=old&layerPoint=7,10&sourceState=old&view=statistics`);for(const key of ['context','layerClass','layerPoint','sourceState'])assert.equal(culture[key],'');assert.equal(culture.place,'NGA');assert.equal(culture.compare,'EGY');assert.equal(culture.year,2023);assert.equal(culture.topic,topic);assert.equal(culture.view,'distribution');assert.deepEqual(readState(writeState(culture,new URL('https://example.com/atlas/africa/')).search),culture);}
+});
+
+test('agriculture comparison snapshots preserve commodity, quantity and the original raster',()=>{
+ for(const [topic,crop,cropMeasure,livestock,context,layer] of [
+  ['farming','rice','production','goats','AG.LND.ARBL.ZS','crop-rice-production'],
+  ['livestock','cassava','harvested','sheep','NV.AGR.TOTL.ZS','livestock-sheep']
+ ]){
+  const source=readState(`?field=agriculture&topic=${topic}&crop=${crop}&cropMeasure=${cropMeasure}&livestock=${livestock}&place=KEN&compare=ETH&year=2023&region=east&zoom=country&layerClass=positive&layerPoint=38,1`);
+  const comparison={...source,context,sourceState:africaComparisonSnapshot(source)},loaded=readState(writeState(comparison,new URL('https://example.com/atlas/africa/')).search);
+  assert.equal(loaded.context,context);assert.equal(africaActualLayerKey(loaded),layer);assert.deepEqual(readState('?'+loaded.sourceState),source);
+ }
+});
+
+test('agriculture thresholds keep zero, small positive values, boundaries and missing separate',()=>{
+ const layer={noData:-1,zeroValue:0,zeroId:'zero',zeroColor:'#fafafa',breaks:[1,10],colors:['#eeeeee','#aaaaaa','#555555'],positiveLegend:[{id:'low'},{id:'medium'},{id:'high'}],legend:[{id:'zero'},{id:'low'},{id:'medium'},{id:'high'}]};
+ for(const [value,id] of [[0,'zero'],[.0001,'low'],[.999,'low'],[1,'medium'],[9.999,'medium'],[10,'high']])assert.equal(africaRasterCategory(value,layer).id,id);
+ for(const value of [-1,NaN,Infinity])assert.equal(africaRasterCategory(value,layer),null);
+ const bytes=new Uint8Array(8),floats=new DataView(bytes.buffer);floats.setFloat32(0,0,true);floats.setFloat32(4,NaN,true);const metadata={bounds:[0,0,2,1],width:2,height:1,encoding:'float32-le-gzip',noData:-1};
+ assert.equal(africaGridValue(bytes,metadata,.5,.5),0);assert.equal(africaGridValue(bytes,metadata,1.5,.5),null);
+});
+
+test('point labels keep actual tiny crop and cattle values positive while using readable rounded precision',()=>{
+ assert.equal(africaGridValueLabel(0),'0');
+ assert.equal(africaGridValueLabel(0.00010143596591660753),'0.0001014');
+ assert.equal(africaGridValueLabel(4.657324268e-7),'0.0000004657');
+ for(const value of [Number.MIN_VALUE,1.401298464324817e-45,1e-20,.00099999])assert.ok(Number(africaGridValueLabel(value).replaceAll(',',''))>0);
+ assert.equal(africaGridValueLabel(1200.123456),'1,200.123');
+ assert.equal(africaGridValueLabel(1.123456),'1.123');
 });

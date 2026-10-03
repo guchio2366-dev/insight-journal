@@ -1,0 +1,5167 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "bounds": [
+    -27,
+    -36,
+    64,
+    39
+  ],
+  "crs": "EPSG:4326",
+  "width": 1092,
+  "height": 900,
+  "resolutionDegrees": 0.08333333333333333,
+  "gridOrder": "row-major north-to-south, west-to-east",
+  "layers": {
+    "maize-harvested": {
+      "title": "トウモロコシ｜収穫面積",
+      "image": "maize-harvested.png",
+      "grid": "maize-harvested.values.gz",
+      "encoding": "float32-le-gzip",
+      "noData": -1,
+      "bounds": [
+        -27,
+        -36,
+        64,
+        39
+      ],
+      "crs": "EPSG:4326",
+      "width": 1092,
+      "height": 900,
+      "resolutionDegrees": 0.08333333333333333,
+      "gridOrder": "row-major north-to-south, west-to-east",
+      "unit": "ha / 5分角セル",
+      "period": "2020基準のモデル推計｜SPAM 2020 V2r2（2026-05-05配布）",
+      "scope": "アフリカ｜全生産方式の5分角セル値",
+      "sourceName": "SPAM 2020 V2r2",
+      "sourceLabel": "SPAM 2020 V2r2 / IFPRI",
+      "publisher": "International Food Policy Research Institute (IFPRI)",
+      "sourceUrl": "https://doi.org/10.7910/DVN/SWPENT",
+      "datasetVersion": "6.0",
+      "sourceEdition": "V2r2",
+      "referenceYear": 2020,
+      "releaseDate": "2026-05-05",
+      "cropCode": "MAIZ",
+      "measure": "harvested",
+      "productionSystem": "A (all technologies)",
+      "sourceUnit": "hectares per native 5-arcminute source cell",
+      "sourceNoData": -3.4028234663852886e+38,
+      "sourceResolutionDegrees": 0.08333333333333333,
+      "sourceCrs": "EPSG:4326",
+      "sourceFile": "spam2020_V2r2_global_H_MAIZ_A.tif",
+      "sourceSha256": "f59ae1d95086f72e05ea753ecc06a2d5dce4488503b669d82981bf37ba713d71",
+      "sourceBytes": 37890590,
+      "sourceArchive": "spam2020V2r2_global_harvested_area.geotiff.zip",
+      "sourceArchiveSha256": "34895a332ba7ff9d9732a81fe9da7063458d197f3c72ce3a405329c41f94ade2",
+      "sourceArchiveBytes": 68007241,
+      "publisherMd5": "dd9ac5def086fcae26d28423b2b31f8b",
+      "sourceDataFileId": 13827040,
+      "sourceDownloadUrl": "https://www.dropbox.com/scl/fi/sw2z9pimrkqqv71pqf5z8/spam2020V2r2_global_harvested_area.geotiff.zip?dl=1&rlkey=e11l395kofek5233pj4e1t9wf&st=o0otxlpz",
+      "sourceRetrievedAt": "2026-10-03T14:36:44.033Z",
+      "sourceNativeWindow": [
+        1836,
+        612,
+        2928,
+        1512
+      ],
+      "sourceNativeOrigin": [
+        -180,
+        90.00000000000004,
+        0
+      ],
+      "sourceNativeResolution": [
+        0.0833333332727273,
+        -0.0833333332727273,
+        0
+      ],
+      "sourceNativeWindowBounds": [
+        -27.000000111272698,
+        -35.99999990836362,
+        63.99999982254553,
+        39.00000003709094
+      ],
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "licenseEvidenceUrl": "https://dataverse.harvard.edu/api/datasets/10094351/versions/6.0",
+      "licenseEvidence": "Fixed dataset Terms of Use section 4 explicitly permits CC BY 4.0 reuse, distribution and reproduction even commercially. Official public-mirror archive matches that dataset file MD5 and byte count.",
+      "sourceNotice": "source-notice.txt",
+      "citation": "International Food Policy Research Institute (IFPRI), 2026, \"Global Spatially-Disaggregated Crop Production Statistics Data for 2020 Version 2.0 Release 2\", https://doi.org/10.7910/DVN/SWPENT, Harvard Dataverse, V6",
+      "breaks": [
+        1,
+        10,
+        100,
+        1000
+      ],
+      "colors": [
+        "#d9ead5",
+        "#b7d8b6",
+        "#80b397",
+        "#458976",
+        "#1e5f57"
+      ],
+      "zeroValue": 0,
+      "zeroId": "crop-zero",
+      "zeroColor": "#f3f2e8",
+      "positiveLegend": [
+        {
+          "id": "h-0",
+          "label": "0超–1未満 ha/セル",
+          "color": "#d9ead5"
+        },
+        {
+          "id": "h-1",
+          "label": "1–10未満 ha/セル",
+          "color": "#b7d8b6"
+        },
+        {
+          "id": "h-2",
+          "label": "10–100未満 ha/セル",
+          "color": "#80b397"
+        },
+        {
+          "id": "h-3",
+          "label": "100–1,000未満 ha/セル",
+          "color": "#458976"
+        },
+        {
+          "id": "h-4",
+          "label": "1,000 ha/セル以上",
+          "color": "#1e5f57"
+        }
+      ],
+      "legend": [
+        {
+          "id": "crop-zero",
+          "label": "0 ha/セル",
+          "color": "#f3f2e8"
+        },
+        {
+          "id": "h-0",
+          "label": "0超–1未満 ha/セル",
+          "color": "#d9ead5"
+        },
+        {
+          "id": "h-1",
+          "label": "1–10未満 ha/セル",
+          "color": "#b7d8b6"
+        },
+        {
+          "id": "h-2",
+          "label": "10–100未満 ha/セル",
+          "color": "#80b397"
+        },
+        {
+          "id": "h-3",
+          "label": "100–1,000未満 ha/セル",
+          "color": "#458976"
+        },
+        {
+          "id": "h-4",
+          "label": "1,000 ha/セル以上",
+          "color": "#1e5f57"
+        }
+      ],
+      "validPixels": 177050,
+      "positivePixels": 154368,
+      "zeroPixels": 22682,
+      "missingPixels": 805750,
+      "maximum": 10174.099609375,
+      "takeaway": "同じ温暖な地域でも、水の季節性と生産技術・流通条件によってトウモロコシの分布は変わる。",
+      "description": "収穫面積は同じ土地での複数回の収穫を含む。土地被覆率・物理的な耕地面積とは異なる。",
+      "method": "Exact native 5-arcminute source window with no resampling, interpolation or smoothing. Original float32 values retained where the unchanged Africa country polygon contains the cell centre. Original noData remains unavailable; supplied zero remains zero. Border cells retain their whole original source-cell value and are not proportionally apportioned by polygon overlap. PNG and query grid use the identical masked array.",
+      "queryMethod": "floor((lon-west)/(east-west)*width), floor((north-lat)/(north-south)*height); outside bounds or -1 is unavailable",
+      "countryCoverage": {
+        "ZWE": {
+          "maskPixels": 4822,
+          "validPixels": 3730,
+          "zeroPixels": 143,
+          "positivePixels": 3587,
+          "missingPixels": 1092
+        },
+        "ZMB": {
+          "maskPixels": 9033,
+          "validPixels": 6175,
+          "zeroPixels": 321,
+          "positivePixels": 5854,
+          "missingPixels": 2858
+        },
+        "UGA": {
+          "maskPixels": 2822,
+          "validPixels": 1533,
+          "zeroPixels": 76,
+          "positivePixels": 1457,
+          "missingPixels": 1289
+        },
+        "TUN": {
+          "maskPixels": 2202,
+          "validPixels": 6,
+          "zeroPixels": 1,
+          "positivePixels": 5,
+          "missingPixels": 2196
+        },
+        "TGO": {
+          "maskPixels": 662,
+          "validPixels": 553,
+          "zeroPixels": 6,
+          "positivePixels": 547,
+          "missingPixels": 109
+        },
+        "TZA": {
+          "maskPixels": 11097,
+          "validPixels": 8379,
+          "zeroPixels": 532,
+          "positivePixels": 7847,
+          "missingPixels": 2718
+        },
+        "SWZ": {
+          "maskPixels": 224,
+          "validPixels": 202,
+          "zeroPixels": 1,
+          "positivePixels": 201,
+          "missingPixels": 22
+        },
+        "SSD": {
+          "maskPixels": 7342,
+          "validPixels": 5634,
+          "zeroPixels": 703,
+          "positivePixels": 4931,
+          "missingPixels": 1708
+        },
+        "SDN": {
+          "maskPixels": 22598,
+          "validPixels": 7191,
+          "zeroPixels": 135,
+          "positivePixels": 7056,
+          "missingPixels": 15407
+        },
+        "ZAF": {
+          "maskPixels": 16280,
+          "validPixels": 4922,
+          "zeroPixels": 337,
+          "positivePixels": 4585,
+          "missingPixels": 11358
+        },
+        "SOM": {
+          "maskPixels": 7516,
+          "validPixels": 1365,
+          "zeroPixels": 223,
+          "positivePixels": 1142,
+          "missingPixels": 6151
+        },
+        "SLE": {
+          "maskPixels": 854,
+          "validPixels": 853,
+          "zeroPixels": 0,
+          "positivePixels": 853,
+          "missingPixels": 1
+        },
+        "SYC": {
+          "maskPixels": 1,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 1
+        },
+        "SEN": {
+          "maskPixels": 2378,
+          "validPixels": 2169,
+          "zeroPixels": 95,
+          "positivePixels": 2074,
+          "missingPixels": 209
+        },
+        "STP": {
+          "maskPixels": 11,
+          "validPixels": 11,
+          "zeroPixels": 0,
+          "positivePixels": 11,
+          "missingPixels": 0
+        },
+        "RWA": {
+          "maskPixels": 295,
+          "validPixels": 292,
+          "zeroPixels": 16,
+          "positivePixels": 276,
+          "missingPixels": 3
+        },
+        "NGA": {
+          "maskPixels": 10765,
+          "validPixels": 10475,
+          "zeroPixels": 386,
+          "positivePixels": 10089,
+          "missingPixels": 290
+        },
+        "NER": {
+          "maskPixels": 14488,
+          "validPixels": 5098,
+          "zeroPixels": 3675,
+          "positivePixels": 1423,
+          "missingPixels": 9390
+        },
+        "NAM": {
+          "maskPixels": 10394,
+          "validPixels": 2040,
+          "zeroPixels": 225,
+          "positivePixels": 1815,
+          "missingPixels": 8354
+        },
+        "MOZ": {
+          "maskPixels": 9668,
+          "validPixels": 8171,
+          "zeroPixels": 320,
+          "positivePixels": 7851,
+          "missingPixels": 1497
+        },
+        "MAR": {
+          "maskPixels": 7842,
+          "validPixels": 5002,
+          "zeroPixels": 299,
+          "positivePixels": 4703,
+          "missingPixels": 2840
+        },
+        "ESH": {
+          "maskPixels": 1165,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 1165
+        },
+        "MUS": {
+          "maskPixels": 23,
+          "validPixels": 20,
+          "zeroPixels": 2,
+          "positivePixels": 18,
+          "missingPixels": 3
+        },
+        "MRT": {
+          "maskPixels": 12899,
+          "validPixels": 797,
+          "zeroPixels": 328,
+          "positivePixels": 469,
+          "missingPixels": 12102
+        },
+        "MLI": {
+          "maskPixels": 15379,
+          "validPixels": 5329,
+          "zeroPixels": 508,
+          "positivePixels": 4821,
+          "missingPixels": 10050
+        },
+        "MWI": {
+          "maskPixels": 1431,
+          "validPixels": 1165,
+          "zeroPixels": 11,
+          "positivePixels": 1154,
+          "missingPixels": 266
+        },
+        "MDG": {
+          "maskPixels": 7358,
+          "validPixels": 5482,
+          "zeroPixels": 391,
+          "positivePixels": 5091,
+          "missingPixels": 1876
+        },
+        "LBY": {
+          "maskPixels": 21316,
+          "validPixels": 905,
+          "zeroPixels": 86,
+          "positivePixels": 819,
+          "missingPixels": 20411
+        },
+        "LBR": {
+          "maskPixels": 1122,
+          "validPixels": 6,
+          "zeroPixels": 0,
+          "positivePixels": 6,
+          "missingPixels": 1116
+        },
+        "LSO": {
+          "maskPixels": 403,
+          "validPixels": 372,
+          "zeroPixels": 30,
+          "positivePixels": 342,
+          "missingPixels": 31
+        },
+        "KEN": {
+          "maskPixels": 6937,
+          "validPixels": 4180,
+          "zeroPixels": 702,
+          "positivePixels": 3478,
+          "missingPixels": 2757
+        },
+        "GNB": {
+          "maskPixels": 373,
+          "validPixels": 337,
+          "zeroPixels": 7,
+          "positivePixels": 330,
+          "missingPixels": 36
+        },
+        "GIN": {
+          "maskPixels": 2898,
+          "validPixels": 2866,
+          "zeroPixels": 19,
+          "positivePixels": 2847,
+          "missingPixels": 32
+        },
+        "GHA": {
+          "maskPixels": 2819,
+          "validPixels": 2665,
+          "zeroPixels": 0,
+          "positivePixels": 2665,
+          "missingPixels": 154
+        },
+        "GMB": {
+          "maskPixels": 121,
+          "validPixels": 120,
+          "zeroPixels": 0,
+          "positivePixels": 120,
+          "missingPixels": 1
+        },
+        "GAB": {
+          "maskPixels": 3035,
+          "validPixels": 2925,
+          "zeroPixels": 140,
+          "positivePixels": 2785,
+          "missingPixels": 110
+        },
+        "ETH": {
+          "maskPixels": 13348,
+          "validPixels": 7213,
+          "zeroPixels": 2893,
+          "positivePixels": 4320,
+          "missingPixels": 6135
+        },
+        "ERI": {
+          "maskPixels": 1495,
+          "validPixels": 682,
+          "zeroPixels": 23,
+          "positivePixels": 659,
+          "missingPixels": 813
+        },
+        "GNQ": {
+          "maskPixels": 310,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 310
+        },
+        "EGY": {
+          "maskPixels": 13050,
+          "validPixels": 5333,
+          "zeroPixels": 1517,
+          "positivePixels": 3816,
+          "missingPixels": 7717
+        },
+        "DJI": {
+          "maskPixels": 258,
+          "validPixels": 240,
+          "zeroPixels": 240,
+          "positivePixels": 0,
+          "missingPixels": 18
+        },
+        "CIV": {
+          "maskPixels": 3794,
+          "validPixels": 3684,
+          "zeroPixels": 1,
+          "positivePixels": 3683,
+          "missingPixels": 110
+        },
+        "COD": {
+          "maskPixels": 27316,
+          "validPixels": 24892,
+          "zeroPixels": 6161,
+          "positivePixels": 18731,
+          "missingPixels": 2424
+        },
+        "COG": {
+          "maskPixels": 4040,
+          "validPixels": 724,
+          "zeroPixels": 12,
+          "positivePixels": 712,
+          "missingPixels": 3316
+        },
+        "COM": {
+          "maskPixels": 17,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 17
+        },
+        "TCD": {
+          "maskPixels": 15396,
+          "validPixels": 5377,
+          "zeroPixels": 372,
+          "positivePixels": 5005,
+          "missingPixels": 10019
+        },
+        "CAF": {
+          "maskPixels": 7290,
+          "validPixels": 4497,
+          "zeroPixels": 702,
+          "positivePixels": 3795,
+          "missingPixels": 2793
+        },
+        "CPV": {
+          "maskPixels": 41,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 41
+        },
+        "CMR": {
+          "maskPixels": 5454,
+          "validPixels": 5206,
+          "zeroPixels": 66,
+          "positivePixels": 5140,
+          "missingPixels": 248
+        },
+        "BDI": {
+          "maskPixels": 310,
+          "validPixels": 292,
+          "zeroPixels": 3,
+          "positivePixels": 289,
+          "missingPixels": 18
+        },
+        "BFA": {
+          "maskPixels": 3266,
+          "validPixels": 3214,
+          "zeroPixels": 23,
+          "positivePixels": 3191,
+          "missingPixels": 52
+        },
+        "BWA": {
+          "maskPixels": 7278,
+          "validPixels": 1496,
+          "zeroPixels": 264,
+          "positivePixels": 1232,
+          "missingPixels": 5782
+        },
+        "BEN": {
+          "maskPixels": 1387,
+          "validPixels": 1259,
+          "zeroPixels": 7,
+          "positivePixels": 1252,
+          "missingPixels": 128
+        },
+        "AGO": {
+          "maskPixels": 14953,
+          "validPixels": 9973,
+          "zeroPixels": 431,
+          "positivePixels": 9542,
+          "missingPixels": 4980
+        },
+        "DZA": {
+          "maskPixels": 30769,
+          "validPixels": 1998,
+          "zeroPixels": 249,
+          "positivePixels": 1749,
+          "missingPixels": 28771
+        }
+      },
+      "samples": [
+        {
+          "kind": "zero",
+          "index": 25516,
+          "row": 23,
+          "col": 400,
+          "sourceRow": 635,
+          "sourceCol": 2236,
+          "lon": 6.375,
+          "lat": 37.041666666666664,
+          "originalValue": 0,
+          "value": 0,
+          "maskAtCellCentre": true,
+          "sourceNoData": false,
+          "pngClass": "crop-zero"
+        },
+        {
+          "kind": "positiveMaximum",
+          "index": 508521,
+          "row": 465,
+          "col": 741,
+          "sourceRow": 1077,
+          "sourceCol": 2577,
+          "lon": 34.791666666666664,
+          "lat": 0.2083333333333357,
+          "originalValue": 10174.099609375,
+          "value": 10174.099609375,
+          "maskAtCellCentre": true,
+          "sourceNoData": false,
+          "pngClass": "h-4"
+        },
+        {
+          "kind": "missing",
+          "index": 0,
+          "row": 0,
+          "col": 0,
+          "sourceRow": 612,
+          "sourceCol": 1836,
+          "lon": -26.958333333333332,
+          "lat": 38.958333333333336,
+          "originalValue": null,
+          "value": -1,
+          "maskAtCellCentre": false,
+          "sourceNoData": true,
+          "pngClass": null
+        },
+        {
+          "kind": "sourceMissingOnLand",
+          "index": 22278,
+          "row": 20,
+          "col": 438,
+          "sourceRow": 632,
+          "sourceCol": 2274,
+          "lon": 9.541666666666664,
+          "lat": 37.291666666666664,
+          "originalValue": null,
+          "value": -1,
+          "maskAtCellCentre": true,
+          "sourceNoData": true,
+          "pngClass": null
+        }
+      ],
+      "checks": {
+        "retainedValuesExact": true,
+        "sourceNoDataPreserved": true,
+        "outsideMaskUnavailable": true,
+        "float32GridExactRoundTrip": true,
+        "imageEqualsQueryClasses": true,
+        "zeroOpaque": true,
+        "missingTransparent": true
+      }
+    },
+    "maize-production": {
+      "title": "トウモロコシ｜生産量",
+      "image": "maize-production.png",
+      "grid": "maize-production.values.gz",
+      "encoding": "float32-le-gzip",
+      "noData": -1,
+      "bounds": [
+        -27,
+        -36,
+        64,
+        39
+      ],
+      "crs": "EPSG:4326",
+      "width": 1092,
+      "height": 900,
+      "resolutionDegrees": 0.08333333333333333,
+      "gridOrder": "row-major north-to-south, west-to-east",
+      "unit": "t / 5分角セル",
+      "period": "2020基準のモデル推計｜SPAM 2020 V2r2（2026-05-05配布）",
+      "scope": "アフリカ｜全生産方式の5分角セル値",
+      "sourceName": "SPAM 2020 V2r2",
+      "sourceLabel": "SPAM 2020 V2r2 / IFPRI",
+      "publisher": "International Food Policy Research Institute (IFPRI)",
+      "sourceUrl": "https://doi.org/10.7910/DVN/SWPENT",
+      "datasetVersion": "6.0",
+      "sourceEdition": "V2r2",
+      "referenceYear": 2020,
+      "releaseDate": "2026-05-05",
+      "cropCode": "MAIZ",
+      "measure": "production",
+      "productionSystem": "A (all technologies)",
+      "sourceUnit": "metric tonnes per native 5-arcminute source cell",
+      "sourceNoData": -3.4028234663852886e+38,
+      "sourceResolutionDegrees": 0.08333333333333333,
+      "sourceCrs": "EPSG:4326",
+      "sourceFile": "spam2020_V2r2_global_P_MAIZ_A.tif",
+      "sourceSha256": "1db1778160f6259e53f1c05eeab899f09297a62147cbd85a735b6e2c41184785",
+      "sourceBytes": 37890590,
+      "sourceArchive": "spam2020V2r2_global_production.geotiff.zip",
+      "sourceArchiveSha256": "7bdce0d9f48d50c2596fbc35bfeb1a4d37afa59f421a6b0c2c10fd221277e42d",
+      "sourceArchiveBytes": 75175570,
+      "publisherMd5": "8ce3956c25860ae9960155b8382518de",
+      "sourceDataFileId": 13827043,
+      "sourceDownloadUrl": "https://www.dropbox.com/scl/fi/euolvnpdooxhd5ljskl4q/spam2020V2r2_global_production.geotiff.zip?dl=1&rlkey=mttc09xhfr4m1zsd4ik40wvz1&st=q36ax4cq",
+      "sourceRetrievedAt": "2026-10-03T14:36:46.655Z",
+      "sourceNativeWindow": [
+        1836,
+        612,
+        2928,
+        1512
+      ],
+      "sourceNativeOrigin": [
+        -180,
+        90.00000000000004,
+        0
+      ],
+      "sourceNativeResolution": [
+        0.0833333333333144,
+        -0.0833333333333144,
+        0
+      ],
+      "sourceNativeWindowBounds": [
+        -27.00000000003476,
+        -35.99999999997132,
+        63.99999999994455,
+        39.00000000001163
+      ],
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "licenseEvidenceUrl": "https://dataverse.harvard.edu/api/datasets/10094351/versions/6.0",
+      "licenseEvidence": "Fixed dataset Terms of Use section 4 explicitly permits CC BY 4.0 reuse, distribution and reproduction even commercially. Official public-mirror archive matches that dataset file MD5 and byte count.",
+      "sourceNotice": "source-notice.txt",
+      "citation": "International Food Policy Research Institute (IFPRI), 2026, \"Global Spatially-Disaggregated Crop Production Statistics Data for 2020 Version 2.0 Release 2\", https://doi.org/10.7910/DVN/SWPENT, Harvard Dataverse, V6",
+      "breaks": [
+        1,
+        10,
+        100,
+        1000,
+        10000
+      ],
+      "colors": [
+        "#dde8d4",
+        "#bfd6ac",
+        "#96b77f",
+        "#6e965b",
+        "#44763f",
+        "#22582e"
+      ],
+      "zeroValue": 0,
+      "zeroId": "crop-zero",
+      "zeroColor": "#f3f2e8",
+      "positiveLegend": [
+        {
+          "id": "p-0",
+          "label": "0超–1未満 t/セル",
+          "color": "#dde8d4"
+        },
+        {
+          "id": "p-1",
+          "label": "1–10未満 t/セル",
+          "color": "#bfd6ac"
+        },
+        {
+          "id": "p-2",
+          "label": "10–100未満 t/セル",
+          "color": "#96b77f"
+        },
+        {
+          "id": "p-3",
+          "label": "100–1,000未満 t/セル",
+          "color": "#6e965b"
+        },
+        {
+          "id": "p-4",
+          "label": "1,000–10,000未満 t/セル",
+          "color": "#44763f"
+        },
+        {
+          "id": "p-5",
+          "label": "10,000 t/セル以上",
+          "color": "#22582e"
+        }
+      ],
+      "legend": [
+        {
+          "id": "crop-zero",
+          "label": "0 t/セル",
+          "color": "#f3f2e8"
+        },
+        {
+          "id": "p-0",
+          "label": "0超–1未満 t/セル",
+          "color": "#dde8d4"
+        },
+        {
+          "id": "p-1",
+          "label": "1–10未満 t/セル",
+          "color": "#bfd6ac"
+        },
+        {
+          "id": "p-2",
+          "label": "10–100未満 t/セル",
+          "color": "#96b77f"
+        },
+        {
+          "id": "p-3",
+          "label": "100–1,000未満 t/セル",
+          "color": "#6e965b"
+        },
+        {
+          "id": "p-4",
+          "label": "1,000–10,000未満 t/セル",
+          "color": "#44763f"
+        },
+        {
+          "id": "p-5",
+          "label": "10,000 t/セル以上",
+          "color": "#22582e"
+        }
+      ],
+      "validPixels": 177050,
+      "positivePixels": 153404,
+      "zeroPixels": 23646,
+      "missingPixels": 805750,
+      "maximum": 80043.8984375,
+      "takeaway": "同じ温暖な地域でも、水の季節性と生産技術・流通条件によってトウモロコシの分布は変わる。",
+      "description": "作物別の生産量を比較する。異なる作物の重さは収量効率・食料価値・所得を直接比較する指標ではない。",
+      "method": "Exact native 5-arcminute source window with no resampling, interpolation or smoothing. Original float32 values retained where the unchanged Africa country polygon contains the cell centre. Original noData remains unavailable; supplied zero remains zero. Border cells retain their whole original source-cell value and are not proportionally apportioned by polygon overlap. PNG and query grid use the identical masked array.",
+      "queryMethod": "floor((lon-west)/(east-west)*width), floor((north-lat)/(north-south)*height); outside bounds or -1 is unavailable",
+      "countryCoverage": {
+        "ZWE": {
+          "maskPixels": 4822,
+          "validPixels": 3730,
+          "zeroPixels": 151,
+          "positivePixels": 3579,
+          "missingPixels": 1092
+        },
+        "ZMB": {
+          "maskPixels": 9033,
+          "validPixels": 6175,
+          "zeroPixels": 282,
+          "positivePixels": 5893,
+          "missingPixels": 2858
+        },
+        "UGA": {
+          "maskPixels": 2822,
+          "validPixels": 1533,
+          "zeroPixels": 76,
+          "positivePixels": 1457,
+          "missingPixels": 1289
+        },
+        "TUN": {
+          "maskPixels": 2202,
+          "validPixels": 6,
+          "zeroPixels": 0,
+          "positivePixels": 6,
+          "missingPixels": 2196
+        },
+        "TGO": {
+          "maskPixels": 662,
+          "validPixels": 553,
+          "zeroPixels": 7,
+          "positivePixels": 546,
+          "missingPixels": 109
+        },
+        "TZA": {
+          "maskPixels": 11097,
+          "validPixels": 8379,
+          "zeroPixels": 530,
+          "positivePixels": 7849,
+          "missingPixels": 2718
+        },
+        "SWZ": {
+          "maskPixels": 224,
+          "validPixels": 202,
+          "zeroPixels": 1,
+          "positivePixels": 201,
+          "missingPixels": 22
+        },
+        "SSD": {
+          "maskPixels": 7342,
+          "validPixels": 5634,
+          "zeroPixels": 764,
+          "positivePixels": 4870,
+          "missingPixels": 1708
+        },
+        "SDN": {
+          "maskPixels": 22598,
+          "validPixels": 7191,
+          "zeroPixels": 876,
+          "positivePixels": 6315,
+          "missingPixels": 15407
+        },
+        "ZAF": {
+          "maskPixels": 16280,
+          "validPixels": 4922,
+          "zeroPixels": 355,
+          "positivePixels": 4567,
+          "missingPixels": 11358
+        },
+        "SOM": {
+          "maskPixels": 7516,
+          "validPixels": 1365,
+          "zeroPixels": 300,
+          "positivePixels": 1065,
+          "missingPixels": 6151
+        },
+        "SLE": {
+          "maskPixels": 854,
+          "validPixels": 853,
+          "zeroPixels": 0,
+          "positivePixels": 853,
+          "missingPixels": 1
+        },
+        "SYC": {
+          "maskPixels": 1,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 1
+        },
+        "SEN": {
+          "maskPixels": 2378,
+          "validPixels": 2169,
+          "zeroPixels": 99,
+          "positivePixels": 2070,
+          "missingPixels": 209
+        },
+        "STP": {
+          "maskPixels": 11,
+          "validPixels": 11,
+          "zeroPixels": 0,
+          "positivePixels": 11,
+          "missingPixels": 0
+        },
+        "RWA": {
+          "maskPixels": 295,
+          "validPixels": 292,
+          "zeroPixels": 16,
+          "positivePixels": 276,
+          "missingPixels": 3
+        },
+        "NGA": {
+          "maskPixels": 10765,
+          "validPixels": 10475,
+          "zeroPixels": 358,
+          "positivePixels": 10117,
+          "missingPixels": 290
+        },
+        "NER": {
+          "maskPixels": 14488,
+          "validPixels": 5098,
+          "zeroPixels": 3527,
+          "positivePixels": 1571,
+          "missingPixels": 9390
+        },
+        "NAM": {
+          "maskPixels": 10394,
+          "validPixels": 2040,
+          "zeroPixels": 237,
+          "positivePixels": 1803,
+          "missingPixels": 8354
+        },
+        "MOZ": {
+          "maskPixels": 9668,
+          "validPixels": 8171,
+          "zeroPixels": 333,
+          "positivePixels": 7838,
+          "missingPixels": 1497
+        },
+        "MAR": {
+          "maskPixels": 7842,
+          "validPixels": 5002,
+          "zeroPixels": 1005,
+          "positivePixels": 3997,
+          "missingPixels": 2840
+        },
+        "ESH": {
+          "maskPixels": 1165,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 1165
+        },
+        "MUS": {
+          "maskPixels": 23,
+          "validPixels": 20,
+          "zeroPixels": 2,
+          "positivePixels": 18,
+          "missingPixels": 3
+        },
+        "MRT": {
+          "maskPixels": 12899,
+          "validPixels": 797,
+          "zeroPixels": 335,
+          "positivePixels": 462,
+          "missingPixels": 12102
+        },
+        "MLI": {
+          "maskPixels": 15379,
+          "validPixels": 5329,
+          "zeroPixels": 554,
+          "positivePixels": 4775,
+          "missingPixels": 10050
+        },
+        "MWI": {
+          "maskPixels": 1431,
+          "validPixels": 1165,
+          "zeroPixels": 8,
+          "positivePixels": 1157,
+          "missingPixels": 266
+        },
+        "MDG": {
+          "maskPixels": 7358,
+          "validPixels": 5482,
+          "zeroPixels": 322,
+          "positivePixels": 5160,
+          "missingPixels": 1876
+        },
+        "LBY": {
+          "maskPixels": 21316,
+          "validPixels": 905,
+          "zeroPixels": 211,
+          "positivePixels": 694,
+          "missingPixels": 20411
+        },
+        "LBR": {
+          "maskPixels": 1122,
+          "validPixels": 6,
+          "zeroPixels": 0,
+          "positivePixels": 6,
+          "missingPixels": 1116
+        },
+        "LSO": {
+          "maskPixels": 403,
+          "validPixels": 372,
+          "zeroPixels": 31,
+          "positivePixels": 341,
+          "missingPixels": 31
+        },
+        "KEN": {
+          "maskPixels": 6937,
+          "validPixels": 4180,
+          "zeroPixels": 845,
+          "positivePixels": 3335,
+          "missingPixels": 2757
+        },
+        "GNB": {
+          "maskPixels": 373,
+          "validPixels": 337,
+          "zeroPixels": 7,
+          "positivePixels": 330,
+          "missingPixels": 36
+        },
+        "GIN": {
+          "maskPixels": 2898,
+          "validPixels": 2866,
+          "zeroPixels": 18,
+          "positivePixels": 2848,
+          "missingPixels": 32
+        },
+        "GHA": {
+          "maskPixels": 2819,
+          "validPixels": 2665,
+          "zeroPixels": 0,
+          "positivePixels": 2665,
+          "missingPixels": 154
+        },
+        "GMB": {
+          "maskPixels": 121,
+          "validPixels": 120,
+          "zeroPixels": 0,
+          "positivePixels": 120,
+          "missingPixels": 1
+        },
+        "GAB": {
+          "maskPixels": 3035,
+          "validPixels": 2925,
+          "zeroPixels": 155,
+          "positivePixels": 2770,
+          "missingPixels": 110
+        },
+        "ETH": {
+          "maskPixels": 13348,
+          "validPixels": 7213,
+          "zeroPixels": 2920,
+          "positivePixels": 4293,
+          "missingPixels": 6135
+        },
+        "ERI": {
+          "maskPixels": 1495,
+          "validPixels": 682,
+          "zeroPixels": 27,
+          "positivePixels": 655,
+          "missingPixels": 813
+        },
+        "GNQ": {
+          "maskPixels": 310,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 310
+        },
+        "EGY": {
+          "maskPixels": 13050,
+          "validPixels": 5333,
+          "zeroPixels": 590,
+          "positivePixels": 4743,
+          "missingPixels": 7717
+        },
+        "DJI": {
+          "maskPixels": 258,
+          "validPixels": 240,
+          "zeroPixels": 0,
+          "positivePixels": 240,
+          "missingPixels": 18
+        },
+        "CIV": {
+          "maskPixels": 3794,
+          "validPixels": 3684,
+          "zeroPixels": 1,
+          "positivePixels": 3683,
+          "missingPixels": 110
+        },
+        "COD": {
+          "maskPixels": 27316,
+          "validPixels": 24892,
+          "zeroPixels": 6442,
+          "positivePixels": 18450,
+          "missingPixels": 2424
+        },
+        "COG": {
+          "maskPixels": 4040,
+          "validPixels": 724,
+          "zeroPixels": 12,
+          "positivePixels": 712,
+          "missingPixels": 3316
+        },
+        "COM": {
+          "maskPixels": 17,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 17
+        },
+        "TCD": {
+          "maskPixels": 15396,
+          "validPixels": 5377,
+          "zeroPixels": 408,
+          "positivePixels": 4969,
+          "missingPixels": 10019
+        },
+        "CAF": {
+          "maskPixels": 7290,
+          "validPixels": 4497,
+          "zeroPixels": 802,
+          "positivePixels": 3695,
+          "missingPixels": 2793
+        },
+        "CPV": {
+          "maskPixels": 41,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 41
+        },
+        "CMR": {
+          "maskPixels": 5454,
+          "validPixels": 5206,
+          "zeroPixels": 71,
+          "positivePixels": 5135,
+          "missingPixels": 248
+        },
+        "BDI": {
+          "maskPixels": 310,
+          "validPixels": 292,
+          "zeroPixels": 4,
+          "positivePixels": 288,
+          "missingPixels": 18
+        },
+        "BFA": {
+          "maskPixels": 3266,
+          "validPixels": 3214,
+          "zeroPixels": 24,
+          "positivePixels": 3190,
+          "missingPixels": 52
+        },
+        "BWA": {
+          "maskPixels": 7278,
+          "validPixels": 1496,
+          "zeroPixels": 314,
+          "positivePixels": 1182,
+          "missingPixels": 5782
+        },
+        "BEN": {
+          "maskPixels": 1387,
+          "validPixels": 1259,
+          "zeroPixels": 6,
+          "positivePixels": 1253,
+          "missingPixels": 128
+        },
+        "AGO": {
+          "maskPixels": 14953,
+          "validPixels": 9973,
+          "zeroPixels": 476,
+          "positivePixels": 9497,
+          "missingPixels": 4980
+        },
+        "DZA": {
+          "maskPixels": 30769,
+          "validPixels": 1998,
+          "zeroPixels": 144,
+          "positivePixels": 1854,
+          "missingPixels": 28771
+        }
+      },
+      "samples": [
+        {
+          "kind": "zero",
+          "index": 25516,
+          "row": 23,
+          "col": 400,
+          "sourceRow": 635,
+          "sourceCol": 2236,
+          "lon": 6.375,
+          "lat": 37.041666666666664,
+          "originalValue": 0,
+          "value": 0,
+          "maskAtCellCentre": true,
+          "sourceNoData": false,
+          "pngClass": "crop-zero"
+        },
+        {
+          "kind": "positiveMaximum",
+          "index": 876405,
+          "row": 802,
+          "col": 621,
+          "sourceRow": 1414,
+          "sourceCol": 2457,
+          "lon": 24.791666666666664,
+          "lat": -27.875,
+          "originalValue": 80043.8984375,
+          "value": 80043.8984375,
+          "maskAtCellCentre": true,
+          "sourceNoData": false,
+          "pngClass": "p-5"
+        },
+        {
+          "kind": "missing",
+          "index": 0,
+          "row": 0,
+          "col": 0,
+          "sourceRow": 612,
+          "sourceCol": 1836,
+          "lon": -26.958333333333332,
+          "lat": 38.958333333333336,
+          "originalValue": null,
+          "value": -1,
+          "maskAtCellCentre": false,
+          "sourceNoData": true,
+          "pngClass": null
+        },
+        {
+          "kind": "sourceMissingOnLand",
+          "index": 22278,
+          "row": 20,
+          "col": 438,
+          "sourceRow": 632,
+          "sourceCol": 2274,
+          "lon": 9.541666666666664,
+          "lat": 37.291666666666664,
+          "originalValue": null,
+          "value": -1,
+          "maskAtCellCentre": true,
+          "sourceNoData": true,
+          "pngClass": null
+        }
+      ],
+      "checks": {
+        "retainedValuesExact": true,
+        "sourceNoDataPreserved": true,
+        "outsideMaskUnavailable": true,
+        "float32GridExactRoundTrip": true,
+        "imageEqualsQueryClasses": true,
+        "zeroOpaque": true,
+        "missingTransparent": true
+      }
+    },
+    "rice-harvested": {
+      "title": "米｜収穫面積",
+      "image": "rice-harvested.png",
+      "grid": "rice-harvested.values.gz",
+      "encoding": "float32-le-gzip",
+      "noData": -1,
+      "bounds": [
+        -27,
+        -36,
+        64,
+        39
+      ],
+      "crs": "EPSG:4326",
+      "width": 1092,
+      "height": 900,
+      "resolutionDegrees": 0.08333333333333333,
+      "gridOrder": "row-major north-to-south, west-to-east",
+      "unit": "ha / 5分角セル",
+      "period": "2020基準のモデル推計｜SPAM 2020 V2r2（2026-05-05配布）",
+      "scope": "アフリカ｜全生産方式の5分角セル値",
+      "sourceName": "SPAM 2020 V2r2",
+      "sourceLabel": "SPAM 2020 V2r2 / IFPRI",
+      "publisher": "International Food Policy Research Institute (IFPRI)",
+      "sourceUrl": "https://doi.org/10.7910/DVN/SWPENT",
+      "datasetVersion": "6.0",
+      "sourceEdition": "V2r2",
+      "referenceYear": 2020,
+      "releaseDate": "2026-05-05",
+      "cropCode": "RICE",
+      "measure": "harvested",
+      "productionSystem": "A (all technologies)",
+      "sourceUnit": "hectares per native 5-arcminute source cell",
+      "sourceNoData": -3.4028234663852886e+38,
+      "sourceResolutionDegrees": 0.08333333333333333,
+      "sourceCrs": "EPSG:4326",
+      "sourceFile": "spam2020_V2r2_global_H_RICE_A.tif",
+      "sourceSha256": "5c20f380b2f7501e8ed025583cc020ebce25f858ff20e07d71c2df59d2e8cfd2",
+      "sourceBytes": 37890590,
+      "sourceArchive": "spam2020V2r2_global_harvested_area.geotiff.zip",
+      "sourceArchiveSha256": "34895a332ba7ff9d9732a81fe9da7063458d197f3c72ce3a405329c41f94ade2",
+      "sourceArchiveBytes": 68007241,
+      "publisherMd5": "dd9ac5def086fcae26d28423b2b31f8b",
+      "sourceDataFileId": 13827040,
+      "sourceDownloadUrl": "https://www.dropbox.com/scl/fi/sw2z9pimrkqqv71pqf5z8/spam2020V2r2_global_harvested_area.geotiff.zip?dl=1&rlkey=e11l395kofek5233pj4e1t9wf&st=o0otxlpz",
+      "sourceRetrievedAt": "2026-10-03T14:36:44.033Z",
+      "sourceNativeWindow": [
+        1836,
+        612,
+        2928,
+        1512
+      ],
+      "sourceNativeOrigin": [
+        -180,
+        90.00000000000004,
+        0
+      ],
+      "sourceNativeResolution": [
+        0.0833333333333144,
+        -0.0833333333333144,
+        0
+      ],
+      "sourceNativeWindowBounds": [
+        -27.00000000003476,
+        -35.99999999997132,
+        63.99999999994455,
+        39.00000000001163
+      ],
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "licenseEvidenceUrl": "https://dataverse.harvard.edu/api/datasets/10094351/versions/6.0",
+      "licenseEvidence": "Fixed dataset Terms of Use section 4 explicitly permits CC BY 4.0 reuse, distribution and reproduction even commercially. Official public-mirror archive matches that dataset file MD5 and byte count.",
+      "sourceNotice": "source-notice.txt",
+      "citation": "International Food Policy Research Institute (IFPRI), 2026, \"Global Spatially-Disaggregated Crop Production Statistics Data for 2020 Version 2.0 Release 2\", https://doi.org/10.7910/DVN/SWPENT, Harvard Dataverse, V6",
+      "breaks": [
+        1,
+        10,
+        100,
+        1000
+      ],
+      "colors": [
+        "#d9ead5",
+        "#b7d8b6",
+        "#80b397",
+        "#458976",
+        "#1e5f57"
+      ],
+      "zeroValue": 0,
+      "zeroId": "crop-zero",
+      "zeroColor": "#f3f2e8",
+      "positiveLegend": [
+        {
+          "id": "h-0",
+          "label": "0超–1未満 ha/セル",
+          "color": "#d9ead5"
+        },
+        {
+          "id": "h-1",
+          "label": "1–10未満 ha/セル",
+          "color": "#b7d8b6"
+        },
+        {
+          "id": "h-2",
+          "label": "10–100未満 ha/セル",
+          "color": "#80b397"
+        },
+        {
+          "id": "h-3",
+          "label": "100–1,000未満 ha/セル",
+          "color": "#458976"
+        },
+        {
+          "id": "h-4",
+          "label": "1,000 ha/セル以上",
+          "color": "#1e5f57"
+        }
+      ],
+      "legend": [
+        {
+          "id": "crop-zero",
+          "label": "0 ha/セル",
+          "color": "#f3f2e8"
+        },
+        {
+          "id": "h-0",
+          "label": "0超–1未満 ha/セル",
+          "color": "#d9ead5"
+        },
+        {
+          "id": "h-1",
+          "label": "1–10未満 ha/セル",
+          "color": "#b7d8b6"
+        },
+        {
+          "id": "h-2",
+          "label": "10–100未満 ha/セル",
+          "color": "#80b397"
+        },
+        {
+          "id": "h-3",
+          "label": "100–1,000未満 ha/セル",
+          "color": "#458976"
+        },
+        {
+          "id": "h-4",
+          "label": "1,000 ha/セル以上",
+          "color": "#1e5f57"
+        }
+      ],
+      "validPixels": 118455,
+      "positivePixels": 103169,
+      "zeroPixels": 15286,
+      "missingPixels": 864345,
+      "maximum": 12164.2998046875,
+      "takeaway": "米の分布は湿潤な自然条件だけでは説明できない。灌漑・水管理と市場へのつながりを合わせて読む。",
+      "description": "収穫面積は同じ土地での複数回の収穫を含む。土地被覆率・物理的な耕地面積とは異なる。",
+      "method": "Exact native 5-arcminute source window with no resampling, interpolation or smoothing. Original float32 values retained where the unchanged Africa country polygon contains the cell centre. Original noData remains unavailable; supplied zero remains zero. Border cells retain their whole original source-cell value and are not proportionally apportioned by polygon overlap. PNG and query grid use the identical masked array.",
+      "queryMethod": "floor((lon-west)/(east-west)*width), floor((north-lat)/(north-south)*height); outside bounds or -1 is unavailable",
+      "countryCoverage": {
+        "ZWE": {
+          "maskPixels": 4822,
+          "validPixels": 994,
+          "zeroPixels": 221,
+          "positivePixels": 773,
+          "missingPixels": 3828
+        },
+        "ZMB": {
+          "maskPixels": 9033,
+          "validPixels": 3157,
+          "zeroPixels": 1157,
+          "positivePixels": 2000,
+          "missingPixels": 5876
+        },
+        "UGA": {
+          "maskPixels": 2822,
+          "validPixels": 1349,
+          "zeroPixels": 100,
+          "positivePixels": 1249,
+          "missingPixels": 1473
+        },
+        "TUN": {
+          "maskPixels": 2202,
+          "validPixels": 3,
+          "zeroPixels": 0,
+          "positivePixels": 3,
+          "missingPixels": 2199
+        },
+        "TGO": {
+          "maskPixels": 662,
+          "validPixels": 632,
+          "zeroPixels": 2,
+          "positivePixels": 630,
+          "missingPixels": 30
+        },
+        "TZA": {
+          "maskPixels": 11097,
+          "validPixels": 7500,
+          "zeroPixels": 834,
+          "positivePixels": 6666,
+          "missingPixels": 3597
+        },
+        "SWZ": {
+          "maskPixels": 224,
+          "validPixels": 31,
+          "zeroPixels": 0,
+          "positivePixels": 31,
+          "missingPixels": 193
+        },
+        "SSD": {
+          "maskPixels": 7342,
+          "validPixels": 6381,
+          "zeroPixels": 565,
+          "positivePixels": 5816,
+          "missingPixels": 961
+        },
+        "SDN": {
+          "maskPixels": 22598,
+          "validPixels": 531,
+          "zeroPixels": 3,
+          "positivePixels": 528,
+          "missingPixels": 22067
+        },
+        "ZAF": {
+          "maskPixels": 16280,
+          "validPixels": 1873,
+          "zeroPixels": 32,
+          "positivePixels": 1841,
+          "missingPixels": 14407
+        },
+        "SOM": {
+          "maskPixels": 7516,
+          "validPixels": 41,
+          "zeroPixels": 1,
+          "positivePixels": 40,
+          "missingPixels": 7475
+        },
+        "SLE": {
+          "maskPixels": 854,
+          "validPixels": 853,
+          "zeroPixels": 28,
+          "positivePixels": 825,
+          "missingPixels": 1
+        },
+        "SYC": {
+          "maskPixels": 1,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 1
+        },
+        "SEN": {
+          "maskPixels": 2378,
+          "validPixels": 1635,
+          "zeroPixels": 169,
+          "positivePixels": 1466,
+          "missingPixels": 743
+        },
+        "STP": {
+          "maskPixels": 11,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 11
+        },
+        "RWA": {
+          "maskPixels": 295,
+          "validPixels": 182,
+          "zeroPixels": 24,
+          "positivePixels": 158,
+          "missingPixels": 113
+        },
+        "NGA": {
+          "maskPixels": 10765,
+          "validPixels": 10451,
+          "zeroPixels": 451,
+          "positivePixels": 10000,
+          "missingPixels": 314
+        },
+        "NER": {
+          "maskPixels": 14488,
+          "validPixels": 2514,
+          "zeroPixels": 1262,
+          "positivePixels": 1252,
+          "missingPixels": 11974
+        },
+        "NAM": {
+          "maskPixels": 10394,
+          "validPixels": 5,
+          "zeroPixels": 0,
+          "positivePixels": 5,
+          "missingPixels": 10389
+        },
+        "MOZ": {
+          "maskPixels": 9668,
+          "validPixels": 7274,
+          "zeroPixels": 2031,
+          "positivePixels": 5243,
+          "missingPixels": 2394
+        },
+        "MAR": {
+          "maskPixels": 7842,
+          "validPixels": 682,
+          "zeroPixels": 1,
+          "positivePixels": 681,
+          "missingPixels": 7160
+        },
+        "ESH": {
+          "maskPixels": 1165,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 1165
+        },
+        "MUS": {
+          "maskPixels": 23,
+          "validPixels": 22,
+          "zeroPixels": 6,
+          "positivePixels": 16,
+          "missingPixels": 1
+        },
+        "MRT": {
+          "maskPixels": 12899,
+          "validPixels": 35,
+          "zeroPixels": 0,
+          "positivePixels": 35,
+          "missingPixels": 12864
+        },
+        "MLI": {
+          "maskPixels": 15379,
+          "validPixels": 7788,
+          "zeroPixels": 1042,
+          "positivePixels": 6746,
+          "missingPixels": 7591
+        },
+        "MWI": {
+          "maskPixels": 1431,
+          "validPixels": 1165,
+          "zeroPixels": 64,
+          "positivePixels": 1101,
+          "missingPixels": 266
+        },
+        "MDG": {
+          "maskPixels": 7358,
+          "validPixels": 4676,
+          "zeroPixels": 187,
+          "positivePixels": 4489,
+          "missingPixels": 2682
+        },
+        "LBY": {
+          "maskPixels": 21316,
+          "validPixels": 1,
+          "zeroPixels": 0,
+          "positivePixels": 1,
+          "missingPixels": 21315
+        },
+        "LBR": {
+          "maskPixels": 1122,
+          "validPixels": 1115,
+          "zeroPixels": 3,
+          "positivePixels": 1112,
+          "missingPixels": 7
+        },
+        "LSO": {
+          "maskPixels": 403,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 403
+        },
+        "KEN": {
+          "maskPixels": 6937,
+          "validPixels": 705,
+          "zeroPixels": 276,
+          "positivePixels": 429,
+          "missingPixels": 6232
+        },
+        "GNB": {
+          "maskPixels": 373,
+          "validPixels": 333,
+          "zeroPixels": 27,
+          "positivePixels": 306,
+          "missingPixels": 40
+        },
+        "GIN": {
+          "maskPixels": 2898,
+          "validPixels": 2873,
+          "zeroPixels": 22,
+          "positivePixels": 2851,
+          "missingPixels": 25
+        },
+        "GHA": {
+          "maskPixels": 2819,
+          "validPixels": 2675,
+          "zeroPixels": 0,
+          "positivePixels": 2675,
+          "missingPixels": 144
+        },
+        "GMB": {
+          "maskPixels": 121,
+          "validPixels": 120,
+          "zeroPixels": 0,
+          "positivePixels": 120,
+          "missingPixels": 1
+        },
+        "GAB": {
+          "maskPixels": 3035,
+          "validPixels": 12,
+          "zeroPixels": 0,
+          "positivePixels": 12,
+          "missingPixels": 3023
+        },
+        "ETH": {
+          "maskPixels": 13348,
+          "validPixels": 2553,
+          "zeroPixels": 224,
+          "positivePixels": 2329,
+          "missingPixels": 10795
+        },
+        "ERI": {
+          "maskPixels": 1495,
+          "validPixels": 5,
+          "zeroPixels": 0,
+          "positivePixels": 5,
+          "missingPixels": 1490
+        },
+        "GNQ": {
+          "maskPixels": 310,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 310
+        },
+        "EGY": {
+          "maskPixels": 13050,
+          "validPixels": 4612,
+          "zeroPixels": 1660,
+          "positivePixels": 2952,
+          "missingPixels": 8438
+        },
+        "DJI": {
+          "maskPixels": 258,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 258
+        },
+        "CIV": {
+          "maskPixels": 3794,
+          "validPixels": 3690,
+          "zeroPixels": 0,
+          "positivePixels": 3690,
+          "missingPixels": 104
+        },
+        "COD": {
+          "maskPixels": 27316,
+          "validPixels": 12519,
+          "zeroPixels": 2795,
+          "positivePixels": 9724,
+          "missingPixels": 14797
+        },
+        "COG": {
+          "maskPixels": 4040,
+          "validPixels": 654,
+          "zeroPixels": 3,
+          "positivePixels": 651,
+          "missingPixels": 3386
+        },
+        "COM": {
+          "maskPixels": 17,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 17
+        },
+        "TCD": {
+          "maskPixels": 15396,
+          "validPixels": 5075,
+          "zeroPixels": 943,
+          "positivePixels": 4132,
+          "missingPixels": 10321
+        },
+        "CAF": {
+          "maskPixels": 7290,
+          "validPixels": 4839,
+          "zeroPixels": 586,
+          "positivePixels": 4253,
+          "missingPixels": 2451
+        },
+        "CPV": {
+          "maskPixels": 41,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 41
+        },
+        "CMR": {
+          "maskPixels": 5454,
+          "validPixels": 5204,
+          "zeroPixels": 67,
+          "positivePixels": 5137,
+          "missingPixels": 250
+        },
+        "BDI": {
+          "maskPixels": 310,
+          "validPixels": 11,
+          "zeroPixels": 0,
+          "positivePixels": 11,
+          "missingPixels": 299
+        },
+        "BFA": {
+          "maskPixels": 3266,
+          "validPixels": 3219,
+          "zeroPixels": 66,
+          "positivePixels": 3153,
+          "missingPixels": 47
+        },
+        "BWA": {
+          "maskPixels": 7278,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 7278
+        },
+        "BEN": {
+          "maskPixels": 1387,
+          "validPixels": 1038,
+          "zeroPixels": 2,
+          "positivePixels": 1036,
+          "missingPixels": 349
+        },
+        "AGO": {
+          "maskPixels": 14953,
+          "validPixels": 6988,
+          "zeroPixels": 365,
+          "positivePixels": 6623,
+          "missingPixels": 7965
+        },
+        "DZA": {
+          "maskPixels": 30769,
+          "validPixels": 440,
+          "zeroPixels": 67,
+          "positivePixels": 373,
+          "missingPixels": 30329
+        }
+      },
+      "samples": [
+        {
+          "kind": "zero",
+          "index": 25517,
+          "row": 23,
+          "col": 401,
+          "sourceRow": 635,
+          "sourceCol": 2237,
+          "lon": 6.458333333333329,
+          "lat": 37.041666666666664,
+          "originalValue": 0,
+          "value": 0,
+          "maskAtCellCentre": true,
+          "sourceNoData": false,
+          "pngClass": "crop-zero"
+        },
+        {
+          "kind": "positiveMaximum",
+          "index": 543406,
+          "row": 497,
+          "col": 682,
+          "sourceRow": 1109,
+          "sourceCol": 2518,
+          "lon": 29.875,
+          "lat": -2.4583333333333286,
+          "originalValue": 12164.2998046875,
+          "value": 12164.2998046875,
+          "maskAtCellCentre": true,
+          "sourceNoData": false,
+          "pngClass": "h-4"
+        },
+        {
+          "kind": "missing",
+          "index": 0,
+          "row": 0,
+          "col": 0,
+          "sourceRow": 612,
+          "sourceCol": 1836,
+          "lon": -26.958333333333332,
+          "lat": 38.958333333333336,
+          "originalValue": null,
+          "value": -1,
+          "maskAtCellCentre": false,
+          "sourceNoData": true,
+          "pngClass": null
+        },
+        {
+          "kind": "sourceMissingOnLand",
+          "index": 22278,
+          "row": 20,
+          "col": 438,
+          "sourceRow": 632,
+          "sourceCol": 2274,
+          "lon": 9.541666666666664,
+          "lat": 37.291666666666664,
+          "originalValue": null,
+          "value": -1,
+          "maskAtCellCentre": true,
+          "sourceNoData": true,
+          "pngClass": null
+        }
+      ],
+      "checks": {
+        "retainedValuesExact": true,
+        "sourceNoDataPreserved": true,
+        "outsideMaskUnavailable": true,
+        "float32GridExactRoundTrip": true,
+        "imageEqualsQueryClasses": true,
+        "zeroOpaque": true,
+        "missingTransparent": true
+      }
+    },
+    "rice-production": {
+      "title": "米｜生産量",
+      "image": "rice-production.png",
+      "grid": "rice-production.values.gz",
+      "encoding": "float32-le-gzip",
+      "noData": -1,
+      "bounds": [
+        -27,
+        -36,
+        64,
+        39
+      ],
+      "crs": "EPSG:4326",
+      "width": 1092,
+      "height": 900,
+      "resolutionDegrees": 0.08333333333333333,
+      "gridOrder": "row-major north-to-south, west-to-east",
+      "unit": "t / 5分角セル",
+      "period": "2020基準のモデル推計｜SPAM 2020 V2r2（2026-05-05配布）",
+      "scope": "アフリカ｜全生産方式の5分角セル値",
+      "sourceName": "SPAM 2020 V2r2",
+      "sourceLabel": "SPAM 2020 V2r2 / IFPRI",
+      "publisher": "International Food Policy Research Institute (IFPRI)",
+      "sourceUrl": "https://doi.org/10.7910/DVN/SWPENT",
+      "datasetVersion": "6.0",
+      "sourceEdition": "V2r2",
+      "referenceYear": 2020,
+      "releaseDate": "2026-05-05",
+      "cropCode": "RICE",
+      "measure": "production",
+      "productionSystem": "A (all technologies)",
+      "sourceUnit": "metric tonnes per native 5-arcminute source cell",
+      "sourceNoData": -3.4028234663852886e+38,
+      "sourceResolutionDegrees": 0.08333333333333333,
+      "sourceCrs": "EPSG:4326",
+      "sourceFile": "spam2020_V2r2_global_P_RICE_A.tif",
+      "sourceSha256": "db16e1358399a32fd72ff34c5a3aa32b2262003a978593b7c260afc6957ee4ac",
+      "sourceBytes": 37890590,
+      "sourceArchive": "spam2020V2r2_global_production.geotiff.zip",
+      "sourceArchiveSha256": "7bdce0d9f48d50c2596fbc35bfeb1a4d37afa59f421a6b0c2c10fd221277e42d",
+      "sourceArchiveBytes": 75175570,
+      "publisherMd5": "8ce3956c25860ae9960155b8382518de",
+      "sourceDataFileId": 13827043,
+      "sourceDownloadUrl": "https://www.dropbox.com/scl/fi/euolvnpdooxhd5ljskl4q/spam2020V2r2_global_production.geotiff.zip?dl=1&rlkey=mttc09xhfr4m1zsd4ik40wvz1&st=q36ax4cq",
+      "sourceRetrievedAt": "2026-10-03T14:36:46.655Z",
+      "sourceNativeWindow": [
+        1836,
+        612,
+        2928,
+        1512
+      ],
+      "sourceNativeOrigin": [
+        -180,
+        90.00000000000004,
+        0
+      ],
+      "sourceNativeResolution": [
+        0.0833333333333144,
+        -0.0833333333333144,
+        0
+      ],
+      "sourceNativeWindowBounds": [
+        -27.00000000003476,
+        -35.99999999997132,
+        63.99999999994455,
+        39.00000000001163
+      ],
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "licenseEvidenceUrl": "https://dataverse.harvard.edu/api/datasets/10094351/versions/6.0",
+      "licenseEvidence": "Fixed dataset Terms of Use section 4 explicitly permits CC BY 4.0 reuse, distribution and reproduction even commercially. Official public-mirror archive matches that dataset file MD5 and byte count.",
+      "sourceNotice": "source-notice.txt",
+      "citation": "International Food Policy Research Institute (IFPRI), 2026, \"Global Spatially-Disaggregated Crop Production Statistics Data for 2020 Version 2.0 Release 2\", https://doi.org/10.7910/DVN/SWPENT, Harvard Dataverse, V6",
+      "breaks": [
+        1,
+        10,
+        100,
+        1000,
+        10000
+      ],
+      "colors": [
+        "#dde8d4",
+        "#bfd6ac",
+        "#96b77f",
+        "#6e965b",
+        "#44763f",
+        "#22582e"
+      ],
+      "zeroValue": 0,
+      "zeroId": "crop-zero",
+      "zeroColor": "#f3f2e8",
+      "positiveLegend": [
+        {
+          "id": "p-0",
+          "label": "0超–1未満 t/セル",
+          "color": "#dde8d4"
+        },
+        {
+          "id": "p-1",
+          "label": "1–10未満 t/セル",
+          "color": "#bfd6ac"
+        },
+        {
+          "id": "p-2",
+          "label": "10–100未満 t/セル",
+          "color": "#96b77f"
+        },
+        {
+          "id": "p-3",
+          "label": "100–1,000未満 t/セル",
+          "color": "#6e965b"
+        },
+        {
+          "id": "p-4",
+          "label": "1,000–10,000未満 t/セル",
+          "color": "#44763f"
+        },
+        {
+          "id": "p-5",
+          "label": "10,000 t/セル以上",
+          "color": "#22582e"
+        }
+      ],
+      "legend": [
+        {
+          "id": "crop-zero",
+          "label": "0 t/セル",
+          "color": "#f3f2e8"
+        },
+        {
+          "id": "p-0",
+          "label": "0超–1未満 t/セル",
+          "color": "#dde8d4"
+        },
+        {
+          "id": "p-1",
+          "label": "1–10未満 t/セル",
+          "color": "#bfd6ac"
+        },
+        {
+          "id": "p-2",
+          "label": "10–100未満 t/セル",
+          "color": "#96b77f"
+        },
+        {
+          "id": "p-3",
+          "label": "100–1,000未満 t/セル",
+          "color": "#6e965b"
+        },
+        {
+          "id": "p-4",
+          "label": "1,000–10,000未満 t/セル",
+          "color": "#44763f"
+        },
+        {
+          "id": "p-5",
+          "label": "10,000 t/セル以上",
+          "color": "#22582e"
+        }
+      ],
+      "validPixels": 118455,
+      "positivePixels": 102786,
+      "zeroPixels": 15669,
+      "missingPixels": 864345,
+      "maximum": 116983.703125,
+      "takeaway": "米の分布は湿潤な自然条件だけでは説明できない。灌漑・水管理と市場へのつながりを合わせて読む。",
+      "description": "作物別の生産量を比較する。異なる作物の重さは収量効率・食料価値・所得を直接比較する指標ではない。",
+      "method": "Exact native 5-arcminute source window with no resampling, interpolation or smoothing. Original float32 values retained where the unchanged Africa country polygon contains the cell centre. Original noData remains unavailable; supplied zero remains zero. Border cells retain their whole original source-cell value and are not proportionally apportioned by polygon overlap. PNG and query grid use the identical masked array.",
+      "queryMethod": "floor((lon-west)/(east-west)*width), floor((north-lat)/(north-south)*height); outside bounds or -1 is unavailable",
+      "countryCoverage": {
+        "ZWE": {
+          "maskPixels": 4822,
+          "validPixels": 994,
+          "zeroPixels": 445,
+          "positivePixels": 549,
+          "missingPixels": 3828
+        },
+        "ZMB": {
+          "maskPixels": 9033,
+          "validPixels": 3157,
+          "zeroPixels": 1169,
+          "positivePixels": 1988,
+          "missingPixels": 5876
+        },
+        "UGA": {
+          "maskPixels": 2822,
+          "validPixels": 1349,
+          "zeroPixels": 101,
+          "positivePixels": 1248,
+          "missingPixels": 1473
+        },
+        "TUN": {
+          "maskPixels": 2202,
+          "validPixels": 3,
+          "zeroPixels": 0,
+          "positivePixels": 3,
+          "missingPixels": 2199
+        },
+        "TGO": {
+          "maskPixels": 662,
+          "validPixels": 632,
+          "zeroPixels": 2,
+          "positivePixels": 630,
+          "missingPixels": 30
+        },
+        "TZA": {
+          "maskPixels": 11097,
+          "validPixels": 7500,
+          "zeroPixels": 799,
+          "positivePixels": 6701,
+          "missingPixels": 3597
+        },
+        "SWZ": {
+          "maskPixels": 224,
+          "validPixels": 31,
+          "zeroPixels": 0,
+          "positivePixels": 31,
+          "missingPixels": 193
+        },
+        "SSD": {
+          "maskPixels": 7342,
+          "validPixels": 6381,
+          "zeroPixels": 593,
+          "positivePixels": 5788,
+          "missingPixels": 961
+        },
+        "SDN": {
+          "maskPixels": 22598,
+          "validPixels": 531,
+          "zeroPixels": 5,
+          "positivePixels": 526,
+          "missingPixels": 22067
+        },
+        "ZAF": {
+          "maskPixels": 16280,
+          "validPixels": 1873,
+          "zeroPixels": 536,
+          "positivePixels": 1337,
+          "missingPixels": 14407
+        },
+        "SOM": {
+          "maskPixels": 7516,
+          "validPixels": 41,
+          "zeroPixels": 2,
+          "positivePixels": 39,
+          "missingPixels": 7475
+        },
+        "SLE": {
+          "maskPixels": 854,
+          "validPixels": 853,
+          "zeroPixels": 28,
+          "positivePixels": 825,
+          "missingPixels": 1
+        },
+        "SYC": {
+          "maskPixels": 1,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 1
+        },
+        "SEN": {
+          "maskPixels": 2378,
+          "validPixels": 1635,
+          "zeroPixels": 206,
+          "positivePixels": 1429,
+          "missingPixels": 743
+        },
+        "STP": {
+          "maskPixels": 11,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 11
+        },
+        "RWA": {
+          "maskPixels": 295,
+          "validPixels": 182,
+          "zeroPixels": 25,
+          "positivePixels": 157,
+          "missingPixels": 113
+        },
+        "NGA": {
+          "maskPixels": 10765,
+          "validPixels": 10451,
+          "zeroPixels": 291,
+          "positivePixels": 10160,
+          "missingPixels": 314
+        },
+        "NER": {
+          "maskPixels": 14488,
+          "validPixels": 2514,
+          "zeroPixels": 1125,
+          "positivePixels": 1389,
+          "missingPixels": 11974
+        },
+        "NAM": {
+          "maskPixels": 10394,
+          "validPixels": 5,
+          "zeroPixels": 0,
+          "positivePixels": 5,
+          "missingPixels": 10389
+        },
+        "MOZ": {
+          "maskPixels": 9668,
+          "validPixels": 7274,
+          "zeroPixels": 2378,
+          "positivePixels": 4896,
+          "missingPixels": 2394
+        },
+        "MAR": {
+          "maskPixels": 7842,
+          "validPixels": 682,
+          "zeroPixels": 1,
+          "positivePixels": 681,
+          "missingPixels": 7160
+        },
+        "ESH": {
+          "maskPixels": 1165,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 1165
+        },
+        "MUS": {
+          "maskPixels": 23,
+          "validPixels": 22,
+          "zeroPixels": 1,
+          "positivePixels": 21,
+          "missingPixels": 1
+        },
+        "MRT": {
+          "maskPixels": 12899,
+          "validPixels": 35,
+          "zeroPixels": 0,
+          "positivePixels": 35,
+          "missingPixels": 12864
+        },
+        "MLI": {
+          "maskPixels": 15379,
+          "validPixels": 7788,
+          "zeroPixels": 1080,
+          "positivePixels": 6708,
+          "missingPixels": 7591
+        },
+        "MWI": {
+          "maskPixels": 1431,
+          "validPixels": 1165,
+          "zeroPixels": 170,
+          "positivePixels": 995,
+          "missingPixels": 266
+        },
+        "MDG": {
+          "maskPixels": 7358,
+          "validPixels": 4676,
+          "zeroPixels": 393,
+          "positivePixels": 4283,
+          "missingPixels": 2682
+        },
+        "LBY": {
+          "maskPixels": 21316,
+          "validPixels": 1,
+          "zeroPixels": 0,
+          "positivePixels": 1,
+          "missingPixels": 21315
+        },
+        "LBR": {
+          "maskPixels": 1122,
+          "validPixels": 1115,
+          "zeroPixels": 3,
+          "positivePixels": 1112,
+          "missingPixels": 7
+        },
+        "LSO": {
+          "maskPixels": 403,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 403
+        },
+        "KEN": {
+          "maskPixels": 6937,
+          "validPixels": 705,
+          "zeroPixels": 294,
+          "positivePixels": 411,
+          "missingPixels": 6232
+        },
+        "GNB": {
+          "maskPixels": 373,
+          "validPixels": 333,
+          "zeroPixels": 36,
+          "positivePixels": 297,
+          "missingPixels": 40
+        },
+        "GIN": {
+          "maskPixels": 2898,
+          "validPixels": 2873,
+          "zeroPixels": 22,
+          "positivePixels": 2851,
+          "missingPixels": 25
+        },
+        "GHA": {
+          "maskPixels": 2819,
+          "validPixels": 2675,
+          "zeroPixels": 0,
+          "positivePixels": 2675,
+          "missingPixels": 144
+        },
+        "GMB": {
+          "maskPixels": 121,
+          "validPixels": 120,
+          "zeroPixels": 0,
+          "positivePixels": 120,
+          "missingPixels": 1
+        },
+        "GAB": {
+          "maskPixels": 3035,
+          "validPixels": 12,
+          "zeroPixels": 0,
+          "positivePixels": 12,
+          "missingPixels": 3023
+        },
+        "ETH": {
+          "maskPixels": 13348,
+          "validPixels": 2553,
+          "zeroPixels": 220,
+          "positivePixels": 2333,
+          "missingPixels": 10795
+        },
+        "ERI": {
+          "maskPixels": 1495,
+          "validPixels": 5,
+          "zeroPixels": 0,
+          "positivePixels": 5,
+          "missingPixels": 1490
+        },
+        "GNQ": {
+          "maskPixels": 310,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 310
+        },
+        "EGY": {
+          "maskPixels": 13050,
+          "validPixels": 4612,
+          "zeroPixels": 650,
+          "positivePixels": 3962,
+          "missingPixels": 8438
+        },
+        "DJI": {
+          "maskPixels": 258,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 258
+        },
+        "CIV": {
+          "maskPixels": 3794,
+          "validPixels": 3690,
+          "zeroPixels": 0,
+          "positivePixels": 3690,
+          "missingPixels": 104
+        },
+        "COD": {
+          "maskPixels": 27316,
+          "validPixels": 12519,
+          "zeroPixels": 2858,
+          "positivePixels": 9661,
+          "missingPixels": 14797
+        },
+        "COG": {
+          "maskPixels": 4040,
+          "validPixels": 654,
+          "zeroPixels": 4,
+          "positivePixels": 650,
+          "missingPixels": 3386
+        },
+        "COM": {
+          "maskPixels": 17,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 17
+        },
+        "TCD": {
+          "maskPixels": 15396,
+          "validPixels": 5075,
+          "zeroPixels": 998,
+          "positivePixels": 4077,
+          "missingPixels": 10321
+        },
+        "CAF": {
+          "maskPixels": 7290,
+          "validPixels": 4839,
+          "zeroPixels": 410,
+          "positivePixels": 4429,
+          "missingPixels": 2451
+        },
+        "CPV": {
+          "maskPixels": 41,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 41
+        },
+        "CMR": {
+          "maskPixels": 5454,
+          "validPixels": 5204,
+          "zeroPixels": 234,
+          "positivePixels": 4970,
+          "missingPixels": 250
+        },
+        "BDI": {
+          "maskPixels": 310,
+          "validPixels": 11,
+          "zeroPixels": 0,
+          "positivePixels": 11,
+          "missingPixels": 299
+        },
+        "BFA": {
+          "maskPixels": 3266,
+          "validPixels": 3219,
+          "zeroPixels": 67,
+          "positivePixels": 3152,
+          "missingPixels": 47
+        },
+        "BWA": {
+          "maskPixels": 7278,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 7278
+        },
+        "BEN": {
+          "maskPixels": 1387,
+          "validPixels": 1038,
+          "zeroPixels": 2,
+          "positivePixels": 1036,
+          "missingPixels": 349
+        },
+        "AGO": {
+          "maskPixels": 14953,
+          "validPixels": 6988,
+          "zeroPixels": 475,
+          "positivePixels": 6513,
+          "missingPixels": 7965
+        },
+        "DZA": {
+          "maskPixels": 30769,
+          "validPixels": 440,
+          "zeroPixels": 46,
+          "positivePixels": 394,
+          "missingPixels": 30329
+        }
+      },
+      "samples": [
+        {
+          "kind": "zero",
+          "index": 25517,
+          "row": 23,
+          "col": 401,
+          "sourceRow": 635,
+          "sourceCol": 2237,
+          "lon": 6.458333333333329,
+          "lat": 37.041666666666664,
+          "originalValue": 0,
+          "value": 0,
+          "maskAtCellCentre": true,
+          "sourceNoData": false,
+          "pngClass": "crop-zero"
+        },
+        {
+          "kind": "positiveMaximum",
+          "index": 518377,
+          "row": 474,
+          "col": 769,
+          "sourceRow": 1086,
+          "sourceCol": 2605,
+          "lon": 37.125,
+          "lat": -0.5416666666666643,
+          "originalValue": 116983.703125,
+          "value": 116983.703125,
+          "maskAtCellCentre": true,
+          "sourceNoData": false,
+          "pngClass": "p-5"
+        },
+        {
+          "kind": "missing",
+          "index": 0,
+          "row": 0,
+          "col": 0,
+          "sourceRow": 612,
+          "sourceCol": 1836,
+          "lon": -26.958333333333332,
+          "lat": 38.958333333333336,
+          "originalValue": null,
+          "value": -1,
+          "maskAtCellCentre": false,
+          "sourceNoData": true,
+          "pngClass": null
+        },
+        {
+          "kind": "sourceMissingOnLand",
+          "index": 22278,
+          "row": 20,
+          "col": 438,
+          "sourceRow": 632,
+          "sourceCol": 2274,
+          "lon": 9.541666666666664,
+          "lat": 37.291666666666664,
+          "originalValue": null,
+          "value": -1,
+          "maskAtCellCentre": true,
+          "sourceNoData": true,
+          "pngClass": null
+        }
+      ],
+      "checks": {
+        "retainedValuesExact": true,
+        "sourceNoDataPreserved": true,
+        "outsideMaskUnavailable": true,
+        "float32GridExactRoundTrip": true,
+        "imageEqualsQueryClasses": true,
+        "zeroOpaque": true,
+        "missingTransparent": true
+      }
+    },
+    "wheat-harvested": {
+      "title": "小麦｜収穫面積",
+      "image": "wheat-harvested.png",
+      "grid": "wheat-harvested.values.gz",
+      "encoding": "float32-le-gzip",
+      "noData": -1,
+      "bounds": [
+        -27,
+        -36,
+        64,
+        39
+      ],
+      "crs": "EPSG:4326",
+      "width": 1092,
+      "height": 900,
+      "resolutionDegrees": 0.08333333333333333,
+      "gridOrder": "row-major north-to-south, west-to-east",
+      "unit": "ha / 5分角セル",
+      "period": "2020基準のモデル推計｜SPAM 2020 V2r2（2026-05-05配布）",
+      "scope": "アフリカ｜全生産方式の5分角セル値",
+      "sourceName": "SPAM 2020 V2r2",
+      "sourceLabel": "SPAM 2020 V2r2 / IFPRI",
+      "publisher": "International Food Policy Research Institute (IFPRI)",
+      "sourceUrl": "https://doi.org/10.7910/DVN/SWPENT",
+      "datasetVersion": "6.0",
+      "sourceEdition": "V2r2",
+      "referenceYear": 2020,
+      "releaseDate": "2026-05-05",
+      "cropCode": "WHEA",
+      "measure": "harvested",
+      "productionSystem": "A (all technologies)",
+      "sourceUnit": "hectares per native 5-arcminute source cell",
+      "sourceNoData": -3.4028234663852886e+38,
+      "sourceResolutionDegrees": 0.08333333333333333,
+      "sourceCrs": "EPSG:4326",
+      "sourceFile": "spam2020_V2r2_global_H_WHEA_A.tif",
+      "sourceSha256": "288f583e50e8237b0eaad880e5ef188383c97701c5015744cf6a62f2bf7dba9e",
+      "sourceBytes": 37902342,
+      "sourceArchive": "spam2020V2r2_global_harvested_area.geotiff.zip",
+      "sourceArchiveSha256": "34895a332ba7ff9d9732a81fe9da7063458d197f3c72ce3a405329c41f94ade2",
+      "sourceArchiveBytes": 68007241,
+      "publisherMd5": "dd9ac5def086fcae26d28423b2b31f8b",
+      "sourceDataFileId": 13827040,
+      "sourceDownloadUrl": "https://www.dropbox.com/scl/fi/sw2z9pimrkqqv71pqf5z8/spam2020V2r2_global_harvested_area.geotiff.zip?dl=1&rlkey=e11l395kofek5233pj4e1t9wf&st=o0otxlpz",
+      "sourceRetrievedAt": "2026-10-03T14:36:44.033Z",
+      "sourceNativeWindow": [
+        1836,
+        612,
+        2928,
+        1512
+      ],
+      "sourceNativeOrigin": [
+        -180,
+        90.00000000000004,
+        0
+      ],
+      "sourceNativeResolution": [
+        0.0833333332727273,
+        -0.0833333332727273,
+        0
+      ],
+      "sourceNativeWindowBounds": [
+        -27.000000111272698,
+        -35.99999990836362,
+        63.99999982254553,
+        39.00000003709094
+      ],
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "licenseEvidenceUrl": "https://dataverse.harvard.edu/api/datasets/10094351/versions/6.0",
+      "licenseEvidence": "Fixed dataset Terms of Use section 4 explicitly permits CC BY 4.0 reuse, distribution and reproduction even commercially. Official public-mirror archive matches that dataset file MD5 and byte count.",
+      "sourceNotice": "source-notice.txt",
+      "citation": "International Food Policy Research Institute (IFPRI), 2026, \"Global Spatially-Disaggregated Crop Production Statistics Data for 2020 Version 2.0 Release 2\", https://doi.org/10.7910/DVN/SWPENT, Harvard Dataverse, V6",
+      "breaks": [
+        1,
+        10,
+        100,
+        1000
+      ],
+      "colors": [
+        "#d9ead5",
+        "#b7d8b6",
+        "#80b397",
+        "#458976",
+        "#1e5f57"
+      ],
+      "zeroValue": 0,
+      "zeroId": "crop-zero",
+      "zeroColor": "#f3f2e8",
+      "positiveLegend": [
+        {
+          "id": "h-0",
+          "label": "0超–1未満 ha/セル",
+          "color": "#d9ead5"
+        },
+        {
+          "id": "h-1",
+          "label": "1–10未満 ha/セル",
+          "color": "#b7d8b6"
+        },
+        {
+          "id": "h-2",
+          "label": "10–100未満 ha/セル",
+          "color": "#80b397"
+        },
+        {
+          "id": "h-3",
+          "label": "100–1,000未満 ha/セル",
+          "color": "#458976"
+        },
+        {
+          "id": "h-4",
+          "label": "1,000 ha/セル以上",
+          "color": "#1e5f57"
+        }
+      ],
+      "legend": [
+        {
+          "id": "crop-zero",
+          "label": "0 ha/セル",
+          "color": "#f3f2e8"
+        },
+        {
+          "id": "h-0",
+          "label": "0超–1未満 ha/セル",
+          "color": "#d9ead5"
+        },
+        {
+          "id": "h-1",
+          "label": "1–10未満 ha/セル",
+          "color": "#b7d8b6"
+        },
+        {
+          "id": "h-2",
+          "label": "10–100未満 ha/セル",
+          "color": "#80b397"
+        },
+        {
+          "id": "h-3",
+          "label": "100–1,000未満 ha/セル",
+          "color": "#458976"
+        },
+        {
+          "id": "h-4",
+          "label": "1,000 ha/セル以上",
+          "color": "#1e5f57"
+        }
+      ],
+      "validPixels": 79720,
+      "positivePixels": 59090,
+      "zeroPixels": 20630,
+      "missingPixels": 903080,
+      "maximum": 8123.89990234375,
+      "takeaway": "小麦は北部・高地などの環境を手掛かりに読めるが、灌漑・栽培技術・需要も分布を左右する。",
+      "description": "収穫面積は同じ土地での複数回の収穫を含む。土地被覆率・物理的な耕地面積とは異なる。",
+      "method": "Exact native 5-arcminute source window with no resampling, interpolation or smoothing. Original float32 values retained where the unchanged Africa country polygon contains the cell centre. Original noData remains unavailable; supplied zero remains zero. Border cells retain their whole original source-cell value and are not proportionally apportioned by polygon overlap. PNG and query grid use the identical masked array.",
+      "queryMethod": "floor((lon-west)/(east-west)*width), floor((north-lat)/(north-south)*height); outside bounds or -1 is unavailable",
+      "countryCoverage": {
+        "ZWE": {
+          "maskPixels": 4822,
+          "validPixels": 3242,
+          "zeroPixels": 56,
+          "positivePixels": 3186,
+          "missingPixels": 1580
+        },
+        "ZMB": {
+          "maskPixels": 9033,
+          "validPixels": 173,
+          "zeroPixels": 60,
+          "positivePixels": 113,
+          "missingPixels": 8860
+        },
+        "UGA": {
+          "maskPixels": 2822,
+          "validPixels": 568,
+          "zeroPixels": 2,
+          "positivePixels": 566,
+          "missingPixels": 2254
+        },
+        "TUN": {
+          "maskPixels": 2202,
+          "validPixels": 1781,
+          "zeroPixels": 474,
+          "positivePixels": 1307,
+          "missingPixels": 421
+        },
+        "TGO": {
+          "maskPixels": 662,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 662
+        },
+        "TZA": {
+          "maskPixels": 11097,
+          "validPixels": 4173,
+          "zeroPixels": 422,
+          "positivePixels": 3751,
+          "missingPixels": 6924
+        },
+        "SWZ": {
+          "maskPixels": 224,
+          "validPixels": 202,
+          "zeroPixels": 0,
+          "positivePixels": 202,
+          "missingPixels": 22
+        },
+        "SSD": {
+          "maskPixels": 7342,
+          "validPixels": 15,
+          "zeroPixels": 9,
+          "positivePixels": 6,
+          "missingPixels": 7327
+        },
+        "SDN": {
+          "maskPixels": 22598,
+          "validPixels": 2558,
+          "zeroPixels": 93,
+          "positivePixels": 2465,
+          "missingPixels": 20040
+        },
+        "ZAF": {
+          "maskPixels": 16280,
+          "validPixels": 4745,
+          "zeroPixels": 20,
+          "positivePixels": 4725,
+          "missingPixels": 11535
+        },
+        "SOM": {
+          "maskPixels": 7516,
+          "validPixels": 260,
+          "zeroPixels": 61,
+          "positivePixels": 199,
+          "missingPixels": 7256
+        },
+        "SLE": {
+          "maskPixels": 854,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 854
+        },
+        "SYC": {
+          "maskPixels": 1,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 1
+        },
+        "SEN": {
+          "maskPixels": 2378,
+          "validPixels": 3,
+          "zeroPixels": 0,
+          "positivePixels": 3,
+          "missingPixels": 2375
+        },
+        "STP": {
+          "maskPixels": 11,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 11
+        },
+        "RWA": {
+          "maskPixels": 295,
+          "validPixels": 190,
+          "zeroPixels": 5,
+          "positivePixels": 185,
+          "missingPixels": 105
+        },
+        "NGA": {
+          "maskPixels": 10765,
+          "validPixels": 1792,
+          "zeroPixels": 84,
+          "positivePixels": 1708,
+          "missingPixels": 8973
+        },
+        "NER": {
+          "maskPixels": 14488,
+          "validPixels": 1430,
+          "zeroPixels": 61,
+          "positivePixels": 1369,
+          "missingPixels": 13058
+        },
+        "NAM": {
+          "maskPixels": 10394,
+          "validPixels": 2743,
+          "zeroPixels": 1190,
+          "positivePixels": 1553,
+          "missingPixels": 7651
+        },
+        "MOZ": {
+          "maskPixels": 9668,
+          "validPixels": 7890,
+          "zeroPixels": 386,
+          "positivePixels": 7504,
+          "missingPixels": 1778
+        },
+        "MAR": {
+          "maskPixels": 7842,
+          "validPixels": 5007,
+          "zeroPixels": 241,
+          "positivePixels": 4766,
+          "missingPixels": 2835
+        },
+        "ESH": {
+          "maskPixels": 1165,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 1165
+        },
+        "MUS": {
+          "maskPixels": 23,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 23
+        },
+        "MRT": {
+          "maskPixels": 12899,
+          "validPixels": 1265,
+          "zeroPixels": 105,
+          "positivePixels": 1160,
+          "missingPixels": 11634
+        },
+        "MLI": {
+          "maskPixels": 15379,
+          "validPixels": 132,
+          "zeroPixels": 31,
+          "positivePixels": 101,
+          "missingPixels": 15247
+        },
+        "MWI": {
+          "maskPixels": 1431,
+          "validPixels": 1020,
+          "zeroPixels": 175,
+          "positivePixels": 845,
+          "missingPixels": 411
+        },
+        "MDG": {
+          "maskPixels": 7358,
+          "validPixels": 4308,
+          "zeroPixels": 1292,
+          "positivePixels": 3016,
+          "missingPixels": 3050
+        },
+        "LBY": {
+          "maskPixels": 21316,
+          "validPixels": 1085,
+          "zeroPixels": 71,
+          "positivePixels": 1014,
+          "missingPixels": 20231
+        },
+        "LBR": {
+          "maskPixels": 1122,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 1122
+        },
+        "LSO": {
+          "maskPixels": 403,
+          "validPixels": 321,
+          "zeroPixels": 27,
+          "positivePixels": 294,
+          "missingPixels": 82
+        },
+        "KEN": {
+          "maskPixels": 6937,
+          "validPixels": 2139,
+          "zeroPixels": 1269,
+          "positivePixels": 870,
+          "missingPixels": 4798
+        },
+        "GNB": {
+          "maskPixels": 373,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 373
+        },
+        "GIN": {
+          "maskPixels": 2898,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 2898
+        },
+        "GHA": {
+          "maskPixels": 2819,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 2819
+        },
+        "GMB": {
+          "maskPixels": 121,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 121
+        },
+        "GAB": {
+          "maskPixels": 3035,
+          "validPixels": 3,
+          "zeroPixels": 3,
+          "positivePixels": 0,
+          "missingPixels": 3032
+        },
+        "ETH": {
+          "maskPixels": 13348,
+          "validPixels": 5733,
+          "zeroPixels": 2282,
+          "positivePixels": 3451,
+          "missingPixels": 7615
+        },
+        "ERI": {
+          "maskPixels": 1495,
+          "validPixels": 367,
+          "zeroPixels": 18,
+          "positivePixels": 349,
+          "missingPixels": 1128
+        },
+        "GNQ": {
+          "maskPixels": 310,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 310
+        },
+        "EGY": {
+          "maskPixels": 13050,
+          "validPixels": 4947,
+          "zeroPixels": 1470,
+          "positivePixels": 3477,
+          "missingPixels": 8103
+        },
+        "DJI": {
+          "maskPixels": 258,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 258
+        },
+        "CIV": {
+          "maskPixels": 3794,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 3794
+        },
+        "COD": {
+          "maskPixels": 27316,
+          "validPixels": 4320,
+          "zeroPixels": 148,
+          "positivePixels": 4172,
+          "missingPixels": 22996
+        },
+        "COG": {
+          "maskPixels": 4040,
+          "validPixels": 1,
+          "zeroPixels": 1,
+          "positivePixels": 0,
+          "missingPixels": 4039
+        },
+        "COM": {
+          "maskPixels": 17,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 17
+        },
+        "TCD": {
+          "maskPixels": 15396,
+          "validPixels": 52,
+          "zeroPixels": 13,
+          "positivePixels": 39,
+          "missingPixels": 15344
+        },
+        "CAF": {
+          "maskPixels": 7290,
+          "validPixels": 21,
+          "zeroPixels": 19,
+          "positivePixels": 2,
+          "missingPixels": 7269
+        },
+        "CPV": {
+          "maskPixels": 41,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 41
+        },
+        "CMR": {
+          "maskPixels": 5454,
+          "validPixels": 5184,
+          "zeroPixels": 4574,
+          "positivePixels": 610,
+          "missingPixels": 270
+        },
+        "BDI": {
+          "maskPixels": 310,
+          "validPixels": 259,
+          "zeroPixels": 19,
+          "positivePixels": 240,
+          "missingPixels": 51
+        },
+        "BFA": {
+          "maskPixels": 3266,
+          "validPixels": 2,
+          "zeroPixels": 0,
+          "positivePixels": 2,
+          "missingPixels": 3264
+        },
+        "BWA": {
+          "maskPixels": 7278,
+          "validPixels": 1493,
+          "zeroPixels": 512,
+          "positivePixels": 981,
+          "missingPixels": 5785
+        },
+        "BEN": {
+          "maskPixels": 1387,
+          "validPixels": 1,
+          "zeroPixels": 0,
+          "positivePixels": 1,
+          "missingPixels": 1386
+        },
+        "AGO": {
+          "maskPixels": 14953,
+          "validPixels": 4731,
+          "zeroPixels": 2916,
+          "positivePixels": 1815,
+          "missingPixels": 10222
+        },
+        "DZA": {
+          "maskPixels": 30769,
+          "validPixels": 5564,
+          "zeroPixels": 2521,
+          "positivePixels": 3043,
+          "missingPixels": 25205
+        }
+      },
+      "samples": [
+        {
+          "kind": "zero",
+          "index": 25516,
+          "row": 23,
+          "col": 400,
+          "sourceRow": 635,
+          "sourceCol": 2236,
+          "lon": 6.375,
+          "lat": 37.041666666666664,
+          "originalValue": 0,
+          "value": 0,
+          "maskAtCellCentre": true,
+          "sourceNoData": false,
+          "pngClass": "crop-zero"
+        },
+        {
+          "kind": "positiveMaximum",
+          "index": 419042,
+          "row": 383,
+          "col": 806,
+          "sourceRow": 995,
+          "sourceCol": 2642,
+          "lon": 40.20833333333333,
+          "lat": 7.041666666666668,
+          "originalValue": 8123.89990234375,
+          "value": 8123.89990234375,
+          "maskAtCellCentre": true,
+          "sourceNoData": false,
+          "pngClass": "h-4"
+        },
+        {
+          "kind": "missing",
+          "index": 0,
+          "row": 0,
+          "col": 0,
+          "sourceRow": 612,
+          "sourceCol": 1836,
+          "lon": -26.958333333333332,
+          "lat": 38.958333333333336,
+          "originalValue": null,
+          "value": -1,
+          "maskAtCellCentre": false,
+          "sourceNoData": true,
+          "pngClass": null
+        },
+        {
+          "kind": "sourceMissingOnLand",
+          "index": 25529,
+          "row": 23,
+          "col": 413,
+          "sourceRow": 635,
+          "sourceCol": 2249,
+          "lon": 7.458333333333329,
+          "lat": 37.041666666666664,
+          "originalValue": null,
+          "value": -1,
+          "maskAtCellCentre": true,
+          "sourceNoData": true,
+          "pngClass": null
+        }
+      ],
+      "checks": {
+        "retainedValuesExact": true,
+        "sourceNoDataPreserved": true,
+        "outsideMaskUnavailable": true,
+        "float32GridExactRoundTrip": true,
+        "imageEqualsQueryClasses": true,
+        "zeroOpaque": true,
+        "missingTransparent": true
+      }
+    },
+    "wheat-production": {
+      "title": "小麦｜生産量",
+      "image": "wheat-production.png",
+      "grid": "wheat-production.values.gz",
+      "encoding": "float32-le-gzip",
+      "noData": -1,
+      "bounds": [
+        -27,
+        -36,
+        64,
+        39
+      ],
+      "crs": "EPSG:4326",
+      "width": 1092,
+      "height": 900,
+      "resolutionDegrees": 0.08333333333333333,
+      "gridOrder": "row-major north-to-south, west-to-east",
+      "unit": "t / 5分角セル",
+      "period": "2020基準のモデル推計｜SPAM 2020 V2r2（2026-05-05配布）",
+      "scope": "アフリカ｜全生産方式の5分角セル値",
+      "sourceName": "SPAM 2020 V2r2",
+      "sourceLabel": "SPAM 2020 V2r2 / IFPRI",
+      "publisher": "International Food Policy Research Institute (IFPRI)",
+      "sourceUrl": "https://doi.org/10.7910/DVN/SWPENT",
+      "datasetVersion": "6.0",
+      "sourceEdition": "V2r2",
+      "referenceYear": 2020,
+      "releaseDate": "2026-05-05",
+      "cropCode": "WHEA",
+      "measure": "production",
+      "productionSystem": "A (all technologies)",
+      "sourceUnit": "metric tonnes per native 5-arcminute source cell",
+      "sourceNoData": -3.4028234663852886e+38,
+      "sourceResolutionDegrees": 0.08333333333333333,
+      "sourceCrs": "EPSG:4326",
+      "sourceFile": "spam2020_V2r2_global_P_WHEA_A.tif",
+      "sourceSha256": "718c230babcd872bfeba1d5cec72b8e5944ec2fe90103b890fff2d33d095fac7",
+      "sourceBytes": 37890590,
+      "sourceArchive": "spam2020V2r2_global_production.geotiff.zip",
+      "sourceArchiveSha256": "7bdce0d9f48d50c2596fbc35bfeb1a4d37afa59f421a6b0c2c10fd221277e42d",
+      "sourceArchiveBytes": 75175570,
+      "publisherMd5": "8ce3956c25860ae9960155b8382518de",
+      "sourceDataFileId": 13827043,
+      "sourceDownloadUrl": "https://www.dropbox.com/scl/fi/euolvnpdooxhd5ljskl4q/spam2020V2r2_global_production.geotiff.zip?dl=1&rlkey=mttc09xhfr4m1zsd4ik40wvz1&st=q36ax4cq",
+      "sourceRetrievedAt": "2026-10-03T14:36:46.655Z",
+      "sourceNativeWindow": [
+        1836,
+        612,
+        2928,
+        1512
+      ],
+      "sourceNativeOrigin": [
+        -180,
+        90.00000000000004,
+        0
+      ],
+      "sourceNativeResolution": [
+        0.0833333333333144,
+        -0.0833333333333144,
+        0
+      ],
+      "sourceNativeWindowBounds": [
+        -27.00000000003476,
+        -35.99999999997132,
+        63.99999999994455,
+        39.00000000001163
+      ],
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "licenseEvidenceUrl": "https://dataverse.harvard.edu/api/datasets/10094351/versions/6.0",
+      "licenseEvidence": "Fixed dataset Terms of Use section 4 explicitly permits CC BY 4.0 reuse, distribution and reproduction even commercially. Official public-mirror archive matches that dataset file MD5 and byte count.",
+      "sourceNotice": "source-notice.txt",
+      "citation": "International Food Policy Research Institute (IFPRI), 2026, \"Global Spatially-Disaggregated Crop Production Statistics Data for 2020 Version 2.0 Release 2\", https://doi.org/10.7910/DVN/SWPENT, Harvard Dataverse, V6",
+      "breaks": [
+        1,
+        10,
+        100,
+        1000,
+        10000
+      ],
+      "colors": [
+        "#dde8d4",
+        "#bfd6ac",
+        "#96b77f",
+        "#6e965b",
+        "#44763f",
+        "#22582e"
+      ],
+      "zeroValue": 0,
+      "zeroId": "crop-zero",
+      "zeroColor": "#f3f2e8",
+      "positiveLegend": [
+        {
+          "id": "p-0",
+          "label": "0超–1未満 t/セル",
+          "color": "#dde8d4"
+        },
+        {
+          "id": "p-1",
+          "label": "1–10未満 t/セル",
+          "color": "#bfd6ac"
+        },
+        {
+          "id": "p-2",
+          "label": "10–100未満 t/セル",
+          "color": "#96b77f"
+        },
+        {
+          "id": "p-3",
+          "label": "100–1,000未満 t/セル",
+          "color": "#6e965b"
+        },
+        {
+          "id": "p-4",
+          "label": "1,000–10,000未満 t/セル",
+          "color": "#44763f"
+        },
+        {
+          "id": "p-5",
+          "label": "10,000 t/セル以上",
+          "color": "#22582e"
+        }
+      ],
+      "legend": [
+        {
+          "id": "crop-zero",
+          "label": "0 t/セル",
+          "color": "#f3f2e8"
+        },
+        {
+          "id": "p-0",
+          "label": "0超–1未満 t/セル",
+          "color": "#dde8d4"
+        },
+        {
+          "id": "p-1",
+          "label": "1–10未満 t/セル",
+          "color": "#bfd6ac"
+        },
+        {
+          "id": "p-2",
+          "label": "10–100未満 t/セル",
+          "color": "#96b77f"
+        },
+        {
+          "id": "p-3",
+          "label": "100–1,000未満 t/セル",
+          "color": "#6e965b"
+        },
+        {
+          "id": "p-4",
+          "label": "1,000–10,000未満 t/セル",
+          "color": "#44763f"
+        },
+        {
+          "id": "p-5",
+          "label": "10,000 t/セル以上",
+          "color": "#22582e"
+        }
+      ],
+      "validPixels": 79720,
+      "positivePixels": 59335,
+      "zeroPixels": 20385,
+      "missingPixels": 903080,
+      "maximum": 56937.30078125,
+      "takeaway": "小麦は北部・高地などの環境を手掛かりに読めるが、灌漑・栽培技術・需要も分布を左右する。",
+      "description": "作物別の生産量を比較する。異なる作物の重さは収量効率・食料価値・所得を直接比較する指標ではない。",
+      "method": "Exact native 5-arcminute source window with no resampling, interpolation or smoothing. Original float32 values retained where the unchanged Africa country polygon contains the cell centre. Original noData remains unavailable; supplied zero remains zero. Border cells retain their whole original source-cell value and are not proportionally apportioned by polygon overlap. PNG and query grid use the identical masked array.",
+      "queryMethod": "floor((lon-west)/(east-west)*width), floor((north-lat)/(north-south)*height); outside bounds or -1 is unavailable",
+      "countryCoverage": {
+        "ZWE": {
+          "maskPixels": 4822,
+          "validPixels": 3242,
+          "zeroPixels": 70,
+          "positivePixels": 3172,
+          "missingPixels": 1580
+        },
+        "ZMB": {
+          "maskPixels": 9033,
+          "validPixels": 173,
+          "zeroPixels": 59,
+          "positivePixels": 114,
+          "missingPixels": 8860
+        },
+        "UGA": {
+          "maskPixels": 2822,
+          "validPixels": 568,
+          "zeroPixels": 3,
+          "positivePixels": 565,
+          "missingPixels": 2254
+        },
+        "TUN": {
+          "maskPixels": 2202,
+          "validPixels": 1781,
+          "zeroPixels": 486,
+          "positivePixels": 1295,
+          "missingPixels": 421
+        },
+        "TGO": {
+          "maskPixels": 662,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 662
+        },
+        "TZA": {
+          "maskPixels": 11097,
+          "validPixels": 4173,
+          "zeroPixels": 1029,
+          "positivePixels": 3144,
+          "missingPixels": 6924
+        },
+        "SWZ": {
+          "maskPixels": 224,
+          "validPixels": 202,
+          "zeroPixels": 0,
+          "positivePixels": 202,
+          "missingPixels": 22
+        },
+        "SSD": {
+          "maskPixels": 7342,
+          "validPixels": 15,
+          "zeroPixels": 3,
+          "positivePixels": 12,
+          "missingPixels": 7327
+        },
+        "SDN": {
+          "maskPixels": 22598,
+          "validPixels": 2558,
+          "zeroPixels": 395,
+          "positivePixels": 2163,
+          "missingPixels": 20040
+        },
+        "ZAF": {
+          "maskPixels": 16280,
+          "validPixels": 4745,
+          "zeroPixels": 28,
+          "positivePixels": 4717,
+          "missingPixels": 11535
+        },
+        "SOM": {
+          "maskPixels": 7516,
+          "validPixels": 260,
+          "zeroPixels": 85,
+          "positivePixels": 175,
+          "missingPixels": 7256
+        },
+        "SLE": {
+          "maskPixels": 854,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 854
+        },
+        "SYC": {
+          "maskPixels": 1,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 1
+        },
+        "SEN": {
+          "maskPixels": 2378,
+          "validPixels": 3,
+          "zeroPixels": 0,
+          "positivePixels": 3,
+          "missingPixels": 2375
+        },
+        "STP": {
+          "maskPixels": 11,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 11
+        },
+        "RWA": {
+          "maskPixels": 295,
+          "validPixels": 190,
+          "zeroPixels": 5,
+          "positivePixels": 185,
+          "missingPixels": 105
+        },
+        "NGA": {
+          "maskPixels": 10765,
+          "validPixels": 1792,
+          "zeroPixels": 138,
+          "positivePixels": 1654,
+          "missingPixels": 8973
+        },
+        "NER": {
+          "maskPixels": 14488,
+          "validPixels": 1430,
+          "zeroPixels": 81,
+          "positivePixels": 1349,
+          "missingPixels": 13058
+        },
+        "NAM": {
+          "maskPixels": 10394,
+          "validPixels": 2743,
+          "zeroPixels": 644,
+          "positivePixels": 2099,
+          "missingPixels": 7651
+        },
+        "MOZ": {
+          "maskPixels": 9668,
+          "validPixels": 7890,
+          "zeroPixels": 474,
+          "positivePixels": 7416,
+          "missingPixels": 1778
+        },
+        "MAR": {
+          "maskPixels": 7842,
+          "validPixels": 5007,
+          "zeroPixels": 284,
+          "positivePixels": 4723,
+          "missingPixels": 2835
+        },
+        "ESH": {
+          "maskPixels": 1165,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 1165
+        },
+        "MUS": {
+          "maskPixels": 23,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 23
+        },
+        "MRT": {
+          "maskPixels": 12899,
+          "validPixels": 1265,
+          "zeroPixels": 117,
+          "positivePixels": 1148,
+          "missingPixels": 11634
+        },
+        "MLI": {
+          "maskPixels": 15379,
+          "validPixels": 132,
+          "zeroPixels": 31,
+          "positivePixels": 101,
+          "missingPixels": 15247
+        },
+        "MWI": {
+          "maskPixels": 1431,
+          "validPixels": 1020,
+          "zeroPixels": 188,
+          "positivePixels": 832,
+          "missingPixels": 411
+        },
+        "MDG": {
+          "maskPixels": 7358,
+          "validPixels": 4308,
+          "zeroPixels": 1091,
+          "positivePixels": 3217,
+          "missingPixels": 3050
+        },
+        "LBY": {
+          "maskPixels": 21316,
+          "validPixels": 1085,
+          "zeroPixels": 98,
+          "positivePixels": 987,
+          "missingPixels": 20231
+        },
+        "LBR": {
+          "maskPixels": 1122,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 1122
+        },
+        "LSO": {
+          "maskPixels": 403,
+          "validPixels": 321,
+          "zeroPixels": 32,
+          "positivePixels": 289,
+          "missingPixels": 82
+        },
+        "KEN": {
+          "maskPixels": 6937,
+          "validPixels": 2139,
+          "zeroPixels": 1292,
+          "positivePixels": 847,
+          "missingPixels": 4798
+        },
+        "GNB": {
+          "maskPixels": 373,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 373
+        },
+        "GIN": {
+          "maskPixels": 2898,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 2898
+        },
+        "GHA": {
+          "maskPixels": 2819,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 2819
+        },
+        "GMB": {
+          "maskPixels": 121,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 121
+        },
+        "GAB": {
+          "maskPixels": 3035,
+          "validPixels": 3,
+          "zeroPixels": 3,
+          "positivePixels": 0,
+          "missingPixels": 3032
+        },
+        "ETH": {
+          "maskPixels": 13348,
+          "validPixels": 5733,
+          "zeroPixels": 1917,
+          "positivePixels": 3816,
+          "missingPixels": 7615
+        },
+        "ERI": {
+          "maskPixels": 1495,
+          "validPixels": 367,
+          "zeroPixels": 20,
+          "positivePixels": 347,
+          "missingPixels": 1128
+        },
+        "GNQ": {
+          "maskPixels": 310,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 310
+        },
+        "EGY": {
+          "maskPixels": 13050,
+          "validPixels": 4947,
+          "zeroPixels": 689,
+          "positivePixels": 4258,
+          "missingPixels": 8103
+        },
+        "DJI": {
+          "maskPixels": 258,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 258
+        },
+        "CIV": {
+          "maskPixels": 3794,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 3794
+        },
+        "COD": {
+          "maskPixels": 27316,
+          "validPixels": 4320,
+          "zeroPixels": 272,
+          "positivePixels": 4048,
+          "missingPixels": 22996
+        },
+        "COG": {
+          "maskPixels": 4040,
+          "validPixels": 1,
+          "zeroPixels": 1,
+          "positivePixels": 0,
+          "missingPixels": 4039
+        },
+        "COM": {
+          "maskPixels": 17,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 17
+        },
+        "TCD": {
+          "maskPixels": 15396,
+          "validPixels": 52,
+          "zeroPixels": 14,
+          "positivePixels": 38,
+          "missingPixels": 15344
+        },
+        "CAF": {
+          "maskPixels": 7290,
+          "validPixels": 21,
+          "zeroPixels": 20,
+          "positivePixels": 1,
+          "missingPixels": 7269
+        },
+        "CPV": {
+          "maskPixels": 41,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 41
+        },
+        "CMR": {
+          "maskPixels": 5454,
+          "validPixels": 5184,
+          "zeroPixels": 4689,
+          "positivePixels": 495,
+          "missingPixels": 270
+        },
+        "BDI": {
+          "maskPixels": 310,
+          "validPixels": 259,
+          "zeroPixels": 19,
+          "positivePixels": 240,
+          "missingPixels": 51
+        },
+        "BFA": {
+          "maskPixels": 3266,
+          "validPixels": 2,
+          "zeroPixels": 0,
+          "positivePixels": 2,
+          "missingPixels": 3264
+        },
+        "BWA": {
+          "maskPixels": 7278,
+          "validPixels": 1493,
+          "zeroPixels": 678,
+          "positivePixels": 815,
+          "missingPixels": 5785
+        },
+        "BEN": {
+          "maskPixels": 1387,
+          "validPixels": 1,
+          "zeroPixels": 0,
+          "positivePixels": 1,
+          "missingPixels": 1386
+        },
+        "AGO": {
+          "maskPixels": 14953,
+          "validPixels": 4731,
+          "zeroPixels": 2905,
+          "positivePixels": 1826,
+          "missingPixels": 10222
+        },
+        "DZA": {
+          "maskPixels": 30769,
+          "validPixels": 5564,
+          "zeroPixels": 2525,
+          "positivePixels": 3039,
+          "missingPixels": 25205
+        }
+      },
+      "samples": [
+        {
+          "kind": "zero",
+          "index": 27700,
+          "row": 25,
+          "col": 400,
+          "sourceRow": 637,
+          "sourceCol": 2236,
+          "lon": 6.375,
+          "lat": 36.875,
+          "originalValue": 0,
+          "value": 0,
+          "maskAtCellCentre": true,
+          "sourceNoData": false,
+          "pngClass": "crop-zero"
+        },
+        {
+          "kind": "positiveMaximum",
+          "index": 104433,
+          "row": 95,
+          "col": 693,
+          "sourceRow": 707,
+          "sourceCol": 2529,
+          "lon": 30.791666666666664,
+          "lat": 31.041666666666668,
+          "originalValue": 56937.30078125,
+          "value": 56937.30078125,
+          "maskAtCellCentre": true,
+          "sourceNoData": false,
+          "pngClass": "p-5"
+        },
+        {
+          "kind": "missing",
+          "index": 0,
+          "row": 0,
+          "col": 0,
+          "sourceRow": 612,
+          "sourceCol": 1836,
+          "lon": -26.958333333333332,
+          "lat": 38.958333333333336,
+          "originalValue": null,
+          "value": -1,
+          "maskAtCellCentre": false,
+          "sourceNoData": true,
+          "pngClass": null
+        },
+        {
+          "kind": "sourceMissingOnLand",
+          "index": 25529,
+          "row": 23,
+          "col": 413,
+          "sourceRow": 635,
+          "sourceCol": 2249,
+          "lon": 7.458333333333329,
+          "lat": 37.041666666666664,
+          "originalValue": null,
+          "value": -1,
+          "maskAtCellCentre": true,
+          "sourceNoData": true,
+          "pngClass": null
+        }
+      ],
+      "checks": {
+        "retainedValuesExact": true,
+        "sourceNoDataPreserved": true,
+        "outsideMaskUnavailable": true,
+        "float32GridExactRoundTrip": true,
+        "imageEqualsQueryClasses": true,
+        "zeroOpaque": true,
+        "missingTransparent": true
+      }
+    },
+    "cassava-harvested": {
+      "title": "キャッサバ｜収穫面積",
+      "image": "cassava-harvested.png",
+      "grid": "cassava-harvested.values.gz",
+      "encoding": "float32-le-gzip",
+      "noData": -1,
+      "bounds": [
+        -27,
+        -36,
+        64,
+        39
+      ],
+      "crs": "EPSG:4326",
+      "width": 1092,
+      "height": 900,
+      "resolutionDegrees": 0.08333333333333333,
+      "gridOrder": "row-major north-to-south, west-to-east",
+      "unit": "ha / 5分角セル",
+      "period": "2020基準のモデル推計｜SPAM 2020 V2r2（2026-05-05配布）",
+      "scope": "アフリカ｜全生産方式の5分角セル値",
+      "sourceName": "SPAM 2020 V2r2",
+      "sourceLabel": "SPAM 2020 V2r2 / IFPRI",
+      "publisher": "International Food Policy Research Institute (IFPRI)",
+      "sourceUrl": "https://doi.org/10.7910/DVN/SWPENT",
+      "datasetVersion": "6.0",
+      "sourceEdition": "V2r2",
+      "referenceYear": 2020,
+      "releaseDate": "2026-05-05",
+      "cropCode": "CASS",
+      "measure": "harvested",
+      "productionSystem": "A (all technologies)",
+      "sourceUnit": "hectares per native 5-arcminute source cell",
+      "sourceNoData": -3.4028234663852886e+38,
+      "sourceResolutionDegrees": 0.08333333333333333,
+      "sourceCrs": "EPSG:4326",
+      "sourceFile": "spam2020_V2r2_global_H_CASS_A.tif",
+      "sourceSha256": "71e7cb861757ab0a50867bb0500e829f6e0b2c48527f1ebdcb60b4301ce1eae6",
+      "sourceBytes": 37890590,
+      "sourceArchive": "spam2020V2r2_global_harvested_area.geotiff.zip",
+      "sourceArchiveSha256": "34895a332ba7ff9d9732a81fe9da7063458d197f3c72ce3a405329c41f94ade2",
+      "sourceArchiveBytes": 68007241,
+      "publisherMd5": "dd9ac5def086fcae26d28423b2b31f8b",
+      "sourceDataFileId": 13827040,
+      "sourceDownloadUrl": "https://www.dropbox.com/scl/fi/sw2z9pimrkqqv71pqf5z8/spam2020V2r2_global_harvested_area.geotiff.zip?dl=1&rlkey=e11l395kofek5233pj4e1t9wf&st=o0otxlpz",
+      "sourceRetrievedAt": "2026-10-03T14:36:44.033Z",
+      "sourceNativeWindow": [
+        1836,
+        612,
+        2928,
+        1512
+      ],
+      "sourceNativeOrigin": [
+        -180,
+        90.00000000000004,
+        0
+      ],
+      "sourceNativeResolution": [
+        0.0833333333333144,
+        -0.0833333333333144,
+        0
+      ],
+      "sourceNativeWindowBounds": [
+        -27.00000000003476,
+        -35.99999999997132,
+        63.99999999994455,
+        39.00000000001163
+      ],
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "licenseEvidenceUrl": "https://dataverse.harvard.edu/api/datasets/10094351/versions/6.0",
+      "licenseEvidence": "Fixed dataset Terms of Use section 4 explicitly permits CC BY 4.0 reuse, distribution and reproduction even commercially. Official public-mirror archive matches that dataset file MD5 and byte count.",
+      "sourceNotice": "source-notice.txt",
+      "citation": "International Food Policy Research Institute (IFPRI), 2026, \"Global Spatially-Disaggregated Crop Production Statistics Data for 2020 Version 2.0 Release 2\", https://doi.org/10.7910/DVN/SWPENT, Harvard Dataverse, V6",
+      "breaks": [
+        1,
+        10,
+        100,
+        1000
+      ],
+      "colors": [
+        "#d9ead5",
+        "#b7d8b6",
+        "#80b397",
+        "#458976",
+        "#1e5f57"
+      ],
+      "zeroValue": 0,
+      "zeroId": "crop-zero",
+      "zeroColor": "#f3f2e8",
+      "positiveLegend": [
+        {
+          "id": "h-0",
+          "label": "0超–1未満 ha/セル",
+          "color": "#d9ead5"
+        },
+        {
+          "id": "h-1",
+          "label": "1–10未満 ha/セル",
+          "color": "#b7d8b6"
+        },
+        {
+          "id": "h-2",
+          "label": "10–100未満 ha/セル",
+          "color": "#80b397"
+        },
+        {
+          "id": "h-3",
+          "label": "100–1,000未満 ha/セル",
+          "color": "#458976"
+        },
+        {
+          "id": "h-4",
+          "label": "1,000 ha/セル以上",
+          "color": "#1e5f57"
+        }
+      ],
+      "legend": [
+        {
+          "id": "crop-zero",
+          "label": "0 ha/セル",
+          "color": "#f3f2e8"
+        },
+        {
+          "id": "h-0",
+          "label": "0超–1未満 ha/セル",
+          "color": "#d9ead5"
+        },
+        {
+          "id": "h-1",
+          "label": "1–10未満 ha/セル",
+          "color": "#b7d8b6"
+        },
+        {
+          "id": "h-2",
+          "label": "10–100未満 ha/セル",
+          "color": "#80b397"
+        },
+        {
+          "id": "h-3",
+          "label": "100–1,000未満 ha/セル",
+          "color": "#458976"
+        },
+        {
+          "id": "h-4",
+          "label": "1,000 ha/セル以上",
+          "color": "#1e5f57"
+        }
+      ],
+      "validPixels": 129472,
+      "positivePixels": 116883,
+      "zeroPixels": 12589,
+      "missingPixels": 853328,
+      "maximum": 18478.666015625,
+      "takeaway": "キャッサバの分布を主食・加工・市場の条件と結び付け、湿潤な地域が同じ生産を持つとは考えない。",
+      "description": "収穫面積は同じ土地での複数回の収穫を含む。土地被覆率・物理的な耕地面積とは異なる。",
+      "method": "Exact native 5-arcminute source window with no resampling, interpolation or smoothing. Original float32 values retained where the unchanged Africa country polygon contains the cell centre. Original noData remains unavailable; supplied zero remains zero. Border cells retain their whole original source-cell value and are not proportionally apportioned by polygon overlap. PNG and query grid use the identical masked array.",
+      "queryMethod": "floor((lon-west)/(east-west)*width), floor((north-lat)/(north-south)*height); outside bounds or -1 is unavailable",
+      "countryCoverage": {
+        "ZWE": {
+          "maskPixels": 4822,
+          "validPixels": 3793,
+          "zeroPixels": 72,
+          "positivePixels": 3721,
+          "missingPixels": 1029
+        },
+        "ZMB": {
+          "maskPixels": 9033,
+          "validPixels": 5465,
+          "zeroPixels": 597,
+          "positivePixels": 4868,
+          "missingPixels": 3568
+        },
+        "UGA": {
+          "maskPixels": 2822,
+          "validPixels": 1531,
+          "zeroPixels": 130,
+          "positivePixels": 1401,
+          "missingPixels": 1291
+        },
+        "TUN": {
+          "maskPixels": 2202,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 2202
+        },
+        "TGO": {
+          "maskPixels": 662,
+          "validPixels": 594,
+          "zeroPixels": 6,
+          "positivePixels": 588,
+          "missingPixels": 68
+        },
+        "TZA": {
+          "maskPixels": 11097,
+          "validPixels": 8165,
+          "zeroPixels": 545,
+          "positivePixels": 7620,
+          "missingPixels": 2932
+        },
+        "SWZ": {
+          "maskPixels": 224,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 224
+        },
+        "SSD": {
+          "maskPixels": 7342,
+          "validPixels": 3756,
+          "zeroPixels": 222,
+          "positivePixels": 3534,
+          "missingPixels": 3586
+        },
+        "SDN": {
+          "maskPixels": 22598,
+          "validPixels": 158,
+          "zeroPixels": 19,
+          "positivePixels": 139,
+          "missingPixels": 22440
+        },
+        "ZAF": {
+          "maskPixels": 16280,
+          "validPixels": 2,
+          "zeroPixels": 0,
+          "positivePixels": 2,
+          "missingPixels": 16278
+        },
+        "SOM": {
+          "maskPixels": 7516,
+          "validPixels": 1898,
+          "zeroPixels": 173,
+          "positivePixels": 1725,
+          "missingPixels": 5618
+        },
+        "SLE": {
+          "maskPixels": 854,
+          "validPixels": 853,
+          "zeroPixels": 0,
+          "positivePixels": 853,
+          "missingPixels": 1
+        },
+        "SYC": {
+          "maskPixels": 1,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 1
+        },
+        "SEN": {
+          "maskPixels": 2378,
+          "validPixels": 1746,
+          "zeroPixels": 216,
+          "positivePixels": 1530,
+          "missingPixels": 632
+        },
+        "STP": {
+          "maskPixels": 11,
+          "validPixels": 11,
+          "zeroPixels": 0,
+          "positivePixels": 11,
+          "missingPixels": 0
+        },
+        "RWA": {
+          "maskPixels": 295,
+          "validPixels": 294,
+          "zeroPixels": 28,
+          "positivePixels": 266,
+          "missingPixels": 1
+        },
+        "NGA": {
+          "maskPixels": 10765,
+          "validPixels": 10189,
+          "zeroPixels": 556,
+          "positivePixels": 9633,
+          "missingPixels": 576
+        },
+        "NER": {
+          "maskPixels": 14488,
+          "validPixels": 1827,
+          "zeroPixels": 24,
+          "positivePixels": 1803,
+          "missingPixels": 12661
+        },
+        "NAM": {
+          "maskPixels": 10394,
+          "validPixels": 5,
+          "zeroPixels": 0,
+          "positivePixels": 5,
+          "missingPixels": 10389
+        },
+        "MOZ": {
+          "maskPixels": 9668,
+          "validPixels": 8342,
+          "zeroPixels": 594,
+          "positivePixels": 7748,
+          "missingPixels": 1326
+        },
+        "MAR": {
+          "maskPixels": 7842,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 7842
+        },
+        "ESH": {
+          "maskPixels": 1165,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 1165
+        },
+        "MUS": {
+          "maskPixels": 23,
+          "validPixels": 22,
+          "zeroPixels": 0,
+          "positivePixels": 22,
+          "missingPixels": 1
+        },
+        "MRT": {
+          "maskPixels": 12899,
+          "validPixels": 3,
+          "zeroPixels": 1,
+          "positivePixels": 2,
+          "missingPixels": 12896
+        },
+        "MLI": {
+          "maskPixels": 15379,
+          "validPixels": 4539,
+          "zeroPixels": 47,
+          "positivePixels": 4492,
+          "missingPixels": 10840
+        },
+        "MWI": {
+          "maskPixels": 1431,
+          "validPixels": 1167,
+          "zeroPixels": 46,
+          "positivePixels": 1121,
+          "missingPixels": 264
+        },
+        "MDG": {
+          "maskPixels": 7358,
+          "validPixels": 5174,
+          "zeroPixels": 412,
+          "positivePixels": 4762,
+          "missingPixels": 2184
+        },
+        "LBY": {
+          "maskPixels": 21316,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 21316
+        },
+        "LBR": {
+          "maskPixels": 1122,
+          "validPixels": 1115,
+          "zeroPixels": 1,
+          "positivePixels": 1114,
+          "missingPixels": 7
+        },
+        "LSO": {
+          "maskPixels": 403,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 403
+        },
+        "KEN": {
+          "maskPixels": 6937,
+          "validPixels": 1725,
+          "zeroPixels": 413,
+          "positivePixels": 1312,
+          "missingPixels": 5212
+        },
+        "GNB": {
+          "maskPixels": 373,
+          "validPixels": 336,
+          "zeroPixels": 8,
+          "positivePixels": 328,
+          "missingPixels": 37
+        },
+        "GIN": {
+          "maskPixels": 2898,
+          "validPixels": 2873,
+          "zeroPixels": 18,
+          "positivePixels": 2855,
+          "missingPixels": 25
+        },
+        "GHA": {
+          "maskPixels": 2819,
+          "validPixels": 2363,
+          "zeroPixels": 0,
+          "positivePixels": 2363,
+          "missingPixels": 456
+        },
+        "GMB": {
+          "maskPixels": 121,
+          "validPixels": 120,
+          "zeroPixels": 0,
+          "positivePixels": 120,
+          "missingPixels": 1
+        },
+        "GAB": {
+          "maskPixels": 3035,
+          "validPixels": 2570,
+          "zeroPixels": 363,
+          "positivePixels": 2207,
+          "missingPixels": 465
+        },
+        "ETH": {
+          "maskPixels": 13348,
+          "validPixels": 21,
+          "zeroPixels": 0,
+          "positivePixels": 21,
+          "missingPixels": 13327
+        },
+        "ERI": {
+          "maskPixels": 1495,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 1495
+        },
+        "GNQ": {
+          "maskPixels": 310,
+          "validPixels": 308,
+          "zeroPixels": 2,
+          "positivePixels": 306,
+          "missingPixels": 2
+        },
+        "EGY": {
+          "maskPixels": 13050,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 13050
+        },
+        "DJI": {
+          "maskPixels": 258,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 258
+        },
+        "CIV": {
+          "maskPixels": 3794,
+          "validPixels": 3699,
+          "zeroPixels": 0,
+          "positivePixels": 3699,
+          "missingPixels": 95
+        },
+        "COD": {
+          "maskPixels": 27316,
+          "validPixels": 24884,
+          "zeroPixels": 5029,
+          "positivePixels": 19855,
+          "missingPixels": 2432
+        },
+        "COG": {
+          "maskPixels": 4040,
+          "validPixels": 710,
+          "zeroPixels": 6,
+          "positivePixels": 704,
+          "missingPixels": 3330
+        },
+        "COM": {
+          "maskPixels": 17,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 17
+        },
+        "TCD": {
+          "maskPixels": 15396,
+          "validPixels": 5023,
+          "zeroPixels": 1263,
+          "positivePixels": 3760,
+          "missingPixels": 10373
+        },
+        "CAF": {
+          "maskPixels": 7290,
+          "validPixels": 4239,
+          "zeroPixels": 720,
+          "positivePixels": 3519,
+          "missingPixels": 3051
+        },
+        "CPV": {
+          "maskPixels": 41,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 41
+        },
+        "CMR": {
+          "maskPixels": 5454,
+          "validPixels": 5204,
+          "zeroPixels": 73,
+          "positivePixels": 5131,
+          "missingPixels": 250
+        },
+        "BDI": {
+          "maskPixels": 310,
+          "validPixels": 292,
+          "zeroPixels": 12,
+          "positivePixels": 280,
+          "missingPixels": 18
+        },
+        "BFA": {
+          "maskPixels": 3266,
+          "validPixels": 3212,
+          "zeroPixels": 230,
+          "positivePixels": 2982,
+          "missingPixels": 54
+        },
+        "BWA": {
+          "maskPixels": 7278,
+          "validPixels": 1,
+          "zeroPixels": 1,
+          "positivePixels": 0,
+          "missingPixels": 7277
+        },
+        "BEN": {
+          "maskPixels": 1387,
+          "validPixels": 1297,
+          "zeroPixels": 18,
+          "positivePixels": 1279,
+          "missingPixels": 90
+        },
+        "AGO": {
+          "maskPixels": 14953,
+          "validPixels": 9946,
+          "zeroPixels": 744,
+          "positivePixels": 9202,
+          "missingPixels": 5007
+        },
+        "DZA": {
+          "maskPixels": 30769,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 30769
+        }
+      },
+      "samples": [
+        {
+          "kind": "zero",
+          "index": 296075,
+          "row": 271,
+          "col": 143,
+          "sourceRow": 883,
+          "sourceCol": 1979,
+          "lon": -15.041666666666668,
+          "lat": 16.375,
+          "originalValue": 0,
+          "value": 0,
+          "maskAtCellCentre": true,
+          "sourceNoData": false,
+          "pngClass": "crop-zero"
+        },
+        {
+          "kind": "positiveMaximum",
+          "index": 422865,
+          "row": 387,
+          "col": 261,
+          "sourceRow": 999,
+          "sourceCol": 2097,
+          "lon": -5.208333333333336,
+          "lat": 6.708333333333336,
+          "originalValue": 18478.666015625,
+          "value": 18478.666015625,
+          "maskAtCellCentre": true,
+          "sourceNoData": false,
+          "pngClass": "h-4"
+        },
+        {
+          "kind": "missing",
+          "index": 0,
+          "row": 0,
+          "col": 0,
+          "sourceRow": 612,
+          "sourceCol": 1836,
+          "lon": -26.958333333333332,
+          "lat": 38.958333333333336,
+          "originalValue": null,
+          "value": -1,
+          "maskAtCellCentre": false,
+          "sourceNoData": true,
+          "pngClass": null
+        },
+        {
+          "kind": "sourceMissingOnLand",
+          "index": 22278,
+          "row": 20,
+          "col": 438,
+          "sourceRow": 632,
+          "sourceCol": 2274,
+          "lon": 9.541666666666664,
+          "lat": 37.291666666666664,
+          "originalValue": null,
+          "value": -1,
+          "maskAtCellCentre": true,
+          "sourceNoData": true,
+          "pngClass": null
+        }
+      ],
+      "checks": {
+        "retainedValuesExact": true,
+        "sourceNoDataPreserved": true,
+        "outsideMaskUnavailable": true,
+        "float32GridExactRoundTrip": true,
+        "imageEqualsQueryClasses": true,
+        "zeroOpaque": true,
+        "missingTransparent": true
+      }
+    },
+    "cassava-production": {
+      "title": "キャッサバ｜生産量",
+      "image": "cassava-production.png",
+      "grid": "cassava-production.values.gz",
+      "encoding": "float32-le-gzip",
+      "noData": -1,
+      "bounds": [
+        -27,
+        -36,
+        64,
+        39
+      ],
+      "crs": "EPSG:4326",
+      "width": 1092,
+      "height": 900,
+      "resolutionDegrees": 0.08333333333333333,
+      "gridOrder": "row-major north-to-south, west-to-east",
+      "unit": "t / 5分角セル",
+      "period": "2020基準のモデル推計｜SPAM 2020 V2r2（2026-05-05配布）",
+      "scope": "アフリカ｜全生産方式の5分角セル値",
+      "sourceName": "SPAM 2020 V2r2",
+      "sourceLabel": "SPAM 2020 V2r2 / IFPRI",
+      "publisher": "International Food Policy Research Institute (IFPRI)",
+      "sourceUrl": "https://doi.org/10.7910/DVN/SWPENT",
+      "datasetVersion": "6.0",
+      "sourceEdition": "V2r2",
+      "referenceYear": 2020,
+      "releaseDate": "2026-05-05",
+      "cropCode": "CASS",
+      "measure": "production",
+      "productionSystem": "A (all technologies)",
+      "sourceUnit": "metric tonnes per native 5-arcminute source cell",
+      "sourceNoData": -3.4028234663852886e+38,
+      "sourceResolutionDegrees": 0.08333333333333333,
+      "sourceCrs": "EPSG:4326",
+      "sourceFile": "spam2020_V2r2_global_P_CASS_A.tif",
+      "sourceSha256": "640fdd4dcc54a16d890b6a4bfc371af2ec7c5a9d524be5aa8d86b1fadb6406c8",
+      "sourceBytes": 37890590,
+      "sourceArchive": "spam2020V2r2_global_production.geotiff.zip",
+      "sourceArchiveSha256": "7bdce0d9f48d50c2596fbc35bfeb1a4d37afa59f421a6b0c2c10fd221277e42d",
+      "sourceArchiveBytes": 75175570,
+      "publisherMd5": "8ce3956c25860ae9960155b8382518de",
+      "sourceDataFileId": 13827043,
+      "sourceDownloadUrl": "https://www.dropbox.com/scl/fi/euolvnpdooxhd5ljskl4q/spam2020V2r2_global_production.geotiff.zip?dl=1&rlkey=mttc09xhfr4m1zsd4ik40wvz1&st=q36ax4cq",
+      "sourceRetrievedAt": "2026-10-03T14:36:46.655Z",
+      "sourceNativeWindow": [
+        1836,
+        612,
+        2928,
+        1512
+      ],
+      "sourceNativeOrigin": [
+        -180,
+        90.00000000000004,
+        0
+      ],
+      "sourceNativeResolution": [
+        0.0833333333333144,
+        -0.0833333333333144,
+        0
+      ],
+      "sourceNativeWindowBounds": [
+        -27.00000000003476,
+        -35.99999999997132,
+        63.99999999994455,
+        39.00000000001163
+      ],
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "licenseEvidenceUrl": "https://dataverse.harvard.edu/api/datasets/10094351/versions/6.0",
+      "licenseEvidence": "Fixed dataset Terms of Use section 4 explicitly permits CC BY 4.0 reuse, distribution and reproduction even commercially. Official public-mirror archive matches that dataset file MD5 and byte count.",
+      "sourceNotice": "source-notice.txt",
+      "citation": "International Food Policy Research Institute (IFPRI), 2026, \"Global Spatially-Disaggregated Crop Production Statistics Data for 2020 Version 2.0 Release 2\", https://doi.org/10.7910/DVN/SWPENT, Harvard Dataverse, V6",
+      "breaks": [
+        1,
+        10,
+        100,
+        1000,
+        10000
+      ],
+      "colors": [
+        "#dde8d4",
+        "#bfd6ac",
+        "#96b77f",
+        "#6e965b",
+        "#44763f",
+        "#22582e"
+      ],
+      "zeroValue": 0,
+      "zeroId": "crop-zero",
+      "zeroColor": "#f3f2e8",
+      "positiveLegend": [
+        {
+          "id": "p-0",
+          "label": "0超–1未満 t/セル",
+          "color": "#dde8d4"
+        },
+        {
+          "id": "p-1",
+          "label": "1–10未満 t/セル",
+          "color": "#bfd6ac"
+        },
+        {
+          "id": "p-2",
+          "label": "10–100未満 t/セル",
+          "color": "#96b77f"
+        },
+        {
+          "id": "p-3",
+          "label": "100–1,000未満 t/セル",
+          "color": "#6e965b"
+        },
+        {
+          "id": "p-4",
+          "label": "1,000–10,000未満 t/セル",
+          "color": "#44763f"
+        },
+        {
+          "id": "p-5",
+          "label": "10,000 t/セル以上",
+          "color": "#22582e"
+        }
+      ],
+      "legend": [
+        {
+          "id": "crop-zero",
+          "label": "0 t/セル",
+          "color": "#f3f2e8"
+        },
+        {
+          "id": "p-0",
+          "label": "0超–1未満 t/セル",
+          "color": "#dde8d4"
+        },
+        {
+          "id": "p-1",
+          "label": "1–10未満 t/セル",
+          "color": "#bfd6ac"
+        },
+        {
+          "id": "p-2",
+          "label": "10–100未満 t/セル",
+          "color": "#96b77f"
+        },
+        {
+          "id": "p-3",
+          "label": "100–1,000未満 t/セル",
+          "color": "#6e965b"
+        },
+        {
+          "id": "p-4",
+          "label": "1,000–10,000未満 t/セル",
+          "color": "#44763f"
+        },
+        {
+          "id": "p-5",
+          "label": "10,000 t/セル以上",
+          "color": "#22582e"
+        }
+      ],
+      "validPixels": 129472,
+      "positivePixels": 121029,
+      "zeroPixels": 8443,
+      "missingPixels": 853328,
+      "maximum": 162264.796875,
+      "takeaway": "キャッサバの分布を主食・加工・市場の条件と結び付け、湿潤な地域が同じ生産を持つとは考えない。",
+      "description": "作物別の生産量を比較する。異なる作物の重さは収量効率・食料価値・所得を直接比較する指標ではない。",
+      "method": "Exact native 5-arcminute source window with no resampling, interpolation or smoothing. Original float32 values retained where the unchanged Africa country polygon contains the cell centre. Original noData remains unavailable; supplied zero remains zero. Border cells retain their whole original source-cell value and are not proportionally apportioned by polygon overlap. PNG and query grid use the identical masked array.",
+      "queryMethod": "floor((lon-west)/(east-west)*width), floor((north-lat)/(north-south)*height); outside bounds or -1 is unavailable",
+      "countryCoverage": {
+        "ZWE": {
+          "maskPixels": 4822,
+          "validPixels": 3793,
+          "zeroPixels": 60,
+          "positivePixels": 3733,
+          "missingPixels": 1029
+        },
+        "ZMB": {
+          "maskPixels": 9033,
+          "validPixels": 5465,
+          "zeroPixels": 155,
+          "positivePixels": 5310,
+          "missingPixels": 3568
+        },
+        "UGA": {
+          "maskPixels": 2822,
+          "validPixels": 1531,
+          "zeroPixels": 130,
+          "positivePixels": 1401,
+          "missingPixels": 1291
+        },
+        "TUN": {
+          "maskPixels": 2202,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 2202
+        },
+        "TGO": {
+          "maskPixels": 662,
+          "validPixels": 594,
+          "zeroPixels": 4,
+          "positivePixels": 590,
+          "missingPixels": 68
+        },
+        "TZA": {
+          "maskPixels": 11097,
+          "validPixels": 8165,
+          "zeroPixels": 407,
+          "positivePixels": 7758,
+          "missingPixels": 2932
+        },
+        "SWZ": {
+          "maskPixels": 224,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 224
+        },
+        "SSD": {
+          "maskPixels": 7342,
+          "validPixels": 3756,
+          "zeroPixels": 49,
+          "positivePixels": 3707,
+          "missingPixels": 3586
+        },
+        "SDN": {
+          "maskPixels": 22598,
+          "validPixels": 158,
+          "zeroPixels": 13,
+          "positivePixels": 145,
+          "missingPixels": 22440
+        },
+        "ZAF": {
+          "maskPixels": 16280,
+          "validPixels": 2,
+          "zeroPixels": 0,
+          "positivePixels": 2,
+          "missingPixels": 16278
+        },
+        "SOM": {
+          "maskPixels": 7516,
+          "validPixels": 1898,
+          "zeroPixels": 83,
+          "positivePixels": 1815,
+          "missingPixels": 5618
+        },
+        "SLE": {
+          "maskPixels": 854,
+          "validPixels": 853,
+          "zeroPixels": 0,
+          "positivePixels": 853,
+          "missingPixels": 1
+        },
+        "SYC": {
+          "maskPixels": 1,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 1
+        },
+        "SEN": {
+          "maskPixels": 2378,
+          "validPixels": 1746,
+          "zeroPixels": 53,
+          "positivePixels": 1693,
+          "missingPixels": 632
+        },
+        "STP": {
+          "maskPixels": 11,
+          "validPixels": 11,
+          "zeroPixels": 0,
+          "positivePixels": 11,
+          "missingPixels": 0
+        },
+        "RWA": {
+          "maskPixels": 295,
+          "validPixels": 294,
+          "zeroPixels": 24,
+          "positivePixels": 270,
+          "missingPixels": 1
+        },
+        "NGA": {
+          "maskPixels": 10765,
+          "validPixels": 10189,
+          "zeroPixels": 530,
+          "positivePixels": 9659,
+          "missingPixels": 576
+        },
+        "NER": {
+          "maskPixels": 14488,
+          "validPixels": 1827,
+          "zeroPixels": 12,
+          "positivePixels": 1815,
+          "missingPixels": 12661
+        },
+        "NAM": {
+          "maskPixels": 10394,
+          "validPixels": 5,
+          "zeroPixels": 0,
+          "positivePixels": 5,
+          "missingPixels": 10389
+        },
+        "MOZ": {
+          "maskPixels": 9668,
+          "validPixels": 8342,
+          "zeroPixels": 329,
+          "positivePixels": 8013,
+          "missingPixels": 1326
+        },
+        "MAR": {
+          "maskPixels": 7842,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 7842
+        },
+        "ESH": {
+          "maskPixels": 1165,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 1165
+        },
+        "MUS": {
+          "maskPixels": 23,
+          "validPixels": 22,
+          "zeroPixels": 0,
+          "positivePixels": 22,
+          "missingPixels": 1
+        },
+        "MRT": {
+          "maskPixels": 12899,
+          "validPixels": 3,
+          "zeroPixels": 0,
+          "positivePixels": 3,
+          "missingPixels": 12896
+        },
+        "MLI": {
+          "maskPixels": 15379,
+          "validPixels": 4539,
+          "zeroPixels": 35,
+          "positivePixels": 4504,
+          "missingPixels": 10840
+        },
+        "MWI": {
+          "maskPixels": 1431,
+          "validPixels": 1167,
+          "zeroPixels": 11,
+          "positivePixels": 1156,
+          "missingPixels": 264
+        },
+        "MDG": {
+          "maskPixels": 7358,
+          "validPixels": 5174,
+          "zeroPixels": 296,
+          "positivePixels": 4878,
+          "missingPixels": 2184
+        },
+        "LBY": {
+          "maskPixels": 21316,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 21316
+        },
+        "LBR": {
+          "maskPixels": 1122,
+          "validPixels": 1115,
+          "zeroPixels": 0,
+          "positivePixels": 1115,
+          "missingPixels": 7
+        },
+        "LSO": {
+          "maskPixels": 403,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 403
+        },
+        "KEN": {
+          "maskPixels": 6937,
+          "validPixels": 1725,
+          "zeroPixels": 211,
+          "positivePixels": 1514,
+          "missingPixels": 5212
+        },
+        "GNB": {
+          "maskPixels": 373,
+          "validPixels": 336,
+          "zeroPixels": 0,
+          "positivePixels": 336,
+          "missingPixels": 37
+        },
+        "GIN": {
+          "maskPixels": 2898,
+          "validPixels": 2873,
+          "zeroPixels": 18,
+          "positivePixels": 2855,
+          "missingPixels": 25
+        },
+        "GHA": {
+          "maskPixels": 2819,
+          "validPixels": 2363,
+          "zeroPixels": 0,
+          "positivePixels": 2363,
+          "missingPixels": 456
+        },
+        "GMB": {
+          "maskPixels": 121,
+          "validPixels": 120,
+          "zeroPixels": 0,
+          "positivePixels": 120,
+          "missingPixels": 1
+        },
+        "GAB": {
+          "maskPixels": 3035,
+          "validPixels": 2570,
+          "zeroPixels": 237,
+          "positivePixels": 2333,
+          "missingPixels": 465
+        },
+        "ETH": {
+          "maskPixels": 13348,
+          "validPixels": 21,
+          "zeroPixels": 0,
+          "positivePixels": 21,
+          "missingPixels": 13327
+        },
+        "ERI": {
+          "maskPixels": 1495,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 1495
+        },
+        "GNQ": {
+          "maskPixels": 310,
+          "validPixels": 308,
+          "zeroPixels": 2,
+          "positivePixels": 306,
+          "missingPixels": 2
+        },
+        "EGY": {
+          "maskPixels": 13050,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 13050
+        },
+        "DJI": {
+          "maskPixels": 258,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 258
+        },
+        "CIV": {
+          "maskPixels": 3794,
+          "validPixels": 3699,
+          "zeroPixels": 0,
+          "positivePixels": 3699,
+          "missingPixels": 95
+        },
+        "COD": {
+          "maskPixels": 27316,
+          "validPixels": 24884,
+          "zeroPixels": 3507,
+          "positivePixels": 21377,
+          "missingPixels": 2432
+        },
+        "COG": {
+          "maskPixels": 4040,
+          "validPixels": 710,
+          "zeroPixels": 4,
+          "positivePixels": 706,
+          "missingPixels": 3330
+        },
+        "COM": {
+          "maskPixels": 17,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 17
+        },
+        "TCD": {
+          "maskPixels": 15396,
+          "validPixels": 5023,
+          "zeroPixels": 1060,
+          "positivePixels": 3963,
+          "missingPixels": 10373
+        },
+        "CAF": {
+          "maskPixels": 7290,
+          "validPixels": 4239,
+          "zeroPixels": 583,
+          "positivePixels": 3656,
+          "missingPixels": 3051
+        },
+        "CPV": {
+          "maskPixels": 41,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 41
+        },
+        "CMR": {
+          "maskPixels": 5454,
+          "validPixels": 5204,
+          "zeroPixels": 15,
+          "positivePixels": 5189,
+          "missingPixels": 250
+        },
+        "BDI": {
+          "maskPixels": 310,
+          "validPixels": 292,
+          "zeroPixels": 11,
+          "positivePixels": 281,
+          "missingPixels": 18
+        },
+        "BFA": {
+          "maskPixels": 3266,
+          "validPixels": 3212,
+          "zeroPixels": 14,
+          "positivePixels": 3198,
+          "missingPixels": 54
+        },
+        "BWA": {
+          "maskPixels": 7278,
+          "validPixels": 1,
+          "zeroPixels": 0,
+          "positivePixels": 1,
+          "missingPixels": 7277
+        },
+        "BEN": {
+          "maskPixels": 1387,
+          "validPixels": 1297,
+          "zeroPixels": 13,
+          "positivePixels": 1284,
+          "missingPixels": 90
+        },
+        "AGO": {
+          "maskPixels": 14953,
+          "validPixels": 9946,
+          "zeroPixels": 577,
+          "positivePixels": 9369,
+          "missingPixels": 5007
+        },
+        "DZA": {
+          "maskPixels": 30769,
+          "validPixels": 0,
+          "zeroPixels": 0,
+          "positivePixels": 0,
+          "missingPixels": 30769
+        }
+      },
+      "samples": [
+        {
+          "kind": "zero",
+          "index": 297176,
+          "row": 272,
+          "col": 152,
+          "sourceRow": 884,
+          "sourceCol": 1988,
+          "lon": -14.291666666666668,
+          "lat": 16.291666666666668,
+          "originalValue": 0,
+          "value": 0,
+          "maskAtCellCentre": true,
+          "sourceNoData": false,
+          "pngClass": "crop-zero"
+        },
+        {
+          "kind": "positiveMaximum",
+          "index": 452556,
+          "row": 414,
+          "col": 468,
+          "sourceRow": 1026,
+          "sourceCol": 2304,
+          "lon": 12.041666666666664,
+          "lat": 4.458333333333336,
+          "originalValue": 162264.796875,
+          "value": 162264.796875,
+          "maskAtCellCentre": true,
+          "sourceNoData": false,
+          "pngClass": "p-5"
+        },
+        {
+          "kind": "missing",
+          "index": 0,
+          "row": 0,
+          "col": 0,
+          "sourceRow": 612,
+          "sourceCol": 1836,
+          "lon": -26.958333333333332,
+          "lat": 38.958333333333336,
+          "originalValue": null,
+          "value": -1,
+          "maskAtCellCentre": false,
+          "sourceNoData": true,
+          "pngClass": null
+        },
+        {
+          "kind": "sourceMissingOnLand",
+          "index": 22278,
+          "row": 20,
+          "col": 438,
+          "sourceRow": 632,
+          "sourceCol": 2274,
+          "lon": 9.541666666666664,
+          "lat": 37.291666666666664,
+          "originalValue": null,
+          "value": -1,
+          "maskAtCellCentre": true,
+          "sourceNoData": true,
+          "pngClass": null
+        }
+      ],
+      "checks": {
+        "retainedValuesExact": true,
+        "sourceNoDataPreserved": true,
+        "outsideMaskUnavailable": true,
+        "float32GridExactRoundTrip": true,
+        "imageEqualsQueryClasses": true,
+        "zeroOpaque": true,
+        "missingTransparent": true
+      }
+    }
+  },
+  "boundary": {
+    "file": "src/data/atlas/africa-geography.json",
+    "sha256": "cefce22f53e415d7a13e2ca514d36a6ec8c6a6ef22454734fdb7b6c8f334d9db",
+    "license": "Natural Earth public domain",
+    "method": "Even-odd polygon scanlines at native source-cell centres, original 55 supplied country/disputed-area polygons unchanged"
+  },
+  "limitations": [
+    "These are official statistical-model estimates referenced to2020, not direct observations of individual farms or current harvests. Inputs include national/subnational statistics, cropland, suitability, irrigation and other information from varied dates.",
+    "A native5-arcminute geographic cell is approximately9km north/south but its east/west width varies by latitude. Units are hectares or tonnes per original source cell, not per square kilometre.",
+    "Harvested area includes repeated harvests on the same land and can exceed physical cropland area. It is not a land-cover fraction.",
+    "Original noData is not treated as zero production or as proof that cultivation is impossible. Different crops have different coverage; only source-provided zeros are labelled zero.",
+    "Country centre clipping keeps whole original source-cell values at retained border cells. It does not divide a cell among countries; summed displayed cells are not official national totals. Coarse/generalized boundaries can omit small islands and coastal cells.",
+    "Production mass across different crops is not comparable as calories, nutrition, value, household income or yield efficiency. Crop output alone does not prove household food security.",
+    "Natural conditions help explain possibilities, while irrigation, varieties, infrastructure, markets, land access and policy affect outcomes. Climate is not a deterministic explanation."
+  ],
+  "processing": {
+    "generator": "scripts/prepare-africa-crops.mjs",
+    "generatorSha256": "75a3f2e5b11fa4447b5bde44d1b97b2864e720d39c6f8d65fdf090eaf3d4677c",
+    "node": "v24.19.0",
+    "geotiff": "Existing private GeoTIFF.js preparation dependency; not a runtime site dependency",
+    "sourceWindow": [
+      1836,
+      612,
+      2928,
+      1512
+    ],
+    "method": "No raster resampling; unchanged original source float32 cells plus Africa country cell-centre mask.",
+    "sourceRecords": {
+      "maize-harvested": {
+        "file": "spam2020_V2r2_global_H_MAIZ_A.tif",
+        "sha256": "f59ae1d95086f72e05ea753ecc06a2d5dce4488503b669d82981bf37ba713d71",
+        "bytes": 37890590
+      },
+      "maize-production": {
+        "file": "spam2020_V2r2_global_P_MAIZ_A.tif",
+        "sha256": "1db1778160f6259e53f1c05eeab899f09297a62147cbd85a735b6e2c41184785",
+        "bytes": 37890590
+      },
+      "rice-harvested": {
+        "file": "spam2020_V2r2_global_H_RICE_A.tif",
+        "sha256": "5c20f380b2f7501e8ed025583cc020ebce25f858ff20e07d71c2df59d2e8cfd2",
+        "bytes": 37890590
+      },
+      "rice-production": {
+        "file": "spam2020_V2r2_global_P_RICE_A.tif",
+        "sha256": "db16e1358399a32fd72ff34c5a3aa32b2262003a978593b7c260afc6957ee4ac",
+        "bytes": 37890590
+      },
+      "wheat-harvested": {
+        "file": "spam2020_V2r2_global_H_WHEA_A.tif",
+        "sha256": "288f583e50e8237b0eaad880e5ef188383c97701c5015744cf6a62f2bf7dba9e",
+        "bytes": 37902342
+      },
+      "wheat-production": {
+        "file": "spam2020_V2r2_global_P_WHEA_A.tif",
+        "sha256": "718c230babcd872bfeba1d5cec72b8e5944ec2fe90103b890fff2d33d095fac7",
+        "bytes": 37890590
+      },
+      "cassava-harvested": {
+        "file": "spam2020_V2r2_global_H_CASS_A.tif",
+        "sha256": "71e7cb861757ab0a50867bb0500e829f6e0b2c48527f1ebdcb60b4301ce1eae6",
+        "bytes": 37890590
+      },
+      "cassava-production": {
+        "file": "spam2020_V2r2_global_P_CASS_A.tif",
+        "sha256": "640fdd4dcc54a16d890b6a4bfc371af2ec7c5a9d524be5aa8d86b1fadb6406c8",
+        "bytes": 37890590
+      }
+    },
+    "reproduction": {
+      "extract": "Python standard-library zipfile: extract files ending _MAIZ_A.tif, _RICE_A.tif, _WHEA_A.tif, _CASS_A.tif from the verified H/P archives into <source-root>/selected; zipfile validates member CRC.",
+      "command": "node scripts/prepare-africa-crops.mjs --source-root <immutable-private-cache> --geotiff-package <existing-geotiff-package>",
+      "cachePolicy": "Global original archives, TIFFs and full metadata remain private. Africa PNG/query grids and provenance/source notice are shipped."
+    }
+  },
+  "licenseEvidence": {
+    "datasetUrl": "https://doi.org/10.7910/DVN/SWPENT",
+    "fixedMetadataUrl": "https://dataverse.harvard.edu/api/datasets/10094351/versions/6.0",
+    "fixedMetadataSha256": "6e71c847cdf3b383cf71a94432fe2a09620d23aeba67859564213effaaf03559",
+    "datasetVersion": "6.0",
+    "license": "CC BY 4.0",
+    "grantSection": 4,
+    "officialMirrorLinksPage": "https://www.mapspam.info/data/",
+    "sourceArchiveIdentity": "Both public-mirror ZIP bytes match the official fixed Dataverse file MD5 and filesize. Neither a guestbook response nor an account was submitted.",
+    "mirrorReadme": {
+      "name": "Readme_SPAM2020V2r2.txt",
+      "bytes": 6016,
+      "sha256": "3da2d847e69ab2edf2f4ccabf1ad66423935ac129b0ba245af570dadb34df9b9",
+      "md5": "250ce76594c9ef3edbaab79f5f850b25",
+      "publisherMd5": "34b66fe5f86456617638bfe452e79145",
+      "matchesDataverseReadme": false,
+      "note": "Official-mirror README has the same byte count but a different checksum. Retained as a distinct ancillary document, not claimed byte-identical and not used as the license evidence. The actual H/P source archives are byte-identical by official MD5 and size."
+    }
+  },
+  "checks": {
+    "allLayersExactSourceCells": true,
+    "allLayersNoDataPreserved": true,
+    "allLayersOutsideMaskUnavailable": true,
+    "allGridsExactRoundTrip": true,
+    "allImagesMatchQuery": true,
+    "allZerosOpaque": true,
+    "allMissingTransparent": true,
+    "sourceArchivesMatchFixedLicensedDataset": true
+  },
+  "files": {
+    "cassava-harvested.png": {
+      "bytes": 66185,
+      "sha256": "2c285ec1daf0f6fa15c5d5f5395edadf1b3593c232e2f1db2b54506b9de781db"
+    },
+    "cassava-harvested.values.gz": {
+      "bytes": 311657,
+      "sha256": "34cb3cd0081c556f4be8c09daa43c3fa061dcdee965c6e8d128d5b4aa01446a6"
+    },
+    "cassava-production.png": {
+      "bytes": 70169,
+      "sha256": "801ffbdb3478e7089185139a17c17ec12612693b079bcf52594c82ca3125a6f3"
+    },
+    "cassava-production.values.gz": {
+      "bytes": 375594,
+      "sha256": "29cbc929b0b3a7132ecf5a1f1c58a3106d997b84d58f5bb01cbe55ef8e7451fe"
+    },
+    "maize-harvested.png": {
+      "bytes": 90402,
+      "sha256": "f7faad807d9dcbf3d3a477316cd84e4d43e92278dea9b18881fe8b6bb0c58093"
+    },
+    "maize-harvested.values.gz": {
+      "bytes": 430515,
+      "sha256": "a2aa58a7765fb605ee164132823556bacfc9bedb744fbdbbcc3af991e4123734"
+    },
+    "maize-production.png": {
+      "bytes": 92823,
+      "sha256": "80528bb937ea1c7fe4f6da046cfab25db0c9b19dccc95d195ef5229ce165b511"
+    },
+    "maize-production.values.gz": {
+      "bytes": 434852,
+      "sha256": "98a0da6e02b1a0db93facfa259b57e54774d26701bc3530571209a1293fc4939"
+    },
+    "rice-harvested.png": {
+      "bytes": 61224,
+      "sha256": "1043a7e31338311326913b6861fdb3b7232050252b42a46bdabea7622ebee524"
+    },
+    "rice-harvested.values.gz": {
+      "bytes": 260492,
+      "sha256": "a31ef621e4fc8877a261ac03ebc36763eccc051025b436fb9ff9db4b2e944d8b"
+    },
+    "rice-production.png": {
+      "bytes": 63388,
+      "sha256": "7ac970bd17161d4d9dbb1a8b0e2fe006d9d14d80753344db0995dd9a32b3a089"
+    },
+    "rice-production.values.gz": {
+      "bytes": 263326,
+      "sha256": "d79570e1641442c117d487d29c4be3a65b4f438a9f65524fc7a6344c25e79bd6"
+    },
+    "source-notice.txt": {
+      "bytes": 903,
+      "sha256": "52f4f62cf7b73e5828f4f373e2a9fb17e046f4c010c837f0bf41ddefb5705b4e"
+    },
+    "wheat-harvested.png": {
+      "bytes": 48068,
+      "sha256": "0a6453645fb97c9bf6aedd89f9adeae65296b3d9f0bb63b53622403ae12ad9a3"
+    },
+    "wheat-harvested.values.gz": {
+      "bytes": 147952,
+      "sha256": "921fbca8e30085a1005ca9151285ffbbcb008206f697adee05cd2396d1d212a1"
+    },
+    "wheat-production.png": {
+      "bytes": 49909,
+      "sha256": "b18bf800ebd995376c8376eb0ae002c382e28e5000bafc8d1ddff774a89a0946"
+    },
+    "wheat-production.values.gz": {
+      "bytes": 153016,
+      "sha256": "a31f09ae0ea830dedc7f4c95f7acbdf11e66764be252edf29292f4a02cdc3525"
+    }
+  }
+}

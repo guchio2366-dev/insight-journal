@@ -3,9 +3,11 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {transform} from 'esbuild';
 import {Window} from 'happy-dom';
+import {cropChoices,livestockChoices,cropMeasureChoices} from '../../src/data/atlas/africa-atlas.ts';
 const mapController=await readFile('src/scripts/atlas-africa-overview-map.ts','utf8');
-const pageController=(await readFile('src/scripts/atlas-africa-overview.ts','utf8')).replace(/^import \{initAfricaOverviewMap\} from ['"]\.\/atlas-africa-overview-map['"];?\r?\n/m,'');
-const controller=(await transform(mapController+'\n'+pageController+'\ninitAfricaOverview(document.querySelector("[data-africa-overview]"));',{loader:'ts',format:'iife'})).code;
+const pageController=(await readFile('src/scripts/atlas-africa-overview.ts','utf8')).replace(/^import \{(?:initAfricaOverviewMap|cropChoices,livestockChoices,cropMeasureChoices)\} from ['"][^'"]+['"];?\r?\n/gm,'');
+const choices=`const cropChoices=${JSON.stringify(cropChoices)},livestockChoices=${JSON.stringify(livestockChoices)},cropMeasureChoices=${JSON.stringify(cropMeasureChoices)};`;
+const controller=(await transform(choices+'\n'+mapController+'\n'+pageController+'\ninitAfricaOverview(document.querySelector("[data-africa-overview]"));',{loader:'ts',format:'iife'})).code;
 async function page(query=''){
  const w=new Window({url:'https://example.com/insight-journal/atlas/africa/overview/'+query,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
  w.document.body.innerHTML=(await readFile('dist/atlas/africa/overview/index.html','utf8')).replace(/<script(?![^>]*type="application\/json")[^>]*>[\s\S]*?<\/script>/g,'');

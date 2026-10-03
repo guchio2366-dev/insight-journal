@@ -12,8 +12,12 @@ const SVG='http://www.w3.org/2000/svg';
 const text=(v:any,fallback=''):string=>typeof v==='string'?v:v===null||v===undefined?fallback:String(v);
 const note=(v:any,fallback=''):string=>typeof v==='string'?v:Array.isArray(v)?v.map(item=>note(item)).filter(Boolean).join(' '):v&&typeof v==='object'?text(v.note??v.description??v.label,fallback):fallback;
 const label=(r:Row)=>text(r.label??r.nameJa??r.name??r.code??r.id);
-export function africaActualLayerKey(state:Pick<State,'field'|'topic'|'water'>):string {
+export function africaGridValueLabel(value:number):string {
+ return value>0&&value<.001?new Intl.NumberFormat('ja-JP',{maximumSignificantDigits:4}).format(value):value.toLocaleString('ja-JP');
+}
+export function africaActualLayerKey(state:Pick<State,'field'|'topic'|'water'> & Partial<Pick<State,'crop'|'livestock'|'cropMeasure'>>):string {
  if(state.field==='nature')return state.topic==='water'?`water-${state.water}`:state.topic;
+ if(state.field==='agriculture')return state.topic==='farming'?`crop-${state.crop??'maize'}-${state.cropMeasure??'harvested'}`:state.topic==='livestock'?`livestock-${state.livestock??'cattle'}`:'';
  return state.field==='population'?state.topic:'';
 }
 export function africaLayerPath(geometry:Row):string {
@@ -30,11 +34,12 @@ export function africaGridValue(bytes:Uint8Array,metadata:Row,lon:number,lat:num
  const col=Math.floor((lon-bounds[0])/(bounds[2]-bounds[0])*width),row=Math.floor((bounds[3]-lat)/(bounds[3]-bounds[1])*height),index=row*width+col;
  const data=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength);
  const value=metadata.encoding?.includes('float32')?index*4+3<bytes.length?data.getFloat32(index*4,true):null:metadata.encoding?.includes('int16')?index*2+1<bytes.length?data.getInt16(index*2,true):null:index<bytes.length?bytes[index]:null;
- return value===metadata.noData?null:value;
+ return value===metadata.noData||value===null||!Number.isFinite(value)?null:value;
 }
 export function africaRasterCategory(value:number,layer:Row):{id:string;color:string}|null {
- if(value===layer.noData)return null;
- if(layer.breaks){const bucket=layer.breaks.findIndex((edge:number)=>value<edge),index=bucket<0?layer.colors.length-1:bucket;return {id:text(layer.legend?.[index]?.id,String(index)),color:layer.colors[index]};}
+ if(value===layer.noData||!Number.isFinite(value))return null;
+ if(layer.zeroValue!==undefined&&value===layer.zeroValue)return {id:text(layer.zeroId,'zero'),color:layer.zeroColor};
+ if(layer.breaks){const bucket=layer.breaks.findIndex((edge:number)=>value<edge),index=bucket<0?layer.colors.length-1:bucket;return {id:text((layer.positiveLegend??layer.legend)?.[index]?.id,String(index)),color:layer.colors[index]};}
  const category=layer.classes?.find((row:Row)=>Number(row.id)===value);return category?{id:text(category.id),color:category.color}:null;
 }
 
@@ -55,6 +60,8 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   if(['climate','terrain','elevation'].includes(key))return {base:withBase('/assets/atlas/africa-physical-v1/'),family:'physical',id:key};
   if(['ethnicity','religion'].includes(key))return {base:withBase('/assets/atlas/africa-settlements-v1/'),family:'social',id:key};
   if(key==='distribution')return {base:withBase('/assets/atlas/africa-population-v1/'),family:'population',id:'population'};
+  if(key.startsWith('crop-'))return {base:withBase('/assets/atlas/africa-crops-v1/'),family:'crops',id:key.slice(5)};
+  if(key.startsWith('livestock-'))return {base:withBase('/assets/atlas/africa-livestock-v1/'),family:'livestock',id:key.slice(10)};
   if(key==='water-rain')return null;
   if(key.startsWith('water-'))return {base:withBase('/assets/atlas/africa-water-v1/'),family:'water',id:key==='water-basin'?'basins':'rivers'};
   return null;
@@ -76,7 +83,9 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   const rawPeriod=text(layer.period??source.period??layer.sourcePeriod??manifest.period??manifest.year);
   const period=rawPeriod.includes('ETOPO 2022')?'ETOPO 2022版（観測年は複数）':rawPeriod;
   const scope=config.family==='social'?`GeoEPR掲載の政治的に関連する集団の事例です。全住民の分布・構成比ではありません。${note(layer.unlisted)}`:note(layer.scope??layer.limitations??manifest.scope??manifest.limitations,'国の平均ではなく、出典に基づく空間分布です。');
-  const view: AfricaLayerView={...empty,title:text(layer.title,empty.title),period,unit:key==='climate'?'気候区分':key==='terrain'?'m（標高区分・等高線）':text(layer.unit??source.unit),scope,method:note(layer.method??manifest.method),sourceUrl:text(layer.sourceUrl??source.url??source.sourceUrl??manifest.sources?.[0]?.page??manifest.sources?.[0]?.url),sourceLabel:text(layer.sourceLabel??source.label??source.name??source.publisher??layer.publisher,'分布の原典・加工方法'),legend,loading:false,error:'',takeaway:text(layer.takeaway),description:text(layer.description??layer.definition)};
+  const input=config.family==='livestock'?layer.countryInputs?.[state.place]:undefined;
+  const inputMethod=config.family==='livestock'?` 選択国の入力統計年：${input?.censusYear??'未記載'}。${input?.averageSpatialResolutionKm!==null&&input?.averageSpatialResolutionKm!==undefined?`元統計の平均空間解像度：約${input.averageSpatialResolutionKm} km（表示格子の5分角とは別）。`:''}${input?.inputSource?`入力統計の機関：${input.inputSource}。`:''}`:'';
+  const view: AfricaLayerView={...empty,title:text(layer.title,empty.title),period,unit:key==='climate'?'気候区分':key==='terrain'?'m（標高区分・等高線）':text(layer.unit??source.unit),scope,method:note(layer.method??manifest.method)+inputMethod,sourceUrl:text(layer.sourceUrl??source.url??source.sourceUrl??manifest.sources?.[0]?.page??manifest.sources?.[0]?.url),sourceLabel:text(layer.sourceLabel??source.label??source.name??source.publisher??layer.publisher,'分布の原典・加工方法'),legend,loading:false,error:'',takeaway:text(layer.takeaway),description:text(layer.description??layer.definition)};
   const file=layer.file??layer.contours??layer.geometry??(typeof layer.geojson==='string'?layer.geojson:undefined);
   const data=file?request(config.base+file):null;
   const grid=layer.grid?request(config.base+layer.grid,true):null;
@@ -99,7 +108,7 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   const current=viewCache.get(currentKey);if(!current)return 'この地点の分布値はまだ読み込まれていません。';
   const {layer,manifest,view,grid}=current;if(!grid)return '元資料の分類・範囲は凡例と出典で確認できます。';
   const value=africaGridValue(grid,{...manifest,...layer},lon,lat);if(value===null)return 'この表示格子は未収録です。';
-  const category=layer.classes?view.legend.find(row=>Number(row.id)===value):undefined;return `${lon.toFixed(2)}°E / ${lat.toFixed(2)}°N：${category?`${category.code??''} ${category.label}`:`${value.toLocaleString('ja-JP')} ${view.unit}`}（表示格子）`;
+  const category=layer.classes?view.legend.find(row=>Number(row.id)===value):undefined,model=currentKey.startsWith('crop-')||currentKey.startsWith('livestock-');return `${lon.toFixed(2)}°E / ${lat.toFixed(2)}°N：${category?`${category.code??''} ${category.label}`:`${africaGridValueLabel(value)} ${view.unit}`}（表示格子${model?'・推定値、表示桁は丸め':''}）`;
  }
  function retry(){for(const [url,result]of cache)if(result.error)cache.delete(url);lastPaint='';onReady();}
  return {render,inspect,retry};

@@ -4,6 +4,11 @@
 .atlas-layout:has(.africa-atlas) .site-header nav a{padding-block:10px}
 .atlas-layout:has(.africa-atlas) .site-brand small{display:none}
 .africa-atlas [hidden]{display:none!important}
+.africa-commodities{display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;padding:5px 6px;border-top:1px solid var(--rule);background:#fffefa}
+.africa-commodity-products,.africa-commodity-measures{display:flex;flex-wrap:wrap;gap:4px;min-width:0}
+.africa-commodities button{min-width:44px;min-height:44px;padding:7px 8px;border:1px solid #bac9c6;border-radius:4px;background:#fff;font-size:14px;line-height:1.5}
+.africa-commodities button[aria-pressed=true]{background:#224c59;color:#fff}
+.africa-commodity-measures{padding-left:6px;border-left:1px solid #c7ccbf}
 .africa-heading{display:flex;justify-content:space-between;align-items:center;gap:20px;margin:0 0 10px}
 .africa-breadcrumb{font-size:13px;color:var(--ink-soft);margin:0 0 2px}
 .africa-heading h1{font-size:22px;line-height:1.3;letter-spacing:-.02em;margin:0}
@@ -302,7 +307,7 @@
 
 /* Africa completion: one map frame and one complete reading scroll container. */
 .africa-region-row{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0}
-.africa-region-row>label,.africa-country-controls>label{display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:14px}
+.africa-region-row>label,.africa-country-controls>label{display:flex;flex-direction:row;align-items:center;gap:6px;white-space:nowrap;font-size:14px}
 .africa-region-row select,.africa-country-controls select{min-height:40px;height:40px;min-width:0;padding:6px 26px 6px 8px;font-size:14px;background:#fffefa;border:1px solid #bac9c6}
 .africa-region-row select{max-width:170px}
 .africa-map-frame{position:relative;min-width:0;aspect-ratio:1.55;border:1px solid #abbfc2;overflow:hidden;background:#c1e1ed}
@@ -356,6 +361,7 @@
  .africa-country-controls{gap:6px}.africa-country-controls select[data-place]{width:150px}.africa-country-controls select[data-compare]{width:145px}
 }
 @media(max-width:959px){
+ .africa-atlas[data-field=agriculture] .africa-map-heading>span{white-space:normal;overflow-wrap:anywhere}
  .africa-country-controls{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 0;padding:0;border:0}
  .africa-country-controls select{max-width:190px}.africa-detail{height:auto;max-height:none;overflow:visible}.africa-map-frame{min-height:320px;aspect-ratio:auto;height:360px}
  .africa-map-frame .africa-map{height:100%;min-height:0}.africa-map-heading{display:block}.africa-map-heading>span{display:block}

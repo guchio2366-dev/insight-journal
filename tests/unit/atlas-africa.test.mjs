@@ -77,3 +77,12 @@ test('theme defaults use representative countries while explicit country and reg
  assert.equal(explicit.place,'EGY');assert.equal(explicit.region,'north');assert.equal(explicit.zoom,'theme');
  assert.deepEqual(readState(writeState(explicit,new URL('https://example.com/atlas/africa/')).search),explicit);
 });
+
+test('crop and species states remain independent through URL reload and reject unavailable products',()=>{
+ const source=readState('?field=agriculture&topic=livestock&crop=rice&cropMeasure=production&livestock=goats&place=KEN&compare=ETH&year=2023&region=east&zoom=country');
+ assert.equal(source.topic,'livestock');assert.equal(source.metric,'NV.AGR.TOTL.ZS');assert.equal(source.crop,'rice');assert.equal(source.cropMeasure,'production');assert.equal(source.livestock,'goats');
+ assert.deepEqual(readState(writeState({...source},new URL('https://example.com/atlas/africa/')).search),source);
+ const invalid=readState('?field=agriculture&topic=bad&crop=constructor&cropMeasure=yield&livestock=horses');
+ assert.equal(invalid.topic,'farming');assert.equal(invalid.crop,'maize');assert.equal(invalid.cropMeasure,'harvested');assert.equal(invalid.livestock,'cattle');assert.equal(invalid.zoom,'all');assert.equal(invalid.region,'all');
+ assert.equal(readState('?field=agriculture&metric=AG.LND.FRST.ZS&topic=livestock').topic,'forestry');
+});
