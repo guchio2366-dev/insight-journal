@@ -88,6 +88,7 @@ const config = { farmingAreas, geography, climateWater, countries, cities: citie
           </svg>
           <div class="eu-live-map" data-eu-live aria-label="操作できる欧州地図"></div>
           <div class="eu-map-annotations" data-eu-annotations aria-label="地図の都市と地点"><svg aria-hidden="true"></svg></div>
+          <div class="eu-farming-focus-marker" data-eu-farming-focus-marker hidden><span aria-hidden="true"></span><strong data-eu-farming-focus-point-label></strong></div>
         </div>
         <div class="eu-drainage-choice" data-eu-drainage-controls hidden><label>流域区画（HYBAS_ID）<select data-eu-drainage-choice><option value="">地図から区画を選ぶ</option></select></label><button type="button" data-eu-drainage-clear>選択を解除</button><p data-eu-basin-summary aria-live="polite">色は区画を見分けるための識別色です。量の大小ではありません。</p></div>
         <div class="eu-item-list" data-eu-farming-list hidden={!agriculture} aria-label="農畜産物と林業を選ぶ">
@@ -119,6 +120,11 @@ const config = { farmingAreas, geography, climateWater, countries, cities: citie
         <section class="eu-comparison-context" data-eu-comparison-context hidden aria-label="元の分布との比較">
           <h2 data-eu-comparison-heading></h2>
           <a data-eu-comparison-return href={withBase('/atlas/europe/agriculture/')}>元の分布へ戻る</a>
+          <section class="eu-farming-comparison-focus" data-eu-farming-comparison-focus hidden aria-label="農林業と条件を比べる">
+            <p data-eu-farming-focus-description></p>
+            <p class="eu-farming-focus-value" data-eu-farming-focus-value hidden aria-live="polite"></p>
+            <details><summary>事例の範囲・根拠</summary><p data-eu-farming-focus-scope></p><div data-eu-farming-focus-sources></div></details>
+          </section>
           <details class="eu-comparison-origin"><summary>比較の問い・対象年・出典</summary><p data-eu-comparison-question></p><div data-eu-comparison-legend></div><p data-eu-comparison-scope></p><p data-eu-comparison-attribution hidden></p><a data-eu-comparison-licence hidden>元の図の利用条件（CC BY 4.0）</a><a data-eu-comparison-source>元の図の出典</a></details>
         </section>
         <div data-eu-culture-host hidden><EuropePopulationCases /></div>

@@ -6,6 +6,7 @@ import populationCities from '../data/atlas/europe/population-cities.json' with 
 import { readEuropeState, writeEuropeState, type EuropeState } from './atlas-europe-view.ts';
 import { cultureSelection } from './atlas-europe-population-cases.ts';
 import { normaliseEuropeDrainageBasin } from './atlas-europe-drainage.ts';
+import { europeFarmingComparisonLinks, europeFarmingComparisonFocus, writeEuropeFarmingFocus } from '../data/atlas/europe/farming-water-comparisons.ts';
 
 export type EuropeComparisonLink = {
   id: string;
@@ -14,9 +15,17 @@ export type EuropeComparisonLink = {
   targetLayer: string;
   city?: string;
   feature?: string;
+  basin?: string;
+  title?: string;
+  description?: string;
+  period?: string;
+  pointLabel?: string;
+  point?: readonly [number, number];
+  focusBounds?: readonly [number, number, number, number];
+  sources?: readonly { label: string; url: string }[];
 };
 
-const returnKeys = new Set(['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin']);
+const returnKeys = new Set(['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin','farmYear','farmMeasure','farmCompare']);
 const returnLimit = 2048;
 const knownLayer = (id: string) => europeLayers.some(layer => layer.id === id);
 const sourceLayer = (state: EuropeState) => state.layer === 'overlay' ? (state.returnLayer === 'climate' ? 'wheat' : state.returnLayer) : state.layer;
@@ -87,13 +96,7 @@ export function europeComparisonLinks(state: EuropeState): EuropeComparisonLink[
       link('forest-kaukas', '森林とカウカスの加工拠点', '国全体の森林面積比率と、木材を原料にするカウカスの加工拠点の位置を比べます。森林の割合から工場の生産量を推定せずに読めますか。', 'hubs', { feature: 'kaukas' }),
       link('forest-terrain', '森林と地形を比べる', '国全体の森林面積比率と地形・標高を読み比べます。国の平均と、山地や平野の位置を分けて確かめます。', 'terrain'),
     ];
-    const livestock = ['cattle', 'pig', 'chicken', 'sheep'].includes(layer);
-    return [
-      link(`${layer}-climate`, livestock ? '家畜の分布とロンドンの季節' : '作物の分布と気候を比べる', livestock
-        ? '家畜の分布とロンドンの月別気温・降水量を比べます。イングランドの地域別農畜産の例を参照し、観測点の平年値と飼養密度を分けて読みます。'
-        : '作物の分布とパリの月別気温・降水量を比べ、季節と位置を確かめます。観測点の平年値を農地全体の値として扱わずに読みます。', 'climate', { city: livestock ? 'london' : 'paris' }),
-      link(`${layer}-terrain`, '農畜産の分布と地形', 'アルプスと周囲の平野を地形図で確かめ、農畜産の分布と読み比べます。二つの地図の位置関係から確認できることは何でしょうか。', 'terrain', { feature: 'alps' }),
-    ];
+    return europeFarmingComparisonLinks({ ...state, layer });
   }
   if (field === 'industry') {
     if(layer!=='hubs')return [
@@ -149,14 +152,23 @@ export function europeComparisonLinks(state: EuropeState): EuropeComparisonLink[
 /** Fixed same-origin field route; source state lives in a separate flat query. */
 export function europeComparisonUrl(base: URL, source: EuropeState, comparison: EuropeComparisonLink): URL {
   if (!knownLayer(comparison.targetLayer)) throw new TypeError('Unknown Europe target layer');
+  const focus = europeFarmingComparisonFocus(comparison.id);
+  if (focus && focus.targetLayer !== comparison.targetLayer) throw new TypeError('Europe comparison focus does not match its layer');
   // An entrance may name a point in another country. Start at the Europe scope
   // so both that point and the saved source distribution can be seen together.
   const target: EuropeState = { ...source, region: 'all', place: '', compare: [], layer: comparison.targetLayer };
+  // Ordinary field comparisons keep independent saved selections, including
+  // the source's basin when viewing crops or population. A registered farming
+  // focus instead owns its target point/unit and must clear unrelated picks.
+  if (focus) { target.feature = undefined; target.basin = undefined; }
   if (comparison.city) target.city = comparison.city;
   if (comparison.feature) target.feature = comparison.feature;
+  if (comparison.basin) target.basin = comparison.basin;
   const next = writeEuropeState(localFieldUrl(base, target), target);
   next.searchParams.set('europeReturn', encodeEuropeReturn(source));
-  return next;
+  // Each entrance replaces the previous comparison focus, including a second
+  // comparison launched from a focused nature view. No arbitrary camera URL.
+  return writeEuropeFarmingFocus(next, focus?.id);
 }
 
 /** Returning cannot resolve a caller-supplied pathname or external destination. */
@@ -166,10 +178,17 @@ export function europeNamedReturnUrl(base: URL, source: EuropeState): URL {
   return next;
 }
 
-export function europeComparisonQuestion(source: EuropeState, targetLayer: string, city?: string, feature?: string): string {
+export function europeComparisonQuestion(source: EuropeState, targetLayer: string, city?: string, feature?: string, focusId?: string, basin?: string): string {
+  const generic = '元の分布と現在の地図を読み比べ、位置、単位、対象年をそれぞれの資料で確かめます。';
   const candidates = europeComparisonLinks(source).filter(item => item.targetLayer === targetLayer);
-  const entrance = candidates.find(item => (!item.city || city === undefined || item.city === city) && (!item.feature || feature === undefined || item.feature === feature)) ?? candidates[0];
-  if (!entrance) return '元の分布と現在の地図を読み比べ、位置、単位、対象年をそれぞれの資料で確かめます。';
+  if (focusId) {
+    const entrance = candidates.find(item => item.id === focusId);
+    if (!entrance || !europeFarmingComparisonFocus(focusId)
+      || entrance.city && entrance.city !== city || entrance.feature && entrance.feature !== feature || entrance.basin && entrance.basin !== basin) return generic;
+    return entrance.question;
+  }
+  const entrance = candidates.find(item => (!item.city || city === undefined || item.city === city) && (!item.feature || feature === undefined || item.feature === feature) && (!item.basin || basin === undefined || item.basin === basin)) ?? candidates[0];
+  if (!entrance) return generic;
   if (entrance.city && city !== undefined && entrance.city !== city || entrance.feature && feature !== undefined && entrance.feature !== feature) {
     return `入口は「${entrance.label}」です。現在の選択は別の地点です。元の分布と現在の地点の位置を読み比べ、単位と対象年をそれぞれの資料で確かめます。`;
   }

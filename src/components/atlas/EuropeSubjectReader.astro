@@ -15,6 +15,7 @@ const copy=europeReaderCopy(layer);
   <button type="button" data-eu-single hidden></button>
   <button type="button" data-eu-return-multi hidden>元の分布表示に戻る</button>
   <nav class="eu-comparison-links" data-eu-comparison-links aria-label="分布の条件を比較する"></nav>
+  <p class="eu-farm-quick-summary" data-eu-farm-quick-summary hidden aria-live="polite"></p>
   <p class="eu-visibility-note" data-eu-hidden-note hidden></p>
   </div>
   <details class="eu-legend eu-subject-primary-key" data-eu-subject-legend open hidden={layer.id==='climate'||layer.id==='crops'}><summary><span data-eu-legend-title>{layer.title} · {layer.period} · {layer.unit}</span></summary><div class="eu-legend-grid" data-eu-legend-items>{layer.labels?.map((label,i)=><div><span class="eu-swatch" style={`background:${layer.colors![i]}`}></span><span>{label}</span></div>)}{layer.grid&&<div><span class="eu-swatch" style="background:repeating-linear-gradient(45deg,#fff,#fff 3px,#ccd3cc 3px,#ccd3cc 4px)"></span><span>データなし</span></div>}</div><details class="eu-legend-methods"><summary>対象範囲・出典</summary><p data-eu-layer-note>{layer.note}</p><a class="eu-source-link" data-eu-layer-source href={layer.source}>データの出典</a></details></details>

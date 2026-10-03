@@ -1,0 +1,32 @@
+{
+  "dataset": "GPCC Precipitation Analysis Climatology Version 2025 at 0.25°, reference period 1991–2020",
+  "publisher": "Global Precipitation Climatology Centre (GPCC) at Deutscher Wetterdienst (DWD)",
+  "sourceUrl": "https://opendata.dwd.de/climate_environment/GPCC/html/gpcc_precipitation_analysis_climatology_v2025_doi_download.html",
+  "downloadUrl": "https://opendata.dwd.de/climate_environment/GPCC/GPCC_Precipitation_Analysis_Climatology/Version_2025/gpcc_precipitation_analysis_climatology_1991_2020_v2025_025.nc.gz",
+  "checksumUrl": "https://opendata.dwd.de/climate_environment/GPCC/GPCC_Precipitation_Analysis_Climatology/Version_2025/readme_md5_gpcc_precipitation_analysis_climatology_1991_2020_v2025.txt",
+  "doi": "https://doi.org/10.5676/DWD_GPCC/CLIMAT_V2025_025",
+  "period": "1991-01-01/2020-12-31",
+  "edition": "2025",
+  "inputBytes": 28442738,
+  "inputSha256": "3bd80d05df52572f6409b594ae26b43e9045147cb3c25254cddb5a934c16e5c5",
+  "inputMd5": "d701c717e08ce6ad457c9f4004984d65",
+  "originalResolution": "0.25° regular latitude/longitude grid",
+  "sourceCRS": "geographic latitude/longitude",
+  "sourceVariable": "gpcc_precip",
+  "sourceUnit": "mm/month",
+  "sourceNoData": -99999.9921875,
+  "sourceMethod": "Rain-gauge-based interpolated monthly climatology. The fixed reference-period product uses stations with at least 20 complete years, according to the publisher.",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://www.dwd.de/EN/service/legal_notice/legal_notice.html",
+  "licenseEvidence": {
+    "publisherProductLinksToLegalNotice": true,
+    "officialIndexedLegalNoticeStatesCcBy40": true,
+    "officialIndexedQuote": "Re-use is permitted solely under the terms of the Creative Commons license BY 4.0 (CC BY 4.0) providing the source is duly acknowledged.",
+    "checkedAt": "2026-10-02",
+    "directLegalNoticeStatus": 403,
+    "dataCiteDoi": "10.5676/dwd_gpcc/climat_v2025_025",
+    "dataCiteRightsList": [],
+    "note": "DataCite confirms the exact publisher and product URL but supplies no registered rights. The license evidence is the official DWD indexed legal-notice text linked by the product page, not a DataCite rights claim. No access bypass used."
+  },
+  "attribution": "Rustemeier, Elke; Finger, Peter; Schirmeister, Zora; Ziese, Markus (2025): GPCC Precipitation Analysis Climatology Version 2025 at 0.25°. DOI: 10.5676/DWD_GPCC/CLIMAT_V2025_025. GPCC/DWD, CC BY 4.0. Modified: 12-month annual sum, target-country display masking, nearest-neighbour Web Mercator display and colour classes."
+}

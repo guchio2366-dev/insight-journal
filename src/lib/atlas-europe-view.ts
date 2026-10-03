@@ -3,6 +3,7 @@ import { europeLayers } from '../data/atlas/europe/layers.ts';
 import censusCases from '../../public/assets/atlas/europe/population-cases-v1/cases.json' with { type:'json' };
 import { normalisePopulationCaseChoice, type PopulationCensusCasePackage, type PopulationCaseChoiceState } from '../data/atlas/europe/population-cases.ts';
 import { normaliseEuropeDrainageBasin, type EuropeDrainageState } from './atlas-europe-drainage.ts';
+import { europeFarmMetric, europeFarmValidYear } from '../data/atlas/europe/farming-statistics.ts';
 
 export const frame = { width: 1200, height: 1001, west: -25, east: 65, south: 32, north: 73 };
 const mercator = (lat: number) => Math.log(Math.tan(Math.PI / 4 + lat * Math.PI / 360));
@@ -21,7 +22,7 @@ export function visibleBounds(geometries: Geometry[]): [[number, number], [numbe
   if (!points.length) return [[-25, 32], [65, 73]];
   return [[Math.min(...points.map(p => p[0])), Math.min(...points.map(p => p[1]))], [Math.max(...points.map(p => p[0])), Math.max(...points.map(p => p[1]))]];
 }
-export type EuropeState = { region: string; place: string; city: string; compare: string[]; render: string; layer: string; returnLayer: string; feature?: string; showCrops?: boolean; showLivestock?: boolean; single?: boolean } & Partial<PopulationCaseChoiceState> & EuropeDrainageState;
+export type EuropeState = { region: string; place: string; city: string; compare: string[]; render: string; layer: string; returnLayer: string; feature?: string; showCrops?: boolean; showLivestock?: boolean; single?: boolean; farmYear?:number; farmMeasure?:string; farmCompare?:string[] } & Partial<PopulationCaseChoiceState> & EuropeDrainageState;
 const europeCapitalCities: Record<string, string> = {
   GBR:'london', FRA:'paris', DEU:'berlin', POL:'warsaw', UKR:'kyiv', BLR:'minsk',
   MDA:'chisinau', RUS:'moscow', SRB:'belgrade', ROU:'bucharest', BGR:'sofia',
@@ -58,6 +59,11 @@ export function readEuropeState(search: string, countries: { code: string; regio
   if (p.get('crops') === 'off') state.showCrops = false;
   if (p.get('livestock') === 'off') state.showLivestock = false;
   if (p.get('single') === '1' && isIndividualFarmingLayer(layer)) state.single = true;
+  const farmYear=p.get('farmYear');
+  if(farmYear&&/^\d{4}$/.test(farmYear)&&europeFarmValidYear(Number(farmYear)))state.farmYear=Number(farmYear);
+  const farmMeasure=p.get('farmMeasure');if(farmMeasure&&europeFarmMetric(farmMeasure))state.farmMeasure=farmMeasure;
+  const farmCompare=[...new Set((p.get('farmCompare')??'').split(','))].filter(code=>code!==state.place&&countries.some(country=>country.code===code)).slice(0,2);
+  if(farmCompare.length)state.farmCompare=farmCompare;
   return state;
 }
 export function writeEuropeState(url: URL, state: EuropeState): URL {
@@ -65,7 +71,7 @@ export function writeEuropeState(url: URL, state: EuropeState): URL {
   const displayedLayer=state.layer==='overlay'?(state.returnLayer==='climate'?'wheat':state.returnLayer):state.layer;
   const field=europeLayers.find(layer=>layer.id===displayedLayer)?.field;
   if(field)next.pathname=next.pathname.replace(/(\/atlas\/europe\/)(nature|agriculture|industry|population)\/?$/,`$1${field}/`);
-  for (const key of ['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin']) next.searchParams.delete(key);
+  for (const key of ['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin','farmYear','farmMeasure','farmCompare']) next.searchParams.delete(key);
   if (state.region !== 'all') next.searchParams.set('region', state.region);
   if (state.place) next.searchParams.set('place', state.place);
   if (state.city) next.searchParams.set('city', state.city);
@@ -80,6 +86,9 @@ export function writeEuropeState(url: URL, state: EuropeState): URL {
   if (state.showLivestock === false) next.searchParams.set('livestock', 'off');
   if (state.single === true && isIndividualFarmingLayer(state.layer)) next.searchParams.set('single', '1');
   for(const key of ['cultureCase','cultureCategory','cultureArea'] as const)if(state[key])next.searchParams.set(key,state[key]!);
+  if(europeFarmValidYear(state.farmYear))next.searchParams.set('farmYear',String(state.farmYear));
+  if(state.farmMeasure&&europeFarmMetric(state.farmMeasure))next.searchParams.set('farmMeasure',state.farmMeasure);
+  if(state.farmCompare?.length)next.searchParams.set('farmCompare',[...new Set(state.farmCompare)].filter(code=>code!==state.place).slice(0,2).join(','));
   return next;
 }
 export function displayCell(values: Float32Array, point: number[], nodata = -1) {

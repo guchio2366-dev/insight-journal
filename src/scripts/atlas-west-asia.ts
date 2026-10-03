@@ -1,6 +1,7 @@
 import {westFields,westTopics,statisticalColors,observation,westReading} from '../data/atlas/west-asia-topics.mjs';
 import {readWestState,westSearch,gridIndex,decodeWestGrid,zoomWestView,panWestView} from '../lib/atlas-west-asia-state.mjs';
 import {stationAnnualRainfall,rainfallBreaks,rainfallColors,rainfallColor,isSettlementTopic,settlementSubject,validateSettlementCollection} from '../lib/atlas-west-asia-completion.mjs';
+import {westAnnualPrecipitationId,westPrecipitationManifestPath,westPrecipitationLayer,decodeWestPrecipitationGrid} from '../lib/atlas-west-asia-precipitation.mjs';
 
 // All classes present in the national-mask grid (1991–2020), including Cwb's four cells.
 // Keep this region-wide key stable when the learner selects a country or pans the map.
@@ -80,6 +81,11 @@ async function init(root:HTMLElement){
  const topic=()=>westTopics.find(t=>t.id===state.topic)!;
  const layer=(t=topic())=>data.layers.find((l:any)=>l.id===t.layer);
  const sourceTopic=()=>comparisonSource?westTopics.find(t=>t.id===comparisonSource.topic):null;
+ async function loadAnnualPrecipitation(){
+  if(data.layers.some((l:any)=>l.id===westAnnualPrecipitationId))return;
+  try{const manifest=await json(westPrecipitationManifestPath);if(data.layers.some((l:any)=>l.id===westAnnualPrecipitationId))return;const l=westPrecipitationLayer(manifest,data);data={...data,layers:[...data.layers,l]};}
+  catch(error){cache.delete(westPrecipitationManifestPath);throw error;}
+ }
  function restoreComparison(search:string){
   const p=new URLSearchParams(search);pointSide=p.get('side')==='source'?'source':'target';
   cityExplicit=!!state.city&&p.has('city');
@@ -196,7 +202,7 @@ async function init(root:HTMLElement){
   if(!keepComparison)availableYear(topic());commit();void render();
  }
  async function getGrid(l:any){
-  if(!grids.has(l.id))grids.set(l.id,fetch(assets+l.grid).then(async r=>{if(!r.ok)throw Error('数値を取得できませんでした。');return decodeWestGrid(await r.arrayBuffer(),l);}).catch(e=>{grids.delete(l.id);throw e;}));
+  if(!grids.has(l.id))grids.set(l.id,fetch(assets+l.grid).then(async r=>{if(!r.ok)throw Error('数値を取得できませんでした。');const bytes=await r.arrayBuffer();return l.id===westAnnualPrecipitationId?decodeWestPrecipitationGrid(bytes,l):decodeWestGrid(bytes,l);}).catch(e=>{grids.delete(l.id);throw e;}));
   return grids.get(l.id)!;
  }
  async function readPoint(coord:number[],label='選択地点',selectedTopic=topic()){
@@ -215,7 +221,8 @@ async function init(root:HTMLElement){
      if(heading)heading.textContent=c?c.code+' '+c.name:'気候区分：未収録';
      if(description)description.textContent=c?.description??'この観測地点を含む格子は未収録です。';
     }
-   }else out.textContent=prefix+'：'+format(value,1)+' '+l.unit+'（'+l.year+'）。'+(value===0?'原資料の値は0です。未収録とは区別しています。':'格子の推計値・補間値であり、地点の実測値とは限りません。');
+   }else if(l.id===westAnnualPrecipitationId)out.textContent=prefix+'：'+format(value,1)+' mm／年（1991–2020年平年値）。GPCC v2025・0.25°原格子の12か月合計です。表示格子が選ぶ最近傍原格子の値で、地点の実測値や現在の水利用可能量ではありません。'+(value===0?'原資料の値は0です。未収録とは区別しています。':'');
+   else out.textContent=prefix+'：'+format(value,1)+' '+l.unit+'（'+l.year+'）。'+(value===0?'原資料の値は0です。未収録とは区別しています。':'格子の推計値・補間値であり、地点の実測値とは限りません。');
   }catch{if(version===pointVersion){out.hidden=false;const message=label+'・'+selectedTopic.label+'の数値を読み込めませんでした。地図の選択は続けられます。「資料を再読み込みする」で再試行できます。';out.textContent=message;const heading=root.querySelector('[data-west-climate-class]');if(heading&&l.id==='climate'&&label!=='選択地点')heading.textContent='気候区分を読み込めませんでした。';fail(message);}}
  }
  async function cityClassification(city:any,version:number){
@@ -279,6 +286,7 @@ async function init(root:HTMLElement){
   html+=`<details class="west-reading-definitions"><summary>この指標の意味・資料の範囲</summary><p>${esc(t.description)}</p>`;
   if(t.id==='basins')html+='<p>流域の識別番号はHydroATLASのNEXT_SINKに対応します。ナイル川など地域外に続く流域も切り取らず、選択すると全体を表示します。色は流域の区別で、水量の大小ではありません。</p>';
   if(t.id==='groundwater')html+='<p>涵養は雨などが地下へ浸透して補給されることです。個々の井戸の深さ・水質・持続可能な取水量は未収録です。</p>';
+  if(t.id===westAnnualPrecipitationId){const coverage=layer()?.countryCoverage?.find((row:any)=>row.code===c?.code);html+='<p>GPCC v2025は雨量計観測に基づく0.25°格子の補間平年値です。1991–2020年の月別平年値が12か月揃う原格子だけ合計します。画像と地点の値は同じfloat32配列で、最近傍原格子の年合計を表示します。表示画素を細かくしても原資料の解像度は増えません。</p><p>年降水量は雨・雪などの水当量です。河川流量・地下水涵養・取水量・現在の渇水や利用可能な水量とは異なります。観測所の降水量は別の主題で確認できます。</p>';if(coverage?.missingDisplayPixelCenters)html+=`<p class="west-coverage-note">${esc(c.name)}の一部の海岸・小島は原格子が未収録です。近隣国や海の値で補わず、灰色で表示します。</p>`;html+=`<p><a href="${esc(assets+westPrecipitationManifestPath)}">GPCCの取得・加工・利用条件・配信ハッシュ</a></p>`;}
   if(t.id==='desalination')html+='<p>20か国・地域で同じ年・定義の淡水化施設一覧と供給量は未収録です。</p><p><a href="https://www.fao.org/aquastat/en/overview/methodology/">FAO AQUASTATの定義と方法</a></p>';
   html+='</details></div>';
   $('[data-west-detail]').innerHTML=html;
@@ -363,7 +371,7 @@ async function init(root:HTMLElement){
    if(extra)$('[data-west-detail]').append(extra);
    $('[data-west-more-reading]').replaceChildren();$('[data-west-more-map]').replaceChildren();
    if(!comparisonSource){
-    if(desktopComparison.matches&&(field==='agriculture'||['climate','density','precipitation','ethnicity','religion'].includes(topic().id)))$('[data-west-reading-key]').append(legendBox);
+    if(desktopComparison.matches&&(field==='agriculture'||['climate','density','precipitation',westAnnualPrecipitationId,'ethnicity','religion'].includes(topic().id)))$('[data-west-reading-key]').append(legendBox);
     if(extra)extra.append(...legendBox.querySelectorAll('[data-west-climate-dictionary]'));
     statisticsControls.append(statControls);
    }
@@ -489,7 +497,9 @@ async function init(root:HTMLElement){
   unavailable=categoryLabels[state.category]??'';
   const t=topic();countrySelect.value=state.country;yearSelect.value=String(state.year);root.dataset.topic=t.id;
   const source=sourceTopic(),swipe=$('[data-west-swipe]');swipe.hidden=!source;root.dataset.comparing=String(!!source);
+  if(t.id!==westAnnualPrecipitationId&&source?.id!==westAnnualPrecipitationId)grids.delete(westAnnualPrecipitationId);
   root.dataset.ready='false';
+  if(t.id===westAnnualPrecipitationId||source?.id===westAnnualPrecipitationId)try{await loadAnnualPrecipitation();if(version!==renderVersion)return;}catch{if(version===renderVersion){scene.replaceChildren();legendBox.replaceChildren();details();links();fail('年降水量の資料を確認できませんでした。「資料を再読み込みする」で再試行できます。観測所の降水量や他の主題も選べます。');}return;}
   if(isSettlementTopic(t.id)||source&&isSettlementTopic(source.id))try{await Promise.all([loadSettlements(t.id),...(source?[loadSettlements(source.id)]:[])]);}catch{if(version===renderVersion){scene.replaceChildren();legendBox.replaceChildren();$('[data-west-detail]').textContent='掲載居住域を読み込めませんでした。未掲載と0人は同じ意味ではありません。';fail('掲載居住域を読み込めませんでした。資料を再読み込みして再試行できます。');}return;}
   if(version!==renderVersion)return;
   const subject=settlementSubject(settlementManifest,t.id);
@@ -509,7 +519,7 @@ async function init(root:HTMLElement){
   root.querySelectorAll<HTMLButtonElement>('[data-west-standard-group]').forEach(b=>{const selected=b.dataset.westStandardGroup===(unavailable==='降水量'||openWaterGroup?'水資源':unavailable||standardGroup(t));b.setAttribute('aria-selected',String(selected));b.setAttribute('aria-pressed',String(selected));b.tabIndex=selected?0:-1;});
   root.querySelectorAll<HTMLButtonElement>('[data-west-unavailable]').forEach(b=>{const selected=b.dataset.westUnavailable===unavailable;b.setAttribute('aria-selected',String(selected));b.tabIndex=selected?0:-1;});
   root.querySelectorAll<HTMLElement>('[data-west-item-group]').forEach(el=>{const forestry=standardGroup(t)==='林業';el.hidden=forestry&&el.dataset.westItemGroup!=='土地・森林';el.querySelectorAll<HTMLButtonElement>('[data-west-topic-button]').forEach(button=>button.hidden=forestry?button.dataset.westTopicButton!=='forest':button.dataset.westTopicButton==='forest');if(el.dataset.westItemGroup==='土地・森林')el.querySelector('strong')!.textContent=forestry?'森林':'土地利用';});
-  const waterItems=root.querySelector<HTMLElement>('[data-west-water-items]');if(waterItems)waterItems.hidden=t.group!=='水資源'||['basins','precipitation'].includes(t.id)||!!unavailable;
+  const waterItems=root.querySelector<HTMLElement>('[data-west-water-items]');if(waterItems)waterItems.hidden=t.group!=='水資源'||['basins','precipitation',westAnnualPrecipitationId].includes(t.id)||!!unavailable;
   const status=root.querySelector<HTMLElement>('[data-west-control-status]');if(status)status.textContent=unavailable?unavailable+'は未整備です。':t.label+'を表示しています。';
   root.querySelectorAll<HTMLButtonElement>('[data-west-topic-button]').forEach(b=>{const selected=!unavailable&&(b.dataset.westTopicButton===t.id||(!!b.closest('.west-agri-picker')&&t.id.startsWith(b.dataset.westTopicButton+'-'))||(!!b.closest('[data-west-subgroup="水資源"]')&&b.dataset.westTopicButton==='rivers'&&['groundwater','desalination'].includes(t.id)));if(b.getAttribute('role')==='tab'){b.setAttribute('aria-selected',String(selected));b.tabIndex=selected?0:-1;}else b.setAttribute('aria-pressed',String(selected));});
   root.querySelectorAll<HTMLElement>('[data-west-subgroup]').forEach(el=>el.hidden=el.dataset.westSubgroup!==(state.category==='precipitation'||openWaterGroup?'水資源':t.group));
