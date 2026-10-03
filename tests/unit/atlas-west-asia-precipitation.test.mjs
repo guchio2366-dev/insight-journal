@@ -47,6 +47,8 @@ test('独立manifestの契約・gzipまたは展開済みデータの実ハッ�
  const damaged=Buffer.from(raw);damaged[100]^=1;await assert.rejects(decodeWestPrecipitationGrid(arrayBuffer(damaged),layer),/ハッシュ/);
  await assert.rejects(decodeWestPrecipitationGrid(new ArrayBuffer(3),layer),/サイズ/);
  for(const update of [{period:'1981-01-01/2010-12-31'},{edition:'2024'},{inputSha256:'0'.repeat(64)},{width:999},{bounds:[23,10,65,45]},{colors:['#000000']}])assert.throws(()=>westPrecipitationLayer({...manifest,...update},data),/契約/);
+ assert.throws(()=>westPrecipitationLayer({...manifest,inputMd5:'invalid-checksum'},data),/契約/);
+ assert.equal(westPrecipitationLayer({...manifest,inputMd5:'0'.repeat(32)},data).id,layer.id,'ブラウザーの原典同定は固定SHA-256で行い、MD5の固定値は生成処理と独立検算で照合する');
  assert.throws(()=>westPrecipitationLayer({...manifest,lookup:{...manifest.lookup,nodata:0}},data),/契約/);
 });
 
