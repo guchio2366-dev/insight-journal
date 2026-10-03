@@ -27,8 +27,6 @@ export function initializeAfricaAtlas() {
  } as const;
   function renderTopics(){
   const items=topicItems[state.field];
-  state.topic=canonicalTopic(state.field,state.metric,state.topic);
-  state.water=state.field==='nature'?canonicalWater(state.metric,state.water):'';
   const topic=state.topic;
   const nav=query<HTMLElement>('[data-africa-subfields]');nav.replaceChildren();
   nav.setAttribute('aria-label',state.field==='industry'?'収録済みの主要産業を選ぶ':'分野内の項目');
@@ -192,6 +190,8 @@ export function initializeAfricaAtlas() {
   for(const year of years){const tr=make('tr');tr.append(make('th',String(year)),make('td',formatValue(valueAt(metric.id,state.place,year),metric)),make('td',state.compare?formatValue(valueAt(metric.id,state.compare,year),metric):'—'));body.append(tr);}
  }
  function render(write=false) {
+  state.topic=canonicalTopic(state.field,state.metric,state.topic);
+  state.water=state.field==='nature'?canonicalWater(state.metric,state.water):'';
   root!.dataset.field=state.field;
   actual=layerRenderer.render(state);
   if(actual?.guide){state.context='';state.layerClass='';state.layerPoint='';state.sourceState='';}
