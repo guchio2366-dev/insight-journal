@@ -307,7 +307,7 @@
 
 /* Africa completion: one map frame and one complete reading scroll container. */
 .africa-region-row{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0}
-.africa-region-row>label,.africa-country-controls>label{display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:14px}
+.africa-region-row>label,.africa-country-controls>label{display:flex;flex-direction:row;align-items:center;gap:6px;white-space:nowrap;font-size:14px}
 .africa-region-row select,.africa-country-controls select{min-height:40px;height:40px;min-width:0;padding:6px 26px 6px 8px;font-size:14px;background:#fffefa;border:1px solid #bac9c6}
 .africa-region-row select{max-width:170px}
 .africa-map-frame{position:relative;min-width:0;aspect-ratio:1.55;border:1px solid #abbfc2;overflow:hidden;background:#c1e1ed}
