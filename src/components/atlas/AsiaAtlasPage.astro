@@ -10,6 +10,7 @@ import AsiaClimateDiagram from './AsiaClimateDiagram.astro';
 import AsiaFarmingPanel from './AsiaFarmingPanel.astro';
 import AsiaIndustryPanel from './AsiaIndustryPanel.astro';
 import AsiaWaterPanel from './AsiaWaterPanel.astro';
+import AsiaSeasonalPrecipitationPanel from './AsiaSeasonalPrecipitationPanel.astro';
 import AsiaSocialPanel from './AsiaSocialPanel.astro';
 import AsiaSettlementPanel from './AsiaSettlementPanel.astro';
 import settlementManifest from '../../../public/assets/atlas/asia-settlements-v1/manifest.json';
@@ -68,6 +69,7 @@ Object.assign(config,{population,populationBase:withBase('/assets/atlas/asia-pop
 const industry={...industryManifest.regions[regionId],topics:[...industryManifest.regions[regionId].topics,...tradeTopics]} as unknown as IndustryRegion;
 Object.assign(config,{industry,industryBase:withBase('/assets/atlas/asia-industry-v1/')});
 Object.assign(config,{water:waterManifest.regions[regionId],waterBase:withBase('/assets/atlas/asia-water-v1/')});
+Object.assign(config,{seasonalBase:withBase('/assets/atlas/asia-seasonal-precipitation-v1/')});
 const social=withSocialOverviews(socialManifest.regions[regionId] as SocialRegion);
 const farmInsight=asiaFarmInsights[regionId];
 Object.assign(config,{farmInsight,focusReadings:focusId?asiaFocusFieldReadings[focusId]??null:null});
@@ -130,6 +132,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
         <section class="asia-comparison-reading" data-comparison-reading hidden><h3 data-comparison-title></h3><p data-comparison-summary></p><div class="asia-comparison-compact" data-comparison-compact aria-label="比較元と比較先の凡例・年・単位"></div></section>
         <label class="asia-city-picker" data-city-picker hidden={initialField!=='natural'}>都市の雨温図<select data-city-select aria-label="都市の雨温図を選ぶ"><option value="">都市を選ぶ</option>{cities.map(c=><option value={c.id} data-country={c.countryCode}>{c.name} · {japaneseNames[c.countryCode]}</option>)}</select></label>
        </section>
+        <AsiaSeasonalPrecipitationPanel />
         <details class="asia-reading-details" data-reading-details><summary>詳しい解説・出典を読む</summary>
        <div class="atlas-national asia-reading-scroll" tabindex="0" role="region" aria-label="選択した場所の詳しい解説">
         <details class="asia-comparison-method" data-comparison-method hidden><summary>比較区分の正式名称・説明・出典を読む</summary><p>元の選択と地図の位置を保存しています。</p><div data-comparison-legend></div></details>

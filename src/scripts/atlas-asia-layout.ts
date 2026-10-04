@@ -7,6 +7,8 @@ export function createAsiaLayout(root:HTMLElement){
  if(!items||!statistics)return {render(_state:AsiaState){}};
  const query=(s:string)=>root.querySelector<HTMLElement>(s);
  const mainLegend=query('[data-reading-map-legend]'),legendHost=query('[data-asia-map-legend]');
+ const seasonalControls=query('.seasonal-month-controls'),seasonalLegend=query('[data-seasonal-legend]'),comparisonKeys=query('[data-comparison-compact]');
+ const homes=[seasonalControls,seasonalLegend,comparisonKeys].filter((node):node is HTMLElement=>!!node).map(node=>({node,parent:node.parentElement!,next:node.nextSibling}));
  if(mainLegend&&legendHost)legendHost.append(mainLegend);
  const methods=query('[data-asia-map-method]');
  const climateLegend=query('[data-climate-legend]');
@@ -56,5 +58,14 @@ export function createAsiaLayout(root:HTMLElement){
  }
  const observer=new root.ownerDocument.defaultView!.MutationObserver(synchronize);
  observer.observe(root,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden']});
- return {render(_state:AsiaState){synchronize();}};
+ return {render(state:AsiaState){
+  const seasonal=state.field==='natural'&&state.topic==='seasonal-precipitation';
+  root.dataset.seasonalActive=String(seasonal);
+  if(seasonal&&legendHost){
+   if(seasonalControls&&toolbar&&seasonalControls.parentElement!==toolbar)toolbar.prepend(seasonalControls);
+   if(comparisonKeys&&state.back)legendHost.append(comparisonKeys);
+   if(seasonalLegend){seasonalLegend.hidden=Boolean(state.back)||Boolean(mainLegend);if(!state.back&&!mainLegend)legendHost.append(seasonalLegend);}
+  }else for(const {node,parent,next} of homes){if(node.parentElement!==parent)parent.insertBefore(node,next?.parentNode===parent?next:null);if(node===seasonalLegend)node.hidden=false;}
+  synchronize();
+ }};
 }

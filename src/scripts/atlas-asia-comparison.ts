@@ -9,13 +9,14 @@ import {leadingCategory,areaCategories} from '../data/atlas/asia-social-overview
 import {isTradeTopic,tradeChapter,tradeFlow,tradeValue,tradeScale,tradeColors,type TradeRegion,type TradeData} from '../data/atlas/asia-trade';
 import {asiaPlaceReadings,selectedPlaceReading} from '../data/atlas/asia-place-readings';
 import {asiaWaterFocus} from '../data/atlas/asia-water-focus';
+import {ASIA_SEASONAL_BREAKS,ASIA_SEASONAL_COLORS,normalizeAsiaSeasonalMonth,validateAsiaSeasonalManifest} from '../lib/atlas-asia-seasonal-precipitation';
 import type {AsiaFarmingRegion} from '../data/atlas/asia-farming';
 import type {AsiaPresentation} from './atlas-asia-presentation';
 
 type Key={label:string;color:string;shortLabel?:string};
 type Raster={url:string;coordinates:number[][]};
 type Reading={title:string;period:string;unit:string;keys:Key[];note:string;compactNote?:string;subject?:string;raster?:Raster;geometry?:any;points?:boolean;boundaryOnly?:boolean};
-type Config={regionId:'east-asia'|'southeast-asia'|'south-central-asia';label:string;countries:{code:string;name:string}[];cities:{id:string;name:string}[];classes:{id:number;code:string;name:string;color:string}[];climate:any;climateBase:string;agricultureBase:string;geographyUrl:string;physical?:any;physicalBase?:string;physicalFocus?:{id:string;name:string}[];population?:AsiaPopulationRegion;populationBase?:string;farming?:AsiaFarmingRegion;farmingBase?:string;water?:WaterRegion;waterBase?:string;industry?:IndustryRegion;industryBase?:string;social?:SocialRegion;socialBase?:string;trade?:TradeRegion;tradeBase?:string;tradeChapters?:Record<string,string>;presentation?:AsiaPresentation;presentationBase?:string;farmInsight?:{rivers:string[]}};
+type Config={regionId:'east-asia'|'southeast-asia'|'south-central-asia';label:string;countries:{code:string;name:string}[];cities:{id:string;name:string}[];classes:{id:number;code:string;name:string;color:string}[];climate:any;climateBase:string;agricultureBase:string;geographyUrl:string;physical?:any;physicalBase?:string;physicalFocus?:{id:string;name:string}[];population?:AsiaPopulationRegion;populationBase?:string;farming?:AsiaFarmingRegion;farmingBase?:string;water?:WaterRegion;waterBase?:string;seasonalBase?:string;industry?:IndustryRegion;industryBase?:string;social?:SocialRegion;socialBase?:string;trade?:TradeRegion;tradeBase?:string;tradeChapters?:Record<string,string>;presentation?:AsiaPresentation;presentationBase?:string;farmInsight?:{rivers:string[]}};
 const fieldNames:Record<AsiaField,string>={natural:'自然環境',agriculture:'農林畜産業',industry:'主要産業',population:'人口・社会'};
 const asset=(base:string,file:string)=>base+file.split('/').at(-1);
 const fmt=(n:number)=>n.toLocaleString('ja-JP',{maximumFractionDigits:2});
@@ -24,6 +25,7 @@ const bins=(colors:string[],breaks:number[]):Key[]=>colors.map((color,i)=>({colo
 function comparisonMeaning(state:AsiaState,config:Config):{label:string;note:string} {
   const topic=state.topic;
   if(state.field==='natural'){
+    if(topic==='seasonal-precipitation')return {label:`${Number(normalizeAsiaSeasonalMonth(state.detail).slice(2))}月の降水量`,note:'1991–2020年の格子平年値で、作物に必要な水量や現在の雨ではありません。'};
     if(topic==='precipitation')return {label:'年降水量',note:'年間合計は季節配分や現在の雨を示しません。'};
     if(topic==='basins')return {label:'流域',note:'色は集水域の区別で、現在の流量ではありません。'};
     if(topic==='groundwater'||topic==='water')return {label:topic==='water'&&!config.water?'河川・湖':'地下水盆地と河川',note:'面色や近接から現在の水量・取水量は分かりません。'};
@@ -61,13 +63,14 @@ function comparisonMeaning(state:AsiaState,config:Config):{label:string;note:str
 function comparisonStory(from:AsiaState,to:AsiaState,config:Config){
   const samePoint=(a:readonly number[]|null|undefined,b:readonly number[]|null|undefined)=>!a&&!b||Boolean(a&&b&&a.every((v,i)=>Math.abs(v-b[i])<0.00001));
   const selected=selectedPlaceReading(config.regionId,from),story=selected&&samePoint(from.point,selected.point??null)?selected:null;
-  const bridge=story?.bridges.find(b=>b.field===to.field&&b.topic===to.topic&&(b.detail??null)===(to.detail??null)&&to.place===from.place&&samePoint(to.point,b.point??(b.relocate?null:from.point)));
-  return bridge?story:null;
+  const bridge=story?.bridges.find(b=>b.field===to.field&&b.topic===to.topic&&((b.detail??null)===(to.detail??null)||b.topic==='seasonal-precipitation'&&/^m-(0[1-9]|1[0-2])$/.test(to.detail??''))&&to.place===from.place&&samePoint(to.point,b.point??(b.relocate?null:from.point)));
+  return bridge?{...story,bridge}:null;
 }
 
 export function comparisonQuestion(from:AsiaState,to:AsiaState,config:Config):string {
   const original=comparisonMeaning(from,config),current=comparisonMeaning(to,config),story=comparisonStory(from,to,config);
   const lead=story?story.lead:`${original.label}と${current.label}を読み比べます。`;
+  if(story?.bridge.question)return lead+story.bridge.question;
   if(story?.id==='north-china-wheat'&&to.field==='natural'&&to.topic==='precipitation')return lead+'収穫面積と灌漑を読むときは、年合計と雨の季節配分を分けます。';
   return lead+[...new Set([original.note,current.note])].join('');
 }
@@ -118,6 +121,11 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
     }
     if(s.field==='natural'){
       const topic=s.topic??'climate';
+      if(topic==='seasonal-precipitation'&&config.seasonalBase){
+        const manifest=validateAsiaSeasonalManifest(await json(config.seasonalBase+'manifest.json')),region=manifest.regions[config.regionId],month=Number(normalizeAsiaSeasonalMonth(s.detail).slice(2)),image=region.months.find(m=>m.month===month)!;
+        const keys=bins([...ASIA_SEASONAL_COLORS],[...ASIA_SEASONAL_BREAKS]).map((key,i)=>({...key,shortLabel:i===0?`0–<${ASIA_SEASONAL_BREAKS[0]}`:i===ASIA_SEASONAL_BREAKS.length?`≥${ASIA_SEASONAL_BREAKS[i-1]}`:`${ASIA_SEASONAL_BREAKS[i-1]}–<${ASIA_SEASONAL_BREAKS[i]}`}));
+        return {...base,title:`${month}月の降水量`,period:'GPCC 1991–2020年',unit:'mm/月',keys:[...keys,{label:'海・対象外・欠測（0とは別）',shortLabel:'海・対象外・欠測 ≠ 0',color:'#d2ceca'}],note:'0.25度の格子平年値。作物の必要水量・土壌水分・取水量ではありません。',raster:{url:config.seasonalBase+image.image,coordinates:region.imageCoordinates}};
+      }
       if(topic==='climate')return {...base,period:'1991–2020年',unit:'ケッペン＝ガイガー分類',keys:config.classes.filter(c=>config.climate.classIds.includes(c.id)).map(c=>({color:c.color,label:c.code+' '+c.name,shortLabel:c.code})),note:'区分境界は加工した広域格子に基づきます。海岸・小島の欠測を含みます。',raster:{url:asset(config.climateBase,config.climate.image),coordinates:config.climate.imageCoordinates}};
       if(['terrain','landform'].includes(topic)&&config.physical)return {...base,period:'ETOPO 2022',unit:'標高 m（EGM2008基準）',keys:bins(['b4cfbf','d8e2b5','e0d5a0','cdbc88','b09a78','987d6b','b9aaa0','eee9e1'],[0,200,500,1000,2000,3000,4500]),note:'広域格子の標高です。個別の山頂や谷底の測量値ではありません。',raster:{url:asset(config.physicalBase!,config.physical.image),coordinates:config.physical.imageCoordinates}};
       if(topic==='precipitation'&&config.water)return {...base,period:'1981–2010年の推計平年値',unit:'mm/年',keys:bins(precipitationColors,precipitationBreaks),note:'年間合計です。雨温図とは資料・期間が異なり、季節配分や現在の雨を表しません。',raster:{url:asset(config.waterBase!,config.water.precipitation.image),coordinates:config.water.precipitation.imageCoordinates}};

@@ -3,6 +3,18 @@ import assert from 'node:assert/strict';
 import {Window} from 'happy-dom';
 import {createAsiaLayout} from '../../src/scripts/atlas-asia-layout.ts';
 
+test('月別比較の月操作をtoolbarへ置き、両凡例と値・イベントを保持して通常表示へ復帰する',()=>{
+ const window=new Window();window.document.body.innerHTML='<main data-asia-atlas><div class="asia-toolbar"></div><div data-asia-map-items></div><div data-asia-map-legend></div><aside><div data-reading-map-legend>当月の全区間と年・単位</div><section data-seasonal-panel hidden><div class="seasonal-month-controls"><select data-seasonal-month><option value="m-04">4月</option><option value="m-07">7月</option></select></div><div data-seasonal-legend>月の全区間</div></section><section data-comparison-reading><div data-comparison-compact>元の作物と比較月の全区間</div></section></aside><section data-asia-statistics hidden></section></main>';
+ const root=window.document.querySelector('main'),select=root.querySelector('[data-seasonal-month]'),controls=select.parentElement,home=controls.parentElement,keys=root.querySelector('[data-comparison-compact]');let changed=0;
+ select.value='m-04';select.addEventListener('change',()=>changed++);
+ const layout=createAsiaLayout(root);layout.render({field:'natural',topic:'seasonal-precipitation',back:'original-wheat'});
+ assert.equal(root.dataset.seasonalActive,'true');assert.equal(controls.parentElement,root.querySelector('.asia-toolbar'));assert.equal(keys.parentElement,root.querySelector('[data-asia-map-legend]'));assert.equal(select.value,'m-04');
+ select.value='m-07';select.dispatchEvent(new window.Event('change'));assert.equal(changed,1);
+ layout.render({field:'natural',topic:'seasonal-precipitation',back:null});assert.equal(root.querySelector('[data-seasonal-legend]').hidden,true,'通常月別表示は年・単位付き主凡例を残して重複凡例を隠す');assert.equal(root.querySelector('[data-reading-map-legend]').parentElement,root.querySelector('[data-asia-map-legend]'));
+ layout.render({field:'agriculture',topic:'wheat'});
+ assert.equal(root.dataset.seasonalActive,'false');assert.equal(controls.parentElement,home);assert.equal(select.value,'m-07');assert.equal(keys.parentElement,root.querySelector('[data-comparison-reading]'));assert.equal(root.querySelector('[data-seasonal-legend]').hidden,false);window.happyDOM.abort();
+});
+
 test('項目を地図直下へ、既存統計をニュース・地図・説明の全幅下へ移し、選択イベントを保つ',async()=>{
  const window=new Window();
  window.document.body.innerHTML='<div data-asia-atlas><div data-asia-map-items></div><aside><div data-reading-map-legend>年と単位</div><label data-city-picker><select data-city-select><option value="tokyo">東京</option></select></label><details data-reading-details><section data-industry-panel><label data-industry-detail-label><select><option>愛知</option></select></label><div data-industry-content><table><tbody><tr><td>42</td></tr></tbody></table></div></section></details></aside><section data-asia-statistics hidden></section></div>';
