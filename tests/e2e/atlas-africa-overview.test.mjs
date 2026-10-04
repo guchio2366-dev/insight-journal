@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {transform} from 'esbuild';
 import {Window} from 'happy-dom';
-import {cropChoices,livestockChoices,cropMeasureChoices} from '../../src/data/atlas/africa-atlas.ts';
+import {cropChoices,livestockChoices,cropMeasureChoices,canonicalAgriLayers,agriLayerKeys} from '../../src/data/atlas/africa-atlas.ts';
 const mapController=await readFile('src/scripts/atlas-africa-overview-map.ts','utf8');
-const pageController=(await readFile('src/scripts/atlas-africa-overview.ts','utf8')).replace(/^import \{(?:initAfricaOverviewMap|cropChoices,livestockChoices,cropMeasureChoices)\} from ['"][^'"]+['"];?\r?\n/gm,'');
-const choices=`const cropChoices=${JSON.stringify(cropChoices)},livestockChoices=${JSON.stringify(livestockChoices)},cropMeasureChoices=${JSON.stringify(cropMeasureChoices)};`;
+const pageController=(await readFile('src/scripts/atlas-africa-overview.ts','utf8')).replace(/^import \{[^}]+\} from ['"](?:\.\/atlas-africa-overview-map|\.\.\/data\/atlas\/africa-atlas)['"];?\r?\n/gm,'');
+const choices=`const cropChoices=${JSON.stringify(cropChoices)},livestockChoices=${JSON.stringify(livestockChoices)},cropMeasureChoices=${JSON.stringify(cropMeasureChoices)},agriLayerKeys=${JSON.stringify(agriLayerKeys)},canonicalAgriLayers=${canonicalAgriLayers.toString()};`;
 const controller=(await transform(choices+'\n'+mapController+'\n'+pageController+'\ninitAfricaOverview(document.querySelector("[data-africa-overview]"));',{loader:'ts',format:'iife'})).code;
 async function page(query=''){
  const w=new Window({url:'https://example.com/insight-journal/atlas/africa/overview/'+query,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
