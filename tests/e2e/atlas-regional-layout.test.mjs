@@ -89,7 +89,12 @@ test('regional agriculture, nature/water and population controls preserve the le
       }else{
         const selector=field==='agriculture'?'[data-farm-group]':field==='nature'?'[data-natural-group]':'[data-population-group]';
         assert.equal(d.querySelectorAll(selector).length,field==='agriculture'?2:field==='nature'?4:3);
-        if(field==='nature')assert.equal(d.querySelectorAll('[data-water-topics] button').length,3);
+        if(field==='nature'){
+          const waterTopics=[...d.querySelectorAll('[data-water-topics] button')];
+          assert.deepEqual(waterTopics.map(button=>button.dataset.waterView),['water','precipitation','seasonal-precipitation','basins']);
+          assert.deepEqual(waterTopics.map(button=>button.textContent),['河川・地下水','年降水量','月別降水量','河川の流域']);
+          assert.ok(waterTopics.every(button=>!button.disabled),'annual and monthly precipitation remain separate enabled topics');
+        }
       }
     }finally{await w.happyDOM.close();}
   }
