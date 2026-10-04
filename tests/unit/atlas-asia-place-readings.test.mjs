@@ -8,6 +8,7 @@ import {waterContains} from '../../src/data/atlas/asia-water.ts';
 import {readAsiaAtlasState,writeAsiaAtlasState,startAsiaComparison,restoreAsiaComparison,gridCellAt} from '../../src/lib/atlas-asia-state.ts';
 import {asiaNaturalTopics} from '../../src/data/atlas/asia-physical-reading.ts';
 import {tradeTopics} from '../../src/data/atlas/asia-trade.ts';
+import {decodeAsiaSeasonalGrid,readAsiaSeasonalSeries,asiaSeasonalCellAt} from '../../src/lib/atlas-asia-seasonal-precipitation.ts';
 const asset=(type,file='manifest.json')=>JSON.parse(file.endsWith('.gz')?gunzipSync(readFileSync(`public/assets/atlas/asia-${type}-v1/${file}`)):readFileSync(`public/assets/atlas/asia-${type}-v1/${file}`,'utf8'));
 const farm=asset('farming'),industry=asset('industry'),population=asset('population'),trade=asset('trade');
 const base={field:'natural',place:null,city:null,point:null,detail:null,topic:null,back:null,camera:null};
@@ -115,6 +116,25 @@ test('三地域と中央アジアfocusの作物から具体的な月を開き、
  }
  assert.equal(regions.size,3);
  for(const id of ['fergana-cotton','kazakhstan-wheat'])assert.ok(availablePlaceReadings('south-central-asia','agriculture','central-asia').find(s=>s.id===id)?.bridges.some(b=>b.topic==='seasonal-precipitation'));
+});
+
+test('六つの季節比較地点は全12か月の原格子値を持ち、新潟の海側欠損を別地点へ黙って代替しない',async()=>{
+ const manifest=asset('seasonal-precipitation'),grids=new Map();
+ for(const region of new Set(seasonalCases.map(id=>asiaPlaceReadings.find(s=>s.id===id).region))){
+  const metadata=manifest.regions[region];
+  grids.set(region,await decodeAsiaSeasonalGrid(readFileSync(`public/assets/atlas/asia-seasonal-precipitation-v1/${metadata.values}`),metadata));
+ }
+ for(const id of seasonalCases){
+  const scene=asiaPlaceReadings.find(s=>s.id===id),series=readAsiaSeasonalSeries(grids.get(scene.region),...scene.point);
+  assert.equal(series?.length,12,id+' exposes all 12 original monthly values');
+  assert.ok(series.every(value=>Number.isFinite(value)&&value>=0),id+' has no silently substituted or missing case month');
+ }
+ const niigata=asiaPlaceReadings.find(s=>s.id==='niigata-rice'),grid=grids.get(niigata.region);
+ assert.deepEqual(niigata.point,[139.05,37.7]);
+ assert.deepEqual(asiaSeasonalCellAt(grid,...niigata.point).center,[139.125,37.625]);
+ assert.ok(Math.abs(cropHaAt(niigata)-2321.4)<.001);
+ assert.deepEqual(asiaSeasonalCellAt(grid,138.95,37.8).center,[138.875,37.875]);
+ assert.equal(readAsiaSeasonalSeries(grid,138.95,37.8),null,'the rejected coastal cell remains missing rather than being filled from the inland case');
 });
 
 test('事例→別分野→再読込→復帰で、説明・主題・地点・カメラを保持する',()=>{
