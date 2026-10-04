@@ -253,6 +253,28 @@
 }
 @media(min-width:1600px){.atlas-desktop-shell .asia-atlas[data-field] .asia-layout{grid-template-columns:minmax(0,1.8fr) minmax(280px,1fr);gap:16px}}
 @media(min-width:960px){
+ [data-seasonal-active=true] .atlas-desktop-shell .asia-reading-dock:has([data-comparison-reading]:not([hidden]))>:is(h2,.eyebrow){display:none}
+ [data-seasonal-active=true] .atlas-desktop-shell .asia-reading-dock:has([data-comparison-reading]:not([hidden])){padding:10px 12px}
+ [data-seasonal-active=true] .atlas-desktop-shell .asia-toolbar .seasonal-month-controls{width:270px;max-width:100%;margin:0;flex:none}
+ [data-seasonal-active=true] .atlas-desktop-shell .asia-map-legend>[data-comparison-compact]{width:100%;margin:4px 0}
+ [data-seasonal-active=true] .atlas-desktop-shell .asia-map-legend>[data-seasonal-legend]{margin:4px 0}
+ [data-seasonal-active=true] .atlas-desktop-shell .asia-map-legend [data-seasonal-scale]{display:flex;flex-wrap:wrap;gap:3px 12px}
+ [data-seasonal-active=true] .atlas-desktop-shell .asia-seasonal-panel{padding:10px 12px;border:1px solid #c7ccbf;border-top:0;background:#f8faf4}
+ /* Keep the complete comparison and its controls visible without resizing the map. */
+ [data-seasonal-active=true] .atlas-desktop-shell .atlas-workspace{padding-top:0}
+ [data-seasonal-active=true] .atlas-desktop-shell .atlas-compact-heading{margin-bottom:0}
+ [data-seasonal-active=true] .atlas-desktop-shell .asia-atlas[data-field] .asia-region-shell{display:grid!important;grid-template-columns:minmax(0,1fr) auto;gap:0 14px;margin-bottom:0}
+ [data-seasonal-active=true] .atlas-desktop-shell .asia-atlas[data-field] .asia-region-shell>.regional-navigation{width:auto;grid-column:1;grid-row:1}
+ [data-seasonal-active=true] .atlas-desktop-shell .asia-atlas[data-field] .asia-region-shell .asia-toolbar{width:auto;grid-column:2;grid-row:1}
+ [data-seasonal-active=true] .atlas-desktop-shell .asia-natural-controls{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0}
+ [data-seasonal-active=true] .atlas-desktop-shell .asia-atlas[data-field] .asia-natural-controls>:is(.asia-primary-topics,.asia-secondary-topics){margin:0;border:1px solid #c7ccbf}
+ [data-seasonal-active=true] .atlas-desktop-shell .asia-atlas[data-field] .asia-natural-controls>:is(.asia-primary-topics,.asia-secondary-topics)>button{min-height:44px;padding:6px 5px;line-height:20px}
+ [data-seasonal-active=true] .atlas-desktop-shell .asia-map-legend>[data-comparison-compact]>section{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 5px;padding:3px 5px}
+ [data-seasonal-active=true] .atlas-desktop-shell .asia-map-legend>[data-comparison-compact]>section>:is(h4,p){margin:0;font-size:12px;line-height:1.5}
+ [data-seasonal-active=true] .atlas-desktop-shell .asia-map-legend>[data-comparison-compact] .asia-comparison-key{width:100%;gap:2px 8px;margin:2px 0}
+ [data-seasonal-active=true] .atlas-desktop-shell .asia-map-legend>[data-comparison-compact] .asia-comparison-key span{white-space:nowrap}
+}
+@media(min-width:960px){
  .atlas-desktop-shell .asia-atlas[data-field] .asia-reading-panel{height:var(--asia-reading-height,460px);max-height:none;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-gutter:stable}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-reading-details .asia-reading-scroll{height:auto;max-height:none;overflow:visible;scrollbar-gutter:auto}
 }

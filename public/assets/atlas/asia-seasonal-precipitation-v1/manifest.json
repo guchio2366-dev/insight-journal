@@ -1,0 +1,929 @@
+{
+  "schemaVersion": 1,
+  "retrievedAt": "2026-10-04",
+  "period": "1991–2020",
+  "unit": "mm/month",
+  "months": [
+    {
+      "id": "m-01",
+      "month": 1,
+      "label": "1月"
+    },
+    {
+      "id": "m-02",
+      "month": 2,
+      "label": "2月"
+    },
+    {
+      "id": "m-03",
+      "month": 3,
+      "label": "3月"
+    },
+    {
+      "id": "m-04",
+      "month": 4,
+      "label": "4月"
+    },
+    {
+      "id": "m-05",
+      "month": 5,
+      "label": "5月"
+    },
+    {
+      "id": "m-06",
+      "month": 6,
+      "label": "6月"
+    },
+    {
+      "id": "m-07",
+      "month": 7,
+      "label": "7月"
+    },
+    {
+      "id": "m-08",
+      "month": 8,
+      "label": "8月"
+    },
+    {
+      "id": "m-09",
+      "month": 9,
+      "label": "9月"
+    },
+    {
+      "id": "m-10",
+      "month": 10,
+      "label": "10月"
+    },
+    {
+      "id": "m-11",
+      "month": 11,
+      "label": "11月"
+    },
+    {
+      "id": "m-12",
+      "month": 12,
+      "label": "12月"
+    }
+  ],
+  "breaks": [
+    10,
+    25,
+    50,
+    100,
+    150,
+    200,
+    300
+  ],
+  "colors": [
+    "#f3ead6",
+    "#e2e5c7",
+    "#c8dbc8",
+    "#a6cfcf",
+    "#7ab9cb",
+    "#4c9abd",
+    "#2778a5",
+    "#14537d"
+  ],
+  "source": {
+    "dataset": "GPCC Precipitation Analysis Climatology Version 2025 at 0.25°, monthly normals for 1991–2020",
+    "publisher": "Global Precipitation Climatology Centre (GPCC, https://gpcc.dwd.de/) at Deutscher Wetterdienst",
+    "sourceUrl": "https://opendata.dwd.de/climate_environment/GPCC/html/gpcc_precipitation_analysis_climatology_v2025_doi_download.html",
+    "downloadUrl": "https://opendata.dwd.de/climate_environment/GPCC/GPCC_Precipitation_Analysis_Climatology/Version_2025/gpcc_precipitation_analysis_climatology_1991_2020_v2025_025.nc.gz",
+    "checksumUrl": "https://opendata.dwd.de/climate_environment/GPCC/GPCC_Precipitation_Analysis_Climatology/Version_2025/readme_md5_gpcc_precipitation_analysis_climatology_1991_2020_v2025.txt",
+    "doi": "https://doi.org/10.5676/DWD_GPCC/CLIMAT_V2025_025",
+    "period": "1991-01-01/2020-12-31",
+    "edition": "2025",
+    "inputSha256": "3bd80d05df52572f6409b594ae26b43e9045147cb3c25254cddb5a934c16e5c5",
+    "inputBytes": 28442738,
+    "originalResolution": "0.25° regular geographic latitude/longitude cells",
+    "sourceCRS": "EPSG:4326",
+    "sourceVariable": "gpcc_precip",
+    "sourceUnit": "mm/month",
+    "sourceNoData": -99999.9921875,
+    "sourceMethod": "Rain-gauge-based interpolated monthly climatology for the 1991–2020 reference period. Publisher station eligibility requires at least 20 complete years; the 12 records are monthly normals, not 30 years of complete observations at every cell.",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://www.dwd.de/EN/service/legal_notice/legal_notice.html",
+    "licenseEvidence": {
+      "checkedAt": "2026-10-02",
+      "publisherLegalNoticeUrl": "https://www.dwd.de/EN/service/legal_notice/legal_notice.html",
+      "publisherLegalNoticeAllowsCcBy40": true,
+      "directLegalNoticeStatus": 403,
+      "dataCiteDoi": "10.5676/dwd_gpcc/climat_v2025_025",
+      "dataCiteRightsList": [],
+      "note": "Inherited exact-product DWD legal-notice evidence is pinned by hash. DataCite lists no registered rights; the CC BY 4.0 basis is the publisher legal notice, not an inferred DataCite license."
+    },
+    "attribution": "Rustemeier, Elke; Finger, Peter; Schirmeister, Zora; Ziese, Markus (2025): GPCC Precipitation Analysis Climatology Version 2025 at 0.25°. DOI: 10.5676/DWD_GPCC/CLIMAT_V2025_025. GPCC/DWD, CC BY 4.0. Modified: cropped original monthly cells, target-country cell-centre masks, nearest-neighbour Mercator display and fixed monthly colour classes."
+  },
+  "limitations": [
+    "These values are interpolated rain-gauge monthly precipitation normals for an original 0.25° grid cell. A named location is a locator for that cell, not a city average or a local station observation.",
+    "The 1991–2020 reference period does not imply complete 30-year observations for every cell or station. Station support and interpolation uncertainty differ spatially; no uncertainty interval is invented.",
+    "Monthly precipitation alone does not determine crop calendars, planting or harvesting dates, irrigation demand, river discharge, groundwater recharge or available water supply.",
+    "Numeric values retain the original source cell centres and north-to-south rows. Small Mercator display images sample the nearest original cell; display pixels add no spatial detail.",
+    "Each region uses its own target-country cell-centre mask with polygon holes preserved. Ocean, source missing cells and land outside that mask are missing; a valid zero remains valid.",
+    "Small islands, microstates and coastal slivers can contain no original land cell centre. They remain missing rather than borrowing another country’s or a nearby cell’s precipitation.",
+    "These are twelve calendar-month climatological normals, not a time series of individual years, annual rainfall totals or country averages."
+  ],
+  "regions": {
+    "east-asia": {
+      "width": 300,
+      "height": 152,
+      "bounds4326": [
+        72,
+        17,
+        147,
+        55
+      ],
+      "imageCoordinates": [
+        [
+          72,
+          55
+        ],
+        [
+          147,
+          55
+        ],
+        [
+          147,
+          17
+        ],
+        [
+          72,
+          17
+        ]
+      ],
+      "projection": "EPSG:4326",
+      "sourceCellDegrees": 0.25,
+      "firstCellCenter": [
+        72.125,
+        54.875
+      ],
+      "lastCellCenter": [
+        146.875,
+        17.125
+      ],
+      "sourceColumnOffset": 1008,
+      "sourceRowOffset": 140,
+      "rowOrder": "north-to-south",
+      "layout": "month-major",
+      "noData": -1,
+      "months": [
+        {
+          "id": "m-01",
+          "month": 1,
+          "image": "east-asia-m-01.png",
+          "sha256": "6e93cf3eeefcc6439601d862322b132ffb6c9dbbd33200e872b99c9ef107537b"
+        },
+        {
+          "id": "m-02",
+          "month": 2,
+          "image": "east-asia-m-02.png",
+          "sha256": "fa259f97843149969901f9adc0255e0d07b6d4793d147884b6dc9056f2799aa8"
+        },
+        {
+          "id": "m-03",
+          "month": 3,
+          "image": "east-asia-m-03.png",
+          "sha256": "f49e8b568e27ee317b722c89b0fd83035022de9b17d00524009e3e045d0b24b8"
+        },
+        {
+          "id": "m-04",
+          "month": 4,
+          "image": "east-asia-m-04.png",
+          "sha256": "2b2c3092a0afd7733abb9b98a2513ea5cf8f1ae88cbd4d9e529d25ea3f41c6af"
+        },
+        {
+          "id": "m-05",
+          "month": 5,
+          "image": "east-asia-m-05.png",
+          "sha256": "763c031027f0b244998ee31aafe72e8ff4ab8bcbbed5816f05dd0037a136e9e5"
+        },
+        {
+          "id": "m-06",
+          "month": 6,
+          "image": "east-asia-m-06.png",
+          "sha256": "d9fe9c774d44bc19560511c5b6025751f704391b5b6c07334bbc7584afe040ba"
+        },
+        {
+          "id": "m-07",
+          "month": 7,
+          "image": "east-asia-m-07.png",
+          "sha256": "324dba36b8c9e0185a177a7b12a46dc1a28f9e431301690f9456ce09fc440fb8"
+        },
+        {
+          "id": "m-08",
+          "month": 8,
+          "image": "east-asia-m-08.png",
+          "sha256": "f4a6dbe607aab48e417433a2b42397172a1c14efcc85ef0c916b177f39e1ca59"
+        },
+        {
+          "id": "m-09",
+          "month": 9,
+          "image": "east-asia-m-09.png",
+          "sha256": "905e6c96d6de54ce93e53fc3c40c379f63a78ec197bb3fb54529aab76e711cd6"
+        },
+        {
+          "id": "m-10",
+          "month": 10,
+          "image": "east-asia-m-10.png",
+          "sha256": "203e75d9ab6345e61ec7bbd9ef8b77bbce05dcd3d5451dc432a3b280eea996f0"
+        },
+        {
+          "id": "m-11",
+          "month": 11,
+          "image": "east-asia-m-11.png",
+          "sha256": "5e4c23524426395f0b9978f5b84c0b22ced6ec695132b29349e3a06304a99d81"
+        },
+        {
+          "id": "m-12",
+          "month": 12,
+          "image": "east-asia-m-12.png",
+          "sha256": "dc74bb11301aec337f3f8f3b257dab73d84c7b58e96fd80dee9f5148c24aa878"
+        }
+      ],
+      "values": "east-asia.values.bin.gz",
+      "valuesSha256": "ced93249266fe46d16f6b14505e53e0a345f4bfb11bc4817646bd603edc3cf09",
+      "uncompressedSha256": "f8917b2beba4bed76dbb8a14d22dfce5769f6b93972b84377879567ed77b72c3",
+      "uncompressedBytes": 2188800,
+      "display": {
+        "width": 300,
+        "height": 196,
+        "projection": "EPSG:3857",
+        "bounds3857": [
+          8015003.337115697,
+          1920825.0403774658,
+          16363965.146611216,
+          7361866.113051185
+        ],
+        "resampling": "nearest"
+      },
+      "countryCodes": [
+        "CHN",
+        "JPN",
+        "KOR",
+        "MNG",
+        "PRK",
+        "TWN"
+      ],
+      "countryCoverage": [
+        {
+          "code": "CHN",
+          "sourceCellCenters": 15228,
+          "completeSourceCellCenters": 15228
+        },
+        {
+          "code": "JPN",
+          "sourceCellCenters": 607,
+          "completeSourceCellCenters": 607
+        },
+        {
+          "code": "KOR",
+          "sourceCellCenters": 156,
+          "completeSourceCellCenters": 156
+        },
+        {
+          "code": "MNG",
+          "sourceCellCenters": 2955,
+          "completeSourceCellCenters": 2955
+        },
+        {
+          "code": "PRK",
+          "sourceCellCenters": 215,
+          "completeSourceCellCenters": 215
+        },
+        {
+          "code": "TWN",
+          "sourceCellCenters": 50,
+          "completeSourceCellCenters": 50
+        }
+      ]
+    },
+    "southeast-asia": {
+      "width": 212,
+      "height": 168,
+      "bounds4326": [
+        90,
+        -12,
+        143,
+        30
+      ],
+      "imageCoordinates": [
+        [
+          90,
+          30
+        ],
+        [
+          143,
+          30
+        ],
+        [
+          143,
+          -12
+        ],
+        [
+          90,
+          -12
+        ]
+      ],
+      "projection": "EPSG:4326",
+      "sourceCellDegrees": 0.25,
+      "firstCellCenter": [
+        90.125,
+        29.875
+      ],
+      "lastCellCenter": [
+        142.875,
+        -11.875
+      ],
+      "sourceColumnOffset": 1080,
+      "sourceRowOffset": 240,
+      "rowOrder": "north-to-south",
+      "layout": "month-major",
+      "noData": -1,
+      "months": [
+        {
+          "id": "m-01",
+          "month": 1,
+          "image": "southeast-asia-m-01.png",
+          "sha256": "de58a9353601bad3745a451de75066a114e75f21d7d6b7d99a6e3508fbd2bba7"
+        },
+        {
+          "id": "m-02",
+          "month": 2,
+          "image": "southeast-asia-m-02.png",
+          "sha256": "4ac56818404a67b184aa5ca4fdeb50bfc84755f8ed7a0d900afdb42d38a3f424"
+        },
+        {
+          "id": "m-03",
+          "month": 3,
+          "image": "southeast-asia-m-03.png",
+          "sha256": "f0b9aec0fb107540ea2b5b585e7516b76cf36c33b65bf82600f1c3ef4bc0dde9"
+        },
+        {
+          "id": "m-04",
+          "month": 4,
+          "image": "southeast-asia-m-04.png",
+          "sha256": "e1126b91acd23ca18bc4dc76894a198f09d1f7a6a4c4750a581c7d058da2d4a7"
+        },
+        {
+          "id": "m-05",
+          "month": 5,
+          "image": "southeast-asia-m-05.png",
+          "sha256": "8736d34db61669830126c813723f548629a94ac42c136bea09acd8aea667062c"
+        },
+        {
+          "id": "m-06",
+          "month": 6,
+          "image": "southeast-asia-m-06.png",
+          "sha256": "6697cc0635087a25de60bed0fa7fabcfbb86fd37ca8ac61a031d937a46824c93"
+        },
+        {
+          "id": "m-07",
+          "month": 7,
+          "image": "southeast-asia-m-07.png",
+          "sha256": "28778fe637dea98e6f892e46c1e1b05098bfe044c1b062b8fb99f84f1fb6663a"
+        },
+        {
+          "id": "m-08",
+          "month": 8,
+          "image": "southeast-asia-m-08.png",
+          "sha256": "18d584bad25739a0acb616adf36eb0db741d52d2e9d3b7c8a903e2c396a72b04"
+        },
+        {
+          "id": "m-09",
+          "month": 9,
+          "image": "southeast-asia-m-09.png",
+          "sha256": "d7f80a31803c2bfd728f4513478bc226c02db7d06656bff9c7bab88167fafde9"
+        },
+        {
+          "id": "m-10",
+          "month": 10,
+          "image": "southeast-asia-m-10.png",
+          "sha256": "491990f86a124abc9b37cc408d05a27a2d112ae0499f445ca55cc25ef48041c8"
+        },
+        {
+          "id": "m-11",
+          "month": 11,
+          "image": "southeast-asia-m-11.png",
+          "sha256": "c07bd6af874cd79c170aa97e568af2c37a00f1c4477848f7cfcb3730cfeed7e9"
+        },
+        {
+          "id": "m-12",
+          "month": 12,
+          "image": "southeast-asia-m-12.png",
+          "sha256": "8ef5c0cb7ab972267dce74b3ad7dca559444b7cab3e7318b1184a1a4bf704f75"
+        }
+      ],
+      "values": "southeast-asia.values.bin.gz",
+      "valuesSha256": "0c61599fbcc2098f470b1ffa67007cbb5fb688620a6f27fc4b48ebbb4fbab043",
+      "uncompressedSha256": "f6f72173853176c70e305a57260ef7d0a4e62335d68bf10ea5914861cee58001",
+      "uncompressedBytes": 1709568,
+      "display": {
+        "width": 212,
+        "height": 175,
+        "projection": "EPSG:3857",
+        "bounds3857": [
+          10018754.171394622,
+          -1345708.4084091098,
+          15918687.183438122,
+          3503549.843504374
+        ],
+        "resampling": "nearest"
+      },
+      "countryCodes": [
+        "BRN",
+        "IDN",
+        "KHM",
+        "LAO",
+        "MMR",
+        "MYS",
+        "PHL",
+        "SGP",
+        "THA",
+        "TLS",
+        "VNM"
+      ],
+      "countryCoverage": [
+        {
+          "code": "BRN",
+          "sourceCellCenters": 7,
+          "completeSourceCellCenters": 7
+        },
+        {
+          "code": "IDN",
+          "sourceCellCenters": 2461,
+          "completeSourceCellCenters": 2461
+        },
+        {
+          "code": "KHM",
+          "sourceCellCenters": 237,
+          "completeSourceCellCenters": 237
+        },
+        {
+          "code": "LAO",
+          "sourceCellCenters": 312,
+          "completeSourceCellCenters": 312
+        },
+        {
+          "code": "MMR",
+          "sourceCellCenters": 930,
+          "completeSourceCellCenters": 930
+        },
+        {
+          "code": "MYS",
+          "sourceCellCenters": 430,
+          "completeSourceCellCenters": 430
+        },
+        {
+          "code": "PHL",
+          "sourceCellCenters": 384,
+          "completeSourceCellCenters": 384
+        },
+        {
+          "code": "SGP",
+          "sourceCellCenters": 1,
+          "completeSourceCellCenters": 1
+        },
+        {
+          "code": "THA",
+          "sourceCellCenters": 696,
+          "completeSourceCellCenters": 696
+        },
+        {
+          "code": "TLS",
+          "sourceCellCenters": 19,
+          "completeSourceCellCenters": 19
+        },
+        {
+          "code": "VNM",
+          "sourceCellCenters": 452,
+          "completeSourceCellCenters": 452
+        }
+      ]
+    },
+    "south-central-asia": {
+      "width": 224,
+      "height": 236,
+      "bounds4326": [
+        44,
+        -2,
+        100,
+        57
+      ],
+      "imageCoordinates": [
+        [
+          44,
+          57
+        ],
+        [
+          100,
+          57
+        ],
+        [
+          100,
+          -2
+        ],
+        [
+          44,
+          -2
+        ]
+      ],
+      "projection": "EPSG:4326",
+      "sourceCellDegrees": 0.25,
+      "firstCellCenter": [
+        44.125,
+        56.875
+      ],
+      "lastCellCenter": [
+        99.875,
+        -1.875
+      ],
+      "sourceColumnOffset": 896,
+      "sourceRowOffset": 132,
+      "rowOrder": "north-to-south",
+      "layout": "month-major",
+      "noData": -1,
+      "months": [
+        {
+          "id": "m-01",
+          "month": 1,
+          "image": "south-central-asia-m-01.png",
+          "sha256": "d1e710cbd8c5125eceda832b5995c804bca85adfcef6783d5eed23237fe9cc5d"
+        },
+        {
+          "id": "m-02",
+          "month": 2,
+          "image": "south-central-asia-m-02.png",
+          "sha256": "db34c8bbcb5b31d4fe402044fa1b22dc1a374f5ce282803b0972c732626f8e2b"
+        },
+        {
+          "id": "m-03",
+          "month": 3,
+          "image": "south-central-asia-m-03.png",
+          "sha256": "8ded689c6765185f335fce51d9d2801c8f8a0acc0703137729f91826941458a6"
+        },
+        {
+          "id": "m-04",
+          "month": 4,
+          "image": "south-central-asia-m-04.png",
+          "sha256": "4aa0298171e99ccf4e4deb385c604d120d8d8a42e72015fdf971bc5c381a841a"
+        },
+        {
+          "id": "m-05",
+          "month": 5,
+          "image": "south-central-asia-m-05.png",
+          "sha256": "6141cfa261bfe507409d6a82e09e1059ebc59b8b366a386fbf8e6323dc78f11c"
+        },
+        {
+          "id": "m-06",
+          "month": 6,
+          "image": "south-central-asia-m-06.png",
+          "sha256": "c9075c4735544ec7a6e7c5f3de5404be94e8f2d53200e408d4533c677565e14b"
+        },
+        {
+          "id": "m-07",
+          "month": 7,
+          "image": "south-central-asia-m-07.png",
+          "sha256": "600e13d1c0c7ba7c8aa70694f7cd9c760d3bcd340b8c0bc4c9c8a3a7e50fa1f7"
+        },
+        {
+          "id": "m-08",
+          "month": 8,
+          "image": "south-central-asia-m-08.png",
+          "sha256": "d660a802f3397f2a2836813eb78da1815b788f97f4ea99af74bc56ca2073413e"
+        },
+        {
+          "id": "m-09",
+          "month": 9,
+          "image": "south-central-asia-m-09.png",
+          "sha256": "6597a5a43a20cf43625b18ebac284e4a3e83ae3a06da80318899d9d265f33565"
+        },
+        {
+          "id": "m-10",
+          "month": 10,
+          "image": "south-central-asia-m-10.png",
+          "sha256": "9cd57df58edf5facc6f2b9208fcfcabf84ffd70ba3fbf7cb5ec0e823d134d7b4"
+        },
+        {
+          "id": "m-11",
+          "month": 11,
+          "image": "south-central-asia-m-11.png",
+          "sha256": "e607a1643d1608eb4844e2d63b7024e97977dd5722897bc866649a937374f797"
+        },
+        {
+          "id": "m-12",
+          "month": 12,
+          "image": "south-central-asia-m-12.png",
+          "sha256": "2a880886146198d754ee98c0ce85cfea2ee1744d6764b95e5d87e2e996642cec"
+        }
+      ],
+      "values": "south-central-asia.values.bin.gz",
+      "valuesSha256": "a01e05981bfe3c9a0f5537e5f8bf9ca30214b2fe1b8ce3de20d54e0eb155fc71",
+      "uncompressedSha256": "760296aa17f8ccd7b6b9a8e929eb3c0d6b8dfe1ba7f13159f9cb7649d850c7e5",
+      "uncompressedBytes": 2537472,
+      "display": {
+        "width": 224,
+        "height": 287,
+        "projection": "EPSG:3857",
+        "bounds3857": [
+          4898057.594904037,
+          -222684.20850554478,
+          11131949.079327356,
+          7760118.672902451
+        ],
+        "resampling": "nearest"
+      },
+      "countryCodes": [
+        "AFG",
+        "BGD",
+        "BTN",
+        "IND",
+        "KAZ",
+        "KGZ",
+        "LKA",
+        "MDV",
+        "NPL",
+        "PAK",
+        "TJK",
+        "TKM",
+        "UZB"
+      ],
+      "countryCoverage": [
+        {
+          "code": "AFG",
+          "sourceCellCenters": 1001,
+          "completeSourceCellCenters": 1001
+        },
+        {
+          "code": "BGD",
+          "sourceCellCenters": 194,
+          "completeSourceCellCenters": 194
+        },
+        {
+          "code": "BTN",
+          "sourceCellCenters": 59,
+          "completeSourceCellCenters": 59
+        },
+        {
+          "code": "IND",
+          "sourceCellCenters": 4466,
+          "completeSourceCellCenters": 4466
+        },
+        {
+          "code": "KAZ",
+          "sourceCellCenters": 5264,
+          "completeSourceCellCenters": 5262
+        },
+        {
+          "code": "KGZ",
+          "sourceCellCenters": 347,
+          "completeSourceCellCenters": 347
+        },
+        {
+          "code": "LKA",
+          "sourceCellCenters": 85,
+          "completeSourceCellCenters": 85
+        },
+        {
+          "code": "MDV",
+          "sourceCellCenters": 0,
+          "completeSourceCellCenters": 0
+        },
+        {
+          "code": "NPL",
+          "sourceCellCenters": 215,
+          "completeSourceCellCenters": 215
+        },
+        {
+          "code": "PAK",
+          "sourceCellCenters": 1306,
+          "completeSourceCellCenters": 1306
+        },
+        {
+          "code": "TJK",
+          "sourceCellCenters": 234,
+          "completeSourceCellCenters": 234
+        },
+        {
+          "code": "TKM",
+          "sourceCellCenters": 786,
+          "completeSourceCellCenters": 786
+        },
+        {
+          "code": "UZB",
+          "sourceCellCenters": 774,
+          "completeSourceCellCenters": 770
+        }
+      ]
+    }
+  },
+  "processing": {
+    "script": "scripts/prepare-asia-seasonal-precipitation.mjs",
+    "scriptSha256": "5e29546f87bacd610a222d7921f2a7be6aac7a587892feb885285278fbaa857f",
+    "numericEncoding": "gzip little-endian float32",
+    "numericLayout": "((month - 1) * width * height) + row * width + column",
+    "numericGrid": "Unchanged original 0.25° source cells, cropped at original cell boundaries; row zero is north.",
+    "missing": "-1 for source missing/non-finite/negative or outside target-country cell-centre mask. Real zero is preserved.",
+    "display": "Small EPSG:3857 PNGs sample the original numeric cube at Mercator display pixel centres by nearest source cell; no bilinear interpolation, smoothing or source upscaling.",
+    "displayMask": "Independent existing detailed country geometry per region, applied at original source-cell centres. Polygon holes retained. No dilation or nearest-country substitution.",
+    "latitudeOrientation": "Coordinate arrays are authoritative: 89.875° to -89.875°, north-to-south. The inconsistent source degrees_south attribute is recorded, not used to flip data.",
+    "recordStrideBytes": 20736008,
+    "precipitationRecordBytes": 4147200,
+    "rawSourceIncludedInRepository": false,
+    "sourceMutation": false
+  },
+  "inputs": [
+    {
+      "path": "data-source/atlas/west-asia/precipitation/source.json",
+      "sha256": "eef8711e54ef8a3c28c40dbcf3bd79b89b69a2f348a3385ea6cecec12cafdc78",
+      "role": "Existing exact-product DWD rights and source evidence"
+    },
+    {
+      "path": "data-source/atlas/west-asia/precipitation/datacite-registration.json",
+      "sha256": "4a190fce229086644299adcde256fee7f06562dd110c08908648c45fcb1167be",
+      "role": "Existing publisher DOI registration snapshot; empty rights retained"
+    },
+    {
+      "path": "public/assets/atlas/asia-population-v1/east-asia.geography.json",
+      "sha256": "73ddacbe15ab3fe35271726ff5c5dd91c219eb47a8719db3705bfb5a7d6b8a22",
+      "role": "Independent east-asia detailed target-country mask"
+    },
+    {
+      "path": "public/assets/atlas/asia-population-v1/southeast-asia.geography.json",
+      "sha256": "027f8d987d1e93699c28e54e1ab3eca9efb7e5abe229955e05151facc9a97885",
+      "role": "Independent southeast-asia detailed target-country mask"
+    },
+    {
+      "path": "public/assets/atlas/asia-population-v1/south-central-asia.geography.json",
+      "sha256": "732562af77cf44bcf45db50be25d88d651c799139b14f496923ee197031da14a",
+      "role": "Independent south-central-asia detailed target-country mask"
+    },
+    {
+      "path": "data-source/atlas/asia/seasonal-precipitation/source.json",
+      "sha256": "b012c1fe3f99c6e96726f3ff00ec855dd50ddd19b35ea6f4c236681bc1247c86",
+      "role": "Source identity, exact raw hash, rights evidence and limitations"
+    },
+    {
+      "path": "data-source/atlas/asia/seasonal-precipitation/validation.json",
+      "sha256": "845868e2a3909aa4d4b2067f807264dc612524558fd4463c35492d37d5ed49a5",
+      "role": "Actual source coordinates, record stride, independent raw location samples and mask coverage"
+    }
+  ],
+  "files": {
+    "east-asia.values.bin.gz": {
+      "sha256": "ced93249266fe46d16f6b14505e53e0a345f4bfb11bc4817646bd603edc3cf09",
+      "bytes": 611202
+    },
+    "east-asia-m-01.png": {
+      "sha256": "6e93cf3eeefcc6439601d862322b132ffb6c9dbbd33200e872b99c9ef107537b",
+      "bytes": 2477
+    },
+    "east-asia-m-02.png": {
+      "sha256": "fa259f97843149969901f9adc0255e0d07b6d4793d147884b6dc9056f2799aa8",
+      "bytes": 2550
+    },
+    "east-asia-m-03.png": {
+      "sha256": "f49e8b568e27ee317b722c89b0fd83035022de9b17d00524009e3e045d0b24b8",
+      "bytes": 2866
+    },
+    "east-asia-m-04.png": {
+      "sha256": "2b2c3092a0afd7733abb9b98a2513ea5cf8f1ae88cbd4d9e529d25ea3f41c6af",
+      "bytes": 3045
+    },
+    "east-asia-m-05.png": {
+      "sha256": "763c031027f0b244998ee31aafe72e8ff4ab8bcbbed5816f05dd0037a136e9e5",
+      "bytes": 3219
+    },
+    "east-asia-m-06.png": {
+      "sha256": "d9fe9c774d44bc19560511c5b6025751f704391b5b6c07334bbc7584afe040ba",
+      "bytes": 3529
+    },
+    "east-asia-m-07.png": {
+      "sha256": "324dba36b8c9e0185a177a7b12a46dc1a28f9e431301690f9456ce09fc440fb8",
+      "bytes": 3734
+    },
+    "east-asia-m-08.png": {
+      "sha256": "f4a6dbe607aab48e417433a2b42397172a1c14efcc85ef0c916b177f39e1ca59",
+      "bytes": 3612
+    },
+    "east-asia-m-09.png": {
+      "sha256": "905e6c96d6de54ce93e53fc3c40c379f63a78ec197bb3fb54529aab76e711cd6",
+      "bytes": 3288
+    },
+    "east-asia-m-10.png": {
+      "sha256": "203e75d9ab6345e61ec7bbd9ef8b77bbce05dcd3d5451dc432a3b280eea996f0",
+      "bytes": 2877
+    },
+    "east-asia-m-11.png": {
+      "sha256": "5e4c23524426395f0b9978f5b84c0b22ced6ec695132b29349e3a06304a99d81",
+      "bytes": 2677
+    },
+    "east-asia-m-12.png": {
+      "sha256": "dc74bb11301aec337f3f8f3b257dab73d84c7b58e96fd80dee9f5148c24aa878",
+      "bytes": 2490
+    },
+    "southeast-asia.values.bin.gz": {
+      "sha256": "0c61599fbcc2098f470b1ffa67007cbb5fb688620a6f27fc4b48ebbb4fbab043",
+      "bytes": 252882
+    },
+    "southeast-asia-m-01.png": {
+      "sha256": "de58a9353601bad3745a451de75066a114e75f21d7d6b7d99a6e3508fbd2bba7",
+      "bytes": 2762
+    },
+    "southeast-asia-m-02.png": {
+      "sha256": "4ac56818404a67b184aa5ca4fdeb50bfc84755f8ed7a0d900afdb42d38a3f424",
+      "bytes": 2811
+    },
+    "southeast-asia-m-03.png": {
+      "sha256": "f0b9aec0fb107540ea2b5b585e7516b76cf36c33b65bf82600f1c3ef4bc0dde9",
+      "bytes": 2744
+    },
+    "southeast-asia-m-04.png": {
+      "sha256": "e1126b91acd23ca18bc4dc76894a198f09d1f7a6a4c4750a581c7d058da2d4a7",
+      "bytes": 2722
+    },
+    "southeast-asia-m-05.png": {
+      "sha256": "8736d34db61669830126c813723f548629a94ac42c136bea09acd8aea667062c",
+      "bytes": 2859
+    },
+    "southeast-asia-m-06.png": {
+      "sha256": "6697cc0635087a25de60bed0fa7fabcfbb86fd37ca8ac61a031d937a46824c93",
+      "bytes": 2973
+    },
+    "southeast-asia-m-07.png": {
+      "sha256": "28778fe637dea98e6f892e46c1e1b05098bfe044c1b062b8fb99f84f1fb6663a",
+      "bytes": 2931
+    },
+    "southeast-asia-m-08.png": {
+      "sha256": "18d584bad25739a0acb616adf36eb0db741d52d2e9d3b7c8a903e2c396a72b04",
+      "bytes": 2997
+    },
+    "southeast-asia-m-09.png": {
+      "sha256": "d7f80a31803c2bfd728f4513478bc226c02db7d06656bff9c7bab88167fafde9",
+      "bytes": 2845
+    },
+    "southeast-asia-m-10.png": {
+      "sha256": "491990f86a124abc9b37cc408d05a27a2d112ae0499f445ca55cc25ef48041c8",
+      "bytes": 2804
+    },
+    "southeast-asia-m-11.png": {
+      "sha256": "c07bd6af874cd79c170aa97e568af2c37a00f1c4477848f7cfcb3730cfeed7e9",
+      "bytes": 2784
+    },
+    "southeast-asia-m-12.png": {
+      "sha256": "8ef5c0cb7ab972267dce74b3ad7dca559444b7cab3e7318b1184a1a4bf704f75",
+      "bytes": 2712
+    },
+    "south-central-asia.values.bin.gz": {
+      "sha256": "a01e05981bfe3c9a0f5537e5f8bf9ca30214b2fe1b8ce3de20d54e0eb155fc71",
+      "bytes": 491939
+    },
+    "south-central-asia-m-01.png": {
+      "sha256": "d1e710cbd8c5125eceda832b5995c804bca85adfcef6783d5eed23237fe9cc5d",
+      "bytes": 2419
+    },
+    "south-central-asia-m-02.png": {
+      "sha256": "db34c8bbcb5b31d4fe402044fa1b22dc1a374f5ce282803b0972c732626f8e2b",
+      "bytes": 2650
+    },
+    "south-central-asia-m-03.png": {
+      "sha256": "8ded689c6765185f335fce51d9d2801c8f8a0acc0703137729f91826941458a6",
+      "bytes": 2645
+    },
+    "south-central-asia-m-04.png": {
+      "sha256": "4aa0298171e99ccf4e4deb385c604d120d8d8a42e72015fdf971bc5c381a841a",
+      "bytes": 2836
+    },
+    "south-central-asia-m-05.png": {
+      "sha256": "6141cfa261bfe507409d6a82e09e1059ebc59b8b366a386fbf8e6323dc78f11c",
+      "bytes": 2902
+    },
+    "south-central-asia-m-06.png": {
+      "sha256": "c9075c4735544ec7a6e7c5f3de5404be94e8f2d53200e408d4533c677565e14b",
+      "bytes": 2972
+    },
+    "south-central-asia-m-07.png": {
+      "sha256": "600e13d1c0c7ba7c8aa70694f7cd9c760d3bcd340b8c0bc4c9c8a3a7e50fa1f7",
+      "bytes": 2927
+    },
+    "south-central-asia-m-08.png": {
+      "sha256": "d660a802f3397f2a2836813eb78da1815b788f97f4ea99af74bc56ca2073413e",
+      "bytes": 2821
+    },
+    "south-central-asia-m-09.png": {
+      "sha256": "6597a5a43a20cf43625b18ebac284e4a3e83ae3a06da80318899d9d265f33565",
+      "bytes": 2867
+    },
+    "south-central-asia-m-10.png": {
+      "sha256": "9cd57df58edf5facc6f2b9208fcfcabf84ffd70ba3fbf7cb5ec0e823d134d7b4",
+      "bytes": 2670
+    },
+    "south-central-asia-m-11.png": {
+      "sha256": "e607a1643d1608eb4844e2d63b7024e97977dd5722897bc866649a937374f797",
+      "bytes": 2538
+    },
+    "south-central-asia-m-12.png": {
+      "sha256": "2a880886146198d754ee98c0ce85cfea2ee1744d6764b95e5d87e2e996642cec",
+      "bytes": 2633
+    }
+  }
+}

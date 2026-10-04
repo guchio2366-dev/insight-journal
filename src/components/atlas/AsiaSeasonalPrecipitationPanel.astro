@@ -1,0 +1,77 @@
+<section class="asia-seasonal-panel" data-seasonal-panel hidden aria-labelledby="asia-seasonal-title">
+  <div class="seasonal-month-controls">
+    <label for="asia-seasonal-month">地図の月</label>
+    <button type="button" data-seasonal-previous aria-label="前の月を表示">‹</button>
+    <select id="asia-seasonal-month" data-seasonal-month aria-label="地図に表示する月">
+      {Array.from({length:12},(_,i)=><option value={`m-${String(i+1).padStart(2,'0')}`} selected={i===6}>{i+1}月</option>)}
+    </select>
+    <button type="button" data-seasonal-next aria-label="次の月を表示">›</button>
+  </div>
+  <figure class="seasonal-chart" data-seasonal-chart>
+    <figcaption><h2 id="asia-seasonal-title">地点の月別降水量</h2><span data-seasonal-coordinate>地図上の地点を選択</span></figcaption>
+    <svg data-seasonal-svg viewBox="0 0 320 148" role="img" aria-labelledby="asia-seasonal-chart-title asia-seasonal-chart-description">
+      <title id="asia-seasonal-chart-title">選択地点の12か月の降水量</title>
+      <desc id="asia-seasonal-chart-description">地図上の地点を選ぶと、同じ格子の月別降水量を表示します。</desc>
+    </svg>
+    <p class="seasonal-chart-period">GPCC · 1991–2020年の平年値 · mm/月</p>
+  </figure>
+  <p class="seasonal-point-reading" data-seasonal-value aria-live="polite">地図上の地点を選ぶと、その格子の12か月を読めます。</p>
+  <p class="seasonal-status" data-seasonal-status role="status"></p>
+  <button class="seasonal-retry" data-seasonal-retry type="button" hidden>月別降水量を再読み込み</button>
+  <div class="seasonal-legend" data-seasonal-legend aria-label="月別降水量の地図凡例">
+    <h3>地図の降水量 <span data-seasonal-legend-month>7月</span> · mm/月</h3>
+    <div data-seasonal-scale></div>
+    <p>色なしはデータなし・対象範囲外。0 mmとは区別します。</p>
+  </div>
+  <p class="seasonal-grid-note">名目0.25°格子の面を代表する平年値です。観測所の値や、その日の雨、農業用水の需要・利用可能量を示すものではありません。</p>
+  <details class="seasonal-details">
+    <summary>12か月の数値と格子</summary>
+    <p data-seasonal-cell></p>
+    <table>
+      <caption>選択地点の月別降水量（1991–2020年の平年値）</caption>
+      <thead><tr><th scope="col">月</th><th scope="col">降水量（mm/月）</th></tr></thead>
+      <tbody data-seasonal-table></tbody>
+    </table>
+    <p>×・「データなし」は未収録です。雨が0 mmという意味ではありません。</p>
+  </details>
+  <details class="seasonal-details">
+    <summary>雨の季節と作付け時期を比べる</summary>
+    <p>雨が増える月と減る月を、作付け・生育・収穫の時期と合わせて読んでください。同じ地点を保ったまま農林業の地図へ進めます。</p>
+    <p>作物・地域・灌漑の有無で作期は異なります。降水量だけから収量や水不足を判断することはできません。</p>
+    <button class="seasonal-related" data-compare="agriculture" type="button">同じ地点の農林業と比べる →</button>
+    <button class="seasonal-related" data-seasonal-related="precipitation" type="button">同じ地点の年降水量を見る →</button>
+  </details>
+  <details class="seasonal-details">
+    <summary>出典・定義・利用条件</summary>
+    <div data-seasonal-method></div>
+  </details>
+  <p class="seasonal-source" data-seasonal-source>出典：GPCC / Deutscher Wetterdienst</p>
+</section>
+<style>
+  .asia-seasonal-panel{min-width:0;max-width:100%;overflow-wrap:anywhere}[hidden]{display:none!important}
+  .seasonal-month-controls{display:grid;grid-template-columns:1fr 44px minmax(70px,96px) 44px;align-items:center;gap:5px;margin-bottom:7px;font-size:12px}
+  .seasonal-month-controls label{font-weight:600}.seasonal-month-controls button,.seasonal-month-controls select{height:44px;box-sizing:border-box;border:1px solid #aebeb8;background:#fff;color:#294c53;font:inherit}
+  .seasonal-month-controls button{font-size:24px;line-height:1}.seasonal-month-controls select{width:100%;padding:6px}
+  .seasonal-chart{margin:0;max-height:200px}.seasonal-chart figcaption{min-width:0;line-height:1.5}.seasonal-chart h2{margin:0;font:700 15px/1.5 var(--sans)}
+  .seasonal-chart figcaption span{display:block;font-size:11px;line-height:1.5;color:#52665f;font-variant-numeric:tabular-nums}
+  .seasonal-chart svg{display:block;width:100%;height:148px;overflow:visible}
+  :global([data-seasonal-svg] text){font:12px var(--sans);fill:#4a615c}:global([data-seasonal-svg] .seasonal-grid){stroke:#d4ded7;stroke-width:.7;shape-rendering:crispEdges}
+  :global([data-seasonal-svg] .seasonal-axis){stroke:#7d9289;stroke-width:1;shape-rendering:crispEdges}:global([data-seasonal-svg] .seasonal-bar){fill:#4c9abd}
+  :global([data-seasonal-svg] .seasonal-bar-selected){fill:#2778a5;stroke:#a74830;stroke-width:2}:global([data-seasonal-svg] .seasonal-selected-label){fill:#963e2c;font-weight:700}
+  .seasonal-chart-period{font-size:11px;line-height:1.5;margin:0;color:#52665f}
+  .seasonal-point-reading{font-size:13px;line-height:1.7;margin:12px 0 8px;padding:8px 10px;border-left:3px solid #2778a5;background:#edf3f3}
+  .seasonal-status{font-size:12px;line-height:1.7;margin:4px 0}.seasonal-status:empty{display:none}
+  .seasonal-grid-note{font-size:12px;line-height:1.75;margin:10px 0}
+  .seasonal-legend{margin:10px 0}.seasonal-legend h3{font:700 12px/1.7 var(--sans);margin:0 0 5px}
+  :global([data-seasonal-scale]){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 8px}
+  :global([data-seasonal-scale]>span){display:flex;align-items:center;gap:6px;font-size:12px;line-height:1.4;white-space:nowrap}
+  :global([data-seasonal-scale] i){display:inline-block;width:21px;height:10px;border:1px solid #79978b;box-sizing:border-box;flex:none}
+  .seasonal-legend p{font-size:11px;line-height:1.6;margin:6px 0}
+  .seasonal-details{border-top:1px solid #d4ded7;font-size:12px}.seasonal-details summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:600;color:#365d54}
+  .seasonal-details p{font-size:12px;line-height:1.8;margin:6px 0 10px}.seasonal-details table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:12px}
+  .seasonal-details caption{text-align:left;font-size:12px;line-height:1.7;margin:5px 0}.seasonal-details th,.seasonal-details td{padding:5px;border-bottom:1px solid #d4ded7;text-align:right}.seasonal-details th:first-child{text-align:left}
+  :global([data-seasonal-table] [aria-current="true"]){background:#edf3f3;font-weight:700}
+  :global([data-seasonal-method] p){font-size:12px;line-height:1.8;margin:6px 0 10px}.seasonal-source{font-size:11px;line-height:1.7;color:#52665f;margin:10px 0 0}
+  .seasonal-retry,.seasonal-related{display:block;width:100%;min-height:44px;box-sizing:border-box;font:inherit;font-size:12px;border:1px solid #315b61;background:#edf3f1;color:#264c52;padding:8px;text-align:left;margin:8px 0}
+  button:focus-visible,summary:focus-visible,select:focus-visible{outline:3px solid #a74830;outline-offset:2px}
+</style>

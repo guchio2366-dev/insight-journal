@@ -1,0 +1,1098 @@
+{
+  "sourceTitle": "GPCC Global Precipitation Climatology (1991-2020) version 2025, 0.25 degree",
+  "sourcePeriod": [
+    "1991-01-01",
+    "2020-12-31"
+  ],
+  "sourceRecords": 12,
+  "sourceDimensions": [
+    1440,
+    720
+  ],
+  "sourceRecordStrideBytes": 20736008,
+  "sourceVariableOffset": 21040,
+  "sourceVariableRecordBytes": 4147200,
+  "coordinates": {
+    "firstLongitude": -179.875,
+    "lastLongitude": 179.875,
+    "firstLatitude": 89.875,
+    "lastLatitude": -89.875,
+    "declaredLatitudeUnit": "degrees_south",
+    "usedLatitudeConvention": "North-positive source array; north-to-south row order"
+  },
+  "regions": {
+    "east-asia": {
+      "monthlyStatistics": [
+        {
+          "id": "m-01",
+          "month": 1,
+          "label": "1月",
+          "validCells": 19211,
+          "zeroCells": 0,
+          "missingCells": 26389,
+          "minimum": 0.11999999731779099,
+          "maximum": 368.8699951171875
+        },
+        {
+          "id": "m-02",
+          "month": 2,
+          "label": "2月",
+          "validCells": 19211,
+          "zeroCells": 1,
+          "missingCells": 26389,
+          "minimum": 0,
+          "maximum": 251.0800018310547
+        },
+        {
+          "id": "m-03",
+          "month": 3,
+          "label": "3月",
+          "validCells": 19211,
+          "zeroCells": 5,
+          "missingCells": 26389,
+          "minimum": 0,
+          "maximum": 343.9100036621094
+        },
+        {
+          "id": "m-04",
+          "month": 4,
+          "label": "4月",
+          "validCells": 19211,
+          "zeroCells": 1,
+          "missingCells": 26389,
+          "minimum": 0,
+          "maximum": 362.67999267578125
+        },
+        {
+          "id": "m-05",
+          "month": 5,
+          "label": "5月",
+          "validCells": 19211,
+          "zeroCells": 0,
+          "missingCells": 26389,
+          "minimum": 0.6600000262260437,
+          "maximum": 406.70001220703125
+        },
+        {
+          "id": "m-06",
+          "month": 6,
+          "label": "6月",
+          "validCells": 19211,
+          "zeroCells": 0,
+          "missingCells": 26389,
+          "minimum": 0.8500000238418579,
+          "maximum": 793.3400268554688
+        },
+        {
+          "id": "m-07",
+          "month": 7,
+          "label": "7月",
+          "validCells": 19211,
+          "zeroCells": 2,
+          "missingCells": 26389,
+          "minimum": 0,
+          "maximum": 609.8900146484375
+        },
+        {
+          "id": "m-08",
+          "month": 8,
+          "label": "8月",
+          "validCells": 19211,
+          "zeroCells": 0,
+          "missingCells": 26389,
+          "minimum": 2.5399999618530273,
+          "maximum": 623.4000244140625
+        },
+        {
+          "id": "m-09",
+          "month": 9,
+          "label": "9月",
+          "validCells": 19211,
+          "zeroCells": 1,
+          "missingCells": 26389,
+          "minimum": 0,
+          "maximum": 608.5599975585938
+        },
+        {
+          "id": "m-10",
+          "month": 10,
+          "label": "10月",
+          "validCells": 19211,
+          "zeroCells": 0,
+          "missingCells": 26389,
+          "minimum": 0.20000000298023224,
+          "maximum": 552.3099975585938
+        },
+        {
+          "id": "m-11",
+          "month": 11,
+          "label": "11月",
+          "validCells": 19211,
+          "zeroCells": 11,
+          "missingCells": 26389,
+          "minimum": 0,
+          "maximum": 433
+        },
+        {
+          "id": "m-12",
+          "month": 12,
+          "label": "12月",
+          "validCells": 19211,
+          "zeroCells": 1,
+          "missingCells": 26389,
+          "minimum": 0,
+          "maximum": 399.3999938964844
+        }
+      ],
+      "countryCoverage": [
+        {
+          "code": "CHN",
+          "sourceCellCenters": 15228,
+          "completeSourceCellCenters": 15228
+        },
+        {
+          "code": "JPN",
+          "sourceCellCenters": 607,
+          "completeSourceCellCenters": 607
+        },
+        {
+          "code": "KOR",
+          "sourceCellCenters": 156,
+          "completeSourceCellCenters": 156
+        },
+        {
+          "code": "MNG",
+          "sourceCellCenters": 2955,
+          "completeSourceCellCenters": 2955
+        },
+        {
+          "code": "PRK",
+          "sourceCellCenters": 215,
+          "completeSourceCellCenters": 215
+        },
+        {
+          "code": "TWN",
+          "sourceCellCenters": 50,
+          "completeSourceCellCenters": 50
+        }
+      ],
+      "unresolvedCountries": [],
+      "sourceSamples": [
+        {
+          "name": "Tokyo",
+          "locator": [
+            139.76,
+            35.68
+          ],
+          "sourceCell": {
+            "row": 217,
+            "column": 1279,
+            "center": [
+              139.875,
+              35.625
+            ]
+          },
+          "cellCenterIsTargetLand": false,
+          "rawMonthlyNormals": [
+            63.689998626708984,
+            58.720001220703125,
+            118.16999816894531,
+            127.7699966430664,
+            138.11000061035156,
+            166.27999877929688,
+            156.57000732421875,
+            137.47999572753906,
+            219.8000030517578,
+            226.41000366210938,
+            98.95999908447266,
+            59.650001525878906
+          ],
+          "deliveredMonthlyNormals": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "flippedLatitudeMonthlyNormals": [
+            16.760000228881836,
+            16.90999984741211,
+            19.040000915527344,
+            27.34000015258789,
+            37.43000030517578,
+            50.959999084472656,
+            51.2599983215332,
+            48.08000183105469,
+            48.119998931884766,
+            30.68000030517578,
+            27.15999984741211,
+            29.459999084472656
+          ],
+          "meaning": "Location labels identify grid-cell locators, not city-average precipitation."
+        },
+        {
+          "name": "Beijing",
+          "locator": [
+            116.4,
+            39.9
+          ],
+          "sourceCell": {
+            "row": 200,
+            "column": 1185,
+            "center": [
+              116.375,
+              39.875
+            ]
+          },
+          "cellCenterIsTargetLand": true,
+          "rawMonthlyNormals": [
+            2.240000009536743,
+            5.460000038146973,
+            8.359999656677246,
+            21.809999465942383,
+            36.5,
+            76.5999984741211,
+            170.72000122070312,
+            112.13999938964844,
+            53.58000183105469,
+            28.030000686645508,
+            12.979999542236328,
+            2.299999952316284
+          ],
+          "deliveredMonthlyNormals": [
+            2.240000009536743,
+            5.460000038146973,
+            8.359999656677246,
+            21.809999465942383,
+            36.5,
+            76.5999984741211,
+            170.72000122070312,
+            112.13999938964844,
+            53.58000183105469,
+            28.030000686645508,
+            12.979999542236328,
+            2.299999952316284
+          ],
+          "flippedLatitudeMonthlyNormals": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "meaning": "Location labels identify grid-cell locators, not city-average precipitation."
+        },
+        {
+          "name": "Ulaanbaatar",
+          "locator": [
+            106.92,
+            47.92
+          ],
+          "sourceCell": {
+            "row": 168,
+            "column": 1147,
+            "center": [
+              106.875,
+              47.875
+            ]
+          },
+          "cellCenterIsTargetLand": true,
+          "rawMonthlyNormals": [
+            1.840000033378601,
+            2.5199999809265137,
+            4.099999904632568,
+            7.239999771118164,
+            21.399999618530273,
+            44.29999923706055,
+            72.30000305175781,
+            64.27999877929688,
+            27.329999923706055,
+            8.319999694824219,
+            6.03000020980835,
+            3.200000047683716
+          ],
+          "deliveredMonthlyNormals": [
+            1.840000033378601,
+            2.5199999809265137,
+            4.099999904632568,
+            7.239999771118164,
+            21.399999618530273,
+            44.29999923706055,
+            72.30000305175781,
+            64.27999877929688,
+            27.329999923706055,
+            8.319999694824219,
+            6.03000020980835,
+            3.200000047683716
+          ],
+          "flippedLatitudeMonthlyNormals": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "meaning": "Location labels identify grid-cell locators, not city-average precipitation."
+        }
+      ],
+      "maskSha256": "5bc6cc81af50f3d4d30f92608835ffc21e4c28b93c44a5c6a0be6f2c12d8ae02"
+    },
+    "southeast-asia": {
+      "monthlyStatistics": [
+        {
+          "id": "m-01",
+          "month": 1,
+          "label": "1月",
+          "validCells": 5929,
+          "zeroCells": 0,
+          "missingCells": 29687,
+          "minimum": 2.009999990463257,
+          "maximum": 776.260009765625
+        },
+        {
+          "id": "m-02",
+          "month": 2,
+          "label": "2月",
+          "validCells": 5929,
+          "zeroCells": 0,
+          "missingCells": 29687,
+          "minimum": 1.190000057220459,
+          "maximum": 597.4199829101562
+        },
+        {
+          "id": "m-03",
+          "month": 3,
+          "label": "3月",
+          "validCells": 5929,
+          "zeroCells": 0,
+          "missingCells": 29687,
+          "minimum": 7.059999942779541,
+          "maximum": 515.0499877929688
+        },
+        {
+          "id": "m-04",
+          "month": 4,
+          "label": "4月",
+          "validCells": 5929,
+          "zeroCells": 0,
+          "missingCells": 29687,
+          "minimum": 20.6299991607666,
+          "maximum": 548.0499877929688
+        },
+        {
+          "id": "m-05",
+          "month": 5,
+          "label": "5月",
+          "validCells": 5929,
+          "zeroCells": 0,
+          "missingCells": 29687,
+          "minimum": 17.920000076293945,
+          "maximum": 495.4599914550781
+        },
+        {
+          "id": "m-06",
+          "month": 6,
+          "label": "6月",
+          "validCells": 5929,
+          "zeroCells": 0,
+          "missingCells": 29687,
+          "minimum": 7.949999809265137,
+          "maximum": 1230.3299560546875
+        },
+        {
+          "id": "m-07",
+          "month": 7,
+          "label": "7月",
+          "validCells": 5929,
+          "zeroCells": 0,
+          "missingCells": 29687,
+          "minimum": 3.3299999237060547,
+          "maximum": 1323.8399658203125
+        },
+        {
+          "id": "m-08",
+          "month": 8,
+          "label": "8月",
+          "validCells": 5929,
+          "zeroCells": 0,
+          "missingCells": 29687,
+          "minimum": 0.3199999928474426,
+          "maximum": 962.5399780273438
+        },
+        {
+          "id": "m-09",
+          "month": 9,
+          "label": "9月",
+          "validCells": 5929,
+          "zeroCells": 0,
+          "missingCells": 29687,
+          "minimum": 2.9100000858306885,
+          "maximum": 798.27001953125
+        },
+        {
+          "id": "m-10",
+          "month": 10,
+          "label": "10月",
+          "validCells": 5929,
+          "zeroCells": 0,
+          "missingCells": 29687,
+          "minimum": 12.649999618530273,
+          "maximum": 799.7899780273438
+        },
+        {
+          "id": "m-11",
+          "month": 11,
+          "label": "11月",
+          "validCells": 5929,
+          "zeroCells": 0,
+          "missingCells": 29687,
+          "minimum": 6.96999979019165,
+          "maximum": 694.75
+        },
+        {
+          "id": "m-12",
+          "month": 12,
+          "label": "12月",
+          "validCells": 5929,
+          "zeroCells": 0,
+          "missingCells": 29687,
+          "minimum": 1.899999976158142,
+          "maximum": 710.530029296875
+        }
+      ],
+      "countryCoverage": [
+        {
+          "code": "BRN",
+          "sourceCellCenters": 7,
+          "completeSourceCellCenters": 7
+        },
+        {
+          "code": "IDN",
+          "sourceCellCenters": 2461,
+          "completeSourceCellCenters": 2461
+        },
+        {
+          "code": "KHM",
+          "sourceCellCenters": 237,
+          "completeSourceCellCenters": 237
+        },
+        {
+          "code": "LAO",
+          "sourceCellCenters": 312,
+          "completeSourceCellCenters": 312
+        },
+        {
+          "code": "MMR",
+          "sourceCellCenters": 930,
+          "completeSourceCellCenters": 930
+        },
+        {
+          "code": "MYS",
+          "sourceCellCenters": 430,
+          "completeSourceCellCenters": 430
+        },
+        {
+          "code": "PHL",
+          "sourceCellCenters": 384,
+          "completeSourceCellCenters": 384
+        },
+        {
+          "code": "SGP",
+          "sourceCellCenters": 1,
+          "completeSourceCellCenters": 1
+        },
+        {
+          "code": "THA",
+          "sourceCellCenters": 696,
+          "completeSourceCellCenters": 696
+        },
+        {
+          "code": "TLS",
+          "sourceCellCenters": 19,
+          "completeSourceCellCenters": 19
+        },
+        {
+          "code": "VNM",
+          "sourceCellCenters": 452,
+          "completeSourceCellCenters": 452
+        }
+      ],
+      "unresolvedCountries": [],
+      "sourceSamples": [
+        {
+          "name": "Bangkok",
+          "locator": [
+            100.5,
+            13.75
+          ],
+          "sourceCell": {
+            "row": 305,
+            "column": 1122,
+            "center": [
+              100.625,
+              13.625
+            ]
+          },
+          "cellCenterIsTargetLand": true,
+          "rawMonthlyNormals": [
+            22.40999984741211,
+            20.350000381469727,
+            45.7400016784668,
+            83.08000183105469,
+            185.0500030517578,
+            171.35000610351562,
+            157.83999633789062,
+            184.99000549316406,
+            295.44000244140625,
+            242.6199951171875,
+            41.119998931884766,
+            10.890000343322754
+          ],
+          "deliveredMonthlyNormals": [
+            22.40999984741211,
+            20.350000381469727,
+            45.7400016784668,
+            83.08000183105469,
+            185.0500030517578,
+            171.35000610351562,
+            157.83999633789062,
+            184.99000549316406,
+            295.44000244140625,
+            242.6199951171875,
+            41.119998931884766,
+            10.890000343322754
+          ],
+          "flippedLatitudeMonthlyNormals": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "meaning": "Location labels identify grid-cell locators, not city-average precipitation."
+        },
+        {
+          "name": "Jakarta",
+          "locator": [
+            106.84,
+            -6.21
+          ],
+          "sourceCell": {
+            "row": 384,
+            "column": 1147,
+            "center": [
+              106.875,
+              -6.125
+            ]
+          },
+          "cellCenterIsTargetLand": true,
+          "rawMonthlyNormals": [
+            376.42999267578125,
+            392.1000061035156,
+            224.3000030517578,
+            189.1300048828125,
+            143.4600067138672,
+            90.02999877929688,
+            79.44999694824219,
+            59.7599983215332,
+            79.94000244140625,
+            130.47999572753906,
+            177.97000122070312,
+            220.3800048828125
+          ],
+          "deliveredMonthlyNormals": [
+            376.42999267578125,
+            392.1000061035156,
+            224.3000030517578,
+            189.1300048828125,
+            143.4600067138672,
+            90.02999877929688,
+            79.44999694824219,
+            59.7599983215332,
+            79.94000244140625,
+            130.47999572753906,
+            177.97000122070312,
+            220.3800048828125
+          ],
+          "flippedLatitudeMonthlyNormals": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "meaning": "Location labels identify grid-cell locators, not city-average precipitation."
+        },
+        {
+          "name": "Hanoi",
+          "locator": [
+            105.85,
+            21.03
+          ],
+          "sourceCell": {
+            "row": 275,
+            "column": 1143,
+            "center": [
+              105.875,
+              21.125
+            ]
+          },
+          "cellCenterIsTargetLand": true,
+          "rawMonthlyNormals": [
+            24.010000228881836,
+            23.850000381469727,
+            56.290000915527344,
+            74.97000122070312,
+            208.13999938964844,
+            263.1300048828125,
+            321.7200012207031,
+            310.57000732421875,
+            189.7899932861328,
+            107.37999725341797,
+            58.470001220703125,
+            24.860000610351562
+          ],
+          "deliveredMonthlyNormals": [
+            24.010000228881836,
+            23.850000381469727,
+            56.290000915527344,
+            74.97000122070312,
+            208.13999938964844,
+            263.1300048828125,
+            321.7200012207031,
+            310.57000732421875,
+            189.7899932861328,
+            107.37999725341797,
+            58.470001220703125,
+            24.860000610351562
+          ],
+          "flippedLatitudeMonthlyNormals": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "meaning": "Location labels identify grid-cell locators, not city-average precipitation."
+        }
+      ],
+      "maskSha256": "f478cff3c2c8216ef3e735783ca0249b324263e2ee537fa60201e31c73f00ec7"
+    },
+    "south-central-asia": {
+      "monthlyStatistics": [
+        {
+          "id": "m-01",
+          "month": 1,
+          "label": "1月",
+          "validCells": 14725,
+          "zeroCells": 0,
+          "missingCells": 38139,
+          "minimum": 0.3400000035762787,
+          "maximum": 241.41000366210938
+        },
+        {
+          "id": "m-02",
+          "month": 2,
+          "label": "2月",
+          "validCells": 14725,
+          "zeroCells": 0,
+          "missingCells": 38139,
+          "minimum": 0.019999999552965164,
+          "maximum": 169.72999572753906
+        },
+        {
+          "id": "m-03",
+          "month": 3,
+          "label": "3月",
+          "validCells": 14725,
+          "zeroCells": 0,
+          "missingCells": 38139,
+          "minimum": 0.20999999344348907,
+          "maximum": 300.54998779296875
+        },
+        {
+          "id": "m-04",
+          "month": 4,
+          "label": "4月",
+          "validCells": 14725,
+          "zeroCells": 0,
+          "missingCells": 38139,
+          "minimum": 0.09000000357627869,
+          "maximum": 667.5900268554688
+        },
+        {
+          "id": "m-05",
+          "month": 5,
+          "label": "5月",
+          "validCells": 14725,
+          "zeroCells": 0,
+          "missingCells": 38139,
+          "minimum": 0.009999999776482582,
+          "maximum": 1096.1099853515625
+        },
+        {
+          "id": "m-06",
+          "month": 6,
+          "label": "6月",
+          "validCells": 14725,
+          "zeroCells": 2,
+          "missingCells": 38139,
+          "minimum": 0,
+          "maximum": 2129.6201171875
+        },
+        {
+          "id": "m-07",
+          "month": 7,
+          "label": "7月",
+          "validCells": 14725,
+          "zeroCells": 191,
+          "missingCells": 38139,
+          "minimum": 0,
+          "maximum": 2174.85009765625
+        },
+        {
+          "id": "m-08",
+          "month": 8,
+          "label": "8月",
+          "validCells": 14725,
+          "zeroCells": 230,
+          "missingCells": 38139,
+          "minimum": 0,
+          "maximum": 1449.0999755859375
+        },
+        {
+          "id": "m-09",
+          "month": 9,
+          "label": "9月",
+          "validCells": 14725,
+          "zeroCells": 80,
+          "missingCells": 38139,
+          "minimum": 0,
+          "maximum": 905.5499877929688
+        },
+        {
+          "id": "m-10",
+          "month": 10,
+          "label": "10月",
+          "validCells": 14725,
+          "zeroCells": 0,
+          "missingCells": 38139,
+          "minimum": 0.41999998688697815,
+          "maximum": 388.80999755859375
+        },
+        {
+          "id": "m-11",
+          "month": 11,
+          "label": "11月",
+          "validCells": 14725,
+          "zeroCells": 0,
+          "missingCells": 38139,
+          "minimum": 0.14000000059604645,
+          "maximum": 387.69000244140625
+        },
+        {
+          "id": "m-12",
+          "month": 12,
+          "label": "12月",
+          "validCells": 14725,
+          "zeroCells": 0,
+          "missingCells": 38139,
+          "minimum": 0.11999999731779099,
+          "maximum": 418.69000244140625
+        }
+      ],
+      "countryCoverage": [
+        {
+          "code": "AFG",
+          "sourceCellCenters": 1001,
+          "completeSourceCellCenters": 1001
+        },
+        {
+          "code": "BGD",
+          "sourceCellCenters": 194,
+          "completeSourceCellCenters": 194
+        },
+        {
+          "code": "BTN",
+          "sourceCellCenters": 59,
+          "completeSourceCellCenters": 59
+        },
+        {
+          "code": "IND",
+          "sourceCellCenters": 4466,
+          "completeSourceCellCenters": 4466
+        },
+        {
+          "code": "KAZ",
+          "sourceCellCenters": 5264,
+          "completeSourceCellCenters": 5262
+        },
+        {
+          "code": "KGZ",
+          "sourceCellCenters": 347,
+          "completeSourceCellCenters": 347
+        },
+        {
+          "code": "LKA",
+          "sourceCellCenters": 85,
+          "completeSourceCellCenters": 85
+        },
+        {
+          "code": "MDV",
+          "sourceCellCenters": 0,
+          "completeSourceCellCenters": 0
+        },
+        {
+          "code": "NPL",
+          "sourceCellCenters": 215,
+          "completeSourceCellCenters": 215
+        },
+        {
+          "code": "PAK",
+          "sourceCellCenters": 1306,
+          "completeSourceCellCenters": 1306
+        },
+        {
+          "code": "TJK",
+          "sourceCellCenters": 234,
+          "completeSourceCellCenters": 234
+        },
+        {
+          "code": "TKM",
+          "sourceCellCenters": 786,
+          "completeSourceCellCenters": 786
+        },
+        {
+          "code": "UZB",
+          "sourceCellCenters": 774,
+          "completeSourceCellCenters": 770
+        }
+      ],
+      "unresolvedCountries": [
+        "MDV"
+      ],
+      "sourceSamples": [
+        {
+          "name": "New Delhi",
+          "locator": [
+            77.21,
+            28.61
+          ],
+          "sourceCell": {
+            "row": 245,
+            "column": 1028,
+            "center": [
+              77.125,
+              28.625
+            ]
+          },
+          "cellCenterIsTargetLand": true,
+          "rawMonthlyNormals": [
+            19.219999313354492,
+            23.84000015258789,
+            19.559999465942383,
+            12.460000038146973,
+            33.81999969482422,
+            83.0999984741211,
+            195.63999938964844,
+            221.50999450683594,
+            126.70999908447266,
+            14.619999885559082,
+            4,
+            7.5
+          ],
+          "deliveredMonthlyNormals": [
+            19.219999313354492,
+            23.84000015258789,
+            19.559999465942383,
+            12.460000038146973,
+            33.81999969482422,
+            83.0999984741211,
+            195.63999938964844,
+            221.50999450683594,
+            126.70999908447266,
+            14.619999885559082,
+            4,
+            7.5
+          ],
+          "flippedLatitudeMonthlyNormals": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "meaning": "Location labels identify grid-cell locators, not city-average precipitation."
+        },
+        {
+          "name": "Dhaka",
+          "locator": [
+            90.41,
+            23.81
+          ],
+          "sourceCell": {
+            "row": 264,
+            "column": 1081,
+            "center": [
+              90.375,
+              23.875
+            ]
+          },
+          "cellCenterIsTargetLand": true,
+          "rawMonthlyNormals": [
+            7.860000133514404,
+            20.899999618530273,
+            50.33000183105469,
+            126.70999908447266,
+            262.5,
+            337.4100036621094,
+            379.260009765625,
+            304.3999938964844,
+            276.6000061035156,
+            168.0800018310547,
+            22.809999465942383,
+            8.649999618530273
+          ],
+          "deliveredMonthlyNormals": [
+            7.860000133514404,
+            20.899999618530273,
+            50.33000183105469,
+            126.70999908447266,
+            262.5,
+            337.4100036621094,
+            379.260009765625,
+            304.3999938964844,
+            276.6000061035156,
+            168.0800018310547,
+            22.809999465942383,
+            8.649999618530273
+          ],
+          "flippedLatitudeMonthlyNormals": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "meaning": "Location labels identify grid-cell locators, not city-average precipitation."
+        },
+        {
+          "name": "Tashkent",
+          "locator": [
+            69.24,
+            41.3
+          ],
+          "sourceCell": {
+            "row": 194,
+            "column": 996,
+            "center": [
+              69.125,
+              41.375
+            ]
+          },
+          "cellCenterIsTargetLand": true,
+          "rawMonthlyNormals": [
+            54.150001525878906,
+            69.51000213623047,
+            68.45999908447266,
+            66.19999694824219,
+            43.79999923706055,
+            16.459999084472656,
+            3.9800000190734863,
+            2.1500000953674316,
+            5.079999923706055,
+            23.6299991607666,
+            51.95000076293945,
+            59.68000030517578
+          ],
+          "deliveredMonthlyNormals": [
+            54.150001525878906,
+            69.51000213623047,
+            68.45999908447266,
+            66.19999694824219,
+            43.79999923706055,
+            16.459999084472656,
+            3.9800000190734863,
+            2.1500000953674316,
+            5.079999923706055,
+            23.6299991607666,
+            51.95000076293945,
+            59.68000030517578
+          ],
+          "flippedLatitudeMonthlyNormals": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "meaning": "Location labels identify grid-cell locators, not city-average precipitation."
+        }
+      ],
+      "maskSha256": "4a090bb76ed7f14db4c368d343f114cfa1ba8ba17c72021b560babc0df483c82"
+    }
+  }
+}

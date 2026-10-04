@@ -676,7 +676,7 @@ test('事例の選択・比較・復帰・別地点選択を実コントロー�
   await until(()=>q('[data-farming-value]').textContent.includes('123.4'),'scene numeric value');
   assert.equal(q('[data-place-story-body]').hidden,false);assert.match(q('[data-place-story-text]').textContent,/灌漑/);
   assert.equal(new URL(window.location.href).searchParams.get('story'),'north-china-wheat');
-  q('[data-place-story-bridges] button').click();assert.equal(new URL(window.location.href).searchParams.get('topic'),'precipitation');assert.equal(q('[data-place-reading]').hidden,true);
+  q('[data-place-story-bridges] button[data-place-bridge-topic="precipitation"]').click();assert.equal(new URL(window.location.href).searchParams.get('topic'),'precipitation');assert.equal(q('[data-place-reading]').hidden,true);
   await until(()=>q('[data-hydrology-value]').textContent.includes('1,534'),'rain comparison loaded');
   assert.equal(new URL(window.location.href).searchParams.has('story'),false);
   q('[data-comparison-back]').click();await until(()=>q('[data-farming-value]').textContent.includes('123.4'),'scene restored');
