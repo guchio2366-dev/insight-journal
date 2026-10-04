@@ -96,6 +96,16 @@ test('a mixed H/P commodity checkbox removes both variants and measure changes c
   q('[data-africa-commodity="wheat"]').click();assert.equal(parameters(window).get('crop'),'wheat');assert.equal(parameters(window).get('agriLayers'),'crop-maize-production,crop-rice-production,livestock-cattle');
   assert.deepEqual(visibleKeys(root),['crop-maize-production','crop-rice-production','livestock-cattle']);
   q('[data-africa-crop-measure="harvested"]').click();assert.equal(parameters(window).get('agriLayers'),'crop-maize-harvested,crop-rice-harvested,livestock-cattle');
+  const retainedLayers=parameters(window).get('agriLayers'),statisticsUrl=new URL(window.location.href);
+  statisticsUrl.searchParams.set('view','statistics');navigate(statisticsUrl.search);
+  assert.equal(root.querySelectorAll('[data-africa-agri-layer]').length,0,'statistics mode exposes no controls implying visible distribution layers');
+  assert.equal(q('.africa-agri-layer-controls'),null);
+  assert.equal(parameters(window).get('crop'),'wheat');assert.equal(parameters(window).get('agriLayers'),retainedLayers);
+  q('[data-africa-commodity="wheat"]').click();
+  assert.equal(parameters(window).get('view'),'distribution');assert.equal(root.querySelectorAll('[data-africa-agri-layer]').length,7);
+  assert.equal(parameters(window).get('crop'),'wheat');assert.equal(parameters(window).get('agriLayers'),retainedLayers);
+  assert.equal(q('[data-africa-commodity="wheat"]').getAttribute('aria-pressed'),'true');
+  assert.deepEqual(visibleKeys(root),['crop-maize-harvested','crop-rice-harvested','livestock-cattle']);
  });
 });
 
