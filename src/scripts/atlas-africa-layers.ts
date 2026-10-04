@@ -6,7 +6,7 @@ import {africaCultureGuides,africaCultureGuideReason} from '../data/atlas/africa
 type Row=Record<string,any>;
 type Feature={type:string;geometry:Row;properties:Row};
 export type AfricaLayerKey={id:string;label:string;color:string;code?:string;description?:string};
-export type AfricaLayerView={key:string;ready:boolean;loading:boolean;error:string;title:string;period:string;unit:string;scope:string;method:string;sourceUrl:string;sourceLabel:string;legend:AfricaLayerKey[];takeaway:string;description:string;guide?:boolean;selectedVisible?:boolean;visibleLayers?:{key:string;title:string;unit:string;color:string;ready:boolean;loading:boolean;error:string}[]};
+export type AfricaLayerView={key:string;ready:boolean;loading:boolean;error:string;title:string;period:string;unit:string;scope:string;method:string;sourceUrl:string;sourceLabel:string;legend:AfricaLayerKey[];takeaway:string;description:string;guide?:boolean;selectedVisible?:boolean;visibleLayers?:{key:string;title:string;unit:string;color:string;ready:boolean;loading:boolean;error:string;period:string;sourceUrl:string;sourceLabel:string}[]};
 type Loaded={value?:any;error?:string;promise?:Promise<void>};
 const SVG='http://www.w3.org/2000/svg';
 export const africaCommodityColors:Record<string,string>={maize:'#b07a12',rice:'#367bb0',wheat:'#9468ae',cassava:'#39836a',cattle:'#b9574d',goats:'#ce7934',sheep:'#55758e'};
@@ -93,7 +93,7 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   const file=layer.file??layer.contours??layer.geometry??(typeof layer.geojson==='string'?layer.geojson:undefined);
   const data=file?request(config.base+file):null;
   const grid=layer.grid?request(config.base+layer.grid,true):null;
-  if(data?.error||grid?.error)return {...view,error:data?.error??grid?.error??'',ready:false};
+  if(data?.error||grid?.error){const failed={...view,error:data?.error??grid?.error??'',ready:false};viewCache.set(key,{manifest,layer,base:config.base,view:failed});return failed;}
   const ready=!!layer.image||!!data?.value;
   const output={...view,ready,loading:!!data?.promise||!!grid?.promise};
   viewCache.set(key,{manifest,layer,base:config.base,view:output,grid:grid?.value});
@@ -117,7 +117,7 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   const agriculture=state.field==='agriculture'&&state.view!=='statistics'&&(state.topic==='farming'||state.topic==='livestock');
   if(!agriculture){if(agriMode){baseGroup.replaceChildren();agriGroups.clear();lastPaint='';}agriMode=false;visibleKeys=[];group=baseGroup;return renderOne(state);}
   if(!agriMode){baseGroup.replaceChildren();lastPaint='';}agriMode=true;
-  const focused=africaAgriFocusedLayer(state),active=africaAgriVisibleLayers(state);visibleKeys=active;
+  const focused=africaAgriFocusedLayer(state);const active:string[]=africaAgriVisibleLayers(state);visibleKeys=active;
   const keys=[...active.filter(key=>key!==focused),focused],multi=active.length>1,views:AfricaLayerView[]=[];
   baseGroup.querySelector('[data-africa-agri-zero-base]')?.remove();if(multi&&active.includes(focused)){const zero=svg('g',{'data-africa-agri-zero-base':focused}) as SVGGElement;baseGroup.prepend(zero);group=zero;lastPaint='';renderOne(state,'zero',false);}
   for(const [key,node]of agriGroups)if(!keys.includes(key)){node.remove();agriGroups.delete(key);}
@@ -125,10 +125,10 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   group=baseGroup;currentKey=focused;
   baseGroup.querySelector('[data-africa-agri-overlays]')?.remove();const overlays=svg('g',{'data-africa-agri-overlays':''}) as SVGGElement;
   if(state.agriOutline&&active.includes(focused))paintFootprint(focused,overlays);paintBorders(state,overlays);baseGroup.append(overlays);
-  const selected=views.find(view=>view.key===focused);return selected?{...selected,error:selected.error||views.find(view=>active.includes(view.key)&&view.error)?.error||'',selectedVisible:active.includes(focused),loading:selected.loading||views.some(view=>active.includes(view.key)&&view.loading),visibleLayers:views.filter(view=>active.includes(view.key)).map(view=>({key:view.key,title:view.title,unit:view.unit,color:africaCommodityColor(view.key),ready:!!viewCache.get(view.key)?.grid,loading:view.loading,error:view.error}))}:null;
+  const selected=views.find(view=>view.key===focused);return selected?{...selected,error:selected.error||views.find(view=>active.includes(view.key)&&view.error)?.error||'',selectedVisible:active.includes(focused),loading:selected.loading||views.some(view=>active.includes(view.key)&&view.loading),visibleLayers:views.filter(view=>active.includes(view.key)).map(view=>({key:view.key,title:view.title,unit:view.unit,color:africaCommodityColor(view.key),ready:!!viewCache.get(view.key)?.grid,loading:view.loading,error:view.error,period:view.period,sourceUrl:view.sourceUrl,sourceLabel:view.sourceLabel}))}:null;
  }
  function inspect(lon:number,lat:number):string {
-  if(agriMode&&(visibleKeys.length!==1||visibleKeys[0]!==currentKey)){const readings=visibleKeys.map(key=>{const row=viewCache.get(key);if(!row?.grid)return `${row?.view.title??key}：読込中`;const value=africaGridValue(row.grid,{...row.manifest,...row.layer},lon,lat);return `${row.view.title}：${value===null?'値なし':`${africaGridValueLabel(value)} ${row.view.unit}`}`;});return readings.length?`${lon.toFixed(2)}°E / ${lat.toFixed(2)}°N（モデル値・数量は合算しません）：${readings.join(' ／ ')}`:'表示品目はすべてOFFです。読み解く品目の選択は保持しています。';}
+  if(agriMode&&(visibleKeys.length!==1||visibleKeys[0]!==currentKey)){const readings=visibleKeys.map(key=>{const row=viewCache.get(key);if(!row?.grid)return `${row?.view.title??key}：${row?.view.error?'取得失敗。再読込できます':'読込中'}`;const value=africaGridValue(row.grid,{...row.manifest,...row.layer},lon,lat);return `${row.view.title}：${value===null?'値なし':`${africaGridValueLabel(value)} ${row.view.unit}`}`;});return readings.length?`${lon.toFixed(2)}°E / ${lat.toFixed(2)}°N（モデル値・数量は合算しません）：${readings.join(' ／ ')}`:'表示品目はすべてOFFです。読み解く品目の選択は保持しています。';}
   const current=viewCache.get(currentKey);if(!current)return 'この地点の分布値はまだ読み込まれていません。';
   const {layer,manifest,view,grid}=current;if(!grid)return '元資料の分類・範囲は凡例と出典で確認できます。';
   const value=africaGridValue(grid,{...manifest,...layer},lon,lat);if(value===null)return 'この表示格子は未収録です。';

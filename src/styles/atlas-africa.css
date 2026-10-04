@@ -17,6 +17,7 @@
 .africa-agri-layer-toggle:has(input:focus-visible){outline:3px solid #bc5c35;outline-offset:2px}
 .africa-agri-layer-toggle input{flex:none;width:18px;height:18px;min-width:18px;margin:0;padding:0;accent-color:#224c59}
 .africa-agri-layer-toggle i{flex:none;width:10px;height:10px;box-sizing:border-box;border:1px solid #6b7a74;background:var(--africa-layer-color,#fff);font-style:normal}
+.africa-agri-reading-swatch{display:inline-block;width:10px;height:10px;margin-right:4px}
 @media(min-width:1200px){.africa-agri-layer-controls{align-self:center;flex-wrap:nowrap;min-height:44px}.africa-agri-layer-group{flex-wrap:nowrap}}
 @media(min-width:960px) and (max-width:1199px){.africa-atlas[data-field=agriculture] .africa-main>.africa-subfields:has(.africa-agri-layer-controls){height:auto;min-height:44px;align-items:center}.africa-agri-layer-controls{flex-basis:100%;margin-left:0}}
 @media(max-width:959px){.africa-agri-layer-controls{flex-basis:100%;margin-left:0}.africa-agri-layer-group{gap:4px}.africa-atlas .africa-agri-layer-toggle{white-space:normal}}

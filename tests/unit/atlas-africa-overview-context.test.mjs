@@ -3,11 +3,11 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {transform} from 'esbuild';
 import {Window} from 'happy-dom';
-import {readState,writeState,cropChoices,livestockChoices,cropMeasureChoices} from '../../src/data/atlas/africa-atlas.ts';
+import {readState,writeState,cropChoices,livestockChoices,cropMeasureChoices,canonicalAgriLayers,agriLayerKeys} from '../../src/data/atlas/africa-atlas.ts';
 
 const mapController=await readFile('src/scripts/atlas-africa-overview-map.ts','utf8');
-const pageController=(await readFile('src/scripts/atlas-africa-overview.ts','utf8')).replace(/^import \{(?:initAfricaOverviewMap|cropChoices,livestockChoices,cropMeasureChoices)\} from ['"][^'"]+['"];?\r?\n/gm,'');
-const choices=`const cropChoices=${JSON.stringify(cropChoices)},livestockChoices=${JSON.stringify(livestockChoices)},cropMeasureChoices=${JSON.stringify(cropMeasureChoices)};`;
+const pageController=(await readFile('src/scripts/atlas-africa-overview.ts','utf8')).replace(/^import \{[^}]+\} from ['"](?:\.\/atlas-africa-overview-map|\.\.\/data\/atlas\/africa-atlas)['"];?\r?\n/gm,'');
+const choices=`const cropChoices=${JSON.stringify(cropChoices)},livestockChoices=${JSON.stringify(livestockChoices)},cropMeasureChoices=${JSON.stringify(cropMeasureChoices)},agriLayerKeys=${JSON.stringify(agriLayerKeys)},canonicalAgriLayers=${canonicalAgriLayers.toString()};`;
 const controller=(await transform(choices+'\n'+mapController+'\n'+pageController+'\nglobalThis.africaOverviewTest={initAfricaOverview};',{loader:'ts',format:'iife'})).code;
 
 function page(search){
@@ -70,5 +70,29 @@ test('Africa overview keeps commodity and comparison source state after country 
   const changed=fieldQuery(w,'agriculture');assert.equal(changed.get('place'),'TZA');assert.equal(changed.has('compare'),false);assert.equal(changed.get('crop'),'cassava');assert.equal(changed.get('cropMeasure'),'production');assert.equal(changed.get('livestock'),'sheep');
   w.history.replaceState(null,'','?place=NGA&field=agriculture&topic=livestock&crop=wheat&cropMeasure=harvested&livestock=goats');w.dispatchEvent(new w.PopStateEvent('popstate'));
   const restored=fieldQuery(w,'agriculture');assert.equal(restored.get('topic'),'livestock');assert.equal(restored.get('crop'),'wheat');assert.equal(restored.get('cropMeasure'),'harvested');assert.equal(restored.get('livestock'),'goats');
+ }finally{await w.happyDOM.close();}
+});
+
+test('Africa overview retains mixed layers, explicit all-off and outline state through every field and back',async()=>{
+ for(const layers of ['livestock-goats,crop-rice-production,crop-maize-production',''])for(const outline of [false,true]){
+  const canonical=canonicalAgriLayers(layers),q=new URLSearchParams({place:'NGA',field:'agriculture',topic:'farming',crop:'rice',cropMeasure:'production',livestock:'goats',agriLayers:layers});if(outline)q.set('agriOutline','1');
+  const w=page('?'+q);
+  try{
+   for(const field of ['overview','agriculture','nature','industry','population']){
+    const out=fieldQuery(w,field);assert.equal(out.has('agriLayers'),true);assert.equal(out.get('agriLayers'),canonical);assert.equal(out.get('agriOutline'),outline?'1':null);
+    if(field!=='overview'){const state=readState('?'+out);assert.equal(state.agriLayers,canonical);assert.equal(state.agriOutline,outline);assert.equal(state.crop,'rice');assert.equal(state.livestock,'goats');}
+   }
+   const state=readState('?'+fieldQuery(w,'agriculture')),back=page(writeState(state,new URL('https://example.com/insight-journal/atlas/africa/overview/')).search);
+   try{const restored=fieldQuery(back,'agriculture');assert.equal(restored.has('agriLayers'),true);assert.equal(restored.get('agriLayers'),canonical);assert.equal(restored.get('agriOutline'),outline?'1':null);assert.equal(restored.get('crop'),'rice');assert.equal(restored.get('cropMeasure'),'production');assert.equal(restored.get('livestock'),'goats');}
+   finally{await back.happyDOM.close();}
+  }finally{await w.happyDOM.close();}
+ }
+});
+
+test('Africa overview changes country without turning all-off back on and restores mixed layers on popstate',async()=>{
+ const w=page('?place=NGA&field=agriculture&crop=rice&agriLayers=&agriOutline=1');
+ try{
+  const picker=w.document.querySelector('[data-ao-country]');picker.value='TZA';picker.dispatchEvent(new w.Event('change',{bubbles:true}));const changed=fieldQuery(w,'agriculture');assert.equal(changed.get('place'),'TZA');assert.equal(changed.has('agriLayers'),true);assert.equal(changed.get('agriLayers'),'');assert.equal(changed.get('agriOutline'),'1');assert.equal(changed.get('crop'),'rice');
+  w.history.replaceState(null,'','?place=NGA&field=agriculture&crop=wheat&agriLayers=livestock-sheep,crop-wheat-harvested');w.dispatchEvent(new w.PopStateEvent('popstate'));const restored=fieldQuery(w,'agriculture');assert.equal(restored.get('agriLayers'),'crop-wheat-harvested,livestock-sheep');assert.equal(restored.has('agriOutline'),false);assert.equal(restored.get('crop'),'wheat');
  }finally{await w.happyDOM.close();}
 });

@@ -28,6 +28,7 @@ export function initializeAfricaAtlas() {
   function renderTopics(){
   const items=topicItems[state.field];
   const topic=state.topic;
+  const focused=root!.ownerDocument.activeElement,focusLayer=focused?.getAttribute('data-africa-agri-layer'),focusOutline=focused?.hasAttribute('data-africa-agri-outline');
   const nav=query<HTMLElement>('[data-africa-subfields]');nav.replaceChildren();
   nav.setAttribute('aria-label',state.field==='industry'?'収録済みの主要産業を選ぶ':'分野内の項目');
   root!.querySelectorAll('.africa-main>.africa-subitems').forEach(row=>row.remove());
@@ -37,9 +38,9 @@ export function initializeAfricaAtlas() {
    for(const theme of themes.filter(t=>t.field==='industry')){const button=make('button',labels[theme.id]??theme.title) as HTMLButtonElement;button.type='button';button.dataset.theme=theme.id;button.title=theme.title;button.setAttribute('aria-pressed',String(state.theme===theme.id));nav.append(button);}
   }else for(const [id,label] of items){const button=make('button',label) as HTMLButtonElement;button.type='button';button.dataset.africaTopic=id;button.setAttribute('aria-pressed',String(topic===id));nav.append(button);}
   if(state.field==='agriculture'&&topic!=='forestry'){
-   const host=make('div');host.className='africa-agri-layer-controls';host.setAttribute('role','group');host.setAttribute('aria-label','表示する品目');const visible=africaAgriVisibleLayers(state);
+   const host=make('div');host.className='africa-agri-layer-controls';host.setAttribute('role','group');host.setAttribute('aria-label','表示する品目');const visible:string[]=africaAgriVisibleLayers(state);
    for(const [title,choices,crop] of [['作物',cropChoices,true],['畜産',livestockChoices,false]] as const){const group=make('fieldset');group.className='africa-agri-layer-group';const legend=make('legend',title);legend.hidden=true;group.append(legend,make('strong',title));for(const row of choices){const key=crop?`crop-${row.id}-${state.cropMeasure}`:`livestock-${row.id}`,label=make('label');label.className='africa-agri-layer-toggle';label.style.setProperty('--africa-layer-color',africaCommodityColor(key));const input=make('input') as HTMLInputElement;input.type='checkbox';input.checked=crop?visible.some(value=>value.startsWith(`crop-${row.id}-`)):visible.includes(key);input.dataset.africaAgriLayer=key;const swatch=make('i');swatch.setAttribute('aria-hidden','true');label.append(input,swatch,make('span',row.label));group.append(label);}host.append(group);}
-   const label=make('label');label.className='africa-agri-layer-toggle';const input=make('input') as HTMLInputElement;input.type='checkbox';input.checked=state.agriOutline;input.dataset.africaAgriOutline='';label.append(input,make('span','選択品目の輪郭'));host.append(label);nav.append(host);
+   const label=make('label');label.className='africa-agri-layer-toggle';const input=make('input') as HTMLInputElement;input.type='checkbox';input.checked=state.agriOutline;input.dataset.africaAgriOutline='';label.append(input,make('span','選択品目の輪郭'));host.append(label);nav.append(host);if(focusLayer||focusOutline)host.querySelector<HTMLInputElement>(focusOutline?'[data-africa-agri-outline]':`[data-africa-agri-layer="${focusLayer}"]`)?.focus({preventScroll:true});
   }
   if(state.field==='industry'||state.field==='population'){
    nav.setAttribute('aria-label',state.field==='industry'?'実例の主要産業を選ぶ':'人口分布・掲載集団の事例を選ぶ');
@@ -169,10 +170,11 @@ export function initializeAfricaAtlas() {
    const layers=actual.visibleLayers,hidden=actual.selectedVisible===false;
    const mode=layers.length>1||hidden&&layers.length>0?'選択品目は数量の色分け、他品目は半透明の色別正値分布。重なりは選択品目を手前に表示し、重なった色は数量や合計を表しません。':'輪郭は選択品目のモデル値が0より大きい格子の範囲です。';
    const warning=hidden?layers.length?'読み解く品目はOFFです。表示チェックでONにできます。':'表示品目はすべてOFFです。読み解く品目の選択は保持しています。':'';
-   if(warning)text('[data-africa-point-reading]',warning);
+   if(warning)text('[data-africa-point-reading]',warning+(state.layerPoint?` ${layerRenderer.inspect(point[0],point[1])}`:''));
    if(hidden)text('[data-africa-layer-caption]',`${actual.title}（表示OFF）・${actual.period}・${actual.unit}`);
+   text('[data-africa-layer-scope]',layers.length>1||hidden&&layers.length>0?'数量凡例は選択品目用。他品目は半透明の正値分布。重なり色は合計を表しません。0と値なしは別です。':state.agriOutline&&!hidden?'モデル推計。輪郭は正値域を示します。0と値なしは別です。':'モデル推計。0と値なしは別です。');
    query<HTMLElement>('[data-theme-details]').append(make('p',mode));
-   for(const layer of layers){const p=make('p',`${layer.title}・${layer.unit}${layer.key===actual.key?'（数量の凡例は上記）':'（品目色は正値の分布、濃淡から数量を比較しません）'}`);const swatch=make('i');swatch.style.background=layer.color;swatch.className='africa-agri-reading-swatch';p.prepend(swatch);query<HTMLElement>('[data-theme-details]').append(p);}
+   for(const layer of layers){const p=make('p',`${layer.title}・${layer.period}・${layer.unit}${layer.key===actual.key?'（数量の凡例は上記）':'（品目色は正値の分布、濃淡から数量を比較しません）'}`);const swatch=make('i');swatch.style.background=layer.color;swatch.className='africa-agri-reading-swatch';p.prepend(swatch);if(layer.key!==actual.key&&layer.sourceUrl){const link=make('a',layer.sourceLabel) as HTMLAnchorElement;link.href=layer.sourceUrl;p.append(make('span',' ・ '),link);}query<HTMLElement>('[data-theme-details]').append(p);}
   }
  }
  function renderComparisonOverlay(metric:Metric){
