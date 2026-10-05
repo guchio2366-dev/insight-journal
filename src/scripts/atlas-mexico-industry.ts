@@ -1,4 +1,4 @@
-import {industryExportColor,industryValueText,industryComparisonUrl,industryPopulationReturnUrl,readMexicoIndustryState,writeMexicoIndustryState,mexicoIndustryStatusLabels,mexicoIndustrySectors,mexicoIndustryMetricChoices,type MexicoIndustryMetric,type MexicoIndustryState,type MexicoIndustryValue} from '../lib/atlas-mexico-industry';
+import {industryExportColor,industryValueText,industryComparisonUrl,industryPopulationReturnUrl,readMexicoIndustryState,writeMexicoIndustryState,isMexicoIndustryPairMetric,mexicoIndustryStatusLabels,mexicoIndustrySectors,mexicoIndustryMetricChoices,type MexicoIndustryMetric,type MexicoIndustryState,type MexicoIndustryValue} from '../lib/atlas-mexico-industry';
 import {formatMexicoDensity,formatMexicoPopulation,mexicoDensityColor,mexicoPopulationRadius,mexicoPopulationSymbolColor,mexicoPopulationSymbolOpacity,mexicoPopulationSymbolStroke,mexicoPopulationSelectedSymbolStroke,mexicoPopulationSelectedSymbolOpacity,type MexicoPopulationRow} from '../lib/atlas-mexico-population';
 
 type IndustryRow={id:string;values:Record<MexicoIndustryMetric,MexicoIndustryValue>};
@@ -14,6 +14,7 @@ export function initMexicoIndustry(root:HTMLElement):void {
  const stateIds=config.data.states.map(s=>s.id),places=new Map(config.data.states.map(s=>[s.id,s])),rows=new Map(config.data.rows.map(r=>[r.id,r])),population=new Map(config.population.states.map(r=>[r.stateCode,r]));
  const selection=(url:URL)=>{const value=readMexicoIndustryState(url,stateIds),choice=mexicoIndustryMetricChoices.find(m=>m.id===value.metric)!;if(!value.sector){value.sector=url.searchParams.has('metric')||value.compare?choice.sector as MexicoIndustryState['sector']:'all';value.subsector=value.sector!=='all'?value.metric:'all';}if(value.compare){value.sector=choice.sector as MexicoIndustryState['sector'];value.subsector=value.metric;}return value;};
  let state=selection(new URL(window.location.href));
+ const cameraViews=new WeakMap<SVGSVGElement,string>();
  const one=<T extends Element=HTMLElement>(selector:string)=>root.querySelector<T>(selector);
  const all=<T extends Element=HTMLElement>(selector:string)=>Array.from(root.querySelectorAll<T>(selector));
  const text=(selector:string,value:string)=>{for(const el of all(selector))el.textContent=value;};
@@ -83,6 +84,7 @@ export function initMexicoIndustry(root:HTMLElement):void {
  }
 
  function render():void {
+  applyCamera();
   const selected=places.get(state.state)!,comparison=state.compare!==null,popComparison=state.compare==='population';
   root.classList.toggle('is-comparison',comparison);root.dataset.miRenderer=state.fallback?'static-fallback':'svg';root.dataset.miCompare=state.compare??'none';root.dataset.miSelected=state.state;root.dataset.miSourceState=state.sourceState;
   one('[data-mi-map-grid]')!.classList.toggle('mi-comparison-grid',comparison);
@@ -106,7 +108,7 @@ export function initMexicoIndustry(root:HTMLElement):void {
   text('[data-mi-selected-place-text]',state.subsector==='all'?broad:fine);
   show('[data-mi-selected-place-reading]',!comparison&&state.sector!=='all');
   show('[data-mi-sector-legend]',!comparison);show('[data-mi-geography-scope]',!comparison&&(state.sector==='all'||state.subsector==='all'));
-  show('.mi-items',comparison||state.subsector!=='all');show('[data-mi-electronics-link]',comparison||(state.sector==='manufacturing'&&['transport','electronics'].includes(state.subsector!)));
+  show('.mi-items',comparison||state.subsector!=='all');show('[data-mi-electronics-link]',isMexicoIndustryPairMetric(state.metric)&&(comparison||(state.sector==='manufacturing'&&state.subsector!=='all')));
   show('[data-mi-legend-slot="secondary"]',comparison);
   const explanation=popComparison?config.reading.populationComparison:config.reading.comparison;
   text('[data-mi-comparison-title]',explanation.title);text('[data-mi-comparison-lead]',explanation.lead);text('[data-mi-reading-comparison-title]',explanation.title);text('[data-mi-reading-comparison-text]',explanation.text);
@@ -160,7 +162,7 @@ export function initMexicoIndustry(root:HTMLElement):void {
   if(target){event.preventDefault();change({state:target.getAttribute('data-mi-shape')??target.getAttribute('data-mi-population-circle')!});}
  });
  one<HTMLSelectElement>('[data-mi-state-select]')!.addEventListener('change',event=>change({state:(event.target as HTMLSelectElement).value}));
- const chooseMetric=(metric:MexicoIndustryMetric)=>change({metric,sector:mexicoIndustryMetricChoices.find(m=>m.id===metric)!.sector as MexicoIndustryState['sector'],subsector:metric});
+ const chooseMetric=(metric:MexicoIndustryMetric)=>change({metric,sector:mexicoIndustryMetricChoices.find(m=>m.id===metric)!.sector as MexicoIndustryState['sector'],subsector:metric,...(state.compare==='electronics'&&!isMexicoIndustryPairMetric(metric)?{compare:null}:{})});
  one<HTMLSelectElement>('[data-mi-metric]')!.addEventListener('change',event=>chooseMetric((event.target as HTMLSelectElement).value as MexicoIndustryMetric));
  for(const button of all<HTMLButtonElement>('[data-industry-sector]'))button.addEventListener('click',()=>{const sector=button.dataset.industrySector as MexicoIndustryState['sector'],place=config.catalog.sectorReadings[sector!]?.places[0];change({sector,subsector:'all',compare:null,...(place?{state:place.state}:{})});});
  for(const button of all<HTMLButtonElement>('[data-industry-subsector]'))button.addEventListener('click',()=>button.dataset.industrySubsector==='all'?change({sector:button.dataset.ownerSector as MexicoIndustryState['sector'],subsector:'all',compare:null}):chooseMetric(button.dataset.industrySubsector as MexicoIndustryMetric));
@@ -172,11 +174,18 @@ export function initMexicoIndustry(root:HTMLElement):void {
  for(const row of all('[role="tablist"]'))row.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;const tabs=Array.from(row.querySelectorAll<HTMLButtonElement>('[role="tab"]')),index=tabs.indexOf(event.target as HTMLButtonElement);if(index<0)return;event.preventDefault();const next=event.key==='Home'?0:event.key==='End'?tabs.length-1:(index+(event.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;tabs[next].click();tabs[next].focus();});
  one<HTMLAnchorElement>('a[href="#mi-statistics"]')?.addEventListener('click',()=>{one<HTMLDetailsElement>('#mi-statistics')!.open=true;});
  one<HTMLSelectElement>('[data-mi-source-view]')!.addEventListener('change',event=>change({sourceView:(event.target as HTMLSelectElement).value as 'density'|'population'}));
- const applyCamera=()=>{for(const svg of all<SVGSVGElement>('[data-mi-map]'))svg.setAttribute('viewBox',state.zoom&&(svg.dataset.miMap==='primary'||state.compare==='electronics')?config.views[state.state]:config.mapViewBox);};
+ function applyCamera(force=false):void {
+  for(const svg of all<SVGSVGElement>('[data-mi-map]')) {
+   const view=state.zoom&&(svg.dataset.miMap==='primary'||state.compare==='electronics')?config.views[state.state]:config.mapViewBox;
+   // Preserve the current frame while an unzoomed selection keeps the same camera.
+   if(force||cameraViews.get(svg)!==view)svg.setAttribute('viewBox',view);
+   cameraViews.set(svg,view);
+  }
+ }
  one<HTMLInputElement>('[data-mi-only]')!.addEventListener('change',event=>change({only:(event.target as HTMLInputElement).checked}));
- one<HTMLButtonElement>('[data-mi-zoom]')!.addEventListener('click',()=>{change({zoom:!state.zoom});applyCamera();resizeLabels();});
- one<HTMLButtonElement>('[data-mi-all]')!.addEventListener('click',()=>{change({only:false,zoom:false});applyCamera();resizeLabels();});
+ one<HTMLButtonElement>('[data-mi-zoom]')!.addEventListener('click',()=>change({zoom:!state.zoom}));
+ one<HTMLButtonElement>('[data-mi-all]')!.addEventListener('click',()=>{change({only:false,zoom:false});applyCamera(true);resizeLabels();});
  window.addEventListener('popstate',()=>{state=selection(new URL(window.location.href));render();});
  const observer=new ResizeObserver(resizeLabels);for(const svg of all<SVGSVGElement>('[data-mi-map]'))observer.observe(svg);
- root.dataset.miInitialized='true';applyCamera();render();
+ root.dataset.miInitialized='true';render();
 }

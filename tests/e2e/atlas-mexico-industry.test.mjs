@@ -25,25 +25,26 @@ test('US sector and supported-field navigation opens visible geographic readings
   assert.equal(visible(d,'primary','[data-mi-reading-markers] [data-mi-region-option]').length,10);
   assert.equal(new Set(visible(d,'primary','[data-mi-reading-markers] [data-mi-region-option]').map(point=>point.dataset.miRegionOption)).size,9);
   for(const sector of mexicoIndustrySectors){
-   q(`[data-industry-sector="${sector.id}"]`).click();assert.equal(q('[data-industry-sector][aria-selected=true]').dataset.industrySector,sector.id);
+   q(`[role=tab][data-industry-sector="${sector.id}"]`).click();assert.equal(q('[data-industry-sector][aria-selected=true]').dataset.industrySector,sector.id);
    assert.equal(q('[data-mi-industry-panel]:not([hidden])').dataset.miIndustryPanel,`${sector.id}:all`);assert.equal(map.getAttribute('viewBox'),'60 50 790 500');
    if(catalog.sectorReadings[sector.id])assert.equal(q('[data-mi-selected-place-text]').textContent,catalog.sectorReadings[sector.id].places[0].text);
    assert.equal(q('[data-mi-electronics-link]').hidden,true);
   }
   for(const metric of mexicoIndustryMetricChoices){
-   q(`[data-industry-sector="${metric.sector}"]`).click();q(`[data-mi-metric-button="${metric.id}"]`).click();
+   q(`[role=tab][data-industry-sector="${metric.sector}"]`).click();q(`[data-mi-metric-button="${metric.id}"]`).click();
    assert.equal(q('[data-mi-industry-panel]:not([hidden])').dataset.miIndustryPanel,`${metric.sector}:${metric.id}`);
    assert.equal(q(`[data-mi-metric-button="${metric.id}"]`).getAttribute('aria-selected'),'true');assert.equal(q(`[data-mi-metric-button="${metric.id}"]`).tabIndex,0);
    assert.equal(new URL(w.location).searchParams.get('sector'),metric.sector);assert.equal(new URL(w.location).searchParams.get('subsector'),metric.id);assert.equal(map.getAttribute('viewBox'),'60 50 790 500');
+   const mapPlace=q(`[data-mi-reading-markers] [data-mi-region-metric="${metric.id}"]:not([hidden])`);assert.ok(mapPlace);mapPlace.querySelector('text').dispatchEvent(new w.MouseEvent('click',{bubbles:true}));assert.equal(q('[data-mi-state-select]').value,mapPlace.dataset.miRegionOption);assert.equal(new URL(w.location).searchParams.get('sector'),metric.sector);assert.equal(new URL(w.location).searchParams.get('subsector'),metric.id);
    const panel=q('[data-mi-industry-panel]:not([hidden])'),place=panel.querySelector('[data-mi-region-option]');assert.ok(place);assert.ok(!place.closest('[hidden]'));
    place.click();assert.equal(q('[data-mi-state-select]').value,place.dataset.miRegionOption);assert.ok(q('[data-mi-selected-place-name]').textContent.includes(place.textContent.replace('を地図で見る','')));
-   q('[data-mi-statistics]');q('a[href="#mi-statistics"]').click();assert.equal(q('#mi-statistics').open,true);
+   q('a[href="#mi-statistics"]').click();assert.equal(q('#mi-statistics').open,true);
    const source=q('[data-mi-map=primary]');assert.equal(source.getAttribute('viewBox'),'60 50 790 500');
    const cmp=new URL(q('[data-mi-population-link]').href),params=cmp.searchParams;assert.equal(params.get('sector'),metric.sector);assert.equal(params.get('subsector'),metric.id);
    const cmpWindow=await page(cmp.search);try{const cd=cmpWindow.document,heading=cd.querySelector('[data-mi-map-heading=primary]').textContent,back=new URL(cd.querySelector('[data-mi-return]').href);assert.equal(back.searchParams.get('sector'),metric.sector);assert.equal(back.searchParams.get('subsector'),metric.id);assert.equal(back.searchParams.get('metric'),metric.id);if(catalog.metrics.find(m=>m.id===metric.id)){for(const code of catalog.metrics.find(m=>m.id===metric.id).sourceCodes)assert.ok(heading.includes(code));assert.equal(cd.querySelector('[data-mi-selected-place-text]').textContent,catalog.metrics.find(m=>m.id===metric.id).reading.text);}}finally{await cmpWindow.happyDOM.close();}
-   panel.querySelector('[data-industry-overview]').click();assert.equal(q('[data-mi-industry-panel]:not([hidden])').dataset.miIndustryPanel,`${metric.sector}:all`);assert.equal(d.activeElement,q(`[data-industry-sector="${metric.sector}"]`));
+   panel.querySelector('[data-industry-overview]').click();assert.equal(q('[data-mi-industry-panel]:not([hidden])').dataset.miIndustryPanel,`${metric.sector}:all`);assert.equal(d.activeElement?.id,`mi-sector-${metric.sector}`,'Overview focuses the active sector tab');
   }
-  q('[data-industry-sector=manufacturing]').click();q('[data-mi-metric-button=electronics]').click();
+  q('[role=tab][data-industry-sector=manufacturing]').click();q('[data-mi-metric-button=electronics]').click();
   assert.match(q('[data-mi-industry-panel]:not([hidden])').textContent,/半導体だけの輸出額ではありません/);
   q('#mi-description').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));assert.equal(q('[data-mi-industry-panel]:not([hidden])').dataset.miIndustryPanel,'manufacturing:all');
   q('[data-mi-metric-button=transport]').click();reload=await page(w.location.search);assert.equal(reload.document.querySelector('[data-mi-industry-panel]:not([hidden])').dataset.miIndustryPanel,'manufacturing:transport');
@@ -91,9 +92,9 @@ test('Category buttons keep keyboard, native selection, URL, reload and actual h
   button('transport').click();assertMetric('transport');assert.equal(q('[data-mi-state-select]').value,'14');
   w.history.back();await w.happyDOM.waitUntilComplete();assertMetric('electronics');
   w.history.forward();await w.happyDOM.waitUntilComplete();assertMetric('transport');
-  button('transport').focus();button('transport').dispatchEvent(new w.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));assertMetric('electronics');assert.equal(d.activeElement,button('electronics'));
+  button('transport').focus();button('transport').dispatchEvent(new w.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));assertMetric('electronics');assert.equal(d.activeElement?.getAttribute('data-mi-metric-button'),'electronics','Keyboard selection focuses electronics');
   button('electronics').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Home',bubbles:true}));assert.equal(q('[data-mi-industry-panel]:not([hidden])').dataset.miIndustryPanel,'manufacturing:all');
-  q('[data-industry-subtabs=manufacturing] [data-industry-subsector=all]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'End',bubbles:true}));assert.equal(q('[data-industry-subsector=machinery]').getAttribute('aria-selected'),'true');
+  q('[data-industry-subtabs=manufacturing] [data-industry-subsector=all]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'End',bubbles:true}));assert.equal(q('[role=tab][data-industry-subsector=machinery]').getAttribute('aria-selected'),'true');
   change(w,'[data-mi-metric]','transport');assertMetric('transport');
   reload=await page(w.location.search);assert.equal(reload.document.querySelector('[data-mi-metric-button=transport]').getAttribute('aria-selected'),'true');assert.equal(reload.document.querySelector('[data-mi-state-select]').value,'14');
  }finally{await w.happyDOM.close();if(reload)await reload.happyDOM.close();}
@@ -143,6 +144,79 @@ test('Population source state and named return survive changing the industry tar
    w.history.back();await w.happyDOM.waitUntilComplete();assert.equal(q('[data-mi-state-select]').value,'09');assertReturn(w.document);
    w.history.forward();await w.happyDOM.waitUntilComplete();assert.equal(q('[data-mi-state-select]').value,'05');assertReturn(w.document);
   }finally{await w.happyDOM.close();if(reload)await reload.happyDOM.close();}
+ }
+});
+
+test('Changing to other fields exits the two-industry comparison without inventing a new comparison explanation',async()=>{
+ const w=await page('?compare=electronics&state=14&metric=transport&only=1&zoom=1');
+ try{
+  const q=s=>w.document.querySelector(s);
+  const assertPair=metric=>{
+   assert.equal(new URL(w.location).searchParams.get('compare'),'electronics');
+   assert.equal(q('[data-mi-map=primary]').dataset.miKind,metric);assert.equal(q('[data-mi-map=secondary]').dataset.miKind,metric==='transport'?'electronics':'transport');
+   assert.equal(q('[data-mi-figure=secondary]').hidden,false);assert.equal(q('[data-mi-reading-comparison]').hidden,false);
+  };
+  const assertNormal=metric=>{
+   assert.equal(new URL(w.location).searchParams.has('compare'),false);assert.equal(new URL(w.location).searchParams.get('metric'),metric);
+   assert.equal(q('[data-mi-map=primary]').dataset.miKind,metric);assert.equal(q('[data-mi-figure=secondary]').hidden,true);
+   assert.equal(q('[data-mi-reading-comparison]').hidden,true);assert.equal(q('[data-mi-electronics-link]').hidden,true);
+   assert.equal(q('[data-mi-industry-panel]:not([hidden])').dataset.miIndustryPanel,`manufacturing:${metric}`);
+   assert.equal(q('[data-mi-state-select]').value,'14');assert.equal(q('[data-mi-only]').checked,true);assert.equal(q('[data-mi-zoom]').getAttribute('aria-pressed'),'true');
+  };
+  assertPair('transport');q('[data-mi-metric-button=electronics]').click();assertPair('electronics');
+  q('[data-mi-metric-button=food]').click();assertNormal('food');
+  w.history.back();await w.happyDOM.waitUntilComplete();assertPair('electronics');
+  change(w,'[data-mi-metric]','chemicals');assertNormal('chemicals');
+ }finally{await w.happyDOM.close();}
+ const populationWindow=await page('?compare=population&state=05&metric=food&from=population&sourceState=09&sourceView=population&only=1&zoom=1');
+ try{
+  const q=s=>populationWindow.document.querySelector(s);
+  for(const metric of ['food','chemicals']){
+   change(populationWindow,'[data-mi-metric]',metric);
+   assert.equal(new URL(populationWindow.location).searchParams.get('compare'),'population');assert.equal(q('[data-mi-map=primary]').dataset.miKind,metric);
+   assert.equal(q('[data-mi-map=secondary]').dataset.miKind,'population');assert.equal(q('[data-mi-map=secondary]').getAttribute('viewBox'),'0 0 900 580');
+   assert.equal(q('[data-mi-electronics-link]').hidden,true);assert.equal(new URL(q('[data-mi-electronics-link]').href).searchParams.has('compare'),false);
+   assert.equal(new URL(q('[data-mi-return]').href).searchParams.get('state'),'09');
+  }
+  change(populationWindow,'[data-mi-metric]','electronics');assert.equal(q('[data-mi-electronics-link]').hidden,false);
+  assert.equal(new URL(q('[data-mi-electronics-link]').href).searchParams.get('compare'),'electronics');
+ }finally{await populationWindow.happyDOM.close();}
+ const invalid=await page('?compare=electronics&state=14&metric=food&sector=manufacturing&subsector=food');
+ try{
+  assert.equal(invalid.document.querySelector('[data-mi-map=primary]').dataset.miKind,'food');
+  assert.equal(invalid.document.querySelector('[data-mi-figure=secondary]').hidden,true);
+  assert.equal(invalid.document.querySelector('[data-mi-reading-comparison]').hidden,true);
+  assert.equal(invalid.document.querySelector('[data-mi-electronics-link]').hidden,true);
+ }finally{await invalid.happyDOM.close();}
+});
+
+test('Zoomed state changes and history restore the camera while the population source keeps its national frame',async()=>{
+ for(const compare of ['', 'electronics', 'population']){
+  const w=await page(`?state=05&metric=transport${compare?`&compare=${compare}&from=industry`:''}`);
+  try{
+   const d=w.document,q=s=>d.querySelector(s),config=JSON.parse(q('[data-mi-config]').textContent);
+   const primary=q('[data-mi-map=primary]'),secondary=q('[data-mi-map=secondary]');
+   const assertFrame=(state,zoom)=>{
+    assert.equal(q('[data-mi-state-select]').value,state);
+    assert.equal(q('[data-mi-selected-name]').textContent,data.states.find(item=>item.id===state).name);
+    assert.equal(q('[data-mi-zoom]').getAttribute('aria-pressed'),String(zoom));
+    assert.equal(new URL(w.location).searchParams.get('zoom')==='1',zoom);
+    assert.equal(primary.getAttribute('viewBox'),zoom?config.views[state]:config.mapViewBox);
+    assert.equal(secondary.getAttribute('viewBox'),zoom&&compare==='electronics'?config.views[state]:config.mapViewBox);
+   };
+   assertFrame('05',false);
+   q('[data-mi-zoom]').click();assertFrame('05',true);
+   change(w,'[data-mi-state-select]','14');assertFrame('14',true);
+   q('[data-mi-all]').click();assertFrame('14',false);
+   w.history.back();await w.happyDOM.waitUntilComplete();assertFrame('14',true);
+   w.history.back();await w.happyDOM.waitUntilComplete();assertFrame('05',true);
+   w.history.back();await w.happyDOM.waitUntilComplete();assertFrame('05',false);
+   w.history.forward();await w.happyDOM.waitUntilComplete();assertFrame('05',true);
+   q('[data-mi-all]').click();assertFrame('05',false);
+   primary.setAttribute('viewBox','60 50 790 500');
+   change(w,'[data-mi-state-select]','14');assert.equal(primary.getAttribute('viewBox'),'60 50 790 500');
+   q('[data-mi-all]').click();assertFrame('14',false);
+  }finally{await w.happyDOM.close();}
  }
 });
 

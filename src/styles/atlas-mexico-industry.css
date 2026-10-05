@@ -22,7 +22,7 @@
 .mexico-workspace.mexico-industry .industry-reading-places button{min-height:44px;padding:6px 9px;border:1px solid #bcc9ba;border-radius:4px;background:#edf1e6;color:#294c4d;font:700 12px var(--sans);cursor:pointer}
 .mexico-workspace.mexico-industry .mi-region-marker{cursor:pointer}
 .mexico-workspace.mexico-industry [data-mi-reading-markers] circle{stroke:#fffefa;stroke-width:2;vector-effect:non-scaling-stroke}
-.mexico-workspace.mexico-industry [data-mi-reading-markers] text{font-size:21px;fill:#344951;paint-order:stroke;stroke:#fffefa;stroke-width:4px;stroke-linejoin:round;pointer-events:none}
+.mexico-workspace.mexico-industry [data-mi-reading-markers] text{font-size:21px;fill:#344951;paint-order:stroke;stroke:#fffefa;stroke-width:4px;stroke-linejoin:round;pointer-events:auto;cursor:pointer}
 .mexico-workspace.mexico-industry [data-mi-reading-markers] .is-selected circle{stroke:#a94d32;stroke-width:4px}
 .mexico-workspace.mexico-industry:not(.is-comparison) :is(.mi-state,.mi-country-context path){fill-opacity:.12}
 .mexico-workspace.mexico-industry [data-mi-region-option]:focus-visible{outline:3px solid #a94d32;outline-offset:3px}
@@ -33,8 +33,8 @@
 .mexico-workspace.mexico-industry .mi-map-heading{margin-top:7px;font-size:16px}
 .mexico-workspace.mexico-industry .mi-map-heading span{white-space:normal;overflow-wrap:anywhere}
 @media(min-width:960px){
- .atlas-desktop-shell .mexico-workspace.mexico-industry .mexico-primary-grid{grid-template-columns:minmax(0,7fr) minmax(290px,3fr);gap:14px}
- .atlas-desktop-shell .mexico-workspace.mexico-industry .mexico-map-frame{height:620px;min-height:620px;max-height:620px;aspect-ratio:auto}
- .atlas-desktop-shell .mexico-workspace.mexico-industry .mexico-map-frame .mi-map{height:100%;width:100%;max-height:none;min-height:0}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace.mexico-industry[data-field=industry] .mexico-primary-grid{grid-template-columns:minmax(0,7fr) minmax(290px,3fr);gap:14px}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace.mexico-industry[data-field=industry] .mexico-map-frame{height:620px;min-height:620px;max-height:620px;aspect-ratio:auto}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace.mexico-industry[data-field=industry] .mexico-map-frame .mi-map{height:100%;width:100%;max-height:none;min-height:0}
 }
 @media(max-width:959px){.mexico-workspace.mexico-industry .industry-guide{flex-wrap:wrap}.mexico-workspace.mexico-industry .industry-guide span{flex-basis:100%}}
