@@ -3,3 +3,48 @@
 .industry-context-general>summary{font-weight:700;cursor:pointer}.canada-industry:not(.is-population-comparison) .industry-context-general>summary{display:none}.canada-industry .population-industry-source-map{width:100%;max-height:180px!important;background:#e5f1f3}.is-population-comparison .industry-context-general{border-top:1px solid #bdccba;padding-top:7px}.is-population-comparison .canada-comparison-context{margin-bottom:8px}
 
 @media(min-width:900px){.atlas-desktop-shell .canada-industry .industry-controls select{min-height:32px;padding:4px 7px}.atlas-desktop-shell .canada-industry .canada-map{max-height:clamp(220px,calc(100dvh - 520px),580px)}.atlas-desktop-shell .canada-industry .canada-map text{font-size:34px}.atlas-desktop-shell .canada-industry .industry-place text{font-size:28px}.atlas-desktop-shell .canada-industry .industry-comparison-cards>div{padding:5px 8px}.atlas-desktop-shell .canada-industry .industry-comparison-cards strong{display:inline;font-size:17px;margin:0 0 0 7px}.atlas-desktop-shell .canada-industry .industry-comparison-cards{margin:5px 0 8px}.atlas-desktop-shell .canada-industry .canada-reading{max-height:calc(100dvh - 275px)}}
+
+/* Canada industry follows the US reading order; the other Canadian fields keep their layouts. */
+[data-canada-industry].canada-industry .country-industry-us-navigation{display:block;padding:5px 8px 0;border:1px solid #c7ccbf;border-bottom:0;background:#fbfaf3;min-width:0;margin:0}
+[data-canada-industry] .country-industry-us-navigation .industry-tab-row{display:flex;gap:4px;overflow-x:auto;overscroll-behavior-x:contain;padding-bottom:3px;scrollbar-width:thin}
+[data-canada-industry] .country-industry-us-navigation [role=tab]{flex:none;min-height:44px;padding:8px 15px;border:1px solid transparent;border-radius:4px;background:transparent;color:#344951;font:700 13px/1.3 var(--sans);white-space:nowrap;cursor:pointer}
+[data-canada-industry] .country-industry-us-navigation [role=tab][aria-selected=true]{background:#35515d;color:#fff}
+[data-canada-industry] .industry-guide{display:flex;align-items:center;gap:16px;margin:4px 0 7px;font-size:12px;line-height:1.5}
+[data-canada-industry] .industry-guide>span{margin-right:auto;font-weight:700}
+[data-canada-industry] .industry-guide>a{padding:8px 0;min-height:44px;box-sizing:border-box}
+[data-canada-industry].canada-industry .canada-country-primary .canada-reading{max-height:none;overflow:visible;scrollbar-gutter:auto;font-size:14px;line-height:1.65}
+[data-canada-industry] .industry-selected-header{display:flex;justify-content:space-between;align-items:center;gap:8px;padding-bottom:8px;margin:0 0 9px;border-bottom:1px solid #d4d8cc}
+[data-canada-industry] .industry-selected-header h2{font-size:21px;line-height:1.4;margin:0}
+[data-canada-industry] .industry-selected-header button,[data-canada-industry] .industry-reading-places button,[data-canada-industry] .industry-reading-place,[data-canada-industry] .industry-region-list button{min-height:44px;padding:6px 8px;border:1px solid #bcc9ba;border-radius:4px;background:#edf1e6;color:#294c4d;font:600 14px/1.5 var(--sans);cursor:pointer}
+[data-canada-industry] .industry-reading-places{display:flex;gap:6px;flex-wrap:wrap}
+[data-canada-industry] .canada-takeaway{padding-left:10px;border-left:3px solid #507b72;font-size:14px;line-height:1.65;font-weight:700;margin:0 0 12px}
+[data-canada-industry] .industry-reading h3{font-size:14px;line-height:1.5}
+[data-canada-industry] .industry-reading p{font-size:14px;line-height:1.65}
+[data-canada-industry] .industry-reading details,[data-canada-industry] .industry-definitions{font-size:12px;line-height:1.65}
+[data-canada-industry] summary{min-height:44px;box-sizing:border-box;padding:10px 0;cursor:pointer}
+[data-canada-industry] .industry-related-statistics{border-top:1px solid #d4d8cc;margin-top:14px;padding-top:10px;scroll-margin-top:12px}
+[data-canada-industry] .industry-related-statistics>h2{font-size:16px;line-height:1.5;margin:0 0 7px}
+[data-canada-industry] .industry-statistics-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}
+[data-canada-industry] .industry-statistics-controls label{display:grid;gap:4px;margin:0;font-size:14px;line-height:1.5;min-width:0}
+[data-canada-industry] .industry-statistics-controls select{width:100%;min-width:0;min-height:44px;padding:6px 8px;font-size:14px}
+[data-canada-industry] .industry-map-actions{font-size:14px;line-height:1.5}
+[data-canada-industry] .industry-map-actions button{min-height:44px;font-size:14px;padding:6px 8px}
+[data-canada-industry] .industry-map-actions label{display:flex;align-items:center;gap:5px;min-height:44px;font-size:14px}
+[data-canada-industry] .industry-region-list>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+[data-canada-industry] .industry-region-list button{text-align:left}
+[data-canada-industry] .industry-region-list small{display:block;font-size:12px}
+[data-canada-industry] .industry-region-marker{cursor:pointer}
+[data-canada-industry] .industry-region-marker circle{stroke:white;stroke-width:2;vector-effect:non-scaling-stroke}
+[data-canada-industry].canada-industry .industry-map .industry-region-marker text{font-size:18px;font-weight:700;paint-order:stroke;stroke:#fffefa;stroke-width:4px;stroke-linejoin:round}
+[data-canada-industry] .industry-region-marker[aria-pressed=true] circle{stroke:#b54f2d;stroke-width:4}
+[data-canada-industry] .industry-sector-legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:12px;line-height:1.5}
+[data-canada-industry] .industry-sector-legend>span{display:flex;align-items:center;gap:5px;min-height:24px}
+[data-canada-industry] .industry-sector-legend i{width:10px;height:10px;border-radius:50%;border:1px solid #fff;box-shadow:0 0 0 1px #667d69}
+[data-canada-industry] .industry-key{font-size:12px;line-height:1.65}
+[data-canada-industry] :is(button,select,.industry-region-marker):focus-visible{outline:3px solid #a94d32;outline-offset:2px}
+@media(min-width:960px) and (min-height:600px){
+ [data-canada-industry].canada-industry .canada-country-primary[data-field=industry] .canada-workspace{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px;align-items:start}
+ [data-canada-industry].canada-industry .canada-country-primary[data-field=industry] .canada-map-frame{height:auto;min-height:620px;max-height:none;aspect-ratio:1.55}
+ [data-canada-industry].canada-industry .canada-country-primary .canada-map-frame>.industry-map{height:100%;max-height:none;aspect-ratio:1.55}
+}
+@media(max-width:959px){[data-canada-industry] .industry-statistics-controls{grid-template-columns:minmax(0,1fr)}[data-canada-industry] .industry-selected-header{align-items:flex-start}[data-canada-industry] .industry-region-list>div{grid-template-columns:minmax(0,1fr)}}

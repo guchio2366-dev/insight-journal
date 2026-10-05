@@ -11,6 +11,17 @@ const geometry=JSON.parse(await readFile('src/data/atlas/canada/industry-geometr
 const manifest=JSON.parse(await readFile(`${assetRoot}/manifest.json`,'utf8'));
 const lib=await import(`data:text/javascript;base64,${Buffer.from(await bundleCanadaSource('src/lib/atlas-canada-industry.ts',{platform:'node',format:'esm'})).toString('base64')}`);
 const hash=b=>createHash('sha256').update(b).digest('hex');
+test('Industry reading URLs validate sector and region and preserve them through a flat natural-conditions comparison',()=>{
+ const ids=data.provinces.map(p=>p.id),source=new URL('https://example.com/insight-journal/atlas/north-america/canada/industry/?sector=manufacturing&region=ontario-manufacturing&year=2024&province=Alberta&metric=mining&compare=Ontario&keep=yes');
+ const state=lib.readCanadaIndustryState(source,data.years,ids);
+ assert.deepEqual(state,{year:2024,province:'Ontario',compare:null,metric:'manufacturing',only:false,zoom:false,sector:'manufacturing',region:'ontario-manufacturing'});
+ const saved=lib.writeCanadaIndustryState(source,state);assert.equal(saved.searchParams.get('keep'),'yes');assert.deepEqual(lib.readCanadaIndustryState(saved,data.years,ids),state);
+ const target=lib.canadaIndustryComparisonUrl(source,new URL('https://example.com/insight-journal/atlas/north-america/canada/nature/?view=water&water=St.+Lawrence'),state);
+ const back=new URL('?'+target.searchParams.get('industryReturn'),source);assert.deepEqual(lib.readCanadaIndustryState(back,data.years,ids),state);assert.equal(back.searchParams.has('keep'),false);assert.equal(back.searchParams.has('industryReturn'),false);
+ for(const region of ['alberta-energy','unknown','https://outside.example/']){const invalid=new URL(source);invalid.searchParams.set('region',region);assert.equal(lib.readCanadaIndustryState(invalid,data.years,ids).region,null);}
+ const invalidSector=new URL(source);invalidSector.searchParams.set('sector','aerospace');const rejected=lib.readCanadaIndustryState(invalidSector,data.years,ids);assert.equal(rejected.sector,undefined);assert.equal(rejected.region,undefined);
+ const invalidWrite=lib.writeCanadaIndustryState(source,{...state,region:'alberta-energy'});assert.equal(invalidWrite.searchParams.has('region'),false);
+});
 const parse=line=>{const cells=[];let value='',quoted=false;for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'){if(quoted&&line[i+1]==='"'){value+='"';i++;}else quoted=!quoted;}else if(c===','&&!quoted){cells.push(value);value='';}else value+=c;}cells.push(value);return cells;};
 
 test('Industry preserves all 156 official current-price shares and original vectors, decimals and flags',async()=>{
