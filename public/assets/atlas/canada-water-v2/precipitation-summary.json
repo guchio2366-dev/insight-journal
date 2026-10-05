@@ -1,0 +1,131 @@
+{
+  "sourceUrl": "https://crd-data-donnees-rdc.ec.gc.ca/CDAS/products/CanGridP_V2/CanGridP_mlyV2_1948-2023.nc",
+  "sourceBytes": 2113147860,
+  "sourceETag": "\"7df413d4-651a328602133\"",
+  "sourceLastModified": "Tue, 12 May 2026 18:37:39 GMT",
+  "period": "1991-01 through 2020-12",
+  "definition": "Mean annual total precipitation: rain plus frozen precipitation water equivalent; interpolated adjusted and homogenized station data, not individual station observations.",
+  "method": "Mean each calendar month across all30 years, requiring all30 values finite, nonnegative and different from source fill -999; annual total is sum of12 valid monthlymeans; retain only source land==1.",
+  "gridShapeXMajor": [
+    621,
+    470
+  ],
+  "sourceFillValue": -999,
+  "sourceLandVariable": "land",
+  "sourceLandValues": [
+    0,
+    1
+  ],
+  "documentedProjection": "Polar stereographic, true at60N, central meridian110W; readme describes approximately10km resolution. Geolocation supplied by 2D latitude/longitude.",
+  "totalGridCells": 291870,
+  "sourceLandCells": 100945,
+  "annualValidLandCells": 100945,
+  "annualMissingLandCells": 0,
+  "allNonLandCellsMasked": true,
+  "annualMinMm": 136.9176470318863,
+  "annualMaxMm": 3986.3944873638015,
+  "landAreaWeightedMeanMm": 635.2709565606218,
+  "landGridAreaKm2": 9882136.270000001,
+  "validLandBboxLonLat": [
+    -140.9955,
+    42.03,
+    -52.6858,
+    83.1182
+  ],
+  "northernValidLandCells": 37855,
+  "northernMissingLandCells": 0,
+  "sourcePrecipitationHasValidNonlandValues": true,
+  "warning": "Precipitation values exist outside land. Apply source land mask before plotting. Do not turn nonland values into coverage; no fabricated fill. Use provided geolocation, not x/y variable misleading degree units. Regional averages require grid-area weighting.",
+  "downloadedPeriodBytes": 840587040,
+  "transferElapsedSeconds": 313.235,
+  "acquiredAtUtc": "2026-10-02T13:22:17.072184+00:00",
+  "monthlyStats": [
+    {
+      "month": 1,
+      "validLandCells": 100945,
+      "minMm": 5.970967105781352,
+      "maxMm": 574.2674811761742
+    },
+    {
+      "month": 2,
+      "validLandCells": 100945,
+      "minMm": 5.607956825955269,
+      "maxMm": 345.6547508810561
+    },
+    {
+      "month": 3,
+      "validLandCells": 100945,
+      "minMm": 6.285992581060444,
+      "maxMm": 412.6259753188514
+    },
+    {
+      "month": 4,
+      "validLandCells": 100945,
+      "minMm": 4.021649463099712,
+      "maxMm": 293.8353806975016
+    },
+    {
+      "month": 5,
+      "validLandCells": 100945,
+      "minMm": 7.4055710446552245,
+      "maxMm": 195.18636721856936
+    },
+    {
+      "month": 6,
+      "validLandCells": 100945,
+      "minMm": 11.929458073086694,
+      "maxMm": 163.6802956203552
+    },
+    {
+      "month": 7,
+      "validLandCells": 100945,
+      "minMm": 13.655755627985751,
+      "maxMm": 163.28593490557338
+    },
+    {
+      "month": 8,
+      "validLandCells": 100945,
+      "minMm": 16.151818130136483,
+      "maxMm": 157.61446410524732
+    },
+    {
+      "month": 9,
+      "validLandCells": 100945,
+      "minMm": 15.915721886130232,
+      "maxMm": 226.42783153571506
+    },
+    {
+      "month": 10,
+      "validLandCells": 100945,
+      "minMm": 13.69952530140097,
+      "maxMm": 402.0619456752589
+    },
+    {
+      "month": 11,
+      "validLandCells": 100945,
+      "minMm": 8.664611766979109,
+      "maxMm": 601.6673315444026
+    },
+    {
+      "month": 12,
+      "validLandCells": 100945,
+      "minMm": 6.487916784013024,
+      "maxMm": 524.8017390484957
+    }
+  ],
+  "yearRangeManifest": "range-manifest.json",
+  "preparedOutputs": {
+    "annual-precipitation-1991-2020-grid.npz": {
+      "bytes": 6772334,
+      "sha256": "414b2978bbeafea9aba6066c866f75a245a801b870243b1b6428c0edc08994d3"
+    },
+    "annual-valid-grid-points.npy": {
+      "bytes": 4037928,
+      "sha256": "c1614bb3f25de52dae59daa05939cd5233edf10299accb65e884862e3fea1afd"
+    },
+    "annual-valid-grid-points.csv.gz": {
+      "bytes": 1495361,
+      "sha256": "05230c91440028ce9c3491c9b97aea3f3e369269c8107e3c9bb57d266c69b5b0"
+    }
+  }
+}

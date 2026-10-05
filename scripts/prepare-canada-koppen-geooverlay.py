@@ -3,10 +3,12 @@
 Offline inputs only. Requires Python 3.12+, NumPy, Pillow and Shapely 2.1+.
 Same-class original 0.1-degree cells are merged without class resampling or
 geometry simplification, then intersected with Canada's cartographic land mask.
+GeoJSON preserves publisher RGB; the manifest uses the existing US display palette.
 """
 from __future__ import annotations
 
 import argparse
+import ast
 import gzip
 import hashlib
 import io
@@ -25,6 +27,9 @@ BOUNDARY_PATH = ROOT / "data-source/atlas/canada/industry/province-boundaries-20
 LAKES_PATH = ROOT / "data-source/atlas/canada/lakes.geojson"
 DATA = ROOT / "data-source/atlas/canada-climate-elevation-v1/beck"
 OUT = ROOT / "public/assets/atlas/canada-climate-elevation-v1"
+PALETTE_REFERENCE = ROOT / "scripts/refine-atlas-nature.py"
+US_LEGEND = ROOT / "public/assets/atlas/nature-v1/climate-legend.json"
+SOURCE_LEGEND = ROOT / "public/assets/atlas/asia-climate-v1/legend.json"
 
 
 def sha(raw):
@@ -46,11 +51,82 @@ def polygon_parts(geometry):
     return len(geometry.geoms) if geometry.geom_type == "MultiPolygon" else (0 if geometry.is_empty else 1)
 
 
+def text_digest(path):
+    return sha(path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n"))
+
+
+def display_palette():
+    """Read all 30 approved US colors without executing its asset generator."""
+    module = ast.parse(PALETTE_REFERENCE.read_text(encoding="utf8"))
+    function = next(node for node in module.body if isinstance(node, ast.FunctionDef) and node.name == "climate")
+    literals = {}
+    for node in function.body:
+        if not isinstance(node, ast.Assign) or not isinstance(node.targets[0], ast.Name):
+            continue
+        name = node.targets[0].id
+        if name not in ("codes", "palette"):
+            continue
+        call = node.value
+        if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Attribute)
+                and call.func.attr == "split" and not call.args and not call.keywords):
+            raise ValueError("US climate palette must use literal split assignments")
+        literals[name] = ast.literal_eval(call.func.value).split()
+    if len(literals.get("codes", [])) != 30 or len(literals.get("palette", [])) != 30 or len(set(literals["codes"])) != 30:
+        raise ValueError("Expected all 30 US climate codes and display colors")
+    colors = dict(zip(literals["codes"], ["#" + color for color in literals["palette"]]))
+    for color in colors.values():
+        if len(color) != 7 or len(bytes.fromhex(color[1:])) != 3:
+            raise ValueError("Invalid US display color")
+    for item in json.loads(US_LEGEND.read_text(encoding="utf8")):
+        if colors.get(item["code"]) != item["color"]:
+            raise ValueError("US display palette differs from its published legend")
+    return colors
+
+
+def apply_display_palette(manifest):
+    """Adapt manifest styling while preserving publisher RGB and all geometry."""
+    colors = display_palette()
+    source = {item["code"]: item for item in json.loads(SOURCE_LEGEND.read_text(encoding="utf8"))}
+    for item in manifest["classes"]:
+        original = source[item["id"]]
+        source_color = item.get("sourceColor", item["color"])
+        if item["code"] != original["id"] or source_color != original["color"]:
+            raise ValueError("Canada class identity or original publisher color differs")
+        item["sourceColor"] = source_color
+        item["color"] = colors[item["id"]]
+    processing = manifest["processing"]
+    script_hash = text_digest(Path(__file__))
+    if processing["scriptSha256"] != script_hash:
+        processing.setdefault("geometryScriptSha256", processing["scriptSha256"])
+    processing["scriptSha256"] = script_hash
+    processing["palette"] = "North America 30-class display palette. Original publisher RGB retained in classes[].sourceColor and GeoJSON properties.color; class IDs, source cells and geometry unchanged."
+    processing["displayPalette"] = {
+        "reference": PALETTE_REFERENCE.relative_to(ROOT).as_posix(),
+        "referenceSha256": text_digest(PALETTE_REFERENCE),
+        "referenceDigestMethod": "UTF-8 text normalized from CRLF/CR to LF",
+        "legend": US_LEGEND.relative_to(ROOT).as_posix(), "legendSha256": sha(US_LEGEND.read_bytes()),
+        "sourceLegend": SOURCE_LEGEND.relative_to(ROOT).as_posix(), "sourceLegendSha256": sha(SOURCE_LEGEND.read_bytes()),
+        "classCount": 30, "colors": colors, "sourceColorField": "classes[].sourceColor",
+        "method": "Reuse the existing US climate() display palette for every code. Only manifest display colors change; publisher definitions, numeric IDs, station samples, masks and the source-colored GeoJSON remain unchanged.",
+    }
+    manifest["version"] = "1.1.0"
+    return manifest
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dependency-dir", type=Path)
     parser.add_argument("--mask-only", action="store_true")
+    parser.add_argument("--palette-only", action="store_true", help="Update only the existing manifest display palette; no geometry or original raster reads or writes are performed")
     args = parser.parse_args()
+    if args.palette_only:
+        if args.mask_only:
+            parser.error("--palette-only and --mask-only are mutually exclusive")
+        manifest_path = OUT / "koppen-manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf8"))
+        manifest_path.write_bytes(encoded(apply_display_palette(manifest)))
+        print(json.dumps({"manifest": manifest_path.relative_to(ROOT).as_posix(), "classes": len(manifest["classes"]), "displayPalette": "US 30-class", "geometryWritten": False}))
+        return
     if args.dependency_dir:
         sys.path.insert(0, str(args.dependency_dir.resolve()))
     import numpy as np
@@ -149,7 +225,7 @@ def main():
     row_stop = math.ceil((90 - min_y) * 10)
     grid = source[row_start:row_stop, col_start:col_stop]
 
-    legend_path = ROOT / "public/assets/atlas/asia-climate-v1/legend.json"
+    legend_path = SOURCE_LEGEND
     definitions = json.loads(legend_path.read_text(encoding="utf8"))
     classes = {item["id"]: {"id": item["code"], "code": item["id"], "name": item["name"],
                "color": item["color"], "description": item["description"],
@@ -302,7 +378,7 @@ def main():
             "Canada boundaries are 2021 cartographic statistical boundaries; small lakes not represented by Natural Earth 1:50m remain unresolved.",
             "Grid class at an ECCC station coordinate is independent of the station monthly normal. It is not a classification recalculated from that station's temperatures or precipitation.",
             "Classes describe the 1991–2020 reference climate, not current weather, rainfall totals, temperatures, crop suitability or national averages."]}
-    (OUT / "koppen-manifest.json").write_bytes(encoded(manifest))
+    (OUT / "koppen-manifest.json").write_bytes(encoded(apply_display_palette(manifest)))
     print(json.dumps({"features": len(features), "classes": [f["properties"]["id"] for f in features],
                       "file": record(output_path), "stations": checks, "seconds": round(time.monotonic()-started,1)}, ensure_ascii=True),flush=True)
 

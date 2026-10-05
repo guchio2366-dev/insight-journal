@@ -1,0 +1,80 @@
+{
+  "width": 1900,
+  "height": 900,
+  "boundsLonLat": [
+    -145,
+    40,
+    -50,
+    85
+  ],
+  "targetCRS": "EPSG:4326 equirectangular affine locator, y decreasing with latitude",
+  "targetParentSize": [
+    900,
+    580
+  ],
+  "parentTransform": "x=(longitude+145)/95*900; y=(85-latitude)/45*580",
+  "imageFit": "Draw full image at x=0,y=0,width=900,height=580, preserveAspectRatio=none.",
+  "nativeResolution": "Approximately 10 km; raster size does not increase scientific resolution.",
+  "resampling": "Categorical source-cell footprint painting using the adopted source-coordinate corner estimates. No interpolated or fabricated raster precipitation values. Alpha=0 beyond painted valid source cells.",
+  "clipRequirement": "Apply the existing trustworthy Canada outline to raster and contour layers.",
+  "classThresholdsMm": [
+    250,
+    500,
+    750,
+    1000,
+    1500,
+    2000
+  ],
+  "classIds": [
+    "lt250",
+    "250-500",
+    "500-750",
+    "750-1000",
+    "1000-1500",
+    "1500-2000",
+    "gte2000"
+  ],
+  "classColors": [
+    "#f2dfb3",
+    "#e0e4be",
+    "#b9d8b8",
+    "#8bc8bf",
+    "#60afb8",
+    "#378eaa",
+    "#216782"
+  ],
+  "classSourceCellCounts": [
+    6841,
+    34612,
+    27489,
+    13132,
+    16269,
+    2090,
+    512
+  ],
+  "classOpaquePixelCounts": [
+    106977,
+    269038,
+    156489,
+    64787,
+    75458,
+    9878,
+    2512
+  ],
+  "classRasterPolicy": "All class layers are derived from the same final categorical ownership raster, so boundary pixels belong to one class only.",
+  "contourMethod": "Marching squares on source-center quads with all four annual values valid. Threshold crossings interpolate only along valid source edges; saddle connectivity uses the bilinear asymptotic decider. No smoothing, simplification, gap filling, or extrapolation.",
+  "contourCoordinateDigits": 6,
+  "contourThresholdsMm": [
+    250,
+    500,
+    750,
+    1000,
+    1500,
+    2000
+  ],
+  "majorContoursMm": [
+    1000,
+    1500
+  ],
+  "labelMethod": "Permanent label anchors are existing vertices on long source-derived contour lines."
+}

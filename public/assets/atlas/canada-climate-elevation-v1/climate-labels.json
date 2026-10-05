@@ -1,0 +1,1240 @@
+{
+  "schemaVersion": 1,
+  "region": "canada",
+  "studyBounds": [
+    -143,
+    40,
+    -50,
+    67
+  ],
+  "wholeBounds": [
+    -141.0181,
+    41.73823835308173,
+    -52.61941,
+    83.11132
+  ],
+  "source": {
+    "path": "public/assets/atlas/canada-climate-elevation-v1/koppen.geojson",
+    "bytes": 12042203,
+    "sha256": "4466a38767a3710c4571db0718a2a04f77922b6a889dff0e0dda51bc785cb8ad"
+  },
+  "families": [
+    {
+      "id": "A",
+      "label": "熱帯",
+      "color": "#78b6ba"
+    },
+    {
+      "id": "B",
+      "label": "乾燥帯",
+      "color": "#e6ad7b"
+    },
+    {
+      "id": "C",
+      "label": "温帯",
+      "color": "#98bba0"
+    },
+    {
+      "id": "D",
+      "label": "冷帯",
+      "color": "#9fb3cc"
+    },
+    {
+      "id": "E",
+      "label": "寒帯",
+      "color": "#c4c9cc"
+    }
+  ],
+  "processing": {
+    "generator": {
+      "path": "scripts/prepare-canada-climate-labels.py",
+      "sha256": "ea29314c1e069b8e562281c93459d12c2f66fad9de6ba18f84573c005d1e7eb1",
+      "digestMethod": "UTF-8 text normalized from CRLF/CR to LF"
+    },
+    "familyReference": {
+      "path": "src/data/atlas/natural-environment.ts",
+      "bytes": 13811,
+      "sha256": "a64d11abe5e324aef802c7a2b8a3f49259555661984716a91f634faf19092bef"
+    },
+    "method": "Use representative_point() of connected source polygons and their intersections with the southern study rectangle. Prefer two large study components, then distinct whole-country components, with at most three label entries per code. Alternatives are representative points of data-derived thirds of the same candidate polygon.",
+    "coordinateCrs": "EPSG:4326",
+    "coordinateRounding": "None; preserve Shapely representative-point doubles.",
+    "maxLabelsPerCode": 3,
+    "maxAlternativesPerLabel": 2,
+    "minimumOtherComponentAreaFraction": 0.02,
+    "areaMeaning": "Planar longitude/latitude degrees squared, used only to rank label candidates; not Canadian surface area.",
+    "minZoomMethod": "0 for candidate polygon >=0.2 degrees squared; 4 for >=0.02; 5.5 for >=0.002; 8 for smaller polygons. Label visibility only; no source polygons are removed.",
+    "familyMethod": "Code initial A/B/C/D/E maps to the existing US climateFamilies legend. All five families remain in the key even when no Canadian source polygon has that family.",
+    "sourceGeometryChanged": false,
+    "manualCoordinates": false
+  },
+  "coverage": [
+    {
+      "code": "BSk",
+      "gridId": 7,
+      "sourcePolygonCount": 63,
+      "studyPolygonCount": 62,
+      "hasStudyPolygon": true,
+      "labelCount": 3
+    },
+    {
+      "code": "Csb",
+      "gridId": 9,
+      "sourcePolygonCount": 918,
+      "studyPolygonCount": 918,
+      "hasStudyPolygon": true,
+      "labelCount": 3
+    },
+    {
+      "code": "Cfb",
+      "gridId": 15,
+      "sourcePolygonCount": 21240,
+      "studyPolygonCount": 21240,
+      "hasStudyPolygon": true,
+      "labelCount": 3
+    },
+    {
+      "code": "Cfc",
+      "gridId": 16,
+      "sourcePolygonCount": 209,
+      "studyPolygonCount": 209,
+      "hasStudyPolygon": true,
+      "labelCount": 3
+    },
+    {
+      "code": "Dsb",
+      "gridId": 18,
+      "sourcePolygonCount": 50,
+      "studyPolygonCount": 50,
+      "hasStudyPolygon": true,
+      "labelCount": 3
+    },
+    {
+      "code": "Dsc",
+      "gridId": 19,
+      "sourcePolygonCount": 2808,
+      "studyPolygonCount": 2542,
+      "hasStudyPolygon": true,
+      "labelCount": 3
+    },
+    {
+      "code": "Dwb",
+      "gridId": 22,
+      "sourcePolygonCount": 1,
+      "studyPolygonCount": 1,
+      "hasStudyPolygon": true,
+      "labelCount": 1
+    },
+    {
+      "code": "Dwc",
+      "gridId": 23,
+      "sourcePolygonCount": 37,
+      "studyPolygonCount": 25,
+      "hasStudyPolygon": true,
+      "labelCount": 3
+    },
+    {
+      "code": "Dfa",
+      "gridId": 25,
+      "sourcePolygonCount": 870,
+      "studyPolygonCount": 870,
+      "hasStudyPolygon": true,
+      "labelCount": 3
+    },
+    {
+      "code": "Dfb",
+      "gridId": 26,
+      "sourcePolygonCount": 17910,
+      "studyPolygonCount": 17910,
+      "hasStudyPolygon": true,
+      "labelCount": 3
+    },
+    {
+      "code": "Dfc",
+      "gridId": 27,
+      "sourcePolygonCount": 18956,
+      "studyPolygonCount": 16513,
+      "hasStudyPolygon": true,
+      "labelCount": 3
+    },
+    {
+      "code": "Dfd",
+      "gridId": 28,
+      "sourcePolygonCount": 12,
+      "studyPolygonCount": 0,
+      "hasStudyPolygon": false,
+      "labelCount": 2
+    },
+    {
+      "code": "ET",
+      "gridId": 29,
+      "sourcePolygonCount": 53705,
+      "studyPolygonCount": 31486,
+      "hasStudyPolygon": true,
+      "labelCount": 3
+    },
+    {
+      "code": "EF",
+      "gridId": 30,
+      "sourcePolygonCount": 94,
+      "studyPolygonCount": 10,
+      "hasStudyPolygon": true,
+      "labelCount": 3
+    }
+  ],
+  "labels": [
+    {
+      "id": "Dfc-study-569-0",
+      "code": "Dfc",
+      "family": "D",
+      "gridId": 27,
+      "coordinate": [
+        -107.11823206594096,
+        57.996338
+      ],
+      "alternatives": [
+        [
+          -112.81141948068428,
+          60.745093
+        ],
+        [
+          -99.59716271392796,
+          59.31254
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 0,
+      "scope": "study",
+      "sourcePolygonIndex": 569,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 465.33668958341667,
+      "sourcePolygonAreaDegrees2": 509.5162200538536
+    },
+    {
+      "id": "Dfb-study-2079-0",
+      "code": "Dfb",
+      "family": "D",
+      "gridId": 26,
+      "coordinate": [
+        -87.93915115685867,
+        50.748099999999994
+      ],
+      "alternatives": [
+        [
+          -83.41384379468884,
+          48.800292999999996
+        ],
+        [
+          -111.0,
+          53.95
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 0,
+      "scope": "study",
+      "sourcePolygonIndex": 2079,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 256.18278028224984,
+      "sourcePolygonAreaDegrees2": 256.18278028224984
+    },
+    {
+      "id": "ET-study-31847-0",
+      "code": "ET",
+      "family": "E",
+      "gridId": 29,
+      "coordinate": [
+        -68.13845257380773,
+        64.78426999999999
+      ],
+      "alternatives": [
+        [
+          -68.86031333333332,
+          65.15
+        ],
+        [
+          -66.39139083333335,
+          64.10964999999999
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 0,
+      "scope": "study",
+      "sourcePolygonIndex": 31847,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 18.2438516208882,
+      "sourcePolygonAreaDegrees2": 101.81241954833148
+    },
+    {
+      "id": "Dsc-study-1-0",
+      "code": "Dsc",
+      "family": "D",
+      "gridId": 19,
+      "coordinate": [
+        -133.41394371663063,
+        60.00002090905844
+      ],
+      "alternatives": [
+        [
+          -133.47579439830042,
+          60.144189499999996
+        ],
+        [
+          -130.8,
+          58.45
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 0,
+      "scope": "study",
+      "sourcePolygonIndex": 1,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 17.78925847257874,
+      "sourcePolygonAreaDegrees2": 17.78925847257874
+    },
+    {
+      "id": "BSk-study-1-0",
+      "code": "BSk",
+      "family": "B",
+      "gridId": 7,
+      "coordinate": [
+        -110.85,
+        50.349999999999994
+      ],
+      "alternatives": [
+        [
+          -111.45,
+          50.349999999999994
+        ],
+        [
+          -109.1,
+          50.849999999999994
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 0,
+      "scope": "study",
+      "sourcePolygonIndex": 1,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 10.62365449575407,
+      "sourcePolygonAreaDegrees2": 10.623654495754076
+    },
+    {
+      "id": "Cfb-study-57-0",
+      "code": "Cfb",
+      "family": "C",
+      "gridId": 15,
+      "coordinate": [
+        -126.27488824908501,
+        49.89185
+      ],
+      "alternatives": [
+        [
+          -126.67175578344612,
+          49.987605
+        ],
+        [
+          -127.74026880903763,
+          50.454040000000006
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 0,
+      "scope": "study",
+      "sourcePolygonIndex": 57,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 1.8292786712302564,
+      "sourcePolygonAreaDegrees2": 1.8292786712302564
+    },
+    {
+      "id": "Csb-study-1-0",
+      "code": "Csb",
+      "family": "C",
+      "gridId": 9,
+      "coordinate": [
+        -124.38574740071556,
+        49.215315000000004
+      ],
+      "alternatives": [
+        [
+          -124.30485999999999,
+          48.95
+        ],
+        [
+          -123.78748429168891,
+          48.77813
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 0,
+      "scope": "study",
+      "sourcePolygonIndex": 1,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 1.0630683235723661,
+      "sourcePolygonAreaDegrees2": 1.0630683235723661
+    },
+    {
+      "id": "Dwc-study-0-0",
+      "code": "Dwc",
+      "family": "D",
+      "gridId": 23,
+      "coordinate": [
+        -139.3,
+        62.05
+      ],
+      "alternatives": [
+        [
+          -139.03333333333336,
+          62.05
+        ],
+        [
+          -139.43333333333334,
+          61.95
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 0,
+      "scope": "study",
+      "sourcePolygonIndex": 0,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.8099999999999923,
+      "sourcePolygonAreaDegrees2": 0.8099999999999923
+    },
+    {
+      "id": "EF-study-5-0",
+      "code": "EF",
+      "family": "E",
+      "gridId": 30,
+      "coordinate": [
+        -139.95,
+        60.95
+      ],
+      "alternatives": [
+        [
+          -140.11651099397778,
+          60.95
+        ],
+        [
+          -139.71651099397778,
+          60.849999999999994
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 0,
+      "scope": "study",
+      "sourcePolygonIndex": 5,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.6796213698291658,
+      "sourcePolygonAreaDegrees2": 0.6796213698291658
+    },
+    {
+      "id": "Dfa-study-0-0",
+      "code": "Dfa",
+      "family": "D",
+      "gridId": 25,
+      "coordinate": [
+        -82.05001752567176,
+        42.468191000000004
+      ],
+      "alternatives": [
+        [
+          -82.21202929858029,
+          42.434115000000006
+        ],
+        [
+          -81.81623779858029,
+          42.518872
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 0,
+      "scope": "study",
+      "sourcePolygonIndex": 0,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.6753274334240343,
+      "sourcePolygonAreaDegrees2": 0.6753274334240343
+    },
+    {
+      "id": "Dsb-study-31-0",
+      "code": "Dsb",
+      "family": "D",
+      "gridId": 18,
+      "coordinate": [
+        -121.45,
+        49.75
+      ],
+      "alternatives": [
+        [
+          -121.45,
+          49.25
+        ],
+        [
+          -121.55,
+          50.150000000000006
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 0,
+      "scope": "study",
+      "sourcePolygonIndex": 31,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.5296921220202625,
+      "sourcePolygonAreaDegrees2": 0.5296921220202625
+    },
+    {
+      "id": "Dfc-study-7762-0",
+      "code": "Dfc",
+      "family": "D",
+      "gridId": 27,
+      "coordinate": [
+        -67.68652143273809,
+        55.914635000000004
+      ],
+      "alternatives": [
+        [
+          -68.8923623107684,
+          55.086597
+        ],
+        [
+          -72.76823666666667,
+          55.9177245
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 1,
+      "scope": "study",
+      "sourcePolygonIndex": 7762,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 154.55622633704323,
+      "sourcePolygonAreaDegrees2": 154.55622633704323
+    },
+    {
+      "id": "Dfb-study-4768-0",
+      "code": "Dfb",
+      "family": "D",
+      "gridId": 26,
+      "coordinate": [
+        -66.37683030178519,
+        46.351678792695594
+      ],
+      "alternatives": [
+        [
+          -66.56879162431702,
+          47.15179838294088
+        ],
+        [
+          -71.40211757112516,
+          46.296580000000006
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 1,
+      "scope": "study",
+      "sourcePolygonIndex": 4768,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 24.37633130544786,
+      "sourcePolygonAreaDegrees2": 24.376331305447884
+    },
+    {
+      "id": "Dsc-study-157-1",
+      "code": "Dsc",
+      "family": "D",
+      "gridId": 19,
+      "coordinate": [
+        -115.89594801423937,
+        65.7068115
+      ],
+      "alternatives": [
+        [
+          -115.5889405,
+          66.288501
+        ],
+        [
+          -117.55980643716003,
+          65.7980225
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 1,
+      "scope": "study",
+      "sourcePolygonIndex": 157,
+      "scopePolygonIndex": 1,
+      "candidatePolygonAreaDegrees2": 13.193601421088944,
+      "sourcePolygonAreaDegrees2": 20.63585442321342
+    },
+    {
+      "id": "ET-study-31847-1",
+      "code": "ET",
+      "family": "E",
+      "gridId": 29,
+      "coordinate": [
+        -76.9113054943117,
+        64.43504
+      ],
+      "alternatives": [
+        [
+          -72.80000000000001,
+          64.85
+        ],
+        [
+          -68.77173925414365,
+          62.98812
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 1,
+      "scope": "study",
+      "sourcePolygonIndex": 31847,
+      "scopePolygonIndex": 1,
+      "candidatePolygonAreaDegrees2": 12.799183154313914,
+      "sourcePolygonAreaDegrees2": 101.81241954833148
+    },
+    {
+      "id": "Cfb-study-44-0",
+      "code": "Cfb",
+      "family": "C",
+      "gridId": 15,
+      "coordinate": [
+        -123.60227900668919,
+        49.45547
+      ],
+      "alternatives": [
+        [
+          -122.78792573183316,
+          49.4432046674848
+        ],
+        [
+          -121.85,
+          49.25
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 1,
+      "scope": "study",
+      "sourcePolygonIndex": 44,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.7499445196203907,
+      "sourcePolygonAreaDegrees2": 0.7499445196203907
+    },
+    {
+      "id": "BSk-study-2-0",
+      "code": "BSk",
+      "family": "B",
+      "gridId": 7,
+      "coordinate": [
+        -121.30000000000001,
+        50.55
+      ],
+      "alternatives": [
+        [
+          -120.3,
+          50.55
+        ],
+        [
+          -121.2,
+          50.75
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 1,
+      "scope": "study",
+      "sourcePolygonIndex": 2,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.6799999999999962,
+      "sourcePolygonAreaDegrees2": 0.6799999999999962
+    },
+    {
+      "id": "Dwc-study-1-0",
+      "code": "Dwc",
+      "family": "D",
+      "gridId": 23,
+      "coordinate": [
+        -140.65232152964052,
+        63.349999999999994
+      ],
+      "alternatives": [
+        [
+          -140.7017747555803,
+          62.849999999999994
+        ],
+        [
+          -141.00286830370078,
+          63.849999999999994
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 1,
+      "scope": "study",
+      "sourcePolygonIndex": 1,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.5869645889215928,
+      "sourcePolygonAreaDegrees2": 0.5869645889215928
+    },
+    {
+      "id": "Dsb-study-34-0",
+      "code": "Dsb",
+      "family": "D",
+      "gridId": 18,
+      "coordinate": [
+        -117.6,
+        49.349999999999994
+      ],
+      "alternatives": [
+        [
+          -117.19999999999999,
+          49.349999999999994
+        ],
+        [
+          -117.80000000000001,
+          49.150000000000006
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 1,
+      "scope": "study",
+      "sourcePolygonIndex": 34,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.3598319946020295,
+      "sourcePolygonAreaDegrees2": 0.35983199460202947
+    },
+    {
+      "id": "Dfa-study-4-0",
+      "code": "Dfa",
+      "family": "D",
+      "gridId": 25,
+      "coordinate": [
+        -79.27646166886387,
+        43.124397
+      ],
+      "alternatives": [
+        [
+          -79.44078766666667,
+          43.05
+        ],
+        [
+          -79.15951047245767,
+          43.050805438644105
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 1,
+      "scope": "study",
+      "sourcePolygonIndex": 4,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.25662649725088826,
+      "sourcePolygonAreaDegrees2": 0.25662649725088815
+    },
+    {
+      "id": "Dfc-whole-569-0",
+      "code": "Dfc",
+      "family": "D",
+      "gridId": 27,
+      "coordinate": [
+        -116.35518172770091,
+        59.39944
+      ],
+      "alternatives": [
+        [
+          -108.04027052183406,
+          61.4826905
+        ],
+        [
+          -98.01336521392795,
+          60.22177000000001
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 2,
+      "scope": "whole",
+      "sourcePolygonIndex": 569,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 509.5162200538536,
+      "sourcePolygonAreaDegrees2": 509.5162200538536
+    },
+    {
+      "id": "ET-whole-31847-0",
+      "code": "ET",
+      "family": "E",
+      "gridId": 29,
+      "coordinate": [
+        -69.69394220273061,
+        67.86628
+      ],
+      "alternatives": [
+        [
+          -71.80684579679891,
+          67.87709000000001
+        ],
+        [
+          -67.35,
+          66.72201952110302
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 2,
+      "scope": "whole",
+      "sourcePolygonIndex": 31847,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 101.81241954833148,
+      "sourcePolygonAreaDegrees2": 101.81241954833148
+    },
+    {
+      "id": "Dsc-whole-157-0",
+      "code": "Dsc",
+      "family": "D",
+      "gridId": 19,
+      "coordinate": [
+        -115.38258123462504,
+        66.772876
+      ],
+      "alternatives": [
+        [
+          -115.45,
+          66.0
+        ],
+        [
+          -118.32345971940691,
+          66.8662355
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 2,
+      "scope": "whole",
+      "sourcePolygonIndex": 157,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 20.63585442321342,
+      "sourcePolygonAreaDegrees2": 20.63585442321342
+    },
+    {
+      "id": "EF-whole-26-0",
+      "code": "EF",
+      "family": "E",
+      "gridId": 30,
+      "coordinate": [
+        -75.85,
+        81.85
+      ],
+      "alternatives": [
+        [
+          -76.51666666666668,
+          81.85
+        ],
+        [
+          -83.18333333333334,
+          81.65
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 2,
+      "scope": "whole",
+      "sourcePolygonIndex": 26,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 13.689051966974544,
+      "sourcePolygonAreaDegrees2": 13.689051966974544
+    },
+    {
+      "id": "Dfb-whole-15645-0",
+      "code": "Dfb",
+      "family": "D",
+      "gridId": 26,
+      "coordinate": [
+        -55.85665039539127,
+        48.69606025082767
+      ],
+      "alternatives": [
+        [
+          -56.35044,
+          48.631616
+        ],
+        [
+          -54.734318160243845,
+          48.40299
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 2,
+      "scope": "whole",
+      "sourcePolygonIndex": 15645,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 9.250636934039589,
+      "sourcePolygonAreaDegrees2": 9.250636934039589
+    },
+    {
+      "id": "Dwc-whole-19-0",
+      "code": "Dwc",
+      "family": "D",
+      "gridId": 23,
+      "coordinate": [
+        -100.25,
+        67.35
+      ],
+      "alternatives": [
+        [
+          -99.73333333333333,
+          67.25
+        ],
+        [
+          -100.4,
+          67.4
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 2,
+      "scope": "whole",
+      "sourcePolygonIndex": 19,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.749847476390747,
+      "sourcePolygonAreaDegrees2": 0.749847476390747
+    },
+    {
+      "id": "Cfb-whole-92-0",
+      "code": "Cfb",
+      "family": "C",
+      "gridId": 15,
+      "coordinate": [
+        -132.00969558426232,
+        53.710750000000004
+      ],
+      "alternatives": [
+        [
+          -132.01283345689905,
+          53.74117168348208
+        ],
+        [
+          -132.77508833333334,
+          53.86302
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 2,
+      "scope": "whole",
+      "sourcePolygonIndex": 92,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.7153913479087728,
+      "sourcePolygonAreaDegrees2": 0.7153913479087728
+    },
+    {
+      "id": "BSk-whole-0-0",
+      "code": "BSk",
+      "family": "B",
+      "gridId": 7,
+      "coordinate": [
+        -119.75,
+        49.75
+      ],
+      "alternatives": [
+        [
+          -119.7,
+          49.25
+        ],
+        [
+          -119.4,
+          50.150000000000006
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 2,
+      "scope": "whole",
+      "sourcePolygonIndex": 0,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.36961287230547085,
+      "sourcePolygonAreaDegrees2": 0.36961287230547085
+    },
+    {
+      "id": "Dsb-whole-33-0",
+      "code": "Dsb",
+      "family": "D",
+      "gridId": 18,
+      "coordinate": [
+        -120.75,
+        49.650000000000006
+      ],
+      "alternatives": [
+        [
+          -121.0,
+          49.95
+        ],
+        [
+          -120.55,
+          49.25
+        ]
+      ],
+      "minZoom": 0,
+      "priority": 2,
+      "scope": "whole",
+      "sourcePolygonIndex": 33,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.2599999999999995,
+      "sourcePolygonAreaDegrees2": 0.2599999999999995
+    },
+    {
+      "id": "Cfc-study-18-0",
+      "code": "Cfc",
+      "family": "C",
+      "gridId": 16,
+      "coordinate": [
+        -132.75,
+        53.650000000000006
+      ],
+      "alternatives": [
+        [
+          -132.8,
+          53.75
+        ],
+        [
+          -132.67199925789618,
+          53.506252082638085
+        ]
+      ],
+      "minZoom": 4,
+      "priority": 0,
+      "scope": "study",
+      "sourcePolygonIndex": 18,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.05482155501509302,
+      "sourcePolygonAreaDegrees2": 0.05482155501509302
+    },
+    {
+      "id": "Dfd-whole-2-0",
+      "code": "Dfd",
+      "family": "D",
+      "gridId": 28,
+      "coordinate": [
+        -84.0844525,
+        71.943475
+      ],
+      "alternatives": [
+        [
+          -84.05,
+          71.95
+        ],
+        [
+          -84.2578675,
+          71.94504317474048
+        ]
+      ],
+      "minZoom": 4,
+      "priority": 0,
+      "scope": "whole",
+      "sourcePolygonIndex": 2,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.025875169053859684,
+      "sourcePolygonAreaDegrees2": 0.025875169053859684
+    },
+    {
+      "id": "EF-study-88-0",
+      "code": "EF",
+      "family": "E",
+      "gridId": 30,
+      "coordinate": [
+        -65.15,
+        66.85
+      ],
+      "alternatives": [
+        [
+          -65.30000000000001,
+          66.85
+        ],
+        [
+          -65.15,
+          66.95
+        ]
+      ],
+      "minZoom": 4,
+      "priority": 1,
+      "scope": "study",
+      "sourcePolygonIndex": 88,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.13999999999999974,
+      "sourcePolygonAreaDegrees2": 0.6399999999999968
+    },
+    {
+      "id": "Cfc-study-8-0",
+      "code": "Cfc",
+      "family": "C",
+      "gridId": 16,
+      "coordinate": [
+        -132.3867567189538,
+        53.26263336427857
+      ],
+      "alternatives": [
+        [
+          -132.39999999999998,
+          53.245505
+        ],
+        [
+          -132.31666666666666,
+          53.349999999999994
+        ]
+      ],
+      "minZoom": 4,
+      "priority": 1,
+      "scope": "study",
+      "sourcePolygonIndex": 8,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.05151826713973107,
+      "sourcePolygonAreaDegrees2": 0.05151826713973108
+    },
+    {
+      "id": "Csb-study-21-0",
+      "code": "Csb",
+      "family": "C",
+      "gridId": 9,
+      "coordinate": [
+        -121.85,
+        49.55
+      ],
+      "alternatives": [
+        [
+          -121.9,
+          49.650000000000006
+        ],
+        [
+          -121.85,
+          49.45
+        ]
+      ],
+      "minZoom": 4,
+      "priority": 1,
+      "scope": "study",
+      "sourcePolygonIndex": 21,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.04000000000000256,
+      "sourcePolygonAreaDegrees2": 0.04000000000000256
+    },
+    {
+      "id": "Dfa-whole-13-0",
+      "code": "Dfa",
+      "family": "D",
+      "gridId": 25,
+      "coordinate": [
+        -73.9,
+        45.21425730280668
+      ],
+      "alternatives": [
+        [
+          -73.85,
+          45.25
+        ],
+        [
+          -73.94999999999999,
+          45.21425730280668
+        ]
+      ],
+      "minZoom": 4,
+      "priority": 2,
+      "scope": "whole",
+      "sourcePolygonIndex": 13,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.051043898382795855,
+      "sourcePolygonAreaDegrees2": 0.051043898382795855
+    },
+    {
+      "id": "Csb-whole-7-0",
+      "code": "Csb",
+      "family": "C",
+      "gridId": 9,
+      "coordinate": [
+        -124.374796220637,
+        49.64946
+      ],
+      "alternatives": [
+        [
+          -124.37919930171978,
+          49.65435888282885
+        ],
+        [
+          -124.54267121738098,
+          49.73280081091873
+        ]
+      ],
+      "minZoom": 4,
+      "priority": 2,
+      "scope": "whole",
+      "sourcePolygonIndex": 7,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.03711414311010868,
+      "sourcePolygonAreaDegrees2": 0.03711414311010868
+    },
+    {
+      "id": "Dfd-whole-1-0",
+      "code": "Dfd",
+      "family": "D",
+      "gridId": 28,
+      "coordinate": [
+        -83.55,
+        71.45
+      ],
+      "alternatives": [
+        [
+          -83.58333333333333,
+          71.45
+        ],
+        [
+          -83.51666666666667,
+          71.45
+        ]
+      ],
+      "minZoom": 5.5,
+      "priority": 1,
+      "scope": "whole",
+      "sourcePolygonIndex": 1,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.009999999999998864,
+      "sourcePolygonAreaDegrees2": 0.009999999999998864
+    },
+    {
+      "id": "Cfc-whole-0-0",
+      "code": "Cfc",
+      "family": "C",
+      "gridId": 16,
+      "coordinate": [
+        -132.95,
+        53.95
+      ],
+      "alternatives": [
+        [
+          -132.95,
+          53.83333333333333
+        ],
+        [
+          -132.95,
+          53.96666666666667
+        ]
+      ],
+      "minZoom": 5.5,
+      "priority": 2,
+      "scope": "whole",
+      "sourcePolygonIndex": 0,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.019999999999999147,
+      "sourcePolygonAreaDegrees2": 0.019999999999999147
+    },
+    {
+      "id": "Dwb-study-0-0",
+      "code": "Dwb",
+      "family": "D",
+      "gridId": 22,
+      "coordinate": [
+        -101.6,
+        48.999744497260224
+      ],
+      "alternatives": [
+        [
+          -101.53333333333333,
+          48.99974272319307
+        ],
+        [
+          -101.6,
+          48.999743610226645
+        ]
+      ],
+      "minZoom": 8,
+      "priority": 0,
+      "scope": "study",
+      "sourcePolygonIndex": 0,
+      "scopePolygonIndex": 0,
+      "candidatePolygonAreaDegrees2": 0.00010273331605574899,
+      "sourcePolygonAreaDegrees2": 0.00010273331605574899
+    }
+  ]
+}
