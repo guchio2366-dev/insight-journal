@@ -1,17 +1,20 @@
 ---
 import MexicoWorkspace from './MexicoWorkspace.astro';
+import AtlasClimatePlot from './AtlasClimatePlot.astro';
+import climateNormals from '../../data/atlas/mexico/climate-normals.json';
 import nature from '../../data/atlas/mexico/nature-v1.json';
 import agriculture from '../../data/atlas/mexico/agriculture.json';
 import {agricultureSources} from '../../data/atlas/mexico/agriculture-reading';
 import population from '../../data/atlas/mexico/population.json';
 import livestock from '../../data/atlas/mexico/livestock.json';
-import {geometryPath, projectNative, stateFeatures, stateLabelPoint, mapViewBox, geometryMetadata} from '../../lib/atlas-mexico-geometry';
+import {geometryPath, projectNative, projectLonLat, stateFeatures, stateLabelPoint, mapViewBox, geometryMetadata} from '../../lib/atlas-mexico-geometry';
 import {irrigationBins, densityBins, indicatorColor} from '../../lib/atlas-mexico-nature';
 import {withBase} from '../../lib/urls';
 import {mexicoNatureItemReading} from '../../data/atlas/mexico/nature-reading';
+import parityLabels from '../../../public/assets/atlas/mexico-nature-parity-v1/labels.json';
+import parityPalette from '../../../public/assets/atlas/mexico-nature-parity-v1/palette.json';
 import '../../styles/atlas-mexico-nature.css';
 const climateClasses = new Map(nature.climate.classes.map(item => [item.id, item]));
-const climateGroups = new Map(nature.climate.groups.map(item => [item.id, item]));
 const reliefClasses = new Map(nature.relief.classes.map(item => [item.id, item]));
 const irrigation = new Map(agriculture.states.map(item => [item.code, item]));
 const density = new Map(population.states.map(item => [item.stateCode, item]));
@@ -19,6 +22,15 @@ const statePaths = stateFeatures.map(feature => ({code: feature.properties.code,
 const format = (value: number, places = 1) => value.toLocaleString('ja-JP', {minimumFractionDigits: places, maximumFractionDigits: places});
 const routes = {nature: withBase('/atlas/north-america/mexico/nature/'), agriculture: withBase('/atlas/north-america/mexico/agriculture/'), population: withBase('/atlas/north-america/mexico/population/')};
 const items = {climate: nature.climate.classes.map(item => ({...item, ...mexicoNatureItemReading('climate', item)})), relief: nature.relief.classes.map(item => ({...item, ...mexicoNatureItemReading('relief', item)}))};
+const climateColor = (code: string) => (parityPalette.climate.bySourceCode as Record<string,{color:string}>)[code]?.color;
+const climateKeys = [
+ {label:'A・A(C) 熱帯・移行型',ids:['a-f','a-m','a-w','a-c-humid','a-c-subhumid']},
+ {label:'B 乾燥',ids:['bs-h','bs-k','bw-h','bw-k']},
+ {label:'C・(A)C 温帯・移行型',ids:['c-a-humid','c-a-subhumid','c-humid','c-w','c-s','c-x']},
+ {label:'C(E) 冷涼移行型',ids:['c-e-humid','c-e-subhumid']},
+ {label:'E(T)H 寒冷高地型',ids:['e-th-highland']},
+].map(key => ({...key,colors:[...new Set(parityPalette.climate.displayGroups.filter(group=>key.ids.includes(group.id)).map(group=>group.color))]}));
+const swatch = (colors:string[]) => `background:linear-gradient(to right,${colors.flatMap((color,index)=>[`${color} ${index/colors.length*100}%`,`${color} ${(index+1)/colors.length*100}%`]).join(',')})`;
 const config = {routes, defaultViewBox: mapViewBox, states: statePaths.map(item => ({code: item.code, name: item.name, point: item.point, irrigationSharePct: irrigation.get(item.code)?.irrigationSharePct ?? null, irrigatedAreaHa: irrigation.get(item.code)?.irrigatedAreaHa ?? null, agriculturalAreaHa: irrigation.get(item.code)?.agriculturalAreaHa ?? null, maizeWhiteProductionT: irrigation.get(item.code)?.maizeWhiteProductionT ?? null, pineObtainedM3: irrigation.get(item.code)?.pineObtainedM3 ?? null, density: density.get(item.code)?.density ?? null, population: density.get(item.code)?.population ?? null})), sinaloaWinter: agriculture.caseStudies.sinaloaAutumnWinterWhiteMaize, staticMaps: {climate: withBase('/assets/atlas/mexico-nature-v1/climate.svg'), relief: withBase('/assets/atlas/mexico-nature-v1/relief.svg')}};
 ---
 <MexicoWorkspace field="nature" title="メキシコの自然環境" lead="北部の乾燥域、中央部の高原、南東部の湿潤域を読み分け、農業の水管理と人口分布とのつながりを見る。">
@@ -26,7 +38,7 @@ const config = {routes, defaultViewBox: mapViewBox, states: statePaths.map(item 
    <button type="button" data-mexico-nature-view="climate" aria-pressed="true">気候区分</button>
    <button type="button" data-mexico-nature-category="rivers-groundwater" aria-pressed="false">水資源</button>
    <button type="button" data-mexico-nature-view="relief" aria-pressed="false">地形</button>
-   <button type="button" data-mexico-nature-category="elevation" aria-pressed="false">標高</button>
+   <button type="button" data-mexico-nature-category="elevation" aria-pressed="false">標高（等高線）</button>
  </div><div class="atlas-water-tabs mexico-nature-water-tabs" data-mexico-nature-water-tabs hidden>
    <button type="button" data-mexico-nature-category="rivers-groundwater" aria-pressed="false">河川・地下水</button>
    <button type="button" data-mexico-nature-category="precipitation" aria-pressed="false">降水量</button>
@@ -34,45 +46,49 @@ const config = {routes, defaultViewBox: mapViewBox, states: statePaths.map(item 
  </div></div>
  <section slot="map" class="mexico-nature-primary" aria-label="気候と地形の全国分布">
   <div class="atlas-map-frame mexico-map-frame">
-   <div class="mexico-controls">
-   <label class="mexico-nature-state-control">読む州<select data-mexico-nature-state-select>{statePaths.map(item => <option value={item.code} selected={item.code === '25'}>{item.name}</option>)}</select></label>
-   </div>
   <svg class="mexico-map mexico-nature-map" data-mexico-map data-mexico-nature-main-map data-mexico-nature-map-mode="interactive" viewBox={mapViewBox} role="group" aria-labelledby="mexico-nature-map-title mexico-nature-map-desc">
    <title id="mexico-nature-map-title">メキシコの気候・自然地理地域の全国分布</title>
-   <desc id="mexico-nature-map-desc">気候21原分類を6群で色分け。地形は15自然地理地域と分類欠測。色の面をクリックすると個別の解説へ、州境の線または州選択欄で読む州へ。地図下の項目選択はキーボードで操作でき、比較元と表示範囲を保持する。</desc>
+   <desc id="mexico-nature-map-desc">INEGI改訂ケッペンの21原分類と細分コードを保持。気候の色はUS共通配色を再利用し、分類を変換しません。地図内のコード・地名を選ぶと個別の説明へ。地形では選んだ公式地域の輪郭だけを強調し、比較元と表示範囲を保持します。</desc>
    <defs><pattern id="mexico-nature-missing" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#edf0ed"/><path d="M0 7L7 0" stroke="#919ba2" stroke-width="1"/></pattern></defs>
    <g data-mexico-nature-neutral style="display:none" aria-hidden="true">{statePaths.map(item => <path d={item.path} fill="#eff0e8" stroke="none" fill-rule="evenodd" />)}</g>
+   <g data-mexico-nature-relief-background style="display:none" aria-hidden="true"><image href={withBase('/assets/atlas/mexico-nature-parity-v1/relief.webp')} x="0" y="0" width="900" height="580" preserveAspectRatio="none"/></g>
    <g data-mexico-nature-vector>
-    <g data-mexico-nature-layer="climate">{nature.climate.features.map(feature => {const category = climateClasses.get(feature.classId)!; const group = climateGroups.get(category.groupId)!; return <path data-nature-class={category.id} data-mexico-nature-feature={feature.id} role="button" tabindex="-1" aria-pressed="false" aria-label={`${category.labelJa}を読む`} fill={group.color} stroke={group.color} stroke-width=".2" fill-rule="evenodd" d={geometryPath(feature.geometry, projectNative)}><title>{category.labelJa}（原分類：{category.labelSource}、{feature.sourceCode}）</title></path>;})}</g>
-    <g data-mexico-nature-layer="relief" hidden>{nature.relief.features.map(feature => {const category = reliefClasses.get(feature.classId)!; return <path data-nature-class={category.id} data-mexico-nature-feature={feature.id} role="button" tabindex="-1" aria-pressed="false" aria-label={`${category.labelJa}を読む`} data-nature-status={feature.status} fill={feature.status === 'missing' ? 'url(#mexico-nature-missing)' : category.color} stroke={category.color} stroke-width=".2" fill-rule="evenodd" d={geometryPath(feature.geometry, projectNative)}><title>{category.labelJa}（原分類：{category.labelSource}）</title></path>;})}</g>
+    <g data-mexico-nature-layer="climate">{nature.climate.features.map(feature => {const category = climateClasses.get(feature.classId)!; const color = climateColor(feature.sourceCode); return <path data-nature-class={category.id} data-nature-source-code={feature.sourceCode} data-mexico-nature-feature={feature.id} role="button" tabindex="-1" aria-pressed="false" aria-label={`${feature.sourceCode} ${category.labelJa}を読む`} fill={color} stroke={color} stroke-width=".2" fill-rule="evenodd" d={geometryPath(feature.geometry, projectNative)}><title>{category.labelJa}（原記載：{feature.sourceLabel}、{feature.sourceCode}／原区分：{category.labelSource}）</title></path>;})}{parityLabels.labels.filter(label=>label.view==='climate').map(label=>{const [x,y]=projectNative(label.displayPointNative);const [ax,ay]=projectNative(label.pointNative);const [lx,ly]=projectNative(label.leaderEndNative);return <g class="mexico-nature-class-label mexico-nature-climate-code" data-mexico-nature-class-label={label.classId} data-mexico-nature-label-feature={label.sourceFeatureId} data-mexico-nature-label-code={label.sourceCode} transform={`translate(${x} ${y})`} role="button" tabindex="0" aria-label={`${label.sourceCode} ${label.labelJa}を読む`} aria-pressed="false">{label.displayDisplaced&&<line class="mexico-nature-label-leader" x1={ax-x} y1={ay-y} x2={lx-x} y2={ly-y}/>}<text text-anchor="middle" dominant-baseline="central">{label.sourceCode}</text></g>;})}</g>
+    <g data-mexico-nature-layer="relief" hidden>{nature.relief.features.map(feature => {const category = reliefClasses.get(feature.classId)!; return <path data-nature-class={category.id} data-mexico-nature-feature={feature.id} role="button" tabindex="-1" aria-pressed="false" aria-label={`${category.labelJa}を読む`} data-nature-status={feature.status} fill={feature.status === 'missing' ? 'url(#mexico-nature-missing)' : 'transparent'} stroke="transparent" fill-rule="evenodd" d={geometryPath(feature.geometry, projectNative)}><title>{category.labelJa}（原分類：{category.labelSource}）</title></path>;})}{parityLabels.labels.filter(label=>label.view==='relief').map(label=>{const [x,y]=projectNative(label.displayPointNative);const [ax,ay]=projectNative(label.pointNative);const [lx,ly]=projectNative(label.leaderEndNative);return <g class="mexico-nature-class-label mexico-nature-landform-name" data-mexico-nature-class-label={label.classId} transform={`translate(${x} ${y})`} role="button" tabindex="0" aria-label={`${label.labelJa}の輪郭と説明を読む`} aria-pressed="false">{label.displayDisplaced&&<line class="mexico-nature-label-leader" x1={ax-x} y1={ay-y} x2={lx-x} y2={ly-y}/>}<text text-anchor="middle" dominant-baseline="central">{label.labelJa}</text></g>;})}</g>
    </g>
-   <g data-mexico-nature-static hidden><image href={config.staticMaps.climate} width="900" height="580" preserveAspectRatio="none" data-mexico-nature-static-image /></g>
+   <g data-mexico-nature-static hidden><image width="900" height="580" preserveAspectRatio="none" data-mexico-nature-static-image /></g>
    <g data-mexico-hydrology-overlay style="display:none" />
    <g class="mexico-nature-state-outlines">{statePaths.map(item => <path class:list={['mexico-nature-state', {'is-selected': item.code === '25'}]} d={item.path} fill-rule="evenodd" pointer-events="stroke" data-mexico-nature-state={item.code} role="button" tabindex="0" aria-pressed={item.code === '25' ? 'true' : 'false'} aria-label={`${item.name}を選ぶ`}><title>{item.name}</title></path>)}</g>
    <g class="mexico-nature-target" data-mexico-nature-target transform={`translate(${stateLabelPoint('25').join(' ')})`} aria-hidden="true"><circle r="7"/><circle r="3"/></g>
+   <g class="mexico-climate-stations" data-mexico-climate-stations>{climateNormals.stations.map(station=>{const [x,y]=projectLonLat(station.coordinates);return <g data-mexico-climate-city={station.id} transform={`translate(${x} ${y})`} role="button" tabindex="0" aria-pressed={String(station.id==='mexico-city-tacubaya')} aria-label={`${station.name}の雨温図を読む`}><circle r="6" vector-effect="non-scaling-stroke"/><text x="12" y="-8">{station.id==='mexico-city-tacubaya'?'メキシコシティ':'Culiacán'}</text></g>;})}</g>
   </svg>
+  <div class="atlas-map-tools mexico-nature-map-tools" aria-label="自然環境地図の操作"><button type="button" data-mexico-nature-reset>全体</button><button type="button" data-mexico-nature-zoom="in" aria-label="地図を拡大">＋</button><button type="button" data-mexico-nature-zoom="out" aria-label="地図を縮小">−</button></div>
   </div>
  </section>
- <div slot="legend" class="mexico-nature-reading-key" data-mexico-nature-reading-key>
+ <div slot="map" class="mexico-nature-reading-key" data-mexico-nature-reading-key>
   <div class="mexico-nature-map-title"><h2 data-mexico-nature-map-title>気候の分布</h2><span data-mexico-nature-map-edition>INEGI・2008版</span></div>
-  <ul class="mexico-legend mexico-nature-climate-legend" data-mexico-nature-legend="climate" aria-label="気候区分の凡例">{nature.climate.groups.map(group => <li><i style={`background:${group.color}`} aria-hidden="true"/>{group.label}</li>)}</ul>
-  <ul class="mexico-legend mexico-nature-relief-legend" data-mexico-nature-legend="relief" aria-label="自然地理地域の凡例" hidden>{nature.relief.classes.map(category => <li><i class:list={{'is-missing': category.status === 'missing'}} style={`background:${category.color}`} aria-hidden="true"/>{category.labelJa}</li>)}</ul>
+  <ul class="mexico-legend mexico-nature-climate-legend" data-mexico-nature-legend="climate" aria-label="改訂ケッペンの原記号と色の凡例">{climateKeys.map(key => <li><i style={swatch(key.colors)} aria-hidden="true"/>{key.label}</li>)}<li><i class="mexico-climate-city-key" aria-hidden="true"/>都市の観測点</li></ul>
+  <ul class="mexico-legend mexico-nature-relief-legend" data-mexico-nature-legend="relief" aria-label="地形の輪郭と陰影の凡例" hidden><li><i class="mexico-nature-relief-shade-key" aria-hidden="true"/>標高から描いた地形陰影（ETOPO 2022）</li><li><i class="mexico-nature-outline-key" aria-hidden="true"/>選んだ公式地形地域の輪郭</li><li><i class="is-missing" aria-hidden="true"/>原資料の分類欠測</li></ul>
   <ul class="mexico-legend mexico-hydrology-legend" data-mexico-hydrology-legend aria-label="水資源・等高線の凡例" hidden />
-  <p class="mexico-caption" data-mexico-nature-period>2008＝刊行年・統一観測期未記載。21原分類→6群。</p>
+  <p class="mexico-caption" data-mexico-nature-period>INEGI改訂ケッペン・2008年刊行。原分類21を保持。色はUS共通配色。</p>
   <div class="mexico-water-background-key" data-mexico-water-background-key hidden><p class="mexico-caption" data-mexico-water-background-key-title></p><div data-mexico-water-background-key-host></div></div>
   <p class="mexico-caption" data-mexico-nature-static-note hidden>原典の静的地図。自然分布と州の選択を保ち、同じ範囲で比較します。</p>
  </div>
  <div slot="items" class="mexico-nature-items">
+  <details class="mexico-nature-secondary-controls"><summary>項目・州と表示範囲</summary>
+  <label class="mexico-nature-state-control">読む州<select data-mexico-nature-state-select>{statePaths.map(item => <option value={item.code} selected={item.code === '25'}>{item.name}</option>)}</select></label>
   <label class="mexico-nature-item-picker">地図の項目<select data-mexico-nature-item-select aria-label="気候・地形の分類を選ぶ"><option value="">全国の概論</option>{items.climate.map(item => <option value={item.id}>{item.labelJa}</option>)}</select></label>
   <div class="mexico-hydrology-controls" data-mexico-hydrology-controls hidden><label>水・等高線の項目<select data-mexico-hydrology-item><option value="">全国の分布</option></select></label><label>背景<select data-mexico-hydrology-base><option value="plain">白地図</option><option value="climate">気候区分</option><option value="relief">地形地域</option></select></label></div>
   <div class="mexico-groundwater-controls" data-mexico-groundwater-controls hidden><label>地下水の分類<select data-mexico-groundwater-class aria-label="地下水の全10分類または一つの分類を表示"><option value="all">全10分類（全国の概観）</option></select></label></div>
   <p class="mexico-caption" data-mexico-hydrology-picker-note hidden></p>
   <p class="mexico-caption" data-mexico-nature-reference hidden></p>
-  <div class="mexico-actions"><span class="mexico-nature-state-badge" data-mexico-nature-selected-name>シナロア</span><button type="button" data-mexico-nature-focus>この州を拡大</button><button type="button" data-mexico-nature-reset>全国の分布へ</button></div>
+  <div class="mexico-actions"><span class="mexico-nature-state-badge" data-mexico-nature-selected-name>シナロア</span><button type="button" data-mexico-nature-focus>この州を拡大</button></div>
   <label data-mexico-nature-only-control hidden><input type="checkbox" data-mexico-nature-only /> <span data-mexico-nature-only-label>比較先は選んだ州を強調</span></label>
   <p class="mexico-caption">細い線は州境、丸印と濃い輪郭は読む州。地形地域は自然地理の区分です。</p>
+  </details>
  </div>
  <div slot="reading" class="mexico-nature-reading">
+  <section class="mexico-climate-diagrams" data-mexico-climate-diagrams><h2>都市の雨温図</h2><p class="mexico-takeaway">高原の首都は夏に雨が集中する。北西部Culiacánの暖かい冬と比べ、水を使う季節の違いを見る。</p>{climateNormals.stations.map(station=><section data-mexico-climate-plot={station.id} hidden={station.id!=='mexico-city-tacubaya'}><AtlasClimatePlot name={station.name} period="1991–2020" temperatureC={station.temperatureC} precipitationMm={station.precipitationMm}/><p class="mexico-caption">棒：降水量mm/月、線：平均気温℃。1991–2020年。</p><p class="mexico-caption">{station.scopeNoteJa}</p><details><summary>12か月の値・観測所と出典</summary><p>{station.stationName}（{station.stationId}）、標高{station.altitudeM}m。{station.latitude}°N / {Math.abs(station.longitude)}°W。<a href={station.sourceUrl}>SMNの公式平年値</a></p><table><caption>{station.name}：1991–2020年、℃・mm/月</caption><thead><tr><th>月</th><th>平均気温℃</th><th>降水量mm</th><th>使用年数</th></tr></thead><tbody>{station.temperatureC.map((temperature,index)=><tr><th>{index+1}</th><td>{temperature}</td><td>{station.precipitationMm[index]}</td><td>{station.temperatureYears[index]} / {station.precipitationYears[index]}</td></tr>)}</tbody></table></details></section>)}<details><summary>観測点を選ぶ</summary>{climateNormals.stations.map(station=><button type="button" data-mexico-climate-city={station.id} aria-pressed={String(station.id==='mexico-city-tacubaya')}>{station.name}</button>)}</details><p class="mexico-caption" data-mexico-climate-notice hidden></p></section>
   <a class="mexico-return" data-mexico-nature-source-return hidden href={routes.agriculture}></a>
   <nav class="mexico-nature-comparison-dock" aria-label="自然条件と社会活動を比較">
    <a class="mexico-comparison-link" data-mexico-nature-compare-link="irrigation" href={`${routes.nature}?view=climate&compare=irrigation&state=25`}>乾燥気候と灌漑農地率を比べる</a>
@@ -84,7 +100,7 @@ const config = {routes, defaultViewBox: mapViewBox, states: statePaths.map(item 
    <h2 data-mexico-nature-reading-title>気候の違いが水管理を変える</h2>
    <p class="mexico-takeaway" data-mexico-nature-reading-lead>北部・北西部に乾燥系、中央部に温帯系、南東部に高温・湿潤系が広がる。</p>
    <div class="mexico-nature-reading-body"><p data-mexico-nature-reading-body>乾燥する地域では、農地へ水を配る灌漑が作期を支える。山地と高原の気温条件、沿岸平原の位置を合わせると、農業や都市が成立する場所を読める。</p>
-   <details><summary>分布の読み方と分類・比較のねらい</summary><p>灌漑率との比較は、北西部の農業を支える水管理との対応を見る。人口密度との比較は、高原・山系・沿岸と人口集中の位置を確かめる。</p><p>気候の原資料は気温と降水の区分を組み合わせた分類です。地図は原分類を保ち、凡例を6気候群へ集約しました。地形地域は地質と地形の成り立ちによる区分で、標高の数値を示す図ではありません。</p></details></div>
+   <details><summary>分布の読み方と分類・比較のねらい</summary><p>灌漑率との比較は、北西部の農業を支える水管理との対応を見る。人口密度との比較は、高原・山系・沿岸と人口集中の位置を確かめる。</p><p>気候はINEGIの改訂ケッペン原分類21と細分コードを保持しています。USの色を記号ごとの配色に再利用し、USと同じ分類へ換算していません。凡例の帯は同じ記号群に含まれる複数の色を示します。地形の陰影は実標高の起伏、輪郭と地名はINEGIの自然地理地域で、別の資料です。</p></details></div>
   </section>
   <section class="mexico-nature-comparison" data-mexico-nature-comparison hidden>
    <h2 data-mexico-nature-comparison-title>乾燥気候と灌漑農地率</h2>
@@ -117,9 +133,10 @@ const config = {routes, defaultViewBox: mapViewBox, states: statePaths.map(item 
  <div slot="sources" id="mexico-nature-sources">
   <details><summary>原典・版・利用条件・加工方法</summary>
    <p>数量の比較：<a href={agricultureSources.maize}>白粒トウモロコシ生産量</a>は t、<a href={agricultureSources.pine}>松材取得量</a>は m³。参照期間は2021年10月～2022年9月。シナロアの<a href={agricultureSources.autumnWinter}>秋冬作白粒の灌漑生産割合</a>は生産量の割合で、農地面積の割合とは分けています。<a href={agricultureSources.temperateForest}>山地の松・オーク林と森林の機能</a>、<a href={agricultureSources.maizeFoodChain}>白粒から主食への生産・流通</a>は原典を要約しています。</p>
-   <ul><li><a href={nature.climate.source.url}>INEGI・全国気候区分</a>、2008版、1:1,000,000。作図期の約4,000観測所の資料を使用し、統一された観測対象期間は原説明に未記載。2021年5月21日の属性訂正を採用。原分類21を保持し、画面凡例は6群に集約。</li><li><a href={nature.relief.source.url}>INEGI・自然地理地域区分</a>、2001版、1:1,000,000、15地域。原資料の分類欠測5図形を網掛けで区別。国外・水面の図形は自然分類から除外。</li><li><a href="https://www.inegi.org.mx/contenidos/programas/ca/2022/tabulados/ca2022_11.xlsx">INEGI・Censo Agropecuario 2022、表11</a>。灌漑面積 ha / 活動中の生産単位の農業用地総面積 ha ×100。参照期間2021年10月～2022年9月、32州すべて公表数値。</li><li><a href={population.sources.density.url}>INEGI・Panorama sociodemográfico de México 2020</a>。人口密度は原表の小数1桁の公表値。地図の図形面積から再計算していません。<a href={population.sources.population.url}>2020人口センサスITER</a>の州総人口と併記。</li><li><a href="https://www.inegi.org.mx/inegi/terminos.html">INEGI自由使用条件</a>に基づく加工。原典ZIP・同梱metadataを保存し、出典と本サイトの加工を明示。地形の個別metadataにも同条件が明記され、Use_ConstraintsはNone。</li><li>自然分布は原典のITRF92・GRS80・Lambert正角円錐図法から描画。最大300 mの表示用簡略化。交差や穴の変化が生じる部分は許容値を下げ、原点の精度・輪郭・穴の区分を保持。<a href={geometryMetadata.documentation}>州境はINEGI・Marco Geoestadístico、2025年12月版</a>を同じ表示座標へ変換。測地系の時期差を全国1:100万の閲覧用として扱います。面積・水収支を推計する用途には使っていません。</li></ul>
+   <ul><li><a href={nature.climate.source.url}>INEGI・全国気候区分</a>、2008版、1:1,000,000。作図期の約4,000観測所の資料を使用し、統一された観測対象期間は原説明に未記載。2021年5月21日の属性訂正を採用。原分類21・細分コード111を保持。記号群の帯は複数のUS共通色を示し、分類の同一性を意味しません。</li><li><a href={nature.relief.source.url}>INEGI・自然地理地域区分</a>、2001版、1:1,000,000、15地域。原資料の分類欠測5図形を網掛けで区別。国外・水面の図形は自然分類から除外。</li><li><a href="https://www.ncei.noaa.gov/products/etopo-global-relief-model">NOAA・ETOPO 2022</a>の実標高から作った陰影。CC0、原データ2022版、EGM2008基準。陰影は地域分類・面積や水収支の推計値ではありません。INEGI陸域内だけを表示し、投影・加工・ハッシュは<a href={withBase('/assets/atlas/mexico-nature-parity-v1/relief-manifest.json')}>地形画像台帳</a>に保存しています。</li><li>雨温図：SMN1991–2020平年値、Tacubaya Central OBS 09048とCuliacán DGE 25015の公式12か月値。市全体や州平均ではありません。Culiacánの10月は29年、他月とTacubayaは30年。出典URLと観測所は各表、参照日は2026年10月5日です。月別の事実値を帰属付きで抽出し、原データベースの一括再配布や包括的オープンライセンスを意味しません。</li><li><a href="https://www.inegi.org.mx/contenidos/programas/ca/2022/tabulados/ca2022_11.xlsx">INEGI・Censo Agropecuario 2022、表11</a>。灌漑面積 ha / 活動中の生産単位の農業用地総面積 ha ×100。参照期間2021年10月～2022年9月、32州すべて公表数値。</li><li><a href={population.sources.density.url}>INEGI・Panorama sociodemográfico de México 2020</a>。人口密度は原表の小数1桁の公表値。地図の図形面積から再計算していません。<a href={population.sources.population.url}>2020人口センサスITER</a>の州総人口と併記。</li><li><a href="https://www.inegi.org.mx/inegi/terminos.html">INEGI自由使用条件</a>に基づく加工。原典ZIP・同梱metadataを保存し、出典と本サイトの加工を明示。地形の個別metadataにも同条件が明記され、Use_ConstraintsはNone。</li><li>自然分布は原典のITRF92・GRS80・Lambert正角円錐図法から描画。最大300 mの表示用簡略化。交差や穴の変化が生じる部分は許容値を下げ、原点の精度・輪郭・穴の区分を保持。<a href={geometryMetadata.documentation}>州境はINEGI・Marco Geoestadístico、2025年12月版</a>を同じ表示座標へ変換。測地系の時期差を全国1:100万の閲覧用として扱います。面積・水収支を推計する用途には使っていません。</li></ul>
    <p><a href={withBase('/assets/atlas/mexico-nature-v1/manifest.json')}>原典・加工・配信ファイルのハッシュ台帳</a> / <a href={withBase('/assets/atlas/mexico-nature-v1/nature-v1.json')}>配信データと元分類</a></p>
-   <details><summary>気候の21原分類と表示凡例の対応</summary><div class="mexico-table-scroll"><table><thead><tr><th>表示群</th><th>日本語分類</th><th>原分類</th></tr></thead><tbody>{nature.climate.classes.map(category => <tr><td>{climateGroups.get(category.groupId)!.label}</td><td>{category.labelJa}</td><td lang="es">{category.labelSource}</td></tr>)}</tbody></table></div></details>
+   <p><a href={withBase('/assets/atlas/mexico-nature-parity-v1/manifest.json')}>原記号の配色・地名配置の台帳</a>。地名の基準点は原図形の内側に置き、文字を移した場合は引出線で結んでいます。農場や観測所の位置とは区別しています。原図形climate-551は細分コードBS0hwと原分類32の属性が整合しないため、双方を原典のまま保持し、選択時に示しています。</p>
+   <details><summary>気候の21原分類と細分コード</summary><div class="mexico-table-scroll"><table><thead><tr><th>日本語分類</th><th>原分類</th><th>細分コード</th></tr></thead><tbody>{nature.climate.classes.map(category => <tr><td>{category.labelJa}</td><td lang="es">{category.labelSource}</td><td>{parityPalette.climate.classes.find(item=>item.id===category.id)?.sourceCodes.map(code=><span class="mexico-nature-exact-code"><i style={`background:${climateColor(code)}`} aria-hidden="true"/>{code}</span>)}</td></tr>)}</tbody></table></div></details>
   </details>
  </div>
  <span hidden data-mexico-nature />
@@ -127,4 +144,4 @@ const config = {routes, defaultViewBox: mapViewBox, states: statePaths.map(item 
  <p class="visually-hidden" data-mexico-nature-announcement aria-live="polite"></p>
  <noscript><p class="mexico-caption">気候の全国分布・凡例・原値表・出典を表示しています。地形・比較・州の切替にはJavaScriptが必要です。</p></noscript>
 </MexicoWorkspace>
-<script>import {initMexicoNature} from '../../scripts/atlas-mexico-nature';const root=document.querySelector<HTMLElement>('[data-mexico-workspace][data-mexico-field="nature"]');if(root)initMexicoNature(root);</script>
+<script>import {initMexicoNature} from '../../scripts/atlas-mexico-nature';import {initMexicoClimate} from '../../scripts/atlas-mexico-climate';const root=document.querySelector<HTMLElement>('[data-mexico-workspace][data-mexico-field="nature"]');if(root){initMexicoNature(root);initMexicoClimate(root);}</script>

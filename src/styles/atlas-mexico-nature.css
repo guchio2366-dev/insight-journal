@@ -41,3 +41,55 @@
 }
 .mexico-groundwater-controls{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:13px}.mexico-groundwater-controls[hidden]{display:none}.mexico-groundwater-controls label{display:flex;align-items:center;gap:8px;min-width:0;flex:1}.mexico-groundwater-controls select{min-width:0;flex:1;max-width:100%;font-size:13px}.mexico-groundwater-overview{pointer-events:none}.mexico-groundwater-notice{font-size:13px;line-height:1.5;margin:6px 0}
 .mexico-workspace .mexico-water-groundwater.is-selected{stroke-width:.65}
+
+/* Nature-only adaptation of the approved US frame; shared Mexico navigation is untouched. */
+.mexico-workspace.mexico-nature .mexico-nature-class-label{cursor:pointer}
+.mexico-nature-class-label text{font:750 18px var(--sans);fill:#263b43;paint-order:stroke fill;stroke:#fffdf4;stroke-width:3px;pointer-events:all}
+.mexico-nature-landform-name text{font-size:17px}
+.mexico-nature-class-label[aria-pressed=true] text{text-decoration:underline;text-underline-offset:3px}
+.mexico-nature-class-label:focus-visible{outline:2px solid #173b51}
+.mexico-nature-label-leader{stroke:#56676a;stroke-width:.75;vector-effect:non-scaling-stroke;pointer-events:none;fill:none}
+.mexico-nature-exact-code{display:inline-flex;align-items:center;gap:4px;margin:3px 10px 3px 0;white-space:nowrap}
+.mexico-nature-exact-code i{display:inline-block;width:14px;height:10px;border:1px solid #727b7544}
+.mexico-workspace.mexico-nature [data-mexico-nature-layer=relief] [data-mexico-nature-feature]:not([data-nature-status=missing]){fill:transparent;stroke:transparent}
+.mexico-workspace.mexico-nature [data-mexico-nature-layer=relief] [data-mexico-nature-feature].is-selected-feature{fill:transparent;stroke:#59696a;stroke-width:3px}
+.mexico-workspace.mexico-nature .mexico-nature-outline-key{height:3px!important;background:#59696a;margin-top:7px}
+.mexico-workspace.mexico-nature .mexico-nature-relief-shade-key{background:linear-gradient(100deg,#d5d4c5,#f5f1dc,#bebfaf)}
+[data-mexico-nature-relief-background]{pointer-events:none}
+.mexico-water-basin-label{cursor:pointer;font:700 16px var(--sans);fill:#203d3f;paint-order:stroke fill;stroke:#fffdf7;stroke-width:3px;stroke-linejoin:round}
+.mexico-water-basin-label[aria-pressed=true]{text-decoration:underline}
+.mexico-water-basin-label:focus-visible{outline:2px solid #173f42}
+.mexico-workspace.mexico-nature .mexico-nature-water-tabs{display:flex;flex-wrap:wrap;gap:6px;height:auto}
+.mexico-workspace.mexico-nature .mexico-nature-water-tabs[hidden]{display:none}
+.mexico-workspace.mexico-nature .mexico-nature-water-tabs button{min-height:40px;font-size:14px;padding:6px 12px}
+.mexico-workspace.mexico-nature .mexico-climate-city-key{width:8px!important;height:8px!important;flex-basis:8px!important;border-radius:50%;background:#263e48;border:1px solid #fff;outline:1px solid #263e48}
+.mexico-climate-stations circle{fill:#263e48;stroke:#fffdf7;stroke-width:1.5}
+.mexico-climate-stations text{font:700 18px var(--sans);fill:#263e48;stroke:#fffdf7;stroke-width:3px;paint-order:stroke fill}
+.mexico-climate-stations [aria-pressed=true] circle{fill:#fff;stroke:#263e48;stroke-width:2.5}
+.mexico-nature[data-mexico-nature-view]:not([data-mexico-nature-view=climate]) [data-mexico-climate-stations],.mexico-nature[data-mexico-nature-category]:not([data-mexico-nature-category=""]) [data-mexico-climate-stations]{display:none}
+.mexico-nature .mexico-climate-diagrams{display:none}
+.mexico-nature:not([data-mexico-nature-view]) .mexico-climate-diagrams{display:block}
+.mexico-nature[data-mexico-nature-view=climate][data-mexico-nature-category=""]:not(.is-comparison) .mexico-climate-diagrams{display:block}
+.mexico-climate-diagrams [hidden]{display:none!important}
+.mexico-workspace.mexico-nature .mexico-climate-diagrams h2{font:700 23px/1.3 var(--serif);margin:0 0 8px}
+.mexico-climate-diagrams svg{display:block;width:100%;height:auto}
+.mexico-climate-diagrams details{font-size:12px;margin:8px 0}
+.mexico-climate-diagrams table{border-collapse:collapse;width:100%;font-size:12px}
+.mexico-climate-diagrams :is(th,td){text-align:right;padding:4px;border-bottom:1px solid #d4d8cc}
+.mexico-workspace.mexico-nature .mexico-nature-tabs button{font-size:14px;min-height:44px}
+.mexico-workspace.mexico-nature .mexico-nature-map-tools{position:absolute;right:10px;top:10px;display:grid;gap:5px}
+.mexico-workspace.mexico-nature .mexico-nature-map-tools button{width:44px;height:44px;min-height:44px;padding:0;border:1px solid #b2beb7;border-radius:5px;background:#fffef5ed;color:#253e42;font:700 12px/1.2 var(--sans);box-shadow:0 1px 3px #223a3824}
+.mexico-workspace.mexico-nature .mexico-nature-map-tools button[data-mexico-nature-zoom]{font-size:22px}
+.mexico-workspace.mexico-nature .mexico-nature-reading-key{margin:6px 0}
+.mexico-workspace.mexico-nature .mexico-nature-reading-key .mexico-legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;line-height:1.7}
+.mexico-workspace.mexico-nature .mexico-nature-reading-key .mexico-legend i{width:14px;height:10px}
+.mexico-workspace.mexico-nature .mexico-nature-secondary-controls{width:100%;font-size:12px}
+.mexico-workspace.mexico-nature .mexico-nature-secondary-controls summary{cursor:pointer;min-height:32px}
+@media(min-width:960px){
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace.mexico-nature[data-field=natural] .mexico-map-frame{height:auto;min-height:300px;max-height:640px;aspect-ratio:1.55;padding:0}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace.mexico-nature[data-field=natural] .mexico-map-frame .mexico-nature-map{max-height:none;height:100%;width:100%;min-height:0}
+ .mexico-workspace.mexico-nature[data-mexico-nature-view=climate][data-mexico-nature-category=""]:not(.is-comparison) .mexico-header{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+ .mexico-workspace.mexico-nature[data-mexico-nature-view=climate][data-mexico-nature-category=""]:not(.is-comparison) :is(.mexico-reading,.mexico-reading-content,.mexico-nature-reading){display:block;min-height:0;overflow:visible}
+ .mexico-workspace.mexico-nature[data-mexico-nature-view=climate][data-mexico-nature-category=""]:not(.is-comparison) .mexico-reading{max-height:calc(100dvh - 220px);overflow:auto;scrollbar-gutter:stable}
+ .mexico-workspace.mexico-nature .mexico-nature-reading>.mexico-climate-diagrams{height:auto;min-height:0;max-height:none;overflow:visible;flex:none}
+}

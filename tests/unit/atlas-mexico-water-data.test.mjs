@@ -63,6 +63,10 @@ test('国内流域は158原IDと正式分類を保持し、海外全流域とは
   assert.equal(record.excludedRecordCount, 0);
   assert.equal(record.observedPeriod, null);
   assert.equal(record.edition, null);
+  assert.equal(record.sourceClassificationAudit.sourceLayer,'AnalisisEspacial:Cuencas');
+  assert.equal(record.sourceClassificationAudit.administrativeStatisticalRegion,false);
+  assert.equal(record.sourceClassificationAudit.includesForeignUpstream,false);
+  assert.deepEqual(record.legend.map(key=>key.id),['EXORREICA','ENDORREICA','basins']);
   assert.match(record.coverage, /foreign upstream.*not provided/);
   assert.ok(vector.features.every(f => /^RH\d{2}[A-Z]$/.test(f.properties.sourceId) && f.properties.sourceName));
   const types = vector.features.reduce((acc, f) => {acc[f.properties.basinType] = (acc[f.properties.basinType] ?? 0) + 1; return acc;}, {});

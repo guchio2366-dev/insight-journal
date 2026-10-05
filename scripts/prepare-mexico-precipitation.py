@@ -23,6 +23,16 @@ PRODUCT_URL = "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=7028252675
 GUIDE_URL = "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/historicos/1329/702825231781/702825231781_1.pdf"
 EXPECTED_ZIP_SHA256 = "0d1d22d690d84e032b3488f6e337bcafcd95f02319250d014316656a7565c0e3"
 EXPECTED_LEVELS = [100, 200, 300, 400, 500, 600, 700, 800, 1000, 1100, 1200, 1300, 1500, 2000, 2500, 3000, 3500, 4000, 4500]
+# The US annual-rainfall palette is reused only to color actual Mexican line values.
+PRECIPITATION_LEGEND = [
+    {"id": "lt250", "label": "250mm未満", "color": "#f2dfb3", "min": 0, "max": 250, "symbol": "line"},
+    {"id": "250-500", "label": "250〜500mm未満", "color": "#e0e4be", "min": 250, "max": 500, "symbol": "line"},
+    {"id": "500-750", "label": "500〜750mm未満", "color": "#b9d8b8", "min": 500, "max": 750, "symbol": "line"},
+    {"id": "750-1000", "label": "750〜1,000mm未満", "color": "#8bc8bf", "min": 750, "max": 1000, "symbol": "line"},
+    {"id": "1000-1500", "label": "1,000〜1,500mm未満", "color": "#60afb8", "min": 1000, "max": 1500, "symbol": "line"},
+    {"id": "1500-2000", "label": "1,500〜2,000mm未満", "color": "#378eaa", "min": 1500, "max": 2000, "symbol": "line"},
+    {"id": "gte2000", "label": "2,000mm以上", "color": "#216782", "min": 2000, "symbol": "line"},
+]
 
 
 def digest(raw):
@@ -111,6 +121,8 @@ def main():
         "edition": 2006, "observedPeriod": None,
         "periodNote": "2006年は刊行年。関連する2005年作成ガイド§3.3（印刷15頁）は1921–1975年の観測を説明するが、この配布版の統一観測期間との対応は未確認。近年の降水量や1991–2020平年値として扱わない。",
         "unit": "mm/year", "geometryMeaning": "Actual source isohyet lines; not rainfall polygons or station observations.",
+        "legend": PRECIPITATION_LEGEND,
+        "displayEncoding": {"colorMeaning": "Actual source isohyet value classified by the seven US rainfall thresholds; no area between lines is classified or interpolated.", "thresholdsMm": [250, 500, 750, 1000, 1500, 2000], "majorSourceValuesMm": [1000, 1500], "retainedSourceValues": EXPECTED_LEVELS},
         "scale": 1000000, "sourceCrsWkt": original_wkt, "outputCrs": "EPSG:4326",
         "transform": {"operation": transform.description, "accuracyMetres": transform.accuracy, "ballparkAllowed": False, "alwaysXY": True},
         "bounds4326": bounds, "levels": EXPECTED_LEVELS,

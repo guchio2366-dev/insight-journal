@@ -1,0 +1,217 @@
+{
+  "schemaVersion": 1,
+  "id": "mexico-nature-parity-relief-v1",
+  "purpose": "Neutral shaded elevation context behind the INEGI landform classification outlines.",
+  "derivedBy": "Insight Journal offline processing; this hillshade is not an official INEGI classification.",
+  "file": "relief.webp",
+  "bytes": 61462,
+  "sha256": "8494a6eceeea62633ad54c7a3447aa9e25466b6df071bd7d500a3baea428469f",
+  "source": {
+    "sourceUrl": "https://www.ncei.noaa.gov/products/etopo-global-relief-model",
+    "downloadUrl": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/60s/60s_surface_elev_gtif/ETOPO_2022_v1_60s_N90W180_surface.tif",
+    "sourceEdition": "ETOPO 2022 v1 60 arc-second surface",
+    "sourceFile": "ETOPO_2022_v1_60s_N90W180_surface.tif",
+    "sourceSha256": "9d27d4b8ea8e76977e2988bca667d7c8fa68b927355feffcddd6b4875a7fd08e",
+    "sourceBytes": 465969062,
+    "retrievedAt": "2026-10-02T06:22:13Z",
+    "license": "CC0-1.0",
+    "licenseUrl": "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ngdc.mgg.dem%3Aetopo_2022/html",
+    "userGuideUrl": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/docs/1.2%20ETOPO%202022%20User%20Guide.pdf",
+    "citation": "NOAA National Centers for Environmental Information. 2022: ETOPO 2022 15 Arc-Second Global Relief Model. DOI:10.25921/fd45-gt74. Accessed 2026-10-02.",
+    "horizontalCrs": "EPSG:4326",
+    "verticalDatum": "EGM2008 geoid",
+    "unit": "m",
+    "editionNotObservationYear": true
+  },
+  "decodedGrid": {
+    "sourceSha256": "9d27d4b8ea8e76977e2988bca667d7c8fa68b927355feffcddd6b4875a7fd08e",
+    "file": "mexico-etopo-window.f32",
+    "sha256": "47e9c1792e653c05e94058b2b7311a18a7db38c094d47fb0f8a5acfef45c9743",
+    "bytes": 9504000,
+    "width": 1980,
+    "height": 1200,
+    "window": [
+      3660,
+      3360,
+      5640,
+      4560
+    ],
+    "origin": [
+      -119,
+      34
+    ],
+    "resolution": [
+      0.016666666666666666,
+      -0.016666666666666666
+    ],
+    "dtype": "float32-little-endian",
+    "noData": -99999,
+    "geoKeys": {
+      "GTModelTypeGeoKey": 2,
+      "GTRasterTypeGeoKey": 1,
+      "GTCitationGeoKey": "WGS 84 + EGM2008 height",
+      "GeographicTypeGeoKey": 4326,
+      "VerticalCSTypeGeoKey": 3855
+    },
+    "method": "GeoTIFF.js 3.0.5 exact native window read; no resampling or integer casting",
+    "verifiedAgainst": "mexico-water-v1/contours.source.json"
+  },
+  "landClip": {
+    "source": "Fuente: INEGI, Marco Geoestadistico, diciembre de 2025; 32 retained state geometries.",
+    "sourceUrl": "https://gaia.inegi.org.mx/wscatgeo/v2/geo/mgee/",
+    "documentation": "https://www.inegi.org.mx/servicios/catalogounico.html",
+    "license": "INEGI Terminos de Libre Uso de la Informacion; attribution and transformation disclosure required.",
+    "licenseUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+    "originalSourceSha256": "170c3ea5ff472f08ece97970dc90ad4ba8c6f503e33859655f315091c105cc91",
+    "retainedGeometryFile": "src/data/atlas/mexico/geometry.json",
+    "retainedGeometrySha256": "193f700c8741c2752561de077c781383dcc28a95244fb60726f591f8af011faa",
+    "geometryIndexFile": "src/data/atlas/mexico/geometry-index.json",
+    "geometryIndexSha256": "c18f61eb22816d9cb3b655df8a2aa71da2dcfc84b4bb4339308d0ea9d4d6689b",
+    "method": "Project retained INEGI geographic state polygon vertices with the same GRS80 Lambert forward formula; union polygons; retain output pixel centres contained by that union. Alpha zero elsewhere."
+  },
+  "displayFrame": {
+    "width": 900,
+    "height": 580,
+    "viewBox": "0 0 900 580",
+    "imagePlacement": {
+      "x": 0,
+      "y": 0,
+      "width": 900,
+      "height": 580,
+      "preserveAspectRatio": "none"
+    },
+    "projection": {
+      "name": "INEGI Lambert Conformal Conic",
+      "datum": "ITRF92",
+      "ellipsoid": "GRS80",
+      "semiMajorM": 6378137,
+      "inverseFlattening": 298.257222101,
+      "standardParallel1": 17.5,
+      "standardParallel2": 29.5,
+      "latitudeOrigin": 12,
+      "centralMeridian": -102,
+      "falseEastingM": 2500000,
+      "falseNorthingM": 0
+    },
+    "boundsNative": [
+      911292.029449366,
+      319149.06252919696,
+      4083063.0952772293,
+      2349614.87171421
+    ],
+    "scalePixelsPerNativeMetre": 0.00025806886165215595,
+    "leftPixels": 40.73232581027895,
+    "topPixels": 28.0,
+    "metresPerPixelInLambertPlane": 3874.934750353078,
+    "cornersOrder": [
+      "top-left",
+      "top-right",
+      "bottom-right",
+      "bottom-left"
+    ],
+    "frameCornersNative": [
+      [
+        753456.9247044125,
+        2458113.0447240965
+      ],
+      [
+        4240898.200022183,
+        2458113.0447240965
+      ],
+      [
+        4240898.200022183,
+        210650.88951931102
+      ],
+      [
+        753456.9247044125,
+        210650.88951931102
+      ]
+    ],
+    "frameCornersLonLat": [
+      [
+        -120.60837078498076,
+        33.16425881431248
+      ],
+      [
+        -83.45110248274294,
+        33.17077474263814
+      ],
+      [
+        -86.09416672508411,
+        13.017717839780246
+      ],
+      [
+        -117.95698415756823,
+        13.012123383493336
+      ]
+    ],
+    "pixelRegistration": "Cell centres at x+0.5,y+0.5 within the full SVG display frame.",
+    "mapping": "x=left+(nativeX-minX)*scale; y=top+(maxY-nativeY)*scale; scale=min(844/(maxX-minX),524/(maxY-minY)).",
+    "geographicNote": "Matches atlas-mexico-projection.mjs and its existing geographic rendering. No epoch-dependent ITRF92/WGS84 transformation or cadastral precision is asserted."
+  },
+  "method": {
+    "resampling": "Inverse exact display-frame Lambert mapping; bilinear interpolation of four valid native cell-centre float32 heights. No resampling of the cached native grid itself.",
+    "noData": -99999,
+    "missingData": "Nonfinite/NoData/out-of-window donors invalidate the sample. All five samples needed by the central derivative must be valid. No fill, extrapolation, synthetic terrain or contour-to-surface reconstruction.",
+    "hillshade": "Lambert-plane east/north central finite differences of sampled EGM2008 metre heights, with a one-pixel source-sampled halo; dot product of normalized surface normal and directional light, clipped to [0,1].",
+    "lightAzimuthDegreesClockwiseFromNorth": 315,
+    "lightAltitudeDegrees": 45,
+    "verticalExaggerationForDisplay": 5,
+    "paperRgb": [
+      245,
+      241,
+      220
+    ],
+    "ambientFraction": 0.65,
+    "darkeningFactor": 0.62,
+    "tone": "gray=255*(0.65+0.35*hillshade); rgb=clip([245,241,220]-(255-gray)*0.62,0,255). Uses the US paper tone and neutral darkening factor from map/atlas/prepare_maplibre.py.",
+    "encoding": "Lossless RGBA WebP; exact transparent RGB; transparent outside retained INEGI land."
+  },
+  "checks": {
+    "originalSourceHashMatches": true,
+    "nativeGridHashMatches": true,
+    "retainedBoundaryMatchesExistingContours": true,
+    "outputPixelCount": 522000,
+    "validLandPixelCount": 130103,
+    "landPixelsWithoutSourceSupport": 0,
+    "nonzeroAlphaOutsideLand": 0,
+    "webpLosslessRoundTripExact": true,
+    "lambertRoundTripMaxNativeMetres": 6.05359673500061e-09,
+    "sampledLandHeightMinM": -364.4692386639753,
+    "sampledLandHeightMaxM": 4715.923780629798,
+    "validNegativeLandHeightPixelCount": 959,
+    "hillshadeRange": [
+      0.0,
+      0.9995848304984876
+    ],
+    "landRgbMin": [
+      189,
+      185,
+      164
+    ],
+    "landRgbMax": [
+      244,
+      240,
+      219
+    ]
+  },
+  "reproduction": {
+    "script": "scripts/prepare-mexico-relief-background.py",
+    "scriptSha256": "447386c34c6d22de83603e36c447195151a52d832e8fb49b705c9f86632fee55",
+    "command": "python scripts/prepare-mexico-relief-background.py --source <pinned-original.tif> --grid <mexico-etopo-window.json>",
+    "dependencies": {
+      "numpy": "2.5.3",
+      "Pillow": "12.3.0",
+      "shapely": "2.1.2"
+    }
+  },
+  "limitations": [
+    "2022 denotes the model edition, not a uniform observation year.",
+    "60 arc-second source data and the 900x580 display raster give national visual context, not survey-grade or site-level elevations.",
+    "Hillshade brightness depends on the disclosed illumination, display exaggeration and tone. It is not an elevation scale or a landform classification.",
+    "The INEGI landform outlines retain their own source classification; this background does not replace or derive those categories.",
+    "Valid negative elevations are retained. Mixed marine/terrestrial coastal source cells may influence coastal shading.",
+    "Source/grid/image pixel counts and sampled height extrema are verification details, not national land area, state summaries or exact national extrema.",
+    "The native-cell interpolation and finite differences use genuine source samples. No source gap is filled."
+  ]
+}

@@ -1,0 +1,2472 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-05",
+  "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d",
+  "classification": "INEGI / García modified Köppen",
+  "equivalence": "display-hue-only",
+  "reference": {
+    "file": "scripts/refine-atlas-nature.py",
+    "sha256": "1b6a55bdfc362b2d1f39d9e919fc40ddd7fd820ba9f4027a5534cb2f52f12ac9",
+    "role": "Existing US display hue values only"
+  },
+  "climate": {
+    "bySourceCode": {
+      "(A)C(fm)": {
+        "displayKey": "c-a-humid",
+        "colorReferenceCode": "Cfa",
+        "sourcePrefix": "(A)C",
+        "mappingBasis": "Separate García warm C/A transition; temperate hue reuse only",
+        "color": "#98bba0",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semicálido húmedo"
+        ],
+        "classIds": [
+          "21"
+        ],
+        "featureCount": 7
+      },
+      "(A)C(m)": {
+        "displayKey": "c-a-humid",
+        "colorReferenceCode": "Cfa",
+        "sourcePrefix": "(A)C",
+        "mappingBasis": "Separate García warm C/A transition; temperate hue reuse only",
+        "color": "#98bba0",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semicálido húmedo"
+        ],
+        "classIds": [
+          "21"
+        ],
+        "featureCount": 8
+      },
+      "(A)C(m)(w)": {
+        "displayKey": "c-a-humid",
+        "colorReferenceCode": "Cfa",
+        "sourcePrefix": "(A)C",
+        "mappingBasis": "Separate García warm C/A transition; temperate hue reuse only",
+        "color": "#98bba0",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semicálido húmedo"
+        ],
+        "classIds": [
+          "21"
+        ],
+        "featureCount": 9
+      },
+      "(A)C(w0)": {
+        "displayKey": "c-a-subhumid",
+        "colorReferenceCode": "Cwa",
+        "sourcePrefix": "(A)C",
+        "mappingBasis": "Separate García warm C/A transition; temperate hue reuse only",
+        "color": "#c5d49b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado subhúmedo"
+        ],
+        "classIds": [
+          "32"
+        ],
+        "featureCount": 38
+      },
+      "(A)C(w0)(w)": {
+        "displayKey": "c-a-subhumid",
+        "colorReferenceCode": "Cwa",
+        "sourcePrefix": "(A)C",
+        "mappingBasis": "Separate García warm C/A transition; temperate hue reuse only",
+        "color": "#c5d49b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado subhúmedo"
+        ],
+        "classIds": [
+          "32"
+        ],
+        "featureCount": 17
+      },
+      "(A)C(w0)(x')": {
+        "displayKey": "c-a-subhumid",
+        "colorReferenceCode": "Cwa",
+        "sourcePrefix": "(A)C",
+        "mappingBasis": "Separate García warm C/A transition; temperate hue reuse only",
+        "color": "#c5d49b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado subhúmedo"
+        ],
+        "classIds": [
+          "32"
+        ],
+        "featureCount": 4
+      },
+      "(A)C(w1)": {
+        "displayKey": "c-a-subhumid",
+        "colorReferenceCode": "Cwa",
+        "sourcePrefix": "(A)C",
+        "mappingBasis": "Separate García warm C/A transition; temperate hue reuse only",
+        "color": "#c5d49b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado subhúmedo"
+        ],
+        "classIds": [
+          "32"
+        ],
+        "featureCount": 25
+      },
+      "(A)C(w1)(w)": {
+        "displayKey": "c-a-subhumid",
+        "colorReferenceCode": "Cwa",
+        "sourcePrefix": "(A)C",
+        "mappingBasis": "Separate García warm C/A transition; temperate hue reuse only",
+        "color": "#c5d49b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado subhúmedo"
+        ],
+        "classIds": [
+          "32"
+        ],
+        "featureCount": 26
+      },
+      "(A)C(w1)(x')": {
+        "displayKey": "c-a-subhumid",
+        "colorReferenceCode": "Cwa",
+        "sourcePrefix": "(A)C",
+        "mappingBasis": "Separate García warm C/A transition; temperate hue reuse only",
+        "color": "#c5d49b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado subhúmedo"
+        ],
+        "classIds": [
+          "32"
+        ],
+        "featureCount": 1
+      },
+      "(A)C(w2)": {
+        "displayKey": "c-a-subhumid",
+        "colorReferenceCode": "Cwa",
+        "sourcePrefix": "(A)C",
+        "mappingBasis": "Separate García warm C/A transition; temperate hue reuse only",
+        "color": "#c5d49b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado subhúmedo"
+        ],
+        "classIds": [
+          "32"
+        ],
+        "featureCount": 7
+      },
+      "(A)C(w2)(w)": {
+        "displayKey": "c-a-subhumid",
+        "colorReferenceCode": "Cwa",
+        "sourcePrefix": "(A)C",
+        "mappingBasis": "Separate García warm C/A transition; temperate hue reuse only",
+        "color": "#c5d49b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado subhúmedo"
+        ],
+        "classIds": [
+          "32"
+        ],
+        "featureCount": 29
+      },
+      "(A)Cx'": {
+        "displayKey": "c-a-subhumid",
+        "colorReferenceCode": "Cwa",
+        "sourcePrefix": "(A)C",
+        "mappingBasis": "Separate García warm C/A transition; temperate hue reuse only",
+        "color": "#c5d49b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semicálido subhúmedo"
+        ],
+        "classIds": [
+          "22"
+        ],
+        "featureCount": 65
+      },
+      "A(C)f(m)": {
+        "displayKey": "a-c-humid",
+        "colorReferenceCode": "Am",
+        "sourcePrefix": "A(C)",
+        "mappingBasis": "Separate García warm A/C transition; tropical hue reuse only",
+        "color": "#78b6ba",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semicálido húmedo"
+        ],
+        "classIds": [
+          "21"
+        ],
+        "featureCount": 10
+      },
+      "A(C)m": {
+        "displayKey": "a-c-humid",
+        "colorReferenceCode": "Am",
+        "sourcePrefix": "A(C)",
+        "mappingBasis": "Separate García warm A/C transition; tropical hue reuse only",
+        "color": "#78b6ba",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semicálido húmedo"
+        ],
+        "classIds": [
+          "21"
+        ],
+        "featureCount": 3
+      },
+      "A(C)m(f)": {
+        "displayKey": "a-c-humid",
+        "colorReferenceCode": "Am",
+        "sourcePrefix": "A(C)",
+        "mappingBasis": "Separate García warm A/C transition; tropical hue reuse only",
+        "color": "#78b6ba",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semicálido húmedo"
+        ],
+        "classIds": [
+          "21"
+        ],
+        "featureCount": 2
+      },
+      "A(C)m(w)": {
+        "displayKey": "a-c-humid",
+        "colorReferenceCode": "Am",
+        "sourcePrefix": "A(C)",
+        "mappingBasis": "Separate García warm A/C transition; tropical hue reuse only",
+        "color": "#78b6ba",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semicálido húmedo"
+        ],
+        "classIds": [
+          "21"
+        ],
+        "featureCount": 7
+      },
+      "A(C)w0(w)": {
+        "displayKey": "a-c-subhumid",
+        "colorReferenceCode": "Aw",
+        "sourcePrefix": "A(C)",
+        "mappingBasis": "Separate García warm A/C transition; tropical hue reuse only",
+        "color": "#a1cdd0",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semicálido subhúmedo"
+        ],
+        "classIds": [
+          "22"
+        ],
+        "featureCount": 19
+      },
+      "A(C)w1(w)": {
+        "displayKey": "a-c-subhumid",
+        "colorReferenceCode": "Aw",
+        "sourcePrefix": "A(C)",
+        "mappingBasis": "Separate García warm A/C transition; tropical hue reuse only",
+        "color": "#a1cdd0",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semicálido subhúmedo"
+        ],
+        "classIds": [
+          "22"
+        ],
+        "featureCount": 51
+      },
+      "A(C)w2": {
+        "displayKey": "a-c-subhumid",
+        "colorReferenceCode": "Aw",
+        "sourcePrefix": "A(C)",
+        "mappingBasis": "Separate García warm A/C transition; tropical hue reuse only",
+        "color": "#a1cdd0",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semicálido subhúmedo"
+        ],
+        "classIds": [
+          "22"
+        ],
+        "featureCount": 3
+      },
+      "A(C)w2(w)": {
+        "displayKey": "a-c-subhumid",
+        "colorReferenceCode": "Aw",
+        "sourcePrefix": "A(C)",
+        "mappingBasis": "Separate García warm A/C transition; tropical hue reuse only",
+        "color": "#a1cdd0",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semicálido subhúmedo"
+        ],
+        "classIds": [
+          "22"
+        ],
+        "featureCount": 21
+      },
+      "Af(m)": {
+        "displayKey": "a-f",
+        "colorReferenceCode": "Af",
+        "sourcePrefix": "Af",
+        "mappingBasis": "Shared A/f prefix; original modified suffix retained",
+        "color": "#529ca5",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Cálido húmedo"
+        ],
+        "classIds": [
+          "11"
+        ],
+        "featureCount": 4
+      },
+      "Am": {
+        "displayKey": "a-m",
+        "colorReferenceCode": "Am",
+        "sourcePrefix": "Am",
+        "mappingBasis": "Shared A/m prefix; original modified suffix retained",
+        "color": "#78b6ba",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Cálido húmedo"
+        ],
+        "classIds": [
+          "11"
+        ],
+        "featureCount": 5
+      },
+      "Am(f)": {
+        "displayKey": "a-m",
+        "colorReferenceCode": "Am",
+        "sourcePrefix": "Am",
+        "mappingBasis": "Shared A/m prefix; original modified suffix retained",
+        "color": "#78b6ba",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Cálido húmedo"
+        ],
+        "classIds": [
+          "11"
+        ],
+        "featureCount": 11
+      },
+      "Am(w)": {
+        "displayKey": "a-m",
+        "colorReferenceCode": "Am",
+        "sourcePrefix": "Am",
+        "mappingBasis": "Shared A/m prefix; original modified suffix retained",
+        "color": "#78b6ba",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Cálido húmedo"
+        ],
+        "classIds": [
+          "11"
+        ],
+        "featureCount": 5
+      },
+      "Aw0": {
+        "displayKey": "a-w",
+        "colorReferenceCode": "Aw",
+        "sourcePrefix": "Aw",
+        "mappingBasis": "Shared A/w prefix; original moisture and season modifiers retained",
+        "color": "#a1cdd0",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Cálido subhúmedo"
+        ],
+        "classIds": [
+          "12"
+        ],
+        "featureCount": 13
+      },
+      "Aw0(w)": {
+        "displayKey": "a-w",
+        "colorReferenceCode": "Aw",
+        "sourcePrefix": "Aw",
+        "mappingBasis": "Shared A/w prefix; original moisture and season modifiers retained",
+        "color": "#a1cdd0",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Cálido subhúmedo"
+        ],
+        "classIds": [
+          "12"
+        ],
+        "featureCount": 30
+      },
+      "Aw0(x')": {
+        "displayKey": "a-w",
+        "colorReferenceCode": "Aw",
+        "sourcePrefix": "Aw",
+        "mappingBasis": "Shared A/w prefix; original moisture and season modifiers retained",
+        "color": "#a1cdd0",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Cálido subhúmedo"
+        ],
+        "classIds": [
+          "12"
+        ],
+        "featureCount": 7
+      },
+      "Aw1": {
+        "displayKey": "a-w",
+        "colorReferenceCode": "Aw",
+        "sourcePrefix": "Aw",
+        "mappingBasis": "Shared A/w prefix; original moisture and season modifiers retained",
+        "color": "#a1cdd0",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Cálido subhúmedo"
+        ],
+        "classIds": [
+          "12"
+        ],
+        "featureCount": 11
+      },
+      "Aw1(w)": {
+        "displayKey": "a-w",
+        "colorReferenceCode": "Aw",
+        "sourcePrefix": "Aw",
+        "mappingBasis": "Shared A/w prefix; original moisture and season modifiers retained",
+        "color": "#a1cdd0",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Cálido subhúmedo"
+        ],
+        "classIds": [
+          "12"
+        ],
+        "featureCount": 48
+      },
+      "Aw1(x')": {
+        "displayKey": "a-w",
+        "colorReferenceCode": "Aw",
+        "sourcePrefix": "Aw",
+        "mappingBasis": "Shared A/w prefix; original moisture and season modifiers retained",
+        "color": "#a1cdd0",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Cálido subhúmedo"
+        ],
+        "classIds": [
+          "12"
+        ],
+        "featureCount": 5
+      },
+      "Aw2": {
+        "displayKey": "a-w",
+        "colorReferenceCode": "Aw",
+        "sourcePrefix": "Aw",
+        "mappingBasis": "Shared A/w prefix; original moisture and season modifiers retained",
+        "color": "#a1cdd0",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Cálido subhúmedo"
+        ],
+        "classIds": [
+          "12"
+        ],
+        "featureCount": 28
+      },
+      "Aw2(w)": {
+        "displayKey": "a-w",
+        "colorReferenceCode": "Aw",
+        "sourcePrefix": "Aw",
+        "mappingBasis": "Shared A/w prefix; original moisture and season modifiers retained",
+        "color": "#a1cdd0",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Cálido subhúmedo"
+        ],
+        "classIds": [
+          "12"
+        ],
+        "featureCount": 20
+      },
+      "Aw2(x')": {
+        "displayKey": "a-w",
+        "colorReferenceCode": "Aw",
+        "sourcePrefix": "Aw",
+        "mappingBasis": "Shared A/w prefix; original moisture and season modifiers retained",
+        "color": "#a1cdd0",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Cálido subhúmedo"
+        ],
+        "classIds": [
+          "12"
+        ],
+        "featureCount": 37
+      },
+      "BS0(h')hw": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS0",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Seco cálido"
+        ],
+        "classIds": [
+          "57"
+        ],
+        "featureCount": 29
+      },
+      "BS0(h')hw(x')": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS0",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Seco cálido"
+        ],
+        "classIds": [
+          "57"
+        ],
+        "featureCount": 4
+      },
+      "BS0(h')hx'": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS0",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Seco cálido"
+        ],
+        "classIds": [
+          "57"
+        ],
+        "featureCount": 1
+      },
+      "BS0(h')w": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS0",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Seco muy cálido"
+        ],
+        "classIds": [
+          "56"
+        ],
+        "featureCount": 1
+      },
+      "BS0(h')w(w)": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS0",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Seco muy cálido"
+        ],
+        "classIds": [
+          "56"
+        ],
+        "featureCount": 9
+      },
+      "BS0(h')w(x')": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS0",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Seco muy cálido"
+        ],
+        "classIds": [
+          "56"
+        ],
+        "featureCount": 12
+      },
+      "BS0h'(h)w": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS0",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Seco semicálido"
+        ],
+        "classIds": [
+          "58"
+        ],
+        "featureCount": 1
+      },
+      "BS0hw": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS0",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Seco semicálido"
+        ],
+        "classIds": [
+          "32",
+          "58"
+        ],
+        "featureCount": 21
+      },
+      "BS0hw(w)": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS0",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Seco semicálido"
+        ],
+        "classIds": [
+          "58"
+        ],
+        "featureCount": 7
+      },
+      "BS0hw(x')": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS0",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Seco semicálido"
+        ],
+        "classIds": [
+          "58"
+        ],
+        "featureCount": 7
+      },
+      "BS0hx'": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS0",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Seco semicálido"
+        ],
+        "classIds": [
+          "58"
+        ],
+        "featureCount": 5
+      },
+      "BS0kw": {
+        "displayKey": "bs-k",
+        "colorReferenceCode": "BSk",
+        "sourcePrefix": "BS0",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#e5d3ad",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Seco templado"
+        ],
+        "classIds": [
+          "59"
+        ],
+        "featureCount": 56
+      },
+      "BS0kw(w)": {
+        "displayKey": "bs-k",
+        "colorReferenceCode": "BSk",
+        "sourcePrefix": "BS0",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#e5d3ad",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Seco templado"
+        ],
+        "classIds": [
+          "59"
+        ],
+        "featureCount": 26
+      },
+      "BS0kw(x')": {
+        "displayKey": "bs-k",
+        "colorReferenceCode": "BSk",
+        "sourcePrefix": "BS0",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#e5d3ad",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Seco templado"
+        ],
+        "classIds": [
+          "59"
+        ],
+        "featureCount": 40
+      },
+      "BS0kx'": {
+        "displayKey": "bs-k",
+        "colorReferenceCode": "BSk",
+        "sourcePrefix": "BS0",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#e5d3ad",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Seco templado"
+        ],
+        "classIds": [
+          "59"
+        ],
+        "featureCount": 5
+      },
+      "BS1(h')hw": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS1",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semiseco cálido"
+        ],
+        "classIds": [
+          "52"
+        ],
+        "featureCount": 21
+      },
+      "BS1(h')hw(w)": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS1",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semiseco cálido"
+        ],
+        "classIds": [
+          "52"
+        ],
+        "featureCount": 4
+      },
+      "BS1(h')hw(x')": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS1",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semiseco cálido"
+        ],
+        "classIds": [
+          "52"
+        ],
+        "featureCount": 2
+      },
+      "BS1(h')hx'": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS1",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semiseco cálido"
+        ],
+        "classIds": [
+          "52"
+        ],
+        "featureCount": 1
+      },
+      "BS1(h')w": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS1",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semiseco muy cálido"
+        ],
+        "classIds": [
+          "51"
+        ],
+        "featureCount": 4
+      },
+      "BS1(h')w(w)": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS1",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semiseco muy cálido"
+        ],
+        "classIds": [
+          "51"
+        ],
+        "featureCount": 17
+      },
+      "BS1(h')w(x')": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS1",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semiseco muy cálido"
+        ],
+        "classIds": [
+          "51"
+        ],
+        "featureCount": 2
+      },
+      "BS1h'(h)w(w)": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS1",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semiseco semicálido"
+        ],
+        "classIds": [
+          "53"
+        ],
+        "featureCount": 1
+      },
+      "BS1hw": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS1",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semiseco semicálido"
+        ],
+        "classIds": [
+          "53"
+        ],
+        "featureCount": 25
+      },
+      "BS1hw(w)": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS1",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semiseco semicálido"
+        ],
+        "classIds": [
+          "53"
+        ],
+        "featureCount": 15
+      },
+      "BS1hw(x')": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS1",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semiseco semicálido"
+        ],
+        "classIds": [
+          "53"
+        ],
+        "featureCount": 9
+      },
+      "BS1hx'": {
+        "displayKey": "bs-h",
+        "colorReferenceCode": "BSh",
+        "sourcePrefix": "BS1",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#ebc38e",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semiseco semicálido"
+        ],
+        "classIds": [
+          "53"
+        ],
+        "featureCount": 2
+      },
+      "BS1k''w": {
+        "displayKey": "bs-k",
+        "colorReferenceCode": "BSk",
+        "sourcePrefix": "BS1",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#e5d3ad",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semiseco semifrío"
+        ],
+        "classIds": [
+          "55"
+        ],
+        "featureCount": 5
+      },
+      "BS1k''w(x')": {
+        "displayKey": "bs-k",
+        "colorReferenceCode": "BSk",
+        "sourcePrefix": "BS1",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#e5d3ad",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semiseco semifrío"
+        ],
+        "classIds": [
+          "55"
+        ],
+        "featureCount": 1
+      },
+      "BS1k'w": {
+        "displayKey": "bs-k",
+        "colorReferenceCode": "BSk",
+        "sourcePrefix": "BS1",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#e5d3ad",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semiseco templado"
+        ],
+        "classIds": [
+          "54"
+        ],
+        "featureCount": 1
+      },
+      "BS1kw": {
+        "displayKey": "bs-k",
+        "colorReferenceCode": "BSk",
+        "sourcePrefix": "BS1",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#e5d3ad",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semiseco templado"
+        ],
+        "classIds": [
+          "54"
+        ],
+        "featureCount": 46
+      },
+      "BS1kw(w)": {
+        "displayKey": "bs-k",
+        "colorReferenceCode": "BSk",
+        "sourcePrefix": "BS1",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#e5d3ad",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semiseco templado"
+        ],
+        "classIds": [
+          "54"
+        ],
+        "featureCount": 13
+      },
+      "BS1kw(x')": {
+        "displayKey": "bs-k",
+        "colorReferenceCode": "BSk",
+        "sourcePrefix": "BS1",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#e5d3ad",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semiseco templado"
+        ],
+        "classIds": [
+          "54"
+        ],
+        "featureCount": 29
+      },
+      "BS1kx'": {
+        "displayKey": "bs-k",
+        "colorReferenceCode": "BSk",
+        "sourcePrefix": "BS1",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#e5d3ad",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semiseco templado"
+        ],
+        "classIds": [
+          "54"
+        ],
+        "featureCount": 8
+      },
+      "BSks": {
+        "displayKey": "bs-k",
+        "colorReferenceCode": "BSk",
+        "sourcePrefix": "BS",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#e5d3ad",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Seco templado"
+        ],
+        "classIds": [
+          "59"
+        ],
+        "featureCount": 6
+      },
+      "BSks(x')": {
+        "displayKey": "bs-k",
+        "colorReferenceCode": "BSk",
+        "sourcePrefix": "BS",
+        "mappingBasis": "Shared BS dry prefix with source h/k marker; García BS0/BS1 distinctions retained, donor hue only",
+        "color": "#e5d3ad",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Seco templado"
+        ],
+        "classIds": [
+          "59"
+        ],
+        "featureCount": 1
+      },
+      "BW(h')hs(x')": {
+        "displayKey": "bw-h",
+        "colorReferenceCode": "BWh",
+        "sourcePrefix": "BW",
+        "mappingBasis": "Shared BW arid prefix with source h/k marker; donor hue only",
+        "color": "#e6ad7b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Muy seco cálido"
+        ],
+        "classIds": [
+          "62"
+        ],
+        "featureCount": 3
+      },
+      "BW(h')hw": {
+        "displayKey": "bw-h",
+        "colorReferenceCode": "BWh",
+        "sourcePrefix": "BW",
+        "mappingBasis": "Shared BW arid prefix with source h/k marker; donor hue only",
+        "color": "#e6ad7b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Muy seco cálido"
+        ],
+        "classIds": [
+          "62"
+        ],
+        "featureCount": 28
+      },
+      "BW(h')hw(w)": {
+        "displayKey": "bw-h",
+        "colorReferenceCode": "BWh",
+        "sourcePrefix": "BW",
+        "mappingBasis": "Shared BW arid prefix with source h/k marker; donor hue only",
+        "color": "#e6ad7b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Muy seco cálido"
+        ],
+        "classIds": [
+          "62"
+        ],
+        "featureCount": 1
+      },
+      "BW(h')hw(x')": {
+        "displayKey": "bw-h",
+        "colorReferenceCode": "BWh",
+        "sourcePrefix": "BW",
+        "mappingBasis": "Shared BW arid prefix with source h/k marker; donor hue only",
+        "color": "#e6ad7b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Muy seco cálido"
+        ],
+        "classIds": [
+          "62"
+        ],
+        "featureCount": 57
+      },
+      "BW(h')w": {
+        "displayKey": "bw-h",
+        "colorReferenceCode": "BWh",
+        "sourcePrefix": "BW",
+        "mappingBasis": "Shared BW arid prefix with source h/k marker; donor hue only",
+        "color": "#e6ad7b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Muy seco muy cálido"
+        ],
+        "classIds": [
+          "61"
+        ],
+        "featureCount": 5
+      },
+      "BWhs": {
+        "displayKey": "bw-h",
+        "colorReferenceCode": "BWh",
+        "sourcePrefix": "BW",
+        "mappingBasis": "Shared BW arid prefix with source h/k marker; donor hue only",
+        "color": "#e6ad7b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Muy seco semicálido"
+        ],
+        "classIds": [
+          "63"
+        ],
+        "featureCount": 9
+      },
+      "BWhs(x')": {
+        "displayKey": "bw-h",
+        "colorReferenceCode": "BWh",
+        "sourcePrefix": "BW",
+        "mappingBasis": "Shared BW arid prefix with source h/k marker; donor hue only",
+        "color": "#e6ad7b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Muy seco semicálido"
+        ],
+        "classIds": [
+          "63"
+        ],
+        "featureCount": 35
+      },
+      "BWhw": {
+        "displayKey": "bw-h",
+        "colorReferenceCode": "BWh",
+        "sourcePrefix": "BW",
+        "mappingBasis": "Shared BW arid prefix with source h/k marker; donor hue only",
+        "color": "#e6ad7b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Muy seco semicálido"
+        ],
+        "classIds": [
+          "63"
+        ],
+        "featureCount": 7
+      },
+      "BWhw(w)": {
+        "displayKey": "bw-h",
+        "colorReferenceCode": "BWh",
+        "sourcePrefix": "BW",
+        "mappingBasis": "Shared BW arid prefix with source h/k marker; donor hue only",
+        "color": "#e6ad7b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Muy seco semicálido"
+        ],
+        "classIds": [
+          "63"
+        ],
+        "featureCount": 2
+      },
+      "BWhw(x')": {
+        "displayKey": "bw-h",
+        "colorReferenceCode": "BWh",
+        "sourcePrefix": "BW",
+        "mappingBasis": "Shared BW arid prefix with source h/k marker; donor hue only",
+        "color": "#e6ad7b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Muy seco semicálido"
+        ],
+        "classIds": [
+          "63"
+        ],
+        "featureCount": 22
+      },
+      "BWhx'": {
+        "displayKey": "bw-h",
+        "colorReferenceCode": "BWh",
+        "sourcePrefix": "BW",
+        "mappingBasis": "Shared BW arid prefix with source h/k marker; donor hue only",
+        "color": "#e6ad7b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Muy seco semicálido"
+        ],
+        "classIds": [
+          "63"
+        ],
+        "featureCount": 3
+      },
+      "BWks": {
+        "displayKey": "bw-k",
+        "colorReferenceCode": "BWk",
+        "sourcePrefix": "BW",
+        "mappingBasis": "Shared BW arid prefix with source h/k marker; donor hue only",
+        "color": "#d4bc92",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Muy seco templado"
+        ],
+        "classIds": [
+          "64"
+        ],
+        "featureCount": 5
+      },
+      "BWks(x')": {
+        "displayKey": "bw-k",
+        "colorReferenceCode": "BWk",
+        "sourcePrefix": "BW",
+        "mappingBasis": "Shared BW arid prefix with source h/k marker; donor hue only",
+        "color": "#d4bc92",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Muy seco templado"
+        ],
+        "classIds": [
+          "64"
+        ],
+        "featureCount": 7
+      },
+      "BWkw": {
+        "displayKey": "bw-k",
+        "colorReferenceCode": "BWk",
+        "sourcePrefix": "BW",
+        "mappingBasis": "Shared BW arid prefix with source h/k marker; donor hue only",
+        "color": "#d4bc92",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Muy seco templado"
+        ],
+        "classIds": [
+          "64"
+        ],
+        "featureCount": 10
+      },
+      "BWkw(w)": {
+        "displayKey": "bw-k",
+        "colorReferenceCode": "BWk",
+        "sourcePrefix": "BW",
+        "mappingBasis": "Shared BW arid prefix with source h/k marker; donor hue only",
+        "color": "#d4bc92",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Muy seco templado"
+        ],
+        "classIds": [
+          "64"
+        ],
+        "featureCount": 7
+      },
+      "BWkw(x')": {
+        "displayKey": "bw-k",
+        "colorReferenceCode": "BWk",
+        "sourcePrefix": "BW",
+        "mappingBasis": "Shared BW arid prefix with source h/k marker; donor hue only",
+        "color": "#d4bc92",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Muy seco templado"
+        ],
+        "classIds": [
+          "64"
+        ],
+        "featureCount": 11
+      },
+      "C(E)(m)": {
+        "displayKey": "c-e-humid",
+        "colorReferenceCode": "Cfc",
+        "sourcePrefix": "C(E)",
+        "mappingBasis": "Separate García cool C/E transition; cool temperate hue reuse only; no D assignment",
+        "color": "#689b95",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Frío"
+        ],
+        "classIds": [
+          "70"
+        ],
+        "featureCount": 4
+      },
+      "C(E)(m)(w)": {
+        "displayKey": "c-e-humid",
+        "colorReferenceCode": "Cfc",
+        "sourcePrefix": "C(E)",
+        "mappingBasis": "Separate García cool C/E transition; cool temperate hue reuse only; no D assignment",
+        "color": "#689b95",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Frío"
+        ],
+        "classIds": [
+          "70"
+        ],
+        "featureCount": 5
+      },
+      "C(E)(w0)(w)": {
+        "displayKey": "c-e-subhumid",
+        "colorReferenceCode": "Cwc",
+        "sourcePrefix": "C(E)",
+        "mappingBasis": "Separate García cool C/E transition; cool temperate hue reuse only; no D assignment",
+        "color": "#8eae90",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semifrío subhúmedo"
+        ],
+        "classIds": [
+          "42"
+        ],
+        "featureCount": 1
+      },
+      "C(E)(w1)": {
+        "displayKey": "c-e-subhumid",
+        "colorReferenceCode": "Cwc",
+        "sourcePrefix": "C(E)",
+        "mappingBasis": "Separate García cool C/E transition; cool temperate hue reuse only; no D assignment",
+        "color": "#8eae90",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semifrío subhúmedo"
+        ],
+        "classIds": [
+          "42"
+        ],
+        "featureCount": 21
+      },
+      "C(E)(w1)(w)": {
+        "displayKey": "c-e-subhumid",
+        "colorReferenceCode": "Cwc",
+        "sourcePrefix": "C(E)",
+        "mappingBasis": "Separate García cool C/E transition; cool temperate hue reuse only; no D assignment",
+        "color": "#8eae90",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semifrío subhúmedo"
+        ],
+        "classIds": [
+          "42"
+        ],
+        "featureCount": 2
+      },
+      "C(E)(w1)(x')": {
+        "displayKey": "c-e-subhumid",
+        "colorReferenceCode": "Cwc",
+        "sourcePrefix": "C(E)",
+        "mappingBasis": "Separate García cool C/E transition; cool temperate hue reuse only; no D assignment",
+        "color": "#8eae90",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semifrío subhúmedo"
+        ],
+        "classIds": [
+          "42"
+        ],
+        "featureCount": 10
+      },
+      "C(E)(w2)": {
+        "displayKey": "c-e-subhumid",
+        "colorReferenceCode": "Cwc",
+        "sourcePrefix": "C(E)",
+        "mappingBasis": "Separate García cool C/E transition; cool temperate hue reuse only; no D assignment",
+        "color": "#8eae90",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semifrío subhúmedo"
+        ],
+        "classIds": [
+          "42"
+        ],
+        "featureCount": 30
+      },
+      "C(E)(w2)(w)": {
+        "displayKey": "c-e-subhumid",
+        "colorReferenceCode": "Cwc",
+        "sourcePrefix": "C(E)",
+        "mappingBasis": "Separate García cool C/E transition; cool temperate hue reuse only; no D assignment",
+        "color": "#8eae90",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semifrío subhúmedo"
+        ],
+        "classIds": [
+          "42"
+        ],
+        "featureCount": 28
+      },
+      "C(E)(w2)(x')": {
+        "displayKey": "c-e-subhumid",
+        "colorReferenceCode": "Cwc",
+        "sourcePrefix": "C(E)",
+        "mappingBasis": "Separate García cool C/E transition; cool temperate hue reuse only; no D assignment",
+        "color": "#8eae90",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semifrío subhúmedo"
+        ],
+        "classIds": [
+          "42"
+        ],
+        "featureCount": 18
+      },
+      "C(E)s(x')": {
+        "displayKey": "c-e-subhumid",
+        "colorReferenceCode": "Cwc",
+        "sourcePrefix": "C(E)",
+        "mappingBasis": "Separate García cool C/E transition; cool temperate hue reuse only; no D assignment",
+        "color": "#8eae90",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semifrío subhúmedo"
+        ],
+        "classIds": [
+          "42"
+        ],
+        "featureCount": 3
+      },
+      "C(E)x'": {
+        "displayKey": "c-e-subhumid",
+        "colorReferenceCode": "Cwc",
+        "sourcePrefix": "C(E)",
+        "mappingBasis": "Separate García cool C/E transition; cool temperate hue reuse only; no D assignment",
+        "color": "#8eae90",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Semifrío subhúmedo"
+        ],
+        "classIds": [
+          "42"
+        ],
+        "featureCount": 13
+      },
+      "C(fm)": {
+        "displayKey": "c-humid",
+        "colorReferenceCode": "Cfa",
+        "sourcePrefix": "C(m)/C(fm)",
+        "mappingBasis": "Original García humid C symbols retained; donor hue only, no f/a subtype conversion",
+        "color": "#98bba0",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado húmedo"
+        ],
+        "classIds": [
+          "31"
+        ],
+        "featureCount": 9
+      },
+      "C(m)": {
+        "displayKey": "c-humid",
+        "colorReferenceCode": "Cfa",
+        "sourcePrefix": "C(m)/C(fm)",
+        "mappingBasis": "Original García humid C symbols retained; donor hue only, no f/a subtype conversion",
+        "color": "#98bba0",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado húmedo"
+        ],
+        "classIds": [
+          "31"
+        ],
+        "featureCount": 6
+      },
+      "C(m)(w)": {
+        "displayKey": "c-humid",
+        "colorReferenceCode": "Cfa",
+        "sourcePrefix": "C(m)/C(fm)",
+        "mappingBasis": "Original García humid C symbols retained; donor hue only, no f/a subtype conversion",
+        "color": "#98bba0",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado húmedo"
+        ],
+        "classIds": [
+          "31"
+        ],
+        "featureCount": 27
+      },
+      "C(w0)": {
+        "displayKey": "c-w",
+        "colorReferenceCode": "Cwa",
+        "sourcePrefix": "C(w)",
+        "mappingBasis": "Shared C/w marker; source moisture modifiers retained, summer subtype unspecified",
+        "color": "#c5d49b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado subhúmedo"
+        ],
+        "classIds": [
+          "32"
+        ],
+        "featureCount": 36
+      },
+      "C(w0)(w)": {
+        "displayKey": "c-w",
+        "colorReferenceCode": "Cwa",
+        "sourcePrefix": "C(w)",
+        "mappingBasis": "Shared C/w marker; source moisture modifiers retained, summer subtype unspecified",
+        "color": "#c5d49b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado subhúmedo"
+        ],
+        "classIds": [
+          "32"
+        ],
+        "featureCount": 38
+      },
+      "C(w0)(x')": {
+        "displayKey": "c-w",
+        "colorReferenceCode": "Cwa",
+        "sourcePrefix": "C(w)",
+        "mappingBasis": "Shared C/w marker; source moisture modifiers retained, summer subtype unspecified",
+        "color": "#c5d49b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado subhúmedo"
+        ],
+        "classIds": [
+          "32"
+        ],
+        "featureCount": 16
+      },
+      "C(w1)": {
+        "displayKey": "c-w",
+        "colorReferenceCode": "Cwa",
+        "sourcePrefix": "C(w)",
+        "mappingBasis": "Shared C/w marker; source moisture modifiers retained, summer subtype unspecified",
+        "color": "#c5d49b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado subhúmedo"
+        ],
+        "classIds": [
+          "32"
+        ],
+        "featureCount": 48
+      },
+      "C(w1)(w)": {
+        "displayKey": "c-w",
+        "colorReferenceCode": "Cwa",
+        "sourcePrefix": "C(w)",
+        "mappingBasis": "Shared C/w marker; source moisture modifiers retained, summer subtype unspecified",
+        "color": "#c5d49b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado subhúmedo"
+        ],
+        "classIds": [
+          "32"
+        ],
+        "featureCount": 36
+      },
+      "C(w1)(x')": {
+        "displayKey": "c-w",
+        "colorReferenceCode": "Cwa",
+        "sourcePrefix": "C(w)",
+        "mappingBasis": "Shared C/w marker; source moisture modifiers retained, summer subtype unspecified",
+        "color": "#c5d49b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado subhúmedo"
+        ],
+        "classIds": [
+          "32"
+        ],
+        "featureCount": 4
+      },
+      "C(w2)": {
+        "displayKey": "c-w",
+        "colorReferenceCode": "Cwa",
+        "sourcePrefix": "C(w)",
+        "mappingBasis": "Shared C/w marker; source moisture modifiers retained, summer subtype unspecified",
+        "color": "#c5d49b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado subhúmedo"
+        ],
+        "classIds": [
+          "32"
+        ],
+        "featureCount": 25
+      },
+      "C(w2)(w)": {
+        "displayKey": "c-w",
+        "colorReferenceCode": "Cwa",
+        "sourcePrefix": "C(w)",
+        "mappingBasis": "Shared C/w marker; source moisture modifiers retained, summer subtype unspecified",
+        "color": "#c5d49b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado subhúmedo"
+        ],
+        "classIds": [
+          "32"
+        ],
+        "featureCount": 71
+      },
+      "C(w2)(x')": {
+        "displayKey": "c-w",
+        "colorReferenceCode": "Cwa",
+        "sourcePrefix": "C(w)",
+        "mappingBasis": "Shared C/w marker; source moisture modifiers retained, summer subtype unspecified",
+        "color": "#c5d49b",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado subhúmedo"
+        ],
+        "classIds": [
+          "32"
+        ],
+        "featureCount": 6
+      },
+      "Cs": {
+        "displayKey": "c-s",
+        "colorReferenceCode": "Csa",
+        "sourcePrefix": "Cs",
+        "mappingBasis": "Shared C/s prefix; summer subtype a/b/c unspecified, donor hue only",
+        "color": "#d9ce8d",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado subhúmedo"
+        ],
+        "classIds": [
+          "32"
+        ],
+        "featureCount": 3
+      },
+      "Cx'": {
+        "displayKey": "c-x",
+        "colorReferenceCode": "Cfb",
+        "sourcePrefix": "Cx'",
+        "mappingBasis": "Original García x-prime rain regime retained separately; donor hue only",
+        "color": "#7caaa1",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Templado subhúmedo"
+        ],
+        "classIds": [
+          "32"
+        ],
+        "featureCount": 1
+      },
+      "E(T)H": {
+        "displayKey": "e-th-highland",
+        "colorReferenceCode": "ET",
+        "sourcePrefix": "E(T)H",
+        "mappingBasis": "Original cold highland symbol retained separately; gray hue reuse only, not a Beck ET assignment",
+        "color": "#c4c9cc",
+        "equivalence": "display-hue-only",
+        "labelSources": [
+          "Frío"
+        ],
+        "classIds": [
+          "70"
+        ],
+        "featureCount": 6
+      }
+    },
+    "displayGroups": [
+      {
+        "id": "c-a-humid",
+        "labelJa": "(A)C 移行型・湿潤",
+        "color": "#98bba0",
+        "colorReferenceCode": "Cfa",
+        "sourcePrefixes": [
+          "(A)C"
+        ],
+        "sourceCodes": [
+          "(A)C(fm)",
+          "(A)C(m)",
+          "(A)C(m)(w)"
+        ]
+      },
+      {
+        "id": "c-a-subhumid",
+        "labelJa": "(A)C 移行型・亜湿潤",
+        "color": "#c5d49b",
+        "colorReferenceCode": "Cwa",
+        "sourcePrefixes": [
+          "(A)C"
+        ],
+        "sourceCodes": [
+          "(A)C(w0)",
+          "(A)C(w0)(w)",
+          "(A)C(w0)(x')",
+          "(A)C(w1)",
+          "(A)C(w1)(w)",
+          "(A)C(w1)(x')",
+          "(A)C(w2)",
+          "(A)C(w2)(w)",
+          "(A)Cx'"
+        ]
+      },
+      {
+        "id": "a-c-humid",
+        "labelJa": "A(C) 移行型・湿潤",
+        "color": "#78b6ba",
+        "colorReferenceCode": "Am",
+        "sourcePrefixes": [
+          "A(C)"
+        ],
+        "sourceCodes": [
+          "A(C)f(m)",
+          "A(C)m",
+          "A(C)m(f)",
+          "A(C)m(w)"
+        ]
+      },
+      {
+        "id": "a-c-subhumid",
+        "labelJa": "A(C) 移行型・亜湿潤",
+        "color": "#a1cdd0",
+        "colorReferenceCode": "Aw",
+        "sourcePrefixes": [
+          "A(C)"
+        ],
+        "sourceCodes": [
+          "A(C)w0(w)",
+          "A(C)w1(w)",
+          "A(C)w2",
+          "A(C)w2(w)"
+        ]
+      },
+      {
+        "id": "a-f",
+        "labelJa": "Af 系（原記号を保持）",
+        "color": "#529ca5",
+        "colorReferenceCode": "Af",
+        "sourcePrefixes": [
+          "Af"
+        ],
+        "sourceCodes": [
+          "Af(m)"
+        ]
+      },
+      {
+        "id": "a-m",
+        "labelJa": "Am 系（原記号を保持）",
+        "color": "#78b6ba",
+        "colorReferenceCode": "Am",
+        "sourcePrefixes": [
+          "Am"
+        ],
+        "sourceCodes": [
+          "Am",
+          "Am(f)",
+          "Am(w)"
+        ]
+      },
+      {
+        "id": "a-w",
+        "labelJa": "Aw 系（原記号を保持）",
+        "color": "#a1cdd0",
+        "colorReferenceCode": "Aw",
+        "sourcePrefixes": [
+          "Aw"
+        ],
+        "sourceCodes": [
+          "Aw0",
+          "Aw0(w)",
+          "Aw0(x')",
+          "Aw1",
+          "Aw1(w)",
+          "Aw1(x')",
+          "Aw2",
+          "Aw2(w)",
+          "Aw2(x')"
+        ]
+      },
+      {
+        "id": "bs-h",
+        "labelJa": "BS 系・h 記号",
+        "color": "#ebc38e",
+        "colorReferenceCode": "BSh",
+        "sourcePrefixes": [
+          "BS0",
+          "BS1"
+        ],
+        "sourceCodes": [
+          "BS0(h')hw",
+          "BS0(h')hw(x')",
+          "BS0(h')hx'",
+          "BS0(h')w",
+          "BS0(h')w(w)",
+          "BS0(h')w(x')",
+          "BS0h'(h)w",
+          "BS0hw",
+          "BS0hw(w)",
+          "BS0hw(x')",
+          "BS0hx'",
+          "BS1(h')hw",
+          "BS1(h')hw(w)",
+          "BS1(h')hw(x')",
+          "BS1(h')hx'",
+          "BS1(h')w",
+          "BS1(h')w(w)",
+          "BS1(h')w(x')",
+          "BS1h'(h)w(w)",
+          "BS1hw",
+          "BS1hw(w)",
+          "BS1hw(x')",
+          "BS1hx'"
+        ]
+      },
+      {
+        "id": "bs-k",
+        "labelJa": "BS 系・k 記号",
+        "color": "#e5d3ad",
+        "colorReferenceCode": "BSk",
+        "sourcePrefixes": [
+          "BS0",
+          "BS1",
+          "BS"
+        ],
+        "sourceCodes": [
+          "BS0kw",
+          "BS0kw(w)",
+          "BS0kw(x')",
+          "BS0kx'",
+          "BS1k''w",
+          "BS1k''w(x')",
+          "BS1k'w",
+          "BS1kw",
+          "BS1kw(w)",
+          "BS1kw(x')",
+          "BS1kx'",
+          "BSks",
+          "BSks(x')"
+        ]
+      },
+      {
+        "id": "bw-h",
+        "labelJa": "BW 系・h 記号",
+        "color": "#e6ad7b",
+        "colorReferenceCode": "BWh",
+        "sourcePrefixes": [
+          "BW"
+        ],
+        "sourceCodes": [
+          "BW(h')hs(x')",
+          "BW(h')hw",
+          "BW(h')hw(w)",
+          "BW(h')hw(x')",
+          "BW(h')w",
+          "BWhs",
+          "BWhs(x')",
+          "BWhw",
+          "BWhw(w)",
+          "BWhw(x')",
+          "BWhx'"
+        ]
+      },
+      {
+        "id": "bw-k",
+        "labelJa": "BW 系・k 記号",
+        "color": "#d4bc92",
+        "colorReferenceCode": "BWk",
+        "sourcePrefixes": [
+          "BW"
+        ],
+        "sourceCodes": [
+          "BWks",
+          "BWks(x')",
+          "BWkw",
+          "BWkw(w)",
+          "BWkw(x')"
+        ]
+      },
+      {
+        "id": "c-e-humid",
+        "labelJa": "C(E) 冷涼移行型・湿潤",
+        "color": "#689b95",
+        "colorReferenceCode": "Cfc",
+        "sourcePrefixes": [
+          "C(E)"
+        ],
+        "sourceCodes": [
+          "C(E)(m)",
+          "C(E)(m)(w)"
+        ]
+      },
+      {
+        "id": "c-e-subhumid",
+        "labelJa": "C(E) 冷涼移行型・亜湿潤",
+        "color": "#8eae90",
+        "colorReferenceCode": "Cwc",
+        "sourcePrefixes": [
+          "C(E)"
+        ],
+        "sourceCodes": [
+          "C(E)(w0)(w)",
+          "C(E)(w1)",
+          "C(E)(w1)(w)",
+          "C(E)(w1)(x')",
+          "C(E)(w2)",
+          "C(E)(w2)(w)",
+          "C(E)(w2)(x')",
+          "C(E)s(x')",
+          "C(E)x'"
+        ]
+      },
+      {
+        "id": "c-humid",
+        "labelJa": "C(m)・C(fm) 系",
+        "color": "#98bba0",
+        "colorReferenceCode": "Cfa",
+        "sourcePrefixes": [
+          "C(m)/C(fm)"
+        ],
+        "sourceCodes": [
+          "C(fm)",
+          "C(m)",
+          "C(m)(w)"
+        ]
+      },
+      {
+        "id": "c-w",
+        "labelJa": "C(w) 系",
+        "color": "#c5d49b",
+        "colorReferenceCode": "Cwa",
+        "sourcePrefixes": [
+          "C(w)"
+        ],
+        "sourceCodes": [
+          "C(w0)",
+          "C(w0)(w)",
+          "C(w0)(x')",
+          "C(w1)",
+          "C(w1)(w)",
+          "C(w1)(x')",
+          "C(w2)",
+          "C(w2)(w)",
+          "C(w2)(x')"
+        ]
+      },
+      {
+        "id": "c-s",
+        "labelJa": "Cs 系",
+        "color": "#d9ce8d",
+        "colorReferenceCode": "Csa",
+        "sourcePrefixes": [
+          "Cs"
+        ],
+        "sourceCodes": [
+          "Cs"
+        ]
+      },
+      {
+        "id": "c-x",
+        "labelJa": "Cx' 系",
+        "color": "#7caaa1",
+        "colorReferenceCode": "Cfb",
+        "sourcePrefixes": [
+          "Cx'"
+        ],
+        "sourceCodes": [
+          "Cx'"
+        ]
+      },
+      {
+        "id": "e-th-highland",
+        "labelJa": "E(T)H 寒冷高地型",
+        "color": "#c4c9cc",
+        "colorReferenceCode": "ET",
+        "sourcePrefixes": [
+          "E(T)H"
+        ],
+        "sourceCodes": [
+          "E(T)H"
+        ]
+      }
+    ],
+    "classes": [
+      {
+        "id": "11",
+        "labelJa": "高温・湿潤",
+        "labelSource": "Cálido húmedo",
+        "groupId": "warm-humid",
+        "sourceCodes": [
+          "Af(m)",
+          "Am",
+          "Am(f)",
+          "Am(w)"
+        ],
+        "colors": [
+          "#529ca5",
+          "#78b6ba"
+        ]
+      },
+      {
+        "id": "12",
+        "labelJa": "高温・亜湿潤",
+        "labelSource": "Cálido subhúmedo",
+        "groupId": "warm-subhumid",
+        "sourceCodes": [
+          "Aw0",
+          "Aw0(w)",
+          "Aw0(x')",
+          "Aw1",
+          "Aw1(w)",
+          "Aw1(x')",
+          "Aw2",
+          "Aw2(w)",
+          "Aw2(x')"
+        ],
+        "colors": [
+          "#a1cdd0"
+        ]
+      },
+      {
+        "id": "21",
+        "labelJa": "やや高温・湿潤",
+        "labelSource": "Semicálido húmedo",
+        "groupId": "warm-humid",
+        "sourceCodes": [
+          "(A)C(fm)",
+          "(A)C(m)",
+          "(A)C(m)(w)",
+          "A(C)f(m)",
+          "A(C)m",
+          "A(C)m(f)",
+          "A(C)m(w)"
+        ],
+        "colors": [
+          "#98bba0",
+          "#78b6ba"
+        ]
+      },
+      {
+        "id": "22",
+        "labelJa": "やや高温・亜湿潤",
+        "labelSource": "Semicálido subhúmedo",
+        "groupId": "warm-subhumid",
+        "sourceCodes": [
+          "(A)Cx'",
+          "A(C)w0(w)",
+          "A(C)w1(w)",
+          "A(C)w2",
+          "A(C)w2(w)"
+        ],
+        "colors": [
+          "#c5d49b",
+          "#a1cdd0"
+        ]
+      },
+      {
+        "id": "31",
+        "labelJa": "温帯・湿潤",
+        "labelSource": "Templado húmedo",
+        "groupId": "temperate",
+        "sourceCodes": [
+          "C(fm)",
+          "C(m)",
+          "C(m)(w)"
+        ],
+        "colors": [
+          "#98bba0"
+        ]
+      },
+      {
+        "id": "32",
+        "labelJa": "温帯・亜湿潤",
+        "labelSource": "Templado subhúmedo",
+        "groupId": "temperate",
+        "sourceCodes": [
+          "(A)C(w0)",
+          "(A)C(w0)(w)",
+          "(A)C(w0)(x')",
+          "(A)C(w1)",
+          "(A)C(w1)(w)",
+          "(A)C(w1)(x')",
+          "(A)C(w2)",
+          "(A)C(w2)(w)",
+          "BS0hw",
+          "C(w0)",
+          "C(w0)(w)",
+          "C(w0)(x')",
+          "C(w1)",
+          "C(w1)(w)",
+          "C(w1)(x')",
+          "C(w2)",
+          "C(w2)(w)",
+          "C(w2)(x')",
+          "Cs",
+          "Cx'"
+        ],
+        "colors": [
+          "#c5d49b",
+          "#ebc38e",
+          "#d9ce8d",
+          "#7caaa1"
+        ]
+      },
+      {
+        "id": "42",
+        "labelJa": "やや寒冷・亜湿潤",
+        "labelSource": "Semifrío subhúmedo",
+        "groupId": "cold",
+        "sourceCodes": [
+          "C(E)(w0)(w)",
+          "C(E)(w1)",
+          "C(E)(w1)(w)",
+          "C(E)(w1)(x')",
+          "C(E)(w2)",
+          "C(E)(w2)(w)",
+          "C(E)(w2)(x')",
+          "C(E)s(x')",
+          "C(E)x'"
+        ],
+        "colors": [
+          "#8eae90"
+        ]
+      },
+      {
+        "id": "51",
+        "labelJa": "半乾燥・非常に高温",
+        "labelSource": "Semiseco muy cálido",
+        "groupId": "semidry",
+        "sourceCodes": [
+          "BS1(h')w",
+          "BS1(h')w(w)",
+          "BS1(h')w(x')"
+        ],
+        "colors": [
+          "#ebc38e"
+        ]
+      },
+      {
+        "id": "52",
+        "labelJa": "半乾燥・高温",
+        "labelSource": "Semiseco cálido",
+        "groupId": "semidry",
+        "sourceCodes": [
+          "BS1(h')hw",
+          "BS1(h')hw(w)",
+          "BS1(h')hw(x')",
+          "BS1(h')hx'"
+        ],
+        "colors": [
+          "#ebc38e"
+        ]
+      },
+      {
+        "id": "53",
+        "labelJa": "半乾燥・やや高温",
+        "labelSource": "Semiseco semicálido",
+        "groupId": "semidry",
+        "sourceCodes": [
+          "BS1h'(h)w(w)",
+          "BS1hw",
+          "BS1hw(w)",
+          "BS1hw(x')",
+          "BS1hx'"
+        ],
+        "colors": [
+          "#ebc38e"
+        ]
+      },
+      {
+        "id": "54",
+        "labelJa": "半乾燥・温帯",
+        "labelSource": "Semiseco templado",
+        "groupId": "semidry",
+        "sourceCodes": [
+          "BS1k'w",
+          "BS1kw",
+          "BS1kw(w)",
+          "BS1kw(x')",
+          "BS1kx'"
+        ],
+        "colors": [
+          "#e5d3ad"
+        ]
+      },
+      {
+        "id": "55",
+        "labelJa": "半乾燥・やや寒冷",
+        "labelSource": "Semiseco semifrío",
+        "groupId": "semidry",
+        "sourceCodes": [
+          "BS1k''w",
+          "BS1k''w(x')"
+        ],
+        "colors": [
+          "#e5d3ad"
+        ]
+      },
+      {
+        "id": "56",
+        "labelJa": "乾燥・非常に高温",
+        "labelSource": "Seco muy cálido",
+        "groupId": "dry",
+        "sourceCodes": [
+          "BS0(h')w",
+          "BS0(h')w(w)",
+          "BS0(h')w(x')"
+        ],
+        "colors": [
+          "#ebc38e"
+        ]
+      },
+      {
+        "id": "57",
+        "labelJa": "乾燥・高温",
+        "labelSource": "Seco cálido",
+        "groupId": "dry",
+        "sourceCodes": [
+          "BS0(h')hw",
+          "BS0(h')hw(x')",
+          "BS0(h')hx'"
+        ],
+        "colors": [
+          "#ebc38e"
+        ]
+      },
+      {
+        "id": "58",
+        "labelJa": "乾燥・やや高温",
+        "labelSource": "Seco semicálido",
+        "groupId": "dry",
+        "sourceCodes": [
+          "BS0h'(h)w",
+          "BS0hw",
+          "BS0hw(w)",
+          "BS0hw(x')",
+          "BS0hx'"
+        ],
+        "colors": [
+          "#ebc38e"
+        ]
+      },
+      {
+        "id": "59",
+        "labelJa": "乾燥・温帯",
+        "labelSource": "Seco templado",
+        "groupId": "dry",
+        "sourceCodes": [
+          "BS0kw",
+          "BS0kw(w)",
+          "BS0kw(x')",
+          "BS0kx'",
+          "BSks",
+          "BSks(x')"
+        ],
+        "colors": [
+          "#e5d3ad"
+        ]
+      },
+      {
+        "id": "61",
+        "labelJa": "非常に乾燥・非常に高温",
+        "labelSource": "Muy seco muy cálido",
+        "groupId": "dry",
+        "sourceCodes": [
+          "BW(h')w"
+        ],
+        "colors": [
+          "#e6ad7b"
+        ]
+      },
+      {
+        "id": "62",
+        "labelJa": "非常に乾燥・高温",
+        "labelSource": "Muy seco cálido",
+        "groupId": "dry",
+        "sourceCodes": [
+          "BW(h')hs(x')",
+          "BW(h')hw",
+          "BW(h')hw(w)",
+          "BW(h')hw(x')"
+        ],
+        "colors": [
+          "#e6ad7b"
+        ]
+      },
+      {
+        "id": "63",
+        "labelJa": "非常に乾燥・やや高温",
+        "labelSource": "Muy seco semicálido",
+        "groupId": "dry",
+        "sourceCodes": [
+          "BWhs",
+          "BWhs(x')",
+          "BWhw",
+          "BWhw(w)",
+          "BWhw(x')",
+          "BWhx'"
+        ],
+        "colors": [
+          "#e6ad7b"
+        ]
+      },
+      {
+        "id": "64",
+        "labelJa": "非常に乾燥・温帯",
+        "labelSource": "Muy seco templado",
+        "groupId": "dry",
+        "sourceCodes": [
+          "BWks",
+          "BWks(x')",
+          "BWkw",
+          "BWkw(w)",
+          "BWkw(x')"
+        ],
+        "colors": [
+          "#d4bc92"
+        ]
+      },
+      {
+        "id": "70",
+        "labelJa": "寒冷",
+        "labelSource": "Frío",
+        "groupId": "cold",
+        "sourceCodes": [
+          "C(E)(m)",
+          "C(E)(m)(w)",
+          "E(T)H"
+        ],
+        "colors": [
+          "#689b95",
+          "#c4c9cc"
+        ]
+      }
+    ]
+  },
+  "relief": {
+    "classes": [
+      {
+        "id": "I",
+        "labelJa": "バハ・カリフォルニア半島",
+        "labelSource": "PENÍNSULA DE BAJA CALIFORNIA",
+        "color": "#dfc895",
+        "status": "valid"
+      },
+      {
+        "id": "II",
+        "labelJa": "ソノラ平原",
+        "labelSource": "LLANURA SONORENSE",
+        "color": "#d8b875",
+        "status": "valid"
+      },
+      {
+        "id": "IV",
+        "labelJa": "北部の山地と平原",
+        "labelSource": "SIERRAS Y LLANURAS DEL NORTE",
+        "color": "#d4a58b",
+        "status": "valid"
+      },
+      {
+        "id": "III",
+        "labelJa": "西シエラマドレ",
+        "labelSource": "SIERRA MADRE OCCIDENTAL",
+        "color": "#a88364",
+        "status": "valid"
+      },
+      {
+        "id": "VI",
+        "labelJa": "北米大平原",
+        "labelSource": "GRANDES LLANURAS DE NORTEAMÉRICA",
+        "color": "#d4c99c",
+        "status": "valid"
+      },
+      {
+        "id": "V",
+        "labelJa": "東シエラマドレ",
+        "labelSource": "SIERRA MADRE ORIENTAL",
+        "color": "#bf9477",
+        "status": "valid"
+      },
+      {
+        "id": "S/It",
+        "labelJa": "原資料の地形分類なし",
+        "labelSource": "N/A",
+        "color": "#bfc3c7",
+        "status": "missing"
+      },
+      {
+        "id": "VII",
+        "labelJa": "太平洋沿岸平原",
+        "labelSource": "LLANURA COSTERA DEL PACÍFICO",
+        "color": "#c3d79e",
+        "status": "valid"
+      },
+      {
+        "id": "VIII",
+        "labelJa": "メキシコ湾北部沿岸平原",
+        "labelSource": "LLANURA COSTERA DEL GOLFO NORTE",
+        "color": "#a8cbb0",
+        "status": "valid"
+      },
+      {
+        "id": "IX",
+        "labelJa": "中央高原",
+        "labelSource": "MESA DEL CENTRO",
+        "color": "#d1beac",
+        "status": "valid"
+      },
+      {
+        "id": "XI",
+        "labelJa": "ユカタン半島",
+        "labelSource": "PENÍNSULA DE YUCATÁN",
+        "color": "#c4d5bf",
+        "status": "valid"
+      },
+      {
+        "id": "X",
+        "labelJa": "メキシコ火山帯",
+        "labelSource": "EJE NEOVOLCÁNICO",
+        "color": "#bc99aa",
+        "status": "valid"
+      },
+      {
+        "id": "XII",
+        "labelJa": "南シエラマドレ",
+        "labelSource": "SIERRA MADRE DEL SUR",
+        "color": "#999d71",
+        "status": "valid"
+      },
+      {
+        "id": "XIII",
+        "labelJa": "メキシコ湾南部沿岸平原",
+        "labelSource": "LLANURA COSTERA DEL GOLFO SUR",
+        "color": "#79aaab",
+        "status": "valid"
+      },
+      {
+        "id": "XIV",
+        "labelJa": "チアパス・グアテマラ山地",
+        "labelSource": "SIERRAS DE CHIAPAS Y GUATEMALA",
+        "color": "#96a985",
+        "status": "valid"
+      },
+      {
+        "id": "XV",
+        "labelJa": "中米山脈",
+        "labelSource": "CORDILLERA CENTROAMERICANA",
+        "color": "#9694b4",
+        "status": "valid"
+      }
+    ]
+  },
+  "notes": [
+    "The 21 original INEGI TIPO_N classes and every original García modified Köppen CLAVE remain unchanged. No conversion to Beck 30 classes, standard five families, or a 1991–2020 observation period is performed.",
+    "Colors are exact hue values from the existing US display palette. colorReferenceCode identifies a hue donor only; it does not classify a Mexico polygon as that US class.",
+    "A(C), (A)C, C(E), and E(T)H are separately identified transitional or highland symbols. C(E) is never reassigned to D. No D-prefixed symbol occurs in these source polygons.",
+    "Original climate-551 retains classId 32, sourceCode BS0hw, and sourceLabel Seco semicálido. The source archive contains this inconsistent TIPO_N/CLAVE combination after its documented 2021 correction; no silent repair is made.",
+    "An original class can contain several display hues. Its legend must show its colors or the original modified-code display groups, not a single claimed Beck equivalent.",
+    "Relief colors and translated class names are preserved from the existing INEGI province presentation. S/It remains missing, with no province-name label anchor."
+  ]
+}

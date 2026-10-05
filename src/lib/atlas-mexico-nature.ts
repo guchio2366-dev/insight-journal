@@ -91,6 +91,16 @@ export function mexicoNatureNormalView(state: MexicoNatureState, view: MexicoNat
 export function mexicoNatureSelectView(state: MexicoNatureState, view: MexicoNatureView): MexicoNatureState {
   return {...state, view, category: ''};
 }
+// Both maps share one camera; source-page selections remain independent of it.
+export function mexicoNatureZoomFrame(frame: number[] | null, full: readonly number[], direction: 'in' | 'out'): number[] | null {
+  const [left, top, width, height] = full;
+  const [x, y, currentWidth, currentHeight] = frame ?? full;
+  const factor = direction === 'in' ? .75 : 1 / .75;
+  const nextWidth = Math.min(width, Math.max(35, currentWidth * factor));
+  const nextHeight = Math.min(height, Math.max(25, currentHeight * factor));
+  if (nextWidth === width && nextHeight === height) return null;
+  return [Math.max(left, Math.min(left + width - nextWidth, x + (currentWidth - nextWidth) / 2)), Math.max(top, Math.min(top + height - nextHeight, y + (currentHeight - nextHeight) / 2)), nextWidth, nextHeight];
+}
 export const irrigationBins = sourceIrrigationBins.map(bin => ({...bin, minimum: bin.min}));
 export const densityBins = mexicoDensityBins.map(bin => ({...bin, minimum: bin.min}));
 export function indicatorColor(value: number | null, bins: {minimum: number; color: string}[]): string {

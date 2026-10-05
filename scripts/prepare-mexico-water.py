@@ -145,11 +145,16 @@ def prepare_basins(folder):
     metadata.update({"name": "国内流域区分", "sourceUrl": "https://antares.inegi.org.mx/analisis/red_hidro/siatl/",
         "downloadUrl": "https://antares.inegi.org.mx/geoserver/AnalisisEspacial/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=AnalisisEspacial:Cuencas&outputFormat=shape-zip&srsName=EPSG:4326",
         "geometryMeaning": "INEGI SIATL Cuencas domestic basin divisions; original domestic extent retained.",
+        "sourceClassificationAudit": {"sourceLayer": "AnalisisEspacial:Cuencas", "sourceFields": ["CVE_CUE", "NOMB", "TIPO"], "selectionUnit": "domestic Cuenca", "includesForeignUpstream": False, "administrativeStatisticalRegion": False},
         "periodNote": "取得日は2026-10-02。WFS配信の図版年・統一観測期は未確認で、取得年を観測年に置き換えない。",
         "coverage": "158 domestic Mexican basin divisions; foreign upstream catchment areas are not provided by this layer.",
         "originalRecordCount": 158, "excludedRecordCount": 0, "sourceVertexCount": source_vertices,
         "sourceTypeCounts": dict(types), "sourceInvalidGeometryIds": invalid_ids,
-        "unit": "domestic basin division", "legend": [{"id": "basins", "label": "国内流域界（158区分）", "color": "#0e7490"}],
+        "unit": "domestic basin division", "legend": [
+            {"id": "EXORREICA", "label": "外流域（143区分）", "color": "#d6e5df"},
+            {"id": "ENDORREICA", "label": "閉鎖流域（15区分）", "color": "#e3ce93"},
+            {"id": "basins", "label": "国内流域界（158区分）", "color": "#0e7490", "symbol": "line"}],
+        "displayEncoding": {"fillMeaning": "Retained source TIPO: EXORREICA or ENDORREICA; not water volume or irrigation coverage.", "labels": "Original source NOMB at a verified interior point of its retained polygon; omit overlapping labels and keep every basin in the picker."},
         "method": "Read original WFS 1.0 longitude/latitude WGS84 polygons and source CVE_CUE/name/type. Preserve every basin and original domestic scope. Simplify valid polygons only with Shapely preserve_topology=True at 0.002 degrees for national display; retain invalid source polygons unchanged, without repair. Round coordinates to six decimals. No clipping, overseas catchment construction or interpolation.",
         "displaySimplification": {"toleranceDegrees": 0.002, "preserveTopology": True, "invalidSourceGeometryChanged": False},
         "limitations": ["Domestic divisions are not complete international upstream catchments.", "Simplified national display is not a survey boundary or a flood-risk map.", "Source type and source-reported area/perimeter remain attributes; displayed geometry does not recalculate hydrological quantities."]})
