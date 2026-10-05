@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "region": "canada",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "period": "1991-2020",
   "crs": "EPSG:4326",
   "sourceResolutionDegrees": 0.1,
@@ -129,113 +129,127 @@
       "id": "BSk",
       "code": 7,
       "name": "低温のステップ気候",
-      "color": "#ffdc64",
+      "color": "#e5d3ad",
       "description": "乾燥帯のうち、低温の半乾燥気候に当たる区分。",
-      "sourceLabel": "Arid, steppe, cold"
+      "sourceLabel": "Arid, steppe, cold",
+      "sourceColor": "#ffdc64"
     },
     {
       "id": "Csb",
       "code": 9,
       "name": "夏に乾燥する温暖夏の温帯",
-      "color": "#c8c800",
+      "color": "#bbc898",
       "description": "夏に乾燥し、夏が温暖な温帯の区分。",
-      "sourceLabel": "Temperate, dry summer, warm summer"
+      "sourceLabel": "Temperate, dry summer, warm summer",
+      "sourceColor": "#c8c800"
     },
     {
       "id": "Cfb",
       "code": 15,
       "name": "西岸海洋性気候",
-      "color": "#64ff50",
+      "color": "#7caaa1",
       "description": "明瞭な乾季がなく、夏が温暖な温帯の区分。名称は海岸からの距離を示すものではない。",
-      "sourceLabel": "Temperate, no dry season, warm summer"
+      "sourceLabel": "Temperate, no dry season, warm summer",
+      "sourceColor": "#64ff50"
     },
     {
       "id": "Cfc",
       "code": 16,
       "name": "乾季のない冷夏の温帯",
-      "color": "#32c800",
+      "color": "#689b95",
       "description": "明瞭な乾季がなく、夏が短く涼しい温帯の区分。",
-      "sourceLabel": "Temperate, no dry season, cold summer"
+      "sourceLabel": "Temperate, no dry season, cold summer",
+      "sourceColor": "#32c800"
     },
     {
       "id": "Dsb",
       "code": 18,
       "name": "夏に乾燥する温暖夏の冷帯",
-      "color": "#c800c8",
+      "color": "#b49aba",
       "description": "寒い冬と温暖な夏を持ち、夏に乾燥する冷帯の区分。",
-      "sourceLabel": "Cold, dry summer, warm summer"
+      "sourceLabel": "Cold, dry summer, warm summer",
+      "sourceColor": "#c800c8"
     },
     {
       "id": "Dsc",
       "code": 19,
       "name": "夏に乾燥する冷夏の冷帯",
-      "color": "#963296",
+      "color": "#a387ac",
       "description": "寒い冬と短く涼しい夏を持ち、夏に乾燥する冷帯の区分。",
-      "sourceLabel": "Cold, dry summer, cold summer"
+      "sourceLabel": "Cold, dry summer, cold summer",
+      "sourceColor": "#963296"
     },
     {
       "id": "Dwb",
       "code": 22,
       "name": "冬に乾燥する温暖夏の冷帯",
-      "color": "#5a78dc",
+      "color": "#a6afc9",
       "description": "寒く乾燥する冬と、温暖な夏を持つ冷帯の区分。",
-      "sourceLabel": "Cold, dry winter, warm summer"
+      "sourceLabel": "Cold, dry winter, warm summer",
+      "sourceColor": "#5a78dc"
     },
     {
       "id": "Dwc",
       "code": 23,
       "name": "冬に乾燥する冷夏の冷帯",
-      "color": "#4b50b4",
+      "color": "#8998b7",
       "description": "寒く乾燥する冬と、短く涼しい夏を持つ冷帯の区分。",
-      "sourceLabel": "Cold, dry winter, cold summer"
+      "sourceLabel": "Cold, dry winter, cold summer",
+      "sourceColor": "#4b50b4"
     },
     {
       "id": "Dfa",
       "code": 25,
       "name": "乾季のない高温夏の冷帯",
-      "color": "#00ffff",
+      "color": "#b7c2d8",
       "description": "明瞭な乾季がなく、寒い冬と高温の夏を持つ冷帯の区分。",
-      "sourceLabel": "Cold, no dry season, hot summer"
+      "sourceLabel": "Cold, no dry season, hot summer",
+      "sourceColor": "#00ffff"
     },
     {
       "id": "Dfb",
       "code": 26,
       "name": "乾季のない温暖夏の冷帯",
-      "color": "#37c8ff",
+      "color": "#9fb3cc",
       "description": "明瞭な乾季がなく、寒い冬と温暖な夏を持つ冷帯の区分。",
-      "sourceLabel": "Cold, no dry season, warm summer"
+      "sourceLabel": "Cold, no dry season, warm summer",
+      "sourceColor": "#37c8ff"
     },
     {
       "id": "Dfc",
       "code": 27,
       "name": "乾季のない冷夏の冷帯",
-      "color": "#007d7d",
+      "color": "#819db8",
       "description": "明瞭な乾季がなく、寒い冬と短く涼しい夏を持つ冷帯の区分。",
-      "sourceLabel": "Cold, no dry season, cold summer"
+      "sourceLabel": "Cold, no dry season, cold summer",
+      "sourceColor": "#007d7d"
     },
     {
       "id": "Dfd",
       "code": 28,
       "name": "乾季のない厳冬の冷帯",
-      "color": "#00465f",
+      "color": "#67869e",
       "description": "明瞭な乾季がなく、とくに厳しい冬を持つ冷帯の区分。",
-      "sourceLabel": "Cold, no dry season, very cold winter"
+      "sourceLabel": "Cold, no dry season, very cold winter",
+      "sourceColor": "#00465f"
     },
     {
       "id": "ET",
       "code": 29,
       "name": "ツンドラ気候",
-      "color": "#b2b2b2",
+      "color": "#c4c9cc",
       "description": "短い夏に気温が上がるが、樹木の生育に適した暖かさに達しない寒帯の区分。",
-      "sourceLabel": "Polar, tundra"
+      "sourceLabel": "Polar, tundra",
+      "sourceColor": "#b2b2b2"
     },
     {
       "id": "EF",
       "code": 30,
       "name": "氷雪気候",
-      "color": "#666666",
+      "color": "#a8aeb3",
       "description": "最も暖かい月も平均気温が0℃未満となる寒帯の区分。",
-      "sourceLabel": "Polar, frost"
+      "sourceLabel": "Polar, frost",
+      "sourceColor": "#666666"
     }
   ],
   "stationSamples": [
@@ -381,7 +395,7 @@
   },
   "processing": {
     "script": "scripts/prepare-canada-koppen-geooverlay.py",
-    "scriptSha256": "09a53f92fc5849140d2130c617e1572524b5d50b39081348d89f73a292674aba",
+    "scriptSha256": "06666b8618fb2e29d70f9013060c6b404270c74a2bc934e0862be913f4cc5c66",
     "scriptDigestMethod": "UTF-8 text normalized from CRLF/CR to LF",
     "method": "Read exact original 0.1-degree categorical cells; form horizontal runs of identical IDs; losslessly union cell rectangles by ID; intersect with Canadian land-minus-lakes mask. No interpolation, averaging, class merging, coordinate rounding, polygon simplification, minimum-area filtering or imputation.",
     "sourceRows": [
@@ -399,7 +413,7 @@
       "bytes": 6784,
       "sha256": "707303acdb0c63d002c50e322217ea1a6c5e37dd9c989b975269399134e9066a"
     },
-    "palette": "Original publisher RGB colors retained; no recoloring.",
+    "palette": "North America 30-class display palette. Original publisher RGB retained in classes[].sourceColor and GeoJSON properties.color; class IDs, source cells and geometry unchanged.",
     "sharedGridEdges": "All rectangle corners use the same global integer grid indices: longitude=-180+column/10, latitude=90-row/10. No repeated x+0.1 or y-0.1 accumulation; adjacent same-class source cell edges dissolve in the union.",
     "classGeometryCounts": [
       {
@@ -501,7 +515,52 @@
         "postMaskParts": 94
       }
     ],
-    "classGeometryCountsScope": "Raw window cell/run/pre-mask counts may include neighboring countries and water; post-mask parts chiefly represent real islands and coast/lake fragmentation. These are geometry diagnostics, not Canadian land-area statistics."
+    "classGeometryCountsScope": "Raw window cell/run/pre-mask counts may include neighboring countries and water; post-mask parts chiefly represent real islands and coast/lake fragmentation. These are geometry diagnostics, not Canadian land-area statistics.",
+    "geometryScriptSha256": "09a53f92fc5849140d2130c617e1572524b5d50b39081348d89f73a292674aba",
+    "displayPalette": {
+      "reference": "scripts/refine-atlas-nature.py",
+      "referenceSha256": "1b6a55bdfc362b2d1f39d9e919fc40ddd7fd820ba9f4027a5534cb2f52f12ac9",
+      "referenceDigestMethod": "UTF-8 text normalized from CRLF/CR to LF",
+      "legend": "public/assets/atlas/nature-v1/climate-legend.json",
+      "legendSha256": "a2be6f64e858736ef8095e607402ff580789df76973059b6773b70eb6f1a8fad",
+      "sourceLegend": "public/assets/atlas/asia-climate-v1/legend.json",
+      "sourceLegendSha256": "707303acdb0c63d002c50e322217ea1a6c5e37dd9c989b975269399134e9066a",
+      "classCount": 30,
+      "colors": {
+        "Af": "#529ca5",
+        "Am": "#78b6ba",
+        "Aw": "#a1cdd0",
+        "BWh": "#e6ad7b",
+        "BWk": "#d4bc92",
+        "BSh": "#ebc38e",
+        "BSk": "#e5d3ad",
+        "Csa": "#d9ce8d",
+        "Csb": "#bbc898",
+        "Csc": "#a4b98b",
+        "Cwa": "#c5d49b",
+        "Cwb": "#a7c59f",
+        "Cwc": "#8eae90",
+        "Cfa": "#98bba0",
+        "Cfb": "#7caaa1",
+        "Cfc": "#689b95",
+        "Dsa": "#c4abc8",
+        "Dsb": "#b49aba",
+        "Dsc": "#a387ac",
+        "Dsd": "#957493",
+        "Dwa": "#bcb5d1",
+        "Dwb": "#a6afc9",
+        "Dwc": "#8998b7",
+        "Dwd": "#6e809e",
+        "Dfa": "#b7c2d8",
+        "Dfb": "#9fb3cc",
+        "Dfc": "#819db8",
+        "Dfd": "#67869e",
+        "ET": "#c4c9cc",
+        "EF": "#a8aeb3"
+      },
+      "sourceColorField": "classes[].sourceColor",
+      "method": "Reuse the existing US climate() display palette for every code. Only manifest display colors change; publisher definitions, numeric IDs, station samples, masks and the source-colored GeoJSON remain unchanged."
+    }
   },
   "verification": {
     "rawSourceHashVerified": true,

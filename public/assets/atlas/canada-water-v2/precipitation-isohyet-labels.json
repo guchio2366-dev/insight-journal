@@ -1,0 +1,123 @@
+[
+  {
+    "id": "250",
+    "precipitation_mm": 250,
+    "coordinates": [
+      -126.528965,
+      68.544138
+    ],
+    "major": false,
+    "lineIndex": 3,
+    "vertexIndex": 32
+  },
+  {
+    "id": "250",
+    "precipitation_mm": 250,
+    "coordinates": [
+      -100.339218,
+      67.371194
+    ],
+    "major": false,
+    "lineIndex": 6,
+    "vertexIndex": 22
+  },
+  {
+    "id": "500",
+    "precipitation_mm": 500,
+    "coordinates": [
+      -115.814684,
+      56.062492
+    ],
+    "major": false,
+    "lineIndex": 4,
+    "vertexIndex": 239
+  },
+  {
+    "id": "500",
+    "precipitation_mm": 500,
+    "coordinates": [
+      -119.729113,
+      58.278906
+    ],
+    "major": false,
+    "lineIndex": 2,
+    "vertexIndex": 152
+  },
+  {
+    "id": "750",
+    "precipitation_mm": 750,
+    "coordinates": [
+      -127.472264,
+      55.060262
+    ],
+    "major": false,
+    "lineIndex": 0,
+    "vertexIndex": 104
+  },
+  {
+    "id": "750",
+    "precipitation_mm": 750,
+    "coordinates": [
+      -90.193842,
+      53.222784
+    ],
+    "major": false,
+    "lineIndex": 3,
+    "vertexIndex": 79
+  },
+  {
+    "id": "1000",
+    "precipitation_mm": 1000,
+    "coordinates": [
+      -75.006293,
+      51.103678
+    ],
+    "major": true,
+    "lineIndex": 2,
+    "vertexIndex": 165
+  },
+  {
+    "id": "1000",
+    "precipitation_mm": 1000,
+    "coordinates": [
+      -78.08416,
+      45.690795
+    ],
+    "major": true,
+    "lineIndex": 7,
+    "vertexIndex": 62
+  },
+  {
+    "id": "1500",
+    "precipitation_mm": 1500,
+    "coordinates": [
+      -56.086154,
+      48.414057
+    ],
+    "major": true,
+    "lineIndex": 15,
+    "vertexIndex": 28
+  },
+  {
+    "id": "1500",
+    "precipitation_mm": 1500,
+    "coordinates": [
+      -126.488096,
+      52.686993
+    ],
+    "major": true,
+    "lineIndex": 2,
+    "vertexIndex": 27
+  },
+  {
+    "id": "2000",
+    "precipitation_mm": 2000,
+    "coordinates": [
+      -122.048749,
+      49.763675
+    ],
+    "major": false,
+    "lineIndex": 8,
+    "vertexIndex": 26
+  }
+]

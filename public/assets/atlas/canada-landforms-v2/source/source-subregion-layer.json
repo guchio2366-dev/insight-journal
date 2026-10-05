@@ -1,0 +1,827 @@
+{
+ "currentVersion": 10.81,
+ "id": 1,
+ "name": "Subregions",
+ "type": "Feature Layer",
+ "description": "This dataset contains the location of Canada's physiographic subregions. Canada\u2019s landscape is very diversified and comprises several distinctive areas, called physiographic regions, each of which is divided into subregions. The physical geography of Canada comprises twenty-one subregions.",
+ "geometryType": "esriGeometryPolygon",
+ "sourceSpatialReference": {
+  "wkid": 3978,
+  "latestWkid": 3978
+ },
+ "copyrightText": "Governement of Canada; Natural Resources Canada",
+ "parentLayer": null,
+ "subLayers": [],
+ "minScale": 50000000,
+ "maxScale": 0,
+ "drawingInfo": {
+  "symbolLayerDrawing": {
+   "type": "CIMSymbolLayerDrawing",
+   "symbolLayers": [
+    {
+     "type": "CIMSymbolLayerIdentifier",
+     "symbolReferenceName": "Symbol_48",
+     "symbolLayerName": "Level_20"
+    },
+    {
+     "type": "CIMSymbolLayerIdentifier",
+     "symbolReferenceName": "Symbol_49",
+     "symbolLayerName": "Level_19"
+    },
+    {
+     "type": "CIMSymbolLayerIdentifier",
+     "symbolReferenceName": "Symbol_50",
+     "symbolLayerName": "Level_18"
+    },
+    {
+     "type": "CIMSymbolLayerIdentifier",
+     "symbolReferenceName": "Symbol_51",
+     "symbolLayerName": "Level_17"
+    },
+    {
+     "type": "CIMSymbolLayerIdentifier",
+     "symbolReferenceName": "Symbol_52",
+     "symbolLayerName": "Level_16"
+    },
+    {
+     "type": "CIMSymbolLayerIdentifier",
+     "symbolReferenceName": "Symbol_53",
+     "symbolLayerName": "Level_15"
+    },
+    {
+     "type": "CIMSymbolLayerIdentifier",
+     "symbolReferenceName": "Symbol_54",
+     "symbolLayerName": "Level_14"
+    },
+    {
+     "type": "CIMSymbolLayerIdentifier",
+     "symbolReferenceName": "Symbol_55",
+     "symbolLayerName": "Level_13"
+    },
+    {
+     "type": "CIMSymbolLayerIdentifier",
+     "symbolReferenceName": "Symbol_56",
+     "symbolLayerName": "Level_12"
+    },
+    {
+     "type": "CIMSymbolLayerIdentifier",
+     "symbolReferenceName": "Symbol_57",
+     "symbolLayerName": "Level_11"
+    },
+    {
+     "type": "CIMSymbolLayerIdentifier",
+     "symbolReferenceName": "Symbol_58",
+     "symbolLayerName": "Level_10"
+    },
+    {
+     "type": "CIMSymbolLayerIdentifier",
+     "symbolReferenceName": "Symbol_59",
+     "symbolLayerName": "Level_9"
+    },
+    {
+     "type": "CIMSymbolLayerIdentifier",
+     "symbolReferenceName": "Symbol_60",
+     "symbolLayerName": "Level_8"
+    },
+    {
+     "type": "CIMSymbolLayerIdentifier",
+     "symbolReferenceName": "Symbol_61",
+     "symbolLayerName": "Level_7"
+    },
+    {
+     "type": "CIMSymbolLayerIdentifier",
+     "symbolReferenceName": "Symbol_62",
+     "symbolLayerName": "Level_6"
+    },
+    {
+     "type": "CIMSymbolLayerIdentifier",
+     "symbolReferenceName": "Symbol_63",
+     "symbolLayerName": "Level_5"
+    },
+    {
+     "type": "CIMSymbolLayerIdentifier",
+     "symbolReferenceName": "Symbol_64",
+     "symbolLayerName": "Level_0"
+    },
+    {
+     "type": "CIMSymbolLayerIdentifier",
+     "symbolReferenceName": "Symbol_65",
+     "symbolLayerName": "Level_0"
+    },
+    {
+     "type": "CIMSymbolLayerIdentifier",
+     "symbolReferenceName": "Symbol_66",
+     "symbolLayerName": "Level_0"
+    },
+    {
+     "type": "CIMSymbolLayerIdentifier",
+     "symbolReferenceName": "Symbol_67",
+     "symbolLayerName": "Level_0"
+    },
+    {
+     "type": "CIMSymbolLayerIdentifier",
+     "symbolReferenceName": "Symbol_68",
+     "symbolLayerName": "Level_0"
+    }
+   ],
+   "useSymbolLayerDrawing": true
+  },
+  "renderer": {
+   "type": "uniqueValue",
+   "field1": "SubRegionE",
+   "field2": null,
+   "field3": null,
+   "defaultSymbol": null,
+   "defaultLabel": null,
+   "uniqueValueInfos": [
+    {
+     "symbol": {
+      "type": "esriSFS",
+      "style": "esriSFSSolid",
+      "color": [
+       191,
+       127,
+       76,
+       255
+      ],
+      "outline": {
+       "type": "esriSLS",
+       "style": "esriSLSSolid",
+       "color": [
+        255,
+        255,
+        255,
+        255
+       ],
+       "width": 1.5
+      }
+     },
+     "value": "Kazan Region",
+     "label": "Kazan Region",
+     "description": ""
+    },
+    {
+     "symbol": {
+      "type": "esriSFS",
+      "style": "esriSFSSolid",
+      "color": [
+       230,
+       204,
+       153,
+       255
+      ],
+      "outline": {
+       "type": "esriSLS",
+       "style": "esriSLSSolid",
+       "color": [
+        255,
+        255,
+        255,
+        255
+       ],
+       "width": 1.5
+      }
+     },
+     "value": "Davis Region",
+     "label": "Davis Region",
+     "description": ""
+    },
+    {
+     "symbol": {
+      "type": "esriSFS",
+      "style": "esriSFSSolid",
+      "color": [
+       215,
+       89,
+       0,
+       255
+      ],
+      "outline": {
+       "type": "esriSLS",
+       "style": "esriSLSSolid",
+       "color": [
+        255,
+        255,
+        255,
+        255
+       ],
+       "width": 1.5
+      }
+     },
+     "value": "James Region",
+     "label": "James Region",
+     "description": ""
+    },
+    {
+     "symbol": {
+      "type": "esriSFS",
+      "style": "esriSFSSolid",
+      "color": [
+       140,
+       64,
+       0,
+       255
+      ],
+      "outline": {
+       "type": "esriSLS",
+       "style": "esriSLSSolid",
+       "color": [
+        255,
+        255,
+        255,
+        255
+       ],
+       "width": 1.5
+      }
+     },
+     "value": "Laurentian Region",
+     "label": "Laurentian Region",
+     "description": ""
+    },
+    {
+     "symbol": {
+      "type": "esriSFS",
+      "style": "esriSFSSolid",
+      "color": [
+       79,
+       129,
+       188,
+       255
+      ],
+      "outline": {
+       "type": "esriSLS",
+       "style": "esriSLSSolid",
+       "color": [
+        255,
+        255,
+        255,
+        255
+       ],
+       "width": 1.5
+      }
+     },
+     "value": "Hudson Bay Lowland",
+     "label": "Hudson Bay Lowland",
+     "description": ""
+    },
+    {
+     "symbol": {
+      "type": "esriSFS",
+      "style": "esriSFSSolid",
+      "color": [
+       87,
+       87,
+       87,
+       255
+      ],
+      "outline": {
+       "type": "esriSLS",
+       "style": "esriSLSSolid",
+       "color": [
+        255,
+        255,
+        255,
+        255
+       ],
+       "width": 1.5
+      }
+     },
+     "value": "Innuitian Region",
+     "label": "Innuitian Region",
+     "description": ""
+    },
+    {
+     "symbol": {
+      "type": "esriSFS",
+      "style": "esriSFSSolid",
+      "color": [
+       146,
+       146,
+       146,
+       255
+      ],
+      "outline": {
+       "type": "esriSLS",
+       "style": "esriSLSSolid",
+       "color": [
+        255,
+        255,
+        255,
+        255
+       ],
+       "width": 1.5
+      }
+     },
+     "value": "Arctic Lowlands",
+     "label": "Arctic Lowlands",
+     "description": ""
+    },
+    {
+     "symbol": {
+      "type": "esriSFS",
+      "style": "esriSFSSolid",
+      "color": [
+       175,
+       175,
+       175,
+       255
+      ],
+      "outline": {
+       "type": "esriSLS",
+       "style": "esriSLSSolid",
+       "color": [
+        255,
+        255,
+        255,
+        255
+       ],
+       "width": 1.5
+      }
+     },
+     "value": "Arctic Coastal Plain",
+     "label": "Arctic Coastal Plain",
+     "description": ""
+    },
+    {
+     "symbol": {
+      "type": "esriSFS",
+      "style": "esriSFSSolid",
+      "color": [
+       166,
+       76,
+       166,
+       255
+      ],
+      "outline": {
+       "type": "esriSLS",
+       "style": "esriSLSSolid",
+       "color": [
+        255,
+        255,
+        255,
+        255
+       ],
+       "width": 1.5
+      }
+     },
+     "value": "Interior Plains",
+     "label": "Interior Plains",
+     "description": ""
+    },
+    {
+     "symbol": {
+      "type": "esriSFS",
+      "style": "esriSFSSolid",
+      "color": [
+       89,
+       217,
+       140,
+       255
+      ],
+      "outline": {
+       "type": "esriSLS",
+       "style": "esriSLSSolid",
+       "color": [
+        255,
+        255,
+        255,
+        255
+       ],
+       "width": 1.5
+      }
+     },
+     "value": "Porcupine Mountain Area",
+     "label": "Porcupine Mountain Area",
+     "description": ""
+    },
+    {
+     "symbol": {
+      "type": "esriSFS",
+      "style": "esriSFSSolid",
+      "color": [
+       179,
+       217,
+       192,
+       255
+      ],
+      "outline": {
+       "type": "esriSLS",
+       "style": "esriSLSSolid",
+       "color": [
+        255,
+        255,
+        255,
+        255
+       ],
+       "width": 1.5
+      }
+     },
+     "value": "Mackenzie Mountain Area",
+     "label": "Mackenzie Mountain Area",
+     "description": ""
+    },
+    {
+     "symbol": {
+      "type": "esriSFS",
+      "style": "esriSFSSolid",
+      "color": [
+       151,
+       217,
+       89,
+       255
+      ],
+      "outline": {
+       "type": "esriSLS",
+       "style": "esriSLSSolid",
+       "color": [
+        255,
+        255,
+        255,
+        255
+       ],
+       "width": 1.5
+      }
+     },
+     "value": "Rocky Mountain Area",
+     "label": "Rocky Mountain Area",
+     "description": ""
+    },
+    {
+     "symbol": {
+      "type": "esriSFS",
+      "style": "esriSFSSolid",
+      "color": [
+       51,
+       115,
+       38,
+       255
+      ],
+      "outline": {
+       "type": "esriSLS",
+       "style": "esriSLSSolid",
+       "color": [
+        255,
+        255,
+        255,
+        255
+       ],
+       "width": 1.5
+      }
+     },
+     "value": "Brooks Range Area",
+     "label": "Brooks Range Area",
+     "description": ""
+    },
+    {
+     "symbol": {
+      "type": "esriSFS",
+      "style": "esriSFSSolid",
+      "color": [
+       76,
+       140,
+       0,
+       255
+      ],
+      "outline": {
+       "type": "esriSLS",
+       "style": "esriSLSSolid",
+       "color": [
+        255,
+        255,
+        255,
+        255
+       ],
+       "width": 1.5
+      }
+     },
+     "value": "Northern Plateau and Mountain Area",
+     "label": "Northern Plateau and Mountain Area",
+     "description": ""
+    },
+    {
+     "symbol": {
+      "type": "esriSFS",
+      "style": "esriSFSSolid",
+      "color": [
+       113,
+       179,
+       38,
+       255
+      ],
+      "outline": {
+       "type": "esriSLS",
+       "style": "esriSLSSolid",
+       "color": [
+        255,
+        255,
+        255,
+        255
+       ],
+       "width": 1.5
+      }
+     },
+     "value": "Central Plateau and Mountain Area",
+     "label": "Central Plateau and Mountain Area",
+     "description": ""
+    },
+    {
+     "symbol": {
+      "type": "esriSFS",
+      "style": "esriSFSSolid",
+      "color": [
+       107,
+       197,
+       174,
+       255
+      ],
+      "outline": {
+       "type": "esriSLS",
+       "style": "esriSLSSolid",
+       "color": [
+        255,
+        255,
+        255,
+        255
+       ],
+       "width": 1.5
+      }
+     },
+     "value": "Southern Plateau and Mountain Area",
+     "label": "Southern Plateau and Mountain Area",
+     "description": ""
+    },
+    {
+     "symbol": {
+      "type": "esriSFS",
+      "style": "esriSFSSolid",
+      "color": [
+       158,
+       222,
+       158,
+       255
+      ],
+      "outline": {
+       "type": "esriSLS",
+       "style": "esriSLSSolid",
+       "color": [
+        255,
+        255,
+        255,
+        255
+       ],
+       "width": 1.5
+      }
+     },
+     "value": "Coast Mountain Area",
+     "label": "Coast Mountain Area",
+     "description": ""
+    },
+    {
+     "symbol": {
+      "type": "esriSFS",
+      "style": "esriSFSSolid",
+      "color": [
+       63,
+       191,
+       127,
+       255
+      ],
+      "outline": {
+       "type": "esriSLS",
+       "style": "esriSLSSolid",
+       "color": [
+        255,
+        255,
+        255,
+        255
+       ],
+       "width": 1.5
+      }
+     },
+     "value": "Coastal Lowlands",
+     "label": "Coastal Lowlands",
+     "description": ""
+    },
+    {
+     "symbol": {
+      "type": "esriSFS",
+      "style": "esriSFSSolid",
+      "color": [
+       0,
+       64,
+       0,
+       255
+      ],
+      "outline": {
+       "type": "esriSLS",
+       "style": "esriSLSSolid",
+       "color": [
+        255,
+        255,
+        255,
+        255
+       ],
+       "width": 1.5
+      }
+     },
+     "value": "Outer Mountain Area",
+     "label": "Outer Mountain Area",
+     "description": ""
+    },
+    {
+     "symbol": {
+      "type": "esriSFS",
+      "style": "esriSFSSolid",
+      "color": [
+       38,
+       166,
+       166,
+       255
+      ],
+      "outline": {
+       "type": "esriSLS",
+       "style": "esriSLSSolid",
+       "color": [
+        255,
+        255,
+        255,
+        255
+       ],
+       "width": 1.5
+      }
+     },
+     "value": "Great Lakes - St. Lawrence Lowlands",
+     "label": "Great Lakes - St. Lawrence Lowlands",
+     "description": ""
+    },
+    {
+     "symbol": {
+      "type": "esriSFS",
+      "style": "esriSFSSolid",
+      "color": [
+       166,
+       153,
+       51,
+       255
+      ],
+      "outline": {
+       "type": "esriSLS",
+       "style": "esriSLSSolid",
+       "color": [
+        255,
+        255,
+        255,
+        255
+       ],
+       "width": 1.5
+      }
+     },
+     "value": "Appalachian Uplands",
+     "label": "Appalachian Uplands",
+     "description": ""
+    }
+   ],
+   "fieldDelimiter": ","
+  },
+  "transparency": 15,
+  "labelingInfo": [
+   {
+    "labelPlacement": "esriServerPolygonPlacementAlwaysHorizontal",
+    "where": null,
+    "labelExpression": "[SubRegionE]",
+    "useCodedValues": true,
+    "symbol": {
+     "type": "esriTS",
+     "color": [
+      78,
+      78,
+      78,
+      255
+     ],
+     "backgroundColor": null,
+     "borderLineColor": null,
+     "borderLineSize": null,
+     "verticalAlignment": "baseline",
+     "horizontalAlignment": "left",
+     "rightToLeft": false,
+     "angle": 0,
+     "xoffset": 0,
+     "yoffset": 0,
+     "kerning": true,
+     "haloColor": [
+      250,
+      250,
+      245,
+      255
+     ],
+     "haloSize": 1.4,
+     "font": {
+      "family": "Arial",
+      "size": 9,
+      "style": "normal",
+      "weight": "bold",
+      "decoration": "none"
+     }
+    },
+    "minScale": 15000000,
+    "maxScale": 8000001
+   }
+  ]
+ },
+ "defaultVisibility": true,
+ "extent": {
+  "xmin": -2341102.6125999987,
+  "ymin": -718231.3946999982,
+  "xmax": 3009778.352499999,
+  "ymax": 3833267.122300001,
+  "spatialReference": {
+   "wkid": 3978,
+   "latestWkid": 3978
+  }
+ },
+ "hasAttachments": false,
+ "htmlPopupType": "esriServerHTMLPopupTypeAsHTMLText",
+ "displayField": "SubRegionE",
+ "typeIdField": null,
+ "subtypeFieldName": null,
+ "subtypeField": null,
+ "defaultSubtypeCode": null,
+ "fields": [
+  {
+   "name": "OBJECTID_12",
+   "type": "esriFieldTypeOID",
+   "alias": "OBJECTID",
+   "domain": null
+  },
+  {
+   "name": "Shape",
+   "type": "esriFieldTypeGeometry",
+   "alias": "Shape",
+   "domain": null
+  },
+  {
+   "name": "RegionEn",
+   "type": "esriFieldTypeString",
+   "alias": "Region",
+   "length": 50,
+   "domain": null
+  },
+  {
+   "name": "SubRegionE",
+   "type": "esriFieldTypeString",
+   "alias": "Subregion",
+   "length": 50,
+   "domain": null
+  }
+ ],
+ "geometryField": {
+  "name": "Shape",
+  "type": "esriFieldTypeGeometry",
+  "alias": "Shape"
+ },
+ "indexes": [
+  {
+   "name": "FDO_OBJECTID_12",
+   "fields": "OBJECTID_12",
+   "isAscending": true,
+   "isUnique": true,
+   "description": ""
+  },
+  {
+   "name": "FDO_Shape",
+   "fields": "Shape",
+   "isAscending": true,
+   "isUnique": false,
+   "description": ""
+  }
+ ],
+ "subtypes": [],
+ "relationships": [],
+ "canModifyLayer": true,
+ "canScaleSymbols": false,
+ "hasLabels": true,
+ "capabilities": "Map,Data,Query",
+ "maxRecordCount": 1000,
+ "supportsStatistics": true,
+ "supportsAdvancedQueries": true,
+ "supportedQueryFormats": "JSON, geoJSON",
+ "isDataVersioned": false,
+ "ownershipBasedAccessControlForFeatures": {"allowOthersToQuery": true},
+ "useStandardizedQueries": true,
+ "advancedQueryCapabilities": {
+  "useStandardizedQueries": true,
+  "supportsStatistics": true,
+  "supportsHavingClause": true,
+  "supportsCountDistinct": true,
+  "supportsOrderBy": true,
+  "supportsDistinct": true,
+  "supportsPagination": true,
+  "supportsTrueCurve": true,
+  "supportsReturningQueryExtent": true,
+  "supportsQueryWithDistance": true,
+  "supportsSqlExpression": true
+ },
+ "supportsDatumTransformation": true,
+ "supportsCoordinatesQuantization": true,
+ "serviceItemId": "cb0a62ce0d664c63bc39db0eefa89d80"
+}

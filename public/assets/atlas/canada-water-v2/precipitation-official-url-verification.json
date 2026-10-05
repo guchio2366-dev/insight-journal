@@ -1,0 +1,42 @@
+[
+  {
+    "url": "https://open.canada.ca/data/en/dataset/203cdcbf-19a8-4493-8ee9-c8a56ddb1783",
+    "status": 200,
+    "utf8Bytes": 52991,
+    "sha256": "d8d792f0e6d412f4b4b24e15e50d26641abde667aa76ad2f113ffd64efbcb966",
+    "hasProduct": true,
+    "hasLicence": false,
+    "checkedAtUtc": "2026-10-05T16:10:23.9626215Z"
+  },
+  {
+    "url": "https://open.canada.ca/en/open-government-licence-canada",
+    "status": 200,
+    "utf8Bytes": 23079,
+    "sha256": "d7648d6d694d66a0891502f85c3383f9263d5e541b47e14fbf33450974af158f",
+    "hasProduct": false,
+    "hasLicence": true,
+    "checkedAtUtc": "2026-10-05T16:10:24.7745302Z",
+    "matchesPinnedOfficialSnapshot": true,
+    "snapshotFile": "precipitation/open-government-licence.html"
+  },
+  {
+    "url": "https://crd-data-donnees-rdc.ec.gc.ca/CDAS/products/CanGridP_V2/",
+    "status": 200,
+    "utf8Bytes": 1272,
+    "sha256": "ee2d77472ee4ecd20816340f5aba9c7b133f9e10c1b3fbe8daa7c76b300b33f0",
+    "hasProduct": true,
+    "hasLicence": false,
+    "checkedAtUtc": "2026-10-05T16:10:25.3992169Z",
+    "matchesPinnedOfficialSnapshot": true,
+    "snapshotFile": "precipitation/eccc-v2-index.html"
+  },
+  {
+    "url": "https://crd-data-donnees-rdc.ec.gc.ca/CDAS/products/CanGridP_V2/CanGridP_mlyV2_1948-2023.nc",
+    "method": "HEAD",
+    "status": 200,
+    "contentLength": 2113147860,
+    "etag": "\"7df413d4-651a328602133\"",
+    "lastModified": "Tue, 12 May 2026 18:37:39 GMT",
+    "checkedAtUtc": "2026-10-05T16:12:03.2912013Z"
+  }
+]

@@ -1,0 +1,52 @@
+{
+  "passed": true,
+  "method": "Read emitted PNG/GeoJSON/label files, reconstruct class-layer union, independently recompute source-edge coordinates, and require every emitted segment to share a complete valid source quad.",
+  "compositeAndClassPixelsAgree": true,
+  "classMasksAreDisjoint": true,
+  "classMaskUnionEqualsComposite": true,
+  "contours": [
+    {
+      "precipitationMm": 250,
+      "verifiedVertices": 310,
+      "verifiedSegments": 284,
+      "unsupportedVertices": 0,
+      "segmentsCrossingInvalidQuads": 0
+    },
+    {
+      "precipitationMm": 500,
+      "verifiedVertices": 1172,
+      "verifiedSegments": 1156,
+      "unsupportedVertices": 0,
+      "segmentsCrossingInvalidQuads": 0
+    },
+    {
+      "precipitationMm": 750,
+      "verifiedVertices": 633,
+      "verifiedSegments": 624,
+      "unsupportedVertices": 0,
+      "segmentsCrossingInvalidQuads": 0
+    },
+    {
+      "precipitationMm": 1000,
+      "verifiedVertices": 660,
+      "verifiedSegments": 651,
+      "unsupportedVertices": 0,
+      "segmentsCrossingInvalidQuads": 0
+    },
+    {
+      "precipitationMm": 1500,
+      "verifiedVertices": 385,
+      "verifiedSegments": 367,
+      "unsupportedVertices": 0,
+      "segmentsCrossingInvalidQuads": 0
+    },
+    {
+      "precipitationMm": 2000,
+      "verifiedVertices": 117,
+      "verifiedSegments": 107,
+      "unsupportedVertices": 0,
+      "segmentsCrossingInvalidQuads": 0
+    }
+  ],
+  "allLabelCoordinatesExistOnTheirContours": true
+}

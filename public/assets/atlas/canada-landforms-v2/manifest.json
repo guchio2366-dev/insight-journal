@@ -1,0 +1,409 @@
+{
+  "version": 2,
+  "title": "Named Canada landforms from official NRCan Regions and Divisions",
+  "preparedAt": "2026-10-05",
+  "source": {
+    "catalogueId": "a3dfbaf4-1b20-4061-aa0a-e7a79953f52d",
+    "publisher": "Government of Canada; Natural Resources Canada",
+    "title": "Physiographic Regions of Canada",
+    "catalogueUrl": "https://open.canada.ca/data/en/dataset/a3dfbaf4-1b20-4061-aa0a-e7a79953f52d",
+    "descriptionUrl": "https://atlas.gc.ca/phys/en/index.html",
+    "published": "2019-04-01",
+    "temporalCoverageStart": "2017-09-01",
+    "catalogueModified": "2022-01-12",
+    "licence": "Open Government Licence - Canada 2.0",
+    "licenceUrl": "https://open.canada.ca/en/open-government-licence-canada",
+    "attribution": "Contains information licensed under the Open Government Licence – Canada."
+  },
+  "geometry": {
+    "filename": "landforms.geojson",
+    "sha256": "1e186fc629e008747f826c8cf590507afe69c67e66177830f7c51c961dc02d94",
+    "bytes": 1276171,
+    "sourceCrs": "EPSG:3978",
+    "deliveryCrs": "EPSG:4326",
+    "featureJoinField": "id",
+    "featureCount": 8,
+    "regionFeatureCount": 7,
+    "divisionFeatureCount": 1,
+    "polygonCount": 751,
+    "ringCount": 751,
+    "vertexCount": 32394,
+    "originalCoordinatesPreserved": true,
+    "simplificationApplied": false,
+    "coordinateRoundingApplied": false,
+    "clippingApplied": false,
+    "unionApplied": false,
+    "imageTracingApplied": false,
+    "method": "Select exact official layer-0 RegionEn names and exact layer-2 Div_En=Rocky Mountains, OBJECTID_12=78. Retain every source geometry coordinate unchanged; append stable UI IDs and explicit source hierarchy only."
+  },
+  "validation": {
+    "library": "shapely 2.1.2",
+    "validGeometries": 8,
+    "finiteCoordinates": true,
+    "closedRings": true,
+    "labelAnchorsInsideExactGeometries": true,
+    "unintendedPositiveAreaOverlapPairs": 0,
+    "intentionalNestedOverlapPairs": [
+      [
+        "cordillera",
+        "rockies"
+      ]
+    ],
+    "rockiesInsideCordillera": true,
+    "rockiesDifferentFromCordillera": true,
+    "rockiesExactOfficialDivisionObjectId": 78
+  },
+  "features": [
+    {
+      "id": "cordillera",
+      "name": "Cordillera",
+      "nameJapanese": "西部山地（コルディレラ）",
+      "sourceLevel": "region",
+      "sourceLayer": 0,
+      "sourceJoinField": "RegionEn",
+      "sourceObjectIds": [
+        4
+      ],
+      "sourceRegion": "Cordillera",
+      "labelAnchor": [
+        -126,
+        58
+      ],
+      "bounds": [
+        -141.0000312043649,
+        48.31195188527063,
+        -113.24852345875098,
+        69.56015841442596
+      ],
+      "geometrySha256": "8bd4debf41b53c937bd74233530730534d94eeb0b3543ff4fa2211948410e883",
+      "coordinatesUnchanged": true,
+      "validation": {
+        "validGeometry": true,
+        "finiteCoordinates": true,
+        "closedRings": true,
+        "labelAnchorInsideGeometry": true,
+        "polygonCount": 108,
+        "ringCount": 108,
+        "vertexCount": 3831
+      }
+    },
+    {
+      "id": "interior-plains",
+      "name": "Interior Plains",
+      "nameJapanese": "内陸平原",
+      "sourceLevel": "region",
+      "sourceLayer": 0,
+      "sourceJoinField": "RegionEn",
+      "sourceObjectIds": [
+        7
+      ],
+      "sourceRegion": "Interior Plains",
+      "labelAnchor": [
+        -110,
+        57
+      ],
+      "bounds": [
+        -135.59545477416685,
+        49.000006767306274,
+        -95.94999579356123,
+        70.41989050266017
+      ],
+      "geometrySha256": "fe8364cd33da7d397e9006820cf64aaee9d416029f18e93121193ce33e03d20d",
+      "coordinatesUnchanged": true,
+      "validation": {
+        "validGeometry": true,
+        "finiteCoordinates": true,
+        "closedRings": true,
+        "labelAnchorInsideGeometry": true,
+        "polygonCount": 2,
+        "ringCount": 2,
+        "vertexCount": 1025
+      }
+    },
+    {
+      "id": "canadian-shield",
+      "name": "Canadian Shield",
+      "nameJapanese": "カナダ盾状地",
+      "sourceLevel": "region",
+      "sourceLayer": 0,
+      "sourceJoinField": "RegionEn",
+      "sourceObjectIds": [
+        3
+      ],
+      "sourceRegion": "Canadian Shield",
+      "labelAnchor": [
+        -93,
+        54
+      ],
+      "bounds": [
+        -120.26163120058065,
+        44.24850937948911,
+        -55.27943984975229,
+        79.08121510148416
+      ],
+      "geometrySha256": "4070c0aeab1cfc9a81453949b638d888e82e6b421e715e5b85d413ff32699a73",
+      "coordinatesUnchanged": true,
+      "validation": {
+        "validGeometry": true,
+        "finiteCoordinates": true,
+        "closedRings": true,
+        "labelAnchorInsideGeometry": true,
+        "polygonCount": 353,
+        "ringCount": 353,
+        "vertexCount": 12408
+      }
+    },
+    {
+      "id": "great-lakes-st-lawrence-lowlands",
+      "name": "Great Lakes - St. Lawrence Lowlands",
+      "nameJapanese": "五大湖・セントローレンス低地",
+      "sourceLevel": "region",
+      "sourceLayer": 0,
+      "sourceJoinField": "RegionEn",
+      "sourceObjectIds": [
+        5
+      ],
+      "sourceRegion": "Great Lakes - St. Lawrence Lowlands",
+      "labelAnchor": [
+        -80.4,
+        43.4
+      ],
+      "bounds": [
+        -84.10537931471478,
+        41.7331182173894,
+        -55.5740620460402,
+        52.46751547057919
+      ],
+      "geometrySha256": "1f63975b7629f1b7514367b3aadbeed0f3b3c7c49603610cc66caaedc6d6ef41",
+      "coordinatesUnchanged": true,
+      "validation": {
+        "validGeometry": true,
+        "finiteCoordinates": true,
+        "closedRings": true,
+        "labelAnchorInsideGeometry": true,
+        "polygonCount": 35,
+        "ringCount": 35,
+        "vertexCount": 1538
+      }
+    },
+    {
+      "id": "appalachian-uplands",
+      "name": "Appalachian Uplands",
+      "nameJapanese": "アパラチア高地",
+      "sourceLevel": "region",
+      "sourceLayer": 0,
+      "sourceJoinField": "RegionEn",
+      "sourceObjectIds": [
+        1
+      ],
+      "sourceRegion": "Appalachian Uplands",
+      "labelAnchor": [
+        -66.5,
+        46.5
+      ],
+      "bounds": [
+        -72.977255684078,
+        43.42934121394151,
+        -52.6312642037036,
+        51.62055886803691
+      ],
+      "geometrySha256": "0383b3262a5c246fe2fb7548005d153235e5baecedb52123c210fde9e8d32e6d",
+      "coordinatesUnchanged": true,
+      "validation": {
+        "validGeometry": true,
+        "finiteCoordinates": true,
+        "closedRings": true,
+        "labelAnchorInsideGeometry": true,
+        "polygonCount": 43,
+        "ringCount": 43,
+        "vertexCount": 2999
+      }
+    },
+    {
+      "id": "hudson-bay-lowland",
+      "name": "Hudson Bay Lowland",
+      "nameJapanese": "ハドソン湾低地",
+      "sourceLevel": "region",
+      "sourceLayer": 0,
+      "sourceJoinField": "RegionEn",
+      "sourceObjectIds": [
+        6
+      ],
+      "sourceRegion": "Hudson Bay Lowland",
+      "labelAnchor": [
+        -84.5,
+        53.5
+      ],
+      "bounds": [
+        -95.42849810315447,
+        49.88527277832726,
+        -78.78249743988049,
+        65.9260706185971
+      ],
+      "geometrySha256": "c20355d234674f0a48a259b0fde16e109a04d8b14842c1932ad0ab5e19988c64",
+      "coordinatesUnchanged": true,
+      "validation": {
+        "validGeometry": true,
+        "finiteCoordinates": true,
+        "closedRings": true,
+        "labelAnchorInsideGeometry": true,
+        "polygonCount": 16,
+        "ringCount": 16,
+        "vertexCount": 944
+      }
+    },
+    {
+      "id": "arctic-lands",
+      "name": "Arctic Lands",
+      "nameJapanese": "北極地域",
+      "sourceLevel": "region",
+      "sourceLayer": 0,
+      "sourceJoinField": "RegionEn",
+      "sourceObjectIds": [
+        2
+      ],
+      "sourceRegion": "Arctic Lands",
+      "labelAnchor": [
+        -110,
+        75
+      ],
+      "bounds": [
+        -141.0000312214689,
+        63.80203625393462,
+        -61.13598219369538,
+        83.13536691574218
+      ],
+      "geometrySha256": "ba5411d4f8fe1a0f0cd1e981a7fb986ea34c5db3fd903dcac41a33ebdb86fd83",
+      "coordinatesUnchanged": true,
+      "validation": {
+        "validGeometry": true,
+        "finiteCoordinates": true,
+        "closedRings": true,
+        "labelAnchorInsideGeometry": true,
+        "polygonCount": 193,
+        "ringCount": 193,
+        "vertexCount": 9297
+      }
+    },
+    {
+      "id": "rockies",
+      "name": "Rocky Mountains",
+      "nameJapanese": "ロッキー山脈",
+      "sourceLevel": "division",
+      "sourceLayer": 2,
+      "sourceJoinField": "Div_En",
+      "sourceObjectIds": [
+        78
+      ],
+      "sourceRegion": "Cordillera",
+      "labelAnchor": [
+        -117.5,
+        52.5
+      ],
+      "bounds": [
+        -127.48422158208285,
+        49.000006716837525,
+        -113.71552941450378,
+        59.54285759143825
+      ],
+      "geometrySha256": "1b43d09d9f038ea46e802114abe9df00783833c300a504cd88d6a3fcac61b22d",
+      "coordinatesUnchanged": true,
+      "validation": {
+        "validGeometry": true,
+        "finiteCoordinates": true,
+        "closedRings": true,
+        "labelAnchorInsideGeometry": true,
+        "polygonCount": 1,
+        "ringCount": 1,
+        "vertexCount": 352
+      },
+      "sourceSubregion": "Rocky Mountain Area",
+      "sourceDivision": "Rocky Mountains",
+      "parentId": "cordillera"
+    }
+  ],
+  "rawGeometrySnapshots": [
+    {
+      "file": "public/assets/atlas/canada-physiography-v1/regions.geojson",
+      "url": "https://maps-cartes.services.geo.ca/server_serveur/rest/services/NRCan/phys_reg_en/MapServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson",
+      "sha256": "26b0d3cde98e66167a2fa122cf73c2d098b5c8f24c225610df145e8c98004866",
+      "retrievedAt": "2026-10-02",
+      "layer": 0,
+      "level": "region",
+      "sourceScaleRange": {
+        "minScale": 50000000,
+        "maxScale": 15000001
+      },
+      "contentType": "application/geo+json;charset=UTF-8",
+      "bytes": 1310663
+    },
+    {
+      "file": "public/assets/atlas/canada-landforms-v2/source/rocky-mountains.geojson",
+      "url": "https://maps-cartes.services.geo.ca/server_serveur/rest/services/NRCan/phys_reg_en/MapServer/2/query?where=OBJECTID_12%3D78&outFields=*&returnGeometry=true&outSR=4326&f=geojson",
+      "sha256": "a59769d34f61f788f4bd8fed428e3dd7f0be08de225dfe4a83c5e06ea6fd5d31",
+      "retrievedAt": "2026-10-05",
+      "layer": 2,
+      "level": "division",
+      "sourceScaleRange": {
+        "minScale": 8000000,
+        "maxScale": 0
+      },
+      "contentType": "application/geo+json;charset=UTF-8",
+      "bytes": 14603
+    }
+  ],
+  "sourceEvidence": [
+    {
+      "file": "data-source/atlas/canada-physiography-v1/source-catalogue.json",
+      "url": "https://open.canada.ca/data/api/action/package_show?id=a3dfbaf4-1b20-4061-aa0a-e7a79953f52d",
+      "sha256": "4e4dc7c0bc74893827779a4987fd26932dbe07b8939a42b1dacc6a3a9a9b99d7",
+      "role": "Official catalogue, licence and related Regions/Subregions/Divisions description",
+      "bytes": 13829
+    },
+    {
+      "file": "data-source/atlas/canada-physiography-v1/source-license.html",
+      "url": "https://open.canada.ca/en/open-government-licence-canada",
+      "sha256": "d7648d6d694d66a0891502f85c3383f9263d5e541b47e14fbf33450974af158f",
+      "role": "Unmodified Open Government Licence - Canada response",
+      "bytes": 23079
+    },
+    {
+      "file": "data-source/atlas/canada-physiography-v1/source-layer.json",
+      "url": "https://maps-cartes.services.geo.ca/server_serveur/rest/services/NRCan/phys_reg_en/MapServer/0?f=pjson",
+      "sha256": "b6e9470e8cd02dbbdd7e34d4e9ae83c7181b15182baf812709edb7e6c4d01c02",
+      "role": "Regions layer metadata",
+      "bytes": 6907
+    },
+    {
+      "file": "public/assets/atlas/canada-landforms-v2/source/source-division-layer.json",
+      "url": "https://maps-cartes.services.geo.ca/server_serveur/rest/services/NRCan/phys_reg_en/MapServer/2?f=pjson",
+      "sha256": "7f90de8eb4c0f06755f829cd26c93eb4a3ad0d2ccde23fd9ca51be9e8fb394c6",
+      "role": "Divisions layer metadata",
+      "bytes": 4616
+    },
+    {
+      "file": "public/assets/atlas/canada-landforms-v2/source/source-subregion-layer.json",
+      "url": "https://maps-cartes.services.geo.ca/server_serveur/rest/services/NRCan/phys_reg_en/MapServer/1?f=pjson",
+      "sha256": "4f0f5a6b868e7091ca6ec0e6fef0d25b303985ccb9cea551ca041c4acb683c6e",
+      "role": "Subregions layer metadata; not used as a substitute for individual mountain ranges",
+      "bytes": 16278
+    }
+  ],
+  "reproduction": {
+    "script": "scripts/prepare-canada-named-landforms.py",
+    "command": "python scripts/prepare-canada-named-landforms.py",
+    "verificationCommand": "python scripts/prepare-canada-named-landforms.py --check",
+    "dependencies": [
+      "shapely==2.1.2"
+    ],
+    "networkRequired": false
+  },
+  "limitations": [
+    "The seven existing national Regions remain broad named physiographic regions. They must not be relabelled as smaller ranges, grassland extent, elevation observations or administrative boundaries.",
+    "Rockies uses the individual Rocky Mountains Division, not the broader Cordillera Region or Rocky Mountain Area Subregion; the separately named Rocky Mountain Foothills Division is excluded.",
+    "The eight selections are hierarchical and do not form an eight-way partition. Rocky Mountains overlaps its parent Cordillera by design.",
+    "Interior Plains includes northern plains as well as its southern part. It is not an exact Prairies polygon. No Prairies boundary is inferred from provinces, a latitude cut or adjacent unnamed divisions.",
+    "Label anchors are cartographic positions verified inside each source feature; they are not observation locations.",
+    "Catalogue publication, temporal coverage and catalogue modification dates are distinct. The separately linked historical map does not establish a reference year for these vectors."
+  ]
+}

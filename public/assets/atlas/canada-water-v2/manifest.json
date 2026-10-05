@@ -1,0 +1,363 @@
+{
+  "id": "canada-water-v2",
+  "scope": "Precipitation parity assets only",
+  "prepared": "2026-10-05",
+  "accessed": "2026-10-02",
+  "projection": {
+    "type": "affine-epsg4326",
+    "bounds": [
+      -145,
+      40,
+      -50,
+      85
+    ],
+    "width": 900,
+    "height": 580,
+    "transform": "x=(longitude+145)/95*900; y=(85-latitude)/45*580"
+  },
+  "precipitation": {
+    "source": {
+      "product": "Canadian Gridded Homogenized Monthly Precipitation – Version 2 (CanGridP mlyV2)",
+      "provider": "Environment and Climate Change Canada",
+      "catalogueUrl": "https://open.canada.ca/data/en/dataset/203cdcbf-19a8-4493-8ee9-c8a56ddb1783",
+      "catalogueMetadataXmlUrl": "https://catalogue.ec.gc.ca/geonetwork/srv/api/records/203cdcbf-19a8-4493-8ee9-c8a56ddb1783/formatters/xml",
+      "cataloguePublicationDate": "2026-04-07",
+      "sourceUrl": "https://crd-data-donnees-rdc.ec.gc.ca/CDAS/products/CanGridP_V2/CanGridP_mlyV2_1948-2023.nc",
+      "sourceReadMeUrl": "https://crd-data-donnees-rdc.ec.gc.ca/CDAS/products/CanGridP_V2/CanGridP_V2_ReadMe.docx",
+      "sourceBytes": 2113147860,
+      "sourceETag": "\"7df413d4-651a328602133\"",
+      "sourceLastModifiedHttp": "Tue, 12 May 2026 18:37:39 GMT",
+      "format": "NetCDF classic CDF1; CF-1.6 declaration; float64 precipitation",
+      "sourcePeriod": "December 1948 through December 2023; 901 monthly records",
+      "selectedPeriod": "January 1991 through December 2020; 360 monthly records",
+      "selectedRangeStart": 1188502116,
+      "selectedRangeEndInclusive": 2029089155,
+      "selectedRecordBytes": 840587040,
+      "staticHeaderAndGeolocationBytes": 9345296,
+      "selectedTimeValues": "506 through 865; units months since 1948-11-01",
+      "gridShapeXMajor": [
+        621,
+        470
+      ],
+      "geographicCoordinates": "Source 2D lat/lon float64 arrays, both dimensions [x,y]; use these arrays for registration.",
+      "sourceXYWarning": "The x/y variables contain integer grid indices but have degree units. Do not interpret x/y as geographic longitude/latitude.",
+      "documentedProjection": "Polar stereographic, true at 60 degrees north, centered on 110 degrees west, approximately 10 km resolution. The catalogue calls the grid EASE; do not claim strict equal-area or invent an EPSG code.",
+      "missingValue": -999,
+      "landVariable": "land; 1 land, 0 nonland; 100945 land cells out of 291870 rectangular cells",
+      "landMaskWarning": "In the inspected January 1991 record, all 291870 precipitation values are numerically valid, including 190925 nonland cells. Mask land!=1 explicitly; _FillValue alone does not mask oceans.",
+      "quantity": "Monthly total precipitation in millimeters; liquid precipitation plus frozen precipitation water equivalent. Spatially interpolated adjusted and homogenized station series, not station measurements at each grid point.",
+      "derivation": "Average each calendar month across 30 years only when all 30 monthly totals are finite, nonnegative, and unequal to -999. Sum all 12 complete monthly averages and retain only land==1. Missing data remain missing.",
+      "primaryPeriodAndQuantitySupportUrl": "https://www.canada.ca/en/environment-climate-change/services/science-technology/changing-climate-report-2026/cccr-chapter-2-en.html",
+      "primaryFigure": "Supplementary Figure S2.3: 1961–1990 and 1991–2020 average annual precipitation amounts (mm), based on CanGridP mlyV2.",
+      "primaryFigureImageUrl": "https://www.canada.ca/content/canadasite/en/environment-climate-change/services/science-technology/changing-climate-report-2026/cccr-chapter-2-en/_jcr_content/par/mwsadaptiveimage_874435805/image.img.png/1784313908864.png",
+      "rainAndSnowWaterEquivalentSupportUrl": "https://climate-scenarios.canada.ca/?page=climate-indices-notes",
+      "licence": "Open Government Licence – Canada, version 2.0",
+      "licenceUrl": "https://open.canada.ca/en/open-government-licence-canada",
+      "reuse": "Copy, modify, publish, translate, adapt and distribute are allowed, including commercially, subject to source attribution and a licence link where possible. Do not imply government endorsement.",
+      "attribution": "Source: Environment and Climate Change Canada, CanGridP mlyV2. Annual 1991–2020 averages calculated from monthly gridded total precipitation. Contains information licensed under the Open Government Licence – Canada.",
+      "distinctionFromPublishedNormals": "The separately published CanGridP_Norm_mlyV2.nc covers 1961–1990, not 1991–2020. This deliverable derives modern annual normals from the published monthly series; do not call it an original ECCC 1991–2020 normals file.",
+      "readmeMismatch": "ReadMe references land_mask and grid_area, but the actual NetCDF variable names are land and grid area; use the actual inspected names.",
+      "regionalAveraging": "Use supplied grid area values in square kilometers as weights; an unweighted national average is not appropriate.",
+      "rendering": "Source land/missing masks must be preserved. Parent should clip coarse cell footprints to its trustworthy Canada outline. Do not extrapolate into missing or nonland cells.",
+      "observedCoverageStatus": "Final valid and missing land counts, northern counts, extrema and hashes are recorded in annual-precipitation-summary.json after extraction completes."
+    },
+    "period": [
+      1991,
+      2020
+    ],
+    "unit": "mm/year",
+    "sourceCellCount": 100945,
+    "missingLandCellCount": 0,
+    "bands": [
+      {
+        "id": "lt250",
+        "color": "#f2dfb3",
+        "lowerBoundMm": 0,
+        "upperBoundExclusiveMm": 250,
+        "sourceCellCount": 6841,
+        "opaquePixelCount": 106977
+      },
+      {
+        "id": "250-500",
+        "color": "#e0e4be",
+        "lowerBoundMm": 250,
+        "upperBoundExclusiveMm": 500,
+        "sourceCellCount": 34612,
+        "opaquePixelCount": 269038
+      },
+      {
+        "id": "500-750",
+        "color": "#b9d8b8",
+        "lowerBoundMm": 500,
+        "upperBoundExclusiveMm": 750,
+        "sourceCellCount": 27489,
+        "opaquePixelCount": 156489
+      },
+      {
+        "id": "750-1000",
+        "color": "#8bc8bf",
+        "lowerBoundMm": 750,
+        "upperBoundExclusiveMm": 1000,
+        "sourceCellCount": 13132,
+        "opaquePixelCount": 64787
+      },
+      {
+        "id": "1000-1500",
+        "color": "#60afb8",
+        "lowerBoundMm": 1000,
+        "upperBoundExclusiveMm": 1500,
+        "sourceCellCount": 16269,
+        "opaquePixelCount": 75458
+      },
+      {
+        "id": "1500-2000",
+        "color": "#378eaa",
+        "lowerBoundMm": 1500,
+        "upperBoundExclusiveMm": 2000,
+        "sourceCellCount": 2090,
+        "opaquePixelCount": 9878
+      },
+      {
+        "id": "gte2000",
+        "color": "#216782",
+        "lowerBoundMm": 2000,
+        "upperBoundExclusiveMm": null,
+        "sourceCellCount": 512,
+        "opaquePixelCount": 2512
+      }
+    ],
+    "rendering": {
+      "width": 1900,
+      "height": 900,
+      "boundsLonLat": [
+        -145,
+        40,
+        -50,
+        85
+      ],
+      "targetCRS": "EPSG:4326 equirectangular affine locator, y decreasing with latitude",
+      "targetParentSize": [
+        900,
+        580
+      ],
+      "parentTransform": "x=(longitude+145)/95*900; y=(85-latitude)/45*580",
+      "imageFit": "Draw full image at x=0,y=0,width=900,height=580, preserveAspectRatio=none.",
+      "nativeResolution": "Approximately 10 km; raster size does not increase scientific resolution.",
+      "resampling": "Categorical source-cell footprint painting using the adopted source-coordinate corner estimates. No interpolated or fabricated raster precipitation values. Alpha=0 beyond painted valid source cells.",
+      "clipRequirement": "Apply the existing trustworthy Canada outline to raster and contour layers.",
+      "classThresholdsMm": [
+        250,
+        500,
+        750,
+        1000,
+        1500,
+        2000
+      ],
+      "classIds": [
+        "lt250",
+        "250-500",
+        "500-750",
+        "750-1000",
+        "1000-1500",
+        "1500-2000",
+        "gte2000"
+      ],
+      "classColors": [
+        "#f2dfb3",
+        "#e0e4be",
+        "#b9d8b8",
+        "#8bc8bf",
+        "#60afb8",
+        "#378eaa",
+        "#216782"
+      ],
+      "classSourceCellCounts": [
+        6841,
+        34612,
+        27489,
+        13132,
+        16269,
+        2090,
+        512
+      ],
+      "classOpaquePixelCounts": [
+        106977,
+        269038,
+        156489,
+        64787,
+        75458,
+        9878,
+        2512
+      ],
+      "classRasterPolicy": "All class layers are derived from the same final categorical ownership raster, so boundary pixels belong to one class only.",
+      "contourMethod": "Marching squares on source-center quads with all four annual values valid. Threshold crossings interpolate only along valid source edges; saddle connectivity uses the bilinear asymptotic decider. No smoothing, simplification, gap filling, or extrapolation.",
+      "contourCoordinateDigits": 6,
+      "contourThresholdsMm": [
+        250,
+        500,
+        750,
+        1000,
+        1500,
+        2000
+      ],
+      "majorContoursMm": [
+        1000,
+        1500
+      ],
+      "labelMethod": "Permanent label anchors are existing vertices on long source-derived contour lines."
+    },
+    "contourUrl": "/assets/atlas/canada-water-v2/precipitation-isohyets.geojson",
+    "labelUrl": "/assets/atlas/canada-water-v2/precipitation-isohyet-labels.json"
+  },
+  "preparation": {
+    "script": "scripts/prepare-canada-precipitation-parity.py",
+    "scriptSha256": "e4fafc251e2c50eec05df234f5d492bd568f665430d0ee27da0e3360965f2e2f",
+    "numpyVersion": "2.3.5",
+    "pillowVersion": "12.3.0",
+    "command": "python scripts/prepare-canada-precipitation-parity.py --research-root ../canada-water-research"
+  },
+  "sourceIntermediates": [
+    {
+      "file": "precipitation/annual-precipitation-1991-2020-grid.npz",
+      "bytes": 6772334,
+      "sha256": "414b2978bbeafea9aba6066c866f75a245a801b870243b1b6428c0edc08994d3"
+    },
+    {
+      "file": "precipitation/annual-valid-grid-points.npy",
+      "bytes": 4037928,
+      "sha256": "c1614bb3f25de52dae59daa05939cd5233edf10299accb65e884862e3fea1afd"
+    },
+    {
+      "file": "precipitation/render_annual_grid.py",
+      "bytes": 3408,
+      "sha256": "fc8068a2157bbb718916993d67dc665ceca010f8047c11e8990c7d0c6d792647"
+    },
+    {
+      "file": "precipitation/source-provenance.json",
+      "bytes": 4800,
+      "sha256": "84fa74932b4c5a05055ed23711f1486155600919d8bf3e9e597ace171956a6d2"
+    },
+    {
+      "file": "precipitation/annual-precipitation-summary.json",
+      "bytes": 4202,
+      "sha256": "f157c1b48a494821b24788f0f492e16e772c7d41e62cd67a17888c5e0ad9967a"
+    },
+    {
+      "file": "precipitation/range-manifest.json",
+      "bytes": 32873,
+      "sha256": "63ba6d4fbe78b9b1ccc5cd239162e5f8d310f7636a8495b4ffa065f806a94fde"
+    },
+    {
+      "file": "precipitation/open-government-licence.html",
+      "bytes": 23079,
+      "sha256": "d7648d6d694d66a0891502f85c3383f9263d5e541b47e14fbf33450974af158f"
+    },
+    {
+      "file": "precipitation/eccc-v2-index.html",
+      "bytes": 1272,
+      "sha256": "ee2d77472ee4ecd20816340f5aba9c7b133f9e10c1b3fbe8daa7c76b300b33f0"
+    }
+  ],
+  "usParityReferences": [
+    {
+      "file": "src/data/atlas/water-resources.ts",
+      "sha256": "70d911cc2c42b7e5e5cd582ebfd83c8dc564e3a62c1eb0204bf967305da1ec3c"
+    },
+    {
+      "file": "scripts/build-water-assets.py",
+      "sha256": "f79f6d7ea7513a6ec16e34b16e84e6651f870b64e2390a176170fb1608931001"
+    }
+  ],
+  "assets": [
+    {
+      "file": "annual-precipitation-1991-2020-class-0.png",
+      "bytes": 13418,
+      "sha256": "bbbaf32e4773c7e9e90d1fabad847ea234b5aa5bc99a113d40f3fb2915d3113f"
+    },
+    {
+      "file": "annual-precipitation-1991-2020-class-1.png",
+      "bytes": 15427,
+      "sha256": "2a3d90d0760b3243e45d4b1309af0605f542b9a35b381e4973f95341b6d40cd3"
+    },
+    {
+      "file": "annual-precipitation-1991-2020-class-2.png",
+      "bytes": 13557,
+      "sha256": "3bfa44fa91d2d0e82484ecf714162d3d632447f7777313c988d4971874bae0fe"
+    },
+    {
+      "file": "annual-precipitation-1991-2020-class-3.png",
+      "bytes": 11405,
+      "sha256": "95997d883ef2b0da7d2a666429897d1cdd00bbbf8373117104e6249785f341eb"
+    },
+    {
+      "file": "annual-precipitation-1991-2020-class-4.png",
+      "bytes": 13105,
+      "sha256": "3fdc8128085a114b579b9205035070edea8c4975be44ef3568972c599de50881"
+    },
+    {
+      "file": "annual-precipitation-1991-2020-class-5.png",
+      "bytes": 10224,
+      "sha256": "45b6067be2afab420af47293675521fc8a8e41a6043722725d1819308251b7f0"
+    },
+    {
+      "file": "annual-precipitation-1991-2020-class-6.png",
+      "bytes": 7670,
+      "sha256": "95709f0de9f6719e3c829b581594e25c19e54eb4d102ba3a1fc1ea0b68b91b7b"
+    },
+    {
+      "file": "annual-precipitation-1991-2020-locator.png",
+      "bytes": 37469,
+      "sha256": "e0c5ea7db56a15491bdf2d010df55d82c1f27e92d18bae21bb3b38f382d42535"
+    },
+    {
+      "file": "precipitation-independent-verification.json",
+      "bytes": 1531,
+      "sha256": "d51bc4d5b690a97fb881515e5184de91792709152f2951efb619076a7e56db24"
+    },
+    {
+      "file": "precipitation-isohyet-labels.json",
+      "bytes": 2112,
+      "sha256": "aef9ce394c1e93f085b8034b7a6f15d6a61fdb90677133d63bda06e7d84a5c87"
+    },
+    {
+      "file": "precipitation-isohyets.geojson",
+      "bytes": 78078,
+      "sha256": "a5e478299ebf2b20af1b050b205b392041adab87882802735aaa00bc92ec97d3"
+    },
+    {
+      "file": "precipitation-isohyets.geojson.gz",
+      "bytes": 31371,
+      "sha256": "ab7c9816f53f0d7b0ba68a55bc20d0dca2333d59aa3435ac6e514056614da73f"
+    },
+    {
+      "file": "precipitation-official-url-verification.json",
+      "bytes": 1529,
+      "sha256": "75ee9561e2cc035c6c4c8d814cbbf7263474032b06011d3952a314bcf3756325"
+    },
+    {
+      "file": "precipitation-parity-verification.json",
+      "bytes": 20752,
+      "sha256": "a9421815095a2494937281757058831d87e6ff8c162f3e58590772a25e0d75aa"
+    },
+    {
+      "file": "precipitation-range-manifest.json",
+      "bytes": 32873,
+      "sha256": "63ba6d4fbe78b9b1ccc5cd239162e5f8d310f7636a8495b4ffa065f806a94fde"
+    },
+    {
+      "file": "precipitation-render-summary.json",
+      "bytes": 2151,
+      "sha256": "785654b4f28d48688478cbfacb6c8178028ab87b5d1231a768810d744e594d64"
+    },
+    {
+      "file": "precipitation-source-provenance.json",
+      "bytes": 4800,
+      "sha256": "84fa74932b4c5a05055ed23711f1486155600919d8bf3e9e597ace171956a6d2"
+    },
+    {
+      "file": "precipitation-summary.json",
+      "bytes": 4202,
+      "sha256": "f157c1b48a494821b24788f0f492e16e772c7d41e62cd67a17888c5e0ad9967a"
+    }
+  ]
+}

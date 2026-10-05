@@ -1,0 +1,1085 @@
+{
+  "id": "canada-natural-river-catchments-v1",
+  "source": {
+    "product": "Actual BasinATLAS v1.0",
+    "level": 6,
+    "publicationYear": 2019,
+    "observationYear": null,
+    "sourceGridResolutionArcSeconds": 15,
+    "northernUnderlyingTerrainMetres": 1000,
+    "productUrl": "https://www.hydrosheds.org/hydroatlas",
+    "doi": "https://doi.org/10.6084/m9.figshare.9890531.v1",
+    "downloadUrl": "https://ndownloader.figshare.com/files/20087237",
+    "archiveFilename": "BasinATLAS_Data_v10_shp.zip",
+    "archiveBytes": 4276492333,
+    "wholeArchiveRetrieved": false,
+    "wholeArchiveMd5Verified": false,
+    "licence": {
+      "value": 1,
+      "name": "CC BY 4.0",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "technicalDocumentationUrl": "https://data.hydrosheds.org/file/technical-documentation/HydroATLAS_TechDoc_v10_1.pdf",
+    "attribution": "BasinATLAS v1.0 / HydroATLAS, Bernhard Lehner; Simon Linke; Michele Thieme (2019), CC BY 4.0. Scientific reference: Linke et al. (2019), doi:10.1038/s41597-019-0300-6. Underlying terrain hydrography: HydroSHEDS/WWF, Lehner et al. (2008), Lehner and Grill (2013). Modified: named noncoastal terminal outlet selection, direct NEXT_SINK connectivity, exclusion of identified endorheic/virtual connections, polygon union and display simplification. River naming check: Natural Earth v5.1.2, public domain.",
+    "inputs": [
+      {
+        "file": "BasinATLAS_v10_lev06.dbf",
+        "archiveMember": "BasinATLAS_v10_shp/BasinATLAS_v10_lev06.dbf",
+        "bytes": 22801272,
+        "sha256": "4f2bb9a9c81e454382d5075701ce8010fd1b2dd93c6e1f84d80e8f52dd92c99c",
+        "crc32": "925b0398",
+        "crc32Verified": true
+      },
+      {
+        "file": "BasinATLAS_v10_lev06.shp",
+        "archiveMember": "BasinATLAS_v10_shp/BasinATLAS_v10_lev06.shp",
+        "bytes": 198729416,
+        "sha256": "dc61ea0eca354d6d7fa981ce738a1f9558f0c9dbee48d7a360de69c339c9d229",
+        "crc32": "23288afc",
+        "crc32Verified": true
+      },
+      {
+        "file": "BasinATLAS_v10_lev06.shx",
+        "archiveMember": "BasinATLAS_v10_shp/BasinATLAS_v10_lev06.shx",
+        "bytes": 131276,
+        "sha256": "b30843b3ad36272f7fa1ce2a1554db81a0d550ff16561482b8dba469ce7d176a",
+        "crc32": "f1680b3f",
+        "crc32Verified": true
+      },
+      {
+        "file": "BasinATLAS_v10_lev06.prj",
+        "archiveMember": "BasinATLAS_v10_shp/BasinATLAS_v10_lev06.prj",
+        "bytes": 145,
+        "sha256": "a02a27b1d1982c8516d83398e85a3c8b1aef1713c13ef4d84d7bde17430c07c4",
+        "crc32": "af437f55",
+        "crc32Verified": true
+      }
+    ],
+    "cachedAcquisitionEvidence": {
+      "metadataSha256": "87ed43e0dd02e6fba1228566878b17e1ad35d9a903f1ef4d26eb9dc2a9a45e38",
+      "archiveIndexSha256": "c444376ebff0fca3b36168b759b24a2db99a8a2b40ef48a1b3a3e8c662aa74f6",
+      "acquisition": null
+    }
+  },
+  "namingSource": {
+    "file": "src/data/atlas/canada/rivers.json",
+    "sha256": "ccf172c4fbf81690f91ee3eaa5ea8cf3a8618f40590aefd394a71cfa18c880ea",
+    "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_50m_rivers_lake_centerlines.geojson",
+    "licence": "Public domain"
+  },
+  "scope": "The four existing named Canada river selections: Fraser, Nelson, St. Lawrence and Mackenzie, with complete selected transboundary source geometry. This is not an exhaustive partition of Canadian land.",
+  "basins": [
+    {
+      "id": "fraser",
+      "name": "フレーザー川の集水域",
+      "sourceRiverName": "Fraser",
+      "color": "#91bfc8",
+      "sourceOutletId": 7060016260,
+      "sourceLevel": 6,
+      "sourceSubBasinIds": [
+        7060016260,
+        7060274850,
+        7060274860,
+        7060269780,
+        7060269970,
+        7060261880,
+        7060261890,
+        7060263330,
+        7060263190,
+        7060234050,
+        7060234040,
+        7060257410,
+        7060257320,
+        7060192750,
+        7060192890,
+        7060177910,
+        7060177760,
+        7060178710,
+        7060178720,
+        7060174580,
+        7060174590,
+        7060174110,
+        7060173970,
+        7060176450,
+        7060176340,
+        7060171990,
+        7060171730,
+        7060174770,
+        7060174890,
+        7060174100,
+        7060174230,
+        7060190090,
+        7060190200
+      ],
+      "sourceSubBasinCount": 33,
+      "excludedSourceIds": [],
+      "excludedEndorheicCount": 0,
+      "sourceSelfTouchingRingRecordCount": 3,
+      "sourceAreaSumKm2": 230828.4,
+      "sourceOutletUpstreamAreaKm2": 230830.7,
+      "areaDiagnosticDifferenceKm2": -2.3,
+      "areaDiagnosticRelativeDifference": -1e-05,
+      "fullBounds": [
+        -127.7880672877751,
+        48.84526604569152,
+        -118.16609937848352,
+        56.17500000024984
+      ],
+      "nameVerification": {
+        "riverSource": "Natural Earth v5.1.2 1:50m rivers",
+        "riverName": "Fraser",
+        "riverVertexCount": 76,
+        "matchingRiverVertices": 74,
+        "unmatchedRiverVertices": 2,
+        "interpretation": "Independent cartographic name/position check; coastal and delta branches can have distinct catchments. Never union all polygons touched by a river name."
+      },
+      "scope": "原資料で定義された水系の出口につながる支流の集水域を、地形と水系モデルでまとめています。国境を越える範囲を含みます。",
+      "note": "支流の水を集める範囲を示すモデル地図です。原資料の細かさより小さい閉鎖域が内部に残ることがあり、塗った場所すべての現在の流出を意味しません。農地への実際の取水・灌漑経路や現在の水量は示しません。デルタの別の出口や沿岸の小流域は別の区域です。",
+      "originalUnionGeometryCounts": {
+        "components": 1,
+        "holes": 1,
+        "coordinates": 6697
+      },
+      "displayGeometryCounts": {
+        "components": 1,
+        "holes": 1,
+        "coordinates": 2860
+      }
+    },
+    {
+      "id": "nelson",
+      "name": "ネルソン川の集水域",
+      "sourceRiverName": "Nelson",
+      "color": "#e4bd7d",
+      "sourceOutletId": 7060022240,
+      "sourceLevel": 6,
+      "sourceSubBasinIds": [
+        7060022240,
+        7060132960,
+        7060132870,
+        7060134100,
+        7060134090,
+        7060159850,
+        7060159950,
+        7060192430,
+        7060192440,
+        7060192420,
+        7060192560,
+        7060206680,
+        7060206690,
+        7060214380,
+        7060214090,
+        7060219980,
+        7060220090,
+        7060224340,
+        7060224350,
+        7060192820,
+        7060192810,
+        7060230950,
+        7060231030,
+        7060250980,
+        7060250990,
+        7060245400,
+        7060245390,
+        7060179770,
+        7060179920,
+        7060177100,
+        7060177090,
+        7060284070,
+        7060284240,
+        7060235410,
+        7060235660,
+        7060179090,
+        7060179080,
+        7060276840,
+        7060277090,
+        7060302030,
+        7060302170,
+        7060306440,
+        7060306430,
+        7060199390,
+        7060199540,
+        7060201290,
+        7060201280,
+        7060194860,
+        7060194980,
+        7060334030,
+        7060334190,
+        7060289500,
+        7060289200,
+        7060284140,
+        7060284060,
+        7060290680,
+        7060290770,
+        7060356710,
+        7060356500,
+        7060318020,
+        7060318150,
+        7060317700,
+        7060317870,
+        7060212920,
+        7060213040,
+        7060314930,
+        7060314820,
+        7060269450,
+        7060269280,
+        7060217900,
+        7060226990,
+        7060217780,
+        7060227100,
+        7060314180,
+        7060314300,
+        7060316050,
+        7060316210,
+        7060208410,
+        7060208540,
+        7060263820,
+        7060263970,
+        7060184430,
+        7060184580,
+        7060263060,
+        7060262850,
+        7060264520,
+        7060264650,
+        7060260120,
+        7060260000,
+        7060300250,
+        7060300390,
+        7060256540,
+        7060256690,
+        7060259190,
+        7060259200,
+        7060282770,
+        7060282720,
+        7060242880,
+        7060242640,
+        7060202930,
+        7060203140,
+        7060224630,
+        7060224750,
+        7060224740,
+        7060224620
+      ],
+      "sourceSubBasinCount": 105,
+      "excludedSourceIds": [
+        7060073820,
+        7060073860,
+        7060073880,
+        7060074540,
+        7060074670,
+        7060075500,
+        7060075830,
+        7060076630
+      ],
+      "excludedEndorheicCount": 8,
+      "sourceSelfTouchingRingRecordCount": 5,
+      "sourceAreaSumKm2": 1035996.7,
+      "sourceOutletUpstreamAreaKm2": 1004347.4,
+      "areaDiagnosticDifferenceKm2": 31649.3,
+      "areaDiagnosticRelativeDifference": 0.0315123,
+      "fullBounds": [
+        -117.41666666693311,
+        45.450000000099976,
+        -89.8625000001748,
+        57.18333333306691
+      ],
+      "nameVerification": {
+        "riverSource": "Natural Earth v5.1.2 1:50m rivers",
+        "riverName": "Nelson",
+        "riverVertexCount": 67,
+        "matchingRiverVertices": 67,
+        "unmatchedRiverVertices": 0,
+        "interpretation": "Independent cartographic name/position check; coastal and delta branches can have distinct catchments. Never union all polygons touched by a river name."
+      },
+      "scope": "原資料で定義された水系の出口につながる支流の集水域を、地形と水系モデルでまとめています。国境を越える範囲を含みます。",
+      "note": "支流の水を集める範囲を示すモデル地図です。原資料の細かさより小さい閉鎖域が内部に残ることがあり、塗った場所すべての現在の流出を意味しません。農地への実際の取水・灌漑経路や現在の水量は示しません。デルタの別の出口や沿岸の小流域は別の区域です。",
+      "originalUnionGeometryCounts": {
+        "components": 3,
+        "holes": 6,
+        "coordinates": 21205
+      },
+      "displayGeometryCounts": {
+        "components": 3,
+        "holes": 6,
+        "coordinates": 8983
+      }
+    },
+    {
+      "id": "st-lawrence",
+      "name": "セントローレンス川の集水域",
+      "sourceRiverName": "St. Lawrence",
+      "color": "#82accc",
+      "sourceOutletId": 7060034520,
+      "sourceLevel": 6,
+      "sourceSubBasinIds": [
+        7060034520,
+        7060374800,
+        7060374950,
+        7060377200,
+        7060377320,
+        7060380380,
+        7060380530,
+        7060382790,
+        7060382860,
+        7060360220,
+        7060360130,
+        7060393220,
+        7060393390,
+        7060402320,
+        7060402430,
+        7060341270,
+        7060341150,
+        7060338280,
+        7060338230,
+        7060334690,
+        7060334580,
+        7060398580,
+        7060398520,
+        7060400760,
+        7060400540,
+        7060400520,
+        7060400660,
+        7060434140,
+        7060434190,
+        7060439780,
+        7060439770,
+        7060388700,
+        7060388530,
+        7060387450,
+        7060387700,
+        7060386900,
+        7060386520,
+        7060450680,
+        7060450950,
+        7060453370,
+        7060453430,
+        7060356130,
+        7060356140,
+        7060354140,
+        7060354130,
+        7060474840,
+        7060475060,
+        7060343940,
+        7060343930,
+        7060343150,
+        7060343060,
+        7060334070,
+        7060334080,
+        7060498570,
+        7060498700,
+        7060494360,
+        7060494540,
+        7060490010,
+        7060489890,
+        7060344050,
+        7060343960,
+        7060481890,
+        7060481800,
+        7060480440,
+        7060480630,
+        7060446640,
+        7060446550,
+        7060431350,
+        7060431340,
+        7060426310,
+        7060426320,
+        7060422540,
+        7060422720,
+        7060419920,
+        7060419750,
+        7060433760,
+        7060433870,
+        7060414930,
+        7060414850,
+        7060399420,
+        7060399240,
+        7060396220,
+        7060396070,
+        7060400750,
+        7060400650,
+        7060456060,
+        7060456100,
+        7060455940,
+        7060456090,
+        7060392650,
+        7060392520,
+        7060450440,
+        7060450170,
+        7060384130,
+        7060383830,
+        7060379040,
+        7060378910,
+        7060363950,
+        7060363960,
+        7060359070,
+        7060358930,
+        7060398060,
+        7060398190,
+        7060399650,
+        7060399530,
+        7060347420,
+        7060347220,
+        7060345330,
+        7060345050,
+        7060343690,
+        7060343600,
+        7060343680,
+        7060343590,
+        7060424420,
+        7060424410,
+        7060411100,
+        7060411200,
+        7060414400,
+        7060414120,
+        7060434930,
+        7060435070,
+        7060437180,
+        7060437290,
+        7060337970,
+        7060337870,
+        7060331850,
+        7060331860,
+        7060447540,
+        7060447550,
+        7060335300,
+        7060335180,
+        7060450160,
+        7060450430,
+        7060453930,
+        7060453940,
+        7060437890,
+        7060438060,
+        7060481280,
+        7060481290,
+        7060343580,
+        7060343660,
+        7060345310,
+        7060345190,
+        7060346350,
+        7060346460,
+        7060293660,
+        7060293670,
+        7060293560,
+        7060293450,
+        7060288450,
+        7060288400,
+        7060361320,
+        7060361190
+      ],
+      "sourceSubBasinCount": 153,
+      "excludedSourceIds": [],
+      "excludedEndorheicCount": 0,
+      "sourceSelfTouchingRingRecordCount": 14,
+      "sourceAreaSumKm2": 1053296.5,
+      "sourceOutletUpstreamAreaKm2": 1053293.8,
+      "areaDiagnosticDifferenceKm2": 2.7,
+      "areaDiagnosticRelativeDifference": 2.6e-06,
+      "fullBounds": [
+        -93.21306728762517,
+        40.379166666408594,
+        -70.27499999975015,
+        50.77910427494237
+      ],
+      "nameVerification": {
+        "riverSource": "Natural Earth v5.1.2 1:50m rivers",
+        "riverName": "St. Lawrence",
+        "riverVertexCount": 7,
+        "matchingRiverVertices": 7,
+        "unmatchedRiverVertices": 0,
+        "interpretation": "Independent cartographic name/position check; coastal and delta branches can have distinct catchments. Never union all polygons touched by a river name."
+      },
+      "scope": "原資料で定義された水系の出口につながる支流の集水域を、地形と水系モデルでまとめています。国境を越える範囲を含みます。",
+      "note": "支流の水を集める範囲を示すモデル地図です。原資料の細かさより小さい閉鎖域が内部に残ることがあり、塗った場所すべての現在の流出を意味しません。農地への実際の取水・灌漑経路や現在の水量は示しません。デルタの別の出口や沿岸の小流域は別の区域です。",
+      "originalUnionGeometryCounts": {
+        "components": 3,
+        "holes": 3,
+        "coordinates": 14114
+      },
+      "displayGeometryCounts": {
+        "components": 3,
+        "holes": 3,
+        "coordinates": 6094
+      }
+    },
+    {
+      "id": "mackenzie",
+      "name": "マッケンジー川の集水域",
+      "sourceRiverName": "Mackenzie",
+      "color": "#cba19b",
+      "sourceOutletId": 8060009560,
+      "sourceLevel": 6,
+      "sourceSubBasinIds": [
+        8060009560,
+        8060112340,
+        8060112350,
+        8060122010,
+        8060122100,
+        8060155680,
+        8060155780,
+        8060157910,
+        8060158000,
+        8060160210,
+        8060160330,
+        8060159800,
+        8060159890,
+        8060148430,
+        8060148510,
+        8060164230,
+        8060164290,
+        8060183170,
+        8060183070,
+        8060194590,
+        8060194580,
+        8060196780,
+        8060196880,
+        8060170630,
+        8060170460,
+        8060155650,
+        8060155550,
+        8060155560,
+        8060155470,
+        8060231560,
+        8060231700,
+        8060148890,
+        8060148880,
+        8060147790,
+        8060147670,
+        8060243400,
+        8060243490,
+        8060150960,
+        8060150880,
+        8060147910,
+        8060147850,
+        8060162560,
+        8060162570,
+        8060252610,
+        8060252760,
+        8060254850,
+        8060254970,
+        8060152450,
+        8060152640,
+        8060176280,
+        8060176270,
+        8060264660,
+        8060264760,
+        8060270520,
+        8060270510,
+        8060191300,
+        8060191160,
+        8060261020,
+        8060260870,
+        8060261290,
+        8060261410,
+        8060185500,
+        8060185510,
+        8060265470,
+        8060265410,
+        8060269310,
+        8060269450,
+        8060286860,
+        8060286910,
+        8060259990,
+        8060260060,
+        8060258940,
+        8060258800,
+        8060272020,
+        8060272130,
+        8060271080,
+        8060271000,
+        8060298780,
+        8060298770,
+        8060296490,
+        8060296400,
+        8060266590,
+        8060266430,
+        8060264770,
+        8060264670,
+        8060262400,
+        8060262310,
+        8060304100,
+        8060303960,
+        8060241560,
+        8060241570,
+        8060258570,
+        8060258460,
+        8060302210,
+        8060302220,
+        8060294870,
+        8060294970,
+        8060306890,
+        8060306980,
+        8060252880,
+        8060252780,
+        8060245940,
+        8060245770,
+        8060261310,
+        8060261430,
+        8060298840,
+        8060298910,
+        8060309320,
+        8060309340,
+        8060246160,
+        8060246110,
+        8060306950,
+        8060306940,
+        8060299210,
+        8060299220,
+        8060275180,
+        8060275110,
+        8060297380,
+        8060297330,
+        8060229150,
+        8060229140,
+        8060279860,
+        8060279900,
+        8060316070,
+        8060316110,
+        8060297770,
+        8060297840,
+        8060226210,
+        8060226220,
+        8060308720,
+        8060308670,
+        8060283050,
+        8060282950,
+        8060293870,
+        8060293820,
+        8060292670,
+        8060292590,
+        8060197790,
+        8060197650,
+        8060287650,
+        8060287560,
+        8060307300,
+        8060307380,
+        8060286130,
+        8060285990,
+        8060311240,
+        8060311330,
+        8060311100,
+        8060311060,
+        8060201890,
+        8060201750,
+        8060302950,
+        8060303080,
+        8060202910,
+        8060203090,
+        8060303240,
+        8060303200,
+        8060327990,
+        8060328000,
+        8060315230,
+        8060315160,
+        8060315580,
+        8060315650,
+        8060328810,
+        8060328820,
+        8060193730,
+        8060193680,
+        8060314130,
+        8060314150,
+        8060305540,
+        8060305580,
+        8060328010,
+        8060328070,
+        8060189340,
+        8060189330,
+        8060305050,
+        8060304890,
+        8060327140,
+        8060327190,
+        8060325210,
+        8060325250,
+        8060320050,
+        8060320060,
+        8060325830,
+        8060325760,
+        8060323980,
+        8060324030,
+        8060331290,
+        8060331230,
+        8060331570,
+        8060331600,
+        8060328330,
+        8060328340,
+        8060331970,
+        8060331980,
+        8060338740,
+        8060338780,
+        8060340700,
+        8060340710,
+        8060335620,
+        8060335660,
+        8060342260,
+        8060342280,
+        8060338810,
+        8060338830,
+        8060338970,
+        8060339000,
+        8060342750,
+        8060342780,
+        8060332620,
+        8060332600,
+        8060332200,
+        8060332270,
+        8060331810,
+        8060331910,
+        8060341320,
+        8060341350,
+        8060343130,
+        8060343100,
+        8060331800,
+        8060331740,
+        8060332890,
+        8060332940,
+        8060333190,
+        8060333260,
+        8060332850,
+        8060332820,
+        8060332260,
+        8060332210,
+        8060327650,
+        8060327690,
+        8060322730,
+        8060322700
+      ],
+      "sourceSubBasinCount": 233,
+      "excludedSourceIds": [],
+      "excludedEndorheicCount": 0,
+      "sourceSelfTouchingRingRecordCount": 10,
+      "sourceAreaSumKm2": 1795626.2,
+      "sourceOutletUpstreamAreaKm2": 1795841.4,
+      "areaDiagnosticDifferenceKm2": -215.2,
+      "areaDiagnosticRelativeDifference": -0.0001198,
+      "fullBounds": [
+        -140.13750000042467,
+        52.1327660454167,
+        -102.77916666650844,
+        69.27556728799999
+      ],
+      "nameVerification": {
+        "riverSource": "Natural Earth v5.1.2 1:50m rivers",
+        "riverName": "Mackenzie",
+        "riverVertexCount": 166,
+        "matchingRiverVertices": 152,
+        "unmatchedRiverVertices": 14,
+        "interpretation": "Independent cartographic name/position check; coastal and delta branches can have distinct catchments. Never union all polygons touched by a river name."
+      },
+      "scope": "原資料で定義された水系の出口につながる支流の集水域を、地形と水系モデルでまとめています。国境を越える範囲を含みます。",
+      "note": "支流の水を集める範囲を示すモデル地図です。原資料の細かさより小さい閉鎖域が内部に残ることがあり、塗った場所すべての現在の流出を意味しません。農地への実際の取水・灌漑経路や現在の水量は示しません。デルタの別の出口や沿岸の小流域は別の区域です。",
+      "originalUnionGeometryCounts": {
+        "components": 1,
+        "holes": 4,
+        "coordinates": 18710
+      },
+      "displayGeometryCounts": {
+        "components": 1,
+        "holes": 4,
+        "coordinates": 8048
+      }
+    }
+  ],
+  "processing": {
+    "crs": "EPSG:4326",
+    "topologySelection": "NEXT_SINK == named terminal outlet, ENDO == 0, COAST == 0; verify every NEXT_DOWN chain reaches that outlet. MAIN_BAS is used only to report excluded source members.",
+    "ringPolicy": "Preserve original boundary segments and source even/odd fill. Node original self-touching ring linework at its existing intersections without coordinate displacement, rounding, buffering or guessed boundaries. Dissolve connected sub-basins. Empty/uncovered land stays empty.",
+    "sourceSelfTouchingRingDiagnostics": [
+      {
+        "basin": "fraser",
+        "sourceRow": 13561,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "fraser",
+        "sourceRow": 13575,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "fraser",
+        "sourceRow": 13584,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "nelson",
+        "sourceRow": 13709,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "nelson",
+        "sourceRow": 13718,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "nelson",
+        "sourceRow": 13743,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "nelson",
+        "sourceRow": 13744,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "nelson",
+        "sourceRow": 13787,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "st-lawrence",
+        "sourceRow": 14121,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "st-lawrence",
+        "sourceRow": 14129,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "st-lawrence",
+        "sourceRow": 14143,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "st-lawrence",
+        "sourceRow": 14151,
+        "invalidRingIndexes": [
+          2
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "st-lawrence",
+        "sourceRow": 14153,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "st-lawrence",
+        "sourceRow": 14179,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "st-lawrence",
+        "sourceRow": 14200,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "st-lawrence",
+        "sourceRow": 14203,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "st-lawrence",
+        "sourceRow": 14209,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "st-lawrence",
+        "sourceRow": 14230,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "st-lawrence",
+        "sourceRow": 14239,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "st-lawrence",
+        "sourceRow": 14242,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "st-lawrence",
+        "sourceRow": 14252,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "st-lawrence",
+        "sourceRow": 14268,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "mackenzie",
+        "sourceRow": 15539,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "mackenzie",
+        "sourceRow": 15553,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "mackenzie",
+        "sourceRow": 15559,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "mackenzie",
+        "sourceRow": 15567,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "mackenzie",
+        "sourceRow": 15580,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "mackenzie",
+        "sourceRow": 15617,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "mackenzie",
+        "sourceRow": 15620,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "mackenzie",
+        "sourceRow": 15623,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "mackenzie",
+        "sourceRow": 15666,
+        "invalidRingIndexes": [
+          0
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      },
+      {
+        "basin": "mackenzie",
+        "sourceRow": 15684,
+        "invalidRingIndexes": [
+          1
+        ],
+        "method": "Node original boundary linework at its existing intersections; reconstruct source even/odd polygon fill, without vertex displacement."
+      }
+    ],
+    "simplification": {
+      "method": "Shared-edge Visvalingam-Whyatt coverage simplification, only if original unions form valid coverage",
+      "toleranceDegrees": 0.006,
+      "allSourceComponentsAndHolesRetained": true,
+      "maximumPositionErrorClaimed": false,
+      "coverageValidBeforeSimplification": true
+    },
+    "sourceQuantityFields": "SUB_AREA and UP_AREA retained only for source consistency diagnostics, not computed from display pixels or polygon sizes.",
+    "noAdministrativeAggregation": true,
+    "noStatCanGeometry": true,
+    "noBoundaryGuessing": true,
+    "noDischargeOrWaterSupplyEstimate": true,
+    "shapelyVersion": "2.1.2"
+  },
+  "validation": {
+    "sourceRecordCount": 16397,
+    "namedCatchmentCount": 4,
+    "allReconstructedSourceAndOutputPolygonsValid": true,
+    "sourceSelfTouchingRingRecordCount": 32,
+    "allNextDownChainsReachNamedOutlet": true,
+    "allSelectedEndoAndCoastZero": true,
+    "independentCatchmentsOverlapDegreesSquared": 0.0,
+    "fullGeometryRetainedAcrossNationalBorders": true
+  },
+  "limitations": [
+    "This is terrain-model catchment geography, not a current flow or irrigation map.",
+    "HydroSHEDS source quality is lower north of 60 degrees latitude because coarser HYDRO1k terrain replaces SRTM.",
+    "Finite source sub-basin subdivisions may include smaller internally noncontributing areas. Nelson has a 3.15% area-sum discrepancy at level 6 even after excluding its eight explicitly endorheic members. This terrain catchment map must not assert that every filled pixel currently drains to the river. Source area-sum versus connected upstream-area diagnostics are reported for every catchment.",
+    "Names are independently checked against Natural Earth river positions; names are not original BasinATLAS attributes.",
+    "Delta branches, lower-estuary shore drainage and smaller coastal catchments have separate source outlets. Each displayed catchment belongs to the named representative model outlet, not every shore or branch of the same river. The St. Lawrence model outlet is at the upper estuary; downstream Gulf shore catchments are not added."
+  ],
+  "files": {
+    "river-catchments.geojson": {
+      "bytes": 1030249,
+      "sha256": "7803c352aa3d021517a3bd86d3d01049de32f96fd28b31558214fec1ef7e1643"
+    },
+    "river-catchments.geojson.gz": {
+      "bytes": 374812,
+      "sha256": "0312449a06ac7915a49fd958906300f4d36a43214324a8cf0352c2d2f8416557"
+    }
+  }
+}

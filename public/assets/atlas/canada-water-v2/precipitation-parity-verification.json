@@ -1,0 +1,902 @@
+{
+  "passed": true,
+  "sourceGridSha256": "414b2978bbeafea9aba6066c866f75a245a801b870243b1b6428c0edc08994d3",
+  "sourcePointSha256": "c1614bb3f25de52dae59daa05939cd5233edf10299accb65e884862e3fea1afd",
+  "sourceCellCount": 100945,
+  "classSourceCellCounts": [
+    6841,
+    34612,
+    27489,
+    13132,
+    16269,
+    2090,
+    512
+  ],
+  "allSourcePointsAgreeWithFloat32GridBands": true,
+  "allNonlandCellsExcluded": true,
+  "sourceMissingLandCells": 0,
+  "allOriginalSourceCellsHave30ValuesPerCalendarMonth": true,
+  "paletteAndThresholdsMatchUsSourceFiles": true,
+  "thresholdBoundaryConvention": "lower inclusive; upper exclusive",
+  "exactThresholdAndAdjacentFloatAssertions": 18,
+  "rasterOpaquePixels": 685139,
+  "classOpaquePixelCounts": [
+    106977,
+    269038,
+    156489,
+    64787,
+    75458,
+    9878,
+    2512
+  ],
+  "classLayersMutuallyExclusive": true,
+  "classLayerUnionEqualsCompositeAlpha": true,
+  "rasterAlphaExactlyMatchesAdoptedV1": true,
+  "rasterSourceCenterCount": 100945,
+  "rasterSourceCenterMatches": 100910,
+  "rasterSourceCenterMatchPercent": 99.9653276536728,
+  "rasterBoundaryRoundingNote": "Finite-resolution Pillow source-footprint painting can assign an adjacent class to a center pixel near a shared cell edge; all original cell values and classes remain unchanged.",
+  "thresholdSourceAndPixelProbes": [
+    {
+      "thresholdMm": 250,
+      "side": "below",
+      "flatSourceCellId": 57504,
+      "sourceIndex": [
+        122,
+        164
+      ],
+      "coordinates": [
+        -127.09230041503906,
+        68.58219909667969
+      ],
+      "sourceAnnualMmFloat64": 249.99642336820344,
+      "gridAnnualMmFloat32": 249.99642944335938,
+      "band": "lt250",
+      "color": "#f2dfb3",
+      "pixel": [
+        358,
+        328
+      ],
+      "pixelBand": "lt250",
+      "pixelColor": "#f2dfb3",
+      "pixelMatch": true
+    },
+    {
+      "thresholdMm": 250,
+      "side": "at-or-above",
+      "flatSourceCellId": 121375,
+      "sourceIndex": [
+        258,
+        115
+      ],
+      "coordinates": [
+        -87.14749908447266,
+        72.7780990600586
+      ],
+      "sourceAnnualMmFloat64": 250.00514249339872,
+      "gridAnnualMmFloat32": 250.00514221191406,
+      "band": "250-500",
+      "color": "#e0e4be",
+      "pixel": [
+        1157,
+        244
+      ],
+      "pixelBand": "250-500",
+      "pixelColor": "#e0e4be",
+      "pixelMatch": true
+    },
+    {
+      "thresholdMm": 500,
+      "side": "below",
+      "flatSourceCellId": 61852,
+      "sourceIndex": [
+        131,
+        282
+      ],
+      "coordinates": [
+        -119.72959899902344,
+        58.280399322509766
+      ],
+      "sourceAnnualMmFloat64": 499.9931504785836,
+      "gridAnnualMmFloat32": 499.9931640625,
+      "band": "250-500",
+      "color": "#e0e4be",
+      "pixel": [
+        505,
+        534
+      ],
+      "pixelBand": "250-500",
+      "pixelColor": "#e0e4be",
+      "pixelMatch": true
+    },
+    {
+      "thresholdMm": 500,
+      "side": "at-or-above",
+      "flatSourceCellId": 71277,
+      "sourceIndex": [
+        151,
+        307
+      ],
+      "coordinates": [
+        -115.91519927978516,
+        56.322898864746094
+      ],
+      "sourceAnnualMmFloat64": 500.0016379911974,
+      "gridAnnualMmFloat32": 500.00164794921875,
+      "band": "500-750",
+      "color": "#b9d8b8",
+      "pixel": [
+        581,
+        573
+      ],
+      "pixelBand": "500-750",
+      "pixelColor": "#b9d8b8",
+      "pixelMatch": true
+    },
+    {
+      "thresholdMm": 750,
+      "side": "below",
+      "flatSourceCellId": 162462,
+      "sourceIndex": [
+        345,
+        312
+      ],
+      "coordinates": [
+        -86.61650085449219,
+        53.20989990234375
+      ],
+      "sourceAnnualMmFloat64": 749.9828235779773,
+      "gridAnnualMmFloat32": 749.9828491210938,
+      "band": "500-750",
+      "color": "#b9d8b8",
+      "pixel": [
+        1167,
+        635
+      ],
+      "pixelBand": "500-750",
+      "pixelColor": "#b9d8b8",
+      "pixelMatch": true
+    },
+    {
+      "thresholdMm": 750,
+      "side": "at-or-above",
+      "flatSourceCellId": 146514,
+      "sourceIndex": [
+        311,
+        344
+      ],
+      "coordinates": [
+        -92.71060180664062,
+        51.63639831542969
+      ],
+      "sourceAnnualMmFloat64": 750.0010500215697,
+      "gridAnnualMmFloat32": 750.0010375976562,
+      "band": "750-1000",
+      "color": "#8bc8bf",
+      "pixel": [
+        1045,
+        667
+      ],
+      "pixelBand": "750-1000",
+      "pixelColor": "#8bc8bf",
+      "pixelMatch": true
+    },
+    {
+      "thresholdMm": 1000,
+      "side": "below",
+      "flatSourceCellId": 202332,
+      "sourceIndex": [
+        430,
+        232
+      ],
+      "coordinates": [
+        -69.46540069580078,
+        55.229801177978516
+      ],
+      "sourceAnnualMmFloat64": 999.9785649063847,
+      "gridAnnualMmFloat32": 999.9785766601562,
+      "band": "750-1000",
+      "color": "#8bc8bf",
+      "pixel": [
+        1510,
+        595
+      ],
+      "pixelBand": "750-1000",
+      "pixelColor": "#8bc8bf",
+      "pixelMatch": true
+    },
+    {
+      "thresholdMm": 1000,
+      "side": "at-or-above",
+      "flatSourceCellId": 211214,
+      "sourceIndex": [
+        449,
+        184
+      ],
+      "coordinates": [
+        -61.99660110473633,
+        57.09600067138672
+      ],
+      "sourceAnnualMmFloat64": 1000.0487052443362,
+      "gridAnnualMmFloat32": 1000.0487060546875,
+      "band": "1000-1500",
+      "color": "#60afb8",
+      "pixel": [
+        1660,
+        558
+      ],
+      "pixelBand": "1000-1500",
+      "pixelColor": "#60afb8",
+      "pixelMatch": true
+    },
+    {
+      "thresholdMm": 1500,
+      "side": "below",
+      "flatSourceCellId": 34641,
+      "sourceIndex": [
+        73,
+        331
+      ],
+      "coordinates": [
+        -126.76950073242188,
+        52.90729904174805
+      ],
+      "sourceAnnualMmFloat64": 1499.7911970986324,
+      "gridAnnualMmFloat32": 1499.7911376953125,
+      "band": "1000-1500",
+      "color": "#60afb8",
+      "pixel": [
+        364,
+        641
+      ],
+      "pixelBand": "1000-1500",
+      "pixelColor": "#60afb8",
+      "pixelMatch": true
+    },
+    {
+      "thresholdMm": 1500,
+      "side": "at-or-above",
+      "flatSourceCellId": 259640,
+      "sourceIndex": [
+        552,
+        200
+      ],
+      "coordinates": [
+        -54.58430099487305,
+        49.20970153808594
+      ],
+      "sourceAnnualMmFloat64": 1500.2891923323618,
+      "gridAnnualMmFloat32": 1500.2891845703125,
+      "band": "1500-2000",
+      "color": "#378eaa",
+      "pixel": [
+        1808,
+        715
+      ],
+      "pixelBand": "1500-2000",
+      "pixelColor": "#378eaa",
+      "pixelMatch": true
+    },
+    {
+      "thresholdMm": 2000,
+      "side": "below",
+      "flatSourceCellId": 27585,
+      "sourceIndex": [
+        58,
+        325
+      ],
+      "coordinates": [
+        -129.08819580078125,
+        53.001800537109375
+      ],
+      "sourceAnnualMmFloat64": 1998.365020841336,
+      "gridAnnualMmFloat32": 1998.364990234375,
+      "band": "1500-2000",
+      "color": "#378eaa",
+      "pixel": [
+        318,
+        639
+      ],
+      "pixelBand": "1500-2000",
+      "pixelColor": "#378eaa",
+      "pixelMatch": true
+    },
+    {
+      "thresholdMm": 2000,
+      "side": "at-or-above",
+      "flatSourceCellId": 42668,
+      "sourceIndex": [
+        90,
+        368
+      ],
+      "coordinates": [
+        -123.17780303955078,
+        50.21179962158203
+      ],
+      "sourceAnnualMmFloat64": 2000.2373563745052,
+      "gridAnnualMmFloat32": 2000.2373046875,
+      "band": "gte2000",
+      "color": "#216782",
+      "pixel": [
+        436,
+        695
+      ],
+      "pixelBand": "gte2000",
+      "pixelColor": "#216782",
+      "pixelMatch": true
+    }
+  ],
+  "contours": [
+    {
+      "precipitationMm": 250,
+      "completeValidQuads": 95219,
+      "crossingQuads": 284,
+      "segments": 284,
+      "uniqueSourceEdgeCrossings": 310,
+      "lineCount": 26,
+      "closedLineCount": 0,
+      "vertices": 310,
+      "saddleQuads": 0,
+      "maximumEdgeThresholdResidualMm": 0.0,
+      "invalidSourceCellSegments": 0,
+      "allSegmentsTracedOnce": true,
+      "sourceEdgeProbes": [
+        {
+          "edge": [
+            "x",
+            74,
+            139
+          ],
+          "sourceCells": [
+            [
+              74,
+              139
+            ],
+            [
+              75,
+              139
+            ]
+          ],
+          "sourceAnnualMm": [
+            254.7012176513672,
+            249.73886108398438
+          ],
+          "fraction": 0.9473760274035786,
+          "coordinates": [
+            -140.78409286939925,
+            68.93458754110497
+          ]
+        },
+        {
+          "edge": [
+            "y",
+            75,
+            139
+          ],
+          "sourceCells": [
+            [
+              75,
+              139
+            ],
+            [
+              75,
+              140
+            ]
+          ],
+          "sourceAnnualMm": [
+            249.73886108398438,
+            256.00189208984375
+          ],
+          "fraction": 0.041695293504266005,
+          "coordinates": [
+            -140.76689214850057,
+            68.9337634362297
+          ]
+        },
+        {
+          "edge": [
+            "y",
+            76,
+            139
+          ],
+          "sourceCells": [
+            [
+              76,
+              139
+            ],
+            [
+              76,
+              140
+            ]
+          ],
+          "sourceAnnualMm": [
+            245.02835083007812,
+            251.83206176757812
+          ],
+          "fraction": 0.730726101621932,
+          "coordinates": [
+            -140.4530367752016,
+            68.92591940140098
+          ]
+        }
+      ]
+    },
+    {
+      "precipitationMm": 500,
+      "completeValidQuads": 95219,
+      "crossingQuads": 1156,
+      "segments": 1156,
+      "uniqueSourceEdgeCrossings": 1166,
+      "lineCount": 16,
+      "closedLineCount": 6,
+      "vertices": 1172,
+      "saddleQuads": 0,
+      "maximumEdgeThresholdResidualMm": 0.0,
+      "invalidSourceCellSegments": 0,
+      "allSegmentsTracedOnce": true,
+      "sourceEdgeProbes": [
+        {
+          "edge": [
+            "x",
+            29,
+            216
+          ],
+          "sourceCells": [
+            [
+              29,
+              216
+            ],
+            [
+              30,
+              216
+            ]
+          ],
+          "sourceAnnualMm": [
+            501.0148010253906,
+            490.0889587402344
+          ],
+          "fraction": 0.09288080487573251,
+          "coordinates": [
+            -140.78127436697574,
+            60.710981233699506
+          ]
+        },
+        {
+          "edge": [
+            "y",
+            29,
+            215
+          ],
+          "sourceCells": [
+            [
+              29,
+              215
+            ],
+            [
+              29,
+              216
+            ]
+          ],
+          "sourceAnnualMm": [
+            497.3994445800781,
+            501.0148010253906
+          ],
+          "fraction": 0.7193081676064422,
+          "coordinates": [
+            -140.82258565539297,
+            60.72842497741419
+          ]
+        },
+        {
+          "edge": [
+            "x",
+            29,
+            217
+          ],
+          "sourceCells": [
+            [
+              29,
+              217
+            ],
+            [
+              30,
+              217
+            ]
+          ],
+          "sourceAnnualMm": [
+            505.01629638671875,
+            493.8590087890625
+          ],
+          "fraction": 0.4495981969464062,
+          "coordinates": [
+            -140.63068727291108,
+            60.64978124640953
+          ]
+        }
+      ]
+    },
+    {
+      "precipitationMm": 750,
+      "completeValidQuads": 95219,
+      "crossingQuads": 624,
+      "segments": 624,
+      "uniqueSourceEdgeCrossings": 631,
+      "lineCount": 9,
+      "closedLineCount": 2,
+      "vertices": 633,
+      "saddleQuads": 0,
+      "maximumEdgeThresholdResidualMm": 0.0,
+      "invalidSourceCellSegments": 0,
+      "allSegmentsTracedOnce": true,
+      "sourceEdgeProbes": [
+        {
+          "edge": [
+            "x",
+            54,
+            254
+          ],
+          "sourceCells": [
+            [
+              54,
+              254
+            ],
+            [
+              55,
+              254
+            ]
+          ],
+          "sourceAnnualMm": [
+            756.12109375,
+            744.2911987304688
+          ],
+          "fraction": 0.5174258723254962,
+          "coordinates": [
+            -133.65590520644403,
+            58.71667669252188
+          ]
+        },
+        {
+          "edge": [
+            "y",
+            54,
+            253
+          ],
+          "sourceCells": [
+            [
+              54,
+              253
+            ],
+            [
+              54,
+              254
+            ]
+          ],
+          "sourceAnnualMm": [
+            731.7892456054688,
+            756.12109375
+          ],
+          "fraction": 0.7484328476143413,
+          "coordinates": [
+            -133.75496105055313,
+            58.71867887286608
+          ]
+        },
+        {
+          "edge": [
+            "y",
+            55,
+            254
+          ],
+          "sourceCells": [
+            [
+              55,
+              254
+            ],
+            [
+              55,
+              255
+            ]
+          ],
+          "sourceAnnualMm": [
+            744.2911987304688,
+            768.8067016601562
+          ],
+          "fraction": 0.23286494614875194,
+          "coordinates": [
+            -133.56380324016558,
+            58.7149291595695
+          ]
+        }
+      ]
+    },
+    {
+      "precipitationMm": 1000,
+      "completeValidQuads": 95219,
+      "crossingQuads": 651,
+      "segments": 651,
+      "uniqueSourceEdgeCrossings": 659,
+      "lineCount": 9,
+      "closedLineCount": 1,
+      "vertices": 660,
+      "saddleQuads": 0,
+      "maximumEdgeThresholdResidualMm": 0.0,
+      "invalidSourceCellSegments": 0,
+      "allSegmentsTracedOnce": true,
+      "sourceEdgeProbes": [
+        {
+          "edge": [
+            "x",
+            55,
+            264
+          ],
+          "sourceCells": [
+            [
+              55,
+              264
+            ],
+            [
+              56,
+              264
+            ]
+          ],
+          "sourceAnnualMm": [
+            1015.4212646484375,
+            999.886474609375
+          ],
+          "fraction": 0.9926921837797912,
+          "coordinates": [
+            -132.75602709410447,
+            57.94864547007325
+          ]
+        },
+        {
+          "edge": [
+            "y",
+            55,
+            263
+          ],
+          "sourceCells": [
+            [
+              55,
+              263
+            ],
+            [
+              55,
+              264
+            ]
+          ],
+          "sourceAnnualMm": [
+            985.1828002929688,
+            1015.4212646484375
+          ],
+          "fraction": 0.49001164651906337,
+          "coordinates": [
+            -132.94274612553434,
+            57.95611842974253
+          ]
+        },
+        {
+          "edge": [
+            "y",
+            56,
+            264
+          ],
+          "sourceCells": [
+            [
+              56,
+              264
+            ],
+            [
+              56,
+              265
+            ]
+          ],
+          "sourceAnnualMm": [
+            999.886474609375,
+            1030.7646484375
+          ],
+          "fraction": 0.003676557793116535,
+          "coordinates": [
+            -132.7546598153542,
+            57.94859647034903
+          ]
+        }
+      ]
+    },
+    {
+      "precipitationMm": 1500,
+      "completeValidQuads": 95219,
+      "crossingQuads": 367,
+      "segments": 367,
+      "uniqueSourceEdgeCrossings": 385,
+      "lineCount": 18,
+      "closedLineCount": 0,
+      "vertices": 385,
+      "saddleQuads": 0,
+      "maximumEdgeThresholdResidualMm": 0.0,
+      "invalidSourceCellSegments": 0,
+      "allSegmentsTracedOnce": true,
+      "sourceEdgeProbes": [
+        {
+          "edge": [
+            "x",
+            40,
+            316
+          ],
+          "sourceCells": [
+            [
+              40,
+              316
+            ],
+            [
+              41,
+              316
+            ]
+          ],
+          "sourceAnnualMm": [
+            1512.76806640625,
+            1490.41943359375
+          ],
+          "fraction": 0.5713130871750055,
+          "coordinates": [
+            -131.902112950564,
+            53.203810628366334
+          ]
+        },
+        {
+          "edge": [
+            "y",
+            41,
+            316
+          ],
+          "sourceCells": [
+            [
+              41,
+              316
+            ],
+            [
+              41,
+              317
+            ]
+          ],
+          "sourceAnnualMm": [
+            1490.41943359375,
+            1510.859619140625
+          ],
+          "fraction": 0.46871230127921837,
+          "coordinates": [
+            -131.81927979165175,
+            53.17992240061291
+          ]
+        },
+        {
+          "edge": [
+            "y",
+            58,
+            278
+          ],
+          "sourceCells": [
+            [
+              58,
+              278
+            ],
+            [
+              58,
+              279
+            ]
+          ],
+          "sourceAnnualMm": [
+            1470.2359619140625,
+            1509.10009765625
+          ],
+          "fraction": 0.7658484491558697,
+          "coordinates": [
+            -131.53330310039422,
+            56.80149424610055
+          ]
+        }
+      ]
+    },
+    {
+      "precipitationMm": 2000,
+      "completeValidQuads": 95219,
+      "crossingQuads": 107,
+      "segments": 107,
+      "uniqueSourceEdgeCrossings": 117,
+      "lineCount": 10,
+      "closedLineCount": 0,
+      "vertices": 117,
+      "saddleQuads": 0,
+      "maximumEdgeThresholdResidualMm": 0.0,
+      "invalidSourceCellSegments": 0,
+      "allSegmentsTracedOnce": true,
+      "sourceEdgeProbes": [
+        {
+          "edge": [
+            "y",
+            59,
+            325
+          ],
+          "sourceCells": [
+            [
+              59,
+              325
+            ],
+            [
+              59,
+              326
+            ]
+          ],
+          "sourceAnnualMm": [
+            1988.767333984375,
+            2052.271240234375
+          ],
+          "fraction": 0.17688149720120563,
+          "coordinates": [
+            -128.9436426656657,
+            53.01559736380067
+          ]
+        },
+        {
+          "edge": [
+            "y",
+            58,
+            325
+          ],
+          "sourceCells": [
+            [
+              58,
+              325
+            ],
+            [
+              58,
+              326
+            ]
+          ],
+          "sourceAnnualMm": [
+            1998.364990234375,
+            2060.308837890625
+          ],
+          "fraction": 0.026395030781721725,
+          "coordinates": [
+            -129.0869553116637,
+            52.99963874316832
+          ]
+        },
+        {
+          "edge": [
+            "y",
+            60,
+            325
+          ],
+          "sourceCells": [
+            [
+              60,
+              325
+            ],
+            [
+              60,
+              326
+            ]
+          ],
+          "sourceAnnualMm": [
+            1971.981689453125,
+            2036.347412109375
+          ],
+          "fraction": 0.43529862465009367,
+          "coordinates": [
+            -128.7953072644415,
+            53.02246285629379
+          ]
+        }
+      ]
+    }
+  ],
+  "contourSyntheticFixturesPassed": [
+    "linear edge threshold",
+    "missing corner excludes quad",
+    "both bilinear saddle determinant signs"
+  ],
+  "labels": 11,
+  "allLabelsAreExactEmittedContourVertices": true
+}
