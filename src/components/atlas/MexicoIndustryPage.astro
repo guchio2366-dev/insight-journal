@@ -1,17 +1,24 @@
 ---
 import MexicoWorkspace from './MexicoWorkspace.astro';
-import data from '../../data/atlas/mexico/industry.json';
+import originalData from '../../data/atlas/mexico/industry.json';
+import catalog from '../../data/atlas/mexico/industry-catalog.json';
 import population from '../../data/atlas/mexico/population.json';
-import {mexicoIndustryReading as reading} from '../../data/atlas/mexico/industry-reading';
+import {mexicoIndustryReading as originalReading} from '../../data/atlas/mexico/industry-reading';
 import {geometryPath,stateFeatures,stateLabelPoint,stateViewBox,mapViewBox,geometryMetadata,projectLonLat} from '../../lib/atlas-mexico-geometry';
-import {industryExportColor,industryValueText,mexicoIndustryBins,type MexicoIndustryValue} from '../../lib/atlas-mexico-industry';
+import {industryExportColor,industryValueText,mexicoIndustryBins,mexicoIndustrySectors,mexicoIndustrySubsectorsFor,type MexicoIndustryValue} from '../../lib/atlas-mexico-industry';
 import {mexicoDensityBins,mexicoDensityColor,mexicoPopulationLegendValues,mexicoPopulationRadius} from '../../lib/atlas-mexico-population';
 import {withBase} from '../../lib/urls';
+import '../../styles/atlas-industry.css';
 import '../../styles/atlas-mexico-industry.css';
 
 const industryHref=withBase('/atlas/north-america/mexico/industry/');
 const populationHref=withBase('/atlas/north-america/mexico/population/');
 const assets=withBase('/assets/atlas/mexico-industry-v1');
+const catalogRows=new Map(catalog.rows.map(r=>[r.id,r.values]));
+const data={...originalData,metrics:[...originalData.metrics.map(m=>({...m,sector:'manufacturing',topStates:m.id==='transport'?['05','11']:['08','14']})),...catalog.metrics],rows:originalData.rows.map(r=>({...r,values:{...r.values,...catalogRows.get(r.id)}}))};
+const reading={...originalReading,...Object.fromEntries(catalog.metrics.map(m=>[m.id,m.reading]))};
+const sectorReadings=catalog.sectorReadings;
+const readingPlaces=[...originalData.metrics.flatMap(m=>(m.id==='transport'?['05','11']:['08','14']).map(state=>({state,name:data.states.find(s=>s.id===state)!.name,sector:'manufacturing',metric:m.id,label:m.name,overview:true}))),...catalog.metrics.flatMap(m=>m.topStates.map(state=>({state,name:data.states.find(s=>s.id===state)!.name,sector:m.sector,metric:m.id,label:m.name,overview:false}))),...Object.entries(sectorReadings).flatMap(([sector,copy])=>copy.places.map(place=>({...place,sector,metric:'',label:sector==='resources'?(place.state==='26'?'銅':'銀'):sector==='services'?(place.state==='09'?'金融・専門サービス':'宿泊・飲食'):'建設・不動産／需要の背景',overview:true})))];
 const selected=data.states.find(s=>s.id==='05')!;
 const initial=data.rows.find(r=>r.id===selected.id)!;
 const rows=new Map(data.rows.map(r=>[r.id,r]));
@@ -20,14 +27,14 @@ const geometry=stateFeatures.map(f=>({id:f.properties.code,path:geometryPath(f.g
 const labels=Object.fromEntries(geometry.map(g=>[g.id,g.point]));
 const views=Object.fromEntries(data.states.map(s=>[s.id,stateViewBox(s.id)]));
 const usaLabel=projectLonLat([-105,32]);
-const config={data,population,reading,labels,views,industryHref,populationHref,mapViewBox};
+const config={data,population,reading,labels,views,industryHref,populationHref,mapViewBox,catalog,readingPlaces};
 const value=(v:unknown)=>industryValueText(v as MexicoIndustryValue);
 ---
-<MexicoWorkspace field="industry" title="輸出工業の立地を読む、メキシコの主要産業" lead={reading.lead}>
-  <div slot="controls" class="country-industry-navigation">
-   <div class="industry-tab-row mi-metric-tabs" role="tablist" aria-label="輸出業種" data-mi-metric-tabs>
-    {data.metrics.map(m=><button type="button" role="tab" id={`mi-category-${m.id}`} data-mi-metric-button={m.id} aria-selected={m.id==='transport'?'true':'false'} tabindex={m.id==='transport'?0:-1} aria-controls="mi-primary-map-panel">{m.name}</button>)}
-   </div>
+<MexicoWorkspace field="industry" title="メキシコの主要産業｜地域・輸送・市場をつなぐ" lead="製造業・資源・サービス・建設の地域例から、産業を支える位置・交通・市場のつながりを読む。">
+  <div slot="controls" class="industry-controls country-industry-navigation" data-industry-controls>
+   <div class="industry-tab-row" role="tablist" aria-label="産業の業態">{mexicoIndustrySectors.map(sector=><button type="button" role="tab" id={`mi-sector-${sector.id}`} data-industry-sector={sector.id} aria-selected={sector.id==='all'?'true':'false'} tabindex={sector.id==='all'?0:-1} aria-controls="mi-primary-map-panel">{sector.label}</button>)}</div>
+   {mexicoIndustrySectors.filter(s=>s.id!=='all').map(sector=><div class="industry-tab-row industry-subtabs" role="tablist" aria-label={`${sector.label}の分野`} data-industry-subtabs={sector.id} data-mi-metric-tabs hidden>{mexicoIndustrySubsectorsFor(sector.id).map(sub=><button type="button" role="tab" id={`mi-category-${sector.id}-${sub.id}`} data-industry-subsector={sub.id} data-owner-sector={sector.id} data-mi-metric-button={sub.id==='all'?undefined:sub.id} aria-selected={sub.id==='all'?'true':'false'} tabindex={sub.id==='all'?0:-1} aria-controls="mi-description mi-statistics">{sub.label}</button>)}</div>)}
+   <p class="industry-guide"><span data-industry-breadcrumb>全産業</span><a href="#mi-statistics">この分野の統計へ</a></p>
    <select data-mi-metric hidden aria-label="輸出業種" tabindex="-1">{data.metrics.map(m=><option value={m.id} selected={m.id==='transport'}>{m.name}</option>)}</select>
   </div>
  <div slot="map" class="mi-map-panel">
@@ -35,11 +42,6 @@ const value=(v:unknown)=>industryValueText(v as MexicoIndustryValue);
   <div class="mi-map-grid" data-mi-map-grid>
    {['primary','secondary'].map((slot,i)=><figure class="mi-map-figure" data-mi-figure={slot} hidden={i===1}>
     <div class="atlas-map-frame mexico-map-frame" id={i===0?'mi-primary-map-panel':undefined}>
-    {i===0&&<div class="mexico-controls mi-controls country-industry-map-controls" aria-label="州と比較元の表示" data-mi-supplementary-controls>
-     <label>州 <select data-mi-state-select>{data.states.map(s=><option value={s.id} selected={s.id===selected.id}>{s.name}</option>)}</select></label>
-     <label data-mi-source-view-control hidden>元の分布 <select data-mi-source-view><option value="density">人口密度</option><option value="population">人口</option></select></label>
-    </div>}
-    {i===0&&<div class="mexico-actions mi-actions mi-map-frame-actions"><label><input type="checkbox" data-mi-only/> 読む州だけ</label><button type="button" data-mi-zoom aria-pressed="false">読む州を拡大</button><button type="button" data-mi-all>全32州へ</button></div>}
     <svg class="mexico-map mi-map" data-mexico-map data-mi-map={slot} viewBox={mapViewBox} role="group" aria-labelledby={`mi-${slot}-title mi-${slot}-desc`}>
      <title id={`mi-${slot}-title`}>{i===0?'輸送機器':'電子機器'}の州別輸出額、2025年速報</title>
      <desc id={`mi-${slot}-desc`}>色は州の生産地に配分したFOB輸出額。州を選ぶと数値と説明を読めます。秘匿は斜線、未把握は点模様です。</desc>
@@ -50,10 +52,12 @@ const value=(v:unknown)=>industryValueText(v as MexicoIndustryValue);
       <pattern id={`mi-${slot}-notSignificant`} width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="#fff"/><path d="M0,5H10" stroke="#92a394" stroke-width="1"/></pattern>
       <pattern id={`mi-${slot}-notApplicable`} width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" fill="#e6e6e6"/></pattern>
      </defs>
+     {i===0&&<image href={withBase('/assets/atlas/mexico-nature-v1/relief.svg')} width="900" height="580" opacity=".35" aria-hidden="true"/>}
      <g class="mi-country-context" data-mi-country-context aria-hidden="true">{geometry.map(g=><path data-mi-context-state={g.id} d={g.path} fill-rule="evenodd" />)}</g>
      <g>{geometry.map(g=>{const state=data.states.find(s=>s.id===g.id)!,v=rows.get(g.id)!.values[i===0?'transport':'electronics'];return <path class:list={['mi-state',{'is-selected':g.id===selected.id}]} data-mi-shape={g.id} d={g.path} fill={industryExportColor(v.value,v.status as MexicoIndustryValue['status'],`mi-${slot}`)} fill-rule="evenodd" role="button" tabindex="0" aria-pressed={g.id===selected.id?'true':'false'} aria-label={`${state.name} ${value(v)}`}><title>{state.name} {value(v)}</title></path>;})}</g>
      {i===1&&<g data-mi-population-circles hidden>{geometry.map(g=>{const r=populationRows.get(g.id)!;return <circle data-mi-population-circle={g.id} cx={g.point[0]} cy={g.point[1]} r={mexicoPopulationRadius(r.population)} class="mi-population-circle" role="button" tabindex="0" aria-label={`${r.nameJa} 人口 ${r.population.toLocaleString('ja-JP')}人`}><title>{r.nameJa} 人口 {r.population.toLocaleString('ja-JP')}人、2020年</title></circle>;})}</g>}
      <g class="mi-labels" aria-hidden="true">{geometry.map(g=>{const s=data.states.find(s=>s.id===g.id)!;return <text data-mi-label={g.id} x={g.point[0]} y={g.point[1]-7} text-anchor="middle" hidden={!['05','11','08','14'].includes(g.id)}>{s.short}</text>;})}</g>
+     {i===0&&<g data-mi-reading-markers>{readingPlaces.map(place=>{const point=labels[place.state],kind=mexicoIndustrySectors.find(s=>s.id===place.sector)!;return <g data-mi-region-option={place.state} data-mi-region-metric={place.metric} data-mi-region-sector={place.sector} data-mi-overview-place={String(place.overview)} role="button" tabindex="0" aria-label={`${place.name}の${place.label}を読む`} transform={`translate(${point[0]},${point[1]})`}><circle r="8" fill={kind.color}/><text data-mi-region-label x={point[0]>700?-12:12} text-anchor={point[0]>700?'end':'start'} y={place.state==='09'&&place.sector==='construction-real-estate'?30:-12}>{place.name}｜{place.label}</text><title>{place.name}（州の位置案内。工場の位置・数量ではありません）</title></g>;})}</g>}
      <text class="mi-context-label" data-mi-context-label x={usaLabel[0]} y={usaLabel[1]} text-anchor="middle" aria-hidden="true">米国</text>
     </svg>
     </div>
@@ -63,7 +67,7 @@ const value=(v:unknown)=>industryValueText(v as MexicoIndustryValue);
   </div>
   <p class="mexico-caption" data-mi-map-status aria-live="polite">2025年速報・輸送機器の輸出額。32州の公開状態を表示。</p>
  </div>
- <div slot="legend" class="mi-reading-keys">
+ <div slot="items" class="industry-key"><div data-mi-sector-legend>{mexicoIndustrySectors.filter(s=>s.id!=='all').map(s=><span><i style={`--industry-color:${s.color}`} aria-hidden="true">{s.symbol}</i>{s.label}</span>)}</div><p data-mi-geography-scope>点は本文の州の案内位置です。同じ大きさで、施設の所在地・数量を表しません。背景：INEGI自然地理地域（2001年の区分図）。</p><div class="mi-reading-keys">
   {['primary','secondary'].map((slot,i)=><div data-mi-legend-slot={slot}>
    <div data-mi-export-legend={slot}>
     <p class="mi-legend-unit">FOB輸出額・10億米ドル（2025年速報・両業種共通）</p>
@@ -74,23 +78,29 @@ const value=(v:unknown)=>industryValueText(v as MexicoIndustryValue);
     <div data-mi-population-size-legend hidden><p class="mi-legend-unit">人口・円の面積が人数に比例（2020年）</p><svg class="mi-circle-legend" viewBox="0 0 330 75" role="img" aria-label="人口の円の大きさ、100万人・500万人・1000万人">{mexicoPopulationLegendValues.map((n,j)=><g><circle data-mi-size-reference={n} cx={55+j*110} cy="28" r={mexicoPopulationRadius(n)} class="mi-population-circle"/><text x={55+j*110} y="69" text-anchor="middle">{(n/10000).toLocaleString('ja-JP')}万人</text></g>)}</svg></div>
    </div>}
   </div>)}
- </div>
- <div slot="reading" class="mi-reading">
+ </div></div>
+ <div slot="reading" class="mi-reading industry-map-reading" id="mi-description">
   <section data-mi-reading-comparison hidden><h2 data-mi-reading-comparison-title>{reading.comparison.title}</h2><p class="mexico-takeaway" data-mi-reading-comparison-text>{reading.comparison.text}</p><p class="mexico-caption" data-mi-period-note hidden>{reading.populationComparison.periodNote}</p><a class="mexico-return" data-mi-return href={`${industryHref}?state=05&metric=transport`}>コアウイラの輸送機器地図へ戻る</a></section>
   <p class="mexico-caption mi-fallback-note" data-mi-fallback-note hidden>簡易表示。州は上の選択欄で選べます。</p>
-  <section data-mi-reading-normal><h2 class="mi-overview-repeat-title">{reading.title}</h2><p class="mexico-takeaway">米国への近さ・部品集積 → 国境・港への交通 → 輸出向けの生産網</p></section>
+  <div class="industry-selected-reading" data-mi-reading-normal>
+   {mexicoIndustrySectors.map(sector=>{const copy=sectorReadings[sector.id];return <article data-mi-industry-panel={`${sector.id}:all`} hidden={sector.id!=='all'}><header><h2>{sector.label}</h2></header><div class="industry-selected-reading-body"><p class="industry-key-sentence"><strong>{copy?.lead??'米国への近さ・部品集積を、国境・港への交通と輸出向けの生産網につなげて読む。'}</strong></p><section><h3>{copy?.heading??'北部とバヒオから、製造業の分布へ'}</h3><p>{copy?.text??reading.causal[0]}</p><div class="industry-reading-places">{copy?copy.places.map(place=><button type="button" data-mi-region-option={place.state} data-mi-region-sector={sector.id}>{place.name}を地図で見る</button>):<><button type="button" data-mi-jump-metric="transport">輸送機器の分布を見る</button><button type="button" data-mi-jump-metric="electronics">半導体・電子機器の分布を見る</button></>}</div></section><details class="industry-reading-definitions"><summary>対象範囲・統計の読み方・出典</summary><p>{copy?copy.sourceYear:'配信中の数値は2025年速報のFOB輸出額です。全産業のGDP・雇用人数ではありません。'}</p>{copy&&copy.places.map(place=>place.sourceURL&&<a href={place.sourceURL}>{place.name}の根拠資料</a>)}<a href={copy?.sourceURL??reading.sources[0].url}>{copy?'地域事例の公式資料':reading.sources[0].label}</a></details></div></article>;})}
+   {data.metrics.map(m=><article data-mi-industry-panel={`${m.sector}:${m.id}`} hidden><header><h2>{m.id==='electronics'?'電子機器（通信・計測など）':m.name}</h2><button type="button" data-industry-overview>全分野へ</button></header><div class="industry-selected-reading-body"><p class="industry-key-sentence"><strong>{reading[m.id].heading}</strong></p><section><h3>立地・交通・市場をつなげて読む</h3><p>{reading[m.id].text}</p><p>{reading[m.id].note}{m.id==='electronics'?' 半導体だけの輸出額ではありません。':m.id==='transport'?' 自動車・航空宇宙それぞれの単独値ではありません。':''}</p><div class="industry-reading-places">{m.topStates.map(code=><button type="button" data-mi-region-option={code} data-mi-region-metric={m.id} data-mi-region-sector={m.sector}>{data.states.find(s=>s.id===code)!.name}を地図で見る</button>)}</div></section><details class="industry-reading-definitions"><summary>対象範囲・統計の読み方・出典</summary><p>州の生産地に配分したFOB輸出額。2025年速報、10億米ドル。秘匿・未把握は0と区別します。</p><p>{m.scope??(m.id==='electronics'?reading.electronics.note:reading.transport.note)}</p><a href={reading.sources[0].url}>{reading.sources[0].label}</a></details></div></article>)}
+  </div>
+  <section data-mi-selected-place-reading hidden><h3 data-mi-selected-place-name></h3><p data-mi-selected-place-text></p></section>
   <div class="mi-items">
    <a class="mexico-comparison-link" data-mi-electronics-link href={`${industryHref}?compare=electronics&state=05&metric=transport`}>輸送機器 × 電子機器：集中する州を比べる</a>
    <a class="mexico-comparison-link" data-mi-population-link href={`${industryHref}?compare=population&state=05&metric=transport&sourceView=density&from=industry`}>人口・密度 × 輸出額：人と生産拠点の位置を比べる</a>
   </div>
-  <section class="mi-selected" aria-labelledby="mi-selected-state"><h3 id="mi-selected-state" data-mi-selected-name>{selected.name}</h3><div class="mi-value-cards">
+  <details class="mi-selected" aria-labelledby="mi-selected-state"><summary>選んだ州の統計</summary><h3 id="mi-selected-state" data-mi-selected-name>{selected.name}</h3><div class="mi-value-cards">
    <div data-mi-population-card hidden><span data-mi-population-card-label>人口密度・2020年</span><strong data-mi-population-card-value>—</strong></div>
    {data.metrics.map(m=><div data-mi-value-card={m.id}><span>{m.name}・2025年速報</span><strong data-mi-value={m.id}>{value(initial.values[m.id as 'transport'|'electronics'])}</strong></div>)}
-  </div></section>
-  <details class="mi-topic-reading" data-mi-reading-normal><summary>選んだ業種の立地・交通・市場を読む</summary><h3 data-mi-topic-heading>{reading.transport.heading}</h3><p data-mi-topic-text>{reading.transport.text}</p><details><summary>位置・交通・市場から成立を読む</summary>{reading.causal.map(p=><p>{p}</p>)}<p><a href={reading.sources[4].url}>ITA：北部・バヒオの工業集積</a> / <a href={reading.sources[5].url}>工業地域を国境・港につなぐ貨物鉄道</a></p></details></details>
+  </div></details>
+  <details class="mi-topic-reading" hidden><summary>選んだ業種の立地・交通・市場を読む</summary><h3 data-mi-topic-heading>{reading.transport.heading}</h3><p data-mi-topic-text>{reading.transport.text}</p></details>
   <details><summary>業種と公開状態の意味</summary><p>{reading.transport.note}</p><p>{reading.electronics.note}</p><p>FOB型の輸出額は、輸出国の国境まで届ける費用を含む価額。国境から先の運賃・保険料は含みません。<a href={reading.sources[9].url}>国連の貿易統計の定義</a></p><p>秘匿：個別業種の値を公表しない。未把握：輸出の有無を特定する情報がない。数値0：輸出なし。500米ドル未満、対象外、未取得もゼロと分けます。</p><p>{data.notes.scope}</p><p>{data.notes.confidential}</p><p>表示は千米ドルを1,000,000で割った10億米ドル。州別GDPや工場数への換算はしていません。</p></details>
  </div>
- <details slot="statistics" class="mi-statistics"><summary>選択州・全32州の輸出額と人口値を確かめる</summary>
+ <details slot="statistics" class="mi-statistics" id="mi-statistics"><summary>この分野の統計：選択州・全32州の輸出額と人口値</summary>
+  <div class="mexico-controls mi-controls" data-mi-supplementary-controls><label>州 <select data-mi-state-select>{data.states.map(s=><option value={s.id} selected={s.id===selected.id}>{s.name}</option>)}</select></label><label data-mi-source-view-control hidden>元の分布 <select data-mi-source-view><option value="density">人口密度</option><option value="population">人口</option></select></label></div>
+  <div class="mexico-actions mi-actions"><label><input type="checkbox" data-mi-only/> 読む州だけ</label><button type="button" data-mi-zoom aria-pressed="false">読む州を拡大</button><button type="button" data-mi-all>全32州へ</button></div>
   <h2><span data-mi-stats-state>{selected.name}</span>の値を確認</h2>
   <div class="mexico-table-scroll"><table class="mi-selected-table"><caption>選択州・輸出額2025年速報／人口・密度2020年</caption><thead><tr><th scope="col">指標</th><th scope="col">値</th><th scope="col">原典の公開状態</th></tr></thead><tbody>{data.metrics.map(m=><tr><th scope="row">{m.name}輸出額・10億米ドル</th><td data-mi-stats-value={m.id}>{value(initial.values[m.id as 'transport'|'electronics'])}</td><td data-mi-stats-status={m.id}>{initial.values[m.id as 'transport'|'electronics'].sourceStatus}</td></tr>)}<tr data-mi-population-stats hidden><th scope="row" data-mi-population-stats-label>人口密度・人/km²</th><td data-mi-population-stats-value>—</td><td>INEGI 公表値</td></tr></tbody></table></div>
   <details class="mi-all-data"><summary>全32州の輸出額・公開状態を原典と照合する</summary><div class="mexico-table-scroll"><table><caption>INEGI ETEF・2025年年次速報。原典はFOB千米ドル、表示は10億米ドル。</caption><thead><tr><th scope="col">州</th>{data.metrics.map(m=><Fragment><th scope="col">{m.name}<br/>10億米ドル</th><th scope="col">原典・千米ドル<br/>公開状態</th></Fragment>)}</tr></thead><tbody>{data.states.map(s=>{const r=rows.get(s.id)!;return <tr data-mi-data-row={s.id}><th scope="row">{s.name}<small>{s.sourceName}</small></th>{data.metrics.map(m=>{const v=r.values[m.id as 'transport'|'electronics'];return <Fragment><td>{value(v)}</td><td>{v.sourceValue===null?'—':v.sourceValue.toLocaleString('ja-JP')}<small>{v.sourceStatus}</small></td></Fragment>;})}</tr>;})}</tbody></table></div></details>

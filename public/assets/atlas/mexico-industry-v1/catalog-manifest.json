@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "source": {
+    "publisher": "INEGI",
+    "product": "Exportaciones por Entidad Federativa (ETEF)",
+    "url": "https://www.inegi.org.mx/programas/exporta_ef/",
+    "downloadUrl": "https://www.inegi.org.mx/contenidos/programas/exporta_ef/datosabiertos/conjunto_de_datos_eef_csv.zip",
+    "metadataUrl": "https://www.inegi.org.mx/rnm/index.php/catalog/1108",
+    "updated": "2026-03-31",
+    "accessed": "2026-10-01",
+    "licenseUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+    "sourceUnit": "thousands USD FOB",
+    "displayUnit": "billions USD FOB",
+    "classification": "SCIAN México 2018; source subsector codes retained. Bundled dictionary/catalog VERSION is 2007.",
+    "publicationStatus": "Cifras Preliminares.",
+    "geographicAssignment": "Origin of production, allocated using linked establishments; not border crossing or exporter headquarters."
+  },
+  "input": {
+    "file": "etef-official-annual-2007-2025.csv",
+    "bytes": 2008293,
+    "sha256": "a120b1f1e7f7ce5a3bc61871d8d302bd104dfcdf65a044a89990353056b196bf"
+  },
+  "legacy": {
+    "file": "src/data/atlas/mexico/industry.json",
+    "bytes": 23500,
+    "sha256": "d4a0723124b1c84e429775ff52d78b90925c3619fffc6216051eb8869925412b",
+    "fixedValuesVerified": 64
+  },
+  "normalized": {
+    "file": "src/data/atlas/mexico/industry-catalog.json",
+    "bytes": 55018,
+    "sha256": "03e1762c39e10e11e3bca6ce6ab4d7706aeb180f53022554ae7dcbcf6e14f5ac"
+  },
+  "extract": {
+    "file": "public/assets/atlas/mexico-industry-v1/industry-catalog-2025.csv",
+    "bytes": 90682,
+    "sha256": "46ea500f3cb5183077ebcc789aee180ea4e4556648b471186262afad1ef7e377",
+    "records": 736,
+    "sourceCodes": [
+      "211",
+      "212",
+      "311",
+      "312",
+      "313",
+      "314",
+      "315",
+      "316",
+      "321",
+      "322",
+      "323",
+      "324",
+      "325",
+      "326",
+      "327",
+      "331",
+      "332",
+      "333",
+      "334",
+      "335",
+      "336",
+      "337",
+      "339"
+    ]
+  },
+  "metrics": [
+    {
+      "id": "oil-gas",
+      "sourceCodes": [
+        "211"
+      ]
+    },
+    {
+      "id": "mining",
+      "sourceCodes": [
+        "212"
+      ]
+    },
+    {
+      "id": "food",
+      "sourceCodes": [
+        "311"
+      ]
+    },
+    {
+      "id": "chemicals",
+      "sourceCodes": [
+        "325"
+      ]
+    },
+    {
+      "id": "metals",
+      "sourceCodes": [
+        "331",
+        "332"
+      ]
+    },
+    {
+      "id": "machinery",
+      "sourceCodes": [
+        "333"
+      ]
+    }
+  ],
+  "statusCounts": {
+    "oil-gas": {
+      "available": 4,
+      "zero": 0,
+      "confidential": 0,
+      "unknown": 28,
+      "notSignificant": 0,
+      "notApplicable": 0
+    },
+    "mining": {
+      "available": 9,
+      "zero": 0,
+      "confidential": 10,
+      "unknown": 13,
+      "notSignificant": 0,
+      "notApplicable": 0
+    },
+    "food": {
+      "available": 27,
+      "zero": 0,
+      "confidential": 4,
+      "unknown": 1,
+      "notSignificant": 0,
+      "notApplicable": 0
+    },
+    "chemicals": {
+      "available": 22,
+      "zero": 0,
+      "confidential": 5,
+      "unknown": 5,
+      "notSignificant": 0,
+      "notApplicable": 0
+    },
+    "metals": {
+      "available": 17,
+      "zero": 0,
+      "confidential": 8,
+      "unknown": 7,
+      "notSignificant": 0,
+      "notApplicable": 0
+    },
+    "machinery": {
+      "available": 16,
+      "zero": 0,
+      "confidential": 7,
+      "unknown": 9,
+      "notSignificant": 0,
+      "notApplicable": 0
+    }
+  },
+  "notes": {
+    "scope": "製造業等の生産地に配分した財の輸出統計。商業・サービスと RENEM に結合できない通関取引は対象外。",
+    "confidential": "秘匿された小業種の金額はコード000に合算される。000を特定業種へ配分しない。",
+    "unknown": "No disponible は輸出の有無を特定する情報がない状態。",
+    "zero": "Disponible の数値0は、その期間の該当州・業種で輸出がなかったことを示す。",
+    "notSignificant": "No Significativo は500米ドル未満。ゼロとして扱わない。",
+    "method": "原典の千米ドルを1,000,000で割って10億米ドルへ変換。各州を面積や人口で割らず、公開値の合計から全国シェアを計算しない。",
+    "classificationMetadata": "同梱旧カタログのVERSION欄は2007。現行2025年RNMのSCIAN México2018の定義で範囲を確認し、コードと正式業種名を保持する。",
+    "coverage": "追加6指標。商業・サービス・建設の量は未収録。産業CSVは211・212と製造業21コードを保持。000と農林漁業コードは除外。",
+    "topStates": "金額が公開されている州内での上位例。秘匿・不明を含む全国順位・全国シェアではありません。",
+    "aggregation": "331＋332の両方が公開値の場合のみ金額を合計。一方が秘匿なら合計は秘匿、秘匿がなく不明なら合計は不明。各原状態は抽出CSVに保持。",
+    "sectorReadings": "公式資料に基づく地域例と学習上の問い。施設位置や州別サービス・建設額の分布ではありません。"
+  }
+}
