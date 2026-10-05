@@ -31,10 +31,11 @@ test('Industry SSR uses the US sector hierarchy, neutral geographic context and 
   assert.equal(q('#canada-industry-map-panel').getAttribute('role'),'tabpanel');assert.equal(q('#canada-industry-map-panel').getAttribute('aria-labelledby'),selectedTab(d).id);
   assert.equal(statistics.open,false);for(const key of ['year','province','compare','metric'])assert.equal(q(`[data-industry-${key}]`).closest('#canada-industry-statistics'),statistics);
   assert.equal(q('[data-industry-metric]').closest('label').hidden,false);
-  for(const selector of ['[data-canada-industry-metric]','[data-industry-example]','[data-industry-only]','[data-industry-focus]','[data-industry-reset]'])assert.equal(q(selector),null);
+  for(const selector of ['[data-canada-industry-metric]','[data-industry-example]','[data-industry-only]','[data-industry-focus]','[data-industry-reset]'])assert.ok(!q(selector),selector);
   for(const row of config.data){const tr=q(`[data-industry-row="${row.id}"][data-year="${row.year}"]`);assert.equal(tr.querySelector('[data-industry-bar]').style.width,`${row.values.mining.value}%`);for(const metric of config.metrics){const v=row.values[metric.id],cell=tr.querySelector(`[data-industry-cell="${metric.id}"]`);assert.equal(cell.dataset.status,v.status);assert.equal(cell.dataset.symbol,v.symbol);assert.equal(cell.dataset.vector,v.vector);assert.equal(Number(cell.dataset.value),v.value);assert.ok(cell.textContent.includes(v.value.toLocaleString('ja-JP',{minimumFractionDigits:2,maximumFractionDigits:2})));}}
   assert.equal(q('[data-industry-row="Nunavut"][data-year="2025"] [data-industry-bar]').style.width,'46.9%');assert.equal(q('[data-industry-row="Ontario"][data-year="2025"] [data-industry-bar]').style.width,'1.31%');
-  for(const shape of d.querySelectorAll('[data-industry-province-shape]')){assert.equal(shape.getAttribute('role'),'button');assert.equal(shape.getAttribute('tabindex'),'0');assert.match(shape.querySelector('title').textContent,/2021/);assert.equal(shape.getAttribute('fill-rule'),'evenodd');assert.equal(shape.getAttribute('fill'),'#edf1df');}
+  for(const shape of d.querySelectorAll('[data-industry-province-shape]')){assert.equal(shape.getAttribute('role'),'button');assert.equal(shape.getAttribute('tabindex'),'0');assert.match(shape.querySelector('title').textContent,/位置案内/);assert.equal(shape.getAttribute('fill-rule'),'evenodd');assert.equal(shape.getAttribute('fill'),'#edf1df');}
+  assert.match(q('.canada-map-column .canada-caption').textContent,/2021年.*位置案内/);
   assert.deepEqual([...d.querySelectorAll('[data-industry-region-markers] [data-industry-region]')].map(el=>el.dataset.industryRegion),regions.map(r=>r[0]));
   assert.equal(q('[data-industry-sector-reading]:not([hidden])').dataset.industrySectorReading,'all');assert.equal(d.querySelectorAll('[data-industry-region-reading]:not([hidden])').length,0);
   assert.equal(q('.industry-region-list').parentElement.tagName,'DETAILS');assert.equal(q('.industry-table-details').open,false);assert.equal(q('.industry-source-footer details').open,false);assert.ok(q('[data-news-rail]'));
@@ -97,7 +98,7 @@ test('US sector navigation opens regional readings, returns by overview or Escap
    const back=new URLSearchParams(new URL(q('[data-industry-nature-link]').href).searchParams.get('industryReturn'));assert.equal(back.get('region'),id);assert.equal(back.get('sector'),sector);assert.equal(back.has('keep'),false);
    q(`[data-industry-region-reading="${id}"] [data-industry-overview]`).click();selected(sector);assert.equal(q('[data-industry-general-reading]').hidden,false);assert.equal(d.activeElement,tab(sector));assert.equal(new URL(w.location).searchParams.has('region'),false);assert.equal(frame(d),'80 120 630 420');
   }
-  tab('manufacturing').click();mark('ontario-manufacturing').click();q('[data-industry-save]').click();const saved=w.localStorage.getItem('insight-journal:canada-industry:v1');assert.match(saved,/region=ontario-manufacturing/);
+  tab('manufacturing').click();mark('ontario-manufacturing').dispatchEvent(new w.MouseEvent('click',{bubbles:true}));q('[data-industry-save]').click();const saved=w.localStorage.getItem('insight-journal:canada-industry:v1');assert.match(saved,/region=ontario-manufacturing/);
   q('[data-industry-controls]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Escape',bubbles:true,cancelable:true}));assert.equal(q('[data-industry-region-reading]:not([hidden])'),null);selected('manufacturing');assert.equal(d.activeElement,tab('manufacturing'));
   tab('services').click();q('[data-industry-restore]').click();selected('manufacturing');assert.equal(q('[data-industry-region-reading]:not([hidden])').dataset.industryRegionReading,'ontario-manufacturing');assert.equal(frame(d),'80 120 630 420');
   reload=await page(w.location.search,true);assert.equal(reload.document.querySelector('[data-industry-region-reading]:not([hidden])').dataset.industryRegionReading,'ontario-manufacturing');assert.equal(reload.document.querySelector('[data-industry-year]').value,'2024');
@@ -131,11 +132,36 @@ test('Industry nature links retain validated sector/context keys and explicit lo
  }finally{await w.happyDOM.close();}
 });
 
-test('Nature retains the selected official distribution, uses a separate map for landform and returns only validated industry state',async()=>{
+test('Modern nature comparison retains regional geography, all sector legends and a named return with saved statistics',async()=>{
+ const source=await page('?year=2024&province=Ontario&compare=Quebec&metric=manufacturing&sector=manufacturing&region=ontario-manufacturing&only=1&zoom=1',true);let nature,returned;
+ try{
+  const target=new URL(source.document.querySelector('[data-industry-nature-link*="St."]').href);
+  nature=new Window({url:target.href,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
+  nature.document.write(stripScripts(await readFile(`dist/${folder}/nature/index.html`,'utf8')));nature.eval(await compile('nature',"initCanadaNature(document.querySelector('[data-canada-nature]'));"));
+  const d=nature.document,q=s=>d.querySelector(s),overlay=q('[data-canada-industry-context-map]'),back=q('[data-canada-industry-return]'),legend=q('[data-canada-industry-context-legend]');
+  assert.equal(back.hidden,false);assert.match(back.textContent,/オンタリオ.*Toronto.*産業地図へ戻る/s);
+  assert.equal(q('[data-canada-industry-context]').hidden,false);assert.equal(overlay.querySelectorAll('path').length,13);
+  const original=JSON.parse(q('[data-canada-config]').textContent).industry;
+  for(const shape of overlay.querySelectorAll('path')){assert.equal(shape.getAttribute('fill'),'#edf1df');assert.equal(shape.getAttribute('fill-rule'),'evenodd');assert.equal(shape.getAttribute('d'),original.geometry.find(g=>g.id===shape.dataset.canadaIndustryContextProvince).path);}
+  assert.deepEqual(new Set([...overlay.querySelectorAll('[data-canada-industry-context-region]')].map(el=>el.dataset.canadaIndustryContextRegion)),new Set(['ontario-manufacturing','quebec-manufacturing']));
+  for(const circle of overlay.querySelectorAll('[data-canada-industry-context-region] circle'))assert.equal(circle.getAttribute('r'),'6');
+  assert.deepEqual([...legend.querySelector('[data-canada-industry-context-reading-scale]').children].map(el=>el.textContent.trim()),['製造業','資源・エネルギー','サービス業']);
+  assert.match(legend.textContent,/案内位置.*2021年/s);assert.match(q('[data-canada-industry-context-text]').textContent,/加工.*輸送.*市場.*生産量.*施設.*GDP統計.*保持/s);
+  const saved=new URL(back.href);for(const [key,value] of Object.entries({sector:'manufacturing',region:'ontario-manufacturing',province:'Ontario',compare:'Quebec',metric:'manufacturing',year:'2024',only:'1',zoom:'1'}))assert.equal(saved.searchParams.get(key),value);
+  q('[data-canada-view=landform]').click();assert.equal(overlay.style.display,'none');
+  const mini=q('[data-canada-industry-context-mini-map]'),miniLegend=q('[data-canada-industry-context-mini-legend]');assert.notEqual(mini.style.display,'none');assert.equal(mini.querySelectorAll('path').length,13);assert.equal(mini.querySelectorAll('[data-canada-industry-context-region]').length,2);assert.equal(miniLegend.hidden,false);assert.equal(miniLegend.querySelector('[data-canada-industry-context-reading-scale]').children.length,3);assert.match(miniLegend.textContent,/別の地図.*左右/s);
+  q('[data-canada-view=water]').click();assert.notEqual(overlay.style.display,'none');assert.equal(mini.style.display,'none');assert.equal(legend.hidden,false);
+  returned=await page(saved.search,true);assert.equal(returned.document.querySelector('[data-industry-region-reading]:not([hidden])').dataset.industryRegionReading,'ontario-manufacturing');assert.equal(returned.document.querySelector('[data-industry-year]').value,'2024');assert.equal(returned.document.querySelector('[data-industry-compare]').value,'Quebec');
+ }finally{await source.happyDOM.close();if(nature)await nature.happyDOM.close();if(returned)await returned.happyDOM.close();}
+});
+
+test('Legacy nature links retain official GDP distribution, separate landform maps and validated industry state',async()=>{
  const source=await page('?year=2023&province=Ontario&compare=Quebec&metric=manufacturing&only=1&zoom=1',true);
  let nature;
  try{
   const target=new URL(source.document.querySelector('[data-industry-nature-link*="St."]').href);
+  // URLs saved before the US sector/region model keep their original quantitative comparison.
+  const legacy=new URLSearchParams(target.searchParams.get('industryReturn'));legacy.delete('sector');legacy.delete('region');target.searchParams.set('industryReturn',legacy.toString());
   target.searchParams.set('industryReturn',target.searchParams.get('industryReturn')+'&next=https%3A%2F%2Fevil.example%2F&city=vancouver&href=%2Foutside%2F');
   nature=new Window({url:target.href,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
   nature.document.write(stripScripts(await readFile(`dist/${folder}/nature/index.html`,'utf8')));
@@ -144,7 +170,7 @@ test('Nature retains the selected official distribution, uses a separate map for
   assert.ok(back,'nature requires a dedicated industry return link');assert.equal(back.hidden,false);
   const returned=new URL(back.href);
   assert.equal(returned.origin,'https://example.com');assert.equal(returned.pathname,`/insight-journal/${folder}/industry/`);
-  assert.deepEqual(new Set(returned.searchParams.keys()),new Set(['year','province','compare','metric','only','zoom','sector']));
+  assert.deepEqual(new Set(returned.searchParams.keys()),new Set(['year','province','compare','metric','only','zoom']));
   for(const [key,value] of Object.entries({year:'2023',province:'Ontario',compare:'Quebec',metric:'manufacturing',only:'1',zoom:'1'}))assert.equal(returned.searchParams.get(key),value);
   assert.equal(q('[data-canada-city]').value,'ottawa');assert.equal(q('[data-canada-water]').value,'St. Lawrence');
   assert.equal(q('[data-canada-industry-context]').hidden,false);assert.equal(q('[data-canada-industry-context-legend] [data-canada-industry-context-scale]').children.length,6);
