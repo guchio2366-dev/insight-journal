@@ -1,6 +1,7 @@
 import {readCanadaPopulationState,writeCanadaPopulationState,canadaPopulationFrame,formatCanadaPopulationValue,canadaPopulationDensityColor,populationDensityColors} from '../lib/atlas-canada-population';
 import {formatCanadaIndustryValue,type CanadaIndustryState} from '../lib/atlas-canada-industry';
 import {isCanadaDemographicTopic} from '../lib/atlas-canada-demographics';
+import {canadaIndustryRegions,canadaIndustrySectors} from '../data/atlas/canada/industry-reading';
 
 /** The source question stays visible; CMA population and provincial GDP have separate denominators. */
 export function renderPopulationIndustryComparison(root:HTMLElement,config:any,industry:CanadaIndustryState){
@@ -15,6 +16,10 @@ export function renderPopulationIndustryComparison(root:HTMLElement,config:any,i
  root.querySelector<HTMLElement>('[data-canada-population-industry-text]')!.textContent=`元の${state.year}年${state.metric==='density'?'人口密度':'都市圏人口'}：${populationValues}。左は${industry.year}年の州内GDP構成、${metric.name}：${cell(province)}${other?' / '+cell(other):''}。都市圏の集中と州の産業構成を、場所の対応として照合します。都市の雇用数・GDPではなく、人口集中の原因をこの2図だけで決めません。`;
  if(!data.geometry?.every((g:any)=>Array.isArray(g.rings))){map.replaceChildren();map.hidden=true;root.querySelector<HTMLElement>('[data-canada-population-industry-legend]')!.textContent=root.dataset.populationGeometryState==='error'?'元の都市圏境界を取得できませんでした。元の人口ページと出典を確認できます。':'元の都市圏分布を読み込んでいます。';return true;}
  map.hidden=false;
+ if(industry.sector){
+  const sector=canadaIndustrySectors.find(s=>s.id===industry.sector)!,region=canadaIndustryRegions.find(r=>r.id===industry.region);
+  root.querySelector<HTMLElement>('[data-canada-population-industry-text]')!.textContent='元図'+state.year+'年'+(state.metric==='density'?'人口密度':'都市圏人口')+'：'+populationValues+'。左は'+(region?.name??sector.label)+'の地域を読む案内点です。都市圏の人口集積と産業地域の位置を照合します。関連統計は'+industry.year+'年の州内GDP構成、'+metric.name+'：'+cell(province)+(other?' / '+cell(other):'')+'。都市の雇用数・GDPではなく、人口集積の原因をこの2図だけで決めません。';
+ }
  const frame=canadaPopulationFrame(state,data.geometry),factor=frame[2]/760,max=Math.max(...data.cmas.flatMap((r:any)=>[r.population[2016].value??0,r.population[2021].value??0])),ns='http://www.w3.org/2000/svg',project=([lon,lat]:number[])=>[(lon+145)/95*900,(85-lat)/45*580];
  const el=(tag:string,attrs:Record<string,string>={})=>{const e=root.ownerDocument.createElementNS(ns,tag);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);return e;};
  const line=(ring:number[][])=>ring.map((p,i)=>{const [x,y]=project(p);return `${i?'L':'M'}${x.toFixed(3)},${y.toFixed(3)}`;}).join('')+'Z';
@@ -32,5 +37,6 @@ export function renderPopulationIndustryComparison(root:HTMLElement,config:any,i
  else{for(const [i,label] of ['50未満','50–150未満','150–300未満','300–600未満','600以上'].entries()){const swatch=el('rect',{x:String(i*135+5),y:'10',width:'24',height:'20',fill:populationDensityColors[i]});swatch.dataset.populationIndustryDensitySwatch=String(i);key.append(swatch);text(i*135+5,51,label);}text(676,26,'人/km²');}
  map.append(key);
  root.querySelector<HTMLElement>('[data-canada-population-industry-legend]')!.textContent=`元図：${state.metric==='density'?'2021年・人口密度（人/km²）':state.year+'年・人口（円の面積）'}／2021年CMA境界。表示用の円中心は居住地点ではありません。左の6色は州内GDP構成%で、年と範囲が異なります。`;
+ if(industry.sector){const legend=root.querySelector<HTMLElement>('[data-canada-population-industry-legend]')!;legend.textContent='元図：'+(state.metric==='density'?'2021年・人口密度（人/km²）':state.year+'年・人口（円の面積）')+'／2021年CMA境界。左の3分野の点は同じ大きさの地域案内で、数量を表しません。GDPは関連統計で確認します。';}
  return true;
 }
