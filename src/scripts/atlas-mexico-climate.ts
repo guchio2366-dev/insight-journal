@@ -13,7 +13,7 @@ export function initMexicoClimate(root:HTMLElement){
   if(notice){notice.hidden=valid;notice.textContent=valid?'':'この観測点の平年値は収録していません。地図の観測点から選び直してください。別都市へは置き換えません。';}
  }
  for(const point of root.querySelectorAll<HTMLElement|SVGElement>('[data-mexico-climate-city]')){
-  const select=()=>{const url=new URL(location.href);url.searchParams.set('city',point.dataset.mexicoClimateCity!);history.pushState(null,'',url);render();root.dispatchEvent(new CustomEvent('mexico-reading-mode',{detail:{selected:true}}));};
+  const select=()=>{const url=new URL(location.href);url.searchParams.set('city',point.dataset.mexicoClimateCity!);history.pushState(null,'',url);render();root.dispatchEvent(new CustomEvent('mexico-climate-city-change'));root.dispatchEvent(new CustomEvent('mexico-reading-mode',{detail:{selected:true}}));};
   point.addEventListener('click',select);
   if(point instanceof SVGElement)point.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();select();}});
  }

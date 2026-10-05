@@ -10,6 +10,7 @@ export type MexicoNatureCategory = '' | typeof natureCategories[number];
 export const natureClassIds = {climate: ['11','12','21','22','31','32','42','51','52','53','54','55','56','57','58','59','61','62','63','64','70'], relief: ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','S/It']} as const;
 export interface MexicoNatureState {
   view: MexicoNatureView;
+  city: string | null;
   category: MexicoNatureCategory;
   item: string;
   feature: string;
@@ -40,6 +41,7 @@ export function readMexicoNatureState(url: URL, codes: readonly string[]): Mexic
   const item = q.get('item') ?? '', feature = q.get('feature') ?? '';
   return {
     view: selectedView,
+    city: q.get('city'),
     category: natureCategories.includes(q.get('category') as typeof natureCategories[number]) ? q.get('category') as MexicoNatureCategory : '',
     item: [...natureClassIds.climate, ...natureClassIds.relief].includes(item as never) ? item : '',
     feature: /^(climate|relief)-[1-9][0-9]*$/.test(feature) ? feature : '',
@@ -53,8 +55,9 @@ export function readMexicoNatureState(url: URL, codes: readonly string[]): Mexic
 }
 export function writeMexicoNatureState(url: URL, state: MexicoNatureState): URL {
   const next = new URL(url);
-  for (const key of ['view', 'category', 'item', 'feature', 'state', 'compare', 'only', 'fallback', 'frame', 'from', 'sourceState', 'sourceOnly', 'sourceFallback', 'sourceMetric', 'sourceView', 'sourceCrops', 'sourceLivestock', 'sourceOnlyItem']) next.searchParams.delete(key);
+  for (const key of ['view', 'city', 'category', 'item', 'feature', 'state', 'compare', 'only', 'fallback', 'frame', 'from', 'sourceState', 'sourceOnly', 'sourceFallback', 'sourceMetric', 'sourceView', 'sourceCrops', 'sourceLivestock', 'sourceOnlyItem']) next.searchParams.delete(key);
   next.searchParams.set('view', state.view); next.searchParams.set('state', state.state);
+  if (state.city !== null && typeof state.city === 'string') next.searchParams.set('city', state.city);
   if (state.category && natureCategories.includes(state.category)) next.searchParams.set('category', state.category);
   if (state.item && [...natureClassIds.climate, ...natureClassIds.relief].includes(state.item as never)) next.searchParams.set('item', state.item);
   if (state.feature && /^(climate|relief)-[1-9][0-9]*$/.test(state.feature)) next.searchParams.set('feature', state.feature);

@@ -22,7 +22,7 @@ export function initMexicoNature(root: HTMLElement): void {
   const text = (selector: string, value: string) => {const element = query(selector); if (element) element.textContent = value;};
   const visible = (selector: string, value: boolean) => {for (const element of all(selector)) element.hidden = !value;};
   const naturalLabel = () => state.category && hydrology ? ({'rivers-groundwater': '河川・地下水', precipitation: '降水量', basins: '河川の流域', elevation: '標高・等高線'}[state.category]) : state.view === 'climate' ? '気候分布' : '地形地域分布';
-  const makeComparisonURL = (comparison: 'irrigation' | 'population') => {const next = writeMexicoNatureState(new URL(config.routes.nature, window.location.origin), {...state, compare: comparison, view: comparison === 'population' || (state.from === 'agriculture' && state.sourceMetric === 'pine') ? 'relief' : 'climate', only: false, frame: state.category ? state.frame : null}); return (hydrology?.url(next) ?? next).href;};
+  const makeComparisonURL = (comparison: 'irrigation' | 'population') => {const next = writeMexicoNatureState(new URL(config.routes.nature, window.location.origin), {...state, compare: comparison, view: comparison === 'population' || (state.from === 'agriculture' && state.sourceMetric === 'pine') ? 'relief' : 'climate', only: false}); return (hydrology?.url(next) ?? next).href;};
   function render(): void {
     const selected = values.get(state.state)!;
     root.classList.toggle('is-comparison', state.compare !== null);
@@ -203,6 +203,7 @@ export function initMexicoNature(root: HTMLElement): void {
   for (const button of all<HTMLButtonElement>('[data-mexico-nature-focus]')) button.addEventListener('click', () => update({frame: stateViewBox(state.state).split(' ').map(Number)}));
   for (const button of all<HTMLButtonElement>('[data-mexico-nature-reset]')) button.addEventListener('click', () => update({frame: null}));
   for (const button of all<HTMLButtonElement>('[data-mexico-nature-zoom]')) button.addEventListener('click', () => update({frame: mexicoNatureZoomFrame(state.frame, config.defaultViewBox.split(' ').map(Number), button.dataset.mexicoNatureZoom === 'in' ? 'in' : 'out')}));
+  root.addEventListener('mexico-climate-city-change', () => {state = {...state, city: new URL(window.location.href).searchParams.get('city')}; render();});
   window.addEventListener('popstate', () => {state = readMexicoNatureState(new URL(window.location.href), codes); hydrology?.read(); render();});
   root.dataset.mexicoNatureReady = 'true'; render(); const initialURL = writeMexicoNatureState(new URL(window.location.href), state); window.history.replaceState(null, '', hydrology?.url(initialURL) ?? initialURL);
 }

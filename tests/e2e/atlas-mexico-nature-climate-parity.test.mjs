@@ -70,6 +70,83 @@ const activate = async (window, element, key = null) => {
   else element.dispatchEvent(new window.KeyboardEvent('keydown', { bubbles: true, cancelable: true, key }));
   await window.happyDOM.waitUntilComplete();
 };
+async function activateNatureLink(window, selector) {
+  const link = root(window).querySelector(selector);
+  assert.ok(link && link.tagName === 'A', 'The named comparison or return anchor exists');
+  assert.ok(!link.hidden, 'The named navigation control is available');
+  // Let the real capture/reading listeners prepare the link as on activation,
+  // then load its final href in a fresh document instead of Happy DOM navigating.
+  link.addEventListener('click', event => event.preventDefault(), { once: true });
+  link.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true, button: 0 }));
+  await window.happyDOM.waitUntilComplete();
+  const destination = new URL(link.href);
+  assert.equal(destination.pathname, new URL(window.location.href).pathname);
+  return destination;
+}
+
+for (const { view, comparison } of [{ view: 'climate', comparison: 'irrigation' }, { view: 'relief', comparison: 'population' }]) {
+  for (const nativeFirst of [false, true]) {
+    test(`${view} comparison entry, reload, named return and reload retain Culiacán and the original camera (${nativeFirst ? 'native' : 'adapter'} first)`, async () => {
+      const windows = [];
+      const load = async (search, order) => {
+        const window = await page(search, order);
+        windows.push(window);
+        return window;
+      };
+      try {
+        const initial = await load(`?view=${view}&state=25&frame=120,40,600,400&reading=overview`, nativeFirst);
+        pressedCity(initial, 'mexico-city-tacubaya');
+        readingMode(initial, false);
+        assert.equal(query(initial).get('compare'), null);
+        const originalFrame = query(initial).get('frame'), originalCamera = camera(initial);
+        assert.equal(originalFrame, '120,40,600,400', 'A framed normal map supplies the comparison camera');
+        assert.equal(originalCamera, '120 40 600 400');
+        await activate(initial, root(initial).querySelector('svg [data-mexico-climate-city="culiacan-dge"]'));
+        pressedCity(initial, 'culiacan-dge');
+        assert.equal(query(initial).get('city'), 'culiacan-dge');
+        assert.equal(camera(initial), originalCamera);
+
+        const comparisonURL = await activateNatureLink(initial, `a[data-mexico-nature-compare-link="${comparison}"]`);
+        assert.equal(comparisonURL.searchParams.get('compare'), comparison);
+        assert.equal(comparisonURL.searchParams.get('view'), view);
+        assert.equal(comparisonURL.searchParams.get('city'), 'culiacan-dge', 'The generated entry link uses the live selected city');
+        assert.equal(comparisonURL.searchParams.get('frame'), originalFrame, 'Entering comparison does not reset the frame');
+        const entered = await load(comparisonURL.search, !nativeFirst);
+        const compared = await load(entered.location.search, nativeFirst);
+        for (const destination of [entered, compared]) {
+          assert.equal(query(destination).get('city'), 'culiacan-dge');
+          assert.equal(query(destination).get('compare'), comparison);
+          assert.equal(query(destination).get('view'), view);
+          assert.equal(query(destination).get('frame'), originalFrame);
+          assert.equal(camera(destination), originalCamera);
+          assert.ok(root(destination).classList.contains('is-comparison'));
+          pressedCity(destination, 'culiacan-dge');
+          readingMode(destination, true);
+        }
+
+        const returnURL = await activateNatureLink(compared, 'a[data-mexico-nature-plain-return]');
+        assert.equal(returnURL.searchParams.get('compare'), null, 'The named return exits comparison');
+        assert.equal(returnURL.searchParams.get('view'), view);
+        assert.equal(returnURL.searchParams.get('city'), 'culiacan-dge', 'The generated return link keeps the selected station');
+        assert.equal(returnURL.searchParams.get('frame'), originalFrame, 'The named return keeps the original frame');
+        const returned = await load(returnURL.search, !nativeFirst);
+        const reloaded = await load(returned.location.search, nativeFirst);
+        for (const destination of [returned, reloaded]) {
+          assert.equal(query(destination).get('city'), 'culiacan-dge');
+          assert.equal(query(destination).get('compare'), null);
+          assert.equal(query(destination).get('view'), view);
+          assert.equal(query(destination).get('frame'), originalFrame, 'Return and normalization never turn the frame into null');
+          assert.equal(camera(destination), originalCamera);
+          assert.ok(!root(destination).classList.contains('is-comparison'));
+          pressedCity(destination, 'culiacan-dge');
+          readingMode(destination, true);
+        }
+      } finally {
+        for (const window of windows) await window.happyDOM.close();
+      }
+    });
+  }
+}
 
 test('Built SSR includes both SMN plots, twelve source values each, and the default capital graph', async () => {
   const window = await page('', false, false);
