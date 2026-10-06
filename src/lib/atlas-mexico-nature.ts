@@ -28,6 +28,7 @@ export interface MexicoNatureState {
   sourceLivestock: boolean;
   sourceOnlyItem: boolean;
   sourceView: 'density' | 'population';
+  sourceAgricultureAtlas?: {item:'corn'|'irrigation'|'pine'|'cattle';state:string|null;camera:[number,number,number]};
 }
 const validState = (value: string | null, codes: readonly string[], fallback: string) => value && codes.includes(value) ? value : fallback;
 export function readMexicoNatureState(url: URL, codes: readonly string[]): MexicoNatureState {
@@ -39,6 +40,11 @@ export function readMexicoNatureState(url: URL, codes: readonly string[]): Mexic
   const metric = q.get('sourceMetric'), view = q.get('view'), from = q.get('from');
   const selectedView: MexicoNatureView = natureViews.includes(view as MexicoNatureView) ? view as MexicoNatureView : comparison === 'population' || (comparison === 'irrigation' && from === 'agriculture' && metric === 'pine') ? 'relief' : 'climate';
   const item = q.get('item') ?? '', feature = q.get('feature') ?? '';
+  const sourceAgriItem=q.get('sourceAgriItem'),sourceAgriState=q.get('sourceAgriState'),sourceAgriCamera=q.get('sourceAgriCamera')?.split(',').map(Number);
+  const sourceItemForMetric=metric==='maize'?'corn':metric;
+  const sourceAgricultureAtlas=from==='agriculture'&&['corn','irrigation','pine','cattle'].includes(sourceAgriItem??'')&&sourceAgriItem===sourceItemForMetric&&(sourceAgriState==='none'||codes.includes(sourceAgriState??''))&&sourceAgriCamera?.length===3&&sourceAgriCamera.every(Number.isFinite)&&sourceAgriCamera[2]>=1&&sourceAgriCamera[2]<=5&&sourceAgriCamera[0]>=450/sourceAgriCamera[2]&&sourceAgriCamera[0]<=900-450/sourceAgriCamera[2]&&sourceAgriCamera[1]>=290/sourceAgriCamera[2]&&sourceAgriCamera[1]<=580-290/sourceAgriCamera[2]
+    ?{item:sourceAgriItem as 'corn'|'irrigation'|'pine'|'cattle',state:sourceAgriState==='none'?null:sourceAgriState,camera:sourceAgriCamera as [number,number,number]}:undefined;
+
   return {
     view: selectedView,
     city: q.get('city'),
@@ -50,12 +56,13 @@ export function readMexicoNatureState(url: URL, codes: readonly string[]): Mexic
     sourceState: validState(q.get('sourceState'), codes, state), sourceOnly: q.get('sourceOnly') === '1' || (!q.has('sourceOnly') && q.get('only') === '1'),
     sourceFallback: q.get('sourceFallback') === '1' || (!q.has('sourceFallback') && q.get('fallback') === '1'),
     sourceMetric: metric === 'maize' || metric === 'cattle' || metric === 'pine' || metric === 'irrigation' ? metric : 'irrigation', sourceView: q.get('sourceView') === 'population' ? 'population' : 'density',
+    ...(sourceAgricultureAtlas?{sourceAgricultureAtlas}:{}),
     sourceCrops: q.get('sourceCrops') !== '0', sourceLivestock: q.get('sourceLivestock') !== '0', sourceOnlyItem: q.get('sourceOnlyItem') === '1',
   };
 }
 export function writeMexicoNatureState(url: URL, state: MexicoNatureState): URL {
   const next = new URL(url);
-  for (const key of ['view', 'city', 'category', 'item', 'feature', 'state', 'compare', 'only', 'fallback', 'frame', 'from', 'sourceState', 'sourceOnly', 'sourceFallback', 'sourceMetric', 'sourceView', 'sourceCrops', 'sourceLivestock', 'sourceOnlyItem']) next.searchParams.delete(key);
+  for (const key of ['view', 'city', 'category', 'item', 'feature', 'state', 'compare', 'only', 'fallback', 'frame', 'from', 'sourceState', 'sourceOnly', 'sourceFallback', 'sourceMetric', 'sourceView', 'sourceCrops', 'sourceLivestock', 'sourceOnlyItem', 'sourceAgriItem', 'sourceAgriState', 'sourceAgriCamera']) next.searchParams.delete(key);
   next.searchParams.set('view', state.view); next.searchParams.set('state', state.state);
   if (state.city !== null && typeof state.city === 'string') next.searchParams.set('city', state.city);
   if (state.category && natureCategories.includes(state.category)) next.searchParams.set('category', state.category);
@@ -69,7 +76,7 @@ export function writeMexicoNatureState(url: URL, state: MexicoNatureState): URL 
   if (state.from) {
     next.searchParams.set('from', state.from); next.searchParams.set('sourceState', state.sourceState); next.searchParams.set('sourceOnly', state.sourceOnly ? '1' : '0');
     next.searchParams.set('sourceFallback', state.sourceFallback ? '1' : '0');
-    if (state.from === 'agriculture') {next.searchParams.set('sourceMetric', state.sourceMetric); next.searchParams.set('sourceCrops', state.sourceCrops ? '1' : '0'); next.searchParams.set('sourceLivestock', state.sourceLivestock ? '1' : '0'); next.searchParams.set('sourceOnlyItem', state.sourceOnlyItem ? '1' : '0');}
+    if (state.from === 'agriculture') {if(state.sourceAgricultureAtlas){next.searchParams.set('sourceAgriItem',state.sourceAgricultureAtlas.item);next.searchParams.set('sourceAgriState',state.sourceAgricultureAtlas.state??'none');next.searchParams.set('sourceAgriCamera',state.sourceAgricultureAtlas.camera.join(','));}next.searchParams.set('sourceMetric', state.sourceMetric); next.searchParams.set('sourceCrops', state.sourceCrops ? '1' : '0'); next.searchParams.set('sourceLivestock', state.sourceLivestock ? '1' : '0'); next.searchParams.set('sourceOnlyItem', state.sourceOnlyItem ? '1' : '0');}
     if (state.from === 'population') next.searchParams.set('sourceView', state.sourceView);
   }
   return next;
@@ -77,6 +84,11 @@ export function writeMexicoNatureState(url: URL, state: MexicoNatureState): URL 
 export function mexicoNatureReturnUrl(base: string, state: MexicoNatureState): string {
   const q = new URLSearchParams({state: state.from ? state.sourceState : state.state});
   if (state.from === 'agriculture') {q.set('metric', state.sourceMetric); if (!state.sourceCrops) q.set('crops', '0'); if (!state.sourceLivestock) q.set('livestock', '0'); if (state.sourceOnlyItem) q.set('onlyItem', '1');}
+  if(state.from==='agriculture'&&state.sourceAgricultureAtlas){
+    const source=state.sourceAgricultureAtlas;q.set('agriItem',source.item);q.set('reading','item');
+    if(source.state)q.set('state',source.state);else q.delete('state');
+    const [x,y,zoom]=source.camera;if(zoom>1){q.set('ax',String(x));q.set('ay',String(y));q.set('az',String(zoom));}
+  }
   if (state.from === 'population') q.set('view', state.sourceView);
   if (state.sourceOnly) q.set('only', '1');
   if (state.sourceFallback) q.set('fallback', '1');

@@ -24,8 +24,10 @@ for(const nativeFirst of [false,true]){
  const result=await build({stdin:{contents:`${imports}\n${initialIntent}\n${nativeFirst?'initializeNative();':''}\n${adapter}\n${nativeFirst?'':'initializeNative();'}`,resolveDir:process.cwd(),sourcefile:'mexico-reading-entry.ts',loader:'ts'},absWorkingDir:process.cwd(),tsconfigRaw:{},plugins:[modules],bundle:true,format:'iife',platform:'browser',write:false});
  codes[String(nativeFirst)]=result.outputFiles[0].text;
 }
+const agricultureBundle=await build({entryPoints:['src/scripts/atlas-mexico-agriculture-atlas.ts'],bundle:true,write:false,format:'iife',globalName:'MexicoAgricultureAtlas'});
+const agricultureCode=agricultureBundle.outputFiles[0].text+';MexicoAgricultureAtlas.initMexicoAgricultureAtlas(document.querySelector("[data-mexico-agriculture-atlas]"));';
 const fields={
- agriculture:{select:'[data-agriculture-state]',state:'08',shape:'path[data-agriculture-state-code="08"]'},
+ agriculture:{select:'[data-agriculture-state]',state:'08',shape:'path[data-mexico-state-outline="08"]'},
  nature:{select:'[data-mexico-nature-state-select]',state:'26',shape:'path[data-mexico-nature-state="26"]'},
  industry:{select:'[data-mi-state-select]',state:'14',shape:'[data-mi-map="primary"] [data-mi-shape="14"]'},
  population:{select:'[data-population-state]',state:'19',shape:'[data-population-state-shape="19"]'},
@@ -44,7 +46,8 @@ async function page(field,search='',nativeFirst=false,listenerCheckpoints=false)
    while(pending.length)pending.shift()();
   },options);
  }
- window.eval(codes[String(nativeFirst)]);
+ window.HTMLElement.prototype.scrollIntoView=function(){};
+ window.eval(field==='agriculture'?agricultureCode:codes[String(nativeFirst)]);
  await window.happyDOM.waitUntilComplete();
  return window;
 }
@@ -53,8 +56,8 @@ function assertMode(window,selected){
  const root=window.document.querySelector('[data-mexico-workspace]');
  assert.equal(root.dataset.mexicoReadingSelected,String(selected));
  assert.equal(query(window).get('reading'),selected?'item':'overview');
- assert.equal(root.querySelector('[data-mexico-country-overview]').hidden,selected);
- assert.equal(root.querySelector('[data-mexico-overview-button]').hidden,!selected);
+ assert.equal(root.querySelector(root.dataset.mexicoField==='agriculture'?'[data-agri-overview]':'[data-mexico-country-overview]').hidden,selected);
+ if(root.dataset.mexicoField==='agriculture')assert.equal(root.querySelector('[data-agri-reading-panel]').hidden,!selected);else assert.equal(root.querySelector('[data-mexico-overview-button]').hidden,!selected);
 }
 async function selectState(window,field){
  const select=window.document.querySelector(fields[field].select);select.value=fields[field].state;select.dispatchEvent(new window.Event('change',{bubbles:true}));
@@ -69,7 +72,7 @@ async function selectState(window,field){
   const pin=window.document.querySelector(`[data-mi-map="primary"] [data-mi-reading-markers] [data-mi-region-option="${fields[field].state}"]:not([hidden])`);
   assert.ok(pin,'The selected industry state must have a visible reading pin');
   assert.equal(pin.getAttribute('aria-pressed'),'true');assert.equal(pin.classList.contains('is-selected'),true);
- }else assert.equal(shape.getAttribute('aria-pressed'),'true');
+ }else if(field==='agriculture')assert.equal(shape.hasAttribute('hidden'),false);else assert.equal(shape.getAttribute('aria-pressed'),'true');
 }
 
 for(const field of Object.keys(fields)){
@@ -86,7 +89,7 @@ for(const field of Object.keys(fields)){
    await selectState(window,field);
    window.history.back();await window.happyDOM.waitUntilComplete();assertMode(window,false);
    window.history.forward();await window.happyDOM.waitUntilComplete();assertMode(window,true);assert.equal(query(window).get('state'),fields[field].state);
-   window.document.querySelector('[data-mexico-overview-button]').click();await window.happyDOM.waitUntilComplete();assertMode(window,false);assert.equal(query(window).get('state'),fields[field].state);
+   window.document.querySelector(field==='agriculture'?'[data-agri-overview-button]':'[data-mexico-overview-button]').click();await window.happyDOM.waitUntilComplete();assertMode(window,false);assert.equal(query(window).get('state'),fields[field].state);
    reload=await page(field,window.location.search,true);assertMode(reload,false);
    await selectState(reload,field);
    window.history.back();await window.happyDOM.waitUntilComplete();assertMode(window,true);assert.equal(query(window).get('state'),fields[field].state);

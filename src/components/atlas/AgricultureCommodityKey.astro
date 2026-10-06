@@ -1,0 +1,12 @@
+---
+interface Crop { id:string; name:string; color:string; href?:string }
+interface Animal { id:string; label:string; symbol:string; color:string; href?:string }
+interface Props { crops:Crop[]; livestock:Animal[]; active?:boolean; overlap?:boolean; forestryHref?:string }
+const {crops,livestock,active=true,overlap=true,forestryHref='#forestry-timber'}=Astro.props;
+---
+<div class="atlas-key" data-crop-key hidden={!active} aria-label="栽培域の凡例">
+ <span class="agri-picker-group" id="agri-crop-picker"><strong>作物</strong>{crops.map(c=><a href={c.href??`#crop-${c.id}`} style={`--crop-color:${c.color}`} data-crop-select={c.id}><i aria-hidden="true"></i>{c.name}</a>)}</span>
+ {overlap&&<span class="atlas-overlap-key"><i aria-hidden="true"></i>重なり</span>}
+ <span class="atlas-livestock-key agri-picker-group" data-livestock-key id="agri-livestock-picker"><strong>畜産</strong>{livestock.map(k=><a href={k.href??`#livestock-${k.id}`} style={`--livestock-color:${k.color}`} data-livestock-select={k.id}><i aria-hidden="true">{k.symbol}</i>{k.label}</a>)}</span>
+ <span class="agri-picker-group"><strong>林業</strong><a href={forestryHref} data-forestry-select>森林資源と木材生産</a></span>
+</div>

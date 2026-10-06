@@ -1,0 +1,658 @@
+{
+  "schemaVersion": 1,
+  "label": "2021年の樹木被覆",
+  "retrieved": "2026-10-06",
+  "source": {
+    "title": "ESA WorldCover 10 m 2021 v200",
+    "sourceUrl": "https://esa-worldcover.org/en/data-access",
+    "doi": "https://doi.org/10.5281/zenodo.7254221",
+    "publisher": "ESA WorldCover consortium",
+    "referenceYear": 2021,
+    "license": "CC-BY-4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "attribution": "© ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium"
+  },
+  "file": "tree-cover-2021.png",
+  "bytes": 68484,
+  "sha256": "00e9777b1246634355a653e7fc18a252a3830c0794fa507d7e110be480e8e891",
+  "width": 1800,
+  "height": 1160,
+  "mapViewBox": "0 0 900 580",
+  "projection": {
+    "name": "INEGI Lambert Conformal Conic",
+    "datum": "ITRF92",
+    "ellipsoid": "GRS80",
+    "semiMajorM": 6378137,
+    "inverseFlattening": 298.257222101,
+    "standardParallel1": 17.5,
+    "standardParallel2": 29.5,
+    "latitudeOrigin": 12,
+    "centralMeridian": -102,
+    "falseEastingM": 2500000,
+    "falseNorthingM": 0
+  },
+  "frame": {
+    "mapWidth": 900,
+    "mapHeight": 580,
+    "boundsNative": [
+      911292.029449366,
+      319149.06252919696,
+      4083063.0952772293,
+      2349614.87171421
+    ],
+    "scale": 0.00025806886165215595,
+    "left": 40.73232581027895,
+    "top": 28
+  },
+  "sourceClass": 10,
+  "sourceNoData": 0,
+  "displayUnknownCode": 255,
+  "extraction": {
+    "availableTiles": 45,
+    "unavailableSourceTiles": [
+      "N18W117"
+    ],
+    "boundedAcquisitionBytes": 3547793,
+    "complete10mTilesDownloaded": 0,
+    "originalTileDimensions": [
+      36000,
+      36000
+    ],
+    "sampledOverviewDimensions": [
+      562,
+      562
+    ],
+    "overviewResolutionDegrees": 0.005338078291814947,
+    "overviewApproxResolutionAtEquatorM": 594,
+    "providerOverviewResampling": "Not specified in source metadata; no quantitative area aggregation claim",
+    "displayResampling": "Nearest-neighbour categorical sampling at pixel centers using the exact existing Mexico Lambert inverse projection",
+    "countryMask": "Existing INEGI Mexico states, preserving holes; pixel-center inclusion",
+    "sourceRanges": [
+      {
+        "tile": "N12W093",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N12W093_Map.tif",
+        "prefixSha256": "3ec69c0ea016a52ddc636abef31047298cf63ae6f7fea48db139d1e56f31fb2d",
+        "overviewSha256": "3974350c8cd90c3fcc090769511547d79953b0a8abfa69b43afbeb60e1514129",
+        "overviewRange": "bytes=27560-44558"
+      },
+      {
+        "tile": "N15W090",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N15W090_Map.tif",
+        "prefixSha256": "bf09262486472b460296cde3c0964945fff6908712230966ad26f07269e77bfd",
+        "overviewSha256": "4dc4d85903ca1d39daa8b3113449bfef6e67cf508f657796d273a0feb0188028",
+        "overviewRange": "bytes=27560-57268"
+      },
+      {
+        "tile": "N15W093",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N15W093_Map.tif",
+        "prefixSha256": "7b0565ac247226ad2ad154674bfe79ae0af52fc209b7a368d68cfee0c846d431",
+        "overviewSha256": "f9e5d2fdc35ff58ff0a7af429a93a5bda04e4dc941ea0c3ee9845e09760488f9",
+        "overviewRange": "bytes=27560-72130"
+      },
+      {
+        "tile": "N15W096",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N15W096_Map.tif",
+        "prefixSha256": "4b5ddd77bd94a3c90c165401a493458ad52222a873672a0a0bc96269fba82c04",
+        "overviewSha256": "ac8adf8dcf679cc777cbabed5d9cd763f41b8b46b19f32551c841f71a1d4bfe2",
+        "overviewRange": "bytes=27560-63112"
+      },
+      {
+        "tile": "N15W099",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N15W099_Map.tif",
+        "prefixSha256": "5d3db0fcb595855ca015f27fac580b6f4f1c3c7bca10c8e4719a14cc36aca882",
+        "overviewSha256": "240844555aeaa1862e696faa0be22c9a4fb69db32b92610aab699e304dae22cc",
+        "overviewRange": "bytes=27560-59137"
+      },
+      {
+        "tile": "N15W102",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N15W102_Map.tif",
+        "prefixSha256": "0b003c64fc3b99decd03bbad1595e9085615e71fbe6996e3199d8f6eb30e5efa",
+        "overviewSha256": "bf6eec508b1820bc099360e8bbddd0d909dea527b1c4da19980c648b93011a43",
+        "overviewRange": "bytes=27560-44155"
+      },
+      {
+        "tile": "N15W105",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N15W105_Map.tif",
+        "prefixSha256": "c3796980ec38abafd427c1cebf622085c6ad1607536b7a7ee23e2f2432cf5bbb",
+        "overviewSha256": "246d772c5f84524e51d485db545ab58c8dd871fc2f48e7d1c8fa794f0d84c4e9",
+        "overviewRange": "bytes=27560-29144"
+      },
+      {
+        "tile": "N18W087",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N18W087_Map.tif",
+        "prefixSha256": "c45ea20202d2eeca3f5f5996ff6986800dbd851c74556ec8ca9630b788ae22ab",
+        "overviewSha256": "cda320d18cce656f4d0aa4f666baa2a2f1c095879a744807e8c40c0cd6526076",
+        "overviewRange": "bytes=27560-29817"
+      },
+      {
+        "tile": "N18W090",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N18W090_Map.tif",
+        "prefixSha256": "1efd4de147ac2cc42b35d1bbaede657f7aee9b2a7ccdc3f4d2b0c2461a477353",
+        "overviewSha256": "b7e0510ab27e5568203f6eddcc7f8dca3c29a4a5080dd71a3852fda0e92c88e9",
+        "overviewRange": "bytes=27560-50097"
+      },
+      {
+        "tile": "N18W093",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N18W093_Map.tif",
+        "prefixSha256": "b0b3ccc6d408df4ade85f71b6b9f6efacd2d9f785f47dae826cd484d6f444142",
+        "overviewSha256": "568372330c42beb73598e3d84f8f853b6830a70a902546eb8387eb106e2c8021",
+        "overviewRange": "bytes=27560-50788"
+      },
+      {
+        "tile": "N18W096",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N18W096_Map.tif",
+        "prefixSha256": "a3d070ad371156683960fa113ce9a504d98ceb8116d730da39fa33da6a766e60",
+        "overviewSha256": "fe14f635ead98cd9545626598da26cf3601b2a87d1e21282cabaee1a5e626d3f",
+        "overviewRange": "bytes=27560-42299"
+      },
+      {
+        "tile": "N18W099",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N18W099_Map.tif",
+        "prefixSha256": "574bc91256f1d3dc9212d6c5262b400414b904e6591175f4305bebb1203ea3eb",
+        "overviewSha256": "2c378a418e4a7d2fdc48d0bdfa3b40d02b1b25773d2af8f26c7ee77bed37a6db",
+        "overviewRange": "bytes=27560-78731"
+      },
+      {
+        "tile": "N18W102",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N18W102_Map.tif",
+        "prefixSha256": "ab2b9af80bb37ba485dab67ee8d94d491639f3459b8d034fbee57eb27d9f9d48",
+        "overviewSha256": "0905126852ceea693be586add266906f3677d7887f0424397d1d11ba38aad21e",
+        "overviewRange": "bytes=27560-95523"
+      },
+      {
+        "tile": "N18W105",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N18W105_Map.tif",
+        "prefixSha256": "be67d829960bca226cb3bb9b919b1738feb3a04bd7d44064166333c4522ec1de",
+        "overviewSha256": "a9305f8708d36c6834c1729598e49fb8faa084978e6d9d7e1bde08af8ed18665",
+        "overviewRange": "bytes=27560-81152"
+      },
+      {
+        "tile": "N18W108",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N18W108_Map.tif",
+        "prefixSha256": "709a3f12c819de2c9f8a42e7d15ef88dd44a93ba9924b664f8b1473a6e70bca6",
+        "overviewSha256": "a19557b5a2de6f5b625e7f81b46858c46c1da436b3780012611dffee07d10552",
+        "overviewRange": "bytes=27560-32739"
+      },
+      {
+        "tile": "N18W111",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N18W111_Map.tif",
+        "prefixSha256": "4939d05337d11ea4f080212420448772df3deeb09724db3ffdb6ea7a76793025",
+        "overviewSha256": "03a3615c7256cc3561b44c5cc113b50684cb4f0ce31727c3bbe93a9d12a8d7b8",
+        "overviewRange": "bytes=27560-29352"
+      },
+      {
+        "tile": "N18W114",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N18W114_Map.tif",
+        "prefixSha256": "247ed55f36493f361a68f18c9187ac075598dc45be4873f3df96d58f7479bf40",
+        "overviewSha256": "6dea588e945b47eb0142a9ea95805f8d1bcc78f80790de63e5f77c1c465e3b04",
+        "overviewRange": "bytes=27560-29199"
+      },
+      {
+        "tile": "N21W087",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N21W087_Map.tif",
+        "prefixSha256": "e10a8c06fa427b8713d5b82bed386793b07c8ffbf23b0d8dd3043e88a5e0cb9d",
+        "overviewSha256": "dabe19d4eabd687a4d737086b3030daeca1e38c45baa67d926d296025b7dd021",
+        "overviewRange": "bytes=27560-33414"
+      },
+      {
+        "tile": "N21W090",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N21W090_Map.tif",
+        "prefixSha256": "07ce56d4c015a679c09fafa1388a0a8b1b84853d0a9293ae350e7eef45bcfae3",
+        "overviewSha256": "41fe55bc4be561e5c769025dd0a6fd8e770244b7abe2b3b83efad569594c7d67",
+        "overviewRange": "bytes=27560-36697"
+      },
+      {
+        "tile": "N21W093",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N21W093_Map.tif",
+        "prefixSha256": "a9f73b2d967ad23d12ad67e02521a70d1e43a1d65bbeedfe2d0a469822cd33a4",
+        "overviewSha256": "9a19026afbe11ff4885c0d7a44d282690093221bd39cc9cea0260d6cd3fb1b1d",
+        "overviewRange": "bytes=27560-29825"
+      },
+      {
+        "tile": "N21W099",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N21W099_Map.tif",
+        "prefixSha256": "7d5cec94680480a82d98ce0dc54488144bea43a4fceef0596e26da841c925111",
+        "overviewSha256": "76b05f1c4c1a67de0fa412525911e2315262ccc5d5d8a24fd820231037ed3c9c",
+        "overviewRange": "bytes=27560-58664"
+      },
+      {
+        "tile": "N21W102",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N21W102_Map.tif",
+        "prefixSha256": "512d3b54f28770b541d3782e316f381ea92308da415c3295e91b679c4225c2de",
+        "overviewSha256": "15675c5b91b4bc37123d3c0ff40d5a028e9784a603c4b2a15a7abc4174fdac8d",
+        "overviewRange": "bytes=27560-71672"
+      },
+      {
+        "tile": "N21W105",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N21W105_Map.tif",
+        "prefixSha256": "9942adad358fc108d002f7903e95257b8092dfd8f0ebb0ca1fce13db51bd29be",
+        "overviewSha256": "02e10fe04d2a770d271eea6cb1ec130f72b3ac6a27267193c0e3dd9afda27ad5",
+        "overviewRange": "bytes=27560-85864"
+      },
+      {
+        "tile": "N21W108",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N21W108_Map.tif",
+        "prefixSha256": "4ac411aca915f8f8f9e48a7619d393e263a0666ece195fed05e559d8a17f9c5f",
+        "overviewSha256": "eb1284c1d63b93e3f04924d791cfcaf814eb8c49ea8e1db957df026b0da12238",
+        "overviewRange": "bytes=27560-44727"
+      },
+      {
+        "tile": "N21W111",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N21W111_Map.tif",
+        "prefixSha256": "f8583a62cd5c309f72e7628206eec7a401794efc505802a518b0746f32fea091",
+        "overviewSha256": "15ad3621231f98d6630a0c2a04614650b49b039647b69b148021cb5333ffb1ad",
+        "overviewRange": "bytes=27560-32449"
+      },
+      {
+        "tile": "N24W099",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N24W099_Map.tif",
+        "prefixSha256": "0a5a4f2126949811ddf2502b052dade17a1e0bcc33fa8ca907344b0f6ddebe5e",
+        "overviewSha256": "b04acbd182c815a4e9d04dc6140eaca0416fa25b152741124eca9e9e091c724a",
+        "overviewRange": "bytes=27560-64885"
+      },
+      {
+        "tile": "N24W102",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N24W102_Map.tif",
+        "prefixSha256": "1011e0673b5129a6d55260a1e3d4e608ad40f826bd8ab42361081bfebe6040e6",
+        "overviewSha256": "de2c66d8e70312370c366b550a84c6ef7c383d7b36a897c1e9f3661221712280",
+        "overviewRange": "bytes=27560-67704"
+      },
+      {
+        "tile": "N24W105",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N24W105_Map.tif",
+        "prefixSha256": "32a85b531b2078346504b6f032ef369ad0738a365d4dfa9db7cbb97be314abb7",
+        "overviewSha256": "222db5b435c0856f80ed6f5890b47fc24f3b273fc3519a9399a84beed4b59303",
+        "overviewRange": "bytes=27560-61282"
+      },
+      {
+        "tile": "N24W108",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N24W108_Map.tif",
+        "prefixSha256": "0b2c97903d2df8712949e7cb12e765013ad028df6e3efd818152b59b68a8856e",
+        "overviewSha256": "f9752ddecd6deb9788b1c0b0b4627b9c6480efdfc3f6cb2af37acdbee8e5e32e",
+        "overviewRange": "bytes=27560-68717"
+      },
+      {
+        "tile": "N24W111",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N24W111_Map.tif",
+        "prefixSha256": "d4a7365cbc164730041e71c5184370803be1be3e64e504dbb6ec35150100de8c",
+        "overviewSha256": "6e82666c64d196d7860554325248022667537fc41089930f1c49479a4677d304",
+        "overviewRange": "bytes=27560-51309"
+      },
+      {
+        "tile": "N24W114",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N24W114_Map.tif",
+        "prefixSha256": "30ad8669432d450defb46454c209db217aba3c1cb677d1fba2c0c747cb51770c",
+        "overviewSha256": "cc4a34c46dfde3e005bd9691f814e6a29fe7c30ef21cfe0119db6e284101ba41",
+        "overviewRange": "bytes=27560-44135"
+      },
+      {
+        "tile": "N24W117",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N24W117_Map.tif",
+        "prefixSha256": "2064de15b8c584ec6c6882c9d31c0a74b0ae7e9c7c4724ee5149296b02dcb24a",
+        "overviewSha256": "d619659afa00bd51379e99b06e5fc1a16d097d84608ab9d047b166bcd77a48f5",
+        "overviewRange": "bytes=27560-29130"
+      },
+      {
+        "tile": "N27W102",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N27W102_Map.tif",
+        "prefixSha256": "99654a365eb6c0809a0dd5b659eb07786b246c07c335a1a3d1f974590cc116ea",
+        "overviewSha256": "3a2df2aa5fac6c931339bcc2cbf4f998383bd2d05821fec9fb3cfd5beac981f9",
+        "overviewRange": "bytes=27560-61173"
+      },
+      {
+        "tile": "N27W105",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N27W105_Map.tif",
+        "prefixSha256": "65bf00923ab3fbfb72f7209de87a1a1d62718a78adb809b837fc5e86e4835aff",
+        "overviewSha256": "e9122f5d99fa1021cc50f433a230cd5419035ce876b9663fa1047e7e0988b8c1",
+        "overviewRange": "bytes=27560-59672"
+      },
+      {
+        "tile": "N27W108",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N27W108_Map.tif",
+        "prefixSha256": "c9bf144cbc709b61662707ebc627ae20711222cc3a1b73cdfa4d14251f32f343",
+        "overviewSha256": "71c963abb9d10e03c44deb7d74b754252eeb61fc07af10a405ff6d8eb9a606e4",
+        "overviewRange": "bytes=27560-80355"
+      },
+      {
+        "tile": "N27W111",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N27W111_Map.tif",
+        "prefixSha256": "3c72423c797e8566ef53474ab1d72b2349ae1d3986dfcc45e7049082e3503f45",
+        "overviewSha256": "3da8f638d104cee7f840179157f1caab65f38e017740b8daa0c5154eff8ed27f",
+        "overviewRange": "bytes=27560-62798"
+      },
+      {
+        "tile": "N27W114",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N27W114_Map.tif",
+        "prefixSha256": "a5048b1214a021c44c38f18b8660bc3622309c31f4162109a844d00ce3c8ea1e",
+        "overviewSha256": "5714356d7f85bbb15188c106d74ff18afadcd5308473573c7292faa3a2331f91",
+        "overviewRange": "bytes=27560-50464"
+      },
+      {
+        "tile": "N27W117",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N27W117_Map.tif",
+        "prefixSha256": "3a9940ee81eff90f11c3bb6458ed1879e7cd4b3d1d69714a81d74f813e537211",
+        "overviewSha256": "eb87d6e44985dcf408fc3c2e7fc622a55ebcc5a598026e293af9cfedb3d0fb4c",
+        "overviewRange": "bytes=27560-38453"
+      },
+      {
+        "tile": "N27W120",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N27W120_Map.tif",
+        "prefixSha256": "b64296c92aa56a2eca7057702642b13d45f4ea1cd8b155cf489c753a424fbedf",
+        "overviewSha256": "39d6cbd516410d92fbce77e9dc9dfa7a6964a1cbb8ed6dae5805bd4bc159ff15",
+        "overviewRange": "bytes=27560-29500"
+      },
+      {
+        "tile": "N30W105",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N30W105_Map.tif",
+        "prefixSha256": "04004d2ef3b0503f9ce1921da1a63a560a60bfa045daf4416d7c7dad417faa82",
+        "overviewSha256": "d51a06f8d2b652382d87eaff5abb459e12ac616b1534f5df923296db01e6b7d3",
+        "overviewRange": "bytes=27560-72303"
+      },
+      {
+        "tile": "N30W108",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N30W108_Map.tif",
+        "prefixSha256": "3d2e987e7584653220cc80ddc120cc9115d888608bb789e2b9feda71502aa562",
+        "overviewSha256": "826f576cb6aba8c36a32da17e63817b0dfad9ec43ca7af8cd77ee486bed63e9f",
+        "overviewRange": "bytes=27560-81646"
+      },
+      {
+        "tile": "N30W111",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N30W111_Map.tif",
+        "prefixSha256": "9ad54ddccdea99d7da6eac4544e1eead35efc0ced1de505d39faef8a7adb3de3",
+        "overviewSha256": "d35da47a7ff9cc44360d2759f9469ba1ec33b87ff3e4d262dd4086575ddfa786",
+        "overviewRange": "bytes=27560-73584"
+      },
+      {
+        "tile": "N30W114",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N30W114_Map.tif",
+        "prefixSha256": "995bab208bc4a5917eebb69f43a59b9287daa0d9118a69471389bc08030c49c1",
+        "overviewSha256": "07146a127d2bcebb41f7b49421f698659c22052d8d56eb78cd11f9cc72ffc9b4",
+        "overviewRange": "bytes=27560-57246"
+      },
+      {
+        "tile": "N30W117",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N30W117_Map.tif",
+        "prefixSha256": "9d42e736428f87e9553c381da3f76e4209a51c3adf5698ff5cec6e58f6692d5f",
+        "overviewSha256": "fdb03fdff81e2673cd5316da731374042e7a236af8f10f87392d0f6d0fb0a12c",
+        "overviewRange": "bytes=27560-54237"
+      },
+      {
+        "tile": "N30W120",
+        "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N30W120_Map.tif",
+        "prefixSha256": "18aaffccdf686dbbb52db651d21d44fe0ad8da6ceda4c3a0b9f7cf980bcffb79",
+        "overviewSha256": "0032ad954ca762dde21a1b044a6696154e0343df50b61b9b26581aad1b69c774",
+        "overviewRange": "bytes=27560-31283"
+      }
+    ]
+  },
+  "definition": "Source class10 tree cover, including plantations and orchards where mapped. Not pine distribution, harvest extent, forest legal status, timber availability or forest area statistics. Mangrove source class95 is separate and not included.",
+  "limitations": [
+    "Source2021 data and pine harvest2022 quantities are different indicators and remain separate.",
+    "Provider overview is approximately0.6km at equator; this national display is further generalized. It does not have10m display precision.",
+    "Other cover and missing source data are both transparent in the visual overlay, but their counts are tracked separately; no tree-area or percent-cover statistic is computed.",
+    "Small islands and patches can be unresolved by pixel centers. One offshore source tile N18W117 is unavailable and remains missing."
+  ],
+  "coverage": {
+    "displayPixelsInsideMexico": 520475,
+    "treeDisplayPixels": 171807,
+    "otherValidDisplayPixels": 348661,
+    "missingDisplayPixels": 7,
+    "missingTileCounts": {
+      "N18W117": 7
+    },
+    "observedCodes": {
+      "10": 171807,
+      "20": 203597,
+      "30": 59565,
+      "40": 35664,
+      "50": 4934,
+      "60": 32318,
+      "80": 6690,
+      "90": 2998,
+      "95": 2895
+    },
+    "stateCoverage": [
+      {
+        "code": "01",
+        "displayPixels": 1470,
+        "treePixels": 92,
+        "otherValidPixels": 1378,
+        "missingPixels": 0
+      },
+      {
+        "code": "02",
+        "displayPixels": 19567,
+        "treePixels": 114,
+        "otherValidPixels": 19453,
+        "missingPixels": 0
+      },
+      {
+        "code": "03",
+        "displayPixels": 19038,
+        "treePixels": 176,
+        "otherValidPixels": 18862,
+        "missingPixels": 0
+      },
+      {
+        "code": "04",
+        "displayPixels": 15251,
+        "treePixels": 10711,
+        "otherValidPixels": 4540,
+        "missingPixels": 0
+      },
+      {
+        "code": "05",
+        "displayPixels": 40129,
+        "treePixels": 1079,
+        "otherValidPixels": 39050,
+        "missingPixels": 0
+      },
+      {
+        "code": "06",
+        "displayPixels": 1537,
+        "treePixels": 1164,
+        "otherValidPixels": 366,
+        "missingPixels": 7
+      },
+      {
+        "code": "07",
+        "displayPixels": 19623,
+        "treePixels": 13056,
+        "otherValidPixels": 6567,
+        "missingPixels": 0
+      },
+      {
+        "code": "08",
+        "displayPixels": 65822,
+        "treePixels": 14681,
+        "otherValidPixels": 51141,
+        "missingPixels": 0
+      },
+      {
+        "code": "09",
+        "displayPixels": 395,
+        "treePixels": 159,
+        "otherValidPixels": 236,
+        "missingPixels": 0
+      },
+      {
+        "code": "10",
+        "displayPixels": 32524,
+        "treePixels": 12354,
+        "otherValidPixels": 20170,
+        "missingPixels": 0
+      },
+      {
+        "code": "11",
+        "displayPixels": 8073,
+        "treePixels": 910,
+        "otherValidPixels": 7163,
+        "missingPixels": 0
+      },
+      {
+        "code": "12",
+        "displayPixels": 16956,
+        "treePixels": 11111,
+        "otherValidPixels": 5845,
+        "missingPixels": 0
+      },
+      {
+        "code": "13",
+        "displayPixels": 5498,
+        "treePixels": 2176,
+        "otherValidPixels": 3322,
+        "missingPixels": 0
+      },
+      {
+        "code": "14",
+        "displayPixels": 20756,
+        "treePixels": 9477,
+        "otherValidPixels": 11279,
+        "missingPixels": 0
+      },
+      {
+        "code": "15",
+        "displayPixels": 5916,
+        "treePixels": 2453,
+        "otherValidPixels": 3463,
+        "missingPixels": 0
+      },
+      {
+        "code": "16",
+        "displayPixels": 15534,
+        "treePixels": 8850,
+        "otherValidPixels": 6684,
+        "missingPixels": 0
+      },
+      {
+        "code": "17",
+        "displayPixels": 1298,
+        "treePixels": 500,
+        "otherValidPixels": 798,
+        "missingPixels": 0
+      },
+      {
+        "code": "18",
+        "displayPixels": 7419,
+        "treePixels": 4987,
+        "otherValidPixels": 2432,
+        "missingPixels": 0
+      },
+      {
+        "code": "19",
+        "displayPixels": 16934,
+        "treePixels": 3470,
+        "otherValidPixels": 13464,
+        "missingPixels": 0
+      },
+      {
+        "code": "20",
+        "displayPixels": 25006,
+        "treePixels": 16272,
+        "otherValidPixels": 8734,
+        "missingPixels": 0
+      },
+      {
+        "code": "21",
+        "displayPixels": 9120,
+        "treePixels": 3396,
+        "otherValidPixels": 5724,
+        "missingPixels": 0
+      },
+      {
+        "code": "22",
+        "displayPixels": 3093,
+        "treePixels": 828,
+        "otherValidPixels": 2265,
+        "missingPixels": 0
+      },
+      {
+        "code": "23",
+        "displayPixels": 11869,
+        "treePixels": 9686,
+        "otherValidPixels": 2183,
+        "missingPixels": 0
+      },
+      {
+        "code": "24",
+        "displayPixels": 16111,
+        "treePixels": 2982,
+        "otherValidPixels": 13129,
+        "missingPixels": 0
+      },
+      {
+        "code": "25",
+        "displayPixels": 15136,
+        "treePixels": 8394,
+        "otherValidPixels": 6742,
+        "missingPixels": 0
+      },
+      {
+        "code": "26",
+        "displayPixels": 48116,
+        "treePixels": 5882,
+        "otherValidPixels": 42234,
+        "missingPixels": 0
+      },
+      {
+        "code": "27",
+        "displayPixels": 6566,
+        "treePixels": 1576,
+        "otherValidPixels": 4990,
+        "missingPixels": 0
+      },
+      {
+        "code": "28",
+        "displayPixels": 21186,
+        "treePixels": 6192,
+        "otherValidPixels": 14994,
+        "missingPixels": 0
+      },
+      {
+        "code": "29",
+        "displayPixels": 1056,
+        "treePixels": 263,
+        "otherValidPixels": 793,
+        "missingPixels": 0
+      },
+      {
+        "code": "30",
+        "displayPixels": 19096,
+        "treePixels": 8474,
+        "otherValidPixels": 10622,
+        "missingPixels": 0
+      },
+      {
+        "code": "31",
+        "displayPixels": 10509,
+        "treePixels": 8915,
+        "otherValidPixels": 1594,
+        "missingPixels": 0
+      },
+      {
+        "code": "32",
+        "displayPixels": 19871,
+        "treePixels": 1427,
+        "otherValidPixels": 18444,
+        "missingPixels": 0
+      }
+    ]
+  },
+  "inputs": {
+    "geometry": {
+      "path": "src/data/atlas/mexico/geometry.json",
+      "sha256": "193f700c8741c2752561de077c781383dcc28a95244fb60726f591f8af011faa"
+    },
+    "sourceSnapshot": {
+      "path": "data-source/atlas/mexico/tree-cover-2021/worldcover-overview-snapshot.json.gz",
+      "sha256": "20300af8134b7c22f6f0ba23002bbbd338513e8caeb9a9e03be262df009c4b22",
+      "bytes": 3267637
+    },
+    "query": {
+      "path": "data-source/atlas/mexico/tree-cover-2021/tree-cover-display-codes.bin.gz",
+      "sha256": "111c7dbd50868ba9ff757cbb11aa9e6f86e5351a4991bc45bebf6f3fd53b9f4f",
+      "bytes": 108413
+    }
+  },
+  "reproduce": "node scripts/prepare-mexico-tree-cover.mjs"
+}

@@ -84,6 +84,44 @@ jobs:
       - name: Verify release boundary
         run: npm run verify:release
 
+      # Real screenshots of this exact build, using Chrome already installed on
+      # the runner. No browser downloads, deployment, or additional permissions.
+      - name: Capture US and Mexico agriculture review
+        shell: bash
+        timeout-minutes: 6
+        run: |
+          set -euo pipefail
+          japanese_fonts="$(fc-list ':lang=ja' family)"
+          font_setup="preinstalled"
+          if [[ -z "$japanese_fonts" ]]; then
+            sudo apt-get update
+            sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+            japanese_fonts="$(fc-list ':lang=ja' family)"
+            font_setup="installed-fonts-noto-cjk-from-ubuntu"
+          fi
+          if [[ -z "$japanese_fonts" ]]; then
+            echo "::error::No Japanese-capable font is available; screenshots would be unreadable."
+            exit 1
+          fi
+          export REVIEW_JAPANESE_FONTS="$japanese_fonts"
+          export REVIEW_JAPANESE_FONT_SETUP="$font_setup"
+          export REVIEW_JAPANESE_FONT_MATCH="$(fc-match -f '%{family}\n' 'sans-serif:lang=ja'; fc-match -f '%{family}\n' 'serif:lang=ja')"
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          if [[ -z "$chrome_path" ]]; then
+            echo "::error::The GitHub runner does not have Google Chrome installed."
+            exit 1
+          fi
+          REVIEW_CHROME_PATH="$chrome_path" npm run test:review:agriculture
+
+      - name: Upload agriculture screenshots and validation metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mexico-agriculture-review-${{ github.run_id }}
+          path: review-artifacts/mexico-agriculture
+          if-no-files-found: warn
+          retention-days: 7
+
       - name: Upload built site for review
         if: success()
         uses: actions/upload-artifact@v4

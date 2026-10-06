@@ -22,15 +22,23 @@ for(const field of fields){
    const workspace=root.querySelector('.mexico-learning-workspace');
    const grid=workspace.querySelector('.atlas-primary-grid');
    assert.ok(grid.querySelector(':scope>.atlas-map-column'));
-   assert.ok(grid.querySelector(':scope>.atlas-national.mexico-reading'));
-   assert.ok(grid.querySelector('.atlas-map-frame.mexico-map-frame [data-mexico-map]'));
-   assert.ok(grid.querySelector('.atlas-key.mexico-items'));
-   assert.ok(grid.querySelector('.mexico-reading h1').textContent.trim());
-   assert.ok(grid.querySelector('.mexico-reading-content').textContent.trim().length>100);
+   if(field==='agriculture'){
+    assert.ok(grid.querySelector(':scope>[data-field-national="agriculture"] .atlas-national'));
+    assert.ok(grid.querySelector('.atlas-map-frame [data-mexico-map]'));
+    assert.ok(grid.querySelector('.atlas-key [data-forestry-select]'));
+    assert.equal(grid.querySelector('.atlas-national h2').textContent.trim(),'メキシコの農林業');
+    assert.ok(grid.querySelector('[data-agri-reading-content]').textContent.trim().length>100);
+   }else{
+    assert.ok(grid.querySelector(':scope>.atlas-national.mexico-reading'));
+    assert.ok(grid.querySelector('.atlas-map-frame.mexico-map-frame [data-mexico-map]'));
+    assert.ok(grid.querySelector('.atlas-key.mexico-items'));
+    assert.ok(grid.querySelector('.mexico-reading h1').textContent.trim());
+    assert.ok(grid.querySelector('.mexico-reading-content').textContent.trim().length>100);
+   }
    assert.equal(root.querySelector('.mexico-statistics').parentElement,root,'Statistics follow the complete learning workspace');
    assert.equal(root.querySelector('.mexico-sources').parentElement,root);
    assert.equal(root.dataset.mexicoReadingSelected,'false','The country summary is the initial reading entry');
-   assert.ok(root.querySelector('[data-mexico-overview-button]').hidden);
+   assert.ok(field==='agriculture'?root.querySelector('[data-agri-reading-panel]').hidden:root.querySelector('[data-mexico-overview-button]').hidden);
    if(field==='industry')assert.equal(root.querySelectorAll('[data-mi-shape]').length,64);
    if(field==='population')assert.equal(root.querySelectorAll('[data-population-state-shape]').length,32);
    if(field==='agriculture')assert.equal(root.querySelectorAll('path[data-agriculture-state-code]').length,32);
