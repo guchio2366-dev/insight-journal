@@ -491,3 +491,9 @@
  .africa-region-controls{display:grid;grid-template-rows:44px 40px;gap:7px;min-height:91px;height:auto}
  .africa-heading{min-height:125px}
 }
+/* Population shares the U.S. tabs + live data-status hierarchy. */
+@media(min-width:960px){
+ .africa-atlas[data-field=population] .africa-main>.africa-subfields{height:auto;min-height:46px;margin:12px 0 0;padding:0;gap:8px;border:0;background:transparent;align-items:start}
+ .africa-atlas[data-field=population] .africa-main>.africa-subfields button{flex:none;width:auto;height:46px;min-height:46px;padding:8px 10px;font-size:16px;font-weight:400;line-height:28px}
+ .africa-atlas[data-field=population] .africa-main>.africa-subfield-status{margin:6px 0 18px;padding:0;border:0;background:transparent;color:#50656a;font-size:14px;line-height:21px}
+}

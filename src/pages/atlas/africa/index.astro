@@ -75,7 +75,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
     <div class="africa-layer-options" data-africa-layer-options hidden></div>
     <section class="africa-essential-legend africa-actual-key" data-africa-actual-key hidden aria-label="元分布の全凡例"><p data-africa-layer-caption></p><div data-africa-layer-legend></div><p data-africa-layer-scope></p></section>
     <div class="africa-map-subfields" data-africa-map-subfields></div>
-    <p class="africa-subfield-status" data-africa-subfield-status hidden aria-live="polite"></p>
+    <p class="africa-subfield-status" data-africa-subfield-status hidden role="status" aria-live="polite"></p>
     <div class="africa-themes" data-themes role="group" aria-label="分布テーマを選ぶ">{themes.filter(theme=>theme.field===state.field).map(theme=><button type="button" data-theme={theme.id} aria-pressed={theme.id===initialTheme.id?'true':'false'}>{theme.title}</button>)}</div>
     <details class="africa-map-notes"><summary>地図の表示方法と収録状況</summary>
     <p class="africa-caption" data-map-caption>国平均の色です。国内の気候区分・雨の分布ではありません。島の白丸は選択用の目印です。</p>

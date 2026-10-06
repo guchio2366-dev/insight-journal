@@ -16,6 +16,7 @@ export function initializeAfricaAtlas() {
  const text=(s:string,t:string)=>{query<HTMLElement>(s).textContent=t;};
  const make=(tag:string,t?:string)=>{const n=document.createElement(tag);if(t!==undefined)n.textContent=t;return n;};
  const svgNS='http://www.w3.org/2000/svg';
+ const populationDensityScope='色は人口密度の推計区分。国の平均とは異なります。';
  const svgEl=(tag:string,attrs:Record<string,string|number>,t?:string)=>{const n=document.createElementNS(svgNS,tag);for(const [k,v]of Object.entries(attrs))n.setAttribute(k,String(v));if(t!==undefined)n.textContent=t;return n;};
  let state=readState(location.search);
  let actual: AfricaLayerView|null=null;
@@ -69,7 +70,14 @@ export function initializeAfricaAtlas() {
    for(const row of choices){const button=make('button',row.label) as HTMLButtonElement;button.type='button';button.dataset.africaCommodity=row.id;button.setAttribute('aria-pressed',String(row.id===selected));products.append(button);}commodities.append(products);
    if(crop){const measures=make('div');measures.className='africa-commodity-measures';measures.setAttribute('role','group');measures.setAttribute('aria-label','作物の数量');for(const row of cropMeasureChoices){const button=make('button',row.label) as HTMLButtonElement;button.type='button';button.dataset.africaCropMeasure=row.id;button.setAttribute('aria-pressed',String(row.id===state.cropMeasure));measures.append(button);}commodities.append(measures);}
   }
-  const status=query<HTMLElement>('[data-africa-subfield-status]');status.hidden=!actual||actual.ready&&!actual.error;status.textContent=actual?.error?`${actual.title}：分布データを取得できませんでした。再読込できます。`:actual?`${actual.title}の分布データを読み込んでいます。国別統計は参考として残しています。`:'';
+  const status=query<HTMLElement>('[data-africa-subfield-status]');
+  if(state.field==='population'){
+   nav.after(status);status.hidden=false;
+   status.textContent=actual?.error?`${actual.title}：分布データを取得できませんでした。再読込できます。`:actual?.ready?actual.guide?actual.scope:populationDensityScope:actual?`${actual.title}のデータを読み込んでいます。`:metricById(state.metric).note;
+  }else{
+   query<HTMLElement>('[data-themes]').before(status);
+   status.hidden=!actual||actual.ready&&!actual.error;status.textContent=actual?.error?`${actual.title}：分布データを取得できませんでした。再読込できます。`:actual?`${actual.title}の分布データを読み込んでいます。国別統計は参考として残しています。`:'';
+  }
  }
  function readSelectionPins(){const p=new URLSearchParams(location.search);countryPinned=countries.some(c=>c.code===p.get('place'));regionPinned=Object.hasOwn(regionNames,p.get('region')??'');}
  function isRiverView(){return state.field==='nature'&&state.topic==='water'&&state.water==='river'&&state.view==='distribution';}
@@ -151,6 +159,7 @@ export function initializeAfricaAtlas() {
  }
  function renderActualReading(){
   root!.querySelector('[data-africa-culture-source]')?.remove();
+  query<HTMLElement>('[data-africa-layer-scope]').hidden=state.field==='population'&&actual?.key==='distribution';
   const keys=query<HTMLElement>('[data-africa-actual-key]'),selection=query<HTMLElement>('[data-africa-layer-selection]');
   keys.hidden=!actual?.ready||!!actual.guide;selection.hidden=!actual||!!actual.guide;query<HTMLElement>('[data-africa-statistics-key]').hidden=!!actual?.ready&&!state.context;
   const retry=query<HTMLButtonElement>('[data-africa-layer-retry]');retry.hidden=!actual?.error;
@@ -164,7 +173,7 @@ export function initializeAfricaAtlas() {
   query<HTMLElement>('[data-theme-details]').replaceChildren(make('p',actual.method));
   if(!agriculture&&!actual.guide){
    query<HTMLElement>('[data-theme-details]').append(make('p',actual.scope));
-   const scope:Record<string,string>={climate:'色は気候区分。凡例を選ぶと、その区分の格子境界を強調します。',terrain:'色は標高区分、線は等高線。選択しても全体の分布を残します。',elevation:'色は標高区分。選択しても全体の分布を残します。',distribution:'色は人口密度の推計区分。国の平均とは異なります。','water-basin':'線は接続する集水区の境界。川名や取水量は示しません。'};
+   const scope:Record<string,string>={climate:'色は気候区分。凡例を選ぶと、その区分の格子境界を強調します。',terrain:'色は標高区分、線は等高線。選択しても全体の分布を残します。',elevation:'色は標高区分。選択しても全体の分布を残します。',distribution:populationDensityScope,'water-basin':'線は接続する集水区の境界。川名や取水量は示しません。'};
    if(scope[actual.key])text('[data-africa-layer-scope]',scope[actual.key]);
   }
   if(agriculture){

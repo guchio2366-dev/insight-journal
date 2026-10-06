@@ -62,6 +62,27 @@ test('population tabs retain roving focus when changing between density and the 
  await withAfricaPage('?field=population&topic=distribution&zoom=all',context=>{
   assertTabs(context,'[data-africa-topic]','distribution',{focused:false});
   navigateTabs(context,'data-africa-topic',[['ArrowRight','ethnicity'],['End','religion'],['ArrowRight','distribution'],['ArrowLeft','religion'],['ArrowLeft','ethnicity'],['Home','distribution']]);
+});
+});
+
+test('population data status follows the tabs and distinguishes density estimates from unpublished source guides',async()=>{
+ await withAfricaPage('?field=population&topic=distribution&zoom=all',async context=>{
+  const {root,q}=context,status=q('[data-africa-subfield-status]'),nav=q('[data-africa-subfields]');
+  assert.equal(status.previousElementSibling,nav);assert.equal(status.nextElementSibling,q('.africa-workspace'));
+  assert.equal(status.getAttribute('role'),'status');assert.equal(status.hidden,false);
+  assert.equal(status.textContent,'色は人口密度の推計区分。国の平均とは異なります。');
+  assert.equal(q('[data-africa-layer-scope]').hidden,true,'the same explanation must not repeat below the legend');
+  assert.equal(root.querySelectorAll('[data-africa-layer-class]').length,7,'all original density classes remain available');
+  navigateTabs(context,'data-africa-topic',[['ArrowRight','ethnicity']]);
+  assert.match(status.textContent,/2021版.*この画面に分布図はありません/);assert.equal(status.previousElementSibling,nav);
+  navigateTabs(context,'data-africa-topic',[['End','religion']]);
+  assert.match(status.textContent,/2020年の局所観測ではなく、この画面に分布図はありません/);
+  navigateTabs(context,'data-africa-topic',[['Home','distribution']]);
+  assert.equal(status.textContent,'色は人口密度の推計区分。国の平均とは異なります。');
+  q('.africa-fields [data-field="nature"]').click();
+  await wait(()=>q('[data-africa-layer-class]')&&root.dataset.actualLayer==='true','nature distribution must load after leaving population');
+  assert.equal(q('.africa-map-card').contains(status),true);assert.equal(status.hidden,true);assert.equal(q('[data-africa-layer-scope]').hidden,false);
+  assert.equal(root.querySelectorAll('[data-africa-subfield-status]').length,1);
  });
 });
 
