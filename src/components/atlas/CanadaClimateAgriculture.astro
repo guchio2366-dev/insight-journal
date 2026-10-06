@@ -1,0 +1,27 @@
+---
+import {climateCause} from '../../data/atlas/canada/reading';
+import manifest from '../../../public/assets/atlas/canada-climate-elevation-v1/koppen-manifest.json';
+import {canadaClimateGroups} from '../../lib/atlas-canada-presentation';
+import {withBase} from '../../lib/urls';
+const {city}=Astro.props;
+const sample=(manifest as any).stationSamples.find((s:any)=>s.id===city);
+const code=sample?.class??sample?.code;
+const zone=canadaClimateGroups((manifest as any).classes).find(s=>s.id===code);
+const crop:Record<string,{potential:string;actual:string;source:string}>= {
+ ottawa:{potential:'暖かい夏に育つトウモロコシ・大豆、牧草。冬は生育が止まるため、栽培期間と越冬・飼料の確保が重要です。',actual:'オタワが位置するオンタリオ州と隣接するケベック州では、トウモロコシ・大豆の栽培、酪農・養豚が行われています。下記は2021年の州別確認で、市内の生産統計ではありません。',source:'https://www150.statcan.gc.ca/n1/daily-quotidien/220615/dq220615a-eng.htm'},
+ vancouver:{potential:'冬の寒さが比較的弱く、牧草・ベリー類・野菜の栽培を考えやすい気候です。夏の雨の少なさには灌漑、冬の多雨には排水への対応が必要です。',actual:'バンクーバーが位置するBC州では、ハイブッシュ・ブルーベリー、施設園芸、酪農などが行われています。2021年の州別統計であり、内陸を含むBC州全体をこの都市の気候と同一視しません。',source:'https://www150.statcan.gc.ca/n1/pub/96-325-x/2021001/article/00010-eng.htm'},
+ regina:{potential:'短い夏に収穫する春小麦・大麦・カノーラ、牧草。生育期の降水量と干ばつへの対応が収量を左右します。草地と飼料を利用する肉牛生産も関係します。',actual:'レジャイナが位置するサスカチュワン州では、小麦・カノーラ・豆類が栽培されています。プレーリー3州では穀物栽培と肉牛生産が行われています。2021年の州・地域別統計です。',source:'https://www150.statcan.gc.ca/n1/pub/96-325-x/2021001/article/00008-eng.htm'},
+ winnipeg:{potential:'暖かい夏を利用する春小麦・カノーラ・大麦、牧草。冬の寒さが強いため、作物の生育期間と家畜の越冬用飼料を確保する必要があります。',actual:'ウィニペグが位置するマニトバ州を含むプレーリー3州では、春小麦・カノーラ・大麦の栽培と牛の飼育が行われています。2021年の地域別確認で、市街地の生産量ではありません。',source:'https://www150.statcan.gc.ca/n1/daily-quotidien/220615/dq220615a-eng.htm'},
+ iqaluit:{potential:'夏も低温で生育期間が短く、一般的な穀物の露地栽培には厳しい条件です。栽培には施設・加温などの条件を別に確認する必要があります。',actual:'イカルイト周辺の農畜産物別の生産実績は、このサイトでは未収録です。生産がないという意味ではありません。',source:''}
+};
+const item=crop[city];
+---
+<section class="canada-city-agriculture">
+<h3>{code??'区分未収録'} {zone?.name??''}</h3><p>{zone?.description??'観測地点に対応する気候区分は未収録です。'}</p>
+<p>{climateCause[city].lead}</p>
+<h3>この気候でつくられやすい農畜産物</h3><p>{item.potential}</p>
+<h3>実際につくられている農畜産物</h3><p>{item.actual}</p>
+{item.source&&<p class="canada-caption"><a href={item.source}>2021年農業センサスの地域別解説</a></p>}
+<p class="canada-caption">栽培適性の説明は気温・降水の季節性からの整理です。実際の生産は土壌・水・品種・飼料・市場にも左右されます。</p>
+<p><a href={withBase('/atlas/north-america/canada/agriculture/')}>農畜産の分布を地図で読む →</a></p>
+</section>

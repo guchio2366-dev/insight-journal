@@ -212,7 +212,7 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
   function fit() {
     clearTimeout(wheelTimer);
     fitted = true; frame = clampFrame([...fullFrame]); cameraKey = 'fit'; cameraCommitPending = false;
-    if (ready && map) { programmaticCamera = true; map.fitBounds(canadaNaturalBounds, { padding: { top: 18, right: 18, bottom: 18, left: 18 }, duration: 0 }); syncMapFrame(); programmaticCamera = false; }
+    if (ready && map) { programmaticCamera = true; map.fitBounds(canadaNaturalBounds, { padding: 0, duration: 0 }); syncMapFrame(); programmaticCamera = false; }
     draw();
   }
   function zoom(direction: 'in' | 'out') {
@@ -273,7 +273,7 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
           { id: 'canada-natural-lines', type: 'line', source: 'canada-natural-groups', filter: ['==', ['geometry-type'], 'LineString'], paint: { 'line-color': ['get', 'color'], 'line-width': ['case',['==',['get','elevation_m'],500],.7,1.8], 'line-opacity': ['case',['==',['get','elevation_m'],500],.45,.9] } },
           { id: 'canada-natural-lines-hit', type: 'line', source: 'canada-natural-groups', filter: ['==', ['geometry-type'], 'LineString'], paint: { 'line-color': '#fff', 'line-width': 9, 'line-opacity': 0 } },
           { id: 'canada-natural-selected', type: 'line', source: 'canada-natural-groups', filter: ['==', ['get', 'id'], '__none__'], paint: { 'line-color': ['case', ['==', ['geometry-type'], 'LineString'], ['get', 'color'], '#243f4c'], 'line-width': 3 } },
-        ] }, bounds: canadaNaturalBounds, fitBoundsOptions: { padding: 18 },
+        ] }, bounds: canadaNaturalBounds, fitBoundsOptions: { padding: 0 },
         minZoom: .5, maxZoom: 9, attributionControl: false, renderWorldCopies: false, scrollZoom: false,
         cooperativeGestures: true, locale: { 'CooperativeGesturesHandler.MobileHelpText': '地図は2本指で動かせます' },
         dragRotate: false, pitchWithRotate: false, touchPitch: false, maxPitch: 0, fadeDuration: 0,

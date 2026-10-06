@@ -184,3 +184,40 @@
 @media(min-width:960px){.canada-nature[data-canada-nature].is-water-resource .atlas-compact-heading{display:flex}}
 @media(min-width:960px) and (max-width:1199px){.atlas-desktop-shell .canada-nature[data-canada-nature] .canada-country-primary .atlas-map-frame{aspect-ratio:1.65;min-height:190px}}
 @media(min-width:960px) and (max-width:1199px){.atlas-desktop-shell .canada-nature[data-canada-nature].is-water-reading .canada-country-primary .atlas-map-frame,.atlas-desktop-shell .canada-nature[data-canada-nature].is-water-resource .canada-country-primary .atlas-map-frame{min-height:500px}}
+/* 2026-10-06: the climate viewport is the common geography and layout reference. */
+.canada-shared-land .canada-land{fill:#edece5!important;stroke:#94aaaa!important;stroke-width:.7!important}
+.canada-map-frame,.population-map,.canada-water-map{background:#e4eff0}
+.canada-city-agriculture h3{font-size:16px;margin:14px 0 5px}.canada-city-agriculture p{margin:5px 0 10px}
+.canada-nature.is-classified-climate [data-canada-original-reading]>.canada-national-header{display:none}
+.canada-nature.is-classified-climate .canada-climate-card{border:0;padding:0;margin:0}
+.canada-climate-options{margin-top:14px}
+.canada-nature .canada-map-actions button,.canada-water-map-tools button{background:#fffdf4;border:1px solid #a4b8b9;color:#263f48;border-radius:4px}
+.canada-population .population-map-tools{position:absolute;right:10px;top:10px;display:grid;gap:5px;z-index:2}
+.canada-population .population-map-tools button{width:44px;min-height:40px;background:#fffdf4;border:1px solid #a4b8b9;color:#263f48;border-radius:4px}
+.canada-population .population-map-frame{position:relative}
+@media(min-width:960px){
+ .atlas-desktop-shell .canada-nature.canada-population .canada-country-primary .atlas-map-frame,
+ .atlas-desktop-shell .canada-nature[data-canada-nature].is-water-reading .canada-country-primary .atlas-map-frame,
+ .atlas-desktop-shell .canada-nature[data-canada-nature].is-water-resource .canada-country-primary .atlas-map-frame{height:auto;aspect-ratio:1.55;min-height:300px;max-height:640px}
+ .atlas-desktop-shell .canada-population .population-map{position:absolute;inset:0;width:100%;height:100%;max-height:none}
+ .atlas-desktop-shell .canada-population .population-workspace{grid-template-columns:minmax(0,1.65fr) minmax(300px,1fr);gap:14px}
+}
+@media(min-width:960px) and (max-width:1199px){
+ .atlas-desktop-shell .canada-nature.canada-population .canada-country-primary .atlas-map-frame,
+ .atlas-desktop-shell .canada-nature[data-canada-nature].is-water-reading .canada-country-primary .atlas-map-frame,
+ .atlas-desktop-shell .canada-nature[data-canada-nature].is-water-resource .canada-country-primary .atlas-map-frame{aspect-ratio:1.65;min-height:190px}
+}
+@media(min-width:1200px){.atlas-desktop-shell .canada-nature.canada-population .canada-country-primary .population-workspace{grid-template-columns:minmax(0,1.65fr) minmax(360px,1fr);gap:14px}}
+@media(min-width:960px) and (max-width:1199px){.atlas-desktop-shell .canada-nature.canada-population .canada-country-primary .population-workspace{grid-template-columns:minmax(0,1.5fr) minmax(380px,1fr);gap:16px}}
+.canada-population .country-topic-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}
+.atlas-desktop-shell .canada-nature [data-canada-reading=climate],.atlas-desktop-shell .canada-nature .canada-climate-card{display:block}
+.canada-nature.is-classified-climate .canada-climate-card>h2{display:block}
+.atlas-desktop-shell .canada-population .population-map-tools button{padding:0;white-space:nowrap;font-size:16px;line-height:1.2}
+/* Match city reference lettering to the climate map. */
+.canada-nature [data-canada-map-city] text{font-size:13px;fill:#263f48;paint-order:stroke;stroke:#fffdf4;stroke-width:4;stroke-linejoin:round}
+.canada-nature [data-canada-map-city] circle{fill:#263f48;stroke:#fff;stroke-width:2;r:5}
+@media(max-width:959px){
+ .canada-nature[data-canada-nature] .canada-country-primary .atlas-map-frame,
+ .canada-nature.canada-population .canada-country-primary .atlas-map-frame{height:clamp(290px,calc(100dvh - 390px),580px);min-height:290px;max-height:580px;aspect-ratio:auto;position:relative}
+ .canada-nature .canada-country-primary :is(.canada-water-map,.population-map){position:absolute;inset:0;width:100%;height:100%;max-height:none;aspect-ratio:auto}
+}

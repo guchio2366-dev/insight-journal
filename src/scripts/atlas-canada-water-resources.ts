@@ -1,3 +1,4 @@
+import {canadaLegacyFrame,canadaMapPath} from '../lib/atlas-canada-map-presentation';
 import {canadaWaterDatasets, canadaWaterFit, canadaWaterFullFrame, canadaWaterPath, validCanadaWaterFrame, validateCanadaWaterCollection, type CanadaWaterArea, type CanadaWaterCollection, type CanadaWaterConfig, type CanadaWaterDataset, type CanadaWaterFeature, type CanadaWaterFrame, type CanadaWaterState, type WaterDatasetTopic, type WaterTopic} from '../lib/atlas-canada-water-state';
 
 const svgNamespace = 'http://www.w3.org/2000/svg';
@@ -43,7 +44,7 @@ export function initCanadaWaterResources(root: HTMLElement) {
   return topic === 'aquifers' && geometry.has(topic) ? canadaWaterFit(geometry.get(topic)!.features) ?? full : full;
  }
  function drawCamera() {
-  map.setAttribute('viewBox',frame.join(' '));
+  map.setAttribute('viewBox',canadaLegacyFrame(frame).join(' '));
   const referenceScale=frame[2]/900;
   for(const reference of map.querySelectorAll<SVGGElement>('[data-canada-water-reference]')) {
    const x=Number(reference.dataset.referenceX),y=Number(reference.dataset.referenceY);
@@ -74,7 +75,7 @@ export function initCanadaWaterResources(root: HTMLElement) {
   const title=document.createElementNS(svgNamespace,'title');title.textContent=name;shape.append(title);
   for (const excluded of [false,true]) {
    const parts=features.filter(feature => !!feature.properties.fillExcluded === excluded);if (!parts.length) continue;
-   const path=document.createElementNS(svgNamespace,'path');path.setAttribute('d',parts.map(feature => canadaWaterPath(feature.geometry)).join(''));path.setAttribute('fill',excluded?'none':color);path.setAttribute('fill-rule','evenodd');path.setAttribute('vector-effect','non-scaling-stroke');
+   const path=document.createElementNS(svgNamespace,'path');path.setAttribute('d',parts.map(feature => canadaMapPath(feature.geometry)).join(''));path.setAttribute('fill',excluded?'none':color);path.setAttribute('fill-rule','evenodd');path.setAttribute('vector-effect','non-scaling-stroke');
    if (excluded) {path.classList.add('canada-water-source-invalid');path.setAttribute('stroke',color);path.setAttribute('stroke-dasharray','3 2');}
    shape.append(path);
   }

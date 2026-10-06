@@ -1,0 +1,69 @@
+{
+  "method": "Inverse Web Mercator to existing affine [-145,40,-50,85] rasters; nearest neighbour preserves categorical colors; pixel centers; transparent outside input. Existing source attribution applies.",
+  "display": [
+    900,
+    580
+  ],
+  "geographicBounds": [
+    -141,
+    41,
+    -52,
+    70
+  ],
+  "files": [
+    {
+      "source": "public/assets/atlas/canada-water-v1/annual-precipitation-us-3.png",
+      "sourceSha256": "5055451da341d3347ed1a46187dd398569096d00017b6352c4bc042d4a6ac510",
+      "output": "public/assets/atlas/canada-water-v1/annual-precipitation-us-3-mercator.png",
+      "sha256": "6743281cdfd6672ab3b1295d3eb41d5cc05e630b152a58ecbf0828be6ce59f1c"
+    },
+    {
+      "source": "public/assets/atlas/canada-water-v1/annual-precipitation-us-all.png",
+      "sourceSha256": "f49c4717909df5f6996cce63fb74167c31e5a2987af1fd9a20db10d0b8b09bfb",
+      "output": "public/assets/atlas/canada-water-v1/annual-precipitation-us-all-mercator.png",
+      "sha256": "81e851c90c5e54ba92bc112fdf7662efcf7faaa74a46e0a30e49f34ca8a3acc8"
+    },
+    {
+      "source": "public/assets/atlas/canada-water-v1/annual-precipitation-us-2.png",
+      "sourceSha256": "82487b89e2d3d94f7bd025c46cacd04d95eb562d622a78289f1c8ffc2c130914",
+      "output": "public/assets/atlas/canada-water-v1/annual-precipitation-us-2-mercator.png",
+      "sha256": "1d5aaee7cac12a5830d2dc3e0848fb8b14b9aec250e2b5a8d1fcc83d065de2b8"
+    },
+    {
+      "source": "public/assets/atlas/canada-water-v1/annual-precipitation-us-6.png",
+      "sourceSha256": "017f4b13a30e79f43202498384d7bb37f11e0992e1962cb246fcbd945f89d05b",
+      "output": "public/assets/atlas/canada-water-v1/annual-precipitation-us-6-mercator.png",
+      "sha256": "9aeb220bd6374112ace57f41331f6d36536fba50e977f20a33bf7efcfa880249"
+    },
+    {
+      "source": "public/assets/atlas/canada-water-v1/annual-precipitation-us-1.png",
+      "sourceSha256": "06ea82bba9d4f853273283e6b8b908bb653cec809bfe04e349c9644ecea6648c",
+      "output": "public/assets/atlas/canada-water-v1/annual-precipitation-us-1-mercator.png",
+      "sha256": "b5bd6a7121808346de6e7bb6dde8130c0ed01152ad569781648b8c6125261770"
+    },
+    {
+      "source": "public/assets/atlas/canada-water-v1/annual-precipitation-us-5.png",
+      "sourceSha256": "1be0c8ed626b3c56609d683a9731d7cbef2bed3c3667493694f85dbe4dc460c9",
+      "output": "public/assets/atlas/canada-water-v1/annual-precipitation-us-5-mercator.png",
+      "sha256": "80009991c19d98c18e711cc65c898e12aa37fb7d246abfbd84333c7c16fe615e"
+    },
+    {
+      "source": "public/assets/atlas/canada-water-v1/annual-precipitation-us-0.png",
+      "sourceSha256": "80f1cd6206e4c64bb2cadff97813a95cc5f93fda2d11db57a58dce6a54fcb651",
+      "output": "public/assets/atlas/canada-water-v1/annual-precipitation-us-0-mercator.png",
+      "sha256": "c8d8510dae94aedf8b1b8697dbbe67fa9c537d06987fd171c62f5e51c0bc64ac"
+    },
+    {
+      "source": "public/assets/atlas/canada-water-v1/annual-precipitation-us-4.png",
+      "sourceSha256": "20a1c47659b51cc22588cec16f778ab654a2b616d3281a34bcac1afeaf76129e",
+      "output": "public/assets/atlas/canada-water-v1/annual-precipitation-us-4-mercator.png",
+      "sha256": "bc17438c7fa78f89945524f3475d2ff857db2657e4747f53dea91063553d688f"
+    },
+    {
+      "source": "public/assets/atlas/canada-forestry-v1/forest-needleleaf-2020.png",
+      "sourceSha256": "31d915b19db23b57f01146d768854d41ac75439c6d89439bf17fef11462dde5c",
+      "output": "public/assets/atlas/canada-forestry-v1/forest-needleleaf-2020-mercator.png",
+      "sha256": "aeadee3b315313164c59cfb4de765942686019f89adaed32484043047848151e"
+    }
+  ]
+}
