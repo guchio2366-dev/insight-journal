@@ -19,6 +19,9 @@ const selected=(ctx,item)=>{assert.equal(ctx.root.dataset.agricultureCurrentItem
 
 test('Mexico uses shared US agriculture hierarchy, truthful zones and a same-year monetary composition',async()=>{
  const ctx=await page('',false);try{
+  assert.ok(source.length<1500000,'The agriculture HTML must not repeat full-resolution national clip geometry');
+  assert.equal(ctx.q('#mexico-agriculture-country-clip'),null,'Crop source zones are already geographically clipped');
+  assert.ok(ctx.q('[data-agriculture-map] image[href$="rivers.png"]'));
   assert.equal(ctx.q('.atlas-key').previousElementSibling.className,'atlas-map-frame');
   assert.equal(ctx.root.querySelectorAll('[data-agri-layer]').length,2);
   assert.equal(ctx.root.querySelectorAll('[data-map-action]').length,3);

@@ -16,6 +16,14 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
  const panel=q('[data-agri-reading-panel]'),heading=q('#agri-reading-heading'),overview=q('[data-agri-overview]');
  const kinds=new Map(config.livestockKinds.map(kind=>[kind.id,kind]));
  const cropIds=new Set(config.crops.map(crop=>crop.id));
+ const overviewMarkers:Marker[]=[];
+ for(const kind of config.livestockKinds){
+  const candidates=config.markers.filter(marker=>marker.kindId===kind.id);
+  const clearance=(marker:Marker)=>overviewMarkers.length?Math.min(...overviewMarkers.map(other=>Math.hypot(marker.point[0]-other.point[0],marker.point[1]-other.point[1]))):0;
+  candidates.sort((a,b)=>clearance(b)-clearance(a));if(candidates[0])overviewMarkers.push(candidates[0]);
+ }
+ const overviewMarkerIds=new Set(overviewMarkers.map(marker=>marker.id));
+
  const text=(selector:string,value:string)=>{const node=root.querySelector(selector);if(node)node.textContent=value;};
  let lastTrigger:HTMLElement|null=null,candidates:Marker[]=[],suppressMapClickUntil=0;
  const pageLinks=new Map(Array.from(root.querySelectorAll<HTMLAnchorElement>('.mexico-fields a')).map(link=>[link,link.href]));
@@ -35,7 +43,7 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
   const visible=state.item!=='pine'&&state.livestock&&(!state.onlyItem||!state.item||kinds.has(state.item));
   hidden(holder,!visible);
   renderAgricultureMarkers({holder,width:frame.clientWidth,height:frame.clientHeight,
-   items:visible?config.markers.filter(marker=>!state.onlyItem||!state.item||marker.kindId===state.item).map(region=>({region,point:project(region.point)})):[],
+   items:visible?config.markers.filter(marker=>marker.kindId===state.item||overviewMarkerIds.has(marker.id)).filter(marker=>!state.onlyItem||!state.item||marker.kindId===state.item).map(region=>({region,point:project(region.point)})):[],
    kinds,selectedKind:state.item,selectedRegion:state.region,
    select:region=>choose(region.kindId,region),candidates:regions=>{candidates=regions;renderCandidates();},
   });
@@ -62,7 +70,7 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
    const id=node.getAttribute('data-crop-zone');node.classList.toggle('is-selected',id===state.item);node.classList.toggle('is-muted',cropSelected&&id!==state.item);
    hidden(node,cropVisible&&state.onlyItem&&!!state.item&&id!==state.item);
   }
-  hidden(q('[data-mexico-forest-states]'),!forestry);hidden(q('[data-mexico-tree-cover]'),!forestry);
+  hidden(q('[data-agri-layers]'),forestry);hidden(q('[data-mexico-forest-states]'),!forestry);hidden(q('[data-mexico-tree-cover]'),!forestry);
   hidden(q('[data-mexico-state-selection]'),!selected||!state.state);
   for(const outline of root.querySelectorAll<SVGElement>('[data-mexico-state-outline]'))hidden(outline,outline.dataset.mexicoStateOutline!==state.state);
   for(const link of root.querySelectorAll<HTMLAnchorElement>('[data-crop-select],[data-livestock-select],[data-forestry-select]')){

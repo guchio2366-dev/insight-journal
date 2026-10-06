@@ -83,7 +83,7 @@ async function serveBuild() {
 
 // Decode browser-generated 8-bit RGB/RGBA PNGs so blank-map checks inspect the
 // actual captured pixels, not merely the presence of a canvas or an SVG node.
-function pixelEvidence(png) {
+function pixelEvidence(png, includePixels = false) {
   assert.equal(png.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
   let width, height, channels;
   const chunks = [];
@@ -128,7 +128,7 @@ function pixelEvidence(png) {
   const dominantColorRatio = samples ? Math.max(...colors.values()) / samples : 1;
   assert(samples > 1000, 'Screenshot has too few opaque pixels');
   assert(colors.size >= 16 && dominantColorRatio < 0.98, 'Screenshot is blank or nearly uniform');
-  return {width, height, sampledOpaquePixels: samples, colorBuckets: colors.size, dominantColorRatio};
+  return {width, height, sampledOpaquePixels: samples, colorBuckets: colors.size, dominantColorRatio, ...(includePixels ? {pixels, channels} : {})};
 }
 
 async function settle(page) {
@@ -191,7 +191,7 @@ async function assertReady(page, country, scene) {
       return {url: href, width: image.naturalWidth, height: image.naturalHeight, decoded: true};
     })));
     assert(svgImages.some(image => image.url.endsWith('/mexico-nature-parity-v1/relief.webp')), 'Mexico relief image missing');
-    assert(svgImages.some(image => image.url.endsWith('/mexico-agriculture-v2/rivers.svg')), 'Mexico river image missing');
+    assert(svgImages.some(image => image.url.endsWith('/mexico-agriculture-v2/rivers.png')), 'Mexico river image missing');
     assert.equal(data.states.length, 32, 'Mexico dataset must contain all 32 states');
     assert(data.crops.length >= 5 && data.livestockKinds.length === 5 && data.markers.length >= 5, 'Mexico crop/livestock datasets missing');
     assert.equal(await root.locator(`${country.map} path[data-agriculture-state-code]`).count(), 32, 'Mexico state geometry missing');
@@ -222,6 +222,7 @@ async function assertReady(page, country, scene) {
   assert(labels.length > 0, 'No rendered map labels');
   for (const selector of ['[data-agri-layer][value="crops"]', '[data-agri-layer][value="livestock"]', '[data-map-action="fit"]', '[data-crop-select]', '[data-livestock-select]', '[data-forestry-select]']) {
     const control = root.locator(selector).first();
+    if(scene.id==='forestry'&&selector.startsWith('[data-agri-layer]')){assert(await control.isHidden(),'Crop/livestock controls must yield to forestry');continue;}
     assert(await control.isVisible() && await control.isEnabled(), `Control unavailable: ${selector}`);
   }
   const busy = root.locator('[aria-busy="true"]');
@@ -365,6 +366,23 @@ async function checkMexicoTouchCamera(page, context, country, name, record) {
   }
 }
 
+async function assertCropPaint(page,country,name,record){
+  const map=page.locator(`${country.root} ${country.map}`),toggle=page.locator(`${country.root} [data-agri-layer][value="crops"]`);
+  const masks=await page.evaluate(rootSelector=>{const root=document.querySelector(rootSelector),map=root.querySelector('[data-agriculture-map]').getBoundingClientRect();return [...root.querySelectorAll('svg text,[data-livestock-markers] button,[data-agri-layers],[data-map-action],[data-layer-caption]')].map(node=>{const r=node.getBoundingClientRect();return {x:r.left-map.left-3,y:r.top-map.top-3,w:r.width+6,h:r.height+6};});},country.root);
+  const box=await map.boundingBox();await toggle.check();await settle(page);const on=await map.screenshot({animations:'disabled'});
+  await toggle.uncheck();await settle(page);const off=await map.screenshot({animations:'disabled'});await toggle.check();await settle(page);
+  const a=pixelEvidence(on,true),b=pixelEvidence(off,true);assert.equal(a.width,b.width);assert.equal(a.height,b.height);
+  const scale=a.width/box.width;let changed=0,eligible=0;
+  for(let y=0;y<a.height;y++)for(let x=0;x<a.width;x++){
+    if(masks.some(mask=>x>=mask.x*scale&&x<=(mask.x+mask.w)*scale&&y>=mask.y*scale&&y<=(mask.y+mask.h)*scale))continue;
+    eligible++;const ai=(y*a.width+x)*a.channels,bi=(y*b.width+x)*b.channels;
+    if(Math.abs(a.pixels[ai]-b.pixels[bi])+Math.abs(a.pixels[ai+1]-b.pixels[bi+1])+Math.abs(a.pixels[ai+2]-b.pixels[bi+2])>30)changed++;
+  }
+  assert(changed>eligible*.006,`Crop fills are absent or imperceptible: ${changed}/${eligible} changed pixels after masking labels and controls`);
+  record.cropPaint={changedPixels:changed,eligiblePixels:eligible,fraction:changed/eligible,method:'Real checkbox toggle pixel difference, excluding text/badge/control boxes'};
+  await writeFile(path.join(output,`${name}-crops-visible-proof.png`),on);await writeFile(path.join(output,`${name}-crops-hidden-proof.png`),off);
+}
+
 async function capture(browser, origin, profile, country, scene) {
   const name = `${country.id}-${profile.name}-${scene.id}`;
   const {name: profileName, ...contextOptions} = profile;
@@ -414,6 +432,7 @@ async function capture(browser, origin, profile, country, scene) {
       record.layerToggle = 'passed';
     }
     if (country.id === 'mexico' && profile.name === 'mobile' && scene.id === 'crop') await checkMexicoTouchCamera(page, context, country, name, record);
+    if(country.id==='mexico'&&scene.id==='overview')await assertCropPaint(page,country,name,record);
     record.uiState = await assertReadingState(page, country, scene);
     Object.assign(record, await assertReady(page, country, scene));
     const mapPng = await page.locator(`${country.root} ${country.map}`).screenshot({animations: 'disabled'});
