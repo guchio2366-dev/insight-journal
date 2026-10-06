@@ -139,6 +139,27 @@ test('National entry has no implicit capital selection; three religion overview 
  }
 });
 
+test('Nationwide composition controls stay canonical after detail, browser history and reload',async()=>{
+ const snapshot=w=>{const q=s=>w.document.querySelector(s),view=q('[data-population-view]');return {
+  url:w.location.href,view:view.value,options:[...view.options].map(option=>[option.value,option.textContent]),viewDisabled:view.disabled,
+  state:q('[data-population-state]').value,metric:q('[data-population-composition-metric]').value,only:q('[data-population-only]').checked,
+  frame:q('[data-population-map]').getAttribute('viewBox'),overviewHidden:q('[data-population-overview-maps]').hidden,detailHidden:q('#mexico-population-distribution').hidden,
+ };};
+ for(const category of ['ethnicity','religion'])for(const view of ['density','population']){
+  const w=await page(`?view=${view}&frame=120,80,600,400`);let reloaded;
+  try{
+   const q=s=>w.document.querySelector(s),originalOptions=snapshot(w).options,metric=compositionData.metrics.find(item=>item.category===category).id;
+   q(`[data-population-category="${category}"]`).click();q(`[data-population-overview-metric="${metric}"]`).click();change(w,'[data-population-view]','count');change(w,'[data-population-state]','20');
+   const detailURL=w.location.href;q('[data-population-national]').click();const nationwide=snapshot(w);
+   assert.equal(nationwide.view,view);assert.deepEqual(nationwide.options,originalOptions);assert.equal(nationwide.viewDisabled,false);assert.equal(nationwide.state,'');assert.equal(nationwide.metric,'');assert.equal(nationwide.overviewHidden,false);assert.equal(nationwide.detailHidden,true);
+   w.history.back();await w.happyDOM.waitUntilComplete();assert.equal(w.location.href,detailURL);assert.equal(q('[data-population-view]').value,'count');assert.equal(q('[data-population-state]').value,'20');
+   w.history.forward();await w.happyDOM.waitUntilComplete();assert.deepEqual(snapshot(w),nationwide);
+   reloaded=await page(w.location.search);assert.deepEqual(snapshot(reloaded),nationwide);
+   reloaded.document.querySelector('[data-population-category="distribution"]').click();assert.equal(reloaded.document.querySelector('[data-population-view]').value,view);
+  }finally{await w.happyDOM.close();if(reloaded)await reloaded.happyDOM.close();}
+ }
+});
+
 test('A nationwide composition source returns nationwide after choosing a different comparison target',async()=>{
  const w=await page('?category=religion&compositionMetric=no_religion&compositionMeasure=share&frame=120,80,600,400');try{const q=s=>w.document.querySelector(s),source=w.location.href;
   q('[data-population-composition-compare]').click();change(w,'[data-population-state]','20');assert.match(q('[data-population-composition-return]').textContent,/メキシコ全国/);assert.equal(q('[data-population-composition-return]').href,source);q('[data-population-composition-return]').click();assert.equal(w.location.href,source);assert.equal(q('[data-population-state]').value,'');assert.equal(new URL(w.location).searchParams.get('frame'),'120,80,600,400');

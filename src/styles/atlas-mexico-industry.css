@@ -51,6 +51,9 @@
  .mexico-workspace.mexico-industry .mi-reading h2{font-size:21px;line-height:1.4}
  .mexico-workspace.mexico-industry .industry-selected-reading-body section h3{font:700 14px/1.5 var(--sans);margin:0 0 5px}
  .mexico-workspace.mexico-industry .industry-guide{font-size:11px;line-height:1.5;margin:4px 0 7px}
+ /* Two narrow comparison maps must not inherit the single-map 620px frame.
+    Keep their full native view above the captions and matching legends. */
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace.mexico-industry.is-comparison[data-field=industry] .mexico-map-frame{height:auto;min-height:0;max-height:none;aspect-ratio:900/580}
 }
 /* Match the U.S. desktop cascade, not the earlier field stylesheet's 7:3 ratio. */
 @media(min-width:1200px) and (max-width:1599px){

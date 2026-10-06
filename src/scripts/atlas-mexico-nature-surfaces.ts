@@ -25,6 +25,7 @@ export function initMexicoNatureSurfaces(
   entries.setAttribute('role', 'group');
   entries.setAttribute('aria-label', '代表水系の国内範囲を選ぶ');
   q('[data-mexico-hydrology-legend]')?.after(legend, entries);
+  const legendHome = document.createComment('quantitative-legend-home'); legend.before(legendHome);
   const images = new Map<string, SVGImageElement>();
   let surfaces: MexicoSurfaceManifest | null = null, basins: any = null;
   const text = (selector: string, value: string) => {const node = q(selector); if (node) node.textContent = value;};
@@ -63,6 +64,7 @@ export function initMexicoNatureSurfaces(
     if (category === 'basins') {
       if (!basins) basins = await json('catalog.json', assets.basinAssetBase);
       if (!current()) return null;
+      legendHome.after(legend);
       // Each plan rejects unverified flow arrows and mouth markers, even if supplied accidentally.
       const plans = basins.systems.map((system: any) => preparedMexicoBasinPlan(basins, system.id));
       const requested = feature.startsWith('basins:') ? feature.slice(7) : '';
@@ -104,6 +106,11 @@ export function initMexicoNatureSurfaces(
     if (!surfaces) surfaces = validateMexicoSurfaceManifest(await json('manifest.json', assets.surfaceAssetBase));
     if (!current()) return null;
     const layer = surfaces.layers[category], {domain, ticks, unit} = layer.legend;
+    const readingSummary = q('[data-mexico-water-reading-summary]');
+    if (readingSummary) {
+      const lead = readingSummary.querySelector(':scope > .mexico-takeaway');
+      if (lead) lead.after(legend); else readingSummary.prepend(legend);
+    }
     legend.replaceChildren(); legend.hidden = false;
     const label = document.createElement('p'); label.className = 'mexico-quantitative-legend-label'; label.textContent = `${layer.titleJa}（${unit}）｜${category === 'precipitation' ? '多いほど濃い青' : '高いほど濃い色'}`;
     const ramp = document.createElement('div'); ramp.className = 'mexico-quantitative-ramp'; ramp.style.background = mexicoSurfaceGradient(layer.legend); ramp.setAttribute('aria-hidden', 'true');

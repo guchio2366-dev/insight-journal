@@ -74,6 +74,16 @@ async function agriculture({page, evidence}) {
     assert(distribution.labels.length > 0 && distribution.labels.every(label => label.fill === label.sourceFill), 'Labels must match their crop colors');
     return distribution;
   });
+  await step('Every crop keeps a visible selected map label after collision layout', async () => {
+    const ids = await page.locator('[data-crop-select]').evaluateAll(nodes => [...new Set(nodes.map(node => node.getAttribute('data-crop-select')))]);
+    assert.equal(ids.length, 11);
+    for (const id of ids) {
+      await click(page, `[data-crop-select="${id}"]`);
+      assert(await page.locator(`[data-crop-label="${id}"]:visible`).count() > 0, `${id}: selected crop label must remain visible`);
+    }
+    await click(page, '[data-crop-select="corn"]');
+    return {verifiedCropIds: ids};
+  });
   await step('PC camera zoom, pan, reload and reset', async () => {
     await zoom(page, 'agriculture', '[data-map-action="in"]', '[data-map-action="out"]', '[data-map-action="fit"]');
     await click(page, '[data-map-action="in"]'); const before = await frame(page, 'agriculture');
@@ -141,8 +151,8 @@ async function water({page, evidence}) {
   await step('Water peer tabs preserve the ten original groundwater classes and meaning', async () => {
     await click(page, 'button[data-mexico-nature-category="rivers-groundwater"]'); await hydrologyReady(page);
     assert.equal(await page.locator('[data-mexico-nature-water-tabs] button').count(), 3);
-    const options = await page.locator('[data-mexico-groundwater-class] option').allTextContents(); assert.equal(options.length, 11);
-    assert.equal(await page.locator('[data-mexico-groundwater-class]').inputValue(), 'all');
+    const options = await page.locator('select[data-mexico-groundwater-class] option').allTextContents(); assert.equal(options.length, 11);
+    assert.equal(await page.locator('select[data-mexico-groundwater-class]').inputValue(), 'all');
     assert.match(await text(page, '[data-mexico-nature-period]'), /1996.*2008/);
     assert.match(await text(page, '[data-mexico-hydrology-body]'), /固結|非固結/);
     return {options, period: await text(page, '[data-mexico-nature-period]')};
@@ -151,7 +161,7 @@ async function water({page, evidence}) {
     await click(page, 'button[data-mexico-nature-category="precipitation"]'); await hydrologyReady(page, 'precipitation');
     assert.match(await text(page, '[data-mexico-quantitative-legend]'), /mm\/年/);
     assert.match(await text(page, '[data-mexico-nature-period]'), /1991[–—-]2020/);
-    assert.match(await page.locator('[data-mexico-numeric-image]').getAttribute('href'), /gpcc.*annual\.png/);
+    assert.match(await page.locator('image[data-mexico-numeric-image]').getAttribute('href'), /gpcc.*annual\.png/);
     return {legend: await text(page, '[data-mexico-quantitative-legend]')};
   });
   await step('Three representative domestic basin systems expose their evidence limit', async () => {
@@ -160,7 +170,7 @@ async function water({page, evidence}) {
     for (const id of ['bravo', 'lerma-chapala-santiago', 'grijalva-usumacinta']) {
       await click(page, `button[data-mexico-basin-system="${id}"]`); await hydrologyReady(page, 'basins');
       assert.equal(await page.locator(`button[data-mexico-basin-system="${id}"]`).getAttribute('aria-pressed'), 'true');
-      assert.equal(await page.locator('[data-mexico-prepared-surface]').getAttribute('data-mexico-basin-system'), id);
+      assert.equal(await page.locator('g[data-mexico-prepared-surface]').getAttribute('data-mexico-basin-system'), id);
     }
     assert.match(await text(page, '#mexico-nature-map-desc'), /未確認/);
     assert.match(await text(page, '[data-mexico-hydrology-body]'), /国外|国内|国境/);
@@ -174,7 +184,7 @@ async function elevation({page, evidence}) {
   await step('Elevation surface and metre legend load without state selection', async () => {
     await click(page, 'button[data-mexico-nature-category="elevation"]'); await hydrologyReady(page, 'elevation');
     assert.match(await text(page, '[data-mexico-quantitative-legend]'), /標高.*m/);
-    assert.match(await page.locator('[data-mexico-numeric-image]').getAttribute('href'), /elevation-surface\.webp/);
+    assert.match(await page.locator('image[data-mexico-numeric-image]').getAttribute('href'), /elevation-surface\.webp/);
     assert(await page.locator('[data-mexico-nature-state-select]').isDisabled());
     const paths = await page.locator('path[data-mexico-nature-state]').evaluateAll(nodes => nodes.map(node => ({disabled: node.getAttribute('aria-disabled'), tabIndex: node.getAttribute('tabindex'), pointerEvents: getComputedStyle(node).pointerEvents})));
     assert.equal(paths.length, 32); assert(paths.every(node => node.disabled === 'true' && node.tabIndex === '-1' && node.pointerEvents === 'none'));

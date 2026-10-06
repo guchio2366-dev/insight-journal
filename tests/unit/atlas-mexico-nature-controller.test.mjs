@@ -27,8 +27,23 @@ function fixture(search, water = false) {
     const content=window.document.createElement('div');content.className='mexico-reading-content';const reading=window.document.createElement('div');reading.className='mexico-nature-reading';reading.append(dock,root.querySelector('[data-mexico-hydrology-reading]'),root.querySelector('[data-mexico-nature-feature-reading]'),root.querySelector('[data-mexico-nature-overview]'),comparison);content.append(reading);aside.append(legend,overview,content);root.append(aside);
     window.fetch=async url=>({ok:true,json:async()=>String(url)==='/quant/manifest.json'?surfaceManifest:String(url).endsWith('manifest.json')?{layers:{contours:{file:'contours.json',publisher:'NOAA NCEI',edition:2022,displayIntervalM:500}}}:{type:'FeatureCollection',features:[{type:'Feature',properties:{id:'contours-1000-1',name:'1000 m',elevationM:1000},geometry:{type:'LineString',coordinates:[[-104,24],[-102,25]]}}]}});
   }
+  root.insertAdjacentHTML('beforeend','<section data-mexico-climate-diagrams><p>都市の雨温図と既存説明</p></section>');
   window.eval(code); return window;
 }
+
+test('Only the climate view displays city diagrams; category/history switches retain their content', async()=>{
+  const window=fixture('?view=climate&state=25');
+  try {
+    const plot=window.document.querySelector('[data-mexico-climate-diagrams]'), saved=plot.innerHTML;
+    assert.equal(plot.hidden,false);
+    for(const query of ['?view=climate&category=elevation&state=25','?view=climate&category=precipitation&state=25','?view=climate&category=basins&state=25','?view=climate&category=rivers-groundwater&state=25','?view=relief&state=25','?view=climate&compare=population&state=25']){
+      window.history.replaceState(null,'',query);window.dispatchEvent(new window.PopStateEvent('popstate'));
+      assert.equal(plot.hidden,true,query);assert.equal(plot.innerHTML,saved);
+    }
+    window.history.replaceState(null,'','?view=climate&state=25');window.dispatchEvent(new window.PopStateEvent('popstate'));
+    assert.equal(plot.hidden,false);assert.equal(plot.innerHTML,saved);
+  }finally{await window.happyDOM.close();}
+});
 
 test('Quantitative elevation comparison preserves legacy source URL state while displaying the new numerical surface', async()=>{
   const wait=async window=>{for(let n=0;n<100&&window.document.querySelector('[data-mexico-workspace]').dataset.mexicoHydrologyReady!=='true';n++){window.document.querySelector('[data-mexico-numeric-image]')?.dispatchEvent(new window.Event('load'));await new Promise(resolve=>setTimeout(resolve,5));}};

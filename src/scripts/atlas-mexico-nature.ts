@@ -28,6 +28,7 @@ export function initMexicoNature(root: HTMLElement): void {
     root.classList.toggle('is-comparison', state.compare !== null);
     root.dataset.mexicoNatureView = state.view; root.dataset.mexicoNatureCompare = state.compare ?? ''; root.dataset.mexicoNatureState = state.state; root.dataset.mexicoNatureFallback = String(state.fallback);
     root.dataset.mexicoNatureCategory = state.category; root.dataset.mexicoNatureItem = state.item; root.dataset.mexicoNatureFeature = state.feature;
+    visible('[data-mexico-climate-diagrams]', state.view === 'climate' && !state.category && !state.compare);
     for (const button of all<HTMLButtonElement>('[data-mexico-nature-view]')) button.setAttribute('aria-pressed', String(!state.category && button.dataset.mexicoNatureView === state.view));
     const water = state.category !== '' && state.category !== 'elevation';
     visible('[data-mexico-nature-water-tabs]', water);

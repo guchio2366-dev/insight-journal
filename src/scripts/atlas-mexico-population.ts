@@ -47,7 +47,7 @@ export function initMexicoPopulation(root: HTMLElement) {
     query<HTMLButtonElement>('[data-population-map-action="out"]').disabled=frame[2]>=900;
     query<HTMLButtonElement>('[data-population-map-action="in"]').disabled=frame[2]<=180;
     const compositionMetric=mexicoCompositionMetric(compositionData,state.category,composition.metric);
-    if(!compositionMetric)restoreMexicoPopulationComposition(root);
+    if(!compositionMetric||composition.overview)restoreMexicoPopulationComposition(root);
     const selectedState = requestedOverview?undefined:population.states.find(row => row.stateCode === state.state);
     const selected = selectedState??{nameJa:'メキシコ全国',short:'全国',population:population.nationalPopulation,density:population.nationalDensity};
     const region = selectedState?mexicoPopulationRegionReading(state.state):null;

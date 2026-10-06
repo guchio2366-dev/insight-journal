@@ -107,6 +107,7 @@ test('prepared precipitation waits for its exact PNG and shows annual mm, baseli
     assert.equal(f.q('[data-mexico-nature-map-title]').textContent, '年降水量');
     assert.equal(f.q('[data-mexico-nature-period]').textContent, '1991–2020年平年値');
     assert.match(f.q('[data-mexico-quantitative-legend]').textContent, /mm\/年.*多いほど濃い青/);
+    assert.equal(f.q('[data-mexico-quantitative-legend]').parentElement, f.q('[data-mexico-water-reading-summary]'), 'The numerical scale precedes the detailed reading rather than falling below the map');
     const ticks = [...f.root.querySelectorAll('.mexico-quantitative-ticks span')];
     assert.deepEqual(ticks.map(node => node.textContent), ['0', '500', '1,000', '2,000', '3,000', '4,000']);
     assert.deepEqual(ticks.map(node => node.style.left), ['0%', '12.5%', '25%', '50%', '75%', '100%']);

@@ -120,5 +120,8 @@
 .mexico-workspace.mexico-nature[data-mexico-nature-category=elevation] .mexico-nature-state{cursor:default;stroke-width:.5;opacity:.5}
 @media(max-width:600px){.mexico-basin-system-picker{grid-template-columns:1fr}.mexico-quantitative-ticks{font-size:11px}.mexico-nature-map-title{flex-wrap:wrap;gap:4px}.mexico-nature-map-title span{white-space:normal}}
 @media(min-width:960px){
- .atlas-desktop-shell .mexico-workspace.mexico-nature[data-mexico-nature-view=climate][data-mexico-nature-category=""]:not(.is-comparison) .mexico-reading{height:auto;max-height:none;overflow:visible;align-self:start}
+ /* One bounded reader contains the full text; inner sections never create competing scroll boxes. */
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace.mexico-nature[data-field=natural] .mexico-reading{display:block;height:auto!important;min-height:0;max-height:clamp(420px,calc(100dvh - 180px),680px)!important;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;align-self:start}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace.mexico-nature[data-field=natural] :is(.mexico-reading-content,.mexico-nature-reading,.mexico-nature-reading>section,.mexico-nature-reading-body){display:block;flex:none;height:auto;min-height:0;max-height:none;overflow:visible;scrollbar-gutter:auto}
 }
+.mexico-workspace.mexico-nature [data-mexico-climate-diagrams][hidden]{display:none!important}
