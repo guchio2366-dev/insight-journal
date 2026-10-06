@@ -68,7 +68,25 @@ test('URL state survives refresh, comparison and targeted return; malformed para
  const comparison=lib.mexicoPopulationScaleUrl(source,state);assert.equal(comparison.searchParams.get('compare'),'scale');assert.equal(comparison.searchParams.get('sourceView'),'population');
  const comparisonState=lib.readMexicoPopulationState(comparison,codes);const back=lib.mexicoPopulationReturnUrl(comparison,comparisonState);assert.equal(back.searchParams.get('view'),'population');assert.equal(back.searchParams.get('state'),'08');assert.equal(back.searchParams.get('only'),'1');assert.equal(back.searchParams.get('fallback'),'1');assert.equal(back.searchParams.get('compare'),null);
  for(const route of ['industry','nature']){const target=new URL(`/insight-journal/atlas/north-america/mexico/${route}/`,source);const result=(route==='industry'?lib.mexicoPopulationIndustryUrl:lib.mexicoPopulationNatureUrl)(target,state);assert.equal(result.pathname,target.pathname);assert.equal(result.searchParams.get('compare'),'population');assert.equal(result.searchParams.get('from'),'population');assert.equal(result.searchParams.get('state'),'08');assert.equal(result.searchParams.get('only'),'1');assert.equal(result.searchParams.get('sourceView'),'population');assert.equal(result.searchParams.get('fallback'),'1');if(route==='nature')assert.equal(result.searchParams.get('view'),'relief');}
- const invalid=lib.readMexicoPopulationState(new URL('https://example.test/?category=bad&view=bad&state=999&compare=https://evil.test&only=true&sourceView=bad&fallback=true'),codes);assert.deepEqual(invalid,{category:'distribution',view:'density',state:'09',compare:null,sourceView:'density',only:false,fallback:false});
+ const invalid=lib.readMexicoPopulationState(new URL('https://example.test/?category=bad&view=bad&state=999&compare=https://evil.test&only=true&sourceView=bad&fallback=true'),codes);assert.deepEqual(invalid,{category:'distribution',view:'density',state:'',compare:null,sourceView:'density',only:false,fallback:false});
+});
+
+test('All population categories start nationally without inventing a selected state, including malformed isolation URLs',()=>{
+ for(const category of ['distribution','ethnicity','religion'])for(const suffix of ['', '&state=99&only=1','&state=&only=1']){
+  const source=new URL(`https://example.test/population/?category=${category}${suffix}&frame=120,80,600,400`);
+  const state=lib.readMexicoPopulationState(source,codes);assert.equal(state.state,'');assert.equal(state.only,false);
+  const saved=lib.writeMexicoPopulationState(source,state);assert.equal(saved.searchParams.has('state'),false);assert.equal(saved.searchParams.has('only'),false);assert.equal(saved.searchParams.get('frame'),'120,80,600,400');
+  assert.equal(lib.readMexicoPopulationState(lib.mexicoPopulationScaleUrl(saved,state),codes).state,'');
+  for(const helper of [lib.mexicoPopulationIndustryUrl,lib.mexicoPopulationNatureUrl]){const target=helper(new URL('https://example.test/compare/?state=09'),state);assert.equal(target.searchParams.has('state'),false);assert.equal(target.searchParams.get('sourceState'),'');assert.equal(target.searchParams.get('sourceOnly'),'0');}
+ }
+});
+
+test('Population camera is bounded, zoomable, and independent from selected-state URL changes',()=>{
+ const base=new URL('https://example.test/population/');assert.deepEqual(lib.readMexicoPopulationFrame(base),[0,0,900,580]);
+ let frame=[0,0,900,580];for(let i=0;i<12;i++)frame=lib.zoomMexicoPopulationFrame(frame,'in');assert.equal(frame[2],180);assert.equal(frame[3],116);
+ for(let i=0;i<12;i++)frame=lib.zoomMexicoPopulationFrame(frame,'out');assert.deepEqual(frame,[0,0,900,580]);
+ for(const value of ['NaN,0,900,580','-1,0,900,580','0,0,999,580','900,0,200,200']){base.searchParams.set('frame',value);assert.deepEqual(lib.readMexicoPopulationFrame(base),[0,0,900,580]);}
+ const source=new URL('https://example.test/population/?view=density&frame=120,80,600,400');const state=lib.readMexicoPopulationState(source,codes);const compared=lib.mexicoPopulationScaleUrl(source,state);const target={...lib.readMexicoPopulationState(compared,codes),state:'20',only:true};const saved=lib.writeMexicoPopulationState(compared,target);const back=lib.mexicoPopulationReturnUrl(saved,target);assert.equal(back.searchParams.has('state'),false);assert.deepEqual(lib.readMexicoPopulationFrame(back),[120,80,600,400]);assert.equal(back.searchParams.has('only'),false);
 });
 
 test('Unprepared population categories round-trip independently of source population data and comparison',()=>{

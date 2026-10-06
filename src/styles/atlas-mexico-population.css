@@ -9,6 +9,7 @@
 .mexico-workspace.mexico-population [hidden]{display:none!important}
 .population-composition-hero p{font-size:14px;line-height:1.7;margin:6px 0}.population-composition-hero>.mexico-takeaway{margin-top:0;font-weight:650}.population-composition-hero .mexico-return{display:block;min-height:44px;padding:7px 9px;border:1px solid #8ca69b;border-radius:4px;font-size:14px;line-height:1.6}.population-composition-hero .population-composition-selected dl{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px}.population-composition-hero .population-composition-selected dl>div{display:block}.population-composition-hero .population-composition-selected dl>div:last-child{grid-column:1/-1;display:flex}
 .mexico-workspace.mexico-population[data-population-composition=true][data-mexico-reading-selected=false] .population-composition-selected{display:none}
+.mexico-workspace.mexico-population[data-population-composition=true][data-population-overview=false] .population-composition-selected{display:block}
 .population-state{stroke:#fffefa;stroke-width:.8;cursor:pointer}.population-state.is-selected-population{stroke:#9c3b24;stroke-width:2.6}.population-state:focus-visible,.population-symbol:focus-visible circle{outline:none;stroke:#9c3b24;stroke-width:4}
 .population-context{fill:#e1e6dc}.population-symbol circle,.population-symbol-legend circle{fill:#d68b38;fill-opacity:.58;stroke:#81511c;stroke-width:1.4}.population-symbol{cursor:pointer}.population-symbol.is-selected-population circle{stroke:#862f21;stroke-width:3.2;fill-opacity:.76}
 .population-labels text,.population-selected-label text{font-size:28px;font-weight:650;fill:#203d36;paint-order:stroke;stroke:#fffefa;stroke-width:5px;stroke-linejoin:round}.population-labels{pointer-events:none}.population-selected-label{pointer-events:none}.population-selected-label path{fill:none;stroke:#9c3b24;stroke-width:2;vector-effect:non-scaling-stroke}.population-selected-label text{fill:#772f21}
@@ -38,3 +39,35 @@
  .mexico-workspace.mexico-population .mexico-comparison-link span{font-size:12px;line-height:1.45}
  .mexico-workspace.mexico-population [data-population-reference]{top:62px;bottom:auto;width:fit-content;max-width:calc(100% - 16px);right:auto;margin:0}
 }
+
+/* National entry cards use the same state geometry and official values as detail. */
+.mexico-population .population-overview-maps{padding:14px;border:1px solid #abbfc2;background:#f4f7f3}
+.mexico-population .population-overview-maps h2{margin:0 0 8px;font-size:19px;line-height:1.5}
+.mexico-population .population-overview-maps>div>p{margin:0 0 12px;font-size:14px;line-height:1.7}
+.mexico-population .population-overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:12px}
+.mexico-population .population-overview-card{min-width:0;border:1px solid #c5d5cf;background:#fffefa}
+.mexico-population .population-overview-card>button{display:block;width:100%;padding:12px;border:0;background:none;color:#243e43;text-align:left;cursor:pointer}
+.mexico-population .population-overview-card-title{display:block;margin:0;min-height:3em;font-size:16px;line-height:1.5;font-weight:700}
+.mexico-population .population-overview-card svg{display:block;width:100%;height:auto;background:#eaf1ee;margin:8px 0}
+.mexico-population .population-overview-card svg use{stroke:#fffefa;stroke-width:.75;vector-effect:non-scaling-stroke}
+.mexico-population .population-shape-definitions{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
+.mexico-population .population-overview-national{display:flex;justify-content:space-between;flex-wrap:wrap;align-items:baseline;gap:5px;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.mexico-population .population-overview-national small{font-size:14px;font-weight:400}
+.mexico-population .population-overview-action{display:block;font-size:14px;margin-top:8px;color:#1e6275;text-decoration:underline;text-underline-offset:3px}
+.mexico-population .population-overview-card>p,.mexico-population .population-overview-card>details{margin:0;padding:0 12px 12px;font-size:13px;line-height:1.6}
+.mexico-population .population-overview-key{display:flex;flex-wrap:wrap;gap:6px 12px;margin:8px 0;padding:0;list-style:none;font-size:13px;line-height:1.5}
+.mexico-population .population-overview-key li{display:flex;align-items:center;gap:5px}
+.mexico-population .population-overview-key i{width:17px;height:13px;flex:none;border:1px solid #54736840}
+.mexico-population .population-overview-values{list-style:none;margin:8px 0;padding:0}
+.mexico-population .population-overview-values button{display:block;width:100%;min-height:44px;padding:8px 0;border:0;border-bottom:1px solid #d6dfd7;background:none;color:#20566a;font:inherit;text-align:left;cursor:pointer}
+.mexico-population .population-overview-values button span{display:block;font-size:14px;color:#31474b;font-variant-numeric:tabular-nums;margin-top:3px}
+.mexico-population .population-overview-reading p,.mexico-population .population-national-intro{font-size:15px!important;line-height:1.75!important}
+.mexico-population .population-overview-reading h2{font-size:20px!important;line-height:1.5}
+.mexico-population .population-overview-reading h3{font-size:16px!important}
+.mexico-population .population-state:focus,.mexico-population .population-symbol:focus{outline:none}
+.mexico-population .population-state:focus-visible,.mexico-population .population-symbol:focus-visible circle{outline:none;stroke:#9c3b24;stroke-width:4}
+.mexico-population .population-scope-caption{margin:0 0 12px;font-size:14px;line-height:1.5;color:#496876}
+.mexico-population .population-map-actions{position:absolute;right:8px;top:64px;z-index:5;display:grid;gap:5px}
+.mexico-population .population-map-actions button{min-width:40px;min-height:40px;padding:6px;border:1px solid #a6bab7;border-radius:4px;background:#fffef4eb;color:#294650;font-size:15px}
+.mexico-population .population-map-actions button:disabled{opacity:.55}
+@media(max-width:959px){.mexico-population .population-overview-grid{grid-template-columns:1fr}.mexico-population .population-overview-card-title{min-height:0}.mexico-population .population-overview-card svg{max-height:255px}.mexico-population .population-map-actions{top:auto;bottom:8px}}

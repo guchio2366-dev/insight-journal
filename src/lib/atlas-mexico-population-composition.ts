@@ -14,8 +14,9 @@ export interface MexicoCompositionMetric {
   sharePrecision?:number;isEstimate?:boolean;nationalShareConfidenceInterval90?:MexicoCompositionInterval;nationalConfidenceInterval90?:MexicoCompositionInterval;nationalCountConfidenceInterval90?:MexicoCompositionInterval;nationalUnknownCount?:number;comparabilityNote?:string;distributionSummary?:string;
 }
 export interface MexicoCompositionData {referenceYear:number;metrics:MexicoCompositionMetric[]}
-export interface MexicoCompositionSelection {metric:string;measure:MexicoCompositionMeasure;compare:boolean;sourceQuery:string|null}
-export const mexicoCompositionKeys=['compositionMetric','compositionMeasure','compositionCompare','compositionFrom'] as const;
+export interface MexicoCompositionSelection {metric:string;measure:MexicoCompositionMeasure;compare:boolean;sourceQuery:string|null;overview:boolean}
+export const mexicoCompositionKeys=['compositionMetric','compositionMeasure','compositionCompare','compositionFrom','compositionView'] as const;
+export const mexicoReligionOverviewMetricIds=['catholic','protestant_evangelical','no_religion'] as const;
 export const mexicoCompositionShareBins:MexicoCompositionBin[]=[
   {min:0,max:1,color:'#edf3df',label:'1%未満'},
   {min:1,max:5,color:'#d1e6c6',label:'1–5%未満'},
@@ -33,6 +34,19 @@ export function mexicoCompositionShare(record:MexicoCompositionRecord):number|nu
 export function mexicoCompositionColor(record:MexicoCompositionRecord,metric:MexicoCompositionMetric):string {
   const share=mexicoCompositionShare(record);
   return share===null?'url(#mexico-population-missing)':(metric.shareBins??mexicoCompositionShareBins).find(bin=>share>=bin.min&&(bin.max===null||share<bin.max))?.color??'url(#mexico-population-missing)';
+}
+/** Overview uses absolute shares on one fixed scale; detail keeps source-specific bins. */
+export function mexicoCompositionOverviewColor(record:MexicoCompositionRecord,metric:MexicoCompositionMetric):string {
+  return mexicoCompositionColor(record,metric.category==='religion'?{...metric,shareBins:mexicoCompositionShareBins}:metric);
+}
+export function mexicoCompositionOverviewMetrics(data:MexicoCompositionData,category:MexicoPopulationCategory):MexicoCompositionMetric[] {
+  if(category==='religion')return mexicoReligionOverviewMetricIds.flatMap(id=>data.metrics.filter(metric=>metric.category===category&&metric.id===id));
+  return data.metrics.filter(metric=>metric.category===category);
+}
+export function mexicoCompositionNationalRecord(metric:MexicoCompositionMetric):MexicoCompositionRecord {
+  return {count:metric.nationalCount,denominator:metric.nationalDenominator,status:metric.nationalStatus,
+    shareConfidenceInterval90:metric.nationalShareConfidenceInterval90??metric.nationalConfidenceInterval90,
+    countConfidenceInterval90:metric.nationalCountConfidenceInterval90,unknownCount:metric.nationalUnknownCount};
 }
 export function formatMexicoCompositionShare(record:MexicoCompositionRecord,metric:MexicoCompositionMetric):string {
   const share=mexicoCompositionShare(record);
@@ -53,21 +67,24 @@ export function mexicoCompositionMetric(data:MexicoCompositionData,category:Mexi
 }
 export function readMexicoCompositionSelection(url:URL,data:MexicoCompositionData,category:MexicoPopulationCategory):MexicoCompositionSelection {
   const p=url.searchParams,metric=mexicoCompositionMetric(data,category,p.get('compositionMetric')??'');
+  const overview=category!=='distribution'&&(p.get('reading')==='overview'||p.get('compositionView')==='overview'||!p.has('compositionMetric')&&!metric?.states?.[p.get('state')??'']);
   const source=p.get('compositionFrom'),sourceURL=source?.startsWith('?')?new URL(source,url):null;
   const sourceMetric=sourceURL?data.metrics.find(metric=>metric.category===sourceURL.searchParams.get('category')&&metric.id===sourceURL.searchParams.get('compositionMetric')):undefined;
-  const validSource=!!sourceURL&&!sourceURL.searchParams.has('compositionCompare')&&!sourceURL.searchParams.has('compositionFrom')&&!!sourceMetric&&sourceMetric.id===metric?.id&&!!sourceMetric.states[sourceURL.searchParams.get('state')??'']&&['share','count'].includes(sourceURL.searchParams.get('compositionMeasure')??'');
-  return {metric:metric?.id??'',measure:p.get('compositionMeasure')==='count'?'count':'share',compare:p.get('compositionCompare')==='scale'&&validSource,sourceQuery:validSource?source:null};
+  const sourceState=sourceURL?.searchParams.get('state')??'';
+  const validSource=!!sourceURL&&!sourceURL.searchParams.has('compositionCompare')&&!sourceURL.searchParams.has('compositionFrom')&&sourceURL.searchParams.get('compositionView')!=='overview'&&!!sourceMetric&&sourceMetric.id===metric?.id&&(!sourceState||!!sourceMetric.states[sourceState])&&(!sourceURL.searchParams.has('only')||!!sourceState)&&['share','count'].includes(sourceURL.searchParams.get('compositionMeasure')??'');
+  return {metric:metric?.id??'',measure:p.get('compositionMeasure')==='count'?'count':'share',compare:!overview&&p.get('compositionCompare')==='scale'&&validSource,sourceQuery:!overview&&validSource?source:null,overview};
 }
 export function writeMexicoCompositionSelection(url:URL,selection:MexicoCompositionSelection,category:MexicoPopulationCategory):URL {
   const next=new URL(url);for(const key of mexicoCompositionKeys)next.searchParams.delete(key);
   if(category==='distribution'||!selection.metric)return next;
+  if(selection.overview){next.searchParams.set('compositionView','overview');return next;}
   next.searchParams.set('compositionMetric',selection.metric);next.searchParams.set('compositionMeasure',selection.measure);
   if(selection.compare&&selection.sourceQuery?.startsWith('?')){next.searchParams.set('compositionCompare','scale');next.searchParams.set('compositionFrom',selection.sourceQuery);}
   return next;
 }
 export function mexicoCompositionComparisonUrl(source:URL):URL {
   const next=new URL(source);next.searchParams.delete('compositionCompare');next.searchParams.delete('compositionFrom');
-  const sourceQuery=next.search;next.searchParams.set('compositionCompare','scale');next.searchParams.set('compositionFrom',sourceQuery);return next;
+  const sourceQuery=source.searchParams.has('compositionCompare')||source.searchParams.has('compositionFrom')?next.search:source.search;next.searchParams.set('compositionCompare','scale');next.searchParams.set('compositionFrom',sourceQuery);return next;
 }
 export function mexicoCompositionReturnUrl(current:URL,selection:MexicoCompositionSelection):URL {
   return selection.sourceQuery?.startsWith('?')?new URL(selection.sourceQuery,current):writeMexicoCompositionSelection(current,{...selection,compare:false,sourceQuery:null},current.searchParams.get('category') as MexicoPopulationCategory);
