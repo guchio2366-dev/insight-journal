@@ -10,6 +10,9 @@ import { mercatorPoint } from '../../src/lib/atlas-asia-state.ts';
 import {gunzipSync} from 'node:zlib';
 import {withSocialOverviews,socialEntry} from '../../src/data/atlas/asia-social-overview.ts';
 
+const industryAsset=name=>JSON.parse(gunzipSync(readFileSync(new URL('../../public/assets/atlas/asia-industry-v1/'+name,import.meta.url))));
+const industryManifest=JSON.parse(readFileSync(new URL('../../public/assets/atlas/asia-industry-v1/manifest.json',import.meta.url),'utf8'));
+
 // Replace the renderer/worker boundary only. The production controller, URL
 // codec, selection logic and fetch handling run without a prebuilt dist/ tree.
 const mapStub = `
@@ -135,6 +138,13 @@ async function setup(query = '', options = {}) {
     const conf=JSON.parse(q('[data-asia-config]').textContent);
     const topic=(id,title,kind,country,fuel)=>({id,title,kind,country,fuel,parent:'製造業',unit:'百万円',year:'2024',source:'https://example.org/source',note:'公表値の定義です。'});
     conf.industryBase='/assets/industry/';conf.industry={data:'east.json.gz',countries:['JPN','CHN','MNG'],topics:[topic('manufacturing','製造業','national'),topic('jp-00','日本製造業','admin','JPN'),topic('power-all','発電所','power',null,'all'),topic('power-coal','石炭','power',null,'Coal')]};
+    if(options.industryRegion){
+      conf.industry={...industryManifest.regions[options.industryRegion],data:'east.json.gz'};
+      if(options.industryRegion==='southeast-asia'){
+        conf.countries.push({code:'MYS',name:'マレーシア',bounds:[99,0,120,8]});
+        q('[data-country-select]').insertAdjacentHTML('beforeend','<option value="MYS">マレーシア</option>');
+      }
+    }
     q('[data-asia-config]').textContent=JSON.stringify(conf);
     const fields=['industry-panel','industry-topics','industry-legend','industry-title','industry-lead','industry-value','industry-definition','industry-coverage','industry-status','industry-content','industry-method','industry-legend-title','industry-scale','industry-legend-note','industry-search-label','industry-detail-label'];
     for(const name of fields){const e=window.document.createElement('div');e.setAttribute('data-'+name,'');root.append(e);}
@@ -185,6 +195,7 @@ async function setup(query = '', options = {}) {
   window.__hitCountry=options.hitCountry;
   window.__forceMapFail = options.mapFailure;
   window.__initialSourceFailure = options.initialSourceFailure;
+  window.__deferMapLoad = options.delayedMap;
   const requests = [];
   let rejectClimate, resolveRice,resolveWater,resolveUrban,resolveFarm,resolvePresentation;
   let statisticsAttempts=0,industryAttempts=0,resolveIndustry,presentationAttempts=0;
@@ -214,10 +225,10 @@ async function setup(query = '', options = {}) {
       };
       if(options.delayedHydrology&&name.endsWith('basins.json.gz'))return new Promise(resolve=>{resolveHydrology=()=>resolve(response());});return response();
     }
-    if(name==='/assets/industry/national.json.gz')return new Response(JSON.stringify({missingNotes:{},indicators:['manufacturing','agriculture','industry','services'].map(id=>({id,label:id,observations:[{countryCode:'JPN',year:2024,value:30},{countryCode:'CHN',year:2024,value:null}]}))}));
+    if(name==='/assets/industry/national.json.gz')return new Response(JSON.stringify(options.industryRegion?industryAsset('national.json.gz'):{missingNotes:{},indicators:['manufacturing','agriculture','industry','services'].map(id=>({id,label:id,observations:[{countryCode:'JPN',year:2024,value:30},{countryCode:'CHN',year:2024,value:null}]}))}));
     if(name==='/assets/industry/east.json.gz'){
       if(options.industryFailure&&industryAttempts++===0)throw Error('industry 503');
-      const response=()=>new Response(JSON.stringify({admin:[{id:'JP-23',country:'JPN',name:'愛知県',sourceName:'Aichi',point:[137,35],bounds:[136,34,138,36],series:{'jp-00':[{year:'2024',value:59314388}]}}],power:[{id:'p1',country:'JPN',name:'Water plant',fuel:'Hydro',point:[136,35],capacity:100,capacityYear:null,source:'WRI',url:'https://example.org/plant',locationSource:'Original',generation:[]},{id:'p2',country:'CHN',name:'Coal plant',fuel:'Coal',point:[110,35],capacity:200,generation:[]}],steel:{},geometry:{type:'FeatureCollection',features:[]}}));
+      const response=()=>new Response(JSON.stringify(options.industryRegion?industryAsset(industryManifest.regions[options.industryRegion].data):{admin:[{id:'JP-23',country:'JPN',name:'愛知県',sourceName:'Aichi',point:[137,35],bounds:[136,34,138,36],series:{'jp-00':[{year:'2024',value:59314388}]}}],power:[{id:'p1',country:'JPN',name:'Water plant',fuel:'Hydro',point:[136,35],capacity:100,capacityYear:null,source:'WRI',url:'https://example.org/plant',locationSource:'Original',generation:[]},{id:'p2',country:'CHN',name:'Coal plant',fuel:'Coal',point:[110,35],capacity:200,generation:[]}],steel:{},geometry:{type:'FeatureCollection',features:[]}}));
       if(options.delayedIndustry)return new Promise(resolve=>{resolveIndustry=()=>resolve(response());});return response();
     }
     if (name === '/assets/geography.json') return new Response(JSON.stringify({ type: 'FeatureCollection', features: [] }));
@@ -243,7 +254,7 @@ async function setup(query = '', options = {}) {
     throw Error('Unexpected fetch: ' + name);
   };
   window.eval(bundle.outputFiles[0].text);
-  await until(() => options.mapFailure ? !q('[data-map-retry]').hidden : root.dataset.mapReady === 'true', 'controller ready');
+  await until(() => options.delayedMap ? window.__map?.events.load?.length : options.mapFailure ? !q('[data-map-retry]').hidden : root.dataset.mapReady === 'true', 'controller ready');
   return { window, root, q, requests, resolvePresentation:()=>resolvePresentation?.(), rejectPopulation:()=>rejectPopulation?.(Error('population failed late')),resolveTrade:()=>resolveTrade?.(),rejectClimate: () => rejectClimate?.(Error('simulated climate fetch failure')), resolveRice: () => resolveRice?.(),resolveWater:()=>resolveWater?.(),resolveUrban:()=>resolveUrban?.(),resolveFarm:()=>resolveFarm?.(),resolveIndustry:()=>resolveIndustry?.(),resolveHydrology:()=>resolveHydrology?.(),resolveSocial:()=>resolveSocial?.() };
 }
 
@@ -363,6 +374,104 @@ test('産業の国内値・詳細URL・比較復帰は同じ場所を保持す�
   assert.equal(requests.filter(r=>r==='/assets/industry/east.json.gz').length,1);assert.equal(window.__maps.length,1);
  }finally{await window.happyDOM.close();}
 });
+
+function industryTable(q,caption){
+ const table=[...q('[data-industry-content]').querySelectorAll('table')].find(t=>t.querySelector('caption')?.textContent.startsWith(caption+'（'));
+ assert.ok(table,caption);return table;
+}
+function industryCell(table,name){
+ const row=[...table.querySelectorAll('tbody tr')].find(r=>r.querySelector('th')?.textContent===name);
+ assert.ok(row,name);return row.querySelector('td');
+}
+function industrySelectedOption(q){
+ const select=q('[data-industry-detail]');return [...select.options].find(option=>option.value===select.value);
+}
+
+test('実配信の愛知県は選択値・24業種・国内比較・年次表で同じ公表値を示す',async()=>{
+ const {window,q}=await setup('?field=industry&topic=jp-00&detail=JP-23',{industry:true,industryRegion:'east-asia'});
+ try{
+  await until(()=>q('[data-industry-value]').textContent.includes('59,314,388'),'published Aichi total');
+  assert.equal(q('[data-grid-reading]').textContent,q('[data-industry-value]').textContent);
+  assert.match(industrySelectedOption(q).textContent,/愛知県.*59,314,388/);
+  assert.match(industryCell(industryTable(q,'国内の地域を同じ年で比較する'),'愛知県').textContent,/59,314,388/);
+  assert.match(industryCell(industryTable(q,'公表値の推移'),'2024').textContent,/59,314,388/);
+  const sectors=industryTable(q,'24業種の製造品出荷額等（2024年）');
+  assert.equal(sectors.querySelectorAll('tbody tr').length,24);
+  assert.match(industryCell(sectors,'なめし革・同製品・毛皮製造業').textContent,/22,155/);
+  assert.match(q('[data-industry-lead]').textContent,/47地域.*1番目/);
+  assert.equal(new URL(window.location.href).searchParams.get('place'),'JPN');
+ }finally{await window.happyDOM.close();}
+});
+
+test('実配信の秘匿・該当なしは全表示で一致し、国内順位に含めず比較から復帰できる',async()=>{
+ const {window,q,requests}=await setup('?field=industry&topic=jp-20&detail=JP-43',{industry:true,industryRegion:'east-asia'});
+ try{
+  await until(()=>window.__map.getLayer('asia-industry-admin'),'Japanese industry statuses loaded');
+  for(const [id,name,status] of [['JP-43','熊本県','秘匿'],['JP-42','長崎県','該当なし']]){
+   q('[data-industry-detail]').value=id;q('[data-industry-detail]').dispatchEvent(new window.Event('change'));
+   const check=()=>{
+    assert.match(q('[data-industry-value]').textContent,new RegExp(name+'：'+status));
+    assert.doesNotMatch(q('[data-industry-value]').textContent,/未掲載/);
+    assert.equal(q('[data-grid-reading]').textContent,q('[data-industry-value]').textContent);
+    assert.match(industrySelectedOption(q).textContent,new RegExp(name+'.*'+status));
+    for(const cell of [
+     industryCell(industryTable(q,'24業種の製造品出荷額等（2024年）'),'なめし革・同製品・毛皮製造業'),
+     industryCell(industryTable(q,'国内の地域を同じ年で比較する'),name),
+     industryCell(industryTable(q,'公表値の推移'),'2024'),
+    ]){assert.equal(cell.textContent,status);assert.equal(cell.querySelector('.industry-bar'),null);}
+    assert.doesNotMatch(q('[data-industry-lead]').textContent,/\d+番目/,'non-numeric selections have no rank');
+    assert.equal(new URL(window.location.href).searchParams.get('detail'),id);
+    assert.equal(new URL(window.location.href).searchParams.get('topic'),'jp-20');
+   };
+   check();
+   q('[data-compare="natural"]').click();await delay();
+   assert.equal(window.__map.layers['asia-industry-admin'].layout.visibility,'none');
+   q('[data-comparison-back]').click();
+   await until(()=>window.__map.layers['asia-industry-admin'].layout.visibility==='visible','publication status restored');check();
+  }
+  const comparison=industryTable(q,'国内の地域を同じ年で比較する'),rows=[...comparison.querySelectorAll('tbody tr')];
+  assert.equal(rows.length,47);
+  assert.ok(rows.slice(0,36).every(r=>!['秘匿','該当なし','未掲載'].includes(r.querySelector('td').textContent)));
+  assert.deepEqual(rows.slice(36).map(r=>r.querySelector('td').textContent).sort(),[...Array(7).fill('秘匿'),...Array(4).fill('該当なし')].sort());
+  assert.match(q('[data-industry-coverage]').textContent,/47地域中36地域/);
+  for(const selector of ['[data-industry-scale]','[data-industry-coverage]']){
+   for(const status of ['未掲載','秘匿','該当なし'])assert.match(q(selector).textContent,new RegExp(status));
+   assert.doesNotMatch(q(selector).textContent,/統計未取得/);
+  }
+  const colors=window.__map.layers['asia-industry-admin'].paint['fill-color'];
+  assert.equal(colors[colors.indexOf('JP-43')+1],'#d2ceca');assert.equal(colors[colors.indexOf('JP-42')+1],'#d2ceca');
+  assert.notEqual(colors[colors.indexOf('JP-23')+1],'#d2ceca');
+  assert.equal(requests.filter(r=>r==='/assets/industry/east.json.gz').length,1);
+ }finally{await window.happyDOM.close();}
+});
+
+test('実配信プトラジャヤの2025年公表0と2023年欠測は取得失敗の再試行後も別表示になる',async()=>{
+ const {window,q,requests}=await setup('?field=industry&topic=my-p3&detail=MY-16',{industry:true,industryRegion:'southeast-asia',industryFailure:true});
+ try{
+  await until(()=>!q('[data-industry-retry]').hidden,'Malaysia data failure');
+  assert.equal(new URL(window.location.href).searchParams.get('detail'),'MY-16');
+  const attempts=requests.filter(r=>r==='/assets/industry/east.json.gz').length;await delay();
+  assert.equal(requests.filter(r=>r==='/assets/industry/east.json.gz').length,attempts,'retry requires the button');
+  q('[data-industry-retry]').click();
+  await until(()=>q('[data-industry-value]').textContent.includes('0（公表値）')&&window.__map.getLayer('asia-industry-admin'),'Malaysia published zero');
+  assert.equal(q('[data-industry-retry]').hidden,true);
+  assert.match(q('[data-industry-value]').textContent,/プトラジャヤ：0（公表値）.*2025/);
+  assert.equal(q('[data-grid-reading]').textContent,q('[data-industry-value]').textContent);
+  assert.match(industrySelectedOption(q).textContent,/プトラジャヤ.*0（公表値）/);
+  assert.equal(industryCell(industryTable(q,'国内の地域を同じ年で比較する'),'プトラジャヤ').textContent,'0（公表値）');
+  const history=industryTable(q,'公表値の推移');
+  assert.equal(industryCell(history,'2023').textContent,'未掲載');
+  assert.equal(industryCell(history,'2023').querySelector('.industry-bar'),null);
+  assert.equal(industryCell(history,'2024').textContent,'0（公表値）');
+  assert.equal(industryCell(history,'2025').textContent,'0（公表値）');
+  assert.match(q('[data-industry-lead]').textContent,/\d+番目/,'published zero participates in the ranking');
+  const colors=window.__map.layers['asia-industry-admin'].paint['fill-color'];assert.notEqual(colors[colors.indexOf('MY-16')+1],'#d2ceca');
+  assert.equal(new URL(window.location.href).searchParams.get('place'),'MYS');
+  assert.equal(new URL(window.location.href).searchParams.get('detail'),'MY-16');
+  assert.equal(requests.filter(r=>r==='/assets/industry/east.json.gz').length,2);
+ }finally{await window.happyDOM.close();}
+});
+
 test('遅い産業応答は別分野へ図や説明を戻さず、後から主題を選べる',async()=>{
  const {window,q,resolveIndustry,requests}=await setup('?field=industry&topic=jp-00',{industry:true,delayedIndustry:true});
  try{
@@ -375,6 +484,44 @@ test('産業資料の取得失敗は再試行でき、地図描画なしでも�
  const {window,q}=await setup('?field=industry&topic=jp-00&detail=JP-23',{industry:true,industryFailure:true,mapFailure:true});
  try{await until(()=>!q('[data-industry-retry]').hidden,'industry failure');q('[data-industry-retry]').click();await until(()=>q('[data-industry-value]').textContent.includes('59,314,388'),'industry retry');assert.equal(q('[data-industry-retry]').hidden,true);assert.equal(q('[data-map-fallback]').hidden,false);}finally{await window.happyDOM.close();}
 });
+test('産業取得失敗後の遅い地図準備・地図再生成は再通信せず、手動再試行で秘匿選択を戻す',async()=>{
+ const {window,root,q,requests}=await setup('?field=industry&topic=jp-20&detail=JP-43',{industry:true,industryRegion:'east-asia',industryFailure:true,delayedMap:true});
+ const attempts=file=>requests.filter(r=>r==='/assets/industry/'+file).length;
+ try{
+  await until(()=>!q('[data-industry-retry]').hidden,'industry failure before map load');
+  const failedSelection=new URL(window.location.href).searchParams;
+  assert.equal(failedSelection.get('detail'),'JP-43');assert.equal(failedSelection.get('topic'),'jp-20');
+  assert.equal(attempts('east.json.gz'),1);assert.equal(attempts('national.json.gz'),1);
+
+  await window.__map.fire('load');await delay();
+  assert.equal(root.dataset.mapReady,'true');
+  assert.equal(attempts('east.json.gz'),1,'late map readiness must not retry failed industry data');
+  assert.equal(attempts('national.json.gz'),1);
+  assert.equal(q('[data-industry-retry]').hidden,false);
+  assert.match(q('[data-industry-status]').textContent,/取得できませんでした/);
+  assert.equal(window.__map.getLayer('asia-industry-admin'),undefined);
+
+  const first=window.__map;
+  first.getCanvas().dispatchEvent(new window.Event('webglcontextlost'));
+  q('[data-map-retry]').click();
+  await until(()=>window.__maps.length===2&&window.__map.events.load?.length,'replacement map constructed');
+  await window.__map.fire('load');await delay();
+  assert.equal(first.removed,true);assert.equal(root.dataset.mapReady,'true');
+  assert.equal(attempts('east.json.gz'),1,'map rebuild must not retry failed industry data');
+  assert.equal(attempts('national.json.gz'),1);assert.equal(q('[data-industry-retry]').hidden,false);
+
+  q('[data-industry-retry]').click();
+  await until(()=>q('[data-industry-value]').textContent.includes('熊本県：秘匿')&&window.__map.getLayer('asia-industry-admin'),'manual retry restores withheld selection');
+  assert.equal(attempts('east.json.gz'),2);assert.equal(attempts('national.json.gz'),2);
+  assert.equal(q('[data-industry-retry]').hidden,true);assert.equal(q('[data-industry-status]').textContent,'');
+  assert.match(industrySelectedOption(q).textContent,/熊本県.*秘匿/);
+  assert.equal(industryCell(industryTable(q,'国内の地域を同じ年で比較する'),'熊本県').textContent,'秘匿');
+  assert.equal(industryCell(industryTable(q,'公表値の推移'),'2024').textContent,'秘匿');
+  assert.equal(window.__map.layers['asia-industry-admin-selected'].filter[2],'JP-43');
+  for(const key of ['detail','topic','place'])assert.equal(new URL(window.location.href).searchParams.get(key),failedSelection.get(key));
+ }finally{await window.happyDOM.close();}
+});
+
 test('発電施設の直接URLで行政区域の色・選択線を重ねない',async()=>{
  const {window,q}=await setup('?field=industry&topic=power-all&detail=p1',{industry:true});
  try{await until(()=>window.__map.getLayer('asia-industry-power'),'power loaded');assert.equal(window.__map.getLayer('asia-industry-admin'),undefined);assert.equal(window.__map.getLayer('asia-industry-national'),undefined);assert.match(q('[data-industry-value]').textContent,/100 MW/);assert.equal(window.__map.layers['asia-industry-power-selected'].layout.visibility,'visible');}finally{await window.happyDOM.close();}

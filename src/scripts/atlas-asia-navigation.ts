@@ -12,7 +12,7 @@ export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|un
  for(const b of all('[data-farm-group-topic]'))b.addEventListener('click',()=>{if(b.dataset.farmGroupTopic)chooseFarm(b.dataset.farmGroupTopic);});
  function selectIndustry(sector:IndustrySector,subsector:string){
   const state=getState(),matches=industry?.topics.filter(t=>{const group=industryTopicGroup(t);return group.sector===sector&&(subsector==='all'||group.subsector===subsector);})??[];
-  const current=matches.find(t=>t.id===state.topic),target=current??matches.find(t=>!t.country)??matches[0];
+  const current=matches.find(t=>t.id===state.topic),featured=subsector==='all'?all('[data-industry-feature]:not([data-industry-current-feature])').map(b=>matches.find(t=>t.id===b.dataset.industryFeature)).find(Boolean):undefined,target=featured??current??matches.find(t=>!t.country)??matches[0];
   // A transport-equipment total, for example, is not an automobile-only map.
   navigate({...state,sector,subsector,topic:target?.id??state.topic,detail:target&&target.id!==state.topic?null:state.detail,place:target?.country??state.place,camera:target?.country&&target.country!==state.place?null:state.camera,point:target&&target.id!==state.topic?null:state.point,story:null},!!target?.country&&target.country!==state.place);
  }
@@ -46,7 +46,11 @@ export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|un
   const current=industry.topics.find(t=>t.id===state.topic)??industry.topics[0],group=industryTopicGroup(current);
   const sector=(state.sector??group.sector) as IndustrySector,subsector=state.subsector??(state.sector?'all':group.subsector);
   for(const b of all('[data-industry-sector]'))b.setAttribute('aria-pressed',String(b.dataset.industrySector===sector));
-  for(const row of all('[data-industry-subsectors]'))row.hidden=row.dataset.industrySubsectors!==sector;
+  for(const row of all('[data-industry-subsectors]')){
+   row.hidden=row.dataset.industrySubsectors!==sector;
+   const currentFeature=row.querySelector<HTMLButtonElement>('[data-industry-current-feature]');
+   if(currentFeature){const listed=[...row.querySelectorAll<HTMLElement>('[data-industry-feature]:not([data-industry-current-feature])')].some(b=>b.dataset.industryFeature===current.id);currentFeature.hidden=row.hidden||listed||group.sector!==sector;currentFeature.dataset.industryFeature=currentFeature.hidden?'':current.id;currentFeature.textContent=current.title;currentFeature.setAttribute('aria-pressed','true');}
+  }
   for(const b of all('[data-industry-subsector]'))b.setAttribute('aria-pressed',String(b.dataset.sector===sector&&b.dataset.industrySubsector===subsector));
   const title=$('[data-industry-navigation-label]');if(title)title.textContent=(industrySectors.find(s=>s.id===sector)?.label??'全産業')+(sector==='all'?'':' ／ '+(industrySubsectors[sector].find(s=>s.id===subsector)?.label??'全分野'));
   const currentMap=$('[data-industry-current-map]');if(currentMap)currentMap.textContent=current.title;

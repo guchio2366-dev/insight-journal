@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
-import {industryValues,industryScale,normalizeIndustryState} from '../../src/data/atlas/asia-industry.ts';
+import {industryValues,industryValueLabel,industryScale,normalizeIndustryState} from '../../src/data/atlas/asia-industry.ts';
 const root=new URL('../../public/assets/atlas/asia-industry-v1/',import.meta.url);
 const read=name=>JSON.parse(name.endsWith('.gz')?gunzipSync(readFileSync(new URL(name,root))):readFileSync(new URL(name,root),'utf8'));
 const manifest=read('manifest.json'),national=read('national.json.gz');
@@ -29,6 +29,44 @@ test('全主題の地域とIDは一意で、国別の分母と固定年を保持
   for(const t of region.topics){assert.ok(t.source.startsWith('https://'));assert.ok(t.note&&t.unit&&t.year);const values=industryValues(t,data,national,region.countries);assert.ok(values.every(v=>v.value===null||Number.isFinite(v.value)));}
   assert.equal(region.topics.find(t=>t.id==='resource-rents').year,'2021');assert.equal(region.topics.find(t=>t.id==='manufactured-exports').year,'2023');
  }
+});
+test('日本の公表値・秘匿X・該当なし***を原本の状態付きで読み出す',()=>{
+ const region=manifest.regions['east-asia'],data=read(region.data);
+ const values=id=>industryValues(region.topics.find(t=>t.id===id),data,national,region.countries);
+ const aichi=values('jp-00').find(v=>v.id==='JP-23');
+ assert.deepEqual(aichi,{id:'JP-23',value:59314388,status:'公表値（0は丸め単位未満を含む）'});
+ assert.equal(industryValueLabel(aichi),'59,314,388');
+ for(const [id,status] of [['JP-43','秘匿'],['JP-42','該当なし']]){
+  const original=data.admin.find(a=>a.id===id).series['jp-20'][0],value=values('jp-20').find(v=>v.id===id);
+  assert.deepEqual(original,{year:'2024',value:null,status});
+  assert.deepEqual(value,{id,value:null,status});
+  assert.equal(industryValueLabel(value),status);
+ }
+ // Every Japanese topic must carry the original publication state through
+ // projection, rather than fixing only the sample prefectures above.
+ for(const topic of region.topics.filter(t=>t.country==='JPN')){
+  for(const value of industryValues(topic,data,national,region.countries)){
+   const original=data.admin.find(a=>a.id===value.id).series[topic.id]?.find(v=>v.year===topic.year);
+   assert.equal(value.status,original?.status,`${value.id} ${topic.id}`);
+  }
+ }
+});
+test('プトラジャヤの2023年未掲載と2025年公表0を同じ値表示でも区別する',()=>{
+ const region=manifest.regions['southeast-asia'],data=read(region.data),topic=region.topics.find(t=>t.id==='my-p3');
+ const valueAt=year=>industryValues({...topic,year},data,national,region.countries).find(v=>v.id==='MY-16');
+ assert.equal(valueAt('2023').value,null);assert.equal(industryValueLabel(valueAt('2023')),'未掲載');
+ assert.equal(valueAt('2025').value,0);assert.equal(industryValueLabel(valueAt('2025')),'0（公表値）');
+ const scale=industryScale(topic,[valueAt('2023'),valueAt('2025'),{value:32}]);
+ assert.notEqual(scale.color(valueAt('2023').value),scale.color(valueAt('2025').value));
+ assert.equal(industryValueLabel(valueAt('2022')),'未掲載','absent years also remain missing');
+});
+test('状態表示は非数値の理由を分け、数値の0と公表桁数を保持する',()=>{
+ for(const [value,label] of [
+  [{value:null,status:'秘匿'},'秘匿'],[{value:null,status:'該当なし'},'該当なし'],
+  [{value:null},'未掲載'],[{value:null,status:'公表値（0は丸め単位未満を含む）'},'未掲載'],
+  [{value:0},'0（公表値）'],[{value:0,status:'公表値（0は丸め単位未満を含む）'},'0（公表値）'],
+  [{value:1234.5},'1,234.5'],[{value:-5},'-5'],
+ ])assert.equal(industryValueLabel(value),label);
 });
 test('別の国・電源・主題のURLを混ぜず、ゼロと欠測の色を分ける',()=>{
  const region=manifest.regions['east-asia'],data=read(region.data),base={field:'industry',place:null,city:null,camera:null,back:null};

@@ -3,7 +3,7 @@ import {asiaRiceLegend,getAsiaRiceLayer} from '../data/atlas/asia-agriculture';
 import {asiaNaturalTopics} from '../data/atlas/asia-physical-reading';
 import {asiaPopulationColors,asiaPopulationLabels,type AsiaPopulationRegion} from '../data/atlas/asia-population';
 import {precipitationColors,precipitationBreaks,groundwaterClasses,basinColor,waterScenes,type WaterRegion,type WaterDataset} from '../data/atlas/asia-water';
-import {industryTopic,industryValues,industryScale,industryFuelColors,industryFuelNames,type IndustryRegion,type IndustryData,type IndustryNational} from '../data/atlas/asia-industry';
+import {industryTopic,industryValues,industryMissingLabel,industryScale,industryFuelColors,industryFuelNames,type IndustryRegion,type IndustryData,type IndustryNational} from '../data/atlas/asia-industry';
 import {socialTopic,socialGroup,socialValue,socialColor,socialColors,type SocialRegion,type SocialData} from '../data/atlas/asia-social';
 import {leadingCategory,areaCategories} from '../data/atlas/asia-social-overview';
 import {isTradeTopic,tradeChapter,tradeFlow,tradeValue,tradeScale,tradeColors,type TradeRegion,type TradeData} from '../data/atlas/asia-trade';
@@ -150,7 +150,7 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
       const [data,national]=await Promise.all([json(config.industryBase!+config.industry.data),json(config.industryBase!+'national.json.gz')]) as [IndustryData,IndustryNational],t=industryTopic(config.industry,s),values=industryValues(t,data,national,config.industry.countries),scale=industryScale(t,values);
       Object.assign(base,{subject:(t.kind==='power'?data.power:data.admin).find(r=>r.id===s.detail)?.name});
       if(t.kind==='power')return {...base,period:t.year,unit:'設備容量 MW',keys:Object.entries(industryFuelColors).filter(([fuel])=>t.fuel==='all'||fuel===t.fuel).map(([fuel,color])=>({color,label:industryFuelNames[fuel]})),compactNote:'100MW＝3px / 1,000MW＝9px / 4,000MW以上＝18px',note:'点は資料にある発電施設の位置です。点の半径は設備容量の平方根に比例し、見やすさのため3–18pxに制限しています（100MWで3px、1,000MWで9px、4,000MW以上で18px）。点の重なりと上下限があるため、色の面積から合計容量は読み取れません。稼働状況や現在の発電量を示す値ではありません。',points:true,geometry:{type:'FeatureCollection',features:data.power.filter(p=>(t.fuel==='all'||p.fuel===t.fuel)&&(!s.place||s.place===p.country)).map(p=>({type:'Feature',properties:{color:industryFuelColors[p.fuel],capacity:p.capacity??0},geometry:{type:'Point',coordinates:p.point}}))}};
-      const colors=Object.fromEntries(values.map(v=>[v.id,scale.color(v.value)]));return {...base,title:t.title,period:t.year,unit:t.unit,keys:[...bins(scale.colors,scale.breaks),missing],note:t.note,geometry:t.kind==='admin'?{...data.geometry,features:data.geometry.features.filter((f:any)=>f.properties.country===t.country).map((f:any)=>({...f,properties:{...f.properties,color:colors[f.properties.id]??'#d2ceca'}}))}:await countryGeometry(colors)};
+      const colors=Object.fromEntries(values.map(v=>[v.id,scale.color(v.value)]));return {...base,title:t.title,period:t.year,unit:t.unit,keys:[...bins(scale.colors,scale.breaks),{label:industryMissingLabel(t),color:'#d2ceca'}],note:t.note,geometry:t.kind==='admin'?{...data.geometry,features:data.geometry.features.filter((f:any)=>f.properties.country===t.country).map((f:any)=>({...f,properties:{...f.properties,color:colors[f.properties.id]??'#d2ceca'}}))}:await countryGeometry(colors)};
     }
     return {...base,note:'この主題の元分布は戻るボタンから確認できます。'};
   }
