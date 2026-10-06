@@ -113,7 +113,12 @@ async function capture(browser, origin, basePath, output, scene) {
       const captureStepImage = async id => {
         assert(/^[a-z0-9-]+$/.test(id));
         const filename = `${name}-${id}.png`;
-        await page.locator(`${selected.root} .atlas-primary-grid`).screenshot({path: path.join(output, filename), animations: 'disabled'});
+        // Element screenshots scroll automatically and can change a viewport-fitted
+        // reader after its clip was measured. Use the existing stable page clip.
+        await settle(page, selected);
+        const {layout: {grid}} = await measure(page, selected);
+        const clip = {x: Math.floor(grid.x), y: Math.floor(grid.y), width: Math.ceil(grid.x + grid.width) - Math.floor(grid.x), height: Math.ceil(grid.y + grid.height) - Math.floor(grid.y)};
+        await page.screenshot({path: path.join(output, filename), fullPage: true, clip, animations: 'disabled'});
         (record.operation.screenshots ??= []).push(filename);
         return filename;
       };
