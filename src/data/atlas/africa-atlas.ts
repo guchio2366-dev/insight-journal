@@ -69,7 +69,7 @@ export const agriLayerKeys=[
   'livestock-cattle','livestock-goats','livestock-sheep'
 ] as const;
 export type AgriLayerKey=typeof agriLayerKeys[number];
-export type State={field:Field;metric:string;year:number;place:string;compare:string;region:Region;zoom:'all'|'region'|'country'|'theme';theme:string;context:string;topic:string;water:string;crop:Crop;livestock:Livestock;cropMeasure:CropMeasure;agriLayers:string|null;agriOutline:boolean;layerClass:string;layerPoint:string;sourceState:string;view:'distribution'|'statistics'};
+export type State={field:Field;metric:string;year:number;place:string;compare:string;region:Region;zoom:'all'|'region'|'country'|'theme';theme:string;context:string;topic:string;water:string;river:string;crop:Crop;livestock:Livestock;cropMeasure:CropMeasure;agriLayers:string|null;agriOutline:boolean;layerClass:string;layerPoint:string;sourceState:string;view:'distribution'|'statistics'};
 /** Absent selections preserve legacy focused-layer defaults; an explicit empty list means all off. */
 export function canonicalAgriLayers(value:unknown):string|null {
   if(typeof value!=='string'||value.length>2048)return null;
@@ -97,6 +97,10 @@ export function canonicalTopic(field:Field,metric:string,requested=''):string {
 export function canonicalWater(metric:string,requested=''):string {
   return requested==='basin'?'basin':metric==='ER.H2O.INTR.PC'?'river':'rain';
 }
+/** Named river selections apply only to the river layer; comparison snapshots retain the source. */
+export function canonicalRiver(state:Pick<State,'field'|'topic'|'water'>,requested:unknown):string {
+  return state.field==='nature'&&state.topic==='water'&&state.water==='river'&&(requested==='nile'||requested==='congo')?requested:'';
+}
 export function defaultThemeRegion(themeId:string):Region {
   const theme=themes.find(t=>t.id===themeId)??themes[0];
   const regions=[...new Set(theme.places.map(code=>countries.find(c=>c.code===code)!.region))];
@@ -121,10 +125,12 @@ export function readState(search:string):State {
   const snapshot=p.get('sourceState')??'';
   const sourceState=snapshot.length<=1800&&!/(?:^|&)sourceState=/.test(snapshot)?snapshot:'';
   const topic=canonicalTopic(safeField,metric.id,p.get('topic')??(defaultClimate?'climate':'')),culture=safeField==='population'&&(topic==='ethnicity'||topic==='religion');
+  const water=safeField==='nature'?canonicalWater(metric.id,p.get('water')??''):'';
+  const river=canonicalRiver({field:safeField,topic,water},p.get('river'));
   const crop=cropChoices.find(row=>row.id===p.get('crop'))?.id??'maize';
   const livestock=livestockChoices.find(row=>row.id===p.get('livestock'))?.id??'cattle';
   const cropMeasure=cropMeasureChoices.find(row=>row.id===p.get('cropMeasure'))?.id??'harvested';
-  return {field:safeField,metric:metric.id,year:years.includes(Number(p.get('year')))?Number(p.get('year')):2021,place,compare:exists(p.get('compare'))&&p.get('compare')!==place?p.get('compare')!:'',region:Object.hasOwn(regionNames,region)?region as Region:'all',zoom:['all','region','country','theme'].includes(zoom)?zoom as State['zoom']:'theme',theme:theme.id,context:culture?'':context??'',topic,water:safeField==='nature'?canonicalWater(metric.id,p.get('water')??''):'',crop,livestock,cropMeasure,agriLayers:canonicalAgriLayers(p.get('agriLayers')),agriOutline:p.get('agriOutline')==='1',layerClass:culture?'':layerClass,layerPoint:culture?'':layerPoint,sourceState:culture?'':sourceState,view:culture?'distribution':p.get('view')==='statistics'||!p.has('view')&&p.has('theme')&&!p.has('topic')?'statistics':'distribution'};
+  return {field:safeField,metric:metric.id,year:years.includes(Number(p.get('year')))?Number(p.get('year')):2021,place,compare:exists(p.get('compare'))&&p.get('compare')!==place?p.get('compare')!:'',region:Object.hasOwn(regionNames,region)?region as Region:'all',zoom:['all','region','country','theme'].includes(zoom)?zoom as State['zoom']:'theme',theme:theme.id,context:culture?'':context??'',topic,water,river,crop,livestock,cropMeasure,agriLayers:canonicalAgriLayers(p.get('agriLayers')),agriOutline:p.get('agriOutline')==='1',layerClass:culture?'':layerClass,layerPoint:culture?'':layerPoint,sourceState:culture?'':sourceState,view:culture?'distribution':p.get('view')==='statistics'||!p.has('view')&&p.has('theme')&&!p.has('topic')?'statistics':'distribution'};
 }
 export function africaComparisonSnapshot(state:State):string {
   return writeState({...state,context:'',sourceState:''},new URL('https://atlas.invalid/')).searchParams.toString();
@@ -132,6 +138,7 @@ export function africaComparisonSnapshot(state:State):string {
 export function writeState(state:State,url:URL) {
   state.topic=canonicalTopic(state.field,state.metric,state.topic);
   state.water=state.field==='nature'?canonicalWater(state.metric,state.water):'';
+  state.river=canonicalRiver(state,state.river);
   if(state.field==='population'&&(state.topic==='ethnicity'||state.topic==='religion')){state.context='';state.layerClass='';state.layerPoint='';state.sourceState='';state.view='distribution';}
   state.agriLayers=canonicalAgriLayers(state.agriLayers);
   state.agriOutline=state.agriOutline===true;

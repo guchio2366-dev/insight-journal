@@ -42,7 +42,7 @@ test('agriculture ready topics follow the actual metric through selection, histo
  const forestURL=withAfricaPage('https://example.com/insight-journal/atlas/africa/?field=agriculture&place=GHA&unknown=preserve',(w,q)=>{
   assert.equal(q('[data-africa-topic="farming"]').getAttribute('aria-pressed'),'true');
   assert.ok(q('.africa-main').contains(q('[data-africa-subfields]')));
-  assert.ok(q('[data-africa-subfields]').compareDocumentPosition(q('.africa-workspace')) & 4);
+  assert.equal(q('[data-africa-subfields]').closest('[data-africa-map-subfields]'),q('[data-africa-map-subfields]'));
   q('[data-africa-topic="forestry"]').click();
   assert.equal(q('[data-theme-marks]').children.length,0);
   assert.equal(q('[data-theme-legend]').children.length,0);
@@ -69,7 +69,7 @@ test('spatial categories and water depth persist across reload, country changes 
   const saved=withAfricaPage(`https://example.com/insight-journal/atlas/africa/?field=${field}&topic=${ready}&place=EGY&unknown=preserve`,(w,q)=>{
    q(`[data-africa-topic="${planned}"]`).click();
    assert.equal(new URL(w.location.href).searchParams.get('topic'),planned);
-   assert.equal(q('[data-africa-subfield-status]').hidden,field==='population');
+   assert.equal(q('[data-africa-subfield-status]').hidden,false);if(field==='population'){assert.match(q('[data-africa-subfield-status]').textContent,/この画面に分布図はありません/);assert.equal(q('[data-africa-subfield-status]').previousElementSibling,q('[data-africa-subfields]'));}
    const saved=w.location.href;
    q('[data-place]').value='GHA';q('[data-place]').dispatchEvent(new w.Event('change'));
    w.history.back();assert.equal(q('[data-place]').value,'EGY');
@@ -78,9 +78,9 @@ test('spatial categories and water depth persist across reload, country changes 
    assert.equal(q('[data-africa-subfield-status]').hidden,field==='nature');
    w.history.forward();assert.equal(q(`[data-africa-topic="${planned}"]`).getAttribute('aria-pressed'),'true');
    w.history.forward();assert.equal(q('[data-place]').value,'GHA');
-   assert.equal(q('[data-africa-subfield-status]').hidden,field==='population');return saved;
+   assert.equal(q('[data-africa-subfield-status]').hidden,false);if(field==='population'){assert.match(q('[data-africa-subfield-status]').textContent,/この画面に分布図はありません/);assert.equal(q('[data-africa-subfield-status]').previousElementSibling,q('[data-africa-subfields]'));}return saved;
   });
-  withAfricaPage(saved,(_w,q)=>{assert.equal(q(`[data-africa-topic="${planned}"]`).getAttribute('aria-pressed'),'true');assert.equal(q('[data-africa-subfield-status]').hidden,field==='population');});
+  withAfricaPage(saved,(_w,q)=>{assert.equal(q(`[data-africa-topic="${planned}"]`).getAttribute('aria-pressed'),'true');assert.equal(q('[data-africa-subfield-status]').hidden,false);if(field==='population'){assert.match(q('[data-africa-subfield-status]').textContent,/この画面に分布図はありません/);assert.equal(q('[data-africa-subfield-status]').previousElementSibling,q('[data-africa-subfields]'));}});
  }
  const basinURL=withAfricaPage('https://example.com/insight-journal/atlas/africa/?field=nature&topic=water&place=EGY',(w,q)=>{
   q('[data-africa-water="river"]').click();assert.equal(q('[data-metric]').value,'ER.H2O.INTR.PC');
