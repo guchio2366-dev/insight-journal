@@ -9,8 +9,8 @@ import NorthAmericaCountryFieldNavigation from './NorthAmericaCountryFieldNaviga
 import CanadaDemographicReading from './CanadaDemographicReading.astro';
 import CanadaDemographicSources from './CanadaDemographicSources.astro';
 import data from '../../data/atlas/canada/population.json';
-import ethnicity from '../../data/atlas/canada/demographics-ethnicity.json';
-import religion from '../../data/atlas/canada/demographics-religion.json';
+import ethnicity from '../../data/atlas/canada/profile-ethnicity.json';
+import religion from '../../data/atlas/canada/profile-religion.json';
 import geometry from '../../data/atlas/canada/population-geometry.json';
 import industry from '../../data/atlas/canada/industry.json';
 import rivers from '../../data/atlas/canada/rivers.json';
@@ -50,6 +50,7 @@ import '../../styles/atlas-canada-country-parity.css';
       <CanadaMapLand />
       {lakes.features.map(f=><g class="population-lake"><path class="canada-lake" d={geometryPath(f.geometry)} fill-rule="evenodd"><title>Ontario湖（オンタリオ湖）</title></path></g>)}
       {rivers.features.filter(f=>f.properties.name==='St. Lawrence').map(f=><path class="canada-river" d={geometryPath(f.geometry)}><title>セントローレンス川</title></path>)}
+      <g data-population-regions></g>
       {geo.map(g=><g data-population-map-cma={g.id} role="button" tabindex="0" aria-label={`${g.name}都市圏を選ぶ`} aria-pressed={g.id==='535'?'true':'false'} class:list={{'is-selected-cma':g.id==='535'}}><title>{g.name}都市圏、2021年 {fmt(g.population.value)}人{g.population.symbol?' '+g.population.symbol:''}</title><path data-population-boundary style={`fill:${densityColor(g.density)}`} d={g.rings.map(r=>line(r)).join('')} fill-rule="evenodd" /><circle class="population-anchor" cx={canadaLegacyPoint(g.point)[0]} cy={canadaLegacyPoint(g.point)[1]} r="1.8"/><circle data-population-symbol cx={canadaLegacyPoint(g.point)[0]} cy={canadaLegacyPoint(g.point)[1]} r={g.population.value===null?0:Math.sqrt(g.population.value/max)*22} style="display:none"/><text data-population-label x={canadaLegacyPoint(g.point)[0]+7} y={canadaLegacyPoint(g.point)[1]-7} style={['535','462','933'].includes(g.id)?undefined:'display:none'}>{g.name.match(/（(.+)）/)?.[1]??g.name}</text></g>)}
 
      </svg><div class="population-map-tools"><button data-population-reset>全体</button><button data-population-scale="in" aria-label="地図を拡大">＋</button><button data-population-scale="out" aria-label="地図を縮小">−</button></div></div>
@@ -57,8 +58,10 @@ import '../../styles/atlas-canada-country-parity.css';
      <ul class="population-density-legend" data-population-density-legend hidden aria-label="2021年人口密度の凡例">{['50未満','50–150未満','150–300未満','300–600未満','600以上'].map((label,i)=><li><i style={`background:${populationDensityColors[i]}`} aria-hidden="true"/>{label}</li>)}<li>人/km²・都市圏全体</li></ul>
      <div data-demographic-share-legend hidden><p class="canada-caption" data-demographic-origin-legend hidden></p><ul class="population-density-legend" data-demographic-share-classes aria-label="選んだ集団の割合の色と区間"></ul><p class="canada-caption">%・各都市圏の私的世帯人口が分母。集団ごとに色の目盛が変わります。灰色は欠測・秘匿。</p></div>
      <div class="population-legend" data-demographic-count-legend hidden><svg viewBox="0 0 280 56" role="img" aria-label="選んだ集団の人数、10万人と100万人。集団間は共通尺度"><circle cx="25" cy="25" data-demographic-legend-count="100000"/><circle cx="160" cy="25" data-demographic-legend-count="1000000"/><text x="45" y="31">10万人</text><text x="190" y="31">100万人</text></svg><span>円の面積が集団の人数。両分野・全集団で共通尺度。公表0と欠測を区別します。</span></div>
+          <p class="canada-caption population-coverage" data-population-coverage>2021年の41都市圏を収録。都市圏外の細かな地域データは本サイトでは未収録です。空白は人口ゼロではありません。</p>
+     <p class="canada-caption" data-population-filter-key hidden></p>
      <div class="population-category-key" data-population-category-key></div>
-     <p class="canada-caption population-coverage" data-population-coverage>2021年の41都市圏を収録。都市圏外の細かな地域データは本サイトでは未収録です。空白は人口ゼロではありません。</p>
+
      <p class="canada-caption" data-population-map-status aria-live="polite"></p>
      <details><summary>都市から解説を選ぶ</summary><div class="population-place-buttons">{data.cmas.map(r=><button data-population-locate={r.id}>{r.name.match(/（(.+)）/)?.[1]??r.name}</button>)}</div></details>
     </section>
@@ -98,7 +101,7 @@ import '../../styles/atlas-canada-country-parity.css';
    </details>
    <CanadaDemographicSources />
    <noscript><p>南部41都市圏の2021年人口密度図、Torontoの比較、本文・全55地域の数値表・出典を読めます。人口集団と宗教は末尾の全国原人数と定義を確認できます。選択・分野・年・密度の切替、拡大、履歴や保存からの復帰にはJavaScriptが必要です。</p></noscript>
-   <script type="application/json" data-population-config set:html={JSON.stringify({...data,demographics:{ethnicity,religion},industryProvinces:industry.provinces.map(({id,code})=>({id,code})),geometry:geometry.features.map(({id,point,bounds,provinceCodes})=>({id,point,bounds,provinceCodes}))}).replace(/</g,String.fromCharCode(92)+'u003c')} />
+   <script type="application/json" data-population-config set:html={JSON.stringify({...data,regionsUrl:withBase('/assets/atlas/canada-demographics-v2/regions.geojson'),demographics:{ethnicity,religion},industryProvinces:industry.provinces.map(({id,code})=>({id,code})),geometry:geometry.features.map(({id,point,bounds,provinceCodes})=>({id,point,bounds,provinceCodes}))}).replace(/</g,String.fromCharCode(92)+'u003c')} />
   </article>
  </AtlasWorkspaceFrame>
 </BaseLayout>

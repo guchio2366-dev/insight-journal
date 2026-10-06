@@ -1,62 +1,47 @@
 import {densityColors,missingColor} from '../data/atlas/population';
-import {canadaDemographicShare} from '../lib/atlas-canada-demographics';
-const ethnicColors:Record<string,string>={'3':'#d3d6d4','4':'#8870b5','5':'#4f91ba','6':'#218b83','7':'#c17caa','8':'#a78345','9':'#e28b40','10':'#5d8dba','11':'#a16c52','12':'#9a83bc','13':'#bb6477','14':'#927563','15':'#bd788e','87':'#bd983b'};
-const religiousColors:Record<string,string>={'2':'#b69a46','3':'#9b4f67','19':'#d47a3e','20':'#626aa3','21':'#4f8067','22':'#d5ad42','23':'#345b78','24':'#8b6d9d','25':'#d3d6d4'};
+import {canadaDemographicShare,canadaDemographicShareColor} from '../lib/atlas-canada-demographics';
+import {demographicComposition,concentrationMethod,concentrationNote,ethnicColors,religiousColors} from '../lib/atlas-canada-concentration';
 const japanese=(name:string)=>name.match(/（(.+)）/)?.[1]??name;
+const provinceNames:Record<string,string>={'10':'ニューファンドランド・ラブラドール','11':'プリンスエドワード島','12':'ノバスコシア','13':'ニューブランズウィック','24':'ケベック','35':'オンタリオ','46':'マニトバ','47':'サスカチュワン','48':'アルバータ','59':'ブリティッシュコロンビア','60':'ユーコン','61':'北西準州','62':'ヌナブト'};
+const nameOf=(r:any)=>r.level==='Census division'?r.name.split(',')[0]+'（'+provinceNames[r.id.slice(0,2)]+'）':japanese(r.name);
 export const densityColor=(n:number|null)=>n===null?missingColor:densityColors[n===0?0:n<=1?1:n<10?2:n<100?3:n<1000?4:n<10000?5:6];
-function composition(record:any,data:any,topic:string){
- const rows=data.groups.map((g:any)=>({...g,count:record.values[g.id]?.value??null,share:canadaDemographicShare(record.values[g.id]?.value??null,record.denominator.value),national:canadaDemographicShare(data.national.values[g.id]?.value??null,data.national.denominator.value)}));
- const complete=rows.every((g:any)=>g.share!==null);
- if(!complete)return {rows,qualified:[],winner:null,missing:true};
- const qualified=rows.filter((g:any)=>topic==='religion'||g.id!=='3'&&(g.share>=20||g.share>=5&&g.national!==null&&g.share>=g.national*1.5)).sort((a:any,b:any)=>b.share-a.share);
- const winner=qualified.length&&!(qualified.length>1&&qualified[0].share===qualified[1].share)?qualified[0]:null;
- return {rows,qualified,winner,missing:false};
-}
-export function renderCanadaPopulationOverview(root:HTMLElement,config:any,state:any,demographic:any,choose:(id:string)=>void){
+export function renderCanadaPopulationOverview(root:HTMLElement,config:any,state:any,demographic:any,choose:(id:string|null)=>void){
  const $=(s:string)=>root.querySelector<HTMLElement>(s)!;
- const topic=demographic.topic,data=topic==='distribution'?null:config.demographics[topic],colors=topic==='ethnicity'?ethnicColors:religiousColors;
+ const topic=demographic.topic,data=topic==='distribution'?null:config.demographics[topic],colors=topic==='ethnicity'?ethnicColors:religiousColors,params=new URL(location.href).searchParams,filtered=Boolean(data)&&params.get('mapGroup')==='1',cd=params.get('cd'),regional=config.demographics.ethnicity.regions;
+ const selectedRegion=regional.find((r:any)=>r.id===cd),ready=root.dataset.regionsReady==='true';
+ const selected=data?(selectedRegion?data.regions.find((r:any)=>r.id===cd):data.cmas.find((r:any)=>r.id===state.cma)):selectedRegion??config.cmas.find((r:any)=>r.id===state.cma),scope=selectedRegion?'統計地域（CD）':'都市圏（CMA）';
  const key=$('[data-population-category-key]');key.replaceChildren();
- for(const selector of ['[data-population-population-legend]','[data-population-density-legend]','[data-demographic-share-legend]','[data-demographic-count-legend]'])$(selector).hidden=true;
- const addKey=(name:string,color:string,id?:string)=>{const el=document.createElement(id?'button':'span'),swatch=document.createElement('i');swatch.style.background=color;el.append(swatch,document.createTextNode(name));if(id){el.setAttribute('type','button');el.dataset.populationCategory=id;el.setAttribute('aria-pressed',String(demographic.group===id));el.addEventListener('click',()=>{root.dataset.populationReadingFocus='group';choose(id);});}key.append(el);};
- if(!data){['0','>0–1','>1–<10','10–<100','100–<1,000','1,000–<10,000','10,000以上'].forEach((name,i)=>addKey(name,densityColors[i]));addKey('未収録・未公表',missingColor);}
- else{for(const g of data.groups)addKey(g.name.replace('（単一回答）',''),colors[g.id],g.id);addKey(topic==='ethnicity'?'集積基準に達しない都市圏':'同率最多','#d3d6d4');addKey('未収録・未公表',missingColor);}
- const note=!data?'人口密度（人/km²）。41都市圏の2021年平均。都市圏外の細かな地域データは本サイトでは未収録です。空白は人口ゼロではありません。':topic==='ethnicity'?'米国と同じ集積基準（20%以上、または5%以上かつ全国割合の1.5倍以上）で色分け。地色は該当集団のうち割合最大、都市の色点は該当する全集団。41都市圏外の地域別データは本サイトでは未収録です。':'色は各都市圏で割合最大の宗教・無宗教（過半数とは限りません）。41都市圏外とキリスト教の教派別データは本サイトでは未収録のため、米国の教派別地図とは分類が異なります。';
- $('[data-population-coverage]').textContent=note;
- $('[data-population-coverage-brief]').textContent=topic==='religion'?'収録：41都市圏・宗教の上位分類。都市圏外と教派別は本サイトでは未収録です。':'収録：41都市圏。米国の郡別地図に相当する都市圏外の詳細分布は、本サイトでは未収録です。';
- $('#canada-population-title').textContent=!data?'2021年カナダ都市圏の人口密度':topic==='ethnicity'?'人口集団の特徴的な集積':'都市圏ごとの最大宗教・無宗教';
- $('#canada-population-desc').textContent=note;
- $('[data-population-map-status]').textContent='2021年国勢調査 · 気候区分と共通の地図 · 都市を選ぶと右の解説が変わります。';
- const legendDescription=topic==='ethnicity'?'地色は集積基準に該当する集団のうち最大のもの。都市の小さな色点は該当する全集団です。':topic==='religion'?'本人が回答した所属の分類です。米国の宗教団体が把握した所属者数とは調査方法が異なります。':'都市圏全体の平均密度であり、市内の地区別の密度ではありません。';
+ for(const s of ['[data-population-population-legend]','[data-population-density-legend]','[data-demographic-share-legend]','[data-demographic-count-legend]'])$(s).hidden=true;
+ function addKey(name:string,color:string,id?:string){const el=document.createElement(id!==undefined?'button':'span'),swatch=document.createElement('i');swatch.style.background=color;el.append(swatch,document.createTextNode(name));if(id!==undefined){el.setAttribute('type','button');el.dataset.populationCategory=id;el.setAttribute('aria-pressed',String(id===''?!filtered:filtered&&demographic.group===id));el.addEventListener('click',()=>{root.dataset.populationReadingFocus='group';choose(id||null);});}key.append(el);}
+ if(!data){['0','>0–1','>1–<10','10–<100','100–<1,000','1,000–<10,000','10,000以上'].forEach((n,i)=>addKey(n,densityColors[i]));addKey('未公表',missingColor);}else{addKey('全体の集積','#d3d6d4','');for(const g of data.groups)addKey(g.name,colors[g.id],g.id);addKey('集積基準外・背景','#d3d6d4');addKey('未公表',missingColor);}
+ const filterKey=$('[data-population-filter-key]');filterKey.hidden=!filtered;filterKey.replaceChildren();if(filtered){const g=data.groups.find((g:any)=>g.id===demographic.group);filterKey.append(document.createTextNode(g.name+'の人口割合：'));['1%未満','1–5%未満','5–10%未満','10–25%未満','25–50%未満','50%以上'].forEach((label,i)=>{const item=document.createElement('span'),swatch=document.createElement('i');swatch.style.background=canadaDemographicShareColor([0,1,5,10,25,50][i]);item.append(swatch,label);filterKey.append(item);});}
+ const coverage=ready?'全国293統計地域＋41都市圏。南部を初期表示。':'地域境界を読み込み中。現在は41都市圏を表示。',ethnicityNote='可視的少数者の公式区分を使用。「該当しない」は白人と同義ではありません。先住民アイデンティティは別集計で、この区分と重複するため全行を合計しません。';
+ const note=!data?'人口密度（人/km²）、2021年の地域平均。地図の面積は人数ではありません。':filtered?'選択した区分の実際の人口割合を濃淡で表示します。':concentrationNote;
+ $('[data-population-coverage]').textContent=note+' '+coverage;
+ $('[data-population-coverage-brief]').textContent=topic==='religion'?'2021年・宗教23区分（キリスト教の教派別を含む）。'+coverage:topic==='ethnicity'?ethnicityNote:coverage;
+ $('#canada-population-title').textContent=!data?'2021年カナダの地域別人口密度':filtered?data.groups.find((g:any)=>g.id===demographic.group).name+'の割合':'特徴的な集積（最多・過半数の地図ではありません）';$('#canada-population-desc').textContent=note;
+ $('[data-population-map-status]').textContent=root.dataset.regionsError==='true'?'地域境界を取得できませんでした。41都市圏を表示しています。再読み込みで再試行できます。':coverage+' 地域または都市を選ぶと右の解説が変わります。';
+ function fill(r:any){if(!data)return densityColor(r.density?.value??r.density2021?.value??null);if(filtered)return canadaDemographicShareColor(canadaDemographicShare(r.values[demographic.group]?.value??null,r.denominator.value));const c=demographicComposition(r,data,topic);return c.missing?missingColor:c.primary?colors[c.primary.id]:'#d3d6d4';}
+ for(const p of root.querySelectorAll<SVGElement>('[data-population-region]')){const r=(data?.regions??regional).find((r:any)=>r.id===p.dataset.populationRegion);p.style.fill=fill(r);p.setAttribute('aria-label',nameOf(r)+'：州より細かい統計地域。構成と割合を開く');p.setAttribute('aria-pressed',String(r.id===cd));p.classList.toggle('is-selected-region',r.id===cd);}
  for(const marker of root.querySelectorAll<SVGElement>('[data-population-map-cma]')){
-  const id=marker.dataset.populationMapCma!,r=(data??config).cmas.find((r:any)=>r.id===id),c=data?composition(r,data,topic):null;
-  if(!marker.dataset.focusReady){marker.dataset.focusReady='true';marker.addEventListener('click',()=>{root.dataset.populationReadingFocus='city';},true);marker.addEventListener('keydown',()=>{root.dataset.populationReadingFocus='city';},true);}
-  marker.style.display='';marker.querySelector<SVGElement>('[data-population-symbol]')!.style.display='none';
-  marker.querySelector<SVGElement>('[data-population-boundary]')!.style.fill=data?c!.missing?missingColor:c!.winner?colors[c!.winner.id]:'#d3d6d4':densityColor(r.density2021.value);
-  marker.querySelector('[data-population-category-dots]')?.remove();
-  const label=marker.querySelector<SVGTextElement>('[data-population-label]')!,point=marker.querySelector<SVGCircleElement>('.population-anchor')!;
-  label.textContent=japanese(r.name);label.style.fontSize='13px';label.style.display=id===state.cma||['535','462','933','825','835','602','505','705'].includes(id)?'':'none';
-  if(c&&topic==='ethnicity'&&c.qualified.length){const dots=document.createElementNS('http://www.w3.org/2000/svg','g');dots.dataset.populationCategoryDots='';c.qualified.forEach((g:any,i:number)=>{const dot=document.createElementNS('http://www.w3.org/2000/svg','circle');dot.setAttribute('cx',String(Number(point.getAttribute('cx'))+i*7));dot.setAttribute('cy',String(Number(point.getAttribute('cy'))+7));dot.setAttribute('r','3');dot.setAttribute('fill',colors[g.id]);dot.setAttribute('stroke','#fff');dots.append(dot);});marker.append(dots);}
-  marker.setAttribute('aria-label',japanese(r.name)+'：'+(!data?`${r.density2021.value??'未公表'}人/km²`:c!.missing?'未公表値あり':c!.winner?c!.winner.name+' '+c!.winner.share.toFixed(1)+'%':topic==='religion'?'同率最多':'集積基準に達する集団なし')+'。解説を開く');
+  const id=marker.dataset.populationMapCma!,r=(data??config).cmas.find((r:any)=>r.id===id),c=data?demographicComposition(r,data,topic):null;
+  marker.style.display='';marker.querySelector<SVGElement>('[data-population-symbol]')!.style.display='none';marker.classList.toggle('is-selected-cma',!selectedRegion&&id===state.cma);marker.setAttribute('aria-pressed',String(!selectedRegion&&id===state.cma));
+  const boundary=marker.querySelector<SVGElement>('[data-population-boundary]')!;boundary.style.fill=ready?'none':fill(r);boundary.style.stroke=ready?'none':'';boundary.style.pointerEvents=ready?'none':'';marker.querySelector('[data-population-category-dots]')?.remove();
+  const label=marker.querySelector<SVGTextElement>('[data-population-label]')!,point=marker.querySelector<SVGCircleElement>('.population-anchor')!;label.textContent=japanese(r.name);label.style.fontSize='13px';label.style.display=id===state.cma||['535','462','933','825','835','602','505','705'].includes(id)?'':'none';
+  if(c&&!filtered&&c.qualified.length){const dots=document.createElementNS('http://www.w3.org/2000/svg','g');dots.dataset.populationCategoryDots='';c.qualified.forEach((g:any,i:number)=>{const dot=document.createElementNS('http://www.w3.org/2000/svg','circle');dot.setAttribute('cx',String(Number(point.getAttribute('cx'))+i*7));dot.setAttribute('cy',String(Number(point.getAttribute('cy'))+7));dot.setAttribute('r','3');dot.setAttribute('fill',colors[g.id]);dot.setAttribute('stroke','#fff');dots.append(dot);});marker.append(dots);}
+  marker.setAttribute('aria-label',japanese(r.name)+'：'+(!data?`${r.density2021.value??'未公表'}人/km²`:c!.missing?'未公表値あり':c!.primary?c!.primary.name+' '+c!.primary.share.toFixed(1)+'%':'集積基準に達する区分なし')+'。都市圏の解説を開く');
  }
- // Move labels only; boundaries and anchor dots keep their geographic coordinates.
- const labels=[...root.querySelectorAll<SVGTextElement>('[data-population-label]')].filter(n=>n.style.display!=='none').sort((a,b)=>Number(b.closest('[data-population-map-cma]')?.getAttribute('data-population-map-cma')===state.cma)-Number(a.closest('[data-population-map-cma]')?.getAttribute('data-population-map-cma')===state.cma));
- const boxes:number[][]=[];
- for(const label of labels){const anchor=label.parentElement!.querySelector('.population-anchor')!,x=Number(anchor.getAttribute('cx')),y=Number(anchor.getAttribute('cy')),width=(label.textContent?.length??0)*13;let placed=false;for(const [dx,dy]of [[8,-8],[8,19],[-width-8,-8],[-width-8,19],[8,-28]]){const box=[x+dx,y+dy-13,x+dx+width,y+dy+3];if(box[0]<2||box[2]>898||boxes.some(b=>box[0]<b[2]+3&&box[2]>b[0]-3&&box[1]<b[3]+3&&box[3]>b[1]-3))continue;label.setAttribute('x',String(x+dx));label.setAttribute('y',String(y+dy));boxes.push(box);placed=true;break;}if(!placed)label.style.display='none';}
+ const labels=[...root.querySelectorAll<SVGTextElement>('[data-population-label]')].filter(n=>n.style.display!=='none').sort((a,b)=>Number(b.closest('[data-population-map-cma]')?.getAttribute('data-population-map-cma')===state.cma)-Number(a.closest('[data-population-map-cma]')?.getAttribute('data-population-map-cma')===state.cma)),boxes:number[][]=[];
+ for(const label of labels){const anchor=label.parentElement!.querySelector('.population-anchor')!,x=Number(anchor.getAttribute('cx')),y=Number(anchor.getAttribute('cy')),width=(label.textContent?.length??0)*13;let placed=false;for(const [dx,dy]of [[8,-8],[8,19],[-width-8,-8],[-width-8,19],[8,-28]]){const b=[x+dx,y+dy-13,x+dx+width,y+dy+3];if(b[0]<2||b[2]>898||boxes.some(a=>b[0]<a[2]+3&&b[2]>a[0]-3&&b[1]<a[3]+3&&b[3]>a[1]-3))continue;label.setAttribute('x',String(x+dx));label.setAttribute('y',String(y+dy));boxes.push(b);placed=true;break;}if(!placed)label.style.display='none';}
  $('[data-population-composition]').hidden=!data;
- if(!data){const selected=config.cmas.find((r:any)=>r.id===state.cma);$('[data-population-comparison]').textContent=`${japanese(selected.name)}都市圏：${selected.population[2021].value?.toLocaleString('ja-JP')??'未公表'}人 ／ 密度 ${selected.density2021.value?.toLocaleString('ja-JP')??'未公表'}人/km²`;return;}
- const selected=data.cmas.find((r:any)=>r.id===state.cma),c=composition(selected,data,topic);
- $('[data-demographic-heading]').textContent=japanese(selected.name)+(topic==='ethnicity'?'の人口集団':'の宗教・無宗教');
- $('[data-demographic-lead]').textContent=topic==='ethnicity'?'都市の周囲の色と構成比を見比べ、どの人口集団が集まるかを読む。':'都市の色と構成比を見比べ、宗教文化の地域差を読む。';
- $('[data-demographic-comparison]').textContent=c.missing?'一部の構成比は未公表です。':c.winner?(topic==='ethnicity'?'集積基準に該当する中で最大：':'最大の区分：')+c.winner.name+' '+c.winner.share.toFixed(1)+'%':topic==='religion'?'最多の区分が同率です。':'集積基準に達する集団はありません。';
- if(root.dataset.populationReadingFocus==='group'){
- const selectedGroup=data.groups.find((g:any)=>g.id===demographic.group);
- const top=data.cmas.map((r:any)=>({name:japanese(r.name),share:canadaDemographicShare(r.values[selectedGroup.id]?.value??null,r.denominator.value)})).filter((r:any)=>r.share!==null).sort((a:any,b:any)=>b.share-a.share).slice(0,3);
- $('[data-demographic-heading]').textContent=selectedGroup.name+'の分布';
- $('[data-demographic-comparison]').textContent='収録した41都市圏で割合が高い地域：'+top.map((r:any)=>r.name+' '+r.share.toFixed(1)+'%').join('、')+'。';
- }
- $('[data-demographic-national]').hidden=true;
- $('[data-demographic-definition]').textContent=legendDescription;
- $('[data-population-composition-title]').textContent='選択した都市圏の構成（2021年）';
- $('[data-population-composition-note]').textContent='分母は同じ表の私的世帯人口。未公表・秘匿は0に置き換えません。';
- const tbody=$('[data-population-composition-rows]');tbody.replaceChildren();for(const g of c.rows){const tr=document.createElement('tr'),name=document.createElement('th'),share=document.createElement('td'),count=document.createElement('td'),dot=document.createElement('i');dot.style.background=colors[g.id];name.append(dot,g.name);share.textContent=g.share===null?'未公表':g.share.toFixed(1)+'%';count.textContent=g.count===null?'未公表':g.count.toLocaleString('ja-JP')+'人';tr.append(name,share,count);tr.classList.toggle('is-active-category',g.id===demographic.group);tbody.append(tr);}
+ if(!data){$('[data-population-change]').hidden=Boolean(selectedRegion);$('[data-population-comparison-links]').hidden=Boolean(selectedRegion);$('[data-population-distribution-heading]').textContent=selectedRegion?nameOf(selected)+'・統計地域（CD）':'都市を選び、人口と仕事の関係を読む';$('[data-population-comparison]').textContent=`${nameOf(selected)}・${scope}：${(selectedRegion?selected.population.value:selected.population[2021].value)?.toLocaleString('ja-JP')??'未公表'}人 ／ 密度 ${(selectedRegion?selected.density.value:selected.density2021.value)?.toLocaleString('ja-JP')??'未公表'}人/km²`;return;}
+ const c=demographicComposition(selected,data,topic),g=data.groups.find((g:any)=>g.id===demographic.group),selectedCell=c.rows.find((r:any)=>r.id===g.id);
+ $('[data-demographic-heading]').textContent=nameOf(selected)+'・'+scope;$('[data-demographic-lead]').textContent=topic==='ethnicity'?'都市とその周辺を比べ、人口集団が特徴的に集まる場所を読む。':'教派別の集積と、都市・周辺地域の違いを読む。';
+ $('[data-demographic-comparison]').textContent=c.missing?'一部の構成比は未公表です。概要図の代表区分は判定しません。':filtered?g.name+'：'+selectedCell.share.toFixed(1)+'% ／ 全国 '+selectedCell.national.toFixed(1)+'% ／ 全国比 '+selectedCell.ratio?.toFixed(2)+'倍':c.primary?'特徴的な集積：'+c.primary.name+' '+c.primary.share.toFixed(1)+'% ／ 全国 '+c.primary.national.toFixed(1)+'% ／ 全国比 '+c.primary.ratio.toFixed(2)+'倍':'集積基準に達する区分はありません。住民がいないという意味ではありません。';
+ if(root.dataset.populationReadingFocus==='group'&&filtered){const top=data.regions.map((r:any)=>({name:nameOf(r),share:canadaDemographicShare(r.values[g.id]?.value??null,r.denominator.value)})).filter((r:any)=>r.share!==null).sort((a:any,b:any)=>b.share-a.share).slice(0,3);$('[data-demographic-heading]').textContent=g.name+'の分布';$('[data-demographic-comparison]').textContent='全国293統計地域で割合が高い地域：'+top.map((r:any)=>r.name+' '+r.share.toFixed(1)+'%').join('、')+'。';}
+ const nationalRow=filtered?selectedCell:c.primary;$('[data-demographic-national]').hidden=false;$('[data-demographic-national]').textContent=nationalRow?'全国の'+nationalRow.name+'：'+nationalRow.national.toFixed(2)+'%。':'';
+ $('[data-demographic-definition]').textContent=topic==='ethnicity'?ethnicityNote:'所属の自己申告です。米国の宗教団体による所属者数とは調査方法が異なります。信仰の強さ・政治姿勢は示しません。';$('[data-demographic-classification]').textContent=concentrationMethod+' 公式の地域区分や統計的有意差ではなく、分布を読むための編集基準です。';$('[data-demographic-quality]').textContent=selected.name+'：長形式未回答率 '+(selected.quality?.tnr?.longForm??'未公表')+'%。 '+(selected.quality?.notes??[]).join(' ');
+ const link=$('[data-demographic-population-link]') as HTMLAnchorElement;link.textContent=nameOf(selected)+'の2021年人口密度を見る';const target=new URL(location.href);target.searchParams.delete('topic');target.searchParams.delete('group');target.searchParams.delete('mapGroup');link.href=target.href;
+ $('[data-population-composition-title]').textContent=nameOf(selected)+'・'+scope+'の構成（2021年）';$('[data-population-composition-note]').textContent='私的世帯人口を分母に使用。公表0と欠測・秘匿を区別。'+(topic==='ethnicity'?'先住民は別集計で他行と重複し、全行を足して100%にはなりません。':'キリスト教の親分類を除き、教派との二重計上を防いでいます。');
+ const tbody=$('[data-population-composition-rows]');tbody.replaceChildren();for(const r of c.rows){const tr=document.createElement('tr'),name=document.createElement('th'),share=document.createElement('td'),count=document.createElement('td'),dot=document.createElement('i');dot.style.background=colors[r.id];name.append(dot,r.name);share.textContent=r.share===null?'未公表':r.share.toFixed(1)+'%';count.textContent=r.count===null?'未公表':r.count.toLocaleString('ja-JP')+'人';tr.append(name,share,count);tr.classList.toggle('is-active-category',filtered&&r.id===g.id);tbody.append(tr);}
 }
