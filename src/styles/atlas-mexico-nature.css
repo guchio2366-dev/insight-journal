@@ -111,7 +111,7 @@
 .mexico-quantitative-ticks [data-edge=end]::before{left:100%}
 .mexico-basin-system-picker{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:8px 0}
 .mexico-basin-system-picker button{min-height:44px;padding:7px 9px;border:1px solid #9bb3b6;border-radius:5px;background:#fffdf6;color:#28454a;font:700 13px/1.45 var(--sans);cursor:pointer}
-.mexico-basin-system-picker button[aria-pressed=true]{background:#d9eceb;border-color:#267787;box-shadow:inset 0 -3px #267787}
+.mexico-workspace .mexico-basin-system-picker button[aria-pressed=true]{background:#d9eceb;color:#28454a;border-color:#267787;box-shadow:inset 0 -3px #267787}
 .mexico-basin-fill-key{display:inline-block;width:17px;height:12px;vertical-align:middle;margin-right:6px;background:#9ac7ce80;border:1px solid #4592a1}
 .mexico-workspace.mexico-nature .mexico-climate-city-reading{font-size:14px;line-height:1.8;margin:10px 0}
 .mexico-workspace.mexico-nature .mexico-climate-code-reading{font-size:14px;line-height:1.7;border-top:1px solid #d4d8cc;padding-top:8px}

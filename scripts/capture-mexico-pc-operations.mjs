@@ -183,6 +183,13 @@ async function water({page, evidence, captureStepImage}) {
     for (const id of ['bravo', 'lerma-chapala-santiago', 'grijalva-usumacinta']) {
       await click(page, `button[data-mexico-basin-system="${id}"]`); await hydrologyReady(page, 'basins');
       assert.equal(await page.locator(`button[data-mexico-basin-system="${id}"]`).getAttribute('aria-pressed'), 'true');
+      const contrast = await page.locator(`button[data-mexico-basin-system="${id}"]`).evaluate(node => {
+        const style = getComputedStyle(node);
+        const luminance = color => color.match(/[\d.]+/g).slice(0, 3).map(Number).map(value => {const c = value / 255; return c <= .04045 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4;}).reduce((sum, value, index) => sum + value * [.2126, .7152, .0722][index], 0);
+        const foreground = luminance(style.color), background = luminance(style.backgroundColor);
+        return (Math.max(foreground, background) + .05) / (Math.min(foreground, background) + .05);
+      });
+      assert(contrast >= 4.5, `${id}: selected basin name has insufficient text contrast (${contrast})`);
       assert.equal(await page.locator('g[data-mexico-prepared-surface]').getAttribute('data-mexico-basin-system'), id);
       await captureStepImage(`basin-${id}`);
     }
