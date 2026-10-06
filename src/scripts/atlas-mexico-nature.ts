@@ -22,7 +22,7 @@ export function initMexicoNature(root: HTMLElement): void {
   const text = (selector: string, value: string) => {const element = query(selector); if (element) element.textContent = value;};
   const visible = (selector: string, value: boolean) => {for (const element of all(selector)) element.hidden = !value;};
   const naturalLabel = () => state.category && hydrology ? ({'rivers-groundwater': '河川・地下水', precipitation: '降水量', basins: '河川の流域', elevation: '標高・等高線'}[state.category]) : state.view === 'climate' ? '気候分布' : '地形地域分布';
-  const makeComparisonURL = (comparison: 'irrigation' | 'population') => {const next = writeMexicoNatureState(new URL(config.routes.nature, window.location.origin), {...state, compare: comparison, view: comparison === 'population' || (state.from === 'agriculture' && state.sourceMetric === 'pine') ? 'relief' : 'climate', only: false}); return (hydrology?.url(next) ?? next).href;};
+  const makeComparisonURL = (comparison: 'irrigation' | 'population') => {const next = writeMexicoNatureState(new URL(config.routes.nature, window.location.origin), {...state, compare: comparison, only: false}); return (hydrology?.url(next) ?? next).href;};
   function render(): void {
     const selected = values.get(state.state)!;
     root.classList.toggle('is-comparison', state.compare !== null);
