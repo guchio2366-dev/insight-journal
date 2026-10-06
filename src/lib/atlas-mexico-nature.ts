@@ -10,6 +10,7 @@ export type MexicoNatureCategory = '' | typeof natureCategories[number];
 export const natureClassIds = {climate: ['11','12','21','22','31','32','42','51','52','53','54','55','56','57','58','59','61','62','63','64','70'], relief: ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','S/It']} as const;
 export interface MexicoNatureState {
   view: MexicoNatureView;
+  city: string | null;
   category: MexicoNatureCategory;
   item: string;
   feature: string;
@@ -40,6 +41,7 @@ export function readMexicoNatureState(url: URL, codes: readonly string[]): Mexic
   const item = q.get('item') ?? '', feature = q.get('feature') ?? '';
   return {
     view: selectedView,
+    city: q.get('city'),
     category: natureCategories.includes(q.get('category') as typeof natureCategories[number]) ? q.get('category') as MexicoNatureCategory : '',
     item: [...natureClassIds.climate, ...natureClassIds.relief].includes(item as never) ? item : '',
     feature: /^(climate|relief)-[1-9][0-9]*$/.test(feature) ? feature : '',
@@ -53,8 +55,9 @@ export function readMexicoNatureState(url: URL, codes: readonly string[]): Mexic
 }
 export function writeMexicoNatureState(url: URL, state: MexicoNatureState): URL {
   const next = new URL(url);
-  for (const key of ['view', 'category', 'item', 'feature', 'state', 'compare', 'only', 'fallback', 'frame', 'from', 'sourceState', 'sourceOnly', 'sourceFallback', 'sourceMetric', 'sourceView', 'sourceCrops', 'sourceLivestock', 'sourceOnlyItem']) next.searchParams.delete(key);
+  for (const key of ['view', 'city', 'category', 'item', 'feature', 'state', 'compare', 'only', 'fallback', 'frame', 'from', 'sourceState', 'sourceOnly', 'sourceFallback', 'sourceMetric', 'sourceView', 'sourceCrops', 'sourceLivestock', 'sourceOnlyItem']) next.searchParams.delete(key);
   next.searchParams.set('view', state.view); next.searchParams.set('state', state.state);
+  if (state.city !== null && typeof state.city === 'string') next.searchParams.set('city', state.city);
   if (state.category && natureCategories.includes(state.category)) next.searchParams.set('category', state.category);
   if (state.item && [...natureClassIds.climate, ...natureClassIds.relief].includes(state.item as never)) next.searchParams.set('item', state.item);
   if (state.feature && /^(climate|relief)-[1-9][0-9]*$/.test(state.feature)) next.searchParams.set('feature', state.feature);
@@ -90,6 +93,16 @@ export function mexicoNatureNormalView(state: MexicoNatureState, view: MexicoNat
 // A natural-layer choice changes the target while keeping the original comparison.
 export function mexicoNatureSelectView(state: MexicoNatureState, view: MexicoNatureView): MexicoNatureState {
   return {...state, view, category: ''};
+}
+// Both maps share one camera; source-page selections remain independent of it.
+export function mexicoNatureZoomFrame(frame: number[] | null, full: readonly number[], direction: 'in' | 'out'): number[] | null {
+  const [left, top, width, height] = full;
+  const [x, y, currentWidth, currentHeight] = frame ?? full;
+  const factor = direction === 'in' ? .75 : 1 / .75;
+  const nextWidth = Math.min(width, Math.max(35, currentWidth * factor));
+  const nextHeight = Math.min(height, Math.max(25, currentHeight * factor));
+  if (nextWidth === width && nextHeight === height) return null;
+  return [Math.max(left, Math.min(left + width - nextWidth, x + (currentWidth - nextWidth) / 2)), Math.max(top, Math.min(top + height - nextHeight, y + (currentHeight - nextHeight) / 2)), nextWidth, nextHeight];
 }
 export const irrigationBins = sourceIrrigationBins.map(bin => ({...bin, minimum: bin.min}));
 export const densityBins = mexicoDensityBins.map(bin => ({...bin, minimum: bin.min}));

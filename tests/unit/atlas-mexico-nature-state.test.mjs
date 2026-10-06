@@ -4,6 +4,29 @@ import {readMexicoNatureState, writeMexicoNatureState, mexicoNatureReturnUrl, me
 import {irrigationBins as agricultureBins, irrigationColor} from '../../src/lib/atlas-mexico-agriculture.ts';
 import {mexicoDensityBins, mexicoDensityColor} from '../../src/lib/atlas-mexico-population.ts';
 const codes = Array.from({length: 32}, (_, index) => String(index + 1).padStart(2, '0'));
+test('City and camera survive fresh comparison and plain-return URLs for both natural views', () => {
+  for (const [view, compare] of [['climate', 'irrigation'], ['relief', 'population']]) {
+    const original = readMexicoNatureState(new URL(`https://example.test/nature/?view=${view}&city=culiacan-dge&frame=210,100,350,220`), codes);
+    const comparisonURL = writeMexicoNatureState(new URL('https://example.test/nature/'), {...original, compare, only: false});
+    assert.equal(comparisonURL.searchParams.get('city'), 'culiacan-dge');
+    assert.equal(comparisonURL.searchParams.get('frame'), '210,100,350,220');
+    const compared = readMexicoNatureState(comparisonURL, codes);
+    const plainURL = writeMexicoNatureState(new URL('https://example.test/nature/'), {...compared, compare: null, only: false});
+    assert.equal(plainURL.searchParams.get('city'), 'culiacan-dge');
+    assert.deepEqual(readMexicoNatureState(plainURL, codes).frame, original.frame);
+    assert.equal(plainURL.searchParams.has('compare'), false);
+  }
+});
+test('Unknown and empty station requests are preserved rather than silently replaced by the capital', () => {
+  for (const requested of ['unavailable', '']) {
+    const state = readMexicoNatureState(new URL(`https://example.test/?city=${requested}`), codes);
+    assert.equal(state.city, requested);
+    assert.equal(writeMexicoNatureState(new URL('https://example.test/'), state).searchParams.get('city'), requested);
+  }
+  const implicit = readMexicoNatureState(new URL('https://example.test/'), codes);
+  assert.equal(implicit.city, null);
+  assert.equal(writeMexicoNatureState(new URL('https://example.test/'), implicit).searchParams.has('city'), false);
+});
 test('Agriculture comparison preserves the original metric, state, only and fallback after changing the natural target', () => {
   const url = new URL('https://example.test/base/atlas/north-america/mexico/nature/?news=retained&compare=irrigation&state=25&from=agriculture&sourceMetric=maize&sourceState=25&sourceOnly=1&sourceFallback=1');
   const initial = readMexicoNatureState(url, codes);

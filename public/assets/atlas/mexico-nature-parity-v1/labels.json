@@ -1,0 +1,1456 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-05",
+  "projection": {
+    "name": "Lambert Conformal Conic",
+    "datum": "ITRF92",
+    "ellipsoid": "GRS80",
+    "semiMajorM": 6378137,
+    "inverseFlattening": 298.257222101,
+    "standardParallel1": 17.5,
+    "standardParallel2": 29.5,
+    "latitudeOfOrigin": 12,
+    "centralMeridian": -102,
+    "falseEastingM": 2500000,
+    "falseNorthingM": 0,
+    "units": "m"
+  },
+  "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d",
+  "coordinateRole": "Strict interior of identified original INEGI polygon and its unchanged display polygon; native projected meters; not a city or summit location",
+  "labels": [
+    {
+      "id": "climate-class-11",
+      "view": "climate",
+      "classId": "11",
+      "sourceCode": "Am(f)",
+      "labelJa": "高温・湿潤",
+      "labelSource": "Cálido húmedo",
+      "pointNative": [
+        3525529.886503093,
+        729012.0281176021
+      ],
+      "clearanceM": 42142.44894902921,
+      "sourceFeatureId": "climate-1345",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+        "edition": 2008,
+        "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        3525529.8865030925,
+        729012.0281176022
+      ],
+      "displayBoxMap": {
+        "left": 679.7857136681058,
+        "top": 432.22713103722356,
+        "right": 750.9857136681059,
+        "bottom": 460.22713103722356
+      },
+      "leaderEndNative": [
+        3525529.8865030925,
+        729012.0281176022
+      ],
+      "displayDisplaced": false,
+      "displayFontSizeMap": 18,
+      "displayDisplacementMap": 0
+    },
+    {
+      "id": "climate-class-12",
+      "view": "climate",
+      "classId": "12",
+      "sourceCode": "Aw0(w)",
+      "labelJa": "高温・亜湿潤",
+      "labelSource": "Cálido subhúmedo",
+      "pointNative": [
+        2823468.880906248,
+        724554.2493524504
+      ],
+      "clearanceM": 31638.110862133988,
+      "sourceFeatureId": "climate-1147",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+        "edition": 2008,
+        "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        2728588.6656543836,
+        528395.5390482633
+      ],
+      "displayBoxMap": {
+        "left": 468,
+        "top": 484,
+        "right": 551.44,
+        "bottom": 512
+      },
+      "leaderEndNative": [
+        2823468.880906248,
+        582644.6255532065
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 18,
+      "displayDisplacementMap": 56.23325521430964
+    },
+    {
+      "id": "climate-class-21",
+      "view": "climate",
+      "classId": "21",
+      "sourceCode": "(A)C(fm)",
+      "labelJa": "やや高温・湿潤",
+      "labelSource": "Semicálido húmedo",
+      "pointNative": [
+        2875134.1166973654,
+        993034.2723954925
+      ],
+      "clearanceM": 15793.569573552624,
+      "sourceFeatureId": "climate-1060",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+        "edition": 2008,
+        "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        3272009.515043899,
+        1024387.1870934574
+      ],
+      "displayBoxMap": {
+        "left": 596,
+        "top": 356,
+        "right": 703.92,
+        "bottom": 384
+      },
+      "leaderEndNative": [
+        3062918.0359148467,
+        993034.2723954925
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 18,
+      "displayDisplacementMap": 102.74028554040486
+    },
+    {
+      "id": "climate-class-22",
+      "view": "climate",
+      "classId": "22",
+      "sourceCode": "(A)Cx'",
+      "labelJa": "やや高温・亜湿潤",
+      "labelSource": "Semicálido subhúmedo",
+      "pointNative": [
+        2930892.6643452947,
+        1521435.6264516048
+      ],
+      "clearanceM": 27414.142488087396,
+      "sourceFeatureId": "climate-501",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+        "edition": 2008,
+        "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        2945585.0116741555,
+        1489379.3571358267
+      ],
+      "displayBoxMap": {
+        "left": 524,
+        "top": 236,
+        "right": 607.44,
+        "bottom": 264
+      },
+      "leaderEndNative": [
+        2930892.6643452942,
+        1521435.6264516048
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 18,
+      "displayDisplacementMap": 9.100246786839149
+    },
+    {
+      "id": "climate-class-31",
+      "view": "climate",
+      "classId": "31",
+      "sourceCode": "C(m)(w)",
+      "labelJa": "温帯・湿潤",
+      "labelSource": "Templado húmedo",
+      "pointNative": [
+        3090088.162473557,
+        628990.8019364496
+      ],
+      "clearanceM": 7206.062287206471,
+      "sourceFeatureId": "climate-1463",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+        "edition": 2008,
+        "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        3090088.1624735566,
+        628990.8019364495
+      ],
+      "displayBoxMap": {
+        "left": 555.1717636319512,
+        "top": 458.0394950188464,
+        "right": 650.8517636319511,
+        "bottom": 486.0394950188464
+      },
+      "leaderEndNative": [
+        3090088.1624735566,
+        628990.8019364495
+      ],
+      "displayDisplaced": false,
+      "displayFontSizeMap": 18,
+      "displayDisplacementMap": 0
+    },
+    {
+      "id": "climate-class-32",
+      "view": "climate",
+      "classId": "32",
+      "sourceCode": "(A)C(w0)(w)",
+      "labelJa": "温帯・亜湿潤",
+      "labelSource": "Templado subhúmedo",
+      "pointNative": [
+        2425462.199038575,
+        923975.7501791767
+      ],
+      "clearanceM": 26478.71840548226,
+      "sourceFeatureId": "climate-1053",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+        "edition": 2008,
+        "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        2425462.199038575,
+        923975.7501791767
+      ],
+      "displayBoxMap": {
+        "left": 359.17249782381805,
+        "top": 381.9130652213257,
+        "right": 503.81249782381803,
+        "bottom": 409.9130652213257
+      },
+      "leaderEndNative": [
+        2425462.199038575,
+        923975.7501791767
+      ],
+      "displayDisplaced": false,
+      "displayFontSizeMap": 18,
+      "displayDisplacementMap": 0
+    },
+    {
+      "id": "climate-class-42",
+      "view": "climate",
+      "classId": "42",
+      "sourceCode": "C(E)(w2)",
+      "labelJa": "やや寒冷・亜湿潤",
+      "labelSource": "Semifrío subhúmedo",
+      "pointNative": [
+        1967423.0311219918,
+        1772157.6450191091
+      ],
+      "clearanceM": 17045.60125493941,
+      "sourceFeatureId": "climate-244",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+        "edition": 2008,
+        "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        1970031.4389252649,
+        1737375.181158424
+      ],
+      "displayBoxMap": {
+        "left": 260,
+        "top": 172,
+        "right": 367.91999999999996,
+        "bottom": 200
+      },
+      "leaderEndNative": [
+        1967423.0311219918,
+        1772157.6450191091
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 18,
+      "displayDisplacementMap": 9.001475867589994
+    },
+    {
+      "id": "climate-class-51",
+      "view": "climate",
+      "classId": "51",
+      "sourceCode": "BS1(h')w(w)",
+      "labelJa": "半乾燥・非常に高温",
+      "labelSource": "Semiseco muy cálido",
+      "pointNative": [
+        2589240.898923106,
+        756180.6022189045
+      ],
+      "clearanceM": 15919.873100789406,
+      "sourceFeatureId": "climate-1286",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+        "edition": 2008,
+        "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        2506167.4109841166,
+        652393.4510595619
+      ],
+      "displayBoxMap": {
+        "left": 380,
+        "top": 452,
+        "right": 524.64,
+        "bottom": 480
+      },
+      "leaderEndNative": [
+        2589240.898923106,
+        706642.5375645049
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 18,
+      "displayDisplacementMap": 34.307609964468305
+    },
+    {
+      "id": "climate-class-52",
+      "view": "climate",
+      "classId": "52",
+      "sourceCode": "BS1(h')hw",
+      "labelJa": "半乾燥・高温",
+      "labelSource": "Semiseco cálido",
+      "pointNative": [
+        2029416.339315728,
+        1315517.9984018283
+      ],
+      "clearanceM": 20306.36928369086,
+      "sourceFeatureId": "climate-287",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+        "edition": 2008,
+        "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        2029416.339315728,
+        1315517.9984018286
+      ],
+      "displayBoxMap": {
+        "left": 269.2053936430935,
+        "top": 280.8682029337801,
+        "right": 389.36539364309346,
+        "bottom": 308.8682029337801
+      },
+      "leaderEndNative": [
+        2029416.339315728,
+        1315517.9984018286
+      ],
+      "displayDisplaced": false,
+      "displayFontSizeMap": 18,
+      "displayDisplacementMap": 0
+    },
+    {
+      "id": "climate-class-53",
+      "view": "climate",
+      "classId": "53",
+      "sourceCode": "BS1hw(x')",
+      "labelJa": "半乾燥・やや高温",
+      "labelSource": "Semiseco semicálido",
+      "pointNative": [
+        1818721.967849503,
+        1949963.8822387035
+      ],
+      "clearanceM": 15012.113807274287,
+      "sourceFeatureId": "climate-64",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+        "edition": 2008,
+        "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        1807749.171580478,
+        1861373.0931697222
+      ],
+      "displayBoxMap": {
+        "left": 212,
+        "top": 140,
+        "right": 332.15999999999997,
+        "bottom": 168
+      },
+      "leaderEndNative": [
+        1818721.9678495033,
+        1915622.1796746654
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 18,
+      "displayDisplacementMap": 23.037225144239812
+    },
+    {
+      "id": "climate-class-54",
+      "view": "climate",
+      "classId": "54",
+      "sourceCode": "BS1kw",
+      "labelJa": "半乾燥・温帯",
+      "labelSource": "Semiseco templado",
+      "pointNative": [
+        2427099.266982099,
+        1220707.8696335298
+      ],
+      "clearanceM": 51705.145562658414,
+      "sourceFeatureId": "climate-752",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+        "edition": 2008,
+        "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        2363879.806951152,
+        1179384.5771075806
+      ],
+      "displayBoxMap": {
+        "left": 380,
+        "top": 316,
+        "right": 451.2,
+        "bottom": 344
+      },
+      "leaderEndNative": [
+        2427099.266982099,
+        1220707.8696335298
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 18,
+      "displayDisplacementMap": 19.491144538003798
+    },
+    {
+      "id": "climate-class-55",
+      "view": "climate",
+      "classId": "55",
+      "sourceCode": "BS1k''w(x')",
+      "labelJa": "半乾燥・やや寒冷",
+      "labelSource": "Semiseco semifrío",
+      "pointNative": [
+        1942857.2674371134,
+        1984080.8014864768
+      ],
+      "clearanceM": 9686.64167245264,
+      "sourceFeatureId": "climate-79",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+        "edition": 2008,
+        "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        2134173.6749502216,
+        1985371.0051810208
+      ],
+      "displayBoxMap": {
+        "left": 284,
+        "top": 108,
+        "right": 428.64,
+        "bottom": 136
+      },
+      "leaderEndNative": [
+        1942857.2674371134,
+        1984080.8014864768
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 18,
+      "displayDisplacementMap": 49.373930205636036
+    },
+    {
+      "id": "climate-class-56",
+      "view": "climate",
+      "classId": "56",
+      "sourceCode": "BS0(h')w(w)",
+      "labelJa": "乾燥・非常に高温",
+      "labelSource": "Seco muy cálido",
+      "pointNative": [
+        2507762.602583223,
+        751508.6190465535
+      ],
+      "clearanceM": 11676.935802210319,
+      "sourceFeatureId": "climate-1317",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+        "edition": 2008,
+        "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        2258171.58696152,
+        776391.3630708605
+      ],
+      "displayBoxMap": {
+        "left": 316,
+        "top": 420,
+        "right": 460.64,
+        "bottom": 448
+      },
+      "leaderEndNative": [
+        2507762.602583223,
+        751508.6190465535
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 18,
+      "displayDisplacementMap": 64.73096868024815
+    },
+    {
+      "id": "climate-class-57",
+      "view": "climate",
+      "classId": "57",
+      "sourceCode": "BS0(h')hx'",
+      "labelJa": "乾燥・高温",
+      "labelSource": "Seco cálido",
+      "pointNative": [
+        2693170.755831898,
+        1696822.9087229483
+      ],
+      "clearanceM": 49468.54437493888,
+      "sourceFeatureId": "climate-264",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+        "edition": 2008,
+        "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        2699449.156331728,
+        1613377.2691471253
+      ],
+      "displayBoxMap": {
+        "left": 436,
+        "top": 204,
+        "right": 568.4,
+        "bottom": 232
+      },
+      "leaderEndNative": [
+        2693170.755831898,
+        1667626.3556520683
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 18,
+      "displayDisplacementMap": 21.595588883223954
+    },
+    {
+      "id": "climate-class-58",
+      "view": "climate",
+      "classId": "58",
+      "sourceCode": "BS0hw",
+      "labelJa": "乾燥・やや高温",
+      "labelSource": "Seco semicálido",
+      "pointNative": [
+        2538701.383912036,
+        1710702.4900478732
+      ],
+      "clearanceM": 29733.328318425632,
+      "sourceFeatureId": "climate-120",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+        "edition": 2008,
+        "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        2518877.1969652753,
+        1737375.181158424
+      ],
+      "displayBoxMap": {
+        "left": 420,
+        "top": 172,
+        "right": 491.2,
+        "bottom": 200
+      },
+      "leaderEndNative": [
+        2538701.383912036,
+        1710702.4900478732
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 18,
+      "displayDisplacementMap": 8.576396850035291
+    },
+    {
+      "id": "climate-class-59",
+      "view": "climate",
+      "classId": "59",
+      "sourceCode": "BS0kw",
+      "labelJa": "乾燥・温帯",
+      "labelSource": "Seco templado",
+      "pointNative": [
+        2518247.045192988,
+        1281270.700379933
+      ],
+      "clearanceM": 56314.48140423921,
+      "sourceFeatureId": "climate-755",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+        "edition": 2008,
+        "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        2518877.1969652753,
+        1334381.9671217036
+      ],
+      "displayBoxMap": {
+        "left": 420,
+        "top": 276,
+        "right": 491.2,
+        "bottom": 304
+      },
+      "leaderEndNative": [
+        2518247.045192988,
+        1281270.700379933
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 18,
+      "displayDisplacementMap": 13.707328852757676
+    },
+    {
+      "id": "climate-class-61",
+      "view": "climate",
+      "classId": "61",
+      "sourceCode": "BW(h')w",
+      "labelJa": "非常に乾燥・非常に高温",
+      "labelSource": "Muy seco muy cálido",
+      "pointNative": [
+        1740954.297585076,
+        1265774.9271215026
+      ],
+      "clearanceM": 2313.034077174412,
+      "sourceFeatureId": "climate-857",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+        "edition": 2008,
+        "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        1729320.4922333318,
+        1179384.5771075806
+      ],
+      "displayBoxMap": {
+        "left": 204,
+        "top": 316,
+        "right": 299.68,
+        "bottom": 344
+      },
+      "leaderEndNative": [
+        1740954.297585076,
+        1233633.6636125236
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 18,
+      "displayDisplacementMap": 22.495905749485026
+    },
+    {
+      "id": "climate-class-62",
+      "view": "climate",
+      "classId": "62",
+      "sourceCode": "BW(h')hw(x')",
+      "labelJa": "非常に乾燥・高温",
+      "labelSource": "Muy seco cálido",
+      "pointNative": [
+        1557977.1386726657,
+        1458626.9390111095
+      ],
+      "clearanceM": 30392.87349562247,
+      "sourceFeatureId": "climate-15",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+        "edition": 2008,
+        "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        1557977.1386726657,
+        1458626.9390111095
+      ],
+      "displayBoxMap": {
+        "left": 129.18161579493602,
+        "top": 243.93624153849692,
+        "right": 286.061615794936,
+        "bottom": 271.9362415384969
+      },
+      "leaderEndNative": [
+        1557977.1386726657,
+        1458626.9390111095
+      ],
+      "displayDisplaced": false,
+      "displayFontSizeMap": 18,
+      "displayDisplacementMap": 0
+    },
+    {
+      "id": "climate-class-63",
+      "view": "climate",
+      "classId": "63",
+      "sourceCode": "BWhw",
+      "labelJa": "非常に乾燥・やや高温",
+      "labelSource": "Muy seco semicálido",
+      "pointNative": [
+        2309683.8102747477,
+        1621370.2211166762
+      ],
+      "clearanceM": 48929.83826817615,
+      "sourceFeatureId": "climate-54",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+        "edition": 2008,
+        "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        2309165.728276166,
+        1613377.2691471253
+      ],
+      "displayBoxMap": {
+        "left": 372,
+        "top": 204,
+        "right": 430.96,
+        "bottom": 232
+      },
+      "leaderEndNative": [
+        2309683.8102747477,
+        1621370.2211166762
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 18,
+      "displayDisplacementMap": 2.067060541517509
+    },
+    {
+      "id": "climate-class-64",
+      "view": "climate",
+      "classId": "64",
+      "sourceCode": "BWkw(x')",
+      "labelJa": "非常に乾燥・温帯",
+      "labelSource": "Muy seco templado",
+      "pointNative": [
+        2030123.7616783867,
+        2114753.687800176
+      ],
+      "clearanceM": 64153.019089011315,
+      "sourceFeatureId": "climate-25",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+        "edition": 2008,
+        "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        2030123.7616783867,
+        2114753.687800176
+      ],
+      "displayBoxMap": {
+        "left": 275.5079573269321,
+        "top": 74.61035837897244,
+        "right": 383.4279573269321,
+        "bottom": 102.61035837897244
+      },
+      "leaderEndNative": [
+        2030123.7616783867,
+        2114753.687800176
+      ],
+      "displayDisplaced": false,
+      "displayFontSizeMap": 18,
+      "displayDisplacementMap": 0
+    },
+    {
+      "id": "climate-class-70",
+      "view": "climate",
+      "classId": "70",
+      "sourceCode": "C(E)(m)(w)",
+      "labelJa": "寒冷",
+      "labelSource": "Frío",
+      "pointNative": [
+        2782442.129259038,
+        794501.0300905936
+      ],
+      "clearanceM": 6520.196713552016,
+      "sourceFeatureId": "climate-1307",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+        "edition": 2008,
+        "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        2792447.5903402027,
+        1086386.1430991066
+      ],
+      "displayBoxMap": {
+        "left": 460.00000000000006,
+        "top": 340,
+        "right": 592.4000000000001,
+        "bottom": 368
+      },
+      "leaderEndNative": [
+        2782442.129259038,
+        1032137.0565941636
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 18,
+      "displayDisplacementMap": 75.37070141844187
+    },
+    {
+      "id": "relief-class-I",
+      "view": "relief",
+      "classId": "I",
+      "sourceCode": "I",
+      "labelJa": "バハ・カリフォルニア半島",
+      "labelSource": "PENÍNSULA DE BAJA CALIFORNIA",
+      "pointNative": [
+        1387669.9705460537,
+        1764932.2061203788
+      ],
+      "clearanceM": 62872.14765667943,
+      "sourceFeatureId": "relief-3",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267575",
+        "edition": 2001,
+        "archiveSha256": "23f106a3001a4bca916e0aab7f6ffb99810599895b0d00ae8b2dcc90272efb2a",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        1387669.9705460537,
+        1764932.2061203788
+      ],
+      "displayBoxMap": {
+        "left": 56.670638785298934,
+        "top": 165.38838993754823,
+        "right": 270.67063878529893,
+        "bottom": 192.38838993754823
+      },
+      "leaderEndNative": [
+        1387669.9705460537,
+        1764932.2061203788
+      ],
+      "displayDisplaced": false,
+      "displayFontSizeMap": 17,
+      "displayDisplacementMap": 0
+    },
+    {
+      "id": "relief-class-II",
+      "view": "relief",
+      "classId": "II",
+      "sourceCode": "II",
+      "labelJa": "ソノラ平原",
+      "labelSource": "LLANURA SONORENSE",
+      "pointNative": [
+        1552909.640157946,
+        2050236.4132640897
+      ],
+      "clearanceM": 88698.69586954074,
+      "sourceFeatureId": "relief-4",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267575",
+        "edition": 2001,
+        "archiveSha256": "23f106a3001a4bca916e0aab7f6ffb99810599895b0d00ae8b2dcc90272efb2a",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        1552909.640157946,
+        2050236.4132640897
+      ],
+      "displayBoxMap": {
+        "left": 158.8138522218183,
+        "top": 91.76025797539984,
+        "right": 253.8138522218183,
+        "bottom": 118.76025797539984
+      },
+      "leaderEndNative": [
+        1552909.640157946,
+        2050236.4132640897
+      ],
+      "displayDisplaced": false,
+      "displayFontSizeMap": 17,
+      "displayDisplacementMap": 0
+    },
+    {
+      "id": "relief-class-IV",
+      "view": "relief",
+      "classId": "IV",
+      "sourceCode": "IV",
+      "labelJa": "北部の山地と平原",
+      "labelSource": "SIERRAS Y LLANURAS DEL NORTE",
+      "pointNative": [
+        2261778.2189561324,
+        1805354.7768060253
+      ],
+      "clearanceM": 118003.66240055689,
+      "sourceFeatureId": "relief-16",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267575",
+        "edition": 2001,
+        "archiveSha256": "23f106a3001a4bca916e0aab7f6ffb99810599895b0d00ae8b2dcc90272efb2a",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        2261778.2189561324,
+        1805354.7768060253
+      ],
+      "displayBoxMap": {
+        "left": 316.2507594132479,
+        "top": 154.95658313564962,
+        "right": 462.2507594132479,
+        "bottom": 181.95658313564962
+      },
+      "leaderEndNative": [
+        2261778.2189561324,
+        1805354.7768060253
+      ],
+      "displayDisplaced": false,
+      "displayFontSizeMap": 17,
+      "displayDisplacementMap": 0
+    },
+    {
+      "id": "relief-class-III",
+      "view": "relief",
+      "classId": "III",
+      "sourceCode": "III",
+      "labelJa": "西シエラマドレ",
+      "labelSource": "SIERRA MADRE OCCIDENTAL",
+      "pointNative": [
+        1987616.5859577984,
+        1646375.2105589646
+      ],
+      "clearanceM": 132574.2200684264,
+      "sourceFeatureId": "relief-17",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267575",
+        "edition": 2001,
+        "archiveSha256": "23f106a3001a4bca916e0aab7f6ffb99810599895b0d00ae8b2dcc90272efb2a",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        1987616.5859577984,
+        1646375.2105589646
+      ],
+      "displayBoxMap": {
+        "left": 253.99817887667172,
+        "top": 195.98425882298207,
+        "right": 382.9981788766717,
+        "bottom": 222.98425882298207
+      },
+      "leaderEndNative": [
+        1987616.5859577984,
+        1646375.2105589646
+      ],
+      "displayDisplaced": false,
+      "displayFontSizeMap": 17,
+      "displayDisplacementMap": 0
+    },
+    {
+      "id": "relief-class-VI",
+      "view": "relief",
+      "classId": "VI",
+      "sourceCode": "VI",
+      "labelJa": "北米大平原",
+      "labelSource": "GRANDES LLANURAS DE NORTEAMÉRICA",
+      "pointNative": [
+        2686952.4808501066,
+        1704431.4988420343
+      ],
+      "clearanceM": 48511.131118929065,
+      "sourceFeatureId": "relief-32",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267575",
+        "edition": 2001,
+        "archiveSha256": "23f106a3001a4bca916e0aab7f6ffb99810599895b0d00ae8b2dcc90272efb2a",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        2688986.832505775,
+        1677313.6925279512
+      ],
+      "displayBoxMap": {
+        "left": 452,
+        "top": 188,
+        "right": 547,
+        "bottom": 215
+      },
+      "leaderEndNative": [
+        2686952.4808501066,
+        1704431.4988420343
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 17,
+      "displayDisplacementMap": 7.017926379152313
+    },
+    {
+      "id": "relief-class-V",
+      "view": "relief",
+      "classId": "V",
+      "sourceCode": "V",
+      "labelJa": "東シエラマドレ",
+      "labelSource": "SIERRA MADRE ORIENTAL",
+      "pointNative": [
+        2694792.088713409,
+        1272734.9076399838
+      ],
+      "clearanceM": 89945.90252776533,
+      "sourceFeatureId": "relief-34",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267575",
+        "edition": 2001,
+        "archiveSha256": "23f106a3001a4bca916e0aab7f6ffb99810599895b0d00ae8b2dcc90272efb2a",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        2754860.7232617773,
+        1336319.43449688
+      ],
+      "displayBoxMap": {
+        "left": 452,
+        "top": 276,
+        "right": 581,
+        "bottom": 303
+      },
+      "leaderEndNative": [
+        2694792.088713409,
+        1284007.8153671136
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 17,
+      "displayDisplacementMap": 22.5736255869169
+    },
+    {
+      "id": "relief-class-VII",
+      "view": "relief",
+      "classId": "VII",
+      "sourceCode": "VII",
+      "labelJa": "太平洋沿岸平原",
+      "labelSource": "LLANURA COSTERA DEL PACÍFICO",
+      "pointNative": [
+        1864109.9825727744,
+        1512748.910222514
+      ],
+      "clearanceM": 30816.61649130691,
+      "sourceFeatureId": "relief-82",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267575",
+        "edition": 2001,
+        "archiveSha256": "23f106a3001a4bca916e0aab7f6ffb99810599895b0d00ae8b2dcc90272efb2a",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        1864109.9825727744,
+        1512748.910222514
+      ],
+      "displayBoxMap": {
+        "left": 222.12497033457424,
+        "top": 230.46904603759899,
+        "right": 351.12497033457424,
+        "bottom": 257.469046037599
+      },
+      "leaderEndNative": [
+        1864109.9825727744,
+        1512748.910222514
+      ],
+      "displayDisplaced": false,
+      "displayFontSizeMap": 17,
+      "displayDisplacementMap": 2.842170943040401e-14
+    },
+    {
+      "id": "relief-class-VIII",
+      "view": "relief",
+      "classId": "VIII",
+      "sourceCode": "VIII",
+      "labelJa": "メキシコ湾北部沿岸平原",
+      "labelSource": "LLANURA COSTERA DEL GOLFO NORTE",
+      "pointNative": [
+        2863541.489276569,
+        1236373.4972161197
+      ],
+      "clearanceM": 67572.025024576,
+      "sourceFeatureId": "relief-126",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267575",
+        "edition": 2001,
+        "archiveSha256": "23f106a3001a4bca916e0aab7f6ffb99810599895b0d00ae8b2dcc90272efb2a",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        2855609.0267709577,
+        1181322.044482757
+      ],
+      "displayBoxMap": {
+        "left": 444,
+        "top": 316,
+        "right": 641,
+        "bottom": 343
+      },
+      "leaderEndNative": [
+        2863541.4892765684,
+        1233633.6636125236
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 17,
+      "displayDisplacementMap": 14.353794746888047
+    },
+    {
+      "id": "relief-class-IX",
+      "view": "relief",
+      "classId": "IX",
+      "sourceCode": "IX",
+      "labelJa": "中央高原",
+      "labelSource": "MESA DEL CENTRO",
+      "pointNative": [
+        2449762.3171252054,
+        1305987.6218469534
+      ],
+      "clearanceM": 60734.72259007167,
+      "sourceFeatureId": "relief-256",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267575",
+        "edition": 2001,
+        "archiveSha256": "23f106a3001a4bca916e0aab7f6ffb99810599895b0d00ae8b2dcc90272efb2a",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        2315055.629096703,
+        1305319.9564940557
+      ],
+      "displayBoxMap": {
+        "left": 364,
+        "top": 284,
+        "right": 442,
+        "bottom": 311
+      },
+      "leaderEndNative": [
+        2449762.3171252054,
+        1305987.6218469534
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 17,
+      "displayDisplacementMap": 34.76402863997723
+    },
+    {
+      "id": "relief-class-XI",
+      "view": "relief",
+      "classId": "XI",
+      "sourceCode": "XI",
+      "labelJa": "ユカタン半島",
+      "labelSource": "PENÍNSULA DE YUCATÁN",
+      "pointNative": [
+        3846281.3672778173,
+        954448.3491875563
+      ],
+      "clearanceM": 144533.9753151612,
+      "sourceFeatureId": "relief-375",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267575",
+        "edition": 2001,
+        "archiveSha256": "23f106a3001a4bca916e0aab7f6ffb99810599895b0d00ae8b2dcc90272efb2a",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        3846281.367277817,
+        954448.3491875562
+      ],
+      "displayBoxMap": {
+        "left": 742.1616831848823,
+        "top": 374.5490362836506,
+        "right": 854.1616831848823,
+        "bottom": 401.5490362836506
+      },
+      "leaderEndNative": [
+        3846281.367277817,
+        954448.3491875562
+      ],
+      "displayDisplaced": false,
+      "displayFontSizeMap": 17,
+      "displayDisplacementMap": 0
+    },
+    {
+      "id": "relief-class-X",
+      "view": "relief",
+      "classId": "X",
+      "sourceCode": "X",
+      "labelJa": "メキシコ火山帯",
+      "labelSource": "EJE NEOVOLCÁNICO",
+      "pointNative": [
+        2875477.102383685,
+        836948.1279401252
+      ],
+      "clearanceM": 60042.08521033715,
+      "sourceFeatureId": "relief-412",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267575",
+        "edition": 2001,
+        "archiveSha256": "23f106a3001a4bca916e0aab7f6ffb99810599895b0d00ae8b2dcc90272efb2a",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        2875477.102383685,
+        836948.1279401253
+      ],
+      "displayBoxMap": {
+        "left": 483.1273316565955,
+        "top": 404.8721846248515,
+        "right": 612.1273316565955,
+        "bottom": 431.8721846248515
+      },
+      "leaderEndNative": [
+        2875477.102383685,
+        836948.1279401253
+      ],
+      "displayDisplaced": false,
+      "displayFontSizeMap": 17,
+      "displayDisplacementMap": 0
+    },
+    {
+      "id": "relief-class-XII",
+      "view": "relief",
+      "classId": "XII",
+      "sourceCode": "XII",
+      "labelJa": "南シエラマドレ",
+      "labelSource": "SIERRA MADRE DEL SUR",
+      "pointNative": [
+        3040066.1761759697,
+        568893.4567314797
+      ],
+      "clearanceM": 125039.21808723304,
+      "sourceFeatureId": "relief-436",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267575",
+        "edition": 2001,
+        "archiveSha256": "23f106a3001a4bca916e0aab7f6ffb99810599895b0d00ae8b2dcc90272efb2a",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        2847859.1572702513,
+        530333.0064234398
+      ],
+      "displayBoxMap": {
+        "left": 476,
+        "top": 484,
+        "right": 605,
+        "bottom": 511
+      },
+      "leaderEndNative": [
+        3040066.176175969,
+        568893.4567314796
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 17,
+      "displayDisplacementMap": 50.59100664677197
+    },
+    {
+      "id": "relief-class-XIII",
+      "view": "relief",
+      "classId": "XIII",
+      "sourceCode": "XIII",
+      "labelJa": "メキシコ湾南部沿岸平原",
+      "labelSource": "LLANURA COSTERA DEL GOLFO SUR",
+      "pointNative": [
+        3237603.2028909423,
+        657122.6158426495
+      ],
+      "clearanceM": 68156.23769046075,
+      "sourceFeatureId": "relief-551",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267575",
+        "edition": 2001,
+        "archiveSha256": "23f106a3001a4bca916e0aab7f6ffb99810599895b0d00ae8b2dcc90272efb2a",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        3237603.2028909423,
+        657122.6158426495
+      ],
+      "displayBoxMap": {
+        "left": 542.5808021890377,
+        "top": 451.27954982786315,
+        "right": 739.5808021890377,
+        "bottom": 478.27954982786315
+      },
+      "leaderEndNative": [
+        3237603.2028909423,
+        657122.6158426495
+      ],
+      "displayDisplaced": false,
+      "displayFontSizeMap": 17,
+      "displayDisplacementMap": 0
+    },
+    {
+      "id": "relief-class-XIV",
+      "view": "relief",
+      "classId": "XIV",
+      "sourceCode": "XIV",
+      "labelJa": "チアパス・グアテマラ山地",
+      "labelSource": "SIERRAS DE CHIAPAS Y GUATEMALA",
+      "pointNative": [
+        3554116.9813217176,
+        564825.1915246908
+      ],
+      "clearanceM": 80474.93894159677,
+      "sourceFeatureId": "relief-704",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267575",
+        "edition": 2001,
+        "archiveSha256": "23f106a3001a4bca916e0aab7f6ffb99810599895b0d00ae8b2dcc90272efb2a",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        3539535.0102082756,
+        437334.57241496607
+      ],
+      "displayBoxMap": {
+        "left": 612,
+        "top": 508,
+        "right": 826,
+        "bottom": 535
+      },
+      "leaderEndNative": [
+        3554116.9813217176,
+        489646.19154473254
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 17,
+      "displayDisplacementMap": 33.11586838002941
+    },
+    {
+      "id": "relief-class-XV",
+      "view": "relief",
+      "classId": "XV",
+      "sourceCode": "XV",
+      "labelJa": "中米山脈",
+      "labelSource": "CORDILLERA CENTROAMERICANA",
+      "pointNative": [
+        3315426.46855342,
+        548517.0855315024
+      ],
+      "clearanceM": 47602.76670676082,
+      "sourceFeatureId": "relief-709",
+      "source": {
+        "agency": "INEGI",
+        "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267575",
+        "edition": 2001,
+        "archiveSha256": "23f106a3001a4bca916e0aab7f6ffb99810599895b0d00ae8b2dcc90272efb2a",
+        "geometrySha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+      },
+      "displayPointNative": [
+        3803030.5732322847,
+        561332.4844262647
+      ],
+      "displayBoxMap": {
+        "left": 748,
+        "top": 476,
+        "right": 826,
+        "bottom": 503
+      },
+      "leaderEndNative": [
+        3651908.1179685146,
+        548517.0855315025
+      ],
+      "displayDisplaced": true,
+      "displayFontSizeMap": 17,
+      "displayDisplacementMap": 125.87889000882913
+    }
+  ],
+  "labelLayout": {
+    "mapViewBox": [
+      0,
+      0,
+      900,
+      580
+    ],
+    "minimumSupportedWidthPx": 591,
+    "intendedViewportPx": [
+      591,
+      381
+    ],
+    "fontSizesMap": {
+      "climate": 18,
+      "relief": 17
+    },
+    "boundsMap": {
+      "left": 12,
+      "right": 888,
+      "top": 12,
+      "bottom": 568
+    },
+    "controlObstacleMap": {
+      "left": 811,
+      "right": 900,
+      "top": 0,
+      "bottom": 244
+    },
+    "climateStationObstaclesMap": [
+      {
+        "left": 516.5076531264291,
+        "right": 536.5076531264291,
+        "top": 411.2676893139344,
+        "bottom": 431.2676893139344
+      },
+      {
+        "left": 534.5076531264291,
+        "right": 674.5076531264291,
+        "top": 391.2676893139344,
+        "bottom": 422.2676893139344
+      },
+      {
+        "left": 300.40787181302545,
+        "right": 320.40787181302545,
+        "top": 255.7141232228132,
+        "bottom": 275.7141232228132
+      },
+      {
+        "left": 318.40787181302545,
+        "right": 430.32787181302547,
+        "top": 235.7141232228132,
+        "bottom": 266.7141232228132
+      }
+    ],
+    "textWidthEstimate": "0.68 em per ASCII code glyph; 1 em per Japanese glyph; 10 SVG units extra stroke/padding; label height font size + 10 SVG units",
+    "leaderPlacement": "Text avoids other source-anchor dots; leaders avoid other label text boxes, city labels, station points and controls. A leader whose fixed source anchor lies within a station glyph starts beneath that glyph; it is not relocated. Leaders may cross other leaders.",
+    "semantics": "displayPointNative is a derived annotation centre only. pointNative remains the strictly interior source anchor. Displaced text requires a leader from pointNative to leaderEndNative; no geographic feature or source coordinate moves.",
+    "stationCoordinateSource": {
+      "file": "src/data/atlas/mexico/climate-normals.json",
+      "sha256": "cfa2c3d504da5feb50c3fe5d385aa78525af599f064fc124d8bc41578f1f72f5"
+    },
+    "frameSource": {
+      "file": "src/data/atlas/mexico/geometry-index.json",
+      "sha256": "c18f61eb22816d9cb3b655df8a2aa71da2dcfc84b4bb4339308d0ea9d4d6689b"
+    }
+  }
+}

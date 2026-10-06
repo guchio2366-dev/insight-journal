@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "publisher": "CONAGUA / Servicio Meteorológico Nacional (SMN)",
+    "product": "Normales climatológicas 1991–2020",
+    "url": "https://smn.conagua.gob.mx/es/climatologia/informacion-climatologica/normales-climatologicas-por-estado",
+    "retrievedAt": "2026-10-05",
+    "attribution": "出典：CONAGUA / Servicio Meteorológico Nacional（SMN）、1991–2020年の観測所別平年値。月平均気温・月降水量を抽出。",
+    "reuse": {
+      "explicitDatasetLicense": null,
+      "basis": "Attributed extraction of selected factual statistics; no open license for the full SMN database asserted.",
+      "evidenceFile": "data-source/atlas/mexico/climate-normals/reuse-evidence.json",
+      "fullDatabaseRedistribution": false
+    }
+  },
+  "sourceFiles": [
+    {
+      "stationId": "09048",
+      "url": "https://smn.conagua.gob.mx/tools/RESOURCES/Normales_Climatologicas/Normales9120/df/nor9120_09048.txt",
+      "retrievedAt": "2026-10-05",
+      "encoding": "UTF-8",
+      "fullDownload": {
+        "bytes": 2644,
+        "sha256": "9da95af1ec7d024c7671ed262efe05df074a83023b9dc5bd83b25bd537ffabd9",
+        "retainedInRepository": false
+      },
+      "selectedFile": "nor9120_09048-selected.txt",
+      "selectedBytes": 1016,
+      "selectedSha256": "a5737f714cfccd6763c8c519a0989b188241b2136e1fe7c7b5d88943736effdb",
+      "originalMetadataLines": [
+        1,
+        20
+      ],
+      "selectedRows": [
+        {
+          "series": "TEMPERATURA MEDIA",
+          "headingLine": 41,
+          "monthsLine": 42,
+          "normalLine": 43,
+          "yearsLine": 44
+        },
+        {
+          "series": "PRECIPITACION",
+          "headingLine": 46,
+          "monthsLine": 47,
+          "normalLine": 48,
+          "yearsLine": 53
+        }
+      ]
+    },
+    {
+      "stationId": "25015",
+      "url": "https://smn.conagua.gob.mx/tools/RESOURCES/Normales_Climatologicas/Normales9120/sin/nor9120_25015.txt",
+      "retrievedAt": "2026-10-05",
+      "encoding": "UTF-8",
+      "fullDownload": {
+        "bytes": 2847,
+        "sha256": "2f2a1f1b7c58e6c04917664540bf824e32e83b2796a60c199119cbd22664efeb",
+        "retainedInRepository": false
+      },
+      "selectedFile": "nor9120_25015-selected.txt",
+      "selectedBytes": 998,
+      "selectedSha256": "e7b71c26d7a347b78d5c1e65c8205ff41c73b3a2a1a2dd6a03e36d9819e9c75d",
+      "originalMetadataLines": [
+        1,
+        20
+      ],
+      "selectedRows": [
+        {
+          "series": "TEMPERATURA MEDIA",
+          "headingLine": 41,
+          "monthsLine": 42,
+          "normalLine": 43,
+          "yearsLine": 44
+        },
+        {
+          "series": "PRECIPITACION",
+          "headingLine": 46,
+          "monthsLine": 47,
+          "normalLine": 48,
+          "yearsLine": 53
+        }
+      ]
+    }
+  ],
+  "processing": {
+    "script": "data-source/atlas/mexico/climate-normals/prepare.mjs",
+    "scriptSha256": "83c854861f1bbeefaece90888c6817c3df7bc7ce258d763f155d37019bff84bb",
+    "selection": "Station metadata, TEMPERATURA MEDIA NORMAL, PRECIPITACION NORMAL, and their AÑOS CON DATOS; monthly columns January to December unchanged, official annual fields unchanged.",
+    "transformations": [
+      "Parsed numeric text to JSON numbers.",
+      "Padded SMN station 9048 to the five-digit key 09048.",
+      "Changed the period separator to an en dash for display.",
+      "Added Japanese station labels and scope notes."
+    ],
+    "calculatedAnnualValues": false,
+    "spatialInterpolation": false
+  }
+}

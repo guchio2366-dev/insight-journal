@@ -4,11 +4,13 @@ import {build} from 'esbuild';
 import {Window} from 'happy-dom';
 import fs from 'node:fs';
 import crypto from 'node:crypto';
-import {readMexicoWaterSelection,writeMexicoWaterSelection,validateMexicoWaterCollection,mexicoWaterFeatureFill,mexicoWaterFeatureStroke,mexicoWaterUnit,mexicoWaterSourceText,mexicoWaterLineLabels,mexicoWaterLayersForCategory,mexicoContourGroups,closestMexicoContour} from '../../src/lib/atlas-mexico-hydrology.ts';
+import {readMexicoWaterSelection,writeMexicoWaterSelection,validateMexicoWaterCollection,mexicoWaterFeatureFill,mexicoWaterFeatureStroke,mexicoWaterUnit,mexicoWaterSourceText,mexicoWaterLineLabels,mexicoWaterLayersForCategory,mexicoContourGroups,closestMexicoContour,mexicoPrecipitationKeys,mexicoPrecipitationKey,mexicoBasinKeys,mexicoBasinContains,mexicoBasinLabelPoint,mexicoBasinLabels} from '../../src/lib/atlas-mexico-hydrology.ts';
+import {precipitationBands} from '../../src/data/atlas/water-resources.ts';
 import {readMexicoNatureState,writeMexicoNatureState,mexicoNatureReturnUrl} from '../../src/lib/atlas-mexico-nature.ts';
 
 const line = (id, value = 1000) => ({type:'Feature', properties:{id,name:`${value} mm/年`,value,unit:'mm/年'},geometry:{type:'LineString',coordinates:[[-105,25],[-102,24],[-100,22]]}});
 const collection = features => ({type:'FeatureCollection',features});
+const bundle = await build({stdin:{contents:"import {initMexicoHydrology} from './src/scripts/atlas-mexico-hydrology.ts';import {projectLonLat} from './src/lib/atlas-mexico-geometry.ts';window.initTestWater=initMexicoHydrology;window.testMexicoProject=projectLonLat;",resolveDir:process.cwd(),loader:'ts'},bundle:true,platform:'browser',format:'iife',write:false});
 test('Water selection has its own stable ID and preserves original comparison, native feature and camera on reload', () => {
   const initial = new URL('https://example.test/nature/?view=relief&feature=relief-17&item=III&category=precipitation&state=10&frame=210,100,350,220&compare=irrigation&from=agriculture&sourceState=25&sourceMetric=cattle&sourceCrops=0&sourceOnlyItem=1');
   const withWater = writeMexicoWaterSelection(initial,{base:'relief',feature:'precipitation:INEGI-1000-7'});
@@ -27,7 +29,35 @@ test('Annual-rainfall lines remain actual lines, and invalid/native coordinates 
   assert.throws(()=>validateMexicoWaterCollection(collection([line('a'),line('a')]),'precipitation'),/重複/);
   assert.throws(()=>validateMexicoWaterCollection(collection([{...line('native'),geometry:{type:'LineString',coordinates:[[2300000,1700000],[2400000,1800000]]}}]),'precipitation'),/経緯度/);
   assert.throws(()=>validateMexicoWaterCollection(collection([line('unknown')]),'contours'),/標高/);
+  assert.throws(()=>validateMexicoWaterCollection(collection([{...line('fake-rain-zone'),geometry:{type:'Polygon',coordinates:[[[-105,25],[-102,25],[-102,22],[-105,25]]]}}]),'precipitation'),/等雨量線/);
   assert.deepEqual(mexicoWaterLayersForCategory('rivers-groundwater'),['groundwater','rivers']);
+});
+test('Mexican real isohyet strokes share all seven US thresholds and colors, without generating areas or losing the 19 original values',()=>{
+  assert.deepEqual(mexicoPrecipitationKeys.map(({id,label,color})=>({id,title:label,color})),precipitationBands.map(({id,title,color})=>({id,title,color})));
+  const edges=[0,249,250,499,500,749,750,999,1000,1499,1500,1999,2000,4500];
+  assert.deepEqual(edges.map(value=>mexicoPrecipitationKey(value)?.id),['lt250','lt250','250-500','250-500','500-750','500-750','750-1000','750-1000','1000-1500','1000-1500','1500-2000','1500-2000','gte2000','gte2000']);
+  assert.equal(mexicoPrecipitationKey(NaN),undefined);assert.equal(mexicoPrecipitationKey(-1),undefined);
+  const source=JSON.parse(fs.readFileSync('public/assets/atlas/mexico-water-v1/precipitation.source.json','utf8'));
+  assert.deepEqual(source.legend,mexicoPrecipitationKeys);assert.deepEqual(source.displayEncoding.majorSourceValuesMm,[1000,1500]);
+  assert.deepEqual(source.displayEncoding.thresholdsMm,[250,500,750,1000,1500,2000]);
+  const features=JSON.parse(fs.readFileSync('public/assets/atlas/mexico-water-v1/precipitation.geojson','utf8')).features;
+  for(const feature of features){assert.equal(mexicoWaterFeatureFill(feature,'precipitation',source),'none');assert.equal(mexicoWaterFeatureStroke(feature,'precipitation',source),mexicoPrecipitationKey(feature.properties.value).color);}
+  assert.equal(features.length,492);assert.equal(new Set(features.map(feature=>feature.properties.value)).size,19);
+});
+test('Basin label anchors stay inside their original source polygon, avoid holes and expose source names with the selected basin first',async()=>{
+  const window=setup(),projectLonLat=window.testMexicoProject;
+  try {
+  const feature={type:'Feature',properties:{id:'hole-test',sourceName:'SOURCE BASIN',basinType:'ENDORREICA'},geometry:{type:'Polygon',coordinates:[[[0,0],[10,0],[10,10],[0,10],[0,0]],[[3,3],[7,3],[7,7],[3,7],[3,3]]]}};
+  const point=mexicoBasinLabelPoint(feature);assert.ok(point);assert.equal(mexicoBasinContains(feature,point),true);assert.equal(mexicoBasinContains(feature,[5,5]),false);
+  assert.equal(mexicoWaterFeatureFill(feature,'basins',{}),mexicoBasinKeys.find(key=>key.id==='ENDORREICA').color);
+  const features=JSON.parse(fs.readFileSync('public/assets/atlas/mexico-water-v1/basins.geojson','utf8')).features,anchors=new Map();
+  const labels=mexicoBasinLabels(features,anchors,projectLonLat,[0,0,900,580],13,'basin-RH10G',[[0,0,100,60]]);
+  assert.ok(labels.length>2);assert.equal(labels[0].id,'basin-RH10G');assert.equal(labels[0].text,'R. FUERTE');
+  for(const label of labels){const original=features.find(feature=>feature.properties.id===label.id);assert.equal(mexicoBasinContains(original,label.point),true);assert.equal(label.text,original.properties.sourceName);}
+  for(const feature of features){const point=mexicoBasinLabelPoint(feature);if(point)assert.equal(mexicoBasinContains(feature,point),true,feature.properties.id);}
+  for(let a=0;a<labels.length;a++)for(let b=a+1;b<labels.length;b++){const x=labels[a].box,y=labels[b].box;assert.ok(!(x[0]<y[0]+y[2]&&x[0]+x[2]>y[0]&&x[1]<y[1]+y[3]&&x[1]+x[3]>y[1]));}
+  assert.deepEqual(mexicoBasinLabels(features,anchors,projectLonLat,[1000,1000,40,40],13),[]);
+  } finally {await window.happyDOM.close();}
 });
 test('The delivered Mexican rainfall lines retain all original annual values, counts, units and the recorded output hash', () => {
   const base='public/assets/atlas/mexico-water-v1/',metadata=JSON.parse(fs.readFileSync(base+'precipitation.source.json','utf8'));
@@ -61,13 +91,13 @@ test('Number labels retain real source vertices and values and omit anchors that
   for(let a=0;a<labels.length;a++)for(let b=a+1;b<labels.length;b++){const x=labels[a].box,y=labels[b].box;assert.ok(!(x[0]<y[0]+y[2]&&x[0]+x[2]>y[0]&&x[1]<y[1]+y[3]&&x[1]+x[3]>y[1]));}
 });
 
-const bundle = await build({stdin:{contents:"import {initMexicoHydrology} from './src/scripts/atlas-mexico-hydrology.ts';window.initTestWater=initMexicoHydrology;",resolveDir:process.cwd(),loader:'ts'},bundle:true,platform:'browser',format:'iife',write:false});
 const waitFor = async fn => {for(let attempt=0;attempt<100;attempt++){if(fn())return;await new Promise(resolve=>setTimeout(resolve,5));}assert.ok(fn(),'Water controller settled');};
 function setup() {
   const window = new Window({url:'https://example.test/nature/?category=precipitation&view=relief&waterBase=relief',settings:{enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
   window.document.write(`<article data-mexico-workspace><svg><g data-mexico-nature-neutral></g><g data-mexico-nature-vector><g data-mexico-nature-layer="climate"></g><g data-mexico-nature-layer="relief"></g></g><g data-mexico-nature-static></g><g data-mexico-hydrology-overlay></g></svg><label><select data-mexico-nature-item-select></select></label><div data-mexico-hydrology-controls><select data-mexico-hydrology-item></select><select data-mexico-hydrology-base><option>plain</option><option>climate</option><option>relief</option></select></div><ul data-mexico-hydrology-legend></ul><div data-mexico-hydrology-reading><h2 data-mexico-hydrology-title></h2><p data-mexico-hydrology-lead></p><p data-mexico-hydrology-status></p><button data-mexico-hydrology-retry></button><p data-mexico-hydrology-value></p><p data-mexico-hydrology-definition></p><p data-mexico-hydrology-limitations></p><div data-mexico-hydrology-source></div></div><p data-mexico-nature-map-title></p><p data-mexico-nature-map-edition></p><p data-mexico-nature-period></p></article>`);
   const nativeKey=window.document.createElement('div');nativeKey.setAttribute('data-native-key-test','');nativeKey.innerHTML='<ul data-mexico-nature-legend="climate"><li>6気候群</li></ul><ul data-mexico-nature-legend="relief"><li>15地形地域＋欠測</li></ul>';window.document.querySelector('article').append(nativeKey);
   const backgroundKey=window.document.createElement('div');backgroundKey.setAttribute('data-mexico-hydrology-base-key-host','');window.document.querySelector('[data-mexico-hydrology-reading]').append(backgroundKey);
+  const reliefBackground=window.document.createElementNS('http://www.w3.org/2000/svg','g');reliefBackground.setAttribute('data-mexico-nature-relief-background','');window.document.querySelector('[data-mexico-nature-neutral]').after(reliefBackground);
   window.eval(bundle.outputFiles[0].text);
   return window;
 }
@@ -132,11 +162,70 @@ test('Selecting a river in the basin overlay describes the river class and gener
   const basin={type:'Feature',properties:{id:'RH01A',name:'原国内流域'},geometry:{type:'Polygon',coordinates:[[[-105,25],[-102,25],[-102,22],[-105,25]]]}};
   const river={...line('rivers-order-7'),properties:{id:'rivers-order-7',classId:'rivers-order-7',name:'小流域内Strahler次数7',sourceIds:['original-segment-1']}};
   window.fetch=async url=>({ok:true,json:async()=>String(url).endsWith('manifest.json')?{layers:{basins:{file:'basins.json',publisher:'INEGI'},rivers:{file:'rivers.json',publisher:'INEGI',unit:'subbasin Strahler order',legend:[{id:'rivers-order-7',label:'小流域内Strahler次数7',color:'#0284c7'}]}}}:collection([String(url).endsWith('basins.json')?basin:river])});
-  let controller;controller=window.initTestWater(root,'/data/',()=>state,()=>controller.render());try{state.category='rivers-groundwater';controller.render();await waitFor(()=>root.dataset.mexicoHydrologyReady==='true');state.category='basins';controller.render();await waitFor(()=>root.dataset.mexicoHydrologyReady==='true');assert.deepEqual([...root.querySelector('[data-mexico-hydrology-overlay]').children].map(group=>group.dataset.mexicoHydrologyLayer),['basins','rivers'],'River strokes stay above basin fills after a same-page category switch');root.querySelector('[data-mexico-water-feature="rivers:rivers-order-7"]').dispatchEvent(new window.MouseEvent('click'));await waitFor(()=>root.querySelector('[data-mexico-hydrology-value]').textContent.includes('配信分類ID'));assert.match(root.querySelector('[data-mexico-hydrology-definition]').textContent,/間欠・仮想流.*Strahler次数/);assert.doesNotMatch(root.querySelector('[data-mexico-hydrology-definition]').textContent,/集水域の区分/);assert.match(root.querySelector('[data-mexico-hydrology-limitations]').textContent,/次数7以上/);assert.doesNotMatch(root.querySelector('[data-mexico-hydrology-value]').textContent,/原ID：rivers-order/);assert.equal(root.querySelector('[data-mexico-nature-period]').textContent,'小流域内：同じ次数の合流で+1。流量・川幅ではない。');assert.match(root.querySelector('[data-mexico-nature-map-edition]').textContent,/版\/期未確認/);assert.equal(root.querySelectorAll('[data-mexico-water-feature="rivers:rivers-order-7"]').length,1);}finally{await window.happyDOM.close();}
+  let controller;controller=window.initTestWater(root,'/data/',()=>state,()=>controller.render());try{state.category='rivers-groundwater';controller.render();await waitFor(()=>root.dataset.mexicoHydrologyReady==='true');state.category='basins';controller.render();await waitFor(()=>root.dataset.mexicoHydrologyReady==='true');assert.deepEqual([...root.querySelector('[data-mexico-hydrology-overlay]').children].map(group=>group.dataset.mexicoHydrologyLayer),['basins','rivers'],'River strokes stay above basin fills after a same-page category switch');root.querySelector('[data-mexico-water-feature="rivers:rivers-order-7"]').dispatchEvent(new window.MouseEvent('click'));await waitFor(()=>root.querySelector('[data-mexico-hydrology-value]').textContent.includes('配信分類ID'));assert.match(root.querySelector('[data-mexico-hydrology-definition]').textContent,/間欠・仮想流.*Strahler次数/);assert.doesNotMatch(root.querySelector('[data-mexico-hydrology-definition]').textContent,/集水域の区分/);assert.match(root.querySelector('[data-mexico-hydrology-limitations]').textContent,/次数7以上/);assert.doesNotMatch(root.querySelector('[data-mexico-hydrology-value]').textContent,/原ID：rivers-order/);assert.match(root.querySelector('[data-mexico-nature-period]').textContent,/国内158流域.*国外上流域は未収録.*小流域内：同じ次数の合流で\+1/);assert.match(root.querySelector('[data-mexico-nature-map-edition]').textContent,/版\/期未確認/);assert.equal(root.querySelectorAll('[data-mexico-water-feature="rivers:rivers-order-7"]').length,1);}finally{await window.happyDOM.close();}
 });
 test('Map resize recalculates physical label size without fetching again or duplicating original line paths',async()=>{
   const window=setup(),root=window.document.querySelector('article'),svg=root.querySelector('svg');svg.setAttribute('data-mexico-nature-main-map','');svg.setAttribute('viewBox','0 0 900 580');let width=645,callback,fetches=0;
   Object.defineProperty(svg,'clientWidth',{get:()=>width});window.ResizeObserver=class{constructor(fn){callback=fn}observe(){}};
   window.fetch=async url=>{fetches++;return{ok:true,json:async()=>String(url).endsWith('manifest.json')?{layers:{precipitation:{file:'rain.json',publisher:'INEGI',unit:'mm/year'}}}:collection([line('real-1000')])}};
   const state={category:'precipitation',view:'climate',fallback:false},controller=window.initTestWater(root,'/data/',()=>state,()=>{});try{controller.render();await waitFor(()=>root.dataset.mexicoHydrologyReady==='true');const label=root.querySelector('[data-source-value="1000"]');assert.ok(label);const count=fetches;assert.ok(Math.abs(Number(label.getAttribute('font-size'))*width/900-13)<.001);width=322.5;callback();await waitFor(()=>Number(root.querySelector('[data-source-value="1000"]').getAttribute('font-size'))>30);assert.ok(Math.abs(Number(root.querySelector('[data-source-value="1000"]').getAttribute('font-size'))*width/900-13)<.001);assert.equal(fetches,count);assert.equal(root.querySelectorAll('[data-mexico-water-feature="precipitation:real-1000"]').length,1);}finally{await window.happyDOM.close();}
+});
+
+test('Native and hydrology relief share the neutral land and terrain backdrop, while legacy fallback URLs keep live SVG and exact source-return flags',async()=>{
+  const window=setup(),root=window.document.querySelector('article'),svg=root.querySelector('svg');svg.setAttribute('data-mexico-nature-main-map','');
+  window.history.replaceState(null,'','?category=precipitation&view=climate&waterBase=relief&fallback=1&compare=irrigation&from=agriculture&sourceMetric=maize&sourceFallback=1&sourceOnlyItem=1');
+  const state={category:'precipitation',view:'climate',fallback:true,compare:'irrigation'},layer=view=>root.querySelector(`[data-mexico-nature-layer="${view}"]`);
+  window.fetch=async url=>({ok:true,json:async()=>String(url).endsWith('manifest.json')?{layers:{precipitation:{file:'rain.json',publisher:'INEGI'}}}:collection([line('rain-1000')])});
+  let controller;controller=window.initTestWater(root,'/data/',()=>state,()=>{window.history.pushState(null,'',controller.url(new URL(window.location.href)));controller.render();});
+  try{controller.render();await waitFor(()=>root.dataset.mexicoHydrologyReady==='true');
+    assert.equal(root.querySelector('[data-mexico-nature-neutral]').style.display,'');assert.equal(root.querySelector('[data-mexico-nature-relief-background]').style.display,'');assert.equal(layer('relief').style.display,'');assert.equal(layer('climate').style.display,'none');
+    assert.equal(root.querySelector('[data-mexico-nature-vector]').style.display,'');assert.equal(root.querySelector('[data-mexico-nature-static]').style.display,'none');
+    const select=root.querySelector('[data-mexico-hydrology-base]');select.value='climate';select.dispatchEvent(new window.Event('change'));await waitFor(()=>root.dataset.mexicoHydrologyReady==='true');
+    assert.equal(root.querySelector('[data-mexico-nature-neutral]').style.display,'none');assert.equal(root.querySelector('[data-mexico-nature-relief-background]').style.display,'none');assert.equal(layer('climate').style.display,'');
+    for(const [key,value] of [['fallback','1'],['sourceFallback','1'],['sourceMetric','maize'],['sourceOnlyItem','1']])assert.equal(new URL(window.location.href).searchParams.get(key),value);
+    state.category='';state.view='relief';controller.render();assert.equal(root.querySelector('[data-mexico-nature-neutral]').style.display,'');assert.equal(root.querySelector('[data-mexico-nature-relief-background]').style.display,'');assert.equal(layer('relief').style.display,'');assert.equal(svg.dataset.mexicoNatureMapMode,'interactive');
+    state.view='climate';controller.render();assert.equal(root.querySelector('[data-mexico-nature-relief-background]').style.display,'none');assert.equal(layer('climate').style.display,'');assert.equal(root.querySelector('[data-mexico-nature-static]').style.display,'none');
+    state.category='precipitation';select.value='plain';select.dispatchEvent(new window.Event('change'));await waitFor(()=>root.dataset.mexicoHydrologyReady==='true');assert.equal(root.querySelector('[data-mexico-nature-neutral]').style.display,'');assert.equal(root.querySelector('[data-mexico-nature-relief-background]').style.display,'none');assert.equal(layer('climate').style.display,'none');assert.equal(layer('relief').style.display,'none');
+  }finally{await window.happyDOM.close();}
+});
+
+test('The seven-color isohyet legend and 1000/1500 major source lines match on the live SVG and do not add missing US boundary lines',async()=>{
+  const window=setup(),root=window.document.querySelector('article');
+  const features=[100,300,500,800,1000,1500,2000,4500].map(value=>line(`rain-${value}`,value));
+  window.fetch=async url=>({ok:true,json:async()=>String(url).endsWith('manifest.json')?{layers:{precipitation:{id:'precipitation',file:'rain.json',publisher:'INEGI',edition:2006,unit:'mm/year'}}}:collection(features)});
+  const controller=window.initTestWater(root,'/data/',()=>({category:'precipitation',view:'climate',fallback:false}),()=>{});
+  try{controller.render();await waitFor(()=>root.dataset.mexicoHydrologyReady==='true');
+    const keys=[...root.querySelectorAll('[data-mexico-hydrology-legend] li')];
+    assert.deepEqual(keys.slice(0,7).map(key=>key.textContent),mexicoPrecipitationKeys.map(key=>key.label));
+    assert.ok(keys.slice(0,7).every(key=>key.querySelector('i').classList.contains('is-line')));
+    for(const feature of features){const path=root.querySelector(`[data-mexico-water-feature="precipitation:${feature.properties.id}"]`);assert.equal(path.style.getPropertyValue('--mexico-water-stroke'),mexicoPrecipitationKey(feature.properties.value).color);assert.equal(path.classList.contains('is-major-line'),[1000,1500].includes(feature.properties.value));}
+    assert.equal(root.querySelectorAll('[data-mexico-water-feature]').length,features.length);
+    assert.match(root.querySelector('[data-mexico-nature-period]').textContent,/2006刊行版.*観測期間との対応未確認.*実線/);
+    assert.match(root.querySelector('[data-mexico-hydrology-limitations]').textContent,/取水源・灌漑量・用水路の接続は特定できません/);
+  }finally{await window.happyDOM.close();}
+});
+
+test('A source basin name is selectable by click and keyboard while its original ID, drainage type, crop comparison and exact source URL state are preserved',async()=>{
+  const window=setup(),root=window.document.querySelector('article');
+  const originalUrl=new URL('https://example.test/nature/?view=relief&category=basins&state=10&feature=relief-17&item=III&frame=210,100,350,220&compare=irrigation&from=agriculture&sourceState=25&sourceMetric=maize&sourceCrops=1&sourceLivestock=0&sourceOnlyItem=1&waterBase=relief');
+  window.history.replaceState(null,'',originalUrl);
+  const basin=JSON.parse(fs.readFileSync('public/assets/atlas/mexico-water-v1/basins.geojson','utf8')).features.find(feature=>feature.properties.id==='basin-RH10G');
+  const state=readMexicoNatureState(originalUrl,['10','25']);state.frame=null;
+  window.fetch=async url=>({ok:true,json:async()=>String(url).endsWith('manifest.json')?{layers:{basins:{file:'basins.json',publisher:'INEGI'}}}:collection([basin])});
+  let controller;controller=window.initTestWater(root,'/data/',()=>state,()=>{window.history.pushState(null,'',controller.url(new URL(window.location.href)));controller.render();});
+  try{controller.render();await waitFor(()=>root.dataset.mexicoHydrologyReady==='true');
+    const label=root.querySelector('[data-mexico-basin-label="basin-RH10G"]');assert.ok(label);assert.equal(label.textContent,'R. FUERTE');assert.equal(mexicoBasinContains(basin,JSON.parse(label.dataset.sourceLonlat)),true);
+    label.dispatchEvent(new window.MouseEvent('click'));await waitFor(()=>root.querySelector('[data-mexico-hydrology-value]').textContent.includes('原ID：RH10G'));
+    assert.match(root.querySelector('[data-mexico-hydrology-definition]').textContent,/外流域.*EXORREICA/);
+    let selectedUrl=new URL(window.location.href);assert.equal(selectedUrl.searchParams.get('waterFeature'),'basins:basin-RH10G');
+    for(const [key,value] of originalUrl.searchParams)assert.equal(selectedUrl.searchParams.get(key),value,`${key} preserved`);
+    const keyboardLabel=root.querySelector('[data-mexico-basin-label="basin-RH10G"]'),focusCalls=[];
+    // Happy DOM does not track SVG text focus; supply that browser boundary and inspect the replacement node.
+    Object.defineProperty(window.document,'activeElement',{configurable:true,get:()=>keyboardLabel});
+    window.SVGElement.prototype.focus=function(options){focusCalls.push({node:this,options});};
+    keyboardLabel.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));await waitFor(()=>root.dataset.mexicoHydrologyReady==='true');
+    assert.equal(focusCalls.at(-1)?.node,root.querySelector('[data-mexico-basin-label="basin-RH10G"]'));assert.equal(focusCalls.at(-1)?.options.preventScroll,true);
+    assert.equal(new URL(window.location.href).searchParams.get('waterFeature'),'basins:basin-RH10G');
+    assert.match(root.querySelector('[data-mexico-hydrology-limitations]').textContent,/国外の上流域.*全流域ではありません.*取水源/);
+  }finally{await window.happyDOM.close();}
 });

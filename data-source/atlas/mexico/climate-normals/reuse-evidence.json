@@ -1,0 +1,44 @@
+{
+  "verifiedAt": "2026-10-05",
+  "explicitDatasetLicense": null,
+  "smnCatalogue": {
+    "url": "https://smn.conagua.gob.mx/es/climatologia/informacion-climatologica/normales-climatologicas-por-estado",
+    "result": "Official public catalogue accessible; links the station-specific 1991–2020 TXT records and the gob.mx terms page."
+  },
+  "linkedTerms": {
+    "url": "https://www.gob.mx/terminos",
+    "result": "HTTP 403 through the web reader; not bypassed. No explicit licence inferred from the government footer, another CONAGUA dataset, or general open-data policies."
+  },
+  "primaryStatutorySource": {
+    "title": "Ley Federal del Derecho de Autor",
+    "publisher": "Cámara de Diputados del H. Congreso de la Unión",
+    "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFDA.pdf",
+    "currentReformDate": "2026-05-14",
+    "verifiedSections": [
+      {
+        "article": "14 X",
+        "printedPage": 5,
+        "summary": "Common-use factual information is outside copyright protection under this provision."
+      },
+      {
+        "article": "107",
+        "printedPage": 20,
+        "summary": "Original database selection and arrangement can receive compilation protection; that protection does not extend to the underlying data and materials themselves."
+      },
+      {
+        "article": "108 and 110",
+        "printedPage": 20,
+        "summary": "The law separately addresses exclusive use of non-original databases and rights in the expression of database structure. These provisions prevent treating all government databases as freely redistributable."
+      }
+    ]
+  },
+  "implementationDecision": {
+    "type": "Narrow attributed factual extraction, not an SMN database licence grant",
+    "scope": "Two named stations; monthly mean temperature and precipitation normal facts with station identity, coordinates, official annual facts, and available-year counts.",
+    "retainedEvidence": "Only the selected source rows and metadata, full download byte counts/hashes, source URLs and extraction row numbers.",
+    "fullStationTxtCommitted": false,
+    "fullDatabaseRedistributed": false,
+    "attributionRequiredByProject": true,
+    "note": "This is the project's limited factual-use assessment from the verified primary statute. It does not claim a verified open licence or general permission to reproduce the source database, report prose, graphics, or logos."
+  }
+}

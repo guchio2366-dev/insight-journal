@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-05",
+  "sources": [
+    {
+      "agency": "INEGI",
+      "product": "Conjunto de datos vectoriales escala 1:1 000 000. Unidades climáticas",
+      "edition": 2008,
+      "observedPeriod": null,
+      "periodNote": "作図期の約4,000観測所の資料を使用。統一された観測対象期間は同梱説明に記載なし。2008は刊行年。",
+      "scale": 1000000,
+      "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+      "downloadUrl": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/geografia/tematicas/CLIMAS/702825267568_s.zip",
+      "sha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+      "originalRecords": 1695,
+      "excludedRecords": 3,
+      "license": {
+        "name": "Términos de Libre Uso de la Información del INEGI",
+        "url": "https://www.inegi.org.mx/inegi/terminos.html",
+        "creditRequired": true,
+        "metadataPreserved": true,
+        "transformationsDisclosed": true
+      },
+      "correction": {
+        "date": "2021-05-21",
+        "objectId": 551,
+        "classCode": "BS0hw",
+        "featureCode": 22114,
+        "classLabel": "Seco semicalido"
+      }
+    },
+    {
+      "agency": "INEGI",
+      "product": "Conjunto de datos vectoriales Fisiográficos. Continuo Nacional serie I. Provincias fisiográficas",
+      "edition": 2001,
+      "observedPeriod": null,
+      "periodNote": "2001版の自然地理地域区分。標高の観測値を示す資料ではない。",
+      "scale": 1000000,
+      "url": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267575",
+      "downloadUrl": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/geografia/tematicas/FISIOGRAFIA/702825267575_s.zip",
+      "sha256": "23f106a3001a4bca916e0aab7f6ffb99810599895b0d00ae8b2dcc90272efb2a",
+      "originalRecords": 733,
+      "excludedRecords": 291,
+      "license": {
+        "name": "Términos de Libre Uso de la Información del INEGI",
+        "url": "https://www.inegi.org.mx/inegi/terminos.html",
+        "creditRequired": true,
+        "metadataPreserved": true,
+        "transformationsDisclosed": true
+      },
+      "individualUseConstraints": "None",
+      "individualLicenseFile": "metadatos/metadatos_cdv_1_1_000_000_provincias_fisiográficas.txt"
+    }
+  ],
+  "projection": {
+    "name": "Lambert Conformal Conic",
+    "datum": "ITRF92",
+    "ellipsoid": "GRS80",
+    "semiMajorM": 6378137,
+    "inverseFlattening": 298.257222101,
+    "standardParallel1": 17.5,
+    "standardParallel2": 29.5,
+    "latitudeOfOrigin": 12,
+    "centralMeridian": -102,
+    "falseEastingM": 2500000,
+    "falseNorthingM": 0,
+    "units": "m"
+  },
+  "geometry": {
+    "file": "../mexico-nature-v1/nature-v1.json",
+    "sha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d",
+    "unchanged": true
+  },
+  "semanticEvidence": {
+    "file": "data-source/atlas/mexico/nature/climas1m.htm",
+    "sha256": "bca409f0025c8bc5228bc64840f08c84b24fcc5e196658c582720487c68ec6ee",
+    "description": "Original INEGI archive metadata identifies Köppen classification modified by E. García, with INEGI contributions for Mexican conditions"
+  },
+  "paletteReference": {
+    "file": "scripts/refine-atlas-nature.py",
+    "sha256": "1b6a55bdfc362b2d1f39d9e919fc40ddd7fd820ba9f4027a5534cb2f52f12ac9",
+    "role": "Existing US display hue values only"
+  },
+  "labelLayout": {
+    "mapViewBox": [
+      0,
+      0,
+      900,
+      580
+    ],
+    "minimumSupportedWidthPx": 591,
+    "intendedViewportPx": [
+      591,
+      381
+    ],
+    "fontSizesMap": {
+      "climate": 18,
+      "relief": 17
+    },
+    "boundsMap": {
+      "left": 12,
+      "right": 888,
+      "top": 12,
+      "bottom": 568
+    },
+    "controlObstacleMap": {
+      "left": 811,
+      "right": 900,
+      "top": 0,
+      "bottom": 244
+    },
+    "climateStationObstaclesMap": [
+      {
+        "left": 516.5076531264291,
+        "right": 536.5076531264291,
+        "top": 411.2676893139344,
+        "bottom": 431.2676893139344
+      },
+      {
+        "left": 534.5076531264291,
+        "right": 674.5076531264291,
+        "top": 391.2676893139344,
+        "bottom": 422.2676893139344
+      },
+      {
+        "left": 300.40787181302545,
+        "right": 320.40787181302545,
+        "top": 255.7141232228132,
+        "bottom": 275.7141232228132
+      },
+      {
+        "left": 318.40787181302545,
+        "right": 430.32787181302547,
+        "top": 235.7141232228132,
+        "bottom": 266.7141232228132
+      }
+    ],
+    "textWidthEstimate": "0.68 em per ASCII code glyph; 1 em per Japanese glyph; 10 SVG units extra stroke/padding; label height font size + 10 SVG units",
+    "leaderPlacement": "Text avoids other source-anchor dots; leaders avoid other label text boxes, city labels, station points and controls. A leader whose fixed source anchor lies within a station glyph starts beneath that glyph; it is not relocated. Leaders may cross other leaders.",
+    "semantics": "displayPointNative is a derived annotation centre only. pointNative remains the strictly interior source anchor. Displaced text requires a leader from pointNative to leaderEndNative; no geographic feature or source coordinate moves.",
+    "stationCoordinateSource": {
+      "file": "src/data/atlas/mexico/climate-normals.json",
+      "sha256": "cfa2c3d504da5feb50c3fe5d385aa78525af599f064fc124d8bc41578f1f72f5"
+    },
+    "frameSource": {
+      "file": "src/data/atlas/mexico/geometry-index.json",
+      "sha256": "c18f61eb22816d9cb3b655df8a2aa71da2dcfc84b4bb4339308d0ea9d4d6689b"
+    }
+  },
+  "assets": [
+    {
+      "file": "labels.json",
+      "sha256": "e3566bf3ff1508f5987b9e8d02ecee9c1cc9c402b35623996d12a8d5df77b292",
+      "bytes": 44702
+    },
+    {
+      "file": "palette.json",
+      "sha256": "b8ec365d045c73806276aca9bcbc1f9ae46db53a81c1f9298e414768ef53adec",
+      "bytes": 68850
+    }
+  ],
+  "counts": {
+    "climateClasses": 21,
+    "climateSourceCodes": 111,
+    "climateLabels": 21,
+    "reliefLabels": 15,
+    "missingReliefLabels": 0
+  },
+  "processing": {
+    "labelSelection": "Largest source-label-matching valid feature in each original class; deterministic pole-of-inaccessibility of unchanged display rings; strict containment checked against unsimplified original SHP and display rings using even-odd fill, including holes",
+    "labelToleranceM": "At most 250 m; at most one hundredth of the smaller feature span",
+    "coordinateTransform": "None: original Lambert Conformal Conic / ITRF92 native meter coordinates",
+    "sourceGeometryMutation": false,
+    "paletteRole": "Display only; no original category, geometry, source code, period or provenance change"
+  },
+  "notes": [
+    "The 21 original INEGI TIPO_N classes and every original García modified Köppen CLAVE remain unchanged. No conversion to Beck 30 classes, standard five families, or a 1991–2020 observation period is performed.",
+    "Colors are exact hue values from the existing US display palette. colorReferenceCode identifies a hue donor only; it does not classify a Mexico polygon as that US class.",
+    "A(C), (A)C, C(E), and E(T)H are separately identified transitional or highland symbols. C(E) is never reassigned to D. No D-prefixed symbol occurs in these source polygons.",
+    "Original climate-551 retains classId 32, sourceCode BS0hw, and sourceLabel Seco semicálido. The source archive contains this inconsistent TIPO_N/CLAVE combination after its documented 2021 correction; no silent repair is made.",
+    "An original class can contain several display hues. Its legend must show its colors or the original modified-code display groups, not a single claimed Beck equivalent.",
+    "Relief colors and translated class names are preserved from the existing INEGI province presentation. S/It remains missing, with no province-name label anchor."
+  ]
+}
