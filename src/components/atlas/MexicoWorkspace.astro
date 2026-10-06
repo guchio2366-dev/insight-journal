@@ -153,10 +153,13 @@ const initialReadingSelected=requestedReading==='item'||(requestedReading!=='ove
    root.addEventListener('keydown',event=>{if(agriculture&&event.key==='Escape')showSelection(false,'push');});
    window.addEventListener('popstate',()=>showSelection(selectionFromURL(new URL(location.href).searchParams),'none'));
    root.dataset.mexicoReadingReady='true';
-   const fitReading=()=>{const panel=root.querySelector<HTMLElement>('.mexico-reading');if(!panel)return;panel.style.maxHeight=window.innerWidth>=960?`${Math.max(200,window.innerHeight-panel.getBoundingClientRect().top-12)}px`:'';};
-   requestAnimationFrame(fitReading);
-   window.addEventListener('resize',fitReading);
-   new ResizeObserver(fitReading).observe(root.querySelector('.mexico-learning-workspace')!);
+   const fitReading=()=>{const panel=root.querySelector<HTMLElement>('.mexico-reading');if(!panel)return;panel.style.maxHeight=window.innerWidth>=960?`${Math.max(200,window.innerHeight-Math.max(0,panel.getBoundingClientRect().top)-12)}px`:'';};
+   let readingFrame=0;
+   const scheduleReadingFit=()=>{if(readingFrame)return;readingFrame=requestAnimationFrame(()=>{readingFrame=0;fitReading();});};
+   scheduleReadingFit();
+   window.addEventListener('resize',scheduleReadingFit);
+   window.addEventListener('scroll',scheduleReadingFit,{passive:true});
+   new ResizeObserver(scheduleReadingFit).observe(root.querySelector('.mexico-learning-workspace')!);
    const query=new URL(location.href).searchParams;
    showSelection((root.dataset.mexicoInitialReadingSelected??String(selectionFromURL(query)))==='true');
    new MutationObserver(prepareReadingLinks).observe(root,{subtree:true,attributes:true,attributeFilter:['href']});

@@ -52,6 +52,31 @@ async function page(field,search='',nativeFirst=false,listenerCheckpoints=false)
  return window;
 }
 const query=window=>new URL(window.location.href).searchParams;
+
+test('Population reading height follows page scroll without retaining an offscreen height or changing history',async()=>{
+ const window=await page('population');
+ try{
+  Object.defineProperty(window,'innerWidth',{value:1280,configurable:true});
+  Object.defineProperty(window,'innerHeight',{value:665,configurable:true});
+  const panel=window.document.querySelector('.mexico-reading');
+  let top=342;
+  panel.getBoundingClientRect=()=>({top,x:895,y:top,left:895,right:1260,bottom:top+311,width:365,height:311});
+  const originalURL=window.location.href,originalHistory=window.history.length;
+  window.dispatchEvent(new window.Event('resize'));await window.happyDOM.waitUntilComplete();
+  assert.equal(panel.style.maxHeight,'311px');
+  top=-125;
+  window.dispatchEvent(new window.Event('scroll'));await window.happyDOM.waitUntilComplete();
+  assert.equal(panel.style.maxHeight,'653px','The reader must never grow beyond the available viewport when its top has scrolled away');
+  top=342;
+  window.dispatchEvent(new window.Event('scroll'));await window.happyDOM.waitUntilComplete();
+  assert.equal(panel.style.maxHeight,'311px','Returning to the page top must restore the original reading height');
+  assert.equal(window.location.href,originalURL);assert.equal(window.history.length,originalHistory);
+  Object.defineProperty(window,'innerWidth',{value:900,configurable:true});
+  window.dispatchEvent(new window.Event('resize'));await window.happyDOM.waitUntilComplete();
+  assert.equal(panel.style.maxHeight,'','Narrow layouts must keep their natural reading height');
+ }finally{await window.happyDOM.close();}
+});
+
 function assertMode(window,selected){
  const root=window.document.querySelector('[data-mexico-workspace]');
  assert.equal(root.dataset.mexicoReadingSelected,String(selected));

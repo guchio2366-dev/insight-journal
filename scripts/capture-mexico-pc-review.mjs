@@ -128,6 +128,10 @@ async function capture(browser, origin, basePath, output, scene) {
     assert.equal(record.viewport.height, profile.viewport.height);
     assert(record.layout.map?.visible && record.layout.map.width >= 250 && record.layout.map.height >= 160, 'Map has no usable rendered area');
     assert(record.layout.reading?.visible, 'Reading panel is hidden');
+    if (country === 'mexico' && field === 'population') {
+      const available = Math.max(200, record.viewport.height - Math.max(0, record.layout.reading.y) - 12);
+      assert(record.layout.reading.height <= available + 2, 'Population reader retained a height from an earlier scroll position');
+    }
     assert(record.rendering.mode === (country === 'us' ? 'webgl2' : 'svg'), 'Expected live map rendering');
     if (country === 'us') assert.equal(record.rendering.webgl.contextLost, false);
     else {
