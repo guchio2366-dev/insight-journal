@@ -2,6 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {build} from 'esbuild';
 import {Window} from 'happy-dom';
+import {readFileSync} from 'node:fs';
+const surfaceManifest=JSON.parse(readFileSync('public/assets/atlas/mexico-quantitative-v1/manifest.json','utf8'));
 const result = await build({stdin: {contents: "import {initMexicoNature} from './src/scripts/atlas-mexico-nature.ts';initMexicoNature(document.querySelector('[data-mexico-workspace]'));", resolveDir: process.cwd(), loader: 'ts'}, bundle: true, platform: 'browser', format: 'iife', write: false});
 const code = result.outputFiles[0].text;
 function fixture(search, water = false) {
@@ -12,7 +14,7 @@ function fixture(search, water = false) {
   window.document.write(`<main data-mexico-workspace><button data-mexico-nature-view="climate"></button><button data-mexico-nature-view="relief"></button><button data-mexico-nature-category="rivers-groundwater"></button><div data-mexico-nature-water-tabs hidden><button data-mexico-nature-category="precipitation"></button></div><select data-mexico-nature-item-select></select><select data-mexico-nature-state-select><option value="25">25</option><option value="10">10</option></select><svg data-mexico-nature-main-map><g data-mexico-nature-layer="climate"><path data-mexico-nature-feature="climate-3" data-nature-class="59"></path></g><g data-mexico-nature-layer="relief"><path data-mexico-nature-feature="relief-5" data-nature-class="III"></path><path data-mexico-nature-feature="relief-6" data-nature-class="S/It"></path></g></svg><section data-mexico-nature-overview></section><section data-mexico-nature-feature-reading><h2 data-mexico-nature-feature-title></h2><p data-mexico-nature-feature-lead></p><p data-mexico-nature-feature-body></p></section><p data-mexico-nature-reference></p><a data-mexico-nature-source-return></a><script type="application/json" data-mexico-nature-config>${JSON.stringify(config)}</script></main>`);
   const root=window.document.querySelector('[data-mexico-workspace]');root.insertAdjacentHTML('beforeend','<svg><g data-mexico-nature-quantity-symbols><circle data-mexico-nature-compare-symbol="25"></circle><circle data-mexico-nature-compare-symbol="10"></circle></g></svg><div data-mexico-nature-quantity-legend><p data-mexico-nature-quantity-definition></p><svg data-mexico-nature-quantity-key></svg><ul data-mexico-nature-quantity-key-values></ul></div>');
   if(water){
-    root.querySelector('[data-mexico-nature-config]').textContent=JSON.stringify({...config,waterAssetBase:'/water/'});
+    root.querySelector('[data-mexico-nature-config]').textContent=JSON.stringify({...config,waterAssetBase:'/water/',...(water==='prepared'?{surfaceAssetBase:'/quant/',basinAssetBase:'/basins/'}:{})});
     const label=window.document.createElement('label'),nativePicker=root.querySelector('[data-mexico-nature-item-select]');nativePicker.before(label);label.append(nativePicker);
     const group=window.document.createElementNS('http://www.w3.org/2000/svg','g');group.setAttribute('data-mexico-hydrology-overlay','');root.querySelector('[data-mexico-nature-main-map]').append(group);
     root.insertAdjacentHTML('beforeend','<ul data-mexico-hydrology-legend></ul><div data-mexico-hydrology-reading><h2 data-mexico-hydrology-title></h2><p data-mexico-hydrology-lead></p><p data-mexico-hydrology-status></p><button data-mexico-hydrology-retry></button></div><select data-mexico-hydrology-item></select><a data-mexico-nature-plain-return></a><a data-mexico-nature-compare-link="population"></a><p data-mexico-nature-comparison-body></p><p data-mexico-nature-comparison-definition></p>');
@@ -23,28 +25,28 @@ function fixture(search, water = false) {
     comparison.lastElementChild.prepend(root.querySelector('[data-mexico-nature-comparison-value]'));root.insertAdjacentHTML('beforeend','<select data-mexico-hydrology-base><option value="plain">白地図</option><option value="climate">気候</option><option value="relief">地形</option></select>');
     const aside=window.document.createElement('aside');aside.className='mexico-reading';const legend=window.document.createElement('div');legend.className='mexico-reading-legend';for(const selector of ['[data-mexico-hydrology-legend]','[data-mexico-water-background-key]','[data-mexico-nature-legend="climate"]','[data-mexico-nature-legend="relief"]'])legend.append(root.querySelector(selector));
     const content=window.document.createElement('div');content.className='mexico-reading-content';const reading=window.document.createElement('div');reading.className='mexico-nature-reading';reading.append(dock,root.querySelector('[data-mexico-hydrology-reading]'),root.querySelector('[data-mexico-nature-feature-reading]'),root.querySelector('[data-mexico-nature-overview]'),comparison);content.append(reading);aside.append(legend,overview,content);root.append(aside);
-    window.fetch=async url=>({ok:true,json:async()=>String(url).endsWith('manifest.json')?{layers:{contours:{file:'contours.json',publisher:'NOAA NCEI',edition:2022,displayIntervalM:500}}}:{type:'FeatureCollection',features:[{type:'Feature',properties:{id:'contours-1000-1',name:'1000 m',elevationM:1000},geometry:{type:'LineString',coordinates:[[-104,24],[-102,25]]}}]}});
+    window.fetch=async url=>({ok:true,json:async()=>String(url)==='/quant/manifest.json'?surfaceManifest:String(url).endsWith('manifest.json')?{layers:{contours:{file:'contours.json',publisher:'NOAA NCEI',edition:2022,displayIntervalM:500}}}:{type:'FeatureCollection',features:[{type:'Feature',properties:{id:'contours-1000-1',name:'1000 m',elevationM:1000},geometry:{type:'LineString',coordinates:[[-104,24],[-102,25]]}}]}});
   }
   window.eval(code); return window;
 }
 
-test('Water target comparison and named natural return retain the actual segment, background and source while defining the contour as a line', async()=>{
-  const wait=async window=>{for(let n=0;n<100&&window.document.querySelector('[data-mexico-workspace]').dataset.mexicoHydrologyReady!=='true';n++)await new Promise(resolve=>setTimeout(resolve,5));};
-  const window=fixture('?category=elevation&waterFeature=contours:contours-1000-1&waterBase=relief&compare=population&from=population&sourceView=population&sourceState=10&state=25&frame=210,100,350,220',true);let restored;
+test('Quantitative elevation comparison preserves legacy source URL state while displaying the new numerical surface', async()=>{
+  const wait=async window=>{for(let n=0;n<100&&window.document.querySelector('[data-mexico-workspace]').dataset.mexicoHydrologyReady!=='true';n++){window.document.querySelector('[data-mexico-numeric-image]')?.dispatchEvent(new window.Event('load'));await new Promise(resolve=>setTimeout(resolve,5));}};
+  const window=fixture('?category=elevation&waterFeature=contours:contours-1000-1&waterBase=relief&compare=population&from=population&sourceView=population&sourceState=10&state=25&frame=210,100,350,220','prepared');let restored;
   try{
     await wait(window);const document=window.document,link=new URL(document.querySelector('[data-mexico-nature-plain-return]').href);
     assert.equal(link.searchParams.get('waterFeature'),'contours:contours-1000-1');assert.equal(link.searchParams.get('waterBase'),'relief');assert.equal(link.searchParams.get('compare'),null);
     assert.equal(link.searchParams.get('sourceState'),'10');assert.equal(link.searchParams.get('frame'),'210,100,350,220');
-    assert.match(document.querySelector('[data-mexico-nature-comparison-body]').textContent,/等高線は同じ標高m（EGM2008）を結ぶ線/);assert.doesNotMatch(document.querySelector('[data-mexico-nature-comparison-body]').textContent,/地域の分類|自然地域の境/);
+    assert.match(document.querySelector('[data-mexico-nature-comparison-body]').textContent,/標高面はETOPO原格子のm単位の標高（EGM2008）/);assert.doesNotMatch(document.querySelector('[data-mexico-nature-comparison-body]').textContent,/地域の分類|自然地域の境/);
     assert.equal(document.querySelector('[data-mexico-hydrology-reading]').hidden,true,'A water comparison shows one reading section');
     assert.ok(document.querySelector('[data-mexico-water-comparison-details]').contains(document.querySelector('[data-mexico-hydrology-body]')),'Original water body and sources remain reachable inside comparison');
     assert.equal(document.querySelectorAll('[data-mexico-hydrology-body]').length,1);assert.equal(document.querySelectorAll('[data-mexico-hydrology-source]').length,1);
     assert.ok(!document.querySelector('[data-mexico-nature-comparison]').contains(document.querySelector('[data-mexico-nature-plain-return]')),'Named return starts the single reading pane before the legends and full comparison');
     assert.ok(document.querySelector('[data-mexico-nature-comparison] .mexico-nature-reading-body').contains(document.querySelector('[data-mexico-overview-button]')));assert.ok(document.querySelector('[data-mexico-water-reading-actions]').contains(document.querySelector('[data-mexico-nature-plain-return]')));assert.equal(document.querySelectorAll('[data-mexico-overview-button]').length,1);
-    assert.match(document.querySelector('[data-mexico-nature-compare-link="population"]').getAttribute('aria-label'),/標高・等高線と人口規模/);
+    assert.match(document.querySelector('[data-mexico-nature-compare-link="population"]').getAttribute('aria-label'),/標高と人口規模/);
     const target=new URL(document.querySelector('[data-mexico-nature-compare-link="population"]').href);assert.equal(target.searchParams.get('waterFeature'),'contours:contours-1000-1');assert.equal(target.searchParams.get('waterBase'),'relief');
-    restored=fixture(link.search,true);await wait(restored);assert.equal(restored.document.querySelector('[data-mexico-workspace]').dataset.mexicoWaterFeature,'contours:contours-1000-1');
-    assert.match(restored.document.querySelector('[data-mexico-hydrology-lead]').textContent,/原DEMから作成した1,000 m/);
+    restored=fixture(link.search,'prepared');await wait(restored);assert.equal(restored.document.querySelector('[data-mexico-workspace]').dataset.mexicoWaterFeature,'contours:contours-1000-1');
+    assert.match(restored.document.querySelector('[data-mexico-hydrology-lead]').textContent,/高い地域ほど濃い色/);
     window.history.replaceState(null,'',link);window.dispatchEvent(new window.PopStateEvent('popstate'));await wait(window);
     assert.equal(document.querySelector('[data-mexico-hydrology-reading]').hidden,false);assert.ok(document.querySelector('[data-mexico-hydrology-reading]').contains(document.querySelector('[data-mexico-hydrology-body]')));assert.ok(document.querySelector('[data-mexico-nature-comparison]').contains(document.querySelector('[data-mexico-nature-plain-return]')));
     assert.equal(document.querySelector('[data-mexico-water-reading-actions]'),null);assert.equal(document.querySelectorAll('[data-mexico-overview-button]').length,1);
@@ -105,7 +107,7 @@ test('Comparison entry names follow the metric retained by their destination URL
 
 test('Active background keys, fixed state values and truthful comparison copy retain original nodes through base and mode changes',async()=>{
   const window=fixture('?category=elevation&waterFeature=contours:contours-1000-1&waterBase=climate&compare=irrigation&from=agriculture&sourceMetric=irrigation&sourceState=10&state=25',true);
-  const wait=async()=>{for(let n=0;n<100&&window.document.querySelector('[data-mexico-workspace]').dataset.mexicoHydrologyReady!=='true';n++)await new Promise(resolve=>setTimeout(resolve,5));};
+  const wait=async()=>{for(let n=0;n<100&&window.document.querySelector('[data-mexico-workspace]').dataset.mexicoHydrologyReady!=='true';n++){window.document.querySelector('[data-mexico-numeric-image]')?.dispatchEvent(new window.Event('load'));await new Promise(resolve=>setTimeout(resolve,5));}};
   try{
     await wait();const document=window.document,climate=document.querySelector('[data-mexico-nature-legend="climate"]'),relief=document.querySelector('[data-mexico-nature-legend="relief"]'),value=document.querySelector('[data-mexico-nature-comparison-value]'),dock=document.querySelector('.mexico-nature-comparison-dock'),host=document.querySelector('[data-mexico-water-background-key-host]'),lead=document.querySelector('[data-mexico-nature-comparison-lead]');
     const summary=document.querySelector('[data-mexico-water-reading-summary]');assert.equal(document.querySelector('.mexico-reading').firstElementChild,summary);assert.equal(summary.firstElementChild,lead);assert.ok(summary.contains(value));assert.ok(summary.contains(document.querySelector('[data-mexico-nature-plain-return]')));assert.equal(summary.nextElementSibling,document.querySelector('.mexico-reading-legend'));

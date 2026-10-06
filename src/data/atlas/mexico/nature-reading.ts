@@ -26,5 +26,5 @@ const climateReading: Record<string, string> = {
   cold: '寒冷・やや寒冷系の原分類です。地形との位置関係を読みます。この分類は地点の標高や月別気温を示しません。',
 };
 export function mexicoNatureItemReading(view: 'climate' | 'relief', item: {id: string; labelJa: string; labelSource: string; groupId?: string}): {title: string; lead: string; body: string} {
-  return {title: item.labelJa, lead: view === 'relief' ? 'INEGI・2001版の自然地理地域。色は地域区分で、標高の数値ではありません。' : 'INEGI・2008刊行の気候原分類。色は6気候群、選択名は21原分類です。', body: `${view === 'relief' ? reliefReading[item.id] : climateReading[item.groupId ?? '']} 原分類名：${item.labelSource}。自然条件だけで産業や人口は決まらず、技術・交通・市場・制度と合わせて読みます。`};
+  return {title: item.labelJa, lead: view === 'relief' ? 'INEGI・2001版の自然地理地域。色は地域区分で、標高の数値ではありません。' : 'INEGI・2008年刊行の気候区分。21の原分類と完全な原コードを保持して表示しています。', body: `${view === 'relief' ? reliefReading[item.id] : climateReading[item.groupId ?? '']} 原分類名：${item.labelSource}。自然条件だけで産業や人口は決まらず、技術・交通・市場・制度と合わせて読みます。`};
 }

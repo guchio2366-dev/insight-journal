@@ -7,7 +7,7 @@ import {mexicoPopulationRadius, mexicoPopulationLegendValues, mexicoPopulationSy
 
 interface NatureStateValue {code: string; name: string; point: number[]; irrigationSharePct: number | null; irrigatedAreaHa: number | null; agriculturalAreaHa: number | null; maizeWhiteProductionT: number | null; cattleHeads?: number | null; pineObtainedM3: number | null; density: number | null; population: number | null}
 interface NatureItem {id: string; labelJa: string; title: string; lead: string; body: string}
-interface NatureConfig {routes: {nature: string; agriculture: string; population: string}; defaultViewBox: string; states: NatureStateValue[]; sinaloaWinter: {productionT: number; irrigatedProductionSharePct: number}; items?: {climate: NatureItem[]; relief: NatureItem[]}; waterAssetBase?: string; groundwaterAssetBase?: string}
+interface NatureConfig {routes: {nature: string; agriculture: string; population: string}; defaultViewBox: string; states: NatureStateValue[]; sinaloaWinter: {productionT: number; irrigatedProductionSharePct: number}; items?: {climate: NatureItem[]; relief: NatureItem[]}; waterAssetBase?: string; groundwaterAssetBase?: string; surfaceAssetBase?: string; basinAssetBase?: string}
 export function initMexicoNature(root: HTMLElement): void {
   const configNode = root.querySelector('[data-mexico-nature-config]');
   if (!configNode?.textContent || root.dataset.mexicoNatureReady === 'true') return;
@@ -17,11 +17,11 @@ export function initMexicoNature(root: HTMLElement): void {
   const query = <T extends Element = HTMLElement>(selector: string) => root.querySelector<T>(selector);
   const all = <T extends Element = HTMLElement>(selector: string) => Array.from(root.querySelectorAll<T>(selector));
   let state = readMexicoNatureState(new URL(window.location.href), codes);
-  const hydrology = config.waterAssetBase ? initMexicoHydrology(root, config.waterAssetBase, () => state, () => update({}), config.groundwaterAssetBase) : null;
+  const hydrology = config.waterAssetBase ? initMexicoHydrology(root, config.waterAssetBase, () => state, () => update({}), config.groundwaterAssetBase, config.surfaceAssetBase && config.basinAssetBase ? {surfaceAssetBase:config.surfaceAssetBase,basinAssetBase:config.basinAssetBase} : undefined) : null;
   const number = (value: number | null, places = 1) => value === null ? '未取得' : value.toLocaleString('ja-JP', {minimumFractionDigits: places, maximumFractionDigits: places});
   const text = (selector: string, value: string) => {const element = query(selector); if (element) element.textContent = value;};
   const visible = (selector: string, value: boolean) => {for (const element of all(selector)) element.hidden = !value;};
-  const naturalLabel = () => state.category && hydrology ? ({'rivers-groundwater': '河川・地下水', precipitation: '降水量', basins: '河川の流域', elevation: '標高・等高線'}[state.category]) : state.view === 'climate' ? '気候分布' : '地形地域分布';
+  const naturalLabel = () => state.category && hydrology ? ({'rivers-groundwater': '河川・地下水', precipitation: '降水量', basins: '河川の流域', elevation: '標高'}[state.category]) : state.view === 'climate' ? '気候分布' : '地形地域分布';
   const makeComparisonURL = (comparison: 'irrigation' | 'population') => {const next = writeMexicoNatureState(new URL(config.routes.nature, window.location.origin), {...state, compare: comparison, view: comparison === 'population' || (state.from === 'agriculture' && state.sourceMetric === 'pine') ? 'relief' : 'climate', only: false}); return (hydrology?.url(next) ?? next).href;};
   function render(): void {
     const selected = values.get(state.state)!;
@@ -76,13 +76,15 @@ export function initMexicoNature(root: HTMLElement): void {
     text('#mexico-nature-map-title', state.view === 'climate' ? 'メキシコの気候区分の全国分布' : 'メキシコの自然地理地域の全国分布');
     text('#mexico-nature-map-desc', state.view === 'climate' ? 'INEGI改訂ケッペン・原分類21を保持。色はUS共通配色。気候コードまたは面を選ぶと解説を表示します。州境と気候の境界は異なります。' : '地形名を選ぶと、その自然地理地域だけを灰色の輪郭で表示します。15地域の原区分を保持。標高mの区分ではありません。');
     text('[data-mexico-nature-map-edition]', state.view === 'climate' ? 'INEGI・2008版' : 'INEGI・2001版');
-    text('[data-mexico-nature-period]', state.view === 'climate' ? 'INEGI改訂ケッペン・原分類21を保持。色はUS共通配色。2008＝刊行年・統一観測期未記載。' : '15自然地理地域＋分類なし。標高の数値ではありません。');
+    text('[data-mexico-nature-period]', state.view === 'climate' ? 'BS1＝半乾燥、BS0＝乾燥、BW＝非常に乾燥。完全な原コードは選択時に表示。原分類21とUS共通配色を保持。2008＝刊行年・統一観測期未記載。' : '15自然地理地域＋分類なし。標高の数値ではありません。');
     text('[data-mexico-nature-selected-name]', selected.name);
-    const nativeRelief = state.view === 'relief' && !state.category;
+    const nativeRelief = state.view === 'relief' && !state.category, elevation = state.category === 'elevation';
     if (!state.category) for (const background of all<SVGGElement>('[data-mexico-nature-neutral],[data-mexico-nature-relief-background]')) {background.removeAttribute('hidden'); background.style.display = nativeRelief ? '' : 'none';}
-    for (const path of all<SVGPathElement>('[data-mexico-nature-state]')) {const isSelected = path.dataset.mexicoNatureState === state.state; path.classList.toggle('is-selected', isSelected); path.setAttribute('aria-pressed', String(!nativeRelief && isSelected)); path.setAttribute('tabindex', nativeRelief ? '-1' : '0'); path.style.display = nativeRelief ? 'none' : '';}
-    for (const target of all<SVGGElement>('[data-mexico-nature-target]')) {target.setAttribute('transform', `translate(${selected.point.join(' ')})`); target.style.display = nativeRelief ? 'none' : '';}
-    visible('[data-mexico-nature-focus]', !nativeRelief);
+    for (const path of all<SVGPathElement>('[data-mexico-nature-state]')) {const isSelected = path.dataset.mexicoNatureState === state.state; path.classList.toggle('is-selected', isSelected && !elevation); path.setAttribute('aria-pressed', String(!nativeRelief && !elevation && isSelected)); path.setAttribute('tabindex', nativeRelief || elevation ? '-1' : '0'); path.setAttribute('aria-disabled', String(elevation)); path.style.pointerEvents = elevation ? 'none' : ''; path.style.display = nativeRelief ? 'none' : '';}
+    for (const target of all<SVGGElement>('[data-mexico-nature-target]')) {target.setAttribute('transform', `translate(${selected.point.join(' ')})`); target.style.display = nativeRelief || elevation ? 'none' : '';}
+    visible('[data-mexico-nature-focus]', !nativeRelief && !elevation);
+    visible('.mexico-nature-state-control,[data-mexico-nature-selected-name],[data-mexico-nature-state-note]', !elevation);
+    if (select) select.disabled = elevation;
     for (const svg of all<SVGSVGElement>('[data-mexico-nature-main-map],[data-mexico-nature-comparison-map]')) svg.setAttribute('viewBox', state.frame?.join(' ') ?? config.defaultViewBox);
     for (const row of all('[data-mexico-nature-value-row]')) row.classList.toggle('is-selected', row.dataset.mexicoNatureValueRow === state.state);
     visible('[data-mexico-nature-overview]', state.compare === null && !item && !state.category); visible('[data-mexico-nature-comparison]', state.compare !== null); visible('[data-mexico-nature-only-control]', state.compare !== null);
@@ -93,7 +95,7 @@ export function initMexicoNature(root: HTMLElement): void {
     const sourceReturn = query<HTMLAnchorElement>('[data-mexico-nature-source-return]');
     if (sourceReturn) {
       sourceReturn.hidden = state.from === null;
-      const originalName = values.get(state.sourceState)?.name ?? selected.name;
+      const originalName = state.from === 'population' && state.sourceState === '' ? '全国' : values.get(state.sourceState)?.name ?? selected.name;
       const sourceLabel = state.from === 'agriculture' ? ({maize: '白粒トウモロコシ', cattle: '牛頭数', irrigation: '灌漑農地率', pine: '松材取得量'}[state.sourceMetric]) : state.sourceView === 'population' ? '人口規模' : '人口密度';
       sourceReturn.href = mexicoNatureReturnUrl(state.from === 'population' ? config.routes.population : config.routes.agriculture, state);
       sourceReturn.textContent = state.from==='agriculture'&&state.sourceAgricultureAtlas?.state===null?`${sourceLabel}の元の解説に戻る`:`${originalName}の${sourceLabel}分布に戻る`;
@@ -128,7 +130,7 @@ export function initMexicoNature(root: HTMLElement): void {
     text('[data-mexico-nature-comparison-consequence]', mode === 'pine' ? '木材の供給と、水の浸透・侵食の抑制・生息地を支える森林管理を結び付ける。取得量は森林の面積や伐採率を示す値ではない。' : reading.consequence);
     if (state.category || mode === 'cattle' || state.view !== (populationMode || mode === 'pine' ? 'relief' : 'climate')) {
       text('[data-mexico-nature-comparison-lead]', state.category && hydrology ? '主図に指標分布なし。州値で照合／別図は詳細。' : `${naturalName}と、州別の${labels[mode]}を同じ範囲で読み比べる。`);
-      const definition = state.category === 'elevation' ? '等高線は同じ標高m（EGM2008）を結ぶ線で、州の平均標高ではありません' : state.category === 'precipitation' ? '等雨量線は原資料の同じ年平均降水量mmを結ぶ線で、隣接する面全体の値や州平均ではありません' : state.category === 'basins' ? '流域は原資料の河川の集水域で、州境や地下水の流動区域とは異なります' : state.category === 'rivers-groundwater' ? '原河川ネットワーク（間欠・仮想流を含む）の次数は小流域内の階層で、水量・幅を表しません。地下水の分類は配信状態を別記しています' : `${naturalName}は自然地域の分類です`;
+      const definition = state.category === 'elevation' ? '標高面はETOPO原格子のm単位の標高（EGM2008）で、州平均ではありません' : state.category === 'precipitation' ? '降水面はGPCCの1991–2020年平年値を年合計したmm/年の格子値で、州平均や観測所の値とは異なります' : state.category === 'basins' ? '薄塗りは3代表水系に関連する国内流域区分で、国際河川の全流域や地下水の流動区域とは異なります' : state.category === 'rivers-groundwater' ? '原河川ネットワーク（間欠・仮想流を含む）の次数は小流域内の階層で、水量・幅を表しません。地下水10分類は材料と井戸産出量・賦存可能性です' : `${naturalName}は自然地域の分類です`;
       text('[data-mexico-nature-comparison-body]', `${definition}。${labels[mode]}は州単位の公表値です。${state.category && hydrology?`主図には${labels[mode]}の分布を重ねていません。主図は自然資料の線・面と選択した背景です。全州の${labels[mode]}は、この詳細内の同じ範囲の別図で確認できます。`:''}自然条件の線・面と州境を区別し、水管理・仕事・交通・市場と合わせて分布を読みます。自然条件だけで数量や人口は決まりません。`);
     }
     if (mode === 'density') text('[data-mexico-nature-comparison-definition]', `人口密度は2020年の州平均。${naturalName}の原資料の線・面とは異なる粒度です。`);
@@ -194,10 +196,10 @@ export function initMexicoNature(root: HTMLElement): void {
   query<HTMLSelectElement>('[data-mexico-nature-item-select]')?.addEventListener('change', event => update({item: (event.currentTarget as HTMLSelectElement).value, feature: '', category: ''}));
   query<HTMLButtonElement>('[data-mexico-nature-clear-item]')?.addEventListener('click', () => update({item: '', feature: '', category: ''}));
   query<HTMLButtonElement>('[data-mexico-overview-button]')?.addEventListener('click', () => setTimeout(() => {state = {...state, item: '', feature: '', category: ''}; render(); const next = writeMexicoNatureState(new URL(window.location.href), state); next.searchParams.set('reading', 'overview'); window.history.replaceState(window.history.state, '', next);}, 0));
-  query<HTMLSelectElement>('[data-mexico-nature-state-select]')?.addEventListener('change', event => update({state: (event.currentTarget as HTMLSelectElement).value}));
+  query<HTMLSelectElement>('[data-mexico-nature-state-select]')?.addEventListener('change', event => {if (state.category !== 'elevation') update({state: (event.currentTarget as HTMLSelectElement).value});});
   query<HTMLInputElement>('[data-mexico-nature-only]')?.addEventListener('change', event => update({only: (event.currentTarget as HTMLInputElement).checked}));
   for (const path of all<SVGElement>('[data-mexico-nature-state],[data-mexico-nature-compare-state],[data-mexico-nature-compare-symbol]')) {
-    const choose = () => {const code = path.dataset.mexicoNatureState ?? path.dataset.mexicoNatureCompareState ?? path.dataset.mexicoNatureCompareSymbol!; if (code !== state.state) update({state: code});};
+    const choose = () => {if (state.category === 'elevation' && path.hasAttribute('data-mexico-nature-state')) return; const code = path.dataset.mexicoNatureState ?? path.dataset.mexicoNatureCompareState ?? path.dataset.mexicoNatureCompareSymbol!; if (code !== state.state) update({state: code});};
     path.addEventListener('click', choose); path.addEventListener('keydown', event => {if (event.key === 'Enter' || event.key === ' ') {event.preventDefault(); choose();}});
   }
   for (const button of all<HTMLButtonElement>('[data-mexico-nature-focus]')) button.addEventListener('click', () => update({frame: stateViewBox(state.state).split(' ').map(Number)}));

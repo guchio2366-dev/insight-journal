@@ -1,0 +1,36 @@
+{
+  "assets": [
+    {
+      "file": "elevation-surface.webp",
+      "bytes": 126908,
+      "sha256": "80f27a16c48d057f93ebd235a43797645b3fb9576f064e666bd0facea465ebef",
+      "width": 900,
+      "height": 580
+    }
+  ],
+  "checks": {
+    "nativeValidMexicoCells": 628539,
+    "nativeNegativeValidMexicoCells": 4091,
+    "nativeSelectedMinM": -519.0625,
+    "nativeSelectedMaxM": 5046.75048828125,
+    "nativeMissingMexicoCells": 0,
+    "nativeMaskCellsDifferentFromSimplifiedBoundary": 467,
+    "retainedMaskRegressionMatchesPrior628628CellsAnd4131Negative": true,
+    "inputStateGeometriesRepairedByMakeValid": 0,
+    "nationalUnionValid": true,
+    "darkerAtHigherValuesVerified": true,
+    "display": {
+      "1x": {
+        "validLandPixels": 130079,
+        "missingLandPixels": 0,
+        "pixelsDifferentFromSimplifiedBoundaryMask": 98,
+        "opaquePixelsOutsideLand": 0,
+        "sampledMinM": -364.4692386639753,
+        "sampledMaxM": 4715.92378063,
+        "negativeValidLandPixels": 947,
+        "losslessRoundTrip": true,
+        "projectionRoundTripMaxM": 5.122274160385132e-09
+      }
+    }
+  }
+}
