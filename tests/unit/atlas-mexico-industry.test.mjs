@@ -11,6 +11,41 @@ const data=JSON.parse(await readFile('src/data/atlas/mexico/industry.json','utf8
 const manifest=JSON.parse(await readFile(`${assets}/manifest.json`,'utf8'));
 const sha=b=>createHash('sha256').update(b).digest('hex');
 
+test('US sector hierarchy validates each supported Mexico field while retaining the original URL contract',()=>{
+ assert.deepEqual(lib.mexicoIndustrySectors.map(s=>s.id),['all','manufacturing','resources','services','construction-real-estate']);
+ const ids=data.states.map(s=>s.id),legacy=lib.readMexicoIndustryState(new URL('https://example.com/?state=14&metric=electronics&only=1'),ids);
+ assert.equal(legacy.sector,undefined);assert.equal(legacy.subsector,undefined);
+ for(const metric of lib.mexicoIndustryMetricChoices){
+  const value={...legacy,sector:metric.sector,subsector:metric.id,metric:metric.id};
+  const written=lib.writeMexicoIndustryState(new URL('https://example.com/?keep=yes'),value),restored=lib.readMexicoIndustryState(written,ids);
+  assert.equal(restored.sector,metric.sector);assert.equal(restored.subsector,metric.id);assert.equal(restored.metric,metric.id);assert.equal(restored.state,'14');assert.equal(written.searchParams.get('keep'),'yes');
+ }
+ const mismatch=lib.readMexicoIndustryState(new URL('https://example.com/?sector=services&subsector=transport&metric=transport'),ids);
+ assert.equal(mismatch.sector,'services');assert.equal(mismatch.subsector,'all');
+ const invalid=lib.readMexicoIndustryState(new URL('https://example.com/?sector=other&subsector=aerospace&metric=aerospace'),ids);
+ assert.equal(invalid.sector,undefined);assert.equal(invalid.metric,'transport');
+});
+
+test('The transport and electronics comparison rejects other fields while population comparisons retain them',()=>{
+ const ids=data.states.map(s=>s.id);
+ for(const choice of lib.mexicoIndustryMetricChoices){
+  const supported=['transport','electronics'].includes(choice.id);
+  const url=new URL(`https://example.com/?compare=electronics&state=14&metric=${choice.id}&sector=${choice.sector}&subsector=${choice.id}&only=1&zoom=1&fallback=1`);
+  const state=lib.readMexicoIndustryState(url,ids);
+  assert.equal(state.compare,supported?'electronics':null);assert.equal(state.metric,choice.id);
+  assert.equal(state.sector,choice.sector);assert.equal(state.subsector,choice.id);assert.equal(state.state,'14');
+  assert.equal(state.only,true);assert.equal(state.zoom,true);assert.equal(state.fallback,true);
+  for(const target of [lib.writeMexicoIndustryState(url,{...state,compare:'electronics'}),lib.industryComparisonUrl(url,state,'electronics')]){
+   assert.equal(target.searchParams.get('compare'),supported?'electronics':null);assert.equal(target.searchParams.get('metric'),choice.id);
+   assert.equal(target.searchParams.get('state'),'14');assert.equal(target.searchParams.get('subsector'),choice.id);
+  }
+  const populationUrl=new URL(url);populationUrl.searchParams.set('compare','population');populationUrl.searchParams.set('from','population');populationUrl.searchParams.set('sourceState','09');populationUrl.searchParams.set('sourceView','population');
+  const populationState=lib.readMexicoIndustryState(populationUrl,ids);
+  assert.equal(populationState.compare,'population');assert.equal(populationState.metric,choice.id);
+  assert.equal(populationState.sourceState,'09');assert.equal(populationState.sourceView,'population');assert.equal(populationState.from,'population');
+ }
+});
+
 test('ETEF 2025 retains 64 original values, state keys, statuses and the thousand-to-billion unit conversion',async()=>{
  const originals=parseCsv(await readFile(`${root}/etef-official-annual-2007-2025.csv`,'utf8'));
  const selected=originals.filter(r=>r.ANIO==='2025'&&['334','336'].includes(r.CODIGO_SCIAN));

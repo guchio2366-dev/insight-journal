@@ -6,3 +6,35 @@
 .mexico-industry .mi-map-figure .mi-legend-unit,.mexico-industry [data-mi-map-status]{position:absolute;width:1px;height:1px;padding:0;margin:-1px!important;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 .mexico-industry .mi-controls [data-mi-state-select]{width:165px}.mexico-industry .mi-controls [data-mi-source-view]{width:110px}.mexico-industry .mi-circle-legend{height:65px}
 @media(min-width:960px){.mexico-industry:not(.is-comparison) .mi-map-figure{display:grid;grid-template-columns:minmax(0,1fr) 132px;column-gap:10px;row-gap:5px}.mexico-industry:not(.is-comparison) .mi-map-heading,.mexico-industry:not(.is-comparison) .mi-map-figure figcaption{grid-column:1/-1}.mexico-industry:not(.is-comparison) .mi-map-heading{margin:0}.mexico-industry:not(.is-comparison) .mi-map-heading span{display:inline;margin-left:8px}.mexico-industry:not(.is-comparison) [data-mi-export-legend]{grid-column:2;align-self:start}.mexico-industry:not(.is-comparison) .mi-map{grid-column:1;max-height:280px}.mexico-industry:not(.is-comparison) .mi-legend{display:grid;grid-template-columns:minmax(0,1fr);gap:3px;margin:0}}
+
+/* Keep the existing US industry hierarchy and reading structure in this country. */
+.atlas-desktop-shell .mexico-workspace.mexico-industry .country-industry-navigation{display:block}
+.atlas-desktop-shell .mexico-workspace.mexico-industry .mexico-reading{max-height:none!important;overflow:visible;overscroll-behavior:auto}
+.mexico-workspace.mexico-industry :is(.mexico-header,.mexico-country-summary,.mexico-overview-button){display:none!important}
+.mexico-workspace.mexico-industry .mexico-reading-content{padding-top:0}
+.mexico-workspace.mexico-industry .mi-map-figure{display:block;margin:0}
+.mexico-workspace.mexico-industry .mi-map{width:100%;height:100%;max-height:none}
+.mexico-workspace.mexico-industry .mi-reading :is(p,li){font-size:14px;line-height:1.65}
+.mexico-workspace.mexico-industry .industry-selected-reading{position:static;height:auto;padding:0;overflow:visible}
+.mexico-workspace.mexico-industry .industry-selected-reading>article:not([hidden]){display:block;height:auto}
+.mexico-workspace.mexico-industry .industry-selected-reading-body{overflow:visible}
+.mexico-workspace.mexico-industry .industry-reading-places{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.mexico-workspace.mexico-industry .industry-reading-places button{min-height:44px;padding:6px 9px;border:1px solid #bcc9ba;border-radius:4px;background:#edf1e6;color:#294c4d;font:700 12px var(--sans);cursor:pointer}
+.mexico-workspace.mexico-industry .mi-region-marker{cursor:pointer}
+.mexico-workspace.mexico-industry [data-mi-reading-markers] circle{stroke:#fffefa;stroke-width:2;vector-effect:non-scaling-stroke}
+.mexico-workspace.mexico-industry [data-mi-reading-markers] text{font-size:21px;fill:#344951;paint-order:stroke;stroke:#fffefa;stroke-width:4px;stroke-linejoin:round;pointer-events:auto;cursor:pointer}
+.mexico-workspace.mexico-industry [data-mi-reading-markers] .is-selected circle{stroke:#a94d32;stroke-width:4px}
+.mexico-workspace.mexico-industry:not(.is-comparison) :is(.mi-state,.mi-country-context path){fill-opacity:.12}
+.mexico-workspace.mexico-industry [data-mi-region-option]:focus-visible{outline:3px solid #a94d32;outline-offset:3px}
+.mexico-workspace.mexico-industry .mi-reading-keys [data-mi-legend-slot=secondary][hidden]{display:none}
+.mexico-workspace.mexico-industry .mi-legend{display:flex;flex-wrap:wrap;gap:3px 11px;font-size:13px}
+.mexico-workspace.mexico-industry .mi-controls{position:static;box-shadow:none;max-width:none}
+.mexico-workspace.mexico-industry .mi-controls :is(select,button){min-height:44px;font-size:14px}
+.mexico-workspace.mexico-industry .mi-map-heading{margin-top:7px;font-size:16px}
+.mexico-workspace.mexico-industry .mi-map-heading span{white-space:normal;overflow-wrap:anywhere}
+@media(min-width:960px){
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace.mexico-industry[data-field=industry] .mexico-primary-grid{grid-template-columns:minmax(0,7fr) minmax(290px,3fr);gap:14px}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace.mexico-industry[data-field=industry] .mexico-map-frame{height:620px;min-height:620px;max-height:620px;aspect-ratio:auto}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace.mexico-industry[data-field=industry] .mexico-map-frame .mi-map{height:100%;width:100%;max-height:none;min-height:0}
+}
+@media(max-width:959px){.mexico-workspace.mexico-industry .industry-guide{flex-wrap:wrap}.mexico-workspace.mexico-industry .industry-guide span{flex-basis:100%}}

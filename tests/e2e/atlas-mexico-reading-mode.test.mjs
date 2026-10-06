@@ -61,7 +61,15 @@ async function selectState(window,field){
  await window.happyDOM.waitUntilComplete();
  assertMode(window,true);
  assert.equal(query(window).get('state'),fields[field].state);
- assert.equal(window.document.querySelector(fields[field].shape).getAttribute('aria-pressed'),'true');
+ const shape=window.document.querySelector(fields[field].shape);
+ if(field==='industry'&&!query(window).get('compare')){
+  // Normal industry outlines are geographic references; the reading pin
+  // carries the selected state rather than an export choropleth outline.
+  assert.equal(shape.getAttribute('aria-pressed'),'false');assert.equal(shape.classList.contains('is-selected'),false);
+  const pin=window.document.querySelector(`[data-mi-map="primary"] [data-mi-reading-markers] [data-mi-region-option="${fields[field].state}"]:not([hidden])`);
+  assert.ok(pin,'The selected industry state must have a visible reading pin');
+  assert.equal(pin.getAttribute('aria-pressed'),'true');assert.equal(pin.classList.contains('is-selected'),true);
+ }else assert.equal(shape.getAttribute('aria-pressed'),'true');
 }
 
 for(const field of Object.keys(fields)){
