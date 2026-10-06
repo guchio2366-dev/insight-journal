@@ -1,9 +1,10 @@
 /** PC comparison evidence. The caller owns the CI-only, sandboxed browser. */
 import assert from 'node:assert/strict';
-import {mkdir, writeFile} from 'node:fs/promises';
+import {mkdir, readdir, stat, writeFile} from 'node:fs/promises';
 import path from 'node:path';
+import {mexicoPCOperationCases} from './capture-mexico-pc-operations.mjs';
 
-const profile = {viewport: {width: 1280, height: 665}, deviceScaleFactor: 1.5, isMobile: false, hasTouch: false};
+const profile = {viewport: {width: 1280, height: 665}, deviceScaleFactor: 1, isMobile: false, hasTouch: false};
 const fields = ['agriculture', 'nature', 'industry', 'population'];
 const mexicoMaps = {agriculture: '[data-agriculture-map]', nature: '[data-mexico-nature-main-map]', industry: '[data-mi-map="primary"]', population: '[data-population-map]'};
 const mexicoReady = {agriculture: ['agricultureReady', 'true'], nature: ['mexicoNatureReady', 'true'], industry: ['miReady', 'true'], population: ['populationReady', '1']};
@@ -37,6 +38,7 @@ async function measure(page, selected) {
       return {x: box.x + scrollX, y: box.y + scrollY, width: box.width, height: box.height, visible: Boolean(visible(node)), scrollWidth: node.scrollWidth, clientWidth: node.clientWidth, scrollHeight: node.scrollHeight, clientHeight: node.clientHeight, overflowX: getComputedStyle(node).overflowX, overflowY: getComputedStyle(node).overflowY};
     };
     const map = root.querySelector(selected.map), grid = root.querySelector('.atlas-primary-grid');
+    if (!map) throw new Error(`Missing map: ${selected.map}`);
     const layout = {article: bounds(root), workspace: bounds(root.querySelector('.atlas-workspace')), grid: bounds(grid), map: bounds(map), mapFrame: bounds(map.closest('.atlas-map-frame')), reading: bounds(root.querySelector(selected.reading)), news: bounds(root.closest('[data-atlas-shell]')?.querySelector('[data-news-rail]'))};
     const elements = ['.atlas-region-controls', '.atlas-tabs', '.atlas-primary-grid'].map(selector => ({selector, ...bounds(root.querySelector(selector))}));
     if (elements.some(element => !element.visible)) throw new Error('Missing visible workspace region');
@@ -48,7 +50,13 @@ async function measure(page, selected) {
       return {url, width: image.naturalWidth, height: image.naturalHeight};
     }));
     const canvas = map.querySelector('canvas'), gl = canvas?.getContext('webgl2');
-    return {layout, workspace: {clip, elements, method: 'browser-clip-of-element-union'}, rootDataset: {...root.dataset}, viewport: {width: innerWidth, height: innerHeight, devicePixelRatio, documentWidth: document.documentElement.scrollWidth}, rendering: {mode: map.tagName.toLowerCase() === 'svg' ? 'svg' : gl ? 'webgl2' : 'unavailable', pathCount: map.querySelectorAll('path').length, svgImages, webgl: gl ? {contextLost: gl.isContextLost(), drawingBufferWidth: gl.drawingBufferWidth, drawingBufferHeight: gl.drawingBufferHeight} : null}, headings: [...root.querySelectorAll('h1,h2,h3')].filter(visible).map(node => node.textContent.trim()), scrollablePanels: [...root.querySelectorAll('*')].filter(node => visible(node) && /auto|scroll/.test(getComputedStyle(node).overflowY) && node.scrollHeight > node.clientHeight + 1).map(node => ({tag: node.tagName, className: node.getAttribute('class'), ...bounds(node)}))};
+    const svgUses = [...map.querySelectorAll('use')].filter(visible).map(node => {
+      const href = node.getAttribute('href') ?? node.getAttribute('xlink:href');
+      const target = href?.startsWith('#') ? document.getElementById(href.slice(1)) : null;
+      return {href, targetHasGeometry: target?.tagName.toLowerCase() === 'path' && Boolean(target.getAttribute('d')), bounds: bounds(node)};
+    });
+    const visibleGeometryCount = [...map.querySelectorAll('path,use')].filter(node => !node.closest('defs') && visible(node)).length;
+    return {layout, workspace: {clip, elements, method: 'browser-clip-of-element-union'}, rootDataset: {...root.dataset}, viewport: {width: innerWidth, height: innerHeight, devicePixelRatio, documentWidth: document.documentElement.scrollWidth}, rendering: {mode: map.tagName.toLowerCase() === 'svg' || map.querySelector('svg') ? 'svg' : gl ? 'webgl2' : 'unavailable', pathCount: map.querySelectorAll('path').length, visibleGeometryCount, svgUses, svgImages, webgl: gl ? {contextLost: gl.isContextLost(), drawingBufferWidth: gl.drawingBufferWidth, drawingBufferHeight: gl.drawingBufferHeight} : null}, headings: [...root.querySelectorAll('h1,h2,h3')].filter(visible).map(node => node.textContent.trim()), scrollablePanels: [...root.querySelectorAll('*')].filter(node => visible(node) && /auto|scroll/.test(getComputedStyle(node).overflowY) && node.scrollHeight > node.clientHeight + 1).map(node => ({tag: node.tagName, className: node.getAttribute('class'), ...bounds(node)}))};
   }, selected);
 }
 
@@ -70,7 +78,12 @@ async function capture(browser, origin, basePath, output, scene) {
     await page.waitForFunction(({root, ready}) => {const node = document.querySelector(root); return node && (node.dataset[ready[0]] === ready[1] || node.dataset.renderState === 'fallback');}, selected, {timeout: 45_000});
     await settle(page);
     // Additional Mexico cases may operate the existing page before measurement.
-    if (scene.run) {record.operation = await scene.run({page, context, selected}); await settle(page);}
+    if (scene.run) {
+      record.operation = {steps: []};
+      await scene.run({page, context, selected, evidence: record.operation});
+      Object.assign(selected, scene.captureSelectors);
+      await settle(page);
+    }
     Object.assign(record, await measure(page, selected));
     assert.equal(record.rootDataset[selected.ready[0]], selected.ready[1], 'Controller is not ready; fallback is not live-map evidence');
     assert.equal(record.viewport.width, profile.viewport.width);
@@ -79,14 +92,17 @@ async function capture(browser, origin, basePath, output, scene) {
     assert(record.layout.reading?.visible, 'Reading panel is hidden');
     assert(record.rendering.mode === (country === 'us' ? 'webgl2' : 'svg'), 'Expected live map rendering');
     if (country === 'us') assert.equal(record.rendering.webgl.contextLost, false);
-    else assert(record.rendering.pathCount > 0, 'SVG map geometry is missing');
+    else {
+      assert(record.rendering.visibleGeometryCount > 0, 'Visible SVG map geometry is missing');
+      for (const use of record.rendering.svgUses) assert(use.targetHasGeometry, `SVG use has no local source geometry: ${use.href}`);
+    }
     for (const image of record.rendering.svgImages) assert(image.width > 0 && image.height > 0, 'SVG image did not decode');
     record.screenshot = `${name}.png`;
     await page.screenshot({path: path.join(output, record.screenshot), fullPage: false, animations: 'disabled'});
-    record.workspaceScreenshot = `${name}-workspace.png`;
-    await page.screenshot({path: path.join(output, record.workspaceScreenshot), fullPage: true, clip: record.workspace.clip, animations: 'disabled'});
-    record.mapScreenshot = `${name}-map.png`;
-    await page.locator(`${selected.root} ${selected.map}`).screenshot({path: path.join(output, record.mapScreenshot), animations: 'disabled'});
+    if (id === 'initial') {
+      record.workspaceScreenshot = `${name}-workspace.png`;
+      await page.screenshot({path: path.join(output, record.workspaceScreenshot), fullPage: true, clip: record.workspace.clip, animations: 'disabled'});
+    }
     record.horizontalOverflow = Math.max(0, record.viewport.documentWidth - record.viewport.width);
     assert(record.horizontalOverflow <= 1, 'Page overflows horizontally');
     assert.deepEqual(errors, [], 'Browser JavaScript errors');
@@ -106,7 +122,7 @@ async function capture(browser, origin, basePath, output, scene) {
 }
 
 /** Reuse the caller's browser and server; never launch or alter browser security here. */
-export async function captureMexicoPCReview({browser, origin, basePath = '', output, additionalCases = []}) {
+export async function captureMexicoPCReview({browser, origin, basePath = '', output, additionalCases = mexicoPCOperationCases}) {
   assert(browser && output, 'An existing browser and output directory are required');
   assert.equal(process.env.GITHUB_ACTIONS, 'true', 'PC capture runs only inside the existing GitHub Actions browser job');
   assert(process.env.GITHUB_SHA, 'The reviewed commit must be recorded');
@@ -131,6 +147,9 @@ export async function captureMexicoPCReview({browser, origin, basePath = '', out
   });
   metadata.status = metadata.captures.every(item => item.status === 'passed') ? 'passed' : 'failed';
   metadata.completedAt = new Date().toISOString();
+  metadata.files = await Promise.all((await readdir(output)).filter(name => name !== 'metadata.json').sort().map(async name => ({name, bytes: (await stat(path.join(output, name))).size})));
+  metadata.artifactBytesExcludingSummary = metadata.files.reduce((sum, file) => sum + file.bytes, 0);
+  metadata.sizeTarget = {bytes: 8 * 1024 * 1024, withinTarget: metadata.artifactBytesExcludingSummary <= 8 * 1024 * 1024, scope: 'Additional PC review only; existing mandatory agriculture captures are unchanged'};
   await writeFile(path.join(output, 'metadata.json'), `${JSON.stringify(metadata, null, 2)}\n`);
   return metadata;
 }
