@@ -1,7 +1,8 @@
 import type {AsiaState} from '../../lib/atlas-asia-state';
 export type IndustryTopic={id:string;title:string;parent:string;kind:'national'|'admin'|'power'|'steel'|'trade';unit:string;year:string;source:string;note:string;country?:string;fuel?:string};
 export type IndustryRegion={data:string;topics:IndustryTopic[];powerCount:number;adminCount:number;countries:string[]};
-export type IndustrySeries={year:string;value:number|null;status?:string}[];
+export type IndustryObservation={value:number|null;status?:string};
+export type IndustrySeries=(IndustryObservation&{year:string})[];
 export type IndustryAdmin={id:string;country:string;name:string;sourceName:string;point?:[number,number];bounds?:number[];series:Record<string,IndustrySeries>;steelMethods?:Record<string,number>;employment2025?:number};
 export type IndustryPlant={id:string;country:string;name:string;point:[number,number];fuel:string;capacity:number|null;capacityYear:string|null;source:string;url:string;locationSource:string;generation:IndustrySeries;generationSource:string};
 export type IndustryData={admin:IndustryAdmin[];power:IndustryPlant[];geometry:any;steel:Record<string,Record<string,number>>};
@@ -23,8 +24,15 @@ export function normalizeIndustryState(region:IndustryRegion,state:AsiaState,dat
  const valid=detail&&(!state.place||detail.country===state.place);
  return {...state,topic:topic.id,detail:valid?detail.id:null,place:valid?detail.country:topic.country??state.place,city:null};
 }
-export function industryValues(topic:IndustryTopic,data:IndustryData,national:IndustryNational,countries:string[]):{id:string;value:number|null}[]{
- if(topic.kind==='admin')return data.admin.filter(a=>a.country===topic.country).map(a=>({id:a.id,value:a.series[topic.id]?.find(v=>v.year===topic.year)?.value??null}));
+// Preserve the source's publication state alongside its numeric value. A null
+// observation can be suppressed, not applicable, or simply unpublished.
+export function industryValueLabel(observation?:IndustryObservation){
+ if(observation?.value===null||observation?.value===undefined)return observation?.status==='秘匿'||observation?.status==='該当なし'?observation.status:'未掲載';
+ return observation.value===0?'0（公表値）':observation.value.toLocaleString('ja-JP',{maximumFractionDigits:2});
+}
+export function industryMissingLabel(topic:IndustryTopic){return topic.country==='JPN'?'未掲載・秘匿・該当なし':'未掲載';}
+export function industryValues(topic:IndustryTopic,data:IndustryData,national:IndustryNational,countries:string[]):(IndustryObservation&{id:string})[]{
+ if(topic.kind==='admin')return data.admin.filter(a=>a.country===topic.country).map(a=>{const observation=a.series[topic.id]?.find(v=>v.year===topic.year);return {id:a.id,value:observation?.value??null,...(observation?.status?{status:observation.status}:{})};});
  if(topic.kind==='power')return data.power.filter(p=>topic.fuel==='all'||p.fuel===topic.fuel).map(p=>({id:p.id,value:p.capacity}));
  if(topic.kind==='steel')return countries.map(id=>({id,value:data.steel[id]?.total??null}));
  const observations=national.indicators.find(i=>i.id===topic.id)?.observations??[];

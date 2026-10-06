@@ -1,11 +1,14 @@
 ---
-import {majorAsiaIndustries,naturalGroups,populationGroups,populationGroup} from '../../data/atlas/asia-navigation';
+import {majorAsiaIndustries,industrySectors,industryTopicGroup,naturalGroups,populationGroups} from '../../data/atlas/asia-navigation';
+import type {IndustryRegion} from '../../data/atlas/asia-industry';
 import {type SocialRegion} from '../../data/atlas/asia-social';
 import {socialEntry} from '../../data/atlas/asia-social-overview';
 import {asiaPopulationTopics} from '../../data/atlas/asia-population';
 import type {AsiaField} from '../../lib/atlas-asia-state';
-const {initialField,social,regionId,forestTopic}=Astro.props as {initialField:AsiaField;social:SocialRegion;regionId:string;forestTopic?:string};
+const {initialField,social,regionId,forestTopic,industry}=Astro.props as {initialField:AsiaField;social:SocialRegion;regionId:string;forestTopic?:string;industry:IndustryRegion};
 const populationTopics=[...asiaPopulationTopics,...social.groups.map(g=>({id:socialEntry(g.id),label:g.label}))];
+const availableSectors=new Set(industry.topics.map(industryTopicGroup).map(group=>group.sector));
+const industryFeatures=majorAsiaIndustries[regionId].map(feature=>({...feature,sector:industryTopicGroup({id:feature.id}).sector}));
 ---
 <nav class="asia-agriculture-tabs asia-primary-topics" data-agriculture-topics hidden={initialField!=='agriculture'} aria-label="農林業の主題"><button type="button" data-farm-group="agriculture" data-farm-group-topic="overview" aria-pressed="true">農畜産</button><button type="button" data-farm-group="forestry" data-farm-group-topic={forestTopic} aria-pressed="false" disabled={!forestTopic}>林業{!forestTopic&&<small>資料を整備中</small>}</button></nav>
 <div class="asia-natural-controls" data-natural-topics hidden={initialField!=='natural'}>
@@ -14,9 +17,11 @@ const populationTopics=[...asiaPopulationTopics,...social.groups.map(g=>({id:soc
 </div>
 <div class="asia-population-navigation" data-population-topics hidden={initialField!=='population'}>
  <nav class="asia-population-tabs" aria-label="人口の主題">{populationGroups.map(g=><button type="button" data-population-group={g.id} data-topic={{distribution:'density',identity:'ethnicity',religion:'religion'}[g.id]} aria-pressed={g.id==='distribution'}>{g.label}</button>)}</nav>
+ <p class="asia-population-scope" data-population-scope>2020年の推計人口密度（人/km²・格子面積当たり）。</p>
 </div>
 <div class="asia-industry-navigation" data-industry-navigation hidden={initialField!=='industry'}>
- <nav class="asia-industry-sectors" aria-label="主要な産業">{majorAsiaIndustries[regionId].map(t=><button type="button" data-industry-feature={t.id} aria-pressed={t.id==='manufacturing'}>{t.label}</button>)}</nav>
+ <nav class="asia-industry-sectors" aria-label="産業の分類">{industrySectors.map(sector=><button type="button" data-industry-sector={sector.id} aria-pressed={sector.id==='manufacturing'} disabled={!availableSectors.has(sector.id)} title={availableSectors.has(sector.id)?undefined:'この分類だけの統計は未収録です'}>{sector.label}</button>)}</nav>
+ {industrySectors.filter(sector=>sector.id!=='all'&&availableSectors.has(sector.id)).map(sector=><nav class="asia-industry-subsectors" data-industry-subsectors={sector.id} hidden={sector.id!=='manufacturing'} aria-label={`${sector.label}の収録主題`}>{industryFeatures.filter(feature=>feature.sector===sector.id).map(feature=><button type="button" data-industry-feature={feature.id} aria-pressed={feature.id==='manufacturing'}>{feature.label}</button>)}<button type="button" data-industry-current-feature data-industry-feature="" aria-pressed="true" hidden></button></nav>)}
  <div class="asia-industry-guide"><strong data-industry-navigation-label>製造業 ／ 全分野</strong><span>地図に表示中：<span data-industry-current-map></span></span></div>
  <p class="asia-navigation-note" data-industry-navigation-note hidden role="status"></p>
 </div>

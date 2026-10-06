@@ -2,6 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {Window} from 'happy-dom';
+import {transform} from 'esbuild';
+import {createAsiaLayout} from '../../src/scripts/atlas-asia-layout.ts';
 
 test('アジア3地域の分野ページは一つの地図・ニュース欄・解説欄を持ち、初期表示がURLと一致する', async () => {
   const labels = {'east-asia':'東アジア','southeast-asia':'東南アジア','south-central-asia':'南・中央アジア'};
@@ -63,7 +65,10 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.equal(q('[data-rice-reading]').hidden,true);
       assert.equal(q('[data-farm-overview-reading]').hidden,field!=='agriculture');
       assert.equal(all('[data-farm-kind]').length,0);
-      assert.ok(all('[data-industry-feature]').length>=4&&all('[data-industry-feature]').length<=6);assert.equal(all('[data-farm-toggle]').length,2);assert.ok(q('[data-industry-all]'));for(const b of all('[data-industry-feature]'))assert.ok(config.industry.topics.some(t=>t.id===b.dataset.industryFeature));
+      const features=all('[data-industry-feature]:not([data-industry-current-feature])');
+      assert.ok(features.length>=4&&features.length<=6);assert.equal(all('[data-farm-toggle]').length,2);assert.ok(q('[data-industry-all]'));for(const b of features)assert.ok(config.industry.topics.some(t=>t.id===b.dataset.industryFeature));
+      assert.equal(all('[data-industry-sector]').length,5,'industry uses the same parent categories as the US');
+      for(const current of all('[data-industry-current-feature]'))assert.equal(current.hidden,true,'current-topic placeholders cannot imply unpublished data before initialization');
       assert.equal(all('[data-industry-subsector]').length,0);
       assert.equal(all('[data-population-group]').length,3);
       assert.equal(q('[data-population-group=voting]'),null);
@@ -73,9 +78,9 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       const mainLegend=q('[data-asia-map-legend]');
       assert.equal(q('.asia-map-frame').nextElementSibling,mainLegend,'the full active-map legend immediately follows the map');
       assert.equal(mainLegend.nextElementSibling,q('[data-farm-overview-legend]'),'the crop/livestock keys follow the active-map legend');
-      assert.equal(q('[data-asia-statistics]').parentElement,q('[data-atlas-shell]'),'statistics span the complete news/map/reading shell');
+      assert.equal(q('[data-asia-statistics]').parentElement,q('[data-atlas-shell]'),'statistics share the shell and align with the map/reading column');
       assert.equal(q('[data-asia-statistics]').previousElementSibling,q('[data-asia-explorer]'),'statistics follow the main map and right reading');
-      assert.equal(q('[data-reading-details]').open,false,'details and sources are folded until explicitly requested');
+      assert.equal(q('[data-reading-details]').open,true,'the complete reading is initially visible beside the map, as in the US atlas');
       assert.equal(config.presentation.rainfall.interval,250);assert.equal(config.presentation.terrain.interval,500);
       assert.ok(config.farmInsight.rivers.length>=2);assert.equal(q('[data-farm-water]'),null);
       assert.ok(config.social.topics.some(t=>t.key==='overview'));
@@ -98,6 +103,33 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.equal(q('[data-country-select] option[value="RUS"]'),null);
     } finally { await window.happyDOM.close(); }
   }
+});
+
+test('アジア統計はニュースの列に広がらず、mobileの国・都市選択は別の行を使う',async()=>{
+ const styles=new Map();
+ for(const width of [390,1024,1440]){
+  const window=new Window({width,height:1000,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true}});
+  try{
+   window.document.write(await readFile('dist/atlas/asia/east-asia/nature/index.html','utf8'));
+   for(const node of window.document.querySelectorAll('style,link[rel=stylesheet]')){
+    const path=node.tagName==='LINK'?`dist/${node.getAttribute('href').split('/insight-journal/')[1]}`:null;
+    const key=path??node.textContent;
+    if(!styles.has(key))styles.set(key,(await transform(path?await readFile(path,'utf8'):node.textContent,{loader:'css'})).code);
+    const style=window.document.createElement('style');style.textContent=styles.get(key);node.replaceWith(style);
+   }
+   const root=window.document.querySelector('[data-asia-atlas]');
+   createAsiaLayout(root).render({field:'natural',topic:'climate'});
+   const css=(selector,property)=>window.getComputedStyle(root.querySelector(selector)).getPropertyValue(property).replace(/\s+/g,'');
+   if(width>=960){
+    assert.equal(css('[data-asia-statistics]','grid-column'),'2',`${width}px statistics occupy the map/reading column`);
+   }else{
+    assert.equal(css('.asia-toolbar','display'),'grid');
+    assert.equal(css('.asia-toolbar','grid-template-columns'),'minmax(0,1fr)auto');
+    assert.equal(css('.asia-toolbar .asia-map-item','grid-column'),'1/-1','city picker receives its own full row');
+    assert.equal(css('.asia-toolbar>label','white-space'),'nowrap','the country label does not split into a narrow column');
+   }
+  }finally{await window.happyDOM.close();}
+ }
 });
 
 test('旧アジア地域ページは自然環境の正規URLを示す', async () => {

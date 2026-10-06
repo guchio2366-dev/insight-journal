@@ -15,7 +15,7 @@ test('月別比較の月操作をtoolbarへ置き、両凡例と値・イベン�
  assert.equal(root.dataset.seasonalActive,'false');assert.equal(controls.parentElement,home);assert.equal(select.value,'m-07');assert.equal(keys.parentElement,root.querySelector('[data-comparison-reading]'));assert.equal(root.querySelector('[data-seasonal-legend]').hidden,false);window.happyDOM.abort();
 });
 
-test('項目を地図直下へ、既存統計をニュース・地図・説明の全幅下へ移し、選択イベントを保つ',async()=>{
+test('項目を地図直下へ、既存統計を地図・説明の下へ移し、選択イベントを保つ',async()=>{
  const window=new Window();
  window.document.body.innerHTML='<div data-asia-atlas><div data-asia-map-items></div><aside><div data-reading-map-legend>年と単位</div><label data-city-picker><select data-city-select><option value="tokyo">東京</option></select></label><details data-reading-details><section data-industry-panel><label data-industry-detail-label><select><option>愛知</option></select></label><div data-industry-content><table><tbody><tr><td>42</td></tr></tbody></table></div></section></details></aside><section data-asia-statistics hidden></section></div>';
  const root=window.document.querySelector('[data-asia-atlas]');
@@ -60,6 +60,26 @@ test('都市選択を既存国toolbarへ移し、選択値・イベント・気�
  picker.hidden=true;layout.render({field:'agriculture'});assert.equal(picker.parentElement.hidden,true);
  picker.hidden=false;layout.render({field:'natural',topic:'climate',city:'tokyo'});
  assert.equal(picker.parentElement.hidden,false);assert.equal(select.value,'tokyo');window.happyDOM.abort();
+});
+
+test('1024pxの気候だけ都市選択を説明欄へ移し、幅・主題・focusの変更後も同じ選択とイベントを保つ',()=>{
+ const window=new Window({width:1440,height:1000});window.document.body.innerHTML='<main data-asia-atlas><div class="asia-toolbar"></div><div data-asia-map-items><label data-city-picker><select data-city-select><option value="tokyo">東京</option></select></label></div><aside class="asia-reading-dock"></aside><section data-asia-statistics hidden></section></main>';
+ const root=window.document.querySelector('main'),picker=root.querySelector('[data-city-picker]'),city=picker.querySelector('select'),toolbar=root.querySelector('.asia-toolbar'),dock=root.querySelector('.asia-reading-dock');let changes=0;
+ city.addEventListener('change',()=>changes++);const layout=createAsiaLayout(root);
+ try{
+  layout.render({field:'natural',topic:null,city:'tokyo'});assert.equal(picker.parentElement.parentElement,toolbar);
+  // Happy DOM dispatches resize/MQL changes synchronously. Start outside the
+  // query so its initially false change-listener state observes both edges.
+  window.happyDOM.setViewport({width:1024,height:768});assert.equal(picker.parentElement.parentElement,dock);assert.equal(city.value,'tokyo');
+  city.dispatchEvent(new window.Event('change'));assert.equal(changes,1);
+  window.happyDOM.setViewport({width:1440,height:1000});assert.equal(picker.parentElement.parentElement,toolbar);
+  window.happyDOM.setViewport({width:1024,height:768});assert.equal(picker.parentElement.parentElement,dock);
+  layout.render({field:'natural',topic:'seasonal-precipitation'});assert.equal(picker.parentElement.parentElement,toolbar);
+  layout.render({field:'natural',topic:'climate'});assert.equal(picker.parentElement.parentElement,dock);
+  const focus=window.document.createElement('nav');focus.className='asia-focus-navigation';root.append(focus);
+  layout.render({field:'natural',topic:'climate'});assert.equal(picker.parentElement.parentElement,toolbar);
+  assert.equal(root.querySelector('[data-city-select]'),city);assert.equal(city.value,'tokyo');city.dispatchEvent(new window.Event('change'));assert.equal(changes,2);
+ }finally{window.happyDOM.abort();}
 });
 
 test('社会区分・発電施設の選択欄は元分野を離れると隠れ、主題別のhiddenも保つ',()=>{

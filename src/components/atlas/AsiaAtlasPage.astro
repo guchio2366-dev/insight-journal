@@ -90,7 +90,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
        <div class="asia-toolbar"><label>国・地域<select data-country-select aria-label="国・地域を選ぶ"><option value="">{region.label}全体</option>{countries.map(c=><option value={c.code}>{c.name}</option>)}</select></label><button class="asia-reset" type="button" data-reset>全体に戻す</button></div>
       </div>
       <nav class="atlas-tabs atlas-tabs-with-overview asia-field-tabs" aria-label="地図の分野"><a data-atlas-overview-link href={withBase(`/atlas/asia/${pageId}/overview/`)}>概要</a>{fieldTabs.map(f=><a href={withBase(`/atlas/asia/${pageId}/${asiaFieldPaths[f.id]}/`)} data-field={f.id} aria-current={initialField===f.id?'page':undefined}>{f.label}</a>)}</nav>
-      <AsiaFieldNavigation {initialField} {social} {regionId} forestTopic={farming.layers.find(t=>t.kind==='forest')?.id} />
+      <AsiaFieldNavigation {initialField} {social} {regionId} {industry} forestTopic={farming.layers.find(t=>t.kind==='forest')?.id} />
 
       <div class="atlas-primary-grid asia-layout">
       <section class="atlas-map-column asia-map-panel" aria-labelledby="asia-map-title">
@@ -133,7 +133,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
         <label class="asia-city-picker" data-city-picker hidden={initialField!=='natural'}>都市の雨温図<select data-city-select aria-label="都市の雨温図を選ぶ"><option value="">都市を選ぶ</option>{cities.map(c=><option value={c.id} data-country={c.countryCode}>{c.name} · {japaneseNames[c.countryCode]}</option>)}</select></label>
        </section>
         <AsiaSeasonalPrecipitationPanel />
-        <details class="asia-reading-details" data-reading-details><summary>詳しい解説・出典を読む</summary>
+        <details class="asia-reading-details" data-reading-details open><summary>詳しい解説・出典を読む</summary>
        <div class="atlas-national asia-reading-scroll" tabindex="0" role="region" aria-label="選択した場所の詳しい解説">
         <details class="asia-comparison-method" data-comparison-method hidden><summary>比較区分の正式名称・説明・出典を読む</summary><p>元の選択と地図の位置を保存しています。</p><div data-comparison-legend></div></details>
         <section data-focus-reading hidden><h3 data-focus-reading-title></h3><p data-focus-reading-body></p><p class="asia-small">出典：<a data-focus-reading-source></a></p></section>
@@ -196,7 +196,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
     .asia-atlas-root :global(.atlas-desktop-shell) .asia-atlas[data-field] .asia-map-frame{min-height:min(300px,var(--asia-map-available-height,640px));max-height:min(640px,var(--asia-map-available-height,640px))}
   }
   @media(max-width:1199px){.asia-reading-scroll{overflow:visible;max-height:none}}
-  @media(max-width:700px){.asia-region-shell .asia-toolbar{display:flex;flex-wrap:wrap}.asia-region-shell .asia-toolbar label{flex:1;min-width:0}.asia-region-shell .asia-toolbar select{flex:1;min-width:0;width:auto}.asia-region-shell :global(.regional-tabs){display:grid;grid-template-columns:1fr 1fr 1.25fr;gap:4px}.asia-region-shell :global(.regional-tabs a){justify-content:center;font-size:12px;padding:7px}}
+  @media(max-width:700px){.asia-region-shell .asia-toolbar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}.asia-region-shell .asia-toolbar>label{min-width:0;white-space:nowrap}.asia-region-shell .asia-toolbar select{flex:1;min-width:0;width:auto;max-width:none}.asia-region-shell .asia-toolbar :global(.asia-map-item){grid-column:1/-1;min-width:0}.asia-region-shell .asia-toolbar :global(.asia-city-picker){display:flex;align-items:center;gap:8px;margin:0;padding:0;white-space:nowrap}.asia-region-shell .asia-toolbar :global(.asia-city-picker select){min-width:0;flex:1;max-width:none}.asia-region-shell :global(.regional-tabs){display:grid;grid-template-columns:1fr 1fr 1.25fr;gap:4px}.asia-region-shell :global(.regional-tabs a){justify-content:center;font-size:12px;padding:7px}}
   @media(pointer:coarse){.asia-region-shell .asia-toolbar select,.asia-region-shell .asia-reset{min-height:44px}}
   .asia-city-links :global(button){display:flex;justify-content:space-between;border:1px solid var(--rule);background:white;min-height:44px;padding:8px 12px;font-size:12px;color:var(--ink);text-align:left}
   @media(max-width:430px){.asia-family-legend{grid-template-columns:repeat(3,1fr)!important}.asia-family-legend summary{white-space:nowrap}}
