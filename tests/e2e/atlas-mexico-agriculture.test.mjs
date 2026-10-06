@@ -4,6 +4,8 @@ import {readFile,access} from 'node:fs/promises';
 import {build} from 'esbuild';
 import {Window} from 'happy-dom';
 const bundle=await build({entryPoints:['src/scripts/atlas-mexico-agriculture-atlas.ts'],bundle:true,write:false,format:'iife',globalName:'MexicoAtlas'});
+const readingBundle=await build({stdin:{contents:"export {mexicoAgricultureProductReading} from './src/data/atlas/mexico/agriculture-product-reading'; export {agricultureReading} from './src/data/atlas/mexico/agriculture-reading';",resolveDir:process.cwd()},bundle:true,write:false,format:'esm'});
+const readingCopy=await import('data:text/javascript;base64,'+Buffer.from(readingBundle.outputFiles[0].text).toString('base64'));
 const source=await readFile('dist/atlas/north-america/mexico/agriculture/index.html','utf8');
 async function page(query='',interactive=true){
  const window=new Window({url:'https://example.com/insight-journal/atlas/north-america/mexico/agriculture/'+query,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
@@ -138,5 +140,42 @@ test('State statistics and municipality products have distinct geographic descri
   assert.match(ctx.q('[data-mexico-stat-panel="irrigation"]').textContent,/全国の灌漑農地率/);
   assert.match(ctx.q('[data-mexico-stat-panel="cattle"]').textContent,/全国の牛頭数/);
   assert.match(ctx.q('[data-mexico-stat-panel="pine"]').textContent,/全国の松材取得量/);
+ }finally{await ctx.window.happyDOM.close();}
+});
+
+test('Selecting a crop keeps every crop area and animal kind available with source-based colored labels',async()=>{
+ const ctx=await page();try{
+  ctx.q('[data-crop-select="corn"]').click();
+  const config=JSON.parse(ctx.q('[data-mexico-agriculture-config]').textContent);
+  assert.equal(config.cropLabelPoints.length,22);
+  const zones=Array.from(ctx.root.querySelectorAll('path[data-crop-zone]'));
+  assert.equal(zones.length,11);
+  assert.ok(zones.every(node=>!node.hasAttribute('hidden')));
+  assert.equal(zones.filter(node=>node.getAttribute('aria-pressed')==='true').length,1);
+  assert.equal(ctx.q('[data-livestock-markers]').hidden,false);
+  assert.equal(ctx.root.querySelectorAll('[data-livestock-select]').length,5);
+  const label=ctx.q('[data-crop-label="corn"]');
+  assert.equal(label.hasAttribute('hidden'),false);
+  assert.equal(label.style.getPropertyValue('--crop-color'),config.crops.find(crop=>crop.id==='corn').color);
+  assert.equal(label.getAttribute('role'),'button');assert.equal(label.getAttribute('tabindex'),'0');
+  label.dispatchEvent(new ctx.window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));selected(ctx,'corn');
+ }finally{await ctx.window.happyDOM.close();}
+});
+
+test('Compact reading entries retain every original sentence and original source link',async()=>{
+ const ctx=await page('',false);try{
+  const readings={...readingCopy.mexicoAgricultureProductReading,irrigation:readingCopy.agricultureReading.irrigation,pine:readingCopy.agricultureReading.pine};
+  for(const [id,reading]of Object.entries(readings)){
+   const section=ctx.q(`[data-agriculture-reading="${id}"]`);assert.ok(section,id);
+   const parts=Array.from(section.querySelectorAll('.mexico-agriculture-causal'));
+   assert.equal(parts.length,reading.steps.length,id);
+   reading.steps.forEach((step,index)=>{
+    const detail=parts[index];assert.equal(detail.tagName,'DETAILS');
+    const entry=detail.querySelector('summary>strong').textContent;
+    const continuation=detail.querySelector('p:not(.atlas-inline-sources)')?.textContent??'';
+    assert.equal(entry+continuation,step.body,`${id}: ${step.title}`);
+    assert.equal(detail.querySelector('a').getAttribute('href'),step.source);
+   });
+  }
  }finally{await ctx.window.happyDOM.close();}
 });

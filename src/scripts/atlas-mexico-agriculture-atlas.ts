@@ -1,8 +1,9 @@
 import {renderAgricultureMarkers} from '../lib/atlas-agriculture-markers';
 import {readMexicoAgricultureAtlasState,writeMexicoAgricultureAtlasState,agricultureCameraViewBox,normalizeMexicoAgricultureCamera,type MexicoAgricultureAtlasState} from '../lib/atlas-mexico-agriculture-atlas-state';
 import {mexicoAgricultureLabel} from '../data/atlas/mexico/agriculture-catalog';
+import {placeMexicoAgricultureLabels,agricultureLabelIntersects,type AgricultureLabelBox} from '../lib/atlas-mexico-agriculture-label-layout';
 interface Marker {id:string;kindId:string;label:string;stateCode:string;municipalityCode:string;point:[number,number];production:number;unit:string;valueMxN:number;sourceUrl:string}
-interface Config {crops:{id:string;name:string;color:string}[];livestockKinds:{id:string;label:string;color:string;symbol:string}[];markers:Marker[];states:{code:string;name:string;point:[number,number]}[];naturePath:string;agriculturePath:string;statistics:Record<string,any>}
+interface Config {crops:{id:string;name:string;color:string}[];cropLabelPoints?:{cropId:string;point:[number,number]}[];livestockKinds:{id:string;label:string;color:string;symbol:string}[];markers:Marker[];states:{code:string;name:string;point:[number,number]}[];naturePath:string;agriculturePath:string;statistics:Record<string,any>}
 const hidden=(element:Element|null,value:boolean)=>{if(!element)return;if(value)element.setAttribute('hidden','');else element.removeAttribute('hidden');};
 export function initMexicoAgricultureAtlas(root:HTMLElement):void {
  if(root.dataset.agricultureReady==='true')return;
@@ -16,6 +17,11 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
  const panel=q('[data-agri-reading-panel]'),heading=q('#agri-reading-heading'),overview=q('[data-agri-overview]');
  const kinds=new Map(config.livestockKinds.map(kind=>[kind.id,kind]));
  const cropIds=new Set(config.crops.map(crop=>crop.id));
+ const cropLabels=Array.from(root.querySelectorAll<SVGTextElement>('[data-crop-label]'));
+ const labelAnchors=new Map(cropLabels.map(node=>{
+  const sourced=config.cropLabelPoints?.filter(label=>label.cropId===node.dataset.cropLabel).map(label=>label.point)??[];
+  return [node.dataset.cropLabel!,sourced.length?sourced:[[Number(node.getAttribute('x')),Number(node.getAttribute('y'))] as [number,number]]];
+ }));
  const overviewMarkers:Marker[]=[];
  for(const kind of config.livestockKinds){
   const candidates=config.markers.filter(marker=>marker.kindId===kind.id);
@@ -47,6 +53,50 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
    kinds,selectedKind:state.item,selectedRegion:state.region,
    select:region=>choose(region.kindId,region),candidates:regions=>{candidates=regions;renderCandidates();},
   });
+  renderMapLabels();
+ }
+ function renderMapLabels(){
+  const width=frame.clientWidth,height=frame.clientHeight;if(!width||!height)return;
+  const frameRect=frame.getBoundingClientRect(),[, ,viewWidth,viewHeight]=agricultureCameraViewBox(state);
+  const scale=Math.min(width/viewWidth,height/viewHeight);
+  const box=(node:Element):AgricultureLabelBox|null=>{
+   const rect=node.getBoundingClientRect();
+   return rect.width&&rect.height?{left:rect.left-frameRect.left,top:rect.top-frameRect.top,right:rect.right-frameRect.left,bottom:rect.bottom-frameRect.top}:null;
+  };
+  const obstacles=Array.from(root.querySelectorAll('[data-agri-layers],.atlas-map-tools,.atlas-layer-caption,.atlas-livestock-marker')).filter(node=>!node.closest('[hidden]')).map(box).filter((value):value is AgricultureLabelBox=>!!value);
+  const visible=state.crops&&state.item!=='pine';
+  const items=cropLabels.filter(node=>visible&&(!state.onlyItem||!state.item||node.dataset.cropLabel===state.item)).map(node=>{
+   const selected=node.dataset.cropLabel===state.item,fontSize=selected?15:width<560?12.5:13.5;
+   hidden(node,false);node.style.fontSize=`${fontSize/scale}px`;
+   const measured=node.getComputedTextLength?.();
+   return {id:node.dataset.cropLabel!,selected,width:(measured&&Number.isFinite(measured)?measured*scale:Array.from(node.textContent??'').length*fontSize)+6,height:fontSize+8,anchors:labelAnchors.get(node.dataset.cropLabel!)!.map(project)};
+  });
+  const placements=placeMexicoAgricultureLabels(items,width,height,obstacles),byId=new Map(placements.map(item=>[item.id,item]));
+  const [vx,vy]=agricultureCameraViewBox(state),left=(width-viewWidth*scale)/2,top=(height-viewHeight*scale)/2;
+  const leaders=root.querySelector('[data-mexico-crop-label-leaders]');leaders?.replaceChildren();
+  for(const node of cropLabels){
+   const placement=byId.get(node.dataset.cropLabel!);hidden(node,!placement);
+   if(!placement){delete node.dataset.labelSourceIndex;continue;}
+   node.setAttribute('x',String(vx+(placement.x-left)/scale));node.setAttribute('y',String(vy+(placement.y-top)/scale));
+   node.dataset.labelSourceIndex=String(placement.anchorIndex);
+   if(placement.leader&&leaders){
+    const ns='http://www.w3.org/2000/svg',line=document.createElementNS(ns,'line'),point=document.createElementNS(ns,'circle');
+    const sx=vx+(placement.sourceX-left)/scale,sy=vy+(placement.sourceY-top)/scale;
+    const endX=Math.max(placement.left,Math.min(placement.right,placement.sourceX)),endY=Math.max(placement.top,Math.min(placement.bottom,placement.sourceY));
+    for(const [key,value] of Object.entries({x1:sx,y1:sy,x2:vx+(endX-left)/scale,y2:vy+(endY-top)/scale}))line.setAttribute(key,String(value));
+    point.setAttribute('cx',String(sx));point.setAttribute('cy',String(sy));point.setAttribute('r',String(2.5/scale));
+    for(const element of [line,point])element.style.setProperty('--crop-color',config.crops.find(crop=>crop.id===placement.id)!.color);
+    leaders.append(line,point);
+   }
+  }
+  // Crop names take precedence over decorative physical labels. Crop areas and
+  // the complete commodity key remain visible regardless of label placement.
+  const occupied=[...obstacles,...placements];
+  for(const node of root.querySelectorAll<SVGTextElement>('.mexico-agriculture-geography text')){
+   hidden(node,false);const rect=box(node);
+   const collision=rect&&(rect.left<3||rect.top<3||rect.right>width-3||rect.bottom>height-3||occupied.some(other=>agricultureLabelIntersects(rect,other,2)));
+   hidden(node,!!collision);if(rect&&!collision)occupied.push(rect);
+  }
  }
  function renderCandidates(){
   const box=q('[data-agri-candidates]');box.replaceChildren();hidden(box,!candidates.length);
@@ -68,6 +118,7 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
   hidden(q('[data-mexico-crop-zones]'),!cropVisible);hidden(q('[data-mexico-crop-labels]'),!cropVisible);
   for(const node of root.querySelectorAll<HTMLElement|SVGElement>('[data-crop-zone]')){
    const id=node.getAttribute('data-crop-zone');node.classList.toggle('is-selected',id===state.item);node.classList.toggle('is-muted',cropSelected&&id!==state.item);
+   node.setAttribute('aria-pressed',String(id===state.item));
    hidden(node,cropVisible&&state.onlyItem&&!!state.item&&id!==state.item);
   }
   hidden(q('[data-agri-layers]'),forestry);hidden(q('[data-mexico-forest-states]'),!forestry);hidden(q('[data-mexico-tree-cover]'),!forestry);
@@ -159,5 +210,6 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
  window.addEventListener('hashchange',()=>{state=readMexicoAgricultureAtlasState(new URL(location.href));candidates=[];save(false);});
  const fitPanel=()=>{const height=q('.atlas-map-column').getBoundingClientRect().height;if(height>0)panel.style.setProperty('--agri-map-height',`${Math.round(height)}px`);renderMarkers();};
  if(typeof ResizeObserver!=='undefined')new ResizeObserver(fitPanel).observe(frame);window.addEventListener('resize',fitPanel);
+ document.fonts?.ready.then(fitPanel);
  save(false);requestAnimationFrame(fitPanel);
 }
