@@ -163,25 +163,13 @@ test('Family changes add one history entry, preserve the source return, and Back
   } finally { await p.close(); }
 });
 
-test('Page subtopics and resource scope buttons update once and keep their selected state scoped to the current topic', async () => {
-  const p = await page('groundwater');
-  try {
-    const scope = p.q('[data-canada-water-groundwater-modes] [data-canada-water-topic="aquifers"]');
-    scope.click();
-    assert.equal(p.events.length, 1, 'the resource controller emits one scope update');
-    assert.equal(p.pushes.length, 1, 'the page consumes that update once');
-    assertHierarchy(p, 'aquifers');
-    assert.equal(scope.getAttribute('aria-pressed'), 'true');
-    assert.equal(p.q('[data-canada-water-groundwater-modes] [data-canada-water-topic="groundwater"]').getAttribute('aria-pressed'), 'false');
-    p.q('[data-canada-water-subtopics] [data-canada-water-topic="groundwater"]').click();
-    assert.equal(p.events.length, 1, 'the page subtopic is not also handled by the nested resource controller');
-    assert.equal(p.pushes.length, 2);
-    assertHierarchy(p, 'groundwater');
-    assert.equal(scope.getAttribute('aria-pressed'), 'false');
-    p.q('[data-canada-water-family="precipitation"]').click();
-    assertHierarchy(p, 'precipitation');
-    assert.equal(p.q('[data-canada-water-groundwater-modes]').hidden, true);
-    assert.equal(p.q('[data-canada-water-groundwater-modes]').querySelectorAll('[aria-pressed="true"]').length, 0);
-    assertSourceReturn(p);
-  } finally { await p.close(); }
+test('Groundwater has one scope switch beside the map and no duplicate upper buttons', async () => {
+ const p=await page('groundwater');try{
+  assert.equal(p.q('[data-canada-water-groundwater-modes]'),null);
+  const scope=p.q('[data-canada-water-subtopics] [data-canada-water-topic="aquifers"]');scope.click();
+  assert.equal(p.events.length,0);assert.equal(p.pushes.length,1);assertHierarchy(p,'aquifers');
+  assert.equal(scope.getAttribute('aria-pressed'),'true');
+  p.q('[data-canada-water-subtopics] [data-canada-water-topic="groundwater"]').click();assertHierarchy(p,'groundwater');assert.equal(p.pushes.length,2);
+  p.q('[data-canada-water-family="precipitation"]').click();assertHierarchy(p,'precipitation');assertSourceReturn(p);
+ }finally{await p.close();}
 });

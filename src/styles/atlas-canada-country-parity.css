@@ -147,3 +147,40 @@
  .canada-nature[data-canada-nature].is-water-resource [data-canada-water-groundwater-modes]{display:none}
  .canada-nature[data-canada-nature].is-water-resource.is-water-river-family .canada-water-frame{height:clamp(235px,calc(100dvh - 510px),500px)}
 }
+
+/* 2026-10-05 acceptance: use the US map column, frame and key contract. */
+.canada-nature[data-canada-nature] .canada-water-resources:not([hidden]){display:contents}
+.canada-nature[data-canada-nature] .canada-water-heading{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.canada-nature[data-canada-nature] .canada-water-reading{max-height:calc(100dvh - 220px);overflow:auto;scrollbar-gutter:stable;overscroll-behavior:contain}
+.canada-nature[data-canada-nature] :is(.canada-natural-frame,.canada-landform-frame,.canada-water-frame){border-radius:0}
+.canada-nature[data-canada-nature] .canada-natural-key,
+.canada-nature[data-canada-nature] .canada-landform-key,
+.canada-nature[data-canada-nature] .canada-water-map-key{margin:0;padding:5px 8px;background:#f7f5ec;border:1px solid #c8cfc4;border-top:0;display:flex;flex-wrap:wrap;justify-content:center;gap:3px 10px}
+.canada-nature[data-canada-nature] :is(.canada-natural-key,.canada-landform-key,.canada-water-legend) button{min-height:26px;display:inline-flex;flex-direction:row;align-items:center;gap:4px;padding:1px 3px;border:0;border-radius:0;background:transparent;color:#42565d;font:400 12px/1.6 var(--sans);width:auto}
+.canada-nature[data-canada-nature] :is(.canada-natural-key,.canada-landform-key,.canada-water-legend) button[aria-pressed=true]{background:#e2e8db;color:#203d48;box-shadow:inset 0 -2px #365866;font-weight:700}
+.canada-nature[data-canada-nature] :is(.canada-natural-key,.canada-water-legend) i{width:13px;height:9px;flex-basis:13px;border:1px solid #657a7650;border-radius:2px}
+.canada-nature[data-canada-nature] .canada-water-legend{margin:0;justify-content:center;gap:3px 10px}
+.canada-nature[data-canada-nature] .country-water-subtopics{margin:0 0 10px;gap:6px}
+.canada-nature[data-canada-nature] .country-water-subtopics button{border:0;border-bottom:1px solid #c4cec4;min-height:28px;padding:3px 5px;background:transparent;color:#365661;font-size:12px}
+.canada-nature[data-canada-nature] .country-water-subtopics button[aria-pressed=true]{border-bottom:2px solid #365661;font-weight:700}
+.canada-landform .canada-landform-region{fill:transparent;stroke:none;pointer-events:all}
+.canada-landform .canada-landform-region.is-selected{fill:#d4c8a63d;stroke:#243f4c;stroke-width:3}
+.canada-basin-lake{fill:#a3cbd9;stroke:#6494a3;stroke-width:.4;vector-effect:non-scaling-stroke}
+.canada-basin-river{fill:none;stroke:#367897;stroke-width:1;pointer-events:none}
+[data-canada-basin-label]{cursor:pointer}
+[data-canada-basin-label] text{font:700 14px var(--sans);text-anchor:middle;fill:#284957;paint-order:stroke;stroke:#fffef5;stroke-width:4;stroke-linejoin:round}
+@media(min-width:960px){
+ .atlas-desktop-shell .canada-nature[data-canada-nature] .canada-country-primary .atlas-map-frame{height:auto;aspect-ratio:1.55;min-height:300px;max-height:640px}
+ .atlas-desktop-shell .canada-nature[data-canada-nature] .canada-country-primary .canada-water-map{position:absolute;inset:0;width:100%;height:100%;max-height:none;aspect-ratio:auto}
+ .atlas-desktop-shell .canada-nature[data-canada-nature] .canada-country-primary .canada-map-frame>.canada-map{position:absolute;inset:0;width:100%;height:100%}
+ .canada-nature[data-canada-nature] .canada-water-map-tools button{width:44px;height:44px;min-height:44px;padding:0}
+}
+.canada-climate-family-key{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;background:#f7f5ec;border:1px solid #c8cfc4;border-top:0;padding:6px;font-size:12px}
+.canada-climate-full-key{border:1px solid #c8cfc4;border-top:0;font-size:12px;background:#f7f5ec}.canada-climate-full-key summary{padding:5px 10px;cursor:pointer;min-height:32px}
+.canada-climate-codes{position:absolute;inset:0;pointer-events:none}.canada-climate-codes button{position:absolute;transform:translate(-50%,-50%);padding:2px;border:0;background:transparent;pointer-events:auto;color:#28424d;font:700 12px var(--sans);text-shadow:0 0 3px #fff,0 0 3px #fff;min-height:24px}.canada-climate-codes button:focus-visible{outline:2px solid #28424d;background:#fff}
+@media(max-width:649px){.canada-climate-full-key summary,.canada-nature .canada-natural-key button,.canada-nature .canada-water-key button{min-height:44px}}
+.canada-nature[data-canada-nature] .canada-water-references text{font-size:14px;font-weight:600;stroke-width:2}
+/* Keep field navigation fixed when switching water datasets. */
+@media(min-width:960px){.canada-nature[data-canada-nature].is-water-resource .atlas-compact-heading{display:flex}}
+@media(min-width:960px) and (max-width:1199px){.atlas-desktop-shell .canada-nature[data-canada-nature] .canada-country-primary .atlas-map-frame{aspect-ratio:1.65;min-height:190px}}
+@media(min-width:960px) and (max-width:1199px){.atlas-desktop-shell .canada-nature[data-canada-nature].is-water-reading .canada-country-primary .atlas-map-frame,.atlas-desktop-shell .canada-nature[data-canada-nature].is-water-resource .canada-country-primary .atlas-map-frame{min-height:500px}}

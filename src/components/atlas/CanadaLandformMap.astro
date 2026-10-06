@@ -1,4 +1,7 @@
 ---
+import CanadaTerrainContext from './CanadaTerrainContext.astro';
+import rivers from '../../data/atlas/canada/rivers.json';
+import lakes from '../../data/atlas/canada/lakes.json';
 import physiography from '../../data/atlas/canada/physiography.json';
 import geography from '../../data/atlas/regional-countries.json';
 import rawGeometry from '../../../public/assets/atlas/canada-physiography-v1/regions.geojson?raw';
@@ -15,7 +18,7 @@ const { hidden = true, selected = null, only = false } = Astro.props;
 const regions = physiography.regions;
 const geometry = prepareCanadaLandforms(JSON.parse(rawGeometry) as CanadaLandformCollection, regions);
 const context = { type: 'FeatureCollection', features: geography.features.filter(feature => ['CAN', 'USA', 'GRL'].includes(feature.properties.code)) };
-const config = { ...physiography, context, workerUrl };
+const config = { ...physiography, context, rivers, lakes, workerUrl };
 const fullFrame = `0 0 ${canadaLandformSize.width} ${canadaLandformSize.height}`;
 ---
 <section class="canada-landform" data-canada-landform hidden={hidden} aria-label="カナダの地形地域を調べる">
@@ -23,12 +26,13 @@ const fullFrame = `0 0 ${canadaLandformSize.width} ${canadaLandformSize.height}`
   <div class="atlas-map-frame canada-landform-frame" data-canada-landform-stage>
     <svg class="canada-landform-fallback" data-canada-landform-fallback viewBox={fullFrame} width={canadaLandformSize.width} height={canadaLandformSize.height} role="group" tabindex="0" aria-labelledby="canada-landform-map-title canada-landform-map-desc">
       <title id="canada-landform-map-title">カナダの地形地域</title>
-      <desc id="canada-landform-map-desc">カナダ政府の七つの地形地域を、原資料の境界で色分けしています。地域の形、地名、または凡例から選べます。色は標高を表しません。</desc>
+      <desc id="canada-landform-map-desc">地形名を選ぶと、その地形地域の輪郭を強調し、右側に説明を表示します。背景の国土全体を地形の色で塗り分ける図ではありません。</desc>
       <rect width={canadaLandformSize.width} height={canadaLandformSize.height} fill="#e4eff0" />
       <g aria-hidden="true">{context.features.map(feature => <path class="canada-landform-context" d={canadaLandformPath(feature.geometry as CanadaLandformGeometry)} fill-rule="evenodd" vector-effect="non-scaling-stroke" />)}</g>
+      <CanadaTerrainContext/>
       <g>{geometry.features.map(feature => {
         const region = regions.find(item => item.id === feature.properties.id)!;
-        return <path class:list={['canada-landform-region', {'is-selected': selected === region.id}]} data-canada-landform-shape={region.id} d={canadaLandformPath(feature.geometry)} fill={region.color} fill-rule="evenodd" vector-effect="non-scaling-stroke" role="button" tabindex="0" aria-label={`${region.name}を読む`} aria-pressed={String(selected === region.id)} hidden={only && !!selected && selected !== region.id}><title>{region.name}：{region.description}</title></path>;
+        return <path class:list={['canada-landform-region', {'is-selected': selected === region.id}]} data-canada-landform-shape={region.id} d={canadaLandformPath(feature.geometry)} fill="transparent" fill-rule="evenodd" vector-effect="non-scaling-stroke" role="button" tabindex="0" aria-label={`${region.name}を読む`} aria-pressed={String(selected === region.id)} hidden={only && !!selected && selected !== region.id}><title>{region.name}：{region.description}</title></path>;
       })}</g>
       <g class="canada-landform-fallback-labels" data-canada-landform-fallback-labels aria-hidden="true">{regions.map(region => { const [x, y] = projectCanadaLandform(region.labelAnchor); return <text x={x} y={y} text-anchor="middle">{region.name}</text>; })}</g>
     </svg>
@@ -38,18 +42,18 @@ const fullFrame = `0 0 ${canadaLandformSize.width} ${canadaLandformSize.height}`
       return <button type="button" class:list={['canada-landform-label', {'is-selected': selected === region.id}]} data-canada-landform-label={region.id} style={`left:${x / canadaLandformSize.width * 100}%;top:${y / canadaLandformSize.height * 100}%`} aria-pressed={String(selected === region.id)} hidden>{region.name}</button>;
     })}</div>
     <div class="canada-landform-tools" aria-label="地形地図の操作">
-      <button type="button" data-canada-landform-reset aria-label="カナダ全体の地形地域を表示">全体</button>
+      <button type="button" data-canada-landform-reset aria-label="カナダ南部を中心に地形を表示">全体</button>
       <button type="button" data-canada-landform-zoom="in" aria-label="地形地図を拡大">＋</button>
       <button type="button" data-canada-landform-zoom="out" aria-label="地形地図を縮小">−</button>
       <button type="button" data-canada-landform-focus aria-label="選んだ地形地域へ" disabled={!selected}>地域へ</button>
     </div>
   </div>
   <div class="canada-landform-key" aria-label="地形地域の凡例">
-    {regions.map(region => <button type="button" data-canada-landform-legend={region.id} aria-pressed={String(selected === region.id)}><i style={`background:${region.color}`} aria-hidden="true"></i>{region.name}</button>)}
+    {regions.map(region => <button type="button" data-canada-landform-legend={region.id} aria-pressed={String(selected === region.id)}>{region.name}</button>)}
   </div>
   <label class="canada-landform-only"><input type="checkbox" data-canada-landform-only checked={only && !!selected} disabled={!selected} /> 選んだ地形地域だけを表示</label>
   <p class="canada-landform-status" data-canada-landform-status role="status" aria-live="polite">地域を選ぶと地形の特徴を読めます。</p>
-  <p class="canada-landform-caption">NRCanの全国的な地形区分。メルカトル図法で位置と境界を表示しています。色は地域の分類で、標高や面積の大小を表しません。<a href={physiography.source.catalogueUrl}>原資料・利用条件</a></p>
+  <p class="canada-landform-caption">地形名を選ぶと該当地域の輪郭を強調します。輪郭はNRCanの広域地形区分で、ロッキー山脈など個別の山脈とは範囲が異なります。<a href={physiography.source.catalogueUrl}>原資料・利用条件</a></p>
   <noscript><p class="canada-landform-caption">境界と名称はこの地図で確認できます。地域の選択・拡大にはJavaScriptを有効にしてください。<a href={physiography.source.descriptionUrl}>NRCanの原資料と説明</a></p></noscript>
   <details class="canada-landform-sources"><summary>地形地域の出典・境界データ</summary><p>{physiography.source.publisher}「{physiography.source.title}」。{physiography.source.brief}</p><p>配信座標系：{physiography.source.deliveryCrs}。原資料の七地域の境界を使用しています。<a href={physiography.geometryUrl}>境界データ（GeoJSON）</a> / <a href={physiography.source.licenceUrl}>{physiography.source.licence}</a></p><p lang="en">{physiography.source.attribution}</p></details>
   <script type="application/json" data-canada-landform-config set:html={JSON.stringify(config).replace(/</g, '\\u003c')} />

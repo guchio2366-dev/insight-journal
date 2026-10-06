@@ -1,7 +1,9 @@
+import {initCanadaIndustryParity} from './atlas-canada-industry-parity';
 import {readCanadaIndustryState,writeCanadaIndustryState,formatCanadaIndustryValue,industryShareColor,canadaIndustryComparisonUrl,type CanadaIndustryState} from '../lib/atlas-canada-industry';
 import {renderPopulationIndustryComparison} from './atlas-canada-population-industry-comparison';
 import {hydrateCanadaPopulationGeometry} from './atlas-canada-population-geometry-loader';
 export function initCanadaIndustry(root:HTMLElement){
+ if(root.hasAttribute("data-ca-industry-parity"))return initCanadaIndustryParity(root);
  const config=JSON.parse(root.querySelector('[data-industry-config]')!.textContent!),ids=config.provinces.map((p:any)=>p.id),$=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const valueText=(v:any)=>`${formatCanadaIndustryValue(v.value)}${v.value===null?'':'%'}${[v.status,v.symbol].filter(Boolean).length?`（${[v.status,v.symbol].filter(Boolean).join(' ')}）`:''}`;
  let state=readCanadaIndustryState(new URL(location.href),config.years,ids);const storageKey='insight-journal:canada-industry:v1';

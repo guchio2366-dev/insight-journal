@@ -18,89 +18,95 @@
       "groups": [
         {
           "id": "p0",
-          "name": "250未満 mm/年",
-          "color": "#ffffcc",
-          "sourceName": "<250 mm/year",
-          "lowerBoundMm": 0,
-          "upperBoundExclusiveMm": 250,
-          "sourceCellCount": 6841
+          "name": "250mm未満",
+          "color": "#f2dfb3",
+          "sourceName": "250mm未満",
+          "sourceCellCount": 6837,
+          "description": "1991–2020年の年降水量。雨・雪の水当量。年合計だけで栽培可能性は決まりません。"
         },
         {
           "id": "p1",
-          "name": "250〜500未満 mm/年",
-          "color": "#c7e9b4",
-          "sourceName": "250–<500 mm/year",
-          "lowerBoundMm": 250,
-          "upperBoundExclusiveMm": 500,
-          "sourceCellCount": 34612
+          "name": "250〜500mm未満",
+          "color": "#e0e4be",
+          "sourceName": "250〜500mm未満",
+          "sourceCellCount": 34606,
+          "description": "1991–2020年の年降水量。雨・雪の水当量。年合計だけで栽培可能性は決まりません。"
         },
         {
           "id": "p2",
-          "name": "500〜750未満 mm/年",
-          "color": "#7fcdbb",
-          "sourceName": "500–<750 mm/year",
-          "lowerBoundMm": 500,
-          "upperBoundExclusiveMm": 750,
-          "sourceCellCount": 27489
+          "name": "500〜750mm未満",
+          "color": "#b9d8b8",
+          "sourceName": "500〜750mm未満",
+          "sourceCellCount": 27498,
+          "description": "1991–2020年の年降水量。雨・雪の水当量。年合計だけで栽培可能性は決まりません。"
         },
         {
           "id": "p3",
-          "name": "750〜1,000未満 mm/年",
-          "color": "#41b6c4",
-          "sourceName": "750–<1000 mm/year",
-          "lowerBoundMm": 750,
-          "upperBoundExclusiveMm": 1000,
-          "sourceCellCount": 13132
+          "name": "750〜1,000mm未満",
+          "color": "#8bc8bf",
+          "sourceName": "750〜1,000mm未満",
+          "sourceCellCount": 13132,
+          "description": "1991–2020年の年降水量。雨・雪の水当量。年合計だけで栽培可能性は決まりません。"
         },
         {
           "id": "p4",
-          "name": "1,000〜1,500未満 mm/年",
-          "color": "#2c7fb8",
-          "sourceName": "1000–<1500 mm/year",
-          "lowerBoundMm": 1000,
-          "upperBoundExclusiveMm": 1500,
-          "sourceCellCount": 16269
+          "name": "1,000〜1,500mm未満",
+          "color": "#60afb8",
+          "sourceName": "1,000〜1,500mm未満",
+          "sourceCellCount": 16270,
+          "description": "1991–2020年の年降水量。雨・雪の水当量。年合計だけで栽培可能性は決まりません。"
         },
         {
           "id": "p5",
-          "name": "1,500以上 mm/年",
-          "color": "#253494",
-          "sourceName": "≥1500 mm/year",
-          "lowerBoundMm": 1500,
-          "upperBoundExclusiveMm": null,
-          "sourceCellCount": 2602
+          "name": "1,500〜2,000mm未満",
+          "color": "#378eaa",
+          "sourceName": "1,500〜2,000mm未満",
+          "sourceCellCount": 2090,
+          "description": "1991–2020年の年降水量。雨・雪の水当量。年合計だけで栽培可能性は決まりません。"
+        },
+        {
+          "id": "p6",
+          "name": "2,000mm以上",
+          "color": "#216782",
+          "sourceName": "2,000mm以上",
+          "sourceCellCount": 512,
+          "description": "1991–2020年の年降水量。雨・雪の水当量。年合計だけで栽培可能性は決まりません。"
         }
       ],
-      "imageUrl": "/assets/atlas/canada-water-v1/annual-precipitation-1991-2020-locator.png",
+      "imageUrl": "/assets/atlas/canada-water-v1/annual-precipitation-us-all.png",
       "images": [
         {
           "id": "p0",
-          "url": "/assets/atlas/canada-water-v1/annual-precipitation-1991-2020-class-0.png"
+          "url": "/assets/atlas/canada-water-v1/annual-precipitation-us-0.png"
         },
         {
           "id": "p1",
-          "url": "/assets/atlas/canada-water-v1/annual-precipitation-1991-2020-class-1.png"
+          "url": "/assets/atlas/canada-water-v1/annual-precipitation-us-1.png"
         },
         {
           "id": "p2",
-          "url": "/assets/atlas/canada-water-v1/annual-precipitation-1991-2020-class-2.png"
+          "url": "/assets/atlas/canada-water-v1/annual-precipitation-us-2.png"
         },
         {
           "id": "p3",
-          "url": "/assets/atlas/canada-water-v1/annual-precipitation-1991-2020-class-3.png"
+          "url": "/assets/atlas/canada-water-v1/annual-precipitation-us-3.png"
         },
         {
           "id": "p4",
-          "url": "/assets/atlas/canada-water-v1/annual-precipitation-1991-2020-class-4.png"
+          "url": "/assets/atlas/canada-water-v1/annual-precipitation-us-4.png"
         },
         {
           "id": "p5",
-          "url": "/assets/atlas/canada-water-v1/annual-precipitation-1991-2020-class-5.png"
+          "url": "/assets/atlas/canada-water-v1/annual-precipitation-us-5.png"
+        },
+        {
+          "id": "p6",
+          "url": "/assets/atlas/canada-water-v1/annual-precipitation-us-6.png"
         }
       ],
       "scope": "全国の陸域・約10 km格子。雨と雪の水当量を合わせた年降水量の30年平均。",
       "reading": "湿った空気が山地に当たる太平洋岸は多雨で、内陸・北極圏は少雨の傾向です。",
-      "method": "1991〜2020年の各月を30年間平均し、12か月を合計。360か月すべてが有効な陸域セルだけを分類し、海域と欠測は透明に保持。",
+      "method": "1991〜2020年の各月を30年間平均し、12か月を合計。360か月すべてが有効な陸域セルだけを分類し、海域と欠測は透明に保持。米国と同じ7階級・配色。既存の5階級と陸域マスクは保持し、1500mm以上の領域だけを、保管済み格子値（0.1mm丸め）の最近傍セルで2000mm未満／以上に分けています。",
       "period": [
         1991,
         2020
@@ -134,343 +140,110 @@
           "attribution": "Source: Environment and Climate Change Canada, CanGridP mlyV2. Annual 1991–2020 averages calculated from monthly gridded total precipitation. Contains information licensed under the Open Government Licence - Canada.",
           "note": "調整・均質化した観測所系列を空間内挿した格子資料。原データは1948〜2023年の月別系列。"
         }
-      ]
+      ],
+      "processingManifestUrl": "/insight-journal/assets/atlas/canada-water-v1/shared-palette-manifest.json"
     },
     "drainage": {
-      "title": "統計排水地域（25地域）",
-      "groupProperty": "group",
-      "geometryUrl": "/assets/atlas/canada-water-v1/drainage-regions.geojson",
+      "title": "山地から河川・湖・海へ、水の集まる範囲",
       "groups": [
         {
-          "id": "01",
-          "name": "太平洋沿岸",
-          "sourceId": "01",
-          "sourceName": "Pacific Coastal",
-          "color": "#2166ac",
-          "oceanAreaId": "1",
-          "oceanAreaName": "Pacific Ocean",
-          "description": "太平洋側。Pacific Coastal（原資料ID 01）。"
+          "id": "mackenzie",
+          "name": "マッケンジー川",
+          "color": "#b8cbe3",
+          "labelAnchor": [
+            -120,
+            60
+          ],
+          "description": "西部山地と内陸平原の水は、ピース川・アサバスカ川からスレーブ川・グレートスレーブ湖を経てマッケンジー川に集まり、北極海へ流れます。プレーリー北西縁のピース地方も、この北向きの水系に含まれます。",
+          "sourceName": "mackenzie"
         },
         {
-          "id": "02",
-          "name": "フレーザー–ローワー・メインランド",
-          "sourceId": "02",
-          "sourceName": "Fraser–Lower Mainland",
-          "color": "#2166ac",
-          "oceanAreaId": "1",
-          "oceanAreaName": "Pacific Ocean",
-          "description": "太平洋側。Fraser–Lower Mainland（原資料ID 02）。"
+          "id": "fraser",
+          "name": "フレーザー川",
+          "color": "#e3ce93",
+          "labelAnchor": [
+            -123,
+            53
+          ],
+          "description": "ロッキー山地側とBC内陸からの水が、トンプソン川などを通じてフレーザー川に集まり、バンクーバー南側で太平洋へ流れます。下流のフレーザーバレーの農業を、内陸・山地の集水域と結び付けて読みます。",
+          "sourceName": "fraser"
         },
         {
-          "id": "03",
-          "name": "オカナガン–シミルカミーン",
-          "sourceId": "03",
-          "sourceName": "Okanagan–Similkameen",
-          "color": "#2166ac",
-          "oceanAreaId": "1",
-          "oceanAreaName": "Pacific Ocean",
-          "description": "太平洋側。Okanagan–Similkameen（原資料ID 03）。"
+          "id": "columbia",
+          "name": "コロンビア川",
+          "color": "#b5d9cb",
+          "labelAnchor": [
+            -117,
+            50.5
+          ],
+          "description": "BC南東部の山地から米国北西部へ流れる越境河川です。クートネー川・スネーク川などの水を集め、太平洋に注ぎます。米国ページのコロンビア川と同じ水系で、ここでは国境の両側を含めています。",
+          "sourceName": "columbia"
         },
         {
-          "id": "04",
-          "name": "コロンビア",
-          "sourceId": "04",
-          "sourceName": "Columbia",
-          "color": "#2166ac",
-          "oceanAreaId": "1",
-          "oceanAreaName": "Pacific Ocean",
-          "description": "太平洋側。Columbia（原資料ID 04）。"
+          "id": "nelson",
+          "name": "ネルソン川水系",
+          "color": "#c5d6bf",
+          "labelAnchor": [
+            -96,
+            55.2
+          ],
+          "description": "ロッキー山地からプレーリーを横断するサスカチュワン川や、南からのレッド川、南東からのウィニペグ川がウィニペグ湖に集まります。湖からネルソン川を通り、ハドソン湾へ流れます。穀物地帯を横断する支流と、その出口を一つの水系として追えます。",
+          "sourceName": "nelson"
         },
         {
-          "id": "05",
-          "name": "ユーコン",
-          "sourceId": "05",
-          "sourceName": "Yukon",
-          "color": "#2166ac",
-          "oceanAreaId": "1",
-          "oceanAreaName": "Pacific Ocean",
-          "description": "太平洋側。Yukon（原資料ID 05）。"
+          "id": "st-lawrence",
+          "name": "セントローレンス川",
+          "color": "#dcc7db",
+          "labelAnchor": [
+            -79,
+            46.5
+          ],
+          "description": "五大湖の集水域とオタワ川などの支流から水が集まり、セントローレンス川を通じて大西洋側へ流れます。オンタリオ南部・ケベック南部の農業地帯と、上流の湖・周囲の高地を結び付けて読むための流域です。",
+          "sourceName": "st-lawrence"
         },
         {
-          "id": "06",
-          "name": "ピース–アサバスカ",
-          "sourceId": "06",
-          "sourceName": "Peace–Athabasca",
-          "color": "#762a83",
-          "oceanAreaId": "2",
-          "oceanAreaName": "Arctic Ocean",
-          "description": "北極海側。Peace–Athabasca（原資料ID 06）。"
+          "id": "saint-john",
+          "name": "セントジョン川",
+          "color": "#efc89e",
+          "labelAnchor": [
+            -67,
+            46.8
+          ],
+          "description": "米国メーン州とカナダ東部の高地から、セントジョン川へ水が集まってファンディ湾へ流れます。ニューブランズウィックの河谷と農業を、国境を越えた集水域の中で確かめられます。",
+          "sourceName": "saint-john"
         },
         {
-          "id": "07",
-          "name": "マッケンジー下流",
-          "sourceId": "07",
-          "sourceName": "Lower Mackenzie",
-          "color": "#762a83",
-          "oceanAreaId": "2",
-          "oceanAreaName": "Arctic Ocean",
-          "description": "北極海側。Lower Mackenzie（原資料ID 07）。"
-        },
-        {
-          "id": "08",
-          "name": "北極海沿岸・諸島",
-          "sourceId": "08",
-          "sourceName": "Arctic Coast–Islands",
-          "color": "#762a83",
-          "oceanAreaId": "2",
-          "oceanAreaName": "Arctic Ocean",
-          "description": "北極海側。Arctic Coast–Islands（原資料ID 08）。"
-        },
-        {
-          "id": "09",
-          "name": "ミズーリ",
-          "sourceId": "09",
-          "sourceName": "Missouri",
-          "color": "#e66101",
-          "oceanAreaId": "3",
-          "oceanAreaName": "Gulf of Mexico",
-          "description": "メキシコ湾側。Missouri（原資料ID 09）。"
-        },
-        {
-          "id": "10",
-          "name": "北サスカチュワン",
-          "sourceId": "10",
-          "sourceName": "North Saskatchewan",
-          "color": "#1b9e77",
-          "oceanAreaId": "4",
-          "oceanAreaName": "Hudson Bay",
-          "description": "ハドソン湾側。North Saskatchewan（原資料ID 10）。"
-        },
-        {
-          "id": "11",
-          "name": "南サスカチュワン",
-          "sourceId": "11",
-          "sourceName": "South Saskatchewan",
-          "color": "#1b9e77",
-          "oceanAreaId": "4",
-          "oceanAreaName": "Hudson Bay",
-          "description": "ハドソン湾側。South Saskatchewan（原資料ID 11）。"
-        },
-        {
-          "id": "12",
-          "name": "アシニボイン–レッド",
-          "sourceId": "12",
-          "sourceName": "Assiniboine-Red",
-          "color": "#1b9e77",
-          "oceanAreaId": "4",
-          "oceanAreaName": "Hudson Bay",
-          "description": "ハドソン湾側。Assiniboine-Red（原資料ID 12）。"
-        },
-        {
-          "id": "13",
-          "name": "ウィニペグ",
-          "sourceId": "13",
-          "sourceName": "Winnipeg",
-          "color": "#1b9e77",
-          "oceanAreaId": "4",
-          "oceanAreaName": "Hudson Bay",
-          "description": "ハドソン湾側。Winnipeg（原資料ID 13）。"
-        },
-        {
-          "id": "14",
-          "name": "サスカチュワン下流–ネルソン",
-          "sourceId": "14",
-          "sourceName": "Lower Saskatchewan–Nelson",
-          "color": "#1b9e77",
-          "oceanAreaId": "4",
-          "oceanAreaName": "Hudson Bay",
-          "description": "ハドソン湾側。Lower Saskatchewan–Nelson（原資料ID 14）。"
-        },
-        {
-          "id": "15",
-          "name": "チャーチル",
-          "sourceId": "15",
-          "sourceName": "Churchill",
-          "color": "#1b9e77",
-          "oceanAreaId": "4",
-          "oceanAreaName": "Hudson Bay",
-          "description": "ハドソン湾側。Churchill（原資料ID 15）。"
-        },
-        {
-          "id": "16",
-          "name": "キーウェティン–バフィン島南部",
-          "sourceId": "16",
-          "sourceName": "Keewatin–Southern Baffin Island",
-          "color": "#1b9e77",
-          "oceanAreaId": "4",
-          "oceanAreaName": "Hudson Bay",
-          "description": "ハドソン湾側。Keewatin–Southern Baffin Island（原資料ID 16）。"
-        },
-        {
-          "id": "17",
-          "name": "オンタリオ北部",
-          "sourceId": "17",
-          "sourceName": "Northern Ontario",
-          "color": "#1b9e77",
-          "oceanAreaId": "4",
-          "oceanAreaName": "Hudson Bay",
-          "description": "ハドソン湾側。Northern Ontario（原資料ID 17）。"
-        },
-        {
-          "id": "18",
-          "name": "ケベック北部",
-          "sourceId": "18",
-          "sourceName": "Northern Quebec",
-          "color": "#1b9e77",
-          "oceanAreaId": "4",
-          "oceanAreaName": "Hudson Bay",
-          "description": "ハドソン湾側。Northern Quebec（原資料ID 18）。"
-        },
-        {
-          "id": "19",
-          "name": "五大湖",
-          "sourceId": "19",
-          "sourceName": "Great Lakes",
-          "color": "#b2182b",
-          "oceanAreaId": "5",
-          "oceanAreaName": "Atlantic Ocean",
-          "description": "大西洋側。Great Lakes（原資料ID 19）。"
-        },
-        {
-          "id": "20",
-          "name": "オタワ",
-          "sourceId": "20",
-          "sourceName": "Ottawa",
-          "color": "#b2182b",
-          "oceanAreaId": "5",
-          "oceanAreaName": "Atlantic Ocean",
-          "description": "大西洋側。Ottawa（原資料ID 20）。"
-        },
-        {
-          "id": "21",
-          "name": "セントローレンス",
-          "sourceId": "21",
-          "sourceName": "St. Lawrence",
-          "color": "#b2182b",
-          "oceanAreaId": "5",
-          "oceanAreaName": "Atlantic Ocean",
-          "description": "大西洋側。St. Lawrence（原資料ID 21）。"
-        },
-        {
-          "id": "22",
-          "name": "ノースショア–ガスペ",
-          "sourceId": "22",
-          "sourceName": "North Shore–Gaspé",
-          "color": "#b2182b",
-          "oceanAreaId": "5",
-          "oceanAreaName": "Atlantic Ocean",
-          "description": "大西洋側。North Shore–Gaspé（原資料ID 22）。"
-        },
-        {
-          "id": "23",
-          "name": "セントジョン–セントクロワ",
-          "sourceId": "23",
-          "sourceName": "Saint John–St. Croix",
-          "color": "#b2182b",
-          "oceanAreaId": "5",
-          "oceanAreaName": "Atlantic Ocean",
-          "description": "大西洋側。Saint John–St. Croix（原資料ID 23）。"
-        },
-        {
-          "id": "24",
-          "name": "沿海地方沿岸",
-          "sourceId": "24",
-          "sourceName": "Maritime Coastal",
-          "color": "#b2182b",
-          "oceanAreaId": "5",
-          "oceanAreaName": "Atlantic Ocean",
-          "description": "大西洋側。Maritime Coastal（原資料ID 24）。"
-        },
-        {
-          "id": "25",
-          "name": "ニューファンドランド–ラブラドール",
-          "sourceId": "25",
-          "sourceName": "Newfoundland–Labrador",
-          "color": "#b2182b",
-          "oceanAreaId": "5",
-          "oceanAreaName": "Atlantic Ocean",
-          "description": "大西洋側。Newfoundland–Labrador（原資料ID 25）。"
+          "id": "saskatchewan",
+          "name": "サスカチュワン川",
+          "color": "#b5cbe1",
+          "labelAnchor": [
+            -107,
+            52.5
+          ],
+          "description": "ロッキー山地で生じた北・南サスカチュワン川がプレーリーを横断して合流し、シーダー湖を経てウィニペグ湖へ流れます。南部の灌漑農業では、地元の降水だけでなく山地から届く河川水が重要です。この流域はネルソン川水系の一部です。",
+          "parent": "nelson",
+          "sourceName": "saskatchewan"
         }
       ],
-      "oceanAreas": [
-        {
-          "id": "1",
-          "name": "太平洋",
-          "color": "#2166ac"
-        },
-        {
-          "id": "2",
-          "name": "北極海",
-          "color": "#762a83"
-        },
-        {
-          "id": "3",
-          "name": "メキシコ湾",
-          "color": "#e66101"
-        },
-        {
-          "id": "4",
-          "name": "ハドソン湾",
-          "color": "#1b9e77"
-        },
-        {
-          "id": "5",
-          "name": "大西洋",
-          "color": "#b2182b"
-        }
-      ],
-      "legendGroups": [
-        {
-          "id": "1",
-          "name": "太平洋",
-          "color": "#2166ac",
-          "description": "太平洋側へ流れる統計排水地域。"
-        },
-        {
-          "id": "2",
-          "name": "北極海",
-          "color": "#762a83",
-          "description": "北極海側へ流れる統計排水地域。"
-        },
-        {
-          "id": "3",
-          "name": "メキシコ湾",
-          "color": "#e66101",
-          "description": "メキシコ湾側へ流れる統計排水地域。"
-        },
-        {
-          "id": "4",
-          "name": "ハドソン湾",
-          "color": "#1b9e77",
-          "description": "ハドソン湾側へ流れる統計排水地域。"
-        },
-        {
-          "id": "5",
-          "name": "大西洋",
-          "color": "#b2182b",
-          "description": "大西洋側へ流れる統計排水地域。"
-        }
-      ],
-      "scope": "カナダ国内の25統計排水地域。海岸部・島を含む2003年分類、2017年刊行。",
-      "reading": "分水界で分けた地域を、太平洋・北極海・ハドソン湾・大西洋・メキシコ湾の5流出先で読みます。",
-      "method": "公式25地域の全成分と穴を保持。共有境界をまとめて簡略化した表示用形状を使用し、原資料ID・名称・流出先を維持。",
-      "note": "国境をまたぐ河川の完全な流域ではありません。面積・流量の測定には使用しません。",
-      "featureCount": 25,
-      "classification": "SDAC 2003 variant",
-      "publicationDate": "2017-03-21",
+      "groupProperty": "group",
+      "geometryUrl": "/assets/atlas/canada-water-v1/river-basins.geojson",
+      "scope": "主要6水系とサスカチュワン支流域。国境を越える範囲を含み、灰色は未選定の流域。",
+      "reading": "流域とは、一つの河川の出口へ雨や雪解け水が集まる範囲です。地形の分水界で区切り、川・湖と重ねて上流から下流を追います。",
+      "method": "HydroBASINS v1cのMAIN_BAS・NEXT_DOWNを使って上流の小流域を結合。沿岸の複数河川をまとめたCOAST区分と内陸閉鎖流域は含めず、原形に自己交差がある場合はmake_validで修復し、境界を0.008度で表示用に簡略化。修復件数は台帳へ記録。",
+      "note": "流域内のすべての土地で常時流出するという意味ではありません。取水・灌漑の給水区域、作物の栽培域、地下水の流動域とは区別します。",
       "sources": [
         {
-          "title": "Drainage regions of Canada",
-          "publisher": "Statistics Canada",
-          "url": "https://www150.statcan.gc.ca/n1/pub/16-201-x/2017000/sec-1/m-c/m-c-1.1-eng.htm",
-          "year": "SDAC 2003; published 2017",
-          "licence": "Open Government Licence - Canada 2.0",
-          "licenceUrl": "https://open.canada.ca/en/open-government-licence-canada",
-          "accessed": "2026-10-02",
-          "attribution": "Source: Statistics Canada, Drainage regions of Canada (SDAC 2003 variant), 2017. Contains information licensed under the Open Government Licence - Canada.",
-          "note": "カナダ部分と隣接海岸・島を含む統計地域。"
+          "title": "HydroBASINS v1c — sub-basin topology",
+          "publisher": "HydroSHEDS / Lehner & Grill (2013)",
+          "url": "https://www.hydrosheds.org/products/hydrobasins",
+          "year": "v1c",
+          "licence": "HydroSHEDS Licence",
+          "licenceUrl": "https://data.hydrosheds.org/file/technical-documentation/HydroSHEDS_TechDoc_v10.pdf",
+          "attribution": "HydroBASINS © HydroSHEDS. Lehner, B. and Grill, G. (2013), Hydrological Processes 27(15): 2171–2186.",
+          "accessed": "2026-10-05"
         }
-      ]
+      ],
+      "processingManifestUrl": "/insight-journal/assets/atlas/canada-water-v1/river-basins-manifest.json"
     },
     "groundwater": {
       "title": "全国の水文地質地域（9区分）",

@@ -25,6 +25,8 @@ async function renderNaturalSSR(props) {
     assert.ok(!compiled.diagnostics.some(item => item.severity === 'error'));
     const modules = new Map([
       ['astro/runtime/server/index.js', import.meta.resolve('astro/runtime/server/index.js')],
+      ['../../data/atlas/canada/climate-labels.json',dataModule(`export default ${await readFile('src/data/atlas/canada/climate-labels.json','utf8')};`)],
+      ['../../data/atlas/natural-environment',dataModule(await bundleCanadaSource('src/data/atlas/natural-environment.ts',{format:'esm',platform:'node'}))],
       ['../../data/atlas/regional-countries.json', dataModule(`export default ${await readFile('src/data/atlas/regional-countries.json', 'utf8')};`)],
       ['maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url', dataModule('export default "/worker.js";')],
       ['../../lib/atlas-canada-landform-map', dataModule(projectionCode)],
@@ -305,7 +307,8 @@ test('Selected city names win collisions on every redraw while all real coordina
     const positions = new Map(buttons.map(button => [button.dataset.canadaNaturalCity, [button.style.left, button.style.top]]));
     for (const button of buttons) Object.defineProperty(button.querySelector('span'), 'offsetWidth', { configurable: true, value: 70 });
     p.controllers.climate.render({selected:null,only:false,city:'ottawa'});
-    assert.equal(p.q('climate','[data-canada-natural-city="vancouver"] span').hidden,true,'an initial nonselected name must not run under a marker drawn later in DOM order');
+    // Southern viewport expands marker spacing; verify actual overlaps instead of assuming Vancouver must be hidden.
+    for(const button of buttons){const text=button.querySelector('span');if(text.hidden)continue;const x=parseFloat(button.style.left),y=parseFloat(button.style.top),left=x-6+parseFloat(text.style.left),cy=y-12+parseFloat(text.style.top);for(const other of buttons.filter(b=>b!==button)){const mx=parseFloat(other.style.left),my=parseFloat(other.style.top);assert.ok(!(left<mx+6&&left+70>mx-6&&cy-11<my+12&&cy+11>my-12));}}
     for (const button of buttons) {
       // Browser widths collapse when a span is hidden. Mimic that to detect
       // stale measurements when a previously hidden city is selected.
@@ -323,7 +326,7 @@ test('Selected city names win collisions on every redraw while all real coordina
         const mx=parseFloat(button.style.left),my=parseFloat(button.style.top);
         assert.ok(!(textBox[0]<mx+6&&textBox[2]>mx-6&&textBox[1]<my+12&&textBox[3]>my-12),'selected text does not cover any other real marker button');
       }
-      for (const id of western.filter(id => id !== city)) assert.equal(p.q('climate', `[data-canada-natural-city="${id}"] span`).hidden, true, 'collisions hide only other text');
+      // Nonselected names may remain when the southern viewport leaves enough space.
       for (const button of buttons) {
         assert.equal(button.hidden, false, 'in-frame coordinate markers remain interactive');
         assert.equal(button.querySelector('i').hidden, false, 'the point glyph remains visible');

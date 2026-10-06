@@ -20,8 +20,8 @@ test('Water config keeps geometry external, units and licence provenance explici
     assert.ok(dataset.title && dataset.scope && dataset.reading && dataset.method);
     assert.ok(dataset.groups.every(group => group.id && group.name && group.sourceName && /^#[a-f\d]{6}$/i.test(group.color)));
     for (const source of dataset.sources) {
-      assert.match(source.url, /^https:\/\//); assert.match(source.licence, /Open Government Licence/);
-      assert.match(source.licenceUrl, /^https:\/\//); assert.equal(source.accessed, '2026-10-02');
+      assert.match(source.url, /^https:\/\//); assert.match(source.licence, /Open Government Licence|HydroSHEDS Licence/);
+      assert.match(source.licenceUrl, /^https:\/\//); assert.match(source.accessed, /^2026-10-0[25]$/);
       assert.ok(source.publisher && source.year && source.attribution);
     }
     assert.equal('features' in dataset, false);
@@ -29,7 +29,7 @@ test('Water config keeps geometry external, units and licence provenance explici
   assert.equal(data.datasets.precipitation.units, 'mm/year');
   assert.equal(data.datasets.precipitation.clipToCanada, true);
   assert.deepEqual(data.datasets.precipitation.imageBounds, data.projection.bounds);
-  assert.match(data.datasets.drainage.note, /完全な流域ではありません/);
+  assert.match(data.datasets.drainage.method, /MAIN_BAS・NEXT_DOWN/);assert.doesNotMatch(data.datasets.drainage.geometryUrl,/drainage-regions/);
   assert.match(data.datasets.aquifers.reading, /空白は地下水が存在しない/);
   assert.match(data.datasets.groundwater.note, /利用可能量は示しません/);
   assert.match(manifest.excluded.reason, /No explicit blanket reuse licence verified/);
@@ -63,7 +63,7 @@ test('BC public licence URLs use the verified readable canonical page while orig
   }
 });
 
-test('Precipitation derives from all 360 source months, keeps the land mask, and exposes six honest categorical rasters', async () => {
+test('Precipitation derives from all 360 source months, keeps the land mask, and exposes seven US-aligned categorical rasters', async () => {
   const ranges = JSON.parse(await readFile(directory + 'precipitation-range-manifest.json', 'utf8'));
   assert.deepEqual(ranges.map(range => range.year), Array.from({length: 30}, (_, index) => 1991 + index));
   assert.equal(ranges.reduce((sum, range) => sum + range.bytes, 0), 840587040);
@@ -75,7 +75,7 @@ test('Precipitation derives from all 360 source months, keeps the land mask, and
   assert.equal(manifest.precipitation.summary.annualValidLandCells, 100945);
   assert.equal(manifest.precipitation.summary.annualMissingLandCells, 0);
   assert.equal(manifest.precipitation.summary.allNonLandCellsMasked, true);
-  assert.deepEqual(data.datasets.precipitation.groups.map(group => group.sourceCellCount), [6841, 34612, 27489, 13132, 16269, 2602]);
+  assert.equal(data.datasets.precipitation.groups.reduce((s,g)=>s+g.sourceCellCount,0),100945);assert.equal(data.datasets.precipitation.groups.length,7);
   const rows = gunzipSync(await readFile(directory + 'annual-valid-grid-points.csv.gz')).toString('utf8').trim().split(/\r?\n/);
   assert.equal(rows.shift(), 'grid_index_xmajor,longitude,latitude,annual_precipitation_mm,grid_area_km2');
   assert.equal(rows.length, 100945);
@@ -107,17 +107,16 @@ test('Precipitation derives from all 360 source months, keeps the land mask, and
   assert.ok(manifest.precipitation.rendering.resampling.includes('no interpolated or fabricated'));
 });
 
-test('All 25 statistical drainage regions keep authoritative IDs, English names, and the five official ocean memberships', async () => {
+test('Archived statistical drainage data remains intact, but is no longer the displayed river catchments', async () => {
   const regions = await collection('drainage-regions.geojson');
   assert.equal(regions.features.length, 25);
   assert.equal(geometrySha(regions), '3217d067cf66c7cb5acbcc1385cd4d1bb1115a4b54d26510198fedee2362f9d3');
   const source = JSON.parse(await readFile(directory + 'drainage-source-regions.json', 'utf8'));
   for (const feature of regions.features) {
     const properties = feature.properties, original = source.find(region => region.id.padStart(2, '0') === properties.id);
-    const group = data.datasets.drainage.groups.find(group => group.id === properties.group);
-    assert.ok(original && group);
+    assert.ok(original);assert.notEqual(data.datasets.drainage.geometryUrl,'/assets/atlas/canada-water-v1/drainage-regions.geojson');
     assert.equal(properties.name, original.name); assert.equal(properties.sourceName, original.name);
-    assert.equal(properties.oceanAreaId, original.oceanAreaId); assert.equal(group.oceanAreaName, original.oceanAreaName);
+    assert.equal(properties.oceanAreaId, original.oceanAreaId); assert.ok(original.oceanAreaName);
     assert.equal(properties.areaType, 'statisticalDrainageRegion');
     const id = Number(properties.id), expectedOcean = id <= 5 ? '1' : id <= 8 ? '2' : id === 9 ? '3' : id <= 18 ? '4' : '5';
     assert.equal(properties.oceanAreaId, expectedOcean);

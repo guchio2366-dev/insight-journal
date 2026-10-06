@@ -14,7 +14,7 @@ export interface CanadaLandformController {
   destroy(): void;
 }
 type Frame = [number, number, number, number];
-interface Config { geometryUrl: string; regions: CanadaLandformRegion[]; context: unknown; workerUrl: string; }
+interface Config { geometryUrl: string; regions: CanadaLandformRegion[]; context: unknown; rivers: unknown; lakes: unknown; workerUrl: string; }
 
 /** Selection belongs to the host page. Camera gestures stay local to this map. */
 export function initCanadaLandform(root: HTMLElement): CanadaLandformController {
@@ -140,6 +140,7 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
       const selected = ['==', ['get', 'id'], state.selected ?? '__none__'] as any;
       const filter = state.only && state.selected ? selected : null;
       map.setFilter('canada-landform-fill', filter);
+      map.setPaintProperty('canada-landform-fill','fill-opacity',['case',selected,.24,0]);
       map.setFilter('canada-landform-boundaries', filter);
       map.setFilter('canada-landform-selected', selected);
     }
@@ -202,13 +203,17 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
       map = new libre.Map({
         container: live, style: { version: 8, sources: {
           'canada-landform-context': { type: 'geojson', data: config.context as any },
+          'ca-rivers':{type:'geojson',data:config.rivers as any},'ca-lakes':{type:'geojson',data:config.lakes as any},'ca-contours':{type:'geojson',data:config.geometryUrl.replace('canada-physiography-v1/regions.geojson','canada-climate-elevation-v1/elevation-contours.geojson')},
           'canada-landform-regions': { type: 'geojson', data: geometry as any, tolerance: 0 },
         }, layers: [
           { id: 'canada-landform-ocean', type: 'background', paint: { 'background-color': '#e4eff0' } },
           { id: 'canada-landform-context-fill', type: 'fill', source: 'canada-landform-context', paint: { 'fill-color': '#edece5' } },
           { id: 'canada-landform-context-line', type: 'line', source: 'canada-landform-context', paint: { 'line-color': '#94aaaa', 'line-width': .7 } },
-          { id: 'canada-landform-fill', type: 'fill', source: 'canada-landform-regions', paint: { 'fill-color': ['get', 'color'], 'fill-opacity': 1 } },
-          { id: 'canada-landform-boundaries', type: 'line', source: 'canada-landform-regions', paint: { 'line-color': '#69796e', 'line-width': .7 } },
+          {id:'ca-contours',type:'line',source:'ca-contours',filter:['<=',['get','elevation_m'],2000],paint:{'line-color':'#b2a886','line-width':.55,'line-opacity':.4}},
+          {id:'ca-lakes',type:'fill',source:'ca-lakes',paint:{'fill-color':'#c6dfe4'}},
+          {id:'ca-rivers',type:'line',source:'ca-rivers',paint:{'line-color':'#92b5c4','line-width':.7}},
+          { id: 'canada-landform-fill', type: 'fill', source: 'canada-landform-regions', paint: { 'fill-color': '#d4c8a6', 'fill-opacity': ['case',['==',['get','id'],state.selected ?? '__none__'],.24,0] } },
+          { id: 'canada-landform-boundaries', type: 'line', source: 'canada-landform-regions', paint: { 'line-color': '#69796e', 'line-opacity': 0, 'line-width': .7 } },
           { id: 'canada-landform-selected', type: 'line', source: 'canada-landform-regions', filter: ['==', ['get', 'id'], '__none__'], paint: { 'line-color': '#243f4c', 'line-width': 3 } },
         ] }, bounds: canadaLandformBounds, fitBoundsOptions: { padding: 18 },
         minZoom: .5, maxZoom: 9, attributionControl: false, renderWorldCopies: false, scrollZoom: false,

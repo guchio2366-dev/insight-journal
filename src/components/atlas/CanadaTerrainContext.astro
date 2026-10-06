@@ -1,0 +1,15 @@
+---
+import contours from '../../../public/assets/atlas/canada-climate-elevation-v1/elevation-contours.geojson?raw';
+import lakes from '../../data/atlas/canada/lakes.json';
+import rivers from '../../data/atlas/canada/rivers.json';
+import {projectCanadaLandform} from '../../lib/atlas-canada-landform-map';
+import {projectCanadaWater} from '../../lib/atlas-canada-water-state';
+const {projection='mercator'}=Astro.props;
+const project=projection==='mercator'?projectCanadaLandform:projectCanadaWater;
+const path=(g:any)=>{const parts=g.type==='MultiPolygon'?g.coordinates.flat():g.type==='LineString'?[g.coordinates]:g.coordinates;return parts.map((r:number[][])=>r.map((p,i)=>{const [x,y]=project(p);return `${i?'L':'M'}${x.toFixed(2)},${y.toFixed(2)}`}).join('')+(g.type.includes('Polygon')?'Z':'')).join('');};
+---
+<g aria-hidden="true" pointer-events="none">
+{JSON.parse(contours).features.filter((f:any)=>Number(f.properties.elevation_m)<=2000).map((f:any)=><path d={path(f.geometry)} fill="none" stroke="#b2a886" stroke-opacity=".4" stroke-width=".55" vector-effect="non-scaling-stroke"/>)}
+{lakes.features.map(f=><path d={path(f.geometry)} fill="#c6dfe4" stroke="#a0bdc5" stroke-width=".4" fill-rule="evenodd" vector-effect="non-scaling-stroke"/>)}
+{rivers.features.map(f=><path d={path(f.geometry)} fill="none" stroke="#92b5c4" stroke-width=".7" vector-effect="non-scaling-stroke"/>)}
+</g>

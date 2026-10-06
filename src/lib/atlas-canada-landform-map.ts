@@ -24,7 +24,7 @@ export interface CanadaLandformCollection {
 }
 
 export const canadaLandformSize = { width: 900, height: 580 };
-export const canadaLandformBounds: [[number, number], [number, number]] = [[-143, 40], [-50, 84]];
+export const canadaLandformBounds: [[number, number], [number, number]] = [[-141, 41], [-52, 70]];
 const radians = Math.PI / 180;
 const mercatorY = (latitude: number) => Math.log(Math.tan(Math.PI / 4 + Math.max(-85.05112878, Math.min(85.05112878, latitude)) * radians / 2));
 const west = canadaLandformBounds[0][0] * radians;
