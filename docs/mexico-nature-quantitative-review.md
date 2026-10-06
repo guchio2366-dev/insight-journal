@@ -9,7 +9,7 @@
 - PNG/WebP は検証済みファイルを無変換でコピーする。900 × 580 の既存 Lambert フレームに配置する。地理座標の矩形を画像の四隅へ当てはめない。
 - 色の凡例は数値間隔に従う連続グラデーション。雨量が多いほど濃い青、標高が高いほど濃い色。国外・海域の表示は元の INEGI 州境界の union で除く。全内陸湖沼を除外するマスクではない。
 
-`public/assets/atlas/mexico-quantitative-v1/manifest.json` は表示用の契約。各名前空間内に原メタデータ・SHA256・加工記録を保持する。大型の全球原本は配信対象に含めない。再コピーは次で実行できる。
+`public/assets/atlas/mexico-quantitative-v1/manifest.json` は表示用の契約。各名前空間内に原メタデータ・SHA256・加工記録を保持する。GPCCの公式MD5は既存の公開台帳形式に合わせ `gpcc/manifest.json` の `publisherMd5` 欄へ移し、数値・出典情報と入力台帳の元SHA256を保持する。公開検査のID除外ルールは変更しない。大型の全球原本は配信対象に含めない。再コピーは次で実行できる。
 
 ```sh
 python3 scripts/prepare-mexico-quantitative-assets.py --prepared-root /workspace/mexico-data-prep --repo-root /workspace/insight-journal

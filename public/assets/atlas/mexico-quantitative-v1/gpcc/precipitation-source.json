@@ -11,7 +11,6 @@
     "bytes": 28442738,
     "sha256": "3bd80d05df52572f6409b594ae26b43e9045147cb3c25254cddb5a934c16e5c5"
   },
-  "archiveMd5": "d701c717e08ce6ad457c9f4004984d65",
   "officialMd5Matches": true,
   "netcdf": {
     "file": "gpcc_precipitation_analysis_climatology_1991_2020_v2025_025.nc",

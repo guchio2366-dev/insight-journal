@@ -229,8 +229,8 @@
   "assets": [
     {
       "file": "gpcc/manifest.json",
-      "bytes": 8863,
-      "sha256": "69a66ce4fb7a8cd84453b8309b51f4dc3cdc84cbf03d28900fc30fecd2f078dd"
+      "bytes": 9368,
+      "sha256": "83fba7efd90c565f44f77c213a31daaae1420a3ced304653e7e44829d0c800c5"
     },
     {
       "file": "gpcc/precipitation-legend.json",
@@ -239,8 +239,8 @@
     },
     {
       "file": "gpcc/precipitation-source.json",
-      "bytes": 5117,
-      "sha256": "3362ec17a923abbfae8dd36ff5c227d0c122ee0f40e4bbac4cc07d9ea26d6d46"
+      "bytes": 5065,
+      "sha256": "9fb82cb2985ae4a4840870e05858cc45780a22f35a9c84f58db6717350619efd"
     },
     {
       "file": "gpcc/mexico-gpcc-1991-2020-annual.png",
@@ -313,5 +313,5 @@
       "sha256": "fa1ca35ce9761194fc50163f7c59c4eb1019d000caa4877fe0855c2222d486ba"
     }
   ],
-  "provenanceNoteJa": "名前空間内の元メタデータは無変更です。記載された全球原本・ETOPO数値窓・取得範囲バイナリはオフラインの生成入力で、公開ファイルへのリンクではありません。"
+  "provenanceNoteJa": "画像・数値格子は無変更です。GPCCの公式MD5だけは既存の公開台帳形式に合わせgpcc/manifest.jsonのpublisherMd5へ移し、入力台帳の元SHA256も保持しています。その他の出典情報は保持しています。記載された全球原本・ETOPO数値窓・取得範囲バイナリはオフラインの生成入力で、公開ファイルへのリンクではありません。"
 }

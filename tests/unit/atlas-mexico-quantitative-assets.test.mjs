@@ -68,6 +68,18 @@ function decodeRgbaPng(data) {
   return {width, height, rgba};
 }
 const rain = decodeRgbaPng(rainBytes), missing = decodeRgbaPng(missingBytes);
+
+test('the public GPCC manifest retains the official MD5 in the existing checksum schema and records unmodified input hashes', async () => {
+  assert.equal(gpcc.publisherMd5, 'd701c717e08ce6ad457c9f4004984d65');
+  assert.equal(rainSource.officialMd5Matches, true);
+  assert.equal(rainSource.archiveMd5, undefined);
+  assert.equal(gpcc.publicPackaging.originalSource.sha256, '3362ec17a923abbfae8dd36ff5c227d0c122ee0f40e4bbac4cc07d9ea26d6d46');
+  assert.equal(gpcc.publicPackaging.originalManifestSha256, '69a66ce4fb7a8cd84453b8309b51f4dc3cdc84cbf03d28900fc30fecd2f078dd');
+  const sourceBytes = await bytes('gpcc/' + gpcc.source.file);
+  assert.equal(sourceBytes.length, gpcc.source.bytes);
+  assert.equal(sha(sourceBytes), gpcc.source.sha256);
+});
+
 function colorAt(value, legend) {
   assert.ok(value >= legend.domain[0] && value <= legend.domain[1], 'Values must not silently saturate');
   const stops = legend.colorStops;

@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Package already verified Mexico rasters. Standard library only; never downloads.
 
-Original prepared metadata is copied byte-for-byte under gpcc/ and etopo/.
+Prepared rasters and grids are copied byte-for-byte under gpcc/ and etopo/.
+GPCC's official MD5 is placed in the existing public manifest checksum schema;
+all other source metadata is retained and original input hashes stay pinned.
 Large original archives and the 9.5 MB ETOPO window remain offline inputs.
 """
 import sys
@@ -90,6 +92,20 @@ def prepare(prepared_root, repo_root, check=False):
     height_legend = read('etopo/elevation-legend.json')
     source = read('gpcc/precipitation-source.json')
     grid = read('gpcc/mexico-gpcc-1991-2020-annual.json')
+    # Public atlas manifests already distinguish declared publisher checksums
+    # from private 32-character identifiers. Keep the official MD5 in that
+    # established schema without changing the release scanner or the raw input.
+    gpcc['publisherMd5'] = source.pop('archiveMd5')
+    source_name = 'gpcc/precipitation-source.json'
+    original_source = dict(gpcc['source'])
+    payloads[source_name] = (json.dumps(source, ensure_ascii=False, indent=2) + '\n').encode()
+    gpcc['source'] = {'file': 'precipitation-source.json', 'bytes': len(payloads[source_name]), 'sha256': sha256(payloads[source_name])}
+    gpcc['publicPackaging'] = {
+        'originalSource': original_source,
+        'originalManifestSha256': sha256(payloads['gpcc/manifest.json']),
+        'change': 'Move archiveMd5 from the source record to publisherMd5 in this manifest. No value, citation, raster or grid is removed or changed.',
+    }
+    payloads['gpcc/manifest.json'] = (json.dumps(gpcc, ensure_ascii=False, indent=2) + '\n').encode()
     require(gpcc['displayFrame'] == etopo['displayFrame'], 'Raster display frames differ')
     require(gpcc['displayFrame']['viewBox'] == '0 0 900 580', 'Unexpected display frame')
     for name in ['gpcc/mexico-gpcc-1991-2020-annual.png', 'etopo/elevation-surface.webp']:
@@ -151,8 +167,8 @@ def prepare(prepared_root, repo_root, check=False):
                 'missingLabelJa': 'データなし（0 mではありません）',
             },
         },
-        'assets': [{'file': dest, 'bytes': size, 'sha256': digest} for _, dest, size, digest in FILES],
-        'provenanceNoteJa': '名前空間内の元メタデータは無変更です。記載された全球原本・ETOPO数値窓・取得範囲バイナリはオフラインの生成入力で、公開ファイルへのリンクではありません。',
+        'assets': [{'file': dest, 'bytes': len(payloads[dest]), 'sha256': sha256(payloads[dest])} for _, dest, _, _ in FILES],
+        'provenanceNoteJa': '画像・数値格子は無変更です。GPCCの公式MD5だけは既存の公開台帳形式に合わせgpcc/manifest.jsonのpublisherMd5へ移し、入力台帳の元SHA256も保持しています。その他の出典情報は保持しています。記載された全球原本・ETOPO数値窓・取得範囲バイナリはオフラインの生成入力で、公開ファイルへのリンクではありません。',
     }
     payloads['manifest.json'] = (json.dumps(manifest, ensure_ascii=False, indent=2) + '\n').encode()
     # Validate all destinations before writing; never follow an output symlink.

@@ -35,7 +35,7 @@ ETOPOは2022版・60秒角原格子の標高mを用い、原本の必要範囲�
 
 画像・原値・凡例・座標・期間・ライセンス確認の記録は
 `public/assets/atlas/mexico-quantitative-v1/manifest.json` と各製品の原記録を参照。
-`scripts/prepare-mexico-quantitative-assets.py` は検証済み入力のサイズ・SHA256を確認して無変換で梱包し、通信を行わない。
+`scripts/prepare-mexico-quantitative-assets.py` は検証済み入力のサイズ・SHA256を確認し、画像・格子を無変換で梱包する。GPCCの公式MD5は既存の公開台帳形式のpublisherMd5欄へ移し、値と入力台帳の元SHA256を保持する。通信は行わない。
 
 河川・地下水のINEGI10分類は、固結・非固結と産出区分・地下水の存在可能性を表す。
 1996年作成・2008年改訂という資料の意味と色を保持する。水温・現時点の地下水量・水不足の指標へ置き換えない。

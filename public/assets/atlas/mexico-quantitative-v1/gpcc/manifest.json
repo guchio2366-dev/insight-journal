@@ -98,8 +98,8 @@
   },
   "source": {
     "file": "precipitation-source.json",
-    "bytes": 5117,
-    "sha256": "3362ec17a923abbfae8dd36ff5c227d0c122ee0f40e4bbac4cc07d9ea26d6d46"
+    "bytes": 5065,
+    "sha256": "9fb82cb2985ae4a4840870e05858cc45780a22f35a9c84f58db6717350619efd"
   },
   "landMask": "Original INEGI 32-state union; pixel centre inclusion; sea, foreign land, supplied polygon holes and source missing are transparent. State polygons are not an exhaustive inland-water mask.",
   "resampling": "Native containing-cell lookup (nearest centre on regular grid), no spatial interpolation. Colour is continuous in mm/year.",
@@ -280,5 +280,15 @@
     "Display clipping uses the original INEGI coast; pixel differences against the existing simplified boundary are reported, and both geometries are pinned. State polygons do not provide an exhaustive inland-water mask.",
     "Uncovered islands and coastal slivers remain missing rather than estimated.",
     "GPCC grid normals and SMN station normals share the 1991–2020 baseline but are different measurement supports; do not replace station climographs with gridded samples."
-  ]
+  ],
+  "publisherMd5": "d701c717e08ce6ad457c9f4004984d65",
+  "publicPackaging": {
+    "originalSource": {
+      "file": "precipitation-source.json",
+      "bytes": 5117,
+      "sha256": "3362ec17a923abbfae8dd36ff5c227d0c122ee0f40e4bbac4cc07d9ea26d6d46"
+    },
+    "originalManifestSha256": "69a66ce4fb7a8cd84453b8309b51f4dc3cdc84cbf03d28900fc30fecd2f078dd",
+    "change": "Move archiveMd5 from the source record to publisherMd5 in this manifest. No value, citation, raster or grid is removed or changed."
+  }
 }
