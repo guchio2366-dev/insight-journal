@@ -7,9 +7,12 @@ deploy files, or upload previously captured local images.
 The workflow runs for Asia-specific pull-request paths targeting `main`, and for
 the same paths on `fix/asia-industry-publication-status` pushes. It uses the
 existing repository dependencies, official GitHub Actions, read-only repository
-permission, and the runner's existing Chrome and Japanese fonts. Missing browser
-or fonts are failures; the workflow does not install either or change trust
-settings.
+permission, and the runner's existing Chrome. It prepares `fonts-noto-cjk` on the
+temporary runner when Japanese fonts are absent, using the same Ubuntu package
+and commands as the existing validation workflow. Font setup is recorded. Missing
+Chrome or fonts after setup are failures. Browser verification needs only local
+built assets; it changes no repository permissions, application secrets, network
+configuration, or certificate trust settings.
 
 ## Evidence
 

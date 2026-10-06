@@ -58,7 +58,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
 
-      - name: Verify existing Chrome and Japanese fonts
+      - name: Prepare Chrome and Japanese fonts
         shell: bash
         run: |
           set -euo pipefail
@@ -68,12 +68,22 @@ jobs:
             exit 1
           fi
           japanese_fonts="$(fc-list ':lang=ja' family)"
+          font_setup="preinstalled"
+          # Match the existing Validate site's temporary runner dependency.
+          # This changes no token permissions, repository settings, or trust.
           if [[ -z "$japanese_fonts" ]]; then
-            echo "::error::The runner must already provide Japanese fonts; unreadable screenshots are not accepted."
+            sudo apt-get update
+            sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+            japanese_fonts="$(fc-list ':lang=ja' family)"
+            font_setup="installed-fonts-noto-cjk-from-ubuntu"
+          fi
+          if [[ -z "$japanese_fonts" ]]; then
+            echo "::error::Japanese fonts are required; unreadable screenshots are not accepted."
             exit 1
           fi
           {
             printf 'REVIEW_CHROME_PATH=%s\n' "$chrome_path"
+            printf 'REVIEW_JAPANESE_FONT_SETUP=%s\n' "$font_setup"
             printf '%s\n' 'REVIEW_JAPANESE_FONTS<<ASIA_PC_FONTS' "$japanese_fonts" 'ASIA_PC_FONTS'
             printf '%s\n' 'REVIEW_JAPANESE_FONT_MATCH<<ASIA_PC_MATCH'
             fc-match -f '%{family}\n' 'sans-serif:lang=ja'
