@@ -162,7 +162,7 @@ for (const [view, item, feature, naturalLabel] of [
       assert.equal(root.dataset.mexicoNatureIndicator, indicator);
       assert.equal(document.querySelector(`[data-mexico-nature-layer="${view}"]`).style.display, '');
       assert.equal(document.querySelector(`[data-mexico-nature-layer="${view === 'climate' ? 'relief' : 'climate'}"]`).style.display, 'none');
-      assert.equal(document.querySelector(`[data-mexico-nature-feature="${feature}"]`).getAttribute('aria-pressed'), 'true');
+      assert.equal(document.querySelector(`[data-mexico-nature-layer] [data-mexico-nature-feature="${feature}"]`).getAttribute('aria-pressed'), 'true');
       assert.equal(document.querySelector('[data-mexico-nature-item-select]').value, item);
       assert.equal(document.querySelector('[data-mexico-nature-main-map]').getAttribute('viewBox'), '210 100 350 220');
       assert.equal(document.querySelector('[data-mexico-nature-comparison-title]').textContent, `${naturalLabel}と${metricLabel}`);
@@ -182,7 +182,7 @@ for (const [view, item, feature, naturalLabel] of [
       for (const key of ['view', 'item', 'feature', 'state', 'city', 'frame', 'fallback']) assert.equal(plain.searchParams.get(key), original.get(key));
       returned = comparisonFixture(plain.search);
       assert.equal(returned.document.querySelector('[data-mexico-workspace]').dataset.mexicoNatureView, view);
-      assert.equal(returned.document.querySelector(`[data-mexico-nature-feature="${feature}"]`).getAttribute('aria-pressed'), 'true');
+      assert.equal(returned.document.querySelector(`[data-mexico-nature-layer] [data-mexico-nature-feature="${feature}"]`).getAttribute('aria-pressed'), 'true');
     } finally {
       await window.happyDOM.close();
       await restored?.happyDOM.close();
