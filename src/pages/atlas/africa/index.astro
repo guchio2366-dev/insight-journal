@@ -46,7 +46,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
   </header>
   <nav class="africa-fields" aria-label="分野を選ぶ"><a data-africa-overview-link href={withBase('/atlas/africa/overview/')}>概要</a>{(['agriculture','nature','industry','population'] as const).map(id=><button type="button" data-field={id} aria-pressed={id==='nature'?'true':'false'}>{fields[id].label}</button>)}</nav>
   <nav class="africa-subfields" data-africa-subfields aria-label="分野内の項目"></nav>
-  <div class="africa-workspace">
+  <div class="africa-workspace" id="africa-map-panel">
    <section class="africa-map-card" aria-labelledby="africa-map-title">
     <div class="africa-map-frame">
     <div class="africa-map-heading"><h2 id="africa-map-title" data-metric-title>{metric.label}</h2><span><span data-period>長期平均</span> · <span data-unit>{metric.unit}</span></span></div>
@@ -70,7 +70,10 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
     </svg>
     <div class="africa-map-tools" aria-label="地図の表示範囲"><button data-zoom="all" type="button">全体</button><button data-zoom="theme" type="button">事例</button><button data-zoom="region" type="button">地域</button><button data-zoom="country" type="button">選択国</button><button data-reset type="button">リセット</button></div>
     </div>
+    <div class="africa-river-choices" data-africa-river-choices role="group" aria-label="読み解く河川" hidden></div>
     <div class="africa-commodities" data-africa-commodities role="group" hidden></div>
+    <div class="africa-layer-options" data-africa-layer-options hidden></div>
+    <section class="africa-essential-legend africa-actual-key" data-africa-actual-key hidden aria-label="元分布の全凡例"><p data-africa-layer-caption></p><div data-africa-layer-legend></div><p data-africa-layer-scope></p></section>
     <div class="africa-map-subfields" data-africa-map-subfields></div>
     <p class="africa-subfield-status" data-africa-subfield-status hidden aria-live="polite"></p>
     <div class="africa-themes" data-themes role="group" aria-label="分布テーマを選ぶ">{themes.filter(theme=>theme.field===state.field).map(theme=><button type="button" data-theme={theme.id} aria-pressed={theme.id===initialTheme.id?'true':'false'}>{theme.title}</button>)}</div>
@@ -87,7 +90,6 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
      <p class="africa-takeaway" data-theme-takeaway>{initialTheme.takeaway}</p>
       <div class="africa-theme-actions"><button type="button" data-theme-comparison>国別統計と重ねる</button><button type="button" data-theme-return hidden>← {initialTheme.title}へ戻る</button></div>
       </div>
-       <section class="africa-essential-legend africa-actual-key" data-africa-actual-key hidden aria-label="元分布の全凡例"><p data-africa-layer-caption></p><div data-africa-layer-legend></div><p data-africa-layer-scope></p></section>
        <section class="africa-essential-legend" data-africa-statistics-key aria-label="国別統計の凡例">
        <p class="africa-essential-legend-heading" data-essential-metric>{metric.label} · 長期平均 · {metric.unit}</p>
        <div class="africa-legend" data-legend>{palette.map((color,i)=><span><i style={`background:${color}`}/>{i===0?'250未満':i===4?'1,500以上':`${metric.breaks[i-1].toLocaleString()}〜${metric.breaks[i].toLocaleString()}未満`}</span>)}<span><i class="africa-no-data"/>未収録</span></div>
@@ -100,7 +102,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
       <p class="africa-theme-caveat" data-theme-caveat>{initialTheme.caveat}</p>
      <a class="africa-theme-source" data-theme-source href={initialTheme.source}>{initialTheme.sourceLabel}</a>
      <details class="africa-theme-full"><summary>分布の詳しい読み方・出典</summary><div data-theme-details>{initialMarks.map(mark=><p>{mark.number} {mark.label} — {mark.note}</p>)}{initialTheme.evidenceSources?.map(source=><p><a href={source.url}>{source.label}</a></p>)}</div></details>
-    <div aria-live="polite" class="africa-selected"><div class="africa-selected-heading"><h2 data-selected-name>エジプト</h2><span data-selected-region>北アフリカ</span></div><p class="africa-selected-metric" data-selected-metric>{metric.label}</p><p class="africa-big-value"><strong data-selected-value>{formatValue(valueAt(metric.id,'EGY',state.year),metric)}</strong><span data-selected-unit>{metric.unit}</span></p><p data-comparison></p><p data-place-note></p></div>
+    <details class="africa-country-statistics" data-country-statistics open><summary>選択国の参考統計</summary><div aria-live="polite" class="africa-selected"><div class="africa-selected-heading"><h2 data-selected-name>エジプト</h2><span data-selected-region>北アフリカ</span></div><p class="africa-selected-metric" data-selected-metric>{metric.label}</p><p class="africa-big-value"><strong data-selected-value>{formatValue(valueAt(metric.id,'EGY',state.year),metric)}</strong><span data-selected-unit>{metric.unit}</span></p><p data-comparison></p><p data-place-note></p></div></details>
      </div>
     </section>
    </aside>

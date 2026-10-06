@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {africaLayerPath,africaGridValue,africaGridValueLabel,africaActualLayerKey,africaRasterCategory} from '../../src/scripts/atlas-africa-layers.ts';
+import {africaLayerPath,africaGridValue,africaGridValueLabel,africaActualLayerKey,africaRasterCategory,africaGridClassOutline} from '../../src/scripts/atlas-africa-layers.ts';
+import {projectAfrica} from '../../src/lib/atlas-africa-geometry.ts';
 import {readState,writeState,africaComparisonSnapshot} from '../../src/data/atlas/africa-atlas.ts';
 
 test('display grids preserve zero, negative elevation and missing values with north-first cell indexing',()=>{
@@ -54,4 +55,29 @@ test('point labels keep actual tiny crop and cattle values positive while using 
  for(const value of [Number.MIN_VALUE,1.401298464324817e-45,1e-20,.00099999])assert.ok(Number(africaGridValueLabel(value).replaceAll(',',''))>0);
  assert.equal(africaGridValueLabel(1200.123456),'1,200.123');
  assert.equal(africaGridValueLabel(1.123456),'1.123');
+});
+
+test('selected class outlines follow cell edges, leave holes, and never bridge missing or other classes',()=>{
+ const layer={bounds:[0,0,3,3],width:3,height:3,encoding:'uint8',noData:0,classes:[{id:1,color:'#aaa'},{id:2,color:'#bbb'}]};
+ const ring=africaGridClassOutline(new Uint8Array([1,1,1,1,0,1,1,1,1]),layer,'1');
+ assert.equal((ring.match(/M/g)??[]).length,8,'four outer edges and four edges around the noData hole');
+ const point=(column,row)=>projectAfrica([column,3-row]).map(value=>value.toFixed(2));
+ const [left,top]=point(0,0),[right]=point(3,0),[innerLeft,innerTop]=point(1,1),[innerRight]=point(2,1);
+ assert.ok(ring.includes(`M${left},${top}H${right}`));assert.ok(ring.includes(`M${innerLeft},${innerTop}H${innerRight}`));
+ const separated=africaGridClassOutline(new Uint8Array([1,2,1,0,0,0,0,0,0]),layer,'1');
+ assert.ok(!separated.includes(`M${left},${top}H${right}`),'unselected middle cell is not bridged');
+ assert.equal((separated.match(/M/g)??[]).length,8);
+ assert.equal(africaGridClassOutline(new Uint8Array(9),layer,'1'),'');
+ assert.equal(africaGridClassOutline(new Uint8Array([1]),layer,'unknown'),'');
+});
+
+test('outline categories use actual signed elevation and zero population while excluding missing and nonfinite cells',()=>{
+ const common={bounds:[0,0,3,1],width:3,height:1,breaks:[0,10],colors:['#aaa','#bbb','#ccc']};
+ const elevation=new Uint8Array(6),signed=new DataView(elevation.buffer);[-5,0,-32768].forEach((value,index)=>signed.setInt16(index*2,value,true));
+ assert.notEqual(africaGridClassOutline(elevation,{...common,encoding:'int16',noData:-32768},'0'),'');
+ assert.notEqual(africaGridClassOutline(elevation,{...common,encoding:'int16',noData:-32768},'1'),'');
+ assert.equal(africaGridClassOutline(elevation,{...common,encoding:'int16',noData:-32768},'2'),'');
+ const population=new Uint8Array(12),floats=new DataView(population.buffer);[0,NaN,-1].forEach((value,index)=>floats.setFloat32(index*4,value,true));
+ const outline=africaGridClassOutline(population,{...common,encoding:'float32',noData:-1,breaks:[1,10],legend:[{id:'density-0'},{id:'density-1'},{id:'density-2'}]},'density-0');
+ assert.equal((outline.match(/M/g)??[]).length,4,'only the available zero-valued cell is enclosed');
 });

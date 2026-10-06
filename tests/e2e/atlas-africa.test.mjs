@@ -42,7 +42,7 @@ test('agriculture ready topics follow the actual metric through selection, histo
  const forestURL=withAfricaPage('https://example.com/insight-journal/atlas/africa/?field=agriculture&place=GHA&unknown=preserve',(w,q)=>{
   assert.equal(q('[data-africa-topic="farming"]').getAttribute('aria-pressed'),'true');
   assert.ok(q('.africa-main').contains(q('[data-africa-subfields]')));
-  assert.ok(q('[data-africa-subfields]').compareDocumentPosition(q('.africa-workspace')) & 4);
+  assert.equal(q('[data-africa-subfields]').closest('[data-africa-map-subfields]'),q('[data-africa-map-subfields]'));
   q('[data-africa-topic="forestry"]').click();
   assert.equal(q('[data-theme-marks]').children.length,0);
   assert.equal(q('[data-theme-legend]').children.length,0);

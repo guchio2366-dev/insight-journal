@@ -1,4 +1,19 @@
 /* Africa-only layout. The shared atlas styles and other regions are untouched. */
+.africa-river-choices{display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:6px;background:#fffefa;border-top:1px solid var(--rule)}
+.africa-river-choices button{min-height:44px;padding:7px 12px;border:1px solid #bac9c6;border-radius:4px;background:#fff;font-size:14px;font-weight:700}
+.africa-river-choices button[aria-pressed=true]{background:#224c59;color:#fff}
+.africa-river-hit{cursor:pointer;outline:none}
+.africa-river-hit:focus-visible{outline:none;stroke:#bc5c35;stroke-opacity:.5;stroke-width:8px}
+.africa-atlas[data-river-view=true] .africa-right-fixed{padding-bottom:4px}
+.africa-atlas[data-river-view=true] .africa-detail-scroll{padding-top:6px}
+.africa-atlas[data-river-view=true] .africa-theme-explanation{font-size:15px;line-height:1.75;margin-bottom:8px}
+.africa-atlas[data-river-view=true] .africa-theme-actions{margin:8px 0}
+.africa-atlas[data-river-view=true] .africa-essential-legend [data-africa-layer-legend]{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:14px}
+.africa-atlas[data-river-view=true] [data-africa-layer-legend]>span{display:inline-flex;align-items:center;gap:6px}
+.africa-atlas[data-river-view=true] [data-africa-layer-legend] .africa-river-key-line{width:22px;height:3px;border:0;flex:none}
+.africa-atlas[data-river-view=true] .africa-actual-key>p{font-size:14px;line-height:1.6;margin:4px 0}
+.africa-atlas[data-river-view=true] .africa-map-heading{max-width:calc(100% - 14px)}
+.africa-atlas[data-river-view=true] .africa-map-heading>span{display:none}
 .africa-atlas.shell{width:calc(100% - 40px);max-width:1560px;padding:10px 0 40px;color:var(--ink);font-size:14px;line-height:1.65}
 .atlas-layout:has(.africa-atlas) .site-header .header-inner{min-height:58px;padding-block:8px}
 .atlas-layout:has(.africa-atlas) .site-header nav a{padding-block:10px}
@@ -377,4 +392,98 @@
  .africa-country-controls{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 0;padding:0;border:0}
  .africa-country-controls select{max-width:190px}.africa-detail{height:auto;max-height:none;overflow:visible}.africa-map-frame{min-height:320px;aspect-ratio:auto;height:360px}
  .africa-map-frame .africa-map{height:100%;min-height:0}.africa-map-heading{display:block}.africa-map-heading>span{display:block}
+}
+
+/* Use the U.S. control hierarchy while keeping Africa's data and palettes. */
+.atlas-layout:has(.africa-atlas) .site-header nav a{padding:12px 0 10px}
+.africa-desktop-shell .atlas-news-empty h3{font-size:15px;margin-top:20px}
+.africa-atlas[data-field=nature] .africa-main>.africa-subfields{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));height:59px;min-height:59px;margin:0;padding:6px;border:1px solid #c7ccbf;border-bottom:0;gap:0;background:#fbfaf3;align-items:stretch;align-content:stretch}
+.africa-atlas[data-field=nature] .africa-main>.africa-subfields button{width:auto;height:46px;min-height:44px;border:1px solid #c9cec4;border-right:0;border-radius:0;padding:7px 4px;background:#f2f1e9;color:#344951;font-size:14px;font-weight:750;line-height:1.5}
+.africa-atlas[data-field=nature] .africa-main>.africa-subfields button:last-child{border-right:1px solid #c9cec4}
+.africa-atlas[data-field=nature] .africa-main>.africa-subfields button[aria-pressed=true]{background:#35515d;color:#fff}
+.africa-main>.africa-subitems{display:flex;flex-wrap:wrap;gap:6px;height:auto;min-height:40px;margin:0 0 10px;padding:0;border:0;background:transparent;align-items:stretch}
+.africa-main>.africa-subitems button{flex:none;height:40px;min-height:40px;padding:7px 16px;border:1px solid #b6c8c9;border-radius:5px;background:#fff;color:#244653;font-size:14px;font-weight:400;line-height:1.5}
+.africa-main>.africa-subitems button[aria-pressed=true]{background:#244653;color:#fff;border-color:#244653}
+.africa-map-frame{background:#e4eff0}
+.africa-map-frame>.africa-map{background:#e4eff0}
+.africa-map-heading{top:auto;bottom:7px;left:7px;max-width:calc(100% - 78px);padding:3px 6px;background:#fffef5ef}
+.africa-map-heading>span{display:none}
+.africa-map-tools{top:10px;right:10px;bottom:auto;display:flex;flex-direction:column;flex-wrap:nowrap;gap:5px;padding:0}
+.africa-map-tools button{width:64px;min-height:44px;height:44px;padding:4px;font-size:13px;background:#fffef5ed;color:#233f4a;border-color:#b2beb7;box-shadow:0 1px 3px #243b4820;white-space:nowrap}
+.africa-map-tools button[aria-pressed=true]{background:#244653;color:#fff}
+.africa-map-card>.africa-actual-key{order:4;border:1px solid #c8cfc4;border-top:0;background:#f7f5ec;padding:8px 10px}
+.africa-map-card>.africa-actual-key>p{font-size:14px;line-height:1.6;margin:4px 0}
+.africa-map-card [data-africa-layer-legend]{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px 8px}
+.africa-map-card [data-africa-layer-legend] button{font-size:14px;min-height:40px;padding:4px}
+.africa-map-card [data-africa-layer-legend] i{width:14px;height:12px}
+.africa-map-card .africa-layer-unlisted{font-size:13px}
+.africa-river-choices{order:3}
+.africa-atlas[data-field=nature] .africa-detail,.africa-atlas[data-field=population] .africa-detail{height:auto;max-height:none;overflow:visible;scrollbar-gutter:auto}
+.africa-atlas[data-field=nature] .africa-theme-reading,.africa-atlas[data-field=population] .africa-theme-reading{max-height:none}
+.africa-theme-reading h2{font-size:20px;line-height:1.5}
+.africa-takeaway{font-size:15px;line-height:1.7;margin:6px 0;padding-left:10px;border-left:3px solid #426e64;color:#243f42}
+.africa-theme-explanation{font-size:15px;line-height:1.75}
+.africa-layer-selection label{display:none}
+.africa-country-statistics{margin-top:10px;border-top:1px solid #d8ddd5}
+.africa-country-statistics>.africa-selected{margin:0;padding:10px;border:0}
+.africa-country-statistics>summary{font-size:14px}
+.africa-agri-layer-disclosure{margin-left:auto;position:relative;min-width:0}
+.africa-agri-layer-disclosure>summary{min-height:44px;padding:8px 10px;border:1px solid #bac9c6;border-radius:4px;background:#fff;font-size:14px}
+.africa-agri-layer-disclosure>.africa-agri-layer-controls{padding:8px;border:1px solid #bac9c6;background:#fffefa}
+.africa-layer-options{order:3;padding:0 6px 6px;background:#fffefa}
+.africa-layer-options .africa-agri-layer-disclosure{margin:0}
+.africa-layer-options .africa-agri-layer-disclosure>.africa-agri-layer-controls{position:static;width:auto;box-shadow:none}
+.africa-detail{height:auto;max-height:none;overflow:visible;scrollbar-gutter:auto}
+.africa-theme-reading{max-height:none}
+.africa-atlas[data-field=agriculture] .africa-map-subfields{max-width:calc(100% - 85px)}
+.africa-atlas[data-field=agriculture] .africa-map-subfields .africa-subfields{display:flex;flex-wrap:wrap;height:auto;min-height:44px;gap:5px;padding:0}
+.africa-atlas[data-field=agriculture] .africa-map-subfields button{min-height:44px;height:44px;padding:6px 8px;line-height:1.5;font-size:14px}
+@media(min-width:960px){
+ .africa-agri-layer-disclosure>.africa-agri-layer-controls{position:absolute;top:100%;right:0;z-index:5;width:min(620px,70vw);display:flex;flex-wrap:wrap;box-shadow:0 3px 8px #243b4820}
+ .africa-atlas[data-field=agriculture] .africa-main>.africa-subfields{height:44px;min-height:44px;align-items:center}
+}
+@media(max-width:959px){
+ .africa-region-controls{display:block;min-height:0}
+ .africa-heading{min-height:0;padding-top:8px}
+ .africa-country-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;margin-top:7px}
+ .africa-country-controls>label{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px;font-size:13px}
+ .africa-country-controls select{width:100%;max-width:none!important;padding:6px 22px 6px 6px;font-size:14px}
+ .africa-country-controls>label:last-child{grid-column:1/-1;justify-self:end;width:160px}
+ .africa-region-row{flex-wrap:wrap;gap:6px}
+ .africa-region-row>label{margin-left:auto}
+ .africa-atlas[data-field=nature] .africa-main>.africa-subfields{grid-template-columns:repeat(2,minmax(0,1fr));height:auto;min-height:0}
+ .africa-atlas[data-field=nature] .africa-main>.africa-subfields button{height:44px;min-height:44px;border:1px solid #c9cec4;font-size:13px}
+ .africa-main>.africa-subitems button{padding:6px 11px}
+ .africa-atlas .africa-map-frame{height:auto;min-height:0;aspect-ratio:1.5}
+ .africa-atlas[data-field=agriculture] .africa-map-frame{aspect-ratio:1.44}
+ .africa-atlas[data-field=nature][data-topic=water] .africa-map-frame,.africa-atlas[data-field=population] .africa-map-frame{height:440px;min-height:440px;aspect-ratio:auto}
+ .africa-map-card [data-africa-layer-legend]{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .africa-map-heading>span{display:none}
+ .africa-atlas[data-field=agriculture] .africa-main>.africa-subfields{height:auto;min-height:44px;margin:0 0 10px;align-items:center;gap:6px}
+ .africa-agri-layer-disclosure{flex-basis:100%;margin:0}
+ .africa-agri-layer-disclosure>.africa-agri-layer-controls{margin:0}
+}
+
+/* The narrow desktop uses the same field-specific map / reader split as the U.S. */
+@media(min-width:960px) and (max-width:1199px){
+ .africa-heading{min-height:78px}
+ .africa-region-controls{display:flex;align-items:center;gap:8px;min-height:44px;height:44px}
+ .africa-region-row{flex:1;gap:6px}
+ .africa-region-tabs{gap:6px}
+ .africa-region-tabs a{padding-inline:8px;white-space:nowrap}
+ .africa-region-row select{width:132px;max-width:132px}
+ .africa-country-controls{flex:none;gap:6px}
+ .africa-country-controls>label{gap:4px}
+ .africa-region-row select,.africa-country-controls select{padding-inline:8px}
+ .africa-country-controls select[data-place]{width:110px}
+ .africa-country-controls select[data-compare]{width:100px}
+ .africa-country-controls select[data-year]{width:82px}
+ .africa-atlas[data-field=nature] .africa-workspace{grid-template-columns:minmax(0,1fr) 380px;gap:16px}
+ .africa-atlas[data-field=agriculture] .africa-workspace{grid-template-columns:minmax(0,1fr) 318px;gap:14px}
+ .africa-atlas[data-field=population] .africa-workspace{grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:12px}
+ .africa-atlas .africa-map-frame{aspect-ratio:1.65}
+ .africa-atlas[data-field=nature][data-topic=water] .africa-map-frame{min-height:500px;aspect-ratio:auto;height:500px}
+ .africa-atlas[data-field=population] .africa-map-frame{height:350px;min-height:350px;aspect-ratio:auto}
+ .africa-atlas[data-field=industry] .africa-map-frame{height:clamp(320px,calc(100dvh - 350px),430px);min-height:0;aspect-ratio:auto}
+ .africa-atlas[data-field=nature]:has(.africa-main>.africa-subitems) .africa-map-frame>.africa-map{height:100%;min-height:0;max-height:none}
 }
