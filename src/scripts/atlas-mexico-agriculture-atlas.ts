@@ -36,7 +36,7 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
  function syncMainFields(){
   const query=new URL(location.href).searchParams,raw=query.get('state'),code=raw&&/^(0?[1-9]|[12][0-9]|3[0-2])$/.test(raw)?raw.padStart(2,'0'):null;
   const mode=query.get('reading')==='item'?'item':'overview';
-  for(const [link,href]of pageLinks){const url=new URL(href);if(code)url.searchParams.set('state',code);url.searchParams.set('reading',mode);link.href=url.href;}
+  for(const [link,href]of pageLinks){const url=new URL(href);const nationalPopulation=url.pathname.endsWith('/population/');if(code&&!nationalPopulation)url.searchParams.set('state',code);url.searchParams.set('reading',nationalPopulation?'overview':mode);link.href=url.href;}
  }
  for(const type of ['click','auxclick','focusin'])root.addEventListener(type,event=>{if((event.target as Element).closest('.mexico-fields>a'))syncMainFields();},{capture:true});
  function project(point:[number,number]){
@@ -118,12 +118,10 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
   hidden(q('[data-mexico-crop-zones]'),!cropVisible);hidden(q('[data-mexico-crop-labels]'),!cropVisible);
   for(const node of root.querySelectorAll<HTMLElement|SVGElement>('[data-crop-zone]')){
    const id=node.getAttribute('data-crop-zone');node.classList.toggle('is-selected',id===state.item);node.classList.toggle('is-muted',cropSelected&&id!==state.item);
-   node.setAttribute('aria-pressed',String(id===state.item));
+   if(node.tagName.toLowerCase()==='text')node.setAttribute('aria-pressed',String(id===state.item));else node.removeAttribute('aria-pressed');
    hidden(node,cropVisible&&state.onlyItem&&!!state.item&&id!==state.item);
   }
-  hidden(q('[data-agri-layers]'),forestry);hidden(q('[data-mexico-forest-states]'),!forestry);hidden(q('[data-mexico-tree-cover]'),!forestry);
-  hidden(q('[data-mexico-state-selection]'),!selected||!state.state);
-  for(const outline of root.querySelectorAll<SVGElement>('[data-mexico-state-outline]'))hidden(outline,outline.dataset.mexicoStateOutline!==state.state);
+  hidden(q('[data-agri-layers]'),forestry);hidden(q('[data-mexico-tree-cover]'),!forestry);
   for(const link of root.querySelectorAll<HTMLAnchorElement>('[data-crop-select],[data-livestock-select],[data-forestry-select]')){
    const id=link.dataset.cropSelect??link.dataset.livestockSelect??'pine';
    if(state.item===id)link.setAttribute('aria-current','true');else link.removeAttribute('aria-current');
@@ -148,7 +146,7 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
    text('[data-mexico-region-production]',`2025年 ${mexicoAgricultureLabel(region.kindId)}：${region.production.toLocaleString('ja-JP',{maximumFractionDigits:0})} ${region.unit}`);
   }else if(selected&&state.state){
    text('[data-mexico-region-heading]','選択した州');
-   text('[data-mexico-region-scope]','州全体の公表値です。輪郭は州の位置確認用で、栽培・飼養・森林の区域を表していません。');
+   text('[data-mexico-region-scope]','州全体の公表値です。地図は主要栽培域・産地の分布で、この州の統計値の区域を強調しません。');
    const row=config.statistics[state.item??'corn']?.rows.find((row:any)=>row.code===state.state);
    text('[data-mexico-region-name]',config.states.find(s=>s.code===state.state)?.name??state.state);
    text('[data-mexico-region-production]',row?`${config.statistics[state.item??'corn'].year}：${row.production===null?'数量は単純合算しません':row.production.toLocaleString('ja-JP',{maximumFractionDigits:1})+' '+config.statistics[state.item??'corn'].unit}`:'');
@@ -163,9 +161,9 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
   syncMainFields();
   svg.classList.toggle('is-zoomed',state.zoom>1);
   svg.setAttribute('viewBox',agricultureCameraViewBox(state).map(value=>value.toFixed(2)).join(' '));
-  text('[data-mexico-map-note]',forestry?'緑は2021年の樹木被覆。輪郭は松材取得量の多いドゥランゴ・チワワの州境で、森林や伐採区域の境界ではありません。':'作物は推計主要栽培域、畜産は生産の多い市町村の代表位置。記号の大きさは数量を表しません。');
-  text('#mexico-agriculture-map-title',forestry?'メキシコの樹木被覆と松材取得の上位州':'メキシコの主要栽培域と畜産の産地');
-  text('[data-layer-caption]',forestry?'樹木被覆2021・松材取得の上位州2022':state.item==='irrigation'?'主要栽培域と地形・河川 / 灌漑率は統計で確認':'作物 2020推計・畜産産地 2025（概略）');
+  text('[data-mexico-map-note]',forestry?'緑は2021年の樹木被覆。松材取得量の多いドゥランゴ・チワワなどの州別数量は統計で確認できます。樹木被覆は松林・伐採区域の境界ではありません。':'作物は推計主要栽培域、畜産は生産の多い市町村の代表位置。記号の大きさは数量を表しません。');
+  text('#mexico-agriculture-map-title',forestry?'メキシコの樹木被覆と森林資源':'メキシコの主要栽培域と畜産の産地');
+  text('[data-layer-caption]',forestry?'樹木被覆2021・州別松材統計2022':state.item==='irrigation'?'主要栽培域と地形・河川 / 灌漑率は統計で確認':'作物 2020推計・畜産産地 2025（概略）');
   q<HTMLButtonElement>('[data-map-action="out"]').disabled=state.zoom<=1;
   q<HTMLButtonElement>('[data-map-action="in"]').disabled=state.zoom>=5;
   renderMarkers();renderCandidates();root.dataset.agricultureReady='true';root.dataset.renderState='ready';
@@ -184,12 +182,12 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
   const target=event.target as Element;
   const link=target.closest<HTMLElement>('[data-crop-select],[data-livestock-select],[data-forestry-select],[data-mexico-agriculture-item]');
   if(link){event.preventDefault();lastTrigger=link;choose(link.dataset.cropSelect??link.dataset.livestockSelect??link.dataset.mexicoAgricultureItem??'pine');return;}
-  const zone=target.closest<SVGElement>('[data-crop-zone]');if(zone&&Date.now()<suppressMapClickUntil){event.preventDefault();return;}if(zone){event.preventDefault();choose(zone.dataset.cropZone!);return;}
+  const zone=target.closest<SVGElement>('text[data-crop-zone]');if(zone&&Date.now()<suppressMapClickUntil){event.preventDefault();return;}if(zone){event.preventDefault();choose(zone.dataset.cropZone!);return;}
   const pick=target.closest<HTMLElement>('[data-agriculture-pick]');if(pick){state={...state,state:pick.dataset.agriculturePick!,region:null};save();return;}
  });
  root.addEventListener('keydown',event=>{
   if(event.key==='Escape'&&(state.item||candidates.length)){event.preventDefault();back();return;}
-  if(['Enter',' '].includes(event.key)){const zone=(event.target as Element).closest<SVGElement>('[data-crop-zone]');if(zone){event.preventDefault();choose(zone.dataset.cropZone!);}}
+  if(['Enter',' '].includes(event.key)){const zone=(event.target as Element).closest<SVGElement>('text[data-crop-zone]');if(zone){event.preventDefault();choose(zone.dataset.cropZone!);}}
  });
  q('[data-agri-overview-button]').addEventListener('click',back);
  for(const input of root.querySelectorAll<HTMLInputElement>('[data-agri-layer]'))input.addEventListener('change',()=>{state={...state,[input.value]:input.checked};save();});

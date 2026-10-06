@@ -17,7 +17,7 @@ export function initMexicoOverview(root:HTMLElement){
   q('[data-mexico-overview-name]').textContent=selected.nameJa;
   q('[data-mexico-overview-values]').textContent=`人口 ${selected.population.toLocaleString('ja-JP')}人 · 密度 ${selected.density.toLocaleString('ja-JP')}人/km²（2020年）`;
   for(const key of ['heading','text','cause'] as const)q(`[data-mexico-overview-${key}]`).textContent=selected.reading[key];
-  for(const a of root.querySelectorAll<HTMLAnchorElement>('[data-mexico-overview-field]')){const url=new URL(config.fields[a.dataset.mexicoOverviewField!],location.href);url.searchParams.set('state',selected.stateCode);url.searchParams.set('reading','item');a.href=url.href;}
+  for(const a of root.querySelectorAll<HTMLAnchorElement>('[data-mexico-overview-field]')){const url=new URL(config.fields[a.dataset.mexicoOverviewField!],location.href);if(a.dataset.mexicoOverviewField==='population'){url.searchParams.set('reading','overview');}else{url.searchParams.set('state',selected.stateCode);url.searchParams.set('reading','item');}a.href=url.href;}
  }
  function update(code=state.code,zoom=state.zoom){state={code,zoom};const url=new URL(location.href);if(code)url.searchParams.set('state',code);else url.searchParams.delete('state');if(zoom)url.searchParams.set('frame','selected');else url.searchParams.delete('frame');url.searchParams.set('reading',code?'item':'overview');history.pushState(null,'',url);render();root.dispatchEvent(new CustomEvent('mexico-reading-mode',{detail:{selected:!!code}}));}
  q<HTMLSelectElement>('[data-mexico-overview-state]').addEventListener('change',e=>update((e.target as HTMLSelectElement).value,false));

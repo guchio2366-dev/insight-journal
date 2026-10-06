@@ -136,3 +136,16 @@
  .atlas-desktop-shell .atlas-explorer.mexico-workspace.mexico-nature[data-field=natural] :is(.mexico-reading-content,.mexico-nature-reading,.mexico-nature-reading>section,.mexico-nature-reading-body){display:block;flex:none;height:auto;min-height:0;max-height:none;overflow:visible;scrollbar-gutter:auto}
 }
 .mexico-workspace.mexico-nature [data-mexico-climate-diagrams][hidden]{display:none!important}
+.mexico-workspace.mexico-nature [data-mexico-nature-layer=climate] [data-mexico-nature-feature]{pointer-events:none;cursor:default}
+/* The main SVG can receive propagated mouse focus from a region selection.
+   Focus belongs to the actual selected region or its name, never this viewport. */
+.mexico-workspace.mexico-nature [data-mexico-nature-main-map]:focus{outline:none}
+.mexico-workspace.mexico-nature [data-mexico-nature-feature]:focus{outline:none}
+.mexico-climate-class-reading{font-size:14px;line-height:1.7;margin:12px 0}
+.mexico-climate-class-reading>summary{font-weight:700;cursor:pointer;min-height:32px}
+.mexico-climate-class-reading h3{font-size:17px;margin:0 0 7px}
+.mexico-climate-class-reading dl{margin:8px 0;display:grid;gap:9px}
+.mexico-climate-class-reading dt{font-weight:700}.mexico-climate-class-reading dd{margin:3px 0 0}
+.mexico-basin-system-label{vector-effect:non-scaling-stroke;fill:#254e55;font-weight:700;paint-order:stroke;stroke:#fffdf7;stroke-width:4px;stroke-linejoin:round;pointer-events:none}
+.mexico-basin-system-image.is-muted{opacity:.42}
+.mexico-water-contours{pointer-events:none!important;cursor:default}

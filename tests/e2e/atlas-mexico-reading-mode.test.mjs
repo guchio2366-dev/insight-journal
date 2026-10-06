@@ -96,7 +96,7 @@ async function selectState(window,field){
   const pin=window.document.querySelector(`[data-mi-map="primary"] [data-mi-reading-markers] [data-mi-region-option="${fields[field].state}"]:not([hidden])`);
   assert.ok(pin,'The selected industry state must have a visible reading pin');
   assert.equal(pin.getAttribute('aria-pressed'),'true');assert.equal(pin.classList.contains('is-selected'),true);
- }else if(field==='agriculture')assert.equal(shape.hasAttribute('hidden'),false);else assert.equal(shape.getAttribute('aria-pressed'),'true');
+ }else if(field==='agriculture')assert.equal(shape,null);else assert.equal(shape.getAttribute('aria-pressed'),field==='nature'&&!query(window).get('category')&&query(window).get('view')==='climate'?'false':'true');
 }
 
 for(const field of Object.keys(fields)){
@@ -198,7 +198,7 @@ test('Adapter-first map choice waits through trusted listener checkpoints and ne
  }finally{await window.happyDOM.close();}
 });
 
-test('All five Mexico main tabs retain state and reading intent without leaking field-specific comparison parameters',async()=>{
+test('Mexico main tabs preserve other field state and always enter national population without comparison parameters',async()=>{
  const mainFields=['overview',...Object.keys(fields)];
  for(const [index,field] of mainFields.entries()){
   for(const mode of ['item','overview']){
@@ -208,14 +208,14 @@ test('All five Mexico main tabs retain state and reading intent without leaking 
     const links=[...window.document.querySelectorAll('.mexico-fields>a')];assert.equal(links.length,5);
     for(const link of links){
      const target=new URL(link.href);
-     assert.equal(target.searchParams.get('state'),'08');assert.equal(target.searchParams.get('reading'),mode);
+     const national=target.pathname.endsWith('/population/');assert.equal(target.searchParams.get('state'),national?null:'08');assert.equal(target.searchParams.get('reading'),national?'overview':mode);
      assert.ok([...target.searchParams.keys()].every(key=>['country','state','reading'].includes(key)));
     }
     if(field==='industry'&&mode==='item')assert.equal(new URL(window.document.querySelector('[data-mi-return]').href).searchParams.get('state'),'09');
     const next=mainFields[(index+1)%mainFields.length],target=new URL(links.find(link=>new URL(link.href).pathname.endsWith(`/${next}/`)).href);
-    destination=await page(next,target.search,true);assertMode(destination,mode==='item');assert.equal(query(destination).get('state'),'08');
+    destination=await page(next,target.search,true);assertMode(destination,next!=='population'&&mode==='item');assert.equal(query(destination).get('state'),next==='population'?null:'08');
     const select=destination.document.querySelector(next==='overview'?'[data-mexico-overview-state]':fields[next].select);
-    if(mode==='item')assert.equal(select.value,'08');
+    if(mode==='item')assert.equal(select.value,next==='population'?'':'08');
    }finally{if(destination)await destination.happyDOM.close();await window.happyDOM.close();}
   }
  }
@@ -232,7 +232,7 @@ test('National overview normalization and last-moment main-tab activation keep t
   window.history.replaceState(null,'','?state=14&reading=item&metric=cattle&compare=irrigation&feature=climate-3');
   const link=[...window.document.querySelectorAll('.mexico-fields>a')].find(link=>new URL(link.href).pathname.endsWith('/population/'));
   link.addEventListener('click',event=>event.preventDefault(),{once:true});link.dispatchEvent(new window.MouseEvent('click',{bubbles:true,cancelable:true}));
-  assert.deepEqual(Object.fromEntries(new URL(link.href).searchParams),{state:'14',reading:'item'});assert.equal(window.history.length,initialLength);
+  assert.deepEqual(Object.fromEntries(new URL(link.href).searchParams),{reading:'overview'});assert.equal(window.history.length,initialLength);
  }finally{if(destination)await destination.happyDOM.close();await window.happyDOM.close();}
 });
 

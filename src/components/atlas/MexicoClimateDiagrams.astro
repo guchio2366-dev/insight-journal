@@ -5,10 +5,10 @@ import climateReadings from '../../data/atlas/mexico/climate-city-reading.json';
 const readings = new Map(climateReadings.stations.map(item => [item.id, item]));
 ---
 <section class="mexico-climate-diagrams" data-mexico-climate-diagrams>
- <h2>都市の雨温図</h2>
+ <h2 data-mexico-climate-heading>メキシコシティ（タクバヤ）の雨温図</h2>
  {climateNormals.stations.map(station => {
   const reading = readings.get(station.id)!;
-  return <section data-mexico-climate-plot={station.id} hidden={station.id !== 'mexico-city-tacubaya'}>
+  return <section data-mexico-climate-plot={station.id} data-climate-city-name={station.name} hidden={station.id !== 'mexico-city-tacubaya'}>
    <AtlasClimatePlot name={station.name} period="1991–2020" temperatureC={station.temperatureC} precipitationMm={station.precipitationMm}/>
    <section class="mexico-climate-city-reading" data-mexico-climate-city-reading={station.id} data-climate-source-feature={reading.sourceFeatureId}>
     <h3 data-mexico-climate-city-class>{reading.labelJa}｜<span class="mexico-climate-city-code">{reading.sourceCode}</span></h3>

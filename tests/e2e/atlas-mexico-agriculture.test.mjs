@@ -36,7 +36,7 @@ test('Mexico uses shared US agriculture hierarchy, truthful zones and a same-yea
   assert.match(ctx.q('.atlas-receipts-chart').textContent,/生産額.*2025年.*49%.*51%.*生体/s);
   assert.match(ctx.q('#mexico-agriculture-sources').textContent,/推計.*5分格子.*市町村.*2025.*2022/s);
   assert.match(ctx.q('[data-agriculture-reading="pine"]').textContent,/ドゥランゴ.*チワワ.*山地.*加工.*市場/s);
-  assert.equal(ctx.q('[data-mexico-forest-states]').hasAttribute('hidden'),true);
+  assert.equal(ctx.q('[data-mexico-forest-states]'),null);
   await access('dist/assets/atlas/mexico-agriculture-v2/manifest.json');
   await access('dist/assets/atlas/mexico-agriculture-v2/rivers.svg');
  }finally{await ctx.window.happyDOM.close();}
@@ -90,17 +90,17 @@ test('Real municipal livestock badges use shared grouping, separate meat/乳/卵
   marker.click();const record=config.markers.find(marker=>marker.id===id);selected(ctx,record.kindId);
   assert.match(ctx.q('[data-mexico-region-name]').textContent,new RegExp(record.label.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')));
   assert.match(ctx.q('[data-mexico-region-production]').textContent,/2025/);assert.equal(ctx.q('[data-agriculture-state]').value,record.stateCode);
-  assert.equal(ctx.q('[data-mexico-state-selection]').hasAttribute('hidden'),false);
-  ctx.q('[data-agri-overview-button]').click();assert.ok(ctx.q('[data-mexico-state-selection]').hasAttribute('hidden'));
+  assert.equal(ctx.q('[data-mexico-state-selection]'),null);
+  ctx.q('[data-agri-overview-button]').click();assert.equal(ctx.q('[data-mexico-state-selection]'),null);
  }finally{await ctx.window.happyDOM.close();}
 });
 
-test('Forestry replaces agriculture overlays with explicit harvest-state outlines, keeps layers, and restores them on return',async()=>{
+test('Forestry replaces agriculture overlays with the retained forest cover and statistics without state outlines, keeps layers, and restores them on return',async()=>{
  const ctx=await page();try{
   ctx.q('[data-agri-layer][value="livestock"]').click();ctx.q('[data-forestry-select]').click();selected(ctx,'pine');
-  assert.equal(ctx.root.dataset.agriReading,'forestry');assert.equal(ctx.q('[data-mexico-tree-cover]').hasAttribute('hidden'),false);assert.equal(ctx.q('[data-mexico-forest-states]').hasAttribute('hidden'),false);
+  assert.equal(ctx.root.dataset.agriReading,'forestry');assert.equal(ctx.q('[data-mexico-tree-cover]').hasAttribute('hidden'),false);assert.equal(ctx.q('[data-mexico-forest-states]'),null);
   assert.ok(ctx.q('[data-mexico-crop-zones]').hasAttribute('hidden'));assert.equal(ctx.q('[data-livestock-markers]').hidden,true);
-  assert.match(ctx.q('[data-layer-caption]').textContent,/松材取得.*2022/);
+  assert.match(ctx.q('[data-layer-caption]').textContent,/州別松材統計2022/);
   ctx.q('[data-agri-overview-button]').click();selected(ctx,null);assert.equal(ctx.q('[data-mexico-crop-zones]').hasAttribute('hidden'),false);
   assert.equal(ctx.q('[data-agri-layer][value="livestock"]').checked,false);
  }finally{await ctx.window.happyDOM.close();}
@@ -120,13 +120,13 @@ test('Legacy corn/pine/irrigation/cattle links preserve source metric and state 
 
 test('Keyboard crop selection, Escape, state statistics and one-item mode preserve usable routes',async()=>{
  const ctx=await page();try{
-  ctx.q('path[data-crop-zone="corn"]').dispatchEvent(new ctx.window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));selected(ctx,'corn');
+  ctx.q('path[data-crop-zone="corn"]').dispatchEvent(new ctx.window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));selected(ctx,null);ctx.q('text[data-crop-zone="corn"]').dispatchEvent(new ctx.window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));selected(ctx,'corn');
   const select=ctx.q('[data-agriculture-state]');select.value='08';select.dispatchEvent(new ctx.window.Event('change',{bubbles:true}));
-  assert.equal(ctx.q('[data-mexico-state-outline="08"]').hasAttribute('hidden'),false);
+  assert.equal(ctx.q('[data-mexico-state-outline="08"]'),null);
   ctx.q('[data-mexico-only-item]').click();assert.equal(ctx.q('[data-livestock-markers]').hidden,true);assert.ok(ctx.q('path[data-crop-zone="wheat"]').hasAttribute('hidden'));
   ctx.root.dispatchEvent(new ctx.window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));selected(ctx,null);
   assert.equal(ctx.q('[data-mexico-only-item]').checked,false);
-  for(const link of ctx.root.querySelectorAll('.mexico-fields a')){const url=new URL(link.href);assert.equal(url.searchParams.get('state'),'08');assert.equal(url.searchParams.get('reading'),'overview');assert.ok(!url.searchParams.has('agriItem'));}
+  for(const link of ctx.root.querySelectorAll('.mexico-fields a')){const url=new URL(link.href);assert.equal(url.searchParams.get('state'),url.pathname.endsWith('/population/')?null:'08');assert.equal(url.searchParams.get('reading'),'overview');assert.ok(!url.searchParams.has('agriItem'));}
  }finally{await ctx.window.happyDOM.close();}
 });
 
@@ -151,7 +151,7 @@ test('Selecting a crop keeps every crop area and animal kind available with sour
   const zones=Array.from(ctx.root.querySelectorAll('path[data-crop-zone]'));
   assert.equal(zones.length,11);
   assert.ok(zones.every(node=>!node.hasAttribute('hidden')));
-  assert.equal(zones.filter(node=>node.getAttribute('aria-pressed')==='true').length,1);
+  assert.equal(zones.filter(node=>node.classList.contains('is-selected')).length,1);
   assert.equal(ctx.q('[data-livestock-markers]').hidden,false);
   assert.equal(ctx.root.querySelectorAll('[data-livestock-select]').length,5);
   const label=ctx.q('[data-crop-label="corn"]');

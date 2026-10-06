@@ -1,15 +1,15 @@
 /** Product colors and badge vocabulary match the shared U.S. agriculture map. */
 export const mexicoCrops = [
  {id:'corn',name:'とうもろこし',color:'#ecc759'},
- {id:'wheat',name:'小麦',color:'#d5a56c'},
  {id:'beans',name:'インゲン豆',color:'#a3bc73'},
- {id:'sorghum',name:'ソルガム',color:'#ce8f58'},
- {id:'sugarcane',name:'さとうきび',color:'#75a985'},
- {id:'rice',name:'稲作',color:'#54acd0'},
- {id:'cotton',name:'綿花',color:'#b886b2'},
- {id:'coffee',name:'コーヒー',color:'#89634b'},
  {id:'fruit',name:'果樹',color:'#e89c6c'},
  {id:'vegetables',name:'野菜',color:'#84aa9a'},
+ {id:'sugarcane',name:'さとうきび',color:'#75a985'},
+ {id:'sorghum',name:'ソルガム',color:'#ce8f58'},
+ {id:'coffee',name:'コーヒー',color:'#89634b'},
+ {id:'cotton',name:'綿花',color:'#b886b2'},
+ {id:'wheat',name:'小麦',color:'#d5a56c'},
+ {id:'rice',name:'稲作',color:'#54acd0'},
  {id:'other',name:'その他',color:'#b7b69e'},
 ] as const;
 export const mexicoLivestockKinds = [

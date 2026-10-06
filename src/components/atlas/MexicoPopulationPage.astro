@@ -9,7 +9,7 @@ import {mexicoCompositionOverviewMetrics, mexicoCompositionOverviewColor, mexico
 import {withBase} from '../../lib/urls';
 import '../../styles/atlas-mexico-population.css';
 
-const initialReading = mexicoPopulationRegionReading('09');
+const initialReading = {text:Object.values(mexicoPopulationReading.regions).map(item=>item.text).join(' '),cause:Object.values(mexicoPopulationReading.regions).map(item=>item.cause).join(' ')};
 const assetRoot = withBase('/assets/atlas/mexico-population-v1');
 const compositionAssetRoot = withBase('/assets/atlas/mexico-population-composition-v1');
 const routes = {

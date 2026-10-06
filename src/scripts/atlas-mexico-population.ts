@@ -85,7 +85,7 @@ export function initMexicoPopulation(root: HTMLElement) {
     query<HTMLElement>('[data-population-scale-reading]').hidden = !comparison;
     query<HTMLElement>('[data-population-scale-heading]').textContent = referencePrefix + '人口規模 × 人口密度';
     query<HTMLElement>('[data-population-reading-heading]').textContent = unavailable ? `${categoryLabel}（未整備）` : comparison
-      ? '人口の多さと密度は、どこで違う？' : mexicoPopulationReading.title;
+      ? '人口の多さと密度は、どこで違う？' : !selectedState?'全国の人口分布':mexicoPopulationReading.title;
     query<HTMLElement>('[data-population-map-heading]').textContent = referencePrefix + (comparison
       ? '人口規模 × 人口密度（2020年）' : state.view === 'density' ? '2020年、人口はどこに集まる？' : '2020年、州人口の規模を比べる');
     query('[data-population-map] title').textContent = referencePrefix + (comparison
@@ -128,7 +128,7 @@ export function initMexicoPopulation(root: HTMLElement) {
     query<HTMLElement>('[data-population-region-heading]').textContent = region?.heading??mexicoPopulationReading.takeaway;
     query<HTMLElement>('[data-population-region-text]').textContent = region?.text??Object.values(mexicoPopulationReading.regions).map(item=>item.text).join(' ');
     query<HTMLElement>('[data-population-region-cause]').textContent = region?.cause??Object.values(mexicoPopulationReading.regions).map(item=>item.cause).join(' ');
-    const shortText = !region ? '州を選ぶと人口・密度と地域の説明を読めます。全国表示では全32州を同じ凡例で比べます。' : region === mexicoPopulationReading.regions.central
+    const shortText = !region ? '中央部の首都圏には人口が多く集まります。北部は広い州の中に都市・輸出産業の拠点があり、中西部では内陸の製造業と交通が都市を結びます。地図の色は州平均で、都市内部や農村の密度を示すものではありません。' : region === mexicoPopulationReading.regions.central
       ? 'メキシコ州は人口が最多、メキシコ市は密度が最高。人口規模と密度を重ねて読みます。'
       : region === mexicoPopulationReading.regions.northern
         ? '北部の広い州の平均密度と、都市・輸出産業の集積をつなげて読みます。'

@@ -76,7 +76,7 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
     if(!active)readingSummary.remove();
   }
   function choose(layer: MexicoHydrologyLayer, id: string): void {
-    selection = {...selection, feature: `${layer}:${id}`, ...(layer === 'groundwater' ? {groundwaterClass: id as MexicoGroundwaterClass} : {})}; commit();
+    selection = {...selection, feature: id ? `${layer}:${id}` : '', ...(layer === 'groundwater' ? {groundwaterClass: id as MexicoGroundwaterClass} : {})}; commit();
     root.dispatchEvent(new CustomEvent('mexico-reading-mode', {bubbles: true, detail: {selected: true}}));
   }
   function baseLayers(): void {
@@ -97,7 +97,7 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
     root.dataset.mexicoWaterBase = selection.base;
   }
   function selectedFeature(layers: MexicoHydrologyLayer[]) {
-    for (const layer of layers) for (const feature of collections.get(layer)?.features ?? []) if (`${layer}:${mexicoWaterFeatureId(feature)}` === selection.feature) return {layer, feature};
+    for (const layer of layers.filter(layer=>layer!=='contours')) for (const feature of collections.get(layer)?.features ?? []) if (`${layer}:${mexicoWaterFeatureId(feature)}` === selection.feature) return {layer, feature};
     return null;
   }
   function updateReading(layers: MexicoHydrologyLayer[]): void {
@@ -143,7 +143,7 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
       else if (layer === 'precipitation') keys.push(...mexicoPrecipitationKeys.map(item=>({label:item.label,color:item.color,line:true,title:'原等雨量線の値を分類。線の間の面を表す色ではありません。'})),{label:'太線：1,000・1,500mm/年',color:'#397f9a',line:true});
       else if (metadata.legend?.length) keys.push(...metadata.legend.map(item => ({label:layer==='rivers'&&/^rivers-order-[789]$/.test(String(item.id))?`次数${String(item.id).slice(-1)}`:item.label, color: item.color,line:item.symbol === 'line' || layer === 'rivers',title:item.fullLabel??item.label})));
       else if (layer === 'rivers') keys.push({label: '原資料の河川流路', color: '#397f9a', line: true});
-      else if (layer === 'contours') keys.push({label: '0〜5,000 m・500m間隔の全等高線', color: '#a28b6f', line: true}, {label:`太線は1,000m間隔・数値${layerGroups.get(layer)?.dataset.numberLabelCount ?? '0'}か所`,color:'#a28b6f',line:true},{label: '選択した等高線', color: '#583d25', line: true});
+      else if (layer === 'contours') keys.push({label: '標高 0・500・1,000・1,500・2,000・2,500・3,000・3,500・4,000・4,500・5,000 m', color: '#a28b6f', line: true}, {label:'500m間隔・太線は1,000m間隔',color:'#a28b6f',line:true});
       else keys.push({label: layer === 'groundwater' ? '原資料の地下水区域' : '原資料の降水区分', color: '#d9ddd9'});
     }
     if (!layers.includes('contours') && !layers.includes('basins')) keys.push({label: '選択地物の線・輪郭', color: '#153f42', line: true});
@@ -185,7 +185,7 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
         const feature = members[0];
         const path = document.createElementNS(ns, 'path'), id = mexicoWaterFeatureId(feature), title = document.createElementNS(ns, 'title');
         path.setAttribute('d', members.map(member => geometryPath(member.geometry)).join('')); path.setAttribute('fill-rule', 'evenodd'); path.setAttribute('fill', mexicoWaterFeatureFill(feature, layer, metadata));
-        path.setAttribute('data-mexico-water-feature', `${layer}:${id}`); path.setAttribute('role', 'button'); path.setAttribute('aria-label', `${mexicoWaterFeatureName(feature)}を読む`);
+        path.setAttribute('data-mexico-water-feature', `${layer}:${id}`); path.setAttribute('role', layer==='contours'?'img':'button'); path.setAttribute('aria-label', `${mexicoWaterFeatureName(feature)}を読む`);
         path.classList.add('mexico-water-feature', `mexico-water-${layer}`); path.setAttribute('vector-effect', 'non-scaling-stroke');
         path.style.setProperty('--mexico-water-stroke',mexicoWaterFeatureStroke(feature,layer,metadata));
         if (layer === 'precipitation' || layer === 'contours') {const value = feature.properties.elevationM ?? feature.properties.value; path.classList.add((layer === 'contours' ? value % 1000 === 0 : [1000,1500].includes(value)) ? 'is-major-line' : 'is-secondary-line');}
@@ -198,7 +198,7 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
           else if (layer === 'contours') original = members.find(member => `${layer}:${mexicoWaterFeatureId(member)}` === selection.feature) ?? feature;
           choose(layer, mexicoWaterFeatureId(original));
         };
-        path.addEventListener('click', picked); path.addEventListener('keydown', event => {if (event.key === 'Enter' || event.key === ' ') {event.preventDefault(); picked();}}); group.append(path);
+        if(layer!=='contours'){path.addEventListener('click', picked); path.addEventListener('keydown', event => {if (event.key === 'Enter' || event.key === ' ') {event.preventDefault(); picked();}});} group.append(path);
       }
       if (layer === 'contours') {const selected = document.createElementNS(ns, 'path'); selected.setAttribute('data-mexico-contour-selected', ''); selected.setAttribute('fill', 'none'); selected.setAttribute('vector-effect', 'non-scaling-stroke'); selected.setAttribute('pointer-events', 'none'); selected.classList.add('mexico-water-contours', 'is-selected'); group.append(selected);}
     }
@@ -248,7 +248,7 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
     text('[data-mexico-hydrology-status]', '地図資料を読み込んでいます。'); show('[data-mexico-hydrology-retry]', false);
     for (const [layer, group] of layerGroups) group.style.display = layers.includes(layer) && !(layer === 'groundwater' && (loadedGroundwaterClass !== requestedGroundwaterClass || requestedGroundwaterClass !== 'all')) ? '' : 'none';
     try {
-      if (prepared && (state.category === 'precipitation' || state.category === 'elevation' || state.category === 'basins')) {
+      if (prepared && (state.category === 'precipitation' || state.category === 'basins')) {
         // Quantitative colors and missing cells must not be confused with a hidden climate/relief background.
         for (const group of layerGroups.values()) group.style.display = 'none';
         for (const group of root.querySelectorAll<SVGGElement>('[data-mexico-nature-layer],[data-mexico-nature-relief-background]')) group.style.display = 'none';
@@ -313,7 +313,8 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
         const active = selectedFeature([layer]); if (active && !listed.includes(active.feature)) listed = [...listed, active.feature];
         return listed.map(feature => {const option = document.createElement('option'); option.value = `${layer}:${mexicoWaterFeatureId(feature)}`; option.textContent = `${option.value === selection.feature ? '選択中：' : ''}${mexicoWaterFeatureName(feature)}`; return option;});
       })); picker.value = selectedFeature(present) ? selection.feature : '';}
-      text('[data-mexico-hydrology-picker-note]', state.category === 'rivers-groundwater' && isSelectedGroundwater(groundwater) ? requestedGroundwaterClass === 'all' ? '全10分類は原図形から作成した全国概観です。地下水の分類を選ぶと、その分類だけのベクトルを表示します。読む州と拡大で地域を選べます。' : '選択分類の全国分布です。未着色は選択区分以外などです。読む州を変え、拡大で位置を確かめます。面のクリックは地点の井戸値ではなく分類の解説です。' : state.category === 'elevation' ? '0〜5,000mの全11値を保持。太線は1,000m間隔、細い補助線は500m中間値。数値ラベルは重なりを避けた代表区間で、省略分も一覧と実線選択で読めます。' : representatives ? '原典100〜4,500mm/年の全19値・492原線を保持。色は実線の値をUSと共通の7段階で分類し、線の間の面を補間しません。太線は1,000・1,500mm/年の原線です。全値は一覧と実線選択で読めます。2006年は刊行年で、統一観測期間との対応は未確認です。' : state.category==='basins'?'INEGIの国内158流域と原河川を重ねています。外流域143と閉鎖流域15を色で区別し、流域名は元の面内に配置。国外上流域や用水路の接続は追加していません。':'一覧と地図は配信された原資料の区域・区分です。');
+      text('[data-mexico-hydrology-picker-note]', state.category === 'rivers-groundwater' && isSelectedGroundwater(groundwater) ? requestedGroundwaterClass === 'all' ? '全10分類は原図形から作成した全国概観です。地下水の分類を選ぶと、その分類だけのベクトルを表示します。読む州と拡大で地域を選べます。' : '選択分類の全国分布です。未着色は選択区分以外などです。読む州を変え、拡大で位置を確かめます。面のクリックは地点の井戸値ではなく分類の解説です。' : state.category === 'elevation' ? '0〜5,000mの全11値を保持。500m間隔の等高線で、1,000m間隔を太線にしています。数値ラベルは重なりを避けた代表区間です。州や線を選ばずに、全国の高さと線の間隔から地形を読みます。' : representatives ? '原典100〜4,500mm/年の全19値・492原線を保持。色は実線の値をUSと共通の7段階で分類し、線の間の面を補間しません。太線は1,000・1,500mm/年の原線です。全値は一覧と実線選択で読めます。2006年は刊行年で、統一観測期間との対応は未確認です。' : state.category==='basins'?'INEGIの国内158流域と原河川を重ねています。外流域143と閉鎖流域15を色で区別し、流域名は元の面内に配置。国外上流域や用水路の接続は追加していません。':'一覧と地図は配信された原資料の区域・区分です。');
+      if(state.category==='elevation'){show('[data-mexico-hydrology-controls]',false);text('[data-mexico-hydrology-value]','500m間隔の等高線です。線が密な場所ほど斜面が急で、間隔が広い場所ほど緩やかです。');text('[data-mexico-nature-period]','NOAA ETOPO 2022 v1・60秒角格子／EGM2008標高 m。2022は版年で、全国共通の観測年ではありません。');root.dataset.mexicoPreparedCategory='elevation';}
       const absent = layers.filter(layer => !present.includes(layer));
       text('[data-mexico-hydrology-status]', absent.length && !(state.category==='rivers-groundwater'&&absent.length===1&&absent[0]==='groundwater'&&present.includes('rivers')) ? `${absent.map(layer => layer === 'groundwater' ? '地下水' : layer === 'rivers' ? '河川' : layer).join('・')}は資料未収録。表示している実資料と区別します。` : '');
       root.dataset.mexicoHydrologyReady = 'true'; root.dataset.mexicoWaterFeature = selection.feature;
@@ -329,7 +330,7 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
   q<HTMLSelectElement>('[data-mexico-groundwater-class]')?.addEventListener('change', event => {const next = (event.currentTarget as HTMLSelectElement).value as MexicoGroundwaterClass;if(next!=='all'&&!mexicoGroundwaterClassIds.includes(next as typeof mexicoGroundwaterClassIds[number]))return;selection={...selection,groundwaterClass:next,feature:next==='all'?selection.feature.startsWith('groundwater:')?'':selection.feature:`groundwater:${next}`};commit();root.dispatchEvent(new CustomEvent('mexico-reading-mode',{bubbles:true,detail:{selected:true}}));});
   q('[data-mexico-hydrology-retry]')?.addEventListener('click', () => {manifest = null; groundwaterManifest = null; cache.delete(cacheKey('manifest.json'));if(groundwaterAssetBase)cache.delete(cacheKey('manifest.json',groundwaterAssetBase));if(preparedAssets){prepared?.invalidate();cache.delete(cacheKey('manifest.json',preparedAssets.surfaceAssetBase));cache.delete(cacheKey('catalog.json',preparedAssets.basinAssetBase));}void render();});
   const map=q<SVGSVGElement>('[data-mexico-nature-main-map]');let labelWidth=map?.clientWidth ?? 0,labelFrame=0;
-  const resizeLabels=()=>{const width=map?.clientWidth ?? 0;if(Math.abs(width-labelWidth)<.5)return;labelWidth=width;if(labelFrame)cancelAnimationFrame(labelFrame);labelFrame=requestAnimationFrame(()=>{labelFrame=0;if(!manifest || root.dataset.mexicoHydrologyReady!=='true' || !current().category || root.dataset.mexicoPreparedCategory)return;const layers=mexicoWaterLayersForCategory(current().category).filter(layer=>collections.has(layer)||(layer==='groundwater' && isSelectedGroundwater(manifest.layers.groundwater) && loadedGroundwaterClass==='all'));for(const layer of layers)if(layer==='precipitation'||layer==='contours'||layer==='basins')draw(layer);keys(layers);});};
+  const resizeLabels=()=>{const width=map?.clientWidth ?? 0;if(Math.abs(width-labelWidth)<.5)return;labelWidth=width;if(labelFrame)cancelAnimationFrame(labelFrame);labelFrame=requestAnimationFrame(()=>{labelFrame=0;if(!manifest || root.dataset.mexicoHydrologyReady!=='true' || !current().category || (root.dataset.mexicoPreparedCategory&&root.dataset.mexicoPreparedCategory!=='elevation'&&root.dataset.mexicoPreparedCategory!=='basins'))return;if(root.dataset.mexicoPreparedCategory==='basins'){void render();return;}const layers=mexicoWaterLayersForCategory(current().category).filter(layer=>collections.has(layer)||(layer==='groundwater' && isSelectedGroundwater(manifest.layers.groundwater) && loadedGroundwaterClass==='all'));for(const layer of layers)if(layer==='precipitation'||layer==='contours'||layer==='basins')draw(layer);keys(layers);});};
   if(map && typeof ResizeObserver!=='undefined')new ResizeObserver(resizeLabels).observe(map);else window.addEventListener('resize',resizeLabels);
   return {render: () => void render(), read: () => {selection = readMexicoWaterSelection(new URL(location.href));}, url: (url: URL) => writeMexicoWaterSelection(url, selection)};
 }
