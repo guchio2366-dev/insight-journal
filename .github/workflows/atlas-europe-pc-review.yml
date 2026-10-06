@@ -1,0 +1,107 @@
+name: Europe PC review
+
+# One run per relevant PR update. This never runs on push, publishes a site, or
+# changes the shared validation workflow or another region's acceptance suite.
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/atlas-europe-pc-review.yml'
+      - 'tests/browser/atlas-europe-pc-review.mjs'
+      - 'docs/atlas-europe-pc-review.md'
+      - 'src/components/atlas/Europe*.astro'
+      - 'src/data/atlas/europe/**'
+      - 'src/data/atlas/*europe*.json'
+      - 'src/lib/atlas-europe-*.ts'
+      - 'src/scripts/atlas-europe-*.ts'
+      - 'src/styles/atlas-europe*.css'
+      - 'src/pages/atlas/europe/**'
+      - 'public/assets/atlas/europe/**'
+      - 'tests/unit/atlas-europe-*.test.mjs'
+      - 'tests/e2e/atlas-europe-*.test.mjs'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: europe-pc-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  europe-pc-review:
+    name: Europe PC maps and selection return
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+      EUROPE_REVIEW_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+      EUROPE_REVIEW_OUTPUT: ${{ runner.temp }}/europe-pc-review
+      EUROPE_REVIEW_BASE_URL: http://127.0.0.1:4173/insight-journal/
+    steps:
+      - name: Check out the PR head to be photographed
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+
+      - name: Verify existing Chrome and Japanese fonts
+        shell: bash
+        run: |
+          set -euo pipefail
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          japanese_fonts="$(fc-list ':lang=ja' family | sort -u | paste -sd ',' -)"
+          if [[ -z "$chrome_path" || -z "$japanese_fonts" ]]; then
+            echo "::error::Preinstalled Chrome and Japanese fonts are required. No browser, font, or system setting will be installed or changed by this workflow."
+            exit 1
+          fi
+          echo "EUROPE_REVIEW_CHROMIUM_PATH=$chrome_path" >> "$GITHUB_ENV"
+          echo "EUROPE_REVIEW_JAPANESE_FONTS=$japanese_fonts" >> "$GITHUB_ENV"
+          font_match="$(fc-match -f '%{family}' 'sans-serif:lang=ja')"
+          echo "EUROPE_REVIEW_JAPANESE_FONT_MATCH=$font_match" >> "$GITHUB_ENV"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install locked project dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Build and verify the production site at this head
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EUROPE_REVIEW_EXPECTED_HEAD"
+          npm run build
+          # On pull_request, GITHUB_SHA identifies a synthetic merge commit.
+          # Record the checked-out head explicitly using the existing release CLI.
+          node scripts/generate-release.mjs --commit "$EUROPE_REVIEW_EXPECTED_HEAD"
+          node scripts/verify-release.mjs --commit "$EUROPE_REVIEW_EXPECTED_HEAD"
+
+      - name: Check PC operations and capture Europe and US reference images
+        timeout-minutes: 6
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run preview -- --host 127.0.0.1 --port 4173 > "$RUNNER_TEMP/europe-preview.log" 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..40}; do
+            if curl --fail --silent "$EUROPE_REVIEW_BASE_URL" > /dev/null; then
+              break
+            fi
+            kill -0 "$preview_pid"
+            sleep 1
+          done
+          curl --fail --silent "$EUROPE_REVIEW_BASE_URL" > /dev/null
+          node tests/browser/atlas-europe-pc-review.mjs
+
+      - name: Save newly captured images and provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: europe-pc-review-${{ github.event.pull_request.head.sha }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/europe-pc-review
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7
