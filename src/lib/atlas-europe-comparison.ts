@@ -3,7 +3,7 @@ import { europeReadings } from '../data/atlas/europe/readings.ts';
 import countries from '../data/atlas/europe/countries.json' with { type:'json' };
 import climateCities from '../data/atlas/europe/climate-cities.json' with { type:'json' };
 import populationCities from '../data/atlas/europe/population-cities.json' with { type:'json' };
-import { readEuropeState, writeEuropeState, type EuropeState } from './atlas-europe-view.ts';
+import { normaliseEuropePoint, readEuropeState, writeEuropeState, type EuropeState } from './atlas-europe-view.ts';
 import { cultureSelection } from './atlas-europe-population-cases.ts';
 import { normaliseEuropeDrainageBasin } from './atlas-europe-drainage.ts';
 import { europeFarmingComparisonLinks, europeFarmingComparisonFocus, writeEuropeFarmingFocus } from '../data/atlas/europe/farming-water-comparisons.ts';
@@ -25,7 +25,7 @@ export type EuropeComparisonLink = {
   sources?: readonly { label: string; url: string }[];
 };
 
-const returnKeys = new Set(['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin','farmYear','farmMeasure','farmCompare']);
+const returnKeys = new Set(['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'point', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin','farmYear','farmMeasure','farmCompare']);
 const returnLimit = 2048;
 const knownLayer = (id: string) => europeLayers.some(layer => layer.id === id);
 const sourceLayer = (state: EuropeState) => state.layer === 'overlay' ? (state.returnLayer === 'climate' ? 'wheat' : state.returnLayer) : state.layer;
@@ -157,12 +157,17 @@ export function europeComparisonUrl(base: URL, source: EuropeState, comparison: 
   // An entrance may name a point in another country. Start at the Europe scope
   // so both that point and the saved source distribution can be seen together.
   const target: EuropeState = { ...source, region: 'all', place: '', compare: [], layer: comparison.targetLayer };
-  // Ordinary field comparisons keep independent saved selections, including
-  // the source's basin when viewing crops or population. A registered farming
-  // focus instead owns its target point/unit and must clear unrelated picks.
-  if (focus) { target.feature = undefined; target.basin = undefined; }
+  // Unnamed field comparisons keep independent saved selections, including
+  // the source's basin when viewing crops or population. Named destinations
+  // and registered farming focuses own their target point instead.
+  if (focus) { target.feature = undefined; target.basin = undefined; target.point = undefined; }
   if (comparison.city) target.city = comparison.city;
-  if (comparison.feature) target.feature = comparison.feature;
+  if (comparison.feature) {
+    target.feature = comparison.feature;
+    const feature=europeReadings.find(item=>item.id===comparison.feature);
+    target.point=!focus&&['terrain','contours','drainage'].includes(target.layer)
+      ? normaliseEuropePoint(feature?.coordinates) : undefined;
+  }
   if (comparison.basin) target.basin = comparison.basin;
   const next = writeEuropeState(localFieldUrl(base, target), target);
   next.searchParams.set('europeReturn', encodeEuropeReturn(source));

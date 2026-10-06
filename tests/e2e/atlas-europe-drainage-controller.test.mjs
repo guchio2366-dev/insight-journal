@@ -44,6 +44,8 @@ async function setup(search='?layer=drainage&render=static',fixture={}){
   w.document.body.innerHTML=html;
   const q=selector=>w.document.querySelector(selector),root=q('[data-europe-detail]');
   const config=JSON.parse(q('[data-eu-config]').textContent);
+  const grid=q('[data-eu-subject-grid]'),result=q('[data-eu-subject-result]');
+  const gridHome=grid.parentElement,resultSemantics={role:result.getAttribute('role'),live:result.getAttribute('aria-live')};
   assert.ok(config.layers.some(layer=>layer.id==='drainage'),'Built HTML must contain the current drainage config');
   const stage=q('.eu-map-stage'),svg=q('[data-eu-static]');
   for(const node of [stage,svg]){Object.defineProperty(node,'clientWidth',{value:1200});Object.defineProperty(node,'clientHeight',{value:1001});}
@@ -68,10 +70,58 @@ async function setup(search='?layer=drainage&render=static',fixture={}){
   const clickPoint=coordinates=>{const [x,y]=project(coordinates);svg.dispatchEvent(new w.MouseEvent('click',{clientX:x,clientY:y,bubbles:true}));};
   w.eval(bundled.outputFiles[0].text);
   await until(()=>root.dataset.initialized==='true');await tick();
-  return{w,q,config,draws,requests,warnings,choose,restore,clickPoint};
+  return{w,q,config,draws,requests,warnings,choose,restore,clickPoint,grid,result,gridHome,resultSemantics};
 }
 
-for(const action of ['choice','clear','popstate']){
+test('drainage lookup feedback follows the basin choice with one live result, and other subjects restore its existing home',async()=>{
+  const app=await setup();
+  const controls=app.q('[data-eu-drainage-controls]');
+  const assertSameReading=()=>{
+    assert.equal(app.w.document.querySelectorAll('[data-eu-subject-grid]').length,1);
+    assert.equal(app.w.document.querySelectorAll('[data-eu-subject-result]').length,1);
+    assert.ok(app.q('[data-eu-subject-grid]')===app.grid,'Move the existing value panel rather than copying it');
+    assert.ok(app.q('[data-eu-subject-result]')===app.result,'Keep the original live result node');
+    assert.equal(app.result.getAttribute('role'),app.resultSemantics.role);
+    assert.equal(app.result.getAttribute('aria-live'),app.resultSemantics.live);
+    assert.equal(app.result.getAttribute('aria-live'),'polite');
+  };
+  const assertDrainageLocation=()=>{
+    assertSameReading();
+    assert.ok(app.grid.closest('[data-eu-drainage-controls]')===controls,'Drainage feedback belongs in the basin controls');
+    assert.ok(app.grid.previousElementSibling===app.q('[data-eu-basin-summary]'),'The value follows the existing basin summary directly');
+    assert.ok(app.q('[data-eu-drainage-choice]').compareDocumentPosition(app.grid)&app.w.Node.DOCUMENT_POSITION_FOLLOWING,'Feedback follows the existing basin selector');
+    assert.equal(controls.hidden,false);assert.equal(app.grid.hidden,false);
+    assert.equal(app.q('[data-eu-layer-source]').href,app.config.layers.find(layer=>layer.id==='drainage').source);
+  };
+  const chooseTopic=layer=>{const button=app.q(`[data-eu-topic="${layer}"]`);assert.ok(button);button.click();};
+  try{
+    assertDrainageLocation();
+    const london=app.config.cities.find(city=>city.id==='london');
+    app.clickPoint(london.coordinates);
+    await until(()=>!app.result.hasAttribute('aria-busy')&&app.result.textContent.includes('HYBAS_ID'));
+    assertDrainageLocation();
+    app.clickPoint([-30,55]);
+    assert.equal(app.result.textContent,'表示範囲外です。');
+    assert.equal(app.result.hasAttribute('aria-busy'),false);assertDrainageLocation();
+
+    for(const layer of ['terrain','contours']){
+      chooseTopic(layer);assertSameReading();
+      assert.ok(app.grid.closest('.eu-read-panel')===app.q('.eu-read-panel'),'Elevation feedback remains beside the map');
+      assert.equal(controls.contains(app.grid),false);assert.equal(controls.hidden,true);assert.equal(app.grid.hidden,false);
+    }
+    for(const layer of ['water','precipitation','climate']){
+      chooseTopic(layer);assertSameReading();
+      assert.ok(app.grid.parentElement===app.gridHome,'Other topics keep the original statistics location');
+      assert.equal(controls.contains(app.grid),false);assert.equal(controls.hidden,true);
+      assert.equal(app.grid.hidden,layer!=='precipitation');
+    }
+    chooseTopic('water');chooseTopic('drainage');assertDrainageLocation();
+    assert.match(app.result.textContent,/地図を押すと/);
+    assert.deepEqual(app.warnings,[]);
+  }finally{await app.w.happyDOM.close();}
+});
+
+for(const action of ['choice','clear','popstate','out-of-range']){
   test(`a cold London grid click cannot override a newer ${action} selection when the actual drainage response arrives`,async()=>{
     const gate=defer(),app=await setup(undefined,{fetch:asset=>asset.endsWith('/drainage-v1/values.bin.gz')?gate.promise:undefined});
     try{
@@ -83,12 +133,14 @@ for(const action of ['choice','clear','popstate']){
       if(action==='choice')app.choose(id);
       if(action==='clear')app.q('[data-eu-drainage-clear]').click();
       if(action==='popstate')app.restore('drainage',id);
+      if(action==='out-of-range')app.clickPoint([-30,55]);
       assert.doesNotMatch(app.q('[data-eu-subject-result]').textContent,/読み込んでいます/,'A cancelled grid read stops claiming to load immediately');
       assert.equal(app.q('[data-eu-subject-result]').hasAttribute('aria-busy'),false);
       gate.resolve(new Response(bytes));
-      if(action==='clear'){
+      if(action==='clear'||action==='out-of-range'){
         await tick();await tick();
         assert.equal(new URL(app.w.location.href).searchParams.has('basin'),false);
+        assert.equal(new URL(app.w.location.href).searchParams.has('point'),false);
         assert.equal(app.q('[data-eu-drainage-choice]').value,'');
         assert.equal(app.q('[data-eu-drainage-selection]').style.display,'none');
         assert.equal(app.draws.length,0,'No superseded grid response paints an outline after clear');
@@ -137,5 +189,54 @@ test('direct reload and native selection restore the same source ID; missing dis
     const ocean=[-20,55];assert.equal(europeDrainageCell(values,ocean),undefined);
     app.clickPoint(ocean);await until(()=>!new URL(app.w.location.href).searchParams.has('basin'));
     assert.equal(app.q('[data-eu-drainage-choice]').value,'');assert.equal(app.q('[data-eu-drainage-selection]').style.display,'none');assert.match(app.q('[data-eu-basin-summary]').textContent,/有効な区画がありません/);assert.match(app.q('[data-eu-subject-result]').textContent,/データなし/);assert.doesNotMatch(app.q('[data-eu-subject-result]').textContent,/：0 /);
+  }finally{await app.w.happyDOM.close();}
+});
+
+test('an out-of-range click clears a completed drainage selection and its comparison snapshot; popstate restores either history state',async()=>{
+  const app=await setup();
+  const url=()=>new URL(app.w.location.href);
+  const sourceChoices=()=>[...app.w.document.querySelectorAll('[data-eu-comparison-link]')].map(link=>new URLSearchParams(new URL(link.href).searchParams.get('europeReturn')));
+  const assertCleared=()=>{
+    assert.equal(url().searchParams.has('point'),false,'The invalid point does not survive in URL state');
+    assert.equal(url().searchParams.has('basin'),false,'The previous basin is cleared with the invalid point');
+    assert.equal(app.q('[data-eu-drainage-choice]').value,'');
+    assert.equal(app.q('[data-eu-drainage-selection]').style.display,'none');
+    assert.equal(app.q('[data-eu-selected-point]').hidden,true);
+    assert.equal(app.q('[data-eu-subject-result]').hasAttribute('aria-busy'),false);
+    assert.ok(app.q('[data-eu-subject-result]').closest('[data-eu-drainage-controls]')===app.q('[data-eu-drainage-controls]'),'Range feedback stays with the cleared selector during history restoration');
+    assert.doesNotMatch(app.q('[data-eu-basin-summary]').textContent,/HYBAS_ID/);
+    const snapshots=sourceChoices();assert.ok(snapshots.length>0);
+    for(const source of snapshots){assert.equal(source.has('point'),false);assert.equal(source.has('basin'),false);}
+  };
+  const replay=href=>{app.w.history.replaceState({},'',href);app.w.dispatchEvent(new app.w.PopStateEvent('popstate'));};
+  try{
+    const london=app.config.cities.find(city=>city.id==='london'),cell=europeDrainageCell(values,london.coordinates);
+    assert.ok(cell);const id=String(cell.basin.HYBAS_ID);
+    app.clickPoint(london.coordinates);
+    await until(()=>app.draws.length===1&&url().searchParams.get('basin')===id&&!app.q('[data-eu-subject-result]').hasAttribute('aria-busy'));
+    assert.equal(app.q('[data-eu-drainage-choice]').value,id);
+    assert.equal(app.q('[data-eu-drainage-selection]').style.display,'');
+    assert.ok(url().searchParams.get('point'));
+    for(const source of sourceChoices()){assert.equal(source.get('basin'),id);assert.ok(source.get('point'));}
+    const selected=app.w.location.href,historyLength=app.w.history.length;
+
+    app.clickPoint([-30,55]);assertCleared();
+    assert.equal(app.q('[data-eu-subject-result]').textContent,'表示範囲外です。');
+    assert.equal(app.w.history.length,historyLength+1,'The range-out click creates one cleared state');
+    const cleared=app.w.location.href;
+    await tick();assertCleared();
+
+    replay(selected);
+    await until(()=>url().searchParams.get('basin')===id&&!app.q('[data-eu-subject-result]').hasAttribute('aria-busy'));
+    assert.equal(app.q('[data-eu-drainage-choice]').value,id);
+    assert.equal(app.q('[data-eu-drainage-selection]').style.display,'');
+    assert.equal(url().searchParams.get('point'),new URL(selected).searchParams.get('point'));
+    for(const source of sourceChoices()){assert.equal(source.get('basin'),id);assert.ok(source.get('point'));}
+    assert.equal(app.w.history.length,historyLength+1,'Restoring the selected grid must not create a history entry');
+
+    replay(cleared);await tick();assertCleared();
+    assert.match(app.q('[data-eu-subject-result]').textContent,/地図を押すと/);
+    assert.equal(app.w.history.length,historyLength+1,'Forward to the cleared state must not create a history entry');
+    assert.equal(app.draws.length,1,'The cleared state never repaints the previous basin');
   }finally{await app.w.happyDOM.close();}
 });
