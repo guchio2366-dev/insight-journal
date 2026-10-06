@@ -21,7 +21,9 @@ PRのheadをcheckoutしてproduction buildを作り、`_release.json.commitSha` 
 
 通常のActions artifact `europe-pc-review-<head SHA>-<run ID>` に画像と結果JSONを7日間保存する。結果には実際のHEAD、src tree、build情報、browser、viewport、画像寸法・hash、画面の測定値、操作結果、描画状態、失敗・未確認範囲を含める。最終判定には画像そのものも確認する。
 
-権限は `contents: read` のみ。既存と同じ公式checkout/setup-node/upload-artifactを用い、秘密情報や公開用権限は受け取らない。標準runnerにあるChromeと日本語フォントを検査し、不足時は停止する。ブラウザー／フォントの追加インストール、課金設定、認証、信頼ストア、TLS例外の変更は行わない。
+権限は `contents: read` のみ。既存と同じ公式checkout/setup-node/upload-artifactを用い、秘密情報や公開用権限は受け取らない。標準runnerのChromeを独立したstepで確認し、版とパスを表示する。日本語フォントが不足する場合だけ、runner既定の公式Ubuntuパッケージ配布元から `fonts-noto-cjk` を一時runnerへ導入する。フォントの準備方法・使用可能なfont・解決されたfont名はmanifestに記録する。ブラウザー不足とfont不足は別のエラーとして停止する。
+
+通常の一時的な開発依存の導入だけを行い、配布元・鍵・証明書検証・ネットワーク権限・sandbox・課金・認証・信頼ストアの設定は変えない。aptの取得エラーは停止条件とし、証明書エラーを無視しない。過去に拒否されたActions詳細ログの取得は再試行せず、今回の正常なjob出力・結果JSON・artifactで検証する。
 
 ## ローカル再現
 

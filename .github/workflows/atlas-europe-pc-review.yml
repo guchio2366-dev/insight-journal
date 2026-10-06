@@ -43,20 +43,43 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
 
-      - name: Verify existing Chrome and Japanese fonts
+      - name: Verify the runner Chrome
         shell: bash
         run: |
           set -euo pipefail
           chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
-          japanese_fonts="$(fc-list ':lang=ja' family | sort -u | paste -sd ',' -)"
-          if [[ -z "$chrome_path" || -z "$japanese_fonts" ]]; then
-            echo "::error::Preinstalled Chrome and Japanese fonts are required. No browser, font, or system setting will be installed or changed by this workflow."
-            exit 1
+          if [[ -z "$chrome_path" ]]; then
+            echo "::error title=Chrome unavailable::Neither google-chrome nor google-chrome-stable was found on this runner. This is a browser prerequisite failure, before font setup."
+            exit 2
           fi
           echo "EUROPE_REVIEW_CHROMIUM_PATH=$chrome_path" >> "$GITHUB_ENV"
+          chrome_version="$("$chrome_path" --version)"
+          echo "::notice title=Chrome ready::$chrome_version at $chrome_path"
+
+      - name: Prepare Japanese fonts from the official runner package repository
+        shell: bash
+        run: |
+          set -euo pipefail
+          japanese_fonts="$(fc-list ':lang=ja' family | sort -u | paste -sd ',' -)"
+          font_setup="preinstalled"
+          if [[ -z "$japanese_fonts" ]]; then
+            echo "::notice title=Japanese fonts missing::Installing only fonts-noto-cjk from the runner's existing official Ubuntu package repository."
+            # Fail on repository errors, including certificate failures. Do not
+            # change repositories, keys, trust settings, or certificate checks.
+            sudo apt-get update -o APT::Update::Error-Mode=any
+            sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+            japanese_fonts="$(fc-list ':lang=ja' family | sort -u | paste -sd ',' -)"
+            font_setup="official-ubuntu-fonts-noto-cjk"
+          fi
+          if [[ -z "$japanese_fonts" ]]; then
+            echo "::error title=Japanese fonts unavailable::fonts-noto-cjk preparation finished without a Japanese-capable font. Screenshots would be unreadable."
+            exit 3
+          fi
+          echo "EUROPE_REVIEW_JAPANESE_FONT_SETUP=$font_setup" >> "$GITHUB_ENV"
           echo "EUROPE_REVIEW_JAPANESE_FONTS=$japanese_fonts" >> "$GITHUB_ENV"
           font_match="$(fc-match -f '%{family}' 'sans-serif:lang=ja')"
           echo "EUROPE_REVIEW_JAPANESE_FONT_MATCH=$font_match" >> "$GITHUB_ENV"
+          echo "::notice title=Japanese fonts ready::$font_setup; sans-serif resolves to $font_match"
 
       - name: Set up Node.js
         uses: actions/setup-node@v6

@@ -25,7 +25,7 @@ const manifest = {
   gitStatus: git('status', '--porcelain'), expectedHead: process.env.EUROPE_REVIEW_EXPECTED_HEAD ?? null,
   scriptSha256: createHash('sha256').update(await readFile(fileURLToPath(import.meta.url))).digest('hex'),
   ci: Object.fromEntries(['GITHUB_REPOSITORY', 'GITHUB_WORKFLOW', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT', 'GITHUB_SHA', 'GITHUB_HEAD_REF', 'GITHUB_BASE_REF'].map(key => [key, process.env[key] ?? null])),
-  fonts: {available: process.env.EUROPE_REVIEW_JAPANESE_FONTS ?? null, match: process.env.EUROPE_REVIEW_JAPANESE_FONT_MATCH ?? null},
+  fonts: {available: process.env.EUROPE_REVIEW_JAPANESE_FONTS ?? null, match: process.env.EUROPE_REVIEW_JAPANESE_FONT_MATCH ?? null, setup: process.env.EUROPE_REVIEW_JAPANESE_FONT_SETUP ?? null},
   records: [], images: [], comparisons: [],
   limits: ['US visual comparison covers climate only; US contour/water/population data and parity are not asserted.', 'Explicit static coverage is limited to 1024×800 and is not counted as a normal-render comparison.', 'SVG extent checks do not establish that the live MapLibre camera is unchanged.'],
   network: {policy: 'Exact local preview origin only; redirects checked before following; service workers blocked.', requests: [], rejected: [], failures: []},
