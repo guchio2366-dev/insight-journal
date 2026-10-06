@@ -35,7 +35,6 @@ jobs:
     env:
       ASTRO_TELEMETRY_DISABLED: '1'
       EUROPE_REVIEW_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
-      EUROPE_REVIEW_OUTPUT: ${{ runner.temp }}/europe-pc-review
       EUROPE_REVIEW_BASE_URL: http://127.0.0.1:4173/insight-journal/
     steps:
       - name: Check out the PR head to be photographed
@@ -81,6 +80,8 @@ jobs:
       - name: Check PC operations and capture Europe and US reference images
         timeout-minutes: 6
         shell: bash
+        env:
+          EUROPE_REVIEW_OUTPUT: ${{ runner.temp }}/europe-pc-review
         run: |
           set -euo pipefail
           npm run preview -- --host 127.0.0.1 --port 4173 > "$RUNNER_TEMP/europe-preview.log" 2>&1 &
