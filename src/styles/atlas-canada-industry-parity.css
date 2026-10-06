@@ -8,4 +8,6 @@
 .canada-industry-parity .industry-method summary{font-size:14px;cursor:pointer}
 .canada-industry-parity .industry-map-reading .industry-selected-reading{position:static}
 @media(max-width:649px){.ca-industry-marker{max-width:108px;gap:2px;padding:2px}.ca-industry-marker strong{font-size:9px}.ca-industry-marker small{font-size:8px}.canada-industry-parity .atlas-map-frame{min-height:340px}.canada-industry-parity .industry-tab-row button{min-height:44px}}
-.ca-industry-marker{width:max-content;max-width:145px;transform:none}
+.ca-industry-marker{display:block;width:44px;height:44px;max-width:none;padding:0;transform:none}
+.ca-industry-marker i{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+.ca-industry-marker span{position:absolute;width:130px;box-sizing:border-box;left:28px;top:0}
