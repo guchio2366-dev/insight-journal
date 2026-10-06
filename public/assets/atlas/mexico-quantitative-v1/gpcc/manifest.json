@@ -98,8 +98,8 @@
   },
   "source": {
     "file": "precipitation-source.json",
-    "bytes": 5065,
-    "sha256": "9fb82cb2985ae4a4840870e05858cc45780a22f35a9c84f58db6717350619efd"
+    "bytes": 5043,
+    "sha256": "5620a7f2e5ff4b01a5aaafeb4b5de946b70e318e96c5589aff350d43f846601c"
   },
   "landMask": "Original INEGI 32-state union; pixel centre inclusion; sea, foreign land, supplied polygon holes and source missing are transparent. State polygons are not an exhaustive inland-water mask.",
   "resampling": "Native containing-cell lookup (nearest centre on regular grid), no spatial interpolation. Colour is continuous in mm/year.",
@@ -289,6 +289,6 @@
       "sha256": "3362ec17a923abbfae8dd36ff5c227d0c122ee0f40e4bbac4cc07d9ea26d6d46"
     },
     "originalManifestSha256": "69a66ce4fb7a8cd84453b8309b51f4dc3cdc84cbf03d28900fc30fecd2f078dd",
-    "change": "Move archiveMd5 from the source record to publisherMd5 in this manifest. No value, citation, raster or grid is removed or changed."
+    "change": "Move archiveMd5 from the source record to publisherMd5 in this manifest; name the byte-identical inherited source record source/manifest.json and update its reference. No value, citation, raster or grid is removed or changed."
   }
 }

@@ -115,7 +115,18 @@ export function initMexicoNatureSurfaces(
     const label = document.createElement('p'); label.className = 'mexico-quantitative-legend-label'; label.textContent = `${layer.titleJa}（${unit}）｜${category === 'precipitation' ? '多いほど濃い青' : '高いほど濃い色'}`;
     const ramp = document.createElement('div'); ramp.className = 'mexico-quantitative-ramp'; ramp.style.background = mexicoSurfaceGradient(layer.legend); ramp.setAttribute('aria-hidden', 'true');
     const values = document.createElement('div'); values.className = 'mexico-quantitative-ticks';
-    for (const value of ticks) {const tick = document.createElement('span'); tick.textContent = value.toLocaleString('ja-JP'); tick.style.left = `${mexicoSurfaceTickPosition(layer.legend, value)}%`; tick.dataset.edge = value === domain[0] ? 'start' : value === domain[1] ? 'end' : ''; values.append(tick);}
+    values.setAttribute('role', 'list'); values.setAttribute('aria-label', `${layer.titleJa}の数値目盛り（${unit}）`);
+    let previousPosition = -Infinity, previousLower = false;
+    for (const value of ticks) {
+      const tick = document.createElement('span'), position = mexicoSurfaceTickPosition(layer.legend, value);
+      const lower = position - previousPosition < 12 && !previousLower;
+      tick.textContent = value.toLocaleString('ja-JP'); tick.style.left = `${position}%`;
+      tick.dataset.edge = value === domain[0] ? 'start' : value === domain[1] ? 'end' : '';
+      tick.dataset.row = lower ? 'lower' : 'upper';
+      tick.setAttribute('role', 'listitem'); tick.setAttribute('aria-label', `${tick.textContent} ${unit}`);
+      if (lower) values.dataset.staggered = 'true';
+      values.append(tick); previousPosition = position; previousLower = lower;
+    }
     legend.append(label, ramp, values);
     text('[data-mexico-nature-map-title]', layer.titleJa);
     text('[data-mexico-nature-map-edition]', layer.sourceLabelJa);

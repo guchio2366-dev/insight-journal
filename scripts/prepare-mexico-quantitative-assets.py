@@ -28,7 +28,7 @@ FILES = [
     ('gpcc/output/mexico-gpcc-1991-2020-land-intersection.u8', 'gpcc/mexico-gpcc-1991-2020-land-intersection.u8', 10560, '965f512275ff6b875f5c7af8eed75fe39ff2d53b8d2e25ddfa018e8dd5f43feb'),
     ('gpcc/output/mexico-gpcc-1991-2020-missing-land.png', 'gpcc/mexico-gpcc-1991-2020-missing-land.png', 2161, 'ff041ddf89353315ab8fa49a95d474094326d78fe359aea7e9b7afc2678674f7'),
     ('gpcc/output/independent-grid-verification.json', 'gpcc/independent-grid-verification.json', 484, '0483610258abd4fca6fac6eed380f0d88bdfbc52bcc75575f3e3c26ecd8d49ce'),
-    ('gpcc/source/inherited-exact-product-rights.json', 'gpcc/source/inherited-exact-product-rights.json', 2547, 'eef8711e54ef8a3c28c40dbcf3bd79b89b69a2f348a3385ea6cecec12cafdc78'),
+    ('gpcc/source/inherited-exact-product-rights.json', 'gpcc/source/manifest.json', 2547, 'eef8711e54ef8a3c28c40dbcf3bd79b89b69a2f348a3385ea6cecec12cafdc78'),
     ('etopo/elevation-surface.manifest.json', 'etopo/elevation-surface.manifest.json', 11176, '56c83774ea227ffe1779e4f636731cb7a97595fd22933046c302dec4c3b45325'),
     ('etopo/elevation-surface.webp', 'etopo/elevation-surface.webp', 126908, '80f27a16c48d057f93ebd235a43797645b3fb9576f064e666bd0facea465ebef'),
     ('etopo/elevation-legend.json', 'etopo/elevation-legend.json', 1239, '68eaf5eed789bcf63b3ab992fb69d28ee2552b9a56e9079423cb365eab834a14'),
@@ -96,6 +96,7 @@ def prepare(prepared_root, repo_root, check=False):
     # from private 32-character identifiers. Keep the official MD5 in that
     # established schema without changing the release scanner or the raw input.
     gpcc['publisherMd5'] = source.pop('archiveMd5')
+    source['licenseEvidence']['retainedAs'] = 'source/manifest.json'
     source_name = 'gpcc/precipitation-source.json'
     original_source = dict(gpcc['source'])
     payloads[source_name] = (json.dumps(source, ensure_ascii=False, indent=2) + '\n').encode()
@@ -103,7 +104,7 @@ def prepare(prepared_root, repo_root, check=False):
     gpcc['publicPackaging'] = {
         'originalSource': original_source,
         'originalManifestSha256': sha256(payloads['gpcc/manifest.json']),
-        'change': 'Move archiveMd5 from the source record to publisherMd5 in this manifest. No value, citation, raster or grid is removed or changed.',
+        'change': 'Move archiveMd5 from the source record to publisherMd5 in this manifest; name the byte-identical inherited source record source/manifest.json and update its reference. No value, citation, raster or grid is removed or changed.',
     }
     payloads['gpcc/manifest.json'] = (json.dumps(gpcc, ensure_ascii=False, indent=2) + '\n').encode()
     require(gpcc['displayFrame'] == etopo['displayFrame'], 'Raster display frames differ')

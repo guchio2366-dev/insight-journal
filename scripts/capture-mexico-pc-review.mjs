@@ -80,7 +80,14 @@ async function capture(browser, origin, basePath, output, scene) {
     // Additional Mexico cases may operate the existing page before measurement.
     if (scene.run) {
       record.operation = {steps: []};
-      await scene.run({page, context, selected, evidence: record.operation});
+      const captureStepImage = async id => {
+        assert(/^[a-z0-9-]+$/.test(id));
+        const filename = `${name}-${id}.png`;
+        await page.locator(`${selected.root} .atlas-primary-grid`).screenshot({path: path.join(output, filename), animations: 'disabled'});
+        (record.operation.screenshots ??= []).push(filename);
+        return filename;
+      };
+      await scene.run({page, context, selected, evidence: record.operation, captureStepImage});
       Object.assign(selected, scene.captureSelectors);
       await settle(page);
     }
@@ -99,7 +106,7 @@ async function capture(browser, origin, basePath, output, scene) {
     for (const image of record.rendering.svgImages) assert(image.width > 0 && image.height > 0, 'SVG image did not decode');
     record.screenshot = `${name}.png`;
     await page.screenshot({path: path.join(output, record.screenshot), fullPage: false, animations: 'disabled'});
-    if (id === 'initial') {
+    if (id === 'initial' || scene.captureWorkspace) {
       record.workspaceScreenshot = `${name}-workspace.png`;
       await page.screenshot({path: path.join(output, record.workspaceScreenshot), fullPage: true, clip: record.workspace.clip, animations: 'disabled'});
     }

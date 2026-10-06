@@ -46,7 +46,7 @@
   "licenseEvidence": {
     "inheritedFrom": "data-source/atlas/europe/precipitation/source.json",
     "inheritedFileSha256": "eef8711e54ef8a3c28c40dbcf3bd79b89b69a2f348a3385ea6cecec12cafdc78",
-    "retainedAs": "source/inherited-exact-product-rights.json",
+    "retainedAs": "source/manifest.json",
     "priorEvidence": {
       "publisherProductLinksToLegalNotice": true,
       "officialIndexedLegalNoticeStatesCcBy40": true,

@@ -229,8 +229,8 @@
   "assets": [
     {
       "file": "gpcc/manifest.json",
-      "bytes": 9368,
-      "sha256": "83fba7efd90c565f44f77c213a31daaae1420a3ced304653e7e44829d0c800c5"
+      "bytes": 9463,
+      "sha256": "ddf855f00c8322a6aad20a27bff988e75bf2e0a480445b96ec621efe8fa55bba"
     },
     {
       "file": "gpcc/precipitation-legend.json",
@@ -239,8 +239,8 @@
     },
     {
       "file": "gpcc/precipitation-source.json",
-      "bytes": 5065,
-      "sha256": "9fb82cb2985ae4a4840870e05858cc45780a22f35a9c84f58db6717350619efd"
+      "bytes": 5043,
+      "sha256": "5620a7f2e5ff4b01a5aaafeb4b5de946b70e318e96c5589aff350d43f846601c"
     },
     {
       "file": "gpcc/mexico-gpcc-1991-2020-annual.png",
@@ -273,7 +273,7 @@
       "sha256": "0483610258abd4fca6fac6eed380f0d88bdfbc52bcc75575f3e3c26ecd8d49ce"
     },
     {
-      "file": "gpcc/source/inherited-exact-product-rights.json",
+      "file": "gpcc/source/manifest.json",
       "bytes": 2547,
       "sha256": "eef8711e54ef8a3c28c40dbcf3bd79b89b69a2f348a3385ea6cecec12cafdc78"
     },

@@ -111,6 +111,7 @@ test('prepared precipitation waits for its exact PNG and shows annual mm, baseli
     const ticks = [...f.root.querySelectorAll('.mexico-quantitative-ticks span')];
     assert.deepEqual(ticks.map(node => node.textContent), ['0', '500', '1,000', '2,000', '3,000', '4,000']);
     assert.deepEqual(ticks.map(node => node.style.left), ['0%', '12.5%', '25%', '50%', '75%', '100%']);
+    assert.deepEqual(ticks.map(node => node.dataset.row), ['upper', 'upper', 'upper', 'upper', 'upper', 'upper']);
     assert.match(f.q('.mexico-quantitative-ramp').style.background, /linear-gradient.*#f7fbff.*#08306b/);
     assert.match(f.q('[data-mexico-hydrology-limitations]').textContent, /欠損は0 mmではありません/);
     assert.match(f.q('[data-mexico-hydrology-source]').textContent, /格子の解析値.*個別観測所.*一致しません/);
@@ -132,7 +133,13 @@ test('prepared elevation reuses the validated manifest, shows m and the EGM2008 
     assert.equal(f.root.dataset.mexicoPreparedCategory, 'elevation');
     assert.match(f.q('[data-mexico-quantitative-legend]').textContent, /標高（m）.*高いほど濃い色/);
     assert.match(f.q('[data-mexico-nature-period]').textContent, /ETOPO 2022（版年）.*60秒.*EGM2008/);
-    assert.deepEqual([...f.root.querySelectorAll('.mexico-quantitative-ticks span')].map(node => node.textContent), ['-600', '0', '1,000', '2,000', '3,000', '4,000', '5,500']);
+    const elevationTicks = [...f.root.querySelectorAll('.mexico-quantitative-ticks span')];
+    assert.deepEqual(elevationTicks.map(node => node.textContent), ['-600', '0', '1,000', '2,000', '3,000', '4,000', '5,500']);
+    assert.deepEqual(elevationTicks.map(node => node.dataset.row), ['upper', 'lower', 'upper', 'upper', 'upper', 'upper', 'upper']);
+    assert.equal(elevationTicks[0].style.left, '0%');
+    assert.equal(Number.parseFloat(elevationTicks[1].style.left), 600 / 6100 * 100, 'Zero retains its true position rather than becoming an evenly spaced class');
+    assert.equal(elevationTicks[1].getAttribute('aria-label'), '0 m');
+    assert.equal(elevationTicks[6].style.left, '100%');
     assert.match(f.q('[data-mexico-hydrology-limitations]').textContent, /有効な負標高/);
     assert.match(f.q('[data-mexico-hydrology-source]').textContent, /全国共通の観測年ではありません/);
     assert.equal(f.q('[data-mexico-hydrology-controls]').hidden, true);

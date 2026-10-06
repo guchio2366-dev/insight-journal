@@ -24,6 +24,17 @@ async function select(page, selector, value) {const locator = page.locator(selec
 async function check(page, selector, value) {const locator = page.locator(selector).first(); await reveal(locator); await locator.setChecked(value); await settled(page);}
 async function text(page, selector) {return (await page.locator(selector).first().textContent())?.trim() ?? '';}
 async function frame(page, field) {return page.locator(map[field]).getAttribute('viewBox');}
+async function legibleNumericTicks(page) {
+  const ticks = await page.locator('.mexico-quantitative-ticks > span').evaluateAll(nodes => nodes.map(node => {
+    const box = node.getBoundingClientRect();
+    return {text: node.textContent, x: box.x, y: box.y, width: box.width, height: box.height};
+  }));
+  assert(ticks.length >= 6);
+  for (const [index, a] of ticks.entries()) for (const b of ticks.slice(index + 1)) {
+    assert(!(Math.min(a.x + a.width, b.x + b.width) - Math.max(a.x, b.x) > 0 && Math.min(a.y + a.height, b.y + b.height) - Math.max(a.y, b.y) > 0), `Numeric legend labels overlap: ${a.text} / ${b.text}`);
+  }
+  return ticks;
+}
 function query(page, key) {return new URL(page.url()).searchParams.get(key);}
 
 async function snapshot(page) {
@@ -146,7 +157,7 @@ async function hydrologyReady(page, category) {
     return node?.dataset.mexicoHydrologyReady === 'true' && (!category || node.dataset.mexicoPreparedCategory === category);
   }, category, {timeout: 45_000});
 }
-async function water({page, evidence}) {
+async function water({page, evidence, captureStepImage}) {
   const step = steps(page, evidence);
   await step('Water peer tabs preserve the ten original groundwater classes and meaning', async () => {
     await click(page, 'button[data-mexico-nature-category="rivers-groundwater"]'); await hydrologyReady(page);
@@ -155,6 +166,7 @@ async function water({page, evidence}) {
     assert.equal(await page.locator('select[data-mexico-groundwater-class]').inputValue(), 'all');
     assert.match(await text(page, '[data-mexico-nature-period]'), /1996.*2008/);
     assert.match(await text(page, '[data-mexico-hydrology-body]'), /固結|非固結/);
+    await captureStepImage('groundwater');
     return {options, period: await text(page, '[data-mexico-nature-period]')};
   });
   await step('Annual precipitation surface, units, period and image load', async () => {
@@ -162,6 +174,7 @@ async function water({page, evidence}) {
     assert.match(await text(page, '[data-mexico-quantitative-legend]'), /mm\/年/);
     assert.match(await text(page, '[data-mexico-nature-period]'), /1991[–—-]2020/);
     assert.match(await page.locator('image[data-mexico-numeric-image]').getAttribute('href'), /gpcc.*annual\.png/);
+    await legibleNumericTicks(page);
     return {legend: await text(page, '[data-mexico-quantitative-legend]')};
   });
   await step('Three representative domestic basin systems expose their evidence limit', async () => {
@@ -171,6 +184,7 @@ async function water({page, evidence}) {
       await click(page, `button[data-mexico-basin-system="${id}"]`); await hydrologyReady(page, 'basins');
       assert.equal(await page.locator(`button[data-mexico-basin-system="${id}"]`).getAttribute('aria-pressed'), 'true');
       assert.equal(await page.locator('g[data-mexico-prepared-surface]').getAttribute('data-mexico-basin-system'), id);
+      await captureStepImage(`basin-${id}`);
     }
     assert.match(await text(page, '#mexico-nature-map-desc'), /未確認/);
     assert.match(await text(page, '[data-mexico-hydrology-body]'), /国外|国内|国境/);
@@ -185,6 +199,7 @@ async function elevation({page, evidence}) {
     await click(page, 'button[data-mexico-nature-category="elevation"]'); await hydrologyReady(page, 'elevation');
     assert.match(await text(page, '[data-mexico-quantitative-legend]'), /標高.*m/);
     assert.match(await page.locator('image[data-mexico-numeric-image]').getAttribute('href'), /elevation-surface\.webp/);
+    await legibleNumericTicks(page);
     assert(await page.locator('[data-mexico-nature-state-select]').isDisabled());
     const paths = await page.locator('path[data-mexico-nature-state]').evaluateAll(nodes => nodes.map(node => ({disabled: node.getAttribute('aria-disabled'), tabIndex: node.getAttribute('tabindex'), pointerEvents: getComputedStyle(node).pointerEvents})));
     assert.equal(paths.length, 32); assert(paths.every(node => node.disabled === 'true' && node.tabIndex === '-1' && node.pointerEvents === 'none'));
@@ -319,9 +334,9 @@ async function composition({page, evidence}) {
 export const mexicoPCOperationCases = [
   {country: 'mexico', field: 'agriculture', id: 'selection-roundtrip', run: agriculture},
   {country: 'mexico', field: 'nature', id: 'climate-and-relief', run: climate},
-  {country: 'mexico', field: 'nature', id: 'water-and-precipitation', run: water},
-  {country: 'mexico', field: 'nature', id: 'elevation', run: elevation},
-  {country: 'mexico', field: 'industry', id: 'comparison-roundtrip', run: industry},
+  {country: 'mexico', field: 'nature', id: 'water-and-precipitation', run: water, captureWorkspace: true},
+  {country: 'mexico', field: 'nature', id: 'elevation', run: elevation, captureWorkspace: true},
+  {country: 'mexico', field: 'industry', id: 'comparison-roundtrip', run: industry, captureWorkspace: true},
   {country: 'mexico', field: 'population', id: 'distribution-roundtrip', run: population},
-  {country: 'mexico', field: 'population', id: 'composition-roundtrip', run: composition, captureSelectors: {map: '[data-population-overview-maps]'}},
+  {country: 'mexico', field: 'population', id: 'composition-roundtrip', run: composition, captureWorkspace: true, captureSelectors: {map: '[data-population-overview-maps]'}},
 ];
