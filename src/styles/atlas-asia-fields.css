@@ -198,6 +198,12 @@
  .atlas-desktop-shell .asia-atlas[data-field] .asia-population-tabs{gap:8px;border:0;background:transparent}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-population-tabs>button{flex:none;min-height:44px;padding:8px 12px;border:1px solid #b5c6c8;border-radius:4px;background:#fff;color:#174b5c;font-size:16px;font-weight:400}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-population-tabs>button[aria-pressed=true]{border:1px solid #35515d;background:#35515d;color:#fff}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-population-navigation:has([data-population-scope]:not([hidden])){padding:12px 0}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-population-navigation:has([data-population-scope]:not([hidden])) .asia-population-tabs{margin:0}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-population-navigation:has([data-population-scope]:not([hidden])) .asia-population-tabs>button{line-height:28px}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-population-scope{margin:6px 0;font-size:13px;line-height:21px}
+ [data-climate-active=true] .atlas-desktop-shell .asia-atlas[data-field=natural] .asia-natural-controls{padding:6px;border:1px solid #c7ccbf;border-bottom:0}
+ [data-climate-active=true] .atlas-desktop-shell .asia-atlas[data-field=natural] .asia-natural-controls>.asia-primary-topics{margin:0;border:1px solid #c7ccbf}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-secondary-topics{margin:-10px 0 10px;padding:0;border:1px solid #c7ccbf;border-top:0;gap:0;background:#f1f0e7}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-secondary-topics>button{flex:1;min-height:44px;font-size:13px;padding:9px 8px;border-right:1px solid #d8d9ce}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-industry-navigation{margin-bottom:0}
@@ -271,8 +277,10 @@
  [data-asia-atlas][data-industry-scope=overview] .atlas-desktop-shell .asia-atlas[data-field=industry] .asia-map-frame{min-height:620px!important;max-height:none!important}
 }
 @media(min-width:960px) and (max-width:1199px){
- .atlas-desktop-shell .asia-atlas[data-field=industry] .asia-region-shell:not(:has(.asia-focus-navigation))>.regional-navigation{width:auto;flex:0 1 auto}
- .atlas-desktop-shell .asia-atlas[data-field=industry] .asia-region-shell:not(:has(.asia-focus-navigation)) .asia-toolbar{width:auto;flex:none}
+ .atlas-desktop-shell .asia-atlas:is([data-field=industry],[data-field=population]) .asia-region-shell:not(:has(.asia-focus-navigation))>.regional-navigation,
+ [data-climate-active=true] .atlas-desktop-shell .asia-atlas[data-field=natural] .asia-region-shell:not(:has(.asia-focus-navigation))>.regional-navigation{width:auto;flex:0 1 auto}
+ .atlas-desktop-shell .asia-atlas:is([data-field=industry],[data-field=population]) .asia-region-shell:not(:has(.asia-focus-navigation)) .asia-toolbar,
+ [data-climate-active=true] .atlas-desktop-shell .asia-atlas[data-field=natural] .asia-region-shell:not(:has(.asia-focus-navigation)) .asia-toolbar{width:auto;flex:none}
  .atlas-desktop-shell .asia-atlas[data-field=industry] .asia-layout{grid-template-columns:minmax(0,2.05fr) minmax(318px,.95fr);gap:12px}
  .atlas-desktop-shell .asia-atlas[data-field=industry] .asia-map-frame{height:clamp(320px,calc(100dvh - 350px),430px)!important;min-height:0!important;max-height:none!important;aspect-ratio:auto!important}
  .atlas-desktop-shell .asia-atlas[data-field=natural] .asia-layout{grid-template-columns:minmax(0,1fr) minmax(340px,380px);column-gap:16px;row-gap:0}

@@ -258,7 +258,7 @@ test('real browser: Asia industry preserves source publication status across con
 
 // PC-only layout acceptance can run without rerunning the existing mobile suite:
 // ATLAS_ASIA_DESKTOP_LAYOUT=1 REVIEW_CHROME_PATH=/usr/bin/chromium node --test tests/e2e/atlas-asia-industry-status.test.mjs
-test('real browser: Asia desktop header controls match the US industry row structure',{
+test('real browser: Asia desktop headers and maps align with the US reference',{
  skip:process.env.ATLAS_ASIA_DESKTOP_LAYOUT==='1'?false:'Set ATLAS_ASIA_DESKTOP_LAYOUT=1 after npm run build for PC-only layout acceptance.',
  timeout:180000,
 },async t=>{
@@ -294,14 +294,14 @@ test('real browser: Asia desktop header controls match the US industry row struc
     const context=await browser.newContext({viewport});const page=await context.newPage();const errors=[];
     page.on('pageerror',error=>errors.push(error.message));
     try{
-     await profile.test('equivalent manufacturing and transport topics start their maps at the US height',async()=>{
+     await profile.test('manufacturing and transport topic layouts align with the US reference',async()=>{
       for(const [subsector,topic] of [['all','manufacturing'],['auto','jp-31']]){
        await page.goto(`${origin}/atlas/north-america/industry/?sector=manufacturing&subsector=${subsector}`,{waitUntil:'domcontentloaded'});
        await page.waitForFunction(subsector=>{const root=document.querySelector('[data-atlas-explorer]');return root?.dataset.renderState==='ready'&&root.dataset.industrySector==='manufacturing'&&root.dataset.industrySubsector===subsector;},subsector);
        await settle(page);
        assert.equal(await page.locator('button[data-industry-sector="manufacturing"]').getAttribute('aria-selected'),'true');
        assert.equal(await page.locator(`[data-industry-subtabs="manufacturing"] [data-industry-subsector="${subsector}"]`).getAttribute('aria-selected'),'true');
-       const us=(await rects(page.locator('[data-atlas-explorer] .atlas-map-frame')))[0];
+       const us=(await rects(page.locator('[data-atlas-explorer] .atlas-map-frame')))[0],usTabs=(await rects(page.locator('.atlas-tabs')))[0];
        const usRegions=await rects(page.locator('.regional-tabs a')),usCountries=await rects(page.locator('.regional-countries a'));
        if(viewport.width===1024)sameRow([...usRegions,...usCountries],'1024px US region/country reference');
        else assert.ok(usCountries[0].y>=Math.max(...usRegions.map(box=>box.bottom))-1,'1440px US reference has a separate country row');
@@ -320,7 +320,27 @@ test('real browser: Asia desktop header controls match the US industry row struc
        const asia=(await rects(page.locator('.asia-map-frame')))[0],delta=asia.y-us.y;
        profile.diagnostic(`${viewport.width}px US manufacturing/${subsector} ↔ Asia ${topic}: mapTop US=${us.y}, Asia=${asia.y}, delta=${delta}; header=${JSON.stringify(header)}`);
        assert.ok(Math.abs(delta)<=1,`${topic}: map top differs only by subpixel rounding from the same US topic (${delta}px)`);
+       const asiaTabs=(await rects(page.locator('.atlas-tabs')))[0];
+       assert.ok(Math.abs(asiaTabs.y-usTabs.y)<=1,`${topic}: main field tabs align with the US reference`);
        assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'the desktop header does not overflow horizontally');
+      }
+     });
+     await profile.test('climate and population layouts align with the US reference without claiming population fill equivalence',async()=>{
+      for(const field of ['nature','population']){
+       await page.goto(`${origin}/atlas/north-america/${field}/`,{waitUntil:'domcontentloaded'});
+       await page.waitForFunction(()=>document.querySelector('[data-atlas-explorer]')?.dataset.renderState==='ready');
+       await settle(page);
+       const usMap=(await rects(page.locator('[data-atlas-explorer] .atlas-map-frame')))[0],usTabs=(await rects(page.locator('.atlas-tabs')))[0];
+       await openAsia(page,`east-asia/${field}/`);
+       const asiaMap=(await rects(page.locator('.asia-map-frame')))[0],asiaTabs=(await rects(page.locator('.atlas-tabs')))[0];
+       for(const key of ['y','width','height'])assert.ok(Math.abs(asiaMap[key]-usMap[key])<=1,`${field}: map ${key} aligns within 1 CSS px (${asiaMap[key]-usMap[key]})`);
+       assert.ok(Math.abs(asiaTabs.y-usTabs.y)<=1,`${field}: main field tabs align within 1 CSS px`);
+       profile.diagnostic(`${viewport.width}px ${field} layout only: map top US=${usMap.y}, Asia=${asiaMap.y}; main tabs US=${usTabs.y}, Asia=${asiaTabs.y}`);
+       if(field==='population'){
+        const scope=page.locator('[data-population-scope]');assert.ok(await scope.isVisible());
+        const text=await scope.innerText();for(const meaning of [/2020/,/推計/,/格子/,/面積/])assert.match(text,meaning);
+        assert.ok(await scope.evaluate(node=>parseFloat(getComputedStyle(node).fontSize)>=13&&node.scrollWidth<=node.clientWidth+1&&node.scrollHeight<=node.clientHeight+1),'population scope is readable in full at 13px or larger');
+       }
       }
      });
      await profile.test('country selection and reset remain usable in the industry header',async()=>{
@@ -369,6 +389,15 @@ test('real browser: Asia desktop header controls match the US industry row struc
       assert.deepEqual(await city.locator('option[value="beijing"]').evaluate(option=>({disabled:option.disabled,hidden:option.hidden,country:option.dataset.country})),{disabled:false,hidden:false,country:'CHN'});
       await city.selectOption('beijing');
       assert.equal(new URL(page.url()).searchParams.get('city'),'beijing');
+      const chart=page.locator('[data-city-statistics]:visible');
+      await chart.waitFor({state:'visible'});
+      const pickerChart=await chart.evaluate(node=>({svg:node.querySelector('svg').innerHTML,monthly:node.querySelector('.monthly-values table').textContent}));
+      await city.selectOption('');assert.equal(new URL(page.url()).searchParams.get('city'),null);
+      await page.locator('[data-station="beijing"]').click();
+      await page.locator('[data-city-panel="beijing"]').waitFor({state:'visible'});
+      assert.equal(await city.inputValue(),'beijing','map city click restores the same picker value');
+      assert.equal(new URL(page.url()).searchParams.get('place'),'CHN');assert.equal(new URL(page.url()).searchParams.get('city'),'beijing');
+      assert.deepEqual(await chart.evaluate(node=>({svg:node.querySelector('svg').innerHTML,monthly:node.querySelector('.monthly-values table').textContent})),pickerChart,'picker and map city click show the same rain-temperature chart and monthly values');
       await page.reload({waitUntil:'domcontentloaded'});
       await page.locator('[data-city-panel="beijing"]').waitFor({state:'visible'});
       assert.equal(await city.inputValue(),'beijing');

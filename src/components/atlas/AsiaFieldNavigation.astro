@@ -17,6 +17,7 @@ const industryFeatures=majorAsiaIndustries[regionId].map(feature=>({...feature,s
 </div>
 <div class="asia-population-navigation" data-population-topics hidden={initialField!=='population'}>
  <nav class="asia-population-tabs" aria-label="人口の主題">{populationGroups.map(g=><button type="button" data-population-group={g.id} data-topic={{distribution:'density',identity:'ethnicity',religion:'religion'}[g.id]} aria-pressed={g.id==='distribution'}>{g.label}</button>)}</nav>
+ <p class="asia-population-scope" data-population-scope>2020年の推計人口密度（人/km²・格子面積当たり）。</p>
 </div>
 <div class="asia-industry-navigation" data-industry-navigation hidden={initialField!=='industry'}>
  <nav class="asia-industry-sectors" aria-label="産業の分類">{industrySectors.map(sector=><button type="button" data-industry-sector={sector.id} aria-pressed={sector.id==='manufacturing'} disabled={!availableSectors.has(sector.id)} title={availableSectors.has(sector.id)?undefined:'この分類だけの統計は未収録です'}>{sector.label}</button>)}</nav>

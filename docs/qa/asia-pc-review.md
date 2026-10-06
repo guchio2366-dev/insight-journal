@@ -28,13 +28,19 @@ At **1440×1000** and **1024×768**, it captures the US and Asia versions of:
 - Climate.
 - Population.
 
-The 16 viewport images cover eight comparisons. Map width and height must agree
-within 1 CSS pixel. Manufacturing map tops must also agree within 1 CSS pixel.
-Climate and population top differences are recorded for review, without imposing
-a new alignment requirement on those screens.
+The 16 viewport images cover eight comparisons. Map width, height, map top and
+main field-tab top must agree within 1 CSS pixel for all eight comparisons.
+Manufacturing guides retain readable type, and the visible population scope
+identifies the 2020 population estimates and grid data at 13px or larger.
+
+Population is a **layout-only comparison**. The US reference does not show the
+population distribution fill, so these checks do not establish equal distribution
+rendering, values or colors. The nonblank-map check only establishes that a map
+is present, and this limitation is also recorded in the JSON evidence.
 
 The same local browser checks publication states and principal controls,
-including URL restoration, comparison return and retry. External browser
+including city selection by picker and map, their shared rain-temperature chart
+and URL, monthly controls, focus links, URL restoration, comparison return and retry. External browser
 requests are blocked before sending and reported as failures. No TLS exceptions
 are used. The artifact is evidence of the local production build, not a check of
 the deployed site.

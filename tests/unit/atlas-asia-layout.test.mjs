@@ -62,6 +62,26 @@ test('都市選択を既存国toolbarへ移し、選択値・イベント・気�
  assert.equal(picker.parentElement.hidden,false);assert.equal(select.value,'tokyo');window.happyDOM.abort();
 });
 
+test('1024pxの気候だけ都市選択を説明欄へ移し、幅・主題・focusの変更後も同じ選択とイベントを保つ',()=>{
+ const window=new Window({width:1440,height:1000});window.document.body.innerHTML='<main data-asia-atlas><div class="asia-toolbar"></div><div data-asia-map-items><label data-city-picker><select data-city-select><option value="tokyo">東京</option></select></label></div><aside class="asia-reading-dock"></aside><section data-asia-statistics hidden></section></main>';
+ const root=window.document.querySelector('main'),picker=root.querySelector('[data-city-picker]'),city=picker.querySelector('select'),toolbar=root.querySelector('.asia-toolbar'),dock=root.querySelector('.asia-reading-dock');let changes=0;
+ city.addEventListener('change',()=>changes++);const layout=createAsiaLayout(root);
+ try{
+  layout.render({field:'natural',topic:null,city:'tokyo'});assert.equal(picker.parentElement.parentElement,toolbar);
+  // Happy DOM dispatches resize/MQL changes synchronously. Start outside the
+  // query so its initially false change-listener state observes both edges.
+  window.happyDOM.setViewport({width:1024,height:768});assert.equal(picker.parentElement.parentElement,dock);assert.equal(city.value,'tokyo');
+  city.dispatchEvent(new window.Event('change'));assert.equal(changes,1);
+  window.happyDOM.setViewport({width:1440,height:1000});assert.equal(picker.parentElement.parentElement,toolbar);
+  window.happyDOM.setViewport({width:1024,height:768});assert.equal(picker.parentElement.parentElement,dock);
+  layout.render({field:'natural',topic:'seasonal-precipitation'});assert.equal(picker.parentElement.parentElement,toolbar);
+  layout.render({field:'natural',topic:'climate'});assert.equal(picker.parentElement.parentElement,dock);
+  const focus=window.document.createElement('nav');focus.className='asia-focus-navigation';root.append(focus);
+  layout.render({field:'natural',topic:'climate'});assert.equal(picker.parentElement.parentElement,toolbar);
+  assert.equal(root.querySelector('[data-city-select]'),city);assert.equal(city.value,'tokyo');city.dispatchEvent(new window.Event('change'));assert.equal(changes,2);
+ }finally{window.happyDOM.abort();}
+});
+
 test('社会区分・発電施設の選択欄は元分野を離れると隠れ、主題別のhiddenも保つ',()=>{
  const window=new Window();window.document.body.innerHTML='<div data-asia-atlas><div data-asia-map-items></div><section data-asia-statistics hidden></section><section data-social-panel hidden><label data-social-metric-label>年齢</label><label data-social-area-label hidden>区域</label></section><section data-industry-panel><label data-industry-search-label>発電施設</label></section></div>';
  const root=window.document.querySelector('[data-asia-atlas]'),layout=createAsiaLayout(root);

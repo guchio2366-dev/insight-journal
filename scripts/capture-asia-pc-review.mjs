@@ -21,11 +21,11 @@ const profiles=[{name:'desktop',viewport:{width:1440,height:1000}},{name:'laptop
 const scenes=[
  {id:'manufacturing-overview',us:'/atlas/north-america/industry/?sector=manufacturing&subsector=all',asia:'/atlas/asia/east-asia/industry/?topic=manufacturing',subsector:'all',topic:'manufacturing',alignTop:true},
  {id:'manufacturing-individual',us:'/atlas/north-america/industry/?sector=manufacturing&subsector=auto',asia:'/atlas/asia/east-asia/industry/?topic=jp-31',subsector:'auto',topic:'jp-31',alignTop:true},
- {id:'climate',us:'/atlas/north-america/nature/',asia:'/atlas/asia/east-asia/nature/'},
- {id:'population',us:'/atlas/north-america/population/',asia:'/atlas/asia/east-asia/population/'},
+ {id:'climate',us:'/atlas/north-america/nature/',asia:'/atlas/asia/east-asia/nature/',alignTop:true},
+ {id:'population',us:'/atlas/north-america/population/',asia:'/atlas/asia/east-asia/population/',alignTop:true,comparisonScope:'layout-only; the US reference does not show a population distribution fill, so distribution rendering equivalence is not assessed'},
 ];
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.geojson':'application/geo+json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.woff2':'font/woff2','.gz':'application/gzip'};
-const metadata={schemaVersion:1,status:'running',startedAt:new Date().toISOString(),checkedOutSHA:null,headSHA:process.env.REVIEW_HEAD_SHA||null,baseSHA:process.env.REVIEW_BASE_SHA||null,beforeSHA:process.env.REVIEW_BEFORE_SHA||null,githubSHA:process.env.GITHUB_SHA||null,runId:process.env.GITHUB_RUN_ID||null,runAttempt:process.env.GITHUB_RUN_ATTEMPT||null,repository:process.env.GITHUB_REPOSITORY||null,basePath,profiles,output:'review-artifacts/asia-pc',expectedImageCount:16,expectedComparisonCount:8,fonts:{setup:process.env.REVIEW_JAPANESE_FONT_SETUP||'preinstalled',families:process.env.REVIEW_JAPANESE_FONTS||null,match:process.env.REVIEW_JAPANESE_FONT_MATCH||null},browser:null,scope:'Local production build only; public deployment is not accessed.',notes:['US automobiles and Japanese transport equipment retain their respective statistical definitions.','Manufacturing map tops must align; climate and population map tops are recorded without an alignment assertion.','Each PNG shows the viewport once; no duplicate map-crop artifacts are generated.']};
+const metadata={schemaVersion:1,status:'running',startedAt:new Date().toISOString(),checkedOutSHA:null,headSHA:process.env.REVIEW_HEAD_SHA||null,baseSHA:process.env.REVIEW_BASE_SHA||null,beforeSHA:process.env.REVIEW_BEFORE_SHA||null,githubSHA:process.env.GITHUB_SHA||null,runId:process.env.GITHUB_RUN_ID||null,runAttempt:process.env.GITHUB_RUN_ATTEMPT||null,repository:process.env.GITHUB_REPOSITORY||null,basePath,profiles,output:'review-artifacts/asia-pc',expectedImageCount:16,expectedComparisonCount:8,fonts:{setup:process.env.REVIEW_JAPANESE_FONT_SETUP||'preinstalled',families:process.env.REVIEW_JAPANESE_FONTS||null,match:process.env.REVIEW_JAPANESE_FONT_MATCH||null},browser:null,scope:'Local production build only; public deployment is not accessed.',notes:['US automobiles and Japanese transport equipment retain their respective statistical definitions.','All eight comparisons require map dimensions, map tops and main field-tab tops to agree within 1 CSS pixel.','Population is a layout-only comparison: the US reference does not show a population distribution fill; no distribution rendering equivalence is asserted.','Each PNG shows the viewport once; no duplicate map-crop artifacts are generated.']};
 const results={captures:[],comparisons:[],operations:[],externalCommunicationAttempts:[],blockedWebSockets:[]};
 const failure=error=>error?.stack??String(error);
 async function persist(){
@@ -129,8 +129,8 @@ function mapPixels(png,box){
 async function geometry(page){
  return page.evaluate(()=>{
   const rect=selector=>{const node=[...document.querySelectorAll(selector)].find(node=>{const r=node.getBoundingClientRect();return r.width>0&&r.height>0;});if(!node)return null;const r=node.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,documentY:r.y+scrollY};};
-  const asia=Boolean(document.querySelector('[data-asia-atlas]')),guide=document.querySelector(asia?'.asia-industry-guide':'.industry-guide');
-  return {url:location.href,path:location.pathname+location.search,map:rect('[data-map-surface]'),overflow:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)>innerWidth,rendering:asia?{mode:'MapLibre',mapReady:document.querySelector('[data-asia-atlas]').dataset.mapReady,fallbackHidden:document.querySelector('[data-map-fallback]').hidden}:{mode:'MapLibre',renderState:document.querySelector('[data-atlas-explorer]').dataset.renderState,fallbackHidden:document.querySelector('[data-fallback]').hidden},header:{regions:rect('.regional-tabs'),country:rect(asia?'[data-country-select]':'.regional-countries'),reset:rect('[data-reset]'),guide:rect(asia?'.asia-industry-guide':'.industry-guide'),guideText:guide?.textContent.replace(/\s+/g,' ').trim()??null,guideFontSize:guide?getComputedStyle(guide).fontSize:null,guideLineHeight:guide?getComputedStyle(guide).lineHeight:null,guideClipped:guide?guide.scrollWidth>guide.clientWidth+1||guide.scrollHeight>guide.clientHeight+1:null},fonts:{status:document.fonts.status,bodyFamily:getComputedStyle(document.body).fontFamily}};
+  const asia=Boolean(document.querySelector('[data-asia-atlas]')),guide=document.querySelector(asia?'.asia-industry-guide':'.industry-guide'),scope=document.querySelector('[data-population-scope]');
+  return {url:location.href,path:location.pathname+location.search,map:rect('[data-map-surface]'),overflow:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)>innerWidth,rendering:asia?{mode:'MapLibre',mapReady:document.querySelector('[data-asia-atlas]').dataset.mapReady,fallbackHidden:document.querySelector('[data-map-fallback]').hidden}:{mode:'MapLibre',renderState:document.querySelector('[data-atlas-explorer]').dataset.renderState,fallbackHidden:document.querySelector('[data-fallback]').hidden},header:{fieldTabs:rect('.atlas-tabs'),regions:rect('.regional-tabs'),country:rect(asia?'[data-country-select]':'.regional-countries'),reset:rect('[data-reset]'),guide:rect(asia?'.asia-industry-guide':'.industry-guide'),guideText:guide?.textContent.replace(/\s+/g,' ').trim()??null,guideFontSize:guide?getComputedStyle(guide).fontSize:null,guideLineHeight:guide?getComputedStyle(guide).lineHeight:null,guideClipped:guide?guide.scrollWidth>guide.clientWidth+1||guide.scrollHeight>guide.clientHeight+1:null},populationScope:scope?{box:rect('[data-population-scope]'),text:scope.innerText,fontSize:getComputedStyle(scope).fontSize,clipped:scope.scrollWidth>scope.clientWidth+1||scope.scrollHeight>scope.clientHeight+1}:null,fonts:{status:document.fonts.status,bodyFamily:getComputedStyle(document.body).fontFamily}};
  });
 }
 async function capture(browser,host,profile,scene,region){
@@ -138,8 +138,13 @@ async function capture(browser,host,profile,scene,region){
  const {page,context}=await isolatedPage(browser,host,profile,record);
  try{
   await open(page,host,scene[region],region,scene);
-  Object.assign(record,await geometry(page));assert(record.map,'A visible map surface is required');assert.equal(record.overflow,false,'No horizontal overflow');
-  if(region==='asia'&&scene.alignTop){assert(record.header.guide?.height>0,'The manufacturing guide must remain visible');assert(parseFloat(record.header.guideFontSize)>=13&&parseFloat(record.header.guideLineHeight)>=19.5,'Map alignment must not shrink the guide below 13px type and 19.5px line height');assert.equal(record.header.guideClipped,false,'The guide must show its complete classification and statistical topic');}
+  Object.assign(record,await geometry(page));assert(record.map,'A visible map surface is required');assert(record.header.fieldTabs,'Main field tabs must remain visible');assert.equal(record.overflow,false,'No horizontal overflow');
+  if(region==='asia'&&scene.topic){assert(record.header.guide?.height>0,'The manufacturing guide must remain visible');assert(parseFloat(record.header.guideFontSize)>=13&&parseFloat(record.header.guideLineHeight)>=19.5,'Map alignment must not shrink the guide below 13px type and 19.5px line height');assert.equal(record.header.guideClipped,false,'The guide must show its complete classification and statistical topic');}
+  if(region==='asia'&&scene.id==='population'){
+   assert(record.populationScope?.box,'The population scope must remain visible');
+   for(const meaning of [/2020/,/推計/,/格子/,/面積/])assert.match(record.populationScope.text,meaning);
+   assert(parseFloat(record.populationScope.fontSize)>=13,'Population scope must use at least 13px type');assert.equal(record.populationScope.clipped,false,'The population scope must be readable in full');
+  }
   const png=await page.screenshot({fullPage:false,animations:'disabled'});
   record.screenshot=record.id+'.png';await writeFile(path.join(output,record.screenshot),png);
   record.screenshotSHA256=createHash('sha256').update(png).digest('hex');record.mapPixels=mapPixels(png,record.map);
@@ -153,9 +158,9 @@ async function capture(browser,host,profile,scene,region){
 function compare(){
  for(const profile of profiles)for(const scene of scenes){
   const us=results.captures.find(row=>row.profile===profile.name&&row.scene===scene.id&&row.region==='us'),asia=results.captures.find(row=>row.profile===profile.name&&row.scene===scene.id&&row.region==='asia');
-  const difference=us?.map&&asia?.map?{width:asia.map.width-us.map.width,height:asia.map.height-us.map.height,mapTop:asia.map.documentY-us.map.documentY}:null;
-  const passed=Boolean(us?.passed&&asia?.passed&&difference&&Math.abs(difference.width)<=1&&Math.abs(difference.height)<=1&&(!scene.alignTop||Math.abs(difference.mapTop)<=1));
-  results.comparisons.push({profile:profile.name,viewport:profile.viewport,scene:scene.id,usPath:us?.path,asiaPath:asia?.path,usMap:us?.map,asiaMap:asia?.map,difference,mapTopAlignmentRequired:Boolean(scene.alignTop),toleranceCssPixels:1,passed,...(!passed?{failure:'Both captures must pass; width and height must differ by at most 1 CSS px, and manufacturing map tops must also align.'}:{})});
+  const difference=us?.map&&asia?.map?{width:asia.map.width-us.map.width,height:asia.map.height-us.map.height,mapTop:asia.map.documentY-us.map.documentY,fieldTabsTop:asia.header.fieldTabs&&us.header.fieldTabs?asia.header.fieldTabs.documentY-us.header.fieldTabs.documentY:null}:null;
+  const passed=Boolean(us?.passed&&asia?.passed&&difference&&Math.abs(difference.width)<=1&&Math.abs(difference.height)<=1&&Math.abs(difference.mapTop)<=1&&difference.fieldTabsTop!==null&&Math.abs(difference.fieldTabsTop)<=1);
+  results.comparisons.push({profile:profile.name,viewport:profile.viewport,scene:scene.id,usPath:us?.path,asiaPath:asia?.path,usMap:us?.map,asiaMap:asia?.map,difference,mapTopAlignmentRequired:true,fieldTabsAlignmentRequired:true,comparisonScope:scene.comparisonScope??'layout and nonblank map; source statistical definitions remain distinct',toleranceCssPixels:1,passed,...(!passed?{failure:'Both captures must pass; map width, height, map top and main field-tab top must differ by at most 1 CSS px.'}:{})});
  }
 }
 
@@ -220,13 +225,20 @@ async function checkOperations(browser,host,profile,source){
  await operation(browser,host,profile,'city-month-comparison',async page=>{
   await open(page,host,'/atlas/asia/east-asia/nature/?place=JPN&city=tokyo');const city=page.locator('[data-city-select]');assert.equal(await city.inputValue(),'tokyo');
   await page.locator('[data-country-select]').selectOption('CHN');assert.equal(await city.inputValue(),'');assert.deepEqual(await city.locator('option[value="tokyo"]').evaluate(option=>({disabled:option.disabled,hidden:option.hidden})),{disabled:true,hidden:true});
-  await city.selectOption('beijing');await page.reload({waitUntil:'domcontentloaded'});await page.locator('[data-city-panel="beijing"]').waitFor({state:'visible'});assert.equal(await city.inputValue(),'beijing');
+  await city.selectOption('beijing');
+  const chart=page.locator('[data-city-statistics]:visible');await chart.waitFor({state:'visible'});
+  const pickerChart=await chart.evaluate(node=>({svg:node.querySelector('svg').innerHTML,monthly:node.querySelector('.monthly-values table').textContent}));
+  await city.selectOption('');assert.equal(new URL(page.url()).searchParams.get('city'),null);
+  await page.locator('[data-station="beijing"]').click();await page.locator('[data-city-panel="beijing"]').waitFor({state:'visible'});
+  assert.equal(await city.inputValue(),'beijing');assert.equal(new URL(page.url()).searchParams.get('place'),'CHN');assert.equal(new URL(page.url()).searchParams.get('city'),'beijing');
+  assert.deepEqual(await chart.evaluate(node=>({svg:node.querySelector('svg').innerHTML,monthly:node.querySelector('.monthly-values table').textContent})),pickerChart,'Picker and map city click must show the same rain-temperature chart and monthly values');
+  await page.reload({waitUntil:'domcontentloaded'});await page.locator('[data-city-panel="beijing"]').waitFor({state:'visible'});assert.equal(await city.inputValue(),'beijing');
   await page.locator('[data-dock-compare="industry"]').click();assert.equal(await city.isVisible(),false);await page.locator('[data-comparison-back]').click();assert.equal(await city.inputValue(),'beijing');
   await page.locator('[data-natural-group="water"]').click();await page.locator('[data-natural-topic="seasonal-precipitation"]').click();const month=page.locator('[data-seasonal-month]');await month.waitFor({state:'visible'});
   await month.selectOption('m-01');await page.locator('[data-seasonal-previous]').click();assert.equal(await month.inputValue(),'m-12');await page.locator('[data-seasonal-next]').click();assert.equal(await month.inputValue(),'m-01');
   await page.locator('[data-dock-compare="industry"]').click();await page.locator('[data-comparison-back]').click();assert.equal(await month.inputValue(),'m-01');
   await page.locator('[data-natural-group="climate"]').click();await city.waitFor({state:'visible'});assert.equal(await month.isVisible(),false);await city.selectOption('beijing');assert.equal(new URL(page.url()).searchParams.get('city'),'beijing');
-  return {countryCityFilter:true,cityURLReload:true,cityComparisonReturn:true,previousMonth:'m-12',nextMonth:'m-01',monthComparisonReturn:'m-01',climatePickerRestored:true};
+  return {countryCityFilter:true,pickerAndMapCityChart:true,pickerAndMapCityURL:true,cityURLReload:true,cityComparisonReturn:true,previousMonth:'m-12',nextMonth:'m-01',monthComparisonReturn:'m-01',climatePickerRestored:true};
  });
  await operation(browser,host,profile,'industry-fetch-retry',async(page,control)=>{
   control.failIndustry=true;

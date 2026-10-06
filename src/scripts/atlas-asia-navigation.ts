@@ -39,6 +39,7 @@ export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|un
   for(const nav of all('[data-population-subgroup]'))nav.hidden=nav.dataset.populationSubgroup!==population;
   for(const b of all('[data-population-choice]'))b.setAttribute('aria-pressed',String(b.dataset.populationChoice===(state.topic??'density')));
   const populationSelect=$('[data-population-selector]');if(populationSelect)populationSelect.hidden=state.field!=='population';
+  const populationScope=$('[data-population-scope]');if(populationScope)populationScope.hidden=state.field!=='population'||!['density','urban'].includes(state.topic??'density');
   const navigation=$('[data-industry-navigation]');if(navigation)navigation.hidden=state.field!=='industry';
   const advanced=$('[data-industry-all]');if(advanced)advanced.hidden=state.field!=='industry';
   if(!industry||state.field!=='industry')return;

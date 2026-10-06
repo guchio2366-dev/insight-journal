@@ -27,15 +27,22 @@ export function createAsiaLayout(root:HTMLElement){
  }
  const controls:{node:HTMLElement;owner:HTMLElement|null;wrapper:HTMLElement}[]=[];
  const toolbar=query('.asia-toolbar');
+ const readingDock=query('.asia-reading-dock'),notebook=root.ownerDocument.defaultView!.matchMedia('(min-width:960px) and (max-width:1199px)');
+ let cityControl:HTMLElement|null=null;
  const farmingNote=query('[data-farm-density-key]');
  if(methods&&farmingNote){const owner=farmingNote.closest<HTMLElement>('[data-farm-overview-legend]'),wrapper=root.ownerDocument.createElement('div');wrapper.append(farmingNote);methods.append(wrapper);controls.push({node:farmingNote,owner,wrapper});}
  for(const selector of [...(legendHost?[]:['[data-reading-map-legend]']),'[data-city-picker]','[data-industry-all]','[data-industry-detail-label]','[data-industry-search-label]','[data-social-metric-label]','[data-social-area-label]']){
   const node=query(selector);if(!node)continue;
   const owner=node.closest<HTMLElement>('[data-industry-panel],[data-social-panel]');
   const wrapper=root.ownerDocument.createElement('div');wrapper.className='asia-map-item';wrapper.append(node);
-  if(selector==='[data-city-picker]'&&toolbar)toolbar.append(wrapper);else items.append(wrapper);
+  if(selector==='[data-city-picker]'&&toolbar){toolbar.append(wrapper);cityControl=wrapper;}else items.append(wrapper);
   controls.push({node,owner,wrapper});
  }
+ function placeCityPicker(){
+  const destination=notebook.matches&&root.dataset.climateActive==='true'&&!query('.asia-focus-navigation')&&readingDock?readingDock:toolbar;
+  if(cityControl&&destination&&cityControl.parentElement!==destination)destination.append(cityControl);
+ }
+ notebook.addEventListener('change',placeCityPicker);
  const groups:{node:HTMLElement;owner:HTMLElement|null;wrapper:HTMLElement}[]=[];
  for(const node of root.querySelectorAll<HTMLElement>('.farming-statistics,[data-farm-trade],[data-industry-content],[data-trade-content],[data-social-content],[data-population-city-facts],[data-city-statistics]')){
   const owner=node.closest<HTMLElement>('[data-farming-panel],[data-industry-panel],[data-trade-panel],[data-social-panel],[data-population-reading],[data-city-panel]');
@@ -61,6 +68,8 @@ export function createAsiaLayout(root:HTMLElement){
  return {render(state:AsiaState){
   const seasonal=state.field==='natural'&&state.topic==='seasonal-precipitation';
   root.dataset.seasonalActive=String(seasonal);
+  root.dataset.climateActive=String(state.field==='natural'&&(!state.topic||state.topic==='climate'));
+  placeCityPicker();
   if(seasonal&&legendHost){
    if(seasonalControls&&toolbar&&seasonalControls.parentElement!==toolbar)toolbar.prepend(seasonalControls);
    if(comparisonKeys&&state.back)legendHost.append(comparisonKeys);
