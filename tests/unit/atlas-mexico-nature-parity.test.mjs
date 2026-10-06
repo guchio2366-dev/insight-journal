@@ -111,7 +111,7 @@ test('Named landform labels select only their official class and preserve the co
   } finally {await window.happyDOM.close(); await restored?.happyDOM.close();}
 });
 
-test('Climate label clicks and dormant layer selections restore without displaying another layer outline', async () => {
+test('Climate labels retain the exact source explanation while climate areas and states remain passive', async () => {
   const window = fixture(`?view=relief&item=III&feature=relief-5&${source}`);
   try {
     const document = window.document;
@@ -120,14 +120,20 @@ test('Climate label clicks and dormant layer selections restore without displayi
     assert.equal(document.querySelector('[data-mexico-nature-class-label="III"]').getAttribute('aria-disabled'), 'true');
     assert.equal(document.querySelector('[data-mexico-nature-class-label="59"]').getAttribute('tabindex'), '0');
     document.querySelector('[data-mexico-nature-class-label="59"]').dispatchEvent(new window.MouseEvent('click', {bubbles: true}));
-    assert.deepEqual(chosen(document), ['climate-3']);
+    assert.deepEqual(chosen(document), []);
     assert.equal(new URL(window.location.href).searchParams.get('item'), '59');
     assert.equal(new URL(window.location.href).searchParams.get('feature'), 'climate-3');
     assert.match(document.querySelector('[data-mexico-nature-feature-title]').textContent, /C\(w0\)\(w\)/);
-    document.querySelector('[data-mexico-nature-feature="climate-5"]').dispatchEvent(new window.MouseEvent('click', {bubbles: true}));
-    assert.deepEqual(chosen(document), ['climate-5']);
-    assert.match(document.querySelector('[data-mexico-nature-feature-title]').textContent, /C\(w1\)\(w\)/);
-    assert.equal(document.querySelector('[data-mexico-nature-class-label="59"]').getAttribute('aria-pressed'), 'false', 'Another source code within the original class cannot mark the labelled polygon selected');
+    const labelURL = window.location.href;
+    const area = document.querySelector('[data-mexico-nature-feature="climate-5"]');
+    area.dispatchEvent(new window.MouseEvent('click', {bubbles: true}));
+    area.dispatchEvent(new window.KeyboardEvent('keydown', {key: 'Enter', bubbles: true}));
+    document.querySelector('path[data-mexico-nature-state="10"]').dispatchEvent(new window.MouseEvent('click', {bubbles: true}));
+    assert.equal(window.location.href, labelURL, 'Passive climate areas and state borders cannot change the selected explanation');
+    assert.deepEqual(chosen(document), []);
+    assert.equal(area.getAttribute('role'), 'img'); assert.equal(area.getAttribute('tabindex'), '-1');
+    assert.match(document.querySelector('[data-mexico-nature-feature-title]').textContent, /C\(w0\)\(w\)/);
+    assert.equal(document.querySelector('[data-mexico-nature-class-label="59"]').getAttribute('aria-pressed'), 'true');
     assert.equal(document.querySelector('path[data-mexico-nature-state="25"]').style.display, '');
     document.querySelector('[data-mexico-nature-category="elevation"]').click();
     assert.deepEqual(chosen(document), []);
@@ -175,7 +181,8 @@ test('Legacy fallback URLs keep current native climate and relief artwork intera
       const display = view === 'relief' ? '' : 'none';
       for (const selector of ['[data-mexico-nature-neutral]', '[data-mexico-nature-relief-background]']) assert.equal(document.querySelector(selector).style.display, display);
       document.querySelector(`[data-mexico-nature-class-label="${view === 'climate' ? '59' : 'IV'}"]`).dispatchEvent(new window.MouseEvent('click', {bubbles: true}));
-      assert.deepEqual(chosen(document), view === 'climate' ? ['climate-3'] : ['relief-8']);
+      assert.deepEqual(chosen(document), view === 'climate' ? [] : ['relief-8']);
+      if (view === 'climate') assert.match(document.querySelector('[data-mexico-nature-feature-title]').textContent, /C\(w0\)\(w\)/);
       const url = new URL(window.location.href);
       assert.equal(url.searchParams.get('fallback'), '1');
       for (const [key, expected] of new URLSearchParams(source)) assert.equal(url.searchParams.get(key), expected, key);
