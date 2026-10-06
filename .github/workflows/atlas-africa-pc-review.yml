@@ -1,0 +1,108 @@
+name: Review Africa PC maps
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'src/pages/atlas/africa/**'
+      - 'src/components/atlas/Africa*.astro'
+      - 'src/data/atlas/africa*'
+      - 'src/lib/atlas-africa*.ts'
+      - 'src/scripts/atlas-africa*.ts'
+      - 'src/styles/atlas-africa*.css'
+      - 'public/assets/atlas/africa/**'
+      - 'public/assets/atlas/africa-*/**'
+      - 'tests/unit/atlas-africa*.test.mjs'
+      - 'tests/e2e/atlas-africa*.test.mjs'
+      - 'scripts/verify-africa-pc-review.mjs'
+      - '.github/workflows/atlas-africa-pc-review.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/pages/atlas/africa/**'
+      - 'src/components/atlas/Africa*.astro'
+      - 'src/data/atlas/africa*'
+      - 'src/lib/atlas-africa*.ts'
+      - 'src/scripts/atlas-africa*.ts'
+      - 'src/styles/atlas-africa*.css'
+      - 'public/assets/atlas/africa/**'
+      - 'public/assets/atlas/africa-*/**'
+      - 'tests/unit/atlas-africa*.test.mjs'
+      - 'tests/e2e/atlas-africa*.test.mjs'
+      - 'scripts/verify-africa-pc-review.mjs'
+      - '.github/workflows/atlas-africa-pc-review.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: africa-pc-review-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: Compare Africa and US on PC
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      AFRICA_REVIEW_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      AFRICA_REVIEW_REPOSITORY: ${{ github.repository }}
+      AFRICA_REVIEW_RUN_ID: ${{ github.run_id }}
+      AFRICA_REVIEW_RUN_ATTEMPT: ${{ github.run_attempt }}
+      AFRICA_REVIEW_EVENT_NAME: ${{ github.event_name }}
+
+    steps:
+      - name: Check out the reviewed commit
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Build production site
+        run: GITHUB_SHA="$AFRICA_REVIEW_HEAD_SHA" npm run build
+
+      - name: Capture and validate Africa PC review
+        shell: bash
+        timeout-minutes: 6
+        run: |
+          set -euo pipefail
+          if ! command -v fc-list >/dev/null || ! command -v fc-match >/dev/null; then
+            echo "::error::Fontconfig is unavailable; preinstalled Japanese fonts cannot be verified."
+            exit 1
+          fi
+          africa_review_japanese_fonts="$(fc-list ':lang=ja' family)"
+          if [[ -z "$africa_review_japanese_fonts" ]]; then
+            echo "::error::No Japanese-capable font is preinstalled; Africa PC review cannot produce readable Japanese screenshots."
+            exit 1
+          fi
+          africa_review_chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          if [[ -z "$africa_review_chrome_path" ]]; then
+            echo "::error::Google Chrome is not preinstalled on this runner."
+            exit 1
+          fi
+          africa_review_sans="$(fc-match -f '%{family}\n' 'sans-serif:lang=ja')"
+          africa_review_serif="$(fc-match -f '%{family}\n' 'serif:lang=ja')"
+          export AFRICA_REVIEW_CHROME_PATH="$africa_review_chrome_path"
+          export AFRICA_REVIEW_JAPANESE_FONTS="$africa_review_japanese_fonts"
+          export AFRICA_REVIEW_JAPANESE_FONT_MATCH="${africa_review_sans}"$'\n'"${africa_review_serif}"
+          export AFRICA_REVIEW_JAPANESE_FONT_SETUP=preinstalled
+          node scripts/verify-africa-pc-review.mjs
+
+      - name: Upload Africa PC screenshots and validation metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: africa-pc-review-${{ github.run_id }}
+          path: review-artifacts/africa-pc-review
+          if-no-files-found: warn
+          retention-days: 7
