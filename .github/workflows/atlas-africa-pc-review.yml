@@ -71,6 +71,12 @@ jobs:
       - name: Build production site
         run: GITHUB_SHA="$AFRICA_REVIEW_HEAD_SHA" npm run build
 
+      - name: Install Japanese fonts on this ephemeral runner
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+
       - name: Capture and validate Africa PC review
         shell: bash
         timeout-minutes: 6
