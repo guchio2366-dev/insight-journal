@@ -280,7 +280,7 @@ test('Saved demographic topics cannot render the legacy whole-population Nature 
     assert.equal(q(w,'[data-canada-population-context-map]').style.display,'none');assert.equal(q(w,'[data-canada-population-context-mini-map]').style.display,'none');assert.equal(q(w,'[data-canada-population-context-legend]').hidden,true);
    }else{
     w.eval(industry+"\nwindow.demographicGuardResult=DemographicIndustryGuard.renderPopulationIndustryComparison(document.querySelector('[data-canada-industry]'),{},{});");
-    assert.equal(q(w,'[data-canada-population-industry-context]').hidden,true);assert.equal(q(w,'[data-canada-population-industry-return]').hidden,true);
+    assert.equal(w.document.querySelector('[data-canada-population-industry-context]'),null,'The removed legacy comparison cannot display population totals');assert.equal(q(w,'[data-ca-population-return-wrap]').hidden,true);
    }
    assert.equal(w.demographicGuardResult,false,`${kind} must not substitute whole-population values for ${name}`);
   }finally{await w.happyDOM.close();}
@@ -307,7 +307,7 @@ test('A demographic Industry to Nature to Industry hop cannot resurrect a whole-
    returned=new Window({url:back.href,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
    returned.document.write((await readFile('dist/atlas/north-america/canada/industry/index.html','utf8')).replace(/<script(?![^>]*type="application\/json")[^>]*>[\s\S]*?<\/script>/g,''));
    returned.eval(oldPopulationRenderer+"\nwindow.demographicHopResult=DemographicOldPopulation.renderPopulationIndustryComparison(document.querySelector('[data-canada-industry]'),{},{});");
-   assert.equal(returned.demographicHopResult,false);assert.equal(q(returned,'[data-canada-population-industry-context]').hidden,true);assert.equal(q(returned,'[data-canada-population-industry-return]').hidden,true);
+   assert.equal(returned.demographicHopResult,false);assert.equal(returned.document.querySelector('[data-canada-population-industry-context]'),null);assert.equal(q(returned,'[data-ca-population-return-wrap]').hidden,true);
   }finally{await w.happyDOM.close();if(returned)await returned.happyDOM.close();}
  }
  const legitimate=new URL('https://example.com/insight-journal/atlas/north-america/canada/industry/');legitimate.searchParams.set('populationReturn',new URLSearchParams(distribution).toString());

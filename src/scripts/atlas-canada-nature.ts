@@ -9,7 +9,7 @@ import {selectedWaterReading} from '../data/atlas/canada/reading';
 import {initCanadaNaturalLayer} from './atlas-canada-natural-layer';
 import {readCanadaNaturalLayerState,writeCanadaNaturalLayerState,type NaturalLayer,type NaturalLayerState} from '../lib/atlas-canada-natural-state';
 import {initCanadaWaterResources} from './atlas-canada-water-resources';
-import {readCanadaWaterState,writeCanadaWaterState,type CanadaWaterState} from '../lib/atlas-canada-water-state';
+import {canadaWaterFullFrame, readCanadaWaterState,writeCanadaWaterState,type CanadaWaterState} from '../lib/atlas-canada-water-state';
 import {renderCanadaWaterOrigin} from './atlas-canada-water-origin';
 export function initCanadaNature(root:HTMLElement){
  const config=JSON.parse(root.querySelector('[data-canada-config]')!.textContent!);
@@ -28,13 +28,13 @@ export function initCanadaNature(root:HTMLElement){
  const naturalHosts=Object.fromEntries(naturalLayers.map(layer=>[layer,root.querySelector<HTMLElement>(`[data-canada-natural-layer="${layer}"]`)]));
  const naturalMaps=Object.fromEntries(naturalLayers.map(layer=>[layer,naturalHosts[layer]?initCanadaNaturalLayer(naturalHosts[layer]!,{deferStart:true}):null]));
  let naturalStates=Object.fromEntries(naturalLayers.map(layer=>[layer,readCanadaNaturalLayerState(new URL(location.href),layer,(config.layers?.[layer]?.groups??[]).map((g:any)=>g.id))])) as Record<NaturalLayer,NaturalLayerState>;
- const full=[0,0,config.width,config.height];
+ const full=[...canadaWaterFullFrame];
  function render(){
   const waterResource=state.view==='water'&&waterState.topic!=='surface';
   root.classList.toggle('is-water-resource',waterResource);
   const waterFamily=['precipitation','drainage'].includes(waterState.topic)?waterState.topic:'surface';
   root.classList.toggle('is-water-river-family',state.view==='water'&&waterFamily==='surface');
-  const waterSubtopics=root.querySelector<HTMLElement>('[data-canada-water-subtopics]');if(waterSubtopics)waterSubtopics.hidden=state.view!=='water'||waterFamily!=='surface';
+  const waterSubtopics=root.querySelector<HTMLElement>('[data-canada-water-subtopics]');if(waterSubtopics){waterSubtopics.hidden=state.view!=='water'||waterFamily!=='surface';const reading=waterResource?waterHost?.querySelector('.canada-water-reading'):root.querySelector('[data-canada-reading=water]');if(reading&&waterSubtopics.parentElement!==reading)reading.prepend(waterSubtopics);}
   for(const button of root.querySelectorAll<HTMLElement>('[data-canada-water-family]'))button.setAttribute('aria-pressed',String(button.dataset.canadaWaterFamily===waterFamily));
   if(waterHost)waterHost.hidden=!waterResource;
   const originalMap=root.querySelector<HTMLElement>('[data-canada-original-map-column]'),originalReading=root.querySelector<HTMLElement>('[data-canada-original-reading]');

@@ -18,7 +18,7 @@ export interface CanadaNaturalController {
   destroy(): void;
 }
 type Frame = [number, number, number, number];
-interface Config { layer: CanadaNaturalLayer; geometryUrl: string; groups: CanadaNaturalGroup[]; stations: CanadaNaturalStation[]; contourLabels?: CanadaNaturalContourLabel[]; context: unknown; workerUrl: string; }
+interface Config { layer: CanadaNaturalLayer; geometryUrl: string; groups: CanadaNaturalGroup[]; stations: CanadaNaturalStation[]; climateLabels?: {id:string;coordinates:[number,number]}[]; contourLabels?: CanadaNaturalContourLabel[]; context: unknown; workerUrl: string; }
 
 /** Selection belongs to the host page. Camera gestures stay local to this map. */
 export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?: boolean } = {}): CanadaNaturalController {
@@ -147,6 +147,14 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
         occupied.push([x-6,y-12,x+6,y+12]);
         if (text && !text.hidden) occupied.push([textLeft,textY-h/2,textLeft+w,textY+h/2]);
       }
+    }
+    for(const element of root.querySelectorAll<HTMLElement>('[data-canada-climate-code]')){
+      const label=config.climateLabels?.[Number(element.dataset.canadaClimateCode)];if(!label)continue;
+      const p=ready&&map?map.project(label.coordinates):null,point=projectCanadaNatural(label.coordinates);
+      const x=p?.x??(point[0]-frame[0])*ratio+left,y=p?.y??(point[1]-frame[1])*ratio+top;
+      const box=[x-18,y-10,x+18,y+10];element.style.left=`${x}px`;element.style.top=`${y}px`;
+      element.hidden=!!(state.only&&state.selected&&label.id!==state.selected)||x<20||x>width-20||y<20||y>height-20||occupied.some(([x1,y1,x2,y2])=>box[0]<x2+3&&box[2]>x1-3&&box[1]<y2+3&&box[3]>y1-3);
+      if(!element.hidden)occupied.push(box);
     }
     const byKey = new Map((config.contourLabels ?? []).map(label => [label.key,label]));
     const ordered = [...contourLabels].sort((a,b) => {

@@ -17,7 +17,9 @@ export interface CanadaWaterConfig {
 }
 export type CanadaWaterIds = Partial<Record<WaterTopic, readonly (string | {id: string})[]>>;
 export const canadaWaterSize = { width: 900, height: 580 };
-export const canadaWaterFullFrame: CanadaWaterFrame = [0, 0, 900, 580];
+// Keep the source coordinate frame stable for raster registration and old links.
+// Default camera prioritizes inhabited southern Canada; the northern edge is Alaska's latitude.
+export const canadaWaterFullFrame: CanadaWaterFrame = [0, 180.444444, 900, 399.555556];
 /** Longitude/latitude locator, deliberately shared with the parent water map. It is not an area projection. */
 export function projectCanadaWater([longitude, latitude]: readonly number[]): [number, number] {
  return [(longitude + 145) / 95 * 900, (85 - latitude) / 45 * 580];

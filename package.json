@@ -13,10 +13,11 @@
     "validate:content": "node scripts/validate-content.mjs",
     "test": "node --test tests/unit/*.test.mjs",
     "build": "node scripts/clean-dist.mjs && node scripts/prepare-population.mjs && npm run schema && npm run validate:content && astro build && pagefind --site dist --force-language ja && node scripts/generate-release.mjs",
-    "test:e2e": "node --test tests/e2e/*.test.mjs",
+    "test:e2e": "node --test --test-concurrency=4 tests/e2e/*.test.mjs",
     "verify:release": "node scripts/verify-release.mjs",
     "check": "npm test && npm run build && npm run test:e2e && npm run verify:release",
-    "pretest": "node scripts/prepare-population.mjs"
+    "pretest": "node scripts/prepare-population.mjs",
+    "test:browser:canada": "node scripts/verify-canada-us-parity.mjs"
   },
   "dependencies": {
     "astro": "7.3.2",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "happy-dom": "20.14.5",
-    "pagefind": "1.5.2"
+    "pagefind": "1.5.2",
+    "playwright": "1.56.1"
   }
 }

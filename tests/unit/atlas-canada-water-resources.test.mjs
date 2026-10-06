@@ -70,7 +70,7 @@ test('groundwater source-invalid geometry stays an unfilled original outline; aq
  assert.equal(page.root.querySelector('[data-canada-water-resource-map]').getAttribute('viewBox'),'197.749 451.777 29.876 19.857');assert.equal(page.root.querySelector('[data-canada-water-resource-shape="551"]').style.display,'none');
  const select=page.root.querySelector('[data-canada-water-area]');select.value='550';select.dispatchEvent(new page.window.Event('change'));assert.equal(page.state.area,'550');
  const only=page.root.querySelector('[data-canada-water-resource-only]');only.checked=true;only.dispatchEvent(new page.window.Event('change'));assert.equal(page.root.querySelector('[data-canada-water-resource-shape="551"]').style.display,'none');
- page.root.querySelector('[data-canada-water-full]').click();assert.equal(page.root.querySelector('[data-canada-water-resource-map]').getAttribute('viewBox'),'0 0 900 580');assert.equal(page.state.area,'550');
+ page.root.querySelector('[data-canada-water-full]').click();assert.deepEqual(page.root.querySelector('[data-canada-water-resource-map]').getAttribute('viewBox').split(' ').map(Number).map(Math.round),[0,180,900,400]);assert.equal(page.state.area,'550');
 });
 test('precipitation isolation swaps the composite for exactly one transparent class image within the national clip',()=>{
  const page=setup();page.show({topic:'precipitation',area:'p1',only:true});

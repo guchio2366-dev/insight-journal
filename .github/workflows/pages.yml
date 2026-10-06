@@ -27,6 +27,21 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm run test:e2e
+      - name: Install Chromium for map acceptance
+        run: |
+          npx playwright install --with-deps chromium
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Compare Canada and US in real Chromium
+        run: npm run test:browser:canada
+      - name: Upload map acceptance screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: canada-us-map-acceptance
+          path: /tmp/atlas-canada-qa
+          if-no-files-found: ignore
+          retention-days: 14
+
       - run: npm run verify:release
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4

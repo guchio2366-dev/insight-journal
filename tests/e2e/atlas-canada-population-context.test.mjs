@@ -62,7 +62,7 @@ test('Population water context retains the original 2016 CMA distribution, perio
  try{
   const q=s=>w.document.querySelector(s),context=q('[data-canada-population-context]'),layer=q('[data-canada-population-context-map]');
   assert.ok(context);assert.equal(context.hidden,false);assert.equal(layer.style.display,'');
-  assert.equal(q('[data-canada-map]').getAttribute('viewBox'),'0 0 900 580');
+  assert.equal(q('[data-canada-map]').getAttribute('viewBox'),'0 180.444444 900 399.555556');
   assertSourceDistribution(layer);
   const text=q('[data-canada-population-context-text]').textContent;
   assert.match(text,/Toronto|トロント/);assert.match(text,/Montréal|モントリオール/);assert.match(text,/Ontario|オンタリオ/);

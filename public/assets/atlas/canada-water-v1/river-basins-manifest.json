@@ -1,0 +1,115 @@
+{
+  "created": "2026-10-05",
+  "sources": [
+    {
+      "url": "https://data.hydrosheds.org/file/HydroBASINS/standard/hybas_na_lev04_v1c.zip",
+      "sha256": "071aaed3095c3459bf95dbf77f299d3ea42c811cf222e3c72413dc293a8fbe57"
+    },
+    {
+      "url": "https://data.hydrosheds.org/file/HydroBASINS/standard/hybas_na_lev06_v1c.zip",
+      "sha256": "6d8e7d8820f5db7c42b4bae5af832265f757b224bce0f705212887b1c12e6d5f"
+    },
+    {
+      "url": "https://data.hydrosheds.org/file/HydroBASINS/standard/hybas_ar_lev04_v1c.zip",
+      "sha256": "b2e1c46b1391ed7acf9b1b3ad448c6334548df6d13ca0e860c34a39dead16878"
+    }
+  ],
+  "method": "HydroBASINS v1cのMAIN_BAS・NEXT_DOWNを使って上流の小流域を結合。沿岸の複数河川をまとめたCOAST区分と内陸閉鎖流域は含めず、原形に自己交差がある場合はmake_validで修復し、境界を0.008度で表示用に簡略化。修復件数は台帳へ記録。",
+  "selectedFor": "Mountain headwaters, agricultural plains and settled river valleys; named river systems, not exhaustive statistical reporting regions.",
+  "resolution": "HydroSHEDS 15 arc-seconds south of 60°N; underlying northern elevation data are coarser (HYDRO1k).",
+  "checks": [
+    {
+      "id": "mackenzie",
+      "parts": 9,
+      "valid": true,
+      "sourceInvalidParts": 2,
+      "bounds": [
+        -140.13714192708332,
+        52.13276604546443,
+        -102.77916666666664,
+        69.27556728786894
+      ],
+      "sourceAreaKm2": 1795626.6
+    },
+    {
+      "id": "fraser",
+      "parts": 1,
+      "valid": true,
+      "sourceInvalidParts": 1,
+      "bounds": [
+        -127.78676130506726,
+        48.845266045464435,
+        -118.16609937879771,
+        56.17414906819665
+      ],
+      "sourceAreaKm2": 230828.6
+    },
+    {
+      "id": "columbia",
+      "parts": 9,
+      "valid": true,
+      "sourceInvalidParts": 1,
+      "bounds": [
+        -123.75833333333331,
+        41.12916666666669,
+        -109.76713545057507,
+        52.88806728786895
+      ],
+      "sourceAreaKm2": 669401.1
+    },
+    {
+      "id": "nelson",
+      "parts": 9,
+      "valid": true,
+      "sourceInvalidParts": 1,
+      "bounds": [
+        -117.41666666666664,
+        45.45000000000003,
+        -89.86249999999998,
+        57.18333333333336
+      ],
+      "sourceAreaKm2": 1091405.2
+    },
+    {
+      "id": "st-lawrence",
+      "parts": 9,
+      "valid": true,
+      "sourceInvalidParts": 3,
+      "bounds": [
+        -93.21185557047524,
+        40.37973395453561,
+        -70.27499999999996,
+        50.77910427517364
+      ],
+      "sourceAreaKm2": 1053296.0
+    },
+    {
+      "id": "saint-john",
+      "parts": 9,
+      "valid": true,
+      "sourceInvalidParts": 0,
+      "bounds": [
+        -70.42951999240448,
+        45.22909206814239,
+        -65.02952473958331,
+        48.10000000000002
+      ],
+      "sourceAreaKm2": 54911.8
+    },
+    {
+      "id": "saskatchewan",
+      "parts": 39,
+      "valid": true,
+      "sourceInvalidParts": 1,
+      "bounds": [
+        -117.41666666666664,
+        48.575000000000024,
+        -98.10035332573781,
+        55.5214760674371
+      ],
+      "sourceAreaKm2": 365259.5
+    }
+  ],
+  "childWithinParent": true,
+  "sha256": "3a9cab2c90636ddbaa2b454b70c1b8359d7262b4c8f56268fb20b60e39f6c783"
+}

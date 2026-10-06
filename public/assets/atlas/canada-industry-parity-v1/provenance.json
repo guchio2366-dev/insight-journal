@@ -1,0 +1,26 @@
+{
+  "accessed": "2026-10-05",
+  "sources": [
+    {
+      "name": "Statistics Canada 36-10-0402-01",
+      "url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3610040201",
+      "definition": "州・準州の産業別GDP。2021年・当年価格・基本価格。全国値は13州・準州の合計。"
+    },
+    {
+      "name": "Statistics Canada 14-10-0023-01",
+      "url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1410002301",
+      "definition": "労働力調査の産業別就業者数。2021年・男女計・15歳以上・年平均。自営業を含み、全国値は準州を除く。米国BEAの雇用数とは定義が異なる。"
+    }
+  ],
+  "archiveHashes": {
+    "gdp": "33c33d696e198bdf9a166a3c02317a7f181cb7d72c9669a410c29c1f214b15e2",
+    "employment": "3a8b67bb78949646adac1039d80b4ac2bb1c8bca22c6bc845755084653e2d01b"
+  },
+  "check": {
+    "gdpChartSum": 2365606.6,
+    "gdpTotal": 2365607.0,
+    "employmentChartSum": 18964.100000000002,
+    "employmentTotal": 18964.1
+  },
+  "rounding": "Source one-decimal values can leave small summation differences; no invented residual."
+}

@@ -47,7 +47,7 @@ export function initCanadaWaterResources(root: HTMLElement) {
   const referenceScale=frame[2]/900;
   for(const reference of map.querySelectorAll<SVGGElement>('[data-canada-water-reference]')) {
    const x=Number(reference.dataset.referenceX),y=Number(reference.dataset.referenceY);
-   reference.style.display=x<frame[0]||x>frame[0]+frame[2]||y<frame[1]||y>frame[1]+frame[3]?'none':'';
+   reference.style.display=state.topic==='drainage'||x<frame[0]||x>frame[0]+frame[2]||y<frame[1]||y>frame[1]+frame[3]?'none':'';
    reference.querySelector('[data-canada-water-reference-glyph]')?.setAttribute('transform',`scale(${referenceScale})`);
   }
   const bcDetail=state.topic==='aquifers'&&frame[2]<100;
@@ -92,7 +92,7 @@ export function initCanadaWaterResources(root: HTMLElement) {
  function drawVectors() {
   const collection=geometry.get(state.topic as WaterDatasetTopic);if (!collection) return;
   for (const shape of vectors.querySelectorAll<SVGGElement>('[data-canada-water-resource-shape]')) {
-   const selected=shape.dataset.canadaWaterResourceShape===state.area || state.topic==='aquifers' && shape.dataset.canadaWaterResourceGroup===state.area;
+   const selected=shape.dataset.canadaWaterResourceShape===state.area || state.topic==='drainage'&&state.area==='nelson'&&shape.dataset.canadaWaterResourceShape==='saskatchewan' || state.topic==='aquifers' && shape.dataset.canadaWaterResourceGroup===state.area;
    const hidden=state.only && !!state.area && !selected;
    shape.style.display=hidden?'none':'';shape.classList.toggle('is-selected',selected);shape.setAttribute('aria-pressed',String(selected));shape.setAttribute('tabindex',hidden||state.topic==='aquifers'?'-1':'0');
   }
@@ -150,7 +150,8 @@ export function initCanadaWaterResources(root: HTMLElement) {
   map.querySelector('title')!.textContent=dataset.title;
   map.querySelector('desc')!.textContent=`${dataset.reading} ${dataset.scope} 地図と同じ区分は凡例と選択欄で確認できます。丸は既存のECCC観測点の位置の目印で、帯水層の測定点ではありません。`;
   $('[data-canada-water-resource-scope]').textContent=dataset.scope;
-  $('[data-canada-water-groundwater-modes]').hidden=topic!=='groundwater'&&topic!=='aquifers';
+  for(const layer of root.querySelectorAll<SVGElement>('[data-canada-basin-water],[data-canada-basin-labels]'))layer.toggleAttribute('hidden',topic!=='drainage');
+  for(const label of root.querySelectorAll<SVGElement>('[data-canada-basin-label]')){const id=label.getAttribute('data-canada-basin-label');label.toggleAttribute('hidden',!!(state.only&&state.area&&id!==state.area&&!(state.area==='nelson'&&id==='saskatchewan')));}
   for(const button of root.querySelectorAll<HTMLElement>('[data-canada-water-topic]'))button.setAttribute('aria-pressed',String(button.dataset.canadaWaterTopic===topic));
   for(const panel of root.querySelectorAll<HTMLElement>('[data-canada-water-resource-reading]'))panel.hidden=panel.dataset.canadaWaterResourceReading!==topic;
   for(const legend of root.querySelectorAll<HTMLElement>('[data-canada-water-resource-legend]'))legend.hidden=legend.dataset.canadaWaterResourceLegend!==topic;
@@ -169,6 +170,7 @@ export function initCanadaWaterResources(root: HTMLElement) {
  vectors.addEventListener('click',event=>{if(ignoreClick){ignoreClick=false;return;}const target=(event.target as Element).closest<SVGGElement>('[data-canada-water-resource-shape]');if(target)emit({area:target.dataset.canadaWaterResourceShape!,only:false});});
  vectors.addEventListener('keydown',event=>{if(event.key!=='Enter'&&event.key!==' ')return;const target=(event.target as Element).closest<SVGGElement>('[data-canada-water-resource-shape]');if(target){event.preventDefault();emit({area:target.dataset.canadaWaterResourceShape!,only:false});}});
  $('[data-canada-water-resource-reset]').addEventListener('click',()=>emit({area:null,only:false,frame:null}));
+ for(const label of root.querySelectorAll<SVGElement>('[data-canada-basin-label]')){const choose=()=>emit({area:label.dataset.canadaBasinLabel!,only:false});label.addEventListener('click',choose);label.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose();}});}
  $('[data-canada-water-full]').addEventListener('click',()=>camera(full));
  $('[data-canada-water-focus]').addEventListener('click',()=>{if(state.topic==='surface'||state.topic==='precipitation')return;const dataset=datasets[state.topic],features=geometry.get(state.topic)?.features.filter(feature=>isMatch(feature,dataset));if(features?.length)camera(canadaWaterFit(features));});
  for(const button of root.querySelectorAll<HTMLElement>('[data-canada-water-zoom]'))button.addEventListener('click',()=>{const factor=button.dataset.canadaWaterZoom==='in'?.7:1/.7;const width=Math.min(900,Math.max(3,frame[2]*factor)),height=Math.min(580,Math.max(3,frame[3]*factor));camera([frame[0]+(frame[2]-width)/2,frame[1]+(frame[3]-height)/2,width,height]);});

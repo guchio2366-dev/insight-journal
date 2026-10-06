@@ -1,0 +1,42 @@
+{
+  "sourcePixelSha256": "a653269436e52924841b08615c5e131bf503cc921db7e47cdc606ff32544cf35",
+  "sourcePointSha256": "05230c91440028ce9c3491c9b97aea3f3e369269c8107e3c9bb57d266c69b5b0",
+  "paletteReference": "src/data/atlas/water-resources.ts",
+  "method": "1991〜2020年の各月を30年間平均し、12か月を合計。360か月すべてが有効な陸域セルだけを分類し、海域と欠測は透明に保持。米国と同じ7階級・配色。既存の5階級と陸域マスクは保持し、1500mm以上の領域だけを、保管済み格子値（0.1mm丸め）の最近傍セルで2000mm未満／以上に分けています。",
+  "originalAlphaPreserved": true,
+  "highRainNearestCellMaximumDistanceDegrees": 0.09067257702856747,
+  "outputs": [
+    {
+      "file": "annual-precipitation-us-all.png",
+      "sha256": "f49c4717909df5f6996cce63fb74167c31e5a2987af1fd9a20db10d0b8b09bfb"
+    },
+    {
+      "file": "annual-precipitation-us-0.png",
+      "sha256": "80f1cd6206e4c64bb2cadff97813a95cc5f93fda2d11db57a58dce6a54fcb651"
+    },
+    {
+      "file": "annual-precipitation-us-1.png",
+      "sha256": "06ea82bba9d4f853273283e6b8b908bb653cec809bfe04e349c9644ecea6648c"
+    },
+    {
+      "file": "annual-precipitation-us-2.png",
+      "sha256": "82487b89e2d3d94f7bd025c46cacd04d95eb562d622a78289f1c8ffc2c130914"
+    },
+    {
+      "file": "annual-precipitation-us-3.png",
+      "sha256": "5055451da341d3347ed1a46187dd398569096d00017b6352c4bc042d4a6ac510"
+    },
+    {
+      "file": "annual-precipitation-us-4.png",
+      "sha256": "20a1c47659b51cc22588cec16f778ab654a2b616d3281a34bcac1afeaf76129e"
+    },
+    {
+      "file": "annual-precipitation-us-5.png",
+      "sha256": "1be0c8ed626b3c56609d683a9731d7cbef2bed3c3667493694f85dbe4dc460c9"
+    },
+    {
+      "file": "annual-precipitation-us-6.png",
+      "sha256": "017f4b13a30e79f43202498384d7bb37f11e0992e1962cb246fcbd945f89d05b"
+    }
+  ]
+}
