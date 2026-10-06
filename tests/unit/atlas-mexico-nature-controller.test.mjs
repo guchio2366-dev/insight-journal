@@ -125,3 +125,103 @@ test('Active background keys, fixed state values and truthful comparison copy re
     assert.equal(document.querySelector('[data-mexico-water-reading-summary]'),null);assert.equal(document.querySelector('[data-mexico-nature-comparison-lead]'),lead);assert.ok(document.querySelector('[data-mexico-nature-comparison]').contains(lead));assert.equal(document.querySelectorAll('[data-mexico-nature-comparison-lead]').length,1);assert.equal(document.querySelectorAll('[data-mexico-hydrology-lead]').length,1);
   }finally{await window.happyDOM.close();}
 });
+
+function comparisonFixture(search) {
+  const window = fixture(search);
+  const root = window.document.querySelector('[data-mexico-workspace]');
+  root.insertAdjacentHTML('beforeend', '<a data-mexico-nature-compare-link="irrigation"></a><a data-mexico-nature-compare-link="population"></a><a data-mexico-nature-plain-return></a><h2 data-mexico-nature-comparison-title></h2><p data-mexico-nature-comparison-lead></p><p data-mexico-nature-comparison-body></p><p data-mexico-nature-comparison-definition></p><p data-mexico-nature-comparison-consequence></p>');
+  window.dispatchEvent(new window.PopStateEvent('popstate'));
+  return window;
+}
+
+for (const [view, item, feature, naturalLabel] of [
+  ['climate', '59', 'climate-3', '気候分布'],
+  ['relief', 'III', 'relief-5', '地形地域分布'],
+]) for (const [comparison, indicator, metricLabel] of [
+  ['irrigation', 'irrigation', '灌漑農地率'],
+  ['population', 'density', '人口密度'],
+]) {
+  test(`${view} → ${comparison} entry preserves the named natural map, selection and return state`, async () => {
+    const original = new URLSearchParams({view, item, feature, state: '10', city: 'culiacan-dge', frame: '210,100,350,220', fallback: '1', only: '1'});
+    const window = comparisonFixture(`?${original}`);
+    let restored, returned;
+    try {
+      const link = window.document.querySelector(`[data-mexico-nature-compare-link="${comparison}"]`);
+      assert.equal(link.textContent, `${naturalLabel}と${metricLabel}を比べる`);
+      assert.equal(link.getAttribute('aria-label'), link.textContent);
+      const target = new URL(link.href);
+      for (const key of ['view', 'item', 'feature', 'state', 'city', 'frame', 'fallback']) {
+        assert.equal(target.searchParams.get(key), original.get(key), `${key} survives comparison entry`);
+      }
+      assert.equal(target.searchParams.get('compare'), comparison);
+      assert.equal(target.searchParams.has('only'), false, 'Entry shows the full comparison distribution');
+      restored = comparisonFixture(target.search);
+      const document = restored.document, root = document.querySelector('[data-mexico-workspace]');
+      assert.equal(root.dataset.mexicoNatureView, view);
+      assert.equal(root.dataset.mexicoNatureState, '10');
+      assert.equal(root.dataset.mexicoNatureIndicator, indicator);
+      assert.equal(document.querySelector(`[data-mexico-nature-layer="${view}"]`).style.display, '');
+      assert.equal(document.querySelector(`[data-mexico-nature-layer="${view === 'climate' ? 'relief' : 'climate'}"]`).style.display, 'none');
+      assert.equal(document.querySelector(`[data-mexico-nature-feature="${feature}"]`).getAttribute('aria-pressed'), 'true');
+      assert.equal(document.querySelector('[data-mexico-nature-item-select]').value, item);
+      assert.equal(document.querySelector('[data-mexico-nature-main-map]').getAttribute('viewBox'), '210 100 350 220');
+      assert.equal(document.querySelector('[data-mexico-nature-comparison-title]').textContent, `${naturalLabel}と${metricLabel}`);
+      const lead = document.querySelector('[data-mexico-nature-comparison-lead]').textContent;
+      const body = document.querySelector('[data-mexico-nature-comparison-body]').textContent;
+      if ((view === 'climate' && comparison === 'population') || (view === 'relief' && comparison === 'irrigation')) {
+        assert.equal(lead, `${naturalLabel}と、州別の${metricLabel}を同じ範囲で読み比べる。`);
+        assert.ok(body.includes(`${naturalLabel}は自然地域の分類です。${metricLabel}は州単位の公表値です。`));
+        assert.doesNotMatch(body, view === 'climate' ? /地形地域|左の地形/ : /気候区分|左の気候/);
+      } else {
+        assert.match(`${lead}${body}`, view === 'climate' ? /気候.*灌漑/s : /地形地域.*人口密度/s);
+      }
+      if (indicator === 'density') assert.ok(document.querySelector('[data-mexico-nature-comparison-definition]').textContent.includes(naturalLabel));
+      assert.equal(document.querySelector(`[data-mexico-nature-compare-link="${comparison}"]`).href, target.href, 'Repeated entry does not change the selected view');
+      const plain = new URL(document.querySelector('[data-mexico-nature-plain-return]').href);
+      assert.equal(plain.searchParams.has('compare'), false);
+      for (const key of ['view', 'item', 'feature', 'state', 'city', 'frame', 'fallback']) assert.equal(plain.searchParams.get(key), original.get(key));
+      returned = comparisonFixture(plain.search);
+      assert.equal(returned.document.querySelector('[data-mexico-workspace]').dataset.mexicoNatureView, view);
+      assert.equal(returned.document.querySelector(`[data-mexico-nature-feature="${feature}"]`).getAttribute('aria-pressed'), 'true');
+    } finally {
+      await window.happyDOM.close();
+      await restored?.happyDOM.close();
+      await returned?.happyDOM.close();
+    }
+  });
+}
+
+test('Pine water comparisons retain the implicit relief default and any later explicit natural view', async () => {
+  for (const view of [null, 'climate', 'relief']) {
+    const original = new URLSearchParams({category: 'elevation', waterFeature: 'contours:contours-1000-1', waterBase: 'relief', compare: 'irrigation', from: 'agriculture', sourceMetric: 'pine', sourceState: '10', sourceOnly: '1', sourceFallback: '1', sourceCrops: '0', sourceLivestock: '1', sourceOnlyItem: '1', state: '25', city: 'culiacan-dge', frame: '210,100,350,220', item: 'III', feature: 'relief-5', only: '0'});
+    if (view) original.set('view', view);
+    const window = fixture(`?${original}`, true);
+    let restored;
+    try {
+      const root = window.document.querySelector('[data-mexico-workspace]');
+      const link = window.document.createElement('a');
+      link.setAttribute('data-mexico-nature-compare-link', 'irrigation');
+      root.append(link);
+      window.dispatchEvent(new window.PopStateEvent('popstate'));
+      const target = new URL(link.href);
+      assert.equal(target.searchParams.get('view'), view ?? 'relief');
+      for (const [key, value] of original) assert.equal(target.searchParams.get(key), value, key);
+      assert.equal(link.getAttribute('aria-label'), '標高・等高線と松材取得量を比べる');
+      restored = fixture(target.search, true);
+      const restoredRoot = restored.document.querySelector('[data-mexico-workspace]');
+      assert.equal(restoredRoot.dataset.mexicoNatureView, view ?? 'relief');
+      assert.equal(restoredRoot.dataset.mexicoNatureIndicator, 'pine');
+      assert.match(restored.document.querySelector('[data-mexico-nature-comparison-title]').textContent, /標高・等高線と松材取得量/);
+      assert.match(restored.document.querySelector('[data-mexico-nature-comparison-body]').textContent, /等高線は同じ標高m（EGM2008）を結ぶ線.*松材取得量は州単位/s);
+      const source = new URL(restored.document.querySelector('[data-mexico-nature-source-return]').href);
+      for (const [key, value] of Object.entries({state: '10', metric: 'pine', crops: '0', onlyItem: '1', only: '1', fallback: '1'})) assert.equal(source.searchParams.get(key), value);
+      const plain = new URL(restored.document.querySelector('[data-mexico-nature-plain-return]').href);
+      assert.equal(plain.searchParams.get('view'), view ?? 'relief');
+      assert.equal(plain.searchParams.has('compare'), false);
+      for (const key of ['waterFeature', 'waterBase', 'city', 'frame', 'item', 'feature', 'state', 'sourceMetric', 'sourceState']) assert.equal(plain.searchParams.get(key), original.get(key));
+    } finally {
+      await window.happyDOM.close();
+      await restored?.happyDOM.close();
+    }
+  }
+});
