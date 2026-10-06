@@ -1,0 +1,69 @@
+{
+  "retrieved": "2026-10-06",
+  "inputs": {
+    "mapspam-mexico-physical-area.npz": {
+      "sha256": "53d906a5078d097b11bd050fa38a0ea455976b759032edde698848adad09bb9b",
+      "bytes": 383909
+    },
+    "spam-zarr.json": {
+      "sha256": "ddf7880ed0d0905735deecc9508416b71804176b837d9890c9120537b8a34028",
+      "bytes": 21301
+    },
+    "spam-acquisition.json": {
+      "sha256": "1849ba3e71d7fb35c475d915a6d96dd10ee07473f30fcbe0414ddfd889dbb3d9",
+      "bytes": 12746
+    },
+    "livestock-candidates.json": {
+      "sha256": "4f39338bae5d53812beac1e6f51266bfd41cbb46a05abfa2212a7ded69b574f8",
+      "bytes": 10921
+    },
+    "siap-agricola-2025.csv.gz": {
+      "sha256": "bb1de62a0de1f87f683f5403b03a61c16fa4cc0f1b8f7ae6928dfcad63776965",
+      "bytes": 898252
+    },
+    "siap-pecuario-2025.csv.gz": {
+      "sha256": "8eace129ad13adc027323f35920a6193fc1f9fd9aacfffc5e0aa24cc23427cd6",
+      "bytes": 677500
+    },
+    "siap-agricola-dictionary.xlsx": {
+      "sha256": "ab6fa27d390a70dd9eb9d19f98e9c0417a5e80cae3251ecca3f70b0a73bd8ffb",
+      "bytes": 114830
+    },
+    "siap-pecuario-dictionary.xlsx": {
+      "sha256": "671d7218391ef9a320f8c15d375da80e4f61290176ef7ae2ffe0a1ce0799fa54",
+      "bytes": 119562
+    },
+    "municipal-seats.json": {
+      "sha256": "e18cf3dd8c022f17c09c5e0fd28727cf730d99e9fef7a73620ff8fe94effa2f6",
+      "bytes": 16826
+    },
+    "spam-raw/crop__c__0": {
+      "sha256": "e50ef268de45a364c8bb2e31db64b0fab889b6d1c1e284e6ce2197405b32ec89",
+      "bytes": 196
+    },
+    "spam-raw/crop_name__c__0": {
+      "sha256": "fa454d7b4bb89bcdbf1f44fe9a2c4e8507f970736a73db26d9f9675e7a6f555e",
+      "bytes": 380
+    },
+    "spam-raw/technology__c__0": {
+      "sha256": "0567ce8260c240cc9f5790f84479f9fcef670627f01645054de31048bf189cdd",
+      "bytes": 44
+    }
+  },
+  "nationalGeometry": {
+    "path": "src/data/atlas/mexico/geometry.json",
+    "sha256": "193f700c8741c2752561de077c781383dcc28a95244fb60726f591f8af011faa"
+  },
+  "cropSourceBytes": 28983306,
+  "clipBounds": [
+    -119,
+    14,
+    -86,
+    33
+  ],
+  "clipArrayShape": [
+    46,
+    228,
+    396
+  ]
+}

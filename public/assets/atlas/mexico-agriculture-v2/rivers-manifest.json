@@ -1,0 +1,10 @@
+{
+  "source": "public/assets/atlas/mexico-water-v1/rivers.geojson.gz",
+  "sourceSha256": "14c1034748c32e0a07439f071fb3317c920008f00705b57db9877dd7a4d06ad7",
+  "sourceMetadata": "../mexico-water-v1/rivers.source.json",
+  "output": "rivers.svg",
+  "outputSha256": "807a1ec6d78c2f32311cba48cb4a9d35fb1e8bda7bb7bdbca83353a35308a953",
+  "projection": "Existing Mexico Lambert, 900×580; same projection as relief.webp",
+  "method": "All existing selected Strahler-order 7–9 segments are projected without smoothing or adding coordinates. This is contextual hydrology, not an inventory of every national river.",
+  "licence": "https://www.inegi.org.mx/inegi/terminos.html"
+}

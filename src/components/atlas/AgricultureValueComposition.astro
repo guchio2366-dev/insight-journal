@@ -1,0 +1,17 @@
+---
+interface Item { label:string; value:number }
+interface Group { id:string; label:string; total:number; items:Item[] }
+interface Props { title:string; period:string; groups:Group[]; total:number; divisor:number; unit:string; definition:string; sourceUrl:string; sourceLabel:string; idPrefix?:string }
+const {title,period,groups,total,divisor,unit,definition,sourceUrl,sourceLabel,idPrefix='receipt'}=Astro.props;
+const share=(value:number,denominator:number)=>denominator>0?value/denominator*100:0;
+---
+<figure class="atlas-mini-chart atlas-receipts-chart">
+ <figcaption><strong>{title}</strong><span>{period}</span></figcaption>
+ <div class="atlas-parent-bar" role="img" aria-label={groups.map(group=>`${group.label}${share(group.total,total).toFixed(1)}%`).join('、')}>
+  {groups.map(group=><span class={`is-${group.id}`} style={`width:${share(group.total,total)}%`}><b>{group.label}</b><strong>{share(group.total,total).toFixed(0)}%</strong></span>)}
+ </div>
+ <p class="atlas-chart-total">農畜産物計　<strong>{(total/divisor).toFixed(1)}</strong> {unit}</p>
+ <div class="atlas-receipt-groups">{groups.map(group=><section class={`atlas-receipt-group is-${group.id}`} aria-labelledby={`${idPrefix}-${group.id}`}><h3 id={`${idPrefix}-${group.id}`}>{group.label}内の割合 <span>{(group.total/divisor).toFixed(1)} {unit}</span></h3><div class="atlas-bars">{group.items.map(item=><div class="atlas-bar-row"><span>{item.label}</span><i><b style={`width:${Math.min(100,share(item.value,group.total)/50*100)}%`}></b></i><strong>{share(item.value,group.total).toFixed(1)}%</strong></div>)}</div></section>)}</div>
+ <details class="atlas-receipt-definitions"><summary>金額と分類の定義</summary><p>{definition}</p><table><thead><tr><th>分類</th><th>{unit}</th></tr></thead><tbody>{groups.flatMap(group=>group.items).map(item=><tr><th>{item.label}</th><td>{(item.value/divisor).toFixed(1)}</td></tr>)}</tbody></table></details>
+ <a href={sourceUrl} target="_blank" rel="noopener noreferrer">出典：{sourceLabel}</a>
+</figure>

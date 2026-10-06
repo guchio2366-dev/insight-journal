@@ -17,7 +17,8 @@
     "verify:release": "node scripts/verify-release.mjs",
     "check": "npm test && npm run build && npm run test:e2e && npm run verify:release",
     "pretest": "node scripts/prepare-population.mjs",
-    "test:browser:canada": "node scripts/verify-canada-us-parity.mjs"
+    "test:browser:canada": "node scripts/verify-canada-us-parity.mjs",
+    "test:review:agriculture": "node scripts/capture-mexico-agriculture-review.mjs"
   },
   "dependencies": {
     "astro": "7.3.2",

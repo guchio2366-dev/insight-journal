@@ -1,100 +1,106 @@
 ---
-import MexicoWorkspace from './MexicoWorkspace.astro';
-import agriculture from '../../data/atlas/mexico/agriculture.json';
-import livestock from '../../data/atlas/mexico/livestock.json';
-import {agricultureReading, agricultureSources} from '../../data/atlas/mexico/agriculture-reading';
-import {geometryPath, stateFeatures, stateLabelPoint, mapViewBox} from '../../lib/atlas-mexico-geometry';
-import {agricultureMetrics, agricultureSymbolKeys, agricultureValue, formatAgricultureValue, irrigationBins, quantityRadius} from '../../lib/atlas-mexico-agriculture';
+import {readFile} from 'node:fs/promises';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
+import AtlasRegionNavigation from './AtlasRegionNavigation.astro';
+import AgricultureMapControls from './AgricultureMapControls.astro';
+import AgricultureCommodityKey from './AgricultureCommodityKey.astro';
+import AgricultureValueComposition from './AgricultureValueComposition.astro';
 import {withBase} from '../../lib/urls';
-import '../../styles/atlas-mexico-agriculture.css';
-const selected = agriculture.states.find(state => state.code === '25')!;
-const maxMaize = Math.max(...agriculture.states.map(state => state.maizeWhiteProductionT));
-const maxPine = Math.max(...agriculture.states.map(state => state.pineObtainedM3));
-const states=agriculture.states.map(state=>({...state,cattleHeads:livestock.states[state.code as keyof typeof livestock.states]}));
-const national={...agriculture.national,cattleHeads:livestock.national};
-const maxCattle=Math.max(...states.map(state=>state.cattleHeads));
-const focusPoint = stateLabelPoint('25');
-const initialSelection=Astro.url.searchParams.get('reading')!=='overview'&&(Astro.url.searchParams.has('state')||Astro.url.searchParams.has('metric'));
-const config = {
-  ...agriculture,
-  states,national,livestockPeriod:livestock.period,
-  naturePath: withBase('/atlas/north-america/mexico/nature/'),
-  agriculturePath: withBase('/atlas/north-america/mexico/agriculture/'),
-  takeaway: Object.fromEntries(Object.entries(agricultureReading).map(([metric, value]) => [metric, value.takeaway])),
-  definitions:{...agriculture.definitions,cattleHeads:livestock.scope},
-  positions: Object.fromEntries(agriculture.states.map(state => [state.code, stateLabelPoint(state.code)])),
+import {geometryPath,stateFeatures,stateLabelPoint,projectLonLat,projectNative,mapViewBox} from '../../lib/atlas-mexico-geometry';
+import {agricultureProductStatistics,formatMexicoProduction,formatMexicoValue,type MexicoAgricultureAtlasData} from '../../lib/atlas-mexico-agriculture-atlas';
+import {mexicoCrops,mexicoLivestockKinds,mexicoAgricultureLabel} from '../../data/atlas/mexico/agriculture-catalog';
+import {agricultureReading,agricultureSources} from '../../data/atlas/mexico/agriculture-reading';
+import {mexicoAgricultureProductReading} from '../../data/atlas/mexico/agriculture-product-reading';
+import displayStates from '../../../public/assets/atlas/mexico-agriculture-v2/display-states.json';
+import census from '../../data/atlas/mexico/agriculture.json';
+import labels from '../../../public/assets/atlas/mexico-nature-parity-v1/labels.json';
+import '../../styles/atlas-us-responsive.css';
+import '../../styles/atlas-agriculture-insights.css';
+import '../../styles/atlas-mexico-agriculture-atlas.css';
+const data=JSON.parse(await readFile('public/assets/atlas/mexico-agriculture-v2/agriculture-atlas.json','utf8')) as MexicoAgricultureAtlasData;
+const assetBase=withBase('/assets/atlas/mexico-agriculture-v2/');
+const crops=mexicoCrops.filter(crop=>data.cropZones.features.some(feature=>feature.properties.cropId===crop.id));
+const readings={...mexicoAgricultureProductReading,
+ corn:{...agricultureReading.maize,title:'とうもろこし：主食と飼料を支える',steps:agricultureReading.maize.steps.map((step,index)=>index===2?{...step,body:'灌漑によって雨の季節だけに頼らず耕作するには、用水の確保が条件になります。2020年推計の主要栽培域と地形を見て、2022年センサスの白粒生産・灌漑率、加工や市場への輸送を別々に確かめます。'}:step)},
+ pine:agricultureReading.pine,irrigation:agricultureReading.irrigation,
+ cattle:{...agricultureReading.cattle,steps:agricultureReading.cattle.steps.map((step,index)=>index===0?{...step,body:'2022年9月の牛の飼養頭数です。農業生産単位と住宅で飼養する牛を合わせ、下の州別統計で確認します。地図の牛の記号は2025年の牛肉生産から選んだ自治体であり、この頭数を表すものではありません。'}:step)},
 };
+const ids=[...crops.map(c=>c.id),...mexicoLivestockKinds.map(k=>k.id),'pine','irrigation','cattle'];
+const stats=Object.fromEntries(ids.map(id=>[id,agricultureProductStatistics(data,id)]));
+const physicalLabels=labels.labels.filter(label=>label.view==='relief'&&['西シエラマドレ','東シエラマドレ','中央高原','ユカタン半島','南シエラマドレ'].includes(label.labelJa));
+const config={crops,livestockKinds:mexicoLivestockKinds,markers:data.livestockMarkers.map(marker=>({...marker,point:projectLonLat(marker.anchor)})),
+ states:census.states.map(state=>({code:state.code,name:state.nameJa,point:stateLabelPoint(state.code)})),statistics:stats,
+ naturePath:withBase('/atlas/north-america/mexico/nature/'),agriculturePath:withBase('/atlas/north-america/mexico/agriculture/')};
+const composition=data.composition.map(group=>({id:group.id,label:group.id==='crops'?'作物':'畜産',total:group.totalValueMxN,items:group.items.map(item=>({label:item.label,value:item.valueMxN}))}));
+const total=composition.reduce((sum,group)=>sum+group.total,0);
+const cropShare=composition.find(group=>group.id==='crops')!.total/total*100;
+const displayCropLabels=crops.filter(crop=>crop.id!=='other').map(crop=>data.cropLabels.find(label=>label.cropId===crop.id)).filter(Boolean);
+const cropPaths=crops.map(crop=>({...crop,path:data.cropZones.features.filter(feature=>feature.properties.cropId===crop.id).map(feature=>geometryPath(feature.geometry)).join('')}));
 ---
-<MexicoWorkspace field="agriculture" title="メキシコの農林業" lead="乾燥する北西部の灌漑農業と山地の松材利用を、分布・生産量・市場へのつながりから読む。">
-  <nav slot="controls" class="atlas-nature-controls mexico-topic-controls" aria-label="農林業の項目"><div class="atlas-nature-tabs mexico-topic-tabs mexico-agriculture-topic-tabs">
-    <a data-agriculture-group="agriculture" data-mexico-agriculture-topic="agriculture" href={withBase('/atlas/north-america/mexico/agriculture/?metric=maize&reading=overview')} aria-current="page">農畜産</a>
-    <a data-agriculture-group="forestry" data-mexico-agriculture-topic="forestry" href={withBase('/atlas/north-america/mexico/agriculture/?metric=pine&reading=overview')}>林業</a>
-  </div></nav>
-  <Fragment slot="map">
-    <figure class="mexico-agriculture-figure">
-      <div class="atlas-map-frame mexico-map-frame">
-    <div class="mexico-controls">
-      <div class="mexico-agriculture-layers" data-agriculture-layers role="group" aria-label="州別数量の表示"><button type="button" data-agriculture-layer="crops" aria-pressed="true">作物 <span>ON</span></button><button type="button" data-agriculture-layer="livestock" aria-pressed="true">畜産 <span>ON</span></button></div>
-      <label for="mexico-agriculture-state">読む州 <select id="mexico-agriculture-state" data-agriculture-state><option value="" disabled selected={!initialSelection}>州を選ぶ</option>{agriculture.states.map(state => <option value={state.code} selected={initialSelection&&state.code === '25'}>{state.nameJa}</option>)}</select></label>
-      <label class="mexico-agriculture-only"><input type="checkbox" data-agriculture-only /> 選択州を強調</label>
-      <button type="button" data-agriculture-fallback aria-pressed="false">数値一覧で読む</button>
-    </div>
-      <svg class="mexico-map mexico-agriculture-map" data-mexico-map data-agriculture-map viewBox={mapViewBox} role="group" aria-labelledby="mexico-agriculture-svg-title mexico-agriculture-svg-desc">
-        <title id="mexico-agriculture-svg-title" data-agriculture-svg-title>メキシコの州別白粒トウモロコシ生産量</title>
-        <desc id="mexico-agriculture-svg-desc">州を選ぶと値と説明を読めます。円は州合計の生産量に比例し、農地の場所や面積を表しません。州選択欄と下の32州表でも確認できます。</desc>
-        <text x="570" y="75" class="mexico-agriculture-sea" aria-hidden="true">アメリカ合衆国</text>
-        <text x="190" y="415" class="mexico-agriculture-sea" aria-hidden="true">太平洋</text>
-        <text x="747" y="354" class="mexico-agriculture-sea" aria-hidden="true">メキシコ湾</text>
-        <g data-agriculture-states>{stateFeatures.map(feature => <path class:list={['mexico-state', {'is-selected': initialSelection&&feature.properties.code === '25'}]} d={geometryPath(feature.geometry)} data-agriculture-state-code={feature.properties.code} role="button" tabindex="0" aria-pressed={initialSelection&&feature.properties.code === '25' ? 'true' : 'false'} aria-label={`${feature.properties.nameJa}を選ぶ`}><title>{feature.properties.nameJa}</title></path>)}</g>
-        <g data-agriculture-symbols>{agriculture.states.map(state => {
-          const [cx, cy] = stateLabelPoint(state.code);
-          return <circle class:list={['mexico-agriculture-symbol', {'is-selected': initialSelection&&state.code === '25'}]} cx={cx-12} cy={cy-10} r={quantityRadius(state.maizeWhiteProductionT, maxMaize)} fill={agricultureMetrics[0].color} data-agriculture-symbol={state.code} data-agriculture-state-code={state.code} data-r-maize={quantityRadius(state.maizeWhiteProductionT, maxMaize)} data-r-pine={quantityRadius(state.pineObtainedM3, maxPine)} aria-hidden="true"><title>{state.nameJa}：{formatAgricultureValue(state.maizeWhiteProductionT, 'maize')}</title></circle>;
-        })}</g>
-        <g data-agriculture-cattle-symbols>{states.map(state=>{const [cx,cy]=stateLabelPoint(state.code);return <circle class="mexico-agriculture-symbol" data-agriculture-cattle-symbol={state.code} data-agriculture-state-code={state.code} data-r-cattle={quantityRadius(state.cattleHeads,maxCattle)} cx={cx+12} cy={cy+10} r={quantityRadius(state.cattleHeads,maxCattle)} fill="#8f4d6a" aria-hidden="true"><title>{state.nameJa}：牛 {formatAgricultureValue(state.cattleHeads,'cattle')}</title></circle>;})}</g>
-        <g class="mexico-agriculture-selected-label" data-agriculture-selected-label transform={`translate(${focusPoint[0]},${focusPoint[1]})`} aria-hidden="true"><text class="mexico-state-label" x="40" y="-8" data-agriculture-label-name>シナロア</text><text class="mexico-state-label mexico-agriculture-label-value" x="40" y="29" data-agriculture-label-value>{formatAgricultureValue(selected.maizeWhiteProductionT, 'maize')}</text></g>
-      </svg>
-      <div class="mexico-agriculture-map-fallback" data-agriculture-map-fallback hidden>
-        <p class="mexico-caption">同じ32州の公表値を、選んだ指標の大きい順で表示します。</p>
-        <div class="mexico-table-scroll"><table><caption data-agriculture-fallback-caption>白粒トウモロコシ生産量（t）</caption><thead><tr><th>州</th><th data-agriculture-fallback-unit>生産量 t</th></tr></thead><tbody data-agriculture-fallback-body>{[...agriculture.states].sort((a,b) => b.maizeWhiteProductionT - a.maizeWhiteProductionT).map(state => <tr data-agriculture-fallback-row={state.code}><th><button type="button" data-agriculture-pick={state.code}>{state.nameJa}</button></th><td data-agriculture-fallback-value={state.code}>{formatAgricultureValue(state.maizeWhiteProductionT, 'maize')}</td></tr>)}</tbody></table></div>
+<BaseLayout title="メキシコの農林業｜北米地理" description="メキシコの主要栽培域と畜産の産地を、地形・水・生産・利用のつながりから読みます。" compactAtlas>
+ <AtlasWorkspaceFrame region="north-america" mapActions={false}>
+  <article class="atlas-explorer mexico-agriculture-atlas" data-mexico-agriculture-atlas data-mexico-workspace data-mexico-field="agriculture" data-field="agriculture" data-mexico-reading-selected="false" data-agri-reading-ready>
+   <section class="atlas-workspace mexico-learning-workspace" aria-label="メキシコの農林業地図">
+    <div class="atlas-compact-heading"><nav aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a><span aria-hidden="true"> / </span><a href={withBase('/atlas/north-america/')}>北米地理</a></nav><span>メキシコ</span></div>
+    <h1 class="visually-hidden">メキシコの農林業</h1>
+    <div class="atlas-region-controls"><AtlasRegionNavigation group="americas" current="north-america" country="mexico" /></div>
+    <nav class="atlas-tabs atlas-tabs-with-overview mexico-fields" aria-label="地図の分野">{([['overview','概要'],['agriculture','農林業'],['nature','自然環境'],['industry','主要産業'],['population','人口']] as const).map(([id,label])=><a href={withBase(`/atlas/north-america/mexico/${id}/${id==='overview'?'?country=MEX':''}`)} aria-current={id==='agriculture'?'page':undefined}>{label}</a>)}</nav>
+    <div class="atlas-primary-grid">
+     <div class="atlas-map-column">
+      <div class="atlas-map-frame" data-map-frame>
+       <svg class="mexico-agriculture-map" data-mexico-map data-agriculture-map viewBox={mapViewBox} tabindex="0" role="group" aria-labelledby="mexico-agriculture-map-title mexico-agriculture-map-description">
+        <title id="mexico-agriculture-map-title">メキシコの主要栽培域と畜産の産地</title>
+        <desc id="mexico-agriculture-map-description">作物面はMapSPAM 2020の推計を5分格子で概略化。畜産記号は2025年の生産統計から選んだ市町村の代表位置。州合計の数量円ではありません。</desc>
+        <rect width="900" height="580" fill="#c1e1ed" />
+        <image href={withBase('/assets/atlas/mexico-nature-parity-v1/relief.webp')} x="0" y="0" width="900" height="580" />
+        <g data-mexico-crop-zones>{cropPaths.map(crop=><path class="mexico-crop-zone" data-crop-zone={crop.id} fill={crop.color} fill-rule="evenodd" d={crop.path} role="button" tabindex="0" aria-label={`${crop.name}の主要栽培域を読む`}><title>{crop.name}：2020年の推計主要栽培域</title></path>)}</g>
+        <image href={`${assetBase}tree-cover-2021.png`} data-mexico-tree-cover width="900" height="580" hidden class="mexico-agriculture-tree-cover" />
+        <image href={`${assetBase}rivers.png`} width="900" height="580" class="mexico-agriculture-rivers" />
+        <g class="mexico-agriculture-state-lines">{displayStates.states.map(state=><path d={state.path} data-agriculture-state-code={state.code}><title>{state.nameJa}</title></path>)}</g>
+        <g class="mexico-agriculture-geography" aria-hidden="true"><text class="is-country" x="550" y="64">アメリカ合衆国</text><text class="is-water" x="135" y="440">太平洋</text><text class="is-water" x="729" y="302">メキシコ湾</text>{physicalLabels.map(label=>{const [x,y]=projectNative(label.pointNative);return <text x={x} y={y}>{label.labelJa}</text>;})}</g>
+        <g class="mexico-agriculture-crop-labels" data-mexico-crop-labels>{displayCropLabels.map(label=>{const [x,y]=projectLonLat(label.anchor);return <text x={x} y={y} data-crop-label={label.cropId} data-crop-zone={label.cropId} role="button" tabindex="0">{mexicoAgricultureLabel(label.cropId)}</text>;})}</g>
+        <g class="mexico-agriculture-state-selection" data-mexico-state-selection hidden>{displayStates.states.map(state=><path d={state.path} data-mexico-state-outline={state.code} hidden />)}</g>
+        <g class="mexico-agriculture-forest-states" data-mexico-forest-states hidden>{displayStates.states.filter(state=>['08','10'].includes(state.code)).map(state=><path d={state.path} />)}{census.states.filter(state=>['08','10'].includes(state.code)).map(state=>{const [x,y]=stateLabelPoint(state.code);return <text x={x} y={y}>{state.nameJa}</text>;})}</g>
+       </svg>
+       <div class="atlas-livestock-markers" data-livestock-markers></div>
+       <AgricultureMapControls countryLabel="メキシコ" />
+       <p class="atlas-layer-caption" data-layer-caption>作物 2020推計・畜産産地 2025（概略）</p>
       </div>
-      </div>
-    <div class="mexico-agriculture-map-heading"><h2 data-agriculture-map-title>{agricultureMetrics[0].title}</h2><span class="mexico-agriculture-period">2022年農業センサス</span></div>
-      <figcaption><span data-agriculture-map-caption>{agricultureMetrics[0].caption}</span></figcaption>
-    </figure>
-  </Fragment>
-    <div slot="legend" class="mexico-agriculture-key" aria-label="地図の凡例">
-      {(['maize','cattle','pine'] as const).map(metric => <div class="mexico-agriculture-symbol-key" data-agriculture-legend={metric} hidden={metric === 'pine'}><span>{agricultureMetrics.find(item=>item.id===metric)!.name}：円の面積＝州の量</span><span class="mexico-agriculture-zero">0＝円なし</span><div class="mexico-agriculture-quantity-keys">{agricultureSymbolKeys[metric].map(value => <span class="mexico-agriculture-symbol-key-item"><svg data-agriculture-legend-size viewBox="0 0 68 68" aria-hidden="true"><circle cx="34" cy="34" r={quantityRadius(value, metric === 'maize' ? maxMaize : metric==='cattle'?maxCattle:maxPine)} fill={agricultureMetrics.find(item => item.id === metric)!.color} /></svg><span>{formatAgricultureValue(value, metric)}</span></span>)}</div><small>{metric==='cattle'?'2022年9月':'2021年10月～2022年9月'}。品目ごとに円の基準は別。</small></div>)}
-      <div data-agriculture-legend="irrigation" hidden><strong>灌漑農地率（%）</strong><small>2021年10月～2022年9月</small><ul class="mexico-legend">{irrigationBins.map(bin => <li><i style={`background:${bin.color}`}></i>{bin.label}</li>)}</ul></div>
+      <AgricultureCommodityKey {crops} livestock={[...mexicoLivestockKinds]} overlap={false} />
+      <p class="mexico-agriculture-map-note"><span data-mexico-map-note>作物は推計主要栽培域、畜産は生産の多い市町村の代表位置。記号の大きさは数量を表しません。</span><a href="#mexico-agriculture-sources">出典・表示方法</a></p>
+      <section class="agriculture-relations mexico-agriculture-relations" aria-label="自然条件と産地のつながり"><h2>自然条件と産地をつなぐ</h2><div><button type="button" data-mexico-agriculture-item="irrigation"><strong>北西部の乾燥と灌漑</strong><span>水の確保が秋冬作を支える</span></button><button type="button" data-mexico-agriculture-item="pine"><strong>山地の森林と木材</strong><span>西シエラマドレと松材供給</span></button></div></section>
+      <p class="visually-hidden" data-atlas-live aria-live="polite" aria-atomic="true"></p>
+     </div>
+     <div data-field-national="agriculture">
+      <aside class="atlas-national" data-agri-overview aria-labelledby="national-agriculture-title">
+       <header><p class="atlas-eyebrow">NATIONAL OVERVIEW</p><h2 id="national-agriculture-title">メキシコの農林業</h2><p>作物・畜産・林業を、自然条件と生産・利用のつながりから読みます。地図下の項目から詳説を選べます。</p><h3>農畜産の概況</h3><p>生産額は作物が{cropShare.toFixed(0)}%、畜産が{(100-cropShare).toFixed(0)}%。北西部の灌漑農業、中央高原の穀物、南部の熱帯作物を、飼料・加工・市場へのつながりと合わせて読みます。</p></header>
+       <AgricultureValueComposition title="農畜産物の生産額" period={`${data.years.statistics}年`} groups={composition} {total} divisor={1e9} unit="十億ペソ" idPrefix="mexico-receipt"
+        definition="当年価格による生産額。作物と畜産は同じ2025年・メキシコペソで集計。生体と枝肉の二重計上を避け、生体の金額は含めません。販売収入・利益・GDPではありません。林業はこの構成比の対象外です。"
+        sourceUrl="https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php" sourceLabel="DGSIAP 農業・畜産年次統計" />
+       <details class="mexico-agriculture-census-overview"><summary>農地と森林資源も確かめる</summary><p>2022年農業センサスでは、農業用地の{census.national.irrigationSharePct.toFixed(1)}%が灌漑農地。松材取得量は{(census.national.pineObtainedM3/1e6).toFixed(2)}百万m³です。</p><button type="button" data-mexico-agriculture-item="irrigation">灌漑と農地を読む</button><button type="button" data-mexico-agriculture-item="pine">森林資源と木材生産を読む</button></details>
+      </aside>
+      <section class="agri-reading-panel" data-agri-reading-panel hidden aria-labelledby="agri-reading-heading">
+       <header><button type="button" data-agri-overview-button>← メキシコの農林業</button><h2 id="agri-reading-heading" tabindex="-1"></h2></header>
+       <div class="agri-reading-body" data-agri-reading-body tabindex="0" role="region" aria-label="選択した項目の解説本文">
+        <div data-agri-reading-content>{Object.entries(readings).map(([id,reading])=><section data-agriculture-reading={id} hidden><p class="mexico-agriculture-takeaway">{id==='corn'&&<small>白粒とうもろこし・2022年センサスの事例</small>}{reading.takeaway}</p>{id==='pine'&&<p class="mexico-agriculture-forest-note">地図の緑は2021年の樹木被覆です。樹木が地表を覆う場所を粗い解像度で示し、松林・伐採区域・法的な森林区分を示すものではありません。輪郭は松材取得量の多い2州の位置です。</p>}{reading.steps.map(step=><section class="mexico-agriculture-causal"><h3>{step.title}</h3><p>{step.body}</p><p class="atlas-inline-sources"><a href={step.source} target="_blank" rel="noopener">この説明の原典</a></p></section>)}{['corn','irrigation','pine','cattle'].includes(id)&&<p><a class="mexico-agriculture-comparison-link" data-agriculture-nature-comparison={id} href={withBase(`/atlas/north-america/mexico/nature/?compare=irrigation&from=agriculture&sourceMetric=${id==='corn'?'maize':id}&state=${id==='pine'?'10':id==='cattle'?'30':'25'}&reading=item`)}>{id==='pine'?'松材の生産州と山地を比べる':id==='cattle'?'牛の頭数と気候を比べる':'白粒の生産と乾燥・灌漑を比べる'}</a></p>}<p><a href="#mexico-agriculture-statistics" data-mexico-statistics-link={id}>全国・州別の統計を確かめる</a></p></section>)}</div>
+        <section data-mexico-region-reading hidden><h3 data-mexico-region-heading>選択した産地</h3><p data-mexico-region-name></p><p data-mexico-region-production></p><p class="atlas-inline-sources" data-mexico-region-scope></p></section>
+        <div data-agri-candidates hidden></div>
+        <div class="atlas-relation-warning" data-agri-layer-warning hidden><p>この項目の地図表示はオフです。</p><button type="button" data-agri-enable-layers>選んだ項目の層を表示</button></div>
+       </div>
+      </section>
+     </div>
     </div>
-  <Fragment slot="items">
-    <nav class="mexico-agriculture-tabs" data-agriculture-group-items="agriculture" aria-label="農畜産の地図項目">{agricultureMetrics.filter(metric=>metric.id!=='pine').map(metric => <a data-agriculture-metric={metric.id} href={withBase(`/atlas/north-america/mexico/agriculture/?metric=${metric.id}&state=${metric.defaultState}`)} aria-current={metric.id === 'maize' ? 'page' : undefined}>{metric.name}<small>{metric.unit}</small></a>)}</nav>
-    <nav class="mexico-agriculture-tabs" data-agriculture-group-items="forestry" hidden aria-label="林業の地図項目"><a data-agriculture-metric="pine" href={withBase('/atlas/north-america/mexico/agriculture/?metric=pine&state=10')}>松材取得量<small>m³</small></a></nav>
-    <label data-agriculture-only-item-label><input type="checkbox" data-agriculture-only-item /> この品目だけ表示</label>
-  </Fragment>
-  <section slot="overview" class="mexico-agriculture-country-overview">
-    <details class="mexico-agriculture-national-values"><summary>全国の生産と農地の4指標</summary><dl>{agricultureMetrics.map(metric=><div><dt>{metric.name}</dt><dd>{formatAgricultureValue(agricultureValue(national,metric.id),metric.id)}</dd></div>)}</dl></details>
-    <p>INEGI・2022年農業センサス。白粒・灌漑・松材は2021年10月～2022年9月、牛は2022年9月の頭数です。</p>
-    <p>地図の項目や州を選ぶと、分布の理由と加工・市場へのつながりを読めます。</p>
-    <p><a href={agricultureSources.census}>全国と州の公表値・原典</a></p>
-  </section>
-  <Fragment slot="reading">
-    <p class="mexico-takeaway" data-agriculture-takeaway>{agricultureReading.maize.takeaway}</p>
-    <a class="mexico-comparison-link" data-agriculture-nature-comparison href={withBase('/atlas/north-america/mexico/nature/?compare=irrigation&state=25&from=agriculture&sourceMetric=maize&sourceState=25&sourceOnly=0&sourceFallback=0')}><strong data-agriculture-comparison-label>シナロアの{agricultureMetrics[0].comparisonTitle}</strong><span data-agriculture-comparison-description>{agricultureMetrics[0].comparisonDescription}</span></a>
-    <div class="mexico-agriculture-selection" aria-live="polite"><span data-agriculture-selection-name>{selected.nameJa}</span><strong data-agriculture-selection-value>{formatAgricultureValue(selected.maizeWhiteProductionT, 'maize')}</strong><span data-agriculture-selection-metric>白粒トウモロコシ生産量</span></div>
-    {Object.entries(agricultureReading).map(([metric, reading]) => <section data-agriculture-reading={metric} hidden={metric !== 'maize'}><h2>{reading.title}</h2><div class="mexico-agriculture-causal"><h3>{reading.steps[0].title}</h3><p>{reading.steps[0].body}</p></div><details><summary>加工・市場・社会へのつながりを読む</summary>{reading.steps.slice(1).map(step => <section><h3>{step.title}</h3><p>{step.body}</p><p class="mexico-caption"><a href={step.source}>この説明の原典</a></p></section>)}</details><p class="mexico-caption"><a href={reading.steps[0].source}>自然条件・生産の説明資料</a></p></section>)}
-    <details class="mexico-agriculture-definition"><summary>指標の範囲・分母を確認する</summary><p data-agriculture-definition>{agriculture.definitions.maizeWhiteProductionT}</p><p>灌漑率の分母には播種・非播種・休耕の農業用地を含めます。牛は2022年9月の頭数で、農業生産単位と住宅を含みます。白粒tと牛の頭数の円を、そのまま大小比較しません。</p></details>
-    <div class="mexico-agriculture-state-links"><span>代表州へ</span><button type="button" data-agriculture-pick="25">シナロア</button><button type="button" data-agriculture-pick="10">ドゥランゴ</button><button type="button" data-agriculture-pick="08">チワワ</button></div>
-  </Fragment>
-  <Fragment slot="statistics">
-    <h2>全国と、選んだ州の値を確かめる</h2>
-    <div class="mexico-agriculture-stat-summary"><p>全国 <strong data-agriculture-national-value>{formatAgricultureValue(agriculture.national.maizeWhiteProductionT, 'maize')}</strong></p><p><span data-agriculture-summary-state>シナロア</span> <strong data-agriculture-summary-value>{formatAgricultureValue(selected.maizeWhiteProductionT, 'maize')}</strong><span data-agriculture-share>全国白粒生産の34.0%</span></p></div>
-    <details><summary>32州の4指標・農地面積を確認する</summary><div class="mexico-table-scroll"><table class="mexico-agriculture-stat-table"><caption>白粒・灌漑・松材：2021年10月～2022年9月。牛：2022年9月。量と割合の分母を分けて読む。</caption><thead><tr><th>地域</th><th>白粒生産 t</th><th>灌漑農地率 %</th><th>松材取得 m³</th><th>牛の頭数 頭</th><th>農業用地 ha</th><th>灌漑面積 ha</th></tr></thead><tbody>{[national,...states].map(state => <tr data-agriculture-stat-row={state.code} class:list={[{'is-selected': state.code === '25'}]}><th>{state.nameJa}</th><td data-agriculture-stat-column="maize">{formatAgricultureValue(state.maizeWhiteProductionT, 'maize', false)}</td><td data-agriculture-stat-column="irrigation">{formatAgricultureValue(state.irrigationSharePct, 'irrigation', false)}</td><td data-agriculture-stat-column="pine">{formatAgricultureValue(state.pineObtainedM3, 'pine', false)}</td><td data-agriculture-stat-column="cattle">{formatAgricultureValue(state.cattleHeads, 'cattle', false)}</td><td>{state.agriculturalAreaHa.toLocaleString('ja-JP',{maximumFractionDigits:2})}</td><td>{state.irrigatedAreaHa.toLocaleString('ja-JP',{maximumFractionDigits:2})}</td></tr>)}</tbody></table></div><p class="mexico-caption">表は表示時に丸めています。0は公表された0で、元の小数値は<a href={withBase('/assets/atlas/mexico-agriculture-v1/selected-states.csv')}>従来3指標の抽出CSV</a>に保持しています。牛を含む4指標は32州すべて公表値があります。</p></details>
-  </Fragment>
-  <Fragment slot="sources">
-    <details><summary>牛の頭数の抽出・時点・集計範囲</summary><p>{livestock.scope} 時点は{livestock.period}です。既存保存のINEGI原典ZIP内ca2022_gan02.csvから、CVE_MUN=000かつTIPO_UNIDAD空白の全国・州総計だけを抽出しました。32州合計と全国{livestock.national.toLocaleString('ja-JP')}頭の差は0です。</p><p><a href={livestock.provenance.definitionUrl}>原典の定義と全国値</a> ／ <a href={livestock.provenance.periodUnitUrl}>単位・2022年9月の確認資料</a> ／ <a href={livestock.provenance.sourceUrl}>原典ZIP</a></p><p class="mexico-caption">原典ZIP SHA256：{livestock.provenance.archiveSha256}。抽出元CSV SHA256：{livestock.provenance.entrySha256}。加工コードと専用JSONには列BOV_EX_TOT、抽出条件、欠測・秘匿0件、全国照合を保持しています。</p></details>
-    <details id="mexico-agriculture-sources"><summary>原典・年・単位・利用条件と加工方法</summary><p>出典：INEGI, Censo Agropecuario 2022。州境はMarco Geoestadístico 2025年12月版。作物・林業の期間は2021年10月～2022年9月、牛は2022年9月時点。取得日2026年10月1日です。州別値からの割合計算・地図表示は本サイトによります。</p><ul>{agricultureMetrics.map(metric => <li><a href={agricultureSources[metric.id]}>{metric.name}：{metric.table} 原表</a>、単位{metric.unit}。{metric.id === 'irrigation' ? agriculture.definitions.irrigationSharePct : metric.id === 'pine' ? agriculture.definitions.pineObtainedM3 : metric.id === 'cattle' ? livestock.scope : agriculture.definitions.maizeWhiteProductionT}</li>)}<li><a href={agricultureSources.autumnWinter}>秋冬作白粒：ca2022_agr04</a>。シナロアの生産量と灌漑生産量から割合を計算。</li><li>原表の*は生産単位数の秘匿、NAは非該当。CSV空欄は原表と行の意味に照合し、0で補いません。「0.00」は丸めた微小値の場合があるため、元の数値を保持しています。</li><li><a href={agricultureSources.licence}>INEGI Términos de Libre Uso</a>に基づき利用・加工。原典とメタデータを保持し、INEGIによる公式加工や承認を意味するものではありません。</li><li>地域と利用の説明：<a href={agricultureSources.temperateForest}>CONABIOの温帯林</a>、<a href={agricultureSources.maizeFoodChain}>SADERの白粒からトルティーヤへの生産・流通</a>。本文を要約して参照し、原典の写真や図を転載していません。</li></ul><p><a href={withBase('/assets/atlas/mexico-agriculture-v1/selected-states.csv')}>従来3指標の32州・全国抽出CSV</a> ／ <a href={withBase('/assets/atlas/mexico-agriculture-v1/manifest.json')}>原典→抽出→配信の台帳・ハッシュ・全国照合</a> ／ <a href={withBase('/assets/atlas/mexico-agriculture-v1/agriculture.json')}>従来3指標の配信JSON</a></p></details>
-  </Fragment>
-  <script type="application/json" data-agriculture-config set:html={JSON.stringify(config).replace(/</g,'\u003c')} />
-  <noscript><p class="mexico-caption">白粒・牛の初期地図、説明、32州表と出典を読めます。地図項目・選択州・比較先の状態を切り替えるにはJavaScriptを有効にしてください。</p></noscript>
-</MexicoWorkspace>
-<script>import {initMexicoAgriculture} from '../../scripts/atlas-mexico-agriculture';const root=document.querySelector<HTMLElement>('[data-mexico-field="agriculture"]');if(root)initMexicoAgriculture(root);</script>
+   </section>
+   <section class="agri-statistics mexico-statistics" id="mexico-agriculture-statistics" data-mexico-agriculture-statistics hidden aria-labelledby="mexico-statistics-heading">
+    <h2 id="mexico-statistics-heading" data-mexico-statistics-heading>全国と州の統計</h2>
+    <div class="mexico-agriculture-stat-tools"><label>読む州 <select data-agriculture-state><option value="">全国</option>{census.states.map(state=><option value={state.code}>{state.nameJa}</option>)}</select></label><label><input type="checkbox" data-mexico-only-item /> 選んだ品目だけを地図に表示</label></div>
+    {ids.map(id=>{const value=stats[id];return value&&<section data-mexico-stat-panel={id} hidden><p>{value.definition}</p><div class="mexico-agriculture-stat-totals"><p>{id==='irrigation'?'全国の灌漑農地率':id==='cattle'?'全国の牛頭数':id==='pine'?'全国の松材取得量':'全国の生産量'} <strong>{formatMexicoProduction(value.national,value.unit)}</strong><small>{value.year}</small></p>{value.valueMxN!==null&&<p>全国の生産額 <strong>{formatMexicoValue(value.valueMxN)}</strong><small>当年価格</small></p>}</div><figure class="atlas-mini-chart"><figcaption><strong>{value.valueMxN!==null?'生産額の大きい州':'公表値の大きい州'}</strong><span>{value.year}</span></figcaption><div class="atlas-bars">{value.rows.slice(0,8).map(row=><button class="atlas-bar-row mexico-agriculture-state-bar" type="button" data-agriculture-pick={row.code}><span>{row.name}</span><i><b style={`width:${(value.valueMxN!==null?(row.valueMxN??0)/(value.rows[0].valueMxN??1):(row.production??0)/(value.rows[0].production??1))*100}%`}></b></i><strong>{value.valueMxN!==null?formatMexicoValue(row.valueMxN):formatMexicoProduction(row.production,value.unit)}</strong></button>)}</div></figure><details><summary>32州の値と単位を確認する</summary><div class="mexico-agriculture-table-scroll"><table><caption>{value.label} / {value.year}</caption><thead><tr><th>州</th><th>生産量・公表値 {value.unit}</th>{value.valueMxN!==null&&<th>生産額 十億ペソ</th>}</tr></thead><tbody>{value.rows.map(row=><tr data-agriculture-stat-row={row.code}><th><button type="button" data-agriculture-pick={row.code}>{row.name}</button></th><td>{formatMexicoProduction(row.production,value.unit)}</td>{value.valueMxN!==null&&<td>{formatMexicoValue(row.valueMxN)}</td>}</tr>)}</tbody></table></div></details></section>;})}
+   </section>
+   <footer class="mexico-sources" id="mexico-agriculture-sources"><details><summary>原典・表示方法・年・単位</summary><p>作物面はMapSPAM 2020 v2r2の物理的栽培面積を使った推計主要栽培域です。格子面積の10%以上が耕作面積と推計された5分格子の支配的な作物群を示し、実際の圃場境界や2025年の作付状況を示すものではありません。</p><p>畜産はDGSIAPの2025年市町村別生産統計から品目ごとに選んだ産地です。初期画面は掲載自治体の中から各品目1点を、互いの間隔を確保して表示し、品目を選ぶとその品目の掲載3自治体を表示します。生産量を飼養頭数に読み替えず、記号の面積で数量を表しません。牛肉と乳、豚肉、鶏肉、卵を別々に集計しています。</p><p>全国構成と州の生産額は同じ2025年のペソ建てで集計。生体と枝肉を合算せず、農業と畜産の単位を確認して換算しています。地図の作物群とDGSIAPの商品分類は同一ではないため、推計面積と2025年の金額を対応付けた順位としては扱いません。</p><p>松材取得量・灌漑農地率・旧白粒統計はINEGIの2022年農業センサス。参照期間は2021年10月～2022年9月、牛頭数は2022年9月です。州境はMarco Geoestadístico 2025年12月版。地形・主要河川は既存のINEGI/地形背景を同じLambert投影で再利用しています。河川は小流域内次数7以上の選択です。</p><ul><li>IFPRI, MapSPAM 2020 v2r2 / CGIAR Climate Action Data Hub。作物図は本サイトで集約・加工。<a href="https://www.mapspam.info/">データと方法</a> ／ <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></li><li><a href="https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php">DGSIAP 農業年次統計</a> ／ <a href="https://nube.agricultura.gob.mx/datosAbiertos/Pecuario.php">畜産年次統計</a></li><li>© ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium。class10を元の10m図ではなく約0.00534度格子の概略画像から採取し、メキシコの投影・国境で加工。<a href="https://creativecommons.org/licenses/by/4.0/">CC BY4.0</a> ／ <a href={`${assetBase}tree-cover-manifest.json`}>樹木被覆の原典・解像度・欠測・加工記録</a></li><li><a href={agricultureSources.census}>INEGI 2022年農業センサス</a> ／ <a href={agricultureSources.licence}>INEGI Términos de Libre Uso</a></li><li><a href={`${assetBase}manifest.json`}>加工方法・原典・ハッシュ・全国照合</a> ／ <a href={`${assetBase}LICENSE.txt`}>作物派生データの帰属・変更点・利用条件</a></li><li><a href={withBase('/assets/atlas/mexico-agriculture-v1/selected-states.csv')}>2022年センサスの32州公表値</a></li></ul></details></footer>
+   <script type="application/json" data-mexico-agriculture-config set:html={JSON.stringify(config).replace(/</g,'\\u003c')} />
+   <noscript><style is:global>.mexico-agriculture-atlas [data-agriculture-reading][hidden],.mexico-agriculture-atlas [data-agri-reading-panel][hidden],.mexico-agriculture-atlas [data-mexico-agriculture-statistics][hidden],.mexico-agriculture-atlas [data-mexico-stat-panel][hidden]{display:block!important}.mexico-agriculture-atlas .agri-reading-panel{height:auto!important}.mexico-agriculture-atlas .agri-reading-body{overflow:visible!important}</style><p>地図の切替・拡大・産地記号はJavaScriptで動作します。解説、統計表、作物図と原典はこのまま読めます。</p></noscript>
+  </article>
+ </AtlasWorkspaceFrame>
+</BaseLayout>
+<script>import {initMexicoAgricultureAtlas} from '../../scripts/atlas-mexico-agriculture-atlas';for(const root of document.querySelectorAll<HTMLElement>('[data-mexico-agriculture-atlas]'))initMexicoAgricultureAtlas(root);</script>

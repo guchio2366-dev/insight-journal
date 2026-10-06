@@ -1,0 +1,247 @@
+{
+  "crop/c/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/crop/c/0",
+    "sha256": "e50ef268de45a364c8bb2e31db64b0fab889b6d1c1e284e6ce2197405b32ec89",
+    "bytes": 196
+  },
+  "technology/c/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/technology/c/0",
+    "sha256": "0567ce8260c240cc9f5790f84479f9fcef670627f01645054de31048bf189cdd",
+    "bytes": 44
+  },
+  "crop_name/c/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/crop_name/c/0",
+    "sha256": "fa454d7b4bb89bcdbf1f44fe9a2c4e8507f970736a73db26d9f9675e7a6f555e",
+    "bytes": 380
+  },
+  "physical_area/c/0/0/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/0/0/0",
+    "sha256": "94436c7a63c5aca6b4c2fdd39a853ae91b47fbd7874ac0079f5708cce3d6025b",
+    "bytes": 1404997
+  },
+  "physical_area/c/0/1/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/1/0/0",
+    "sha256": "09352010d28368fae6c7f035128f332483dc834e73edcf51c223ebe5ac69d02a",
+    "bytes": 805730
+  },
+  "physical_area/c/0/2/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/2/0/0",
+    "sha256": "565cfe6e947100b125da1f42f060846d2de1dd54bbe7072b5a963f9ec5a27e84",
+    "bytes": 1612976
+  },
+  "physical_area/c/0/4/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/4/0/0",
+    "sha256": "c941d5aab1b3e61a6c1784f41011e703b449874335a1b6e5dd7950d4c89d3d65",
+    "bytes": 301201
+  },
+  "physical_area/c/0/5/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/5/0/0",
+    "sha256": "423d138c5aaaa176a691686e9d5efebb9b855d57ee4b73f3b47e5d428622d7f9",
+    "bytes": 403468
+  },
+  "physical_area/c/0/3/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/3/0/0",
+    "sha256": "5e998dcdbd6a4d2a5caf1d446d74d9b47f5d7534cb8361aec85bd3bbae6c330c",
+    "bytes": 978097
+  },
+  "physical_area/c/0/7/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/7/0/0",
+    "sha256": "97bbc68a44480f91be6d419eaf0705b36b6221dfaef555da534be0574fb99c49",
+    "bytes": 1014080
+  },
+  "physical_area/c/0/6/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/6/0/0",
+    "sha256": "208f98f7cd33c2eb59c1a1305457aa959761ce30166db33c5b8c1f6f9a388c56",
+    "bytes": 1017788
+  },
+  "physical_area/c/0/8/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/8/0/0",
+    "sha256": "7b1c4680490e4e99fcc858a674cac83fe8dd136fb7f930b01570733c47652278",
+    "bytes": 1078850
+  },
+  "physical_area/c/0/14/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/14/0/0",
+    "sha256": "905358a4036a9b5e7b76a1af2bc961e5af5c4cd3cbc6d0ab33ceedde34b4cc68",
+    "bytes": 390703
+  },
+  "physical_area/c/0/10/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/10/0/0",
+    "sha256": "f016a8ce96c74352e4608a7c55b470a664459b0a8c168d76bb223a3aca956653",
+    "bytes": 230243
+  },
+  "physical_area/c/0/12/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/12/0/0",
+    "sha256": "625c9d65d18121dac1ad55f55cd1c7ea4303f0d05dc751514d1eadc876cebba6",
+    "bytes": 292529
+  },
+  "physical_area/c/0/9/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/9/0/0",
+    "sha256": "7e5343f2dc56e2408d9e5dff78dfd479dd8d206cf5d0978c5f6e9963bbc75265",
+    "bytes": 685562
+  },
+  "physical_area/c/0/13/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/13/0/0",
+    "sha256": "97c9c067d2d9e473acb55cbe7cc490700990814a1a403af7a178372a3215f9e3",
+    "bytes": 1073172
+  },
+  "physical_area/c/0/11/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/11/0/0",
+    "sha256": "21cc2e7a28ed26ed614c10001c3e905a76cac849a610eeb4f3aaee0000ec63e0",
+    "bytes": 608148
+  },
+  "physical_area/c/0/16/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/16/0/0",
+    "sha256": "94db966deca1b19c84c90e22213ab0cbc5c2a6ed1207e13183fd19afa43dbc15",
+    "bytes": 139084
+  },
+  "physical_area/c/0/15/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/15/0/0",
+    "sha256": "dd7bbbd589496caf7ad3e7f9b343d6b3a8588fddfefabc827688a00d023c927e",
+    "bytes": 285918
+  },
+  "physical_area/c/0/17/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/17/0/0",
+    "sha256": "ceecb853b44c6d4b1e66ef87b6586d72172bd6b561dca38b928b5a13de3855b1",
+    "bytes": 329505
+  },
+  "physical_area/c/0/19/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/19/0/0",
+    "sha256": "b31dfd4556d690d3fa2af3f770d6d990b6b4f54757ab784e16b225ae82cf4386",
+    "bytes": 1100278
+  },
+  "physical_area/c/0/20/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/20/0/0",
+    "sha256": "db6229da9dbd3b883c32c43e7b73fefdc72cfbbb3a721256515320e9dda2fe9c",
+    "bytes": 756603
+  },
+  "physical_area/c/0/18/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/18/0/0",
+    "sha256": "7155de7e92ddbbe0da74986806943986bf2d6e96e020509afd179d227e26dbe8",
+    "bytes": 886284
+  },
+  "physical_area/c/0/21/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/21/0/0",
+    "sha256": "af9ffa289e9895941503a3b3cb21008ca2c1389e0e6f7a5c09b823e06958d3fd",
+    "bytes": 235061
+  },
+  "physical_area/c/0/26/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/26/0/0",
+    "sha256": "761a55ee0ed171b06497fb3b7cb9b64ab91a7cd23b2bc7ac9e9c0a97846a102d",
+    "bytes": 686410
+  },
+  "physical_area/c/0/24/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/24/0/0",
+    "sha256": "477572cd2844d8d0f9d3ac3917c81b8702f7a4bf85b65a9ba82d1b7e720cd268",
+    "bytes": 751369
+  },
+  "physical_area/c/0/22/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/22/0/0",
+    "sha256": "a31b1fa58e78a1229fe22b3e45d3403d832d2180b1f9a115af2df28a950461e7",
+    "bytes": 202504
+  },
+  "physical_area/c/0/25/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/25/0/0",
+    "sha256": "74604d30cc18f3904c9b0b011ec1c14adcc92e5d77d2bea918d24397b209d675",
+    "bytes": 385332
+  },
+  "physical_area/c/0/23/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/23/0/0",
+    "sha256": "9aeb6a5f8e7f916a83f358e71f3e0b7f5c4cdf9b5546ec37bcbc4f865dd5c7b1",
+    "bytes": 808665
+  },
+  "physical_area/c/0/30/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/30/0/0",
+    "sha256": "4f57b88cf4dd44aa981fb0de9015996425d1261b6d4e51e90b3deb8214dab6f5",
+    "bytes": 308227
+  },
+  "physical_area/c/0/27/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/27/0/0",
+    "sha256": "6d71b15c72d5d2b21a9b9c50403f34b27082c68c34abbbf3d44a0a136c8f2c33",
+    "bytes": 442400
+  },
+  "physical_area/c/0/32/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/32/0/0",
+    "sha256": "bf525bd84c415c695afd2092c6c762d6e799f13990d5ef154caef7a39bd5a190",
+    "bytes": 196355
+  },
+  "physical_area/c/0/31/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/31/0/0",
+    "sha256": "764bd47b0d867cbb89e34657e26b477e029ca6c1897e88dab6387279ddb24db8",
+    "bytes": 218551
+  },
+  "physical_area/c/0/28/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/28/0/0",
+    "sha256": "757cbbc4251d09d98b4cc3d4fd6d864f61f4424b3a093ce15a90ddc1eaf3d672",
+    "bytes": 369398
+  },
+  "physical_area/c/0/29/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/29/0/0",
+    "sha256": "7aa59626e80a3782d7bd840265a054d4c660f40100a316b08dd99651c25e93c6",
+    "bytes": 555000
+  },
+  "physical_area/c/0/37/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/37/0/0",
+    "sha256": "0c36e9ab00ed1d2c81c1859c36c4d68fd1e6a358b6dd456de0b2db7aa722f074",
+    "bytes": 183021
+  },
+  "physical_area/c/0/33/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/33/0/0",
+    "sha256": "9b7ff229e08184d2f2dcb7838c8474a9d90d7fd400c925acfe7725cf41d1df52",
+    "bytes": 223683
+  },
+  "physical_area/c/0/34/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/34/0/0",
+    "sha256": "cd049662a2d4b43fe351e027ff2bfc986f080d46b84e1c6f0905f327f60ec2cc",
+    "bytes": 169587
+  },
+  "physical_area/c/0/35/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/35/0/0",
+    "sha256": "920e064b1c3c9d72d9210ece8c6799891813499b957fb120a54018d303019ea2",
+    "bytes": 443109
+  },
+  "physical_area/c/0/38/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/38/0/0",
+    "sha256": "9f9372e06a1f50c74bb18565101c8951d7c444633b53d726b691c1ad41317d86",
+    "bytes": 560159
+  },
+  "physical_area/c/0/36/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/36/0/0",
+    "sha256": "835dc3109aaeef96398cc345792cd579cab325ceb3e349fcb4f53d65800c0828",
+    "bytes": 464689
+  },
+  "physical_area/c/0/39/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/39/0/0",
+    "sha256": "905870e94792ed39a8f0884d27418448b182c996e6c6d59ef8f91ffe7d5b9e31",
+    "bytes": 994684
+  },
+  "physical_area/c/0/44/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/44/0/0",
+    "sha256": "8c41fc2aa4eca98b6477af9bdbb1bb0cb77db9fc2e735b0cd5ea9715bae523f0",
+    "bytes": 201152
+  },
+  "physical_area/c/0/41/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/41/0/0",
+    "sha256": "dbb482f582093d29693ada85ad1430858e5d1fd33687ea2db2bf2ac71d0276c7",
+    "bytes": 908586
+  },
+  "physical_area/c/0/42/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/42/0/0",
+    "sha256": "234b037371e99663aa5e4991d6039cc388dc7a73e738b65eb09d8ebc18a7dcc0",
+    "bytes": 911337
+  },
+  "physical_area/c/0/43/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/43/0/0",
+    "sha256": "d1710d67c13b5019d2556b69ed940d211c15deb99f685cad67b2668df6c40e1d",
+    "bytes": 1326867
+  },
+  "physical_area/c/0/40/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/40/0/0",
+    "sha256": "6aaf273d036278186423b4748fafc17206642c924c923c7d47c9d88096328d64",
+    "bytes": 1162653
+  },
+  "physical_area/c/0/45/0/0": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr/physical_area/c/0/45/0/0",
+    "sha256": "223223c16fcc142d91038e756ac862bd4ea3ca8bd93fb04f82b0caf9c7032b63",
+    "bytes": 878671
+  }
+}

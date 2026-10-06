@@ -1,0 +1,10 @@
+{
+  "source": "rivers.svg",
+  "sourceSha256": "807a1ec6d78c2f32311cba48cb4a9d35fb1e8bda7bb7bdbca83353a35308a953",
+  "file": "rivers.png",
+  "sha256": "bac461e6ad4424bb4171345a034d3f984dd16b5e13f2af97b3bfb46034e73091",
+  "width": 1800,
+  "height": 1160,
+  "mapViewBox": "0 0 900 580",
+  "method": "Raster cache of unchanged projected river coordinates; 4x antialiasing, then 2x display pixels. No geographic resampling or invented watercourses."
+}

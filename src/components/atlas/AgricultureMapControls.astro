@@ -1,0 +1,11 @@
+---
+/** Shared by country agriculture maps: one control layout and one interaction contract. */
+interface Props { active?: boolean; countryLabel?: string; toolsHidden?: boolean }
+const {active=true,countryLabel='米国本土',toolsHidden=false}=Astro.props;
+---
+<fieldset class="atlas-agri-layers" data-agri-layers hidden={!active}><legend class="visually-hidden">農業地図の表示</legend><label><input type="checkbox" value="crops" data-agri-layer checked />作物</label><label><input type="checkbox" value="livestock" data-agri-layer checked />畜産</label></fieldset>
+<div class="atlas-map-tools" aria-label="地図操作" hidden={toolsHidden}>
+ <button type="button" data-map-action="fit" aria-label={`${countryLabel}の全体を表示`}>全体</button>
+ <button type="button" data-map-action="in" aria-label="地図を拡大">＋</button>
+ <button type="button" data-map-action="out" aria-label="地図を縮小">−</button>
+</div>

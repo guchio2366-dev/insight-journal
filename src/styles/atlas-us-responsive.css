@@ -1,70 +1,70 @@
-/* The four US fields keep the news beside the learning map on small laptops. */
+/* Shared small-laptop frame for the U.S. fields and Mexico agriculture. */
 @media (min-width:960px) and (max-width:1199px) {
-  .atlas-desktop-shell:not(.is-reading-news):has(> [data-atlas-explorer]:is([data-field=agriculture],[data-field=natural],[data-field=industry],[data-field=population])) {
+  .atlas-desktop-shell:not(.is-reading-news):has(> :is([data-atlas-explorer],[data-mexico-agriculture-atlas]):is([data-field=agriculture],[data-field=natural],[data-field=industry],[data-field=population])) {
     display:grid;
     grid-template-columns:160px minmax(0,1fr);
     gap:12px;
     padding:10px 12px 24px;
   }
-  .atlas-desktop-shell:not(.is-reading-news):has(> [data-atlas-explorer]:is([data-field=agriculture],[data-field=natural],[data-field=industry],[data-field=population])) .atlas-news {
+  .atlas-desktop-shell:not(.is-reading-news):has(> :is([data-atlas-explorer],[data-mexico-agriculture-atlas]):is([data-field=agriculture],[data-field=natural],[data-field=industry],[data-field=population])) .atlas-news {
     position:sticky;
     top:10px;
     width:auto;
     height:calc(100dvh - 82px);
     min-height:0;
   }
-  .atlas-desktop-shell:not(.is-reading-news):has(> [data-atlas-explorer]:is([data-field=agriculture],[data-field=natural],[data-field=industry],[data-field=population])) :is(.atlas-news-header,.atlas-news-list,.atlas-news-reader) {
+  .atlas-desktop-shell:not(.is-reading-news):has(> :is([data-atlas-explorer],[data-mexico-agriculture-atlas]):is([data-field=agriculture],[data-field=natural],[data-field=industry],[data-field=population])) :is(.atlas-news-header,.atlas-news-list,.atlas-news-reader) {
     padding-inline:12px;
   }
-  .atlas-desktop-shell:not(.is-reading-news) [data-atlas-explorer]:is([data-field=agriculture],[data-field=natural],[data-field=industry],[data-field=population]) .regional-navigation {
+  .atlas-desktop-shell:not(.is-reading-news) :is([data-atlas-explorer],[data-mexico-agriculture-atlas]):is([data-field=agriculture],[data-field=natural],[data-field=industry],[data-field=population]) .regional-navigation {
     display:flex;
     flex-wrap:wrap;
     align-items:center;
     gap:7px 16px;
   }
-  .atlas-desktop-shell:not(.is-reading-news) [data-atlas-explorer]:is([data-field=agriculture],[data-field=natural],[data-field=industry],[data-field=population]) .regional-countries {
+  .atlas-desktop-shell:not(.is-reading-news) :is([data-atlas-explorer],[data-mexico-agriculture-atlas]):is([data-field=agriculture],[data-field=natural],[data-field=industry],[data-field=population]) .regional-countries {
     margin-top:0;
   }
-  .atlas-desktop-shell:not(.is-reading-news) [data-atlas-explorer][data-field=industry] .atlas-map-frame {
+  .atlas-desktop-shell:not(.is-reading-news) :is([data-atlas-explorer],[data-mexico-agriculture-atlas])[data-field=industry] .atlas-map-frame {
     height:clamp(320px,calc(100dvh - 350px),430px);
     min-height:0;
     max-height:none;
     aspect-ratio:auto;
   }
-  .atlas-desktop-shell:not(.is-reading-news) [data-atlas-explorer][data-field=population] .population-national,
-  .atlas-desktop-shell:not(.is-reading-news) [data-atlas-explorer][data-field=population] [data-pop-reading-body] {
+  .atlas-desktop-shell:not(.is-reading-news) :is([data-atlas-explorer],[data-mexico-agriculture-atlas])[data-field=population] .population-national,
+  .atlas-desktop-shell:not(.is-reading-news) :is([data-atlas-explorer],[data-mexico-agriculture-atlas])[data-field=population] [data-pop-reading-body] {
     display:flex;
     flex-direction:column;
   }
-  .atlas-desktop-shell:not(.is-reading-news) [data-atlas-explorer][data-field=population] [data-pop-reading] {
+  .atlas-desktop-shell:not(.is-reading-news) :is([data-atlas-explorer],[data-mexico-agriculture-atlas])[data-field=population] [data-pop-reading] {
     order:1;
   }
-  .atlas-desktop-shell:not(.is-reading-news) [data-atlas-explorer][data-field=population] [data-pop-story-index] {
+  .atlas-desktop-shell:not(.is-reading-news) :is([data-atlas-explorer],[data-mexico-agriculture-atlas])[data-field=population] [data-pop-story-index] {
     order:2;
   }
-  .atlas-desktop-shell:not(.is-reading-news) [data-atlas-explorer][data-field=population] .population-map-return {
+  .atlas-desktop-shell:not(.is-reading-news) :is([data-atlas-explorer],[data-mexico-agriculture-atlas])[data-field=population] .population-map-return {
     order:3;
   }
-  .atlas-desktop-shell:not(.is-reading-news) [data-atlas-explorer][data-field=population] [data-pop-reading-body] > .population-reading-action {
+  .atlas-desktop-shell:not(.is-reading-news) :is([data-atlas-explorer],[data-mexico-agriculture-atlas])[data-field=population] [data-pop-reading-body] > .population-reading-action {
     order:-1;
   }
-  .atlas-desktop-shell:not(.is-reading-news) [data-atlas-explorer][data-field=natural] .atlas-us-natural-takeaway {
+  .atlas-desktop-shell:not(.is-reading-news) :is([data-atlas-explorer],[data-mexico-agriculture-atlas])[data-field=natural] .atlas-us-natural-takeaway {
     display:block;
     margin:0 0 8px;
     padding-bottom:8px;
     border-bottom:1px solid #d4dbd0;
   }
-  .atlas-desktop-shell:not(.is-reading-news) [data-atlas-explorer][data-field=natural] .atlas-us-natural-takeaway :is(h2,h3) {
+  .atlas-desktop-shell:not(.is-reading-news) :is([data-atlas-explorer],[data-mexico-agriculture-atlas])[data-field=natural] .atlas-us-natural-takeaway :is(h2,h3) {
     font-size:16px;
     line-height:1.5;
     margin:0 0 4px;
   }
-  .atlas-desktop-shell:not(.is-reading-news) [data-atlas-explorer][data-field=natural] .atlas-us-natural-takeaway p {
+  .atlas-desktop-shell:not(.is-reading-news) :is([data-atlas-explorer],[data-mexico-agriculture-atlas])[data-field=natural] .atlas-us-natural-takeaway p {
     font-size:14px;
     line-height:1.65;
     margin:0 0 6px;
   }
-  .atlas-desktop-shell:not(.is-reading-news) [data-atlas-explorer][data-field=natural] .atlas-us-natural-takeaway a {
+  .atlas-desktop-shell:not(.is-reading-news) :is([data-atlas-explorer],[data-mexico-agriculture-atlas])[data-field=natural] .atlas-us-natural-takeaway a {
     display:inline-flex;
     align-items:center;
     min-height:44px;

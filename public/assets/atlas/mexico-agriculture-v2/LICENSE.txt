@@ -1,0 +1,24 @@
+Mexico agriculture atlas: data license notice
+
+MapSPAM-derived crop data are distributed under Creative Commons Attribution-ShareAlike 4.0 International (CC-BY-SA-4.0):
+https://creativecommons.org/licenses/by-sa/4.0/
+Legal code: https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+Covered data: agriculture-atlas.json cropZones, cropLabels and metadata.map; crop-grid-query.json; and the retained mapspam-mexico-physical-area.npz source snapshot.
+
+Original title: Global Spatially-Disaggregated Crop Production Statistics Data for 2020 Version 2.0 Release 2.
+Derivation date: 2026-10-06.
+
+Attribution: International Food Policy Research Institute (IFPRI), MapSPAM 2020 v2r2, via CGIAR Climate Action Data Hub. Derived Mexico data by Insight Journal.
+Source: https://cgiar-climate-data-hub.github.io/catalog/spam2020/
+Original DOI: https://doi.org/10.7910/DVN/SWPENT
+
+Changes: crop-area grids clipped to Mexico with INEGI boundaries; 46 crops grouped into 11 categories; cells with at least 10% modelled crop coverage selected; dominant groups selected; adjacent cells merged; center-free clipped fragments omitted; representative crop label anchors and query values derived. These are modelled crop distributions, not observed field boundaries. No institutional endorsement is implied.
+
+The ShareAlike notice applies only to MapSPAM-derived data. It does not relicense application code, DGSIAP statistics, INEGI geometry, or unrelated assets. The JSON manifest records their respective sources and terms.
+
+DGSIAP: agricultural and animal-product statistical data downloaded from its current official Datos abiertos portal. The general open-data statement describes reuse with attribution. No separate dataset-specific 2025 license text is asserted.
+https://nube.agricultura.gob.mx/datosAbiertos/
+
+INEGI: source locations and boundary data, under INEGI Terms of Free Use:
+https://www.inegi.org.mx/inegi/terminos.html

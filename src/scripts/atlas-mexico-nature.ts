@@ -96,7 +96,7 @@ export function initMexicoNature(root: HTMLElement): void {
       const originalName = values.get(state.sourceState)?.name ?? selected.name;
       const sourceLabel = state.from === 'agriculture' ? ({maize: '白粒トウモロコシ', cattle: '牛頭数', irrigation: '灌漑農地率', pine: '松材取得量'}[state.sourceMetric]) : state.sourceView === 'population' ? '人口規模' : '人口密度';
       sourceReturn.href = mexicoNatureReturnUrl(state.from === 'population' ? config.routes.population : config.routes.agriculture, state);
-      sourceReturn.textContent = `${originalName}の${sourceLabel}分布に戻る`;
+      sourceReturn.textContent = state.from==='agriculture'&&state.sourceAgricultureAtlas?.state===null?`${sourceLabel}の元の解説に戻る`:`${originalName}の${sourceLabel}分布に戻る`;
     }
     const plainReturn = query<HTMLAnchorElement>('[data-mexico-nature-plain-return]');
     if (plainReturn) {const native = writeMexicoNatureState(new URL(config.routes.nature, window.location.origin), {...state, compare: null, only: false}); plainReturn.href = (hydrology?.url(native) ?? native).href; plainReturn.textContent = `${selected.name}の${naturalLabel()}に戻る`;}
