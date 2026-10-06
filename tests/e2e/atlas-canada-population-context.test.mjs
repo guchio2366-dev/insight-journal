@@ -1,3 +1,5 @@
+import {canadaLegacyPoint} from '../../src/lib/atlas-canada-map-presentation.ts';
+import {projectCanadaLandform} from '../../src/lib/atlas-canada-landform-map.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
@@ -42,10 +44,10 @@ function assertSourceDistribution(layer,year=2016){
   const first=boundary.getAttribute('d').match(/^M\s*(-?[\d.]+)[,\s]+(-?[\d.]+)/);
   assert.ok(first,'CMA boundary has projected coordinates');
   const [lon,lat]=shape.rings[0][0];
-  assert.ok(Math.abs(Number(first[1])-(lon+145)/95*900)<0.01);
-  assert.ok(Math.abs(Number(first[2])-(85-lat)/45*580)<0.01);
-  assert.ok(Math.abs(Number(circle.getAttribute('cx'))-shape.point[0])<0.01);
-  assert.ok(Math.abs(Number(circle.getAttribute('cy'))-shape.point[1])<0.01);
+  assert.ok(Math.abs(Number(first[1])-((layer.hasAttribute('data-canada-population-context-map')||layer.hasAttribute('data-canada-population-context-mini-map'))?projectCanadaLandform([lon,lat])[0]:(lon+145)/95*900))<0.01);
+  assert.ok(Math.abs(Number(first[2])-((layer.hasAttribute('data-canada-population-context-map')||layer.hasAttribute('data-canada-population-context-mini-map'))?projectCanadaLandform([lon,lat])[1]:(85-lat)/45*580))<0.01);
+  assert.ok(Math.abs(Number(circle.getAttribute('cx'))-((layer.hasAttribute('data-canada-population-context-map')||layer.hasAttribute('data-canada-population-context-mini-map'))?canadaLegacyPoint(shape.point)[0]:shape.point[0]))<0.01);
+  assert.ok(Math.abs(Number(circle.getAttribute('cy'))-((layer.hasAttribute('data-canada-population-context-map')||layer.hasAttribute('data-canada-population-context-mini-map'))?canadaLegacyPoint(shape.point)[1]:shape.point[1]))<0.01);
   assert.notEqual(circle.style.display,'none');
   assert.ok(Number(circle.getAttribute('r'))>0);
   assert.ok(markerText(marker).includes(String(year)));
@@ -62,7 +64,7 @@ test('Population water context retains the original 2016 CMA distribution, perio
  try{
   const q=s=>w.document.querySelector(s),context=q('[data-canada-population-context]'),layer=q('[data-canada-population-context-map]');
   assert.ok(context);assert.equal(context.hidden,false);assert.equal(layer.style.display,'');
-  assert.equal(q('[data-canada-map]').getAttribute('viewBox'),'0 180.444444 900 399.555556');
+  assert.equal(q('[data-canada-map]').getAttribute('viewBox'),'0 0 900 580');
   assertSourceDistribution(layer);
   const text=q('[data-canada-population-context-text]').textContent;
   assert.match(text,/Toronto|トロント/);assert.match(text,/Montréal|モントリオール/);assert.match(text,/Ontario|オンタリオ/);

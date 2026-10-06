@@ -1,0 +1,9 @@
+---
+import geography from '../../data/atlas/regional-countries.json';
+import outline from '../../data/atlas/canada/map-outline.json';
+import {canadaMapPath} from '../../lib/atlas-canada-map-presentation';
+---
+<g aria-hidden="true" class="canada-shared-land">
+{geography.features.filter(f=>['USA','GRL'].includes(f.properties.code)).map(f=><path class="canada-land is-context" d={canadaMapPath(f.geometry)} fill-rule="evenodd" vector-effect="non-scaling-stroke"/>)}
+<path class="canada-land" data-map-country="CAN" d={canadaMapPath(outline.geometry)} fill-rule="evenodd" vector-effect="non-scaling-stroke"/>
+</g>

@@ -1,3 +1,5 @@
+import {canadaLegacyFrame} from '../lib/atlas-canada-map-presentation';
+import {renderCanadaPopulationOverview} from './atlas-canada-population-overview';
 import {readCanadaPopulationState,writeCanadaPopulationState,formatCanadaPopulationValue,canadaPopulationDensityColor,canadaPopulationNatureUrl,canadaPopulationIndustryUrl,canadaPopulationFrame,populationStateKeys,populationStorageKey,type CanadaPopulationState} from '../lib/atlas-canada-population';
 import {readCanadaDemographicsState,writeCanadaDemographicsState,canadaDemographicsStateKeys,canadaDemographicShare,canadaDemographicShareColor,canadaDemographicShareColors,canadaDemographicShareScale,type CanadaDemographicsState,type CanadaDemographicCell,type CanadaDemographicTopic} from '../lib/atlas-canada-demographics';
 
@@ -6,8 +8,10 @@ export function initCanadaPopulation(root:HTMLElement){
  const catalog=Object.fromEntries(['ethnicity','religion'].map(topic=>[topic,{ids:config.demographics[topic].groups.map((g:any)=>g.id),defaultId:config.demographics[topic].defaultGroup}])) as Parameters<typeof readCanadaDemographicsState>[1];
  const allKeys=[...populationStateKeys,...canadaDemographicsStateKeys],initialUrl=new URL(location.href);
  let initial=initialUrl;
- if(!allKeys.some(key=>initialUrl.searchParams.has(key)))try{const stored=localStorage.getItem(populationStorageKey);if(stored){const params=new URLSearchParams(stored);initial=new URL(initialUrl);for(const key of allKeys){const value=params.get(key);if(value)initial.searchParams.set(key,value);}}}catch{}
  let state=readCanadaPopulationState(initial,ids),demographic=readCanadaDemographicsState(initial,catalog);
+ if(!initial.searchParams.has('metric'))state.metric='density';
+ const readCamera=()=>{const p=new URL(location.href).searchParams.get('mapFrame')?.split(',').map(Number);return p?.length===4&&p.every(Number.isFinite)&&p[2]>=30&&p[3]>=20&&p[2]<=1800&&p[3]<=1160?p:null;};
+ let mapCamera=readCamera();
  const combinedUrl=(url:URL,population=state,demographics=demographic)=>writeCanadaDemographicsState(writeCanadaPopulationState(url,population),demographics);
  if(initial!==initialUrl)history.replaceState(null,'',combinedUrl(initialUrl));
  const $=<T extends HTMLElement=HTMLElement>(selector:string)=>root.querySelector<T>(selector)!;
@@ -33,9 +37,7 @@ export function initCanadaPopulation(root:HTMLElement){
   const records=data.cmas.filter((r:any)=>[state.cma,state.compare].includes(r.id));$('[data-demographic-origin-comparison]').textContent=`元の集団・2021年 ${group.name}：${records.map((r:any)=>`${r.name} ${shareText(r.values[group.id],r.denominator)} / ${countText(r.values[group.id])}`).join(' / ')}。`;
  }
  function renderDemographics(data:any,selected:any,compare:any){
-  const group=data.groups.find((g:any)=>g.id===demographic.group),select=$<HTMLSelectElement>('[data-demographic-group]');
-  if(select.dataset.topic!==demographic.topic){select.replaceChildren(...data.groups.map((g:any)=>{const option=document.createElement('option');option.value=g.id;option.textContent=g.name;return option;}));select.dataset.topic=demographic.topic;}
-  select.value=group.id;$<HTMLSelectElement>('[data-demographic-measure]').value=demographic.measure;
+  const group=data.groups.find((g:any)=>g.id===demographic.group);
   $('[data-demographic-heading]').textContent=demographic.topic==='ethnicity'?'都市圏ごとの人口集団':'都市圏ごとの宗教・無宗教';
   $('[data-demographic-lead]').textContent=demographic.topic==='ethnicity'?'人口集団の割合は都市圏ごとに異なる。同じ集団を選んで、その違いを比べる。':'宗教・無宗教の割合は都市圏ごとに異なる。同じ分類を選んで、その違いを比べる。';
   const record=(r:any)=>`${r.name}：${shareText(r.values[group.id],r.denominator)} / ${countText(r.values[group.id])}`;
@@ -63,11 +65,7 @@ export function initCanadaPopulation(root:HTMLElement){
   for(const element of root.querySelectorAll<HTMLElement>('[data-demographic-control]'))element.hidden=isDistribution;
   $('[data-population-distribution-reading]').hidden=!isDistribution;$('[data-demographic-reading]').hidden=isDistribution;
   $('[data-population-distribution-table]').hidden=!isDistribution;$('[data-demographic-tables]').hidden=isDistribution;
-  for(const key of ['year','cma','compare','metric','zoom'])$<HTMLSelectElement>(`[data-population-${key}]`).value=String(state[key as keyof CanadaPopulationState]??'');
-  $<HTMLSelectElement>('[data-population-year]').disabled=Boolean(origin)||state.metric==='density';$<HTMLSelectElement>('[data-population-metric]').disabled=Boolean(origin);
-  for(const option of $<HTMLSelectElement>('[data-population-compare]').options)option.disabled=option.value===state.cma;
-  $('[data-population-only]').setAttribute('aria-pressed',String(state.only));
-  const selected=(data??config).cmas.find((r:any)=>r.id===state.cma),compare=(data??config).cmas.find((r:any)=>r.id===state.compare),colorData=data??origin?.data,group=data?.groups.find((g:any)=>g.id===demographic.group)??origin?.group,frame=canadaPopulationFrame(state,config.geometry),scale=frame[2]/760;
+  const selected=(data??config).cmas.find((r:any)=>r.id===state.cma),compare=(data??config).cmas.find((r:any)=>r.id===state.compare),colorData=data??origin?.data,group=data?.groups.find((g:any)=>g.id===demographic.group)??origin?.group,frame=mapCamera??(state.zoom==='south'?[0,0,900,580]:canadaLegacyFrame(canadaPopulationFrame(state,config.geometry))),scale=frame[2]/900;
   const density=isDistribution&&state.metric==='density',share=Boolean(origin)||!isDistribution&&demographic.measure==='share',max=isDistribution?density?Math.max(1,...config.cmas.map((r:any)=>r.density2021.value??0)):distributionMax:demographicMax;
   const shareScale=colorData?canadaDemographicShareScale(colorData.cmas.map((r:any)=>canadaDemographicShare(r.values[group.id].value,r.denominator.value)).filter((v:any)=>v!==null)):null;
   root.querySelector('[data-population-map]')!.setAttribute('viewBox',frame.join(' '));
@@ -100,19 +98,26 @@ export function initCanadaPopulation(root:HTMLElement){
   for(const a of root.querySelectorAll<HTMLAnchorElement>('[data-population-nature-link]'))a.href=canadaPopulationNatureUrl(new URL(location.href),new URL(a.dataset.populationNatureLink!,location.href),state).href;
   for(const a of root.querySelectorAll<HTMLAnchorElement>('[data-population-industry-link]'))a.href=canadaPopulationIndustryUrl(new URL(location.href),new URL(a.dataset.populationIndustryLink!,location.href),state,config.geometry,config.industryProvinces).href;
   try{localStorage.setItem(populationStorageKey,combinedUrl(new URL(location.href)).searchParams.toString());}catch{}
+  renderCanadaPopulationOverview(root,config,state,demographic,group=>{demographic={...demographic,group};commitUrl(combinedUrl(new URL(location.href)));});
   alignQuantityLegend();
  }
- function commitUrl(url:URL){history.pushState(null,'',url);state=readCanadaPopulationState(url,ids);demographic=readCanadaDemographicsState(url,catalog);render();}
+ function commitUrl(url:URL){history.pushState(null,'',url);state=readCanadaPopulationState(url,ids);if(!url.searchParams.has('metric'))state.metric='density';demographic=readCanadaDemographicsState(url,catalog);render();}
  function update(patch:Partial<CanadaPopulationState>){state={...state,...patch};if(state.metric==='density')state.year=2021;if(state.compare===state.cma)state.compare=null;commitUrl(combinedUrl(new URL(location.href)));}
- for(const key of ['year','cma','compare','metric','zoom'])$<HTMLSelectElement>(`[data-population-${key}]`).addEventListener('change',e=>{const value=(e.target as HTMLSelectElement).value;update({[key]:key==='year'?Number(value):value||null});});
  for(const button of root.querySelectorAll<HTMLElement>('[data-population-topic]'))button.addEventListener('click',()=>{const topic=button.dataset.populationTopic as CanadaDemographicsState['topic'];if(topic===demographic.topic)return;demographic=topic==='distribution'?{topic,group:null,measure:'share'}:{topic,group:catalog[topic as CanadaDemographicTopic].defaultId,measure:'share'};const target=combinedUrl(new URL(location.href));target.searchParams.delete('demographicsReturn');commitUrl(target);});
- $<HTMLSelectElement>('[data-demographic-group]').addEventListener('change',e=>{demographic={...demographic,group:(e.target as HTMLSelectElement).value};commitUrl(combinedUrl(new URL(location.href)));});
- $<HTMLSelectElement>('[data-demographic-measure]').addEventListener('change',e=>{demographic={...demographic,measure:(e.target as HTMLSelectElement).value==='count'?'count':'share'};commitUrl(combinedUrl(new URL(location.href)));});
  for(const a of root.querySelectorAll<HTMLAnchorElement>('[data-demographic-population-link],[data-demographic-return],[data-demographic-context-clear]'))a.addEventListener('click',e=>{if(e.button===0&&!e.metaKey&&!e.ctrlKey&&!e.shiftKey&&!e.altKey){e.preventDefault();commitUrl(new URL(a.href));}});
  for(const marker of root.querySelectorAll<SVGElement>('[data-population-map-cma]')){const choose=()=>update({cma:marker.dataset.populationMapCma});marker.addEventListener('click',choose);marker.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose();}});}
- for(const button of root.querySelectorAll<HTMLElement>('[data-population-locate]'))button.addEventListener('click',()=>update({cma:button.dataset.populationLocate,zoom:'selected'}));
- $('[data-population-only]').addEventListener('click',()=>update({only:!state.only}));$('[data-population-reset]').addEventListener('click',()=>update({only:false,zoom:'south'}));
- window.addEventListener('popstate',()=>{state=readCanadaPopulationState(new URL(location.href),ids);demographic=readCanadaDemographicsState(new URL(location.href),catalog);render();});
+ for(const button of root.querySelectorAll<HTMLElement>('[data-population-locate]'))button.addEventListener('click',()=>update({cma:button.dataset.populationLocate,zoom:'south'}));
+ $('[data-population-reset]').addEventListener('click',()=>{mapCamera=null;const u=new URL(location.href);u.searchParams.delete('mapFrame');history.replaceState(null,'',u);update({only:false,zoom:'south'});});
+ const map=root.querySelector<SVGSVGElement>('[data-population-map]')!;
+ const camera=(frame:number[],commit=true)=>{mapCamera=frame;map.setAttribute('viewBox',frame.join(' '));if(commit){const url=new URL(location.href);url.searchParams.set('mapFrame',frame.map(n=>Number(n.toFixed(3))).join(','));history.pushState(null,'',url);}};
+ for(const button of root.querySelectorAll<HTMLElement>('[data-population-scale]'))button.addEventListener('click',()=>{const [x,y,w,h]=map.getAttribute('viewBox')!.split(' ').map(Number),factor=button.dataset.populationScale==='in'?.7:1/.7;if(w*factor<30||w*factor>1800)return;camera([x+w*(1-factor)/2,y+h*(1-factor)/2,w*factor,h*factor]);});
+ let drag:{x:number;y:number;frame:number[];moved:boolean}|null=null,ignoreClick=false;
+ map.addEventListener('pointerdown',e=>{if(e.button!==0||e.pointerType==='touch')return;drag={x:e.clientX,y:e.clientY,frame:map.getAttribute('viewBox')!.split(' ').map(Number),moved:false};});
+ map.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)<5&&!drag.moved)return;drag.moved=true;map.setPointerCapture?.(e.pointerId);const box=map.getBoundingClientRect(),scale=Math.min(box.width/drag.frame[2],box.height/drag.frame[3]);camera([drag.frame[0]-dx/scale,drag.frame[1]-dy/scale,drag.frame[2],drag.frame[3]],false);});
+ map.addEventListener('pointerup',()=>{if(drag?.moved&&mapCamera){ignoreClick=true;camera(mapCamera);}drag=null;});map.addEventListener('pointercancel',()=>{drag=null;});
+ map.addEventListener('click',e=>{if(ignoreClick){e.stopPropagation();ignoreClick=false;}},true);
+ map.addEventListener('keydown',e=>{if(e.target!==map)return;const direction:Record<string,number[]>={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]},d=direction[e.key];if(d){e.preventDefault();const [x,y,w,h]=map.getAttribute('viewBox')!.split(' ').map(Number);camera([x+d[0]*w*.15,y+d[1]*h*.15,w,h]);}});
+ window.addEventListener('popstate',()=>{mapCamera=readCamera();state=readCanadaPopulationState(new URL(location.href),ids);demographic=readCanadaDemographicsState(new URL(location.href),catalog);render();});
  if(typeof ResizeObserver!=='undefined'){const observer=new ResizeObserver(alignQuantityLegend);observer.observe(root.querySelector('[data-population-map]')!);}
  window.addEventListener('resize',alignQuantityLegend);
  render();

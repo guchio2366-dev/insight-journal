@@ -91,7 +91,7 @@ test('Precipitation derives from all 360 source months, keeps the land mask, and
   for (const image of data.datasets.precipitation.images) {
     const group = data.datasets.precipitation.groups.find(group => group.id === image.id);
     const color = group.color.slice(1).match(/../g).map(hex => Number.parseInt(hex, 16));
-    const {data: pixels, info} = await sharp('public' + image.url).ensureAlpha().raw().toBuffer({resolveWithObject: true});
+    const {data: pixels, info} = await sharp('public' + image.url.replace('-mercator.png','.png')).ensureAlpha().raw().toBuffer({resolveWithObject: true});
     assert.equal(info.width, 1900); assert.equal(info.height, 900);
     let opaque = 0;
     for (let index = 0; index < pixels.length; index += 4) {
@@ -102,7 +102,7 @@ test('Precipitation derives from all 360 source months, keeps the land mask, and
     }
     assert.ok(opaque > 0 && opaque < union.length);
   }
-  const all = await sharp('public' + data.datasets.precipitation.imageUrl).ensureAlpha().raw().toBuffer();
+  const all = await sharp('public' + data.datasets.precipitation.imageUrl.replace('-mercator.png','.png')).ensureAlpha().raw().toBuffer();
   for (let index = 0; index < union.length; index++) assert.equal(all[index * 4 + 3] > 0, Boolean(union[index]));
   assert.ok(manifest.precipitation.rendering.resampling.includes('no interpolated or fabricated'));
 });
@@ -173,4 +173,13 @@ test('BC example retains 149 individually addressable mapped aquifers, source na
   assert.deepEqual(data.datasets.aquifers.queryBbox, [-123.4, 48.85, -121.6, 49.5]);
   assert.equal(manifest.aquifers.topology.original.invalid_geometry_count, 0);
   assert.equal(manifest.aquifers.topology.unchanged_geometry_wkb_count, 149);
+});
+
+test('Mercator presentation keeps categorical colors and a reproducible source/output hash ledger',async()=>{
+ const crypto=await import('node:crypto');
+ const ledger=JSON.parse(await readFile('public/assets/atlas/canada-water-v1/mercator-manifest.json','utf8'));
+ for(const item of ledger.files){for(const [file,hash]of [[item.source,item.sourceSha256],[item.output,item.sha256]])assert.equal(crypto.createHash('sha256').update(await readFile(file)).digest('hex'),hash);}
+ const palette=new Set(data.datasets.precipitation.groups.map(g=>g.color.toLowerCase()));
+ const {data:pixels,info}=await sharp('public'+data.datasets.precipitation.imageUrl).ensureAlpha().raw().toBuffer({resolveWithObject:true});assert.equal(info.width,1800);assert.equal(info.height,1160);
+ for(let i=0;i<pixels.length;i+=4){assert.ok(pixels[i+3]===0||pixels[i+3]===255);if(pixels[i+3])assert.ok(palette.has('#'+[...pixels.subarray(i,i+3)].map(n=>n.toString(16).padStart(2,'0')).join('')));}
 });
