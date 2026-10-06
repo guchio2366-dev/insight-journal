@@ -456,7 +456,9 @@ export function initEuropeAtlas() {
     const coordinates=normaliseEuropePoint(point);
     if(!coordinates){
       if(remember){
-        delete state.point;commit(false,false,false);
+        delete state.point;
+        if(layer.id==='drainage'){delete state.basin;delete state.feature;}
+        commit(false,false,false);
         query(layer.id==='wheat'?'[data-eu-grid-result]':'[data-eu-subject-result]').textContent='表示範囲外です。';
       }
       return;

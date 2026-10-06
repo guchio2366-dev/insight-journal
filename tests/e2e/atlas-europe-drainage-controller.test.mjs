@@ -71,7 +71,7 @@ async function setup(search='?layer=drainage&render=static',fixture={}){
   return{w,q,config,draws,requests,warnings,choose,restore,clickPoint};
 }
 
-for(const action of ['choice','clear','popstate']){
+for(const action of ['choice','clear','popstate','out-of-range']){
   test(`a cold London grid click cannot override a newer ${action} selection when the actual drainage response arrives`,async()=>{
     const gate=defer(),app=await setup(undefined,{fetch:asset=>asset.endsWith('/drainage-v1/values.bin.gz')?gate.promise:undefined});
     try{
@@ -83,12 +83,14 @@ for(const action of ['choice','clear','popstate']){
       if(action==='choice')app.choose(id);
       if(action==='clear')app.q('[data-eu-drainage-clear]').click();
       if(action==='popstate')app.restore('drainage',id);
+      if(action==='out-of-range')app.clickPoint([-30,55]);
       assert.doesNotMatch(app.q('[data-eu-subject-result]').textContent,/読み込んでいます/,'A cancelled grid read stops claiming to load immediately');
       assert.equal(app.q('[data-eu-subject-result]').hasAttribute('aria-busy'),false);
       gate.resolve(new Response(bytes));
-      if(action==='clear'){
+      if(action==='clear'||action==='out-of-range'){
         await tick();await tick();
         assert.equal(new URL(app.w.location.href).searchParams.has('basin'),false);
+        assert.equal(new URL(app.w.location.href).searchParams.has('point'),false);
         assert.equal(app.q('[data-eu-drainage-choice]').value,'');
         assert.equal(app.q('[data-eu-drainage-selection]').style.display,'none');
         assert.equal(app.draws.length,0,'No superseded grid response paints an outline after clear');
@@ -137,5 +139,53 @@ test('direct reload and native selection restore the same source ID; missing dis
     const ocean=[-20,55];assert.equal(europeDrainageCell(values,ocean),undefined);
     app.clickPoint(ocean);await until(()=>!new URL(app.w.location.href).searchParams.has('basin'));
     assert.equal(app.q('[data-eu-drainage-choice]').value,'');assert.equal(app.q('[data-eu-drainage-selection]').style.display,'none');assert.match(app.q('[data-eu-basin-summary]').textContent,/有効な区画がありません/);assert.match(app.q('[data-eu-subject-result]').textContent,/データなし/);assert.doesNotMatch(app.q('[data-eu-subject-result]').textContent,/：0 /);
+  }finally{await app.w.happyDOM.close();}
+});
+
+test('an out-of-range click clears a completed drainage selection and its comparison snapshot; popstate restores either history state',async()=>{
+  const app=await setup();
+  const url=()=>new URL(app.w.location.href);
+  const sourceChoices=()=>[...app.w.document.querySelectorAll('[data-eu-comparison-link]')].map(link=>new URLSearchParams(new URL(link.href).searchParams.get('europeReturn')));
+  const assertCleared=()=>{
+    assert.equal(url().searchParams.has('point'),false,'The invalid point does not survive in URL state');
+    assert.equal(url().searchParams.has('basin'),false,'The previous basin is cleared with the invalid point');
+    assert.equal(app.q('[data-eu-drainage-choice]').value,'');
+    assert.equal(app.q('[data-eu-drainage-selection]').style.display,'none');
+    assert.equal(app.q('[data-eu-selected-point]').hidden,true);
+    assert.equal(app.q('[data-eu-subject-result]').hasAttribute('aria-busy'),false);
+    assert.doesNotMatch(app.q('[data-eu-basin-summary]').textContent,/HYBAS_ID/);
+    const snapshots=sourceChoices();assert.ok(snapshots.length>0);
+    for(const source of snapshots){assert.equal(source.has('point'),false);assert.equal(source.has('basin'),false);}
+  };
+  const replay=href=>{app.w.history.replaceState({},'',href);app.w.dispatchEvent(new app.w.PopStateEvent('popstate'));};
+  try{
+    const london=app.config.cities.find(city=>city.id==='london'),cell=europeDrainageCell(values,london.coordinates);
+    assert.ok(cell);const id=String(cell.basin.HYBAS_ID);
+    app.clickPoint(london.coordinates);
+    await until(()=>app.draws.length===1&&url().searchParams.get('basin')===id&&!app.q('[data-eu-subject-result]').hasAttribute('aria-busy'));
+    assert.equal(app.q('[data-eu-drainage-choice]').value,id);
+    assert.equal(app.q('[data-eu-drainage-selection]').style.display,'');
+    assert.ok(url().searchParams.get('point'));
+    for(const source of sourceChoices()){assert.equal(source.get('basin'),id);assert.ok(source.get('point'));}
+    const selected=app.w.location.href,historyLength=app.w.history.length;
+
+    app.clickPoint([-30,55]);assertCleared();
+    assert.equal(app.q('[data-eu-subject-result]').textContent,'表示範囲外です。');
+    assert.equal(app.w.history.length,historyLength+1,'The range-out click creates one cleared state');
+    const cleared=app.w.location.href;
+    await tick();assertCleared();
+
+    replay(selected);
+    await until(()=>url().searchParams.get('basin')===id&&!app.q('[data-eu-subject-result]').hasAttribute('aria-busy'));
+    assert.equal(app.q('[data-eu-drainage-choice]').value,id);
+    assert.equal(app.q('[data-eu-drainage-selection]').style.display,'');
+    assert.equal(url().searchParams.get('point'),new URL(selected).searchParams.get('point'));
+    for(const source of sourceChoices()){assert.equal(source.get('basin'),id);assert.ok(source.get('point'));}
+    assert.equal(app.w.history.length,historyLength+1,'Restoring the selected grid must not create a history entry');
+
+    replay(cleared);await tick();assertCleared();
+    assert.match(app.q('[data-eu-subject-result]').textContent,/地図を押すと/);
+    assert.equal(app.w.history.length,historyLength+1,'Forward to the cleared state must not create a history entry');
+    assert.equal(app.draws.length,1,'The cleared state never repaints the previous basin');
   }finally{await app.w.happyDOM.close();}
 });

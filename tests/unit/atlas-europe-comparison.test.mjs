@@ -68,6 +68,26 @@ test('a selected terrain or contour point survives ordinary comparison and named
   }
 });
 
+test('named feature comparisons select the destination elevation point while the return keeps the source click', () => {
+  const original=state('?layer=density&point=-0.1278,51.5074&render=static');
+  const snapshot=structuredClone(original);
+  const base=new URL('https://example.test/insight-journal/atlas/europe/population/');
+  const entries=europeComparisonLinks(original);
+  const terrain=entries.find(entry=>entry.id==='population-terrain');
+  const target=europeComparisonUrl(base,original,terrain);
+  assert.equal(target.searchParams.get('feature'),'alps');
+  assert.deepEqual(state(target.search).point,[9.5,46.6],'The Alps heading and elevation query refer to the Alps, not the London source click');
+  const saved=readEuropeReturn(target.searchParams.get('europeReturn'),countries,cities);
+  assert.deepEqual(saved,original);
+  assert.deepEqual(state(europeNamedReturnUrl(target,saved).search),original);
+  assert.deepEqual(original,snapshot,'Creating the destination does not mutate the saved source');
+
+  const hubs=europeComparisonUrl(base,original,entries.find(entry=>entry.id==='population-hubs'));
+  assert.equal(hubs.searchParams.get('feature'),'kiruna');
+  assert.equal(hubs.searchParams.has('point'),false,'A named non-grid destination clears an unrelated numeric selection');
+  assert.deepEqual(readEuropeReturn(hubs.searchParams.get('europeReturn'),countries,cities),original);
+});
+
 test('safe return values use the shared country, city and farming normalization', () => {
   const normalized = readEuropeReturn('layer=density&returnLayer=climate&place=UKR&region=west&city=invalid&compare=london,london,invalid,paris,berlin&render=bad&single=1&crops=off&livestock=false&feature=not_valid', countries, cities);
   assert.deepEqual(normalized, state('?layer=density&returnLayer=climate&place=UKR&region=west&city=invalid&compare=london,london,invalid,paris,berlin&render=bad&single=1&crops=off&livestock=false&feature=not_valid'));
