@@ -1,0 +1,107 @@
+name: Review Asia atlas on PC
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/atlas-asia-pc-review.yml'
+      - 'scripts/capture-asia-pc-review.mjs'
+      - 'src/components/atlas/Asia*.astro'
+      - 'src/data/atlas/asia*'
+      - 'src/data/atlas/asia/**'
+      - 'src/scripts/atlas-asia-*.ts'
+      - 'src/lib/atlas-asia*.ts'
+      - 'src/styles/atlas-asia*.css'
+      - 'src/pages/atlas/asia/**'
+      - 'public/assets/atlas/asia*/**'
+      - 'tests/e2e/atlas-asia-*.test.mjs'
+      - 'tests/unit/atlas-asia-*.test.mjs'
+  push:
+    branches: [fix/asia-industry-publication-status]
+    paths:
+      - '.github/workflows/atlas-asia-pc-review.yml'
+      - 'scripts/capture-asia-pc-review.mjs'
+      - 'src/components/atlas/Asia*.astro'
+      - 'src/data/atlas/asia*'
+      - 'src/data/atlas/asia/**'
+      - 'src/scripts/atlas-asia-*.ts'
+      - 'src/lib/atlas-asia*.ts'
+      - 'src/styles/atlas-asia*.css'
+      - 'src/pages/atlas/asia/**'
+      - 'public/assets/atlas/asia*/**'
+      - 'tests/e2e/atlas-asia-*.test.mjs'
+      - 'tests/unit/atlas-asia-*.test.mjs'
+
+# Test artifacts only: no deployment, repository writes, or application secrets.
+permissions:
+  contents: read
+
+concurrency:
+  group: asia-pc-review-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: Compare Asia and US PC views
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+      REVIEW_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      REVIEW_BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
+      REVIEW_BEFORE_SHA: ${{ github.event.before || '' }}
+
+    steps:
+      - name: Check out the image generation commit
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+
+      - name: Verify existing Chrome and Japanese fonts
+        shell: bash
+        run: |
+          set -euo pipefail
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          if [[ -z "$chrome_path" ]]; then
+            echo "::error::The runner must already provide Chrome; no browser installation is performed."
+            exit 1
+          fi
+          japanese_fonts="$(fc-list ':lang=ja' family)"
+          if [[ -z "$japanese_fonts" ]]; then
+            echo "::error::The runner must already provide Japanese fonts; unreadable screenshots are not accepted."
+            exit 1
+          fi
+          {
+            printf 'REVIEW_CHROME_PATH=%s\n' "$chrome_path"
+            printf '%s\n' 'REVIEW_JAPANESE_FONTS<<ASIA_PC_FONTS' "$japanese_fonts" 'ASIA_PC_FONTS'
+            printf '%s\n' 'REVIEW_JAPANESE_FONT_MATCH<<ASIA_PC_MATCH'
+            fc-match -f '%{family}\n' 'sans-serif:lang=ja'
+            fc-match -f '%{family}\n' 'serif:lang=ja'
+            printf '%s\n' 'ASIA_PC_MATCH'
+          } >> "$GITHUB_ENV"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install existing dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Build local production site
+        run: npm run build
+
+      - name: Capture PC images and verify controls
+        timeout-minutes: 6
+        run: node scripts/capture-asia-pc-review.mjs
+
+      - name: Save PC images and verification metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: asia-pc-review-${{ github.run_id }}-${{ github.run_attempt }}
+          path: review-artifacts/asia-pc
+          if-no-files-found: warn
+          compression-level: 6
+          retention-days: 7
