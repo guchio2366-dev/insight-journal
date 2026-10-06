@@ -487,3 +487,7 @@
  .africa-atlas[data-field=industry] .africa-map-frame{height:clamp(320px,calc(100dvh - 350px),430px);min-height:0;aspect-ratio:auto}
  .africa-atlas[data-field=nature]:has(.africa-main>.africa-subitems) .africa-map-frame>.africa-map{height:100%;min-height:0;max-height:none}
 }
+@media(min-width:960px) and (max-width:1023px){
+ .africa-region-controls{display:grid;grid-template-rows:44px 40px;gap:7px;min-height:91px;height:auto}
+ .africa-heading{min-height:125px}
+}
