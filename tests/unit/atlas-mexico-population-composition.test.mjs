@@ -6,6 +6,33 @@ const module=await transform(await readFile('src/lib/atlas-mexico-population-com
 const lib=await import(`data:text/javascript;base64,${Buffer.from(module.code).toString('base64')}`);
 const metric={id:'indigenous_language',category:'ethnicity',countRadiusReference:10000,countMaximumRadius:30,states:{'08':{count:100,denominator:1000,status:'value'}}};
 const data={referenceYear:2020,metrics:[metric,{id:'noReligion',category:'religion'}]};
+const official=JSON.parse(await readFile('src/data/atlas/mexico/population-composition.json','utf8'));
+
+test('Religion overview compares three absolute shares with common bins while all eight details retain their own bins',()=>{
+ const before=JSON.stringify(official),overview=lib.mexicoCompositionOverviewMetrics(official,'religion');
+ assert.deepEqual(overview.map(m=>m.id),['catholic','protestant_evangelical','no_religion']);
+ assert.equal(official.metrics.filter(m=>m.category==='religion').length,8);
+ for(const m of overview){
+  for(const share of [0,.5,1,5,10,25,50,75,100])assert.equal(lib.mexicoCompositionOverviewColor({count:share*10,denominator:1000,status:share?'value':'zero'},m),lib.mexicoCompositionColor({count:share*10,denominator:1000,status:share?'value':'zero'},{...m,shareBins:lib.mexicoCompositionShareBins}));
+  for(const bin of m.shareBins)assert.equal(lib.mexicoCompositionColor({count:bin.min*10000,denominator:1000000,status:bin.min?'value':'zero'},m),bin.color);
+  const national=lib.mexicoCompositionNationalRecord(m);assert.equal(national.count,m.nationalCount);assert.equal(national.denominator,m.nationalDenominator);
+ }
+ assert.equal(JSON.stringify(official),before);
+ assert.equal(lib.mexicoCompositionOverviewMetrics(official,'ethnicity').length,3);
+});
+
+test('Bare categories open a national overview; explicit metric links and national comparison returns remain durable',()=>{
+ for(const category of ['ethnicity','religion']){
+  const bare=new URL(`https://example.test/?category=${category}&reading=overview`);
+  const overview=lib.readMexicoCompositionSelection(bare,official,category);assert.equal(overview.overview,true);
+  const saved=lib.writeMexicoCompositionSelection(bare,overview,category);assert.equal(saved.searchParams.get('compositionView'),'overview');assert.equal(saved.searchParams.has('compositionMetric'),false);
+  const m=official.metrics.find(m=>m.category===category);
+  const source=new URL(`https://example.test/?category=${category}&compositionMetric=${m.id}&compositionMeasure=share&reading=item&frame=120,80,600,400`);
+  const detail=lib.readMexicoCompositionSelection(source,official,category);assert.equal(detail.overview,false);
+  const compared=lib.mexicoCompositionComparisonUrl(source),selection=lib.readMexicoCompositionSelection(compared,official,category);
+  assert.equal(selection.compare,true);compared.searchParams.set('state','09');assert.equal(lib.mexicoCompositionReturnUrl(compared,selection).href,source.href);
+ }
+});
 
 test('Composition percentages retain their own population universe and distinguish zero, confidential, missing and undefined denominators',()=>{
  assert.equal(lib.mexicoCompositionShare({count:100,denominator:1000,status:'value'}),10);

@@ -125,3 +125,37 @@ test('Population returns keep the original state when the industry target change
   assert.equal(lib.industryPopulationReturnUrl('/population/',saved,{...restored,state:'10'}).searchParams.get('state'),'09');
  }
 });
+
+test('National population source and its original extent survive independent industry selection',()=>{
+ const ids=data.states.map(s=>s.id);
+ for(const view of ['density','population']){
+  const entered=new URL(`https://example.com/industry/?compare=population&from=population&sourceState=&sourceOnly=0&sourceView=${view}`);
+  const original=lib.readMexicoIndustryState(entered,ids);
+  assert.equal(original.sourceState,'');assert.equal(original.sourceOnly,false);
+  const saved=lib.writeMexicoIndustryState(entered,{...original,state:'14',only:true,zoom:true});
+  const restored=lib.readMexicoIndustryState(saved,ids);
+  assert.equal(restored.sourceState,'');assert.equal(restored.sourceOnly,false);assert.equal(restored.state,'14');
+  const back=lib.industryPopulationReturnUrl('/population/',saved,restored);
+  assert.equal(back.searchParams.get('view'),view);assert.equal(back.searchParams.has('state'),false);assert.equal(back.searchParams.has('only'),false);
+  const selectedUrl=new URL(entered);selectedUrl.searchParams.set('state','09');selectedUrl.searchParams.set('sourceState','09');selectedUrl.searchParams.set('sourceOnly','1');
+  const selected=lib.readMexicoIndustryState(selectedUrl,ids);assert.equal(selected.sourceState,'09');assert.equal(selected.sourceOnly,true);
+  const selectedBack=lib.industryPopulationReturnUrl('/population/',entered,{...selected,state:'05',only:false,sourceState:'09',sourceOnly:true});
+  assert.equal(selectedBack.searchParams.get('state'),'09');assert.equal(selectedBack.searchParams.get('only'),'1');
+ }
+});
+
+test('Industry camera zoom clamps to the national map and round-trips independently of source population query',()=>{
+ const ids=data.states.map(s=>s.id),origin=new URL('https://example.com/industry/?compare=population&from=population&sourceState=&sourceOnly=0');
+ let frame=[0,0,900,580];for(let i=0;i<20;i++)frame=lib.zoomMexicoIndustryFrame(frame,'in');
+ assert.equal(frame[2],180);assert.equal(frame[3],116);assert.ok(frame[0]>=0&&frame[1]>=0);
+ assert.deepEqual(lib.industryCameraFrame([-80,10000,600,400]),[0,193.333,600,386.667]);
+ const query='?view=population&reading=overview&frame=120,80,600,400';
+ const state={...lib.readMexicoIndustryState(origin,ids),frame,sourcePopulationQuery:query};
+ const saved=lib.writeMexicoIndustryState(origin,state),restored=lib.readMexicoIndustryState(saved,ids);
+ assert.deepEqual(restored.frame,frame);
+ const back=lib.industryPopulationReturnUrl('/population/',saved,restored);
+ assert.equal(back.pathname,'/population/');assert.equal(back.searchParams.get('frame'),'120,80,600,400');assert.equal(back.searchParams.get('reading'),'overview');assert.equal(back.searchParams.has('industryFrame'),false);
+ for(const invalid of ['https://elsewhere.example/?view=population','//elsewhere.example/?view=population','?view=invalid','?view=density&state=99'])assert.equal(lib.industryPopulationSourceQuery(invalid),null);
+ assert.deepEqual(lib.zoomMexicoIndustryFrame(frame,'fit'),[0,0,900,580]);
+ const reset=lib.writeMexicoIndustryState(saved,{...restored,frame:undefined});assert.equal(reset.searchParams.has('industryFrame'),false);
+});

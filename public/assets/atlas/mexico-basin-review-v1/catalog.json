@@ -1,0 +1,290 @@
+{
+  "schemaVersion": 1,
+  "titleJa": "3代表水系の国内流域・原線検証資料",
+  "isCompleteNationalBasinInventory": false,
+  "totalDomesticSourceBasins": 158,
+  "nationalScopeLabelJa": "3つの代表水系を入口にします。全国158の国内区分の全てを表すものではありません。",
+  "status": "standalone preparation; f548290 restoration and official named-network evidence pending",
+  "source": {
+    "file": "public/assets/atlas/mexico-water-v1/basins.geojson",
+    "sha256": "2937066a5ae7472a05b885ee144a71f2a7f7f280cab652c34aca0237416340f1",
+    "metadataFile": "public/assets/atlas/mexico-water-v1/basins.source.json",
+    "metadataSha256": "3f14e52b19bddddb02bb73143f828abaf14a37cfa363f59a7e8e9f88577e463f",
+    "sourceUrl": "https://antares.inegi.org.mx/analisis/red_hidro/siatl/",
+    "license": {
+      "name": "Términos de Libre Uso de la Información del INEGI",
+      "url": "https://www.inegi.org.mx/inegi/terminos.html",
+      "creditRequired": true,
+      "preserveMetadata": true,
+      "discloseTransformations": true
+    },
+    "observedPeriod": null,
+    "sourceDateNoteJa": "取得日を図版年・観測年に置き換えません。"
+  },
+  "countryClip": {
+    "file": "data-source/atlas/mexico/common/inegi-geo-states-2025.json.gz",
+    "decodedSha256": "170c3ea5ff472f08ece97970dc90ad4ba8c6f503e33859655f315091c105cc91",
+    "method": "Original INEGI state union in existing Lambert frame; fill pixels outside union transparent.",
+    "countryValidPixelCount": 130079
+  },
+  "frame": {
+    "width": 900,
+    "height": 580,
+    "viewBox": "0 0 900 580",
+    "placement": {
+      "x": 0,
+      "y": 0,
+      "width": 900,
+      "height": 580
+    },
+    "geometryIndexSha256": "c18f61eb22816d9cb3b655df8a2aa71da2dcfc84b4bb4339308d0ea9d4d6689b"
+  },
+  "doNotInfer": [
+    "A retained source endpoint is not automatically a river mouth.",
+    "Coordinate order alone is not evidence of downstream flow.",
+    "A lake drainage basin is not a lake-water polygon.",
+    "FLUJO VIRTUAL exists in source totals, but no per-segment condition survives; lake-interior lines are not automatically physical river channels.",
+    "Disconnected line parts must not be joined by straight connectors.",
+    "High Strahler order is local to a subbasin and does not identify an entire named trunk river."
+  ],
+  "systems": [
+    {
+      "id": "bravo",
+      "nameJa": "ブラボー",
+      "basinIds": [
+        "RH24A",
+        "RH24B",
+        "RH24C",
+        "RH24D",
+        "RH24E",
+        "RH24F",
+        "RH24G",
+        "RH24H",
+        "RH24I",
+        "RH24J",
+        "RH24K",
+        "RH24L",
+        "RH24M",
+        "RH24N"
+      ],
+      "excludedBasinIds": [],
+      "foreignScopeJa": "米国側の上流域を含む国際流域全体ではありません。色はメキシコ領域内だけです。",
+      "reviewDirectory": "bravo",
+      "basinSourceIds": [
+        "RH24A",
+        "RH24B",
+        "RH24C",
+        "RH24D",
+        "RH24E",
+        "RH24F",
+        "RH24G",
+        "RH24H",
+        "RH24I",
+        "RH24J",
+        "RH24K",
+        "RH24L",
+        "RH24M",
+        "RH24N"
+      ],
+      "basinSourceNames": [
+        "R. BRAVO - MATAMOROS - REYNOSA",
+        "R. BRAVO - SAN JUAN",
+        "R. BRAVO - SOSA",
+        "P. FALCÓN - R. SALADO",
+        "R. BRAVO - NUEVO LAREDO",
+        "R. BRAVO - PIEDRAS NEGRAS",
+        "R.BRAVO - P. DE LA AMISTAD",
+        "R. BRAVO - OJINAGA",
+        "R. BRAVO - CD. JUÁREZ",
+        "R. CONCHOS - OJINAGA",
+        "R. CONCHOS - P. EL GRANERO",
+        "R. CONCHOS - P. DE LA BOQUILLA",
+        "R. FLORIDO",
+        "R. SAN PEDRO"
+      ],
+      "basinCount": 14,
+      "basinGeojson": "bravo.basins.geojson",
+      "basinGeojsonSha256": "8186ba9fa579d220cc994a571a8f00b4f5bdef8000c2de7b3eabac8f49f33f36",
+      "domesticFill": {
+        "file": "bravo.domestic-fill.png",
+        "sha256": "c846ef523cce8765902cc83145e750a4a4eec51374fcab9dca5a5813d5549b8b",
+        "width": 900,
+        "height": 580,
+        "selectedCountryPixels": 15314,
+        "basinPixelsOutsideCountryMasked": 23,
+        "opaqueOutsideCountry": 0
+      },
+      "status": "domestic basin subset prepared; named mainstem, flow and mouths unresolved",
+      "scope": "Selected original domestic Cuenca divisions, not the complete international upstream catchment.",
+      "groupingStatus": "Draft system grouping by source region and names; confirm the complete connectivity after restoration.",
+      "verifiedMainstem": {
+        "type": "FeatureCollection",
+        "features": []
+      },
+      "verifiedFlowArrows": {
+        "type": "FeatureCollection",
+        "features": []
+      },
+      "verifiedMouths": {
+        "type": "FeatureCollection",
+        "features": []
+      },
+      "allowMainstemFlowMouthRendering": false,
+      "missingEvidence": [
+        "Per-segment river names",
+        "Documented downstream orientation/connectivity",
+        "Official terminal network and receiving-water connection"
+      ],
+      "sourceGeometriesRepairedForTemporaryRasterOnly": 0
+    },
+    {
+      "id": "lerma-chapala-santiago",
+      "nameJa": "レルマ―チャパラ―サンティアゴ",
+      "basinIds": [
+        "RH12A",
+        "RH12B",
+        "RH12C",
+        "RH12D",
+        "RH12E",
+        "RH12F",
+        "RH12H",
+        "RH12I",
+        "RH12J",
+        "RH12K",
+        "RH12L"
+      ],
+      "excludedBasinIds": [
+        "RH12G"
+      ],
+      "foreignScopeJa": "原資料の関連国内区分です。RH12Gの閉鎖流域を同じ流下域に含めません。",
+      "reviewDirectory": "lerma-chapala-santiago",
+      "basinSourceIds": [
+        "RH12A",
+        "RH12B",
+        "RH12C",
+        "RH12D",
+        "RH12E",
+        "RH12F",
+        "RH12H",
+        "RH12I",
+        "RH12J",
+        "RH12K",
+        "RH12L"
+      ],
+      "basinSourceNames": [
+        "R. LERMA - TOLUCA",
+        "R. LERMA - SALAMANCA",
+        "R. LERMA - CHAPALA",
+        "L. CHAPALA",
+        "R. SANTIAGO - GUADALAJARA",
+        "R. SANTIAGO - AGUAMILPA",
+        "R. LAJA",
+        "R. VERDE GRANDE",
+        "R. JUCHIPILA",
+        "R. BOLAÑOS",
+        "R. HUAYNAMOTA"
+      ],
+      "basinCount": 11,
+      "basinGeojson": "lerma-chapala-santiago.basins.geojson",
+      "basinGeojsonSha256": "10d36153ecc75ea517c85ee89a8124ea4a7d956aae8ba14aaa3ef8f90d16435b",
+      "domesticFill": {
+        "file": "lerma-chapala-santiago.domestic-fill.png",
+        "sha256": "b4df567400e2c2599d1c94a4cba41cb2f2f1607a8d94c16b6d4ebcc82d65efb9",
+        "width": 900,
+        "height": 580,
+        "selectedCountryPixels": 8533,
+        "basinPixelsOutsideCountryMasked": 0,
+        "opaqueOutsideCountry": 0
+      },
+      "status": "domestic basin subset prepared; named mainstem, flow and mouths unresolved",
+      "scope": "Selected original domestic Cuenca divisions, not the complete international upstream catchment.",
+      "groupingStatus": "Draft system grouping by source region and names; confirm the complete connectivity after restoration.",
+      "verifiedMainstem": {
+        "type": "FeatureCollection",
+        "features": []
+      },
+      "verifiedFlowArrows": {
+        "type": "FeatureCollection",
+        "features": []
+      },
+      "verifiedMouths": {
+        "type": "FeatureCollection",
+        "features": []
+      },
+      "allowMainstemFlowMouthRendering": false,
+      "missingEvidence": [
+        "Per-segment river names",
+        "Documented downstream orientation/connectivity",
+        "Official terminal network and receiving-water connection"
+      ],
+      "sourceGeometriesRepairedForTemporaryRasterOnly": 0
+    },
+    {
+      "id": "grijalva-usumacinta",
+      "nameJa": "グリハルバ―ウスマシンタ",
+      "basinIds": [
+        "RH30A",
+        "RH30B",
+        "RH30D",
+        "RH30E",
+        "RH30F",
+        "RH30G"
+      ],
+      "excludedBasinIds": [
+        "RH30C"
+      ],
+      "foreignScopeJa": "メキシコ国内分です。グアテマラ等の国外上流域を含む国際流域全体ではありません。分派・河口の範囲は確認待ちです。",
+      "reviewDirectory": "grijalva-usumacinta",
+      "basinSourceIds": [
+        "RH30A",
+        "RH30B",
+        "RH30D",
+        "RH30E",
+        "RH30F",
+        "RH30G"
+      ],
+      "basinSourceNames": [
+        "R. USUMACINTA",
+        "R. CHIXOY",
+        "R. GRIJALVA - VILLAHERMOSA",
+        "R. GRIJALVA - TUXTLA GUTIÉRREZ",
+        "R. GRIJALVA - LA CONCORDIA",
+        "R. LACANTÚN"
+      ],
+      "basinCount": 6,
+      "basinGeojson": "grijalva-usumacinta.basins.geojson",
+      "basinGeojsonSha256": "a4ebb045ce3148c6b6611c8a6c25b85f0d1a7904c912def7f631d2761e167825",
+      "domesticFill": {
+        "file": "grijalva-usumacinta.domestic-fill.png",
+        "sha256": "c690615460d2307c1f15993888543a58f815033b6aa09aab682f9c38177ab1ef",
+        "width": 900,
+        "height": 580,
+        "selectedCountryPixels": 5530,
+        "basinPixelsOutsideCountryMasked": 2,
+        "opaqueOutsideCountry": 0
+      },
+      "status": "domestic basin subset prepared; named mainstem, flow and mouths unresolved",
+      "scope": "Selected original domestic Cuenca divisions, not the complete international upstream catchment.",
+      "groupingStatus": "Draft system grouping by source region and names; confirm the complete connectivity after restoration.",
+      "verifiedMainstem": {
+        "type": "FeatureCollection",
+        "features": []
+      },
+      "verifiedFlowArrows": {
+        "type": "FeatureCollection",
+        "features": []
+      },
+      "verifiedMouths": {
+        "type": "FeatureCollection",
+        "features": []
+      },
+      "allowMainstemFlowMouthRendering": false,
+      "missingEvidence": [
+        "Per-segment river names",
+        "Documented downstream orientation/connectivity",
+        "Official terminal network and receiving-water connection"
+      ],
+      "sourceGeometriesRepairedForTemporaryRasterOnly": 0
+    }
+  ]
+}

@@ -1,0 +1,317 @@
+{
+  "schemaVersion": 1,
+  "id": "mexico-quantitative-v1",
+  "displayFrame": {
+    "width": 900,
+    "height": 580,
+    "viewBox": "0 0 900 580",
+    "imagePlacement": {
+      "x": 0,
+      "y": 0,
+      "width": 900,
+      "height": 580,
+      "preserveAspectRatio": "none"
+    },
+    "projection": {
+      "name": "INEGI Lambert Conformal Conic",
+      "datum": "ITRF92",
+      "ellipsoid": "GRS80",
+      "semiMajorM": 6378137,
+      "inverseFlattening": 298.257222101,
+      "standardParallel1": 17.5,
+      "standardParallel2": 29.5,
+      "latitudeOrigin": 12,
+      "centralMeridian": -102,
+      "falseEastingM": 2500000,
+      "falseNorthingM": 0
+    },
+    "boundsNative": [
+      911292.029449366,
+      319149.06252919696,
+      4083063.0952772293,
+      2349614.87171421
+    ],
+    "scalePixelsPerNativeMetre": 0.00025806886165215595,
+    "leftPixels": 40.73232581027895,
+    "topPixels": 28.0,
+    "metresPerPixelInLambertPlane": 3874.934750353078,
+    "cornersOrder": [
+      "top-left",
+      "top-right",
+      "bottom-right",
+      "bottom-left"
+    ],
+    "frameCornersNative": [
+      [
+        753456.9247044125,
+        2458113.0447240965
+      ],
+      [
+        4240898.200022183,
+        2458113.0447240965
+      ],
+      [
+        4240898.200022183,
+        210650.88951931102
+      ],
+      [
+        753456.9247044125,
+        210650.88951931102
+      ]
+    ],
+    "frameCornersLonLat": [
+      [
+        -120.60837078498076,
+        33.16425881431248
+      ],
+      [
+        -83.45110248274294,
+        33.17077474263814
+      ],
+      [
+        -86.09416672508411,
+        13.017717839780246
+      ],
+      [
+        -117.95698415756823,
+        13.012123383493336
+      ]
+    ],
+    "pixelRegistration": "Cell centres at x+0.5,y+0.5 within the full SVG display frame.",
+    "mapping": "x=left+(nativeX-minX)*scale; y=top+(maxY-nativeY)*scale; scale=min(844/(maxX-minX),524/(maxY-minY)).",
+    "geographicNote": "Matches atlas-mexico-projection.mjs and its existing geographic rendering. No epoch-dependent ITRF92/WGS84 transformation or cadastral precision is asserted."
+  },
+  "layers": {
+    "precipitation": {
+      "image": {
+        "file": "gpcc/mexico-gpcc-1991-2020-annual.png",
+        "width": 900,
+        "height": 580,
+        "bytes": 25166,
+        "sha256": "07a6f56eeb0e5cdea5197140d89f5fe64d934847e43ff0cfcce383737ef10117"
+      },
+      "legend": {
+        "domain": [
+          0,
+          4000
+        ],
+        "ticks": [
+          0,
+          500,
+          1000,
+          2000,
+          3000,
+          4000
+        ],
+        "colorStops": [
+          {
+            "value": 0,
+            "color": "#f7fbff"
+          },
+          {
+            "value": 250,
+            "color": "#deebf7"
+          },
+          {
+            "value": 500,
+            "color": "#c6dbef"
+          },
+          {
+            "value": 1000,
+            "color": "#9ecae1"
+          },
+          {
+            "value": 1500,
+            "color": "#6baed6"
+          },
+          {
+            "value": 2000,
+            "color": "#4292c6"
+          },
+          {
+            "value": 3000,
+            "color": "#2171b5"
+          },
+          {
+            "value": 4000,
+            "color": "#08306b"
+          }
+        ],
+        "unit": "mm/年"
+      },
+      "titleJa": "年降水量",
+      "periodLabelJa": "1991–2020年平年値",
+      "sourceLabelJa": "GPCC / DWD・2025版・0.25°格子",
+      "descriptionJa": "月降水量の平年値12か月分を合計し、年降水量が多いほど濃い青で示します。",
+      "limitationsJa": [
+        "海域・国外・原データの欠損は透明です。欠損は0 mmではありません。",
+        "雨温図と基準期間は共通ですが、格子の補間値と観測所の値は異なります。",
+        "現在の雨、水不足、河川流量や利用可能な水量を表す図ではありません。"
+      ],
+      "sourceUrl": "https://opendata.dwd.de/climate_environment/GPCC/html/gpcc_precipitation_analysis_climatology_v2025_doi_download.html",
+      "provenanceFile": "gpcc/manifest.json",
+      "sourceFile": "gpcc/precipitation-source.json",
+      "gridFile": "gpcc/mexico-gpcc-1991-2020-annual.json",
+      "missingLabelJa": "データなし（0 mmではありません）"
+    },
+    "elevation": {
+      "image": {
+        "file": "etopo/elevation-surface.webp",
+        "width": 900,
+        "height": 580,
+        "bytes": 126908,
+        "sha256": "80f27a16c48d057f93ebd235a43797645b3fb9576f064e666bd0facea465ebef"
+      },
+      "legend": {
+        "domain": [
+          -600,
+          5500
+        ],
+        "ticks": [
+          -600,
+          0,
+          1000,
+          2000,
+          3000,
+          4000,
+          5500
+        ],
+        "colorStops": [
+          {
+            "value": -600,
+            "color": "#fffaf0"
+          },
+          {
+            "value": 0,
+            "color": "#fff4d8"
+          },
+          {
+            "value": 500,
+            "color": "#f4dfad"
+          },
+          {
+            "value": 1000,
+            "color": "#e5c486"
+          },
+          {
+            "value": 2000,
+            "color": "#c99655"
+          },
+          {
+            "value": 3000,
+            "color": "#a96b35"
+          },
+          {
+            "value": 4000,
+            "color": "#7c4326"
+          },
+          {
+            "value": 5500,
+            "color": "#492315"
+          }
+        ],
+        "unit": "m"
+      },
+      "titleJa": "標高",
+      "periodLabelJa": "ETOPO 2022（版年）・60秒格子・EGM2008基準",
+      "sourceLabelJa": "NOAA NCEI・ETOPO 2022",
+      "descriptionJa": "ETOPO原格子の標高をm単位で示し、標高が高いほど濃い色にしています。",
+      "limitationsJa": [
+        "2022は版の年で、全地点に共通する観測年ではありません。",
+        "有効な負標高も保持しています。沿岸の混合セルを含むため、個別地点や全国の最低・最高標高には使えません。",
+        "海域・国外は元の国土境界で除外しています。すべての内陸湖沼を除外するマスクではありません。"
+      ],
+      "sourceUrl": "https://www.ncei.noaa.gov/products/etopo-global-relief-model",
+      "provenanceFile": "etopo/elevation-surface.manifest.json",
+      "missingLabelJa": "データなし（0 mではありません）"
+    }
+  },
+  "assets": [
+    {
+      "file": "gpcc/manifest.json",
+      "bytes": 9463,
+      "sha256": "ddf855f00c8322a6aad20a27bff988e75bf2e0a480445b96ec621efe8fa55bba"
+    },
+    {
+      "file": "gpcc/precipitation-legend.json",
+      "bytes": 1379,
+      "sha256": "ede79e74a94995ac25fae811a9ad05bcccb51f1c90d3da59a90eb029374a7fa9"
+    },
+    {
+      "file": "gpcc/precipitation-source.json",
+      "bytes": 5043,
+      "sha256": "5620a7f2e5ff4b01a5aaafeb4b5de946b70e318e96c5589aff350d43f846601c"
+    },
+    {
+      "file": "gpcc/mexico-gpcc-1991-2020-annual.png",
+      "bytes": 25166,
+      "sha256": "07a6f56eeb0e5cdea5197140d89f5fe64d934847e43ff0cfcce383737ef10117"
+    },
+    {
+      "file": "gpcc/mexico-gpcc-1991-2020-annual.json",
+      "bytes": 1629,
+      "sha256": "f0506319f9f5f89a9bc8407be92d20d1280214c4ccf68e7b7592d2383551ab85"
+    },
+    {
+      "file": "gpcc/mexico-gpcc-1991-2020-annual.f32",
+      "bytes": 42240,
+      "sha256": "fd90fa28043ff894f4141bfeb0cb26f52b6575ebb07c397a363f2b76e0e692de"
+    },
+    {
+      "file": "gpcc/mexico-gpcc-1991-2020-land-intersection.u8",
+      "bytes": 10560,
+      "sha256": "965f512275ff6b875f5c7af8eed75fe39ff2d53b8d2e25ddfa018e8dd5f43feb"
+    },
+    {
+      "file": "gpcc/mexico-gpcc-1991-2020-missing-land.png",
+      "bytes": 2161,
+      "sha256": "ff041ddf89353315ab8fa49a95d474094326d78fe359aea7e9b7afc2678674f7"
+    },
+    {
+      "file": "gpcc/independent-grid-verification.json",
+      "bytes": 484,
+      "sha256": "0483610258abd4fca6fac6eed380f0d88bdfbc52bcc75575f3e3c26ecd8d49ce"
+    },
+    {
+      "file": "gpcc/source/manifest.json",
+      "bytes": 2547,
+      "sha256": "eef8711e54ef8a3c28c40dbcf3bd79b89b69a2f348a3385ea6cecec12cafdc78"
+    },
+    {
+      "file": "etopo/elevation-surface.manifest.json",
+      "bytes": 11176,
+      "sha256": "56c83774ea227ffe1779e4f636731cb7a97595fd22933046c302dec4c3b45325"
+    },
+    {
+      "file": "etopo/elevation-surface.webp",
+      "bytes": 126908,
+      "sha256": "80f27a16c48d057f93ebd235a43797645b3fb9576f064e666bd0facea465ebef"
+    },
+    {
+      "file": "etopo/elevation-legend.json",
+      "bytes": 1239,
+      "sha256": "68eaf5eed789bcf63b3ab992fb69d28ee2552b9a56e9079423cb365eab834a14"
+    },
+    {
+      "file": "etopo/mexico-etopo-window.json",
+      "bytes": 1421,
+      "sha256": "6c5fcb9939251b4ac0b1db79c5efb1e32487f6fed9aab312a2875aeb16ca4c26"
+    },
+    {
+      "file": "etopo/range-acquisition.json",
+      "bytes": 16280,
+      "sha256": "afc4f7b233f39d3c2c25a4dfa25777f4af459435c46c9b8199d2742f1dade63d"
+    },
+    {
+      "file": "etopo/generation-validation.json",
+      "bytes": 1115,
+      "sha256": "029efd8a6a6ef1b1be1012cace22b71f22417fe8a69d02412eaf08f3d9f69a28"
+    },
+    {
+      "file": "etopo/etopo-user-guide.source.json",
+      "bytes": 809,
+      "sha256": "fa1ca35ce9761194fc50163f7c59c4eb1019d000caa4877fe0855c2222d486ba"
+    }
+  ],
+  "provenanceNoteJa": "画像・数値格子は無変更です。GPCCの公式MD5だけは既存の公開台帳形式に合わせgpcc/manifest.jsonのpublisherMd5へ移し、入力台帳の元SHA256も保持しています。その他の出典情報は保持しています。記載された全球原本・ETOPO数値窓・取得範囲バイナリはオフラインの生成入力で、公開ファイルへのリンクではありません。"
+}

@@ -68,7 +68,7 @@ test('Industry SSR preserves 32 geography keys, both source columns, accessible 
 });
 
 test('All 32 states and both industries show the original absolute amount, separate state geography, original status and selected source table',async()=>{
- const w=await page();try{const d=w.document;for(const metric of ['transport','electronics']){d.querySelector(`[data-mi-metric-button=${metric}]`).click();assert.equal(d.querySelector('[data-mi-metric]').value,metric);assert.equal(d.querySelector(`[data-mi-metric-button=${metric}]`).getAttribute('aria-selected'),'true');for(const row of data.rows){change(w,'[data-mi-state-select]',row.id);const v=row.values[metric],shape=d.querySelector(`[data-mi-map=primary] [data-mi-shape="${row.id}"]`);assert.equal(shape.getAttribute('fill'),'#edf1df');assert.equal(shape.dataset.miStatus,v.status);assert.equal(shape.getAttribute('aria-pressed'),'false');assert.equal(shape.getAttribute('aria-label'),shape.querySelector('title').textContent);assert.equal(d.querySelector(`[data-mi-value="${metric}"]`).textContent,industryValueText(v));assert.equal(d.querySelector(`[data-mi-stats-status="${metric}"]`).textContent,v.sourceStatus);assert.equal(new URL(w.location).searchParams.get('state'),row.id);assert.equal(d.querySelectorAll('.mi-all-data tr.is-selected').length,1);assert.equal(visible(d,'primary').length,32);}}
+ const w=await page();try{const d=w.document;for(const metric of ['transport','electronics']){d.querySelector(`[data-mi-metric-button=${metric}]`).click();assert.equal(d.querySelector('[data-mi-metric]').value,metric);assert.equal(d.querySelector(`[data-mi-metric-button=${metric}]`).getAttribute('aria-selected'),'true');for(const row of data.rows){change(w,'[data-mi-state-select]',row.id);const v=row.values[metric],shape=d.querySelector(`[data-mi-map=primary] [data-mi-shape="${row.id}"]`);assert.equal(shape.getAttribute('fill'),'#edf1df');assert.equal(shape.dataset.miStatus,v.status);assert.equal(shape.getAttribute('aria-pressed'),'true');assert.equal(shape.classList.contains('is-selected'),true);assert.equal(shape.getAttribute('aria-label'),shape.querySelector('title').textContent);assert.equal(d.querySelector(`[data-mi-value="${metric}"]`).textContent,industryValueText(v));assert.equal(d.querySelector(`[data-mi-stats-status="${metric}"]`).textContent,v.sourceStatus);assert.equal(new URL(w.location).searchParams.get('state'),row.id);assert.equal(d.querySelectorAll('.mi-all-data tr.is-selected').length,1);assert.equal(visible(d,'primary').length,32);}}
  assert.equal(d.querySelector('[data-mexico-field=industry]').dataset.miRenderer,'svg');assert.equal(d.querySelector('[data-mi-fallback-note]').hidden,true);
  }finally{await w.happyDOM.close();}
 });
@@ -118,7 +118,7 @@ test('Population density is retained as the source distribution with original bi
 
 test('Population quantities retain area-proportional circles through selection, refresh and history, with both comparison maps kept in isolation',async()=>{
  const w=await page('?compare=population&state=19&metric=electronics&from=population&sourceView=population&only=1');let reload;try{const d=w.document,q=s=>d.querySelector(s);assert.equal(q('[data-mi-population-circles]').hasAttribute('hidden'),false);assert.equal(q('[data-mi-density-legend]').hidden,true);assert.equal(q('[data-mi-population-size-legend]').hidden,false);assert.equal(visible(d,'secondary','[data-mi-population-circle]').length,1);assert.equal(d.querySelectorAll('[data-mi-size-reference]').length,3);for(const row of population.states){const circle=q(`[data-mi-population-circle="${row.stateCode}"]`);assert.equal(Number(circle.getAttribute('r')),mexicoPopulationRadius(row.population));assert.equal(circle.style.fill,mexicoPopulationSymbolColor);assert.equal(Number(circle.style.fillOpacity),row.stateCode==='19'?mexicoPopulationSelectedSymbolOpacity:mexicoPopulationSymbolOpacity);}
- q('[data-mi-population-circle="15"]').dispatchEvent(new w.MouseEvent('click',{bubbles:true}));assert.equal(q('[data-mi-state-select]').value,'15');assert.deepEqual(visible(d,'primary').map(el=>el.dataset.miShape),['15']);assert.deepEqual(visible(d,'secondary').map(el=>el.dataset.miShape),['15']);assert.equal(visible(d,'secondary','[data-mi-population-circle]')[0].dataset.miPopulationCircle,'15');assert.ok(q('[data-mi-population-card-value]').textContent.includes(population.states.find(s=>s.stateCode==='15').population.toLocaleString('ja-JP')));
+ change(w,'[data-mi-state-select]','15');assert.equal(q('[data-mi-state-select]').value,'15');assert.deepEqual(visible(d,'primary').map(el=>el.dataset.miShape),['15']);assert.deepEqual(visible(d,'secondary').map(el=>el.dataset.miShape),['19']);assert.equal(visible(d,'secondary','[data-mi-population-circle]')[0].dataset.miPopulationCircle,'19');assert.ok(q('[data-mi-population-card-value]').textContent.includes(population.states.find(s=>s.stateCode==='19').population.toLocaleString('ja-JP')));
  reload=await page(w.location.search);assert.equal(reload.document.querySelector('[data-mi-map=secondary]').dataset.miKind,'population');assert.equal(reload.document.querySelector('[data-mi-state-select]').value,'15');
  q('[data-mi-zoom]').click();assert.notEqual(q('[data-mi-map=primary]').getAttribute('viewBox'),'0 0 900 580');assert.equal(q('[data-mi-map=secondary]').getAttribute('viewBox'),'0 0 900 580');assert.match(q('[data-mi-zoom]').textContent,/輸出図/);
  w.history.replaceState(null,'','?compare=population&state=08&metric=transport&from=population&sourceView=density&only=1');w.dispatchEvent(new w.PopStateEvent('popstate'));assert.equal(q('[data-mi-source-view]').value,'density');assert.equal(q('[data-mi-state-select]').value,'08');assert.equal(q('[data-mi-population-circles]').hasAttribute('hidden'),true);assert.equal(new URL(q('[data-mi-return]').href).searchParams.get('view'),'density');
@@ -221,6 +221,65 @@ test('Zoomed state changes and history restore the camera while the population s
 });
 
 test('Explicit fallback retains both data distributions and status patterns, while the state selector and return remain usable',async()=>{
- const w=await page('?compare=population&state=06&from=population&sourceView=density&only=1&fallback=1');try{const d=w.document,q=s=>d.querySelector(s);assert.equal(q('[data-mexico-field=industry]').dataset.miRenderer,'static-fallback');assert.equal(q('[data-mi-fallback-note]').hidden,false);assert.equal(q('[data-mi-map=primary] [data-mi-shape="06"]').getAttribute('fill'),'url(#mi-primary-confidential)');assert.equal(q('[data-mi-map=primary] [data-mi-shape="06"]').getAttribute('tabindex'),'-1');q('[data-mi-map=primary] [data-mi-shape="08"]').dispatchEvent(new w.MouseEvent('click',{bubbles:true}));assert.equal(q('[data-mi-state-select]').value,'06');change(w,'[data-mi-state-select]','08');assert.equal(q('[data-mi-state-select]').value,'08');assert.equal(new URL(q('[data-mi-return]').href).searchParams.get('fallback'),'1');for(const slot of ['primary','secondary'])assert.deepEqual(visible(d,slot).map(el=>el.dataset.miShape),['08']);
+ const w=await page('?compare=population&state=06&from=population&sourceView=density&only=1&fallback=1');try{const d=w.document,q=s=>d.querySelector(s);assert.equal(q('[data-mexico-field=industry]').dataset.miRenderer,'static-fallback');assert.equal(q('[data-mi-fallback-note]').hidden,false);assert.equal(q('[data-mi-map=primary] [data-mi-shape="06"]').getAttribute('fill'),'url(#mi-primary-confidential)');assert.equal(q('[data-mi-map=primary] [data-mi-shape="06"]').getAttribute('tabindex'),'-1');q('[data-mi-map=primary] [data-mi-shape="08"]').dispatchEvent(new w.MouseEvent('click',{bubbles:true}));assert.equal(q('[data-mi-state-select]').value,'06');change(w,'[data-mi-state-select]','08');assert.equal(q('[data-mi-state-select]').value,'08');assert.equal(new URL(q('[data-mi-return]').href).searchParams.get('fallback'),'1');assert.deepEqual(visible(d,'primary').map(el=>el.dataset.miShape),['08']);assert.deepEqual(visible(d,'secondary').map(el=>el.dataset.miShape),['06']);
  }finally{await w.happyDOM.close();}
+});
+
+
+test('National population comparison keeps its source view while industry selection, reload and history change',async()=>{
+ for(const view of ['density','population']){
+  const w=await page(`?compare=population&from=population&sourceView=${view}&sourceState=&sourceOnly=0`);let reload;
+  try{
+   const q=s=>w.document.querySelector(s);
+   const assertNational=d=>{
+    assert.equal(visible(d,'secondary').length,32);
+    assert.equal(d.querySelectorAll('[data-mi-map=secondary] .is-selected').length,0);
+    assert.match(d.querySelector('[data-mi-map-heading=secondary]').textContent,/^比較元：/);
+    assert.match(d.querySelector('[data-mi-map-heading=primary]').textContent,/^比較先：/);
+    const link=d.querySelector('[data-mi-return]'),back=new URL(link.href);
+    assert.match(link.textContent,/全国の元の/);assert.equal(back.searchParams.has('state'),false);assert.equal(back.searchParams.has('only'),false);
+   };
+   assertNational(w.document);change(w,'[data-mi-state-select]','14');
+   q('[data-mi-only]').checked=true;q('[data-mi-only]').dispatchEvent(new w.Event('change'));
+   assert.deepEqual(visible(w.document,'primary').map(el=>el.dataset.miShape),['14']);assertNational(w.document);
+   q('[data-mi-zoom]').click();assertNational(w.document);
+   reload=await page(w.location.search);assertNational(reload.document);
+   assert.equal(reload.document.querySelector('[data-mi-state-select]').value,'14');
+   w.history.back();await w.happyDOM.waitUntilComplete();assertNational(w.document);
+   q('[data-mi-all]').click();assertNational(w.document);
+  }finally{await w.happyDOM.close();if(reload)await reload.happyDOM.close();}
+ }
+ const industry=await page('?compare=population&from=industry&state=05&metric=transport');
+ try{const q=s=>industry.document.querySelector(s);assert.equal(q('[data-mi-figure=primary]').style.order,'0');assert.match(q('[data-mi-map-heading=primary]').textContent,/^比較元：/);assert.match(q('[data-mi-map-heading=secondary]').textContent,/^比較先：/);}finally{await industry.happyDOM.close();}
+});
+
+test('Industry geographic labels retain all topics without duplicate state abbreviations and isolated selection is visible',async()=>{
+ const w=await page();
+ try{
+  const q=s=>w.document.querySelector(s),points=visible(w.document,'primary','[data-mi-reading-markers] [data-mi-region-option]');
+  assert.equal(points.length,10);assert.equal(visible(w.document,'primary','[data-mi-label]').length,0);
+  assert.equal(q('[data-mi-map=primary]').querySelectorAll('.is-selected').length,0,'The initial overview must not invent a Coahuila selection');
+  for(const point of points){assert.ok(point.querySelector('[data-mi-region-name]').textContent);assert.ok(point.querySelector('[data-mi-region-topic]').textContent);assert.ok(point.querySelector('[data-mi-region-leader]'));}
+  q('[data-mi-reading-markers] [data-mi-region-option="09"][data-mi-region-sector=services]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
+  assert.equal(q('[data-mi-map=primary] [data-mi-shape="09"]').classList.contains('is-selected'),true);
+  q('[data-mi-only]').checked=true;q('[data-mi-only]').dispatchEvent(new w.Event('change'));
+  assert.deepEqual(visible(w.document,'primary').map(el=>el.dataset.miShape),['09']);
+  assert.ok(visible(w.document,'primary','[data-mi-reading-markers] [data-mi-region-option]').every(point=>point.dataset.miRegionOption==='09'));
+  q('[data-mi-all]').click();assert.equal(visible(w.document,'primary').length,32);
+ }finally{await w.happyDOM.close();}
+});
+
+test('Visible industry map controls preserve zoom across selection, reload and history with an independent population camera',async()=>{
+ const source='?view=population&reading=overview&frame=120,80,600,400';
+ const w=await page(`?compare=population&from=population&sourceView=population&sourceState=&sourceOnly=0&sourcePopulationQuery=${encodeURIComponent(source)}`);let reload;
+ try{
+  const q=s=>w.document.querySelector(s),primary=q('[data-mi-map=primary]');
+  const sourceFrame=()=>assert.equal(q('[data-mi-map=secondary]').getAttribute('viewBox'),'120 80 600 400');
+  sourceFrame();q('[data-mi-map-action=in]').click();const zoomed=primary.getAttribute('viewBox');assert.notEqual(zoomed,'0 0 900 580');sourceFrame();
+  change(w,'[data-mi-state-select]','14');assert.equal(primary.getAttribute('viewBox'),zoomed);sourceFrame();
+  reload=await page(w.location.search);assert.equal(reload.document.querySelector('[data-mi-map=primary]').getAttribute('viewBox'),zoomed);assert.equal(reload.document.querySelector('[data-mi-map=secondary]').getAttribute('viewBox'),'120 80 600 400');
+  const back=new URL(q('[data-mi-return]').href);assert.equal(back.searchParams.get('frame'),'120,80,600,400');assert.equal(back.searchParams.get('reading'),'overview');assert.equal(back.searchParams.has('state'),false);
+  q('[data-mi-map-action=fit]').click();assert.equal(primary.getAttribute('viewBox'),'0 0 900 580');sourceFrame();
+  w.history.back();await w.happyDOM.waitUntilComplete();assert.equal(primary.getAttribute('viewBox'),zoomed);sourceFrame();
+ }finally{await w.happyDOM.close();if(reload)await reload.happyDOM.close();}
 });

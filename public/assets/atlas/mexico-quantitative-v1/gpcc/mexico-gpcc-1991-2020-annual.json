@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "mexico-gpcc-1991-2020-annual",
+  "file": "mexico-gpcc-1991-2020-annual.f32",
+  "width": 132,
+  "height": 80,
+  "dtype": "float32-little-endian",
+  "order": "row-major; north to south, west to east",
+  "origin": [
+    -119.0,
+    34.0
+  ],
+  "resolution": [
+    0.25,
+    -0.25
+  ],
+  "pixelRegistration": "origin is upper-left cell EDGE; values refer to native 0.25-degree grid cells; first centre = [-118.875,33.875]",
+  "unit": "mm/year",
+  "unitLabelJa": "mm/年",
+  "period": "1991-01-01/2020-12-31",
+  "noData": -99999.9921875,
+  "annualComputation": "Float64 sum of all 12 valid original float32 monthly normals, then one float32 storage cast; never average or multiply by days. One missing month makes the whole annual value missing.",
+  "spatialMask": "Keep a native cell only when its footprint has positive-area intersection with the original 32-state INEGI land union. Do not discard a coastal cell because its centre is offshore. Native cell values apply to gridded climate support, not exact local station measurements. Mask outside land at output-pixel stage.",
+  "landIntersectionMaskFile": "mexico-gpcc-1991-2020-land-intersection.u8",
+  "landIntersectionMaskMeaning": "1 means footprint intersects Mexican boundary; independent of precipitation validity. Allows distinguishing missing Mexican support from outside-Mexico cells.",
+  "originalWindow": {
+    "columnRowEdges": [
+      244,
+      224,
+      376,
+      304
+    ],
+    "globalShape": [
+      720,
+      1440
+    ]
+  },
+  "sha256": "fd90fa28043ff894f4141bfeb0cb26f52b6575ebb07c397a363f2b76e0e692de",
+  "bytes": 42240
+}

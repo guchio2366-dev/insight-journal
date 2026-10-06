@@ -13,6 +13,7 @@ import {fileURLToPath} from 'node:url';
 import {inflateSync} from 'node:zlib';
 import {chromium} from 'playwright';
 import astroConfig from '../astro.config.mjs';
+import {captureMexicoPCReview} from './capture-mexico-pc-review.mjs';
 
 const repo = fileURLToPath(new URL('../', import.meta.url));
 const dist = path.join(repo, 'dist');
@@ -512,6 +513,8 @@ async function main() {
       await writeFile(path.join(output, 'metadata.json'), `${JSON.stringify(metadata, null, 2)}\n`);
       console.log(`${result.status.toUpperCase()}: ${result.name}${result.failure ? `: ${result.failure.split('\n')[0]}` : ''}`);
     }
+    metadata.pcReview = await captureMexicoPCReview({browser, origin: hosted.origin, basePath, output: path.join(output, 'pc-review')});
+    assert.equal(metadata.pcReview.status, 'passed', 'PC comparison capture failed. Inspect mexico-agriculture/pc-review metadata and PNGs.');
     const failures = metadata.captures.filter(item => item.status !== 'passed');
     assert.equal(failures.length, 0, `${failures.length} browser capture(s) failed. Inspect review-artifacts/mexico-agriculture metadata and failure PNGs.`);
     metadata.status = 'passed';

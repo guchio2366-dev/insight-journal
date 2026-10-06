@@ -1,5 +1,33 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+
+test('A national population source remains national after nature selection, URL round-trip and return', () => {
+  const initial = new URL('https://example.test/nature/?compare=population&from=population&sourceState=&sourceView=population&state=25');
+  const state = readMexicoNatureState(initial, ['09','25','10']);
+  assert.equal(state.sourceState, '');
+  const changed = {...state, state:'10', category:'elevation'};
+  const roundTrip = readMexicoNatureState(writeMexicoNatureState(initial, changed), ['09','25','10']);
+  assert.equal(roundTrip.sourceState, '');
+  const back = new URL(mexicoNatureReturnUrl('/population/', roundTrip), initial.origin);
+  assert.equal(back.searchParams.get('state'), '');
+  assert.equal(back.searchParams.get('view'), 'population');
+});
+
+test('The exact population query, including camera and unknown source flags, returns only to the fixed population route', () => {
+  const source = '?category=distribution&view=population&state=&only=0&frame=210,100,350,220&reading=item&retainedSource=original';
+  const initial = new URL('https://example.test/nature/?from=population&compare=population&sourceState=&state=25');
+  initial.searchParams.set('sourcePopulationQuery', source);
+  const state = readMexicoNatureState(initial, ['09','25','10']);
+  const restored = readMexicoNatureState(writeMexicoNatureState(initial, {...state,state:'10',category:'precipitation'}), ['09','25','10']);
+  assert.equal(restored.sourcePopulationQuery, source);
+  assert.equal(mexicoNatureReturnUrl('/atlas/mexico/population/', restored), '/atlas/mexico/population/' + source);
+  for (const invalid of ['https://example.invalid/', '//example.invalid/', '?state=99', '?view=other', '?only=yes', '?view=density#fragment', '?state=25\n', '?'+'x'.repeat(2048)]) {
+    const url = new URL(initial); url.searchParams.set('sourcePopulationQuery', invalid);
+    const rejected = readMexicoNatureState(url, ['09','25','10']);
+    assert.equal(rejected.sourcePopulationQuery, undefined);
+    assert.ok(mexicoNatureReturnUrl('/population/', rejected).startsWith('/population/?'));
+  }
+});
 import {readMexicoNatureState, writeMexicoNatureState, mexicoNatureReturnUrl, mexicoNatureIndicator, mexicoNatureNormalView, mexicoNatureSelectView, natureClassIds, indicatorColor, irrigationBins, densityBins, natureComparisonReading} from '../../src/lib/atlas-mexico-nature.ts';
 import {irrigationBins as agricultureBins, irrigationColor} from '../../src/lib/atlas-mexico-agriculture.ts';
 import {mexicoDensityBins, mexicoDensityColor} from '../../src/lib/atlas-mexico-population.ts';

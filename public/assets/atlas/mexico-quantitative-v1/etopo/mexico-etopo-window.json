@@ -1,0 +1,53 @@
+{
+  "sourceSha256": "9d27d4b8ea8e76977e2988bca667d7c8fa68b927355feffcddd6b4875a7fd08e",
+  "sourceSha256Status": "Previously pinned full-source digest; not recomputed from this partial download",
+  "file": "mexico-etopo-window.f32",
+  "sha256": "47e9c1792e653c05e94058b2b7311a18a7db38c094d47fb0f8a5acfef45c9743",
+  "bytes": 9504000,
+  "width": 1980,
+  "height": 1200,
+  "window": [
+    3660,
+    3360,
+    5640,
+    4560
+  ],
+  "windowConvention": "[columnStart,rowStart,columnEndExclusive,rowEndExclusive]",
+  "bounds": [
+    -119,
+    14,
+    -86,
+    34
+  ],
+  "origin": [
+    -119,
+    34
+  ],
+  "resolution": [
+    0.016666666666666666,
+    -0.016666666666666666
+  ],
+  "dtype": "float32-little-endian",
+  "noData": -99999,
+  "unit": "m",
+  "verticalDatum": "EGM2008",
+  "geoKeys": {
+    "GTModelTypeGeoKey": 2,
+    "GTRasterTypeGeoKey": 1,
+    "GTCitationGeoKey": "WGS 84 + EGM2008 height",
+    "GeographicTypeGeoKey": 4326,
+    "VerticalCSTypeGeoKey": 3855
+  },
+  "method": "Exact native float32 TIFF tile decode with tifffile/imagecodecs; crop only, no resampling or integer casting",
+  "verification": {
+    "sourceTotalBytes": 465969062,
+    "downloadedRangeBytes": 7540857,
+    "fullSourceHashRecomputed": false,
+    "matchesRetainedWindowFromPreviouslyVerifiedFullSource": true,
+    "decodedCells": 2376000,
+    "tileCount": 45,
+    "allCellsCovered": true,
+    "noDataCells": 0,
+    "nonfiniteCells": 0
+  }
+}

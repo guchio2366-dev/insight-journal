@@ -1,0 +1,498 @@
+{
+  "sourceUrl": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/60s/60s_surface_elev_gtif/ETOPO_2022_v1_60s_N90W180_surface.tif",
+  "ranges": [
+    {
+      "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/60s/60s_surface_elev_gtif/ETOPO_2022_v1_60s_N90W180_surface.tif",
+      "retrievedAt": "2026-10-06T08:18:21.850898+00:00",
+      "status": 206,
+      "headers": {
+        "date": "Tue, 06 Oct 2026 08:18:21 GMT",
+        "server": "envoy",
+        "strict-transport-security": "max-age=31536000;",
+        "last-modified": "Tue, 04 Oct 2022 21:52:12 GMT",
+        "accept-ranges": "bytes",
+        "content-length": "65536",
+        "x-frame-options": "SAMEORIGIN",
+        "access-control-allow-origin": "*",
+        "access-control-allow-headers": "X-Requested-With, Content-Type",
+        "content-range": "bytes 0-65535/465969062",
+        "content-type": "image/tiff",
+        "x-envoy-upstream-service-time": "126",
+        "connection": "close"
+      },
+      "range": [
+        0,
+        65535
+      ],
+      "bytes": 65536,
+      "sha256": "4369551e0384aa43673a879571f73885465d0b87c435f48a5a7b4a748860b2ff",
+      "file": "source-ranges/000000000000-000000065535.bin",
+      "tls": "Python urllib default certificate and hostname validation; no overrides"
+    },
+    {
+      "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/60s/60s_surface_elev_gtif/ETOPO_2022_v1_60s_N90W180_surface.tif",
+      "range": [
+        114210677,
+        115929784
+      ],
+      "bytes": 1719108,
+      "sha256": "28f7ebce4787046ec3158f6a051ce5661941065d974f51875e87d02c02bac96b",
+      "file": "source-ranges/000114210677-000115929784.bin",
+      "status": 206,
+      "headers": {
+        "date": "Tue, 06 Oct 2026 08:20:52 GMT",
+        "server": "envoy",
+        "strict-transport-security": "max-age=31536000;",
+        "last-modified": "Tue, 04 Oct 2022 21:52:12 GMT",
+        "accept-ranges": "bytes",
+        "content-length": "1719108",
+        "x-frame-options": "SAMEORIGIN",
+        "access-control-allow-origin": "*",
+        "access-control-allow-headers": "X-Requested-With, Content-Type",
+        "content-range": "bytes 114210677-115929784/465969062",
+        "content-type": "image/tiff",
+        "x-envoy-upstream-service-time": "108",
+        "connection": "close"
+      },
+      "retrievedAt": "2026-10-06T08:20:53.128513+00:00",
+      "tls": "Python urllib default certificate and hostname validation; no overrides"
+    },
+    {
+      "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/60s/60s_surface_elev_gtif/ETOPO_2022_v1_60s_N90W180_surface.tif",
+      "range": [
+        124236478,
+        125851505
+      ],
+      "bytes": 1615028,
+      "sha256": "746cf73dabcefca6590193226a7671f3a37082764ecdc47b6f465406d143ebb5",
+      "file": "source-ranges/000124236478-000125851505.bin",
+      "status": 206,
+      "headers": {
+        "date": "Tue, 06 Oct 2026 08:20:53 GMT",
+        "server": "envoy",
+        "strict-transport-security": "max-age=31536000;",
+        "last-modified": "Tue, 04 Oct 2022 21:52:12 GMT",
+        "accept-ranges": "bytes",
+        "content-length": "1615028",
+        "x-frame-options": "SAMEORIGIN",
+        "access-control-allow-origin": "*",
+        "access-control-allow-headers": "X-Requested-With, Content-Type",
+        "content-range": "bytes 124236478-125851505/465969062",
+        "content-type": "image/tiff",
+        "x-envoy-upstream-service-time": "127",
+        "connection": "close"
+      },
+      "retrievedAt": "2026-10-06T08:20:53.731391+00:00",
+      "tls": "Python urllib default certificate and hostname validation; no overrides"
+    },
+    {
+      "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/60s/60s_surface_elev_gtif/ETOPO_2022_v1_60s_N90W180_surface.tif",
+      "range": [
+        134413836,
+        135742417
+      ],
+      "bytes": 1328582,
+      "sha256": "a68e5c873dd6a6f99a190fd150d9971cbef967d1fea4bfaf38d77d12b0334c26",
+      "file": "source-ranges/000134413836-000135742417.bin",
+      "status": 206,
+      "headers": {
+        "date": "Tue, 06 Oct 2026 08:20:53 GMT",
+        "server": "envoy",
+        "strict-transport-security": "max-age=31536000;",
+        "last-modified": "Tue, 04 Oct 2022 21:52:12 GMT",
+        "accept-ranges": "bytes",
+        "content-length": "1328582",
+        "x-frame-options": "SAMEORIGIN",
+        "access-control-allow-origin": "*",
+        "access-control-allow-headers": "X-Requested-With, Content-Type",
+        "content-range": "bytes 134413836-135742417/465969062",
+        "content-type": "image/tiff",
+        "x-envoy-upstream-service-time": "106",
+        "connection": "close"
+      },
+      "retrievedAt": "2026-10-06T08:20:54.199176+00:00",
+      "tls": "Python urllib default certificate and hostname validation; no overrides"
+    },
+    {
+      "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/60s/60s_surface_elev_gtif/ETOPO_2022_v1_60s_N90W180_surface.tif",
+      "range": [
+        144078066,
+        145472045
+      ],
+      "bytes": 1393980,
+      "sha256": "d26a426d69215bb6376d43ddccf76936a0d5c766cc9ba9ad9f1a79191bed5f52",
+      "file": "source-ranges/000144078066-000145472045.bin",
+      "status": 206,
+      "headers": {
+        "date": "Tue, 06 Oct 2026 08:20:54 GMT",
+        "server": "envoy",
+        "strict-transport-security": "max-age=31536000;",
+        "last-modified": "Tue, 04 Oct 2022 21:52:12 GMT",
+        "accept-ranges": "bytes",
+        "content-length": "1393980",
+        "x-frame-options": "SAMEORIGIN",
+        "access-control-allow-origin": "*",
+        "access-control-allow-headers": "X-Requested-With, Content-Type",
+        "content-range": "bytes 144078066-145472045/465969062",
+        "content-type": "image/tiff",
+        "x-envoy-upstream-service-time": "121",
+        "connection": "close"
+      },
+      "retrievedAt": "2026-10-06T08:20:54.788267+00:00",
+      "tls": "Python urllib default certificate and hostname validation; no overrides"
+    },
+    {
+      "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/60s/60s_surface_elev_gtif/ETOPO_2022_v1_60s_N90W180_surface.tif",
+      "range": [
+        153467548,
+        154886170
+      ],
+      "bytes": 1418623,
+      "sha256": "116c6db5c85cbbe0dd448c5cef601351ada2a3e084e0eea64b0780856533973f",
+      "file": "source-ranges/000153467548-000154886170.bin",
+      "status": 206,
+      "headers": {
+        "date": "Tue, 06 Oct 2026 08:20:55 GMT",
+        "server": "envoy",
+        "strict-transport-security": "max-age=31536000;",
+        "last-modified": "Tue, 04 Oct 2022 21:52:12 GMT",
+        "accept-ranges": "bytes",
+        "content-length": "1418623",
+        "x-frame-options": "SAMEORIGIN",
+        "access-control-allow-origin": "*",
+        "access-control-allow-headers": "X-Requested-With, Content-Type",
+        "content-range": "bytes 153467548-154886170/465969062",
+        "content-type": "image/tiff",
+        "x-envoy-upstream-service-time": "135",
+        "connection": "close"
+      },
+      "retrievedAt": "2026-10-06T08:20:55.487515+00:00",
+      "tls": "Python urllib default certificate and hostname validation; no overrides"
+    }
+  ],
+  "tiles": [
+    {
+      "index": 1119,
+      "offset": 114210677,
+      "bytes": 192748,
+      "sha256": "68d2d5a18be92618d0de13f0da4312d92b8ad4a7d3626b87b6da0e8d8405a3e5"
+    },
+    {
+      "index": 1120,
+      "offset": 114403425,
+      "bytes": 189726,
+      "sha256": "6d3baf056db019d4f86aed1ac18802f494bbdcb44f3e98211477ed9cc6fa33cd"
+    },
+    {
+      "index": 1121,
+      "offset": 114593151,
+      "bytes": 187734,
+      "sha256": "165418f50c2182ca6e91a53f56e3e4be9e091e38d0f6812ca540adf6372a3dc9"
+    },
+    {
+      "index": 1122,
+      "offset": 114780885,
+      "bytes": 176568,
+      "sha256": "25bb2ebdf209ea8606632198ebe26a3f63787aecdab3e08e49bfbfef9cd56806"
+    },
+    {
+      "index": 1123,
+      "offset": 114957453,
+      "bytes": 177357,
+      "sha256": "17c0839cd82ec746a4d8863d4706d098e928dc4859f6fc67497c0f64917df905"
+    },
+    {
+      "index": 1124,
+      "offset": 115134810,
+      "bytes": 194932,
+      "sha256": "f8c30efd394cad9104ca79f070fd6c44e52d0ee4bffb1aeb693fe3388a4f96ba"
+    },
+    {
+      "index": 1125,
+      "offset": 115329742,
+      "bytes": 198688,
+      "sha256": "65692178650d2fe9469b247a897aaa8ece5860764d4462fb44429d8a2d4617ce"
+    },
+    {
+      "index": 1126,
+      "offset": 115528430,
+      "bytes": 203148,
+      "sha256": "a1ffd812c5ee21e32b26c3b5d054d027310d31be6f10397188ce95b32bddae64"
+    },
+    {
+      "index": 1127,
+      "offset": 115731578,
+      "bytes": 198207,
+      "sha256": "ba91f56e2bb33f94538a926e48347e6803f9c128ed17ef166c50cfdf936e0759"
+    },
+    {
+      "index": 1204,
+      "offset": 124236478,
+      "bytes": 151199,
+      "sha256": "886b85b5c4ab936f4c52af6313b83df0c23d23278b710d3f4bb4f4da044b7462"
+    },
+    {
+      "index": 1205,
+      "offset": 124387677,
+      "bytes": 179642,
+      "sha256": "c9a2c416c68f174e56d259ea2cc637faf232c9139b80853c043caaa48123365e"
+    },
+    {
+      "index": 1206,
+      "offset": 124567319,
+      "bytes": 194196,
+      "sha256": "967c5f282e7aadce648100fb7f5b6d756b09ed99dd4b1eb69c6cefc4384cce81"
+    },
+    {
+      "index": 1207,
+      "offset": 124761515,
+      "bytes": 185665,
+      "sha256": "12f2fda087a37d5392e2cd3d8398292b67ad2284e346857cf50a3cb61b27a245"
+    },
+    {
+      "index": 1208,
+      "offset": 124947180,
+      "bytes": 191720,
+      "sha256": "07bc47693b202a1aca394c8fb4c3dd9fd34a62a5d8ba2ab849d7382b3e4ee42f"
+    },
+    {
+      "index": 1209,
+      "offset": 125138900,
+      "bytes": 196071,
+      "sha256": "1f6b46d20e9ea4f0d2598441b9da4ea04a028b4b8a1a0c992e4510c7a8bbe6c6"
+    },
+    {
+      "index": 1210,
+      "offset": 125334971,
+      "bytes": 192812,
+      "sha256": "f726953adb6b0c999c08d5ddb7b9fe4a2f49f0eeb47a06ed33095031c99ea5c7"
+    },
+    {
+      "index": 1211,
+      "offset": 125527783,
+      "bytes": 170535,
+      "sha256": "706218a54fec346280bbb7adc9ff9cba7d0cb920b8b4b2b718ba725eb77390db"
+    },
+    {
+      "index": 1212,
+      "offset": 125698318,
+      "bytes": 153188,
+      "sha256": "cb82d4e65c6f77e52f647d1eb3c3db7c02b19ea02dd8ee502de7398cbccd9b20"
+    },
+    {
+      "index": 1289,
+      "offset": 134413836,
+      "bytes": 119875,
+      "sha256": "42e986157c774786f382975f59ef9a7ba5bd03ccb912c8e6ac51a64a51651514"
+    },
+    {
+      "index": 1290,
+      "offset": 134533711,
+      "bytes": 152891,
+      "sha256": "d6f16170afab5c05b2c3e815ba29f908dc11288bce80760f52bdc3ad01589905"
+    },
+    {
+      "index": 1291,
+      "offset": 134686602,
+      "bytes": 180990,
+      "sha256": "95f1c8a8a2455df71353bdf4f667bf6566549b064cd3fc2b5c4431557366f897"
+    },
+    {
+      "index": 1292,
+      "offset": 134867592,
+      "bytes": 192586,
+      "sha256": "2261de6ea7564c23243883fb3d25f36b3cc68a5dfc82ee42ed8b861ac1f9a933"
+    },
+    {
+      "index": 1293,
+      "offset": 135060178,
+      "bytes": 190126,
+      "sha256": "56b4f666aaa0680b320385d2eb14ee3b6608b25263c213c8efb8c82eecc8ea6c"
+    },
+    {
+      "index": 1294,
+      "offset": 135250304,
+      "bytes": 154078,
+      "sha256": "8b8ae40e1baade9e64f875da8895e1f66b9994a9941a2cfd5fef0f135caf0f66"
+    },
+    {
+      "index": 1295,
+      "offset": 135404382,
+      "bytes": 109987,
+      "sha256": "c5509d64f8c464b7763390a378cecbfd91dda24dd84e2ad2aec7b6ccf092eebf"
+    },
+    {
+      "index": 1296,
+      "offset": 135514369,
+      "bytes": 106956,
+      "sha256": "2d56fc71ce49f316f76b32bb24c76861a8fd1f1a424c8a7e3f1dd4f856074628"
+    },
+    {
+      "index": 1297,
+      "offset": 135621325,
+      "bytes": 121093,
+      "sha256": "4c17f710bad8af6006382b35168f55f95f5f9ae8bf704cd176a027a93eb50731"
+    },
+    {
+      "index": 1374,
+      "offset": 144078066,
+      "bytes": 121559,
+      "sha256": "5bcd7136626d15fe4d7986f3684507b6e91e52cf31d42b0110dde107abdb5ca6"
+    },
+    {
+      "index": 1375,
+      "offset": 144199625,
+      "bytes": 125204,
+      "sha256": "a5370c8f973bbb4340443562b974f6a838432eeaa0c9b767e246a81d12953e40"
+    },
+    {
+      "index": 1376,
+      "offset": 144324829,
+      "bytes": 152215,
+      "sha256": "2da4d9683667694a6aa901f4793f05e4f092afe5bf4f66f07da4e7e4ae218205"
+    },
+    {
+      "index": 1377,
+      "offset": 144477044,
+      "bytes": 180463,
+      "sha256": "09e28025f3249af28933fc60dcefc9549efc4b04c50522343b8cf12d47b9c314"
+    },
+    {
+      "index": 1378,
+      "offset": 144657507,
+      "bytes": 195506,
+      "sha256": "3bf932904c8bf87f68a57a4837a05736f8460bcf1953085065a57961fa97e471"
+    },
+    {
+      "index": 1379,
+      "offset": 144853013,
+      "bytes": 174882,
+      "sha256": "2ff70dd722efd05564079d5aba31d0d58f3f1c96247f7f7703ffec8f505954ab"
+    },
+    {
+      "index": 1380,
+      "offset": 145027895,
+      "bytes": 139165,
+      "sha256": "4e408955823372bb543bd045581c78aaabb3e2eb1c098a36dd19f7fdd4b444b4"
+    },
+    {
+      "index": 1381,
+      "offset": 145167060,
+      "bytes": 176374,
+      "sha256": "d5ade05f014a7e4cf8435479de3aeca4371bdbd94f49357279f89d5d362ce9ca"
+    },
+    {
+      "index": 1382,
+      "offset": 145343434,
+      "bytes": 128612,
+      "sha256": "78e0a8ed9048468ec64fd1a65f62a794dd8dc276773f1d447a1f71ccb99892d4"
+    },
+    {
+      "index": 1459,
+      "offset": 153467548,
+      "bytes": 119808,
+      "sha256": "44ba2caa5103d1d38e9afe8482499c4dad9e08acafddb17bb4f69e4564fbd3b7"
+    },
+    {
+      "index": 1460,
+      "offset": 153587356,
+      "bytes": 122267,
+      "sha256": "ae228e7b14c031bca041ca202c1cf3d9220892c59e93200515ba57d85da66c38"
+    },
+    {
+      "index": 1461,
+      "offset": 153709623,
+      "bytes": 155648,
+      "sha256": "29a3d52e2b90fe766cd17a49b9662d9587d579315ffb36185a3f73d96ec19e92"
+    },
+    {
+      "index": 1462,
+      "offset": 153865271,
+      "bytes": 175349,
+      "sha256": "c8879fa8b3824fc70edeef6786061289b33d27a0249e5fedfa76d9b5eb9780a3"
+    },
+    {
+      "index": 1463,
+      "offset": 154040620,
+      "bytes": 158249,
+      "sha256": "32ee941bce23b49ba0ba80746477ec66aab291414b9ad2fe557c3a89fd548b51"
+    },
+    {
+      "index": 1464,
+      "offset": 154198869,
+      "bytes": 171125,
+      "sha256": "4929b9ee8766beff7039cd30da171c1dc80d4dcaf4408bb082b90f0495c40fa9"
+    },
+    {
+      "index": 1465,
+      "offset": 154369994,
+      "bytes": 176551,
+      "sha256": "b9addb3d3ba2b0a353496469adc80a8d3af5da0417b31f363b5a00083e9120e5"
+    },
+    {
+      "index": 1466,
+      "offset": 154546545,
+      "bytes": 188807,
+      "sha256": "44c2c5d19e3b923b068d80b71f857f67976537c8b24258cb107377eaee68b265"
+    },
+    {
+      "index": 1467,
+      "offset": 154735352,
+      "bytes": 150819,
+      "sha256": "f7464786ca4b5a4a4dfdf4f76860172d0dd6b5ef7e4966de6e6931911efe7c8e"
+    }
+  ],
+  "decoding": {
+    "sourceSha256": "9d27d4b8ea8e76977e2988bca667d7c8fa68b927355feffcddd6b4875a7fd08e",
+    "sourceSha256Status": "Previously pinned full-source digest; not recomputed from this partial download",
+    "file": "mexico-etopo-window.f32",
+    "sha256": "47e9c1792e653c05e94058b2b7311a18a7db38c094d47fb0f8a5acfef45c9743",
+    "bytes": 9504000,
+    "width": 1980,
+    "height": 1200,
+    "window": [
+      3660,
+      3360,
+      5640,
+      4560
+    ],
+    "windowConvention": "[columnStart,rowStart,columnEndExclusive,rowEndExclusive]",
+    "bounds": [
+      -119,
+      14,
+      -86,
+      34
+    ],
+    "origin": [
+      -119,
+      34
+    ],
+    "resolution": [
+      0.016666666666666666,
+      -0.016666666666666666
+    ],
+    "dtype": "float32-little-endian",
+    "noData": -99999,
+    "unit": "m",
+    "verticalDatum": "EGM2008",
+    "geoKeys": {
+      "GTModelTypeGeoKey": 2,
+      "GTRasterTypeGeoKey": 1,
+      "GTCitationGeoKey": "WGS 84 + EGM2008 height",
+      "GeographicTypeGeoKey": 4326,
+      "VerticalCSTypeGeoKey": 3855
+    },
+    "method": "Exact native float32 TIFF tile decode with tifffile/imagecodecs; crop only, no resampling or integer casting",
+    "verification": {
+      "sourceTotalBytes": 465969062,
+      "downloadedRangeBytes": 7540857,
+      "fullSourceHashRecomputed": false,
+      "matchesRetainedWindowFromPreviouslyVerifiedFullSource": true,
+      "decodedCells": 2376000,
+      "tileCount": 45,
+      "allCellsCovered": true,
+      "noDataCells": 0,
+      "nonfiniteCells": 0
+    }
+  }
+}

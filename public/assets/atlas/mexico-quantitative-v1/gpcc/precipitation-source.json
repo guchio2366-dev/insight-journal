@@ -1,0 +1,75 @@
+{
+  "dataset": "GPCC Global Precipitation Climatology (1991-2020) version 2025, 0.25 degree",
+  "publisher": "GPCC / Deutscher Wetterdienst",
+  "downloadUrl": "https://opendata.dwd.de/climate_environment/GPCC/GPCC_Precipitation_Analysis_Climatology/Version_2025/gpcc_precipitation_analysis_climatology_1991_2020_v2025_025.nc.gz",
+  "sourceUrl": "https://opendata.dwd.de/climate_environment/GPCC/html/gpcc_precipitation_analysis_climatology_v2025_doi_download.html",
+  "checksumUrl": "https://opendata.dwd.de/climate_environment/GPCC/GPCC_Precipitation_Analysis_Climatology/Version_2025/readme_md5_gpcc_precipitation_analysis_climatology_1991_2020_v2025.txt",
+  "doi": "https://doi.org/10.5676/DWD_GPCC/CLIMAT_V2025_025",
+  "retrievedDate": "2026-10-06",
+  "archive": {
+    "file": "gpcc_precipitation_analysis_climatology_1991_2020_v2025_025.nc.gz",
+    "bytes": 28442738,
+    "sha256": "3bd80d05df52572f6409b594ae26b43e9045147cb3c25254cddb5a934c16e5c5"
+  },
+  "officialMd5Matches": true,
+  "netcdf": {
+    "file": "gpcc_precipitation_analysis_climatology_1991_2020_v2025_025.nc",
+    "bytes": 248853128,
+    "sha256": "83155e6689b0475daa13d3d0c5ef957cf07e5468b2647d23878d91f40fb8ae82"
+  },
+  "network": {
+    "host": "opendata.dwd.de",
+    "TLS": "curl default certificate and hostname verification enabled; no insecure flags, trust-store changes, pinned-key exceptions, redirect following, proxy bypass or alternate storage",
+    "httpStatus": 200,
+    "redirectsFollowed": 0,
+    "gzipTransferSizeLimit": 30000000
+  },
+  "period": [
+    "1991-01-01",
+    "2020-12-31"
+  ],
+  "sourceUnit": "mm/month",
+  "outputUnit": "mm/year",
+  "coordinateSystem": "geographic longitude/latitude on regular 0.25-degree grid; source does not explicitly declare a geodetic datum",
+  "latitudeUnitAnomaly": {
+    "declared": "degrees_south",
+    "used": "north-positive values in the actual lat array, descending from 89.875 to -89.875; no data flip",
+    "evidence": [
+      "source coordinate arrays",
+      "current repository exact-product Europe/West Asia processing",
+      "official legacy GPCC format description has first row at positive northern latitude",
+      "four Mexico control cells have 12 valid values; their sign-flipped Pacific counterparts are all missing"
+    ]
+  },
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://www.dwd.de/EN/service/legal_notice/legal_notice.html",
+  "licenseEvidence": {
+    "inheritedFrom": "data-source/atlas/europe/precipitation/source.json",
+    "inheritedFileSha256": "eef8711e54ef8a3c28c40dbcf3bd79b89b69a2f348a3385ea6cecec12cafdc78",
+    "retainedAs": "source/manifest.json",
+    "priorEvidence": {
+      "publisherProductLinksToLegalNotice": true,
+      "officialIndexedLegalNoticeStatesCcBy40": true,
+      "officialIndexedQuote": "Re-use is permitted solely under the terms of the Creative Commons license BY 4.0 (CC BY 4.0) providing the source is duly acknowledged.",
+      "checkedAt": "2026-10-02",
+      "directLegalNoticeStatus": 403,
+      "dataCiteDoi": "10.5676/dwd_gpcc/climat_v2025_025",
+      "dataCiteRightsList": [],
+      "note": "DataCite confirms the exact publisher and product URL but supplies no registered rights. The license evidence is the official DWD indexed legal-notice text linked by the product page, not a DataCite rights claim. No access bypass used."
+    },
+    "currentVerification": "Same exact archive SHA and product-page link verified. DWD README on allowed host confirms free access. No www.dwd.de request was made in this run; complete legal notice was not re-fetched."
+  },
+  "citation": "Rustemeier, Elke; Finger, Peter; Schirmeister, Zora; Ziese, Markus (2025): GPCC Precipitation Analysis Climatology Version 2025 at 0.25°. DOI: 10.5676/DWD_GPCC/CLIMAT_V2025_025. GPCC/DWD, CC BY 4.0.",
+  "modifications": "Extract Mexico rectangle; sum 12 complete monthly normals; retain every cell with positive land intersection; clip at original polygon pixel centres; color by continuous blue mm/year legend. No gap fill, spatial smoothing or station-to-grid equality claimed.",
+  "originalMethod": "Rain-gauge monthly climatological interpolation. The fixed-period product requires at least 20 complete years, per product description; this is not a requirement of 30 complete observed years at every station.",
+  "boundary": {
+    "publisher": "INEGI",
+    "product": "Marco Geoestadístico, diciembre de 2025",
+    "sourceUrl": "https://gaia.inegi.org.mx/wscatgeo/v2/geo/mgee/",
+    "licenseUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+    "originalGeojsonSha256": "170c3ea5ff472f08ece97970dc90ad4ba8c6f503e33859655f315091c105cc91",
+    "retainedGeometrySha256": "193f700c8741c2752561de077c781383dcc28a95244fb60726f591f8af011faa",
+    "indexSha256": "c18f61eb22816d9cb3b655df8a2aa71da2dcfc84b4bb4339308d0ea9d4d6689b",
+    "attribution": "Fuente: INEGI, Marco Geoestadístico, diciembre de 2025. Modified: union of 32 states, projected clipping, original source boundary clipping in the existing display frame. INEGI does not endorse the processing."
+  }
+}

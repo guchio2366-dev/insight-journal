@@ -6,12 +6,12 @@ import {Window} from 'happy-dom';
 const parity=await readFile('src/styles/atlas-mexico-parity.css','utf8');
 const industry=await readFile('src/styles/atlas-mexico-industry.css','utf8');
 
-async function declarations(width,field,styles){
+async function declarations(width,field,styles,comparison=false){
  const w=new Window({settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true}});
  try{
   w.happyDOM.setViewport({width,height:665});
   assert.equal(w.matchMedia('(min-width:960px)').matches,width>=960);
-  w.document.write(`<html><head></head><body><div class="atlas-desktop-shell"><article class="atlas-explorer mexico-workspace ${field==='industry'?'mexico-industry':''}" data-field="${field}"><div class="atlas-primary-grid mexico-primary-grid"><div class="mexico-map-column"><div class="mexico-map-frame"><svg class="mi-map mexico-map" data-mexico-map></svg></div></div><aside class="mexico-reading"></aside></div></article></div></body></html>`);
+  w.document.write(`<html><head></head><body><div class="atlas-desktop-shell"><article class="atlas-explorer mexico-workspace ${field==='industry'?'mexico-industry':''} ${comparison?'is-comparison':''}" data-field="${field}"><div class="atlas-primary-grid mexico-primary-grid"><div class="mexico-map-column"><div class="mexico-map-frame"><svg class="mi-map mexico-map" data-mexico-map></svg></div></div><aside class="mexico-reading"></aside></div></article></div></body></html>`);
   for(const css of styles){
    const sheet=w.document.createElement('style');
    // Happy DOM 20.14.5 splits at-rule names on a literal space and drops
@@ -27,14 +27,23 @@ async function declarations(width,field,styles){
  }finally{await w.happyDOM.close();}
 }
 
-test('Mexico industry retains its 620px frame and 7:3 columns against parity CSS in either load order',async()=>{
- for(const width of [1280,1024])for(const styles of [[industry,parity],[parity,industry]]){
+test('Mexico industry retains its 620px frame and matches the US desktop columns against either CSS load order',async()=>{
+ for(const width of [1600,1280,1024])for(const styles of [[industry,parity],[parity,industry]]){
   const actual=await declarations(width,'industry',styles);
   assert.equal(actual.height,'620px',`height at ${width}px`);
   assert.equal(actual.minHeight,'620px',`minimum at ${width}px`);
   assert.equal(actual.maxHeight,'620px',`maximum at ${width}px`);
   assert.equal(actual.aspectRatio,'auto',`aspect ratio at ${width}px`);
-  assert.match(actual.columns,/^minmax\(0(?:px)?,\s*7fr\)\s+minmax\(290px,\s*3fr\)$/);
+  assert.match(actual.columns,width>=1600?/^minmax\(0(?:px)?,\s*1\.8fr\)\s+minmax\(280px,\s*1fr\)$/:width>=1200?/^minmax\(0(?:px)?,\s*1\.65fr\)\s+minmax\(320px,\s*1fr\)$/:/^minmax\(0(?:px)?,\s*7fr\)\s+minmax\(290px,\s*3fr\)$/);
+ }
+});
+
+test('Paired industry maps use their native aspect ratio instead of centering a small map inside a 620px frame',async()=>{
+ for(const width of [1024,1280,1600])for(const styles of [[industry,parity],[parity,industry]]){
+  const normal=await declarations(width,'industry',styles),paired=await declarations(width,'industry',styles,true);
+  assert.equal(normal.height,'620px');assert.equal(paired.height,'auto');
+  assert.match(paired.minHeight,/^0(?:px)?$/);assert.equal(paired.maxHeight,'none');
+  assert.match(paired.aspectRatio,/^900\s*\/\s*580$/);assert.equal(paired.columns,normal.columns);
  }
 });
 

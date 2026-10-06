@@ -1,0 +1,20 @@
+{
+  "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/docs/1.2%20ETOPO%202022%20User%20Guide.pdf",
+  "bytes": 852374,
+  "sha256": "6859a650a53446d62a502dc05d04f3b174b90f2e24f46069680924270c8d1642",
+  "headers": {
+    "date": "Tue, 06 Oct 2026 08:19:22 GMT",
+    "server": "envoy",
+    "strict-transport-security": "max-age=31536000;",
+    "last-modified": "Mon, 17 Oct 2022 16:02:02 GMT",
+    "accept-ranges": "bytes",
+    "content-length": "852374",
+    "x-frame-options": "SAMEORIGIN",
+    "access-control-allow-origin": "*",
+    "access-control-allow-headers": "X-Requested-With, Content-Type",
+    "content-type": "application/pdf",
+    "x-envoy-upstream-service-time": "113",
+    "connection": "close"
+  },
+  "tls": "Python urllib default certificate and hostname validation; no overrides"
+}

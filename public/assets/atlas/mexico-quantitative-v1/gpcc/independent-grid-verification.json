@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "sourceDecoder": "Existing independent JS CDF2 byte parser; not scipy.io",
+  "sourceRecordStride": 20736008,
+  "checkedCells": 10560,
+  "missingCells": 7407,
+  "validZeroCells": 0,
+  "validNonzeroCells": 3153,
+  "exactFloat32Matches": 10560,
+  "sourceSha256": "83155e6689b0475daa13d3d0c5ef957cf07e5468b2647d23878d91f40fb8ae82",
+  "annualGridSha256": "fd90fa28043ff894f4141bfeb0cb26f52b6575ebb07c397a363f2b76e0e692de",
+  "zeroAndMissingSemanticsVerified": true
+}

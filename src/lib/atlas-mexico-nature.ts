@@ -28,9 +28,17 @@ export interface MexicoNatureState {
   sourceLivestock: boolean;
   sourceOnlyItem: boolean;
   sourceView: 'density' | 'population';
+  sourcePopulationQuery?: string;
   sourceAgricultureAtlas?: {item:'corn'|'irrigation'|'pine'|'cattle';state:string|null;camera:[number,number,number]};
 }
 const validState = (value: string | null, codes: readonly string[], fallback: string) => value && codes.includes(value) ? value : fallback;
+function validPopulationSourceQuery(value: unknown): value is string {
+  if (typeof value !== 'string' || !value.startsWith('?') || value.startsWith('??') || value.length > 2048 || /[#\x00-\x1f\x7f]/.test(value)) return false;
+  const query = new URLSearchParams(value);
+  return query.getAll('view').every(view => view === 'density' || view === 'population') &&
+    query.getAll('state').every(state => state === '' || /^(0[1-9]|[12][0-9]|3[0-2])$/.test(state)) &&
+    query.getAll('only').every(only => only === '0' || only === '1');
+}
 export function readMexicoNatureState(url: URL, codes: readonly string[]): MexicoNatureState {
   const q = url.searchParams, compare = q.get('compare');
   const comparison = compare === 'irrigation' || compare === 'population' ? compare : null;
@@ -53,16 +61,17 @@ export function readMexicoNatureState(url: URL, codes: readonly string[]): Mexic
     feature: /^(climate|relief)-[1-9][0-9]*$/.test(feature) ? feature : '',
     state, compare: comparison, only: q.get('only') === '1' || (!q.has('only') && q.get('sourceOnly') === '1'), fallback: q.get('fallback') === '1', frame: validFrame ? frame! : null,
     from: from === 'agriculture' || from === 'population' ? from : null,
-    sourceState: validState(q.get('sourceState'), codes, state), sourceOnly: q.get('sourceOnly') === '1' || (!q.has('sourceOnly') && q.get('only') === '1'),
+    sourceState: from === 'population' && q.has('sourceState') && q.get('sourceState') === '' ? '' : validState(q.get('sourceState'), codes, state), sourceOnly: q.get('sourceOnly') === '1' || (!q.has('sourceOnly') && q.get('only') === '1'),
     sourceFallback: q.get('sourceFallback') === '1' || (!q.has('sourceFallback') && q.get('fallback') === '1'),
     sourceMetric: metric === 'maize' || metric === 'cattle' || metric === 'pine' || metric === 'irrigation' ? metric : 'irrigation', sourceView: q.get('sourceView') === 'population' ? 'population' : 'density',
+    ...(from === 'population' && validPopulationSourceQuery(q.get('sourcePopulationQuery')) ? {sourcePopulationQuery:q.get('sourcePopulationQuery')!} : {}),
     ...(sourceAgricultureAtlas?{sourceAgricultureAtlas}:{}),
     sourceCrops: q.get('sourceCrops') !== '0', sourceLivestock: q.get('sourceLivestock') !== '0', sourceOnlyItem: q.get('sourceOnlyItem') === '1',
   };
 }
 export function writeMexicoNatureState(url: URL, state: MexicoNatureState): URL {
   const next = new URL(url);
-  for (const key of ['view', 'city', 'category', 'item', 'feature', 'state', 'compare', 'only', 'fallback', 'frame', 'from', 'sourceState', 'sourceOnly', 'sourceFallback', 'sourceMetric', 'sourceView', 'sourceCrops', 'sourceLivestock', 'sourceOnlyItem', 'sourceAgriItem', 'sourceAgriState', 'sourceAgriCamera']) next.searchParams.delete(key);
+  for (const key of ['view', 'city', 'category', 'item', 'feature', 'state', 'compare', 'only', 'fallback', 'frame', 'from', 'sourceState', 'sourceOnly', 'sourceFallback', 'sourceMetric', 'sourceView', 'sourcePopulationQuery', 'sourceCrops', 'sourceLivestock', 'sourceOnlyItem', 'sourceAgriItem', 'sourceAgriState', 'sourceAgriCamera']) next.searchParams.delete(key);
   next.searchParams.set('view', state.view); next.searchParams.set('state', state.state);
   if (state.city !== null && typeof state.city === 'string') next.searchParams.set('city', state.city);
   if (state.category && natureCategories.includes(state.category)) next.searchParams.set('category', state.category);
@@ -77,11 +86,13 @@ export function writeMexicoNatureState(url: URL, state: MexicoNatureState): URL 
     next.searchParams.set('from', state.from); next.searchParams.set('sourceState', state.sourceState); next.searchParams.set('sourceOnly', state.sourceOnly ? '1' : '0');
     next.searchParams.set('sourceFallback', state.sourceFallback ? '1' : '0');
     if (state.from === 'agriculture') {if(state.sourceAgricultureAtlas){next.searchParams.set('sourceAgriItem',state.sourceAgricultureAtlas.item);next.searchParams.set('sourceAgriState',state.sourceAgricultureAtlas.state??'none');next.searchParams.set('sourceAgriCamera',state.sourceAgricultureAtlas.camera.join(','));}next.searchParams.set('sourceMetric', state.sourceMetric); next.searchParams.set('sourceCrops', state.sourceCrops ? '1' : '0'); next.searchParams.set('sourceLivestock', state.sourceLivestock ? '1' : '0'); next.searchParams.set('sourceOnlyItem', state.sourceOnlyItem ? '1' : '0');}
-    if (state.from === 'population') next.searchParams.set('sourceView', state.sourceView);
+    if (state.from === 'population') {next.searchParams.set('sourceView', state.sourceView);if(validPopulationSourceQuery(state.sourcePopulationQuery))next.searchParams.set('sourcePopulationQuery',state.sourcePopulationQuery);}
   }
   return next;
 }
 export function mexicoNatureReturnUrl(base: string, state: MexicoNatureState): string {
+  // The caller supplies the fixed population route. Only its original query is restored.
+  if (state.from === 'population' && validPopulationSourceQuery(state.sourcePopulationQuery)) return `${base}${state.sourcePopulationQuery}`;
   const q = new URLSearchParams({state: state.from ? state.sourceState : state.state});
   if (state.from === 'agriculture') {q.set('metric', state.sourceMetric); if (!state.sourceCrops) q.set('crops', '0'); if (!state.sourceLivestock) q.set('livestock', '0'); if (state.sourceOnlyItem) q.set('onlyItem', '1');}
   if(state.from==='agriculture'&&state.sourceAgricultureAtlas){

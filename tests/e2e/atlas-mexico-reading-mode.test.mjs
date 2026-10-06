@@ -52,6 +52,31 @@ async function page(field,search='',nativeFirst=false,listenerCheckpoints=false)
  return window;
 }
 const query=window=>new URL(window.location.href).searchParams;
+
+test('Population reading height follows page scroll without retaining an offscreen height or changing history',async()=>{
+ const window=await page('population');
+ try{
+  Object.defineProperty(window,'innerWidth',{value:1280,configurable:true});
+  Object.defineProperty(window,'innerHeight',{value:665,configurable:true});
+  const panel=window.document.querySelector('.mexico-reading');
+  let top=342;
+  panel.getBoundingClientRect=()=>({top,x:895,y:top,left:895,right:1260,bottom:top+311,width:365,height:311});
+  const originalURL=window.location.href,originalHistory=window.history.length;
+  window.dispatchEvent(new window.Event('resize'));await window.happyDOM.waitUntilComplete();
+  assert.equal(panel.style.maxHeight,'311px');
+  top=-125;
+  window.dispatchEvent(new window.Event('scroll'));await window.happyDOM.waitUntilComplete();
+  assert.equal(panel.style.maxHeight,'653px','The reader must never grow beyond the available viewport when its top has scrolled away');
+  top=342;
+  window.dispatchEvent(new window.Event('scroll'));await window.happyDOM.waitUntilComplete();
+  assert.equal(panel.style.maxHeight,'311px','Returning to the page top must restore the original reading height');
+  assert.equal(window.location.href,originalURL);assert.equal(window.history.length,originalHistory);
+  Object.defineProperty(window,'innerWidth',{value:900,configurable:true});
+  window.dispatchEvent(new window.Event('resize'));await window.happyDOM.waitUntilComplete();
+  assert.equal(panel.style.maxHeight,'','Narrow layouts must keep their natural reading height');
+ }finally{await window.happyDOM.close();}
+});
+
 function assertMode(window,selected){
  const root=window.document.querySelector('[data-mexico-workspace]');
  assert.equal(root.dataset.mexicoReadingSelected,String(selected));
@@ -66,9 +91,8 @@ async function selectState(window,field){
  assert.equal(query(window).get('state'),fields[field].state);
  const shape=window.document.querySelector(fields[field].shape);
  if(field==='industry'&&!query(window).get('compare')){
-  // Normal industry outlines are geographic references; the reading pin
-  // carries the selected state rather than an export choropleth outline.
-  assert.equal(shape.getAttribute('aria-pressed'),'false');assert.equal(shape.classList.contains('is-selected'),false);
+  // An explicit state choice highlights its geographic outline and reading pin.
+  assert.equal(shape.getAttribute('aria-pressed'),'true');assert.equal(shape.classList.contains('is-selected'),true);
   const pin=window.document.querySelector(`[data-mi-map="primary"] [data-mi-reading-markers] [data-mi-region-option="${fields[field].state}"]:not([hidden])`);
   assert.ok(pin,'The selected industry state must have a visible reading pin');
   assert.equal(pin.getAttribute('aria-pressed'),'true');assert.equal(pin.classList.contains('is-selected'),true);
@@ -89,7 +113,7 @@ for(const field of Object.keys(fields)){
    await selectState(window,field);
    window.history.back();await window.happyDOM.waitUntilComplete();assertMode(window,false);
    window.history.forward();await window.happyDOM.waitUntilComplete();assertMode(window,true);assert.equal(query(window).get('state'),fields[field].state);
-   window.document.querySelector(field==='agriculture'?'[data-agri-overview-button]':'[data-mexico-overview-button]').click();await window.happyDOM.waitUntilComplete();assertMode(window,false);assert.equal(query(window).get('state'),fields[field].state);
+   window.document.querySelector(field==='agriculture'?'[data-agri-overview-button]':'[data-mexico-overview-button]').click();await window.happyDOM.waitUntilComplete();assertMode(window,false);assert.equal(query(window).get('state'),field==='population'?null:fields[field].state);
    reload=await page(field,window.location.search,true);assertMode(reload,false);
    await selectState(reload,field);
    window.history.back();await window.happyDOM.waitUntilComplete();assertMode(window,true);assert.equal(query(window).get('state'),fields[field].state);
@@ -133,30 +157,32 @@ test('Space on native focus checkboxes waits for change and creates one selected
  for(const [field,selector] of [['industry','[data-mi-only]'],['population','[data-population-only]']]){
   const window=await page(field);
   try{
+   if(field==='population')await selectState(window,field);
    const control=window.document.querySelector(selector);
    control.dispatchEvent(new window.KeyboardEvent('keydown',{key:' ',bubbles:true}));
-   await window.happyDOM.waitUntilComplete();assertMode(window,false);
+   await window.happyDOM.waitUntilComplete();assertMode(window,field==='population');
    control.checked=true;control.dispatchEvent(new window.Event('change',{bubbles:true}));
    await window.happyDOM.waitUntilComplete();assertMode(window,true);assert.equal(query(window).get('only'),'1');
-   window.history.back();await window.happyDOM.waitUntilComplete();assertMode(window,false);assert.equal(control.checked,false);
+   window.history.back();await window.happyDOM.waitUntilComplete();assertMode(window,field==='population');assert.equal(control.checked,false);
   }finally{await window.happyDOM.close();}
  }
 });
 
-test('A native checkbox click checkpoint stays overview until its separate change activation',async()=>{
+test('A native checkbox click checkpoint preserves its reading mode until its separate change activation',async()=>{
  for(const [field,selector] of [['industry','[data-mi-only]'],['population','[data-population-only]']]){
   const window=await page(field);
   try{
+   if(field==='population')await selectState(window,field);
    const control=window.document.querySelector(selector),initialLength=window.history.length;
    // Dispatch the click phase without Happy DOM's synchronous MouseEvent default
    // action, then expose the checkpoint before the native checkbox change.
    const click=new window.Event('click',{bubbles:true});Object.defineProperty(click,'button',{value:0});
    control.dispatchEvent(click);await window.happyDOM.waitUntilComplete();
-   assertMode(window,false);assert.equal(window.history.length,initialLength);
+   assertMode(window,field==='population');assert.equal(window.history.length,initialLength);
    control.checked=true;control.dispatchEvent(new window.Event('change',{bubbles:true}));
    await window.happyDOM.waitUntilComplete();assertMode(window,true);assert.equal(query(window).get('only'),'1');
    assert.equal(window.history.length,initialLength+1);
-   window.history.back();await window.happyDOM.waitUntilComplete();assertMode(window,false);assert.equal(control.checked,false);
+   window.history.back();await window.happyDOM.waitUntilComplete();assertMode(window,field==='population');assert.equal(control.checked,false);
   }finally{await window.happyDOM.close();}
  }
 });
@@ -208,4 +234,24 @@ test('National overview normalization and last-moment main-tab activation keep t
   link.addEventListener('click',event=>event.preventDefault(),{once:true});link.dispatchEvent(new window.MouseEvent('click',{bubbles:true,cancelable:true}));
   assert.deepEqual(Object.fromEntries(new URL(link.href).searchParams),{state:'14',reading:'item'});assert.equal(window.history.length,initialLength);
  }finally{if(destination)await destination.happyDOM.close();await window.happyDOM.close();}
+});
+
+test('Population category entrances remain nationwide through initialization, reload and history',async()=>{
+ for(const nativeFirst of [false,true]){
+  for(const category of ['ethnicity','religion']){
+   const suffix=category==='religion'?'&compositionMetric=catholic&compositionView=overview':'';
+   const window=await page('population',`?category=${category}${suffix}`,nativeFirst);let reloaded;
+   try{
+    assertMode(window,false);
+    assert.equal(query(window).get('state'),null);
+    assert.equal(window.document.querySelector('[data-population-state]').value,'');
+    assert.equal(window.document.querySelector('[data-population-only]').disabled,true);
+    assert.equal(window.document.querySelector(`[data-population-overview-category="${category}"]`).hidden,false);
+    reloaded=await page('population',window.location.search,!nativeFirst);assertMode(reloaded,false);
+    await selectState(window,'population');
+    window.history.back();await window.happyDOM.waitUntilComplete();assertMode(window,false);
+    assert.equal(query(window).get('state'),null);
+   }finally{if(reloaded)await reloaded.happyDOM.close();await window.happyDOM.close();}
+  }
+ }
 });

@@ -1,0 +1,302 @@
+{
+  "schemaVersion": 1,
+  "id": "mexico-elevation-quantitative-preparation",
+  "status": "standalone; not integrated",
+  "source": {
+    "sourceUrl": "https://www.ncei.noaa.gov/products/etopo-global-relief-model",
+    "downloadUrl": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/60s/60s_surface_elev_gtif/ETOPO_2022_v1_60s_N90W180_surface.tif",
+    "sourceEdition": "ETOPO 2022 v1 60 arc-second surface",
+    "sourceFile": "ETOPO_2022_v1_60s_N90W180_surface.tif",
+    "sourceSha256": "9d27d4b8ea8e76977e2988bca667d7c8fa68b927355feffcddd6b4875a7fd08e",
+    "sourceBytes": 465969062,
+    "retrievedAt": "2026-10-06T08:18:21.850898+00:00",
+    "license": "CC0-1.0",
+    "licenseUrl": "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ngdc.mgg.dem%3Aetopo_2022/html",
+    "userGuideUrl": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/docs/1.2%20ETOPO%202022%20User%20Guide.pdf",
+    "citation": "NOAA National Centers for Environmental Information. 2022: ETOPO 2022 15 Arc-Second Global Relief Model. DOI:10.25921/fd45-gt74. Accessed 2026-10-06.",
+    "horizontalCrs": "EPSG:4326",
+    "verticalDatum": "EGM2008 geoid",
+    "unit": "m",
+    "editionNotObservationYear": true,
+    "sourceHashVerification": "Full hash inherited from prior provenance, not recomputed; exact decoded-window hash independently matches",
+    "licenseVerification": {
+      "priorManifestLicense": "CC0-1.0",
+      "priorMetadataNotFetchedThisRun": true,
+      "currentOfficialEvidence": {
+        "file": "etopo-user-guide.pdf",
+        "sha256": "6859a650a53446d62a502dc05d04f3b174b90f2e24f46069680924270c8d1642",
+        "section": "4. Dataset Usage and Citation (PDF page 4)",
+        "paraphrase": "ETOPO tiles may be used for private, academic and commercial purposes; cite NOAA NCEI and the dataset DOI."
+      }
+    }
+  },
+  "grid": {
+    "sourceSha256": "9d27d4b8ea8e76977e2988bca667d7c8fa68b927355feffcddd6b4875a7fd08e",
+    "sourceSha256Status": "Previously pinned full-source digest; not recomputed from this partial download",
+    "file": "mexico-etopo-window.f32",
+    "sha256": "47e9c1792e653c05e94058b2b7311a18a7db38c094d47fb0f8a5acfef45c9743",
+    "bytes": 9504000,
+    "width": 1980,
+    "height": 1200,
+    "window": [
+      3660,
+      3360,
+      5640,
+      4560
+    ],
+    "windowConvention": "[columnStart,rowStart,columnEndExclusive,rowEndExclusive]",
+    "bounds": [
+      -119,
+      14,
+      -86,
+      34
+    ],
+    "origin": [
+      -119,
+      34
+    ],
+    "resolution": [
+      0.016666666666666666,
+      -0.016666666666666666
+    ],
+    "dtype": "float32-little-endian",
+    "noData": -99999,
+    "unit": "m",
+    "verticalDatum": "EGM2008",
+    "geoKeys": {
+      "GTModelTypeGeoKey": 2,
+      "GTRasterTypeGeoKey": 1,
+      "GTCitationGeoKey": "WGS 84 + EGM2008 height",
+      "GeographicTypeGeoKey": 4326,
+      "VerticalCSTypeGeoKey": 3855
+    },
+    "method": "Exact native float32 TIFF tile decode with tifffile/imagecodecs; crop only, no resampling or integer casting",
+    "verification": {
+      "sourceTotalBytes": 465969062,
+      "downloadedRangeBytes": 7540857,
+      "fullSourceHashRecomputed": false,
+      "matchesRetainedWindowFromPreviouslyVerifiedFullSource": true,
+      "decodedCells": 2376000,
+      "tileCount": 45,
+      "allCellsCovered": true,
+      "noDataCells": 0,
+      "nonfiniteCells": 0
+    }
+  },
+  "landClip": {
+    "source": "Fuente: INEGI, Marco Geoestadistico, diciembre de 2025; 32 retained state geometries.",
+    "sourceUrl": "https://gaia.inegi.org.mx/wscatgeo/v2/geo/mgee/",
+    "documentation": "https://www.inegi.org.mx/servicios/catalogounico.html",
+    "license": "INEGI Terminos de Libre Uso de la Informacion; attribution and transformation disclosure required.",
+    "licenseUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+    "originalSourceSha256": "170c3ea5ff472f08ece97970dc90ad4ba8c6f503e33859655f315091c105cc91",
+    "retainedGeometryFile": "src/data/atlas/mexico/geometry.json",
+    "retainedGeometrySha256": "193f700c8741c2752561de077c781383dcc28a95244fb60726f591f8af011faa",
+    "geometryIndexFile": "src/data/atlas/mexico/geometry-index.json",
+    "geometryIndexSha256": "c18f61eb22816d9cb3b655df8a2aa71da2dcfc84b4bb4339308d0ea9d4d6689b",
+    "method": "Original unsimplified INEGI geographic state union for numerical cells, projected original union for display pixel centres; alpha zero outside.",
+    "usedBoundaryFile": "data-source/atlas/mexico/common/inegi-geo-states-2025.json.gz",
+    "usedBoundaryGzipSha256": "00637f7a8ca51a0a56249cbdc2aa2821ee089da1483200b63857a2577bac3b82",
+    "usedBoundaryDecodedSha256": "170c3ea5ff472f08ece97970dc90ad4ba8c6f503e33859655f315091c105cc91",
+    "retainedGeometryRole": "Display frame and prior-result cross-check only; original geometry controls the current clip."
+  },
+  "displayFrame": {
+    "width": 900,
+    "height": 580,
+    "viewBox": "0 0 900 580",
+    "imagePlacement": {
+      "x": 0,
+      "y": 0,
+      "width": 900,
+      "height": 580,
+      "preserveAspectRatio": "none"
+    },
+    "projection": {
+      "name": "INEGI Lambert Conformal Conic",
+      "datum": "ITRF92",
+      "ellipsoid": "GRS80",
+      "semiMajorM": 6378137,
+      "inverseFlattening": 298.257222101,
+      "standardParallel1": 17.5,
+      "standardParallel2": 29.5,
+      "latitudeOrigin": 12,
+      "centralMeridian": -102,
+      "falseEastingM": 2500000,
+      "falseNorthingM": 0
+    },
+    "boundsNative": [
+      911292.029449366,
+      319149.06252919696,
+      4083063.0952772293,
+      2349614.87171421
+    ],
+    "scalePixelsPerNativeMetre": 0.00025806886165215595,
+    "leftPixels": 40.73232581027895,
+    "topPixels": 28.0,
+    "metresPerPixelInLambertPlane": 3874.934750353078,
+    "cornersOrder": [
+      "top-left",
+      "top-right",
+      "bottom-right",
+      "bottom-left"
+    ],
+    "frameCornersNative": [
+      [
+        753456.9247044125,
+        2458113.0447240965
+      ],
+      [
+        4240898.200022183,
+        2458113.0447240965
+      ],
+      [
+        4240898.200022183,
+        210650.88951931102
+      ],
+      [
+        753456.9247044125,
+        210650.88951931102
+      ]
+    ],
+    "frameCornersLonLat": [
+      [
+        -120.60837078498076,
+        33.16425881431248
+      ],
+      [
+        -83.45110248274294,
+        33.17077474263814
+      ],
+      [
+        -86.09416672508411,
+        13.017717839780246
+      ],
+      [
+        -117.95698415756823,
+        13.012123383493336
+      ]
+    ],
+    "pixelRegistration": "Cell centres at x+0.5,y+0.5 within the full SVG display frame.",
+    "mapping": "x=left+(nativeX-minX)*scale; y=top+(maxY-nativeY)*scale; scale=min(844/(maxX-minX),524/(maxY-minY)).",
+    "geographicNote": "Matches atlas-mexico-projection.mjs and its existing geographic rendering. No epoch-dependent ITRF92/WGS84 transformation or cadastral precision is asserted."
+  },
+  "assets": [
+    {
+      "file": "elevation-surface.webp",
+      "bytes": 126908,
+      "sha256": "80f27a16c48d057f93ebd235a43797645b3fb9576f064e666bd0facea465ebef",
+      "width": 900,
+      "height": 580
+    }
+  ],
+  "legend": {
+    "titleJa": "標高",
+    "unit": "m",
+    "datum": "EGM2008",
+    "type": "continuous-piecewise-linear-sRGB",
+    "domain": [
+      -600,
+      5500
+    ],
+    "ticks": [
+      -600,
+      0,
+      1000,
+      2000,
+      3000,
+      4000,
+      5500
+    ],
+    "colorStops": [
+      {
+        "value": -600,
+        "color": "#fffaf0"
+      },
+      {
+        "value": 0,
+        "color": "#fff4d8"
+      },
+      {
+        "value": 500,
+        "color": "#f4dfad"
+      },
+      {
+        "value": 1000,
+        "color": "#e5c486"
+      },
+      {
+        "value": 2000,
+        "color": "#c99655"
+      },
+      {
+        "value": 3000,
+        "color": "#a96b35"
+      },
+      {
+        "value": 4000,
+        "color": "#7c4326"
+      },
+      {
+        "value": 5500,
+        "color": "#492315"
+      }
+    ],
+    "belowDomain": "No data are below the displayed domain; do not silently clamp future data",
+    "aboveDomain": "No data are above the displayed domain; do not silently clamp future data",
+    "missing": "transparent; a separate no-data label is required if missing land cells occur",
+    "editionLabelJa": "ETOPO 2022（版年）・60秒格子・EGM2008基準",
+    "noteJa": "有効な負標高も保持。沿岸の混合セルを含むため、個別地点や全国の最低・最高標高の値には使えません。"
+  },
+  "method": {
+    "numericNationalGrid": "Exact native cells selected by original geographic INEGI union; outside is NaN.",
+    "displayResampling": "Bilinear interpolation of four finite/non-NoData native cell centres in the exact existing Lambert frame.",
+    "mask": "Original INEGI projected union at output pixel centres; no z>=0 sea/land threshold.",
+    "seaExclusion": "All pixels outside original national polygon union are transparent; not a complete inland-water mask.",
+    "noData": "Nonfinite, -99999, or out-of-window support is missing; never replaced by zero.",
+    "color": "Strictly monotone piecewise linear sRGB by numerical metres; no terrain illumination."
+  },
+  "checks": {
+    "nativeValidMexicoCells": 628539,
+    "nativeNegativeValidMexicoCells": 4091,
+    "nativeSelectedMinM": -519.0625,
+    "nativeSelectedMaxM": 5046.75048828125,
+    "nativeMissingMexicoCells": 0,
+    "nativeMaskCellsDifferentFromSimplifiedBoundary": 467,
+    "retainedMaskRegressionMatchesPrior628628CellsAnd4131Negative": true,
+    "inputStateGeometriesRepairedByMakeValid": 0,
+    "nationalUnionValid": true,
+    "darkerAtHigherValuesVerified": true,
+    "display": {
+      "1x": {
+        "validLandPixels": 130079,
+        "missingLandPixels": 0,
+        "pixelsDifferentFromSimplifiedBoundaryMask": 98,
+        "opaquePixelsOutsideLand": 0,
+        "sampledMinM": -364.4692386639753,
+        "sampledMaxM": 4715.92378063,
+        "negativeValidLandPixels": 947,
+        "losslessRoundTrip": true,
+        "projectionRoundTripMaxM": 5.122274160385132e-09
+      }
+    }
+  },
+  "limitations": [
+    "Edition 2022 is not a common observation year.",
+    "60 arc-second source mixes coastal land/marine elevations; masked negative values are not exact local land elevations.",
+    "The source window includes sea and neighbouring countries for interpolation; the national NPZ and RGBA displays mask them.",
+    "No whole-source SHA256 was recomputed; range receipts plus exact previously pinned window SHA256 establish equivalence.",
+    "No state, contour or region interaction is defined by these standalone assets."
+  ],
+  "reproduction": {
+    "script": "prepare_elevation_surface.py",
+    "sha256": "c3c1477c23ece999ef4cc3269c677d54fb65ca374eda32cec95182eaab6a2bc6",
+    "referencedProjectionScript": "scripts/prepare-mexico-relief-background.py",
+    "referencedProjectionSha256": "447386c34c6d22de83603e36c447195151a52d832e8fb49b705c9f86632fee55",
+    "pythonDependencies": {
+      "numpy": "2.3.5",
+      "shapely": "2.1.2",
+      "Pillow": "12.3.0"
+    },
+    "command": "PYTHONPATH=/workspace/mexico-data-prep/deps python3 /workspace/mexico-data-prep/etopo/prepare_elevation_surface.py"
+  }
+}

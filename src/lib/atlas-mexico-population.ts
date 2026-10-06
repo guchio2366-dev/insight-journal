@@ -9,6 +9,7 @@ export interface MexicoPopulationState {
   compare: 'scale' | null;
   sourceView: MexicoPopulationView;
   fallback: boolean;
+  sourceQuery?: string;
 }
 export interface MexicoPopulationRow {
   stateCode: string;
@@ -22,7 +23,7 @@ export interface MexicoPopulationRow {
   densityUnit: string;
   publishedAreaKm2: number;
 }
-export const mexicoPopulationKeys = ['category', 'view', 'state', 'only', 'compare', 'sourceView', 'fallback'] as const;
+export const mexicoPopulationKeys = ['category', 'view', 'state', 'only', 'compare', 'sourceView', 'fallback', 'populationFrom'] as const;
 export const mexicoDensityBins = [
   { min: 0, max: 25, color: '#f1f0d6', label: '25未満' },
   { min: 25, max: 50, color: '#c6debe', label: '25–50未満' },
@@ -63,6 +64,18 @@ export function formatMexicoDensity(value: number | null, status: MexicoPopulati
   return value.toLocaleString('ja-JP', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 }
 
+export type MexicoPopulationFrame=[number,number,number,number];
+export function readMexicoPopulationFrame(url:URL):MexicoPopulationFrame {
+  const values=url.searchParams.get('frame')?.split(',').map(Number);
+  return values?.length===4&&values.every(Number.isFinite)&&values[0]>=0&&values[1]>=0&&values[2]>=180&&values[2]<=900&&values[3]>=116&&values[3]<=580&&values[0]+values[2]<=900.01&&values[1]+values[3]<=580.01?values as MexicoPopulationFrame:[0,0,900,580];
+}
+export function zoomMexicoPopulationFrame(frame:MexicoPopulationFrame,action:'in'|'out'|'fit'):MexicoPopulationFrame {
+  if(action==='fit')return [0,0,900,580];
+  const [x,y,w,h]=frame,factor=action==='in'?.74:1/.74;
+  const width=Math.max(180,Math.min(900,w*factor)),height=Math.max(116,Math.min(580,h*factor));
+  return [Math.max(0,Math.min(900-width,x+(w-width)/2)),Math.max(0,Math.min(580-height,y+(h-height)/2)),width,height].map(value=>Math.round(value*1000)/1000) as MexicoPopulationFrame;
+}
+
 function validView(raw: string | null): MexicoPopulationView {
   return raw === 'population' ? 'population' : 'density';
 }
@@ -71,13 +84,19 @@ export function readMexicoPopulationState(url: URL, stateCodes: readonly string[
   const p = url.searchParams;
   const view = validView(p.get('view'));
   const selected = p.get('state') ?? '';
+  const state = stateCodes.includes(selected) ? selected : '';
   const category = p.get('category');
+  const sourceQuery=p.get('populationFrom');
+  const source=sourceQuery?.startsWith('?')?new URL(sourceQuery,url):null;
+  const sourceState=source?.searchParams.get('state')??'';
+  const validSource=!!source&&!source.searchParams.has('compare')&&!source.searchParams.has('populationFrom')&&(!sourceState||stateCodes.includes(sourceState))&&(source.searchParams.get('only')!=='1'||!!sourceState)&&['density','population'].includes(source.searchParams.get('view')??'');
   return {
     category: category === 'ethnicity' || category === 'religion' ? category : 'distribution',
-    view, state: stateCodes.includes(selected) ? selected : '09', only: p.get('only') === '1',
+    view, state, only: !!state && p.get('only') === '1',
     compare: p.get('compare') === 'scale' ? 'scale' : null,
     sourceView: p.has('sourceView') ? validView(p.get('sourceView')) : view,
     fallback: p.get('fallback') === '1',
+    ...(p.get('compare')==='scale'&&validSource?{sourceQuery:sourceQuery!}:{}),
   };
 }
 
@@ -86,31 +105,37 @@ export function writeMexicoPopulationState(url: URL, state: MexicoPopulationStat
   for (const key of mexicoPopulationKeys) next.searchParams.delete(key);
   if (state.category !== 'distribution') next.searchParams.set('category', state.category);
   next.searchParams.set('view', state.view);
-  next.searchParams.set('state', state.state);
-  if (state.only) next.searchParams.set('only', '1');
+  if (state.state) next.searchParams.set('state', state.state);
+  if (state.state && state.only) next.searchParams.set('only', '1');
   if (state.compare) {
     next.searchParams.set('compare', state.compare);
     next.searchParams.set('sourceView', state.sourceView);
+    if(state.sourceQuery?.startsWith('?'))next.searchParams.set('populationFrom',state.sourceQuery);
   }
   if (state.fallback) next.searchParams.set('fallback', '1');
   return next;
 }
 
 export function mexicoPopulationScaleUrl(source: URL, state: MexicoPopulationState): URL {
-  return writeMexicoPopulationState(source, { ...state, compare: 'scale', sourceView: state.view });
+  const original=writeMexicoPopulationState(source,{...state,compare:null,sourceQuery:undefined});
+  return writeMexicoPopulationState(original, { ...state, compare: 'scale', sourceView: state.view,sourceQuery:original.search });
 }
 
 export function mexicoPopulationReturnUrl(source: URL, state: MexicoPopulationState): URL {
+  if(state.sourceQuery?.startsWith('?'))return new URL(state.sourceQuery,source);
   return writeMexicoPopulationState(source, { ...state, view: state.sourceView, compare: null });
 }
 
 export function mexicoPopulationIndustryUrl(target: URL, state: MexicoPopulationState): URL {
   const next = new URL(target);
   next.searchParams.set('compare', 'population');
-  next.searchParams.set('state', state.state);
+  if (state.state) next.searchParams.set('state', state.state);
+  else next.searchParams.delete('state');
+  next.searchParams.set('sourceState', state.state);
+  next.searchParams.set('sourceOnly', state.state && state.only ? '1' : '0');
   next.searchParams.set('from', 'population');
   next.searchParams.set('sourceView', state.view);
-  if (state.only) next.searchParams.set('only', '1');
+  if (state.state && state.only) next.searchParams.set('only', '1');
   else next.searchParams.delete('only');
   if (state.fallback) next.searchParams.set('fallback', '1');
   else next.searchParams.delete('fallback');
@@ -121,10 +146,13 @@ export function mexicoPopulationNatureUrl(target: URL, state: MexicoPopulationSt
   const next = new URL(target);
   next.searchParams.set('view', 'relief');
   next.searchParams.set('compare', 'population');
-  next.searchParams.set('state', state.state);
+  if (state.state) next.searchParams.set('state', state.state);
+  else next.searchParams.delete('state');
+  next.searchParams.set('sourceState', state.state);
+  next.searchParams.set('sourceOnly', state.state && state.only ? '1' : '0');
   next.searchParams.set('from', 'population');
   next.searchParams.set('sourceView', state.view);
-  if (state.only) next.searchParams.set('only', '1');
+  if (state.state && state.only) next.searchParams.set('only', '1');
   else next.searchParams.delete('only');
   if (state.fallback) next.searchParams.set('fallback', '1');
   else next.searchParams.delete('fallback');

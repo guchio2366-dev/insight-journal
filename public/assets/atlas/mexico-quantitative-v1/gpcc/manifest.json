@@ -1,0 +1,294 @@
+{
+  "schemaVersion": 1,
+  "id": "mexico-gpcc-1991-2020",
+  "displayFrame": {
+    "width": 900,
+    "height": 580,
+    "viewBox": "0 0 900 580",
+    "imagePlacement": {
+      "x": 0,
+      "y": 0,
+      "width": 900,
+      "height": 580,
+      "preserveAspectRatio": "none"
+    },
+    "projection": {
+      "name": "INEGI Lambert Conformal Conic",
+      "datum": "ITRF92",
+      "ellipsoid": "GRS80",
+      "semiMajorM": 6378137,
+      "inverseFlattening": 298.257222101,
+      "standardParallel1": 17.5,
+      "standardParallel2": 29.5,
+      "latitudeOrigin": 12,
+      "centralMeridian": -102,
+      "falseEastingM": 2500000,
+      "falseNorthingM": 0
+    },
+    "boundsNative": [
+      911292.029449366,
+      319149.06252919696,
+      4083063.0952772293,
+      2349614.87171421
+    ],
+    "scalePixelsPerNativeMetre": 0.00025806886165215595,
+    "leftPixels": 40.73232581027895,
+    "topPixels": 28.0,
+    "metresPerPixelInLambertPlane": 3874.934750353078,
+    "cornersOrder": [
+      "top-left",
+      "top-right",
+      "bottom-right",
+      "bottom-left"
+    ],
+    "frameCornersNative": [
+      [
+        753456.9247044125,
+        2458113.0447240965
+      ],
+      [
+        4240898.200022183,
+        2458113.0447240965
+      ],
+      [
+        4240898.200022183,
+        210650.88951931102
+      ],
+      [
+        753456.9247044125,
+        210650.88951931102
+      ]
+    ],
+    "frameCornersLonLat": [
+      [
+        -120.60837078498076,
+        33.16425881431248
+      ],
+      [
+        -83.45110248274294,
+        33.17077474263814
+      ],
+      [
+        -86.09416672508411,
+        13.017717839780246
+      ],
+      [
+        -117.95698415756823,
+        13.012123383493336
+      ]
+    ],
+    "pixelRegistration": "Cell centres at x+0.5,y+0.5 within the full SVG display frame.",
+    "mapping": "x=left+(nativeX-minX)*scale; y=top+(maxY-nativeY)*scale; scale=min(844/(maxX-minX),524/(maxY-minY)).",
+    "geographicNote": "Matches atlas-mexico-projection.mjs and its existing geographic rendering. No epoch-dependent ITRF92/WGS84 transformation or cadastral precision is asserted."
+  },
+  "image": {
+    "file": "mexico-gpcc-1991-2020-annual.png",
+    "bytes": 25166,
+    "sha256": "07a6f56eeb0e5cdea5197140d89f5fe64d934847e43ff0cfcce383737ef10117"
+  },
+  "grid": {
+    "file": "mexico-gpcc-1991-2020-annual.json",
+    "bytes": 1629,
+    "sha256": "f0506319f9f5f89a9bc8407be92d20d1280214c4ccf68e7b7592d2383551ab85"
+  },
+  "legend": {
+    "file": "precipitation-legend.json",
+    "bytes": 1379,
+    "sha256": "ede79e74a94995ac25fae811a9ad05bcccb51f1c90d3da59a90eb029374a7fa9"
+  },
+  "source": {
+    "file": "precipitation-source.json",
+    "bytes": 5043,
+    "sha256": "5620a7f2e5ff4b01a5aaafeb4b5de946b70e318e96c5589aff350d43f846601c"
+  },
+  "landMask": "Original INEGI 32-state union; pixel centre inclusion; sea, foreign land, supplied polygon holes and source missing are transparent. State polygons are not an exhaustive inland-water mask.",
+  "resampling": "Native containing-cell lookup (nearest centre on regular grid), no spatial interpolation. Colour is continuous in mm/year.",
+  "missingData": "Require all 12 months valid. No zero filling, nearest-valid search, extrapolation or missing-year assumptions.",
+  "checks": {
+    "archiveSizeShaAndOfficialMd5Verified": true,
+    "cdf2MagicVerified": true,
+    "sourceMonthlyRecords": 12,
+    "sourceWindowShape": [
+      12,
+      80,
+      132
+    ],
+    "sourceNoData": -99999.9921875,
+    "timeCoordinateNote": "12 climatological month coordinates (0–11 months since 1991-01-01), not 12 individual months of observed 1991 weather. No time bounds or climatology_bounds variable is supplied. Baseline uses explicit global 1991–2020 coverage attributes.",
+    "originalBoundaryBoundsLonLat": [
+      -118.365263218,
+      14.53209837,
+      -86.71040528,
+      32.71865357
+    ],
+    "entireBoundaryContainedByNativeWindow": true,
+    "timeCoverageVerified": true,
+    "latitudeOrientationSamples": [
+      {
+        "name": "Tijuana",
+        "coordinate": [
+          -117.0382,
+          32.5149
+        ],
+        "cellCenter": [
+          -117.125,
+          32.625
+        ],
+        "monthlyMm": [
+          44.81999969482422,
+          56.27000045776367,
+          31.459999084472656,
+          16.579999923706055,
+          7.309999942779541,
+          1.0399999618530273,
+          2.2799999713897705,
+          0.550000011920929,
+          3.8299999237060547,
+          13.510000228881836,
+          21.420000076293945,
+          43.900001525878906
+        ],
+        "annualMm": 242.9700008034706,
+        "flippedLatitudeHas12MissingMonths": true
+      },
+      {
+        "name": "Ciudad de Mexico",
+        "coordinate": [
+          -99.19611111,
+          19.40361111
+        ],
+        "cellCenter": [
+          -99.125,
+          19.375
+        ],
+        "monthlyMm": [
+          7.489999771118164,
+          6.050000190734863,
+          16.850000381469727,
+          24.899999618530273,
+          71.1500015258789,
+          162.27999877929688,
+          187.07000732421875,
+          193.5399932861328,
+          174.3800048828125,
+          79.2699966430664,
+          17.899999618530273,
+          6.320000171661377
+        ],
+        "annualMm": 947.2000021934509,
+        "flippedLatitudeHas12MissingMonths": true
+      },
+      {
+        "name": "Culiacan",
+        "coordinate": [
+          -107.407188,
+          24.806146
+        ],
+        "cellCenter": [
+          -107.375,
+          24.875
+        ],
+        "monthlyMm": [
+          10.510000228881836,
+          12.739999771118164,
+          4.690000057220459,
+          3.430000066757202,
+          5.71999979019165,
+          43.29999923706055,
+          120.19000244140625,
+          137.72000122070312,
+          122.44000244140625,
+          36.119998931884766,
+          19.1200008392334,
+          10.010000228881836
+        ],
+        "annualMm": 525.9900052547455,
+        "flippedLatitudeHas12MissingMonths": true
+      },
+      {
+        "name": "Villahermosa",
+        "coordinate": [
+          -92.93,
+          17.99
+        ],
+        "cellCenter": [
+          -92.875,
+          17.875
+        ],
+        "monthlyMm": [
+          114.38999938964844,
+          66.52999877929688,
+          40.099998474121094,
+          41.02000045776367,
+          72.97000122070312,
+          169.6999969482422,
+          134.1199951171875,
+          197.61000061035156,
+          271.7099914550781,
+          293.80999755859375,
+          171.14999389648438,
+          92.3499984741211
+        ],
+        "annualMm": 1665.4599723815918,
+        "flippedLatitudeHas12MissingMonths": true
+      }
+    ],
+    "annualSumMaxFloat32StorageErrorMm": 0.0001201629638671875,
+    "sourceWindowCompleteCells": 6034,
+    "landIntersectingNativeCells": 3162,
+    "validMexicanNativeCells": 3153,
+    "missingMexicanNativeCells": 9,
+    "validBoundaryCellsRetainedDespiteCenterOutsideMexico": 376,
+    "sourceMonthsInValidMexicanCells": 37836,
+    "mexicanNativeAnnualRangeMm": [
+      22.739999771118164,
+      2482.909912109375
+    ],
+    "originalLandPixels": 130079,
+    "retainedLandPixels": 130103,
+    "displayLandPixels": 130079,
+    "retainedOutsideOriginalPixels": 61,
+    "originalOutsideRetainedPixels": 37,
+    "validDisplayPixels": 130061,
+    "missingDisplayLandPixels": 18,
+    "opaquePixelsOutsideOriginalLand": 0,
+    "opaquePixelsOutsideRetainedLand": 36,
+    "transparentMissingPixelsVerified": true,
+    "pngRoundTripExact": true,
+    "moreRainNeverLighterVerifiedAtEachIntegerMm": true,
+    "lambertRoundTripMaxMetres": 6.51925802230835e-09,
+    "displayAnnualRangeMm": [
+      22.739999771118164,
+      2482.909912109375
+    ]
+  },
+  "reproduction": {
+    "script": "prepare_gpcc.py",
+    "scriptSha256": "67744d56066c449a020978418de87dd646b780cf55f221015e45b267705da30a",
+    "projectionScript": "scripts/prepare-mexico-relief-background.py",
+    "projectionScriptSha256": "447386c34c6d22de83603e36c447195151a52d832e8fb49b705c9f86632fee55",
+    "dependencies": {
+      "numpy": "2.3.5",
+      "scipy": "1.17.0",
+      "Pillow": "12.3.0",
+      "shapely": "2.1.2"
+    }
+  },
+  "limitations": [
+    "Display raster is not a station reading, field survey, state average or land-area statistic.",
+    "0.25-degree source support is retained; color gradation does not imply finer spatial measurements.",
+    "Display clipping uses the original INEGI coast; pixel differences against the existing simplified boundary are reported, and both geometries are pinned. State polygons do not provide an exhaustive inland-water mask.",
+    "Uncovered islands and coastal slivers remain missing rather than estimated.",
+    "GPCC grid normals and SMN station normals share the 1991–2020 baseline but are different measurement supports; do not replace station climographs with gridded samples."
+  ],
+  "publisherMd5": "d701c717e08ce6ad457c9f4004984d65",
+  "publicPackaging": {
+    "originalSource": {
+      "file": "precipitation-source.json",
+      "bytes": 5117,
+      "sha256": "3362ec17a923abbfae8dd36ff5c227d0c122ee0f40e4bbac4cc07d9ea26d6d46"
+    },
+    "originalManifestSha256": "69a66ce4fb7a8cd84453b8309b51f4dc3cdc84cbf03d28900fc30fecd2f078dd",
+    "change": "Move archiveMd5 from the source record to publisherMd5 in this manifest; name the byte-identical inherited source record source/manifest.json and update its reference. No value, citation, raster or grid is removed or changed."
+  }
+}

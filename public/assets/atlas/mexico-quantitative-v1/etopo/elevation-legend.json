@@ -1,0 +1,58 @@
+{
+  "titleJa": "標高",
+  "unit": "m",
+  "datum": "EGM2008",
+  "type": "continuous-piecewise-linear-sRGB",
+  "domain": [
+    -600,
+    5500
+  ],
+  "ticks": [
+    -600,
+    0,
+    1000,
+    2000,
+    3000,
+    4000,
+    5500
+  ],
+  "colorStops": [
+    {
+      "value": -600,
+      "color": "#fffaf0"
+    },
+    {
+      "value": 0,
+      "color": "#fff4d8"
+    },
+    {
+      "value": 500,
+      "color": "#f4dfad"
+    },
+    {
+      "value": 1000,
+      "color": "#e5c486"
+    },
+    {
+      "value": 2000,
+      "color": "#c99655"
+    },
+    {
+      "value": 3000,
+      "color": "#a96b35"
+    },
+    {
+      "value": 4000,
+      "color": "#7c4326"
+    },
+    {
+      "value": 5500,
+      "color": "#492315"
+    }
+  ],
+  "belowDomain": "No data are below the displayed domain; do not silently clamp future data",
+  "aboveDomain": "No data are above the displayed domain; do not silently clamp future data",
+  "missing": "transparent; a separate no-data label is required if missing land cells occur",
+  "editionLabelJa": "ETOPO 2022（版年）・60秒格子・EGM2008基準",
+  "noteJa": "有効な負標高も保持。沿岸の混合セルを含むため、個別地点や全国の最低・最高標高の値には使えません。"
+}
