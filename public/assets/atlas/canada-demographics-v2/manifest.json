@@ -1,0 +1,59 @@
+{
+  "referenceYear": 2021,
+  "retrievedAt": "2026-10-06",
+  "sources": [
+    {
+      "kind": "national",
+      "url": "https://www12-2021.statcan.gc.ca/census-recensement/2021/dp-pd/prof/details/download-telecharger/comp/GetFile.cfm?Lang=E&FILETYPE=CSV&GEONO=001",
+      "bytes": 736546,
+      "sha256": "6cfd0268e768ea1177f4d95fe08dc617cd552b44eee907a3eda69ee24abd078b"
+    },
+    {
+      "kind": "cma",
+      "url": "https://www12-2021.statcan.gc.ca/census-recensement/2021/dp-pd/prof/details/download-telecharger/comp/GetFile.cfm?Lang=E&FILETYPE=CSV&GEONO=003",
+      "bytes": 45451902,
+      "sha256": "2eee212cc8071f2f92a1f7dade649f62162fd8cdcf9ec1842f17be3d5a4b3cfa"
+    },
+    {
+      "kind": "cd",
+      "url": "https://www12-2021.statcan.gc.ca/census-recensement/2021/dp-pd/prof/details/download-telecharger/comp/GetFile.cfm?Lang=E&FILETYPE=CSV&GEONO=004",
+      "bytes": 12612443,
+      "sha256": "c52d08ee5035c2240795b154a9692de8cc53dd488d2a5137f0d1bde4c325cd97"
+    },
+    {
+      "kind": "boundary",
+      "url": "https://www12-2021.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/files-fichiers/lcd_000b21a_e.zip",
+      "bytes": 139871865,
+      "sha256": "1b638cea73fbf8349ba908d86be678272b2abcc74240fb0dfd9daf7a28457ad0"
+    }
+  ],
+  "selection": {
+    "national": 1,
+    "cmas": 41,
+    "censusDivisions": 293,
+    "religionLeafGroups": 23,
+    "selectedRows": 14740
+  },
+  "method": "Exact DGUID/CDUID join. Source EPSG:3347 transformed to EPSG:4326, exported coordinates rounded to 5 decimals. Shapely topology-preserving simplification: 600 m south of representative-point latitude 60 N; 3000 m north. Polygon parts and holes smaller than tolerance squared omitted; largest component always retained. Area conversion for this display-only omission: 12,364,000,000 * cos(latitude) square metres per square degree. Full-CD statistics even when the viewport clips a polygon. No area-derived counts. Profile total-count SYMBOL is column 12, not repeated rate/sex SYMBOL columns. Missing remains null; published zero remains zero.",
+  "ethnicity": "Visible minority categories. Not a visible minority is not White. Indigenous identity is a separate overlapping variable; never sum all displayed rows. Same Profile variables for CMA, CD and Canada.",
+  "religion": "23 leaf groups; Christian parent excluded. No religion retained separately.",
+  "licence": "https://www.statcan.gc.ca/en/terms-conditions/open-licence",
+  "outputs": {
+    "data-source/atlas/canada-demographics-v2/profile-selected.csv.gz": {
+      "bytes": 97658,
+      "sha256": "f79bee012604679b2ebec3abbb894848a4734dd825f89074ca341dbe06c1af3f"
+    },
+    "public/assets/atlas/canada-demographics-v2/regions.geojson": {
+      "bytes": 2088886,
+      "sha256": "3be816f276323fe9b4ed7b8d8652c79533ea28f6402921b00c1f37f3d5d84927"
+    },
+    "src/data/atlas/canada/profile-ethnicity.json": {
+      "bytes": 386720,
+      "sha256": "922210fbd028f180316398f40439bd228e2d2013b1bd346183933568be162848"
+    },
+    "src/data/atlas/canada/profile-religion.json": {
+      "bytes": 553866,
+      "sha256": "148f446259d6e9425fa08c12b8ba8d0df2422e7425dbbff90ac2bbf350f21f51"
+    }
+  }
+}
