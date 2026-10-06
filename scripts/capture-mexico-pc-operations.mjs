@@ -24,6 +24,90 @@ async function select(page, selector, value) {const locator = page.locator(selec
 async function check(page, selector, value) {const locator = page.locator(selector).first(); await reveal(locator); await locator.setChecked(value); await settled(page);}
 async function text(page, selector) {return (await page.locator(selector).first().textContent())?.trim() ?? '';}
 async function frame(page, field) {return page.locator(map[field]).getAttribute('viewBox');}
+
+async function populationNationalLayout(page) {
+  const layout = await page.evaluate(() => {
+    const svg = document.querySelector('[data-population-map]');
+    const bounds = node => {const box = node.getBoundingClientRect(); return {left: box.left, top: box.top, right: box.right, bottom: box.bottom, width: box.width, height: box.height};};
+    const map = bounds(svg), clip = {...map}, ancestors = [];
+    for (let node = svg.parentElement; node && !node.classList.contains('atlas-map-column'); node = node.parentElement) {
+      const style = getComputedStyle(node), box = bounds(node);
+      if (/(hidden|clip|auto|scroll)/.test(style.overflowX)) {clip.left = Math.max(clip.left, box.left); clip.right = Math.min(clip.right, box.right);}
+      if (/(hidden|clip|auto|scroll)/.test(style.overflowY)) {clip.top = Math.max(clip.top, box.top); clip.bottom = Math.min(clip.bottom, box.bottom);}
+      ancestors.push({tag: node.tagName, className: node.className, box, overflowX: style.overflowX, overflowY: style.overflowY});
+    }
+    const shapes = [...svg.querySelectorAll('path[data-population-state-shape]')].map(node => ({state: node.getAttribute('data-population-state-shape'), ...bounds(node)}));
+    const labels = [...svg.querySelectorAll('[data-population-state-label]')].filter(node => !node.closest('[hidden]') && getComputedStyle(node).display !== 'none' && node.getBoundingClientRect().width > 0).map(node => {
+      const label = node.querySelector('text') ?? node, matrix = label.getScreenCTM();
+      return {text: label.textContent.trim(), screenFontSize: parseFloat(getComputedStyle(label).fontSize) * Math.hypot(matrix.a, matrix.b), ...bounds(label)};
+    });
+    const settings = document.querySelector('details[data-population-display-settings]');
+    const controls = [...document.querySelectorAll('select[data-population-view],select[data-population-state]')].map(node => ({inSettings: settings?.contains(node) ?? false, inMapFrame: Boolean(node.closest('#mexico-population-distribution'))}));
+    return {map, clip, ancestors, shapes, labels, settings: settings ? {open: settings.open, box: bounds(settings), summary: settings.querySelector('summary')?.textContent} : null, controls, preserveAspectRatio: svg.getAttribute('preserveAspectRatio')};
+  });
+  assert.equal(layout.shapes.length, 32);
+  for (const shape of layout.shapes) assert(shape.left >= layout.clip.left - 1.5 && shape.right <= layout.clip.right + 1.5 && shape.top >= layout.clip.top - 1.5 && shape.bottom <= layout.clip.bottom + 1.5, `State ${shape.state} is clipped in the nationwide population map`);
+  assert(layout.labels.length > 0 && layout.labels.every(label => /[ぁ-んァ-ヶ一-龯]/u.test(label.text) && !/^[A-Za-z.\s]+$/.test(label.text)), 'Nationwide population labels must use readable Japanese place names');
+  assert(layout.settings && !layout.settings.open, 'Initial population display controls must be in a closed disclosure');
+  assert(layout.settings.box.top >= layout.map.bottom - 1.5, 'Population selectors must be below the map');
+  assert.equal(layout.controls.length, 2);
+  assert(layout.controls.every(control => control.inSettings && !control.inMapFrame), 'Population selectors must belong to the disclosure below the map');
+  return layout;
+}
+
+async function religionOverviewLayout(page) {
+  const layout = await page.locator('[data-population-overview-category="religion"]').evaluate(root => {
+    const box = node => {const r = node.getBoundingClientRect(); return {x: r.x, y: r.y, width: r.width, height: r.height, right: r.right, bottom: r.bottom};};
+    const cards = [...root.querySelectorAll('.population-overview-card')].map(node => ({...box(node), title: node.querySelector('.population-overview-card-title')?.textContent, svg: box(node.querySelector('svg')), text: node.textContent, stateCount: node.querySelectorAll('use[data-overview-state]').length}));
+    const denominators = [...root.querySelectorAll('[data-population-overview-denominator="religion"]')].map(node => ({text: node.textContent, ...box(node)}));
+    return {container: box(root), cards, denominators};
+  });
+  assert.equal(layout.cards.length, 3);
+  const ordered = [...layout.cards].sort((a, b) => a.x - b.x);
+  assert(Math.max(...ordered.map(card => card.y)) - Math.min(...ordered.map(card => card.y)) <= 2, 'PC religion maps must share one row');
+  assert(Math.max(...ordered.map(card => card.width)) - Math.min(...ordered.map(card => card.width)) <= 2, 'PC religion maps must have equal-width cards');
+  for (const [index, card] of ordered.entries()) {
+    assert.equal(card.stateCount, 32); assert(card.svg.width > 100 && card.svg.height > 60, 'Religion overview map must remain readable');
+    if (index) assert(ordered[index - 1].right <= card.x + .5, 'Religion overview cards must not overlap');
+    assert(card.right <= layout.container.right + 1, 'Religion overview must fit the PC map column');
+    assert(!card.text.includes('分母：'), 'The common religion denominator must not repeat in each card');
+  }
+  assert.equal(layout.denominators.length, 1, 'Religion overview must show the common denominator once');
+  assert.match(layout.denominators[0].text, /全.*人口|全.*住民/);
+  return layout;
+}
+
+async function cityClimateReadingLayout(page, requestedId) {
+  const layout = await page.evaluate(requestedId => {
+    const plot = [...document.querySelectorAll('section[data-mexico-climate-plot]')].find(node => requestedId ? node.getAttribute('data-mexico-climate-plot') === requestedId : !node.hidden);
+    if (!plot) throw new Error('The selected city climate plot is missing');
+    const id = plot.getAttribute('data-mexico-climate-plot');
+    const box = node => {if (!node) return null; const r = node.getBoundingClientRect(); return {top: r.top, bottom: r.bottom, left: r.left, right: r.right, width: r.width, height: r.height};};
+    const svg = plot.querySelector('svg'), figure = plot.querySelector(':scope > .atlas-climate-plot') ?? svg;
+    const reading = plot.querySelector('[data-mexico-climate-city-reading]'), heading = reading?.querySelector('[data-mexico-climate-city-class]'), explanation = reading?.querySelector('[data-mexico-climate-city-explanation]');
+    const observations = plot.querySelector('details[data-mexico-climate-city-observations]');
+    return {id, hidden: plot.hidden, chart: box(svg), reading: box(reading), heading: box(heading), explanation: box(explanation), panel: box(plot.closest('.mexico-reading')), classification: heading?.textContent.trim(), explanationText: explanation?.textContent.trim(), directlyAfterChart: figure?.nextElementSibling === reading, observations: observations ? {open: observations.open, reading: observations.querySelector('[data-mexico-climate-observation-reading]')?.textContent.trim(), rows: observations.querySelectorAll('tbody tr').length, sourceLinks: [...observations.querySelectorAll('a[href]')].map(link => ({text: link.textContent, href: link.getAttribute('href')})), text: observations.textContent, afterReading: Boolean(reading?.compareDocumentPosition(observations) & Node.DOCUMENT_POSITION_FOLLOWING)} : null};
+  }, requestedId);
+  assert(!layout.hidden && layout.chart?.height > 0 && layout.heading?.height > 0 && layout.explanation?.height > 0, 'The plot, city classification and explanation must be rendered');
+  assert(layout.directlyAfterChart, 'The city classification and explanation must directly follow its diagram');
+  assert(layout.reading.top >= layout.chart.bottom - 1.5 && layout.reading.top - layout.chart.bottom <= 32, 'The city reading must sit immediately below the plot');
+  assert(layout.heading.bottom <= layout.panel.bottom + 1.5 && layout.explanation.top < layout.panel.bottom, 'The city classification and start of its explanation must be visible in the reading panel');
+  const expected = layout.id === 'mexico-city-tacubaya' ? ['温帯', '亜湿潤', 'C(w1)(w)'] : ['半乾燥', '高温', "BS1(h')hw"];
+  for (const word of expected) assert(layout.classification?.includes(word), `Missing city classification: ${word}`);
+  assert((layout.explanationText?.length ?? 0) > 30 && /[ぁ-んァ-ヶ一-龯]/u.test(layout.explanationText), 'City classification needs a Japanese explanation');
+  assert(layout.observations && !layout.observations.open && layout.observations.afterReading, 'Observed values and source notes must be in the following closed disclosure');
+  assert((layout.observations.reading?.length ?? 0) > 30);
+  assert.equal(layout.observations.rows, 12); assert(layout.observations.sourceLinks.length > 0);
+  assert.match(layout.observations.text, /1991[–—-]2020/);
+  return layout;
+}
+
+export async function inspectMexicoInitialPresentation(page, field) {
+  if (field === 'population') return {populationNationalLayout: await populationNationalLayout(page)};
+  if (field === 'nature') return {cityClimateReadingLayout: await cityClimateReadingLayout(page)};
+  return null;
+}
+
 async function legibleNumericTicks(page) {
   const ticks = await page.locator('.mexico-quantitative-ticks > span').evaluateAll(nodes => nodes.map(node => {
     const box = node.getBoundingClientRect();
@@ -134,14 +218,17 @@ async function climate({page, evidence}) {
   await step('Both city plots and Japanese reading follow selection, reload and history', async () => {
     const ids = await page.locator('svg [data-mexico-climate-city]').evaluateAll(nodes => nodes.map(node => node.getAttribute('data-mexico-climate-city')));
     assert.equal(ids.length, 2);
+    const layouts = [];
     for (const id of ids) {
       await click(page, `svg [data-mexico-climate-city="${id}"]`);
       assert(await page.locator(`[data-mexico-climate-plot="${id}"]`).isVisible());
       assert((await text(page, `[data-mexico-climate-city-reading="${id}"]`)).length > 30);
       assert.match(await text(page, `[data-mexico-climate-plot="${id}"]`), /1991[–—-]2020/);
+      layouts.push(await cityClimateReadingLayout(page, id));
     }
     await reload(page);
     await history(page, () => click(page, `svg [data-mexico-climate-city="${ids[0]}"]`));
+    return {cityReadingLayouts: layouts};
   });
   await step('Relief and climate switching retain a usable map and camera controls', async () => {
     await click(page, 'button[data-mexico-nature-view="relief"]');
@@ -313,7 +400,7 @@ async function composition({page, evidence}) {
       assert.equal(card.states.length, 32); const metric = config.metrics.find(item => item.id === card.id);
       for (const area of card.states) {const row = metric.states[area.state], share = row.count / row.denominator * 100; const bin = commonReligionBins.find(bin => share >= bin.min && (bin.max === null || share < bin.max)); assert.equal(area.fill, bin.color, `${card.id}/${area.state}: nationwide color must encode the common absolute-share band`);}
     }
-    return {metricIds: colors.map(card => card.id), statesPerMap: 32, commonBins: commonReligionBins};
+    return {metricIds: colors.map(card => card.id), statesPerMap: 32, commonBins: commonReligionBins, layout: await religionOverviewLayout(page)};
   });
   await step('All eight religion details retain their own bands, actual shares and denominators', async () => {
     const metrics = config.metrics.filter(metric => metric.category === 'religion'); assert.equal(metrics.length, 8);

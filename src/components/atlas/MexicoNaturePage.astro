@@ -1,6 +1,6 @@
 ---
 import MexicoWorkspace from './MexicoWorkspace.astro';
-import AtlasClimatePlot from './AtlasClimatePlot.astro';
+import MexicoClimateDiagrams from './MexicoClimateDiagrams.astro';
 import climateNormals from '../../data/atlas/mexico/climate-normals.json';
 import nature from '../../data/atlas/mexico/nature-v1.json';
 import agriculture from '../../data/atlas/mexico/agriculture.json';
@@ -89,7 +89,7 @@ const config = {routes, defaultViewBox: mapViewBox, states: statePaths.map(item 
   </details>
  </div>
  <div slot="reading" class="mexico-nature-reading">
-  <section class="mexico-climate-diagrams" data-mexico-climate-diagrams><h2>都市の雨温図</h2>{climateNormals.stations.map(station=><section data-mexico-climate-plot={station.id} hidden={station.id!=='mexico-city-tacubaya'}><AtlasClimatePlot name={station.name} period="1991–2020" temperatureC={station.temperatureC} precipitationMm={station.precipitationMm}/><p class="mexico-caption">棒：降水量mm/月、線：平均気温℃。1991–2020年。</p><p class="mexico-climate-city-reading" data-mexico-climate-city-reading={station.id}>{station.id==='mexico-city-tacubaya' ? '標高2,308.6 mのタクバヤでは、月平均気温は1月の15.3℃から5月の20.5℃まで変化します。降水は6〜9月に集中し、この4か月で640.2 mm、年間の75.6%を占めます。' : '標高60 mのクリアカンでは、月平均気温が6月に30.9℃となり、1月も20.4℃です。3〜5月の降水量は計5.1 mmですが、7〜9月には計554.9 mmとなり、年間の80.7%が集中します。'}</p><p class="mexico-caption">{station.scopeNoteJa}</p><details><summary>12か月の値・観測所と出典</summary><p>{station.stationName}（{station.stationId}）、標高{station.altitudeM}m。{station.latitude}°N / {Math.abs(station.longitude)}°W。<a href={station.sourceUrl}>SMNの公式平年値</a></p><table><caption>{station.name}：1991–2020年、℃・mm/月</caption><thead><tr><th>月</th><th>平均気温℃</th><th>降水量mm</th><th>使用年数</th></tr></thead><tbody>{station.temperatureC.map((temperature,index)=><tr><th>{index+1}</th><td>{temperature}</td><td>{station.precipitationMm[index]}</td><td>{station.temperatureYears[index]} / {station.precipitationYears[index]}</td></tr>)}</tbody></table></details></section>)}<details><summary>観測点を選ぶ</summary>{climateNormals.stations.map(station=><button type="button" data-mexico-climate-city={station.id} aria-pressed={String(station.id==='mexico-city-tacubaya')}>{station.name}</button>)}</details><p class="mexico-caption" data-mexico-climate-notice hidden></p><details class="mexico-climate-comparison-purpose"><summary>2都市の比較で読むこと</summary><p>高原の首都は夏に雨が集中する。北西部Culiacánの暖かい冬と比べ、水を使う季節の違いを見る。</p></details><details class="mexico-climate-code-reading" open><summary>BS・BWなど、地図の気候記号を読む</summary><p>この地図はINEGIのGarcía改訂ケッペン分類です。BS系には「半乾燥」のBS1と「乾燥」のBS0などがあり、BW系には「非常に乾燥」の区分があります。例えばBS1hwは半乾燥・やや高温、BS1kwは半乾燥・温帯、BWhwは非常に乾燥・やや高温です。</p><p>地図の記号を選ぶと、日本語の分類名と完全な原コードを併記します。A系は熱帯、C系は温帯、C(E)は冷涼への移行、E(T)Hは寒冷な高地の区分です。細分記号は原記載のまま保持しています。</p><p class="mexico-caption">地図は2008年刊行・統一観測期間は未記載。雨温図と降水面は1991–2020年平年値です。</p></details></section>
+  <MexicoClimateDiagrams />
   <a class="mexico-return" data-mexico-nature-source-return hidden href={routes.agriculture}></a>
   <nav class="mexico-nature-comparison-dock" aria-label="自然条件と社会活動を比較">
    <a class="mexico-comparison-link" data-mexico-nature-compare-link="irrigation" href={`${routes.nature}?view=climate&compare=irrigation&state=25`}>乾燥気候と灌漑農地率を比べる</a>

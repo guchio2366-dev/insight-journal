@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import {mkdir, readdir, stat, writeFile} from 'node:fs/promises';
 import path from 'node:path';
-import {mexicoPCOperationCases} from './capture-mexico-pc-operations.mjs';
+import {inspectMexicoInitialPresentation, mexicoPCOperationCases} from './capture-mexico-pc-operations.mjs';
 
 const profile = {viewport: {width: 1280, height: 665}, deviceScaleFactor: 1, isMobile: false, hasTouch: false};
 const fields = ['agriculture', 'nature', 'industry', 'population'];
@@ -92,6 +92,7 @@ async function capture(browser, origin, basePath, output, scene) {
       await settle(page);
     }
     Object.assign(record, await measure(page, selected));
+    if (country === 'mexico' && id === 'initial') record.presentation = await inspectMexicoInitialPresentation(page, field);
     assert.equal(record.rootDataset[selected.ready[0]], selected.ready[1], 'Controller is not ready; fallback is not live-map evidence');
     assert.equal(record.viewport.width, profile.viewport.width);
     assert.equal(record.viewport.height, profile.viewport.height);

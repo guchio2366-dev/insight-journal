@@ -20,7 +20,11 @@ const routes = {
  assets: assetRoot,
  labelPoints: Object.fromEntries(population.states.map(row => [row.stateCode, stateLabelPoint(row.stateCode)])),
 };
-const labelCodes = ['02','03','05','08','14','19','25','26','31'];
+const mapLabels = [
+ {stateCode:'08',label:'チワワ州',point:stateLabelPoint('08'),anchor:'middle',leader:false},
+ {stateCode:'09',label:'メキシコ市',point:[560,520],anchor:'start',leader:true},
+ {stateCode:'31',label:'ユカタン州',point:stateLabelPoint('31'),anchor:'middle',leader:false},
+];
 const shapes = stateFeatures.map(feature => {
  const row = population.states.find(row => row.stateCode === feature.properties.code)!;
  return {row, path: geometryPath(feature.geometry), point: stateLabelPoint(row.stateCode)};
@@ -46,38 +50,35 @@ const overviewGroups=['ethnicity','religion'] as const;
     <h2>{category==='religion'?'宗教の全国一覧｜同じ割合の階級で3図を比べる':'民族・自己認識の全国一覧'}</h2>
     <p>{category==='religion'?'色は各州の全人口に占める割合です。3図とも同じ色は同じ割合階級を表します。':'言語・自己認識は別の指標です。分母と割合の階級を、それぞれの図で確認します。'}</p>
     <div class="population-overview-grid">{mexicoCompositionOverviewMetrics(compositionData,category).map(metric=><article class="population-overview-card">
-     <button type="button" data-population-overview-metric={metric.id} aria-label={`${metric.label}の全国分布を大きく表示し、州を選ぶ`}>
+     <button type="button" data-population-overview-metric={metric.id} aria-label={`${metric.label}の全国分布を大きく表示し、必要に応じて州別の値を見る`}>
       <span class="population-overview-card-title">{metric.label}</span>
-      <svg viewBox={mapViewBox} role="img" aria-label={`${metric.label}・2020年の州内割合。全国${formatMexicoCompositionShare(mexicoCompositionNationalRecord(metric),metric)}`}>
+      <svg viewBox={mapViewBox} preserveAspectRatio="xMidYMid meet" role="img" aria-label={`${metric.label}・2020年の州内割合。全国${formatMexicoCompositionShare(mexicoCompositionNationalRecord(metric),metric)}`}>
        <defs><pattern id={`mexico-population-overview-missing-${metric.id}`} width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" fill="#eef0e7"/><path d="M0,9L9,0" stroke="#798c83" stroke-width="2"/></pattern></defs>
        {shapes.map(({row})=><use href={`#mexico-population-outline-${row.stateCode}`} data-overview-state={row.stateCode} fill={mexicoCompositionOverviewColor(metric.states[row.stateCode],metric).replace('mexico-population-missing',`mexico-population-overview-missing-${metric.id}`)}><title>{row.nameJa}：{formatMexicoCompositionShare(metric.states[row.stateCode],metric)}、{formatMexicoPopulation(metric.states[row.stateCode].count,metric.states[row.stateCode].status)}人</title></use>)}
       </svg>
       <span class="population-overview-national">全国 {formatMexicoCompositionShare(mexicoCompositionNationalRecord(metric),metric)}<small>{formatMexicoPopulation(metric.nationalCount,metric.nationalStatus)}人</small></span>
       <span class="population-overview-action">大きい地図・州別の値へ →</span>
      </button>
-     <p>分母：{metric.countDenominatorLabel}</p>
+     {category==='ethnicity'&&<p>分母：{metric.countDenominatorLabel}</p>}
      {category==='ethnicity'&&<details><summary>この図の割合階級</summary><ul class="population-overview-key">{(metric.shareBins??mexicoCompositionShareBins).map(bin=><li><i style={`background:${bin.color}`} aria-hidden="true"/>{bin.label}</li>)}</ul></details>}
     </article>)}</div>
+    {category==='religion'&&<p class="population-overview-denominator" data-population-overview-denominator="religion">3図共通の分母：全年齢の通常居住人口（不詳を含む）。州の色は各州の人口、全国の割合は全国人口{formatMexicoPopulation(population.nationalPopulation)}人を分母にしています。</p>}
    </div>)}
   </section>
    <div class="atlas-map-frame mexico-map-frame" id="mexico-population-distribution">
    <div class="population-map-actions" aria-label="人口地図の表示範囲"><button type="button" data-population-map-action="fit">全体</button><button type="button" data-population-map-action="in" aria-label="人口地図を拡大">＋</button><button type="button" data-population-map-action="out" aria-label="人口地図を縮小">−</button></div>
-   <div class="mexico-controls population-controls">
-    <label>地図の指標<select data-population-view disabled><option value="density" selected>人口密度（色）</option><option value="population">人口規模（円）</option></select></label>
-    <label>選ぶ州<select data-population-state disabled><option value="" selected>全国・州を選ばない</option>{population.states.map(row => <option value={row.stateCode}>{row.nameJa}</option>)}</select></label>
-   </div>
    <p class="mexico-caption population-reference" data-population-reference hidden>参考：人口分布</p>
   <figure class="population-map-figure" data-population-normal>
-   <svg class="mexico-map population-map" data-mexico-map data-population-map viewBox={mapViewBox} role="group" aria-labelledby="mexico-population-map-title mexico-population-map-desc">
+   <svg class="mexico-map population-map" data-mexico-map data-population-map viewBox={mapViewBox} preserveAspectRatio="xMidYMid meet" role="group" aria-labelledby="mexico-population-map-title mexico-population-map-desc">
     <title id="mexico-population-map-title">2020年の州別人口密度</title>
     <desc id="mexico-population-map-desc">INEGIの32州の人口密度を色で表示。単位は人/km²、州全域の平均です。人口規模を選ぶと円の面積で州人口を表示します。選ぶ州のメニューと全州の表でも値を読めます。表示州境は2025年、統計は2020年です。</desc>
     <defs><pattern id="mexico-population-missing" width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" fill="#eef0e7"/><path d="M-2,2L2,-2M0,9L9,0M7,11L11,7" stroke="#798c83" stroke-width="2"/></pattern></defs>
     <g aria-hidden="true">{shapes.map(({row}) => <use href={`#mexico-population-outline-${row.stateCode}`} class="mexico-context population-context" />)}</g>
     <g>{shapes.map(({row,path}) => <path d={path} class="population-state" data-population-state-shape={row.stateCode} fill={mexicoDensityColor(row.density)} fill-rule="evenodd" role="button" tabindex="0" aria-pressed="false" aria-label={`${row.nameJa}、2020年人口密度 ${formatMexicoDensity(row.density)}人/km²、人口 ${formatMexicoPopulation(row.population)}人`}><title>{row.nameJa}：{formatMexicoDensity(row.density)}人/km²、{formatMexicoPopulation(row.population)}人（2020年）</title></path>)}</g>
     <g data-population-symbols hidden>{symbolShapes.map(({row,point}) => <g class="population-symbol" data-population-state-symbol={row.stateCode} role="button" tabindex="0" aria-pressed="false" aria-label={`${row.nameJa}、2020年人口 ${formatMexicoPopulation(row.population)}人`}><circle cx={point[0]} cy={point[1]} r={mexicoPopulationRadius(row.population)} /><title>{row.nameJa}：{formatMexicoPopulation(row.population)}人（円の面積、2020年）</title></g>)}</g>
-    <g aria-hidden="true" class="population-labels">{shapes.filter(shape => labelCodes.includes(shape.row.stateCode)).map(({row,point}) => <text x={point[0]} y={point[1]-6} text-anchor="middle" data-population-state-label={row.stateCode}>{row.short}</text>)}</g>
+    <g aria-hidden="true" class="population-labels">{mapLabels.map(({stateCode,label,point,anchor,leader}) => <g data-population-state-label={stateCode}>{leader&&<path d={`M${stateLabelPoint(stateCode).join(',')}L${point[0]-12},${point[1]-12}h8`} />}<text x={point[0]} y={point[1]-6} text-anchor={anchor}>{label}</text></g>)}</g>
     <g class="population-selected-label" data-population-selected-label aria-hidden="true" hidden><path d={`M${selectedX},${selectedY}l20,-24`} /><text x={selectedX+25} y={selectedY-25} data-population-selected-label-text></text></g>
-    <g class="population-map-context" aria-hidden="true"><text x="450" y="45">米国</text><text x="95" y="415">太平洋</text><text x="720" y="250">メキシコ湾</text><text x="800" y="540">グアテマラ</text></g>
+    <g class="population-map-context" aria-hidden="true"><text x="450" y="45">米国</text><text x="95" y="415">太平洋</text><text x="720" y="250">メキシコ湾</text><text x="870" y="540" text-anchor="end">グアテマラ</text></g>
     <g class="population-map-symbol-key" data-population-map-symbol-key hidden role="img" aria-label="円の面積の凡例。人口100万人、500万人、1000万人。地図の人口円と同じ座標縮尺。"><text x="45" y="476" class="population-map-key-heading">円の面積＝州人口</text>{mexicoPopulationLegendValues.map((value,index) => <g><circle cx={70+index*135} cy="524" r={mexicoPopulationRadius(value)} /><text x={70+index*135} y="572" text-anchor="middle">{value===1_000_000?'100万':value===5_000_000?'500万':'1,000万'}人</text></g>)}</g>
    </svg>
   </figure>
@@ -125,6 +126,13 @@ const overviewGroups=['ethnicity','religion'] as const;
    <details class="population-key-notes"><summary>表示州・統計と州境</summary><p class="mexico-caption" data-population-map-status aria-live="polite">2020年・全32州の平均密度。全国表示。</p><p class="mexico-caption population-source-caption">統計：2020年3月15日 ／ 州境：2025年。密度は公表値。</p></details>
  </Fragment>
  <Fragment slot="items">
+  <details class="population-display-settings" data-population-display-settings>
+   <summary>表示指標・州の詳細</summary>
+   <div class="mexico-controls population-controls">
+    <label>地図の指標<select data-population-view disabled><option value="density" selected>人口密度（色）</option><option value="population">人口規模（円）</option></select></label>
+    <label>州を詳しく見る<select data-population-state disabled><option value="" selected>全国・州を選ばない</option>{population.states.map(row => <option value={row.stateCode}>{row.nameJa}</option>)}</select></label>
+   </div>
+  </details>
   <button type="button" data-population-national>全国一覧へ</button>
   <label class="population-composition-selector" data-population-composition-selector hidden>統計の項目 <select data-population-composition-metric aria-label="民族・宗教の統計指標"></select></label>
   <label><input type="checkbox" data-population-only disabled /> <span data-population-only-label>選んだ州のデータだけ</span></label>

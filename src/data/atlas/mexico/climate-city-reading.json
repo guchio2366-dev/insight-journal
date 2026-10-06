@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "classification": "INEGI García-modified Köppen, published 2008",
+  "scope": "Climate polygon at each official SMN station coordinate; not a city-wide class or a classification recalculated from the 1991–2020 normals.",
+  "auditFile": "data-source/atlas/mexico/climate-normals/classification-audit.json",
+  "stations": [
+    {
+      "id": "mexico-city-tacubaya",
+      "stationId": "09048",
+      "coordinates": [-99.19611111, 19.40361111],
+      "sourceFeatureId": "climate-1124",
+      "sourceObjectId": 1124,
+      "classId": "32",
+      "sourceCode": "C(w1)(w)",
+      "sourceLabel": "Templado subhúmedo",
+      "labelJa": "温帯・亜湿潤",
+      "explanationJa": "高原にある観測所です。雨は夏に多く、冬は少なくなります。低地のクリアカンより気温が低く、年間の気温差も小さいことが雨温図から読めます。",
+      "observationReadingJa": "標高2,308.6 mのタクバヤでは、月平均気温は1月の15.3℃から5月の20.5℃まで変化します。降水は6〜9月に集中し、この4か月で640.2 mm、年間の75.6%を占めます。",
+      "locationCautionJa": "観測所は原分類図の境界から約296 mです。原図は縮尺1:100万のため、敷地単位の精度や市域全体の分類を示すものではありません。"
+    },
+    {
+      "id": "culiacan-dge",
+      "stationId": "25015",
+      "coordinates": [-107.407188, 24.806146],
+      "sourceFeatureId": "climate-287",
+      "sourceObjectId": 287,
+      "classId": "52",
+      "sourceCode": "BS1(h')hw",
+      "sourceLabel": "Semiseco cálido",
+      "labelJa": "半乾燥・高温",
+      "explanationJa": "暑い夏に雨が集中し、春は雨の少ない地域です。冬も暖かく、高原のタクバヤより一年を通して気温が高いことが雨温図から読めます。",
+      "observationReadingJa": "標高60 mのクリアカンでは、月平均気温が6月に30.9℃となり、1月も20.4℃です。3〜5月の降水量は計5.1 mmですが、7〜9月には計554.9 mmとなり、年間の80.7%が集中します。",
+      "locationCautionJa": "観測所は原分類図の境界から約10 kmです。原図は縮尺1:100万で、観測所所在地の区分を示します。市域全体が同じ分類とは限りません。"
+    }
+  ]
+}

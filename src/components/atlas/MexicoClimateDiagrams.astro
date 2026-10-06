@@ -1,0 +1,33 @@
+---
+import AtlasClimatePlot from './AtlasClimatePlot.astro';
+import climateNormals from '../../data/atlas/mexico/climate-normals.json';
+import climateReadings from '../../data/atlas/mexico/climate-city-reading.json';
+const readings = new Map(climateReadings.stations.map(item => [item.id, item]));
+---
+<section class="mexico-climate-diagrams" data-mexico-climate-diagrams>
+ <h2>都市の雨温図</h2>
+ {climateNormals.stations.map(station => {
+  const reading = readings.get(station.id)!;
+  return <section data-mexico-climate-plot={station.id} hidden={station.id !== 'mexico-city-tacubaya'}>
+   <AtlasClimatePlot name={station.name} period="1991–2020" temperatureC={station.temperatureC} precipitationMm={station.precipitationMm}/>
+   <section class="mexico-climate-city-reading" data-mexico-climate-city-reading={station.id} data-climate-source-feature={reading.sourceFeatureId}>
+    <h3 data-mexico-climate-city-class>{reading.labelJa}｜<span class="mexico-climate-city-code">{reading.sourceCode}</span></h3>
+    <p data-mexico-climate-city-explanation>{reading.explanationJa}</p>
+    <p class="mexico-caption" data-mexico-climate-city-classification-note>観測所所在地のINEGI区分（García改訂・2008年刊行）。米国版のケッペン＝ガイガー分類とは同一ではありません。</p>
+   </section>
+   <p class="mexico-caption">棒：降水量mm/月、線：平均気温℃。1991–2020年。</p>
+   <details data-mexico-climate-city-observations={station.id}>
+    <summary>観測値・期間・出典と分類の根拠</summary>
+    <p data-mexico-climate-observation-reading>{reading.observationReadingJa}</p>
+    <p class="mexico-caption">{station.scopeNoteJa}</p>
+    <p>{station.stationName}（{station.stationId}）、標高{station.altitudeM}m。{station.latitude}°N / {Math.abs(station.longitude)}°W。<a href={station.sourceUrl}>SMNの公式平年値</a></p>
+    <p class="mexico-caption">所在地の分類は、上記の公式観測所座標をINEGIの原分類図と照合したものです。原図形：{reading.sourceFeatureId}、原記載：<span lang="es">{reading.sourceLabel}</span>（{reading.sourceCode}）。雨温図の値から再判定した分類ではありません。{reading.locationCautionJa}</p>
+    <table><caption>{station.name}：1991–2020年、℃・mm/月</caption><thead><tr><th>月</th><th>平均気温℃</th><th>降水量mm</th><th>使用年数</th></tr></thead><tbody>{station.temperatureC.map((temperature,index) => <tr><th>{index+1}</th><td>{temperature}</td><td>{station.precipitationMm[index]}</td><td>{station.temperatureYears[index]} / {station.precipitationYears[index]}</td></tr>)}</tbody></table>
+   </details>
+  </section>;
+ })}
+ <details><summary>観測点を選ぶ</summary>{climateNormals.stations.map(station => <button type="button" data-mexico-climate-city={station.id} aria-pressed={String(station.id === 'mexico-city-tacubaya')}>{station.name}</button>)}</details>
+ <p class="mexico-caption" data-mexico-climate-notice hidden></p>
+ <details class="mexico-climate-comparison-purpose"><summary>2都市の比較で読むこと</summary><p>高原の首都は夏に雨が集中する。北西部Culiacánの暖かい冬と比べ、水を使う季節の違いを見る。</p></details>
+ <details class="mexico-climate-code-reading"><summary>BS・BWなど、地図の気候記号を読む</summary><p>この地図はINEGIのGarcía改訂ケッペン分類です。BS系には「半乾燥」のBS1と「乾燥」のBS0などがあり、BW系には「非常に乾燥」の区分があります。例えばBS1hwは半乾燥・やや高温、BS1kwは半乾燥・温帯、BWhwは非常に乾燥・やや高温です。</p><p>地図の記号を選ぶと、日本語の分類名と完全な原コードを併記します。A系は熱帯、C系は温帯、C(E)は冷涼への移行、E(T)Hは寒冷な高地の区分です。細分記号は原記載のまま保持しています。</p><p class="mexico-caption">地図は2008年刊行・統一観測期間は未記載。雨温図と降水面は1991–2020年平年値です。</p></details>
+</section>

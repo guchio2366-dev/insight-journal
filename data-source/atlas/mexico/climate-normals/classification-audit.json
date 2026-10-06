@@ -1,0 +1,451 @@
+{
+  "method": "Original unmodified SHP rings and matching DBF rows; station lon/lat projected by existing lambertForward; independent even-odd ray crossing across all 1695 records with explicit boundary exclusion; shortest Euclidean point-to-segment distance in native Lambert metres.",
+  "projection": {
+    "name": "INEGI Lambert Conformal Conic",
+    "datum": "ITRF92",
+    "ellipsoid": "GRS80",
+    "semiMajorM": 6378137,
+    "inverseFlattening": 298.257222101,
+    "standardParallel1": 17.5,
+    "standardParallel2": 29.5,
+    "latitudeOrigin": 12,
+    "centralMeridian": -102,
+    "falseEastingM": 2500000,
+    "falseNorthingM": 0
+  },
+  "sourceProjectionWkt": "PROJCS[\"North_America_Lambert_Conformal_Conic\",GEOGCS[\"ITRF92\",DATUM[\"D_ITRF_1992\",SPHEROID[\"GRS_1980\",6378137.0,298.257222101]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Lambert_Conformal_Conic\"],PARAMETER[\"False_Easting\",2500000.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",-102.0],PARAMETER[\"Standard_Parallel_1\",17.5],PARAMETER[\"Standard_Parallel_2\",29.5],PARAMETER[\"Latitude_Of_Origin\",12.0],UNIT[\"Meter\",1.0]]",
+  "svgPlacement": "The same projectNative formula as src/lib/atlas-mexico-geometry.ts; point-in-polygon uses native metres, not rounded SVG path strings.",
+  "source": {
+    "archivePath": "data-source/atlas/mexico/nature/climate-2008.zip",
+    "archiveBytes": 5237543,
+    "archiveSha256": "9678ed5307ec9ba9adeb958926a78226165017363f23761135ade400d53b896f",
+    "members": [
+      {
+        "name": "unidadesClimaticas.dbf",
+        "bytes": 378435,
+        "sha256": "dd1e29099d1520ac9ce3110917b99d7127d4a5df64c6b08ef7eeb8c14b96c149"
+      },
+      {
+        "name": "unidadesClimaticas.shp",
+        "bytes": 6389456,
+        "sha256": "b10a9f6302c1d754347101568bd59eb302e8eb81eb60c5b9f1a008c4145ec3d4"
+      },
+      {
+        "name": "UnidadesClimaticas.prj",
+        "bytes": 463,
+        "sha256": "9c43f8f8c41714c1cd852060bd102e53937f601850aea78ea4a4820cad0dc2c5"
+      }
+    ],
+    "records": 1695,
+    "sourceUrl": "https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825267568",
+    "scale": 1000000,
+    "classification": "Köppen modified by E. García with INEGI contributions; not Beck or an unmodified US Köppen classification"
+  },
+  "inputs": [
+    {
+      "file": "src/data/atlas/mexico/climate-normals.json",
+      "sha256": "cfa2c3d504da5feb50c3fe5d385aa78525af599f064fc124d8bc41578f1f72f5"
+    },
+    {
+      "file": "src/data/atlas/mexico/nature-v1.json",
+      "sha256": "7a215a77ce3109b72571502029ca42ab61298234bc34cf6e6d209b267b6ed89d"
+    },
+    {
+      "file": "src/data/atlas/mexico/geometry-index.json",
+      "sha256": "c18f61eb22816d9cb3b655df8a2aa71da2dcfc84b4bb4339308d0ea9d4d6689b"
+    }
+  ],
+  "results": [
+    {
+      "stationId": "mexico-city-tacubaya",
+      "officialStationId": "09048",
+      "nameJa": "メキシコシティ（タクバヤ）",
+      "coordinatesLonLat": [
+        -99.19611111,
+        19.40361111
+      ],
+      "coordinatesSourceStrings": [
+        "-99.19611111",
+        "19.40361111"
+      ],
+      "coordinateSourceFile": "data-source/atlas/mexico/climate-normals/nor9120_09048-selected.txt",
+      "coordinateSourceSha256": "a5737f714cfccd6763c8c519a0989b188241b2136e1fe7c7b5d88943736effdb",
+      "pointNativeM": [
+        2793639.726130857,
+        825728.2362005878
+      ],
+      "pointDisplaySvg": [
+        526.5076531264291,
+        421.2676893139344
+      ],
+      "original": {
+        "featureId": "climate-1124",
+        "objectId": 1124,
+        "classId": "32",
+        "sourceCode": "C(w1)(w)",
+        "sourceLabel": "Templado subhúmedo",
+        "recordIndex0": 1123,
+        "strictlyInside": true,
+        "onBoundary": false,
+        "boundaryToleranceM": 1e-7,
+        "boundaryDistanceNativeM": 295.5423108989736,
+        "nearest": {
+          "ringIndex0": 0,
+          "segmentIndex0": 1743,
+          "nativePoint": [
+            2793886.111123249,
+            825891.4529063982
+          ],
+          "lonLat": [
+            -99.1937285530479,
+            19.405045884563734
+          ]
+        }
+      },
+      "labelJa": "温帯・亜湿潤",
+      "sourceClassLabel": "Templado subhúmedo",
+      "displayGeometryMatches": [
+        {
+          "featureId": "climate-1124",
+          "classId": "32",
+          "sourceCode": "C(w1)(w)",
+          "sourceLabel": "Templado subhúmedo",
+          "strictlyInside": true,
+          "onBoundary": false,
+          "boundaryToleranceM": 1e-7,
+          "boundaryDistanceNativeM": 390.7471505055204,
+          "nearest": {
+            "ringIndex0": 0,
+            "segmentIndex0": 658,
+            "nativePoint": [
+              2793974.0683988673,
+              825930.4701825246
+            ],
+            "lonLat": [
+              -99.19288158626107,
+              19.40538371280602
+            ]
+          }
+        }
+      ],
+      "nearestDifferentSourceCode": {
+        "featureId": "climate-1009",
+        "objectId": 1009,
+        "classId": "32",
+        "sourceCode": "C(w0)(w)",
+        "sourceLabel": "Templado subhúmedo",
+        "recordIndex0": 1008,
+        "strictlyInside": false,
+        "onBoundary": false,
+        "boundaryToleranceM": 1e-7,
+        "boundaryDistanceNativeM": 295.5423108989736,
+        "nearest": {
+          "ringIndex0": 0,
+          "segmentIndex0": 203,
+          "nativePoint": [
+            2793886.111123249,
+            825891.4529063982
+          ],
+          "lonLat": [
+            -99.1937285530479,
+            19.405045884563734
+          ]
+        }
+      },
+      "nearestDifferentOriginalClass": {
+        "featureId": "climate-1181",
+        "objectId": 1181,
+        "classId": "54",
+        "sourceCode": "BS1kw",
+        "sourceLabel": "Semiseco templado",
+        "recordIndex0": 1180,
+        "strictlyInside": false,
+        "onBoundary": false,
+        "boundaryToleranceM": 1e-7,
+        "boundaryDistanceNativeM": 7622.165521945611,
+        "nearest": {
+          "ringIndex0": 0,
+          "segmentIndex0": 7,
+          "nativePoint": [
+            2801187.976956498,
+            826787.1586326621
+          ],
+          "lonLat": [
+            -99.12385117076401,
+            19.411848804726663
+          ]
+        }
+      },
+      "displayedDecimalRounding": {
+        "assumption": "half a last printed decimal unit; this is a rounding sensitivity check, not a claim of station positional accuracy",
+        "maxCornerDisplacementNativeM": 0.0007607929639582147,
+        "corners": [
+          {
+            "lonLat": [
+              -99.19611111500001,
+              19.403611105
+            ],
+            "displacementNativeM": 0.0007607929639582147,
+            "strictlyInsideOriginal": true
+          },
+          {
+            "lonLat": [
+              -99.19611111500001,
+              19.403611115
+            ],
+            "displacementNativeM": 0.0007607900018686157,
+            "strictlyInsideOriginal": true
+          },
+          {
+            "lonLat": [
+              -99.196111105,
+              19.403611105
+            ],
+            "displacementNativeM": 0.0007607926535997017,
+            "strictlyInsideOriginal": true
+          },
+          {
+            "lonLat": [
+              -99.196111105,
+              19.403611115
+            ],
+            "displacementNativeM": 0.0007607912741088757,
+            "strictlyInsideOriginal": true
+          }
+        ],
+        "roundedCoordinateChecks": [
+          {
+            "digits": 4,
+            "lonLat": [
+              -99.1961,
+              19.4036
+            ],
+            "displacementNativeM": 1.6904778595233383,
+            "strictlyInsideOriginal": true
+          },
+          {
+            "digits": 5,
+            "lonLat": [
+              -99.19611,
+              19.40361
+            ],
+            "displacementNativeM": 0.16889562514878081,
+            "strictlyInsideOriginal": true
+          },
+          {
+            "digits": 6,
+            "lonLat": [
+              -99.196111,
+              19.403611
+            ],
+            "displacementNativeM": 0.016737404648852615,
+            "strictlyInsideOriginal": true
+          }
+        ]
+      },
+      "stationPeriod": "1991–2020",
+      "classificationEdition": 2008,
+      "classificationObservationPeriod": null,
+      "suggestedHeadingJa": "観測所所在地の気候区分：温帯・亜湿潤〔C(w1)(w)〕"
+    },
+    {
+      "stationId": "culiacan-dge",
+      "officialStationId": "25015",
+      "nameJa": "クリアカン（DGE）",
+      "coordinatesLonLat": [
+        -107.407188,
+        24.806146
+      ],
+      "coordinatesSourceStrings": [
+        "-107.407188",
+        "24.806146"
+      ],
+      "coordinateSourceFile": "data-source/atlas/mexico/climate-normals/nor9120_25015-selected.txt",
+      "coordinateSourceSha256": "e7b71c26d7a347b78d5c1e65c8205ff41c73b3a2a1a2dd6a03e36d9819e9c75d",
+      "pointNativeM": [
+        1956267.1739758486,
+        1428488.1549884174
+      ],
+      "pointDisplaySvg": [
+        310.40787181302545,
+        265.7141232228132
+      ],
+      "original": {
+        "featureId": "climate-287",
+        "objectId": 287,
+        "classId": "52",
+        "sourceCode": "BS1(h')hw",
+        "sourceLabel": "Semiseco cálido",
+        "recordIndex0": 286,
+        "strictlyInside": true,
+        "onBoundary": false,
+        "boundaryToleranceM": 1e-7,
+        "boundaryDistanceNativeM": 10000.277602391803,
+        "nearest": {
+          "ringIndex0": 0,
+          "segmentIndex0": 1511,
+          "nativePoint": [
+            1946361.1724145801,
+            1429858.0765894756
+          ],
+          "lonLat": [
+            -107.50612577299314,
+            24.815149538857053
+          ]
+        }
+      },
+      "labelJa": "半乾燥・高温",
+      "sourceClassLabel": "Semiseco cálido",
+      "displayGeometryMatches": [
+        {
+          "featureId": "climate-287",
+          "classId": "52",
+          "sourceCode": "BS1(h')hw",
+          "sourceLabel": "Semiseco cálido",
+          "strictlyInside": true,
+          "onBoundary": false,
+          "boundaryToleranceM": 1e-7,
+          "boundaryDistanceNativeM": 10000.277602391803,
+          "nearest": {
+            "ringIndex0": 0,
+            "segmentIndex0": 623,
+            "nativePoint": [
+              1946361.1724145801,
+              1429858.0765894756
+            ],
+            "lonLat": [
+              -107.50612577299314,
+              24.815149538857053
+            ]
+          }
+        }
+      ],
+      "nearestDifferentSourceCode": {
+        "featureId": "climate-215",
+        "objectId": 215,
+        "classId": "57",
+        "sourceCode": "BS0(h')hw",
+        "sourceLabel": "Seco cálido",
+        "recordIndex0": 214,
+        "strictlyInside": false,
+        "onBoundary": false,
+        "boundaryToleranceM": 1e-7,
+        "boundaryDistanceNativeM": 10000.277602391803,
+        "nearest": {
+          "ringIndex0": 0,
+          "segmentIndex0": 298,
+          "nativePoint": [
+            1946361.1724145801,
+            1429858.0765894756
+          ],
+          "lonLat": [
+            -107.50612577299314,
+            24.815149538857053
+          ]
+        }
+      },
+      "nearestDifferentOriginalClass": {
+        "featureId": "climate-215",
+        "objectId": 215,
+        "classId": "57",
+        "sourceCode": "BS0(h')hw",
+        "sourceLabel": "Seco cálido",
+        "recordIndex0": 214,
+        "strictlyInside": false,
+        "onBoundary": false,
+        "boundaryToleranceM": 1e-7,
+        "boundaryDistanceNativeM": 10000.277602391803,
+        "nearest": {
+          "ringIndex0": 0,
+          "segmentIndex0": 298,
+          "nativePoint": [
+            1946361.1724145801,
+            1429858.0765894756
+          ],
+          "lonLat": [
+            -107.50612577299314,
+            24.815149538857053
+          ]
+        }
+      },
+      "displayedDecimalRounding": {
+        "assumption": "half a last printed decimal unit; this is a rounding sensitivity check, not a claim of station positional accuracy",
+        "maxCornerDisplacementNativeM": 0.074597394726777,
+        "corners": [
+          {
+            "lonLat": [
+              -107.4071885,
+              24.8061455
+            ],
+            "displacementNativeM": 0.0745973929494951,
+            "strictlyInsideOriginal": true
+          },
+          {
+            "lonLat": [
+              -107.4071885,
+              24.806146499999997
+            ],
+            "displacementNativeM": 0.074597394726777,
+            "strictlyInsideOriginal": true
+          },
+          {
+            "lonLat": [
+              -107.4071875,
+              24.8061455
+            ],
+            "displacementNativeM": 0.07459739360544489,
+            "strictlyInsideOriginal": true
+          },
+          {
+            "lonLat": [
+              -107.4071875,
+              24.806146499999997
+            ],
+            "displacementNativeM": 0.07459739411357151,
+            "strictlyInsideOriginal": true
+          }
+        ],
+        "roundedCoordinateChecks": [
+          {
+            "digits": 4,
+            "lonLat": [
+              -107.4072,
+              24.8061
+            ],
+            "displacementNativeM": 5.210596626151783,
+            "strictlyInsideOriginal": true
+          },
+          {
+            "digits": 5,
+            "lonLat": [
+              -107.40719,
+              24.80615
+            ],
+            "displacementNativeM": 0.4845062768013072,
+            "strictlyInsideOriginal": true
+          },
+          {
+            "digits": 6,
+            "lonLat": [
+              -107.407188,
+              24.806146
+            ],
+            "displacementNativeM": 0,
+            "strictlyInsideOriginal": true
+          }
+        ]
+      },
+      "stationPeriod": "1991–2020",
+      "classificationEdition": 2008,
+      "classificationObservationPeriod": null,
+      "suggestedHeadingJa": "観測所所在地の気候区分：半乾燥・高温〔BS1(h')hw〕"
+    }
+  ],
+  "limitationsJa": [
+    "分類は都市全域の面積最大分類ではなく、SMN観測所座標を原分類図へ重ねた所在地の分類です。",
+    "2008はINEGI図の刊行年で、統一観測対象期間は不明です。1991–2020のSMN月別値から再分類していません。",
+    "SHPはITRF92/GRS80のLambert投影です。保存されたSMN座標資料には測地基準・座標時点・位置精度の明示がなく、時点付き測地変換は適用していません。",
+    "1:1,000,000の原図はアナログ資料を数値化した分類です。表示小数桁と計算距離は測量精度を意味しません。原資料に定量的位置誤差がないため、その影響量は断定しません。",
+    "原コードの細分類記号を分解した閾値の説明や、BS1と米国BShの同値変換は行いません。"
+  ]
+}

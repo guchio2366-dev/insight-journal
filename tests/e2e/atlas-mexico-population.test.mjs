@@ -40,6 +40,10 @@ async function comparisonDestination(field,search){
 test('JavaScript-free population page retains every source value, actual geometry, disabled controls and an open table',async()=>{
  const w=await page('',false);try{const d=w.document;
   assert.equal(d.querySelectorAll('[data-population-state-shape]').length,32);assert.equal(d.querySelectorAll('[data-population-state-symbol]').length,32);assert.equal(d.querySelectorAll('[data-population-row]').length,32);
+  const map=d.querySelector('[data-population-map]'),settings=d.querySelector('[data-population-display-settings]');
+  assert.equal(map.getAttribute('preserveAspectRatio'),'xMidYMid meet');assert.equal(map.getAttribute('viewBox'),'0 0 900 580');assert.equal(settings.open,false);assert.equal(settings.closest('.mexico-map-frame'),null);
+  for(const selector of ['[data-population-view]','[data-population-state]'])assert.equal(d.querySelector(selector).closest('[data-population-display-settings]'),settings);
+  assert.deepEqual([...map.querySelectorAll('[data-population-state-label]')].map(label=>label.textContent),['チワワ州','メキシコ市','ユカタン州']);
   assert.equal(d.querySelector('[data-population-table]').open,true);assert.equal(d.querySelector('[data-population-view]').disabled,true);assert.equal(d.querySelector('[data-population-state]').disabled,true);assert.equal(d.querySelector('[data-population-only]').disabled,true);
   assert.equal(d.querySelector('[data-population-symbols]').hasAttribute('hidden'),true);assert.equal(d.querySelector('[data-population-fallback]').hidden,true);
   for(const row of population.states){const shape=d.querySelector(`[data-population-state-shape="${row.stateCode}"]`);assert.ok(shape.getAttribute('d').length>50);assert.equal(shape.getAttribute('fill'),mexicoDensityColor(row.density));assert.equal(shape.getAttribute('role'),'button');assert.equal(shape.getAttribute('fill-rule'),'evenodd');const tr=d.querySelector(`[data-population-row="${row.stateCode}"]`);assert.ok(tr.textContent.includes(row.population.toLocaleString('ja-JP')));assert.ok(tr.textContent.includes(row.density.toLocaleString('ja-JP',{minimumFractionDigits:1,maximumFractionDigits:1})));}
@@ -131,8 +135,13 @@ test('National entry has no implicit capital selection; three religion overview 
     assert.equal(q('[data-population-overview-maps]').hidden,false);const overview=q(`[data-population-overview-category="${category}"]`);assert.equal(overview.hidden,false);
     const metrics=category==='religion'?['catholic','protestant_evangelical','no_religion']:['indigenous_language','afro_identity','indigenous_identity_estimate'];
     for(const id of metrics){const metric=compositionData.metrics.find(m=>m.id===id),card=overview.querySelector(`[data-population-overview-metric="${id}"]`);assert.equal(card.querySelectorAll('[data-overview-state]').length,32);for(const row of population.states){const mark=card.querySelector(`[data-overview-state="${row.stateCode}"]`);assert.equal(mark.getAttribute('fill'),mexicoCompositionOverviewColor(metric.states[row.stateCode],metric));assert.ok(q(mark.getAttribute('href'))?.getAttribute('d').length>50);}}
-    if(category==='religion')assert.equal(q('[data-population-overview-reading-category="religion"]').querySelectorAll('[data-population-overview-metric]').length,8);
-    q(`[data-population-overview-metric="${metrics[0]}"]`).click();assert.equal(q('[data-population-overview-maps]').hidden,true);assert.equal(q('[data-population-composition-selected-name]').textContent,'メキシコ全国');assert.equal(q('[data-population-composition-share-label]').textContent,'全国の割合');
+    assert.equal(q('[data-population-display-settings]').hidden,true);
+    if(category==='religion'){
+     assert.equal(q('[data-population-overview-reading-category="religion"]').querySelectorAll('[data-population-overview-metric]').length,8);
+     const denominators=overview.querySelectorAll('[data-population-overview-denominator="religion"]');assert.equal(denominators.length,1);assert.match(denominators[0].textContent,/全年齢の通常居住人口（不詳を含む）/);assert.ok(denominators[0].textContent.includes(population.nationalPopulation.toLocaleString('ja-JP')));
+     for(const card of overview.querySelectorAll('.population-overview-card'))assert.doesNotMatch(card.textContent,/分母：/);
+    }
+    q(`[data-population-overview-metric="${metrics[0]}"]`).click();assert.equal(q('[data-population-overview-maps]').hidden,true);assert.equal(q('[data-population-display-settings]').hidden,false);assert.equal(q('[data-population-composition-selected-name]').textContent,'メキシコ全国');assert.equal(q('[data-population-composition-share-label]').textContent,'全国の割合');
    }
    change(w,'[data-population-state]','20');assert.equal(q('[data-population-only]').disabled,false);q('[data-population-national]').click();assert.equal(q('[data-population-state]').value,'');assert.equal(new URL(w.location).searchParams.get('reading'),'overview');
   }finally{await w.happyDOM.close();}
