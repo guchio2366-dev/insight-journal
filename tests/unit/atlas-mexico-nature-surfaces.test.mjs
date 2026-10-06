@@ -32,7 +32,7 @@ function setup(search = '?category=precipitation&view=relief&waterBase=relief') 
       <div data-mexico-water-background-key><div data-mexico-water-background-key-host></div></div>
       <p data-mexico-nature-map-title></p><p data-mexico-nature-map-edition></p><p data-mexico-nature-period></p>
       <section data-mexico-hydrology-reading><h2 data-mexico-hydrology-title></h2><p data-mexico-hydrology-lead></p><p data-mexico-hydrology-status></p><button data-mexico-hydrology-retry hidden>再読み込み</button>
-        <div data-mexico-hydrology-body><p data-mexico-hydrology-value></p><p data-mexico-hydrology-definition></p><p data-mexico-hydrology-limitations></p><div data-mexico-hydrology-source></div></div>
+        <div data-mexico-hydrology-body><p data-mexico-hydrology-value></p><p data-mexico-hydrology-definition></p><p data-mexico-hydrology-limitations></p><div data-mexico-hydrology-source></div><a data-mexico-hydrology-ledger href="/water/manifest.json">既存の河川・水資源資料の台帳</a></div>
       </section>
       <section data-mexico-nature-comparison><p data-mexico-nature-comparison-lead>比較元の説明</p><p data-mexico-nature-comparison-value>比較元の値</p><div class="mexico-nature-reading-body"></div></section>
     </aside><p data-mexico-hydrology-picker-note></p>
@@ -71,6 +71,31 @@ function setup(search = '?category=precipitation&view=relief&waterBase=relief') 
 }
 const precipitationImage = '/quant/' + quantitative.layers.precipitation.image.file;
 const elevationImage = '/quant/' + quantitative.layers.elevation.image.file;
+
+test('the source ledger follows numeric and basin categories immediately, including errors and switching back', async () => {
+  const f = setup();
+  const ledger = () => f.q('[data-mexico-hydrology-ledger]');
+  try {
+    f.setResponder(path => path === '/quant/manifest.json' ? {ok: false, status: 503} : undefined);
+    f.controller.render();
+    assert.equal(ledger().getAttribute('href'), '/quant/manifest.json');
+    assert.match(ledger().textContent, /数値格子/);
+    await waitFor(() => f.root.dataset.mexicoHydrologyReady === 'false');
+    assert.equal(ledger().getAttribute('href'), '/quant/manifest.json');
+    f.setResponder(null);
+    f.transition('elevation');
+    assert.equal(ledger().getAttribute('href'), '/quant/manifest.json');
+    await f.loadImage(elevationImage);
+    f.transition('basins');
+    assert.equal(ledger().getAttribute('href'), '/basins/catalog.json');
+    assert.match(ledger().textContent, /3代表水系/);
+    await f.loadImage('/basins/' + basins.systems[0].domesticFill.file);
+    f.transition('rivers-groundwater');
+    assert.equal(ledger().getAttribute('href'), '/water/manifest.json');
+    assert.match(ledger().textContent, /既存の河川・水資源/);
+    await waitFor(() => f.root.dataset.mexicoHydrologyReady === 'true');
+  } finally {await f.window.happyDOM.close();}
+});
 
 test('prepared precipitation waits for its exact PNG and shows annual mm, baseline, numeric ticks and provenance', async () => {
   const f = setup();

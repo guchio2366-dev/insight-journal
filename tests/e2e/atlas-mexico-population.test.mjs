@@ -194,6 +194,18 @@ test('Official estimates expose original percentage intervals without deriving t
  }finally{await w.happyDOM.close();}
 });
 
+test('Official estimate unknown counts label national and selected-state values without duplicating the national count',async()=>{
+ const metric=compositionData.metrics.find(m=>m.id==='indigenous_identity_estimate'),w=await page('?category=ethnicity&compositionMetric=indigenous_identity_estimate');
+ try{
+  const detail=()=>w.document.querySelector('[data-population-composition-confidence-detail]').textContent,national=`全国の不詳：${metric.nationalUnknownCount.toLocaleString('ja-JP')}人。`;
+  assert.ok(detail().includes(national));assert.equal(detail().split(national).length-1,1);assert.doesNotMatch(detail(),/選択州の不詳/);
+  change(w,'[data-population-state]','20');
+  assert.ok(detail().includes(`選択州の不詳：${metric.states['20'].unknownCount.toLocaleString('ja-JP')}人。`));assert.ok(detail().includes(national));
+  change(w,'[data-population-state]','');
+  assert.ok(detail().includes(national));assert.equal(detail().split(national).length-1,1);assert.doesNotMatch(detail(),/選択州の不詳/);
+ }finally{await w.happyDOM.close();}
+});
+
 test('Returning to population distribution restores the original option and legend nodes, radii and remembered density mode',async()=>{
  const w=await page('?view=population&state=20');try{const d=w.document,q=s=>d.querySelector(s),options=[...q('[data-population-view]').children],keys=[...q('[data-population-map-symbol-key]').children];
   q('[data-population-category="ethnicity"]').click();change(w,'[data-population-composition-metric]','afro_identity');change(w,'[data-population-view]','share');q('[data-population-category="distribution"]').click();

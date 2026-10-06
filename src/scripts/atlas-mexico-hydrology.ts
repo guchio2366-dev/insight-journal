@@ -223,6 +223,13 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
   async function render(): Promise<void> {
     const generation = ++version, state = current(), active = !!state.category, layers = mexicoWaterLayersForCategory(state.category);
     prepared?.reset();
+    const ledger = q<HTMLAnchorElement>('[data-mexico-hydrology-ledger]');
+    if (ledger) {
+      const numeric = preparedAssets && (state.category === 'precipitation' || state.category === 'elevation');
+      const representativeBasins = preparedAssets && state.category === 'basins';
+      ledger.href = numeric ? preparedAssets.surfaceAssetBase + 'manifest.json' : representativeBasins ? preparedAssets.basinAssetBase + 'catalog.json' : assetBase + 'manifest.json';
+      ledger.textContent = numeric ? '降水量・標高の数値格子と配信台帳' : representativeBasins ? '3代表水系の国内流域・検証台帳' : '既存の河川・水資源資料の台帳';
+    }
     const requestedGroundwaterClass = groundwaterClass();
     root.dataset.mexicoGroundwaterClass = requestedGroundwaterClass;
     groundwaterNotice.hidden = true;
