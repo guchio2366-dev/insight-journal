@@ -27,14 +27,14 @@ async function declarations(width,field,styles){
  }finally{await w.happyDOM.close();}
 }
 
-test('Mexico industry retains its 620px frame and 7:3 columns against parity CSS in either load order',async()=>{
- for(const width of [1280,1024])for(const styles of [[industry,parity],[parity,industry]]){
+test('Mexico industry retains its 620px frame and matches the US desktop columns against either CSS load order',async()=>{
+ for(const width of [1600,1280,1024])for(const styles of [[industry,parity],[parity,industry]]){
   const actual=await declarations(width,'industry',styles);
   assert.equal(actual.height,'620px',`height at ${width}px`);
   assert.equal(actual.minHeight,'620px',`minimum at ${width}px`);
   assert.equal(actual.maxHeight,'620px',`maximum at ${width}px`);
   assert.equal(actual.aspectRatio,'auto',`aspect ratio at ${width}px`);
-  assert.match(actual.columns,/^minmax\(0(?:px)?,\s*7fr\)\s+minmax\(290px,\s*3fr\)$/);
+  assert.match(actual.columns,width>=1600?/^minmax\(0(?:px)?,\s*1\.8fr\)\s+minmax\(280px,\s*1fr\)$/:width>=1200?/^minmax\(0(?:px)?,\s*1\.65fr\)\s+minmax\(320px,\s*1fr\)$/:/^minmax\(0(?:px)?,\s*7fr\)\s+minmax\(290px,\s*3fr\)$/);
  }
 });
 
