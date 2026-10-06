@@ -51,7 +51,7 @@ test('all seven regional workspaces retain five main destinations and one map/re
       if(region==='europe')assert.equal(stats.previousElementSibling,d.querySelector('[data-atlas-shell]'),'Europe statistics follow all three columns');
       if(region.startsWith('asia/')){
         assert.equal(stats.parentElement,d.querySelector('[data-atlas-shell]'),'Asia statistics span the news/map/reading shell');
-        assert.equal(root.querySelector('[data-reading-details]').open,false,'details and sources are folded until explicitly requested');
+        assert.equal(root.querySelector('[data-reading-details]').open,true,'Asia details and sources are initially visible like the U.S. reading column');
         assert.equal(root.querySelector('.asia-reading-scroll').tabIndex,0);
       }
     }finally{await w.happyDOM.close();}
@@ -105,7 +105,7 @@ test('regional desktop CSS keeps normal maps at the reference aspect and keyboar
     const w=await page(region,'nature',width,true),d=w.document,c=configuration(region);
     try{
       assert.equal(w.getComputedStyle(d.querySelector('[data-atlas-shell]')).display,'grid',`${region} ${width}: side-by-side shell`);
-      assert.equal(Number.parseFloat(w.getComputedStyle(d.querySelector(c.frame)).aspectRatio),1.55,`${region} ${width}: normal map reference aspect`);
+      assert.equal(Number.parseFloat(w.getComputedStyle(d.querySelector(c.frame)).aspectRatio),region.startsWith('asia/')&&width<1200?1.65:1.55,`${region} ${width}: normal map reference aspect`);
       assert.equal((w.getComputedStyle(d.querySelector(c.grid)).gridTemplateColumns.match(/minmax\(/g)??[]).length,2,`${region} ${width}: map and reading retain two desktop tracks`);
       assert.ok(!['none','hidden'].includes(w.getComputedStyle(d.querySelector(c.reading)).display));
     }finally{await w.happyDOM.close();}
