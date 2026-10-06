@@ -154,6 +154,13 @@ async function zoom(page, field, inSelector, outSelector, resetSelector) {
 
 async function agriculture({page, evidence}) {
   const step = steps(page, evidence);
+  await step('Compact livestock badges and comparable production-value order',async()=>{
+    const layout=await page.evaluate(()=>({icons:[...document.querySelectorAll('.atlas-livestock-marker i')].map(node=>{const r=node.getBoundingClientRect();return {width:r.width,height:r.height};}),order:[...document.querySelectorAll('[data-crop-key] [data-crop-select]')].map(node=>node.getAttribute('data-crop-select')),groups:[...document.querySelectorAll('.atlas-receipt-group')].map(group=>[...group.querySelectorAll('.atlas-bar-row strong')].map(node=>parseFloat(node.textContent)))}));
+    assert(layout.icons.length>0&&layout.icons.every(icon=>icon.width<=20&&icon.height<=20));
+    assert.equal(layout.order[0],'corn');assert(layout.order.indexOf('wheat')>layout.order.indexOf('vegetables'));assert(layout.order.indexOf('rice')>layout.order.indexOf('coffee'));
+    assert(layout.groups.every(values=>values.every((value,index)=>index===0||value<=values[index-1])));
+    assert.equal(await page.locator('[data-mexico-state-selection],[data-mexico-forest-states]').count(),0);return layout;
+  });
   await step('All crop and livestock distributions remain after crop selection', async () => {
     await click(page, '[data-crop-select="corn"]');
     assert.match(await text(page, '#agri-reading-heading'), /とうもろこし/);
@@ -206,13 +213,16 @@ async function agriculture({page, evidence}) {
   });
 }
 
-async function climate({page, evidence}) {
+async function climate({page, evidence, captureStepImage}) {
   const step = steps(page, evidence);
   await step('Climate map labels select the full source code and Japanese explanation', async () => {
     const label = page.locator('[data-mexico-nature-label-code^="BS"]').first();
     const code = await label.getAttribute('data-mexico-nature-label-code'); await label.click(); await settled(page);
     assert((await text(page, '[data-mexico-nature-feature-title]')).includes(code));
     assert((await text(page, '[data-mexico-nature-feature-body]')).length > 20);
+    assert.equal(await page.locator('[data-mexico-nature-layer=climate] .is-selected-feature').count(),0);
+    assert.equal(await page.locator('[data-mexico-nature-state].is-selected').count(),0);
+    assert(await page.locator('[data-mexico-climate-class-reading]').textContent().then(text=>text.includes('21の原分類')));
     return {sourceCode: code, title: await text(page, '[data-mexico-nature-feature-title]')};
   });
   await step('Both city plots and Japanese reading follow selection, reload and history', async () => {
@@ -225,6 +235,7 @@ async function climate({page, evidence}) {
       assert((await text(page, `[data-mexico-climate-city-reading="${id}"]`)).length > 30);
       assert.match(await text(page, `[data-mexico-climate-plot="${id}"]`), /1991[–—-]2020/);
       layouts.push(await cityClimateReadingLayout(page, id));
+      const city=await page.locator(`[data-mexico-climate-plot="${id}"]`).getAttribute('data-climate-city-name');assert.equal(await text(page,'[data-mexico-climate-heading]'),`${city}の雨温図`);
     }
     await reload(page);
     await history(page, () => click(page, `svg [data-mexico-climate-city="${ids[0]}"]`));
@@ -233,6 +244,12 @@ async function climate({page, evidence}) {
   await step('Relief and climate switching retain a usable map and camera controls', async () => {
     await click(page, 'button[data-mexico-nature-view="relief"]');
     assert(await page.locator('[data-mexico-nature-relief-background] image').isVisible());
+    const label=page.locator('.mexico-nature-landform-name').first();await label.focus();await label.press('Enter');await settled(page);
+    const selected=page.locator('[data-mexico-nature-layer=relief] .is-selected-feature').first();assert(await selected.count()>0);
+    await selected.evaluate(node=>node.focus({preventScroll:true}));
+    const focus=await selected.evaluate(node=>({outline:getComputedStyle(node).outlineStyle,stroke:getComputedStyle(node).stroke,width:getComputedStyle(node).strokeWidth}));
+    assert.equal(focus.outline,'none');assert.notEqual(focus.stroke,'none');assert(parseFloat(focus.width)>0);
+    assert.equal(await label.evaluate(node=>getComputedStyle(node).outlineStyle),'none');await captureStepImage('relief-selected');
     await zoom(page, 'nature', '[data-mexico-nature-zoom="in"]', '[data-mexico-nature-zoom="out"]', '[data-mexico-nature-reset]');
     await history(page, () => click(page, 'button[data-mexico-nature-view="climate"]'));
   });
@@ -266,7 +283,9 @@ async function water({page, evidence, captureStepImage}) {
   });
   await step('Three representative domestic basin systems expose their evidence limit', async () => {
     await click(page, 'button[data-mexico-nature-category="basins"]'); await hydrologyReady(page, 'basins');
-    assert.equal(await page.locator('button[data-mexico-basin-system]').count(), 3);
+    assert.equal(await page.locator('button[data-mexico-basin-system]').count(),4);
+    assert.equal(await page.locator('image[data-mexico-basin-system-image]').count(),3);assert.equal(await page.locator('image[data-mexico-basin-system-image].is-muted').count(),0);
+    assert.equal(await page.locator('[data-mexico-basin-label]').count(),3);await captureStepImage('basins-all');
     for (const id of ['bravo', 'lerma-chapala-santiago', 'grijalva-usumacinta']) {
       await click(page, `button[data-mexico-basin-system="${id}"]`); await hydrologyReady(page, 'basins');
       assert.equal(await page.locator(`button[data-mexico-basin-system="${id}"]`).getAttribute('aria-pressed'), 'true');
@@ -289,15 +308,15 @@ async function water({page, evidence, captureStepImage}) {
 
 async function elevation({page, evidence}) {
   const step = steps(page, evidence);
-  await step('Elevation surface and metre legend load without state selection', async () => {
+  await step('All 500m contours and metre legend load without state or line selection', async () => {
     await click(page, 'button[data-mexico-nature-category="elevation"]'); await hydrologyReady(page, 'elevation');
-    assert.match(await text(page, '[data-mexico-quantitative-legend]'), /標高.*m/);
-    assert.match(await page.locator('image[data-mexico-numeric-image]').getAttribute('href'), /elevation-surface\.webp/);
-    await legibleNumericTicks(page);
+    assert.match(await text(page,'[data-mexico-hydrology-legend]'),/標高.*m.*500m間隔/s);
+    const levels=await page.locator('[data-elevation-m]').evaluateAll(nodes=>nodes.map(node=>({level:Number(node.getAttribute('data-elevation-m')),members:Number(node.getAttribute('data-source-member-count')),pointer:getComputedStyle(node).pointerEvents,role:node.getAttribute('role')})));
+    assert.deepEqual(levels.map(row=>row.level).sort((a,b)=>a-b),Array.from({length:11},(_,i)=>i*500));assert.equal(levels.reduce((sum,row)=>sum+row.members,0),5490);assert(levels.every(row=>row.pointer==='none'&&row.role==='img'));
     assert(await page.locator('[data-mexico-nature-state-select]').isDisabled());
     const paths = await page.locator('path[data-mexico-nature-state]').evaluateAll(nodes => nodes.map(node => ({disabled: node.getAttribute('aria-disabled'), tabIndex: node.getAttribute('tabindex'), pointerEvents: getComputedStyle(node).pointerEvents})));
     assert.equal(paths.length, 32); assert(paths.every(node => node.disabled === 'true' && node.tabIndex === '-1' && node.pointerEvents === 'none'));
-    return {legend: await text(page, '[data-mexico-quantitative-legend]'), statePaths: paths.length};
+    return {legend:await text(page,'[data-mexico-hydrology-legend]'),statePaths:paths.length};
   });
   await step('Elevation zoom and reload, with state selection retained in other tabs', async () => {
     await zoom(page, 'nature', '[data-mexico-nature-zoom="in"]', '[data-mexico-nature-zoom="out"]', '[data-mexico-nature-reset]'); await hydrologyReady(page, 'elevation');
@@ -375,6 +394,12 @@ async function population({page, evidence}) {
     await click(page, '[data-population-industry-link]'); assert.equal(query(page, 'sourceState'), '');
     await click(page, '[data-mi-return]'); await restored(page, before, 'Nationwide comparison return must keep state empty');
   });
+  await step('Ordinary field navigation opens national population even from a selected agriculture state',async()=>{
+    await click(page,'.mexico-fields a[href*="/agriculture/"]');await click(page,'[data-crop-select="corn"]');await select(page,'[data-agriculture-state]','08');
+    await click(page,'.mexico-fields a[href*="/population/"]');assert.equal(query(page,'state'),null);assert.equal(query(page,'reading'),'overview');assert.equal(await page.locator('[data-population-state]').inputValue(),'');
+    assert.equal(await text(page,'[data-population-reading-heading]'),'全国の人口分布');await reload(page);
+  });
+
 }
 
 const commonReligionBins = [

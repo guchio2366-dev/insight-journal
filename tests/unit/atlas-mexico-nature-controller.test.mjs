@@ -45,14 +45,14 @@ test('Only the climate view displays city diagrams; category/history switches re
   }finally{await window.happyDOM.close();}
 });
 
-test('Quantitative elevation comparison preserves legacy source URL state while displaying the new numerical surface', async()=>{
+test('Quantitative elevation comparison preserves legacy source URL state while displaying the 500m contours', async()=>{
   const wait=async window=>{for(let n=0;n<100&&window.document.querySelector('[data-mexico-workspace]').dataset.mexicoHydrologyReady!=='true';n++){window.document.querySelector('[data-mexico-numeric-image]')?.dispatchEvent(new window.Event('load'));await new Promise(resolve=>setTimeout(resolve,5));}};
   const window=fixture('?category=elevation&waterFeature=contours:contours-1000-1&waterBase=relief&compare=population&from=population&sourceView=population&sourceState=10&state=25&frame=210,100,350,220','prepared');let restored;
   try{
     await wait(window);const document=window.document,link=new URL(document.querySelector('[data-mexico-nature-plain-return]').href);
     assert.equal(link.searchParams.get('waterFeature'),'contours:contours-1000-1');assert.equal(link.searchParams.get('waterBase'),'relief');assert.equal(link.searchParams.get('compare'),null);
     assert.equal(link.searchParams.get('sourceState'),'10');assert.equal(link.searchParams.get('frame'),'210,100,350,220');
-    assert.match(document.querySelector('[data-mexico-nature-comparison-body]').textContent,/標高面はETOPO原格子のm単位の標高（EGM2008）/);assert.doesNotMatch(document.querySelector('[data-mexico-nature-comparison-body]').textContent,/地域の分類|自然地域の境/);
+    assert.match(document.querySelector('[data-mexico-nature-comparison-body]').textContent,/標高の等高線はETOPO原格子から500m間隔で生成した線（EGM2008）/);assert.doesNotMatch(document.querySelector('[data-mexico-nature-comparison-body]').textContent,/地域の分類|自然地域の境/);
     assert.equal(document.querySelector('[data-mexico-hydrology-reading]').hidden,true,'A water comparison shows one reading section');
     assert.ok(document.querySelector('[data-mexico-water-comparison-details]').contains(document.querySelector('[data-mexico-hydrology-body]')),'Original water body and sources remain reachable inside comparison');
     assert.equal(document.querySelectorAll('[data-mexico-hydrology-body]').length,1);assert.equal(document.querySelectorAll('[data-mexico-hydrology-source]').length,1);
@@ -61,7 +61,7 @@ test('Quantitative elevation comparison preserves legacy source URL state while 
     assert.match(document.querySelector('[data-mexico-nature-compare-link="population"]').getAttribute('aria-label'),/標高と人口規模/);
     const target=new URL(document.querySelector('[data-mexico-nature-compare-link="population"]').href);assert.equal(target.searchParams.get('waterFeature'),'contours:contours-1000-1');assert.equal(target.searchParams.get('waterBase'),'relief');
     restored=fixture(link.search,'prepared');await wait(restored);assert.equal(restored.document.querySelector('[data-mexico-workspace]').dataset.mexicoWaterFeature,'contours:contours-1000-1');
-    assert.match(restored.document.querySelector('[data-mexico-hydrology-lead]').textContent,/高い地域ほど濃い色/);
+    assert.match(restored.document.querySelector('[data-mexico-hydrology-lead]').textContent,/同じ標高の線/);
     window.history.replaceState(null,'',link);window.dispatchEvent(new window.PopStateEvent('popstate'));await wait(window);
     assert.equal(document.querySelector('[data-mexico-hydrology-reading]').hidden,false);assert.ok(document.querySelector('[data-mexico-hydrology-reading]').contains(document.querySelector('[data-mexico-hydrology-body]')));assert.ok(document.querySelector('[data-mexico-nature-comparison]').contains(document.querySelector('[data-mexico-nature-plain-return]')));
     assert.equal(document.querySelector('[data-mexico-water-reading-actions]'),null);assert.equal(document.querySelectorAll('[data-mexico-overview-button]').length,1);

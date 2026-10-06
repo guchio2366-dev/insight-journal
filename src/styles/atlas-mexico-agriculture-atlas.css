@@ -5,7 +5,7 @@
 .mexico-agriculture-atlas .mexico-agriculture-map.is-zoomed{touch-action:none}
 .mexico-agriculture-atlas .mexico-agriculture-map.is-panning{cursor:grabbing;touch-action:none}
 .mexico-agriculture-atlas .mexico-agriculture-map:focus-visible{outline:3px solid #176f89;outline-offset:-3px}
-.mexico-crop-zone{fill-opacity:.57;stroke:none;cursor:pointer;transition:fill-opacity .15s;vector-effect:non-scaling-stroke}
+.mexico-crop-zone{fill-opacity:.57;stroke:none;pointer-events:none;transition:fill-opacity .15s;vector-effect:non-scaling-stroke}
 .mexico-crop-zone.is-muted{fill-opacity:.44}
 .mexico-crop-zone.is-selected{fill-opacity:.78;stroke:color-mix(in srgb,var(--crop-color) 42%,#493d2b);stroke-width:1.35;stroke-linejoin:round}
 /* SVG focus uses the actual shape, never its large rectangular bounding box. */
@@ -76,3 +76,11 @@
 .mexico-agriculture-census-overview{font-size:12px;line-height:1.7}.mexico-agriculture-census-overview button{display:block;font:inherit;padding:7px;margin:5px 0;min-height:40px}
 @media(max-width:599px){.mexico-agriculture-atlas .mexico-agriculture-state-bar{grid-template-columns:90px minmax(0,1fr) 110px;font-size:11px}.mexico-agriculture-atlas .mexico-agriculture-state-bar strong{font-size:10px}.mexico-agriculture-relations>div{grid-template-columns:1fr}}
 .mexico-agriculture-takeaway>small{display:block;font-size:11px;color:#66796c;margin-bottom:5px}
+@media(min-width:960px){
+ .mexico-agriculture-atlas .atlas-livestock-marker{min-width:28px;min-height:28px;gap:3px;padding:2px 5px 2px 3px;border-radius:15px;font-size:11px;box-shadow:0 1px 3px #243b4835}
+ .mexico-agriculture-atlas .atlas-livestock-marker i{width:18px;height:18px;box-sizing:border-box;border-width:1px;font-size:11px}
+ .mexico-agriculture-atlas .atlas-key{gap:3px;padding:5px 0}
+ .mexico-agriculture-atlas .agri-picker-group{gap:3px 5px;padding:0}
+ .mexico-agriculture-atlas .agri-picker-group>a{min-height:28px;padding:3px 5px;font-size:12px;line-height:1.4}
+ .mexico-agriculture-atlas .atlas-livestock-key i{width:17px;height:17px;font-size:10px}
+}

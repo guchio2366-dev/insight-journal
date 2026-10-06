@@ -77,7 +77,7 @@ test('Population comparison restores density or scale independently from the cur
 });
 test('Invalid state, view, comparison and camera values cannot produce a broken map state', () => {
   const state = readMexicoNatureState(new URL('https://example.test/?state=99&view=height&compare=anything&frame=NaN,1,-3,4&from=external&sourceState=invalid'), codes);
-  assert.equal(state.state, '25'); assert.equal(state.view, 'climate'); assert.equal(state.compare, null); assert.equal(state.frame, null); assert.equal(state.from, null);
+  assert.equal(state.state, ''); assert.equal(state.view, 'climate'); assert.equal(state.compare, null); assert.equal(state.frame, null); assert.equal(state.from, null);
   assert.equal(readMexicoNatureState(new URL('https://example.test/?compare=population'), codes).state, '09');
 });
 test('Quantity-source comparisons retain the source metric and natural region appropriate to the quantity', () => {

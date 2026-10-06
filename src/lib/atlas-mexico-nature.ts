@@ -42,7 +42,7 @@ function validPopulationSourceQuery(value: unknown): value is string {
 export function readMexicoNatureState(url: URL, codes: readonly string[]): MexicoNatureState {
   const q = url.searchParams, compare = q.get('compare');
   const comparison = compare === 'irrigation' || compare === 'population' ? compare : null;
-  const state = validState(q.get('state'), codes, comparison === 'population' ? '09' : '25');
+  const state = validState(q.get('state'), codes, comparison === 'population' ? '09' : comparison ? '25' : '');
   const frame = q.get('frame')?.split(',').map(Number);
   const validFrame = frame?.length === 4 && frame.every(Number.isFinite) && frame[0] >= -100 && frame[0] <= 900 && frame[1] >= -100 && frame[1] <= 580 && frame[2] >= 35 && frame[2] <= 1000 && frame[3] >= 25 && frame[3] <= 700;
   const metric = q.get('sourceMetric'), view = q.get('view'), from = q.get('from');
@@ -72,7 +72,7 @@ export function readMexicoNatureState(url: URL, codes: readonly string[]): Mexic
 export function writeMexicoNatureState(url: URL, state: MexicoNatureState): URL {
   const next = new URL(url);
   for (const key of ['view', 'city', 'category', 'item', 'feature', 'state', 'compare', 'only', 'fallback', 'frame', 'from', 'sourceState', 'sourceOnly', 'sourceFallback', 'sourceMetric', 'sourceView', 'sourcePopulationQuery', 'sourceCrops', 'sourceLivestock', 'sourceOnlyItem', 'sourceAgriItem', 'sourceAgriState', 'sourceAgriCamera']) next.searchParams.delete(key);
-  next.searchParams.set('view', state.view); next.searchParams.set('state', state.state);
+  next.searchParams.set('view', state.view); if (state.state) next.searchParams.set('state', state.state);
   if (state.city !== null && typeof state.city === 'string') next.searchParams.set('city', state.city);
   if (state.category && natureCategories.includes(state.category)) next.searchParams.set('category', state.category);
   if (state.item && [...natureClassIds.climate, ...natureClassIds.relief].includes(state.item as never)) next.searchParams.set('item', state.item);

@@ -60,8 +60,9 @@ const initialReadingSelected=requestedReading==='item'||(requestedReading!=='ove
     for(const [link,target] of mainFields){
      const url=new URL(target,location.href);
      for(const key of [...url.searchParams.keys()])if(key!=='country')url.searchParams.delete(key);
-     if(/^(0[1-9]|[12][0-9]|3[0-2])$/.test(code))url.searchParams.set('state',code);
-     url.searchParams.set('reading',mode);
+     const nationalPopulation=url.pathname.endsWith('/population/');
+     if(!nationalPopulation&&/^(0[1-9]|[12][0-9]|3[0-2])$/.test(code))url.searchParams.set('state',code);
+     url.searchParams.set('reading',nationalPopulation?'overview':mode);
      if(link.href!==url.href)link.href=url.href;
     }
    };

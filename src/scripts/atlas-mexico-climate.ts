@@ -8,6 +8,9 @@ export function initMexicoClimate(root:HTMLElement){
   const valid=requested===null||ids.includes(requested);
   const selected=requested===null?'mexico-city-tacubaya':requested;
   for(const plot of plots)plot.hidden=!valid||plot.dataset.mexicoClimatePlot!==selected;
+  const heading=root.querySelector<HTMLElement>('[data-mexico-climate-heading]');
+  const plot=plots.find(plot=>!plot.hidden);
+  if(heading)heading.textContent=plot?`${plot.dataset.climateCityName}の雨温図`:'未収録の観測点の雨温図';
   for(const point of root.querySelectorAll<HTMLElement|SVGElement>('[data-mexico-climate-city]'))point.setAttribute('aria-pressed',String(valid&&point.dataset.mexicoClimateCity===selected));
   const notice=root.querySelector<HTMLElement>('[data-mexico-climate-notice]');
   if(notice){notice.hidden=valid;notice.textContent=valid?'':'この観測点の平年値は収録していません。地図の観測点から選び直してください。別都市へは置き換えません。';}
