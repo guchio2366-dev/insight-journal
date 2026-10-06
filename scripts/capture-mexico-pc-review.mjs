@@ -5,6 +5,7 @@ import path from 'node:path';
 import {inspectMexicoInitialPresentation, mexicoPCOperationCases} from './capture-mexico-pc-operations.mjs';
 
 const profile = {viewport: {width: 1280, height: 665}, deviceScaleFactor: 1, isMobile: false, hasTouch: false};
+const layoutTolerance = 0.25;
 const fields = ['agriculture', 'nature', 'industry', 'population'];
 const mexicoMaps = {agriculture: '[data-agriculture-map]', nature: '[data-mexico-nature-main-map]', industry: '[data-mi-map="primary"]', population: '[data-population-map]'};
 const mexicoReady = {agriculture: ['agricultureReady', 'true'], nature: ['mexicoNatureReady', 'true'], industry: ['miReady', 'true'], population: ['populationReady', '1']};
@@ -15,17 +16,45 @@ function selectors(country, field) {
     : {root: field === 'agriculture' ? '[data-mexico-agriculture-atlas]' : `[data-mexico-workspace][data-mexico-field="${field}"]`, map: mexicoMaps[field], reading: field === 'agriculture' ? '[data-field-national="agriculture"]' : '.mexico-reading', ready: mexicoReady[field]};
 }
 
-async function settle(page) {
+async function stableLayout(page, selected) {
+  await page.evaluate(({selected, tolerance}) => new Promise((resolve, reject) => {
+    const root = document.querySelector(selected.root);
+    const targets = [selected.map, selected.reading, '.atlas-primary-grid', '.atlas-region-controls', '.atlas-tabs'];
+    let frame, anchor, latest, stableFrames = 0;
+    const timeout = setTimeout(() => {
+      cancelAnimationFrame(frame);
+      reject(new Error(`Capture layout did not stabilize within 2000 ms: ${JSON.stringify(latest)}`));
+    }, 2000);
+    const sample = () => {
+      try {
+        latest = [scrollX, scrollY, ...targets.flatMap(selector => {
+          const node = root?.querySelector(selector);
+          if (!node) throw new Error(`Missing capture layout target: ${selector}`);
+          const box = node.getBoundingClientRect();
+          return [box.x, box.y, box.width, box.height];
+        })];
+        if (anchor && latest.every((value, index) => Math.abs(value - anchor[index]) <= tolerance)) stableFrames++;
+        else {anchor = latest; stableFrames = 1;}
+        // ResizeObserver callbacks can update the next frame after this sample.
+        if (stableFrames >= 3) {clearTimeout(timeout); resolve();}
+        else frame = requestAnimationFrame(sample);
+      } catch (error) {clearTimeout(timeout); reject(error);}
+    };
+    frame = requestAnimationFrame(sample);
+  }), {selected, tolerance: layoutTolerance});
+}
+
+async function settle(page, selected) {
   await page.waitForLoadState('networkidle');
   await page.evaluate(async () => {
     await document.fonts.ready;
+    window.scrollTo({top: 0, left: 0, behavior: 'instant'});
     await Promise.all([...document.images].filter(image => {
       const box = image.getBoundingClientRect();
       return !image.closest('[hidden]') && box.width > 0 && box.height > 0 && box.bottom > 0 && box.top < innerHeight;
     }).map(image => image.decode()));
-    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-    window.scrollTo({top: 0, left: 0, behavior: 'instant'});
   });
+  await stableLayout(page, selected);
 }
 
 async function measure(page, selected) {
@@ -39,16 +68,17 @@ async function measure(page, selected) {
     };
     const map = root.querySelector(selected.map), grid = root.querySelector('.atlas-primary-grid');
     if (!map) throw new Error(`Missing map: ${selected.map}`);
-    const layout = {article: bounds(root), workspace: bounds(root.querySelector('.atlas-workspace')), grid: bounds(grid), map: bounds(map), mapFrame: bounds(map.closest('.atlas-map-frame')), reading: bounds(root.querySelector(selected.reading)), news: bounds(root.closest('[data-atlas-shell]')?.querySelector('[data-news-rail]'))};
-    const elements = ['.atlas-region-controls', '.atlas-tabs', '.atlas-primary-grid'].map(selector => ({selector, ...bounds(root.querySelector(selector))}));
-    if (elements.some(element => !element.visible)) throw new Error('Missing visible workspace region');
-    const x = Math.floor(Math.min(...elements.map(box => box.x))), y = Math.floor(Math.min(...elements.map(box => box.y)));
-    const clip = {x, y, width: Math.ceil(Math.max(...elements.map(box => box.x + box.width))) - x, height: Math.ceil(Math.max(...elements.map(box => box.y + box.height))) - y};
     const svgImages = await Promise.all([...map.querySelectorAll('image')].filter(visible).map(async node => {
       const url = new URL(node.getAttribute('href') ?? node.getAttribute('xlink:href'), location.href).href;
       const image = new Image(); image.src = url; await image.decode();
       return {url, width: image.naturalWidth, height: image.naturalHeight};
     }));
+    // Read all bounds after image decoding, without an asynchronous gap between them.
+    const layout = {article: bounds(root), workspace: bounds(root.querySelector('.atlas-workspace')), grid: bounds(grid), map: bounds(map), mapFrame: bounds(map.closest('.atlas-map-frame')), reading: bounds(root.querySelector(selected.reading)), news: bounds(root.closest('[data-atlas-shell]')?.querySelector('[data-news-rail]'))};
+    const elements = ['.atlas-region-controls', '.atlas-tabs', '.atlas-primary-grid'].map(selector => ({selector, ...bounds(root.querySelector(selector))}));
+    if (elements.some(element => !element.visible)) throw new Error('Missing visible workspace region');
+    const x = Math.floor(Math.min(...elements.map(box => box.x))), y = Math.floor(Math.min(...elements.map(box => box.y)));
+    const clip = {x, y, width: Math.ceil(Math.max(...elements.map(box => box.x + box.width))) - x, height: Math.ceil(Math.max(...elements.map(box => box.y + box.height))) - y};
     const canvas = map.querySelector('canvas'), gl = canvas?.getContext('webgl2');
     const svgUses = [...map.querySelectorAll('use')].filter(visible).map(node => {
       const href = node.getAttribute('href') ?? node.getAttribute('xlink:href');
@@ -76,7 +106,7 @@ async function capture(browser, origin, basePath, output, scene) {
     const response = await page.goto(record.requestedUrl, {waitUntil: 'domcontentloaded'});
     assert.equal(response?.status(), 200, 'Page did not load successfully');
     await page.waitForFunction(({root, ready}) => {const node = document.querySelector(root); return node && (node.dataset[ready[0]] === ready[1] || node.dataset.renderState === 'fallback');}, selected, {timeout: 45_000});
-    await settle(page);
+    await settle(page, selected);
     // Additional Mexico cases may operate the existing page before measurement.
     if (scene.run) {
       record.operation = {steps: []};
@@ -89,10 +119,10 @@ async function capture(browser, origin, basePath, output, scene) {
       };
       await scene.run({page, context, selected, evidence: record.operation, captureStepImage});
       Object.assign(selected, scene.captureSelectors);
-      await settle(page);
+      await settle(page, selected);
     }
-    Object.assign(record, await measure(page, selected));
     if (country === 'mexico' && id === 'initial') record.presentation = await inspectMexicoInitialPresentation(page, field);
+    Object.assign(record, await measure(page, selected));
     assert.equal(record.rootDataset[selected.ready[0]], selected.ready[1], 'Controller is not ready; fallback is not live-map evidence');
     assert.equal(record.viewport.width, profile.viewport.width);
     assert.equal(record.viewport.height, profile.viewport.height);
@@ -109,6 +139,17 @@ async function capture(browser, origin, basePath, output, scene) {
     await page.screenshot({path: path.join(output, record.screenshot), fullPage: false, animations: 'disabled'});
     if (id === 'initial' || scene.captureWorkspace) {
       record.workspaceScreenshot = `${name}-workspace.png`;
+      await stableLayout(page, selected);
+      const current = await measure(page, selected);
+      for (const key of ['workspace', 'grid', 'map', 'reading']) {
+        for (const axis of ['x', 'y', 'width', 'height']) {
+          assert(Math.abs(current.layout[key][axis] - record.layout[key][axis]) <= layoutTolerance, `Capture layout changed between viewport and workspace: ${key}.${axis} (${record.layout[key][axis]} -> ${current.layout[key][axis]})`);
+        }
+      }
+      for (const [index, element] of current.workspace.elements.entries()) {
+        for (const axis of ['x', 'y', 'width', 'height']) assert(Math.abs(element[axis] - record.workspace.elements[index][axis]) <= layoutTolerance, `Workspace clip target changed between screenshots: ${element.selector}.${axis}`);
+      }
+      Object.assign(record, current);
       await page.screenshot({path: path.join(output, record.workspaceScreenshot), fullPage: true, clip: record.workspace.clip, animations: 'disabled'});
     }
     record.horizontalOverflow = Math.max(0, record.viewport.documentWidth - record.viewport.width);
