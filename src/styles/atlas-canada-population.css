@@ -18,3 +18,14 @@
 @media(min-width:960px){.canada-population.has-demographic-context[data-canada-population] .atlas-map-frame.canada-map-frame{height:clamp(220px,calc(100dvh - 535px),480px);min-height:220px}.canada-population.has-demographic-context [data-demographic-origin-legend]{margin:2px 0}.canada-population.has-demographic-context .population-legend{margin:3px 0}}
 
 @media(min-width:900px){.atlas-desktop-shell .canada-population .population-controls select{min-height:32px;padding:4px 7px}.atlas-desktop-shell .canada-population .canada-map{max-height:clamp(220px,calc(100dvh - 510px),580px)}.atlas-desktop-shell .canada-population .population-map-actions label{display:flex;align-items:center;gap:5px}.atlas-desktop-shell .canada-population .population-map-actions select{width:140px;min-height:32px}.atlas-desktop-shell .canada-population .population-map-actions button{min-height:32px}}
+.population-category-key{display:flex;flex-wrap:wrap;justify-content:center;gap:5px 12px;padding:7px;background:#f7f5ec;border:1px solid #c8cfc4;border-top:0;font-size:12px}
+.population-category-key :is(button,span){display:inline-flex;align-items:center;gap:5px;font-size:12px;min-height:28px;border:0;background:transparent;padding:1px;color:#304f5a}
+.population-category-key button[aria-pressed=true]{box-shadow:inset 0 -2px #365866;font-weight:700}
+.population-category-key i,[data-population-composition] th i{display:inline-block;width:13px;height:10px;margin-right:4px;border:1px solid #687a7a55}
+.population-map [data-population-label]{fill:#263f48;paint-order:stroke;stroke:#fffdf4;stroke-width:4;stroke-linejoin:round}
+.population-map .population-anchor{fill:#263f48;stroke:#fff;stroke-width:1;r:3}
+.population-map [data-population-boundary]{stroke:#829692;stroke-width:.6}
+.population-map .is-selected-cma [data-population-boundary]{stroke:#263f48;stroke-width:2}
+[data-population-composition] table{width:100%;font-size:12px;border-collapse:collapse}[data-population-composition] td{text-align:right;white-space:nowrap}[data-population-composition] th{text-align:left}[data-population-composition] :is(th,td){padding:6px;border-bottom:1px solid #d8dcd4}.is-active-category{background:#e4ece5}
+@media(max-width:649px){.population-category-key button{min-height:44px}}
+.population-coverage-brief{font-size:12px;line-height:1.6;background:#f0efe5;border-left:3px solid #829692;padding:7px 9px;margin:0 0 12px}

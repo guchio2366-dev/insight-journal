@@ -73,35 +73,35 @@
           "description": "1991–2020年の年降水量。雨・雪の水当量。年合計だけで栽培可能性は決まりません。"
         }
       ],
-      "imageUrl": "/assets/atlas/canada-water-v1/annual-precipitation-us-all.png",
+      "imageUrl": "/assets/atlas/canada-water-v1/annual-precipitation-us-all-mercator.png",
       "images": [
         {
           "id": "p0",
-          "url": "/assets/atlas/canada-water-v1/annual-precipitation-us-0.png"
+          "url": "/assets/atlas/canada-water-v1/annual-precipitation-us-0-mercator.png"
         },
         {
           "id": "p1",
-          "url": "/assets/atlas/canada-water-v1/annual-precipitation-us-1.png"
+          "url": "/assets/atlas/canada-water-v1/annual-precipitation-us-1-mercator.png"
         },
         {
           "id": "p2",
-          "url": "/assets/atlas/canada-water-v1/annual-precipitation-us-2.png"
+          "url": "/assets/atlas/canada-water-v1/annual-precipitation-us-2-mercator.png"
         },
         {
           "id": "p3",
-          "url": "/assets/atlas/canada-water-v1/annual-precipitation-us-3.png"
+          "url": "/assets/atlas/canada-water-v1/annual-precipitation-us-3-mercator.png"
         },
         {
           "id": "p4",
-          "url": "/assets/atlas/canada-water-v1/annual-precipitation-us-4.png"
+          "url": "/assets/atlas/canada-water-v1/annual-precipitation-us-4-mercator.png"
         },
         {
           "id": "p5",
-          "url": "/assets/atlas/canada-water-v1/annual-precipitation-us-5.png"
+          "url": "/assets/atlas/canada-water-v1/annual-precipitation-us-5-mercator.png"
         },
         {
           "id": "p6",
-          "url": "/assets/atlas/canada-water-v1/annual-precipitation-us-6.png"
+          "url": "/assets/atlas/canada-water-v1/annual-precipitation-us-6-mercator.png"
         }
       ],
       "scope": "全国の陸域・約10 km格子。雨と雪の水当量を合わせた年降水量の30年平均。",

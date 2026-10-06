@@ -1,3 +1,4 @@
+import {canadaLegacyFrame} from '../../src/lib/atlas-canada-map-presentation.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, access } from 'node:fs/promises';
@@ -156,7 +157,7 @@ test('Family changes add one history entry, preserve the source return, and Back
     assertHierarchy(p, 'aquifers');
     assert.equal(p.q('[data-canada-water-area]').value, aquifer);
     assert.equal(p.q('[data-canada-water-resource-only]').checked, true);
-    assert.equal(p.q('[data-canada-water-resource-map]').getAttribute('viewBox'), savedFrame.replaceAll(',', ' '));
+    assert.equal(p.q('[data-canada-water-resource-map]').getAttribute('viewBox'), canadaLegacyFrame(savedFrame.split(',').map(Number)).join(' '));
     assertSourceReturn(p);
     assert.equal(p.pushes.length, count, 'Back restoration does not write another history entry');
     assert.equal(p.events.length, 0, 'family navigation does not duplicate resource update events');

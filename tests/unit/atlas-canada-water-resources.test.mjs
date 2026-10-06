@@ -1,3 +1,4 @@
+import {canadaLegacyFrame} from '../../src/lib/atlas-canada-map-presentation.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {Window} from 'happy-dom';
@@ -60,17 +61,17 @@ test('hidden and surface views make no theme requests; visible drainage loads on
  assert.equal(page.root.querySelector('[data-canada-water-resource-shape="02"]').style.display,'none');assert.equal(page.root.querySelector('[data-canada-water-resource-shape="02"]').getAttribute('tabindex'),'-1');
  assert.equal(new URL(page.window.location.href).searchParams.get('cropReturn'),'wheat');assert.equal(new URL(page.window.location.href).searchParams.get('water'),'Fraser');
  page.window.history.replaceState(null,'','?city=regina&water=Fraser&waterTopic=drainage&waterArea=02&waterOnly=1&waterFrame=100,200,300,200#read');page.window.dispatchEvent(new page.window.PopStateEvent('popstate'));
- assert.equal(page.root.querySelector('[data-canada-water-area]').value,'02');assert.equal(page.root.querySelector('[data-canada-water-resource-map]').getAttribute('viewBox'),'100 200 300 200');assert.equal(page.requests.length,1);
+ assert.equal(page.root.querySelector('[data-canada-water-area]').value,'02');assert.equal(page.root.querySelector('[data-canada-water-resource-map]').getAttribute('viewBox'),canadaLegacyFrame([100,200,300,200]).join(' '));assert.equal(page.requests.length,1);
  page.root.querySelector('[data-canada-water-resource-reset]').click();assert.deepEqual(page.state,{topic:'drainage',area:null,only:false,frame:null});
 });
 test('groundwater source-invalid geometry stays an unfilled original outline; aquifers isolate a class or individual source ID',async()=>{
  const page=setup();page.show({topic:'groundwater'});await waitFor(()=>page.root.dataset.canadaWaterReady==='ready');
  const invalid=page.root.querySelector('.canada-water-source-invalid');assert.equal(invalid.getAttribute('fill'),'none');assert.equal(invalid.getAttribute('stroke-dasharray'),'3 2');assert.ok(invalid.getAttribute('d').startsWith('M'));
  page.show({topic:'aquifers',area:'bedrock',only:true,frame:null});await waitFor(()=>page.root.querySelector('[data-canada-water-resource-shape="550"]'));
- assert.equal(page.root.querySelector('[data-canada-water-resource-map]').getAttribute('viewBox'),'197.749 451.777 29.876 19.857');assert.equal(page.root.querySelector('[data-canada-water-resource-shape="551"]').style.display,'none');
+ assert.equal(page.root.querySelector('[data-canada-water-resource-map]').getAttribute('viewBox'),canadaLegacyFrame([197.749,451.777,29.876,19.857]).join(' '));assert.equal(page.root.querySelector('[data-canada-water-resource-shape="551"]').style.display,'none');
  const select=page.root.querySelector('[data-canada-water-area]');select.value='550';select.dispatchEvent(new page.window.Event('change'));assert.equal(page.state.area,'550');
  const only=page.root.querySelector('[data-canada-water-resource-only]');only.checked=true;only.dispatchEvent(new page.window.Event('change'));assert.equal(page.root.querySelector('[data-canada-water-resource-shape="551"]').style.display,'none');
- page.root.querySelector('[data-canada-water-full]').click();assert.deepEqual(page.root.querySelector('[data-canada-water-resource-map]').getAttribute('viewBox').split(' ').map(Number).map(Math.round),[0,180,900,400]);assert.equal(page.state.area,'550');
+ page.root.querySelector('[data-canada-water-full]').click();assert.deepEqual(page.root.querySelector('[data-canada-water-resource-map]').getAttribute('viewBox').split(' ').map(Number).map(Math.round),[0,0,900,580]);assert.equal(page.state.area,'550');
 });
 test('precipitation isolation swaps the composite for exactly one transparent class image within the national clip',()=>{
  const page=setup();page.show({topic:'precipitation',area:'p1',only:true});

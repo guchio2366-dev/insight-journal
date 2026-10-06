@@ -1,3 +1,4 @@
+import {canadaLegacyFrame,projectCanadaComparison} from '../lib/atlas-canada-map-presentation';
 import {renderPopulationNatureComparison} from './atlas-canada-population-comparison';
 import {hydrateCanadaPopulationGeometry} from './atlas-canada-population-geometry-loader';
 import {renderIndustryNatureComparison} from './atlas-canada-industry-comparison';
@@ -109,7 +110,8 @@ export function initCanadaNature(root:HTMLElement){
    const selected=waterGroup?comparisonWaters.includes(shape.dataset.canadaWaterShape!):shape.dataset.canadaWaterShape===state.water;
    shape.style.display=state.only&&state.water&&!selected?'none':'';shape.classList.toggle('is-selected',selected);
   }
-  map.setAttribute('viewBox',(state.frame??full).join(' '));
+  map.setAttribute('viewBox',canadaLegacyFrame(state.frame).join(' '));
+  for(const selector of ['[data-canada-industry-context-map]','[data-canada-population-context-map]']){const group=root.querySelector<SVGElement>(selector);if(group)projectCanadaComparison(group);}
   const name=config.cities.find((c:any)=>c.id===state.city).name;
   $('[data-canada-announcement]').textContent=state.view==='landform'?`${landform?.name??'七つの地形地域'}${state.landformOnly?'だけ':''}を表示。`:state.view==='elevation'?`${elevation?.name??'標高の等高線'}を表示。`:`${name}${state.compare?'と比較':''}。${({climate:'都市の気候',landform:'地形地域',water:'湖と河川'})[state.view]}を表示。`;
  }
