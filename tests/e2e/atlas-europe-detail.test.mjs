@@ -106,7 +106,11 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       const unavailable=[...doc.querySelectorAll('[data-eu-water-options] button:disabled')];
       assert.equal(unavailable.length,0);
       assert.equal(doc.querySelector('[data-eu-water-options] [data-eu-topic="drainage"]').disabled,false);
-      assert.match(doc.querySelector('[data-eu-water-options]').textContent,/地下水.*未確認.*未収録/);
+      const waterNote='河川・湖の位置、年降水量、流域区画を切り替えます。地下水は公開利用条件が未確認のため未収録です。';
+      assert.equal(doc.querySelector('[data-eu-map-legend] .eu-water-note').textContent,waterNote,'承認済みの水資源説明を地図下に全文保持する');
+      assert.equal(doc.querySelectorAll('.eu-water-note').length,1);
+      assert.equal(doc.body.textContent.split(waterNote).length-1,1,'同じ説明を重複表示しない');
+      assert.doesNotMatch(doc.querySelector('[data-eu-water-options]').textContent,/地下水/,'表示切替には説明文を重複させない');
       assert.equal(doc.querySelector('[data-eu-water-options] [data-eu-topic="precipitation"]').disabled,false);
     }
     if(field==='industry'||field==='population'){

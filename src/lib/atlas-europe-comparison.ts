@@ -25,7 +25,7 @@ export type EuropeComparisonLink = {
   sources?: readonly { label: string; url: string }[];
 };
 
-const returnKeys = new Set(['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin','farmYear','farmMeasure','farmCompare']);
+const returnKeys = new Set(['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'point', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin','farmYear','farmMeasure','farmCompare']);
 const returnLimit = 2048;
 const knownLayer = (id: string) => europeLayers.some(layer => layer.id === id);
 const sourceLayer = (state: EuropeState) => state.layer === 'overlay' ? (state.returnLayer === 'climate' ? 'wheat' : state.returnLayer) : state.layer;
@@ -160,7 +160,7 @@ export function europeComparisonUrl(base: URL, source: EuropeState, comparison: 
   // Ordinary field comparisons keep independent saved selections, including
   // the source's basin when viewing crops or population. A registered farming
   // focus instead owns its target point/unit and must clear unrelated picks.
-  if (focus) { target.feature = undefined; target.basin = undefined; }
+  if (focus) { target.feature = undefined; target.basin = undefined; target.point = undefined; }
   if (comparison.city) target.city = comparison.city;
   if (comparison.feature) target.feature = comparison.feature;
   if (comparison.basin) target.basin = comparison.basin;

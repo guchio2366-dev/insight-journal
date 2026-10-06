@@ -13,13 +13,15 @@ const countries = JSON.parse(readFileSync(new URL('../../src/data/atlas/europe/c
 const cities = JSON.parse(readFileSync(new URL('../../src/data/atlas/europe/climate-cities.json', import.meta.url))).map(city => city.id);
 const state = query => readEuropeState(query, countries, cities);
 
-test('comparison return preserves country, city, feature, rendering and independent farming choices', () => {
+test('comparison return preserves country, city, feature, point, rendering and independent farming choices', () => {
   for (const query of [
     '?layer=wheat&region=east&place=UKR&city=kyiv&compare=london,paris&feature=rotterdam&render=static&crops=off&livestock=off&single=1&returnLayer=crops',
     '?layer=cattle&region=west&city=london&livestock=off&single=1',
     '?layer=overlay&returnLayer=hubs&place=SWE&city=helsinki&feature=kiruna&crops=off',
     '?layer=climate&place=CHE&city=invalid&returnLayer=terrain',
     '?layer=density&region=north&feature=kaukas&render=static',
+    '?layer=terrain&point=10.123456789,46.7654321&render=static',
+    '?layer=contours&feature=alps&point=10.5,46.5&city=london',
   ]) {
     const original = state(query), encoded = encodeEuropeReturn(original);
     assert.deepEqual(readEuropeReturn(encoded, countries, cities), original);
@@ -38,7 +40,32 @@ test('return query rejects malformed or unbounded envelopes, duplicate keys and 
     'layer=unknown', 'layer=wheat&returnLayer=unknown', 'city=london',
     'layer=wheat&europeReturn=layer%3Dcattle', 'layer=wheat&url=https%3A%2F%2Fevil.test',
     'layer=wheat&__proto__=x', 'layer=wheat&constructor=x',
+    'layer=terrain&point=10,50&point=20,55',
   ]) assert.equal(readEuropeReturn(raw, countries, cities), null, raw);
+});
+
+test('a selected terrain or contour point survives ordinary comparison and named return', () => {
+  for(const layer of ['terrain','contours']) {
+    const original=state(`?layer=${layer}&point=10.123456789,46.7654321&render=static`);
+    assert.deepEqual(original.point,[10.123456789,46.7654321]);
+    const snapshot=structuredClone(original);
+    for(const entry of europeComparisonLinks(original)) {
+      const target=europeComparisonUrl(new URL('https://example.test/insight-journal/atlas/europe/nature/'),original,entry);
+      assert.deepEqual(state(target.search).point,original.point,'A different topic keeps the independent saved point');
+      const saved=readEuropeReturn(target.searchParams.get('europeReturn'),countries,cities);
+      assert.deepEqual(saved,original);
+      const returned=europeNamedReturnUrl(target,saved);
+      assert.equal(returned.pathname,'/insight-journal/atlas/europe/nature/');
+      assert.equal(returned.searchParams.has('europeReturn'),false);
+      assert.deepEqual(state(returned.search),original);
+    }
+    assert.deepEqual(original,snapshot);
+  }
+  for(const point of ['65,50','10,32','NaN,50',',50']) {
+    const normalized=readEuropeReturn(`layer=contours&point=${point}`,countries,cities);
+    assert.ok(normalized,'An invalid point does not discard the otherwise valid source layer');
+    assert.equal(Object.hasOwn(normalized,'point'),false);
+  }
 });
 
 test('safe return values use the shared country, city and farming normalization', () => {
@@ -122,13 +149,15 @@ test('specific sourced readings select useful river, population, forestry and cl
 });
 
 test('a focused crop entrance restores the source selection and rejects stale comparison text', () => {
-  const original = state('?layer=rice&place=ITA&render=static&crops=off&livestock=off&single=1&city=rome&basin=2040048790');
+  const original = state('?layer=rice&place=ITA&render=static&crops=off&livestock=off&single=1&city=rome&basin=2040048790&point=10.123456789,46.7654321');
+  assert.deepEqual(original.point,[10.123456789,46.7654321]);
   for (const entry of europeComparisonLinks(original)) {
     const target = europeComparisonUrl(new URL('https://example.test/atlas/europe/agriculture/?europeFocus=pig-german-density'), original, entry);
     assert.equal(target.searchParams.get('europeFocus'), entry.id);
     assert.equal(readEuropeFarmingFocus(target.search, entry.targetLayer)?.id, entry.id);
     assert.equal(target.searchParams.get('basin'), entry.basin ?? null, 'old source basin cannot select a different target unit');
     assert.equal(target.searchParams.get('feature'), entry.feature ?? null, 'old source feature cannot select a different target point');
+    assert.equal(target.searchParams.has('point'),false,'The registered farming focus owns its target point while the source snapshot keeps the old selection');
     const saved = readEuropeReturn(target.searchParams.get('europeReturn'), countries, cities);
     assert.deepEqual(saved, original);
     assert.deepEqual(state(europeNamedReturnUrl(target, saved).search), original);

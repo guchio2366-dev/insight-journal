@@ -22,7 +22,13 @@ export function visibleBounds(geometries: Geometry[]): [[number, number], [numbe
   if (!points.length) return [[-25, 32], [65, 73]];
   return [[Math.min(...points.map(p => p[0])), Math.min(...points.map(p => p[1]))], [Math.max(...points.map(p => p[0])), Math.max(...points.map(p => p[1]))]];
 }
-export type EuropeState = { region: string; place: string; city: string; compare: string[]; render: string; layer: string; returnLayer: string; feature?: string; showCrops?: boolean; showLivestock?: boolean; single?: boolean; farmYear?:number; farmMeasure?:string; farmCompare?:string[] } & Partial<PopulationCaseChoiceState> & EuropeDrainageState;
+export type EuropeState = { region: string; place: string; city: string; compare: string[]; render: string; layer: string; returnLayer: string; feature?: string; point?: [number, number]; showCrops?: boolean; showLivestock?: boolean; single?: boolean; farmYear?:number; farmMeasure?:string; farmCompare?:string[] } & Partial<PopulationCaseChoiceState> & EuropeDrainageState;
+/** Keep the original precision so restoring a click cannot select a neighbouring cell. */
+export function normaliseEuropePoint(value: unknown): [number, number] | undefined {
+  if (!Array.isArray(value) || value.length !== 2 || !value.every(Number.isFinite)) return undefined;
+  const [lon, lat] = value;
+  return lon >= frame.west && lon < frame.east && lat > frame.south && lat <= frame.north ? [lon, lat] : undefined;
+}
 const europeCapitalCities: Record<string, string> = {
   GBR:'london', FRA:'paris', DEU:'berlin', POL:'warsaw', UKR:'kyiv', BLR:'minsk',
   MDA:'chisinau', RUS:'moscow', SRB:'belgrade', ROU:'bucharest', BGR:'sofia',
@@ -44,6 +50,9 @@ export function readEuropeState(search: string, countries: { code: string; regio
   const layer = [...allowed, 'overlay'].includes(p.get('layer') ?? '') ? p.get('layer')! : initialLayer;
   const returnLayer = allowed.includes(p.get('returnLayer') ?? '') ? p.get('returnLayer')! : initialLayer;
   const state: EuropeState = { region, place: place?.code ?? '', city, compare, render: p.get('render') === 'static' ? 'static' : 'auto', layer, returnLayer };
+  const coordinates = p.get('point')?.split(',');
+  const point = p.getAll('point').length === 1 && coordinates?.every(value => value.trim() !== '') ? normaliseEuropePoint(coordinates.map(Number)) : undefined;
+  if (point) state.point = point;
   const basin = normaliseEuropeDrainageBasin(p.get('basin'));
   if (basin) state.basin = basin;
   if(layer==='ethnicity'||layer==='religion')Object.assign(state,normalisePopulationCaseChoice(p,layer,censusCases as PopulationCensusCasePackage));
@@ -71,7 +80,7 @@ export function writeEuropeState(url: URL, state: EuropeState): URL {
   const displayedLayer=state.layer==='overlay'?(state.returnLayer==='climate'?'wheat':state.returnLayer):state.layer;
   const field=europeLayers.find(layer=>layer.id===displayedLayer)?.field;
   if(field)next.pathname=next.pathname.replace(/(\/atlas\/europe\/)(nature|agriculture|industry|population)\/?$/,`$1${field}/`);
-  for (const key of ['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin','farmYear','farmMeasure','farmCompare']) next.searchParams.delete(key);
+  for (const key of ['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'point', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin','farmYear','farmMeasure','farmCompare']) next.searchParams.delete(key);
   if (state.region !== 'all') next.searchParams.set('region', state.region);
   if (state.place) next.searchParams.set('place', state.place);
   if (state.city) next.searchParams.set('city', state.city);
@@ -80,6 +89,8 @@ export function writeEuropeState(url: URL, state: EuropeState): URL {
   if (state.layer) next.searchParams.set('layer', state.layer);
   if (state.layer === 'overlay') next.searchParams.set('returnLayer', state.returnLayer);
   if (state.feature) next.searchParams.set('feature', state.feature);
+  const point = normaliseEuropePoint(state.point);
+  if (point) next.searchParams.set('point', point.join(','));
   const basin = normaliseEuropeDrainageBasin(state.basin);
   if (basin) next.searchParams.set('basin', basin);
   if (state.showCrops === false) next.searchParams.set('crops', 'off');
@@ -92,6 +103,7 @@ export function writeEuropeState(url: URL, state: EuropeState): URL {
   return next;
 }
 export function displayCell(values: Float32Array, point: number[], nodata = -1) {
+  if (!normaliseEuropePoint(point)) return null;
   const [lon, lat] = point;
   if (lon < -25 || lon >= 65 || lat <= 32 || lat > 73) return null;
   const [x,y]=project(point), width=1800, height=1502;

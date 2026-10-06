@@ -34,6 +34,9 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.equal(doc.querySelector('[data-eu-subject]'),null);
       assert.ok(doc.querySelector('.eu-map-stage [data-eu-annotations]'));
       assert.ok(doc.querySelector('.eu-map-stage [data-eu-zoom="in"]'));
+      assert.deepEqual([...doc.querySelectorAll('.eu-map-buttons button')].map(button=>button.hasAttribute('data-eu-reset')?'overview':button.dataset.euZoom??'renderer'),['overview','in','out','renderer']);
+      assert.equal(doc.querySelector('[data-eu-map-legend]').previousElementSibling,doc.querySelector('.eu-map-stage'));
+      assert.match(doc.querySelector('[data-eu-map-legend] .eu-water-note').textContent,/地下水.*未確認.*未収録/);
       const waterMask=doc.querySelector('[data-eu-water-mask="caspian-sea"]');
       assert.ok(waterMask);
       assert.equal(waterMask.getAttribute('fill'),'#e7eff1');
@@ -55,6 +58,9 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
     }
     if (field==='nature/') {
       assert.deepEqual([...doc.querySelectorAll('[data-eu-topic-field="nature"] button')].map(b=>b.textContent), ['気候区分','水資源','地形','標高（等高線）']);
+      assert.equal(doc.querySelector('[data-eu-topic-field="nature"]').getAttribute('role'),'tablist');
+      assert.equal(doc.querySelectorAll('[data-eu-topic-field="nature"] [role="tab"][tabindex="0"]').length,1);
+      assert.equal(doc.querySelector('[data-eu-water-options]').getAttribute('role'),'tablist');
       assert.equal(doc.querySelector('[data-eu-climate-reader] h2').textContent,'ロンドンの気候と農畜産');
       const londonChart=doc.querySelector('.eu-read-panel [data-city-reading="london"] [data-eu-city-chart="london"] svg');
       assert.ok(londonChart);

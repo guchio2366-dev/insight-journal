@@ -50,15 +50,14 @@ const config = { farmingAreas, geography, climateWater, countries, cities: citie
     <EuropeRegionNavigation />
     <nav class="eu-field-nav" aria-label="欧州地図の表示"><a data-atlas-overview-link href={withBase('/atlas/europe/overview/')}>概要</a>{[fields[1],fields[0],...fields.slice(2)].map(f=><a data-eu-field={f.initial} href={withBase(`/atlas/europe/${f.id}/`)} aria-current={field===f.id?'page':undefined}>{f.id==='industry'?'主要産業':f.label}</a>)}</nav>
     <EuropeLayoutControls position="above" {field} />
-    <div class="eu-water-options" data-eu-water-options hidden role="group" aria-label="水資源の表示">
-      <button type="button" aria-pressed="true" data-eu-topic="water">河川・湖</button><button type="button" aria-pressed="false" data-eu-topic="precipitation">降水量 <small>1991–2020年平均</small></button><button type="button" aria-pressed="false" data-eu-topic="drainage">河川の流域 <small>モデルの区画</small></button>
-      <p>河川・湖の位置、年降水量、流域区画を切り替えます。地下水は公開利用条件が未確認のため未収録です。</p>
+    <div class="eu-water-options" data-eu-water-options hidden role="tablist" aria-label="水資源の表示">
+      <button type="button" role="tab" aria-selected="true" aria-pressed="true" data-eu-topic="water">河川・湖</button><button type="button" role="tab" aria-selected="false" aria-pressed="false" tabindex="-1" data-eu-topic="precipitation">降水量 <small>1991–2020年平均</small></button><button type="button" role="tab" aria-selected="false" aria-pressed="false" tabindex="-1" data-eu-topic="drainage">河川の流域 <small>モデルの区画</small></button>
     </div>
     <div class="eu-layout">
       <section class="eu-map-panel" aria-labelledby="eu-map-title">
         <div class="eu-map-stage" data-map-surface tabindex="0" role="region" aria-label="欧州の地図">
           <EuropeLayoutControls position="map" {field} />
-          <div class="eu-map-buttons" role="group" aria-label="地図の縮尺と表示"><button type="button" data-eu-zoom="in" aria-label="地図を拡大">＋</button><button type="button" data-eu-zoom="out" aria-label="地図を縮小">−</button><button type="button" data-eu-reset>全体へ</button><button type="button" data-eu-render>簡易表示</button></div>
+          <div class="eu-map-buttons" role="group" aria-label="地図の縮尺と表示"><button type="button" data-eu-reset>全体へ</button><button type="button" data-eu-zoom="in" aria-label="地図を拡大">＋</button><button type="button" data-eu-zoom="out" aria-label="地図を縮小">−</button><button type="button" data-eu-render>簡易表示</button></div>
           <div class="eu-map-heading"><div><h2 id="eu-map-title" data-eu-map-title>{initialLayer.title}</h2><p data-eu-map-status>{initialClimateReader?'都市を選ぶと、その観測所の気候を表示します。':agriculture?'作物名を選ぶと、その分布を表示します。':'地図の分布と右側の説明を読み比べます。'}</p></div><p data-eu-focus aria-live="polite">欧州全体</p></div>
           <svg class="eu-static-map" data-eu-static viewBox={`0 0 ${frame.width} ${frame.height}`} role="img" aria-labelledby="eu-map-label">
             <title id="eu-map-label">欧州の{initialLayer.title}。{initialLayer.unit}。地図の名前から地点や品目を選べます。</title>
@@ -89,7 +88,9 @@ const config = { farmingAreas, geography, climateWater, countries, cities: citie
           <div class="eu-live-map" data-eu-live aria-label="操作できる欧州地図"></div>
           <div class="eu-map-annotations" data-eu-annotations aria-label="地図の都市と地点"><svg aria-hidden="true"></svg></div>
           <div class="eu-farming-focus-marker" data-eu-farming-focus-marker hidden><span aria-hidden="true"></span><strong data-eu-farming-focus-point-label></strong></div>
+          <span class="eu-selected-point" data-eu-selected-point role="img" aria-label="選択地点" hidden></span>
         </div>
+        <div class="eu-map-legend" data-eu-map-legend><p class="eu-water-note">河川・湖の位置、年降水量、流域区画を切り替えます。地下水は公開利用条件が未確認のため未収録です。</p></div>
         <div class="eu-drainage-choice" data-eu-drainage-controls hidden><label>流域区画（HYBAS_ID）<select data-eu-drainage-choice><option value="">地図から区画を選ぶ</option></select></label><button type="button" data-eu-drainage-clear>選択を解除</button><p data-eu-basin-summary aria-live="polite">色は区画を見分けるための識別色です。量の大小ではありません。</p></div>
         <div class="eu-item-list" data-eu-farming-list hidden={!agriculture} aria-label="農畜産物と林業を選ぶ">
           {(['crop','livestock'] as const).map(kind=><section data-eu-farming-children={kind}><h3>{kind==='crop'?'作物':'畜産'}</h3><div>{farmingAreas.features.filter(f=>f.properties.kind===kind).map(f=><button type="button" data-eu-layer={f.properties.id} aria-pressed="false"><span class:list={['eu-item-swatch',{'is-livestock':kind==='livestock'}]} style={{'--item-color':f.properties.color}}></span>{f.properties.name}</button>)}</div></section>)}

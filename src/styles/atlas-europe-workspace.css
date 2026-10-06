@@ -373,7 +373,7 @@
  .eu-workspace-root[data-europe-detail].has-eu-comparison .eu-topic-above { padding-top:2px; padding-bottom:4px; }
  .eu-workspace-root[data-europe-detail].has-eu-comparison .eu-breadcrumb { margin-bottom:2px; }
  .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-read-panel { position:static; max-height:none; }
- .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-subject-reader { order:0; display:block; flex:none; }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-subject-reader { order:2; display:block; flex:none; }
  .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-reader-summary>h2,
  .eu-workspace-root[data-europe-detail].is-eu-climate-reading [data-eu-subject-takeaway] { display:none; }
  .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-comparison-links { margin:0 0 4px; gap:6px; }
@@ -391,3 +391,35 @@
  .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-comparison-context>a { padding:3px 0; }
  .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-comparison-origin { margin-top:3px; }
 }
+.eu-workspace-root .eu-selected-point { position:absolute; z-index:4; width:14px; height:14px; border:3px solid #841e37; border-radius:50%; background:#fffdf2; box-shadow:0 0 0 2px #fffdf2; transform:translate(-50%,-50%); pointer-events:none; }
+.eu-workspace-root .eu-selected-point[hidden] { display:none; }
+.eu-workspace-root .eu-read-panel .eu-grid-value p { font:14px/1.6 var(--sans); color:#3b4848; }
+
+/* Match the US field → topic → map/key → reading sequence without changing data. */
+.eu-workspace-root[data-europe-detail] .eu-field-nav { border-bottom:0; }
+@media(min-width:960px) {
+.eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="nature"] { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:0; padding:6px; border:1px solid #c7ccbf; border-bottom:0; background:#fbfaf3; }
+.eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="nature"] button { min-width:0; min-height:46px; height:auto; padding:7px 4px; border:1px solid #c9cec4; border-right:0; background:#f2f1e9; font-size:14px; }
+.eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="nature"] button:last-child { border-right:1px solid #c9cec4; }
+.eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="nature"] button[aria-pressed=true] { background:#35515d; color:#fff; }
+.eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="nature"] button:hover { background:#dce6e1; color:#21363e; }
+.eu-workspace-root[data-europe-detail] .eu-water-options { gap:6px; align-items:stretch; margin:0 0 10px; padding:0; }
+.eu-workspace-root[data-europe-detail] .eu-water-options button { min-height:40px; padding:5px 12px; border-color:#b6c8c9; border-radius:5px; color:#244653; font-size:14px; }
+.eu-workspace-root[data-europe-detail] .eu-water-options button[aria-pressed=true] { background:#244653; border-color:#244653; color:#fff; }
+.eu-workspace-root[data-europe-detail] .eu-water-options small { margin-top:0; font-size:12px; line-height:1.2; }
+}
+.eu-workspace-root[data-europe-detail] .eu-map-legend { min-width:0; order:1; }
+.eu-workspace-root[data-europe-detail] .eu-map-legend>.eu-legend { margin:0; padding:7px 10px; border:1px solid #c7ccbf; border-top:0; background:#f8f6ed; }
+.eu-workspace-root[data-europe-detail] .eu-map-legend>.eu-legend>summary { min-height:32px; margin:0; padding:5px 0; font:700 13px/1.5 var(--sans); cursor:pointer; }
+.eu-workspace-root[data-europe-detail] .eu-map-legend>.eu-legend>summary span { margin-left:0; font:inherit; color:inherit; }
+.eu-workspace-root[data-europe-detail] .eu-map-legend .eu-legend-grid { grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr)); gap:5px 10px; }
+.eu-workspace-root[data-europe-detail] .eu-map-legend .eu-legend-grid>div { font:13px/1.5 var(--sans); }
+.eu-workspace-root[data-europe-detail] .eu-map-legend .eu-swatch { flex:none; width:13px; height:13px; }
+.eu-workspace-root[data-europe-detail] .eu-map-legend .eu-legend-methods { margin-top:5px; font:12px/1.7 var(--sans); }
+.eu-workspace-root[data-europe-detail] .eu-map-legend .eu-legend-methods summary { min-height:32px; padding:5px 0; font:12px/1.5 var(--sans); cursor:pointer; }
+.eu-workspace-root[data-europe-detail] .eu-map-legend .eu-culture-legend { margin:0; padding:8px 10px; border:1px solid #c7ccbf; border-top:0; background:#f8f6ed; grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr)); gap:5px 10px; color:#223c47; font:13px/1.5 var(--sans); }
+.eu-workspace-root[data-europe-detail] .eu-water-note { display:none; margin:6px 0; color:#526561; font:12px/1.6 var(--sans); }
+.eu-workspace-root[data-europe-detail] .eu-workspace:has([data-eu-water-options]:not([hidden])) .eu-water-note { display:block; }
+.eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="population"] { gap:8px; }
+.eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="population"] button { border-color:#bac9c6; border-radius:4px; background:#fff; color:#243f48; }
+.eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="population"] button[aria-pressed=true] { background:#224c59; color:#fff; }
