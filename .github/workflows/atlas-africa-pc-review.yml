@@ -101,7 +101,7 @@ jobs:
           export AFRICA_REVIEW_CHROME_PATH="$africa_review_chrome_path"
           export AFRICA_REVIEW_JAPANESE_FONTS="$africa_review_japanese_fonts"
           export AFRICA_REVIEW_JAPANESE_FONT_MATCH="${africa_review_sans}"$'\n'"${africa_review_serif}"
-          export AFRICA_REVIEW_JAPANESE_FONT_SETUP=preinstalled
+          export AFRICA_REVIEW_JAPANESE_FONT_SETUP=official-ubuntu-fonts-noto-cjk
           node scripts/verify-africa-pc-review.mjs
 
       - name: Upload Africa PC screenshots and validation metadata
