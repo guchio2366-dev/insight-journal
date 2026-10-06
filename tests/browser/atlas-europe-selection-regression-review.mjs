@@ -38,6 +38,29 @@ async function drainageState(page){return page.evaluate(()=>({
   result:document.querySelector('[data-eu-subject-result]').textContent,
   comparison:document.querySelector('[data-eu-comparison-link="drainage-density"]').href,
 }));}
+async function drainageFeedback(page){
+  assert.equal(await page.locator('[data-eu-subject-grid]').count(),1);
+  assert.equal(await page.locator('[data-eu-subject-result]').count(),1);
+  assert.equal(await page.locator('[data-eu-subject-result]').isVisible(),true);
+  const placement=await page.evaluate(()=>{
+    const controls=document.querySelector('[data-eu-drainage-controls]');
+    const choice=controls.querySelector('[data-eu-drainage-choice]').getBoundingClientRect();
+    const summary=controls.querySelector('[data-eu-basin-summary]');
+    const grid=document.querySelector('[data-eu-subject-grid]');
+    const result=document.querySelector('[data-eu-subject-result]');
+    return {insideControls:grid.parentElement===controls,afterSummary:summary.nextElementSibling===grid,
+      gridGap:grid.getBoundingClientRect().top-summary.getBoundingClientRect().bottom,
+      resultGap:result.getBoundingClientRect().top-choice.bottom,live:result.getAttribute('aria-live'),
+      fontSize:parseFloat(getComputedStyle(result).fontSize),
+      horizontalOverflow:document.documentElement.scrollWidth>innerWidth||controls.scrollWidth>controls.clientWidth+1};
+  });
+  assert.equal(placement.insideControls,true);assert.equal(placement.afterSummary,true);
+  assert.ok(placement.gridGap>=0&&placement.gridGap<=24,JSON.stringify(placement));
+  assert.ok(placement.resultGap>=0&&placement.resultGap<=180,JSON.stringify(placement));
+  assert.equal(placement.live,'polite');
+  assert.ok(placement.fontSize>=14,JSON.stringify(placement));assert.equal(placement.horizontalOverflow,false);
+  return placement;
+}
 async function settled(page,pattern){
   await page.waitForFunction(pattern=>{
     const node=document.querySelector('[data-eu-subject-result]');
@@ -58,6 +81,7 @@ try{
    assert.ok(basin);await page.locator('[data-eu-drainage-choice]').selectOption(basin);
    await page.waitForFunction(()=>document.querySelector('[data-eu-drainage-selection]').style.display!=='none');
    const drainageSelected=await drainageState(page);
+   const feedbackSelected=old?null:await drainageFeedback(page);
    await page.locator('.eu-map-stage').scrollIntoViewIfNeeded();
    const bounds=await page.locator('.eu-map-stage').boundingBox();assert.ok(bounds);
    // Both renderers letterbox the published extent. The left margin is outside
@@ -66,6 +90,7 @@ try{
    await page.mouse.click(outsideClick.x,outsideClick.y);
    await settled(page,'表示範囲外');
    const drainageAfter=await drainageState(page);
+   const feedbackOutside=old?null:await drainageFeedback(page);
    if(old){assert.equal(drainageAfter.basin,basin);assert.equal(drainageAfter.choice,basin);assert.equal(drainageAfter.outline,true);}
    else{
     assert.equal(drainageAfter.basin,null);assert.equal(drainageAfter.choice,'');assert.equal(drainageAfter.outline,false);
@@ -73,12 +98,18 @@ try{
     const origin=new URLSearchParams(comparison.searchParams.get('europeReturn')??'');assert.equal(origin.has('basin'),false);
    }
    await snapshot(page,`${profile.name}-${render}-drainage-outside`);
+   let feedbackValue=null;
    if(!old){
     await page.goBack();await ready(page,render);
     await page.waitForFunction(basin=>new URL(location.href).searchParams.get('basin')===basin&&document.querySelector('[data-eu-drainage-selection]').style.display!=='none',basin);
     await page.goForward();await ready(page,render);
     assert.equal((await drainageState(page)).basin,null);assert.equal((await drainageState(page)).outline,false);
     await page.reload({waitUntil:'networkidle'});await ready(page,render);assert.equal((await drainageState(page)).choice,'');assert.equal((await drainageState(page)).outline,false);
+    await drainageFeedback(page);
+    await page.locator('[data-eu-feature-select="rhine"]').click();
+    const value=await settled(page,'表示格子中心.*BasinATLAS');
+    assert.ok(new URL(page.url()).searchParams.get('basin'));assert.doesNotMatch(value,/データなし/);
+    feedbackValue={value,...await drainageFeedback(page)};
    }
    await page.goto(new URL(`atlas/europe/population/?layer=density${suffix}`,base).href,{waitUntil:'networkidle'});await ready(page,render);
    // The annotations expose the real projected London point in both renderers.
@@ -112,7 +143,7 @@ try{
     await page.goBack();await ready(page,render);assert.equal(await settled(page,'（ETOPO 2022）'),targetValue);
     await page.goForward();await ready(page,render);assert.equal(await settled(page,'（2020）'),density);
    }
-   records.push({profile:profile.name,render,expect:old?'old defects reproduced':'fixed',drainageSelected,drainageAfter,outsideClick,londonPixel,sourcePoint,density,target,returned});
+   records.push({profile:profile.name,render,expect:old?'old defects reproduced':'fixed',drainageSelected,drainageAfter,feedbackSelected,feedbackOutside,feedbackValue,outsideClick,londonPixel,sourcePoint,density,target,returned});
    await writeFile(`${output}/results.json`,JSON.stringify({preview:base.href,...provenance,records,errors},null,2));
    console.log(JSON.stringify({profile:profile.name,render,old,basin,afterBasin:drainageAfter.basin,sourcePoint,targetPoint:target.point,targetValue}));
   }

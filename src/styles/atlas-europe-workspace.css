@@ -74,6 +74,7 @@
 .eu-workspace-root .eu-map-caption,.eu-workspace-root .eu-workspace .europe-map-caption { padding:8px; font-size:11px; }
 .eu-workspace-root .eu-legend { border:1px solid #d1d4c8; margin-top:6px; padding:8px; background:#f8f6ed; }
 .eu-workspace-root .eu-grid-value { padding:10px; margin-top:6px; }
+.eu-workspace-root .eu-drainage-choice .eu-grid-value { flex-basis:100%; min-width:0; box-sizing:border-box; margin:0; }
 .eu-workspace-root .eu-workspace .europe-selection { padding:0 0 12px; min-height:0; background:transparent; }
 .eu-workspace-root .eu-workspace .europe-country-list { padding:14px 0 0; border-left:0; }
 .eu-workspace-root .atlas-news-card h3 a { display:block; }
@@ -393,7 +394,7 @@
 }
 .eu-workspace-root .eu-selected-point { position:absolute; z-index:4; width:14px; height:14px; border:3px solid #841e37; border-radius:50%; background:#fffdf2; box-shadow:0 0 0 2px #fffdf2; transform:translate(-50%,-50%); pointer-events:none; }
 .eu-workspace-root .eu-selected-point[hidden] { display:none; }
-.eu-workspace-root .eu-read-panel .eu-grid-value p { font:14px/1.6 var(--sans); color:#3b4848; }
+.eu-workspace-root :is(.eu-read-panel,.eu-drainage-choice) .eu-grid-value p { font:14px/1.6 var(--sans); color:#3b4848; }
 
 /* Match the US field → topic → map/key → reading sequence without changing data. */
 .eu-workspace-root[data-europe-detail] .eu-field-nav { border-bottom:0; }

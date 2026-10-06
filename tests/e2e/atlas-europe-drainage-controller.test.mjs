@@ -44,6 +44,8 @@ async function setup(search='?layer=drainage&render=static',fixture={}){
   w.document.body.innerHTML=html;
   const q=selector=>w.document.querySelector(selector),root=q('[data-europe-detail]');
   const config=JSON.parse(q('[data-eu-config]').textContent);
+  const grid=q('[data-eu-subject-grid]'),result=q('[data-eu-subject-result]');
+  const gridHome=grid.parentElement,resultSemantics={role:result.getAttribute('role'),live:result.getAttribute('aria-live')};
   assert.ok(config.layers.some(layer=>layer.id==='drainage'),'Built HTML must contain the current drainage config');
   const stage=q('.eu-map-stage'),svg=q('[data-eu-static]');
   for(const node of [stage,svg]){Object.defineProperty(node,'clientWidth',{value:1200});Object.defineProperty(node,'clientHeight',{value:1001});}
@@ -68,8 +70,56 @@ async function setup(search='?layer=drainage&render=static',fixture={}){
   const clickPoint=coordinates=>{const [x,y]=project(coordinates);svg.dispatchEvent(new w.MouseEvent('click',{clientX:x,clientY:y,bubbles:true}));};
   w.eval(bundled.outputFiles[0].text);
   await until(()=>root.dataset.initialized==='true');await tick();
-  return{w,q,config,draws,requests,warnings,choose,restore,clickPoint};
+  return{w,q,config,draws,requests,warnings,choose,restore,clickPoint,grid,result,gridHome,resultSemantics};
 }
+
+test('drainage lookup feedback follows the basin choice with one live result, and other subjects restore its existing home',async()=>{
+  const app=await setup();
+  const controls=app.q('[data-eu-drainage-controls]');
+  const assertSameReading=()=>{
+    assert.equal(app.w.document.querySelectorAll('[data-eu-subject-grid]').length,1);
+    assert.equal(app.w.document.querySelectorAll('[data-eu-subject-result]').length,1);
+    assert.ok(app.q('[data-eu-subject-grid]')===app.grid,'Move the existing value panel rather than copying it');
+    assert.ok(app.q('[data-eu-subject-result]')===app.result,'Keep the original live result node');
+    assert.equal(app.result.getAttribute('role'),app.resultSemantics.role);
+    assert.equal(app.result.getAttribute('aria-live'),app.resultSemantics.live);
+    assert.equal(app.result.getAttribute('aria-live'),'polite');
+  };
+  const assertDrainageLocation=()=>{
+    assertSameReading();
+    assert.ok(app.grid.closest('[data-eu-drainage-controls]')===controls,'Drainage feedback belongs in the basin controls');
+    assert.ok(app.grid.previousElementSibling===app.q('[data-eu-basin-summary]'),'The value follows the existing basin summary directly');
+    assert.ok(app.q('[data-eu-drainage-choice]').compareDocumentPosition(app.grid)&app.w.Node.DOCUMENT_POSITION_FOLLOWING,'Feedback follows the existing basin selector');
+    assert.equal(controls.hidden,false);assert.equal(app.grid.hidden,false);
+    assert.equal(app.q('[data-eu-layer-source]').href,app.config.layers.find(layer=>layer.id==='drainage').source);
+  };
+  const chooseTopic=layer=>{const button=app.q(`[data-eu-topic="${layer}"]`);assert.ok(button);button.click();};
+  try{
+    assertDrainageLocation();
+    const london=app.config.cities.find(city=>city.id==='london');
+    app.clickPoint(london.coordinates);
+    await until(()=>!app.result.hasAttribute('aria-busy')&&app.result.textContent.includes('HYBAS_ID'));
+    assertDrainageLocation();
+    app.clickPoint([-30,55]);
+    assert.equal(app.result.textContent,'表示範囲外です。');
+    assert.equal(app.result.hasAttribute('aria-busy'),false);assertDrainageLocation();
+
+    for(const layer of ['terrain','contours']){
+      chooseTopic(layer);assertSameReading();
+      assert.ok(app.grid.closest('.eu-read-panel')===app.q('.eu-read-panel'),'Elevation feedback remains beside the map');
+      assert.equal(controls.contains(app.grid),false);assert.equal(controls.hidden,true);assert.equal(app.grid.hidden,false);
+    }
+    for(const layer of ['water','precipitation','climate']){
+      chooseTopic(layer);assertSameReading();
+      assert.ok(app.grid.parentElement===app.gridHome,'Other topics keep the original statistics location');
+      assert.equal(controls.contains(app.grid),false);assert.equal(controls.hidden,true);
+      assert.equal(app.grid.hidden,layer!=='precipitation');
+    }
+    chooseTopic('water');chooseTopic('drainage');assertDrainageLocation();
+    assert.match(app.result.textContent,/地図を押すと/);
+    assert.deepEqual(app.warnings,[]);
+  }finally{await app.w.happyDOM.close();}
+});
 
 for(const action of ['choice','clear','popstate','out-of-range']){
   test(`a cold London grid click cannot override a newer ${action} selection when the actual drainage response arrives`,async()=>{
@@ -153,6 +203,7 @@ test('an out-of-range click clears a completed drainage selection and its compar
     assert.equal(app.q('[data-eu-drainage-selection]').style.display,'none');
     assert.equal(app.q('[data-eu-selected-point]').hidden,true);
     assert.equal(app.q('[data-eu-subject-result]').hasAttribute('aria-busy'),false);
+    assert.ok(app.q('[data-eu-subject-result]').closest('[data-eu-drainage-controls]')===app.q('[data-eu-drainage-controls]'),'Range feedback stays with the cleared selector during history restoration');
     assert.doesNotMatch(app.q('[data-eu-basin-summary]').textContent,/HYBAS_ID/);
     const snapshots=sourceChoices();assert.ok(snapshots.length>0);
     for(const source of snapshots){assert.equal(source.has('point'),false);assert.equal(source.has('basin'),false);}

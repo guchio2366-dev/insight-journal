@@ -199,8 +199,9 @@ export function initEuropeAtlas() {
   }
   function updateReader() {
     const layer=subject(),copy=europeReaderCopy(layer),farm=farmingView();
-    // Match the US nature reader: the selected elevation sits beside the map.
+    // Keep the same live result beside its controls, without duplicating it.
     if(['terrain','contours'].includes(layer.id))query('.eu-reader-summary').after(gridReading);
+    else if(layer.id==='drainage')query('[data-eu-drainage-controls]').append(gridReading);
     else gridReadingHome.after(gridReading);
     query<HTMLElement>('[data-eu-climate-reader]').hidden=!climateReader();
     query<HTMLElement>('[data-eu-subject-reader]').hidden=cultureActive();
