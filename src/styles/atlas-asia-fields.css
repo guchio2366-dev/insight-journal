@@ -200,7 +200,9 @@
  .atlas-desktop-shell .asia-atlas[data-field] .asia-population-tabs>button[aria-pressed=true]{border:1px solid #35515d;background:#35515d;color:#fff}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-secondary-topics{margin:-10px 0 10px;padding:0;border:1px solid #c7ccbf;border-top:0;gap:0;background:#f1f0e7}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-secondary-topics>button{flex:1;min-height:44px;font-size:13px;padding:9px 8px;border-right:1px solid #d8d9ce}
- .atlas-desktop-shell .asia-atlas[data-field] .asia-industry-guide{display:none}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-industry-navigation{margin-bottom:0}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-industry-guide{display:flex;align-items:center;margin:4px 0;padding:0;font-size:13px;line-height:1.5}
+ .atlas-desktop-shell .asia-atlas[data-field] .asia-industry-guide strong{font-size:inherit}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-reading-panel{position:sticky;top:12px;height:auto;min-width:0;margin:0}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-reading-dock{padding:13px 14px 11px;border:1px solid #c7ccbf;background:#f4f7ee}
  .atlas-desktop-shell .asia-atlas[data-field] .asia-reading-dock>h2{font:700 22px/1.4 var(--serif);margin:0 0 8px}
@@ -269,6 +271,8 @@
  [data-asia-atlas][data-industry-scope=overview] .atlas-desktop-shell .asia-atlas[data-field=industry] .asia-map-frame{min-height:620px!important;max-height:none!important}
 }
 @media(min-width:960px) and (max-width:1199px){
+ .atlas-desktop-shell .asia-atlas[data-field=industry] .asia-region-shell:not(:has(.asia-focus-navigation))>.regional-navigation{width:auto;flex:0 1 auto}
+ .atlas-desktop-shell .asia-atlas[data-field=industry] .asia-region-shell:not(:has(.asia-focus-navigation)) .asia-toolbar{width:auto;flex:none}
  .atlas-desktop-shell .asia-atlas[data-field=industry] .asia-layout{grid-template-columns:minmax(0,2.05fr) minmax(318px,.95fr);gap:12px}
  .atlas-desktop-shell .asia-atlas[data-field=industry] .asia-map-frame{height:clamp(320px,calc(100dvh - 350px),430px)!important;min-height:0!important;max-height:none!important;aspect-ratio:auto!important}
  .atlas-desktop-shell .asia-atlas[data-field=natural] .asia-layout{grid-template-columns:minmax(0,1fr) minmax(340px,380px);column-gap:16px;row-gap:0}
