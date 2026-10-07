@@ -36,7 +36,38 @@ const regional:Record<AsiaOverviewRegionId,{title:string;takeaway:string;reading
  ]},
  'southeast-asia':{title:'大河川の低地と島々を、加工・港・市場でつなぐ',takeaway:'東南アジアの農業と工業は、雨や低地だけでなく、季節の水管理、加工・物流、森林管理と協力の制度から読む。',readings:[
   {id:'nature',title:'一年中暖かくても、雨の季節は同じではない',paragraphs:['大陸部と島しょ部の観測所を比べ、雨の少ない季節と山地・低地の違いを見ます。メコン川・エーヤワディー川の下流の低地と、島々の山地を同じ標高尺度で確認できます。'],sources:[{label:'気象庁：ClimatView',url:'https://www.data.jma.go.jp/gmd/cpd/monitor/climatview/frame.php'}]},
-  {id:'agriculture',title:'米の低地、油ヤシ・ゴムと森林の違い',paragraphs:['メコンデルタの稲作では淡水の確保と塩水侵入への対応が関わります。タイの養鶏では、飼料・食肉加工・販売を結ぶ仕組みが発達しました。樹木作物と森林は同じ土地利用区分ではありません。'],sources:asiaPlaceReadings.filter(s=>['mekong-rice','thailand-poultry'].i…2630 tokens truncated…子と島の陸地面積を区別して読みます。',NPL:'ネパールの北の高地から南の低地へ、短い距離の標高差を読みます。',
+  {id:'agriculture',title:'米の低地、油ヤシ・ゴムと森林の違い',paragraphs:['メコンデルタの稲作では淡水の確保と塩水侵入への対応が関わります。タイの養鶏では、飼料・食肉加工・販売を結ぶ仕組みが発達しました。樹木作物と森林は同じ土地利用区分ではありません。'],sources:asiaPlaceReadings.filter(s=>['mekong-rice','thailand-poultry'].includes(s.id)).map(s=>s.source)},
+  {id:'industry',title:'タイの港・道路と、ペナンの電子産業',paragraphs:['タイ東部臨海部の2017年資料は、工業と港・道路・鉄道の接続を説明します。ペナンの州GDPは製造業全体の値で、電子産業だけの売上ではありません。設備・技術・人材と市場を一緒に考えます。'],sources:asiaPlaceReadings.filter(s=>['thailand-coast','penang-electronics'].includes(s.id)).map(s=>s.source)},
+  {id:'population',title:'ジャワ島や河川平野の集中を読む',paragraphs:['ジャワ島や大河川の平野の人口の集中と、山地・森林域を比べます。マレーシアの民族統計は市民を分母とする公表区分です。人口密度や宗教と同じ分類として扱いません。'],sources:[ghsl,{label:'マレーシア統計局：人口統計',url:'https://www.dosm.gov.my/'}]},
+  {id:'politics',title:'ASEANは経済・社会・安全保障の協力を扱う',paragraphs:['ASEAN憲章は経済、政治・安全保障、社会・文化の協力の目的と組織を定めます。港や市場のつながりを読む際には、交通施設だけでなく取引や協力の制度にも注目します。憲章の目的と、各国で実現した成果は区別します。'],sources:[asean]},
+ ]},
+ 'south-central-asia':{title:'モンスーンの平野と乾燥した内陸を、同じ条件で比べる',takeaway:'南アジアの雨季・河川平野と中央アジアの内陸を、水管理・加工・輸送・住民の制度までつなげて比較する。',readings:[]},
+ 'south-asia':{title:'雨の季節、集乳と通信、人々の暮らし',takeaway:'南アジアでは雨季と水利用を出発点に、集乳・加工・通信、人材と住民の管理制度が生産を支える関係を読む。',readings:[
+  {id:'nature',title:'高山・河川平野・半島・島を読み分ける',paragraphs:['ヒマラヤからガンジス・インダスの平野へ、デカン高原とスリランカの高地へ、標高と雨の季節を比べます。年間雨量だけでは、作物が育つ時期に使える水を決められません。'],sources:[{label:'気象庁：ClimatView',url:'https://www.data.jma.go.jp/gmd/cpd/monitor/climatview/frame.php'}]},
+  {id:'agriculture',title:'パンジャーブの灌漑、アナンドの集乳',paragraphs:['パンジャーブの水稲・小麦の事例は、作付けと灌漑の時期の調整を示します。アナンド方式では、村の集乳、地区の加工、州の販売を組み合わせ、家畜を飼う農家と消費者を結びます。'],sources:asiaPlaceReadings.filter(s=>['punjab-wheat','anand-dairy'].includes(s.id)).map(s=>s.source)},
+  {id:'industry',title:'インドの州別産業と、通信・集乳・加工',paragraphs:['国別産業の対象はインドです。2022–23年度の州別収録値では、製造業は西部のグジャラート州・マハーラーシュトラ州と南部のタミル・ナードゥ州、サービス業はマハーラーシュトラ州・カルナータカ州・タミル・ナードゥ州の総額が大きくなります。ベンガルールの通信回線・事業施設と、アナンドの集乳・加工・販売は、産業を支える仕組みの具体例です。州の総額を都市や個別業種だけの生産額へ読み替えません。','他国は南アジアの地域的特徴と生産・加工・市場のつながりを読む対象です。地域全体の国別GDP比や商品貿易を比べる画面と、インド国内の州別付加価値を比べる画面は、範囲・単位が異なります。'],sources:asiaPlaceReadings.filter(s=>['bengaluru-services','gujarat-manufacturing'].includes(s.id)).flatMap(s=>[s.source,...s.additionalSources??[]])},
+  {id:'population',title:'平野の人口と、言語・宗教を別の資料で読む',paragraphs:['ガンジス川下流からベンガルの平野へ続く人口の集中と、高山・乾燥域を比べます。インドの2011年国勢調査の母語と宗教は別の設問です。州内にも多様性があり、最多区分の色は単一の居住域を表しません。'],sources:[ghsl,{label:'インド国勢調査：2011年の表',url:'https://censusindia.gov.in/census.website/data/census-tables'}]},
+  {id:'politics',title:'森林を使う住民、地域間の協力',paragraphs:['ネパールの歴史的な住民林業研究では、利用者の組織が管理計画を作って森林を利用します。SAARCの1985年憲章も経済・社会・技術の協力を掲げています。自然の分布と、利用を決める組織・制度は別の情報です。'],sources:[asiaPlaceReadings.find(s=>s.id==='nepal-forest')!.source,saarc]},
+ ]},
+ 'central-asia':{title:'山地の水、内陸の農業と国境を越える輸送',takeaway:'中央アジアの生産と暮らしは、山地から届く水、灌漑と政策、加工・人材、国境を越える輸送を組み合わせて読む。',readings:[
+  {id:'nature',title:'乾燥した低地と山地の水を分ける',paragraphs:[asiaFocusFieldReadings['central-asia'].natural.takeaway,asiaFocusFieldReadings['central-asia'].natural.reading],sources:[centralSource]},
+  {id:'agriculture',title:'北部の小麦と、灌漑による綿花',paragraphs:['カザフスタン北部の小麦では短い生育期に合う品種と鉄道輸送が、ウズベキスタンの綿花では灌漑と生産計画の歴史が関わります。水・設備・政策・市場の条件を比べます。'],sources:asiaPlaceReadings.filter(s=>['kazakhstan-wheat','fergana-cotton'].includes(s.id)).map(s=>s.source)},
+  {id:'industry',title:'原料と加工、隣国を通る市場への道',paragraphs:[asiaFocusFieldReadings['central-asia'].industry.reading],sources:[asiaFocusFieldReadings['central-asia'].industry.source]},
+  {id:'population',title:'都市と灌漑地域の集まり、仕事とサービス',paragraphs:[asiaFocusFieldReadings['central-asia'].population.takeaway,asiaFocusFieldReadings['central-asia'].population.reading],sources:[asiaFocusFieldReadings['central-asia'].population.source]},
+  {id:'politics',title:'国境と、上流・下流の調整',paragraphs:['FAOの2013年報告は、中央アジアの国を越える河川と灌漑の水利用を整理しています。上流と下流の水配分は国境を越えた協力の課題です。流域図は地形の接続を示し、現在の協定の履行や配分量を示しません。'],sources:[centralSource]},
+ ]},
+ 'west-asia':{title:'乾燥と水供給、資源と都市を結ぶ設備',takeaway:'西アジア・中東の地域差は、水を届ける設備と管理、資源を加工・輸送する仕組み、都市の仕事と人の移動から読む。',readings:[
+  {id:'nature',title:'沿岸・山地・内陸で、水の条件が違う',paragraphs:['トルコとイランの山地・高原、イラクの低地、乾燥したアラビア半島を比べます。河川、地下水、淡水化は水の供給の異なる仕組みで、施設の能力と実際の供給量も違います。'],sources:[aquastat]},
+  {id:'agriculture',title:'天水栽培と、灌漑栽培を比べる',paragraphs:['小麦・大麦の2020年推計収穫面積を、降水を使う天水栽培と人工的に水を届ける灌漑栽培に分けて読みます。ナツメヤシの実やオリーブの国別生産量は、国内の畑の位置や加工後の製品量を示しません。'],sources:[fao,aquastat]},
+  {id:'industry',title:'石油・ガスと、製造業・物流・サービス',paragraphs:['資源レントは産出価値から採掘費用を差し引いた推計額です。GDP比を生産量・政府収入と読み替えず、製造業やサービス業の付加価値、港湾のコンテナ取扱量と別々に比べます。採掘・加工・送水・輸送は設備と制度に支えられます。'],sources:[wdi,{label:'世界銀行WDI：石油資源レントの定義',url:'https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NY.GDP.PETR.RT.ZS'}]},
+  {id:'population',title:'人口分布、年齢構成、人の移動',paragraphs:['ナイル川沿いのエジプト、内陸や沿岸の都市の集中を比べます。このページの範囲は既存教材に合わせ、イランとエジプトを含みます。純移動数は転入と転出の差で、外国籍人口や難民数、移動の経路ではありません。'],sources:[ghsl,{label:'世界銀行WDI：純移動数の定義',url:'https://databank.worldbank.org/metadataglossary/world-development-indicators/series/SM.POP.NETM'}]},
+  {id:'politics',title:'水と交通の利用は、管理と調整で変わる',paragraphs:['チグリス・ユーフラテス川やナイル川の上流は国境の外にも広がります。水を分ける制度や取引・交通の制度を考えると、乾燥や資源だけで農業・都市の姿を説明できないことが分かります。地図の境界は教材上の位置の目安で、領有権の判断を示しません。'],sources:[aquastat]},
+ ]},
+};
+regional['south-central-asia'].readings = asiaOverviewTopics.map(t=>({id:t.id,title:t.id==='nature'?'モンスーンの平野と乾燥した内陸':`${t.label}を南・中央アジアで比較する`,paragraphs:[regional['south-asia'].readings.find(r=>r.id===t.id)!.paragraphs[0],regional['central-asia'].readings.find(r=>r.id===t.id)!.paragraphs[0]],sources:[...regional['south-asia'].readings.find(r=>r.id===t.id)!.sources,...regional['central-asia'].readings.find(r=>r.id===t.id)!.sources]}));
+
+const naturalNotes:Record<string,string> = {
+ AFG:'アフガニスタンの山地と盆地を、周囲の低地や水系と比べます。',BGD:'バングラデシュの低地を、ガンジス川・ブラマプトラ川と稲作の分布につなげて読みます。',BTN:'ブータンのヒマラヤ山地を、南の低地への高低差と雨の季節から読みます。',IND:'インドの北の平野、デカン高原、沿岸を比較し、国内を一つの気候にまとめず読みます。',PAK:'パキスタンのインダス川沿いの低地と北部の山地を、水の季節とともに読みます。',LKA:'スリランカの中央高地と沿岸を、雨の季節差と標高から読みます。',MDV:'モルディブの島々では、海を含む広域格子と島の陸地面積を区別して読みます。',NPL:'ネパールの北の高地から南の低地へ、短い距離の標高差を読みます。',
  KAZ:'カザフスタンの広い内陸と南東の山地を、寒暖の季節差と水系から比べます。',KGZ:'キルギスの天山山脈と山地の間の盆地・湖を、同じ標高尺度で読みます。',TJK:'タジキスタンのパミールの高地と西側の盆地を、河川の上流・下流から読みます。',TKM:'トルクメニスタンの乾燥した低地を、アムダリヤ川や灌漑の分布と別々に確かめます。',UZB:'ウズベキスタンの盆地や低地では、雨の量と川から水を届ける仕組みを分けて読みます。',
  CHN:'中国の西の高原・盆地と東の平野を、標高、川、雨の季節から比較します。',JPN:'日本の山地と沿岸の低地、南北の季節差を、都市の観測所と地形で比べます。',KOR:'韓国では朝鮮半島東部の山地と西側の低地、夏と冬の気候を比べます。',PRK:'朝鮮民主主義人民共和国の山地・低地と周辺の水系を、国の境界とは別に読みます。',MNG:'モンゴルの高原で、内陸の乾燥と冬の寒さを別々の条件として読みます。',TWN:'台湾の山地と西側の低地を、島内の高低差と雨の季節から比べます。',
  IDN:'インドネシアではジャワ・スマトラなどの島内の山地・低地と、雨の季節を比較します。',MYS:'マレーシアの半島部とボルネオ島側は離れた範囲です。山地・沿岸と森林・樹木作物を分けて読みます。',VNM:'ベトナムのメコンデルタと山地を、水の季節と低地の配置から読みます。',THA:'タイの河川平野とコラート高原を、標高と乾季・雨季から比べます。',MMR:'ミャンマーのエーヤワディー川下流の低地と上流側の山地を、流路と雨の季節から読みます。',PHL:'フィリピンのルソン島などでは、山地と平野を島ごとに比べます。海を陸続きの空白として扱いません。',LAO:'ラオスの山地とメコン川沿いの低地を、上流・下流の位置関係で読みます。',KHM:'カンボジアのメコン川とトンレサップ湖の位置を、周囲の低地と比べます。湖の参考輪郭は季節の水面変動ではありません。',BRN:'ブルネイの沿岸と内陸を、ボルネオ島の山地・低地の配置と合わせて読みます。',SGP:'シンガポールでは国の範囲と、資料が定めた都市中心部の範囲を区別します。',TLS:'東ティモールの島内の山地と沿岸を、縮尺を変えて確認します。',
