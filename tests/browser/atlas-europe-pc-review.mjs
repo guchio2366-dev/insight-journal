@@ -252,6 +252,7 @@ async function agricultureClimateRepairs(page,profile){
   // cause must stay in the visible panel, ahead of the retained farming prose.
   const cityChoices=await page.locator('[data-eu-city-choice] option').evaluateAll(nodes=>nodes.map(node=>node.value).filter(Boolean));
   const geographyRecords=[];
+  manifest.checks.push({profile:profile.name,cityGeography:geographyRecords});
   for(const cityId of cityChoices){
     await page.locator('[data-eu-city-choice]').selectOption(cityId);
     await page.waitForFunction(id=>!document.querySelector(`[data-city-reading="${id}"]`).hidden,cityId);
@@ -259,15 +260,15 @@ async function agricultureClimateRepairs(page,profile){
       const reason=node.querySelector('[data-eu-climate-reason]'),farm=node.querySelector('.eu-climate-farming>p'),details=node.querySelector('.eu-city-reading-details');
       return {id:reason.dataset.euClimateGeography,reason:reason.textContent,reasonBottom:reason.getBoundingClientRect().bottom,farmBottom:farm.getBoundingClientRect().bottom,reasonFont:Number.parseFloat(getComputedStyle(reason).fontSize),farmFont:Number.parseFloat(getComputedStyle(farm).fontSize),detailsClosed:!details.open,sources:details.querySelectorAll('a').length,viewportHeight:innerHeight};
     });
+    geographyRecords.push(cityEvidence);
+    await save();
     assert.equal(cityEvidence.id,cityId);
     assert.match(cityEvidence.reason,/大西洋|海|内陸|平原|台地|高緯度|山地|日射/);
     assert.ok(cityEvidence.reasonFont>=14&&cityEvidence.farmFont>=14);
     assert.ok(cityEvidence.sources>=3&&cityEvidence.detailsClosed);
     assert.ok(cityEvidence.reasonBottom<cityEvidence.farmBottom);
     assert.ok(cityEvidence.farmBottom<=cityEvidence.viewportHeight-8,'Each full city reason/farming paragraph stays within the PC viewport: '+JSON.stringify(cityEvidence));
-    geographyRecords.push(cityEvidence);
   }
-  manifest.checks.push({profile:profile.name,cityGeography:geographyRecords});
   networkClean();
 }
 
