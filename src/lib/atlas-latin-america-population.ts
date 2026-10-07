@@ -1,7 +1,9 @@
 import population from '../data/atlas/latin-america/population.json';
-import {latinCountries,latinWidth,latinHeight,latinMapLayout} from './atlas-latin-america-geometry';
+import {latinCountries,latinWidth,latinHeight,latinMapLayout,latinRasterFrame} from './atlas-latin-america-geometry';
+import ghsl from '../../public/assets/atlas/latin-america-population-v1/manifest.json';
+import {withBase} from './urls';
 
-export type LatinPopulationLayer='density'|'population'|'scale';
+export type LatinPopulationLayer='spatial'|'density'|'population'|'scale';
 export type LatinPopulationStatus='value'|'zero'|'missing'|'confidential'|'unavailable';
 export type LatinPopulationScope='all'|'central'|'south'|'country';
 export interface LatinPopulationMapState {layer:string;place:string;scope:LatinPopulationScope;only:boolean}
@@ -31,11 +33,30 @@ export function latinPopulationScopeIncludes(code:string,scope:string){
 }
 const escape=(value:unknown)=>String(value).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
 
+export const latinPopulationSpatialBins=ghsl.classes;
+export interface LatinPopulationSpatialGrid {width:number;height:number;noData:number;values:number[]}
+/** Read the retained display cell without interpolation or another rounding step. */
+export function latinPopulationSpatialCell(grid:LatinPopulationSpatialGrid,x:number,y:number){
+ if(!Number.isFinite(x)||!Number.isFinite(y)||x<0||x>=1||y<0||y>=1)return null;
+ const value=grid.values[Math.floor(y*grid.height)*grid.width+Math.floor(x*grid.width)];
+ return value===grid.noData||value===undefined?null:value;
+}
+function renderLatinPopulationSpatialMap(state:LatinPopulationMapState,id:string){
+ const {frame,transform}=latinMapLayout(state.scope,state.place),raster=latinRasterFrame();
+ const selected=latinCountries.find(country=>country.code===state.place);
+ const clip=state.only&&selected?`<defs><clipPath id="${id}-only"><path d="${selected.path}"/></clipPath></defs>`:'';
+ const image=(opacity:number,mask='')=>`<image data-lp-spatial-image="" href="${withBase('/assets/atlas/latin-america-population-v1/latin-america.png')}" x="${raster.x}" y="${raster.y}" width="${raster.width}" height="${raster.height}" preserveAspectRatio="none" style="image-rendering:pixelated" opacity="${opacity}" ${mask}/>`;
+ const context=latinCountries.map(country=>`<path class="lp-context" d="${country.path}" fill="#dce3e1" stroke="#9baaa4" stroke-width=".55" vector-effect="non-scaling-stroke"/>`).join('');
+ const outlines=latinCountries.map(country=>`<path data-lp-country="${country.code}" d="${country.path}" fill="transparent" stroke="${country.code===state.place?'#983c26':'#657f71'}" stroke-width="${country.code===state.place?'2.5':'.55'}" vector-effect="non-scaling-stroke" role="button" tabindex="0" aria-pressed="${country.code===state.place}" aria-label="${escape(country.name)}の人口分布と2023年国統計を読む"/>`).join('');
+ return `<svg xmlns="http://www.w3.org/2000/svg" class="latin-map lp-map lp-spatial-map" data-latin-map="" data-lp-map="${id}" data-lp-layer="spatial" data-lp-scope="${escape(state.scope)}" data-lp-frame="${frame.join(' ')}" viewBox="0 0 ${latinWidth} ${latinHeight}" role="group" aria-labelledby="${id}-title ${id}-desc" style="display:block;width:100%;height:auto;background:#edf3ef;border:1px solid #cbd8cd;border-radius:8px"><title id="${id}-title">中南米の居住人口密度推計・GHSL2020</title><desc id="${id}-desc">1km等積人口格子を10km格子へ集計した2020年の推計。8階級の色は人/km²。国平均ではありません。0は有効な0、透明部分は欠測・対象外。国を選んでも他地域の分布を残します。</desc>${clip}<g data-lp-spatial-native="" transform="${transform}"><g aria-hidden="true">${context}</g>${clip?image(.16)+image(1,`clip-path="url(#${id}-only)"`):image(1)}<g>${outlines}</g></g></svg>`;
+}
+
 // The outer canvas stays 900x580 even when the geographic frame changes. Paths
 // are transformed into it; population circles and their legend share this fixed
 // canvas. Thus zoom never changes population size or creates mismatched legends.
 export function renderLatinPopulationMap(state:LatinPopulationMapState,idPrefix='lp'){
  const id=idPrefix.replace(/[^A-Za-z0-9_-]/g,'');
+ if(state.layer==='spatial')return renderLatinPopulationSpatialMap(state,id);
  const {k,tx,ty,transform:geometryTransform}=latinMapLayout(state.scope,state.place);
  const density=state.layer!=='population',quantity=state.layer!=='density';
  const labelPoint=(country:typeof latinCountries[number])=>{const p=country.label;return [p[0]*k+tx,p[1]*k+ty];};
@@ -67,6 +88,7 @@ export function renderLatinPopulationMap(state:LatinPopulationMapState,idPrefix=
 }
 
 export function renderLatinPopulationLegend(layer:string){
+ if(layer==='spatial')return `<div class="lp-legend" data-lp-legend="spatial"><p class="lp-legend-title">色＝2020年の居住人口密度推計（人/km²）</p><ul class="lp-density-legend lp-spatial-legend">${latinPopulationSpatialBins.map(bin=>`<li><i style="background:${bin.color}" aria-hidden="true"></i>${bin.label}</li>`).join('')}</ul><p class="lp-legend-status">0は有効な0。透明・灰背景：欠測／対象外。10km等積格子へ集計し、表示は約14km。GHSL GHS-POP R2023A、CC BY 4.0。</p></div>`;
  const density=layer!=='population',quantity=layer!=='density';
  return `<div class="lp-legend" data-lp-legend="${escape(layer)}">${density?`<p class="lp-legend-title">色＝2023年の人口密度（人/陸地km²）</p><ul class="lp-density-legend" style="list-style:none;display:flex;flex-wrap:wrap;gap:5px 11px;margin:4px 0;padding:0;font-size:13px;line-height:1.6">${latinPopulationDensityBins.map(bin=>`<li style="display:inline-flex;align-items:center;gap:5px"><i style="display:inline-block;width:18px;height:13px;background:${bin.color};border:1px solid #879c90" aria-hidden="true"></i>${bin.label}</li>`).join('')}</ul>`:''}${quantity?'<p class="lp-legend-title" style="font-size:13px">円の面積＝2023年人口。地図内の円は左から1,000万・5,000万・2億人。</p>':''}<p class="lp-legend-status" style="font-size:13px;margin:3px 0">斜線・四角：対象統計なし（FLK）。0人とは区別。</p></div>`;
 }

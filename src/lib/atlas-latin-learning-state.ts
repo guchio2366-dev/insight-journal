@@ -6,7 +6,7 @@ export interface LatinLearningSelection {field:LatinLearningField;layer:string;p
 export interface LatinLearningState extends LatinLearningSelection {fallback:boolean;source?:LatinLearningSelection}
 const scopes:LatinLearningScope[]=['all','central','south','country'];
 const places=new Set(countries.map(country=>country.code));
-const sourceLayers:Record<LatinLearningField,string[]>={nature:['climate'],agriculture:['all','bana','coff','soyb','cattle'],industry:['ores','manufactures','canal'],population:['density','population','scale']};
+const sourceLayers:Record<LatinLearningField,string[]>={nature:['climate'],agriculture:['all','bana','coff','soyb','cattle'],industry:['ores','manufactures','canal'],population:['spatial','density','population','scale']};
 const agricultureAliases:Record<string,string>={banana:'bana',coffee:'coff',soy:'soyb'};
 const canonicalLayer=(field:LatinLearningField,value:string|null)=>field==='agriculture'&&value?agricultureAliases[value]??value:value;
 const validPlace=(value:string|null)=>value&&places.has(value)?value:'all';

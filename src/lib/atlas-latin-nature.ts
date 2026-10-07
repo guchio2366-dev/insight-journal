@@ -37,6 +37,7 @@ export function natureComparisonReading(source:{field:string;layer:string;place:
   return {title:`${name}：${metric}`,takeaway:reading.takeaway,explanation:`地域事例：${reading.title}。${reading.compare}。気候は1991–2020年、作物・牛の分布は2020年の格子推計で、年と粒度を区別して読みます。`,sources:reading.sources.map(s=>({name:s.label,url:s.url}))};
  }
  if(source.field==='population'){
+  if(source.layer==='spatial')return {title:`${name}の気候と居住人口分布`,takeaway:'沿岸・河川・高地などの自然条件と、国内の人口の集まり方を同じ範囲で読みます。国平均ではなく、2020年の居住人口推計を残しています。',explanation:'気候は1991–2020年、居住人口分布はGHSL2020年です。1km人口格子を10km等積格子へ集計し、表示は約14km。格子密度と2023年国別統計は年・面積分母が異なります。',sources:[{name:'欧州委員会JRC：GHS-POP R2023A、2020年推計',url:'https://data.jrc.ec.europa.eu/dataset/2ff68a52-5b5b-4a22-8f40-c41da8332cfe'}]};
   const quantity=source.layer==='population',metric=quantity?'人口規模':source.layer==='scale'?'人口密度・規模':'人口密度';
   return {title:`${name}の気候と${metric}`,takeaway:quantity?'水や農業を支える自然条件と、国・地域の人口規模を比べます。人口の多さは、生活用水・市場・交通への需要の規模を考える手掛かりになります。':'気候は水や農業の条件をつくり、人口の集まりは水供給や交通への需要につながります。気候群と国・地域平均の人口密度を並べ、その条件と暮らしを考えます。',explanation:'気候は1991–2020年の原0.1度区分、人口は2023年の国・地域全体の公表値です。国平均の密度は都市の位置、人口規模は水需要そのものを表していません。',sources:[{name:'世界銀行：国・地域の人口・人口密度',url:'https://data.worldbank.org/indicator/EN.POP.DNST'}]};
  }

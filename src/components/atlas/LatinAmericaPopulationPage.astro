@@ -1,62 +1,61 @@
 ---
 import LatinAmericaWorkspace from './LatinAmericaWorkspace.astro';
 import population from '../../data/atlas/latin-america/population.json';
-import ghsl from '../../../public/assets/atlas/latin-america-population-v1/manifest.json';
-import {latinPopulationOriginalTopics,latinPopulationReadings,latinPopulationReadingSources} from '../../data/atlas/latin-america/population-reading';
+import {latinPopulationOriginalTopics,latinPopulationSpatialOverview,latinPopulationReadingSources} from '../../data/atlas/latin-america/population-reading';
 import {renderLatinPopulationMap,renderLatinPopulationLegend,latinPopulationValue} from '../../lib/atlas-latin-america-population';
 import {withBase} from '../../lib/urls';
 import '../../styles/atlas-latin-america-population.css';
 const base=withBase('/atlas/latin-america/');
 const assets=withBase('/assets/atlas/latin-america-population-v2');
 const spatialAssets=withBase('/assets/atlas/latin-america-population-v1');
-const initial={layer:'density',place:'all',scope:'all' as const,only:false};
+const initial={layer:'spatial',place:'all',scope:'all' as const,only:false};
 const brazil=population.countries.find(row=>row.countryCode==='BRA')!;
 const barbados=population.countries.find(row=>row.countryCode==='BRB')!;
 const routes={base,assets,spatialAssets};
 ---
-<LatinAmericaWorkspace field="population" title="人口の規模と密度から読む中南米" lead="中米・カリブ・南米の人口を同じ年で比べ、自然条件・仕事・交通と人の集まりのつながりが分かります。">
+<LatinAmericaWorkspace field="population" title="人口の分布から読む中南米" lead="沿岸・高地・河川沿いの人口集中を、2020年の居住分布と2023年の国別統計で分けて読みます。">
  <Fragment slot="map">
-  <h2 data-lp-map-heading>2023年、人口の規模と密度を比べる</h2>
+  <h2 data-lp-map-heading>2020年、国内の居住人口分布を読む</h2>
   <div class="lp-map-comparison-brief" data-lp-map-comparison-brief hidden><p data-lp-map-comparison-text></p><a data-lp-map-return href={`${base}population/?layer=density&place=all&scope=all`}>元の人口分布に戻る</a></div>
-  <details class="latin-map-options"><summary>地域・表示を選ぶ</summary><div class="latin-map-options-body">  <div class="latin-controls lp-controls">
-   <label>指標<select data-lp-layer-select disabled><option value="density">国平均密度2023</option><option value="population">人口規模2023</option><option value="scale">規模 × 密度2023</option></select></label>
+  <details class="latin-map-options lp-example-options"><summary>地域・表示を選ぶ</summary><div class="latin-map-options-body">  <div class="latin-controls lp-controls">
+   <label>指標<select data-lp-layer-select disabled><option value="spatial">居住人口分布2020</option><option value="density">国平均密度2023</option><option value="population">人口規模2023</option><option value="scale">規模 × 密度2023</option></select></label>
    <label>地図の範囲<select data-lp-scope-select disabled><option value="all">中南米全体</option><option value="central">中米・カリブ</option><option value="south">南米</option><option value="country">選ぶ国・地域</option></select></label>
    <label>国・地域<select data-lp-place-select disabled><option value="all">全体を比べる</option>{population.countries.map(row=><option value={row.countryCode}>{row.nameJa}・{row.countryCode}</option>)}</select></label>
   </div>
+  <div class="lp-quick-places"><button type="button" data-lp-quick="BRA" disabled>ブラジル</button><button type="button" data-lp-quick="GTM" disabled>グアテマラ</button><button type="button" data-lp-quick="JAM" disabled>ジャマイカ</button></div>
+  <label><input type="checkbox" data-lp-only disabled/><span data-lp-only-label>選択国を強調（周辺は参考）</span></label>
+  <button type="button" data-lp-all disabled>全対象に戻す</button>
 </div></details>
   <div class="lp-map-pair" data-lp-map-pair>
    <figure class="lp-source-figure" data-lp-source-figure hidden><figcaption data-lp-source-caption>元の分布</figcaption><div data-lp-source-map></div><div data-lp-source-legend></div></figure>
-   <figure class="lp-target-figure"><figcaption data-lp-target-caption hidden>人口の比較先</figcaption><div data-lp-target-map set:html={renderLatinPopulationMap(initial,'lp-primary')} /><div data-lp-target-legend set:html={renderLatinPopulationLegend('density')} /></figure>
+   <figure class="lp-target-figure"><figcaption data-lp-target-caption hidden>人口の比較先</figcaption><div data-lp-target-map set:html={renderLatinPopulationMap(initial,'lp-primary')} /><div data-lp-target-legend set:html={renderLatinPopulationLegend('spatial')} /></figure>
   </div>
-  <p class="latin-caption lp-map-status" data-lp-status aria-live="polite">2023年・国と地域全域の値。33対象は取得済み、FLKは対象統計なし。</p>
- </Fragment>
- <Fragment slot="items">
-  <div class="lp-quick-places"><button type="button" data-lp-quick="BRA" disabled>ブラジル</button><button type="button" data-lp-quick="GTM" disabled>グアテマラ</button><button type="button" data-lp-quick="JAM" disabled>ジャマイカ</button></div>
-  <label><input type="checkbox" data-lp-only disabled/>選ぶ対象のデータだけ</label>
-  <button type="button" data-lp-all disabled>全対象に戻す</button>
+  <p class="latin-caption lp-map-status" data-lp-status aria-live="polite">2020年・GHSL居住人口密度推計。国を選んでも周辺の分布を残します。国別統計は2023年です。</p>
  </Fragment>
  <Fragment slot="reading">
-  <h2 data-lp-reading-title>{latinPopulationReadings.all.title}</h2>
-  <p class="lp-cause-brief" data-lp-cause-brief>沿岸・河川・高地の条件に港・産業・交通が重なって人が集まり、都市では住宅・水・通勤の整備が重要になります。</p>
-  <a class="latin-comparison-link" data-lp-scale-link href={`${base}population/?layer=scale&place=all&scope=all&from=population&sourceLayer=density&sourcePlace=all&sourceScope=all`}><strong>2023年の人口規模 × 国平均密度</strong><br/><span>人口が多い国と、密度が高い国・島を分けて読む</span></a>
-  <a class="latin-comparison-link" data-lp-nature-link href={`${base}nature/?layer=climate&place=all&scope=all&from=population&sourceLayer=density&sourcePlace=all&sourceScope=all`}><strong data-lp-nature-label>人口密度2023 × 気候1991–2020</strong><br/><span>人口の集まりと、熱帯・乾燥・高地などの位置関係を比べる</span></a>
-  <a class="latin-comparison-link" data-lp-industry-link href={`${base}industry/?layer=manufactures&place=all&scope=all&from=population&sourceLayer=density&sourcePlace=all&sourceScope=all`}><strong data-lp-industry-label>人口密度2023 × 製造品輸出比率2024</strong><br/><span>人が集まる国と、商品輸出に占める製造品の割合を比べる</span></a>
-  <div class="lp-value-card" aria-live="polite"><p class="lp-value-name" data-lp-value-name>人口最多の例：ブラジル</p><dl><div><dt>人口・2023年</dt><dd><strong data-lp-value-population>{latinPopulationValue(brazil.population)}</strong><span data-lp-population-unit> 人</span></dd></div><div><dt>国・地域全域の密度</dt><dd><strong data-lp-value-density>{latinPopulationValue(brazil.density,'value',1)}</strong><span data-lp-density-unit> 人/陸地km²</span></dd></div><div><dt>都市化率・2023年</dt><dd><strong data-lp-value-urban>{latinPopulationValue(brazil.urbanShare,'value',1)}</strong><span data-lp-urban-unit> %</span></dd></div></dl></div>
+  <h2 data-lp-reading-title>{latinPopulationSpatialOverview.title}</h2>
+  <p class="lp-cause-brief" data-lp-cause-brief>{latinPopulationSpatialOverview.cause}</p>
+  <p data-lp-spatial-summary>{latinPopulationSpatialOverview.text}</p>
+  <p class="lp-spatial-cell" data-lp-spatial-cell aria-live="polite">地図上の地点をクリックすると、表示格子の2020年推計値を確認できます。</p>
+  <a class="latin-comparison-link" data-lp-scale-link href={`${base}population/?layer=scale&place=all&scope=all&from=population&sourceLayer=spatial&sourcePlace=all&sourceScope=all`}><strong>居住分布2020 × 国別規模・密度2023</strong><br/><span>国内の集まり方と国全体の人口を、異なる年・尺度で分けて読む</span></a>
+  <a class="latin-comparison-link" data-lp-nature-link href={`${base}nature/?layer=climate&place=all&scope=all&from=population&sourceLayer=spatial&sourcePlace=all&sourceScope=all`}><strong data-lp-nature-label>居住人口分布2020 × 気候1991–2020</strong><br/><span>人口の集まりと、熱帯・乾燥・高地などの位置関係を比べる</span></a>
+  <a class="latin-comparison-link" data-lp-industry-link href={`${base}industry/?layer=manufactures&place=all&scope=all&from=population&sourceLayer=spatial&sourcePlace=all&sourceScope=all`}><strong data-lp-industry-label>居住人口分布2020 × 製造品輸出比率2024</strong><br/><span>国内の居住分布と、国の商品輸出構成を分けて比べる</span></a>
+  <div class="lp-value-card" data-lp-value-card aria-live="polite" hidden><p class="lp-value-name" data-lp-value-name>人口最多の例：ブラジル</p><dl><div><dt>人口・2023年</dt><dd><strong data-lp-value-population>{latinPopulationValue(brazil.population)}</strong><span data-lp-population-unit> 人</span></dd></div><div><dt>国・地域全域の密度</dt><dd><strong data-lp-value-density>{latinPopulationValue(brazil.density,'value',1)}</strong><span data-lp-density-unit> 人/陸地km²</span></dd></div><div><dt>都市化率・2023年</dt><dd><strong data-lp-value-urban>{latinPopulationValue(brazil.urbanShare,'value',1)}</strong><span data-lp-urban-unit> %</span></dd></div></dl></div>
   <p class="latin-takeaway" data-lp-reading-short>ブラジルは約2.11億人、密度25.3人/陸地km²。バルバドスは約28.2万人、密度656.6人/陸地km²。</p>
   <div class="lp-comparison-reading" data-lp-comparison-reading hidden><h3 data-lp-comparison-title>元の分布と人口を比べる</h3><p data-lp-comparison-text></p><a class="latin-return" data-lp-return href={`${base}population/?layer=density&place=all&scope=all`}>元の人口密度に戻る</a></div>
-  <details class="lp-causal-detail"><summary>自然条件 → 仕事・交通 → 人口を読む</summary><p data-lp-reading-text>{latinPopulationReadings.all.text}</p><p data-lp-reading-cause>{latinPopulationReadings.all.cause}</p><p><a href={latinPopulationReadingSources.productivity}>世界銀行：都市形態・技能・市場へのアクセス（2018年）</a><br/><a href={latinPopulationReadingSources.employment}>世界銀行：都市間の交通と、住宅・雇用をつなぐ移動</a></p></details>
+  <details class="lp-causal-detail"><summary>自然条件 → 仕事・交通 → 人口を読む</summary><p data-lp-reading-text>{latinPopulationSpatialOverview.text}</p><p data-lp-reading-cause>{latinPopulationSpatialOverview.cause}</p><p><a href={latinPopulationReadingSources.productivity}>世界銀行：都市形態・技能・市場へのアクセス（2018年）</a><br/><a href={latinPopulationReadingSources.employment}>世界銀行：都市間の交通と、住宅・雇用をつなぐ移動</a></p></details>
   <details><summary>年・国平均・都市化率をどう読む？</summary><p>人口は2023年の年央推計。密度は国・地域全域の陸地面積あたりの人口で、公表値を使用しています。表示地図から面積を計算していません。</p><p>都市化率は人口のうち、各国の都市の定義で都市に住む人の割合。人口の規模や人口密度とは別の指標です。</p><p>33国・地域は値を取得済み。FLKは対象統計なしで、0・欠測・秘匿と区別しています。このサイトの対象は中米・カリブ・南米で、メキシコは北米ページにあります。</p></details>
-  <noscript><p>全34対象の値を下の表で確認できます。地図と値は2023年、細かな居住分布の別図は2020年です。</p></noscript>
+  <noscript><p>主地図は2020年の居住人口分布。2023年の国別値は下の全34対象の表で確認できます。</p></noscript>
  </Fragment>
  <Fragment slot="statistics">
   <h2>国・地域の値と、国内の居住分布を確かめる</h2>
   <details class="lp-country-table" data-lp-country-table open><summary>全34国・地域の人口・密度・都市化率</summary><div class="latin-table-scroll"><table><caption>2023年の世界銀行公表値。人数は人、密度は人/陸地km²、都市化率は%。欠測・対象統計なしは0に置換しません。</caption><thead><tr><th scope="col">国・地域</th><th scope="col">人口（人）</th><th scope="col">密度</th><th scope="col">都市化率</th></tr></thead><tbody>{population.countries.map(row=><tr data-lp-row={row.countryCode}><th scope="row">{row.nameJa}<span lang="en">{row.name}・{row.countryCode}</span></th><td>{latinPopulationValue(row.population,row.populationStatus)}</td><td>{latinPopulationValue(row.density,row.densityStatus,1)}</td><td>{latinPopulationValue(row.urbanShare,row.urbanShareStatus,1)}</td></tr>)}</tbody></table></div></details>
-  <details class="lp-spatial-detail"><summary>2020年の細かな居住分布を別図で読む（GHSL）</summary><p>国平均の2023年密度と、国内の居住分布を読む2020年推計は別の年・尺度です。2020年図では沿岸・都市・河川沿いの集まりと、アマゾンやパタゴニアの低密度地域を読めます。</p><figure><img loading="lazy" src={`${spatialAssets}/latin-america.png`} alt="GHSL2020年の中米・カリブ・南米の居住人口密度推計。10km等積格子に集計し地図へ表示。" width="480" height="777"/><figcaption>欧州委員会JRC・GHS-POP R2023A。1km人口推計を10km等積格子に集計。単位：人/km²。0は有効な0、透明部分は欠測・対象外。</figcaption></figure><ul class="latin-legend">{ghsl.classes.map(bin=><li><i style={`background:${bin.color}`} aria-hidden="true"/>{bin.label}</li>)}</ul><p><a href={`${spatialAssets}/manifest.json`}>2020年図の加工・配信値・利用条件台帳</a> ／ <a href={`${spatialAssets}/source-inputs.json`}>42元タイルの原典とSHA256</a></p></details>
+  <details class="lp-spatial-detail"><summary>主地図の2020年推計・粒度・欠測を確かめる（GHSL）</summary><p>国平均の2023年密度と、国内の居住分布を読む2020年推計は別の年・尺度です。欧州委員会JRC・GHS-POP R2023Aの1km人口推計を10km等積格子に集計。表示は約14kmで小さな集落が平滑化され、小島や海岸は省略されることがあります。街区ごとの実測人数ではありません。</p><p>単位：人/km²。分母は有効な元人口セルの面積で、国別統計の陸地面積とは異なります。0は有効な0、透明部分は欠測・対象外。メルカトル画像のセル数から人口を足し上げません。表示格子は既存の配信原値をそのまま照会します。</p><p><a href={`${spatialAssets}/latin-america.grid.json`}>2020年の配信格子値</a> ／ <a href={`${spatialAssets}/manifest.json`}>加工・配信値・利用条件台帳</a> ／ <a href={`${spatialAssets}/source-inputs.json`}>42元タイルの原典とSHA256</a></p></details>
   <details class="lp-original-readings"><summary>都市・河川・中米・カリブの地域解説</summary>{latinPopulationOriginalTopics.map(topic=><details><summary>{topic.title}</summary><p>{topic.summary}</p>{topic.sections.map(section=><div><h3>{section.title}</h3><p>{section.body}</p></div>)}<ul>{topic.sources.map(source=><li><a href={source.url}>{source.label}</a>{source.period?`（${source.period}）`:''}</li>)}</ul></details>)}</details>
  </Fragment>
  <Fragment slot="sources">
   <details><summary>原典・加工・配信値・利用条件</summary><ul>{population.sources.map(source=><li><a href={source.apiUrl}>世界銀行API：{source.indicator}（2023年を採用）</a> ／ <a href={source.metadataUrl}>個別指標の定義と利用条件</a>。API更新：{source.apiLastUpdated}。</li>)}<li>3指標それぞれの公式メタデータにCC BY4.0を指定。世界銀行・元指標提供機関を出典とし、対象・年の抽出、日本語名、表示丸め、地図表示はInsight Journalが加工。</li><li>国境：Natural Earth。人口密度は国境面積から再計算していません。</li><li><a href={`${assets}/countries-2023.csv`}>採用値CSV</a> ／ <a href={`${assets}/countries-2023.json`}>採用JSON</a> ／ <a href={`${assets}/manifest.json`}>原典レスポンス・個別メタデータ・加工・SHA256台帳</a></li></ul></details>
-  <details class="lp-ghsl-citation"><summary>GHSL別図の元データ・参考論文</summary><p>2020年の別図の元データ：欧州委員会JRC、<a href="https://human-settlement.emergency.copernicus.eu/ghs_pop2023.php">GHS-POP R2023A</a>。1km人口格子を10kmの等積格子に集約した図です。通常地図の2023年国別統計と年・目的が異なります。</p><p>GHSLの方法と検証の参考論文：<a href="https://doi.org/10.1080/17538947.2024.2390454">Pesaresi et al. (2024)、DOI: 10.1080/17538947.2024.2390454</a>。元データの採用年・加工・配信値は別図の台帳で確認できます。</p></details>
+  <details class="lp-ghsl-citation"><summary>GHSL主地図の元データ・参考論文</summary><p>2020年の主地図の元データ：欧州委員会JRC、<a href="https://human-settlement.emergency.copernicus.eu/ghs_pop2023.php">GHS-POP R2023A</a>。1km人口格子を10kmの等積格子に集約した図です。2023年国別統計と年・目的が異なります。</p><p>GHSLの方法と検証の参考論文：<a href="https://doi.org/10.1080/17538947.2024.2390454">Pesaresi et al. (2024)、DOI: 10.1080/17538947.2024.2390454</a>。元データの採用年・加工・配信値は主地図の台帳で確認できます。</p></details>
  </Fragment>
  <script type="application/json" data-lp-config set:html={JSON.stringify(routes).replace(/</g,'\\u003c')}/>
  <script>

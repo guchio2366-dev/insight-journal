@@ -23,8 +23,8 @@ export function initLatinEssentialLegends():void {
     note.textContent=layer==='canal'?'2024会計年度の説明図。矢印＝淡水と物流のつながり。位置・流量・数量の比例図ではありません。':'細線：国境。太枠：選択国。色は国の商品輸出額に占める割合（%）、2024年。';
    }else if(field==='population'){
     const control=root.querySelector<HTMLSelectElement>('[data-lp-layer-select]');
-    const layer=root.dataset.lpLayer??(routeLayer&&['density','population','scale'].includes(routeLayer)?routeLayer:control?.value);
-    note.textContent=layer==='population'?'円面積＝2023年の国人口（人）。地色は固定。細線：国境。太枠：選択国。':layer==='scale'?'色＝2023年の国平均密度（人/陸地km²）。円面積＝国人口（人）。細線：国境。太枠：選択国。':'細線：国境。太枠：選択国。色＝2023年の国平均密度（人/陸地km²）。';
+    const layer=root.dataset.lpLayer??(routeLayer&&['spatial','density','population','scale'].includes(routeLayer)?routeLayer:control?.value);
+    note.textContent=layer==='spatial'?'色＝2020年の居住人口密度推計（人/km²）。細線：国境。太枠：選択国。国平均ではありません。':layer==='population'?'円面積＝2023年の国人口（人）。地色は固定。細線：国境。太枠：選択国。':layer==='scale'?'色＝2023年の国平均密度（人/陸地km²）。円面積＝国人口（人）。細線：国境。太枠：選択国。':'細線：国境。太枠：選択国。色＝2023年の国平均密度（人/陸地km²）。';
    }else note.textContent=field==='nature'?'細線：国境。太枠：選択国。色は5気候群で、国平均ではありません。':'細線：国境。太枠：選択国。色は格子の分布で、国の合計ではありません。';
   };
   syncLegendNote();
@@ -38,6 +38,9 @@ export function initLatinEssentialLegends():void {
   }
   if(scroll&&root.dataset.latinField==='population'){
    const cause=fixed.querySelector<HTMLElement>('.lp-cause-brief');if(cause)scroll.prepend(cause);
+   const distribution=root.querySelector<HTMLElement>('[data-lp-spatial-summary]');
+   const firstComparison=fixed.querySelector<HTMLElement>('.latin-comparison-link');
+   if(distribution&&firstComparison)fixed.insertBefore(distribution,firstComparison);
    const takeaway=document.createElement('p');takeaway.className='latin-takeaway';takeaway.textContent='沿岸・河川・高地の都市へ、人と仕事・交通が集まる。';
    fixed.querySelector('h2')?.after(takeaway);
    const detail=document.createElement('details'),summary=document.createElement('summary');summary.textContent='比較で読み取ること';detail.append(summary);
@@ -50,7 +53,8 @@ export function initLatinEssentialLegends():void {
   const placeLegend=()=>{
    syncLegendNote();
    const comparison=root.classList.contains('is-comparison'),desktop=window.matchMedia('(min-width:960px)').matches;
-   if(comparison||!desktop){if(legend.parentElement===panel){anchor.after(legend);spacer.remove();}panel.hidden=true;return;}
+   const spatial=root.dataset.latinField==='population'&&(root.dataset.lpLayer??root.querySelector<HTMLSelectElement>('[data-lp-layer-select]')?.value)==='spatial';
+   if(comparison||spatial||!desktop){if(legend.parentElement===panel){anchor.after(legend);spacer.remove();}panel.hidden=true;return;}
    panel.hidden=false;
    if(legend.parentElement!==panel){spacer.style.height=`${legend.getBoundingClientRect().height}px`;anchor.after(spacer);panel.insertBefore(legend,note);}
   };

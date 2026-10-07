@@ -68,9 +68,36 @@ test('Only hides data for other targets while all 34 context shapes remain, and 
 });
 
 test('Every population layer uses XML-compatible valued data attributes in fallback SVG',()=>{
- for(const layer of ['density','population','scale']){
+ for(const layer of ['spatial','density','population','scale']){
   const svg=lib.renderLatinPopulationMap(state(layer,'JAM','central',true),'xml-test');
   assert.equal((svg.match(/\sdata-[a-z-]+(?=\s|>)/g)??[]).length,0);
-  assert.match(svg,/data-latin-map=""/);if(layer!=='density')assert.match(svg,/data-lp-map-size-key=""/);
+  assert.match(svg,/data-latin-map=""/);if(['population','scale'].includes(layer))assert.match(svg,/data-lp-map-size-key=""/);
  }
+});
+
+test('GHSL selection preserves the same retained raster, all countries, frame and eight source classes',async()=>{
+ const baseline=svg(state('spatial'));
+ const selected=svg(state('spatial','BRA','all',true));
+ try{
+  assert.equal(baseline.root.querySelectorAll('[data-lp-country][aria-pressed="true"]').length,0);
+  assert.equal(selected.root.querySelectorAll('[data-lp-country]').length,34);
+  assert.equal(selected.root.getAttribute('data-lp-frame'),baseline.root.getAttribute('data-lp-frame'));
+  assert.deepEqual([...selected.root.querySelectorAll('image')].map(x=>x.getAttribute('href')),[baseline.root.querySelector('image').getAttribute('href'),baseline.root.querySelector('image').getAttribute('href')]);
+  assert.equal(selected.root.querySelector('image').getAttribute('opacity'),'0.16');
+  assert.ok(selected.root.querySelector('image[clip-path]'));
+  assert.equal(selected.root.querySelectorAll('[data-lp-country] title').length,0);
+  const source=JSON.parse(await readFile('public/assets/atlas/latin-america-population-v1/manifest.json','utf8'));
+  assert.deepEqual(lib.latinPopulationSpatialBins,source.classes);
+  assert.equal(lib.latinPopulationSpatialBins.length,8);
+ }finally{await baseline.w.happyDOM.close();await selected.w.happyDOM.close();}
+});
+
+test('GHSL queries retain exact distributed positive/zero values and distinguish missing cells and outside coordinates',async()=>{
+ const grid=JSON.parse(await readFile('public/assets/atlas/latin-america-population-v1/latin-america.grid.json','utf8'));
+ for(const index of [grid.values.findIndex(v=>v>0&&v<.1),grid.values.findIndex(v=>v>1000),grid.values.indexOf(0),grid.values.indexOf(grid.noData)]){
+  assert.ok(index>=0);
+  const value=lib.latinPopulationSpatialCell(grid,(index%grid.width+.5)/grid.width,(Math.floor(index/grid.width)+.5)/grid.height);
+  assert.equal(value,grid.values[index]===grid.noData?null:grid.values[index]);
+ }
+ for(const [x,y] of [[-1,.5],[1,.5],[.5,1],[NaN,.5]])assert.equal(lib.latinPopulationSpatialCell(grid,x,y),null);
 });

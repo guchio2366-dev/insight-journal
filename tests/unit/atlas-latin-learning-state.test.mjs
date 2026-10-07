@@ -21,7 +21,7 @@ test('a source selection survives target changes, refresh and a named return URL
  assert.equal(returned.searchParams.has('from'),false);
 });
 test('quantity and density remain different source layers through all region scopes',()=>{
- for(const layer of ['density','population'])for(const scope of ['all','central','south','country'])for(const only of [false,true]){
+ for(const layer of ['spatial','density','population'])for(const scope of ['all','central','south','country'])for(const only of [false,true]){
   const comparison=lib.latinComparisonState({field:'population',layer,place:'JAM',scope,only,fallback:false},'industry','ores');
   const roundTrip=read(lib.writeLatinLearningState(comparison));
   assert.equal(roundTrip.source.layer,layer);assert.equal(roundTrip.source.scope,scope);assert.equal(roundTrip.source.only,only);
