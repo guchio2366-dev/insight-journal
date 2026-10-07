@@ -1,6 +1,9 @@
 ---
 import AsiaFieldNavigation from './AsiaFieldNavigation.astro';
-import {asiaFocusViews,asiaFocusFieldReadings,type AsiaFocusId} from '../../data/atlas/asia-focus';
+import {asiaFocusViews,asiaFocusFieldReadings,asiaFocusCountries,type AsiaFocusId} from '../../data/atlas/asia-focus';
+import eastContentGeography from '../../../public/assets/atlas/asia-population-v1/east-asia.geography.json';
+import southeastContentGeography from '../../../public/assets/atlas/asia-population-v1/southeast-asia.geography.json';
+import southContentGeography from '../../../public/assets/atlas/asia-population-v1/south-central-asia.geography.json';
 import presentationManifest from '../../../public/assets/atlas/asia-presentation-v1/manifest.json';
 import '../../styles/atlas-asia-fields.css';
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -9,6 +12,9 @@ import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
 import AsiaClimateDiagram from './AsiaClimateDiagram.astro';
 import AsiaFarmingPanel from './AsiaFarmingPanel.astro';
 import AsiaIndustryPanel from './AsiaIndustryPanel.astro';
+import SoutheastAsiaFarmView from './asia/SoutheastAsiaFarmView.astro';
+import {southeastIndustryCountryScope} from '../../data/atlas/asia/southeast-asia-industry';
+import {southeastAsiaInitialReadings} from '../../data/atlas/asia/southeast-asia-reading';
 import AsiaWaterPanel from './AsiaWaterPanel.astro';
 import AsiaSeasonalPrecipitationPanel from './AsiaSeasonalPrecipitationPanel.astro';
 import AsiaSocialPanel from './AsiaSocialPanel.astro';
@@ -49,7 +55,17 @@ const targets=regionFeatures(regionId);
 const countryCodes=new Set(targets.map(f=>f.properties.code));
 const rings=(f:CountryFeature)=>f.geometry.type==='Polygon'?f.geometry.coordinates as number[][][]:(f.geometry.coordinates as number[][][][]).flat();
 const countryBounds=(f:CountryFeature)=>{const p=rings(f).flat();return [Math.min(...p.map(p=>p[0])),Math.min(...p.map(p=>p[1])),Math.max(...p.map(p=>p[0])),Math.max(...p.map(p=>p[1]))];};
-const countries=targets.map(f=>({code:f.properties.code,name:japaneseNames[f.properties.code]??f.properties.name,bounds:countryBounds(f)})).sort((a,b)=>a.name.localeCompare(b.name,'ja'));
+const contentGeography={'east-asia':eastContentGeography,'southeast-asia':southeastContentGeography,'south-central-asia':southContentGeography}[regionId];
+// Fit all rings in the existing detailed geography, including small islands.
+// Raster rectangles and a country's largest polygon are not its content extent.
+const contentBounds=(coordinates:unknown)=>{
+ const extent=[Infinity,Infinity,-Infinity,-Infinity];
+ const visit=(value:any)=>{if(typeof value?.[0]==='number'){extent[0]=Math.min(extent[0],value[0]);extent[1]=Math.min(extent[1],value[1]);extent[2]=Math.max(extent[2],value[0]);extent[3]=Math.max(extent[3],value[1]);}else if(Array.isArray(value))value.forEach(visit);};
+ visit(coordinates);return extent;
+};
+const countries=targets.map(f=>({code:f.properties.code,name:japaneseNames[f.properties.code]??f.properties.name,bounds:contentBounds(contentGeography.features.filter(g=>g.properties.code===f.properties.code).map(g=>g.geometry.coordinates))})).map(c=>({...c,bounds:c.bounds.every(Number.isFinite)?c.bounds:countryBounds(targets.find(f=>f.properties.code===c.code)!)})).sort((a,b)=>a.name.localeCompare(b.name,'ja'));
+const visibleCountries=new Set(focusId?asiaFocusCountries[focusId]:countries.map(c=>c.code));
+const contentExtent=contentBounds(contentGeography.features.filter(f=>visibleCountries.has(f.properties.code)).map(f=>f.geometry.coordinates));
 const longitudeScale=Math.cos(region.latitude*Math.PI/180);
 const project=([lon,lat]:number[])=>[lon*longitudeScale,-lat];
 const bounds=reading.bounds;
@@ -59,20 +75,20 @@ const nearby=features.filter(f=>!countryCodes.has(f.properties.code)&&rings(f).s
 const precipitationMax=Math.max(400,Math.ceil(Math.max(...cities.flatMap(c=>c.precipitationMm.filter(v=>v!==null) as number[]))/200)*200);
 const physical=physicalManifest.regions[regionId], physicalFocus=asiaPhysicalFocus.filter(f=>f.region===regionId);
 const population=populationManifest.regions[regionId] as unknown as AsiaPopulationRegion;
-const config={regionId,label:region.label,bounds,dataBounds:asiaRegionReading[regionId].bounds,countries,cities,classes:asiaClimateClasses,climate:climateManifest.regions[regionId],physical,physicalFocus,geographyUrl:withBase('/assets/atlas/asia-geography-v1.json'),climateBase:withBase('/assets/atlas/asia-climate-v2/'),agricultureBase:withBase('/assets/atlas/asia-agriculture-v1/'),physicalBase:withBase('/assets/atlas/asia-physical-v1/')};
+const config={regionId,label:region.label,bounds,contentExtent,dataBounds:asiaRegionReading[regionId].bounds,countries,cities,classes:asiaClimateClasses,climate:climateManifest.regions[regionId],physical,physicalFocus,geographyUrl:withBase('/assets/atlas/asia-geography-v1.json'),climateBase:withBase('/assets/atlas/asia-climate-v2/'),agricultureBase:withBase('/assets/atlas/asia-agriculture-v1/'),physicalBase:withBase('/assets/atlas/asia-physical-v1/')};
 const farming=farmingManifest.regions[regionId] as unknown as AsiaFarmingRegion;
 Object.assign(config,{farming,farmingBase:withBase('/assets/atlas/asia-farming-v1/')});
 const presentation={...presentationManifest.regions[regionId],settlements:settlementManifest.regions[regionId]};
 Object.assign(config,{presentation,presentationBase:withBase('/assets/atlas/asia-presentation-v1/')});
 const familyNames=['熱帯','乾燥帯','温帯','冷帯','寒帯'];
 Object.assign(config,{population,populationBase:withBase('/assets/atlas/asia-population-v1/')});
-const industry={...industryManifest.regions[regionId],topics:[...industryManifest.regions[regionId].topics,...tradeTopics]} as unknown as IndustryRegion;
+const industry={...industryManifest.regions[regionId],topics:[...industryManifest.regions[regionId].topics,...tradeTopics],...(regionId==='southeast-asia'?{countryScope:southeastIndustryCountryScope}:{})} as unknown as IndustryRegion;
 Object.assign(config,{industry,industryBase:withBase('/assets/atlas/asia-industry-v1/')});
 Object.assign(config,{water:waterManifest.regions[regionId],waterBase:withBase('/assets/atlas/asia-water-v1/')});
 Object.assign(config,{seasonalBase:withBase('/assets/atlas/asia-seasonal-precipitation-v1/')});
 const social=withSocialOverviews(socialManifest.regions[regionId] as SocialRegion);
 const farmInsight=asiaFarmInsights[regionId];
-Object.assign(config,{farmInsight,focusReadings:focusId?asiaFocusFieldReadings[focusId]??null:null});
+Object.assign(config,{farmInsight,focusReadings:focusId?asiaFocusFieldReadings[focusId]??null:regionId==='southeast-asia'?southeastAsiaInitialReadings():null});
 Object.assign(config,{social,socialBase:withBase('/assets/atlas/asia-social-v1/')});
 Object.assign(config,{trade:tradeManifest.regions[regionId],tradeBase:withBase('/assets/atlas/asia-trade-v1/'),tradeChapters:tradeManifest.chapters});
 const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林業'},{id:'natural',label:'自然環境'},{id:'industry',label:'主要産業'},{id:'population',label:'人口'}];
@@ -87,7 +103,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
       <div class="atlas-region-controls asia-region-shell">
        <AtlasRegionNavigation group="asia" current={regionId} />
        {regionId==='south-central-asia'&&<nav class="asia-focus-navigation" aria-label="南・中央アジアの表示範囲">{[{id:'south-central-asia',label:'南・中央アジア全体'},...Object.entries(asiaFocusViews).map(([id,v])=>({id,label:v.label}))].map(v=><a href={withBase(`/atlas/asia/${v.id}/${asiaFieldPaths[initialField]}/`)} data-focus-link={v.id} aria-current={pageId===v.id?'page':undefined}>{v.label}</a>)}</nav>}
-       <div class="asia-toolbar"><label>国・地域<select data-country-select aria-label="国・地域を選ぶ"><option value="">{region.label}全体</option>{countries.map(c=><option value={c.code}>{c.name}</option>)}</select></label><button class="asia-reset" type="button" data-reset>全体に戻す</button></div>
+       <div class="asia-toolbar"><label data-country-picker>国・地域<select data-country-select aria-label="国・地域を選ぶ"><option value="">{region.label}全体</option>{countries.map(c=><option value={c.code}>{c.name}</option>)}</select></label><button class="asia-reset" type="button" data-reset>全体に戻す</button></div>
       </div>
       <nav class="atlas-tabs atlas-tabs-with-overview asia-field-tabs" aria-label="地図の分野"><a data-atlas-overview-link href={withBase(`/atlas/asia/${pageId}/overview/`)}>概要</a>{fieldTabs.map(f=><a href={withBase(`/atlas/asia/${pageId}/${asiaFieldPaths[f.id]}/`)} data-field={f.id} aria-current={initialField===f.id?'page':undefined}>{f.label}</a>)}</nav>
       <AsiaFieldNavigation {initialField} {social} {regionId} {industry} forestTopic={farming.layers.find(t=>t.kind==='forest')?.id} />
@@ -124,6 +140,9 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
         <details class="asia-country-list"><summary>{region.label}の国・地域を一覧から選ぶ</summary><div>{countries.map(c=><button type="button" data-country-button={c.code} aria-pressed="false">{c.name}</button>)}</div></details>
       </section>
       <aside class="atlas-field-national asia-reading-panel" data-field-national={initialField} aria-label="地図の解説">
+       <div class="asia-city-reading-host" data-city-reading-host hidden>
+        {cities.map(city=><article class="asia-city-card" data-city-panel={city.id} id={`city-${city.id}`} hidden><h2 class="visually-hidden">{city.name}の気候</h2><AsiaClimateDiagram {city} {precipitationMax} countryName={japaneseNames[city.countryCode]} /></article>)}
+       </div>
        <section class="asia-reading-dock" data-reading-dock aria-label="この地図の要点と比較">
         <p class="eyebrow">この地図の要点</p><h2 data-reading-dock-title>{reading.title}</h2><p data-reading-dock-summary>{reading.summary}</p>
         <div class="asia-comparison-compact asia-main-legend" data-reading-map-legend aria-label="この地図の凡例・年・単位" hidden></div>
@@ -138,13 +157,13 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
         <details class="asia-comparison-method" data-comparison-method hidden><summary>比較区分の正式名称・説明・出典を読む</summary><p>元の選択と地図の位置を保存しています。</p><div data-comparison-legend></div></details>
         <section data-focus-reading hidden><h3 data-focus-reading-title></h3><p data-focus-reading-body></p><p class="asia-small">出典：<a data-focus-reading-source></a></p></section>
         <AsiaPopulationPanel {regionId} {population} active={initialField==='population'} />
-        <AsiaIndustryPanel active={initialField==='industry'} />
+        <AsiaIndustryPanel {regionId} active={initialField==='industry'} />
+        {regionId==='southeast-asia'&&<SoutheastAsiaFarmView />}
         <AsiaWaterPanel />
         <AsiaSocialPanel />
         <AsiaSettlementPanel {regionId} {pageId} />
         <AsiaTradePanel />
         <section class="asia-overview" data-overview hidden={initialField!=='natural'}><p class="eyebrow" data-reading-eyebrow>How to read this map</p><h2 data-reading-title>{reading.title}</h2><p class="asia-takeaway" data-reading-summary>{reading.summary}</p><div data-reading-questions><h3>地図で確かめること</h3><ol>{reading.questions.map(q=><li>{q}</li>)}</ol></div><div class="asia-next"><p>都市を選ぶと、雨温図と月別の数値を読めます。</p><div class="asia-city-links">{cities.slice(0,4).map(city=><button type="button" data-city-shortcut={city.id}>{city.name}<span>↗</span></button>)}</div></div></section>
-        {cities.map(city=><article class="asia-city-card" data-city-panel={city.id} id={`city-${city.id}`} hidden><h2 class="visually-hidden">{city.name}の気候</h2><AsiaClimateDiagram {city} {precipitationMax} countryName={japaneseNames[city.countryCode]} /></article>)}
         <section class="asia-class-reading" data-class-reading hidden><p class="eyebrow">Climate classification</p><h3><b data-class-code></b><span data-class-name></span></h3><p data-class-description></p><p class="asia-small">広域の格子データによる分類です。観測所の位置や気候の期間・解像度によって、雨温図から読む特徴と一致しないことがあります。</p></section>
         <section class="asia-farm-overview-reading" data-farm-overview-reading hidden={initialField!=='agriculture'}><p class="eyebrow">Agriculture &amp; Livestock · 2020</p><h2 data-farm-insight-title>{farmInsight.title}</h2><p class="asia-takeaway" data-farm-insight-lead>{farmInsight.lead}</p><h3>水の確保と稲作の分布</h3><p>{farmInsight.body}</p><a class="asia-small" href={farmInsight.source}>水と稲作の説明の出典</a><p class="asia-small">色面で作物の栽培域を示し、名前付きの点で主な畜産地域を示します。点の大きさは頭数・羽数を表しません。同じ品目の濃い色は集中する地域、淡い色は周辺に続く分布です。作物が重なる場所では特徴的な一品目を代表として塗ります。畜産の点はその上に重ねるため、同じ地方で両方が営まれていることも読めます。</p><details class="asia-method"><summary>概略図の作り方と出典</summary><p>元の推計格子を共通の約12kmの投影格子にまとめ、周辺の分布をならしました。各品目の地域内での順位が上位55％に入る格子まで表示し、上位15％の集中域は濃くしています。作物同士が重なる場所は順位の高い一品目を代表とします。畜産は各品目の集中域の大きなまとまりから代表点を選びます。共通格子への平均化後の値が1ha/元格子未満の作物、1頭または1羽/km²未満の家畜は表示候補から除き、分布がない場所まで色を延ばしません。表示候補となった小さな区域も残します。地表での距離は緯度により異なります。色の濃淡は品目内での相対的な分布を示し、品目間の生産量や面積を比較する尺度ではありません。</p><p>地図直下の品目名を選ぶと、元の分布と地点の数値を確認できます。農畜産物は2020年の推計です。色を付けていない場所は、掲載品目の分布が薄いか、資料がない範囲です。農業がないという意味ではありません。色の付いた範囲も、すべてが農地や放牧地という意味ではなく、地方の特徴をつかむための概略です。</p><p>作物：IFPRI MapSPAM 2020 v2r2（米はCC BY-SA 4.0、他はCC BY 4.0）。家畜：FAO GLW4 2020（CC BY 4.0）。川：Natural Earth 1:50m。雨：CHELSA（CC0 1.0）。</p></details></section>
         <section class="asia-rice-reading" data-rice-reading hidden><p class="eyebrow">Agriculture · Rice</p><h2>米が育つ場所と、気候の関係</h2><p class="asia-takeaway">米の収穫面積の分布を、都市の気温・降水量と見比べます。</p><div class="asia-rice-value" data-rice-value>地図上の対象地域を選ぶと、格子内の収穫面積を表示します。</div><p data-rice-summary></p><h3>「面積」の読み方</h3><p>収穫面積は、年間に収穫した作付面積です。同じ土地で複数回収穫すると、その回数分を含みます。表示は統計などを基にした空間配分モデルの推計で、個々の田畑の境界を示すものではありません。</p><p>気候と栽培の分布が重なることだけでは、因果関係は確定しません。灌漑、地形、土壌、品種、経済条件も関わります。</p><button class="asia-compare" type="button" data-compare="natural">同じ場所で気候を比べる<span>→</span></button><p class="asia-small" data-rice-source></p></section>

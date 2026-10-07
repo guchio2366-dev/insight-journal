@@ -16,6 +16,7 @@ import { readEuropeFarmingFocus, writeEuropeFarmingFocus } from '../data/atlas/e
 import { europeIndustryGroupCopy, isEuropeIndustryCountry, normaliseEuropeIndustryGroup } from './atlas-europe-industry';
 import { createEuropeFarmingStatistics } from '../scripts/atlas-europe-farming-statistics';
 import { europeFarmAvailableMetrics } from '../data/atlas/europe/farming-statistics';
+import { createEuropeCultureOverview, europeCultureOverviewPlaces } from './atlas-europe-culture-overview';
 type Country = { code: string; name: string; region: string };
 type City = { id: string; name: string; country: string; coordinates: [number, number] };
 type Feature = { type: 'Feature'; properties: { code: string; kind: string }; geometry: Geometry };
@@ -67,6 +68,7 @@ export function initEuropeAtlas() {
     },
   });
   const cultureActive=()=>state.layer==='ethnicity'||state.layer==='religion';
+  const cultureOverview=createEuropeCultureOverview(root);
   let cultureData:CultureMapData={type:'FeatureCollection',features:[]};
   let cultureRunning=false;
   const cultureReader=query<HTMLElement>('[data-eu-culture-reader]');
@@ -136,9 +138,14 @@ export function initEuropeAtlas() {
     query('[data-eu-basin-summary]').textContent=`選択：HYBAS_ID ${selected} · Pfafstetter ${basin.PFAF_ID}。濃い輪郭は表示格子上の区画で、その河川の流域全体とは限りません。`;
     const token=++drainageRequest;
     try {
+      const values=await gridValues(config.layers.find(layer=>layer.id==='drainage')!);
+      if(token!==drainageRequest||state.layer!=='drainage'||state.basin!==selected)return;
+      const representatives=config.readings.filter(item=>item.field==='nature'&&item.layer==='water').filter(item=>{
+        const cell=displayCell(values,item.coordinates,-1),record=cell?.value==null?undefined:europeDrainageBasinByIndex(cell.value);
+        return record?.MAIN_BAS===basin.MAIN_BAS;
+      });
+      if(representatives.length)query('[data-eu-basin-summary]').textContent+=` ${representatives.map(item=>item.name).join('、')}の代表地点と同じMAIN_BASのモデル区画です。代表地点の区画と上流・下流の区画は別に分かれることがあります。`;
       if(drainageDrawn!==selected){
-        const values=await gridValues(config.layers.find(layer=>layer.id==='drainage')!);
-        if(token!==drainageRequest||state.layer!=='drainage'||state.basin!==selected)return;
         const outline=europeDrainageOutline(values,index),canvas=document.createElement('canvas');canvas.width=1800;canvas.height=1502;
         canvas.getContext('2d')!.putImageData(new ImageData(outline.rgba,1800,1502),0,0);
         drainageImage=canvas.toDataURL('image/png');drainageDrawn=selected;
@@ -165,7 +172,7 @@ export function initEuropeAtlas() {
   const climateReader = () => state.layer==='climate'||state.layer==='overlay';
   const farmingItems=config.farmingAreas.features.map(feature=>feature.properties);
   const farmingView=()=>farmingPresentation(state,farmingItems);
-  const features = [...config.populationCities,...config.readings];
+  const features = [...config.populationCities,...config.readings,...europeCultureOverviewPlaces];
     const visibleFeatures = () => subject().field==='population'&&!cultureActive() ? config.populationCities : subject().field==='industry' ? config.readings.filter(r=>r.field==='industry') : subject().field==='nature'&&['water','drainage','terrain','contours'].includes(state.layer) ? config.readings.filter(r=>r.field==='nature'&&r.layer===(['water','drainage'].includes(state.layer)?'water':'terrain')) : [];
   const featureVisible = (id:string) => {
     const p=visibleFeatures().find(p=>p.id===id); if(!p)return false;
@@ -180,13 +187,13 @@ export function initEuropeAtlas() {
     root!.style.setProperty('--eu-reader-height',`${Math.max(220,window.innerHeight-top-12)}px`);
   }
   const annotations=createEuropeAnnotations(query<HTMLElement>('.eu-map-stage'),cities,features,
-    ()=>({climate:climateReader(),crops:farmingView().active,farmingIds:farmingView().visible.map(item=>item.id),selectedFarming:farmingView().item?.id,city:state.city,feature:state.feature,detailed:map&&liveMap.classList.contains('is-ready')?map.getBounds().getEast()-map.getBounds().getWest()<60:box[2]<frame.width*.65,emphasizedFeatures:industryEmphasized(),places:visibleFeatures().filter(p=>featureVisible(p.id))}),
+    ()=>({climate:climateReader(),crops:farmingView().active,farmingIds:farmingView().visible.map(item=>item.id),selectedFarming:farmingView().item?.id,city:state.city,feature:state.feature,detailed:map&&liveMap.classList.contains('is-ready')?map.getBounds().getEast()-map.getBounds().getWest()<60:box[2]<frame.width*.65,emphasizedFeatures:industryEmphasized(),places:cultureActive()&&!state.cultureCase?europeCultureOverviewPlaces.filter(item=>item.id.startsWith(state.layer+'-')):visibleFeatures().filter(p=>featureVisible(p.id))}),
     coordinate=>{
       if(map&&liveMap.classList.contains('is-ready'))return map.project(coordinate as [number,number]);
       const [x,y]=project(coordinate), matrix=staticMap.getScreenCTM(),rect=query<HTMLElement>('.eu-map-stage').getBoundingClientRect();
       const point=matrix?new DOMPoint(x,y).matrixTransform(matrix):new DOMPoint();
       return {x:point.x-rect.left,y:point.y-rect.top};
-    },(kind,id)=>kind==='city'?selectCity(id):kind==='crop'?setLayer(id):selectFeature(id),farmingItems);
+    },(kind,id)=>kind==='city'?selectCity(id):kind==='crop'?setLayer(id):selectFeature(id),farmingItems,cultureOverview.decorate);
   function setLayer(id:string, save = true) {
     if(id==='overlay' && state.layer!=='overlay')state.returnLayer=state.layer;
     state.layer=id;
@@ -197,15 +204,19 @@ export function initEuropeAtlas() {
     if(save)commit(false);
   }
   function selectFeature(id:string) {
+    const composition=europeCultureOverviewPlaces.find(item=>item.id===id);
+    if(composition&&cultureActive()){
+      culture.applyState({cultureCase:composition.caseId,cultureCategory:'',cultureArea:''});Object.assign(state,culture.readState());commit(false);return;
+    }
     const p=features.find(p=>p.id===id);if(!p)return;
     state.feature=id;
-    if(['terrain','contours','drainage'].includes(state.layer))void showGrid(p.coordinates);
+    if(['terrain','contours','drainage','density'].includes(state.layer))void showGrid(p.coordinates);
     else commit(false);
   }
   function updateReader() {
     const layer=subject(),copy=europeReaderCopy(layer),farm=farmingView();
     // Keep the same live result beside its controls, without duplicating it.
-    if(['terrain','contours'].includes(layer.id))query('.eu-reader-summary').after(gridReading);
+    if(['terrain','contours','density'].includes(layer.id))query('.eu-reader-summary').after(gridReading);
     else if(layer.id==='drainage')query('[data-eu-drainage-controls]').append(gridReading);
     else gridReadingHome.after(gridReading);
     query<HTMLElement>('[data-eu-climate-reader]').hidden=!climateReader();
@@ -565,6 +576,7 @@ export function initEuropeAtlas() {
       const selected=cultureSelection(culture.readState(),topic as 'ethnicity'|'religion');
       if(selected.state.cultureCase)query('[data-culture-takeaway]').textContent=selected.censusCase.grain==='LAD'?'イングランド・ウェールズで自己申告分類の地域差を読む事例です。欧州全域の分布ではありません。':'クロアチアの自己申告分類を全国値で読む事例です。行政区と同じ粒度では比較しません。';
     }else if(cultureRunning){cultureRunning=false;culture.setActive(false);}
+    cultureOverview.render(cultureActive(),topic==='religion'?'religion':'ethnicity',state.cultureCase??'');
     const selectedTopic=currentField.id==='agriculture'?(['forest','treecover'].includes(topic)?'treecover':'crops'):currentField.id==='population'?(cultureActive()?topic:'density'):['precipitation','drainage'].includes(topic)?'water':topic;
     all<HTMLElement>('[data-eu-topic]').forEach(button=>{
       const industryGroup=normaliseEuropeIndustryGroup(button.dataset.euIndustryGroup);
