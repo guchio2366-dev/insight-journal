@@ -220,8 +220,11 @@ async function agricultureClimateRepairs(page,profile){
   assert.ok(cityLabels.length<=8);
   for(const label of cityLabels){assert.equal(label.background,'rgba(0, 0, 0, 0)');assert.ok(label.font>=12&&label.font<=13);}
   const point=page.locator('[data-eu-map-kind="city"].is-point-only:visible').first();
-  assert.ok(await point.count());await point.focus();
-  assert.equal(await point.evaluate(node=>Number.parseFloat(getComputedStyle(node).fontSize)),12,'Focus reveals the station name');
+  assert.ok(await point.count());await page.bringToFront();await point.focus();
+  // Exercise real keyboard focus, with the pointer away from the station.
+  await page.mouse.move(5,5);await page.keyboard.press('Tab');await page.keyboard.press('Shift+Tab');
+  const stationFocus=await point.evaluate(node=>({id:node.dataset.euMapPlace,active:document.activeElement===node,documentFocus:document.hasFocus(),focus:node.matches(':focus'),focusVisible:node.matches(':focus-visible'),font:Number.parseFloat(getComputedStyle(node).fontSize),hidden:node.hidden,style:node.getAttribute('style')}));
+  manifest.checks.push({profile:profile.name,stationFocus});
   await page.locator('[data-eu-city-choice]').selectOption('london');
   await page.evaluate(()=>scrollTo(0,0));
   assert.equal(await page.locator('#eu-city-heading').textContent(),'ロンドンの雨温図');
@@ -234,6 +237,8 @@ async function agricultureClimateRepairs(page,profile){
   assert.ok(evidence.reasonFont>=14&&evidence.farmFont>=14);
   assert.equal(evidence.overflow,'visible');assert.equal(evidence.duplicates,0);
   assert.ok(evidence.farmBottom<=evidence.viewportHeight-8,'The full farming paragraph is visible in the initial PC viewport: '+JSON.stringify(evidence));
+  assert.equal(stationFocus.active,true,'Keyboard focus returns to the actual station button: '+JSON.stringify(stationFocus));
+  assert.equal(stationFocus.font,12,'Keyboard focus reveals the station name: '+JSON.stringify(stationFocus));
   manifest.checks.push({profile:profile.name,agricultureClimateEvidence:evidence});
   networkClean();
 }
