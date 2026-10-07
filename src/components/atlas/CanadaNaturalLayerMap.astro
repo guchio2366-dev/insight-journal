@@ -1,5 +1,6 @@
 ---
 import climateLabels from '../../data/atlas/canada/climate-labels.json';
+import {canadaElevationColors} from '../../lib/atlas-canada-natural-presentation';
 import {climateFamilies} from '../../data/atlas/natural-environment';
 import geography from '../../data/atlas/regional-countries.json';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
@@ -12,7 +13,8 @@ interface Props {
   layer: CanadaNaturalLayer; geometry: CanadaNaturalCollection | string; groups: CanadaNaturalGroup[]; geometryUrl: string;
   stations?: CanadaNaturalStation[]; source?: CanadaNaturalSource; hidden?: boolean; selected?: string | null; only?: boolean; city?: string | null;
 }
-const { layer, geometry: input, groups, geometryUrl, stations = [], source = {}, hidden = true, selected = null, only = false, city = null } = Astro.props;
+const { layer, geometry: input, groups: sourceGroups, geometryUrl, stations = [], source = {}, hidden = true, selected = null, only = false, city = null } = Astro.props;
+const groups=sourceGroups.map(group=>layer==='elevation'?{...group,color:canadaElevationColors[group.id]??group.color}:group);
 const geometry = prepareCanadaNaturalLayer(typeof input === 'string' ? JSON.parse(input) : input, groups);
 const context = { type: 'FeatureCollection', features: geography.features.filter(feature => ['CAN', 'USA', 'GRL'].includes(feature.properties.code)) };
 const contourLabels = layer === 'elevation' ? canadaNaturalContourLabels(geometry) : [];
@@ -51,7 +53,8 @@ const paths = groups.map(group => ({ group, fill: geometry.features.filter(featu
     {layer==='climate'&&<div class="canada-climate-codes">{climateLabels.map((label,i)=><button type="button" data-canada-climate-code={i} data-canada-natural-legend={label.id} aria-label={`${label.id}の気候区分を読む`} hidden>{label.id}</button>)}</div>}
     <div class="canada-natural-stations" data-canada-natural-stations>{stations.map(station => <button type="button" class:list={['canada-natural-station', {'is-selected':city===station.id}]} data-canada-natural-city={station.id} aria-label={`${station.name}の気候平年値を読む`} aria-pressed={String(city===station.id)} hidden><i aria-hidden="true"></i><span>{station.name}</span></button>)}</div>
     <div class="canada-natural-tools" aria-label="地図の操作">
-      <button type="button" data-canada-natural-reset aria-label="カナダ南部を中心に表示">全体</button>
+      <button type="button" data-canada-natural-reset aria-label="カナダ南部を中心に表示">南部</button>
+      <button type="button" data-canada-natural-whole aria-label="北極圏を含むカナダ全域を表示">全域</button>
       <button type="button" data-canada-natural-zoom="in" aria-label="地図を拡大">＋</button>
       <button type="button" data-canada-natural-zoom="out" aria-label="地図を縮小">−</button>
       <button type="button" data-canada-natural-focus aria-label="選んだ区分へ移動" disabled={!selected}>選択へ</button>

@@ -1,5 +1,6 @@
 ---
 import {projectCanadaMap,canadaMapPath,canadaLegacyPath} from '../../lib/atlas-canada-map-presentation';
+import {canadaAnnualRainColor} from '../../lib/atlas-canada-natural-presentation';
 import CanadaMapLand from './CanadaMapLand.astro';
 import canadaOutline from '../../data/atlas/canada/map-outline.json';
 import rivers from '../../data/atlas/canada/rivers.json';
@@ -28,7 +29,7 @@ const conciseNote = (topic: string, dataset: typeof datasets.precipitation) => t
   <div class="atlas-map-frame canada-water-frame">
    <svg class="canada-water-map" data-canada-water-resource-map viewBox="0 0 900 580" width="900" height="580" role="group" tabindex="0" aria-labelledby="canada-water-resource-title canada-water-resource-desc">
     <title id="canada-water-resource-title">カナダの水資源分布</title><desc id="canada-water-resource-desc">地図データは表示時に読み込みます。色の区分と説明は地図下の凡例と右の文章でも確認できます。矢印キーで移動、拡大・縮小ボタンで範囲を変えられます。</desc>
-    <defs><clipPath id="canada-water-national-clip"><path d={nationalPath} fill-rule="evenodd" clip-rule="evenodd" /></clipPath></defs>
+    <defs>{datasets.precipitation.groups.map(group=><filter id={`canada-rain-color-${group.id}`} color-interpolation-filters="sRGB"><feFlood flood-color={canadaAnnualRainColor(group.id)??group.color}/><feComposite in2="SourceAlpha" operator="in"/></filter>)}<filter id="canada-rain-selection" x="-1%" y="-1%" width="102%" height="102%" color-interpolation-filters="sRGB"><feMorphology in="SourceAlpha" operator="dilate" radius="1.5" result="outer"/><feComposite in="outer" in2="SourceAlpha" operator="out" result="edge"/><feFlood flood-color="#783914"/><feComposite in2="edge" operator="in"/></filter><clipPath id="canada-water-national-clip"><path d={nationalPath} fill-rule="evenodd" clip-rule="evenodd" /></clipPath></defs>
     <rect x="0" y="0" width="900" height="580" fill="#e4eff0" />
     <CanadaMapLand />
     <g data-canada-water-resource-raster clip-path="url(#canada-water-national-clip)"></g>
@@ -39,9 +40,10 @@ const conciseNote = (topic: string, dataset: typeof datasets.precipitation) => t
     <g class="canada-water-references" aria-label="位置の目印に使う既存のECCC観測点">{climate.stations.map(station => {const [x,y] = projectCanadaWater(station.coordinates);return <g data-canada-water-reference={station.id} data-reference-x={x} data-reference-y={y} transform={`translate(${projectCanadaMap(station.coordinates).join(" ")})`}><title>{station.name}：ECCC観測点の位置。帯水層の測定点ではありません。</title><g data-canada-water-reference-glyph><circle r="5" vector-effect="non-scaling-stroke" /><text x="10" y="-8" vector-effect="non-scaling-stroke">{station.name}</text></g></g>;})}</g>
    </svg>
    <p class="canada-water-loading" data-canada-water-load role="status">分布図は表示時に読み込みます。</p>
-   <div class="canada-water-map-tools" aria-label="水資源地図の操作"><button type="button" data-canada-water-zoom="in" aria-label="地図を拡大">＋</button><button type="button" data-canada-water-zoom="out" aria-label="地図を縮小">−</button><button type="button" data-canada-water-focus disabled>選択へ</button><button type="button" data-canada-water-full>南部へ</button></div>
+   <div class="canada-water-map-tools" aria-label="水資源地図の操作"><button type="button" data-canada-water-zoom="in" aria-label="地図を拡大">＋</button><button type="button" data-canada-water-zoom="out" aria-label="地図を縮小">−</button><button type="button" data-canada-water-focus disabled>選択へ</button><button type="button" data-canada-water-full>南部</button><button type="button" data-canada-water-whole>全域</button></div>
   </div>
-  <div class="canada-water-map-key">{Object.entries(datasets).map(([topic,dataset])=><div class="canada-water-legend" data-canada-water-resource-legend={topic} hidden aria-label="地図の凡例">{dataset.groups.map(group=><button type="button" data-canada-water-group={group.id} data-canada-water-group-topic={topic} aria-pressed="false"><i style={`background:${group.color}`} aria-hidden="true"></i><span>{group.name}</span></button>)}</div>)}</div>
+  <div class="canada-water-map-key">{Object.entries(datasets).map(([topic,dataset])=><div class="canada-water-legend" data-canada-water-resource-legend={topic} hidden aria-label="地図の凡例">{dataset.groups.map(group=><button type="button" data-canada-water-group={group.id} data-canada-water-group-topic={topic} aria-pressed="false"><i style={`background:${topic==='precipitation'?(canadaAnnualRainColor(group.id)??group.color):group.color}`} aria-hidden="true"></i><span>{group.name}</span></button>)}</div>)}</div>
+  <p class="canada-water-precipitation-key" data-canada-water-precipitation-key hidden>年降水量（雨・雪の水当量）。濃い青ほど多雨。区分の幅は一定ではありません。</p>
   <div class="canada-water-selection"><label>区分を選ぶ <select data-canada-water-area aria-label="水資源の区分を選ぶ"><option value="">すべて</option></select></label><label class="canada-water-only"><input type="checkbox" data-canada-water-resource-only disabled /> 選んだ区分だけ表示</label><button type="button" data-canada-water-resource-reset>選択と範囲を戻す</button></div>
   <p class="canada-water-status" data-canada-water-resource-status aria-live="polite">色の区分と表示範囲を確認できます。</p>
   <button class="canada-water-retry" type="button" data-canada-water-retry hidden>地図を再読み込み</button>

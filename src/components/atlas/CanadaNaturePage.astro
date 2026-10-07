@@ -49,6 +49,9 @@ const climateGroups=canadaClimateGroups((koppenManifest as any).classes);
 const elevationGroups=(elevationManifest as any).levels;
 const config={cities:climate.stations.map(s=>({id:s.id,name:s.name,point:legacyProject(s.coordinates)})),waters:waterNames,width,height,layers:{climate:{groups:climateGroups,stations:(koppenManifest as any).stationSamples},elevation:{groups:elevationGroups}},industry:{...industry,geometry:industryGeometry.features},population:{...population,geometryUrl:populationGeometryUrl,geometry:populationGeometry.features.map(({id,point,bounds,provinceCodes})=>({id,point,bounds,provinceCodes}))}};
 const waterConfig=JSON.parse(JSON.stringify(waterResources));
+const rainDisplay=(waterConfig.datasets??waterConfig.layers).precipitation;
+for(const image of rainDisplay.images??[])image.url=image.url.replace(/-mercator\.png$/, '-full-mercator.png');
+rainDisplay.method=rainDisplay.method?.replace('米国と同じ7階級・配色。','米国と同じ7階級を保持し、画面の配色は多雨ほど濃い青で表示。保管画像の全域を最近傍法で投影。');
 for(const layer of Object.values(waterConfig.datasets??waterConfig.layers) as any[]){
  if(layer.geometryUrl)layer.geometryUrl=withBase(layer.geometryUrl);
  if(layer.imageUrl)layer.imageUrl=withBase(layer.imageUrl);
@@ -98,7 +101,7 @@ import '../../styles/atlas-canada-country-parity.css';
         <text class="canada-ocean" x={canadaLegacyPoint([80,420])[0]} y={canadaLegacyPoint([80,420])[1]}>太平洋</text><text class="canada-ocean" x={canadaLegacyPoint([750,515])[0]} y={canadaLegacyPoint([750,515])[1]}>大西洋</text><text class="canada-ocean" x={canadaLegacyPoint([400,38])[0]} y={canadaLegacyPoint([400,38])[1]}>北極海</text><text class="canada-ocean" x={canadaLegacyPoint([550,265])[0]} y={canadaLegacyPoint([550,265])[1]}>ハドソン湾</text>
        </g>
       </svg>
-       <div class="canada-map-actions canada-nature-map-tools"><button type="button" data-country-button="CAN" data-canada-reset aria-label="カナダ全体を表示">南部</button><button data-canada-zoom="in" aria-label="地図を拡大">＋</button><button data-canada-zoom="out" aria-label="地図を縮小">−</button><button data-canada-focus aria-label="選んだ都市の位置へ">都市へ</button></div>
+       <div class="canada-map-actions canada-nature-map-tools"><button type="button" data-country-button="CAN" data-canada-reset aria-label="カナダ南部を表示">南部</button><button type="button" data-canada-whole aria-label="北極圏を含むカナダ全域を表示">全域</button><button data-canada-zoom="in" aria-label="地図を拡大">＋</button><button data-canada-zoom="out" aria-label="地図を縮小">−</button><button data-canada-focus aria-label="選んだ都市の位置へ">都市へ</button></div>
       </div>
       <p class="canada-caption" data-canada-forest-context-legend hidden><i style={`display:inline-block;width:18px;height:12px;background:rgb(${forestry.classes[0].color.join(',')})`} aria-hidden="true"/> 温帯・亜寒帯の針葉樹林（NRCan、2020年、元データ30m）。位置図と同じ範囲に重ねています。気候は点の位置の1991–2020年平年値です。<a href={withBase('/atlas/north-america/canada/agriculture/forestry/#canada-forestry-sources')}>森林分類・利用条件</a></p>
       <p class="canada-caption" data-canada-industry-context-legend hidden></p>

@@ -4,7 +4,7 @@ import {
   projectCanadaLandform as projectCanadaNatural, unprojectCanadaLandform as unprojectCanadaNatural,
 } from '../lib/atlas-canada-landform-map';
 import {
-  canadaNaturalGroupBounds, prepareCanadaNaturalLayer,
+  canadaNaturalGroupBounds, canadaNaturalParts, prepareCanadaNaturalLayer,
   type CanadaNaturalCollection, type CanadaNaturalContourLabel, type CanadaNaturalGroup, type CanadaNaturalLayer, type CanadaNaturalStation,
 } from '../lib/atlas-canada-natural-layer';
 
@@ -32,6 +32,9 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
   const labels = [...root.querySelectorAll<HTMLButtonElement>('[data-canada-natural-city]')];
   const contourLabels = [...root.querySelectorAll<HTMLElement>('[data-canada-natural-contour-label]')];
   const fullFrame: Frame = [0, 0, canadaNaturalSize.width, canadaNaturalSize.height];
+  const national=(config.context as CanadaNaturalCollection).features.find(feature=>feature.properties.code==='CAN');
+  const nationalPoints=national?canadaNaturalParts(national.geometry).flat():[canadaNaturalBounds[0],canadaNaturalBounds[1]];
+  const wholeBounds:CanadaNaturalCameraBounds=[Math.min(...nationalPoints.map(p=>p[0])),Math.min(...nationalPoints.map(p=>p[1])),Math.max(...nationalPoints.map(p=>p[0])),Math.max(...nationalPoints.map(p=>p[1]))];
   const [worldLeft, worldTop] = projectCanadaNatural([-180, 85.051]);
   const [worldRight, worldBottom] = projectCanadaNatural([180, -85.051]);
   const abort = new AbortController();
@@ -111,7 +114,7 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
     if (!width || !height) return;
     const ratio = Math.min(width / frame[2], height / frame[3]);
     const left = (width - frame[2] * ratio) / 2, top = (height - frame[3] * ratio) / 2;
-    const occupied: number[][] = [[width - 60, 0, width, 183]];
+    const occupied: number[][] = [[width - 60, 0, width, 230]];
     const positions = new Map(config.stations.map(station => {
       const projected = ready && map ? map.project(station.coordinates as [number, number]) : null, point = projectCanadaNatural(station.coordinates);
       return [station.id, [projected?.x ?? (point[0] - frame[0]) * ratio + left, projected?.y ?? (point[1] - frame[1]) * ratio + top]];
@@ -320,6 +323,7 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
   });
   listen(onlyControl, 'change', () => emit('canada-natural-only', { only: onlyControl.checked }));
   listen(root.querySelector('[data-canada-natural-reset]')!, 'click', () => { fit(); emit('canada-natural-reset', {}); });
+  const wholeButton=root.querySelector('[data-canada-natural-whole]');if(wholeButton)listen(wholeButton,'click',()=>{restoreCamera(wholeBounds);commitCamera();});
   for (const button of root.querySelectorAll<HTMLButtonElement>('[data-canada-natural-zoom]')) listen(button, 'click', () => zoom(button.dataset.canadaNaturalZoom as 'in' | 'out'));
   listen(focusButton, 'click', focusSelected);
   listen(stage, 'wheel', event => {

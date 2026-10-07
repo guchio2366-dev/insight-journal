@@ -45,11 +45,20 @@ export function initCanadaWaterResources(root: HTMLElement) {
  }
  function drawCamera() {
   map.setAttribute('viewBox',canadaLegacyFrame(frame).join(' '));
-  const referenceScale=frame[2]/900;
+  const matrix=map.getScreenCTM?.();
+  const referenceScale=matrix?.a?1/matrix.a:frame[2]/900;
   for(const reference of map.querySelectorAll<SVGGElement>('[data-canada-water-reference]')) {
    const x=Number(reference.dataset.referenceX),y=Number(reference.dataset.referenceY);
    reference.style.display=state.topic==='drainage'||x<frame[0]||x>frame[0]+frame[2]||y<frame[1]||y>frame[1]+frame[3]?'none':'';
    reference.querySelector('[data-canada-water-reference-glyph]')?.setAttribute('transform',`scale(${referenceScale})`);
+  }
+  if(matrix?.a){
+   const occupied:DOMRect[]=[];
+   for(const reference of map.querySelectorAll<SVGGElement>('[data-canada-water-reference]')){
+    const label=reference.querySelector<SVGTextElement>('text');if(!label)continue;label.style.display='';
+    if(reference.style.display==='none')continue;
+    const box=label.getBoundingClientRect();if(occupied.some(b=>box.left<b.right+4&&box.right>b.left-4&&box.top<b.bottom+4&&box.bottom>b.top-4))label.style.display='none';else occupied.push(box);
+   }
   }
   const bcDetail=state.topic==='aquifers'&&frame[2]<100;
   map.querySelector<SVGElement>('[data-canada-water-bc-context]')?.toggleAttribute('hidden',!bcDetail);
@@ -101,22 +110,25 @@ export function initCanadaWaterResources(root: HTMLElement) {
  function drawRaster() {
   const dataset=datasets.precipitation, images=dataset.images ?? dataset.classImages?.map(image=>({id:image.group,url:image.url})) ?? [];
   const selected=images.find(image=>image.id===state.area);
-  const urls=state.only&&selected?[selected.url]:[dataset.imageUrl,...(selected?[selected.url]:[])].filter((url):url is string=>!!url);
-  const key=urls.join('|')+`:${state.only}`;
+  const layers=(state.only&&selected?[selected]:images).map(image=>({...image,outline:false}));
+  if(selected&&!state.only)layers.push({...selected,outline:true});
+  const urls=[...new Set(layers.map(image=>image.url))];
+  const key=layers.map(image=>image.id+':'+image.outline).join('|');
   if(urls.length) {
    const failed=urls.some(url=>failedImages.has(url));
    setLoading(failed?'分布図を読み込めませんでした。凡例と出典は確認できます。':urls.every(url=>readyImages.has(url))?null:'降水量の分布図を読み込み中…',failed);
   }
-  if (rasterKey===key) return; rasterKey=key;raster.replaceChildren();
-  if (!urls.length) {setLoading('降水量の画像がありません。出典と区分一覧を参照してください。',true);return;}
-  for (const [index,url] of urls.entries()) {
-   const image=document.createElementNS(svgNamespace,'image');image.setAttribute('x','0');image.setAttribute('y','0');image.setAttribute('width','900');image.setAttribute('height','580');image.setAttribute('preserveAspectRatio','none');image.setAttribute('href',url);
-   if (index===0&&selected&&!state.only) image.setAttribute('opacity','.4');
+  if(rasterKey===key)return;rasterKey=key;raster.replaceChildren();
+  if(!urls.length){setLoading('降水量の画像がありません。出典と区分一覧を参照してください。',true);return;}
+  for(const layer of layers){
+   const image=document.createElementNS(svgNamespace,'image'),url=layer.url,box=url.includes('-full-mercator.png')?canadaLegacyFrame([0,0,900,580]):[0,0,900,580];for(const [i,key]of ['x','y','width','height'].entries())image.setAttribute(key,String(box[i]));image.setAttribute('preserveAspectRatio','none');image.setAttribute('href',url);
+   image.dataset.canadaRainClass=layer.id;image.dataset.canadaRainOutline=String(layer.outline);image.setAttribute('filter',`url(#${layer.outline?'canada-rain-selection':'canada-rain-color-'+layer.id})`);
    image.addEventListener('load',()=>{readyImages.add(url);failedImages.delete(url);if(state.topic==='precipitation'&&rasterKey===key&&urls.every(item=>readyImages.has(item)))setLoading(null);});
    image.addEventListener('error',()=>{failedImages.add(url);if(state.topic==='precipitation'&&rasterKey===key)setLoading('分布図を読み込めませんでした。凡例と出典は確認できます。',true);});
    raster.append(image);
   }
  }
+
  async function loadGeometry(topic: WaterDatasetTopic) {
   if (geometry.has(topic)||pending.has(topic)) return pending.get(topic);
   const dataset=datasets[topic];if (!dataset.geometryUrl) {errors.add(topic);if(state.topic===topic)setLoading('この資料の分布図がありません。出典と区分一覧を参照してください。',true);return;}
@@ -159,6 +171,7 @@ export function initCanadaWaterResources(root: HTMLElement) {
   for(const button of root.querySelectorAll<HTMLElement>('[data-canada-water-group]'))button.setAttribute('aria-pressed',String(button.dataset.canadaWaterGroupTopic===topic&&button.dataset.canadaWaterGroup===state.area));
   renderReading(topic);
   if(!isVisible())return;
+  root.querySelector<HTMLElement>('[data-canada-water-precipitation-key]')?.toggleAttribute('hidden',topic!=='precipitation');
   if(topic==='precipitation')drawRaster();
   else if(geometry.has(topic)){if(vectors.dataset.canadaWaterVectorTopic!==topic)buildVectors(topic);drawVectors();setLoading(null);}
   else if(errors.has(topic))setLoading('分布図を読み込めませんでした。区分一覧と出典は確認できます。',true);
@@ -173,6 +186,7 @@ export function initCanadaWaterResources(root: HTMLElement) {
  $('[data-canada-water-resource-reset]').addEventListener('click',()=>emit({area:null,only:false,frame:null}));
  for(const label of root.querySelectorAll<SVGElement>('[data-canada-basin-label]')){const choose=()=>emit({area:label.dataset.canadaBasinLabel!,only:false});label.addEventListener('click',choose);label.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose();}});}
  $('[data-canada-water-full]').addEventListener('click',()=>camera(full));
+ root.querySelector('[data-canada-water-whole]')?.addEventListener('click',()=>camera([0,0,900,580]));
  $('[data-canada-water-focus]').addEventListener('click',()=>{if(state.topic==='surface'||state.topic==='precipitation')return;const dataset=datasets[state.topic],features=geometry.get(state.topic)?.features.filter(feature=>isMatch(feature,dataset));if(features?.length)camera(canadaWaterFit(features));});
  for(const button of root.querySelectorAll<HTMLElement>('[data-canada-water-zoom]'))button.addEventListener('click',()=>{const factor=button.dataset.canadaWaterZoom==='in'?.7:1/.7;const width=Math.min(900,Math.max(3,frame[2]*factor)),height=Math.min(580,Math.max(3,frame[3]*factor));camera([frame[0]+(frame[2]-width)/2,frame[1]+(frame[3]-height)/2,width,height]);});
  retry.addEventListener('click',()=>{if(state.topic==='surface')return;errors.delete(state.topic);if(state.topic==='precipitation')failedImages.clear();rasterKey='';render(state);});
@@ -181,5 +195,6 @@ export function initCanadaWaterResources(root: HTMLElement) {
  map.addEventListener('pointermove',event=>{if(!drag)return;const bounds=map.getBoundingClientRect(),dx=event.clientX-drag.x,dy=event.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)<5&&!drag.moved)return;drag.moved=true;map.setPointerCapture?.(event.pointerId);const scale=Math.min(bounds.width/drag.frame[2],bounds.height/drag.frame[3]);if(scale>0){frame=safeFrame([drag.frame[0]-dx/scale,drag.frame[1]-dy/scale,drag.frame[2],drag.frame[3]]);drawCamera();}});
  map.addEventListener('pointerup',()=>{if(drag?.moved){ignoreClick=true;camera(frame);}drag=null;});
  map.addEventListener('pointercancel',()=>{drag=null;render(state);});
+ const resize=typeof ResizeObserver==='undefined'?undefined:new ResizeObserver(()=>{if(isVisible())drawCamera();});resize?.observe(map);
  return {render};
 }
