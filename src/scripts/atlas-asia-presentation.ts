@@ -58,6 +58,13 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
    // and tap-to-open diagrams also expose stations without a permanent label.
    for(const city of visible){
     const p=project(city.coordinates),b=button('station-'+city.id,'','asia-climate-station',()=>active==='climate'?chooseCity(city.id):chooseUrban(city.id));
+    // In the compact Central Asian view, nearby stations can be closer than
+    // the default 24px hit box. Keep their geographic points and keyboard
+    // buttons, while preventing an invisible neighbour from owning the centre.
+    if(active==='climate'&&root.dataset.region==='south-central-asia'){
+     const nearest=Math.min(...visible.filter(other=>other.id!==city.id).map(other=>{const q=project(other.coordinates);return Math.hypot(p.x-q.x,p.y-q.y);}));
+     const target=Math.min(24,Math.max(12,nearest*1.5));b.style.width=b.style.height=target+'px';
+    }
     b.dataset.station=city.id;b.setAttribute('aria-label',city.name+(active==='climate'?'の雨温図':'の位置'));b.setAttribute('aria-pressed',String(active==='climate'?state.city===city.id:state.point?.every((n,i)=>Math.abs(n-city.coordinates[i])<.001)));
     const name=document.createElement('span');name.textContent=city.name;if(p.x>width-150){name.style.left='auto';name.style.right='calc(50% + 9px)';}b.append(name);
     b.style.left=p.x+'px';b.style.top=p.y+'px';b.hidden=false;

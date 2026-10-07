@@ -1,6 +1,7 @@
 ---
 import AsiaFieldNavigation from './AsiaFieldNavigation.astro';
 import {asiaFocusViews,asiaFocusFieldReadings,asiaFocusCountries,type AsiaFocusId} from '../../data/atlas/asia-focus';
+import {southCentralFieldReadings} from '../../data/atlas/asia-south-central-reading';
 import eastContentGeography from '../../../public/assets/atlas/asia-population-v1/east-asia.geography.json';
 import southeastContentGeography from '../../../public/assets/atlas/asia-population-v1/southeast-asia.geography.json';
 import southContentGeography from '../../../public/assets/atlas/asia-population-v1/south-central-asia.geography.json';
@@ -50,7 +51,7 @@ interface Props { regionId: AsiaRegionId; initialField?: AsiaField; focusId?: As
 const {regionId,initialField='natural',focusId}=Astro.props;
 const focus=focusId?asiaFocusViews[focusId]:null,pageId=focusId??regionId;
 const region={...regionalMaps[regionId],...(focus?{label:focus.label}:{})},reading={...asiaRegionReading[regionId],...focus};
-const cities=asiaClimateCities.filter(city=>city.regionId===regionId);
+const cities=asiaClimateCities.filter(city=>city.regionId===regionId&&(!focusId||asiaFocusCountries[focusId].includes(city.countryCode)));
 const targets=regionFeatures(regionId);
 const countryCodes=new Set(targets.map(f=>f.properties.code));
 const rings=(f:CountryFeature)=>f.geometry.type==='Polygon'?f.geometry.coordinates as number[][][]:(f.geometry.coordinates as number[][][][]).flat();
@@ -82,13 +83,13 @@ const presentation={...presentationManifest.regions[regionId],settlements:settle
 Object.assign(config,{presentation,presentationBase:withBase('/assets/atlas/asia-presentation-v1/')});
 const familyNames=['熱帯','乾燥帯','温帯','冷帯','寒帯'];
 Object.assign(config,{population,populationBase:withBase('/assets/atlas/asia-population-v1/')});
-const industry={...industryManifest.regions[regionId],topics:[...industryManifest.regions[regionId].topics,...tradeTopics],...(regionId==='southeast-asia'?{countryScope:southeastIndustryCountryScope}:{})} as unknown as IndustryRegion;
-Object.assign(config,{industry,industryBase:withBase('/assets/atlas/asia-industry-v1/')});
+const industry={...industryManifest.regions[regionId],topics:[...industryManifest.regions[regionId].topics,...tradeTopics].filter(topic=>focusId!=='central-asia'||!('country' in topic)||topic.country!=='IND'),...(regionId==='southeast-asia'?{countryScope:southeastIndustryCountryScope}:{})} as unknown as IndustryRegion;
+Object.assign(config,{industry,industryBase:withBase('/assets/atlas/asia-industry-v1/'),...(regionId==='south-central-asia'?{industryCountryCodes:focusId==='central-asia'?[]:['IND']}:{})});
 Object.assign(config,{water:waterManifest.regions[regionId],waterBase:withBase('/assets/atlas/asia-water-v1/')});
 Object.assign(config,{seasonalBase:withBase('/assets/atlas/asia-seasonal-precipitation-v1/')});
 const social=withSocialOverviews(socialManifest.regions[regionId] as SocialRegion);
 const farmInsight=asiaFarmInsights[regionId];
-Object.assign(config,{farmInsight,focusReadings:focusId?asiaFocusFieldReadings[focusId]??null:regionId==='southeast-asia'?southeastAsiaInitialReadings():null});
+Object.assign(config,{farmInsight,focusReadings:focusId?asiaFocusFieldReadings[focusId]??null:regionId==='southeast-asia'?southeastAsiaInitialReadings():regionId==='south-central-asia'?southCentralFieldReadings:null});
 Object.assign(config,{social,socialBase:withBase('/assets/atlas/asia-social-v1/')});
 Object.assign(config,{trade:tradeManifest.regions[regionId],tradeBase:withBase('/assets/atlas/asia-trade-v1/'),tradeChapters:tradeManifest.chapters});
 const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林業'},{id:'natural',label:'自然環境'},{id:'industry',label:'主要産業'},{id:'population',label:'人口'}];

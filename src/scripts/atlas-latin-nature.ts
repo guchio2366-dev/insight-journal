@@ -24,6 +24,9 @@ if(workspace){
   state.case=currentCaseId;
   const params=new URLSearchParams(writeLatinLearningState(state));
   params.set('case',currentCaseId);
+  // Foundation tabs and river selection share this page without changing climate state.
+  const current=new URLSearchParams(location.search);
+  for(const key of ['section','river']){const value=current.get(key);if(value)params.set(key,value);}
   const url=location.pathname+'?'+params.toString();
   if(push)history.pushState(null,'',url);else if(location.pathname+location.search!==url)history.replaceState(null,'',url);
  }
