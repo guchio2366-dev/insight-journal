@@ -75,21 +75,17 @@ export interface PopulationCensusCasePackage {
 export type PopulationCaseChoiceKind = 'ethnicity' | 'religion';
 export type PopulationCaseChoiceState = { cultureCase: string; cultureCategory: string; cultureArea: string };
 
-function defaultPopulationCaseCategory(topic: PopulationCaseTopic): string {
-  const preferred = topic.kind === 'religion' ? ['Christian', 'Catholics'] : ['White: English, Welsh, Scottish, Northern Irish or British', 'Croats'];
-  return topic.categories.find(category => preferred.includes(category.label))?.id ?? topic.partitionCategoryIds[0];
-}
-
 /** Pure URL/UI choice normalisation. No map, DOM, project, history or data-fetch dependency. */
 export function normalisePopulationCaseChoice(input: Partial<PopulationCaseChoiceState> | URLSearchParams, kind: PopulationCaseChoiceKind, data: PopulationCensusCasePackage): PopulationCaseChoiceState {
   const get = (key: keyof PopulationCaseChoiceState) => input instanceof URLSearchParams ? input.get(key) ?? '' : input[key] ?? '';
-  const censusCase = data.cases.find(item => item.id === get('cultureCase')) ?? data.cases[0];
+  const censusCase = data.cases.find(item => item.id === get('cultureCase'));
+  if (!censusCase) return { cultureCase: '', cultureCategory: '', cultureArea: '' };
   const topic = censusCase.topics.find(item => item.kind === kind);
   if (!topic) throw new Error('Selected census case has no requested topic');
   return {
     cultureCase: censusCase.id,
-    cultureCategory: topic.categories.some(item => item.id === get('cultureCategory')) ? get('cultureCategory') : defaultPopulationCaseCategory(topic),
-    cultureArea: topic.areas.some(item => item.code === get('cultureArea')) ? get('cultureArea') : topic.areas[0].code,
+    cultureCategory: topic.categories.some(item => item.id === get('cultureCategory')) ? get('cultureCategory') : '',
+    cultureArea: topic.areas.some(item => item.code === get('cultureArea')) ? get('cultureArea') : '',
   };
 }
 

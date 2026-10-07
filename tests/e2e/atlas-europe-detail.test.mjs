@@ -86,6 +86,7 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       }
       for(const target of ['stat-summary','country-table','series','stat-source','measure-definition'])assert.equal(quantities.querySelector(`[data-eu-farm-${target}]`).hidden,true,target);
       assert.equal(quantities.querySelector('[data-eu-farm-country-rows]').children.length,0,'取得前に公表値や未収録表を作らない');
+      assert.equal(quantities.querySelector('[data-eu-farm-country-table]').open,false,'国別の長い表は利用者が開いたときに表示する');
       assert.equal(quantities.querySelector('[data-eu-farm-statistics-retry]').hidden,true);
       assert.equal(statistics.querySelector('svg,canvas'),null);
     }
@@ -182,10 +183,11 @@ test('24都市の右側の雨温図・開閉できる気候と農畜産説明、
     assert.ok(before(chart,tableCard.querySelector('table')),`${city.id}: 雨温図より下段に月別表を掲載する`);
     assert.equal(farming.hidden,false,`${city.id}: 農畜産の全文を解説本文として保持する`);
     const details=farming.closest('details');
-    assert.equal(details,card.querySelector('.eu-city-reading-details'),`${city.id}: 全文と出典をnative detailsで開ける`);
-    assert.equal(details.open,false,`${city.id}: 詳しい解説は初期状態で閉じる`);
-    assert.match(details.querySelector('summary').textContent,/季節.*農畜産.*出典/,city.id);
-    assert.equal(details.querySelectorAll('summary').length,1,city.id);
+    assert.equal(details,null,`${city.id}: 理由と農畜産の全文は雨温図下に常時表示する`);
+    const sourceDetails=card.querySelector('.eu-city-reading-details');
+    assert.equal(sourceDetails.open,false,`${city.id}: 観測地点と追加出典は補助操作で開ける`);
+    assert.match(sourceDetails.querySelector('summary').textContent,/季節.*農畜産.*出典/,city.id);
+    assert.equal(sourceDetails.querySelectorAll('summary').length,1,city.id);
     const tableDetails=tableCard.querySelector('table').closest('details');
     assert.ok(tableDetails.querySelector('summary')?.textContent.trim(),`${city.id}: 月別の全数値をnative detailsで開ける`);
     assert.equal(tableDetails.open,false,city.id);

@@ -6,12 +6,18 @@ import { readEuropeState } from '../../src/lib/atlas-europe-view.ts';
 import { readEuropeFarmingFocus } from '../../src/data/atlas/europe/farming-water-comparisons.ts';
 import {
   europeComparisonLinks, encodeEuropeReturn, readEuropeReturn,
-  europeComparisonUrl, europeNamedReturnUrl, europeComparisonQuestion,
+  europeComparisonUrl, europeNamedReturnUrl, europeComparisonQuestion, europeComparisonSourceLabel,
 } from '../../src/lib/atlas-europe-comparison.ts';
 
 const countries = JSON.parse(readFileSync(new URL('../../src/data/atlas/europe/countries.json', import.meta.url)));
 const cities = JSON.parse(readFileSync(new URL('../../src/data/atlas/europe/climate-cities.json', import.meta.url))).map(city => city.id);
 const state = query => readEuropeState(query, countries, cities);
+
+test('culture comparison labels allow an unselected overview and retain explicit legacy area names', () => {
+  assert.equal(europeComparisonSourceLabel(state('?layer=ethnicity')), '民族的帰属・欧州全体・地域未選択');
+  assert.equal(europeComparisonSourceLabel(state('?layer=religion&cultureCase=croatia-national-2021')), '宗教的帰属・欧州全体・地域未選択');
+  assert.match(europeComparisonSourceLabel(state('?layer=ethnicity&cultureCase=england-wales-2021&cultureCategory=ts021-17&cultureArea=E06000001')), /Hartlepool/);
+});
 
 test('comparison return preserves country, city, feature, point, rendering and independent farming choices', () => {
   for (const query of [

@@ -21,9 +21,9 @@ const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 test('URL and UI choices use one dependency-free case/topic/category/area normaliser', async () => {
   const moduleSource = await fs.readFile(path.join(root, 'src/data/atlas/europe/population-cases.ts'), 'utf8');
   assert.equal(/^import\s/m.test(moduleSource), false, 'Data contract must not import the map view or DOM controller');
-  assert.deepEqual(normalisePopulationCaseChoice({}, 'ethnicity', packageData), { cultureCase: 'england-wales-2021', cultureCategory: 'ts021-17', cultureArea: 'E06000001' });
-  assert.deepEqual(normalisePopulationCaseChoice(new URLSearchParams('cultureCase=invalid&cultureCategory=hr-religion-AB&cultureArea=HRV'), 'religion', packageData), { cultureCase: 'england-wales-2021', cultureCategory: 'ts030-02', cultureArea: 'E06000001' });
-  assert.deepEqual(normalisePopulationCaseChoice({ cultureCase: 'croatia-national-2021', cultureCategory: 'ts021-17', cultureArea: 'E06000002' }, 'ethnicity', packageData), { cultureCase: 'croatia-national-2021', cultureCategory: 'hr-ethnicity-H', cultureArea: 'HRV' });
+  assert.deepEqual(normalisePopulationCaseChoice({}, 'ethnicity', packageData), { cultureCase: '', cultureCategory: '', cultureArea: '' });
+  assert.deepEqual(normalisePopulationCaseChoice(new URLSearchParams('cultureCase=invalid&cultureCategory=hr-religion-AB&cultureArea=HRV'), 'religion', packageData), { cultureCase: '', cultureCategory: '', cultureArea: '' });
+  assert.deepEqual(normalisePopulationCaseChoice({ cultureCase: 'croatia-national-2021', cultureCategory: 'ts021-17', cultureArea: 'E06000002' }, 'ethnicity', packageData), { cultureCase: 'croatia-national-2021', cultureCategory: '', cultureArea: '' });
   const religiousChoice = { cultureCase: 'croatia-national-2021', cultureCategory: 'hr-religion-AB', cultureArea: 'HRV' };
   assert.deepEqual(normalisePopulationCaseChoice(religiousChoice, 'religion', packageData), religiousChoice);
   assert.deepEqual(normalisePopulationCaseChoice(new URLSearchParams('cultureCase=england-wales-2021&cultureCategory=ts030-09&cultureArea=E06000002'), 'religion', packageData), { cultureCase: 'england-wales-2021', cultureCategory: 'ts030-09', cultureArea: 'E06000002' });

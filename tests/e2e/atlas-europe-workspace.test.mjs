@@ -118,7 +118,7 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.equal(planned.length,0);
       assert.deepEqual([...doc.querySelectorAll('[data-eu-topic-field="population"] button')].map(b=>b.textContent),['人口分布','人種・民族（事例）','宗教（事例）']);
       assert.match(doc.querySelector('.eu-culture-kicker').textContent,/地域事例/);
-      assert.deepEqual([...doc.querySelector('[data-culture-case]').options].map(option=>option.textContent),['イングランド・ウェールズ・行政区','クロアチア・全国値']);
+      assert.deepEqual([...doc.querySelector('[data-culture-case]').options].map(option=>option.textContent),['欧州全体・事例未選択','イングランド・ウェールズ・行政区','クロアチア・全国値']);
       assert.ok(!doc.querySelector('[data-eu-topic-field="population"]').textContent.includes('投票'));
     }
     window.happyDOM.abort();

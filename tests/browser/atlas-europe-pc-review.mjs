@@ -337,6 +337,71 @@ async function europeOperations(page, profile, render) {
   record.status = 'passed'; await save();
 }
 
+async function stageOneOperations(page, profile) {
+  await openEurope(page, 'atlas/europe/nature/?layer=climate', 'normal');
+  const climate = page.locator('[data-city-reading]:visible');
+  for (const selector of ['.eu-city-climate-description', '.eu-climate-farming']) {
+    assert.equal(await climate.locator(selector).isVisible(), true);
+    assert.equal(await climate.locator(selector).evaluate(node => node.closest('details') === null), true);
+    assert.ok(await climate.locator(selector).evaluate(node => parseFloat(getComputedStyle(node.querySelector('p')).fontSize) >= 14));
+  }
+  await openEurope(page, 'atlas/europe/population/?layer=ethnicity', 'normal');
+  const extent = () => page.locator('[data-eu-static]').getAttribute('viewBox');
+  const fullExtent = await extent();
+  for (const name of ['case', 'category', 'area']) assert.equal(await page.locator(`[data-culture-${name}]`).inputValue(), '');
+  assert.equal(await page.locator('[data-culture-value]').isVisible(), false);
+  await snapshot(page, profile, 'culture-overview');
+  await page.locator('[data-culture-case]').selectOption('england-wales-2021');
+  await page.waitForFunction(() => document.querySelectorAll('[data-culture-code]').length === 331);
+  for (const name of ['category', 'area']) assert.equal(await page.locator(`[data-culture-${name}]`).inputValue(), '');
+  assert.equal(await extent(), fullExtent);
+  await page.locator('[data-culture-category]').selectOption('ts021-17');
+  assert.equal(await page.locator('[data-culture-area]').inputValue(), '');
+  assert.equal(await extent(), fullExtent);
+  await page.locator('[data-culture-area]').selectOption('E06000002');
+  const selectedURL = page.url(), selectedValue = await page.locator('[data-culture-value]').textContent();
+  assert.equal(await extent(), fullExtent);
+  assert.equal(await page.locator('[data-culture-code]').count(), 331);
+  assert.match(selectedValue, /Middlesbrough/);
+  await snapshot(page, profile, 'culture-selected');
+  await page.goBack(); await ready(page);
+  assert.equal(await page.locator('[data-culture-area]').inputValue(), '');
+  assert.equal(await page.locator('[data-culture-value]').isVisible(), false);
+  await page.goForward(); await ready(page);
+  assert.equal(await page.locator('[data-culture-value]').textContent(), selectedValue);
+  await page.reload({waitUntil: 'networkidle'}); await ready(page);
+  assert.equal(page.url(), selectedURL);
+  assert.equal(await page.locator('[data-culture-value]').textContent(), selectedValue);
+  assert.equal(await extent(), fullExtent);
+  await page.locator('[data-eu-comparison-link="culture-hubs"]').click(); await page.waitForURL('**/industry/**'); await ready(page);
+  assert.match(await page.locator('[data-eu-origin-caption]').textContent(), /Middlesbrough/);
+  await page.locator('[data-eu-comparison-return]').click(); await page.waitForURL('**/population/**'); await ready(page);
+  assert.equal(await page.locator('[data-culture-value]').textContent(), selectedValue);
+  assert.equal(await extent(), fullExtent);
+  await page.locator('[data-culture-case]').selectOption(''); await ready(page);
+  for (const name of ['case', 'category', 'area']) assert.equal(new URL(page.url()).searchParams.has(`culture${name[0].toUpperCase()}${name.slice(1)}`), false);
+  assert.equal(await page.locator('[data-culture-value]').isVisible(), false);
+  await page.locator('[data-eu-comparison-link="culture-hubs"]').click(); await page.waitForURL('**/industry/**'); await ready(page);
+  assert.match(await page.locator('[data-eu-origin-caption]').textContent(), /未選択/);
+  await page.locator('[data-eu-comparison-return]').click(); await page.waitForURL('**/population/**'); await ready(page);
+  assert.equal(await page.locator('[data-culture-case]').inputValue(), '');
+  await openEurope(page, 'atlas/europe/population/?layer=religion', 'normal');
+  for (const name of ['case', 'category', 'area']) assert.equal(await page.locator(`[data-culture-${name}]`).inputValue(), '');
+  await openEurope(page, 'atlas/europe/agriculture/?layer=wheat', 'normal');
+  const table = page.locator('[data-eu-farm-country-table]');
+  await table.waitFor({state: 'visible'});
+  assert.equal(await table.evaluate(node => node.open), false);
+  const values = await table.locator('[data-eu-farm-country-rows]').textContent();
+  assert.ok(values.length > 100);
+  assert.match(await page.locator('[data-eu-farming-statistics]').textContent(), /未収録.*ゼロという意味ではありません/s);
+  await snapshot(page, profile, 'farming-closed-table');
+  await table.locator('summary').click();
+  assert.equal(await table.evaluate(node => node.open), true);
+  assert.equal(await table.locator('[data-eu-farm-country-rows]').textContent(), values);
+  manifest.checks.push(`${profile.name}: visible full climate reasons/crops; no automatic census choice/fit; distribution/history/reload/comparison restoration; closed farming table retains values and honest missingness`);
+  networkClean();
+}
+
 try {
   if (manifest.expectedHead) assert.equal(manifest.gitHead, manifest.expectedHead);
   if (process.env.CI) assert.equal(manifest.gitStatus, '', 'CI evidence requires a clean checkout');
@@ -365,14 +430,15 @@ try {
       if (profile.viewport.width === 1440) assert.ok(Math.abs(delta.width) <= 2 && Math.abs(delta.height) <= 2 && Math.abs(delta.top) <= 2, `Desktop climate map geometry differs: ${JSON.stringify(delta)}`);
       else manifest.limits.push({profile: profile.name, reason: 'Existing compact-PC layout difference, not exact US geometry parity: Europe retains a two-row region navigator and 1.65:1 columns; US uses one row and a 380px reader. Both normal renderers and relative map/legend/reader/control placement are checked.', mapSizeDelta: delta});
       await europeOperations(page, profile, 'normal');
+      await stageOneOperations(page, profile);
       if (profile.viewport.width === 1024) await europeOperations(page, profile, 'explicit-static');
     } finally { await context.close(); }
   }
-  networkClean(); assert.equal(manifest.images.length, 10); assert.equal(manifest.records.length, 3);
+  networkClean(); assert.equal(manifest.images.length, 16); assert.equal(manifest.records.length, 3);
   assert.ok(manifest.records.every(record => record.status === 'passed'));
   assert.equal(git('rev-parse', 'HEAD'), manifest.gitHead, 'Checkout changed during capture');
   assert.equal(git('rev-parse', 'HEAD:src'), manifest.gitSrcTree);
-  manifest.status = 'passed'; manifest.checks.push('10 normal-render screenshots', '2 normal PC operation profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
+  manifest.status = 'passed'; manifest.checks.push('16 normal-render screenshots', '2 normal PC operation profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
   console.log(JSON.stringify({status: manifest.status, output, images: manifest.images.length, head: manifest.gitHead}));
 } catch (error) {
   manifest.status = 'failed'; manifest.failure = {message: String(error), stack: error.stack};
