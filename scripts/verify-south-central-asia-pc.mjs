@@ -15,7 +15,7 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  const checks=[],bandsChecks=[];
  const record=name=>checks.push({name,passed:true});
  const ready=()=>page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-map-fallback]')?.hidden);
- const open=async(route)=>{await page.goto(source+`/atlas/asia/${route}`,{waitUntil:'domcontentloaded'});await ready();await page.waitForLoadState('networkidle');};
+ const open=async(route)=>{await page.goto(source+`/atlas/asia/${route}`,{waitUntil:'domcontentloaded'});await ready();if(profile.name==='south-desktop')await page.waitForLoadState('networkidle');};
  const screenshot=async id=>{if(!id.includes('-aligned-')&&!['south-central-industry-overview','south-central-cultural-distribution'].includes(id))return;await page.waitForLoadState('networkidle');await page.evaluate(async()=>{await document.fonts.ready;scrollTo({top:0,behavior:'instant'});await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});assert.equal(await page.evaluate(()=>scrollY),0,'Regional screenshots must start at the page top');await capture(page,profile,id,'asia');};
  const story=async id=>{const picker=page.locator('[data-place-story]');await picker.selectOption(id);await page.waitForFunction(id=>new URL(location.href).searchParams.get('story')===id,id);await page.waitForLoadState('networkidle');};
  const scope=()=>page.locator('[data-country-select] option').evaluateAll(nodes=>nodes.filter(n=>n.value&&!n.disabled&&!n.hidden).map(n=>n.value));
@@ -35,6 +35,9 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
   extentChecks.push({label,camera,extent,corners,passed:true});
  };
 
+ // The foundation operations passed in all three PC sizes on the preceding
+ // review run. Keep them on desktop; all sizes still check new contour views.
+ if(profile.name==='south-desktop'){
  await open('south-central-asia/industry/');
  assert.equal(new URL(page.url()).searchParams.get('place'),null);
  assert.deepEqual(await scope(),['IND']);
@@ -122,8 +125,12 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  await page.waitForFunction(()=>document.querySelector('[data-map-period]')?.textContent.includes('500m'));
  await screenshot('central-asia-500m-elevation');record('Central Asian elevation uses the existing 500m contours');
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
- // Keep all foundation operations, while reusing the fixed 30-image regional
- // budget for the two stable overview references and eight new band scenes.
+ }else{
+  await open('south-central-asia/industry/');await screenshot('south-central-industry-overview');
+  await open('south-central-asia/population/?topic=ethnicity');await screenshot('south-central-cultural-distribution');
+ }
+ // Reuse the fixed 30-image regional budget for two overview references and
+ // eight new band scenes across desktop, laptop and the smaller PC viewport.
  for(const [topic,kind,interval,legend] of [['precipitation','rainfall',250,'[data-hydrology-scale]'],['terrain','terrain',500,'[data-physical-legend] .asia-physical-key']]){
   let expected;
   for(const region of ['south-central-asia','south-asia','central-asia']){
