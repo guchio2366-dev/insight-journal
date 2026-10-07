@@ -72,7 +72,7 @@ export function getRussiaTheme(state:{field:RussiaField;theme:string}):RussiaThe
 export function getRussiaLayer(id:string,_state?:RussiaState):RussiaLayer{return russiaLayers.find(l=>l.id===id)??russiaLayers[0];}
 export function createRussiaState(search:string,field:RussiaField='nature'):RussiaState{
  const query=new URLSearchParams(search),validField=Object.hasOwn(russiaFields,field)?field:'nature',place=russiaRegions.some(r=>r.code===query.get('place'))?query.get('place')!:'all';
- const theme=russiaThemes.find(t=>t.field===validField&&t.id===query.get('theme'))??russiaThemes.find(t=>t.field===validField&&t.regionCodes.includes(place))??getRussiaTheme({field:validField,theme:''});
+ const theme=russiaThemes.find(t=>t.field===validField&&t.id===query.get('theme'))??russiaThemes.find(t=>t.field===validField&&t.defaultLayer===query.get('layer')&&(place==='all'||t.regionCodes.includes(place)))??russiaThemes.find(t=>t.field===validField&&t.regionCodes.includes(place))??getRussiaTheme({field:validField,theme:''});
  const layer=russiaLayers.find(l=>l.field===validField&&l.id===query.get('layer'))?.id??(validField==='agriculture'?'farming-all':theme.defaultLayer),compareLayer=russiaLayers.some(l=>l.id===query.get('compare'))?query.get('compare')!:theme.comparisonLayer;
  const candidate=query.get('scope'),scope=['all','theme','region'].includes(candidate??'')?candidate as RussiaState['scope']:place==='all'?'all':'region';
  return {field:validField,place,theme:theme.id,layer,compareLayer,scope:scope==='region'&&place==='all'?'all':scope,comparison:query.get('view')==='comparison'};

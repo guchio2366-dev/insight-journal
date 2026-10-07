@@ -170,6 +170,12 @@ test('farming overview and product focus retain both distributions, separate uni
   assert.ok(one('primary-map').querySelector('[data-farming-product="cattle"][data-farming-mode="quantity"]'));
   assert.ok(one('primary-map').querySelector('[data-farming-product="wheat"][data-farming-mode="outline"]'));
   assertPrimaryLegend(one,model.getRussiaLayer('cattle'));
+  one('place').value='all';one('place').dispatchEvent(new win.Event('change'));
+  assert.equal(one('layer').value,'cattle');assert.match(one('theme-title').textContent,/牛と飼料/);
+  const direct=page('agriculture','?layer=cattle');
+  try{assert.match(direct.one('theme-title').textContent,/牛と飼料/);assert.equal(direct.one('layer').value,'cattle');}finally{direct.win.happyDOM.abort();}
+  one('layer').value='farming-all';one('layer').dispatchEvent(new win.Event('change'));
+  assert.equal(one('theme-title').textContent,model.russiaOverviewReadings.agriculture.title);
  }finally{win.happyDOM.abort();}
 });
 
