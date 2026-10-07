@@ -4,6 +4,9 @@
 .africa-river-choices button[aria-pressed=true]{background:#224c59;color:#fff}
 .africa-river-hit{cursor:pointer;outline:none}
 .africa-river-hit:focus-visible{outline:none;stroke:#bc5c35;stroke-opacity:.5;stroke-width:8px}
+.africa-industry-hit{cursor:pointer;outline:none}
+.africa-industry-hit:focus-visible{outline:none}
+.africa-industry-hit:focus-visible circle{stroke:#bc5c35;stroke-width:4px}
 .africa-atlas[data-river-view=true] .africa-right-fixed{padding-bottom:4px}
 .africa-atlas[data-river-view=true] .africa-detail-scroll{padding-top:6px}
 .africa-atlas[data-river-view=true] .africa-theme-explanation{font-size:15px;line-height:1.75;margin-bottom:8px}
@@ -480,6 +483,8 @@
  .africa-country-controls select[data-year]{width:82px}
  .africa-atlas[data-field=nature] .africa-workspace{grid-template-columns:minmax(0,1fr) 380px;gap:16px}
  .africa-atlas[data-field=agriculture] .africa-workspace{grid-template-columns:minmax(0,1fr) 318px;gap:14px}
+ .africa-atlas[data-field=industry] .africa-workspace{grid-template-columns:minmax(0,1fr) 318px;gap:12px}
+ .africa-atlas[data-field=industry] .africa-map-tools{display:grid;grid-template-columns:repeat(2,64px)}
  .africa-atlas[data-field=population] .africa-workspace{grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:12px}
  .africa-atlas .africa-map-frame{aspect-ratio:1.65}
  .africa-atlas[data-field=nature][data-topic=water] .africa-map-frame{min-height:500px;aspect-ratio:auto;height:500px}
@@ -496,4 +501,13 @@
  .africa-atlas[data-field=population] .africa-main>.africa-subfields{height:auto;min-height:46px;margin:12px 0 0;padding:0;gap:8px;border:0;background:transparent;align-items:start}
  .africa-atlas[data-field=population] .africa-main>.africa-subfields button{flex:none;width:auto;height:46px;min-height:46px;padding:8px 10px;font-size:16px;font-weight:400;line-height:28px}
  .africa-atlas[data-field=population] .africa-main>.africa-subfield-status{margin:6px 0 18px;padding:0;border:0;background:transparent;color:#50656a;font-size:14px;line-height:21px}
+}
+
+/* Match the measured U.S. industry guide row and desktop map frame. */
+@media(min-width:960px){
+ .africa-atlas[data-field=industry] .africa-main>.africa-subfields{height:62px;min-height:62px;align-items:flex-start;align-content:flex-start;row-gap:0}
+ .africa-atlas[data-field=industry] .africa-subfield-caption{flex-basis:100%;margin:0;font-size:14px;line-height:21px}
+}
+@media(min-width:1200px){
+ .africa-atlas[data-field=industry] .africa-map-frame{height:620px;min-height:620px;aspect-ratio:auto}
 }
