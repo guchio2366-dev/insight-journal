@@ -43,7 +43,7 @@ test('the river key selects the actual source lines without discarding their ori
 test('real zero and low elevations are metres rather than similarly numbered legend categories',async()=>{
  await withLayers('?field=nature&topic=elevation&zoom=all',({renderer})=>{
   const layer=JSON.parse(readFileSync(new URL('../../public/assets/atlas/africa-physical-v1/manifest.json',import.meta.url),'utf8')).layers.elevation,grid=gunzipSync(readFileSync(new URL('../../public/assets/atlas/africa-physical-v1/'+layer.grid,import.meta.url)));
-  for(const metres of [0,2,7]){let index=-1;for(let i=0;i<grid.length/2;i++)if(grid.readInt16LE(i*2)===metres){index=i;break;}assert.ok(index>=0);const lon=layer.bounds[0]+(index%layer.width+.5)*.1,lat=layer.bounds[3]-(Math.floor(index/layer.width)+.5)*.1;assert.match(renderer.inspect(lon,lat),new RegExp(`：${metres} m（表示格子）`));}
+  for(const metres of [0,2,7]){let index=-1;for(let i=0;i<grid.length/2;i++)if(grid.readInt16LE(i*2)===metres){index=i;break;}assert.ok(index>=0);const lon=layer.bounds[0]+(index%layer.width+.5)*.1,lat=layer.bounds[3]-(Math.floor(index/layer.width)+.5)*.1;assert.match(renderer.inspect(lon,lat),new RegExp(`：${metres} m（EGM2008）（表示格子）`));}
  });
 });
 

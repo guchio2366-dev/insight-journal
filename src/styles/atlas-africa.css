@@ -577,3 +577,19 @@
  .africa-atlas[data-field=agriculture] .africa-map-subfields{right:6px}
  .africa-atlas[data-field=agriculture] .africa-map-subfields button{padding-inline:7px}
 }
+
+/* Elevation is a physical surface: country/year comparison controls do not apply. */
+.africa-atlas[data-topic=elevation] .africa-country-controls,
+.africa-atlas[data-topic=elevation] .africa-region-row>label,
+.africa-atlas[data-topic=elevation] .africa-theme-actions,
+.africa-atlas[data-topic=elevation] .africa-statistics-controls,
+.africa-atlas[data-topic=elevation] .africa-map-notes,
+.africa-atlas[data-topic=elevation] [data-zoom]{display:none}
+.africa-atlas[data-topic=elevation] .africa-map-card [data-africa-layer-legend]{display:flex;flex-wrap:wrap;gap:2px 10px}
+.africa-atlas[data-topic=elevation] [data-africa-layer-legend]>button{width:auto;min-height:38px;flex:none;font-size:14px;padding:4px 2px}
+.africa-atlas[data-topic=elevation] .africa-layer-unlisted{flex-basis:100%}
+.africa-atlas[data-topic=elevation] .africa-theme-explanation{font-size:15px;line-height:1.75}
+.africa-atlas[data-topic=elevation] [data-africa-point-reading]{font-size:14px;line-height:1.7}
+.africa-atlas[data-topic=elevation] .africa-detail-scroll{overflow:visible}
+
+.africa-elevation-note{margin:0;align-self:center;font-size:14px;line-height:1.6;color:#4c625e}

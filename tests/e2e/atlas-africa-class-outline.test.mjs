@@ -22,7 +22,7 @@ async function withRenderer(run,{delayGrid=false}={}){
 
 test('non-agricultural class selection retains each complete native raster and overlays only the selected grid boundary',async()=>{
  await withRenderer(async({root,paint,ready})=>{
-  for(const [field,topic,selected,file] of [['nature','climate','1','climate.png'],['nature','terrain','4','elevation.png'],['nature','elevation','0','elevation.png'],['population','distribution','density-0','population.png']]){
+  for(const [field,topic,selected,file] of [['nature','climate','1','climate.png'],['nature','terrain','4','elevation.png'],['population','distribution','density-0','population.png']]){
    const search=`?field=${field}&topic=${topic}&zoom=all`;
    paint(search);await ready();const original=root.querySelector('[data-africa-raster]').getAttribute('href');assert.ok(original.endsWith('/'+file));
    const nativeFeatures=[...root.querySelectorAll('[data-africa-layer-feature]')].map(path=>path.getAttribute('d'));

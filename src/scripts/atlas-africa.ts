@@ -1,3 +1,4 @@
+import {withBase} from '../lib/urls.ts';
 import {countries,fields,metrics,regionNames,years,readState,writeState,africaComparisonSnapshot,canonicalTopic,canonicalWater,canonicalAgriLayers,africaAgriVisibleLayers,metricById,valueAt,latestValueAt,formatValue,fillFor,rankedCountries,palette,sources,defaultYear,cropChoices,livestockChoices,cropMeasureChoices,type Field,type Region,type Metric,type Crop,type Livestock,type CropMeasure} from '../data/atlas/africa-atlas.ts';
 import {projectAfrica,africaWidth,africaHeight} from '../lib/atlas-africa-geometry.ts';
 import {themes,type AfricaTheme} from '../data/atlas/africa-themes.ts';
@@ -23,8 +24,9 @@ export function initializeAfricaAtlas() {
  let actual: AfricaLayerView|null=null;
  const layerRenderer=createAfricaLayerRenderer(root,()=>{if(typeof document!=='undefined'&&document===root.ownerDocument)render();});
  let countryPinned=false,regionPinned=false;
+ const isElevation=()=>state.field==='nature'&&state.topic==='elevation';
  const isAgriMap=()=>state.field==='agriculture'&&state.topic!=='forestry';
- const publicStateURL=(input:typeof state,url:URL)=>{const result=writeState(input,url);if(input.field==='agriculture'){result.searchParams.delete('year');result.searchParams.delete('compare');}return result;};
+ const publicStateURL=(input:typeof state,url:URL)=>{const result=writeState(input,url);if(input.field==='agriculture'){result.searchParams.delete('year');result.searchParams.delete('compare');}if(input.field==='nature'&&input.topic==='elevation')for(const key of ['place','compare','region','year','context','sourceState'])result.searchParams.delete(key);return result;};
  const isAgriOverview=()=>state.field==='agriculture'&&state.topic!=='forestry'&&state.overview;
  const countryInteractive=()=>!!state.context||!actual&&!isRiverView();
  const topicItems={
@@ -207,7 +209,7 @@ export function initializeAfricaAtlas() {
   query<HTMLElement>('[data-theme-details]').replaceChildren(make('p',actual.method));
   if(!agriculture&&!actual.guide){
    query<HTMLElement>('[data-theme-details]').append(make('p',actual.scope));
-   const scope:Record<string,string>={climate:'色は気候区分。凡例を選ぶと、その区分の格子境界を強調します。',terrain:'色は標高区分、線は等高線。選択しても全体の分布を残します。',elevation:'色は標高区分。選択しても全体の分布を残します。',distribution:populationDensityScope,'water-basin':'線は接続する集水区の境界。川名や取水量は示しません。'};
+   const scope:Record<string,string>={climate:'色は気候区分。凡例を選ぶと、その区分の格子境界を強調します。',terrain:'色は標高区分、線は等高線。選択しても全体の分布を残します。',elevation:'色と細線：500m刻み／太線：1,000m刻み。凡例を選ぶと、その標高帯を強調します。',distribution:populationDensityScope,'water-basin':'線は接続する集水区の境界。川名や取水量は示しません。'};
    if(scope[actual.key])text('[data-africa-layer-scope]',scope[actual.key]);
   }
   if(agriculture){
@@ -223,7 +225,7 @@ export function initializeAfricaAtlas() {
   const picker=query<HTMLSelectElement>('[data-africa-layer-category]');picker.replaceChildren();const all=make('option','全ての区分') as HTMLOptionElement;all.value='';picker.append(all);
   const climateShort:Record<string,string>={Af:'雨林',Am:'モンスーン',Aw:'サバナ',BWh:'高温砂漠',BWk:'低温砂漠',BSh:'高温ステップ',BSk:'低温ステップ',Csa:'夏乾燥・高温夏',Csb:'夏乾燥・温暖夏',Cwa:'冬乾燥・高温夏',Cwb:'冬乾燥・温暖夏',Cfa:'温暖湿潤',Cfb:'西岸海洋性',Dsb:'冷帯・夏乾燥',Dwb:'冷帯・冬乾燥',ET:'ツンドラ',EF:'氷雪'};
   for(const row of actual.legend){const fullLabel=`${row.code?row.code+' ':''}${row.label}`,short=row.code&&climateShort[row.code]?`${row.code} ${climateShort[row.code]}`:fullLabel;const item=make('button',short) as HTMLButtonElement;item.type='button';item.title=`${fullLabel}${row.description?'：'+row.description:''}`;item.setAttribute('aria-label',fullLabel);if(isAgriOverview())item.dataset.africaOverviewLayer=row.id;else item.dataset.africaLayerClass=row.id;item.setAttribute('aria-pressed',String(!isAgriOverview()&&state.layerClass===row.id));const swatch=make('i');swatch.style.background=row.color;item.prepend(swatch);legend.append(item);const option=make('option',fullLabel) as HTMLOptionElement;option.value=row.id;picker.append(option);}
-  const missing=make('span',agriculture||isAgriOverview()?'値なし（0とは断定しません）':'未収録（不在を意味しません）');missing.className='africa-layer-unlisted';legend.append(missing);
+  const missing=make('span',isElevation()?'空白：格子なし・海岸の未描画域':agriculture||isAgriOverview()?'値なし（0とは断定しません）':'未収録（不在を意味しません）');missing.className='africa-layer-unlisted';legend.append(missing);
   picker.value=actual.legend.some(row=>row.id===state.layerClass)?state.layerClass:'';
   if(focusedClass)legend.querySelector<HTMLButtonElement>(`[data-africa-layer-class="${focusedClass}"]`)?.focus({preventScroll:true});
   const compare=query<HTMLButtonElement>('[data-theme-comparison]');compare.disabled=!actual.ready;compare.textContent=agriculture?.compareLabel??`${metricById(state.metric).label}と比べる`;
@@ -232,6 +234,7 @@ export function initializeAfricaAtlas() {
   if(actual.ready){text('[data-metric-title]',actual.title);text('[data-period]',actual.period);text('[data-unit]',actual.unit);text('#africa-svg-title',`${actual.title}・${actual.period}`);text('[data-map-caption]',actual.scope);}
   const selected=actual.legend.find(row=>row.id===state.layerClass),point=state.layerPoint.split(',').map(Number);text('[data-africa-point-reading]',state.layerPoint?layerRenderer.inspect(point[0],point[1]):selected?`${selected.code??''} ${selected.label}：${selected.description||'選択した分類の分布を表示しています。'}`:'地図の地点を押すと、表示格子の値を確認できます。');
   if(!agriculture&&selected&&['climate','terrain','elevation','distribution'].includes(actual.key))text('[data-africa-point-reading]',`${selected.code??''} ${selected.label}：全体分布を残し、選択区分の格子境界を白と濃い青緑の線で示します。${state.layerPoint?layerRenderer.inspect(point[0],point[1]):''}`);
+  if(isElevation()){text('.africa-kicker','高地と低地を読む');text('[data-africa-layer-caption]','標高帯（m） · ETOPO 2022版');text('[data-africa-point-reading]',state.layerPoint?'地点の格子平均：'+layerRenderer.inspect(point[0],point[1]):selected?`${selected.label}の色面の境界を強調しています。他の標高帯と等高線も残しています。`:'凡例で標高帯を選択。地図の地点を押すと、保存した格子平均値を確認できます。');const metadata=make('a','500m等高線の加工方法・保存データ') as HTMLAnchorElement;metadata.href=withBase('/assets/atlas/africa-elevation-500m-v1/manifest.json');query<HTMLElement>('[data-theme-details]').append(metadata);}
   if(agriculture&&actual.visibleLayers){
    const layers=actual.visibleLayers,hidden=actual.selectedVisible===false;
    const mode=layers.length>1||hidden&&layers.length>0?'選択品目は数量の色分け、他品目は半透明の色別正値分布。重なりは選択品目を手前に表示し、重なった色は数量や合計を表しません。':'輪郭は選択品目のモデル値が0より大きい格子の範囲です。';
@@ -278,6 +281,7 @@ export function initializeAfricaAtlas() {
   query<HTMLElement>('[data-theme-takeaway]').hidden=riverView;
   query<HTMLElement>('[data-theme-caveat]').hidden=riverView?!state.context&&river?.id!=='congo':!!actual&&!actual.guide&&state.field!=='agriculture';
   if(isAgriMap()){query<HTMLElement>('[data-theme-takeaway-detail]').hidden=true;query<HTMLElement>('[data-theme-caveat]').hidden=true;query<HTMLElement>('[data-theme-comparison]').hidden=true;query<HTMLElement>('[data-theme-return]').hidden=true;query<HTMLElement>('[data-africa-layer-selection] label').hidden=true;countryStatistics.hidden=true;return;}
+  if(isElevation()){countryStatistics.hidden=true;query<HTMLElement>('[data-theme-caveat]').hidden=false;query<HTMLElement>('[data-theme-comparison]').hidden=true;query<HTMLElement>('[data-theme-return]').hidden=true;query<HTMLElement>('[data-africa-layer-selection] label').hidden=true;text('#africa-svg-desc','既存0.1度格子に基づく500m間隔の等高線と標高帯。太線は1,000m刻み。地図下の凡例から標高帯を選び、右の説明を読めます。欠測は補いません。');return;}
   if(!riverView){query<HTMLElement>('[data-africa-layer-selection] label').hidden=isAgriOverview();query<HTMLElement>('.africa-right-fixed').append(actions);return;}
   query<HTMLElement>('[data-africa-statistics-key]').hidden=!state.context;
   explanation.after(actions);
@@ -336,6 +340,7 @@ export function initializeAfricaAtlas() {
  }
  function render(write=false) {
   state.topic=canonicalTopic(state.field,state.metric,state.topic);
+  if(isElevation()){state.place='';state.compare='';state.region='all';state.zoom='all';state.context='';state.sourceState='';state.view='distribution';countryPinned=false;regionPinned=false;}
   if(state.field==='agriculture'){
    state.cropMeasure='harvested';state.compare='';state.context='';state.sourceState='';
    if(state.topic!=='forestry'){
@@ -356,6 +361,7 @@ export function initializeAfricaAtlas() {
   if(actual?.ready&&state.layerClass&&!actual.legend.some(row=>row.id===state.layerClass)){state.layerClass='';actual=layerRenderer.render(state);}
   root!.dataset.actualLayer=actual?.ready&&!actual.guide?'true':'false';root!.dataset.layerMode=actual?.guide?'guide':actual?.ready?'distribution':'statistics';
   renderTopics();
+  query<HTMLElement>('[data-africa-elevation-note]').hidden=!isElevation();
   const agricultureField=state.field==='agriculture';
   query<HTMLElement>('[data-africa-agri-map-controls]').hidden=!agricultureField;query<HTMLSelectElement>('[data-africa-agri-region]').value=state.region;
   query<HTMLElement>('[data-africa-agri-context]').hidden=!isAgriMap();query<HTMLElement>('[data-africa-agri-actions]').hidden=!isAgriMap()||state.overview;query<HTMLElement>('[data-africa-agri-overview]').hidden=!isAgriMap()||state.overview;
@@ -472,5 +478,5 @@ export function initializeAfricaAtlas() {
  window.addEventListener('popstate',()=>{state=readState(location.search);readSelectionPins();render();});
  window.addEventListener('resize',()=>render());
  render();
- if(state.field==='agriculture'){const url=publicStateURL(state,new URL(location.href));if(url.href!==location.href)history.replaceState(null,'',url);}
+ if(state.field==='agriculture'||isElevation()){const url=publicStateURL(state,new URL(location.href));if(url.href!==location.href)history.replaceState(null,'',url);}
 }
