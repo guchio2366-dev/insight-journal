@@ -207,7 +207,7 @@ async function stableUS(page,record,topic){
 async function elevationOperations(page,record,reference){
  await open(page,'/atlas/africa/?field=nature&topic=elevation&place=EGY&compare=COD&region=north&year=2023&zoom=country');
  await page.waitForFunction(()=>document.querySelectorAll('[data-africa-elevation-band]').length===10&&document.querySelectorAll('[data-africa-elevation-contour]').length===9);await settle(page);
- for(const selector of ['[data-place]','[data-compare]','[data-year]','[data-region]','[data-theme-comparison]','[data-zoom]'])assert.equal(await page.locator(selector).first().isVisible(),false);
+ for(const selector of ['[data-place]','[data-compare]','[data-year]','[data-region]','[data-theme-comparison]','[data-zoom]','.africa-secondary>.africa-disclosure:has(.africa-ranking)','.africa-secondary>.africa-disclosure:has(.africa-statistics-grid)','.africa-place-links'])assert.equal(await page.locator(selector).first().isVisible(),false);
  const params=await state(page);for(const key of ['place','compare','year','region','context'])assert.equal(params[key],undefined);assert.equal(params.zoom,'all');
  const native=await page.locator('[data-africa-layer-feature]').evaluateAll(nodes=>nodes.map(n=>({id:n.dataset.africaLayerFeature,d:n.getAttribute('d'),fill:n.getAttribute('fill'),stroke:n.getAttribute('stroke'),width:n.getAttribute('stroke-width')})));
  const colors=['#c5d8b0','#dee0aa','#e2d29a','#d5be8c','#c2a57f'];

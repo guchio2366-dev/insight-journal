@@ -593,3 +593,7 @@
 .africa-atlas[data-topic=elevation] .africa-detail-scroll{overflow:visible}
 
 .africa-elevation-note{margin:0;align-self:center;font-size:14px;line-height:1.6;color:#4c625e}
+
+.africa-atlas[data-topic=elevation] .africa-secondary>.africa-disclosure:has(.africa-statistics-grid),
+.africa-atlas[data-topic=elevation] .africa-secondary>.africa-disclosure:has(.africa-ranking),
+.africa-atlas[data-topic=elevation] .africa-place-links{display:none}
