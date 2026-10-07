@@ -1,4 +1,7 @@
 import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {gunzipSync} from 'node:zlib';
+import {fileURLToPath} from 'node:url';
 
 // Uses the existing CI's guarded, normally sandboxed browser and local build.
 export const southCentralProfiles=[
@@ -9,11 +12,11 @@ export const southCentralProfiles=[
 export const southCentralImageCount=10*southCentralProfiles.length;
 
 export async function verifySouthCentralAsia(page,{source,profile,capture}){
- const checks=[];
+ const checks=[],bandsChecks=[];
  const record=name=>checks.push({name,passed:true});
  const ready=()=>page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-map-fallback]')?.hidden);
  const open=async(route)=>{await page.goto(source+`/atlas/asia/${route}`,{waitUntil:'domcontentloaded'});await ready();await page.waitForLoadState('networkidle');};
- const screenshot=async id=>{await page.waitForLoadState('networkidle');await page.evaluate(async()=>{await document.fonts.ready;scrollTo({top:0,behavior:'instant'});await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});assert.equal(await page.evaluate(()=>scrollY),0,'Regional screenshots must start at the page top');await capture(page,profile,id,'asia');};
+ const screenshot=async id=>{if(!id.includes('-aligned-')&&!['south-central-industry-overview','south-central-cultural-distribution'].includes(id))return;await page.waitForLoadState('networkidle');await page.evaluate(async()=>{await document.fonts.ready;scrollTo({top:0,behavior:'instant'});await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});assert.equal(await page.evaluate(()=>scrollY),0,'Regional screenshots must start at the page top');await capture(page,profile,id,'asia');};
  const story=async id=>{const picker=page.locator('[data-place-story]');await picker.selectOption(id);await page.waitForFunction(id=>new URL(location.href).searchParams.get('story')===id,id);await page.waitForLoadState('networkidle');};
  const scope=()=>page.locator('[data-country-select] option').evaluateAll(nodes=>nodes.filter(n=>n.value&&!n.disabled&&!n.hidden).map(n=>n.value));
  const extentChecks=[];
@@ -119,5 +122,40 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  await page.waitForFunction(()=>document.querySelector('[data-map-period]')?.textContent.includes('500m'));
  await screenshot('central-asia-500m-elevation');record('Central Asian elevation uses the existing 500m contours');
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
- return {profile:profile.name,passed:true,checks,extentChecks};
+ // Keep all foundation operations, while reusing the fixed 30-image regional
+ // budget for the two stable overview references and eight new band scenes.
+ for(const [topic,kind,interval,legend] of [['precipitation','rainfall',250,'[data-hydrology-scale]'],['terrain','terrain',500,'[data-physical-legend] .asia-physical-key']]){
+  let expected;
+  for(const region of ['south-central-asia','south-asia','central-asia']){
+   await open(`${region}/nature/?topic=${topic}`);
+   await page.waitForFunction(kind=>{const r=document.querySelector('[data-asia-atlas]');return r.dataset.contourBandStatus==='ready'&&r.dataset.contourBandKind===kind;},kind);
+   expected=await page.locator('[data-asia-config]').evaluate((node,kind)=>JSON.parse(node.textContent).presentation[kind].bands,kind);
+   assert.equal(expected.interval,interval);
+   const wanted=await page.evaluate(b=>b.colors.map((color,i)=>{const e=document.createElement('i');e.style.backgroundColor=color;return {color:e.style.backgroundColor,label:`${b.breaks[i].toLocaleString('ja-JP')}–${b.breaks[i+1].toLocaleString('ja-JP')}`};}),expected);
+   const actual=await page.locator(`${legend} > span`).evaluateAll(nodes=>nodes.filter(n=>/–/.test(n.textContent)).map(n=>({color:n.querySelector('i').style.backgroundColor,label:n.textContent})));
+   assert.deepEqual(actual,wanted,'Visible explanation legend must use the generated intervals and colors');
+   const mapLegend=await page.locator('[data-reading-map-legend] .asia-comparison-compact-key > span').evaluateAll(nodes=>nodes.map(n=>({color:n.querySelector('i').style.backgroundColor,label:n.textContent})));
+   assert.deepEqual(mapLegend,wanted,'Legend below the map must use the same generated intervals');
+   await screenshot(`${region}-aligned-${kind}-overview`);
+   bandsChecks.push({region,kind,interval,sourceGridSHA256:expected.sourceGridSHA256,legendMatches:true});
+  }
+  const point=kind==='rainfall'?[75.5,12.9]:[85.3,27.7];
+  await open(`south-asia/nature/?topic=${topic}&lng=${point[0].toFixed(5)}&lat=${point[1].toFixed(5)}&z=6.000&at=${point.map(n=>n.toFixed(5)).join(',')}`);
+  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]').dataset.contourBandStatus==='ready');
+  const selector=kind==='rainfall'?'[data-hydrology-value]':'[data-physical-value]';
+  await page.waitForFunction(selector=>/\d/.test(document.querySelector(selector)?.textContent??''),selector);
+  const cfg=await page.locator('[data-asia-config]').evaluate(n=>JSON.parse(n.textContent)),grid=kind==='rainfall'?cfg.water.precipitation:cfg.physical;
+  const raw=gunzipSync(await readFile(fileURLToPath(new URL('../'+expected.sourceGrid,import.meta.url)))),[w,s,e,n]=grid.bounds3857;
+  const x=6378137*point[0]*Math.PI/180,y=6378137*Math.log(Math.tan(Math.PI/4+point[1]*Math.PI/360));
+  const value=raw.readInt16LE(2*(Math.floor((n-y)/(n-s)*grid.height)*grid.width+Math.floor((x-w)/(e-w)*grid.width)));
+  assert.notEqual(value,-32768);assert((await page.locator(selector).textContent()).includes(value.toLocaleString('ja-JP')),'Point lookup must retain the original, unsmoothed source value');
+  await screenshot(`south-asia-aligned-${kind}-point`);
+  const url=page.url();await page.reload({waitUntil:'domcontentloaded'});await ready();await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]').dataset.contourBandStatus==='ready');assert.equal(page.url(),url);
+  await page.locator('[data-dock-compare="agriculture"]').click();
+  await page.locator('[data-comparison-back]').click();await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]').dataset.contourBandStatus==='ready');assert.equal(page.url(),url,'Comparison return must retain the original point, topic and camera');
+  assert.equal(await page.locator('.maplibregl-popup').count(),0);
+  bandsChecks.push({region:'south-asia',kind,interval,point,originalPointValue:value,reloadRetainsURL:true,comparisonRetainsURL:true});
+ }
+ record('South/Central rainfall 250mm and elevation 500m bands use aligned legends in all three focus views; original point values survive reload and comparison');
+ return {profile:profile.name,passed:true,checks,extentChecks,bandsChecks};
 }
