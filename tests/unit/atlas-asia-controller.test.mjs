@@ -976,6 +976,8 @@ test('東アジアの線と色帯・凡例を一緒に切り替え、地点の�
   const map=window.__map;
   assert.equal(map.layers['asia-rainfall-bands'].layout.visibility,'visible');
   assert.equal(map.layers['asia-rainfall-aligned-lines'].layout.visibility,'visible');
+  assert.equal(map.getSource('asia-rainfall-bands').tolerance,0);
+  assert.equal(map.getSource('asia-rainfall-aligned-lines').tolerance,0,'The browser cannot independently simplify the shared boundaries');
   assert.equal(map.getLayer('asia-hydrology-rain'),undefined,'Do not blend an unrelated raster palette');
   assert(requests.includes('/assets/presentation/rainfall-bands.json.gz'));
   assert(requests.includes('/assets/presentation/rainfall-aligned.json.gz'));
@@ -986,6 +988,8 @@ test('東アジアの線と色帯・凡例を一緒に切り替え、地点の�
   assert.equal(map.layers['asia-rainfall-bands'].layout.visibility,'none');
   assert.equal(map.layers['asia-terrain-bands'].layout.visibility,'visible');
   assert.equal(map.layers['asia-terrain-aligned-lines'].layout.visibility,'visible');
+  assert.equal(map.getSource('asia-terrain-bands').tolerance,0);
+  assert.equal(map.getSource('asia-terrain-aligned-lines').tolerance,0);
   assert.equal(map.layers['asia-terrain'].layout.visibility,'none');
   assert.match(q('[data-physical-legend] .asia-physical-key').textContent,/0–500.*500–1,000/);
   assert.match(q('[data-physical-legend] p').textContent,/existing source note.*原格子値/);
