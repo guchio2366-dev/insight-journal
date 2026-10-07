@@ -16,6 +16,21 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  const screenshot=async id=>{await page.waitForLoadState('networkidle');await page.evaluate(async()=>{await document.fonts.ready;scrollTo({top:0,behavior:'instant'});await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});assert.equal(await page.evaluate(()=>scrollY),0,'Regional screenshots must start at the page top');await capture(page,profile,id,'asia');};
  const story=async id=>{const picker=page.locator('[data-place-story]');await picker.selectOption(id);await page.waitForFunction(id=>new URL(location.href).searchParams.get('story')===id,id);await page.waitForLoadState('networkidle');};
  const scope=()=>page.locator('[data-country-select] option').evaluateAll(nodes=>nodes.filter(n=>n.value&&!n.disabled&&!n.hidden).map(n=>n.value));
+ const extentChecks=[];
+ const extentFits=async(label,serializeCamera=false)=>{
+  if(serializeCamera){
+   await page.locator('[data-zoom-in]').click();await page.waitForFunction(()=>new URL(location.href).searchParams.has('z'));
+   const enlarged=Number(new URL(page.url()).searchParams.get('z'));
+   await page.locator('[data-zoom-out]').click();await page.waitForFunction(z=>Number(new URL(location.href).searchParams.get('z'))<z-.9,enlarged);
+  }
+  const url=new URL(page.url()),camera={lng:Number(url.searchParams.get('lng')),lat:Number(url.searchParams.get('lat')),zoom:Number(url.searchParams.get('z'))};
+  assert(url.searchParams.has('z'),'A real map camera is required for extent verification');
+  const extent=await page.locator('[data-asia-config]').evaluate(n=>JSON.parse(n.textContent).contentExtent),box=await page.locator('[data-map-surface]').boundingBox();
+  const project=(lon,lat)=>[(lon+180)/360,(1-Math.log(Math.tan(Math.PI/4+lat*Math.PI/360))/Math.PI)/2],centre=project(camera.lng,camera.lat),world=512*2**camera.zoom;
+  const corners=[[extent[0],extent[1]],[extent[2],extent[3]]].map(p=>{const q=project(...p);return {x:box.width/2+(q[0]-centre[0])*world,y:box.height/2+(q[1]-centre[1])*world};});
+  for(const p of corners){assert(p.x>=-2&&p.x<=box.width+2&&p.y>=-2&&p.y<=box.height+2,`${label}: complete regional extent must fit the real map viewport: ${JSON.stringify({camera,box,corners,extent})}`);}
+  extentChecks.push({label,camera,extent,corners,passed:true});
+ };
 
  await open('south-central-asia/industry/');
  assert.equal(new URL(page.url()).searchParams.get('place'),null);
@@ -25,6 +40,7 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  const config=await page.locator('[data-asia-config]').evaluate(n=>JSON.parse(n.textContent));
  assert.deepEqual(Object.keys(config.focusReadings).sort(),['agriculture','industry','natural','population']);
  assert.equal(config.countries.length,13);assert(config.contentExtent.every(Number.isFinite));
+ await extentFits('south-central industry overview',true);
  const before=page.url();await page.locator('[data-map-surface]').click({position:{x:30,y:30}});assert.equal(page.url(),before);
  await screenshot('south-central-industry-overview');record('regional overview, four reading guides, India-only country entry and inert industry background');
 
@@ -67,6 +83,7 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  for(const [region,city] of [['south-asia','new-delhi'],['central-asia','tashkent']]){
   await open(`${region}/nature/`);assert.equal(new URL(page.url()).searchParams.get('place'),null);
   await page.locator('[data-focus-reading]').waitFor({state:'visible'});
+  await extentFits(`${region} initial climate`,true);
   const station=page.locator(`.asia-climate-station[data-station="${city}"]`);
   assert.equal(await station.evaluate(n=>{const r=n.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('[data-station]')?.getAttribute('data-station');}),city,'A nearby transparent station hit box must not intercept this city');
   await station.click();
@@ -86,6 +103,7 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
   assert.equal(new URL(page.url()).searchParams.get('place'),null);
   const livestock=page.locator('.asia-livestock-point:visible'),count=await livestock.count();assert(count>0);
   await page.locator(`[data-farm-choice="${product}"]`).click();await page.waitForFunction(product=>document.querySelector('[data-asia-atlas]').dataset.farmSelected===product,product);
+  await extentFits(`${region} selected crop context`);
   assert.equal(await livestock.count(),count);for(const opacity of await livestock.evaluateAll(nodes=>nodes.map(n=>getComputedStyle(n).opacity)))assert.equal(Number(opacity),.2);
   const url=page.url();await page.locator('[data-map-surface]').click({position:{x:30,y:30}});assert.equal(page.url(),url);
   await screenshot(`${region}-${product}-context`);
@@ -101,5 +119,5 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  await page.waitForFunction(()=>document.querySelector('[data-map-period]')?.textContent.includes('500m'));
  await screenshot('central-asia-500m-elevation');record('Central Asian elevation uses the existing 500m contours');
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
- return {profile:profile.name,passed:true,checks};
+ return {profile:profile.name,passed:true,checks,extentChecks};
 }
