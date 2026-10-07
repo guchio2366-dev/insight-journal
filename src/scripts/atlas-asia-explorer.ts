@@ -480,7 +480,10 @@ function start(root:HTMLElement) {
     for(const id of ['asia-urban-boundary','asia-urban-selected'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility',population&&(urban||!!selectedUrban)?'visible':'none');
     const populationGeographyVisibility=()=>{
       if(!map)return;const detailed=(population||social?.active()||!!farm||state.field==='industry'||hydrology?.active()||seasonal?.active())&&!!map.getSource('asia-population-geography');
-      for(const id of ['asia-land','asia-context','asia-context-border','asia-country-hit','asia-country-border','asia-country-selected'])map.setLayoutProperty(id,'visibility',detailed?'none':'visible');
+      // The detailed file clips neighbouring countries to its own coverage.
+      // Keep the existing world land/context under it in South/Central Asia:
+      // a wider full-region fit must not turn omitted context land into ocean.
+      for(const id of ['asia-land','asia-context','asia-context-border','asia-country-hit','asia-country-border','asia-country-selected'])map.setLayoutProperty(id,'visibility',detailed&&!(config.regionId==='south-central-asia'&&['asia-land','asia-context','asia-context-border'].includes(id))?'none':'visible');
       for(const id of ['asia-population-land','asia-population-context','asia-population-country-hit','asia-population-border','asia-population-country-selected'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility',detailed?'visible':'none');
       if(map.getLayer('asia-population-country-selected'))map.setFilter('asia-population-country-selected',['==',['get','code'],state.city||hydrology?.active()?'':state.place??'']);
     };
@@ -494,7 +497,7 @@ function start(root:HTMLElement) {
           map.addLayer({id:'asia-population-land',type:'fill',source:'asia-population-geography',paint:{'fill-color':'#e1e4db'}},'asia-climate');
           map.addLayer({id:'asia-population-context',type:'fill',source:'asia-population-geography',filter:['==',['get','target'],false],paint:{'fill-color':'#d7dad5'}},'asia-country-border');
           map.addLayer({id:'asia-population-country-hit',type:'fill',source:'asia-population-geography',filter:['==',['get','target'],true],paint:{'fill-opacity':0}},'asia-country-border');
-          map.addLayer({id:'asia-population-border',type:'line',source:'asia-population-geography',paint:{'line-color':'#5b7077','line-width':.65}},'asia-country-border');
+          map.addLayer({id:'asia-population-border',type:'line',source:'asia-population-geography',...(config.regionId==='south-central-asia'?{filter:['==',['get','target'],true]}:{}),paint:{'line-color':'#5b7077','line-width':.65}},'asia-country-border');
           map.addLayer({id:'asia-population-country-selected',type:'line',source:'asia-population-geography',filter:['==',['get','code'],state.place??''],paint:{'line-color':'#304954','line-width':1.3}},'asia-country-border');
         }
         populationGeographyVisibility();
