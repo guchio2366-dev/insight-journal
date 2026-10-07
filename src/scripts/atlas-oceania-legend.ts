@@ -1,4 +1,4 @@
-import {renderOceaniaLegend,type OceaniaLayer} from '../data/atlas/oceania-learning';
+import {renderOceaniaLegend,renderOceaniaFarmingKey,type OceaniaLayer} from '../data/atlas/oceania-learning';
 
 const climateShortNames:Record<string,string>={
  Af:'熱帯雨林',Am:'熱帯季節雨',Aw:'サバナ',
@@ -13,6 +13,7 @@ const climateShortNames:Record<string,string>={
 };
 
 export function renderOceaniaRequiredLegend(layer:OceaniaLayer):string{
+ if(layer.field==='agriculture')return renderOceaniaFarmingKey(layer);
  const legend=renderOceaniaLegend(layer);
  if(layer.id!=='climate')return legend;
  return legend.replace(/<span>(<i\b[^>]*><\/i>)([A-Z][A-Za-z]{1,2}) ([^<]+)<\/span>/g,(_,mark,code,name)=>`<span title="${code} ${name}" aria-label="${code} ${name}">${mark}<span>${code} ${climateShortNames[code]??name}</span></span>`).replace('未収録・分類なし','未収録/分類なし');

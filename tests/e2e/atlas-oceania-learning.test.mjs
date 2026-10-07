@@ -16,7 +16,7 @@ function page(field,query=''){
  return {win,root:win.document.querySelector('[data-oceania-learning]')};
 }
 test('all four built Oceania pages expose real initial distributions, complete legends, messages and working entries',()=>{
- const expected={nature:18,agriculture:8,industry:9,population:10};
+ const expected={nature:18,agriculture:5,industry:9,population:10};
  const sitemap=readFileSync(new URL('../../dist/sitemap.xml',import.meta.url),'utf8');
  for(const [field,count] of Object.entries(expected)){
   const {win,root}=page(field);
@@ -36,10 +36,10 @@ test('built PNG comparison preserves the original climate, crop choice, country,
  const {win,root}=page('nature','?place=PNG&scope=country&theme=altitude&layer=climate&compare=coconut&view=comparison&keep=source#reference');
  assert.equal(root.querySelector('[data-comparison-view]').hidden,false);
  assert.ok(root.querySelector('[data-original-map] image').getAttribute('href').endsWith('/oceania-climate-v2/png.png'));
- assert.ok(root.querySelector('[data-comparison-map] image').getAttribute('href').endsWith('/oceania-crops-v1/coconut.png'));
+ assert.ok(root.querySelector('[data-comparison-map] [data-farming-mode="quantity"]').getAttribute('href').endsWith('/oceania-farming-overlay-v1/coconut-quantity.png'));
  assert.equal(root.querySelector('[data-original-map] svg').getAttribute('viewBox'),root.querySelector('[data-comparison-map] svg').getAttribute('viewBox'));
  assert.equal(root.querySelector('[data-original-legend]').children.length,7);
- assert.equal(root.querySelector('[data-comparison-legend]').children.length,8);
+ assert.equal(root.querySelector('[data-comparison-legend]').children.length,6);
  assert.ok(root.querySelector('[data-return]').textContent.includes('パプアニューギニア'));
  root.querySelector('[data-return]').click();
  assert.equal(root.querySelector('[data-normal-view]').hidden,false);
@@ -87,8 +87,8 @@ test('country selection preserves both crop and livestock comparison distributio
   assert.equal(root.querySelector('[data-layer]').value,'wheat');
   assert.equal(root.querySelector('[data-compare-layer]').value,'cattle');
   for(const hook of ['original','comparison'])assert.equal(root.querySelector(`[data-${hook}-map] svg`).getAttribute('viewBox'),frame);
-  assert.ok(root.querySelector('[data-original-map] image').getAttribute('href').endsWith('/wheat.png'));
-  assert.ok(root.querySelector('[data-comparison-map] image').getAttribute('href').endsWith('/cattle.png'));
+  assert.ok(root.querySelector('[data-original-map] [data-farming-mode="quantity"]').getAttribute('href').endsWith('/wheat-quantity.png'));
+  assert.ok(root.querySelector('[data-comparison-map] [data-farming-mode="quantity"]').getAttribute('href').endsWith('/cattle-quantity.png'));
   assert.match(root.querySelector('[data-original-unit]').textContent,/ha/);
   assert.match(root.querySelector('[data-comparison-unit]').textContent,/頭/);
   const reloaded=page('agriculture',win.location.search);

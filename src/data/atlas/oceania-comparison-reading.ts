@@ -115,7 +115,7 @@ export const oceaniaComparisonReadings = {
 } satisfies Record<string, OceaniaComparisonReading>;
 
 const layerNames: Record<string, string> = {
-  climate: '気候区分', wheat: '小麦の収穫面積', coconut: 'ココナツの収穫面積', cacao: 'カカオの収穫面積',
+  'farming-all':'保存5品目の農畜産分布', climate: '気候区分', wheat: '小麦の収穫面積', coconut: 'ココナツの収穫面積', cacao: 'カカオの収穫面積',
   sheep: '羊の密度', cattle: '牛の密度', mines: '豪州の鉱山', places: '港・加工・都市の代表点',
   density: '人口密度', cities: '都市中心の人口',
 };

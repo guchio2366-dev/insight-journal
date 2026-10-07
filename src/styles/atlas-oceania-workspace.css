@@ -189,3 +189,37 @@
  .atlas-desktop-shell .oceania-learning[data-field=agriculture] .oceania-workspace-subviews small{font-size:13px;line-height:19.5px;margin-left:5px;font-weight:400}
  .atlas-desktop-shell .oceania-learning[data-field=agriculture] .oceania-context-inset{top:64px}
 }
+
+/* Saved Oceania farming products: compact map key, full folded quantities. */
+.atlas-desktop-shell .oceania-learning[data-field=agriculture] .oceania-workspace-subviews{position:static;width:240px;max-width:none;margin:8px 0;height:44px}
+.atlas-desktop-shell .oceania-learning[data-field=agriculture] .oceania-workspace-region-navigation label{flex-basis:100%;justify-content:flex-start;height:auto;margin-left:0;font-size:14px}
+.atlas-desktop-shell .oceania-learning[data-field=agriculture] .oceania-learning-place select{height:44px;min-height:44px!important;width:220px;font-size:14px}
+.atlas-desktop-shell .oceania-learning[data-field=agriculture] .oceania-learning-normal .oceania-learning-map-heading{position:static;display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:10px;max-width:none;border:0;background:transparent;padding:6px 0;margin:0;min-height:48px}
+.atlas-desktop-shell .oceania-learning[data-field=agriculture] .oceania-learning-map-heading>div:first-child{display:none}
+.atlas-desktop-shell .oceania-learning[data-field=agriculture] .oceania-learning-normal .oceania-learning-layer{display:flex;align-items:center;gap:6px;width:auto;flex:1;max-width:250px;margin:0;font-size:14px}
+.atlas-desktop-shell .oceania-learning[data-field=agriculture] .oceania-learning-layer>span{white-space:nowrap;flex:none}
+.atlas-desktop-shell .oceania-learning[data-field=agriculture] .oceania-learning-layer select{height:44px;min-height:44px;font-size:14px}
+.oceania-farming-view-options{flex:0 0 auto;min-width:0}
+.oceania-farming-view-options>summary{min-height:44px;padding:10px 4px;font-weight:500}
+.oceania-farming-view-options[open]{flex:1 0 100%}
+.oceania-farming-advanced-controls{padding:8px 0;display:grid;gap:8px}
+.atlas-desktop-shell .oceania-learning[data-field=agriculture] :is(.oceania-learning-reading,.oceania-workspace-reading-scroll,.oceania-learning-coverage){max-height:none;overflow:visible}
+.oceania-farming-map-legend{padding:8px 0 4px}
+.atlas-desktop-shell .oceania-learning[data-field=agriculture] .oceania-farming-map-legend [data-primary-legend]{display:flex;flex-wrap:wrap;gap:6px 15px;font-size:14px;line-height:1.5;padding:0}
+.oceania-farming-map-legend [data-farming-key]{display:inline-flex;align-items:center;gap:5px}
+.oceania-learning .oceania-legend-mark.farming-outline{background:transparent;border:2px solid var(--mark)}
+.oceania-learning .oceania-legend-mark.farming-dot{position:relative;background:transparent;border-color:#c6cec9}
+.oceania-legend-mark.farming-dot::after{content:'';position:absolute;inset:3px;border-radius:50%;background:var(--mark);opacity:var(--mark-opacity)}
+.oceania-farming-legend-details{margin-top:6px}
+.atlas-desktop-shell .oceania-learning[data-field=agriculture] [data-primary-legend-dictionary-content]{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;font-size:14px}
+.oceania-farming-legend-group{min-width:0}
+.oceania-farming-legend-group h3{margin:0 0 5px;font-size:15px;line-height:1.5}
+.oceania-farming-legend-group>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 8px}
+.oceania-farming-legend-group>div>span{display:flex;align-items:center;gap:5px}
+.oceania-farming-status-key{grid-column:1/-1;font-size:14px;line-height:1.75}
+.oceania-farming-geography{font-size:15px;line-height:1.8;white-space:pre-line;padding:4px 0 10px}
+.oceania-learning-scene .oceania-farming-place text{fill:currentColor;stroke:none;font-family:var(--sans);font-weight:600}
+.oceania-learning[data-field=agriculture] .oceania-country{cursor:default;pointer-events:none}
+.oceania-learning[data-field=agriculture] .oceania-country:hover{stroke:#637d7b;stroke-width:.7}
+.oceania-learning[data-field=agriculture] .oceania-country.is-selected{stroke:#133741;stroke-width:2.1}
+@media(max-width:600px){.atlas-desktop-shell .oceania-learning[data-field=agriculture] [data-primary-legend-dictionary-content]{grid-template-columns:1fr}.oceania-farming-legend-group>div{grid-template-columns:1fr}}
