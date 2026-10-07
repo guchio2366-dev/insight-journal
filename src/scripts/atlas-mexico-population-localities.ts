@@ -26,7 +26,7 @@ export function initMexicoLocalityPopulation(root:HTMLElement) {
  const text=(selector:string,value:string)=>{const target=query(selector);if(target)target.textContent=value;};
  const cache=new Map<string,Promise<any>>();
  let active=false,onlyState='',frame=readLocalityFrame(new URL(location.href)),generation=0;
- let marks:Mark[]=[],picks:Pick[]=[],selected:Mark|null=null,drawFrame=0,mode:'cluster'|'locality'='cluster';
+ let marks:Mark[]=[],picks:Pick[]=[],selected:Mark|null=null,drawFrame=0,mode:'cluster'|'locality'='cluster',listing='';
  async function load(file:string){
   if(!cache.has(file))cache.set(file,(async()=>{
    const response=await fetch(config.assets+file);
@@ -118,7 +118,9 @@ export function initMexicoLocalityPopulation(root:HTMLElement) {
   text('[data-locality-total]',number(scope?.population??config.population));
   text('[data-locality-total-localities]',number(scope?config.chunks.find(c=>c.stateCode===onlyState)!.localities:config.localities));
   text('[data-locality-scope-note]',scope?'選んだ州の集落を表示しています。':'州を選ばず全国で表示します。');
-  const list=query('[data-locality-list]');if(list){list.replaceChildren();for(const mark of [...visible].sort((a,b)=>b.population-a.population).slice(0,10)){
+  const list=query('[data-locality-list]');const ranked=[...visible].sort((a,b)=>b.population-a.population).slice(0,10);
+  const signature=ranked.map(mark=>[mark.code,mark.x,mark.y,mark.population,mark.localities].join(':')).join('|');
+  if(list&&signature!==listing){listing=signature;list.replaceChildren();for(const mark of ranked){
    const li=document.createElement('li'),button=document.createElement('button');button.type='button';
    button.textContent=`${mark.name}${mark.localities>1?'周辺':''}　${number(mark.population)}人${mark.localities>1?`・${number(mark.localities)}集落`:''}`;
    button.addEventListener('click',()=>select(mark));li.append(button);list.append(li);
@@ -151,6 +153,10 @@ export function initMexicoLocalityPopulation(root:HTMLElement) {
    loading.hidden=true;scheduleDraw();
   }catch(error){
    if(ticket!==generation||!active)return;
+   marks=[];picks=[];selected=null;listing='';renderSelection();
+   context?.clearRect(0,0,canvas.width,canvas.height);labels.replaceChildren();query('[data-locality-list]')?.replaceChildren();
+   text('[data-locality-visible-count]','取得できません');
+   delete root.dataset.localityVisiblePopulation;delete root.dataset.localityVisibleCount;root.dataset.localityMarkCount='0';
    loading.textContent='集落人口を読み込めませんでした。州別の人口と密度は下の表で確認できます。';
    root.dataset.localityPopulationReady='error';text('[data-locality-mode]','集落人口の読み込みに失敗');
   }

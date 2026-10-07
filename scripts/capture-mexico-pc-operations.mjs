@@ -431,6 +431,9 @@ async function population({page, evidence}) {
       const originalFrame=await page.locator('[data-locality-map]').getAttribute('viewBox');await page.reload();
       await page.waitForFunction(()=>document.querySelector('[data-mexico-field="population"]')?.dataset.localityPopulationReady==='true');
       assert.equal(await page.locator('[data-locality-map]').getAttribute('viewBox'),originalFrame);
+      await page.locator('[data-locality-canvas]').focus();await page.keyboard.press('ArrowRight');
+      await page.waitForFunction(()=>document.querySelector('[data-mexico-field="population"]')?.dataset.localityPopulationReady==='true');
+      assert.notEqual(await page.locator('[data-locality-map]').getAttribute('viewBox'),originalFrame,'Keyboard pan must change the saved camera');
       await click(page,'[data-locality-action="fit"]');
       await page.waitForFunction(()=>document.querySelector('[data-mexico-field="population"]')?.dataset.localityVisiblePopulation==='126014024');
       assert.equal(query(page,'localityFrame'),null);assert.equal(query(page,'state'),null);
