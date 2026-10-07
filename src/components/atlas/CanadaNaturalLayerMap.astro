@@ -10,15 +10,15 @@ import { canadaNaturalPath, canadaNaturalIsLine, canadaNaturalContourLabels, can
 import '../../styles/atlas-canada-natural-layer.css';
 
 interface Props {
-  layer: CanadaNaturalLayer; geometry: CanadaNaturalCollection | string; groups: CanadaNaturalGroup[]; geometryUrl: string;
-  stations?: CanadaNaturalStation[]; source?: CanadaNaturalSource; hidden?: boolean; selected?: string | null; only?: boolean; city?: string | null;
+  raster?:any; layer: CanadaNaturalLayer; geometry: CanadaNaturalCollection | string; groups: CanadaNaturalGroup[]; geometryUrl: string;
+  stations?: CanadaNaturalStation[]; source?: CanadaNaturalSource; hidden?: boolean; selected?: string | null; only?: boolean; city?: string | null; lazyGeometry?: boolean;
 }
-const { layer, geometry: input, groups: sourceGroups, geometryUrl, stations = [], source = {}, hidden = true, selected = null, only = false, city = null } = Astro.props;
+const { raster, layer, geometry: input, groups: sourceGroups, geometryUrl, stations = [], source = {}, hidden = true, selected = null, only = false, city = null, lazyGeometry = false } = Astro.props;
 const groups=sourceGroups.map(group=>layer==='elevation'?{...group,color:canadaElevationColors[group.id]??group.color}:group);
 const geometry = prepareCanadaNaturalLayer(typeof input === 'string' ? JSON.parse(input) : input, groups);
 const context = { type: 'FeatureCollection', features: geography.features.filter(feature => ['CAN', 'USA', 'GRL'].includes(feature.properties.code)) };
 const contourLabels = layer === 'elevation' ? canadaNaturalContourLabels(geometry) : [];
-const config = { layer, groups, geometryUrl, stations: stations.map(({id,name,coordinates}) => ({id,name,coordinates})), contourLabels, climateLabels:layer==='climate'?climateLabels:[], context, workerUrl };
+const config = { raster, layer, groups, geometryUrl, lazyGeometry, stations: stations.map(({id,name,coordinates}) => ({id,name,coordinates})), contourLabels, climateLabels:layer==='climate'?climateLabels:[], context, workerUrl };
 const labelBoxes: number[][] = [];
 const staticContourLabels = [...contourLabels].sort((a,b) => Number(b.id===selected)-Number(a.id===selected) || Number(a.elevationM===500)-Number(b.elevationM===500)).filter(label => {
   if (only && selected && label.id !== selected) return false;
@@ -27,20 +27,21 @@ const staticContourLabels = [...contourLabels].sort((a,b) => Number(b.id===selec
   labelBoxes.push(box); return true;
 });
 const fullFrame = `0 0 ${canadaLandformSize.width} ${canadaLandformSize.height}`;
-const heading = layer === 'climate' ? 'カナダの気候区分' : 'カナダの標高と等高線';
+const heading = layer === 'climate' ? 'カナダの気候区分' : 'カナダの標高';
 const titleId = `canada-natural-${layer}-title`, descId = `canada-natural-${layer}-desc`;
-const paths = groups.map(group => ({ group, fill: geometry.features.filter(feature => feature.properties.id === group.id && !canadaNaturalIsLine(feature.geometry)).map(feature => canadaNaturalPath(feature.geometry)).join(''), line: geometry.features.filter(feature => feature.properties.id === group.id && canadaNaturalIsLine(feature.geometry)).map(feature => canadaNaturalPath(feature.geometry)).join('') }));
+const paths = groups.map(group => ({ group, fill: lazyGeometry?'':geometry.features.filter(feature => feature.properties.id === group.id && !canadaNaturalIsLine(feature.geometry)).map(feature => canadaNaturalPath(feature.geometry)).join(''), line: geometry.features.filter(feature => feature.properties.id === group.id && canadaNaturalIsLine(feature.geometry)).map(feature => canadaNaturalPath(feature.geometry)).join('') }));
+const elevationBands=!!raster||layer==='elevation'&&geometry.features.some(feature=>!canadaNaturalIsLine(feature.geometry));
 ---
-<section class="canada-natural-layer" data-canada-natural-layer={layer} hidden={hidden} aria-label={heading}>
+<section class="canada-natural-layer" data-canada-natural-layer={layer} data-canada-elevation-bands={elevationBands||undefined} hidden={hidden} aria-label={heading}>
   <h2 class="visually-hidden">{heading}</h2>
   <div class="atlas-map-frame canada-natural-frame" data-canada-natural-stage>
     <svg class="canada-natural-fallback" data-canada-natural-fallback viewBox={fullFrame} width={canadaLandformSize.width} height={canadaLandformSize.height} role="group" tabindex="0" aria-labelledby={`${titleId} ${descId}`}>
       <title id={titleId}>{heading}</title>
-      <desc id={descId}>{layer === 'climate' ? '気候区分を原データの境界で色分けします。丸印は別の気候平年値観測地点です。' : '標高区分と原データから作成した等高線を表示します。線の凡例を選ぶとその標高を確認できます。'} 地図か凡例で区分を選択し、拡大ボタンと矢印キーで移動できます。</desc>
+      <desc id={descId}>{layer === 'climate' ? '気候区分を原データの境界で色分けします。丸印は別の気候平年値観測地点です。' : elevationBands?'元標高格子から作った500 m間隔の色面。高い場所ほど濃い緑で表示し、0 m未満は灰色で分けます。':'標高区分と原データから作成した等高線を表示します。線の凡例を選ぶとその標高を確認できます。'} 地図か凡例で区分を選択し、拡大ボタンと矢印キーで移動できます。</desc>
       <rect x="-2000" y="-2000" width="5000" height="5000" fill="#e4eff0" />
       <defs data-canada-natural-definitions>{paths.filter(item => item.line).map(({group,line}) => <path id={`canada-natural-${layer}-line-${group.id}`} data-canada-natural-geometry={group.id} d={line} vector-effect="non-scaling-stroke" />)}</defs>
       <g aria-hidden="true">{context.features.map(feature => <path class="canada-natural-context" d={canadaNaturalPath(feature.geometry as CanadaNaturalGeometry)} fill-rule="evenodd" vector-effect="non-scaling-stroke" />)}</g>
-      <g>{paths.map(({group, fill, line}) => <g class:list={['canada-natural-shape', {'is-selected': selected === group.id}]} data-canada-natural-shape={group.id} role="button" tabindex="0" aria-label={`${group.name}を選ぶ`} aria-pressed={String(selected === group.id)} hidden={only && !!selected && selected !== group.id}>
+      <g>{paths.map(({group, fill, line}) => <g class:list={['canada-natural-shape', {'is-selected': selected === group.id}]} data-canada-natural-shape={group.id} role="button" tabindex={lazyGeometry?"-1":"0"} aria-label={`${group.name}を選ぶ`} aria-pressed={String(selected === group.id)} hidden={only && !!selected && selected !== group.id}>
         <title>{group.name}：{group.description}</title>
         {fill && <path class="canada-natural-area" d={fill} fill={group.color} fill-rule="evenodd" vector-effect="non-scaling-stroke" />}
         {line && <><use class="canada-natural-line" href={`#canada-natural-${layer}-line-${group.id}`} fill="none" stroke={group.color} stroke-width={layer==='elevation'?canadaNaturalContourWidth(Number(group.id)):1.2} stroke-opacity={layer==='elevation'?canadaNaturalContourOpacity(Number(group.id)):1} vector-effect="non-scaling-stroke" /><use class="canada-natural-line-hit" href={`#canada-natural-${layer}-line-${group.id}`} fill="none" stroke="transparent" stroke-width="9" pointer-events="stroke" vector-effect="non-scaling-stroke" /></>}
@@ -50,6 +51,7 @@ const paths = groups.map(group => ({ group, fill: geometry.features.filter(featu
     </svg>
     <div class="canada-natural-contour-labels" data-canada-natural-contour-labels aria-hidden="true">{contourLabels.map(label => <span class:list={['canada-natural-contour-label', {'is-selected':selected===label.id}]} data-canada-natural-contour-label={label.key} data-canada-natural-contour-id={label.id} hidden>{label.elevationM} m</span>)}</div>
     <div class="canada-natural-live" data-canada-natural-live aria-label={`${heading}の操作できる地図`} hidden></div>
+    {lazyGeometry&&<div class="canada-natural-loading" data-canada-natural-loading role="status"><span data-canada-natural-loading-text>500 m色面を読み込み中…</span><button type="button" data-canada-natural-retry hidden>標高図を再読み込み</button></div>}
     {layer==='climate'&&<div class="canada-climate-codes">{climateLabels.map((label,i)=><button type="button" data-canada-climate-code={i} data-canada-natural-legend={label.id} aria-label={`${label.id}の気候区分を読む`} hidden>{label.id}</button>)}</div>}
     <div class="canada-natural-stations" data-canada-natural-stations>{stations.map(station => <button type="button" class:list={['canada-natural-station', {'is-selected':city===station.id}]} data-canada-natural-city={station.id} aria-label={`${station.name}の気候平年値を読む`} aria-pressed={String(city===station.id)} hidden><i aria-hidden="true"></i><span>{station.name}</span></button>)}</div>
     <div class="canada-natural-tools" aria-label="地図の操作">
@@ -64,9 +66,9 @@ const paths = groups.map(group => ({ group, fill: geometry.features.filter(featu
   <details class:list={{"canada-climate-full-key":layer==='climate'}} open={layer!=='climate'}><summary hidden={layer!=='climate'}>気候区分の色と説明</summary>
   <div class="canada-natural-key" aria-label={`${heading}の凡例`}>{groups.map(group => <button type="button" data-canada-natural-legend={group.id} aria-pressed={String(selected===group.id)} aria-label={`${group.id} ${group.name}を選ぶ`} title={`${group.name}：${group.description}`}><i style={`background:${group.color}`} aria-hidden="true"></i><span>{layer==='climate'?`${group.id} ${group.name}`:group.name}</span></button>)}</div>
   </details>
-  <div class="canada-natural-options"><label class="canada-natural-only"><input type="checkbox" data-canada-natural-only checked={only && !!selected} disabled={!selected} /> 選んだ区分だけ表示</label><p class="canada-natural-status" data-canada-natural-status role="status" aria-live="polite">地図か凡例で区分を選べます。</p></div>
-  <p class="canada-natural-caption">{layer === 'climate' ? '色は気候区分、丸は気候平年値の観測地点です。地域の分類と一点の観測を分けて読みます。' : '線の色は標高（m）です。凡例の線を選ぶと、その高さの等高線を強調します。'} {source.catalogueUrl && <a href={source.catalogueUrl}>出典・利用条件</a>} <a href={geometryUrl}>地図データ</a></p>
+  <div class="canada-natural-options"><label class="canada-natural-only"><input type="checkbox" data-canada-natural-only checked={only && !!selected} disabled={!selected} /> 選んだ区分だけ表示</label><p class="canada-natural-status" data-canada-natural-status role="status" aria-live="polite">{lazyGeometry?'標高を開くと500 m色面を読み込みます。':'地図か凡例で区分を選べます。'}</p></div>
+  <p class="canada-natural-caption">{layer === 'climate' ? '色は気候区分、丸は気候平年値の観測地点です。地域の分類と一点の観測を分けて読みます。' : elevationBands?'標高（m）。500 m間隔で高いほど濃く表示。各区分は下限以上・上限未満です。選択時は輪郭を強調します。':'線の色は標高（m）です。凡例の線を選ぶと、その高さの等高線を強調します。'} {source.catalogueUrl && <a href={source.catalogueUrl}>出典・利用条件</a>} <a href={geometryUrl}>地図データ</a></p>
   {(source.title || source.attribution) && <details class="canada-natural-sources"><summary>{heading}の出典</summary><p>{source.publisher} {source.title}。{source.brief}</p><p>{source.licenceUrl && <a href={source.licenceUrl}>{source.licence || '利用条件'}</a>} {source.attribution}</p></details>}
-  <noscript><p class="canada-natural-caption">境界・等高線と凡例をこの地図で確認できます。区分の選択・移動には JavaScript が必要です。</p></noscript>
+  <noscript><p class="canada-natural-caption">{lazyGeometry?'500 m色面の読込にはJavaScriptが必要です。区分・出典は凡例と地図データのリンクから確認できます。':'境界・等高線と凡例をこの地図で確認できます。区分の選択・移動には JavaScript が必要です。'}</p></noscript>
   <script type="application/json" data-canada-natural-config set:html={JSON.stringify(config).replace(/</g, '\\u003c')} />
 </section>
