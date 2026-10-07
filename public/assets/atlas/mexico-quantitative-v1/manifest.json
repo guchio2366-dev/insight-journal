@@ -84,11 +84,11 @@
   "layers": {
     "precipitation": {
       "image": {
-        "file": "gpcc/mexico-gpcc-1991-2020-annual.png",
+        "file": "gpcc/mexico-gpcc-1991-2020-isohyets-250mm.svg",
+        "bytes": 100165,
+        "sha256": "46c8044df141a858ac113f51b9cdf6a087d865d01be688546ed3d555b14c99a9",
         "width": 900,
-        "height": 580,
-        "bytes": 25166,
-        "sha256": "07a6f56eeb0e5cdea5197140d89f5fe64d934847e43ff0cfcce383737ef10117"
+        "height": 580
       },
       "legend": {
         "domain": [
@@ -137,22 +137,108 @@
             "color": "#08306b"
           }
         ],
-        "unit": "mm/年"
+        "unit": "mm/年",
+        "bands": [
+          {
+            "min": 0,
+            "max": 250,
+            "color": "#ebf3fb"
+          },
+          {
+            "min": 250,
+            "max": 500,
+            "color": "#d2e3f3"
+          },
+          {
+            "min": 500,
+            "max": 750,
+            "color": "#bcd7ec"
+          },
+          {
+            "min": 750,
+            "max": 1000,
+            "color": "#a8cee5"
+          },
+          {
+            "min": 1000,
+            "max": 1250,
+            "color": "#91c3de"
+          },
+          {
+            "min": 1250,
+            "max": 1500,
+            "color": "#78b5d9"
+          },
+          {
+            "min": 1500,
+            "max": 1750,
+            "color": "#61a7d2"
+          },
+          {
+            "min": 1750,
+            "max": 2000,
+            "color": "#4c99ca"
+          },
+          {
+            "min": 2000,
+            "max": 2250,
+            "color": "#3e8ec4"
+          },
+          {
+            "min": 2250,
+            "max": 2500,
+            "color": "#3686c0"
+          },
+          {
+            "min": 2500,
+            "max": 2750,
+            "color": "#2d7dbb"
+          },
+          {
+            "min": 2750,
+            "max": 3000,
+            "color": "#2575b7"
+          },
+          {
+            "min": 3000,
+            "max": 3250,
+            "color": "#1e69ac"
+          },
+          {
+            "min": 3250,
+            "max": 3500,
+            "color": "#185999"
+          },
+          {
+            "min": 3500,
+            "max": 3750,
+            "color": "#114887"
+          },
+          {
+            "min": 3750,
+            "max": 4000,
+            "color": "#0b3874"
+          }
+        ],
+        "interval": 250
       },
       "titleJa": "年降水量",
       "periodLabelJa": "1991–2020年平年値",
       "sourceLabelJa": "GPCC / DWD・2025版・0.25°格子",
-      "descriptionJa": "月降水量の平年値12か月分を合計し、年降水量が多いほど濃い青で示します。",
+      "descriptionJa": "GPCCの1991–2020年平年値12か月分を年合計し、0.25°格子から250mm間隔の等雨量線と線間の段階帯を導出。雨の多い帯ほど濃い青です。",
       "limitationsJa": [
-        "海域・国外・原データの欠損は透明です。欠損は0 mmではありません。",
+        "等雨量線はGPCC格子の補間値から導出したもので、観測された線やINEGI2006年の原線ではありません。",
+        "0.25°の解析格子を使い、250mm間隔は雨量の区分幅です。より細かい地点観測の精度を意味しません。",
+        "海域・国外・原欠測と補間できない沿岸などの区画は透明です。欠損は0 mmではありません。",
         "雨温図と基準期間は共通ですが、格子の補間値と観測所の値は異なります。",
         "現在の雨、水不足、河川流量や利用可能な水量を表す図ではありません。"
       ],
       "sourceUrl": "https://opendata.dwd.de/climate_environment/GPCC/html/gpcc_precipitation_analysis_climatology_v2025_doi_download.html",
-      "provenanceFile": "gpcc/manifest.json",
+      "provenanceFile": "gpcc/mexico-gpcc-1991-2020-isohyets-250mm.json",
       "sourceFile": "gpcc/precipitation-source.json",
       "gridFile": "gpcc/mexico-gpcc-1991-2020-annual.json",
-      "missingLabelJa": "データなし（0 mmではありません）"
+      "missingLabelJa": "データなし（0 mmではありません）",
+      "rendering": "derived-250mm-isohyets-and-bands"
     },
     "elevation": {
       "image": {
@@ -311,7 +397,17 @@
       "file": "etopo/etopo-user-guide.source.json",
       "bytes": 809,
       "sha256": "fa1ca35ce9761194fc50163f7c59c4eb1019d000caa4877fe0855c2222d486ba"
+    },
+    {
+      "file": "gpcc/mexico-gpcc-1991-2020-isohyets-250mm.svg",
+      "bytes": 100165,
+      "sha256": "46c8044df141a858ac113f51b9cdf6a087d865d01be688546ed3d555b14c99a9"
+    },
+    {
+      "file": "gpcc/mexico-gpcc-1991-2020-isohyets-250mm.json",
+      "bytes": 13927,
+      "sha256": "f64c79bf380cdeebac6eb51602f53095d61c3dd425c9d79e2deff39ec83f717d"
     }
   ],
-  "provenanceNoteJa": "画像・数値格子は無変更です。GPCCの公式MD5だけは既存の公開台帳形式に合わせgpcc/manifest.jsonのpublisherMd5へ移し、入力台帳の元SHA256も保持しています。その他の出典情報は保持しています。記載された全球原本・ETOPO数値窓・取得範囲バイナリはオフラインの生成入力で、公開ファイルへのリンクではありません。"
+  "provenanceNoteJa": "元の数値格子・メタデータ・PNG/WebPを保持。降水量の表示だけを同じGPCC1991–2020年の格子から導出した250mm等雨量線と段階帯へ変更。生成・補間・欠測処理は専用台帳に記録。"
 }

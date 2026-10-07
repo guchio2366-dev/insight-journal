@@ -132,7 +132,7 @@ test('the public bundle preserves every pinned prepared file and excludes large 
     return result;
   }
   assert.deepEqual((await walk()).sort(), [...listed].sort());
-  assert.ok(total < 300000, 'Only compact distribution assets are shipped');
+  assert.ok(total < 500000, 'Compact distribution assets plus the derived vector contours are shipped');
   assert.equal([...listed].some(name => /\.(nc|gz|tif|npz|bin)$/.test(name)), false);
   assert.equal(listed.has('etopo/mexico-etopo-window.f32'), false);
   assert.equal(sha(rainBytes), '07a6f56eeb0e5cdea5197140d89f5fe64d934847e43ff0cfcce383737ef10117');
@@ -222,6 +222,78 @@ test('every painted precipitation pixel agrees with the actual native value and 
     checked++;
   }
   assert.equal(checked, 130061);
+});
+
+test('the displayed vector has 250mm isohyets and contiguous darker blue bands from the same unchanged GPCC period', async () => {
+  const layer = manifest.layers.precipitation;
+  const svg = (await bytes(layer.image.file)).toString();
+  const ledger = await json(layer.provenanceFile);
+  assert.match(layer.image.file, /isohyets-250mm\.svg$/);
+  assert.equal(ledger.period, grid.period); assert.equal(ledger.nativeResolutionDegrees, .25);
+  assert.equal(ledger.annualGrid.sha256, sha(rawGrid));
+  assert.equal(ledger.checks.missingLandNativeCells, 9);
+  assert.equal(ledger.intervalMmPerYear, 250);
+  assert.deepEqual(ledger.boundariesMmPerYear, Array.from({length: 17}, (_, i) => i * 250));
+  assert.deepEqual(layer.legend.bands, ledger.bands);
+  assert.equal(layer.legend.interval, 250);
+  let previous = Infinity;
+  for (const band of ledger.bands) {
+    assert.equal(band.max - band.min, 250);
+    const rgb = [1, 3, 5].map(i => parseInt(band.color.slice(i, i + 2), 16));
+    assert.deepEqual(rgb, colorAt((band.min + band.max) / 2, layer.legend));
+    assert.ok(luminance(rgb) < previous); previous = luminance(rgb);
+  }
+  const levels = [...svg.matchAll(/data-isohyet-mm="(\d+)"/g)].map(match => Number(match[1]));
+  assert.deepEqual(levels, ledger.lines.filter(line => line.parts > 0).map(line => line.valueMmPerYear));
+  assert.deepEqual(ledger.lines.map(line => line.valueMmPerYear), Array.from({length: 15}, (_, i) => (i + 1) * 250));
+  assert.match(ledger.derivation, /corner|linear|Linear/);
+  assert.match(ledger.missingData, /four complete.*corner_mask=False/);
+  assert.match(svg, /mask="url\(#land-and-native-validity\)"/);
+  assert.doesNotMatch(svg, /<script|<foreignObject|href="https?:|<rect/);
+});
+
+test('actual SVG isohyet coordinates independently recover their stated rainfall from native donor values', async () => {
+  const svg = (await bytes(manifest.layers.precipitation.image.file)).toString();
+  const frame = manifest.displayFrame, inverse = inverseLambert(frame.projection);
+  let checked = 0, greatestError = 0;
+  for (const line of svg.matchAll(/<path data-isohyet-mm="(\d+)" d="([^"]+)"/g)) {
+    const level = Number(line[1]);
+    for (const point of line[2].matchAll(/[ML](-?[\d.]+),(-?[\d.]+)/g)) {
+      const nativeX = frame.boundsNative[0] + (Number(point[1]) - frame.leftPixels) / frame.scalePixelsPerNativeMetre;
+      const nativeY = frame.boundsNative[3] - (Number(point[2]) - frame.topPixels) / frame.scalePixelsPerNativeMetre;
+      const [lon, lat] = inverse(nativeX, nativeY);
+      const col = (lon - grid.origin[0]) / .25 - .5, row = (grid.origin[1] - lat) / .25 - .5;
+      let a, b, fraction;
+      if (Math.abs(row - Math.round(row)) < Math.abs(col - Math.round(col))) {
+        const r = Math.round(row), c = Math.max(0, Math.min(Math.floor(col), grid.width - 2));
+        if (r < 0 || r >= grid.height) continue;
+        a = r * grid.width + c; b = a + 1; fraction = col - c;
+      } else {
+        const c = Math.round(col), r = Math.max(0, Math.min(Math.floor(row), grid.height - 2));
+        if (c < 0 || c >= grid.width) continue;
+        a = r * grid.width + c; b = a + grid.width; fraction = row - r;
+      }
+      const first = rawGrid.readFloatLE(a * 4), second = rawGrid.readFloatLE(b * 4);
+      if (first === grid.noData || second === grid.noData) continue;
+      assert.ok(fraction >= -.001 && fraction <= 1.001);
+      const error = Math.abs(first + fraction * (second - first) - level);
+      assert.ok(error < 1, `SVG ${level}mm line differs from retained grid by ${error}mm`);
+      greatestError = Math.max(greatestError, error); checked++;
+    }
+  }
+  assert.ok(checked > 700, `Checked ${checked} interior native-donor vertices`);
+  assert.ok(greatestError < 1);
+});
+
+test('the contour SVG preserves every original coast and missing-pixel mask without inventing zeros', async () => {
+  const svg = (await bytes(manifest.layers.precipitation.image.file)).toString();
+  const embedded = svg.match(/href="data:image\/png;base64,([A-Za-z0-9+/=]+)"/);
+  assert.ok(embedded, 'Self-contained original validity mask');
+  const mask = decodeRgbaPng(Buffer.from(embedded[1], 'base64'));
+  assert.equal(mask.width, rain.width); assert.equal(mask.height, rain.height);
+  for (let pixel = 0; pixel < rain.width * rain.height; pixel++) {
+    assert.equal(mask.rgba[pixel * 4 + 3], rain.rgba[pixel * 4 + 3]);
+  }
 });
 
 test('both numeric legends use the exact source stops and never become lighter at a higher value', async () => {

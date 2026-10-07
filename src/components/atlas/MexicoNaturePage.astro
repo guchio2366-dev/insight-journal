@@ -67,7 +67,8 @@ const config = {routes, defaultViewBox: mapViewBox, states: statePaths.map(item 
   </div>
  </section>
  <div slot="map" class="mexico-nature-reading-key" data-mexico-nature-reading-key>
-  <div class="mexico-nature-map-title"><h2 data-mexico-nature-map-title>気候の分布</h2><span data-mexico-nature-map-edition>INEGI・2008版</span></div>
+  <div data-mexico-precipitation-legend-host hidden></div>
+  <div class="mexico-nature-map-title" data-mexico-nature-map-caption><h2 data-mexico-nature-map-title>気候の分布</h2><span data-mexico-nature-map-edition>INEGI・2008版</span></div>
   <ul class="mexico-legend mexico-nature-climate-legend" data-mexico-nature-legend="climate" aria-label="改訂ケッペンの原記号と色の凡例">{climateKeys.map(key => <li><i style={swatch(key.colors)} aria-hidden="true"/>{key.label}</li>)}<li><i class="mexico-climate-city-key" aria-hidden="true"/>都市の観測点</li></ul>
   <ul class="mexico-legend mexico-nature-relief-legend" data-mexico-nature-legend="relief" aria-label="地形の輪郭と陰影の凡例" hidden><li><i class="mexico-nature-relief-shade-key" aria-hidden="true"/>標高から描いた地形陰影（ETOPO 2022）</li><li><i class="mexico-nature-outline-key" aria-hidden="true"/>選んだ公式地形地域の輪郭</li><li><i class="is-missing" aria-hidden="true"/>原資料の分類欠測</li></ul>
   <ul class="mexico-legend mexico-hydrology-legend" data-mexico-hydrology-legend aria-label="水資源の凡例" hidden />

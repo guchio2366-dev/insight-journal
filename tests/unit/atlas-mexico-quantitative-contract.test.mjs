@@ -32,3 +32,16 @@ test('Out-of-order color stops, out-of-domain ticks and truncated scales are rej
     m=>m.layers.elevation.legend.colorStops.pop(),
   ]) {const invalid=manifest();mutate(invalid);assert.throws(()=>validateMexicoSurfaceManifest(invalid));}
 });
+
+test('250mm band legends reject gaps, mismatched domain endpoints and a different interval',()=>{
+  const valid=manifest();
+  valid.layers.precipitation.legend.bands=Array.from({length:16},(_,i)=>({min:i*250,max:(i+1)*250,color:'#2171b5'}));
+  valid.layers.precipitation.legend.interval=250;
+  valid.layers.precipitation.image.file='gpcc/derived.svg';
+  assert.doesNotThrow(()=>validateMexicoSurfaceManifest(valid));
+  for(const mutate of [
+    m=>m.layers.precipitation.legend.bands[2].min=750,
+    m=>m.layers.precipitation.legend.bands.pop(),
+    m=>m.layers.precipitation.legend.interval=500,
+  ]) {const invalid=structuredClone(valid);mutate(invalid);assert.throws(()=>validateMexicoSurfaceManifest(invalid));}
+});

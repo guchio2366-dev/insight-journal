@@ -32,6 +32,7 @@ function setup(search = '?category=precipitation&view=relief&waterBase=relief') 
     <label><select data-mexico-nature-item-select><option>既存の地域選択</option></select></label>
     <div data-mexico-hydrology-controls><select data-mexico-hydrology-item></select><select data-mexico-hydrology-base><option>plain</option><option>climate</option><option>relief</option></select></div>
     <ul data-mexico-nature-legend="climate"><li>気候原分類</li></ul><ul data-mexico-nature-legend="relief"><li>自然地理地域</li></ul>
+    <div data-mexico-precipitation-legend-host hidden></div><div data-mexico-nature-map-caption></div>
     <aside class="mexico-reading"><ul data-mexico-hydrology-legend></ul>
       <div data-mexico-hydrology-base-key><div data-mexico-hydrology-base-key-host></div></div>
       <div data-mexico-water-background-key><div data-mexico-water-background-key-host></div></div>
@@ -107,7 +108,7 @@ test('the source ledger follows numeric and basin categories immediately, includ
   } finally {await f.window.happyDOM.close();}
 });
 
-test('prepared precipitation waits for its exact PNG and shows annual mm, baseline, numeric ticks and provenance', async () => {
+test('prepared precipitation waits for its exact contour SVG and shows annual mm, baseline, 250mm bands and provenance', async () => {
   const f = setup();
   try {
     f.controller.render(); const image = await f.waitImage(precipitationImage);
@@ -117,12 +118,20 @@ test('prepared precipitation waits for its exact PNG and shows annual mm, baseli
     assert.equal(f.q('[data-mexico-nature-map-title]').textContent, '年降水量');
     assert.equal(f.q('[data-mexico-nature-period]').textContent, '1991–2020年平年値');
     assert.match(f.q('[data-mexico-quantitative-legend]').textContent, /mm\/年.*多いほど濃い青/);
-    assert.equal(f.q('[data-mexico-quantitative-legend]').parentElement, f.q('[data-mexico-water-reading-summary]'), 'The numerical scale precedes the detailed reading rather than falling below the map');
+    assert.equal(f.q('[data-mexico-quantitative-legend]').parentElement, f.q('[data-mexico-precipitation-legend-host]'));
+    assert.equal(f.q('[data-mexico-precipitation-legend-host]').hidden,false);
+    assert.equal(f.q('[data-mexico-nature-map-caption]').hidden,true);
+    assert.equal(f.q('[data-mexico-nature-period]').hidden,true);
+    assert.match(f.q('.mexico-quantitative-map-source').textContent,/GPCC.*DWD.*0.25°.*1991–2020/);
+    assert.equal(f.q('[data-mexico-water-reading-summary]').querySelector('[data-mexico-quantitative-legend]'),null);
+    assert.match(f.q('[data-mexico-precipitation-reason]').textContent, /湿った風.*風下/);
     const ticks = [...f.root.querySelectorAll('.mexico-quantitative-ticks span')];
     assert.deepEqual(ticks.map(node => node.textContent), ['0', '500', '1,000', '2,000', '3,000', '4,000']);
     assert.deepEqual(ticks.map(node => node.style.left), ['0%', '12.5%', '25%', '50%', '75%', '100%']);
     assert.deepEqual(ticks.map(node => node.dataset.row), ['upper', 'upper', 'upper', 'upper', 'upper', 'upper']);
-    assert.match(f.q('.mexico-quantitative-ramp').style.background, /linear-gradient.*#f7fbff.*#08306b/);
+    assert.match(f.q('.mexico-quantitative-ramp').style.background, /linear-gradient/);
+    assert.ok(f.q('.mexico-quantitative-ramp').style.background.includes(quantitative.layers.precipitation.legend.bands[0].color));
+    assert.match(f.q('[data-mexico-quantitative-legend]').textContent, /線・色の帯は250mm間隔/);
     assert.match(f.q('[data-mexico-hydrology-limitations]').textContent, /欠損は0 mmではありません/);
     assert.match(f.q('[data-mexico-hydrology-source]').textContent, /格子の解析値.*個別観測所.*一致しません/);
     assert.equal(f.q('[data-mexico-hydrology-source] a:last-child').getAttribute('href'), '/quant/' + quantitative.layers.precipitation.provenanceFile);

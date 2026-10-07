@@ -99,6 +99,13 @@
 .mexico-workspace.mexico-nature .mexico-quantitative-legend[hidden],.mexico-workspace.mexico-nature .mexico-basin-system-picker[hidden]{display:none}
 .mexico-quantitative-legend-label{font-weight:700;margin:0 0 5px}
 .mexico-quantitative-ramp{height:14px;border:1px solid #829599;border-radius:2px}
+.mexico-quantitative-interval{margin:3px 0 0;font-size:12px;line-height:1.45}
+.mexico-nature-map-title[hidden]{display:none}
+.mexico-workspace.mexico-nature .mexico-quantitative-legend.is-map-legend{margin:0;padding:0}
+.mexico-quantitative-map-header{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:2px 12px;margin-bottom:5px}
+.mexico-quantitative-map-header .mexico-quantitative-legend-label{margin:0}
+.mexico-quantitative-map-source{margin:0;font-size:12px;color:#586c63}
+.mexico-precipitation-reading-reason{margin:0 0 6px;font-size:13px;line-height:1.5}
 .mexico-quantitative-ticks{position:relative;height:28px;margin-top:0;font-size:12px;font-variant-numeric:tabular-nums}
 .mexico-quantitative-ticks span{position:absolute;top:7px;transform:translateX(-50%);white-space:nowrap}
 .mexico-quantitative-ticks span::before{content:"";position:absolute;left:50%;bottom:100%;width:1px;height:7px;background:#63797b}
