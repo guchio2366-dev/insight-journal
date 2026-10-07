@@ -13,6 +13,7 @@ import {fileURLToPath} from 'node:url';
 import {chromium} from 'playwright';
 import astroConfig from '../astro.config.mjs';
 import {verifyAsiaIndustryCountry} from './verify-asia-industry-country.mjs';
+import {verifySouthCentralAsia,southCentralProfiles,southCentralImageCount} from './verify-south-central-asia-pc.mjs';
 
 const run=promisify(execFile);
 const repo=fileURLToPath(new URL('../',import.meta.url));
@@ -274,10 +275,11 @@ async function checkOperations(browser,host,profile,source){
   await page.locator('[data-country-select]').selectOption('JPN');assert.equal(new URL(page.url()).searchParams.get('place'),'JPN');
   await page.locator('[data-reset]').click();assert.equal(await page.locator('[data-country-select]').inputValue(),'');assert.equal(new URL(page.url()).searchParams.get('place'),null);
   await open(page,host,'/atlas/asia/south-central-asia/industry/?topic=manufacturing');
-  for(const [focus,country] of [['south-asia','IND'],['central-asia','KAZ']]){
+  for(const [focus,country] of [['south-asia','IND'],['central-asia',null]]){
    assert.deepEqual(await page.locator('[data-focus-link]').evaluateAll(links=>links.map(link=>link.dataset.focusLink)),['south-central-asia','south-asia','central-asia']);
    await page.locator(`[data-focus-link="${focus}"]`).focus();await page.keyboard.press('Enter');await page.waitForURL(`**/atlas/asia/${focus}/industry/**`);
-   await page.locator('[data-country-select]').selectOption(country);assert.equal(new URL(page.url()).searchParams.get('place'),country);
+   if(country){await page.locator('[data-country-select]').selectOption(country);assert.equal(new URL(page.url()).searchParams.get('place'),country);}
+   else {assert.deepEqual(await page.locator('[data-country-select] option').evaluateAll(options=>options.filter(o=>o.value&&!o.disabled&&!o.hidden).map(o=>o.value)),[]);await page.locator('[data-place-story]').selectOption('uzbekistan-market');assert.equal(new URL(page.url()).searchParams.get('story'),'uzbekistan-market');}
    await page.locator('[data-reset]').click();assert.equal(new URL(page.url()).pathname,`${basePath}/atlas/asia/${focus}/industry/`);assert.equal(await page.locator('[data-country-select]').inputValue(),'');assert.equal(await page.locator(`[data-focus-link="${focus}"]`).getAttribute('aria-current'),'page');
   }
   return {countrySelection:true,reset:true,keyboardFocusLinks:['south-asia','central-asia'],focusRetained:true};
@@ -465,10 +467,12 @@ async function main(){
   for(const profile of profiles)await checkContextOperations(browser,host,profile);
   for(const profile of profiles)await checkRequestedCorrections(browser,host,profile);
   for(const profile of profiles)await checkEastContourBands(browser,host,profile);
-  metadata.expectedImageCount=82;
-  assert.equal(results.captures.length,82);assert(results.captures.every(row=>row.passed),'All 82 viewport captures must pass');
+  for(const profile of southCentralProfiles)await operation(browser,host,profile,'south-central-regional-acceptance',page=>verifySouthCentralAsia(page,{profile,source:host.origin+basePath,capture:contextPicture}));
+  metadata.regionalProfiles=southCentralProfiles;
+  metadata.expectedImageCount=82+southCentralImageCount;
+  assert.equal(results.captures.length,metadata.expectedImageCount);assert(results.captures.every(row=>row.passed),'All viewport captures must pass');
   assert.equal(results.comparisons.length,8);assert(results.comparisons.every(row=>row.passed),'All 8 geometry comparisons must pass');
-  assert.equal(results.operations.length,38);assert(results.operations.every(row=>row.passed),'All 38 PC operation groups must pass');
+  assert.equal(results.operations.length,38+southCentralProfiles.length);assert(results.operations.every(row=>row.passed),'All PC operation groups must pass');
   assert.deepEqual(results.externalCommunicationAttempts,[]);assert.deepEqual(results.blockedWebSockets,[]);
   metadata.status='passed';
  }catch(error){metadata.status='failed';metadata.failure=failure(error);process.exitCode=1;}

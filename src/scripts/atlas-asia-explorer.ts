@@ -45,7 +45,7 @@ function start(root:HTMLElement) {
     physicalBase?:string;physical?:any;physicalFocus?:AsiaPhysicalFocus[];
     populationBase?:string;population?:AsiaPopulationRegion;
     farmingBase?:string;farming?:AsiaFarmingRegion;
-    industryBase?:string;industry?:IndustryRegion;
+    industryBase?:string;industry?:IndustryRegion;industryCountryCodes?:string[];
     waterBase?:string;water?:WaterRegion;seasonalBase?:string;
     socialBase?:string;social?:SocialRegion;
     presentation?:AsiaPresentation;presentationBase?:string;
@@ -194,7 +194,8 @@ function start(root:HTMLElement) {
     else {const b=config.countries.find(c=>c.code===state.place)?.bounds??config.contentExtent??config.bounds;map.fitBounds([[b[0],b[1]],[b[2],b[3]]],{padding:12,maxZoom:9,duration:0});}
     requestAnimationFrame(()=>{suppressCamera=false;});
   }
-  function selectCountry(code:string|null) {if(code===state.place)return;if(state.field==='industry'&&config.industry&&isEastIndustryRegion(config.industry)&&code&&!eastIndustryCountries.some(c=>c.code===code))return;const topic=config.industry?.topics.find(t=>t.id===state.topic),g=config.social&&socialGroup(config.social,state);navigate({...state,place:code,city:null,camera:null,back:null,point:null,detail:trade?.active()?state.detail:null,topic:g?.country&&g.country!==code?'national-age-old':state.field==='industry'&&topic?.country&&topic.country!==code?'manufacturing':state.topic});}
+  function industryCountryCodes(){return config.industryCountryCodes??(config.industry&&isEastIndustryRegion(config.industry)?eastIndustryCountries.map(c=>c.code):null);}
+  function selectCountry(code:string|null) {if(code===state.place)return;const scope=state.field==='industry'?industryCountryCodes():null;if(scope&&code&&!scope.includes(code))return;const topic=config.industry?.topics.find(t=>t.id===state.topic),g=config.social&&socialGroup(config.social,state);navigate({...state,place:code,city:null,camera:null,back:null,point:null,detail:trade?.active()?state.detail:null,topic:g?.country&&g.country!==code?'national-age-old':state.field==='industry'&&topic?.country&&topic.country!==code?'manufacturing':state.topic});}
   function selectCity(id:string) {const city=config.cities.find(c=>c.id===id);if(!city)return;navigate({...state,field:'natural',topic:null,detail:null,place:city.countryCode,city:id,camera:camera(),back:null,point:null},false);}
   function selectNaturalTopic(topic:string) {navigate({...state,field:'natural',topic:topic==='climate'?null:topic,detail:null,city:topic==='climate'?state.city:null,point:state.point??config.cities.find(c=>c.id===state.city)?.coordinates??null,camera:camera()},false);}
   function clearDetail() {navigate({...state,detail:null,point:null,city:null,camera:camera()},false);}
@@ -209,11 +210,11 @@ function start(root:HTMLElement) {
     const urbanDetail=state.field==='population'&&state.topic==='urban'?state.detail:null;
     if(urbanDetail&&urbanDetail!==shownUrbanDetail){const details=root.querySelector<HTMLDetailsElement>('[data-reading-details]');if(details)details.open=true;shownUrbanDetail=urbanDetail;}
     countrySelect.value=state.place??'';
-    const eastIndustryScope=state.field==='industry'&&config.industry&&isEastIndustryRegion(config.industry);
-    for(const option of countrySelect.options){const allowed=!eastIndustryScope||!option.value||eastIndustryCountries.some(c=>c.code===option.value);option.hidden=!allowed;option.disabled=!allowed;}
+    const industryScope=state.field==='industry'?industryCountryCodes():null;
+    for(const option of countrySelect.options){const allowed=!industryScope||!option.value||industryScope.includes(option.value);option.hidden=!allowed;option.disabled=!allowed;}
     citySelect.value=state.city??'';
     for(const option of citySelect.options){const allowed=!state.place||!option.value||option.dataset.country===state.place;option.hidden=!allowed;option.disabled=!allowed;}
-    $$<HTMLButtonElement>('[data-country-button]').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.countryButton===state.place));b.hidden=!!eastIndustryScope&&!eastIndustryCountries.some(c=>c.code===b.dataset.countryButton);});
+    $$<HTMLButtonElement>('[data-country-button]').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.countryButton===state.place));b.hidden=!!industryScope&&!industryScope.includes(b.dataset.countryButton!);});
     $$('[data-map-country]').forEach(p=>p.classList.toggle('is-selected',(p as SVGPathElement).dataset.mapCountry===state.place));
     syncFieldLinks();
     const explorer=$<HTMLElement>('[data-asia-explorer]');
@@ -487,7 +488,10 @@ function start(root:HTMLElement) {
     for(const id of ['asia-urban-boundary','asia-urban-selected'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility',population&&(urban||!!selectedUrban)?'visible':'none');
     const populationGeographyVisibility=()=>{
       if(!map)return;const detailed=(population||social?.active()||!!farm||state.field==='industry'||hydrology?.active()||seasonal?.active())&&!!map.getSource('asia-population-geography');
-      for(const id of ['asia-land','asia-context','asia-context-border','asia-country-hit','asia-country-border','asia-country-selected'])map.setLayoutProperty(id,'visibility',detailed?'none':'visible');
+      // The detailed file clips neighbouring countries to its own coverage.
+      // Keep the existing world land/context under it in South/Central Asia:
+      // a wider full-region fit must not turn omitted context land into ocean.
+      for(const id of ['asia-land','asia-context','asia-context-border','asia-country-hit','asia-country-border','asia-country-selected'])map.setLayoutProperty(id,'visibility',detailed&&!(config.regionId==='south-central-asia'&&['asia-land','asia-context','asia-context-border'].includes(id))?'none':'visible');
       for(const id of ['asia-population-land','asia-population-context','asia-population-country-hit','asia-population-border','asia-population-country-selected'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility',detailed?'visible':'none');
       if(map.getLayer('asia-population-country-selected'))map.setFilter('asia-population-country-selected',['==',['get','code'],state.city||hydrology?.active()?'':state.place??'']);
     };
@@ -501,7 +505,7 @@ function start(root:HTMLElement) {
           map.addLayer({id:'asia-population-land',type:'fill',source:'asia-population-geography',paint:{'fill-color':'#e1e4db'}},'asia-climate');
           map.addLayer({id:'asia-population-context',type:'fill',source:'asia-population-geography',filter:['==',['get','target'],false],paint:{'fill-color':'#d7dad5'}},'asia-country-border');
           map.addLayer({id:'asia-population-country-hit',type:'fill',source:'asia-population-geography',filter:['==',['get','target'],true],paint:{'fill-opacity':0}},'asia-country-border');
-          map.addLayer({id:'asia-population-border',type:'line',source:'asia-population-geography',paint:{'line-color':'#5b7077','line-width':.65}},'asia-country-border');
+          map.addLayer({id:'asia-population-border',type:'line',source:'asia-population-geography',...(config.regionId==='south-central-asia'?{filter:['==',['get','target'],true]}:{}),paint:{'line-color':'#5b7077','line-width':.65}},'asia-country-border');
           map.addLayer({id:'asia-population-country-selected',type:'line',source:'asia-population-geography',filter:['==',['get','code'],state.place??''],paint:{'line-color':'#304954','line-width':1.3}},'asia-country-border');
         }
         populationGeographyVisibility();
@@ -576,7 +580,7 @@ function start(root:HTMLElement) {
       const nearby={...lands,features:lands.features.filter((f:any)=>!targets.has(f.properties.code))};
       if(map){createPresentation();markers.splice(0).forEach(m=>m.marker.remove());pointMarker?.remove();pointMarker=null;pointLabel=null;map.remove();map=null;}
       mapReady=false;lib.setWorkerUrl(workerUrl);lib.setWorkerCount(1);
-      map=new lib.Map({container:$('[data-map-surface]'),attributionControl:false,renderWorldCopies:false,dragRotate:false,touchPitch:false,maxPitch:0,trackResize:false,maxZoom:9,minZoom:1,pixelRatio:Math.min(devicePixelRatio,2),cooperativeGestures:true,locale:{'CooperativeGesturesHandler.MobileHelpText':'地図は2本指で動かせます'},bounds:[[config.bounds[0],config.bounds[1]],[config.bounds[2],config.bounds[3]]],fitBoundsOptions:{padding:20},maxBounds:[[Math.max(-180,navigationBounds[0]-15),Math.max(-80,navigationBounds[1]-15)],[Math.min(180,navigationBounds[2]+15),Math.min(80,navigationBounds[3]+15)]],style:{version:8,sources:{'asia-land':{type:'geojson',data:lands},'asia-countries':{type:'geojson',data:selected},'asia-context':{type:'geojson',data:nearby},'asia-climate':{type:'image',url:asset(config.climateBase,region.image),coordinates:region.imageCoordinates}},layers:[{id:'asia-ocean',type:'background',paint:{'background-color':'#e6eef0'}},{id:'asia-land',type:'fill',source:'asia-land',paint:{'fill-color':'#e1e4db'}},{id:'asia-climate',type:'raster',source:'asia-climate',paint:{'raster-opacity':1,'raster-resampling':'nearest','raster-fade-duration':0}},{id:'asia-context',type:'fill',source:'asia-context',paint:{'fill-color':'#d7dad5'}},{id:'asia-context-border',type:'line',source:'asia-context',paint:{'line-color':'#f6f6ee','line-width':.65}},{id:'asia-country-hit',type:'fill',source:'asia-countries',paint:{'fill-opacity':0}},{id:'asia-country-border',type:'line',source:'asia-countries',paint:{'line-color':'#354c56','line-opacity':.6,'line-width':.8}},{id:'asia-country-selected',type:'line',source:'asia-countries',filter:['==',['get','code'],''],paint:{'line-color':'#28363d','line-width':2.6}}]}});
+      map=new lib.Map({container:$('[data-map-surface]'),attributionControl:false,renderWorldCopies:false,dragRotate:false,touchPitch:false,maxPitch:0,trackResize:false,maxZoom:9,minZoom:1,pixelRatio:Math.min(devicePixelRatio,2),cooperativeGestures:true,locale:{'CooperativeGesturesHandler.MobileHelpText':'地図は2本指で動かせます'},bounds:[[config.bounds[0],config.bounds[1]],[config.bounds[2],config.bounds[3]]],fitBoundsOptions:{padding:20},maxBounds:config.regionId==='south-central-asia'?undefined:[[Math.max(-180,navigationBounds[0]-15),Math.max(-80,navigationBounds[1]-15)],[Math.min(180,navigationBounds[2]+15),Math.min(80,navigationBounds[3]+15)]],style:{version:8,sources:{'asia-land':{type:'geojson',data:lands},'asia-countries':{type:'geojson',data:selected},'asia-context':{type:'geojson',data:nearby},'asia-climate':{type:'image',url:asset(config.climateBase,region.image),coordinates:region.imageCoordinates}},layers:[{id:'asia-ocean',type:'background',paint:{'background-color':'#e6eef0'}},{id:'asia-land',type:'fill',source:'asia-land',paint:{'fill-color':'#e1e4db'}},{id:'asia-climate',type:'raster',source:'asia-climate',paint:{'raster-opacity':1,'raster-resampling':'nearest','raster-fade-duration':0}},{id:'asia-context',type:'fill',source:'asia-context',paint:{'fill-color':'#d7dad5'}},{id:'asia-context-border',type:'line',source:'asia-context',paint:{'line-color':'#f6f6ee','line-width':.65}},{id:'asia-country-hit',type:'fill',source:'asia-countries',paint:{'fill-opacity':0}},{id:'asia-country-border',type:'line',source:'asia-countries',paint:{'line-color':'#354c56','line-opacity':.6,'line-width':.8}},{id:'asia-country-selected',type:'line',source:'asia-countries',filter:['==',['get','code'],''],paint:{'line-color':'#28363d','line-width':2.6}}]}});
       map.scrollZoom.disable();map.touchZoomRotate.disableRotation();
       map.once('load',()=>{
         if(currentAttempt!==attempt)return;
@@ -604,6 +608,7 @@ function start(root:HTMLElement) {
         }
         if(state.field==='industry'){
           if(industry?.hit(event.point))return;
+          if(config.regionId==='south-central-asia')return;
           const contextHit=map.queryRenderedFeatures(event.point,{layers:[map.getSource('asia-population-geography')?'asia-population-context':'asia-context']})[0];
           if(contextHit?.properties.code&&!context.countries.includes(contextHit.properties.code))return;
           const hit=map.queryRenderedFeatures(event.point,{layers:[map.getSource('asia-population-geography')?'asia-population-country-hit':'asia-country-hit']})[0];
