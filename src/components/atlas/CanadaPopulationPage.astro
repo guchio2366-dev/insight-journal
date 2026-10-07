@@ -41,6 +41,7 @@ import '../../styles/atlas-canada-country-parity.css';
    <h1 class="visually-hidden">カナダの都市圏人口・人口集団・宗教</h1>
    <NorthAmericaCountryFieldNavigation country="canada" field="population" />
    <nav class="country-topic-tabs" aria-label="人口の分野"><button type="button" data-population-topic="distribution" aria-pressed="true">人口分布</button><button type="button" data-population-topic="ethnicity" aria-pressed="false">人種・民族</button><button type="button" data-population-topic="religion" aria-pressed="false">宗教</button></nav>
+   <p class="population-coverage-brief" data-population-coverage-brief>2021年・293統計地域と41都市圏。地域未選択、南部を初期表示。</p>
 
    <div class="canada-workspace atlas-primary-grid population-workspace">
     <section class="canada-map-column atlas-map-column" aria-label="都市圏の地図と選択">
@@ -53,19 +54,20 @@ import '../../styles/atlas-canada-country-parity.css';
       <g data-population-regions></g>
       {geo.map(g=><g data-population-map-cma={g.id} role="button" tabindex="0" aria-label={`${g.name}都市圏を選ぶ`} aria-pressed="false"><title>{g.name}都市圏、2021年 {fmt(g.population.value)}人{g.population.symbol?' '+g.population.symbol:''}</title><path data-population-boundary style={`fill:${densityColor(g.density)}`} d={g.rings.map(r=>line(r)).join('')} fill-rule="evenodd" /><circle class="population-anchor" cx={canadaLegacyPoint(g.point)[0]} cy={canadaLegacyPoint(g.point)[1]} r="1.8"/><circle data-population-symbol cx={canadaLegacyPoint(g.point)[0]} cy={canadaLegacyPoint(g.point)[1]} r={g.population.value===null?0:Math.sqrt(g.population.value/max)*22} style="display:none"/><text data-population-label x={canadaLegacyPoint(g.point)[0]+7} y={canadaLegacyPoint(g.point)[1]-7} style={['535','462','933'].includes(g.id)?undefined:'display:none'}>{g.name.match(/（(.+)）/)?.[1]??g.name}</text></g>)}
 
-     </svg><div class="population-map-tools"><button data-population-reset>全体</button><button data-population-scale="in" aria-label="地図を拡大">＋</button><button data-population-scale="out" aria-label="地図を縮小">−</button></div></div>
+     </svg><div class="population-map-tools"><button data-population-reset>南部</button><button data-population-whole>全域</button><button data-population-scale="in" aria-label="地図を拡大">＋</button><button data-population-scale="out" aria-label="地図を縮小">−</button></div></div>
+     <div class="population-category-key" data-population-category-key></div>
      <div class="population-legend" data-population-population-legend hidden><svg viewBox="0 0 280 56" role="img" aria-label="人口総数の円、100万人と500万人。2016年と2021年で同じ尺度"><circle cx="25" cy="25" r={Math.sqrt(1000000/max)*22}/><circle cx="160" cy="25" r={Math.sqrt(5000000/max)*22}/><text x="45" y="31">100万人</text><text x="190" y="31">500万人</text></svg><span>円の面積が人口総数。両年は共通尺度。輪郭の広さは人口の多さではありません。</span></div>
      <ul class="population-density-legend" data-population-density-legend hidden aria-label="2021年人口密度の凡例">{['50未満','50–150未満','150–300未満','300–600未満','600以上'].map((label,i)=><li><i style={`background:${populationDensityColors[i]}`} aria-hidden="true"/>{label}</li>)}<li>人/km²・都市圏全体</li></ul>
      <div data-demographic-share-legend hidden><p class="canada-caption" data-demographic-origin-legend hidden></p><ul class="population-density-legend" data-demographic-share-classes aria-label="選んだ集団の割合の色と区間"></ul><p class="canada-caption">%・各都市圏の私的世帯人口が分母。集団ごとに色の目盛が変わります。灰色は欠測・秘匿。</p></div>
      <div class="population-legend" data-demographic-count-legend hidden><svg viewBox="0 0 280 56" role="img" aria-label="選んだ集団の人数、10万人と100万人。集団間は共通尺度"><circle cx="25" cy="25" data-demographic-legend-count="100000"/><circle cx="160" cy="25" data-demographic-legend-count="1000000"/><text x="45" y="31">10万人</text><text x="190" y="31">100万人</text></svg><span>円の面積が集団の人数。両分野・全集団で共通尺度。公表0と欠測を区別します。</span></div>
           <p class="canada-caption population-coverage" data-population-coverage>2021年の41都市圏を収録。都市圏外の細かな地域データは本サイトでは未収録です。空白は人口ゼロではありません。</p>
      <p class="canada-caption" data-population-filter-key hidden></p>
-     <div class="population-category-key" data-population-category-key></div>
+
 
      <p class="canada-caption" data-population-map-status aria-live="polite"></p>
      <details><summary>都市から解説を選ぶ</summary><div class="population-place-buttons">{data.cmas.map(r=><button data-population-locate={r.id}>{r.name.match(/（(.+)）/)?.[1]??r.name}</button>)}</div></details>
     </section>
-    <aside class="canada-reading atlas-national population-reading" aria-label="人口比較と集中の理由"><p class="population-coverage-brief" data-population-coverage-brief></p>
+    <aside class="canada-reading atlas-national population-reading" aria-label="人口比較と集中の理由">
    <div data-population-distribution-reading>
    <header class="canada-national-header"><p class="atlas-eyebrow">Canada · Population</p><h2>都市圏に集まる、カナダの人口</h2><p class="canada-lead" data-population-distribution-lead>人口は南部の都市圏に集中し、交通・仕事・住まいのつながりが、その集中と広がりを支えている。</p></header>
 
@@ -78,7 +80,7 @@ import '../../styles/atlas-canada-country-parity.css';
      <details class="population-background"><summary>場所 → 交通と仕事 → 人口集中</summary><p>地図のTorontoとMontréalは五大湖・セントローレンス側、Vancouverは太平洋側にあります。オンタリオ・ケベックの交通回廊や西岸の港は、産業と市場をつなぐ場所です。人の集中は気候だけでなく、仕事への移動や住宅にも関わります。</p><div class="population-place-buttons"><button data-population-locate="535">Torontoを拡大</button><button data-population-locate="462">Montréalを拡大</button><button data-population-locate="933">Vancouverを拡大</button></div></details>
      <details class="population-more"><summary>都市の広がり・移動と、自然や農畜林業との関係</summary><p>2016–2019年に移住してきた人の9割超はCMAに居住しました。2016→2021年には中心部と郊外の両方で人口が増え、住宅供給・価格や通勤時間も居住場所に関わっています。人口が増えると交通・住宅・サービスの整備が必要になり、都市の拡大は農地などの利用へも影響します。これは当時の分析で、2026年現在の人口・移民動向を示す数値ではありません。</p><p><a href={sources.urban}>Statistics Canadaの2016→2021年分析</a> / <a href={sources.transport}>Transport Canada 2024年交通報告</a></p><p><button data-population-locate="505">Ottawa–Gatineauを拡大</button>は州をまたぐ1都市圏です。首都Ottawaの自治体だけの人口とは区別します。</p><p><a href={natureTargets.climate} data-population-nature-link={natureTargets.climate}>首都OttawaとVancouver：2地点の気温と雨の季節を比較</a>。観測所の気候と、都市圏全体の人口を同じ対象としません。<a href={natureTargets.landform} data-population-nature-link={natureTargets.landform}>地形：南部の低地・西部の山地の位置を確認</a>。</p><p><button data-population-locate="602">Winnipegの都市圏</button>と<button data-population-locate="705">Reginaの都市圏</button>を図で確かめ、<a href={withBase(`${path}agriculture/wheat/`)}>小麦の産地・輸送・需要</a>、<a href={withBase(`${path}agriculture/`)}>カノーラの生産と加工</a>へ。<a href={withBase(`${path}agriculture/beef/`)}>肉牛の草地・飼料・管理</a>、<a href={withBase(`${path}agriculture/forestry/`)}>森林と木材加工</a>も、自然条件と人の活動を分けて読みます。</p></details>
    </div>
-   <CanadaDemographicReading /><section data-population-composition hidden><h3 data-population-composition-title></h3><p data-population-composition-note></p><table><thead><tr><th>区分</th><th>割合</th><th>人数</th></tr></thead><tbody data-population-composition-rows></tbody></table></section>
+   <CanadaDemographicReading /><details data-population-composition hidden><summary data-population-composition-title></summary><p data-population-composition-note></p><table><thead><tr><th>区分</th><th>割合</th><th>人数</th></tr></thead><tbody data-population-composition-rows></tbody></table></details>
     </aside>
    </div>
    </div>

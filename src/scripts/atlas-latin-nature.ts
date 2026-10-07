@@ -1,5 +1,5 @@
 import {latinCountries} from '../lib/atlas-latin-america-geometry';
-import {latinNatureCases,latinNatureLayers,renderLatinNatureMap,renderLatinNatureLegend,renderLatinNatureNormals,natureCaseForPlace,natureCountryName,natureScopeForPlace,natureComparisonReading,escapeNatureHtml} from '../lib/atlas-latin-nature';
+import {latinNatureCases,latinNatureLayers,renderLatinNatureMap,renderLatinNatureLegend,renderLatinNatureNormals,natureCaseForPlace,natureCityCase,natureCountryName,natureScopeForPlace,natureComparisonReading,escapeNatureHtml} from '../lib/atlas-latin-nature';
 import {renderLatinAgricultureMap,renderLatinAgricultureLegend,agricultureLayerTitle} from '../lib/atlas-latin-agriculture';
 import {renderLatinPopulationMap,renderLatinPopulationLegend} from '../lib/atlas-latin-america-population';
 import {renderLatinIndustryMap,renderLatinIndustryLegend} from '../lib/atlas-latin-industry';
@@ -104,6 +104,9 @@ if(workspace){
   q('[data-nature-comparison-explanation]').textContent=comparisonReading?.explanation??selected.compare;
   q('[data-nature-case-sources]').innerHTML=(comparisonReading?.sources??selected.sources).map(s=>`<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a></li>`).join('');
   q('[data-nature-normals]').innerHTML=renderLatinNatureNormals(selected.city);
+  q<HTMLSelectElement>('[data-nature-city]').value=selected.city;
+  q<HTMLSelectElement>('[data-nature-city]').disabled=comparison;
+  q<HTMLOptionElement>('[data-nature-city-empty]').hidden=!!selected.city;
   workspace.querySelectorAll<HTMLButtonElement>('[data-nature-case]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.natureCase===selected.id)));
   const agriculture=q<HTMLAnchorElement>('[data-nature-agriculture]'),population=q<HTMLAnchorElement>('[data-nature-population]'),industry=q<HTMLAnchorElement>('[data-nature-industry]');
   state.case=currentCaseId;
@@ -123,6 +126,7 @@ if(workspace){
  q<HTMLSelectElement>('[data-nature-place]').addEventListener('change',event=>{const place=(event.target as HTMLSelectElement).value;state={...state,place,scope:natureScopeForPlace(place,state.scope),source:undefined};currentCaseId=natureCaseForPlace(state.place).id;render(true);});
  q<HTMLSelectElement>('[data-nature-scope]').addEventListener('change',event=>{const scope=(event.target as HTMLSelectElement).value as LatinLearningState['scope'];let place=state.place;if(place!=='all'&&(scope==='central'||scope==='south')&&natureScopeForPlace(place,scope)!==scope)place=scope==='south'?'BRA':'CRI';state={...state,place,scope:scope==='country'&&place==='all'?'all':scope,source:undefined};currentCaseId=natureCaseForPlace(place).id;render(true);});
  q<HTMLInputElement>('[data-nature-only]').addEventListener('change',event=>{state={...state,only:(event.target as HTMLInputElement).checked};render(true);});
+ q<HTMLSelectElement>('[data-nature-city]').addEventListener('change',event=>{const city=natureCityCase((event.target as HTMLSelectElement).value);if(!city)return;state={...state,place:city.place,scope:natureScopeForPlace(city.place,state.scope),source:undefined};currentCaseId=city.id;render(true);});
  workspace.addEventListener('click',event=>{
   const target=(event.target as Element).closest<HTMLElement>('[data-nature-case],[data-nature-country]');if(!target)return;
   if(target.dataset.natureCase){const selected=latinNatureCases.find(c=>c.id===target.dataset.natureCase)!;state={...state,place:selected.place,scope:selected.place==='all'?'all':state.scope==='all'?'all':selected.scope as LatinLearningState['scope'],only:false,source:undefined};currentCaseId=selected.id;render(true);}

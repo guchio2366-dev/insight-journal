@@ -5,6 +5,7 @@ import {createHash} from 'node:crypto';
 import {inflateSync} from 'node:zlib';
 import {registerHooks,stripTypeScriptTypes} from 'node:module';
 import {fileURLToPath} from 'node:url';
+import {Window} from 'happy-dom';
 
 registerHooks({
  resolve(specifier,context,nextResolve){if(specifier.startsWith('.')&&context.parentURL&&!/\.[a-z]+$/i.test(specifier)){const resolved=new URL(specifier+'.ts',context.parentURL);if(existsSync(fileURLToPath(resolved)))return {url:resolved.href,shortCircuit:true};}return nextResolve(specifier,context);},
@@ -82,4 +83,37 @@ test('Comparison introductions match the original crop or population quantity an
  const coffee=nature.natureComparisonReading({field:'agriculture',layer:'coff',place:'HND'});assert.match(coffee.title,/ホンジュラス.*コーヒー/);assert.match(coffee.takeaway,/高地/);assert.doesNotMatch(coffee.takeaway,/コスタリカ/);
  const density=nature.natureComparisonReading({field:'population',layer:'density',place:'BRA'});assert.match(density.title,/ブラジル.*人口密度/);assert.match(density.takeaway,/水供給.*交通/);assert.doesNotMatch(density.takeaway,/大豆/);
  const population=nature.natureComparisonReading({field:'population',layer:'population',place:'GTM'});assert.match(population.title,/グアテマラ.*人口規模/);assert.match(population.takeaway,/人口規模/);
+});
+
+test('All 16 retained stations expose their own values, geographic reading and comparison return',async()=>{
+ const w=new Window();
+ try{for(const city of data.cities){
+  const selected=nature.natureCityCase(city.id);assert.equal(selected.place,city.countryCode);assert.equal(selected.city,city.id);
+  assert.equal(nature.natureCaseForPlace(city.countryCode,selected.id).city,city.id);
+  assert.equal(nature.natureScopeForPlace(city.countryCode,'all'),'all');
+  w.document.body.innerHTML=nature.renderLatinNatureNormals(city.id);
+  const section=w.document.querySelector('[data-nature-city-id]');assert.equal(section.dataset.natureCityId,city.id);
+  assert.equal(section.firstElementChild.tagName.toLowerCase(),'svg');assert.equal(section.children[1].textContent,city.name);
+  assert.equal(section.children[2].getAttribute('data-nature-city-climate'),'');assert.equal(section.children[3].getAttribute('data-nature-city-reason'),'');
+  assert.ok(section.children[2].textContent.length>25);assert.ok(section.children[3].textContent.length>30);
+  const rows=[...section.querySelectorAll('tbody tr')];assert.equal(rows.length,12);
+  rows.forEach((row,i)=>assert.deepEqual([...row.querySelectorAll('td')].map(cell=>cell.textContent),[city.temperatureC[i],city.precipitationMm[i]].map(v=>v===null?'欠測':String(v))));
+  assert.equal(section.querySelector('details a').href,city.sourceUrl);assert.equal(selected.sources[0].url,city.sourceUrl);
+  assert.ok(selected.sources.every(source=>new URL(source.url).protocol==='https:'));
+  const original={field:'nature',layer:'climate',place:city.countryCode,scope:'all',only:false,fallback:false,case:selected.id};
+  const compared=codec.latinComparisonState(original,'agriculture','all');
+  const round=codec.readLatinLearningState(codec.writeLatinLearningState(compared),'agriculture',['all'],'all');
+  const returned=new URL(codec.latinSourceReturnUrl('/atlas/latin-america/',round),'https://example.test');
+  assert.equal(returned.searchParams.get('case'),selected.id);assert.equal(returned.searchParams.get('place'),city.countryCode);assert.equal(returned.searchParams.get('scope'),'all');
+ }}finally{await w.happyDOM.close();}
+});
+
+test('New station countries use actual local observations and old cases remain compatible',()=>{
+ for(const [country,city] of [['JAM','kingston'],['BLZ','belize'],['PER','lima'],['COL','bogota'],['CHL','santiago'],['ECU','quito-izobamba'],['URY','montevideo']])assert.equal(nature.natureCaseForPlace(country).city,city);
+ assert.equal(nature.natureCaseForPlace('CHL','station-lima').city,'santiago');
+ assert.equal(nature.natureCaseForPlace('CHL','station-punta-arenas').city,'punta-arenas');
+ for(const previous of nature.latinNatureCases)assert.equal(nature.natureCaseForPlace(previous.place,previous.id).id,previous.id);
+ assert.equal(nature.natureCaseForPlace('all').id,'overview');assert.equal(nature.natureCityCase('unknown'),undefined);
+ const missing=nature.renderLatinNatureNormals('unknown');assert.match(missing,/未収録/);assert.doesNotMatch(missing,/<svg|polyline|<rect/);
+ const page=readFileSync('src/components/atlas/LatinNaturePage.astro','utf8');assert.match(page,/data-nature-city/);assert.match(page,/latinNatureData.cities.map/);
 });
