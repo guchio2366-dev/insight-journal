@@ -1,9 +1,18 @@
 import assert from 'node:assert/strict';
 
 // Use the existing PC review's guarded page, normal browser sandbox and images.
-export async function verifySoutheastAsiaRegion(page,{source,capture,background}){
+export async function verifySoutheastAsiaRegion(page,{source,capture:takePicture,background}){
  const base=source.replace(/\/$/,''),checks=[];
  const record=name=>checks.push({name,passed:true});
+ // State and reading text update before asynchronous map sources paint. Keep
+ // the shared nonblank-map check and capture the completed view after reloads
+ // and case changes, rather than its loading frame.
+ const capture=async id=>{
+  await page.waitForLoadState('networkidle');
+  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-map-fallback]')?.hidden);
+  await page.evaluate(async()=>{await document.fonts.ready;window.scrollTo(0,0);await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
+  await takePicture(id);
+ };
  const open=async(path)=>{await page.goto(base+'/atlas/asia/southeast-asia/'+path,{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-map-fallback]')?.hidden);};
  const ready=async()=>page.waitForFunction(()=>document.querySelector('[data-industry-status]')?.textContent===''&&document.querySelector('[data-industry-content] table'));
  const country=page.locator('[data-country-select]');
