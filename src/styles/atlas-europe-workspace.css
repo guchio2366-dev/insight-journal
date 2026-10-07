@@ -411,7 +411,7 @@
 .eu-workspace-root .eu-map-label[data-eu-map-kind="city"][aria-pressed=true] { font-weight:700; text-decoration:underline; text-underline-offset:3px; }
 .eu-workspace-root .eu-map-label[data-eu-map-kind="city"]:is(:hover,:focus-visible) { background:#fffdf2; outline:2px solid #426b6b; outline-offset:2px; }
 .eu-workspace-root .eu-map-label[data-eu-map-kind="city"].is-point-only { width:16px; height:16px; min-height:16px; padding:0; color:transparent; text-shadow:none; font-size:0; }
-.eu-workspace-root .eu-map-label[data-eu-map-kind="city"].is-point-only:is(:hover,:focus-visible) { width:auto; height:auto; padding:1px 3px; color:#203e49; font-size:12px; }
+.eu-workspace-root .eu-map-label[data-eu-map-kind="city"].is-point-only:is(:hover,:focus) { width:auto; height:auto; padding:1px 3px; color:#203e49; font-size:12px; }
 .eu-workspace-root .eu-crop-label.is-muted { opacity:.22; }
 .eu-workspace-root .eu-crop-label.is-muted:is(:hover,:focus-visible) { opacity:1; }
 @media(min-width:960px) {

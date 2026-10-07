@@ -225,6 +225,7 @@ async function agricultureClimateRepairs(page,profile){
   await page.locator('[data-eu-city-choice]').selectOption('london');
   await page.evaluate(()=>scrollTo(0,0));
   assert.equal(await page.locator('#eu-city-heading').textContent(),'ロンドンの雨温図');
+  await snapshot(page,profile,'climate-selected');
   const evidence=await page.locator('[data-city-reading="london"]').evaluate(node=>{
     const reason=node.querySelector('[data-eu-climate-reason]'),farm=node.querySelector('.eu-climate-farming>p'),reader=node.closest('[data-eu-climate-reader]');
     return {reason:reason.textContent,farmBottom:farm.getBoundingClientRect().bottom,reasonFont:Number.parseFloat(getComputedStyle(reason).fontSize),farmFont:Number.parseFloat(getComputedStyle(farm).fontSize),overflow:getComputedStyle(reader).overflowY,viewportHeight:innerHeight,duplicates:node.querySelectorAll('.eu-city-selected-note').length};
@@ -234,7 +235,7 @@ async function agricultureClimateRepairs(page,profile){
   assert.equal(evidence.overflow,'visible');assert.equal(evidence.duplicates,0);
   assert.ok(evidence.farmBottom<=evidence.viewportHeight-8,'The full farming paragraph is visible in the initial PC viewport: '+JSON.stringify(evidence));
   manifest.checks.push({profile:profile.name,agricultureClimateEvidence:evidence});
-  await snapshot(page,profile,'climate-selected');networkClean();
+  networkClean();
 }
 
 async function uniqueElevation(page) {

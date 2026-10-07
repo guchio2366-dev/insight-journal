@@ -32,6 +32,8 @@ MIN_AREA_KM2 = 750
 # Irrigated rice and citrus occupy smaller, discontinuous concentrations.
 # Preserve those source-supported regions without widening their value cutoff.
 PRODUCT_RULES = {'rice': (0.50, 500), 'citrus': (0.50, 500)}
+MAX_CONCENTRATIONS = 5
+COMPARISON_ANCHORS = {'maize': [(8.708333333333336, 45.29166666666667)]}
 SIMPLIFY_DEGREES = .07
 RADIUS_KM = 6371.0088
 inputs = []
@@ -184,7 +186,24 @@ def main():
             mask = contains_xy(part, longitude_grid[top:bottom, left:right], latitude_grid[top:bottom, left:right])
             score = float(np.sum(weights[top:bottom, left:right][mask]))
             label_regions.append((score, part))
-        label_region = max(label_regions, key=lambda item: item[0])[1]
+        label_regions.sort(key=lambda item: (-item[0], item[1].bounds))
+        supported_components = len(label_regions)
+        regional_examples = [(score, part) for score, part in label_regions
+                             if any(contains_xy(part, longitude, latitude)
+                                    for longitude, latitude in COMPARISON_ANCHORS.get(id, []))]
+        # Broadly distributed products need a readable overview, not every
+        # isolated high-value patch. Rank only within one product and retain its
+        # five greatest source-supported concentrations. Rice/citrus keep their
+        # small, distinct irrigated/orchard regions, including the Tagus case.
+        if id not in PRODUCT_RULES:
+            label_regions = label_regions[:MAX_CONCENTRATIONS]
+            for example in regional_examples:
+                if not any(example[1].equals(part) for _, part in label_regions):
+                    label_regions.append(example)
+        kept = [part for _, part in label_regions]
+        geometry = make_valid(union_all(kept))
+        geometry_json = mapping(geometry)
+        label_region = label_regions[0][1]
         in_region = contains_xy(label_region, longitude_grid, latitude_grid)
         local_threshold = max(threshold, float(np.quantile(grid[positive & in_region], .90)))
         rows, cols = np.where(high & in_region & (grid >= local_threshold))
@@ -200,6 +219,8 @@ def main():
                       minimumComponentAreaKm2=minimum_area, positiveCells=int(np.sum(positive)),
                       aboveThresholdCells=int(np.sum(high)), candidateCells=int(np.sum(candidate)),
                       originalComponents=len(source_parts), retainedComponents=len(kept),
+                      supportedComponentsBeforeSelection=supported_components,
+                      retainedComparisonAnchors=COMPARISON_ANCHORS.get(id, []),
                       approximateDisplayAreaKm2=round(area_km2(geometry), 2),
                       labelSource=dict(row=row, column=col, value=float(grid[row, col])),
                       countryCodes=[feature['properties']['code'] for feature in targets
@@ -219,6 +240,8 @@ def main():
                         minimumComponentAreaKm2=MIN_AREA_KM2,
                         productRules={id: dict(minimumNeighborFraction=rule[0], minimumComponentAreaKm2=rule[1]) for id, rule in PRODUCT_RULES.items()},
                         productRuleReason='米と柑橘類は小さく分かれた高値の産地を残すため、近隣比率と最小面積のみ緩和する。元格子の第90百分位は全品目で維持する。',
+                        maximumConcentrationsPerProduct=MAX_CONCENTRATIONS,
+                        concentrationSelection='品目内で集中域に含まれる元格子の数量を比較し、大きい5地域を表示する。既存の比較説明で使うポー平原のトウモロコシ集中域も残す。米・柑橘類は小さく分かれた産地を全て保持する。品目間の生産額順位や国別統計ではない。',
                         minimumAreaMethod='半径6371.0088kmの球面円筒等積投影による概算面積',
                         simplifyToleranceDegrees=SIMPLIFY_DEGREES, coordinatePrecisionDecimalPlaces=6,
                         precisionTopology='6桁への丸め後にmake_validとunion_allで接触辺を修復。緩衝帯や離れた面を結ぶ線を加えない。',
@@ -233,7 +256,7 @@ def main():
         licenses=dict(crops='IFPRI Dataverse CC BY 4.0', livestock='FAO GLW4 CC BY 4.0',
                       boundaries='Natural Earth public domain'),
         limitations=[
-            '主要な集中帯を読むための概略図であり、耕地・牧場の実際の境界や全分布を示さない。',
+            '主要な集中帯を読むための概略図。原則品目ごとの大きい5集中域と既存のポー平原の比較例で、米・柑橘類は小さく分かれた産地も残す。耕地・牧場の実際の境界や全分布を示さない。',
             '輪郭の簡略化により元格子との境界にずれが生じる。格子の数量・0・欠測は変更せず、品目別の詳細図で確認する。',
             '色の面積や輪郭の大小から、品目間の生産量・収穫面積・飼養頭羽数を比較できない。',
             '原則750km²未満（米・柑橘類は500km²未満）の孤立域は省略するが、離れた主産地は一つに結ばず別々の面として残す。',
