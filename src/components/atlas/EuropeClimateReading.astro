@@ -54,7 +54,7 @@ const dryMonths = city.months.filter(month => month.precipitation !== null && mo
       <p class="eu-climate-reason" data-eu-climate-reason data-eu-climate-geography={city.id}>地理的な背景：{geography?.body ?? 'この地点の説明は未収録です。'}</p>
     </section>
     <section class="eu-climate-farming" data-eu-climate-farming={city.id} aria-labelledby={`city-farming-${city.id}`}>
-      <h4 id={`city-farming-${city.id}`}>{farming?.heading ?? '特徴的な農畜産物'}</h4>
+      <h4 id={`city-farming-${city.id}`}>{farming?.heading.replace(/^農畜産物の例：/, '') ?? '特徴的な農畜産物'}</h4>
       <p>{farming?.body ?? 'この地点の特徴的な農畜産物の説明は未収録です。'}</p>
     </section>
   </div>
