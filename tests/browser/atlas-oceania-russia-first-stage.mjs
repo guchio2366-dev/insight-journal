@@ -56,6 +56,16 @@ try{
  };
  const open=async(region,field,search='')=>{await page.goto(`${base}atlas/${region}/${field}/${search}`,{waitUntil:'networkidle'});await ready(region);};
  const shot=async name=>{if(focusDeltaOnly&&!/^oceania-agriculture-1536-(overview|crop-focus)$/.test(name))return;if(representativeOnly&&!/^(?:oceania|russia)-agriculture-(1536|1024)-(overview|crop-focus)$/.test(name))return;await page.screenshot({path:resolve(output,name+'.png'),fullPage:true});result.screenshots.push(name+'.png');};
+ const annotationShot=async(map,product)=>{
+  // Capture document pixels without element scrolling or a retained SVG handle.
+  // Closing the details can resize the root and replace its SVG in the next frame.
+  const clip=await map.locator(`[data-farming-place][data-place-product="${product}"]`).evaluate(el=>{
+   const b=el.getBoundingClientRect(),x=Math.floor(b.x+scrollX),y=Math.floor(b.y+scrollY);
+   return {x,y,width:Math.ceil(b.right+scrollX)-x,height:Math.ceil(b.bottom+scrollY)-y};
+  });
+  assert.ok(clip.width>0&&clip.height>0);
+  return {clip,png:await page.screenshot({fullPage:true,clip})};
+ };
  for(const width of representativeOnly?[1536,1024]:[1536,1280,1024]){
   await page.setViewportSize({width,height:864});
   for(const region of regions){
@@ -151,7 +161,7 @@ try{
      const cattle=map.locator('[data-farming-product="cattle"][data-farming-mode="texture"]');
      const initialOpacity=Number(await cattle.getAttribute('opacity'));
      const initialAnnotationPixels=new Map();
-     if(region==='oceania')for(const product of products)initialAnnotationPixels.set(product,await map.locator(`[data-farming-place][data-place-product="${product}"]`).screenshot());
+     if(region==='oceania'){await ready(region);for(const product of products)initialAnnotationPixels.set(product,await annotationShot(map,product));}
      await host.locator('[data-layer]').selectOption('wheat');await ready(region);
      assert.deepEqual(await shown(),products);
      assert.ok(Number(await cattle.getAttribute('opacity'))<initialOpacity);
@@ -163,9 +173,10 @@ try{
       for(const item of annotations.filter(item=>item.product!=='wheat')){assert.ok(item.opacity>0&&item.opacity<.4,'Other names and livestock icons become faint');assert.ok(item.hasName&&item.hasIcon,'Faint annotations remain in the map');}
       const renderDeltas=[];
       for(const item of annotations.filter(item=>item.product!=='wheat')){
-       const before=initialAnnotationPixels.get(item.product),after=await map.locator(`[data-farming-place][data-place-product="${item.product}"]`).screenshot();
-       assert.ok(!before.equals(after),'Rendered nonselected name/icon pixels change after crop focus');
-       renderDeltas.push({product:item.product,overviewOpacity:1,cropFocusOpacity:item.opacity,overviewPngSha256:createHash('sha256').update(before).digest('hex'),cropFocusPngSha256:createHash('sha256').update(after).digest('hex')});
+       const before=initialAnnotationPixels.get(item.product),after=await annotationShot(map,item.product);
+       assert.deepEqual(after.clip,before.clip,'Compare the same document pixels before and after crop focus');
+       assert.ok(!before.png.equals(after.png),'Rendered nonselected name/icon pixels change after crop focus');
+       renderDeltas.push({product:item.product,overviewOpacity:1,cropFocusOpacity:item.opacity,clip:before.clip,overviewPngSha256:createHash('sha256').update(before.png).digest('hex'),cropFocusPngSha256:createHash('sha256').update(after.png).digest('hex')});
       }
       (result.annotationRenderDeltas??=[]).push({width,items:renderDeltas});
       result.checks.push(`Oceania ${width}px: overview names/icons opacity 1; wheat selection retains wheat opacity 1 and fades the other four to 0.32 while all five distributions remain.`);
