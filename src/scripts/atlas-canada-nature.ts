@@ -30,6 +30,16 @@ export function initCanadaNature(root:HTMLElement){
  const naturalMaps=Object.fromEntries(naturalLayers.map(layer=>[layer,naturalHosts[layer]?initCanadaNaturalLayer(naturalHosts[layer]!,{deferStart:true}):null]));
  let naturalStates=Object.fromEntries(naturalLayers.map(layer=>[layer,readCanadaNaturalLayerState(new URL(location.href),layer,(config.layers?.[layer]?.groups??[]).map((g:any)=>g.id))])) as Record<NaturalLayer,NaturalLayerState>;
  const full=[...canadaWaterFullFrame];
+ // Comparison links retain their source data below the climate view. They must
+ // never replace the selected nature layer or precede its city climate reading.
+ const climateContext=root.querySelector<HTMLDetailsElement>('[data-canada-climate-context]');
+ const climateMapSlot=root.querySelector<HTMLElement>('[data-canada-climate-context-map-slot]');
+ const climateReadingSlot=root.querySelector<HTMLElement>('[data-canada-climate-context-reading-slot]');
+ const climateContextSources=[
+  ...[...root.querySelectorAll<HTMLElement>('[data-canada-crop-source]')].map(node=>({node,slot:climateMapSlot})),
+  ...[...root.querySelectorAll<HTMLElement>('[data-canada-crop-context],[data-canada-forest-context],[data-canada-industry-context],[data-canada-population-context]')].map(node=>({node,slot:climateReadingSlot})),
+  ...[...root.querySelectorAll<HTMLElement>('[data-canada-crop-return],[data-canada-forestry-return],[data-canada-industry-return],[data-canada-population-return]')].map(link=>({node:link.parentElement!,slot:climateReadingSlot}))
+ ].map(source=>{const home=root.ownerDocument.createComment('Canada comparison source');source.node.before(home);return {...source,home};});
  function render(){
   const waterResource=state.view==='water'&&waterState.topic!=='surface';
   root.classList.toggle('is-water-resource',waterResource);
@@ -51,10 +61,17 @@ export function initCanadaNature(root:HTMLElement){
    const waterText=state.water&&state.water!=='Fraser'?`現在は${state.water}${state.only?'だけ':'を選択して全水系'}を表示しています。林業の比較入口はFraser川とBCの針葉樹林です。Fraserを選ぶと、森林と海岸の位置関係へ戻れます。`:'針葉樹林とFraser川の位置を重ね、森林と海岸のつながりを照合します。木材輸送には道路・港も必要です。';
    text.textContent=state.view==='elevation'?'山地の高さをETOPOの等高線で確かめます。森林の重ね図と沿岸の観測点へは「気候区分・都市」で戻れます。':state.view==='landform'?'山地と海岸を地形図で確かめます。針葉樹林と観測点の重ね図へは「都市の気候」で戻れます。':state.view==='water'?waterText:state.city==='vancouver'?'Vancouverの温和な冬・秋冬の雨を、沿岸の針葉樹林と比べます。':'観測点を切り替えています。元の問いはVancouverの沿岸気候と針葉樹林の関係です。Vancouverで沿岸の事例へ戻れます。';
   }
-  const industryComparison=renderIndustryNatureComparison(root,config,state),populationComparison=renderPopulationNatureComparison(root,config,state),cropComparison=renderCanadaCropNatureComparison(root,state);root.classList.toggle('is-learning-comparison',!!savedForestry||industryComparison||populationComparison||cropComparison);root.classList.toggle('is-crop-comparison',cropComparison);
+  const industryComparison=renderIndustryNatureComparison(root,config,state),populationComparison=renderPopulationNatureComparison(root,config,state),cropComparison=renderCanadaCropNatureComparison(root,state);root.classList.toggle('is-learning-comparison',state.view!=='climate'&&(!!savedForestry||industryComparison||populationComparison||cropComparison));root.classList.toggle('is-crop-comparison',state.view!=='climate'&&cropComparison);
   renderCanadaWaterOrigin(root,waterState);
   const comparison=!!savedForestry||industryComparison||populationComparison||cropComparison;
-  const classifiedClimate=state.view==='climate'&&!comparison&&!!naturalMaps.climate;
+  const classifiedClimate=state.view==='climate'&&!!naturalMaps.climate;
+  if(climateContext&&climateMapSlot&&climateReadingSlot){
+   climateContext.hidden=!classifiedClimate||!comparison;
+   for(const source of climateContextSources){
+    if(classifiedClimate&&comparison){if(source.node.parentElement!==source.slot)source.slot!.append(source.node);}
+    else if(source.node.parentNode!==source.home.parentNode)source.home.after(source.node);
+   }
+  }
   root.classList.toggle('is-classified-climate',classifiedClimate);
   root.classList.toggle('is-elevation-reading',state.view==='elevation');
   for(const layer of naturalLayers){const host=naturalHosts[layer];if(host){host.hidden=layer==='climate'?!classifiedClimate:state.view!=='elevation';naturalMaps[layer]?.render({...naturalStates[layer],city:state.city});}}
