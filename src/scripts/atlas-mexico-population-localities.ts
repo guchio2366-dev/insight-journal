@@ -88,14 +88,17 @@ export function initMexicoLocalityPopulation(root:HTMLElement) {
    if(labelBoxes.length>=7)break;
    if(mode==='cluster'&&pick.population<150000)continue;
    const label=pick.localities>1?`${pick.name}周辺`:pick.name;
-   const width=Math.min(160,label.length*8),height=19;
-   const x=Math.min(box.width-width-8,Math.max(8,pick.screenX+pick.radius+5));
-   const y=Math.max(20,pick.screenY-pick.radius-4);
-   if(labelBoxes.some(b=>x<b[0]+b[2]+6&&x+width>b[0]-6&&y-height<b[1]+5&&y>b[1]-height-5))continue;
-   labelBoxes.push([x,y,width,height]);
    const node=document.createElementNS('http://www.w3.org/2000/svg','text');
+   node.style.fontSize=`${13*900/box.width}px`;node.textContent=label;labels.append(node);
+   // Use the actual SVG font metrics, including Japanese glyphs and accents.
+   const measured=node.getBBox(),width=measured.width*box.width/900,height=measured.height*box.height/580;
+   if(width>box.width-16){node.remove();continue;}
+   const x=Math.min(box.width-width-8,Math.max(8,pick.screenX+pick.radius+5));
+   let y=pick.screenY-pick.radius-4,top=y+measured.y*box.height/580;
+   if(top<8){y+=8-top;top=8;}else if(top+height>box.height-8){y-=top+height-(box.height-8);top=box.height-8-height;}
+   if((x+width>box.width-60&&top<138)||labelBoxes.some(b=>x<b[0]+b[2]+6&&x+width>b[0]-6&&top<b[1]+b[3]+6&&top+height>b[1]-6)){node.remove();continue;}
+   labelBoxes.push([x,top,width,height]);
    node.setAttribute('x',String(x/box.width*900));node.setAttribute('y',String(y/box.height*580));
-   node.setAttribute('font-size',String(13*900/box.width));node.textContent=label;labels.append(node);
   }
   const legend=query<SVGSVGElement>('[data-locality-count-key]');
   if(legend){
