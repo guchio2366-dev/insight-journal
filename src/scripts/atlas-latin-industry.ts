@@ -20,8 +20,8 @@ export function initLatinIndustry(root:HTMLElement){
   if(!row)return '中南米全体 · 商品輸出額に占める2024年の割合。国を選ぶと二つの比率を確かめられます。';
   return `${industryCountryName(place)} · 2024年：鉱石・金属 ${formatLatinIndustryValue(row.values.ores.value,row.values.ores.status)} ／ 製造品 ${formatLatinIndustryValue(row.values.manufactures.value,row.values.manufactures.status)}`;
  };
- const populationTitle=(layer:string)=>layer==='population'?'人口の規模':layer==='scale'?'人口密度と人口規模':'人口密度';
- const populationPeriod=(layer:string)=>layer==='population'?'2023年 · 国・地域単位 · 人（円の面積）':layer==='scale'?'2023年 · 国・地域単位 · 人/km²（色）・人（円の面積）':'2023年 · 国・地域単位 · 人/km²';
+ const populationTitle=(layer:string)=>layer==='spatial'?'国内の居住人口分布':layer==='population'?'人口の規模':layer==='scale'?'人口密度と人口規模':'人口密度';
+ const populationPeriod=(layer:string)=>layer==='spatial'?'2020年 · GHSL居住人口推計 · 10km等積格子集計 · 人/km²':layer==='population'?'2023年 · 国・地域単位 · 人（円の面積）':layer==='scale'?'2023年 · 国・地域単位 · 人/km²（色）・人（円の面積）':'2023年 · 国・地域単位 · 人/km²';
  function save(push=true){
   const url=new URL(window.location.href);url.search=writeLatinLearningState(state);
   if(push)window.history.pushState(null,'',url);else window.history.replaceState(null,'',url);
@@ -97,7 +97,8 @@ export function initLatinIndustry(root:HTMLElement){
    let explanation=reading.comparison,values=valueText(state.place);
    if(source.field==='population'){
     explanation=`${populationTitle(source.layer)}（2023年）と${layerName(state.layer)}（2024年）を並べ、人口・市場と輸出産業の関係を読みます。単位・分母が異なり、人口から生産や産業全体の規模は求めていません。`;
-    const row=latinPopulationRows.find(r=>r.countryCode===source.place);if(row)values=`${industryCountryName(source.place)} · 元人口2023年：${source.layer==='density'?`${latinPopulationValue(row.density,row.densityStatus,1)}人/km²`:`${latinPopulationValue(row.population,row.populationStatus)}人`} ／ ${valueText(state.place)}`;
+   const row=latinPopulationRows.find(r=>r.countryCode===source.place);if(row)values=`${industryCountryName(source.place)} · 元人口2023年：${source.layer==='density'?`${latinPopulationValue(row.density,row.densityStatus,1)}人/km²`:`${latinPopulationValue(row.population,row.populationStatus)}人`} ／ ${valueText(state.place)}`;
+    if(source.layer==='spatial'){explanation=`国内の居住人口分布（GHSL2020年）と${layerName(state.layer)}（2024年）を並べます。人口は10km等積格子の密度推計、輸出比率は国全体の商品輸出額に占める割合です。年・粒度・分母が異なり、人口から産業の量は求めません。`;values=`GHSL2020：国内の居住人口分布（人/km²） ／ ${valueText(state.place)}`;}
    }else if(source.field==='nature'){
     if(state.layer==='canal'){explanation='パナマの気候（1991–2020年）と雨→貯水→閘門→通航を並べ、物流を支える淡水を読みます。2024会計年度の通航を示す説明図で、気候区分から水収支は計算していません。';values='パナマ · 元気候1991–2020年 ／ 運河2024会計年度：大型外航船9,944通航、前年比21%減。通航回数から商品輸出額や運河収入を推計していません。';}
     else explanation=`元の気候分布（1991–2020年）と、${layerName(state.layer)}（2024年）を並べます。自然条件・資源と、加工・交通・市場を結び付けて産業の成立を考えます。気候区分から個々の鉱床や工場の位置、輸出額は推計していません。`;

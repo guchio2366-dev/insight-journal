@@ -32,7 +32,7 @@ if(workspace){
   const source=state.source;
   if(!source)return '';
   if(source.field==='agriculture')return `${natureCountryName(source.place)} · ${agricultureLayerTitle(source.layer)} · 2020年`;
-  if(source.field==='population')return `${natureCountryName(source.place)} · ${source.layer==='density'?'人口密度':source.layer==='population'?'人口規模':'人口密度と規模'} · 2023年`;
+  if(source.field==='population')return source.layer==='spatial'?`${natureCountryName(source.place)} · 居住人口分布 · 2020年`:`${natureCountryName(source.place)} · ${source.layer==='density'?'人口密度':source.layer==='population'?'人口規模':'人口密度と規模'} · 2023年`;
   if(source.field==='industry')return source.layer==='canal'?'パナマ運河 · 淡水と物流 · 2024会計年度':`${natureCountryName(source.place)} · ${source.layer==='manufactures'?'製造品':'鉱石・金属'}の輸出比率 · 2024年`;
   return `${natureCountryName(source.place)} · 気候群 · 1991–2020年`;
  }

@@ -46,3 +46,16 @@ test('Actual population layer changes distinguish circle counts, density colors 
   assert.equal(state(w).get('place'),'CRI');assert.equal(state(w).get('scope'),'country');assert.equal(state(w).get('only'),'1');
  }finally{await w.happyDOM.close();}
 });
+
+test('The default GHSL overview precedes comparison actions and keeps its eight-class key under the map',async()=>{
+ const {w,legend}=await page('population','',population);try{
+  const overview=w.document.querySelector('[data-lp-spatial-summary]');
+  const fixed=w.document.querySelector('.latin-reading-fixed');
+  assert.equal(overview.parentElement,fixed);
+  const children=[...fixed.children];
+  assert.ok(children.indexOf(overview)<children.indexOf(fixed.querySelector('.latin-comparison-link')));
+  assert.equal(legend.closest('figure').className,'lp-target-figure');
+  assert.equal(legend.querySelectorAll('li').length,8);
+  assert.equal(w.document.querySelector('.lp-example-options').open,false);
+ }finally{await w.happyDOM.close();}
+});
