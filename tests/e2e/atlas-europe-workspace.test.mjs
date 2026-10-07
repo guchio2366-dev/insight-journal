@@ -69,7 +69,8 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.ok(londonChart);
       assert.deepEqual([...londonChart.querySelectorAll('.atlas-climate-month')].map(label=>label.textContent),Array.from({length:12},(_,i)=>String(i+1)));
       assert.equal(londonChart.querySelector('.atlas-climate-axis-title').textContent,'月');
-      assert.match(doc.querySelector('[data-city-reading="london"] .eu-climate-reason').textContent,/乾季.*最寒1月.*5\.7.*最暖7月.*19\.0/);
+      assert.match(doc.querySelector('[data-city-reading="london"] .eu-climate-reason').textContent,/大西洋.*偏西風.*海.*冬.*夏/);
+      assert.match(doc.querySelector('[data-city-reading="london"] .eu-city-reading-details').textContent,/乾季.*最寒1月.*5\.7.*最暖7月.*19\.0/s);
       assert.equal(doc.querySelector('[data-city-reading="london"] .eu-city-selected-note'),null,'分類見出しと気温要約を重複させない');
       assert.equal(doc.querySelector('[data-city-reading="london"] .eu-city-reading-details').open,false);
       assert.match(doc.querySelector('[data-eu-climate-statistics] h2').textContent,/月別の数値.*年間の要約/);
