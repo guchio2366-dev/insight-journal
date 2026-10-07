@@ -1,0 +1,310 @@
+{
+  "title": "Canada 500 m elevation bands",
+  "source": {
+    "publisher": "NOAA National Centers for Environmental Information",
+    "title": "ETOPO 2022 — 500 m標高区分",
+    "brief": "元60秒格子（WGS84 / EGM2008）から500 m間隔の色面を作成。2022はモデルの版で、全地点の観測年ではありません。",
+    "catalogueUrl": "https://www.ncei.noaa.gov/products/etopo-global-relief-model",
+    "descriptionUrl": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/docs/1.2%20ETOPO%202022%20User%20Guide.pdf",
+    "licenceUrl": "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ngdc.mgg.dem%3Aetopo_2022/html",
+    "licence": "CC0-1.0",
+    "attribution": "NOAA NCEI ETOPO 2022 (DOI:10.25921/fd45-gt74). Boundary: Statistics Canada, Open Government Licence — Canada. Lakes: Natural Earth v5.1.2, public domain."
+  },
+  "levels": [
+    {
+      "id": "below-sea",
+      "name": "0 m未満",
+      "color": "#e6e5e1",
+      "lowerBoundM": null,
+      "upperBoundExclusiveM": 0,
+      "description": "原格子で0 m未満の値を別表示。海岸線と標高格子の解像度差を含むため、すべてを陸上の低地・窪地とは解釈しません。"
+    },
+    {
+      "id": "0",
+      "name": "0–500 m",
+      "color": "#edf4de",
+      "lowerBoundM": 0,
+      "upperBoundExclusiveM": 500,
+      "description": "標高0 m以上500 m未満。淡い色はハドソン湾周辺や東部の低地、海岸沿いに広がります。五大湖からセントローレンス川へ続く低地と、西部山地の狭い海岸側を比べます。"
+    },
+    {
+      "id": "500",
+      "name": "500–1,000 m",
+      "color": "#dbe8c4",
+      "lowerBoundM": 500,
+      "upperBoundExclusiveM": 1000,
+      "description": "標高500 m以上1,000 m未満。内陸のプレーリーにも西部山地にも現れる高さです。同じ標高でも、周囲の色の境界が広く離れた平原と、境界が集まる山地では起伏が違います。"
+    },
+    {
+      "id": "1000",
+      "name": "1,000–1,500 m",
+      "color": "#c7d6a7",
+      "lowerBoundM": 1000,
+      "upperBoundExclusiveM": 1500,
+      "description": "標高1,000 m以上1,500 m未満。西部山地の東縁と内部の高地に注目します。山地の色と隣接する低い平原の色をたどると、山麓から内陸への高さの変化を読めます。"
+    },
+    {
+      "id": "1500",
+      "name": "1,500–2,000 m",
+      "color": "#b3c18d",
+      "lowerBoundM": 1500,
+      "upperBoundExclusiveM": 2000,
+      "description": "標高1,500 m以上2,000 m未満。西部山地でまとまる色面に加え、北極圏の山地にも分布します。全域表示で、寒い北部がすべて低地というわけではないことを確かめます。"
+    },
+    {
+      "id": "2000",
+      "name": "2,000–2,500 m",
+      "color": "#9cab74",
+      "lowerBoundM": 2000,
+      "upperBoundExclusiveM": 2500,
+      "description": "標高2,000 m以上2,500 m未満。西部の高い山地や北極圏の山地に見られます。周囲の低い区分を残して選ぶと、山脈の中で高い部分がどこに続くかを追えます。"
+    },
+    {
+      "id": "2500",
+      "name": "2,500–3,000 m",
+      "color": "#87955f",
+      "lowerBoundM": 2500,
+      "upperBoundExclusiveM": 3000,
+      "description": "標高2,500 m以上3,000 m未満。高い山地の中でも分布が絞られます。地形タブの山地という地域区分と、この高さを満たす範囲が同一ではないことを読み分けます。"
+    },
+    {
+      "id": "3000",
+      "name": "3,000–3,500 m",
+      "color": "#73814d",
+      "lowerBoundM": 3000,
+      "upperBoundExclusiveM": 3500,
+      "description": "標高3,000 m以上3,500 m未満。西部の高い山地の一部です。小さな色面は元60秒格子による概略で、個々の山頂や登山道の正確な高さを示すものではありません。"
+    },
+    {
+      "id": "3500",
+      "name": "3,500–4,000 m",
+      "color": "#606d3d",
+      "lowerBoundM": 3500,
+      "upperBoundExclusiveM": 4000,
+      "description": "標高3,500 m以上4,000 m未満。西部の高峰周辺に限られる高さです。周囲の500 m区分を合わせて読むと、局地的に高い部分と、広く続く山地の違いが分かります。"
+    },
+    {
+      "id": "4000",
+      "name": "4,000–4,500 m",
+      "color": "#4e5b30",
+      "lowerBoundM": 4000,
+      "upperBoundExclusiveM": 4500,
+      "description": "標高4,000 m以上4,500 m未満。北西部のアラスカとの国境付近にある高い山地の、ごく限られた部分です。「選択へ」で位置を確かめ、全域へ戻して国土に占める広がりを比べます。"
+    },
+    {
+      "id": "4500",
+      "name": "4,500–5,000 m",
+      "color": "#3e4a25",
+      "lowerBoundM": 4500,
+      "upperBoundExclusiveM": 5000,
+      "description": "標高4,500 m以上5,000 m未満。北西部のアラスカとの国境付近にある高い山地の、ごく限られた部分です。「選択へ」で位置を確かめ、全域へ戻して国土に占める広がりを比べます。"
+    },
+    {
+      "id": "5000",
+      "name": "5,000–5,500 m",
+      "color": "#303c1b",
+      "lowerBoundM": 5000,
+      "upperBoundExclusiveM": 5500,
+      "description": "標高5,000 m以上5,500 m未満。北西部のアラスカとの国境付近にある高い山地の、ごく限られた部分です。「選択へ」で位置を確かめ、全域へ戻して国土に占める広がりを比べます。"
+    },
+    {
+      "id": "5500",
+      "name": "5,500–6,000 m",
+      "color": "#243010",
+      "lowerBoundM": 5500,
+      "upperBoundExclusiveM": 6000,
+      "description": "標高5,500 m以上6,000 m未満。北西部のアラスカとの国境付近にある高い山地の、ごく限られた部分です。「選択へ」で位置を確かめ、全域へ戻して国土に占める広がりを比べます。"
+    }
+  ],
+  "sourceWindow": {
+    "sourceSha256": "9d27d4b8ea8e76977e2988bca667d7c8fa68b927355feffcddd6b4875a7fd08e",
+    "sourceBytes": 465969062,
+    "file": "canada-etopo-window.f32",
+    "sha256": "779fbc97ee041d58ee09c87b6d5bbe07bd79d240cd01fc2328f22c562206526d",
+    "bytes": 57657600,
+    "width": 5460,
+    "height": 2640,
+    "bounds": [
+      -142,
+      40,
+      -51,
+      84
+    ],
+    "window": [
+      2280,
+      360,
+      7740,
+      3000
+    ],
+    "origin": [
+      -142,
+      84
+    ],
+    "resolution": [
+      0.016666666666666666,
+      -0.016666666666666666
+    ],
+    "dtype": "float32-little-endian",
+    "noData": -99999,
+    "geoKeys": {
+      "GTModelTypeGeoKey": 2,
+      "GTRasterTypeGeoKey": 1,
+      "GTCitationGeoKey": "WGS 84 + EGM2008 height",
+      "GeographicTypeGeoKey": 4326,
+      "VerticalCSTypeGeoKey": 3855
+    },
+    "method": "GeoTIFF.js 3.0.5 exact native window read; no resampling or integer casting"
+  },
+  "landMask": {
+    "file": "data-source/atlas/canada-climate-elevation-v1/beck/land-mask.geojson.gz",
+    "sha256": "f54908964f6e451137bb50b4a21fb0ada82fbaeea5c8438d3d204046a663644e"
+  },
+  "verification": {
+    "allBandsValid": true,
+    "sharedEdgesValid": true,
+    "nonoverlapping": true,
+    "landCells": 5935998,
+    "validLandCells": 5935998,
+    "missingLandCells": 0,
+    "negativeLandCells": 9368,
+    "minimumSourceM": -563.125,
+    "maximumSourceM": 5653.3212890625,
+    "landCoverageSymmetricDifferenceDegreesSquared": 0.0003228702015736626,
+    "bandCellCountSum": 5935998,
+    "spots": [
+      {
+        "name": "Winnipeg",
+        "requestedLonLat": [
+          -97.1384,
+          49.8951
+        ],
+        "nativeCentre": [
+          -97.14166666666667,
+          49.891666666666666
+        ],
+        "sourceElevationM": 232.10125732421875,
+        "sourceRow": 2046,
+        "sourceColumn": 2691,
+        "insideLandMask": true,
+        "expectedBand": "0",
+        "renderedBands": [
+          "0"
+        ]
+      },
+      {
+        "name": "Regina",
+        "requestedLonLat": [
+          -104.6189,
+          50.4452
+        ],
+        "nativeCentre": [
+          -104.625,
+          50.44166666666667
+        ],
+        "sourceElevationM": 576.7361450195312,
+        "sourceRow": 2013,
+        "sourceColumn": 2242,
+        "insideLandMask": true,
+        "expectedBand": "500",
+        "renderedBands": [
+          "500"
+        ]
+      },
+      {
+        "name": "Calgary",
+        "requestedLonLat": [
+          -114.0719,
+          51.0447
+        ],
+        "nativeCentre": [
+          -114.075,
+          51.041666666666664
+        ],
+        "sourceElevationM": 1051.7313232421875,
+        "sourceRow": 1977,
+        "sourceColumn": 1675,
+        "insideLandMask": true,
+        "expectedBand": "1000",
+        "renderedBands": [
+          "1000"
+        ]
+      },
+      {
+        "name": "Quebec",
+        "requestedLonLat": [
+          -71.208,
+          46.8139
+        ],
+        "nativeCentre": [
+          -71.20833333333333,
+          46.80833333333334
+        ],
+        "sourceElevationM": 48.58599853515625,
+        "sourceRow": 2231,
+        "sourceColumn": 4247,
+        "insideLandMask": true,
+        "expectedBand": "0",
+        "renderedBands": [
+          "0"
+        ]
+      },
+      {
+        "name": "Whitehorse",
+        "requestedLonLat": [
+          -135.0568,
+          60.7212
+        ],
+        "nativeCentre": [
+          -135.05833333333334,
+          60.725
+        ],
+        "sourceElevationM": 635.5360107421875,
+        "sourceRow": 1396,
+        "sourceColumn": 416,
+        "insideLandMask": true,
+        "expectedBand": "500",
+        "renderedBands": [
+          "500"
+        ]
+      },
+      {
+        "name": "Ellesmere interior",
+        "requestedLonLat": [
+          -72,
+          82.5
+        ],
+        "nativeCentre": [
+          -71.99166666666666,
+          82.49166666666666
+        ],
+        "sourceElevationM": 1119.0,
+        "sourceRow": 90,
+        "sourceColumn": 4200,
+        "insideLandMask": true,
+        "expectedBand": "1000",
+        "renderedBands": [
+          "1000"
+        ]
+      },
+      {
+        "name": "Mount Logan grid",
+        "requestedLonLat": [
+          -140.405,
+          60.567
+        ],
+        "nativeCentre": [
+          -140.40833333333333,
+          60.575
+        ],
+        "sourceElevationM": 5640.72802734375,
+        "sourceRow": 1405,
+        "sourceColumn": 95,
+        "insideLandMask": true,
+        "expectedBand": "5500",
+        "renderedBands": [
+          "5500"
+        ]
+      }
+    ]
+  }
+}
