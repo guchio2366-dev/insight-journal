@@ -25,7 +25,7 @@ export function initMexicoLocalityPopulation(root:HTMLElement) {
  const query=<T extends Element=HTMLElement>(selector:string)=>root.querySelector<T>(selector);
  const text=(selector:string,value:string)=>{const target=query(selector);if(target)target.textContent=value;};
  const cache=new Map<string,Promise<any>>();
- let active=false,onlyState='',frame=readLocalityFrame(new URL(location.href)),generation=0;
+ let active=false,onlyState='',readingState='',frame=readLocalityFrame(new URL(location.href)),generation=0;
  let marks:Mark[]=[],picks:Pick[]=[],selected:Mark|null=null,drawFrame=0,mode:'cluster'|'locality'='cluster',listing='';
  async function load(file:string){
   if(!cache.has(file))cache.set(file,(async()=>{
@@ -113,11 +113,11 @@ export function initMexicoLocalityPopulation(root:HTMLElement) {
   const visibleLocalities=visible.reduce((sum,mark)=>sum+mark.localities,0);
   text('[data-locality-mode]',mode==='cluster'?'近接集落を集約した人数円':'公式の集落代表位置ごとの人数円');
   text('[data-locality-visible-count]',`${number(visibleLocalities)}集落・${number(visiblePopulation)}人`);
-  const scope=onlyState?population.states.find(s=>s.stateCode===onlyState):null;
+  const scope=readingState?population.states.find(s=>s.stateCode===readingState):null;
   text('[data-locality-total-label]',scope?`${scope.nameJa}の人口`:'メキシコ全国の人口');
   text('[data-locality-total]',number(scope?.population??config.population));
-  text('[data-locality-total-localities]',number(scope?config.chunks.find(c=>c.stateCode===onlyState)!.localities:config.localities));
-  text('[data-locality-scope-note]',scope?'選んだ州の集落を表示しています。':'州を選ばず全国で表示します。');
+  text('[data-locality-total-localities]',number(scope?config.chunks.find(c=>c.stateCode===readingState)!.localities:config.localities));
+  text('[data-locality-scope-note]',scope?(onlyState?'選んだ州の集落を表示しています。':'選択州の総計です。地図は全国の集落を表示しています。'):'州を選ばず全国で表示します。');
   const list=query('[data-locality-list]');const ranked=[...visible].sort((a,b)=>b.population-a.population).slice(0,10);
   const signature=ranked.map(mark=>[mark.code,mark.x,mark.y,mark.population,mark.localities].join(':')).join('|');
   if(list&&signature!==listing){listing=signature;list.replaceChildren();for(const mark of ranked){
@@ -194,7 +194,7 @@ export function initMexicoLocalityPopulation(root:HTMLElement) {
  window.addEventListener('popstate',()=>{frame=readLocalityFrame(new URL(location.href));if(active)void refresh();});
  return {setActive(enabled:boolean,stateCode:string,only:boolean){
   const newScope=only?stateCode:'';const changed=enabled!==active||newScope!==onlyState;
-  active=enabled;onlyState=newScope;holder.hidden=!active;root.dataset.localityPopulationActive=String(active);
+  active=enabled;onlyState=newScope;readingState=stateCode;holder.hidden=!active;root.dataset.localityPopulationActive=String(active);
   for(const node of root.querySelectorAll<HTMLElement>('[data-locality-legend],[data-locality-reading]'))node.hidden=!active;
   if(changed&&active){selected=null;renderSelection();void refresh();}else scheduleDraw();
   if(!active)generation++;

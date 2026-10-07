@@ -437,6 +437,14 @@ async function population({page, evidence}) {
       await click(page,'[data-locality-action="fit"]');
       await page.waitForFunction(()=>document.querySelector('[data-mexico-field="population"]')?.dataset.localityVisiblePopulation==='126014024');
       assert.equal(query(page,'localityFrame'),null);assert.equal(query(page,'state'),null);
+      await select(page,'[data-population-state]','09');
+      await page.waitForFunction(()=>document.querySelector('[data-locality-total]')?.textContent==='9,209,944');
+      assert.equal(await page.locator('[data-mexico-field="population"]').getAttribute('data-locality-visible-population'),'126014024');
+      await check(page,'[data-population-only]',true);
+      await page.waitForFunction(()=>document.querySelector('[data-mexico-field="population"]')?.dataset.localityVisiblePopulation==='9209944');
+      await click(page,'[data-locality-action="fit"]');
+      await page.waitForFunction(()=>document.querySelector('[data-mexico-field="population"]')?.dataset.localityVisiblePopulation==='126014024');
+      assert.equal(query(page,'state'),null);assert.equal(query(page,'only'),null);
       return {requests,originalFrame};
     }finally{page.off('request',record);}
   });
