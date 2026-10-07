@@ -5,6 +5,7 @@ import {createHash} from 'node:crypto';
 import {gunzipSync,inflateSync} from 'node:zlib';
 import {sumCompleteMonthlyNormals,displayCoordinate,sourceCellIndex} from '../../scripts/europe/prepare-precipitation.mjs';
 import {europePrecipitationLayer,europePrecipitationReading} from '../../src/data/atlas/europe/water-reading.ts';
+import {europeLayers} from '../../src/data/atlas/europe/layers.ts';
 
 const root=new URL('../../',import.meta.url),base='public/assets/atlas/europe/precipitation-contours-v1/';
 const bytes=name=>readFileSync(new URL(name,root));
@@ -98,5 +99,6 @@ test('published lines and bands use one SVG, preserve all source-missing pixels 
   }
   assert.equal(painted,manifest.rendering.paintedPixels);assert.equal(manifest.rendering.sourceMissingPixelsFilled,0);
   assert.equal(europePrecipitationLayer.image,'/assets/atlas/europe/precipitation-contours-v1/precipitation.png');
+  assert.equal(europeLayers.find(layer=>layer.id==='precipitation').manifest,'/assets/atlas/europe/precipitation-contours-v1/manifest.json','The composed reader links the processing record of the displayed contours');
   assert.match(europePrecipitationReading.note,/四隅.*完全な年値/);assert.match(europePrecipitationReading.note,/地点照会.*最寄り原格子/);
 });
