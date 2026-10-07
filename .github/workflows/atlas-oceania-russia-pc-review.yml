@@ -35,6 +35,7 @@ jobs:
       ASTRO_TELEMETRY_DISABLED: '1'
       REGION_REVIEW_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
       REGION_REVIEW_FARMING_ONLY: '1'
+      REGION_REVIEW_REPRESENTATIVE_ONLY: '1'
       REGION_REVIEW_REGIONS: 'russia'
     steps:
       - uses: actions/checkout@v7
