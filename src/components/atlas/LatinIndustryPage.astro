@@ -29,11 +29,11 @@ const sources=latinIndustryReadings.flatMap(r=>r.sources).filter((s,i,a)=>a.find
      <div data-industry-primary-legend set:html={renderLatinIndustryLegend('ores')} />
     </div>
     <p class="latin-industry-map-note" data-industry-map-note>同じ2024年で表示。24国に値、9国・地域は原典欠測、1地域は対象統計なし。0に置き換えていません。</p>
-    <div class="latin-industry-topics" aria-label="代表例">{latinIndustryReadings.map(r=><button type="button" data-industry-topic={r.id} aria-pressed={r.id==='andes'}>{r.name}</button>)}</div>
+    <div class="latin-industry-topics" aria-label="代表例">{latinIndustryReadings.map(r=><button type="button" data-industry-topic={r.id} aria-pressed={false}>{r.name}</button>)}</div>
    </section>
    <aside class="latin-industry-reading" aria-label="成立条件と比較">
-    <h2 data-industry-reading-title>{reading.title}</h2>
-    <p data-industry-takeaway>{reading.takeaway}</p>
+    <h2 data-industry-reading-title>中南米全体の輸出構成</h2>
+    <p data-industry-takeaway>鉱石・金属と製造品の輸出比率を国ごとに見渡します。各国の商品輸出額を分母とした割合で、生産量・GDPやサービス輸出の規模とは区別します。</p>
     <div class="latin-industry-selected" data-industry-selected aria-live="polite">中南米全体 · 2024年の商品輸出構成。国を選ぶと二つの比率を確かめられます。</div>
     <div class="latin-industry-actions" aria-label="何を比べて読むか">
      <a data-industry-compare-exports href={`${base}industry/?layer=manufactures&from=industry&sourceLayer=ores`}>鉱石・金属と製造品の比率を並べ、輸出の重心を比べる →</a>

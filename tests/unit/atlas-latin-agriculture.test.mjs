@@ -111,6 +111,24 @@ test('Latin agriculture: exact bin legend, original maps and small positive valu
  }
 });
 
+test('Latin agriculture overview reuses both existing distributions and preserves them after crop selection',async()=>{
+ const lib=await module('src/lib/atlas-latin-agriculture.ts');
+ const manifest=json('public/assets/atlas/latin-america-overview-v1/manifest.json');
+ for(const [kind,entry]of Object.entries(manifest.groups))assert.equal(sha(readFileSync(`public/assets/atlas/latin-america-overview-v1/${entry.image}`)),entry.sha256,kind);
+ for(const id of ['all','bana','coff','soyb','cattle']){
+  const html=lib.renderLatinAgricultureWorkspaceMap({layer:id,place:'all',scope:'all',only:false});
+  const w=new Window();w.document.body.innerHTML=html;
+  assert.equal(w.document.querySelectorAll('[data-latin-agriculture-country][aria-pressed=true]').length,0);
+  assert.ok(w.document.querySelector('[data-agriculture-overview-crops] image[href$="crop.png"]'));
+  const animals=w.document.querySelector('[data-agriculture-overview-livestock] image[href$="livestock.png"]');assert.ok(animals);
+  assert.equal(animals.getAttribute('opacity'),id==='all'||id==='cattle'?'1':'0.3');
+  assert.equal(w.document.querySelectorAll('[data-agriculture-selected-outline]').length,id==='all'?0:1);
+  if(id!=='all'){const entry=manifest.inputs.find(input=>input.id===id);assert.equal(sha(readFileSync(`public/assets/atlas/latin-america-overview-v1/${entry.outline}`)),entry.outlineSha256);}
+  const legend=lib.renderLatinAgricultureOverviewLegend(id);assert.match(legend,/数量の比較ではありません/);assert.match(legend,/0・下限未満・欠測・対象外/);
+  await w.happyDOM.close();
+ }
+});
+
 function clientFixture(window){
  const fields=['title','map-caption','reading-title','takeaway','selected-name','selected-spatial','selected-unit','steps','examples','definition','coffee-definition','reading-sources','stat-caption','stat-note','fallback-caption','fallback-unit','map-panes','source-pane','source-title','source-map','source-legend','target-title','target-pane','comparison-message','comparison-explanation'];
  window.document.body.innerHTML=`<article data-latin-field="agriculture">${fields.map(name=>`<div data-latin-agriculture-${name}></div>`).join('')}<select data-latin-agriculture-place><option value="all">全体</option>${data.scope.countries.map(code=>`<option value="${code}">${code}</option>`).join('')}</select><select data-latin-agriculture-scope>${['all','central','south','country'].map(scope=>`<option value="${scope}">${scope}</option>`).join('')}</select><input type="checkbox" data-latin-agriculture-only><button data-latin-agriculture-fallback></button>${data.layers.map(l=>`<button data-latin-agriculture-layer="${l.id}">${l.label}</button>`).join('')}<figure data-latin-agriculture-normal-container><div data-latin-agriculture-map-container></div><div data-latin-agriculture-legend-container></div></figure><div data-latin-agriculture-fallback-container><table><tbody data-latin-agriculture-fallback-rows></tbody></table></div><table><thead></thead><tbody data-latin-agriculture-stat-rows></tbody></table><a data-latin-agriculture-compare></a><a data-latin-agriculture-return></a></article>`;
@@ -128,8 +146,8 @@ test('Latin agriculture: selection, fallback, named return and history/refresh r
   q('fallback').click();assert.equal(q('fallback-container').hidden,true);assert.equal(q('normal-container').hidden,false);
   q('place').value='BRA';q('place').dispatchEvent(new window.Event('change',{bubbles:true}));
   q('layer="soyb"').click();
-  assert.equal(article.dataset.latinAgricultureCurrentLayer,'soyb');assert.equal(q('place').value,'BRA');assert.equal(q('scope').value,'country');assert.equal(q('only').checked,true);
-  const comparison=new URL(q('compare').href);assert.match(comparison.pathname,/nature\/$/);assert.equal(comparison.searchParams.get('sourceLayer'),'soyb');assert.equal(comparison.searchParams.get('sourcePlace'),'BRA');assert.equal(comparison.searchParams.get('sourceScope'),'country');assert.equal(comparison.searchParams.get('sourceOnly'),'1');assert.equal(comparison.searchParams.get('sourceFallback'),'0');
+  assert.equal(article.dataset.latinAgricultureCurrentLayer,'soyb');assert.equal(q('place').value,'BRA');assert.equal(q('scope').value,'south');assert.equal(q('only').checked,true);
+  const comparison=new URL(q('compare').href);assert.match(comparison.pathname,/nature\/$/);assert.equal(comparison.searchParams.get('sourceLayer'),'soyb');assert.equal(comparison.searchParams.get('sourcePlace'),'BRA');assert.equal(comparison.searchParams.get('sourceScope'),'south');assert.equal(comparison.searchParams.get('sourceOnly'),'1');assert.equal(comparison.searchParams.get('sourceFallback'),'0');
   window.history.replaceState({},'','?layer=coff&place=HND&scope=central&only=1&fallback=1');window.dispatchEvent(new window.PopStateEvent('popstate'));
   assert.equal(q('place').value,'HND');assert.equal(q('scope').value,'central');assert.equal(article.dataset.latinAgricultureRenderMode,'fallback');assert.equal(article.dataset.latinAgricultureCurrentLayer,'coff');
   const restoredQuery=window.location.search;clientFixture(window);client.initialiseLatinAgriculture();

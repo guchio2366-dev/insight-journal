@@ -12,13 +12,12 @@ if(workspace){
  const base=withBase('/atlas/latin-america/');
  const esc=escapeNatureHtml;
  let state:LatinLearningState;
- let currentCaseId='central';
+ let currentCaseId='overview';
  let renderVersion=0;
  const imageData=new Map<string,Promise<string>>();
  function read(){
   state=readLatinLearningState(location.search,'nature',latinNatureLayers,'climate');
   const params=new URLSearchParams(location.search);
-  if(!params.has('place')&&!params.has('scope'))state={...state,place:'CRI',scope:'central'};
   currentCaseId=natureCaseForPlace(state.place,params.get('case')??undefined).id;
  }
  function write(push:boolean){
@@ -126,7 +125,7 @@ if(workspace){
  q<HTMLInputElement>('[data-nature-only]').addEventListener('change',event=>{state={...state,only:(event.target as HTMLInputElement).checked};render(true);});
  workspace.addEventListener('click',event=>{
   const target=(event.target as Element).closest<HTMLElement>('[data-nature-case],[data-nature-country]');if(!target)return;
-  if(target.dataset.natureCase){const selected=latinNatureCases.find(c=>c.id===target.dataset.natureCase)!;state={...state,place:selected.place,scope:selected.scope as LatinLearningState['scope'],only:false,source:undefined};currentCaseId=selected.id;render(true);}
+  if(target.dataset.natureCase){const selected=latinNatureCases.find(c=>c.id===target.dataset.natureCase)!;state={...state,place:selected.place,scope:selected.place==='all'?'all':state.scope==='all'?'all':selected.scope as LatinLearningState['scope'],only:false,source:undefined};currentCaseId=selected.id;render(true);}
   else if(!state.source&&target.dataset.natureCountry){state={...state,place:target.dataset.natureCountry};currentCaseId=natureCaseForPlace(state.place).id;render(true);}
  });
  workspace.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){const target=(event.target as Element).closest<SVGElement>('[data-nature-country]');if(target){event.preventDefault();target.dispatchEvent(new MouseEvent('click',{bubbles:true}));}}});

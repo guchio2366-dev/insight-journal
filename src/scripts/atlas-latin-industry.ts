@@ -70,8 +70,8 @@ export function initLatinIndustry(root:HTMLElement){
   shown('[data-industry-normal]',!source);shown('[data-industry-comparison]',!!source);shown('[data-industry-return]',!!source);
   shown('[data-industry-source-attribution]',false);
   const reading=industryReadingForPlace(state.place,state.layer);
-  for(const button of root.querySelectorAll<HTMLButtonElement>('[data-industry-topic]'))button.setAttribute('aria-pressed',String(button.dataset.industryTopic===reading.id));
-   text('[data-industry-reading-title]',reading.title);text('[data-industry-takeaway]',reading.takeaway);text('[data-industry-selected]',state.layer==='canal'?'パナマ運河 · 2024会計年度 · 大型外航船9,944通航（前年比21%減）':valueText(state.place));
+  for(const button of root.querySelectorAll<HTMLButtonElement>('[data-industry-topic]'))button.setAttribute('aria-pressed',String(state.place!=='all'&&button.dataset.industryTopic===reading.id));
+   text('[data-industry-reading-title]',state.place==='all'&&state.layer!=='canal'?'中南米全体の輸出構成':reading.title);text('[data-industry-takeaway]',state.place==='all'&&state.layer!=='canal'?'鉱石・金属と製造品の輸出比率を国ごとに見渡します。各国の商品輸出額を分母とした割合で、生産量・GDPやサービス輸出の規模とは区別します。代表例を選ぶと資源・技能・交通・市場のつながりを読めます。':reading.takeaway);text('[data-industry-selected]',state.layer==='canal'?'パナマ運河 · 2024会計年度 · 大型外航船9,944通航（前年比21%減）':valueText(state.place));
    const brief=q<HTMLElement>('[data-industry-brief]');if(brief)brief.textContent=state.layer==='canal'?'流域の雨と貯水が閘門の通航を支え、干ばつ時は通航を調整する。':'鉱石・金属と製造品の輸出比率を分け、資源・技能・交通・市場を読む。';
   const imageContainers:HTMLElement[]=[];
   if(!source){

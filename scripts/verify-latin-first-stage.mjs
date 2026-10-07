@@ -1,0 +1,111 @@
+/** Focused browser acceptance against the built Latin America pages and real local assets. */
+import assert from 'node:assert/strict';
+import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import path from 'node:path';
+import {chromium} from 'playwright';
+
+const output=process.env.ATLAS_QA_OUTPUT??'/tmp/latin-first-stage-qa';
+await mkdir(output,{recursive:true});
+const browser=await chromium.launch({executablePath:process.env.ATLAS_CHROMIUM_PATH,headless:true});
+const page=await browser.newPage({reducedMotion:'reduce'});
+const errors=[],failedAssets=[],dist=path.resolve('dist'),origin='https://atlas.test/insight-journal';
+const result={commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),diffSha256:createHash('sha256').update(execFileSync('git',['diff','HEAD'])).digest('hex'),browser:browser.version(),checks:[],frames:[],screenshots:[],errors,failedAssets};
+page.on('pageerror',error=>errors.push(error.message));
+page.on('requestfailed',request=>failedAssets.push({url:request.url(),error:request.failure()?.errorText}));
+await page.route('https://atlas.test/**',async route=>{
+ let relative=decodeURIComponent(new URL(route.request().url()).pathname).replace(/^\/insight-journal/,'');
+ if(relative.endsWith('/'))relative+='index.html';
+ const file=path.resolve(dist,'.'+relative);
+ assert.ok(file.startsWith(dist+path.sep));
+ const mime={'.html':'text/html','.css':'text/css','.js':'text/javascript','.json':'application/json','.png':'image/png','.svg':'image/svg+xml','.woff2':'font/woff2'};
+ try{await route.fulfill({body:await readFile(file),contentType:mime[path.extname(file)]??'application/octet-stream'});}
+ catch{await route.fulfill({status:404,body:'Not found'});failedAssets.push({url:route.request().url(),error:'Missing built asset'});}
+});
+const open=async(field,query='')=>{
+ await page.goto(`${origin}/atlas/latin-america/${field}/${query}`);
+ await page.waitForFunction(()=>document.querySelector('[data-latin-workspace]')?.dataset.layoutReady==='true');
+ await page.waitForFunction(()=>{const root=document.querySelector('[data-latin-workspace]');return root.dataset.natureReady==='true'||root.dataset.latinAgricultureReady==='true'||root.dataset.industryReady==='true'||root.dataset.industryMode==='normal'||root.dataset.latinPopulationReady==='1';});
+ await page.evaluate(()=>document.fonts.ready);
+};
+const map=field=>page.locator(field==='nature'?'[data-nature-map-host] svg':field==='industry'?'[data-industry-primary-map] svg':field==='population'?'[data-lp-target-map] svg':'[data-latin-agriculture-map-container] svg');
+const shot=async(name)=>{const file=path.join(output,name+'.png');await page.screenshot({path:file,fullPage:true});const bytes=await readFile(file);result.screenshots.push({file,sha256:createHash('sha256').update(bytes).digest('hex')});};
+const noOverflow=async()=>assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'No page horizontal overflow');
+try{
+ for(const [width,height]of [[1536,864],[1280,720],[1024,768]]){
+  await page.setViewportSize({width,height});
+  await open('nature');
+  assert.equal(await page.locator('select[data-nature-place]').inputValue(),'all');
+  assert.equal(await page.locator('select[data-nature-scope]').inputValue(),'all');
+  assert.equal(await page.locator('[data-nature-country][aria-pressed=true]').count(),0);
+  assert.match(await page.locator('[data-nature-reading-title]').textContent(),/中南米全体/);
+  const normal=await page.locator('[data-nature-normals]').boundingBox(),explanation=await page.locator('[data-nature-reading-title]').boundingBox();
+  assert.ok(normal.y<explanation.y,'Station chart precedes Japanese explanation');
+  assert.ok(await page.locator('[data-nature-legend-host]').evaluate(node=>!!node.closest('.latin-map-column')),'Climate legend stays at the map');
+  const nature=await map('nature').boundingBox();await noOverflow();await shot(`nature-overview-${width}`);
+  await open('agriculture');
+  assert.equal(await page.locator('[data-latin-agriculture-place]').inputValue(),'all');
+  assert.equal(await page.locator('[data-latin-agriculture-scope]').inputValue(),'all');
+  assert.equal(await page.locator('[data-latin-agriculture-layer=all]').getAttribute('aria-pressed'),'true');
+  assert.equal(await page.locator('[data-latin-agriculture-country][aria-pressed=true]').count(),0);
+  assert.equal(await page.locator('[data-agriculture-overview-crops] image').count(),1);
+  assert.equal(await page.locator('[data-agriculture-overview-livestock] image').count(),1);
+  const agriculture=await map('agriculture').boundingBox();await noOverflow();await shot(`agriculture-overview-${width}`);
+  await open('industry');
+  assert.equal(await page.locator('[data-industry-place]').inputValue(),'all');
+  assert.match(await page.locator('[data-industry-reading-title]').textContent(),/中南米全体/);
+  const industry=await map('industry').boundingBox();
+  assert.ok(Math.abs(industry.width-nature.width)<2&&Math.abs(industry.height-nature.height)<2,'Industry map uses the climate dimensions: '+JSON.stringify({width,nature,industry}));
+  assert.ok(Math.abs(agriculture.width-nature.width)<2&&Math.abs(agriculture.height-nature.height)<2,'Agriculture map uses the climate dimensions');
+  await noOverflow();await shot(`industry-overview-${width}`);
+  await open('population');const population=await map('population').boundingBox();
+  assert.ok(Math.abs(population.width-nature.width)<2&&Math.abs(population.height-nature.height)<2,'Population uses the same map dimensions');await noOverflow();
+  result.frames.push({width,height,nature,agriculture,industry,population});
+ }
+ result.checks.push('Three PC sizes: all-region entry, unselected countries, climate chart order, complete map legends, matching map dimensions, no horizontal overflow');
+ await page.setViewportSize({width:1536,height:864});
+ await open('agriculture');
+ const before=await map('agriculture').getAttribute('data-agriculture-frame');
+ await page.locator('[data-latin-agriculture-layer=coff]').click();
+ assert.equal(await page.locator('[data-agriculture-overview-livestock] image').getAttribute('opacity'),'0.3');
+ assert.match(await page.locator('[data-agriculture-selected-outline] image').getAttribute('href'),/coff-outline\.png$/);
+ await map('agriculture').locator('[data-latin-agriculture-country=BRA]').press('Enter');
+ assert.equal(await page.locator('[data-latin-agriculture-place]').inputValue(),'BRA');
+ assert.equal(await page.locator('[data-latin-agriculture-scope]').inputValue(),'all');
+ assert.equal(await map('agriculture').getAttribute('data-agriculture-frame'),before);
+ assert.equal(await map('agriculture').locator('[data-latin-agriculture-country]').count(),34);
+ await shot('agriculture-coffee-brazil');
+ const selectionURL=page.url();await page.reload();
+ assert.equal(page.url(),selectionURL);assert.equal(await page.locator('[data-latin-agriculture-layer=coff]').getAttribute('aria-pressed'),'true');
+ await page.locator('[data-latin-agriculture-compare]').click();
+ await page.waitForSelector('[data-nature-source-map] [data-latin-agriculture-map]');
+ assert.match(await page.locator('[data-nature-source-map] image').last().getAttribute('href'),/coff\.png$/);
+ await shot('nature-coffee-comparison');
+ await page.locator('[data-nature-return]').click();
+ await page.waitForSelector('[data-agriculture-selected-outline]');
+ assert.equal(await page.locator('[data-latin-agriculture-place]').inputValue(),'BRA');assert.equal(await page.locator('[data-latin-agriculture-scope]').inputValue(),'all');
+ await page.locator('.latin-map-options summary').click();await page.locator('[data-latin-agriculture-fallback]').click();
+ assert.equal(await page.locator('[data-latin-agriculture-fallback-rows] tr').count(),34);
+ assert.match(await page.locator('[data-latin-agriculture-fallback-rows] tr').first().textContent(),/ブラジル/);
+ await shot('agriculture-numeric-fallback');
+ result.checks.push('Crop and country keyboard selection retains both distributions and all-region frame; refresh, quantified comparison, named return and numeric fallback retain values/selection');
+ await open('nature');
+ const natureFrame=await map('nature').getAttribute('data-nature-frame');
+ await page.locator('[data-nature-case=andes]').click();
+ assert.equal(await page.locator('select[data-nature-place]').inputValue(),'BOL');assert.equal(await page.locator('select[data-nature-scope]').inputValue(),'all');
+ assert.equal(await map('nature').getAttribute('data-nature-frame'),natureFrame);
+ await shot('nature-andes');
+ await page.locator('[data-latin-section=water]').click();
+ assert.match(await page.locator('[data-latin-unavailable]').textContent(),/未整備/);
+ await page.locator('[data-latin-section=climate]').click();
+ assert.equal(await page.locator('select[data-nature-place]').inputValue(),'BOL');
+ await open('agriculture');await page.locator('[data-latin-agriculture-compare]').click();await page.waitForSelector('[data-nature-source-map] [data-agriculture-overview-crops]');
+ await page.locator('[data-nature-return]').click();await page.waitForSelector('[data-latin-agriculture-layer=all][aria-pressed=true]');
+ assert.match(await page.locator('[data-latin-agriculture-reading-title]').textContent(),/中南米全体/);
+ result.checks.push('Nature case selection keeps context; unavailable water section remains explicit; combined overview comparison returns to the combined overview');
+ await page.setViewportSize({width:390,height:844});await open('nature');await noOverflow();await shot('nature-mobile');await open('agriculture');await noOverflow();await shot('agriculture-mobile');
+ assert.deepEqual(errors,[]);assert.deepEqual(failedAssets,[]);
+ result.checks.push('Mobile portrait smoke check; no browser errors or failed built assets');
+ console.log(JSON.stringify({checks:result.checks,frames:result.frames,screenshots:result.screenshots.length,errors,failedAssets},null,2));
+}finally{await writeFile(path.join(output,'metadata.json'),JSON.stringify(result,null,2)+'\n');await browser.close();}

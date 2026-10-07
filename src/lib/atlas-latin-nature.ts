@@ -9,6 +9,7 @@ export const latinNatureLayers=['climate'];
 export const escapeNatureHtml=(value:unknown)=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 const esc=escapeNatureHtml;
 export const latinNatureCases=[
+ {id:'overview',name:'中南米全体',place:'all',scope:'all',city:'san-jose',crop:'all',title:'中南米全体の気候と農業',takeaway:'中米・カリブから南米まで、熱帯・乾燥帯・温帯・寒帯の分布を見渡します。緯度に加えて標高や雨の季節が作物・牧畜・水供給に関わります。雨温図はサンホセの観測所1点の例で、中南米全体の平均ではありません。',compare:'気候群と農畜産・人口の分布を同じ範囲で比べます。地域の代表例を選ぶと、その観測所と出典を確認できます。',sources:[{name:'気候分類：Beck et al. (2023)、1991–2020年',url:'https://www.gloh2o.org/koppen/'},{name:'気象庁ClimatView：月別平年値の説明',url:'https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/outline.html'}]},
  {id:'central',name:'中米の高地とコーヒー',place:'CRI',scope:'central',city:'san-jose',crop:'coff',title:'熱帯の高地がコーヒーを育てる',takeaway:'コスタリカの中央盆地では、熱帯でも標高によって気温が下がり、火山性の土壌と雨がコーヒー栽培を支えます。高地の産地から加工・輸出へつながり、土地や水の管理が品質を支えます。',compare:'気候群と2020年のコーヒー収穫面積を並べ、熱帯の中で高地に産地があることを確かめます。標高は観測所の値、作物は5分格子の推計です。',sources:[{name:'ICAFE：中央盆地のコーヒー産地・標高と火山性土壌',url:'https://www.icafe.cr/nuestro-cafe/regiones-cafetaleras/valle-central/'}]},
  {id:'cerrado',name:'ブラジルの雨季・乾季',place:'BRA',scope:'south',city:'brasilia',crop:'soyb',title:'雨季と土壌改良が大豆産地を支える',takeaway:'ブラジル中央部のセラードには雨季と乾季があり、酸性で養分が少ない土壌を改良して大豆を育てます。収穫物は飼料・油の市場と港へ運ばれ、農地の拡大は植生や水の管理にも影響します。',compare:'気候群と2020年の大豆収穫面積を比べます。雨季・乾季はブラジリアの月別平年値で読み、気候群だけから作物の分布を決めつけません。',sources:[{name:'Embrapa：大豆栽培の土壌改良と施肥',url:'https://www.embrapa.br/en/busca-de-publicacoes/-/publicacao/551684/correcao-do-solo-e-adubacao-da-cultura-da-soja'},{name:'FAO：セラードの自然条件と農業（2001年）',url:'https://www.fao.org/4/y1860e/y1860e09.htm'}]},
  {id:'caribbean',name:'カリブの季節と暮らし',place:'CUB',scope:'central',city:'havana',crop:'bana',title:'雨の季節が農業と水供給につながる',takeaway:'ハバナでは一年を通して暖かく、雨の多い季節と少ない季節が現れます。カリブの熱帯条件は作物や観光に関わり、季節の雨と暴風への備えが水供給・交通・滞在を支えます。',compare:'カリブと中米の熱帯の広がりを見てから、バナナの収穫面積と比べます。ハバナの観測値はキューバの一地点で、島全体や他の島の値ではありません。',sources:[{name:'NOAA：貿易風の仕組み',url:'https://www.nesdis.noaa.gov/about/k-12-education/atmosphere/what-are-trade-winds'},{name:'気象庁：ハバナの月別平年値',url:'https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/graph_mkhtml.php?n=78325&y=2025&m=12&e=6&r=5&s=1&k=0'}]},
@@ -24,14 +25,16 @@ export function natureCaseForPlace(place:string,caseId?:string){
  if(['URY','PRY'].includes(place))return latinNatureCases.find(c=>c.id==='pampas')!;
  if(['PER','ECU','CHL'].includes(place))return latinNatureCases.find(c=>c.id==='andes')!;
  if(subregion==='South America')return latinNatureCases.find(c=>c.id==='amazon')!;
- return latinNatureCases[0];
+ return latinNatureCases.find(c=>c.id==='central')!;
 }
 export function natureCountryName(place:string){return latinCountries.find(c=>c.code===place)?.name??(place==='all'?'中南米全体':place);}
 export function natureComparisonReading(source:{field:string;layer:string;place:string}){
  const name=natureCountryName(source.place);
+ if(source.field==='agriculture'&&source.layer==='all')return {title:`${name}の気候と農畜産`,takeaway:'緯度・標高・雨の季節と、作物・家畜の広がりを同じ範囲で比べます。気候群から生産量や産地を決めつけず、品目ごとの数値と出典で確かめます。',explanation:'気候は1991–2020年、農畜産は2020年の既存格子推計を合成した分布図です。色は品目で、品目間の数量・面積比ではありません。',sources:latinNatureCases[0].sources};
  if(source.field==='agriculture'&&Object.hasOwn(latinAgricultureReading,source.layer)){
   const reading=latinAgricultureReading[source.layer as keyof typeof latinAgricultureReading];
-  return {title:`${name}：${reading.title}`,takeaway:reading.takeaway,explanation:`${reading.compare}。気候は1991–2020年、作物・牛の分布は2020年の格子推計で、年と粒度を区別して読みます。`,sources:reading.sources.map(s=>({name:s.label,url:s.url}))};
+  const metric=source.layer==='cattle'?'牛の飼育密度':source.layer==='coff'?'アラビカコーヒーの収穫面積':source.layer==='soyb'?'大豆の収穫面積':'バナナの収穫面積';
+  return {title:`${name}：${metric}`,takeaway:reading.takeaway,explanation:`地域事例：${reading.title}。${reading.compare}。気候は1991–2020年、作物・牛の分布は2020年の格子推計で、年と粒度を区別して読みます。`,sources:reading.sources.map(s=>({name:s.label,url:s.url}))};
  }
  if(source.field==='population'){
   const quantity=source.layer==='population',metric=quantity?'人口規模':source.layer==='scale'?'人口密度・規模':'人口密度';
@@ -59,7 +62,7 @@ export function renderLatinNatureMap(state:LatinNatureMapState,idPrefix='latin-n
  const clip=state.only&&selected?`<defs><clipPath id="${esc(idPrefix)}-only"><path d="${selected.path}"/></clipPath></defs>`:'';
  const image=(opacity:number,mask='')=>`<image href="${withBase(data.image)}" x="${left}" y="${top}" width="${right-left}" height="${bottom-top}" preserveAspectRatio="none" style="image-rendering:pixelated" opacity="${opacity}" ${mask}/>`;
  const distribution=clip?image(.16)+image(1,`clip-path="url(#${esc(idPrefix)}-only)"`):image(1);
- const outlines=latinCountries.map(c=>`<path d="${c.path}" fill="transparent" stroke="${c.code===state.place?'#233d3b':'#657f71'}" stroke-width="${c.code===state.place?'2.5':'.55'}" vector-effect="non-scaling-stroke" data-nature-country="${esc(c.code)}" role="button" tabindex="0" aria-label="${esc(c.name)}の自然条件" aria-pressed="${c.code===state.place}"><title>${esc(c.name)} · 気候群1991–2020</title></path>`).join('');
+ const outlines=latinCountries.map(c=>`<path d="${c.path}" fill="transparent" stroke="${c.code===state.place?'#233d3b':'#657f71'}" stroke-width="${c.code===state.place?'2.5':'.55'}" vector-effect="non-scaling-stroke" data-nature-country="${esc(c.code)}" role="button" tabindex="0" aria-label="${esc(c.name)}の自然条件" aria-pressed="${c.code===state.place}"></path>`).join('');
  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${latinWidth} ${latinHeight}" width="${latinWidth}" height="${latinHeight}" class="latin-map latin-nature-map" data-latin-map data-latin-nature-map data-nature-frame="${frame.join(' ')}" role="group" aria-labelledby="${esc(idPrefix)}-title"><title id="${esc(idPrefix)}-title">中南米の5気候群 · 1991–2020年 · 0.1度分類を5群へ加工</title>${clip}<g data-nature-native-group transform="${transform}"><g data-nature-context aria-hidden="true">${context}</g><g data-nature-original-distribution>${distribution}</g><g data-nature-countries>${outlines}</g>${marker}</g></svg>`;
 }
 export function renderLatinNatureLegend(_layer='climate'){
