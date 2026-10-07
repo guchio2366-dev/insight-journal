@@ -1,3 +1,4 @@
+import {westTopicReasons} from './west-asia-readings.mjs';
 export const westFields = [
   {id:'agriculture',label:'農林業',route:'agriculture',first:'farming-overview'},
   {id:'natural',label:'自然環境',route:'nature',first:'climate'},
@@ -84,8 +85,10 @@ const readings={
 };
 export function westReading(t){
   const base=t.id.replace(/-(irrigated|rainfed)$/,'');
-  const r=readings[base];
-  if(!r)return {message:t.description,reason:'',comparisons:[]};
+  const original=readings[base];
+  const reason=westTopicReasons[t.id]??westTopicReasons[base]??original?.reason??'';
+  const r=original?{...original,reason}:null;
+  if(!r)return {message:t.description,reason,comparisons:[]};
   const annualComparison=compare('annual-precipitation','年降水量の分布と比べる',t.id.endsWith('-irrigated')?'2020年の灌漑小麦と1991–2020年の年降水量を比べます。水源・設備・水の配分も考えます。年合計は利用可能な水量を、収穫面積は取水量を示しません。':'2020年の天水小麦と1991–2020年の年降水量を比べます。雨を主な水源とする栽培を探し、生育期の雨・土壌・品種・経営も考えます。年合計は栽培限界や収量を示しません。');
   const annualAdditions=base==='wheat'?[annualComparison]:[];
   if(t.id.endsWith('-irrigated'))return {...r,message:'灌漑は降水を補って栽培を支え、水を届ける設備・費用・管理が関わる。',comparisons:[...r.comparisons,...annualAdditions]};
