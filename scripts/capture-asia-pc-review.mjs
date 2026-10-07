@@ -25,7 +25,7 @@ const scenes=[
  {id:'population',us:'/atlas/north-america/population/',asia:'/atlas/asia/east-asia/population/',alignTop:true,comparisonScope:'layout-only; the US reference does not show a population distribution fill, so distribution rendering equivalence is not assessed'},
 ];
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.geojson':'application/geo+json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.woff2':'font/woff2','.gz':'application/gzip'};
-const metadata={schemaVersion:1,status:'running',startedAt:new Date().toISOString(),checkedOutSHA:null,headSHA:process.env.REVIEW_HEAD_SHA||null,baseSHA:process.env.REVIEW_BASE_SHA||null,beforeSHA:process.env.REVIEW_BEFORE_SHA||null,githubSHA:process.env.GITHUB_SHA||null,runId:process.env.GITHUB_RUN_ID||null,runAttempt:process.env.GITHUB_RUN_ATTEMPT||null,repository:process.env.GITHUB_REPOSITORY||null,basePath,profiles,output:'review-artifacts/asia-pc',expectedImageCount:46,expectedComparisonCount:8,fonts:{setup:process.env.REVIEW_JAPANESE_FONT_SETUP||'preinstalled',families:process.env.REVIEW_JAPANESE_FONTS||null,match:process.env.REVIEW_JAPANESE_FONT_MATCH||null},browser:null,scope:'Local production build only; public deployment is not accessed.',notes:['US automobiles and Japanese transport equipment retain their respective statistical definitions.','Industry map dimensions use the compact US population frame; other dimensions and all corresponding field tops agree within 1 CSS pixel.','Population is a layout-only comparison: the US reference does not show a population distribution fill; no distribution rendering equivalence is asserted.','Each PNG shows the viewport once; no duplicate map-crop artifacts are generated.']};
+const metadata={schemaVersion:1,status:'running',startedAt:new Date().toISOString(),checkedOutSHA:null,headSHA:process.env.REVIEW_HEAD_SHA||null,baseSHA:process.env.REVIEW_BASE_SHA||null,beforeSHA:process.env.REVIEW_BEFORE_SHA||null,githubSHA:process.env.GITHUB_SHA||null,runId:process.env.GITHUB_RUN_ID||null,runAttempt:process.env.GITHUB_RUN_ATTEMPT||null,repository:process.env.GITHUB_REPOSITORY||null,basePath,profiles,output:'review-artifacts/asia-pc',expectedImageCount:48,expectedComparisonCount:8,fonts:{setup:process.env.REVIEW_JAPANESE_FONT_SETUP||'preinstalled',families:process.env.REVIEW_JAPANESE_FONTS||null,match:process.env.REVIEW_JAPANESE_FONT_MATCH||null},browser:null,scope:'Local production build only; public deployment is not accessed.',notes:['US automobiles and Japanese transport equipment retain their respective statistical definitions.','Industry map dimensions use the compact US population frame; other dimensions and all corresponding field tops agree within 1 CSS pixel.','Population is a layout-only comparison: the US reference does not show a population distribution fill; no distribution rendering equivalence is asserted.','Each PNG shows the viewport once; no duplicate map-crop artifacts are generated.']};
 const results={captures:[],comparisons:[],operations:[],externalCommunicationAttempts:[],blockedWebSockets:[]};
 const failure=error=>error?.stack??String(error);
 async function persist(){
@@ -229,7 +229,19 @@ async function checkContextOperations(browser,host,profile){
   assert(layout.plot.x>=layout.mapRight,'Selected city chart is on the right');assert(layout.readingTop>=layout.plotBottom,'Climate explanation follows its chart');
   assert.equal(await page.locator(west?'.west-subtabs [data-west-topic-button="precipitation"]':'[data-water-topics] [data-water-view="seasonal-precipitation"]').count(),0);
   await contextPicture(page,profile,`${region}-city-chart-right`,west?'west-asia':'asia');
-  return {city:west?'riyadh':'tokyo',chartRight:true,climateReadingBelowChart:true,waterMonthlyTabAbsent:true,layout};
+  let scrolledLayout=null;
+  if(west){
+   const pane=page.locator('.west-reading');
+   const delta=await page.locator(chart).evaluate(node=>node.getBoundingClientRect().top-node.closest('.west-reading').getBoundingClientRect().top-40);
+   await pane.hover();await page.mouse.wheel(0,delta);await settle(page);
+   scrolledLayout=await page.evaluate(chart=>{const plot=document.querySelector(chart).getBoundingClientRect(),pane=document.querySelector('.west-reading'),reading=pane.querySelector('.atlas-city-reading').getBoundingClientRect(),p=pane.getBoundingClientRect(),map=document.querySelector('[data-west-map]').getBoundingClientRect();return {plot:{left:plot.left,top:plot.top,right:plot.right,bottom:plot.bottom},pane:{left:p.left,top:p.top,right:p.right,bottom:p.bottom,scrollTop:pane.scrollTop},readingTop:reading.top,mapRight:map.right,viewportHeight:innerHeight};},chart);
+   assert(scrolledLayout.pane.scrollTop>0,'Wheel scroll must reach the chart within the right reading pane');
+   assert(scrolledLayout.plot.left>=scrolledLayout.mapRight&&scrolledLayout.plot.right<=scrolledLayout.pane.right,'Scrolled chart stays inside the right column');
+   assert(scrolledLayout.plot.top>=scrolledLayout.pane.top&&scrolledLayout.plot.bottom<=Math.min(scrolledLayout.pane.bottom,scrolledLayout.viewportHeight),'The complete chart is visible after scrolling the reading pane');
+   assert(scrolledLayout.readingTop>=scrolledLayout.plot.bottom&&scrolledLayout.readingTop<scrolledLayout.pane.bottom,'The climate reading follows the visible chart in the same pane');
+   await contextPicture(page,profile,`${region}-city-chart-right-scrolled`,'west-asia');
+  }
+  return {city:west?'riyadh':'tokyo',chartRight:true,climateReadingBelowChart:true,waterMonthlyTabAbsent:true,layout,scrolledLayout};
  });
  await operation(browser,host,profile,'us-farming-reference',async page=>{await open(page,host,'/atlas/north-america/agriculture/','us');await contextPicture(page,profile,'us-farming-reference','us');return {referenceOnly:true};});
 }
@@ -354,7 +366,7 @@ async function main(){
   compare();await persist();
   for(const profile of profiles)await checkOperations(browser,host,profile,source);
   for(const profile of profiles)await checkContextOperations(browser,host,profile);
-  assert.equal(results.captures.length,46);assert(results.captures.every(row=>row.passed),'All 46 viewport captures must pass');
+  assert.equal(results.captures.length,48);assert(results.captures.every(row=>row.passed),'All 48 viewport captures must pass');
   assert.equal(results.comparisons.length,8);assert(results.comparisons.every(row=>row.passed),'All 8 geometry comparisons must pass');
   assert.equal(results.operations.length,28);assert(results.operations.every(row=>row.passed),'All 28 PC operation groups must pass');
   assert.deepEqual(results.externalCommunicationAttempts,[]);assert.deepEqual(results.blockedWebSockets,[]);

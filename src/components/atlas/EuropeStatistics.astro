@@ -11,7 +11,7 @@ const { field } = Astro.props;
 const countryName = (code: string) => countries.find(country => country.code === code)?.name ?? code;
 ---
 <section class="eu-statistics" data-eu-statistics aria-label="選択中の分野・品目の統計">
-  <section id="europe-climate-statistics" data-eu-climate-statistics hidden={field !== 'nature'} aria-labelledby="europe-climate-statistics-title">
+  <section id="europe-climate-statistics" data-eu-climate-statistics hidden aria-labelledby="europe-climate-statistics-title">
     <header class="eu-statistics-heading">
       <h2 id="europe-climate-statistics-title">月別の数値・年間の要約</h2>
       <p>右側の雨温図と同じ観測地点の数値です。都市を選び直すと、雨温図・表・年間の要約が一緒に切り替わります。</p>

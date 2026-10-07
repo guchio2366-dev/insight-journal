@@ -18,8 +18,37 @@ export const latinNatureCases=[
  {id:'panama',name:'パナマの雨と物流',place:'PAN',scope:'central',city:'',crop:'bana',title:'流域の雨が世界の物流を支える',takeaway:'パナマ運河は流域の雨を湖に蓄え、淡水を使う閘門で船を通します。太平洋と大西洋の市場を結ぶ物流が貯水に支えられ、干ばつ時には生活用水と通航のため節水・通航調整が必要になります。',compare:'元の気候群分布と、雨→貯水→閘門→通航の専用図を並べます。1991–2020年の気候と2024会計年度の活動を区別して読みます。',sources:[{name:'パナマ運河庁：流域の水と生活・運河',url:'https://pancanal.com/agua/'},{name:'パナマ運河庁：水と通航の調整（2023年）',url:'https://pancanal.com/en/how-the-panama-canal-is-addressing-the-issue-of-water-head-on/'}]},
  {id:'pampas',name:'パンパの草地と牧畜',place:'ARG',scope:'south',city:'buenos-aires',crop:'cattle',title:'温帯の草地が穀物と牧畜につながる',takeaway:'アルゼンチンのパンパでは、温帯の草地を利用する牛の飼育と穀物栽培が広がります。牧草と耕地の利用を組み合わせ、肉や穀物を都市・輸出市場へ送り、土壌の肥沃さと草地の管理が生産を支えます。',compare:'温帯の広がりと2020年の牛の密度を並べ、草地利用と牧畜の分布を考えます。気候群は草地面積、牛の密度は牛肉生産量を表していません。',sources:[{name:'FAO：パンパの草地・耕地・牧畜（2005年、地域背景）',url:'https://www.fao.org/4/y8344e/y8344e0i.htm'}]},
 ];
+const seasonSource={name:'NASA：地軸の傾きと南北半球の季節',url:'https://spaceplace.nasa.gov/seasons/en/'};
+const windSource={name:'NOAA：熱帯の暖かさ、水蒸気と貿易風',url:'https://www.nesdis.noaa.gov/about/k-12-education/atmosphere/what-are-trade-winds'};
+const westCoastSource={name:'NASA：南米西岸の冷たい海水と低い雲',url:'https://eol.jsc.nasa.gov/Collections/EarthObservatory/articles/SouthAmericasWestCoastWonders.htm'};
+/** Observed seasonal patterns, with geographic reasons; these are not new Köppen classifications. */
+const cityReadings:Record<string,{climate:string;reason:string;source:{name:string;url:string}}>={
+ 'havana':{climate:'年間を通じて暖かく、夏を中心に雨が増える観測所です。',reason:'低緯度では日射が強く、暖かい海からの水蒸気と熱帯の風が雲・雨に関わります。雨の量は島や観測所ごとに異なります。',source:windSource},
+ 'kingston':{climate:'年間を通じて高温で、秋の降水量が多く、冬には少なくなります。',reason:'低緯度の暖かさと、海から運ばれる水蒸気を分けて読みます。カリブの貿易風は雲を運びますが、ハバナと同じ雨の季節とは限りません。',source:windSource},
+ 'belize':{climate:'年間を通じて暖かく、秋の雨が多い一方、春には少なくなります。',reason:'低緯度の海沿いでは暖かい海から水蒸気が供給されます。熱帯の風と雨の季節性を、気温の小さな年変化とは別に読みます。',source:windSource},
+ 'san-jose':{climate:'熱帯の高地にあるため、低地の熱帯都市ほど暑くなく、雨季・乾季が明瞭です。',reason:'低緯度でも標高が上がると気温が下がります。高地の気温と季節の雨は、コーヒーなどの生育条件を読む手掛かりです。',source:latinNatureCases.find(c=>c.id==='central')!.sources[0]},
+ 'manaus':{climate:'赤道に近い熱帯の観測所で、気温の年変化が小さく、年間を通して降水があります。',reason:'強い日射に加え、アマゾンでは森林の蒸発散も水蒸気を大気へ戻します。森林が緑でも雨量が毎月同じになるわけではありません。',source:latinNatureCases.find(c=>c.id==='amazon')!.sources[0]},
+ 'brasilia':{climate:'ブラジル中央高原では、雨の多い夏と少雨の冬が明瞭に分かれます。',reason:'熱帯でも高原の標高が気温に関わり、季節の雨は作物の生育期と水管理を左右します。年雨量だけで乾季の利用可能な水は決まりません。',source:latinNatureCases.find(c=>c.id==='cerrado')!.sources[1]},
+ 'sao-paulo':{climate:'南半球の夏は温暖で雨が多く、冬は気温・雨量とも下がる観測所です。',reason:'南半球の季節は日本と逆です。高原にある都市の気温を、低地のマナウスや沿岸のレシフェと同じものとして扱いません。',source:seasonSource},
+ 'recife':{climate:'低緯度の沿岸で年間を通して高温ですが、降水量は南半球の秋から冬に多くなります。',reason:'熱帯の暖かい海は水蒸気の供給源です。雨の多い季節はブラジリアと異なるため、同じ熱帯の国でも各観測所の月別値で確かめます。',source:windSource},
+ 'lima':{climate:'太平洋岸の少雨の観測所です。気温には南半球の季節変化がありますが、降水量は各月ともごく少量です。',reason:'南米西岸では冷たい海流と湧昇に伴う低い雲が見られます。雲・霧があることと、雨温図に記録される雨が多いことを区別します。',source:westCoastSource},
+ 'bogota':{climate:'低緯度でも標高の高い観測所では年間を通して冷涼で、春と秋に雨が多くなります。',reason:'気温は緯度だけでなく標高にも左右されます。高地のボゴタと、同じ低緯度にある沿岸・低地の都市を分けて比較します。',source:latinNatureCases.find(c=>c.id==='andes')!.sources[0]},
+ 'buenos-aires':{climate:'南半球の夏に暑く冬に冷涼な温帯の観測所で、年間を通して降水があります。',reason:'南半球では日射の季節が日本と逆になり、夏は主に12～2月、冬は6～8月です。暖かい月と雨の多い月をそれぞれ読みます。',source:seasonSource},
+ 'santiago':{climate:'南半球の夏が乾燥し、冬に雨が多い地中海性の季節パターンが見られます。',reason:'地中海性という名称は夏乾燥・冬雨の型を表します。日本と逆の季節で読み、冬の雨と夏の農業用水を分けて考えます。',source:{name:'チリ気象局：チリ中部の気候特性',url:'https://climatologia.meteochile.gob.cl/application/publicaciones/documentoPdf/climaticoAeronautico/climaticoAeronautico202106001.pdf'}},
+ 'la-paz':{climate:'エルアルトの高地観測所では年間を通して気温が低く、南半球の夏に雨が多くなります。',reason:'低緯度でも高い標高による気温低下が現れます。ラパス市全域の平均ではなく、標高4,058mのエルアルト1地点の値です。',source:latinNatureCases.find(c=>c.id==='andes')!.sources[0]},
+ 'quito-izobamba':{climate:'赤道に近くても高地では冷涼で、気温の年変化が小さい観測所です。',reason:'赤道に近い緯度と高い標高を合わせて読みます。低緯度の強い日射だけで暑さを判断せず、郊外のイソバンバの観測値を確かめます。',source:latinNatureCases.find(c=>c.id==='andes')!.sources[0]},
+ 'punta-arenas':{climate:'南米南端に近く、夏でも涼しく、冬の気温はさらに下がる観測所です。',reason:'南半球の高緯度では冬の日射条件が低緯度と異なります。暖かい季節は日本と逆で、同じチリでもサンティアゴとは気温・雨量が大きく違います。',source:seasonSource},
+ 'montevideo':{climate:'南半球の夏に温暖、冬に冷涼で、雨は年間を通して観測されています。',reason:'南半球では地軸の傾きによる日射の季節が日本と逆です。ラプラタ河口近くのこの地点の値を、ウルグアイ全域の平均に置き換えません。',source:seasonSource},
+};
+export function natureCityReading(cityId:string){return cityReadings[cityId];}
+export function natureCityCase(cityId:string){
+ const city=data.cities.find(c=>c.id===cityId),reading=cityReadings[cityId];if(!city||!reading)return undefined;
+ return {id:`station-${city.id}`,name:city.name,place:city.countryCode,scope:latinCountries.find(c=>c.code===city.countryCode)?.subregion==='South America'?'south':'central',city:city.id,crop:'all',title:`${city.name}の気候`,takeaway:reading.climate+' '+reading.reason,compare:'1991–2020年の観測所1点の平年値と、同期間の気候群を合わせて読みます。地点の値は国全体や流域の値ではありません。',sources:[{name:'気象庁ClimatView：この観測所の原表',url:city.sourceUrl},reading.source]};
+}
 export function natureCaseForPlace(place:string,caseId?:string){
+ if(caseId?.startsWith('station-')){const city=natureCityCase(caseId.slice(8));if(city&&city.place===place)return city;}
  const exact=latinNatureCases.find(c=>c.id===caseId&&c.place===place)??latinNatureCases.find(c=>c.place===place);if(exact)return exact;
+ const station=data.cities.find(c=>c.countryCode===place);if(station)return natureCityCase(station.id)!;
  const subregion=latinCountries.find(c=>c.code===place)?.subregion;
  if(subregion==='Caribbean')return latinNatureCases.find(c=>c.id==='caribbean')!;
  if(['URY','PRY'].includes(place))return latinNatureCases.find(c=>c.id==='pampas')!;
@@ -71,7 +100,7 @@ export function renderLatinNatureLegend(_layer='climate'){
 }
 export function renderLatinNatureNormals(cityId:string){
  const city=data.cities.find(c=>c.id===cityId);
- if(!city)return `<div class="latin-nature-water-note"><strong>雨 → 貯水 → 物流・生活用水</strong><p>湖に蓄える雨水が閘門の運用と生活用水を支えます。運河庁の2024会計年度の専用図で、自然条件と通航調整を比べられます。</p><a href="https://pancanal.com/agua/" target="_blank" rel="noopener">運河庁：流域の水</a></div>`;
+ if(!city)return cityId?'<p class="latin-nature-water-note">この観測所の平年値は未収録です。別地点の値や0で補いません。</p>':`<div class="latin-nature-water-note"><strong>雨 → 貯水 → 物流・生活用水</strong><p>湖に蓄える雨水が閘門の運用と生活用水を支えます。運河庁の2024会計年度の専用図で、自然条件と通航調整を比べられます。</p><a href="https://pancanal.com/agua/" target="_blank" rel="noopener">運河庁：流域の水</a></div>`;
  const t=city.temperatureC,r=city.precipitationMm,rainMax=Math.max(100,Math.ceil(Math.max(...r.filter(v=>v!==null))/100)*100);
  const rainY=(v:number)=>150-v/rainMax*118,tempY=(v:number)=>150-(v+20)/60*118;
  const bars=r.map((v,i)=>v===null?'':`<rect x="${51+i*32}" y="${rainY(v)}" width="18" height="${150-rainY(v)}" fill="#6a9db6"><title>${i+1}月の降水量 ${v}mm</title></rect>`).join('');
@@ -79,5 +108,6 @@ export function renderLatinNatureNormals(cityId:string){
  const lines=segments.map(s=>`<polyline points="${s}" fill="none" stroke="#b75d34" stroke-width="2.4"/>`).join('');
  const months=Array.from({length:12},(_,i)=>`<text x="${60+i*32}" y="179" text-anchor="middle">${i+1}</text>`).join('');
  const annual=r.every(v=>v!==null)?r.reduce((sum,v)=>sum+v,0):null;
- return `<section class="latin-nature-normals"><h3>${esc(city.name)}</h3><p>${esc(city.stationName)} · 標高${city.elevationM.toLocaleString('ja-JP')}m · 観測所1点</p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 485 188" role="img" aria-label="${esc(city.name)}の月別平年気温と降水量、1991–2020年"><g font-size="24" font-family="sans-serif" fill="#456064"><path d="M44 30V150H432" stroke="#9cafb0" fill="none"/><text x="42" y="44" text-anchor="end">${rainMax}</text><text x="42" y="156" text-anchor="end">0</text><text x="10" y="19">mm</text><text x="439" y="44">40</text><text x="439" y="156">−20</text><text x="437" y="19">°C</text>${bars}${lines}${months}<text x="455" y="183">月</text></g></svg><p class="latin-nature-normal-key"><i class="rain"></i>左：降水量 mm/月 <i class="temperature"></i>右：月平均気温 °C</p><p>1991–2020年${annual===null?'':` · 年降水量 ${annual.toLocaleString('ja-JP',{maximumFractionDigits:1})}mm`}</p><details><summary>12か月の値・観測所の位置</summary><p>経度${city.longitude}°・緯度${city.latitude}°。空港・郊外などの観測所名を明記しています。</p><table><thead><tr><th>月</th><th>気温 °C</th><th>降水 mm</th></tr></thead><tbody>${t.map((v,i)=>`<tr><th>${i+1}</th><td>${v===null?'欠測':v}</td><td>${r[i]===null?'欠測':r[i]}</td></tr>`).join('')}</tbody></table><a href="${esc(city.sourceUrl)}" target="_blank" rel="noopener">気象庁ClimatViewの原表</a></details></section>`;
+ const reading=natureCityReading(cityId);
+ return `<section class="latin-nature-normals" data-nature-city-id="${esc(city.id)}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 485 188" role="img" aria-label="${esc(city.name)}の月別平年気温と降水量、1991–2020年"><g font-size="24" font-family="sans-serif" fill="#456064"><path d="M44 30V150H432" stroke="#9cafb0" fill="none"/><text x="42" y="44" text-anchor="end">${rainMax}</text><text x="42" y="156" text-anchor="end">0</text><text x="10" y="19">mm</text><text x="439" y="44">40</text><text x="439" y="156">−20</text><text x="437" y="19">°C</text>${bars}${lines}${months}<text x="455" y="183">月</text></g></svg><h3 data-nature-city-title>${esc(city.name)}</h3><p class="latin-nature-city-climate" data-nature-city-climate>${esc(reading?.climate??city.summary)}</p>${reading?`<p class="latin-nature-city-reason" data-nature-city-reason>${esc(reading.reason)}</p>`:''}<p>${esc(city.stationName)} · 標高${city.elevationM.toLocaleString('ja-JP')}m · 観測所1点</p><p class="latin-nature-normal-key"><i class="rain"></i>左：降水量 mm/月 <i class="temperature"></i>右：月平均気温 °C</p><p>1991–2020年${annual===null?'':` · 年降水量 ${annual.toLocaleString('ja-JP',{maximumFractionDigits:1})}mm`}</p><details><summary>12か月の値・観測所の位置</summary><p>${esc(city.summary)}</p><p>経度${city.longitude}°・緯度${city.latitude}°。空港・郊外などの観測所名を明記しています。</p><table><thead><tr><th>月</th><th>気温 °C</th><th>降水 mm</th></tr></thead><tbody>${t.map((v,i)=>`<tr><th>${i+1}</th><td>${v===null?'欠測':v}</td><td>${r[i]===null?'欠測':r[i]}</td></tr>`).join('')}</tbody></table><a href="${esc(city.sourceUrl)}" target="_blank" rel="noopener">気象庁ClimatViewの原表</a>${reading?` ／ <a href="${esc(reading.source.url)}" target="_blank" rel="noopener">${esc(reading.source.name)}</a>`:''}</details></section>`;
 }

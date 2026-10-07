@@ -1,5 +1,7 @@
 /** Real Chromium acceptance against the production build. No HTTP server/mocked renderer. */
 import {chromium} from 'playwright';
+import {verifyCanadaDemographicsReading} from './verify-canada-demographics-reading.mjs';
+import {verifyCanadaForestryOverview} from './verify-canada-forestry-overview.mjs';
 import {readFile,mkdir,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
@@ -30,10 +32,11 @@ try{
   const station=await page.locator('[data-canada-natural-city=ottawa] i').boundingBox();
   let waterReference=reference;if(width>=960){await open('nature/?env=water&waterView=precipitation');waterReference=await frame();}
   for(const route of ['canada/nature/?view=water','canada/nature/?view=water&waterTopic=precipitation','canada/population/','canada/population/?topic=ethnicity','canada/population/?topic=religion']){
-   await open(route);const actual=await frame(),expected=route.includes('view=water')&&width>=960?waterReference:reference;assert.ok(Math.abs(expected.width-actual.width)<2&&Math.abs(expected.height-actual.height)<2,`${width} ${route}: corresponding map dimensions`);if(route.includes('view=water')&&width>=960)assert.ok(Math.abs(expected.y-actual.y)<2,`${width} ${route}: corresponding water map top`);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`${width} ${route}: no horizontal overflow`);
+   let populationReference=reference;if(route.includes('population')&&width>=960){await open('population/?popView='+(new URL('https://atlas.test/'+route).searchParams.get('topic')??'distribution'));populationReference=await frame();}
+   await open(route);const actual=await frame(),expected=route.includes('view=water')&&width>=960?waterReference:route.includes('population')&&width>=960?populationReference:reference;assert.ok(Math.abs(expected.width-actual.width)<2&&Math.abs(expected.height-actual.height)<2,`${width} ${route}: corresponding map dimensions`);if(route.includes('view=water')&&width>=960)assert.ok(Math.abs(expected.y-actual.y)<2,`${width} ${route}: corresponding water map top`);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`${width} ${route}: no horizontal overflow`);
    if(route.includes('population')){assert.equal(await page.locator('.population-controls').count(),0);await page.waitForSelector('[data-canada-population][data-regions-ready="true"]');assert.equal(await page.locator('[data-population-region]').count(),293);await page.locator('[data-population-map-cma="933"]').press('Enter');assert.equal(await page.locator('[data-population-map-cma="933"]').getAttribute('aria-pressed'),'true');if(route.includes('topic=')){assert.ok(await page.locator('[data-population-composition-rows] tr').count()>8);await page.locator('[data-population-category]').nth(1).click();assert.match(await page.locator('[data-demographic-comparison]').textContent(),/割合が高い地域/);}}
    if(route==='canada/nature/?view=water'&&width>=960&&station){const marker=page.locator('[data-canada-map-city=ottawa] circle'),sourcePoint=await marker.evaluate(node=>[Number(node.getAttribute('cx')),Number(node.getAttribute('cy'))]);sourcePoint.forEach((value,i)=>assert.ok(Math.abs(value-ottawaPoint[i])<.02,'Ottawa retains its original projected coordinate'));if(Math.abs(reference.height-actual.height)<2){const point=await marker.boundingBox();assert.ok(Math.abs((station.x+station.width/2-reference.x)-(point.x+point.width/2-actual.x))<2,'Ottawa longitude registration');assert.ok(Math.abs((station.y+station.height/2-reference.y)-(point.y+point.height/2-actual.y))<2,'Ottawa latitude registration');}}
-   result.viewports.push({width,height,topic:route,reference:expected,referenceRoute:route.includes('view=water')&&width>=960?'nature/?env=water&waterView=precipitation':'canada/nature/',actual});if(width===1536||width===390)await shot(`followup-${width}-${route.replace(/[^a-z0-9]/g,'-')}`);
+   result.viewports.push({width,height,topic:route,reference:expected,referenceRoute:route.includes('view=water')&&width>=960?'nature/?env=water&waterView=precipitation':route.includes('population')&&width>=960?'population/?popView='+(new URL('https://atlas.test/'+route).searchParams.get('topic')??'distribution'):'canada/nature/',actual});if(width===1536||width===390)await shot(`followup-${width}-${route.replace(/[^a-z0-9]/g,'-')}`);
   }
  }
  await page.setViewportSize({width:1536,height:864});await open('canada/population/?topic=religion');await page.waitForSelector('[data-canada-population][data-regions-ready="true"]');
@@ -43,7 +46,7 @@ try{
  await page.locator('[data-population-category=""]').click();assert.equal(new URL(page.url()).searchParams.has('mapGroup'),false);await page.locator('[data-population-map-cma="933"]').press('Enter');assert.equal(new URL(page.url()).searchParams.has('cd'),false);await page.goBack();assert.equal(new URL(page.url()).searchParams.get('cd'),'2466');
  await page.route('**/canada-demographics-v2/regions.geojson',route=>route.abort());await open('canada/population/?topic=religion');await page.waitForSelector('[data-canada-population][data-regions-error="true"]');assert.match(await page.locator('[data-population-map-status]').textContent(),/取得できません/);assert.equal(await page.locator('[data-population-map-cma]').count(),41);await page.unroute('**/canada-demographics-v2/regions.geojson');
  result.checks.push('293 CDs, 23 religion leaves, non-majority note, category share, region selection/reload/history and network failure fallback');
- result.checks.push('Climate-first reading, water dimensions/top compared with actual US water and population compared with climate, removed upper controls, 293 regional boundaries and statistical definitions, categorical composition and city/legend selection at four widths');
+ result.checks.push('Climate-first reading, water dimensions/top compared with actual US water and population compared with the corresponding US population topic, removed upper controls, 293 regional boundaries and statistical definitions, categorical composition and city/legend selection at four widths');
  await page.setViewportSize({width:1536,height:864});
  await open('nature/');await page.waitForTimeout(3000);await shot('us-climate');
  await open('canada/nature/');await page.locator('[data-canada-natural-layer=climate][data-canada-natural-render=maplibre]').waitFor({timeout:25000});await shot('canada-climate-live');result.checks.push('Climate uses actual MapLibre/WebGL');
@@ -57,5 +60,7 @@ try{
  await page.route('**/*maplibre-gl*.js',route=>route.abort());await open('canada/nature/');await page.waitForTimeout(2000);assert.equal(await page.locator('[data-canada-natural-layer=climate]').getAttribute('data-canada-natural-render'),'svg');await shot('canada-climate-fallback');result.checks.push('Explicit fallback uses the same source and palette');
  await page.unroute('**/*maplibre-gl*.js');
  await verifyCanadaAgricultureOverview({page,url,output,result});
+ await verifyCanadaForestryOverview({page,url,output,result});
+ await verifyCanadaDemographicsReading({page,url,output,result});
  assert.deepEqual(errors,[],'No browser runtime errors');await writeFile(path.join(output,'results.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({passed:true,viewports:result.viewports.length,checks:result.checks,output},null,2));
 }finally{await browser.close();}

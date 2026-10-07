@@ -28,7 +28,8 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
     assert.ok(doc.querySelector('.eu-read-panel,.europe-side'));
     if (!field) assert.equal(doc.querySelectorAll('[data-europe-country-select] option').length,46);
     if (field) {
-      assert.equal(doc.querySelectorAll('.eu-read-panel select').length, 3,'Case controls move to the map only when the runtime activates the census case');
+      assert.equal(doc.querySelectorAll('.eu-read-panel select:not([data-eu-drainage-choice])').length, 3,'Case controls move to the map only when the runtime activates the census case');
+      assert.equal(doc.querySelector('[data-eu-drainage-choice]').closest('label').hidden,true);
       assert.equal(doc.querySelector('[data-eu-culture-host]').hidden,true);
       assert.equal(doc.querySelector('[data-eu-country]'),null);
       assert.equal(doc.querySelector('[data-eu-subject]'),null);
@@ -61,7 +62,9 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.equal(doc.querySelector('[data-eu-topic-field="nature"]').getAttribute('role'),'tablist');
       assert.equal(doc.querySelectorAll('[data-eu-topic-field="nature"] [role="tab"][tabindex="0"]').length,1);
       assert.equal(doc.querySelector('[data-eu-water-options]').getAttribute('role'),'tablist');
-      assert.equal(doc.querySelector('[data-eu-climate-reader] h2').textContent,'ロンドンの気候と農畜産');
+      assert.equal(doc.querySelector('[data-eu-climate-reader] h2').textContent,'欧州の気候分布');
+      assert.equal(doc.querySelector('[data-eu-climate-overview]').hidden,false);
+      assert.equal(doc.querySelector('[data-city-reading="london"]').hidden,true);
       const londonChart=doc.querySelector('.eu-read-panel [data-city-reading="london"] [data-eu-city-chart="london"] svg');
       assert.ok(londonChart);
       assert.deepEqual([...londonChart.querySelectorAll('.atlas-climate-month')].map(label=>label.textContent),Array.from({length:12},(_,i)=>String(i+1)));
@@ -75,8 +78,8 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.match(doc.querySelector('[data-city-reading="london"] .eu-city-chart-meta').textContent,/イギリス.*首都ロンドン/);
       const cityList=doc.querySelector('.eu-map-panel [data-eu-city-list]');
       assert.equal(cityList.hidden,false);
-      assert.equal(cityList.querySelectorAll('[data-eu-city-choice] option').length,24);
-      assert.equal(cityList.querySelector('[data-eu-city-choice]').value,'london');
+      assert.equal(cityList.querySelectorAll('[data-eu-city-choice] option').length,25);
+      assert.equal(cityList.querySelector('[data-eu-city-choice]').value,'');
       const key=doc.querySelector('.eu-read-panel [data-eu-climate-legend]');
       assert.equal(key.open,false,'Full 17-class key is available in a native disclosure without displacing the selected station plot');
       assert.equal(key.querySelectorAll('.eu-legend-grid>div').length,17);

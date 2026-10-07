@@ -217,17 +217,18 @@ async function drainageState(page) {
 async function feedbackPlacement(page) {
   assert.equal(await page.locator(resultSelector).count(), 1); assert.equal(await page.locator(resultSelector).isVisible(), true);
   const measured = await page.evaluate(() => {
-    const group = document.querySelector('[data-eu-drainage-controls]'), choice = group.querySelector('select'), summary = group.querySelector('[data-eu-basin-summary]');
+    const group = document.querySelector('[data-eu-drainage-controls]'), summary = group.querySelector('[data-eu-basin-summary]');
     const grid = document.querySelector('[data-eu-subject-grid]'), result = document.querySelector('[data-eu-subject-result]');
     return {insideControls: grid.parentElement === group, afterSummary: summary.nextElementSibling === grid,
       gridGap: grid.getBoundingClientRect().top - summary.getBoundingClientRect().bottom,
-      resultGap: result.getBoundingClientRect().top - choice.getBoundingClientRect().bottom,
+      rightReader: group.closest('.eu-read-panel') !== null,
+      externalChoicesHidden: group.querySelector('label').hidden && group.querySelector('button').hidden,
       fontSize: parseFloat(getComputedStyle(result).fontSize), live: result.getAttribute('aria-live'),
       horizontalOverflow: document.documentElement.scrollWidth > innerWidth || group.scrollWidth > group.clientWidth + 1};
   });
   assert.equal(measured.insideControls, true); assert.equal(measured.afterSummary, true);
+  assert.equal(measured.rightReader, true); assert.equal(measured.externalChoicesHidden, true);
   assert.ok(measured.gridGap >= 0 && measured.gridGap <= 24, JSON.stringify(measured));
-  assert.ok(measured.resultGap >= 0 && measured.resultGap <= 180, JSON.stringify(measured));
   assert.ok(measured.fontSize >= 14); assert.equal(measured.live, 'polite'); assert.equal(measured.horizontalOverflow, false);
   return measured;
 }
@@ -339,6 +340,10 @@ async function europeOperations(page, profile, render) {
 
 async function stageOneOperations(page, profile) {
   await openEurope(page, 'atlas/europe/nature/?layer=climate', 'normal');
+  assert.equal(await page.locator('[data-eu-city-choice]').inputValue(), '');
+  assert.equal(await page.locator('[data-eu-climate-overview]').isVisible(), true);
+  assert.equal(await page.locator('[data-city-reading]:visible').count(), 0);
+  await page.locator('[data-eu-city-choice]').selectOption('london');
   const climate = page.locator('[data-city-reading]:visible');
   assert.equal(await page.locator('.eu-read-panel').evaluate(node => node.scrollHeight <= node.clientHeight + 1), true, 'Climate text stays inside the reader panel');
   for (const selector of ['.eu-city-climate-description', '.eu-climate-farming']) {
@@ -413,7 +418,7 @@ try {
   manifest.release = {sourceURL: releaseURL.href, ...await response.json()};
   assert.equal(manifest.release.commitSha, manifest.gitHead, 'Served production build must match the checkout');
   manifest.checks.push('served release commit matches git HEAD and expected CI head');
-  browser = await chromium.launch({headless: true, ...(process.env.EUROPE_REVIEW_CHROMIUM_PATH ? {executablePath: process.env.EUROPE_REVIEW_CHROMIUM_PATH} : {}), args: ['--no-sandbox', '--enable-unsafe-swiftshader', '--disable-background-networking', '--disable-component-update']});
+  browser = await chromium.launch({headless: true, chromiumSandbox: true, ...(process.env.EUROPE_REVIEW_CHROMIUM_PATH ? {executablePath: process.env.EUROPE_REVIEW_CHROMIUM_PATH} : {}), args: ['--enable-unsafe-swiftshader', '--disable-background-networking', '--disable-component-update']});
   manifest.browser = {version: await browser.version(), executable: process.env.EUROPE_REVIEW_CHROMIUM_PATH ?? 'Playwright default'};
   for (const profile of profiles) {
     const context = await guardedContext(profile), page = await context.newPage();

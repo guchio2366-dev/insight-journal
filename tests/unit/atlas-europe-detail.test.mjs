@@ -22,9 +22,9 @@ test('国選択と都市比較がURL往復・不正入力の正規化で保た�
   assert.equal(readEuropeState(writeEuropeState(new URL('https://example.test/'), returnToClimate).search, countries, ids, 'wheat').returnLayer, 'climate');
 });
 
-test('初回は対象国の収録済み首都を使い、首都の未収録を別都市で埋めない', () => {
+test('初回は都市を選ばず、対象国の収録済み首都だけを候補にする', () => {
   const ids = cities.map(c => c.id);
-  assert.equal(defaultEuropeCity('', ids), 'london');
+  assert.equal(defaultEuropeCity('', ids), '');
   assert.equal(defaultEuropeCity('NOR', ids), 'oslo');
   assert.equal(defaultEuropeCity('CHE', ids), '');
   assert.equal(defaultEuropeCity('SWE', ids), '');
@@ -34,7 +34,7 @@ test('初回は対象国の収録済み首都を使い、首都の未収録を�
     const city = defaultEuropeCity(country.code, ids);
     if (city) assert.equal(cities.find(c => c.id === city)?.country, country.code);
   }
-  assert.equal(readEuropeState('', countries, ids).city, 'london');
+  assert.equal(readEuropeState('', countries, ids).city, '');
   assert.equal(readEuropeState('?place=NOR&city=invalid', countries, ids).city, 'oslo');
   const missing = readEuropeState('?place=CHE&city=invalid', countries, ids);
   assert.equal(missing.city, '');

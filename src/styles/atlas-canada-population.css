@@ -33,3 +33,28 @@
 .canada-population .population-map [data-population-map-cma]:focus-visible{outline:none}
 .canada-population .population-map [data-population-map-cma]:focus-visible .population-anchor{stroke:#a74931;stroke-width:3}
 .canada-population [data-population-filter-key],.canada-population [data-population-filter-key] span{font-size:14px}
+/* The Canada topic row, coverage and map use the US population workspace rhythm. */
+.atlas-desktop-shell .canada-population .canada-country-primary .regional-navigation{margin-bottom:8px}
+.atlas-desktop-shell .canada-population .canada-country-primary>.country-topic-tabs{display:flex;gap:8px;padding:0;border:0;background:none;margin:12px 0 7px}
+.atlas-desktop-shell .canada-population .canada-country-primary>.country-topic-tabs button{min-height:46px;padding:8px 12px;border:1px solid #b6c8c9;border-radius:4px;background:white;font:400 14px/1.5 var(--sans);color:#244653}
+.atlas-desktop-shell .canada-population .canada-country-primary>.country-topic-tabs button[aria-pressed=true]{background:#244653;color:#fff}
+.atlas-desktop-shell .canada-population .canada-country-primary>.population-coverage-brief{margin:0 0 17px;padding:0;border:0;background:none;font-size:14px;line-height:1.5;color:#526b73}
+.atlas-desktop-shell .canada-population .population-category-key{justify-content:flex-start;gap:5px 12px;font-size:14px}
+.atlas-desktop-shell .canada-population .canada-country-primary .population-reading{font-size:16px;line-height:1.75}
+.atlas-desktop-shell .canada-population .population-reading :is(p,.canada-national-header .canada-lead){font-size:16px;line-height:1.75}
+.atlas-desktop-shell .canada-population .population-reading h3{font-size:18px;line-height:1.6}
+.atlas-desktop-shell .canada-population .population-reading :is(summary,.demographic-definition){font-size:14px;line-height:1.7}
+.canada-population .demographic-national-reading{border-bottom:1px solid #cdd5c7;padding-bottom:10px;margin-bottom:12px}
+.canada-population [data-demographic-examples] p{margin:12px 0;padding-left:10px;border-left:3px solid #abbcb4}
+.canada-population [data-demographic-examples] button{display:block;border:0;background:none;text-align:left;padding:2px 0;min-height:30px;color:#254b58;font:700 16px/1.7 var(--sans);text-decoration:underline;cursor:pointer}
+.canada-population [data-demographic-examples] span{font-size:16px;line-height:1.75}
+.canada-population [data-demographic-examples] i{display:inline-block;width:12px;height:12px;margin-right:4px;border:1px solid #687a7a55}
+.canada-population .population-clear-selection{min-height:36px;font-size:14px;cursor:pointer;margin:4px 0 10px}
+.canada-population [data-population-composition] :is(table,p){font-size:14px;line-height:1.7}
+.canada-population [data-population-composition]>summary{font-weight:700;cursor:pointer}
+.canada-population .population-reading [data-demographic-simultaneous]{border-left:3px solid #849f97;padding-left:9px}
+.atlas-desktop-shell .canada-population[data-canada-population] .canada-country-primary .population-reading{max-height:none;overflow:visible}
+@media(min-width:960px) and (max-width:1199px){
+ .atlas-desktop-shell .canada-nature.canada-population[data-canada-population] .canada-country-primary .population-workspace{grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:12px}
+ .atlas-desktop-shell .canada-nature.canada-population[data-canada-population] .canada-country-primary .atlas-map-frame{min-height:350px;aspect-ratio:1.65}
+}
