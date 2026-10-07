@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { farmingPresentation } from '../../src/lib/atlas-europe-farming.ts';
+import { farmingPresentation, updateFarmingMap } from '../../src/lib/atlas-europe-farming.ts';
 import { readEuropeState, writeEuropeState } from '../../src/lib/atlas-europe-view.ts';
 
 const json = path => JSON.parse(readFileSync(new URL(`../../${path}`, import.meta.url)));
@@ -43,6 +43,28 @@ test('通常の品目選択と再選択は他品目を残し、選択対象だ�
     assert.deepEqual(farmingPresentation(selected, items), view);
   }
   assert.equal(farmingPresentation(initial, items).item, undefined);
+});
+
+test('作物選択時も畜産を残して薄く描き、概況で元の濃さに戻す', () => {
+  const areas=items.map(item=>({dataset:{euFarmArea:item.id},style:{}}));
+  const outlines=items.map(item=>({dataset:{euFarmOutline:item.id},style:{}}));
+  const root={querySelectorAll:selector=>selector==='[data-eu-farm-area]'?areas:outlines};
+  const sources=new Set(),paint=new Map();
+  const map={getLayer:id=>id==='land',getSource:id=>sources.has(id),addSource:id=>sources.add(id),addLayer:()=>{},setFilter:()=>{},setPaintProperty:(id,key,value)=>paint.set(`${id}.${key}`,value),moveLayer:()=>{}};
+  const data={type:'FeatureCollection',features:items.map(properties=>({type:'Feature',properties,geometry:{type:'Polygon',coordinates:[]}}))};
+  updateFarmingMap(root,map,data,read('?layer=wheat'));
+  assert.deepEqual(areas.map(path=>path.style.display),['','','','']);
+  assert.equal(areas[0].style.fillOpacity,'0.44');
+  assert.equal(areas[2].style.fillOpacity,'0.06');
+  assert.equal(areas[2].style.strokeOpacity,'0.45');
+  assert.equal(paint.get('eu-farm-livestock-fill.fill-opacity'),.06);
+  assert.equal(paint.get('eu-farm-livestock-line.line-opacity'),.45);
+  assert.equal(outlines[0].style.display,'');
+  updateFarmingMap(root,map,data,read('?layer=crops'));
+  assert.equal(areas[2].style.fillOpacity,'0.13');
+  assert.equal(areas[2].style.strokeOpacity,'0.85');
+  assert.equal(paint.get('eu-farm-livestock-fill.fill-opacity'),.13);
+  assert.equal(paint.get('eu-farm-livestock-line.line-opacity'),.85);
 });
 
 test('種類をOFFにしても品目の選択を保持し、もう一方の表示は維持する', () => {
