@@ -59,12 +59,17 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       assert.match(statistics.textContent,/FAOSTAT.*World/,'世界比の分母を出版社のWorld行としてJavaScriptなしでも説明する');
       assert.match(statistics.textContent,/ゼロという意味ではありません/);
       const availability=[...statistics.querySelectorAll('.eu-statistics-availability > div')];
-      const unavailable=['販売総額（米ドル）','需給・用途別消費','輸出額・輸出相手国'];
+      const unavailable=['販売総額（米ドル）'];
       for(const label of unavailable){
         const entry=availability.find(row=>row.querySelector('dt').textContent===label);
         assert.ok(entry,label);
         assert.match(entry.querySelector('dd').textContent,/未収録/,`${label}は数量統計で代用しない`);
       }
+      const columns=statistics.querySelectorAll('[data-eu-farm-three-columns] > section');
+      assert.equal(columns.length,3);
+      assert.match(columns[0].textContent,/供給元・行先.*国内仕向け.*未収録/s);
+      assert.match(columns[1].textContent,/輸出先.*輸出量・額.*未収録/s);
+      assert.equal(columns[2].querySelector('[data-eu-farm-share-chart]').children.length,0);
       const scope=availability.find(row=>row.querySelector('dt').textContent==='地図と数量の対象');
       assert.match(scope.querySelector('dd').textContent,/格子の収穫面積・家畜密度.*国全体の生産量・頭羽数.*別の資料/);
       assert.match(scope.querySelector('dd').textContent,/集合的な作物区分.*個別品目の統計に置き換えません/);

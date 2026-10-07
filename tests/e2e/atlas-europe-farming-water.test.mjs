@@ -272,3 +272,23 @@ test('a late rainfall lookup cannot restore a dismissed regional focus after a n
     assert.doesNotMatch(target.q('[data-eu-farming-focus-value]').textContent, /比較地点：/);
   } finally { gate.resolve(new Response('', { status: 503 })); await source.close(); if (target) await target.close(); }
 });
+
+
+test('the explicit farming statistics country preserves all distributions and camera, and the share chart clears on overview',async()=>{
+  const app=await setup(route('agriculture','layer=wheat&render=static'));
+  try{
+    await statisticsReady(app);const full=app.q('[data-eu-static]').getAttribute('viewBox');
+    app.select('select[data-eu-farm-country]','DEU');await statisticsReady(app);
+    assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
+    assert.equal(app.q('[data-eu-shape="DEU"]').classList.contains('is-selected'),true);
+    assert.equal(app.q('[data-eu-farm-share-chart]').querySelectorAll('svg').length,1);
+    assert.match(app.q('[data-eu-farm-share-status]').textContent,/ドイツ.*2024年.*%/);
+    const reload=await setup(app.w.location.href);
+    try{await statisticsReady(reload);assert.equal(reload.q('[data-eu-static]').getAttribute('viewBox'),full);}finally{await reload.close();}
+    app.select('select[data-eu-farm-country]','');await statisticsReady(app);
+    assert.equal(current(app).has('place'),false);assert.equal(current(app).has('region'),false);
+    assert.equal(app.q('[data-eu-farm-share-chart]').children.length,0);
+    app.q('[data-eu-topic="crops"]').click();await tick();
+    assert.equal(app.q('[data-eu-farm-share-chart]').children.length,0);
+  }finally{await app.close();}
+});

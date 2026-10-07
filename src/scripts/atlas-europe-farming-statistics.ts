@@ -4,6 +4,7 @@ import {
   europeFarmWorldObservation, europeFarmYears,
   type EuropeFarmMetric, type EuropeFarmObservation, type EuropeFarmStatistics,
 } from '../data/atlas/europe/farming-statistics';
+import { europeFarmShareSeries, europeFarmShareSegments } from '../lib/atlas-europe-farm-share';
 import type { EuropeState } from '../lib/atlas-europe-view';
 
 type Country = {code:string;name:string};
@@ -22,6 +23,11 @@ export function createEuropeFarmingStatistics(root:HTMLElement,callbacks:Callbac
   const message=query('[data-eu-farm-statistics-message]');
   const controls=query('[data-eu-farm-stat-controls]');
   const measureSelect=query<HTMLSelectElement>('[data-eu-farm-measure]');
+  const countrySelect=query<HTMLSelectElement>('[data-eu-farm-country]');
+  const shareChart=query('[data-eu-farm-share-chart]');
+  let redrawShare:(()=>void)|undefined;
+  countrySelect.addEventListener('change',()=>callbacks.onCountry(countrySelect.value));
+  new ResizeObserver(()=>redrawShare?.()).observe(shareChart);
   const yearSelect=query<HTMLSelectElement>('[data-eu-farm-year]');
   const compares=[0,1].map(index=>query<HTMLSelectElement>(`[data-eu-farm-compare="${index}"]`));
   const retry=query<HTMLButtonElement>('[data-eu-farm-statistics-retry]');
@@ -60,7 +66,9 @@ export function createEuropeFarmingStatistics(root:HTMLElement,callbacks:Callbac
   }
   function clear(){
     for(const selector of ['[data-eu-farm-stat-summary]','[data-eu-farm-country-table]','[data-eu-farm-series]','[data-eu-farm-stat-source]','[data-eu-farm-measure-definition]'])query(selector).hidden=true;
-    quick.hidden=true;
+    query('[data-eu-farm-share-title]').textContent='世界シェア・推移';
+    quick.hidden=true;redrawShare=undefined;shareChart.replaceChildren();
+    query('[data-eu-farm-share-status]').textContent='品目・統計対象国を選ぶと、公表World値に対する割合と年次推移を表示します。';
   }
   function table(headers:string[],caption:string){
     const element=create('table'),head=create('thead'),row=create('tr'),body=create('tbody');
@@ -79,6 +87,7 @@ export function createEuropeFarmingStatistics(root:HTMLElement,callbacks:Callbac
       const shareText=create('p',`${metric.shareLabel}：${share?percent(share.value):'分母または同年の値が未収録'}`);
       shareText.className='eu-statistic-note';box.append(shareText);summary.append(box);
     }
+    renderShare(state,metric,statistics,codes);
     const selected=state.place?europeFarmObservation(statistics,state.place,metric.id,year):null;
     quick.replaceChildren();quick.hidden=!state.place;
     if(state.place){
@@ -106,10 +115,10 @@ export function createEuropeFarmingStatistics(root:HTMLElement,callbacks:Callbac
     query('[data-eu-farm-country-rows]').replaceChildren(countryTable.element);query('[data-eu-farm-country-table]').hidden=false;
     const series=query('[data-eu-farm-series]');series.hidden=codes.length===0;
     if(codes.length){
-      const seriesTable=table(['年',...codes.map(code=>countryName(code))],`${metric.label} · ${unit}。表示年に値がなくても別年へ置き換えません。記号と注記は原資料の値です。`);
+      const seriesTable=table(['年',...codes.map(code=>countryName(code))],`${metric.label} · ${unit}と${metric.shareLabel}。表示年に値がなくても別年へ置き換えません。記号と注記は原資料の値です。`);
       for(const year of europeFarmYears){
         const row=create('tr'),header=create('th',String(year));header.setAttribute('scope','row');row.append(header);
-        for(const code of codes){const observed=europeFarmObservation(statistics,code,metric.id,year),item=cell(value(observed));item.append(create('small',status(observed)));if(observed?.note)item.append(create('small',observed.note));row.append(item);}
+        for(const code of codes){const observed=europeFarmObservation(statistics,code,metric.id,year),item=cell(value(observed));item.append(create('small',status(observed)));if(observed?.note)item.append(create('small',observed.note));const share=europeFarmWorldShare(statistics,code,metric.id,year);item.append(create('small',metric.shareLabel+'：'+(share?percent(share.value):'未収録')));row.append(item);}
         seriesTable.body.append(row);
       }
       query('[data-eu-farm-series-rows]').replaceChildren(seriesTable.element);
@@ -128,7 +137,37 @@ export function createEuropeFarmingStatistics(root:HTMLElement,callbacks:Callbac
     const audit=create('p');for(const [label,name] of [['抽出データ','statistics.json'],['取得・加工・ハッシュの記録','manifest.json']]){const a=create('a',label) as HTMLAnchorElement;a.href=new URL(name,new URL(panel.dataset.statisticsUrl!,location.href)).href;audit.append(a,document.createTextNode(' · '));}source.append(audit);
     message.textContent=`${metric.label} · ${year}年・国全体。世界比の分母と資料の記号は下の出典で確認できます。`;
   }
+  function renderShare(state:EuropeState,metric:EuropeFarmMetric,statistics:EuropeFarmStatistics,codes:string[]){
+    query('[data-eu-farm-share-title]').textContent=metric.shareLabel+'・推移';
+    const series=codes.map(code=>({code,points:europeFarmShareSeries(statistics,code,metric.id)}));
+    const year=state.farmYear??europeFarmComparisonYear;
+    const labels=series.map(item=>{const point=item.points.find(point=>point.year===year)!;return `${countryName(item.code)} ${year}年：${point.value===null?'同年の分子または分母が未収録':percent(point.value)}`;});
+    query('[data-eu-farm-share-status]').textContent=labels.length?labels.join('。')+'。':'統計対象国を選ぶと、その国の数量を同年の公表World値で割った割合を表示します。欧州合計は作っていません。';
+    if(!series.some(item=>item.points.some(point=>point.value!==null)))return;
+    redrawShare=()=>{
+      shareChart.replaceChildren();
+      const ns='http://www.w3.org/2000/svg',width=Math.max(260,shareChart.clientWidth||360),height=240;
+      const svg=document.createElementNS(ns,'svg');svg.setAttribute('viewBox',`0 0 ${width} ${height}`);svg.setAttribute('role','img');svg.setAttribute('aria-label',`${metric.shareLabel}の2015〜2024年推移。${labels.join('。')}。欠測年では線を切っています。`);
+      const add=(tag:string,attrs:Record<string,string>,text?:string)=>{const el=document.createElementNS(ns,tag);for(const [key,value] of Object.entries(attrs))el.setAttribute(key,value);if(text!==undefined)el.textContent=text;svg.append(el);return el;};
+      add('title',{},`${metric.label}の${metric.shareLabel}`);add('desc',{},'分母はFAOSTATの同年・同品目・同要素・同単位のWorld行。正確な数量と出典記号は年次表で確認できます。');
+      const values=series.flatMap(item=>item.points.flatMap(point=>point.value===null?[]:[point.value]));
+      const maximum=Math.max(1,Math.ceil(Math.max(...values)/5)*5),left=46,right=width-15,top=20,bottom=202;
+      const x=(year:number)=>left+(year-2015)/9*(right-left),y=(value:number)=>bottom-value/maximum*(bottom-top);
+      for(let i=0;i<=4;i++){const value=maximum*i/4;add('line',{x1:String(left),x2:String(right),y1:String(y(value)),y2:String(y(value)),stroke:'#d4ddd6'});add('text',{x:String(left-7),y:String(y(value)+5),'text-anchor':'end'},`${value.toLocaleString('ja-JP',{maximumFractionDigits:1})}%`);}
+      for(const year of [2015,2018,2021,2024])add('text',{x:String(x(year)),y:'227','text-anchor':'middle'},String(year));
+      const colors=['#1d6172','#ad5937','#6d518b'];
+      for(const [index,item] of series.entries()){
+        for(const segment of europeFarmShareSegments(item.points))add('path',{d:segment.map((point,i)=>`${i?'L':'M'}${x(point.year).toFixed(2)},${y(point.value!).toFixed(2)}`).join(' '),fill:'none',stroke:colors[index],'stroke-width':'2.5','data-share-country':item.code});
+        for(const point of item.points)if(point.value!==null){const dot=add('circle',{cx:String(x(point.year)),cy:String(y(point.value)),r:point.year===year?'4':'2.5',fill:colors[index],'data-share-year':String(point.year)});const title=document.createElementNS(ns,'title');title.textContent=`${countryName(item.code)} ${point.year}年 ${percent(point.value)}`;dot.append(title);}
+      }
+      shareChart.append(svg);
+      const key=create('ul');key.className='eu-farm-share-key';
+      series.forEach((item,index)=>{const li=create('li',countryName(item.code)),swatch=create('span');swatch.style.backgroundColor=colors[index];swatch.setAttribute('aria-hidden','true');li.prepend(swatch);key.append(li);});shareChart.append(key);
+    };
+    redrawShare();
+  }
   async function update(state:EuropeState){
+    countrySelect.value=state.place;
     current={...state,farmCompare:state.farmCompare?[...state.farmCompare]:undefined};
     const token=++generation,available=europeFarmAvailableMetrics(state.layer);
     clear();retry.hidden=true;

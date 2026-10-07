@@ -439,6 +439,21 @@ async function stageOneOperations(page, profile) {
   await table.locator('summary').click();
   assert.equal(await table.evaluate(node => node.open), true);
   assert.equal(await table.locator('[data-eu-farm-country-rows]').textContent(), values);
+  await table.locator('summary').click();
+  const farmingExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
+  await page.locator('select[data-eu-farm-country]').selectOption('DEU');
+  await page.waitForFunction(() => document.querySelectorAll('[data-eu-farm-share-chart] svg').length === 1);
+  assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'), farmingExtent);
+  assert.match(await page.locator('[data-eu-farm-share-status]').textContent(), /ドイツ.*2024年.*%/);
+  assert.equal(await page.locator('[data-eu-farm-three-columns] > section').count(), 3);
+  const columns = await page.locator('[data-eu-farm-three-columns] > section').evaluateAll(nodes => nodes.map(node => {const r=node.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width};}));
+  assert.ok(columns.every(column => Math.abs(column.y-columns[0].y) <= 1));
+  assert.ok(columns[1].x>columns[0].x && columns[2].x>columns[1].x);
+  const shareFont = await page.locator('[data-eu-farm-share-chart] svg text').first().evaluate(node => parseFloat(getComputedStyle(node).fontSize));
+  assert.ok(shareFont >= 14);
+  await snapshot(page, profile, 'farming-world-share');
+  await page.locator('select[data-eu-farm-country]').selectOption('');
+  assert.equal(await page.locator('[data-eu-farm-share-chart] svg').count(), 0);
   manifest.checks.push(`${profile.name}: visible full climate reasons/crops; no automatic census choice/fit; distribution/history/reload/comparison restoration; closed farming table retains values and honest missingness`);
   networkClean();
 }
@@ -477,11 +492,11 @@ try {
       if (profile.viewport.width === 1024) await europeOperations(page, profile, 'explicit-static');
     } finally { await context.close(); }
   }
-  networkClean(); assert.equal(manifest.images.length, 24); assert.equal(manifest.records.length, 3);
+  networkClean(); assert.equal(manifest.images.length, 26); assert.equal(manifest.records.length, 3);
   assert.ok(manifest.records.every(record => record.status === 'passed'));
   assert.equal(git('rev-parse', 'HEAD'), manifest.gitHead, 'Checkout changed during capture');
   assert.equal(git('rev-parse', 'HEAD:src'), manifest.gitSrcTree);
-  manifest.status = 'passed'; manifest.checks.push('24 normal-render screenshots', '2 normal PC operation profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
+  manifest.status = 'passed'; manifest.checks.push('26 normal-render screenshots', '2 normal PC operation profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
   console.log(JSON.stringify({status: manifest.status, output, images: manifest.images.length, head: manifest.gitHead}));
 } catch (error) {
   manifest.status = 'failed'; manifest.failure = {message: String(error), stack: error.stack};
