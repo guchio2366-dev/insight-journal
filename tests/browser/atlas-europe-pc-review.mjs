@@ -176,7 +176,7 @@ async function snapshot(page, profile, topic, region = 'europe') {
     if (index) assert.ok(control.y >= measured.controls[index - 1].y + measured.controls[index - 1].height, 'Map controls retain fit / zoom in / zoom out order');
   }
   // Retain all operation/geometry checks, photograph only this repair's states.
-  if(region!=='europe'||!['climate','climate-selected','farming-initial','farming-selected'].includes(topic))return measured;
+  if(region!=='europe'||!['terrain-overview','contours','precipitation-250mm','drainage-river-reading','industry-overview','population-overview'].includes(topic))return measured;
   const filename = `${profile.name}-${region}-${topic}.png`;
   const png = await page.screenshot({path: resolve(output, filename), fullPage: false, animations: 'disabled'});
   manifest.images.push({file: filename, sourceURL: page.url(), profile: profile.name, viewport: profile.viewport, render,
@@ -326,6 +326,7 @@ async function europeOperations(page, profile, render) {
   manifest.records.push(record); activeRecord = record;
   const normal = render === 'normal';
   await openEurope(page, 'atlas/europe/nature/?layer=terrain', render);
+  if(normal)await snapshot(page,profile,'terrain-overview');
   const history = await page.evaluate(() => history.length), svgExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
   await page.locator('[data-eu-feature-select="alps"]').click();
   const elevation = await settled(page), selectedPoint = new URL(page.url()).searchParams.get('point');
@@ -339,6 +340,9 @@ async function europeOperations(page, profile, render) {
   assert.match(await page.locator('[data-eu-legend-title]').textContent(), /500m間隔/);
   assert.doesNotMatch(await page.locator(resultSelector).textContent(), /間隔|標高 m/);
   assert.deepEqual(await page.locator('[data-eu-legend-items] .eu-swatch').evaluateAll(nodes => nodes.slice(0, 2).map(node => getComputedStyle(node).backgroundColor)), ['rgb(184, 161, 130)', 'rgb(134, 103, 71)']);
+  assert.match(await page.locator('[data-eu-subject-image]').getAttribute('href'),/physical-v1\/elevation\.png$/);
+  assert.equal(await page.locator('[data-eu-legend-items] > div').count(),15);
+  assert.match(await page.locator('[data-eu-legend-items]').textContent(),/0〜500m未満.*500〜1,000m未満.*4,500〜5,000m未満/s);
   await uniqueElevation(page);
   const readerCopy = await page.locator('[data-eu-subject-reader]').textContent();
   if (normal) await snapshot(page, profile, 'contours');
