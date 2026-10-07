@@ -66,6 +66,11 @@ test('地域水説明・元流域・雨温図の具体的理由を既存資料�
   assert.equal(q('.west-reading [data-west-related]'),null);
   assert.ok(q('.atlas-map-column [data-west-related]'));
   assert.equal(q('[data-west-detail]').children[1].className,'atlas-city-climate');
+  q('[data-west-reading-overview]').click();
+  assert.match(q('#west-detail-title').textContent,/自然環境の概論/);assert.equal(q('[data-west-active-chart]'),null);
+  q('[data-city="helwan"]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
+  await until(()=>q('[data-west-climate-class]')?.textContent.includes('BWh'));
+  assert.equal(q('[data-west-detail]').children[1].className,'atlas-city-climate');
  }finally{await w.happyDOM.close();}
 });
 test('背景国が必要な地図選択を遮らず、国選択は都市も地図範囲も自動変更しない',async()=>{

@@ -271,7 +271,7 @@ async function init(root:HTMLElement){
  function details(){
   const t=topic(),c=country(),city=data.cities.find((x:any)=>x.id===state.city),urban=data.urban.cities.find((x:any)=>x.id===state.urban);
   const reading=westReading(t),source=sourceTopic(),comparison=source?westReading(source).comparisons.find((x:any)=>x.topic===t.id):null;
-  const selectedClimate=t.id==='climate'&&!!city;
+  const selectedClimate=t.id==='climate'&&!!city&&!readingOverview;
   root.dataset.cityClimateActive=String(selectedClimate);
   statistics.hidden=true;statisticsContent.replaceChildren();statistics.setAttribute('aria-label',t.id==='climate'?'観測所の気温・降水量':t.id==='cities'?'都市中心部の人口推計':'国別統計');
   let html=`<header class="west-reading-header"><p class="atlas-eyebrow">${c?esc(c.name):'西アジア・中東'}</p>${!source&&!readingOverview?'<button type="button" data-west-reading-overview>概論へ戻る</button>':''}<h2 id="west-detail-title">${esc(unavailable?unavailable:!source&&readingOverview?westFields.find(f=>f.id===field)!.label+'の概論':t.id==='precipitation'?'降水量':t.label)}</h2></header>`;
@@ -333,7 +333,7 @@ async function init(root:HTMLElement){
   if(t.id==='desalination')html+='<p>20か国・地域で同じ年・定義の淡水化施設一覧と供給量は未収録です。</p><p><a href="https://www.fao.org/aquastat/en/overview/methodology/">FAO AQUASTATの定義と方法</a></p>';
   html+='</details></div>';
   $('[data-west-detail]').innerHTML=html;
-  if(city&&['climate','precipitation'].includes(t.id)){
+  if(city&&(selectedClimate||t.id==='precipitation')){
    const tpl=root.querySelector<HTMLTemplateElement>(`template[data-west-chart="${city.id}"]`);
    if(tpl){const chart=(t.id==='climate'?root:statistics).querySelector('[data-west-active-chart]')!;chart.append(tpl.content.cloneNode(true));if(westCityReadings[city.id]){const paragraph=document.createElement('p');paragraph.dataset.westCityGeography='';paragraph.textContent=westCityReadings[city.id];chart.querySelector('[data-west-climate-description]')?.after(paragraph);}}
   }
@@ -609,7 +609,7 @@ async function init(root:HTMLElement){
  function zoom(factor:number){state.view=zoomWestView(view(),factor);applyView();commit();}
  root.addEventListener('click',event=>{
   if(!data)return;const target=event.target as Element;
-  if(target.closest('[data-west-reading-overview]')){readingOverview=true;details();legend();links();comparisonLayout();return;}
+  if(target.closest('[data-west-reading-overview]')){readingOverview=true;$('.west-reading').scrollTop=0;details();legend();links();comparisonLayout();return;}
   if(target.closest('[data-west-farming-only]')){farmingOnlySelected=!farmingOnlySelected;void render();return;}
   if(target.closest('[data-west-resume-topic]')){state.category='';readingOverview=false;commit();render();return;}
   const missing=target.closest<HTMLElement>('[data-west-unavailable]');if(missing){state.category='precipitation';openWaterGroup=false;readingOverview=false;commit();render();return;}

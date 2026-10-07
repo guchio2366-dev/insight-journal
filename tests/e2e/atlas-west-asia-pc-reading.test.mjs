@@ -76,6 +76,10 @@ test('西アジアのPC実画面で地域説明・3か国・欠測年・選択�
    assert.equal(await page.locator('.west-reading [data-west-related]').count(),0);
    assert(await page.evaluate(()=>{const pane=document.querySelector('.west-reading').getBoundingClientRect(),chart=document.querySelector('[data-west-active-chart] svg').getBoundingClientRect(),classification=document.querySelector('[data-west-climate-class]').getBoundingClientRect(),links=document.querySelector('[data-west-related]').getBoundingClientRect(),map=document.querySelector('[data-west-map]').getBoundingClientRect();return chart.top-pane.top<110&&classification.top>chart.bottom&&classification.bottom<=pane.bottom&&links.top>=map.bottom;}),'chart leads the right pane, its Japanese classification is immediately below and visible, and links sit below the map');
    await shot('riyadh-climate');
+   await page.locator('[data-west-reading-overview]').click();assert.equal(await page.locator('[data-west-active-chart]').count(),0);
+   assert((await page.locator('#west-detail-title').innerText()).includes('自然環境の概論'));
+   await page.locator('[data-city="riyadh"]').press('Enter');
+   await page.waitForFunction(()=>document.querySelector('[data-west-climate-class]')?.textContent.includes('BWh'));
    await open('nature/?topic=basins');
    await page.locator('[data-west-basin-label] > summary').click();
    await page.locator('[data-west-basin]').selectOption('1060034260');
