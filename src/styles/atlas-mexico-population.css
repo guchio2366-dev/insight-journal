@@ -32,6 +32,7 @@
  .mexico-workspace.mexico-population .mexico-header{padding-bottom:6px}
  .mexico-workspace.mexico-population .mexico-header h1{font-size:18px;line-height:1.3}
  .mexico-workspace.mexico-population .mexico-header .mexico-lead{font-size:12px!important;line-height:1.5!important;margin:4px 0 0!important}
+ .mexico-workspace.mexico-population[data-locality-population-active=true] .mexico-header{position:absolute;width:1px;height:1px;padding:0;border:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
  .mexico-workspace.mexico-population .mexico-reading-content{padding-top:6px}
  .mexico-workspace.mexico-population[data-mexico-reading-selected=false]:not(.is-comparison) [data-population-reading-heading]{display:none}
  .mexico-workspace.mexico-population .mexico-reading :is([data-population-region-heading],[data-population-short-reading]){margin:4px 0;font-size:13px;line-height:1.5}
@@ -41,6 +42,28 @@
 }
 
 /* National entry cards use the same state geometry and official values as detail. */
+.mexico-population[data-locality-population-active=true] :is([data-population-legacy-frame],[data-population-map-heading],.population-density-key,.population-symbol-key,.population-key-notes,[data-population-reading-heading],.population-state-summary,[data-population-national-intro],[data-population-distribution-reading],[data-population-scale-link]){display:none!important}
+.mexico-population .locality-population-frame{position:relative;aspect-ratio:900/580;overflow:hidden;background:#eaf1ee}
+.mexico-population .locality-population-frame :is(canvas,.locality-population-context,.locality-population-labels){position:absolute;inset:0;width:100%;height:100%;margin:0;display:block}
+.mexico-population .locality-population-frame canvas{z-index:2;cursor:grab}
+.mexico-population .locality-population-frame canvas:active{cursor:grabbing}
+.mexico-population .locality-population-frame canvas:focus-visible{outline:3px solid #9c3b24;outline-offset:-3px}
+.mexico-population .locality-population-land use{fill:#e3e8dd;stroke:#a3b4a8;stroke-width:.65;vector-effect:non-scaling-stroke}
+.mexico-population .locality-population-labels{z-index:3;pointer-events:none}
+.mexico-population .locality-population-labels text{fill:#26473c;font-family:var(--sans);font-weight:650;paint-order:stroke;stroke:#fffefa;stroke-width:4px;stroke-linejoin:round}
+.mexico-population .locality-population-city-marker{fill:none;stroke:#26473c;stroke-width:1;vector-effect:non-scaling-stroke}
+.mexico-population .locality-population-loading{position:absolute;bottom:10px;left:10px;right:10px;z-index:4;margin:0;padding:7px 10px;background:#fffef2e8;font-size:13px;line-height:1.5}
+.mexico-population .locality-population-key h2{margin:0 0 5px;font-size:16px}
+.mexico-population .locality-population-key p{margin:5px 0;font-size:13px;line-height:1.55}
+.mexico-population .locality-population-key details{font-size:13px;line-height:1.55}
+.mexico-population [data-locality-count-key]{display:block;width:300px;max-width:100%;height:62px;background:transparent;overflow:visible}
+.mexico-population [data-locality-count-key] circle{fill:#b97831;fill-opacity:.74;stroke:#89551f;stroke-width:.55}
+.mexico-population [data-locality-count-key] text{font:12px var(--sans);fill:#203d36}
+.mexico-population .locality-population-reading p{font-size:13px;line-height:1.65;margin:6px 0}
+.mexico-population .locality-population-total strong{font-size:24px;font-variant-numeric:tabular-nums}
+.mexico-population .locality-population-selection{border-left:3px solid #b97831;padding-left:9px;margin:10px 0}
+.mexico-population .locality-population-list{list-style:none;margin:0;padding:0}
+.mexico-population .locality-population-list button{width:100%;padding:7px 0;border:0;border-bottom:1px solid #d0dbd0;background:transparent;color:#254c41;text-align:left;font:13px/1.5 var(--sans);cursor:pointer}
 .mexico-population .population-overview-maps{padding:10px;border:1px solid #abbfc2;background:#f4f7f3}
 .mexico-population .population-overview-maps h2{margin:0 0 6px;font-size:18px;line-height:1.5}
 .mexico-population .population-overview-maps>div>p{margin:0 0 8px;font-size:14px;line-height:1.7}

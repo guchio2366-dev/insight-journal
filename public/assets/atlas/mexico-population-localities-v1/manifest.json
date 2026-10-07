@@ -1,0 +1,519 @@
+{
+  "schemaVersion": 1,
+  "referenceDate": "2020-03-15",
+  "sourceMetadataModified": "2022-05-19",
+  "localities": 189432,
+  "municipalities": 2469,
+  "population": 126014024,
+  "sourceUrl": "https://www.inegi.org.mx/contenidos/programas/ccpv/2020/datosabiertos/iter/iter_00_cpv2020_csv.zip",
+  "sourceArchiveSha256": "9342fdbd45bda5897f2b827a12904843b6f8fb85d4e72da299e09e4d2422ab60",
+  "attribution": "Fuente: INEGI, Censo de Población y Vivienda 2020, Principales resultados por localidad (ITER), cuarta edición.",
+  "reuseTermsUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+  "overview": {
+    "file": "overview.json.gz",
+    "bytes": 331683,
+    "sha256": "c1fb31b818a39b062d21531cb04830b23d055a14ff253f2033ca840efa50ad65",
+    "points": 8359,
+    "binWidthInMapUnits": 4,
+    "method": "Nearby locality representative points grouped in 4x4 projected display units within each source state. Counts summed; position is population-weighted mean. Every source locality assigned exactly once."
+  },
+  "pointFields": [
+    "x",
+    "y",
+    "population",
+    "localityCode",
+    "localityName",
+    "municipalityName"
+  ],
+  "overviewFields": [
+    "x",
+    "y",
+    "population",
+    "localities",
+    "stateCode",
+    "largestLocalityName",
+    "minX",
+    "minY",
+    "maxX",
+    "maxY"
+  ],
+  "chunks": [
+    {
+      "file": "localities-01.json.gz",
+      "bytes": 44471,
+      "sha256": "a6126fbaf5a4461b1e93545134121557ca20557b3a0b076671d33ca97a119f8b",
+      "stateCode": "01",
+      "localities": 2022,
+      "population": 1425607,
+      "bounds": [
+        428.25312,
+        335.58398,
+        454.24287,
+        358.85802
+      ]
+    },
+    {
+      "file": "localities-02.json.gz",
+      "bytes": 117241,
+      "sha256": "505b86df398a5a812dcc6e5b289a10472a9f5b30664da23c56c836dc0a272913",
+      "stateCode": "02",
+      "localities": 5545,
+      "population": 3769020,
+      "bounds": [
+        41.95325,
+        28.10854,
+        176.84916,
+        165.60288
+      ]
+    },
+    {
+      "file": "localities-03.json.gz",
+      "bytes": 51278,
+      "sha256": "6480a8907274be5b2dc8730699db4408e607464b8665b87a05e87306fe4c0da8",
+      "stateCode": "03",
+      "localities": 2543,
+      "population": 798447,
+      "bounds": [
+        117.30137,
+        165.39452,
+        255.96176,
+        316.86846
+      ]
+    },
+    {
+      "file": "localities-04.json.gz",
+      "bytes": 57493,
+      "sha256": "1830ab9927157aca22f73ef2fe909330bb08182aff76c7b85be4a88d8488f675",
+      "stateCode": "04",
+      "localities": 2762,
+      "population": 928363,
+      "bounds": [
+        709.68232,
+        372.93556,
+        800.82414,
+        455.48851
+      ]
+    },
+    {
+      "file": "localities-05.json.gz",
+      "bytes": 91613,
+      "sha256": "70ed523ac93f28fbe21f337a1a5ebe2e56a1db57bf82987da75c68f9cb0af7a3",
+      "stateCode": "05",
+      "localities": 4034,
+      "population": 3146771,
+      "bounds": [
+        402.0942,
+        127.40909,
+        505.30073,
+        273.62628
+      ]
+    },
+    {
+      "file": "localities-06.json.gz",
+      "bytes": 26123,
+      "sha256": "8cc9aea978b3c54a99debea4dbd71931ac00e4dc97d107e035a0f18cc583575f",
+      "stateCode": "06",
+      "localities": 1226,
+      "population": 731391,
+      "bounds": [
+        378.16825,
+        419.48135,
+        409.59553,
+        442.08137
+      ]
+    },
+    {
+      "file": "localities-07.json.gz",
+      "bytes": 431361,
+      "sha256": "4a5cb286313b3585d0fa78123b6007d76fab6d72161e46c5d4c24017a69ce636",
+      "stateCode": "07",
+      "localities": 21157,
+      "population": 5543828,
+      "bounds": [
+        668.13916,
+        454.92469,
+        770.66425,
+        551.89668
+      ]
+    },
+    {
+      "file": "localities-08.json.gz",
+      "bytes": 251966,
+      "sha256": "6fb0df6349179beb2f93c0b160207b563138db1d371a972267691618888cd6f6",
+      "stateCode": "08",
+      "localities": 12186,
+      "population": 3741869,
+      "bounds": [
+        272.32421,
+        65.91269,
+        413.51043,
+        243.61
+      ]
+    },
+    {
+      "file": "localities-09.json.gz",
+      "bytes": 14271,
+      "sha256": "334572568826186a7b46ffe7f4b77e39ff476fa65240d685007e1cfe1ad9d959",
+      "stateCode": "09",
+      "localities": 634,
+      "population": 9209944,
+      "bounds": [
+        522.28838,
+        418.9641,
+        533.39849,
+        429.49289
+      ]
+    },
+    {
+      "file": "localities-10.json.gz",
+      "bytes": 127773,
+      "sha256": "c90d3b2f17971b2ec94539288a71f253a5df1afbc65df021c41cb9ddf3287614",
+      "stateCode": "10",
+      "localities": 5890,
+      "population": 1832650,
+      "bounds": [
+        317.72856,
+        209.47392,
+        438.06113,
+        336.70509
+      ]
+    },
+    {
+      "file": "localities-11.json.gz",
+      "bytes": 196039,
+      "sha256": "4edf1fff951b2503a9dde639d63eeacbd39fce4fa11a610a702953ae433a5015",
+      "stateCode": "11",
+      "localities": 8809,
+      "population": 6166934,
+      "bounds": [
+        448.15253,
+        352.72484,
+        511.94493,
+        407.11512
+      ]
+    },
+    {
+      "file": "localities-12.json.gz",
+      "bytes": 153360,
+      "sha256": "aeb6706b278cc8df9bb03c7550c4415fd353a662d310490bdae57646c3cc9a40",
+      "stateCode": "12",
+      "localities": 6769,
+      "population": 3540685,
+      "bounds": [
+        445.83071,
+        437.34405,
+        558.26451,
+        508.74216
+      ]
+    },
+    {
+      "file": "localities-13.json.gz",
+      "bytes": 103237,
+      "sha256": "18e2161fd4d1c18527da8875b6141ffda14e6a729a2b61378a9ba1c381fb1b05",
+      "stateCode": "13",
+      "localities": 4690,
+      "population": 3082841,
+      "bounds": [
+        508.34489,
+        364.675,
+        557.45477,
+        415.25337
+      ]
+    },
+    {
+      "file": "localities-14.json.gz",
+      "bytes": 225091,
+      "sha256": "afbf9a9e376b3d721e837bdaab8b87631e5338e458fe25d862284898f1941b00",
+      "stateCode": "14",
+      "localities": 10348,
+      "population": 8348151,
+      "bounds": [
+        351.9926,
+        326.79644,
+        462.27415,
+        435.20225
+      ]
+    },
+    {
+      "file": "localities-15.json.gz",
+      "bytes": 115196,
+      "sha256": "fc1688cc87d814798cc17722914168ca61d9459dfd47e8bdfa2a1e6c18b1bbe0",
+      "stateCode": "15",
+      "localities": 4894,
+      "population": 16992418,
+      "bounds": [
+        488.63089,
+        396.81638,
+        541.83758,
+        451.20439
+      ]
+    },
+    {
+      "file": "localities-16.json.gz",
+      "bytes": 190443,
+      "sha256": "c99137370a3739a391185268aa1b57cd7164b1fa3a6ec04de7b3f6f05e583cda",
+      "stateCode": "16",
+      "localities": 8644,
+      "population": 4748846,
+      "bounds": [
+        403.59036,
+        393.94874,
+        501.56726,
+        463.96658
+      ]
+    },
+    {
+      "file": "localities-17.json.gz",
+      "bytes": 36528,
+      "sha256": "c70aafeff8158673ab504634cee76ced1518cf529fe0c1c9ba684aa71421aefb",
+      "stateCode": "17",
+      "localities": 1578,
+      "population": 1971520,
+      "bounds": [
+        518.80279,
+        430.0632,
+        541.19461,
+        450.3133
+      ]
+    },
+    {
+      "file": "localities-18.json.gz",
+      "bytes": 61586,
+      "sha256": "7bea666ef98fb5f5ce2a3d9a5c2db7c4529df82ceba02be5ccbeec8e7fee27e5",
+      "stateCode": "18",
+      "localities": 2850,
+      "population": 1235456,
+      "bounds": [
+        352.37206,
+        319.94565,
+        403.6577,
+        386.58724
+      ]
+    },
+    {
+      "file": "localities-19.json.gz",
+      "bytes": 103607,
+      "sha256": "78da3cba88a45c9030b8de683a8f83bcf4529c6c719dc3c13066809aef4497d4",
+      "stateCode": "19",
+      "localities": 4822,
+      "population": 5784442,
+      "bounds": [
+        473.59128,
+        184.48639,
+        541.80534,
+        312.4399
+      ]
+    },
+    {
+      "file": "localities-20.json.gz",
+      "bytes": 243361,
+      "sha256": "2242c19eafe0d4af5576f5c6f1cbdbb336511255a22aa38ea872345c71f1536c",
+      "stateCode": "20",
+      "localities": 10723,
+      "population": 4132148,
+      "bounds": [
+        546.20441,
+        440.91564,
+        673.16898,
+        525.94845
+      ]
+    },
+    {
+      "file": "localities-21.json.gz",
+      "bytes": 147027,
+      "sha256": "e3e6f36b8828561c6136f5cbace32854dde0fd7f301e4fab5e85a4ecfd2cc972",
+      "stateCode": "21",
+      "localities": 6568,
+      "population": 6583278,
+      "bounds": [
+        531.61805,
+        379.98568,
+        593.52679,
+        463.81633
+      ]
+    },
+    {
+      "file": "localities-22.json.gz",
+      "bytes": 48650,
+      "sha256": "a9a90fb1130457f68e83cfe9ad5c8528baadc78cbdab16dbf25aafa47e4572f3",
+      "stateCode": "22",
+      "localities": 2192,
+      "population": 2368467,
+      "bounds": [
+        488.54077,
+        358.18313,
+        529.30831,
+        403.79114
+      ]
+    },
+    {
+      "file": "localities-23.json.gz",
+      "bytes": 48097,
+      "sha256": "3d4221257fb9ca43aa2348f8fecdae906a607c0a8fb89de1fd3d1097f905d891",
+      "stateCode": "23",
+      "localities": 2207,
+      "population": 1857985,
+      "bounds": [
+        796.62687,
+        338.8208,
+        856.63904,
+        448.5472
+      ]
+    },
+    {
+      "file": "localities-24.json.gz",
+      "bytes": 144606,
+      "sha256": "102170a26a3843979e316e5e4c143ceb97edbe2ae650707e7685cf3e067cab52",
+      "stateCode": "24",
+      "localities": 6554,
+      "population": 2822255,
+      "bounds": [
+        444.07904,
+        279.85495,
+        547.49126,
+        370.86886
+      ]
+    },
+    {
+      "file": "localities-25.json.gz",
+      "bytes": 118621,
+      "sha256": "145c7aa4fd6840c9c14dd4dd315c30e82a230d7c2f39c7db2fb7a99d3bd3f885",
+      "stateCode": "25",
+      "localities": 5495,
+      "population": 3026943,
+      "bounds": [
+        260.19226,
+        201.96382,
+        360.7752,
+        332.41122
+      ]
+    },
+    {
+      "file": "localities-26.json.gz",
+      "bytes": 161058,
+      "sha256": "11a9a46cf344daef4e16d4177f91f3f25bab1a922979efcb4e8f6e75bb282bc9",
+      "stateCode": "26",
+      "localities": 7300,
+      "population": 2944840,
+      "bounds": [
+        132.39282,
+        34.75418,
+        287.73063,
+        221.05758
+      ]
+    },
+    {
+      "file": "localities-27.json.gz",
+      "bytes": 55657,
+      "sha256": "555880fd998aff3b85866d8227b451ddf4b91fe1064106b912cc3ae0a4fe7700",
+      "stateCode": "27",
+      "localities": 2472,
+      "population": 2402598,
+      "bounds": [
+        665.32058,
+        435.10862,
+        752.01506,
+        474.70265
+      ]
+    },
+    {
+      "file": "localities-28.json.gz",
+      "bytes": 144237,
+      "sha256": "03018812daf9c2ed0b7537e3ab7e511db6a940834cc80dfee33f6e0c644a138f",
+      "stateCode": "28",
+      "localities": 6566,
+      "population": 3527735,
+      "bounds": [
+        500.06653,
+        186.52831,
+        575.56294,
+        340.40815
+      ]
+    },
+    {
+      "file": "localities-29.json.gz",
+      "bytes": 27249,
+      "sha256": "4434fa1a95fba70e72f5eed83717f90db76ebebc3d6ec348585cb658e0fa7daa",
+      "stateCode": "29",
+      "localities": 1175,
+      "population": 1342977,
+      "bounds": [
+        540.16131,
+        411.80275,
+        568.10375,
+        428.71121
+      ]
+    },
+    {
+      "file": "localities-30.json.gz",
+      "bytes": 426452,
+      "sha256": "635325663b5f5f615fd36180723e6458de2a837ac1ff7272136456462f71ed28",
+      "stateCode": "30",
+      "localities": 19845,
+      "population": 8062579,
+      "bounds": [
+        540.38661,
+        333.44068,
+        680.23267,
+        480.25762
+      ]
+    },
+    {
+      "file": "localities-31.json.gz",
+      "bytes": 51426,
+      "sha256": "75e3cf312befcc76ac0426f30a2e77a99b17fb801f0d66a248b7279c7d2405be",
+      "stateCode": "31",
+      "localities": 2434,
+      "population": 2320898,
+      "bounds": [
+        760.57863,
+        341.07889,
+        835.69635,
+        399.2785
+      ]
+    },
+    {
+      "file": "localities-32.json.gz",
+      "bytes": 103363,
+      "sha256": "aaf003a0907d8cdc3f7cea73b7f10d15a42b80c297441b0596aadf4af39a72b9",
+      "stateCode": "32",
+      "localities": 4498,
+      "population": 1622138,
+      "bounds": [
+        388.74023,
+        260.59177,
+        481.84528,
+        374.60676
+      ]
+    }
+  ],
+  "projection": {
+    "name": "INEGI Lambert Conformal Conic",
+    "datum": "ITRF92",
+    "ellipsoid": "GRS80",
+    "semiMajorM": 6378137,
+    "inverseFlattening": 298.257222101,
+    "standardParallel1": 17.5,
+    "standardParallel2": 29.5,
+    "latitudeOrigin": 12,
+    "centralMeridian": -102,
+    "falseEastingM": 2500000,
+    "falseNorthingM": 0
+  },
+  "coordinateNote": "Official DMS locality representative coordinates converted into the existing map display projection. ITER datum/epoch is not explicitly documented in the reviewed descriptor; no epoch-dependent transformation, house positions, locality area, or cadastral accuracy claimed.",
+  "validation": {
+    "localityPopulationEqualsEveryMunicipality": true,
+    "localityPopulationEqualsEveryState": true,
+    "overviewPreservesPopulationAndLocalityCounts": true,
+    "allPopulationFieldsNumeric": true,
+    "excludedSyntheticLocalities": [
+      "0000",
+      "9998",
+      "9999"
+    ]
+  },
+  "sourceSelectedFields": {
+    "file": "locality-source-fields.csv.gz",
+    "sha256": "d3769266dfe0986ba409dafcba3a3c4b910bb6f4f3487e5d414e07df771c8109"
+  }
+}

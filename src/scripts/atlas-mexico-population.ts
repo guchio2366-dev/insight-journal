@@ -1,4 +1,5 @@
 import population from '../data/atlas/mexico/population.json';
+import {initMexicoLocalityPopulation} from './atlas-mexico-population-localities';
 import {mexicoPopulationReading, mexicoPopulationRegionReading} from '../data/atlas/mexico/population-reading';
 import {
   readMexicoPopulationState, writeMexicoPopulationState, mexicoDensityColor,
@@ -19,6 +20,9 @@ export function initMexicoPopulation(root: HTMLElement) {
   const configuration = root.querySelector('[data-population-config]');
   if (!configuration?.textContent) return;
   const routes = JSON.parse(configuration.textContent) as PopulationRoutes;
+  const locality=initMexicoLocalityPopulation(root);
+  const wantsLocalities=(url:URL)=>url.searchParams.get('populationDetail')==='locality'||!url.searchParams.has('view');
+  let localityChosen=wantsLocalities(new URL(location.href));
   const codes = population.states.map(row => row.stateCode);
   const query = <T extends Element = HTMLElement>(selector: string) => root.querySelector<T>(selector)!;
   let state = readMexicoPopulationState(new URL(location.href), codes);
@@ -37,7 +41,11 @@ export function initMexicoPopulation(root: HTMLElement) {
     root.dispatchEvent(new CustomEvent('mexico-reading-mode',{detail:{selected}}));
   }
   function normalizedURL() {
-    const next=writeMexicoCompositionSelection(writeMexicoPopulationState(new URL(location.href),state),composition,state.category);
+    // Serialize the locality choice after the state keys every time so a
+    // restored history entry does not need a rewrite for parameter order.
+    const source=new URL(location.href);source.searchParams.delete('populationDetail');
+    const next=writeMexicoCompositionSelection(writeMexicoPopulationState(source,state),composition,state.category);
+    if(localityChosen)next.searchParams.set('populationDetail','locality');else next.searchParams.delete('populationDetail');
     next.searchParams.set('reading',readingSelected()?'item':'overview');
     return next;
   }
@@ -175,6 +183,9 @@ export function initMexicoPopulation(root: HTMLElement) {
     query<HTMLElement>('[data-population-map-status]').textContent = referencePrefix + `2020年・${comparison ? '人口密度と人口規模' : state.view === 'density' ? '州全域の平均密度' : '州人口の規模'}。${state.only ? '選択州のデータのみ（州境は位置の参考）' : '全32州'}。${selectedState?selected.nameJa+'を選択':'全国表示'}。`;
     query<HTMLElement>('[data-population-national-intro]').hidden=state.category!=='distribution'||!!selectedState;
     renderMexicoPopulationComposition(root,compositionData,state,composition,population.states);
+    const localActive=locality?.setActive(localityChosen&&state.category==='distribution'&&!comparison&&!state.fallback,requestedOverview?'':state.state,!requestedOverview&&state.only)??false;
+    if(localActive)query<HTMLSelectElement>('[data-population-view]').value='locality';
+    query<HTMLElement>('[data-population-scope]').textContent=localActive?'2020年・全国189,432集落の人口。背景州境は2025年。':'2020年・全国32州のデータ。州境は2025年。';
     synchronizeReading();
   }
 
@@ -196,7 +207,7 @@ export function initMexicoPopulation(root: HTMLElement) {
     history.pushState(null,'',next);render();
   });
 
-  query<HTMLSelectElement>('[data-population-view]').addEventListener('change', event => {const value=(event.target as HTMLSelectElement).value;if(mexicoCompositionMetric(compositionData,state.category,composition.metric)){composition={...composition,measure:value==='count'?'count':'share'};update({});}else update({view:value as MexicoPopulationState['view']});});
+  query<HTMLSelectElement>('[data-population-view]').addEventListener('change', event => {const value=(event.target as HTMLSelectElement).value;if(mexicoCompositionMetric(compositionData,state.category,composition.metric)){composition={...composition,measure:value==='count'?'count':'share'};update({});}else{localityChosen=value==='locality';update({view:localityChosen?'density':value as MexicoPopulationState['view']});}});
   root.querySelector<HTMLSelectElement>('[data-population-composition-metric]')?.addEventListener('change',event=>{const metric=(event.target as HTMLSelectElement).value;composition={...composition,metric,overview:!metric,compare:false,sourceQuery:null};update({});});
   for(const button of root.querySelectorAll<HTMLButtonElement>('[data-population-overview-metric]'))button.addEventListener('click',()=>{composition={...composition,metric:button.dataset.populationOverviewMetric!,overview:false,measure:'share',compare:false,sourceQuery:null};update({state:'',only:false,compare:null});});
   query<HTMLButtonElement>('[data-population-national]').addEventListener('click',()=>{composition={...composition,overview:true,compare:false,sourceQuery:null};update({state:'',only:false,compare:null});});
@@ -206,6 +217,7 @@ export function initMexicoPopulation(root: HTMLElement) {
   query<HTMLSelectElement>('[data-population-state]').addEventListener('change', event => update({state:(event.target as HTMLSelectElement).value}));
   query<HTMLInputElement>('[data-population-only]').addEventListener('change', event => update({only:(event.target as HTMLInputElement).checked}));
   query<HTMLButtonElement>('[data-population-reset]').addEventListener('click', () => update({state:'',only:false}));
+  root.addEventListener('locality-population-fit',()=>update({state:'',only:false}));
   for (const shape of root.querySelectorAll<SVGElement>('[data-population-state-shape],[data-population-state-symbol]')) {
     const choose = () => update({state:shape.dataset.populationStateShape ?? shape.dataset.populationStateSymbol!});
     shape.addEventListener('click', choose);
@@ -223,7 +235,7 @@ export function initMexicoPopulation(root: HTMLElement) {
     event.preventDefault();
     const next=mexicoPopulationReturnUrl(new URL(location.href),state);requestedOverview=next.searchParams.get('reading')==='overview';state=readMexicoPopulationState(next,codes);frame=readMexicoPopulationFrame(next);composition=readMexicoCompositionSelection(next,compositionData,state.category);history.pushState(null,'',next);render();
   });
-  window.addEventListener('popstate', () => {requestedOverview=new URL(location.href).searchParams.get('reading')==='overview';state = readMexicoPopulationState(new URL(location.href), codes);frame=readMexicoPopulationFrame(new URL(location.href));composition=readMexicoCompositionSelection(new URL(location.href),compositionData,state.category);const normalized=normalizedURL();if(normalized.href!==location.href)history.replaceState(history.state,'',normalized);render();});
+  window.addEventListener('popstate', () => {localityChosen=wantsLocalities(new URL(location.href));requestedOverview=new URL(location.href).searchParams.get('reading')==='overview';state = readMexicoPopulationState(new URL(location.href), codes);frame=readMexicoPopulationFrame(new URL(location.href));composition=readMexicoCompositionSelection(new URL(location.href),compositionData,state.category);const normalized=normalizedURL();if(normalized.href!==location.href)history.replaceState(history.state,'',normalized);render();});
   history.replaceState(null,'',normalizedURL());
   render();
   for (const control of root.querySelectorAll<HTMLButtonElement | HTMLInputElement | HTMLSelectElement>('[data-population-view],[data-population-state],[data-population-only],[data-population-reset]')) control.disabled = false;
