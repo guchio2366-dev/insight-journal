@@ -71,6 +71,27 @@ try{
     dimensions.push({field,width:bounds.width,height:bounds.height,frame});
     await shot(`${region}-${field}-${width}-overview`);
     if(farmingOnly){
+     if(region==='russia'){
+      const legend=host.locator('[data-primary-legend]'),key=host.locator('[data-key-legend]'),reading=host.locator('.russia-learning-reading');
+      assert.equal(await key.evaluate(el=>!!el.closest('.russia-learning-map-panel')),true,'Legend belongs to the map panel');
+      assert.equal(await reading.locator('[data-primary-legend]').count(),0,'Right reading is free of the map legend');
+      assert.ok((await key.boundingBox()).y>=bounds.y+bounds.height-1,'Legend sits below the map');
+      assert.ok(await host.locator('[data-explanation]').isVisible(),'Geographical explanation is open initially');
+      assert.match(await host.locator('[data-takeaway]').textContent(),/ロストフ.*オムスク.*ヤクーツク/);
+      for(const selector of ['.russia-learning-reading','.russia-reading-scroll','.russia-learning-coverage']){
+       const geometry=await host.locator(selector).evaluate(el=>({maxHeight:getComputedStyle(el).maxHeight,overflow:getComputedStyle(el).overflowY,client:el.clientHeight,scroll:el.scrollHeight}));
+       assert.equal(geometry.maxHeight,'none',`${selector} has no height cap`);assert.equal(geometry.overflow,'visible');
+       assert.ok(geometry.scroll<=geometry.client+1,`${selector} retains the full text`);
+      }
+      const labels=await map.locator('.russia-region-marker-label').evaluateAll(elements=>elements.map(el=>{const b=el.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};}));
+      for(let i=0;i<labels.length;i++){
+       assert.ok(labels[i].height<=29,'Visible region label is light and compact');
+       for(let j=i+1;j<labels.length;j++)assert.ok(labels[i].x+labels[i].width<=labels[j].x||labels[j].x+labels[j].width<=labels[i].x||labels[i].y+labels[i].height<=labels[j].y||labels[j].y+labels[j].height<=labels[i].y,'Region labels do not overlap');
+      }
+      for(const hit of await map.locator('[data-region-hit-area]').all())assert.ok((await hit.boundingBox()).height>=43.5,'44px region operation target');
+      assert.match(await legend.textContent(),/牛の有効0は点を描きません/);
+      assert.equal(await map.locator('[data-farming-product="cattle"][data-farming-mode="missing"] rect[mask]').count(),1);
+     }
      assert.equal(await host.locator('[data-layer]').inputValue(),'farming-all');
      const products=region==='russia'?['cattle','wheat']:['cacao','cattle','coconut','sheep','wheat'];
      const shown=async()=>[...new Set(await map.locator('[data-farming-product]').evaluateAll(elements=>elements.map(el=>el.dataset.farmingProduct)))].sort();
@@ -100,7 +121,10 @@ try{
     assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
     assert.equal(await host.locator('[data-layer]').inputValue(),layer);
     assert.equal(await host.locator('[data-compare-layer]').inputValue(),compare);
-    if(region==='russia')assert.equal(await map.locator('[data-region-marker]').count(),3);
+    if(region==='russia'){
+     assert.equal(await map.locator('[data-region-marker]').count(),3);
+     assert.equal(await map.locator('[data-region-marker][data-map-place=far-east]').evaluate(el=>document.activeElement===el),true,'Keyboard focus survives redraw');
+    }
     if(region==='oceania'&&field==='industry'){
      assert.equal(await map.locator('circle[fill][stroke="#fff"]').count(),347);
      assert.ok(await map.locator('path[fill][stroke="#fff"]').count()>0);
@@ -118,6 +142,7 @@ try{
  }
  result.checks.push(farmingOnly?'Changed farming pages start with all saved crop/livestock products, full extent and overview. Product focus, country/keyboard region selection, reload and reset retain other distributions.':'All eight direct field routes start at full extent and overview without a selected country/region/theme.');
  result.checks.push(farmingOnly?'At 1536, 1280 and 1024px, crop focus keeps the full frame, strengthens its outline and makes livestock thinner. Both units and missing/zero keys remain visible.':'All four field map dimensions agree per region at 1536, 1280 and 1024px; hidden legend duplicates reserve no height.');
+ if(farmingOnly&&regions.includes('russia'))result.checks.push('Russia legend is below the map; the open geographical explanation and complete text have no height caps. Labels do not overlap, visible labels are compact, 44px targets and Enter focus are preserved.');
  await page.setViewportSize({width:1536,height:864});
  for(const region of regions){
   await open(region,'agriculture','?scope=all&layer=wheat&compare=cattle&view=comparison');

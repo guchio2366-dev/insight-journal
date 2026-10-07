@@ -77,7 +77,7 @@ function assertSources(element,sources){
  for(const source of sources)assert.ok(urls.has(source.url),`Visible source missing: ${source.title}`);
 }
 function assertRealImage(element){
- const image=element.querySelector('image');assert.ok(image,'Initial distribution has a raster image');
+ const image=element.querySelector('image[data-farming-mode="quantity"]')??element.querySelector('image');assert.ok(image,'Initial distribution has a raster image');
  const url=new URL(image.getAttribute('href'),'https://example.test');
  const file=path.join(repo,'dist',url.pathname.replace(/^\/insight-journal\//,''));
  const bytes=readFileSync(file);
@@ -151,10 +151,17 @@ test('farming overview and product focus retain both distributions, separate uni
   assert.equal(one('layer').value,'farming-all');
   const frame=one('primary-map').querySelector('svg').getAttribute('viewBox');
   assert.deepEqual([...new Set([...one('primary-map').querySelectorAll('[data-farming-product]')].map(el=>el.dataset.farmingProduct))].sort(),['cattle','wheat']);
-  const initialOpacity=Number(one('primary-map').querySelector('[data-farming-product="cattle"]').getAttribute('opacity'));
+  const initialOpacity=Number(one('primary-map').querySelector('[data-farming-product="cattle"][data-farming-mode="texture"]').getAttribute('opacity'));
   assert.match(one('explanation').textContent,/2品目/);assert.match(one('explanation').textContent,/上位10/);
+  assert.match(one('takeaway').textContent,/ロストフ.*オムスク.*ヤクーツク/);
+  assert.equal(one('explanation').closest('details').open,true);
+  assert.ok(one('primary-legend').closest('.russia-learning-map-panel'));
+  assert.equal(root.querySelector('.russia-learning-reading [data-primary-legend]'),null);
+  assert.equal(one('primary-map').querySelectorAll('[data-region-hit-area]').length,3);
+  assert.equal(one('primary-map').querySelectorAll('[data-farming-mode="missing"] rect[mask]').length,1);
+  assert.match(one('primary-legend').textContent,/牛の有効0は点を描きません/);
   one('layer').value='wheat';one('layer').dispatchEvent(new win.Event('change'));
-  const cattle=one('primary-map').querySelector('[data-farming-product="cattle"]');
+  const cattle=one('primary-map').querySelector('[data-farming-product="cattle"][data-farming-mode="texture"]');
   assert.ok(cattle);assert.ok(Number(cattle.getAttribute('opacity'))<initialOpacity);
   assert.equal(one('primary-map').querySelector('[data-farming-product="wheat"][data-farming-mode="outline"]').getAttribute('opacity'),'1');
   assert.equal(one('primary-map').querySelector('svg').getAttribute('viewBox'),frame);
@@ -163,7 +170,7 @@ test('farming overview and product focus retain both distributions, separate uni
   const reloaded=page('agriculture',win.location.search);
   try{
    assert.equal(reloaded.one('layer').value,'wheat');assert.equal(reloaded.one('place').value,'siberia');
-   assert.equal(Number(reloaded.one('primary-map').querySelector('[data-farming-product="cattle"]').getAttribute('opacity')),.22);
+   assert.equal(Number(reloaded.one('primary-map').querySelector('[data-farming-product="cattle"][data-farming-mode="texture"]').getAttribute('opacity')),.22);
    assert.equal(reloaded.one('primary-map').querySelector('svg').getAttribute('viewBox'),frame);
   }finally{reloaded.win.happyDOM.abort();}
   one('layer').value='cattle';one('layer').dispatchEvent(new win.Event('change'));
@@ -187,7 +194,7 @@ test('west wheat and climate comparison retains the original distribution, every
   one('comparison').click();
   const state=D.createRussiaState(win.location.search,'agriculture'),original=D.getRussiaLayer('wheat'),comparison=D.getRussiaLayer('climate');
   assert.equal(one('comparison-view').hidden,false);assert.equal(one('normal-view').hidden,true);
-  assert.ok(one('original-map').querySelector('image').getAttribute('href').endsWith(original.image));
+  assert.ok(one('original-map').querySelector('image[data-farming-mode="quantity"]').getAttribute('href').endsWith(original.image));
   assert.ok(one('comparison-map').querySelector('image').getAttribute('href').endsWith(comparison.image));
   assert.equal(one('original-map').querySelector('svg').getAttribute('viewBox'),originalFrame);
   assert.equal(one('comparison-map').querySelector('svg').getAttribute('viewBox'),originalFrame);

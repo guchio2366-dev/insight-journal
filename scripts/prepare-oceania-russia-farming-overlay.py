@@ -2,7 +2,8 @@
 """Derive display-only farming textures from saved native grids; no downloads.
 
 The original Float32 grids, quantities, zero and missing cells remain untouched.
-A four-pixel texture cell keeps positive, zero and missing patterns distinct.
+Positive density uses quiet classed dots; zero is transparent. Missing has its
+own exact mask and is styled separately at the browser's display scale.
 """
 from __future__ import annotations
 
@@ -17,6 +18,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 LIVESTOCK_COLORS = ['a7cbd9', '78adc4', '548ca9', '376d91', '225375', '143d5c']
+LIVESTOCK_ALPHAS = [16, 44, 88, 140, 190, 240]
 CELL = 4
 
 
@@ -46,20 +48,20 @@ def prepare(region: str) -> None:
             positive, zero, missing = values > 0, values == 0, values == -1
             classes = np.searchsorted(layer['breaks'], values, side='right')
             rgba = np.zeros((height * CELL, width * CELL, 4), dtype=np.uint8)
+            mask_name = None
             if kind == 'livestock':
-                palette = np.array([list(bytes.fromhex(c)) + [255] for c in LIVESTOCK_COLORS], dtype=np.uint8)
-                for offset in range(CELL):
-                    tile = rgba[offset::CELL, offset::CELL]
-                    tile[positive] = palette[classes[positive]]
-                    opposite = rgba[(CELL - 1 - offset)::CELL, offset::CELL]
-                    opposite[missing] = [121, 126, 139, 150]
-                rgba[2::CELL, 2::CELL][zero] = [89, 114, 132, 170]
+                palette = np.array([list(bytes.fromhex(c)) + [alpha] for c, alpha in zip(LIVESTOCK_COLORS, LIVESTOCK_ALPHAS)], dtype=np.uint8)
+                for dy, dx in [(1, 1), (1, 2), (2, 1), (2, 2)]:
+                    rgba[dy::CELL, dx::CELL][positive] = palette[classes[positive]]
+                mask = np.zeros((height, width, 4), dtype=np.uint8)
+                mask[missing] = [255, 255, 255, 255]
+                mask_name = layer['id'] + '-missing.png'
+                Image.fromarray(mask).save(out / mask_name, optimize=True)
                 name = layer['id'] + '-texture.png'
                 counts = {'positive': int(positive.sum()), 'zero': int(zero.sum()), 'missing': int(missing.sum())}
-                # Every source cell has the documented, independent status pattern.
-                assert np.array_equal((rgba[0::CELL, 0::CELL, 3] == 255), positive)
-                assert np.array_equal((rgba[0::CELL, 3::CELL, 3] == 150), missing)
-                assert np.array_equal((rgba[2::CELL, 2::CELL, 3] == 170), zero)
+                assert np.array_equal(rgba[1::CELL, 1::CELL, 3] > 0, positive)
+                assert not rgba[1::CELL, 1::CELL, 3][zero | missing].any()
+                assert np.array_equal(mask[:, :, 3] > 0, missing)
             else:
                 # Draw only positive-cell outer edges; do not interpolate across gaps.
                 color = list(bytes.fromhex(layer['colors'][-1])) + [255]
@@ -84,10 +86,11 @@ def prepare(region: str) -> None:
                             'boundsUnwrapped': layer.get('boundsUnwrapped', layer.get('bounds4326Unwrapped')),
                             'unit': layer['unit'], 'year': 2020, 'license': 'CC BY 4.0',
                             'breaks': layer['breaks'], 'colors': LIVESTOCK_COLORS if kind == 'livestock' else layer['colors'],
+                            **({'alphas': LIVESTOCK_ALPHAS, 'missingImage': mask_name} if kind == 'livestock' else {}),
                             'sourceGrid': str(path.relative_to(ROOT)), 'sourceCounts': counts})
     record = {'schemaVersion': 1, 'region': region, 'year': 2020, 'generator': Path(__file__).name,
               'inputs': inputs, 'layers': records,
-              'method': 'Display textures only. Native values and geographic cell bounds are unchanged. Positive livestock cells have forward diagonals colored by the original density breaks; valid zero has a dot; missing has an opposite diagonal. Crop outlines follow only the outer edges of positive native cells. No aggregation, interpolation, national totals or cross-unit addition.',
+              'method': 'Display textures only. Native values and geographic cell bounds are unchanged. Positive livestock cells have classed blue dots with fixed size and increasing class opacity using the original density breaks. Valid zero is transparent. Missing has a separate exact native-cell mask, drawn as a faint neutral hatch in the browser. Crop outlines follow only the outer edges of positive native cells. No aggregation, interpolation, national totals or cross-unit addition.',
               'limitations': ['Texture strokes and outlines indicate model-cell distributions, not actual farm boundaries or individual animals.', 'At overview scale, source cells are smaller than screen pixels; selecting a product restores its source quantity colors while the other distribution stays visible.', 'Available products are not a validated national top-ten ranking.'],
               'files': {p.name: {'bytes': p.stat().st_size, 'sha256': digest(p)} for p in sorted(out.glob('*.png'))}}
     (out / 'manifest.json').write_text(json.dumps(record, ensure_ascii=False, indent=2) + '\n')

@@ -79,6 +79,15 @@
         "225375",
         "143d5c"
       ],
+      "alphas": [
+        16,
+        44,
+        88,
+        140,
+        190,
+        240
+      ],
+      "missingImage": "cattle-missing.png",
       "sourceGrid": "public/assets/atlas/russia-livestock-v1/cattle.values.gz",
       "sourceCounts": {
         "positive": 568934,
@@ -87,16 +96,20 @@
       }
     }
   ],
-  "method": "Display textures only. Native values and geographic cell bounds are unchanged. Positive livestock cells have forward diagonals colored by the original density breaks; valid zero has a dot; missing has an opposite diagonal. Crop outlines follow only the outer edges of positive native cells. No aggregation, interpolation, national totals or cross-unit addition.",
+  "method": "Display textures only. Native values and geographic cell bounds are unchanged. Positive livestock cells have classed blue dots with fixed size and increasing class opacity using the original density breaks. Valid zero is transparent. Missing has a separate exact native-cell mask, drawn as a faint neutral hatch in the browser. Crop outlines follow only the outer edges of positive native cells. No aggregation, interpolation, national totals or cross-unit addition.",
   "limitations": [
     "Texture strokes and outlines indicate model-cell distributions, not actual farm boundaries or individual animals.",
     "At overview scale, source cells are smaller than screen pixels; selecting a product restores its source quantity colors while the other distribution stays visible.",
     "Available products are not a validated national top-ten ranking."
   ],
   "files": {
+    "cattle-missing.png": {
+      "bytes": 22340,
+      "sha256": "33ba3e3d25efb79cc2723f9f8eb721c523c5cbc963fe676c32f229d30ea500c4"
+    },
     "cattle-texture.png": {
-      "bytes": 387989,
-      "sha256": "704ce4a7eeab2b7872fe1fb7eea39e52dca4cb88cb6c3d707478cde9203f554c"
+      "bytes": 149417,
+      "sha256": "e19a00386fc19156175e9937fdd59ad65ddd2b4e79fb31a6e88c83aade0c4d96"
     },
     "wheat-outline.png": {
       "bytes": 162906,

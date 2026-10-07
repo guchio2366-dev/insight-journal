@@ -45,7 +45,8 @@ for(const region of ['russia']){
    assert.equal(layer.year,2020);assert.equal(layer.license,'CC BY 4.0');
    assert.deepEqual(layer.boundsUnwrapped,[18,40,191,83]);
    assert.match(layer.unit,layer.kind==='crop'?/ha/:/頭/);
-   const counts={positive:0,zero:0,missing:0};
+   const counts={positive:0,zero:0,missing:0},missing=layer.kind==='livestock'?pixels(read(base+layer.missingImage)):null;
+   if(missing){assert.equal(missing.width,layer.width);assert.equal(missing.height,layer.height);}
    const pixel=(row,column,dy,dx)=>(row*4+dy)*image.width*4+(column*4+dx)*4;
    const palette=layer.colors.map(color=>Buffer.from(color,'hex'));
    for(let row=0;row<layer.height;row++)for(let column=0;column<layer.width;column++){
@@ -55,13 +56,13 @@ for(const region of ['russia']){
     if(layer.kind==='livestock'){
      const alpha=(dy,dx)=>image.rgba[pixel(row,column,dy,dx)+3];
      if(value>0){
-      const index=layer.breaks.filter(bound=>value>=bound).length,at=pixel(row,column,0,0);
-      if(alpha(0,0)!==255||!image.rgba.subarray(at,at+3).equals(palette[index]))assert.fail(`Density class mismatch at native cell ${row},${column}`);
-     }else if(value===0){
-      if(alpha(2,2)!==170||alpha(0,0)!==0||alpha(0,3)!==0)assert.fail(`Valid zero pattern mismatch at ${row},${column}`);
+      const index=layer.breaks.filter(bound=>value>=bound).length,at=pixel(row,column,1,1);
+      if(alpha(1,1)!==layer.alphas[index]||alpha(1,1)===0||!image.rgba.subarray(at,at+3).equals(palette[index]))assert.fail(`Density class mismatch at native cell ${row},${column}`);
+      for(let dy=0;dy<4;dy++)for(let dx=0;dx<4;dx++)assert.equal(alpha(dy,dx),dy>=1&&dy<=2&&dx>=1&&dx<=2?layer.alphas[index]:0);
      }else{
-      if(alpha(0,3)!==150||alpha(0,0)!==0||alpha(2,2)!==0)assert.fail(`Missing pattern mismatch at ${row},${column}`);
+      for(let dy=0;dy<4;dy++)for(let dx=0;dx<4;dx++)if(alpha(dy,dx)!==0)assert.fail(`Zero/missing density mark at ${row},${column}`);
      }
+     assert.equal(missing.rgba[(row*layer.width+column)*4+3],value===-1?255:0,'Exact missing mask');
     }else if(value<=0){
      for(let dy=0;dy<4;dy++)for(let dx=0;dx<4;dx++)if(image.rgba[pixel(row,column,dy,dx)+3]!==0)assert.fail(`Crop outline invents production in zero/missing cell ${row},${column}`);
     }

@@ -309,7 +309,24 @@
 .russia-farming-legend-group > div { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .25rem .65rem; }
 .russia-farming-legend-group > div > span { display: flex; align-items: center; gap: .35rem; }
 .russia-farming-status-key { grid-column: 1 / -1; flex-basis: 100%; margin: .15rem 0; font-size: .94rem; line-height: 1.55; }
-.russia-legend-mark.farming-line { background: repeating-linear-gradient(45deg,transparent 0 3px,var(--mark) 3px 5px,transparent 5px 8px); border: 1px solid var(--mark); }
+.russia-learning .russia-legend-mark.farming-dot { position: relative; background: transparent; border-color: #c6cec9; }
+.russia-legend-mark.farming-dot::after { content: ''; position: absolute; inset: 3px; border-radius: 50%; background: var(--mark); opacity: var(--mark-opacity); }
 .russia-legend-mark.farming-outline { background: transparent; border: 2px solid var(--mark); }
-.russia-legend-mark.farming-zero { background: radial-gradient(circle at center,#597284 0 2px,transparent 2px); border: 1px solid #b7c6ce; }
-.russia-legend-mark.farming-missing { background: repeating-linear-gradient(-45deg,transparent 0 3px,#797e8b 3px 4px,transparent 4px 8px); border: 1px solid #b7bbc2; }
+.russia-learning .russia-legend-mark.farming-zero { background: transparent; border: 1px solid #b7c6ce; }
+.russia-learning .russia-legend-mark.farming-missing { background: repeating-linear-gradient(45deg,transparent 0 6px,#999d9273 6px 7px,transparent 7px 9px); border: 1px solid #c8ccc2; }
+.russia-learning[data-field=agriculture] .russia-legend-mark.missing { background: repeating-linear-gradient(135deg,#f2f1e8 0 3px,#d3d4c8 3px 4px); }
+
+/* The map key stays below its map; the complete geographical reading flows on the right. */
+.russia-workspace .russia-learning[data-field=agriculture] .russia-farming-map-legend { padding: 12px 0 8px; border: 0; }
+.russia-workspace .russia-learning[data-field=agriculture] .russia-farming-map-legend [data-primary-legend] { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px 16px; }
+.russia-farming-map-legend .russia-farming-legend-group { grid-column: auto; }
+.russia-farming-map-legend .russia-farming-status-key { font-size: 14px; line-height: 1.65; }
+.russia-workspace .russia-learning[data-field=agriculture] .russia-learning-reading { max-height: none; overflow: visible; }
+.russia-workspace .russia-learning[data-field=agriculture] .russia-reading-scroll { display: flex; flex-direction: column; flex: none; max-height: none; overflow: visible; }
+.russia-workspace .russia-learning[data-field=agriculture] .russia-learning-detailed-readings { order: 0; }
+.russia-workspace .russia-learning[data-field=agriculture] .russia-learning-coverage { order: 1; max-height: none; overflow: visible; padding-inline: 0; }
+.russia-farming-region-marker .russia-region-marker-label { fill-opacity: .86; stroke-width: .7; }
+.russia-learning-scene .russia-farming-region-marker text { font-weight: 500; }
+.russia-farming-region-marker .russia-region-marker-leader { stroke-width: .7; stroke-opacity: .65; }
+.russia-farming-region-marker .russia-region-marker-point { stroke-width: 1; }
+@media(max-width:600px) { .russia-workspace .russia-learning[data-field=agriculture] .russia-farming-map-legend [data-primary-legend] { grid-template-columns: 1fr; } }
