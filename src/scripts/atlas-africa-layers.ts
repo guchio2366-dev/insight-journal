@@ -104,7 +104,8 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
  }
  const svg=(tag:string,attrs:Row)=>{const node=document.createElementNS(SVG,tag);for(const [key,value]of Object.entries(attrs))node.setAttribute(key,String(value));return node;};
  const setup=(key:string)=>{
-  if(['climate','terrain','elevation'].includes(key))return {base:withBase('/assets/atlas/africa-physical-v1/'),family:'physical',id:key};
+  if(key==='elevation')return {base:withBase('/assets/atlas/africa-elevation-500m-v1/'),family:'physical',id:key};
+  if(['climate','terrain'].includes(key))return {base:withBase('/assets/atlas/africa-physical-v1/'),family:'physical',id:key};
   if(['ethnicity','religion'].includes(key))return {base:withBase('/assets/atlas/africa-settlements-v1/'),family:'social',id:key};
   if(key==='distribution')return {base:withBase('/assets/atlas/africa-population-v1/'),family:'population',id:'population'};
   if(key.startsWith('crop-'))return {base:withBase('/assets/atlas/africa-crops-v1/'),family:'crops',id:key.slice(5)};
@@ -156,12 +157,15 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
     for(const feature of collection as Feature[]){
      const props=feature.properties??{},id=text(props.categoryId??props.classId??props.id);
      if(config.family==='social'&&key==='ethnicity'&&!ids.has(id))continue;
-     if(state.layerClass&&key!=='terrain'&&categories.length!==1&&id!==state.layerClass&&props.id!==state.layerClass)continue;
+     if(state.layerClass&&!layer.vectorBands&&key!=='terrain'&&categories.length!==1&&id!==state.layerClass&&props.id!==state.layerClass)continue;
      let d=paths.get(feature);if(!d){d=africaLayerPath(feature.geometry);paths.set(feature,d);}if(!d)continue;
      const line=/LineString/.test(feature.geometry.type),boundary=config.id==='basins';
+     const contour=layer.vectorBands&&props.kind==='contour',band=layer.vectorBands&&props.kind==='band';
      const river=key==='water-river'?africaRiverForFeature(feature):undefined,selected=!!river&&river.id===state.river;
-     const color=selected?africaRiverSelectedColor:text(props.color,categories.find(row=>text(row.id)===id)?.color??(key==='terrain'?'#655449':categories.length===1?categories[0].color:'#447f9d'));
-     const path=svg('path',{d,fill:line||boundary?'none':color,'fill-opacity':1,stroke:line||boundary?color:'#ffffff','stroke-width':selected?3.2:line||boundary?1.3:.3,'vector-effect':'non-scaling-stroke','fill-rule':'evenodd','data-africa-layer-feature':text(props.id,id),'pointer-events':'none'});
+     const color=contour?'#875d40':selected?africaRiverSelectedColor:text(props.color,categories.find(row=>text(row.id)===id)?.color??(key==='terrain'?'#655449':categories.length===1?categories[0].color:'#447f9d'));
+     const path=svg('path',{d,fill:line||boundary?'none':color,'fill-opacity':1,stroke:band?'none':line||boundary?color:'#ffffff','stroke-width':contour?props.major?1.15:.55:selected?3.2:line||boundary?1.3:.3,'vector-effect':'non-scaling-stroke','fill-rule':'evenodd','data-africa-layer-feature':text(props.id,id),'pointer-events':'none'});
+     if(contour)path.setAttribute('data-africa-elevation-contour',String(props.elevationM));
+     if(band)path.setAttribute('data-africa-elevation-band',id);
      if(river){path.setAttribute('data-africa-river-feature',river.id);path.setAttribute('class',`africa-river-path${selected?' is-selected':''}`);}
      const title=svg('title',{});title.textContent=river?.label??label(props);path.append(title);group.append(path);
      if(river){
@@ -172,7 +176,12 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
      }
     }
    }
-   if(outlineSelection&&state.layerClass&&grid?.value){
+   if(layer.vectorBands&&state.layerClass&&data?.value){
+    const feature=data.value.features.find((row:Feature)=>row.properties.kind==='band'&&row.properties.id===state.layerClass);
+    if(feature){const outline=svg('g',{'data-africa-class-outline':state.layerClass,'data-africa-outline-layer':key,'pointer-events':'none','aria-hidden':'true'});
+     for(const [stroke,width]of [['#ffffff',2.5],['#183c4a',1]] as const)outline.append(svg('path',{d:africaLayerPath(feature.geometry),fill:'none',stroke,'stroke-width':width,'vector-effect':'non-scaling-stroke'}));group.append(outline);}
+   }
+   if(outlineSelection&&!layer.vectorBands&&state.layerClass&&grid?.value){
     const outlineKey=[key,state.layerClass].join('|');let d=outlineCache.get(outlineKey);
     if(d===undefined){d=africaGridClassOutline(grid.value,{...manifest,...layer},state.layerClass);outlineCache.set(outlineKey,d);}
     if(d){const outline=svg('g',{'data-africa-class-outline':state.layerClass,'data-africa-outline-layer':key,'pointer-events':'none','aria-hidden':'true'});

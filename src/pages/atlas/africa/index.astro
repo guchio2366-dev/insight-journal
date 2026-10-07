@@ -41,6 +41,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
    <h1>アフリカ地図</h1>
    <div class="africa-region-controls">
     <div class="africa-region-row"><nav class="africa-region-tabs" aria-label="地域の移動"><a href={withBase('/atlas/')}>世界の地域</a><a href={withBase('/atlas/africa/overview/')} aria-current="page">アフリカ</a></nav><label>地域<select data-region>{Object.entries(regionNames).map(([id,name])=><option value={id}>{name}</option>)}</select></label></div>
+    <p class="africa-elevation-note" data-africa-elevation-note hidden>500mの等高線と段階色 · 元の表示格子は0.1度 · ETOPO 2022版</p>
     <div class="africa-country-controls"><label>国・地域<select data-place><option value="" selected={!state.place}>国未選択</option>{ordered.map(c=><option value={c.code} selected={c.code===state.place}>{c.name}</option>)}</select></label><label>比較国<select data-compare disabled={!state.place}><option value="">比較なし</option>{ordered.map(c=><option value={c.code}>{c.name}</option>)}</select></label><label>統計年<select data-year disabled>{[...years].reverse().map(y=><option value={y} selected={y===state.year}>{y}年</option>)}</select></label></div>
    </div>
   </header>

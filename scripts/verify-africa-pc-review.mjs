@@ -27,6 +27,7 @@ const output=path.resolve(process.env.AFRICA_REVIEW_OUTPUT||path.join(repo,'revi
 const basePath=`/${String(astroConfig.base??'').replace(/^\/+|\/+$/g,'')}`.replace(/^\/$/,'');
 const profiles=[{id:'desktop1440',width:1440,height:1000},{id:'notebook1024',width:1024,height:768}];
 const agricultureProfiles=[{id:'agriculture1536',width:1536,height:864},{id:'agriculture1280',width:1280,height:720},{id:'agriculture1024',width:1024,height:768}];
+const elevationProfiles=agricultureProfiles.map(profile=>({...profile,id:profile.id.replace('agriculture','elevation')}));
 const mobileProfile={id:'mobile390',width:390,height:844,mobile:true};
 const riverRoute='/atlas/africa/?field=nature&topic=water&water=river&metric=ER.H2O.INTR.PC&zoom=all&region=all&place=EGY&compare=COD&year=2021';
 const populationRoute='/atlas/africa/?field=population&topic=distribution&zoom=all';
@@ -34,7 +35,7 @@ const agricultureKeys=['crop-maize-harvested','crop-rice-harvested','crop-wheat-
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const git=(...args)=>execFileSync('git',args,{cwd:repo,encoding:'utf8'}).trim();
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.geojson':'application/geo+json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.woff2':'font/woff2','.gz':'application/gzip'};
-const report={status:'running',scope:'Local production dist in real Chrome at PC viewports and an emulated 390 × 844 touch mobile viewport. Public deployment and physical mobile devices are not verified.',startedAt:new Date().toISOString(),comparisonTolerancePx:2,profiles,agricultureProfiles,mobileProfile,cases:[],screenshots:[],visualReviewRequired:['Initial agriculture: identify each crop and livestock distribution from map labels and distinct legend colors without reading technical notes.','Selected rice: all other distributions remain visible; crop selection outline and quieter livestock agree with the right reading.','Scrolled agriculture: every heading and source remains readable beside the news rail at 1536, 1280 and 1024 pixels.','Mobile: review initial arrival, map, rice selection and lower readings at 390 × 844; desktop Chrome touch emulation is not a physical-device test.'],exclusions:[{scene:'US elevation',status:'not-verified',reason:'Previous normal contour rendering timed out and displayed fallback. This script excludes that scene; it is not counted as a successful comparison.'}]};
+const report={status:'running',scope:'Local production dist in real Chrome at PC viewports and an emulated 390 × 844 touch mobile viewport. Public deployment and physical mobile devices are not verified.',startedAt:new Date().toISOString(),comparisonTolerancePx:2,profiles,agricultureProfiles,elevationProfiles,mobileProfile,cases:[],screenshots:[],visualReviewRequired:['Initial agriculture: identify each crop and livestock distribution from map labels and distinct legend colors without reading technical notes.','Selected rice: all other distributions remain visible; crop selection outline and quieter livestock agree with the right reading.','Scrolled agriculture: every heading and source remains readable beside the news rail at 1536, 1280 and 1024 pixels.','Mobile: review initial arrival, map, rice selection and lower readings at 390 × 844; desktop Chrome touch emulation is not a physical-device test.'],exclusions:[]};
 let browser,server,origin,fatalNetwork;
 const native=JSON.parse(await readFile(path.join(repo,'public/assets/atlas/africa-water-v1/rivers.geojson'),'utf8'));
 const nativePaths=Object.fromEntries(native.features.map(feature=>[feature.properties.id,africaLayerPath(feature.geometry)]));
@@ -169,7 +170,7 @@ async function clickLine(page,id){
 }
 
 async function stableUS(page,record,topic){
- const population=['distribution','ethnicity','religion'].includes(topic),nature=['water','climate'].includes(topic);
+ const population=['distribution','ethnicity','religion'].includes(topic),nature=['water','climate','contour'].includes(topic);
  await page.waitForFunction(()=>['ready','fallback'].includes(document.querySelector('[data-atlas-explorer]')?.dataset.renderState),null,{timeout:45000});
  if(nature)await page.waitForFunction(()=>['ready','error'].includes(document.querySelector('[data-atlas-explorer]')?.dataset.natureLoad),null,{timeout:45000});
  assert.equal(await page.locator('[data-atlas-explorer]').getAttribute('data-render-state'),'ready','Fallback is not a successful US comparison');
@@ -193,6 +194,7 @@ async function stableUS(page,record,topic){
  }
  assert(finalEvidence,'US canvas did not become stably painted; ready alone is insufficient');assertPaint(finalEvidence);
  const topicAssets=record.loadedAssets.filter(url=>population?url.includes('/population/v1/'):nature?url.includes('/nature-v1/'):url.includes('/atlas/'));
+ if(topic==='contour')assert(topicAssets.some(url=>url.endsWith('/contours.geojson.gz')),'Actual US 500 m contours were not fetched');
  if(population){
   assert(topicAssets.some(url=>topic==='religion'?/religion-counties-2020\.geo/.test(url):/counties\.geo/.test(url)),'Actual US county geometry was not fetched');
   const dataset=topic==='distribution'?'/counties.json':topic==='ethnicity'?'/ethnicity.json':'/religion-dominant.json';
@@ -200,6 +202,30 @@ async function stableUS(page,record,topic){
  }
  record.checks.push({check:'US actual canvas rendering',topic,renderState:'ready',fallback:false,graphics,palette,samples,assets:topicAssets});
  return samples.at(-1).sha256;
+}
+
+async function elevationOperations(page,record,reference){
+ await open(page,'/atlas/africa/?field=nature&topic=elevation&place=EGY&compare=COD&region=north&year=2023&zoom=country');
+ await page.waitForFunction(()=>document.querySelectorAll('[data-africa-elevation-band]').length===10&&document.querySelectorAll('[data-africa-elevation-contour]').length===9);await settle(page);
+ for(const selector of ['[data-place]','[data-compare]','[data-year]','[data-region]','[data-theme-comparison]','[data-zoom]'])assert.equal(await page.locator(selector).first().isVisible(),false);
+ const params=await state(page);for(const key of ['place','compare','year','region','context'])assert.equal(params[key],undefined);assert.equal(params.zoom,'all');
+ const native=await page.locator('[data-africa-layer-feature]').evaluateAll(nodes=>nodes.map(n=>({id:n.dataset.africaLayerFeature,d:n.getAttribute('d'),fill:n.getAttribute('fill'),stroke:n.getAttribute('stroke'),width:n.getAttribute('stroke-width')})));
+ const colors=['#c5d8b0','#dee0aa','#e2d29a','#d5be8c','#c2a57f'];
+ const pixels=pixelEvidence(await page.locator('.africa-map').screenshot(),colors);assert(pixels.paletteMatches.filter(count=>count>=5).length>=4,'Elevation bands are not visibly painted');
+ const measurement=await measure(page,'africa');assertLayout(measurement);record.measurements.push({scene:'elevation',...measurement});
+ await screenshot(page,record,'africa-elevation');
+ await page.locator('[data-africa-layer-class="band-3"]').click();await page.locator('[data-africa-class-outline="band-3"]').waitFor();
+ assert.equal(await page.locator('[data-africa-layer-feature]').count(),19);assert.equal(await page.locator('[data-africa-class-outline] rect').count(),0);assert.match(await page.locator('[data-africa-point-reading]').textContent(),/1,000–1,500 m/);
+ assert.equal(await page.locator('[data-theme-source]').getAttribute('href'),'https://www.ncei.noaa.gov/products/etopo-global-relief-model');
+ const paths=await page.locator('[data-africa-layer-feature]').evaluateAll(nodes=>nodes.map(n=>({id:n.dataset.africaLayerFeature,d:n.getAttribute('d'),fill:n.getAttribute('fill'),stroke:n.getAttribute('stroke'),width:n.getAttribute('stroke-width')})));assert.deepEqual(paths,native);
+ await screenshot(page,record,'africa-elevation-selected');
+ await page.locator('[data-africa-layer-class="band-5"]').focus();await page.keyboard.press('Enter');await page.locator('[data-africa-class-outline="band-5"]').waitFor();
+ await page.goBack();await page.locator('[data-africa-class-outline="band-3"]').waitFor();await page.goForward();await page.reload();await page.locator('[data-africa-class-outline="band-5"]').waitFor();
+ await page.locator('[data-africa-layer-class="band-5"]').click();assert.equal(await page.locator('[data-africa-class-outline]').count(),0);
+ await page.locator('.africa-theme-full>summary').click();const source=page.locator('[data-theme-details] a').last();await source.scrollIntoViewIfNeeded();assert.match(await source.getAttribute('href'),/africa-elevation-500m-v1\/manifest.json$/);await screenshot(page,record,'africa-elevation-source',{preserveScroll:true});
+ await page.locator('[data-reset]').click();await waitAfrica(page,'climate');assert.equal(await page.locator('[data-africa-elevation-band]').count(),0);
+ record.checks.push({check:'500 m bands/lines paint, all geometry retained on band selection, source, obsolete controls, keyboard/history/reload/reset',status:'passed',pixels,features:native.map(({d,...rest})=>({...rest,pathLength:d.length}))});
+ assert(reference,'US elevation did not render normally; fallback cannot be a successful comparison');assertLayout(measurement,reference);
 }
 
 async function riverOperations(page,record,reference){
@@ -440,6 +466,11 @@ async function main(){
   const hosted=await serveBuild();server=hosted.server;origin=hosted.origin;report.origin=origin;report.basePath=basePath;
   report.browser={executablePath,headless:true,chromiumSandbox:true,additionalFlags:[]};await save();
   browser=await chromium.launch({executablePath,headless:true,chromiumSandbox:true});report.browser.version=browser.version();await save();
+  for(const profile of elevationProfiles){
+   let reference;
+   await runCase(profile,'us-elevation',async(page,record)=>{await open(page,'/atlas/north-america/nature/?env=contour');await stableUS(page,record,'contour');reference=await measure(page,'us');assertLayout(reference);record.measurements.push({scene:'elevation',...reference});await screenshot(page,record,'us-elevation');});
+   await runCase(profile,'africa-elevation',async(page,record)=>{await elevationOperations(page,record,reference);});
+  }
   // Agriculture is reviewed first so its three representative scenes are available
   // immediately; unchanged fields retain their established two-width coverage.
   for(const profile of agricultureProfiles){
