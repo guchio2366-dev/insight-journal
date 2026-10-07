@@ -57,6 +57,7 @@ jobs:
           echo "::notice title=Chrome ready::$chrome_version at $chrome_path"
 
       - name: Prepare Japanese fonts from the official runner package repository
+        timeout-minutes: 2
         shell: bash
         run: |
           set -euo pipefail
@@ -64,9 +65,9 @@ jobs:
           font_setup="preinstalled"
           if [[ -z "$japanese_fonts" ]]; then
             echo "::notice title=Japanese fonts missing::Installing only fonts-noto-cjk from the runner's existing official Ubuntu package repository."
-            # Fail on repository errors, including certificate failures. Do not
-            # change repositories, keys, trust settings, or certificate checks.
-            sudo apt-get update -o APT::Update::Error-Mode=any
+            # Reuse the runner's existing package index. Updating every runner
+            # repository stalled the review before any browser operation.
+            # Keep the official package, repositories and certificate checks.
             sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
             japanese_fonts="$(fc-list ':lang=ja' family | sort -u | paste -sd ',' -)"
             font_setup="official-ubuntu-fonts-noto-cjk"
