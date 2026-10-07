@@ -319,7 +319,9 @@ async function europeOperations(page, profile, render) {
   });
   await page.mouse.click(londonPixel.x, londonPixel.y);
   const density = await settled(page, '（2020）'), sourcePoint = new URL(page.url()).searchParams.get('point'); assert.ok(sourcePoint);
-  const [longitude, latitude] = sourcePoint.split(',').map(Number); assert.ok(Math.abs(longitude + .1187) < .3 && Math.abs(latitude - 51.5019) < .3, sourcePoint);
+  const [longitude, latitude] = sourcePoint.split(',').map(Number);
+  // At the compact frame, one screen pixel spans about 0.2° near London.
+  assert.ok(Math.hypot(longitude + .1187, latitude - 51.5019) < .5, sourcePoint);
   await page.locator('[data-eu-comparison-link="population-terrain"]').click(); await page.waitForURL('**/nature/**'); await ready(page, 'europe', render);
   const targetValue = await settled(page), targetURL = new URL(page.url());
   assert.equal(targetURL.searchParams.get('feature'), 'alps'); assert.equal(targetURL.searchParams.get('point'), '9.5,46.6'); assert.equal(targetValue, elevation);
