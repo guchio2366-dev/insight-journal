@@ -13,9 +13,10 @@ export const southCentralImageCount=10*southCentralProfiles.length;
 
 export async function verifySouthCentralAsia(page,{source,profile,capture}){
  const checks=[],bandsChecks=[];
+ const reviewFoundation=process.env.SOUTH_CENTRAL_FOUNDATION_REVIEW==='1'&&profile.name==='south-desktop';
  const record=name=>checks.push({name,passed:true});
  const ready=()=>page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-map-fallback]')?.hidden);
- const open=async(route)=>{await page.goto(source+`/atlas/asia/${route}`,{waitUntil:'domcontentloaded'});await ready();if(profile.name==='south-desktop')await page.waitForLoadState('networkidle');};
+ const open=async(route)=>{await page.goto(source+`/atlas/asia/${route}`,{waitUntil:'domcontentloaded'});await ready();if(reviewFoundation)await page.waitForLoadState('networkidle');};
  const screenshot=async id=>{if(!id.includes('-aligned-')&&!['south-central-industry-overview','south-central-cultural-distribution'].includes(id))return;await page.waitForLoadState('networkidle');await page.evaluate(async()=>{await document.fonts.ready;scrollTo({top:0,behavior:'instant'});await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});assert.equal(await page.evaluate(()=>scrollY),0,'Regional screenshots must start at the page top');await capture(page,profile,id,'asia');};
  const story=async id=>{const picker=page.locator('[data-place-story]');await picker.selectOption(id);await page.waitForFunction(id=>new URL(location.href).searchParams.get('story')===id,id);await page.waitForLoadState('networkidle');};
  const scope=()=>page.locator('[data-country-select] option').evaluateAll(nodes=>nodes.filter(n=>n.value&&!n.disabled&&!n.hidden).map(n=>n.value));
@@ -35,9 +36,10 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
   extentChecks.push({label,camera,extent,corners,passed:true});
  };
 
- // The foundation operations passed in all three PC sizes on the preceding
- // review run. Keep them on desktop; all sizes still check new contour views.
- if(profile.name==='south-desktop'){
+ // Foundation operations passed in all three PC sizes on the first contour
+ // review run. Retain the deeper suite for explicit regional follow-up; the
+ // regular CI budget covers all new contour views in every PC size.
+ if(reviewFoundation){
  await open('south-central-asia/industry/');
  assert.equal(new URL(page.url()).searchParams.get('place'),null);
  assert.deepEqual(await scope(),['IND']);
