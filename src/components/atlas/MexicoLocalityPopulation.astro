@@ -12,7 +12,7 @@ const assets = withBase('/assets/atlas/mexico-population-localities-v1/');
  </div>
  <svg class="mexico-map population-map locality-population-context" data-locality-map viewBox="0 0 900 580" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
   <g class="locality-population-land">{states.states.map(row => <use href={`#mexico-population-outline-${row.stateCode}`} />)}</g>
-  <g class="population-map-context"><text x="450" y="45">米国</text><text x="95" y="415">太平洋</text><text x="720" y="250">メキシコ湾</text></g>
+  <g class="population-map-context"><text x="650" y="70">米国</text><text x="95" y="415">太平洋</text><text x="720" y="250">メキシコ湾</text></g>
  </svg>
  <canvas data-locality-canvas aria-label="2020年の集落人口。点の意味と人数の凡例、全国と選択した点の値は右側で読めます。" tabindex="0"></canvas>
  <svg class="locality-population-labels" data-locality-labels viewBox="0 0 900 580" aria-hidden="true"></svg>
