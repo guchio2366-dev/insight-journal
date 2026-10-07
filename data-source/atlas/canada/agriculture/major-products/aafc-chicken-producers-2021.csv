@@ -1,0 +1,12 @@
+geo_code,geography,year,indicator,unit,value,source_url
+59,British Columbia,2021,Chicken producers,producers,312,https://agriculture.canada.ca/en/sector/animal-industry/poultry-and-egg-market-information/industry-profile/provincial-poultry-facts
+48,Alberta,2021,Chicken producers,producers,246,https://agriculture.canada.ca/en/sector/animal-industry/poultry-and-egg-market-information/industry-profile/provincial-poultry-facts
+47,Saskatchewan,2021,Chicken producers,producers,71,https://agriculture.canada.ca/en/sector/animal-industry/poultry-and-egg-market-information/industry-profile/provincial-poultry-facts
+46,Manitoba,2021,Chicken producers,producers,125,https://agriculture.canada.ca/en/sector/animal-industry/poultry-and-egg-market-information/industry-profile/provincial-poultry-facts
+35,Ontario,2021,Chicken producers,producers,1298,https://agriculture.canada.ca/en/sector/animal-industry/poultry-and-egg-market-information/industry-profile/provincial-poultry-facts
+24,Quebec,2021,Chicken producers,producers,626,https://agriculture.canada.ca/en/sector/animal-industry/poultry-and-egg-market-information/industry-profile/provincial-poultry-facts
+13,New Brunswick,2021,Chicken producers,producers,39,https://agriculture.canada.ca/en/sector/animal-industry/poultry-and-egg-market-information/industry-profile/provincial-poultry-facts
+12,Nova Scotia,2021,Chicken producers,producers,92,https://agriculture.canada.ca/en/sector/animal-industry/poultry-and-egg-market-information/industry-profile/provincial-poultry-facts
+11,Prince Edward Island,2021,Chicken producers,producers,8,https://agriculture.canada.ca/en/sector/animal-industry/poultry-and-egg-market-information/industry-profile/provincial-poultry-facts
+10,Newfoundland and Labrador,2021,Chicken producers,producers,6,https://agriculture.canada.ca/en/sector/animal-industry/poultry-and-egg-market-information/industry-profile/provincial-poultry-facts
+01,Canada,2021,Chicken producers,producers,2823,https://agriculture.canada.ca/en/sector/animal-industry/poultry-and-egg-market-information/industry-profile/provincial-poultry-facts
