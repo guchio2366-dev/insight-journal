@@ -7,7 +7,7 @@ export type FarmingAreas = {type:'FeatureCollection';features:{type:'Feature';pr
 /** Selection and visibility are independent; a single-item view preserves both switches. */
 export function farmingPresentation(state:EuropeState, items:FarmingItem[]) {
   const item=items.find(item=>item.id===state.layer);
-  const active=state.layer==='crops'||!!item;
+  const active=state.layer==='crops'||state.layer==='dairy'||!!item;
   const single=active&&!!item&&state.single===true;
   const visible=active?items.filter(candidate=>single?candidate.id===item!.id:candidate.kind==='crop'?state.showCrops!==false:state.showLivestock!==false):[];
   return {active,item,single,visible,selectedVisible:!!item&&visible.some(candidate=>candidate.id===item.id)};

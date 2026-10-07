@@ -53,6 +53,7 @@ const metricById = new Map(europeFarmMetrics.map(value=>[value.id,value]));
 
 export function europeFarmMetric(id:string):EuropeFarmMetric|undefined { return metricById.get(id); }
 export function europeFarmAvailableMetrics(topic:string):EuropeFarmMetric[] {
+  if(topic==='dairy')return [metricById.get('cattle-milk')!];
   return europeFarmMetrics.filter(value=>value.topics.includes(topic));
 }
 export function europeFarmValidYear(year:unknown):year is number {

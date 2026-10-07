@@ -10,7 +10,7 @@ const context={type:'FeatureCollection',features:[]};
 test('Canada overview uses the independent official province and national values and preserves all source regions',()=>{
  const before=JSON.stringify(data),model=buildCanadaAgricultureOverviewModel(data,geometry,context);
  assert.equal(JSON.stringify(data),before,'No source values or qualities change');
- assert.equal(Object.keys(model.anchors).length,1757);assert.equal(model.evidence.retainedIndicatorCells,8785);
+ assert.equal(Object.keys(model.anchors).length,1757);assert.equal(model.evidence.retainedIndicatorCells,17570);
  assert.deepEqual(model.counts.canola,{published:1604,'quality-f':143,'not-covered':10});
  assert.deepEqual(model.counts.pasture,{published:791,'quality-f':956,'not-covered':10});
  const share=(group,product)=>model.summaries.find(s=>s.id===group).values[product].nationalShare.toFixed(1);

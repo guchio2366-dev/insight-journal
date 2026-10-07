@@ -23,6 +23,7 @@ test('0・欠測・負値を分布にせず、隣接正値の内部境界を省�
  assert.ok(shape.outline.includes('M2,0V1'));
  assert.ok(shape.points.every(p=>values[Math.floor(p.y)*l.width+Math.floor(p.x)]===p.value&&p.value>0));
  assert.deepEqual(values,original,'display derivation does not alter source values');
- assert.deepEqual(westFarmingGeometry(Float32Array.of(0,-9999),{width:2,height:1,noData:-9999}),{outline:'',points:[]});
+ assert.equal(shape.coverage,'M0,0h2v1H0Z','all positive source cells are retained while zeros, missing and negative cells remain empty');
+ assert.deepEqual(westFarmingGeometry(Float32Array.of(0,-9999),{width:2,height:1,noData:-9999}),{coverage:'',outline:'',points:[]});
  assert.throws(()=>westFarmingGeometry(Float32Array.of(1),l),/length/);
 });

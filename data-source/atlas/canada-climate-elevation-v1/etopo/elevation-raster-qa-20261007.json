@@ -1,0 +1,419 @@
+{
+  "dateUTC": "2026-10-07",
+  "scope": "Canada elevation only; no publication performed",
+  "sourceGrid": {
+    "sha256": "779fbc97ee041d58ee09c87b6d5bbe07bd79d240cd01fc2328f22c562206526d",
+    "nativeShape": [
+      5460,
+      2640
+    ],
+    "resolutionArcSeconds": 60,
+    "sourceCellCount": 5935998,
+    "negativeSourceCellCount": 9368
+  },
+  "raster": {
+    "shape": [
+      5460,
+      7515
+    ],
+    "displayLandPixels": 14555277,
+    "everyDisplayLandPixelMatchesOriginalNearestCell": true,
+    "sourceMaskPolygons": 119614,
+    "displayConnectedLandComponents": 6368,
+    "islandInterpretation": "All original polygons are supplied to rasterization; subpixel islands can be absent and nearby islands can join in a finite display grid. No island count or exact class area is inferred from this map."
+  },
+  "classAreaComparison": [
+    {
+      "id": "below-sea",
+      "nativeCentreMaskKm2": 12003.457284869464,
+      "displayMaskKm2": 15599.376891747252,
+      "differencePercent": 29.957365795023883
+    },
+    {
+      "id": "0",
+      "nativeCentreMaskKm2": 6564545.988980687,
+      "displayMaskKm2": 6561167.163915748,
+      "differencePercent": -0.05147081109053355
+    },
+    {
+      "id": "500",
+      "nativeCentreMaskKm2": 1997977.9472896575,
+      "displayMaskKm2": 1998127.06345976,
+      "differencePercent": 0.0074633541528714075
+    },
+    {
+      "id": "1000",
+      "nativeCentreMaskKm2": 671192.7921214624,
+      "displayMaskKm2": 671424.5509374534,
+      "differencePercent": 0.0345293958325246
+    },
+    {
+      "id": "1500",
+      "nativeCentreMaskKm2": 295723.2241486123,
+      "displayMaskKm2": 295731.7620634612,
+      "differencePercent": 0.0028871303136461814
+    },
+    {
+      "id": "2000",
+      "nativeCentreMaskKm2": 64267.64899525956,
+      "displayMaskKm2": 64327.72921393411,
+      "differencePercent": 0.09348438851245533
+    },
+    {
+      "id": "2500",
+      "nativeCentreMaskKm2": 9781.773683979096,
+      "displayMaskKm2": 9743.95598875656,
+      "differencePercent": -0.3866138846012738
+    },
+    {
+      "id": "3000",
+      "nativeCentreMaskKm2": 989.3410804604354,
+      "displayMaskKm2": 987.4647484484749,
+      "differencePercent": -0.18965471554938707
+    },
+    {
+      "id": "3500",
+      "nativeCentreMaskKm2": 300.27712377211907,
+      "displayMaskKm2": 299.90067572724723,
+      "differencePercent": -0.12536687448675682
+    },
+    {
+      "id": "4000",
+      "nativeCentreMaskKm2": 154.23251596923637,
+      "displayMaskKm2": 156.525842367354,
+      "differencePercent": 1.4869279566022555
+    },
+    {
+      "id": "4500",
+      "nativeCentreMaskKm2": 60.67181802275302,
+      "displayMaskKm2": 60.20391873852114,
+      "differencePercent": -0.7711970721833533
+    },
+    {
+      "id": "5000",
+      "nativeCentreMaskKm2": 47.31624768692804,
+      "displayMaskKm2": 51.443313687091916,
+      "differencePercent": 8.722301961624177
+    },
+    {
+      "id": "5500",
+      "nativeCentreMaskKm2": 5.073336379614732,
+      "displayMaskKm2": 7.476532858101816,
+      "differencePercent": 47.36915313053975
+    }
+  ],
+  "transfer": {
+    "measurements": [
+      {
+        "file": "elevation-classes.png",
+        "bytes": 565752,
+        "gzip9Bytes": 535303
+      },
+      {
+        "file": "elevation-outline-below-sea.geojson",
+        "bytes": 2719028,
+        "gzip9Bytes": 233169
+      },
+      {
+        "file": "elevation-outline-0.geojson",
+        "bytes": 9689741,
+        "gzip9Bytes": 1157236
+      },
+      {
+        "file": "elevation-outline-500.geojson",
+        "bytes": 7827111,
+        "gzip9Bytes": 826929
+      },
+      {
+        "file": "elevation-outline-1000.geojson",
+        "bytes": 6347921,
+        "gzip9Bytes": 640399
+      },
+      {
+        "file": "elevation-outline-1500.geojson",
+        "bytes": 4131879,
+        "gzip9Bytes": 398981
+      },
+      {
+        "file": "elevation-outline-2000.geojson",
+        "bytes": 1250486,
+        "gzip9Bytes": 114701
+      },
+      {
+        "file": "elevation-outline-2500.geojson",
+        "bytes": 246790,
+        "gzip9Bytes": 21878
+      },
+      {
+        "file": "elevation-outline-3000.geojson",
+        "bytes": 37918,
+        "gzip9Bytes": 3493
+      },
+      {
+        "file": "elevation-outline-3500.geojson",
+        "bytes": 15076,
+        "gzip9Bytes": 1375
+      },
+      {
+        "file": "elevation-outline-4000.geojson",
+        "bytes": 6150,
+        "gzip9Bytes": 727
+      },
+      {
+        "file": "elevation-outline-4500.geojson",
+        "bytes": 3181,
+        "gzip9Bytes": 449
+      },
+      {
+        "file": "elevation-outline-5000.geojson",
+        "bytes": 1081,
+        "gzip9Bytes": 260
+      },
+      {
+        "file": "elevation-outline-5500.geojson",
+        "bytes": 235,
+        "gzip9Bytes": 157
+      }
+    ],
+    "method": "Raw files and deterministic gzip level 9 measured locally. Actual public-server Content-Encoding and network latency have not been measured."
+  },
+  "browser": {
+    "passed": true,
+    "activation": {
+      "clickToFirstPaintMs": 1303,
+      "clickToIdleMs": 1313,
+      "sourceBytes": 565752,
+      "rasterDimensions": [
+        5460,
+        7515
+      ],
+      "method": "Climate MapLibre idle first; then elevation click to first paint / MapLibre idle, Chromium software GPU, local built-asset responses; excludes public-network latency"
+    },
+    "directOpen": [
+      {
+        "width": 1536,
+        "openToMapIdleMs": 1864
+      },
+      {
+        "width": 1280,
+        "openToMapIdleMs": 1658
+      },
+      {
+        "width": 1024,
+        "openToMapIdleMs": 1456
+      }
+    ],
+    "coldSelections": [
+      {
+        "id": "below-sea",
+        "clickToPaintMs": 679,
+        "clickToMapIdleMs": 683,
+        "outline": {
+          "id": "below-sea",
+          "cached": false,
+          "fetchMs": 66.90000000223517,
+          "parseMs": 12
+        }
+      },
+      {
+        "id": "0",
+        "clickToPaintMs": 2065,
+        "clickToMapIdleMs": 2070,
+        "outline": {
+          "id": "0",
+          "cached": false,
+          "fetchMs": 185,
+          "parseMs": 40.69999999925494
+        }
+      },
+      {
+        "id": "500",
+        "clickToPaintMs": 1471,
+        "clickToMapIdleMs": 1476,
+        "outline": {
+          "id": "500",
+          "cached": false,
+          "fetchMs": 174.10000000149012,
+          "parseMs": 39.30000000074506
+        }
+      },
+      {
+        "id": "1000",
+        "clickToPaintMs": 1350,
+        "clickToMapIdleMs": 1355,
+        "outline": {
+          "id": "1000",
+          "cached": false,
+          "fetchMs": 154.09999999776483,
+          "parseMs": 27.900000002235174
+        }
+      },
+      {
+        "id": "1500",
+        "clickToPaintMs": 864,
+        "clickToMapIdleMs": 869,
+        "outline": {
+          "id": "1500",
+          "cached": false,
+          "fetchMs": 107.5,
+          "parseMs": 18.599999997764826
+        }
+      },
+      {
+        "id": "2000",
+        "clickToPaintMs": 385,
+        "clickToMapIdleMs": 391,
+        "outline": {
+          "id": "2000",
+          "cached": false,
+          "fetchMs": 73.40000000223517,
+          "parseMs": 5.299999997019768
+        }
+      },
+      {
+        "id": "2500",
+        "clickToPaintMs": 178,
+        "clickToMapIdleMs": 182,
+        "outline": {
+          "id": "2500",
+          "cached": false,
+          "fetchMs": 59,
+          "parseMs": 1.699999999254942
+        }
+      },
+      {
+        "id": "3000",
+        "clickToPaintMs": 218,
+        "clickToMapIdleMs": 224,
+        "outline": {
+          "id": "3000",
+          "cached": false,
+          "fetchMs": 54.599999997764826,
+          "parseMs": 0.30000000074505806
+        }
+      },
+      {
+        "id": "3500",
+        "clickToPaintMs": 173,
+        "clickToMapIdleMs": 177,
+        "outline": {
+          "id": "3500",
+          "cached": false,
+          "fetchMs": 56.5,
+          "parseMs": 0.19999999925494194
+        }
+      },
+      {
+        "id": "4000",
+        "clickToPaintMs": 184,
+        "clickToMapIdleMs": 188,
+        "outline": {
+          "id": "4000",
+          "cached": false,
+          "fetchMs": 55.19999999925494,
+          "parseMs": 0
+        }
+      },
+      {
+        "id": "4500",
+        "clickToPaintMs": 165,
+        "clickToMapIdleMs": 169,
+        "outline": {
+          "id": "4500",
+          "cached": false,
+          "fetchMs": 54.19999999925494,
+          "parseMs": 0.10000000149011612
+        }
+      },
+      {
+        "id": "5000",
+        "clickToPaintMs": 233,
+        "clickToMapIdleMs": 238,
+        "outline": {
+          "id": "5000",
+          "cached": false,
+          "fetchMs": 73.30000000074506,
+          "parseMs": 0
+        }
+      },
+      {
+        "id": "5500",
+        "clickToPaintMs": 217,
+        "clickToMapIdleMs": 221,
+        "outline": {
+          "id": "5500",
+          "cached": false,
+          "fetchMs": 55.899999998509884,
+          "parseMs": 0
+        }
+      }
+    ],
+    "cachedSelections": [
+      {
+        "id": "0",
+        "clickToPaintMs": 832,
+        "outline": {
+          "id": "0",
+          "cached": true,
+          "fetchMs": 0,
+          "parseMs": 0
+        }
+      },
+      {
+        "id": "500",
+        "clickToPaintMs": 740,
+        "outline": {
+          "id": "500",
+          "cached": true,
+          "fetchMs": 0,
+          "parseMs": 0
+        }
+      },
+      {
+        "id": "1000",
+        "clickToPaintMs": 423,
+        "outline": {
+          "id": "1000",
+          "cached": true,
+          "fetchMs": 0,
+          "parseMs": 0
+        }
+      },
+      {
+        "id": "below-sea",
+        "clickToPaintMs": 303,
+        "outline": {
+          "id": "below-sea",
+          "cached": true,
+          "fetchMs": 0,
+          "parseMs": 0
+        }
+      },
+      {
+        "id": "0",
+        "clickToPaintMs": 876,
+        "outline": {
+          "id": "0",
+          "cached": true,
+          "fetchMs": 0,
+          "parseMs": 0
+        }
+      }
+    ],
+    "checks": [
+      "500 m native-DEM palette raster: nearest only, lazy fetch without initial HTML duplication; clear loading/error states and successful retry; 13 distinct groups including negative coastal values, all three US-aligned desktop frames, full north, every group selection without removing other bands, isolation, focus, URL/reload, reset and same-pixel SVG image fallback.",
+      "Real map click at Winnipeg selects the rendered 0–500 m pixel class; an interrupted outline request keeps the colour map, shows waiting/failure honestly, and succeeds when reselected."
+    ],
+    "pageErrors": []
+  },
+  "rejectedPrototype": {
+    "file": "elevation-bands.geojson",
+    "sha256": "4a971a0215a50410ec21152f6c09c3b6297337fd79183971aa2a99c140446f7b",
+    "bytes": 37824318,
+    "gzip9Bytes": 9981229,
+    "firstPaintMs": 24714,
+    "boundaryDisplacementUpperBoundDegrees": 0.0473684213311897,
+    "productionReferenced": false,
+    "reason": "Unacceptable load time and a coverage-simplification area tolerance that did not bound distance. Replaced by unsmoothed discrete raster classes and exact display-pixel outline edges."
+  }
+}

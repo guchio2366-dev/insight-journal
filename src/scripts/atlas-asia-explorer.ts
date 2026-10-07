@@ -1,4 +1,5 @@
 import {createAsiaPresentation,type AsiaPresentation} from './atlas-asia-presentation';
+import {contourBandLabels} from '../data/atlas/asia-contour-bands';
 import {indiaPopulationLabels} from '../data/atlas/asia-focus';
 import {createAsiaNavigation} from './atlas-asia-navigation';
 import { readAsiaAtlasState, writeAsiaAtlasState, startAsiaComparison, restoreAsiaComparison, gridCellAt, type AsiaState, type AsiaCamera, type AsiaField, type AsiaStateContext } from '../lib/atlas-asia-state';
@@ -35,6 +36,8 @@ if(root) start(root);
 function start(root:HTMLElement) {
   const $=<T extends Element=HTMLElement>(selector:string)=>root.querySelector<T>(selector)!;
   const $$=<T extends Element=HTMLElement>(selector:string)=>[...root.querySelectorAll<T>(selector)];
+  const physicalKey=root.querySelector<HTMLElement>('[data-physical-legend] .asia-physical-key'),physicalKeyHTML=physicalKey?.innerHTML;
+  const physicalLegendNote=root.querySelector<HTMLElement>('[data-physical-legend] p'),physicalLegendText=physicalLegendNote?.textContent;
   const config=JSON.parse($('[data-asia-config]').textContent!) as {
     regionId:'east-asia'|'southeast-asia'|'south-central-asia';label:string;bounds:number[];contentExtent?:number[];dataBounds?:number[];
     countries:{code:string;name:string;bounds:number[]}[];cities:AsiaClimateCity[];classes:AsiaClimateClass[];
@@ -114,7 +117,7 @@ function start(root:HTMLElement) {
   const riceLayer=getAsiaRiceLayer(config.regionId)!;
   const riceNote=asiaRiceRegionNotes[config.regionId];
   industry=config.industry?createAsiaIndustry(root,{industry:config.industry,industryBase:config.industryBase!,countries:config.countries},()=>state,navigate,camera,()=>{state=industry!.normalize(state);const d=industry!.detail();if(d?.point)state={...state,point:state.point??d.point};selectedPoint=state.point??null;persist(false);render();fitSelection();}):null;
-  hydrology=config.water?createAsiaWater(root,{regionId:config.regionId,water:config.water,waterBase:config.waterBase!,countries:config.countries,waterFeatures:config.physical?.waterFeatures},()=>state,navigate,camera,()=>{state=hydrology!.normalize(state);selectedPoint=state.point??null;persist(false);render();fitSelection();}):null;
+  hydrology=config.water?createAsiaWater(root,{regionId:config.regionId,water:config.water,waterBase:config.waterBase!,countries:config.countries,waterFeatures:config.physical?.waterFeatures,contourBands:config.presentation?.rainfall.bands},()=>state,navigate,camera,()=>{state=hydrology!.normalize(state);selectedPoint=state.point??null;persist(false);render();fitSelection();}):null;
   seasonal=config.seasonalBase?createAsiaSeasonalPrecipitation(root,{regionId:config.regionId,seasonalBase:config.seasonalBase},()=>state,navigate,camera,()=>{render();}):null;
   social=config.social?createAsiaSocial(root,{social:config.social,socialBase:config.socialBase!,countries:config.countries},()=>state,navigate,camera,()=>{state=social!.normalize(state);selectedPoint=state.point??null;persist(false);render();fitSelection();}):null;
   trade=config.trade?createAsiaTrade(root,{trade:config.trade,tradeBase:config.tradeBase!,chapters:config.tradeChapters!,countries:config.countries,domesticTopics:config.industry?.topics??[]},()=>state,navigate,camera):null;
@@ -425,6 +428,11 @@ function start(root:HTMLElement) {
     optionalHidden('[data-physical-reading]',!physical);optionalHidden('[data-physical-legend]',!physical);root.dataset.physicalView=naturalTopic()??'';
     const gesture=$('[data-map-gesture]');if(gesture)gesture.textContent=physical?'地形の着目点・河川・湖は一覧からも選べます。地図は2本指で移動・拡大できます。':state.field==='natural'?'都市の点を選ぶと雨温図が開きます。地図は2本指で移動・拡大できます。':'品目名から米の分布を選びます。雨温図などから同じ場所を比較すると米の収穫面積を表示します。背景クリックでは選択を変えません。地図は2本指で移動・拡大できます。';
     if(!physical||!config.physical)return;
+    const bands=naturalTopic()==='terrain'?config.presentation?.terrain?.bands:undefined;
+    if(physicalKey){if(bands){physicalKey.replaceChildren();for(const band of contourBandLabels(bands)){const span=document.createElement('span'),swatch=document.createElement('i');swatch.style.backgroundColor=band.color;span.append(swatch,document.createTextNode(band.label));physicalKey.append(span);}}else physicalKey.innerHTML=physicalKeyHTML??'';}
+    if(physicalLegendNote)physicalLegendNote.textContent=(physicalLegendText??'')+(bands?' 色帯も500mごとで、線と同じ平滑化した表示値から作っています。地点の標高は平滑化前の原格子値です。':'');
+    const physicalMethod=root.querySelector<HTMLElement>('[data-physical-reading] .asia-method');
+    if(physicalMethod){let note=physicalMethod.querySelector<HTMLElement>('[data-terrain-band-method]');if(bands&&!note){note=document.createElement('p');note.dataset.terrainBandMethod='';physicalMethod.querySelector('p')?.before(note);}if(note){note.hidden=!bands;note.textContent='この標高図の線と色帯は、原格子を投影座標上の半径約6kmでならした同じ値から500mごとに補間しています。短い線を省かず、線と面を別々に簡略化しません。下記の短い線と細部の省略は従来の地形表示の生成方法です。地点の標高は平滑化前の原格子値です。';}}
     const landform=naturalTopic()==='landform',waterTopic=naturalTopic()==='water',reading=asiaPhysicalReading[config.regionId];
     $('[data-map-title]').textContent=waterTopic?'河川・湖と地形':landform?'山地・高原・平野の位置':'標高と等高線';
     $('[data-map-eyebrow]').textContent='Terrain · ETOPO 2022';$('[data-map-period]').textContent=landform?'地形の着目点 · 背景は標高':'標高 m · 500m等高線';
@@ -523,7 +531,7 @@ function start(root:HTMLElement) {
         map.addLayer({id,type:'raster',source:id,paint:{'raster-opacity':1,'raster-resampling':'nearest','raster-fade-duration':0}},'asia-context');
       }
     }
-    for(const id of ['asia-terrain','asia-contours'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility',physical&&!(id==='asia-contours'&&(naturalTopic()==='landform'||!!config.presentation?.terrain))?'visible':'none');
+    for(const id of ['asia-terrain','asia-contours'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility',physical&&!(naturalTopic()==='terrain'&&config.presentation?.terrain?.bands)&&!(id==='asia-contours'&&(naturalTopic()==='landform'||!!config.presentation?.terrain))?'visible':'none');
     if(map.getLayer('asia-terrain'))map.setPaintProperty('asia-terrain','raster-opacity',naturalTopic()==='terrain'&&config.presentation?.terrain? .3:1);
     for(const id of ['asia-lakes','asia-rivers','asia-rivers-hit','asia-water-selected'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility',water?'visible':'none');
     if(water&&config.physical&&!map.getSource('asia-water')){

@@ -175,13 +175,79 @@ async function snapshot(page, profile, topic, region = 'europe') {
     assert.ok(control.y >= measured.map.y && control.y + control.height <= measured.map.y + measured.map.height + 1);
     if (index) assert.ok(control.y >= measured.controls[index - 1].y + measured.controls[index - 1].height, 'Map controls retain fit / zoom in / zoom out order');
   }
+  // Retain all operation/geometry checks, photograph only this repair's states.
+  if(region!=='europe'||!['climate','climate-selected','farming-initial','farming-selected'].includes(topic))return measured;
   const filename = `${profile.name}-${region}-${topic}.png`;
-  const png = await page.screenshot({path: resolve(output, filename), fullPage: true, animations: 'disabled'});
+  const png = await page.screenshot({path: resolve(output, filename), fullPage: false, animations: 'disabled'});
   manifest.images.push({file: filename, sourceURL: page.url(), profile: profile.name, viewport: profile.viewport, render,
     dimensions: {width: png.readUInt32BE(16), height: png.readUInt32BE(20)}, measurements: measured,
     sha256: createHash('sha256').update(png).digest('hex')});
   await save();
   return measured;
+}
+
+async function agricultureClimateRepairs(page,profile){
+  await openEurope(page,'atlas/europe/agriculture/','normal');
+  const initialExtent=await page.locator('[data-eu-static]').getAttribute('viewBox');
+  assert.notEqual(initialExtent,'0 0 1200 1001','Agriculture starts closer to the main production regions');
+  assert.equal(await page.locator('[data-eu-farm-area]').evaluateAll(nodes=>nodes.filter(node=>node.style.display!=='none').length),16);
+  const labelCount=await page.locator('[data-eu-map-kind="crop"]:visible').count();
+  assert.ok(labelCount>0&&labelCount<=8,'Only representative concentration names are shown initially');
+  const anchors=()=>page.locator('.eu-label-dot').evaluateAll(nodes=>nodes.map(node=>[node.getAttribute('cx'),node.getAttribute('cy')]));
+  const initialAnchors=await anchors();
+  await snapshot(page,profile,'farming-initial');
+  await page.locator('[data-eu-layer="wheat"]').click();
+  await page.waitForFunction(()=>document.querySelector('[data-eu-map-place="wheat"]').getAttribute('aria-pressed')==='true');
+  assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'),initialExtent);
+  assert.deepEqual(await anchors(),initialAnchors,'A selection keeps the actual projected positions of every distribution');
+  assert.equal(await page.locator('[data-eu-farm-area]').evaluateAll(nodes=>nodes.filter(node=>node.style.display!=='none').length),16);
+  assert.equal(await page.locator('[data-eu-farm-outline="wheat"]').evaluateAll(nodes=>nodes.every(node=>node.style.display!=='none')),true);
+  const labels=await page.locator('[data-eu-map-kind="crop"]:visible').evaluateAll(nodes=>nodes.map(node=>({id:node.dataset.euMapPlace,opacity:Number(getComputedStyle(node).opacity)})));
+  for(const label of labels)assert.equal(label.opacity,label.id==='wheat'?1:.22);
+  await snapshot(page,profile,'farming-selected');
+  await page.locator('[data-eu-layer="dairy"]').click();
+  await page.waitForFunction(()=>document.querySelector('[data-eu-farm-measure]').value==='cattle-milk');
+  assert.equal(await page.locator('[data-eu-farm-measure] option').count(),1);
+  assert.match(await page.locator('[data-eu-subject-note]').textContent(),/乳牛.*未収録/);
+  assert.equal(await page.locator('[data-eu-farm-area]').evaluateAll(nodes=>nodes.filter(node=>node.style.display!=='none').length),16);
+  await page.locator('[data-eu-reset]').click();
+  assert.equal(new URL(page.url()).searchParams.get('farmExtent'),'full');
+  await page.waitForFunction(()=>document.querySelector('[data-eu-static]').getAttribute('viewBox')==='0 0 1200 1001');
+  await page.reload({waitUntil:'networkidle'});await ready(page);
+  assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'),'0 0 1200 1001');
+  await openEurope(page,'atlas/europe/nature/','normal');
+  const cityLabels=await page.locator('[data-eu-map-kind="city"]:visible').evaluateAll(nodes=>nodes.filter(node=>!node.classList.contains('is-point-only')).map(node=>{const style=getComputedStyle(node);return {name:node.textContent,background:style.backgroundColor,font:Number.parseFloat(style.fontSize)};}));
+  assert.ok(cityLabels.length<=8);
+  for(const label of cityLabels){assert.equal(label.background,'rgba(0, 0, 0, 0)');assert.ok(label.font>=12&&label.font<=13);}
+  const stationId=await page.locator('[data-eu-map-kind="city"].is-point-only:visible').first().getAttribute('data-eu-map-place');
+  assert.ok(stationId);
+  const point=page.locator(`[data-eu-map-kind="city"][data-eu-map-place="${stationId}"]`);
+  await page.bringToFront();await point.focus();
+  // Exercise real keyboard focus, with the pointer away from the station.
+  await page.mouse.move(5,5);await page.keyboard.press('Tab');await page.keyboard.press('Shift+Tab');
+  await page.waitForFunction(id=>{
+    const node=document.querySelector(`[data-eu-map-kind="city"][data-eu-map-place="${id}"]`);
+    return node&&document.activeElement===node&&Number.parseFloat(getComputedStyle(node).fontSize)===12;
+  },stationId,{timeout:5000});
+  const stationFocus=await point.evaluate(node=>({id:node.dataset.euMapPlace,active:document.activeElement===node,activeId:document.activeElement?.getAttribute('data-eu-map-place'),activeTag:document.activeElement?.tagName,documentFocus:document.hasFocus(),focus:node.matches(':focus'),focusVisible:node.matches(':focus-visible'),font:Number.parseFloat(getComputedStyle(node).fontSize),hidden:node.hidden,style:node.getAttribute('style')}));
+  manifest.checks.push({profile:profile.name,stationFocus});
+  await page.locator('[data-eu-city-choice]').selectOption('london');
+  await page.evaluate(()=>scrollTo(0,0));
+  assert.equal(await page.locator('#eu-city-heading').textContent(),'ロンドンの雨温図');
+  await snapshot(page,profile,'climate-selected');
+  const evidence=await page.locator('[data-city-reading="london"]').evaluate(node=>{
+    const reason=node.querySelector('[data-eu-climate-reason]'),farm=node.querySelector('.eu-climate-farming>p'),reader=node.closest('[data-eu-climate-reader]');
+    return {reason:reason.textContent,farmBottom:farm.getBoundingClientRect().bottom,reasonFont:Number.parseFloat(getComputedStyle(reason).fontSize),farmFont:Number.parseFloat(getComputedStyle(farm).fontSize),classificationFont:Number.parseFloat(getComputedStyle(node.querySelector('.eu-city-climate')).fontSize),farmHeadingFont:Number.parseFloat(getComputedStyle(node.querySelector('.eu-climate-farming h4')).fontSize),overflow:getComputedStyle(reader).overflowY,viewportHeight:innerHeight,duplicates:node.querySelectorAll('.eu-city-selected-note').length};
+  });
+  assert.match(evidence.reason,/明瞭な乾季.*5\.7.*19\.0/);
+  assert.ok(evidence.reasonFont>=14&&evidence.farmFont>=14);
+  assert.ok(evidence.classificationFont>=18&&evidence.farmHeadingFont>=17,'Existing heading sizes are retained');
+  assert.equal(evidence.overflow,'visible');assert.equal(evidence.duplicates,0);
+  assert.ok(evidence.farmBottom<=evidence.viewportHeight-8,'The full farming paragraph is visible in the initial PC viewport: '+JSON.stringify(evidence));
+  assert.equal(stationFocus.active,true,'Keyboard focus returns to the actual station button: '+JSON.stringify(stationFocus));
+  assert.equal(stationFocus.font,12,'Keyboard focus reveals the station name: '+JSON.stringify(stationFocus));
+  manifest.checks.push({profile:profile.name,agricultureClimateEvidence:evidence});
+  networkClean();
 }
 
 async function uniqueElevation(page) {
@@ -513,14 +579,21 @@ try {
       }
       await europeOperations(page, profile, 'normal');
       await stageOneOperations(page, profile);
-      if (profile.viewport.width === 1024) await europeOperations(page, profile, 'explicit-static');
+      await agricultureClimateRepairs(page,profile);
+      if (profile.viewport.width === 1024) {
+        // Keep the static history checks independent of all preceding normal
+        // operations; Chromium caps a tab's accumulated session history.
+        const staticPage=await context.newPage();
+        try { await europeOperations(staticPage, profile, 'explicit-static'); }
+        finally { await staticPage.close(); }
+      }
     } finally { await context.close(); }
   }
-  networkClean(); assert.equal(manifest.images.length, 32); assert.equal(manifest.records.length, 3);
+  networkClean(); assert.equal(manifest.images.length, 8); assert.equal(manifest.records.length, 3);
   assert.ok(manifest.records.every(record => record.status === 'passed'));
   assert.equal(git('rev-parse', 'HEAD'), manifest.gitHead, 'Checkout changed during capture');
   assert.equal(git('rev-parse', 'HEAD:src'), manifest.gitSrcTree);
-  manifest.status = 'passed'; manifest.checks.push('32 normal-render screenshots', '2 normal PC operation profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
+  manifest.status = 'passed'; manifest.checks.push('8 viewport screenshots of agriculture initial/selected and climate initial/selected', 'Existing operations retained at 2 normal PC profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
   console.log(JSON.stringify({status: manifest.status, output, images: manifest.images.length, head: manifest.gitHead}));
 } catch (error) {
   manifest.status = 'failed'; manifest.failure = {message: String(error), stack: error.stack};
