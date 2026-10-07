@@ -448,8 +448,7 @@ try {
       manifest.comparisons.push({profile: profile.name, topic: 'climate', render: 'normal', europe, us, mapSizeDelta: delta});
       if (profile.viewport.width === 1440) assert.ok(Math.abs(delta.width) <= 2 && Math.abs(delta.height) <= 2 && Math.abs(delta.top) <= 2, `Desktop climate map geometry differs: ${JSON.stringify(delta)}`);
       else {
-        assert.ok(Math.abs(delta.width) <= 2 && Math.abs(delta.height) <= 2, `Compact PC climate map area differs: ${JSON.stringify({delta, europe: europe.map, us: us.map})}`);
-        manifest.limits.push({profile: profile.name, reason: 'Compact-PC top position is measured but not required to equal the US climate map; both normal renderers and map/legend/reader/control placement are checked.', mapSizeDelta: delta});
+        assert.ok(Math.abs(delta.width) <= 2 && Math.abs(delta.height) <= 2 && Math.abs(delta.top) <= 2, `Compact PC climate map geometry differs: ${JSON.stringify({delta, europe: europe.map, us: us.map})}`);
       }
       await europeOperations(page, profile, 'normal');
       await stageOneOperations(page, profile);
