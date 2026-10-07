@@ -426,7 +426,7 @@ async function init(root:HTMLElement){
   requestAnimationFrame(syncReadingHeight);
  }
  function syncReadingHeight(){
-  const pane=$('.west-reading'),height=window.innerWidth>=960?Math.max(200,window.innerHeight-pane.getBoundingClientRect().top-12)+'px':'';
+  const pane=$('.west-reading'),top=Math.max(0,pane.getBoundingClientRect().top),height=window.innerWidth>=960?Math.max(200,window.innerHeight-top-12)+'px':'';
   if(root.style.getPropertyValue('--west-reading-height')!==height){if(height)root.style.setProperty('--west-reading-height',height);else root.style.removeProperty('--west-reading-height');}
  }
  function sizeComparisonMap(){
@@ -669,6 +669,8 @@ async function init(root:HTMLElement){
  window.addEventListener('popstate',async()=>{if(data){root.dataset.ready='false';loading.hidden=false;groundwaterSelection='';farmingOnlySelected=false;state=readWestState(location.search,field,data);openWaterGroup=false;restoreComparison(location.search);const p=new URLSearchParams(location.search);readingOverview=!p.has('topic')&&!p.has('country')&&!p.has('city')&&!p.has('category');if(p.has('lng')&&p.has('lat')){const lng=Number(p.get('lng')),lat=Number(p.get('lat'));if(Number.isFinite(lng)&&Number.isFinite(lat)&&lng>=23&&lng<=64&&lat>=10&&lat<=45)state.view=fit([lng-3,lat-2,lng+3,lat+2]);}try{await restoreBasinExtent();await render();}catch{fail('流域を読み込めませんでした。');}}});
  new ResizeObserver(()=>{if(data&&state)applyView();}).observe(svg);
  new ResizeObserver(()=>{if(data&&state){sizeComparisonMap();syncReadingHeight();}}).observe($('.atlas-primary-grid'));
+ let readingScrollFrame=0;
+ window.addEventListener('scroll',()=>{if(data&&state&&!readingScrollFrame)readingScrollFrame=requestAnimationFrame(()=>{readingScrollFrame=0;syncReadingHeight();});},{passive:true});
  window.addEventListener('resize',()=>{if(data&&state){sizeComparisonMap();syncReadingHeight();}});
  desktopComparison.addEventListener('change',()=>{if(data&&state){legend();comparisonLayout();}});
  await start();
