@@ -73,8 +73,8 @@
   },
   "files": {
     "native-window.json": {
-      "sha256": "39a50cab970b6ec370e0e658bdc0f331bc5994039fc3e04211dd7bff3efbcb0c",
-      "bytes": 7816
+      "sha256": "e2fc53c435839665e85d7a790bfc31347b5fefa55e636edafaf981749c899c0c",
+      "bytes": 7756
     },
     "native-annual.bin.gz": {
       "sha256": "50149482683533b704ae6f3b860063949b15028c1a683d8606896da3d94c010a",

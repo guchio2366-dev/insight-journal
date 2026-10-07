@@ -20,7 +20,7 @@ const originalGrid=f32(gunzipSync(bytes('public/assets/atlas/europe/precipitatio
 
 test('native contour values are complete twelve-month sums of the pinned source, preserving every original point lookup',()=>{
   assert.equal(window.originalArchiveSha256,'3bd80d05df52572f6409b594ae26b43e9045147cb3c25254cddb5a934c16e5c5');
-  assert.equal(window.originalArchiveMd5,'d701c717e08ce6ad457c9f4004984d65');
+  assert.equal(manifest.inputMd5,'d701c717e08ce6ad457c9f4004984d65');
   assert.equal(sha(bytes(window.monthlyWindow.path)),window.monthlyWindow.sha256);
   assert.equal(window.months,12);assert.equal(window.rows,166);assert.equal(window.columns,362);
   assert.equal(window.longitude[0],-25.125);assert.equal(window.latitude[0],73.125);

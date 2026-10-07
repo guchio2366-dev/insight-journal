@@ -33,7 +33,7 @@ const output=path.join(root,'public/assets/atlas/europe/precipitation-contours-v
 await fs.mkdir(output,{recursive:true});
 const monthlyArchive=gzipSync(monthly,{level:9});
 await fs.writeFile(path.join(sourceFolder,'isohyets-monthly-window.bin.gz'),monthlyArchive);
-const window={originalArchiveSha256:old.inputSha256,originalArchiveMd5:old.inputMd5,originalArchiveBytes:old.inputBytes,
+const window={originalArchiveSha256:old.inputSha256,originalArchiveBytes:old.inputBytes,
   rows,columns,months:12,longitude,latitude,encoding:'little-endian float32, month-row-column',sourceNoData:variable.attributes._FillValue,
   monthlyWindow:{path:'data-source/atlas/europe/precipitation/isohyets-monthly-window.bin.gz',sha256:sha(monthlyArchive),bytes:monthlyArchive.length},
   period:old.period,sourceUnit:'mm/month',license:old.license,licenseUrl:old.licenseUrl,licenseEvidence:old.licenseEvidence};
