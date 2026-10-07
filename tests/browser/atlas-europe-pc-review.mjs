@@ -353,6 +353,10 @@ async function stageOneOperations(page, profile) {
     assert.equal(await climate.locator(selector).evaluate(node => node.closest('details') === null), true);
     assert.ok(await climate.locator(selector).evaluate(node => parseFloat(getComputedStyle(node.querySelector('p')).fontSize) >= 14));
   }
+  await openEurope(page, 'atlas/europe/nature/?layer=precipitation', 'normal');
+  assert.equal(await page.locator('[data-eu-legend-items] > div').count(), 14);
+  assert.match(await page.locator('[data-eu-legend-items]').textContent(), /250未満.*3,000以上/s);
+  await snapshot(page, profile, 'precipitation-250mm');
   await openEurope(page, 'atlas/europe/industry/?layer=hubs', 'normal');
   assert.equal(new URL(page.url()).searchParams.has('feature'), false);
   await snapshot(page, profile, 'industry-overview');
@@ -452,11 +456,11 @@ try {
       if (profile.viewport.width === 1024) await europeOperations(page, profile, 'explicit-static');
     } finally { await context.close(); }
   }
-  networkClean(); assert.equal(manifest.images.length, 20); assert.equal(manifest.records.length, 3);
+  networkClean(); assert.equal(manifest.images.length, 22); assert.equal(manifest.records.length, 3);
   assert.ok(manifest.records.every(record => record.status === 'passed'));
   assert.equal(git('rev-parse', 'HEAD'), manifest.gitHead, 'Checkout changed during capture');
   assert.equal(git('rev-parse', 'HEAD:src'), manifest.gitSrcTree);
-  manifest.status = 'passed'; manifest.checks.push('20 normal-render screenshots', '2 normal PC operation profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
+  manifest.status = 'passed'; manifest.checks.push('22 normal-render screenshots', '2 normal PC operation profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
   console.log(JSON.stringify({status: manifest.status, output, images: manifest.images.length, head: manifest.gitHead}));
 } catch (error) {
   manifest.status = 'failed'; manifest.failure = {message: String(error), stack: error.stack};

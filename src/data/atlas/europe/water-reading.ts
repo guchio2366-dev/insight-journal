@@ -1,11 +1,11 @@
 /** GPCC precipitation reading kept distinct from river/lake location and water supply. */
 export const europePrecipitationLayer = {
   id: 'precipitation', field: 'nature' as const, title: '年降水量の分布', period: '1991–2020', unit: 'mm/年',
-  note: 'GPCC/DWDの1991–2020年の月別平年値を12か月合計した分布です。原資料は0.25度格子の雨量計に基づく補間値。表示用の格子に最も近い原格子の値を置き、欠測を補っていません。細かな山地や小国の局地的な降水量、河川流量・地下水量・利用できる水の量は表しません。',
+  note: 'GPCC/DWDの1991–2020年の月別平年値を12か月合計し、250 mmごとの青い段階で表示します。原資料は0.25度格子の雨量計に基づく補間値。表示用の格子に最も近い原格子の値を置き、欠測を補っていません。帯の境界は元格子値からの区分で、測量した等雨量線ではありません。細かな山地や小国の局地的な降水量、河川流量・地下水量・利用できる水の量は表しません。',
   source: 'https://doi.org/10.5676/DWD_GPCC/CLIMAT_V2025_025',
   image: '/assets/atlas/europe/precipitation-v1/precipitation.png', grid: '/assets/atlas/europe/precipitation-v1/values.bin.gz', gridType: 'display' as const, nodata: -1,
-  breaks: [250, 500, 750, 1000, 1500, 2000], colors: ['#f5f0dd', '#d9e6df', '#b6d7df', '#86bdd2', '#529abc', '#2877a5', '#14537d'],
-  labels: ['250未満', '250–500未満', '500–750未満', '750–1,000未満', '1,000–1,500未満', '1,500–2,000未満', '2,000以上'],
+  breaks: Array.from({length:12},(_,i)=>(i+1)*250), colors: ['#eef7fb','#dceef7','#c7e3f2','#add5eb','#8fc4df','#6fb1d3','#529ac5','#3d82b4','#2f6da4','#245b94','#1c4b82','#153b6d','#0c2d57'],
+  labels: [...Array.from({length:12},(_,i)=>i===0?'250未満':`${(i*250).toLocaleString('ja-JP')}–${((i+1)*250).toLocaleString('ja-JP')}未満`),'3,000以上'],
 };
 
 export const europePrecipitationReading = {
