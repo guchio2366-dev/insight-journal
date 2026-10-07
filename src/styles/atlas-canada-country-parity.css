@@ -181,7 +181,6 @@
 /* Keep field navigation fixed when switching water datasets. */
 @media(min-width:960px){.canada-nature[data-canada-nature].is-water-resource .atlas-compact-heading{display:flex}}
 @media(min-width:960px) and (max-width:1199px){.atlas-desktop-shell .canada-nature[data-canada-nature] .canada-country-primary .atlas-map-frame{aspect-ratio:1.65;min-height:190px}}
-@media(min-width:960px) and (max-width:1199px){.atlas-desktop-shell .canada-nature[data-canada-nature].is-water-reading .canada-country-primary .atlas-map-frame,.atlas-desktop-shell .canada-nature[data-canada-nature].is-water-resource .canada-country-primary .atlas-map-frame{min-height:500px}}
 /* 2026-10-06: the climate viewport is the common geography and layout reference. */
 .canada-shared-land .canada-land{fill:#edece5!important;stroke:#94aaaa!important;stroke-width:.7!important}
 .canada-map-frame,.population-map,.canada-water-map{background:#e4eff0}
@@ -204,6 +203,9 @@
  .atlas-desktop-shell .canada-nature.canada-population .canada-country-primary .atlas-map-frame,
  .atlas-desktop-shell .canada-nature[data-canada-nature].is-water-reading .canada-country-primary .atlas-map-frame,
  .atlas-desktop-shell .canada-nature[data-canada-nature].is-water-resource .canada-country-primary .atlas-map-frame{aspect-ratio:1.65;min-height:190px}
+ /* U.S. water views retain a 500px map on the small-PC frame. */
+ .atlas-desktop-shell .canada-nature[data-canada-nature].is-water-reading .canada-country-primary .atlas-map-frame,
+ .atlas-desktop-shell .canada-nature[data-canada-nature].is-water-resource .canada-country-primary .atlas-map-frame{min-height:500px}
 }
 @media(min-width:1200px){.atlas-desktop-shell .canada-nature.canada-population .canada-country-primary .population-workspace{grid-template-columns:minmax(0,1.65fr) minmax(360px,1fr);gap:14px}}
 @media(min-width:960px) and (max-width:1199px){.atlas-desktop-shell .canada-nature.canada-population .canada-country-primary .population-workspace{grid-template-columns:minmax(0,1.5fr) minmax(380px,1fr);gap:16px}}
@@ -226,3 +228,10 @@
 [data-population-filter-key] span{display:inline-flex;align-items:center;margin:3px 8px 3px 0;gap:4px}
 [data-population-filter-key] i{width:16px;height:12px;border:1px solid #778b84}
 @media(min-width:960px){.canada-population .population-category-key{gap:4px 10px}.canada-population .population-category-key :is(button,span){font-size:14px;min-height:30px}}
+@media(min-width:960px){
+ .canada-nature[data-canada-nature] .country-water-topics{gap:6px;margin:0 0 10px;padding:0;border:0;background:none}
+ .canada-nature[data-canada-nature] .country-water-topics button{min-height:40px;padding:7px 16px;border:1px solid #b6c8c9;border-radius:5px;background:#fff;color:#244653;font:400 14px/1.75 var(--sans)}
+ .canada-nature[data-canada-nature] .country-water-topics button[aria-pressed=true]{background:#244653;color:#fff;border-color:#244653}
+}
+.canada-nature[data-canada-nature] [data-canada-basin-label]:focus-visible{outline:none}
+.canada-nature[data-canada-nature] [data-canada-basin-label]:focus-visible text{fill:#a64125}
