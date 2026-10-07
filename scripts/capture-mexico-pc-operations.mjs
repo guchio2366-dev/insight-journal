@@ -355,9 +355,11 @@ async function industry({page, evidence}) {
       return {name: node.textContent, x: box.x, y: box.y, width: box.width, height: box.height, screenFontSize: parseFloat(getComputedStyle(node).fontSize) * Math.hypot(matrix.a, matrix.b), leader: node.parentElement.querySelector('[data-mi-region-leader]')?.getAttribute('d')};
     }));
     assert(labels.length >= 8, 'All-sector overview is missing state labels');
+    const controls=await page.locator('[data-mi-map="primary"]').evaluate(svg=>[...svg.closest('.mexico-map-frame').querySelectorAll('[data-mi-map-action]')].map(button=>{const box=button.getBoundingClientRect();return{x:box.x,y:box.y,width:box.width,height:box.height};}));
     for (const [index, a] of labels.entries()) {
       assert.match(a.leader, /^M0,0L/); assert(Math.abs(a.screenFontSize - 14) < .5);
       for (const b of labels.slice(index + 1)) assert(!(Math.min(a.x + a.width, b.x + b.width) - Math.max(a.x, b.x) > .5 && Math.min(a.y + a.height, b.y + b.height) - Math.max(a.y, b.y) > .5), `Industry labels overlap: ${a.name} / ${b.name}`);
+      for(const b of controls)assert(!(Math.min(a.x+a.width,b.x+b.width)-Math.max(a.x,b.x)>.5&&Math.min(a.y+a.height,b.y+b.height)-Math.max(a.y,b.y)>.5),`Map controls obscure ${a.name}`);
     }
     await zoom(page, 'industry', '[data-mi-map-action="in"]', '[data-mi-map-action="out"]', '[data-mi-map-action="fit"]');
     return labels;
