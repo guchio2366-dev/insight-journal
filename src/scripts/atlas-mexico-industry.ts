@@ -27,6 +27,30 @@ export function initMexicoIndustry(root:HTMLElement):void {
  const valueFor=(code:string,metric:MexicoIndustryMetric)=>rows.get(code)?.values[metric]??missing;
  const populationValue=(code:string)=>{const row=population.get(code)!;return state.sourceView==='density'?`${formatMexicoDensity(row.density,row.densityStatus)} 人/km²`:`${formatMexicoPopulation(row.population,row.populationStatus)} 人`;};
 
+ function placeReadingLabels(svg:SVGSVGElement):void {
+  if(svg.closest('[hidden]')||state.compare)return;
+  const parts=svg.getAttribute('viewBox')!.split(/\s+/).map(Number),rect=svg.getBoundingClientRect(),scale=Math.min(rect.width/parts[2],rect.height/parts[3]);
+  if(!scale)return;
+  const markers=Array.from(svg.querySelectorAll<SVGGElement>('[data-mi-reading-markers] [data-mi-region-option]')).filter(marker=>!marker.hasAttribute('hidden'));
+  const topOffsets=new Map<string,number>();
+  const labels=markers.map((marker,index)=>{
+   const point=config.labels[marker.dataset.miRegionOption!],label=marker.querySelector<SVGTextElement>('[data-mi-region-label]')!;
+   const onMap=point[0]>=parts[0]&&point[1]>=parts[1]&&point[0]<=parts[0]+parts[2]&&point[1]<=parts[1]+parts[3];label.toggleAttribute('hidden',!onMap);marker.querySelector('[data-mi-region-leader]')?.toggleAttribute('hidden',!onMap);
+   const spans=Array.from(label.querySelectorAll<SVGTSpanElement>('tspan'));
+   const width=Math.max(...spans.map(span=>typeof span.getComputedTextLength==='function'?span.getComputedTextLength()*scale:(span.textContent?.length??0)*14));
+   const box=typeof label.getBBox==='function'?label.getBBox():null;
+   topOffsets.set(String(index),box?box.y-Number(label.getAttribute('y')):-13/scale);
+   return {id:String(index),x:(point[0]-parts[0])*scale,y:(point[1]-parts[1])*scale,width,height:box?box.height*scale:34};
+  }).filter(label=>label.x>=0&&label.y>=0&&label.x<=parts[2]*scale&&label.y<=parts[3]*scale);
+  for(const position of layoutMexicoIndustryLabels(labels,{width:parts[2]*scale,height:parts[3]*scale})){
+   const marker=markers[Number(position.id)],label=marker.querySelector<SVGTextElement>('[data-mi-region-label]')!,leader=marker.querySelector<SVGPathElement>('[data-mi-region-leader]')!;
+   const x=(position.left-position.x)/scale,y=(position.top-position.y)/scale-topOffsets.get(position.id)!;
+   label.setAttribute('x',String(x));label.setAttribute('y',String(y));
+   for(const span of label.querySelectorAll('tspan'))span.setAttribute('x',String(x));
+   const edgeX=Math.max(position.left,Math.min(position.x,position.left+position.width)),edgeY=Math.max(position.top,Math.min(position.y,position.top+position.height));
+   leader.setAttribute('d',`M0,0L${(edgeX-position.x)/scale},${(edgeY-position.y)/scale}`);
+  }
+ }
  function resizeLabels():void {
   for(const svg of all<SVGSVGElement>('[data-mi-map]')) {
    if(svg.closest('[hidden]'))continue;
@@ -37,27 +61,9 @@ export function initMexicoIndustry(root:HTMLElement):void {
     label.style.fontSize=`${size}px`;label.style.strokeWidth=`${3/scale}px`;
     if(label.dataset.miLabel){const code=label.dataset.miLabel;label.setAttribute('y',String(config.labels[code][1]-(svg.dataset.miKind==='population'?mexicoPopulationRadius(population.get(code)!.population)+6/scale:7)));}
    }
-   const markers=Array.from(svg.querySelectorAll<SVGGElement>('[data-mi-reading-markers] [data-mi-region-option]')).filter(marker=>!marker.hasAttribute('hidden'));
-   if(!state.compare&&markers.length){
-    const topOffsets=new Map<string,number>();
-    const labels=markers.map((marker,index)=>{
-     const point=config.labels[marker.dataset.miRegionOption!],label=marker.querySelector<SVGTextElement>('[data-mi-region-label]')!;
-     const onMap=point[0]>=parts[0]&&point[1]>=parts[1]&&point[0]<=parts[0]+parts[2]&&point[1]<=parts[1]+parts[3];label.toggleAttribute('hidden',!onMap);marker.querySelector('[data-mi-region-leader]')?.toggleAttribute('hidden',!onMap);
-     const spans=Array.from(label.querySelectorAll<SVGTSpanElement>('tspan'));
-     const width=Math.max(...spans.map(span=>typeof span.getComputedTextLength==='function'?span.getComputedTextLength()*scale:(span.textContent?.length??0)*14));
-     const box=typeof label.getBBox==='function'?label.getBBox():null;
-     topOffsets.set(String(index),box?box.y-Number(label.getAttribute('y')):-13/scale);
-     return {id:String(index),x:(point[0]-parts[0])*scale,y:(point[1]-parts[1])*scale,width,height:box?box.height*scale:34};
-    }).filter(label=>label.x>=0&&label.y>=0&&label.x<=parts[2]*scale&&label.y<=parts[3]*scale);
-    for(const position of layoutMexicoIndustryLabels(labels,{width:parts[2]*scale,height:parts[3]*scale})){
-     const marker=markers[Number(position.id)],label=marker.querySelector<SVGTextElement>('[data-mi-region-label]')!,leader=marker.querySelector<SVGPathElement>('[data-mi-region-leader]')!;
-     const x=(position.left-position.x)/scale,y=(position.top-position.y)/scale-topOffsets.get(position.id)!;
-     label.setAttribute('x',String(x));label.setAttribute('y',String(y));
-     for(const span of label.querySelectorAll('tspan'))span.setAttribute('x',String(x));
-     const edgeX=Math.max(position.left,Math.min(position.x,position.left+position.width)),edgeY=Math.max(position.top,Math.min(position.y,position.top+position.height));
-     leader.setAttribute('d',`M0,0L${(edgeX-position.x)/scale},${(edgeY-position.y)/scale}`);
-    }
-   }
+   // SVG text metrics can still describe the previous font size in this frame.
+   // Measure after the resized Japanese glyphs have been painted.
+   requestAnimationFrame(()=>requestAnimationFrame(()=>placeReadingLabels(svg)));
   }
   const source=one<SVGSVGElement>('[data-mi-map="secondary"]'),legend=one<SVGSVGElement>('.mi-circle-legend');
   if(state.compare==='population'&&state.sourceView==='population'&&source&&legend){
@@ -239,7 +245,8 @@ export function initMexicoIndustry(root:HTMLElement):void {
  primary.addEventListener('pointerup',finishDrag);primary.addEventListener('pointercancel',finishDrag);
  window.addEventListener('popstate',()=>{state=selection(new URL(window.location.href));render();});
  const observer=new ResizeObserver(resizeLabels);for(const svg of all<SVGSVGElement>('[data-mi-map]'))observer.observe(svg);
- document.fonts?.ready.then(resizeLabels);
+ document.fonts?.ready.then(()=>requestAnimationFrame(()=>requestAnimationFrame(resizeLabels)));
+ document.fonts?.addEventListener('loadingdone',resizeLabels);
  new MutationObserver(render).observe(root,{attributes:true,attributeFilter:['data-mexico-reading-selected']});
  root.dataset.miInitialized='true';render();
 }
