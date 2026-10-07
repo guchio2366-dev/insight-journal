@@ -44,8 +44,8 @@
         },
         "selected": {
           "file": "32100309-selected.csv",
-          "rows": 7044,
-          "sha256": "7a08d4132a82d90613380428359457ec81151fdff7209510132eeacf331c9447"
+          "rows": 14088,
+          "sha256": "4b6976da6916c897836a0c9c1978cc294074325b2058039e0062f30abd7e7ff3"
         },
         "metadata": {
           "file": "32100309-metadata.csv",
@@ -74,8 +74,8 @@
         },
         "selected": {
           "file": "32100370-selected.csv",
-          "rows": 1761,
-          "sha256": "b93c9a629848ee0cd8c60c3b547fb15fa1e1044852e7a40c89dedc785386d46c"
+          "rows": 3522,
+          "sha256": "eecb6f90ef59c79ecf77784ad4ddd6394f5436732148ad7a9975e35907bdfecd"
         },
         "metadata": {
           "file": "32100370-metadata.csv",
@@ -121,7 +121,7 @@
       "uomColumn": "Number",
       "scalarFactor": "units"
     },
-    "selectionMethod": "Retain original CSV row text for 2021 official Canada, province and CCS source cells of the seven explicitly named variables. Join CCS by DGUID only; retain exact numeric values, zero, quality, vector and coordinate. Never derive values from map dots or aggregate regions into government totals.",
+    "selectionMethod": "Retain original CSV row text for 2021 official Canada, province and CCS source cells of the explicitly named variables. Join CCS by DGUID only; retain exact numeric values, zero, quality, vector and coordinate. Never derive values from map dots or aggregate regions into government totals.",
     "counts": {
       "canola": {
         "published": 1604,
@@ -152,6 +152,36 @@
         "qualityF": 590,
         "notCovered": 10,
         "zero": 88
+      },
+      "soybeans": {
+        "published": 1416,
+        "qualityF": 331,
+        "notCovered": 10,
+        "zero": 739
+      },
+      "corn": {
+        "published": 1215,
+        "qualityF": 532,
+        "notCovered": 10,
+        "zero": 404
+      },
+      "lentils": {
+        "published": 1634,
+        "qualityF": 113,
+        "notCovered": 10,
+        "zero": 1429
+      },
+      "potatoes": {
+        "published": 1076,
+        "qualityF": 671,
+        "notCovered": 10,
+        "zero": 912
+      },
+      "dairy": {
+        "published": 1312,
+        "qualityF": 435,
+        "notCovered": 10,
+        "zero": 453
       }
     },
     "publishedRegionCount": 1747,
@@ -397,13 +427,183 @@
         "comparable": false,
         "note": "原図のTotal hayとは定義の異なる2成分合算。原図の全国値をこの指標へ流用しない。"
       }
+    },
+    "soybeans": {
+      "id": "soybeans",
+      "label": "大豆",
+      "displayName": "大豆",
+      "unit": "ha",
+      "unitLabel": "申告面積（ha）",
+      "sourceTableId": "32100309",
+      "sourceTableUrl": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210030901",
+      "sourceVariables": [
+        "Soybeans"
+      ],
+      "releasedAt": "2022-05-11",
+      "definition": "大豆の地域別申告面積。収穫量や輸出量ではない。",
+      "national": {
+        "value": 2087363,
+        "quality": "A",
+        "status": "published",
+        "components": [
+          {
+            "id": "soybeans",
+            "variable": "Soybeans",
+            "value": 2087363,
+            "quality": "A",
+            "vector": "v1325942216",
+            "coordinate": "1.16.3",
+            "unit": "Hectares",
+            "symbol": "",
+            "decimals": 0
+          }
+        ]
+      },
+      "derived": false,
+      "notes": "公表値と公式品質等級を保持する。"
+    },
+    "corn": {
+      "id": "corn",
+      "label": "とうもろこし",
+      "displayName": "とうもろこし",
+      "unit": "ha",
+      "unitLabel": "申告面積（ha）",
+      "sourceTableId": "32100309",
+      "sourceTableUrl": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210030901",
+      "sourceVariables": [
+        "Corn, total"
+      ],
+      "releasedAt": "2022-05-11",
+      "definition": "子実用とサイレージ用を含むとうもろこしの総申告面積。子実収穫量ではない。",
+      "national": {
+        "value": 1898108,
+        "quality": "A",
+        "status": "published",
+        "components": [
+          {
+            "id": "corn",
+            "variable": "Corn, total",
+            "value": 1898108,
+            "quality": "A",
+            "vector": "v1325942195",
+            "coordinate": "1.9.3",
+            "unit": "Hectares",
+            "symbol": "",
+            "decimals": 0
+          }
+        ]
+      },
+      "derived": false,
+      "notes": "公表値と公式品質等級を保持する。"
+    },
+    "lentils": {
+      "id": "lentils",
+      "label": "レンズ豆",
+      "displayName": "レンズ豆",
+      "unit": "ha",
+      "unitLabel": "申告面積（ha）",
+      "sourceTableId": "32100309",
+      "sourceTableUrl": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210030901",
+      "sourceVariables": [
+        "Lentils"
+      ],
+      "releasedAt": "2022-05-11",
+      "definition": "レンズ豆の地域別申告面積。えんどうや他の豆類を含まない。",
+      "national": {
+        "value": 1699959,
+        "quality": "A",
+        "status": "published",
+        "components": [
+          {
+            "id": "lentils",
+            "variable": "Lentils",
+            "value": 1699959,
+            "quality": "A",
+            "vector": "v1325942228",
+            "coordinate": "1.20.3",
+            "unit": "Hectares",
+            "symbol": "",
+            "decimals": 0
+          }
+        ]
+      },
+      "derived": false,
+      "notes": "公表値と公式品質等級を保持する。"
+    },
+    "potatoes": {
+      "id": "potatoes",
+      "label": "ばれいしょ",
+      "displayName": "ばれいしょ",
+      "unit": "ha",
+      "unitLabel": "申告面積（ha）",
+      "sourceTableId": "32100309",
+      "sourceTableUrl": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210030901",
+      "sourceVariables": [
+        "Potatoes"
+      ],
+      "releasedAt": "2022-05-11",
+      "definition": "ばれいしょの地域別申告面積。加工品の生産量・輸出量とは区別する。",
+      "national": {
+        "value": 157214,
+        "quality": "A",
+        "status": "published",
+        "components": [
+          {
+            "id": "potatoes",
+            "variable": "Potatoes",
+            "value": 157214,
+            "quality": "A",
+            "vector": "v1325942249",
+            "coordinate": "1.27.3",
+            "unit": "Hectares",
+            "symbol": "",
+            "decimals": 0
+          }
+        ]
+      },
+      "derived": false,
+      "notes": "公表値と公式品質等級を保持する。"
+    },
+    "dairy": {
+      "id": "dairy",
+      "label": "乳牛",
+      "displayName": "乳牛",
+      "unit": "頭",
+      "unitLabel": "乳牛頭数（頭）",
+      "sourceTableId": "32100370",
+      "sourceTableUrl": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210037001",
+      "sourceVariables": [
+        "Cows, dairy"
+      ],
+      "releasedAt": "2022-05-11",
+      "definition": "乳用の牛の頭数。牛乳の産出量ではなく、酪農の飼養分布を表す。",
+      "national": {
+        "value": 980297,
+        "quality": "A",
+        "status": "published",
+        "components": [
+          {
+            "id": "dairy",
+            "variable": "Cows, dairy",
+            "value": 980297,
+            "quality": "A",
+            "vector": "v1326984292",
+            "coordinate": "1.10.2",
+            "unit": "Number of animals",
+            "symbol": "",
+            "decimals": 0
+          }
+        ]
+      },
+      "derived": false,
+      "notes": "公表値と公式品質等級を保持する。"
     }
   },
   "output": {
     "data": {
       "file": "census-agriculture.json",
-      "bytes": 2954440,
-      "sha256": "df88f6305822a3e61e7db751665c76b8a806c0697219417c8a5ed0e4e3bedfe2"
+      "bytes": 4984845,
+      "sha256": "2f08e84077fbb6505271f28958463b1f4b17626d75c1b5c172bbb067fd089bde"
     },
     "geometry": {
       "file": "ccs.geojson",

@@ -1,0 +1,620 @@
+{
+  "schemaVersion": 1,
+  "preparedAt": "2026-10-07",
+  "products": {
+    "soybeans": {
+      "label": "大豆",
+      "keySentence": "大豆はオンタリオを中心にマニトバ・ケベックへ広がり、地域の生育期間に合う品種選びが国内の搾油と海外への供給を支える。",
+      "paragraphs": [
+        "2021年の申告面積はオンタリオ113.6万ha、マニトバ52.1万ha、ケベック38.1万haで、この3州が全国の約98%を占める。オンタリオ南西部のChatham-Kentでは10.3万haが申告されており、五大湖周辺の耕作地域に大きなまとまりがある。",
+        "大豆は生育に暖かさを必要とするため、秋までに熟す品種を選ぶことが栽培の条件になる。マニトバ州の栽培指針は、地域で得られる積算温度に応じた早生・晩生品種の選択を重視している。積算温度は、生育期間に蓄積する暖かさの目安であり、品種の必要量と地域の条件を合わせることで栽培を成り立たせる。",
+        "収穫した豆は国内での搾油・食品加工につながり、海外にも供給される。2024/25年度の大豆輸出は553.1万t。地図の2021年面積は産地の広がり、別年の輸出量は供給先との結び付きを示している。"
+      ],
+      "paragraphSourceIds": [
+        [
+          "census-crops"
+        ],
+        [
+          "mb-soybeans"
+        ],
+        [
+          "aafc-crops"
+        ]
+      ],
+      "metricNote": "地図：2021年の大豆申告面積（ha）。輸出：2024/25年度（9月〜翌8月）の大豆数量（t）、大豆油・油かすなどの加工品を除く。",
+      "sourceIds": [
+        "census-crops",
+        "mb-soybeans",
+        "aafc-crops"
+      ],
+      "headings": [
+        "五大湖周辺とマニトバに集積",
+        "生育期間に合う品種を選ぶ",
+        "搾油・食品と海外への供給"
+      ],
+      "focusProvinces": [
+        "35",
+        "46",
+        "24"
+      ],
+      "relatedProducts": [
+        "corn"
+      ],
+      "focusCcs": [
+        {
+          "id": "2021S05023536020",
+          "label": "Chatham-Kent"
+        }
+      ]
+    },
+    "corn": {
+      "label": "とうもろこし",
+      "keySentence": "とうもろこしはオンタリオ・ケベックに集中し、夏の暖かさに合う品種を選んで、家畜の飼料と加工原料を生産する。",
+      "paragraphs": [
+        "2021年の総申告面積はオンタリオ100.9万ha、ケベック45.1万haで、2州が全国の76.9%を占める。マニトバも24.1万haを持つ。地図には、穀粒を収穫する子実用と、茎葉も利用するサイレージ用の両方が含まれている。",
+        "子実を十分に熟させるには、霜のない期間と、その間に蓄積する暖かさが必要になる。マニトバでは品種の必要積算温度を畑の条件に合わせて選び、熟し切らない穀粒の乾燥費用や品質低下を避ける。受粉期の水不足も収量を落とすため、暖かさに加えて雨の時期と土壌の保水・排水が重要になる。",
+        "マニトバの子実用とうもろこしは主に飼料・エタノール原料となり、サイレージは乳牛や肉牛の餌になる。全国の子実用統計では2024/25年度の国内利用が1,481万t、輸出が277.6万tで、国内の畜産・加工需要が大きい。サイレージを含む地図の面積と、この子実の数量は分けて読む。"
+      ],
+      "paragraphSourceIds": [
+        [
+          "census-crops"
+        ],
+        [
+          "mb-corn"
+        ],
+        [
+          "mb-corn",
+          "aafc-crops"
+        ]
+      ],
+      "metricNote": "地図：2021年Corn, totalの申告面積（ha）、子実用＋サイレージ用。需給：2024/25年度（9月〜翌8月）の子実用数量（t）。国内利用には食品・工業、飼料・損失、種子などを含み、純粋な飼料量ではない。輸出は穀物加工品を含む原表定義。",
+      "sourceIds": [
+        "census-crops",
+        "mb-corn",
+        "aafc-crops"
+      ],
+      "headings": [
+        "オンタリオ・ケベックに約8割",
+        "暖かさと水の時期が重要",
+        "飼料・エタノールと輸出"
+      ],
+      "focusProvinces": [
+        "35",
+        "24",
+        "46"
+      ],
+      "relatedProducts": [
+        "dairy",
+        "beef"
+      ],
+      "focusCcs": [
+        {
+          "id": "2021S05023536020",
+          "label": "Chatham-Kent"
+        }
+      ]
+    },
+    "lentils": {
+      "label": "レンズ豆",
+      "keySentence": "レンズ豆はサスカチュワンの草原農業に強く集中し、過湿を避けながら水分を保つ管理で、海外向けの食用豆を生産する。",
+      "paragraphs": [
+        "2021年の申告面積はサスカチュワン151.8万haで全国の89.3%、アルバータ17.9万haがこれに続く。サスカチュワンのKindersleyやSwift Current周辺は、この集中を地図で確かめられる栽培地域である。",
+        "州の生産者団体は、レンズ豆がBrown・Dark Brownと呼ばれる草原土壌帯に適すると説明している。水はけの悪い畑では根の病害が増え、過剰な水分は茎葉の成長を長引かせて成熟も遅らせる。一方、干ばつにも備える必要があり、前作の刈株を残して土壌水分を保つことや、連作を避ける輪作が栽培を支える。",
+        "乾燥した豆を食用に供給し、赤レンズ豆では皮を除いたり割ったりして出荷する形態もある。2024/25年度の全国輸出は182.1万tで、プレーリーの農地が海外の食料需要につながる品目である。"
+      ],
+      "paragraphSourceIds": [
+        [
+          "census-crops"
+        ],
+        [
+          "spg-lentils",
+          "mb-lentils"
+        ],
+        [
+          "spg-lentils",
+          "aafc-crops"
+        ]
+      ],
+      "metricNote": "地図：2021年の申告面積（ha）。輸出：2024/25年度（8月〜翌7月）の全国数量（t）。土壌帯の適性は栽培解説であり、CCS境界を土壌帯境界とは扱わない。",
+      "sourceIds": [
+        "census-crops",
+        "spg-lentils",
+        "mb-lentils",
+        "aafc-crops"
+      ],
+      "headings": [
+        "サスカチュワンに約9割",
+        "過湿を避け、土壌水分を保つ",
+        "食用豆を海外へ"
+      ],
+      "focusProvinces": [
+        "47",
+        "48"
+      ],
+      "relatedProducts": [
+        "wheat"
+      ],
+      "focusCcs": [
+        {
+          "id": "2021S05024713006",
+          "label": "Kindersley"
+        },
+        {
+          "id": "2021S05024708001",
+          "label": "Swift Current"
+        }
+      ]
+    },
+    "potatoes": {
+      "label": "じゃがいも",
+      "keySentence": "じゃがいもは大西洋岸とプレーリーの産地を加工工場が結び、契約栽培と貯蔵を通じてフライドポテトなどの輸出につながる。",
+      "paragraphs": [
+        "2021年の申告面積では、プリンスエドワード島3.45万ha、マニトバ3.15万ha、アルバータ2.84万ha、ニューブランズウィック2.11万haが大きい。東の大西洋岸と西のプレーリーに産地が分かれ、アルバータのTaberやマニトバのNorth Cypress-Langfordにもまとまった申告面積がある。",
+        "この分布を支える要素の一つが、産地近くにある加工工場である。AAFCによると、主なフライドポテト加工州はアルバータ、マニトバ、ニューブランズウィック、プリンスエドワード島。加工会社は作付け前に必要な品種と数量を農家と契約し、農家は貯蔵中も品質を保って工場への供給につなげる。",
+        "用途は食卓向け、種いも、加工向けに分かれる。2024/25年度のじゃがいも・加工品輸出額は37億CAD超で、フライドポテトが大きな部分を占め、米国が主要市場となる。畑の面積だけでなく、加工と貯蔵まで含めて産地を読むと、東西に離れた拠点の役割が見える。"
+      ],
+      "paragraphSourceIds": [
+        [
+          "census-crops"
+        ],
+        [
+          "aafc-potatoes"
+        ],
+        [
+          "aafc-potatoes"
+        ]
+      ],
+      "metricNote": "地図：2021年Censusの申告面積（ha）。輸出：2024/25年度の価額（CAD）、生鮮・種いも・加工品を含む。Census面積とAAFCの別調査による年次作付面積を混合しない。",
+      "sourceIds": [
+        "census-crops",
+        "aafc-potatoes"
+      ],
+      "headings": [
+        "大西洋岸とプレーリーに産地",
+        "加工工場と契約が作付けを支える",
+        "生鮮・種いも・加工品を供給"
+      ],
+      "focusProvinces": [
+        "11",
+        "46",
+        "48",
+        "13"
+      ],
+      "relatedProducts": [],
+      "focusCcs": [
+        {
+          "id": "2021S05024802021",
+          "label": "Taber"
+        },
+        {
+          "id": "2021S05024607066",
+          "label": "North Cypress-Langford"
+        }
+      ]
+    },
+    "dairy": {
+      "label": "酪農・乳製品",
+      "keySentence": "乳牛はケベックとオンタリオに集中し、飼料作物と乳加工を結ぶ酪農が、国内需要に応じた供給管理の下で営まれる。",
+      "paragraphs": [
+        "2021年の乳牛はケベック35.7万頭、オンタリオ32.7万頭で、2州に全国の約7割が集まる。西部ではアルバータ8.7万頭、ブリティッシュコロンビア8.1万頭が続き、フレーザー河谷にもまとまりが見られる。地図の頭数は酪農の立地を示す指標で、乳量を表すものではない。",
+        "乳牛の飼養は飼料作物とも結び付いている。とうもろこしを茎葉ごと利用するサイレージは乳牛の餌となるため、乳牛ととうもろこしの分布を比べると、作物と畜産の関係を考えられる。飼料を育てる耕地と乳を生産する農場を一緒に見ることで、地域の農業の組み合わせが分かる。",
+        "生乳は飲用のほか、チーズやヨーグルト、バターなどの加工に向かう。カナダの酪農は国内生産の計画、価格の管理、輸入管理を組み合わせる供給管理制度の下にあり、産地を読む際には飼料条件とともに、国内需要へ供給する仕組みにも目を向けたい。"
+      ],
+      "paragraphSourceIds": [
+        [
+          "census-cattle"
+        ],
+        [
+          "mb-corn"
+        ],
+        [
+          "aafc-dairy"
+        ]
+      ],
+      "metricNote": "地図：2021年5月11日のCows, dairy（乳用の雌牛、頭）。乳用未経産牛を加えた頭数、乳量、乳製品生産量ではない。制度・用途の解説と別年の産業概況を混合して2021年量を作らない。",
+      "sourceIds": [
+        "census-cattle",
+        "mb-corn",
+        "aafc-dairy"
+      ],
+      "headings": [
+        "乳牛の約7割が東部2州",
+        "とうもろこしなどの飼料とつながる",
+        "国内需要に合わせた供給"
+      ],
+      "focusProvinces": [
+        "24",
+        "35",
+        "59"
+      ],
+      "relatedProducts": [
+        "corn",
+        "hay"
+      ]
+    },
+    "pork": {
+      "label": "豚肉・養豚",
+      "keySentence": "養豚はケベック・オンタリオ・マニトバに集中し、飼養管理と加工を通じて、国内向けの豚肉供給と生体・食肉の輸出につながる。",
+      "paragraphs": [
+        "AAFCの「Quick Facts 2025」が示す1月1日の全国豚頭数は1,398万頭。公表された丸め比率ではケベック30%、オンタリオ27%、マニトバ24%で、この3州が計81%を占める。これは州別分布の概要であり、農場やCCSごとの位置・頭数を示す情報ではない。",
+        "養豚では、成長段階に合う飼料と清潔な水、飼育環境、病気を防ぐ管理が生産を支える。マニトバ州の解説では、生まれた豚を生体で送り出す流れと、州内の食肉処理施設へ送る流れの両方が示されている。このため、産地の役割は豚舎だけでなく、育成・出荷・加工のつながりから読む必要がある。",
+        "カナダの輸出には生きた豚と豚肉の両方がある。生体で出荷された豚と国内で加工された豚肉では、生産から市場までの経路が異なる。州の在庫頭数はその時点の飼養規模を示し、年間の出荷頭数や豚肉生産量とは区別する。"
+      ],
+      "paragraphSourceIds": [
+        [
+          "aafc-hogs"
+        ],
+        [
+          "mb-pork"
+        ],
+        [
+          "aafc-hogs",
+          "mb-pork"
+        ]
+      ],
+      "metricNote": "表示できる地域数値はAAFC 2025年版に記載された1月1日の全国1,398万頭と、AAFC公表のQC30%・ON27%・MB24%という丸めシェア。州別頭数への逆算、残り州への配分、CCS化は行わない。",
+      "sourceIds": [
+        "aafc-hogs",
+        "mb-pork"
+      ],
+      "headings": [
+        "公表3州が全国頭数の81%",
+        "育成・出荷・加工をつなぐ",
+        "生きた豚と豚肉を輸出"
+      ],
+      "focusProvinces": [
+        "24",
+        "35",
+        "46"
+      ],
+      "relatedProducts": [
+        "corn",
+        "soybeans"
+      ]
+    },
+    "chicken": {
+      "label": "鶏肉・養鶏",
+      "keySentence": "鶏肉を供給する生産者はオンタリオとケベックに多く、ふ化場・飼料供給・加工を結ぶ体制で国内需要に応える。",
+      "paragraphs": [
+        "2021年の公表生産者数はオンタリオ1,298、ケベック626で、全国2,823のうち約68%を占める。ブリティッシュコロンビア312、アルバータ246にも生産者が分布する。この地図が比べるのは州別の生産者数であり、鶏の羽数や鶏肉の産出量ではない。",
+        "養鶏は、ひなを供給するふ化場、飼料を供給する事業者、飼育農家、食肉加工を結ぶ産業である。国内ではChicken Farmers of Canadaが鶏肉の生産・販売を担う全国組織となり、供給管理の仕組みの下で生産が行われる。州ごとの生産者のまとまりは、この供給体制を読み解く入口になる。",
+        "鶏肉は国内の食卓を支えるとともに輸出され、輸入品も国内供給を補っている。AAFCの2025年概況では、鶏肉・加工品の主な輸出先は米国、フィリピン、ベナンである。国内向けの供給体制に、海外市場との取引が重なる産業として捉えられる。"
+      ],
+      "paragraphSourceIds": [
+        [
+          "aafc-chicken-producers"
+        ],
+        [
+          "aafc-poultry",
+          "aafc-chicken",
+          "aafc-sector"
+        ],
+        [
+          "aafc-chicken"
+        ]
+      ],
+      "metricNote": "地図：AAFC掲載・Chicken Farmers of Canada原典の2021年Chicken producers（生産者数）、10州＋全国。3準州は個別値未掲載。Census農場総数、鳥数、重量、生産量ではない。用途・制度は独立した産業概況による。",
+      "sourceIds": [
+        "aafc-chicken-producers",
+        "aafc-poultry",
+        "aafc-chicken",
+        "aafc-sector"
+      ],
+      "headings": [
+        "生産者の約68%が東部2州",
+        "ふ化から食肉加工までを結ぶ",
+        "国内需要と海外取引"
+      ],
+      "focusProvinces": [
+        "35",
+        "24",
+        "59"
+      ],
+      "relatedProducts": [
+        "corn",
+        "soybeans"
+      ]
+    },
+    "canola": {
+      "label": "カノーラ",
+      "keySentence": "プレーリーのカノーラは、季節と土壌に合わせた栽培を、種子・油・飼料の加工と輸送へつなぐ。",
+      "paragraphs": [
+        "カノーラは冷涼な季節に適する油料作物です。しかし、寒い場所ならどこでも育つわけではありません。生育・成熟に使える季節が必要で、極端な暑さや水分条件も収量に関わります。種が発芽する土壌の水分、養分、排水、品種、輪作を合わせて考えます。Reginaの平年値で季節を読むことと、ある年・ある畑の土壌水分や収量を知ることは別です。",
+        "収穫した種子は、そのまま出荷する経路と、搾油して油や飼料用の搾りかすにする経路があります。加工能力、鉄道、港、買い手がつながって初めて作物が市場へ届きます。2025年3月のUSDA報告は、米国向けの油の鉄道輸送やブリティッシュコロンビアの港からの海上出荷を扱っています。Vancouver（バンクーバー）は西岸の位置を読む手掛かりで、ここで特定の港別取扱量を示しているわけではありません。",
+        "日本はカナダのカノーラ種子の買い手の一つです。AAFCの2023年貿易を扱う資料では、供給州としてプレーリー3州が示されています。また、油の品質に応じた契約や品種選択もあります。2025年3月のUSDA報告では、燃料需要、貿易規制、政策への期待や不確実性が加工投資に関わると分析しています。自然条件が社会活動を一方的に決めるのではなく、需要・技術・制度が栽培や加工の選択へ戻る関係として読みます。報告当時の分析と現在の制度は区別します。"
+      ],
+      "headings": [
+        "育つ条件：夏の熱と、根が使える水・土壌",
+        "加工・輸送：種子、油、搾りかすは違う商品",
+        "需要と制度が生産地へ戻ってくる"
+      ],
+      "paragraphSourceIds": [
+        [
+          "legacy-canola-0-0"
+        ],
+        [
+          "legacy-canola-1-0"
+        ],
+        [
+          "legacy-canola-2-0",
+          "legacy-canola-2-1"
+        ]
+      ],
+      "sourceIds": [
+        "legacy-canola-0-0",
+        "legacy-canola-1-0",
+        "legacy-canola-2-0",
+        "legacy-canola-2-1"
+      ],
+      "metricNote": "地図は2021年の申告面積（ha）。原図や別年の作付・生産・貿易統計は各資料の対象を保持します。",
+      "focusProvinces": [
+        "47",
+        "48",
+        "46"
+      ],
+      "relatedProducts": [
+        "wheat",
+        "beef"
+      ],
+      "legacy": "canola"
+    },
+    "wheat": {
+      "label": "小麦",
+      "keySentence": "プレーリーの小麦は、生育期間に合う栽培と品質管理、内陸から港への輸送によって国内外の需要に応える。",
+      "paragraphs": [
+        "春小麦では春に播いて収穫まで育つ期間を確保します。マニトバ州の栽培資料は早い播種、排水のよい土壌、発芽に使える水を重視しています。雨が多いほど常によいのではなく、根が使える水と排水の両方を考えます。秋に播く冬小麦は冬を越すため、同じ小麦でも播種時期と越冬条件が異なります。同州の冬小麦資料では、刈株を残して雪を留める越冬管理を重視します。Reginaの気温・降水の季節を読み、畑の土壌水分やその年の天候とは区別しましょう。平年値だけから収量や栽培可能範囲を決めることはできません。",
+        "広い平原は機械で作業する地形の条件ですが、それだけで安い大量生産が成立するわけではありません。播種、輪作、土壌に応じた施肥、病害対策、コンバインによる収穫、乾燥・貯蔵をつなぐ管理が必要です。水分と窒素の管理は量だけでなく粒の品質にも関わります。Canadian Grain Commissionは製粉・加工に使う性質によって小麦を分類しています。パン向けの硬質春小麦、パスタのセモリナに使うデュラム、菓子向けの軟質小麦を同じ用途と考えず、下の表で分けて読みます。",
+        "畑で収穫できても、買い手へ運べなければ輸出商品にはなりません。Transport Canadaの2024年報告では、プレーリーの東西鉄道と支線が農産物を市場へつなぎ、太平洋港へ輸出貨物を運ぶ仕組みを説明しています。西岸のVancouver（バンクーバー）は穀物輸出を担う港の一例で、鉄道網に接続します。これは代表的な経路の説明であり、全小麦がこの港を通るという意味ではありません。自然環境の地図で内陸と西岸の位置を確かめ、距離を越える設備・輸送の条件を考えます。"
+      ],
+      "headings": [
+        "育つ条件：生育期間と、根が使える水・土壌",
+        "生産と用途：面積だけでは量も品質も決まらない",
+        "輸送：内陸の穀物を鉄道と港で市場へつなぐ"
+      ],
+      "paragraphSourceIds": [
+        [
+          "legacy-wheat-0-0",
+          "legacy-wheat-0-1"
+        ],
+        [
+          "legacy-wheat-1-0",
+          "legacy-wheat-1-1"
+        ],
+        [
+          "legacy-wheat-2-0"
+        ]
+      ],
+      "sourceIds": [
+        "legacy-wheat-0-0",
+        "legacy-wheat-0-1",
+        "legacy-wheat-1-0",
+        "legacy-wheat-1-1",
+        "legacy-wheat-2-0"
+      ],
+      "metricNote": "地図は2021年の申告面積（ha）。原図や別年の作付・生産・貿易統計は各資料の対象を保持します。",
+      "focusProvinces": [
+        "47",
+        "48",
+        "46"
+      ],
+      "relatedProducts": [
+        "canola",
+        "lentils"
+      ],
+      "legacy": "wheat"
+    },
+    "beef": {
+      "label": "肉牛",
+      "keySentence": "西部の肉牛は放牧だけで完結せず、冬の貯蔵飼料と育成・肥育をつなぐ管理に支えられる。",
+      "paragraphs": [
+        "草地があっても、自由に頭数を増やせるわけではありません。マニトバ州の資料は、草地を傷めず一定期間養える量を「carrying capacity」、実際に置く家畜の量と期間を「stocking rate」として区別します。草の生産量が変われば維持できる放牧量も変わります。草の回復、放牧時期、利用する区画、家畜の大きさを合わせて管理することが、草地を繰り返し使う条件です。公式放牧地図は面積の分布であり、この能力や放牧期間を測った図ではありません。",
+        "冬も牛の維持には飼料が必要です。乾草やサイレージなどの貯蔵飼料は、生育する季節と給餌する季節をつなぎます。マニトバ州の資料は、寒さだけでなく風・湿り・牛の状態・風よけが冬の給餌に関わると説明しています。「寒い場所だから牛を飼えない」と一歩で結論づけず、飼料を確保し保管して届ける設備と管理も考えます。乾草などの面積図は、収穫した重量・栄養価・実際の貯蔵量を示しません。",
+        "肉用母牛が子牛を産み育てる段階、その後の育成、出荷へ向けて体重を増やす肥育を分けます。StatCanは育成を担う経営に乾草や放牧などの低エネルギー飼料、肥育経営に穀物などの高エネルギー飼料を用いる区分を設けています。州政府の肥育資料にも大麦やサイレージ、カノーラミールの例があります。放牧地だけで全段階が完結するとは限りません。小麦やカノーラのページへ戻り、穀物の用途と油を搾った後の副産物を区別して読みます。配合量の指導や全作物が飼料になるという説明ではありません。"
+      ],
+      "headings": [
+        "放牧管理：何頭を、どれだけの期間置くか",
+        "冬：生育が鈍る時期を貯蔵飼料と管理でつなぐ",
+        "繁殖・育成・肥育：すべてが同じ餌ではない"
+      ],
+      "paragraphSourceIds": [
+        [
+          "legacy-beef-0-0"
+        ],
+        [
+          "legacy-beef-1-0"
+        ],
+        [
+          "legacy-beef-2-0",
+          "legacy-beef-2-1"
+        ]
+      ],
+      "sourceIds": [
+        "legacy-beef-0-0",
+        "legacy-beef-1-0",
+        "legacy-beef-2-0",
+        "legacy-beef-2-1"
+      ],
+      "metricNote": "地図は2021年の肉用母牛頭数。肉牛総数・肥育場の位置・牛肉生産量ではありません。",
+      "focusProvinces": [
+        "48",
+        "47"
+      ],
+      "relatedProducts": [
+        "pasture",
+        "hay",
+        "corn"
+      ],
+      "legacy": "beef"
+    }
+  },
+  "sources": {
+    "census-crops": {
+      "title": "Statistics Canada — Field crops and hay, Census of Agriculture, 2021, 32-10-0309-01",
+      "url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210030901",
+      "year": 2021,
+      "usedFor": "Held official source values, including province/CCS areas. No source re-download."
+    },
+    "census-cattle": {
+      "title": "Statistics Canada — Cattle inventory, Census of Agriculture, 2021, 32-10-0370-01",
+      "url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210037001",
+      "year": 2021,
+      "usedFor": "Held Cows, dairy / Number of animals values. No source re-download."
+    },
+    "mb-soybeans": {
+      "title": "Manitoba Agriculture — Soybean: Production and Management",
+      "url": "https://www.gov.mb.ca/agriculture/crops/crop-management/soybeans.html",
+      "year": null,
+      "usedFor": "Temperature limits, maturity-based variety choice, field water conditions. Page has no publication date used here."
+    },
+    "mb-corn": {
+      "title": "Manitoba Agriculture — Introduction to Corn Production",
+      "url": "https://www.gov.mb.ca/agriculture/crops/crop-management/grain-corn/index.html",
+      "year": null,
+      "usedFor": "Heat units, frost-free period, rainfall, maturity matching; Manitoba grain corn supplies feed and ethanol, silage supplies dairy/beef cattle. Undated extension guidance; do not use its undated percentage."
+    },
+    "spg-lentils": {
+      "title": "Saskatchewan Pulse Growers — Lentils Seeding: Description & Adaptation",
+      "url": "https://saskpulse.com/growing-pulses/lentils/lentils-seeding/",
+      "year": null,
+      "usedFor": "Saskatchewan Brown/Dark Brown soil adaptation, excess moisture delays seed set and raises fungal risk; retaining stubble conserves soil moisture. Primary grower research/extension source, not a government publisher."
+    },
+    "mb-lentils": {
+      "title": "Manitoba Agriculture — Lentils: Production and Management",
+      "url": "https://www.gov.mb.ca/agriculture/crops/crop-management/lentils.html",
+      "year": null,
+      "usedFor": "Drainage and multi-year crop rotation for disease management; undated extension guidance."
+    },
+    "aafc-crops": {
+      "title": "AAFC — Canada: Outlook for Principal Field Crops, 2026-09-25",
+      "url": "https://agriculture.canada.ca/en/sector/crops/reports-statistics/canada-outlook-principal-field-crops-2026-09-25",
+      "year": "2024/25 crop-year observations in a 2026-09-25 publication",
+      "usedFor": "Unflagged 2024-2025 table columns: soybean exports 5531 kt; corn domestic use 14810 kt and exports 2776 kt; lentil exports 1821 kt. No 2025-26/2026-27 forecast values used. Soybean/corn year Sep-Aug; lentil year Aug-Jul."
+    },
+    "aafc-potatoes": {
+      "title": "AAFC — Potato Market Information Review 2024-2025",
+      "url": "https://agriculture.canada.ca/en/sector/horticulture/reports/potato-market-information-review-2024-2025",
+      "year": "2024 and 2024/25",
+      "usedFor": "Nearby processing plants, contracts before planting, storage; principal French-fry provinces AB/MB/NB/PE; exports including processed/seed/fresh >CAD3.7bn, predominantly US."
+    },
+    "aafc-dairy": {
+      "title": "AAFC — Canada's dairy industry at a glance",
+      "url": "https://agriculture.canada.ca/en/sector/animal-industry/canadian-dairy-information-centre/dairy-industry",
+      "year": "2025 highlights, viewed 2026-10-07",
+      "usedFor": "Planned domestic production, administered pricing and import controls; fluid milk and dairy processing uses. Do not reuse the previous 2024 numeric highlights under 2025 labels."
+    },
+    "aafc-hogs": {
+      "title": "AAFC — Hogs / Pork: Quick Facts 2025",
+      "url": "https://agriculture.canada.ca/en/sector/animal-industry/red-meat-and-livestock-market-information/hogs-pork",
+      "year": 2025,
+      "usedFor": "Jan 1 inventory13.98 million; rounded QC30/ON27/MB24 shares; qualitative existence of live-hog and pork exports. No province counts derived."
+    },
+    "mb-pork": {
+      "title": "Manitoba Agriculture — Pork",
+      "url": "https://www.gov.mb.ca/agriculture/livestock/pork/index.html",
+      "year": null,
+      "usedFor": "Manitoba industry combines live-pig exports and processing; nutrition, clean water, housing by growth stage and disease management. Undated approximate industry percentages were deliberately not reused."
+    },
+    "aafc-chicken-producers": {
+      "title": "AAFC — Provincial poultry facts: 2021",
+      "url": "https://agriculture.canada.ca/en/sector/animal-industry/poultry-and-egg-market-information/industry-profile/provincial-poultry-facts",
+      "year": 2021,
+      "usedFor": "Chicken producer counts, underlying source CFC; 10 provinces and Canada, not quantities of chicken produced."
+    },
+    "aafc-chicken": {
+      "title": "AAFC — Canada's chicken industry",
+      "url": "https://agriculture.canada.ca/en/sector/animal-industry/poultry-and-egg-market-information/chicken",
+      "year": "2025 highlights",
+      "usedFor": "CFC responsibility for production and marketing; domestic demand and import/export activity. No output amount or provincial output share copied into producer-count map. The stated leading export destinations in 2025 are US, Philippines, Benin."
+    },
+    "aafc-poultry": {
+      "title": "AAFC — Canada's poultry and egg industry profile",
+      "url": "https://agriculture.canada.ca/en/sector/animal-industry/poultry-and-egg-market-information/industry-profile",
+      "year": "2025 highlights",
+      "usedFor": "Links among hatcheries, feed suppliers, farms and processors."
+    },
+    "aafc-sector": {
+      "title": "AAFC — Overview of the agriculture and agri-food sector, transition book 2024",
+      "url": "https://agriculture.canada.ca/en/department/transparency/briefing-documents/aafc-transition-books/overview-agriculture-and-agri-food-sector-deputy-minister-transition-book-2024-aafc",
+      "year": 2024,
+      "usedFor": "Dairy and chicken described as supply-managed sectors; not used to calculate 2021 shares."
+    },
+    "legacy-canola-0-0": {
+      "title": "カノーラの既存解説の原典",
+      "url": "https://www.gov.mb.ca/agriculture/crops/crop-management/canola.html",
+      "year": null,
+      "usedFor": "育つ条件：夏の熱と、根が使える水・土壌"
+    },
+    "legacy-canola-1-0": {
+      "title": "カノーラの既存解説の原典",
+      "url": "https://apps.fas.usda.gov/newgainapi/api/Report/DownloadReportByFileName?fileName=Oilseeds+and+Products+Annual_Ottawa_Canada_CA2025-0017.pdf",
+      "year": null,
+      "usedFor": "加工・輸送：種子、油、搾りかすは違う商品"
+    },
+    "legacy-canola-2-0": {
+      "title": "カノーラの既存解説の原典",
+      "url": "https://agriculture.canada.ca/en/international-trade/reports-and-guides/market-overview-japan",
+      "year": null,
+      "usedFor": "需要と制度が生産地へ戻ってくる"
+    },
+    "legacy-canola-2-1": {
+      "title": "カノーラの既存解説の原典",
+      "url": "https://apps.fas.usda.gov/newgainapi/api/Report/DownloadReportByFileName?fileName=Oilseeds+and+Products+Annual_Ottawa_Canada_CA2025-0017.pdf",
+      "year": null,
+      "usedFor": "需要と制度が生産地へ戻ってくる"
+    },
+    "legacy-wheat-0-0": {
+      "title": "小麦の既存解説の原典",
+      "url": "https://www.gov.mb.ca/agriculture/crops/crop-management/spring-wheat.html",
+      "year": null,
+      "usedFor": "育つ条件：生育期間と、根が使える水・土壌"
+    },
+    "legacy-wheat-0-1": {
+      "title": "小麦の既存解説の原典",
+      "url": "https://www.gov.mb.ca/agriculture/crops/crop-management/winter-wheat.html",
+      "year": null,
+      "usedFor": "育つ条件：生育期間と、根が使える水・土壌"
+    },
+    "legacy-wheat-1-0": {
+      "title": "小麦の既存解説の原典",
+      "url": "https://www.gov.mb.ca/agriculture/crops/crop-management/spring-wheat.html",
+      "year": null,
+      "usedFor": "生産と用途：面積だけでは量も品質も決まらない"
+    },
+    "legacy-wheat-1-1": {
+      "title": "小麦の既存解説の原典",
+      "url": "https://www.grainscanada.gc.ca/en/grain-quality/grain-grading/wheat-classes.html",
+      "year": null,
+      "usedFor": "生産と用途：面積だけでは量も品質も決まらない"
+    },
+    "legacy-wheat-2-0": {
+      "title": "小麦の既存解説の原典",
+      "url": "https://tc.canada.ca/en/corporate-services/transparency/corporate-management-reporting/transportation-canada-annual-reports/transportation-canada-2024/role-canada-s-transportation-network",
+      "year": null,
+      "usedFor": "輸送：内陸の穀物を鉄道と港で市場へつなぐ"
+    },
+    "legacy-beef-0-0": {
+      "title": "肉牛の既存解説の原典",
+      "url": "https://www.gov.mb.ca/agriculture/crops/crop-management/forages/animal-unit-months-stocking-rate-and-carrying-capacity.html",
+      "year": null,
+      "usedFor": "放牧管理：何頭を、どれだけの期間置くか"
+    },
+    "legacy-beef-1-0": {
+      "title": "肉牛の既存解説の原典",
+      "url": "https://www.gov.mb.ca/agriculture/livestock/beef/feeding-cattle-during-manitoba-winters.html",
+      "year": null,
+      "usedFor": "冬：生育が鈍る時期を貯蔵飼料と管理でつなぐ"
+    },
+    "legacy-beef-2-0": {
+      "title": "肉牛の既存解説の原典",
+      "url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210013001",
+      "year": null,
+      "usedFor": "繁殖・育成・肥育：すべてが同じ餌ではない"
+    },
+    "legacy-beef-2-1": {
+      "title": "肉牛の既存解説の原典",
+      "url": "https://www.gov.mb.ca/agriculture/livestock/beef/rations-for-finishing-beef-cattle.html",
+      "year": null,
+      "usedFor": "繁殖・育成・肥育：すべてが同じ餌ではない"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "sourceUrl": "https://agriculture.canada.ca/en/sector/animal-industry/poultry-and-egg-market-information/industry-profile/provincial-poultry-facts",
+  "retrievedDate": "2026-10-07",
+  "sourceTable": "2021 Provincial poultry facts",
+  "sourceRow": "Chicken producers",
+  "publisher": "Agriculture and Agri-Food Canada",
+  "underlyingSource": "Chicken Farmers of Canada (CFC), footnote 2",
+  "method": "Manual factual transcription of public official rendered HTML table inspected with web tool; not raw HTML acquisition. Numeric values retain exact published precision. Added geo_code is a join key, not a source column.",
+  "year": 2021,
+  "unit": "producers",
+  "grain": "province",
+  "rowCount": 11,
+  "provinceCount": 10,
+  "provinceSum": 2823,
+  "publishedCanadaTotal": 2823,
+  "territories": "No separate Yukon, Northwest Territories, Nunavut columns published; represent as not-covered, do not derive zero from agreement of totals. The source footnote says Canada totals include all provinces and territories.",
+  "interpretation": "CFC chicken producer counts; not bird inventory, output weight, number of all Census farms, or CCS distribution.",
+  "sha256": "e99a6d3286d6e948b8481cf2a2a1d85642c836ccf02c19b29f3e2b1cecedff8d"
+}

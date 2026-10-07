@@ -1,5 +1,5 @@
 import climate from '../data/atlas/canada/climate.json';
-export type CanadaCensusProductId = 'canola' | 'wheat' | 'beef' | 'pasture' | 'hay';
+export type CanadaCensusProductId = 'canola' | 'wheat' | 'beef' | 'pasture' | 'hay' | 'soybeans' | 'corn' | 'lentils' | 'potatoes' | 'dairy';
 export type CanadaCensusBounds = [number, number, number, number];
 export interface CanadaCensusMapState { selected: string | null; only: boolean; bounds: CanadaCensusBounds | null; }
 export interface CanadaCensusComponent { id: string; variable: string; value: number | null; quality: string | null; }

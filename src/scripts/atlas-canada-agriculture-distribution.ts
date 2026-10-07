@@ -1,5 +1,7 @@
+import {combineCanadaAgricultureSources} from '../lib/atlas-canada-agriculture-supplement';
 import {projectCanadaMap} from '../lib/atlas-canada-map-presentation';
-import {canadaCensusRings,type CanadaCensusGeometry,type CanadaCensusCell,type CanadaCensusProductId} from '../lib/atlas-canada-census-map';
+import {canadaCensusRings,type CanadaCensusGeometry,type CanadaCensusCell} from '../lib/atlas-canada-census-map';
+import {canadaAgricultureProducts as products,canadaAgricultureSymbolOffset,type CanadaAgricultureIndicatorId} from '../lib/atlas-canada-agriculture-products';
 
 /** The broad view uses official province values; detail retains every source CCS cell. */
 export async function initCanadaAgricultureDistribution(root:HTMLElement){
@@ -7,13 +9,18 @@ export async function initCanadaAgricultureDistribution(root:HTMLElement){
  try{
 const began = performance.now();
 const config=JSON.parse(root.querySelector('[data-canada-agri-overview-config]')!.textContent!);
-const [dataset,geometry]=await Promise.all([config.dataUrl,config.geometryUrl].map(async url=>{const response=await fetch(url);if(!response.ok)throw new Error('Canada agriculture data '+response.status);return response.json();}));
+const [census,geometry,supplement]=await Promise.all([config.dataUrl,config.geometryUrl,config.supplementUrl].map(async url=>{const response=await fetch(url);if(!response.ok)throw new Error('Canada agriculture data '+response.status);return response.json();}));
+const dataset=combineCanadaAgricultureSources(census,supplement);
 const model={...config,dataset,geometry};
 const $=<T extends HTMLElement=HTMLElement>(id:string)=>root.querySelector<T>('#canada-agri-'+id)!;
 const { anchors, ids, provinceNames } = model, canvas = $<HTMLCanvasElement>("map"), frame = $("map-frame");
 const context2d=canvas.getContext("2d");if(!context2d)throw new Error("Canvas2D is unavailable");const ctx=context2d;
-const colors = { canola: "#b38c16", wheat: "#287ba0", hay: "#387c5b", beef: "#b35354", pasture: "#79643d" };
-const names = { canola: "カノーラ", wheat: "小麦", hay: "干草・栽培牧草（アルファルファ＋その他）", beef: "肉用母牛", pasture: "放牧地" };
+const colors = Object.fromEntries(ids.map(id=>[id,products[id].color]));
+const names = Object.fromEntries(ids.map(id=>[id,products[id].name]));
+const ccsIds=ids.filter(id=>dataset.products[id].resolution==='ccs'),provinceOnlyIds=ids.filter(id=>dataset.products[id].resolution==='province');
+const symbolRows=Math.ceil(ids.length/(ids.length<=5?ids.length:4));
+const markerHalfWidth=ids.length<=5?(ids.length-1)*5.5+6:22;
+const markerHalfHeight=(symbolRows-1)*5.5+6;
 const abbreviations = { 10: "NL", 11: "PE", 12: "NS", 13: "NB", 24: "QC", 35: "ON", 46: "MB", 47: "SK", 48: "AB", 59: "BC", 60: "YT", 61: "NT", 62: "NU" };
 const allIds = Object.keys(dataset.records).sort((a, b) => dataset.records[a].provinceCode.localeCompare(dataset.records[b].provinceCode) || dataset.records[a].name.localeCompare(dataset.records[b].name));
 const esc = (v: unknown) => String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
@@ -45,30 +52,34 @@ const provinceMax=Object.fromEntries(ids.map(id=>[id,Math.max(...dataset.provinc
 const provincePoints=model.labels.map(label=>({label,point:project(label.labelAnchor),record:dataset.provinces.find(p=>p.code===label.id)}));
 const storyNodes=model.summaries.map(story=>{
  const element=document.createElement('div');element.className='map-story map-story-'+story.id;
- const labels=story.id==='east'?['hay']:story.products;
- element.innerHTML='<strong>'+esc(story.id==='prairie'?'プレーリー':story.id==='west'?'西部 AB・SK':'東部 ON・QC')+'</strong>'+labels.map(id=>'<span style="color:'+colors[id]+'"><i class="shape '+id+'" style="--color:'+colors[id]+'" aria-hidden="true"></i>'+esc(id==='hay'?'干草':names[id])+' <b>'+story.values[id].nationalShare.toFixed(1)+'%</b></span>').join('');
+ const labels=story.id==='east'?['corn','dairy']:story.products;
+ element.innerHTML='<strong>'+esc(story.id==='prairie'?'プレーリー':story.id==='west'?'西部 AB・SK':'東部 ON・QC')+'</strong>'+labels.map(id=>'<span style="color:'+colors[id]+'"><i class="shape '+products[id].shape+'" style="--color:'+colors[id]+'" aria-hidden="true"></i>'+esc(id==='hay'?'干草':id==='beef'?'肉用母牛':id==='dairy'?'乳牛':names[id])+' <b>'+story.values[id].nationalShare.toFixed(1)+'%</b></span>').join('');
  $('map-stories').append(element);
  const label=model.labels.find(l=>l.id===story.anchorProvince);
  return {story,element,point:project(label.labelAnchor)};
 });
 let displayTargets=[],provinceLayout=new Map();
-function drawPresence(id: CanadaCensusProductId,cell: CanadaCensusCell,x: number,y: number,{strength=1,mixed=false}={}){
+function drawPresence(id: CanadaAgricultureIndicatorId,cell: CanadaCensusCell,x: number,y: number,{strength=1,mixed=false}={}){
  ctx.globalAlpha=opacity(id);const r=3.5;
  if(cell.status==='published'&&cell.value>0){symbol(id,x,y,r);ctx.fillStyle=colors[id];ctx.globalAlpha*=strength;ctx.fill();ctx.globalAlpha=opacity(id);ctx.strokeStyle=colors[id];ctx.lineWidth=.5;ctx.stroke();}
  else if(cell.status==='published'){symbol(id,x,y,r);ctx.strokeStyle=colors[id];ctx.lineWidth=.8;ctx.stroke();}
  else{ctx.strokeStyle='#718389';ctx.lineWidth=1;ctx.beginPath();if(cell.status==='quality-f'){ctx.moveTo(x-2.5,y-2.5);ctx.lineTo(x+2.5,y+2.5);ctx.moveTo(x-2.5,y+2.5);ctx.lineTo(x+2.5,y-2.5);}else{ctx.moveTo(x-3,y);ctx.lineTo(x+3,y);}ctx.stroke();}
  if(mixed){ctx.globalAlpha=opacity(id);ctx.fillStyle='#718389';ctx.fillRect(x+4,y-4,1.5,1.5);}
 }
-function drawProvinceOverview(){
- const counts={},boxes=[...storyBoxes,...controlBoxes()];displayTargets=[];provinceLayout=new Map();
+function drawProvinceOverview(renderIds=ids,keepDetail=false){
+ const counts={},boxes=[...storyBoxes,...controlBoxes()];if(!keepDetail){displayTargets=[];provinceLayout=new Map();}
  for(const {label,point,record} of provincePoints){const anchor=screen(point);if(!screenContains(anchor))continue;let p=anchor;
   const offsets=[[0,0],[0,30],[0,-30],[58,0],[-58,0],[0,60],[0,-60],[58,30],[-58,-30]];for(let r=90;r<=210;r+=30)for(const [dx,dy] of [[0,r],[0,-r],[r,0],[-r,0],[r,r],[-r,-r],[r,-r],[-r,r]])offsets.push([dx,dy]);
-  for(const [dx,dy] of offsets){const candidate=[Math.max(29,Math.min(size.width-29,anchor[0]+dx)),Math.max(20,Math.min(size.height-16,anchor[1]+dy))],box=[candidate[0]-28,candidate[1]+3,candidate[0]+28,candidate[1]+14];if(!boxes.some(b=>box[0]<b[2]&&box[2]>b[0]&&box[1]<b[3]&&box[3]>b[1])){p=candidate;boxes.push(box);break;}}
-  provinceLayout.set(label.id,p);ctx.globalAlpha=.6;ctx.strokeStyle='#769097';ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(...anchor);ctx.lineTo(...p);ctx.stroke();counts[label.id]=ids.slice();
-  for(const [index,id] of ids.entries()){const cell=record.cells[id];drawPresence(id,cell,p[0]+(index-2)*10,p[1]+8,{strength:cell.value>0?.22+.78*cell.value/provinceMax[id]:1});}
+  // Province symbols reserve their entire grid before labels; search the remaining
+  // frame when nearby positions are occupied by the three geographic readings.
+  const remaining=[];for(let y=markerHalfHeight+20;y<=size.height-markerHalfHeight-12;y+=10)for(let x=markerHalfWidth+4;x<=size.width-markerHalfWidth-4;x+=10)remaining.push([x-anchor[0],y-anchor[1]]);
+  remaining.sort((a,b)=>Math.hypot(...a)-Math.hypot(...b));offsets.push(...remaining);
+  for(const [dx,dy] of offsets){const candidate=[Math.max(markerHalfWidth+4,Math.min(size.width-markerHalfWidth-4,anchor[0]+dx)),Math.max(markerHalfHeight+20,Math.min(size.height-markerHalfHeight-12,anchor[1]+dy))],box=[candidate[0]-markerHalfWidth,candidate[1]-markerHalfHeight-16,candidate[0]+markerHalfWidth,candidate[1]+markerHalfHeight+10];if(!boxes.some(b=>box[0]<b[2]&&box[2]>b[0]&&box[1]<b[3]&&box[3]>b[1])){p=candidate;boxes.push(box);break;}}
+  provinceLayout.set(label.id,p);ctx.globalAlpha=.6;ctx.strokeStyle='#769097';ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(...anchor);ctx.lineTo(...p);ctx.stroke();counts[label.id]=renderIds.slice();
+  for(const [index,id] of renderIds.entries()){const cell=record.cells[id];const [dx,dy]=canadaAgricultureSymbolOffset(index,renderIds.length);drawPresence(id,cell,p[0]+dx,p[1]+8+dy,{strength:cell.value>0?.22+.78*cell.value/provinceMax[id]:1});}
   displayTargets.push({point:p,province:label.id,members:features.filter(f=>dataset.records[f.id].provinceCode===label.id).map(f=>f.id)});
  }
- return {granularity:'official-province',provinceIndicators:counts,visibleSymbols:Object.keys(counts).length*5,retainedCcs:features.length};
+ return {granularity:'official-province',provinceIndicators:counts,visibleSymbols:Object.keys(counts).length*renderIds.length,retainedCcs:features.length};
 }
 function makeDetailGroups(){
  const cells=new Map(),columns=Math.max(1,Math.floor(size.width/56)),rows=Math.max(1,Math.floor(size.height/56)),cw=size.width/columns,ch=size.height/rows;
@@ -80,14 +91,14 @@ function drawCcsDetails(){
  for(const group of groups){
   const {point:p,members}=group;
   if(members.length===1){ctx.globalAlpha=.7;ctx.strokeStyle='#769097';ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(...group.points[0]);ctx.lineTo(...p);ctx.stroke();ctx.beginPath();ctx.arc(...group.points[0],1.5,0,Math.PI*2);ctx.fillStyle='#4b6d77';ctx.fill();}
-  for(const [index,id] of ids.entries()){
+  for(const [index,id] of ccsIds.entries()){
    const cells=members.map(ccs=>dataset.records[ccs].cells[id]),positive=cells.find(c=>c.status==='published'&&c.value>0),allZero=cells.every(c=>c.status==='published'&&c.value===0);
    const representative=positive??(allZero?cells[0]:cells.find(c=>c.status==='quality-f')??cells.find(c=>c.status==='not-covered')??cells[0]);
-   drawPresence(id,representative,p[0]+(index-2)*9,p[1],{mixed:!!positive&&cells.some(c=>c.status!=='published')});
+   const [dx,dy]=canadaAgricultureSymbolOffset(index,ccsIds.length);drawPresence(id,representative,p[0]+dx,p[1]+dy,{mixed:!!positive&&cells.some(c=>c.status!=='published')});
   }
-  if(members.length>1){ctx.globalAlpha=1;ctx.font='14px sans-serif';ctx.textAlign='center';ctx.strokeStyle='#fffef5';ctx.lineWidth=3;ctx.strokeText(members.length+' CCS',p[0],p[1]+19);ctx.fillStyle='#385564';ctx.fillText(members.length+' CCS',p[0],p[1]+19);}
+  if(members.length>1){ctx.globalAlpha=1;ctx.font='14px sans-serif';ctx.textAlign='center';ctx.strokeStyle='#fffef5';ctx.lineWidth=3;ctx.strokeText(members.length+' CCS',p[0],p[1]+markerHalfHeight+16);ctx.fillStyle='#385564';ctx.fillText(members.length+' CCS',p[0],p[1]+markerHalfHeight+16);}
  }
- return {granularity:'ccs-display-cells',cellPixels:56,groups:groups.map(g=>({members:g.members,point:g.point})),visibleSymbols:groups.length*5,visibleCcs:groups.reduce((n,g)=>n+g.members.length,0),retainedCcs:features.length};
+ return {granularity:'ccs-display-cells',cellPixels:56,groups:groups.map(g=>({members:g.members,point:g.point})),visibleSymbols:groups.length*ccsIds.length,visibleCcs:groups.reduce((n,g)=>n+g.members.length,0),retainedCcs:features.length};
 }
 let storyBoxes:number[][]=[];
 function overlaps(a:number[],b:number[]){return a[0]<b[2]&&a[2]>b[0]&&a[1]<b[3]&&a[3]>b[1];}
@@ -97,17 +108,22 @@ function controlBoxes(){
 }
 function placeStories(overview: boolean){
  storyBoxes=[];
+ const inline=size.width<560,container=$('map-stories'),parent=inline?$('story-dock'):frame;
+ if(container.parentElement!==parent)parent.append(container);
+ container.classList.toggle('is-inline',inline);
+ if(inline){for(const {element}of storyNodes){element.hidden=!overview;element.style.removeProperty('width');element.style.removeProperty('left');element.style.removeProperty('top');}return;}
+
  const obstacles=controlBoxes();
- const points=provincePoints.filter(p=>Number(p.label.id)<60).map(p=>screen(p.point)).filter(screenContains).map(p=>[p[0]-29,p[1]+2,p[0]+29,p[1]+15]);
+ const points=provincePoints.filter(p=>Number(p.label.id)<60).map(p=>screen(p.point)).filter(screenContains).map(p=>[p[0]-markerHalfWidth,p[1]-markerHalfHeight-16,p[0]+markerHalfWidth,p[1]+markerHalfHeight+10]);
  for(const {story,element,point} of [...storyNodes].sort((a,b)=>['west','prairie','east'].indexOf(a.story.id)-['west','prairie','east'].indexOf(b.story.id))){
   const p=screen(point);element.hidden=!overview||!screenContains(p);if(element.hidden)continue;
-  const width=Math.min(190,Math.max(128,size.width*.28));element.style.width=width+'px';
+  const width=Math.min(190,Math.max(170,size.width*.28));element.style.width=width+'px';
   const height=element.getBoundingClientRect().height;
   const preferred=story.id==='west'?[8,64]:story.id==='prairie'?[Math.max(width+16,size.width*.36),64]:[size.width-width-76,size.height*.32];
   const candidates=[preferred];
   if(story.id==='east')candidates.push([size.width-width-76,5]);
   for(let y=58;y+height<size.height-32;y+=20)for(let x=8;x+width<size.width-8;x+=20)candidates.push([x,y]);
-  const candidate=candidates.find(([x,y])=>x>=4&&y>=4&&x+width<=size.width-4&&y+height<=size.height-4&&![...obstacles,...storyBoxes,...points].some(box=>overlaps([x-3,y-3,x+width+3,y+height+3],box)));
+  const candidate=candidates.find(([x,y])=>x>=4&&y>=4&&x+width<=size.width-4&&y+height<=size.height-4&&![...obstacles,...storyBoxes].some(box=>overlaps([x-3,y-3,x+width+3,y+height+3],box)));
   if(!candidate){element.hidden=true;continue;}
   const [x,y]=candidate;storyBoxes.push([x-3,y-3,x+width+3,y+height+3]);element.style.left=x+'px';element.style.top=y+'px';
   ctx.globalAlpha=.85;ctx.strokeStyle=colors[story.products[0]];ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x+width/2,y+height);ctx.lineTo(...p);ctx.stroke();ctx.beginPath();ctx.arc(...p,2,0,Math.PI*2);ctx.fillStyle=colors[story.products[0]];ctx.fill();
@@ -141,13 +157,13 @@ function world(p: readonly number[]): [number,number] {
 function screenContains(p: readonly number[]) {
   return p[0] >= 0 && p[0] <= size.width && p[1] >= 0 && p[1] <= size.height;
 }
-const opacity = (id) => state.metric && state.metric !== id ? id === "beef" && ["canola", "wheat", "hay"].includes(state.metric) ? 0.14 : 0.58 : 1;
-function symbol(id: CanadaCensusProductId, x: number, y: number, r: number) {
+const opacity = (id) => state.metric && state.metric !== id ? products[id].kind === 'livestock' && products[state.metric].kind === 'crop' ? 0.14 : 0.58 : 1;
+function symbol(id: CanadaAgricultureIndicatorId, x: number, y: number, r: number) {
   ctx.beginPath();
-  if (id === "canola") ctx.arc(x, y, r, 0, Math.PI * 2);
-  else if (id === "wheat") ctx.rect(x - r, y - r, r * 2, r * 2);
+  if (products[id].shape === 'circle') ctx.arc(x, y, r, 0, Math.PI * 2);
+  else if (products[id].shape === 'square') ctx.rect(x - r, y - r, r * 2, r * 2);
   else {
-    const n = id === "hay" ? 3 : id === "beef" ? 4 : 5;
+    const n = products[id].shape === 'triangle' ? 3 : products[id].shape === 'diamond' ? 4 : 5;
     for (let i = 0; i < n; i++) {
       const angle = -Math.PI / 2 + i * 2 * Math.PI / n, px = x + Math.cos(angle) * r, py = y + Math.sin(angle) * r;
       i ? ctx.lineTo(px, py) : ctx.moveTo(px, py);
@@ -202,14 +218,15 @@ function draw() {
  ctx.save();ctx.translate(w/2,h/2);ctx.scale(scale*state.camera[2],scale*state.camera[2]);ctx.translate(-state.camera[0],-state.camera[1]);
  ctx.fillStyle='#efeee5';ctx.strokeStyle='#94aaaa';ctx.lineWidth=.55/(scale*state.camera[2]);for(const p of contextPaths){ctx.fill(p,'evenodd');ctx.stroke(p);}
  const overview=state.camera[2]<3.5;
- canvas.setAttribute('aria-label',overview?'2021年、州・準州公表値による5指標の概観地図':'2021年、農場本拠地域CCSの5指標を同時表示する地図');
+ canvas.setAttribute('aria-label',overview?'年・単位を凡例に記載した主要品目の州別概観地図':'2021年CCS指標と独立した州統計を読む地図');
  ctx.fillStyle='#f4f2e8';ctx.strokeStyle=overview?'#c6d0ca':'#a5b9b6';ctx.lineWidth=(overview?.17:.5)/(scale*state.camera[2]);for(const f of features){ctx.fill(f.path,'evenodd');ctx.stroke(f.path);}ctx.restore();
  placeStories(overview);
  const detail=overview?drawProvinceOverview():drawCcsDetails();
+ if(!overview&&provinceOnlyIds.length){const provincial=drawProvinceOverview(provinceOnlyIds,true);detail.provinceOnlyIndicators=provincial.provinceIndicators;detail.visibleSymbols+=provincial.visibleSymbols;}
  if(state.ccs){const f=featureById.get(state.ccs);ctx.save();ctx.translate(w/2,h/2);ctx.scale(scale*state.camera[2],scale*state.camera[2]);ctx.translate(-state.camera[0],-state.camera[1]);ctx.strokeStyle='#234d68';ctx.lineWidth=3/(scale*state.camera[2]);ctx.stroke(f.path);ctx.restore();}
  placeLabels();ctx.globalAlpha=1;
- $('display-meaning').textContent=overview?'州・準州の公式公表値。記号の大きさは共通、濃淡は同品目の最大州との比較。注記の％は各指標の全国公表値に対する割合。':'約56pxの表示セルでCCS記号を束ねています。色は公表正値がある指標、数字はCCS地域数。値・品質は下の一覧で保持。';
- lastStats={...detail,metrics:ids.slice(),opacities:Object.fromEntries(ids.map(id=>[id,opacity(id)])),retainedValues:features.length*ids.length,drawMs:performance.now()-started,backingStore:{width:canvas.width,height:canvas.height,dpr},selected:state.ccs,view:Math.abs(state.camera[2]-wholeCamera[2])<.001?'whole-canada':'south-or-detail'};
+ $('display-meaning').textContent=overview?'州・準州の公式公表値。記号の大きさは共通、濃淡は同品目の最大州との比較。注記の％は各指標の全国公表値に対する割合。':'約56pxの表示セルでCCS記号を束ねます。数字はCCS地域数。豚・鶏は州の記号だけを保持し、CCS値は作りません。';
+ lastStats={...detail,metrics:ids.slice(),opacities:Object.fromEntries(ids.map(id=>[id,opacity(id)])),retainedValues:features.length*ids.length,sourceCcsCells:features.length*ccsIds.length,provinceOnlyMetrics:provinceOnlyIds.slice(),drawMs:performance.now()-started,backingStore:{width:canvas.width,height:canvas.height,dpr},selected:state.ccs,view:Math.abs(state.camera[2]-wholeCamera[2])<.001?'whole-canada':'south-or-detail'};
  canvas.dataset.ready='true';
  root.querySelector<HTMLElement>('[data-overview-fallback]')!.hidden=true;
 }
@@ -231,31 +248,45 @@ function resize() {
 function valueText(cell: CanadaCensusCell, unit: string) {
   if (cell.status === "not-covered") return "対象外・未収録";
   if (cell.status === "quality-f") return "非公表 F";
-  return fmt(cell.value) + " " + unit;
+  return fmt(cell.value) + " " + (cell.unit??unit);
 }
 function qualityText(cell: CanadaCensusCell) {
   if (cell.status === "not-covered") return "ゼロではありません";
   if (cell.quality) return "品質 " + cell.quality + (cell.quality === "E" ? "・注意して利用" : "");
+  if(cell.qualityNote)return cell.qualityNote;
   const grades = cell.components.map((c) => c.quality ?? "未収録");
   return "成分の品質 " + grades.join("・") + (grades.includes("E") ? "・注意して利用" : "");
 }
+const nationalReading=$('distribution-overview').innerHTML,nationalTitle=$('reading-title').textContent,nationalIntro=$('reading-intro').textContent;
 function renderReading() {
-  $('reading-eyebrow').textContent='2021年・州別公表値';
-  $('reading-title').textContent='プレーリーと東部を読む';
-  const prairie=model.summaries.find(s=>s.id==='prairie'),west=model.summaries.find(s=>s.id==='west'),east=model.summaries.find(s=>s.id==='east'),percent=(s,p)=>s.values[p].nationalShare.toFixed(1)+'％';
-  $('distribution-overview').innerHTML='<section class="distribution-section"><h3>プレーリーの穀物・カノーラ</h3><p>アルバータ・サスカチュワン・マニトバに、カノーラ面積の<strong>'+percent(prairie,'canola')+'</strong>、小麦面積の<strong>'+percent(prairie,'wheat')+'</strong>が集まります。</p></section><section class="distribution-section"><h3>西部の母牛・放牧地</h3><p>アルバータ・サスカチュワンで、肉用母牛頭数の<strong>'+percent(west,'beef')+'</strong>、放牧地面積の<strong>'+percent(west,'pasture')+'</strong>を占めます。</p></section><section class="distribution-section"><h3>東部にも干草が広がる</h3><p>オンタリオ・ケベックには、干草・栽培牧草面積の<strong>'+percent(east,'hay')+'</strong>、小麦面積の<strong>'+percent(east,'wheat')+'</strong>があります。干草は東部だけの指標ではなく、西部にも広く分布します。</p></section>';
+  const profile=state.metric?config.readings.products[state.metric]:null;
+  $('reading-eyebrow').textContent=state.metric?(dataset.products[state.metric].referenceLabel??'2021年・農業センサス'):'主要品目の産地と用途';
+  $('reading-title').textContent=profile?profile.label:nationalTitle;
+  if(profile){
+    const references=profile.sourceIds.map((id,index)=>({id,index:index+1,...config.readings.sources[id]}));
+    const links=ids=>ids.map(id=>{const source=references.find(s=>s.id===id);return '<a href="'+esc(source.url)+'" title="'+esc(source.title)+'">資料'+source.index+'</a>';}).join('・');
+    const paragraphs=profile.paragraphs.map((paragraph,index)=>'<section class="distribution-section"><h3>'+esc(profile.headings[index])+'</h3><p>'+esc(paragraph)+'<span class="reading-source-links">'+links(profile.paragraphSourceIds[index])+'</span></p></section>').join('');
+    const focus='<div class="reading-actions">'+profile.focusProvinces.map(code=>'<button data-agri-province-focus="'+esc(code)+'">'+esc(provinceNames[code])+'周辺へ</button>').join('')+(profile.focusCcs??[]).map(place=>'<button data-agri-ccs-focus="'+place.id+'">'+esc(place.label)+'へ</button>').join('')+'</div>';
+    const related='<div class="reading-actions">'+profile.relatedProducts.map(id=>'<button data-agri-reading-product="'+id+'">'+esc(names[id])+'を読む</button>').join('')+'</div>';
+    const legacy=profile.legacy?'<p><a '+(profile.legacy==='canola'?'data-canola-select-item="canola" ':'')+'href="'+esc(config.legacyUrls[profile.legacy])+'">原図・年次比較と詳しい解説</a></p>':'';
+    $('distribution-overview').innerHTML='<p class="key-sentence"><strong>'+esc(profile.keySentence)+'</strong></p>'+focus+paragraphs+related+legacy+'<details><summary>出典・年・単位</summary><p>'+esc(profile.metricNote)+'</p>'+references.map(source=>'<p><a href="'+esc(source.url)+'">資料'+source.index+'：'+esc(source.title)+'</a></p>').join('')+'</details>';
+    $('reading-intro').textContent=profile.metricNote;
+  }else{
+    $('distribution-overview').innerHTML=nationalReading;
+    $('reading-intro').textContent=nationalIntro;
+  }
   const selectedRecord=state.ccs?dataset.records[state.ccs]:null,selection=$('selection-reading');selection.hidden=!selectedRecord;
-  if(selectedRecord){selection.innerHTML='<strong>選択CCS：'+esc(selectedRecord.name)+'</strong><br>'+esc(provinceNames[selectedRecord.provinceCode])+'／農場本拠地域の申告値。<a href="#canada-agri-statistics">下の5指標・品質を見る</a>';$<HTMLDetailsElement>('statistics-detail').open=true;}
+  if(selectedRecord){selection.innerHTML='<strong>選択CCS：'+esc(selectedRecord.name)+'</strong><br>'+esc(provinceNames[selectedRecord.provinceCode])+'／農場本拠地域の申告値。<a href="#canada-agri-statistics">下の指標・品質を見る</a>';$<HTMLDetailsElement>('statistics-detail').open=true;}
 
   const record = state.ccs ? dataset.records[state.ccs] : null, cells = record?.cells ?? Object.fromEntries(ids.map((id) => [id, dataset.products[id].national]));
   $<HTMLSelectElement>("region").value = state.ccs ?? "";
   $<HTMLButtonElement>("focus-region").disabled = !state.ccs;
-  $("table-caption").textContent = record ? "CCS " + record.uid + "／地域別申告値" : "全国の公表値（準州を含まない）";
-  $("values").innerHTML = ids.map((id) => '<tr data-value="' + id + '"><th scope="row"><span class="metric-name"><i class="shape ' + id + '" style="--color:' + colors[id] + '" aria-hidden="true"></i>' + esc(names[id]) + "</span></th><td>" + esc(valueText(cells[id], dataset.products[id].unit)) + "<small>" + esc(qualityText(cells[id])) + "</small></td></tr>").join("");
+  $("table-caption").textContent = record ? "CCS " + record.uid + "／地域別申告値" : "全国の公表値（各指標の年・対象範囲は定義欄）";
+  $("values").innerHTML = ids.map((id) => '<tr data-value="' + id + '"><th scope="row"><span class="metric-name"><i class="shape ' + products[id].shape + '" style="--color:' + colors[id] + '" aria-hidden="true"></i>' + esc(id==='beef'?'肉用母牛':id==='dairy'?'乳牛':id==='chicken'?'鶏肉生産者':names[id]) + "</span></th><td>" + esc(valueText(cells[id], dataset.products[id].unit)) + "<small>" + esc(qualityText(cells[id])) + "</small></td></tr>").join("");
   $("quality-note").textContent = record ? "公表0・非公表F・対象外/未収録を区別しています。合算指標は成分の品質を保持し、合算値に新たな品質等級を付けません。" : "全国値は原表の公表値です。地域値を足して全国値に置き換えません。";
   $("components").innerHTML = ids.map((id) => "<h3>" + esc(names[id]) + "</h3>" + cells[id].components.map((c) => '<p class="component">' + esc(c.variable) + "：" + (c.value === null ? c.quality==='F'?"非公表 F":"未収録" : fmt(c.value) + " " + dataset.products[id].unit) + "／品質 " + esc(c.quality ?? "未収録") + "</p>").join("")).join("");
   for (const button of root.querySelectorAll("[data-metric]")) button.setAttribute("aria-pressed", String((button.dataset.metric || null) === state.metric));
-  const focused = state.metric ? names[state.metric] + "を強調、他の分布も表示" : "5指標を同時表示";
+  const focused = state.metric ? names[state.metric] + "を強調、他の分布も表示" : ids.length+"指標を同時表示";
   $("map-status").textContent = focused + "。1,757 CCSを保持。" + (record ? record.name + "を選択中。" : "地域未選択。") + " 地図はドラッグ・矢印で移動、＋−で拡大縮小できます。";
 }
 function renderList() {
@@ -264,7 +295,7 @@ function renderList() {
   const visible = matches.slice(pageIndex * 12, pageIndex * 12 + 12);
   $("rows").innerHTML = visible.map((id) => {
     const r = dataset.records[id];
-    return "<tr" + (state.ccs === id ? ' style="background:#e5ede5"' : "") + '><td><button data-list-ccs="' + id + '">' + esc(r.name) + "</button><br>" + esc(provinceNames[r.provinceCode]) + " \xB7 " + esc(r.uid) + "</td>" + ids.map((p) => "<td>" + esc(r.cells[p].status === "published" ? fmt(r.cells[p].value) : r.cells[p].status === "quality-f" ? "非公表 F" : "未収録") + "</td>").join("") + "</tr>";
+    return "<tr" + (state.ccs === id ? ' style="background:#e5ede5"' : "") + '><td><button data-list-ccs="' + id + '">' + esc(r.name) + "</button><br>" + esc(provinceNames[r.provinceCode]) + " \xB7 " + esc(r.uid) + "</td>" + ids.filter(p=>dataset.products[p].resolution==='ccs').map((p) => "<td>" + esc(r.cells[p].status === "published" ? fmt(r.cells[p].value) : r.cells[p].status === "quality-f" ? "非公表 F" : "未収録") + "</td>").join("") + "</tr>";
   }).join("");
   $("page-status").textContent = (visible.length ? pageIndex * 12 + 1 : 0) + "–" + (pageIndex * 12 + visible.length) + " / " + matches.length + "地域（全1,757）";
   $<HTMLButtonElement>("previous").disabled = pageIndex === 0;
@@ -297,14 +328,21 @@ for (const [code, name] of Object.entries(provinceNames)) {
   }
   $("region").append(group);
 }
-$("scales").innerHTML=ids.map(id=>{const c=model.counts[id];return '<p class="scale-row"><strong>'+esc(names[id])+'</strong>：公表 '+fmt(c.published)+'・F '+fmt(c['quality-f'])+'・未収録 '+c['not-covered']+'地域</p>';}).join('');
+$("scales").innerHTML=ids.map(id=>{const c=model.counts[id];if(dataset.products[id].resolution==='province')return '<p class="scale-row"><strong>'+esc(names[id])+'</strong>：州別公表 '+dataset.provinces.filter(p=>p.cells[id].status==='published').length+'州。CCS値は未収録です。</p>';return '<p class="scale-row"><strong>'+esc(names[id])+'</strong>：CCSの公表 '+fmt(c.published)+'・F '+fmt(c['quality-f'])+'・未収録 '+c['not-covered']+'地域</p>';}).join('');
 $("definitions").innerHTML = ids.map((id) => {
   const p = dataset.products[id];
-  return "<section><h3>" + esc(p.label) + '</h3><p class="definition">' + esc(p.definition) + " " + esc(p.notes) + '</p><p class="source-note"><a href="' + esc(p.sourceTableUrl) + '" target="_blank" rel="noopener">StatCan ' + esc(p.sourceTableId) + " 原表</a></p></section>";
+  return "<section><h3>" + esc(p.label) + '</h3><p class="definition">' + esc(p.definition) + " " + esc(p.notes) + '</p><p class="source-note">' + esc(p.referenceLabel) + '／地図：' + esc(p.unitLabel) + '</p><p class="source-note"><a href="' + esc(p.sourceTableUrl) + '" target="_blank" rel="noopener">' + esc(p.sourceName) + ' ' + esc(p.sourceTableId) + " 原表</a></p></section>";
 }).join("");
-$("sources").innerHTML = '<p class="source-note">' + esc(dataset.source.geographicMeaning) + " " + esc(dataset.source.randomTabularAdjustment) + " " + esc(dataset.source.nationalCoverage) + '</p><p class="source-note">境界は2021年の公式CCS。原資料で5km一般化された1,757地域をDGUIDで結合しています。表示用の基点は各CCS内で確認し、重なりを避けた記号は基点と線で結びます。農場の実位置として解釈しません。</p><p class="source-note"><a href="' + esc(dataset.source.geographicRuleUrl) + '" target="_blank" rel="noopener">地域集計の定義</a> ／ <a href="' + esc(dataset.source.qualityUrl) + '" target="_blank" rel="noopener">品質等級</a> ／ <a href="' + esc(dataset.geometry.sourceUrl) + '" target="_blank" rel="noopener">境界の出典</a></p><p class="source-note">州・準州の略号：' + Object.entries(abbreviations).map(([id, code]) => code + "＝" + esc(provinceNames[id])).join("、") + '</p><p class="source-note" lang="en">' + esc(dataset.attribution) + " " + esc(dataset.geometry.attribution) + '</p><p class="source-note"><a href="' + esc(dataset.licence.url) + '" target="_blank" rel="noopener">Statistics Canada Open Licence</a> ／ <a href="' + esc(dataset.geometry.licence.url) + '" target="_blank" rel="noopener">Open Government Licence – Canada</a></p>';
-$("page-source").innerHTML = '出典：<a href="' + esc(dataset.source.url) + '" target="_blank" rel="noopener">Statistics Canada, Census of Agriculture, 2021</a>。統計参照日 ' + esc(dataset.source.referenceDate) + "、公表日 " + esc(dataset.source.releasedAt) + "、取得日 " + esc(dataset.source.accessedAt) + "。面積はha、肉用母牛は頭数。";
+$("sources").innerHTML = '<p class="source-note">' + esc(dataset.source.geographicMeaning) + " " + esc(dataset.source.randomTabularAdjustment) + " " + esc(dataset.source.nationalCoverage) + '</p><p class="source-note">境界は2021年の公式CCS。原資料で5km一般化された1,757地域をDGUIDで結合しています。表示用の基点は各CCS内で確認し、重なりを避けた記号は基点と線で結びます。農場の実位置として解釈しません。</p><p class="source-note"><a href="' + esc(dataset.source.geographicRuleUrl) + '" target="_blank" rel="noopener">地域集計の定義</a> ／ <a href="' + esc(dataset.source.qualityUrl) + '" target="_blank" rel="noopener">品質等級</a> ／ <a href="' + esc(dataset.geometry.sourceUrl) + '" target="_blank" rel="noopener">境界の出典</a></p><p class="source-note">州・準州の略号：' + Object.entries(abbreviations).map(([id, code]) => code + "＝" + esc(provinceNames[id])).join("、") + '</p><p class="source-note" lang="en">' + esc(dataset.attribution) + " " + esc(dataset.geometry.attribution) + '</p><p class="source-note">豚・鶏の出典：' + esc(dataset.supplement.source) + '。各指標の年・定義・公表精度を保持し、州値をCCSへ配分しません。<a href="' + esc(dataset.supplement.licence.url) + '">利用条件</a></p><p class="source-note"><a href="' + esc(dataset.licence.url) + '" target="_blank" rel="noopener">Statistics Canada Open Licence</a> ／ <a href="' + esc(dataset.geometry.licence.url) + '" target="_blank" rel="noopener">Open Government Licence – Canada</a></p>';
+$("page-source").innerHTML = '出典：<a href="' + esc(dataset.source.url) + '" target="_blank" rel="noopener">Statistics Canada, Census of Agriculture, 2021</a>。統計参照日 ' + esc(dataset.source.referenceDate) + "、公表日 " + esc(dataset.source.releasedAt) + "、取得日 " + esc(dataset.source.accessedAt) + "。作物面積はha、牛は頭数。豚の3州の全国比（2025年版）・鶏の州別生産者数（2021年）は独立AAFC資料。";
 root.querySelectorAll("[data-metric]").forEach((b) => b.addEventListener("click", () => update({ metric: b.dataset.metric || null })));
+root.addEventListener('click',event=>{
+ const target=event.target instanceof Element?event.target.closest('[data-agri-reading-product],[data-agri-province-focus],[data-agri-ccs-focus]'):null;if(!target)return;
+ if(target.hasAttribute('data-agri-reading-product')){update({metric:target.getAttribute('data-agri-reading-product')});return;}
+ const selectedCcs=target.getAttribute('data-agri-ccs-focus');if(selectedCcs&&featureById.has(selectedCcs)){update({ccs:selectedCcs});fitMembers([selectedCcs]);return;}
+ const code=target.getAttribute('data-agri-province-focus'),members=features.filter(f=>dataset.records[f.id].provinceCode===code).map(f=>f.id);
+ if(members.length){update({ccs:null});fitMembers(members);}
+});
 $("region").addEventListener("change", (e) => update({ ccs: e.target.value || null }));
 $("clear-region").addEventListener("click", () => update({ ccs: null }));
 $("reset").addEventListener("click", () => update({ metric: null, ccs: null, camera: wholeCamera.slice() }));
