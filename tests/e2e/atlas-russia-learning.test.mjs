@@ -74,6 +74,9 @@ test('four built Russia fields show real initial distributions, complete legends
   try{
    const D=win.RussiaClient.Data,state=D.createRussiaState(win.location.search,field),layer=D.getRussiaLayer(state.layer,state);
    assert.equal(state.scope,'all');assert.equal(one('place').value,'all');
+   assert.equal(one('reading-status').textContent,'ロシアの概要');
+   assert.equal(one('theme-title').textContent,D.russiaOverviewReadings[field].title);
+   assert.equal(root.querySelectorAll('[data-theme][aria-pressed="true"]').length,0);
    assert.deepEqual([...one('place').options].map(option=>option.value),['all','west','siberia','far-east']);
    assert.ok(one('primary-map').querySelector('svg'));
    if(layer.kind==='raster')assertRealImage(one('primary-map'));
@@ -87,6 +90,30 @@ test('four built Russia fields show real initial distributions, complete legends
    assert.equal(root.querySelector('[data-scope="region"]').disabled,true);
   }finally{win.happyDOM.abort();}
  }
+});
+
+test('keyboard region selection retains both farming distributions and other regions, with reload and explicit zoom',()=>{
+ const {win,root,one}=page('agriculture','?scope=all&layer=wheat&compare=cattle&view=comparison');
+ try{
+  const frame=one('original-map').querySelector('svg').getAttribute('viewBox');
+  const marker=one('original-map').querySelector('[data-region-marker][data-map-place="far-east"]');
+  marker.dispatchEvent(new win.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
+  assert.equal(one('place').value,'far-east');assert.equal(one('layer').value,'wheat');assert.equal(one('compare-layer').value,'cattle');
+  assert.equal(new URL(win.location.href).searchParams.get('scope'),'all');
+  for(const hook of ['original-map','comparison-map']){
+   assert.equal(one(hook).querySelector('svg').getAttribute('viewBox'),frame);
+   assert.equal(one(hook).querySelectorAll('[data-region-marker]').length,3);
+   assert.equal(one(hook).querySelector('[data-region-marker][aria-pressed="true"]').dataset.mapPlace,'far-east');
+  }
+  const reloaded=page('agriculture',win.location.search);
+  try{
+   assert.equal(reloaded.one('original-map').querySelector('svg').getAttribute('viewBox'),frame);
+   assert.equal(reloaded.one('place').value,'far-east');assert.equal(reloaded.one('layer').value,'wheat');
+  }finally{reloaded.win.happyDOM.abort();}
+  root.querySelector('[data-scope="region"]').click();
+  assert.notEqual(one('original-map').querySelector('svg').getAttribute('viewBox'),frame);
+  assert.equal(one('layer').value,'wheat');assert.equal(one('compare-layer').value,'cattle');
+ }finally{win.happyDOM.abort();}
 });
 
 test('west wheat and climate comparison retains the original distribution, every legend, dates, both sources and a named return',()=>{

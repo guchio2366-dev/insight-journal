@@ -92,12 +92,8 @@
  .atlas-desktop-shell:has(.oceania-learning,.oceania-overview) .atlas-news-header{padding:12px 16px}
  .atlas-desktop-shell:has(.oceania-learning,.oceania-overview) .atlas-news-header>p{display:none}
  .atlas-desktop-shell:has(.oceania-learning,.oceania-overview) .atlas-news-header h2{font-size:16px}
- .atlas-desktop-shell .oceania-learning[data-field=agriculture] .oceania-learning-normal{grid-template-columns:minmax(0,652fr) minmax(0,318fr)}
- .atlas-desktop-shell .oceania-learning[data-field=nature] .oceania-learning-normal{grid-template-columns:minmax(0,588fr) minmax(0,382fr)}
- .atlas-desktop-shell .oceania-learning[data-field=industry] .oceania-learning-normal{grid-template-columns:minmax(0,654fr) minmax(0,316fr)}
- .atlas-desktop-shell .oceania-learning[data-field=population] .oceania-learning-normal{grid-template-columns:minmax(0,605.2fr) minmax(0,364.8fr)}
- .atlas-desktop-shell .oceania-learning .oceania-learning-scene{aspect-ratio:1.65}
- .atlas-desktop-shell .oceania-learning[data-field=industry] .oceania-learning-scene{aspect-ratio:654/407}
+ .atlas-desktop-shell .oceania-learning .oceania-learning-normal{grid-template-columns:minmax(0,1.65fr) minmax(300px,1fr)}
+ .atlas-desktop-shell .oceania-learning .oceania-learning-normal .oceania-learning-scene{height:auto;min-height:300px;max-height:640px;aspect-ratio:1.55}
 }
 @media(min-width:900px){
  .atlas-desktop-shell .oceania-learning[data-field=agriculture] .oceania-workspace-subviews{position:absolute;z-index:6;width:240px;max-width:45%;height:40px;margin:10px 0 0 10px;border:1px solid #c7ccbf}
@@ -138,12 +134,10 @@
  .atlas-desktop-shell .oceania-learning[data-field=industry]{--oceania-reading-height:calc(100dvh - 290.5px)}
  .atlas-desktop-shell .oceania-learning[data-field=population]{--oceania-reading-height:calc(100dvh - 313px)}
 }
-@media(min-width:1200px){
- .atlas-desktop-shell .oceania-learning[data-field=industry] .oceania-learning-normal .oceania-learning-scene{height:620px;min-height:620px;max-height:none;aspect-ratio:auto}
-}
 
-/* Essential legend stays with the fixed message; the original flow space preserves controls. */
-.oceania-workspace-legend-spacer{visibility:hidden;pointer-events:none}
+
+/* The visible legend stays beside the message without reserving a duplicate row. */
+.oceania-workspace-legend-spacer{display:none}
 .oceania-workspace-required-legend{flex:none;padding:7px 16px;border-bottom:1px solid #d4d8cc;background:#fbfaf3}
 .oceania-workspace-required-legend>p{font-size:13px;line-height:1.5;margin:0 0 5px!important}
 .atlas-desktop-shell .oceania-workspace-required-legend>.oceania-learning-legend{padding:0;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px 8px;font-size:13px;line-height:1.5}

@@ -9,14 +9,14 @@ const result=await build({entryPoints:[fileURLToPath(new URL('../../src/scripts/
 after(()=>stop());
 const site='https://example.test/insight-journal/atlas/oceania/';
 function page(field,query=''){
- const win=new Window({url:site+field+'/'+query,settings:{enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
+ const win=new Window({url:site+field+'/'+query,settings:{enableJavaScriptEvaluation:true,disableCSSFileLoading:true,disableJavaScriptFileLoading:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
  win.document.write(readFileSync(new URL(`../../dist/atlas/oceania/${field}/index.html`,import.meta.url),'utf8'));
  win.ResizeObserver=class{observe(){} disconnect(){}};
  win.eval(result.outputFiles[0].text+';OceaniaClient.initOceaniaLearningAtlas(document.querySelector("[data-oceania-learning]"));');
  return {win,root:win.document.querySelector('[data-oceania-learning]')};
 }
 test('all four built Oceania pages expose real initial distributions, complete legends, messages and working entries',()=>{
- const expected={nature:18,agriculture:8,industry:6,population:10};
+ const expected={nature:18,agriculture:8,industry:9,population:10};
  const sitemap=readFileSync(new URL('../../dist/sitemap.xml',import.meta.url),'utf8');
  for(const [field,count] of Object.entries(expected)){
   const {win,root}=page(field);
@@ -58,4 +58,45 @@ test('built Tarawa density compares source 1 km data with real climate classific
  assert.equal(root.querySelector('[data-original-map] svg').getAttribute('viewBox'),root.querySelector('[data-comparison-map] svg').getAttribute('viewBox'));
  assert.ok(root.querySelector('[data-original-map] .oceania-context-inset'));
  win.happyDOM.abort();
+});
+
+test('direct field routes start with the full regional frame and overview, including both industry point families',()=>{
+ for(const field of ['nature','agriculture','industry','population']){
+  const {win,root}=page(field);
+  try{
+   assert.equal(new URL(win.location.href).searchParams.get('scope'),'all');
+   assert.equal(root.querySelector('[data-place]').value,'all');
+   assert.ok(root.querySelector('[data-theme-title]').textContent.startsWith('オセアニアの'));
+   assert.equal(root.querySelectorAll('[data-theme][aria-pressed="true"]').length,0);
+   assert.equal(root.querySelector('[data-primary-map] svg').getAttribute('viewBox'),'0 0 1200 757');
+   if(field==='industry'){
+    assert.equal(root.querySelector('[data-layer]').value,'industry-all');
+    assert.equal(root.querySelectorAll('[data-primary-map] circle[fill][stroke="#fff"]').length,347);
+    assert.ok(root.querySelectorAll('[data-primary-map] path[fill][stroke="#fff"]').length>0);
+    assert.match(root.querySelector('[data-coverage]').textContent,/生産量・埋蔵量を表しません/);
+   }
+  }finally{win.happyDOM.abort();}
+ }
+});
+
+test('country selection preserves both crop and livestock comparison distributions, extent and URL on reload',()=>{
+ const {win,root}=page('agriculture','?scope=all&layer=wheat&compare=cattle&view=comparison');
+ try{
+  const frame=root.querySelector('[data-original-map] svg').getAttribute('viewBox');
+  const place=root.querySelector('[data-place]');place.value='PNG';place.dispatchEvent(new win.Event('change'));
+  assert.equal(root.querySelector('[data-layer]').value,'wheat');
+  assert.equal(root.querySelector('[data-compare-layer]').value,'cattle');
+  for(const hook of ['original','comparison'])assert.equal(root.querySelector(`[data-${hook}-map] svg`).getAttribute('viewBox'),frame);
+  assert.ok(root.querySelector('[data-original-map] image').getAttribute('href').endsWith('/wheat.png'));
+  assert.ok(root.querySelector('[data-comparison-map] image').getAttribute('href').endsWith('/cattle.png'));
+  assert.match(root.querySelector('[data-original-unit]').textContent,/ha/);
+  assert.match(root.querySelector('[data-comparison-unit]').textContent,/頭/);
+  const reloaded=page('agriculture',win.location.search);
+  try{
+   assert.equal(reloaded.root.querySelector('[data-place]').value,'PNG');
+   assert.equal(reloaded.root.querySelector('[data-layer]').value,'wheat');
+   assert.equal(reloaded.root.querySelector('[data-compare-layer]').value,'cattle');
+   assert.equal(reloaded.root.querySelector('[data-original-map] svg').getAttribute('viewBox'),frame);
+  }finally{reloaded.win.happyDOM.abort();}
+ }finally{win.happyDOM.abort();}
 });

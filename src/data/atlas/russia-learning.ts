@@ -18,6 +18,12 @@ export type RussiaLegend={label:string;color:string;shape?:'square'|'circle'|'di
 export type RussiaLayer={id:string;field:RussiaField;title:string;period:string;unit:string;kind:'raster'|'places'|'cities';image?:string;bounds?:number[];legend:RussiaLegend[];sources:RussiaSource[];coverage:string;resolution?:string};
 export type RussiaTheme={id:string;field:RussiaField;title:string;takeaway:string;explanation:string;social:string;regionCodes:string[];defaultLayer:string;comparisonLayer:string;sources:RussiaSource[]};
 export const russiaFields:Record<RussiaField,{label:string;title:string}>={nature:{label:'自然環境',title:'寒さと生育期、広い国土の違いを読む'},agriculture:{label:'農林畜産業',title:'小麦と牛の分布を、気候・市場とつなぐ'},industry:{label:'主要産業',title:'資源の場所と、加工・港・市場をつなぐ'},population:{label:'人口・社会',title:'西の集積と、シベリア・極東の都市を読む'}};
+export const russiaOverviewReadings:Record<RussiaField,{title:string;takeaway:string;explanation:string}>={
+ nature:{title:'ロシアの自然環境を読む',takeaway:'欧州側からシベリア・極東までの気候区分を、生育期・水利用・暮らしとのつながりから比べます。',explanation:'1991–2020年の気候区分を全域で表示します。場所やテーマを選ぶと理由の説明に切り替わり、全域の分布は残ります。気候分類は年降水量や現在の天候ではありません。都市の雨温図、水資源、地形・標高の分布資料は未整備です。'},
+ agriculture:{title:'ロシアの農林業を読む',takeaway:'小麦の収穫面積と牛の密度を、自然条件・設備・輸送・市場とのつながりから読みます。',explanation:'2020年のモデル分布を全域で確かめます。小麦はha／元5分セル、牛は頭／km²で、互いに足せる量ではありません。分布の切替と比較で同じ場所を読みます。未収録を栽培・飼育ゼロとは扱いません。林業の分布資料は未整備です。'},
+ industry:{title:'ロシアの主要産業を読む',takeaway:'資源・加工地域、都市・物流、港湾の代表位置を、交通・市場・制度とのつながりから比べます。',explanation:'一次資料で位置と役割を確認した代表例を全域で表示します。地点の数や記号の大きさは生産量・埋蔵量・GDP比を示しません。地域やテーマを選ぶと説明が切り替わり、他の代表位置も残ります。施設全数や全国生産量の分布資料は未整備です。'},
+ population:{title:'ロシアの人口分布を読む',takeaway:'欧州側の集積とシベリア・極東の居住を、都市・交通・公共サービスとのつながりから比べます。',explanation:'全域の2020年モデル人口密度と都市中心の位置を表示します。密度と都市中心の人口は単位・範囲が異なり、市の行政人口や現在の人口とは一致しません。地域を選んでも他地域の分布は残ります。人種・民族・宗教の分布資料は未整備です。'},
+};
 const allPath=russiaPath(geography.features.find(f=>f.properties.kind==='russia')!.geometry);
 const contexts=geography.features.filter(f=>f.properties.kind==='context').map(f=>russiaPath(f.geometry)).filter(Boolean);
 const disputes=disputed.features.map(f=>({name:f.properties.sourceLabel,path:russiaPath(f.geometry)})).filter(f=>f.path);

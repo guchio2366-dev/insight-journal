@@ -1,0 +1,71 @@
+name: Oceania and Russia PC review
+
+# Region-only acceptance, using the existing runner and upload pattern.
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/atlas-oceania-russia-pc-review.yml'
+      - 'tests/browser/atlas-oceania-russia-first-stage.mjs'
+      - 'src/components/atlas/OceaniaLearningPage.astro'
+      - 'src/components/atlas/RussiaLearningPage.astro'
+      - 'src/data/atlas/oceania-*.ts'
+      - 'src/data/atlas/russia-*.ts'
+      - 'src/scripts/atlas-oceania-*.ts'
+      - 'src/scripts/atlas-russia-*.ts'
+      - 'src/styles/atlas-oceania-*.css'
+      - 'src/styles/atlas-russia-*.css'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: oceania-russia-pc-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: Oceania and Russia desktop maps
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+      REGION_REVIEW_OUTPUT: ${{ runner.temp }}/oceania-russia-pc-review
+      REGION_REVIEW_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - name: Verify existing Chrome and Japanese fonts
+        shell: bash
+        run: |
+          set -euo pipefail
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          test -n "$chrome_path"
+          echo "REGION_REVIEW_CHROME_PATH=$chrome_path" >> "$GITHUB_ENV"
+          if [[ -z "$(fc-list ':lang=ja' family)" ]]; then
+            sudo apt-get update -o APT::Update::Error-Mode=any
+            sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+          fi
+          test -n "$(fc-list ':lang=ja' family)"
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - name: Record and verify the reviewed commit
+        run: |
+          test "$(git rev-parse HEAD)" = "$REGION_REVIEW_EXPECTED_HEAD"
+          node scripts/generate-release.mjs --commit "$REGION_REVIEW_EXPECTED_HEAD"
+          node scripts/verify-release.mjs --commit "$REGION_REVIEW_EXPECTED_HEAD"
+      - name: Verify full extent, operations and desktop dimensions
+        run: node tests/browser/atlas-oceania-russia-first-stage.mjs
+      - name: Upload new screenshots and measurements
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: oceania-russia-pc-review-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/oceania-russia-pc-review
+          if-no-files-found: error
+          retention-days: 7
