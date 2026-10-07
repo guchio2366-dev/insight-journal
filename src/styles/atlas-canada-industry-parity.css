@@ -11,3 +11,24 @@
 .ca-industry-marker{display:block;width:44px;height:44px;max-width:none;padding:0;transform:none}
 .ca-industry-marker i{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
 .ca-industry-marker span{position:absolute;width:130px;box-sizing:border-box;left:28px;top:0}
+.canada-industry-parity .ca-province.is-selected{fill:transparent;stroke:#ac482b;stroke-width:2.5}
+.canada-industry-parity .ca-industry-marker strong{font-size:14px;line-height:1.4}
+.canada-industry-parity .ca-industry-marker small{font-size:14px;line-height:1.4}
+.canada-industry-parity .ca-industry-marker span{width:146px}
+.canada-industry-parity .industry-selected-reading-body :is(p,.industry-key-sentence){font-size:16px;line-height:1.75}
+.canada-industry-parity .industry-selected-reading-body h3{font-size:18px;line-height:1.5}
+.canada-industry-parity .industry-selected-reading-body :is(summary,.industry-reading-definitions p){font-size:14px;line-height:1.7}
+.canada-industry-parity .ca-industry-national-patterns section{margin:14px 0;padding-left:10px;border-left:3px solid #90a799}
+.canada-industry-parity .ca-industry-national-patterns button{display:block;padding:0;background:none;border:0;color:#254b58;font:700 16px/1.7 var(--sans);text-align:left;cursor:pointer;text-decoration:underline;min-height:32px}
+.canada-industry-parity .ca-industry-national-patterns p{margin:5px 0}
+.canada-industry-parity .ca-industry-clear{font:400 14px/1.7 var(--sans);min-height:36px;cursor:pointer;margin-bottom:10px}
+.canada-industry-parity .canada-industry-statistics{grid-column:1/-1;margin-top:18px}
+.canada-industry-parity .canada-industry-statistics>summary{cursor:pointer;font-size:16px;line-height:1.7;padding:8px 0;font-weight:700}
+.canada-industry-parity .canada-industry-statistics .industry-national{max-width:100%;position:static;margin-top:8px}
+.canada-industry-parity .canada-industry-statistics .industry-paired-row,.canada-industry-parity .canada-industry-statistics .industry-paired-heading{grid-template-columns:minmax(0,1.5fr) repeat(2,minmax(0,1fr));font-size:14px}
+.canada-industry-parity [data-ca-province-shape]{cursor:pointer}
+.canada-industry-parity [data-ca-province-shape]:focus-visible{outline:none;stroke:#a74931;stroke-width:3}
+.canada-industry-parity .atlas-map-tools button{font-size:14px}
+
+.atlas-desktop-shell .canada-industry-parity .ca-industry-marker[aria-pressed=true]{color:#743923}
+@media(min-width:960px){.canada-industry-parity .industry-guide{margin-bottom:15px}}

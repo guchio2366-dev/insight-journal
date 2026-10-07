@@ -1,4 +1,5 @@
 /** Real Chromium acceptance against the production build. No HTTP server/mocked renderer. */
+import {verifyCanadaIndustryReading} from './verify-canada-industry-reading.mjs';
 import {chromium} from 'playwright';
 import {verifyCanadaForestryOverview} from './verify-canada-forestry-overview.mjs';
 import {readFile,mkdir,writeFile} from 'node:fs/promises';
@@ -59,5 +60,6 @@ try{
  await page.unroute('**/*maplibre-gl*.js');
  await verifyCanadaAgricultureOverview({page,url,output,result});
  await verifyCanadaForestryOverview({page,url,output,result});
+ await verifyCanadaIndustryReading({page,url,output,result});
  assert.deepEqual(errors,[],'No browser runtime errors');await writeFile(path.join(output,'results.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({passed:true,viewports:result.viewports.length,checks:result.checks,output},null,2));
 }finally{await browser.close();}
