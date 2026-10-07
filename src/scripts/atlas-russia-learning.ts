@@ -92,7 +92,7 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
   }
   text('reading-status',selected?'選んだ場所・分布の説明':'ロシアの概要');
   text('theme-title',!selected?(overview?'広い国土を、都市と分野の分布から読む':fieldOverview.title):contextualReading?theme.title:selectedName()+'の'+layer.title);text('takeaway',!selected?(overview?'欧州側・シベリア・極東を同じ表示枠で確かめ、自然条件に設備・交通・市場・社会を重ねて読む。都市中心の円は行政人口ではなく、固定された都市範囲の人口です。':fieldOverview.takeaway):contextualReading?theme.takeaway:fieldOverview.takeaway);
-  text('explanation',contextualReading?theme.explanation:(selected?selectedName()+'を選択しています。 ':'')+fieldOverview.explanation);text('social-context',theme.social);
+  text('explanation',contextualReading?theme.explanation:selected?selectedName()+'を選択しています。 '+layer.coverage:fieldOverview.explanation);text('social-context',theme.social);
   text('coverage',russiaCoverage(layer,state));
   text('comparison',compare.title+'と比べる →');
   text('return','← '+layer.title+'へ戻る：'+targetName()+(state.scope!=='region'&&state.place!=='all'?'／選択：'+selectedName():''));
@@ -119,8 +119,13 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
   state.place=(event.target as HTMLSelectElement).value as RussiaState['place'];
   if(state.place==='all')state.scope='all';selected=state.place!=='all';chooseRegionTheme();
  }));
- one<HTMLSelectElement>('layer').addEventListener('change',event=>update(()=>{state.layer=(event.target as HTMLSelectElement).value;selected=true;}));
- root.querySelector<HTMLSelectElement>('[data-distribution-layer]')?.addEventListener('change',event=>update(()=>{state.layer=(event.target as HTMLSelectElement).value;selected=true;}));
+ const chooseLayer=(event:Event)=>update(()=>{
+  state.layer=(event.target as HTMLSelectElement).value;selected=true;
+  const theme=russiaThemes.find(item=>item.field===field&&item.defaultLayer===state.layer);
+  if(theme)state.theme=theme.id;
+ });
+ one<HTMLSelectElement>('layer').addEventListener('change',chooseLayer);
+ root.querySelector<HTMLSelectElement>('[data-distribution-layer]')?.addEventListener('change',chooseLayer);
  one<HTMLSelectElement>('compare-layer').addEventListener('change',event=>update(()=>{state.compareLayer=(event.target as HTMLSelectElement).value;}));
  root.querySelectorAll<HTMLButtonElement>('[data-theme]').forEach(button=>button.addEventListener('click',()=>update(()=>{
   const theme=getRussiaTheme({...state,field,theme:button.dataset.theme!});

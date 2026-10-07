@@ -23,7 +23,7 @@ export function initOceaniaLearningAtlas(root:HTMLElement):void{
  const chooseCountryTheme=()=>{
   if(state.place==='all')return;
   const theme=getOceaniaTheme(state);if(theme.countryCodes.includes(state.place))return;
-  const suitable=oceaniaThemes.find(t=>t.field===field&&t.countryCodes.includes(state.place)&&(field==='industry'||t.defaultLayer===state.layer));
+  const suitable=oceaniaThemes.find(t=>t.field===field&&t.countryCodes.includes(state.place)&&(state.layer==='industry-all'||t.defaultLayer===state.layer));
   if(suitable){state.theme=suitable.id;}
  };
  const comparisonText=()=>{
@@ -50,7 +50,7 @@ export function initOceaniaLearningAtlas(root:HTMLElement):void{
    text(prefix+'-period',item.period);text(prefix+'-unit',item.unit+(item.resolution?' · '+item.resolution:''));const legend=renderOceaniaLegend(item);one(prefix+'-legend').innerHTML=prefix==='primary'?renderOceaniaRequiredLegend(item):legend;
    if(prefix==='primary'){one('primary-legend-spacer').innerHTML=legend;one('primary-legend-dictionary-content').innerHTML=legend;one('primary-legend-dictionary').hidden=item.id!=='climate';text('primary-legend-unit',item.period+' ・ '+item.unit);root.querySelector<HTMLElement>('[data-required-legend-layer]')!.dataset.requiredLegendLayer=item.id;}
   }
-  text('theme-title',contextualReading?theme.title:selectedName?selectedName+'の'+layer.title:overview.title);text('takeaway',contextualReading?theme.takeaway:overview.takeaway);text('explanation',contextualReading?theme.explanation:(selectedName?selectedName+'を選択しています。 ':'')+overview.explanation);
+  text('theme-title',contextualReading?theme.title:selectedName?selectedName+'の'+layer.title:overview.title);text('takeaway',contextualReading?theme.takeaway:overview.takeaway);text('explanation',contextualReading?theme.explanation:selectedName?selectedName+'を選択しています。 '+layer.coverage:overview.explanation);
   text('coverage',oceaniaCoverage(layer,state));text('comparison',compare.title+'と比べる →');text('return','← '+layer.title+'へ戻る：'+targetName()+(state.scope!=='country'&&state.place!=='all'?'／選択：'+oceaniaCountries.find(c=>c.code===state.place)?.name:''));text('comparison-explanation',comparisonText());
   const shorter=one(layer.legend.length<=compare.legend.length?'original-map':'comparison-map').closest('.oceania-learning-map-panel');shorter?.append(one('comparison-explanation'));
   const keys:Record<string,keyof typeof oceaniaPopulationReading.contexts>={AUS:'australia',NZL:'new-zealand',PNG:'papua-new-guinea',FJI:'fiji',KIR:'tarawa',PYF:'tahiti',WSM:'samoa'};
@@ -68,7 +68,7 @@ export function initOceaniaLearningAtlas(root:HTMLElement):void{
   mutate();history.pushState({},'',serialized(state));render();if(focus)one(focus).focus();
  };
  one<HTMLSelectElement>('place').addEventListener('change',e=>update(()=>{state.place=(e.target as HTMLSelectElement).value;if(state.place==='all')state.scope='all';selectedReading=state.place!=='all';chooseCountryTheme();}));
- one<HTMLSelectElement>('layer').addEventListener('change',e=>update(()=>{state.layer=(e.target as HTMLSelectElement).value;selectedReading=true;const matching=oceaniaThemes.find(t=>t.field===field&&t.defaultLayer===state.layer)||oceaniaThemes.find(t=>t.field===field&&t.id===(state.layer==='sheep'?'livestock':state.layer==='cacao'?'tropical-crops':state.theme));if(matching)state.theme=matching.id;}));
+ one<HTMLSelectElement>('layer').addEventListener('change',e=>update(()=>{state.layer=(e.target as HTMLSelectElement).value;selectedReading=true;const matching=oceaniaThemes.find(t=>t.field===field&&t.defaultLayer===state.layer)||oceaniaThemes.find(t=>t.field===field&&t.id===(['sheep','cattle'].includes(state.layer)?'livestock':['coconut','cacao'].includes(state.layer)?'tropical-crops':state.theme));if(matching)state.theme=matching.id;}));
  one<HTMLSelectElement>('compare-layer').addEventListener('change',e=>update(()=>{state.compareLayer=(e.target as HTMLSelectElement).value;}));
  root.querySelectorAll<HTMLButtonElement>('[data-theme]').forEach(b=>b.addEventListener('click',()=>update(()=>{const t=getOceaniaTheme({field,theme:b.dataset.theme!});selectedReading=true;state.theme=t.id;if(field!=='industry')state.layer=t.defaultLayer;})));
  root.querySelectorAll<HTMLButtonElement>('[data-scope]').forEach(b=>b.addEventListener('click',()=>update(()=>{state.scope=b.dataset.scope as OceaniaState['scope'];selectedReading=state.scope!=='all'||state.place!=='all';if(state.scope==='country')chooseCountryTheme();})));

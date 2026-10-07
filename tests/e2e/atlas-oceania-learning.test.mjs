@@ -100,3 +100,15 @@ test('country selection preserves both crop and livestock comparison distributio
   }finally{reloaded.win.happyDOM.abort();}
  }finally{win.happyDOM.abort();}
 });
+
+test('changing the livestock layer updates its reading while keeping the chosen comparison and full extent',()=>{
+ const {win,root}=page('agriculture','?scope=all&compare=climate');
+ try{
+  const frame=root.querySelector('[data-primary-map] svg').getAttribute('viewBox');
+  const layer=root.querySelector('[data-layer]');layer.value='cattle';layer.dispatchEvent(new win.Event('change'));
+  assert.equal(new URL(win.location.href).searchParams.get('theme'),'livestock');
+  assert.equal(root.querySelector('[data-compare-layer]').value,'climate');
+  assert.equal(root.querySelector('[data-primary-map] svg').getAttribute('viewBox'),frame);
+  assert.match(root.querySelector('[data-primary-unit]').textContent,/頭/);
+ }finally{win.happyDOM.abort();}
+});

@@ -116,6 +116,18 @@ test('keyboard region selection retains both farming distributions and other reg
  }finally{win.happyDOM.abort();}
 });
 
+test('changing cattle distribution updates the reading without resetting the comparison or full frame',()=>{
+ const {win,one}=page('agriculture','?scope=all&compare=climate');
+ try{
+  const frame=one('primary-map').querySelector('svg').getAttribute('viewBox');
+  one('layer').value='cattle';one('layer').dispatchEvent(new win.Event('change'));
+  assert.equal(new URL(win.location.href).searchParams.get('theme'),'cattle-and-feed');
+  assert.match(one('theme-title').textContent,/牛と飼料/);
+  assert.equal(one('compare-layer').value,'climate');
+  assert.equal(one('primary-map').querySelector('svg').getAttribute('viewBox'),frame);
+ }finally{win.happyDOM.abort();}
+});
+
 test('west wheat and climate comparison retains the original distribution, every legend, dates, both sources and a named return',()=>{
  const {win,root,one}=page('agriculture','?place=west&scope=region&theme=wheat-and-water&layer=wheat&compare=climate&keep=source#reference');
  try{
