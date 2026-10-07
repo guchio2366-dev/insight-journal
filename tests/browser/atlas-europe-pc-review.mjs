@@ -328,7 +328,8 @@ async function europeOperations(page, profile, render) {
   await openEurope(page, 'atlas/europe/nature/?layer=terrain', render);
   if(normal)await snapshot(page,profile,'terrain-overview');
   const history = await page.evaluate(() => history.length), svgExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
-  await page.locator('[data-eu-feature-select="alps"]').click();
+  assert.equal(await page.locator('[data-eu-feature-list]').isVisible(),false);
+  await page.locator('[data-eu-map-place="alps"][data-eu-map-kind="feature"]').click();
   const elevation = await settled(page), selectedPoint = new URL(page.url()).searchParams.get('point');
   assert.equal(selectedPoint, '9.5,46.6'); assert.match(elevation, /：2,283 m（ETOPO 2022）$/);
   assert.equal(await page.evaluate(() => history.length), history + 1);
@@ -341,6 +342,9 @@ async function europeOperations(page, profile, render) {
   assert.doesNotMatch(await page.locator(resultSelector).textContent(), /間隔|標高 m/);
   assert.deepEqual(await page.locator('[data-eu-legend-items] .eu-swatch').evaluateAll(nodes => nodes.slice(0, 2).map(node => getComputedStyle(node).backgroundColor)), ['rgb(184, 161, 130)', 'rgb(134, 103, 71)']);
   assert.match(await page.locator('[data-eu-subject-image]').getAttribute('href'),/physical-v1\/elevation\.png$/);
+  assert.equal(new URL(page.url()).searchParams.has('feature'),false);
+  assert.equal(await page.locator('[data-eu-feature-list]').isVisible(),false);
+  assert.equal(await page.locator('[data-eu-map-kind="feature"]:visible').count(),0);
   assert.equal(await page.locator('[data-eu-legend-items] > div').count(),15);
   assert.match(await page.locator('[data-eu-legend-items]').textContent(),/0〜500m未満.*500〜1,000m未満.*4,500〜5,000m未満/s);
   await uniqueElevation(page);
@@ -378,7 +382,8 @@ async function europeOperations(page, profile, render) {
   record.checks.push('metres separate from contour interval', 'same point and elevation across terrain/contours', 'single marker/result/legend', 'one history entry per selection', 'SVG extent retained', 'unselected back/forward', 'reload retains reader text', 'named comparison return', 'real map click and history');
 
   await openEurope(page, 'atlas/europe/nature/?layer=drainage', render);
-  await page.locator('[data-eu-feature-select="rhine"]').click(); await settled(page, '表示格子中心.*BasinATLAS');
+  assert.equal(await page.locator('[data-eu-feature-list]').isVisible(),false);
+  await page.locator('[data-eu-map-place="rhine"][data-eu-map-kind="feature"]').click(); await settled(page, '表示格子中心.*BasinATLAS');
   await page.waitForFunction(() => document.querySelector('[data-eu-drainage-selection]').style.display !== 'none');
   const selected = await drainageState(page); assert.ok(selected.point); assert.ok(selected.basin); assert.doesNotMatch(selected.result, /データなし/);
   const selectedFeedback = await feedbackPlacement(page);
@@ -433,6 +438,22 @@ async function europeOperations(page, profile, render) {
 }
 
 async function stageOneOperations(page, profile) {
+  const quietFeatures=async(field)=>{
+    const names=await page.locator('[data-eu-map-kind="feature"]:visible:not(.is-point-only)').evaluateAll(nodes=>nodes.map(node=>{const s=getComputedStyle(node),r=node.getBoundingClientRect();return {id:node.dataset.euMapPlace,font:parseFloat(s.fontSize),background:s.backgroundColor,border:parseFloat(s.borderWidth),left:r.left,right:r.right,top:r.top,bottom:r.bottom};}));
+    assert.ok(names.length>0&&names.length<=4,field+' initial representative names');
+    for(const name of names){assert.ok(name.font>=13);assert.equal(name.background,'rgba(0, 0, 0, 0)');assert.equal(name.border,0);}
+    for(let i=0;i<names.length;i++)for(let j=i+1;j<names.length;j++){const a=names[i],b=names[j];assert.ok(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,field+' names do not overlap');}
+    const points=await page.locator('[data-eu-map-kind="feature"].is-point-only:visible').count();assert.ok(points>0,field+' keeps other real places');
+    const target=page.locator('[data-eu-map-kind="feature"].is-point-only:visible').first(),id=await target.getAttribute('data-eu-map-place');
+    const anchors=()=>page.locator('.eu-label-dot').evaluateAll(nodes=>nodes.map(node=>[node.getAttribute('cx'),node.getAttribute('cy')]));
+    const original=await anchors();await page.bringToFront();await page.mouse.move(5,5);await target.focus();
+    assert.equal(await target.evaluate(node=>parseFloat(getComputedStyle(node).fontSize)),13,'Keyboard focus reveals the retained name size');
+    await page.keyboard.press('Enter');await ready(page);
+    assert.equal(new URL(page.url()).searchParams.get('feature'),id);
+    assert.deepEqual(await anchors(),original,'Name selection keeps every actual projected point');
+    assert.equal(await page.locator(`[data-eu-map-kind="feature"][data-eu-map-place="${id}"]`).getAttribute('aria-pressed'),'true');
+    manifest.checks.push({profile:profile.name,quietPlaceLabels:{field,names,otherPoints:points,keyboardSelected:id}});
+  };
   await openEurope(page, 'atlas/europe/nature/?layer=climate', 'normal');
   assert.equal(await page.locator('[data-eu-city-choice]').inputValue(), '');
   assert.equal(await page.locator('[data-eu-climate-overview]').isVisible(), true);
@@ -463,6 +484,7 @@ async function stageOneOperations(page, profile) {
   await snapshot(page, profile, 'industry-overview');
   const industryExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
   const industryPoints = await page.locator('[data-eu-feature-options] option').count();
+  await quietFeatures('industry');
   await page.locator('[data-eu-industry-group="機械・輸送"]').click();
   assert.equal(new URL(page.url()).searchParams.has('place'), false);
   assert.equal(new URL(page.url()).searchParams.has('feature'), false);
@@ -483,6 +505,7 @@ async function stageOneOperations(page, profile) {
   assert.equal(new URL(page.url()).searchParams.has('place'), false);
   await snapshot(page, profile, 'population-overview');
   const populationExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
+  await quietFeatures('population');
   const [parisId] = await page.locator('[data-eu-feature-choice]').selectOption({label:'パリ'});
   await settled(page, '（2020）');
   assert.equal(await page.locator('[data-eu-subject-grid]').evaluate(node => !!node.closest('.eu-read-panel')), true);
@@ -615,11 +638,11 @@ try {
       }
     } finally { await context.close(); }
   }
-  networkClean(); assert.equal(manifest.images.length, 8); assert.equal(manifest.records.length, 3);
+  networkClean(); assert.equal(manifest.images.length, 12); assert.equal(manifest.records.length, 3);
   assert.ok(manifest.records.every(record => record.status === 'passed'));
   assert.equal(git('rev-parse', 'HEAD'), manifest.gitHead, 'Checkout changed during capture');
   assert.equal(git('rev-parse', 'HEAD:src'), manifest.gitSrcTree);
-  manifest.status = 'passed'; manifest.checks.push('8 viewport screenshots of agriculture initial/selected and climate initial/selected', 'Existing operations retained at 2 normal PC profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
+  manifest.status = 'passed'; manifest.checks.push('12 viewport screenshots of terrain, elevation, precipitation, drainage, industry overview and population overview', 'Existing operations retained at 2 normal PC profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
   console.log(JSON.stringify({status: manifest.status, output, images: manifest.images.length, head: manifest.gitHead}));
 } catch (error) {
   manifest.status = 'failed'; manifest.failure = {message: String(error), stack: error.stack};

@@ -9,7 +9,7 @@ const compactCities = ['london','moscow','madrid','rome','helsinki'];
 export const overviewFarmingLabels = ['wheat','maize','sunflower','rice','vegetables','cattle','pig','sheep'];
 type Place = { id:string; name:string; coordinates:number[] };
 type Annotation = Place & { kind:'city'|'feature'|'crop'; button:HTMLButtonElement; line:SVGLineElement; dot:SVGCircleElement };
-type View = { climate:boolean; crops:boolean; detailed:boolean; city:string; feature?:string; places:Place[]; farmingIds?:string[]; selectedFarming?:string; emphasizedFeatures?:string[] };
+type View = { climate:boolean; crops:boolean; detailed:boolean; city:string; feature?:string; places:Place[]; featureLabelIds?:string[]; farmingIds?:string[]; selectedFarming?:string; emphasizedFeatures?:string[] };
 
 /** One screen-space annotation layer is shared by MapLibre and the SVG fallback. */
 export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], features:Place[], getView:()=>View, project:(coordinate:number[])=>Point, select:(kind:'city'|'feature'|'crop', id:string)=>void, farmingItems:FarmingItem[] = [], decorateFeature?:(id:string,button:HTMLButtonElement)=>void) {
@@ -32,6 +32,7 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
     button.addEventListener('click',e=>{e.stopPropagation();select(kind,place.id);});
     const line=create('line');line.classList.add('eu-label-leader');
     const dot=create('circle');dot.classList.add('eu-label-dot');dot.setAttribute('r','3.5');
+    dot.dataset.euLabelPoint=kind+'-'+place.id;
     svg.append(line,dot);overlay.append(button);items.push({...place,kind,button,line,dot});
   }
   const codeElements=new Map(climateLabels.labels.map(label=>{
@@ -53,7 +54,7 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
     const selected=(item:Annotation)=>item.kind==='city'?item.id===view.city:item.kind==='crop'?farmingIds.has(item.id)&&item.id===view.selectedFarming:item.id===view.feature;
     const inputs=visible.map(item=>{
       item.button.hidden=false;
-      const pointOnly=item.kind==='city'&&!view.detailed&&!major.includes(item.id)&&item.id!==view.city;
+      const pointOnly=!view.detailed&&(item.kind==='city'&&!major.includes(item.id)&&item.id!==view.city||item.kind==='feature'&&!!view.featureLabelIds&&!view.featureLabelIds.includes(item.id)&&item.id!==view.feature);
       item.button.classList.toggle('is-point-only',pointOnly);
       item.button.classList.toggle('is-muted',item.kind==='crop'&&!!view.selectedFarming&&item.id!==view.selectedFarming);
       item.button.title=item.name;
@@ -78,7 +79,8 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
     if(relayout) {
       const selectedIds=new Set(visible.filter(selected).map(item=>item.kind+'-'+item.id));
       inputs.sort((a,b)=>Number(selectedIds.has(b.id))-Number(selectedIds.has(a.id)));
-      placements=layoutNatureLabels(inputs.filter(input=>!items.find(item=>input.id===item.kind+'-'+item.id)?.button.classList.contains('is-point-only')),bounds,obstacles);
+      const pointObstacles=view.featureLabelIds?inputs.filter(input=>items.find(item=>input.id===item.kind+'-'+item.id)?.button.classList.contains('is-point-only')).map(input=>({left:input.anchor.x-7,top:input.anchor.y-7,right:input.anchor.x+7,bottom:input.anchor.y+7})):[];
+      placements=layoutNatureLabels(inputs.filter(input=>!items.find(item=>input.id===item.kind+'-'+item.id)?.button.classList.contains('is-point-only')),bounds,[...obstacles,...pointObstacles]);
       placements.push(...inputs.filter(input=>items.find(item=>input.id===item.kind+'-'+item.id)?.button.classList.contains('is-point-only')).map(input=>({...input,left:input.anchor.x-8,top:input.anchor.y-8,right:input.anchor.x+8,bottom:input.anchor.y+8,leader:false})));
     }
     for(const item of visible) {
