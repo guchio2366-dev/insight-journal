@@ -175,8 +175,9 @@ async function snapshot(page, profile, topic, region = 'europe') {
     assert.ok(control.y >= measured.map.y && control.y + control.height <= measured.map.y + measured.map.height + 1);
     if (index) assert.ok(control.y >= measured.controls[index - 1].y + measured.controls[index - 1].height, 'Map controls retain fit / zoom in / zoom out order');
   }
-  // Retain all operation/geometry checks, photograph only this repair's states.
-  if(region!=='europe'||!['precipitation-250mm-direct','precipitation-250mm-tabs'].includes(topic))return measured;
+  // This source-link repair reuses PR246's accepted pictures; no redraw changed.
+  const photographStates=[];
+  if(region!=='europe'||!photographStates.includes(topic))return measured;
   const filename = `${profile.name}-${region}-${topic}.png`;
   const png = await page.screenshot({path: resolve(output, filename), fullPage: false, animations: 'disabled'});
   manifest.images.push({file: filename, sourceURL: page.url(), profile: profile.name, viewport: profile.viewport, render,
@@ -476,8 +477,14 @@ async function stageOneOperations(page, profile) {
   assert.equal(await page.locator('[data-eu-legend-items] > div').count(), 14);
   assert.match(await page.locator('[data-eu-legend-items]').textContent(), /250未満.*3,000以上/s);
   const rainfallPath='/insight-journal/assets/atlas/europe/precipitation-contours-v1/precipitation.png';
-  const rainState=async()=>({url:page.url(),image:await page.locator('[data-eu-subject-image]').getAttribute('href'),extent:await page.locator('[data-eu-static]').getAttribute('viewBox')});
+  const rainfallManifestPath=rainfallPath.replace('precipitation.png','manifest.json');
+  const rainState=async()=>({url:page.url(),image:await page.locator('[data-eu-subject-image]').getAttribute('href'),manifest:await page.locator('[data-eu-layer-manifest]').getAttribute('href'),extent:await page.locator('[data-eu-static]').getAttribute('viewBox')});
   const directRain=await rainState();assert.equal(directRain.image,rainfallPath);
+  assert.equal(directRain.manifest,rainfallManifestPath);
+  const processing=await page.evaluate(async path=>{const response=await fetch(path,{redirect:'error'});if(!response.ok)throw Error('Rainfall processing record unavailable');return response.json();},directRain.manifest);
+  assert.equal(processing.validation.verifiedLineVertices,8621);
+  assert.equal(processing.validation.verifiedSharedBandEdges,8258);
+  assert.equal(processing.rendering.sourceMissingPixelsFilled,0);
   assert.match(await page.locator('[data-eu-legend-title]').textContent(),/250mm等雨量線/);
   assert.match(await page.locator('[data-eu-legend-items]').textContent(),/欠測・補間範囲外/);
   await snapshot(page, profile, 'precipitation-250mm-direct');
@@ -485,6 +492,7 @@ async function stageOneOperations(page, profile) {
   await page.locator('[data-eu-topic-field="nature"] [data-eu-topic="water"]').click();
   await page.locator('[data-eu-water-options] [data-eu-topic="precipitation"]').click();await ready(page);
   const tabRain=await rainState();assert.equal(tabRain.image,rainfallPath);
+  assert.equal(tabRain.manifest,rainfallManifestPath);
   assert.equal(new URL(tabRain.url).searchParams.get('layer'),'precipitation');
   assert.equal(tabRain.extent,directRain.extent,'Direct and tab routes retain the same map extent');
   await snapshot(page, profile, 'precipitation-250mm-tabs');
@@ -655,11 +663,11 @@ try {
       }
     } finally { await context.close(); }
   }
-  networkClean(); assert.equal(manifest.images.length, 4); assert.equal(manifest.records.length, 3);
+  networkClean(); assert.equal(manifest.images.length, 0); assert.equal(manifest.records.length, 3);
   assert.ok(manifest.records.every(record => record.status === 'passed'));
   assert.equal(git('rev-parse', 'HEAD'), manifest.gitHead, 'Checkout changed during capture');
   assert.equal(git('rev-parse', 'HEAD:src'), manifest.gitSrcTree);
-  manifest.status = 'passed'; manifest.checks.push('4 viewport screenshots: direct and tab routes of precipitation at 2 PC sizes; earlier photographs reused for unchanged views', 'Existing operations retained at 2 normal PC profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
+  manifest.status = 'passed'; manifest.checks.push('PR246 final 4 viewport images reused: accepted head 5450538e6024ce2fa7d793cc5a281bae6b14fa21, artifact 11515068508; this repair changes only the processing-record link', 'Processing link matches the displayed contour asset for direct and tab routes at 2 PC sizes', 'Existing operations retained at 2 normal PC profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
   console.log(JSON.stringify({status: manifest.status, output, images: manifest.images.length, head: manifest.gitHead}));
 } catch (error) {
   manifest.status = 'failed'; manifest.failure = {message: String(error), stack: error.stack};
