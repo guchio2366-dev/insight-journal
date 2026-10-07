@@ -272,17 +272,13 @@
  .atlas-desktop-shell .asia-atlas[data-field] .asia-map-items .asia-settlement-key button{min-height:24px;padding:2px 4px;font-size:13px;line-height:18px}
 }
 @media(min-width:1600px){.atlas-desktop-shell .asia-atlas[data-field] .asia-layout{grid-template-columns:minmax(0,1.8fr) minmax(280px,1fr);gap:16px}}
-/* Match the U.S. overview/detail map sizing without changing statistical scope. */
-@media(min-width:1200px){
- [data-asia-atlas][data-industry-scope=overview] .atlas-desktop-shell .asia-atlas[data-field=industry] .asia-map-frame{min-height:620px!important;max-height:none!important}
-}
 @media(min-width:960px) and (max-width:1199px){
  .atlas-desktop-shell .asia-atlas:is([data-field=industry],[data-field=population]) .asia-region-shell:not(:has(.asia-focus-navigation))>.regional-navigation,
  [data-climate-active=true] .atlas-desktop-shell .asia-atlas[data-field=natural] .asia-region-shell:not(:has(.asia-focus-navigation))>.regional-navigation{width:auto;flex:0 1 auto}
  .atlas-desktop-shell .asia-atlas:is([data-field=industry],[data-field=population]) .asia-region-shell:not(:has(.asia-focus-navigation)) .asia-toolbar,
  [data-climate-active=true] .atlas-desktop-shell .asia-atlas[data-field=natural] .asia-region-shell:not(:has(.asia-focus-navigation)) .asia-toolbar{width:auto;flex:none}
- .atlas-desktop-shell .asia-atlas[data-field=industry] .asia-layout{grid-template-columns:minmax(0,2.05fr) minmax(318px,.95fr);gap:12px}
- .atlas-desktop-shell .asia-atlas[data-field=industry] .asia-map-frame{height:clamp(320px,calc(100dvh - 350px),430px)!important;min-height:0!important;max-height:none!important;aspect-ratio:auto!important}
+ .atlas-desktop-shell .asia-atlas[data-field=industry] .asia-layout{grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:12px}
+ .atlas-desktop-shell .asia-atlas[data-field=industry] .asia-map-frame{min-height:350px!important;aspect-ratio:1.65!important}
  .atlas-desktop-shell .asia-atlas[data-field=natural] .asia-layout{grid-template-columns:minmax(0,1fr) minmax(340px,380px);column-gap:16px;row-gap:0}
  .atlas-desktop-shell .asia-atlas[data-field=natural] .asia-map-frame{min-height:190px!important;aspect-ratio:1.65!important}
  .atlas-desktop-shell .asia-atlas[data-field=population] .asia-layout{grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:12px}

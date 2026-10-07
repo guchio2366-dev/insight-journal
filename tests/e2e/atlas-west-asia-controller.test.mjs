@@ -36,6 +36,43 @@ test('小国と観測所の選択、分野間リンク、履歴復元が同じ�
  }finally{await w.happyDOM.close();}
 });
 
+test('中東の農畜産は五品目を同時表示し、作物の輪郭選択・薄い家畜・履歴復元で分布を失わない',async()=>{
+ const {w,q}=await setup('agriculture');
+ try{
+  const initial=w.location.href,frame=q('[data-west-map]').getAttribute('viewBox');
+  const contexts=()=>[...q('[data-west-scene]').querySelectorAll('[data-west-farm-context]')].map(el=>el.dataset.westFarmContext);
+  assert.deepEqual(contexts(),['wheat','barley','sheep','goat','cattle']);
+  assert.equal(q('[data-west-country]').value,'');assert.equal(q('[data-west-atlas]').dataset.topic,'farming-overview');
+  assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-raster]').length,0);
+  assert.match(q('[data-west-legend]').textContent,/2020年.*品目.*選択作物/);
+  q('[data-west-topic-button=wheat]').click();await until(()=>q('[data-west-farm-selected=wheat]'));
+  assert.deepEqual(contexts(),['wheat','barley','sheep','goat','cattle']);
+  for(const id of ['sheep','goat','cattle'])assert.equal(q('[data-west-farm-context='+id+']').getAttribute('opacity'),'.2');
+  assert.equal(q('[data-west-map]').getAttribute('viewBox'),frame);
+  q('[data-west-topic-button=sheep]').click();await until(()=>!q('[data-west-farm-selected]')&&q('[data-west-farm-context=sheep]')?.getAttribute('opacity')==='1');
+  assert.deepEqual(contexts(),['wheat','barley','sheep','goat','cattle']);
+  w.history.replaceState({},'',initial);w.dispatchEvent(new w.PopStateEvent('popstate'));
+  await until(()=>q('[data-west-atlas]').dataset.topic==='farming-overview'&&q('[data-west-loading]').hidden);
+  assert.deepEqual(contexts(),['wheat','barley','sheep','goat','cattle']);assert.equal(q('[data-west-country]').value,'');
+ }finally{await w.happyDOM.close();}
+});
+
+test('中東の初期気候は地域全体、選んだ都市の雨温図と説明は右に同居し国名hoverを出さない',async()=>{
+ const {w,q,select}=await setup('nature');
+ try{
+  assert.equal(q('[data-west-city]').value,'');assert.equal(q('[data-west-active-chart]'),null);
+  assert.equal(q('[data-west-scene]').querySelectorAll('.west-country-line title').length,0);
+  assert.equal(q('.west-subtabs [data-west-topic-button=precipitation]'),null);
+  const frame=q('[data-west-map]').getAttribute('viewBox');select('[data-west-city]','riyadh');
+  await until(()=>q('[data-west-point]').textContent.includes('BWh'));
+  await until(()=>q('[data-west-detail] [data-west-active-chart] svg'));
+  const chart=q('[data-west-detail] [data-west-active-chart]');
+  assert.ok(chart.querySelector('.atlas-city-reading'));assert.ok(chart.querySelector('[data-city-numbers] table'));
+  assert.equal(q('[data-west-comparison] [data-west-active-chart]'),null);
+  assert.equal(q('[data-west-map]').getAttribute('viewBox'),frame);
+ }finally{await w.happyDOM.close();}
+});
+
 test('標準階層から掲載民族・宗教域へ進み、通常統計と概論・履歴へ戻れる',async()=>{
  const app=await setup('population');
  try{
@@ -96,23 +133,26 @@ test('水資源から実降水地点へ進み、元作物分布・地点・年�
   try{
    const {w,q}=app,original=new URL(w.location.href).searchParams,view=q('[data-west-map]').getAttribute('viewBox');
    q('[data-west-standard-group="水資源"]').click();await until(()=>q('[data-west-loading]').hidden);
-   q('[data-west-topic-button="precipitation"]').click();await until(()=>q('[data-west-atlas]').dataset.ready==='true');
+   const legacy=new URL(w.location.href);legacy.searchParams.set('topic','precipitation');w.history.replaceState({},'',legacy.href);w.dispatchEvent(new w.PopStateEvent('popstate'));await until(()=>q('[data-west-atlas]').dataset.topic==='precipitation'&&q('[data-west-loading]').hidden);
    const saved=w.location.href,p=new URL(saved).searchParams;assert.equal(p.get('topic'),'precipitation');assert.equal(p.has('category'),false);
    for(const key of ['country','year','city','map','at','from','side'])assert.equal(p.get(key),original.get(key),key);
    assert.equal(q('[data-west-map]').getAttribute('viewBox'),view);assert.equal(q('[data-west-scene]').querySelectorAll('[data-city]').length,18);assert.ok(q('[data-west-return]'));
-   assert.match(q('[data-west-detail]').textContent,/国平均|観測所/);assert.match(q('[data-west-legend]').textContent,/mm／年/);assert.ok(q('[data-west-active-chart] svg'));
+   assert.match(q('[data-west-detail]').textContent,/国平均|観測所/);assert.match(q('[data-west-legend]').textContent,/mm／年/);assert.ok(q('[data-west-comparison] [data-west-active-chart] svg'));
    const reload=await setup('nature',new URL(saved).search);try{assert.equal(reload.q('[data-west-city]').value,'istanbul');assert.equal(new URL(reload.q('[data-west-return]').href).searchParams.get('topic'),source);}finally{await reload.w.happyDOM.close();}
    w.history.replaceState({},'',initial);w.dispatchEvent(new w.PopStateEvent('popstate'));await until(()=>q('[data-west-loading]').hidden);assert.equal(new URL(w.location.href).searchParams.get('topic'),'climate');
-   w.history.replaceState({},'',saved);w.dispatchEvent(new w.PopStateEvent('popstate'));await until(()=>q('[data-west-atlas]').dataset.ready==='true');assert.equal(q('[data-west-topic-button="precipitation"]').getAttribute('aria-selected'),'true');
+   w.history.replaceState({},'',saved);w.dispatchEvent(new w.PopStateEvent('popstate'));await until(()=>q('[data-west-atlas]').dataset.ready==='true');assert.equal(q('[data-west-atlas]').dataset.topic,'precipitation');assert.equal(q('.west-subtabs [data-west-topic-button="precipitation"]'),null);
   }finally{await app.w.happyDOM.close();}
  }
 });
 
-test('農林業の地図を読む数値階級・単位・固定年は初期凡例で保たれ森林と国にも同期する',async()=>{
+test('農林業の概略凡例は品目と固定年を保ち、森林の参考画像と区別する',async()=>{
  const app=await setup('agriculture','?topic=wheat&country=TUR&year=2020',false,{width:1366,height:768});
  try{
-  const {w,q,select}=app,l=climateData.layers.find(x=>x.id==='wheat'),verify=()=>{const legend=q('[data-west-reading-key] [data-west-legend]');assert.ok(legend);assert.deepEqual([...legend.querySelectorAll('i')].map(x=>x.getAttribute('style')),l.colors.map(c=>'background:'+c).concat('background:#e4e5df'));assert.match(legend.textContent,/ha／原資料の格子.*2020/);for(const b of l.breaks)assert.ok(legend.textContent.includes(b.toLocaleString('ja-JP')));assert.match(legend.textContent,/周辺国・未収録/);assert.equal(w.document.querySelectorAll('[data-west-legend]').length,1);};
-  verify();select('[data-west-country]','IRN');await until(()=>q('[data-west-loading]').hidden);verify();q('[data-west-standard-group="林業"]').click();await until(()=>q('[data-west-loading]').hidden);const forest=q('[data-west-reading-key] [data-west-legend]');assert.equal(forest.querySelectorAll('i').length,2);assert.match(forest.textContent,/森林の参考分布（2020年）/);assert.equal(q('[data-west-cultivation="wheat"]').hidden,true);q('[data-west-standard-group="農畜産"]').click();await until(()=>q('[data-west-loading]').hidden);verify();assert.equal(q('[data-west-cultivation="wheat"]').hidden,false);
+  const {w,q,select}=app,verify=()=>{const legend=q('[data-west-reading-key] [data-west-legend]');assert.ok(legend);assert.equal(legend.querySelectorAll('i').length,6);for(const label of ['小麦','大麦','羊','山羊','牛'])assert.ok(legend.textContent.includes(label));assert.match(legend.textContent,/2020年の推計.*品目.*選択作物/);assert.match(legend.textContent,/正の推計なし・欠測/);assert.equal(w.document.querySelectorAll('[data-west-legend]').length,1);};
+  verify();select('[data-west-country]','IRN');await until(()=>q('[data-west-loading]').hidden);verify();
+  q('[data-west-standard-group="林業"]').click();await until(()=>q('[data-west-loading]').hidden);assert.equal(q('[data-west-legend]').querySelectorAll('i').length,2);assert.match(q('[data-west-legend]').textContent,/森林の参考分布（2020年）/);assert.equal(q('[data-west-cultivation="wheat"]').hidden,true);
+  q('[data-west-standard-group="農畜産"]').click();await until(()=>q('[data-west-loading]').hidden);verify();assert.equal(q('[data-west-atlas]').dataset.topic,'farming-overview');assert.equal(q('[data-west-cultivation="wheat"]').hidden,true);
+  q('[data-west-topic-button=wheat]').click();await until(()=>q('[data-west-farm-selected=wheat]'));assert.equal(q('[data-west-cultivation="wheat"]').hidden,false);
  }finally{await app.w.happyDOM.close();}
 });
 
@@ -133,20 +173,15 @@ test('直接指定された未収録年は保ち、主題切替時は実際の�
  }finally{await w.happyDOM.close();}
 });
 
-test('北米と同じ読み順で初期雨温図が表示され、都市選択で地図の範囲は動かない',async()=>{
- const {w,q}=await setup('nature');
+test('地域の気候から都市を選ぶと雨温図・説明を右に読み、地図の範囲は動かない',async()=>{
+ const {w,q,select}=await setup('nature');
  try{
-  await until(()=>q('[data-west-climate-class]')?.textContent.includes('BWh'));
-  assert.equal(q('[data-west-city]').value,'riyadh');assert.match(q('[data-west-detail] .atlas-city-climate h3').textContent,/リヤド.*気候/);assert.equal(q('[data-west-detail] svg'),null);assert.equal(q('[data-west-active-chart]').closest('[data-west-comparison]'),q('[data-west-comparison]'));assert.equal(q('[data-west-comparison]').parentElement,q('[data-atlas-shell]'));assert.ok(q('[data-west-comparison] [data-city-numbers] table'));assert.equal(q('[data-west-climate-class]').closest('[data-west-detail]'),q('[data-west-detail]'));
-  assert.equal(q('[data-west-scene]').querySelectorAll('[data-city]').length,18);
-  const before=q('[data-west-map]').getAttribute('viewBox');
-  q('[data-city="tehran"]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
-  await until(()=>q('[data-west-city]').value==='tehran');
-  assert.equal(q('[data-west-map]').getAttribute('viewBox'),before);assert.match(q('[data-west-active-chart]').textContent,/テヘラン/);
-  q('[data-west-group="気候区分"]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));
-  await until(()=>q('[data-west-loading]').hidden);
-  assert.equal(q('[data-west-group="水資源"]').getAttribute('aria-selected'),'true');assert.equal(q('[data-west-subgroup="水資源"]').hidden,false);
-  assert.equal(q('[data-west-climate-overview]').hidden,true);
+  assert.equal(q('[data-west-city]').value,'');assert.equal(q('[data-west-active-chart]'),null);
+  assert.equal(q('[data-west-scene]').querySelectorAll('[data-city]').length,18);const before=q('[data-west-map]').getAttribute('viewBox');
+  select('[data-west-city]','riyadh');await until(()=>q('[data-west-point]').textContent.includes('BWh'));
+  assert.match(q('[data-west-detail] .atlas-city-climate h3').textContent,/リヤド.*気候/);assert.ok(q('[data-west-detail] [data-west-active-chart] svg'));assert.ok(q('[data-west-detail] [data-city-numbers] table'));assert.equal(q('[data-west-comparison] [data-west-active-chart]'),null);
+  q('[data-city="tehran"]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));await until(()=>q('[data-west-point]').textContent.includes('テヘラン'));assert.equal(q('[data-west-map]').getAttribute('viewBox'),before);
+  q('[data-west-group="気候区分"]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));await until(()=>q('[data-west-loading]').hidden);assert.equal(q('[data-west-group="水資源"]').getAttribute('aria-selected'),'true');assert.equal(q('[data-west-subgroup="水資源"]').hidden,false);
  }finally{await w.happyDOM.close();}
 });
 
@@ -175,8 +210,10 @@ test('比較は元の分布・全凡例・対象名付き戻りと元の選択�
   comparison=await setup('nature',new URL(link.href).search);const {w,q}=comparison;
   await until(()=>q('[data-west-climate-class]')?.textContent.match(/^[ABCDE][A-Za-z]/));
   assert.equal(q('[data-west-atlas]').dataset.comparing,'true');
-  assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-raster]').length,2);
+  assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-raster]').length,1);
   assert.equal(q('[data-west-source-clip]').getAttribute('width'),'200');
+  assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-farm-context]').length,5);
+  assert.ok(q('[data-west-farm-selected="wheat-rainfed"]'));
   assert.equal(q('[data-west-legend]').querySelectorAll('.west-legend-subject').length,2);
   assert.match(q('[data-west-legend]').textContent,/小麦・天水栽培/);
   assert.equal(q('.west-complete-key .west-swatches').querySelectorAll('span').length,30);
@@ -218,18 +255,13 @@ test('比較で系列の収録年が異なる場合も元の年へ戻り、不�
  try{assert.equal(invalid.q('[data-west-atlas]').dataset.comparing,'false');assert.equal(invalid.q('[data-west-return]'),null);}finally{await invalid.w.happyDOM.close();}
 });
 
-test('比較の戻りは雨温図より先にあり、自動都市の図は閉じて明示選択で開く',async()=>{
+test('比較の戻りは選択都市の雨温図より先にあり、都市を自動選択せず比較元も変えない',async()=>{
  const source=await setup('agriculture','?topic=wheat&country=TUR&year=2020');let comparison;
  try{
   comparison=await setup('nature',new URL(source.q('[data-west-compare="climate"]').href).search);
-  const {w,q,select}=comparison,chart=q('.west-chart-details'),back=q('[data-west-return]');
-  assert.equal(chart.open,false);
-  assert.ok(back.closest('[data-west-detail]'));
-  assert.ok(back.compareDocumentPosition(chart)&w.Node.DOCUMENT_POSITION_FOLLOWING);
-  assert.match(back.textContent,/トルコ/);
-  const id=[...q('[data-west-city]').options].find(o=>o.value)?.value;assert.ok(id);
-  select('[data-west-city]',id);assert.equal(q('.west-chart-details').open,true);
-  assert.equal(new URL(q('[data-west-return]').href).searchParams.has('city'),false,'自動都市の明示選択後も比較元の選択は変えない');
+  const {w,q,select}=comparison,back=q('[data-west-return]');assert.equal(q('[data-west-active-chart]'),null);assert.match(back.textContent,/トルコ/);
+  const id=[...q('[data-west-city]').options].find(o=>o.value)?.value;select('[data-west-city]',id);await until(()=>q('[data-west-point]').textContent.includes('東経'));
+  const chart=q('.west-reading [data-west-active-chart]');assert.ok(chart);assert.ok(q('[data-west-return]').compareDocumentPosition(chart)&w.Node.DOCUMENT_POSITION_FOLLOWING);assert.equal(new URL(q('[data-west-return]').href).searchParams.has('city'),false);
  }finally{await source.w.happyDOM.close();if(comparison)await comparison.w.happyDOM.close();}
 });
 
@@ -244,7 +276,7 @@ test('比較の全凡例・詳細操作は幅変更と通常主題への復帰�
   const expected=labels(),expectedMarks=marks(),view=q('[data-west-map]').getAttribute('viewBox');
   const classes=climateData.classes;
   for(const c of classes)assert.ok(expected.includes(c.code+' '+c.name),c.code);
-  assert.equal(classes.length,30);assert.match(legend.textContent,/ha／原資料の格子 · 2020/);assert.match(legend.textContent,/1991–2020年/);
+  assert.equal(classes.length,30);assert.match(legend.textContent,/2020年の推計.*品目.*選択作物/);assert.match(legend.textContent,/1991–2020年/);
   assert.match(legend.textContent,/周辺国・未収録/);assert.match(legend.textContent,/雨温図の都市/);
   assert.equal(dictionary().open,false);assert.ok(dictionary().closest('[data-west-more-reading]'));
   const unique=(climate=true)=>{for(const selector of ['[data-west-legend]','[data-west-map-extras]','[data-west-agri-switches]','[data-west-stat-controls]','[data-west-reading-extra]'])assert.equal(w.document.querySelectorAll(selector).length,1,selector);assert.equal(root.querySelectorAll('[data-west-climate-dictionary]').length,climate?1:0);};
@@ -313,7 +345,7 @@ test('比較の常時気候凡例は描画格子の全実在区分を意味付�
    assert.match(q('[data-west-comparison-details]>summary').textContent,/全30気候区分の辞書/);
    assert.equal(dictionary.querySelectorAll('.west-swatches>span').length,30);
    for(const c of climateData.classes)assert.ok(dictionary.textContent.includes(c.code+' '+c.name));
-   assert.match(q('[data-west-legend]').textContent,/1991–2020年/);assert.match(q('[data-west-legend]').textContent,/ha／原資料の格子 · 2020/);assert.match(q('[data-west-legend]').textContent,/周辺国・未収録/);
+   assert.match(q('[data-west-legend]').textContent,/1991–2020年/);assert.match(q('[data-west-legend]').textContent,/2020年の推計.*品目.*選択作物/);assert.match(q('[data-west-legend]').textContent,/周辺国・未収録/);
    const svg=q('[data-west-map]');
    for(const [screenWidth,screenHeight] of [[500,420],[500,800]]){
     Object.defineProperties(svg,{clientWidth:{value:screenWidth,configurable:true},clientHeight:{value:screenHeight,configurable:true}});notifyResize('[data-west-map]');
@@ -340,26 +372,44 @@ test('比較の常時気候凡例は描画格子の全実在区分を意味付�
 
 test('比較の地点格子取得失敗は閉じた詳細を開き対象名付きエラーから再試行できる',async()=>{
  let rejectGrid,broken=true;const pending=new Promise((_,reject)=>{rejectGrid=reject;});
- const query='?topic=climate&country=TUR&year=2020&at=35,39&side=source&from='+encodeURIComponent('?topic=wheat&country=TUR&year=2020');
- const {w,q}=await setup('nature',query,false,{width:1180,height:757},{fetch:url=>broken&&url.endsWith('wheat.values.gz')?pending:undefined});
+ const query='?topic=wheat-rainfed&country=TUR&year=2020&at=35,39&side=source&from='+encodeURIComponent('?topic=climate&country=TUR&year=2020');
+ const {w,q}=await setup('agriculture',query,false,{width:1180,height:757},{fetch:url=>broken&&url.endsWith('climate.values.gz')?pending:undefined});
  try{
   const more=q('[data-west-comparison-details]'),view=q('[data-west-map]').getAttribute('viewBox'),before=w.location.href;more.open=false;
   rejectGrid(Error('Test: point grid unavailable'));await until(()=>!q('[data-west-retry]').hidden);
-  assert.equal(more.open,true);assert.equal(q('[data-west-loading]').hidden,false);assert.match(q('[data-west-loading]').textContent,/選択地点・小麦の収穫面積/);
+  assert.equal(more.open,true);assert.equal(q('[data-west-loading]').hidden,false);assert.match(q('[data-west-loading]').textContent,/選択地点・気候区分/);
   assert.match(q('[data-west-point]').textContent,/読み込めません/);assert.ok(more.contains(q('[data-west-retry]')));
   broken=false;q('[data-west-retry]').click();await until(()=>q('[data-west-loading]').hidden&&q('[data-west-retry]').hidden&&!q('[data-west-point]').textContent.includes('読み込んでいます'));
   assert.doesNotMatch(q('[data-west-point]').textContent,/読み込めません/);assert.equal(w.location.href,before);assert.equal(q('[data-west-map]').getAttribute('viewBox'),view);assert.equal(q('[data-west-atlas]').dataset.comparing,'true');
  }finally{await w.happyDOM.close();}
 });
 
-test('比較の自動都市の気候格子decode失敗も見える再試行から復帰し詳細は閉じる',async()=>{
+test('比較の気候格子decode失敗を再試行し、都市の未選択とURLを保つ',async()=>{
  let broken=true;
  const {w,q}=await setup('nature','?topic=climate&country=TUR&year=2020&from='+encodeURIComponent('?topic=wheat&country=TUR&year=2020'),false,{width:1180,height:757},{expectFailure:true,fetch:url=>broken&&url.endsWith('climate.values.gz')?new Response('invalid grid'):undefined});
  try{
   const more=q('[data-west-comparison-details]'),before=w.location.href;
   assert.equal(more.open,true);assert.equal(q('[data-west-loading]').hidden,false);assert.ok(more.contains(q('[data-west-retry]')));
   broken=false;q('[data-west-retry]').click();await until(()=>q('[data-west-loading]').hidden&&q('[data-west-retry]').hidden);
-  await until(()=>q('[data-west-point]').textContent.includes('イスタンブール'));
-  assert.equal(more.open,false);assert.equal(q('.west-chart-details').open,false);assert.equal(w.location.href,before);assert.equal(q('[data-west-country]').value,'TUR');assert.equal(q('[data-west-year]').value,'2020');
+  assert.equal(q('[data-west-city]').value,'');assert.equal(q('[data-west-active-chart]'),null);
+  assert.equal(more.open,false);assert.equal(w.location.href,before);assert.equal(q('[data-west-country]').value,'TUR');assert.equal(q('[data-west-year]').value,'2020');
+ }finally{await w.happyDOM.close();}
+});
+
+
+test('農畜産分布の格子取得失敗から同じ品目・比較・地点へ再試行できる',async()=>{
+ let broken=true;
+ const query='?topic=climate&country=TUR&year=2020&at=35,39&side=source&map=100,120,400,300&from='+encodeURIComponent('?topic=wheat&country=TUR&year=2020');
+ const {w,q}=await setup('nature',query,false,{width:1180,height:757},{expectFailure:true,fetch:url=>broken&&url.endsWith('wheat.values.gz')?Promise.reject(Error('Test: farming grid unavailable')):undefined});
+ try{
+  const before=w.location.href;
+  assert.match(q('[data-west-loading]').textContent,/資料を読み込めません/);
+  assert.equal(q('[data-west-atlas]').dataset.ready,'false');
+  broken=false;q('[data-west-retry]').click();
+  await until(()=>q('[data-west-loading]').hidden&&q('[data-west-retry]').hidden);
+  await until(()=>q('[data-west-point]').textContent.includes('ha'));
+  assert.equal(w.location.href,before);assert.equal(q('[data-west-map]').getAttribute('viewBox'),'100 120 400 300');
+  assert.equal(q('[data-west-atlas]').dataset.comparing,'true');
+  assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-farm-context]').length,5);
  }finally{await w.happyDOM.close();}
 });
