@@ -522,6 +522,7 @@ export function initEuropeAtlas() {
     if(subject().field==='industry')return [[frame.west,frame.south],[frame.east,frame.north]] as [[number,number],[number,number]];
     const focus=comparisonFocus();
     if(focus)return [[focus.focusBounds[0],focus.focusBounds[1]],[focus.focusBounds[2],focus.focusBounds[3]]] as [[number,number],[number,number]];
+    if(subject().field==='agriculture')return [[frame.west,frame.south],[frame.east,frame.north]] as [[number,number],[number,number]];
     const codes = countries.filter(c => state.place ? c.code === state.place : state.region === 'all' || c.region === state.region).map(c => c.code);
     if (state.region === 'all' && !state.place) return [[-25, 32], [65, 73]] as [[number, number], [number, number]];
     return visibleBounds(geography.features.filter(f => codes.includes(f.properties.code)).map(f => f.geometry));
@@ -536,7 +537,7 @@ export function initEuropeAtlas() {
     const [right, top] = project(bounds[1]);
     const width = Math.max(right - left, 24), height = Math.max(bottom - top, 24);
     box = [(left + right - width) / 2 - width * .12, (top + bottom - height) / 2 - height * .12, width * 1.24, height * 1.24];
-    if (cultureActive() || subject().field==='industry' || state.region === 'all' && !state.place&&!comparisonFocus()) box = [0, 0, frame.width, frame.height];
+    if (cultureActive() || subject().field==='industry' || subject().field==='agriculture'&&!comparisonFocus() || state.region === 'all' && !state.place&&!comparisonFocus()) box = [0, 0, frame.width, frame.height];
     staticMap.setAttribute('viewBox', box.join(' '));
     staticSymbols();
     map?.fitBounds(bounds, { padding: {top:20,bottom:42,left:14,right:14}, maxZoom: 7, duration: reduced ? 0 : 450 });
@@ -646,11 +647,12 @@ export function initEuropeAtlas() {
     state.place = country?.code ?? '';
     if(state.farmCompare){state.farmCompare=state.farmCompare.filter(code=>code!==state.place);if(!state.farmCompare.length)delete state.farmCompare;}
     delete state.feature;
+    if (!country){state.region='all';state.city='';state.compare=[];}
     if (country) {
       state.region = country.region;
-      state.city=defaultEuropeCity(code,ids);state.compare=[];
+      state.city=subject().field==='agriculture'?'':defaultEuropeCity(code,ids);state.compare=[];
     }
-    commit(true);
+    commit(subject().field!=='agriculture');
   }
   function selectCity(id: string) {
     if(id===''){state.city='';state.compare=[];delete state.feature;commit(false);return;}

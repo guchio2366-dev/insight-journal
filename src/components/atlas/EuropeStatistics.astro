@@ -29,12 +29,18 @@ const countryName = (code: string) => countries.find(country => country.code ===
       <p class="eu-statistic-note">世界生産量比・飼養数比・森林面積比の分母は、同年・同品目・同単位でFAOSTATが公表するWorld行です。</p>
       <button type="button" data-eu-farm-statistics-retry hidden>数量統計を再読み込み</button>
       <div class="eu-farm-stat-controls" data-eu-farm-stat-controls hidden>
+        <label>国全体の数値<select data-eu-farm-country aria-label="農林業の統計対象国"><option value="">国を選ぶ</option>{countries.map(country=><option value={country.code}>{country.name}</option>)}</select></label>
         <label>数値の対象<select data-eu-farm-measure aria-label="農林業の数値の対象"></select></label>
         <label>比較年<select data-eu-farm-year aria-label="農林業の比較年">{Array.from({length:10},(_,i)=>2024-i).map(year=><option value={year} selected={year===2024}>{year}年</option>)}</select></label>
         <label>比較する国 1<select data-eu-farm-compare="0" aria-label="農林業の比較する国1"><option value="">比較しない</option>{countries.map(country=><option value={country.code}>{country.name}</option>)}</select></label>
         <label>比較する国 2<select data-eu-farm-compare="1" aria-label="農林業の比較する国2"><option value="">比較しない</option>{countries.map(country=><option value={country.code}>{country.name}</option>)}</select></label>
       </div>
       <p class="eu-statistic-note" data-eu-farm-measure-definition hidden></p>
+      <div class="eu-farm-three-columns" data-eu-farm-three-columns>
+        <section aria-labelledby="eu-farm-supply-title"><h4 id="eu-farm-supply-title">供給元・行先</h4><p class="eu-statistic-missing"><span data-eu-statistics-item>選択品目</span>の生産・輸入・在庫変動・輸出・国内仕向けと用途別の数量は、同じ年・分類で照合した原表が未収録です。</p><p>需給と国内用途は階層が異なるため、足し合わせません。原表が揃うまで横帯の値を作りません。</p><a href="https://www.fao.org/faostat/en/#data/FBS">FAOSTAT 食料需給表</a></section>
+        <section aria-labelledby="eu-farm-export-title"><h4 id="eu-farm-export-title">輸出先</h4><p class="eu-statistic-missing"><span data-eu-statistics-item>選択品目</span>の相手国別輸出量・額と総輸出は未収録です。円の割合は算出できません。</p><p>輸出量（t）と輸出額は別の指標です。輸入国の報告や別年の値で置き換えません。</p><a href="https://www.fao.org/faostat/en/#data/TM">FAOSTAT 詳細貿易行列</a></section>
+        <section aria-labelledby="eu-farm-share-title"><h4 id="eu-farm-share-title" data-eu-farm-share-title>世界シェア・推移</h4><p data-eu-farm-share-status role="status">品目・統計対象国を選ぶと、公表World値に対する割合と年次推移を表示します。</p><div data-eu-farm-share-chart></div><p class="eu-statistic-note">2015〜2024年。欠測年は線を切り、別年・ゼロ・補間で埋めません。数量の世界比で、販売額・輸出額・輸出比ではありません。</p></section>
+      </div>
       <div class="eu-farm-stat-summary" data-eu-farm-stat-summary hidden></div>
       <details class="eu-farm-stat-table" data-eu-farm-country-table hidden>
         <summary>同じ年・品目で欧州の国を比べる</summary>
@@ -51,8 +57,6 @@ const countryName = (code: string) => countries.find(country => country.code ===
     </section>
     <dl class="eu-statistics-availability">
       <div><dt>販売総額（米ドル）</dt><dd><span data-eu-statistics-item>欧州の農畜産物</span>の販売総額は未収録です。</dd></div>
-      <div><dt>需給・用途別消費</dt><dd><span data-eu-statistics-item>欧州の農畜産物</span>の需給・用途別消費は未収録です。</dd></div>
-      <div><dt>輸出額・輸出相手国</dt><dd><span data-eu-statistics-item>欧州の農畜産物</span>の輸出額と相手国別の内訳は未収録です。</dd></div>
       <div><dt>地図と数量の対象</dt><dd>格子の収穫面積・家畜密度と、国全体の生産量・頭羽数は別の資料です。集合的な作物区分を個別品目の統計に置き換えません。</dd></div>
     </dl>
     <p class="eu-statistic-note">「未収録」は、このサイトに数値を収録していないことを示します。販売・生産・輸出がゼロという意味ではありません。</p>

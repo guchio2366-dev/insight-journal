@@ -88,3 +88,14 @@
 .eu-workspace-root .eu-city-reading-details { border-top:1px solid #c7cec3; margin-top:6px; }
 .eu-workspace-root .eu-city-reading-details>summary { min-height:32px; padding:6px 0; font:13px/1.5 var(--sans); cursor:pointer; }
 .eu-workspace-root .eu-city-reading-details>summary:focus-visible { outline:3px solid #176f89; outline-offset:3px; }
+
+/* Supply, trade destination and world share remain distinct measures. */
+.eu-workspace-root .eu-farm-three-columns { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; margin:18px 0; }
+.eu-workspace-root .eu-farm-three-columns>section { min-width:0; border-top:2px solid #9aafa6; padding-top:10px; }
+.eu-workspace-root .eu-farm-three-columns h4 { margin:0 0 10px; font:700 18px/1.5 var(--sans); }
+.eu-workspace-root .eu-farm-three-columns :is(p,a) { font:14px/1.8 var(--sans); }
+.eu-workspace-root [data-eu-farm-share-chart] svg { display:block; width:100%; height:auto; overflow:visible; }
+.eu-workspace-root [data-eu-farm-share-chart] svg text { fill:#405650; font:14px var(--sans); }
+.eu-workspace-root .eu-farm-share-key { display:flex; flex-wrap:wrap; gap:6px 14px; list-style:none; padding:0; margin:8px 0; font:14px/1.5 var(--sans); }
+.eu-workspace-root .eu-farm-share-key span { display:inline-block; width:18px; height:3px; margin:0 6px 4px 0; }
+@media(max-width:959px) { .eu-workspace-root .eu-farm-three-columns { grid-template-columns:minmax(0,1fr); } }
