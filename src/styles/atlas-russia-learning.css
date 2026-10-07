@@ -303,3 +303,13 @@
 .russia-workspace .russia-learning[data-field=agriculture] .russia-agriculture-subtabs button:disabled{color:#7d8583;opacity:1}
 .russia-workspace .russia-learning[data-field=agriculture] .russia-agriculture-subtabs small{font-size:13px;font-weight:400;line-height:19.5px}
 .russia-workspace .russia-learning[data-field=agriculture] [data-normal-view] .russia-context-inset{top:64px}
+.russia-workspace .russia-learning[data-field=agriculture] .russia-key-legend [data-primary-legend] { grid-template-columns: 1fr; font-size: 14px; line-height: 1.5; row-gap: .45rem; }
+.russia-farming-legend-group { grid-column: 1 / -1; flex-basis: 100%; min-width: 0; }
+.russia-farming-legend-group h3 { margin: 0 0 .3rem; font-size: 1rem; line-height: 1.45; }
+.russia-farming-legend-group > div { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .25rem .65rem; }
+.russia-farming-legend-group > div > span { display: flex; align-items: center; gap: .35rem; }
+.russia-farming-status-key { grid-column: 1 / -1; flex-basis: 100%; margin: .15rem 0; font-size: .94rem; line-height: 1.55; }
+.russia-legend-mark.farming-line { background: repeating-linear-gradient(45deg,transparent 0 3px,var(--mark) 3px 5px,transparent 5px 8px); border: 1px solid var(--mark); }
+.russia-legend-mark.farming-outline { background: transparent; border: 2px solid var(--mark); }
+.russia-legend-mark.farming-zero { background: radial-gradient(circle at center,#597284 0 2px,transparent 2px); border: 1px solid #b7c6ce; }
+.russia-legend-mark.farming-missing { background: repeating-linear-gradient(-45deg,transparent 0 3px,#797e8b 3px 4px,transparent 4px 8px); border: 1px solid #b7bbc2; }

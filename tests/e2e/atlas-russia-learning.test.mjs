@@ -41,8 +41,25 @@ function page(field,query='',interactive=true){
  return {win,root,one:hook=>root.querySelector(`[data-${hook}]`)};
 }
 const legendLabels=element=>[...element.children].map(item=>item.textContent.trim());
-function assertLegend(element,layer){assert.deepEqual(legendLabels(element),Array.from(layer.legend,item=>item.label));}
+function assertLegend(element,layer){
+ if(layer.field==='agriculture'){
+  assert.equal(element.querySelectorAll('[data-farming-legend]').length,2);
+  assert.match(element.textContent,/ha／元5分セル/);assert.match(element.textContent,/頭／km²/);
+  assert.match(element.textContent,/有効0/);assert.match(element.textContent,/未収録/);
+  return;
+ }
+ assert.deepEqual(legendLabels(element),Array.from(layer.legend,item=>item.label));
+}
 function assertPrimaryLegend(one,layer){
+ if(layer.field==='agriculture'){
+  const legend=one('primary-legend');
+  assert.equal(legend.querySelectorAll('[data-farming-legend]').length,2);
+  assert.match(legend.querySelector('[data-farming-legend="wheat"] h3').textContent,/ha／元5分セル/);
+  assert.match(legend.querySelector('[data-farming-legend="cattle"] h3').textContent,/頭／km²/);
+  assert.match(legend.textContent,/有効0/);assert.match(legend.textContent,/未収録/);
+  assert.equal(legend.querySelector('[data-farming-legend="cattle"] div').children.length,6);
+  return;
+ }
  if(layer.id!=='climate'){assertLegend(one('primary-legend'),layer);return;}
  const dictionary=one('primary-legend-definitions');assertLegend(dictionary,layer);
  assert.equal(dictionary.closest('details').hidden,false);
@@ -125,6 +142,34 @@ test('changing cattle distribution updates the reading without resetting the com
   assert.match(one('theme-title').textContent,/牛と飼料/);
   assert.equal(one('compare-layer').value,'climate');
   assert.equal(one('primary-map').querySelector('svg').getAttribute('viewBox'),frame);
+ }finally{win.happyDOM.abort();}
+});
+
+test('farming overview and product focus retain both distributions, separate units and the full frame after reload',()=>{
+ const {win,root,one}=page('agriculture');
+ try{
+  assert.equal(one('layer').value,'farming-all');
+  const frame=one('primary-map').querySelector('svg').getAttribute('viewBox');
+  assert.deepEqual([...new Set([...one('primary-map').querySelectorAll('[data-farming-product]')].map(el=>el.dataset.farmingProduct))].sort(),['cattle','wheat']);
+  const initialOpacity=Number(one('primary-map').querySelector('[data-farming-product="cattle"]').getAttribute('opacity'));
+  assert.match(one('explanation').textContent,/2品目/);assert.match(one('explanation').textContent,/上位10/);
+  one('layer').value='wheat';one('layer').dispatchEvent(new win.Event('change'));
+  const cattle=one('primary-map').querySelector('[data-farming-product="cattle"]');
+  assert.ok(cattle);assert.ok(Number(cattle.getAttribute('opacity'))<initialOpacity);
+  assert.equal(one('primary-map').querySelector('[data-farming-product="wheat"][data-farming-mode="outline"]').getAttribute('opacity'),'1');
+  assert.equal(one('primary-map').querySelector('svg').getAttribute('viewBox'),frame);
+  one('place').value='siberia';one('place').dispatchEvent(new win.Event('change'));
+  assert.equal(one('layer').value,'wheat');assert.equal(one('primary-map').querySelectorAll('[data-region-marker]').length,3);
+  const reloaded=page('agriculture',win.location.search);
+  try{
+   assert.equal(reloaded.one('layer').value,'wheat');assert.equal(reloaded.one('place').value,'siberia');
+   assert.equal(Number(reloaded.one('primary-map').querySelector('[data-farming-product="cattle"]').getAttribute('opacity')),.22);
+   assert.equal(reloaded.one('primary-map').querySelector('svg').getAttribute('viewBox'),frame);
+  }finally{reloaded.win.happyDOM.abort();}
+  one('layer').value='cattle';one('layer').dispatchEvent(new win.Event('change'));
+  assert.ok(one('primary-map').querySelector('[data-farming-product="cattle"][data-farming-mode="quantity"]'));
+  assert.ok(one('primary-map').querySelector('[data-farming-product="wheat"][data-farming-mode="outline"]'));
+  assertPrimaryLegend(one,model.getRussiaLayer('cattle'));
  }finally{win.happyDOM.abort();}
 });
 

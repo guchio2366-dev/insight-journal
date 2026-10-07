@@ -8,6 +8,9 @@ import {execFileSync} from 'node:child_process';
 import {chromium} from 'playwright';
 
 const output=resolve(process.env.REGION_REVIEW_OUTPUT??'/tmp/oceania-russia-first-stage');
+const farmingOnly=process.env.REGION_REVIEW_FARMING_ONLY==='1';
+const regions=(process.env.REGION_REVIEW_REGIONS??'oceania,russia').split(',');
+assert.ok(regions.length>0&&regions.every(region=>['oceania','russia'].includes(region)));
 await mkdir(output,{recursive:true});
 const directory=resolve('dist');
 const types={'.html':'text/html','.js':'application/javascript','.css':'text/css','.json':'application/json','.geojson':'application/json','.png':'image/png','.svg':'image/svg+xml','.webp':'image/webp','.woff2':'font/woff2'};
@@ -52,9 +55,9 @@ try{
  const shot=async name=>{await page.screenshot({path:resolve(output,name+'.png'),fullPage:true});result.screenshots.push(name+'.png');};
  for(const width of [1536,1280,1024]){
   await page.setViewportSize({width,height:864});
-  for(const region of ['oceania','russia']){
+  for(const region of regions){
    const dimensions=[];
-   for(const field of ['agriculture','nature','industry','population']){
+   for(const field of farmingOnly?['agriculture']:['agriculture','nature','industry','population']){
     await open(region,field);
     const host=root(region),map=host.locator('[data-primary-map]'),frame=await map.locator('svg').first().getAttribute('viewBox');
     assert.equal(await host.locator('[data-place]').inputValue(),'all');
@@ -67,6 +70,29 @@ try{
     const bounds=await map.boundingBox();assert.ok(bounds.width>300&&bounds.height>=299);
     dimensions.push({field,width:bounds.width,height:bounds.height,frame});
     await shot(`${region}-${field}-${width}-overview`);
+    if(farmingOnly){
+     assert.equal(await host.locator('[data-layer]').inputValue(),'farming-all');
+     const products=region==='russia'?['cattle','wheat']:['cacao','cattle','coconut','sheep','wheat'];
+     const shown=async()=>[...new Set(await map.locator('[data-farming-product]').evaluateAll(elements=>elements.map(el=>el.dataset.farmingProduct)))].sort();
+     assert.deepEqual(await shown(),products);
+     assert.match(await host.locator('[data-explanation]').textContent(),/上位10/);
+     const cattle=map.locator('[data-farming-product="cattle"][data-farming-mode="texture"]');
+     const initialOpacity=Number(await cattle.getAttribute('opacity'));
+     await host.locator('[data-layer]').selectOption('wheat');await ready(region);
+     assert.deepEqual(await shown(),products);
+     assert.ok(Number(await cattle.getAttribute('opacity'))<initialOpacity);
+     assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
+     assert.equal(Number(await map.locator('[data-farming-product="wheat"][data-farming-mode="outline"]').getAttribute('opacity')),1);
+     await shot(`${region}-agriculture-${width}-crop-focus`);
+     await page.reload({waitUntil:'networkidle'});await ready(region);
+     assert.equal(await host.locator('[data-layer]').inputValue(),'wheat');assert.deepEqual(await shown(),products);
+     await host.locator('[data-layer]').selectOption('cattle');await ready(region);
+     assert.deepEqual(await shown(),products);
+     assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
+     assert.match(await host.locator('[data-farming-legend="cattle"] h3').textContent(),/頭／km²/);
+     if(width===1536)await shot(`${region}-agriculture-${width}-livestock-focus`);
+     await host.locator('[data-layer]').selectOption('farming-all');await ready(region);
+    }
     const layer=await host.locator('[data-layer]').inputValue(),compare=await host.locator('[data-compare-layer]').inputValue();
     if(region==='oceania')await host.locator('[data-place]').selectOption('PNG');
     else await map.locator('[data-region-marker][data-map-place=far-east]').press('Enter');
@@ -90,11 +116,10 @@ try{
    result.viewports.push({region,width,maps:dimensions});
   }
  }
- result.checks.push('All eight direct field routes start at full extent and overview without a selected country/region/theme.');
- result.checks.push('All four field map dimensions agree per region at 1536, 1280 and 1024px; hidden legend duplicates reserve no height.');
- result.checks.push('Country/keyboard region selection, reload and reset retain distributions and the full frame; Oceania retains all 347 mines and representative industry marks.');
+ result.checks.push(farmingOnly?'Changed farming pages start with all saved crop/livestock products, full extent and overview. Product focus, country/keyboard region selection, reload and reset retain other distributions.':'All eight direct field routes start at full extent and overview without a selected country/region/theme.');
+ result.checks.push(farmingOnly?'At 1536, 1280 and 1024px, crop focus keeps the full frame, strengthens its outline and makes livestock thinner. Both units and missing/zero keys remain visible.':'All four field map dimensions agree per region at 1536, 1280 and 1024px; hidden legend duplicates reserve no height.');
  await page.setViewportSize({width:1536,height:864});
- for(const region of ['oceania','russia']){
+ for(const region of regions){
   await open(region,'agriculture','?scope=all&layer=wheat&compare=cattle&view=comparison');
   const host=root(region),frame=await host.locator('[data-original-map] svg').first().getAttribute('viewBox');
   assert.equal(await host.locator('[data-comparison-map] svg').first().getAttribute('viewBox'),frame);
@@ -102,11 +127,11 @@ try{
   await shot(`${region}-crop-livestock-comparison`);
  }
  // Existing US reference pages are captured, without claiming data completeness or exact inter-region geometry parity.
- for(const field of ['agriculture','nature','industry','population']){
+ for(const field of farmingOnly?[]:['agriculture','nature','industry','population']){
   await page.goto(`${base}atlas/north-america/${field}/`,{waitUntil:'networkidle'});await page.evaluate(()=>document.fonts.ready);
   await shot(`us-${field}-reference`);
  }
- result.checks.push('Crop and livestock comparison uses two real source rasters, the same extent and separate units. Simultaneous all-product overlays remain outside this stage.');
+ result.checks.push(farmingOnly?'Farming overlays and focused comparison retain separate source units, true zero and missing; product availability is explicitly limited.':'Crop and livestock comparison uses the same extent and separate units.');
  assert.deepEqual(result.errors,[]);
  result.status='passed';console.log(JSON.stringify({status:result.status,head:result.head,checks:result.checks,viewports:result.viewports,screenshots:result.screenshots},null,2));
 }catch(error){result.status='failed';result.failure=String(error);throw error;}

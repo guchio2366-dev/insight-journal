@@ -63,7 +63,7 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
    const focusedPlace=focusedMarker?.dataset.mapPlace;
   const theme=getRussiaTheme(state),layer=getRussiaLayer(state.layer,state),compare=getRussiaLayer(state.compareLayer,state);
   const comparisonReading=getRussiaComparisonReading(state);
-  const contextualReading=selected&&(state.place==='all'||theme.regionCodes.includes(state.place));
+  const contextualReading=selected&&layer.id!=='farming-all'&&(state.place==='all'||theme.regionCodes.includes(state.place));
   one<HTMLSelectElement>('place').value=state.place;
   one<HTMLSelectElement>('layer').value=state.layer;
   const distribution=root.querySelector<HTMLSelectElement>('[data-distribution-layer]');if(distribution)distribution.value=state.layer;
@@ -99,12 +99,12 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
   text('comparison-explanation',comparisonReading.message);
   const shorter=one(layer.legend.length<=compare.legend.length?'original-map':'comparison-map').closest('.russia-learning-map-panel');
   shorter?.append(one('comparison-explanation'));
-  sources([...russiaBoundarySources,...layer.sources,...theme.sources,...(state.comparison?[...compare.sources,...comparisonReading.sources]:[])]);
+  sources([...russiaBoundarySources,...layer.sources,...(layer.field==='agriculture'?getRussiaLayer('farming-all').sources:[]),...theme.sources,...(state.comparison?[...compare.sources,...comparisonReading.sources]:[])]);
   root.querySelectorAll<HTMLAnchorElement>('[data-field-link]').forEach(link=>{
    const nextField=link.dataset.fieldLink as RussiaField;
    const available=russiaThemes.filter(item=>item.field===nextField);
    const nextTheme=available.find(item=>item.regionCodes.some(code=>code===state.place))??available[0];
-   link.href=serialized({...state,field:nextField,theme:nextTheme.id,layer:nextTheme.defaultLayer,compareLayer:nextTheme.comparisonLayer,comparison:false},withBase(`/atlas/russia/${nextField}/`)).href;
+   link.href=serialized({...state,field:nextField,theme:nextTheme.id,layer:nextField==='agriculture'?'farming-all':nextTheme.defaultLayer,compareLayer:nextTheme.comparisonLayer,comparison:false},withBase(`/atlas/russia/${nextField}/`)).href;
   });
   root.querySelectorAll<HTMLAnchorElement>('[data-russia-overview-link]').forEach(link=>{link.href=serialized({...state,comparison:false},link.href).href;});
    if(state.comparison){scene('original-map',state.layer);scene('comparison-map',state.compareLayer);}
@@ -120,7 +120,7 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
   if(state.place==='all')state.scope='all';selected=state.place!=='all';chooseRegionTheme();
  }));
  const chooseLayer=(event:Event)=>update(()=>{
-  state.layer=(event.target as HTMLSelectElement).value;selected=true;
+  state.layer=(event.target as HTMLSelectElement).value;selected=state.layer!=='farming-all'||state.place!=='all';
   const theme=russiaThemes.find(item=>item.field===field&&item.defaultLayer===state.layer);
   if(theme)state.theme=theme.id;
  });

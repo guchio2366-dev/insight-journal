@@ -15,6 +15,9 @@ on:
       - 'src/scripts/atlas-russia-*.ts'
       - 'src/styles/atlas-oceania-*.css'
       - 'src/styles/atlas-russia-*.css'
+      - 'public/assets/atlas/russia-farming-overlay-v1/**'
+      - 'public/assets/atlas/oceania-farming-overlay-v1/**'
+      - 'scripts/prepare-oceania-russia-farming-overlay.py'
 
 permissions:
   contents: read
@@ -31,6 +34,8 @@ jobs:
     env:
       ASTRO_TELEMETRY_DISABLED: '1'
       REGION_REVIEW_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+      REGION_REVIEW_FARMING_ONLY: '1'
+      REGION_REVIEW_REGIONS: 'russia'
     steps:
       - uses: actions/checkout@v7
         with:
@@ -58,7 +63,7 @@ jobs:
           test "$(git rev-parse HEAD)" = "$REGION_REVIEW_EXPECTED_HEAD"
           node scripts/generate-release.mjs --commit "$REGION_REVIEW_EXPECTED_HEAD"
           node scripts/verify-release.mjs --commit "$REGION_REVIEW_EXPECTED_HEAD"
-      - name: Verify full extent, operations and desktop dimensions
+      - name: Review changed farming maps and product selection
         env:
           REGION_REVIEW_OUTPUT: ${{ runner.temp }}/oceania-russia-pc-review
         run: node tests/browser/atlas-oceania-russia-first-stage.mjs
