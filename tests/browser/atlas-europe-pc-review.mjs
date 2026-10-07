@@ -225,6 +225,10 @@ async function agricultureClimateRepairs(page,profile){
   await page.bringToFront();await point.focus();
   // Exercise real keyboard focus, with the pointer away from the station.
   await page.mouse.move(5,5);await page.keyboard.press('Tab');await page.keyboard.press('Shift+Tab');
+  await page.waitForFunction(id=>{
+    const node=document.querySelector(`[data-eu-map-kind="city"][data-eu-map-place="${id}"]`);
+    return node&&document.activeElement===node&&Number.parseFloat(getComputedStyle(node).fontSize)===12;
+  },stationId,{timeout:5000});
   const stationFocus=await point.evaluate(node=>({id:node.dataset.euMapPlace,active:document.activeElement===node,activeId:document.activeElement?.getAttribute('data-eu-map-place'),activeTag:document.activeElement?.tagName,documentFocus:document.hasFocus(),focus:node.matches(':focus'),focusVisible:node.matches(':focus-visible'),font:Number.parseFloat(getComputedStyle(node).fontSize),hidden:node.hidden,style:node.getAttribute('style')}));
   manifest.checks.push({profile:profile.name,stationFocus});
   await page.locator('[data-eu-city-choice]').selectOption('london');
