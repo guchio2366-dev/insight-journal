@@ -1,0 +1,12 @@
+[
+  {
+    "dataset": "BasinATLAS v1.0",
+    "operation": "Read ZIP central-directory byte range from the original dataset archive",
+    "url": "https://ndownloader.figshare.com/files/20087237",
+    "reason": "urllib.error.URLError: Tunnel connection failed: 403 Forbidden",
+    "recordedAt": "2026-10-07T17:21:00.344134+00:00",
+    "retried": false,
+    "bypassAttempted": false,
+    "remaining": "Connected basin polygons/topology and major-basin map cannot be derived from the two retained river lines."
+  }
+]
