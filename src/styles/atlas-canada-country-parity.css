@@ -235,3 +235,9 @@
 }
 .canada-nature[data-canada-nature] [data-canada-basin-label]:focus-visible{outline:none}
 .canada-nature[data-canada-nature] [data-canada-basin-label]:focus-visible text{fill:#a64125}
+
+@media(min-width:960px){
+ .canada-nature[data-canada-nature] :is(.canada-natural-key,.canada-water-legend) button{font-size:14px}
+ .canada-nature[data-canada-nature] .canada-natural-layer[data-canada-natural-layer=elevation] .canada-natural-key i{height:2px;border:0;border-radius:0}
+ .canada-nature[data-canada-nature] .canada-natural-layer[data-canada-natural-layer=elevation] .canada-natural-key [data-canada-natural-legend="500"] i{height:1px}
+}

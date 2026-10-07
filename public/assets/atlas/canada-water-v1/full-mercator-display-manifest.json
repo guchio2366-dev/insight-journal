@@ -1,0 +1,93 @@
+{
+  "method": "Inverse Web Mercator with nearest original source pixel, full held affine source extent; class masks and source color values retained. Display palette is applied separately in SVG. Source scientific resolution remains approximately 10 km.",
+  "geographicBounds": [
+    -145,
+    40,
+    -50,
+    85
+  ],
+  "imageSize": [
+    1800,
+    2600
+  ],
+  "sourceClassesModified": false,
+  "files": [
+    {
+      "source": "annual-precipitation-us-0.png",
+      "sourceSha256": "80f1cd6206e4c64bb2cadff97813a95cc5f93fda2d11db57a58dce6a54fcb651",
+      "output": "annual-precipitation-us-0-full-mercator.png",
+      "sha256": "0f0b21c8ccda77007e699a19e18f597f59de6616eeb431388e5093e43281b991",
+      "sourceSize": [
+        1900,
+        900
+      ],
+      "northernVisiblePixels": 419041
+    },
+    {
+      "source": "annual-precipitation-us-1.png",
+      "sourceSha256": "06ea82bba9d4f853273283e6b8b908bb653cec809bfe04e349c9644ecea6648c",
+      "output": "annual-precipitation-us-1-full-mercator.png",
+      "sha256": "e30296dec448a034dea2b8df285a36d3ca9a34c5338bdffdf892aff37127f772",
+      "sourceSize": [
+        1900,
+        900
+      ],
+      "northernVisiblePixels": 103665
+    },
+    {
+      "source": "annual-precipitation-us-2.png",
+      "sourceSha256": "82487b89e2d3d94f7bd025c46cacd04d95eb562d622a78289f1c8ffc2c130914",
+      "output": "annual-precipitation-us-2-full-mercator.png",
+      "sha256": "2c1466a636b28619756322d30186867d61ff5170e90a516d1ab3cdf9c97e763b",
+      "sourceSize": [
+        1900,
+        900
+      ],
+      "northernVisiblePixels": 0
+    },
+    {
+      "source": "annual-precipitation-us-3.png",
+      "sourceSha256": "5055451da341d3347ed1a46187dd398569096d00017b6352c4bc042d4a6ac510",
+      "output": "annual-precipitation-us-3-full-mercator.png",
+      "sha256": "5915d32564c9e7524be8185f7fa490e29c91c55c274b93cd30e96bc822bcd65a",
+      "sourceSize": [
+        1900,
+        900
+      ],
+      "northernVisiblePixels": 0
+    },
+    {
+      "source": "annual-precipitation-us-4.png",
+      "sourceSha256": "20a1c47659b51cc22588cec16f778ab654a2b616d3281a34bcac1afeaf76129e",
+      "output": "annual-precipitation-us-4-full-mercator.png",
+      "sha256": "dda4a70769259cf2a28abab6eef46c34819ab9b8e8386d7dc2cd6b334a6cb91a",
+      "sourceSize": [
+        1900,
+        900
+      ],
+      "northernVisiblePixels": 0
+    },
+    {
+      "source": "annual-precipitation-us-5.png",
+      "sourceSha256": "1be0c8ed626b3c56609d683a9731d7cbef2bed3c3667493694f85dbe4dc460c9",
+      "output": "annual-precipitation-us-5-full-mercator.png",
+      "sha256": "bc16949ee0586722f6cd946bda72df5d8c37cf95769bdfcd619906af8d63141f",
+      "sourceSize": [
+        1900,
+        900
+      ],
+      "northernVisiblePixels": 0
+    },
+    {
+      "source": "annual-precipitation-us-6.png",
+      "sourceSha256": "017f4b13a30e79f43202498384d7bb37f11e0992e1962cb246fcbd945f89d05b",
+      "output": "annual-precipitation-us-6-full-mercator.png",
+      "sha256": "4a4b64b95c2fd8ad095aac80796dfd05133ea0a2f663cafefa60aea7ae885f73",
+      "sourceSize": [
+        1900,
+        900
+      ],
+      "northernVisiblePixels": 0
+    }
+  ]
+}

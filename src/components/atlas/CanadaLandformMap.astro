@@ -42,7 +42,7 @@ const fullFrame = `0 0 ${canadaLandformSize.width} ${canadaLandformSize.height}`
       return <button type="button" class:list={['canada-landform-label', {'is-selected': selected === region.id}]} data-canada-landform-label={region.id} style={`left:${x / canadaLandformSize.width * 100}%;top:${y / canadaLandformSize.height * 100}%`} aria-pressed={String(selected === region.id)} hidden>{region.name}</button>;
     })}</div>
     <div class="canada-landform-tools" aria-label="地形地図の操作">
-      <button type="button" data-canada-landform-reset aria-label="カナダ南部を中心に地形を表示">全体</button>
+      <button type="button" data-canada-landform-reset aria-label="カナダ南部を中心に地形を表示">南部</button><button type="button" data-canada-landform-whole aria-label="北極圏を含むカナダの地形を表示">全域</button>
       <button type="button" data-canada-landform-zoom="in" aria-label="地形地図を拡大">＋</button>
       <button type="button" data-canada-landform-zoom="out" aria-label="地形地図を縮小">−</button>
       <button type="button" data-canada-landform-focus aria-label="選んだ地形地域へ" disabled={!selected}>地域へ</button>

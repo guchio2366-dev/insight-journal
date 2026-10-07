@@ -31,6 +31,7 @@ async function renderNaturalSSR(props) {
       ['maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url', dataModule('export default "/worker.js";')],
       ['../../lib/atlas-canada-landform-map', dataModule(projectionCode)],
       ['../../lib/atlas-canada-natural-layer', dataModule(contourCode)],
+      ['../../lib/atlas-canada-natural-presentation',dataModule(await bundleCanadaSource('src/lib/atlas-canada-natural-presentation.ts',{format:'esm',platform:'node'}))],
     ]);
     // Standalone SSR has no Vite CSS/worker asset pipeline. Geometry and
     // component rendering run unchanged; unused compiler import metadata is inert.
@@ -109,7 +110,7 @@ test('No-JS contour SVG defines every original projected vertex once and referen
       assert.equal(html.split(expected).length-1,1,'the coordinate string is serialized once, including with JavaScript disabled');
       assert.equal(shape.querySelectorAll('[d]').length,0,'instances reference geometry instead of repeating a path');
       assert.equal(hit.getAttribute('stroke-width'),'9'); assert.equal(hit.getAttribute('pointer-events'),'stroke');
-      assert.equal(visual.getAttribute('stroke'),group.color);
+      assert.equal(visual.getAttribute('stroke'),JSON.parse(root.querySelector('[data-canada-natural-config]').textContent).groups.find(g=>g.id===group.id).color);
       assert.equal(Number(visual.getAttribute('stroke-width')),contourHelper.canadaNaturalContourWidth(Number(group.id)));
       assert.equal(Number(visual.getAttribute('stroke-opacity')),contourHelper.canadaNaturalContourOpacity(Number(group.id)));
       for (const element of [definition,visual,hit]) assert.equal(element.getAttribute('vector-effect'),'non-scaling-stroke');

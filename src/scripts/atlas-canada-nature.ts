@@ -162,6 +162,7 @@ export function initCanadaNature(root:HTMLElement){
  $<HTMLInputElement>('[data-canada-only]').addEventListener('change',e=>update({only:(e.target as HTMLInputElement).checked}));
  $('[data-canada-all-water]').addEventListener('click',()=>update({water:null,only:false}));
  $('[data-canada-reset]').addEventListener('click',()=>update({frame:null}));
+ root.querySelector('[data-canada-whole]')?.addEventListener('click',()=>update({frame:[0,0,900,580]}));
  $('[data-canada-focus]').addEventListener('click',()=>{const p=config.cities.find((c:any)=>c.id===state.city).point;update({frame:[p[0]-150,p[1]-100,300,200]});});
  for(const button of root.querySelectorAll<HTMLElement>('[data-canada-zoom]'))button.addEventListener('click',()=>{
   const [x,y,w,h]=state.frame??full,factor=button.dataset.canadaZoom==='in'?.75:1/.75;

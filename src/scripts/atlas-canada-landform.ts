@@ -27,6 +27,9 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
   const focusButton = root.querySelector<HTMLButtonElement>('[data-canada-landform-focus]')!;
   const labels = [...root.querySelectorAll<HTMLButtonElement>('[data-canada-landform-label]')];
   const fullFrame: Frame = [0, 0, canadaLandformSize.width, canadaLandformSize.height];
+  const national=(config.context as any).features.find((feature:any)=>feature.properties.code==='CAN')?.geometry;
+  const points:number[][]=national?national.coordinates.flat(national.type==='MultiPolygon'?2:1):[canadaLandformBounds[0],canadaLandformBounds[1]];
+  const wholeBounds:CanadaLandformCameraBounds=[Math.min(...points.map(p=>p[0])),Math.min(...points.map(p=>p[1])),Math.max(...points.map(p=>p[0])),Math.max(...points.map(p=>p[1]))];
   const [worldLeft, worldTop] = projectCanadaLandform([-180, 85.051]);
   const [worldRight, worldBottom] = projectCanadaLandform([180, -85.051]);
   const abort = new AbortController();
@@ -104,7 +107,7 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
     if (!width || !height) return;
     const ratio = Math.min(width / frame[2], height / frame[3]);
     const left = (width - frame[2] * ratio) / 2, top = (height - frame[3] * ratio) / 2;
-    const occupied: number[][] = [[width - 60, 0, width, 205]];
+    const occupied: number[][] = [[width - 60, 0, width, 245]];
     for (const label of [...labels].sort((a, b) => Number(b.dataset.canadaLandformLabel === state.selected) - Number(a.dataset.canadaLandformLabel === state.selected))) {
       const region = config.regions.find(item => item.id === label.dataset.canadaLandformLabel)!;
       if (state.only && state.selected && region.id !== state.selected) { label.hidden = true; continue; }
@@ -255,6 +258,7 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
   });
   listen(onlyControl, 'change', () => emit('canada-landform-only', { only: onlyControl.checked }));
   listen(root.querySelector('[data-canada-landform-reset]')!, 'click', () => { fit(); emit('canada-landform-reset', {}); });
+  const wholeButton=root.querySelector('[data-canada-landform-whole]');if(wholeButton)listen(wholeButton,'click',()=>{restoreCamera(wholeBounds);commitCamera();});
   for (const button of root.querySelectorAll<HTMLButtonElement>('[data-canada-landform-zoom]')) listen(button, 'click', () => zoom(button.dataset.canadaLandformZoom as 'in' | 'out'));
   listen(focusButton, 'click', focusSelected);
 
