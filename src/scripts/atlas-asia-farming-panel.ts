@@ -32,7 +32,7 @@ export function renderAsiaFarmingPanel(root:HTMLElement,region:AsiaRegionId,topi
  $('[data-farming-statistics-title]').textContent=country?`${country.name}の${definition.statName}`:'国・地域の統計を読む';$('[data-farming-statistics-definition]').textContent=definition.definition;
  const tables=$('[data-farming-statistics-tables]');tables.replaceChildren();
  const status=$('[data-farming-statistics-status]');
- if(!country){status.textContent='国・地域を選ぶと、2015–2024年の統計を表示します。';return;}
+ if(!country){status.textContent=region==='southeast-asia'?'雨温図や地域事例から同じ場所を比較すると、その国全体の2015–2024年の統計を表示します。':'国・地域を選ぶと、2015–2024年の統計を表示します。';return;}
  if(!statistics){status.textContent='国・地域の統計を読み込んでいます。';return;}
  const record=statistics.countries[country.code];status.textContent=country.code==='CHN'?'この表はFAOの中国本土の統計です。香港・マカオ・台湾を含むChina集計とは区別しています。':country.code==='TWN'?'この表はFAOの台湾区分（M49:158）を使っています。':'';
  for(const series of farmSeries(topic,layer,record?.observations??[])){

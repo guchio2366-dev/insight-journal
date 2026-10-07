@@ -13,6 +13,7 @@ import {fileURLToPath} from 'node:url';
 import {chromium} from 'playwright';
 import astroConfig from '../astro.config.mjs';
 import {verifyAsiaIndustryCountry} from './verify-asia-industry-country.mjs';
+import {verifySoutheastAsiaRegion} from './verify-southeast-asia-regional-reading.mjs';
 import {verifySouthCentralAsia,southCentralProfiles,southCentralImageCount} from './verify-south-central-asia-pc.mjs';
 
 const run=promisify(execFile);
@@ -27,7 +28,7 @@ const scenes=[
  {id:'population',us:'/atlas/north-america/population/',asia:'/atlas/asia/east-asia/population/',alignTop:true,comparisonScope:'layout-only; the US reference does not show a population distribution fill, so distribution rendering equivalence is not assessed'},
 ];
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.geojson':'application/geo+json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.woff2':'font/woff2','.gz':'application/gzip'};
-const metadata={schemaVersion:1,status:'running',startedAt:new Date().toISOString(),checkedOutSHA:null,headSHA:process.env.REVIEW_HEAD_SHA||null,baseSHA:process.env.REVIEW_BASE_SHA||null,beforeSHA:process.env.REVIEW_BEFORE_SHA||null,githubSHA:process.env.GITHUB_SHA||null,runId:process.env.GITHUB_RUN_ID||null,runAttempt:process.env.GITHUB_RUN_ATTEMPT||null,repository:process.env.GITHUB_REPOSITORY||null,basePath,profiles,output:'review-artifacts/asia-pc',expectedImageCount:82,expectedComparisonCount:8,fonts:{setup:process.env.REVIEW_JAPANESE_FONT_SETUP||'preinstalled',families:process.env.REVIEW_JAPANESE_FONTS||null,match:process.env.REVIEW_JAPANESE_FONT_MATCH||null},browser:null,scope:'Local production build only; public deployment is not accessed.',notes:['US automobiles and Japanese transport equipment retain their respective statistical definitions.','Industry map dimensions use the compact US population frame; other dimensions and all corresponding field tops agree within 1 CSS pixel.','Population is a layout-only comparison: the US reference does not show a population distribution fill; no distribution rendering equivalence is asserted.','Each PNG shows the viewport once; no duplicate map-crop artifacts are generated.']};
+const metadata={schemaVersion:1,status:'running',startedAt:new Date().toISOString(),checkedOutSHA:null,headSHA:process.env.REVIEW_HEAD_SHA||null,baseSHA:process.env.REVIEW_BASE_SHA||null,beforeSHA:process.env.REVIEW_BEFORE_SHA||null,githubSHA:process.env.GITHUB_SHA||null,runId:process.env.GITHUB_RUN_ID||null,runAttempt:process.env.GITHUB_RUN_ATTEMPT||null,repository:process.env.GITHUB_REPOSITORY||null,basePath,profiles,output:'review-artifacts/asia-pc',expectedImageCount:108+southCentralImageCount,expectedComparisonCount:8,fonts:{setup:process.env.REVIEW_JAPANESE_FONT_SETUP||'preinstalled',families:process.env.REVIEW_JAPANESE_FONTS||null,match:process.env.REVIEW_JAPANESE_FONT_MATCH||null},browser:null,scope:'Local production build only; public deployment is not accessed.',notes:['US automobiles and Japanese transport equipment retain their respective statistical definitions.','Industry map dimensions use the compact US population frame; other dimensions and all corresponding field tops agree within 1 CSS pixel.','Population is a layout-only comparison: the US reference does not show a population distribution fill; no distribution rendering equivalence is asserted.','Each PNG shows the viewport once; no duplicate map-crop artifacts are generated.']};
 const results={captures:[],comparisons:[],operations:[],externalCommunicationAttempts:[],blockedWebSockets:[]};
 const failure=error=>error?.stack??String(error);
 async function persist(){
@@ -111,7 +112,7 @@ async function open(page,host,route,region='asia',scene){
 
 // Decode the viewport PNG and inspect only its visible map pixels. This avoids
 // producing a second screenshot artifact or accepting a merely present canvas.
-function mapPixels(png,box){
+function mapPixels(png,box,backgroundExclusions=[]){
  assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a');
  let width,height,channels;const chunks=[];
  for(let offset=8;offset<png.length;){
@@ -124,7 +125,7 @@ function mapPixels(png,box){
  const paeth=(a,b,c)=>{const p=a+b-c,pa=Math.abs(p-a),pb=Math.abs(p-b),pc=Math.abs(p-c);return pa<=pb&&pa<=pc?a:pb<=pc?b:c;};
  for(let y=0;y<height;y++){const filter=raw[y*(stride+1)];assert(filter<=4);for(let x=0;x<stride;x++){const offset=y*stride+x,left=x>=channels?pixels[offset-channels]:0,up=y?pixels[offset-stride]:0,upperLeft=y&&x>=channels?pixels[offset-stride-channels]:0;pixels[offset]=(raw[y*(stride+1)+1+x]+[0,left,up,Math.floor((left+up)/2),paeth(left,up,upperLeft)][filter])&255;}}
  const colors=new Map();let samples=0,backgroundPoint=null;
- for(let y=Math.max(0,Math.ceil(box.y+4));y<Math.min(height,Math.floor(box.y+box.height-4));y+=3)for(let x=Math.max(0,Math.ceil(box.x+4));x<Math.min(width,Math.floor(box.x+box.width-4));x+=3){const i=(y*width+x)*channels;if(channels===4&&pixels[i+3]<128)continue;const key=`${pixels[i]>>4},${pixels[i+1]>>4},${pixels[i+2]>>4}`;colors.set(key,(colors.get(key)??0)+1);samples++;if(!backgroundPoint&&x>box.x+24&&x<box.x+box.width-24&&y>box.y+24&&y<box.y+box.height-24&&['230,238,240','215,218,213','225,228,219'].includes(`${pixels[i]},${pixels[i+1]},${pixels[i+2]}`))backgroundPoint={x,y};}
+ for(let y=Math.max(0,Math.ceil(box.y+4));y<Math.min(height,Math.floor(box.y+box.height-4));y+=3)for(let x=Math.max(0,Math.ceil(box.x+4));x<Math.min(width,Math.floor(box.x+box.width-4));x+=3){const i=(y*width+x)*channels;if(channels===4&&pixels[i+3]<128)continue;const key=`${pixels[i]>>4},${pixels[i+1]>>4},${pixels[i+2]>>4}`;colors.set(key,(colors.get(key)??0)+1);samples++;if(!backgroundPoint&&x>box.x+24&&x<box.x+box.width-24&&y>box.y+24&&y<box.y+box.height-24&&!backgroundExclusions.some(r=>x>=r.x-4&&x<=r.x+r.width+4&&y>=r.y-4&&y<=r.y+r.height+4)&&['230,238,240','215,218,213','225,228,219'].includes(`${pixels[i]},${pixels[i+1]},${pixels[i+2]}`))backgroundPoint={x,y};}
  const evidence={viewportWidth:width,viewportHeight:height,sampledMapPixels:samples,colorBuckets:colors.size,dominantColorRatio:samples?Math.max(...colors.values())/samples:1};
  assert(samples>1000,`The visible map has too few pixels to review: ${JSON.stringify({box,...evidence})}`);
  assert(colors.size>=16&&evidence.dominantColorRatio<.98,`The map is blank or nearly uniform: ${JSON.stringify(evidence)}`);return {...evidence,backgroundPoint,colorBucketKeys:[...colors.keys()]};
@@ -301,12 +302,15 @@ async function checkOperations(browser,host,profile,source){
   assert.equal(new URL(page.url()).searchParams.get('topic'),'jp-20');await page.reload({waitUntil:'domcontentloaded'});await industryReady(page);await selected(page,'長崎県','該当なし');
   return {observations,sourceMarkers:{X:'秘匿','***':'該当なし'},sectorCount:24,domesticCount:47,numericRankingOnly:true,pointerTopicButtons:true,comparisonReturn:true,urlReload:true};
  });
- await operation(browser,host,profile,'putrajaya-missing-zero',async page=>{
-  await open(page,host,'/atlas/asia/southeast-asia/industry/?topic=my-p3&place=MYS&detail=MY-16');await industryReady(page);const value=await selected(page,'プトラジャヤ','0（公表値）');
-  await expand(page.locator('[data-industry-content] details').filter({has:page.locator('caption').filter({hasText:/^公表値の推移/})}));
-  const history=table(page,/^公表値の推移/),missing=await row(page,history,'2023').locator('td').textContent(),zero=await row(page,history,'2025').locator('td').textContent();
-  assert.match(missing,/^未掲載/);assert.match(zero,/^0（公表値）/);assert.match(await row(page,table(page,/^国内の地域/),'プトラジャヤ').locator('td').textContent(),/^0（公表値）/);assert.match(await page.locator('[data-industry-lead]').textContent(),/番目/);
-  return {selection:value,year2023:missing,year2025:zero,zeroIncludedInRanking:true};
+ await operation(browser,host,profile,'southeast-excluded-domestic-source-preserved',async page=>{
+  const manifest=JSON.parse(await readFile(path.join(repo,'public/assets/atlas/asia-industry-v1/manifest.json'),'utf8'));
+  const southeast=JSON.parse(gunzipSync(await readFile(path.join(repo,'public/assets/atlas/asia-industry-v1',manifest.regions['southeast-asia'].data))));
+  const series=southeast.admin.find(a=>a.id==='MY-16').series['my-p3'];
+  assert.equal(series.find(o=>o.year==='2023').value,null);assert.equal(series.find(o=>o.year==='2025').value,0);
+  await open(page,host,'/atlas/asia/southeast-asia/industry/?topic=my-p3&place=MYS&detail=MY-16');
+  await page.waitForFunction(()=>document.querySelector('[data-industry-status]')?.textContent===''&&new URL(location.href).searchParams.get('topic')==='manufacturing');
+  assert.equal(new URL(page.url()).searchParams.get('place'),null);assert.equal(new URL(page.url()).searchParams.get('detail'),null);
+  return {sourceMissing2023Preserved:true,sourceZero2025Preserved:true,excludedDomesticURLReturnsToRegionalIndustry:true};
  });
  await operation(browser,host,profile,'city-month-comparison',async page=>{
   await open(page,host,'/atlas/asia/east-asia/nature/?place=JPN&city=tokyo');const city=page.locator('[data-city-select]');assert.equal(await city.inputValue(),'tokyo');
@@ -466,13 +470,18 @@ async function main(){
   for(const profile of profiles)await checkOperations(browser,host,profile,source);
   for(const profile of profiles)await checkContextOperations(browser,host,profile);
   for(const profile of profiles)await checkRequestedCorrections(browser,host,profile);
+  for(const profile of profiles)await operation(browser,host,profile,'southeast-asia-regional-reading',async page=>verifySoutheastAsiaRegion(page,{
+   source:host.origin+basePath,
+   capture:id=>contextPicture(page,profile,'southeast-'+id,'asia'),
+   background:async()=>{await settle(page);await page.locator('[data-map-surface]').scrollIntoViewIfNeeded();const box=await page.locator('[data-map-surface]').boundingBox();const buttons=await page.locator('[data-map-surface] button,[data-map-annotations] button').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};}).filter(r=>r.width>0&&r.height>0));return mapPixels(await page.screenshot({fullPage:false,animations:'disabled'}),box,buttons).backgroundPoint;}
+  }));
   for(const profile of profiles)await checkEastContourBands(browser,host,profile);
   for(const profile of southCentralProfiles)await operation(browser,host,profile,'south-central-regional-acceptance',page=>verifySouthCentralAsia(page,{profile,source:host.origin+basePath,capture:contextPicture}));
   metadata.regionalProfiles=southCentralProfiles;
-  metadata.expectedImageCount=82+southCentralImageCount;
+  metadata.expectedImageCount=108+southCentralImageCount;
   assert.equal(results.captures.length,metadata.expectedImageCount);assert(results.captures.every(row=>row.passed),'All viewport captures must pass');
   assert.equal(results.comparisons.length,8);assert(results.comparisons.every(row=>row.passed),'All 8 geometry comparisons must pass');
-  assert.equal(results.operations.length,38+southCentralProfiles.length);assert(results.operations.every(row=>row.passed),'All PC operation groups must pass');
+  assert.equal(results.operations.length,40+southCentralProfiles.length);assert(results.operations.every(row=>row.passed),'All PC operation groups must pass');
   assert.deepEqual(results.externalCommunicationAttempts,[]);assert.deepEqual(results.blockedWebSockets,[]);
   metadata.status='passed';
  }catch(error){metadata.status='failed';metadata.failure=failure(error);process.exitCode=1;}

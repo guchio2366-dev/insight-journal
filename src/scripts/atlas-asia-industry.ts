@@ -1,4 +1,4 @@
-import {industryTopic,normalizeIndustryState,industryValues,industryValueLabel,industryMissingLabel,industryScale,industryColors,industryFuelNames,industryFuelColors,industryDomesticNotes,industryMalaysiaReading,industryScopeCountries,isEastIndustryRegion,type IndustryRegion,type IndustryData,type IndustryNational,type IndustrySeries,type IndustryAdmin} from '../data/atlas/asia-industry';
+import {industryTopic,normalizeIndustryState,industryValues,industryValueLabel,industryMissingLabel,industryScale,industryColors,industryFuelNames,industryFuelColors,industryDomesticNotes,industryMalaysiaReading,industryScopeCountries,hasIndustryCountryScope,type IndustryRegion,type IndustryData,type IndustryNational,type IndustrySeries,type IndustryAdmin} from '../data/atlas/asia-industry';
 import type {AsiaState,AsiaCamera} from '../lib/atlas-asia-state';
 type Config={industry:IndustryRegion;industryBase:string;countries:{code:string;name:string}[]};
 const fmt=(value:number|null|undefined)=>value===null||value===undefined?'未掲載':value.toLocaleString('ja-JP',{maximumFractionDigits:2});
@@ -11,7 +11,7 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
  let data:IndustryData|null=null,national:IndustryNational|null=null,pending:Promise<void>|null=null,failed=false,map:import('maplibre-gl').Map|null=null,revision=0;
  const countryName=(code:string)=>config.countries.find(c=>c.code===code)?.name??code;
  const current=()=>industryTopic(region,getState());
- const east=isEastIndustryRegion(region);
+ const east=hasIndustryCountryScope(region);
  function scopedValues(t:ReturnType<typeof current>){const countries=industryScopeCountries(region,getState().place),values=industryValues(t,data!,national!,countries);if(!east||t.kind!=='power')return values;const ids=new Set(data!.power.filter(p=>countries.includes(p.country)).map(p=>p.id));return values.filter(v=>ids.has(v.id));}
  async function json<T>(file:string):Promise<T>{
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);
@@ -38,7 +38,7 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
   if(!data)return;const state=getState(),t=current(),input=$<HTMLInputElement>('[data-industry-search]');
   $('[data-industry-search-label]').hidden=t.kind!=='power';$('[data-industry-detail-label]').hidden=!['admin','power'].includes(t.kind);
   const selectEl=$<HTMLSelectElement>('[data-industry-detail]');selectEl.replaceChildren(option('選択を解除する',''));
-  let records=t.kind==='admin'?data.admin.filter(a=>a.country===t.country&&a.point):t.kind==='power'?data.power.filter(p=>(!state.place||p.country===state.place)&&(t.fuel==='all'||p.fuel===t.fuel)&&(!input.value||p.name.toLowerCase().includes(input.value.toLowerCase()))).sort((a,b)=>(b.capacity??0)-(a.capacity??0)):[];
+  let records=t.kind==='admin'?data.admin.filter(a=>a.country===t.country&&a.point):t.kind==='power'?data.power.filter(p=>(!east||industryScopeCountries(region,state.place).includes(p.country))&&(!state.place||p.country===state.place)&&(t.fuel==='all'||p.fuel===t.fuel)&&(!input.value||p.name.toLowerCase().includes(input.value.toLowerCase()))).sort((a,b)=>(b.capacity??0)-(a.capacity??0)):[];
   const selected=detail();if(t.kind==='power'){records=records.slice(0,100);if(selected&&!records.some(r=>r.id===selected.id))records.unshift(selected as any);}
   const values=scopedValues(t);
   for(const r of records){const observation=values.find(v=>v.id===r.id);selectEl.append(option(r.name+' · '+countryName(r.country)+' · '+industryValueLabel(observation),r.id));}selectEl.value=state.detail??'';
@@ -47,6 +47,7 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
   const state=getState(),active=state.field==='industry'&&current().kind!=='trade';$('[data-industry-panel]').hidden=!active;$('[data-industry-topics]').hidden=state.field!=='industry';$('[data-industry-legend]').hidden=!active;
   const regionReading=root.querySelector<HTMLElement>('[data-industry-region-reading]');if(regionReading)regionReading.hidden=!east||state.field!=='industry'||!!state.place;
   const countryReading=root.querySelector<HTMLElement>('[data-industry-country-reading]');if(countryReading){countryReading.hidden=!east||state.field!=='industry'||!state.place;if(!countryReading.hidden){countryReading.querySelector('[data-industry-country-reading-title]')!.textContent=countryName(state.place!)+'の収録範囲';countryReading.querySelector('[data-industry-country-reading-text]')!.textContent=state.place==='TWN'?'台湾のWorld Bank WDI系列は未掲載で、他国の値で補っていません。国連Comtradeは台湾等を含む「Other Asia, nes」（報告区分490）であり、台湾だけの厳密な値とは言い切れません。中国本土156とは合算しません。鉄鋼の設備能力と発電施設はそれぞれの原資料の収録範囲で読みます。':state.place==='JPN'?'日本の都道府県別製造品出荷額等は2024年・百万円です。国全体の付加価値や商品輸出額とは単位・定義が異なります。国内の業種を切り替えると、同じ県の産業構成を確認できます。':state.place==='CHN'?'中国の省別鉄鋼は稼働区分の設備能力です。年の実生産量ではありません。製造業・サービス業の国全体の指標、商品貿易と分けて確認できます。':'韓国は国全体の産業指標、鉄鋼の設備能力、発電施設、商品貿易を収録しています。韓国内の地域別・業種別産業統計は未収録で、日本や中国の国内統計で補っていません。';}}
+  if(countryReading&&region.countryScope){const reading=state.place?region.countryScope.readings?.[state.place]:null;const source=countryReading.querySelector<HTMLElement>('[data-industry-country-reading-source]');if(reading){countryReading.querySelector('[data-industry-country-reading-title]')!.textContent=reading.title;countryReading.querySelector('[data-industry-country-reading-text]')!.textContent=reading.reading+' '+reading.scope;}if(source){source.hidden=!reading;if(reading){const a=source.querySelector<HTMLAnchorElement>('a')!;a.textContent=reading.source.label;a.href=reading.source.url;}}}
   root.dataset.industryScope=state.field==='industry'&&['national','steel'].includes(current().kind)?'overview':'detail';
   if(!active)return;const t=current();$<HTMLSelectElement>('[data-industry-topic]').value=t.id;
   $('[data-map-title]').textContent=t.title;$('[data-map-eyebrow]').textContent='Industry · '+t.year;$('[data-map-period]').textContent=t.unit;

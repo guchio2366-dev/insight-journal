@@ -1,5 +1,5 @@
 import {industryTopicGroup,industrySectors,industrySubsectors,naturalGroup,populationGroup} from '../data/atlas/asia-navigation.ts';
-import {eastIndustryCountries,isEastIndustryRegion,industryTopicsForPlace,type IndustryRegion} from '../data/atlas/asia-industry.ts';
+import {industryCountryChoices,hasIndustryCountryScope,industryTopicsForPlace,type IndustryRegion} from '../data/atlas/asia-industry.ts';
 import type {AsiaState} from '../lib/atlas-asia-state';
 import type {IndustrySector} from '../data/atlas/industry-catalog';
 export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|undefined,getState:()=>AsiaState,navigate:(s:AsiaState,fit?:boolean)=>void,choosePopulation:(topic:string)=>void,chooseNatural:(topic:string)=>void,chooseFarm:(topic:string)=>void){
@@ -10,11 +10,12 @@ export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|un
  for(const b of all('[data-population-choice]'))b.addEventListener('click',()=>choosePopulation(b.dataset.populationChoice!));
  for(const b of all('[data-farm-choice]'))b.addEventListener('click',()=>chooseFarm(b.dataset.farmChoice!));
  for(const b of all('[data-farm-group-topic]'))b.addEventListener('click',()=>{if(b.dataset.farmGroupTopic)chooseFarm(b.dataset.farmGroupTopic);});
- const east=!!industry&&isEastIndustryRegion(industry);
+ const east=!!industry&&hasIndustryCountryScope(industry);
+ const countries=industry?industryCountryChoices(industry):[],regionLabel=industry?.countryScope?.label??'東アジア';
  for(const b of all('[data-industry-country]'))b.addEventListener('click',()=>{
   if(!industry||!east)return;
   const state=getState(),place=b.dataset.industryCountry==='all'?null:b.dataset.industryCountry!;
-  if(place&&!eastIndustryCountries.some(c=>c.code===place))return;
+  if(place&&!countries.some(c=>c.code===place))return;
   const same=place===state.place,topics=industryTopicsForPlace(industry,place);
   const current=topics.find(t=>t.id===state.topic&&(!!place||!t.country)),target=current??topics.find(t=>t.id==='manufacturing')??topics[0];
   const keepDetail=same||target.kind==='trade'&&target.id===state.topic;
@@ -57,7 +58,7 @@ export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|un
   if(!industry||state.field!=='industry')return;
   const topics=industryTopicsForPlace(industry,state.place);
   for(const b of all('[data-industry-country]'))b.setAttribute('aria-pressed',String(b.dataset.industryCountry===(state.place??'all')));
-  const scope=$('[data-industry-country-scope]');if(scope)scope.textContent=state.place?`${eastIndustryCountries.find(c=>c.code===state.place)?.name??state.place}の産業。主題と施設はこの国に絞っています。「東アジア全体」で地域の比較へ戻れます。`:'東アジア全体の産業を比較しています。中国・日本・韓国・台湾を選ぶと、その国の収録主題へ進めます。';
+  const scope=$('[data-industry-country-scope]');if(scope)scope.textContent=state.place?`${countries.find(c=>c.code===state.place)?.name??state.place}の産業。主題と施設はこの国に絞っています。「${regionLabel}全体」で地域の比較へ戻れます。`:`${regionLabel}全体の産業を比較しています。${countries.map(c=>c.name).join('・')}を選ぶと、その国の収録主題へ進めます。${industry.countryScope?.regionalTrade?'国別産業は3か国、地域全体の商品貿易は収録11か国・地域を扱います。':''}`;
   for(const b of all('[data-industry-feature]:not([data-industry-current-feature])'))b.hidden=!topics.some(t=>t.id===b.dataset.industryFeature);
   const selector=$<HTMLSelectElement>('[data-industry-topic]');if(selector){for(const o of [...selector.options]){o.hidden=!topics.some(t=>t.id===o.value);o.disabled=o.hidden;}for(const group of [...selector.querySelectorAll('optgroup')])group.hidden=[...group.children].every(o=>(o as HTMLOptionElement).hidden);}
   for(const b of all('[data-industry-feature]'))b.setAttribute('aria-pressed',String(b.dataset.industryFeature===(state.topic??'manufacturing')));

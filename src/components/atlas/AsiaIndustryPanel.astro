@@ -1,6 +1,7 @@
 ---
-interface Props{active:boolean}
-const {active}=Astro.props;
+import SoutheastAsiaIndustryReading from './asia/SoutheastAsiaIndustryReading.astro';
+interface Props{active:boolean;regionId?:string}
+const {active,regionId}=Astro.props;
 ---
 <section data-industry-panel hidden={!active}>
  <p class="eyebrow">Industry · Economy &amp; Energy</p><h2 data-industry-title>産業の分布を読む</h2>
@@ -16,8 +17,8 @@ const {active}=Astro.props;
  <button class="asia-compare" type="button" data-compare="agriculture">同じ場所で農林業を比べる<span>→</span></button>
  <details><summary>出典・年・単位と収録範囲</summary><div data-industry-method></div><p>国・地域の統計と施設データは別の母集団です。発電施設を足して国全体の設備容量とはしません。国内の行政区域別統計は日本・中国・マレーシア・インドを収録し、ほかの国に隣国の値を補っていません。</p><p>行政界はNatural Earth v5.1.2（縮尺1:1000万）を表示用に簡略化しています。境界は政治的な主張を示すものではなく、色の面積を経済の規模と読むことはできません。</p></details>
 </section>
-<section data-industry-country-reading hidden aria-label="国別産業の収録範囲"><h3 data-industry-country-reading-title></h3><p data-industry-country-reading-text></p></section>
-<section data-industry-region-reading hidden aria-label="東アジアの産業と供給網を読む">
+<section data-industry-country-reading hidden aria-label="国別産業の収録範囲"><h3 data-industry-country-reading-title></h3><p data-industry-country-reading-text></p><p data-industry-country-reading-source hidden><a></a></p></section>
+{regionId==='southeast-asia'?<SoutheastAsiaIndustryReading />:<section data-industry-region-reading hidden aria-label="東アジアの産業と供給網を読む">
  <h3>地域の産業と、供給網の役割を分けて読む</h3>
  <p>製造業、素材・エネルギー、サービスを切り替え、各国の経済の構成と国内の分布を確かめます。地域の特徴にはモンゴルも含みます。この国別産業入口では中国・日本・韓国・台湾の4対象を比較し、周辺国の値を代用しません。</p>
  <p>供給網では、素材を得ること、部品や製品を加工・組立すること、輸送して市場へ届けることが関わります。収録した鉄鋼の設備能力、日本の業種別出荷額、商品貿易を順に読むと、それぞれの役割を考える手掛かりになります。能力・出荷額・貿易額は異なる量で、足し合わせられません。</p>
@@ -25,7 +26,7 @@ const {active}=Astro.props;
  <div class="asia-industry-reading-links"><button type="button" data-industry-reading-topic="steel-capacity">鉄鋼の設備能力</button><button type="button" data-industry-reading-topic="trade-exports" data-industry-reading-detail="t-85">電気機器の輸出</button><button type="button" data-industry-reading-topic="trade-imports" data-industry-reading-detail="t-85">電気機器の輸入</button><button type="button" data-industry-reading-topic="trade-exports" data-industry-reading-detail="t-87">車両・部分品の輸出</button></div>
  <p>製造業の付加価値は2024年のGDP比、日本の製造品出荷額等は2024年の百万円、鉄鋼能力はGEMの2026年6月版・千t/年、商品貿易は2023年の名目米ドルです。資料年・単位・対象範囲を各主題の出典で確認してください。台湾のWDI系列は未掲載、貿易は台湾等を含む「Other Asia, nes」（490）です。</p>
  <p><a href="https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NV.IND.MANF.ZS">World Bank WDIの定義</a> · <a href="https://globalenergymonitor.org/projects/global-iron-steel-tracker/">GEMの鉄鋼能力</a> · <a href="https://comtradeplus.un.org/">国連Comtrade</a></p>
-</section>
+</section>}
 <style>
  [data-industry-region-reading],[data-industry-country-reading]{margin-top:18px}.asia-industry-reading-links{display:flex;flex-wrap:wrap;gap:8px}.asia-industry-reading-links button{min-height:44px;padding:8px 12px;background:#edf3f1;color:#264c52;border:1px solid #8a9e9c;font:inherit;font-size:12px}
  [hidden]{display:none!important}h2{font-family:var(--serif);font-size:27px;line-height:1.5;margin:5px 0 14px}h3{font-size:14px;margin:22px 0 8px}p{font-size:13px;line-height:2}.asia-takeaway{font-size:14px}.industry-value{padding:14px;background:#edf2e7;border-left:3px solid #477e6b;font-size:14px;line-height:1.8}.industry-note{font-size:13px;color:var(--ink-soft)}label{display:flex;flex-direction:column;gap:6px;font-size:12px;margin:15px 0}select,input{min-height:44px;width:100%;max-width:100%;font:inherit;border:1px solid #afbcb6;background:#fff;padding:10px;color:#263c40}summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:12px}.asia-compare,[data-industry-retry]{width:100%;min-height:48px;font-size:12px;border:1px solid #315b61;background:#edf3f1;color:#264c52;padding:12px;margin:12px 0;display:flex;align-items:center;justify-content:space-between}:global(.industry-table){width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed;margin:14px 0}:global(.industry-table caption){text-align:left;font-size:12px;font-weight:700;padding:8px 0}:global(.industry-table td),:global(.industry-table th){padding:9px 4px;text-align:right;border-bottom:1px solid #d4dcd4;overflow-wrap:anywhere;vertical-align:top}:global(.industry-table th:first-child),:global(.industry-table td:first-child){text-align:left;width:45%}:global(.industry-table button){min-height:44px;border:0;background:none;text-align:left;text-decoration:underline;color:#285b60;font:inherit;padding:3px 0}:global(.industry-table tfoot td){font-size:12px;text-align:left;font-weight:400}:global(.industry-bar){display:block;height:5px;background:#477e6b;margin-top:5px}:global(.industry-history){display:flex;gap:3px;align-items:end;height:85px;border-bottom:1px solid #a1b2a5;margin:15px 0}:global(.industry-history span){flex:1;background:#477e6b;min-height:1px}button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #a74830;outline-offset:2px}

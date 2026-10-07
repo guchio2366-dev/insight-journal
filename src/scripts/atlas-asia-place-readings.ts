@@ -7,12 +7,14 @@ export function createPlaceReadings(root:HTMLElement,region:AsiaRegionId,getStat
  if(!panel)return {render(){}};
  const $=<T extends Element=HTMLElement>(q:string)=>panel.querySelector<T>(q)!;
  const picker=$<HTMLSelectElement>('[data-place-story]');
+ const configNode=root.querySelector('[data-asia-config]'),config=configNode?JSON.parse(configNode.textContent??'{}'):null;
+ const available=()=>{const state=getState(),choices=config?.industry?.countryScope?.countries;return availablePlaceReadings(region,state.field,asiaFocusForPath(location.pathname)).filter(s=>state.field!=='industry'||!choices||choices.some((c:{code:string})=>c.code===s.country));};
  const option=(name:string,value:string)=>{const item=document.createElement('option');item.textContent=name;item.value=value;return item;};
- picker.addEventListener('change',()=>{const state=getState(),scene=availablePlaceReadings(region,state.field,asiaFocusForPath(location.pathname)).find(s=>s.id===picker.value);navigate(scene?choosePlaceReading(state,scene):{...state,story:null,camera:camera()},Boolean(scene));});
+ picker.addEventListener('change',()=>{const state=getState(),scene=available().find(s=>s.id===picker.value);navigate(scene?choosePlaceReading(state,scene):{...state,story:null,camera:camera()},Boolean(scene));});
  function render(){
-  const state=getState(),available=availablePlaceReadings(region,state.field,asiaFocusForPath(location.pathname)),scene=available.find(s=>s===selectedPlaceReading(region,state));
-  panel!.hidden=!available.length;
-  picker.replaceChildren(option('事例を選ぶ',''),...available.map(s=>option(s.name,s.id)));picker.value=scene?.id??'';
+  const state=getState(),choices=available(),scene=choices.find(s=>s===selectedPlaceReading(region,state));
+  panel!.hidden=!choices.length;
+  picker.replaceChildren(option('事例を選ぶ',''),...choices.map(s=>option(s.name,s.id)));picker.value=scene?.id??'';
   $('[data-place-story-body]').hidden=!scene;
   const links=root.querySelector<HTMLElement>('[data-place-story-bridges]')!;links.hidden=!scene;
   if(!scene)return;

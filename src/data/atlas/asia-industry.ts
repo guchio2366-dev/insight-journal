@@ -1,6 +1,7 @@
 import type {AsiaState} from '../../lib/atlas-asia-state';
 export type IndustryTopic={id:string;title:string;parent:string;kind:'national'|'admin'|'power'|'steel'|'trade';unit:string;year:string;source:string;note:string;country?:string;fuel?:string};
-export type IndustryRegion={data:string;topics:IndustryTopic[];powerCount:number;adminCount:number;countries:string[]};
+export type IndustryCountryScope={label:string;countries:{code:string;name:string}[];regionalTrade?:boolean;readings?:Record<string,{title:string;reading:string;scope:string;source:{label:string;url:string}}>};
+export type IndustryRegion={data:string;topics:IndustryTopic[];powerCount:number;adminCount:number;countries:string[];countryScope?:IndustryCountryScope};
 export type IndustryObservation={value:number|null;status?:string};
 export type IndustrySeries=(IndustryObservation&{year:string})[];
 export type IndustryAdmin={id:string;country:string;name:string;sourceName:string;point?:[number,number];bounds?:number[];series:Record<string,IndustrySeries>;steelMethods?:Record<string,number>;employment2025?:number};
@@ -13,13 +14,21 @@ export const industryFuelColors:Record<string,string>={Coal:'#4c4846',Gas:'#c077
 export const industryGroups=['製造業','資源・エネルギー','サービス業','工業・建設と経済全体','貿易'];
 export const eastIndustryCountries=[{code:'CHN',name:'中国'},{code:'JPN',name:'日本'},{code:'KOR',name:'韓国'},{code:'TWN',name:'台湾'}];
 export function isEastIndustryRegion(region:IndustryRegion){return Array.isArray(region.countries)&&eastIndustryCountries.every(c=>region.countries.includes(c.code));}
-export function industryTopicsForPlace(region:IndustryRegion,place:string|null){return isEastIndustryRegion(region)&&place?region.topics.filter(t=>!t.country||t.country===place):region.topics;}
-export function industryScopeCountries(region:IndustryRegion,place:string|null){return isEastIndustryRegion(region)?eastIndustryCountries.filter(c=>!place||c.code===place).map(c=>c.code):region.countries;}
+export function industryCountryChoices(region:IndustryRegion){return region.countryScope?.countries??(isEastIndustryRegion(region)?eastIndustryCountries:[]);}
+export function hasIndustryCountryScope(region:IndustryRegion){return industryCountryChoices(region).length>0;}
+export function industryTopicsForPlace(region:IndustryRegion,place:string|null){const choices=industryCountryChoices(region);return choices.length?region.topics.filter(t=>!t.country||(place?t.country===place:choices.some(c=>c.code===t.country))):region.topics;}
+export function industryScopeCountries(region:IndustryRegion,place:string|null){return hasIndustryCountryScope(region)?industryCountryChoices(region).filter(c=>!place||c.code===place).map(c=>c.code):region.countries;}
 export function industryTopic(region:IndustryRegion,state:AsiaState){const topics=industryTopicsForPlace(region,state.place);return topics.find(t=>t.id===state.topic)??topics.find(t=>t.id==='manufacturing')??topics[0];}
 export function isIndustryDetailId(id:string){return /^[A-Za-z0-9_-]{1,64}$/.test(id);}
+export function normalizeScopedIndustryState(region:IndustryRegion|undefined,state:AsiaState):AsiaState{
+ if(!region?.countryScope?.regionalTrade||state.field!=='industry'||!state.place||industryCountryChoices(region).some(c=>c.code===state.place))return state;
+ const trade=['trade-exports','trade-imports'].includes(state.topic??'');
+ return {...state,place:null,city:null,detail:trade?state.detail:null,point:null,story:null,camera:null};
+}
 export function normalizeIndustryState(region:IndustryRegion,state:AsiaState,data?:IndustryData|null):AsiaState{
  if(state.field!=='industry')return state;
- if(isEastIndustryRegion(region)&&state.place&&!eastIndustryCountries.some(c=>c.code===state.place))state={...state,place:null,detail:null,point:null};
+ state=normalizeScopedIndustryState(region,state);
+ if(hasIndustryCountryScope(region)&&state.place&&!industryCountryChoices(region).some(c=>c.code===state.place))state={...state,place:null,detail:null,point:null,story:null};
  const topic=industryTopic(region,state);
  if(state.topic&&state.topic!==topic.id)state={...state,detail:null,point:null};
  const candidate=state.detail&&isIndustryDetailId(state.detail)?state.detail:null;
@@ -27,7 +36,7 @@ export function normalizeIndustryState(region:IndustryRegion,state:AsiaState,dat
  // Keep a bounded URL candidate until the lazy dataset can validate it. No
  // facility names, coordinates or selections are displayed from this ID alone.
  if(!data)return {...state,topic:topic.id,detail:(topic.kind==='power'||topic.kind==='admin'&&(!state.place||state.place===topic.country))?candidate:null,place:topic.country??state.place,city:null};
- const detail=topic.kind==='admin'?data.admin.find(d=>d.id===candidate&&d.point&&d.country===topic.country):topic.kind==='power'?data.power.find(d=>d.id===candidate&&(topic.fuel==='all'||topic.fuel===d.fuel)):undefined;
+ const detail=topic.kind==='admin'?data.admin.find(d=>d.id===candidate&&d.point&&d.country===topic.country):topic.kind==='power'?data.power.find(d=>d.id===candidate&&(topic.fuel==='all'||topic.fuel===d.fuel)&&(!hasIndustryCountryScope(region)||industryScopeCountries(region,state.place).includes(d.country))):undefined;
  const valid=detail&&(!state.place||detail.country===state.place);
  return {...state,topic:topic.id,detail:valid?detail.id:null,place:valid?detail.country:topic.country??state.place,city:null};
 }

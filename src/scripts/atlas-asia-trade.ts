@@ -1,14 +1,14 @@
 import {isTradeTopic,tradeTopics,normalizeTradeState,tradeChapter,tradeFlow,tradeValue,tradeShare,tradeScale,tradeColors,formatTradeMoney,tradeCoverageNote,partnerName,farmTrade,farmTradeLabels,type TradeData,type TradeRegion} from '../data/atlas/asia-trade';
 import {startAsiaComparison,type AsiaState,type AsiaCamera} from '../lib/atlas-asia-state';
-import {eastIndustryCountries} from '../data/atlas/asia-industry';
-type Config={trade:TradeRegion;tradeBase:string;chapters:Record<string,string>;countries:{code:string;name:string}[];domesticTopics:{id:string;country?:string}[]};
+import {eastIndustryCountries,industryCountryChoices,type IndustryRegion} from '../data/atlas/asia-industry';
+type Config={industry?:IndustryRegion;trade:TradeRegion;tradeBase:string;chapters:Record<string,string>;countries:{code:string;name:string}[];domesticTopics:{id:string;country?:string}[]};
 const el=<K extends keyof HTMLElementTagNameMap>(tag:K,text?:string)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
 const pct=(v:number|null)=>v===null?'—':v>0&&v<.01?'0.01%未満':v.toLocaleString('ja-JP',{maximumFractionDigits:2})+'%';
 export function createAsiaTrade(root:HTMLElement,config:Config,getState:()=>AsiaState,navigate:(state:AsiaState,fit?:boolean)=>void,camera:()=>AsiaCamera|null){
  const $=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  let data:TradeData|null=null,pending:Promise<void>|null=null,failed=false,map:import('maplibre-gl').Map|null=null,revision=0;
  const active=()=>getState().field==='industry'&&isTradeTopic(getState().topic);
- const scopeCountries=()=>getState().field==='industry'&&eastIndustryCountries.every(c=>config.trade.countries.includes(c.code))?eastIndustryCountries.map(c=>c.code):config.trade.countries;
+ const scopeCountries=()=>config.industry?.countryScope?.regionalTrade&&getState().place?[getState().place!]:getState().field==='industry'&&eastIndustryCountries.every(c=>config.trade.countries.includes(c.code))?eastIndustryCountries.map(c=>c.code):config.trade.countries;
  const name=(code:string)=>config.countries.find(c=>c.code===code)?.name??code;
  const chapterName=(code:string)=>code==='TOTAL'?'全商品':config.chapters[code]+'（HS '+code+'）';
  async function load(){
@@ -32,7 +32,7 @@ export function createAsiaTrade(root:HTMLElement,config:Config,getState:()=>Asia
  function renderFarm(){
   const state=getState(),box=$('[data-farm-trade]'),topic=state.topic??'rice',mapping=farmTrade[topic],visible=state.field==='agriculture'&&!!mapping;box.hidden=!visible;if(!visible)return;box.replaceChildren(el('h3','生産地と商品貿易をつなげる'));
   box.append(el('p',mapping.note));
-  if(!state.place){box.append(el('p','国・地域を選ぶと、対応する商品の2023年の輸出入額を確認できます。'));return;}
+  if(!state.place){box.append(el('p',config.industry?.countryScope?.regionalTrade?'雨温図や地域事例から同じ場所を比較すると、その国全体の2023年の商品輸出入額を確認できます。':'国・地域を選ぶと、対応する商品の2023年の輸出入額を確認できます。'));return;}
   if(!data){box.append(el('p',failed?'貿易の資料を取得できませんでした。':'関連する商品の貿易額を読み込んでいます。'));if(failed){const b=el('button','貿易データを再読み込み');b.type='button';b.addEventListener('click',retry);box.append(b);}else request();return;}
   const c=data.countries[state.place],note=tradeCoverageNote(state.place);if(note)box.append(el('p',note));
   box.append(el('p',`${name(state.place)}の国全体の金額です。地図の2020年の推計分布、FAOSTATの生産量、2023年の貿易額は、年と対象・単位が異なります。`));
@@ -49,7 +49,7 @@ export function createAsiaTrade(root:HTMLElement,config:Config,getState:()=>Asia
   $('[data-trade-lead]').textContent='国の色は同じ年・商品区分の金額を表します。国を選ぶと、商品構成と輸出相手先を読み、国内の産業分布と比較できます。';
   $('[data-map-gesture]').textContent='国を地図か一覧で選ぶと、商品の構成と輸出先を読めます。地図は2本指で移動・拡大できます。';
   const scope=scopeCountries(),covered=data?scope.filter(code=>tradeValue(data!.countries[code],'TOTAL','exports')!==null).length:null;
-  $('[data-trade-coverage]').textContent=`この地域の${scope.length}か国・地域${covered===null?'':`中${covered}か国・区分で、2023年の総額を収録しています。`}商品区分ごとに未掲載もあります。灰色は未掲載で、取引が0という意味ではありません。`;
+  $('[data-trade-coverage]').textContent=`${config.industry?.countryScope?.regionalTrade&&state.place?name(state.place)+'の国全体の2023年の金額です。':'この地域の'+scope.length+'か国・地域'+(covered===null?'':`中${covered}か国・区分で、2023年の総額を収録しています。`)}商品区分ごとに未掲載もあります。灰色は未掲載で、取引が0という意味ではありません。`;
   $('[data-trade-status]').textContent=failed?'貿易の資料を取得できませんでした。再読み込みをお試しください。':data?'':'商品貿易の数値を読み込んでいます。';$('[data-trade-retry]').hidden=!failed;
   const content=$('[data-trade-content]');content.replaceChildren();$('[data-trade-domestic]').hidden=!state.place;
   if(!data){$('[data-trade-value]').textContent=$('[data-trade-status]').textContent;$('[data-grid-reading]').textContent=$('[data-trade-status]').textContent;request();return;}
@@ -76,7 +76,7 @@ export function createAsiaTrade(root:HTMLElement,config:Config,getState:()=>Asia
     }else content.append(el('p','輸入の相手先別内訳は、この版では収録していません。輸出額へ切り替えると、全商品と輸出上位3章の輸出相手先を読めます。'));
    }
   }
-  const comparison=table('同年・同区分の国・地域の金額',values.sort((a,b)=>(b.value??-1)-(a.value??-1)).map(v=>({label:name(v.code)+(v.code==='TWN'?'（区分490）':''),value:v.value,click:()=>navigate({...getState(),place:v.code,point:null,camera:null})})));
+  const comparison=table('同年・同区分の国・地域の金額',values.sort((a,b)=>(b.value??-1)-(a.value??-1)).map(v=>({label:name(v.code)+(v.code==='TWN'?'（区分490）':''),value:v.value,click:!config.industry?.countryScope||industryCountryChoices(config.industry).some(c=>c.code===v.code)?()=>navigate({...getState(),place:v.code,point:null,camera:null}):undefined})));
   folded(content,'地域内の国・地域を比べる',comparison,!state.place);
  }
  async function show(currentMap:import('maplibre-gl').Map){
