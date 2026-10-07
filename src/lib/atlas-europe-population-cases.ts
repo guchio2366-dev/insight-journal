@@ -173,9 +173,9 @@ export function createEuropePopulationCases(root: HTMLElement, options: CultureO
     caseSelect!.disabled = false; categorySelect!.disabled = !hasCase; areaSelect!.disabled = !hasCase;
     setText('[data-culture-title]', hasCase ? selected.topic.titleJa : kind === 'religion' ? '宗教的帰属の地域事例' : '民族的帰属の地域事例');
     setText('[data-culture-takeaway]', 'イングランド・ウェールズの行政区とクロアチアの全国値の事例です。欧州全域の分布ではありません。自己申告の元分類と表ごとの分母を使い、無宗教・未回答・不明を区別します。');
-    setText('[data-culture-overview]', !hasCase ? '欧州全体を表示しています。事例と元の回答分類を選ぶと、その分類の分布を表示します。' : !hasCategory ? '元の回答分類を選ぶと、その事例の各地域の割合を表示します。' : '選択した分類の分布全体を表示しています。地域を選ぶと、同じ表の総人口に対する割合と人数を確認できます。');
+    setText('[data-culture-overview]', !hasCase ? 'イングランド・ウェールズ・クロアチアの2021年公表総計から、回答構成を同時に示します。民族は自己認識、宗教は申告した帰属です。言語分布・信仰の実践・欧州全域の細分布を示すものではありません。円の名前から事例を開くと、元の回答分類の分布を選べます。' : !hasCategory ? '元の回答分類を選ぶと、その事例の各地域の割合を表示します。' : '選択した分類の分布全体を表示しています。地域を選ぶと、同じ表の総人口に対する割合と人数を確認できます。');
     setText('[data-culture-note]', hasCase ? cultureCaseNote(selected.censusCase, kind) : '民族・宗教は各国の自己申告分類を使います。イングランド・ウェールズの行政区とクロアチアの全国値は粒度が異なり、欧州全域の分布ではありません。');
-    setText('[data-culture-grain]', !hasCase ? '行政区と全国値の2事例' : selected.censusCase.grain === 'national' ? '全国値 · 1地域' : '行政区（LAD2021）· 331地域');
+    setText('[data-culture-grain]', !hasCase ? '3対象の公表総計 · 詳細は2事例' : selected.censusCase.grain === 'national' ? '全国値 · 1地域' : '行政区（LAD2021）· 331地域');
     setText('[data-culture-year]', hasCase ? `${selected.topic.year}年国勢調査 · ${selected.topic.censusDate}` : '2021年国勢調査');
     query<HTMLElement>('[data-culture-value]')!.hidden = !selected.area || !hasCategory;
     setText('[data-culture-area-name]', selected.area?.name ?? '地域未選択');
@@ -185,7 +185,11 @@ export function createEuropePopulationCases(root: HTMLElement, options: CultureO
     setText('[data-culture-denominator]', selected.area ? `分母：この表の総人口 ${formatCultureCount(selected.area.denominator)}` : '分母は選択した地域の同じ公表表の総人口です。');
     setText('[data-culture-classification-note]', selected.category?.level === 'aggregate' ? '元表の大分類です。細分類と足し合わせません。' : selected.censusCase.grain === 'national' ? 'クロアチアの元分類です。他国の分類と同一化しません。' : '元表の回答分類です。大分類に含まれる人数を重ねて合計しません。');
     for (const key of legendRoot.querySelectorAll<HTMLElement>('[data-culture-scale-key]')) key.hidden = !hasCategory;
-    const unselectedKey = legendRoot.querySelector<HTMLElement>('[data-culture-unselected-key]'); if (unselectedKey) unselectedKey.hidden = hasCategory;
+    const unselectedKey = legendRoot.querySelector<HTMLElement>('[data-culture-unselected-key]'); if (unselectedKey) {
+      unselectedKey.hidden = hasCategory;
+      const text=hasCase?'回答分類未選択・未掲載（0%ではありません）':'未掲載・3対象以外（0%ではありません）';
+      unselectedKey.replaceChildren(unselectedKey.querySelector('i')!,document.createTextNode(text));
+    }
     query<HTMLButtonElement>('[data-culture-fit]')!.disabled = !hasCase;
     setText('[data-culture-disclosure]', selected.censusCase.grain === 'LAD' ? '秘匿処理により、民族表と宗教表の総人口がわずかに異なる場合があります。各表の公表値をそのまま使います。' : '全国の公表行を使います。無宗教・不可知論・未申告・不明を区別し、宗教団体への所属で回答を組み替えません。');
     setText('[data-culture-attribution]', selected.censusCase.attribution.join('\n'));

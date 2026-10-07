@@ -10,7 +10,7 @@ type Annotation = Place & { kind:'city'|'feature'|'crop'; button:HTMLButtonEleme
 type View = { climate:boolean; crops:boolean; detailed:boolean; city:string; feature?:string; places:Place[]; farmingIds?:string[]; selectedFarming?:string; emphasizedFeatures?:string[] };
 
 /** One screen-space annotation layer is shared by MapLibre and the SVG fallback. */
-export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], features:Place[], getView:()=>View, project:(coordinate:number[])=>Point, select:(kind:'city'|'feature'|'crop', id:string)=>void, farmingItems:FarmingItem[] = []) {
+export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], features:Place[], getView:()=>View, project:(coordinate:number[])=>Point, select:(kind:'city'|'feature'|'crop', id:string)=>void, farmingItems:FarmingItem[] = [], decorateFeature?:(id:string,button:HTMLButtonElement)=>void) {
   const overlay=stage.querySelector<HTMLElement>('[data-eu-annotations]')!;
   const svg=overlay.querySelector<SVGSVGElement>('svg')!;
   const ns='http://www.w3.org/2000/svg';
@@ -51,6 +51,7 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
     const selected=(item:Annotation)=>item.kind==='city'?item.id===view.city:item.kind==='crop'?farmingIds.has(item.id)&&item.id===view.selectedFarming:item.id===view.feature;
     const inputs=visible.map(item=>{
       item.button.hidden=false;
+      if(item.kind==='feature')decorateFeature?.(item.id,item.button);
       return {id:item.kind+'-'+item.id,anchor:project(item.coordinates),width:item.button.offsetWidth,height:item.button.offsetHeight};
     }).filter(p=>p.anchor.x>=bounds.left&&p.anchor.x<=bounds.right&&p.anchor.y>=bounds.top&&p.anchor.y<=bounds.bottom);
     const inputIds=new Set(inputs.map(p=>p.id));

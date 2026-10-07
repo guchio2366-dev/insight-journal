@@ -402,9 +402,19 @@ async function stageOneOperations(page, profile) {
   const fullExtent = await extent();
   for (const name of ['case', 'category', 'area']) assert.equal(await page.locator(`[data-culture-${name}]`).inputValue(), '');
   assert.equal(await page.locator('[data-culture-value]').isVisible(), false);
+  const compositionCheck=async()=>{
+    const buttons=page.locator('[data-eu-composition]:visible');assert.equal(await buttons.count(),3);
+    const boxes=await buttons.evaluateAll(nodes=>nodes.map(node=>{const box=node.getBoundingClientRect();return {left:box.left,top:box.top,right:box.right,bottom:box.bottom,width:box.width,height:box.height,font:parseFloat(getComputedStyle(node).fontSize),svg:node.querySelector('svg').getAttribute('viewBox')};}));
+    for(const box of boxes){assert.ok(box.font>=14);assert.equal(box.svg,'0 0 56 56');assert.equal(box.width,boxes[0].width);}
+    for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){const a=boxes[i],b=boxes[j];assert.ok(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,'Composition labels do not overlap');}
+    assert.equal(await page.locator('[data-eu-culture-composition-key]').isVisible(),true);
+    assert.equal(await page.locator('[data-eu-composition-table]').count(),3);
+  };
+  await compositionCheck();
   await snapshot(page, profile, 'culture-overview');
-  await page.locator('[data-culture-case]').selectOption('england-wales-2021');
+  await page.locator('[data-eu-composition="ethnicity-E92000001"]').click();
   await page.waitForFunction(() => document.querySelectorAll('[data-culture-code]').length === 331);
+  assert.equal(await page.locator('[data-eu-composition]:visible').count(),0);
   for (const name of ['category', 'area']) assert.equal(await page.locator(`[data-culture-${name}]`).inputValue(), '');
   assert.equal(await extent(), fullExtent);
   await page.locator('[data-culture-category]').selectOption('ts021-17');
@@ -438,8 +448,10 @@ async function stageOneOperations(page, profile) {
   assert.match(await page.locator('[data-eu-origin-caption]').textContent(), /未選択/);
   await page.locator('[data-eu-comparison-return]').click(); await page.waitForURL('**/population/**'); await ready(page);
   assert.equal(await page.locator('[data-culture-case]').inputValue(), '');
+  await compositionCheck();
   await openEurope(page, 'atlas/europe/population/?layer=religion', 'normal');
   for (const name of ['case', 'category', 'area']) assert.equal(await page.locator(`[data-culture-${name}]`).inputValue(), '');
+  await compositionCheck();await snapshot(page,profile,'religion-overview');
   await openEurope(page, 'atlas/europe/agriculture/?layer=wheat', 'normal');
   const table = page.locator('[data-eu-farm-country-table]');
   await table.waitFor({state: 'visible'});
@@ -504,11 +516,11 @@ try {
       if (profile.viewport.width === 1024) await europeOperations(page, profile, 'explicit-static');
     } finally { await context.close(); }
   }
-  networkClean(); assert.equal(manifest.images.length, 30); assert.equal(manifest.records.length, 3);
+  networkClean(); assert.equal(manifest.images.length, 32); assert.equal(manifest.records.length, 3);
   assert.ok(manifest.records.every(record => record.status === 'passed'));
   assert.equal(git('rev-parse', 'HEAD'), manifest.gitHead, 'Checkout changed during capture');
   assert.equal(git('rev-parse', 'HEAD:src'), manifest.gitSrcTree);
-  manifest.status = 'passed'; manifest.checks.push('30 normal-render screenshots', '2 normal PC operation profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
+  manifest.status = 'passed'; manifest.checks.push('32 normal-render screenshots', '2 normal PC operation profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
   console.log(JSON.stringify({status: manifest.status, output, images: manifest.images.length, head: manifest.gitHead}));
 } catch (error) {
   manifest.status = 'failed'; manifest.failure = {message: String(error), stack: error.stack};
