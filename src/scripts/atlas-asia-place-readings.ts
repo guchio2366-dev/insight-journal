@@ -24,7 +24,11 @@ export function createPlaceReadings(root:HTMLElement,region:AsiaRegionId,getStat
   const references=panel!.querySelector<HTMLElement>('[data-place-story-additional-sources]');
   if(references){references.replaceChildren();references.hidden=!scene.additionalSources?.length;for(const [index,reference] of (scene.additionalSources??[]).entries()){if(index)references.append(document.createTextNode(' · '));const a=document.createElement('a');a.textContent=reference.label;a.href=reference.url;references.append(a);}}
   links.replaceChildren();
-  for(const bridge of scene.bridges){const button=document.createElement('button');button.type='button';button.dataset.placeBridgeTopic=bridge.topic;button.textContent=bridge.label+' →';button.addEventListener('click',()=>navigate(startPlaceComparison(new URL(location.href),{...getState(),camera:camera()},bridge),Boolean(bridge.relocate)));links.append(button);}
+  for(const bridge of scene.bridges){const button=document.createElement('button');button.type='button';button.dataset.placeBridgeTopic=bridge.topic;button.textContent=bridge.label+' →';button.addEventListener('click',()=>{
+   const next=startPlaceComparison(new URL(location.href),{...getState(),camera:camera()},bridge),scope=config?.industry?.countryScope;
+   const regional=scope?.regionalTrade&&next.field==='industry'&&['trade-exports','trade-imports'].includes(next.topic??'')&&next.place&&!scope.countries.some((c:{code:string})=>c.code===next.place);
+   navigate(regional?{...next,place:null,point:null,story:null,camera:null}:next,Boolean(regional||bridge.relocate));
+  });links.append(button);}
  }
  return {render};
 }

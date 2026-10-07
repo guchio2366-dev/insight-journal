@@ -65,6 +65,15 @@ export async function verifySoutheastAsiaRegion(page,{source,capture:takePicture
  assert.equal(restored.length,projected.length);for(let i=0;i<restored.length;i++){assert.equal(restored[i].name,projected[i].name);for(const key of ['x','y'])assert(Math.abs(restored[i][key]-projected[i][key])<=1);}
  record('returning to all products restores livestock and the regional camera');await capture('farm-all-restored');
 
+ await page.locator('[data-farm-group="forestry"]').click();await expand('[data-reading-details]');await page.locator('[data-place-story]').selectOption('peninsula-forest');
+ assert.doesNotMatch(await page.locator('[data-map-gesture]').textContent(),/国の選択欄/);
+ const forest=new URL(page.url());assert.equal(forest.searchParams.get('place'),'MYS');
+ const wood=page.locator('[data-place-story-bridges] [data-place-bridge-topic="trade-exports"]');assert.match(await wood.textContent(),/東南アジア全体/);await wood.click();
+ await page.waitForFunction(()=>document.querySelector('[data-trade-status]')?.textContent===''&&document.querySelector('[data-trade-chapter]')?.value==='44');
+ assert.equal(new URL(page.url()).searchParams.get('place'),null);assert.equal(new URL(page.url()).searchParams.get('detail'),'t-44');assert.match(await page.locator('[data-trade-coverage]').textContent(),/11か国/);
+ await page.locator('[data-comparison-back]').click();const forestBack=new URL(page.url());for(const key of ['place','topic','story','at'])assert.equal(forestBack.searchParams.get(key),forest.searchParams.get(key));
+ record('forestry keeps the wood chapter in regional trade and restores the Malaysia forest case');
+
  for(const [path,id,key,value]of [['nature/?city=bangkok&lng=116.576&lat=9.362&z=2.7','climate-background','city','bangkok'],['nature/?topic=terrain&detail=java-island&lng=116.576&lat=9.362&z=2.7','terrain-background','detail','java-island']]){
   await open(path);if(key==='city')await page.locator('[data-city-panel="bangkok"]').waitFor({state:'visible'});
   const point=await background();assert(point,'An uncovered map background point is required');
