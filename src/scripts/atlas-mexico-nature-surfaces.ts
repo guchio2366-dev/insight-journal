@@ -21,6 +21,10 @@ export function initMexicoNatureSurfaces(
   const legend = document.createElement('div');
   legend.className = 'mexico-quantitative-legend';
   legend.setAttribute('data-mexico-quantitative-legend', '');
+  const precipitationReason = document.createElement('p');
+  precipitationReason.className = 'mexico-precipitation-reading-reason';
+  precipitationReason.setAttribute('data-mexico-precipitation-reason', '');
+  precipitationReason.textContent = '北部の乾いた空気と、南部へ届く海からの湿った空気が地域差を生む。山地では、湿った風が上昇する側で雨が増え、風下で少なくなる。';
   const foreground = document.createElementNS(ns,'g');
   foreground.setAttribute('data-mexico-basin-foreground','');
   q('[data-mexico-nature-main-map]')?.append(foreground);
@@ -106,6 +110,7 @@ export function initMexicoNatureSurfaces(
   }
   function reset(): void {
     group.style.display = 'none'; foreground.style.display='none';legend.hidden = true;
+    precipitationReason.hidden = true;
     overview.hidden=true;overviewButton.hidden=true;
     root.dataset.mexicoPreparedCategory = '';
   }
@@ -180,7 +185,12 @@ export function initMexicoNatureSurfaces(
     const readingSummary = q('[data-mexico-water-reading-summary]');
     if (readingSummary) {
       const lead = readingSummary.querySelector(':scope > .mexico-takeaway');
-      if (lead) lead.after(legend); else readingSummary.prepend(legend);
+      if (category === 'precipitation') {
+        precipitationReason.hidden = false;
+        if (lead) lead.after(precipitationReason); else readingSummary.prepend(precipitationReason);
+        readingSummary.append(legend);
+      }
+      else if (lead) lead.after(legend); else readingSummary.prepend(legend);
     }
     legend.replaceChildren(); legend.hidden = false;
     const label = document.createElement('p'); label.className = 'mexico-quantitative-legend-label'; label.textContent = `${layer.titleJa}（${unit}）｜${category === 'precipitation' ? '多いほど濃い青' : '高いほど濃い色'}`;
@@ -199,21 +209,26 @@ export function initMexicoNatureSurfaces(
       values.append(tick); previousPosition = position; previousLower = lower;
     }
     legend.append(label, ramp, values);
+    if (layer.legend.interval) {
+      const interval = document.createElement('p'); interval.className = 'mexico-quantitative-interval';
+      interval.textContent = '等雨量線・色の帯は250mm間隔。線の数字はmm/年。海域・国外・欠測と補間できない区画は透明。';
+      legend.append(interval);
+    }
     text('[data-mexico-nature-map-title]', layer.titleJa);
     text('[data-mexico-nature-map-edition]', layer.sourceLabelJa);
     text('[data-mexico-nature-period]', layer.periodLabelJa);
     text('#mexico-nature-map-title', `メキシコの${layer.titleJa}`);
     text('#mexico-nature-map-desc', `${layer.descriptionJa} ${layer.periodLabelJa}`);
     text('[data-mexico-hydrology-title]', layer.titleJa);
-    text('[data-mexico-hydrology-lead]', category === 'precipitation' ? '雨の多い地域ほど濃い青。1991–2020年の平均的な年降水量を、河川・地下水や農地の水利用と読み比べます。' : '高い地域ほど濃い色。山地・中央高原・沿岸低地の高さを、m単位の凡例で読み比べます。');
+    text('[data-mexico-hydrology-lead]', category === 'precipitation' ? '北部・北西部は雨が少なく、南部・南東部は雨が多い。250mmごとの等雨量線と、雨の多いほど濃い青の帯で地域差を読む。' : '高い地域ほど濃い色。山地・中央高原・沿岸低地の高さを、m単位の凡例で読み比べます。');
     text('[data-mexico-hydrology-value]', layer.periodLabelJa);
-    text('[data-mexico-hydrology-definition]', layer.descriptionJa);
+    text('[data-mexico-hydrology-definition]', category === 'precipitation' ? '等雨量線は、年降水量が同じ場所を結ぶ線です。線と線の間を250mmごとの帯として塗り分け、その分布を河川・地下水や農地の水利用と読み比べます。地図はGPCCの1991–2020年平年値から作成しています。' : layer.descriptionJa);
     text('[data-mexico-hydrology-limitations]', layer.limitationsJa.join(' '));
     text('[data-mexico-hydrology-status]', '');
     const source = q('[data-mexico-hydrology-source]');
     if (source) {
       const period = document.createElement('p'); period.textContent = category === 'precipitation' ? 'GPCCと都市のSMN雨温図は1991–2020年に期間を合わせています。地図は0.25°格子の解析値、雨温図は個別観測所の平年値なので、数値は一致しません。' : 'NOAA ETOPO 2022の60秒角原格子を使用。2022はモデルの版年で、全国共通の観測年ではありません。';
-      const processing = document.createElement('p'); processing.textContent = '数値格子から生成し、既存のINEGI Lambert投影に合わせています。海域・国外と原データ欠損は透明。出典、利用条件、原値と画像のSHA256、加工・検証記録を保存しています。';
+      const processing = document.createElement('p'); processing.textContent = category === 'precipitation' ? layer.descriptionJa + ' 隣接する格子中心間の辺上を線形補間し、各区画内を直線で結ぶ等値線と段階帯です。細かい格子への再標本化や平滑化は行いません。4点の原値がすべて有効な区画だけを描画し、欠測・補間できない沿岸区画は透明。元のINEGI2006年等雨量線は混ぜていません。既存のLambert投影と国土マスクを使用し、原格子・利用条件・加工とSHA256を保持しています。' : '数値格子から生成し、既存のINEGI Lambert投影に合わせています。海域・国外と原データ欠損は透明。出典、利用条件、原値と画像のSHA256、加工・検証記録を保存しています。';
       source.replaceChildren(period, processing, sourceLink(layer.sourceLabelJa + ' 原典', layer.sourceUrl), document.createTextNode(' ／ '), sourceLink('期間・原値・利用条件・加工と検証', assets.surfaceAssetBase + layer.provenanceFile));
     }
     group.style.display = ''; group.removeAttribute('data-mexico-basin-system'); root.dataset.mexicoPreparedCategory = category;

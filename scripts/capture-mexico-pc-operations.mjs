@@ -275,13 +275,24 @@ async function water({page, evidence, captureStepImage}) {
     await captureStepImage('groundwater');
     return {options, period: await text(page, '[data-mexico-nature-period]')};
   });
-  await step('Annual precipitation surface, units, period and image load', async () => {
+  await step('250mm GPCC isohyets, darker blue bands, period and image load', async () => {
     await click(page, 'button[data-mexico-nature-category="precipitation"]'); await hydrologyReady(page, 'precipitation');
     assert.match(await text(page, '[data-mexico-quantitative-legend]'), /mm\/年/);
     assert.match(await text(page, '[data-mexico-nature-period]'), /1991[–—-]2020/);
-    assert.match(await page.locator('image[data-mexico-numeric-image]').getAttribute('href'), /gpcc.*annual\.png/);
+    assert.match(await page.locator('image[data-mexico-numeric-image]').getAttribute('href'), /gpcc.*isohyets-250mm\.svg/);
+    assert.match(await text(page, '[data-mexico-quantitative-legend]'), /250mm間隔/);
+    const source = await page.locator('image[data-mexico-numeric-image]').getAttribute('href');
+    const svg = await page.evaluate(async url => (await fetch(url)).text(), source);
+    const levels = [...svg.matchAll(/data-isohyet-mm="(\d+)"/g)].map(match => Number(match[1]));
+    assert(levels.length >= 9 && levels.every(level => level > 0 && level % 250 === 0), 'Every derived contour follows the 250mm base interval');
+    const positions = await page.locator('[data-mexico-water-reading-summary]').evaluate(node => {
+      const reason=node.querySelector('[data-mexico-precipitation-reason]'),legend=node.querySelector('[data-mexico-quantitative-legend]');
+      return {reason:reason.getBoundingClientRect().bottom,legend:legend.getBoundingClientRect().top};
+    });
+    assert(positions.reason <= positions.legend, 'The distribution explanation precedes the lower legend');
     await legibleNumericTicks(page);
-    return {legend: await text(page, '[data-mexico-quantitative-legend]')};
+    await captureStepImage('precipitation-isohyets-250mm');
+    return {legend: await text(page, '[data-mexico-quantitative-legend]'), contourLevels: levels, positions};
   });
   await step('Three representative domestic basin systems expose their evidence limit', async () => {
     await click(page, 'button[data-mexico-nature-category="basins"]'); await hydrologyReady(page, 'basins');

@@ -1,19 +1,27 @@
 # メキシコ自然環境：数値面と代表水系
 
-降水量は GPCC v2025 の 1991–2020 年平年値、標高は NOAA ETOPO 2022 の原格子から生成した面を表示する。元の INEGI 等雨量線・等高線と原メタデータは保存するが、この 2 タブの初期表示は新しい数値面である。
+降水量は GPCC v2025 の 1991–2020 年平年値から導出した250mm間隔の等雨量線と段階青帯、標高は NOAA ETOPO 2022 の原格子から生成した面を表示する。元の INEGI2006年等雨量線と原メタデータは保存するが、GPCC表示へ混ぜない。
 
 ## データと凡例
 
 - GPCC は 12 か月がすべて有効なセルだけを年合計する。単位は mm/年、欠測は透明で 0 と区別する。解析格子と都市の SMN 観測所値は対象の空間的な単位が異なる。期間は両方とも 1991–2020 年。
 - ETOPO は 60 秒角の m 値、鉛直基準 EGM2008。有効な負値も保持する。2022 は版年。海岸の陸海混合セルがあるため、地図の極値を正確な地点標高や全国の最低・最高標高として使わない。
 - PNG/WebP は検証済みファイルを無変換でコピーする。900 × 580 の既存 Lambert フレームに配置する。地理座標の矩形を画像の四隅へ当てはめない。
-- 色の凡例は数値間隔に従う連続グラデーション。雨量が多いほど濃い青、標高が高いほど濃い色。国外・海域の表示は元の INEGI 州境界の union で除く。全内陸湖沼を除外するマスクではない。
+- 降水量の線と青帯は250mm間隔。0.25°格子中心間の辺上を線形補間し、区画内を直線で結ぶmarching squaresから両方を生成する。高解像度への再標本化・平滑化・欠測補完は行わない。4頂点がすべて有効な区画だけを使用し、原欠測9セルと沿岸などの補間できない区画は透明。元PNGの国土・原欠測alphaを保持した900×580マスクを自己完結SVGに埋め込む。250mmは雨量の区分幅で、地点観測の解像度ではない。
+- 雨量の凡例は250mmごとの段階帯で、多雨ほど濃い青。全国縮尺ではラベル数だけを整理し、全等値線を保持する。右に分布の特徴・理由、その下に凡例を置く。標高の既存凡例・配色は変更しない。国外・海域の表示は元の INEGI 州境界で除く。全内陸湖沼を除外するマスクではない。
 
 `public/assets/atlas/mexico-quantitative-v1/manifest.json` は表示用の契約。各名前空間内に原メタデータ・SHA256・加工記録を保持する。GPCCの公式MD5は既存の公開台帳形式に合わせ `gpcc/manifest.json` の `publisherMd5` 欄へ移し、数値・出典情報と入力台帳の元SHA256を保持する。公開検査のID除外ルールは変更しない。大型の全球原本は配信対象に含めない。再コピーは次で実行できる。
 
 ```sh
 python3 scripts/prepare-mexico-quantitative-assets.py --prepared-root /workspace/mexico-data-prep --repo-root /workspace/insight-journal
 python3 scripts/prepare-mexico-quantitative-assets.py --prepared-root /workspace/mexico-data-prep --repo-root /workspace/insight-journal --check
+```
+
+上記は元資産のコピーと照合。コピー後に現在の降水表示を再現する場合は、保持済み月別窓を指定し、次を実行する（通信なし）。最後の `--check` は専用台帳・SVG・表示manifestの完全一致を確認する。
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/workspace/mexico-data-prep/deps python3 scripts/prepare-mexico-gpcc-isohyets.py --source-window /workspace/mexico-data-prep/gpcc/output/mexico-gpcc-1991-2020-source-window.npz
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/workspace/mexico-data-prep/deps python3 scripts/prepare-mexico-gpcc-isohyets.py --source-window /workspace/mexico-data-prep/gpcc/output/mexico-gpcc-1991-2020-source-window.npz --check
 ```
 
 ## 選択と未確認事項

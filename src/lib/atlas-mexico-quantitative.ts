@@ -3,6 +3,8 @@ export interface MexicoSurfaceLegend {
   domain: [number, number];
   ticks: number[];
   colorStops: {value: number; color: string}[];
+  bands?: {min: number; max: number; color: string}[];
+  interval?: number;
   unit: string;
 }
 export interface MexicoSurfaceLayer {
@@ -28,7 +30,7 @@ export function validateMexicoSurfaceManifest(value: unknown): MexicoSurfaceMani
   for (const [id, unit] of [['precipitation', 'mm/年'], ['elevation', 'm']] as const) {
     const layer = manifest.layers[id];
     if (!layer || layer.image?.width !== 900 || layer.image?.height !== 580 ||
-        !/^(?:[a-zA-Z0-9_-]+\/)?[a-zA-Z0-9][a-zA-Z0-9._-]*\.(png|webp)$/.test(layer.image.file) ||
+        !/^(?:[a-zA-Z0-9_-]+\/)?[a-zA-Z0-9][a-zA-Z0-9._-]*\.(png|webp|svg)$/.test(layer.image.file) ||
         !/^[a-f0-9]{64}$/.test(layer.image.sha256)) throw new Error('数値面の画像・投影フレームが不正です');
     const legend = layer.legend;
     if (!legend || legend.unit !== unit || legend.domain?.length !== 2 || !legend.domain.every(Number.isFinite) ||
@@ -46,12 +48,19 @@ export function validateMexicoSurfaceManifest(value: unknown): MexicoSurfaceMani
     if (!/^https:\/\//.test(layer.sourceUrl) || !/^(?:[a-zA-Z0-9_-]+\/)?[a-zA-Z0-9][a-zA-Z0-9._-]*\.json$/.test(layer.provenanceFile)) {
       throw new Error('数値面の出典参照が不正です');
     }
+    if (legend.bands && (id !== 'precipitation' || legend.interval !== 250 || !legend.bands.length ||
+        legend.bands[0].min !== legend.domain[0] || legend.bands.at(-1)?.max !== legend.domain[1] ||
+        legend.bands.some((band, index) => !Number.isFinite(band.min) || !Number.isFinite(band.max) ||
+          band.max - band.min !== 250 || !/^#[a-f0-9]{6}$/i.test(band.color) ||
+          (index > 0 && band.min !== legend.bands![index - 1].max)))) throw new Error('250mm降水帯の数値凡例が不正です');
   }
   return manifest;
 }
 
 export function mexicoSurfaceGradient(legend: MexicoSurfaceLegend): string {
   const [minimum, maximum] = legend.domain;
+  if (legend.bands) return `linear-gradient(to right, ${legend.bands.flatMap(band =>
+    [`${band.color} ${(band.min - minimum) / (maximum - minimum) * 100}%`, `${band.color} ${(band.max - minimum) / (maximum - minimum) * 100}%`]).join(', ')})`;
   return `linear-gradient(to right, ${legend.colorStops.map(stop => `${stop.color} ${(stop.value - minimum) / (maximum - minimum) * 100}%`).join(', ')})`;
 }
 
