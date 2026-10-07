@@ -60,7 +60,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
      <g data-africa-comparison-layer></g>
      <g data-symbols></g>
      {[{name:'大西洋',point:[-18,-12]},{name:'インド洋',point:[56,-8]},{name:'地中海',point:[18,36]}].map(l=><text class="africa-ocean" x={projectAfrica(l.point)[0]} y={projectAfrica(l.point)[1]}>{l.name}</text>)}
-     {countries.filter(c=>['CPV','STP','COM','SYC','MUS'].includes(c.code)).map(c=><g data-island-marker={c.code}><circle data-country-marker={c.code} cx={projectAfrica(c.point)[0]} cy={projectAfrica(c.point)[1]} r="5" class="africa-island"/><text class="africa-island-label" x={projectAfrica(c.point)[0]+9} y={projectAfrica(c.point)[1]+4}>{c.name}</text></g>)}
+     {countries.filter(c=>['CPV','STP','COM','SYC','MUS'].includes(c.code)).map(c=><g data-island-marker={c.code}><circle data-country-marker={c.code} cx={projectAfrica(c.point)[0]} cy={projectAfrica(c.point)[1]} r="5" class="africa-island"/><text class="africa-island-label" x={projectAfrica(c.point)[0]+(c.point[0]>=50?-9:9)} y={projectAfrica(c.point)[1]+4} text-anchor={c.point[0]>=50?'end':'start'}>{c.name}</text></g>)}
      <g data-theme-marks>{initialMarks.map(mark=><g data-theme-mark={mark.id}>
       {mark.line&&<path d={mark.path} fill="none" stroke={mark.color} stroke-width="3" vector-effect="non-scaling-stroke"/>}
       <circle cx={mark.x} cy={mark.y} r={7*markScale} fill={mark.color} stroke="#fff" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
