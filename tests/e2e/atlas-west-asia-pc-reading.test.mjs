@@ -37,6 +37,7 @@ test('西アジアのPC実画面で地域説明・3か国・欠測年・選択�
     const file=`${viewport.width}-${label}.png`;const png=await page.screenshot({path:path.join(output,file),animations:'disabled'});
     const dimensions=await page.evaluate(()=>{const r=document.querySelector('[data-west-map]').getBoundingClientRect();return {map:{x:r.x,y:r.y,width:r.width,height:r.height},overflow:document.documentElement.scrollWidth>innerWidth};});
     assert(dimensions.map.width>200&&dimensions.map.height>200);assert.equal(dimensions.overflow,false);
+    assert(await page.evaluate(()=>{const button=document.querySelector('[data-west-reading-overview]');if(!button)return true;const r=button.getBoundingClientRect(),pane=button.closest('.west-reading').getBoundingClientRect();return r.left>=pane.left&&r.right<=pane.right&&r.width>40;}),'the overview action remains fully inside the right pane');
     records.push({file,viewport,sha256:createHash('sha256').update(png).digest('hex'),...dimensions});
    };
    await open('industry/');

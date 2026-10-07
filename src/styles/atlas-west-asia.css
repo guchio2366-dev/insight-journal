@@ -279,6 +279,7 @@
 .west-country-line:not([data-country]){cursor:default}
 .west-single-product{min-height:44px;padding:8px 12px;font:inherit;color:#254952;background:#fffef8;border:1px solid #b8c8ba;cursor:pointer}
 @media(min-width:960px){
+ .west-atlas .west-reading .west-reading-header{flex-wrap:wrap}
  .west-atlas[data-city-climate-active=true] .west-reading .west-reading-header{flex-wrap:wrap;min-height:0;padding-bottom:4px}
  .west-atlas[data-city-climate-active=true] .west-reading .west-reading-header .atlas-eyebrow{display:none}
  .west-atlas[data-city-climate-active=true] .west-reading .atlas-city-climate>h3{position:absolute;width:1px;height:1px;margin:0;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
