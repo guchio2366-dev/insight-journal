@@ -1,5 +1,6 @@
 /** Real Chromium acceptance against the production build. No HTTP server/mocked renderer. */
 import {verifyCanadaNaturalReading} from './verify-canada-natural-reading.mjs';
+import {verifyCanadaElevationBands,verifyCanadaElevationRasterInteraction} from './verify-canada-elevation-bands.mjs';
 import {verifyCanadaIndustryReading} from './verify-canada-industry-reading.mjs';
 import {chromium} from 'playwright';
 import {verifyCanadaDemographicsReading} from './verify-canada-demographics-reading.mjs';
@@ -66,5 +67,7 @@ try{
  await verifyCanadaIndustryReading({page,url,output,result});
  await verifyCanadaDemographicsReading({page,url,output,result});
  await verifyCanadaNaturalReading({page,url,output,result});
+ await verifyCanadaElevationBands({page,url,output,result});
+ await verifyCanadaElevationRasterInteraction({page,url,output,result});
  assert.deepEqual(errors,[],'No browser runtime errors');await writeFile(path.join(output,'results.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({passed:true,viewports:result.viewports.length,checks:result.checks,output},null,2));
 }finally{await browser.close();}
