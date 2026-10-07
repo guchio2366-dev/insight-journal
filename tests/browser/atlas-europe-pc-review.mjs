@@ -364,6 +364,7 @@ async function stageOneOperations(page, profile) {
   assert.equal(await extent(), fullExtent);
   assert.equal(await page.locator('[data-culture-code]').count(), 331);
   assert.match(selectedValue, /Middlesbrough/);
+  assert.equal(await page.locator('.eu-read-panel').evaluate(node => node.scrollHeight <= node.clientHeight + 1), true, 'Culture values and disclosure stay inside the reader panel');
   await snapshot(page, profile, 'culture-selected');
   await page.goBack(); await ready(page);
   assert.equal(await page.locator('[data-culture-area]').inputValue(), '');
