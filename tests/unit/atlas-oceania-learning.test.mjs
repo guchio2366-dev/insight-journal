@@ -1,6 +1,7 @@
 import test, {after} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {gunzipSync} from 'node:zlib';
 import {fileURLToPath} from 'node:url';
 import {build,stop} from 'esbuild';
 import {Window} from 'happy-dom';
@@ -153,7 +154,7 @@ function controllerFixture(url,field='agriculture'){
     '<button data-comparison></button><button data-return></button><div data-normal-view><div data-primary-map></div></div><div data-comparison-view><div data-original-map></div><div data-comparison-map></div></div>'+
     ['primary','original','comparison'].flatMap(prefix=>['title','period','unit',...(prefix==='primary'?[]:['legend'])].map(suffix=>`<div data-${prefix}-${suffix}></div>`)).join('')+
     '<div data-primary-legend-spacer></div><section data-required-legend-layer><p data-primary-legend-unit></p><div data-primary-legend></div></section><details data-primary-legend-dictionary><div data-primary-legend-dictionary-content></div></details>'+
-    ['theme-title','takeaway','explanation','coverage','comparison-explanation','social-context','source-list'].map(hook=>`<div data-${hook}></div>`).join('')+
+    ['geography-reading','theme-title','takeaway','explanation','coverage','comparison-explanation','social-context','source-list'].map(hook=>`<div data-${hook}></div>`).join('')+
     Object.keys(api.oceaniaFields).map(field=>`<a data-field-link="${field}"></a>`).join('');
   window.document.body.append(root);
   Object.assign(globalThis,{window,document:window.document,location:window.location,history:window.history,ResizeObserver:class{observe(){}},requestAnimationFrame:fn=>fn()});
@@ -181,10 +182,10 @@ test('comparison reload and named return preserve original crop, country, legend
     assert.equal(reload.root.querySelector('[data-comparison-view]').hidden,false);
     assert.equal(reload.root.querySelector('[data-place]').value,'KIR');
     assert.equal(reload.root.querySelector('[data-layer]').value,'coconut');
-    assert.ok(reload.root.querySelector('[data-original-map] image').getAttribute('href').endsWith('/coconut.png'));
+    assert.ok(reload.root.querySelector('[data-original-map] [data-farming-mode="quantity"]').getAttribute('href').endsWith('/coconut-quantity.png'));
     assert.ok(reload.root.querySelector('[data-comparison-map] image').getAttribute('href').endsWith('/tarawa.png'));
-    const expected=api.getOceaniaLayer('coconut').legend.map(item=>item.label);
-    assert.deepEqual([...reload.root.querySelectorAll('[data-original-legend]>span')].map(item=>item.textContent),expected);
+    assert.equal(reload.root.querySelectorAll('[data-original-legend] [data-farming-legend]').length,5);
+    assert.match(reload.root.querySelector('[data-original-legend] [data-farming-legend="coconut"] h3').textContent,/ha／元5分セル/);
     assert.equal(reload.root.querySelector('[data-original-map]>svg').getAttribute('viewBox'),reload.root.querySelector('[data-comparison-map]>svg').getAttribute('viewBox'));
     assert.match(reload.root.querySelector('[data-return]').textContent,/キリバス/);
     assert.match(reload.root.querySelector('[data-return]').textContent,/戻る/);
@@ -235,4 +236,36 @@ test('selected population context occurs once in the expanded reading for Kiriba
     try{assert.equal(root.querySelector('[data-explanation]').textContent.split(api.oceaniaPopulationReading.contexts[key]).length-1,1);}
     finally{window.happyDOM.abort();for(const key of ['window','document','location','history','ResizeObserver','requestAnimationFrame'])delete globalThis[key];}
   }
+});
+
+test('saved Oceania farming products start together and direct product URLs choose their own reading',()=>{
+ const state=api.createOceaniaState('','agriculture');assert.equal(state.layer,'farming-all');assert.equal(state.place,'all');assert.equal(state.scope,'all');
+ for(const [product,theme] of [['wheat','wheat'],['coconut','tropical-crops'],['cacao','tropical-crops'],['sheep','livestock'],['cattle','livestock']]){
+  const focus=api.createOceaniaState('?layer='+product,'agriculture');assert.equal(focus.theme,theme);
+  const win=new Window();try{
+   const holder=win.document.createElement('div');holder.innerHTML=api.renderOceaniaScene(api.getOceaniaLayer(product),focus);
+   assert.deepEqual([...new Set([...holder.querySelectorAll('[data-farming-product]')].map(el=>el.dataset.farmingProduct))].sort(),['cacao','cattle','coconut','sheep','wheat']);
+   assert.equal(holder.querySelectorAll('[data-map-place]').length,0,'Agriculture country selection uses the native control');
+   assert.equal(holder.querySelectorAll('[data-farming-place]').length,5);
+   for(const annotation of holder.querySelectorAll('[data-farming-place]'))assert.equal(Number(annotation.getAttribute('opacity')),['wheat','coconut','cacao'].includes(product)&&annotation.dataset.placeProduct!==product?0.32:1);
+   assert.equal(holder.querySelectorAll(`[data-farming-product="${product}"][data-farming-mode="quantity"]`).length,1);
+   assert.equal(holder.querySelector('[data-farming-product="wheat"][data-farming-mode="outline"]').getAttribute('opacity'),product==='wheat'?'1':'0.75');
+   const key=win.document.createElement('div');key.innerHTML=api.renderOceaniaFarmingKey(api.getOceaniaLayer(product));assert.equal(key.querySelectorAll('[data-farming-key]').length,5);
+   assert.match(api.renderOceaniaLegend(api.getOceaniaLayer(product)),/ha／元5分セル/);assert.match(api.renderOceaniaLegend(api.getOceaniaLayer(product)),/頭／km²/);
+  }finally{win.happyDOM.abort();}
+ }
+});
+
+test('Oceania farming example names stay inside the saved country and on a positive source cell',()=>{
+ const ring=(point,vertices)=>{let inside=false;const [x,y]=point;for(let i=0,j=vertices.length-1;i<vertices.length;j=i++){const [ax,ay]=vertices[i],[bx,by]=vertices[j];if((ay>y)!==(by>y)&&x<(bx-ax)*(y-ay)/(by-ay)+ax)inside=!inside;}return inside;};
+ const inGeometry=(point,geometry)=>(geometry.type==='Polygon'?[geometry.coordinates]:geometry.coordinates).some(poly=>ring(point,poly[0])&&!poly.slice(1).some(r=>ring(point,r)));
+ const geography=JSON.parse(readFileSync(new URL('../../src/data/atlas/oceania-countries.json',import.meta.url),'utf8'));
+ for(const place of api.oceaniaFarmingPlaces){
+  const feature=geography.features.find(f=>f.properties.code===place.country);assert.ok(inGeometry(place.coordinates,feature.geometry),place.id);
+  const kind=['sheep','cattle'].includes(place.product)?'livestock':'crops',base=`../../public/assets/atlas/oceania-${kind}-v1/`;
+  const manifest=JSON.parse(readFileSync(new URL(base+'manifest.json',import.meta.url),'utf8')),layer=manifest.layers.find(l=>l.id===place.product),[west,south,east,north]=layer.bounds4326Unwrapped;
+  const [lon,lat]=place.coordinates,column=Math.floor((lon-west)/(east-west)*layer.width),row=Math.floor((north-lat)/(north-south)*layer.height);
+  const values=gunzipSync(readFileSync(new URL(base+layer.grid,import.meta.url)));
+  assert.ok(values.readFloatLE((row*layer.width+column)*4)>0,place.id+' must use a source positive');
+ }
 });

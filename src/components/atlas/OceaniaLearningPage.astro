@@ -7,7 +7,7 @@ import {renderOceaniaRequiredLegend} from '../../scripts/atlas-oceania-legend';
 import {
  oceaniaFields,oceaniaCountries,oceaniaLayers,oceaniaThemes,
  createOceaniaState,getOceaniaLayer,getOceaniaTheme,
- renderOceaniaScene,renderOceaniaLegend,oceaniaCoverage,oceaniaOverviewReadings,
+ renderOceaniaScene,renderOceaniaLegend,oceaniaCoverage,oceaniaOverviewReadings,getOceaniaFarmingGeography,
  type OceaniaField,
 } from '../../data/atlas/oceania-learning';
 import '../../styles/atlas-oceania-learning.css';
@@ -22,7 +22,7 @@ const comparison=getOceaniaLayer(state.compareLayer,state);
 const primaryLegend=renderOceaniaLegend(layer);
 const compactPrimaryLegend=renderOceaniaRequiredLegend(layer);
 const fieldThemes=oceaniaThemes.filter(t=>t.field===field);
-const fieldLayers=oceaniaLayers.filter(l=>l.field===field);
+const fieldLayers=oceaniaLayers.filter(l=>l.field===field).sort((a,b)=>Number(b.id==='farming-all')-Number(a.id==='farming-all'));
 const scopeOptions=[{id:'all',label:'全体'},{id:'theme',label:'テーマ'},{id:'country',label:'選択国'}];
 const orderedFields:OceaniaField[]=['agriculture','nature','industry','population'];
 const labels={agriculture:'農林業',nature:'自然環境',industry:'主要産業',population:'人口'};
@@ -37,7 +37,7 @@ const industryLabels:Record<string,string>={'australia-minerals':'豪州の鉱�
   <header class="oceania-learning-heading">
    <div class="oceania-learning-title"><p class="oceania-learning-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / オセアニア</p><h1>{oceaniaFields[field].title}</h1></div>
    <button type="button" class="oceania-learning-return" data-return>← {layer.title}へ戻る：オセアニア全体</button>
-   <label class="oceania-learning-compare-layer">並べる分布<select data-compare-layer>{oceaniaLayers.map(item=><option value={item.id} selected={item.id===comparison.id}>{item.title}</option>)}</select></label>
+   <label class="oceania-learning-compare-layer">並べる分布<select data-compare-layer>{oceaniaLayers.map(item=><option value={item.id} selected={item.id===comparison.id}>{item.id==='farming-all'?'保存5品目の全分布':item.title}</option>)}</select></label>
   </header>
   <OceaniaWorkspaceRegionNavigation><label class="oceania-learning-place">国・地域<select data-place><option value="all" selected={state.place==='all'}>オセアニア全体</option>{oceaniaCountries.map(country=><option value={country.code} selected={country.code===state.place}>{country.name}</option>)}</select></label></OceaniaWorkspaceRegionNavigation>
   <nav class="oceania-learning-fields" aria-label="オセアニアの分野を選ぶ">
@@ -47,18 +47,21 @@ const industryLabels:Record<string,string>={'australia-minerals':'豪州の鉱�
   <nav class="oceania-workspace-subviews" aria-label="分野内の項目">{field==='industry'&&fieldThemes.map(item=><button type="button" data-theme={item.id} title={item.title} aria-pressed="false">{industryLabels[item.id]??item.title}</button>)}{field!=='industry'&&subviews.map((label,index)=>index===0?((field==='population'||field==='agriculture')?<button type="button" aria-pressed="true">{label}</button>:<span aria-current="page">{label}</span>):field==='agriculture'?<button type="button" disabled>{label}<small>未整備</small></button>:<details class="oceania-workspace-unready"><summary>{label}<small>未整備</small></summary><p>この地域の{label}の分布資料は未整備です。</p>{label==='水資源'&&<div class="oceania-workspace-water-items">{['河川・地下水','降水量','河川の流域'].map(item=><span>{item}<small>未整備</small></span>)}</div>}</details>)}{field==='population'&&<p class="oceania-population-unready">人種・民族・宗教：未整備</p>}</nav>
   <div class="oceania-learning-normal" data-normal-view>
    <section class="oceania-learning-map-panel" aria-labelledby="oceania-primary-title">
-    <div class="oceania-learning-map-heading"><div><h2 id="oceania-primary-title" data-primary-title>{layer.title}</h2><p><span data-primary-period>{layer.period}</span><span data-primary-unit>{layer.unit}</span></p></div><label class="oceania-learning-layer"><span class="visually-hidden">地図の分布を選ぶ</span><select data-layer>{fieldLayers.map(item=><option value={item.id} selected={item.id===layer.id}>{item.title}</option>)}</select></label></div>
+    <div class="oceania-learning-map-heading"><div><h2 id="oceania-primary-title" data-primary-title>{layer.title}</h2><p><span data-primary-period>{layer.period}</span><span data-primary-unit>{layer.unit}</span></p></div><label class="oceania-learning-layer"><span class:list={{'visually-hidden':field!=='agriculture'}}>{field==='agriculture'?'分布':'地図の分布を選ぶ'}</span><select data-layer>{fieldLayers.map(item=><option value={item.id} selected={item.id===layer.id}>{item.id==='farming-all'?'保存5品目の全分布':item.title}</option>)}</select></label>{field==='agriculture'&&<details class="oceania-farming-view-options"><summary>範囲・テーマ</summary><div class="oceania-farming-advanced-controls"><div class="oceania-learning-themes" aria-label="学ぶテーマ">{fieldThemes.map(item=><button type="button" data-theme={item.id} title={item.title} aria-pressed="false">{themeLabels[item.id]??item.title}</button>)}</div><div class="oceania-learning-scope" aria-label="地図の範囲">{scopeOptions.map(item=><button type="button" data-scope={item.id} aria-pressed={item.id===state.scope?'true':'false'} disabled={item.id==='country'&&state.place==='all'}>{item.label}</button>)}</div></div></details>}</div>
     <div class="oceania-learning-scene" data-primary-map set:html={renderOceaniaScene(layer,state,'primary')}></div>
+    {field==='agriculture'&&<section class="oceania-farming-map-legend" data-key-legend data-required-legend-layer={layer.id} aria-label="品目と色の凡例"><div class="oceania-learning-legend" data-primary-legend set:html={compactPrimaryLegend}></div><details class="oceania-learning-legend-dictionary oceania-farming-legend-details" data-primary-legend-dictionary><summary>数量階級・単位・欠測の詳しい凡例</summary><p data-primary-legend-unit>{layer.period} ・ {layer.unit}</p><div class="oceania-learning-legend" data-primary-legend-dictionary-content data-primary-legend-definitions set:html={primaryLegend}></div></details></section>}
     <div class="oceania-learning-legend oceania-workspace-legend-spacer" data-primary-legend-spacer aria-hidden="true" inert set:html={renderOceaniaLegend(layer)}></div>
-    <div class="oceania-learning-toolbar"><div class="oceania-learning-themes" aria-label="学ぶテーマ">{fieldThemes.map(item=><button type="button" data-theme={item.id} title={item.title} aria-pressed="false">{themeLabels[item.id]??item.title}</button>)}</div><div class="oceania-learning-scope" aria-label="地図の範囲">{scopeOptions.map(item=><button type="button" data-scope={item.id} aria-pressed={item.id===state.scope?'true':'false'} disabled={item.id==='country'&&state.place==='all'}>{item.label}</button>)}</div></div>
+    {field!=='agriculture'&&<div class="oceania-learning-toolbar"><div class="oceania-learning-themes" aria-label="学ぶテーマ">{fieldThemes.map(item=><button type="button" data-theme={item.id} title={item.title} aria-pressed="false">{themeLabels[item.id]??item.title}</button>)}</div><div class="oceania-learning-scope" aria-label="地図の範囲">{scopeOptions.map(item=><button type="button" data-scope={item.id} aria-pressed={item.id===state.scope?'true':'false'} disabled={item.id==='country'&&state.place==='all'}>{item.label}</button>)}</div></div>}
    </section>
    <aside class="oceania-learning-reading" aria-label="地図から読み取ること">
     <div class="oceania-learning-message"><h2 data-theme-title>オセアニアの{labels[field]}を読む</h2><p class="oceania-learning-takeaway" data-takeaway>{overview.takeaway}</p><button type="button" class="oceania-learning-comparison-button" data-comparison>{comparison.title}と並べる →</button></div>
+    {field==='agriculture'?<div class="oceania-workspace-reading-scroll" tabindex="0" aria-label="地理の読み取りと詳しい資料"><p class="oceania-farming-geography" data-geography-reading>{getOceaniaFarmingGeography(layer.id)}</p><details class="oceania-learning-explanation"><summary>資料・表示方法の詳細</summary><p data-explanation>{overview.explanation}</p><div class="oceania-learning-coverage"><h3>この地図で読める範囲</h3><p data-coverage>{oceaniaCoverage(layer,state)}</p></div></details><details class="oceania-learning-social"><summary>経営・加工・市場とのつながりを読む</summary><p data-social-context>{getOceaniaFarmingGeography(layer.id)}</p></details></div>:<>
     <section class="oceania-workspace-required-legend" data-required-legend-layer={layer.id} aria-label="現在の地図の凡例と単位"><p data-primary-legend-unit>{layer.period} ・ {layer.unit}</p><div class="oceania-learning-legend" data-primary-legend aria-label="地図の全凡例" set:html={compactPrimaryLegend}></div></section>
     <div class="oceania-workspace-reading-scroll" tabindex="0" aria-label="選択した項目の詳しい説明"><p data-explanation>{overview.explanation}</p><details class="oceania-learning-social"><summary>社会・制度とのつながりを読む</summary><p data-social-context>{theme.explanation}</p></details>
     <details class="oceania-learning-legend-dictionary" data-primary-legend-dictionary hidden={layer.id!=='climate'}><summary>気候コードの名称を詳しく読む</summary><div class="oceania-learning-legend" data-primary-legend-dictionary-content set:html={primaryLegend}></div></details>
     <div class="oceania-learning-coverage"><h3>この地図で読める範囲</h3><p data-coverage>{oceaniaCoverage(layer,state)}</p></div>
     </div>
+    </>}
    </aside>
   </div>
   <section class="oceania-learning-comparison" data-comparison-view hidden aria-label="元の分布と比較する">
