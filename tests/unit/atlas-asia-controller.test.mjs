@@ -177,7 +177,9 @@ async function setup(query = '', options = {}) {
   }
   if(options.presentation){
     const conf=JSON.parse(q('[data-asia-config]').textContent);
-    conf.presentationBase='/assets/presentation/';conf.presentation={farming:{file:'farming.json.gz',products:[{id:'rice',kind:'crop',title:'米',color:'#43854c'},{id:'wheat',kind:'crop',title:'小麦',color:'#b39742'}],labels:[]},rainfall:{file:'rainfall.json.gz',levels:[250,500],labels:[]},terrain:{file:'terrain.json.gz',levels:[500,1000],labels:[]},climate:[]};q('[data-asia-config]').textContent=JSON.stringify(conf);
+    conf.presentationBase='/assets/presentation/';conf.presentation={farming:{file:'farming.json.gz',products:[{id:'rice',kind:'crop',title:'米',color:'#43854c'},{id:'wheat',kind:'crop',title:'小麦',color:'#b39742'}],labels:[]},rainfall:{file:'rainfall.json.gz',levels:[250,500],labels:[]},terrain:{file:'terrain.json.gz',levels:[500,1000],labels:[]},climate:[]};
+    if(options.contourBands){for(const [kind,interval] of [['rainfall',250],['terrain',500]])conf.presentation[kind].bands={file:kind+'-bands.json.gz',lineFile:kind+'-aligned.json.gz',interval,breaks:[0,interval,interval*2],colors:['#edf5fc','#4d9aca'],labels:[]};q('[data-physical-legend]').innerHTML='<div class="asia-physical-key"><span>legacy elevation</span></div><p>existing source note</p>';q('[data-natural-topics]').insertAdjacentHTML('beforeend','<button data-natural-topic="landform">landform</button>');}
+    q('[data-asia-config]').textContent=JSON.stringify(conf);
     root.insertAdjacentHTML('beforeend','<div data-farm-switches><button data-farm-toggle="crop" aria-pressed="true"><span></span></button><button data-farm-toggle="livestock" aria-pressed="true"><span></span></button></div><button data-farm-water></button><div data-map-annotations></div><section data-farm-overview-reading></section><section data-farm-overview-legend></section><input type="checkbox" data-farm-kind="crop" checked><input type="checkbox" data-farm-kind="livestock" checked><button data-farm-choice="overview"></button><button data-farm-choice="wheat"></button>');
     q('[data-farming-topic]').insertAdjacentHTML('afterbegin','<option value="overview"></option>');
   }
@@ -964,6 +966,57 @@ test('等雨量線の取得失敗は主題を離れると消え、戻ると再�
   q('[data-natural-topic=climate]').click();assert.equal(q('[data-map-state]').hidden,true);assert.equal(q('[data-map-retry]').hidden,true);
   q('[data-natural-topic=precipitation]').click();await until(()=>window.__map.getLayer('asia-rainfall-lines')?.layout?.visibility==='visible','rainfall recovered');
   assert.equal(q('[data-map-state]').hidden,true);assert.equal(q('[data-map-retry]').hidden,true);
+ }finally{await window.happyDOM.close();}
+});
+
+test('東アジアの線と色帯・凡例を一緒に切り替え、地点の原格子値と従来の重ね合わせを保持する',async()=>{
+ const {window,root,q,requests}=await setup('?topic=precipitation&at=139.75000,35.69000',{farming:true,hydrology:true,presentation:true,contourBands:true});
+ try{
+  await until(()=>root.dataset.contourBandStatus==='ready'&&q('[data-hydrology-value]').textContent.includes('1,534'),'aligned rainfall and original point value');
+  const map=window.__map;
+  assert.equal(map.layers['asia-rainfall-bands'].layout.visibility,'visible');
+  assert.equal(map.layers['asia-rainfall-aligned-lines'].layout.visibility,'visible');
+  assert.equal(map.getLayer('asia-hydrology-rain'),undefined,'Do not blend an unrelated raster palette');
+  assert(requests.includes('/assets/presentation/rainfall-bands.json.gz'));
+  assert(requests.includes('/assets/presentation/rainfall-aligned.json.gz'));
+  assert.match(q('[data-hydrology-scale]').textContent,/0–250.*250–500/);
+  assert.match(q('[data-hydrology-legend-note]').textContent,/原格子値/);
+  q('[data-natural-topic=terrain]').click();
+  await until(()=>root.dataset.contourBandStatus==='ready'&&root.dataset.contourBandKind==='terrain','aligned terrain');
+  assert.equal(map.layers['asia-rainfall-bands'].layout.visibility,'none');
+  assert.equal(map.layers['asia-terrain-bands'].layout.visibility,'visible');
+  assert.equal(map.layers['asia-terrain-aligned-lines'].layout.visibility,'visible');
+  assert.equal(map.layers['asia-terrain'].layout.visibility,'none');
+  assert.match(q('[data-physical-legend] .asia-physical-key').textContent,/0–500.*500–1,000/);
+  assert.match(q('[data-physical-legend] p').textContent,/existing source note.*原格子値/);
+  q('[data-natural-topic=landform]').click();
+  await until(()=>map.layers['asia-terrain'].layout.visibility==='visible','original landform background');
+  assert.equal(map.layers['asia-terrain-bands'].layout.visibility,'none');
+  assert.equal(q('[data-physical-legend] .asia-physical-key').textContent,'legacy elevation');
+  assert.equal(q('[data-physical-legend] p').textContent,'existing source note');
+  q('[data-field=agriculture]').click();q('[data-farm-water]').click();
+  await until(()=>map.getLayer('asia-rainfall-lines')?.layout.visibility==='visible','unchanged agriculture water overlay');
+  assert.equal(map.layers['asia-rainfall-aligned-lines'].layout.visibility,'none');
+  assert.equal(map.layers['asia-rainfall-bands'].layout.visibility,'none');
+  assert(requests.includes('/assets/presentation/rainfall.json.gz'));
+ }finally{await window.happyDOM.close();}
+});
+
+test('色帯の取得失敗は誤った色背景を出さず、地点・URLを維持して再試行する',async()=>{
+ const {window,root,q}=await setup('?topic=precipitation&at=139.75000,35.69000',{hydrology:true,presentation:true,contourBands:true,presentationFailure:true});
+ try{
+  await until(()=>root.dataset.contourBandStatus==='error','contour bands error');
+  await until(()=>q('[data-hydrology-value]').textContent.includes('1,534'),'original point remains readable');
+  assert.equal(window.__map.getLayer('asia-hydrology-rain'),undefined);
+  assert.equal(q('[data-map-retry]').hidden,false);
+  assert.match(q('[data-map-state]').textContent,/等値線と色帯を取得できません/);
+  const at=new URL(window.location.href).searchParams.get('at');
+  q('[data-map-retry]').click();
+  await until(()=>root.dataset.contourBandStatus==='ready','aligned bands retry');
+  assert.equal(new URL(window.location.href).searchParams.get('at'),at);
+  assert.match(q('[data-hydrology-value]').textContent,/1,534/);
+  assert.equal(window.__map.layers['asia-rainfall-bands'].layout.visibility,'visible');
+  assert.equal(q('[data-map-state]').hidden,true);
  }finally{await window.happyDOM.close();}
 });
 
