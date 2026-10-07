@@ -1,6 +1,6 @@
 /* Country-only adapters reuse the approved US workspace classes and dimensions. */
 .atlas-desktop-shell .canada-nature{display:contents;padding:0;border:0;background:none}
-.canada-nature .canada-country-primary{min-width:0;margin:0;align-self:start;padding:8px 0 0;color:#21343d}
+.canada-nature .canada-country-primary{min-width:0;margin:0;align-self:start;padding:10px 0 0;color:#21343d}
 .canada-nature .canada-country-primary{position:relative}
 .canada-nature .canada-country-primary>p:has(>a[hidden]){display:none}
 .canada-nature .canada-country-primary>.country-topic-tabs[aria-label="農林業の分野"]{position:absolute;z-index:5;transform:translate(8px,7px);display:flex;width:fit-content;gap:3px;padding:3px;border:1px solid #9eaca3;border-radius:6px;background:#fffef5ed;box-shadow:0 1px 4px #243b4820}
@@ -39,10 +39,8 @@
 .canada-nature .country-topic-tabs [aria-pressed=true],.canada-nature .country-topic-tabs [aria-current]{background:#35515d;color:white}
 .canada-nature .country-topic-tabs small,.canada-nature .country-water-topics small{display:block;font-size:9px;font-weight:400;line-height:1.4}
 .canada-nature .country-topic-tabs button:disabled{cursor:default;color:#727970}
-.atlas-desktop-shell .canada-nature.canada-population .country-topic-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:12px 0;border:0;background:none}
-.atlas-desktop-shell .canada-nature.canada-population .country-topic-tabs button{display:inline-flex;flex-direction:row;gap:4px;min-height:40px;padding:8px 10px;border:1px solid #bac9c6;border-radius:4px;background:#fff;color:#243f48;font:400 16px/1.75 var(--sans)}
-.atlas-desktop-shell .canada-nature.canada-population .country-topic-tabs button[aria-pressed=true]{background:#224c59;color:#fff}
-.atlas-desktop-shell .canada-nature.canada-population .country-topic-tabs small{display:inline;margin:0;font-size:10px;line-height:inherit}
+.atlas-desktop-shell .canada-nature.canada-population .country-topic-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}
+.atlas-desktop-shell .canada-nature.canada-population .country-topic-tabs button{font-size:14px;min-height:44px}
 .canada-nature .country-water-topics{display:none;grid-template-columns:repeat(3,minmax(0,1fr));padding:6px;border:1px solid #c7ccbf;background:#fbfaf3;font-size:12px;text-align:center}
 .canada-nature:has([data-canada-view=water][aria-pressed=true]) .country-water-topics{display:grid}
 .canada-nature .canada-map-column>h2{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
@@ -227,4 +225,4 @@
 [data-population-filter-key]{padding:8px;background:#f7f5ec;color:#304f5a;font-size:12px}
 [data-population-filter-key] span{display:inline-flex;align-items:center;margin:3px 8px 3px 0;gap:4px}
 [data-population-filter-key] i{width:16px;height:12px;border:1px solid #778b84}
-@media(min-width:960px){.population-category-key{gap:3px 9px}.population-category-key :is(button,span){font-size:11px;min-height:24px}}
+@media(min-width:960px){.canada-population .population-category-key{gap:4px 10px}.canada-population .population-category-key :is(button,span){font-size:14px;min-height:30px}}

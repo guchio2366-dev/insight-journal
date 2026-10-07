@@ -1,5 +1,5 @@
 import population from '../data/atlas/canada/population.json';
-import {readCanadaPopulationState,writeCanadaPopulationState} from '../lib/atlas-canada-population';
+import {readCanadaPopulationState,writeCanadaPopulationState,copyCanadaPopulationMapState} from '../lib/atlas-canada-population';
 import {isCanadaDemographicTopic} from '../lib/atlas-canada-demographics';
 import {projectCanadaLandform} from '../lib/atlas-canada-landform-map';
 const canadaWaterFullFrame=[0,0,900,580];
@@ -40,7 +40,7 @@ export function initCanadaIndustryParity(root:HTMLElement){
  function camera(){svg.setAttribute('viewBox',frame.join(' '));labels();}
  function render(){const m=selected();
  const raw=new URL(location.href).searchParams.get('populationReturn');const wrap=q('[data-ca-population-return-wrap]');wrap.hidden=true;
- if(raw){const source=new URL('?'+raw,location.href);if(!isCanadaDemographicTopic(source.searchParams.get('topic'))){const state=readCanadaPopulationState(source,population.cmas.map(p=>p.id));const back=q<HTMLAnchorElement>('[data-canada-population-industry-return]');back.href=writeCanadaPopulationState(new URL(back.getAttribute('href')!,location.href),state).href;back.textContent=`元の${state.year}年${state.metric==='density'?'人口密度':'都市圏人口'}比較へ戻る`;wrap.hidden=false;}}
+ if(raw){const source=new URL('?'+raw,location.href);if(!isCanadaDemographicTopic(source.searchParams.get('topic'))){const state=readCanadaPopulationState(source,population.cmas.map(p=>p.id));const back=q<HTMLAnchorElement>('[data-canada-population-industry-return]');back.href=copyCanadaPopulationMapState(source,writeCanadaPopulationState(new URL(back.getAttribute('href')!,location.href),state)).href;back.textContent=`元の${state.year}年${state.metric==='density'?'人口密度':'都市圏人口'}比較へ戻る`;wrap.hidden=false;}}
 root.dataset.industrySubsector=subsector;q('#ca-industry-panel').setAttribute('aria-labelledby',`ca-sector-${sector}`);
  for(const b of root.querySelectorAll<HTMLElement>('[data-ca-sector]')){const on=b.dataset.caSector===sector;b.setAttribute('aria-selected',String(on));b.tabIndex=on?0:-1;}
  for(const row of root.querySelectorAll<HTMLElement>('[data-ca-subtabs]'))row.hidden=row.dataset.caSubtabs!==sector;
