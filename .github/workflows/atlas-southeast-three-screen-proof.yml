@@ -1,0 +1,76 @@
+name: Southeast Asia representative screen proof
+
+# This isolated branch captures an immutable, already published product source.
+# It is a QA-only create-event job, not a publishing workflow.
+'on': create
+
+permissions:
+  contents: read
+
+jobs:
+  proof:
+    if: github.event.ref_type == 'branch' && github.event.ref == 'codex/southeast-three-screen-proof-20261007'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+      REVIEW_HEAD_SHA: 6634a280141739f3cb941b7c38b16d4a53c4501c
+    steps:
+      - name: Check out diagnostic code
+        uses: actions/checkout@v7
+        with:
+          path: proof
+          persist-credentials: false
+      - name: Check out the published source
+        uses: actions/checkout@v7
+        with:
+          ref: 6634a280141739f3cb941b7c38b16d4a53c4501c
+          path: site
+          persist-credentials: false
+      - name: Prepare existing Chrome and Japanese fonts
+        shell: bash
+        run: |
+          set -euo pipefail
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          test -n "$chrome_path"
+          japanese_fonts="$(fc-list ':lang=ja' family)"
+          font_setup="preinstalled"
+          if [[ -z "$japanese_fonts" ]]; then
+            sudo apt-get update
+            sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+            japanese_fonts="$(fc-list ':lang=ja' family)"
+            font_setup="installed-fonts-noto-cjk-from-ubuntu"
+          fi
+          test -n "$japanese_fonts"
+          {
+            printf 'REVIEW_CHROME_PATH=%s\n' "$chrome_path"
+            printf 'REVIEW_JAPANESE_FONT_SETUP=%s\n' "$font_setup"
+            printf '%s\n' 'REVIEW_JAPANESE_FONT_MATCH<<SE_THREE_FONTS'
+            fc-match -f '%{family}\n' 'sans-serif:lang=ja'
+            fc-match -f '%{family}\n' 'serif:lang=ja'
+            printf '%s\n' 'SE_THREE_FONTS'
+          } >> "$GITHUB_ENV"
+      - name: Set up the existing Node version
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: site/.nvmrc
+      - name: Install existing dependencies
+        working-directory: site
+        run: npm ci --no-audit --no-fund
+      - name: Build the fixed published source
+        working-directory: site
+        run: |
+          npm run build
+          node scripts/generate-release.mjs --commit "$REVIEW_HEAD_SHA"
+      - name: Capture only the three representative screens
+        timeout-minutes: 3
+        run: node proof/scripts/capture-southeast-three-screen-proof.mjs site
+      - name: Save the small proof artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: southeast-three-screen-proof-${{ github.run_id }}-${{ github.run_attempt }}
+          path: review-artifacts/southeast-three
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 6
