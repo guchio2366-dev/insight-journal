@@ -41,7 +41,7 @@ if(workspace){
   if(source.field==='agriculture')return renderLatinAgricultureMap(source,'nature-agriculture-source');
   if(source.field==='population')return renderLatinPopulationMap(source,'nature-population-source');
   if(source.field==='industry')return renderLatinIndustryMap(source,'nature-industry-source');
-  return renderLatinNatureMap(source,'nature-source');
+  return renderLatinNatureMap({...source,interactiveCities:false,cityScale:cityScale('[data-nature-source-map]')},'nature-source');
  }
  function sourceLegend(){
   const source=state.source!;
@@ -49,6 +49,16 @@ if(workspace){
   if(source.field==='population')return renderLatinPopulationLegend(source.layer);
   if(source.field==='industry')return renderLatinIndustryLegend(source.layer);
   return renderLatinNatureLegend(source.layer);
+ }
+ function cityScale(selector='[data-nature-map-host]'){return 900/Math.max(250,q<HTMLElement>(selector).getBoundingClientRect().width||900);}
+ function measureReader(){
+  const reader=q<HTMLElement>('.latin-reading');
+  workspace.style.setProperty('--latin-nature-reader-top',`${Math.round(reader.getBoundingClientRect().top+window.scrollY)}px`);
+ }
+ function resizeMap(){
+  if(!state.fallback)q('[data-nature-map-host]').innerHTML=renderLatinNatureMap({...state,cityScale:cityScale(),interactiveCities:!state.source},'nature-main');
+  if(state.source&&state.source.field==='nature'&&!(state.source.fallback??state.fallback))q('[data-nature-source-map]').innerHTML=sourceMap();
+  alignMapCaptions();measureReader();
  }
  function alignMapCaptions(){
   const captions=[q<HTMLElement>('[data-nature-primary-caption]'),q<HTMLElement>('[data-nature-source-caption]')];
@@ -77,7 +87,7 @@ if(workspace){
   workspace.classList.toggle('is-comparison',comparison);
   q('[data-nature-panes]').classList.toggle('is-comparison',comparison);
   q<HTMLElement>('[data-nature-source-pane]').hidden=!comparison;
-  q<HTMLElement>('[data-nature-map-host]').innerHTML=renderLatinNatureMap(state,'nature-main');
+  q<HTMLElement>('[data-nature-map-host]').innerHTML=renderLatinNatureMap({...state,cityScale:cityScale(),interactiveCities:!comparison},'nature-main');
   q<HTMLElement>('[data-nature-legend-host]').innerHTML=renderLatinNatureLegend(state.layer);
   q<HTMLSelectElement>('[data-nature-place]').value=state.place;
   q<HTMLSelectElement>('[data-nature-scope]').value=state.scope;
@@ -104,9 +114,6 @@ if(workspace){
   q('[data-nature-comparison-explanation]').textContent=comparisonReading?.explanation??selected.compare;
   q('[data-nature-case-sources]').innerHTML=(comparisonReading?.sources??selected.sources).map(s=>`<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a></li>`).join('');
   q('[data-nature-normals]').innerHTML=renderLatinNatureNormals(selected.city);
-  q<HTMLSelectElement>('[data-nature-city]').value=selected.city;
-  q<HTMLSelectElement>('[data-nature-city]').disabled=comparison;
-  q<HTMLOptionElement>('[data-nature-city-empty]').hidden=!!selected.city;
   workspace.querySelectorAll<HTMLButtonElement>('[data-nature-case]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.natureCase===selected.id)));
   const agriculture=q<HTMLAnchorElement>('[data-nature-agriculture]'),population=q<HTMLAnchorElement>('[data-nature-population]'),industry=q<HTMLAnchorElement>('[data-nature-industry]');
   state.case=currentCaseId;
@@ -115,8 +122,8 @@ if(workspace){
   population.href=latinLearningUrl(base,latinComparisonState({...state,source:undefined},'population','density'));
   population.textContent=`${natureCountryName(state.place)}の気候と人口密度を比べる`;
   industry.hidden=state.place!=='PAN';industry.href=latinLearningUrl(base,latinComparisonState({...state,source:undefined},'industry','canal'));
-  q('[data-nature-map-description]').textContent=comparison?'同じ範囲で元の分布と比較。代表例を選ぶと自然の通常表示に戻ります。':'5気候群の中にも雨季・乾季の違いがあります。右の観測所の月別平年値で確かめます。';
-  alignMapCaptions();
+  q('[data-nature-map-description]').textContent=comparison?'同じ範囲で元の分布と比較。代表例を選ぶと自然の通常表示に戻ります。':'5気候群の中にも雨季・乾季の違いがあります。地図の都市・観測所の点を選び、右の月別平年値で確かめます。';
+  alignMapCaptions();measureReader();
   q('[data-nature-renderer]').textContent=state.fallback?'静的画像表示（地図と同じ分布・凡例）':'';
   workspace.dataset.natureReady='true';workspace.dataset.natureLayer=state.layer;workspace.dataset.naturePlace=state.place;workspace.dataset.natureScope=state.scope;workspace.dataset.natureRenderer=state.fallback?'fallback':'svg';
   write(push);
@@ -126,16 +133,17 @@ if(workspace){
  q<HTMLSelectElement>('[data-nature-place]').addEventListener('change',event=>{const place=(event.target as HTMLSelectElement).value;state={...state,place,scope:natureScopeForPlace(place,state.scope),source:undefined};currentCaseId=natureCaseForPlace(state.place).id;render(true);});
  q<HTMLSelectElement>('[data-nature-scope]').addEventListener('change',event=>{const scope=(event.target as HTMLSelectElement).value as LatinLearningState['scope'];let place=state.place;if(place!=='all'&&(scope==='central'||scope==='south')&&natureScopeForPlace(place,scope)!==scope)place=scope==='south'?'BRA':'CRI';state={...state,place,scope:scope==='country'&&place==='all'?'all':scope,source:undefined};currentCaseId=natureCaseForPlace(place).id;render(true);});
  q<HTMLInputElement>('[data-nature-only]').addEventListener('change',event=>{state={...state,only:(event.target as HTMLInputElement).checked};render(true);});
- q<HTMLSelectElement>('[data-nature-city]').addEventListener('change',event=>{const city=natureCityCase((event.target as HTMLSelectElement).value);if(!city)return;state={...state,place:city.place,scope:natureScopeForPlace(city.place,state.scope),source:undefined};currentCaseId=city.id;render(true);});
  workspace.addEventListener('click',event=>{
-  const target=(event.target as Element).closest<HTMLElement>('[data-nature-case],[data-nature-country]');if(!target)return;
-  if(target.dataset.natureCase){const selected=latinNatureCases.find(c=>c.id===target.dataset.natureCase)!;state={...state,place:selected.place,scope:selected.place==='all'?'all':state.scope==='all'?'all':selected.scope as LatinLearningState['scope'],only:false,source:undefined};currentCaseId=selected.id;render(true);}
+  const target=(event.target as Element).closest<HTMLElement>('[data-nature-case],[data-nature-country],[data-nature-city-point]');if(!target)return;
+  if(!state.source&&target.dataset.natureCityPoint){const city=natureCityCase(target.dataset.natureCityPoint);if(!city)return;const keepFocus=document.activeElement===target;state={...state,place:city.place,scope:natureScopeForPlace(city.place,state.scope),only:false,source:undefined};currentCaseId=city.id;render(true);q<HTMLElement>('.latin-reading-scroll').scrollTop=0;if(keepFocus)q<SVGElement>(`[data-nature-map-host] [data-nature-city-point="${city.city}"]`).focus({preventScroll:true});}
+  else if(target.dataset.natureCase){const selected=latinNatureCases.find(c=>c.id===target.dataset.natureCase)!;state={...state,place:selected.place,scope:selected.place==='all'?'all':state.scope==='all'?'all':selected.scope as LatinLearningState['scope'],only:false,source:undefined};currentCaseId=selected.id;render(true);}
   else if(!state.source&&target.dataset.natureCountry){state={...state,place:target.dataset.natureCountry};currentCaseId=natureCaseForPlace(state.place).id;render(true);}
  });
- workspace.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){const target=(event.target as Element).closest<SVGElement>('[data-nature-country]');if(target){event.preventDefault();target.dispatchEvent(new MouseEvent('click',{bubbles:true}));}}});
+ workspace.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){const target=(event.target as Element).closest<SVGElement>('[data-nature-country],[data-nature-city-point]');if(target){event.preventDefault();target.dispatchEvent(new MouseEvent('click',{bubbles:true}));}}});
  const restore=()=>{read();render();};
  window.addEventListener('popstate',restore);window.addEventListener('latin-section-change',restore);
- window.addEventListener('resize',alignMapCaptions);
+ window.addEventListener('resize',resizeMap);
  read();render();
- void document.fonts.ready.then(alignMapCaptions);
+ void document.fonts.ready.then(resizeMap);
+ requestAnimationFrame(measureReader);
 }

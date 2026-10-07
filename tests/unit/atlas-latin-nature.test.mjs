@@ -12,6 +12,7 @@ registerHooks({
  load(url,context,nextLoad){if(url.startsWith('file:')&&url.endsWith('.json'))return {format:'module',source:'export default '+readFileSync(fileURLToPath(url),'utf8'),shortCircuit:true};if(url.startsWith('file:')&&url.endsWith('.ts'))return {format:'module',source:stripTypeScriptTypes(readFileSync(fileURLToPath(url),'utf8')),shortCircuit:true};return nextLoad(url,context);},
 });
 const nature=await import('../../src/lib/atlas-latin-nature.ts');
+const stationClimate=await import('../../src/lib/atlas-latin-station-climate.ts');
 const geometry=await import('../../src/lib/atlas-latin-america-geometry.ts');
 const codec=await import('../../src/lib/atlas-latin-learning-state.ts');
 const json=path=>JSON.parse(readFileSync(path,'utf8'));
@@ -52,7 +53,7 @@ test('Natural raster uses the same Mercator frame as boundaries; only keeps ever
  assert.equal((html.match(/data-nature-country=/g)||[]).length,34);
  assert.match(html,/data-nature-context/);assert.match(html,/clip-path="url\(#test-climate-only\)"/);
  assert.match(html,/viewBox="0 0 900 580"/);assert.match(html,/opacity="0.16"/);assert.match(html,/opacity="1"/);
- assert.equal((html.match(/aria-pressed="true"/g)||[]).length,1);
+ const w=new Window();w.document.body.innerHTML=html;assert.equal(w.document.querySelectorAll('[data-nature-country][aria-pressed=true]').length,1);void w.happyDOM.close();
  assert.match(html,/viewBox="[^\"]+"/);assert.match(html,/\/insight-journal\/assets\/atlas\/latin-nature-v1/);
  for(const [scope,place] of [['all','all'],['central','CRI'],['south','BRA'],['country','CUB']]){
   const layout=geometry.latinMapLayout(scope,place),rendered=nature.renderLatinNatureMap({layer:'climate',scope,place,only:false});assert.ok(rendered.includes(`transform="${layout.transform}"`));assert.ok(rendered.includes(`data-nature-frame="${layout.frame.join(' ')}"`));
@@ -93,8 +94,8 @@ test('All 16 retained stations expose their own values, geographic reading and c
   assert.equal(nature.natureScopeForPlace(city.countryCode,'all'),'all');
   w.document.body.innerHTML=nature.renderLatinNatureNormals(city.id);
   const section=w.document.querySelector('[data-nature-city-id]');assert.equal(section.dataset.natureCityId,city.id);
-  assert.equal(section.firstElementChild.tagName.toLowerCase(),'svg');assert.equal(section.children[1].textContent,city.name);
-  assert.equal(section.children[2].getAttribute('data-nature-city-climate'),'');assert.equal(section.children[3].getAttribute('data-nature-city-reason'),'');
+  assert.equal(section.firstElementChild.textContent,city.name+'の雨温図');assert.equal(section.children[1].tagName.toLowerCase(),'svg');
+  assert.equal(section.children[2].getAttribute('data-nature-city-climate'),'');assert.equal(section.children[3].getAttribute('data-nature-city-reason'),'');assert.equal(section.children[4].getAttribute('data-nature-city-agriculture'),'');assert.ok(section.children[4].textContent.length>30);
   assert.ok(section.children[2].textContent.length>25);assert.ok(section.children[3].textContent.length>30);
   const rows=[...section.querySelectorAll('tbody tr')];assert.equal(rows.length,12);
   rows.forEach((row,i)=>assert.deepEqual([...row.querySelectorAll('td')].map(cell=>cell.textContent),[city.temperatureC[i],city.precipitationMm[i]].map(v=>v===null?'欠測':String(v))));
@@ -115,5 +116,29 @@ test('New station countries use actual local observations and old cases remain c
  for(const previous of nature.latinNatureCases)assert.equal(nature.natureCaseForPlace(previous.place,previous.id).id,previous.id);
  assert.equal(nature.natureCaseForPlace('all').id,'overview');assert.equal(nature.natureCityCase('unknown'),undefined);
  const missing=nature.renderLatinNatureNormals('unknown');assert.match(missing,/未収録/);assert.doesNotMatch(missing,/<svg|polyline|<rect/);
- const page=readFileSync('src/components/atlas/LatinNaturePage.astro','utf8');assert.match(page,/data-nature-city/);assert.match(page,/latinNatureData.cities.map/);
+ const page=readFileSync('src/components/atlas/LatinNaturePage.astro','utf8');assert.doesNotMatch(page,/data-nature-city[\s>]|latin-nature-city-control/);assert.match(page,/latinNatureData.cities.map/);
+});
+
+
+test('Station classifications use the retained 24 normals and disclose the map distinction',()=>{
+ const expected=['Aw','Aw','Am','Aw','Am','Aw','Cfa','Am','BWh','Cfb','Cfa','Csb','ET','Cfb','Cfc','Cfa'];
+ data.cities.forEach((city,i)=>{assert.equal(stationClimate.classifyLatinStation(city.temperatureC,city.precipitationMm),expected[i]);const chart=nature.renderLatinNatureNormals(city.id);assert.ok(chart.includes('（'+expected[i]+'）'));assert.match(chart,/当サイトが判定/);assert.match(chart,/観測所の区分と異なる場合/);});
+ const all=value=>Array(12).fill(value);
+ assert.equal(stationClimate.classifyLatinStation(all(10),all(100)),'ET');assert.equal(stationClimate.classifyLatinStation(all(0),all(100)),'EF');
+ assert.equal(stationClimate.classifyLatinStation(all(18),all(60)),'Af');
+ assert.equal(stationClimate.classifyLatinStation(all(28),all(0)),'BWh','Aridity has priority over tropical temperature');
+ assert.equal(stationClimate.classifyLatinStation([null,...all(20).slice(1)],all(100)),undefined);
+ assert.equal(stationClimate.classifyLatinStation(all(20),[-1,...all(100).slice(1)]),undefined);
+});
+test('All stations use exact fitted coordinates; labels adapt and source maps have no actions',async()=>{
+ const w=new Window();try{
+  const layout=geometry.latinMapLayout('all','all');
+  for(const cityScale of [1,1.7,2.5]){
+   w.document.body.innerHTML=nature.renderLatinNatureMap({layer:'climate',place:'all',scope:'all',only:false,cityScale,interactiveCities:true});
+   const markers=[...w.document.querySelectorAll('[data-nature-city-point]')];assert.equal(markers.length,16);assert.equal(w.document.querySelectorAll('[data-nature-country][aria-pressed=true]').length,0);
+   for(const [i,node]of markers.entries()){const city=data.cities[i],[x,y]=geometry.projectLatin([city.longitude,city.latitude]);assert.ok(Math.abs(Number(node.dataset.natureCityX)-(x*layout.k+layout.tx))<1e-8);assert.ok(Math.abs(Number(node.dataset.natureCityY)-(y*layout.k+layout.ty))<1e-8);assert.equal(node.getAttribute('tabindex'),'0');assert.match(node.getAttribute('aria-label'),/雨温図/);assert.equal(node.querySelector('title'),null);}
+   assert.equal(w.document.querySelectorAll('.is-major').length,cityScale===1?8:cityScale===1.7?6:4);
+  }
+  w.document.body.innerHTML=nature.renderLatinNatureMap({layer:'climate',place:'all',scope:'all',only:false,interactiveCities:false});assert.equal(w.document.querySelectorAll('[data-nature-city-point][role=button]').length,0);
+ }finally{await w.happyDOM.close();}
 });

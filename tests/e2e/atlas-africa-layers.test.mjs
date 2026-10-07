@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
 import {Window} from 'happy-dom';
-import {createAfricaLayerRenderer} from '../../src/scripts/atlas-africa-layers.ts';
+import {createAfricaLayerRenderer,africaGridValue,africaGridValueLabel} from '../../src/scripts/atlas-africa-layers.ts';
 import {initializeAfricaAtlas} from '../../src/scripts/atlas-africa.ts';
 import {projectAfrica,africaWidth,africaHeight} from '../../src/lib/atlas-africa-geometry.ts';
 import {readState} from '../../src/data/atlas/africa-atlas.ts';
@@ -47,25 +47,41 @@ test('real zero and low elevations are metres rather than similarly numbered leg
  });
 });
 
-test('all crop quantities and livestock species render their source grid, year, unit and complete zero-aware legend',async()=>{
- const crops=JSON.parse(readFileSync(new URL('../../public/assets/atlas/africa-crops-v1/manifest.json',import.meta.url),'utf8'));
- const livestock=JSON.parse(readFileSync(new URL('../../public/assets/atlas/africa-livestock-v1/manifest.json',import.meta.url),'utf8'));
- for(const [family,manifest] of [['crops',crops],['livestock',livestock]])for(const [id,layer] of Object.entries(manifest.layers)){
-  const [crop,cropMeasure]=id.split('-'),search=family==='crops'?`?field=agriculture&topic=farming&crop=${crop}&cropMeasure=${cropMeasure}&year=2023&zoom=all`:`?field=agriculture&topic=livestock&livestock=${id}&year=2023&zoom=all`;
-  await withLayers(search,({root,renderer,view,setState})=>{
-   const key=family==='crops'?`crop-${id}`:`livestock-${id}`;
-   assert.equal(root.querySelector('[data-africa-raster]').getAttribute('data-africa-raster'),key);assert.equal(view.unit,layer.unit);assert.equal(view.period,layer.period);assert.match(view.period,/2020/);assert.equal(view.legend.length,layer.legend.length);assert.equal(view.legend[0].id,layer.zeroId);assert.match(view.sourceUrl,/^https:\/\//);
+test('all source crop measures and livestock retain raw zero, positive and no-data quantities',()=>{
+ // Production is no longer a display toggle. Both published H/P source grids
+ // remain independently checkable; no derived concentration replaces a value.
+ for(const family of ['crops','livestock']){
+  const manifest=JSON.parse(readFileSync(new URL(`../../public/assets/atlas/africa-${family}-v1/manifest.json`,import.meta.url),'utf8'));
+  for(const [id,layer] of Object.entries(manifest.layers)){
    const grid=gunzipSync(readFileSync(new URL(`../../public/assets/atlas/africa-${family}-v1/${layer.grid}`,import.meta.url))),indices={zero:-1,positive:-1,missing:-1};
    for(let i=0;i<grid.length/4;i++){const value=grid.readFloatLE(i*4);if(value===0&&indices.zero<0)indices.zero=i;if(value>0&&indices.positive<0)indices.positive=i;if(value===layer.noData&&indices.missing<0)indices.missing=i;if(Object.values(indices).every(index=>index>=0))break;}
-   for(const [kind,index] of Object.entries(indices)){assert.ok(index>=0,`${key} ${kind} available`);const lon=layer.bounds[0]+(index%layer.width+.5)*(layer.bounds[2]-layer.bounds[0])/layer.width,lat=layer.bounds[3]-(Math.floor(index/layer.width)+.5)*(layer.bounds[3]-layer.bounds[1])/layer.height,reading=renderer.inspect(lon,lat);if(kind==='missing')assert.ok(reading.includes(`${view.title}：値なし`),`${key} retains its own missing value`);else{const value=grid.readFloatLE(index*4),number=value>0&&value<.001?new Intl.NumberFormat('ja-JP',{maximumSignificantDigits:4}).format(value):value.toLocaleString('ja-JP');assert.ok(reading.includes(`：${number} ${layer.unit}`));assert.match(reading,/表示格子/);}}
-   const comparison=setState(search+'&context=NV.AGR.TOTL.ZS&sourceState='+encodeURIComponent(search.slice(1)));assert.equal(comparison.key,key);assert.deepEqual(comparison.legend,view.legend);assert.equal(root.querySelector('[data-africa-raster]').getAttribute('data-africa-raster'),key);
-  });
+   for(const [kind,index] of Object.entries(indices)){assert.ok(index>=0,`${id} ${kind} available`);const lon=layer.bounds[0]+(index%layer.width+.5)*(layer.bounds[2]-layer.bounds[0])/layer.width,lat=layer.bounds[3]-(Math.floor(index/layer.width)+.5)*(layer.bounds[3]-layer.bounds[1])/layer.height;assert.equal(africaGridValue(grid,layer,lon,lat),kind==='missing'?null:grid.readFloatLE(index*4));}
+   assert.match(layer.period,/2020/);assert.equal(layer.legend[0].id,layer.zeroId);
+   assert.equal(layer.unit,family==='livestock'?'頭/km²':id.endsWith('-production')?'t / 5分角セル':'ha / 5分角セル');
+  }
+ }
+});
+
+test('seven fixed concentration distributions retain each original query grid, unit, year and source',async()=>{
+ for(const family of ['crops','livestock']){
+  const manifest=JSON.parse(readFileSync(new URL(`../../public/assets/atlas/africa-${family}-v1/manifest.json`,import.meta.url),'utf8'));
+  for(const [id,layer] of Object.entries(manifest.layers).filter(([id])=>!id.endsWith('-production'))){
+   const search=family==='crops'?`?field=agriculture&crop=${id.split('-')[0]}&cropMeasure=harvested&zoom=all`:`?field=agriculture&topic=livestock&livestock=${id}&zoom=all`;
+   await withLayers(search,({root,renderer,view,requests})=>{
+    const key=family==='crops'?`crop-${id}`:`livestock-${id}`;
+    assert.equal(view.key,key);assert.equal(view.unit,layer.unit);assert.equal(view.period,layer.period);assert.match(view.sourceUrl,/^https:\/\//);assert.equal(view.legend.length,7);assert.equal(root.querySelectorAll('[data-africa-commodity-layer]').length,7);
+    assert.ok(requests.some(url=>url.endsWith('/'+layer.grid)),'the selected item still fetches its original numeric grid');
+    const grid=gunzipSync(readFileSync(new URL(`../../public/assets/atlas/africa-${family}-v1/${layer.grid}`,import.meta.url))),indices={zero:-1,positive:-1,missing:-1};
+    for(let i=0;i<grid.length/4;i++){const value=grid.readFloatLE(i*4);if(value===0&&indices.zero<0)indices.zero=i;if(value>0&&indices.positive<0)indices.positive=i;if(value===layer.noData&&indices.missing<0)indices.missing=i;if(Object.values(indices).every(index=>index>=0))break;}
+    for(const [kind,index] of Object.entries(indices)){const lon=layer.bounds[0]+(index%layer.width+.5)*(layer.bounds[2]-layer.bounds[0])/layer.width,lat=layer.bounds[3]-(Math.floor(index/layer.width)+.5)*(layer.bounds[3]-layer.bounds[1])/layer.height,reading=renderer.inspect(lon,lat);assert.ok(reading.includes(`${layer.title}：${kind==='missing'?'値なし':africaGridValueLabel(grid.readFloatLE(index*4))+' '+layer.unit}`),`${key} ${kind} reads its own original value`);assert.match(reading,/元の5分角格子/);}
+   });
+  }
  }
 });
 
 test('livestock source details keep input census years separate from the 2020 model and retain missing input metadata',async()=>{
  await withLayers('?field=agriculture&topic=livestock&livestock=goats&place=ETH&zoom=all',({view,setState})=>{
-  assert.match(view.period,/2020/);assert.match(view.method,/入力統計年：2002/);assert.match(view.method,/平均空間解像度：約45.5 km/);assert.match(view.method,/表示格子の5分角とは別/);
+  assert.match(view.period,/2020/);assert.match(view.method,/入力統計年：2002/);assert.match(view.method,/平均空間解像度：(?:約)?45.5 km/);assert.match(view.method,/5分角/);
   const kenya=setState('?field=agriculture&topic=livestock&livestock=goats&place=KEN&zoom=all');assert.match(kenya.method,/入力統計年：2019/);assert.match(kenya.period,/2020/);
  });
  await withLayers('?field=agriculture&topic=livestock&livestock=sheep&place=SDN&zoom=all',({view})=>{assert.match(view.method,/入力統計年：未記載/);assert.doesNotMatch(view.method,/入力統計年：2017/);});
@@ -76,7 +92,7 @@ test('actual tiny crop and cattle grid readings retain positive values instead o
  await withLayers('?field=agriculture&topic=livestock&livestock=cattle&zoom=all',({renderer})=>{const reading=renderer.inspect(12.208333,25.625);assert.match(reading,/：0\.0000004657 頭\/km²/);assert.doesNotMatch(reading,/：0 頭/);assert.match(reading,/推定値、表示桁は丸め/);});
 });
 test('actual map point does not select a passive country and the overview preserves its source state',async()=>{
- const window=new Window({url:'https://example.com/insight-journal/atlas/africa/?field=nature&topic=climate&place=EGY&compare=GHA&year=2023&zoom=all'}),previous=Object.fromEntries(['window','document','location','history','fetch'].map(key=>[key,globalThis[key]]));
+ const window=new Window({settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true},url:'https://example.com/insight-journal/atlas/africa/?field=nature&topic=climate&place=EGY&compare=GHA&year=2023&zoom=all'}),previous=Object.fromEntries(['window','document','location','history','fetch'].map(key=>[key,globalThis[key]]));
  try{
   for(const key of ['window','document','location','history'])globalThis[key]=window[key];
   globalThis.fetch=async url=>new Response(readFileSync(new URL('../../public'+new URL(url,'https://example.com').pathname.replace(/^\/insight-journal/,''),import.meta.url)),{status:200});
