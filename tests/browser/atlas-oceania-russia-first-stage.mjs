@@ -89,7 +89,7 @@ try{
      await host.locator('[data-layer]').selectOption('cattle');await ready(region);
      assert.deepEqual(await shown(),products);
      assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
-     assert.match(await host.locator('[data-farming-legend="cattle"] h3').textContent(),/頭／km²/);
+     assert.match(await host.locator('[data-primary-legend] [data-farming-legend="cattle"] h3').textContent(),/頭／km²/);
      if(width===1536)await shot(`${region}-agriculture-${width}-livestock-focus`);
      await host.locator('[data-layer]').selectOption('farming-all');await ready(region);
     }
