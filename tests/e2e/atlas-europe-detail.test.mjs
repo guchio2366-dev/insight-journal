@@ -9,9 +9,10 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
     const window=new Window();const doc=window.document;
     doc.write(readFileSync(new URL(`../../dist/atlas/europe/${field}/index.html`,import.meta.url),'utf8'));
     assert.ok(doc.querySelector('[data-eu-static]'));
-    assert.equal(doc.querySelectorAll('.eu-read-panel select').length,3);
+    assert.equal(doc.querySelectorAll('.eu-read-panel select').length,4);
+    assert.equal(doc.querySelector('[data-eu-drainage-choice]').closest('label').hidden,true);
     assert.equal(doc.querySelector('[data-eu-culture-host]').hidden,true,'The bounded census case does not replace the default whole-Europe map');
-    assert.ok([...doc.querySelectorAll('.eu-read-panel select')].every(select=>select.disabled));
+    assert.ok([...doc.querySelectorAll('.eu-read-panel select:not([data-eu-drainage-choice])')].every(select=>select.disabled));
     assert.equal(doc.querySelectorAll('[data-city-card]').length,24);
     assert.equal(doc.querySelectorAll('[data-city-card="kyiv"] tbody tr').length,12);
     assert.ok(doc.querySelector('[data-city-card="rome"]').textContent.includes('欠測'));
@@ -97,9 +98,9 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       assert.equal(reading.querySelectorAll('[data-eu-city-chart] svg').length,24);
       assert.equal(statistics.querySelector('[data-eu-city-chart],svg,canvas'),null,'下段には数値表と年間の要約を掲載し、雨温図を重複しない');
       assert.equal(doc.querySelectorAll('[data-eu-city-chart]').length,24);
-      assert.equal(statistics.hidden,false);
-      assert.deepEqual([...reading.querySelectorAll('[data-city-reading]:not([hidden])')].map(card=>card.dataset.cityReading),['london']);
-      assert.deepEqual([...statistics.querySelectorAll('[data-city-card]:not([hidden])')].map(card=>card.dataset.cityCard),['london']);
+      assert.equal(statistics.hidden,true);
+      assert.deepEqual([...reading.querySelectorAll('[data-city-reading]:not([hidden])')].map(card=>card.dataset.cityReading),[]);
+      assert.deepEqual([...statistics.querySelectorAll('[data-city-card]:not([hidden])')].map(card=>card.dataset.cityCard),[]);
       assert.equal(reading.querySelectorAll('[data-city-reading]').length,24);
       assert.equal(statistics.querySelectorAll('[data-city-card]').length,24);
       assert.match(reading.querySelector('[data-city-reading="london"]').textContent,/HEATHROW/);
@@ -155,8 +156,8 @@ test('24都市の右側の雨温図・開閉できる気候と農畜産説明、
   assert.deepEqual([...doc.querySelectorAll('[data-eu-point]')].map(point=>point.dataset.euPoint).sort(),ids);
   const cityChoice=doc.querySelector('[data-eu-city-choice]');
   assert.ok(cityChoice);
-  assert.deepEqual([...cityChoice.options].map(option=>option.value).sort(),ids);
-  assert.equal(cityChoice.value,'london');
+  assert.deepEqual([...cityChoice.options].map(option=>option.value).filter(Boolean).sort(),ids);
+  assert.equal(cityChoice.value,'');
   assert.deepEqual([...reading.querySelectorAll('[data-city-reading]')].map(card=>card.dataset.cityReading).sort(),ids);
   assert.deepEqual([...reading.querySelectorAll('[data-eu-city-chart]')].map(chart=>chart.dataset.euCityChart).sort(),ids);
   assert.deepEqual([...reading.querySelectorAll('[data-eu-climate-farming]')].map(section=>section.dataset.euClimateFarming).sort(),ids);
@@ -172,8 +173,8 @@ test('24都市の右側の雨温図・開閉できる気候と農畜産説明、
     const classification=card.querySelector('.eu-city-climate-description');
     const farming=card.querySelector(`[data-eu-climate-farming="${city.id}"]`);
     const tableCard=statistics.querySelector(`[data-city-card="${city.id}"]`);
-    assert.equal(card.hidden,city.id!=='london',city.id);
-    assert.equal(tableCard.hidden,city.id!=='london',city.id);
+    assert.equal(card.hidden,true,city.id);
+    assert.equal(tableCard.hidden,true,city.id);
     assert.equal(chart.querySelector('svg .atlas-climate-city-name').textContent,city.name,city.id);
     assert.match(chart.querySelector('svg').getAttribute('aria-label'),new RegExp(city.name),city.id);
     assert.equal(doc.getElementById(card.getAttribute('aria-labelledby'))?.textContent,`${city.name}の気候と農畜産`,city.id);

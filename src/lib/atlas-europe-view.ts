@@ -36,7 +36,7 @@ const europeCapitalCities: Record<string, string> = {
   ISL:'reykjavik', NOR:'oslo', FIN:'helsinki', EST:'tallinn',
 };
 export function defaultEuropeCity(country: string, ids: string[]): string {
-  const city = country ? europeCapitalCities[country] : 'london';
+  const city = country ? europeCapitalCities[country] : '';
   return city && ids.includes(city) ? city : '';
 }
 const isIndividualFarmingLayer = (id: string) => europeLayers.some(layer => layer.id === id && layer.field === 'agriculture' && layer.gridType === 'source' && !!layer.grid);
