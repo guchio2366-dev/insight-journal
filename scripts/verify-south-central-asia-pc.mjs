@@ -152,6 +152,8 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
   await screenshot(`south-asia-aligned-${kind}-point`);
   const url=page.url();await page.reload({waitUntil:'domcontentloaded'});await ready();await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]').dataset.contourBandStatus==='ready');assert.equal(page.url(),url);
   await page.locator('[data-dock-compare="agriculture"]').click();
+  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.comparisonOriginal==='outline');
+  assert.doesNotMatch(await page.locator('[data-comparison-legend]').textContent(),/元分布の描画を取得できませんでした/,'Original comparison must render every regional band part');
   await page.locator('[data-comparison-back]').click();await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]').dataset.contourBandStatus==='ready');assert.equal(page.url(),url,'Comparison return must retain the original point, topic and camera');
   assert.equal(await page.locator('.maplibregl-popup').count(),0);
   bandsChecks.push({region:'south-asia',kind,interval,point,originalPointValue:value,reloadRetainsURL:true,comparisonRetainsURL:true});
