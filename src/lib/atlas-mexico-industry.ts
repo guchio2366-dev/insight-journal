@@ -49,8 +49,8 @@ export function industryPopulationSourceQuery(raw:string|null|undefined):string|
 const keys=['state','sourceState','sourceOnly','sourcePopulationQuery','industryFrame','metric','compare','sourceView','from','only','zoom','fallback','sector','subsector'] as const;
 export function readMexicoIndustryState(url:URL,stateIds:readonly string[]):MexicoIndustryState {
  const p=url.searchParams,code=p.get('state')??'',compare=p.get('compare'),sourceView=p.get('sourceView');
- const state=stateIds.includes(code)?code:'05',sourceCode=p.get('sourceState')??'';
- const result:MexicoIndustryState={state,sourceState:compare==='population'&&p.get('from')==='population'&&p.has('sourceState')&&(sourceCode===''||stateIds.includes(sourceCode))?sourceCode:state,metric:mexicoIndustryMetricChoices.some(m=>m.id===p.get('metric'))?p.get('metric')!:'transport',compare:compare==='electronics'||compare==='population'?compare:null,sourceView:sourceView==='population'?'population':'density',from:compare==='population'&&p.get('from')==='population'?'population':'industry',only:p.get('only')==='1',zoom:p.get('zoom')==='1',fallback:p.get('fallback')==='1'};
+ const state=stateIds.includes(code)?code:'',sourceCode=p.get('sourceState')??'';
+ const result:MexicoIndustryState={state,sourceState:compare==='population'&&p.get('from')==='population'&&p.has('sourceState')&&(sourceCode===''||stateIds.includes(sourceCode))?sourceCode:state,metric:mexicoIndustryMetricChoices.some(m=>m.id===p.get('metric'))?p.get('metric')!:'transport',compare:compare==='electronics'||compare==='population'?compare:null,sourceView:sourceView==='population'?'population':'density',from:compare==='population'&&p.get('from')==='population'?'population':'industry',only:!!state&&p.get('only')==='1',zoom:!!state&&p.get('zoom')==='1',fallback:p.get('fallback')==='1'};
  if(result.compare==='population'&&result.from==='population'&&p.has('sourceOnly'))result.sourceOnly=p.get('sourceOnly')==='1';
  const sourceQuery=industryPopulationSourceQuery(p.get('sourcePopulationQuery'));if(result.compare==='population'&&result.from==='population'&&sourceQuery)result.sourcePopulationQuery=sourceQuery;
  const frame=p.get('industryFrame')?.split(',').map(Number);if(frame?.length===4&&frame.every(Number.isFinite)&&frame[2]>0&&frame[3]>0)result.frame=industryCameraFrame(frame as MexicoIndustryFrame);
@@ -60,10 +60,10 @@ export function readMexicoIndustryState(url:URL,stateIds:readonly string[]):Mexi
 }
 export function writeMexicoIndustryState(url:URL,state:MexicoIndustryState):URL {
  const target=new URL(url);for(const key of keys)target.searchParams.delete(key);
- target.searchParams.set('state',state.state);target.searchParams.set('metric',state.metric);
+ if(state.state)target.searchParams.set('state',state.state);target.searchParams.set('metric',state.metric);
  if(state.compare&&(state.compare!=='electronics'||isMexicoIndustryPairMetric(state.metric)))target.searchParams.set('compare',state.compare);
  if(state.compare==='population'){target.searchParams.set('sourceView',state.sourceView);target.searchParams.set('from',state.from);if(state.from==='population'){target.searchParams.set('sourceState',state.sourceState);if(state.sourceOnly!==undefined)target.searchParams.set('sourceOnly',state.sourceOnly?'1':'0');const query=industryPopulationSourceQuery(state.sourcePopulationQuery);if(query)target.searchParams.set('sourcePopulationQuery',query);}}
- if(state.only)target.searchParams.set('only','1');if(state.zoom)target.searchParams.set('zoom','1');if(state.fallback)target.searchParams.set('fallback','1');
+ if(state.state&&state.only)target.searchParams.set('only','1');if(state.state&&state.zoom)target.searchParams.set('zoom','1');if(state.fallback)target.searchParams.set('fallback','1');
  if(state.frame&&state.frame[2]<900)target.searchParams.set('industryFrame',industryCameraFrame(state.frame).join(','));
  if(state.sector&&industrySectors.some(s=>s.id===state.sector)){target.searchParams.set('sector',state.sector);target.searchParams.set('subsector',mexicoIndustryMetricChoices.some(m=>m.sector===state.sector&&m.id===state.subsector)?state.subsector!:'all');}
  return target;

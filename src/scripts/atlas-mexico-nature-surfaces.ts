@@ -1,6 +1,6 @@
 import {validateMexicoSurfaceManifest, mexicoSurfaceGradient, mexicoSurfaceTickPosition, type MexicoSurfaceManifest} from '../lib/atlas-mexico-quantitative';
 import {mexicoBasinLabelPoint, type MexicoWaterFeature} from '../lib/atlas-mexico-hydrology';
-import {projectLonLat} from '../lib/atlas-mexico-geometry';
+import {projectLonLat,geometryPath,stateFeatures} from '../lib/atlas-mexico-geometry';
 import {preparedMexicoBasinPlan} from '../lib/atlas-mexico-basin-evidence.mjs';
 
 export interface MexicoNaturePreparedAssets {surfaceAssetBase: string; basinAssetBase: string}
@@ -21,12 +21,22 @@ export function initMexicoNatureSurfaces(
   const legend = document.createElement('div');
   legend.className = 'mexico-quantitative-legend';
   legend.setAttribute('data-mexico-quantitative-legend', '');
-  const entries = document.createElement('div');
-  entries.className = 'mexico-basin-system-picker';
-  entries.setAttribute('data-mexico-basin-systems', '');
-  entries.setAttribute('role', 'group');
-  entries.setAttribute('aria-label', '代表水系の国内範囲を選ぶ');
-  q('[data-mexico-hydrology-legend]')?.after(legend, entries);
+  const foreground = document.createElementNS(ns,'g');
+  foreground.setAttribute('data-mexico-basin-foreground','');
+  const definitions=document.createElementNS(ns,'defs'),countryClip=document.createElementNS(ns,'clipPath');
+  countryClip.id='mexico-basin-control-country';
+  for(const state of stateFeatures){const path=document.createElementNS(ns,'path');path.setAttribute('d',geometryPath(state.geometry));path.setAttribute('clip-rule','evenodd');countryClip.append(path);}
+  definitions.append(countryClip);q('[data-mexico-nature-main-map]')?.prepend(definitions);
+  q('[data-mexico-nature-main-map]')?.append(foreground);
+  const overviewButton=document.createElement('button');
+  overviewButton.type='button';overviewButton.textContent='3水系の概要へ戻る';
+  overviewButton.setAttribute('data-mexico-basin-overview','');
+  overviewButton.addEventListener('click',()=>chooseBasin(''));
+  q('[data-mexico-hydrology-title]')?.after(overviewButton);
+  const overview=document.createElement('div');overview.className='mexico-basin-overview';
+  overview.setAttribute('data-mexico-basin-overview-reading','');
+  q('[data-mexico-hydrology-definition]')?.after(overview);
+  q('[data-mexico-hydrology-legend]')?.after(legend);
   const legendHome = document.createComment('quantitative-legend-home'); legend.before(legendHome);
   const images = new Map<string, SVGImageElement>();
   let surfaces: MexicoSurfaceManifest | null = null, basins: any = null;
@@ -63,6 +73,14 @@ export function initMexicoNatureSurfaces(
     success();
   }
   const basinLabelPoints = new Map<string,number[] | null>();
+  const basinFeatures = new Map<string,MexicoWaterFeature>();
+  function basinControl(node:SVGElement,id:string,name:string,selected:boolean):void {
+    node.setAttribute('data-mexico-basin-system',id);node.setAttribute('role','button');
+    node.setAttribute('tabindex','0');node.setAttribute('aria-label',`${name}の国内流域を読む`);
+    node.setAttribute('aria-pressed',String(selected));node.style.pointerEvents='auto';
+    node.addEventListener('click',()=>chooseBasin(id));
+    node.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();chooseBasin(id);}});
+  }
   async function basinLabels(plans: any[], current: () => boolean): Promise<SVGTextElement[]> {
     const labels:SVGTextElement[]=[];
     const map=q<SVGSVGElement>('[data-mexico-nature-main-map]');
@@ -73,6 +91,7 @@ export function initMexicoNatureSurfaces(
       if(!basinLabelPoints.has(plan.id)){
         const collection=await json(plan.basinGeojson,assets.basinAssetBase);
         const feature:MexicoWaterFeature={type:'Feature',properties:{},geometry:{type:'MultiPolygon',coordinates:collection.features.flatMap((item:MexicoWaterFeature)=>item.geometry.type==='Polygon'?[item.geometry.coordinates]:item.geometry.coordinates)}};
+        basinFeatures.set(plan.id,feature);
         basinLabelPoints.set(plan.id,mexicoBasinLabelPoint(feature));
       }
       if(!current())return [];
@@ -89,7 +108,8 @@ export function initMexicoNatureSurfaces(
     return labels;
   }
   function reset(): void {
-    group.style.display = 'none'; legend.hidden = true; entries.hidden = true;
+    group.style.display = 'none'; foreground.style.display='none';legend.hidden = true;
+    overview.hidden=true;overviewButton.hidden=true;
     root.dataset.mexicoPreparedCategory = '';
   }
   reset();
@@ -102,15 +122,14 @@ export function initMexicoNatureSurfaces(
       const plans = basins.systems.map((system: any) => preparedMexicoBasinPlan(basins, system.id));
       const requested = feature.startsWith('basins:') ? feature.slice(7) : '';
       const plan = requested ? plans.find((item: any) => item.id === requested || item.basinSourceIds.includes(requested)) : undefined;
-      const focusId = entries.contains(document.activeElement) ? (document.activeElement as HTMLElement).dataset.mexicoBasinSystem : null;
-      const allButton=document.createElement('button');allButton.type='button';allButton.textContent='3水系を表示';allButton.dataset.mexicoBasinSystem='all';allButton.setAttribute('aria-pressed',String(!requested));allButton.addEventListener('click',()=>chooseBasin(''));
-      entries.replaceChildren(allButton,...plans.map((item: any) => {
-        const button = document.createElement('button'); button.type = 'button'; button.textContent = item.label;
-        button.dataset.mexicoBasinSystem = item.id; button.setAttribute('aria-pressed', String(item.id === plan?.id));
-        button.addEventListener('click', () => chooseBasin(item.id)); return button;
+      const focusId = foreground.contains(document.activeElement) ? (document.activeElement as SVGElement).getAttribute('data-mexico-basin-system') : null;
+      const focusLabel=document.activeElement?.hasAttribute('data-mexico-basin-label');
+      overviewButton.hidden=!requested;overview.hidden=!!plan;
+      overview.replaceChildren(...plans.map((item:any)=>{
+        const section=document.createElement('section'),heading=document.createElement('h3'),copy=document.createElement('p');
+        heading.textContent=item.label;copy.textContent=`国内の${item.basinSourceIds.length}区分をまとめた代表水系の入口。${item.scopeNote}`;
+        section.append(heading,copy);return section;
       }));
-      entries.hidden = false;
-      if (focusId) entries.querySelector<HTMLButtonElement>(`[data-mexico-basin-system="${focusId}"]`)?.focus({preventScroll: true});
       legend.replaceChildren(); legend.hidden = false;
       const swatch = document.createElement('span'); swatch.className = 'mexico-basin-fill-key'; swatch.setAttribute('aria-hidden', 'true');
       legend.append(swatch, document.createTextNode('3代表水系に関連する国内の流域区分。選択すると他の水系を薄く表示'));
@@ -121,8 +140,8 @@ export function initMexicoNatureSurfaces(
       text('#mexico-nature-map-desc', `${basins.nationalScopeLabelJa}本流・流向・河口は未確認です。`);
       text('[data-mexico-hydrology-title]', plan?.label ?? '3代表水系の流域を読む');
       text('[data-mexico-hydrology-lead]', '流域は、雨が河川へ集まる土地の範囲です。3つの代表水系から、州境とは異なる水のまとまりを読みます。');
-      text('[data-mexico-hydrology-value]', plan ? `${plan.label}：原資料の国内${plan.basinSourceIds.length}区分。原地域名に基づく仮のまとめで、本流の連続性は確認中です。` : requested?'指定された流域はこの3代表水系の入口には収録されていません。上の入口から選べます。':'ブラボー、レルマ―チャパラ―サンティアゴ、グリハルバ―ウスマシンタの国内範囲を同時に示します。');
-      text('[data-mexico-hydrology-definition]', plan?.scopeNote ?? plans.map((item:any)=>`${item.label}：${item.scopeNote}`).join(' '));
+      text('[data-mexico-hydrology-value]', plan ? `${plan.label}：原資料の国内${plan.basinSourceIds.length}区分。原地域名に基づく仮のまとめで、本流の連続性は確認中です。` : requested?'指定された流域はこの3代表水系の入口には収録されていません。地図内の流域や名前から選べます。':'地図内の流域や名前を選ぶと、その水系の国内範囲を強調します。');
+      text('[data-mexico-hydrology-definition]', plan?.scopeNote ?? basins.nationalScopeLabelJa);
       text('[data-mexico-hydrology-limitations]', '本流・流向・河口の表示は原典確認待ちで未完成です。地図の重なりだけから、農地の取水源・用水路・洪水危険度は判断できません。');
       text('[data-mexico-hydrology-status]', !requested||plan ? '本流・流向・河口は原典確認待ちです。' : '指定流域は未収録です。代表水系を選んでください。');
       const source = q('[data-mexico-hydrology-source]');
@@ -136,7 +155,15 @@ export function initMexicoNatureSurfaces(
       const labels=await basinLabels(plans,current);if(!current())return null;
       readyImage(plans.map((item:any)=>assets.basinAssetBase+item.domesticFill.file),current);
       for(const item of plans){const image=images.get(assets.basinAssetBase+item.domesticFill.file)!;image.classList.add('mexico-basin-system-image');image.classList.toggle('is-muted',!!plan&&plan.id!==item.id);image.dataset.mexicoBasinSystemImage=item.id;}
-      group.append(...labels);
+      const hitAreas=plans.map((item:any)=>{const path=document.createElementNS(ns,'path');
+        path.setAttribute('d',geometryPath(basinFeatures.get(item.id)!.geometry));path.setAttribute('fill','transparent');
+        path.setAttribute('clip-path','url(#mexico-basin-control-country)');
+        path.setAttribute('fill-rule','evenodd');path.classList.add('mexico-basin-hit-area');
+        basinControl(path,item.id,item.label,item.id===plan?.id);return path;
+      });
+      for(const label of labels){const item=plans.find((item:any)=>item.id===label.dataset.mexicoBasinLabel);basinControl(label,item.id,item.label,item.id===plan?.id);}
+      foreground.replaceChildren(...hitAreas,...labels);foreground.style.display='';
+      if(focusId)foreground.querySelector<SVGElement>(`${focusLabel?'text':'path'}[data-mexico-basin-system="${focusId}"]`)?.focus({preventScroll:true});
       return plan?.label ?? '3代表水系の国内流域';
     }
     if (!surfaces) surfaces = validateMexicoSurfaceManifest(await json('manifest.json', assets.surfaceAssetBase));

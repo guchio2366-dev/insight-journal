@@ -108,7 +108,7 @@ export function initMexicoIndustry(root:HTMLElement):void {
 
  function render():void {
   applyCamera();
-  const selected=places.get(state.state)!,comparison=state.compare!==null,popComparison=state.compare==='population';
+  const selected=places.get(state.state),selectedName=selected?.name??'全国',comparison=state.compare!==null,popComparison=state.compare==='population';
   root.classList.toggle('is-comparison',comparison);root.dataset.miRenderer=state.fallback?'static-fallback':'svg';root.dataset.miCompare=state.compare??'none';root.dataset.miSelected=state.state;root.dataset.miSourceState=state.sourceState;
   one('[data-mi-map-grid]')!.classList.toggle('mi-comparison-grid',comparison);
   show('[data-mi-figure="secondary"]',comparison);
@@ -125,12 +125,12 @@ export function initMexicoIndustry(root:HTMLElement):void {
   one('[data-mi-map="primary"]')!.setAttribute('aria-labelledby',`mi-sector-${state.sector} mi-primary-title mi-primary-desc`);
   show('[data-mi-reading-markers]',!comparison);
   for(const point of all<SVGElement>('[data-mi-reading-markers] [data-mi-region-option]')){const visible=state.subsector==='all'?(point.dataset.miOverviewPlace==='true'&&(state.sector==='all'||point.dataset.miRegionSector===state.sector)):point.dataset.miRegionMetric===state.subsector;point.toggleAttribute('hidden',!visible||(state.only&&point.dataset.miRegionOption!==state.state));point.setAttribute('tabindex',visible&&(!state.only||point.dataset.miRegionOption===state.state)?'0':'-1');point.classList.toggle('is-selected',visible&&point.dataset.miRegionOption===state.state&&selectedPlaceVisible());point.setAttribute('aria-pressed',String(visible&&point.dataset.miRegionOption===state.state&&selectedPlaceVisible()));}
-  text('[data-mi-selected-place-name]',selected.name+'｜'+(state.subsector==='all'?sector.label:metricName(state.metric)));
+  text('[data-mi-selected-place-name]',selectedName+'｜'+(state.subsector==='all'?sector.label:metricName(state.metric)));
   const sectorCopy=config.catalog.sectorReadings[state.sector!],local=sectorCopy?.places.find(p=>p.state===state.state);
   const broad=local?.text??sectorCopy?.text??config.reading.causal[0];
   const fine=state.metric==='transport'&&state.state==='05'?'コアウイラの輸送機器を、米国国境への近さ、部品の集積、道路・鉄道と市場につなげて読む。':state.metric==='transport'&&state.state==='11'?'グアナフアトは内陸のバヒオ。組立工場と部品集積が、国境・港への交通と市場につながる。':state.metric==='electronics'&&state.state==='08'?'チワワの電子機器を、北部の生産拠点と米国への交通・市場につなげて読む。':state.metric==='electronics'&&state.state==='14'?'ハリスコの電子機器を、グアダラハラ周辺の技術・部品集積と輸送・市場につなげて読む。':config.reading[state.metric].text;
   text('[data-mi-selected-place-text]',state.subsector==='all'?broad:fine);
-  show('[data-mi-selected-place-reading]',!comparison&&state.sector!=='all');
+  show('[data-mi-selected-place-reading]',!comparison&&!!selected&&state.sector!=='all');
   show('[data-mi-sector-legend]',!comparison);show('[data-mi-geography-scope]',!comparison&&(state.sector==='all'||state.subsector==='all'));
   show('.mi-items',comparison||state.subsector!=='all');show('[data-mi-electronics-link]',isMexicoIndustryPairMetric(state.metric)&&(comparison||(state.sector==='manufacturing'&&state.subsector!=='all')));
   show('[data-mi-legend-slot="secondary"]',comparison);
@@ -142,9 +142,9 @@ export function initMexicoIndustry(root:HTMLElement):void {
   const populationNumber=populationCode?populationValue(populationCode):state.sourceView==='density'?`${formatMexicoDensity(config.population.nationalDensity)} 人/km²`:`${formatMexicoPopulation(config.population.nationalPopulation)} 人`;
   const periodLabel=`${populationPlace}の${state.sourceView==='density'?'人口密度':'人口'}・2020年`;
   text('[data-mi-population-card-label]',periodLabel);text('[data-mi-population-card-value]',populationNumber);text('[data-mi-population-stats-label]',`${periodLabel}・${state.sourceView==='density'?'人/km²':'人'}`);text('[data-mi-population-stats-value]',populationNumber);
-  text('[data-mi-selected-name]',selected.name);text('[data-mi-stats-state]',selected.name);
+  text('[data-mi-selected-name]',selected?.name??'州を選ぶと値を確認できます');text('[data-mi-stats-state]',selected?.name??'州未選択');
   for(const {id:metric} of config.data.metrics) {
-   const value=valueFor(state.state,metric);text(`[data-mi-value="${metric}"]`,industryValueText(value));text(`[data-mi-stats-value="${metric}"]`,industryValueText(value));text(`[data-mi-stats-status="${metric}"]`,value.sourceStatus);
+   const value=valueFor(state.state,metric);text(`[data-mi-value="${metric}"]`,selected?industryValueText(value):'—');text(`[data-mi-stats-value="${metric}"]`,selected?industryValueText(value):'—');text(`[data-mi-stats-status="${metric}"]`,selected?value.sourceStatus:'州を選択');
    show(`[data-mi-value-card="${metric}"]`,!popComparison||metric===state.metric);
   }
   for(const row of all('[data-mi-data-row]'))row.classList.toggle('is-selected',row.getAttribute('data-mi-data-row')===state.state);
@@ -155,7 +155,7 @@ export function initMexicoIndustry(root:HTMLElement):void {
    button.setAttribute('aria-selected',String(selected));button.tabIndex=selected?0:-1;
   }
   one<HTMLSelectElement>('[data-mi-state-select]')!.value=state.state;one<HTMLSelectElement>('[data-mi-source-view]')!.value=state.sourceView;
-  one<HTMLInputElement>('[data-mi-only]')!.checked=state.only;one<HTMLButtonElement>('[data-mi-zoom]')!.setAttribute('aria-pressed',String(state.zoom));
+  one<HTMLInputElement>('[data-mi-only]')!.checked=state.only;one<HTMLInputElement>('[data-mi-only]')!.disabled=!selected;one<HTMLButtonElement>('[data-mi-zoom]')!.disabled=!selected;one<HTMLButtonElement>('[data-mi-zoom]')!.setAttribute('aria-pressed',String(state.zoom));
   text('[data-mi-zoom]',popComparison?'輸出図を拡大':'読む州を拡大');
   const current=new URL(window.location.href);
   one<HTMLAnchorElement>('[data-mi-electronics-link]')!.href=industryComparisonUrl(current,state,'electronics').href;one<HTMLAnchorElement>('[data-mi-population-link]')!.href=industryComparisonUrl(current,state,'population').href;
@@ -165,10 +165,10 @@ export function initMexicoIndustry(root:HTMLElement):void {
    const destination=industryPopulationReturnUrl(config.populationHref,current,state),code=destination.searchParams.get('state');
    back.href=destination.href;back.textContent=`${code?places.get(code)!.name:'全国'}の元の${destination.searchParams.get('view')==='density'?'人口密度':'人口'}地図へ戻る`;
   } else {
-   back.href=writeMexicoIndustryState(current,{...state,compare:null,from:'industry'}).href;back.textContent=`${selected.name}の${metricName(state.metric)}地図へ戻る`;
+   back.href=writeMexicoIndustryState(current,{...state,compare:null,from:'industry'}).href;back.textContent=`${selectedName}の${metricName(state.metric)}地図へ戻る`;
   }
   map('primary',state.metric);if(comparison)map('secondary',popComparison?null:otherMetric(state.metric));
-  const mode=popComparison&&state.from==='population'?`比較元は${state.sourceState?places.get(state.sourceState)!.name:'全国'}の人口図、比較先は${selected.name}の産業を選択。`:state.only?`${selected.name}と比較相手の同州を表示`:'全32州を表示';
+  const mode=popComparison&&state.from==='population'?`比較元は${state.sourceState?places.get(state.sourceState)!.name:'全国'}の人口図、比較先は${selectedName}の産業を選択。`:state.only?`${selectedName}と比較相手の同州を表示`:'全32州を表示';
   const period=comparison?(popComparison?`人口2020年 × ${metricName(state.metric)}輸出2025年速報。`:`${metricName(state.metric)} × ${metricName(otherMetric(state.metric))}・2025年速報。`):'2025年速報・州の生産地に配分された輸出額。';
   text('[data-mi-map-status]',`${period}${mode}。${state.fallback?'簡易表示。':''}`);
   show('[data-mi-fallback-note]',state.fallback);
@@ -179,7 +179,7 @@ export function initMexicoIndustry(root:HTMLElement):void {
  }
 
  function change(patch:Partial<MexicoIndustryState>):void {
-  state={...state,...patch};window.history.pushState(null,'',writeMexicoIndustryState(new URL(window.location.href),state));render();
+  state={...state,...patch};if(!state.state){state.only=false;state.zoom=false;}window.history.pushState(null,'',writeMexicoIndustryState(new URL(window.location.href),state));render();
   root.dispatchEvent(new CustomEvent('mexico-reading-mode',{detail:{selected:state.subsector!=='all'||!!state.compare}}));
  }
  root.addEventListener('click',event=>{
@@ -194,11 +194,11 @@ export function initMexicoIndustry(root:HTMLElement):void {
  one<HTMLSelectElement>('[data-mi-state-select]')!.addEventListener('change',event=>change({state:(event.target as HTMLSelectElement).value}));
  const chooseMetric=(metric:MexicoIndustryMetric)=>change({metric,sector:mexicoIndustryMetricChoices.find(m=>m.id===metric)!.sector as MexicoIndustryState['sector'],subsector:metric,...(state.compare==='electronics'&&!isMexicoIndustryPairMetric(metric)?{compare:null}:{})});
  one<HTMLSelectElement>('[data-mi-metric]')!.addEventListener('change',event=>chooseMetric((event.target as HTMLSelectElement).value as MexicoIndustryMetric));
- for(const button of all<HTMLButtonElement>('[data-industry-sector]'))button.addEventListener('click',()=>{const sector=button.dataset.industrySector as MexicoIndustryState['sector'],place=config.catalog.sectorReadings[sector!]?.places[0];change({sector,subsector:'all',compare:null,...(place?{state:place.state}:{})});});
+ for(const button of all<HTMLButtonElement>('[data-industry-sector]'))button.addEventListener('click',()=>{const sector=button.dataset.industrySector as MexicoIndustryState['sector'];change({sector,subsector:'all',compare:null});});
  for(const button of all<HTMLButtonElement>('[data-industry-subsector]'))button.addEventListener('click',()=>button.dataset.industrySubsector==='all'?change({sector:button.dataset.ownerSector as MexicoIndustryState['sector'],subsector:'all',compare:null}):chooseMetric(button.dataset.industrySubsector as MexicoIndustryMetric));
  for(const button of all<HTMLButtonElement>('[data-mi-jump-metric]'))button.addEventListener('click',()=>chooseMetric(button.dataset.miJumpMetric as MexicoIndustryMetric));
  for(const item of all<HTMLElement|SVGElement>('[data-mi-region-option]')){const choose=()=>{if(!suppressMapClick)change({state:item.dataset.miRegionOption!,sector:item.dataset.miRegionSector as MexicoIndustryState['sector'],subsector:item.dataset.miRegionMetric||'all',...(item.dataset.miRegionMetric?{metric:item.dataset.miRegionMetric}:{})});};item.addEventListener('click',choose);if(item.tagName.toLowerCase()!=='button')item.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose();}});}
- const overview=()=>{change({subsector:'all',compare:null});one<HTMLButtonElement>(`[data-industry-sector="${state.sector}"]`)?.focus();};
+ const overview=()=>{change({state:'',only:false,zoom:false,subsector:'all',compare:null});one<HTMLButtonElement>(`[data-industry-sector="${state.sector}"]`)?.focus();};
  for(const button of all('[data-industry-overview]'))button.addEventListener('click',overview);
  one('#mi-description')?.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();overview();}});
  for(const row of all('[role="tablist"]'))row.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;const tabs=Array.from(row.querySelectorAll<HTMLButtonElement>('[role="tab"]')),index=tabs.indexOf(event.target as HTMLButtonElement);if(index<0)return;event.preventDefault();const next=event.key==='Home'?0:event.key==='End'?tabs.length-1:(index+(event.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;tabs[next].click();tabs[next].focus();});
@@ -208,7 +208,7 @@ export function initMexicoIndustry(root:HTMLElement):void {
   for(const svg of all<SVGSVGElement>('[data-mi-map]')) {
    const targetMap=svg.dataset.miMap==='primary'||state.compare==='electronics';
    const sourceFrame=state.from==='population'&&state.sourcePopulationQuery?readMexicoPopulationFrame(new URL(state.sourcePopulationQuery,window.location.href)).join(' '):config.mapViewBox;
-   const view=targetMap?(state.zoom?config.views[state.state]:state.frame?.join(' ')??config.mapViewBox):sourceFrame;
+   const view=targetMap?(state.zoom&&state.state?config.views[state.state]:state.frame?.join(' ')??config.mapViewBox):sourceFrame;
    // Preserve the current frame while an unzoomed selection keeps the same camera.
    if(force||cameraViews.get(svg)!==view)svg.setAttribute('viewBox',view);
    cameraViews.set(svg,view);

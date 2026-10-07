@@ -44,14 +44,14 @@
 .mexico-workspace.mexico-industry .mi-map-navigation button:disabled{opacity:.45;cursor:default}
 @media(min-width:960px){
  .atlas-desktop-shell .atlas-explorer.mexico-workspace.mexico-industry[data-field=industry] .mexico-primary-grid{grid-template-columns:minmax(0,7fr) minmax(290px,3fr);gap:14px}
- .atlas-desktop-shell .atlas-explorer.mexico-workspace.mexico-industry[data-field=industry] .mexico-map-frame{height:620px;min-height:620px;max-height:620px;aspect-ratio:auto}
+ .atlas-desktop-shell .atlas-explorer.mexico-workspace.mexico-industry[data-field=industry] .mexico-map-frame{height:auto;min-height:300px;max-height:640px;aspect-ratio:1.55}
  .atlas-desktop-shell .atlas-explorer.mexico-workspace.mexico-industry[data-field=industry] .mexico-map-frame .mi-map{height:100%;width:100%;max-height:none;min-height:0}
  .atlas-desktop-shell .atlas-explorer.mexico-workspace.mexico-industry[data-field=industry] .mexico-reading{padding:0;overflow:visible;scrollbar-gutter:auto}
  .mexico-workspace.mexico-industry .mi-reading{padding:12px 13px}
  .mexico-workspace.mexico-industry .mi-reading h2{font-size:21px;line-height:1.4}
  .mexico-workspace.mexico-industry .industry-selected-reading-body section h3{font:700 14px/1.5 var(--sans);margin:0 0 5px}
  .mexico-workspace.mexico-industry .industry-guide{font-size:11px;line-height:1.5;margin:4px 0 7px}
- /* Two narrow comparison maps must not inherit the single-map 620px frame.
+ /* Two narrow comparison maps must not inherit the single-map frame.
     Keep their full native view above the captions and matching legends. */
  .atlas-desktop-shell .atlas-explorer.mexico-workspace.mexico-industry.is-comparison[data-field=industry] .mexico-map-frame{height:auto;min-height:0;max-height:none;aspect-ratio:900/580}
 }

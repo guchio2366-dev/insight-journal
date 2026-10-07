@@ -46,6 +46,13 @@ test('The transport and electronics comparison rejects other fields while popula
  }
 });
 
+test('national industry entry remains unselected through category, zoom and comparison URL updates',()=>{
+ const ids=data.states.map(s=>s.id),entry=new URL('https://example.com/industry/?only=1&zoom=1');
+ const state=lib.readMexicoIndustryState(entry,ids);assert.equal(state.state,'');assert.equal(state.only,false);assert.equal(state.zoom,false);
+ const category=lib.writeMexicoIndustryState(entry,{...state,sector:'resources',subsector:'mining'});assert.equal(category.searchParams.has('state'),false);
+ const compare=lib.industryComparisonUrl(category,state,'population');assert.equal(compare.searchParams.has('state'),false);
+});
+
 test('ETEF 2025 retains 64 original values, state keys, statuses and the thousand-to-billion unit conversion',async()=>{
  const originals=parseCsv(await readFile(`${root}/etef-official-annual-2007-2025.csv`,'utf8'));
  const selected=originals.filter(r=>r.ANIO==='2025'&&['334','336'].includes(r.CODIGO_SCIAN));
@@ -107,7 +114,7 @@ test('Dedicated comparison URLs round-trip state, source population view and sel
  assert.equal(back.searchParams.get('view'),'population');assert.equal(back.searchParams.get('state'),'08');assert.equal(back.searchParams.get('only'),'1');assert.equal(back.searchParams.get('fallback'),'1');
  assert.equal(back.searchParams.has('metric'),false);assert.equal(back.searchParams.has('compare'),false);
  const pair=lib.industryComparisonUrl(original,state,'electronics');assert.equal(pair.searchParams.get('state'),'08');assert.equal(pair.searchParams.get('compare'),'electronics');assert.equal(pair.searchParams.has('sourceView'),false);assert.equal(pair.searchParams.has('sourceState'),false);
- assert.deepEqual(lib.readMexicoIndustryState(new URL('https://example.com/?state=33&sourceState=invalid&metric=all&compare=bad&from=population&only=yes&sourceView=bad&zoom=true'),ids),{state:'05',sourceState:'05',metric:'transport',compare:null,sourceView:'density',from:'industry',only:false,zoom:false,fallback:false});
+ assert.deepEqual(lib.readMexicoIndustryState(new URL('https://example.com/?state=33&sourceState=invalid&metric=all&compare=bad&from=population&only=yes&sourceView=bad&zoom=true'),ids),{state:'',sourceState:'',metric:'transport',compare:null,sourceView:'density',from:'industry',only:false,zoom:false,fallback:false});
 });
 
 test('Population returns keep the original state when the industry target changes and the URL is restored',()=>{

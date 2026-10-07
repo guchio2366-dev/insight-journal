@@ -126,7 +126,7 @@ test('Keyboard crop selection, Escape, state statistics and one-item mode preser
   ctx.q('[data-mexico-only-item]').click();assert.equal(ctx.q('[data-livestock-markers]').hidden,true);assert.ok(ctx.q('path[data-crop-zone="wheat"]').hasAttribute('hidden'));
   ctx.root.dispatchEvent(new ctx.window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));selected(ctx,null);
   assert.equal(ctx.q('[data-mexico-only-item]').checked,false);
-  for(const link of ctx.root.querySelectorAll('.mexico-fields a')){const url=new URL(link.href);assert.equal(url.searchParams.get('state'),url.pathname.endsWith('/population/')?null:'08');assert.equal(url.searchParams.get('reading'),'overview');assert.ok(!url.searchParams.has('agriItem'));}
+  for(const link of ctx.root.querySelectorAll('.mexico-fields a')){const url=new URL(link.href);assert.equal(url.searchParams.get('state'),/\/(population|industry)\/$/.test(url.pathname)?null:'08');assert.equal(url.searchParams.get('reading'),'overview');assert.ok(!url.searchParams.has('agriItem'));}
  }finally{await ctx.window.happyDOM.close();}
 });
 

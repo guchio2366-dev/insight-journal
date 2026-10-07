@@ -1,0 +1,186 @@
+{
+  "file": "elevation-bands.geojson.gz",
+  "bytes": 3732614,
+  "sha256": "0ea85b43c326d5a9d6acedf49e067f6cacb67788adfd3e044339448b3e3fb616",
+  "provenanceFile": "elevation-bands.source.json",
+  "legend": [
+    {
+      "id": "elevation-band-0",
+      "label": "0 m未満",
+      "color": "#f6f4ed",
+      "lowerM": null,
+      "upperM": 0
+    },
+    {
+      "id": "elevation-band-1",
+      "label": "0–500 m",
+      "color": "#f0e5c9",
+      "lowerM": 0,
+      "upperM": 500
+    },
+    {
+      "id": "elevation-band-2",
+      "label": "500–1,000 m",
+      "color": "#e4d3aa",
+      "lowerM": 500,
+      "upperM": 1000
+    },
+    {
+      "id": "elevation-band-3",
+      "label": "1,000–1,500 m",
+      "color": "#d6bc8c",
+      "lowerM": 1000,
+      "upperM": 1500
+    },
+    {
+      "id": "elevation-band-4",
+      "label": "1,500–2,000 m",
+      "color": "#c5a471",
+      "lowerM": 1500,
+      "upperM": 2000
+    },
+    {
+      "id": "elevation-band-5",
+      "label": "2,000–2,500 m",
+      "color": "#b58c58",
+      "lowerM": 2000,
+      "upperM": 2500
+    },
+    {
+      "id": "elevation-band-6",
+      "label": "2,500–3,000 m",
+      "color": "#a37545",
+      "lowerM": 2500,
+      "upperM": 3000
+    },
+    {
+      "id": "elevation-band-7",
+      "label": "3,000–3,500 m",
+      "color": "#8e6038",
+      "lowerM": 3000,
+      "upperM": 3500
+    },
+    {
+      "id": "elevation-band-8",
+      "label": "3,500–4,000 m",
+      "color": "#784c2e",
+      "lowerM": 3500,
+      "upperM": 4000
+    },
+    {
+      "id": "elevation-band-9",
+      "label": "4,000–4,500 m",
+      "color": "#623c28",
+      "lowerM": 4000,
+      "upperM": 4500
+    },
+    {
+      "id": "elevation-band-10",
+      "label": "4,500–5,000 m",
+      "color": "#4d2e23",
+      "lowerM": 4500,
+      "upperM": 5000
+    },
+    {
+      "id": "elevation-band-11",
+      "label": "5,000 m以上",
+      "color": "#382019",
+      "lowerM": 5000,
+      "upperM": null
+    }
+  ],
+  "intervalM": 500,
+  "decodedGridSha256": "47e9c1792e653c05e94058b2b7311a18a7db38c094d47fb0f8a5acfef45c9743",
+  "sourceUrl": "https://www.ncei.noaa.gov/products/etopo-global-relief-model",
+  "downloadUrl": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/60s/60s_surface_elev_gtif/ETOPO_2022_v1_60s_N90W180_surface.tif",
+  "sourceEdition": "ETOPO 2022 v1 60 arc-second surface",
+  "sourceSha256": "9d27d4b8ea8e76977e2988bca667d7c8fa68b927355feffcddd6b4875a7fd08e",
+  "sourceSha256Status": "Previously pinned full-source digest; not recomputed from this partial download",
+  "fullSourceHashRecomputed": false,
+  "license": "CC0-1.0",
+  "licenseUrl": "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ngdc.mgg.dem%3Aetopo_2022/html",
+  "horizontalCrs": "EPSG:4326",
+  "verticalDatum": "EGM2008",
+  "unit": "m",
+  "editionNotObservationYear": true,
+  "grid": {
+    "sourceSha256": "9d27d4b8ea8e76977e2988bca667d7c8fa68b927355feffcddd6b4875a7fd08e",
+    "sourceSha256Status": "Previously pinned full-source digest; not recomputed from this partial download",
+    "file": "mexico-etopo-window.f32",
+    "sha256": "47e9c1792e653c05e94058b2b7311a18a7db38c094d47fb0f8a5acfef45c9743",
+    "bytes": 9504000,
+    "width": 1980,
+    "height": 1200,
+    "window": [
+      3660,
+      3360,
+      5640,
+      4560
+    ],
+    "windowConvention": "[columnStart,rowStart,columnEndExclusive,rowEndExclusive]",
+    "bounds": [
+      -119,
+      14,
+      -86,
+      34
+    ],
+    "origin": [
+      -119,
+      34
+    ],
+    "resolution": [
+      0.016666666666666666,
+      -0.016666666666666666
+    ],
+    "dtype": "float32-little-endian",
+    "noData": -99999,
+    "unit": "m",
+    "verticalDatum": "EGM2008",
+    "geoKeys": {
+      "GTModelTypeGeoKey": 2,
+      "GTRasterTypeGeoKey": 1,
+      "GTCitationGeoKey": "WGS 84 + EGM2008 height",
+      "GeographicTypeGeoKey": 4326,
+      "VerticalCSTypeGeoKey": 3855
+    },
+    "method": "Exact native float32 TIFF tile decode with tifffile/imagecodecs; crop only, no resampling or integer casting",
+    "verification": {
+      "sourceTotalBytes": 465969062,
+      "downloadedRangeBytes": 7540857,
+      "fullSourceHashRecomputed": false,
+      "matchesRetainedWindowFromPreviouslyVerifiedFullSource": true,
+      "decodedCells": 2376000,
+      "tileCount": 45,
+      "allCellsCovered": true,
+      "noDataCells": 0,
+      "nonfiniteCells": 0
+    }
+  },
+  "boundarySha256": "193f700c8741c2752561de077c781383dcc28a95244fb60726f591f8af011faa",
+  "method": "ContourPy native cell-centre isobands and matching contours from the same float32 DEM. No resampling or independent simplification. Both are clipped to the retained INEGI national land union, rounded to six decimal degrees and projected by the existing renderer. Boundaries are shared contour levels; class interiors lie between them.",
+  "limitations": [
+    "2022 is a model edition, not a uniform observation year.",
+    "Native 60 arc-second resolution; 500 m bands do not give survey-grade elevations or exact summit heights.",
+    "Valid below-zero cells remain a separate class; coastal cells may mix marine and terrestrial elevations. Grid extrema are not national land extrema.",
+    "NoData is masked, never converted to zero. Sea and foreign territory are clipped away."
+  ],
+  "verification": {
+    "nationalCoverageDifferenceRatio": 2.1604985389571982e-07,
+    "overlapAreaRatio": 0,
+    "classCount": 12,
+    "contourLevelsM": [
+      0,
+      500,
+      1000,
+      1500,
+      2000,
+      2500,
+      3000,
+      3500,
+      4000,
+      4500,
+      5000
+    ]
+  },
+  "decodedBytes": 13749880
+}

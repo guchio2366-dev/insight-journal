@@ -15,6 +15,8 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
   let countryMaskNode: SVGMaskElement | null = null;
   const cache = new Map<string, Promise<unknown>>(), collections = new Map<MexicoHydrologyLayer, MexicoWaterCollection>();
   const layerGroups = new Map<MexicoHydrologyLayer, SVGGElement>();
+  let elevationBandGroup:SVGGElement|null=null;
+  const matchingContourPaths=new Map<number,string>();
   const basinAnchors = new Map<string, number[] | null>();
   const overlay = q<SVGGElement>('[data-mexico-hydrology-overlay]');
   const groundwaterNotice = document.createElement('p'); groundwaterNotice.className = 'mexico-groundwater-notice'; groundwaterNotice.setAttribute('data-mexico-groundwater-notice',''); q('[data-mexico-hydrology-legend]')?.after(groundwaterNotice); groundwaterNotice.hidden = true;
@@ -46,9 +48,9 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
   const show = (selector: string, shown: boolean) => {const element = q<HTMLElement>(selector); if (element) element.hidden = !shown;};
   const prepared = preparedAssets ? initMexicoNatureSurfaces(root, preparedAssets, json, id => choose('basins', id)) : null;
   const titles: Record<string, string> = {'rivers-groundwater': '河川・地下水', precipitation: '降水量', basins: '河川の流域', elevation: '標高・等高線'};
-  const meanings: Record<string,string> = {elevation:'等高線は同じ標高を結ぶ線です。基準はEGM2008ジオイド・単位m。地形地域や州平均の標高ではありません。',precipitation:'等雨量線は原資料の同じ年平均降水量mmを結ぶ線です。隣接する面全体の値や州平均ではありません。',basins:'国内の河川集水域の区分です。州境、地下水の流動区域や給水区域とは異なります。','rivers-groundwater':'原資料の河川ネットワークで、間欠・仮想流も含みます。Strahler次数は小流域内の支流の合流関係で、流量・貯水量・河川幅を表しません。'};
+  const meanings: Record<string,string> = {elevation:'等高線は同じ標高を結ぶ線です。基準はEGM2008ジオイド・単位m。面は隣り合う500m等高線の間の高さを示し、線と面は同じ原格子から作成しています。地形地域や州平均の標高ではありません。',precipitation:'等雨量線は原資料の同じ年平均降水量mmを結ぶ線です。隣接する面全体の値や州平均ではありません。',basins:'国内の河川集水域の区分です。州境、地下水の流動区域や給水区域とは異なります。','rivers-groundwater':'原資料の河川ネットワークで、間欠・仮想流も含みます。Strahler次数は小流域内の支流の合流関係で、流量・貯水量・河川幅を表しません。'};
   const limitations: Record<string,string> = {elevation:'2022年はモデルの版です。約60秒角のDEMから500m間隔の線を作成しており、測量級の地点標高や正確な山頂高度は示しません。海底を除き、元DEMの有効な負標高は欠測値と区別して保持しています。',precipitation:'関連2005作成ガイド§3.3・印刷15頁は1921〜1975年の観測を説明しますが、この2006刊行配布版との対応は未確認です。現在の降水量ではありません。1:100万の全国概観で、線の間を補間していません。',basins:'原資料の国内範囲を保持しています。国外の上流域は未収録のため、国際河川の全流域ではありません。全国用の簡略化境界から洪水危険度や水収支を推定しません。','rivers-groundwater':'原資料の小流域内次数7以上に限る流路表示で、細い全河川を網羅しません。小流域間で次数が連続するとは限らず、河川名を推測して付けていません。現在の取水量や水位は示しません。'};
-  const methods: Record<MexicoHydrologyLayer,string> = {precipitation:'原492等雨量線・19値を保持し、経緯度へ変換。面の補間、線の結合、線形の簡略化は行っていません。',contours:'原DEMのセル値から500m間隔の線を作成し、メキシコの陸域で切り取り、全国表示用に0.002度で簡略化。表示線は0〜5,000mです。',basins:'原国内範囲と全158流域を保持。全国表示用に0.002度で境界を簡略化し、国外の上流域は追加していません。',rivers:'全61,350原区間のID・parts・端点を保持し、次数7/8/9の3群へまとめています。全国表示用に0.002度で線を簡略化し、区間間の接続線を作っていません。',groundwater:'水文地質の原分類を表示。法定帯水層の境界や現在の地下水量とは区別します。'};
+  const methods: Record<MexicoHydrologyLayer,string> = {precipitation:'原492等雨量線・19値を保持し、経緯度へ変換。面の補間、線の結合、線形の簡略化は行っていません。',contours:'原DEMのセル値から500m間隔の面と一致する等高線を作成し、メキシコの陸域で切り取っています。原線資料も保持しています。表示線は0〜5,000mです。',basins:'原国内範囲と全158流域を保持。全国表示用に0.002度で境界を簡略化し、国外の上流域は追加していません。',rivers:'全61,350原区間のID・parts・端点を保持し、次数7/8/9の3群へまとめています。全国表示用に0.002度で線を簡略化し、区間間の接続線を作っていません。',groundwater:'水文地質の原分類を表示。法定帯水層の境界や現在の地下水量とは区別します。'};
   meanings.groundwater = '水理地質区分は、岩石や粒状材料が地下水を蓄え・通す性質と、原典の井戸産出量・賦存可能性を表します。';
   limitations.groundwater = '1996年は原典作成、2008年は改訂です。全国共通の観測期は未確認。現在の地下水量・取水量・貯水量や法定帯水層の境界ではありません。未着色を地下水なしと読みません。';
   methods.groundwater = '原29,479単位・48,769リングと分類を保持し、表示用に0.002度で簡略化。元の不正形状と簡略化による変化を監査に記録し、分析用境界として修復していません。全10分類の全国概観は同じ図形・投影から作成した画像、選択分類は元の分割ベクトルです。';
@@ -107,7 +109,7 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
     const name = selected ? mexicoWaterFeatureName(selected.feature) : subject === 'groundwater' ? groundwaterClass() === 'all' ? '地下水の全10水理地質区分' : selectedGroundwaterRecord()?.fullLabel ?? '選択した地下水区分' : titles[category];
     const riverOrder=selected?.layer==='rivers' ? /^rivers-order-([789])$/.exec(String(selected.feature.properties.classId ?? ''))?.[1] : null;
     text('[data-mexico-hydrology-title]',riverOrder ? `小流域内次数${riverOrder}の河川` : name);q('[data-mexico-hydrology-title]')?.setAttribute('title',name);
-    const lead = category === 'elevation' ? selected ? `原DEMから作成した${selected.feature.properties.elevationM.toLocaleString('ja-JP')} mの等高線を選択しています。` : '同じ標高の線をたどり、山地・高原・沿岸低地の高さを比べる。' : category === 'precipitation' ? '農地の水はどこから届くか。雨量の線を、河川・地下水と選択した作物の比較につなげる。' : category === 'basins' ? '農地の水はどこから届くか。流域に集まる水と河川をたどり、地形の背景や選択した作物と比べる。' : available.includes('groundwater') ? '農地の水はどこから届くか。河川の流路と地下水の性質を、選択した作物の比較につなげる。' : '農地の水はどこから届くか。原河川網から水の集まる方向を読む。';
+    const lead = category === 'elevation' ? selected ? `原DEMから作成した${selected.feature.properties.elevationM.toLocaleString('ja-JP')} mの等高線を選択しています。` : '高いほど濃い500m階級の面と等高線で、山地・高原・沿岸低地の高さを比べる。' : category === 'precipitation' ? '農地の水はどこから届くか。雨量の線を、河川・地下水と選択した作物の比較につなげる。' : category === 'basins' ? '農地の水はどこから届くか。流域に集まる水と河川をたどり、地形の背景や選択した作物と比べる。' : available.includes('groundwater') ? '農地の水はどこから届くか。河川の流路と地下水の性質を、選択した作物の比較につなげる。' : '農地の水はどこから届くか。原河川網から水の集まる方向を読む。';
     text('[data-mexico-hydrology-lead]', subject === 'groundwater' ? '材料の性質と井戸産出量・賦存可能性を分けて読む。現在の地下水量や法定帯水層ではありません。' : lead);
     text('[data-mexico-hydrology-definition]', subject === 'groundwater' ? meanings.groundwater + mexicoGroundwaterDefinition(selectedGroundwaterRecord()) : meanings[subject] + (selected?.layer === 'basins' ? mexicoBasinTypeText(selected.feature) : ''));
     text('[data-mexico-hydrology-limitations]',limitations[subject]+(category==='rivers-groundwater'&&!available.includes('groundwater')?' 地下水の地質分類は、分類別表示の負荷検証が未完のため未配信です。':'')+(category==='basins'||category==='rivers-groundwater'||category==='precipitation'?' 地図の位置や重なりだけでは、農地の取水源・灌漑量・用水路の接続は特定できません。':''));
@@ -122,7 +124,7 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
     comparisonName.textContent = selected ? `自然図の対象：${name}` : `自然図：${titles[category]}の全国分布`;
     comparisonSummary.textContent = `${selected ? name : titles[category]}の定義・背景・原典`;
     const source = q('[data-mexico-hydrology-source]');
-    if (source) source.replaceChildren(...available.map(layer => {const record = manifest!.layers[layer]!, p = document.createElement('p'), link = document.createElement('a'); const url = record.url ?? record.sourceUrl ?? record.source?.url; if (url && /^https?:\/\//.test(url)) {link.href = url; link.target = '_blank'; link.rel = 'noopener'; link.textContent = mexicoWaterSourceText(record); p.append(link);} else p.textContent = mexicoWaterSourceText(record); p.append(document.createTextNode(`。${methods[layer]}。${layer === 'contours' ? 'NOAA・CC0。原DEMの鉛直基準はEGM2008。' : 'INEGI自由使用条件に基づき、出典・加工・原metadataを保存しています。'}`)); const details = document.createElement('a'); details.href = (layer === 'groundwater' ? groundwaterAssetBase ?? assetBase : assetBase) + 'manifest.json'; details.textContent = '原metadata・利用条件・加工方法とSHA'; p.append(document.createTextNode(' '),details); return p;}));
+    if (source) source.replaceChildren(...available.map(layer => {const record = manifest!.layers[layer]!, p = document.createElement('p'), link = document.createElement('a'); const url = record.url ?? record.sourceUrl ?? record.source?.url; if (url && /^https?:\/\//.test(url)) {link.href = url; link.target = '_blank'; link.rel = 'noopener'; link.textContent = mexicoWaterSourceText(record); p.append(link);} else p.textContent = mexicoWaterSourceText(record); p.append(document.createTextNode(`。${methods[layer]}。${layer === 'contours' ? 'NOAA・CC0。原DEMの鉛直基準はEGM2008。' : 'INEGI自由使用条件に基づき、出典・加工・原metadataを保存しています。'}`)); const details = document.createElement('a'); details.href = (layer === 'groundwater' ? groundwaterAssetBase ?? assetBase : assetBase) + (layer==='contours'&&record.bands?record.bands.provenanceFile:'manifest.json'); details.textContent = '原metadata・利用条件・加工方法とSHA'; p.append(document.createTextNode(' '),details); return p;}));
     if (available.includes('groundwater')) {
       groundwaterNotice.textContent = groundwaterClass() === 'all' ? '全10分類の全国概観。井戸産出量（L/s）と賦存可能性は別尺度で、現在の地下水量ではありません。未着色は原資料の区分外などで、水がないという意味ではありません。' : `${selectedGroundwaterRecord()?.fullLabel ?? '選択分類'}の分布。未着色は選択区分以外などで、欠測・地下水なしを意味しません。現在の地下水量ではありません。`;
       groundwaterNotice.hidden = false;
@@ -130,7 +132,7 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
       if (plainReturn && current().compare) plainReturn.textContent = `${selectedName}の${name}分布に戻る`;
     } else groundwaterNotice.hidden = true;
     text('[data-mexico-nature-map-title]', `${category === 'precipitation' ? '年平均降水量' : category === 'rivers-groundwater' && available.includes('groundwater') ? '水理地質区分と河川' : titles[category]}の分布`);
-    text('#mexico-nature-map-title',`メキシコの${titles[category]}の全国分布`); text('#mexico-nature-map-desc',`${category === 'rivers-groundwater' && available.includes('groundwater') ? meanings.groundwater + '井戸産出量と賦存可能性は別尺度で、現在水量や法定帯水層ではありません。' + meanings[category] : meanings[category]}。${category === 'elevation' || category === 'precipitation' ? '数値ラベルは原線上の代表値です。全原線は保持し、地図下の項目から各値・区間を選択できます。' : '原区域・原区間を保持し、地図下の項目から流域や局所次数を選択できます。'}`);
+    text('#mexico-nature-map-title',`メキシコの${titles[category]}の全国分布`); text('#mexico-nature-map-desc',`${category === 'rivers-groundwater' && available.includes('groundwater') ? meanings.groundwater + '井戸産出量と賦存可能性は別尺度で、現在水量や法定帯水層ではありません。' + meanings[category] : meanings[category]}。${category === 'elevation' || category === 'precipitation' ? '数値ラベルは線上の代表値です。500m階級面と一致する等高線を表示し、州や線の選択は行いません。' : '原区域・原区間を保持し、地図下の項目から流域や局所次数を選択できます。'}`);
     text('[data-mexico-nature-map-edition]', metadata.edition ? `${metadata.publisher ?? metadata.source?.publisher ?? '原資料'}・${metadata.edition}版` : available.includes('rivers')?'INEGI・版/期未確認':metadata.publisher ?? metadata.source?.publisher ?? '原資料');
     text('[data-mexico-nature-period]', `${category==='precipitation'?'INEGI・2006刊行版／観測期間との対応未確認・mm/年。色は実線の値だけに適用。':available.includes('groundwater') ? '地下水原典：1996作成・2008改訂／統一観測期未確認。' : category==='basins'?'INEGI・国内158流域／国外上流域は未収録。':''}${available.includes('rivers') ? '小流域内：同じ次数の合流で+1。流量・川幅ではない。' : category==='precipitation'?'':available.map(layer => mexicoWaterSourceText(manifest!.layers[layer]!)).join(' / ')}`);
   }
@@ -143,6 +145,7 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
       else if (layer === 'precipitation') keys.push(...mexicoPrecipitationKeys.map(item=>({label:item.label,color:item.color,line:true,title:'原等雨量線の値を分類。線の間の面を表す色ではありません。'})),{label:'太線：1,000・1,500mm/年',color:'#397f9a',line:true});
       else if (metadata.legend?.length) keys.push(...metadata.legend.map(item => ({label:layer==='rivers'&&/^rivers-order-[789]$/.test(String(item.id))?`次数${String(item.id).slice(-1)}`:item.label, color: item.color,line:item.symbol === 'line' || layer === 'rivers',title:item.fullLabel??item.label})));
       else if (layer === 'rivers') keys.push({label: '原資料の河川流路', color: '#397f9a', line: true});
+      else if (layer === 'contours'&&metadata.bands) keys.push(...metadata.bands.legend.map((item:any)=>({label:item.label,color:item.color})),{label:'500m間隔・太線は1,000m間隔',color:'#a28b6f',line:true});
       else if (layer === 'contours') keys.push({label: '標高 0・500・1,000・1,500・2,000・2,500・3,000・3,500・4,000・4,500・5,000 m', color: '#a28b6f', line: true}, {label:'500m間隔・太線は1,000m間隔',color:'#a28b6f',line:true});
       else keys.push({label: layer === 'groundwater' ? '原資料の地下水区域' : '原資料の降水区分', color: '#d9ddd9'});
     }
@@ -184,7 +187,7 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
       for (const members of features) {
         const feature = members[0];
         const path = document.createElementNS(ns, 'path'), id = mexicoWaterFeatureId(feature), title = document.createElementNS(ns, 'title');
-        path.setAttribute('d', members.map(member => geometryPath(member.geometry)).join('')); path.setAttribute('fill-rule', 'evenodd'); path.setAttribute('fill', mexicoWaterFeatureFill(feature, layer, metadata));
+        path.setAttribute('d', layer==='contours'&&matchingContourPaths.has(feature.properties.elevationM)?matchingContourPaths.get(feature.properties.elevationM)!:members.map(member => geometryPath(member.geometry)).join('')); path.setAttribute('fill-rule', 'evenodd'); path.setAttribute('fill', mexicoWaterFeatureFill(feature, layer, metadata));
         path.setAttribute('data-mexico-water-feature', `${layer}:${id}`); path.setAttribute('role', layer==='contours'?'img':'button'); path.setAttribute('aria-label', `${mexicoWaterFeatureName(feature)}を読む`);
         path.classList.add('mexico-water-feature', `mexico-water-${layer}`); path.setAttribute('vector-effect', 'non-scaling-stroke');
         path.style.setProperty('--mexico-water-stroke',mexicoWaterFeatureStroke(feature,layer,metadata));
@@ -223,11 +226,12 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
   async function render(): Promise<void> {
     const generation = ++version, state = current(), active = !!state.category, layers = mexicoWaterLayersForCategory(state.category);
     prepared?.reset();
+    if(elevationBandGroup)elevationBandGroup.style.display='none';
     const ledger = q<HTMLAnchorElement>('[data-mexico-hydrology-ledger]');
     if (ledger) {
       const numeric = preparedAssets && (state.category === 'precipitation' || state.category === 'elevation');
       const representativeBasins = preparedAssets && state.category === 'basins';
-      ledger.href = numeric ? preparedAssets.surfaceAssetBase + 'manifest.json' : representativeBasins ? preparedAssets.basinAssetBase + 'catalog.json' : assetBase + 'manifest.json';
+      ledger.href = state.category==='elevation'?assetBase+'elevation-bands.source.json':numeric ? preparedAssets.surfaceAssetBase + 'manifest.json' : representativeBasins ? preparedAssets.basinAssetBase + 'catalog.json' : assetBase + 'manifest.json';
       ledger.textContent = numeric ? '降水量・標高の数値格子と配信台帳' : representativeBasins ? '3代表水系の国内流域・検証台帳' : '既存の河川・水資源資料の台帳';
     }
     const requestedGroundwaterClass = groundwaterClass();
@@ -298,6 +302,21 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
         }
         if (result.collection) collections.set(result.layer,result.collection); else collections.delete(result.layer);
       }
+      if(present.includes('contours')&&manifest.layers.contours?.bands){
+        const record=manifest.layers.contours.bands;
+        if(!elevationBandGroup){
+          const bands=await json(record.file);
+          if(generation!==version||current().category!==state.category)return;
+          const collection=validateMexicoWaterCollection(bands,'basins');
+          if(bands.intervalM!==500||bands.decodedGridSha256!==record.decodedGridSha256||collection.features.length!==12||!Array.isArray(bands.contours)||bands.contours.length!==11)throw new Error('500m階級面の格子・間隔が一致しません');
+          const lines=validateMexicoWaterCollection({type:'FeatureCollection',features:bands.contours.map((line:any)=>({...line,id:`matching-${line.properties.elevationM}`}))},'contours');
+          for(const line of lines.features)matchingContourPaths.set(line.properties.elevationM,geometryPath(line.geometry));
+          elevationBandGroup=document.createElementNS(ns,'g');elevationBandGroup.setAttribute('data-mexico-elevation-bands','');elevationBandGroup.setAttribute('pointer-events','none');
+          for(const feature of collection.features){const path=document.createElementNS(ns,'path');path.setAttribute('d',geometryPath(feature.geometry));path.setAttribute('fill-rule','evenodd');path.setAttribute('fill',feature.properties.color);path.setAttribute('data-elevation-band',feature.properties.id);path.setAttribute('role','img');path.setAttribute('aria-label',feature.properties.label);elevationBandGroup.append(path);}
+          overlay?.append(elevationBandGroup);
+        }else overlay?.append(elevationBandGroup);
+        elevationBandGroup.style.display='';
+      }
       for (const layer of present) {if(layer==='groundwater' && isSelectedGroundwater(manifest.layers.groundwater) && requestedGroundwaterClass==='all') await drawGroundwaterOverview();else draw(layer);}
       if (generation !== version || current().category !== state.category) return;
       for (const layer of present) layerGroups.get(layer)?.style.removeProperty('display');
@@ -314,7 +333,7 @@ export function initMexicoHydrology(root: HTMLElement, assetBase: string, curren
         return listed.map(feature => {const option = document.createElement('option'); option.value = `${layer}:${mexicoWaterFeatureId(feature)}`; option.textContent = `${option.value === selection.feature ? '選択中：' : ''}${mexicoWaterFeatureName(feature)}`; return option;});
       })); picker.value = selectedFeature(present) ? selection.feature : '';}
       text('[data-mexico-hydrology-picker-note]', state.category === 'rivers-groundwater' && isSelectedGroundwater(groundwater) ? requestedGroundwaterClass === 'all' ? '全10分類は原図形から作成した全国概観です。地下水の分類を選ぶと、その分類だけのベクトルを表示します。読む州と拡大で地域を選べます。' : '選択分類の全国分布です。未着色は選択区分以外などです。読む州を変え、拡大で位置を確かめます。面のクリックは地点の井戸値ではなく分類の解説です。' : state.category === 'elevation' ? '0〜5,000mの全11値を保持。500m間隔の等高線で、1,000m間隔を太線にしています。数値ラベルは重なりを避けた代表区間です。州や線を選ばずに、全国の高さと線の間隔から地形を読みます。' : representatives ? '原典100〜4,500mm/年の全19値・492原線を保持。色は実線の値をUSと共通の7段階で分類し、線の間の面を補間しません。太線は1,000・1,500mm/年の原線です。全値は一覧と実線選択で読めます。2006年は刊行年で、統一観測期間との対応は未確認です。' : state.category==='basins'?'INEGIの国内158流域と原河川を重ねています。外流域143と閉鎖流域15を色で区別し、流域名は元の面内に配置。国外上流域や用水路の接続は追加していません。':'一覧と地図は配信された原資料の区域・区分です。');
-      if(state.category==='elevation'){show('[data-mexico-hydrology-controls]',false);text('[data-mexico-hydrology-value]','500m間隔の等高線です。線が密な場所ほど斜面が急で、間隔が広い場所ほど緩やかです。');text('[data-mexico-nature-period]','NOAA ETOPO 2022 v1・60秒角格子／EGM2008標高 m。2022は版年で、全国共通の観測年ではありません。');root.dataset.mexicoPreparedCategory='elevation';}
+      if(state.category==='elevation'){for(const group of root.querySelectorAll<SVGGElement>('[data-mexico-nature-layer],[data-mexico-nature-relief-background]'))group.style.display='none';q<SVGGElement>('[data-mexico-nature-neutral]')?.style.removeProperty('display');show('[data-mexico-water-background-key]',false);show('[data-mexico-hydrology-base-key]',false);show('[data-mexico-hydrology-controls]',false);text('[data-mexico-hydrology-value]','面は500mごとの標高階級です。境界は等高線と一致します。線が密な場所ほど斜面が急で、間隔が広い場所ほど緩やかです。');text('[data-mexico-nature-period]','NOAA ETOPO 2022 v1・60秒角格子／EGM2008標高 m。2022は版年で、全国共通の観測年ではありません。');root.dataset.mexicoPreparedCategory='elevation';}
       const absent = layers.filter(layer => !present.includes(layer));
       text('[data-mexico-hydrology-status]', absent.length && !(state.category==='rivers-groundwater'&&absent.length===1&&absent[0]==='groundwater'&&present.includes('rivers')) ? `${absent.map(layer => layer === 'groundwater' ? '地下水' : layer === 'rivers' ? '河川' : layer).join('・')}は資料未収録。表示している実資料と区別します。` : '');
       root.dataset.mexicoHydrologyReady = 'true'; root.dataset.mexicoWaterFeature = selection.feature;

@@ -4,7 +4,7 @@ import {mkdir, readdir, stat, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {inspectMexicoInitialPresentation, mexicoPCOperationCases} from './capture-mexico-pc-operations.mjs';
 
-const profile = {viewport: {width: 1280, height: 665}, deviceScaleFactor: 1, isMobile: false, hasTouch: false};
+const defaultProfile = {viewport: {width: 1280, height: 665}, deviceScaleFactor: 1, isMobile: false, hasTouch: false};
 const layoutTolerance = 0.25;
 const fields = ['agriculture', 'nature', 'industry', 'population'];
 const mexicoMaps = {agriculture: '[data-agriculture-map]', nature: '[data-mexico-nature-main-map]', industry: '[data-mi-map="primary"]', population: '[data-population-map]'};
@@ -90,7 +90,7 @@ async function measure(page, selected) {
   }, selected);
 }
 
-async function capture(browser, origin, basePath, output, scene) {
+async function capture(browser, origin, basePath, output, scene, commit, profile) {
   const {country, field, id = 'initial'} = scene;
   const selected = selectors(country, field), name = `${country}-pc-${field}-${id}`;
   const context = await browser.newContext({...profile, locale: 'ja-JP', timezoneId: 'UTC', colorScheme: 'light', reducedMotion: 'reduce'});
@@ -101,7 +101,7 @@ async function capture(browser, origin, basePath, output, scene) {
   page.on('response', response => {if (response.status() >= 400) failedRequests.push({url: response.url(), status: response.status()}); else if (['image', 'stylesheet', 'script', 'fetch', 'xhr', 'font'].includes(response.request().resourceType())) assets.add(response.url());});
   page.on('requestfailed', request => {if (request.failure()?.errorText !== 'net::ERR_ABORTED') failedRequests.push({url: request.url(), error: request.failure()?.errorText});});
   const route = `/atlas/north-america/${country === 'mexico' ? 'mexico/' : ''}${field}/`;
-  const record = {name, country, field, scene: id, commit: process.env.GITHUB_SHA, status: 'failed', profile, requestedUrl: `${origin}${basePath}${route}`, errors, consoleMessages, failedRequests};
+  const record = {name, country, field, scene: id, commit, status: 'failed', profile, requestedUrl: `${origin}${basePath}${route}`, errors, consoleMessages, failedRequests};
   try {
     const response = await page.goto(record.requestedUrl, {waitUntil: 'domcontentloaded'});
     assert.equal(response?.status(), 200, 'Page did not load successfully');
@@ -180,24 +180,25 @@ async function capture(browser, origin, basePath, output, scene) {
 }
 
 /** Reuse the caller's browser and server; never launch or alter browser security here. */
-export async function captureMexicoPCReview({browser, origin, basePath = '', output, additionalCases = mexicoPCOperationCases}) {
+export async function captureMexicoPCReview({browser, origin, basePath = '', output, additionalCases = mexicoPCOperationCases, commit = process.env.GITHUB_SHA, execution = 'ci', profile = defaultProfile, initialCountries = ['us','mexico'], initialFields = fields}) {
   assert(browser && output, 'An existing browser and output directory are required');
-  assert.equal(process.env.GITHUB_ACTIONS, 'true', 'PC capture runs only inside the existing GitHub Actions browser job');
-  assert(process.env.GITHUB_SHA, 'The reviewed commit must be recorded');
+  assert(execution==='local'||process.env.GITHUB_ACTIONS==='true','Use the existing CI browser or explicitly select local review');
+  assert(/^[a-f0-9]{40}$/.test(commit??''),'The exact reviewed commit must be recorded');
+  assert(initialCountries.every(country=>['us','mexico'].includes(country))&&initialFields.every(field=>fields.includes(field)),'Invalid initial capture scope');
   for (const scene of additionalCases) {
     assert.equal(scene.country, 'mexico', 'Additional operation cases are Mexico-only');
     assert(fields.includes(scene.field) && /^[a-z0-9-]+$/.test(scene.id) && scene.id !== 'initial', 'Invalid additional case');
   }
   await mkdir(output, {recursive: true});
-  const scenes = [...fields.flatMap(field => ['us', 'mexico'].map(country => ({country, field, id: 'initial'}))), ...additionalCases];
-  const metadata = {status: 'running', commit: process.env.GITHUB_SHA, browserVersion: browser.version(), profile, startedAt: new Date().toISOString(), captures: [], comparisons: []};
+  const scenes = [...initialFields.flatMap(field => initialCountries.map(country => ({country, field, id: 'initial'}))), ...additionalCases];
+  const metadata = {status: 'running', commit, execution, browserVersion: browser.version(), profile, startedAt: new Date().toISOString(), captures: [], comparisons: []};
   for (const scene of scenes) {
-    const record = await capture(browser, origin, basePath, output, scene);
+    const record = await capture(browser, origin, basePath, output, scene, commit, profile);
     metadata.captures.push(record);
     await writeFile(path.join(output, 'metadata.json'), `${JSON.stringify(metadata, null, 2)}\n`);
     console.log(`${record.status.toUpperCase()}: ${record.name}${record.failure ? `: ${record.failure.split('\n')[0]}` : ''}`);
   }
-  metadata.comparisons = fields.map(field => {
+  metadata.comparisons = initialFields.filter(field=>initialCountries.includes('us')&&initialCountries.includes('mexico')).map(field => {
     const us = metadata.captures.find(item => item.field === field && item.country === 'us' && item.scene === 'initial');
     const mexico = metadata.captures.find(item => item.field === field && item.country === 'mexico' && item.scene === 'initial');
     const delta = key => us.layout?.[key] && mexico.layout?.[key] ? Object.fromEntries(['x', 'y', 'width', 'height'].map(axis => [axis, mexico.layout[key][axis] - us.layout[key][axis]])) : null;

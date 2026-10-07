@@ -36,7 +36,7 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
  function syncMainFields(){
   const query=new URL(location.href).searchParams,raw=query.get('state'),code=raw&&/^(0?[1-9]|[12][0-9]|3[0-2])$/.test(raw)?raw.padStart(2,'0'):null;
   const mode=query.get('reading')==='item'?'item':'overview';
-  for(const [link,href]of pageLinks){const url=new URL(href);const nationalPopulation=url.pathname.endsWith('/population/');if(code&&!nationalPopulation)url.searchParams.set('state',code);url.searchParams.set('reading',nationalPopulation?'overview':mode);link.href=url.href;}
+  for(const [link,href]of pageLinks){const url=new URL(href);const nationalEntry=/\/(population|industry)\/$/.test(url.pathname);if(nationalEntry)url.searchParams.delete('state');else if(code)url.searchParams.set('state',code);url.searchParams.set('reading',nationalEntry?'overview':mode);link.href=url.href;}
  }
  for(const type of ['click','auxclick','focusin'])root.addEventListener(type,event=>{if((event.target as Element).closest('.mexico-fields>a'))syncMainFields();},{capture:true});
  function project(point:[number,number]){
@@ -109,7 +109,7 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
  function render(){
   const selected=!!state.item,forestry=state.item==='pine',cropSelected=!!state.item&&cropIds.has(state.item),animalSelected=!!state.item&&kinds.has(state.item);
   root.dataset.mexicoReadingSelected=String(selected);root.dataset.agriReading=forestry?'forestry':selected?'product':'overview';
-  root.dataset.agricultureCurrentItem=state.item??'';root.dataset.agricultureCurrentState=state.state??'';
+  root.dataset.agricultureCropSelected=String(cropSelected);root.dataset.agricultureCurrentItem=state.item??'';root.dataset.agricultureCurrentState=state.state??'';
   root.dataset.agricultureCrops=String(state.crops);root.dataset.agricultureLivestock=String(state.livestock);
   hidden(overview,selected);hidden(panel,!selected);heading.textContent=state.item?mexicoAgricultureLabel(state.item):'';
   for(const copy of root.querySelectorAll<HTMLElement>('[data-agriculture-reading]'))hidden(copy,copy.dataset.agricultureReading!==state.item);

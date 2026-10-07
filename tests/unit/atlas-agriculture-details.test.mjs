@@ -82,3 +82,9 @@ test('輸出製品コードが重複せず、相手先と乳製品内訳が同�
   assert.equal(livestockStatistics.exports.broilers.totalUsd,4756946998);
   assert.equal(livestockStatistics.exports.layers.totalUsd,360105802);
 });
+
+test('a Mexico focus retains its reported amount outside the top five, using the same world denominator',()=>{
+ const countries=[{code:'US',country:'United States',value:20},...Array.from({length:4},(_,i)=>({code:'C'+i,country:'Country '+i,value:15-i})),{code:'MX',country:'Mexico',value:3}];
+ const rows=productionShares(100,countries,'MX');assert.equal(rows.find(row=>row.code==='MX').value,3);assert.equal(rows.find(row=>row.code==='MX').share,3);
+ assert.equal(rows.reduce((sum,row)=>sum+row.share,0),100);assert.equal(rows.length,7);
+});

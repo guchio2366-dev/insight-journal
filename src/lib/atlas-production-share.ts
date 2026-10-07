@@ -2,7 +2,7 @@ export type ProductionCountry = { code:string; country:string; value:number; mem
 export type ProductionTrend = { year:number; us:number; world:number; share:number };
 
 /** A partition of the reported world total, never a renormalized top-country list. */
-export function productionShares(worldTotal:number, countries:readonly ProductionCountry[]) {
+export function productionShares(worldTotal:number, countries:readonly ProductionCountry[], focusCode='US') {
   if(!Number.isFinite(worldTotal)||worldTotal<=0)throw new Error('World production must be positive');
   const seen=new Set<string>();
   for(const row of countries){
@@ -17,7 +17,9 @@ export function productionShares(worldTotal:number, countries:readonly Productio
   if(!us||us.value>worldTotal)throw new Error('Missing or invalid US production');
   if(countries.reduce((sum,row)=>sum+row.value,0)>worldTotal)throw new Error('Country production exceeds world total');
   const selected=[...countries].sort((a,b)=>b.value-a.value).slice(0,5);
-  if(!selected.some(row=>row.code==='US'))selected.push(us);
+  const focus=countries.find(row=>row.code===focusCode);
+  if(!focus)throw new Error('Missing highlighted production country');
+  if(!selected.some(row=>row.code===focusCode))selected.push(focus);
   const other=worldTotal-selected.reduce((sum,row)=>sum+row.value,0);
   return [...selected,{code:'OTHER',country:'Other',value:other}].map(row=>({...row,share:row.value/worldTotal*100}));
 }

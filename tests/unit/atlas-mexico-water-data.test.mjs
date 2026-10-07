@@ -87,6 +87,18 @@ test('等高線は11実標高値の5490線で、版・基準面・表示間隔�
   assert.ok(vector.features.every(f => f.geometry.type === 'LineString' && f.properties.unit === 'm'));
 });
 
+test('500m階級面と境界線は同じ原格子で、負標高・単位・12階級を保持する',()=>{
+ const record=manifest.layers.contours.bands,raw=read(record.file);assert.equal(raw.length,record.bytes);assert.equal(sha(raw),record.sha256);
+ const bands=JSON.parse(gunzipSync(raw)),source=JSON.parse(read(record.provenanceFile));
+ assert.equal(bands.decodedGridSha256,manifest.layers.contours.decodedGridSha256);assert.equal(bands.intervalM,500);assert.equal(bands.features.length,12);
+ assert.deepEqual(bands.contours.map(f=>f.properties.elevationM),Array.from({length:11},(_,i)=>i*500));
+ assert.deepEqual(bands.features.map(f=>f.properties.label),record.legend.map(k=>k.label));
+ assert.equal(bands.features[0].properties.upperM,0);assert.equal(bands.features.at(-1).properties.lowerM,5000);
+ assert(bands.features.every(f=>f.geometry.type==='MultiPolygon'&&f.properties.unit==='m'));
+ assert(source.verification.nationalCoverageDifferenceRatio<1e-5);assert(source.verification.overlapAreaRatio<1e-5);
+ assert.equal(source.fullSourceHashRecomputed,false);assert.equal(source.license,'CC0-1.0');
+});
+
 test('河川は小流域内次数を3分類にまとめ、全原セグメントとpartを保持する', {skip: !data.rivers}, () => {
   const record = manifest.layers.rivers, vector = data.rivers;
   assert.equal(vector.features.length, 3);
