@@ -231,10 +231,11 @@ async function agricultureClimateRepairs(page,profile){
   await snapshot(page,profile,'climate-selected');
   const evidence=await page.locator('[data-city-reading="london"]').evaluate(node=>{
     const reason=node.querySelector('[data-eu-climate-reason]'),farm=node.querySelector('.eu-climate-farming>p'),reader=node.closest('[data-eu-climate-reader]');
-    return {reason:reason.textContent,farmBottom:farm.getBoundingClientRect().bottom,reasonFont:Number.parseFloat(getComputedStyle(reason).fontSize),farmFont:Number.parseFloat(getComputedStyle(farm).fontSize),overflow:getComputedStyle(reader).overflowY,viewportHeight:innerHeight,duplicates:node.querySelectorAll('.eu-city-selected-note').length};
+    return {reason:reason.textContent,farmBottom:farm.getBoundingClientRect().bottom,reasonFont:Number.parseFloat(getComputedStyle(reason).fontSize),farmFont:Number.parseFloat(getComputedStyle(farm).fontSize),classificationFont:Number.parseFloat(getComputedStyle(node.querySelector('.eu-city-climate')).fontSize),farmHeadingFont:Number.parseFloat(getComputedStyle(node.querySelector('.eu-climate-farming h4')).fontSize),overflow:getComputedStyle(reader).overflowY,viewportHeight:innerHeight,duplicates:node.querySelectorAll('.eu-city-selected-note').length};
   });
   assert.match(evidence.reason,/明瞭な乾季.*5\.7.*19\.0/);
   assert.ok(evidence.reasonFont>=14&&evidence.farmFont>=14);
+  assert.ok(evidence.classificationFont>=18&&evidence.farmHeadingFont>=17,'Existing heading sizes are retained');
   assert.equal(evidence.overflow,'visible');assert.equal(evidence.duplicates,0);
   assert.ok(evidence.farmBottom<=evidence.viewportHeight-8,'The full farming paragraph is visible in the initial PC viewport: '+JSON.stringify(evidence));
   assert.equal(stationFocus.active,true,'Keyboard focus returns to the actual station button: '+JSON.stringify(stationFocus));

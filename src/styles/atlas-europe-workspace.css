@@ -418,10 +418,10 @@
  .eu-workspace-root[data-europe-detail] .eu-workspace[data-field="agriculture"] .eu-map-stage { aspect-ratio:1.4; }
  .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-city-reading-head { display:none; }
  .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-reader-heading { margin:0 0 3px; }
- .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-city-reading .eu-city-climate { margin:7px 0 4px; padding-top:6px; font:700 16px/1.5 var(--sans); }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-city-reading .eu-city-climate { margin:7px 0 4px; padding-top:6px; font:700 18px/1.5 var(--sans); }
  .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-city-reading :is(.eu-climate-reason,.eu-climate-farming>p) { margin:4px 0; font:14px/1.6 var(--sans); }
  .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-climate-farming { margin-top:7px; padding-top:6px; }
- .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-climate-farming h4 { margin:0 0 4px; font:700 15px/1.5 var(--sans); }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-climate-farming h4 { margin:0 0 4px; font:700 17px/1.5 var(--sans); }
  .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-inline-climate-plot .atlas-climate-city-name { display:none; }
 }
 
