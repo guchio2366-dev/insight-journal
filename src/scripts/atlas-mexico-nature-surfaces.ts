@@ -111,6 +111,12 @@ export function initMexicoNatureSurfaces(
   function reset(): void {
     group.style.display = 'none'; foreground.style.display='none';legend.hidden = true;
     precipitationReason.hidden = true;
+    const mapLegendHost = q<HTMLElement>('[data-mexico-precipitation-legend-host]');
+    if (mapLegendHost) mapLegendHost.hidden = true;
+    for (const selector of ['[data-mexico-nature-map-caption]', '[data-mexico-nature-period]']) {
+      const node = q<HTMLElement>(selector); if (node) node.hidden = false;
+    }
+    legend.classList.remove('is-map-legend');
     overview.hidden=true;overviewButton.hidden=true;
     root.dataset.mexicoPreparedCategory = '';
   }
@@ -188,7 +194,13 @@ export function initMexicoNatureSurfaces(
       if (category === 'precipitation') {
         precipitationReason.hidden = false;
         if (lead) lead.after(precipitationReason); else readingSummary.prepend(precipitationReason);
-        readingSummary.append(legend);
+        const mapLegendHost = q<HTMLElement>('[data-mexico-precipitation-legend-host]');
+        if (mapLegendHost) {
+          mapLegendHost.hidden = false; mapLegendHost.append(legend); legend.classList.add('is-map-legend');
+          for (const selector of ['[data-mexico-nature-map-caption]', '[data-mexico-nature-period]']) {
+            const node = q<HTMLElement>(selector); if (node) node.hidden = true;
+          }
+        }
       }
       else if (lead) lead.after(legend); else readingSummary.prepend(legend);
     }
@@ -208,10 +220,15 @@ export function initMexicoNatureSurfaces(
       if (lower) values.dataset.staggered = 'true';
       values.append(tick); previousPosition = position; previousLower = lower;
     }
-    legend.append(label, ramp, values);
+    if (category === 'precipitation') {
+      const header = document.createElement('div'); header.className = 'mexico-quantitative-map-header';
+      const metadata = document.createElement('p'); metadata.className = 'mexico-quantitative-map-source';
+      metadata.textContent = `${layer.sourceLabelJa}｜${layer.periodLabelJa}`;
+      header.append(label, metadata); legend.append(header, ramp, values);
+    } else legend.append(label, ramp, values);
     if (layer.legend.interval) {
       const interval = document.createElement('p'); interval.className = 'mexico-quantitative-interval';
-      interval.textContent = '等雨量線・色の帯は250mm間隔。線の数字はmm/年。海域・国外・欠測と補間できない区画は透明。';
+      interval.textContent = '線・色の帯は250mm間隔。線の数字はmm/年。海域・国外・欠測・補間不可は透明。';
       legend.append(interval);
     }
     text('[data-mexico-nature-map-title]', layer.titleJa);

@@ -285,11 +285,16 @@ async function water({page, evidence, captureStepImage}) {
     const svg = await page.evaluate(async url => (await fetch(url)).text(), source);
     const levels = [...svg.matchAll(/data-isohyet-mm="(\d+)"/g)].map(match => Number(match[1]));
     assert(levels.length >= 9 && levels.every(level => level > 0 && level % 250 === 0), 'Every derived contour follows the 250mm base interval');
-    const positions = await page.locator('[data-mexico-water-reading-summary]').evaluate(node => {
-      const reason=node.querySelector('[data-mexico-precipitation-reason]'),legend=node.querySelector('[data-mexico-quantitative-legend]');
-      return {reason:reason.getBoundingClientRect().bottom,legend:legend.getBoundingClientRect().top};
+    const positions = await page.locator('[data-mexico-workspace]').evaluate(node => {
+      const map=node.querySelector('[data-mexico-nature-main-map]'),legend=node.querySelector('[data-mexico-quantitative-legend]');
+      const reading=node.querySelector('.mexico-reading');
+      return {mapBottom:map.getBoundingClientRect().bottom,legendTop:legend.getBoundingClientRect().top,
+        legendInMapColumn:!!legend.closest('.atlas-map-column'),legendInReading:reading.contains(legend),
+        duplicateCaptionHidden:node.querySelector('[data-mexico-nature-map-caption]').hidden,
+        duplicatePeriodHidden:node.querySelector('[data-mexico-nature-period]').hidden};
     });
-    assert(positions.reason <= positions.legend, 'The distribution explanation precedes the lower legend');
+    assert(positions.mapBottom <= positions.legendTop && positions.legendInMapColumn && !positions.legendInReading, 'The rainfall legend is immediately below the map');
+    assert(positions.duplicateCaptionHidden && positions.duplicatePeriodHidden, 'Source and period are combined into the map legend without duplicate captions');
     await legibleNumericTicks(page);
     await captureStepImage('precipitation-isohyets-250mm');
     return {legend: await text(page, '[data-mexico-quantitative-legend]'), contourLevels: levels, positions};
