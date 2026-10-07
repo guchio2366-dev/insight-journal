@@ -17,6 +17,17 @@
 .asia-atlas .asia-population-tabs button:disabled{color:#636b6c;background:#f1f1e9}
 .asia-atlas .asia-population-tabs small{font-size:10px;display:block}
 .asia-atlas button:focus-visible{outline:3px solid #a74730;outline-offset:2px}
+.asia-atlas :is(.asia-map-surface,.maplibregl-canvas):focus{outline:none}
+.asia-atlas .asia-map-frame:has(:is(.asia-map-surface,.maplibregl-canvas):focus-visible)::after{content:'地図をキーボードで操作中';position:absolute;left:8px;bottom:8px;z-index:5;padding:5px 8px;background:#fffdf3;color:#173f50;font:600 13px/1.5 var(--sans);border:1px solid #718992;pointer-events:none}
+.asia-atlas .asia-city-reading-host{min-width:0;padding:0 14px 14px}
+.asia-atlas .asia-city-reading-host .asia-city-card{margin:0;padding:0;border:0}
+.asia-atlas .asia-city-reading-host .city-climate-reading p{font-size:14px;line-height:1.75}
+.asia-atlas .asia-city-reading-host .city-climate-reading h4{font-size:14px;line-height:1.5;margin:8px 0}
+@media(min-width:960px){.asia-atlas .asia-city-reading-host{max-height:var(--asia-reading-height,600px);overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable}}
+.asia-atlas .asia-map-items>.asia-reading-dock-links{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.asia-atlas .asia-map-items>.asia-reading-dock-links button{min-height:44px;padding:8px 12px;border:1px solid #9ebbbd;border-radius:4px;background:#f6faf9;color:#204f5e;font-size:14px}
+.asia-atlas[data-city-climate-active=true] .asia-reading-details{margin-top:0}
+.asia-atlas [data-industry-country-scope]{margin:4px 0;font-size:14px;line-height:1.5}
 .asia-atlas .asia-farm-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:8px 16px;min-height:50px;padding:8px 0}
 .asia-atlas .asia-farm-toolbar label{display:flex;align-items:center;gap:5px;font-weight:700;font-size:14px;min-height:36px}
 .asia-atlas .asia-farm-toolbar input{width:18px;height:18px;accent-color:#35515d}
