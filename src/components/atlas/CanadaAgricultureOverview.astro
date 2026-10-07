@@ -55,6 +55,7 @@ const abbreviations:Record<string,string>={'10':'NL','11':'PE','12':'NS','13':'N
 <i class="quality-symbol" aria-hidden="true">−</i>未収録</span>
 <span class="meaning" id="canada-agri-display-meaning">州別の公表値を同時表示。濃淡は同じ指標の最大州との比較です。</span>
 </div>
+    <div id="canada-agri-story-dock"></div>
     <p class="source-note" data-agri-resolution-note>作物・牛と飼料・土地利用は2021年センサス。鶏は2021年の州別生産者数、豚はAAFC 2025年版の3州の全国頭数比です。豚・鶏のCCS値を配分・推計しません。</p>
     <p id="canada-agri-map-note" class="note">
 <strong>州別値と、農場の本拠地があるCCSの値を縮尺で切り替えます。</strong>記号は統計地域の表示用の目印で、実際の耕地・農場・牛の位置を示しません。CCS境界も耕地の輪郭ではありません。</p>
@@ -93,10 +94,10 @@ const abbreviations:Record<string,string>={'10':'NL','11':'PE','12':'NS','13':'N
 <thead>
 <tr>
 <th scope="col">指標</th>
-<th scope="col">申告値</th>
+<th scope="col">公表値</th>
 </tr>
 </thead>
-<tbody id="canada-agri-values">{ids.map(id=><tr data-value={id}><th scope="row">{names[id]}</th><td>{census.products[id].national.value.toLocaleString('ja-JP')} {census.products[id].national.unit??census.products[id].unit}</td></tr>)}</tbody>
+<tbody id="canada-agri-values">{ids.map(id=><tr data-value={id}><th scope="row">{id==='beef'?'肉用母牛':id==='dairy'?'乳牛':id==='chicken'?'鶏肉生産者':names[id]}</th><td>{census.products[id].national.value.toLocaleString('ja-JP')} {census.products[id].national.unit??census.products[id].unit}</td></tr>)}</tbody>
 </table>
 <p class="source-note" id="canada-agri-quality-note">全国値は原表の公表値です。地域値を足して全国値に置き換えません。</p>
 <details>
@@ -130,7 +131,7 @@ const abbreviations:Record<string,string>={'10':'NL','11':'PE','12':'NS','13':'N
 <thead>
 <tr>
 <th scope="col">地域名・州</th>
-{ids.filter(id=>census.products[id].resolution==='ccs').map(id=><th scope="col">{names[id]}<small>{census.products[id].unit}</small></th>)}
+{ids.filter(id=>census.products[id].resolution==='ccs').map(id=><th scope="col">{id==='beef'?'肉用母牛':id==='dairy'?'乳牛':names[id]}<small>{census.products[id].unit}</small></th>)}
 </tr>
 </thead>
 <tbody id="canada-agri-rows">

@@ -70,6 +70,10 @@ function drawProvinceOverview(renderIds=ids,keepDetail=false){
  const counts={},boxes=[...storyBoxes,...controlBoxes()];if(!keepDetail){displayTargets=[];provinceLayout=new Map();}
  for(const {label,point,record} of provincePoints){const anchor=screen(point);if(!screenContains(anchor))continue;let p=anchor;
   const offsets=[[0,0],[0,30],[0,-30],[58,0],[-58,0],[0,60],[0,-60],[58,30],[-58,-30]];for(let r=90;r<=210;r+=30)for(const [dx,dy] of [[0,r],[0,-r],[r,0],[-r,0],[r,r],[-r,-r],[r,-r],[-r,r]])offsets.push([dx,dy]);
+  // Province symbols reserve their entire grid before labels; search the remaining
+  // frame when nearby positions are occupied by the three geographic readings.
+  const remaining=[];for(let y=markerHalfHeight+20;y<=size.height-markerHalfHeight-12;y+=10)for(let x=markerHalfWidth+4;x<=size.width-markerHalfWidth-4;x+=10)remaining.push([x-anchor[0],y-anchor[1]]);
+  remaining.sort((a,b)=>Math.hypot(...a)-Math.hypot(...b));offsets.push(...remaining);
   for(const [dx,dy] of offsets){const candidate=[Math.max(markerHalfWidth+4,Math.min(size.width-markerHalfWidth-4,anchor[0]+dx)),Math.max(markerHalfHeight+20,Math.min(size.height-markerHalfHeight-12,anchor[1]+dy))],box=[candidate[0]-markerHalfWidth,candidate[1]-markerHalfHeight-16,candidate[0]+markerHalfWidth,candidate[1]+markerHalfHeight+10];if(!boxes.some(b=>box[0]<b[2]&&box[2]>b[0]&&box[1]<b[3]&&box[3]>b[1])){p=candidate;boxes.push(box);break;}}
   provinceLayout.set(label.id,p);ctx.globalAlpha=.6;ctx.strokeStyle='#769097';ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(...anchor);ctx.lineTo(...p);ctx.stroke();counts[label.id]=renderIds.slice();
   for(const [index,id] of renderIds.entries()){const cell=record.cells[id];const [dx,dy]=canadaAgricultureSymbolOffset(index,renderIds.length);drawPresence(id,cell,p[0]+dx,p[1]+8+dy,{strength:cell.value>0?.22+.78*cell.value/provinceMax[id]:1});}
@@ -104,6 +108,11 @@ function controlBoxes(){
 }
 function placeStories(overview: boolean){
  storyBoxes=[];
+ const inline=size.width<560,container=$('map-stories'),parent=inline?$('story-dock'):frame;
+ if(container.parentElement!==parent)parent.append(container);
+ container.classList.toggle('is-inline',inline);
+ if(inline){for(const {element}of storyNodes){element.hidden=!overview;element.style.removeProperty('width');element.style.removeProperty('left');element.style.removeProperty('top');}return;}
+
  const obstacles=controlBoxes();
  const points=provincePoints.filter(p=>Number(p.label.id)<60).map(p=>screen(p.point)).filter(screenContains).map(p=>[p[0]-markerHalfWidth,p[1]-markerHalfHeight-16,p[0]+markerHalfWidth,p[1]+markerHalfHeight+10]);
  for(const {story,element,point} of [...storyNodes].sort((a,b)=>['west','prairie','east'].indexOf(a.story.id)-['west','prairie','east'].indexOf(b.story.id))){
@@ -273,7 +282,7 @@ function renderReading() {
   $<HTMLSelectElement>("region").value = state.ccs ?? "";
   $<HTMLButtonElement>("focus-region").disabled = !state.ccs;
   $("table-caption").textContent = record ? "CCS " + record.uid + "／地域別申告値" : "全国の公表値（各指標の年・対象範囲は定義欄）";
-  $("values").innerHTML = ids.map((id) => '<tr data-value="' + id + '"><th scope="row"><span class="metric-name"><i class="shape ' + products[id].shape + '" style="--color:' + colors[id] + '" aria-hidden="true"></i>' + esc(names[id]) + "</span></th><td>" + esc(valueText(cells[id], dataset.products[id].unit)) + "<small>" + esc(qualityText(cells[id])) + "</small></td></tr>").join("");
+  $("values").innerHTML = ids.map((id) => '<tr data-value="' + id + '"><th scope="row"><span class="metric-name"><i class="shape ' + products[id].shape + '" style="--color:' + colors[id] + '" aria-hidden="true"></i>' + esc(id==='beef'?'肉用母牛':id==='dairy'?'乳牛':id==='chicken'?'鶏肉生産者':names[id]) + "</span></th><td>" + esc(valueText(cells[id], dataset.products[id].unit)) + "<small>" + esc(qualityText(cells[id])) + "</small></td></tr>").join("");
   $("quality-note").textContent = record ? "公表0・非公表F・対象外/未収録を区別しています。合算指標は成分の品質を保持し、合算値に新たな品質等級を付けません。" : "全国値は原表の公表値です。地域値を足して全国値に置き換えません。";
   $("components").innerHTML = ids.map((id) => "<h3>" + esc(names[id]) + "</h3>" + cells[id].components.map((c) => '<p class="component">' + esc(c.variable) + "：" + (c.value === null ? c.quality==='F'?"非公表 F":"未収録" : fmt(c.value) + " " + dataset.products[id].unit) + "／品質 " + esc(c.quality ?? "未収録") + "</p>").join("")).join("");
   for (const button of root.querySelectorAll("[data-metric]")) button.setAttribute("aria-pressed", String((button.dataset.metric || null) === state.metric));
