@@ -53,7 +53,7 @@ def lonlat(points):
 def color(value, kind):
     anchors = ([(0, "edf5fc"), (1000, "a8d0e8"), (2500, "4d9aca"),
                 (5000, "185f97"), (8000, "0b315a")] if kind == "rainfall" else
-               [(-500, "d5e4ed"), (0, "c7dcb5"), (1000, "e5d59a"),
+               [(-2500, "8aafc5"), (-500, "d5e4ed"), (0, "c7dcb5"), (1000, "e5d59a"),
                 (2500, "c5a074"), (4500, "a99183"), (6500, "d7cfc7"),
                 (8500, "f6f4ef")])
     channels = np.asarray([list(bytes.fromhex(c)) for _, c in anchors])

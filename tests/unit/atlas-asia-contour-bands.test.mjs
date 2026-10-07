@@ -20,6 +20,7 @@ for(const [kind,interval] of [['rainfall',250],['terrain',500]]){
   assert.equal(sha(base+meta.lineFile),meta.lineSHA256);
   assert.equal(meta.thresholdRule,'lower inclusive, upper exclusive');
   assert.equal(meta.breaks.length,meta.colors.length+1);
+  assert.equal(new Set(meta.colors).size,meta.colors.length,'Every interval has a distinct color, including retained negative coastal elevations');
   for(let i=1;i<meta.breaks.length;i++)assert.equal(meta.breaks[i]-meta.breaks[i-1],interval);
   const bands=json(meta.file).features,lines=json(meta.lineFile).features;
   assert(bands.length>100);assert(lines.length>100);
