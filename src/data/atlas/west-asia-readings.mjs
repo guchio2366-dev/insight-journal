@@ -2,6 +2,12 @@
 // not new facility coordinates, quantities or inferred supply routes.
 export const westIndustryCountries = ['SAU', 'ARE', 'TUR'];
 export const westIndustryCountry = code => westIndustryCountries.includes(code);
+const industryTakeaways = {
+  SAU:'東部の油田とラス・タヌラの精製、ジュバイルの石油化学がつながります。資源を採る場所、加工する場所と東西の港への輸送を分けて読みます。',
+  ARE:'アブダビの原油・ルワイスの精製と、ドバイのジュベル・アリ港の物流を分けて読みます。資源の加工と、海運・倉庫・陸上輸送が支える産業です。',
+  TUR:'ブルサ・イズミット周辺の自動車産業を、部品供給・研究開発・欧州市場への近さと結びつけて読みます。製造業GDP比は自動車だけの比率ではありません。',
+};
+export const westIndustryTakeaway = code => industryTakeaways[code]??'ペルシャ湾の資源、ホルムズ海峡、スエズとトルコ側の接続を読みます。国別産業は3か国、地域供給網では他国の産地・加工・通過点も扱います。';
 export const westReadingSources = {
   water: {label:'World Bank「Beyond Scarcity」(2017)',url:'https://www.worldbank.org/en/topic/water/publication/beyond-scarcity-water-security-in-the-middle-east-and-north-africa',period:'中東・北アフリカの概説。掲載20対象とは範囲が異なります。'},
   irrigation: {label:'FAO：サウジアラビアの灌漑改善 (2024)',url:'https://www.fao.org/neareast/news/stories/details/from-scarcity-to-sustainability--a-leap-toward-efficient-irrigation-in-saudi-arabia/',period:'2024年10月3日。実証農場の事例で、全農場の状態ではありません。'},

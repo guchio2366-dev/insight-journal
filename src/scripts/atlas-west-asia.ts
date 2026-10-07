@@ -3,7 +3,7 @@ import {readWestState,westSearch,gridIndex,decodeWestGrid,zoomWestView,panWestVi
 import {stationAnnualRainfall,rainfallBreaks,rainfallColors,rainfallColor,isSettlementTopic,settlementSubject,validateSettlementCollection} from '../lib/atlas-west-asia-completion.mjs';
 import {westAnnualPrecipitationId,westPrecipitationManifestPath,westPrecipitationLayer,decodeWestPrecipitationGrid} from '../lib/atlas-west-asia-precipitation.mjs';
 import {westFarmingProducts,westFarmingProduct,isWestFarmingOverview,westFarmingGeometry} from '../lib/atlas-west-asia-farming.mjs';
-import {westFieldIntroductions,westIndustryCountries,westIndustryCountry,westRegionalReading,westReadingSources,westCityReadings,westFarmingSelection} from '../data/atlas/west-asia-readings.mjs';
+import {westFieldIntroductions,westIndustryCountries,westIndustryCountry,westIndustryTakeaway,westRegionalReading,westReadingSources,westCityReadings,westFarmingSelection} from '../data/atlas/west-asia-readings.mjs';
 
 // All classes present in the national-mask grid (1991–2020), including Cwb's four cells.
 // Keep this region-wide key stable when the learner selects a country or pans the map.
@@ -263,7 +263,7 @@ async function init(root:HTMLElement){
   const reading=westReading(t),source=sourceTopic(),comparison=source?westReading(source).comparisons.find((x:any)=>x.topic===t.id):null;
   statistics.hidden=true;statisticsContent.replaceChildren();statistics.setAttribute('aria-label',t.id==='climate'?'観測所の気温・降水量':t.id==='cities'?'都市中心部の人口推計':'国別統計');
   let html=`<header class="west-reading-header"><p class="atlas-eyebrow">${c?esc(c.name):'西アジア・中東'}</p>${!source&&!readingOverview?'<button type="button" data-west-reading-overview>概論へ戻る</button>':''}<h2 id="west-detail-title">${esc(unavailable?unavailable:!source&&readingOverview?westFields.find(f=>f.id===field)!.label+'の概論':t.id==='precipitation'?'降水量':t.label)}</h2></header>`;
-  html+=unavailable?`<p class="atlas-reading-takeaway"><strong>${esc(unavailable)}は未整備です。表示中の${esc(t.label)}は参考図です。</strong></p>`:source?`<section class="west-comparison-reading"><h3>${esc(source.label)} × ${esc(t.label)}</h3><p class="atlas-reading-takeaway"><strong>${esc(comparison?.explanation)}</strong></p><p class="west-stat-note">左は元の主題、右は比較先です。地図の境目を動かすと、同じ場所の両方の分布を読めます。凡例の単位・時点も比べてください。</p></section>`:`<p class="atlas-reading-takeaway"><strong>${esc(readingOverview?fieldIntroductions[field]:reading.message)}</strong></p>`;
+  html+=unavailable?`<p class="atlas-reading-takeaway"><strong>${esc(unavailable)}は未整備です。表示中の${esc(t.label)}は参考図です。</strong></p>`:source?`<section class="west-comparison-reading"><h3>${esc(source.label)} × ${esc(t.label)}</h3><p class="atlas-reading-takeaway"><strong>${esc(comparison?.explanation)}</strong></p><p class="west-stat-note">左は元の主題、右は比較先です。地図の境目を動かすと、同じ場所の両方の分布を読めます。凡例の単位・時点も比べてください。</p></section>`:`<p class="atlas-reading-takeaway"><strong>${esc(field==='industry'?westIndustryTakeaway(state.country):readingOverview?fieldIntroductions[field]:reading.message)}</strong></p>`;
   html+='<div class="west-related west-reading-dock" data-west-related></div>';
   html+='<div data-west-reading-key></div>';
   html+='<div data-west-reading-extra>';

@@ -29,6 +29,7 @@ test('産業は未選択の地域供給網から始まり、国別の比較・�
    q(`[data-west-industry-scope] [data-west-country-button="${code}"]`).click();
    await until(()=>q('[data-west-atlas]').dataset.ready==='true'&&q('[data-west-country]').value===code);
    assert.match(q('[data-west-regional-reading]').textContent,expected);
+   assert.match(q('[data-west-detail] .atlas-reading-takeaway').textContent,code==='SAU'?/ジュバイル/:code==='ARE'?/ジュベル・アリ/:/ブルサ/);
    assert.equal(new URL(w.location.href).searchParams.get('country'),code);
    assert.equal(q('[data-west-map]').getAttribute('viewBox'),frame,'country industry selection retains the full regional map');
    assert.equal(q(`[data-west-industry-scope] [data-west-country-button="${code}"]`).getAttribute('aria-pressed'),'true');
