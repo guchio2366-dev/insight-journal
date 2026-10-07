@@ -1,5 +1,8 @@
 /* West Asia follows the North America frame, tabs, map key and reading column. */
 .west-atlas{min-width:0}
+.west-reading .atlas-climate-diagrams{display:block;min-width:0}
+.west-reading .atlas-climate-diagram{width:100%;min-width:0;max-width:none;margin:0}
+.west-reading .atlas-city-reading{margin-top:8px}
 .west-regional-navigation{margin-top:12px;margin-bottom:18px}
 .west-region-links{display:flex;flex-wrap:wrap;gap:6px}
 .west-region-links a{display:inline-flex;align-items:center;min-height:44px;padding:8px 15px;border:1px solid var(--rule);background:var(--white);font-size:14px;text-decoration:none}

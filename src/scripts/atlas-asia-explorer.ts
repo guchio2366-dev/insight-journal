@@ -124,7 +124,7 @@ function start(root:HTMLElement) {
   let shownUrbanDetail:string|null=null;
 
 
-  function chooseFarm(topic:string){navigate({...state,field:'agriculture',topic,overlay:null,detail:null,story:null,point:state.point??config.cities.find(c=>c.id===state.city)?.coordinates??null,city:null,camera:camera()},false);}
+  function chooseFarm(topic:string){navigate({...state,field:'agriculture',topic,farms:config.presentation?.farming.products.some(p=>p.id===topic)?null:state.farms,overlay:null,detail:null,story:null,point:state.point??config.cities.find(c=>c.id===state.city)?.coordinates??null,city:null,camera:camera()},false);}
   function choosePopulation(topic:string){if(config.social?.topics.some(t=>t.id===topic))social?.chooseTopic(topic);else navigate({...state,field:'population',topic,detail:null,story:null,city:null,camera:camera()},false);}
   const navigation=createAsiaNavigation(root,config.industry,()=>state,navigate,choosePopulation,selectNaturalTopic,chooseFarm);
   let presentation:ReturnType<typeof createAsiaPresentation>|null=null;
@@ -391,7 +391,7 @@ function start(root:HTMLElement) {
     const active=state.field==='agriculture',layer=farmingLayer(),topic=farmingTopic();
     for(const key of farmingGrids.keys())if(key!==layer?.grid)farmingGrids.delete(key);
     optionalHidden('[data-farm-switches]',!active||topic!=='overview'||state.overlay==='water');
-    optionalHidden('[data-farming-topics]',true);optionalHidden('[data-farming-panel]',!active||topic==='overview');optionalHidden('[data-farm-overview-reading]',!active||topic!=='overview');optionalHidden('[data-farm-overview-legend]',!active||layer?.kind==='forest');optionalHidden('[data-farming-legend]',!layer);
+    optionalHidden('[data-farming-topics]',true);optionalHidden('[data-farming-panel]',!active||topic==='overview');optionalHidden('[data-farm-overview-reading]',!active||topic!=='overview');optionalHidden('[data-farm-overview-legend]',!active||layer?.kind==='forest');optionalHidden('[data-farming-legend]',!layer||!!config.presentation&&layer.kind!=='forest');
     if(!active||!config.farming)return;
     const select=$<HTMLSelectElement>('[data-farming-topic]');if(select)select.value=topic!;
     for(const b of $$<HTMLButtonElement>('[data-farm-choice]'))b.setAttribute('aria-pressed',String(b.dataset.farmChoice===topic));
@@ -443,12 +443,12 @@ function start(root:HTMLElement) {
     if(!seasonal?.active())seasonal?.hide();
     void presentation?.show(map);
     map.setLayoutProperty('asia-climate','visibility',natural?'visible':'none');
-    if(rice&&!map.getSource('asia-rice')){
+    if(rice&&!config.presentation&&!map.getSource('asia-rice')){
       map.addSource('asia-rice',{type:'image',url:asset(config.agricultureBase,riceLayer.imageUrl),coordinates:riceLayer.coordinates as [number,number][]});
       map.addLayer({id:'asia-rice',type:'raster',source:'asia-rice',paint:{'raster-opacity':.95,'raster-resampling':'nearest','raster-fade-duration':0}},'asia-context');
     }
-    if(map.getLayer('asia-rice'))map.setLayoutProperty('asia-rice','visibility',rice?'visible':'none');
-    const farm=farmingLayer();
+    if(map.getLayer('asia-rice'))map.setLayoutProperty('asia-rice','visibility',rice&&!config.presentation?'visible':'none');
+    const selectedFarm=farmingLayer(),farm=!config.presentation||selectedFarm?.kind==='forest'?selectedFarm:undefined;
     for(const layer of config.farming?.layers??[]){
       if(layer.id===farm?.id)continue;
       const id='asia-farming-'+layer.id;

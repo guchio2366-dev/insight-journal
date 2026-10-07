@@ -22,11 +22,12 @@ test('actual industry entries change the theme, map and reader while preserving 
   assert.deepEqual(entries.map(b=>b.dataset.theme),themes.filter(t=>t.field==='industry').map(t=>t.id));
   assert.equal(w.document.querySelectorAll('button[data-theme]').length,2);
   assert.equal(q('[data-africa-topic="regional"]'),null);
+  q('button[data-theme="copperbelt-connections"]').click();
   const copperView=q('.africa-map').getAttribute('viewBox');
   q('button[data-theme="casablanca-manufacturing"]').click();
   const casablanca=themes.find(t=>t.id==='casablanca-manufacturing');
   assert.equal(q('.africa-map').dataset.theme,casablanca.id);
-  assert.notEqual(q('.africa-map').getAttribute('viewBox'),copperView);
+  assert.equal(q('.africa-map').getAttribute('viewBox'),copperView);
   assert.equal(q('button[data-theme="casablanca-manufacturing"]').getAttribute('aria-pressed'),'true');
   assert.equal(q('button[data-theme="copperbelt-connections"]').getAttribute('aria-pressed'),'false');
   assert.ok(q('[data-theme-title]').textContent.includes(casablanca.title));
@@ -101,7 +102,8 @@ test('Africa build includes sitemap, all fields, countries, sources and CSV fall
  assert.equal(doc.querySelectorAll('main').length,1);
  assert.equal(doc.querySelectorAll('[data-country-path]').length,55);
  assert.equal(doc.querySelectorAll('[data-field]').length,4);
- assert.equal(doc.querySelector('[data-place]').options.length,55);
+ assert.equal(doc.querySelector('[data-place]').options.length,56);
+ assert.equal(doc.querySelector('[data-place]').options[0].value,'');
  assert.equal(doc.querySelector('[data-metric]').options.length,15);
  assert.ok(doc.querySelector('noscript').textContent.includes('CSV'));
  assert.ok(readFileSync(new URL('../../dist/sitemap.xml',import.meta.url),'utf8').includes('/insight-journal/atlas/africa/'));
@@ -127,7 +129,7 @@ test('Africa controller retains country across fields, compares, restores URL hi
  w.history.replaceState(null,'','?field=agriculture&metric=AG.YLD.CREL.KG&place=EGY&compare=NGA&year=2023&zoom=country');w.dispatchEvent(new w.PopStateEvent('popstate'));
  assert.equal(q('[data-selected-value]').textContent,'7,402');assert.ok(q('[data-comparison]').textContent.includes('1,549'));assert.notEqual(q('.africa-map').getAttribute('viewBox'),'0 0 1100 907');
  q('[data-field="nature"]').click();assert.ok(q('[data-year]').disabled);assert.ok(q('[data-trend]').textContent.includes('長期平均'));
- q('[data-reset]').click();assert.equal(q('[data-place]').value,'EGY');assert.equal(q('[data-compare]').value,'');assert.equal(q('[data-africa-topic="climate"]').getAttribute('aria-pressed'),'true');assert.equal(q('.africa-map').getAttribute('viewBox'),'0 0 1100 907');
+ q('[data-reset]').click();assert.equal(q('[data-place]').value,'');assert.equal(q('[data-compare]').value,'');assert.equal(q('[data-africa-topic="climate"]').getAttribute('aria-pressed'),'true');assert.equal(q('.africa-map').getAttribute('viewBox'),'0 0 1100 907');
  } finally {for(const k of Object.keys(previous))globalThis[k]=previous[k];w.happyDOM.abort();}
 });
 
@@ -169,6 +171,8 @@ test('each thematic comparison retains the source marks, all legends and named r
   }
   q('[data-theme-comparison]').click();q('[data-field="industry"]').click();
   assert.equal(new URL(w.location.href).searchParams.has('context'),false);
+  assert.equal(q('[data-africa-atlas]').dataset.overview,'true');
+  q('button[data-theme="copperbelt-connections"]').click();
   assert.equal(q('[data-theme-takeaway-detail]').textContent,themes.find(t=>t.field==='industry').takeaway);
  }finally{for(const k of Object.keys(previous))globalThis[k]=previous[k];w.happyDOM.abort();}
 });
@@ -181,8 +185,11 @@ test('theme entry aligns unselected countries and preserves explicit selection w
   w.document.write(html());
   for(const path of w.document.querySelectorAll('[data-country-path]'))path.getBBox=()=>({x:10,y:10,width:100,height:100});
   initializeAfricaAtlas();const q=s=>w.document.querySelector(s);
-  q('[data-field="agriculture"]').click();assert.equal(q('[data-place]').value,'CIV');
-  q('[data-field="industry"]').click();assert.equal(q('[data-place]').value,'ZMB');
+  q('[data-field="agriculture"]').click();assert.equal(q('[data-place]').value,'');
+  q('[data-field="industry"]').click();assert.equal(q('[data-place]').value,'');
+  assert.equal(q('[data-africa-industry-overview]').getAttribute('aria-pressed'),'true');assert.equal(w.document.querySelectorAll('[data-africa-industry-theme]').length,2);assert.equal(q('.africa-map').getAttribute('viewBox'),'0 0 1100 907');
+  q('[data-africa-industry-theme="casablanca-manufacturing"]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));assert.equal(q('[data-africa-atlas]').dataset.overview,'false');assert.equal(q('[data-place]').value,'');assert.equal(q('[data-theme-takeaway-detail]').textContent,themes.find(t=>t.id==='casablanca-manufacturing').takeaway);
+  q('[data-field="population"]').click();assert.equal(q('[data-place]').value,'');assert.equal(q('.africa-map').getAttribute('viewBox'),'0 0 1100 907');
   q('[data-place]').value='EGY';q('[data-place]').dispatchEvent(new w.Event('change'));
   q('[data-field="agriculture"]').click();assert.equal(q('[data-place]').value,'EGY');
   w.history.replaceState(null,'','?field=population&theme=urban-connections&place=EGY&compare=GHA&region=north&year=2021&zoom=theme');

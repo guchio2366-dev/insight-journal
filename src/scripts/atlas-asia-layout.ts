@@ -44,12 +44,8 @@ export function createAsiaLayout(root:HTMLElement){
  }
  notebook.addEventListener('change',placeCityPicker);
  const groups:{node:HTMLElement;owner:HTMLElement|null;wrapper:HTMLElement}[]=[];
- for(const node of root.querySelectorAll<HTMLElement>('.farming-statistics,[data-farm-trade],[data-industry-content],[data-trade-content],[data-social-content],[data-population-city-facts],[data-city-statistics]')){
+ for(const node of root.querySelectorAll<HTMLElement>('.farming-statistics,[data-farm-trade],[data-industry-content],[data-trade-content],[data-social-content],[data-population-city-facts]')){
   const owner=node.closest<HTMLElement>('[data-farming-panel],[data-industry-panel],[data-trade-panel],[data-social-panel],[data-population-reading],[data-city-panel]');
-  if(node.matches('[data-city-statistics]')){
-   const monthly=owner?.querySelector('.monthly-values'),source=owner?.querySelector('.climate-source');
-   if(source)node.append(source);if(monthly)node.append(monthly);
-  }
   const wrapper=root.ownerDocument.createElement('section');wrapper.className='asia-statistics-panel';wrapper.hidden=true;
   wrapper.append(node);statistics.append(wrapper);groups.push({node,owner,wrapper});
  }

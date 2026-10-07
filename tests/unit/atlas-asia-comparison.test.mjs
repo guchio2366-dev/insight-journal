@@ -262,3 +262,21 @@ test('米の個別図と都市選択には全色区分・年・単位を表示�
   assert.match(main.textContent,/小麦の収穫面積.*2020年.*ha\/格子/);assert.equal(main.querySelectorAll('i').length,3);
   assert.equal(fetches,0);
 });
+
+
+test('作物選択の比較元にも全作物・薄い家畜を残し、概略の凡例と選択輪郭を一致させる',async()=>{
+  const features=['rice','wheat'].map(id=>({type:'Feature',properties:{kind:'crop',id,color:id==='rice'?'#00ff00':'#ffaa00'},geometry:{type:'Polygon',coordinates:[]}}));
+  const {root,controller,state,config}=setup({...base,topic:'wheat'},{field:'natural',topic:'climate'},async()=>response({type:'FeatureCollection',features}));
+  config.presentation.farming={file:'overview.json',products:[{id:'rice',title:'米',kind:'crop',color:'#00ff00'},{id:'wheat',title:'小麦',kind:'crop',color:'#ffaa00'},{id:'cattle',title:'牛',kind:'livestock',color:'#aabbcc'}],labels:[{id:'cattle-0',kind:'livestock',color:'#aabbcc',coordinate:[100,30]}]};
+  controller.render(state);await waitForReading(root);
+  const legend=root.querySelector('[data-comparison-legend]');
+  for(const product of ['米','小麦','牛'])assert.ok(legend.textContent.includes(product));
+  assert.match(legend.textContent,/概略.*太い輪郭.*薄い点/);assert.doesNotMatch(legend.textContent,/ha\/格子/);
+  const map={sources:{},layers:{},getStyle(){return {};},getSource(id){return this.sources[id];},getLayer(id){return this.layers[id];},addSource(id,source){this.sources[id]=source;},addLayer(layer){this.layers[layer.id]=layer;},setLayoutProperty(id,name,value){(this.layers[id].layout??={})[name]=value;},setPaintProperty(id,name,value){this.layers[id].paint[name]=value;},setFilter(id,filter){this.layers[id].filter=filter;}};
+  await controller.show(map);
+  const shown=map.sources['asia-comparison-original'].data.features;
+  assert.deepEqual(JSON.parse(JSON.stringify(shown.filter(f=>f.properties.kind==='crop').map(f=>[f.properties.id,f.properties.selected]))),[['rice',false],['wheat',true]]);
+  assert.equal(shown.find(f=>f.properties.kind==='livestock').properties.opacity,.2);
+  assert.deepEqual(JSON.parse(JSON.stringify(map.layers['asia-comparison-original-line'].paint['line-width'])),['case',['boolean',['get','selected'],false],2.8,.85]);
+  assert.equal(map.layers['asia-comparison-original-area'].layout.visibility,'none');
+});
