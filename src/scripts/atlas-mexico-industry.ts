@@ -39,16 +39,19 @@ export function initMexicoIndustry(root:HTMLElement):void {
    }
    const markers=Array.from(svg.querySelectorAll<SVGGElement>('[data-mi-reading-markers] [data-mi-region-option]')).filter(marker=>!marker.hasAttribute('hidden'));
    if(!state.compare&&markers.length){
+    const topOffsets=new Map<string,number>();
     const labels=markers.map((marker,index)=>{
      const point=config.labels[marker.dataset.miRegionOption!],label=marker.querySelector<SVGTextElement>('[data-mi-region-label]')!;
      const onMap=point[0]>=parts[0]&&point[1]>=parts[1]&&point[0]<=parts[0]+parts[2]&&point[1]<=parts[1]+parts[3];label.toggleAttribute('hidden',!onMap);marker.querySelector('[data-mi-region-leader]')?.toggleAttribute('hidden',!onMap);
      const spans=Array.from(label.querySelectorAll<SVGTSpanElement>('tspan'));
      const width=Math.max(...spans.map(span=>typeof span.getComputedTextLength==='function'?span.getComputedTextLength()*scale:(span.textContent?.length??0)*14));
-     return {id:String(index),x:(point[0]-parts[0])*scale,y:(point[1]-parts[1])*scale,width,height:34};
+     const box=typeof label.getBBox==='function'?label.getBBox():null;
+     topOffsets.set(String(index),box?box.y-Number(label.getAttribute('y')):-13/scale);
+     return {id:String(index),x:(point[0]-parts[0])*scale,y:(point[1]-parts[1])*scale,width,height:box?box.height*scale:34};
     }).filter(label=>label.x>=0&&label.y>=0&&label.x<=parts[2]*scale&&label.y<=parts[3]*scale);
     for(const position of layoutMexicoIndustryLabels(labels,{width:parts[2]*scale,height:parts[3]*scale})){
      const marker=markers[Number(position.id)],label=marker.querySelector<SVGTextElement>('[data-mi-region-label]')!,leader=marker.querySelector<SVGPathElement>('[data-mi-region-leader]')!;
-     const x=(position.left-position.x)/scale,y=(position.top-position.y+13)/scale;
+     const x=(position.left-position.x)/scale,y=(position.top-position.y)/scale-topOffsets.get(position.id)!;
      label.setAttribute('x',String(x));label.setAttribute('y',String(y));
      for(const span of label.querySelectorAll('tspan'))span.setAttribute('x',String(x));
      const edgeX=Math.max(position.left,Math.min(position.x,position.left+position.width)),edgeY=Math.max(position.top,Math.min(position.y,position.top+position.height));

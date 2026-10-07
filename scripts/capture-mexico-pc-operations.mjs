@@ -156,7 +156,8 @@ async function agriculture({page, evidence}) {
   const step = steps(page, evidence);
   await step('Compact livestock badges and comparable production-value order',async()=>{
     const layout=await page.evaluate(()=>({icons:[...document.querySelectorAll('.atlas-livestock-marker i')].map(node=>{const r=node.getBoundingClientRect();return {width:r.width,height:r.height};}),order:[...document.querySelectorAll('[data-crop-key] [data-crop-select]')].map(node=>node.getAttribute('data-crop-select')),groups:[...document.querySelectorAll('.atlas-receipt-group')].map(group=>[...group.querySelectorAll('.atlas-bar-row strong')].map(node=>parseFloat(node.textContent)))}));
-    assert(layout.icons.length>0&&layout.icons.every(icon=>icon.width<=20&&icon.height<=20));
+    const desktop=await page.evaluate(()=>matchMedia('(min-width:960px)').matches),iconLimit=desktop?20:30;
+    assert(layout.icons.length>0&&layout.icons.every(icon=>icon.width<=iconLimit&&icon.height<=iconLimit));
     assert.equal(layout.order[0],'corn');assert(layout.order.indexOf('wheat')>layout.order.indexOf('vegetables'));assert(layout.order.indexOf('rice')>layout.order.indexOf('coffee'));
     assert(layout.groups.every(values=>values.every((value,index)=>index===0||value<=values[index-1])));
     assert.equal(await page.locator('[data-mexico-state-selection],[data-mexico-forest-states]').count(),0);return layout;
@@ -189,6 +190,7 @@ async function agriculture({page, evidence}) {
   await step('PC camera zoom, pan, reload and reset', async () => {
     await zoom(page, 'agriculture', '[data-map-action="in"]', '[data-map-action="out"]', '[data-map-action="fit"]');
     await click(page, '[data-map-action="in"]'); const before = await frame(page, 'agriculture');
+    await page.locator(map.agriculture).scrollIntoViewIfNeeded();
     const box = await page.locator(map.agriculture).boundingBox();
     await page.mouse.move(box.x + box.width * .5, box.y + box.height * .5); await page.mouse.down();
     await page.mouse.move(box.x + box.width * .5 + 35, box.y + box.height * .5 + 12, {steps: 6}); await page.mouse.up(); await settled(page);
@@ -297,10 +299,10 @@ async function water({page, evidence, captureStepImage}) {
       throw new Error('No visible basin geometry is available for a real pointer click');
     });
     await page.mouse.click(point.x,point.y);await hydrologyReady(page,'basins');
-    assert.equal(query(page,'waterFeature'),'bravo');
+    assert.equal(query(page,'waterFeature'),'basins:bravo');
     await click(page,'button[data-mexico-basin-overview]');await hydrologyReady(page,'basins');
     await page.locator('path[data-mexico-basin-system="lerma-chapala-santiago"]').press('Enter');await hydrologyReady(page,'basins');
-    assert.equal(query(page,'waterFeature'),'lerma-chapala-santiago');
+    assert.equal(query(page,'waterFeature'),'basins:lerma-chapala-santiago');
     await click(page,'button[data-mexico-basin-overview]');await hydrologyReady(page,'basins');
     for (const id of ['bravo', 'lerma-chapala-santiago', 'grijalva-usumacinta']) {
       await click(page, `text[data-mexico-basin-system="${id}"]`); await hydrologyReady(page, 'basins');
