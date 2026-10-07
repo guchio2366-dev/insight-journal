@@ -36,7 +36,7 @@ const region=getOverviewRegion('west-asia');
     <div class={initialField==='natural'?'atlas-nature-tabs':initialField==='industry'?'industry-tab-row':initialField==='population'?'population-tabs':'atlas-water-tabs'} role="tablist" aria-label={`${field.label}の表示切替`}>{initialField==='industry'?topics.map(t=><button type="button" role="tab" data-west-topic-button={t.id} title={t.label} aria-controls="west-map-panel" aria-selected={t.id===initial.id} tabindex={t.id===initial.id?0:-1}>{t.label.replace('の付加価値','付加価値')}</button>):standardGroups.map(([g,label],i)=><button type="button" role="tab" id={`west-group-${i}`} aria-controls="west-map-panel" data-west-standard-group={g} data-west-group={initialField==='natural'?g:undefined} aria-pressed={i===0} aria-selected={i===0} tabindex={i===0?0:-1}>{label}</button>)}</div>
     {initialField==='population'&&<p class="west-control-status" data-west-control-status>人口分布を表示しています。</p>}
    </div>
-   {initialField==='natural'&&<div class="atlas-water-tabs west-subtabs" role="tablist" aria-label="水資源の表示切替" data-west-subgroup="水資源" hidden>{[['rivers','河川・地下水'],['annual-precipitation','年降水量の分布'],['precipitation','観測所の降水量'],['basins','河川の流域']].map(([id,label])=><button type="button" role="tab" data-west-topic-button={id} aria-controls="west-map-panel" aria-selected="false" tabindex="-1">{label}</button>)}</div>}
+   {initialField==='natural'&&<div class="atlas-water-tabs west-subtabs" role="tablist" aria-label="水資源の表示切替" data-west-subgroup="水資源" hidden>{[['rivers','河川・地下水'],['annual-precipitation','年降水量の分布'],['basins','河川の流域']].map(([id,label])=><button type="button" role="tab" data-west-topic-button={id} aria-controls="west-map-panel" aria-selected="false" tabindex="-1">{label}</button>)}</div>}
    <div class="atlas-primary-grid" id="west-map-panel" role="tabpanel" aria-label={`${field.label}の地図と解説`}>
     <section class="atlas-map-column" aria-labelledby="west-map-title">
      <h2 id="west-map-title" class="visually-hidden">{initial.label}</h2>
@@ -52,6 +52,7 @@ const region=getOverviewRegion('west-asia');
      {initialField==='natural'&&<div class="atlas-key west-water-items" data-west-water-items hidden><button type="button" data-west-topic-button="rivers">河川・湖</button><button type="button" data-west-topic-button="groundwater">地下水</button><button type="button" data-west-topic-button="desalination">淡水化と供給</button></div>}
      {initialField==='agriculture'&&['wheat','barley'].map(id=><div class="atlas-water-tabs west-cultivation" aria-label="栽培方法" role="tablist" data-west-cultivation={id} hidden={id!==initial.id}>{topics.filter(t=>t.id===id||t.id.startsWith(id+'-')).map(t=><button type="button" role="tab" data-west-topic-button={t.id} aria-selected={t.id===initial.id} tabindex={t.id===initial.id?0:-1}>{t.id===id?'収穫面積':t.id.endsWith('irrigated')?'灌漑栽培':'天水栽培'}</button>)}</div>)}</div>
      <div class="west-legend" data-west-legend aria-label="地図の凡例"></div>
+     <div class="west-related west-map-related" data-west-related><h3>この関係を地図で確かめる</h3>{westReading(initial).comparisons.map(c=><a href={withBase(`/atlas/west-asia/${westFields.find(f=>f.id===westTopics.find(t=>t.id===c.topic)!.field)!.route}/?topic=${c.topic}`)}>{c.label} →</a>)}</div>
      <div data-west-map-extras><p class="west-map-help" data-west-guide>地図の国・都市名を選ぶと、右側に解説を表示します。</p>
      <label class="west-settlement-picker" data-west-settlement-label hidden>掲載居住域<select data-west-settlement aria-label="掲載された集団・宗教を選択"><option value="">掲載域全体</option></select></label>
      <div class="west-map-lists">
@@ -64,7 +65,7 @@ const region=getOverviewRegion('west-asia');
      <button class="west-retry" data-west-retry hidden>資料を再読み込みする</button></div>
     </section>
     <aside class={`atlas-national west-reading ${initialField==='natural'?'atlas-nature-summary':initialField==='population'?'population-national':initialField==='industry'?'industry-national':'west-agri-reading'}`} data-field-national={initialField} aria-labelledby="west-detail-title">
-     <div data-west-detail><h2 id="west-detail-title">{initial.label}</h2><p><strong>{westReading(initial).message}</strong></p><p>{westReading(initial).reason}</p><div class="west-related west-reading-dock" data-west-related><h3>この関係を地図で確かめる</h3>{westReading(initial).comparisons.map(c=><a href={withBase(`/atlas/west-asia/${westFields.find(f=>f.id===westTopics.find(t=>t.id===c.topic)!.field)!.route}/?topic=${c.topic}`)}>{c.label} →</a>)}</div></div>
+     <div data-west-detail><h2 id="west-detail-title">{initial.label}</h2><p><strong>{westReading(initial).message}</strong></p><p>{westReading(initial).reason}</p></div>
      <div class="west-detail-controls" data-west-stat-controls>
       <label data-west-year-label>国別統計の年<select data-west-year aria-label="国別統計の年">{[2024,2023,2022,2021,2020].map(y=><option value={y}>{y}年</option>)}</select></label>
      </div>

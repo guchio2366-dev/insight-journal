@@ -175,13 +175,101 @@ async function snapshot(page, profile, topic, region = 'europe') {
     assert.ok(control.y >= measured.map.y && control.y + control.height <= measured.map.y + measured.map.height + 1);
     if (index) assert.ok(control.y >= measured.controls[index - 1].y + measured.controls[index - 1].height, 'Map controls retain fit / zoom in / zoom out order');
   }
+  // Retain all operation/geometry checks, photograph only this repair's states.
+  if(region!=='europe'||!['terrain-overview','contours','precipitation-250mm','drainage-river-reading','industry-overview','population-overview'].includes(topic))return measured;
   const filename = `${profile.name}-${region}-${topic}.png`;
-  const png = await page.screenshot({path: resolve(output, filename), fullPage: true, animations: 'disabled'});
+  const png = await page.screenshot({path: resolve(output, filename), fullPage: false, animations: 'disabled'});
   manifest.images.push({file: filename, sourceURL: page.url(), profile: profile.name, viewport: profile.viewport, render,
     dimensions: {width: png.readUInt32BE(16), height: png.readUInt32BE(20)}, measurements: measured,
     sha256: createHash('sha256').update(png).digest('hex')});
   await save();
   return measured;
+}
+
+async function agricultureClimateRepairs(page,profile){
+  await openEurope(page,'atlas/europe/agriculture/','normal');
+  const initialExtent=await page.locator('[data-eu-static]').getAttribute('viewBox');
+  assert.notEqual(initialExtent,'0 0 1200 1001','Agriculture starts closer to the main production regions');
+  assert.equal(await page.locator('[data-eu-farm-area]').evaluateAll(nodes=>nodes.filter(node=>node.style.display!=='none').length),16);
+  const labelCount=await page.locator('[data-eu-map-kind="crop"]:visible').count();
+  assert.ok(labelCount>0&&labelCount<=8,'Only representative concentration names are shown initially');
+  const anchors=()=>page.locator('.eu-label-dot').evaluateAll(nodes=>nodes.map(node=>[node.getAttribute('cx'),node.getAttribute('cy')]));
+  const initialAnchors=await anchors();
+  await snapshot(page,profile,'farming-initial');
+  await page.locator('[data-eu-layer="wheat"]').click();
+  await page.waitForFunction(()=>document.querySelector('[data-eu-map-place="wheat"]').getAttribute('aria-pressed')==='true');
+  assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'),initialExtent);
+  assert.deepEqual(await anchors(),initialAnchors,'A selection keeps the actual projected positions of every distribution');
+  assert.equal(await page.locator('[data-eu-farm-area]').evaluateAll(nodes=>nodes.filter(node=>node.style.display!=='none').length),16);
+  assert.equal(await page.locator('[data-eu-farm-outline="wheat"]').evaluateAll(nodes=>nodes.every(node=>node.style.display!=='none')),true);
+  const labels=await page.locator('[data-eu-map-kind="crop"]:visible').evaluateAll(nodes=>nodes.map(node=>({id:node.dataset.euMapPlace,opacity:Number(getComputedStyle(node).opacity)})));
+  for(const label of labels)assert.equal(label.opacity,label.id==='wheat'?1:.22);
+  await snapshot(page,profile,'farming-selected');
+  await page.locator('[data-eu-layer="dairy"]').click();
+  await page.waitForFunction(()=>document.querySelector('[data-eu-farm-measure]').value==='cattle-milk');
+  assert.equal(await page.locator('[data-eu-farm-measure] option').count(),1);
+  assert.match(await page.locator('[data-eu-subject-note]').textContent(),/乳牛.*未収録/);
+  assert.equal(await page.locator('[data-eu-farm-area]').evaluateAll(nodes=>nodes.filter(node=>node.style.display!=='none').length),16);
+  await page.locator('[data-eu-reset]').click();
+  assert.equal(new URL(page.url()).searchParams.get('farmExtent'),'full');
+  await page.waitForFunction(()=>document.querySelector('[data-eu-static]').getAttribute('viewBox')==='0 0 1200 1001');
+  await page.reload({waitUntil:'networkidle'});await ready(page);
+  assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'),'0 0 1200 1001');
+  await openEurope(page,'atlas/europe/nature/','normal');
+  const cityLabels=await page.locator('[data-eu-map-kind="city"]:visible').evaluateAll(nodes=>nodes.filter(node=>!node.classList.contains('is-point-only')).map(node=>{const style=getComputedStyle(node);return {name:node.textContent,background:style.backgroundColor,font:Number.parseFloat(style.fontSize)};}));
+  assert.ok(cityLabels.length<=8);
+  for(const label of cityLabels){assert.equal(label.background,'rgba(0, 0, 0, 0)');assert.ok(label.font>=12&&label.font<=13);}
+  const stationId=await page.locator('[data-eu-map-kind="city"].is-point-only:visible').first().getAttribute('data-eu-map-place');
+  assert.ok(stationId);
+  const point=page.locator(`[data-eu-map-kind="city"][data-eu-map-place="${stationId}"]`);
+  await page.bringToFront();await point.focus();
+  // Exercise real keyboard focus, with the pointer away from the station.
+  await page.mouse.move(5,5);await page.keyboard.press('Tab');await page.keyboard.press('Shift+Tab');
+  await page.waitForFunction(id=>{
+    const node=document.querySelector(`[data-eu-map-kind="city"][data-eu-map-place="${id}"]`);
+    return node&&document.activeElement===node&&Number.parseFloat(getComputedStyle(node).fontSize)===12;
+  },stationId,{timeout:5000});
+  const stationFocus=await point.evaluate(node=>({id:node.dataset.euMapPlace,active:document.activeElement===node,activeId:document.activeElement?.getAttribute('data-eu-map-place'),activeTag:document.activeElement?.tagName,documentFocus:document.hasFocus(),focus:node.matches(':focus'),focusVisible:node.matches(':focus-visible'),font:Number.parseFloat(getComputedStyle(node).fontSize),hidden:node.hidden,style:node.getAttribute('style')}));
+  manifest.checks.push({profile:profile.name,stationFocus});
+  await page.locator('[data-eu-city-choice]').selectOption('london');
+  await page.evaluate(()=>scrollTo(0,0));
+  assert.equal(await page.locator('#eu-city-heading').textContent(),'ロンドンの雨温図');
+  await snapshot(page,profile,'climate-selected');
+  const evidence=await page.locator('[data-city-reading="london"]').evaluate(node=>{
+    const reason=node.querySelector('[data-eu-climate-reason]'),farm=node.querySelector('.eu-climate-farming>p'),reader=node.closest('[data-eu-climate-reader]');
+    return {reason:reason.textContent,farmBottom:farm.getBoundingClientRect().bottom,reasonFont:Number.parseFloat(getComputedStyle(reason).fontSize),farmFont:Number.parseFloat(getComputedStyle(farm).fontSize),classificationFont:Number.parseFloat(getComputedStyle(node.querySelector('.eu-city-climate')).fontSize),farmHeadingFont:Number.parseFloat(getComputedStyle(node.querySelector('.eu-climate-farming h4')).fontSize),overflow:getComputedStyle(reader).overflowY,viewportHeight:innerHeight,duplicates:node.querySelectorAll('.eu-city-selected-note').length};
+  });
+  assert.match(evidence.reason,/大西洋.*偏西風.*海.*冬.*夏/);
+  assert.match(await page.locator('[data-city-reading="london"] .eu-city-reading-details').textContent(),/明瞭な乾季.*5\.7.*19\.0/s);
+  assert.ok(evidence.reasonFont>=14&&evidence.farmFont>=14);
+  assert.ok(evidence.classificationFont>=18&&evidence.farmHeadingFont>=17,'Existing heading sizes are retained');
+  assert.equal(evidence.overflow,'visible');assert.equal(evidence.duplicates,0);
+  assert.ok(evidence.farmBottom<=evidence.viewportHeight-8,'The full farming paragraph is visible in the initial PC viewport: '+JSON.stringify(evidence));
+  assert.equal(stationFocus.active,true,'Keyboard focus returns to the actual station button: '+JSON.stringify(stationFocus));
+  assert.equal(stationFocus.font,12,'Keyboard focus reveals the station name: '+JSON.stringify(stationFocus));
+  manifest.checks.push({profile:profile.name,agricultureClimateEvidence:evidence});
+  // Read each actual city choice without taking additional screenshots. The
+  // cause must stay in the visible panel, ahead of the retained farming prose.
+  const cityChoices=await page.locator('[data-eu-city-choice] option').evaluateAll(nodes=>nodes.map(node=>node.value).filter(Boolean));
+  const geographyRecords=[];
+  manifest.checks.push({profile:profile.name,cityGeography:geographyRecords});
+  for(const cityId of cityChoices){
+    await page.locator('[data-eu-city-choice]').selectOption(cityId);
+    await page.waitForFunction(id=>!document.querySelector(`[data-city-reading="${id}"]`).hidden,cityId);
+    const cityEvidence=await page.locator(`[data-city-reading="${cityId}"]`).evaluate(node=>{
+      const reason=node.querySelector('[data-eu-climate-reason]'),farm=node.querySelector('.eu-climate-farming>p'),details=node.querySelector('.eu-city-reading-details');
+      return {id:reason.dataset.euClimateGeography,reason:reason.textContent,reasonBottom:reason.getBoundingClientRect().bottom,farmBottom:farm.getBoundingClientRect().bottom,reasonFont:Number.parseFloat(getComputedStyle(reason).fontSize),farmFont:Number.parseFloat(getComputedStyle(farm).fontSize),detailsClosed:!details.open,sources:details.querySelectorAll('a').length,viewportHeight:innerHeight};
+    });
+    geographyRecords.push(cityEvidence);
+    await save();
+    assert.equal(cityEvidence.id,cityId);
+    assert.match(cityEvidence.reason,/大西洋|海|内陸|平原|台地|高緯度|山地|日射/);
+    assert.ok(cityEvidence.reasonFont>=14&&cityEvidence.farmFont>=14);
+    assert.ok(cityEvidence.sources>=3&&cityEvidence.detailsClosed);
+    assert.ok(cityEvidence.reasonBottom<cityEvidence.farmBottom);
+    assert.ok(cityEvidence.farmBottom<=cityEvidence.viewportHeight-8,'Each full city reason/farming paragraph stays within the PC viewport: '+JSON.stringify(cityEvidence));
+  }
+  networkClean();
 }
 
 async function uniqueElevation(page) {
@@ -238,8 +326,10 @@ async function europeOperations(page, profile, render) {
   manifest.records.push(record); activeRecord = record;
   const normal = render === 'normal';
   await openEurope(page, 'atlas/europe/nature/?layer=terrain', render);
+  if(normal)await snapshot(page,profile,'terrain-overview');
   const history = await page.evaluate(() => history.length), svgExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
-  await page.locator('[data-eu-feature-select="alps"]').click();
+  assert.equal(await page.locator('[data-eu-feature-list]').isVisible(),false);
+  await page.locator('[data-eu-map-place="alps"][data-eu-map-kind="feature"]').click();
   const elevation = await settled(page), selectedPoint = new URL(page.url()).searchParams.get('point');
   assert.equal(selectedPoint, '9.5,46.6'); assert.match(elevation, /：2,283 m（ETOPO 2022）$/);
   assert.equal(await page.evaluate(() => history.length), history + 1);
@@ -251,6 +341,12 @@ async function europeOperations(page, profile, render) {
   assert.match(await page.locator('[data-eu-legend-title]').textContent(), /500m間隔/);
   assert.doesNotMatch(await page.locator(resultSelector).textContent(), /間隔|標高 m/);
   assert.deepEqual(await page.locator('[data-eu-legend-items] .eu-swatch').evaluateAll(nodes => nodes.slice(0, 2).map(node => getComputedStyle(node).backgroundColor)), ['rgb(184, 161, 130)', 'rgb(134, 103, 71)']);
+  assert.match(await page.locator('[data-eu-subject-image]').getAttribute('href'),/physical-v1\/elevation\.png$/);
+  assert.equal(new URL(page.url()).searchParams.has('feature'),false);
+  assert.equal(await page.locator('[data-eu-feature-list]').isVisible(),false);
+  assert.equal(await page.locator('[data-eu-map-kind="feature"]:visible').count(),0);
+  assert.equal(await page.locator('[data-eu-legend-items] > div').count(),15);
+  assert.match(await page.locator('[data-eu-legend-items]').textContent(),/0〜500m未満.*500〜1,000m未満.*4,500〜5,000m未満/s);
   await uniqueElevation(page);
   const readerCopy = await page.locator('[data-eu-subject-reader]').textContent();
   if (normal) await snapshot(page, profile, 'contours');
@@ -286,7 +382,8 @@ async function europeOperations(page, profile, render) {
   record.checks.push('metres separate from contour interval', 'same point and elevation across terrain/contours', 'single marker/result/legend', 'one history entry per selection', 'SVG extent retained', 'unselected back/forward', 'reload retains reader text', 'named comparison return', 'real map click and history');
 
   await openEurope(page, 'atlas/europe/nature/?layer=drainage', render);
-  await page.locator('[data-eu-feature-select="rhine"]').click(); await settled(page, '表示格子中心.*BasinATLAS');
+  assert.equal(await page.locator('[data-eu-feature-list]').isVisible(),false);
+  await page.locator('[data-eu-map-place="rhine"][data-eu-map-kind="feature"]').click(); await settled(page, '表示格子中心.*BasinATLAS');
   await page.waitForFunction(() => document.querySelector('[data-eu-drainage-selection]').style.display !== 'none');
   const selected = await drainageState(page); assert.ok(selected.point); assert.ok(selected.basin); assert.doesNotMatch(selected.result, /データなし/);
   const selectedFeedback = await feedbackPlacement(page);
@@ -319,7 +416,9 @@ async function europeOperations(page, profile, render) {
   });
   await page.mouse.click(londonPixel.x, londonPixel.y);
   const density = await settled(page, '（2020）'), sourcePoint = new URL(page.url()).searchParams.get('point'); assert.ok(sourcePoint);
-  const [longitude, latitude] = sourcePoint.split(',').map(Number); assert.ok(Math.abs(longitude + .1187) < .3 && Math.abs(latitude - 51.5019) < .3, sourcePoint);
+  const [longitude, latitude] = sourcePoint.split(',').map(Number);
+  // At the compact frame, one screen pixel spans about 0.2° near London.
+  assert.ok(Math.hypot(longitude + .1187, latitude - 51.5019) < .5, sourcePoint);
   await page.locator('[data-eu-comparison-link="population-terrain"]').click(); await page.waitForURL('**/nature/**'); await ready(page, 'europe', render);
   const targetValue = await settled(page), targetURL = new URL(page.url());
   assert.equal(targetURL.searchParams.get('feature'), 'alps'); assert.equal(targetURL.searchParams.get('point'), '9.5,46.6'); assert.equal(targetValue, elevation);
@@ -339,6 +438,24 @@ async function europeOperations(page, profile, render) {
 }
 
 async function stageOneOperations(page, profile) {
+  const quietFeatures=async(field)=>{
+    const names=await page.locator('[data-eu-map-kind="feature"]:visible:not(.is-point-only)').evaluateAll(nodes=>nodes.map(node=>{const s=getComputedStyle(node),r=node.getBoundingClientRect();return {id:node.dataset.euMapPlace,font:parseFloat(s.fontSize),background:s.backgroundColor,border:parseFloat(s.borderWidth),left:r.left,right:r.right,top:r.top,bottom:r.bottom};}));
+    assert.ok(names.length>0&&names.length<=4,field+' initial representative names');
+    for(const name of names){assert.ok(name.font>=13);assert.equal(name.background,'rgba(0, 0, 0, 0)');assert.equal(name.border,0);}
+    for(let i=0;i<names.length;i++)for(let j=i+1;j<names.length;j++){const a=names[i],b=names[j];assert.ok(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,field+' names do not overlap');}
+    const points=await page.locator('[data-eu-map-kind="feature"].is-point-only:visible').count();assert.ok(points>0,field+' keeps other real places');
+    const target=page.locator('[data-eu-map-kind="feature"].is-point-only:visible').first(),id=await target.getAttribute('data-eu-map-place');
+    const anchors=()=>page.locator('.eu-label-dot').evaluateAll(nodes=>nodes.map(node=>[node.getAttribute('cx'),node.getAttribute('cy')]));
+    const original=await anchors();await page.bringToFront();await page.mouse.move(5,5);await target.focus();
+    await page.keyboard.press('Tab');await page.keyboard.press('Shift+Tab');
+    await page.waitForFunction(id=>{const node=document.querySelector(`[data-eu-map-kind="feature"][data-eu-map-place="${id}"]`);return node&&document.activeElement===node&&parseFloat(getComputedStyle(node).fontSize)===13;},id,{timeout:5000});
+    assert.equal(await target.evaluate(node=>parseFloat(getComputedStyle(node).fontSize)),13,'Keyboard focus reveals the retained name size');
+    await page.keyboard.press('Enter');await ready(page);
+    assert.equal(new URL(page.url()).searchParams.get('feature'),id);
+    assert.deepEqual(await anchors(),original,'Name selection keeps every actual projected point');
+    assert.equal(await page.locator(`[data-eu-map-kind="feature"][data-eu-map-place="${id}"]`).getAttribute('aria-pressed'),'true');
+    manifest.checks.push({profile:profile.name,quietPlaceLabels:{field,names,otherPoints:points,keyboardSelected:id}});
+  };
   await openEurope(page, 'atlas/europe/nature/?layer=climate', 'normal');
   assert.equal(await page.locator('[data-eu-city-choice]').inputValue(), '');
   assert.equal(await page.locator('[data-eu-climate-overview]').isVisible(), true);
@@ -351,14 +468,70 @@ async function stageOneOperations(page, profile) {
     assert.equal(await climate.locator(selector).evaluate(node => node.closest('details') === null), true);
     assert.ok(await climate.locator(selector).evaluate(node => parseFloat(getComputedStyle(node.querySelector('p')).fontSize) >= 14));
   }
+  await page.locator('[data-eu-city-choice]').selectOption('');
+  assert.equal(await page.locator('[data-eu-climate-overview]').isVisible(), true);
+  assert.equal(await page.locator('[data-city-reading]:visible').count(), 0);
+  assert.equal(await page.locator('[data-eu-climate-statistics]').isVisible(), false);
+  await openEurope(page, 'atlas/europe/nature/?layer=precipitation', 'normal');
+  assert.equal(await page.locator('[data-eu-legend-items] > div').count(), 14);
+  assert.match(await page.locator('[data-eu-legend-items]').textContent(), /250未満.*3,000以上/s);
+  await snapshot(page, profile, 'precipitation-250mm');
+  await openEurope(page, 'atlas/europe/nature/?layer=drainage', 'normal');
+  await page.locator('[data-eu-map-place="rhine"][data-eu-map-kind="feature"]').click();
+  await page.waitForFunction(() => document.querySelector('[data-eu-basin-summary]').textContent.includes('ライン川'));
+  assert.match(await page.locator('[data-eu-basin-summary]').textContent(), /同じMAIN_BAS.*モデル区画/);
+  await snapshot(page, profile, 'drainage-river-reading');
+  await openEurope(page, 'atlas/europe/industry/?layer=hubs', 'normal');
+  assert.equal(new URL(page.url()).searchParams.has('feature'), false);
+  await snapshot(page, profile, 'industry-overview');
+  const industryExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
+  const industryPoints = await page.locator('[data-eu-feature-options] option').count();
+  await quietFeatures('industry');
+  await page.locator('[data-eu-industry-group="機械・輸送"]').click();
+  assert.equal(new URL(page.url()).searchParams.has('place'), false);
+  assert.equal(new URL(page.url()).searchParams.has('feature'), false);
+  assert.equal(await page.locator('[data-eu-feature-options] option').count(), industryPoints);
+  assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'), industryExtent);
+  await page.locator('[data-eu-industry-scope]').selectOption('country:DEU');
+  assert.equal(await page.locator('[data-eu-country-reader]').isVisible(), true);
+  assert.match(await page.locator('[data-eu-national-values]').textContent(), /18.94.*26.8.*63.62/s);
+  assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'), industryExtent);
+  await snapshot(page, profile, 'industry-country-group');
+  await page.locator('[data-eu-topic-field="industry"] [data-eu-topic="hubs"]:not([data-eu-industry-group])').click();
+  assert.equal(await page.locator('[data-eu-industry-scope]').inputValue(), 'region:all');
+  assert.equal(new URL(page.url()).searchParams.has('place'), false);
+  assert.equal(new URL(page.url()).searchParams.has('industryGroup'), false);
+  assert.equal(await page.locator('[data-eu-country-reader]').isVisible(), false);
+
+  await openEurope(page, 'atlas/europe/population/?layer=density', 'normal');
+  assert.equal(new URL(page.url()).searchParams.has('place'), false);
+  await snapshot(page, profile, 'population-overview');
+  const populationExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
+  await quietFeatures('population');
+  const [parisId] = await page.locator('[data-eu-feature-choice]').selectOption({label:'パリ'});
+  await settled(page, '（2020）');
+  assert.equal(await page.locator('[data-eu-subject-grid]').evaluate(node => !!node.closest('.eu-read-panel')), true);
+  assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'), populationExtent);
+  assert.equal(new URL(page.url()).searchParams.get('feature'), parisId);
+  await snapshot(page, profile, 'population-city-density');
   await openEurope(page, 'atlas/europe/population/?layer=ethnicity', 'normal');
   const extent = () => page.locator('[data-eu-static]').getAttribute('viewBox');
   const fullExtent = await extent();
   for (const name of ['case', 'category', 'area']) assert.equal(await page.locator(`[data-culture-${name}]`).inputValue(), '');
   assert.equal(await page.locator('[data-culture-value]').isVisible(), false);
+  const compositionCheck=async()=>{
+    const buttons=page.locator('[data-eu-composition]:visible');assert.equal(await buttons.count(),3);
+    const boxes=await buttons.evaluateAll(nodes=>nodes.map(node=>{const box=node.getBoundingClientRect();return {left:box.left,top:box.top,right:box.right,bottom:box.bottom,width:box.width,height:box.height,font:parseFloat(getComputedStyle(node).fontSize),svg:node.querySelector('svg').getAttribute('viewBox')};}));
+    for(const box of boxes){assert.ok(box.font>=14);assert.equal(box.svg,'0 0 56 56');assert.equal(box.width,boxes[0].width);}
+    for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){const a=boxes[i],b=boxes[j];assert.ok(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,'Composition labels do not overlap');}
+    assert.equal(await page.locator('[data-eu-culture-composition-key]').isVisible(),true);
+    assert.equal(await page.locator('[data-eu-composition-table]').count(),3);
+  };
+  await compositionCheck();
   await snapshot(page, profile, 'culture-overview');
-  await page.locator('[data-culture-case]').selectOption('england-wales-2021');
+  await page.locator('[data-eu-composition="ethnicity-E92000001"]').click();
   await page.waitForFunction(() => document.querySelectorAll('[data-culture-code]').length === 331);
+  assert.equal(await page.locator('[data-eu-composition]:visible').count(),0);
   for (const name of ['category', 'area']) assert.equal(await page.locator(`[data-culture-${name}]`).inputValue(), '');
   assert.equal(await extent(), fullExtent);
   await page.locator('[data-culture-category]').selectOption('ts021-17');
@@ -392,8 +565,10 @@ async function stageOneOperations(page, profile) {
   assert.match(await page.locator('[data-eu-origin-caption]').textContent(), /未選択/);
   await page.locator('[data-eu-comparison-return]').click(); await page.waitForURL('**/population/**'); await ready(page);
   assert.equal(await page.locator('[data-culture-case]').inputValue(), '');
+  await compositionCheck();
   await openEurope(page, 'atlas/europe/population/?layer=religion', 'normal');
   for (const name of ['case', 'category', 'area']) assert.equal(await page.locator(`[data-culture-${name}]`).inputValue(), '');
+  await compositionCheck();await snapshot(page,profile,'religion-overview');
   await openEurope(page, 'atlas/europe/agriculture/?layer=wheat', 'normal');
   const table = page.locator('[data-eu-farm-country-table]');
   await table.waitFor({state: 'visible'});
@@ -405,6 +580,21 @@ async function stageOneOperations(page, profile) {
   await table.locator('summary').click();
   assert.equal(await table.evaluate(node => node.open), true);
   assert.equal(await table.locator('[data-eu-farm-country-rows]').textContent(), values);
+  await table.locator('summary').click();
+  const farmingExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
+  await page.locator('select[data-eu-farm-country]').selectOption('DEU');
+  await page.waitForFunction(() => document.querySelectorAll('[data-eu-farm-share-chart] svg').length === 1);
+  assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'), farmingExtent);
+  assert.match(await page.locator('[data-eu-farm-share-status]').textContent(), /ドイツ.*2024年.*%/);
+  assert.equal(await page.locator('[data-eu-farm-three-columns] > section').count(), 3);
+  const columns = await page.locator('[data-eu-farm-three-columns] > section').evaluateAll(nodes => nodes.map(node => {const r=node.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width};}));
+  assert.ok(columns.every(column => Math.abs(column.y-columns[0].y) <= 1));
+  assert.ok(columns[1].x>columns[0].x && columns[2].x>columns[1].x);
+  const shareFont = await page.locator('[data-eu-farm-share-chart] svg text').first().evaluate(node => parseFloat(getComputedStyle(node).fontSize));
+  assert.ok(shareFont >= 14);
+  await snapshot(page, profile, 'farming-world-share');
+  await page.locator('select[data-eu-farm-country]').selectOption('');
+  assert.equal(await page.locator('[data-eu-farm-share-chart] svg').count(), 0);
   manifest.checks.push(`${profile.name}: visible full climate reasons/crops; no automatic census choice/fit; distribution/history/reload/comparison restoration; closed farming table retains values and honest missingness`);
   networkClean();
 }
@@ -435,22 +625,32 @@ try {
       const delta = {width: europe.map.width - us.map.width, height: europe.map.height - us.map.height, top: europe.map.y - us.map.y};
       manifest.comparisons.push({profile: profile.name, topic: 'climate', render: 'normal', europe, us, mapSizeDelta: delta});
       if (profile.viewport.width === 1440) assert.ok(Math.abs(delta.width) <= 2 && Math.abs(delta.height) <= 2 && Math.abs(delta.top) <= 2, `Desktop climate map geometry differs: ${JSON.stringify(delta)}`);
-      else manifest.limits.push({profile: profile.name, reason: 'Existing compact-PC layout difference, not exact US geometry parity: Europe retains a two-row region navigator and 1.65:1 columns; US uses one row and a 380px reader. Both normal renderers and relative map/legend/reader/control placement are checked.', mapSizeDelta: delta});
+      else {
+        assert.ok(Math.abs(delta.width) <= 2 && Math.abs(delta.height) <= 2 && Math.abs(delta.top) <= 2, `Compact PC climate map geometry differs: ${JSON.stringify({delta, europe: europe.map, us: us.map})}`);
+      }
       await europeOperations(page, profile, 'normal');
       await stageOneOperations(page, profile);
-      if (profile.viewport.width === 1024) await europeOperations(page, profile, 'explicit-static');
+      await agricultureClimateRepairs(page,profile);
+      if (profile.viewport.width === 1024) {
+        // Keep the static history checks independent of all preceding normal
+        // operations; Chromium caps a tab's accumulated session history.
+        const staticPage=await context.newPage();
+        try { await europeOperations(staticPage, profile, 'explicit-static'); }
+        finally { await staticPage.close(); }
+      }
     } finally { await context.close(); }
   }
-  networkClean(); assert.equal(manifest.images.length, 16); assert.equal(manifest.records.length, 3);
+  networkClean(); assert.equal(manifest.images.length, 12); assert.equal(manifest.records.length, 3);
   assert.ok(manifest.records.every(record => record.status === 'passed'));
   assert.equal(git('rev-parse', 'HEAD'), manifest.gitHead, 'Checkout changed during capture');
   assert.equal(git('rev-parse', 'HEAD:src'), manifest.gitSrcTree);
-  manifest.status = 'passed'; manifest.checks.push('16 normal-render screenshots', '2 normal PC operation profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
+  manifest.status = 'passed'; manifest.checks.push('12 viewport screenshots of terrain, elevation, precipitation, drainage, industry overview and population overview', 'Existing operations retained at 2 normal PC profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
   console.log(JSON.stringify({status: manifest.status, output, images: manifest.images.length, head: manifest.gitHead}));
 } catch (error) {
   manifest.status = 'failed'; manifest.failure = {message: String(error), stack: error.stack};
   if (activeRecord?.status === 'running') activeRecord.status = 'failed';
   console.error(String(error)); process.exitCode = 1;
+  if (process.env.GITHUB_ACTIONS) console.error(`::error title=Europe PC review::${String(error).replaceAll('%','%25').replaceAll('\r','%0D').replaceAll('\n','%0A')}`);
 } finally {
   if (browser) await browser.close();
   manifest.completedAt = new Date().toISOString(); await save();

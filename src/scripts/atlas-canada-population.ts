@@ -1,3 +1,4 @@
+import {layoutCanadaPopulationLabels} from './atlas-canada-population-labels';
 import {canadaLegacyFrame,canadaMapPath} from '../lib/atlas-canada-map-presentation';
 import {renderCanadaPopulationOverview} from './atlas-canada-population-overview';
 import {readCanadaPopulationState,writeCanadaPopulationState,canadaPopulationMapCamera,copyCanadaPopulationMapState,formatCanadaPopulationValue,canadaPopulationDensityColor,canadaPopulationNatureUrl,canadaPopulationIndustryUrl,canadaPopulationFrame,populationStorageKey,type CanadaPopulationState} from '../lib/atlas-canada-population';
@@ -95,8 +96,8 @@ export function initCanadaPopulation(root:HTMLElement){
   for(const a of root.querySelectorAll<HTMLAnchorElement>('[data-population-nature-link]'))a.href=canadaPopulationNatureUrl(new URL(location.href),new URL(a.dataset.populationNatureLink!,location.href),state).href;
   for(const a of root.querySelectorAll<HTMLAnchorElement>('[data-population-industry-link]'))a.href=canadaPopulationIndustryUrl(new URL(location.href),new URL(a.dataset.populationIndustryLink!,location.href),state,config.geometry,config.industryProvinces).href;
   try{localStorage.setItem(populationStorageKey,combinedUrl(new URL(location.href)).searchParams.toString());}catch{}
-  renderCanadaPopulationOverview(root,config,state,demographic,group=>{if(group)demographic={...demographic,group};const url=combinedUrl(new URL(location.href));if(group)url.searchParams.set('mapGroup','1');else url.searchParams.delete('mapGroup');commitUrl(url);});
-  alignQuantityLegend();
+  renderCanadaPopulationOverview(root,config,state,demographic,group=>{if(group)demographic={...demographic,group};const url=combinedUrl(new URL(location.href));if(group)url.searchParams.set('mapGroup','1');else url.searchParams.delete('mapGroup');commitUrl(url);},(id,level)=>{const url=combinedUrl(new URL(location.href));url.searchParams.delete(level==='cd'?'cma':'cd');url.searchParams.set(level,id);root.dataset.populationReadingFocus=level==='cd'?'region':'city';commitUrl(url);});
+  layoutCanadaPopulationLabels(root);alignQuantityLegend();
  }
  function commitUrl(url:URL){history.pushState(null,'',url);mapCamera=readCamera();state=readState(url);demographic=readCanadaDemographicsState(url,catalog);render();}
  function update(patch:Partial<CanadaPopulationState>){state={...state,...patch};if(state.metric==='density')state.year=2021;if(state.compare===state.cma)state.compare=null;const url=combinedUrl(new URL(location.href));if(patch.cma){root.dataset.populationReadingFocus='city';url.searchParams.delete('cd');}commitUrl(url);}
@@ -105,8 +106,10 @@ export function initCanadaPopulation(root:HTMLElement){
  for(const marker of root.querySelectorAll<SVGElement>('[data-population-map-cma]')){const choose=()=>update({cma:marker.dataset.populationMapCma});marker.addEventListener('click',choose);marker.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose();}});}
  for(const button of root.querySelectorAll<HTMLElement>('[data-population-locate]'))button.addEventListener('click',()=>update({cma:button.dataset.populationLocate,zoom:'south'}));
  $('[data-population-reset]').addEventListener('click',()=>{const u=new URL(location.href);for(const key of ['mapFrame','cd','cma','compare','only','zoom','demographicsReturn'])u.searchParams.delete(key);root.dataset.populationReadingFocus='overview';commitUrl(u);});
+ $('[data-population-whole]').addEventListener('click',()=>{const u=new URL(location.href);for(const key of ['mapFrame','cd','cma','compare','only','demographicsReturn'])u.searchParams.delete(key);u.searchParams.set('zoom','country');root.dataset.populationReadingFocus='overview';commitUrl(u);});
+ $('[data-population-clear-selection]').addEventListener('click',()=>{const u=new URL(location.href);for(const key of ['cd','cma','compare','only'])u.searchParams.delete(key);root.dataset.populationReadingFocus='overview';commitUrl(u);});
  const map=root.querySelector<SVGSVGElement>('[data-population-map]')!;
- const camera=(frame:number[],commit=true)=>{mapCamera=frame;map.setAttribute('viewBox',frame.join(' '));if(commit){const url=new URL(location.href);url.searchParams.set('mapFrame',frame.map(n=>Number(n.toFixed(3))).join(','));history.pushState(null,'',url);}};
+ const camera=(frame:number[],commit=true)=>{mapCamera=frame;map.setAttribute('viewBox',frame.join(' '));layoutCanadaPopulationLabels(root);if(commit){const url=new URL(location.href);url.searchParams.set('mapFrame',frame.map(n=>Number(n.toFixed(3))).join(','));history.pushState(null,'',url);}};
  for(const button of root.querySelectorAll<HTMLElement>('[data-population-scale]'))button.addEventListener('click',()=>{const [x,y,w,h]=map.getAttribute('viewBox')!.split(' ').map(Number),factor=button.dataset.populationScale==='in'?.7:1/.7;if(w*factor<30||w*factor>1800)return;camera([x+w*(1-factor)/2,y+h*(1-factor)/2,w*factor,h*factor]);});
  let drag:{x:number;y:number;frame:number[];moved:boolean}|null=null,ignoreClick=false;
  map.addEventListener('pointerdown',e=>{if(e.button!==0||e.pointerType==='touch')return;drag={x:e.clientX,y:e.clientY,frame:map.getAttribute('viewBox')!.split(' ').map(Number),moved:false};});
@@ -115,8 +118,9 @@ export function initCanadaPopulation(root:HTMLElement){
  map.addEventListener('click',e=>{if(ignoreClick){e.stopPropagation();ignoreClick=false;}},true);
  map.addEventListener('keydown',e=>{if(e.target!==map)return;const direction:Record<string,number[]>={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]},d=direction[e.key];if(d){e.preventDefault();const [x,y,w,h]=map.getAttribute('viewBox')!.split(' ').map(Number);camera([x+d[0]*w*.15,y+d[1]*h*.15,w,h]);}});
  window.addEventListener('popstate',()=>{mapCamera=readCamera();state=readState(new URL(location.href));demographic=readCanadaDemographicsState(new URL(location.href),catalog);render();});
- if(typeof ResizeObserver!=='undefined'){const observer=new ResizeObserver(alignQuantityLegend);observer.observe(root.querySelector('[data-population-map]')!);}
- window.addEventListener('resize',alignQuantityLegend);
+ if(typeof ResizeObserver!=='undefined'){const observer=new ResizeObserver(()=>{alignQuantityLegend();layoutCanadaPopulationLabels(root);});observer.observe(root.querySelector('[data-population-map]')!);}
+ window.addEventListener('resize',()=>{alignQuantityLegend();layoutCanadaPopulationLabels(root);});
+ document.fonts?.ready.then(()=>layoutCanadaPopulationLabels(root));
  render();
  if(typeof fetch==='function')fetch(config.regionsUrl).then(r=>{if(!r.ok)throw Error('Region geometry unavailable');return r.json();}).then(geo=>{
   if(!root.isConnected)return;

@@ -35,10 +35,11 @@ function fixture() {
     <p data-eu-farm-quick-summary hidden></p>
     <section data-eu-farm-numbers data-statistics-url="/insight-journal/assets/atlas/europe/farming-statistics-v1/statistics.json.gz">
       <p data-eu-farm-statistics-message role="status"></p><button data-eu-farm-statistics-retry hidden></button>
-      <div data-eu-farm-stat-controls hidden><select data-eu-farm-measure></select>
+      <div data-eu-farm-stat-controls hidden><select data-eu-farm-country>${options}</select><select data-eu-farm-measure></select>
         <select data-eu-farm-year>${Array.from({ length: 10 }, (_, i) => `<option value="${2024-i}">${2024-i}</option>`).join('')}</select>
         <select data-eu-farm-compare="0">${options}</select><select data-eu-farm-compare="1">${options}</select>
       </div>
+      <h4 data-eu-farm-share-title></h4><p data-eu-farm-share-status></p><div data-eu-farm-share-chart></div>
       <p data-eu-farm-measure-definition hidden></p><div data-eu-farm-stat-summary hidden></div>
       <details data-eu-farm-country-table hidden><div data-eu-farm-country-rows></div></details>
       <details data-eu-farm-series hidden><div data-eu-farm-series-rows></div></details>
@@ -144,6 +145,19 @@ test('Germany chicken stocks and France egg tonnage stay missing while meat, mil
     }
     assert.equal(cells(ui.row('FRA'))[0], '24,204,280');
     assert.match(ui.q('[data-eu-farm-stat-summary]').textContent, /牛の生乳生産量：24,204,280 t/);
+  } finally { await ui.close(); }
+});
+
+test('dairy exposes only raw cow milk and keeps national production distinct from cattle density', async () => {
+  const ui = setup();
+  try {
+    await ui.controller.update(state({ layer: 'dairy', place: 'AUT', farmMeasure: 'cattle-stocks' }));
+    assert.deepEqual([...ui.q('[data-eu-farm-measure]').options].map(option => option.value), ['cattle-milk']);
+    assert.equal(ui.q('[data-eu-farm-measure]').value, 'cattle-milk');
+    assert.equal(cells(ui.row('AUT'))[0], '4,020,700');
+    assert.match(ui.q('[data-eu-farm-stat-summary]').textContent, /牛の生乳生産量：4,020,700 t/);
+    assert.match(ui.q('[data-eu-farm-measure-definition]').textContent, /肉用・乳用.*生乳の細地域分布ではありません/);
+    assert.match(cells(ui.row('AUT'))[2], /^A：/);
   } finally { await ui.close(); }
 });
 
@@ -295,4 +309,28 @@ test('world shares use the publisher World row and show the denominator, year an
       assert.match(mismatch.q('[data-eu-farm-stat-summary]').textContent, /世界生産量比：分母または同年の値が未収録/);
     } finally { await mismatch.close(); }
   }
+});
+
+
+test('world-share chart keeps primary/comparison countries, exact current share and gaps in the published time series',async()=>{
+  const data=structuredClone(statistics);
+  data.countries.DEU.observations=data.countries.DEU.observations.filter(row=>!(row[0]==='wheat-production'&&row[1]===2019));
+  const ui=setup({data:JSON.stringify(data)});
+  try{
+    await ui.controller.update(state({place:'DEU',farmCompare:['FRA']}));
+    assert.equal(ui.q('[data-eu-farm-country]').value,'DEU');
+    assert.equal(ui.q('[data-eu-farm-share-chart]').querySelectorAll('svg').length,1);
+    assert.equal(ui.q('[data-eu-farm-share-chart]').querySelectorAll('path[data-share-country="DEU"]').length,2);
+    assert.equal(ui.q('[data-eu-farm-share-chart]').querySelectorAll('path[data-share-country="FRA"]').length,1);
+    const german=ui.q('[data-eu-farm-share-chart]').querySelectorAll('path[data-share-country="DEU"]');
+    assert.ok([...german].every(path=>!path.getAttribute('d').includes('NaN')));
+    assert.equal(ui.q('[data-eu-farm-share-chart]').querySelectorAll('[data-share-year="2019"]').length,1,'Only the observed French point remains for the missing German year');
+    assert.match(ui.q('[data-eu-farm-share-chart] svg').getAttribute('aria-label'),/同年|欠測/);
+    ui.select('[data-eu-farm-country]','ITA');assert.deepEqual(ui.selected,['ITA']);
+    await ui.controller.update(state({place:'',farmCompare:[]}));
+    assert.equal(ui.q('[data-eu-farm-share-chart]').children.length,0);
+    assert.match(ui.q('[data-eu-farm-share-status]').textContent,/統計対象国を選ぶ/);
+    await ui.controller.update(state({layer:'vegetables'}));
+    assert.equal(ui.q('[data-eu-farm-share-chart]').children.length,0,'No individual crop substitutes for an unsupported collection');
+  }finally{await ui.close();}
 });

@@ -1,10 +1,11 @@
+import {createCanadaElevationRaster,type CanadaElevationRasterConfig} from './atlas-canada-elevation-raster';
 import type { Map as LibreMap } from 'maplibre-gl';
 import {
   canadaLandformBounds as canadaNaturalBounds, canadaLandformSize as canadaNaturalSize,
   projectCanadaLandform as projectCanadaNatural, unprojectCanadaLandform as unprojectCanadaNatural,
 } from '../lib/atlas-canada-landform-map';
 import {
-  canadaNaturalGroupBounds, prepareCanadaNaturalLayer,
+  canadaNaturalGroupBounds, canadaNaturalParts, canadaNaturalPath, prepareCanadaNaturalLayer,
   type CanadaNaturalCollection, type CanadaNaturalContourLabel, type CanadaNaturalGroup, type CanadaNaturalLayer, type CanadaNaturalStation,
 } from '../lib/atlas-canada-natural-layer';
 
@@ -18,7 +19,7 @@ export interface CanadaNaturalController {
   destroy(): void;
 }
 type Frame = [number, number, number, number];
-interface Config { layer: CanadaNaturalLayer; geometryUrl: string; groups: CanadaNaturalGroup[]; stations: CanadaNaturalStation[]; climateLabels?: {id:string;coordinates:[number,number]}[]; contourLabels?: CanadaNaturalContourLabel[]; context: unknown; workerUrl: string; }
+interface Config { raster?:CanadaElevationRasterConfig; layer: CanadaNaturalLayer; geometryUrl: string; lazyGeometry?: boolean; groups: CanadaNaturalGroup[]; stations: CanadaNaturalStation[]; climateLabels?: {id:string;coordinates:[number,number]}[]; contourLabels?: CanadaNaturalContourLabel[]; context: unknown; workerUrl: string; }
 
 /** Selection belongs to the host page. Camera gestures stay local to this map. */
 export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?: boolean } = {}): CanadaNaturalController {
@@ -32,15 +33,21 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
   const labels = [...root.querySelectorAll<HTMLButtonElement>('[data-canada-natural-city]')];
   const contourLabels = [...root.querySelectorAll<HTMLElement>('[data-canada-natural-contour-label]')];
   const fullFrame: Frame = [0, 0, canadaNaturalSize.width, canadaNaturalSize.height];
+  const national=(config.context as CanadaNaturalCollection).features.find(feature=>feature.properties.code==='CAN');
+  const nationalPoints=national?canadaNaturalParts(national.geometry).flat():[canadaNaturalBounds[0],canadaNaturalBounds[1]];
+  const wholeBounds:CanadaNaturalCameraBounds=[Math.min(...nationalPoints.map(p=>p[0])),Math.min(...nationalPoints.map(p=>p[1])),Math.max(...nationalPoints.map(p=>p[0])),Math.max(...nationalPoints.map(p=>p[1]))];
   const [worldLeft, worldTop] = projectCanadaNatural([-180, 85.051]);
   const [worldRight, worldBottom] = projectCanadaNatural([180, -85.051]);
   const abort = new AbortController();
+  const raster=config.raster?createCanadaElevationRaster(root,fallback,config.raster,abort.signal):undefined;
   root.dataset.canadaNaturalRender = 'svg';
   let state: CanadaNaturalState = { selected: null, only: false };
   let frame: Frame = [...fullFrame];
   let geometry: CanadaNaturalCollection | undefined;
   let map: LibreMap | undefined;
   let ready = false, started = false, destroyed = false, fitted = true, dragged = false;
+  let loadFailed=false,fallbackPopulated=false;
+  let lastFilterKey:string|undefined,lastSelectedKey:string|undefined;
   let cameraKey = 'fit', cameraCommitPending = false, programmaticCamera = false;
   let loadTimer: ReturnType<typeof setTimeout> | undefined;
   let wheelTimer: ReturnType<typeof setTimeout> | undefined;
@@ -48,6 +55,17 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
   const emit = (name: string, detail: Record<string, unknown>) => root.dispatchEvent(new CustomEvent(name, { detail: { layer: config.layer, ...detail }, bubbles: true }));
   const select = (id: string) => { if (config.groups.some(group => group.id === id)) emit('canada-natural-select', { id }); };
   const listen = (target: EventTarget, name: string, handler: EventListener, options: AddEventListenerOptions = {}) => target.addEventListener(name, handler, { ...options, signal: abort.signal });
+  function populateLazyFallback(){
+    if(raster||!config.lazyGeometry||!geometry||fallbackPopulated)return;
+    for(const group of config.groups){
+      const shape=root.querySelector<SVGGElement>(`[data-canada-natural-shape="${group.id}"]`)!;
+      const area=document.createElementNS('http://www.w3.org/2000/svg','path');
+      area.setAttribute('class','canada-natural-area');area.setAttribute('fill',group.color);area.setAttribute('fill-rule','evenodd');area.setAttribute('vector-effect','non-scaling-stroke');
+      area.setAttribute('d',geometry.features.filter(feature=>String(feature.properties.id)===group.id).map(feature=>canadaNaturalPath(feature.geometry)).join(''));
+      shape.append(area);
+    }
+    fallbackPopulated=true;
+  }
 
   /** Move the complete Mercator viewport into the world; never clip its four edges separately. */
   function clampFrame(next: Frame): Frame {
@@ -111,7 +129,7 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
     if (!width || !height) return;
     const ratio = Math.min(width / frame[2], height / frame[3]);
     const left = (width - frame[2] * ratio) / 2, top = (height - frame[3] * ratio) / 2;
-    const occupied: number[][] = [[width - 60, 0, width, 183]];
+    const occupied: number[][] = [[width - 60, 0, width, 230]];
     const positions = new Map(config.stations.map(station => {
       const projected = ready && map ? map.project(station.coordinates as [number, number]) : null, point = projectCanadaNatural(station.coordinates);
       return [station.id, [projected?.x ?? (point[0] - frame[0]) * ratio + left, projected?.y ?? (point[1] - frame[1]) * ratio + top]];
@@ -185,7 +203,7 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
       if (element.hasAttribute('data-canada-natural-shape')) {
         const hidden = state.only && !!state.selected && id !== state.selected;
         element.toggleAttribute('hidden', hidden);
-        element.setAttribute('tabindex', hidden || ready ? '-1' : '0');
+        element.setAttribute('tabindex', hidden || ready || !!raster || config.lazyGeometry&&!geometry ? '-1' : '0');
       }
     }
     for (const element of root.querySelectorAll<HTMLElement | SVGElement>('[data-canada-natural-city],[data-canada-natural-static-city]')) {
@@ -193,19 +211,36 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
       element.classList.toggle('is-selected', id === state.city);
       element.setAttribute('aria-pressed', String(id === state.city));
     }
-    onlyControl.checked = state.only; onlyControl.disabled = !state.selected; focusButton.disabled = !state.selected;
-    if (map && ready) {
+    onlyControl.checked = state.only; onlyControl.disabled = !state.selected||!!config.lazyGeometry&&!geometry; focusButton.disabled = !state.selected||!!config.lazyGeometry&&!geometry;
+    if (map && ready && !raster) {
       const selected = ['==', ['get', 'id'], state.selected ?? '__none__'] as any;
       const all = ['has', 'id'];
       const filter = state.only && state.selected ? selected : all;
-      map.setFilter('canada-natural-fill', ['all', ['==', ['geometry-type'], 'Polygon'], filter] as any);
-      map.setFilter('canada-natural-boundaries', ['all', ['==', ['geometry-type'], 'Polygon'], filter] as any);
-      map.setFilter('canada-natural-lines', ['all', ['==', ['geometry-type'], 'LineString'], filter] as any);
-      map.setFilter('canada-natural-lines-hit', ['all', ['==', ['geometry-type'], 'LineString'], filter] as any);
-      map.setFilter('canada-natural-selected', selected);
+      const filterKey=state.only&&state.selected?state.selected:'all',selectedKey=state.selected??'none';
+      // Selection changes only the outline. Keep the large filled source and its
+      // all-distribution filters unchanged unless auxiliary isolation changes.
+      if(!config.lazyGeometry||lastFilterKey!==filterKey){
+        root.dataset.canadaNaturalPaint='pending';
+        map.setFilter('canada-natural-fill', ['all', ['==', ['geometry-type'], 'Polygon'], filter] as any);
+        map.setFilter('canada-natural-boundaries', ['all', ['==', ['geometry-type'], 'Polygon'], filter] as any);
+        map.setFilter('canada-natural-lines', ['all', ['==', ['geometry-type'], 'LineString'], filter] as any);
+        map.setFilter('canada-natural-lines-hit', ['all', ['==', ['geometry-type'], 'LineString'], filter] as any);
+        lastFilterKey=filterKey;
+      }
+      if(!config.lazyGeometry||lastSelectedKey!==selectedKey){
+        root.dataset.canadaNaturalPaint='pending';
+        if(config.lazyGeometry){
+          if(lastSelectedKey&&lastSelectedKey!=='none')map.setFeatureState({source:'canada-natural-groups',id:lastSelectedKey},{selected:false});
+          if(state.selected)map.setFeatureState({source:'canada-natural-groups',id:state.selected},{selected:true});
+        }else map.setFilter('canada-natural-selected',selected);
+        lastSelectedKey=selectedKey;
+      }
     }
+    if(raster&&geometry){const key=JSON.stringify([state.selected,state.only,ready]);if(lastFilterKey!==key){lastFilterKey=key;void raster.render(state.selected,state.only);}}
     const group = config.groups.find(item => item.id === state.selected);
-    status.textContent = group ? `${group.name}${state.only ? 'だけ表示。' : 'を選択。'} ${group.description}` : '地図か凡例で区分を選べます。';
+    const loading=root.querySelector<HTMLElement>('[data-canada-natural-loading]');if(loading)loading.hidden=!!geometry&&(fallbackPopulated||ready)&&root.dataset.canadaElevationOutlinePending!=='true';
+    const loadingText=root.querySelector<HTMLElement>('[data-canada-natural-loading-text]');if(loadingText)loadingText.textContent=root.dataset.canadaElevationOutlinePending==='true'?'選択した区分の輪郭を読み込み中…色面全体は表示済みです。':loadFailed?'500 m色面を表示できませんでした。背景の国境は標高分布ではありません。':geometry?'500 m色面を描画中…':'500 m色面を読み込み中…';
+    status.textContent = config.lazyGeometry&&!geometry ? loadFailed?'500 m色面を読み込めませんでした。再読み込みするか、地図データのリンクから確認してください。':'500 m色面を読み込み中です。背景の国境は標高分布ではありません。' : group ? `${group.name}${state.only ? 'だけ表示。' : 'を選択。'} ${group.description}` : '地図か凡例で区分を選べます。';
     drawLabels();
   }
 
@@ -225,8 +260,8 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
     commitCamera();
   }
   function focusSelected() {
-    if (!state.selected) return;
-    const bounds = geometry ? canadaNaturalGroupBounds(geometry, state.selected) : null;
+    if (!state.selected||config.lazyGeometry&&!geometry) return;
+    const bounds = config.raster?.groups.find(g=>g.id===state.selected)?.bounds ?? (geometry ? canadaNaturalGroupBounds(geometry, state.selected) : null);
     const path = [...root.querySelectorAll<SVGGElement>('[data-canada-natural-shape]')].find(element => element.dataset.canadaNaturalShape === state.selected);
     fitted = false;
     if (bounds) {
@@ -244,41 +279,59 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
     syncMapFrame();
     const pending = cameraCommitPending;
     clearTimeout(loadTimer); ready = false; map?.remove(); map = undefined;
+    populateLazyFallback();raster?.fallback();lastFilterKey=undefined;
     live.hidden = true; live.style.visibility = 'hidden'; fallback.style.visibility = 'visible'; fallback.removeAttribute('aria-hidden'); fallback.setAttribute('tabindex', '0');
+    root.dataset.canadaNaturalPaint=geometry||!config.lazyGeometry?'ready':'error';
     root.dataset.canadaNaturalRender = 'svg'; draw(); if (pending) commitCamera();
   }
   async function start() {
     if (started || destroyed || root.hidden || !stage.clientWidth) return;
-    started = true;
-    if (new URL(location.href).searchParams.get('render') === 'static') { root.dataset.canadaNaturalRender = 'svg'; return; }
+    started = true;loadFailed=false;
+    const staticMode=new URL(location.href).searchParams.get('render') === 'static';
+    if (staticMode&&!config.lazyGeometry) { root.dataset.canadaNaturalRender = 'svg'; return; }
+    if(config.lazyGeometry){root.dataset.canadaNaturalData='loading';root.querySelector<HTMLElement>('[data-canada-natural-retry]')?.setAttribute('hidden','');draw();}
     try {
+      if(raster){await raster.load();geometry={type:'FeatureCollection',features:[]};fallbackPopulated=true;}else{
       const geometryUrl = new URL(config.geometryUrl, location.href);
       if (geometryUrl.origin !== location.origin) throw new Error('Canada landform geometry must be local');
       const response = await fetch(geometryUrl.href, { signal: abort.signal });
       if (!response.ok) throw new Error(`Canada landform geometry ${response.status}`);
       geometry = prepareCanadaNaturalLayer(await response.json(), config.groups);
+      }
+      if(destroyed)return;
+      if(config.lazyGeometry){
+        if(staticMode)populateLazyFallback();
+        root.dataset.canadaNaturalData='ready';draw();
+      }
+      if(staticMode){root.dataset.canadaNaturalRender='svg';return;}
       const libre = await import('maplibre-gl');
       if (destroyed) return;
+      lastFilterKey=undefined;lastSelectedKey=undefined;
       libre.setWorkerUrl(config.workerUrl); libre.setWorkerCount(1); live.style.visibility = 'hidden'; live.hidden = false;
       map = new libre.Map({
         container: live, style: { version: 8, sources: {
           'canada-natural-context': { type: 'geojson', data: config.context as any },
-          'canada-natural-groups': { type: 'geojson', data: geometry as any, tolerance: 0 },
+          ...(raster?raster.style().sources:{'canada-natural-groups': { type: 'geojson', data: geometry as any, tolerance: 0, ...(config.lazyGeometry?{promoteId:'id'}:{}) }}),
         }, layers: [
           { id: 'canada-natural-ocean', type: 'background', paint: { 'background-color': '#e4eff0' } },
           { id: 'canada-natural-context-fill', type: 'fill', source: 'canada-natural-context', paint: { 'fill-color': '#edece5' } },
           { id: 'canada-natural-context-line', type: 'line', source: 'canada-natural-context', paint: { 'line-color': '#94aaaa', 'line-width': .7 } },
-          { id: 'canada-natural-fill', type: 'fill', source: 'canada-natural-groups', filter: ['==', ['geometry-type'], 'Polygon'], paint: { 'fill-color': ['get', 'color'], 'fill-opacity': 1 } },
-          { id: 'canada-natural-boundaries', type: 'line', source: 'canada-natural-groups', filter: ['==', ['geometry-type'], 'Polygon'], paint: { 'line-color': '#69796e', 'line-width': .35 } },
+          ...(raster?raster.style().layers:[{ id: 'canada-natural-fill', type: 'fill', source: 'canada-natural-groups', filter: ['==', ['geometry-type'], 'Polygon'], paint: { 'fill-color': ['get', 'color'], 'fill-opacity': 1 } },
+          { id: 'canada-natural-boundaries', type: 'line', source: 'canada-natural-groups', filter: ['==', ['geometry-type'], 'Polygon'], paint: { 'line-color': '#69796e', 'line-width': config.lazyGeometry?.25:.35, 'line-opacity':config.lazyGeometry?.32:1 } },
           { id: 'canada-natural-lines', type: 'line', source: 'canada-natural-groups', filter: ['==', ['geometry-type'], 'LineString'], paint: { 'line-color': ['get', 'color'], 'line-width': ['case',['==',['get','elevation_m'],500],.7,1.8], 'line-opacity': ['case',['==',['get','elevation_m'],500],.45,.9] } },
           { id: 'canada-natural-lines-hit', type: 'line', source: 'canada-natural-groups', filter: ['==', ['geometry-type'], 'LineString'], paint: { 'line-color': '#fff', 'line-width': 9, 'line-opacity': 0 } },
-          { id: 'canada-natural-selected', type: 'line', source: 'canada-natural-groups', filter: ['==', ['get', 'id'], '__none__'], paint: { 'line-color': ['case', ['==', ['geometry-type'], 'LineString'], ['get', 'color'], '#243f4c'], 'line-width': 3 } },
-        ] }, bounds: canadaNaturalBounds, fitBoundsOptions: { padding: 0 },
+          { id: 'canada-natural-selected', type: 'line', source: 'canada-natural-groups', filter: config.lazyGeometry?['==',['geometry-type'],'Polygon']:['==', ['get', 'id'], '__none__'], paint: { 'line-color': ['case', ['==', ['geometry-type'], 'LineString'], ['get', 'color'], '#243f4c'], 'line-width': 3, 'line-opacity':config.lazyGeometry?['case',['boolean',['feature-state','selected'],false],1,0]:1 } }]),
+        ] } as any, bounds: canadaNaturalBounds, fitBoundsOptions: { padding: 0 },
         minZoom: .5, maxZoom: 9, attributionControl: false, renderWorldCopies: false, scrollZoom: false,
         cooperativeGestures: true, locale: { 'CooperativeGesturesHandler.MobileHelpText': '地図は2本指で動かせます' },
         dragRotate: false, pitchWithRotate: false, touchPitch: false, maxPitch: 0, fadeDuration: 0,
       });
+      raster?.attach(map);lastFilterKey=undefined;
       map.touchZoomRotate.disableRotation();
+      map.on('idle',()=>{root.dataset.canadaNaturalPaint='ready';});
+      map.on('render',()=>{if(!raster&&lastSelectedKey!==undefined&&root.dataset.canadaNaturalSelectionFrame!==lastSelectedKey)root.dataset.canadaNaturalSelectionFrame=lastSelectedKey;});
+      map.on('resize',()=>{root.dataset.canadaNaturalPaint='pending';});
+      map.on('dataloading',()=>{root.dataset.canadaNaturalPaint='pending';});
       map.keyboard.disableRotation();
       loadTimer = setTimeout(fail, 15000);
       map.on('error', event => { console.warn('Canada landform map switched to the same-source SVG fallback:', event.error?.message); fail(); });
@@ -286,9 +339,10 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
       map.on('movestart', event => { if ('originalEvent' in event && event.originalEvent && !programmaticCamera) { fitted = false; cameraCommitPending = true; } });
       map.on('move', () => { syncMapFrame(); drawLabels(); });
       map.on('moveend', () => { syncMapFrame(); drawLabels(); if (cameraCommitPending && !programmaticCamera) commitCamera(); setTimeout(() => { dragged = false; }, 0); });
-      map.on('click', ['canada-natural-fill', 'canada-natural-lines-hit'], event => { if (!dragged) select(String(event.features?.[0]?.properties?.id ?? '')); });
-      map.on('mouseenter', 'canada-natural-fill', () => { if (map) map.getCanvas().style.cursor = 'pointer'; });
-      map.on('mouseleave', 'canada-natural-fill', () => { if (map) map.getCanvas().style.cursor = ''; });
+      if(raster)map.on('click',event=>{if(!dragged){const id=raster.hit(event.lngLat.lng,event.lngLat.lat);if(id)select(id);}});
+      else map.on('click', ['canada-natural-fill', 'canada-natural-lines-hit'], event => { if (!dragged) select(String(event.features?.[0]?.properties?.id ?? '')); });
+      if(!raster)map.on('mouseenter', 'canada-natural-fill', () => { if (map) map.getCanvas().style.cursor = 'pointer'; });
+      if(!raster)map.on('mouseleave', 'canada-natural-fill', () => { if (map) map.getCanvas().style.cursor = ''; });
       listen(map.getCanvas(), 'webglcontextlost', fail);
       map.once('load', () => {
         if (destroyed || !map) return;
@@ -301,7 +355,7 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
           programmaticCamera = false; draw();
         }
       });
-    } catch (error) { console.warn('Canada landform renderer could not start:', error instanceof Error ? error.stack : String(error)); fail(); }
+    } catch (error) { console.warn('Canada landform renderer could not start:', error instanceof Error ? error.stack : String(error));if(config.lazyGeometry&&!geometry){loadFailed=true;root.dataset.canadaNaturalData='error';root.querySelector<HTMLElement>('[data-canada-natural-retry]')?.removeAttribute('hidden');} fail(); }
   }
 
   listen(root, 'click', event => {
@@ -320,6 +374,8 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
   });
   listen(onlyControl, 'change', () => emit('canada-natural-only', { only: onlyControl.checked }));
   listen(root.querySelector('[data-canada-natural-reset]')!, 'click', () => { fit(); emit('canada-natural-reset', {}); });
+  const wholeButton=root.querySelector('[data-canada-natural-whole]');if(wholeButton)listen(wholeButton,'click',()=>{restoreCamera(wholeBounds);commitCamera();});
+  const retry=root.querySelector('[data-canada-natural-retry]');if(retry)listen(retry,'click',()=>{started=false;void start();});
   for (const button of root.querySelectorAll<HTMLButtonElement>('[data-canada-natural-zoom]')) listen(button, 'click', () => zoom(button.dataset.canadaNaturalZoom as 'in' | 'out'));
   listen(focusButton, 'click', focusSelected);
   listen(stage, 'wheel', event => {
@@ -346,6 +402,7 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
   }, { passive: false });
 
   let drag: { x: number; y: number; frame: Frame; pointerId: number } | undefined;
+  if(raster)listen(fallback,'click',event=>{if(dragged||ready)return;const mouse=event as MouseEvent,point=fallback.createSVGPoint();point.x=mouse.clientX;point.y=mouse.clientY;const p=point.matrixTransform(fallback.getScreenCTM()!.inverse()),[lon,lat]=unprojectCanadaNatural([p.x,p.y]),id=raster.hit(lon,lat);if(id)select(id);});
   listen(fallback, 'pointerdown', event => {
     const pointer = event as PointerEvent;
     if (ready || pointer.button !== 0 || pointer.pointerType === 'touch') return;
@@ -383,8 +440,8 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
   root.querySelector('[data-canada-natural-static-contours]')?.setAttribute('hidden', '');
   draw(); if (!options.deferStart) void start();
   return {
-    render(next) { const selected = config.groups.some(group => group.id === next.selected) ? next.selected : null; state = { selected, only: !!next.only && !!selected, city: next.city ?? state.city ?? null }; if ('bounds' in next) restoreCamera(next.bounds ?? null); draw(); if (!root.hidden) { map?.resize(); if (ready && fitted) fit(); void start(); } },
+    render(next) { const selected = config.groups.some(group => group.id === next.selected) ? next.selected : null; state = { selected, only: !!next.only && !!selected, city: next.city ?? state.city ?? null }; if ('bounds' in next) restoreCamera(next.bounds ?? null); draw(); if (!root.hidden) { if(!raster){map?.resize(); if (ready && fitted) fit();} void start(); } },
     reset: fit, zoom, focusSelected,
-    destroy() { destroyed = true; abort.abort(); clearTimeout(loadTimer); clearTimeout(wheelTimer); resize?.disconnect(); visibility?.disconnect(); map?.remove(); map = undefined; },
+    destroy() { destroyed = true; abort.abort();raster?.destroy(); clearTimeout(loadTimer); clearTimeout(wheelTimer); resize?.disconnect(); visibility?.disconnect(); map?.remove(); map = undefined; },
   };
 }

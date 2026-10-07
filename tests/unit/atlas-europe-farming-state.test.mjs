@@ -1,8 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { farmingPresentation } from '../../src/lib/atlas-europe-farming.ts';
-import { readEuropeState, writeEuropeState } from '../../src/lib/atlas-europe-view.ts';
+import { farmingPresentation, updateFarmingMap } from '../../src/lib/atlas-europe-farming.ts';
+import { readEuropeState, writeEuropeState, europeFarmingInitialBounds } from '../../src/lib/atlas-europe-view.ts';
+import { europeFarmAvailableMetrics } from '../../src/data/atlas/europe/farming-statistics.ts';
 
 const json = path => JSON.parse(readFileSync(new URL(`../../${path}`, import.meta.url)));
 const countries = json('src/data/atlas/europe/countries.json');
@@ -31,6 +32,28 @@ test('初回は品目未選択で作物と畜産を同時表示する', () => {
   assert.equal(Object.hasOwn(state, 'showLivestock'), false);
 });
 
+test('主要生産地域の初期拡大と明示した欧州全域を区別して保存する',()=>{
+  assert.deepEqual(europeFarmingInitialBounds,[[-12,35],[48,61]]);
+  assert.equal(read('').farmExtent,undefined);
+  const full=read('?farmExtent=full');assert.equal(full.farmExtent,'full');
+  assert.deepEqual(read(urlFor(full).search),full);
+  assert.equal(read('?farmExtent=north').farmExtent,undefined);
+  const url=writeEuropeState(urlFor(full),{...full,farmExtent:undefined});
+  assert.equal(url.searchParams.has('farmExtent'),false);
+});
+
+test('酪農は生乳だけの国別指標を読み、牛の頭数・分布を乳牛に転用しない',()=>{
+  const state=read('?layer=dairy'),view=farmingPresentation(state,items);
+  assert.equal(view.active,true);assert.equal(view.item,undefined);
+  assert.deepEqual(view.visible.map(item=>item.id),allIds);
+  assert.equal(view.selectedVisible,false);
+  const metrics=europeFarmAvailableMetrics('dairy');
+  assert.deepEqual(metrics.map(metric=>metric.id),['cattle-milk']);
+  assert.equal(metrics[0].unit,'t');assert.equal(metrics[0].itemCode,'882');
+  assert.equal(metrics[0].elementCode,'5510');
+  assert.deepEqual(read(urlFor(state).search),state);
+});
+
 test('通常の品目選択と再選択は他品目を残し、選択対象だけを識別する', () => {
   const initial = read('');
   for (const item of items) {
@@ -43,6 +66,28 @@ test('通常の品目選択と再選択は他品目を残し、選択対象だ�
     assert.deepEqual(farmingPresentation(selected, items), view);
   }
   assert.equal(farmingPresentation(initial, items).item, undefined);
+});
+
+test('作物選択時も畜産を残して薄く描き、概況で元の濃さに戻す', () => {
+  const areas=items.map(item=>({dataset:{euFarmArea:item.id},style:{}}));
+  const outlines=items.map(item=>({dataset:{euFarmOutline:item.id},style:{}}));
+  const root={querySelectorAll:selector=>selector==='[data-eu-farm-area]'?areas:outlines};
+  const sources=new Set(),paint=new Map();
+  const map={getLayer:id=>id==='land',getSource:id=>sources.has(id),addSource:id=>sources.add(id),addLayer:()=>{},setFilter:()=>{},setPaintProperty:(id,key,value)=>paint.set(`${id}.${key}`,value),moveLayer:()=>{}};
+  const data={type:'FeatureCollection',features:items.map(properties=>({type:'Feature',properties,geometry:{type:'Polygon',coordinates:[]}}))};
+  updateFarmingMap(root,map,data,read('?layer=wheat'));
+  assert.deepEqual(areas.map(path=>path.style.display),['','','','']);
+  assert.equal(areas[0].style.fillOpacity,'0.44');
+  assert.equal(areas[2].style.fillOpacity,'0.06');
+  assert.equal(areas[2].style.strokeOpacity,'0.45');
+  assert.equal(paint.get('eu-farm-livestock-fill.fill-opacity'),.06);
+  assert.equal(paint.get('eu-farm-livestock-line.line-opacity'),.45);
+  assert.equal(outlines[0].style.display,'');
+  updateFarmingMap(root,map,data,read('?layer=crops'));
+  assert.equal(areas[2].style.fillOpacity,'0.13');
+  assert.equal(areas[2].style.strokeOpacity,'0.85');
+  assert.equal(paint.get('eu-farm-livestock-fill.fill-opacity'),.13);
+  assert.equal(paint.get('eu-farm-livestock-line.line-opacity'),.85);
 });
 
 test('種類をOFFにしても品目の選択を保持し、もう一方の表示は維持する', () => {
@@ -111,10 +156,12 @@ test('単独表示中に別品目へ移ると前の品目を残さず、再読�
   assert.deepEqual(visibleIds(first), ['wheat']);
 });
 
-test('自然環境への表示変更は農畜産物を隠し、都市・地物・表示設定をURLに保存できる', () => {
-  const original = read('?layer=wheat&city=paris&feature=danube&crops=off&livestock=off');
+test('自然環境への表示変更は農畜産物を隠し、標高では地区名だけを解除して地点と表示設定を保存する', () => {
+  const original = read('?layer=wheat&city=paris&feature=danube&point=8.5,46.5&crops=off&livestock=off');
   for (const layer of ['climate','water','terrain','contours']) {
     const nature = Object.freeze({...original, layer});
+    const expected = {...nature};
+    if (layer === 'contours') delete expected.feature;
     const view = farmingPresentation(nature, items);
     assert.equal(view.active, false);
     assert.equal(view.single, false);
@@ -123,11 +170,14 @@ test('自然環境への表示変更は農畜産物を隠し、都市・地物�
     const natureUrl = urlFor(nature);
     assert.equal(natureUrl.pathname, '/atlas/europe/nature/');
     const reloaded = read(natureUrl.search);
-    assert.deepEqual(reloaded, nature);
+    assert.deepEqual(reloaded, expected);
     assert.equal(reloaded.city, 'paris');
-    assert.equal(reloaded.feature, 'danube');
+    assert.equal(reloaded.feature, layer === 'contours' ? undefined : 'danube');
+    assert.deepEqual(reloaded.point, original.point);
     const returned = read(urlFor({...reloaded, layer:original.layer}).search);
-    assert.deepEqual(returned, original);
+    const expectedReturn = {...original};
+    if (layer === 'contours') delete expectedReturn.feature;
+    assert.deepEqual(returned, expectedReturn);
     assert.equal(farmingPresentation(returned, items).item?.id, 'wheat');
   }
 });

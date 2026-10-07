@@ -80,11 +80,10 @@ test('regional agriculture, nature/water and population controls preserve the le
         assert.equal(d.querySelectorAll('[data-west-standard-group]').length,field==='agriculture'?2:field==='nature'?4:3);
         if(field==='nature'){
           const waterTopics=[...d.querySelectorAll('[data-west-subgroup="水資源"] button')];
-          assert.deepEqual(waterTopics.map(button=>button.textContent),['河川・地下水','年降水量の分布','観測所の降水量','河川の流域']);
-          assert.deepEqual(waterTopics.map(button=>button.dataset.westTopicButton),['rivers','annual-precipitation','precipitation','basins']);
-          assert.ok(waterTopics.every(button=>!button.disabled),'annual precipitation grid and the original station topic are separately available');
-          const rainfall=d.querySelector('[data-west-topic-button="precipitation"]');
-          assert.ok(rainfall&&!rainfall.disabled,'measured station rainfall is available as a water topic');
+          assert.deepEqual(waterTopics.map(button=>button.textContent),['河川・地下水','年降水量の分布','河川の流域']);
+          assert.deepEqual(waterTopics.map(button=>button.dataset.westTopicButton),['rivers','annual-precipitation','basins']);
+          assert.ok(waterTopics.every(button=>!button.disabled),'annual precipitation and river topics remain available');
+          assert.equal(d.querySelector('.west-subtabs [data-west-topic-button="precipitation"]'),null,'station monthly values remain in city climographs rather than the water tabs');
           assert.equal(d.querySelector('[data-west-unavailable="降水量"]'),null,'measured rainfall no longer uses the unavailable placeholder');
           assert.equal(d.querySelectorAll('[data-west-chart]').length,18,'the topic retains all 18 original station normal series');
         }
@@ -93,9 +92,9 @@ test('regional agriculture, nature/water and population controls preserve the le
         assert.equal(d.querySelectorAll(selector).length,field==='agriculture'?2:field==='nature'?4:3);
         if(field==='nature'){
           const waterTopics=[...d.querySelectorAll('[data-water-topics] button')];
-          assert.deepEqual(waterTopics.map(button=>button.dataset.waterView),['water','precipitation','seasonal-precipitation','basins']);
-          assert.deepEqual(waterTopics.map(button=>button.textContent),['河川・地下水','年降水量','月別降水量','河川の流域']);
-          assert.ok(waterTopics.every(button=>!button.disabled),'annual and monthly precipitation remain separate enabled topics');
+          assert.deepEqual(waterTopics.map(button=>button.dataset.waterView),['water','precipitation','basins']);
+          assert.deepEqual(waterTopics.map(button=>button.textContent),['河川・地下水','年降水量','河川の流域']);
+          assert.ok(waterTopics.every(button=>!button.disabled),'annual precipitation and river topics remain enabled; monthly values are retained in city climographs');
         }
       }
     }finally{await w.happyDOM.close();}
@@ -107,7 +106,8 @@ test('regional desktop CSS keeps normal maps at the reference aspect and keyboar
     const w=await page(region,'nature',width,true),d=w.document,c=configuration(region);
     try{
       assert.equal(w.getComputedStyle(d.querySelector('[data-atlas-shell]')).display,'grid',`${region} ${width}: side-by-side shell`);
-      assert.equal(Number.parseFloat(w.getComputedStyle(d.querySelector(c.frame)).aspectRatio),region.startsWith('asia/')&&width<1200?1.65:1.55,`${region} ${width}: normal map reference aspect`);
+      const compactAspect=width<1200&&(region==='europe'||region.startsWith('asia/'));
+      assert.equal(Number.parseFloat(w.getComputedStyle(d.querySelector(c.frame)).aspectRatio),compactAspect?1.65:1.55,`${region} ${width}: normal map reference aspect`);
       assert.equal((w.getComputedStyle(d.querySelector(c.grid)).gridTemplateColumns.match(/minmax\(/g)??[]).length,2,`${region} ${width}: map and reading retain two desktop tracks`);
       assert.ok(!['none','hidden'].includes(w.getComputedStyle(d.querySelector(c.reading)).display));
     }finally{await w.happyDOM.close();}
@@ -158,3 +158,4 @@ test('Europe shared overview relocation preserves original country summary, dest
     }finally{await w.happyDOM.close();}
   }
 });
+

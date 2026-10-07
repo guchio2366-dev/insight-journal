@@ -62,16 +62,18 @@ test('都市選択を既存国toolbarへ移し、選択値・イベント・気�
  assert.equal(picker.parentElement.hidden,false);assert.equal(select.value,'tokyo');window.happyDOM.abort();
 });
 
-test('1024pxの気候だけ都市選択を説明欄へ移し、幅・主題・focusの変更後も同じ選択とイベントを保つ',()=>{
+test('1024pxの未選択気候だけ都市選択を説明欄へ移し、選択後と幅・主題・focusの変更後も同じ選択とイベントを保つ',()=>{
  const window=new Window({width:1440,height:1000});window.document.body.innerHTML='<main data-asia-atlas><div class="asia-toolbar"></div><div data-asia-map-items><label data-city-picker><select data-city-select><option value="tokyo">東京</option></select></label></div><aside class="asia-reading-dock"></aside><section data-asia-statistics hidden></section></main>';
  const root=window.document.querySelector('main'),picker=root.querySelector('[data-city-picker]'),city=picker.querySelector('select'),toolbar=root.querySelector('.asia-toolbar'),dock=root.querySelector('.asia-reading-dock');let changes=0;
  city.addEventListener('change',()=>changes++);const layout=createAsiaLayout(root);
  try{
-  layout.render({field:'natural',topic:null,city:'tokyo'});assert.equal(picker.parentElement.parentElement,toolbar);
+  layout.render({field:'natural',topic:null,city:null});assert.equal(picker.parentElement.parentElement,toolbar);
   // Happy DOM dispatches resize/MQL changes synchronously. Start outside the
   // query so its initially false change-listener state observes both edges.
   window.happyDOM.setViewport({width:1024,height:768});assert.equal(picker.parentElement.parentElement,dock);assert.equal(city.value,'tokyo');
   city.dispatchEvent(new window.Event('change'));assert.equal(changes,1);
+  layout.render({field:'natural',topic:'climate',city:'tokyo'});assert.equal(picker.parentElement.parentElement,toolbar);assert.equal(dock.hidden,true);
+  layout.render({field:'natural',topic:'climate',city:null});assert.equal(picker.parentElement.parentElement,dock);assert.equal(dock.hidden,false);
   window.happyDOM.setViewport({width:1440,height:1000});assert.equal(picker.parentElement.parentElement,toolbar);
   window.happyDOM.setViewport({width:1024,height:768});assert.equal(picker.parentElement.parentElement,dock);
   layout.render({field:'natural',topic:'seasonal-precipitation'});assert.equal(picker.parentElement.parentElement,toolbar);
@@ -95,19 +97,33 @@ test('社会区分・発電施設の選択欄は元分野を離れると隠れ�
  window.happyDOM.abort();
 });
 
-test('都市の雨温図・月別表だけを全幅下へ移し、選択説明と気候区分は右に保つ',()=>{
+test('都市の雨温図の直下に気候説明を保ち、月別表・出典も右の同じ都市に保持する',()=>{
  const window=new Window();window.document.body.innerHTML='<div data-asia-atlas><div data-asia-map-legend></div><div data-asia-map-items></div><section data-asia-statistics hidden></section><aside><div data-reading-map-legend>全気候区分・1991–2020</div><article data-city-panel="tokyo"><figure data-city-statistics><svg><title>雨温図</title></svg></figure><section class="city-climate-reading"><h3 data-city-climate-class>Cfa</h3><p class="city-takeaway">夏に雨が多い</p></section><p class="climate-source">1991–2020年</p><details class="monthly-values"><summary>月別表</summary><table><tbody><tr><td>12.3℃</td></tr></tbody></table></details></article></aside></div>';
  const root=window.document.querySelector('[data-asia-atlas]'),layout=createAsiaLayout(root);
  layout.render({field:'natural',city:'tokyo'});
  assert.equal(root.querySelector('[data-asia-map-legend] [data-reading-map-legend]').textContent,'全気候区分・1991–2020');
- assert.equal(root.querySelector('[data-asia-statistics] svg title').textContent,'雨温図');
- assert.equal(root.querySelector('[data-asia-statistics] .monthly-values td').textContent,'12.3℃');
+ assert.equal(root.querySelector('aside [data-city-statistics] svg title').textContent,'雨温図');
+ assert.equal(root.querySelector('aside .monthly-values td').textContent,'12.3℃');
  assert.equal(root.querySelector('aside .city-climate-reading [data-city-climate-class]').textContent,'Cfa');
  assert.equal(root.querySelector('aside .city-takeaway').textContent,'夏に雨が多い');
- assert.equal(root.querySelector('[data-asia-statistics]').hidden,false);
+ assert.equal(root.querySelector('[data-city-statistics]').nextElementSibling.className,'city-climate-reading');
+ assert.equal(root.querySelector('aside .climate-source').textContent,'1991–2020年');
+ assert.equal(root.querySelector('[data-asia-statistics]').hidden,true);
  root.querySelector('[data-city-panel]').hidden=true;layout.render({field:'industry'});
  assert.equal(root.querySelector('[data-asia-statistics]').hidden,true);
  window.happyDOM.abort();
+});
+test('都市選択は右列先頭の図を表示し、比較リンクを地図下へ移してイベントを維持する',()=>{
+ const window=new Window();window.document.body.innerHTML='<main data-asia-atlas><div data-asia-map-items></div><section data-asia-statistics hidden></section><aside><div data-city-reading-host hidden><article data-city-panel="tokyo"><figure data-city-statistics>東京の雨温図</figure><section class="city-farming"><p>地域の出典付き本文</p><button data-compare="agriculture">同じ場所の農業</button></section></article></div><section class="asia-reading-dock"><div data-reading-dock-links><button data-dock-compare="population">人口</button></div><div data-comparison-return hidden><button data-comparison-back>戻る</button></div></section></aside></main>';
+ const root=window.document.querySelector('main'),button=root.querySelector('.city-farming button');let clicks=0;button.addEventListener('click',()=>clicks++);
+ const layout=createAsiaLayout(root);layout.render({field:'natural',city:'tokyo'});
+ assert.equal(root.querySelector('[data-city-reading-host]').hidden,false);assert.equal(root.querySelector('.asia-reading-dock').hidden,true);
+ assert.equal(root.querySelector('aside').firstElementChild,root.querySelector('[data-city-reading-host]'));
+ assert.equal(root.querySelector('[data-reading-dock-links]').parentElement,root.querySelector('[data-asia-map-items]'));
+ assert.equal(root.querySelector('[data-comparison-return]').parentElement,root.querySelector('[data-asia-map-items]'));
+ assert.ok(root.querySelector('[data-asia-map-items]').contains(button));button.click();assert.equal(clicks,1);
+ assert.match(root.querySelector('.city-farming').textContent,/地域の出典付き本文/);
+ layout.render({field:'natural',city:null});assert.equal(root.querySelector('[data-city-reading-host]').hidden,true);assert.equal(root.querySelector('.asia-reading-dock').hidden,false);window.happyDOM.abort();
 });
 
 test('気候と民族の操作ボタンは地図直下へ残し、正式名と既存イベントを維持する',()=>{

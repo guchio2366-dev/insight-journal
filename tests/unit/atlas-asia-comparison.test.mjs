@@ -7,7 +7,7 @@ import {startAsiaComparison,restoreAsiaComparison,writeAsiaAtlasState} from '../
 import {asiaPlaceReadings,choosePlaceReading,startPlaceComparison} from '../../src/data/atlas/asia-place-readings.ts';
 
 const built=await build({entryPoints:[resolve('src/scripts/atlas-asia-comparison.ts')],bundle:true,format:'iife',globalName:'AsiaComparison',platform:'browser',write:false,logLevel:'silent'});
-const context={countries:['CHN','JPN'],cities:[],bounds:[72,17,147,55],fields:['natural','agriculture','industry','population'],topics:{natural:['climate','precipitation'],agriculture:['wheat','overview'],industry:['trade-exports','power'],population:['density','urban','ethnicity']},details:{population:['tibetan','uc-selected','uc-other'],industry:['plant']},stories:{agriculture:['north-china-wheat']}};
+const context={countries:['CHN','JPN'],cities:[],bounds:[72,17,147,55],fields:['natural','agriculture','industry','population'],topics:{natural:['climate','precipitation','terrain'],agriculture:['wheat','overview'],industry:['trade-exports','power'],population:['density','urban','ethnicity']},details:{population:['tibetan','uc-selected','uc-other'],industry:['plant']},stories:{agriculture:['north-china-wheat']}};
 const originalUrl=new URL('https://example.org/atlas/asia/east-asia/');
 const base={field:'agriculture',topic:'wheat',place:'CHN',city:null,point:[115,37.8],camera:{lng:117,lat:35,zoom:4},back:null};
 
@@ -36,6 +36,26 @@ async function waitForReading(root){
   }
 }
 const response=data=>({ok:true,arrayBuffer:async()=>new TextEncoder().encode(JSON.stringify(data)).buffer});
+
+for(const [topic,kind,interval] of [['precipitation','rainfall',250],['terrain','terrain',500]])test(`東アジア${kind}の地図直下・比較凡例と元色面は同じ色帯を使う`,async()=>{
+ const requested=[],geometry={type:'FeatureCollection',features:[{type:'Feature',properties:{lower:0,upper:interval,color:'#123456'},geometry:{type:'Polygon',coordinates:[[[100,30],[110,30],[110,40],[100,30]]]}}]};
+ const original={...base,field:'natural',topic},app=setup(original,{field:'natural',topic:'climate'},async url=>{requested.push(url);return response(geometry);},true);
+ const {window,root,config,controller,state}=app;
+ try{
+  config.presentation[kind]={bands:{file:kind+'-bands.json.gz',lineFile:kind+'-aligned.json.gz',interval,breaks:[0,interval,2*interval],colors:['#123456','#789abc'],labels:[]}};
+  controller.render({...original,back:null});await new Promise(resolve=>setImmediate(resolve));
+  assert.match(root.querySelector('[data-reading-map-legend]').textContent,new RegExp(`0–${interval}.*${interval}–${(2*interval).toLocaleString('ja-JP')}`));
+  assert.equal(requested.length,0,'The visible legend uses metadata without downloading another copy of the geometry');
+  controller.render(state);await waitForReading(root);
+  assert.deepEqual([...root.querySelector('[data-comparison-compact-role=original]').querySelectorAll('i')].map(i=>i.style.backgroundColor),['#123456','#789abc']);
+  const map={sources:{},layers:{},getStyle(){return {};},getSource(id){return this.sources[id];},getLayer(id){return this.layers[id];},addSource(id,source){this.sources[id]=source;},addLayer(layer){this.layers[layer.id]=layer;},setLayoutProperty(id,name,value){(this.layers[id].layout??={})[name]=value;},setPaintProperty(){},setFilter(){}};
+  await controller.show(map);
+  assert.deepEqual(requested,['/asia-presentation-v1/'+kind+'-bands.json.gz']);
+  assert.deepEqual(JSON.parse(JSON.stringify(map.sources['asia-comparison-original'].data)),geometry);
+  assert.equal(map.sources['asia-comparison-original'].tolerance,0);
+  assert.equal(map.sources['asia-comparison-original-raster'],undefined);
+ }finally{await window.happyDOM.close();}
+});
 
 test('比較元の全色区分と比較先の全色区分を、年・単位とともに表示する',async()=>{
   const {root,controller,state}=setup(base,{field:'natural',topic:'climate'});
@@ -261,4 +281,22 @@ test('米の個別図と都市選択には全色区分・年・単位を表示�
   const deadline=Date.now()+5000;while(!main.querySelector('[data-comparison-compact-role="main"]')){assert.ok(Date.now()<deadline);await new Promise(resolve=>setImmediate(resolve));}
   assert.match(main.textContent,/小麦の収穫面積.*2020年.*ha\/格子/);assert.equal(main.querySelectorAll('i').length,3);
   assert.equal(fetches,0);
+});
+
+
+test('作物選択の比較元にも全作物・薄い家畜を残し、概略の凡例と選択輪郭を一致させる',async()=>{
+  const features=['rice','wheat'].map(id=>({type:'Feature',properties:{kind:'crop',id,color:id==='rice'?'#00ff00':'#ffaa00'},geometry:{type:'Polygon',coordinates:[]}}));
+  const {root,controller,state,config}=setup({...base,topic:'wheat'},{field:'natural',topic:'climate'},async()=>response({type:'FeatureCollection',features}));
+  config.presentation.farming={file:'overview.json',products:[{id:'rice',title:'米',kind:'crop',color:'#00ff00'},{id:'wheat',title:'小麦',kind:'crop',color:'#ffaa00'},{id:'cattle',title:'牛',kind:'livestock',color:'#aabbcc'}],labels:[{id:'cattle-0',kind:'livestock',color:'#aabbcc',coordinate:[100,30]}]};
+  controller.render(state);await waitForReading(root);
+  const legend=root.querySelector('[data-comparison-legend]');
+  for(const product of ['米','小麦','牛'])assert.ok(legend.textContent.includes(product));
+  assert.match(legend.textContent,/概略.*太い輪郭.*薄い点/);assert.doesNotMatch(legend.textContent,/ha\/格子/);
+  const map={sources:{},layers:{},getStyle(){return {};},getSource(id){return this.sources[id];},getLayer(id){return this.layers[id];},addSource(id,source){this.sources[id]=source;},addLayer(layer){this.layers[layer.id]=layer;},setLayoutProperty(id,name,value){(this.layers[id].layout??={})[name]=value;},setPaintProperty(id,name,value){this.layers[id].paint[name]=value;},setFilter(id,filter){this.layers[id].filter=filter;}};
+  await controller.show(map);
+  const shown=map.sources['asia-comparison-original'].data.features;
+  assert.deepEqual(JSON.parse(JSON.stringify(shown.filter(f=>f.properties.kind==='crop').map(f=>[f.properties.id,f.properties.selected]))),[['rice',false],['wheat',true]]);
+  assert.equal(shown.find(f=>f.properties.kind==='livestock').properties.opacity,.2);
+  assert.deepEqual(JSON.parse(JSON.stringify(map.layers['asia-comparison-original-line'].paint['line-width'])),['case',['boolean',['get','selected'],false],2.8,.85]);
+  assert.equal(map.layers['asia-comparison-original-area'].layout.visibility,'none');
 });

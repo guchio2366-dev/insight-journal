@@ -17,3 +17,5 @@
 @media(min-width:1600px){.canada-water-resources{grid-template-columns:minmax(0,1.35fr) minmax(400px,1fr)}}
 @media(max-width:1100px){.canada-water-resources{grid-template-columns:minmax(0,1fr)}.canada-water-map{max-height:65dvh}.canada-water-reading{padding:12px}}
 @media(max-width:650px){.canada-water-map{max-height:none}.canada-water-selection select{max-width:220px}.canada-nature .canada-water-legend button{min-height:36px}.canada-water-map-tools{right:5px;top:5px}}
+
+@media(min-width:960px){.canada-nature .canada-water-precipitation-key{font-size:14px;line-height:1.7;margin:7px 0}.canada-nature .canada-water-map-tools button{font-size:14px}}

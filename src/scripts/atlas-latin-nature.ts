@@ -1,5 +1,5 @@
 import {latinCountries} from '../lib/atlas-latin-america-geometry';
-import {latinNatureCases,latinNatureLayers,renderLatinNatureMap,renderLatinNatureLegend,renderLatinNatureNormals,natureCaseForPlace,natureCountryName,natureScopeForPlace,natureComparisonReading,escapeNatureHtml} from '../lib/atlas-latin-nature';
+import {latinNatureCases,latinNatureLayers,renderLatinNatureMap,renderLatinNatureLegend,renderLatinNatureNormals,natureCaseForPlace,natureCityCase,natureCountryName,natureScopeForPlace,natureComparisonReading,escapeNatureHtml} from '../lib/atlas-latin-nature';
 import {renderLatinAgricultureMap,renderLatinAgricultureLegend,agricultureLayerTitle} from '../lib/atlas-latin-agriculture';
 import {renderLatinPopulationMap,renderLatinPopulationLegend} from '../lib/atlas-latin-america-population';
 import {renderLatinIndustryMap,renderLatinIndustryLegend} from '../lib/atlas-latin-industry';
@@ -24,6 +24,9 @@ if(workspace){
   state.case=currentCaseId;
   const params=new URLSearchParams(writeLatinLearningState(state));
   params.set('case',currentCaseId);
+  // Foundation tabs and river selection share this page without changing climate state.
+  const current=new URLSearchParams(location.search);
+  for(const key of ['section','river']){const value=current.get(key);if(value)params.set(key,value);}
   const url=location.pathname+'?'+params.toString();
   if(push)history.pushState(null,'',url);else if(location.pathname+location.search!==url)history.replaceState(null,'',url);
  }
@@ -41,7 +44,7 @@ if(workspace){
   if(source.field==='agriculture')return renderLatinAgricultureMap(source,'nature-agriculture-source');
   if(source.field==='population')return renderLatinPopulationMap(source,'nature-population-source');
   if(source.field==='industry')return renderLatinIndustryMap(source,'nature-industry-source');
-  return renderLatinNatureMap(source,'nature-source');
+  return renderLatinNatureMap({...source,interactiveCities:false,cityScale:cityScale('[data-nature-source-map]')},'nature-source');
  }
  function sourceLegend(){
   const source=state.source!;
@@ -49,6 +52,17 @@ if(workspace){
   if(source.field==='population')return renderLatinPopulationLegend(source.layer);
   if(source.field==='industry')return renderLatinIndustryLegend(source.layer);
   return renderLatinNatureLegend(source.layer);
+ }
+ function cityScale(selector='[data-nature-map-host]'){return 900/Math.max(250,q<HTMLElement>(selector).getBoundingClientRect().width||900);}
+ function measureReader(){
+  const reader=q<HTMLElement>('.latin-reading');
+  workspace.style.setProperty('--latin-nature-reader-top',`${Math.round(reader.getBoundingClientRect().top+window.scrollY)}px`);
+ }
+ function resizeMap(){
+  q('[data-nature-map-host]').innerHTML=renderLatinNatureMap({...state,cityScale:cityScale(),interactiveCities:!state.source},'nature-main');
+  if(state.fallback)void fallbackMap(q('[data-nature-map-host]'),renderVersion);
+  if(state.source&&state.source.field==='nature'&&!(state.source.fallback??state.fallback))q('[data-nature-source-map]').innerHTML=sourceMap();
+  alignMapCaptions();measureReader();
  }
  function alignMapCaptions(){
   const captions=[q<HTMLElement>('[data-nature-primary-caption]'),q<HTMLElement>('[data-nature-source-caption]')];
@@ -63,12 +77,22 @@ if(workspace){
  async function fallbackMap(host:HTMLElement,version:number){
   const original=host.querySelector('svg');if(!original)return;
   const clone=original.cloneNode(true) as SVGSVGElement;
+  const points=original.querySelector('[data-nature-city-points]');
+  const interactivePoints=points?.querySelector('[data-nature-city-point][role="button"]');
+  if(interactivePoints)clone.querySelector('[data-nature-city-points]')?.remove();
   clone.setAttribute('xmlns','http://www.w3.org/2000/svg');
   try{
    for(const img of clone.querySelectorAll('image')){const href=img.getAttribute('href');if(href&&!href.startsWith('data:'))img.setAttribute('href',await inlineImage(href));}
-   if(version!==renderVersion)return;
+   if(version!==renderVersion||original!==host.querySelector('svg'))return;
    const img=document.createElement('img');img.className='latin-nature-fallback';img.alt=original.querySelector('title')?.textContent??'比較地図';img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(clone));img.setAttribute('data-nature-fallback','');
-   host.replaceChildren(img);
+   if(interactivePoints&&points){
+    const image=document.createElementNS('http://www.w3.org/2000/svg','image');
+    image.setAttribute('href',img.src);image.setAttribute('width',original.getAttribute('width')!);image.setAttribute('height',original.getAttribute('height')!);
+    image.setAttribute('data-nature-fallback','');image.setAttribute('aria-hidden','true');
+    // Keep the actual station controls and their focus; flatten only the distribution.
+    for(const child of [...original.children])if(child!==points&&child.localName!=='title')child.remove();
+    original.insertBefore(image,points);
+   }else host.replaceChildren(img);
   }catch{if(version===renderVersion){q('[data-nature-renderer]').textContent='地図画像を取得できません。元区分と観測所の数値一覧で確認できます。';workspace.dataset.natureRenderer='unavailable';}}
  }
  function render(push=false){
@@ -77,7 +101,7 @@ if(workspace){
   workspace.classList.toggle('is-comparison',comparison);
   q('[data-nature-panes]').classList.toggle('is-comparison',comparison);
   q<HTMLElement>('[data-nature-source-pane]').hidden=!comparison;
-  q<HTMLElement>('[data-nature-map-host]').innerHTML=renderLatinNatureMap(state,'nature-main');
+  q<HTMLElement>('[data-nature-map-host]').innerHTML=renderLatinNatureMap({...state,cityScale:cityScale(),interactiveCities:!comparison},'nature-main');
   q<HTMLElement>('[data-nature-legend-host]').innerHTML=renderLatinNatureLegend(state.layer);
   q<HTMLSelectElement>('[data-nature-place]').value=state.place;
   q<HTMLSelectElement>('[data-nature-scope]').value=state.scope;
@@ -112,8 +136,8 @@ if(workspace){
   population.href=latinLearningUrl(base,latinComparisonState({...state,source:undefined},'population','density'));
   population.textContent=`${natureCountryName(state.place)}の気候と人口密度を比べる`;
   industry.hidden=state.place!=='PAN';industry.href=latinLearningUrl(base,latinComparisonState({...state,source:undefined},'industry','canal'));
-  q('[data-nature-map-description]').textContent=comparison?'同じ範囲で元の分布と比較。代表例を選ぶと自然の通常表示に戻ります。':'5気候群の中にも雨季・乾季の違いがあります。右の観測所の月別平年値で確かめます。';
-  alignMapCaptions();
+  q('[data-nature-map-description]').textContent=comparison?'同じ範囲で元の分布と比較。代表例を選ぶと自然の通常表示に戻ります。':'5気候群の中にも雨季・乾季の違いがあります。地図の都市・観測所の点を選び、右の月別平年値で確かめます。';
+  alignMapCaptions();measureReader();
   q('[data-nature-renderer]').textContent=state.fallback?'静的画像表示（地図と同じ分布・凡例）':'';
   workspace.dataset.natureReady='true';workspace.dataset.natureLayer=state.layer;workspace.dataset.naturePlace=state.place;workspace.dataset.natureScope=state.scope;workspace.dataset.natureRenderer=state.fallback?'fallback':'svg';
   write(push);
@@ -124,14 +148,16 @@ if(workspace){
  q<HTMLSelectElement>('[data-nature-scope]').addEventListener('change',event=>{const scope=(event.target as HTMLSelectElement).value as LatinLearningState['scope'];let place=state.place;if(place!=='all'&&(scope==='central'||scope==='south')&&natureScopeForPlace(place,scope)!==scope)place=scope==='south'?'BRA':'CRI';state={...state,place,scope:scope==='country'&&place==='all'?'all':scope,source:undefined};currentCaseId=natureCaseForPlace(place).id;render(true);});
  q<HTMLInputElement>('[data-nature-only]').addEventListener('change',event=>{state={...state,only:(event.target as HTMLInputElement).checked};render(true);});
  workspace.addEventListener('click',event=>{
-  const target=(event.target as Element).closest<HTMLElement>('[data-nature-case],[data-nature-country]');if(!target)return;
-  if(target.dataset.natureCase){const selected=latinNatureCases.find(c=>c.id===target.dataset.natureCase)!;state={...state,place:selected.place,scope:selected.place==='all'?'all':state.scope==='all'?'all':selected.scope as LatinLearningState['scope'],only:false,source:undefined};currentCaseId=selected.id;render(true);}
+  const target=(event.target as Element).closest<HTMLElement>('[data-nature-case],[data-nature-country],[data-nature-city-point]');if(!target)return;
+  if(!state.source&&target.dataset.natureCityPoint){const city=natureCityCase(target.dataset.natureCityPoint);if(!city)return;const keepFocus=document.activeElement===target;state={...state,place:city.place,scope:natureScopeForPlace(city.place,state.scope),only:false,source:undefined};currentCaseId=city.id;render(true);q<HTMLElement>('.latin-reading-scroll').scrollTop=0;if(keepFocus)q<SVGElement>(`[data-nature-map-host] [data-nature-city-point="${city.city}"]`).focus({preventScroll:true});}
+  else if(target.dataset.natureCase){const selected=latinNatureCases.find(c=>c.id===target.dataset.natureCase)!;state={...state,place:selected.place,scope:selected.place==='all'?'all':state.scope==='all'?'all':selected.scope as LatinLearningState['scope'],only:false,source:undefined};currentCaseId=selected.id;render(true);}
   else if(!state.source&&target.dataset.natureCountry){state={...state,place:target.dataset.natureCountry};currentCaseId=natureCaseForPlace(state.place).id;render(true);}
  });
- workspace.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){const target=(event.target as Element).closest<SVGElement>('[data-nature-country]');if(target){event.preventDefault();target.dispatchEvent(new MouseEvent('click',{bubbles:true}));}}});
+ workspace.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){const target=(event.target as Element).closest<SVGElement>('[data-nature-country],[data-nature-city-point]');if(target){event.preventDefault();target.dispatchEvent(new MouseEvent('click',{bubbles:true}));}}});
  const restore=()=>{read();render();};
  window.addEventListener('popstate',restore);window.addEventListener('latin-section-change',restore);
- window.addEventListener('resize',alignMapCaptions);
+ window.addEventListener('resize',resizeMap);
  read();render();
- void document.fonts.ready.then(alignMapCaptions);
+ void document.fonts.ready.then(resizeMap);
+ requestAnimationFrame(measureReader);
 }

@@ -1,6 +1,8 @@
 ---
 import type { AsiaClimateCity } from '../../data/atlas/asia-climate-cities';
-interface Props { city: Omit<AsiaClimateCity, 'regionId'>; precipitationMax: number; countryName?: string }
+import {asiaRiceReading} from '../../data/atlas/asia-agriculture';
+import {asiaFarmInsights} from '../../data/atlas/asia-map-insights';
+interface Props { city: AsiaClimateCity; precipitationMax: number; countryName?: string }
 const { city, precipitationMax, countryName } = Astro.props;
 // Compact North American proportions; retain scales covering Asian stations.
 const left=34,right=286,top=18,bottom=148;
@@ -15,6 +17,7 @@ const annualRain=validRain.length===12?validRain.reduce((a,b)=>a+b,0):null;
 const temperatures=city.temperatureC.filter(v=>v!==null) as number[];
 const format=(v:number|null,unit:string)=>v===null?'欠測':`${v.toLocaleString('ja-JP',{minimumFractionDigits:1,maximumFractionDigits:1})} ${unit}`;
 const sourceLabel=city.countryCode==='TWN'?'台湾・中央気象署':'気象庁';
+const farmingReading=asiaFarmInsights[city.regionId];
 ---
 <div class="asia-climate-diagram"><figure data-city-statistics>
   <figcaption><strong data-climate-place>{city.name}{countryName&&` — ${countryName}`}</strong></figcaption>
@@ -37,7 +40,7 @@ const sourceLabel=city.countryCode==='TWN'?'台湾・中央気象署':'気象庁
     <p class="city-takeaway"><strong>{city.summary}</strong></p>
     <p class="city-class-description" data-city-class-description></p>
     <p>{city.reading}</p>
-    <details class="city-farming"><summary>周辺の農業</summary><button type="button" data-compare="agriculture">同じ場所で米の分布を見る →</button></details>
+    <section class="city-farming"><h4>地域の農林業と水の季節を読む</h4><p>{farmingReading.body}</p><p>{asiaRiceReading.relationship}</p><p>地域の参考：<a href={farmingReading.source}>農業と水の解説の出典</a>。この観測所の気候から、都市の作物や灌漑を決めることはできません。</p><button type="button" data-compare="agriculture">同じ場所で米の分布を見る →</button></section>
   </section>
   <p class="climate-source">{city.normalPeriod} · <a href={city.sourceUrl} title={city.sourceName} target="_blank" rel="noopener noreferrer">{sourceLabel}</a> · <a href="#asia-sources">気候区分の出典</a></p>
   <details class="monthly-values"><summary>月別の数値・観測地点</summary>

@@ -25,6 +25,8 @@ import mapLabels from '../../data/atlas/europe/map-labels.json';
 import climateWater from '../../data/atlas/europe/climate-water.json';
 
 import { majorClimateCities } from '../../lib/atlas-europe-annotations';
+import { europeIndustryCountries } from '../../lib/atlas-europe-industry';
+import { countryOverview, countryOverviewSource } from '../../data/atlas/europe/country-overviews';
 import { europeReaderCopy } from '../../lib/atlas-europe-reader';
 import '../../styles/atlas-europe.css';
 interface Props { field?: EuropeField }
@@ -41,7 +43,8 @@ const initialClimateReader = field==='nature';
 const climateOverview = europeReaderCopy(layers.find(l=>l.id==='climate')!);
 const initialFeatures = field==='population'?populationCities:field==='industry'?europeReadings.filter(r=>r.field==='industry'):[];
 const initialPointVisible = (p:{id:string;rank?:number}) => initialFeatures.some(f=>f.id===p.id)&&(p.rank??0)<=1;
-const config = { farmingAreas, geography, climateWater, countries, cities: cities.map(({ id, name, country, coordinates }) => ({ id, name, country, coordinates })), climate, wheat, wheatValues: withBase('/assets/atlas/europe/wheat-v1/values.bin.gz'), initialLayer: currentField.initial, layers, populationCities, readings:europeReadings, statistics };
+const industryOverviews = Object.fromEntries(europeIndustryCountries.map(code=>{const copy=countryOverview(code)!.topics.industry!;return [code,{...copy,sources:copy.sourceIds.map(id=>countryOverviewSource(id))}];}));
+const config = { industryOverviews, farmingAreas, geography, climateWater, countries, cities: cities.map(({ id, name, country, coordinates }) => ({ id, name, country, coordinates })), climate, wheat, wheatValues: withBase('/assets/atlas/europe/wheat-v1/values.bin.gz'), initialLayer: currentField.initial, layers, populationCities, readings:europeReadings, statistics };
 ---
 <BaseLayout title={`欧州の${currentField.label}`} description="欧州の自然環境・農林業・産業・人口を、国境をまたぐ分布と国別の数値で読み比べる地図。" compactAtlas>
   <div class="eu-atlas eu-workspace-root" data-europe-detail>
@@ -49,7 +52,7 @@ const config = { farmingAreas, geography, climateWater, countries, cities: citie
     <div class="eu-workspace atlas-explorer" data-field={field==='nature'?'natural':field}>
     <p class="eu-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / <a data-base-map href={withBase('/atlas/europe/')}>欧州</a> / <span data-eu-field-label>{currentField.label}</span></p>
     <header class="eu-heading visually-hidden"><div><p class="eu-kicker" data-eu-field-kicker>EUROPE · {field.toUpperCase()}</p><h1 data-eu-field-heading>{europeFieldHeadings[field]}</h1></div><p>西欧から東欧・ロシア西部まで。<br />地図上の名前を選び、分布と説明を読み比べます。</p></header>
-    <EuropeRegionNavigation />
+    <EuropeRegionNavigation industry={field==='industry'} />
     <nav class="eu-field-nav" aria-label="欧州地図の表示"><a data-atlas-overview-link href={withBase('/atlas/europe/overview/')}>概要</a>{[fields[1],fields[0],...fields.slice(2)].map(f=><a data-eu-field={f.initial} href={withBase(`/atlas/europe/${f.id}/`)} aria-current={field===f.id?'page':undefined}>{f.id==='industry'?'主要産業':f.label}</a>)}</nav>
     <EuropeLayoutControls position="above" {field} />
     <div class="eu-water-options" data-eu-water-options hidden role="tablist" aria-label="水資源の表示">
@@ -76,7 +79,7 @@ const config = { farmingAreas, geography, climateWater, countries, cities: citie
             <g class="eu-farming-selection">
               {farmingAreas.features.map(f=><g><path d={viewPath(f.geometry as any)} data-eu-farm-outline={f.properties.id} fill="none" stroke="#fffdf2" stroke-width="5" vector-effect="non-scaling-stroke" style="display:none"/><path d={viewPath(f.geometry as any)} data-eu-farm-outline={f.properties.id} fill="none" stroke="#173c48" stroke-width="2.5" vector-effect="non-scaling-stroke" style="display:none"/></g>)}
             </g>
-            {geography.features.map(f => <path d={viewPath(f.geometry)} class:list={['eu-outline', { 'eu-context': f.properties.kind === 'context' }]} data-eu-shape={f.properties.kind === 'europe' ? f.properties.code : undefined}><title>{countryName(f.properties.code)}</title></path>)}
+            {geography.features.map(f => <path d={viewPath(f.geometry)} class:list={['eu-outline', { 'eu-context': f.properties.kind === 'context' }]} data-eu-shape={f.properties.kind === 'europe' ? f.properties.code : undefined} />)}
             <g data-eu-climate-water style={initialClimateReader?'':'display:none'}>
               {climateWater.features.map(f=><path d={viewPath(f.geometry)} data-eu-water-mask={f.properties.id} fill="#e7eff1" fill-rule="evenodd" stroke="#8ca6aa" stroke-width="0.7" vector-effect="non-scaling-stroke"><title>{f.properties.name}の水面</title></path>)}
             </g>
@@ -94,7 +97,9 @@ const config = { farmingAreas, geography, climateWater, countries, cities: citie
         </div>
         <div class="eu-map-legend" data-eu-map-legend><p class="eu-water-note">河川・湖の位置、年降水量、流域区画を切り替えます。地下水は公開利用条件が未確認のため未収録です。</p></div>
         <div class="eu-item-list" data-eu-farming-list hidden={!agriculture} aria-label="農畜産物と林業を選ぶ">
+          <p class="eu-item-ranking-note">作物12区分・家畜4種の分布と、酪農の生乳統計です。生産額順位ではありません。野菜・果樹の集合区分と個別作物、生体数と肉・乳・卵を同列に順位付けしません。</p>
           {(['crop','livestock'] as const).map(kind=><section data-eu-farming-children={kind}><h3>{kind==='crop'?'作物':'畜産'}</h3><div>{farmingAreas.features.filter(f=>f.properties.kind===kind).map(f=><button type="button" data-eu-layer={f.properties.id} aria-pressed="false"><span class:list={['eu-item-swatch',{'is-livestock':kind==='livestock'}]} style={{'--item-color':f.properties.color}}></span>{f.properties.name}</button>)}</div></section>)}
+          <section data-eu-farming-children="dairy"><h3>酪農</h3><button type="button" data-eu-layer="dairy" aria-pressed="false">牛の生乳 · 国別統計</button></section>
           <section data-eu-farming-children="forest" hidden><h3>林業</h3><button type="button" data-eu-layer="treecover" aria-pressed="false">樹木被覆の分布 · 2021</button><button type="button" data-eu-layer="forest" aria-pressed="false">国別の森林面積比率 · 2023</button></section>
         </div>
         <div class="eu-map-candidates" data-eu-farm-candidates hidden aria-live="polite"></div>
@@ -108,10 +113,15 @@ const config = { farmingAreas, geography, climateWater, countries, cities: citie
         <div class="eu-farming-key" data-eu-farming-legend hidden={!agriculture}>
           <p><strong>主な栽培域・飼養地域 · 2020年頃</strong></p>
           <p>作物は実線、家畜は破線で示します。重なった色は新しい分類ではありません。品目を選ぶと、その分布の輪郭を濃くします。</p>
-          <details class="eu-legend-methods"><summary>対象範囲・出典</summary>          <p>モデル推計の格子から主な集中域を取り出した概略図です。色のない場所でも生産がないとは限りません。色や面積で品目間の生産量を比較できません。</p>
+          <details class="eu-legend-methods"><summary>対象範囲・出典</summary><p>品目ごとの正値格子の上位10%が集中する場所から、元格子の数量が大きい原則5集中域を選んだ概略図です。ポー平原のトウモロコシの比較例と、米・柑橘類の小さく分かれた産地も残します。全ての産地を塗った図ではありません。色のない場所や北欧でも生産がないとは限らず、色や面積で品目間の生産量を比較できません。初期表示は主要生産地域を拡大し、「欧州全域へ」で北部も確認できます。</p>
           <p>牛は肉用・乳用、鶏は肉用・採卵用を分けていません。オリーブ・ブドウ単独の分布は未収録です。</p>
           <a href={withBase('/assets/atlas/europe/farming-overview-v2/manifest.json')}>出典・分布面の加工方法</a>
           </details>
+        </div>
+        <div class="eu-culture-composition-key" data-eu-culture-composition-key hidden>
+          <p>2021年の公表総計 · 円は同じ大きさです。角度は各対象の総人口に占める回答割合で、円の位置は対象を示す目印です。人口規模・個人の位置・細地域の分布を表しません。</p>
+          <p>イングランド・ウェールズ・クロアチアだけを掲載しています。最多・過半数の分類で土地を塗った地図ではありません。色は各表の分類を区別し、国をまたいだ同色の対応はありません。</p>
+          <div class="eu-composition-tables" data-eu-composition-tables></div>
         </div>
         <p class="eu-map-caption">線は国境です。ロシアは欧州側の表示枠内を掲載しています。境界は概略で、係争地の帰属を示すものではありません。</p>
         
@@ -131,6 +141,7 @@ const config = { farmingAreas, geography, climateWater, countries, cities: citie
           <details class="eu-comparison-origin"><summary>比較の問い・対象年・出典</summary><p data-eu-comparison-question></p><div data-eu-comparison-legend></div><p data-eu-comparison-scope></p><p data-eu-comparison-attribution hidden></p><a data-eu-comparison-licence hidden>元の図の利用条件（CC BY 4.0）</a><a data-eu-comparison-source>元の図の出典</a></details>
         </section>
         <div data-eu-culture-host hidden><EuropePopulationCases /></div>
+        <p id="eu-industry-scope-note" class="eu-industry-scope-note" data-eu-industry-scope-note hidden={field!=='industry'}>地域では特色・生産網の事例を、4か国では2023年のGDPを分母にした全国統計を読みます。点は拠点の位置で、量・額や順位ではありません。選択後も欧州全体の分布を保ちます。</p>
         <EuropeSubjectReader layer={initialLayer} />
         <details class="eu-legend eu-climate-primary-key" data-eu-climate-legend hidden={field!=='nature'}><summary>気候分類 · 1991–2020 · 全17区分</summary><div class="eu-legend-grid">{legend.map(l => <div><span class="eu-swatch" style={`background:${l.color}`}></span><strong>{l.code}</strong><span>{l.name}</span></div>)}</div><details class="eu-legend-methods"><summary>対象範囲・出典</summary><p>区分はBeckほかのKöppen–Geiger分類。周辺の北アフリカ・西アジアも同じ色で表示します。掲載画像の元格子は0.05度で、細かな局地気候を表すものではありません。</p><p>カスピ海の水面には気候区分を表示しません。輪郭は<a href={climateWater.source.url}>Natural Earth 5.1.2（1:110m）</a>に基づきます。</p></details></details>
         <div data-eu-climate-reader hidden={!initialClimateReader}>

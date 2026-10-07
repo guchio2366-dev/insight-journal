@@ -1,10 +1,13 @@
 ---
+import { europeIndustryCountries } from '../../lib/atlas-europe-industry';
+import countries from '../../data/atlas/europe/countries.json';
 import { withBase } from '../../lib/urls';
-interface Props { overview?: boolean }
-const { overview = false } = Astro.props;
+interface Props { overview?: boolean; industry?: boolean }
+const { overview = false, industry = false } = Astro.props;
 const regions = [['all','欧州全体'],['north','北欧'],['west','西欧'],['south','南欧'],['east','東欧']];
 ---
 <div class="eu-region-navigation atlas-region-controls">
   <nav class="eu-region-top" aria-label="地図の地域"><a href={withBase('/atlas/')}>世界の地域</a><a href={withBase('/atlas/europe/')} aria-current="page">欧州</a></nav>
-  <nav class="eu-region-buttons" aria-label="欧州の地域を選ぶ">{regions.map(([id,name]) => <button type="button" data-region-button={overview?id:undefined} data-eu-region={overview?undefined:id} aria-pressed={id==='all'}>{name}</button>)}</nav>
+  <nav data-eu-region-host hidden={industry} class="eu-region-buttons" aria-label="欧州の地域を選ぶ">{regions.map(([id,name]) => <button type="button" data-region-button={overview?id:undefined} data-eu-region={overview?undefined:id} aria-pressed={id==='all'}>{name}</button>)}</nav>
+  {!overview&&<label class="eu-industry-scope" data-eu-industry-scope-host hidden={!industry}>地域・国<select data-eu-industry-scope aria-label="産業の地域特色・4か国統計" aria-describedby="eu-industry-scope-note"><optgroup label="地域特色・サプライチェーン">{regions.map(([id,name])=><option value={`region:${id}`}>{name}</option>)}</optgroup><optgroup label="4か国の全国統計 · 2023">{europeIndustryCountries.map(code=><option value={`country:${code}`}>{countries.find(country=>country.code===code)!.name}</option>)}</optgroup></select></label>}
 </div>

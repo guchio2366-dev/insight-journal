@@ -9,3 +9,16 @@
 @media(min-width:960px){.latin-workspace.latin-nature.is-comparison .latin-nature-map-panes svg,.latin-workspace.latin-nature.is-comparison .latin-nature-map-panes .latin-nature-fallback{height:285px;max-height:285px}}
 .latin-nature-comparison-header{display:grid;grid-template-columns:minmax(210px,.8fr) minmax(0,1.6fr);align-items:start;gap:12px;margin:0 0 8px}.latin-nature-comparison-header .latin-return{margin:0;padding:6px 9px;font-size:14px;line-height:1.55}.latin-nature-comparison-header .latin-takeaway{margin:0;font-size:14px;line-height:1.65}.latin-nature.is-comparison .latin-nature-main>.latin-controls{display:none}.latin-nature.is-comparison .latin-nature-map-panes figure>figcaption{min-height:26px}.latin-nature.is-comparison .latin-reading>[data-nature-reading-title],.latin-nature.is-comparison .latin-reading>[data-nature-takeaway]{display:none}
 @media(max-width:959px){.latin-nature-comparison-header{grid-template-columns:1fr}}
+
+/* Stations remain at their coordinates; only secondary names appear on hover/focus. */
+.latin-nature-city-point[role=button]{cursor:pointer;outline:none}.latin-nature-city-label{pointer-events:none}
+.latin-nature-city-point.is-secondary:hover .latin-nature-city-label,.latin-nature-city-point.is-secondary:focus .latin-nature-city-label{visibility:visible!important}
+.latin-nature-city-point:hover .latin-nature-city-dot,.latin-nature-city-point:focus-visible .latin-nature-city-dot{stroke:#e5a145;stroke-width:3}
+.latin-nature-city-point[aria-pressed=true] .latin-nature-city-dot{stroke:#fff;stroke-width:2.5}
+.latin-nature-city-point[aria-pressed=true]:focus-visible .latin-nature-city-dot{stroke:#e5a145;stroke-width:3}
+.latin-workspace.latin-nature .latin-nature-normals>h3{margin:0 0 5px!important;font-size:17px;line-height:1.5}
+.latin-workspace.latin-nature .latin-nature-normals>p:is(.latin-nature-city-climate,.latin-nature-city-reason,.latin-nature-city-agriculture){font-size:15px!important;line-height:1.65!important;margin:7px 0!important}
+@media(min-width:960px){
+ .latin-workspace.latin-nature:not(.is-comparison) .latin-reading{height:calc(100dvh - var(--latin-nature-reader-top,298px) - 8px);max-height:none;overflow:hidden}
+ .latin-workspace.latin-nature:not(.is-comparison) .latin-reading-scroll{flex:1;min-height:0;max-height:none;overflow-y:auto}
+}

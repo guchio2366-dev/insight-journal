@@ -69,13 +69,15 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.ok(londonChart);
       assert.deepEqual([...londonChart.querySelectorAll('.atlas-climate-month')].map(label=>label.textContent),Array.from({length:12},(_,i)=>String(i+1)));
       assert.equal(londonChart.querySelector('.atlas-climate-axis-title').textContent,'月');
-      assert.match(doc.querySelector('[data-city-reading="london"] .eu-city-selected-note').textContent,/Cfb.*最寒1月.*5\.7.*最暖7月.*19\.0/);
+      assert.match(doc.querySelector('[data-city-reading="london"] .eu-climate-reason').textContent,/大西洋.*偏西風.*海.*冬.*夏/);
+      assert.match(doc.querySelector('[data-city-reading="london"] .eu-city-reading-details').textContent,/乾季.*最寒1月.*5\.7.*最暖7月.*19\.0/s);
+      assert.equal(doc.querySelector('[data-city-reading="london"] .eu-city-selected-note'),null,'分類見出しと気温要約を重複させない');
       assert.equal(doc.querySelector('[data-city-reading="london"] .eu-city-reading-details').open,false);
       assert.match(doc.querySelector('[data-eu-climate-statistics] h2').textContent,/月別の数値.*年間の要約/);
       assert.ok(doc.querySelector('[data-eu-climate-statistics] [data-city-card="london"] table'));
       assert.ok(doc.querySelector('[data-eu-climate-statistics] [data-city-card="london"] .eu-summary'));
       assert.ok(doc.querySelector('.eu-read-panel [data-city-reading="london"]'));
-      assert.match(doc.querySelector('[data-city-reading="london"] .eu-city-chart-meta').textContent,/イギリス.*首都ロンドン/);
+      assert.match(doc.querySelector('[data-city-reading="london"] .eu-city-reading-details').textContent,/イギリス.*観測所.*ヒースロー/);
       const cityList=doc.querySelector('.eu-map-panel [data-eu-city-list]');
       assert.equal(cityList.hidden,false);
       assert.equal(cityList.querySelectorAll('[data-eu-city-choice] option').length,25);
@@ -96,7 +98,7 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.ok([...toggles.querySelectorAll('button')].every(button=>button.getAttribute('aria-pressed')==='true'&&!button.disabled));
       const list=doc.querySelector('.eu-map-panel [data-eu-farming-list]');
       assert.equal(list.hidden,false);
-      assert.deepEqual([...list.querySelectorAll('[data-eu-farming-children]:not([hidden]) h3')].map(heading=>heading.textContent),['作物','畜産']);
+      assert.deepEqual([...list.querySelectorAll('[data-eu-farming-children]:not([hidden]) h3')].map(heading=>heading.textContent),['作物','畜産','酪農']);
       assert.equal(list.querySelector('[data-eu-farming-children="forest"]').hidden,true);
       assert.equal(list.querySelectorAll('[data-eu-layer][aria-pressed="true"]').length,0);
       assert.equal(doc.querySelector('[data-eu-overview]').hidden,true);
@@ -105,8 +107,12 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
     }
     if (field==='industry/') {
       const topics=doc.querySelector('[data-eu-topic-field="industry"]');
-      assert.deepEqual([...topics.querySelectorAll('[data-eu-topic-feature]')].map(button=>button.textContent),['資源・素材代表地点','機械・輸送代表地点','技術・医薬代表地点','物流・サービス代表地点']);
-      assert.deepEqual([...topics.querySelectorAll('button:not([data-eu-topic-feature])')].map(button=>button.dataset.euTopic),['hubs','manufacturing','industry','services']);
+      assert.deepEqual([...topics.querySelectorAll('[data-eu-industry-group]')].map(button=>button.textContent),['資源・素材','機械・輸送','技術・医薬','物流・サービス']);
+      assert.deepEqual([...topics.querySelectorAll('button:not([data-eu-industry-group])')].map(button=>button.dataset.euTopic),['hubs','manufacturing','industry','services']);
+      const scope=doc.querySelector('[data-eu-industry-scope]');
+      assert.deepEqual([...scope.options].map(option=>option.value),['region:all','region:north','region:west','region:south','region:east','country:DEU','country:GBR','country:FRA','country:ITA']);
+      assert.equal(scope.closest('[data-eu-industry-scope-host]').hidden,false);
+      assert.equal(doc.querySelector('[data-eu-region-host]').hidden,true);
       assert.ok(doc.querySelector('.eu-reader-body').open);
       assert.ok(doc.querySelector('.eu-read-panel [data-eu-subject-legend]').open);
     }

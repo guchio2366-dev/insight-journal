@@ -1,6 +1,6 @@
 ---
 import {majorAsiaIndustries,industrySectors,industryTopicGroup,naturalGroups,populationGroups} from '../../data/atlas/asia-navigation';
-import type {IndustryRegion} from '../../data/atlas/asia-industry';
+import {industryCountryChoices,type IndustryRegion} from '../../data/atlas/asia-industry';
 import {type SocialRegion} from '../../data/atlas/asia-social';
 import {socialEntry} from '../../data/atlas/asia-social-overview';
 import {asiaPopulationTopics} from '../../data/atlas/asia-population';
@@ -9,17 +9,19 @@ const {initialField,social,regionId,forestTopic,industry}=Astro.props as {initia
 const populationTopics=[...asiaPopulationTopics,...social.groups.map(g=>({id:socialEntry(g.id),label:g.label}))];
 const availableSectors=new Set(industry.topics.map(industryTopicGroup).map(group=>group.sector));
 const industryFeatures=majorAsiaIndustries[regionId].map(feature=>({...feature,sector:industryTopicGroup({id:feature.id}).sector}));
+const industryCountries=industryCountryChoices(industry),industryLabel=industry.countryScope?.label??'東アジア';
 ---
 <nav class="asia-agriculture-tabs asia-primary-topics" data-agriculture-topics hidden={initialField!=='agriculture'} aria-label="農林業の主題"><button type="button" data-farm-group="agriculture" data-farm-group-topic="overview" aria-pressed="true">農畜産</button><button type="button" data-farm-group="forestry" data-farm-group-topic={forestTopic} aria-pressed="false" disabled={!forestTopic}>林業{!forestTopic&&<small>資料を整備中</small>}</button></nav>
 <div class="asia-natural-controls" data-natural-topics hidden={initialField!=='natural'}>
  <nav class="asia-primary-topics" aria-label="自然環境の主題">{naturalGroups.map(t=><button type="button" data-natural-group={t.id} aria-pressed={t.id==='climate'}>{t.label}</button>)}</nav>
- <nav class="asia-secondary-topics" data-water-topics hidden aria-label="水資源の種類">{[{id:'water',label:'河川・地下水'},{id:'precipitation',label:'年降水量'},{id:'seasonal-precipitation',label:'月別降水量'},{id:'basins',label:'河川の流域'}].map(t=><button type="button" data-water-view={t.id} data-natural-topic={t.id} aria-pressed="false">{t.label}</button>)}</nav>
+ <nav class="asia-secondary-topics" data-water-topics hidden aria-label="水資源の種類">{[{id:'water',label:'河川・地下水'},{id:'precipitation',label:'年降水量'},{id:'basins',label:'河川の流域'}].map(t=><button type="button" data-water-view={t.id} data-natural-topic={t.id} aria-pressed="false">{t.label}</button>)}</nav>
 </div>
 <div class="asia-population-navigation" data-population-topics hidden={initialField!=='population'}>
  <nav class="asia-population-tabs" aria-label="人口の主題">{populationGroups.map(g=><button type="button" data-population-group={g.id} data-topic={{distribution:'density',identity:'ethnicity',religion:'religion'}[g.id]} aria-pressed={g.id==='distribution'}>{g.label}</button>)}</nav>
  <p class="asia-population-scope" data-population-scope>2020年の推計人口密度（人/km²・格子面積当たり）。</p>
 </div>
 <div class="asia-industry-navigation" data-industry-navigation hidden={initialField!=='industry'}>
+ {industryCountries.length>0&&<p class="asia-navigation-note" data-industry-country-scope aria-live="polite">上の国・地域欄で{industryCountries.map(c=>c.name).join('・')}を選び、その国に関係する産業統計へ進めます。「{industryLabel}全体」で地域の比較へ戻れます。</p>}
  <nav class="asia-industry-sectors" aria-label="産業の分類">{industrySectors.map(sector=><button type="button" data-industry-sector={sector.id} aria-pressed={sector.id==='manufacturing'} disabled={!availableSectors.has(sector.id)} title={availableSectors.has(sector.id)?undefined:'この分類だけの統計は未収録です'}>{sector.label}</button>)}</nav>
  {industrySectors.filter(sector=>sector.id!=='all'&&availableSectors.has(sector.id)).map(sector=><nav class="asia-industry-subsectors" data-industry-subsectors={sector.id} hidden={sector.id!=='manufacturing'} aria-label={`${sector.label}の収録主題`}>{industryFeatures.filter(feature=>feature.sector===sector.id).map(feature=><button type="button" data-industry-feature={feature.id} aria-pressed={feature.id==='manufacturing'}>{feature.label}</button>)}<button type="button" data-industry-current-feature data-industry-feature="" aria-pressed="true" hidden></button></nav>)}
  <div class="asia-industry-guide"><strong data-industry-navigation-label>製造業 ／ 全分野</strong><span>地図に表示中：<span data-industry-current-map></span></span></div>

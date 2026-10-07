@@ -24,7 +24,7 @@ export function renderAsiaFarmingPanel(root:HTMLElement,region:AsiaRegionId,topi
   $('[data-farming-definition]').textContent=definition.definition;
   const coverage=country?layer.countryCoverage?.[country.code]:null;
   $('[data-farming-coverage]').textContent=coverage?.maskPixels===0?'この国・地域の島は、広域図の格子の中心に収まりません。地図の空白から生産がないと判断せず、下の国別統計を参照してください。':coverage?.validPixels===0?'この国・地域の範囲には、採用した資料の有効な表示格子がありません。統計がある場合は下の表で確認できます。':coverage?.positivePixels===0?'この国・地域の範囲では、採用した表示格子に正の値がありません。ほかの品目や農業全体の不存在を意味するものではありません。':'';
-  $('[data-farming-method]').textContent=definitions[layer.kind]+(layer.kind!=='forest'?' 元格子をWeb Mercatorへ最近傍で再標本化しています。表示画像と照会値には同じ配列を使い、0と欠測を区別します。地図上の見かけの格子面積は緯度によって変わります。':'');
+  $('[data-farming-method]').textContent=definitions[layer.kind]+(layer.kind!=='forest'?' 元格子をWeb Mercatorへ最近傍で再標本化しています。品目別の原画像と地点の照会値には同じ配列を使い、0と欠測を区別します。地図上の見かけの格子面積は緯度によって変わります。' + (root.querySelector('[data-map-annotations]')?' 地図は各品目の概略分布を残して、選択作物の輪郭を強調します。概略の面から地点の値や生産量は計算しません。':''):'');
   const sources=$('[data-farming-map-source]');sources.replaceChildren();
   const link=document.createElement('a');link.textContent=layer.kind==='crop'?'IFPRI MapSPAM 2020 v2r2（CC BY 4.0）':layer.kind==='livestock'?'FAO GLW4 / CGIAR（CC BY 4.0）':'JRC Global Forest Cover 2020 v3';link.href=layer.kind==='crop'?'https://doi.org/10.7910/DVN/SWPENT':layer.kind==='livestock'?'https://cgiar-climate-data-hub.github.io/catalog/glw4-2020/':'https://forobs.jrc.ec.europa.eu/GFC/v3';sources.append(link,document.createTextNode((layer.kind==='forest'?'。European Union, Copernicus Land Monitoring Service / JRC。':'。')+'地域の抽出・表示：Insight Journal。'));
   const reference=$('[data-farming-reference]');reference.replaceChildren();if(layer.kind==='forest')for(const source of asiaForestSources[region]){const p=document.createElement('p'),a=document.createElement('a');a.href=source.url;a.textContent=source.label;p.append(a);reference.append(p);}
@@ -32,7 +32,7 @@ export function renderAsiaFarmingPanel(root:HTMLElement,region:AsiaRegionId,topi
  $('[data-farming-statistics-title]').textContent=country?`${country.name}の${definition.statName}`:'国・地域の統計を読む';$('[data-farming-statistics-definition]').textContent=definition.definition;
  const tables=$('[data-farming-statistics-tables]');tables.replaceChildren();
  const status=$('[data-farming-statistics-status]');
- if(!country){status.textContent='国・地域を選ぶと、2015–2024年の統計を表示します。';return;}
+ if(!country){status.textContent=region==='southeast-asia'?'雨温図や地域事例から同じ場所を比較すると、その国全体の2015–2024年の統計を表示します。':'国・地域を選ぶと、2015–2024年の統計を表示します。';return;}
  if(!statistics){status.textContent='国・地域の統計を読み込んでいます。';return;}
  const record=statistics.countries[country.code];status.textContent=country.code==='CHN'?'この表はFAOの中国本土の統計です。香港・マカオ・台湾を含むChina集計とは区別しています。':country.code==='TWN'?'この表はFAOの台湾区分（M49:158）を使っています。':'';
  for(const series of farmSeries(topic,layer,record?.observations??[])){

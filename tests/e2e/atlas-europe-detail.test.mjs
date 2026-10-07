@@ -32,7 +32,7 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
     assert.equal(doc.querySelector('[data-eu-climate-legend]').hidden,field!=='nature');
     assert.equal(doc.querySelector('[data-eu-wheat-legend]').hidden,true);
     assert.equal(doc.querySelector('.eu-read-panel').getAttribute('aria-labelledby'),climateReader?'eu-city-heading':'eu-subject-title');
-    assert.equal(doc.querySelectorAll('[data-eu-point]:not([hidden])').length,climateReader?15:0);
+    assert.equal(doc.querySelectorAll('[data-eu-point]:not([hidden])').length,climateReader?8:0);
     if(field==='agriculture'){
       assert.match(doc.querySelector('[data-eu-map-title]').textContent,/作物.*畜産/);
       assert.equal(doc.querySelector('[data-eu-subject-image]').getAttribute('href'),null);
@@ -59,12 +59,17 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       assert.match(statistics.textContent,/FAOSTAT.*World/,'世界比の分母を出版社のWorld行としてJavaScriptなしでも説明する');
       assert.match(statistics.textContent,/ゼロという意味ではありません/);
       const availability=[...statistics.querySelectorAll('.eu-statistics-availability > div')];
-      const unavailable=['販売総額（米ドル）','需給・用途別消費','輸出額・輸出相手国'];
+      const unavailable=['販売総額（米ドル）'];
       for(const label of unavailable){
         const entry=availability.find(row=>row.querySelector('dt').textContent===label);
         assert.ok(entry,label);
         assert.match(entry.querySelector('dd').textContent,/未収録/,`${label}は数量統計で代用しない`);
       }
+      const columns=statistics.querySelectorAll('[data-eu-farm-three-columns] > section');
+      assert.equal(columns.length,3);
+      assert.match(columns[0].textContent,/供給元・行先.*国内仕向け.*未収録/s);
+      assert.match(columns[1].textContent,/輸出先.*輸出量・額.*未収録/s);
+      assert.equal(columns[2].querySelector('[data-eu-farm-share-chart]').children.length,0);
       const scope=availability.find(row=>row.querySelector('dt').textContent==='地図と数量の対象');
       assert.match(scope.querySelector('dd').textContent,/格子の収穫面積・家畜密度.*国全体の生産量・頭羽数.*別の資料/);
       assert.match(scope.querySelector('dd').textContent,/集合的な作物区分.*個別品目の統計に置き換えません/);
@@ -177,7 +182,7 @@ test('24都市の右側の雨温図・開閉できる気候と農畜産説明、
     assert.equal(tableCard.hidden,true,city.id);
     assert.equal(chart.querySelector('svg .atlas-climate-city-name').textContent,city.name,city.id);
     assert.match(chart.querySelector('svg').getAttribute('aria-label'),new RegExp(city.name),city.id);
-    assert.equal(doc.getElementById(card.getAttribute('aria-labelledby'))?.textContent,`${city.name}の気候と農畜産`,city.id);
+    assert.equal(doc.getElementById(card.getAttribute('aria-labelledby'))?.textContent,`${city.name}の雨温図`,city.id);
     assert.deepEqual([...chart.querySelectorAll('.atlas-climate-month')].filter(label=>label.textContent!=='×').map(label=>label.textContent),Array.from({length:12},(_,index)=>String(index+1)),`${city.id}: 全12月の軸ラベルを掲載する`);
     assert.ok(before(classification,farming),`${city.id}: 右は気候→農畜産の順で読む`);
     assert.ok(before(chart,classification),`${city.id}: 右は雨温図→詳しい解説の順で読む`);
@@ -187,7 +192,7 @@ test('24都市の右側の雨温図・開閉できる気候と農畜産説明、
     assert.equal(details,null,`${city.id}: 理由と農畜産の全文は雨温図下に常時表示する`);
     const sourceDetails=card.querySelector('.eu-city-reading-details');
     assert.equal(sourceDetails.open,false,`${city.id}: 観測地点と追加出典は補助操作で開ける`);
-    assert.match(sourceDetails.querySelector('summary').textContent,/季節.*農畜産.*出典/,city.id);
+    assert.match(sourceDetails.querySelector('summary').textContent,/1991–2020.*観測地点.*出典/,city.id);
     assert.equal(sourceDetails.querySelectorAll('summary').length,1,city.id);
     const tableDetails=tableCard.querySelector('table').closest('details');
     assert.ok(tableDetails.querySelector('summary')?.textContent.trim(),`${city.id}: 月別の全数値をnative detailsで開ける`);
@@ -222,7 +227,8 @@ test('24都市の右側の雨温図・開閉できる気候と農畜産説明、
     if(rainCount<12) {
       assert.match(card.textContent,/欠測[\s\S]*0 mmではありません/,city.id);
       assert.match(annual.textContent,/欠測.*算出できません/,city.id);
-      assert.match(classification.textContent,/年間降水量は、この資料だけでは示せません/,city.id);
+      assert.match(card.querySelector('.eu-climate-missing').textContent,/欠測.*0 mmではありません/,city.id);
+      assert.match(card.querySelector('.eu-city-reading-details').textContent,/欠測.*年間降水量は示せません/,city.id);
     } else {
       const sum=city.months.reduce((total,month)=>total+month.precipitation,0);
       assert.equal(annual.textContent,`${sum.toLocaleString('ja-JP',{maximumFractionDigits:1})} mm`,city.id);

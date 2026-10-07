@@ -1,4 +1,4 @@
-import { frame, project, unproject, wheatCell, displayCell, visibleBounds, readEuropeState, writeEuropeState, defaultEuropeCity, normaliseEuropePoint } from './atlas-europe-view';
+import { frame, europeFarmingInitialBounds, project, unproject, wheatCell, displayCell, visibleBounds, readEuropeState, writeEuropeState, defaultEuropeCity, normaliseEuropePoint } from './atlas-europe-view';
 import { farmingPresentation, farmingAtPoint, updateFarmingMap, type FarmingAreas } from './atlas-europe-farming';
 import { layerColor, fields, europeFieldHeadings, type EuropeLayer } from '../data/atlas/europe/layers';
 import type { EuropeReading } from '../data/atlas/europe/readings';
@@ -13,8 +13,10 @@ import { createEuropePopulationCases, cultureSelection, cultureColor, type Cultu
 import { europeDrainageBasins, europeDrainageBasinByIndex, europeDrainageIndexForBasin, normaliseEuropeDrainageBasin, europeDrainageOutline } from './atlas-europe-drainage';
 import drainageManifest from '../../public/assets/atlas/europe/drainage-v1/manifest.json' with {type:'json'};
 import { readEuropeFarmingFocus, writeEuropeFarmingFocus } from '../data/atlas/europe/farming-water-comparisons';
+import { europeIndustryGroupCopy, isEuropeIndustryCountry, normaliseEuropeIndustryGroup } from './atlas-europe-industry';
 import { createEuropeFarmingStatistics } from '../scripts/atlas-europe-farming-statistics';
 import { europeFarmAvailableMetrics } from '../data/atlas/europe/farming-statistics';
+import { createEuropeCultureOverview, europeCultureOverviewPlaces } from './atlas-europe-culture-overview';
 type Country = { code: string; name: string; region: string };
 type City = { id: string; name: string; country: string; coordinates: [number, number] };
 type Feature = { type: 'Feature'; properties: { code: string; kind: string }; geometry: Geometry };
@@ -25,7 +27,7 @@ export function initEuropeAtlas() {
   const root = document.querySelector<HTMLElement>('[data-europe-detail]');
   if (!root || root.dataset.initialized) return;
   root.dataset.initialized = 'true';
-  const config = JSON.parse(root.querySelector('[data-eu-config]')!.textContent!) as { farmingAreas:FarmingAreas; countries: Country[]; cities: City[]; geography: { type: 'FeatureCollection'; features: Feature[] }; climateWater: { type:'FeatureCollection';features:{type:'Feature';properties:{id:string;name:string};geometry:Geometry}[] }; climate: string; wheat: string; wheatValues: string; initialLayer: string; layers:EuropeLayer[];populationCities:Place[];readings:EuropeReading[];statistics:{indicators:Indicator[]} };
+  const config = JSON.parse(root.querySelector('[data-eu-config]')!.textContent!) as { industryOverviews:Record<string,{takeaway:string;body:string;evidenceNote?:string;sources:{label:string;url:string;period:string}[]}>; farmingAreas:FarmingAreas; countries: Country[]; cities: City[]; geography: { type: 'FeatureCollection'; features: Feature[] }; climateWater: { type:'FeatureCollection';features:{type:'Feature';properties:{id:string;name:string};geometry:Geometry}[] }; climate: string; wheat: string; wheatValues: string; initialLayer: string; layers:EuropeLayer[];populationCities:Place[];readings:EuropeReading[];statistics:{indicators:Indicator[]} };
   const { countries, cities, geography } = config;
   const query = <T extends Element>(selector: string) => root.querySelector<T>(selector)!;
   const all = <T extends Element>(selector: string) => Array.from(root.querySelectorAll<T>(selector));
@@ -66,6 +68,7 @@ export function initEuropeAtlas() {
     },
   });
   const cultureActive=()=>state.layer==='ethnicity'||state.layer==='religion';
+  const cultureOverview=createEuropeCultureOverview(root);
   let cultureData:CultureMapData={type:'FeatureCollection',features:[]};
   let cultureRunning=false;
   const cultureReader=query<HTMLElement>('[data-eu-culture-reader]');
@@ -135,9 +138,14 @@ export function initEuropeAtlas() {
     query('[data-eu-basin-summary]').textContent=`選択：HYBAS_ID ${selected} · Pfafstetter ${basin.PFAF_ID}。濃い輪郭は表示格子上の区画で、その河川の流域全体とは限りません。`;
     const token=++drainageRequest;
     try {
+      const values=await gridValues(config.layers.find(layer=>layer.id==='drainage')!);
+      if(token!==drainageRequest||state.layer!=='drainage'||state.basin!==selected)return;
+      const representatives=config.readings.filter(item=>item.field==='nature'&&item.layer==='water').filter(item=>{
+        const cell=displayCell(values,item.coordinates,-1),record=cell?.value==null?undefined:europeDrainageBasinByIndex(cell.value);
+        return record?.MAIN_BAS===basin.MAIN_BAS;
+      });
+      if(representatives.length)query('[data-eu-basin-summary]').textContent+=` ${representatives.map(item=>item.name).join('、')}の代表地点と同じMAIN_BASのモデル区画です。代表地点の区画と上流・下流の区画は別に分かれることがあります。`;
       if(drainageDrawn!==selected){
-        const values=await gridValues(config.layers.find(layer=>layer.id==='drainage')!);
-        if(token!==drainageRequest||state.layer!=='drainage'||state.basin!==selected)return;
         const outline=europeDrainageOutline(values,index),canvas=document.createElement('canvas');canvas.width=1800;canvas.height=1502;
         canvas.getContext('2d')!.putImageData(new ImageData(outline.rgba,1800,1502),0,0);
         drainageImage=canvas.toDataURL('image/png');drainageDrawn=selected;
@@ -164,44 +172,52 @@ export function initEuropeAtlas() {
   const climateReader = () => state.layer==='climate'||state.layer==='overlay';
   const farmingItems=config.farmingAreas.features.map(feature=>feature.properties);
   const farmingView=()=>farmingPresentation(state,farmingItems);
-  const features = [...config.populationCities,...config.readings];
-    const visibleFeatures = () => subject().field==='population'&&!cultureActive() ? config.populationCities : subject().field==='industry' ? config.readings.filter(r=>r.field==='industry') : subject().field==='nature'&&['water','drainage','terrain','contours'].includes(state.layer) ? config.readings.filter(r=>r.field==='nature'&&r.layer===(['water','drainage'].includes(state.layer)?'water':'terrain')) : [];
+  const features = [...config.populationCities,...config.readings,...europeCultureOverviewPlaces];
+    const visibleFeatures = () => subject().field==='population'&&!cultureActive() ? config.populationCities : subject().field==='industry' ? config.readings.filter(r=>r.field==='industry') : subject().field==='nature'&&['water','drainage','terrain'].includes(state.layer) ? config.readings.filter(r=>r.field==='nature'&&r.layer===(['water','drainage'].includes(state.layer)?'water':'terrain')) : [];
   const featureVisible = (id:string) => {
     const p=visibleFeatures().find(p=>p.id===id); if(!p)return false;
+    if(subject().field==='industry')return true;
     if(state.place)return p.country===state.place;
     if(state.region!=='all' && countries.find(c=>c.code===p.country)?.region!==state.region)return false;
     return !('rank' in p) || (p.rank??0)<=(state.region==='all'?1:3) || p.id===state.feature;
   };
+  const industryEmphasized = () => subject().field==='industry' ? config.readings.filter(p=>p.field==='industry'&&(!state.industryGroup||p.group===state.industryGroup)&&(state.place?p.country===state.place:state.region==='all'||countries.find(c=>c.code===p.country)?.region===state.region)).map(p=>p.id) : [];
   function sizeReader() {
     const top=query<HTMLElement>('.eu-map-stage').getBoundingClientRect().top+window.scrollY;
     root!.style.setProperty('--eu-reader-height',`${Math.max(220,window.innerHeight-top-12)}px`);
   }
   const annotations=createEuropeAnnotations(query<HTMLElement>('.eu-map-stage'),cities,features,
-    ()=>({climate:climateReader(),crops:farmingView().active,farmingIds:farmingView().visible.map(item=>item.id),selectedFarming:farmingView().item?.id,city:state.city,feature:state.feature,detailed:map&&liveMap.classList.contains('is-ready')?map.getBounds().getEast()-map.getBounds().getWest()<60:box[2]<frame.width*.65,places:visibleFeatures().filter(p=>featureVisible(p.id))}),
+    ()=>({climate:climateReader(),crops:farmingView().active,farmingIds:farmingView().visible.map(item=>item.id),selectedFarming:farmingView().item?.id,city:state.city,feature:state.feature,featureLabelIds:subject().field==='industry'?['rotterdam','toulouse','veldhoven','frankfurt']:subject().field==='population'&&!cultureActive()?config.populationCities.filter(city=>['ロンドン','パリ','モスクワ','ローマ'].includes(city.name)).map(city=>city.id):undefined,detailed:map&&liveMap.classList.contains('is-ready')?map.getBounds().getEast()-map.getBounds().getWest()<60:box[2]<frame.width*.65,emphasizedFeatures:industryEmphasized(),places:cultureActive()&&!state.cultureCase?europeCultureOverviewPlaces.filter(item=>item.id.startsWith(state.layer+'-')):visibleFeatures().filter(p=>featureVisible(p.id))}),
     coordinate=>{
       if(map&&liveMap.classList.contains('is-ready'))return map.project(coordinate as [number,number]);
       const [x,y]=project(coordinate), matrix=staticMap.getScreenCTM(),rect=query<HTMLElement>('.eu-map-stage').getBoundingClientRect();
       const point=matrix?new DOMPoint(x,y).matrixTransform(matrix):new DOMPoint();
       return {x:point.x-rect.left,y:point.y-rect.top};
-    },(kind,id)=>kind==='city'?selectCity(id):kind==='crop'?setLayer(id):selectFeature(id),farmingItems);
+    },(kind,id)=>kind==='city'?selectCity(id):kind==='crop'?setLayer(id):selectFeature(id),farmingItems,cultureOverview.decorate);
   function setLayer(id:string, save = true) {
     if(id==='overlay' && state.layer!=='overlay')state.returnLayer=state.layer;
     state.layer=id;
+    if(id==='contours')delete state.feature;
+    if(id!=='hubs')delete state.industryGroup;
     if(state.farmMeasure&&!europeFarmAvailableMetrics(id).some(metric=>metric.id===state.farmMeasure))delete state.farmMeasure;
     if(!farmingItems.some(item=>item.id===id))delete state.single;
     query<HTMLElement>('[data-eu-farm-candidates]').hidden=true;
     if(save)commit(false);
   }
   function selectFeature(id:string) {
+    const composition=europeCultureOverviewPlaces.find(item=>item.id===id);
+    if(composition&&cultureActive()){
+      culture.applyState({cultureCase:composition.caseId,cultureCategory:'',cultureArea:''});Object.assign(state,culture.readState());commit(false);return;
+    }
     const p=features.find(p=>p.id===id);if(!p)return;
     state.feature=id;
-    if(['terrain','contours','drainage'].includes(state.layer))void showGrid(p.coordinates);
+    if(['terrain','contours','drainage','density'].includes(state.layer))void showGrid(p.coordinates);
     else commit(false);
   }
   function updateReader() {
     const layer=subject(),copy=europeReaderCopy(layer),farm=farmingView();
     // Keep the same live result beside its controls, without duplicating it.
-    if(['terrain','contours'].includes(layer.id))query('.eu-reader-summary').after(gridReading);
+    if(['terrain','contours','density'].includes(layer.id))query('.eu-reader-summary').after(gridReading);
     else if(layer.id==='drainage')query('[data-eu-drainage-controls]').append(gridReading);
     else gridReadingHome.after(gridReading);
     query<HTMLElement>('[data-eu-climate-reader]').hidden=!climateReader();
@@ -215,6 +231,21 @@ export function initEuropeAtlas() {
     query<HTMLAnchorElement>('[data-eu-subject-source]').href=layer.source;
     const readingSources=query<HTMLElement>('[data-eu-reading-sources]');readingSources.replaceChildren();
     for(const source of europeReaderSources(layer)){const a=document.createElement('a');a.href=source.url;a.textContent=source.label;a.className='eu-source-link';readingSources.append(a);}
+    const industryCountry=layer.field==='industry'?config.industryOverviews[state.place]:undefined;
+    if(industryCountry){
+      query('[data-eu-subject-title]').textContent=`${countries.find(c=>c.code===state.place)!.name}の産業構成`;
+      query('[data-eu-subject-takeaway]').textContent=industryCountry.takeaway;
+      query('[data-eu-subject-intro]').textContent=industryCountry.body;
+      query('[data-eu-subject-note]').textContent=industryCountry.evidenceNote??'2023年・国全体のGDPが分母です。製造業は鉱工業・建設業に含まれ、3指標を足して100%にすることはできません。';
+      readingSources.replaceChildren();
+      for(const source of industryCountry.sources){const a=document.createElement('a');a.href=source.url;a.textContent=source.label+' · '+source.period;a.className='eu-source-link';readingSources.append(a);}
+    }else if(layer.field==='industry'&&(state.industryGroup||state.region!=='all')){
+      const cases=config.readings.filter(p=>p.field==='industry'&&(!state.industryGroup||p.group===state.industryGroup)&&(state.region==='all'||countries.find(c=>c.code===p.country)?.region===state.region));
+      query('[data-eu-subject-title]').textContent=`${regionNames[state.region]}${state.industryGroup?' · '+state.industryGroup:''}`;
+      query('[data-eu-subject-takeaway]').textContent=cases.length?`${cases.map(p=>p.name).join('、')}の事例を強調しています。欧州全体の拠点は残しています。`:'この地域・分野の拠点事例は未収録です。欧州全体の拠点と、他の地域・分野を読み比べられます。';
+      query('[data-eu-subject-intro]').textContent=(state.industryGroup?europeIndustryGroupCopy[state.industryGroup]+' ':'')+copy.body;
+      for(const item of cases){const a=document.createElement('a');a.href=item.source;a.textContent=item.name+' · '+item.sourceLabel+' · '+item.period;a.className='eu-source-link';readingSources.append(a);}
+    }
     const feature=state.layer==='drainage'?undefined:visibleFeatures().find(p=>p.id===state.feature&&featureVisible(p.id));
     if(feature){
       query('[data-eu-subject-title]').textContent=`${feature.name}（${countries.find(country=>country.code===feature.country)?.name??feature.country}）`;
@@ -225,7 +256,7 @@ export function initEuropeAtlas() {
         : `${countries.find(c=>c.code===feature.country)?.name}の${feature.capital?'首都':'都市'}です。都市の点は位置を示し、人口の大小を表すものではありません。`;
     }
     const overview=query<HTMLButtonElement>('[data-eu-overview]');
-    overview.hidden=!farm.item&&!feature&&!['forest','treecover'].includes(layer.id);
+    overview.hidden=!farm.item&&!feature&&!['forest','treecover','dairy'].includes(layer.id);
     overview.textContent=layer.field==='agriculture'?'← 欧州の農林業':`← ${layer.title}の概論`;
     const hiddenNote=query<HTMLElement>('[data-eu-hidden-note]');
     hiddenNote.hidden=!farm.item||farm.selectedVisible;
@@ -235,7 +266,7 @@ export function initEuropeAtlas() {
     query<HTMLElement>('[data-eu-return-multi]').hidden=!farm.single;
     query<HTMLElement>('[data-eu-climate-statistics]').hidden=!climateReader()||!state.city;
     query<HTMLElement>('[data-eu-farming-statistics]').hidden=layer.field!=='agriculture';
-    const statisticsName=farm.item?.name??(['forest','treecover'].includes(layer.id)?'林業':'欧州の農畜産物');
+    const statisticsName=farm.item?.name??(layer.id==='dairy'?'牛の生乳':['forest','treecover'].includes(layer.id)?'林業':'欧州の農畜産物');
     query('[data-eu-statistics-title]').textContent=statisticsName+'の統計';
     all<HTMLElement>('[data-eu-statistics-item]').forEach(el=>{el.textContent=statisticsName;});
     void farmStatistics.update(state);
@@ -255,7 +286,8 @@ export function initEuropeAtlas() {
     // are secondary to the key statement and genuine comparison entries.
     details.open=!!feature||layer.field==='industry'||layer.field==='population';
     const country=countries.find(c=>c.code===state.place);
-    query<HTMLElement>('[data-eu-country-reader]').hidden=!country||layer.field==='nature';
+    query<HTMLElement>('[data-eu-country-reader]').hidden=!country||layer.field==='nature'||layer.field==='industry'&&!isEuropeIndustryCountry(country.code);
+    if(layer.field==='industry')query<HTMLDetailsElement>('[data-eu-country-reader]').open=!!industryCountry;
     query('[data-eu-country-title]').textContent=country?country.name+'の国全体の数値':'';
     const panel=query('[data-eu-national-values]');panel.replaceChildren();
     const preferred=layer.field==='population'?Array.from(new Set([...(layer.indicator?[layer.indicator]:[]),'population','urban'])):layer.field==='industry'?['manufacturing','industry','services']:['forest','agrishare'];
@@ -397,7 +429,7 @@ export function initEuropeAtlas() {
       if(next&&map.getLayer('climate'))map.moveLayer('climate','subject-'+next);
     }
     const indicator=config.statistics.indicators.find(i=>i.id===layer.indicator);
-    const fills=countries.map(c=>[c.code,indicator?layerColor(layer,indicator.values[c.code]?.['2023']??null):'#edece5'] as const);
+    const fills=countries.map(c=>[c.code,indicator?layer.field==='industry'&&!isEuropeIndustryCountry(c.code)?'#edece5':layerColor(layer,indicator.values[c.code]?.['2023']??null):'#edece5'] as const);
     all<SVGElement>('[data-eu-shape]').forEach(shape=>{shape.style.fill=cultureActive()?cultureColor(null):indicator?fills.find(([code])=>code===shape.dataset.euShape)?.[1]??'#d9dcda':'transparent';});
     if(map?.getLayer('land'))map.setPaintProperty('land','fill-color',cultureActive()?cultureColor(null):indicator?['match',['get','code'],...fills.flat(),'#edece5']:'#edece5');
     paintCulture();
@@ -416,13 +448,13 @@ export function initEuropeAtlas() {
     query<HTMLElement>('[data-eu-city-list]').hidden=!climateReader();
     query<HTMLElement>('[data-eu-water-options]').hidden=!['water','precipitation','drainage'].includes(state.layer);
     const places=visibleFeatures().filter(p=>featureVisible(p.id));
-    query<HTMLElement>('[data-eu-feature-list]').hidden=!places.length;
+    query<HTMLElement>('[data-eu-feature-list]').hidden=!places.length||layer.field==='nature';
     const choices=query('[data-eu-feature-options]');choices.replaceChildren();
-    if(layer.field==='population'){
-      const select=document.createElement('select');select.setAttribute('aria-label','人口地図の都市を選ぶ');select.dataset.euFeatureChoice='';
-      const prompt=document.createElement('option');prompt.value='';prompt.textContent='都市を選ぶ';select.append(prompt);
+    if(layer.field==='population'||layer.field==='industry'){
+      const select=document.createElement('select');select.setAttribute('aria-label',layer.field==='industry'?'産業拠点の解説を選ぶ':'人口地図の都市を選ぶ');select.dataset.euFeatureChoice='';
+      const prompt=document.createElement('option');prompt.value='';prompt.textContent=layer.field==='industry'?'地図の拠点を選ぶ':'都市を選ぶ';select.append(prompt);
       for(const place of places){const option=document.createElement('option');option.value=place.id;option.textContent=place.name;select.append(option);}
-      select.value=state.feature??'';select.addEventListener('change',()=>{if(select.value)selectFeature(select.value);});choices.append(select);
+      select.value=state.feature??'';select.addEventListener('change',()=>{if(select.value)selectFeature(select.value);else{delete state.feature;commit(false);}});choices.append(select);
     } else for(const place of places){const button=document.createElement('button');button.type='button';button.textContent=place.name;button.dataset.euFeatureSelect=place.id;button.setAttribute('aria-pressed',String(state.feature===place.id));button.addEventListener('click',()=>selectFeature(place.id));choices.append(button);}
     query<HTMLElement>('[data-eu-subject-legend]').hidden=!custom||cultureActive();
     query<HTMLElement>('.eu-culture-legend').hidden=!cultureActive();
@@ -432,9 +464,10 @@ export function initEuropeAtlas() {
       const labels=layer.labels??layer.colors?.map((_,i)=>i===0?`${layer.breaks![0]}未満`:i===layer.breaks!.length?`${layer.breaks![i-1]}以上`:`${layer.breaks![i-1]}〜${layer.breaks![i]}未満`)??[];
       const swatch=(color:string,label:string)=>{const d=document.createElement('div'),s=document.createElement('span'),t=document.createElement('span');s.className='eu-swatch';s.style.background=color;t.textContent=label;d.append(s,t);key.append(d);};
       labels.forEach((label,i)=>swatch(layer.colors![i],label));
+      if(layer.field==='industry'&&layer.indicator)swatch('#edece5','4か国の統計比較対象外 · 拠点・地域特色で読む');
       if(layer.indicator||layer.grid)swatch(layer.indicator?'#d9dcda':'repeating-linear-gradient(45deg,#fff,#fff 3px,#ccd3cc 3px,#ccd3cc 4px)','データなし');
     }
-    query('[data-eu-layer-note]').textContent=layer.note;
+    query('[data-eu-layer-note]').textContent=layer.note+(layer.field==='industry'&&layer.indicator?' 色で比べる全国統計はドイツ・イギリス・フランス・イタリアの4か国です。その他の国は拠点と地域特色で読みます。':'');
     const credit=query<HTMLElement>('[data-eu-layer-attribution]');credit.hidden=!layer.attribution;credit.textContent=layer.attribution??'';
     const licence=query<HTMLAnchorElement>('[data-eu-layer-licence]');licence.hidden=!layer.licence;licence.href=layer.licence??layer.source;
     const manifest=query<HTMLAnchorElement>('[data-eu-layer-manifest]');manifest.hidden=!layer.manifest;manifest.href=layer.manifest??layer.source;
@@ -498,8 +531,10 @@ export function initEuropeAtlas() {
   }
 
   function selectionBounds() {
+    if(subject().field==='industry')return [[frame.west,frame.south],[frame.east,frame.north]] as [[number,number],[number,number]];
     const focus=comparisonFocus();
     if(focus)return [[focus.focusBounds[0],focus.focusBounds[1]],[focus.focusBounds[2],focus.focusBounds[3]]] as [[number,number],[number,number]];
+    if(subject().field==='agriculture')return state.farmExtent==='full'||!farmingView().active ? [[frame.west,frame.south],[frame.east,frame.north]] as [[number,number],[number,number]] : europeFarmingInitialBounds;
     const codes = countries.filter(c => state.place ? c.code === state.place : state.region === 'all' || c.region === state.region).map(c => c.code);
     if (state.region === 'all' && !state.place) return [[-25, 32], [65, 73]] as [[number, number], [number, number]];
     return visibleBounds(geography.features.filter(f => codes.includes(f.properties.code)).map(f => f.geometry));
@@ -514,7 +549,8 @@ export function initEuropeAtlas() {
     const [right, top] = project(bounds[1]);
     const width = Math.max(right - left, 24), height = Math.max(bottom - top, 24);
     box = [(left + right - width) / 2 - width * .12, (top + bottom - height) / 2 - height * .12, width * 1.24, height * 1.24];
-    if (cultureActive() || state.region === 'all' && !state.place&&!comparisonFocus()) box = [0, 0, frame.width, frame.height];
+    if (cultureActive() || subject().field==='industry' || subject().field!=='agriculture'&&state.region === 'all' && !state.place&&!comparisonFocus() || subject().field==='agriculture'&&!comparisonFocus()&&(state.farmExtent==='full'||!farmingView().active)) box = [0, 0, frame.width, frame.height];
+    else if(subject().field==='agriculture'&&!comparisonFocus()) box = [left-width*.04,top-height*.04,width*1.08,height*1.08];
     staticMap.setAttribute('viewBox', box.join(' '));
     staticSymbols();
     map?.fitBounds(bounds, { padding: {top:20,bottom:42,left:14,right:14}, maxZoom: 7, duration: reduced ? 0 : 450 });
@@ -524,6 +560,7 @@ export function initEuropeAtlas() {
   function render(refit = false, restorePoint = true) {
     query<HTMLElement>('[data-eu-farm-candidates]').hidden=true;
     const currentField=fields.find(field=>field.id===subject().field)!;
+    query('[data-eu-reset]').textContent=currentField.id==='agriculture'?'欧州全域へ':'全体へ';
     query('[data-eu-field-label]').textContent=currentField.label;
     query('[data-eu-field-kicker]').textContent='EUROPE · '+currentField.id.toUpperCase();
     query('[data-eu-field-heading]').textContent=europeFieldHeadings[currentField.id];
@@ -542,12 +579,12 @@ export function initEuropeAtlas() {
       const selected=cultureSelection(culture.readState(),topic as 'ethnicity'|'religion');
       if(selected.state.cultureCase)query('[data-culture-takeaway]').textContent=selected.censusCase.grain==='LAD'?'イングランド・ウェールズで自己申告分類の地域差を読む事例です。欧州全域の分布ではありません。':'クロアチアの自己申告分類を全国値で読む事例です。行政区と同じ粒度では比較しません。';
     }else if(cultureRunning){cultureRunning=false;culture.setActive(false);}
+    cultureOverview.render(cultureActive(),topic==='religion'?'religion':'ethnicity',state.cultureCase??'');
     const selectedTopic=currentField.id==='agriculture'?(['forest','treecover'].includes(topic)?'treecover':'crops'):currentField.id==='population'?(cultureActive()?topic:'density'):['precipitation','drainage'].includes(topic)?'water':topic;
-    const selectedIndustry=topic==='hubs'?config.readings.find(reading=>reading.id===state.feature&&reading.field==='industry'):undefined;
     all<HTMLElement>('[data-eu-topic]').forEach(button=>{
-      const representative=config.readings.find(reading=>reading.id===button.dataset.euTopicFeature);
+      const industryGroup=normaliseEuropeIndustryGroup(button.dataset.euIndustryGroup);
       const selected=button.closest('[data-eu-water-options]')?topic:selectedTopic;
-      const active=representative?topic==='hubs'&&selectedIndustry?.group===representative.group:button.dataset.euTopic===selected&&!(topic==='hubs'&&selectedIndustry);
+      const active=industryGroup?topic==='hubs'&&state.industryGroup===industryGroup:button.dataset.euTopic===selected&&!(topic==='hubs'&&state.industryGroup);
       button.setAttribute('aria-pressed',String(active));
       if(button.getAttribute('role')==='tab'){
         button.setAttribute('aria-selected',String(active));button.tabIndex=active?0:-1;
@@ -560,7 +597,11 @@ export function initEuropeAtlas() {
     });
     document.title=`欧州の${currentField.label}｜Insight Journal`;
     const canonical=writeEuropeState(new URL(location.href),state);
-    if(canonical.pathname!==location.pathname||cultureActive()&&canonical.href!==location.href)history.replaceState({},'',canonical);
+    if(canonical.pathname!==location.pathname||(cultureActive()||state.layer==='contours')&&canonical.href!==location.href)history.replaceState({},'',canonical);
+    query<HTMLElement>('[data-eu-region-host]').hidden=currentField.id==='industry';
+    query<HTMLElement>('[data-eu-industry-scope-host]').hidden=currentField.id!=='industry';
+    query<HTMLElement>('[data-eu-industry-scope-note]').hidden=currentField.id!=='industry';
+    query<HTMLSelectElement>('[data-eu-industry-scope]').value=isEuropeIndustryCountry(state.place)?`country:${state.place}`:`region:${state.region}`;
     const active = [state.city];
     const place = countries.find(c => c.code === state.place);
     query('[data-eu-focus]').textContent = `${place?.name ?? regionNames[state.region]} · ${subject().period}${state.place === 'RUS' ? subject().indicator?' · 数値はロシア全土':' · 地図は表示枠内のみ' : ''}`;
@@ -577,7 +618,7 @@ export function initEuropeAtlas() {
     query<HTMLSelectElement>('[data-eu-city-choice]').value=state.city;
     const city=cities.find(city=>city.id===state.city);
     query<HTMLElement>('[data-eu-climate-overview]').hidden=!!city;
-    query('#eu-city-heading').textContent=city?`${city.name}の気候と農畜産`:'欧州の気候分布';
+    query('#eu-city-heading').textContent=city?`${city.name}の雨温図`:'欧州の気候分布';
     query<HTMLElement>('[data-eu-capital-missing]').hidden=!!city||!place;
     query('[data-eu-capital-missing]').textContent=`対象国：${place?.name??'未選択'}。首都の観測値は未収録です。地図下の都市一覧から、収録済みの観測地点を選べます。`;
     query<HTMLElement>('[data-eu-climate-statistics-link]').hidden=!city;
@@ -613,17 +654,23 @@ export function initEuropeAtlas() {
   }
   function commit(refit = false, keepFocus = false, restorePoint = true) { invalidateGridReading();const focus=keepFocus?comparisonFocus():undefined;history.pushState({}, '', writeEuropeFarmingFocus(writeEuropeState(new URL(location.href), state),focus?.id)); render(refit,restorePoint); }
   function selectCountry(code: string) {
+    if(subject().field==='industry'){
+      const country=countries.find(c=>c.code===code);if(!country)return;
+      state.place=isEuropeIndustryCountry(code)?code:'';state.region=country.region;state.city='';state.compare=[];delete state.feature;commit(false);return;
+    }
     const country = countries.find(c => c.code === code);
     state.place = country?.code ?? '';
     if(state.farmCompare){state.farmCompare=state.farmCompare.filter(code=>code!==state.place);if(!state.farmCompare.length)delete state.farmCompare;}
     delete state.feature;
+    if (!country){state.region='all';state.city='';state.compare=[];}
     if (country) {
       state.region = country.region;
-      state.city=defaultEuropeCity(code,ids);state.compare=[];
+      state.city=subject().field==='agriculture'?'':defaultEuropeCity(code,ids);state.compare=[];
     }
-    commit(true);
+    commit(subject().field!=='agriculture');
   }
   function selectCity(id: string) {
+    if(id===''){state.city='';state.compare=[];delete state.feature;commit(false);return;}
     const city = cities.find(c => c.id === id);
     if (!city) return;
     state.city = id;
@@ -701,7 +748,13 @@ export function initEuropeAtlas() {
     } catch { if (token === generation) fallback(); }
   }
   all<SVGImageElement>('image').forEach(img=>img.addEventListener('error',()=>{if(img.style.display!=='none')status.textContent='地図画像を取得できませんでした。出典・解説・国別の数値は確認できます。主題を選び直すか、通常地図への再試行を使ってください。';}));
-  all<HTMLElement>('[data-eu-region]').forEach(button => button.addEventListener('click', () => { state.region = button.dataset.euRegion!; state.place = ''; delete state.feature;commit(true); }));
+  query<HTMLSelectElement>('[data-eu-industry-scope]').addEventListener('change',event=>{
+    const [kind,id]=(event.target as HTMLSelectElement).value.split(':');
+    if(kind==='country'&&isEuropeIndustryCountry(id)){selectCountry(id);return;}
+    if(kind!=='region'||!Object.hasOwn(regionNames,id))return;
+    state.region=id;state.place='';state.city='';state.compare=[];delete state.feature;commit(false);
+  });
+  all<HTMLElement>('[data-eu-region]').forEach(button => button.addEventListener('click', () => { state.region = button.dataset.euRegion!; state.place = ''; delete state.feature;commit(subject().field!=='industry'); }));
   all<SVGElement>('[data-eu-shape]').forEach(shape => shape.addEventListener('click', () => { if (subject().indicator) selectCountry(shape.dataset.euShape!); }));
   staticMap.addEventListener('click', event => {
     if (state.layer === 'climate') return;
@@ -711,13 +764,15 @@ export function initEuropeAtlas() {
   });
   all<HTMLElement>('[data-eu-layer]').forEach(b => b.addEventListener('click', () => setLayer(b.dataset.euLayer!)));
   all<HTMLElement>('[data-eu-topic]').forEach(button=>button.addEventListener('click',()=>{
-    if(button.dataset.euTopicFeature){
-      const representative=config.readings.find(reading=>reading.id===button.dataset.euTopicFeature)!;
-      state.layer='hubs';state.feature=representative.id;state.place=representative.country;
-      state.region=countries.find(country=>country.code===representative.country)?.region??'all';
-      delete state.single;commit(true);
+    const group=normaliseEuropeIndustryGroup(button.dataset.euIndustryGroup);
+    if(group){state.layer='hubs';state.industryGroup=group;delete state.feature;delete state.single;commit(false);}
+    else {
+      if(subject().field==='industry'){
+        delete state.feature;delete state.industryGroup;
+        if(button.dataset.euTopic==='hubs'){state.place='';state.region='all';state.city='';state.compare=[];}
+      }
+      setLayer(button.dataset.euTopic!);
     }
-    else {if(subject().field==='industry')delete state.feature;setLayer(button.dataset.euTopic!);}
   }));
   // Match the US subject controls: arrow keys select the adjacent topic.
   all<HTMLElement>('[data-eu-topic-field],[data-eu-water-options]').forEach(group=>group.addEventListener('keydown',event=>{
@@ -747,7 +802,7 @@ export function initEuropeAtlas() {
     query<HTMLElement>('[data-eu-farm-candidates]').hidden=true;
     query<HTMLElement>('.eu-map-stage').focus({preventScroll:true});
   }});
-  query('[data-eu-reset]').addEventListener('click', () => { state.region = 'all'; state.place = ''; delete state.feature;commit(true); });
+  query('[data-eu-reset]').addEventListener('click', () => { state.region = 'all'; state.place = ''; state.city='';state.compare=[];delete state.feature;delete state.industryGroup;if(subject().field==='agriculture')state.farmExtent='full';commit(true); });
   drainageChoice.addEventListener('change',()=>{state.basin=normaliseEuropeDrainageBasin(drainageChoice.value);delete state.point;delete state.feature;commit(false);});
   query('[data-eu-drainage-clear]').addEventListener('click',()=>{delete state.basin;delete state.point;delete state.feature;commit(false);query('[data-eu-basin-summary]').textContent='色は区画を見分けるための識別色です。量の大小ではありません。';});
   all<HTMLElement>('[data-eu-zoom]').forEach(button => button.addEventListener('click', () => {

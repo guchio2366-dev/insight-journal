@@ -43,7 +43,7 @@ test('気候色は北米の23凡例と全30色の作成定義に一致し、分�
 test('国・都市・地点・表示範囲と年がURLを往復し、不正な値は解除される',()=>{
  const s=readWestState('?country=SAU&city=riyadh&topic=climate&year=2021&map=10,20,400,300&at=46.7,24.9','natural',data);
  assert.deepEqual(readWestState(westSearch(s),'natural',data),s);
- const ag=readWestState(westSearch(s,'agriculture'),'agriculture',data);assert.equal(ag.topic,'wheat');assert.equal(ag.city,'riyadh');assert.deepEqual(ag.view,s.view);assert.deepEqual(ag.point,s.point);
+ const ag=readWestState(westSearch(s,'agriculture'),'agriculture',data);assert.equal(ag.topic,'farming-overview');assert.equal(ag.city,'riyadh');assert.deepEqual(ag.view,s.view);assert.deepEqual(ag.point,s.point);
  const bad=readWestState('?country=XXX&city=nonexistent&topic=ports&map=0,0,-2,NaN&year=1800&at=999,0','natural',data);
  assert.equal(bad.country,'');assert.equal(bad.city,'');assert.equal(bad.topic,'climate');assert.equal(bad.view,null);assert.equal(bad.year,2024);assert.equal(bad.point,null);
  assert.equal(readWestState('?country=BHR&city=riyadh','natural',data).city,'');

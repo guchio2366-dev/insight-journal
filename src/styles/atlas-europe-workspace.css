@@ -334,9 +334,14 @@
  .eu-workspace-root[data-europe-detail] .eu-water-options button { min-height:44px; padding:7px 10px; }
 }
 @media(min-width:960px) and (max-width:1199px) {
- .eu-workspace-root[data-europe-detail] .atlas-desktop-shell:not(.is-reading-news) { grid-template-columns:160px minmax(0,1fr); gap:12px; padding:12px 12px 28px; }
+ .eu-workspace-root[data-europe-detail] .atlas-desktop-shell:not(.is-reading-news) { grid-template-columns:160px minmax(0,1fr); gap:12px; padding:10px 12px 24px; }
  .eu-workspace-root[data-europe-detail] .atlas-desktop-shell:not(.is-reading-news) .atlas-news { height:calc(100dvh - 72px); min-height:0; max-height:calc(100dvh - 72px); }
- .eu-workspace-root[data-europe-detail] .eu-layout { grid-template-columns:minmax(0,1.65fr) minmax(285px,1fr); }
+ .eu-workspace-root[data-europe-detail] .eu-region-top { display:none; }
+ .eu-workspace-root[data-europe-detail] .eu-region-buttons { margin-top:0; }
+ .eu-workspace-root[data-europe-detail] .eu-region-navigation { margin-bottom:14px; }
+ .eu-workspace-root[data-europe-detail] .eu-layout { grid-template-columns:minmax(0,1fr) minmax(340px,380px); gap:16px; }
+ .eu-workspace-root[data-europe-detail] .eu-map-stage,
+ .eu-workspace-root[data-europe-detail].has-eu-comparison:has([data-eu-climate-reader]:not([hidden])) .eu-map-stage { aspect-ratio:1.65; }
 }
 
 /* The first view includes real subject entries and each map's complete key. */
@@ -401,6 +406,31 @@
 .eu-workspace-root .eu-selected-point[hidden] { display:none; }
 .eu-workspace-root :is(.eu-read-panel,.eu-drainage-choice) .eu-grid-value p { font:14px/1.6 var(--sans); color:#3b4848; }
 
+/* Quiet names keep the climate surface visible. Other stations stay focusable. */
+.eu-workspace-root .eu-map-label[data-eu-map-kind="city"] { min-height:22px; padding:1px 3px; border:0; border-radius:0; background:transparent; color:#203e49; font:500 12px/1.5 var(--sans); text-shadow:0 1px 2px #fffdf2,1px 0 2px #fffdf2,-1px 0 2px #fffdf2; }
+.eu-workspace-root .eu-map-label[data-eu-map-kind="city"][aria-pressed=true] { font-weight:700; text-decoration:underline; text-underline-offset:3px; }
+.eu-workspace-root .eu-map-label[data-eu-map-kind="city"]:is(:hover,:focus-visible) { background:#fffdf2; outline:2px solid #426b6b; outline-offset:2px; }
+.eu-workspace-root .eu-map-label[data-eu-map-kind="city"].is-point-only { width:16px; height:16px; min-height:16px; padding:0; color:transparent; text-shadow:none; font-size:0; }
+.eu-workspace-root .eu-map-label[data-eu-map-kind="city"].is-point-only:is(:hover,:focus) { width:auto; height:auto; padding:1px 3px; color:#203e49; font-size:12px; }
+.eu-workspace-root .eu-crop-label.is-muted { opacity:.22; }
+.eu-workspace-root .eu-crop-label.is-muted:is(:hover,:focus-visible) { opacity:1; }
+/* Retain 13px place names; dots and focus reveal the less prominent places. */
+.eu-workspace-root .eu-map-label[data-eu-map-kind="feature"]:not([data-eu-composition]) { min-height:22px; padding:1px 3px; border:0; border-radius:0; background:transparent; font:600 13px/1.5 var(--sans); text-shadow:0 1px 2px #fffdf2,1px 0 2px #fffdf2,-1px 0 2px #fffdf2; box-shadow:none; }
+.eu-workspace-root .eu-map-label[data-eu-map-kind="feature"]:not([data-eu-composition])[aria-pressed=true] { text-decoration:underline; text-underline-offset:3px; }
+.eu-workspace-root .eu-map-label[data-eu-map-kind="feature"]:not([data-eu-composition]):is(:hover,:focus-visible) { outline:2px solid #426b6b; outline-offset:2px; }
+.eu-workspace-root .eu-map-label[data-eu-map-kind="feature"]:not([data-eu-composition]).is-point-only { width:16px; height:16px; min-height:16px; padding:0; color:transparent; text-shadow:none; font-size:0; }
+.eu-workspace-root .eu-map-label[data-eu-map-kind="feature"]:not([data-eu-composition]).is-point-only:is(:hover,:focus) { width:auto; height:auto; padding:1px 3px; color:#173c48; text-shadow:0 1px 2px #fffdf2,1px 0 2px #fffdf2,-1px 0 2px #fffdf2; font-size:13px; }
+@media(min-width:960px) {
+ .eu-workspace-root[data-europe-detail] .eu-workspace[data-field="agriculture"] .eu-map-stage { aspect-ratio:1.4; }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-city-reading-head { display:none; }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-reader-heading { margin:0 0 3px; }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-city-reading .eu-city-climate { margin:3px 0 4px; padding-top:2px; font:700 18px/1.5 var(--sans); }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-city-reading :is(.eu-climate-reason,.eu-climate-farming>p) { margin:4px 0; font:14px/1.6 var(--sans); }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-climate-farming { margin-top:3px; padding-top:2px; }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-climate-farming h4 { margin:0 0 4px; font:700 17px/1.5 var(--sans); }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-inline-climate-plot .atlas-climate-city-name { display:none; }
+}
+
 /* Match the US field → topic → map/key → reading sequence without changing data. */
 .eu-workspace-root[data-europe-detail] .eu-field-nav { border-bottom:0; }
 @media(min-width:960px) {
@@ -429,3 +459,11 @@
 .eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="population"] { gap:8px; }
 .eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="population"] button { border-color:#bac9c6; border-radius:4px; background:#fff; color:#243f48; }
 .eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="population"] button[aria-pressed=true] { background:#224c59; color:#fff; }
+
+.eu-workspace-root .eu-industry-scope { display:flex; align-items:center; gap:12px; min-height:40px; color:#243b48; font:700 14px/1.5 var(--sans); }
+.eu-workspace-root .eu-industry-scope select { min-height:40px; width:min(360px,100%); padding:6px 10px; border:1px solid #9eaca3; background:#fffef5; color:#223b45; font:14px/1.5 var(--sans); }
+.eu-workspace-root .eu-industry-scope-note { margin:0 0 12px; font:14px/1.8 var(--sans); color:#526561; }
+.eu-workspace-root .eu-map-label.is-emphasized { border-color:#234553; box-shadow:inset 0 -3px #47766b; }
+.eu-workspace-root .eu-label-dot.is-emphasized { stroke-width:3; }
+
+.eu-workspace-root .eu-item-ranking-note { margin:0 0 8px; font:14px/1.7 var(--sans); color:#526561; }

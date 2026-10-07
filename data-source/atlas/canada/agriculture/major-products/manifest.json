@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "accessedAt": "2026-10-07",
+  "selection": "10 major food/feed products chosen by farm cash receipts, international supply and geographic reading; hay and pasture are auxiliary measures, not added products. This is not a mixed-unit numerical ranking.",
+  "sourceScope": {
+    "census": "8 main products plus hay/pasture; exact retained 2021 CSV rows joined by DGUID; 1747 covered CCS and 10 uncovered territorial polygons.",
+    "pork": "3 published rounded province inventory percentages; national 13.98 million head is a separate source value; 2025 edition, Jan 1 date as stated without inferring a reference year.",
+    "chicken": "2021 CFC producer counts published by AAFC; 10 province values and separately published national total. Not bird numbers, output or Census farms."
+  },
+  "blockedAcquisition": "No CCS pork or chicken values were acquired; none are inferred or allocated from province figures.",
+  "reproduction": "Rerun data-source/atlas/canada-census-2021/convert.mjs with the retained official source cache for CCS. Provincial supplement is an attributed factual transcription of inspected source tables. No raw HTML snapshot is claimed.",
+  "files": [
+    {
+      "file": "src/data/atlas/canada/agriculture-major-reading.json",
+      "bytes": 35195,
+      "sha256": "38990e9c8c86016e342aaedf5064181305448de071d7a27414c4d132137ccf58"
+    },
+    {
+      "file": "data-source/atlas/canada/agriculture/major-products/provincial-supplement.json",
+      "bytes": 2738,
+      "sha256": "9c3217f688daabaafa6202c79bbf1b83d106e71ee41af70222af5aa54880c9bb"
+    },
+    {
+      "file": "data-source/atlas/canada/agriculture/major-products/aafc-chicken-producers-2021.csv",
+      "bytes": 2108,
+      "sha256": "e99a6d3286d6e948b8481cf2a2a1d85642c836ccf02c19b29f3e2b1cecedff8d"
+    }
+  ]
+}

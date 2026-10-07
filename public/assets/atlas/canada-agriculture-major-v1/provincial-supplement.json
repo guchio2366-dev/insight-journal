@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "source": "Agriculture and Agri-Food Canada; Chicken Farmers of Canada",
+  "accessedAt": "2026-10-07",
+  "method": "Factual transcription of the individually inspected official published tables. Original published precision retained; no raw HTML snapshot is claimed. Province identifiers added for exact joins. Never allocate province figures to CCS.",
+  "licence": {
+    "name": "Government of Canada terms and conditions; underlying CFC attribution retained",
+    "url": "https://www.canada.ca/en/transparency/terms.html"
+  },
+  "products": {
+    "pork": {
+      "id": "pork",
+      "label": "豚（全国頭数に占める州の割合）",
+      "unit": "%",
+      "unitLabel": "全国在庫頭数に対する比率（%）",
+      "nationalValue": 13.98,
+      "nationalUnit": "百万頭",
+      "referenceYear": 2025,
+      "referenceLabel": "AAFC Quick Facts 2025（在庫：1月1日）",
+      "sourceName": "Agriculture and Agri-Food Canada",
+      "sourceTableId": "Hogs / Pork — Quick Facts 2025",
+      "sourceTableUrl": "https://agriculture.canada.ca/en/sector/animal-industry/red-meat-and-livestock-market-information/hogs-pork",
+      "definition": "ケベック・オンタリオ・マニトバの全国在庫頭数に占める公表比率。整数％の丸め値をそのまま表示する。全国値は13.98百万頭。",
+      "notes": "公表された3州のみ。その他の州とCCSは未収録で、ゼロではない。州別頭数を逆算しない。",
+      "qualityNote": "整数％の公表比率。",
+      "provinces": {
+        "24": 30,
+        "35": 27,
+        "46": 24
+      }
+    },
+    "chicken": {
+      "id": "chicken",
+      "label": "鶏肉生産者",
+      "unit": "生産者",
+      "unitLabel": "生産者数",
+      "nationalValue": 2823,
+      "nationalUnit": "生産者",
+      "referenceYear": 2021,
+      "referenceLabel": "2021年・州別生産者数",
+      "sourceName": "AAFC / Chicken Farmers of Canada",
+      "sourceTableId": "2021 Provincial poultry facts — Chicken producers",
+      "sourceTableUrl": "https://agriculture.canada.ca/en/sector/animal-industry/poultry-and-egg-market-information/industry-profile/provincial-poultry-facts",
+      "definition": "Chicken Farmers of Canadaの州別生産者数。羽数・生産重量・センサスの全農場数ではない。",
+      "notes": "10州の公表値。全国計は全州・準州を含む。3準州の個別値とCCS値は未収録で、ゼロとはしない。",
+      "provinces": {
+        "59": 312,
+        "48": 246,
+        "47": 71,
+        "46": 125,
+        "35": 1298,
+        "24": 626,
+        "13": 39,
+        "12": 92,
+        "11": 8,
+        "10": 6
+      }
+    }
+  }
+}

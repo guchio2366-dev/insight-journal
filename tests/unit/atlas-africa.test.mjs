@@ -69,10 +69,9 @@ test('comparison URLs preserve source selection and reject unrelated thematic co
  assert.equal(readState(`?field=industry&theme=${theme.id}&context=${theme.compareMetric}`).theme,themes.find(t=>t.field==='industry').id);
 });
 
-test('theme defaults use representative countries while explicit country and region remain authoritative',()=>{
- assert.equal(readState('?field=agriculture').place,'CIV');
- assert.equal(readState('?field=industry').place,'ZMB');
- assert.equal(readState('?field=nature&theme=east-highlands').place,'ETH');
+test('every field starts with no country and a full-region overview while explicit selections remain authoritative',()=>{
+ for(const field of ['nature','agriculture','industry','population']){const initial=readState('?field='+field);assert.equal(initial.place,'');assert.equal(initial.compare,'');assert.equal(initial.zoom,'all');assert.equal(initial.region,'all');assert.equal(initial.overview,true);assert.deepEqual(readState(writeState({...initial},new URL('https://example.com/atlas/africa/')).search),initial);}
+ assert.equal(readState('?field=nature&theme=east-highlands').place,'');
  const explicit=readState('?field=industry&place=EGY&region=north&zoom=theme');
  assert.equal(explicit.place,'EGY');assert.equal(explicit.region,'north');assert.equal(explicit.zoom,'theme');
  assert.deepEqual(readState(writeState(explicit,new URL('https://example.com/atlas/africa/')).search),explicit);

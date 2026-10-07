@@ -47,6 +47,11 @@ async function setup(location='?layer=terrain&render=static',fixture={}){
   const field=url.pathname.match(/\/atlas\/europe\/(nature|agriculture|industry|population)\//)?.[1]??'nature';
   const html=(await readFile(`dist/atlas/europe/${field}/index.html`,'utf8')).replace(/<script(?![^>]*type=["']application\/json["'])[^>]*>[\s\S]*?<\/script>/g,'');
   const w=new Window({url:url.href,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
+  // State commits and annotation rendering use separate frames; exercise a busy renderer.
+  if(fixture.animationFrameDelay){
+    const requestFrame=w.requestAnimationFrame.bind(w);
+    w.requestAnimationFrame=callback=>requestFrame(time=>w.setTimeout(()=>callback(time),fixture.animationFrameDelay));
+  }
   w.document.body.innerHTML=html;
   const q=selector=>w.document.querySelector(selector),root=q('[data-europe-detail]');
   const config=JSON.parse(q('[data-eu-config]').textContent);
@@ -128,7 +133,7 @@ test('terrain and contours query the same real elevation cell in metres, preserv
   }finally{await app.w.happyDOM.close();}
 });
 
-for(const layer of ['terrain','contours']){
+for(const layer of ['terrain']){
   test(`${layer} named feature selection survives comparison return and a fresh page load with its elevation`,async()=>{
     const app=await setup(`?layer=${layer}&render=static`);
     try{
@@ -148,6 +153,24 @@ for(const layer of ['terrain','contours']){
     }finally{await app.w.happyDOM.close();}
   });
 }
+
+test('elevation drops a stale named district but preserves the actual point through comparison and reload',async()=>{
+  const app=await setup('?layer=contours&feature=alps&point='+alps.join(',')+'&render=static');
+  try{
+    await assertReading(app,alps);
+    assert.equal(new URL(app.w.location.href).searchParams.has('feature'),false);
+    assert.equal(app.q('[data-eu-feature-list]').hidden,true);
+    assert.equal(app.q('[data-eu-feature-card]').hidden,true);
+    assert.match(app.q('[data-eu-subject-title]').textContent,/標高/);
+    const comparison=await setup(app.q('[data-eu-comparison-link="nature-density"]').href);
+    try{
+      const back=comparison.q('[data-eu-comparison-return]');
+      const reload=await setup(back.href);
+      try{await assertReading(reload,alps);assert.equal(new URL(reload.w.location.href).searchParams.has('feature'),false);assert.equal(reload.q('[data-eu-feature-list]').hidden,true);}
+      finally{await reload.w.happyDOM.close();}
+    }finally{await comparison.w.happyDOM.close();}
+  }finally{await app.w.happyDOM.close();}
+});
 
 test('back/forward popstate and reload restore arbitrary clicked points without inventing a feature selection',async()=>{
   const app=await setup();
@@ -272,7 +295,7 @@ for(const topic of ['ethnicity','religion'])test(`${topic} keeps the unselected 
     assert.equal(legend.children.length,7);
     assert.ok([...legend.querySelectorAll('[data-culture-scale-key]')].every(key=>key.hidden));
     assert.equal(legend.lastElementChild.hidden,false);
-    assert.match(legend.lastElementChild.textContent,/回答分類未選択.*0%ではありません/);
+    assert.match(legend.lastElementChild.textContent,/未掲載・3対象以外.*0%ではありません/);
     assert.match(legend.lastElementChild.querySelector('i').getAttribute('style'),/#b8bec7/);
     assert.match(app.q('[data-culture-denominator]').textContent,/分母/);
     const select=(selector,value)=>{const node=app.q(selector);node.value=value;node.dispatchEvent(new app.w.Event('change',{bubbles:true}));};
@@ -284,4 +307,114 @@ for(const topic of ['ethnicity','religion'])test(`${topic} keeps the unselected 
     app.choose('terrain');
     assert.equal(legend.hidden,true);assert.equal(app.q('[data-eu-subject-legend]').hidden,false);
   }finally{await app.w.happyDOM.close();}
+});
+
+for(const topic of ['ethnicity','religion'])test(`${topic} shows all three published response compositions without an initial case and preserves explicit selection/history`,async()=>{
+  const app=await setup(`/insight-journal/atlas/europe/population/?layer=${topic}&render=static`,{animationFrameDelay:40});
+  try{
+    const visibleCompositions=()=>app.w.document.querySelectorAll('[data-eu-composition]:not([hidden])').length;
+    const initial=app.w.location.href,full=app.q('[data-eu-static]').getAttribute('viewBox');
+    const key=app.q('[data-eu-culture-composition-key]');assert.equal(key.hidden,false);
+    await until(()=>app.w.document.querySelectorAll('[data-eu-composition]').length===3,'The annotation frame renders all three compositions');
+    assert.equal(key.querySelectorAll('[data-eu-composition-table]').length,3);
+    assert.equal(app.q('[data-culture-case]').value,'');assert.equal(app.q('[data-culture-category]').value,'');assert.equal(app.q('[data-culture-area]').value,'');
+    await until(()=>app.w.document.querySelectorAll('[data-eu-composition]:not([hidden])').length===3);
+    const expected=topic==='ethnicity'?[5,5,8]:[9,9,12];
+    for(const [index,code] of ['E92000001','W92000004','HRV'].entries()){
+      const button=app.q(`[data-eu-composition="${topic}-${code}"]`);assert.equal(button.querySelectorAll('circle').length,expected[index]);
+      assert.equal(button.querySelector('svg').getAttribute('viewBox'),'0 0 56 56');
+      assert.equal(key.querySelector(`[data-eu-composition-table="${code}"]`).querySelectorAll('tbody tr').length,expected[index]);
+    }
+    assert.match(app.q('[data-culture-overview]').textContent,/自己認識.*言語分布.*実践/);
+    app.q(`[data-eu-composition="${topic}-HRV"]`).click();
+    await until(()=>visibleCompositions()===0,'Selecting a census case hides every overview composition');
+    assert.equal(app.q('[data-culture-case]').value,'croatia-national-2021');assert.equal(key.hidden,true);
+    assert.equal(app.q('[data-culture-category]').value,'');assert.equal(app.q('[data-culture-area]').value,'');
+    assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);assert.equal(app.w.document.querySelectorAll('[data-eu-composition]:not([hidden])').length,0);
+    assert.equal(new URL(app.w.location.href).searchParams.has('feature'),false);
+    app.restore(initial);assert.equal(key.hidden,false);assert.equal(app.q('[data-culture-case]').value,'');
+    await until(()=>app.w.document.querySelectorAll('[data-eu-composition]:not([hidden])').length===3);
+    const select=app.q('[data-culture-case]');select.value='england-wales-2021';select.dispatchEvent(new app.w.Event('change'));
+    await until(()=>visibleCompositions()===0,'The case selector hides every overview composition');
+    select.value='';select.dispatchEvent(new app.w.Event('change'));
+    await until(()=>visibleCompositions()===3,'Clearing the case restores all three overview compositions');
+    assert.equal(key.hidden,false);
+    assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
+  }finally{await app.w.happyDOM.close();}
+});
+
+
+test('産業分野は国を自動選択せず、全拠点を保ったまま強調し全体へ戻れる',async()=>{
+  const app=await setup('/insight-journal/atlas/europe/industry/?layer=hubs&render=static');
+  try{
+    const full=app.q('[data-eu-static]').getAttribute('viewBox');
+    app.q('[data-eu-industry-group="機械・輸送"]').click();await tick();
+    const params=new URL(app.w.location.href).searchParams;
+    assert.equal(params.get('industryGroup'),'機械・輸送');assert.equal(params.has('place'),false);assert.equal(params.has('feature'),false);
+    assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
+    const config=app.config.readings.filter(item=>item.field==='industry');
+    assert.equal(config.filter(item=>app.q(`[data-eu-feature-point="${item.id}"]`).style.display!=='none').length,14);
+    assert.match(app.q('[data-eu-subject-takeaway]').textContent,/ミュンヘン.*トゥールーズ.*欧州全体/);
+    const scope=app.q('[data-eu-industry-scope]');scope.value='country:DEU';scope.dispatchEvent(new app.w.Event('change'));
+    await tick();assert.equal(app.q('[data-eu-country-reader]').hidden,false);assert.equal(app.q('[data-eu-country-reader]').open,true);
+    assert.match(app.q('[data-eu-national-values]').textContent,/18.94.*26.8.*63.62/s);
+    assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
+    app.choose('hubs');await tick();
+    assert.equal(scope.value,'region:all');assert.equal(app.q('[data-eu-country-reader]').hidden,true);
+    assert.equal(new URL(app.w.location.href).searchParams.has('industryGroup'),false);
+    assert.equal(new URL(app.w.location.href).searchParams.has('place'),false);
+  }finally{await app.w.happyDOM.abort();}
+});
+
+test('産業は4か国統計と地域事例を読み分け、URL復元も全欧州分布を保つ',async()=>{
+  const app=await setup('/insight-journal/atlas/europe/industry/?layer=manufacturing&place=GBR&render=static');
+  try{
+    const full=app.q('[data-eu-static]').getAttribute('viewBox');
+    assert.equal(app.q('[data-eu-industry-scope]').value,'country:GBR');
+    assert.match(app.q('[data-eu-national-values]').textContent,/8.22.*17.67.*72.42/s);
+    assert.equal(app.q('[data-eu-shape="NLD"]').style.fill,'#edece5');
+    assert.notEqual(app.q('[data-eu-shape="GBR"]').style.fill,'#edece5');
+    assert.match(app.q('[data-eu-legend-items]').textContent,/統計比較対象外/);
+    app.restore('?layer=hubs&place=NLD&feature=rotterdam&render=static');await tick();
+    assert.equal(app.q('[data-eu-industry-scope]').value,'region:west');
+    assert.equal(app.q('[data-eu-country-reader]').hidden,true);assert.match(app.q('[data-eu-subject-title]').textContent,/ロッテルダム/);
+    assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
+    app.restore('?layer=hubs&industryGroup=技術・医薬&region=north&render=static');await tick();
+    assert.match(app.q('[data-eu-subject-title]').textContent,/北欧.*技術・医薬/);
+    assert.equal(app.q('[data-eu-topic="hubs"][data-eu-industry-group="技術・医薬"]').getAttribute('aria-pressed'),'true');
+    const points=app.config.readings.filter(item=>item.field==='industry');assert.ok(points.every(item=>app.q(`[data-eu-feature-point="${item.id}"]`).style.display!=='none'));
+  }finally{await app.w.happyDOM.abort();}
+});
+
+test('気候の空の都市選択と全体へ操作は雨温図を解除して概要を復元する',async()=>{
+  const app=await setup('?layer=climate&render=static');
+  try{
+    const choice=app.q('[data-eu-city-choice]');
+    for(const reset of [()=>{choice.value='';choice.dispatchEvent(new app.w.Event('change'));},()=>app.q('[data-eu-reset]').click()]){
+      choice.value='london';choice.dispatchEvent(new app.w.Event('change'));await tick();
+      assert.equal(app.q('[data-eu-climate-overview]').hidden,true);
+      reset();await tick();
+      assert.equal(choice.value,'');assert.equal(app.q('[data-eu-climate-overview]').hidden,false);
+      assert.equal(app.q('[data-eu-climate-statistics]').hidden,true);
+      assert.ok([...app.w.document.querySelectorAll('[data-city-reading]')].every(node=>node.hidden));
+      assert.equal(new URL(app.w.location.href).searchParams.has('city'),false);
+    }
+  }finally{await app.w.happyDOM.abort();}
+});
+
+test('a named population city reads its published density cell beside the map without changing the camera',async()=>{
+  const app=await setup('/insight-journal/atlas/europe/population/?layer=density&render=static');
+  try{
+    const full=app.q('[data-eu-static]').getAttribute('viewBox'),choice=app.q('[data-eu-feature-choice]');
+    const paris=app.config.populationCities.find(city=>city.name==='パリ');
+    choice.value=paris.id;choice.dispatchEvent(new app.w.Event('change'));
+    await until(()=>app.q('[data-eu-subject-result]').textContent.endsWith('（2020）'));
+    assert.deepEqual(savedPoint(app),paris.coordinates);
+    const bytes=gunzipSync(await readFile('public/assets/atlas/europe/population-v1/density.bin.gz'));
+    const values=new Float32Array(bytes.buffer,bytes.byteOffset,bytes.byteLength/4),cell=displayCell(values,paris.coordinates,-1);
+    assert.match(app.q('[data-eu-subject-result]').textContent,new RegExp(cell.value.toLocaleString('ja-JP',{maximumFractionDigits:1})+' 人/km²'));
+    assert.ok(app.q('[data-eu-subject-grid]').closest('.eu-read-panel'));
+    assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
+    assert.equal(new URL(app.w.location.href).searchParams.get('feature'),paris.id);
+  }finally{await app.w.happyDOM.abort();}
 });

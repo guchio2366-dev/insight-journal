@@ -3,10 +3,11 @@ import {
   canadaCensusProvinceNames, type CanadaCensusCollection, type CanadaCensusFeature,
   type CanadaCensusProductId, type CanadaCensusCell,
 } from './atlas-canada-census-map';
+import {canadaAgricultureProducts,canadaAgricultureProductOrder,type CanadaAgricultureIndicatorId} from './atlas-canada-agriculture-products';
 
-export const canadaAgricultureOverviewIds: CanadaCensusProductId[] = ['canola', 'wheat', 'hay', 'beef', 'pasture'];
-export const canadaAgricultureOverviewColors = { canola: '#b38c16', wheat: '#287ba0', hay: '#387c5b', beef: '#b35354', pasture: '#79643d' };
-export const canadaAgricultureOverviewNames = { canola: 'カノーラ', wheat: '小麦', hay: '干草・栽培牧草', beef: '肉用母牛', pasture: '放牧地' };
+export const canadaAgricultureOverviewIds = canadaAgricultureProductOrder;
+export const canadaAgricultureOverviewColors = Object.fromEntries(canadaAgricultureProductOrder.map(id=>[id,canadaAgricultureProducts[id].color])) as Record<CanadaAgricultureIndicatorId,string>;
+export const canadaAgricultureOverviewNames = Object.fromEntries(canadaAgricultureProductOrder.map(id=>[id,canadaAgricultureProducts[id].name])) as Record<CanadaAgricultureIndicatorId,string>;
 
 /** A display anchor must fall inside the held CCS polygon, including its holes. */
 export function canadaAgricultureInteriorAnchor(feature: CanadaCensusFeature) {
@@ -36,7 +37,7 @@ export function canadaAgricultureInteriorAnchor(feature: CanadaCensusFeature) {
 
 /** Province/national values remain their own official publications, never sums of CCS. */
 export function buildCanadaAgricultureOverviewModel(dataset: any, geometry: CanadaCensusCollection, context: CanadaCensusCollection) {
-  const ids = canadaAgricultureOverviewIds, seen = new Set<string>();
+  const ids = canadaAgricultureOverviewIds.filter(id=>dataset.products[id]), seen = new Set<string>();
   const anchors: Record<string, { point: number[]; bounds: number[] }> = {};
   for (const feature of geometry.features) {
     const id = String(feature.properties.DGUID), record = dataset.records[id];
@@ -49,13 +50,13 @@ export function buildCanadaAgricultureOverviewModel(dataset: any, geometry: Cana
   const summaries = [
     { id: 'prairie', name: 'プレーリーの穀物・カノーラ', codes: ['48', '47', '46'], anchorProvince: '47', products: ['canola', 'wheat'] },
     { id: 'west', name: '西部の母牛・放牧地', codes: ['48', '47'], anchorProvince: '48', products: ['beef', 'pasture'] },
-    { id: 'east', name: '東部にも干草', codes: ['35', '24'], anchorProvince: '24', products: ['hay', 'wheat'] },
+    { id: 'east', name: '東部にも干草', codes: ['35', '24'], anchorProvince: '24', products: ['hay', 'wheat', 'corn', 'dairy', 'soybeans'] },
   ].map(group => ({ ...group, values: Object.fromEntries(group.products.map(id => {
     const cells: CanadaCensusCell[] = dataset.provinces.filter((province: any) => group.codes.includes(province.code)).map((province: any) => province.cells[id]);
     if (cells.length !== group.codes.length || cells.some(cell => cell.status !== 'published' || cell.value === null)) throw new Error('Canada agriculture: a concentration requires published province values');
     const value = cells.reduce((sum, cell) => sum + cell.value!, 0);
     return [id, { value, nationalShare: value / dataset.products[id].national.value * 100, unit: dataset.products[id].unit }];
   })) }));
-  return { anchors, ids, counts, summaries, provinceNames: canadaCensusProvinceNames, labels: canadaCensusGeographicLabels(geometry), context,
+  return { anchors, ids, counts, summaries, products:canadaAgricultureProducts, provinceNames: canadaCensusProvinceNames, labels: canadaCensusGeographicLabels(geometry), context,
     evidence: { regionCount: seen.size, retainedIndicatorCells: seen.size * ids.length, exactDguidJoin: true, allDisplayAnchorsInsideOriginalCcs: true, boundarySourceGeneralizationMetres: 5000, overviewGranularity: 'official province/territory publication values, not summed CCS', detailAggregation: 'display cells group symbols, not values; counts are CCS, not farms' } };
 }
