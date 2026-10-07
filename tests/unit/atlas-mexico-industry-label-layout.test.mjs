@@ -19,3 +19,17 @@ test('Industry keeps every reading and both Mexico City topics legible at deskto
   assert.deepEqual(layoutMexicoIndustryLabels([...labels].reverse(),frame),positions,'Input order cannot cause label movement');
  }
 });
+
+test('Narrow map frames reserve room for the long construction topics without dropping labels',()=>{
+ for(const width of [358,390]){
+  const scale=width/900,frame={width,height:580*scale};
+  // Conservative Japanese text widths, and the full two-line font box measured in Chromium.
+  const labels=examples.map(([id,x,y,w])=>({id,x:x*scale,y:y*scale,width:w*.8,height:37.2}));
+  const positions=layoutMexicoIndustryLabels(labels,frame);
+  assert.equal(positions.length,10);
+  for(const [i,placed] of positions.entries()){
+   assert(placed.left>=0&&placed.top>=0&&placed.left+placed.width<=frame.width&&placed.top+placed.height<=frame.height);
+   for(const other of positions.slice(i+1))assert.equal(intersects(placed,other),false,`${width}px: ${placed.id} overlaps ${other.id}`);
+  }
+ }
+});

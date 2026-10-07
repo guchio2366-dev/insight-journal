@@ -5,7 +5,8 @@ export type IndustryLabelPlacement = IndustryLabel & {left:number;top:number};
 export function layoutMexicoIndustryLabels(labels:IndustryLabel[],frame:{width:number;height:number},gap=5):IndustryLabelPlacement[] {
  const placed:IndustryLabelPlacement[]=[];
  const overlap=(a:{left:number;top:number;width:number;height:number},b:{left:number;top:number;width:number;height:number})=>Math.max(0,Math.min(a.left+a.width,b.left+b.width)-Math.max(a.left,b.left)+gap)*Math.max(0,Math.min(a.top+a.height,b.top+b.height)-Math.max(a.top,b.top)+gap);
- const sorted=[...labels].sort((a,b)=>a.y-b.y||a.x-b.x||a.id.localeCompare(b.id));
+ // Reserve space for wide topics first; narrow labels can use the remaining gaps.
+ const sorted=[...labels].sort((a,b)=>b.width-a.width||a.y-b.y||a.x-b.x||a.id.localeCompare(b.id));
  for(const label of sorted){
   const {x,y,width,height}=label,candidates:{left:number;top:number}[]=[];
   for(let ring=0;ring<9;ring++)for(const dy of ring===0?[-height-12,12]:[-height-12-ring*24,12+ring*24])for(const dx of [12,-width-12,-width/2])candidates.push({left:x+dx,top:y+dy});
