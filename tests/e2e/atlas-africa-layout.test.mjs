@@ -91,7 +91,7 @@ test('actual distribution legends live beside the map and remain there during co
   await withAfricaPage(search,({root,q})=>{
    const legend=q('[data-africa-actual-key]');assert.equal(root.querySelectorAll('[data-africa-actual-key]').length,1);assert.equal(legend.hidden,false);assert.ok(q('.africa-map-card').contains(legend));assert.equal(q('.africa-detail').contains(legend),false);assert.ok(legend.querySelector('[data-africa-layer-legend]').children.length>0);
    assert.ok(q('.africa-map').compareDocumentPosition(legend)&4,'the full actual legend follows the map');
-   const labels=legend.textContent;q('[data-theme-comparison]').click();
+   const labels=legend.textContent;if(root.dataset.field==='agriculture'){assert.equal(q('[data-theme-comparison]').hidden,true);assert.equal(legend.querySelectorAll('[data-africa-agri-pick]').length,7);assert.ok(labels.trim());return;}q('[data-theme-comparison]').click();
    assert.equal(legend.hidden,false);assert.ok(q('.africa-map-card').contains(legend));assert.equal(q('[data-africa-statistics-key]').hidden,false);assert.ok(labels.trim());
    q('[data-theme-return]').click();assert.equal(legend.hidden,false);assert.equal(q('[data-africa-statistics-key]').hidden,true);
   });
@@ -102,12 +102,12 @@ test('reference country statistics preserve disclosure choices and comparison/re
  for(const [search,hidden] of [
   ['?field=nature&topic=climate&place=EGY&compare=COD&zoom=all',false],
   ['?field=nature&topic=water&water=river&metric=ER.H2O.INTR.PC&river=congo&place=COD&compare=EGY&zoom=all',true],
-  ['?field=agriculture&topic=farming&crop=rice&place=KEN&compare=ETH&zoom=all',false]
+  ['?field=agriculture&topic=farming&crop=rice&place=KEN&compare=ETH&zoom=all',true]
  ]){
   await withAfricaPage(search,({window,q,change})=>{
    const details=q('[data-country-statistics]');assert.equal(details.hidden,hidden);assert.equal(details.open,false);assert.equal(details.dataset.mode,'reference');
    if(!hidden){details.open=true;change('[data-place]','GHA');assert.equal(details.open,true);details.open=false;change('[data-place]','KEN');assert.equal(details.open,false);}
-   const source=readState(window.location.search);q('[data-theme-comparison]').click();
+   const source=readState(window.location.search);if(source.field==='agriculture'){assert.equal(q('[data-theme-comparison]').hidden,true);assert.equal(source.compare,'');assert.equal(parameters(window).has('year'),false);return;}q('[data-theme-comparison]').click();
    assert.equal(details.hidden,false);assert.equal(details.open,true);assert.equal(details.dataset.mode,'comparison');assert.equal(q('.africa-selected').hidden,false);
    assert.ok(parameters(window).get('context'));assert.equal(readState('?'+parameters(window).get('sourceState')).place,source.place);
    details.open=false;change('[data-place]','ZAF');assert.equal(details.open,false,'country changes must respect a manual collapse during comparison');
@@ -116,37 +116,46 @@ test('reference country statistics preserve disclosure choices and comparison/re
  }
 });
 
-test('agriculture layer disclosure stays open with the focused checkbox through toggles and asynchronous renders',async()=>{
- await withAfricaPage('?field=agriculture&topic=farming&crop=maize&place=KEN&zoom=all',async({window,root,q,change})=>{
-  let disclosure=q('.africa-agri-layer-disclosure');assert.ok(disclosure);assert.equal(disclosure.open,false);assert.equal(disclosure.querySelector('summary').textContent,'品目を重ねる');assert.equal(disclosure.querySelectorAll('[data-africa-agri-layer]').length,7);
-  assert.equal(disclosure.closest('[data-africa-layer-options]'),q('[data-africa-layer-options]'));assert.equal(q('[data-africa-layer-options]').hidden,false);assert.equal(q('[data-africa-subfields]').closest('[data-africa-map-subfields]'),q('[data-africa-map-subfields]'));
-  disclosure.open=true;
-  for(const [selector,checked] of [['[data-africa-agri-layer="crop-rice-harvested"]',true],['[data-africa-agri-layer="crop-maize-harvested"]',false],['[data-africa-agri-outline]',true]]){
-   const input=q(selector);input.focus();input.checked=checked;input.dispatchEvent(new window.Event('change',{bubbles:true}));
-   disclosure=q('.africa-agri-layer-disclosure');assert.equal(disclosure.open,true);assert.equal(q(selector).checked,checked);assert.equal(window.document.activeElement,q(selector));
-  }
-  await wait(()=>q('[data-africa-commodity-layer="crop-rice-harvested"] image'),'the newly enabled rice model layer must finish');
-  assert.equal(q('.africa-agri-layer-disclosure').open,true);assert.equal(window.document.activeElement,q('[data-africa-agri-outline]'));
-  assert.deepEqual(parameters(window).get('agriLayers').split(','),['crop-rice-harvested','crop-wheat-harvested','crop-cassava-harvested','livestock-cattle','livestock-goats','livestock-sheep']);assert.equal(parameters(window).get('agriOutline'),'1');
-  q('.africa-agri-layer-disclosure').open=false;change('[data-place]','ETH');assert.equal(q('.africa-agri-layer-disclosure').open,false,'an unrelated redraw must preserve a closed disclosure');
-  q('[data-africa-topic="livestock"]').click();assert.equal(q('.africa-agri-layer-disclosure').open,false);assert.equal(root.querySelectorAll('[data-africa-agri-layer]').length,7);assert.equal(q('[data-africa-agri-layer="crop-rice-harvested"]').checked,true);
-  q('[data-africa-topic="forestry"]').click();assert.equal(q('.africa-agri-layer-disclosure'),null);
-});
+// The user replaced the former checkbox/quantity controls with direct map
+// selection and an explicit right-panel isolation action. Keep those semantics
+// separate from the other fields' comparison/disclosure contract above.
+test('agriculture reading, compact key and supplements occupy the main content column',async()=>{
+ await withAfricaPage('?field=agriculture&topic=farming&crop=maize&zoom=all',async({window,root,q})=>{
+  assert.equal(q('.africa-secondary').parentElement,q('.africa-main'));
+  assert.equal(q('.africa-secondary').contains(q('.africa-sources')),true);
+  assert.equal(q('[data-africa-agri-notes]').contains(q('.africa-theme-full')),true);
+  assert.equal(q('.africa-theme-full').contains(q('[data-africa-layer-selection]')),true);
+  assert.equal(q('.africa-detail').contains(q('[data-africa-agri-context]')),true);
+  assert.equal(q('.africa-detail').contains(q('[data-africa-agri-only]')),true);
+  assert.equal(root.querySelectorAll('[data-africa-commodity],[data-africa-crop-measure],[data-africa-agri-layer]').length,0);
+  assert.deepEqual([...root.querySelectorAll('[data-africa-topic]')].map(button=>button.textContent),['農畜産','林業']);
+  assert.match(q('[data-africa-agri-context]').textContent,/西部|東部|南部/);
+  assert.match(q('[data-theme-details]').textContent,/75%|25%/);
+  assert.equal(q('[data-theme-comparison]').hidden,true);
+  q('.africa-theme-full').open=true;
+  q('[data-africa-layer-legend] [data-africa-agri-pick="crop-rice-harvested"]').click();
+  assert.equal(q('.africa-theme-full').open,true,'the supplement keeps its disclosure choice on product selection');
+  q('[data-field="nature"]').click();await wait(()=>q('[data-africa-raster="climate"]'),'nature must restore its physical layer');
+  assert.equal(q('.africa-detail-scroll').contains(q('.africa-theme-full')),true);
+  assert.equal(q('.africa-detail-scroll').contains(q('[data-africa-layer-selection]')),true);
+  assert.equal(q('[data-africa-agri-notes]').hidden,true);
+ });
 });
 
-test('agriculture starts with seven distributions and selection retains the other products without a country popup',async()=>{
+test('agriculture map selection and keyboard focus preserve seven distributions without a country popup',async()=>{
  await withAfricaPage('?field=agriculture',async({window,root,q})=>{
-  const layers=()=>[...root.querySelectorAll('[data-africa-commodity-layer]')].map(node=>({key:node.dataset.africaCommodityLayer,display:node.style.display,opacity:node.style.opacity}));
-  assert.equal(root.dataset.overview,'true');assert.equal(q('[data-place]').value,'');assert.equal(q('[data-country-statistics]').hidden,true);assert.equal(q('[data-compare]').disabled,true);assert.ok([...root.querySelectorAll('[data-compare-country]')].every(button=>button.disabled));
-  assert.equal(q('.africa-map').getAttribute('viewBox'),'0 0 1100 907');assert.equal(root.querySelectorAll('[data-africa-overview-layer]').length,7);assert.equal(layers().length,7);assert.ok(layers().every(row=>row.display===''));
+  const layers=()=>[...root.querySelectorAll('[data-africa-commodity-layer]')].map(node=>({key:node.dataset.africaCommodityLayer,display:node.style.display,opacity:Number(node.style.opacity)}));
+  assert.equal(root.dataset.overview,'true');assert.equal(q('[data-place]').value,'');assert.equal(q('[data-country-statistics]').hidden,true);
+  assert.equal(root.querySelectorAll('[data-africa-layer-legend] [data-africa-agri-pick]').length,7);assert.equal(layers().length,7);assert.ok(layers().every(row=>row.display===''));
   assert.equal(root.querySelectorAll('[data-country-path] title').length,0);assert.equal(q('[data-country-path="EGY"]').style.pointerEvents,'none');
-  q('.africa-map').dispatchEvent(new window.MouseEvent('click',{bubbles:true,clientX:300,clientY:200}));assert.ok(parameters(window).get('layerPoint'));assert.match(q('[data-africa-point-reading]').textContent,/米｜収穫面積/);assert.match(q('[data-africa-point-reading]').textContent,/牛の推定飼養密度/);
-  q('[data-africa-overview-layer="crop-rice-harvested"]').click();await wait(()=>q('[data-africa-raster="crop-rice-harvested"]'),'rice quantity must finish');
-  assert.equal(root.dataset.overview,'false');assert.equal(root.querySelectorAll('[data-africa-overview-layer]').length,0);assert.equal(layers().length,7);assert.ok(layers().every(row=>row.display===''));
-  assert.ok(layers().filter(row=>row.key.startsWith('livestock-')).every(row=>Number(row.opacity)===.2));assert.equal(layers().find(row=>row.key==='crop-rice-harvested').opacity,'1');assert.match(q('[data-unit]').textContent,/ha/);
-  const saved=window.location.href;window.history.back();assert.equal(root.dataset.overview,'true');window.history.forward();assert.equal(window.location.href,saved);assert.equal(root.dataset.overview,'false');
-  window.dispatchEvent(new window.PopStateEvent('popstate'));assert.equal(q('[data-africa-commodity="rice"]').getAttribute('aria-pressed'),'true');assert.equal(layers().length,7);
-  q('[data-africa-agri-overview]').click();assert.equal(root.dataset.overview,'true');assert.equal(root.querySelectorAll('[data-africa-crop-measure]').length,0);assert.equal(layers().length,7);
-  q('[data-reset]').click();await wait(()=>q('[data-africa-raster="climate"]'),'reset must restore climate');assert.equal(q('[data-place]').value,'');assert.equal(root.querySelectorAll('[data-africa-commodity-layer]').length,0);
+  q('[data-africa-agri-label="crop-rice-harvested"]').dispatchEvent(new window.MouseEvent('click',{bubbles:true}));
+  await wait(()=>q('[data-africa-agri-footprint="crop-rice-harvested"]'),'rice selection must show its derived outline');
+  assert.equal(root.dataset.overview,'false');assert.equal(layers().length,7);assert.ok(layers().every(row=>row.display===''));
+  assert.ok(layers().filter(row=>row.key.startsWith('livestock-')).every(row=>row.opacity<1));assert.match(q('[data-africa-agri-context]').textContent,/マダガスカル/);
+  const label=q('[data-africa-agri-label="livestock-cattle"]');label.focus();label.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));
+  assert.equal(parameters(window).get('livestock'),'cattle');assert.equal(window.document.activeElement.getAttribute('data-africa-agri-pick'),'livestock-cattle');
+  assertTabs({window,root,q},'[data-africa-topic]','farming',{focused:false});
+  q('[data-africa-agri-overview]').click();assert.equal(root.dataset.overview,'true');assert.equal(layers().length,7);
+  q('[data-field="nature"]').click();await wait(()=>q('[data-africa-raster="climate"]'),'nature returns to climate');assert.equal(root.querySelectorAll('[data-africa-commodity-layer]').length,0);
  });
 });

@@ -90,6 +90,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
      <p class="africa-kicker">地図から持ち帰ること</p>
      <h2 id="africa-theme-title" data-theme-title>{initialTheme.title}</h2>
      <p class="africa-takeaway" data-theme-takeaway>{initialTheme.takeaway}</p>
+      <div class="africa-agri-actions" data-africa-agri-actions hidden><button type="button" data-africa-agri-only>この品目だけを表示</button><button type="button" data-africa-agri-all hidden>作物・家畜の全分布へ戻る</button></div>
       <div class="africa-theme-actions"><button type="button" data-theme-comparison>国別統計と重ねる</button><button type="button" data-theme-return hidden>← {initialTheme.title}へ戻る</button></div>
       </div>
        <section class="africa-essential-legend" data-africa-statistics-key aria-label="国別統計の凡例">
@@ -100,7 +101,6 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
       </section>
        <div class="africa-detail-scroll">
        <div class="africa-agri-context" data-africa-agri-context hidden></div>
-       <div class="africa-agri-actions" data-africa-agri-actions hidden><button type="button" data-africa-agri-only>この品目だけを表示</button><button type="button" data-africa-agri-all hidden>作物・家畜の全分布へ戻る</button></div>
        <div class="africa-layer-selection" data-africa-layer-selection hidden><label>表示・読解する分類<select data-africa-layer-category></select></label><p data-africa-point-reading aria-live="polite"></p><button type="button" data-africa-layer-retry hidden>分布データを再読込</button></div>
       <p class="africa-theme-explanation" data-theme-takeaway-detail>{initialTheme.takeaway}</p>
       <p class="africa-theme-caveat" data-theme-caveat>{initialTheme.caveat}</p>

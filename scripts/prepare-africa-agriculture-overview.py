@@ -21,7 +21,7 @@ COLS, ROWS = WIDTH // SCALE, HEIGHT // SCALE
 RADIUS_KM = 6371.0088
 MIN_COVERAGE, QUANTILE = 0.5, 0.75
 KEYS = [('crops', name + '-harvested') for name in ['maize', 'rice', 'wheat', 'cassava']] + [('livestock', name) for name in ['cattle', 'goats', 'sheep']]
-LABELS = {'maize': 'トウモロコシ', 'rice': '米', 'wheat': '小麦', 'cassava': 'キャッサバ', 'cattle': '牛', 'goats': '山羊', 'sheep': '羊'}
+LABELS = {'maize': 'とうもろこし', 'rice': '稲', 'wheat': '小麦', 'cassava': 'キャッサバ', 'cattle': '牛', 'goats': 'ヤギ', 'sheep': '羊'}
 COLORS = {'maize': '#c59320', 'rice': '#287daa', 'wheat': '#8b64aa', 'cassava': '#268365', 'cattle': '#98513e', 'goats': '#aa6b28', 'sheep': '#50698c'}
 
 
@@ -85,6 +85,9 @@ def anchors(values, selected, maximum):
 
 def main():
     boundary = ROOT / 'src/data/atlas/africa-geography.json'
+    relief_manifest = ASSETS / 'africa-physical-v1/manifest.json'
+    relief = json.loads(relief_manifest.read_text())['layers']['elevation']
+    relief_image = relief_manifest.parent / relief['image']
     land = land_mask(json.loads(boundary.read_text()))
     latitude_edges = np.deg2rad(39 - np.arange(HEIGHT + 1) / SCALE)
     row_area = RADIUS_KM ** 2 * math.pi / (180 * SCALE) * (np.sin(latitude_edges[:-1]) - np.sin(latitude_edges[1:]))
@@ -123,6 +126,14 @@ def main():
     manifest = {
         'schemaVersion': 1, 'bounds': BOUNDS, 'width': COLS, 'height': ROWS, 'resolutionDegrees': 1,
         'layers': layers, 'sourceBoundary': 'src/data/atlas/africa-geography.json', 'sourceBoundarySha256': sha(boundary),
+        'background': {
+            'sourceManifest': '../africa-physical-v1/manifest.json', 'sourceManifestSha256': sha(relief_manifest),
+            'sourceLayer': 'elevation', 'image': '../africa-physical-v1/' + relief['image'], 'imageSha256': sha(relief_image),
+            'sourceUrl': relief['sourceUrl'], 'sourceLabel': relief['sourceName'], 'publisher': relief['publisher'],
+            'period': relief['period'], 'license': relief['license'], 'licenseUrl': relief['licenseUrl'],
+            'sourceMethod': relief['method'], 'displaySaturation': 0, 'displayOpacity': 0.22,
+            'note': '位置を理解するため、既存のETOPO 2022標高画像を彩度0・不透明度22%で背景表示する。2022はモデルの版で観測年は複数。背景は農畜産の抽出・数値・順位には使わない。',
+        },
         'method': '元の5分角セルを緯度・経度1°の表示セルに集約。作物は収穫面積haの合計を有効セルの球面面積km²の合計で割り、家畜は頭/km²を有効セル面積で加重平均する。品目ごとに、陸地面積の50%以上に有効値がある正値の集約セルを対象とし、75%分位以上を抽出する。分位は対象の集約セル数に基づく（面積加重の分位ではない）。0は有効値、欠測は分子・分母から除く。色は品目を表し、色の濃さや面積は生産量の順位を表さない。',
         'display': '作物の重なる集約セルは、同じ幅の別々の色帯で示す。帯の位置・幅は植え付け位置や面積比を表さない。国境で表示をクリップする。家畜記号は同一種の抽出域を要約する位置で、牧場の所在地や頭数を表さない。品目ラベル・記号のアンカーは抽出セル中心だけから選ぶ。選択輪郭はこの抽出形に一致する。',
         'limitations': ['1°は一覧のための集約単位で、農地や牧場の境界ではない。集約セル内には元格子の0や欠測を含む場合がある。地点照会では元格子の値・0・欠測を保持する。', '収穫面積には同じ土地での複数回の収穫を含む。ha/km²は作物被覆率ではない。', '品目別の相対的な集中を示す閾値で、他品目との優劣、国別順位、全生産量・公式統計・所得・栄養価・地表の被覆率を表さない。', '抽出されない場所を生産なしとは扱わない。原データの国境セルはセル全体の元値を保持しており、国別合計には使わない。'],

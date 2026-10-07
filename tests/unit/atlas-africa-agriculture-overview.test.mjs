@@ -3,12 +3,25 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {gunzipSync} from 'node:zlib';
-import {africaCommodityColor,africaGridClassOutline} from '../../src/scripts/atlas-africa-layers.ts';
+import {africaCommodityColor,africaGridClassOutline,africaAgriContextPlace} from '../../src/scripts/atlas-africa-layers.ts';
+import {projectAfrica} from '../../src/lib/atlas-africa-geometry.ts';
 
 const asset=new URL('../../public/assets/atlas/africa-agriculture-overview-v1/',import.meta.url);
 const summary=JSON.parse(readFileSync(new URL('manifest.json',asset),'utf8'));
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const expected=['crop-maize-harvested','crop-rice-harvested','crop-wheat-harvested','crop-cassava-harvested','livestock-cattle','livestock-goats','livestock-sheep'];
+
+test('Madagascar is an existing country locator for overview and rice, including rice-only, and stays outside unrelated viewports',()=>{
+ const country=JSON.parse(readFileSync(new URL('../../src/data/atlas/africa-countries.json',import.meta.url),'utf8')).find(row=>row.code==='MDG');
+ const all=[0,0,1100,907],rice='crop-rice-harvested';
+ for(const [overview,focused,layers]of [[true,'crop-maize-harvested',expected],[false,rice,expected],[false,rice,[rice]]])assert.deepEqual(africaAgriContextPlace(overview,focused,layers,all),country);
+ assert.equal(africaAgriContextPlace(false,'crop-maize-harvested',expected,all),null);
+ assert.equal(africaAgriContextPlace(true,'crop-maize-harvested',['crop-maize-harvested'],all),null);
+ const [left,top]=projectAfrica([10,-15]),[right,bottom]=projectAfrica([35,-36]);
+ assert.equal(africaAgriContextPlace(false,rice,expected,[left,top,right-left,bottom-top]),null,'southern mainland view does not acquire an off-map country label');
+ const [eastLeft,eastTop]=projectAfrica([25,15]),[eastRight,eastBottom]=projectAfrica([52,-27]);
+ assert.deepEqual(africaAgriContextPlace(false,rice,expected,[eastLeft,eastTop,eastRight-eastLeft,eastBottom-eastTop]),country);
+});
 
 test('agriculture summaries identify immutable source grids, distinct category colours and the explicit selection rule',()=>{
  assert.deepEqual(Object.keys(summary.layers),expected);
@@ -19,6 +32,13 @@ test('agriculture summaries identify immutable source grids, distinct category c
  assert.equal(summary.sourceBoundarySha256,sha(boundary));
  const generator=readFileSync(new URL('../../scripts/prepare-africa-agriculture-overview.py',import.meta.url));
  assert.equal(summary.processing.generatorSha256,sha(generator));
+ const background=summary.background,physicalBytes=readFileSync(new URL(background.sourceManifest,asset));
+ const physical=JSON.parse(physicalBytes).layers.elevation;
+ assert.equal(background.sourceManifestSha256,sha(physicalBytes));
+ assert.equal(background.imageSha256,sha(readFileSync(new URL(background.image,asset))));
+ assert.equal(background.sourceLayer,'elevation');assert.equal(background.sourceUrl,physical.sourceUrl);
+ assert.equal(background.sourceLabel,physical.sourceName);assert.equal(background.sourceMethod,physical.method);
+ assert.equal(background.license,physical.license);assert.equal(background.displaySaturation,0);assert.equal(background.displayOpacity,.22);
  const colours=new Set();
  for(const [key,layer]of Object.entries(summary.layers)){
   assert.equal(layer.sourceGridSha256,sha(readFileSync(new URL(layer.sourceGrid,asset))));

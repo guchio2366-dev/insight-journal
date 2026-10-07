@@ -336,7 +336,16 @@ export function initializeAfricaAtlas() {
  }
  function render(write=false) {
   state.topic=canonicalTopic(state.field,state.metric,state.topic);
-  if(state.field==='agriculture'){state.cropMeasure='harvested';state.compare='';state.context='';state.sourceState='';if(state.topic!=='forestry'){state.view='distribution';state.layerClass='';state.agriLayers=state.agriLayers&&state.agriLayers.split(',').length===1?canonicalAgriLayers(state.agriLayers.replace(/-production$/,'-harvested')):null;state.agriOutline=!state.overview;}}
+  if(state.field==='agriculture'){
+   state.cropMeasure='harvested';state.compare='';state.context='';state.sourceState='';
+   if(state.topic!=='forestry'){
+    state.view='distribution';state.layerClass='';
+    const focused=state.topic==='livestock'?`livestock-${state.livestock}`:`crop-${state.crop}-harvested`;
+    const requested=state.agriLayers&&state.agriLayers.split(',').length===1?canonicalAgriLayers(state.agriLayers.replace(/-production$/,'-harvested')):null;
+    state.agriLayers=!state.overview&&requested===focused?requested:null;
+    state.agriOutline=!state.overview;
+   }
+  }
   state.water=state.field==='nature'?canonicalWater(state.metric,state.water):'';
   state.river=canonicalRiver(state,state.river);
   root!.dataset.field=state.field;root!.dataset.overview=String(state.overview);

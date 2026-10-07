@@ -1,6 +1,6 @@
 import {withBase} from '../lib/urls.ts';
 import {projectAfrica,africaWidth,africaHeight} from '../lib/atlas-africa-geometry.ts';
-import {africaAgriFocusedLayer,africaAgriVisibleLayers,type State} from '../data/atlas/africa-atlas.ts';
+import {africaAgriFocusedLayer,africaAgriVisibleLayers,countries,type State} from '../data/atlas/africa-atlas.ts';
 import {africaCultureGuides,africaCultureGuideReason} from '../data/atlas/africa-culture-guide.ts';
 import {africaRiverForFeature,africaRiverSelectedColor} from '../data/atlas/africa-river-reading.ts';
 
@@ -11,8 +11,16 @@ export type AfricaLayerView={key:string;ready:boolean;loading:boolean;error:stri
 type Loaded={value?:any;error?:string;promise?:Promise<void>};
 const SVG='http://www.w3.org/2000/svg';
 export const africaCommodityColors:Record<string,string>={maize:'#c59320',rice:'#287daa',wheat:'#8b64aa',cassava:'#268365',cattle:'#98513e',goats:'#aa6b28',sheep:'#50698c'};
-export const africaCommodityLabels:Record<string,string>={maize:'トウモロコシ',rice:'米',wheat:'小麦',cassava:'キャッサバ',cattle:'牛',goats:'山羊',sheep:'羊'};
+export const africaCommodityLabels:Record<string,string>={maize:'とうもろこし',rice:'稲',wheat:'小麦',cassava:'キャッサバ',cattle:'牛',goats:'ヤギ',sheep:'羊'};
 export function africaCommodityColor(key:string):string{return africaCommodityColors[key.replace(/^crop-|^livestock-/,'').replace(/-harvested$|-production$/,'')]??'#567c77';}
+/** Existing country locator, deliberately distinct from a crop-summary anchor. */
+export function africaAgriContextPlace(overview:boolean,focused:string,activeKeys:string[],viewport:number[]){
+ const rice='crop-rice-harvested';
+ if(!activeKeys.includes(rice)||!overview&&focused!==rice)return null;
+ const place=countries.find(country=>country.code==='MDG');if(!place)return null;
+ const [x,y]=projectAfrica(place.point);
+ return x>=viewport[0]&&x<=viewport[0]+viewport[2]&&y>=viewport[1]&&y<=viewport[1]+viewport[3]?place:null;
+}
 const text=(v:any,fallback=''):string=>typeof v==='string'?v:v===null||v===undefined?fallback:String(v);
 const note=(v:any,fallback=''):string=>typeof v==='string'?v:Array.isArray(v)?v.map(item=>note(item)).filter(Boolean).join(' '):v&&typeof v==='object'?text(v.note??v.description??v.label,fallback):fallback;
 const label=(r:Row)=>text(r.label??r.nameJa??r.name??r.code??r.id);
@@ -213,7 +221,8 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   const visibleLayers=views.filter(view=>active.includes(view.key)).map(view=>({key:view.key,title:view.title,unit:view.unit,color:africaCommodityColor(view.key),ready:view.ready,loading:view.loading,error:view.error,period:view.period,sourceUrl:view.sourceUrl,sourceLabel:view.sourceLabel}));
   const legend=visibleLayers.map(view=>({id:view.key,label:summary?.layers[view.key]?.label??view.title.split('｜')[0].replace('の推定飼養密度',''),color:view.color}));
   const thresholdDetails=summary?keys.map(key=>{const layer=summary.layers[key];return `${layer.label}：${Number(layer.threshold).toLocaleString('ja-JP',{maximumFractionDigits:3})} ${layer.unit}以上`;}).join('。'):'';
-  const result:AfricaLayerView={...selected,ready:!!summary&&visibleLayers.every(view=>view.ready),error:summaryResult.error??(selected.error||visibleLayers.find(view=>view.error)?.error||''),selectedVisible:active.includes(focused),loading:!!summaryResult.promise||visibleLayers.some(view=>view.loading),visibleLayers,legend,method:[summary?.method,thresholdDetails,summary?.display,...(summary?.limitations??[]),selected.method].filter(Boolean).join(' '),scope:'色帯は作物、動物記号は家畜の比較的集中する範囲を示します。1°集約・品目内上位25%を抽出し、数量や品目間の優劣は表しません。抽出外も生産なしとは限りません。'};
+  const backgroundSource=summary?.background?`背景出典：${summary.background.sourceLabel}。${summary.background.sourceUrl} ${summary.background.note}`:'';
+  const result:AfricaLayerView={...selected,ready:!!summary&&visibleLayers.every(view=>view.ready),error:summaryResult.error??(selected.error||visibleLayers.find(view=>view.error)?.error||''),selectedVisible:active.includes(focused),loading:!!summaryResult.promise||visibleLayers.some(view=>view.loading),visibleLayers,legend,method:[summary?.method,thresholdDetails,summary?.display,...(summary?.limitations??[]),backgroundSource,selected.method].filter(Boolean).join(' '),scope:'色帯は作物、動物記号は家畜の比較的集中する範囲を示します。1°集約・品目内上位25%を抽出し、数量や品目間の優劣は表しません。抽出外も生産なしとは限りません。'};
   if(state.overview){result.title='作物と家畜の特徴的な分布';result.period='作物・家畜とも2020年基準のモデル';result.unit='品目内の相対的な集中';result.sourceUrl='';result.sourceLabel='';result.takeaway='作物の帯と家畜の記号から、生産の地域差を読む';result.description='作物は収穫面積、家畜は飼養密度のモデルから、それぞれの品目が比較的集中する範囲を示します。';}
   if(!summary){baseGroup.replaceChildren();lastAgriPaint='';return result;}
   // Summary geometry does not change when an original query grid arrives late.
@@ -276,6 +285,21 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
    const title=svg('text',{x:position.x+iconWidth,y:position.y,'font-size':font,'font-weight':selectedNow?800:700,fill:africaCommodityColor(key),stroke:'#fffdf8','stroke-width':3*labelScale,'paint-order':'stroke','stroke-linejoin':'round','data-africa-agri-label-text':key});title.textContent=layer.label;labelGroup.append(title);node.append(labelGroup);
   }
   baseGroup.append(...agriGroups.values());
+  const contextPlace=africaAgriContextPlace(state.overview,focused,active,viewport);
+  if(contextPlace){
+   const [ax,ay]=projectAfrica(contextPlace.point),font=14*labelScale,width=contextPlace.name.length*font+5*labelScale,height=19*labelScale,gap=5*labelScale;
+   const minX=viewport[0]+4*labelScale,maxX=viewport[0]+viewport[2]-width-4*labelScale,minY=viewport[1]+height,maxY=viewport[1]+viewport[3]-6*labelScale;
+   // Use the same viewport bounds and occupied-label boxes as commodity names.
+   // Additional rings make a country name yield to existing crop/animal labels.
+   const candidates:number[][]=[];for(const offset of [-12,17,-35,40,-58,63,-81,86])candidates.push([gap,offset*labelScale],[-width-gap,offset*labelScale]);
+   const position=maxX>=minX?candidates.map(([dx,dy])=>({x:Math.max(minX,Math.min(maxX,ax+dx)),y:Math.max(minY,Math.min(maxY,ay+dy)),w:width,h:height})).find(box=>!occupied.some(other=>box.x<other.x+other.w+gap&&box.x+box.w+gap>other.x&&box.y-height<other.y+gap&&box.y+gap>other.y-other.h)):undefined;
+   if(position){
+    const place=svg('g',{'data-africa-agri-place-label':contextPlace.code,'data-africa-agri-place-anchor':contextPlace.point.join(','),'pointer-events':'none','aria-label':`国名：${contextPlace.name}`});
+    const note=svg('title',{});note.textContent='既存の国位置データによる地名案内。作物の生産地点を表す印ではありません。';place.append(note);
+    place.append(svg('path',{d:`M${ax},${ay}L${Math.max(position.x,Math.min(position.x+width,ax))},${position.y-5*labelScale}`,fill:'none',stroke:'#53656a','stroke-width':1,'vector-effect':'non-scaling-stroke'}));
+    const name=svg('text',{x:position.x,y:position.y,'font-size':font,'font-weight':600,fill:'#53656a',stroke:'#fffdf8','stroke-width':3*labelScale,'paint-order':'stroke','stroke-linejoin':'round','data-africa-agri-place-text':contextPlace.code});name.textContent=contextPlace.name;place.append(name);baseGroup.append(place);
+   }
+  }
   if(focusedElement)baseGroup.querySelector<SVGElement>(`[data-africa-agri-focus="${focusedElement}"]`)?.focus({preventScroll:true});
   return result;
  }

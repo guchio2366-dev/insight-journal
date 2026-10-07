@@ -27,13 +27,14 @@ const output=path.resolve(process.env.AFRICA_REVIEW_OUTPUT||path.join(repo,'revi
 const basePath=`/${String(astroConfig.base??'').replace(/^\/+|\/+$/g,'')}`.replace(/^\/$/,'');
 const profiles=[{id:'desktop1440',width:1440,height:1000},{id:'notebook1024',width:1024,height:768}];
 const agricultureProfiles=[{id:'agriculture1536',width:1536,height:864},{id:'agriculture1280',width:1280,height:720},{id:'agriculture1024',width:1024,height:768}];
+const mobileProfile={id:'mobile390',width:390,height:844,mobile:true};
 const riverRoute='/atlas/africa/?field=nature&topic=water&water=river&metric=ER.H2O.INTR.PC&zoom=all&region=all&place=EGY&compare=COD&year=2021';
 const populationRoute='/atlas/africa/?field=population&topic=distribution&zoom=all';
 const agricultureKeys=['crop-maize-harvested','crop-rice-harvested','crop-wheat-harvested','crop-cassava-harvested','livestock-cattle','livestock-goats','livestock-sheep'];
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const git=(...args)=>execFileSync('git',args,{cwd:repo,encoding:'utf8'}).trim();
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.geojson':'application/geo+json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.woff2':'font/woff2','.gz':'application/gzip'};
-const report={status:'running',scope:'Local production dist in a real PC browser. Public deployment and mobile are not verified.',startedAt:new Date().toISOString(),comparisonTolerancePx:2,profiles,agricultureProfiles,cases:[],screenshots:[],visualReviewRequired:['Initial agriculture: identify each crop and livestock distribution from map labels and distinct legend colors without reading technical notes.','Selected rice: all other distributions remain visible; crop selection outline and quieter livestock agree with the right reading.','Scrolled agriculture: every heading and source remains readable beside the news rail at 1536, 1280 and 1024 pixels.'],exclusions:[{scene:'US elevation',status:'not-verified',reason:'Previous normal contour rendering timed out and displayed fallback. This script excludes that scene; it is not counted as a successful comparison.'}]};
+const report={status:'running',scope:'Local production dist in real Chrome at PC viewports and an emulated 390 × 844 touch mobile viewport. Public deployment and physical mobile devices are not verified.',startedAt:new Date().toISOString(),comparisonTolerancePx:2,profiles,agricultureProfiles,mobileProfile,cases:[],screenshots:[],visualReviewRequired:['Initial agriculture: identify each crop and livestock distribution from map labels and distinct legend colors without reading technical notes.','Selected rice: all other distributions remain visible; crop selection outline and quieter livestock agree with the right reading.','Scrolled agriculture: every heading and source remains readable beside the news rail at 1536, 1280 and 1024 pixels.','Mobile: review initial arrival, map, rice selection and lower readings at 390 × 844; desktop Chrome touch emulation is not a physical-device test.'],exclusions:[{scene:'US elevation',status:'not-verified',reason:'Previous normal contour rendering timed out and displayed fallback. This script excludes that scene; it is not counted as a successful comparison.'}]};
 let browser,server,origin,fatalNetwork;
 const native=JSON.parse(await readFile(path.join(repo,'public/assets/atlas/africa-water-v1/rivers.geojson'),'utf8'));
 const nativePaths=Object.fromEntries(native.features.map(feature=>[feature.properties.id,africaLayerPath(feature.geometry)]));
@@ -136,7 +137,7 @@ async function lowerAgriculture(page,record){
 }
 async function runCase(profile,name,run){
  const record={profile:profile.id,name,status:'running',startedAt:new Date().toISOString(),checks:[],measurements:[],screenshots:[],pageErrors:[],console:[],failedRequests:[],externalRequests:[],loadedAssets:[]};report.cases.push(record);await save();
- const context=await browser.newContext({viewport:{width:profile.width,height:profile.height},deviceScaleFactor:1,locale:'ja-JP',timezoneId:'UTC',reducedMotion:'reduce',colorScheme:'light',serviceWorkers:'block'}),page=await context.newPage();page.setDefaultTimeout(30000);
+ const context=await browser.newContext({viewport:{width:profile.width,height:profile.height},isMobile:profile.mobile===true,hasTouch:profile.mobile===true,deviceScaleFactor:1,locale:'ja-JP',timezoneId:'UTC',reducedMotion:'reduce',colorScheme:'light',serviceWorkers:'block'}),page=await context.newPage();page.setDefaultTimeout(30000);
  await context.route('**/*',route=>{const url=new URL(route.request().url());if(['http:','https:'].includes(url.protocol)&&url.origin!==origin){record.externalRequests.push(url.href);fatalNetwork=`External dependency requested: ${url.href}`;return route.abort('blockedbyclient');}return route.continue();});
  page.on('pageerror',error=>record.pageErrors.push(error.message));page.on('console',message=>{if(['error','warning'].includes(message.type()))record.console.push({type:message.type(),text:message.text()});});
  page.on('response',response=>{if(response.status()>=400)record.failedRequests.push({url:response.url(),status:response.status()});else if(/\.(json|geojson|png|webp|gz)(?:\?|$)/.test(response.url()))record.loadedAssets.push(response.url());});
@@ -250,11 +251,21 @@ async function waitAgriculture(page,key){
  },{keys:agricultureKeys,key});await settle(page);
 }
 async function agricultureLayers(page){return page.locator('[data-africa-commodity-layer]').evaluateAll(nodes=>nodes.map(node=>({key:node.dataset.africaCommodityLayer,opacity:Number(getComputedStyle(node).opacity),visible:getComputedStyle(node).display!=='none',paths:node.querySelectorAll('path').length,glyphs:node.querySelectorAll('[data-africa-agri-glyph]').length,labels:node.querySelectorAll('[data-africa-agri-label]').length})));}
-async function pickAgriculture(page,key){
+async function pickAgriculture(page,key,{touch=false}={}){
  await page.locator('.africa-map-frame').scrollIntoViewIfNeeded();
  const point=await page.locator(`[data-africa-agri-label-text="${key}"]`).evaluateAll((nodes,key)=>{
   for(const node of nodes){const box=node.getBoundingClientRect();for(const fx of [.5,.2,.8]){const x=box.x+box.width*fx,y=box.y+box.height/2;if(x<=0||y<=0||x>=innerWidth||y>=innerHeight)continue;const hit=document.elementFromPoint(x,y)?.closest('[data-africa-agri-pick]');if(hit?.getAttribute('data-africa-agri-pick')===key)return{x,y,label:node.textContent};}}return null;
- },key);assert(point,`No visible, hittable ${key} map label`);await page.mouse.click(point.x,point.y);await waitAgriculture(page,key);return point;
+ },key);assert(point,`No visible, hittable ${key} map label`);if(touch)await page.touchscreen.tap(point.x,point.y);else await page.mouse.click(point.x,point.y);await waitAgriculture(page,key);return point;
+}
+async function agricultureNavigation(page){
+ const navigation=await page.locator('[data-africa-agri-region]').evaluate(node=>{
+  const box=element=>{const r=element.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height};};
+  return{options:[...node.options].map(option=>({value:option.value,label:option.textContent})),box:box(node),label:box(node.closest('label')),map:box(document.querySelector('.africa-map-frame')),font:getComputedStyle(node).fontSize};
+ });
+ assert.deepEqual(navigation.options.map(row=>row.value).sort(),['all','central','east','north','south','west']);
+ assert(navigation.box.x>=navigation.map.x&&navigation.box.x<=navigation.map.x+navigation.map.width*.4,'Region selector is not at the map left');assert(navigation.box.y>=navigation.map.y&&navigation.box.y<navigation.map.y+80,'Region selector is not at the map top');assert(parseFloat(navigation.font)>=14,'Map region selector is too small');
+ const {label,map}=navigation;assert(label.x>=map.x-1&&label.y>=map.y-1&&label.x+label.width<=map.x+map.width+1&&label.y+label.height<=map.y+map.height+1,'The full region label and select extend outside the map frame');
+ return navigation;
 }
 async function agricultureOperations(page,record,reference){
  await open(page,'/atlas/africa/?field=agriculture&zoom=all');await waitAgriculture(page);
@@ -264,25 +275,27 @@ async function agricultureOperations(page,record,reference){
  assert.equal(await page.locator('[data-africa-crop-measure]').count(),0);assert.equal(await page.locator('[data-africa-agri-layer]').count(),0);
  assert.deepEqual(await page.locator('[data-africa-subfields] [data-africa-topic]').allTextContents(),['農畜産','林業']);
  assert.equal(await page.locator('[data-africa-agri-only]').isVisible(),false);assert.equal(await page.locator('[data-country-statistics]').isVisible(),false);
- const navigation=await page.locator('[data-africa-agri-region]').evaluate(node=>{const box=node.getBoundingClientRect(),map=document.querySelector('.africa-map-frame').getBoundingClientRect();return{options:[...node.options].map(option=>({value:option.value,label:option.textContent})),box:{x:box.x,y:box.y,width:box.width,height:box.height},map:{x:map.x,y:map.y,width:map.width,height:map.height},font:getComputedStyle(node).fontSize};});
- assert.deepEqual(navigation.options.map(row=>row.value).sort(),['all','central','east','north','south','west']);assert(navigation.box.x>=navigation.map.x&&navigation.box.x<=navigation.map.x+navigation.map.width*.3,'Region selector is not at the map left');assert(navigation.box.y>=navigation.map.y&&navigation.box.y<navigation.map.y+80,'Region selector is not at the map top');assert(parseFloat(navigation.font)>=14,'Map region selector is too small');
+ const navigation=await agricultureNavigation(page);
  const labels=await page.locator('[data-africa-agri-label-text]').evaluateAll(nodes=>nodes.map(node=>{const r=node.getBoundingClientRect(),matrix=node.getScreenCTM();return{key:node.getAttribute('data-africa-agri-label-text'),text:node.textContent,x:r.x,y:r.y,width:r.width,height:r.height,fontPx:parseFloat(getComputedStyle(node).fontSize)*Math.hypot(matrix.a,matrix.b)};}));
  assert.deepEqual([...new Set(labels.map(row=>row.key))].sort(),[...agricultureKeys].sort());
+ assert.equal(await page.locator('[data-africa-agri-place-text="MDG"]').textContent(),'マダガスカル','The geographic anchor for the rice reading is missing');
  const palette=agricultureKeys.map(africaCommodityColor),paint=pixelEvidence(await page.locator('.africa-map-frame').screenshot({animations:'disabled'}),palette);assertPaint(paint);
  const measurement=await measure(page,'africa');assertLayout(measurement);measurement.usDifference=reference?Object.fromEntries(['x','y','width','height'].map(key=>[key,measurement.map[key]-reference.map[key]])):null;record.measurements.push({scene:'agriculture',...measurement});
  record.checks.push({check:'Initial map has four labeled crop distributions, three labeled livestock symbols and the left region selector; technical controls are absent',status:'passed',products:initial,navigation,labels,paint,colors:Object.fromEntries(agricultureKeys.map(key=>[key,africaCommodityColor(key)]))});
  await screenshot(page,record,'africa-agriculture');
  const rice='crop-rice-harvested',point=await pickAgriculture(page,rice),selected=await agricultureLayers(page);assert.deepEqual(selected.filter(row=>row.visible).map(row=>row.key).sort(),[...agricultureKeys].sort());assert(selected.filter(row=>row.key.startsWith('livestock-')).every(row=>row.opacity<initial.find(old=>old.key===row.key).opacity));
  assert.match(await page.locator('[data-theme-title]').textContent(),/米|稲/);assert.equal(await page.locator('[data-africa-agri-only]').isVisible(),true);assert.equal(await page.locator('.africa-detail [data-africa-agri-only]').count(),1);assert.equal((await state(page)).crop,'rice');assert.equal((await state(page)).cropMeasure,'harvested');
+ await page.evaluate(()=>window.scrollTo(0,0));const singleControl=await page.locator('[data-africa-agri-only]').evaluate(node=>{const r=node.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height,viewportHeight:innerHeight};});assert(singleControl.y>=0&&singleControl.y+singleControl.height<=singleControl.viewportHeight,'Single-product action is outside the initial selected PC viewport');
  const riceReading=await page.locator('[data-africa-agri-context]').innerText();assert(riceReading.trim().length>80,'Selected crop lacks its geographic and economic reading');
- record.checks.push({check:'Rice map label selects matching reading and derived distribution outline while all distributions remain and livestock becomes quieter',status:'passed',point,products:selected,reading:riceReading});await screenshot(page,record,'africa-agriculture-rice');
+ assert.equal(await page.locator('[data-africa-agri-place-text="MDG"]').isVisible(),true);
+ record.checks.push({check:'Rice map label selects matching reading and derived distribution outline while all distributions remain and livestock becomes quieter',status:'passed',point,products:selected,reading:riceReading,singleControl});await screenshot(page,record,'africa-agriculture-rice');
  await lowerAgriculture(page,record);
  assert(labels.every(row=>row.fontPx>=12.9),'Map product names shrink below 13 screen pixels');assert(paint.paletteMatches.every(count=>count>=5),'One or more product colors are absent from actual map pixels');
  await page.goBack();await waitAgriculture(page);assert.equal(await page.locator('[data-africa-agri-footprint]').count(),0);await page.goForward();await waitAgriculture(page,rice);await page.reload();await waitAgriculture(page,rice);
  await page.locator('[data-africa-agri-only]').click();await waitAgriculture(page,rice);assert.deepEqual((await agricultureLayers(page)).filter(row=>row.visible).map(row=>row.key),[rice]);await page.reload();await waitAgriculture(page,rice);assert.deepEqual((await agricultureLayers(page)).filter(row=>row.visible).map(row=>row.key),[rice]);
  await page.locator('[data-africa-agri-all]').click();await waitAgriculture(page,rice);assert.equal((await agricultureLayers(page)).filter(row=>row.visible).length,7);record.checks.push({check:'History and reload retain crop selection; explicit right-panel single display reloads and returns to all distributions',status:'passed'});
  const region=page.locator('[data-africa-agri-region]'),allView=await page.locator('.africa-map').getAttribute('viewBox'),regionViews=[];
- for(const value of ['north','south','west','east','central']){await region.selectOption(value);await settle(page);const view=await page.locator('.africa-map').getAttribute('viewBox');assert.notEqual(view,allView,`${value} selection does not fit the map`);assert.equal((await state(page)).region,value);assert.equal((await state(page)).place,undefined);regionViews.push({region:value,viewBox:view});}
+ for(const value of ['north','south','west','east','central']){await region.selectOption(value);await settle(page);const view=await page.locator('.africa-map').getAttribute('viewBox');assert.notEqual(view,allView,`${value} selection does not fit the map`);assert.equal((await state(page)).region,value);assert.equal((await state(page)).place,undefined);regionViews.push({region:value,viewBox:view,navigation:await agricultureNavigation(page)});}
  await region.selectOption('all');await settle(page);assert.equal(await page.locator('.africa-map').getAttribute('viewBox'),allView);record.checks.push({check:'Five geographic regions fit the map, southern Africa is a region and all restores the full extent',status:'passed',views:regionViews});
  await page.locator('[data-africa-agri-overview]').click();await waitAgriculture(page);assert.equal(await page.locator('[data-africa-agri-footprint]').count(),0);
  const keyboard=page.locator('[data-africa-agri-pick="livestock-cattle"][tabindex="0"]').first();await keyboard.focus();assert.equal(await keyboard.evaluate(node=>getComputedStyle(node).outlineStyle),'none');assert.equal(await keyboard.getAttribute('role'),'button');assert((await keyboard.getAttribute('aria-label'))?.length>0);await page.keyboard.press('Enter');await waitAgriculture(page,'livestock-cattle');assert.equal((await state(page)).livestock,'cattle');assert.match(await page.locator('[data-theme-title]').textContent(),/牛/);assert.equal((await agricultureLayers(page)).filter(row=>row.visible).length,7);assert.equal(await page.evaluate(()=>document.activeElement?.getAttribute('data-africa-agri-pick')),'livestock-cattle','Map selection loses keyboard focus');
@@ -297,6 +310,45 @@ async function usAgricultureReference(page,record){
  record.checks.push({check:'US rice selected under the same viewport, with real map rendering and matching reading',status:'passed',heading:await page.locator('#agri-reading-heading').textContent()});await screenshot(page,record,'us-agriculture-rice');
  const statistics=page.locator('[data-agri-statistics]');assert.equal(await statistics.isVisible(),true,'US selected rice statistics were not displayed');await page.locator('[data-agri-statistics-heading]').scrollIntoViewIfNeeded();await screenshot(page,record,'us-agriculture-lower',{preserveScroll:true});
  return reference;
+}
+
+async function mobileNoOverflow(page){
+ const value=await page.evaluate(()=>({documentWidth:document.documentElement.scrollWidth,viewportWidth:innerWidth,viewportHeight:innerHeight,scrollY}));assert(value.documentWidth<=value.viewportWidth+1,'Mobile page has horizontal overflow');return value;
+}
+async function mobileSourceReach(page){
+ const lower=page.locator('.africa-secondary'),sources=lower.locator(':scope > details:has(.africa-sources)');
+ if(!await sources.evaluate(node=>node.open))await sources.locator(':scope > summary').tap();
+ for(const disclosure of await sources.locator('.africa-sources details').all())if(!await disclosure.evaluate(node=>node.open))await disclosure.locator(':scope > summary').tap();
+ const last=sources.locator('.africa-sources a').last();await last.scrollIntoViewIfNeeded();
+ const evidence=await last.evaluate(node=>{const r=node.getBoundingClientRect(),x=r.x+r.width/2,y=r.y+r.height/2,hit=document.elementFromPoint(x,y);return{text:node.textContent,href:node.getAttribute('href'),x:r.x,y:r.y,width:r.width,height:r.height,viewportWidth:innerWidth,viewportHeight:innerHeight,hit:hit===node||node.contains(hit)};});
+ assert(evidence.x>=0&&evidence.x+evidence.width<=evidence.viewportWidth+1&&evidence.y>=0&&evidence.y+evidence.height<=evidence.viewportHeight+1,'Final mobile source cannot be brought into view');assert.equal(evidence.hit,true,'Final mobile source is obscured');return evidence;
+}
+async function mobileLowerAgriculture(page,record){
+ const lower=page.locator('.africa-secondary'),disclosure=lower.locator(':scope > details:has(.africa-reading)');
+ if(!await disclosure.evaluate(node=>node.open))await disclosure.locator(':scope > summary').tap();
+ await lower.locator('.africa-reading .africa-section-heading').evaluate(node=>node.scrollIntoView({block:'start'}));await settle(page);
+ const evidence=await lower.locator('[data-reading-field="agriculture"] article').evaluateAll(nodes=>nodes.map(node=>{const r=node.getBoundingClientRect();return{heading:node.querySelector('h3')?.textContent,x:r.x,width:r.width,source:node.querySelector('a')?.getAttribute('href'),viewportWidth:innerWidth};}));
+ assert(evidence.length>0);assert(evidence.every(row=>row.x>=0&&row.x+row.width<=row.viewportWidth+1&&row.source),'Mobile reading cards exceed the screen or lose their sources');await mobileNoOverflow(page);await screenshot(page,record,'africa-agriculture-lower',{preserveScroll:true});
+ record.checks.push({check:'Mobile lower reading fits the viewport and final source is reachable without a desktop news-column assumption',status:'passed',readings:evidence,finalSource:await mobileSourceReach(page)});
+}
+async function mobileUsAgriculture(page,record){
+ await open(page,'/atlas/north-america/agriculture/');await stableUS(page,record,'agriculture');record.measurements.push({scene:'mobile-overview',...await mobileNoOverflow(page)});await screenshot(page,record,'us-agriculture');
+ await page.locator('.atlas-map-frame').evaluate(node=>node.scrollIntoView({block:'start'}));await screenshot(page,record,'us-agriculture-map',{preserveScroll:true});
+ await page.locator('[data-crop-key] [data-crop-select=rice]').tap();await page.waitForFunction(()=>/米|稲/.test(document.querySelector('#agri-reading-heading')?.textContent??''));await stableUS(page,record,'agriculture');
+ await page.locator('.atlas-map-frame').evaluate(node=>node.scrollIntoView({block:'start'}));await screenshot(page,record,'us-agriculture-rice',{preserveScroll:true});await page.locator('[data-agri-reading-panel]').evaluate(node=>node.scrollIntoView({block:'start'}));await screenshot(page,record,'us-agriculture-rice-reading',{preserveScroll:true});
+ await mobileNoOverflow(page);await page.locator('[data-agri-overview-button]').tap();await page.locator('[data-agri-overview]').waitFor({state:'visible'});record.checks.push({check:'Mobile US rice is selected by touch, its map and reading are captured, and the overview return works',status:'passed'});
+}
+async function mobileAfricaAgriculture(page,record){
+ await open(page,'/atlas/africa/?field=agriculture&zoom=all');await waitAgriculture(page);record.measurements.push({scene:'mobile-overview',...await mobileNoOverflow(page)});await screenshot(page,record,'africa-agriculture');
+ const navigation=await agricultureNavigation(page),initial=await agricultureLayers(page);assert.deepEqual(initial.filter(row=>row.visible).map(row=>row.key).sort(),[...agricultureKeys].sort());
+ for(const selector of ['[data-year]','[data-compare]','[data-place]','[data-region]','.africa-map-tools','[data-theme-comparison]','[data-africa-commodities]'])assert.equal(await page.locator(selector).first().isVisible(),false,`Obsolete mobile agriculture control remains visible: ${selector}`);
+ await page.locator('.africa-map-frame').evaluate(node=>node.scrollIntoView({block:'start'}));await screenshot(page,record,'africa-agriculture-map',{preserveScroll:true});
+ const rice='crop-rice-harvested',point=await pickAgriculture(page,rice,{touch:true});assert.equal((await state(page)).crop,'rice');assert.equal((await agricultureLayers(page)).filter(row=>row.visible).length,7);assert.match(await page.locator('[data-theme-title]').textContent(),/米|稲/);
+ await page.locator('.africa-map-frame').evaluate(node=>node.scrollIntoView({block:'start'}));await screenshot(page,record,'africa-agriculture-rice',{preserveScroll:true});await page.locator('.africa-detail').evaluate(node=>node.scrollIntoView({block:'start'}));await screenshot(page,record,'africa-agriculture-rice-reading',{preserveScroll:true});await mobileNoOverflow(page);
+ await page.locator('[data-africa-agri-only]').tap();await waitAgriculture(page,rice);assert.deepEqual((await agricultureLayers(page)).filter(row=>row.visible).map(row=>row.key),[rice]);await page.locator('[data-africa-agri-all]').tap();await waitAgriculture(page,rice);assert.equal((await agricultureLayers(page)).filter(row=>row.visible).length,7);
+ await page.locator('[data-africa-agri-overview]').tap();await waitAgriculture(page);assert.equal(await page.locator('[data-africa-agri-footprint]').count(),0);await page.goBack();await waitAgriculture(page,rice);await page.reload();await waitAgriculture(page,rice);await mobileNoOverflow(page);
+ const region=page.locator('[data-africa-agri-region]'),allView=await page.locator('.africa-map').getAttribute('viewBox');await region.selectOption('south');await settle(page);assert.notEqual(await page.locator('.africa-map').getAttribute('viewBox'),allView);await agricultureNavigation(page);await region.selectOption('all');await settle(page);assert.equal(await page.locator('.africa-map').getAttribute('viewBox'),allView);
+ await mobileLowerAgriculture(page,record);record.measurements.push({scene:'mobile-final',...await mobileNoOverflow(page)});record.checks.push({check:'Mobile touch selection, explicit single display, all-distribution return, history, reload, regional fit and source reach work at 390 × 844',status:'passed',navigation,point});
 }
 
 async function industryOperations(page,record,reference){
@@ -396,6 +448,8 @@ async function main(){
    await runCase(profile,'africa-agriculture',async(page,record)=>{await agricultureOperations(page,record,agricultureReference);});
   }
   await runCase(agricultureProfiles[0],'africa-delayed-agriculture',delayedAgriculture);
+  await runCase(mobileProfile,'us-agriculture',mobileUsAgriculture);
+  await runCase(mobileProfile,'africa-agriculture',mobileAfricaAgriculture);
   for(const profile of profiles){
    let waterReference,climateReference,industryReference;const populationReferences={};
    await runCase(profile,'us-climate',async(page,record)=>{await open(page,'/atlas/north-america/nature/?env=climate');await stableUS(page,record,'climate');climateReference=await measure(page,'us');assertLayout(climateReference);record.measurements.push({scene:'climate',...climateReference});if(profile.id==='desktop1440')await screenshot(page,record,'us-climate');});
@@ -410,7 +464,7 @@ async function main(){
     await runCase(profile,'africa-delayed-river',delayedRiver);
    }
   }
-  assert.equal(report.cases.filter(record=>record.status!=='passed').length,0,'Browser review failed; inspect metadata and failure screenshots');for(const profile of agricultureProfiles)for(const region of ['us','africa'])for(const scene of ['agriculture','agriculture-rice','agriculture-lower'])assert(report.screenshots.some(row=>row.file===`${profile.id}-${region}-${scene}.png`),`Missing ${profile.id} ${region} ${scene} representative capture`);report.status='passed';
+  assert.equal(report.cases.filter(record=>record.status!=='passed').length,0,'Browser review failed; inspect metadata and failure screenshots');for(const profile of agricultureProfiles)for(const region of ['us','africa'])for(const scene of ['agriculture','agriculture-rice','agriculture-lower'])assert(report.screenshots.some(row=>row.file===`${profile.id}-${region}-${scene}.png`),`Missing ${profile.id} ${region} ${scene} representative capture`);for(const region of ['us','africa'])for(const scene of ['agriculture','agriculture-map','agriculture-rice','agriculture-rice-reading'])assert(report.screenshots.some(row=>row.file===`${mobileProfile.id}-${region}-${scene}.png`),`Missing mobile ${region} ${scene} capture`);assert(report.screenshots.some(row=>row.file===`${mobileProfile.id}-africa-agriculture-lower.png`),'Missing mobile Africa lower reading capture');report.status='passed';
  }catch(error){report.status='failed';report.failure=error.stack??String(error);process.exitCode=1;console.error(error);}
  finally{report.completedAt=new Date().toISOString();await browser?.close();if(server)await new Promise(resolve=>server.close(resolve));await save();console.log(JSON.stringify({status:report.status,output,cases:report.cases.length,screenshots:report.screenshots.length}));}
 }
