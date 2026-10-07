@@ -94,3 +94,15 @@ test('ナイル流域の直接URLと履歴復元は全流域へ合わせ、明�
   await until(()=>explicit.q('[data-west-map]').getAttribute('viewBox')===fitted);
  }finally{await full.w.happyDOM.close();await explicit.w.happyDOM.close();}
 });
+test('農畜産の全面分布を保ち、右欄上部の単独表示から同じ地図範囲で全品目へ戻る',async()=>{
+ const {w,q}=await setup('agriculture','?topic=wheat');
+ try{
+  const frame=q('[data-west-map]').getAttribute('viewBox');
+  assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-farm-coverage]').length,5);
+  assert.equal(q('[data-west-farming-only]').parentElement,q('[data-west-detail]'),'the action precedes the longer regional explanation');
+  q('[data-west-farming-only]').click();await until(()=>q('[data-west-scene]').querySelectorAll('[data-west-farm-context]').length===1);
+  assert.equal(q('[data-west-farm-context]').dataset.westFarmContext,'wheat');
+  q('[data-west-farming-only]').click();await until(()=>q('[data-west-scene]').querySelectorAll('[data-west-farm-context]').length===5);
+  assert.equal(q('[data-west-map]').getAttribute('viewBox'),frame);
+ }finally{await w.happyDOM.close();}
+});

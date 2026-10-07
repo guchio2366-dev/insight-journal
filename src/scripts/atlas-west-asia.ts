@@ -195,7 +195,7 @@ async function init(root:HTMLElement){
  async function restoreBasinExtent(){
   if(topic().id!=='basins'||!state.basin||state.view)return;
   const basins=await json('basins.json'),feature=basins.features.find((f:any)=>f.properties.id===state.basin);
-  if(feature)state.view=fit(feature.properties.bounds,.08);
+  if(feature&&!state.view)state.view=fit(feature.properties.bounds,.08);
  }
  function availableYear(t:any){
   if(!t.indicator&&!t.faoItem)return;
@@ -278,6 +278,8 @@ async function init(root:HTMLElement){
   if(selectedClimate)html+=`<section class="atlas-city-climate"><h3>${esc(city.name)}の気候</h3><div class="atlas-climate-diagrams" data-west-active-chart></div></section>`;
   html+=unavailable?`<p class="atlas-reading-takeaway"><strong>${esc(unavailable)}は未整備です。表示中の${esc(t.label)}は参考図です。</strong></p>`:source?`<section class="west-comparison-reading"><h3>${esc(source.label)} × ${esc(t.label)}</h3><p class="atlas-reading-takeaway"><strong>${esc(comparison?.explanation)}</strong></p><p class="west-stat-note">左は元の主題、右は比較先です。地図の境目を動かすと、同じ場所の両方の分布を読めます。凡例の単位・時点も比べてください。</p></section>`:`<p class="atlas-reading-takeaway"><strong>${esc(field==='industry'?westIndustryTakeaway(state.country):readingOverview?fieldIntroductions[field]:reading.message)}</strong></p>`;
   html+='<div data-west-reading-key></div>';
+  const farmingProduct=westFarmingProduct(t);
+  if(farmingProduct)html+=`<button type="button" class="west-single-product" data-west-farming-only aria-pressed="${farmingOnlySelected}">${farmingOnlySelected?'全品目を表示':esc(farmingProduct.label)+'だけ表示'}</button>`;
   html+='<div data-west-reading-extra>';
   if(t.id==='groundwater'&&groundwaterSelection)html+=`<section data-west-ground-reading><h3>選択した帯水層</h3><p>${esc(groundwaterSelection)}</p><p>この広域区分の涵養は地下へ補給される水の目安です。サウジ内陸などの再生しにくい地下水は、揚水を続けても同じ速さで補給されるとは限りません。井戸ごとの残存量や農場の取水量はこの面から判断できません。</p></section>`;
   if(unavailable)html+=`<p>この項目を20対象で比較できる資料は未収録です。参考図の分布・凡例・統計と元の比較の選択は保持しています。</p><button type="button" data-west-resume-topic>参考図の説明へ戻る</button>`;
@@ -286,8 +288,6 @@ async function init(root:HTMLElement){
   const regional=westRegionalReading(t,{country:state.country,basin:state.basin});
   if(regional){html+=`<section data-west-regional-reading><h3>${esc(regional.heading)}</h3>${regional.paragraphs.map((paragraph:string)=>`<p>${esc(paragraph)}</p>`).join('')}<details><summary>この地域説明の根拠・対象時点</summary>${regional.sources.map((id:string)=>{const source=westReadingSources[id];return `<p><a href="${esc(source.url)}">${esc(source.label)}</a> · ${esc(source.period)}</p>`;}).join('')}</details></section>`;}
   if(t.id==='farming-overview')html+=`<details data-west-farming-selection><summary>品目の採用候補・次点・収録範囲</summary>${Object.values(westFarmingSelection).map(text=>`<p>${esc(text)}</p>`).join('')}</details>`;
-  const farmingProduct=westFarmingProduct(t);
-  if(farmingProduct)html+=`<button type="button" class="west-single-product" data-west-farming-only aria-pressed="${farmingOnlySelected}">${farmingOnlySelected?'全品目を表示':esc(farmingProduct.label)+'だけ表示'}</button>`;
   statistics.hidden=true;
   if(state.city&&!['climate','precipitation'].includes(t.id))html+=`<p class="west-persisted">${esc(city?.name)}の選択を保持しています。「気候区分」へ戻ると同じ雨温図を読めます。</p>`;
   if(['climate','precipitation'].includes(t.id)){
@@ -583,7 +583,7 @@ async function init(root:HTMLElement){
   if(!state.point)$('[data-west-point]').textContent=state.yearNotice??(country()?country().name+'を選択しています。'+(layer()?'地図の場所を選ぶと、収録されている格子の値を確認できます。':'一覧や地図から、別の対象へ切り替えられます。'):'国・都市の一覧、または地図の場所を選択してください。');
   state.yearNotice=null;
   if(t.id==='climate'&&state.point){const city=data.cities.find((c:any)=>c.id===state.city);if(city)void cityClassification(city,version);}
-  try{await draw(version);if(version!==renderVersion)return;root.dataset.ready='true';if(restoreMapFocus)svg.focus({preventScroll:true});const city=data.cities.find((c:any)=>c.id===state.city);if(t.id==='climate'&&city&&!state.point)void readPoint(city.coordinates,city.name);else if(state.point){const selected=pointSide==='source'&&source?source:t;if(layer(selected))void readPoint(state.point,'選択地点',selected);}if(t.id==='basins'&&state.basin){const basins=await json('basins.json');const f=basins.features.find((f:any)=>f.properties.id===state.basin);if(f&&version===renderVersion)$('[data-west-point]').textContent=f.properties.name+'の全体を表示しています。地域の外に続く上流も含みます。';}}catch{if(version===renderVersion)fail('この地図の資料を読み込めませんでした。国別統計と分野の切替は利用できます。');}
+  try{await draw(version);if(version!==renderVersion)return;root.dataset.ready='true';if(restoreMapFocus)svg.focus({preventScroll:true});const city=data.cities.find((c:any)=>c.id===state.city);if(t.id==='climate'&&city&&!state.point)void readPoint(city.coordinates,city.name);else if(state.point){const selected=pointSide==='source'&&source?source:t;if(layer(selected))void readPoint(state.point,'選択地点',selected);}if(t.id==='basins'&&state.basin){const basins=await json('basins.json');const f=basins.features.find((f:any)=>f.properties.id===state.basin);if(f&&version===renderVersion)$('[data-west-point]').textContent=f.properties.name+'を選択しています。地域の外に続く上流も元の流域図に含みます。';}}catch{if(version===renderVersion)fail('この地図の資料を読み込めませんでした。国別統計と分野の切替は利用できます。');}
  }
  async function start(explicitCity?:boolean){
   try{
