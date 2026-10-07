@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "id": "canada-crude-oil-exports-2024",
+  "title": "国際供給の実例：原油",
+  "geography": "カナダ全国",
+  "source": {
+    "publisher": "Canada Energy Regulator",
+    "title": "Market Snapshot: Annual Trade Summary – Crude Oil",
+    "url": "https://www.cer-rec.gc.ca/en/data-analysis/energy-markets/market-snapshots/2025/market-snapshot-annual-trade-summary-crude-oil.html",
+    "referenceYear": 2024,
+    "publishedAt": "2025-06-11",
+    "accessedAt": "2026-10-07",
+    "edition": "2025年6月11日公表の2024年概況",
+    "method": "CERの公式HTML本文から公表値を転記。原CSV・XLSXは取得していない。最新の改訂系列とは区別する。",
+    "underlyingSource": "CER Commodity Tracking System Statistics – Crude Oil"
+  },
+  "indicators": [
+    {
+      "id": "exports",
+      "label": "原油輸出の日平均",
+      "value": 4.2,
+      "sourceDisplay": "4.20",
+      "unit": "million-barrels-per-day",
+      "denominator": null,
+      "definition": "2024年のカナダから全世界への原油輸出量を日平均で表示。重質油・軽質油を含む。年合計や生産量ではない。"
+    },
+    {
+      "id": "us-share",
+      "label": "米国向け",
+      "value": 93,
+      "sourceDisplay": "93%",
+      "unit": "percent",
+      "denominator": "2024年のカナダの原油輸出量（全仕向け先）",
+      "definition": "カナダの原油輸出量に占める米国向けの割合。CERが公表した整数比率。世界シェアや米国の輸入に占める割合ではない。"
+    },
+    {
+      "id": "alberta-share",
+      "label": "Albertaからの輸出",
+      "value": 91,
+      "sourceDisplay": "91%",
+      "unit": "percent",
+      "denominator": "2024年のカナダの原油輸出量（全州・地域）",
+      "definition": "カナダの原油輸出量に占めるAlbertaからの輸出の割合。州の生産量、GDP、積出港の所在地を示す割合ではない。"
+    }
+  ],
+  "reading": "Albertaの原油は、EdmontonやHardistyの集積拠点からパイプラインで米国の精製地域へ送られる。Trans Mountainは太平洋岸の積出港にもつながる。",
+  "readingSource": {
+    "publisher": "Canada Energy Regulator",
+    "title": "Alberta: Oil and Gas — Trade and Transportation",
+    "url": "https://www.cer-rec.gc.ca/en/data-analysis/energy-markets/province-territory-energy-profiles/alberta.html",
+    "accessedAt": "2026-10-07",
+    "scope": "資源と輸送の定性的な説明。州プロフィールの2023年生産量を2024年輸出量と混合しない。"
+  },
+  "focus": {
+    "sector": "resources",
+    "subsector": "oil-gas",
+    "province": "Alberta",
+    "label": "Albertaの石油・ガスを地図で読む"
+  },
+  "scopeNote": "原油という一品目の輸出指標。下部の国内GDP・雇用構成は2021年で、対象年・単位・分母が異なる。",
+  "roundingNote": "米国向け93%はCERの公表値を保持。原文の丸め済み日量3.93÷4.20から比率を再計算していない。"
+}

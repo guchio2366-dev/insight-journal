@@ -5,6 +5,7 @@ import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
 import NorthAmericaCountryFieldNavigation from './NorthAmericaCountryFieldNavigation.astro';
 import CanadaTerrainContext from './CanadaTerrainContext.astro';
 import data from '../../data/atlas/canada/industry-parity.json';
+import {canadaIndustryInternational as international,formatCanadaIndustryInternationalIndicator} from '../../data/atlas/canada/industry-international';
 import geometry from '../../data/atlas/canada/industry-geometry.json';
 import geography from '../../data/atlas/regional-countries.json';
 import {canadaLandformPath,projectCanadaLandform} from '../../lib/atlas-canada-landform-map';
@@ -20,7 +21,7 @@ const colors=Object.fromEntries(industrySectors.map(s=>[s.id,s.color]));
 const total=data.metrics[0];
 const rows=[...data.nationalChart].sort((a,b)=>a.gdp-b.gdp);
 ---
-<BaseLayout title="カナダの主要産業｜地図から読む立地と全国構成" description="産業の分布を地図で選び、付加価値・雇用の全国構成と合わせて読む。" compactAtlas>
+<BaseLayout title="カナダの主要産業｜地図から読む立地と国際供給" description="産業の立地と原油輸出の実例を読み、国内の付加価値・雇用構成と合わせて比較する。" compactAtlas>
 <AtlasWorkspaceFrame region="north-america" mapActions={false}>
 <article class="atlas-explorer atlas-workspace canada-industry-parity" data-canada-industry data-ca-industry-parity data-atlas-explorer data-field="industry" data-industry-subsector="all">
  <div class="atlas-compact-heading"><nav aria-label="パンくず"><a href={withBase('/atlas/')}>地図から見る</a> / <a href={withBase('/atlas/north-america/')}>北米地図</a></nav><span>カナダ</span></div>
@@ -48,13 +49,22 @@ const rows=[...data.nationalChart].sort((a,b)=>a.gdp-b.gdp);
    <div class="industry-key"><p data-ca-key>州名の丸は位置の目印。州を選ぶと、主要分野と付加価値を右側で確認できます。</p><details><summary>州・準州を一覧から選ぶ</summary><div class="industry-region-list">{total.provinces.map(p=><button type="button" data-ca-place={p.id}>{p.name}</button>)}</div></details></div>
   </div>
   <div class="industry-map-reading" data-field-national="industry">
-   <aside class="atlas-national industry-selected-reading" aria-label="選んだ産業・地域の説明"><article><header><h2 data-ca-title>産業の立地と全国構成</h2></header><div class="industry-selected-reading-body">
-    <p class="industry-key-sentence"><strong data-ca-lead>中央部の加工・サービスと、西部の資源を地図で比較する。</strong></p>
+   <aside class="atlas-national industry-selected-reading" aria-label="選んだ産業・地域の説明"><article><header><h2 data-ca-title>産業の立地と国際供給</h2></header><div class="industry-selected-reading-body">
+    <p class="industry-key-sentence"><strong data-ca-lead>中央部の加工・サービスと西部の資源を比較し、原油の実例から海外への供給を読む。</strong></p>
+    <section class="ca-industry-international" data-ca-international aria-labelledby="ca-industry-international-title">
+     <h3 id="ca-industry-international-title">{international.title}</h3>
+     <p class="ca-industry-international-period">{international.source.referenceYear}年 · {international.geography}</p>
+     <dl class="ca-industry-international-values">{international.indicators.map(metric=>{const display=formatCanadaIndustryInternationalIndicator(metric);return <div data-ca-international-indicator={metric.id}><dt>{metric.label}</dt><dd><strong>{display.value}</strong><span>{display.unit}</span></dd></div>;})}</dl>
+     <p class="ca-industry-international-denominator">割合の分母：カナダの原油輸出量。米国向けはCER公表値。</p>
+     <p>{international.reading}</p>
+     <button type="button" class="ca-industry-international-place" data-ca-international-place>{international.focus.label}</button>
+     <p class="ca-industry-international-source"><a href={international.source.url}>CER · {international.source.edition}</a></p>
+    </section>
     <button type="button" class="ca-industry-clear" data-ca-clear hidden>全国の解説へ</button><section><h3 data-ca-heading>地域を選んで読む</h3><p data-ca-reading>地図の州名から、その地域で大きい産業を確認できます。業態と分野は米国と同じ順序で選べます。</p></section>
     <div class="ca-industry-national-patterns" data-ca-national-patterns></div>
     <p class="industry-economic-value" data-ca-value hidden aria-live="polite"></p>
     <p><a data-ca-nature href={withBase('/atlas/north-america/canada/nature/?view=landform')}>地形・水系と照らし合わせる</a></p>
-    <details class="industry-reading-definitions"><summary>地域と統計の範囲・操作方法</summary><p data-ca-operation-reading>業態を選び、さらに分野を絞ると、州別GDPの大きさを比較できます。地形や水路・市場の位置と合わせて、産業の立地を読んでいきます。</p><p>州・準州単位の産業GDPです。国際供給量・輸出額・世界シェアはこの国内構成比に含みません。丸の位置は地域の案内で、工場・鉱山の所在地ではありません。分野を絞るとGDP上位5州の金額を丸の面積で比較します。</p><p>GDPと雇用を同一年で比較できる抽出値は2021年。現在の工場数や生産量を示すものではありません。</p></details>
+    <details class="industry-reading-definitions"><summary>地域と統計の範囲・操作方法</summary><p data-ca-operation-reading>業態を選び、さらに分野を絞ると、州別GDPの大きさを比較できます。地形や水路・市場の位置と合わせて、産業の立地を読んでいきます。</p><p>地図の数量は州・準州単位の産業GDPです。丸の位置は地域の案内で、工場・鉱山の所在地ではありません。分野を絞るとGDP上位5州の金額を丸の面積で比較します。</p><p>{international.scopeNote} 地図の丸を原油の輸出量とは読み替えません。</p><p>GDPと雇用を同一年で比較できる抽出値は2021年。現在の工場数や生産量を示すものではありません。</p></details>
    </div></article></aside>
 
   </div>
@@ -69,6 +79,13 @@ const rows=[...data.nationalChart].sort((a,b)=>a.gdp-b.gdp);
    </section></aside></details>
  <p class="industry-return" data-ca-population-return-wrap hidden><a data-canada-population-industry-return href={withBase('/atlas/north-america/canada/population/')}>元の人口比較へ戻る</a></p>
  <details class="industry-method" id="canada-industry-sources"><summary>出典・年・分類・利用条件</summary>
+  <section class="ca-industry-international-definitions" data-ca-international-definitions>
+   <h3>原油輸出：2024年</h3>
+   <p><a href={international.source.url}>{international.source.publisher} — {international.source.title}</a>。公表日：{international.source.publishedAt}。確認日：{international.source.accessedAt}。{international.source.method}</p>
+   <dl>{international.indicators.map(metric=><><dt>{metric.label}</dt><dd>{metric.definition}</dd></>)}</dl>
+   <p>{international.roundingNote}</p>
+   <p>輸送の解説：<a href={international.readingSource.url}>{international.readingSource.publisher} — {international.readingSource.title}</a>。確認日：{international.readingSource.accessedAt}。{international.readingSource.scope}</p>
+  </section>
   <p>GDP：<a href="https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3610040201">Statistics Canada 36-10-0402-01</a>。雇用：<a href="https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1410002301">14-10-0023-01</a>。2021年の公表値を使用し、分類の対応がない細分類の雇用は欠損として表示します。業態別の集計では不動産をサービスから外し、建設・不動産へ一度だけ含めています。</p>
   <p>「半導体・電子機器」はNAICS 334の電子機器全体。「娯楽・宿泊・飲食」は住民の利用も含みます。製造業の分野タブは代表的な分野で、全製造業を分割したものではありません。</p>
   <p>州境：Statistics Canada 2021 Census Cartographic Boundary Files。地形の線：NOAA ETOPO 2022、500・1,000・2,000 m。河川・湖・周辺国土：Natural Earth、public domain。地図は面積測定用ではありません。</p>
