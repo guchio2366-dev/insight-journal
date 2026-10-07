@@ -52,6 +52,7 @@ export async function verifySoutheastAsiaRegion(page,{source,capture:takePicture
  assert.equal(await country.isVisible(),false);assert.equal(await page.locator('.asia-country-list').isVisible(),false);
  const livestock=page.locator('.asia-livestock-point:visible'),count=await livestock.count();assert(count>0);
  await page.locator('[data-farm-choice="maize"]').click();await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmSelected==='maize');
+ assert.doesNotMatch(await page.locator('[data-map-gesture]').textContent(),/国の選択欄/,'Agriculture guidance must not direct learners to a hidden country control');
  const projected=await livestock.evaluateAll(n=>n.map(x=>({name:x.getAttribute('aria-label'),x:parseFloat(x.style.left),y:parseFloat(x.style.top)})));
  await page.locator('[data-southeast-farm-single]').click();await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmView==='single');
  await page.waitForFunction(()=>document.querySelectorAll('.asia-livestock-point:not([hidden])').length===0);assert.equal(await livestock.count(),0);assert.equal(new URL(page.url()).searchParams.get('farmview'),'single');

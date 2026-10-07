@@ -417,7 +417,7 @@ function start(root:HTMLElement) {
     if(state.place&&!farmingStatistics&&!farmingStatisticsError)void loadFarmingStatistics().then(()=>{if(state.field==='agriculture')renderFarming();}).catch(()=>{if(state.field==='agriculture')renderFarming();});
     if(!layer)return;
     $('[data-map-title]').textContent=layer.title;$('[data-map-eyebrow]').textContent='Agriculture & Forestry · 2020';$('[data-map-period]').textContent=layer.unit??'森林の参考図';
-    $('[data-map-gesture]').textContent=layer.kind==='forest'?'国の選択欄から森林面積と木材の統計を読めます。地図は2本指で移動・拡大できます。':'品目名・畜産の点から分布を選び、国の選択欄から公表統計を読めます。背景のクリックでは選択を変えません。地図は2本指で移動・拡大できます。';
+    $('[data-map-gesture]').textContent=config.regionId==='southeast-asia'?(layer.kind==='forest'?'林業の分布と資料の説明を右で読めます。地図は2本指で移動・拡大できます。':'品目名・畜産の点から分布を選びます。背景のクリックでは選択を変えません。地図は2本指で移動・拡大できます。'):layer.kind==='forest'?'国の選択欄から森林面積と木材の統計を読めます。地図は2本指で移動・拡大できます。':'品目名・畜産の点から分布を選び、国の選択欄から公表統計を読めます。背景のクリックでは選択を変えません。地図は2本指で移動・拡大できます。';
     $('[data-farming-legend-title]').textContent=layer.kind==='forest'?'森林の分布（2020年・参考画像）':`${layer.title}（${layer.unit}・2020年）`;
     const scale=$('[data-farming-scale]');scale.replaceChildren();
     for(const [i,color] of (layer.colors??['4d9221']).entries()){const item=document.createElement('span'),swatch=document.createElement('i');swatch.style.backgroundColor='#'+color;const breaks=layer.breaks??[],label=layer.kind==='forest'?'資料で森林と分類された場所':i===0?`0より大きく${breaks[0]}未満`:i===breaks.length?`${breaks[i-1].toLocaleString('ja-JP')}以上`:`${breaks[i-1].toLocaleString('ja-JP')}以上${breaks[i].toLocaleString('ja-JP')}未満`;item.append(swatch,document.createTextNode(label));scale.append(item);}
