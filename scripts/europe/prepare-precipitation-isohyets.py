@@ -88,7 +88,9 @@ def generate(repo):
         for name in ['native-window.json','native-annual.bin.gz','source-mask.png','precipitation.svg','geometry.json.gz']}
     manifest={'schemaVersion':1,'dataset':old['dataset'],'publisher':old['publisher'],'sourceUrl':old['sourceUrl'],'downloadUrl':old['downloadUrl'],
         'doi':old['doi'],'period':old['period'],'originalResolution':old['originalResolution'],'inputSha256':old['inputSha256'],'inputMd5':old['inputMd5'],
-        'license':old['license'],'licenseUrl':old['licenseUrl'],'licenseEvidence':old['licenseEvidence'],'attribution':old['attribution'],
+        'license':old['license'],'licenseUrl':old['licenseUrl'],'licenseEvidence':old['licenseEvidence'],
+        'attribution':old['attribution'].replace('nearest-neighbour Web Mercator display and colour classes.',
+            'native-grid linear 250 mm contours and matching blue bands projected to Web Mercator. Original nearest native annual values retained for separate point lookup.'),
         'bounds':old['bounds'],'width':width,'height':height,'projection':old['projection'],'unit':'mm/year','breaks':thresholds,'colors':old['colors'],
         'numericLookup':{'path':'../precipitation-v1/values.bin.gz','sha256':old['files']['values.bin.gz']['sha256'],'method':'Unchanged nearest native annual source-cell lookup; it is distinct from interpolated contour display.'},
         'monthlyWindow':window['monthlyWindow'],'files':files,

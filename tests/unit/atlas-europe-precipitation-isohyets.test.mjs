@@ -78,6 +78,7 @@ function rgba(name){
 test('published lines and bands use one SVG, preserve all source-missing pixels and retain source-period and interpolation limits',()=>{
   for(const [name,record] of Object.entries(manifest.files))assert.equal(sha(bytes(base+name)),record.sha256,name);
   assert.equal(manifest.inputSha256,original.inputSha256);assert.equal(manifest.period,original.period);assert.equal(manifest.license,'CC BY 4.0');
+  assert.match(manifest.attribution,/native-grid linear 250 mm contours and matching blue bands/);
   const svg=bytes(base+'precipitation.svg').toString();
   for(const level of manifest.breaks)assert.ok(svg.includes(`data-isohyet-mm="${level}"`));
   assert.ok(svg.includes('data-isobands="250mm"'));assert.ok(svg.includes('data-isohyets="250mm"'));
