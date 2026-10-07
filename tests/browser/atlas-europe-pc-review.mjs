@@ -219,11 +219,13 @@ async function agricultureClimateRepairs(page,profile){
   const cityLabels=await page.locator('[data-eu-map-kind="city"]:visible').evaluateAll(nodes=>nodes.filter(node=>!node.classList.contains('is-point-only')).map(node=>{const style=getComputedStyle(node);return {name:node.textContent,background:style.backgroundColor,font:Number.parseFloat(style.fontSize)};}));
   assert.ok(cityLabels.length<=8);
   for(const label of cityLabels){assert.equal(label.background,'rgba(0, 0, 0, 0)');assert.ok(label.font>=12&&label.font<=13);}
-  const point=page.locator('[data-eu-map-kind="city"].is-point-only:visible').first();
-  assert.ok(await point.count());await page.bringToFront();await point.focus();
+  const stationId=await page.locator('[data-eu-map-kind="city"].is-point-only:visible').first().getAttribute('data-eu-map-place');
+  assert.ok(stationId);
+  const point=page.locator(`[data-eu-map-kind="city"][data-eu-map-place="${stationId}"]`);
+  await page.bringToFront();await point.focus();
   // Exercise real keyboard focus, with the pointer away from the station.
   await page.mouse.move(5,5);await page.keyboard.press('Tab');await page.keyboard.press('Shift+Tab');
-  const stationFocus=await point.evaluate(node=>({id:node.dataset.euMapPlace,active:document.activeElement===node,documentFocus:document.hasFocus(),focus:node.matches(':focus'),focusVisible:node.matches(':focus-visible'),font:Number.parseFloat(getComputedStyle(node).fontSize),hidden:node.hidden,style:node.getAttribute('style')}));
+  const stationFocus=await point.evaluate(node=>({id:node.dataset.euMapPlace,active:document.activeElement===node,activeId:document.activeElement?.getAttribute('data-eu-map-place'),activeTag:document.activeElement?.tagName,documentFocus:document.hasFocus(),focus:node.matches(':focus'),focusVisible:node.matches(':focus-visible'),font:Number.parseFloat(getComputedStyle(node).fontSize),hidden:node.hidden,style:node.getAttribute('style')}));
   manifest.checks.push({profile:profile.name,stationFocus});
   await page.locator('[data-eu-city-choice]').selectOption('london');
   await page.evaluate(()=>scrollTo(0,0));
