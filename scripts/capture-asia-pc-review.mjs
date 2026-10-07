@@ -124,7 +124,7 @@ function mapPixels(png,box){
  const colors=new Map();let samples=0,backgroundPoint=null;
  for(let y=Math.max(0,Math.ceil(box.y+4));y<Math.min(height,Math.floor(box.y+box.height-4));y+=3)for(let x=Math.max(0,Math.ceil(box.x+4));x<Math.min(width,Math.floor(box.x+box.width-4));x+=3){const i=(y*width+x)*channels;if(channels===4&&pixels[i+3]<128)continue;const key=`${pixels[i]>>4},${pixels[i+1]>>4},${pixels[i+2]>>4}`;colors.set(key,(colors.get(key)??0)+1);samples++;if(!backgroundPoint&&x>box.x+24&&x<box.x+box.width-24&&y>box.y+24&&y<box.y+box.height-24&&['230,238,240','215,218,213','225,228,219'].includes(`${pixels[i]},${pixels[i+1]},${pixels[i+2]}`))backgroundPoint={x,y};}
  const evidence={viewportWidth:width,viewportHeight:height,sampledMapPixels:samples,colorBuckets:colors.size,dominantColorRatio:samples?Math.max(...colors.values())/samples:1};
- assert(samples>1000,'The visible map has too few pixels to review');
+ assert(samples>1000,`The visible map has too few pixels to review: ${JSON.stringify({box,...evidence})}`);
  assert(colors.size>=16&&evidence.dominantColorRatio<.98,`The map is blank or nearly uniform: ${JSON.stringify(evidence)}`);return {...evidence,backgroundPoint};
 }
 async function geometry(page){
@@ -378,6 +378,7 @@ async function checkRequestedCorrections(browser,host,profile){
   const id=await basin.locator('option').evaluateAll(options=>options.find(o=>o.value&&!o.disabled).value);await basin.selectOption(id);
   await page.waitForFunction(id=>new URL(location.href).searchParams.get('detail')===id,id);
   await settle(page);
+  await page.locator('[data-map-surface]').scrollIntoViewIfNeeded();
   const basinURL=page.url(),basinValue=await page.locator('[data-hydrology-value]').textContent(),map=await page.locator('[data-map-surface]').boundingBox();
   const background=mapPixels(await page.screenshot({fullPage:false,animations:'disabled'}),{x:map.x,y:map.y,width:map.width,height:map.height}).backgroundPoint;
   assert(background,'A visible uncovered background pixel is required for the inert-click check');await page.mouse.click(background.x,background.y);assert.equal(page.url(),basinURL,'Empty background must retain the selected basin');
