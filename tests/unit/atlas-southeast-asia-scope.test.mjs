@@ -3,11 +3,12 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
 import {southeastIndustryCountryScope} from '../../src/data/atlas/asia/southeast-asia-industry.ts';
-import {industryCountryChoices,industryScopeCountries,industryTopicsForPlace,normalizeIndustryState,industryValues} from '../../src/data/atlas/asia-industry.ts';
+import {industryCountryChoices,industryScopeCountries,industryTopicsForPlace,normalizeIndustryState,normalizeScopedIndustryState,industryValues} from '../../src/data/atlas/asia-industry.ts';
+import {tradeTopics} from '../../src/data/atlas/asia-trade.ts';
 import {readAsiaAtlasState,writeAsiaAtlasState,startAsiaComparison,restoreAsiaComparison} from '../../src/lib/atlas-asia-state.ts';
 const root=new URL('../../public/assets/atlas/asia-industry-v1/',import.meta.url);
 const original=JSON.parse(readFileSync(new URL('manifest.json',root))).regions['southeast-asia'];
-const region={...original,countryScope:southeastIndustryCountryScope};
+const region={...original,topics:[...original.topics,...tradeTopics],countryScope:southeastIndustryCountryScope};
 const data=JSON.parse(gunzipSync(readFileSync(new URL(region.data,root))));
 const national=JSON.parse(gunzipSync(readFileSync(new URL('national.json.gz',root))));
 const state={field:'industry',place:null,city:null,topic:'manufacturing',detail:null,point:null,camera:null,back:null};
@@ -45,4 +46,17 @@ test('single-product state survives URL reload and comparison without contaminat
  assert.equal(restored.single,true);assert.equal(restored.field,'agriculture');assert.equal(restored.topic,'maize');assert.deepEqual(restored.camera,chosen.camera);
  assert.equal(writeAsiaAtlasState(url,{...chosen,single:false}).searchParams.get('farmview'),null);
  assert.equal(readAsiaAtlasState(new URL(url.href+'?topic=overview&farmview=single'),context).single,undefined);
+});
+
+test('outside-country comparisons keep their commodity in regional trade and restore the original field',()=>{
+ const context={countries:region.countries,cities:[],fields:['agriculture','industry'],bounds:[91,-12,143,30],topics:{agriculture:['forest','maize'],industry:['trade-exports','manufacturing']},details:{industry:id=>/^t-\d{2}$/.test(id)}};
+ for(const [place,topic,chapter]of [['MYS','forest','44'],['PHL','maize','10']]){
+  const from={...state,field:'agriculture',place,topic,point:[103,4.5],camera:{lng:103,lat:4.5,zoom:6}},url=new URL('https://example.com/atlas/asia/southeast-asia/agriculture/');
+  const comparison={...startAsiaComparison(url,from,'industry'),topic:'trade-exports',detail:'t-'+chapter};
+  const scoped=normalizeScopedIndustryState(region,comparison),actual=normalizeIndustryState(region,comparison,data);
+  for(const value of [scoped,actual]){assert.equal(value.place,null);assert.equal(value.detail,'t-'+chapter);assert.equal(value.camera,null);assert.equal(value.point,null);assert.equal(value.back,comparison.back);}
+  const reloaded=readAsiaAtlasState(writeAsiaAtlasState(url,scoped),context),restored=restoreAsiaComparison(url,reloaded,context);
+  assert.equal(reloaded.detail,'t-'+chapter);assert.equal(restored.field,'agriculture');assert.equal(restored.place,place);assert.equal(restored.topic,topic);assert.deepEqual(restored.camera,from.camera);
+ }
+ assert.equal(normalizeScopedIndustryState({...region,countryScope:undefined},{...state,place:'MYS'}).place,'MYS');
 });

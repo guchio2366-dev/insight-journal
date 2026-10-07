@@ -32,7 +32,7 @@ export function createAsiaTrade(root:HTMLElement,config:Config,getState:()=>Asia
  function renderFarm(){
   const state=getState(),box=$('[data-farm-trade]'),topic=state.topic??'rice',mapping=farmTrade[topic],visible=state.field==='agriculture'&&!!mapping;box.hidden=!visible;if(!visible)return;box.replaceChildren(el('h3','生産地と商品貿易をつなげる'));
   box.append(el('p',mapping.note));
-  if(!state.place){box.append(el('p','国・地域を選ぶと、対応する商品の2023年の輸出入額を確認できます。'));return;}
+  if(!state.place){box.append(el('p',config.industry?.countryScope?.regionalTrade?'雨温図や地域事例から同じ場所を比較すると、その国全体の2023年の商品輸出入額を確認できます。':'国・地域を選ぶと、対応する商品の2023年の輸出入額を確認できます。'));return;}
   if(!data){box.append(el('p',failed?'貿易の資料を取得できませんでした。':'関連する商品の貿易額を読み込んでいます。'));if(failed){const b=el('button','貿易データを再読み込み');b.type='button';b.addEventListener('click',retry);box.append(b);}else request();return;}
   const c=data.countries[state.place],note=tradeCoverageNote(state.place);if(note)box.append(el('p',note));
   box.append(el('p',`${name(state.place)}の国全体の金額です。地図の2020年の推計分布、FAOSTATの生産量、2023年の貿易額は、年と対象・単位が異なります。`));

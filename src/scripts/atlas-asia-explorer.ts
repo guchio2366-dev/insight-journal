@@ -11,7 +11,7 @@ import { asiaPhysicalReading, asiaNaturalTopics, type AsiaPhysicalFocus } from '
 import {asiaPopulationTopics,asiaPopulationReading,asiaUrbanReading,type AsiaPopulationRegion,type AsiaPopulationRaster} from '../data/atlas/asia-population';
 import {renderAsiaFarmingPanel} from './atlas-asia-farming-panel';
 import {createAsiaIndustry} from './atlas-asia-industry';
-import {hasIndustryCountryScope,industryCountryChoices} from '../data/atlas/asia-industry';
+import {hasIndustryCountryScope,industryCountryChoices,normalizeScopedIndustryState} from '../data/atlas/asia-industry';
 import {asiaWaterFocus} from '../data/atlas/asia-water-focus';
 import {createAsiaWater} from './atlas-asia-water';
 import {createAsiaSeasonalPrecipitation} from './atlas-asia-seasonal-precipitation';
@@ -67,7 +67,7 @@ function start(root:HTMLElement) {
   context.stories=Object.fromEntries(context.fields.map(field=>[field,asiaPlaceReadings.filter(s=>s.region===config.regionId&&s.field===field).map(s=>s.id)]));
   function readState():AsiaState {return normalizePlaceReading(config.regionId,readBaseState());}
   function readBaseState():AsiaState {
-    let restored=readAsiaAtlasState(new URL(location.href),context);
+    let restored=normalizeScopedIndustryState(config.industry,readAsiaAtlasState(new URL(location.href),context));
     if(restored.field==='industry'&&config.industry&&hasIndustryCountryScope(config.industry)&&restored.place&&!industryCountryChoices(config.industry).some(c=>c.code===restored.place))restored={...restored,place:null,detail:null,point:null,story:null};
     if(restored.field==='natural'&&restored.topic==='water'&&restored.detail?.startsWith('b-'))restored={...restored,topic:'basins'};
     if(restored.field==='industry'&&config.trade&&isTradeTopic(restored.topic))return normalizeTradeState(restored,config.tradeChapters!);
@@ -164,6 +164,7 @@ function start(root:HTMLElement) {
     history[push?'pushState':'replaceState']({},'',url);
   }
   function navigate(next:AsiaState,fit=true) {
+    const scoped=normalizeScopedIndustryState(config.industry,next);if(scoped!==next)fit=true;next=scoped;
     if(next.field!=='agriculture'||next.topic&&next.topic!=='overview')next={...next,overlay:null};
     if(next.field!=='industry')next={...next,sector:null,subsector:null};
     if(next.field==='industry')next={...next,point:next.point??config.cities.find(c=>c.id===next.city)?.coordinates??null};

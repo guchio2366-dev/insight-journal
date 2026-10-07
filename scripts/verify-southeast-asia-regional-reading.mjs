@@ -73,6 +73,10 @@ export async function verifySoutheastAsiaRegion(page,{source,capture:takePicture
  assert.equal(new URL(page.url()).searchParams.get('place'),null);assert.equal(new URL(page.url()).searchParams.get('detail'),'t-44');assert.match(await page.locator('[data-trade-coverage]').textContent(),/11か国/);
  await page.locator('[data-comparison-back]').click();const forestBack=new URL(page.url());for(const key of ['place','topic','story','at'])assert.equal(forestBack.searchParams.get(key),forest.searchParams.get(key));
  record('forestry keeps the wood chapter in regional trade and restores the Malaysia forest case');
+ await open('agriculture/?topic=maize&place=PHL');await page.locator('[data-farm-trade] table').waitFor({state:'visible'});
+ await page.locator('[data-farm-trade] button').click();await page.waitForFunction(()=>document.querySelector('[data-trade-status]')?.textContent===''&&document.querySelector('[data-trade-chapter]')?.value==='10');
+ assert.equal(new URL(page.url()).searchParams.get('place'),null);assert.equal(new URL(page.url()).searchParams.get('detail'),'t-10');await page.locator('[data-comparison-back]').click();
+ assert.equal(new URL(page.url()).searchParams.get('place'),'PHL');assert.equal(new URL(page.url()).searchParams.get('topic'),'maize');record('crop trade from an outside-study country keeps its HS chapter and comparison return');
 
  for(const [path,id,key,value]of [['nature/?city=bangkok&lng=116.576&lat=9.362&z=2.7','climate-background','city','bangkok'],['nature/?topic=terrain&detail=java-island&lng=116.576&lat=9.362&z=2.7','terrain-background','detail','java-island']]){
   await open(path);if(key==='city')await page.locator('[data-city-panel="bangkok"]').waitFor({state:'visible'});

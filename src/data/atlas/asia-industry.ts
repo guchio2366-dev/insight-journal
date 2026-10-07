@@ -20,8 +20,14 @@ export function industryTopicsForPlace(region:IndustryRegion,place:string|null){
 export function industryScopeCountries(region:IndustryRegion,place:string|null){return hasIndustryCountryScope(region)?industryCountryChoices(region).filter(c=>!place||c.code===place).map(c=>c.code):region.countries;}
 export function industryTopic(region:IndustryRegion,state:AsiaState){const topics=industryTopicsForPlace(region,state.place);return topics.find(t=>t.id===state.topic)??topics.find(t=>t.id==='manufacturing')??topics[0];}
 export function isIndustryDetailId(id:string){return /^[A-Za-z0-9_-]{1,64}$/.test(id);}
+export function normalizeScopedIndustryState(region:IndustryRegion|undefined,state:AsiaState):AsiaState{
+ if(!region?.countryScope?.regionalTrade||state.field!=='industry'||!state.place||industryCountryChoices(region).some(c=>c.code===state.place))return state;
+ const trade=['trade-exports','trade-imports'].includes(state.topic??'');
+ return {...state,place:null,city:null,detail:trade?state.detail:null,point:null,story:null,camera:null};
+}
 export function normalizeIndustryState(region:IndustryRegion,state:AsiaState,data?:IndustryData|null):AsiaState{
  if(state.field!=='industry')return state;
+ state=normalizeScopedIndustryState(region,state);
  if(hasIndustryCountryScope(region)&&state.place&&!industryCountryChoices(region).some(c=>c.code===state.place))state={...state,place:null,detail:null,point:null,story:null};
  const topic=industryTopic(region,state);
  if(state.topic&&state.topic!==topic.id)state={...state,detail:null,point:null};
