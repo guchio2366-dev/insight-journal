@@ -181,7 +181,10 @@ async function checkContextOperations(browser,host,profile){
   assert.equal(await page.locator('[data-country-select]').inputValue(),'');
   const product=await page.locator('[data-asia-config]').evaluate(node=>JSON.parse(node.textContent).presentation.farming.products.find(p=>p.kind==='crop'&&p.id!=='rice').id);
   const livestock=page.locator('.asia-livestock-point:visible'),before=await livestock.count();
-  const camera=new URL(page.url()).searchParams;
+  // Initial fitted views omit camera URL parameters. Compare projected map
+  // anchors so serializing the unchanged camera is not mistaken for a move.
+  const anchors=()=>livestock.evaluateAll(nodes=>nodes.map(node=>({name:node.getAttribute('aria-label'),x:parseFloat(node.style.left),y:parseFloat(node.style.top)})));
+  const cameraAnchors=await anchors();assert(before>0,'Regional extent needs visible map anchors');
   await contextPicture(page,profile,`${region}-farm-overview`,'asia');
   await page.locator(`[data-farm-choice="${product}"]`).click();
   await page.waitForFunction(id=>{const root=document.querySelector('[data-asia-atlas]');return root.dataset.farmContextStatus==='ready'&&root.dataset.farmSelected===id;},product);
@@ -189,7 +192,8 @@ async function checkContextOperations(browser,host,profile){
   assert.equal(await livestock.count(),before,'Livestock points stay in the map');
   for(const opacity of await livestock.evaluateAll(nodes=>nodes.map(node=>parseFloat(getComputedStyle(node).opacity))))assert.equal(opacity,.2);
   assert.equal(await page.locator('[data-farming-legend]').isVisible(),false,'Context map must not display the quantitative raster key');
-  for(const key of ['lng','lat','z'])assert.equal(new URL(page.url()).searchParams.get(key),camera.get(key),'Crop choice must retain the regional extent');
+  const selectedAnchors=await anchors();for(let i=0;i<before;i++){assert.equal(selectedAnchors[i].name,cameraAnchors[i].name);for(const axis of ['x','y'])assert(Math.abs(selectedAnchors[i][axis]-cameraAnchors[i][axis])<=1,'Crop choice must retain projected regional map anchors within 1 CSS pixel');}
+  for(const key of ['lng','lat','z']){const value=new URL(page.url()).searchParams.get(key);assert(value!==null&&Number.isFinite(Number(value)),'Crop choice must serialize its current camera');}
   await contextPicture(page,profile,`${region}-farm-selected`,'asia');
   await page.reload({waitUntil:'domcontentloaded'});
   await page.waitForFunction(id=>document.querySelector('[data-asia-atlas]')?.dataset.farmSelected===id,product);
@@ -206,7 +210,7 @@ async function checkContextOperations(browser,host,profile){
   assert.equal(await page.locator('.west-country-line title').count(),0);
   const frame=await page.locator('[data-west-map]').getAttribute('viewBox');
   await contextPicture(page,profile,'west-asia-farm-overview','west-asia');
-  await page.locator('[data-west-topic-button="wheat"]').click();await page.waitForSelector('[data-west-farm-selected="wheat"]');await settle(page);
+  await page.locator('.west-agri-picker [data-west-topic-button="wheat"]').click();await page.waitForSelector('[data-west-farm-selected="wheat"]');await settle(page);
   assert.equal(await contexts.count(),5);
   for(const id of ['sheep','goat','cattle'])assert.equal(await page.locator(`[data-west-farm-context="${id}"]`).getAttribute('opacity'),'.2');
   assert.equal(await page.locator('[data-west-map]').getAttribute('viewBox'),frame);
