@@ -239,7 +239,8 @@ async function agricultureClimateRepairs(page,profile){
     const reason=node.querySelector('[data-eu-climate-reason]'),farm=node.querySelector('.eu-climate-farming>p'),reader=node.closest('[data-eu-climate-reader]');
     return {reason:reason.textContent,farmBottom:farm.getBoundingClientRect().bottom,reasonFont:Number.parseFloat(getComputedStyle(reason).fontSize),farmFont:Number.parseFloat(getComputedStyle(farm).fontSize),classificationFont:Number.parseFloat(getComputedStyle(node.querySelector('.eu-city-climate')).fontSize),farmHeadingFont:Number.parseFloat(getComputedStyle(node.querySelector('.eu-climate-farming h4')).fontSize),overflow:getComputedStyle(reader).overflowY,viewportHeight:innerHeight,duplicates:node.querySelectorAll('.eu-city-selected-note').length};
   });
-  assert.match(evidence.reason,/明瞭な乾季.*5\.7.*19\.0/);
+  assert.match(evidence.reason,/大西洋.*偏西風.*海.*冬.*夏/);
+  assert.match(await page.locator('[data-city-reading="london"] .eu-city-reading-details').textContent(),/明瞭な乾季.*5\.7.*19\.0/s);
   assert.ok(evidence.reasonFont>=14&&evidence.farmFont>=14);
   assert.ok(evidence.classificationFont>=18&&evidence.farmHeadingFont>=17,'Existing heading sizes are retained');
   assert.equal(evidence.overflow,'visible');assert.equal(evidence.duplicates,0);
@@ -247,6 +248,27 @@ async function agricultureClimateRepairs(page,profile){
   assert.equal(stationFocus.active,true,'Keyboard focus returns to the actual station button: '+JSON.stringify(stationFocus));
   assert.equal(stationFocus.font,12,'Keyboard focus reveals the station name: '+JSON.stringify(stationFocus));
   manifest.checks.push({profile:profile.name,agricultureClimateEvidence:evidence});
+  // Read each actual city choice without taking additional screenshots. The
+  // cause must stay in the visible panel, ahead of the retained farming prose.
+  const cityChoices=await page.locator('[data-eu-city-choice] option').evaluateAll(nodes=>nodes.map(node=>node.value).filter(Boolean));
+  const geographyRecords=[];
+  manifest.checks.push({profile:profile.name,cityGeography:geographyRecords});
+  for(const cityId of cityChoices){
+    await page.locator('[data-eu-city-choice]').selectOption(cityId);
+    await page.waitForFunction(id=>!document.querySelector(`[data-city-reading="${id}"]`).hidden,cityId);
+    const cityEvidence=await page.locator(`[data-city-reading="${cityId}"]`).evaluate(node=>{
+      const reason=node.querySelector('[data-eu-climate-reason]'),farm=node.querySelector('.eu-climate-farming>p'),details=node.querySelector('.eu-city-reading-details');
+      return {id:reason.dataset.euClimateGeography,reason:reason.textContent,reasonBottom:reason.getBoundingClientRect().bottom,farmBottom:farm.getBoundingClientRect().bottom,reasonFont:Number.parseFloat(getComputedStyle(reason).fontSize),farmFont:Number.parseFloat(getComputedStyle(farm).fontSize),detailsClosed:!details.open,sources:details.querySelectorAll('a').length,viewportHeight:innerHeight};
+    });
+    geographyRecords.push(cityEvidence);
+    await save();
+    assert.equal(cityEvidence.id,cityId);
+    assert.match(cityEvidence.reason,/大西洋|海|内陸|平原|台地|高緯度|山地|日射/);
+    assert.ok(cityEvidence.reasonFont>=14&&cityEvidence.farmFont>=14);
+    assert.ok(cityEvidence.sources>=3&&cityEvidence.detailsClosed);
+    assert.ok(cityEvidence.reasonBottom<cityEvidence.farmBottom);
+    assert.ok(cityEvidence.farmBottom<=cityEvidence.viewportHeight-8,'Each full city reason/farming paragraph stays within the PC viewport: '+JSON.stringify(cityEvidence));
+  }
   networkClean();
 }
 
