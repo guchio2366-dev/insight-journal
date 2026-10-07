@@ -481,6 +481,9 @@ async function stageOneOperations(page, profile) {
   const rainState=async()=>({url:page.url(),image:await page.locator('[data-eu-subject-image]').getAttribute('href'),manifest:await page.locator('[data-eu-layer-manifest]').getAttribute('href'),extent:await page.locator('[data-eu-static]').getAttribute('viewBox')});
   const directRain=await rainState();assert.equal(directRain.image,rainfallPath);
   assert.equal(directRain.manifest,rainfallManifestPath);
+  const processingLinks=()=>page.locator('a[href*="/europe/precipitation"][href$="manifest.json"]').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('href')));
+  const directProcessingLinks=await processingLinks();assert.ok(directProcessingLinks.length>=2);
+  assert.ok(directProcessingLinks.every(href=>href===rainfallManifestPath),'Reader and page-wide processing links identify the displayed contours');
   const processing=await page.evaluate(async path=>{const response=await fetch(path,{redirect:'error'});if(!response.ok)throw Error('Rainfall processing record unavailable');return response.json();},directRain.manifest);
   assert.equal(processing.validation.verifiedLineVertices,8621);
   assert.equal(processing.validation.verifiedSharedBandEdges,8258);
@@ -493,6 +496,7 @@ async function stageOneOperations(page, profile) {
   await page.locator('[data-eu-water-options] [data-eu-topic="precipitation"]').click();await ready(page);
   const tabRain=await rainState();assert.equal(tabRain.image,rainfallPath);
   assert.equal(tabRain.manifest,rainfallManifestPath);
+  assert.deepEqual(await processingLinks(),directProcessingLinks);
   assert.equal(new URL(tabRain.url).searchParams.get('layer'),'precipitation');
   assert.equal(tabRain.extent,directRain.extent,'Direct and tab routes retain the same map extent');
   await snapshot(page, profile, 'precipitation-250mm-tabs');
