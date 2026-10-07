@@ -8,7 +8,9 @@ const finite=(value:string|null,fallback:number,min:number,max:number)=>{
 };
 export function normalizeMexicoAgricultureCamera(camera:Pick<MexicoAgricultureAtlasState,'x'|'y'|'zoom'>){
  const zoom=Math.round(Math.max(1,Math.min(5,camera.zoom))*100)/100,halfWidth=450/zoom,halfHeight=290/zoom;
- return {zoom,x:Math.max(halfWidth,Math.min(900-halfWidth,camera.x)),y:Math.max(halfHeight,Math.min(580-halfHeight,camera.y))};
+ // Use the same precision as the URL so a completed drag and its reload agree.
+ const coordinate=(value:number)=>Math.round(value*100)/100;
+ return {zoom,x:Math.max(halfWidth,Math.min(900-halfWidth,coordinate(camera.x))),y:Math.max(halfHeight,Math.min(580-halfHeight,coordinate(camera.y)))};
 }
 export function readMexicoAgricultureAtlasState(url:URL):MexicoAgricultureAtlasState {
  const query=url.searchParams;

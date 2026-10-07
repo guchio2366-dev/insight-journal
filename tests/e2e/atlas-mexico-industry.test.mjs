@@ -27,7 +27,7 @@ test('US sector and supported-field navigation opens visible geographic readings
   for(const sector of mexicoIndustrySectors){
    q(`[role=tab][data-industry-sector="${sector.id}"]`).click();assert.equal(q('[data-industry-sector][aria-selected=true]').dataset.industrySector,sector.id);
    assert.equal(q('[data-mi-industry-panel]:not([hidden])').dataset.miIndustryPanel,`${sector.id}:all`);assert.equal(map.getAttribute('viewBox'),'60 50 790 500');
-   if(catalog.sectorReadings[sector.id])assert.equal(q('[data-mi-selected-place-text]').textContent,catalog.sectorReadings[sector.id].places[0].text);
+   if(catalog.sectorReadings[sector.id])assert.equal(q('[data-mi-selected-place-text]').textContent,catalog.sectorReadings[sector.id].text);
    assert.equal(q('[data-mi-electronics-link]').hidden,true);
   }
   for(const metric of mexicoIndustryMetricChoices){

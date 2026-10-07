@@ -498,7 +498,101 @@
       "displayIntervalM": 500,
       "periodNote": "2022年はモデルの版。統一観測年ではない。元DEMの負標高を保持し、表示等高線は0〜5,000m。",
       "bytes": 3903584,
-      "sha256": "e2aa928e7d4e27efb1b46809c9f2f297c1118430f512edecca3ef0433ad9ad87"
+      "sha256": "e2aa928e7d4e27efb1b46809c9f2f297c1118430f512edecca3ef0433ad9ad87",
+      "bands": {
+        "file": "elevation-bands.geojson.gz",
+        "bytes": 3732614,
+        "sha256": "0ea85b43c326d5a9d6acedf49e067f6cacb67788adfd3e044339448b3e3fb616",
+        "provenanceFile": "elevation-bands.source.json",
+        "legend": [
+          {
+            "id": "elevation-band-0",
+            "label": "0 m未満",
+            "color": "#f6f4ed",
+            "lowerM": null,
+            "upperM": 0
+          },
+          {
+            "id": "elevation-band-1",
+            "label": "0–500 m",
+            "color": "#f0e5c9",
+            "lowerM": 0,
+            "upperM": 500
+          },
+          {
+            "id": "elevation-band-2",
+            "label": "500–1,000 m",
+            "color": "#e4d3aa",
+            "lowerM": 500,
+            "upperM": 1000
+          },
+          {
+            "id": "elevation-band-3",
+            "label": "1,000–1,500 m",
+            "color": "#d6bc8c",
+            "lowerM": 1000,
+            "upperM": 1500
+          },
+          {
+            "id": "elevation-band-4",
+            "label": "1,500–2,000 m",
+            "color": "#c5a471",
+            "lowerM": 1500,
+            "upperM": 2000
+          },
+          {
+            "id": "elevation-band-5",
+            "label": "2,000–2,500 m",
+            "color": "#b58c58",
+            "lowerM": 2000,
+            "upperM": 2500
+          },
+          {
+            "id": "elevation-band-6",
+            "label": "2,500–3,000 m",
+            "color": "#a37545",
+            "lowerM": 2500,
+            "upperM": 3000
+          },
+          {
+            "id": "elevation-band-7",
+            "label": "3,000–3,500 m",
+            "color": "#8e6038",
+            "lowerM": 3000,
+            "upperM": 3500
+          },
+          {
+            "id": "elevation-band-8",
+            "label": "3,500–4,000 m",
+            "color": "#784c2e",
+            "lowerM": 3500,
+            "upperM": 4000
+          },
+          {
+            "id": "elevation-band-9",
+            "label": "4,000–4,500 m",
+            "color": "#623c28",
+            "lowerM": 4000,
+            "upperM": 4500
+          },
+          {
+            "id": "elevation-band-10",
+            "label": "4,500–5,000 m",
+            "color": "#4d2e23",
+            "lowerM": 4500,
+            "upperM": 5000
+          },
+          {
+            "id": "elevation-band-11",
+            "label": "5,000 m以上",
+            "color": "#382019",
+            "lowerM": 5000,
+            "upperM": null
+          }
+        ],
+        "intervalM": 500,
+        "decodedGridSha256": "47e9c1792e653c05e94058b2b7311a18a7db38c094d47fb0f8a5acfef45c9743"
+      }
     }
   }
 }

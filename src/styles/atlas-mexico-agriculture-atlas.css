@@ -84,3 +84,7 @@
  .mexico-agriculture-atlas .agri-picker-group>a{min-height:28px;padding:3px 5px;font-size:12px;line-height:1.4}
  .mexico-agriculture-atlas .atlas-livestock-key i{width:17px;height:17px;font-size:10px}
 }
+
+/* Keep all livestock controls available while the selected crop remains prominent. */
+.mexico-agriculture-atlas[data-agriculture-crop-selected="true"] [data-livestock-markers] button{opacity:.35}
+.mexico-agriculture-atlas[data-agriculture-crop-selected="true"] [data-livestock-markers] button:is(:hover,:focus-visible){opacity:1}

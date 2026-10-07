@@ -44,5 +44,10 @@ test('Overview intent, legacy routes, malformed cameras and complete state round
  assert.deepEqual(state.agricultureCameraViewBox({...desired,zoom:1}),[0,0,900,580]);
  assert.deepEqual(state.normalizeMexicoAgricultureCamera({zoom:1,x:800,y:500}),{zoom:1,x:450,y:290});
  assert.deepEqual(state.normalizeMexicoAgricultureCamera({zoom:2,x:0,y:580}),{zoom:2,x:225,y:435});
+ for(const [x,y] of [[384.457,267.527],[0,580],[900,0]]){
+  const dragged={...desired,...state.normalizeMexicoAgricultureCamera({zoom:1.35,x,y})};
+  const restored=state.readMexicoAgricultureAtlasState(state.writeMexicoAgricultureAtlasState(new URL('https://example.test/'),dragged));
+  assert.deepEqual(state.agricultureCameraViewBox(restored),state.agricultureCameraViewBox(dragged),'A fractional drag must restore the identical camera');
+ }
  for(const zoom of [1,2,5]){const [x,y,w,h]=state.agricultureCameraViewBox({zoom,x:-10,y:999});assert.ok(x>=0&&y>=0&&x+w<=900.0001&&y+h<=580.0001);}
 });

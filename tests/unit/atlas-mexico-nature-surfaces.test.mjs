@@ -8,7 +8,10 @@ const quantitative = JSON.parse(fs.readFileSync('public/assets/atlas/mexico-quan
 const basins = JSON.parse(fs.readFileSync('public/assets/atlas/mexico-basin-review-v1/catalog.json', 'utf8'));
 const contours=JSON.parse(fs.readFileSync('public/assets/atlas/mexico-water-v1/contours.geojson','utf8'));
 const basinGeometries=new Map(basins.systems.map(system=>['/basins/'+system.basinGeojson,JSON.parse(fs.readFileSync('public/assets/atlas/mexico-basin-review-v1/'+system.basinGeojson,'utf8'))]));
+const basinControls=JSON.parse(fs.readFileSync('public/assets/atlas/mexico-basin-review-v1/'+basins.controlGeometry.file,'utf8'));
 const originalWater = JSON.parse(fs.readFileSync('public/assets/atlas/mexico-water-v1/manifest.json', 'utf8'));
+const elevationPacked=fs.readFileSync('public/assets/atlas/mexico-water-v1/'+originalWater.layers.contours.bands.file);
+const packedResponse=()=>({ok:true,body:new ReadableStream({start(controller){controller.enqueue(new Uint8Array(elevationPacked));controller.close();}})});
 const bundle = await build({stdin: {contents: "import {initMexicoHydrology} from './src/scripts/atlas-mexico-hydrology.ts';window.initSurfaceWater=initMexicoHydrology;", resolveDir: process.cwd(), loader: 'ts'}, bundle: true, platform: 'browser', format: 'iife', write: false});
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function waitFor(predicate, message = 'prepared surface controller settled') {
@@ -39,7 +42,7 @@ function setup(search = '?category=precipitation&view=relief&waterBase=relief') 
       <section data-mexico-nature-comparison><p data-mexico-nature-comparison-lead>比較元の説明</p><p data-mexico-nature-comparison-value>比較元の値</p><div class="mexico-nature-reading-body"></div></section>
     </aside><p data-mexico-hydrology-picker-note></p>
   </article>`);
-  window.ResizeObserver = undefined;
+  window.ResizeObserver = undefined;window.Response=Response;window.DecompressionStream=DecompressionStream;
   window.eval(bundle.outputFiles[0].text);
   const root = window.document.querySelector('article'), requests = [];
   const query = new URL(window.location.href).searchParams;
@@ -51,7 +54,9 @@ function setup(search = '?category=precipitation&view=relief&waterBase=relief') 
     if (responder) {const result = await responder(path); if (result !== undefined) return result;}
     if (path === '/quant/manifest.json') return response(quantitative);
     if (path === '/basins/catalog.json') return response(basins);
+    if(path==='/basins/'+basins.controlGeometry.file)return response(basinControls);
     if(basinGeometries.has(path))return response(basinGeometries.get(path));
+    if(path==='/water/'+originalWater.layers.contours.bands.file)return packedResponse();
     if(path==='/water/contours.geojson')return response(contours);
     if (path === '/water/manifest.json') return response({layers: {rivers: {...originalWater.layers.rivers, file: 'rivers.json'},contours:originalWater.layers.contours}});
     if (path === '/water/rivers.json') return response(riverFixture);
@@ -89,7 +94,7 @@ test('the source ledger follows numeric and basin categories immediately, includ
     assert.equal(ledger().getAttribute('href'), '/quant/manifest.json');
     f.setResponder(null);
     f.transition('elevation');
-    assert.equal(ledger().getAttribute('href'), '/quant/manifest.json');
+    assert.equal(ledger().getAttribute('href'), '/water/elevation-bands.source.json');
     await f.waitContours();
     f.transition('basins');
     assert.equal(ledger().getAttribute('href'), '/basins/catalog.json');
@@ -143,6 +148,9 @@ test('elevation uses every retained 500m contour level with metre legend and no 
   assert.match(f.q('[data-mexico-nature-period]').textContent,/ETOPO 2022.*60秒角.*EGM2008.*版年/);
   assert.equal(f.q('[data-mexico-hydrology-controls]').hidden,true);
   assert.equal(f.group().style.display,'none');
+  assert.equal(f.q('[data-mexico-elevation-bands]').querySelectorAll('path').length,12);
+  assert.match(f.q('[data-mexico-hydrology-legend]').textContent,/0 m未満.*0–500 m.*5,000 m以上/);
+  assert.equal(f.q('[data-mexico-elevation-bands]').getAttribute('pointer-events'),'none');
   assert.equal(f.requests.includes('/water/contours.geojson'),true);
   assert.equal(f.requests.includes(elevationImage),false);
   const before=f.window.location.href;paths[0].dispatchEvent(new f.window.MouseEvent('click',{bubbles:true}));assert.equal(f.window.location.href,before);
@@ -155,24 +163,28 @@ test('the basin entry has exactly three domestic systems, preserves scope, and r
   try {
     f.controller.render();const first=await f.waitImage('/basins/'+basins.systems[0].domesticFill.file);first.dispatchEvent(new f.window.Event('load'));assert.equal(f.root.dataset.mexicoHydrologyReady,'loading');
     const others=[...f.group().querySelectorAll('image')].filter(node=>node!==first);others[0].dispatchEvent(new f.window.Event('load'));assert.equal(f.root.dataset.mexicoHydrologyReady,'loading');others[1].dispatchEvent(new f.window.Event('load'));await waitFor(()=>f.root.dataset.mexicoHydrologyReady==='true');
-    assert.equal(f.group().querySelectorAll('image.is-muted').length,0);assert.equal(f.q('[data-mexico-basin-system=all]').getAttribute('aria-pressed'),'true');
-    const picker = f.q('[data-mexico-basin-systems]');
-    assert.equal(picker.hidden, false); assert.equal(picker.getAttribute('role'), 'group');
-    assert.deepEqual([...picker.querySelectorAll('button')].map(node => node.dataset.mexicoBasinSystem), ['all',...basins.systems.map(system => system.id)]);
+    assert.equal(f.group().querySelectorAll('image.is-muted').length,0);
+    assert.equal(f.q('[data-mexico-basin-systems]'),null);
+    assert.equal(f.q('[data-mexico-basin-overview-reading]').querySelectorAll('section').length,3);
+    assert.deepEqual([...f.root.querySelectorAll('path[data-mexico-basin-system]')].map(node=>node.dataset.mexicoBasinSystem),basins.systems.map(system=>system.id));
+    assert.equal(f.q('[data-mexico-basin-foreground]').parentElement,f.q('[data-mexico-nature-main-map]'));
+    assert.equal(f.q('[data-mexico-nature-main-map]').lastElementChild,f.q('[data-mexico-basin-foreground]'));
     assert.match(f.q('[data-mexico-nature-period]').textContent, /全国158.*全てを表すものではありません/);
     for (const system of basins.systems) {
-      f.q(`button[data-mexico-basin-system="${system.id}"]`).click();
+      f.q(`path[data-mexico-basin-system="${system.id}"]`).dispatchEvent(new f.window.MouseEvent('click',{bubbles:true}));
       await f.loadImage('/basins/' + system.domesticFill.file);
       assert.equal(f.q('[data-mexico-hydrology-title]').textContent, system.nameJa);
       assert.equal(f.q('[data-mexico-hydrology-definition]').textContent, system.foreignScopeJa);
-      assert.equal(f.q(`button[data-mexico-basin-system="${system.id}"]`).getAttribute('aria-pressed'), 'true');
-      assert.equal(f.root.querySelectorAll('[data-mexico-basin-systems] [aria-pressed="true"]').length, 1);
+      assert.equal(f.q(`path[data-mexico-basin-system="${system.id}"]`).getAttribute('aria-pressed'), 'true');
+      assert.equal(f.root.querySelectorAll('path[data-mexico-basin-system][aria-pressed="true"]').length, 1);
       assert.match(f.q('[data-mexico-hydrology-status]').textContent, /本流・流向・河口は原典確認待ち/);
       assert.match(f.q('[data-mexico-hydrology-source]').textContent, /国外の上流域は追加せず.*国土境界内/);
-      assert.equal(f.group().querySelectorAll('image').length,3);assert.equal(f.group().querySelectorAll('[data-mexico-basin-label]').length,3);assert.equal(f.group().querySelectorAll('image.is-muted').length,2);
+      assert.equal(f.group().querySelectorAll('image').length,3);assert.equal(f.root.querySelectorAll('[data-mexico-basin-label]').length,3);assert.equal(f.group().querySelectorAll('image.is-muted').length,2);
       assert.equal(f.group().querySelectorAll('path,line,polyline,marker,circle').length, 0);
     }
-    assert.deepEqual(f.requests, ['/basins/catalog.json',...basins.systems.map(system=>'/basins/'+system.basinGeojson)]);
+    const reset=f.q('[data-mexico-basin-overview]');reset.click();await waitFor(()=>!f.q('[data-mexico-basin-overview-reading]').hidden);
+    const label=f.q('text[data-mexico-basin-system=bravo]');label.dispatchEvent(new f.window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));await waitFor(()=>f.root.dataset.mexicoWaterFeature==='basins:bravo');
+    assert.deepEqual(f.requests, ['/basins/catalog.json','/basins/'+basins.controlGeometry.file]);
   } finally {await f.window.happyDOM.close();}
 });
 
@@ -272,7 +284,7 @@ test('basin choice and history restoration retain waterFeature, native camera an
   const f = setup(initial); let restored;
   try {
     f.controller.render(); await f.loadImage('/basins/' + basins.systems[0].domesticFill.file);
-    const target = basins.systems[1]; f.q(`button[data-mexico-basin-system="${target.id}"]`).click();
+    const target = basins.systems[1]; f.q(`path[data-mexico-basin-system="${target.id}"]`).dispatchEvent(new f.window.MouseEvent('click',{bubbles:true}));
     await f.loadImage('/basins/' + target.domesticFill.file);
     restored = f.window.location.href;
     const selected = new URL(restored), before = new URL('https://example.test/nature/' + initial);
@@ -281,7 +293,7 @@ test('basin choice and history restoration retain waterFeature, native camera an
     f.transition('elevation'); await f.waitContours();
     assert.equal(f.controller.url(new URL(f.window.location.href)).searchParams.get('waterFeature'), `basins:${target.id}`);
     f.restore(restored); await waitFor(() => f.root.dataset.mexicoPreparedCategory === 'basins' && f.root.dataset.mexicoHydrologyReady === 'true');
-    assert.equal(f.q(`button[data-mexico-basin-system="${target.id}"]`).getAttribute('aria-pressed'), 'true');
+    assert.equal(f.q(`path[data-mexico-basin-system="${target.id}"]`).getAttribute('aria-pressed'), 'true');
     assert.equal(f.root.dataset.mexicoWaterFeature, `basins:${target.id}`);
     assert.equal(f.q('[data-mexico-water-comparison-selection]').textContent, `自然図：${target.nameJa}`);
   } finally {await f.window.happyDOM.close();}

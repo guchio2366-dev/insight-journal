@@ -156,7 +156,8 @@ async function agriculture({page, evidence}) {
   const step = steps(page, evidence);
   await step('Compact livestock badges and comparable production-value order',async()=>{
     const layout=await page.evaluate(()=>({icons:[...document.querySelectorAll('.atlas-livestock-marker i')].map(node=>{const r=node.getBoundingClientRect();return {width:r.width,height:r.height};}),order:[...document.querySelectorAll('[data-crop-key] [data-crop-select]')].map(node=>node.getAttribute('data-crop-select')),groups:[...document.querySelectorAll('.atlas-receipt-group')].map(group=>[...group.querySelectorAll('.atlas-bar-row strong')].map(node=>parseFloat(node.textContent)))}));
-    assert(layout.icons.length>0&&layout.icons.every(icon=>icon.width<=20&&icon.height<=20));
+    const desktop=await page.evaluate(()=>matchMedia('(min-width:960px)').matches),iconLimit=desktop?20:30;
+    assert(layout.icons.length>0&&layout.icons.every(icon=>icon.width<=iconLimit&&icon.height<=iconLimit));
     assert.equal(layout.order[0],'corn');assert(layout.order.indexOf('wheat')>layout.order.indexOf('vegetables'));assert(layout.order.indexOf('rice')>layout.order.indexOf('coffee'));
     assert(layout.groups.every(values=>values.every((value,index)=>index===0||value<=values[index-1])));
     assert.equal(await page.locator('[data-mexico-state-selection],[data-mexico-forest-states]').count(),0);return layout;
@@ -168,10 +169,10 @@ async function agriculture({page, evidence}) {
       const node = document.querySelector('[data-mexico-agriculture-atlas]');
       const paths = [...node.querySelectorAll('[data-mexico-crop-zones] path')].map(path => ({id: path.getAttribute('data-crop-zone'), hidden: !!path.closest('[hidden]'), opacity: getComputedStyle(path).fillOpacity, stroke: getComputedStyle(path).stroke, strokeWidth: getComputedStyle(path).strokeWidth}));
       const labels = [...node.querySelectorAll('[data-crop-label]')].filter(label => !label.closest('[hidden]')).map(label => ({id: label.getAttribute('data-crop-label'), fill: getComputedStyle(label).fill, sourceFill: getComputedStyle(node.querySelector(`[data-mexico-crop-zones] [data-crop-zone="${label.getAttribute('data-crop-label')}"]`)).fill}));
-      return {paths, labels, livestock: node.querySelectorAll('[data-livestock-markers] button').length};
+      return {paths, labels, livestock: node.querySelectorAll('[data-livestock-markers] button').length,livestockOpacity:[...node.querySelectorAll('[data-livestock-markers] button')].map(button=>Number(getComputedStyle(button).opacity))};
     });
     assert(distribution.paths.length >= 10 && distribution.paths.every(path => !path.hidden && Number(path.opacity) > 0));
-    assert(distribution.livestock > 0);
+    assert(distribution.livestock > 0);assert(distribution.livestockOpacity.every(value=>value>0&&value<1));
     const corn = distribution.paths.find(path => path.id === 'corn'); assert(corn && corn.stroke !== 'none' && parseFloat(corn.strokeWidth) > 0);
     assert(distribution.labels.length > 0 && distribution.labels.every(label => label.fill === label.sourceFill), 'Labels must match their crop colors');
     return distribution;
@@ -189,6 +190,7 @@ async function agriculture({page, evidence}) {
   await step('PC camera zoom, pan, reload and reset', async () => {
     await zoom(page, 'agriculture', '[data-map-action="in"]', '[data-map-action="out"]', '[data-map-action="fit"]');
     await click(page, '[data-map-action="in"]'); const before = await frame(page, 'agriculture');
+    await page.locator(map.agriculture).scrollIntoViewIfNeeded();
     const box = await page.locator(map.agriculture).boundingBox();
     await page.mouse.move(box.x + box.width * .5, box.y + box.height * .5); await page.mouse.down();
     await page.mouse.move(box.x + box.width * .5 + 35, box.y + box.height * .5 + 12, {steps: 6}); await page.mouse.up(); await settled(page);
@@ -283,16 +285,32 @@ async function water({page, evidence, captureStepImage}) {
   });
   await step('Three representative domestic basin systems expose their evidence limit', async () => {
     await click(page, 'button[data-mexico-nature-category="basins"]'); await hydrologyReady(page, 'basins');
-    assert.equal(await page.locator('button[data-mexico-basin-system]').count(),4);
+    assert.equal(await page.locator('button[data-mexico-basin-system]').count(),0);
     assert.equal(await page.locator('image[data-mexico-basin-system-image]').count(),3);assert.equal(await page.locator('image[data-mexico-basin-system-image].is-muted').count(),0);
     assert.equal(await page.locator('[data-mexico-basin-label]').count(),3);await captureStepImage('basins-all');
+    const point=await page.locator('path[data-mexico-basin-system="bravo"]').evaluate(node=>{
+      const box=node.getBBox(),matrix=node.getScreenCTM();
+      for(let y=1;y<20;y++)for(let x=1;x<20;x++){
+        const local=new DOMPoint(box.x+box.width*x/20,box.y+box.height*y/20);
+        if(!node.isPointInFill(local))continue;
+        const screen=local.matrixTransform(matrix);
+        if(document.elementFromPoint(screen.x,screen.y)===node)return {x:screen.x,y:screen.y};
+      }
+      throw new Error('No visible basin geometry is available for a real pointer click');
+    });
+    await page.mouse.click(point.x,point.y);await hydrologyReady(page,'basins');
+    assert.equal(query(page,'waterFeature'),'basins:bravo');
+    await click(page,'button[data-mexico-basin-overview]');await hydrologyReady(page,'basins');
+    await page.locator('path[data-mexico-basin-system="lerma-chapala-santiago"]').press('Enter');await hydrologyReady(page,'basins');
+    assert.equal(query(page,'waterFeature'),'basins:lerma-chapala-santiago');
+    await click(page,'button[data-mexico-basin-overview]');await hydrologyReady(page,'basins');
     for (const id of ['bravo', 'lerma-chapala-santiago', 'grijalva-usumacinta']) {
-      await click(page, `button[data-mexico-basin-system="${id}"]`); await hydrologyReady(page, 'basins');
-      assert.equal(await page.locator(`button[data-mexico-basin-system="${id}"]`).getAttribute('aria-pressed'), 'true');
-      const contrast = await page.locator(`button[data-mexico-basin-system="${id}"]`).evaluate(node => {
+      await click(page, `text[data-mexico-basin-system="${id}"]`); await hydrologyReady(page, 'basins');
+      assert.equal(await page.locator(`text[data-mexico-basin-system="${id}"]`).getAttribute('aria-pressed'), 'true');
+      const contrast = await page.locator(`text[data-mexico-basin-system="${id}"]`).evaluate(node => {
         const style = getComputedStyle(node);
         const luminance = color => color.match(/[\d.]+/g).slice(0, 3).map(Number).map(value => {const c = value / 255; return c <= .04045 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4;}).reduce((sum, value, index) => sum + value * [.2126, .7152, .0722][index], 0);
-        const foreground = luminance(style.color), background = luminance(style.backgroundColor);
+        const foreground = luminance(style.fill), background = luminance(style.stroke);
         return (Math.max(foreground, background) + .05) / (Math.min(foreground, background) + .05);
       });
       assert(contrast >= 4.5, `${id}: selected basin name has insufficient text contrast (${contrast})`);
@@ -310,7 +328,7 @@ async function elevation({page, evidence}) {
   const step = steps(page, evidence);
   await step('All 500m contours and metre legend load without state or line selection', async () => {
     await click(page, 'button[data-mexico-nature-category="elevation"]'); await hydrologyReady(page, 'elevation');
-    assert.match(await text(page,'[data-mexico-hydrology-legend]'),/標高.*m.*500m間隔/s);
+    assert.match(await text(page,'[data-mexico-hydrology-legend]'),/0 m未満.*0–500 m.*5,000 m以上.*500m間隔/s);assert.equal(await page.locator('[data-mexico-elevation-bands] [data-elevation-band]').count(),12);
     const levels=await page.locator('[data-elevation-m]').evaluateAll(nodes=>nodes.map(node=>({level:Number(node.getAttribute('data-elevation-m')),members:Number(node.getAttribute('data-source-member-count')),pointer:getComputedStyle(node).pointerEvents,role:node.getAttribute('role')})));
     assert.deepEqual(levels.map(row=>row.level).sort((a,b)=>a-b),Array.from({length:11},(_,i)=>i*500));assert.equal(levels.reduce((sum,row)=>sum+row.members,0),5490);assert(levels.every(row=>row.pointer==='none'&&row.role==='img'));
     assert(await page.locator('[data-mexico-nature-state-select]').isDisabled());
@@ -330,14 +348,19 @@ async function elevation({page, evidence}) {
 async function industry({page, evidence}) {
   const step = steps(page, evidence);
   await step('Industry labels remain separate and connected to their source state', async () => {
+    await page.waitForFunction(()=>document.querySelector('[data-mexico-field="industry"]')?.dataset.miLabelLayoutReady==='true');
+    assert.equal(await page.locator('[data-mi-state-select]').inputValue(),'');assert.equal(query(page,'state'),null);assert.equal(await page.locator('[data-mi-map=primary] [aria-pressed=true]').count(),0);
+    const height=await page.locator('.mexico-map-frame').first().evaluate(node=>node.getBoundingClientRect().height);assert(height<500,'Industry map must use the shared aspect ratio');
     const labels = await page.locator('[data-mi-reading-markers] [data-mi-region-label]').evaluateAll(nodes => nodes.filter(node => !node.closest('[hidden]') && node.getBoundingClientRect().width > 0).map(node => {
       const box = node.getBoundingClientRect(), matrix = node.getScreenCTM();
       return {name: node.textContent, x: box.x, y: box.y, width: box.width, height: box.height, screenFontSize: parseFloat(getComputedStyle(node).fontSize) * Math.hypot(matrix.a, matrix.b), leader: node.parentElement.querySelector('[data-mi-region-leader]')?.getAttribute('d')};
     }));
     assert(labels.length >= 8, 'All-sector overview is missing state labels');
+    const controls=await page.locator('[data-mi-map="primary"]').evaluate(svg=>[...svg.closest('.mexico-map-frame').querySelectorAll('[data-mi-map-action]')].map(button=>{const box=button.getBoundingClientRect();return{x:box.x,y:box.y,width:box.width,height:box.height};}));
     for (const [index, a] of labels.entries()) {
       assert.match(a.leader, /^M0,0L/); assert(Math.abs(a.screenFontSize - 14) < .5);
       for (const b of labels.slice(index + 1)) assert(!(Math.min(a.x + a.width, b.x + b.width) - Math.max(a.x, b.x) > .5 && Math.min(a.y + a.height, b.y + b.height) - Math.max(a.y, b.y) > .5), `Industry labels overlap: ${a.name} / ${b.name}`);
+      for(const b of controls)assert(!(Math.min(a.x+a.width,b.x+b.width)-Math.max(a.x,b.x)>.5&&Math.min(a.y+a.height,b.y+b.height)-Math.max(a.y,b.y)>.5),`Map controls obscure ${a.name}`);
     }
     await zoom(page, 'industry', '[data-mi-map-action="in"]', '[data-mi-map-action="out"]', '[data-mi-map-action="fit"]');
     return labels;

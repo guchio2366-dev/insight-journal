@@ -19,8 +19,7 @@ const data={...originalData,metrics:[...originalData.metrics.map(m=>({...m,secto
 const reading={...originalReading,...Object.fromEntries(catalog.metrics.map(m=>[m.id,m.reading]))};
 const sectorReadings=catalog.sectorReadings;
 const readingPlaces=[...originalData.metrics.flatMap(m=>(m.id==='transport'?['05','11']:['08','14']).map(state=>({state,name:data.states.find(s=>s.id===state)!.name,sector:'manufacturing',metric:m.id,label:m.name,overview:true}))),...catalog.metrics.flatMap(m=>m.topStates.map(state=>({state,name:data.states.find(s=>s.id===state)!.name,sector:m.sector,metric:m.id,label:m.name,overview:false}))),...Object.entries(sectorReadings).flatMap(([sector,copy])=>copy.places.map(place=>({...place,sector,metric:'',label:sector==='resources'?(place.state==='26'?'銅':'銀'):sector==='services'?(place.state==='09'?'金融・専門サービス':'宿泊・飲食'):'建設・不動産／需要の背景',overview:true})))];
-const selected=data.states.find(s=>s.id==='05')!;
-const initial=data.rows.find(r=>r.id===selected.id)!;
+const selected={id:'',name:'州未選択'};
 const rows=new Map(data.rows.map(r=>[r.id,r]));
 const populationRows=new Map(population.states.map(r=>[r.stateCode,r]));
 const geometry=stateFeatures.map(f=>({id:f.properties.code,path:geometryPath(f.geometry),point:stateLabelPoint(f.properties.code)}));
@@ -94,16 +93,16 @@ const value=(v:unknown)=>industryValueText(v as MexicoIndustryValue);
   </div>
   <details class="mi-selected" aria-labelledby="mi-selected-state"><summary>選んだ州の統計</summary><h3 id="mi-selected-state" data-mi-selected-name>{selected.name}</h3><div class="mi-value-cards">
    <div data-mi-population-card hidden><span data-mi-population-card-label>人口密度・2020年</span><strong data-mi-population-card-value>—</strong></div>
-   {data.metrics.map(m=><div data-mi-value-card={m.id}><span>{m.name}・2025年速報</span><strong data-mi-value={m.id}>{value(initial.values[m.id as 'transport'|'electronics'])}</strong></div>)}
+   {data.metrics.map(m=><div data-mi-value-card={m.id}><span>{m.name}・2025年速報</span><strong data-mi-value={m.id}>—</strong></div>)}
   </div></details>
   <details class="mi-topic-reading" hidden><summary>選んだ業種の立地・交通・市場を読む</summary><h3 data-mi-topic-heading>{reading.transport.heading}</h3><p data-mi-topic-text>{reading.transport.text}</p></details>
   <details><summary>業種と公開状態の意味</summary><p>{reading.transport.note}</p><p>{reading.electronics.note}</p><p>FOB型の輸出額は、輸出国の国境まで届ける費用を含む価額。国境から先の運賃・保険料は含みません。<a href={reading.sources[9].url}>国連の貿易統計の定義</a></p><p>秘匿：個別業種の値を公表しない。未把握：輸出の有無を特定する情報がない。数値0：輸出なし。500米ドル未満、対象外、未取得もゼロと分けます。</p><p>{data.notes.scope}</p><p>{data.notes.confidential}</p><p>表示は千米ドルを1,000,000で割った10億米ドル。州別GDPや工場数への換算はしていません。</p></details>
  </div>
  <details slot="statistics" class="mi-statistics" id="mi-statistics"><summary>この分野の統計：選択州・全32州の輸出額と人口値</summary>
-  <div class="mexico-controls mi-controls" data-mi-supplementary-controls><label>州 <select data-mi-state-select>{data.states.map(s=><option value={s.id} selected={s.id===selected.id}>{s.name}</option>)}</select></label><label data-mi-source-view-control hidden>元の分布 <select data-mi-source-view><option value="density">人口密度</option><option value="population">人口</option></select></label></div>
+  <div class="mexico-controls mi-controls" data-mi-supplementary-controls><label>州 <select data-mi-state-select><option value="" selected>全国・州未選択</option>{data.states.map(s=><option value={s.id} selected={s.id===selected.id}>{s.name}</option>)}</select></label><label data-mi-source-view-control hidden>元の分布 <select data-mi-source-view><option value="density">人口密度</option><option value="population">人口</option></select></label></div>
   <div class="mexico-actions mi-actions"><label><input type="checkbox" data-mi-only/> 読む州だけ</label><button type="button" data-mi-zoom aria-pressed="false">読む州を拡大</button><button type="button" data-mi-all>全32州へ</button></div>
   <h2><span data-mi-stats-state>{selected.name}</span>の値を確認</h2>
-  <div class="mexico-table-scroll"><table class="mi-selected-table"><caption>選択州・輸出額2025年速報／人口・密度2020年</caption><thead><tr><th scope="col">指標</th><th scope="col">値</th><th scope="col">原典の公開状態</th></tr></thead><tbody>{data.metrics.map(m=><tr><th scope="row">{m.name}輸出額・10億米ドル</th><td data-mi-stats-value={m.id}>{value(initial.values[m.id as 'transport'|'electronics'])}</td><td data-mi-stats-status={m.id}>{initial.values[m.id as 'transport'|'electronics'].sourceStatus}</td></tr>)}<tr data-mi-population-stats hidden><th scope="row" data-mi-population-stats-label>人口密度・人/km²</th><td data-mi-population-stats-value>—</td><td>INEGI 公表値</td></tr></tbody></table></div>
+  <div class="mexico-table-scroll"><table class="mi-selected-table"><caption>選択州・輸出額2025年速報／人口・密度2020年</caption><thead><tr><th scope="col">指標</th><th scope="col">値</th><th scope="col">原典の公開状態</th></tr></thead><tbody>{data.metrics.map(m=><tr><th scope="row">{m.name}輸出額・10億米ドル</th><td data-mi-stats-value={m.id}>—</td><td data-mi-stats-status={m.id}>州を選択</td></tr>)}<tr data-mi-population-stats hidden><th scope="row" data-mi-population-stats-label>人口密度・人/km²</th><td data-mi-population-stats-value>—</td><td>INEGI 公表値</td></tr></tbody></table></div>
   <details class="mi-all-data"><summary>全32州の輸出額・公開状態を原典と照合する</summary><div class="mexico-table-scroll"><table><caption>INEGI ETEF・2025年年次速報。原典はFOB千米ドル、表示は10億米ドル。</caption><thead><tr><th scope="col">州</th>{data.metrics.map(m=><Fragment><th scope="col">{m.name}<br/>10億米ドル</th><th scope="col">原典・千米ドル<br/>公開状態</th></Fragment>)}</tr></thead><tbody>{data.states.map(s=>{const r=rows.get(s.id)!;return <tr data-mi-data-row={s.id}><th scope="row">{s.name}<small>{s.sourceName}</small></th>{data.metrics.map(m=>{const v=r.values[m.id as 'transport'|'electronics'];return <Fragment><td>{value(v)}</td><td>{v.sourceValue===null?'—':v.sourceValue.toLocaleString('ja-JP')}<small>{v.sourceStatus}</small></td></Fragment>;})}</tr>;})}</tbody></table></div></details>
  </details>
  <div slot="sources">

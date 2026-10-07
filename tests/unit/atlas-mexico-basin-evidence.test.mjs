@@ -57,3 +57,12 @@ test('The additive evidence reader does not mutate restored state or reference c
   assert.equal(JSON.stringify(catalog),before);
   assert.throws(()=>preparedMexicoBasinPlan(catalog,'all-mexico'),/Unknown/);
 });
+
+test('Three domestic control polygons preserve the national mask and source hashes',()=>{
+ const record=catalog.controlGeometry,bytes=fs.readFileSync(path.join(base,record.file));
+ assert.equal(bytes.length,record.bytes);assert.equal(sha(bytes),record.sha256);assert.equal(record.crs,'EPSG:4326');
+ assert.equal(sha(fs.readFileSync(path.join(root,'src/data/atlas/mexico/geometry.json'))),record.boundarySha256);
+ const controls=JSON.parse(bytes);assert.deepEqual(controls.features.map(f=>f.properties.id),catalog.systems.map(s=>s.id));
+ assert(controls.features.every(f=>['Polygon','MultiPolygon'].includes(f.geometry.type)));
+ for(const input of record.inputs)assert.equal(sha(fs.readFileSync(path.join(base,input.file))),input.sha256);
+});

@@ -149,3 +149,13 @@
 .mexico-basin-system-label{vector-effect:non-scaling-stroke;fill:#254e55;font-weight:700;paint-order:stroke;stroke:#fffdf7;stroke-width:4px;stroke-linejoin:round;pointer-events:none}
 .mexico-basin-system-image.is-muted{opacity:.42}
 .mexico-water-contours{pointer-events:none!important;cursor:default}
+
+.mexico-basin-hit-area{cursor:pointer;stroke:none}
+.mexico-basin-hit-area:focus-visible{outline:none;stroke:#254e55;stroke-width:2;vector-effect:non-scaling-stroke}
+.mexico-basin-system-label{cursor:pointer;pointer-events:auto}
+.mexico-basin-system-label:focus-visible{outline:none;fill:#102f39;stroke:#fffdf7;stroke-width:6px}
+.mexico-basin-overview section{margin:10px 0}
+.mexico-basin-overview h3{font:700 15px/1.5 var(--sans);margin:0 0 4px}
+.mexico-basin-overview p{margin:0}
+
+.mexico-basin-hit-area:focus,.mexico-basin-system-label:focus{outline:none}

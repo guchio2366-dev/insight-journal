@@ -201,9 +201,9 @@ test('Relief backdrop follows hydrology base changes and history while preservin
     await settled();
     const document = window.document, base = document.querySelector('[data-mexico-hydrology-base]');
     const neutral = document.querySelector('[data-mexico-nature-neutral]'), backdrop = document.querySelector('[data-mexico-nature-relief-background]');
-    assert.equal(neutral.style.display, ''); assert.equal(backdrop.style.display, '');
+    assert.equal(neutral.style.display, ''); assert.equal(backdrop.style.display, 'none');
     assert.equal(document.querySelector('[data-mexico-nature-layer="climate"]').style.display, 'none');
-    for (const [value, neutralDisplay, backdropDisplay] of [['plain', '', 'none'], ['climate', 'none', 'none'], ['relief', '', '']]) {
+    for (const [value, neutralDisplay, backdropDisplay] of [['plain', '', 'none'], ['climate', '', 'none'], ['relief', '', 'none']]) {
       base.value = value; base.dispatchEvent(new window.Event('change', {bubbles: true})); await settled();
       assert.equal(neutral.style.display, neutralDisplay, value); assert.equal(backdrop.style.display, backdropDisplay, value);
       const url = new URL(window.location.href);

@@ -286,5 +286,29 @@
       ],
       "sourceGeometriesRepairedForTemporaryRasterOnly": 0
     }
-  ]
+  ],
+  "controlGeometry": {
+    "file": "domestic-controls.geojson",
+    "bytes": 361000,
+    "sha256": "391a6bd8dc253f90a89b843d04addeb25dbc802885c0312ae2f04932dd45f7bc",
+    "boundarySha256": "193f700c8741c2752561de077c781383dcc28a95244fb60726f591f8af011faa",
+    "inputs": [
+      {
+        "file": "bravo.basins.geojson",
+        "sha256": "8186ba9fa579d220cc994a571a8f00b4f5bdef8000c2de7b3eabac8f49f33f36"
+      },
+      {
+        "file": "lerma-chapala-santiago.basins.geojson",
+        "sha256": "10d36153ecc75ea517c85ee89a8124ea4a7d956aae8ba14aaa3ef8f90d16435b"
+      },
+      {
+        "file": "grijalva-usumacinta.basins.geojson",
+        "sha256": "a4ebb045ce3148c6b6611c8a6c25b85f0d1a7904c912def7f631d2761e167825"
+      }
+    ],
+    "featureCount": 3,
+    "crs": "EPSG:4326",
+    "method": "Union each retained representative-system basin group and intersect it with the retained INEGI national land union. No new source data or independent simplification. These polygons are click areas, not a verified river network.",
+    "generator": "scripts/prepare-mexico-basin-controls.py"
+  }
 }

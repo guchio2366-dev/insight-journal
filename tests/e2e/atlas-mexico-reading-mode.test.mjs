@@ -157,13 +157,13 @@ test('Space on native focus checkboxes waits for change and creates one selected
  for(const [field,selector] of [['industry','[data-mi-only]'],['population','[data-population-only]']]){
   const window=await page(field);
   try{
-   if(field==='population')await selectState(window,field);
+   await selectState(window,field);
    const control=window.document.querySelector(selector);
    control.dispatchEvent(new window.KeyboardEvent('keydown',{key:' ',bubbles:true}));
-   await window.happyDOM.waitUntilComplete();assertMode(window,field==='population');
+   await window.happyDOM.waitUntilComplete();assertMode(window,true);
    control.checked=true;control.dispatchEvent(new window.Event('change',{bubbles:true}));
    await window.happyDOM.waitUntilComplete();assertMode(window,true);assert.equal(query(window).get('only'),'1');
-   window.history.back();await window.happyDOM.waitUntilComplete();assertMode(window,field==='population');assert.equal(control.checked,false);
+   window.history.back();await window.happyDOM.waitUntilComplete();assertMode(window,true);assert.equal(control.checked,false);
   }finally{await window.happyDOM.close();}
  }
 });
@@ -172,17 +172,17 @@ test('A native checkbox click checkpoint preserves its reading mode until its se
  for(const [field,selector] of [['industry','[data-mi-only]'],['population','[data-population-only]']]){
   const window=await page(field);
   try{
-   if(field==='population')await selectState(window,field);
+   await selectState(window,field);
    const control=window.document.querySelector(selector),initialLength=window.history.length;
    // Dispatch the click phase without Happy DOM's synchronous MouseEvent default
    // action, then expose the checkpoint before the native checkbox change.
    const click=new window.Event('click',{bubbles:true});Object.defineProperty(click,'button',{value:0});
    control.dispatchEvent(click);await window.happyDOM.waitUntilComplete();
-   assertMode(window,field==='population');assert.equal(window.history.length,initialLength);
+   assertMode(window,true);assert.equal(window.history.length,initialLength);
    control.checked=true;control.dispatchEvent(new window.Event('change',{bubbles:true}));
    await window.happyDOM.waitUntilComplete();assertMode(window,true);assert.equal(query(window).get('only'),'1');
    assert.equal(window.history.length,initialLength+1);
-   window.history.back();await window.happyDOM.waitUntilComplete();assertMode(window,field==='population');assert.equal(control.checked,false);
+   window.history.back();await window.happyDOM.waitUntilComplete();assertMode(window,true);assert.equal(control.checked,false);
   }finally{await window.happyDOM.close();}
  }
 });
@@ -198,7 +198,7 @@ test('Adapter-first map choice waits through trusted listener checkpoints and ne
  }finally{await window.happyDOM.close();}
 });
 
-test('Mexico main tabs preserve other field state and always enter national population without comparison parameters',async()=>{
+test('Mexico main tabs preserve other field state and enter national population and industry without inherited comparison parameters',async()=>{
  const mainFields=['overview',...Object.keys(fields)];
  for(const [index,field] of mainFields.entries()){
   for(const mode of ['item','overview']){
@@ -208,14 +208,14 @@ test('Mexico main tabs preserve other field state and always enter national popu
     const links=[...window.document.querySelectorAll('.mexico-fields>a')];assert.equal(links.length,5);
     for(const link of links){
      const target=new URL(link.href);
-     const national=target.pathname.endsWith('/population/');assert.equal(target.searchParams.get('state'),national?null:'08');assert.equal(target.searchParams.get('reading'),national?'overview':mode);
+     const national=/\/(population|industry)\/$/.test(target.pathname);assert.equal(target.searchParams.get('state'),national?null:'08');assert.equal(target.searchParams.get('reading'),national?'overview':mode);
      assert.ok([...target.searchParams.keys()].every(key=>['country','state','reading'].includes(key)));
     }
     if(field==='industry'&&mode==='item')assert.equal(new URL(window.document.querySelector('[data-mi-return]').href).searchParams.get('state'),'09');
     const next=mainFields[(index+1)%mainFields.length],target=new URL(links.find(link=>new URL(link.href).pathname.endsWith(`/${next}/`)).href);
-    destination=await page(next,target.search,true);assertMode(destination,next!=='population'&&mode==='item');assert.equal(query(destination).get('state'),next==='population'?null:'08');
+    destination=await page(next,target.search,true);assertMode(destination,!['population','industry'].includes(next)&&mode==='item');assert.equal(query(destination).get('state'),['population','industry'].includes(next)?null:'08');
     const select=destination.document.querySelector(next==='overview'?'[data-mexico-overview-state]':fields[next].select);
-    if(mode==='item')assert.equal(select.value,next==='population'?'':'08');
+    if(mode==='item')assert.equal(select.value,['population','industry'].includes(next)?'':'08');
    }finally{if(destination)await destination.happyDOM.close();await window.happyDOM.close();}
   }
  }
