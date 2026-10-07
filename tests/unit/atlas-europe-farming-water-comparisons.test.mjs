@@ -45,7 +45,7 @@ test('crop cases choose regional observations and give Po rice three suitable ma
 });
 
 test('every exposed focus has a readable concise question, a real observation and bounds containing its reference position', () => {
-  for (const product of europeLayers.filter(layer => layer.field === 'agriculture' && !['treecover', 'forest'].includes(layer.id))) {
+  for (const product of europeLayers.filter(layer => layer.field === 'agriculture' && !['treecover', 'forest', 'dairy'].includes(layer.id))) {
     for (const place of ['', 'GBR', 'FIN', 'UKR', 'ITA', 'PRT']) {
       const choices = europeFarmingComparisonLinks({ layer: product.id, place });
       assert.equal(choices.length, 3);

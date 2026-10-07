@@ -25,7 +25,7 @@ export type EuropeComparisonLink = {
   sources?: readonly { label: string; url: string }[];
 };
 
-const returnKeys = new Set(['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'point', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin','farmYear','farmMeasure','farmCompare']);
+const returnKeys = new Set(['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'point', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin','farmYear','farmMeasure','farmCompare','farmExtent']);
 const returnLimit = 2048;
 const knownLayer = (id: string) => europeLayers.some(layer => layer.id === id);
 const sourceLayer = (state: EuropeState) => state.layer === 'overlay' ? (state.returnLayer === 'climate' ? 'wheat' : state.returnLayer) : state.layer;
@@ -87,6 +87,10 @@ export function europeComparisonLinks(state: EuropeState): EuropeComparisonLink[
   const layer = sourceLayer(state), definition=europeLayers.find(item => item.id === layer), field = definition?.field;
   if (!field) return [];
   if (field === 'agriculture') {
+    if (layer === 'dairy') return [
+      link('dairy-alps', '酪農とアルプスの地形', 'オーストリアの国全体の生乳統計と、アルプスの山地・周辺の低地を読み比べます。生乳の値を山地だけの生産量と扱わず、牛の総飼養分布を酪農専用の分布として読み替えません。', 'terrain', { feature: 'alps' }),
+      link('dairy-climate', '酪農と欧州の気候', '国全体の生乳統計と欧州の気候区分を別々の資料として読みます。気候だけから酪農の立地や生乳の生産量を推定せず、飼料や土地利用の条件も区別して確かめます。', 'climate'),
+    ];
     if(layer==='treecover')return [
       link('treecover-kaukas','樹木被覆とカウカスの加工拠点','2021年の樹木被覆とカウカスの加工拠点を比べ、樹木がある場所と木材を加工する場所を区別します。この重なりから木材の調達先や供給量は推定できません。','hubs',{feature:'kaukas'}),
       link('treecover-climate','樹木被覆と北欧の気候','樹木被覆と気候区分を比べ、北欧とロシア西部の位置関係を確かめます。ヘルシンキ1観測所の平年値を森林全体の平均とは扱いません。','climate',{city:'helsinki'}),
