@@ -247,6 +247,7 @@ test('saved Oceania farming products start together and direct product URLs choo
    assert.deepEqual([...new Set([...holder.querySelectorAll('[data-farming-product]')].map(el=>el.dataset.farmingProduct))].sort(),['cacao','cattle','coconut','sheep','wheat']);
    assert.equal(holder.querySelectorAll('[data-map-place]').length,0,'Agriculture country selection uses the native control');
    assert.equal(holder.querySelectorAll('[data-farming-place]').length,5);
+   for(const annotation of holder.querySelectorAll('[data-farming-place]'))assert.equal(Number(annotation.getAttribute('opacity')),['wheat','coconut','cacao'].includes(product)&&annotation.dataset.placeProduct!==product?0.32:1);
    assert.equal(holder.querySelectorAll(`[data-farming-product="${product}"][data-farming-mode="quantity"]`).length,1);
    assert.equal(holder.querySelector('[data-farming-product="wheat"][data-farming-mode="outline"]').getAttribute('opacity'),product==='wheat'?'1':'0.75');
    const key=win.document.createElement('div');key.innerHTML=api.renderOceaniaFarmingKey(api.getOceaniaLayer(product));assert.equal(key.querySelectorAll('[data-farming-key]').length,5);

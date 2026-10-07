@@ -5,11 +5,13 @@ import {createServer} from 'node:http';
 import {readFile, mkdir, writeFile} from 'node:fs/promises';
 import {resolve, extname, sep} from 'node:path';
 import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
 import {chromium} from 'playwright';
 
 const output=resolve(process.env.REGION_REVIEW_OUTPUT??'/tmp/oceania-russia-first-stage');
 const farmingOnly=process.env.REGION_REVIEW_FARMING_ONLY==='1';
 const representativeOnly=process.env.REGION_REVIEW_REPRESENTATIVE_ONLY==='1';
+const focusDeltaOnly=process.env.REGION_REVIEW_FOCUS_DELTA_ONLY==='1';
 const regions=(process.env.REGION_REVIEW_REGIONS??'oceania,russia').split(',');
 assert.ok(regions.length>0&&regions.every(region=>['oceania','russia'].includes(region)));
 await mkdir(output,{recursive:true});
@@ -53,7 +55,7 @@ try{
   });
  };
  const open=async(region,field,search='')=>{await page.goto(`${base}atlas/${region}/${field}/${search}`,{waitUntil:'networkidle'});await ready(region);};
- const shot=async name=>{if(representativeOnly&&!/^(?:oceania|russia)-agriculture-(1536|1024)-(overview|crop-focus)$/.test(name))return;await page.screenshot({path:resolve(output,name+'.png'),fullPage:true});result.screenshots.push(name+'.png');};
+ const shot=async name=>{if(focusDeltaOnly&&!/^oceania-agriculture-1536-(overview|crop-focus)$/.test(name))return;if(representativeOnly&&!/^(?:oceania|russia)-agriculture-(1536|1024)-(overview|crop-focus)$/.test(name))return;await page.screenshot({path:resolve(output,name+'.png'),fullPage:true});result.screenshots.push(name+'.png');};
  for(const width of representativeOnly?[1536,1024]:[1536,1280,1024]){
   await page.setViewportSize({width,height:864});
   for(const region of regions){
@@ -144,14 +146,30 @@ try{
      const products=region==='russia'?['cattle','wheat']:['cacao','cattle','coconut','sheep','wheat'];
      const shown=async()=>[...new Set(await map.locator('[data-farming-product]').evaluateAll(elements=>elements.map(el=>el.dataset.farmingProduct)))].sort();
      assert.deepEqual(await shown(),products);
+     if(region==='oceania')assert.deepEqual(await map.locator('[data-farming-place]').evaluateAll(elements=>elements.map(el=>Number(getComputedStyle(el).opacity))),[1,1,1,1,1]);
      assert.match(await host.locator('[data-explanation]').textContent(),/上位10/);
      const cattle=map.locator('[data-farming-product="cattle"][data-farming-mode="texture"]');
      const initialOpacity=Number(await cattle.getAttribute('opacity'));
+     const initialAnnotationPixels=new Map();
+     if(region==='oceania')for(const product of products)initialAnnotationPixels.set(product,await map.locator(`[data-farming-place][data-place-product="${product}"]`).screenshot());
      await host.locator('[data-layer]').selectOption('wheat');await ready(region);
      assert.deepEqual(await shown(),products);
      assert.ok(Number(await cattle.getAttribute('opacity'))<initialOpacity);
      assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
      assert.equal(Number(await map.locator('[data-farming-product="wheat"][data-farming-mode="outline"]').getAttribute('opacity')),1);
+     if(region==='oceania'){
+      const annotations=await map.locator('[data-farming-place]').evaluateAll(elements=>elements.map(el=>({product:el.dataset.placeProduct,opacity:Number(getComputedStyle(el).opacity),hasName:!!el.querySelector('text'),hasIcon:!!el.querySelector('g[transform]')})));
+      assert.equal(annotations.length,5);assert.equal(annotations.find(item=>item.product==='wheat').opacity,1);
+      for(const item of annotations.filter(item=>item.product!=='wheat')){assert.ok(item.opacity>0&&item.opacity<.4,'Other names and livestock icons become faint');assert.ok(item.hasName&&item.hasIcon,'Faint annotations remain in the map');}
+      const renderDeltas=[];
+      for(const item of annotations.filter(item=>item.product!=='wheat')){
+       const before=initialAnnotationPixels.get(item.product),after=await map.locator(`[data-farming-place][data-place-product="${item.product}"]`).screenshot();
+       assert.ok(!before.equals(after),'Rendered nonselected name/icon pixels change after crop focus');
+       renderDeltas.push({product:item.product,overviewOpacity:1,cropFocusOpacity:item.opacity,overviewPngSha256:createHash('sha256').update(before).digest('hex'),cropFocusPngSha256:createHash('sha256').update(after).digest('hex')});
+      }
+      (result.annotationRenderDeltas??=[]).push({width,items:renderDeltas});
+      result.checks.push(`Oceania ${width}px: overview names/icons opacity 1; wheat selection retains wheat opacity 1 and fades the other four to 0.32 while all five distributions remain.`);
+     }
      await shot(`${region}-agriculture-${width}-crop-focus`);
      await page.reload({waitUntil:'networkidle'});await ready(region);
      assert.equal(await host.locator('[data-layer]').inputValue(),'wheat');assert.deepEqual(await shown(),products);
