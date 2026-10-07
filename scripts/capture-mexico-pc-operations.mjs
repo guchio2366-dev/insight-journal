@@ -361,6 +361,43 @@ async function elevation({page, evidence}) {
   });
 }
 
+async function foodProcessing({page, evidence, captureStepImage}) {
+  const step = steps(page, evidence);
+  await click(page, 'button[data-industry-sector="manufacturing"]');
+  await click(page, 'button[data-mi-metric-button="food"]');
+  await step('Food examples, supply chain and historical production period remain readable', async () => {
+    assert(await page.locator('[data-mi-food-processing]').isVisible());
+    const layout = await page.locator('[data-mi-food-processing]').evaluate(root => {
+      const box = node => {const r=node.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,right:r.right};};
+      return {text:root.textContent,box:box(root),products:[...root.querySelectorAll('dl>div')].map(row=>({text:row.textContent,...box(row)})),chain:[...root.querySelectorAll('ol>li')].map(node=>({text:node.textContent,...box(node)})),fontSizes:[...root.querySelectorAll('p,dt,dd,li')].map(node=>parseFloat(getComputedStyle(node).fontSize)),overflow:document.documentElement.scrollWidth-innerWidth};
+    });
+    assert.equal(layout.products.length,4);assert.equal(layout.chain.length,3);
+    for(const word of ['トルティーヤ','製粉','パン','ビスケット','麺','乳製品','食肉加工','冷凍','缶詰','2019年経済センサス','食品製造311','飲料製造3121'])assert(layout.text.includes(word),`Missing food reading: ${word}`);
+    assert(layout.fontSizes.every(size=>size>=14));assert(layout.overflow<=1);
+    for(const box of [...layout.products,...layout.chain])assert(box.x>=layout.box.x-1&&box.right<=layout.box.right+1);
+    return layout;
+  });
+  await step('2019 state examples preserve the 2025 food export metric and camera',async()=>{
+    const before=await frame(page,'industry');
+    for(const state of ['14','15']){
+      await click(page,`[data-mi-food-processing] [data-mi-region-option="${state}"]`);
+      assert.equal(query(page,'metric'),'food');assert.equal(query(page,'state'),state);
+      assert.equal(await frame(page,'industry'),before);
+    }
+    await reload(page);
+    await zoom(page,'industry','[data-mi-map-action="in"]','[data-mi-map-action="out"]','[data-mi-map-action="fit"]');
+  });
+  await step('Food switches and population comparisons return through reload and history',async()=>{
+    await history(page,()=>click(page,'button[data-mi-metric-button="electronics"]'));
+    await click(page,'button[data-mi-metric-button="food"]');
+    const before=await snapshot(page);
+    await click(page,'[data-mi-population-link]');assert.equal(query(page,'metric'),'food');assert.equal(query(page,'compare'),'population');
+    await reload(page);await click(page,'[data-mi-return]');await restored(page,before,'Food comparison return preserves state and camera');
+    assert(await page.locator('[data-mi-food-processing]').isVisible());
+  });
+  await captureStepImage('food-processing');
+}
+
 async function industry({page, evidence}) {
   const step = steps(page, evidence);
   await step('Industry labels remain separate and connected to their source state', async () => {
@@ -495,6 +532,8 @@ export const mexicoPCOperationCases = [
   {country: 'mexico', field: 'nature', id: 'water-and-precipitation', run: water, captureWorkspace: true},
   {country: 'mexico', field: 'nature', id: 'elevation', run: elevation, captureWorkspace: true},
   {country: 'mexico', field: 'industry', id: 'comparison-roundtrip', run: industry, captureWorkspace: true},
+  {country: 'mexico', field: 'industry', id: 'food-processing', run: foodProcessing, captureWorkspace: true},
+  {country: 'mexico', field: 'industry', id: 'food-processing', run: foodProcessing, captureWorkspace: true, profile: {viewport: {width: 390, height: 844}, deviceScaleFactor: 1, isMobile: true, hasTouch: true}},
   {country: 'mexico', field: 'population', id: 'distribution-roundtrip', run: population},
   {country: 'mexico', field: 'population', id: 'composition-roundtrip', run: composition, captureWorkspace: true, captureSelectors: {map: '[data-population-overview-maps]'}},
 ];

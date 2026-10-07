@@ -195,7 +195,7 @@ export async function captureMexicoPCReview({browser, origin, basePath = '', out
   const scenes = [...initialFields.flatMap(field => initialCountries.map(country => ({country, field, id: 'initial'}))), ...additionalCases];
   const metadata = {status: 'running', commit, execution, browserVersion: browser.version(), profile, startedAt: new Date().toISOString(), captures: [], comparisons: []};
   for (const scene of scenes) {
-    const record = await capture(browser, origin, basePath, output, scene, commit, profile);
+    const record = await capture(browser, origin, basePath, output, scene, commit, scene.profile ?? profile);
     metadata.captures.push(record);
     await writeFile(path.join(output, 'metadata.json'), `${JSON.stringify(metadata, null, 2)}\n`);
     console.log(`${record.status.toUpperCase()}: ${record.name}${record.failure ? `: ${record.failure.split('\n')[0]}` : ''}`);

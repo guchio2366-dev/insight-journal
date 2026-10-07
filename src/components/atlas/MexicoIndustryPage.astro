@@ -1,5 +1,7 @@
 ---
 import MexicoWorkspace from './MexicoWorkspace.astro';
+import MexicoFoodProcessingReading from './MexicoFoodProcessingReading.astro';
+import {mexicoFoodProcessingReading} from '../../data/atlas/mexico/food-processing-reading';
 import originalData from '../../data/atlas/mexico/industry.json';
 import catalog from '../../data/atlas/mexico/industry-catalog.json';
 import population from '../../data/atlas/mexico/population.json';
@@ -84,7 +86,24 @@ const value=(v:unknown)=>industryValueText(v as MexicoIndustryValue);
   <p class="mexico-caption mi-fallback-note" data-mi-fallback-note hidden>簡易表示。州は上の選択欄で選べます。</p>
   <div class="industry-selected-reading" data-mi-reading-normal>
    {mexicoIndustrySectors.map(sector=>{const copy=sectorReadings[sector.id];return <article data-mi-industry-panel={`${sector.id}:all`} hidden={sector.id!=='all'}><header><h2>{sector.label}</h2></header><div class="industry-selected-reading-body"><p class="industry-key-sentence"><strong>{sector.id==='all'?'製造業・資源・サービス・建設・不動産を、地域の交通・市場・需要につなげて読む。':copy?.lead??'米国への近さ・部品集積を、国境・港への交通と輸出向けの生産網につなげて読む。'}</strong></p><section><h3>{sector.id==='all'?'州の位置から、産業を支える条件を比べる':copy?.heading??'北部とバヒオから、製造業の分布へ'}</h3><p>{sector.id==='all'?'北部とバヒオの製造業、ソノラの銅とサカテカスの銀、メキシコ市の都市サービスとキンタナ・ローの観光サービスを比べます。メキシコ市・メヒコ州の人口は、建設・不動産の需要を考える背景です。点は州を読む位置案内で、工場の位置や生産・建設額ではありません。':copy?.text??reading.causal[0]}</p><div class="industry-reading-places">{copy?copy.places.map(place=><button type="button" data-mi-region-option={place.state} data-mi-region-sector={sector.id}>{place.name}を地図で見る</button>):<><button type="button" data-mi-jump-metric="transport">輸送機器の分布を見る</button><button type="button" data-mi-jump-metric="electronics">半導体・電子機器の分布を見る</button></>}</div></section><details class="industry-reading-definitions"><summary>対象範囲・統計の読み方・出典</summary><p>{copy?copy.sourceYear:'配信中の数値は2025年速報のFOB輸出額です。全産業のGDP・雇用人数ではありません。'}</p>{copy&&copy.places.map(place=>place.sourceURL&&<a href={place.sourceURL}>{place.name}の根拠資料</a>)}<a href={copy?.sourceURL??reading.sources[0].url}>{copy?'地域事例の公式資料':reading.sources[0].label}</a></details></div></article>;})}
-   {data.metrics.map(m=><article data-mi-industry-panel={`${m.sector}:${m.id}`} hidden><header><h2>{m.id==='electronics'?'電子機器（通信・計測など）':m.name}</h2><button type="button" data-industry-overview>全分野へ</button></header><div class="industry-selected-reading-body"><p class="industry-key-sentence"><strong>{reading[m.id].heading}</strong></p><section><h3>立地・交通・市場をつなげて読む</h3><p>{reading[m.id].text}</p><p>{reading[m.id].note}{m.id==='electronics'?' 半導体だけの輸出額ではありません。':m.id==='transport'?' 自動車・航空宇宙それぞれの単独値ではありません。':''}</p><div class="industry-reading-places">{m.topStates.map(code=><button type="button" data-mi-region-option={code} data-mi-region-metric={m.id} data-mi-region-sector={m.sector}>{data.states.find(s=>s.id===code)!.name}を地図で見る</button>)}</div></section><details class="industry-reading-definitions"><summary>対象範囲・統計の読み方・出典</summary><p>州の生産地に配分したFOB輸出額。2025年速報、10億米ドル。秘匿・未把握は0と区別します。</p><p>{m.scope??(m.id==='electronics'?reading.electronics.note:reading.transport.note)}</p><a href={reading.sources[0].url}>{reading.sources[0].label}</a></details></div></article>)}
+   {data.metrics.map(m=><article data-mi-industry-panel={`${m.sector}:${m.id}`} hidden>
+    <header><h2>{m.id==='electronics'?'電子機器（通信・計測など）':m.name}</h2><button type="button" data-industry-overview>全分野へ</button></header>
+    <div class="industry-selected-reading-body">
+     {m.id==='food'?<MexicoFoodProcessingReading />:<>
+      <p class="industry-key-sentence"><strong>{reading[m.id].heading}</strong></p>
+      <section><h3>立地・交通・市場をつなげて読む</h3><p>{reading[m.id].text}</p><p>{reading[m.id].note}{m.id==='electronics'?' 半導体だけの輸出額ではありません。':m.id==='transport'?' 自動車・航空宇宙それぞれの単独値ではありません。':''}</p><div class="industry-reading-places">{m.topStates.map(code=><button type="button" data-mi-region-option={code} data-mi-region-metric={m.id} data-mi-region-sector={m.sector}>{data.states.find(s=>s.id===code)!.name}を地図で見る</button>)}</div></section>
+     </>}
+     <details class="industry-reading-definitions"><summary>対象範囲・統計の読み方・出典</summary>
+      {m.id==='food'&&<>
+       <h3>{reading[m.id].heading}</h3><p>{reading[m.id].text}</p><p>{reading[m.id].note}</p>
+       <p>2025年に輸出額が公開されている州の上位例</p>
+       <div class="industry-reading-places">{m.topStates.map(code=><button type="button" data-mi-region-option={code} data-mi-region-metric={m.id} data-mi-region-sector={m.sector}>{data.states.find(s=>s.id===code)!.name}を地図で見る</button>)}</div>
+       <ul>{mexicoFoodProcessingReading.sources.map(source=><li><a href={source.url}>{source.label}</a></li>)}</ul>
+      </>}
+      <p>州の生産地に配分したFOB輸出額。2025年速報、10億米ドル。秘匿・未把握は0と区別します。</p><p>{m.scope??(m.id==='electronics'?reading.electronics.note:reading.transport.note)}</p><a href={reading.sources[0].url}>{reading.sources[0].label}</a>
+     </details>
+    </div>
+   </article>)}
   </div>
   <section data-mi-selected-place-reading hidden><h3 data-mi-selected-place-name></h3><p data-mi-selected-place-text></p></section>
   <div class="mi-items">
