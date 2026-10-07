@@ -11,7 +11,7 @@ const manifest=JSON.parse(await readFile(`${assets}/manifest.json`,'utf8'));
 const geometryBytes=await readFile(`${assets}/ccs.geojson`);
 const geometry=JSON.parse(geometryBytes);
 const hash=b=>createHash('sha256').update(b).digest('hex');
-const productIds=['canola','wheat','beef','pasture','hay'];
+const productIds=['canola','wheat','beef','pasture','hay','soybeans','corn','lentils','potatoes','dairy'];
 const parse=line=>[...line.matchAll(/"((?:[^"]|"")*)"(?:,|$)/g)].map(m=>m[1].replaceAll('""','"'));
 
 // Read an original ZIP entry without a system-specific unzip dependency.
@@ -49,11 +49,11 @@ test('every numeric, F, zero, vector and unit comes from retained exact rows of 
   assert.equal(hash(await readFile(`${raw}/${table.metadata.file}`)),table.metadata.sha256);
  }
  let checked=0;for(const [dguid,cells] of allRegions)for(const id of productIds){const cell=cells[id];assert.equal(cell.components.length,data.products[id].sourceVariables.length);for(const component of cell.components){const row=rowsByVector.get(component.vector);assert.ok(row);assert.equal(row.DGUID,dguid);assert.equal(row.table,data.products[id].sourceTableId);assert.equal(component.variable,row.variable);assert.equal(component.value,row.VALUE===''?null:Number(row.VALUE));assert.equal(component.quality,row.STATUS);assert.equal(component.coordinate,row.COORDINATE);assert.equal(component.unit,row['Unit of measure']);assert.equal(component.symbol,row.SYMBOL);assert.equal(component.decimals,Number(row.DECIMALS));checked++;}}
- assert.equal(checked,rowsByVector.size);assert.equal(checked,12327);
+ assert.equal(checked,rowsByVector.size);assert.equal(checked,21132);
 });
 
 test('published zero, quality F and missing geographic coverage remain three distinct states',()=>{
- const expected={canola:[1604,143,1046],wheat:[1356,391,389],beef:[1318,429,164],pasture:[791,956,89],hay:[1157,590,88]};
+ const expected={canola:[1604,143,1046],wheat:[1356,391,389],beef:[1318,429,164],pasture:[791,956,89],hay:[1157,590,88],soybeans:[1416,331,739],corn:[1215,532,404],lentils:[1634,113,1429],potatoes:[1076,671,912],dairy:[1312,435,453]};
  for(const id of productIds){const cells=Object.values(data.records).map(r=>r.cells[id]);const [published,f,zero]=expected[id];assert.equal(cells.filter(c=>c.status==='published').length,published);assert.equal(cells.filter(c=>c.status==='quality-f').length,f);assert.equal(cells.filter(c=>c.status==='not-covered').length,10);assert.equal(cells.filter(c=>c.value===0).length,zero);assert.deepEqual(manifest.statistics.counts[id],{published,qualityF:f,notCovered:10,zero});for(const cell of cells){if(cell.status==='published')assert.ok(Number.isFinite(cell.value)&&cell.value>=0);else assert.equal(cell.value,null);for(const c of cell.components){assert.match(c.quality,/^[A-F]$/);if(c.quality==='F')assert.equal(c.value,null);else assert.ok(Number.isFinite(c.value));}}}
 });
 
@@ -65,7 +65,7 @@ test('pasture and hay preserve both original grades and refuse a partial total w
 });
 
 test('government national values come from national source cells and remain separate from annual surveys and regional sums',()=>{
- const expected={canola:9012449,wheat:9413876,beef:3776389,pasture:18559652,hay:5238906};for(const id of productIds){const cell=data.products[id].national;assert.equal(cell.value,expected[id]);assert.equal(cell.status,'published');assert.ok(cell.components.every(c=>c.quality==='A'));assert.equal(data.products[id].releasedAt,'2022-05-11');assert.equal(data.products[id].unit,id==='beef'?'頭':'ha');}
+ const expected={canola:9012449,wheat:9413876,beef:3776389,pasture:18559652,hay:5238906,soybeans:2087363,corn:1898108,lentils:1699959,potatoes:157214,dairy:980297};for(const id of productIds){const cell=data.products[id].national;assert.equal(cell.value,expected[id]);assert.equal(cell.status,'published');assert.ok(cell.components.every(c=>c.quality==='A'));assert.equal(data.products[id].releasedAt,'2022-05-11');assert.equal(data.products[id].unit,['beef','dairy'].includes(id)?'頭':'ha');}
  assert.equal(data.products.beef.national.quality,'A');assert.equal(data.products.pasture.national.quality,null);assert.equal(data.products.hay.national.quality,null);assert.notEqual(Object.values(data.records).reduce((sum,r)=>sum+(r.cells.canola.value??0),0),data.products.canola.national.value);assert.match(data.source.randomTabularAdjustment,/地域値から全国・州の公表値を再計算しない/);assert.match(data.source.geographicMeaning,/本拠地/);assert.match(data.source.geographicMeaning,/所在地を表すものではない/);
 });
 
