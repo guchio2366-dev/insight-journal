@@ -34,10 +34,13 @@ export function farmingAtPoint(data:FarmingAreas, point:number[], visibleIds:str
 export function updateFarmingMap(root:HTMLElement,map:LibreMap|undefined,data:FarmingAreas,state:EuropeState) {
   const view=farmingPresentation(state,data.features.map(feature=>feature.properties));
   const ids=view.visible.map(item=>item.id);
+  const livestockFill=view.item?.kind==='crop'&&!view.single ? .06 : view.single ? .30 : .13;
+  const livestockLine=view.item?.kind==='crop'&&!view.single ? .45 : .85;
   root.querySelectorAll<SVGPathElement>('[data-eu-farm-area]').forEach(path=>{
     const item=data.features.find(feature=>feature.properties.id===path.dataset.euFarmArea)?.properties;
     path.style.display=ids.includes(path.dataset.euFarmArea!)?'':'none';
-    path.style.fillOpacity=String(item?.kind==='livestock'?(view.single?.30:.13):(view.single?.65:.44));
+    path.style.fillOpacity=String(item?.kind==='livestock'?livestockFill:(view.single?.65:.44));
+    path.style.strokeOpacity=String(item?.kind==='livestock'?livestockLine:.85);
   });
   root.querySelectorAll<SVGPathElement>('[data-eu-farm-outline]').forEach(path=>{
     path.style.display=view.selectedVisible&&path.dataset.euFarmOutline===view.item?.id?'':'none';
@@ -55,7 +58,8 @@ export function updateFarmingMap(root:HTMLElement,map:LibreMap|undefined,data:Fa
     for(const kind of ['crop','livestock'] as const) {
       const filter:any=['all',['==',['get','kind'],kind],['in',['get','id'],['literal',ids]]];
       for(const suffix of ['fill','line'])map.setFilter('eu-farm-'+kind+'-'+suffix,filter);
-      map.setPaintProperty('eu-farm-'+kind+'-fill','fill-opacity',kind==='crop'?(view.single?.65:.44):(view.single?.30:.13));
+      map.setPaintProperty('eu-farm-'+kind+'-fill','fill-opacity',kind==='crop'?(view.single?.65:.44):livestockFill);
+      map.setPaintProperty('eu-farm-'+kind+'-line','line-opacity',kind==='crop'?.85:livestockLine);
     }
     for(const id of ['eu-farm-selection-halo','eu-farm-selection']) {
       map.setFilter(id,['==',['get','id'],view.selectedVisible?view.item!.id:'']);

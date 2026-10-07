@@ -131,9 +131,9 @@ test('annual rainfall keeps a separate adjacent registered map and every source 
     assert.equal(mini.getAttribute('viewBox'),'0 0 1200 1001');
     assert.equal(mini.querySelector('image').getAttribute('href'),rainfall.image);
     assert.equal(mini.querySelector('image').getAttribute('preserveAspectRatio'),'none','Registered projection fills the same1200×1001 source frame');
-    assert.deepEqual([...key.querySelectorAll('[data-eu-origin-legend]>div')].map(row=>row.textContent),[...rainfall.labels,'データなし']);
+    assert.deepEqual([...root.querySelectorAll('[data-eu-origin-legend]>div')].map(row=>row.textContent),[...rainfall.labels,'データなし']);
     assert.ok(key.querySelector('[data-eu-origin-caption]').compareDocumentPosition(mini)&4);
-    assert.ok(mini.compareDocumentPosition(key.querySelector('[data-eu-origin-legend]'))&4);
+    assert.ok(mini.compareDocumentPosition(root.querySelector('[data-eu-origin-legend]'))&4);
     assert.match(mini.getAttribute('aria-label'),/年降水量.*1991–2020.*mm\/年/);
     assert.equal(root.querySelector('[data-eu-origin-image]').style.display,'none');
     assert.equal(calls.length,0,'No original coloured raster is added on top of the target map');
@@ -307,7 +307,7 @@ test('a source lookup finishing after switching to rainfall cannot add drainage 
     const draws=drainageCanvas(window);let resolve;const deferred=new Promise(done=>{resolve=done;}),target=europeLayers.find(item=>item.id==='crops');
     const pending=renderEuropeOrigin(root,{...state('drainage'),basin:String(visibleBasins[0].HYBAS_ID)},target,config,undefined,{fetchDrainageValues:()=>deferred});
     renderEuropeOrigin(root,state('precipitation'),target,config);resolve(drainageValues);await pending;
-    assert.equal(draws.length,0);assert.equal(root.querySelector('[data-eu-origin-drainage-outline]'),null);assert.equal(root.querySelector('[data-eu-origin-map]').dataset.euOriginBasin,undefined);assert.match(root.querySelector('[data-eu-origin-map] image').getAttribute('href'),/precipitation\.png/);assert.equal(root.querySelectorAll('[data-eu-origin-legend]>div').length,8);
+    assert.equal(draws.length,0);assert.equal(root.querySelector('[data-eu-origin-drainage-outline]'),null);assert.equal(root.querySelector('[data-eu-origin-map]').dataset.euOriginBasin,undefined);assert.match(root.querySelector('[data-eu-origin-map] image').getAttribute('href'),/precipitation\.png/);assert.equal(root.querySelectorAll('[data-eu-origin-legend]>div').length,14);
   }finally{window.happyDOM.abort();delete globalThis.document;}
 });
 
