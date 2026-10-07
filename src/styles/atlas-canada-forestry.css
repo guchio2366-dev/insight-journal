@@ -1,1 +1,36 @@
 .forestry-map-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}.forestry-map-controls label{display:grid;gap:6px;font-size:13px}.forestry-map-controls select{width:100%;min-width:0}.forestry-legend{display:grid;gap:8px;list-style:none;padding:0;font-size:13px}.forestry-legend li{display:flex;gap:10px;align-items:center}.forestry-legend i{display:inline-block;flex:none;width:25px;height:18px;border:1px solid #64755e}.canada-forest-map .canada-land{fill:#eeeade;stroke:#b5c0b0}.canada-forest-map .canada-land.is-context{fill:#deded9}.canada-forest-map image{image-rendering:pixelated}.canada-forest-map [data-forestry-region-marker]{cursor:pointer}.canada-forest-map [data-forestry-region-marker] circle{fill:#fffdf3;stroke:#263f36;stroke-width:2}.canada-forest-map [data-forestry-region-marker][aria-pressed=true] circle{fill:#ae452e;stroke:white}.canada-forest-map .forest-place circle{fill:#254c68;stroke:#fff;stroke-width:1.5}.canada-forest-map .canada-river{stroke:#2368a2;stroke-width:1.8}.canada-forest-map .forest-place text{font-size:14px}.forestry-definitions{font-size:13px;padding:12px;background:#f5f4ea;margin:16px 0}.forestry-definitions dl{display:grid;grid-template-columns:7em 1fr;gap:8px}.forestry-definitions dt{font-weight:700}.forestry-definitions dd{margin:0}.forestry-static-regions{font-size:13px}.forestry-static-regions p{margin:8px 0}.forestry-stat-notes{font-size:12px}.forestry-region-reading{border-left:4px solid #617b56;padding:12px;background:#edf2e8;margin:0 0 20px}@media(max-width:650px){.forestry-map-controls{grid-template-columns:minmax(0,1fr)}}
+.atlas-desktop-shell [data-canada-forestry] .canada-country-primary .regional-navigation{margin-bottom:8px}
+[data-canada-forestry] [hidden]{display:none!important}
+[data-canada-forestry] .forestry-map-controls :is(label,select){font-size:14px}
+[data-canada-forestry] .forestry-selector-details{margin:8px 0;font-size:14px}
+[data-canada-forestry] :is(.forestry-selector-details,.forestry-map-source-details,.forestry-static-regions)>summary{cursor:pointer;font-size:14px;min-height:32px;padding:5px 0}
+[data-canada-forestry] [data-forestry-stage]{position:relative;background:#e4eff0}
+[data-canada-forestry] [data-forestry-canvas]{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+[data-canada-forestry] :is(button,select):focus-visible,[data-canada-forestry] canvas:focus-visible{outline:2px solid #244653;outline-offset:2px}
+[data-canada-forestry] .forestry-map-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:3}
+[data-canada-forestry] .forestry-map-label{position:absolute;font:600 14px/1.4 var(--sans);color:#284b45;white-space:nowrap;text-shadow:0 0 3px #fff,0 1px 3px #fff,1px 0 3px #fff}
+[data-canada-forestry] .forestry-map-label.region{pointer-events:auto;min-height:30px;padding:4px 7px;background:#fffef2eb;border:1px solid #7e9685;border-radius:3px;cursor:pointer}
+.atlas-desktop-shell [data-canada-forestry] .forestry-map-label.region[aria-pressed=true]{outline:2px solid #ac482b;border-color:#ac482b;background:#fffaf0;color:#743923;text-shadow:none}
+[data-canada-forestry] .forestry-map-label:is(.city,.river){font-weight:500;color:#245472}
+[data-canada-forestry] .forestry-map-label.ocean{font-weight:400;color:#568293;text-shadow:none}
+[data-canada-forestry] .forestry-map-tools{position:absolute;top:8px;right:8px;display:grid;gap:4px;z-index:4}
+[data-canada-forestry] .forestry-map-tools button{min-height:40px;min-width:44px;padding:4px 8px;border:1px solid #b4c5c7;border-radius:0;background:#fffef8;font:400 14px/1.4 var(--sans);color:#294652;cursor:pointer}
+[data-canada-forestry] .forestry-map-tools button:nth-child(-n+2){font-size:22px}
+[data-canada-forestry] .forestry-map-tools button:disabled{opacity:.55;cursor:default}
+[data-canada-forestry] .forestry-map-year{position:absolute;left:8px;bottom:8px;z-index:4;background:#fffef5ed;padding:2px 6px;font-size:14px;color:#36535b}
+[data-canada-forestry] .forestry-legend{display:flex;flex-wrap:wrap;gap:4px 8px;padding:7px 9px;margin:0;border:1px solid #c8cfc4;border-top:0;background:#f6f5ec}
+[data-canada-forestry] .forestry-legend button{display:inline-flex;align-items:center;gap:5px;min-height:30px;padding:4px 6px;font:400 14px/1.5 var(--sans);border:1px solid #b4c5c7;border-radius:0;background:#fffef8;color:#294652;cursor:pointer}
+[data-canada-forestry] .forestry-legend button[aria-pressed=true]{background:#244653;color:#fff}
+[data-canada-forestry] .forestry-legend i{width:18px;height:14px}
+[data-canada-forestry] :is(.forestry-short-note,[data-forestry-map-status],.forestry-map-source-details,.forestry-static-regions,.forestry-stat-notes,.canada-crop-tabs){font-size:14px;line-height:1.7}
+[data-canada-forestry] :is(.forestry-short-note,[data-forestry-map-status]){margin:7px 0}
+[data-canada-forestry] .canada-country-primary .canada-reading{font-size:16px;line-height:1.75;max-height:calc(100dvh - 260px)}
+[data-canada-forestry] .canada-reading :is(p,.canada-takeaway){font-size:16px;line-height:1.75}
+[data-canada-forestry] .canada-reading h2{font-size:20px;line-height:1.5;margin:12px 0 8px}
+[data-canada-forestry] .canada-reading .canada-national-header .canada-lead{font-size:16px;line-height:1.75}
+[data-canada-forestry] .canada-reading :is(summary,.canada-sources-inline){font-size:14px;line-height:1.7}
+[data-canada-forestry] .forestry-region-reading{margin:8px 0 12px}
+[data-canada-forestry] .forestry-overview-return{font:inherit;font-size:14px;min-height:36px;margin:0 0 8px;cursor:pointer}
+[data-canada-forestry] .forestry-statistics>summary{font-size:16px;cursor:pointer;padding:8px 0}
+[data-canada-forestry] .forestry-definitions{font-size:14px}
+[data-canada-forestry] [data-forestry-province].is-selected{stroke:#ac482b;stroke-width:2.5}

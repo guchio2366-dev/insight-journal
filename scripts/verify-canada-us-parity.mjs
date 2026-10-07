@@ -1,5 +1,6 @@
 /** Real Chromium acceptance against the production build. No HTTP server/mocked renderer. */
 import {chromium} from 'playwright';
+import {verifyCanadaForestryOverview} from './verify-canada-forestry-overview.mjs';
 import {readFile,mkdir,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
@@ -57,5 +58,6 @@ try{
  await page.route('**/*maplibre-gl*.js',route=>route.abort());await open('canada/nature/');await page.waitForTimeout(2000);assert.equal(await page.locator('[data-canada-natural-layer=climate]').getAttribute('data-canada-natural-render'),'svg');await shot('canada-climate-fallback');result.checks.push('Explicit fallback uses the same source and palette');
  await page.unroute('**/*maplibre-gl*.js');
  await verifyCanadaAgricultureOverview({page,url,output,result});
+ await verifyCanadaForestryOverview({page,url,output,result});
  assert.deepEqual(errors,[],'No browser runtime errors');await writeFile(path.join(output,'results.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({passed:true,viewports:result.viewports.length,checks:result.checks,output},null,2));
 }finally{await browser.close();}
