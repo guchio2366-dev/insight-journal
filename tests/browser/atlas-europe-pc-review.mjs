@@ -576,7 +576,13 @@ try {
       await europeOperations(page, profile, 'normal');
       await stageOneOperations(page, profile);
       await agricultureClimateRepairs(page,profile);
-      if (profile.viewport.width === 1024) await europeOperations(page, profile, 'explicit-static');
+      if (profile.viewport.width === 1024) {
+        // Keep the static history checks independent of all preceding normal
+        // operations; Chromium caps a tab's accumulated session history.
+        const staticPage=await context.newPage();
+        try { await europeOperations(staticPage, profile, 'explicit-static'); }
+        finally { await staticPage.close(); }
+      }
     } finally { await context.close(); }
   }
   networkClean(); assert.equal(manifest.images.length, 8); assert.equal(manifest.records.length, 3);
