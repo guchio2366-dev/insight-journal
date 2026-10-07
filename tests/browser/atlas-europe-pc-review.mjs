@@ -148,7 +148,7 @@ async function measurements(page, region) {
   return page.evaluate(region => {
     const rectangle = node => { if (!node) return null; const r = node.getBoundingClientRect(); return {x: r.x, y: r.y + scrollY, width: r.width, height: r.height}; };
     return {map: rectangle(document.querySelector(region === 'us' ? '[data-map-frame]' : '.eu-map-stage')),
-      legend: rectangle(document.querySelector(region === 'us' ? '[data-nature-key]' : '[data-eu-map-legend]')),
+      legend: rectangle(region === 'us' ? document.querySelector('[data-nature-key]') : document.querySelector('[data-eu-farming-legend]:not([hidden])') ?? document.querySelector('[data-eu-map-legend]')),
       reader: rectangle(document.querySelector(region === 'us' ? '[data-field-national="natural"]' : '.eu-read-panel')),
       controls: [...document.querySelectorAll(region === 'us' ? '[data-map-action]' : '[data-eu-reset],[data-eu-zoom]')].map(node => ({
         ...rectangle(node), action: region === 'us' ? node.dataset.mapAction : node.hasAttribute('data-eu-reset') ? 'fit' : node.dataset.euZoom,
@@ -340,6 +340,7 @@ async function europeOperations(page, profile, render) {
 async function stageOneOperations(page, profile) {
   await openEurope(page, 'atlas/europe/nature/?layer=climate', 'normal');
   const climate = page.locator('[data-city-reading]:visible');
+  assert.equal(await page.locator('.eu-read-panel').evaluate(node => node.scrollHeight <= node.clientHeight + 1), true, 'Climate text stays inside the reader panel');
   for (const selector of ['.eu-city-climate-description', '.eu-climate-farming']) {
     assert.equal(await climate.locator(selector).isVisible(), true);
     assert.equal(await climate.locator(selector).evaluate(node => node.closest('details') === null), true);
