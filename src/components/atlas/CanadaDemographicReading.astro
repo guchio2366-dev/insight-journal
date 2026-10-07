@@ -3,7 +3,10 @@ import {withBase} from '../../lib/urls';
 ---
 <div data-demographic-reading hidden>
  <header class="canada-national-header"><p class="atlas-eyebrow">Canada · 2021 Census</p><h2 data-demographic-heading>都市圏ごとの人口集団</h2><p class="canada-lead" data-demographic-lead>同じ集団を選び、都市圏ごとの割合の違いを比べる。</p></header>
+ <section class="demographic-national-reading" data-demographic-overview><h3 data-demographic-overview-title></h3><p data-demographic-overview-intro></p><div data-demographic-examples></div></section>
+ <button class="population-clear-selection" data-population-clear-selection hidden>全国の解説へ</button>
  <p class="population-comparison" data-demographic-comparison aria-live="polite"></p>
+ <p data-demographic-simultaneous></p>
  <p class="demographic-national" data-demographic-national></p>
  <p class="population-main-reading population-reading-links"><a data-demographic-population-link href={withBase('/atlas/north-america/canada/population/?year=2021')}>2021年の都市圏人口と照合：割合と人数を分けて読む</a></p>
  <p class="demographic-definition" data-demographic-definition></p>
