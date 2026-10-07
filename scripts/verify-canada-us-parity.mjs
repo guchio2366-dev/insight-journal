@@ -3,6 +3,7 @@ import {chromium} from 'playwright';
 import {readFile,mkdir,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
+import {verifyCanadaAgricultureOverview} from './verify-canada-agriculture-overview.mjs';
 import {projectCanadaMap} from '../src/lib/atlas-canada-map-presentation.ts';
 const ottawaPoint=projectCanadaMap(JSON.parse(await readFile('src/data/atlas/canada/climate.json','utf8')).stations.find(station=>station.id==='ottawa').coordinates);
 const output=process.env.ATLAS_QA_OUTPUT??'/tmp/atlas-canada-qa';await mkdir(output,{recursive:true});
@@ -54,5 +55,7 @@ try{
  await open('canada/industry/');for(const sector of ['all','manufacturing','resources','services','construction-real-estate']){await page.locator(`[data-ca-sector="${sector}"]`).click();assert.equal(await page.locator('[data-ca-sector][aria-selected=true]').getAttribute('data-ca-sector'),sector);}await page.locator('[data-ca-sector=manufacturing]').click();await page.locator('[data-ca-subsector=auto]').click();await page.locator('[data-ca-marker=Ontario]').click();assert.match(await page.locator('[data-ca-reading]').textContent(),/オンタリオ/);assert.equal(await page.locator('[data-ca-marker]').count(),5);await checkMarkerLocations();await shot('canada-auto');result.checks.push('Industry symbols stay at geographic anchors when labels move');await page.reload();await page.locator('[data-ca-subsector=auto][aria-selected=true]').waitFor();result.checks.push('Industry tabs, top-five GDP circles, province selection and reload');
  // Block only the GL library to verify the complete SVG fallback with the same source data.
  await page.route('**/*maplibre-gl*.js',route=>route.abort());await open('canada/nature/');await page.waitForTimeout(2000);assert.equal(await page.locator('[data-canada-natural-layer=climate]').getAttribute('data-canada-natural-render'),'svg');await shot('canada-climate-fallback');result.checks.push('Explicit fallback uses the same source and palette');
+ await page.unroute('**/*maplibre-gl*.js');
+ await verifyCanadaAgricultureOverview({page,url,output,result});
  assert.deepEqual(errors,[],'No browser runtime errors');await writeFile(path.join(output,'results.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({passed:true,viewports:result.viewports.length,checks:result.checks,output},null,2));
 }finally{await browser.close();}
