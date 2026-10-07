@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "region": "russia",
+  "year": 2020,
+  "generator": "prepare-oceania-russia-farming-overlay.py",
+  "inputs": {
+    "public/assets/atlas/russia-crops-v1/manifest.json": "16af875aa25ef1a4c06f245b95a39f34c5de363dc22afbe1319bf1b8d95560d2",
+    "public/assets/atlas/russia-crops-v1/wheat.values.gz": "fb4e9291d1bd1bec4be66baac71c1c412218680d63865688653bed965b7e95b8",
+    "public/assets/atlas/russia-livestock-v1/manifest.json": "c4ab538b55d91efc315baae373865010e7e02b7dc6f8a9ecc2f986b3c8483964",
+    "public/assets/atlas/russia-livestock-v1/cattle.values.gz": "fba88fcf602c90e6a3998c52d649e442dd0be94fbd6b53966df3b54000937c30"
+  },
+  "layers": [
+    {
+      "id": "wheat",
+      "kind": "crop",
+      "image": "wheat-outline.png",
+      "width": 2076,
+      "height": 516,
+      "displayCellPixels": 4,
+      "boundsUnwrapped": [
+        18,
+        40,
+        191,
+        83
+      ],
+      "unit": "ha/5分格子",
+      "year": 2020,
+      "license": "CC BY 4.0",
+      "breaks": [
+        1,
+        10,
+        100,
+        1000,
+        5000
+      ],
+      "colors": [
+        "edf1e3",
+        "d7e7b4",
+        "afd08b",
+        "7fa95c",
+        "4f7e3d",
+        "23582d"
+      ],
+      "sourceGrid": "public/assets/atlas/russia-crops-v1/wheat.values.gz",
+      "sourceCounts": {
+        "positive": 139283,
+        "zero": 8792,
+        "missing": 923141
+      }
+    },
+    {
+      "id": "cattle",
+      "kind": "livestock",
+      "image": "cattle-texture.png",
+      "width": 2076,
+      "height": 516,
+      "displayCellPixels": 4,
+      "boundsUnwrapped": [
+        18,
+        40,
+        191,
+        83
+      ],
+      "unit": "頭/km²",
+      "year": 2020,
+      "license": "CC BY 4.0",
+      "breaks": [
+        1,
+        10,
+        50,
+        200,
+        1000
+      ],
+      "colors": [
+        "a7cbd9",
+        "78adc4",
+        "548ca9",
+        "376d91",
+        "225375",
+        "143d5c"
+      ],
+      "alphas": [
+        16,
+        44,
+        88,
+        140,
+        190,
+        240
+      ],
+      "missingImage": "cattle-missing.png",
+      "sourceGrid": "public/assets/atlas/russia-livestock-v1/cattle.values.gz",
+      "sourceCounts": {
+        "positive": 568934,
+        "zero": 37617,
+        "missing": 464665
+      }
+    }
+  ],
+  "method": "Display textures only. Native values and geographic cell bounds are unchanged. Positive livestock cells have classed blue dots with fixed size and increasing class opacity using the original density breaks. Valid zero is transparent. Missing has a separate exact native-cell mask, drawn as a faint neutral hatch in the browser. Crop outlines follow only the outer edges of positive native cells. No aggregation, interpolation, national totals or cross-unit addition.",
+  "limitations": [
+    "Texture strokes and outlines indicate model-cell distributions, not actual farm boundaries or individual animals.",
+    "At overview scale, source cells are smaller than screen pixels; selecting a product restores its source quantity colors while the other distribution stays visible.",
+    "Available products are not a validated national top-ten ranking."
+  ],
+  "files": {
+    "cattle-missing.png": {
+      "bytes": 22340,
+      "sha256": "33ba3e3d25efb79cc2723f9f8eb721c523c5cbc963fe676c32f229d30ea500c4"
+    },
+    "cattle-texture.png": {
+      "bytes": 149417,
+      "sha256": "e19a00386fc19156175e9937fdd59ad65ddd2b4e79fb31a6e88c83aade0c4d96"
+    },
+    "wheat-outline.png": {
+      "bytes": 162906,
+      "sha256": "4d77718c75ccaaa54542b6cd80ddbf50f4c34b775c45d87f1da2af30bc7db388"
+    }
+  }
+}

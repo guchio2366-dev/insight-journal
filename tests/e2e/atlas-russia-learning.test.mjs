@@ -41,8 +41,27 @@ function page(field,query='',interactive=true){
  return {win,root,one:hook=>root.querySelector(`[data-${hook}]`)};
 }
 const legendLabels=element=>[...element.children].map(item=>item.textContent.trim());
-function assertLegend(element,layer){assert.deepEqual(legendLabels(element),Array.from(layer.legend,item=>item.label));}
+function assertLegend(element,layer){
+ if(layer.field==='agriculture'){
+  assert.equal(element.querySelectorAll('[data-farming-legend]').length,2);
+  assert.match(element.textContent,/ha／元5分セル/);assert.match(element.textContent,/頭／km²/);
+  assert.match(element.textContent,/有効0/);assert.match(element.textContent,/未収録/);
+  return;
+ }
+ assert.deepEqual(legendLabels(element),Array.from(layer.legend,item=>item.label));
+}
 function assertPrimaryLegend(one,layer){
+ if(layer.field==='agriculture'){
+  const compact=one('primary-legend');assert.equal(compact.querySelectorAll('[data-farming-key]').length,2);assert.equal(compact.querySelectorAll('[data-farming-legend]').length,0);
+  const legend=one('primary-legend-definitions');
+  assert.equal(legend.closest('details').open,false);
+  assert.equal(legend.querySelectorAll('[data-farming-legend]').length,2);
+  assert.match(legend.querySelector('[data-farming-legend="wheat"] h3').textContent,/ha／元5分セル/);
+  assert.match(legend.querySelector('[data-farming-legend="cattle"] h3').textContent,/頭／km²/);
+  assert.match(legend.textContent,/有効0/);assert.match(legend.textContent,/未収録/);
+  assert.equal(legend.querySelector('[data-farming-legend="cattle"] div').children.length,6);
+  return;
+ }
  if(layer.id!=='climate'){assertLegend(one('primary-legend'),layer);return;}
  const dictionary=one('primary-legend-definitions');assertLegend(dictionary,layer);
  assert.equal(dictionary.closest('details').hidden,false);
@@ -60,7 +79,7 @@ function assertSources(element,sources){
  for(const source of sources)assert.ok(urls.has(source.url),`Visible source missing: ${source.title}`);
 }
 function assertRealImage(element){
- const image=element.querySelector('image');assert.ok(image,'Initial distribution has a raster image');
+ const image=element.querySelector('image[data-farming-mode="quantity"]')??element.querySelector('image');assert.ok(image,'Initial distribution has a raster image');
  const url=new URL(image.getAttribute('href'),'https://example.test');
  const file=path.join(repo,'dist',url.pathname.replace(/^\/insight-journal\//,''));
  const bytes=readFileSync(file);
@@ -92,18 +111,18 @@ test('four built Russia fields show real initial distributions, complete legends
  }
 });
 
-test('keyboard region selection retains both farming distributions and other regions, with reload and explicit zoom',()=>{
+test('one native region selector retains both farming distributions and other regions, with reload and explicit zoom',()=>{
  const {win,root,one}=page('agriculture','?scope=all&layer=wheat&compare=cattle&view=comparison');
  try{
   const frame=one('original-map').querySelector('svg').getAttribute('viewBox');
-  const marker=one('original-map').querySelector('[data-region-marker][data-map-place="far-east"]');
-  marker.dispatchEvent(new win.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
+  one('place').focus();one('place').value='far-east';one('place').dispatchEvent(new win.Event('change'));
+  assert.equal(win.document.activeElement,one('place'));assert.equal(root.querySelectorAll('[data-region-option]').length,0);
   assert.equal(one('place').value,'far-east');assert.equal(one('layer').value,'wheat');assert.equal(one('compare-layer').value,'cattle');
   assert.equal(new URL(win.location.href).searchParams.get('scope'),'all');
   for(const hook of ['original-map','comparison-map']){
    assert.equal(one(hook).querySelector('svg').getAttribute('viewBox'),frame);
-   assert.equal(one(hook).querySelectorAll('[data-region-marker]').length,3);
-   assert.equal(one(hook).querySelector('[data-region-marker][aria-pressed="true"]').dataset.mapPlace,'far-east');
+   assert.equal(one(hook).querySelectorAll('[data-region-marker]').length,0);
+   assert.equal(one(hook).querySelectorAll('[data-farming-place]').length,4);
   }
   const reloaded=page('agriculture',win.location.search);
   try{
@@ -128,6 +147,47 @@ test('changing cattle distribution updates the reading without resetting the com
  }finally{win.happyDOM.abort();}
 });
 
+test('farming overview and product focus retain both distributions, separate units and the full frame after reload',()=>{
+ const {win,root,one}=page('agriculture');
+ try{
+  assert.equal(one('layer').value,'farming-all');
+  const frame=one('primary-map').querySelector('svg').getAttribute('viewBox');
+  assert.deepEqual([...new Set([...one('primary-map').querySelectorAll('[data-farming-product]')].map(el=>el.dataset.farmingProduct))].sort(),['cattle','wheat']);
+  const initialOpacity=Number(one('primary-map').querySelector('[data-farming-product="cattle"][data-farming-mode="texture"]').getAttribute('opacity'));
+  assert.match(one('explanation').textContent,/2品目/);assert.match(one('explanation').textContent,/上位10/);
+  assert.match(one('takeaway').textContent,/ロストフ.*オムスク.*ヤクーツク/);
+  assert.equal(one('explanation').closest('details').open,false);assert.match(one('geography-reading').textContent,/生育期.*飼料.*肉・乳/);
+  assert.ok(one('primary-legend').closest('.russia-learning-map-panel'));
+  assert.equal(root.querySelector('.russia-learning-reading [data-primary-legend]'),null);
+  assert.equal(one('primary-map').querySelectorAll('[data-region-marker]').length,0);assert.equal(one('primary-map').querySelectorAll('[data-farming-place]').length,4);
+  assert.equal(one('primary-map').querySelectorAll('[data-farming-mode="missing"] rect[mask]').length,1);
+  assert.match(one('primary-legend-definitions').textContent,/牛の有効0は点を描きません/);
+  one('layer').value='wheat';one('layer').dispatchEvent(new win.Event('change'));
+  const cattle=one('primary-map').querySelector('[data-farming-product="cattle"][data-farming-mode="texture"]');
+  assert.ok(cattle);assert.ok(Number(cattle.getAttribute('opacity'))<initialOpacity);
+  assert.equal(one('primary-map').querySelector('[data-farming-product="wheat"][data-farming-mode="outline"]').getAttribute('opacity'),'1');
+  assert.equal(one('primary-map').querySelector('svg').getAttribute('viewBox'),frame);
+  one('place').value='siberia';one('place').dispatchEvent(new win.Event('change'));
+  assert.equal(one('layer').value,'wheat');assert.equal(one('primary-map').querySelectorAll('[data-region-marker]').length,0);
+  const reloaded=page('agriculture',win.location.search);
+  try{
+   assert.equal(reloaded.one('layer').value,'wheat');assert.equal(reloaded.one('place').value,'siberia');
+   assert.equal(Number(reloaded.one('primary-map').querySelector('[data-farming-product="cattle"][data-farming-mode="texture"]').getAttribute('opacity')),.22);
+   assert.equal(reloaded.one('primary-map').querySelector('svg').getAttribute('viewBox'),frame);
+  }finally{reloaded.win.happyDOM.abort();}
+  one('layer').value='cattle';one('layer').dispatchEvent(new win.Event('change'));
+  assert.ok(one('primary-map').querySelector('[data-farming-product="cattle"][data-farming-mode="quantity"]'));
+  assert.ok(one('primary-map').querySelector('[data-farming-product="wheat"][data-farming-mode="outline"]'));
+  assertPrimaryLegend(one,model.getRussiaLayer('cattle'));
+  one('place').value='all';one('place').dispatchEvent(new win.Event('change'));
+  assert.equal(one('layer').value,'cattle');assert.match(one('theme-title').textContent,/牛と飼料/);
+  const direct=page('agriculture','?layer=cattle');
+  try{assert.match(direct.one('theme-title').textContent,/牛と飼料/);assert.equal(direct.one('layer').value,'cattle');}finally{direct.win.happyDOM.abort();}
+  one('layer').value='farming-all';one('layer').dispatchEvent(new win.Event('change'));
+  assert.equal(one('theme-title').textContent,model.russiaOverviewReadings.agriculture.title);
+ }finally{win.happyDOM.abort();}
+});
+
 test('west wheat and climate comparison retains the original distribution, every legend, dates, both sources and a named return',()=>{
  const {win,root,one}=page('agriculture','?place=west&scope=region&theme=wheat-and-water&layer=wheat&compare=climate&keep=source#reference');
  try{
@@ -136,7 +196,7 @@ test('west wheat and climate comparison retains the original distribution, every
   one('comparison').click();
   const state=D.createRussiaState(win.location.search,'agriculture'),original=D.getRussiaLayer('wheat'),comparison=D.getRussiaLayer('climate');
   assert.equal(one('comparison-view').hidden,false);assert.equal(one('normal-view').hidden,true);
-  assert.ok(one('original-map').querySelector('image').getAttribute('href').endsWith(original.image));
+  assert.ok(one('original-map').querySelector('image[data-farming-mode="quantity"]').getAttribute('href').endsWith(original.image));
   assert.ok(one('comparison-map').querySelector('image').getAttribute('href').endsWith(comparison.image));
   assert.equal(one('original-map').querySelector('svg').getAttribute('viewBox'),originalFrame);
   assert.equal(one('comparison-map').querySelector('svg').getAttribute('viewBox'),originalFrame);

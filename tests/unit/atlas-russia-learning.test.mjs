@@ -34,13 +34,14 @@ test('all three learning windows are finite and preserve a shared comparison fra
   assert.match(api.russiaCoverage(api.getRussiaLayer(state.layer),state),/行政境界ではありません/);
  }
 });
-test('every distribution offers named learning-region buttons without inventing region boundaries',()=>{
+test('non-farming fields retain learning-region buttons and farming uses source-backed labels without duplicate region buttons',()=>{
  const window=new Window();
  for(const layer of api.russiaLayers){
   const state=api.createRussiaState('',layer.field);
   window.document.body.innerHTML=api.renderRussiaScene(layer,state,'primary');
   const svg=window.document.querySelector('svg');assert.equal(svg.getAttribute('role'),'group');
-  const markers=[...svg.querySelectorAll('[data-region-marker]')];assert.equal(markers.length,3,layer.id);
+  const markers=[...svg.querySelectorAll('[data-region-marker]')];assert.equal(markers.length,layer.field==='agriculture'?0:3,layer.id);
+  if(layer.field==='agriculture'){assert.equal(svg.querySelectorAll('[data-farming-place]').length,4);continue;}
   for(const region of api.russiaRegions){
    const marker=markers.find(item=>item.dataset.mapPlace===region.code);assert.ok(marker,region.code);
    assert.equal(marker.getAttribute('role'),'button');assert.equal(marker.getAttribute('tabindex'),'0');
@@ -96,4 +97,25 @@ test('theme descriptions and SVG names identify the displayed learning window',(
   const climateScene=api.renderRussiaScene(api.getRussiaLayer('climate'),state);for(const name of excluded)assert.ok(!climateScene.includes('>'+name+'</text>'));
   const all={...state,scope:'all'};assert.match(api.renderRussiaScene(api.getRussiaLayer(state.layer),all),/aria-label="[^"]*ロシア全域"/);assert.ok(api.getRussiaComparisonReading(all).message.startsWith('ロシア全域：'));
  }
+});
+
+
+test('farming representative positions have positive native source values and persist under product focus without ranking claims',()=>{
+ const window=new Window();
+ const country=json('src/data/atlas/russia-countries.json').features.find(feature=>feature.properties.kind==='russia').geometry,polygons=country.type==='Polygon'?[country.coordinates]:country.coordinates;
+ const insideRing=([x,y],ring)=>{let inside=false;for(let i=1;i<ring.length;i++){const a=ring[i-1],b=ring[i];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])inside=!inside;}return inside;};
+ for(const place of api.russiaFarmingPlaces){
+  const folder=place.product==='wheat'?'russia-crops-v1':'russia-livestock-v1',manifest=json('public/assets/atlas/'+folder+'/manifest.json'),layer=manifest.layers.find(item=>item.id===place.product);
+  const [west,south,east,north]=layer.boundsUnwrapped,[lon,lat]=place.coordinates;
+  assert.ok(polygons.some(polygon=>insideRing(place.coordinates,polygon[0])&&!polygon.slice(1).some(ring=>insideRing(place.coordinates,ring))),place.id+' lies inside the saved Russia boundary');
+  const column=Math.floor((lon-west)/(east-west)*layer.width),row=Math.floor((north-lat)/(north-south)*layer.height),values=gunzipSync(read('public/assets/atlas/'+folder+'/'+layer.grid));
+  assert.ok(values.readFloatLE((row*layer.width+column)*4)>0,place.id+' has a positive saved source cell');assert.equal(manifest.year,2020);
+ }
+ for(const id of ['farming-all','wheat','cattle']){
+  const state=api.createRussiaState('?layer='+id,'agriculture');window.document.body.innerHTML=api.renderRussiaScene(api.getRussiaLayer(id),state);
+  assert.equal(window.document.querySelectorAll('[data-farming-place]').length,4);
+  assert.equal(window.document.querySelectorAll('[data-region-marker]').length,0);
+  for(const place of api.russiaFarmingPlaces){const mark=window.document.querySelector('[data-farming-place="'+place.id+'"]');assert.ok(mark.textContent.includes(place.name));assert.match(mark.querySelector('title').textContent,/全国順位ではありません/);}
+ }
+ window.happyDOM.abort();
 });
