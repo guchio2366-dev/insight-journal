@@ -339,6 +339,7 @@
 .russia-workspace .russia-learning[data-field=agriculture] .russia-agriculture-subtabs { position: static; order: -2; width: auto; max-width: none; margin: 0; }
 .russia-workspace .russia-learning[data-field=agriculture] .russia-learning-layer { display: flex; align-items: center; gap: 6px; width: auto; flex: 1; max-width: 240px; font-size: 14px; }
 .russia-workspace .russia-learning[data-field=agriculture] .russia-learning-layer select { font-size: 14px; min-height: 44px; }
+.russia-workspace .russia-learning[data-field=agriculture] .russia-learning-layer > span { white-space: nowrap; flex: none; }
 .russia-farming-view-options { flex: 0 0 auto; min-width: 0; }
 .russia-farming-view-options > summary { min-height: 44px; padding: 10px 4px; font-weight: 500; }
 .russia-farming-view-options[open] { flex: 1 0 100%; }
