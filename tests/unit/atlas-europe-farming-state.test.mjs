@@ -156,10 +156,12 @@ test('単独表示中に別品目へ移ると前の品目を残さず、再読�
   assert.deepEqual(visibleIds(first), ['wheat']);
 });
 
-test('自然環境への表示変更は農畜産物を隠し、都市・地物・表示設定をURLに保存できる', () => {
-  const original = read('?layer=wheat&city=paris&feature=danube&crops=off&livestock=off');
+test('自然環境への表示変更は農畜産物を隠し、標高では地区名だけを解除して地点と表示設定を保存する', () => {
+  const original = read('?layer=wheat&city=paris&feature=danube&point=8.5,46.5&crops=off&livestock=off');
   for (const layer of ['climate','water','terrain','contours']) {
     const nature = Object.freeze({...original, layer});
+    const expected = {...nature};
+    if (layer === 'contours') delete expected.feature;
     const view = farmingPresentation(nature, items);
     assert.equal(view.active, false);
     assert.equal(view.single, false);
@@ -168,11 +170,14 @@ test('自然環境への表示変更は農畜産物を隠し、都市・地物�
     const natureUrl = urlFor(nature);
     assert.equal(natureUrl.pathname, '/atlas/europe/nature/');
     const reloaded = read(natureUrl.search);
-    assert.deepEqual(reloaded, nature);
+    assert.deepEqual(reloaded, expected);
     assert.equal(reloaded.city, 'paris');
-    assert.equal(reloaded.feature, 'danube');
+    assert.equal(reloaded.feature, layer === 'contours' ? undefined : 'danube');
+    assert.deepEqual(reloaded.point, original.point);
     const returned = read(urlFor({...reloaded, layer:original.layer}).search);
-    assert.deepEqual(returned, original);
+    const expectedReturn = {...original};
+    if (layer === 'contours') delete expectedReturn.feature;
+    assert.deepEqual(returned, expectedReturn);
     assert.equal(farmingPresentation(returned, items).item?.id, 'wheat');
   }
 });
