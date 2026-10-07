@@ -4,6 +4,7 @@ import {createServer} from 'node:http';
 import {readFile} from 'node:fs/promises';
 import {gunzipSync} from 'node:zlib';
 import path from 'node:path';
+import {verifyAsiaIndustryCountry} from '../../scripts/verify-asia-industry-country.mjs';
 
 // This suite uses the real production build and browser, including MapLibre.
 // Run after npm run build:
@@ -15,6 +16,19 @@ const enabled=process.env.ATLAS_ASIA_BROWSER==='1';
 const chromiumSandbox=process.env.ATLAS_ASIA_BROWSER_UNSANDBOXED!=='1';
 const basePath='/insight-journal';
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.geojson':'application/geo+json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.woff2':'font/woff2','.gz':'application/gzip'};
+
+test('real browser: East Asia industry country entry keeps scope, missing data and regional return coherent',{
+ skip:enabled?false:'Set ATLAS_ASIA_BROWSER=1 after npm run build to run real Chromium acceptance.',timeout:120000,
+},async t=>{
+ const {chromium}=await import('playwright'),{server,origin}=await serveBuild();let browser;
+ try{
+  browser=await chromium.launch({headless:true,chromiumSandbox,...(process.env.REVIEW_CHROME_PATH?{executablePath:process.env.REVIEW_CHROME_PATH}:{})});
+  for(const viewport of [{width:1440,height:1000},{width:1024,height:768},{width:390,height:844}])await t.test(`${viewport.width}px`,async()=>{
+   const context=await browser.newContext({viewport}),page=await context.newPage();
+   try{assert.equal((await verifyAsiaIndustryCountry(page,{profile:`${viewport.width}px`,source:origin})).passed,true);}finally{await context.close();}
+  });
+ }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
+});
 
 async function serveBuild(){
  const root=path.resolve('dist');
