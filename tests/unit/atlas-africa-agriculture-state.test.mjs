@@ -4,14 +4,14 @@ import {readState,writeState,africaComparisonSnapshot,agriLayerKeys,canonicalAgr
 
 const url=()=>new URL('https://example.com/atlas/africa/');
 
-test('legacy agriculture URLs retain one focused product without making a persisted explicit layer list',()=>{
+test('absent layer lists show all seven products while keeping the reading focus independent',()=>{
  for(const [query,focused] of [
   ['?field=agriculture','crop-maize-harvested'],
   ['?field=agriculture&crop=rice&cropMeasure=production','crop-rice-production'],
   ['?field=agriculture&topic=livestock&livestock=sheep&crop=cassava&cropMeasure=production','livestock-sheep']
  ]){
   const state=readState(query);assert.equal(state.agriLayers,null);assert.equal(state.agriOutline,false);
-  assert.equal(africaAgriFocusedLayer(state),focused);assert.deepEqual(africaAgriVisibleLayers(state),[focused]);
+  assert.equal(africaAgriFocusedLayer(state),focused);assert.equal(africaAgriVisibleLayers(state).length,7);assert.ok(africaAgriVisibleLayers(state).includes(focused));
   const written=writeState({...state},url());assert.equal(written.searchParams.has('agriLayers'),false);assert.equal(written.searchParams.has('agriOutline'),false);
   assert.deepEqual(readState(written.search),state);
  }
@@ -22,7 +22,7 @@ test('explicit all-off keeps the empty URL parameter through reload and differs 
  assert.equal(state.agriLayers,'');assert.deepEqual(africaAgriVisibleLayers(state),[]);assert.equal(africaAgriFocusedLayer(state),'crop-rice-harvested');
  const written=writeState({...state},url());assert.equal(written.searchParams.has('agriLayers'),true);assert.equal(written.searchParams.get('agriLayers'),'');
  assert.equal(written.searchParams.get('agriOutline'),'1');assert.deepEqual(readState(written.search),state);
- const defaults=readState('?field=agriculture&crop=rice');assert.deepEqual(africaAgriVisibleLayers(defaults),['crop-rice-harvested']);
+ const defaults=readState('?field=agriculture&crop=rice');assert.equal(africaAgriVisibleLayers(defaults).length,7);
 });
 
 test('the eleven real layer keys are deduplicated and canonically ordered, with invalid keys excluded',()=>{

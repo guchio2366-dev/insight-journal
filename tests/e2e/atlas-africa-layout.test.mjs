@@ -127,9 +127,26 @@ test('agriculture layer disclosure stays open with the focused checkbox through 
   }
   await wait(()=>q('[data-africa-commodity-layer="crop-rice-harvested"] image'),'the newly enabled rice model layer must finish');
   assert.equal(q('.africa-agri-layer-disclosure').open,true);assert.equal(window.document.activeElement,q('[data-africa-agri-outline]'));
-  assert.equal(parameters(window).get('agriLayers'),'crop-rice-harvested');assert.equal(parameters(window).get('agriOutline'),'1');
+  assert.deepEqual(parameters(window).get('agriLayers').split(','),['crop-rice-harvested','crop-wheat-harvested','crop-cassava-harvested','livestock-cattle','livestock-goats','livestock-sheep']);assert.equal(parameters(window).get('agriOutline'),'1');
   q('.africa-agri-layer-disclosure').open=false;change('[data-place]','ETH');assert.equal(q('.africa-agri-layer-disclosure').open,false,'an unrelated redraw must preserve a closed disclosure');
   q('[data-africa-topic="livestock"]').click();assert.equal(q('.africa-agri-layer-disclosure').open,false);assert.equal(root.querySelectorAll('[data-africa-agri-layer]').length,7);assert.equal(q('[data-africa-agri-layer="crop-rice-harvested"]').checked,true);
   q('[data-africa-topic="forestry"]').click();assert.equal(q('.africa-agri-layer-disclosure'),null);
+});
+});
+
+test('agriculture starts with seven distributions and selection retains the other products without a country popup',async()=>{
+ await withAfricaPage('?field=agriculture',async({window,root,q})=>{
+  const layers=()=>[...root.querySelectorAll('[data-africa-commodity-layer]')].map(node=>({key:node.dataset.africaCommodityLayer,display:node.style.display,opacity:node.style.opacity}));
+  assert.equal(root.dataset.overview,'true');assert.equal(q('[data-place]').value,'');assert.equal(q('[data-country-statistics]').hidden,true);assert.equal(q('[data-compare]').disabled,true);assert.ok([...root.querySelectorAll('[data-compare-country]')].every(button=>button.disabled));
+  assert.equal(q('.africa-map').getAttribute('viewBox'),'0 0 1100 907');assert.equal(root.querySelectorAll('[data-africa-overview-layer]').length,7);assert.equal(layers().length,7);assert.ok(layers().every(row=>row.display===''));
+  assert.equal(root.querySelectorAll('[data-country-path] title').length,0);assert.equal(q('[data-country-path="EGY"]').style.pointerEvents,'none');
+  q('.africa-map').dispatchEvent(new window.MouseEvent('click',{bubbles:true,clientX:300,clientY:200}));assert.ok(parameters(window).get('layerPoint'));assert.match(q('[data-africa-point-reading]').textContent,/米｜収穫面積/);assert.match(q('[data-africa-point-reading]').textContent,/牛の推定飼養密度/);
+  q('[data-africa-overview-layer="crop-rice-harvested"]').click();await wait(()=>q('[data-africa-raster="crop-rice-harvested"]'),'rice quantity must finish');
+  assert.equal(root.dataset.overview,'false');assert.equal(root.querySelectorAll('[data-africa-overview-layer]').length,0);assert.equal(layers().length,7);assert.ok(layers().every(row=>row.display===''));
+  assert.ok(layers().filter(row=>row.key.startsWith('livestock-')).every(row=>Number(row.opacity)===.2));assert.equal(layers().find(row=>row.key==='crop-rice-harvested').opacity,'1');assert.match(q('[data-unit]').textContent,/ha/);
+  const saved=window.location.href;window.history.back();assert.equal(root.dataset.overview,'true');window.history.forward();assert.equal(window.location.href,saved);assert.equal(root.dataset.overview,'false');
+  window.dispatchEvent(new window.PopStateEvent('popstate'));assert.equal(q('[data-africa-commodity="rice"]').getAttribute('aria-pressed'),'true');assert.equal(layers().length,7);
+  q('[data-africa-agri-overview]').click();assert.equal(root.dataset.overview,'true');assert.equal(root.querySelectorAll('[data-africa-crop-measure]').length,0);assert.equal(layers().length,7);
+  q('[data-reset]').click();await wait(()=>q('[data-africa-raster="climate"]'),'reset must restore climate');assert.equal(q('[data-place]').value,'');assert.equal(root.querySelectorAll('[data-africa-commodity-layer]').length,0);
  });
 });

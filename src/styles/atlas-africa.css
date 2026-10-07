@@ -4,6 +4,9 @@
 .africa-river-choices button[aria-pressed=true]{background:#224c59;color:#fff}
 .africa-river-hit{cursor:pointer;outline:none}
 .africa-river-hit:focus-visible{outline:none;stroke:#bc5c35;stroke-opacity:.5;stroke-width:8px}
+.africa-industry-hit{cursor:pointer;outline:none}
+.africa-industry-hit:focus-visible{outline:none}
+.africa-industry-hit:focus-visible circle{stroke:#bc5c35;stroke-width:4px}
 .africa-atlas[data-river-view=true] .africa-right-fixed{padding-bottom:4px}
 .africa-atlas[data-river-view=true] .africa-detail-scroll{padding-top:6px}
 .africa-atlas[data-river-view=true] .africa-theme-explanation{font-size:15px;line-height:1.75;margin-bottom:8px}
