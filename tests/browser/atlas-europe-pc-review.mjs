@@ -353,6 +353,10 @@ async function stageOneOperations(page, profile) {
     assert.equal(await climate.locator(selector).evaluate(node => node.closest('details') === null), true);
     assert.ok(await climate.locator(selector).evaluate(node => parseFloat(getComputedStyle(node.querySelector('p')).fontSize) >= 14));
   }
+  await page.locator('[data-eu-city-choice]').selectOption('');
+  assert.equal(await page.locator('[data-eu-climate-overview]').isVisible(), true);
+  assert.equal(await page.locator('[data-city-reading]:visible').count(), 0);
+  assert.equal(await page.locator('[data-eu-climate-statistics]').isVisible(), false);
   await openEurope(page, 'atlas/europe/nature/?layer=precipitation', 'normal');
   assert.equal(await page.locator('[data-eu-legend-items] > div').count(), 14);
   assert.match(await page.locator('[data-eu-legend-items]').textContent(), /250未満.*3,000以上/s);
@@ -360,6 +364,24 @@ async function stageOneOperations(page, profile) {
   await openEurope(page, 'atlas/europe/industry/?layer=hubs', 'normal');
   assert.equal(new URL(page.url()).searchParams.has('feature'), false);
   await snapshot(page, profile, 'industry-overview');
+  const industryExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
+  const industryPoints = await page.locator('[data-eu-feature-options] option').count();
+  await page.locator('[data-eu-industry-group="機械・輸送"]').click();
+  assert.equal(new URL(page.url()).searchParams.has('place'), false);
+  assert.equal(new URL(page.url()).searchParams.has('feature'), false);
+  assert.equal(await page.locator('[data-eu-feature-options] option').count(), industryPoints);
+  assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'), industryExtent);
+  await page.locator('[data-eu-industry-scope]').selectOption('country:DEU');
+  assert.equal(await page.locator('[data-eu-country-reader]').isVisible(), true);
+  assert.match(await page.locator('[data-eu-national-values]').textContent(), /18.94.*26.8.*63.62/s);
+  assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'), industryExtent);
+  await snapshot(page, profile, 'industry-country-group');
+  await page.locator('[data-eu-topic-field="industry"] [data-eu-topic="hubs"]:not([data-eu-industry-group])').click();
+  assert.equal(await page.locator('[data-eu-industry-scope]').inputValue(), 'region:all');
+  assert.equal(new URL(page.url()).searchParams.has('place'), false);
+  assert.equal(new URL(page.url()).searchParams.has('industryGroup'), false);
+  assert.equal(await page.locator('[data-eu-country-reader]').isVisible(), false);
+
   await openEurope(page, 'atlas/europe/population/?layer=density', 'normal');
   assert.equal(new URL(page.url()).searchParams.has('place'), false);
   await snapshot(page, profile, 'population-overview');
@@ -455,11 +477,11 @@ try {
       if (profile.viewport.width === 1024) await europeOperations(page, profile, 'explicit-static');
     } finally { await context.close(); }
   }
-  networkClean(); assert.equal(manifest.images.length, 22); assert.equal(manifest.records.length, 3);
+  networkClean(); assert.equal(manifest.images.length, 24); assert.equal(manifest.records.length, 3);
   assert.ok(manifest.records.every(record => record.status === 'passed'));
   assert.equal(git('rev-parse', 'HEAD'), manifest.gitHead, 'Checkout changed during capture');
   assert.equal(git('rev-parse', 'HEAD:src'), manifest.gitSrcTree);
-  manifest.status = 'passed'; manifest.checks.push('22 normal-render screenshots', '2 normal PC operation profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
+  manifest.status = 'passed'; manifest.checks.push('24 normal-render screenshots', '2 normal PC operation profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
   console.log(JSON.stringify({status: manifest.status, output, images: manifest.images.length, head: manifest.gitHead}));
 } catch (error) {
   manifest.status = 'failed'; manifest.failure = {message: String(error), stack: error.stack};

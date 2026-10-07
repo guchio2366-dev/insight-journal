@@ -285,3 +285,62 @@ for(const topic of ['ethnicity','religion'])test(`${topic} keeps the unselected 
     assert.equal(legend.hidden,true);assert.equal(app.q('[data-eu-subject-legend]').hidden,false);
   }finally{await app.w.happyDOM.close();}
 });
+
+
+test('産業分野は国を自動選択せず、全拠点を保ったまま強調し全体へ戻れる',async()=>{
+  const app=await setup('/insight-journal/atlas/europe/industry/?layer=hubs&render=static');
+  try{
+    const full=app.q('[data-eu-static]').getAttribute('viewBox');
+    app.q('[data-eu-industry-group="機械・輸送"]').click();await tick();
+    const params=new URL(app.w.location.href).searchParams;
+    assert.equal(params.get('industryGroup'),'機械・輸送');assert.equal(params.has('place'),false);assert.equal(params.has('feature'),false);
+    assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
+    const config=app.config.readings.filter(item=>item.field==='industry');
+    assert.equal(config.filter(item=>app.q(`[data-eu-feature-point="${item.id}"]`).style.display!=='none').length,14);
+    assert.match(app.q('[data-eu-subject-takeaway]').textContent,/ミュンヘン.*トゥールーズ.*欧州全体/);
+    const scope=app.q('[data-eu-industry-scope]');scope.value='country:DEU';scope.dispatchEvent(new app.w.Event('change'));
+    await tick();assert.equal(app.q('[data-eu-country-reader]').hidden,false);assert.equal(app.q('[data-eu-country-reader]').open,true);
+    assert.match(app.q('[data-eu-national-values]').textContent,/18.94.*26.8.*63.62/s);
+    assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
+    app.choose('hubs');await tick();
+    assert.equal(scope.value,'region:all');assert.equal(app.q('[data-eu-country-reader]').hidden,true);
+    assert.equal(new URL(app.w.location.href).searchParams.has('industryGroup'),false);
+    assert.equal(new URL(app.w.location.href).searchParams.has('place'),false);
+  }finally{await app.w.happyDOM.abort();}
+});
+
+test('産業は4か国統計と地域事例を読み分け、URL復元も全欧州分布を保つ',async()=>{
+  const app=await setup('/insight-journal/atlas/europe/industry/?layer=manufacturing&place=GBR&render=static');
+  try{
+    const full=app.q('[data-eu-static]').getAttribute('viewBox');
+    assert.equal(app.q('[data-eu-industry-scope]').value,'country:GBR');
+    assert.match(app.q('[data-eu-national-values]').textContent,/8.22.*17.67.*72.42/s);
+    assert.equal(app.q('[data-eu-shape="NLD"]').style.fill,'#edece5');
+    assert.notEqual(app.q('[data-eu-shape="GBR"]').style.fill,'#edece5');
+    assert.match(app.q('[data-eu-legend-items]').textContent,/統計比較対象外/);
+    app.restore('?layer=hubs&place=NLD&feature=rotterdam&render=static');await tick();
+    assert.equal(app.q('[data-eu-industry-scope]').value,'region:west');
+    assert.equal(app.q('[data-eu-country-reader]').hidden,true);assert.match(app.q('[data-eu-subject-title]').textContent,/ロッテルダム/);
+    assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
+    app.restore('?layer=hubs&industryGroup=技術・医薬&region=north&render=static');await tick();
+    assert.match(app.q('[data-eu-subject-title]').textContent,/北欧.*技術・医薬/);
+    assert.equal(app.q('[data-eu-topic="hubs"][data-eu-industry-group="技術・医薬"]').getAttribute('aria-pressed'),'true');
+    const points=app.config.readings.filter(item=>item.field==='industry');assert.ok(points.every(item=>app.q(`[data-eu-feature-point="${item.id}"]`).style.display!=='none'));
+  }finally{await app.w.happyDOM.abort();}
+});
+
+test('気候の空の都市選択と全体へ操作は雨温図を解除して概要を復元する',async()=>{
+  const app=await setup('?layer=climate&render=static');
+  try{
+    const choice=app.q('[data-eu-city-choice]');
+    for(const reset of [()=>{choice.value='';choice.dispatchEvent(new app.w.Event('change'));},()=>app.q('[data-eu-reset]').click()]){
+      choice.value='london';choice.dispatchEvent(new app.w.Event('change'));await tick();
+      assert.equal(app.q('[data-eu-climate-overview]').hidden,true);
+      reset();await tick();
+      assert.equal(choice.value,'');assert.equal(app.q('[data-eu-climate-overview]').hidden,false);
+      assert.equal(app.q('[data-eu-climate-statistics]').hidden,true);
+      assert.ok([...app.w.document.querySelectorAll('[data-city-reading]')].every(node=>node.hidden));
+      assert.equal(new URL(app.w.location.href).searchParams.has('city'),false);
+    }
+  }finally{await app.w.happyDOM.abort();}
+});

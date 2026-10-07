@@ -105,8 +105,12 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
     }
     if (field==='industry/') {
       const topics=doc.querySelector('[data-eu-topic-field="industry"]');
-      assert.deepEqual([...topics.querySelectorAll('[data-eu-topic-feature]')].map(button=>button.textContent),['資源・素材代表地点','機械・輸送代表地点','技術・医薬代表地点','物流・サービス代表地点']);
-      assert.deepEqual([...topics.querySelectorAll('button:not([data-eu-topic-feature])')].map(button=>button.dataset.euTopic),['hubs','manufacturing','industry','services']);
+      assert.deepEqual([...topics.querySelectorAll('[data-eu-industry-group]')].map(button=>button.textContent),['資源・素材','機械・輸送','技術・医薬','物流・サービス']);
+      assert.deepEqual([...topics.querySelectorAll('button:not([data-eu-industry-group])')].map(button=>button.dataset.euTopic),['hubs','manufacturing','industry','services']);
+      const scope=doc.querySelector('[data-eu-industry-scope]');
+      assert.deepEqual([...scope.options].map(option=>option.value),['region:all','region:north','region:west','region:south','region:east','country:DEU','country:GBR','country:FRA','country:ITA']);
+      assert.equal(scope.closest('[data-eu-industry-scope-host]').hidden,false);
+      assert.equal(doc.querySelector('[data-eu-region-host]').hidden,true);
       assert.ok(doc.querySelector('.eu-reader-body').open);
       assert.ok(doc.querySelector('.eu-read-panel [data-eu-subject-legend]').open);
     }
