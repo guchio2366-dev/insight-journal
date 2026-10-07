@@ -176,7 +176,7 @@ async function snapshot(page, profile, topic, region = 'europe') {
     if (index) assert.ok(control.y >= measured.controls[index - 1].y + measured.controls[index - 1].height, 'Map controls retain fit / zoom in / zoom out order');
   }
   // Retain all operation/geometry checks, photograph only this repair's states.
-  if(region!=='europe'||!['terrain-overview','contours','precipitation-250mm','drainage-river-reading','industry-overview','population-overview'].includes(topic))return measured;
+  if(region!=='europe'||!['precipitation-250mm-direct','precipitation-250mm-tabs'].includes(topic))return measured;
   const filename = `${profile.name}-${region}-${topic}.png`;
   const png = await page.screenshot({path: resolve(output, filename), fullPage: false, animations: 'disabled'});
   manifest.images.push({file: filename, sourceURL: page.url(), profile: profile.name, viewport: profile.viewport, render,
@@ -475,7 +475,22 @@ async function stageOneOperations(page, profile) {
   await openEurope(page, 'atlas/europe/nature/?layer=precipitation', 'normal');
   assert.equal(await page.locator('[data-eu-legend-items] > div').count(), 14);
   assert.match(await page.locator('[data-eu-legend-items]').textContent(), /250未満.*3,000以上/s);
-  await snapshot(page, profile, 'precipitation-250mm');
+  const rainfallPath='/insight-journal/assets/atlas/europe/precipitation-contours-v1/precipitation.png';
+  const rainState=async()=>({url:page.url(),image:await page.locator('[data-eu-subject-image]').getAttribute('href'),extent:await page.locator('[data-eu-static]').getAttribute('viewBox')});
+  const directRain=await rainState();assert.equal(directRain.image,rainfallPath);
+  assert.match(await page.locator('[data-eu-legend-title]').textContent(),/250mm等雨量線/);
+  assert.match(await page.locator('[data-eu-legend-items]').textContent(),/欠測・補間範囲外/);
+  await snapshot(page, profile, 'precipitation-250mm-direct');
+  await openEurope(page, 'atlas/europe/nature/', 'normal');
+  await page.locator('[data-eu-topic-field="nature"] [data-eu-topic="water"]').click();
+  await page.locator('[data-eu-water-options] [data-eu-topic="precipitation"]').click();await ready(page);
+  const tabRain=await rainState();assert.equal(tabRain.image,rainfallPath);
+  assert.equal(new URL(tabRain.url).searchParams.get('layer'),'precipitation');
+  assert.equal(tabRain.extent,directRain.extent,'Direct and tab routes retain the same map extent');
+  await snapshot(page, profile, 'precipitation-250mm-tabs');
+  assert.ok(manifest.network.requests.some(item=>new URL(item.url).pathname===rainfallPath));
+  assert.equal(manifest.network.requests.filter(item=>new URL(item.url).pathname.endsWith('/precipitation-v1/precipitation.png')).length,0,'Neither route requests the former mesh raster');
+  manifest.checks.push({profile:profile.name,precipitationRoutes:{direct:directRain,tabs:tabRain,formerMeshRequests:0}});
   await openEurope(page, 'atlas/europe/nature/?layer=drainage', 'normal');
   await page.locator('[data-eu-map-place="rhine"][data-eu-map-kind="feature"]').click();
   await page.waitForFunction(() => document.querySelector('[data-eu-basin-summary]').textContent.includes('ライン川'));
@@ -640,11 +655,11 @@ try {
       }
     } finally { await context.close(); }
   }
-  networkClean(); assert.equal(manifest.images.length, 12); assert.equal(manifest.records.length, 3);
+  networkClean(); assert.equal(manifest.images.length, 4); assert.equal(manifest.records.length, 3);
   assert.ok(manifest.records.every(record => record.status === 'passed'));
   assert.equal(git('rev-parse', 'HEAD'), manifest.gitHead, 'Checkout changed during capture');
   assert.equal(git('rev-parse', 'HEAD:src'), manifest.gitSrcTree);
-  manifest.status = 'passed'; manifest.checks.push('12 viewport screenshots of terrain, elevation, precipitation, drainage, industry overview and population overview', 'Existing operations retained at 2 normal PC profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
+  manifest.status = 'passed'; manifest.checks.push('4 viewport screenshots: direct and tab routes of precipitation at 2 PC sizes; earlier photographs reused for unchanged views', 'Existing operations retained at 2 normal PC profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
   console.log(JSON.stringify({status: manifest.status, output, images: manifest.images.length, head: manifest.gitHead}));
 } catch (error) {
   manifest.status = 'failed'; manifest.failure = {message: String(error), stack: error.stack};
