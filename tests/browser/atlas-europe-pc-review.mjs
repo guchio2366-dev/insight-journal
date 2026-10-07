@@ -351,6 +351,12 @@ async function stageOneOperations(page, profile) {
     assert.equal(await climate.locator(selector).evaluate(node => node.closest('details') === null), true);
     assert.ok(await climate.locator(selector).evaluate(node => parseFloat(getComputedStyle(node.querySelector('p')).fontSize) >= 14));
   }
+  await openEurope(page, 'atlas/europe/industry/?layer=hubs', 'normal');
+  assert.equal(new URL(page.url()).searchParams.has('feature'), false);
+  await snapshot(page, profile, 'industry-overview');
+  await openEurope(page, 'atlas/europe/population/?layer=density', 'normal');
+  assert.equal(new URL(page.url()).searchParams.has('place'), false);
+  await snapshot(page, profile, 'population-overview');
   await openEurope(page, 'atlas/europe/population/?layer=ethnicity', 'normal');
   const extent = () => page.locator('[data-eu-static]').getAttribute('viewBox');
   const fullExtent = await extent();
@@ -435,17 +441,20 @@ try {
       const delta = {width: europe.map.width - us.map.width, height: europe.map.height - us.map.height, top: europe.map.y - us.map.y};
       manifest.comparisons.push({profile: profile.name, topic: 'climate', render: 'normal', europe, us, mapSizeDelta: delta});
       if (profile.viewport.width === 1440) assert.ok(Math.abs(delta.width) <= 2 && Math.abs(delta.height) <= 2 && Math.abs(delta.top) <= 2, `Desktop climate map geometry differs: ${JSON.stringify(delta)}`);
-      else manifest.limits.push({profile: profile.name, reason: 'Existing compact-PC layout difference, not exact US geometry parity: Europe retains a two-row region navigator and 1.65:1 columns; US uses one row and a 380px reader. Both normal renderers and relative map/legend/reader/control placement are checked.', mapSizeDelta: delta});
+      else {
+        assert.ok(Math.abs(delta.width) <= 2 && Math.abs(delta.height) <= 2, `Compact PC climate map area differs: ${JSON.stringify(delta)}`);
+        manifest.limits.push({profile: profile.name, reason: 'Compact-PC top position is measured but not required to equal the US climate map; both normal renderers and map/legend/reader/control placement are checked.', mapSizeDelta: delta});
+      }
       await europeOperations(page, profile, 'normal');
       await stageOneOperations(page, profile);
       if (profile.viewport.width === 1024) await europeOperations(page, profile, 'explicit-static');
     } finally { await context.close(); }
   }
-  networkClean(); assert.equal(manifest.images.length, 16); assert.equal(manifest.records.length, 3);
+  networkClean(); assert.equal(manifest.images.length, 20); assert.equal(manifest.records.length, 3);
   assert.ok(manifest.records.every(record => record.status === 'passed'));
   assert.equal(git('rev-parse', 'HEAD'), manifest.gitHead, 'Checkout changed during capture');
   assert.equal(git('rev-parse', 'HEAD:src'), manifest.gitSrcTree);
-  manifest.status = 'passed'; manifest.checks.push('16 normal-render screenshots', '2 normal PC operation profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
+  manifest.status = 'passed'; manifest.checks.push('20 normal-render screenshots', '2 normal PC operation profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
   console.log(JSON.stringify({status: manifest.status, output, images: manifest.images.length, head: manifest.gitHead}));
 } catch (error) {
   manifest.status = 'failed'; manifest.failure = {message: String(error), stack: error.stack};

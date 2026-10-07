@@ -334,9 +334,9 @@
  .eu-workspace-root[data-europe-detail] .eu-water-options button { min-height:44px; padding:7px 10px; }
 }
 @media(min-width:960px) and (max-width:1199px) {
- .eu-workspace-root[data-europe-detail] .atlas-desktop-shell:not(.is-reading-news) { grid-template-columns:160px minmax(0,1fr); gap:12px; padding:12px 12px 28px; }
+ .eu-workspace-root[data-europe-detail] .atlas-desktop-shell:not(.is-reading-news) { grid-template-columns:160px minmax(0,1fr); gap:12px; padding:10px 12px 24px; }
  .eu-workspace-root[data-europe-detail] .atlas-desktop-shell:not(.is-reading-news) .atlas-news { height:calc(100dvh - 72px); min-height:0; max-height:calc(100dvh - 72px); }
- .eu-workspace-root[data-europe-detail] .eu-layout { grid-template-columns:minmax(0,1.65fr) minmax(285px,1fr); }
+ .eu-workspace-root[data-europe-detail] .eu-layout { grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr); }
 }
 
 /* The first view includes real subject entries and each map's complete key. */
