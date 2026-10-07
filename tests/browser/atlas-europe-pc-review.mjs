@@ -447,6 +447,8 @@ async function stageOneOperations(page, profile) {
     const target=page.locator('[data-eu-map-kind="feature"].is-point-only:visible').first(),id=await target.getAttribute('data-eu-map-place');
     const anchors=()=>page.locator('.eu-label-dot').evaluateAll(nodes=>nodes.map(node=>[node.getAttribute('cx'),node.getAttribute('cy')]));
     const original=await anchors();await page.bringToFront();await page.mouse.move(5,5);await target.focus();
+    await page.keyboard.press('Tab');await page.keyboard.press('Shift+Tab');
+    await page.waitForFunction(id=>{const node=document.querySelector(`[data-eu-map-kind="feature"][data-eu-map-place="${id}"]`);return node&&document.activeElement===node&&parseFloat(getComputedStyle(node).fontSize)===13;},id,{timeout:5000});
     assert.equal(await target.evaluate(node=>parseFloat(getComputedStyle(node).fontSize)),13,'Keyboard focus reveals the retained name size');
     await page.keyboard.press('Enter');await ready(page);
     assert.equal(new URL(page.url()).searchParams.get('feature'),id);
