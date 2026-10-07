@@ -45,6 +45,7 @@ export function initializeAfricaAtlas() {
    const overview=make('button','全域概要') as HTMLButtonElement;overview.type='button';overview.dataset.africaIndustryOverview='';overview.setAttribute('aria-pressed',String(state.overview));nav.append(overview);
    const labels:Record<string,string>={'copperbelt-connections':'銅鉱業','casablanca-manufacturing':'カサブランカの製造業'};
    for(const theme of themes.filter(t=>t.field==='industry')){const button=make('button',labels[theme.id]??theme.title) as HTMLButtonElement;button.type='button';button.dataset.theme=theme.id;button.title=theme.title;button.setAttribute('aria-pressed',String(!state.overview&&state.theme===theme.id));nav.append(button);}
+   const caption=make('p','収録済み2事例 · 色は国別統計');caption.className='africa-subfield-caption';nav.append(caption);
   }else for(const [id,label] of items){const button=make('button',label) as HTMLButtonElement;button.type='button';button.dataset.africaTopic=id;button.setAttribute('aria-pressed',String(topic===id));button.setAttribute('aria-selected',String(topic===id));button.setAttribute('role','tab');button.setAttribute('aria-controls','africa-map-panel');button.tabIndex=topic===id?0:-1;nav.append(button);}
   if(state.field==='industry')nav.setAttribute('role','group');
   if(state.field==='agriculture'&&topic!=='forestry'&&state.view==='distribution'){

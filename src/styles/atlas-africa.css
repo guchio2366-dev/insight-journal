@@ -500,3 +500,12 @@
  .africa-atlas[data-field=population] .africa-main>.africa-subfields button{flex:none;width:auto;height:46px;min-height:46px;padding:8px 10px;font-size:16px;font-weight:400;line-height:28px}
  .africa-atlas[data-field=population] .africa-main>.africa-subfield-status{margin:6px 0 18px;padding:0;border:0;background:transparent;color:#50656a;font-size:14px;line-height:21px}
 }
+
+/* Match the measured U.S. industry guide row and desktop map frame. */
+@media(min-width:960px){
+ .africa-atlas[data-field=industry] .africa-main>.africa-subfields{height:62px;min-height:62px;align-items:flex-start;align-content:flex-start;row-gap:0}
+ .africa-atlas[data-field=industry] .africa-subfield-caption{flex-basis:100%;margin:0;font-size:14px;line-height:21px}
+}
+@media(min-width:1200px){
+ .africa-atlas[data-field=industry] .africa-map-frame{height:620px;min-height:620px;aspect-ratio:auto}
+}
