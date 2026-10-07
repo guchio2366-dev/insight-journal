@@ -348,6 +348,7 @@ async function elevation({page, evidence}) {
 async function industry({page, evidence}) {
   const step = steps(page, evidence);
   await step('Industry labels remain separate and connected to their source state', async () => {
+    await page.waitForFunction(()=>document.querySelector('[data-mexico-field="industry"]')?.dataset.miLabelLayoutReady==='true');
     assert.equal(await page.locator('[data-mi-state-select]').inputValue(),'');assert.equal(query(page,'state'),null);assert.equal(await page.locator('[data-mi-map=primary] [aria-pressed=true]').count(),0);
     const height=await page.locator('.mexico-map-frame').first().evaluate(node=>node.getBoundingClientRect().height);assert(height<500,'Industry map must use the shared aspect ratio');
     const labels = await page.locator('[data-mi-reading-markers] [data-mi-region-label]').evaluateAll(nodes => nodes.filter(node => !node.closest('[hidden]') && node.getBoundingClientRect().width > 0).map(node => {

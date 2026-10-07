@@ -106,6 +106,7 @@ async function capture(browser, origin, basePath, output, scene, commit, profile
     const response = await page.goto(record.requestedUrl, {waitUntil: 'domcontentloaded'});
     assert.equal(response?.status(), 200, 'Page did not load successfully');
     await page.waitForFunction(({root, ready}) => {const node = document.querySelector(root); return node && (node.dataset[ready[0]] === ready[1] || node.dataset.renderState === 'fallback');}, selected, {timeout: 45_000});
+    if(country==='mexico'&&field==='industry')await page.waitForFunction(()=>document.querySelector('[data-mexico-field="industry"]')?.dataset.miLabelLayoutReady==='true');
     await settle(page, selected);
     // Additional Mexico cases may operate the existing page before measurement.
     if (scene.run) {
