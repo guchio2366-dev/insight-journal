@@ -5,6 +5,12 @@ export function initLatinWaterTerrain():void{
   let selectedRiver:string|null=null;
   const active=()=>{const value=new URLSearchParams(location.search).get('section');return value==='water'?'rivers':value;};
   const render=()=>{
+   // Keep the comparison URL for returning to climate, but show foundation
+   // sections in the normal map/reader frame with usable geographic controls.
+   if(latinFoundationSections.includes(active() as LatinFoundationSection)){
+    root.classList.remove('is-comparison');
+    for(const control of root.querySelectorAll<HTMLSelectElement>('select[data-nature-scope],select[data-nature-place]'))control.disabled=false;
+   }
    const params=new URLSearchParams(location.search),routeRiver=params.get('river');selectedRiver=latinFoundationRivers.some(r=>r.id===routeRiver)?routeRiver:null;
    const scope=root.querySelector<HTMLSelectElement>('[data-nature-scope]')?.value??'all',place=root.querySelector<HTMLSelectElement>('[data-nature-place]')?.value??'all';
    for(const section of latinFoundationSections){const map=root.querySelector<HTMLElement>(`[data-foundation-map="${section}"]`)!;map.innerHTML=renderLatinFoundationMap(section,scope,place,selectedRiver,900/Math.max(250,map.getBoundingClientRect().width||900),active()===section);root.querySelector<HTMLElement>(`[data-foundation-reading="${section}"]`)!.innerHTML=renderLatinFoundationReading(section,selectedRiver);}
