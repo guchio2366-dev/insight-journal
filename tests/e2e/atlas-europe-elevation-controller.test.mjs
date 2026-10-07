@@ -47,6 +47,11 @@ async function setup(location='?layer=terrain&render=static',fixture={}){
   const field=url.pathname.match(/\/atlas\/europe\/(nature|agriculture|industry|population)\//)?.[1]??'nature';
   const html=(await readFile(`dist/atlas/europe/${field}/index.html`,'utf8')).replace(/<script(?![^>]*type=["']application\/json["'])[^>]*>[\s\S]*?<\/script>/g,'');
   const w=new Window({url:url.href,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
+  // State commits and annotation rendering use separate frames; exercise a busy renderer.
+  if(fixture.animationFrameDelay){
+    const requestFrame=w.requestAnimationFrame.bind(w);
+    w.requestAnimationFrame=callback=>requestFrame(time=>w.setTimeout(()=>callback(time),fixture.animationFrameDelay));
+  }
   w.document.body.innerHTML=html;
   const q=selector=>w.document.querySelector(selector),root=q('[data-europe-detail]');
   const config=JSON.parse(q('[data-eu-config]').textContent);
@@ -272,7 +277,7 @@ for(const topic of ['ethnicity','religion'])test(`${topic} keeps the unselected 
     assert.equal(legend.children.length,7);
     assert.ok([...legend.querySelectorAll('[data-culture-scale-key]')].every(key=>key.hidden));
     assert.equal(legend.lastElementChild.hidden,false);
-    assert.match(legend.lastElementChild.textContent,/回答分類未選択.*0%ではありません/);
+    assert.match(legend.lastElementChild.textContent,/未掲載・3対象以外.*0%ではありません/);
     assert.match(legend.lastElementChild.querySelector('i').getAttribute('style'),/#b8bec7/);
     assert.match(app.q('[data-culture-denominator]').textContent,/分母/);
     const select=(selector,value)=>{const node=app.q(selector);node.value=value;node.dispatchEvent(new app.w.Event('change',{bubbles:true}));};
@@ -283,6 +288,40 @@ for(const topic of ['ethnicity','religion'])test(`${topic} keeps the unselected 
     assert.match(legend.querySelectorAll('[data-culture-scale-key]')[5].textContent,/未掲載・数値なし/);
     app.choose('terrain');
     assert.equal(legend.hidden,true);assert.equal(app.q('[data-eu-subject-legend]').hidden,false);
+  }finally{await app.w.happyDOM.close();}
+});
+
+for(const topic of ['ethnicity','religion'])test(`${topic} shows all three published response compositions without an initial case and preserves explicit selection/history`,async()=>{
+  const app=await setup(`/insight-journal/atlas/europe/population/?layer=${topic}&render=static`,{animationFrameDelay:40});
+  try{
+    const visibleCompositions=()=>app.w.document.querySelectorAll('[data-eu-composition]:not([hidden])').length;
+    const initial=app.w.location.href,full=app.q('[data-eu-static]').getAttribute('viewBox');
+    const key=app.q('[data-eu-culture-composition-key]');assert.equal(key.hidden,false);
+    await until(()=>app.w.document.querySelectorAll('[data-eu-composition]').length===3,'The annotation frame renders all three compositions');
+    assert.equal(key.querySelectorAll('[data-eu-composition-table]').length,3);
+    assert.equal(app.q('[data-culture-case]').value,'');assert.equal(app.q('[data-culture-category]').value,'');assert.equal(app.q('[data-culture-area]').value,'');
+    await until(()=>app.w.document.querySelectorAll('[data-eu-composition]:not([hidden])').length===3);
+    const expected=topic==='ethnicity'?[5,5,8]:[9,9,12];
+    for(const [index,code] of ['E92000001','W92000004','HRV'].entries()){
+      const button=app.q(`[data-eu-composition="${topic}-${code}"]`);assert.equal(button.querySelectorAll('circle').length,expected[index]);
+      assert.equal(button.querySelector('svg').getAttribute('viewBox'),'0 0 56 56');
+      assert.equal(key.querySelector(`[data-eu-composition-table="${code}"]`).querySelectorAll('tbody tr').length,expected[index]);
+    }
+    assert.match(app.q('[data-culture-overview]').textContent,/自己認識.*言語分布.*実践/);
+    app.q(`[data-eu-composition="${topic}-HRV"]`).click();
+    await until(()=>visibleCompositions()===0,'Selecting a census case hides every overview composition');
+    assert.equal(app.q('[data-culture-case]').value,'croatia-national-2021');assert.equal(key.hidden,true);
+    assert.equal(app.q('[data-culture-category]').value,'');assert.equal(app.q('[data-culture-area]').value,'');
+    assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);assert.equal(app.w.document.querySelectorAll('[data-eu-composition]:not([hidden])').length,0);
+    assert.equal(new URL(app.w.location.href).searchParams.has('feature'),false);
+    app.restore(initial);assert.equal(key.hidden,false);assert.equal(app.q('[data-culture-case]').value,'');
+    await until(()=>app.w.document.querySelectorAll('[data-eu-composition]:not([hidden])').length===3);
+    const select=app.q('[data-culture-case]');select.value='england-wales-2021';select.dispatchEvent(new app.w.Event('change'));
+    await until(()=>visibleCompositions()===0,'The case selector hides every overview composition');
+    select.value='';select.dispatchEvent(new app.w.Event('change'));
+    await until(()=>visibleCompositions()===3,'Clearing the case restores all three overview compositions');
+    assert.equal(key.hidden,false);
+    assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
   }finally{await app.w.happyDOM.close();}
 });
 

@@ -112,15 +112,15 @@ test('掲載域比較の元選択は左の非操作凡例に残り、両側の�
  try{assert.match(rain.q('[data-west-source]').textContent,/左の元図.*気象庁 ClimatView/);assert.equal(rain.q('[data-west-source]').querySelectorAll('a').length,2);}finally{await rain.w.happyDOM.close();}
 });
 
-test('通常の気候16区分と人口密度全階級・時点は固定凡例に残り年操作と国選択で変わらない',async()=>{
+test('通常の気候16区分と人口密度全階級・時点は地図下の凡例に残り年操作と国選択で変わらない',async()=>{
  const climate=await setup('nature','?topic=climate&year=2020',false,{width:1366,height:768});
  try{
-  const {w,q,select}=climate,verify=()=>{const legend=q('[data-west-reading-key] [data-west-legend]');assert.ok(legend);const keys=[...legend.querySelectorAll('[data-west-climate-key]')];assert.deepEqual(keys.map(x=>x.dataset.westClimateKey).sort(),regionalClasses.map(c=>c.code).sort());for(const c of regionalClasses){const key=keys.find(x=>x.dataset.westClimateKey===c.code);assert.equal(key.title,c.name);assert.ok(key.textContent.length>c.code.length);assert.equal(key.querySelector('i').getAttribute('style'),'background:'+c.color);}assert.match(legend.textContent,/全16区分.*1991–2020年/);const dictionary=q('[data-west-climate-dictionary]');assert.equal(dictionary.open,false);assert.ok(dictionary.closest('[data-west-reading-extra]'));assert.equal(dictionary.querySelectorAll('.west-swatches span').length,30);};
+  const {w,q,select}=climate,verify=()=>{const legend=q('.atlas-map-column [data-west-legend]');assert.ok(legend);const keys=[...legend.querySelectorAll('[data-west-climate-key]')];assert.deepEqual(keys.map(x=>x.dataset.westClimateKey).sort(),regionalClasses.map(c=>c.code).sort());for(const c of regionalClasses){const key=keys.find(x=>x.dataset.westClimateKey===c.code);assert.equal(key.title,c.name);assert.ok(key.textContent.length>c.code.length);assert.equal(key.querySelector('i').getAttribute('style'),'background:'+c.color);}assert.match(legend.textContent,/全16区分.*1991–2020年/);const dictionary=q('[data-west-climate-dictionary]');assert.equal(dictionary.open,false);assert.ok(dictionary.closest('.atlas-map-column'));assert.equal(dictionary.querySelectorAll('.west-swatches span').length,30);};
   verify();select('[data-west-country]','TUR');await until(()=>q('[data-west-loading]').hidden);verify();q('[data-west-map]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));verify();q('[data-west-reading-overview]').click();verify();
  }finally{await climate.w.happyDOM.close();}
  const population=await setup('population','?topic=density&year=2024',false,{width:1366,height:768});
  try{
-  const {w,q,select}=population,l=climateData.layers.find(x=>x.id==='population'),verify=()=>{const legend=q('[data-west-reading-key] [data-west-legend]');assert.ok(legend);assert.deepEqual([...legend.querySelectorAll('i')].slice(0,-1).map(x=>x.getAttribute('style')),l.colors.map(c=>'background:'+c));assert.equal(legend.querySelectorAll('i').length,l.colors.length+1);assert.match(legend.textContent,/人／km².*2020/);for(const b of l.breaks)assert.ok(legend.textContent.includes(b.toLocaleString('ja-JP')));assert.match(legend.textContent,/周辺国・未収録/);assert.equal(q('[data-west-stat-controls]').closest('[data-west-comparison]'),q('[data-west-comparison]'));assert.equal(w.document.querySelectorAll('[data-west-year]').length,1);};
+  const {w,q,select}=population,l=climateData.layers.find(x=>x.id==='population'),verify=()=>{const legend=q('.atlas-map-column [data-west-legend]');assert.ok(legend);assert.deepEqual([...legend.querySelectorAll('i')].slice(0,-1).map(x=>x.getAttribute('style')),l.colors.map(c=>'background:'+c));assert.equal(legend.querySelectorAll('i').length,l.colors.length+1);assert.match(legend.textContent,/人／km².*2020/);for(const b of l.breaks)assert.ok(legend.textContent.includes(b.toLocaleString('ja-JP')));assert.match(legend.textContent,/周辺国・未収録/);assert.equal(q('[data-west-stat-controls]').closest('[data-west-comparison]'),q('[data-west-comparison]'));assert.equal(w.document.querySelectorAll('[data-west-year]').length,1);};
   verify();for(const country of ['EGY','TUR']){select('[data-west-country]',country);await until(()=>q('[data-west-loading]').hidden);verify();}select('[data-west-year]','2020');await until(()=>q('[data-west-comparison] caption').textContent.includes('2020年'));verify();assert.equal(new URL(w.location.href).searchParams.get('year'),'2020');
  }finally{await population.w.happyDOM.close();}
 
@@ -148,7 +148,7 @@ test('水資源から実降水地点へ進み、元作物分布・地点・年�
 test('農林業の概略凡例は品目と固定年を保ち、森林の参考画像と区別する',async()=>{
  const app=await setup('agriculture','?topic=wheat&country=TUR&year=2020',false,{width:1366,height:768});
  try{
-  const {w,q,select}=app,verify=()=>{const legend=q('[data-west-reading-key] [data-west-legend]');assert.ok(legend);assert.equal(legend.querySelectorAll('i').length,6);for(const label of ['小麦','大麦','羊','山羊','牛'])assert.ok(legend.textContent.includes(label));assert.match(legend.textContent,/2020年の推計.*品目.*選択作物/);assert.match(legend.textContent,/正の推計なし・欠測/);assert.equal(w.document.querySelectorAll('[data-west-legend]').length,1);};
+  const {w,q,select}=app,verify=()=>{const legend=q('.atlas-map-column [data-west-legend]');assert.ok(legend);assert.equal(legend.querySelectorAll('i').length,6);for(const label of ['小麦','大麦','羊','山羊','牛'])assert.ok(legend.textContent.includes(label));assert.match(legend.textContent,/2020年の推計.*品目.*選択作物/);assert.match(legend.textContent,/正の推計なし・欠測/);assert.equal(w.document.querySelectorAll('[data-west-legend]').length,1);};
   verify();select('[data-west-country]','IRN');await until(()=>q('[data-west-loading]').hidden);verify();
   q('[data-west-standard-group="林業"]').click();await until(()=>q('[data-west-loading]').hidden);assert.equal(q('[data-west-legend]').querySelectorAll('i').length,2);assert.match(q('[data-west-legend]').textContent,/森林の参考分布（2020年）/);assert.equal(q('[data-west-cultivation="wheat"]').hidden,true);
   q('[data-west-standard-group="農畜産"]').click();await until(()=>q('[data-west-loading]').hidden);verify();assert.equal(q('[data-west-atlas]').dataset.topic,'farming-overview');assert.equal(q('[data-west-cultivation="wheat"]').hidden,true);
@@ -162,7 +162,7 @@ test('資料取得に失敗しても国と主題を切り替えられる',async(
   q('[data-west-group="水資源"]').click();q('[data-west-topic-button="basins"]').click();await until(()=>!q('[data-west-retry]').hidden);
   assert.match(q('[data-west-loading]').textContent,/読み込めません/);
   q('[data-west-group="気候区分"]').click();await until(()=>q('[data-west-loading]').hidden);
-  select('[data-west-country]','SAU');await until(()=>q('[data-west-climate-class]')?.textContent.includes('BWh'));assert.equal(q('[data-west-country]').value,'SAU');assert.match(q('[data-west-scope]').textContent,/サウジアラビア/);
+  select('[data-west-country]','SAU');assert.equal(q('[data-west-active-chart]'),null);select('[data-west-city]','riyadh');await until(()=>q('[data-west-climate-class]')?.textContent.includes('BWh'));assert.equal(q('[data-west-country]').value,'SAU');assert.match(q('[data-west-scope]').textContent,/サウジアラビア/);
  }finally{await w.happyDOM.close();}
 });
 test('直接指定された未収録年は保ち、主題切替時は実際の収録年を明示する',async()=>{

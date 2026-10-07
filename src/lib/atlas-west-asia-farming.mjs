@@ -1,5 +1,5 @@
 // Outlines describe positive 2020 estimated cells, not field boundaries.
-// Dots mark representative cells, not farms or livestock head counts.
+// Filled coverage retains every positive display cell. Dots are supplementary representatives.
 export const westFarmingProducts = [
   {id:'wheat',label:'小麦',kind:'crop',color:'#ad8735'},
   {id:'barley',label:'大麦',kind:'crop',color:'#4d8665'},
@@ -24,6 +24,16 @@ export function westFarmingGeometry(values,layer,stride=4) {
     const bin=Math.floor(y/height*4)*6+Math.floor(x/width*6),previous=points.get(bin);
     if(!previous||value>previous.value)points.set(bin,{x:x+.5,y:y+.5,value});
   }
+  let coverage='';
+  for(let y=0;y<height;y++){
+    let start=-1;
+    for(let x=0;x<=width;x++){
+      const value=x<width?values[y*width+x]:noData;
+      const positive=Number.isFinite(value)&&value!==noData&&value>0;
+      if(positive&&start<0)start=x;
+      if(!positive&&start>=0){coverage+=`M${start},${y}h${x-start}v1H${start}Z`;start=-1;}
+    }
+  }
   let outline='';
   const active=(x,y)=>x>=0&&y>=0&&x<cols&&y<rows&&mask[y*cols+x]===1;
   for(let y=0;y<rows;y++)for(let x=0;x<cols;x++)if(active(x,y)){
@@ -33,5 +43,5 @@ export function westFarmingGeometry(values,layer,stride=4) {
     if(!active(x,y+1))outline+=`M${right},${bottom}H${left}`;
     if(!active(x-1,y))outline+=`M${left},${bottom}V${top}`;
   }
-  return {outline,points:[...points.values()]};
+  return {coverage,outline,points:[...points.values()]};
 }

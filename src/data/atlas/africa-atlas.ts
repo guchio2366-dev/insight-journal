@@ -4,7 +4,7 @@ import {themes} from './africa-themes.ts';
 export type Field = 'nature' | 'agriculture' | 'industry' | 'population';
 export type Region = 'all' | 'north' | 'west' | 'central' | 'east' | 'south';
 export const countries = countryData;
-export const regionNames: Record<Region,string> = {all:'アフリカ全体',north:'北アフリカ',west:'西アフリカ',central:'中部アフリカ',east:'東アフリカ',south:'南部アフリカ'};
+export const regionNames: Record<Region,string> = {all:'アフリカ全体',north:'北アフリカ',west:'西アフリカ',central:'中央アフリカ',east:'東アフリカ',south:'南部アフリカ'};
 export const fields: Record<Field,{label:string;title:string;summary:string}> = {
   nature:{label:'自然環境',title:'雨の量と、利用できる水は同じではない',summary:'国土に降る雨と、国内で生まれる再生可能な淡水を読み比べます。乾燥地域でも、国外を水源とする川や灌漑が暮らしを支える場合があります。'},
   agriculture:{label:'農林業',title:'作物と家畜の分布から、生産を支える条件を読む',summary:'作物の収穫面積・生産量と家畜密度は2020年のモデル分布です。自然条件に加え、管理・交通・市場・土地の制度を考え、国全体の統計とは分けて読みます。'},
@@ -46,6 +46,14 @@ export function valueAt(id:string,code:string,year:number):number|null {
 }
 export function defaultYear(id:string) {
   return [...years].reverse().find(y=>countries.filter(c=>valueAt(id,c.code,y)!==null).length>=40)??2023;
+}
+/** Latest retained observation for this country and indicator; never fill a missing year. */
+export function latestValueAt(id:string,code:string):{year:number;value:number}|null {
+  if(!countries.some(c=>c.code===code&&c.statistical))return null;
+  const rows=series[id]?.[code];
+  if(!rows)return null;
+  const year=Object.keys(rows).map(Number).filter(Number.isFinite).sort((a,b)=>b-a).find(y=>rows[String(y)]!==null);
+  return year===undefined?null:{year,value:rows[String(year)]!};
 }
 export function formatValue(value:number|null,metric:Metric):string {
   if(value===null)return '未収録';

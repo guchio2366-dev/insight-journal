@@ -63,5 +63,34 @@ test('地域水説明・元流域・雨温図の具体的理由を既存資料�
   assert.match(q('[data-west-city-geography]').textContent,/ナイル川.*地域外の上流.*流量/s);
   assert.ok(q('[data-west-active-chart] [data-city-numbers] table'));
   assert.equal(q('[data-west-city-geography]').previousElementSibling.dataset.westClimateDescription,'');
+  assert.equal(q('.west-reading [data-west-related]'),null);
+  assert.ok(q('.atlas-map-column [data-west-related]'));
+  assert.equal(q('[data-west-detail]').children[1].className,'atlas-city-climate');
  }finally{await w.happyDOM.close();}
+});
+test('背景国が必要な地図選択を遮らず、国選択は都市も地図範囲も自動変更しない',async()=>{
+ for(const query of ['?topic=climate','?topic=groundwater','?topic=basins','?topic=terrain']){
+  const {w,q,select}=await setup('nature',query);
+  try{
+   const frame=q('[data-west-map]').getAttribute('viewBox');
+   assert.equal(q('[data-west-scene]').querySelectorAll('[data-country]').length,0);
+   if(query.includes('groundwater'))assert.ok(q('[data-ground]'));
+   if(query.includes('basins'))assert.ok(q('[data-basin]'));
+   select('[data-west-country]','SAU');await until(()=>q('[data-west-loading]').hidden);
+   assert.equal(q('[data-west-city]').value,'');assert.equal(q('[data-west-active-chart]'),null);
+   assert.equal(q('[data-west-map]').getAttribute('viewBox'),frame);
+  }finally{await w.happyDOM.close();}
+ }
+});
+test('ナイル流域の直接URLと履歴復元は全流域へ合わせ、明示したカメラは保持する',async()=>{
+ const full=await setup('nature','?topic=basins&basin=1060034260');
+ const explicit=await setup('nature','?topic=basins&basin=1060034260&map=10,20,400,300');
+ try{
+  const fitted=full.q('[data-west-map]').getAttribute('viewBox');
+  assert.notEqual(fitted,'0 0 1000 987');
+  assert.equal(explicit.q('[data-west-map]').getAttribute('viewBox'),'10 20 400 300');
+  explicit.w.history.replaceState({},'','?topic=basins&basin=1060034260');
+  explicit.w.dispatchEvent(new explicit.w.PopStateEvent('popstate'));
+  await until(()=>explicit.q('[data-west-map]').getAttribute('viewBox')===fitted);
+ }finally{await full.w.happyDOM.close();await explicit.w.happyDOM.close();}
 });

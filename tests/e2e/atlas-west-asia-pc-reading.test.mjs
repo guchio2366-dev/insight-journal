@@ -33,6 +33,7 @@ test('西アジアのPC実画面で地域説明・3か国・欠測年・選択�
    const page=await context.newPage();page.on('pageerror',error=>errors.push(error.message));page.on('response',response=>{if(response.status()>=400)failures.push(response.url());});
    const open=async route=>{await page.goto(origin+'/insight-journal/atlas/west-asia/'+route);await page.waitForFunction(()=>document.querySelector('[data-west-atlas]')?.dataset.ready==='true'&&document.querySelector('[data-west-loading]')?.hidden);await page.evaluate(()=>document.fonts.ready);};
    const shot=async label=>{
+    await page.evaluate(()=>window.scrollTo(0,0));
     const file=`${viewport.width}-${label}.png`;const png=await page.screenshot({path:path.join(output,file),animations:'disabled'});
     const dimensions=await page.evaluate(()=>{const r=document.querySelector('[data-west-map]').getBoundingClientRect();return {map:{x:r.x,y:r.y,width:r.width,height:r.height},overflow:document.documentElement.scrollWidth>innerWidth};});
     assert(dimensions.map.width>200&&dimensions.map.height>200);assert.equal(dimensions.overflow,false);
@@ -58,11 +59,22 @@ test('西アジアのPC実画面で地域説明・3か国・欠測年・選択�
    assert.equal(await page.locator('[data-west-year]').inputValue(),'2024');
    await open('nature/?topic=groundwater');
    assert((await page.locator('[data-west-detail]').innerText()).includes('再生しにくい地下水'));
+   assert.equal(await page.locator('[data-west-scene] [data-country]').count(),0);
+   const groundPoint=await page.evaluate(()=>{const r=document.querySelector('[data-west-map]').getBoundingClientRect();for(let y=r.top+20;y<Math.min(r.bottom,innerHeight)-20;y+=12)for(let x=r.left+20;x<r.right-20;x+=12)if(document.elementFromPoint(x,y)?.closest('[data-ground]'))return {x,y};});
+   assert(groundPoint,'a groundwater polygon receives actual pointer events');await page.mouse.click(groundPoint.x,groundPoint.y);
+   await page.waitForFunction(()=>document.querySelector('[data-west-ground-reading]')?.textContent.includes('涵養区分'));
    await shot('groundwater');
-   await open('nature/?topic=climate&city=riyadh&country=SAU');
+   await open('nature/?topic=climate');
+   const climateFrame=await page.locator('[data-west-map]').getAttribute('viewBox');
+   await page.locator('[data-west-country]').selectOption('SAU');
+   assert.equal(await page.locator('[data-west-city]').inputValue(),'');assert.equal(await page.locator('[data-west-active-chart]').count(),0);
+   assert.equal(await page.locator('[data-west-map]').getAttribute('viewBox'),climateFrame);
+   await page.locator('[data-city="riyadh"]').press('Enter');
    await page.waitForFunction(()=>document.querySelector('[data-west-climate-class]')?.textContent.includes('BWh'));
    assert((await page.locator('[data-west-city-geography]').innerText()).includes('灌漑小麦'));
    assert.equal(await page.locator('[data-west-detail] [data-west-active-chart] svg').count(),1);
+   assert.equal(await page.locator('.west-reading [data-west-related]').count(),0);
+   assert(await page.evaluate(()=>{const pane=document.querySelector('.west-reading').getBoundingClientRect(),chart=document.querySelector('[data-west-active-chart] svg').getBoundingClientRect(),classification=document.querySelector('[data-west-climate-class]').getBoundingClientRect(),links=document.querySelector('[data-west-related]').getBoundingClientRect(),map=document.querySelector('[data-west-map]').getBoundingClientRect();return chart.top-pane.top<110&&classification.top>chart.bottom&&classification.bottom<=pane.bottom&&links.top>=map.bottom;}),'chart leads the right pane, its Japanese classification is immediately below and visible, and links sit below the map');
    await shot('riyadh-climate');
    await open('nature/?topic=basins');
    await page.locator('[data-west-basin-label] > summary').click();
@@ -71,11 +83,22 @@ test('西アジアのPC実画面で地域説明・3か国・欠測年・選択�
    assert((await page.locator('[data-west-regional-reading]').innerText()).includes('南の上流'));
    assert(await page.evaluate(()=>{const svg=document.querySelector('[data-west-map]'),frame=svg.viewBox.baseVal,bounds=svg.querySelector('[data-basin="1060034260"]').getBBox();return bounds.x>=frame.x&&bounds.y>=frame.y&&bounds.x+bounds.width<=frame.x+frame.width&&bounds.y+bounds.height<=frame.y+frame.height;}),'the selected Nile basin remains fully inside the map frame');
    await shot('nile-basin');
+   await open('nature/?topic=basins&basin=1060034260');
+   assert(await page.evaluate(()=>{const svg=document.querySelector('[data-west-map]'),frame=svg.viewBox.baseVal,bounds=svg.querySelector('[data-basin="1060034260"]').getBBox();return bounds.x>=frame.x&&bounds.y>=frame.y&&bounds.x+bounds.width<=frame.x+frame.width&&bounds.y+bounds.height<=frame.y+frame.height;}),'a direct basin URL fits the full Nile basin');
    await open('agriculture/');
    assert.equal(await page.locator('[data-west-farm-context]').count(),5);
+   assert.equal(await page.locator('[data-west-farm-coverage]').count(),5);
    await page.locator('[data-west-farming-selection] summary').click();
    assert((await page.locator('[data-west-farming-selection]').innerText()).includes('牛乳・鶏肉・鶏卵'));
    await shot('farming-coverage');
+   await page.locator('[data-west-topic-button="wheat"]').first().click();
+   await page.waitForFunction(()=>document.querySelector('[data-west-farm-selected="wheat"]'));
+   assert.equal(await page.locator('[data-west-farm-coverage]').count(),5);
+   await page.locator('.west-reading [data-west-farming-only]').click();
+   await page.waitForFunction(()=>document.querySelectorAll('[data-west-farm-context]').length===1);
+   await page.locator('[data-west-farming-only]').click();
+   await page.waitForFunction(()=>document.querySelectorAll('[data-west-farm-context]').length===5);
+   await shot('wheat-full-context');
    await context.close();
   }
   assert.deepEqual(errors,[]);assert.deepEqual(failures,[]);
