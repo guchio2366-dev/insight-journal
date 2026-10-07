@@ -344,3 +344,20 @@ test('気候の空の都市選択と全体へ操作は雨温図を解除して�
     }
   }finally{await app.w.happyDOM.abort();}
 });
+
+test('a named population city reads its published density cell beside the map without changing the camera',async()=>{
+  const app=await setup('/insight-journal/atlas/europe/population/?layer=density&render=static');
+  try{
+    const full=app.q('[data-eu-static]').getAttribute('viewBox'),choice=app.q('[data-eu-feature-choice]');
+    const paris=app.config.populationCities.find(city=>city.name==='パリ');
+    choice.value=paris.id;choice.dispatchEvent(new app.w.Event('change'));
+    await until(()=>app.q('[data-eu-subject-result]').textContent.endsWith('（2020）'));
+    assert.deepEqual(savedPoint(app),paris.coordinates);
+    const bytes=gunzipSync(await readFile('public/assets/atlas/europe/population-v1/density.bin.gz'));
+    const values=new Float32Array(bytes.buffer,bytes.byteOffset,bytes.byteLength/4),cell=displayCell(values,paris.coordinates,-1);
+    assert.match(app.q('[data-eu-subject-result]').textContent,new RegExp(cell.value.toLocaleString('ja-JP',{maximumFractionDigits:1})+' 人/km²'));
+    assert.ok(app.q('[data-eu-subject-grid]').closest('.eu-read-panel'));
+    assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
+    assert.equal(new URL(app.w.location.href).searchParams.get('feature'),paris.id);
+  }finally{await app.w.happyDOM.abort();}
+});

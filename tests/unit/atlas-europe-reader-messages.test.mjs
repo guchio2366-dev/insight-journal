@@ -8,7 +8,7 @@ const copy = id => europeReaderCopy(europeLayers.find(layer => layer.id === id))
 const statistics = JSON.parse(readFileSync(new URL('../../src/data/atlas/europe/country-statistics.json', import.meta.url)));
 const value = (indicator, country) => statistics.indicators.find(item => item.id === indicator).values[country]['2023'];
 
-test('全主題に1文の要点と短い地理の説明があり、操作説明で置き換えない', () => {
+test('全主題に1文の要点と根拠・地理の説明があり、操作説明で置き換えない', () => {
   for (const layer of europeLayers) {
     const message = europeReaderCopy(layer);
     assert.deepEqual(Object.keys(message).sort(), ['body','note','takeaway','title']);
@@ -16,7 +16,9 @@ test('全主題に1文の要点と短い地理の説明があり、操作説明�
     assert.equal((message.takeaway.match(/。/g) ?? []).length, 1, layer.id);
     assert.ok(message.takeaway.endsWith('。'), layer.id);
     assert.ok(message.takeaway.length <= 100, `${layer.id}: takeaway`);
-    assert.ok(message.body.length <= 200, `${layer.id}: body`);
+    // Preserve the existing methods and limitations beside the added geographic reading.
+    const bodyLimit=['density','precipitation'].includes(layer.id)?500:200;
+    assert.ok(message.body.length <= bodyLimit, `${layer.id}: body`);
     assert.doesNotMatch(message.takeaway + message.body, /押す|選ぶと|切り替え|OFF|ボタン|左上|統計領域/, layer.id);
   }
 });

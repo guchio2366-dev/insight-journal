@@ -136,9 +136,14 @@ export function initEuropeAtlas() {
     query('[data-eu-basin-summary]').textContent=`選択：HYBAS_ID ${selected} · Pfafstetter ${basin.PFAF_ID}。濃い輪郭は表示格子上の区画で、その河川の流域全体とは限りません。`;
     const token=++drainageRequest;
     try {
+      const values=await gridValues(config.layers.find(layer=>layer.id==='drainage')!);
+      if(token!==drainageRequest||state.layer!=='drainage'||state.basin!==selected)return;
+      const representatives=config.readings.filter(item=>item.field==='nature'&&item.layer==='water').filter(item=>{
+        const cell=displayCell(values,item.coordinates,-1),record=cell?.value==null?undefined:europeDrainageBasinByIndex(cell.value);
+        return record?.MAIN_BAS===basin.MAIN_BAS;
+      });
+      if(representatives.length)query('[data-eu-basin-summary]').textContent+=` ${representatives.map(item=>item.name).join('、')}の代表地点と同じMAIN_BASのモデル区画です。代表地点の区画と上流・下流の区画は別に分かれることがあります。`;
       if(drainageDrawn!==selected){
-        const values=await gridValues(config.layers.find(layer=>layer.id==='drainage')!);
-        if(token!==drainageRequest||state.layer!=='drainage'||state.basin!==selected)return;
         const outline=europeDrainageOutline(values,index),canvas=document.createElement('canvas');canvas.width=1800;canvas.height=1502;
         canvas.getContext('2d')!.putImageData(new ImageData(outline.rgba,1800,1502),0,0);
         drainageImage=canvas.toDataURL('image/png');drainageDrawn=selected;
@@ -199,13 +204,13 @@ export function initEuropeAtlas() {
   function selectFeature(id:string) {
     const p=features.find(p=>p.id===id);if(!p)return;
     state.feature=id;
-    if(['terrain','contours','drainage'].includes(state.layer))void showGrid(p.coordinates);
+    if(['terrain','contours','drainage','density'].includes(state.layer))void showGrid(p.coordinates);
     else commit(false);
   }
   function updateReader() {
     const layer=subject(),copy=europeReaderCopy(layer),farm=farmingView();
     // Keep the same live result beside its controls, without duplicating it.
-    if(['terrain','contours'].includes(layer.id))query('.eu-reader-summary').after(gridReading);
+    if(['terrain','contours','density'].includes(layer.id))query('.eu-reader-summary').after(gridReading);
     else if(layer.id==='drainage')query('[data-eu-drainage-controls]').append(gridReading);
     else gridReadingHome.after(gridReading);
     query<HTMLElement>('[data-eu-climate-reader]').hidden=!climateReader();
