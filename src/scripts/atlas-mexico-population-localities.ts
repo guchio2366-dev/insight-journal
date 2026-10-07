@@ -62,7 +62,7 @@ export function initMexicoLocalityPopulation(root:HTMLElement) {
  }
  function scheduleDraw(){if(!active||drawFrame)return;drawFrame=requestAnimationFrame(()=>{drawFrame=0;draw();});}
  function draw(){
-  if(!active||!context)return;
+  if(!active||!context||root.dataset.localityPopulationReady==='error')return;
   const box=canvas.getBoundingClientRect();if(!box.width||!box.height)return;
   const ratio=Math.min(2,window.devicePixelRatio||1);
   canvas.width=Math.round(box.width*ratio);canvas.height=Math.round(box.height*ratio);
