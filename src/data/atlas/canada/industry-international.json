@@ -35,15 +35,15 @@
     },
     {
       "id": "alberta-share",
-      "label": "Albertaからの輸出",
+      "label": "アルバータからの輸出",
       "value": 91,
       "sourceDisplay": "91%",
       "unit": "percent",
       "denominator": "2024年のカナダの原油輸出量（全州・地域）",
-      "definition": "カナダの原油輸出量に占めるAlbertaからの輸出の割合。州の生産量、GDP、積出港の所在地を示す割合ではない。"
+      "definition": "カナダの原油輸出量に占めるアルバータからの輸出の割合。州の生産量、GDP、積出港の所在地を示す割合ではない。"
     }
   ],
-  "reading": "Albertaの原油は、EdmontonやHardistyの集積拠点からパイプラインで米国の精製地域へ送られる。Trans Mountainは太平洋岸の積出港にもつながる。",
+  "reading": "アルバータの原油は、エドモントンやハーディスティの集積拠点からパイプラインで米国の精製地域へ送られる。Trans Mountainは太平洋岸の積出港にもつながる。",
   "readingSource": {
     "publisher": "Canada Energy Regulator",
     "title": "Alberta: Oil and Gas — Trade and Transportation",
@@ -55,7 +55,7 @@
     "sector": "resources",
     "subsector": "oil-gas",
     "province": "Alberta",
-    "label": "Albertaの石油・ガスを地図で読む"
+    "label": "アルバータの石油・ガスを地図で読む"
   },
   "scopeNote": "原油という一品目の輸出指標。下部の国内GDP・雇用構成は2021年で、対象年・単位・分母が異なる。",
   "roundingNote": "米国向け93%はCERの公表値を保持。原文の丸め済み日量3.93÷4.20から比率を再計算していない。"
