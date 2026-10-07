@@ -333,6 +333,7 @@
 
 /* Farming has one region control and a compact main map key; full information remains in details. */
 .russia-workspace .russia-learning[data-field=agriculture] .russia-learning-place { margin-left: 0; font-size: 14px; }
+.russia-workspace .russia-learning[data-field=agriculture] .russia-learning-place select { height: 44px; min-height: 44px; font-size: 14px; }
 .russia-workspace .russia-learning[data-field=agriculture] .russia-region-countries { justify-content: flex-start; }
 .russia-workspace .russia-learning[data-field=agriculture] .russia-learning-map-heading { order: -1; align-items: center; justify-content: flex-start; gap: 10px; margin: 0; padding: 6px 0; min-height: 48px; }
 .russia-workspace .russia-learning[data-field=agriculture] .russia-agriculture-subtabs { position: static; order: -2; width: auto; max-width: none; margin: 0; }
