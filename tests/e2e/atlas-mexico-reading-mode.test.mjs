@@ -110,9 +110,13 @@ for(const field of Object.keys(fields)){
  test(`${field}: actual state selection, Return, reload and browser history preserve reading intent`,async()=>{
   const window=await page(field);let reload;
   try{
+   const initialURL=window.location.href,initialLength=window.history.length;
    await selectState(window,field);
+   const selectedURL=window.location.href;
    window.history.back();await window.happyDOM.waitUntilComplete();assertMode(window,false);
+   if(field==='population'){assert.equal(window.location.href,initialURL,'Restoring the national population entry must preserve its canonical URL');assert.equal(window.history.length,initialLength+1,'Back must preserve the forward state-selection entry');}
    window.history.forward();await window.happyDOM.waitUntilComplete();assertMode(window,true);assert.equal(query(window).get('state'),fields[field].state);
+   if(field==='population')assert.equal(window.location.href,selectedURL,'Forward must restore the saved population selection without rewriting its URL');
    window.document.querySelector(field==='agriculture'?'[data-agri-overview-button]':'[data-mexico-overview-button]').click();await window.happyDOM.waitUntilComplete();assertMode(window,false);assert.equal(query(window).get('state'),field==='population'?null:fields[field].state);
    reload=await page(field,window.location.search,true);assertMode(reload,false);
    await selectState(reload,field);

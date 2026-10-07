@@ -41,7 +41,10 @@ export function initMexicoPopulation(root: HTMLElement) {
     root.dispatchEvent(new CustomEvent('mexico-reading-mode',{detail:{selected}}));
   }
   function normalizedURL() {
-    const next=writeMexicoCompositionSelection(writeMexicoPopulationState(new URL(location.href),state),composition,state.category);
+    // Serialize the locality choice after the state keys every time so a
+    // restored history entry does not need a rewrite for parameter order.
+    const source=new URL(location.href);source.searchParams.delete('populationDetail');
+    const next=writeMexicoCompositionSelection(writeMexicoPopulationState(source,state),composition,state.category);
     if(localityChosen)next.searchParams.set('populationDetail','locality');else next.searchParams.delete('populationDetail');
     next.searchParams.set('reading',readingSelected()?'item':'overview');
     return next;
