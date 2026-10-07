@@ -54,3 +54,11 @@ test('unsupported nature source layers cannot create a misleading comparison',()
  }
  assert.equal(read('?from=nature&sourceLayer=climate&sourcePlace=PAN').source.layer,'climate');
 });
+
+test('combined agriculture overview remains a named comparison source and returns to the overview',()=>{
+ const original={field:'agriculture',layer:'all',place:'all',scope:'all',only:false,fallback:false};
+ const compared=lib.latinComparisonState(original,'nature','climate');
+ const restored=read(lib.writeLatinLearningState(compared),'nature');
+ assert.deepEqual(restored.source,original);
+ assert.equal(new URL(lib.latinSourceReturnUrl('/atlas/latin-america/',restored),'https://example.test').searchParams.get('layer'),'all');
+});
