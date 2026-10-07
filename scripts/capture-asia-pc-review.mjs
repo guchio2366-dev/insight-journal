@@ -377,6 +377,7 @@ async function checkRequestedCorrections(browser,host,profile){
   await expand(page.locator('[data-hydrology-panel] > details').first());
   const id=await basin.locator('option').evaluateAll(options=>options.find(o=>o.value&&!o.disabled).value);await basin.selectOption(id);
   await page.waitForFunction(id=>new URL(location.href).searchParams.get('detail')===id,id);
+  await settle(page);
   const basinURL=page.url(),basinValue=await page.locator('[data-hydrology-value]').textContent(),map=await page.locator('[data-map-surface]').boundingBox();
   const background=mapPixels(await page.screenshot({fullPage:false,animations:'disabled'}),{x:map.x,y:map.y,width:map.width,height:map.height}).backgroundPoint;
   assert(background,'A visible uncovered background pixel is required for the inert-click check');await page.mouse.click(background.x,background.y);assert.equal(page.url(),basinURL,'Empty background must retain the selected basin');
@@ -387,7 +388,7 @@ async function checkRequestedCorrections(browser,host,profile){
  await operation(browser,host,profile,'east-industry-country-pilot',async page=>{
   const checks=await verifyAsiaIndustryCountry(page,{profile,source:host.origin+basePath});
   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-map-fallback]')?.hidden&&document.querySelector('[data-trade-status]')?.textContent==='');
-  await page.evaluate(()=>window.scrollTo(0,0));
+  await settle(page);
   await contextPicture(page,profile,'east-industry-country-pilot','asia');return checks;
  });
 }
