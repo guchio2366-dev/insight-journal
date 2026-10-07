@@ -102,9 +102,12 @@ test('theme descriptions and SVG names identify the displayed learning window',(
 
 test('farming representative positions have positive native source values and persist under product focus without ranking claims',()=>{
  const window=new Window();
+ const country=json('src/data/atlas/russia-countries.json').features.find(feature=>feature.properties.kind==='russia').geometry,polygons=country.type==='Polygon'?[country.coordinates]:country.coordinates;
+ const insideRing=([x,y],ring)=>{let inside=false;for(let i=1;i<ring.length;i++){const a=ring[i-1],b=ring[i];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])inside=!inside;}return inside;};
  for(const place of api.russiaFarmingPlaces){
   const folder=place.product==='wheat'?'russia-crops-v1':'russia-livestock-v1',manifest=json('public/assets/atlas/'+folder+'/manifest.json'),layer=manifest.layers.find(item=>item.id===place.product);
   const [west,south,east,north]=layer.boundsUnwrapped,[lon,lat]=place.coordinates;
+  assert.ok(polygons.some(polygon=>insideRing(place.coordinates,polygon[0])&&!polygon.slice(1).some(ring=>insideRing(place.coordinates,ring))),place.id+' lies inside the saved Russia boundary');
   const column=Math.floor((lon-west)/(east-west)*layer.width),row=Math.floor((north-lat)/(north-south)*layer.height),values=gunzipSync(read('public/assets/atlas/'+folder+'/'+layer.grid));
   assert.ok(values.readFloatLE((row*layer.width+column)*4)>0,place.id+' has a positive saved source cell');assert.equal(manifest.year,2020);
  }

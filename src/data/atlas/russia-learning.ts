@@ -36,7 +36,7 @@ export const russiaRegions=[
 // Representative source-cell positions, not farm locations or national rankings.
 export const russiaFarmingPlaces=[
  {id:'rostov-wheat',product:'wheat',name:'ロストフ付近',coordinates:[40,47],offset:-38},
- {id:'omsk-wheat',product:'wheat',name:'オムスク付近',coordinates:[73,54],offset:28},
+ {id:'omsk-wheat',product:'wheat',name:'オムスク付近',coordinates:[73.4,55],offset:28},
  {id:'ufa-cattle',product:'cattle',name:'ウファ付近',coordinates:[56,54.7],offset:-36},
  {id:'yakutsk-cattle',product:'cattle',name:'ヤクーツク付近',coordinates:[129.7,62],offset:30},
 ] as const;
