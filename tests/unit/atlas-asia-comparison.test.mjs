@@ -51,7 +51,7 @@ for(const [topic,kind,interval] of [['precipitation','rainfall',250],['terrain',
   const map={sources:{},layers:{},getStyle(){return {};},getSource(id){return this.sources[id];},getLayer(id){return this.layers[id];},addSource(id,source){this.sources[id]=source;},addLayer(layer){this.layers[layer.id]=layer;},setLayoutProperty(id,name,value){(this.layers[id].layout??={})[name]=value;},setPaintProperty(){},setFilter(){}};
   await controller.show(map);
   assert.deepEqual(requested,['/asia-presentation-v1/'+kind+'-bands.json.gz']);
-  assert.deepEqual(map.sources['asia-comparison-original'].data,geometry);
+  assert.deepEqual(JSON.parse(JSON.stringify(map.sources['asia-comparison-original'].data)),geometry);
   assert.equal(map.sources['asia-comparison-original'].tolerance,0);
   assert.equal(map.sources['asia-comparison-original-raster'],undefined);
  }finally{await window.happyDOM.close();}
