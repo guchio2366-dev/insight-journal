@@ -40,7 +40,7 @@ const maxRain = rainValues.length ? Math.max(...rainValues) : null;
 const wetMonths = city.months.filter(month => month.precipitation !== null && month.precipitation === maxRain).map(month => `${month.month}月`).join('・');
 const dryMonths = city.months.filter(month => month.precipitation !== null && month.precipitation === minRain).map(month => `${month.month}月`).join('・');
 ---
-<article class="eu-city-reading" data-city-reading={city.id} hidden={city.id !== 'london'} aria-labelledby={`city-reading-${city.id}`}>
+<article class="eu-city-reading" data-city-reading={city.id} hidden aria-labelledby={`city-reading-${city.id}`}>
   <header class="eu-city-reading-head">
     <h3 class="eu-city-reading-title" id={`city-reading-${city.id}`}>{city.name}の気候と農畜産</h3>
     <p class="eu-statistic-note eu-city-chart-meta">{country}{city.id === 'london' && ' · 首都ロンドン'} · {city.period}年の平年値<br />観測所 {station}{city.id === 'london' && '（ヒースロー）'}</p>

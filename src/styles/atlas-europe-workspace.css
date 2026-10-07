@@ -71,6 +71,10 @@
 .eu-drainage-choice label { display:flex; align-items:center; gap:6px; }
 .eu-drainage-choice select,.eu-drainage-choice button { min-height:32px; max-width:100%; font:13px/1.4 var(--sans); color:#173c48; background:#fffdf2; border:1px solid #98aaa4; padding:4px 6px; }
 .eu-drainage-choice p { flex-basis:100%; margin:0; }
+.eu-workspace-root .eu-read-panel .eu-drainage-choice { display:block; margin:0 0 12px; padding:0 0 10px; border-bottom:1px solid #c7cec3; }
+.eu-workspace-root .eu-read-panel .eu-drainage-choice p { font-size:14px; line-height:1.7; }
+.eu-workspace-root .eu-climate-overview p { margin:0 0 12px; font-size:14px; line-height:1.8; }
+.eu-workspace-root .eu-climate-overview .eu-data-note { color:#526561; font-size:13px; }
 .eu-workspace-root .eu-map-caption,.eu-workspace-root .eu-workspace .europe-map-caption { padding:8px; font-size:11px; }
 .eu-workspace-root .eu-legend { border:1px solid #d1d4c8; margin-top:6px; padding:8px; background:#f8f6ed; }
 .eu-workspace-root .eu-grid-value { padding:10px; margin-top:6px; }

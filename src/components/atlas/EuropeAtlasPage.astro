@@ -25,6 +25,7 @@ import mapLabels from '../../data/atlas/europe/map-labels.json';
 import climateWater from '../../data/atlas/europe/climate-water.json';
 
 import { majorClimateCities } from '../../lib/atlas-europe-annotations';
+import { europeReaderCopy } from '../../lib/atlas-europe-reader';
 import '../../styles/atlas-europe.css';
 interface Props { field?: EuropeField }
 const { field = 'nature' } = Astro.props;
@@ -37,6 +38,7 @@ const wheat = withBase('/assets/atlas/europe/wheat-v1/wheat.png');
 const layers = europeLayers.map(l=>({...l,image:l.image?withBase(l.image):undefined,grid:l.grid?withBase(l.grid):undefined,manifest:l.manifest?withBase(l.manifest):undefined}));
 const initialLayer = layers.find(l=>l.id===currentField.initial)!;
 const initialClimateReader = field==='nature';
+const climateOverview = europeReaderCopy(layers.find(l=>l.id==='climate')!);
 const initialFeatures = field==='population'?populationCities:field==='industry'?europeReadings.filter(r=>r.field==='industry'):[];
 const initialPointVisible = (p:{id:string;rank?:number}) => initialFeatures.some(f=>f.id===p.id)&&(p.rank??0)<=1;
 const config = { farmingAreas, geography, climateWater, countries, cities: cities.map(({ id, name, country, coordinates }) => ({ id, name, country, coordinates })), climate, wheat, wheatValues: withBase('/assets/atlas/europe/wheat-v1/values.bin.gz'), initialLayer: currentField.initial, layers, populationCities, readings:europeReadings, statistics };
@@ -91,13 +93,12 @@ const config = { farmingAreas, geography, climateWater, countries, cities: citie
           <span class="eu-selected-point" data-eu-selected-point role="img" aria-label="選択地点" hidden></span>
         </div>
         <div class="eu-map-legend" data-eu-map-legend><p class="eu-water-note">河川・湖の位置、年降水量、流域区画を切り替えます。地下水は公開利用条件が未確認のため未収録です。</p></div>
-        <div class="eu-drainage-choice" data-eu-drainage-controls hidden><label>流域区画（HYBAS_ID）<select data-eu-drainage-choice><option value="">地図から区画を選ぶ</option></select></label><button type="button" data-eu-drainage-clear>選択を解除</button><p data-eu-basin-summary aria-live="polite">色は区画を見分けるための識別色です。量の大小ではありません。</p></div>
         <div class="eu-item-list" data-eu-farming-list hidden={!agriculture} aria-label="農畜産物と林業を選ぶ">
           {(['crop','livestock'] as const).map(kind=><section data-eu-farming-children={kind}><h3>{kind==='crop'?'作物':'畜産'}</h3><div>{farmingAreas.features.filter(f=>f.properties.kind===kind).map(f=><button type="button" data-eu-layer={f.properties.id} aria-pressed="false"><span class:list={['eu-item-swatch',{'is-livestock':kind==='livestock'}]} style={{'--item-color':f.properties.color}}></span>{f.properties.name}</button>)}</div></section>)}
           <section data-eu-farming-children="forest" hidden><h3>林業</h3><button type="button" data-eu-layer="treecover" aria-pressed="false">樹木被覆の分布 · 2021</button><button type="button" data-eu-layer="forest" aria-pressed="false">国別の森林面積比率 · 2023</button></section>
         </div>
         <div class="eu-map-candidates" data-eu-farm-candidates hidden aria-live="polite"></div>
-        <div class="eu-city-choice" data-eu-city-list hidden={!initialClimateReader}><label>雨温図の都市<select data-eu-city-choice>{cities.map(city=><option value={city.id} selected={city.id==='london'}>{city.name}（{countryName(city.country)}）</option>)}</select></label></div>
+        <div class="eu-city-choice" data-eu-city-list hidden={!initialClimateReader}><label>雨温図の都市<select data-eu-city-choice><option value="">都市を選ぶ</option>{cities.map(city=><option value={city.id}>{city.name}（{countryName(city.country)}）</option>)}</select></label></div>
         <div class="eu-item-list" data-eu-feature-list hidden aria-label="地図の地点を選ぶ"><h3>地図の名称から選ぶ</h3><div data-eu-feature-options></div></div>
         <EuropeLayoutControls position="items" {field} />
         <div class="eu-culture-controls-host" data-eu-culture-controls-host hidden></div>
@@ -118,6 +119,7 @@ const config = { farmingAreas, geography, climateWater, countries, cities: citie
         
       </section>
       <aside class="eu-read-panel" aria-labelledby={initialClimateReader?'eu-city-heading':'eu-subject-title'}>
+        <div class="eu-drainage-choice" data-eu-drainage-controls hidden><label hidden>流域区画（HYBAS_ID）<select data-eu-drainage-choice tabindex="-1"><option value="">地図から区画を選ぶ</option></select></label><button type="button" data-eu-drainage-clear hidden tabindex="-1">選択を解除</button><p data-eu-basin-summary aria-live="polite">地図上の流域区画を選ぶと、その範囲と識別番号を表示します。色は区画の識別用で、量の大小ではありません。</p></div>
         <section class="eu-comparison-context" data-eu-comparison-context hidden aria-label="元の分布との比較">
           <h2 data-eu-comparison-heading></h2>
           <a data-eu-comparison-return href={withBase('/atlas/europe/agriculture/')}>元の分布へ戻る</a>
@@ -132,10 +134,16 @@ const config = { farmingAreas, geography, climateWater, countries, cities: citie
         <EuropeSubjectReader layer={initialLayer} />
         <details class="eu-legend eu-climate-primary-key" data-eu-climate-legend hidden={field!=='nature'}><summary>気候分類 · 1991–2020 · 全17区分</summary><div class="eu-legend-grid">{legend.map(l => <div><span class="eu-swatch" style={`background:${l.color}`}></span><strong>{l.code}</strong><span>{l.name}</span></div>)}</div><details class="eu-legend-methods"><summary>対象範囲・出典</summary><p>区分はBeckほかのKöppen–Geiger分類。周辺の北アフリカ・西アジアも同じ色で表示します。掲載画像の元格子は0.05度で、細かな局地気候を表すものではありません。</p><p>カスピ海の水面には気候区分を表示しません。輪郭は<a href={climateWater.source.url}>Natural Earth 5.1.2（1:110m）</a>に基づきます。</p></details></details>
         <div data-eu-climate-reader hidden={!initialClimateReader}>
-        <div class="eu-reader-heading"><h2 id="eu-city-heading">ロンドンの気候と農畜産</h2></div>
+        <div class="eu-reader-heading"><h2 id="eu-city-heading">欧州の気候分布</h2></div>
+        <section class="eu-climate-overview" data-eu-climate-overview aria-label="欧州の気候の概要">
+          <p class="eu-reader-takeaway">{climateOverview.takeaway}</p>
+          <p>{climateOverview.body}</p>
+          <p class="eu-data-note">{climateOverview.note}</p>
+          <p class="eu-data-note">地図は1991–2020年のKöppen–Geiger分類です。都市を選ぶと、1観測所の雨温図、区分の読み方、農畜産との関係を表示します。</p>
+        </section>
         <div class="eu-city-readings">{cities.map(city=><EuropeClimateReading city={city} country={countryName(city.country)} />)}</div>
         <p data-eu-capital-missing hidden>対象国の首都の観測値は未収録です。地図下の都市一覧から、収録済みの観測地点を選べます。</p>
-        <a class="eu-statistics-jump" href="#europe-climate-statistics" data-eu-climate-statistics-link>月別の数値・年間の要約へ ↓</a>
+        <a class="eu-statistics-jump" href="#europe-climate-statistics" data-eu-climate-statistics-link hidden>月別の数値・年間の要約へ ↓</a>
         </div>
       </aside>
     </div>

@@ -576,8 +576,9 @@ export function initEuropeAtlas() {
     all<HTMLElement>('[data-eu-city-select]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.euCitySelect===state.city)));
     query<HTMLSelectElement>('[data-eu-city-choice]').value=state.city;
     const city=cities.find(city=>city.id===state.city);
-    query('#eu-city-heading').textContent=city?`${city.name}の気候と農畜産`:'気候の読み方：観測地点未選択';
-    query<HTMLElement>('[data-eu-capital-missing]').hidden=!!city;
+    query<HTMLElement>('[data-eu-climate-overview]').hidden=!!city;
+    query('#eu-city-heading').textContent=city?`${city.name}の気候と農畜産`:'欧州の気候分布';
+    query<HTMLElement>('[data-eu-capital-missing]').hidden=!!city||!place;
     query('[data-eu-capital-missing]').textContent=`対象国：${place?.name??'未選択'}。首都の観測値は未収録です。地図下の都市一覧から、収録済みの観測地点を選べます。`;
     query<HTMLElement>('[data-eu-climate-statistics-link]').hidden=!city;
     all<SVGElement>('[data-eu-point]').forEach(point => {point.classList.toggle('is-active', active.includes(point.dataset.euPoint!));point.style.display=climateReader()?'':'none';point.removeAttribute('hidden');});
