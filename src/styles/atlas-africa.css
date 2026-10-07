@@ -483,6 +483,7 @@
  .africa-country-controls select[data-year]{width:82px}
  .africa-atlas[data-field=nature] .africa-workspace{grid-template-columns:minmax(0,1fr) 380px;gap:16px}
  .africa-atlas[data-field=agriculture] .africa-workspace{grid-template-columns:minmax(0,1fr) 318px;gap:14px}
+ .africa-atlas[data-field=industry] .africa-workspace{grid-template-columns:minmax(0,1fr) 318px;gap:12px}
  .africa-atlas[data-field=population] .africa-workspace{grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:12px}
  .africa-atlas .africa-map-frame{aspect-ratio:1.65}
  .africa-atlas[data-field=nature][data-topic=water] .africa-map-frame{min-height:500px;aspect-ratio:auto;height:500px}
