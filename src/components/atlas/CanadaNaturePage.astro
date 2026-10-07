@@ -151,6 +151,13 @@ import '../../styles/atlas-canada-country-parity.css';
      <section data-canada-reading="water" hidden>     <div class="canada-water-controls" data-canada-water-controls hidden><label>水系・湖<select data-canada-water><option value="">全体を読む</option>{waterNames.map(name=><option value={name}>{japaneseWater[name]}</option>)}</select></label><label><input type="checkbox" data-canada-only /> <span data-canada-only-label>選んだ川・湖だけを表示</span></label><button data-canada-all-water>すべての水系へ戻す</button><details><summary>水系図の縮尺・範囲</summary><p>川と湖はNatural Earth v5.1.2の1:50m概略形状。国境をまたぐ水系を含みます。国土は残り、製造業の五大湖比較では水域を読みやすくするため観測点を隠します。</p></details></div><h2 data-canada-water-reading-title>湖と川を、海までつないで読む</h2><p class="canada-takeaway" data-canada-water-reading-text>湖や川を選び、内陸から海への出口と位置を確かめます。</p><p class="canada-caption" data-canada-water-reading-scope>線は川、面は湖の概略形状です。流量・水質・地下水・流域境界の地図ではありません。</p><details class="canada-general-reading" data-canada-general-reading><summary>全国の湖・河川と原典を読む</summary><h2>湖と川を、海までつなげて読む</h2>{waterReading.map(r=><section class="canada-reading-section"><h3>{r.title}</h3><p>{r.body}</p></section>)}<p><a href="https://www.naturalearthdata.com/downloads/50m-physical-vectors/">河川・湖の原典</a>。概略図のため小河川は省略されます。線の幅・湖の色は流量・水深・水質ではありません。</p></details></section>
     </aside>
    </div>
+   <details class="canada-climate-context" data-canada-climate-context hidden>
+    <summary>元の農業・人口・産業の分布と気候を比較する</summary>
+    <div class="canada-climate-context-grid">
+     <div data-canada-climate-context-map-slot></div>
+     <div data-canada-climate-context-reading-slot></div>
+    </div>
+   </details>
    </div>
    <details class="canada-source-footer" id="canada-water-sources"><summary>水資源の取得記録・配布データ・利用条件</summary><p>降水はECCC CanGridP mlyV2の1991–2020年360か月から算出した雨・雪の水当量の年平均です。流域はHydroBASINS v1cの地形由来の集水域を上下流関係に沿って結合したものです。国境をまたぐ水系も含めます。地下水は2008年の広域区分と、1993–2025年に地図化されたBC南西部の帯水層事例です。地下水量・取水量・利用可能量は示しません。</p><p><a href={withBase('/assets/atlas/canada-water-v1/manifest.json')}>原典・利用条件・形状検証・加工とハッシュの台帳</a> ／ <a href={withBase('/assets/atlas/canada-water-v1/annual-valid-grid-points.csv.gz')}>年降水量の有効格子CSV（gzip）</a></p><p>全国地下水の原資料で輪郭が交差する7区域は、座標を補正せず輪郭のみ表示します。BCの空白は帯水層がないことを意味しません。日本語名・色と降水量の計算は本サイトによる加工です。Contains information licensed under the Open Government Licence – Canada and the Open Government Licence – British Columbia. 提供機関による本サイトの承認を意味しません。</p></details>
 

@@ -66,3 +66,32 @@ test('Initial HTML exposes the classified climate SVG and all its legends beside
   assert.equal(d.querySelector('[data-canada-climate-card="ottawa"]').querySelectorAll('tbody tr').length,12);
  }finally{await w.happyDOM.close();}
 });
+test('Agriculture comparison URLs keep the climate map and city chart primary through view changes and history while preserving the source GIS',async()=>{
+ const saved='/insight-journal/atlas/north-america/canada/agriculture/?year=2021&province=Saskatchewan&metric=seeded';
+ const search='?city=ottawa&view=climate&crop=canola&cropReturn='+encodeURIComponent(saved);
+ const w=await page(search,true);try{
+  const d=w.document,q=s=>d.querySelector(s),main=q('[data-canada-original-map-column]'),reading=q('[data-canada-original-reading]');
+  const context=q('[data-canada-climate-context]'),source=q('[data-canada-crop-source]'),gis=q('[data-canada-crop-gis]');
+  const assertClimate=()=>{
+   assert.equal(q('[data-canada-natural-layer="climate"]').hidden,false);
+   assert.equal(q('[data-canada-locator]').hidden,true);
+   assert.equal(q('[data-canada-zone-reading]').hidden,false);
+   assert.equal(main.contains(source),false);assert.equal(context.contains(source),true);
+   assert.equal(reading.querySelector('[data-canada-crop-context]'),null);
+   assert.equal(context.hidden,false);assert.equal(context.open,false);
+   assert.equal(q('[data-canada-climate-card="ottawa"]').hidden,false);
+   assert.equal(q('[data-canada-census-region]').options.length,1758);
+   assert.equal(new URL(w.location).searchParams.get('cropReturn'),saved);
+  };
+  assertClimate();
+  const config=q('[data-canada-census-config]').textContent;
+  for(const view of ['water','landform','elevation']){
+   q(`[data-canada-view=${view}]`).click();assert.equal(context.hidden,true);
+   q('[data-canada-view=climate]').click();assertClimate();
+   assert.equal(q('[data-canada-crop-gis]'),gis);assert.equal(q('[data-canada-census-config]').textContent,config);
+  }
+  w.history.replaceState(null,'',search.replace('view=climate','view=water'));w.dispatchEvent(new w.PopStateEvent('popstate'));
+  assert.equal(context.hidden,true);
+  w.history.replaceState(null,'',search);w.dispatchEvent(new w.PopStateEvent('popstate'));assertClimate();
+ }finally{await w.happyDOM.close();}
+});
