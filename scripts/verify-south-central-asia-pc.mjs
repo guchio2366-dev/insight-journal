@@ -67,7 +67,9 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  for(const [region,city] of [['south-asia','new-delhi'],['central-asia','tashkent']]){
   await open(`${region}/nature/`);assert.equal(new URL(page.url()).searchParams.get('place'),null);
   await page.locator('[data-focus-reading]').waitFor({state:'visible'});
-  await page.locator(`.asia-climate-station[data-station="${city}"]`).click();
+  const station=page.locator(`.asia-climate-station[data-station="${city}"]`);
+  assert.equal(await station.evaluate(n=>{const r=n.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('[data-station]')?.getAttribute('data-station');}),city,'A nearby transparent station hit box must not intercept this city');
+  await station.click();
   const chart=page.locator(`[data-city-panel="${city}"] [data-city-statistics]`);await chart.waitFor({state:'visible'});
   await page.waitForFunction(city=>!document.querySelector(`[data-city-panel="${city}"] [data-city-class-name]`).textContent.includes('未取得'),city);
   await page.evaluate(()=>scrollTo(0,0));
