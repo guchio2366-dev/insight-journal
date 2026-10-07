@@ -42,4 +42,10 @@
 .canada-natural-status, .canada-natural-caption, .canada-natural-sources { margin: 3px 0; color: #526765; font: 12px/1.6 var(--sans, sans-serif); }
 .canada-natural-sources summary { cursor: pointer; }
 .canada-natural-layer button:focus-visible, .canada-natural-static-station:focus-visible { outline: 2px solid #173b51; outline-offset: 2px; }
+.canada-nature[data-canada-nature] .canada-natural-layer[data-canada-natural-layer=elevation][data-canada-elevation-bands] .canada-natural-key i,
+.canada-nature[data-canada-nature] .canada-natural-layer[data-canada-natural-layer=elevation][data-canada-elevation-bands] .canada-natural-key [data-canada-natural-legend="500"] i { height: 10px; width: 16px; flex-basis: 16px; opacity: 1; border: 1px solid #64745480; border-radius: 1px; }
+.canada-natural-layer[data-canada-elevation-bands] .canada-natural-area { stroke-width: .25; stroke-opacity: .32; }
+.canada-natural-layer[data-canada-elevation-bands] .canada-natural-shape.is-selected .canada-natural-area { stroke-opacity: 1; }
+.canada-natural-loading { position:absolute; z-index:2; left:14px; top:14px; max-width:calc(100% - 90px); padding:8px 10px; border:1px solid #b7c9be; border-radius:4px; color:#304e42; background:#fffffff5; font:400 14px/1.6 var(--sans); }
+.canada-natural-loading button { display:block; margin-top:6px; padding:6px 10px; border:1px solid #557564; border-radius:4px; background:#fff; color:#304e42; font:600 14px/1.5 var(--sans); }
 @media (max-width: 700px) { .canada-natural-layer .canada-natural-frame { height: clamp(320px, 54dvh, 460px); min-height: 320px; } .canada-natural-key button { min-height: 40px; } .canada-natural-tools button { height: 44px; min-height: 44px; } }

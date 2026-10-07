@@ -1,5 +1,10 @@
 ---
-import census from '../../data/atlas/canada/census-agriculture.json';
+import rawCensus from '../../data/atlas/canada/census-agriculture.json';
+import readings from '../../data/atlas/canada/agriculture-major-reading.json';
+import supplement from '../../data/atlas/canada/agriculture-provincial-supplement.json';
+import {combineCanadaAgricultureSources} from '../../lib/atlas-canada-agriculture-supplement';
+import {canadaAgricultureProducts as products,canadaAgricultureSymbolOffset,canadaAgricultureMarkerPath} from '../../lib/atlas-canada-agriculture-products';
+const census=combineCanadaAgricultureSources(rawCensus,supplement);
 import geography from '../../data/atlas/regional-countries.json';
 import rawGeometry from '../../../public/assets/atlas/canada-census-agriculture-v1/ccs.geojson?raw';
 import {buildCanadaAgricultureOverviewModel,canadaAgricultureOverviewColors as colors,canadaAgricultureOverviewNames as names} from '../../lib/atlas-canada-agriculture-overview';
@@ -9,22 +14,22 @@ import {withBase} from '../../lib/urls';
 import '../../styles/atlas-canada-agriculture-overview.css';
 const context={type:'FeatureCollection',features:geography.features.filter(feature=>['CAN','USA','GRL'].includes(feature.properties.code))} as CanadaCensusCollection;
 const model=buildCanadaAgricultureOverviewModel(census,JSON.parse(rawGeometry),context),ids=model.ids;
-const config={...model,dataUrl:withBase('/assets/atlas/canada-census-agriculture-v1/census-agriculture.json'),geometryUrl:withBase(census.geometry.url)};
+const config={...model,readings,legacyUrls:{canola:withBase('/atlas/north-america/canada/agriculture/?item=canola'),wheat:withBase('/atlas/north-america/canada/agriculture/wheat/'),beef:withBase('/atlas/north-america/canada/agriculture/beef/')},dataUrl:withBase('/assets/atlas/canada-census-agriculture-v1/census-agriculture.json'),geometryUrl:withBase(census.geometry.url),supplementUrl:withBase('/assets/atlas/canada-agriculture-major-v1/provincial-supplement.json')};
 const percent=(group:string,id:string)=>model.summaries.find(item=>item.id===group)!.values[id].nationalShare.toFixed(1);
 const maxima=Object.fromEntries(ids.map(id=>[id,Math.max(...census.provinces.map(p=>p.cells[id].value??0))]));
-const markerPaths={canola:'M4,0A4,4 0 1 1 -4,0A4,4 0 1 1 4,0',wheat:'M-4,-4H4V4H-4Z',hay:'M0,-4L4,4H-4Z',beef:'M0,-4L4,0L0,4L-4,0Z',pasture:'M0,-4L4,-1L2.5,4H-2.5L-4,-1Z'};
+
 const abbreviations:Record<string,string>={'10':'NL','11':'PE','12':'NS','13':'NB','24':'QC','35':'ON','46':'MB','47':'SK','48':'AB','59':'BC','60':'YT','61':'NT','62':'NU'};
 ---
 <div class="canada-agri-overview" data-canada-agri-overview data-canola-country-map>
   <div class="canada-workspace atlas-primary-grid">
-   <section class="map-column canada-map-column atlas-map-column" aria-label="5指標の同時分布">
+   <section class="map-column canada-map-column atlas-map-column" aria-label="主要10品目と飼料・土地利用の同時分布">
     <div class="map-frame atlas-map-frame canada-map-frame" id="canada-agri-map-frame">
-<svg class="overview-fallback" data-overview-fallback viewBox="0 0 900 580" role="img" aria-label="2021年、州別公式値による5指標の概観。詳しい数値は下の表。">
+<svg class="overview-fallback" data-overview-fallback viewBox="0 0 900 580" role="img" aria-label="主要10品目と飼料・土地利用の州別公表値。指標・年・数値は凡例と表に記載。">
 <rect width="900" height="580" fill="#e4eff0"/>
 {context.features.map(feature => <path d={canadaMapPath(feature.geometry)} fill="#efeee5" stroke="#94aaaa" stroke-width=".6"/>)}
-{model.labels.map(label => { const [x,y]=projectCanadaMap(label.labelAnchor); const province=census.provinces.find(p=>p.code===label.id)!; return <g transform={`translate(${x} ${y})`}><title>{label.name}</title>{ids.map((id,index)=>{const cell=province.cells[id];return <g transform={`translate(${(index-2)*12} 8)`}><title>{names[id]}：{cell.status==='not-covered'?'対象外・未収録':cell.status==='quality-f'?'非公表 F':cell.value!.toLocaleString('ja-JP')+' '+census.products[id].unit}</title>{cell.status==='published'?<path d={markerPaths[id]} fill={cell.value!>0?colors[id]:'#fff'} opacity={cell.value!>0?.25+.75*cell.value!/maxima[id]:1} stroke={colors[id]}/>:<path d={cell.status==='quality-f'?'M-3,-3L3,3M-3,3L3,-3':'M-3,0H3'} stroke="#718389" stroke-width="1"/>}</g>;})}<text y="-6" text-anchor="middle" fill="#36535b" font-size="14">{abbreviations[label.id]}</text></g>;})}
+{model.labels.map(label => { const [x,y]=projectCanadaMap(label.labelAnchor); const province=census.provinces.find(p=>p.code===label.id)!; return <g transform={`translate(${x} ${y})`}><title>{label.name}</title>{ids.map((id,index)=>{const cell=province.cells[id];const [dx,dy]=canadaAgricultureSymbolOffset(index,ids.length);return <g transform={`translate(${dx} ${8+dy})`}><title>{names[id]}：{cell.status==='not-covered'?'対象外・未収録':cell.status==='quality-f'?'非公表 F':cell.value!.toLocaleString('ja-JP')+' '+census.products[id].unit}</title>{cell.status==='published'?<path d={canadaAgricultureMarkerPath(products[id].shape)} fill={cell.value!>0?colors[id]:'#fff'} opacity={cell.value!>0?.25+.75*cell.value!/maxima[id]:1} stroke={colors[id]}/>:<path d={cell.status==='quality-f'?'M-3,-3L3,3M-3,3L3,-3':'M-3,0H3'} stroke="#718389" stroke-width="1"/>}</g>;})}<text y="-6" text-anchor="middle" fill="#36535b" font-size="14">{abbreviations[label.id]}</text></g>;})}
 </svg>
-<canvas id="canada-agri-map" role="group" tabindex="0" aria-label="2021年の州別概観とCCSの5指標を読む地図" aria-describedby="canada-agri-map-note canada-agri-map-status">地図と同じ地域別数値を、下の一覧と地域選択から読めます。</canvas>
+<canvas id="canada-agri-map" role="group" tabindex="0" aria-label="主要10品目と飼料・土地利用の州別概観・CCS地図" aria-describedby="canada-agri-map-note canada-agri-map-status">地図と同じ地域別数値を、下の一覧と地域選択から読めます。</canvas>
 <div class="labels" id="canada-agri-labels" aria-hidden="true">
 </div>
 <div class="map-stories" id="canada-agri-map-stories" aria-label="州公表値で確認できる分布の特徴"></div>
@@ -36,25 +41,11 @@ const abbreviations:Record<string,string>={'10':'NL','11':'PE','12':'NS','13':'N
 <button id="canada-agri-reset">全国へ</button>
 <button id="canada-agri-south">南部へ</button>
 </div>
-<span class="map-year">2021年・農業センサス</span>
+<span class="map-year">作物・牛：2021年／豚：2025年版</span>
 </div>
     <div class="key" role="group" aria-label="指標の凡例と強調">
-<button data-metric="" aria-pressed="true">全指標</button>
-<button data-metric="canola" aria-pressed="false">
-<i class="shape canola" style="--color:#b38c16" aria-hidden="true">
-</i>カノーラ ha</button>
-<button data-metric="wheat" aria-pressed="false">
-<i class="shape wheat" style="--color:#287ba0" aria-hidden="true">
-</i>小麦 ha</button>
-<button data-metric="hay" aria-pressed="false">
-<i class="shape hay" style="--color:#387c5b" aria-hidden="true">
-</i>干草 ha</button>
-<button data-metric="beef" aria-pressed="false">
-<i class="shape beef" style="--color:#b35354" aria-hidden="true">
-</i>肉用母牛 頭</button>
-<button data-metric="pasture" aria-pressed="false">
-<i class="shape pasture" style="--color:#79643d" aria-hidden="true">
-</i>放牧地 ha</button>
+<button data-metric="" aria-pressed="true">全分布</button>
+{ids.map(id=><button data-metric={id} aria-pressed="false" title={`${census.products[id].label}：${census.products[id].unitLabel}`}><i class={`shape ${products[id].shape}`} style={`--color:${colors[id]}`} aria-hidden="true"/>{id==='beef'?'肉用母牛':id==='dairy'?'乳牛':names[id]} <small>{id==='pork'?'全国比 %':id==='chicken'?'生産者':census.products[id].unit}</small></button>)}
 <span>
 <i class="quality-symbol" aria-hidden="true">
 </i>公表0</span>
@@ -62,8 +53,10 @@ const abbreviations:Record<string,string>={'10':'NL','11':'PE','12':'NS','13':'N
 <i class="quality-symbol" aria-hidden="true">×</i>非公表F</span>
 <span>
 <i class="quality-symbol" aria-hidden="true">−</i>未収録</span>
-<span class="meaning" id="canada-agri-display-meaning">州別の公表値で分布を概観。記号の大きさは共通で、濃淡は同品目の最大州との比較です。</span>
+<span class="meaning" id="canada-agri-display-meaning">州別の公表値を同時表示。濃淡は同じ指標の最大州との比較です。</span>
 </div>
+    <div id="canada-agri-story-dock"></div>
+    <p class="source-note" data-agri-resolution-note>作物・牛と飼料・土地利用は2021年センサス。鶏は2021年の州別生産者数、豚はAAFC 2025年版の3州の全国頭数比です。豚・鶏のCCS値を配分・推計しません。</p>
     <p id="canada-agri-map-note" class="note">
 <strong>州別値と、農場の本拠地があるCCSの値を縮尺で切り替えます。</strong>記号は統計地域の表示用の目印で、実際の耕地・農場・牛の位置を示しません。CCS境界も耕地の輪郭ではありません。</p>
     <div class="region-controls">
@@ -73,33 +66,38 @@ const abbreviations:Record<string,string>={'10':'NL','11':'PE','12':'NS','13':'N
 </select>
 <button id="canada-agri-clear-region">解除</button>
 </div>
-    <p id="canada-agri-map-status" class="status" aria-live="polite">5指標の州別公式値を概観しています。地域未選択。</p>
+    <p id="canada-agri-map-status" class="status" aria-live="polite">主要10品目と飼料・土地利用の州別公式値を概観しています。地域未選択。</p>
 <nav class="canada-crop-tabs" aria-label="品目別の原図と解説"><a data-canola-select-item="canola" href={withBase('/atlas/north-america/canada/agriculture/?item=canola')}>カノーラの解説</a><a href={withBase('/atlas/north-america/canada/agriculture/wheat/')}>小麦の解説</a><a href={withBase('/atlas/north-america/canada/agriculture/beef/')}>肉牛・放牧と飼料</a></nav>
    </section>
    <aside class="reading canada-reading atlas-national" data-canola-overview-reading aria-label="分布と数値の読み方">
-<p class="eyebrow" id="canada-agri-reading-eyebrow">2021年・州別公表値</p>
-<h2 id="canada-agri-reading-title">プレーリーと東部を読む</h2>
+<p class="eyebrow" id="canada-agri-reading-eyebrow">主要品目の産地と用途</p>
+<h2 id="canada-agri-reading-title">穀物・飼料と畜産を重ねて読む</h2>
 <div id="canada-agri-distribution-overview">
+<p class="key-sentence"><strong>西部の穀物・豆類、東部の飼料と畜産、東西の加工向けばれいしょを比べると、産地と市場のつながりが見えます。</strong></p>
+<section class="distribution-section"><h3>プレーリー：穀物・豆と肉牛</h3><p>プレーリー3州はカノーラ面積の{percent('prairie','canola')}％、小麦面積の{percent('prairie','wheat')}％を占めます。冷涼な季節に育つ作物でも、成熟までの期間、水分・排水、輪作を合わせる管理が必要です。内陸の収穫物は加工と鉄道・港を通じて市場につながります。</p><button data-agri-reading-product="canola">カノーラを読む</button> <button data-agri-reading-product="lentils">レンズ豆を読む</button></section>
+<section class="distribution-section"><h3>東部：とうもろこし・大豆と酪農</h3><p>オンタリオ・ケベックには、とうもろこし面積の{percent('east','corn')}％、乳牛頭数の{percent('east','dairy')}％があります。茎葉も利用するサイレージは牛の飼料になり、作物と畜産の分布を重ねると農業の組合せを読めます。</p><button data-agri-reading-product="corn">とうもろこしを読む</button> <button data-agri-reading-product="dairy">酪農を読む</button></section>
+<section class="distribution-section"><h3>ばれいしょ：産地と加工工場</h3><p>プリンスエドワード島などの大西洋岸と、マニトバ・アルバータに産地が分かれます。作付け前の契約、貯蔵、産地近くの加工工場が、フライドポテトなどの海外供給を支えます。</p><button data-agri-reading-product="potatoes">ばれいしょを読む</button></section>
+<details><summary>穀物・草地と肉牛の分布</summary>
 <section class="distribution-section"><h3>プレーリーの穀物・カノーラ</h3><p>アルバータ・サスカチュワン・マニトバに、カノーラ面積の<strong>{percent('prairie','canola')}％</strong>、小麦面積の<strong>{percent('prairie','wheat')}％</strong>が集まります。</p></section>
 <section class="distribution-section"><h3>西部の母牛・放牧地</h3><p>アルバータ・サスカチュワンで、肉用母牛頭数の<strong>{percent('west','beef')}％</strong>、放牧地面積の<strong>{percent('west','pasture')}％</strong>を占めます。</p></section>
-<section class="distribution-section"><h3>東部にも干草が広がる</h3><p>オンタリオ・ケベックには、干草・栽培牧草面積の<strong>{percent('east','hay')}％</strong>、小麦面積の<strong>{percent('east','wheat')}％</strong>があります。干草は東部だけの指標ではなく、西部にも広く分布します。</p></section>
+<section class="distribution-section"><h3>東部にも干草が広がる</h3><p>オンタリオ・ケベックには、干草・栽培牧草面積の<strong>{percent('east','hay')}％</strong>、小麦面積の<strong>{percent('east','wheat')}％</strong>があります。干草は東部だけの指標ではなく、西部にも広く分布します。</p></section></details>
 </div>
 <p id="canada-agri-reading-intro" class="source-note">割合は同じ指標の全国公表値に対する比です。面積と頭数の量を相互比較しません。</p>
 <p id="canada-agri-selection-reading" class="source-note" hidden></p>
-<details><summary>概観とCCS表示の違い</summary><p class="source-note">概観は公式の州・準州公表値です。CCSを足して公式州値に置き換えません。拡大時は画面を約56pxのセルに分け、重なるCCS記号の表示を束ねます。数字はCCS地域数で、農場数ではありません。色記号はそのセルに公表正値がある指標を示します。記号右上の小点は、同じ束に非公表・未収録の地域もあることを示します。</p><p class="source-note">元の1,757 CCSの値・品質・成分は残しています。セルで新しい面積・頭数を推計しません。公表0・非公表F・未収録は地域選択と下の表で区別します。</p></details>
+<details><summary>概観とCCS表示の違い</summary><p class="source-note">概観は公式の州・準州公表値です。CCSを足して公式州値に置き換えません。豚・鶏は拡大後も州単位の記号です。作物・牛と補助指標は、拡大時に画面を約56pxのセルに分け、重なるCCS記号の表示を束ねます。数字はCCS地域数で、農場数ではありません。色記号はそのセルに公表正値がある指標を示します。記号右上の小点は、同じ束に非公表・未収録の地域もあることを示します。</p><p class="source-note">元の1,757 CCSの値・品質・成分は残しています。セルで新しい面積・頭数を推計しません。公表0・非公表F・未収録は地域選択と下の表で区別します。</p></details>
 <details class="overview-original-reading"><summary>農畜産・林業の解説へ</summary><p>プレーリーの作物・草地と森林の広がりを、栽培・家畜・加工へつなげて読む。</p><p>農畜産は作物の生育、放牧と冬の飼料を、林業は森林被覆と木材の加工活動を分けて比べます。自然条件に加え、管理・輸送・用途を確かめます。</p><p><a data-canola-select-item="canola" href={withBase('/atlas/north-america/canada/agriculture/?item=canola')}>カノーラ：プレーリーの面積と油の加工</a><br/><a href={withBase('/atlas/north-america/canada/agriculture/wheat/')}>小麦：生育期間・用途と輸送</a><br/><a href={withBase('/atlas/north-america/canada/agriculture/beef/')}>肉牛：放牧地と冬の飼料</a><br/><a href={withBase('/atlas/north-america/canada/agriculture/forestry/')}>林業：森林被覆と木材・紙製品の加工</a></p><p class="canada-caption">各項目の資料年・単位は異なります。未収集の品目をゼロとして表示しません。</p></details></aside>
   </div>
 <section class="statistics" id="canada-agri-statistics" aria-label="補助統計">
-<details id="canada-agri-statistics-detail"><summary>補助統計：全国・選択CCSの5指標と品質</summary>
+<details id="canada-agri-statistics-detail"><summary>補助統計：全国・選択CCSの主要10品目・補助指標と品質</summary>
 <table>
-<caption id="canada-agri-table-caption">全国の公表値（準州を含まない）</caption>
+<caption id="canada-agri-table-caption">全国の公表値（各指標の年・対象範囲は定義欄）</caption>
 <thead>
 <tr>
 <th scope="col">指標</th>
-<th scope="col">申告値</th>
+<th scope="col">公表値</th>
 </tr>
 </thead>
-<tbody id="canada-agri-values">{ids.map(id=><tr data-value={id}><th scope="row">{names[id]}</th><td>{census.products[id].national.value.toLocaleString('ja-JP')} {census.products[id].unit}</td></tr>)}</tbody>
+<tbody id="canada-agri-values">{ids.map(id=><tr data-value={id}><th scope="row">{id==='beef'?'肉用母牛':id==='dairy'?'乳牛':id==='chicken'?'鶏肉生産者':names[id]}</th><td>{census.products[id].national.value.toLocaleString('ja-JP')} {census.products[id].national.unit??census.products[id].unit}</td></tr>)}</tbody>
 </table>
 <p class="source-note" id="canada-agri-quality-note">全国値は原表の公表値です。地域値を足して全国値に置き換えません。</p>
 <details>
@@ -109,7 +107,7 @@ const abbreviations:Record<string,string>={'10':'NL','11':'PE','12':'NS','13':'N
 <p class="source-note">ゼロは白抜き、Fは×、対象外・未収録は−の小記号です。Fは品質上の理由による非公表です。選択や拡大をしても他の指標を残します。</p>
 </details>
 <details>
-<summary>5指標の定義・原表・成分の品質</summary>
+<summary>主要10品目と飼料・土地利用の定義・原表・成分の品質</summary>
 <div id="canada-agri-definitions">
 </div>
 <div id="canada-agri-components">
@@ -122,27 +120,23 @@ const abbreviations:Record<string,string>={'10':'NL','11':'PE','12':'NS','13':'N
 </details>
 </details>
 </section>
-  <details class="list" aria-label="地域別5指標一覧"><summary>地域一覧：全1,757 CCSの5指標を読む</summary>
+  <details class="list" aria-label="CCS別公表値一覧"><summary>地域一覧：全1,757 CCSの公表値・品質</summary>
 <div class="list-title">
-<h2>地域一覧：5指標を並べる</h2>
+<h2>地域一覧：CCS指標を並べる</h2>
 <label>
 <input id="canada-agri-search" type="search" placeholder="地域名・CCSコード・州名" aria-label="地域名・CCSコード・州名で探す">
 </label>
 </div>
-<table>
+<div class="agri-table-scroll" tabindex="0" aria-label="全指標の地域表を横スクロール"><table>
 <thead>
 <tr>
 <th scope="col">地域名・州</th>
-<th scope="col">カノーラ ha</th>
-<th scope="col">小麦 ha</th>
-<th scope="col">干草 ha</th>
-<th scope="col">肉用母牛 頭</th>
-<th scope="col">放牧地 ha</th>
+{ids.filter(id=>census.products[id].resolution==='ccs').map(id=><th scope="col">{id==='beef'?'肉用母牛':id==='dairy'?'乳牛':names[id]}<small>{census.products[id].unit}</small></th>)}
 </tr>
 </thead>
 <tbody id="canada-agri-rows">
 </tbody>
-</table>
+</table></div>
 <div class="pager">
 <button id="canada-agri-previous">前へ</button>
 <span id="canada-agri-page-status">
@@ -150,9 +144,9 @@ const abbreviations:Record<string,string>={'10':'NL','11':'PE','12':'NS','13':'N
 <button id="canada-agri-next">次へ</button>
 </div>
 </details>
-  <div class="page-source" id="canada-agri-page-source">出典：<a href={census.source.url}>Statistics Canada, Census of Agriculture, 2021</a>。面積はha、肉用母牛は頭数。</div>
+  <div class="page-source" id="canada-agri-page-source">出典：<a href={census.source.url}>Statistics Canada, Census of Agriculture, 2021</a>。作物・牛は2021年センサス。豚と鶏は<a href={supplement.products.pork.sourceTableUrl}>AAFCの豚在庫比率</a>・<a href={supplement.products.chicken.sourceTableUrl}>2021年の鶏肉生産者数</a>。</div>
 
-<p class="overview-scope">表示範囲：既存の5指標による分布の概観です。個々の作付域、主要品目全体、貿易統計の完成を示すものではありません。</p>
+<details class="overview-scope"><summary>主要10品目の採用根拠と次点</summary><p>販売規模、国際供給、産地の特徴を合わせた主要な食料・飼料品目の選定です。面積・頭数・輸出額を混ぜた数量順位ではありません。放牧地は品目に数えず、干草とともに補助表示に残します。</p><p>カノーラ・小麦・肉牛・酪農・豚・鶏肉・大豆・とうもろこしは、AAFCの2019–2023年平均現金収入の上位群。ばれいしょは2024年の収入と加工品を含む輸出、レンズ豆は国際供給とサスカチュワンへの集中を重視しました。</p><p>次点はえんどう、続いて大麦・干草・えん麦・亜麻。えんどうの2024/25年度輸出量はレンズ豆より多く、レンズ豆を輸出量順位で選んだわけではありません。野菜全体など複数品目の合計や大麻を含む公式収入順位とは範囲が異なります。</p><p><a href="https://agriculture.canada.ca/en/department/transparency/briefing-documents/aafc-transition-books/overview-agriculture-and-agri-food-sector-deputy-minister-transition-book-2024-aafc">AAFCの収入構成</a> ／ <a href="https://agriculture.canada.ca/en/sector/horticulture/reports/potato-market-information-review-2024-2025">ばれいしょの市場統計</a> ／ <a href="https://agriculture.canada.ca/en/sector/crops/reports-statistics/canada-outlook-principal-field-crops-2026-09-25">豆類の供給・輸出</a></p></details>
 <noscript><p>拡大・地域選択・地域一覧の操作にはJavaScriptが必要です。州別概観と全国値、品目別の原図・解説はこのまま読めます。<a href={config.dataUrl}>全地域の元データ</a>から値・品質・成分を確認できます。</p></noscript>
 <script type="application/json" data-canada-agri-overview-config set:html={JSON.stringify(config).replace(/</g,'\\u003c')} />
 </div>
