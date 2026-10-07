@@ -465,7 +465,7 @@ export function initEuropeAtlas() {
       const swatch=(color:string,label:string)=>{const d=document.createElement('div'),s=document.createElement('span'),t=document.createElement('span');s.className='eu-swatch';s.style.background=color;t.textContent=label;d.append(s,t);key.append(d);};
       labels.forEach((label,i)=>swatch(layer.colors![i],label));
       if(layer.field==='industry'&&layer.indicator)swatch('#edece5','4か国の統計比較対象外 · 拠点・地域特色で読む');
-      if(layer.indicator||layer.grid)swatch(layer.indicator?'#d9dcda':'repeating-linear-gradient(45deg,#fff,#fff 3px,#ccd3cc 3px,#ccd3cc 4px)','データなし');
+      if(layer.indicator||layer.grid)swatch(layer.indicator?'#d9dcda':'repeating-linear-gradient(45deg,#fff,#fff 3px,#ccd3cc 3px,#ccd3cc 4px)',layer.id==='precipitation'?'欠測・補間範囲外':'データなし');
     }
     query('[data-eu-layer-note]').textContent=layer.note+(layer.field==='industry'&&layer.indicator?' 色で比べる全国統計はドイツ・イギリス・フランス・イタリアの4か国です。その他の国は拠点と地域特色で読みます。':'');
     const credit=query<HTMLElement>('[data-eu-layer-attribution]');credit.hidden=!layer.attribution;credit.textContent=layer.attribution??'';
