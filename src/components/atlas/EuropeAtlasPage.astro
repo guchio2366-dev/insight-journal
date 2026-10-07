@@ -79,7 +79,7 @@ const config = { industryOverviews, farmingAreas, geography, climateWater, count
             <g class="eu-farming-selection">
               {farmingAreas.features.map(f=><g><path d={viewPath(f.geometry as any)} data-eu-farm-outline={f.properties.id} fill="none" stroke="#fffdf2" stroke-width="5" vector-effect="non-scaling-stroke" style="display:none"/><path d={viewPath(f.geometry as any)} data-eu-farm-outline={f.properties.id} fill="none" stroke="#173c48" stroke-width="2.5" vector-effect="non-scaling-stroke" style="display:none"/></g>)}
             </g>
-            {geography.features.map(f => <path d={viewPath(f.geometry)} class:list={['eu-outline', { 'eu-context': f.properties.kind === 'context' }]} data-eu-shape={f.properties.kind === 'europe' ? f.properties.code : undefined}><title>{countryName(f.properties.code)}</title></path>)}
+            {geography.features.map(f => <path d={viewPath(f.geometry)} class:list={['eu-outline', { 'eu-context': f.properties.kind === 'context' }]} data-eu-shape={f.properties.kind === 'europe' ? f.properties.code : undefined} />)}
             <g data-eu-climate-water style={initialClimateReader?'':'display:none'}>
               {climateWater.features.map(f=><path d={viewPath(f.geometry)} data-eu-water-mask={f.properties.id} fill="#e7eff1" fill-rule="evenodd" stroke="#8ca6aa" stroke-width="0.7" vector-effect="non-scaling-stroke"><title>{f.properties.name}の水面</title></path>)}
             </g>
