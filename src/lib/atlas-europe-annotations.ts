@@ -7,7 +7,7 @@ export const majorClimateCities = ['london','paris','berlin','warsaw','kyiv','mo
 const compactCities = ['london','paris','moscow','madrid','rome','athens','reykjavik','helsinki'];
 type Place = { id:string; name:string; coordinates:number[] };
 type Annotation = Place & { kind:'city'|'feature'|'crop'; button:HTMLButtonElement; line:SVGLineElement; dot:SVGCircleElement };
-type View = { climate:boolean; crops:boolean; detailed:boolean; city:string; feature?:string; places:Place[]; farmingIds?:string[]; selectedFarming?:string };
+type View = { climate:boolean; crops:boolean; detailed:boolean; city:string; feature?:string; places:Place[]; farmingIds?:string[]; selectedFarming?:string; emphasizedFeatures?:string[] };
 
 /** One screen-space annotation layer is shared by MapLibre and the SVG fallback. */
 export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], features:Place[], getView:()=>View, project:(coordinate:number[])=>Point, select:(kind:'city'|'feature'|'crop', id:string)=>void, farmingItems:FarmingItem[] = []) {
@@ -59,6 +59,8 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
       item.button.hidden=!isVisible;item.line.style.display=item.dot.style.display=isVisible?'':'none';
       item.button.setAttribute('aria-pressed',String(selected(item)));
       item.dot.classList.toggle('is-active',selected(item));
+      const emphasized=item.kind==='feature'&&(view.emphasizedFeatures??[]).includes(item.id);
+      item.button.classList.toggle('is-emphasized',emphasized);item.dot.classList.toggle('is-emphasized',emphasized);
     }
     const stageRect=stage.getBoundingClientRect();
     const obstacles=[...stage.querySelectorAll<HTMLElement>('.eu-map-buttons,.eu-topic-map:not([hidden])')].map(el=>{
