@@ -161,12 +161,7 @@
  .russia-workspace .atlas-news{position:sticky;top:10px;width:auto;height:calc(100dvh - 82px);min-height:0}
  .russia-workspace :is(.atlas-news-header,.atlas-news-list,.atlas-news-reader){padding-inline:12px}
  .russia-workspace .russia-learning-normal{grid-template-columns:minmax(0,1.65fr) minmax(280px,1fr);gap:12px}
- .russia-workspace .russia-learning[data-field=nature] .russia-learning-normal{grid-template-columns:minmax(0,1fr) 380px;gap:16px}
- .russia-workspace .russia-learning[data-field=agriculture] .russia-learning-normal{grid-template-columns:minmax(0,1fr) 318px;gap:14px}
- .russia-workspace .russia-learning[data-field=industry] .russia-learning-normal{grid-template-columns:minmax(0,1fr) 318px;gap:12px}
- .russia-workspace .russia-learning-scene{aspect-ratio:1.65;min-height:0;max-height:none}
- .russia-workspace .russia-learning[data-field=industry] .russia-learning-scene{height:clamp(320px,calc(100dvh - 350px),430px);aspect-ratio:auto}
- .russia-workspace .russia-learning[data-field=population] .russia-learning-scene{min-height:350px}
+ .russia-workspace .russia-learning-scene{height:auto;aspect-ratio:1.55;min-height:300px;max-height:640px}
 }
 @media(max-width:959px){.russia-workspace{padding:10px 12px 24px}.russia-desktop-shell{display:flex;flex-direction:column;gap:12px}.russia-workspace .atlas-news{position:relative;top:auto;height:240px;width:100%}.russia-workspace .russia-learning-normal{grid-template-columns:1fr}.russia-workspace .russia-learning-reading{max-height:none}.russia-reading-scroll{max-height:360px}.russia-workspace .russia-learning-scene{aspect-ratio:1.65;min-height:0}.russia-workspace .russia-learning-heading{flex-wrap:wrap}.russia-workspace .russia-learning-fields{grid-template-columns:repeat(5,minmax(0,1fr))}.russia-workspace .russia-learning-fields a{font-size:12px;padding:6px 3px}.russia-overview-entries{grid-template-columns:1fr}}
 /* Match the US compact heading, region rows, bands and map positions. */
@@ -232,8 +227,7 @@
  .russia-workspace .russia-learning[data-field=regional-overview] .russia-learning-scene{height:600px;min-height:0;aspect-ratio:auto}
 }
 @media(max-width:959px){.russia-workspace .russia-learning-heading{height:auto;min-height:21px;margin:5px 0 8px}.russia-region-tabs{flex-wrap:wrap}.russia-region-countries{height:auto;flex-wrap:wrap}.russia-workspace .russia-learning-place{margin:0}.russia-workspace .russia-learning[data-field=regional-overview] .russia-learning-normal{grid-template-columns:1fr}.russia-workspace .russia-learning[data-field=regional-overview] .russia-learning-scene{height:auto;aspect-ratio:1.65}.russia-workspace .russia-learning[data-field=population] .russia-learning-legend{grid-template-columns:repeat(2,minmax(0,1fr))}.russia-subcontrols{height:auto!important}.russia-header-scope{display:none}}
-/* US all-industries height after its runtime selects subsector=all. */
-@media(min-width:1200px){.russia-workspace .russia-learning[data-field=industry] [data-normal-view] [data-primary-map]{height:620px;min-height:620px;max-height:none;aspect-ratio:auto}}
+
 /* Keep the key message fixed while the detail body scrolls inside the viewport. */
 .russia-workspace .russia-learning-reading{max-height:calc(100dvh - var(--russia-reader-top,239px) - 20px)}
 .russia-workspace .russia-learning[data-field=nature]{--russia-reader-top:298px}
@@ -244,7 +238,7 @@
 @media(max-width:959px){.russia-workspace .russia-learning-reading{max-height:none}}
 
 /* Keep every map colour and boundary visible beside the fixed learning message. */
-.russia-legend-spacer{visibility:hidden;pointer-events:none;user-select:none}
+.russia-legend-spacer{display:none}
 .russia-workspace:not([data-russia-overview=true]) .russia-key-legend{flex:none;order:0;padding:4px 12px;border-top:1px solid #deded5;background:#fffefa}
 .russia-key-legend>p{font-size:13px;line-height:18px;margin:0 0 2px}
 .russia-workspace:not([data-russia-overview=true]) .russia-key-legend [data-primary-legend]{grid-template-columns:repeat(2,minmax(0,1fr));font-size:13px;line-height:18px;column-gap:10px;row-gap:1px;padding:0;order:0;flex:none}

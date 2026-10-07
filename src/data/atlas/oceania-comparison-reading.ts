@@ -1,3 +1,4 @@
+import {oceaniaIndustryReadingThemes} from './oceania-industry-reading';
 import type {OceaniaSource, OceaniaState} from './oceania-learning';
 import {getOceaniaTheme} from './oceania-learning';
 
@@ -166,6 +167,7 @@ export function getOceaniaComparisonReading(state: OceaniaState): OceaniaCompari
       sources: [islandTransport], supportNotes: ['局地気候データの未分類を人口ゼロや特定の気候区分に置き換えない。'],
     };
   }
+  if (state.layer==='industry-all'||state.compareLayer==='industry-all') return {message:'丸は豪州の鉱種別の稼働鉱山、ひし形は港・加工・サービスの代表地点です。同じ範囲の分布と位置関係を比べます。記号の数や大きさから生産量や埋蔵量を推定せず、鉱山は豪州のみ、代表地点は全数調査ではないという収録範囲を保って読みます。',sources:[mineralMap,...oceaniaIndustryReadingThemes.flatMap(item=>item.sources)],supportNotes:['異なる資料の代表点を数量分布として合算しない。']};
   if (isPair(state, 'mines', 'density')) {
     if (country === 'AUS' || (country === 'all' && (!visibleCountries || visibleCountries.includes('AUS')))) return oceaniaComparisonReadings.minesDensity;
     return {
