@@ -54,6 +54,8 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  await screenshot('india-bengaluru-services');record('India services preserves Karnataka totals separately from Bengaluru software and commodity trade');
 
  await open('central-asia/industry/');assert.deepEqual(await scope(),[]);
+ assert.equal(await page.locator('[data-industry-feature="in-manufacturing"]').isVisible(),false);
+ assert.equal(await page.locator('[data-industry-topic] option[value="in-services"]').count(),0);
  const centralStories=await page.locator('[data-place-story] option').evaluateAll(nodes=>nodes.map(n=>n.value));
  assert(centralStories.includes('uzbekistan-market'));assert(!centralStories.includes('gujarat-manufacturing'));
  await story('uzbekistan-market');assert.match(await page.locator('[data-place-story-scope]').textContent(),/対象はインド.*地域的特徴/s);
@@ -65,7 +67,7 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  for(const [region,city] of [['south-asia','new-delhi'],['central-asia','tashkent']]){
   await open(`${region}/nature/`);assert.equal(new URL(page.url()).searchParams.get('place'),null);
   await page.locator('[data-focus-reading]').waitFor({state:'visible'});
-  await page.locator(`[data-map-city="${city}"]`).click();
+  await page.locator(`.asia-climate-station[data-station="${city}"]`).click();
   const chart=page.locator(`[data-city-panel="${city}"] [data-city-statistics]`);await chart.waitFor({state:'visible'});
   await page.waitForFunction(city=>!document.querySelector(`[data-city-panel="${city}"] [data-city-class-name]`).textContent.includes('未取得'),city);
   await page.evaluate(()=>scrollTo(0,0));
