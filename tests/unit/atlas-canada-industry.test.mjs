@@ -88,10 +88,10 @@ test('Industry return strips unrelated outer and nested routes while retaining a
  assert.equal(new URLSearchParams(target.searchParams.get('populationReturn')).has('populationReturn'),false);
 });
 
-test('Industry return normalizes an unknown source CMA with the existing population defaults',()=>{
+test('Industry return keeps an unknown source CMA unselected instead of inventing a city',()=>{
  const populationIds=['535','462','505','933'],source=new URL('https://example.com/insight-journal/atlas/north-america/canada/industry/');
  source.searchParams.set('populationReturn',new URLSearchParams({year:'2035',cma:'unknown',compare:'462',metric:'density',only:'true',zoom:'unknown',populationReturn:'cma=933',returnTo:'https://outside.example/'}).toString());
  const target=lib.canadaIndustryReturnUrl(source,{year:2025,province:'Ontario',compare:null,metric:'services',only:false,zoom:false},populationIds);
- assert.deepEqual(Object.fromEntries(new URLSearchParams(target.searchParams.get('populationReturn'))),{year:'2021',cma:'535',metric:'density',zoom:'south',compare:'462'});
+ assert.deepEqual(Object.fromEntries(new URLSearchParams(target.searchParams.get('populationReturn'))),{year:'2021',metric:'density',zoom:'south'});
  assert.deepEqual(new Set(target.searchParams.keys()),new Set(['year','province','metric','populationReturn']));
 });

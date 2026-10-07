@@ -1,4 +1,4 @@
-import {readCanadaPopulationState,writeCanadaPopulationState,canadaPopulationFrame,formatCanadaPopulationValue,canadaPopulationDensityColor,populationDensityColors} from '../lib/atlas-canada-population';
+import {readCanadaPopulationState,writeCanadaPopulationState,copyCanadaPopulationMapState,canadaPopulationFrame,formatCanadaPopulationValue,canadaPopulationDensityColor,populationDensityColors} from '../lib/atlas-canada-population';
 import {formatCanadaIndustryValue,type CanadaIndustryState} from '../lib/atlas-canada-industry';
 import {isCanadaDemographicTopic} from '../lib/atlas-canada-demographics';
 
@@ -7,7 +7,7 @@ export function renderPopulationIndustryComparison(root:HTMLElement,config:any,i
  const requested=new URL(location.href).searchParams.get('populationReturn'),raw=requested&&!isCanadaDemographicTopic(new URL('?'+requested,location.href).searchParams.get('topic'))?requested:null,context=root.querySelector<HTMLElement>('[data-canada-population-industry-context]'),back=root.querySelector<HTMLAnchorElement>('[data-canada-population-industry-return]');
  if(!context||!back)return false;context.hidden=back.hidden=!raw;if(!raw)return false;
  const data=config.population,state=readCanadaPopulationState(new URL('?'+raw,location.href),data.cmas.map((r:any)=>r.id)),selected=[state.cma,state.compare].filter(Boolean),records=data.cmas.filter((r:any)=>selected.includes(r.id)),map=root.querySelector<SVGSVGElement>('[data-canada-population-industry-map]')!;
- const target=writeCanadaPopulationState(new URL(back.getAttribute('href')!,location.href),state);back.href=target.href;back.textContent=`${records.map((r:any)=>r.name.split('（')[0]).join('・')}の${state.year}年${state.metric==='density'?'人口密度':'人口'}比較へ戻る`;
+ const target=copyCanadaPopulationMapState(new URL('?'+raw,location.href),writeCanadaPopulationState(new URL(back.getAttribute('href')!,location.href),state));back.href=target.href;back.textContent=`${records.map((r:any)=>r.name.split('（')[0]).join('・')||'全国の都市圏分布'}の${state.year}年${state.metric==='density'?'人口密度':'人口'}比較へ戻る`;
  const metric=config.metrics.find((m:any)=>m.id===industry.metric),province=config.data.find((r:any)=>r.id===industry.province&&r.year===industry.year),other=config.data.find((r:any)=>r.id===industry.compare&&r.year===industry.year),cell=(r:any)=>`${r.name} ${formatCanadaIndustryValue(r.values[industry.metric].value)}%`;
  const populationValues=records.map((r:any)=>{const v=state.metric==='density'?r.density2021:r.population[state.year];return `${r.name.split('（')[0]} ${formatCanadaPopulationValue(v.value,state.metric)}${state.metric==='density'?'人/km²':'人'}${v.symbol?' '+v.symbol:''}`;}).join(' / ');
  const omitted=records.flatMap((r:any)=>(data.geometry.find((g:any)=>g.id===r.id)?.provinceCodes??[]).map((code:string)=>config.provinces.find((p:any)=>p.code===code)).filter((p:any)=>p&&![industry.province,industry.compare].includes(p.id)).map((p:any)=>`${r.name.split('（')[0]}の${p.name}`));

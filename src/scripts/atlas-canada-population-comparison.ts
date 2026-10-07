@@ -1,5 +1,5 @@
 import {projectCanadaComparison,canadaLegacyFrame} from '../lib/atlas-canada-map-presentation';
-import {readCanadaPopulationState,writeCanadaPopulationState,formatCanadaPopulationValue,canadaPopulationDensityColor,canadaPopulationFrame,populationDensityColors} from '../lib/atlas-canada-population';
+import {readCanadaPopulationState,writeCanadaPopulationState,copyCanadaPopulationMapState,formatCanadaPopulationValue,canadaPopulationDensityColor,canadaPopulationFrame,populationDensityColors} from '../lib/atlas-canada-population';
 import type {CanadaNatureState} from '../lib/atlas-canada-nature';
 import {isCanadaDemographicTopic} from '../lib/atlas-canada-demographics';
 
@@ -9,9 +9,9 @@ export function renderPopulationNatureComparison(root:HTMLElement,config:any,nat
  context.hidden=back.hidden=!raw;legend.hidden=!raw||physical;layer.style.display=raw&&!physical?'':'none';mini.style.display=raw&&physical?'':'none';
  const position=root.querySelector<HTMLElement>('[data-canada-position-caption]')!;position.dataset.originalCaption??=position.textContent!;position.textContent=raw?'小さい点は気候観測地点。人口円の中心は都市圏の表示用位置で、都心や居住地点ではありません。位置図は等緯度経度表示で、面積の測定には使いません。':position.dataset.originalCaption;
  if(!raw)return false;
- const data=config.population,state=readCanadaPopulationState(new URL('?'+raw,location.href),data.cmas.map((c:any)=>c.id)),target=new URL(back.getAttribute('href')!,location.href);target.search=writeCanadaPopulationState(new URL(target.pathname,target),state).search;back.href=target.href;
+ const data=config.population,state=readCanadaPopulationState(new URL('?'+raw,location.href),data.cmas.map((c:any)=>c.id)),target=new URL(back.getAttribute('href')!,location.href);target.search=copyCanadaPopulationMapState(new URL('?'+raw,location.href),writeCanadaPopulationState(new URL(target.pathname,target),state)).search;back.href=target.href;
  const chosen=[state.cma,state.compare].filter(Boolean),records=data.cmas.filter((c:any)=>chosen.includes(c.id)),city=config.cities.find((c:any)=>c.id===nature.city).name;
- const values=records.map((r:any)=>{const v=state.metric==='density'?r.density2021:r.population[state.year];return `${r.name} ${formatCanadaPopulationValue(v.value,state.metric)}${state.metric==='density'?'人/km²':'人'}${v.symbol?' '+v.symbol:''}`;}).join(' / ');
+ const values=records.map((r:any)=>{const v=state.metric==='density'?r.density2021:r.population[state.year];return `${r.name} ${formatCanadaPopulationValue(v.value,state.metric)}${state.metric==='density'?'人/km²':'人'}${v.symbol?' '+v.symbol:''}`;}).join(' / ')||'全国の都市圏分布';
  const water=nature.water?`現在は${nature.water}${nature.only?'だけ':'を選び全水系'}を表示。${nature.water!=='Lake Ontario'?'元の比較入口はOntario湖です。':''}`:'現在は全水系を表示。';
  const question=nature.view==='water'?`${water} 都市圏の集中と南部の水域位置を比べます。水路の位置は交通の条件で、人口の原因を単独で決めません。`:physical?'都市圏の元分布と、地形・標高図の南部・山地・沿岸を左右で照合します。地形・標高図は別投影のため重ねません。':`${city}は1観測点。都市圏全体の平均気候ではありません。人口の分布と冬の気温・季節降水を比べます。`;
  root.querySelector<HTMLElement>('[data-canada-population-context-text]')!.textContent=`${state.year}年 ${values}。${question}`;
