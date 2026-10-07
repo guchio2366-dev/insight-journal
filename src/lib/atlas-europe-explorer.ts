@@ -9,7 +9,7 @@ import { europeReaderCopy, europeReaderSources } from './atlas-europe-reader';
 import { europeComparisonLinks, readEuropeReturn, europeComparisonUrl, europeNamedReturnUrl, europeComparisonQuestion, europeComparisonSourceLabel } from './atlas-europe-comparison';
 import { renderEuropeOrigin } from './atlas-europe-comparison-renderer';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
-import { createEuropePopulationCases, cultureSelection, cultureColor, cultureBounds, type CultureMapData, type CultureBounds } from './atlas-europe-population-cases';
+import { createEuropePopulationCases, cultureSelection, cultureColor, type CultureMapData, type CultureBounds } from './atlas-europe-population-cases';
 import { europeDrainageBasins, europeDrainageBasinByIndex, europeDrainageIndexForBasin, normaliseEuropeDrainageBasin, europeDrainageOutline } from './atlas-europe-drainage';
 import drainageManifest from '../../public/assets/atlas/europe/drainage-v1/manifest.json' with {type:'json'};
 import { readEuropeFarmingFocus, writeEuropeFarmingFocus } from '../data/atlas/europe/farming-water-comparisons';
@@ -93,6 +93,7 @@ export function initEuropeAtlas() {
     annotations.refresh();
   }
   const culture=createEuropePopulationCases(cultureReader,{
+    legend:query<HTMLElement>('.eu-culture-legend'),
     active:false,base:location.pathname.split('/atlas/europe/')[0]+'/',mapLayer:query<SVGGElement>('[data-eu-culture-layer]'),
     onMapData:data=>{cultureData=data;paintCulture();},onFitBounds:fitCulture,
     onChange:choice=>{Object.assign(state,choice);commit(false);},
@@ -508,13 +509,12 @@ export function initEuropeAtlas() {
     all<SVGGElement>('[data-eu-point],[data-eu-feature-point]').forEach(g=>{const id=g.dataset.euPoint??g.dataset.euFeaturePoint;const p=[...cities,...features].find(p=>p.id===id);if(!p)return;const [x,y]=project(p.coordinates);g.querySelector('circle')?.setAttribute('r',String(5/scale));const label=g.querySelector('text');label?.setAttribute('x',String(x+9/scale));label?.setAttribute('y',String(y-9/scale));if(label)label.style.fontSize=12/scale+'px';});
   }
   function fit() {
-    if(cultureActive()&&cultureData.features.length){fitCulture(cultureBounds(cultureData));return;}
-    const bounds = selectionBounds();
+    const bounds = cultureActive() ? [[frame.west, frame.south], [frame.east, frame.north]] as [[number,number],[number,number]] : selectionBounds();
     const [left, bottom] = project(bounds[0]);
     const [right, top] = project(bounds[1]);
     const width = Math.max(right - left, 24), height = Math.max(bottom - top, 24);
     box = [(left + right - width) / 2 - width * .12, (top + bottom - height) / 2 - height * .12, width * 1.24, height * 1.24];
-    if (state.region === 'all' && !state.place&&!comparisonFocus()) box = [0, 0, frame.width, frame.height];
+    if (cultureActive() || state.region === 'all' && !state.place&&!comparisonFocus()) box = [0, 0, frame.width, frame.height];
     staticMap.setAttribute('viewBox', box.join(' '));
     staticSymbols();
     map?.fitBounds(bounds, { padding: {top:20,bottom:42,left:14,right:14}, maxZoom: 7, duration: reduced ? 0 : 450 });
@@ -540,7 +540,7 @@ export function initEuropeAtlas() {
       Object.assign(state,culture.readState());
       if(!cultureRunning){cultureRunning=true;culture.setActive(true);}
       const selected=cultureSelection(culture.readState(),topic as 'ethnicity'|'religion');
-      query('[data-culture-takeaway]').textContent=selected.censusCase.grain==='LAD'?'イングランド・ウェールズで自己申告分類の地域差を読む事例です。欧州全域の分布ではありません。':'クロアチアの自己申告分類を全国値で読む事例です。行政区と同じ粒度では比較しません。';
+      if(selected.state.cultureCase)query('[data-culture-takeaway]').textContent=selected.censusCase.grain==='LAD'?'イングランド・ウェールズで自己申告分類の地域差を読む事例です。欧州全域の分布ではありません。':'クロアチアの自己申告分類を全国値で読む事例です。行政区と同じ粒度では比較しません。';
     }else if(cultureRunning){cultureRunning=false;culture.setActive(false);}
     const selectedTopic=currentField.id==='agriculture'?(['forest','treecover'].includes(topic)?'treecover':'crops'):currentField.id==='population'?(cultureActive()?topic:'density'):['precipitation','drainage'].includes(topic)?'water':topic;
     const selectedIndustry=topic==='hubs'?config.readings.find(reading=>reading.id===state.feature&&reading.field==='industry'):undefined;
@@ -564,7 +564,7 @@ export function initEuropeAtlas() {
     const active = [state.city];
     const place = countries.find(c => c.code === state.place);
     query('[data-eu-focus]').textContent = `${place?.name ?? regionNames[state.region]} · ${subject().period}${state.place === 'RUS' ? subject().indicator?' · 数値はロシア全土':' · 地図は表示枠内のみ' : ''}`;
-    if(cultureActive())query('[data-eu-focus]').textContent=`${cultureSelection(culture.readState(),topic as 'ethnicity'|'religion').area.name} · 2021年国勢調査`;
+    if(cultureActive())query('[data-eu-focus]').textContent=`${cultureSelection(culture.readState(),topic as 'ethnicity'|'religion').area?.name ?? '欧州全体・地域未選択'} · 2021年国勢調査`;
     all<HTMLButtonElement>('[data-eu-region]').forEach(button => {
       button.setAttribute('aria-pressed',String(!cultureActive()&&button.dataset.euRegion===state.region));
       button.disabled=cultureActive();

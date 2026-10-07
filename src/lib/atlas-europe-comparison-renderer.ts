@@ -6,7 +6,7 @@ import { farmingPresentation } from './atlas-europe-farming.ts';
 import type { Map as LibreMap } from 'maplibre-gl';
 import type { Geometry } from './atlas-europe-geometry';
 import climateLegend from '../data/atlas/europe/climate-legend.json' with { type:'json' };
-import { europeCultureData, fetchCaseGeometry, cultureSelection, caseMapData, cultureGeometryPath, cultureBounds, cultureLegend, formatCultureShare, type CultureGeometry } from './atlas-europe-population-cases.ts';
+import { europeCultureData, fetchCaseGeometry, cultureSelection, caseMapData, cultureGeometryPath, cultureBounds, cultureLegend, cultureColor, formatCultureShare, type CultureGeometry } from './atlas-europe-population-cases.ts';
 import { europeDrainageGrid, europeDrainageIndexForBasin, europeDrainageOutline, readEuropeDrainageValues } from './atlas-europe-drainage.ts';
 
 type Config = {
@@ -100,12 +100,17 @@ export function renderEuropeOrigin(root:HTMLElement, source:EuropeState|null, ta
   if(source.layer==='ethnicity'||source.layer==='religion') {
     const kind=source.layer;
     const selection=cultureSelection({cultureCase:source.cultureCase??'',cultureCategory:source.cultureCategory??'',cultureArea:source.cultureArea??''},kind);
+    if(!selection.state.cultureCase || !selection.category) {
+      caption.textContent=`元の図：${layer.title} · 欧州全体 · 事例・回答分類未選択`;
+      addKey(cultureColor(null),'回答分類未選択・未掲載（0%ではありません）');
+      positionOrigin(root,key,false);sourceReading(root,key,false);return;
+    }
     const grain=selection.censusCase.grain==='LAD'?'行政区（LAD2021）· 331地域':'全国値 · 1地域';
-    caption.textContent=`元の図：${selection.topic.titleJa} · ${selection.topic.year}年 · ${grain} · ${selection.category.label} · ${selection.area.name}（総人口比%）`;
+    caption.textContent=`元の図：${selection.topic.titleJa} · ${selection.topic.year}年 · ${grain} · ${selection.category.label} · ${selection.area?.name ?? '地域未選択'}（総人口比%）`;
     mini.setAttribute('aria-label',`${caption.textContent}。各地域のこの表の総人口に対する割合。欧州全域の分布ではありません。`);
     mini.dataset.euOriginCase=selection.censusCase.id;
     mini.dataset.euOriginCategory=selection.category.id;
-    mini.dataset.euOriginArea=selection.area.code;
+    mini.dataset.euOriginArea=selection.area?.code ?? '';
     mini.dataset.euOriginGrain=selection.censusCase.grain;
     key.classList.add('eu-origin-culture-reference');
     mini.removeAttribute('hidden');positionOrigin(root,key,true);caption.after(mini);

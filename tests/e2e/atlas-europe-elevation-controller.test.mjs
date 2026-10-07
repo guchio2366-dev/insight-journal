@@ -262,17 +262,25 @@ test('a click outside the published extent clears the old point instead of leavi
   }finally{await app.w.happyDOM.close();}
 });
 
-for(const topic of ['ethnicity','religion'])test(`${topic} shows the single case legend including missing values beneath the map`,async()=>{
+for(const topic of ['ethnicity','religion'])test(`${topic} keeps the unselected legend and the explicit source scale beneath the map`,async()=>{
   const app=await setup(`https://example.com/insight-journal/atlas/europe/population/?layer=${topic}&render=static`);
   try{
     const legend=app.q('.eu-culture-legend');
     assert.equal(legend.parentElement,app.q('[data-eu-map-legend]'));
     assert.equal(legend.hidden,false);assert.equal(app.q('[data-eu-subject-legend]').hidden,true);
     assert.equal(app.w.document.querySelectorAll('.eu-culture-legend').length,1);
-    assert.equal(legend.children.length,6);
-    assert.match(legend.lastElementChild.textContent,/未掲載・数値なし/);
+    assert.equal(legend.children.length,7);
+    assert.ok([...legend.querySelectorAll('[data-culture-scale-key]')].every(key=>key.hidden));
+    assert.equal(legend.lastElementChild.hidden,false);
+    assert.match(legend.lastElementChild.textContent,/回答分類未選択.*0%ではありません/);
     assert.match(legend.lastElementChild.querySelector('i').getAttribute('style'),/#b8bec7/);
     assert.match(app.q('[data-culture-denominator]').textContent,/分母/);
+    const select=(selector,value)=>{const node=app.q(selector);node.value=value;node.dispatchEvent(new app.w.Event('change',{bubbles:true}));};
+    select('[data-culture-case]','england-wales-2021');
+    select('[data-culture-category]',topic==='religion'?'ts030-02':'ts021-17');
+    assert.equal(legend.lastElementChild.hidden,true);
+    assert.equal(legend.querySelectorAll('[data-culture-scale-key]:not([hidden])').length,6);
+    assert.match(legend.querySelectorAll('[data-culture-scale-key]')[5].textContent,/未掲載・数値なし/);
     app.choose('terrain');
     assert.equal(legend.hidden,true);assert.equal(app.q('[data-eu-subject-legend]').hidden,false);
   }finally{await app.w.happyDOM.close();}

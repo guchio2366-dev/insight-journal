@@ -13,7 +13,7 @@ const json=name=>JSON.parse(readFileSync(new URL('../../src/data/atlas/'+name,im
 const config={layers:europeLayers,farmingAreas:json('europe/farming-areas.json'),geography:json('europe-countries.json'),readings:europeReadings,statistics:json('europe/country-statistics.json'),countries:json('europe/countries.json'),climateWater:json('europe/climate-water.json'),cities:json('europe/climate-cities.json'),populationCities:json('europe/population-cities.json')};
 const state=layer=>({region:'all',place:'',city:'london',compare:[],render:'static',layer,returnLayer:layer});
 const cultureGeometry=id=>JSON.parse(readFileSync(new URL('../../public'+europeCultureData.cases.find(item=>item.id===id).geometryURL,import.meta.url),'utf8'));
-const cultureState=(layer,caseId='england-wales-2021',category='',area='')=>({...state(layer),cultureCase:caseId,cultureCategory:category,cultureArea:area});
+const cultureState=(layer,caseId='england-wales-2021',category=layer==='religion'?(caseId==='croatia-national-2021'?'hr-religion-H':'ts030-02'):(caseId==='croatia-national-2021'?'hr-ethnicity-H':'ts021-17'),area=caseId==='croatia-national-2021'?'HRV':'E06000001')=>({...state(layer),cultureCase:caseId,cultureCategory:category,cultureArea:area});
 const drainageValues=readEuropeDrainageValues(gunzipSync(readFileSync(new URL('../../public/assets/atlas/europe/drainage-v1/values.bin.gz',import.meta.url))));
 const visibleBasinIndexes=new Set(drainageValues);
 const visibleBasins=europeDrainageBasins.filter(basin=>visibleBasinIndexes.has(basin.index));
@@ -188,6 +188,18 @@ test('the complete17-class climate source key gets its own wide row and returns 
     assert.equal(key.hidden,true);
     assert.equal(root.querySelectorAll('[data-eu-origin-legend]').length,1);
   }finally{window.happyDOM.abort();delete globalThis.document;}
+});
+
+test('an unselected culture comparison keeps the honest overview without fetching or inventing a percentage',async()=>{
+  const {root,window}=setup();
+  try {
+    let requests=0;
+    await renderEuropeOrigin(root,state('ethnicity'),europeLayers.find(layer=>layer.id==='hubs'),config,undefined,{fetchCultureGeometry:async()=>{requests++;return cultureGeometry('england-wales-2021');}});
+    assert.equal(requests,0);
+    assert.equal(root.querySelector('[data-eu-origin-map]').hasAttribute('hidden'),true);
+    assert.match(root.querySelector('[data-eu-origin-caption]').textContent,/欧州全体.*未選択/);
+    assert.match(root.querySelector('[data-eu-origin-legend]').textContent,/0%ではありません/);
+  } finally {window.happyDOM.abort();}
 });
 
 test('the culture source uses all331 actual LAD boundaries and the selected source category, area and denominator',async()=>{

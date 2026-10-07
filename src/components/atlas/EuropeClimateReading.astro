@@ -52,8 +52,6 @@ const dryMonths = city.months.filter(month => month.precipitation !== null && mo
     {missingRain && ' ×は降水量の欠測（0 mmではありません）。'}
     {missingTemperature && ' 気温の欠測月では線が途切れます。'}
   </p>
-  <details class="eu-city-reading-details">
-    <summary>季節・農畜産との関係・出典</summary>
   <div class="eu-city-reading-body">
     <section class="eu-city-climate-description" aria-labelledby={`city-classification-${city.id}`}>
       <h4 class="eu-city-climate" id={`city-classification-${city.id}`}>{classification ? <><strong>{classification.code}</strong> {classification.name}</> : '気候区分：観測地点の分類は未収録です'}</h4>
@@ -67,8 +65,10 @@ const dryMonths = city.months.filter(month => month.precipitation !== null && mo
       {farming && <p class="eu-statistic-note">見出しの地域での例です。産地は気候に加え、土壌・地形や水の利用条件にも左右されます。</p>}
       {farming && <p class="eu-statistic-source">農畜産物の出典：{farming.sources.map((source, index) => <Fragment>{index > 0 && ' ／ '}<a href={source.url} target="_blank" rel="noopener noreferrer">{source.label} ↗</a></Fragment>)}</p>}
     </section>
+  </div>
+  <details class="eu-city-reading-details">
+    <summary>季節・農畜産との関係・出典</summary>
     <p class="eu-statistic-note">雨温図は1観測所の値で、都市や国全体の平均ではありません。気候区分は地図の格子の分類で、下段の月別値から計算したものではありません。{!classification && '分類を近隣地点の値で補っていません。'}</p>
     <p class="eu-statistic-source">原典：<a href={city.sourceUrl} target="_blank" rel="noopener noreferrer">気象庁の観測所平年値 ↗</a> ／ <a href="https://www.gloh2o.org/koppen/" target="_blank" rel="noopener noreferrer">Beckほかの気候区分 ↗</a></p>
-  </div>
   </details>
 </article>

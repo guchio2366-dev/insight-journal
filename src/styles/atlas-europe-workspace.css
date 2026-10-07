@@ -373,7 +373,8 @@
  .eu-workspace-root[data-europe-detail].has-eu-comparison .eu-region-navigation { margin-bottom:4px; }
  .eu-workspace-root[data-europe-detail].has-eu-comparison .eu-topic-above { padding-top:2px; padding-bottom:4px; }
  .eu-workspace-root[data-europe-detail].has-eu-comparison .eu-breadcrumb { margin-bottom:2px; }
- .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-read-panel { position:static; max-height:none; }
+ .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-read-panel:has([data-eu-climate-reader]:not([hidden])) { position:static; max-height:none; }
+ .eu-workspace-root[data-europe-detail].is-eu-culture-reading .eu-read-panel { position:static; max-height:none; }
  .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-subject-reader { order:2; display:block; flex:none; }
  .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-reader-summary>h2,
  .eu-workspace-root[data-europe-detail].is-eu-climate-reading [data-eu-subject-takeaway] { display:none; }

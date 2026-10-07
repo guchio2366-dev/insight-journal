@@ -34,17 +34,19 @@ async function setup(props = {}) {
 }
 function change(window, select, value) { select.value = value; select.dispatchEvent(new window.Event('change', { bubbles: true })); }
 
-test('actual Astro SSR contains an honest selected case, denominator, source and accessible controls', async () => {
+test('actual Astro SSR starts with an unselected overview and no invented area/category value', async () => {
   const setupData = await setup();
   try {
     const { root } = setupData;
     assert.match(root.querySelector('[data-culture-note]').textContent, /自己申告.*英国全土や欧州全域/);
-    assert.equal(root.querySelector('[data-culture-case]').options.length, 2);
-    assert.equal(root.querySelector('[data-culture-category]').options.length, 24);
-    assert.equal(root.querySelector('[data-culture-area]').options.length, 331);
+    assert.equal(root.querySelector('[data-culture-case]').value, '');
+    assert.equal(root.querySelector('[data-culture-value]').hidden, true);
+    assert.equal(root.querySelector('[data-culture-case]').options.length, 3);
+    assert.equal(root.querySelector('[data-culture-category]').options.length, 1);
+    assert.equal(root.querySelector('[data-culture-area]').options.length, 1);
     assert.equal(root.querySelectorAll('label[for]').length, 3);
     assert.equal(root.querySelectorAll('select[disabled]').length, 3);
-    assert.equal(root.querySelector('[data-culture-denominator]').textContent, '分母：この表の総人口 92,338人');
+    assert.equal(root.querySelector('[data-culture-denominator]').textContent, '分母は選択した地域の同じ公表表の総人口です。');
     assert.match(root.querySelector('[data-culture-attribution]').textContent, /Office for National Statistics/);
     assert.match(root.querySelector('[data-culture-map-status]').textContent, /数値なし.*0%/);
     assert.equal(root.querySelectorAll('svg').length, 0, 'The reader must use the parent central map');
@@ -56,7 +58,7 @@ test('canonical culture URL values are validated within their own case/topic and
   const invalid = readCultureSearch('?cultureCase=unknown&cultureCategory=hr-religion-H&cultureArea=HRV', 'ethnicity');
   assert.deepEqual(invalid, normaliseCultureState({}, 'ethnicity'));
   const croatia = readCultureSearch('?cultureCase=croatia-national-2021&cultureCategory=ts021-17&cultureArea=E06000001', 'religion');
-  assert.deepEqual(croatia, { cultureCase: 'croatia-national-2021', cultureCategory: 'hr-religion-H', cultureArea: 'HRV' });
+  assert.deepEqual(croatia, { cultureCase: 'croatia-national-2021', cultureCategory: '', cultureArea: '' });
   const url = new URL('https://example.test/atlas/europe/population/?layer=religion&place=HRV&render=static&single=1#map');
   const next = writeCultureState(url, croatia);
   assert.equal(next.searchParams.get('layer'), 'religion');
@@ -69,7 +71,7 @@ test('canonical culture URL values are validated within their own case/topic and
 });
 
 test('map values/colors use exact topic denominators, and absent coverage is not zero', () => {
-  const state = normaliseCultureState({ cultureArea: 'E06000002' }, 'religion');
+  const state = normaliseCultureState({ cultureCase: 'england-wales-2021', cultureCategory: 'ts030-02', cultureArea: 'E06000002' }, 'religion');
   const selection = cultureSelection(state, 'religion');
   const data = caseMapData(europeCultureData, geometries.ew, 'religion', state);
   const area = data.features.find(feature => feature.properties.code === 'E06000002');
@@ -112,19 +114,19 @@ test('controller synchronises SVG, MapLibre payload, topic, selects, percentage/
   try {
     const { root, mapLayer, window } = setupData;
     const requests = [], changes = [], maps = [], fits = [];
-    const controller = createEuropePopulationCases(root, { base: '/unit-culture-controller/', mapLayer, onChange: state => changes.push(state), onMapData: data => maps.push(data), onFitBounds: bounds => fits.push(bounds), fetch: async url => { requests.push(url); return responseFor(url); } });
+    const controller = createEuropePopulationCases(root, { initialState: {cultureCase:'england-wales-2021',cultureCategory:'ts021-17',cultureArea:'E06000001'}, base: '/unit-culture-controller/', mapLayer, onChange: state => changes.push(state), onMapData: data => maps.push(data), onFitBounds: bounds => fits.push(bounds), fetch: async url => { requests.push(url); return responseFor(url); } });
     await controller.ready();
     assert.equal(requests.length, 1);
     assert.equal(root.querySelectorAll('select[disabled]').length, 0);
     assert.equal(mapLayer.querySelectorAll('path').length, 331);
     assert.equal(mapLayer.querySelectorAll('[tabindex="0"]').length, 1);
-    assert.equal(fits.length, 1);
+    assert.equal(fits.length, 0);
     for (const feature of maps.at(-1).features) {
       assert.equal(mapLayer.querySelector(`[data-culture-code="${feature.properties.code}"]`).getAttribute('fill'), feature.properties.fill);
     }
     controller.setTopic('religion');
     await controller.ready();
-    assert.equal(root.querySelector('[data-culture-category]').options.length, 9);
+    assert.equal(root.querySelector('[data-culture-category]').options.length, 10);
     assert.equal(requests.length, 1, 'Changing category/topic must reuse the same official boundary');
     assert.equal(changes.length, 0, 'Parent-driven topic changes must not perform a second URL update');
     assert.equal(controller.selectArea('E06000002'), true);
@@ -141,8 +143,12 @@ test('controller synchronises SVG, MapLibre payload, topic, selects, percentage/
     await controller.ready();
     assert.equal(requests.length, 2);
     assert.equal(mapLayer.querySelectorAll('path').length, 1);
-    assert.equal(root.querySelector('[data-culture-area]').options.length, 1);
-    assert.equal(root.querySelector('[data-culture-category]').options.length, 12);
+    assert.equal(root.querySelector('[data-culture-area]').options.length, 2);
+    assert.equal(root.querySelector('[data-culture-category]').options.length, 13);
+    assert.equal(controller.readState().cultureCategory, '');
+    assert.equal(controller.readState().cultureArea, '');
+    change(window, root.querySelector('[data-culture-category]'), 'hr-religion-H');
+    change(window, root.querySelector('[data-culture-area]'), 'HRV');
     assert.match(root.querySelector('[data-culture-note]').textContent, /全国値.*行政区と同じ単位で比較しません/);
     assert.match(root.querySelector('[data-culture-note]').textContent, /欧州全域の分布ではありません/);
     assert.equal(root.querySelector('[data-culture-count]').textContent, '3,057,735人');
@@ -188,7 +194,7 @@ test('late geometry from a previous case cannot overwrite a newly selected natio
     let finishEW;
     const deferred = new Promise(resolve => { finishEW = resolve; });
     const published = [];
-    const controller = createEuropePopulationCases(root, { base: '/unit-culture-race/', mapLayer, onMapData: data => published.push(data), fetch: async url => url.endsWith('croatia-national-outline.geojson') ? responseFor(url) : deferred });
+    const controller = createEuropePopulationCases(root, { initialState: { cultureCase: 'england-wales-2021', cultureCategory: 'ts021-17', cultureArea: 'E06000001' }, base: '/unit-culture-race/', mapLayer, onMapData: data => published.push(data), fetch: async url => url.endsWith('croatia-national-outline.geojson') ? responseFor(url) : deferred });
     const earlierReady = controller.ready();
     change(window, root.querySelector('[data-culture-case]'), 'croatia-national-2021');
     await controller.ready();
@@ -197,7 +203,9 @@ test('late geometry from a previous case cannot overwrite a newly selected natio
     assert.equal(controller.readState().cultureCase, 'croatia-national-2021');
     assert.equal(mapLayer.querySelectorAll('path').length, 1);
     assert.equal(published.at(-1).features[0].properties.code, 'HRV');
-    assert.equal(root.querySelector('[data-culture-count]').textContent, '3,547,614人');
+    assert.equal(root.querySelector('[data-culture-value]').hidden, true);
+    assert.equal(controller.readState().cultureCategory, '');
+    assert.equal(controller.readState().cultureArea, '');
     controller.destroy();
   } finally { setupData.close(); }
 });
@@ -207,7 +215,7 @@ test('geometry failure keeps source values usable and supports an explicit bound
   try {
     const { root, mapLayer, window } = setupData;
     let calls = 0;
-    const controller = createEuropePopulationCases(root, { base: '/unit-culture-retry/', mapLayer, fetch: async url => ++calls === 1 ? { ok: false, json: async () => ({}) } : responseFor(url) });
+    const controller = createEuropePopulationCases(root, { initialState: { cultureCase: 'england-wales-2021', cultureCategory: 'ts021-17', cultureArea: 'E06000001' }, base: '/unit-culture-retry/', mapLayer, fetch: async url => ++calls === 1 ? { ok: false, json: async () => ({}) } : responseFor(url) });
     await controller.ready();
     assert.match(root.querySelector('[data-culture-map-status]').textContent, /地図を表示できません.*数値は利用できます/);
     assert.equal(mapLayer.children.length, 0);
@@ -218,6 +226,39 @@ test('geometry failure keeps source values usable and supports an explicit bound
     assert.equal(calls, 2);
     assert.equal(mapLayer.querySelectorAll('path').length, 331);
     assert.match(root.querySelector('[data-culture-map-status]').textContent, /未掲載地域は0%ではありません/);
+    controller.destroy();
+  } finally { setupData.close(); }
+});
+
+test('overview and explicit choices preserve the complete distribution without automatic fitting', async () => {
+  const setupData = await setup();
+  try {
+    const { root, mapLayer, window } = setupData;
+    let requests = 0, fits = 0;
+    const maps = [];
+    const controller = createEuropePopulationCases(root, { base: '/unit-culture-overview/', mapLayer, onMapData: data => maps.push(data), onFitBounds: () => fits++, fetch: async url => { requests++; return responseFor(url); } });
+    await controller.ready();
+    assert.equal(requests, 0);
+    assert.deepEqual(controller.readState(), { cultureCase: '', cultureCategory: '', cultureArea: '' });
+    assert.equal(maps.at(-1).features.length, 0);
+    change(window, root.querySelector('[data-culture-case]'), 'england-wales-2021');
+    await controller.ready();
+    assert.equal(requests, 1);
+    assert.equal(maps.at(-1).features.length, 331);
+    assert.ok(maps.at(-1).features.every(feature => feature.properties.value === null && !feature.properties.selected));
+    assert.equal(root.querySelector('[data-culture-value]').hidden, true);
+    change(window, root.querySelector('[data-culture-category]'), 'ts021-17');
+    assert.equal(controller.readState().cultureArea, '');
+    assert.ok(maps.at(-1).features.every(feature => feature.properties.value !== null && !feature.properties.selected));
+    controller.selectArea('E06000002');
+    assert.equal(maps.at(-1).features.length, 331);
+    assert.equal(maps.at(-1).features.filter(feature => feature.properties.selected).length, 1);
+    assert.equal(root.querySelector('[data-culture-value]').hidden, false);
+    assert.equal(fits, 0);
+    controller.applyState('');
+    assert.equal(maps.at(-1).features.length, 0);
+    assert.equal(root.querySelector('[data-culture-value]').hidden, true);
+    assert.equal(fits, 0);
     controller.destroy();
   } finally { setupData.close(); }
 });

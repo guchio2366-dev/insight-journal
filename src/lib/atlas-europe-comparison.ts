@@ -206,7 +206,7 @@ export function europeComparisonSourceLabel(source: EuropeState): string {
     const basin=normaliseEuropeDrainageBasin(source.basin);
     return basin?`${layer.title}・HYBAS_ID ${basin}`:layer.title;
   }
-  if(layer?.id==='ethnicity'||layer?.id==='religion')return `${layer.id==='ethnicity'?'民族的帰属':'宗教的帰属'}・${cultureSelection(source,layer.id).area.name}`;
+  if(layer?.id==='ethnicity'||layer?.id==='religion')return `${layer.id==='ethnicity'?'民族的帰属':'宗教的帰属'}・${cultureSelection(source,layer.id).area?.name ?? '欧州全体・地域未選択'}`;
   const feature = europeReadings.find(item => item.id === source.feature && item.field===layer?.field
     && (layer.field==='industry'?layer.id==='hubs':item.layer===(layer.id==='contours'?'terrain':layer.id))
     && (source.place?item.country===source.place:source.region==='all'||countries.find(c=>c.code===item.country)?.region===source.region));
