@@ -32,8 +32,8 @@ test('Mexico state selection, keyboard, focus and history restore the same readi
  assert.equal(q('[data-mexico-overview-state]').value,'08');assert.match(q('[data-mexico-overview-name]').textContent,/チワワ/);
  assert.match(q('[data-mexico-overview-values]').textContent,/3,741,869/);
  assert.equal(q('[data-mexico-overview-shape="08"]').getAttribute('aria-pressed'),'true');
- for(const a of d.querySelectorAll('[data-mexico-overview-field]')){const u=new URL(a.href);assert.equal(u.searchParams.get('state'),a.dataset.mexicoOverviewField==='population'?null:'08');if(a.dataset.mexicoOverviewField==='population')assert.equal(u.searchParams.get('reading'),'overview');}
- for(const a of d.querySelectorAll('.mexico-fields>a')){const u=new URL(a.href),national=u.pathname.endsWith('/population/');assert.equal(u.searchParams.get('state'),national?null:'08');assert.equal(u.searchParams.get('reading'),national?'overview':'item');}
+ for(const a of d.querySelectorAll('[data-mexico-overview-field]')){const u=new URL(a.href),national=['population','industry'].includes(a.dataset.mexicoOverviewField);assert.equal(u.searchParams.get('state'),national?null:'08');if(national)assert.equal(u.searchParams.get('reading'),'overview');}
+ for(const a of d.querySelectorAll('.mexico-fields>a')){const u=new URL(a.href),national=/\/(population|industry)\/$/.test(u.pathname);assert.equal(u.searchParams.get('state'),national?null:'08');assert.equal(u.searchParams.get('reading'),national?'overview':'item');}
  q('[data-mexico-overview-focus]').click();const frame=q('[data-mexico-overview-map]').getAttribute('viewBox');assert.notEqual(frame,'0 0 900 580');
  reload=await page(w.location.search);assert.equal(reload.document.querySelector('[data-mexico-overview-map]').getAttribute('viewBox'),frame);
  q('[data-mexico-overview-reset]').click();assert.equal(q('[data-mexico-overview-map]').getAttribute('viewBox'),'0 0 900 580');
