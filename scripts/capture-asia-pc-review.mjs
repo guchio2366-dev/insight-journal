@@ -407,6 +407,8 @@ async function checkEastContourBands(browser,host,profile){
    const actual=await page.locator(`${legend} > span`).evaluateAll(nodes=>nodes.filter(n=>/–/.test(n.textContent)).map(n=>({color:n.querySelector('i').style.backgroundColor,label:n.textContent})));
    const wanted=await page.evaluate(b=>b.colors.map((color,i)=>{const e=document.createElement('i');e.style.backgroundColor=color;return {color:e.style.backgroundColor,label:`${b.breaks[i].toLocaleString('ja-JP')}–${b.breaks[i+1].toLocaleString('ja-JP')}`};}),expected);
    assert.deepEqual(actual,wanted,'Legend colors and thresholds match the generated polygons');
+   const mapLegend=await page.locator('[data-reading-map-legend] .asia-comparison-compact-key > span').evaluateAll(nodes=>nodes.map(n=>({color:n.querySelector('i').style.backgroundColor,label:n.textContent})));
+   assert.deepEqual(mapLegend,wanted,'The visible legend directly below the map also uses the same generated bands');
    await settle(page);await contextPicture(page,profile,`east-${kind}-bands-overview`,'asia');
    const capture=results.captures.at(-1),palette=expected.colors.map(c=>[1,3,5].map(i=>parseInt(c.slice(i,i+2),16)>>4).join(','));
    const rendered=palette.filter(c=>capture.mapPixels.colorBucketKeys.includes(c));assert(new Set(rendered).size>=4,'The actual canvas must render several generated palette colors');

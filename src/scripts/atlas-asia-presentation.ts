@@ -23,6 +23,7 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
  const toggles=root.querySelectorAll<HTMLButtonElement>('[data-farm-toggle]');
  const syncKinds=()=>{if(config.selectFarmKinds){selectedKinds.clear();const value=getState().farms;if(value!=='none')for(const kind of ['crop','livestock'])if(!value||value===kind)selectedKinds.add(kind);}for(const b of toggles){const on=selectedKinds.has(b.dataset.farmToggle!);b.setAttribute('aria-pressed',String(on));const label=b.querySelector('span');if(label)label.textContent=on?'表示':'非表示';}};
  const datasets=new Map<string,any>(),pending=new Map<string,Promise<any>>();
+ const sourceWaits=new Set<()=>void>();
  const buttons=new Map<string,HTMLButtonElement>();
  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('aria-hidden','true');overlay.append(svg);
  const selectedFarm=()=>getState().field==='agriculture'?metadata.farming.products.find(p=>p.id===getState().topic):undefined;
@@ -113,7 +114,19 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
   for(const rect of codePlacements){const b=buttons.get(rect.id)!;b.hidden=false;b.style.left=rect.left+'px';b.style.top=rect.top+'px';b.style.width=(rect.right-rect.left)+'px';b.style.height=(rect.bottom-rect.top)+'px';if(rect.id.startsWith('climate-')){const cls=metadata.climate.find(c=>'climate-'+c.id===rect.id)!;const index=cls.anchors.findIndex(p=>{const q=project(p);return Math.abs(q.x-rect.anchor.x)<.1&&Math.abs(q.y-rect.anchor.y)<.1;});b.dataset.coordinate=cls.anchors[Math.max(0,index)].join(',');}if(active&&metadata.settlements?.[active]){const c=metadata.settlements[active].categories.find(c=>active+'-'+c.id===rect.id);const anchor=c?.anchors.find(p=>{const q=project(p);return Math.abs(q.x-rect.anchor.x)<.1&&Math.abs(q.y-rect.anchor.y)<.1;});if(anchor)b.dataset.coordinate=anchor.join(',');}if(rect.leader||rect.id.startsWith('overview-animal-')){const end=leaderEnd(rect.anchor,rect);line(rect.anchor.x,rect.anchor.y,end.x,end.y);}}
  }
  function schedule(){if(!scheduled&&!disposed)scheduled=requestAnimationFrame(update);}
+ async function sourceReady(currentMap:import('maplibre-gl').Map,id:string,seq:number){
+  if(currentMap.isSourceLoaded(id))return;
+  await new Promise<void>((resolve,reject)=>{
+   const cancel=()=>{cleanup();resolve();};
+   const cleanup=()=>{clearTimeout(timer);currentMap.off('sourcedata',changed);currentMap.off('error',failed);sourceWaits.delete(cancel);};
+   const changed=()=>{if(seq!==revision||map!==currentMap||disposed||currentMap.isSourceLoaded(id)){cleanup();resolve();}};
+   const failed=(event:any)=>{if(event.sourceId===id){cleanup();reject(Error('Contour source unavailable'));}};
+   const timer=setTimeout(()=>{cleanup();reject(Error('Contour source timed out'));},20000);
+   currentMap.on('sourcedata',changed);currentMap.on('error',failed);sourceWaits.add(cancel);changed();
+  });
+ }
  async function show(currentMap:import('maplibre-gl').Map){
+  for(const cancel of sourceWaits)cancel();
   if(map!==currentMap){map=currentMap;map.on('movestart',()=>{overlay.hidden=true;});map.on('moveend',schedule);map.on('resize',schedule);}
   syncKinds();const seq=++revision,current=mode();schedule();
   if(errorMode!==current){errorMode=null;onStatus('');}
@@ -153,7 +166,7 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
     if(!map.getSource(id)){map.addSource(id,{type:'geojson',data:datasets.get(bands?.lineFile??record.file),...(bands?{tolerance:0}:{})});map.addLayer({id,type:'line',source:id,paint:{'line-color':color,'line-width':['case',['==',['%',['get','value'],1000],0],1,.5],'line-opacity':['case',['==',['%',['get','value'],1000],0],.8,.4]}},'asia-country-border');}
     map.setLayoutProperty(id,'visibility','visible');
    }
-   if(bands)root.dataset.contourBandStatus='ready';
+   if(bands){await Promise.all([sourceReady(currentMap,terrain?'asia-terrain-bands':'asia-rainfall-bands',seq),sourceReady(currentMap,terrain?'asia-terrain-aligned-lines':'asia-rainfall-aligned-lines',seq)]);if(seq!==revision||map!==currentMap||disposed)return;root.dataset.contourBandStatus='ready';}
    if(water&&config.riverFile){const id='asia-farm-rivers';if(!map.getSource(id)){map.addSource(id,{type:'geojson',data:datasets.get(config.riverFile)});map.addLayer({id,type:'line',source:id,filter:['in',['get','id'],['literal',config.riverIds??[]]],paint:{'line-color':'#17688b','line-width':2,'line-opacity':.95}});}map.setLayoutProperty(id,'visibility','visible');}
    if(farm){root.dataset.farmContextStatus='ready';root.dataset.farmSelected=selectedFarm()?.id??'';}
    errorMode=null;onStatus('');schedule();
@@ -162,5 +175,5 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
  }
  for(const b of toggles)b.addEventListener('click',()=>{const kind=b.dataset.farmToggle!;if(selectedKinds.has(kind))selectedKinds.delete(kind);else selectedKinds.add(kind);const value=selectedKinds.size===2?null:selectedKinds.size===0?'none':[...selectedKinds][0] as 'crop'|'livestock';config.selectFarmKinds?.(value);if(map&&!config.selectFarmKinds)void show(map);},{signal:events.signal});
  for(const control of controls)control.addEventListener('change',()=>{if(control.checked)selectedKinds.add(control.dataset.farmKind!);else selectedKinds.delete(control.dataset.farmKind!);config.selectFarmKinds?.(selectedKinds.size===2?null:selectedKinds.size===0?'none':[...selectedKinds][0] as 'crop'|'livestock');if(map&&!config.selectFarmKinds)void show(map);},{signal:events.signal});
- return {show,refresh:schedule,setRivers(data:any){if(config.riverFile)datasets.set(config.riverFile,data);schedule();},destroy(){disposed=true;events.abort();cancelAnimationFrame(scheduled);overlay.replaceChildren();onStatus('');}};
+ return {show,refresh:schedule,setRivers(data:any){if(config.riverFile)datasets.set(config.riverFile,data);schedule();},destroy(){disposed=true;for(const cancel of sourceWaits)cancel();events.abort();cancelAnimationFrame(scheduled);overlay.replaceChildren();onStatus('');}};
 }

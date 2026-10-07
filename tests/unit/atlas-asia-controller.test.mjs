@@ -29,6 +29,8 @@ export class Map {
   (window.__maps??=[]).push(this);window.__map=this;
  }
  on(name,handler){(this.events[name]??=[]).push(handler);return this}
+ off(name,handler){this.events[name]=(this.events[name]??[]).filter(fn=>fn!==handler);return this}
+ isSourceLoaded(id){return !!this.sources[id]&&!window.__pendingContourSources?.has(id)}
  once(name,handler){this.on(name,handler);if(name==='load'&&!window.__deferMapLoad)queueMicrotask(async()=>{if(window.__initialSourceFailure)await this.fire('error',{error:Error('initial image 503')});await this.fire('load')});return this}
  async fire(name,event={}){for(const fn of this.events[name]??[])await fn(event)}
  project(p){return {x:(p[0]-90)*7,y:(50-p[1])*9}}
@@ -255,6 +257,7 @@ async function setup(query = '', options = {}) {
     if(name==='/assets/physical/water.json'){const response=()=>new Response(JSON.stringify({type:'FeatureCollection',features:[]}));if(options.delayedWater)return new Promise(resolve=>{resolveWater=()=>resolve(response());});return response();}
     throw Error('Unexpected fetch: ' + name);
   };
+  if(options.pendingContourSources)window.__pendingContourSources=new Set(['asia-rainfall-bands','asia-rainfall-aligned-lines']);
   window.eval(bundle.outputFiles[0].text);
   await until(() => options.delayedMap ? window.__map?.events.load?.length : options.mapFailure ? !q('[data-map-retry]').hidden : root.dataset.mapReady === 'true', 'controller ready');
   return { window, root, q, requests, resolvePresentation:()=>resolvePresentation?.(), rejectPopulation:()=>rejectPopulation?.(Error('population failed late')),resolveTrade:()=>resolveTrade?.(),rejectClimate: () => rejectClimate?.(Error('simulated climate fetch failure')), resolveRice: () => resolveRice?.(),resolveWater:()=>resolveWater?.(),resolveUrban:()=>resolveUrban?.(),resolveFarm:()=>resolveFarm?.(),resolveIndustry:()=>resolveIndustry?.(),resolveHydrology:()=>resolveHydrology?.(),resolveSocial:()=>resolveSocial?.() };
@@ -1021,6 +1024,21 @@ test('色帯の取得失敗は誤った色背景を出さず、地点・URLを�
   assert.match(q('[data-hydrology-value]').textContent,/1,534/);
   assert.equal(window.__map.layers['asia-rainfall-bands'].layout.visibility,'visible');
   assert.equal(q('[data-map-state]').hidden,true);
+ }finally{await window.happyDOM.close();}
+});
+
+test('色帯と線の両方の描画準備を待ち、主題変更後の古い準備完了を採用しない',async()=>{
+ const {window,root,q}=await setup('?topic=precipitation',{hydrology:true,presentation:true,contourBands:true,pendingContourSources:true});
+ try{
+  await until(()=>window.__map.getSource('asia-rainfall-aligned-lines'),'contour source submitted');
+  assert.equal(root.dataset.contourBandStatus,'loading');
+  window.__pendingContourSources.delete('asia-rainfall-bands');await window.__map.fire('sourcedata',{sourceId:'asia-rainfall-bands'});
+  assert.equal(root.dataset.contourBandStatus,'loading','The line source still has unfinished worker tiles');
+  window.__pendingContourSources.delete('asia-rainfall-aligned-lines');await window.__map.fire('sourcedata',{sourceId:'asia-rainfall-aligned-lines'});
+  await until(()=>root.dataset.contourBandStatus==='ready','both contour sources ready');
+  window.__pendingContourSources.add('asia-rainfall-bands');q('[data-natural-topic=precipitation]').click();
+  q('[data-natural-topic=climate]').click();await window.__map.fire('sourcedata',{sourceId:'asia-rainfall-bands'});
+  assert.equal(root.dataset.contourBandStatus,'inactive');assert.equal(window.__map.layers['asia-rainfall-bands'].layout.visibility,'none');
  }finally{await window.happyDOM.close();}
 });
 
