@@ -51,6 +51,17 @@ test('ETOPO native window and continental processing retain datum and truthful p
  for(const r of a.ranges){assert.equal(r.status,206);assert.equal(r.bytes,r.end-r.start+1);assert.match(r.sha256,/^[0-9a-f]{64}$/);}
  assert.ok(a.downloadedBytes<48*1024*1024);assert.match(manifest.processing.numericExtrema,/not exact summits/);
 });
+test('Every elevation and terrain source colour has a matching legend entry, including negative cells',async()=>{
+ const w=new Window();try{
+  for(const section of ['elevation','terrain']){
+   const colors=section==='terrain'?manifest.elevation.terrainColors:manifest.elevation.colors;
+   w.document.body.innerHTML=lib.renderLatinFoundationLegend(section);
+   assert.equal(w.document.querySelector('[data-foundation-subzero]').getAttribute('style'),`background:${colors[0]}`);
+   assert.match(w.document.body.textContent,/0m未満/);
+   for(const color of colors)assert.ok(w.document.body.innerHTML.includes('background:'+color),color);
+  }
+ }finally{await w.happyDOM.close();}
+});
 test('River clipping uses direct SVG paths, all actual source lines stay present and names do not duplicate',async()=>{
  const river=lib.latinFoundationRivers.find(r=>r.name==='Amazonas');assert.equal(lib.latinFoundationRivers.length,44);
  const w=new Window();try{

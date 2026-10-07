@@ -11,6 +11,9 @@
 .latin-foundation-colorbar{height:14px;display:flex;border:1px solid #aab7ba}
 .latin-foundation-ticks{position:relative;height:20px;font-size:12px;line-height:1.6}
 .latin-foundation-ticks span{position:absolute;white-space:nowrap}
+.latin-foundation-extra-key{display:flex;flex-wrap:wrap;gap:4px 12px;margin:5px 0}
+.latin-foundation-extra-key span{display:inline-flex;align-items:center;gap:5px}
+.latin-foundation-extra-key i{display:inline-block;width:18px;height:13px;border:1px solid #87968b;flex:none}
 .latin-workspace [data-foundation-reading] h3{font-size:17px;margin:16px 0 7px}
 .latin-workspace [data-foundation-reading] p{font-size:15px;line-height:1.65;margin:9px 0}
 .latin-workspace [data-foundation-reading] button{min-height:36px;padding:5px 10px}

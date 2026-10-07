@@ -36,7 +36,9 @@ export function renderLatinFoundationLegend(section:LatinFoundationSection):stri
  const ticks=section==='rainfall'?[0,2500,5000,7500]:[0,1500,3000,4500,6000];
  const colorBar=colors.map(c=>`<span style="flex:1;background:${c}"></span>`).join('');
  const maximum=data.levels.at(-1)!;
- return `<div class="latin-foundation-scale" aria-label="${section==='rainfall'?'降水量：薄い青から濃い青へ250mm間隔':'標高：500m間隔。低地から高地へ'}"><div class="latin-foundation-colorbar" aria-hidden="true">${colorBar}</div><div class="latin-foundation-ticks">${[...ticks,maximum].map(t=>`<span style="left:${100*t/maximum}%;transform:translateX(${t===0?'0':t===maximum?'-100':'-50'}%)">${t.toLocaleString('ja-JP')}</span>`).join('')}</div></div><p>${section==='rainfall'?'mm/年 · 1991–2020年平年値。線と青の境界は250mm間隔、濃い青ほど多雨。':'m · EGM2008基準。線と色の境界は500m間隔。2022年はモデルの版。'} ${section!=='rainfall'?'最初の薄色：海面以下・沿岸混合セル。':''}灰地：欠測・格子で未解像。細線：国境。</p>`;
+ const below=section==='terrain'?manifest.elevation.terrainColors[0]:manifest.elevation.colors[0];
+ const subzero=section==='rainfall'?'':`<div class="latin-foundation-extra-key"><span><i data-foundation-subzero style="background:${below}"></i>0m未満（沿岸の陸海混合を含む）</span><span><i style="background:#e2e5df"></i>欠測・未解像</span></div>`;
+ return `<div class="latin-foundation-scale" aria-label="${section==='rainfall'?'降水量：薄い青から濃い青へ250mm間隔':'標高：500m間隔。低地から高地へ'}"><div class="latin-foundation-colorbar" aria-hidden="true">${colorBar}</div><div class="latin-foundation-ticks">${[...ticks,maximum].map(t=>`<span style="left:${100*t/maximum}%;transform:translateX(${t===0?'0':t===maximum?'-100':'-50'}%)">${t.toLocaleString('ja-JP')}</span>`).join('')}</div></div>${subzero}<p>${section==='rainfall'?'mm/年 · 1991–2020年平年値。線と青の境界は250mm間隔、濃い青ほど多雨。':'m · EGM2008基準。線と色の境界は500m間隔。2022年はモデルの版。'}灰地：欠測・格子で未解像。細線：国境。</p>`;
 }
 export function renderLatinFoundationReading(section:LatinFoundationSection,riverId:string|null=null):string{
  const r=latinFoundationRivers.find(r=>r.id===riverId);
