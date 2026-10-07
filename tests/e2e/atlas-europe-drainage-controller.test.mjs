@@ -240,3 +240,16 @@ test('an out-of-range click clears a completed drainage selection and its compar
     assert.equal(app.draws.length,1,'The cleared state never repaints the previous basin');
   }finally{await app.w.happyDOM.close();}
 });
+
+test('a drainage section names a representative river only when its retained MAIN_BAS agrees',async()=>{
+  const app=await setup();
+  try{
+    for(const river of app.config.readings.filter(item=>item.field==='nature'&&item.layer==='water')){
+      const cell=europeDrainageCell(values,river.coordinates);assert.ok(cell);
+      app.choose(String(cell.basin.HYBAS_ID));
+      await until(()=>app.q('[data-eu-basin-summary]').textContent.includes(river.name));
+      assert.match(app.q('[data-eu-basin-summary]').textContent,/同じMAIN_BAS.*モデル区画/);
+      assert.match(app.q('[data-eu-basin-summary]').textContent,/流域全体とは限りません/);
+    }
+  }finally{await app.w.happyDOM.abort();}
+});

@@ -361,6 +361,11 @@ async function stageOneOperations(page, profile) {
   assert.equal(await page.locator('[data-eu-legend-items] > div').count(), 14);
   assert.match(await page.locator('[data-eu-legend-items]').textContent(), /250未満.*3,000以上/s);
   await snapshot(page, profile, 'precipitation-250mm');
+  await openEurope(page, 'atlas/europe/nature/?layer=drainage', 'normal');
+  await page.locator('[data-eu-map-place="rhine"][data-eu-map-kind="feature"]').click();
+  await page.waitForFunction(() => document.querySelector('[data-eu-basin-summary]').textContent.includes('ライン川'));
+  assert.match(await page.locator('[data-eu-basin-summary]').textContent(), /同じMAIN_BAS.*モデル区画/);
+  await snapshot(page, profile, 'drainage-river-reading');
   await openEurope(page, 'atlas/europe/industry/?layer=hubs', 'normal');
   assert.equal(new URL(page.url()).searchParams.has('feature'), false);
   await snapshot(page, profile, 'industry-overview');
@@ -385,6 +390,13 @@ async function stageOneOperations(page, profile) {
   await openEurope(page, 'atlas/europe/population/?layer=density', 'normal');
   assert.equal(new URL(page.url()).searchParams.has('place'), false);
   await snapshot(page, profile, 'population-overview');
+  const populationExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
+  const [parisId] = await page.locator('[data-eu-feature-choice]').selectOption({label:'パリ'});
+  await settled(page, '（2020）');
+  assert.equal(await page.locator('[data-eu-subject-grid]').evaluate(node => !!node.closest('.eu-read-panel')), true);
+  assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'), populationExtent);
+  assert.equal(new URL(page.url()).searchParams.get('feature'), parisId);
+  await snapshot(page, profile, 'population-city-density');
   await openEurope(page, 'atlas/europe/population/?layer=ethnicity', 'normal');
   const extent = () => page.locator('[data-eu-static]').getAttribute('viewBox');
   const fullExtent = await extent();
@@ -492,11 +504,11 @@ try {
       if (profile.viewport.width === 1024) await europeOperations(page, profile, 'explicit-static');
     } finally { await context.close(); }
   }
-  networkClean(); assert.equal(manifest.images.length, 26); assert.equal(manifest.records.length, 3);
+  networkClean(); assert.equal(manifest.images.length, 30); assert.equal(manifest.records.length, 3);
   assert.ok(manifest.records.every(record => record.status === 'passed'));
   assert.equal(git('rev-parse', 'HEAD'), manifest.gitHead, 'Checkout changed during capture');
   assert.equal(git('rev-parse', 'HEAD:src'), manifest.gitSrcTree);
-  manifest.status = 'passed'; manifest.checks.push('26 normal-render screenshots', '2 normal PC operation profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
+  manifest.status = 'passed'; manifest.checks.push('30 normal-render screenshots', '2 normal PC operation profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
   console.log(JSON.stringify({status: manifest.status, output, images: manifest.images.length, head: manifest.gitHead}));
 } catch (error) {
   manifest.status = 'failed'; manifest.failure = {message: String(error), stack: error.stack};
