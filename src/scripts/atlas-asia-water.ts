@@ -79,7 +79,7 @@ export function createAsiaWater(root:HTMLElement,config:Config,getState:()=>Asia
   if(shortcuts){shortcuts.hidden=t!=='basins';shortcuts.replaceChildren();if(t==='basins')for(const item of asiaWaterFocus[config.regionId]){const b=el('button',item.name);b.type='button';b.dataset.basinShortcut=item.id;b.disabled=!datasets.get(t)?.records.some(r=>r.id===item.id);b.setAttribute('aria-pressed',String(record?.id===item.id));b.onclick=()=>select(item.id);shortcuts.append(b);}}
   $('[data-map-title]').textContent=meta.title;$('[data-map-eyebrow]').textContent='Water · '+meta.period;$('[data-map-period]').textContent=meta.unit;
   $('[data-hydrology-title]').textContent=getState().topic==='water'?'河川と、地下水を蓄える主な地域':meta.title;$('[data-hydrology-definition]').textContent=meta.definition;
-  $('[data-map-gesture]').textContent='地図上の対象国か区域の一覧から選ぶと、その場所の値と資料を読めます。地図は2本指で移動・拡大できます。';
+  $('[data-map-gesture]').textContent=t==='precipitation'?'地点を選ぶと年降水量を読めます。国の背景クリックでは選択を変えません。地図は2本指で移動・拡大できます。':'流域・地下水の区域や河川そのもの、または区域の一覧から選べます。対象外の背景クリックでは選択を変えません。地図は2本指で移動・拡大できます。';
   $('[data-hydrology-status]').textContent=status;$('[data-hydrology-retry]').hidden=!failed.has(t);
   $('[data-hydrology-lead]').textContent=selectedScene?.lead??(t==='precipitation'?'海から山地、さらに内陸へ、年間に届く水の違いを読みます。':t==='basins'?'川には、その場所の雨だけでなく、上流の広い範囲に降った雨や雪の水も集まります。色分けした流域と青い流路を重ね、国境を越えたつながりを確かめてください。':'青い線は川、淡い青の面は地下水を蓄える主要な地層です。川と地下水域の位置を見比べます。');
   const sc=$('[data-hydrology-scene-reading]');sc.replaceChildren();if(selectedScene)sc.append(el('h3',selectedScene.name),el('p',selectedScene.reading),link('この場所の解説の根拠',selectedScene.source));

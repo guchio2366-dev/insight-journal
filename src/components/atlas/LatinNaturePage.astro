@@ -5,7 +5,7 @@ import {latinNatureData,latinNatureCases,renderLatinNatureMap,renderLatinNatureL
 import {withBase} from '../../lib/urls';
 import '../../styles/atlas-latin-nature.css';
 const selected=latinNatureCases[0];
-const state={layer:'climate',place:selected.place,scope:selected.scope,only:false};
+const state={layer:'climate',place:selected.place,scope:selected.scope,only:false,interactiveCities:true};
 ---
 <LatinAmericaWorkspace field="nature" title="中南米の自然環境" lead="気候と雨の季節が、作物の産地・河川交通・運河の物流にどうつながるかを読みます。">
  <section slot="map" class="latin-nature-main" data-latin-nature>
@@ -20,12 +20,11 @@ const state={layer:'climate',place:selected.place,scope:selected.scope,only:fals
    <figure class="latin-nature-pane"><figcaption data-nature-primary-caption>気候群 · 1991–2020年</figcaption><div data-nature-map-host set:html={renderLatinNatureMap(state,'nature-main')} /><div data-nature-legend-host set:html={renderLatinNatureLegend('climate')} /></figure>
    <figure class="latin-nature-source-pane" data-nature-source-pane hidden><figcaption data-nature-source-caption></figcaption><div data-nature-source-map></div><div data-nature-source-legend></div></figure>
   </div>
-  <p class="latin-caption" data-nature-map-description>5気候群の中にも雨季・乾季の違いがあります。右の観測所の月別平年値で確かめます。</p>
+  <p class="latin-caption" data-nature-map-description>5気候群の中にも雨季・乾季の違いがあります。地図の都市・観測所の点を選び、右の月別平年値で確かめます。</p>
   <div class="latin-actions"><label><input type="checkbox" data-nature-only /> 選択国の気候を強調（周辺は参考）</label><span data-nature-renderer role="status"></span></div>
  </section>
  <div slot="items" class="latin-nature-cases" aria-label="自然条件の代表例">{latinNatureCases.map((c,i)=><button type="button" data-nature-case={c.id} aria-pressed={i===0}>{c.name}</button>)}</div>
  <div slot="reading">
-  <label class="latin-nature-city-control">雨温図の都市・観測所（16地点）<select data-nature-city aria-label="雨温図の都市・観測所" disabled><option value="" data-nature-city-empty hidden>この事例の月別平年値は未収録</option>{latinNatureData.cities.map(city=><option value={city.id} selected={city.id===selected.city}>{city.name}</option>)}</select></label>
   <div data-nature-normals set:html={renderLatinNatureNormals(selected.city)} />
   <h2 data-nature-reading-title>{selected.title}</h2>
   <p class="latin-takeaway" data-nature-takeaway>{selected.takeaway}</p>

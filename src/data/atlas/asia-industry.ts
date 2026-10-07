@@ -11,11 +11,18 @@ export const industryColors=['#eaf0dc','#c5d5a6','#92b982','#559078','#1d625e'];
 export const industryFuelNames:Record<string,string>={Coal:'石炭',Gas:'天然ガス',Oil:'石油',Hydro:'水力',Nuclear:'原子力',Solar:'太陽光',Wind:'風力',Biomass:'バイオマス',Waste:'廃棄物',Geothermal:'地熱','Wave and Tidal':'波力・潮汐'};
 export const industryFuelColors:Record<string,string>={Coal:'#4c4846',Gas:'#c07739',Oil:'#84637c',Hydro:'#2076a5',Nuclear:'#ad4c3b',Solar:'#c6a127',Wind:'#638e50',Biomass:'#356e4e',Waste:'#a47f62',Geothermal:'#bf744e','Wave and Tidal':'#346e83'};
 export const industryGroups=['製造業','資源・エネルギー','サービス業','工業・建設と経済全体','貿易'];
-export function industryTopic(region:IndustryRegion,state:AsiaState){return region.topics.find(t=>t.id===state.topic)??region.topics[0];}
+export const eastIndustryCountries=[{code:'CHN',name:'中国'},{code:'JPN',name:'日本'},{code:'KOR',name:'韓国'},{code:'TWN',name:'台湾'}];
+export function isEastIndustryRegion(region:IndustryRegion){return Array.isArray(region.countries)&&eastIndustryCountries.every(c=>region.countries.includes(c.code));}
+export function industryTopicsForPlace(region:IndustryRegion,place:string|null){return isEastIndustryRegion(region)&&place?region.topics.filter(t=>!t.country||t.country===place):region.topics;}
+export function industryScopeCountries(region:IndustryRegion,place:string|null){return isEastIndustryRegion(region)?eastIndustryCountries.filter(c=>!place||c.code===place).map(c=>c.code):region.countries;}
+export function industryTopic(region:IndustryRegion,state:AsiaState){const topics=industryTopicsForPlace(region,state.place);return topics.find(t=>t.id===state.topic)??topics.find(t=>t.id==='manufacturing')??topics[0];}
 export function isIndustryDetailId(id:string){return /^[A-Za-z0-9_-]{1,64}$/.test(id);}
 export function normalizeIndustryState(region:IndustryRegion,state:AsiaState,data?:IndustryData|null):AsiaState{
  if(state.field!=='industry')return state;
- const topic=industryTopic(region,state),candidate=state.detail&&isIndustryDetailId(state.detail)?state.detail:null;
+ if(isEastIndustryRegion(region)&&state.place&&!eastIndustryCountries.some(c=>c.code===state.place))state={...state,place:null,detail:null,point:null};
+ const topic=industryTopic(region,state);
+ if(state.topic&&state.topic!==topic.id)state={...state,detail:null,point:null};
+ const candidate=state.detail&&isIndustryDetailId(state.detail)?state.detail:null;
  if(topic.kind==='trade')return {...state,topic:topic.id,city:null};
  // Keep a bounded URL candidate until the lazy dataset can validate it. No
  // facility names, coordinates or selections are displayed from this ID alone.

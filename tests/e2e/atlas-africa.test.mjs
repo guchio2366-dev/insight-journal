@@ -3,10 +3,11 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {Window} from 'happy-dom';
 import {initializeAfricaAtlas} from '../../src/scripts/atlas-africa.ts';
+import {latestValueAt,formatValue,metricById} from '../../src/data/atlas/africa-atlas.ts';
 import {themes} from '../../src/data/atlas/africa-themes.ts';
 const html=()=>readFileSync(new URL('../../dist/atlas/africa/index.html',import.meta.url),'utf8');
 function withAfricaPage(url,run){
- const w=new Window({url});
+ const w=new Window({url,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true}});
  const previous=Object.fromEntries(['window','document','location','history'].map(k=>[k,globalThis[k]]));
  try{
   for(const k of Object.keys(previous))globalThis[k]=w[k];
@@ -98,7 +99,7 @@ test('spatial categories and water depth persist across reload, country changes 
 });
 
 test('Africa build includes sitemap, all fields, countries, sources and CSV fallback',()=>{
- const w=new Window();w.document.write(html());const doc=w.document;
+ const w=new Window({settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true}});w.document.write(html());const doc=w.document;
  assert.equal(doc.querySelectorAll('main').length,1);
  assert.equal(doc.querySelectorAll('[data-country-path]').length,55);
  assert.equal(doc.querySelectorAll('[data-field]').length,4);
@@ -114,7 +115,7 @@ test('Africa build includes sitemap, all fields, countries, sources and CSV fall
 });
 
 test('Africa controller retains country across fields, compares, restores URL history, reports missing and recovers valid year',()=>{
- const w=new Window({url:'https://example.com/insight-journal/atlas/africa/?field=population&place=NGA&compare=EGY&year=2023'});
+ const w=new Window({settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true},url:'https://example.com/insight-journal/atlas/africa/?field=population&place=NGA&compare=EGY&year=2023'});
  const previous=Object.fromEntries(['window','document','location','history'].map(k=>[k,globalThis[k]]));
  try{
  for(const k of Object.keys(previous))globalThis[k]=w[k];
@@ -127,21 +128,23 @@ test('Africa controller retains country across fields, compares, restores URL hi
  q('[data-latest]').click();assert.equal(q('[data-year]').value,'2021');assert.notEqual(q('[data-selected-value]').textContent,'未収録');
  q('[data-place]').value='ESH';q('[data-place]').dispatchEvent(new w.Event('change'));assert.equal(q('[data-selected-value]').textContent,'未収録');assert.ok(q('[data-place-note]').textContent.includes('転用しません'));
  w.history.replaceState(null,'','?field=agriculture&metric=AG.YLD.CREL.KG&place=EGY&compare=NGA&year=2023&zoom=country');w.dispatchEvent(new w.PopStateEvent('popstate'));
- assert.equal(q('[data-selected-value]').textContent,'7,402');assert.ok(q('[data-comparison]').textContent.includes('1,549'));assert.notEqual(q('.africa-map').getAttribute('viewBox'),'0 0 1100 907');
+ assert.equal(q('[data-selected-value]').textContent,formatValue(latestValueAt('AG.YLD.CREL.KG','EGY').value,metricById('AG.YLD.CREL.KG')));assert.equal(q('[data-compare]').value,'');assert.match(q('[data-metric-year]').textContent,/最新収録年/);assert.notEqual(q('.africa-map').getAttribute('viewBox'),'0 0 1100 907');
  q('[data-field="nature"]').click();assert.ok(q('[data-year]').disabled);assert.ok(q('[data-trend]').textContent.includes('長期平均'));
  q('[data-reset]').click();assert.equal(q('[data-place]').value,'');assert.equal(q('[data-compare]').value,'');assert.equal(q('[data-africa-topic="climate"]').getAttribute('aria-pressed'),'true');assert.equal(q('.africa-map').getAttribute('viewBox'),'0 0 1100 907');
  } finally {for(const k of Object.keys(previous))globalThis[k]=previous[k];w.happyDOM.abort();}
 });
 
 test('each thematic comparison retains the source marks, all legends and named return with exact source selection',()=>{
- const w=new Window({url:'https://example.com/insight-journal/atlas/africa/'});
+ const w=new Window({settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true},url:'https://example.com/insight-journal/atlas/africa/'});
  const previous=Object.fromEntries(['window','document','location','history'].map(k=>[k,globalThis[k]]));
  try{
   for(const k of Object.keys(previous))globalThis[k]=w[k];
   w.document.write(html());
   for(const path of w.document.querySelectorAll('[data-country-path]'))path.getBBox=()=>({x:10,y:10,width:100,height:100});
   initializeAfricaAtlas();const q=s=>w.document.querySelector(s);
-  for(const theme of themes){
+  // Agriculture now has a fixed distribution-first reading and no comparison action.
+  // Its retained original reading/source is covered by the agriculture E2E suite.
+  for(const theme of themes.filter(theme=>theme.field!=='agriculture')){
    w.history.replaceState(null,'',`?field=${theme.field}&place=GHA&compare=EGY&year=2023&zoom=theme&theme=${theme.id}`);
    w.dispatchEvent(new w.PopStateEvent('popstate'));
    const sourceMetric=q('[data-metric]').value,sourceYear=q('[data-year]').value,sourceView=q('.africa-map').getAttribute('viewBox');
@@ -178,7 +181,7 @@ test('each thematic comparison retains the source marks, all legends and named r
 });
 
 test('theme entry aligns unselected countries and preserves explicit selection without muting the theme',()=>{
- const w=new Window({url:'https://example.com/insight-journal/atlas/africa/'});
+ const w=new Window({settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true},url:'https://example.com/insight-journal/atlas/africa/'});
  const previous=Object.fromEntries(['window','document','location','history'].map(k=>[k,globalThis[k]]));
  try{
   for(const k of Object.keys(previous))globalThis[k]=w[k];

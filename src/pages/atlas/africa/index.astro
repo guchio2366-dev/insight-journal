@@ -49,6 +49,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
   <div class="africa-workspace" id="africa-map-panel">
    <section class="africa-map-card" aria-labelledby="africa-map-title">
     <div class="africa-map-frame">
+    <div class="africa-agri-map-controls" data-africa-agri-map-controls hidden><label>地域<select data-africa-agri-region aria-label="農畜産の表示地域">{Object.entries(regionNames).map(([id,name])=><option value={id}>{name}</option>)}</select></label></div>
     <div class="africa-map-heading"><h2 id="africa-map-title" data-metric-title>{metric.label}</h2><span><span data-period>長期平均</span> · <span data-unit>{metric.unit}</span></span></div>
     <svg class="africa-map" viewBox={initialViewBox.join(' ')} data-theme={initialTheme.id} data-detail={state.zoom!=='all'?'true':'false'} role="img" aria-labelledby="africa-svg-title africa-svg-desc">
       <title id="africa-svg-title">{initialTheme.title}・国別の年降水量（長期平均）</title><desc id="africa-svg-desc">分布テーマと国別統計を重ねた地図。右の凡例と説明から、表示した分布を読み取れます。国は選択欄や一覧からも選べます。</desc>
@@ -85,9 +86,11 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
     <aside class="africa-detail" aria-label="分布の読み方と国別比較" tabindex="0">
     <section class="africa-theme-reading" aria-labelledby="africa-theme-title">
      <div class="africa-right-fixed">
+     <button class="africa-agri-overview-return" data-africa-agri-overview type="button" hidden>← 農畜産の概要</button>
      <p class="africa-kicker">地図から持ち帰ること</p>
      <h2 id="africa-theme-title" data-theme-title>{initialTheme.title}</h2>
      <p class="africa-takeaway" data-theme-takeaway>{initialTheme.takeaway}</p>
+      <div class="africa-agri-actions" data-africa-agri-actions hidden><button type="button" data-africa-agri-only>この品目だけを表示</button><button type="button" data-africa-agri-all hidden>作物・家畜の全分布へ戻る</button></div>
       <div class="africa-theme-actions"><button type="button" data-theme-comparison>国別統計と重ねる</button><button type="button" data-theme-return hidden>← {initialTheme.title}へ戻る</button></div>
       </div>
        <section class="africa-essential-legend" data-africa-statistics-key aria-label="国別統計の凡例">
@@ -97,6 +100,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
        <p class="africa-essential-legend-note" data-essential-boundary>細線：国境。赤枠：選択国。青い破線：比較国。</p>
       </section>
        <div class="africa-detail-scroll">
+       <div class="africa-agri-context" data-africa-agri-context hidden></div>
        <div class="africa-layer-selection" data-africa-layer-selection hidden><label>表示・読解する分類<select data-africa-layer-category></select></label><p data-africa-point-reading aria-live="polite"></p><button type="button" data-africa-layer-retry hidden>分布データを再読込</button></div>
       <p class="africa-theme-explanation" data-theme-takeaway-detail>{initialTheme.takeaway}</p>
       <p class="africa-theme-caveat" data-theme-caveat>{initialTheme.caveat}</p>
@@ -107,8 +111,8 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
     </section>
    </aside>
   </div>
-  </article>
   <div class="africa-secondary">
+<div class="africa-agri-notes" data-africa-agri-notes hidden></div>
 <details class="africa-disclosure africa-statistics-controls"><summary>国別統計の指標・年を選ぶ</summary>  <div class="africa-controls">
    <label>指標<select data-metric>{metrics.map(m=><option value={m.id} hidden={m.field!=='nature'} selected={m.id===state.metric}>{m.label}</option>)}</select></label>
    <p data-year-note>長期平均のため年による切替はありません</p>
@@ -122,6 +126,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
 <details class="africa-disclosure"><summary>地図・統計の全出典と範囲・CSV</summary>  <footer class="africa-sources"><h2>地図・統計の出典と範囲</h2><p>境界：<a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/">Natural Earth Admin 0 Countries 1:50m</a>（public domain）。西経27度〜東経64度、南緯36度〜北緯39度を等距円筒図法で表示しています。面積を比較する地図ではありません。54か国と西サハラを選択でき、海外領土は選択対象に含みません。</p><p>境界は出典の概略表現で、現在の実効支配や主権を判定するものではありません。西サハラは別の地物として表示し、モロッコの統計を転用しません。ソマリアは統計対象に合わせ、出典のソマリランド地物も同じ選択対象に含めています。</p><p>統計：世界銀行 World Development Indicators（FAO、国民経済計算、人口推計等に由来）。<a href="https://datacatalog.worldbank.org/public-licenses">CC BY 4.0・データの利用条件</a>。国境地物と統計の集計範囲は完全には一致しません。数値は改訂される場合があります。</p><p><a href={withBase('/assets/atlas/africa/indicators.csv')} download>15指標の国別・年別データをCSVで保存</a></p><details><summary>15指標の定義・出典をすべて見る</summary>{metrics.map(m=><div class="africa-source-entry"><h3>{m.label}（{m.unit}）</h3><p>{m.note}</p><a href={`https://data.worldbank.org/indicator/${m.id}`}>{m.id} · 世界銀行</a></div>)}</details></footer></details>
   </div>
   <noscript><p class="africa-noscript">JavaScriptが無効のため、ナイルの分布テーマと長期平均降水量の地図を表示しています。分布の説明・出典と、国別の一覧は折畳みを開いて読めます。4分野すべての数値はCSVから確認できます。分野・選択・比較・年の切替にはJavaScriptが必要です。</p></noscript>
+  </article>
   </div>
  </div>
 </BaseLayout>

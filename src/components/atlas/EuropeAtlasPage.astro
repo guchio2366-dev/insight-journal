@@ -79,7 +79,7 @@ const config = { industryOverviews, farmingAreas, geography, climateWater, count
             <g class="eu-farming-selection">
               {farmingAreas.features.map(f=><g><path d={viewPath(f.geometry as any)} data-eu-farm-outline={f.properties.id} fill="none" stroke="#fffdf2" stroke-width="5" vector-effect="non-scaling-stroke" style="display:none"/><path d={viewPath(f.geometry as any)} data-eu-farm-outline={f.properties.id} fill="none" stroke="#173c48" stroke-width="2.5" vector-effect="non-scaling-stroke" style="display:none"/></g>)}
             </g>
-            {geography.features.map(f => <path d={viewPath(f.geometry)} class:list={['eu-outline', { 'eu-context': f.properties.kind === 'context' }]} data-eu-shape={f.properties.kind === 'europe' ? f.properties.code : undefined}><title>{countryName(f.properties.code)}</title></path>)}
+            {geography.features.map(f => <path d={viewPath(f.geometry)} class:list={['eu-outline', { 'eu-context': f.properties.kind === 'context' }]} data-eu-shape={f.properties.kind === 'europe' ? f.properties.code : undefined} />)}
             <g data-eu-climate-water style={initialClimateReader?'':'display:none'}>
               {climateWater.features.map(f=><path d={viewPath(f.geometry)} data-eu-water-mask={f.properties.id} fill="#e7eff1" fill-rule="evenodd" stroke="#8ca6aa" stroke-width="0.7" vector-effect="non-scaling-stroke"><title>{f.properties.name}の水面</title></path>)}
             </g>
@@ -116,6 +116,11 @@ const config = { industryOverviews, farmingAreas, geography, climateWater, count
           <p>牛は肉用・乳用、鶏は肉用・採卵用を分けていません。オリーブ・ブドウ単独の分布は未収録です。</p>
           <a href={withBase('/assets/atlas/europe/farming-overview-v2/manifest.json')}>出典・分布面の加工方法</a>
           </details>
+        </div>
+        <div class="eu-culture-composition-key" data-eu-culture-composition-key hidden>
+          <p>2021年の公表総計 · 円は同じ大きさです。角度は各対象の総人口に占める回答割合で、円の位置は対象を示す目印です。人口規模・個人の位置・細地域の分布を表しません。</p>
+          <p>イングランド・ウェールズ・クロアチアだけを掲載しています。最多・過半数の分類で土地を塗った地図ではありません。色は各表の分類を区別し、国をまたいだ同色の対応はありません。</p>
+          <div class="eu-composition-tables" data-eu-composition-tables></div>
         </div>
         <p class="eu-map-caption">線は国境です。ロシアは欧州側の表示枠内を掲載しています。境界は概略で、係争地の帰属を示すものではありません。</p>
         
