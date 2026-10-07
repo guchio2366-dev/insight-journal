@@ -460,6 +460,7 @@ try {
   manifest.status = 'failed'; manifest.failure = {message: String(error), stack: error.stack};
   if (activeRecord?.status === 'running') activeRecord.status = 'failed';
   console.error(String(error)); process.exitCode = 1;
+  if (process.env.GITHUB_ACTIONS) console.error(`::error title=Europe PC review::${String(error).replaceAll('%','%25').replaceAll('\r','%0D').replaceAll('\n','%0A')}`);
 } finally {
   if (browser) await browser.close();
   manifest.completedAt = new Date().toISOString(); await save();
