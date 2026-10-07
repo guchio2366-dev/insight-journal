@@ -1,0 +1,21 @@
+---
+import {withBase} from '../../lib/urls';
+import population from '../../data/atlas/mexico/population-localities.json';
+import states from '../../data/atlas/mexico/population.json';
+const assets = withBase('/assets/atlas/mexico-population-localities-v1/');
+---
+<div class="atlas-map-frame mexico-map-frame locality-population-frame" data-locality-frame hidden>
+ <div class="population-map-actions" aria-label="集落人口図の表示範囲">
+  <button type="button" data-locality-action="fit">全国</button>
+  <button type="button" data-locality-action="in" aria-label="集落人口図を拡大">＋</button>
+  <button type="button" data-locality-action="out" aria-label="集落人口図を縮小">−</button>
+ </div>
+ <svg class="mexico-map population-map locality-population-context" data-locality-map viewBox="0 0 900 580" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+  <g class="locality-population-land">{states.states.map(row => <use href={`#mexico-population-outline-${row.stateCode}`} />)}</g>
+  <g class="population-map-context"><text x="450" y="45">米国</text><text x="95" y="415">太平洋</text><text x="720" y="250">メキシコ湾</text></g>
+ </svg>
+ <canvas data-locality-canvas aria-label="2020年の集落人口。点の意味と人数の凡例、全国と選択した点の値は右側で読めます。" tabindex="0"></canvas>
+ <svg class="locality-population-labels" data-locality-labels viewBox="0 0 900 580" aria-hidden="true"></svg>
+ <p class="locality-population-loading" data-locality-loading role="status">集落人口を読み込み中…</p>
+</div>
+<script type="application/json" data-locality-config set:html={JSON.stringify({assets,...population}).replace(/</g,'\\u003c')} />

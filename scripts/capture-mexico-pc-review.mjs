@@ -7,7 +7,7 @@ import {inspectMexicoInitialPresentation, mexicoPCOperationCases} from './captur
 const defaultProfile = {viewport: {width: 1280, height: 665}, deviceScaleFactor: 1, isMobile: false, hasTouch: false};
 const layoutTolerance = 0.25;
 const fields = ['agriculture', 'nature', 'industry', 'population'];
-const mexicoMaps = {agriculture: '[data-agriculture-map]', nature: '[data-mexico-nature-main-map]', industry: '[data-mi-map="primary"]', population: '[data-population-map]'};
+const mexicoMaps = {agriculture: '[data-agriculture-map]', nature: '[data-mexico-nature-main-map]', industry: '[data-mi-map="primary"]', population: '[data-locality-frame]:not([hidden]), [data-population-legacy-frame]:not([hidden]) [data-population-map]'};
 const mexicoReady = {agriculture: ['agricultureReady', 'true'], nature: ['mexicoNatureReady', 'true'], industry: ['miReady', 'true'], population: ['populationReady', '1']};
 
 function selectors(country, field) {
@@ -108,6 +108,7 @@ async function capture(browser, origin, basePath, output, scene, commit, profile
     await page.waitForFunction(({root, ready}) => {const node = document.querySelector(root); return node && (node.dataset[ready[0]] === ready[1] || node.dataset.renderState === 'fallback');}, selected, {timeout: 45_000});
     if(country==='mexico'&&field==='industry')await page.waitForFunction(()=>document.querySelector('[data-mexico-field="industry"]')?.dataset.miLabelLayoutReady==='true');
     await settle(page, selected);
+    if(country==='mexico'&&field==='population')await page.waitForFunction(()=>{const root=document.querySelector('[data-mexico-field="population"]');return root?.dataset.localityPopulationActive!=='true'||root.dataset.localityPopulationReady==='true';});
     // Additional Mexico cases may operate the existing page before measurement.
     if (scene.run) {
       record.operation = {steps: []};

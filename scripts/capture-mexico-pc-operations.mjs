@@ -26,6 +26,27 @@ async function text(page, selector) {return (await page.locator(selector).first(
 async function frame(page, field) {return page.locator(map[field]).getAttribute('viewBox');}
 
 async function populationNationalLayout(page) {
+  if (await page.locator('[data-locality-frame]:visible').count()) {
+    const layout = await page.evaluate(() => {
+      const root = document.querySelector('[data-mexico-field="population"]');
+      const box = node => {const r=node.getBoundingClientRect();return {left:r.left,top:r.top,right:r.right,bottom:r.bottom,width:r.width,height:r.height};};
+      const frame=root.querySelector('[data-locality-frame]'), settings=root.querySelector('[data-population-display-settings]');
+      const canvas=frame.querySelector('canvas'), pixels=canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data;
+      let paintedPixels=0;for(let i=3;i<pixels.length;i+=4)if(pixels[i]>0)paintedPixels++;
+      return {map:box(frame),canvas:{...box(canvas),paintedPixels},landStates:frame.querySelectorAll('use').length,settings:{open:settings.open,box:box(settings)},dataset:{...root.dataset},state:root.querySelector('[data-population-state]').value,view:root.querySelector('[data-population-view]').value,legend:root.querySelector('[data-locality-legend]').textContent,total:root.querySelector('[data-locality-total]').textContent,labels:[...root.querySelectorAll('[data-locality-labels] text')].map(node=>({text:node.textContent,...box(node)}))};
+    });
+    assert.equal(layout.dataset.localityPopulationReady,'true');
+    assert.equal(layout.dataset.localityVisiblePopulation,'126014024');
+    assert.equal(layout.dataset.localityVisibleCount,'189432');
+    assert.equal(layout.dataset.localityMarkCount,'8359');
+    assert.equal(layout.dataset.localityMode,'cluster');
+    assert.equal(layout.state,'');assert.equal(layout.view,'locality');
+    assert.equal(layout.landStates,32);assert(layout.canvas.width>250&&layout.canvas.height>160);assert(layout.canvas.paintedPixels>1000,'The actual population point layer must paint visible pixels');
+    assert.match(layout.legend,/面積.*人数/s);assert.match(layout.legend,/代表位置/);
+    assert.equal(layout.settings.open,false);assert(layout.settings.box.top>=layout.map.bottom-1.5);
+    assert(layout.labels.length>0&&layout.labels.every(label=>label.left>=layout.map.left-1.5&&label.right<=layout.map.right+1.5&&label.top>=layout.map.top-1.5&&label.bottom<=layout.map.bottom+1.5),'Locality labels must fit the map');
+    return layout;
+  }
   const layout = await page.evaluate(() => {
     const svg = document.querySelector('[data-population-map]');
     const bounds = node => {const box = node.getBoundingClientRect(); return {left: box.left, top: box.top, right: box.right, bottom: box.bottom, width: box.width, height: box.height};};
@@ -391,6 +412,33 @@ async function industry({page, evidence}) {
 
 async function population({page, evidence}) {
   const step = steps(page, evidence);
+  await step('Nationwide locality population loads without selecting a state',async()=>{
+    await page.waitForFunction(()=>document.querySelector('[data-mexico-field="population"]')?.dataset.localityPopulationReady==='true');
+    return populationNationalLayout(page);
+  });
+  await step('A population cluster expands into official locality positions, reloads and returns nationwide',async()=>{
+    const requests=[];const record=request=>{if(request.url().includes('mexico-population-localities-v1'))requests.push(request.url());};page.on('request',record);
+    try{
+      await page.locator('[data-locality-reading] details[data-locality-ranked] > summary').click();await settled(page);
+      await click(page,'[data-locality-list] button');
+      assert(await page.locator('[data-locality-selection]').isVisible());
+      await click(page,'[data-locality-selection-zoom]');
+      await page.waitForFunction(()=>{const root=document.querySelector('[data-mexico-field="population"]');return root.dataset.localityPopulationReady==='true'&&root.dataset.localityMode==='locality';});
+      assert(requests.some(url=>/localities-\d\d.json.gz$/.test(url)),'Expanding must fetch original source points');
+      assert(requests.filter(url=>/localities-\d\d.json.gz$/.test(url)).length<32,'Expansion must not fetch the entire country');
+      await click(page,'[data-locality-list] button');
+      assert.match(await text(page,'[data-locality-selected-description]'),/コード\d{9}/);
+      const originalFrame=await page.locator('[data-locality-map]').getAttribute('viewBox');await page.reload();
+      await page.waitForFunction(()=>document.querySelector('[data-mexico-field="population"]')?.dataset.localityPopulationReady==='true');
+      assert.equal(await page.locator('[data-locality-map]').getAttribute('viewBox'),originalFrame);
+      await click(page,'[data-locality-action="fit"]');
+      await page.waitForFunction(()=>document.querySelector('[data-mexico-field="population"]')?.dataset.localityVisiblePopulation==='126014024');
+      assert.equal(query(page,'localityFrame'),null);assert.equal(query(page,'state'),null);
+      return {requests,originalFrame};
+    }finally{page.off('request',record);}
+  });
+  // Retain the existing state density, comparisons and cultural regression cases.
+  await select(page,'[data-population-view]','density');
   await step('Nationwide initial population, state selection, scale comparison and return', async () => {
     assert.equal(await page.locator('[data-population-state]').inputValue(), ''); assert.equal(query(page, 'state'), null);
     assert.match(await text(page, '[data-population-selected-name]'), /全国/);
