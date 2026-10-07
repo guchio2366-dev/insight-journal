@@ -95,7 +95,7 @@ export function createEuropeFarmingStatistics(root:HTMLElement,callbacks:Callbac
       const jump=create('a','国別比較・年次・出典へ ↓') as HTMLAnchorElement;jump.href='#eu-farm-numbers-title';quick.append(jump);
     }
     const definition=query('[data-eu-farm-measure-definition]');definition.hidden=false;
-    const mapDefinition=state.layer==='forest'
+    const mapDefinition=state.layer==='dairy'?'地図に残る牛の分布は肉用・乳用をまとめたGLW4で、乳牛や生乳の細地域分布ではありません。':state.layer==='forest'
       ?'地図は2023年・国全体の森林面積比率で、ここでは森林面積と木材生産量を別の指標として比べます。'
       :state.layer==='treecover'
         ?'地図はESA WorldCover 2021の樹木被覆分類で、FAOSTATの森林土地面積や木材生産量とは定義が異なります。'

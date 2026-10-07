@@ -148,6 +148,19 @@ test('Germany chicken stocks and France egg tonnage stay missing while meat, mil
   } finally { await ui.close(); }
 });
 
+test('dairy exposes only raw cow milk and keeps national production distinct from cattle density', async () => {
+  const ui = setup();
+  try {
+    await ui.controller.update(state({ layer: 'dairy', place: 'AUT', farmMeasure: 'cattle-stocks' }));
+    assert.deepEqual([...ui.q('[data-eu-farm-measure]').options].map(option => option.value), ['cattle-milk']);
+    assert.equal(ui.q('[data-eu-farm-measure]').value, 'cattle-milk');
+    assert.equal(cells(ui.row('AUT'))[0], '4,020,700');
+    assert.match(ui.q('[data-eu-farm-stat-summary]').textContent, /牛の生乳生産量：4,020,700 t/);
+    assert.match(ui.q('[data-eu-farm-measure-definition]').textContent, /肉用・乳用.*生乳の細地域分布ではありません/);
+    assert.match(cells(ui.row('AUT'))[2], /^A：/);
+  } finally { await ui.close(); }
+});
+
 test('forest and tree-cover definitions retain their own map years and source instead of the farming model year', async () => {
   const ui = setup();
   try {

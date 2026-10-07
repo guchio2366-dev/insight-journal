@@ -25,10 +25,13 @@ OUTPUT = ROOT / 'src/data/atlas/europe/farming-areas.json'
 BOUNDS = [-25, 32, 65, 73]
 ROWS, COLS = 492, 1080
 STEP = 1 / 12
-QUANTILE = .80
+QUANTILE = .90
 SMOOTH_RADIUS = 2
-MIN_NEIGHBOR_FRACTION = .50
-MIN_AREA_KM2 = 500
+MIN_NEIGHBOR_FRACTION = .60
+MIN_AREA_KM2 = 750
+# Irrigated rice and citrus occupy smaller, discontinuous concentrations.
+# Preserve those source-supported regions without widening their value cutoff.
+PRODUCT_RULES = {'rice': (0.50, 500), 'citrus': (0.50, 500)}
 SIMPLIFY_DEGREES = .07
 RADIUS_KM = 6371.0088
 inputs = []
@@ -121,6 +124,7 @@ def main():
     features, records = [], []
     for product in products:
         id = product['id']
+        neighbor_fraction, minimum_area = PRODUCT_RULES.get(id, (MIN_NEIGHBOR_FRACTION, MIN_AREA_KM2))
         path = ASSETS / ('wheat-v1/values.bin.gz' if id == 'wheat' else f'farming-v1/{id}.bin.gz')
         raw = read(path, id=id, role='original 5-arc-minute quantity grid')
         grid = np.frombuffer(gzip.decompress(raw), dtype='<f4').reshape(ROWS, COLS)
@@ -131,21 +135,38 @@ def main():
         # Require local concentration and direct positive evidence in each cell.
         # Missing and zero source cells do not acquire evidence from neighbours.
         neighborhood = box_mean(high, SMOOTH_RADIUS)
-        candidate = positive & (neighborhood >= MIN_NEIGHBOR_FRACTION)
+        candidate = high & (neighborhood >= neighbor_fraction)
         exact = grid_geometry(candidate).intersection(land)
         source_parts = polygons(exact)
-        kept = [part for part in source_parts if area_km2(part) >= MIN_AREA_KM2]
+        kept = [part for part in source_parts if area_km2(part) >= minimum_area]
         assert kept, f'No supported area remains for {id}'
         # Simplification only generalizes the edges. Clip once more so it cannot
         # bleed into the sea or any context country surrounding Europe.
         simplified = make_valid(union_all(kept).simplify(SIMPLIFY_DEGREES, preserve_topology=True))
         clipped = simplified.intersection(land)
-        kept = [part for part in polygons(clipped) if area_km2(part) >= MIN_AREA_KM2]
+        kept = [part for part in polygons(clipped) if area_km2(part) >= minimum_area]
         kept.sort(key=lambda part: (-area_km2(part), part.bounds))
         geometry = MultiPolygon(kept)
         geometry_json = mapping(geometry)
         geometry_json['coordinates'] = rounded_coordinates(geometry_json['coordinates'])
-        geometry = shape(geometry_json)
+        # Coordinate rounding can create touching edges. Repair that topology
+        # without bridging separate concentration areas or adding buffers.
+        geometry = make_valid(union_all(polygons(make_valid(shape(geometry_json)))))
+        # Remove tiny repair fragments and pieces whose simplified outline has
+        # lost every high-value source centre. Missing evidence stays absent.
+        supported_parts = []
+        for part in polygons(geometry):
+            if area_km2(part) < minimum_area:
+                continue
+            west, south, east, north = part.bounds
+            left, right = max(0, math.floor((west + 25) * 12)), min(COLS, math.ceil((east + 25) * 12))
+            top, bottom = max(0, math.floor((73 - north) * 12)), min(ROWS, math.ceil((73 - south) * 12))
+            mask = contains_xy(part, longitude_grid[top:bottom, left:right], latitude_grid[top:bottom, left:right])
+            if np.any(mask & high[top:bottom, left:right]):
+                supported_parts.append(part)
+        kept = supported_parts
+        geometry = make_valid(union_all(kept))
+        geometry_json = mapping(geometry)
         assert geometry.is_valid and not geometry.is_empty, id
         assert geometry.difference(land.buffer(.000002)).is_empty, id
         # Label the region with the greatest represented source quantity. This
@@ -175,7 +196,8 @@ def main():
         label = [round(float(longitudes[col]), 6), round(float(latitudes[row]), 6)]
         properties = dict(product, threshold=threshold, labelCoordinate=label)
         features.append(dict(type='Feature', properties=properties, geometry=geometry_json))
-        record = dict(id=id, threshold=threshold, positiveCells=int(np.sum(positive)),
+        record = dict(id=id, threshold=threshold, minimumNeighborFraction=neighbor_fraction,
+                      minimumComponentAreaKm2=minimum_area, positiveCells=int(np.sum(positive)),
                       aboveThresholdCells=int(np.sum(high)), candidateCells=int(np.sum(candidate)),
                       originalComponents=len(source_parts), retainedComponents=len(kept),
                       approximateDisplayAreaKm2=round(area_km2(geometry), 2),
@@ -191,12 +213,16 @@ def main():
         sourceGrid=dict(width=COLS, height=ROWS, resolutionDegrees=STEP,
                         encoding='gzip little-endian float32', nodata=-1),
         threshold=dict(quantile=QUANTILE, population='各品目の欧州対象国の陸域内にある正値の元格子',
-                       meaning='品目ごとの収穫面積または飼養密度の第80百分位'),
-        processing=dict(smoothing='閾値以上の格子の割合を5×5格子で平均し、50%以上の場所を選ぶ。選ばれる中心格子にも正値が必要。',
+                       meaning='品目ごとの収穫面積または飼養密度の第90百分位'),
+        processing=dict(smoothing='閾値以上の格子の割合を5×5格子で平均し、原則60%以上の場所を選ぶ。米と柑橘類は50%以上。中心格子も第90百分位以上の値が必要。',
                         smoothingRadiusCells=SMOOTH_RADIUS, minimumNeighborFraction=MIN_NEIGHBOR_FRACTION,
                         minimumComponentAreaKm2=MIN_AREA_KM2,
+                        productRules={id: dict(minimumNeighborFraction=rule[0], minimumComponentAreaKm2=rule[1]) for id, rule in PRODUCT_RULES.items()},
+                        productRuleReason='米と柑橘類は小さく分かれた高値の産地を残すため、近隣比率と最小面積のみ緩和する。元格子の第90百分位は全品目で維持する。',
                         minimumAreaMethod='半径6371.0088kmの球面円筒等積投影による概算面積',
                         simplifyToleranceDegrees=SIMPLIFY_DEGREES, coordinatePrecisionDecimalPlaces=6,
+                        precisionTopology='6桁への丸め後にmake_validとunion_allで接触辺を修復。緩衝帯や離れた面を結ぶ線を加えない。',
+                        finalEvidence='修復後の原則750km²未満（米・柑橘類は500km²未満）の面と、第90百分位以上の元格子中心を一つも含まない面は表示しない。',
                         clipping='europe-countries.jsonでkind=europeの国を結合し、表示範囲と陸域で切り抜く。周辺国は含めない。',
                         overlaps='16品目をそれぞれ独立に処理し、分布が重なる部分も残す。最大品目だけに割り当てない。',
                         labelPlacement='分布面内の元格子の数量が最大の面を選び、その面の正値の第90百分位以上かつ全体閾値以上の元セル中心を使う。面の比較は作物で収穫面積、家畜で密度×球面格子面積を使う。数量集計は名称配置だけに用い、統計値として提示しない。',
@@ -210,7 +236,7 @@ def main():
             '主要な集中帯を読むための概略図であり、耕地・牧場の実際の境界や全分布を示さない。',
             '輪郭の簡略化により元格子との境界にずれが生じる。格子の数量・0・欠測は変更せず、品目別の詳細図で確認する。',
             '色の面積や輪郭の大小から、品目間の生産量・収穫面積・飼養頭羽数を比較できない。',
-            '500km²未満の孤立域は省略するが、離れた主産地は一つに結ばず別々の面として残す。',
+            '原則750km²未満（米・柑橘類は500km²未満）の孤立域は省略するが、離れた主産地は一つに結ばず別々の面として残す。',
             'SPAMの収穫面積は複数作期を含む場合があり、耕地面積と一致しない。',
             '収録済みの12作物と牛・豚・鶏・羊のみ。ブドウ・オリーブ単独の格子は未収録。',
             'ロシアは表示枠内の対象国データを含む。統計・地理区分の境界や領有権を判断する図ではない。',
