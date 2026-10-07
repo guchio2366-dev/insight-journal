@@ -4,7 +4,7 @@ export {industrySectors, industrySubsectors};
 export const majorAsiaIndustries:Record<string,{id:string;label:string}[]>={
  'east-asia':[{id:'manufacturing',label:'製造業全体'},{id:'jp-31',label:'輸送用機械（日本）'},{id:'jp-28',label:'電子部品（日本）'},{id:'cn-steel',label:'鉄鋼（中国）'},{id:'power-all',label:'電力'},{id:'services',label:'サービス業'}],
  'southeast-asia':[{id:'manufacturing',label:'製造業'},{id:'my-p2',label:'鉱業（マレーシア）'},{id:'power-all',label:'電力'},{id:'services',label:'サービス業'}],
- 'south-central-asia':[{id:'manufacturing',label:'製造業'},{id:'steel-capacity',label:'鉄鋼'},{id:'resource-rents',label:'天然資源'},{id:'power-all',label:'電力'},{id:'services',label:'サービス業'}],
+ 'south-central-asia':[{id:'in-manufacturing',label:'州別製造業（インド）'},{id:'in-services',label:'州別サービス業（インド）'},{id:'manufacturing',label:'地域比較：製造業の構成'},{id:'steel-capacity',label:'地域比較：鉄鋼設備'},{id:'resource-rents',label:'地域比較：天然資源'},{id:'power-all',label:'地域の発電施設'}],
 };
 export function industryTopicGroup(t:Pick<IndustryTopic,'id'>):{sector:IndustrySector;subsector:string} {
  const id=t.id;
