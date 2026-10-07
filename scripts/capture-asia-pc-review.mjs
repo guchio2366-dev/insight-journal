@@ -12,6 +12,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {chromium} from 'playwright';
 import astroConfig from '../astro.config.mjs';
+import {verifyAsiaIndustryCountry} from './verify-asia-industry-country.mjs';
 
 const run=promisify(execFile);
 const repo=fileURLToPath(new URL('../',import.meta.url));
@@ -25,7 +26,7 @@ const scenes=[
  {id:'population',us:'/atlas/north-america/population/',asia:'/atlas/asia/east-asia/population/',alignTop:true,comparisonScope:'layout-only; the US reference does not show a population distribution fill, so distribution rendering equivalence is not assessed'},
 ];
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.geojson':'application/geo+json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.woff2':'font/woff2','.gz':'application/gzip'};
-const metadata={schemaVersion:1,status:'running',startedAt:new Date().toISOString(),checkedOutSHA:null,headSHA:process.env.REVIEW_HEAD_SHA||null,baseSHA:process.env.REVIEW_BASE_SHA||null,beforeSHA:process.env.REVIEW_BEFORE_SHA||null,githubSHA:process.env.GITHUB_SHA||null,runId:process.env.GITHUB_RUN_ID||null,runAttempt:process.env.GITHUB_RUN_ATTEMPT||null,repository:process.env.GITHUB_REPOSITORY||null,basePath,profiles,output:'review-artifacts/asia-pc',expectedImageCount:48,expectedComparisonCount:8,fonts:{setup:process.env.REVIEW_JAPANESE_FONT_SETUP||'preinstalled',families:process.env.REVIEW_JAPANESE_FONTS||null,match:process.env.REVIEW_JAPANESE_FONT_MATCH||null},browser:null,scope:'Local production build only; public deployment is not accessed.',notes:['US automobiles and Japanese transport equipment retain their respective statistical definitions.','Industry map dimensions use the compact US population frame; other dimensions and all corresponding field tops agree within 1 CSS pixel.','Population is a layout-only comparison: the US reference does not show a population distribution fill; no distribution rendering equivalence is asserted.','Each PNG shows the viewport once; no duplicate map-crop artifacts are generated.']};
+const metadata={schemaVersion:1,status:'running',startedAt:new Date().toISOString(),checkedOutSHA:null,headSHA:process.env.REVIEW_HEAD_SHA||null,baseSHA:process.env.REVIEW_BASE_SHA||null,beforeSHA:process.env.REVIEW_BEFORE_SHA||null,githubSHA:process.env.GITHUB_SHA||null,runId:process.env.GITHUB_RUN_ID||null,runAttempt:process.env.GITHUB_RUN_ATTEMPT||null,repository:process.env.GITHUB_REPOSITORY||null,basePath,profiles,output:'review-artifacts/asia-pc',expectedImageCount:74,expectedComparisonCount:8,fonts:{setup:process.env.REVIEW_JAPANESE_FONT_SETUP||'preinstalled',families:process.env.REVIEW_JAPANESE_FONTS||null,match:process.env.REVIEW_JAPANESE_FONT_MATCH||null},browser:null,scope:'Local production build only; public deployment is not accessed.',notes:['US automobiles and Japanese transport equipment retain their respective statistical definitions.','Industry map dimensions use the compact US population frame; other dimensions and all corresponding field tops agree within 1 CSS pixel.','Population is a layout-only comparison: the US reference does not show a population distribution fill; no distribution rendering equivalence is asserted.','Each PNG shows the viewport once; no duplicate map-crop artifacts are generated.']};
 const results={captures:[],comparisons:[],operations:[],externalCommunicationAttempts:[],blockedWebSockets:[]};
 const failure=error=>error?.stack??String(error);
 async function persist(){
@@ -120,11 +121,11 @@ function mapPixels(png,box){
  assert.equal(raw.length,(stride+1)*height);
  const paeth=(a,b,c)=>{const p=a+b-c,pa=Math.abs(p-a),pb=Math.abs(p-b),pc=Math.abs(p-c);return pa<=pb&&pa<=pc?a:pb<=pc?b:c;};
  for(let y=0;y<height;y++){const filter=raw[y*(stride+1)];assert(filter<=4);for(let x=0;x<stride;x++){const offset=y*stride+x,left=x>=channels?pixels[offset-channels]:0,up=y?pixels[offset-stride]:0,upperLeft=y&&x>=channels?pixels[offset-stride-channels]:0;pixels[offset]=(raw[y*(stride+1)+1+x]+[0,left,up,Math.floor((left+up)/2),paeth(left,up,upperLeft)][filter])&255;}}
- const colors=new Map();let samples=0;
- for(let y=Math.max(0,Math.ceil(box.y+4));y<Math.min(height,Math.floor(box.y+box.height-4));y+=3)for(let x=Math.max(0,Math.ceil(box.x+4));x<Math.min(width,Math.floor(box.x+box.width-4));x+=3){const i=(y*width+x)*channels;if(channels===4&&pixels[i+3]<128)continue;const key=`${pixels[i]>>4},${pixels[i+1]>>4},${pixels[i+2]>>4}`;colors.set(key,(colors.get(key)??0)+1);samples++;}
+ const colors=new Map();let samples=0,backgroundPoint=null;
+ for(let y=Math.max(0,Math.ceil(box.y+4));y<Math.min(height,Math.floor(box.y+box.height-4));y+=3)for(let x=Math.max(0,Math.ceil(box.x+4));x<Math.min(width,Math.floor(box.x+box.width-4));x+=3){const i=(y*width+x)*channels;if(channels===4&&pixels[i+3]<128)continue;const key=`${pixels[i]>>4},${pixels[i+1]>>4},${pixels[i+2]>>4}`;colors.set(key,(colors.get(key)??0)+1);samples++;if(!backgroundPoint&&x>box.x+24&&x<box.x+box.width-24&&y>box.y+24&&y<box.y+box.height-24&&['230,238,240','215,218,213','225,228,219'].includes(`${pixels[i]},${pixels[i+1]},${pixels[i+2]}`))backgroundPoint={x,y};}
  const evidence={viewportWidth:width,viewportHeight:height,sampledMapPixels:samples,colorBuckets:colors.size,dominantColorRatio:samples?Math.max(...colors.values())/samples:1};
  assert(samples>1000,'The visible map has too few pixels to review');
- assert(colors.size>=16&&evidence.dominantColorRatio<.98,`The map is blank or nearly uniform: ${JSON.stringify(evidence)}`);return evidence;
+ assert(colors.size>=16&&evidence.dominantColorRatio<.98,`The map is blank or nearly uniform: ${JSON.stringify(evidence)}`);return {...evidence,backgroundPoint};
 }
 async function geometry(page){
  return page.evaluate(()=>{
@@ -337,6 +338,44 @@ async function checkOperations(browser,host,profile,source){
  });
 }
 
+async function checkRequestedCorrections(browser,host,profile){
+ for(const [region,country,city] of [['east-asia','JPN','tokyo'],['southeast-asia','THA','bangkok'],['south-central-asia','IND','new-delhi']])await operation(browser,host,profile,`${region}-requested-corrections`,async page=>{
+  await open(page,host,`/atlas/asia/${region}/nature/?place=${country}&city=${city}`);
+  const chart=page.locator(`[data-city-panel="${city}"] [data-city-statistics]`);await chart.waitFor({state:'visible'});
+  await page.waitForFunction(city=>!document.querySelector(`[data-city-panel="${city}"] [data-city-class-name]`).textContent.includes('未取得'),city);
+  const boxes=await page.evaluate(city=>{
+   const box=n=>{const r=n.getBoundingClientRect();return {x:r.x,y:r.y,right:r.right,bottom:r.bottom};};
+   return {panel:box(document.querySelector('.asia-reading-panel')),chart:box(document.querySelector(`[data-city-panel="${city}"] [data-city-statistics]`)),map:box(document.querySelector('[data-map-surface]')),first:document.querySelector('.asia-reading-panel').firstElementChild.hasAttribute('data-city-reading-host'),linksBelow:document.querySelector('[data-asia-map-items]').contains(document.querySelector('[data-reading-dock-links]'))};
+  },city);
+  assert(boxes.first&&boxes.linksBelow);assert(boxes.chart.y-boxes.panel.y<=24&&boxes.chart.x>=boxes.map.right,'Rain-temperature figure must lead the right column');
+  assert(boxes.chart.bottom<=profile.viewport.height,'The complete figure must be visible before scrolling');
+  assert.equal(await page.locator('[data-reading-dock]').isVisible(),false);assert.match(await page.locator(`[data-city-panel="${city}"] .city-farming`).textContent(),/灌漑|デルタ/);
+  await contextPicture(page,profile,`${region}-city-first`,'asia');
+  await open(page,host,`/atlas/asia/${region}/agriculture/`);await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]').dataset.farmContextStatus==='ready');
+  const product=await page.locator('[data-asia-config]').evaluate(node=>JSON.parse(node.textContent).presentation.farming.products.find(p=>p.kind==='crop'&&p.id!=='rice').id);
+  await page.locator(`[data-farm-choice="${product}"]`).click();await page.waitForFunction(id=>document.querySelector('[data-asia-atlas]').dataset.farmSelected===id,product);
+  const agricultureURL=page.url();await page.locator('[data-map-surface]').click({position:{x:30,y:30}});
+  assert.equal(page.url(),agricultureURL,'Unrelated agriculture background must be inert');assert.equal(await page.locator('.asia-point-marker').isVisible(),false);
+  assert.equal(await page.locator('[data-map-surface] canvas').evaluate(node=>getComputedStyle(node).outlineStyle),'none','Pointer click must not add a rectangular focus frame');
+  await contextPicture(page,profile,`${region}-agriculture-inert-background`,'asia');
+  await open(page,host,`/atlas/asia/${region}/nature/?topic=precipitation`);await page.locator('[data-map-surface]').click({position:{x:100,y:100}});
+  await page.waitForFunction(()=>document.querySelector('[data-hydrology-value]')?.textContent&&!document.querySelector('[data-hydrology-value]').textContent.includes('読み込'));
+  assert.equal(new URL(page.url()).searchParams.get('place'),null,'Rainfall point lookup must not select a background country');assert.equal(await page.locator('.asia-point-marker').isVisible(),false);
+  await contextPicture(page,profile,`${region}-rainfall-no-country-popup`,'asia');
+  await open(page,host,`/atlas/asia/${region}/nature/?topic=basins`);const basin=page.locator('[data-hydrology-detail]');
+  await page.waitForFunction(()=>document.querySelector('[data-hydrology-detail]')?.options.length>1);
+  const id=await basin.locator('option').evaluateAll(options=>options.find(o=>o.value&&!o.disabled).value);await basin.selectOption(id);
+  await page.waitForFunction(id=>new URL(location.href).searchParams.get('detail')===id,id);
+  const basinURL=page.url(),basinValue=await page.locator('[data-hydrology-value]').textContent(),map=await page.locator('[data-map-surface]').boundingBox();
+  const background=mapPixels(await page.screenshot({fullPage:false,animations:'disabled'}),{x:map.x,y:map.y,width:map.width,height:map.height}).backgroundPoint;
+  assert(background,'A visible uncovered background pixel is required for the inert-click check');await page.mouse.click(background.x,background.y);assert.equal(page.url(),basinURL,'Empty background must retain the selected basin');
+  assert.equal(await page.locator('[data-hydrology-value]').textContent(),basinValue);assert.equal(await page.locator('.asia-point-marker').isVisible(),false);
+  await contextPicture(page,profile,`${region}-basin-selection-retained`,'asia');
+  return {cityFirst:boxes,agricultureBackgroundInert:true,productSelectionPreserved:product,rainfallLookupDoesNotSelectCountry:true,basinBackgroundPreservesSelection:id,noCountryPopups:true,noPointerFocusRectangle:true};
+ });
+ await operation(browser,host,profile,'east-industry-country-pilot',async page=>{const checks=await verifyAsiaIndustryCountry(page,{profile,source:host.origin+basePath});await contextPicture(page,profile,'east-industry-country-pilot','asia');return checks;});
+}
+
 async function main(){
  await mkdir(output,{recursive:true});await persist();let host,browser;
  try{
@@ -366,9 +405,11 @@ async function main(){
   compare();await persist();
   for(const profile of profiles)await checkOperations(browser,host,profile,source);
   for(const profile of profiles)await checkContextOperations(browser,host,profile);
-  assert.equal(results.captures.length,48);assert(results.captures.every(row=>row.passed),'All 48 viewport captures must pass');
+  for(const profile of profiles)await checkRequestedCorrections(browser,host,profile);
+  metadata.expectedImageCount=74;
+  assert.equal(results.captures.length,74);assert(results.captures.every(row=>row.passed),'All 74 viewport captures must pass');
   assert.equal(results.comparisons.length,8);assert(results.comparisons.every(row=>row.passed),'All 8 geometry comparisons must pass');
-  assert.equal(results.operations.length,28);assert(results.operations.every(row=>row.passed),'All 28 PC operation groups must pass');
+  assert.equal(results.operations.length,36);assert(results.operations.every(row=>row.passed),'All 36 PC operation groups must pass');
   assert.deepEqual(results.externalCommunicationAttempts,[]);assert.deepEqual(results.blockedWebSockets,[]);
   metadata.status='passed';
  }catch(error){metadata.status='failed';metadata.failure=failure(error);process.exitCode=1;}

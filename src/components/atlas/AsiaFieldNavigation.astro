@@ -1,6 +1,6 @@
 ---
 import {majorAsiaIndustries,industrySectors,industryTopicGroup,naturalGroups,populationGroups} from '../../data/atlas/asia-navigation';
-import type {IndustryRegion} from '../../data/atlas/asia-industry';
+import {eastIndustryCountries,type IndustryRegion} from '../../data/atlas/asia-industry';
 import {type SocialRegion} from '../../data/atlas/asia-social';
 import {socialEntry} from '../../data/atlas/asia-social-overview';
 import {asiaPopulationTopics} from '../../data/atlas/asia-population';
@@ -20,6 +20,7 @@ const industryFeatures=majorAsiaIndustries[regionId].map(feature=>({...feature,s
  <p class="asia-population-scope" data-population-scope>2020年の推計人口密度（人/km²・格子面積当たり）。</p>
 </div>
 <div class="asia-industry-navigation" data-industry-navigation hidden={initialField!=='industry'}>
+ {regionId==='east-asia'&&<p class="asia-navigation-note" data-industry-country-scope aria-live="polite">上の国・地域欄で中国・日本・韓国・台湾を選び、その国に関係する産業統計へ進めます。「東アジア全体」で地域の比較へ戻れます。</p>}
  <nav class="asia-industry-sectors" aria-label="産業の分類">{industrySectors.map(sector=><button type="button" data-industry-sector={sector.id} aria-pressed={sector.id==='manufacturing'} disabled={!availableSectors.has(sector.id)} title={availableSectors.has(sector.id)?undefined:'この分類だけの統計は未収録です'}>{sector.label}</button>)}</nav>
  {industrySectors.filter(sector=>sector.id!=='all'&&availableSectors.has(sector.id)).map(sector=><nav class="asia-industry-subsectors" data-industry-subsectors={sector.id} hidden={sector.id!=='manufacturing'} aria-label={`${sector.label}の収録主題`}>{industryFeatures.filter(feature=>feature.sector===sector.id).map(feature=><button type="button" data-industry-feature={feature.id} aria-pressed={feature.id==='manufacturing'}>{feature.label}</button>)}<button type="button" data-industry-current-feature data-industry-feature="" aria-pressed="true" hidden></button></nav>)}
  <div class="asia-industry-guide"><strong data-industry-navigation-label>製造業 ／ 全分野</strong><span>地図に表示中：<span data-industry-current-map></span></span></div>

@@ -48,7 +48,7 @@ export function createAsiaReadingDock(root:HTMLElement) {
   summary.hidden=Boolean(state.back);
   const scene=config?.regionId?selectedPlaceReading(config.regionId,state):null;
   if(scene){title.textContent=scene.name;summary.textContent=scene.lead;}
-  dock.querySelectorAll<HTMLButtonElement>('[data-dock-compare]').forEach(button=>{
+  root.querySelectorAll<HTMLButtonElement>('[data-dock-compare]').forEach(button=>{
    button.hidden=Boolean(state.back)||Boolean(scene)||button.dataset.dockCompare===state.field;
   });
  }
