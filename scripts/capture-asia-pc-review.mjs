@@ -368,8 +368,9 @@ async function checkRequestedCorrections(browser,host,profile){
    throw new Error('A visible map canvas point without a rainfall label is required');
   });
   await page.mouse.click(rainPoint.x,rainPoint.y);
+  await page.waitForFunction(()=>new URL(location.href).searchParams.has('at'));
   assert(new URL(page.url()).searchParams.get('at'),'Rainfall background click must perform the point lookup');
-  await page.waitForFunction(()=>document.querySelector('[data-hydrology-value]')?.textContent&&!document.querySelector('[data-hydrology-value]').textContent.includes('読み込'));
+  await page.waitForFunction(()=>/年降水量.*mm\/年|この地点はデータなし、または表示範囲外/.test(document.querySelector('[data-hydrology-value]')?.textContent??''));
   assert.equal(new URL(page.url()).searchParams.get('place'),null,'Rainfall point lookup must not select a background country');assert.equal(await page.locator('.asia-point-marker').isVisible(),false);
   await contextPicture(page,profile,`${region}-rainfall-no-country-popup`,'asia');
   await open(page,host,`/atlas/asia/${region}/nature/?topic=basins`);const basin=page.locator('[data-hydrology-detail]');
