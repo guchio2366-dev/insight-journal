@@ -5,13 +5,13 @@ import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
 import NorthAmericaCountryFieldNavigation from './NorthAmericaCountryFieldNavigation.astro';
 import AtlasClimatePlot from './AtlasClimatePlot.astro';
 import CanadaCensusAgricultureMap from './CanadaCensusAgricultureMap.astro';
+import CanadaAgricultureOverview from './CanadaAgricultureOverview.astro';
 import canolaData from '../../data/atlas/canada/canola.json';
 import wheatData from '../../data/atlas/canada/wheat.json';
 import climate from '../../data/atlas/canada/climate.json';
 import {canolaReading as originalReading,canolaSources as originalSources} from '../../data/atlas/canada/agriculture-reading';
 import {wheatReading,wheatSources,wheatTypes} from '../../data/atlas/canada/wheat-reading';
 import {withBase} from '../../lib/urls';
-import {features} from '../../data/atlas/regional-atlas';
 import {buildCanadaCropNatureUrl} from '../../lib/atlas-canada-crop-comparison';
 import '../../styles/atlas-canada-nature.css';
 import '../../styles/atlas-canada-agriculture.css';
@@ -23,7 +23,6 @@ const cropName=isWheat?'小麦':'カノーラ',mapTitle=isWheat?'Total wheat are
 const dotAcres=isWheat?'15,000':'10,000',dotHectares=isWheat?'6,070':'4,047',totalHectares=isWheat?'9,413,876':'9,012,449';
 const assetRoot=isWheat?'/assets/atlas/canada-wheat-v1':'/assets/atlas/canada-agriculture-v1';
 const mapAsset=withBase(`${assetRoot}/${crop}-map-2021.jpg`);
-const overviewPath=(g:any)=>{const line=(r:number[][])=>r.map(([lon,lat],i)=>`${i?'L':'M'}${((lon+145)/95*900).toFixed(2)},${((85-lat)/45*580).toFixed(2)}`).join('')+'Z';return g.type==='Polygon'?g.coordinates.map(line).join(''):g.coordinates.flat().map(line).join('');};
 const regina=climate.stations.find(s=>s.id==='regina')!;
 const fmt=(v:number|null)=>v===null?'未収録':v.toLocaleString('ja-JP');
 const seededMax=(year:number)=>Math.max(1,...canola.data.filter(r=>r.year===year&&r.id!=='Canada').map(r=>r.values.seeded.value??0));
@@ -31,23 +30,23 @@ const sourceUrl=new URL(withBase(`/atlas/north-america/canada/agriculture/${isWh
 const nature=(query:string)=>{const q=new URLSearchParams(query),u=buildCanadaCropNatureUrl(sourceUrl,crop,q.get('city')??'ottawa',(q.get('view')??'climate') as 'climate'|'landform'|'water');return u.pathname+u.search;};
 import '../../styles/atlas-canada-country-parity.css';
 ---
-<BaseLayout title={`カナダの農林業｜${cropName}とプレーリー`} description={`${cropName}の面積分布を、気候・土地管理・機械化・用途・輸送・需要へつなげて読む。`} compactAtlas>
+<BaseLayout title={isWheat?`カナダの農林業｜${cropName}とプレーリー`:'カナダの農林業｜作物・家畜の分布とプレーリー'} description={`${cropName}の面積分布を、気候・土地管理・機械化・用途・輸送・需要へつなげて読む。`} compactAtlas>
  <AtlasWorkspaceFrame region="north-america" mapActions={false}>
   <article class="canada-nature canada-agriculture" data-canada-agriculture data-canada-crop={crop} data-canola-reading-mode={isWheat?'selected':'overview'}>
    <div class="atlas-explorer atlas-workspace canada-country-primary" data-field="agriculture">
    <div class="atlas-compact-heading"><nav aria-label="パンくず"><a href={withBase('/atlas/')}>地図から見る</a> / <a href={withBase('/atlas/north-america/')}>北米地図</a></nav><span>カナダ</span></div>
    <AtlasRegionNavigation group="americas" current="north-america" country="canada" />
-   <h1 class="visually-hidden">{cropName}から読む、カナダの農林業</h1>
+   <h1 class="visually-hidden">{isWheat?'小麦から読む、カナダの農林業':'カナダの作物・家畜と林業の分布'}</h1>
    <NorthAmericaCountryFieldNavigation country="canada" field="agriculture" natureHref={nature('')} />
    <nav class="country-topic-tabs" aria-label="農林業の分野"><a href={withBase('/atlas/north-america/canada/agriculture/')} aria-current="page">農畜産</a><a href={withBase('/atlas/north-america/canada/agriculture/forestry/')}>林業</a></nav>
 
 
 
-   <div class="canada-workspace atlas-primary-grid">
+   {!isWheat&&<CanadaAgricultureOverview />}
+   <div class="canada-workspace atlas-primary-grid" data-canola-selected-map hidden={!isWheat}>
     <section class="canada-map-column atlas-map-column" aria-label={`${cropName}の分布と比較`}>
      <h2>どこに栽培面積が集まる？</h2>
-     <section data-canola-country-map hidden={isWheat}><div class="atlas-map-frame canada-map-frame"><svg class="canada-map" viewBox="0 0 900 580" role="img" aria-label="カナダの位置図。農畜産の合成分布図ではありません">{features.filter(f=>['CAN','USA','GRL'].includes(f.properties.code)).map(f=><path class:list={['canada-land',{'is-context':f.properties.code!=='CAN'}]} d={overviewPath(f.geometry)} fill-rule="evenodd"/>)}<text x="420" y="280">カナダ</text></svg></div><p class="canada-caption">国全体の位置図。下の項目から出典付き分布図と説明を選びます。作物・畜産を同時に重ねた分布図は未整備です。</p></section>
-     <section data-canola-selected-map hidden={!isWheat}><CanadaCensusAgricultureMap product={crop} /><details class="canada-census-original"><summary>2021年の公式ドット原図・元の凡例を読む</summary>     <figure class="canola-distribution"><div class="canola-map-scroll atlas-map-frame canada-map-frame" data-canola-map-scroll><a href={mapAsset} aria-label={`${cropName}分布図を原寸で開く`}><img src={mapAsset} width="1133" height="814" alt={`2021年${cropName}面積の公式ドット分布図。プレーリー南部に赤い点が集まり、北部は少ない。Regina、Edmonton、Winnipegと州境・凡例を表示。${isWheat?'オンタリオ・ケベックの拡大枠Aも表示。':''}`} /></a></div><figcaption><details><summary>2021年固定・点の単位／凡例・出典</summary><strong>2021年・農業センサスの分布図（固定）</strong>。1点＝{dotAcres} acres（約{dotHectares} ha）。点はセンサス区の農業地域内にランダム配置した面積量で、農場の位置・数ではありません。<a href={canolaSources.map}>原図・説明・区別表</a>。地図と凡例を保持し、末尾の政府シンボル部分を除いて掲載。<a href="#canada-statcan-attribution">図・抽出比較表の帰属表示</a>。</details></figcaption></figure></details></section>
+     <section><CanadaCensusAgricultureMap product={crop} /><details class="canada-census-original"><summary>2021年の公式ドット原図・元の凡例を読む</summary>     <figure class="canola-distribution"><div class="canola-map-scroll atlas-map-frame canada-map-frame" data-canola-map-scroll><a href={mapAsset} aria-label={`${cropName}分布図を原寸で開く`}><img src={mapAsset} width="1133" height="814" alt={`2021年${cropName}面積の公式ドット分布図。プレーリー南部に赤い点が集まり、北部は少ない。Regina、Edmonton、Winnipegと州境・凡例を表示。${isWheat?'オンタリオ・ケベックの拡大枠Aも表示。':''}`} /></a></div><figcaption><details><summary>2021年固定・点の単位／凡例・出典</summary><strong>2021年・農業センサスの分布図（固定）</strong>。1点＝{dotAcres} acres（約{dotHectares} ha）。点はセンサス区の農業地域内にランダム配置した面積量で、農場の位置・数ではありません。<a href={canolaSources.map}>原図・説明・区別表</a>。地図と凡例を保持し、末尾の政府シンボル部分を除いて掲載。<a href="#canada-statcan-attribution">図・抽出比較表の帰属表示</a>。</details></figcaption></figure></details></section>
    <nav class="canada-crop-tabs atlas-key" aria-label="公開済みの農畜林業"><a href={withBase('/atlas/north-america/canada/agriculture/?item=canola')} data-canola-select-item="canola" aria-current={false?'page':undefined}>カノーラ</a><a href={withBase('/atlas/north-america/canada/agriculture/wheat/')} aria-current={isWheat?'page':undefined}>小麦</a><a href={withBase('/atlas/north-america/canada/agriculture/beef/')}>肉牛・放牧と飼料</a><a href={withBase('/atlas/north-america/canada/agriculture/forestry/')}>林業</a></nav>
 
      <div class="canada-map-actions" hidden><button data-canola-zoom aria-pressed="false">図を拡大して読む</button><button data-canola-map-reset>全体へ戻す</button><a href={mapAsset}>原寸画像</a></div>
@@ -55,7 +54,6 @@ import '../../styles/atlas-canada-country-parity.css';
      {isWheat&&<section class="canada-reading-section" id="wheat-statistical-scope"><h3>「全小麦」の集計対象</h3><p>年次表はStatCanの「Wheat, all」です。春小麦、デュラム、秋に播いた冬小麦を含みます。内訳を総計に追加せず、冬小麦の「越冬後に残った面積」とも区別します。地図は2021年農業センサス、表は年次推計で、調査と定義が異なるため全国面積が同じ値とは限りません。</p></section>}
     </section>
     <aside class="canada-reading atlas-national" aria-label="自然から社会へつながる説明">
-     <section data-canola-overview-reading hidden={isWheat}><header class="canada-national-header"><p class="atlas-eyebrow">National overview</p><h2>カナダの農林業</h2><p>プレーリーの作物・草地と森林の広がりを、栽培・家畜・加工へつなげて読む。</p></header><p>農畜産は作物の生育、放牧と冬の飼料を、林業は森林被覆と木材の加工活動を分けて比べます。自然条件に加え、管理・輸送・用途を確かめます。</p><p><a data-canola-select-item="canola" href={withBase('/atlas/north-america/canada/agriculture/?item=canola')}>カノーラ：プレーリーの面積と油の加工</a><br/><a href={withBase('/atlas/north-america/canada/agriculture/wheat/')}>小麦：生育期間・用途と輸送</a><br/><a href={withBase('/atlas/north-america/canada/agriculture/beef/')}>肉牛：放牧地と冬の飼料</a><br/><a href={withBase('/atlas/north-america/canada/agriculture/forestry/')}>林業：森林被覆と木材・紙製品の加工</a></p><p class="canada-caption">各項目の資料年・単位は異なります。未収集の品目をゼロとして表示しません。</p></section>
      <div data-canola-selected-reading hidden={!isWheat}>{isWheat?<a href={withBase('/atlas/north-america/canada/agriculture/')}>← カナダの農林業</a>:<button type="button" data-canola-overview-return>← カナダの農林業</button>}
    <section data-canada-census-reading hidden><h2 data-canada-census-reading-title></h2><p data-canada-census-reading-value></p><p class="canada-caption">農場の本拠地に集計した申告値</p><details class="canada-census-reading-details"><summary>成分・品質・地域コード・原表</summary><p class="canada-caption" data-canada-census-reading-quality></p><p class="canada-caption" data-canada-census-reading-components></p><p class="canada-caption" data-canada-census-reading-id></p><p><a data-canada-census-reading-source href="#canada-agriculture-sources">2021年の原表・地域の定義</a></p></details></section>
    <header class="canada-national-header" data-canada-census-national-header><p class="atlas-eyebrow">Canada · Agriculture and forestry</p><h2>{cropName}から読む、カナダの農林業</h2><p class="canada-lead">自然条件から、育てる・収穫する・運ぶ・加工する・買う人へ。プレーリーの分布をたどる。</p></header>
@@ -77,7 +75,7 @@ import '../../styles/atlas-canada-country-parity.css';
     </aside>
    </div>
    </div>
-   <section class="canada-statistics">     <h2>州別の面積と生産量を比べる</h2>
+   <details class="canada-statistics canada-agri-annual-statistics"><summary>{cropName}の年次統計：州別の面積・生産量</summary>     <h2>州別の面積と生産量を比べる</h2>
      <div class="canola-stat-controls"><label>年次統計の年<select data-canola-year>{canola.years.map(y=><option value={y} selected={y===2021}>{y}年</option>)}</select></label><label>指標<select data-canola-metric>{canola.metrics.map(m=><option value={m.id}>{m.name}（{m.unit}）</option>)}</select></label><label>読む地域<select data-canola-province>{canola.provinces.map(p=><option value={p.id} selected={p.id==='Saskatchewan'}>{p.name}</option>)}</select></label><label>比べる地域<select data-canola-compare><option value="">比較なし</option>{canola.provinces.map(p=><option value={p.id}>{p.name}</option>)}</select></label></div>
      <div class="canada-city-list">{canola.provinces.filter(p=>['Alberta','Saskatchewan','Manitoba'].includes(p.id)).map(p=><button data-canola-province-button={p.id} aria-pressed={p.id==='Saskatchewan'}>{p.name}</button>)}</div>
      <p class="canola-comparison" data-canola-comparison aria-live="polite">2021年 作付面積 — サスカチュワン</p>
@@ -85,7 +83,7 @@ import '../../styles/atlas-canada-country-parity.css';
      <div class="canola-table-scroll"><table class="canola-stats"><caption>{cropName}：公表値と品質記号（32-10-0359-01）</caption><thead><tr><th>年・地域</th><th>作付 ha</th><th>収穫 ha</th><th>生産 t</th></tr></thead><tbody>{canola.data.map(r=><tr data-canola-row={r.id} data-year={r.year} hidden={r.year!==2021}><th>{r.year}年 {r.name}{r.id!=='Canada'&&<span class:list={['canola-bar-track',{'is-missing':r.values.seeded.value===null}]} aria-label={`${r.name}: ${fmt(r.values.seeded.value)} ha`}><span data-canola-bar={r.id} style={`width:${(r.values.seeded.value??0)/seededMax(r.year)*100}%`}/></span>}</th>{canola.metrics.map(m=>{const v=r.values[m.id as keyof typeof r.values];return <td data-canola-cell={m.id}>{fmt(v.value)}{(v.status||v.symbol)&&<small> {[v.status,v.symbol].filter(Boolean).join(" ")}</small>}</td>;})}</tr>)}</tbody></table></div>
      <p class="canada-caption">未収録＝数値未公表。F＝信頼性不足のため非公表、x＝秘匿、r＝改訂済み。公表された0は0のまま保持します。全国合計には非公表の州値を含む場合があり、丸めもあるため、表示州の合計と必ず一致するとは限りません。3準州はこの比較表の収録対象外です。</p>
      <p><a href={canolaSources.table}>数値・定義・注記の原表</a> ／ <a href={withBase(`${assetRoot}/${crop}-selected.csv`)}>今回の抽出CSV</a></p>
-</section>
+</details>
    <footer class="canada-source-footer" id="canada-agriculture-sources"><h2>出典・年・単位・利用条件</h2><p id="canada-statcan-attribution" lang="en">Adapted from Statistics Canada, Thematic maps from the Census of Agriculture, 2021 — {mapTitle} by census division (CD), 2021; and Table 32-10-0359-01, Estimated areas, yield, production, average farm price and total farm value of principal field crops, in metric and imperial units, reference years 2020, 2021, 2022 and 2025 (accessed September 30, 2026). This does not constitute an endorsement by Statistics Canada of this product.</p><ul><li>分布：Statistics Canada、2021 Census of Agriculture。1点＝{dotAcres} acres（約{dotHectares} ha）。公表全国面積{totalHectares} ha。点の量から区別面積を逆算していません。<a href={canolaSources.map}>原資料</a>。</li><li>年次統計：Statistics Canada、32-10-0359-01、取得日2026年9月30日。2020・2021・2022・2025年の作付面積 ha、収穫面積 ha、生産量 metric tonnes。公表値と品質記号を保持し、欠損を0で補完しません。<a href={canolaSources.table}>原表と注記</a>。<a href="https://www.statcan.gc.ca/en/terms-conditions/open-licence">Statistics Canada Open Licence</a>に基づく利用。Statistics Canadaが本教材を承認したことを意味しません。</li><li>気候：ECCC 1991–2020年平年値、Regina composite 4016560。<a href={regina.sourceUrl}>観測所と数値</a>。気象の平年値は年次収量や畑の土壌水分と別です。</li><li>条件と管理：<a href={canolaSources.management}>Manitoba Agriculture</a>。輸送：<a href={canolaSources.industry}>{isWheat?'Transport Canada、2024年報告（2025年公表）':'USDA報告、2025年3月31日'}</a>。日本とのつながり：<a href={canolaSources.japan}>AAFCの日本市場資料、2023年貿易</a>。当時の分析・予測と現在の制度・実績を区別し、予測数量は年次統計に混ぜていません。{isWheat&&<> 品種・用途・等級：<a href={wheatSources.classes}>Canadian Grain Commission</a>。<a href={wheatSources.winter}>Manitobaの冬小麦資料</a>。これらの文章は事実を要約して参照し、原文・画像・輸送図表は再配布していません。</>}</li></ul><a href={withBase(`${assetRoot}/manifest.json`)}>加工方法・収録範囲・ハッシュ台帳</a></footer>
    <noscript><p>国全体の概説、州別3指標、出典と原寸分布図へのリンクを読めます。項目の選択・年・比較・拡大にはJavaScriptが必要です。<a href={mapAsset}>{cropName}の2021年分布図を原寸で開く</a></p></noscript>
    <script type="application/json" data-canola-config set:html={JSON.stringify(canola).replace(/</g,'\u003c')} />
