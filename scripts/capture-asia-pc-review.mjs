@@ -358,12 +358,23 @@ async function checkRequestedCorrections(browser,host,profile){
   assert.equal(page.url(),agricultureURL,'Unrelated agriculture background must be inert');assert.equal(await page.locator('.asia-point-marker').isVisible(),false);
   assert.equal(await page.locator('[data-map-surface] canvas').evaluate(node=>getComputedStyle(node).outlineStyle),'none','Pointer click must not add a rectangular focus frame');
   await contextPicture(page,profile,`${region}-agriculture-inert-background`,'asia');
-  await open(page,host,`/atlas/asia/${region}/nature/?topic=precipitation`);await page.locator('[data-map-surface]').click({position:{x:100,y:100}});
+  await open(page,host,`/atlas/asia/${region}/nature/?topic=precipitation`);
+  const rainPoint=await page.locator('[data-map-surface]').evaluate(node=>{
+   const r=node.getBoundingClientRect();
+   for(const y of [100,60,140])for(const x of [100,60,140]){
+    const point={x:r.left+x,y:r.top+y},hit=document.elementFromPoint(point.x,point.y);
+    if(hit?.tagName==='CANVAS'&&node.contains(hit))return point;
+   }
+   throw new Error('A visible map canvas point without a rainfall label is required');
+  });
+  await page.mouse.click(rainPoint.x,rainPoint.y);
+  assert(new URL(page.url()).searchParams.get('at'),'Rainfall background click must perform the point lookup');
   await page.waitForFunction(()=>document.querySelector('[data-hydrology-value]')?.textContent&&!document.querySelector('[data-hydrology-value]').textContent.includes('読み込'));
   assert.equal(new URL(page.url()).searchParams.get('place'),null,'Rainfall point lookup must not select a background country');assert.equal(await page.locator('.asia-point-marker').isVisible(),false);
   await contextPicture(page,profile,`${region}-rainfall-no-country-popup`,'asia');
   await open(page,host,`/atlas/asia/${region}/nature/?topic=basins`);const basin=page.locator('[data-hydrology-detail]');
   await page.waitForFunction(()=>document.querySelector('[data-hydrology-detail]')?.options.length>1);
+  await expand(page.locator('[data-hydrology-panel] > details').first());
   const id=await basin.locator('option').evaluateAll(options=>options.find(o=>o.value&&!o.disabled).value);await basin.selectOption(id);
   await page.waitForFunction(id=>new URL(location.href).searchParams.get('detail')===id,id);
   const basinURL=page.url(),basinValue=await page.locator('[data-hydrology-value]').textContent(),map=await page.locator('[data-map-surface]').boundingBox();
@@ -373,7 +384,12 @@ async function checkRequestedCorrections(browser,host,profile){
   await contextPicture(page,profile,`${region}-basin-selection-retained`,'asia');
   return {cityFirst:boxes,agricultureBackgroundInert:true,productSelectionPreserved:product,rainfallLookupDoesNotSelectCountry:true,basinBackgroundPreservesSelection:id,noCountryPopups:true,noPointerFocusRectangle:true};
  });
- await operation(browser,host,profile,'east-industry-country-pilot',async page=>{const checks=await verifyAsiaIndustryCountry(page,{profile,source:host.origin+basePath});await contextPicture(page,profile,'east-industry-country-pilot','asia');return checks;});
+ await operation(browser,host,profile,'east-industry-country-pilot',async page=>{
+  const checks=await verifyAsiaIndustryCountry(page,{profile,source:host.origin+basePath});
+  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-map-fallback]')?.hidden&&document.querySelector('[data-trade-status]')?.textContent==='');
+  await page.evaluate(()=>window.scrollTo(0,0));
+  await contextPicture(page,profile,'east-industry-country-pilot','asia');return checks;
+ });
 }
 
 async function main(){
