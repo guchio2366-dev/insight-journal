@@ -24,7 +24,8 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
  const datasets=new Map<string,any>(),pending=new Map<string,Promise<any>>();
  const buttons=new Map<string,HTMLButtonElement>();
  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('aria-hidden','true');overlay.append(svg);
- const mode=()=>{const s=getState();return s.field==='natural'?(s.topic??'climate'):s.field==='agriculture'?(s.topic??(s.city?'rice':'overview')):s.field==='population'?(!s.topic||['density','urban'].includes(s.topic)?'population':['ethnicity','religion'].includes(s.topic)?s.topic:null):null;};
+ const selectedFarm=()=>getState().field==='agriculture'?metadata.farming.products.find(p=>p.id===getState().topic):undefined;
+ const mode=()=>{const s=getState();return s.field==='natural'?(s.topic??'climate'):s.field==='agriculture'?(selectedFarm()?'overview':s.topic??(s.city?'rice':'overview')):s.field==='population'?(!s.topic||['density','urban'].includes(s.topic)?'population':['ethnicity','religion'].includes(s.topic)?s.topic:null):null;};
  async function load(file:string){
   if(datasets.has(file))return datasets.get(file);
   if(!pending.has(file))pending.set(file,(async()=>{const abort=new AbortController(),timer=setTimeout(()=>abort.abort(),20000);try{const response=await fetch(file.startsWith('/')?file:config.presentationBase+file,{signal:abort.signal});if(!response.ok)throw Error('Presentation asset '+response.status);const bytes=new Uint8Array(await response.arrayBuffer());const text=bytes[0]===31&&bytes[1]===139?await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text():new TextDecoder().decode(bytes);const data=JSON.parse(text);datasets.set(file,data);return data;}finally{clearTimeout(timer);}})().finally(()=>pending.delete(file)));
@@ -34,7 +35,7 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
  function dot(x:number,y:number){const el=document.createElementNS(svg.namespaceURI,'circle');for(const [key,value] of Object.entries({cx:x,cy:y,r:3.5,fill:'#fff',stroke:'#345965','stroke-width':1.8}))el.setAttribute(key,String(value));svg.append(el);}
  function button(id:string,text:string,kind:string,action:()=>void){
   let b=buttons.get(id);if(!b){b=document.createElement('button');b.type='button';b.onclick=event=>{event.stopPropagation();action();};buttons.set(id,b);overlay.append(b);}
-  b.className=kind;b.textContent=text;b.hidden=true;return b;
+  b.className=kind;b.textContent=text;b.hidden=true;b.style.opacity='1';return b;
  }
  function measuredWidth(b:HTMLButtonElement,fallback:number){b.hidden=false;b.style.width='max-content';const width=b.getBoundingClientRect().width;b.hidden=true;return width||fallback;}
  function update(){
@@ -90,13 +91,13 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
    if(selectedKinds.has('livestock')){
     const points=metadata.farming.labels.filter(a=>a.kind==='livestock').filter(a=>Number(a.id.split('-').at(-1))<3);
     for(const a of points){const p=project(a.coordinate);if(p.x<12||p.y<12||p.x>width-12||p.y>height-12)continue;
-     const b=button('animal-point-'+a.id,'','asia-climate-station asia-livestock-point',()=>chooseFarm(a.product!));b.style.left=p.x+'px';b.style.top=p.y+'px';b.style.setProperty('--label-color',a.color??'#80583b');b.setAttribute('aria-label',a.text+'の代表地点');const name=document.createElement('span');name.textContent=a.text;b.append(name);b.hidden=false;
+     const b=button('animal-point-'+a.id,'','asia-climate-station asia-livestock-point',()=>chooseFarm(a.product!));b.style.opacity=selectedFarm()?.kind==='crop'?'.2':'1';b.style.left=p.x+'px';b.style.top=p.y+'px';b.style.setProperty('--label-color',a.color??'#80583b');b.setAttribute('aria-label',a.text+'の代表地点');b.setAttribute('aria-pressed',String(state.topic===a.product));const name=document.createElement('span');name.textContent=a.text;b.append(name);b.hidden=false;
      obstacles.push({left:p.x-6,top:p.y-6,right:p.x+6,bottom:p.y+6});
      // One permanent name per kind; all representative points keep hover names.
     }
     const animalInputs=groups.filter(a=>a.kind==='livestock').flatMap(a=>{
      const anchor=a.anchors.map(project).find(p=>p.x>=12&&p.y>=12&&p.x<=width-12&&p.y<=height-12);if(!anchor)return [];
-     const id='overview-animal-'+a.id,b=button(id,a.text,'asia-farm-label',()=>chooseFarm(a.product!));b.style.setProperty('--label-color',a.color??'#80583b');b.setAttribute('aria-label',a.text+'の詳しい分布');
+     const id='overview-animal-'+a.id,b=button(id,a.text,'asia-farm-label',()=>chooseFarm(a.product!));b.style.opacity=selectedFarm()?.kind==='crop'?'.2':'1';b.style.setProperty('--label-color',a.color??'#80583b');b.setAttribute('aria-label',a.text+'の詳しい分布');b.setAttribute('aria-pressed',String(state.topic===a.product));
      return [{id,anchor,width:measuredWidth(b,a.text.length*12+10),height:24}];
     });
     for(const rect of layoutNatureLabels(animalInputs,bounds,obstacles)){
@@ -117,8 +118,9 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
   if(errorMode!==current){errorMode=null;onStatus('');}
   const settlement=current?metadata.settlements?.[current]:undefined;
   const farm=current==='overview',water=farm&&getState().overlay==='water',terrain=current==='terrain'&&!!metadata.terrain;
-  if(farm){const reading=root.querySelector<HTMLElement>('[data-grid-reading]');if(reading)reading.textContent=water?'米の概略栽培域（緑）・主な川（青）・250mm間隔の年降水量を重ねています。':selectedKinds.size===2?'作物の栽培域と畜産の代表点を表示しています。品目名を選ぶと詳しい分布を読めます。':selectedKinds.size===0?'作物・畜産は非表示です。左上のボタンで表示できます。':selectedKinds.has('crop')?'作物の特徴的な分布を表示しています。家畜の分布は非表示です。':'家畜の特徴的な分布を表示しています。作物の分布は非表示です。';}
-  for(const id of ['asia-settlement-fill','asia-settlement-selected-halo','asia-settlement-selected','asia-farm-overview-fill','asia-farm-overview-crop','asia-farm-overview-livestock-fill','asia-farm-overview-livestock','asia-rainfall-lines','asia-terrain-lines','asia-farm-rivers'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility','none');
+  root.dataset.farmContextStatus=farm?'loading':'inactive';
+  if(farm){const reading=root.querySelector<HTMLElement>('[data-grid-reading]');if(reading&&(!selectedFarm()||!getState().point))reading.textContent=water?'米の概略栽培域（緑）・主な川（青）・250mm間隔の年降水量を重ねています。':selectedFarm()?.kind==='crop'?'色は各作物の概略分布、太い輪郭は選択した作物です。家畜の代表点は薄く表示しています。':selectedKinds.size===2?'作物の栽培域と畜産の代表点を表示しています。品目名を選ぶと詳しい分布を読めます。':selectedKinds.size===0?'作物・畜産は非表示です。左上のボタンで表示できます。':selectedKinds.has('crop')?'作物の特徴的な分布を表示しています。家畜の分布は非表示です。':'家畜の特徴的な分布を表示しています。作物の分布は非表示です。';}
+  for(const id of ['asia-settlement-fill','asia-settlement-selected-halo','asia-settlement-selected','asia-farm-overview-fill','asia-farm-overview-crop','asia-farm-overview-selected-halo','asia-farm-overview-selected','asia-farm-overview-livestock-fill','asia-farm-overview-livestock','asia-rainfall-lines','asia-terrain-lines','asia-farm-rivers'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility','none');
   if(!farm&&current!=='precipitation'&&!terrain&&!settlement)return;
   const requested=[...(settlement?[config.presentationBase.replace('asia-presentation-v1/','asia-settlements-v1/')+settlement.file]:[]),...(farm?[metadata.farming.file]:[]),...(current==='precipitation'||water?[metadata.rainfall.file]:[]),...(terrain?[metadata.terrain!.file]:[]),...(water&&config.riverFile?[config.riverFile]:[])];
   try{
@@ -135,8 +137,11 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
      map.addLayer({id:id+'-livestock-fill',type:'fill',source:id,paint:{'fill-color':['get','color'],'fill-opacity':opacity}},'asia-country-border');
      map.addLayer({id:id+'-crop',type:'line',source:id,paint:{'line-color':['get','color'],'line-opacity':.7,'line-width':.85}},'asia-country-border');
      map.addLayer({id:id+'-livestock',type:'line',source:id,paint:{'line-color':['get','color'],'line-opacity':.7,'line-width':1.2}},'asia-country-border');
+     map.addLayer({id:id+'-selected-halo',type:'line',source:id,paint:{'line-color':'#fffdf5','line-width':5}});
+     map.addLayer({id:id+'-selected',type:'line',source:id,paint:{'line-color':'#203f4a','line-width':2.5}});
     }
     for(const [suffix,kind] of [['fill','crop'],['crop','crop'],['livestock-fill','livestock'],['livestock','livestock']]){const layer=id+'-'+suffix;map.setFilter(layer,['all',['==',['get','kind'],kind],...(water?[['==',['get','id'],'rice']]:[])] as any);map.setLayoutProperty(layer,'visibility',suffix==='fill'&&(water?kind==='crop':selectedKinds.has(kind))?'visible':'none');}
+    for(const suffix of ['selected-halo','selected']){const selected=id+'-'+suffix;map.setFilter(selected,['==',['get','id'],selectedFarm()?.id??'']);map.setLayoutProperty(selected,'visibility',!water&&selectedFarm()?.kind==='crop'&&selectedKinds.has('crop')?'visible':'none');}
    }
    for(const [visible,id,record,color] of [[current==='precipitation'||water,'asia-rainfall-lines',metadata.rainfall,'#347d9c'],[terrain,'asia-terrain-lines',metadata.terrain,'#8c7051']] as const){
     if(!visible||!record)continue;
@@ -144,8 +149,9 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
     map.setLayoutProperty(id,'visibility','visible');
    }
    if(water&&config.riverFile){const id='asia-farm-rivers';if(!map.getSource(id)){map.addSource(id,{type:'geojson',data:datasets.get(config.riverFile)});map.addLayer({id,type:'line',source:id,filter:['in',['get','id'],['literal',config.riverIds??[]]],paint:{'line-color':'#17688b','line-width':2,'line-opacity':.95}});}map.setLayoutProperty(id,'visibility','visible');}
+   if(farm){root.dataset.farmContextStatus='ready';root.dataset.farmSelected=selectedFarm()?.id??'';}
    errorMode=null;onStatus('');schedule();
-  }catch{if(seq===revision&&map===currentMap&&!disposed){errorMode=current;onStatus(settlement?'居住域の資料を取得できませんでした。再読み込みをお試しください。':farm?'農畜産物の分布図を取得できませんでした。凡例から品目別の詳細図を選べます。':terrain?'等高線を取得できませんでした。地点を選ぶと標高を確認できます。':'等雨量線を取得できませんでした。地点ごとの降水量は選んで確認できます。');}}
+  }catch{if(seq===revision&&map===currentMap&&!disposed){errorMode=current;if(farm)root.dataset.farmContextStatus='error';onStatus(settlement?'居住域の資料を取得できませんでした。再読み込みをお試しください。':farm?'農畜産物の概略分布を取得できませんでした。地点の値と国別統計は品目の欄で確認できます。':terrain?'等高線を取得できませんでした。地点を選ぶと標高を確認できます。':'等雨量線を取得できませんでした。地点ごとの降水量は選んで確認できます。');}}
 
  }
  for(const b of toggles)b.addEventListener('click',()=>{const kind=b.dataset.farmToggle!;if(selectedKinds.has(kind))selectedKinds.delete(kind);else selectedKinds.add(kind);const value=selectedKinds.size===2?null:selectedKinds.size===0?'none':[...selectedKinds][0] as 'crop'|'livestock';config.selectFarmKinds?.(value);if(map&&!config.selectFarmKinds)void show(map);},{signal:events.signal});

@@ -15,7 +15,7 @@ test('former category URLs migrate to real topics while preserving geography and
 test('invalid categories and groups cannot inject subjects or markup',()=>{
  for(const field of ['natural','population','agriculture','industry'])for(const category of ['unknown','constructor','__proto__','forest',' precipitation']){
   const state=readWestState(`?${selection}&category=${encodeURIComponent(category)}`,field,data);
-  assert.equal(state.category,'');assert.equal(state.topic,field==='natural'?'climate':field==='population'?'density':field==='agriculture'?'wheat':'manufacturing');
+  assert.equal(state.category,'');assert.equal(state.topic,field==='natural'?'climate':field==='population'?'density':field==='agriculture'?'farming-overview':'manufacturing');
  }
  assert.equal(readWestState('?topic=ethnicity&group=%3Cscript%3E','population',data).group,'');
  assert.equal(readWestState('?topic=religion&group=epr-123','natural',data).topic,'climate');

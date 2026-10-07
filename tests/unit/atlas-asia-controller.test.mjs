@@ -177,7 +177,7 @@ async function setup(query = '', options = {}) {
   }
   if(options.presentation){
     const conf=JSON.parse(q('[data-asia-config]').textContent);
-    conf.presentationBase='/assets/presentation/';conf.presentation={farming:{file:'farming.json.gz',products:[],labels:[]},rainfall:{file:'rainfall.json.gz',levels:[250,500],labels:[]},terrain:{file:'terrain.json.gz',levels:[500,1000],labels:[]},climate:[]};q('[data-asia-config]').textContent=JSON.stringify(conf);
+    conf.presentationBase='/assets/presentation/';conf.presentation={farming:{file:'farming.json.gz',products:[{id:'rice',kind:'crop',title:'米',color:'#43854c'},{id:'wheat',kind:'crop',title:'小麦',color:'#b39742'}],labels:[]},rainfall:{file:'rainfall.json.gz',levels:[250,500],labels:[]},terrain:{file:'terrain.json.gz',levels:[500,1000],labels:[]},climate:[]};q('[data-asia-config]').textContent=JSON.stringify(conf);
     root.insertAdjacentHTML('beforeend','<div data-farm-switches><button data-farm-toggle="crop" aria-pressed="true"><span></span></button><button data-farm-toggle="livestock" aria-pressed="true"><span></span></button></div><button data-farm-water></button><div data-map-annotations></div><section data-farm-overview-reading></section><section data-farm-overview-legend></section><input type="checkbox" data-farm-kind="crop" checked><input type="checkbox" data-farm-kind="livestock" checked><button data-farm-choice="overview"></button><button data-farm-choice="wheat"></button>');
     q('[data-farming-topic]').insertAdjacentHTML('afterbegin','<option value="overview"></option>');
   }
@@ -916,7 +916,7 @@ test('農畜産物の概要は初期同時表示し、種類切替・詳細図�
   const livestock=q('[data-farm-kind=livestock]');livestock.checked=false;livestock.dispatchEvent(new window.Event('change'));
   await until(()=>window.__map.layers['asia-farm-overview-fill'].layout.visibility==='visible','crop retained');
   assert.equal(window.__map.layers['asia-farm-overview-livestock-fill'].layout.visibility,'none');
-  q('[data-farm-choice=wheat]').click();assert.equal(q('[data-farm-density-key]').hidden,true);assert.equal(q('[data-farm-overview-reading]').hidden,true);assert.ok(window.__map.getLayer('asia-farming-wheat'));assert.equal(window.__map.layers['asia-farm-overview-fill'].layout.visibility,'none');
+  q('[data-farm-choice=wheat]').click();await until(()=>window.__map.layers['asia-farm-overview-selected']?.layout?.visibility==='visible','selected crop outline');assert.equal(q('[data-farm-density-key]').hidden,true);assert.equal(q('[data-farm-overview-reading]').hidden,true);assert.equal(window.__map.getLayer('asia-farming-wheat'),undefined);assert.equal(window.__map.layers['asia-farm-overview-fill'].layout.visibility,'visible');assert.deepEqual(JSON.parse(JSON.stringify(window.__map.layers['asia-farm-overview-fill'].filter)),['all',['==',['get','kind'],'crop']]);assert.deepEqual(JSON.parse(JSON.stringify(window.__map.layers['asia-farm-overview-selected'].filter)),['==',['get','id'],'wheat']);assert.equal(q('[data-farming-legend]').hidden,true,'quantitative raster colors are not shown for the context map');
   q('[data-farm-choice=overview]').click();await until(()=>window.__map.layers['asia-farm-overview-fill'].layout.visibility==='visible','overview restored');assert.equal(window.__maps.length,1);assert.equal(requests.filter(r=>r.startsWith('/assets/presentation/')).length,1);
   q('[data-field=industry]').click();assert.equal(window.__map.layers['asia-farm-overview-fill'].layout.visibility,'none','old overview hides before detailed geography resolves');await until(()=>window.__map.getLayer('asia-industry-national'),'industry settled');
  }finally{await window.happyDOM.close();}
@@ -946,7 +946,7 @@ test('概要図の取得失敗は種類切替で回復すると消え、別の�
  for(const sourceError of [false,true]){
   const {window,q}=await setup('?field=agriculture',{farming:true,presentation:true,presentationFailure:true});
   try{
-   await until(()=>q('[data-map-state]').textContent.includes('農畜産物の分布図を取得できません'),'overview error');
+   await until(()=>q('[data-map-state]').textContent.includes('農畜産物の概略分布を取得できません'),'overview error');
    assert.equal(q('[data-map-retry]').hidden,false);
    if(sourceError)await window.__map.fire('error',{error:Error('image 503')});
    const livestock=q('[data-farm-kind=livestock]');livestock.checked=false;livestock.dispatchEvent(new window.Event('change'));

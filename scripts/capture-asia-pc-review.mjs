@@ -25,7 +25,7 @@ const scenes=[
  {id:'population',us:'/atlas/north-america/population/',asia:'/atlas/asia/east-asia/population/',alignTop:true,comparisonScope:'layout-only; the US reference does not show a population distribution fill, so distribution rendering equivalence is not assessed'},
 ];
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.geojson':'application/geo+json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.woff2':'font/woff2','.gz':'application/gzip'};
-const metadata={schemaVersion:1,status:'running',startedAt:new Date().toISOString(),checkedOutSHA:null,headSHA:process.env.REVIEW_HEAD_SHA||null,baseSHA:process.env.REVIEW_BASE_SHA||null,beforeSHA:process.env.REVIEW_BEFORE_SHA||null,githubSHA:process.env.GITHUB_SHA||null,runId:process.env.GITHUB_RUN_ID||null,runAttempt:process.env.GITHUB_RUN_ATTEMPT||null,repository:process.env.GITHUB_REPOSITORY||null,basePath,profiles,output:'review-artifacts/asia-pc',expectedImageCount:16,expectedComparisonCount:8,fonts:{setup:process.env.REVIEW_JAPANESE_FONT_SETUP||'preinstalled',families:process.env.REVIEW_JAPANESE_FONTS||null,match:process.env.REVIEW_JAPANESE_FONT_MATCH||null},browser:null,scope:'Local production build only; public deployment is not accessed.',notes:['US automobiles and Japanese transport equipment retain their respective statistical definitions.','All eight comparisons require map dimensions, map tops and main field-tab tops to agree within 1 CSS pixel.','Population is a layout-only comparison: the US reference does not show a population distribution fill; no distribution rendering equivalence is asserted.','Each PNG shows the viewport once; no duplicate map-crop artifacts are generated.']};
+const metadata={schemaVersion:1,status:'running',startedAt:new Date().toISOString(),checkedOutSHA:null,headSHA:process.env.REVIEW_HEAD_SHA||null,baseSHA:process.env.REVIEW_BASE_SHA||null,beforeSHA:process.env.REVIEW_BEFORE_SHA||null,githubSHA:process.env.GITHUB_SHA||null,runId:process.env.GITHUB_RUN_ID||null,runAttempt:process.env.GITHUB_RUN_ATTEMPT||null,repository:process.env.GITHUB_REPOSITORY||null,basePath,profiles,output:'review-artifacts/asia-pc',expectedImageCount:46,expectedComparisonCount:8,fonts:{setup:process.env.REVIEW_JAPANESE_FONT_SETUP||'preinstalled',families:process.env.REVIEW_JAPANESE_FONTS||null,match:process.env.REVIEW_JAPANESE_FONT_MATCH||null},browser:null,scope:'Local production build only; public deployment is not accessed.',notes:['US automobiles and Japanese transport equipment retain their respective statistical definitions.','Industry map dimensions use the compact US population frame; other dimensions and all corresponding field tops agree within 1 CSS pixel.','Population is a layout-only comparison: the US reference does not show a population distribution fill; no distribution rendering equivalence is asserted.','Each PNG shows the viewport once; no duplicate map-crop artifacts are generated.']};
 const results={captures:[],comparisons:[],operations:[],externalCommunicationAttempts:[],blockedWebSockets:[]};
 const failure=error=>error?.stack??String(error);
 async function persist(){
@@ -158,10 +158,76 @@ async function capture(browser,host,profile,scene,region){
 function compare(){
  for(const profile of profiles)for(const scene of scenes){
   const us=results.captures.find(row=>row.profile===profile.name&&row.scene===scene.id&&row.region==='us'),asia=results.captures.find(row=>row.profile===profile.name&&row.scene===scene.id&&row.region==='asia');
-  const difference=us?.map&&asia?.map?{width:asia.map.width-us.map.width,height:asia.map.height-us.map.height,mapTop:asia.map.documentY-us.map.documentY,fieldTabsTop:asia.header.fieldTabs&&us.header.fieldTabs?asia.header.fieldTabs.documentY-us.header.fieldTabs.documentY:null}:null;
+  const sizeReference=scene.id.startsWith('manufacturing')?results.captures.find(row=>row.profile===profile.name&&row.scene==='population'&&row.region==='us'):us;
+  const difference=sizeReference?.map&&us?.map&&asia?.map?{width:asia.map.width-sizeReference.map.width,height:asia.map.height-sizeReference.map.height,mapTop:asia.map.documentY-us.map.documentY,fieldTabsTop:asia.header.fieldTabs&&us.header.fieldTabs?asia.header.fieldTabs.documentY-us.header.fieldTabs.documentY:null}:null;
   const passed=Boolean(us?.passed&&asia?.passed&&difference&&Math.abs(difference.width)<=1&&Math.abs(difference.height)<=1&&Math.abs(difference.mapTop)<=1&&difference.fieldTabsTop!==null&&Math.abs(difference.fieldTabsTop)<=1);
-  results.comparisons.push({profile:profile.name,viewport:profile.viewport,scene:scene.id,usPath:us?.path,asiaPath:asia?.path,usMap:us?.map,asiaMap:asia?.map,difference,mapTopAlignmentRequired:true,fieldTabsAlignmentRequired:true,comparisonScope:scene.comparisonScope??'layout and nonblank map; source statistical definitions remain distinct',toleranceCssPixels:1,passed,...(!passed?{failure:'Both captures must pass; map width, height, map top and main field-tab top must differ by at most 1 CSS px.'}:{})});
+  results.comparisons.push({profile:profile.name,viewport:profile.viewport,scene:scene.id,usPath:us?.path,asiaPath:asia?.path,usMap:us?.map,sizeReferenceScene:sizeReference?.scene,sizeReferenceMap:sizeReference?.map,asiaMap:asia?.map,difference,mapTopAlignmentRequired:true,fieldTabsAlignmentRequired:true,comparisonScope:scene.comparisonScope??'layout and nonblank map; industry size uses the compact US population frame, while header alignment uses the corresponding industry page',toleranceCssPixels:1,passed,...(!passed?{failure:'Both captures must pass; map width and height must match the stated compact reference, and map and main field-tab tops must match the corresponding field within 1 CSS px.'}:{})});
  }
+}
+
+async function contextPicture(page,profile,id,region){
+ const record={id:`${profile.name}-${id}`,profile:profile.name,viewport:profile.viewport,region,scene:id,passed:false};
+ Object.assign(record,await page.evaluate(()=>{const node=document.querySelector('[data-west-map],[data-map-surface]'),r=node.getBoundingClientRect();return {path:location.pathname+location.search,map:{x:r.x,y:r.y,width:r.width,height:r.height,documentY:r.y+scrollY},overflow:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)>innerWidth};}));
+ assert.equal(record.overflow,false,'Changed screens must not overflow horizontally');
+ const png=await page.screenshot({fullPage:false,animations:'disabled'});
+ record.screenshot=record.id+'.png';await writeFile(path.join(output,record.screenshot),png);
+ record.screenshotSHA256=createHash('sha256').update(png).digest('hex');record.mapPixels=mapPixels(png,record.map);record.passed=true;
+ results.captures.push(record);await persist();
+}
+async function checkContextOperations(browser,host,profile){
+ for(const region of ['east-asia','southeast-asia','south-central-asia','south-asia','central-asia'])await operation(browser,host,profile,`${region}-farm-context`,async page=>{
+  await open(page,host,`/atlas/asia/${region}/agriculture/`);
+  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]').dataset.farmContextStatus==='ready');
+  assert.equal(await page.locator('[data-country-select]').inputValue(),'');
+  const product=await page.locator('[data-asia-config]').evaluate(node=>JSON.parse(node.textContent).presentation.farming.products.find(p=>p.kind==='crop'&&p.id!=='rice').id);
+  const livestock=page.locator('.asia-livestock-point:visible'),before=await livestock.count();
+  const camera=new URL(page.url()).searchParams;
+  await contextPicture(page,profile,`${region}-farm-overview`,'asia');
+  await page.locator(`[data-farm-choice="${product}"]`).click();
+  await page.waitForFunction(id=>{const root=document.querySelector('[data-asia-atlas]');return root.dataset.farmContextStatus==='ready'&&root.dataset.farmSelected===id;},product);
+  await settle(page);
+  assert.equal(await livestock.count(),before,'Livestock points stay in the map');
+  for(const opacity of await livestock.evaluateAll(nodes=>nodes.map(node=>parseFloat(getComputedStyle(node).opacity))))assert.equal(opacity,.2);
+  assert.equal(await page.locator('[data-farming-legend]').isVisible(),false,'Context map must not display the quantitative raster key');
+  for(const key of ['lng','lat','z'])assert.equal(new URL(page.url()).searchParams.get(key),camera.get(key),'Crop choice must retain the regional extent');
+  await contextPicture(page,profile,`${region}-farm-selected`,'asia');
+  await page.reload({waitUntil:'domcontentloaded'});
+  await page.waitForFunction(id=>document.querySelector('[data-asia-atlas]')?.dataset.farmSelected===id,product);
+  await page.locator('[data-farm-choice="overview"]').click();
+  await page.waitForFunction(()=>{const root=document.querySelector('[data-asia-atlas]');return root.dataset.farmContextStatus==='ready'&&root.dataset.farmSelected==='';});
+  return {crop:product,livestockPointCount:before,otherDistributionsRetained:true,selectedUrlReloadAndClear:true};
+ });
+ await operation(browser,host,profile,'west-asia-farm-context',async page=>{
+  await page.goto(host.origin+basePath+'/atlas/west-asia/agriculture/',{waitUntil:'domcontentloaded'});
+  await page.waitForFunction(()=>document.querySelector('[data-west-atlas]')?.dataset.ready==='true');await settle(page);
+  assert.equal(await page.locator('[data-west-country]').inputValue(),'');
+  const contexts=page.locator('[data-west-farm-context]');assert.equal(await contexts.count(),5);
+  assert.equal(new URL(page.url()).searchParams.get('topic'),'farming-overview');
+  assert.equal(await page.locator('.west-country-line title').count(),0);
+  const frame=await page.locator('[data-west-map]').getAttribute('viewBox');
+  await contextPicture(page,profile,'west-asia-farm-overview','west-asia');
+  await page.locator('[data-west-topic-button="wheat"]').click();await page.waitForSelector('[data-west-farm-selected="wheat"]');await settle(page);
+  assert.equal(await contexts.count(),5);
+  for(const id of ['sheep','goat','cattle'])assert.equal(await page.locator(`[data-west-farm-context="${id}"]`).getAttribute('opacity'),'.2');
+  assert.equal(await page.locator('[data-west-map]').getAttribute('viewBox'),frame);
+  await contextPicture(page,profile,'west-asia-farm-selected','west-asia');
+  await page.reload({waitUntil:'domcontentloaded'});await page.waitForSelector('[data-west-farm-selected="wheat"]');
+  await page.locator('[data-west-topic-button="farming-overview"]').click();await page.waitForFunction(()=>!document.querySelector('[data-west-farm-selected]')&&document.querySelector('[data-west-atlas]').dataset.topic==='farming-overview');
+  return {allFiveSourceProducts:true,cropOutline:true,livestockFaded:true,regionalExtentRetained:true,urlReloadAndClear:true};
+ });
+ for(const region of ['east-asia','west-asia'])await operation(browser,host,profile,`${region}-city-chart-right`,async page=>{
+  const west=region==='west-asia';
+  if(west){await page.goto(host.origin+basePath+'/atlas/west-asia/nature/',{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('[data-west-atlas]')?.dataset.ready==='true');await page.locator('[data-west-city-label] > summary').click();await page.locator('[data-west-city]').selectOption('riyadh');}
+  else{await open(page,host,'/atlas/asia/east-asia/nature/');await page.locator('[data-city-select]').selectOption('tokyo');}
+  const chart=west?'[data-west-detail] [data-west-active-chart] svg':'[data-city-panel="tokyo"] [data-city-statistics] svg';
+  await page.waitForSelector(chart);await settle(page);
+  const layout=await page.evaluate(({west,chart})=>{const plot=document.querySelector(chart).getBoundingClientRect(),map=document.querySelector(west?'[data-west-map]':'[data-map-surface]').getBoundingClientRect(),reading=document.querySelector(west?'[data-west-detail] .atlas-city-reading':'[data-city-panel="tokyo"] .city-climate-reading').getBoundingClientRect();return {plot:{x:plot.x,y:plot.y,width:plot.width,height:plot.height},mapRight:map.right,readingTop:reading.top,plotBottom:plot.bottom};},{west,chart});
+  assert(layout.plot.x>=layout.mapRight,'Selected city chart is on the right');assert(layout.readingTop>=layout.plotBottom,'Climate explanation follows its chart');
+  assert.equal(await page.locator(west?'.west-subtabs [data-west-topic-button="precipitation"]':'[data-water-topics] [data-water-view="seasonal-precipitation"]').count(),0);
+  await contextPicture(page,profile,`${region}-city-chart-right`,west?'west-asia':'asia');
+  return {city:west?'riyadh':'tokyo',chartRight:true,climateReadingBelowChart:true,waterMonthlyTabAbsent:true,layout};
+ });
+ await operation(browser,host,profile,'us-farming-reference',async page=>{await open(page,host,'/atlas/north-america/agriculture/','us');await contextPicture(page,profile,'us-farming-reference','us');return {referenceOnly:true};});
 }
 
 // The same DOM/URL contracts as tests/e2e/atlas-asia-industry-status.test.mjs,
@@ -227,14 +293,14 @@ async function checkOperations(browser,host,profile,source){
   await page.locator('[data-country-select]').selectOption('CHN');assert.equal(await city.inputValue(),'');assert.deepEqual(await city.locator('option[value="tokyo"]').evaluate(option=>({disabled:option.disabled,hidden:option.hidden})),{disabled:true,hidden:true});
   await city.selectOption('beijing');
   const chart=page.locator('[data-city-statistics]:visible');await chart.waitFor({state:'visible'});
-  const pickerChart=await chart.evaluate(node=>({svg:node.querySelector('svg').innerHTML,monthly:node.querySelector('.monthly-values table').textContent}));
+  const pickerChart=await chart.evaluate(node=>({svg:node.querySelector('svg').innerHTML,monthly:node.closest('[data-city-panel]').querySelector('.monthly-values table').textContent}));
   await city.selectOption('');assert.equal(new URL(page.url()).searchParams.get('city'),null);
   await page.locator('[data-station="beijing"]').click();await page.locator('[data-city-panel="beijing"]').waitFor({state:'visible'});
   assert.equal(await city.inputValue(),'beijing');assert.equal(new URL(page.url()).searchParams.get('place'),'CHN');assert.equal(new URL(page.url()).searchParams.get('city'),'beijing');
-  assert.deepEqual(await chart.evaluate(node=>({svg:node.querySelector('svg').innerHTML,monthly:node.querySelector('.monthly-values table').textContent})),pickerChart,'Picker and map city click must show the same rain-temperature chart and monthly values');
+  assert.deepEqual(await chart.evaluate(node=>({svg:node.querySelector('svg').innerHTML,monthly:node.closest('[data-city-panel]').querySelector('.monthly-values table').textContent})),pickerChart,'Picker and map city click must show the same rain-temperature chart and monthly values');
   await page.reload({waitUntil:'domcontentloaded'});await page.locator('[data-city-panel="beijing"]').waitFor({state:'visible'});assert.equal(await city.inputValue(),'beijing');
   await page.locator('[data-dock-compare="industry"]').click();assert.equal(await city.isVisible(),false);await page.locator('[data-comparison-back]').click();assert.equal(await city.inputValue(),'beijing');
-  await page.locator('[data-natural-group="water"]').click();await page.locator('[data-natural-topic="seasonal-precipitation"]').click();const month=page.locator('[data-seasonal-month]');await month.waitFor({state:'visible'});
+  assert.equal(await page.locator('[data-water-topics] [data-natural-topic="seasonal-precipitation"]').count(),0);await open(page,host,'/atlas/asia/east-asia/nature/?topic=seasonal-precipitation&place=CHN&detail=m-07');const month=page.locator('[data-seasonal-month]');await month.waitFor({state:'visible'});
   await month.selectOption('m-01');await page.locator('[data-seasonal-previous]').click();assert.equal(await month.inputValue(),'m-12');await page.locator('[data-seasonal-next]').click();assert.equal(await month.inputValue(),'m-01');
   await page.locator('[data-dock-compare="industry"]').click();await page.locator('[data-comparison-back]').click();assert.equal(await month.inputValue(),'m-01');
   await page.locator('[data-natural-group="climate"]').click();await city.waitFor({state:'visible'});assert.equal(await month.isVisible(),false);await city.selectOption('beijing');assert.equal(new URL(page.url()).searchParams.get('city'),'beijing');
@@ -283,9 +349,10 @@ async function main(){
   for(const profile of profiles)for(const scene of scenes)for(const region of ['us','asia'])await capture(browser,host,profile,scene,region);
   compare();await persist();
   for(const profile of profiles)await checkOperations(browser,host,profile,source);
-  assert.equal(results.captures.length,16);assert(results.captures.every(row=>row.passed),'All 16 viewport captures must pass');
+  for(const profile of profiles)await checkContextOperations(browser,host,profile);
+  assert.equal(results.captures.length,46);assert(results.captures.every(row=>row.passed),'All 46 viewport captures must pass');
   assert.equal(results.comparisons.length,8);assert(results.comparisons.every(row=>row.passed),'All 8 geometry comparisons must pass');
-  assert.equal(results.operations.length,10);assert(results.operations.every(row=>row.passed),'All 10 PC operation groups must pass');
+  assert.equal(results.operations.length,28);assert(results.operations.every(row=>row.passed),'All 28 PC operation groups must pass');
   assert.deepEqual(results.externalCommunicationAttempts,[]);assert.deepEqual(results.blockedWebSockets,[]);
   metadata.status='passed';
  }catch(error){metadata.status='failed';metadata.failure=failure(error);process.exitCode=1;}
