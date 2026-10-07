@@ -66,7 +66,9 @@ export async function verifySoutheastAsiaRegion(page,{source,capture:takePicture
 
  for(const [path,id,key,value]of [['nature/?city=bangkok&lng=116.576&lat=9.362&z=2.7','climate-background','city','bangkok'],['nature/?topic=terrain&detail=java-island&lng=116.576&lat=9.362&z=2.7','terrain-background','detail','java-island']]){
   await open(path);if(key==='city')await page.locator('[data-city-panel="bangkok"]').waitFor({state:'visible'});
-  const before=page.url(),point=await background();assert(point,'An uncovered map background point is required');await page.mouse.click(point.x,point.y);
+  const point=await background();assert(point,'An uncovered map background point is required');
+  assert.equal(await page.evaluate(({x,y})=>Boolean(document.elementFromPoint(x,y)?.closest('button,a,[role="button"]')),point),false,'The background click must not hit a city or annotation control');
+  const before=page.url();await page.mouse.click(point.x,point.y);
   assert.equal(page.url(),before);assert.equal(new URL(page.url()).searchParams.get(key),value);record(id+' preserves the selected city or landform');await capture(id);
   if(key==='city'){
    for(const city of ['jakarta','haiphong']){

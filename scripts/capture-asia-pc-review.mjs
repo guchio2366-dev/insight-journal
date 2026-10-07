@@ -110,7 +110,7 @@ async function open(page,host,route,region='asia',scene){
 
 // Decode the viewport PNG and inspect only its visible map pixels. This avoids
 // producing a second screenshot artifact or accepting a merely present canvas.
-function mapPixels(png,box){
+function mapPixels(png,box,backgroundExclusions=[]){
  assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a');
  let width,height,channels;const chunks=[];
  for(let offset=8;offset<png.length;){
@@ -123,7 +123,7 @@ function mapPixels(png,box){
  const paeth=(a,b,c)=>{const p=a+b-c,pa=Math.abs(p-a),pb=Math.abs(p-b),pc=Math.abs(p-c);return pa<=pb&&pa<=pc?a:pb<=pc?b:c;};
  for(let y=0;y<height;y++){const filter=raw[y*(stride+1)];assert(filter<=4);for(let x=0;x<stride;x++){const offset=y*stride+x,left=x>=channels?pixels[offset-channels]:0,up=y?pixels[offset-stride]:0,upperLeft=y&&x>=channels?pixels[offset-stride-channels]:0;pixels[offset]=(raw[y*(stride+1)+1+x]+[0,left,up,Math.floor((left+up)/2),paeth(left,up,upperLeft)][filter])&255;}}
  const colors=new Map();let samples=0,backgroundPoint=null;
- for(let y=Math.max(0,Math.ceil(box.y+4));y<Math.min(height,Math.floor(box.y+box.height-4));y+=3)for(let x=Math.max(0,Math.ceil(box.x+4));x<Math.min(width,Math.floor(box.x+box.width-4));x+=3){const i=(y*width+x)*channels;if(channels===4&&pixels[i+3]<128)continue;const key=`${pixels[i]>>4},${pixels[i+1]>>4},${pixels[i+2]>>4}`;colors.set(key,(colors.get(key)??0)+1);samples++;if(!backgroundPoint&&x>box.x+24&&x<box.x+box.width-24&&y>box.y+24&&y<box.y+box.height-24&&['230,238,240','215,218,213','225,228,219'].includes(`${pixels[i]},${pixels[i+1]},${pixels[i+2]}`))backgroundPoint={x,y};}
+ for(let y=Math.max(0,Math.ceil(box.y+4));y<Math.min(height,Math.floor(box.y+box.height-4));y+=3)for(let x=Math.max(0,Math.ceil(box.x+4));x<Math.min(width,Math.floor(box.x+box.width-4));x+=3){const i=(y*width+x)*channels;if(channels===4&&pixels[i+3]<128)continue;const key=`${pixels[i]>>4},${pixels[i+1]>>4},${pixels[i+2]>>4}`;colors.set(key,(colors.get(key)??0)+1);samples++;if(!backgroundPoint&&x>box.x+24&&x<box.x+box.width-24&&y>box.y+24&&y<box.y+box.height-24&&!backgroundExclusions.some(r=>x>=r.x-4&&x<=r.x+r.width+4&&y>=r.y-4&&y<=r.y+r.height+4)&&['230,238,240','215,218,213','225,228,219'].includes(`${pixels[i]},${pixels[i+1]},${pixels[i+2]}`))backgroundPoint={x,y};}
  const evidence={viewportWidth:width,viewportHeight:height,sampledMapPixels:samples,colorBuckets:colors.size,dominantColorRatio:samples?Math.max(...colors.values())/samples:1};
  assert(samples>1000,`The visible map has too few pixels to review: ${JSON.stringify({box,...evidence})}`);
  assert(colors.size>=16&&evidence.dominantColorRatio<.98,`The map is blank or nearly uniform: ${JSON.stringify(evidence)}`);return {...evidence,backgroundPoint};
@@ -432,7 +432,7 @@ async function main(){
   for(const profile of profiles)await operation(browser,host,profile,'southeast-asia-regional-reading',async page=>verifySoutheastAsiaRegion(page,{
    source:host.origin+basePath,
    capture:id=>contextPicture(page,profile,'southeast-'+id,'asia'),
-   background:async()=>{await settle(page);await page.locator('[data-map-surface]').scrollIntoViewIfNeeded();const box=await page.locator('[data-map-surface]').boundingBox();return mapPixels(await page.screenshot({fullPage:false,animations:'disabled'}),box).backgroundPoint;}
+   background:async()=>{await settle(page);await page.locator('[data-map-surface]').scrollIntoViewIfNeeded();const box=await page.locator('[data-map-surface]').boundingBox();const buttons=await page.locator('[data-map-surface] button,[data-map-annotations] button').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};}).filter(r=>r.width>0&&r.height>0));return mapPixels(await page.screenshot({fullPage:false,animations:'disabled'}),box,buttons).backgroundPoint;}
   }));
   metadata.expectedImageCount=100;
   assert.equal(results.captures.length,100);assert(results.captures.every(row=>row.passed),'All 100 viewport captures must pass');
