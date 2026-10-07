@@ -26,7 +26,7 @@ const scenes=[
  {id:'population',us:'/atlas/north-america/population/',asia:'/atlas/asia/east-asia/population/',alignTop:true,comparisonScope:'layout-only; the US reference does not show a population distribution fill, so distribution rendering equivalence is not assessed'},
 ];
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.geojson':'application/geo+json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.woff2':'font/woff2','.gz':'application/gzip'};
-const metadata={schemaVersion:1,status:'running',startedAt:new Date().toISOString(),checkedOutSHA:null,headSHA:process.env.REVIEW_HEAD_SHA||null,baseSHA:process.env.REVIEW_BASE_SHA||null,beforeSHA:process.env.REVIEW_BEFORE_SHA||null,githubSHA:process.env.GITHUB_SHA||null,runId:process.env.GITHUB_RUN_ID||null,runAttempt:process.env.GITHUB_RUN_ATTEMPT||null,repository:process.env.GITHUB_REPOSITORY||null,basePath,profiles,output:'review-artifacts/asia-pc',expectedImageCount:74,expectedComparisonCount:8,fonts:{setup:process.env.REVIEW_JAPANESE_FONT_SETUP||'preinstalled',families:process.env.REVIEW_JAPANESE_FONTS||null,match:process.env.REVIEW_JAPANESE_FONT_MATCH||null},browser:null,scope:'Local production build only; public deployment is not accessed.',notes:['US automobiles and Japanese transport equipment retain their respective statistical definitions.','Industry map dimensions use the compact US population frame; other dimensions and all corresponding field tops agree within 1 CSS pixel.','Population is a layout-only comparison: the US reference does not show a population distribution fill; no distribution rendering equivalence is asserted.','Each PNG shows the viewport once; no duplicate map-crop artifacts are generated.']};
+const metadata={schemaVersion:1,status:'running',startedAt:new Date().toISOString(),checkedOutSHA:null,headSHA:process.env.REVIEW_HEAD_SHA||null,baseSHA:process.env.REVIEW_BASE_SHA||null,beforeSHA:process.env.REVIEW_BEFORE_SHA||null,githubSHA:process.env.GITHUB_SHA||null,runId:process.env.GITHUB_RUN_ID||null,runAttempt:process.env.GITHUB_RUN_ATTEMPT||null,repository:process.env.GITHUB_REPOSITORY||null,basePath,profiles,output:'review-artifacts/asia-pc',expectedImageCount:82,expectedComparisonCount:8,fonts:{setup:process.env.REVIEW_JAPANESE_FONT_SETUP||'preinstalled',families:process.env.REVIEW_JAPANESE_FONTS||null,match:process.env.REVIEW_JAPANESE_FONT_MATCH||null},browser:null,scope:'Local production build only; public deployment is not accessed.',notes:['US automobiles and Japanese transport equipment retain their respective statistical definitions.','Industry map dimensions use the compact US population frame; other dimensions and all corresponding field tops agree within 1 CSS pixel.','Population is a layout-only comparison: the US reference does not show a population distribution fill; no distribution rendering equivalence is asserted.','Each PNG shows the viewport once; no duplicate map-crop artifacts are generated.']};
 const results={captures:[],comparisons:[],operations:[],externalCommunicationAttempts:[],blockedWebSockets:[]};
 const failure=error=>error?.stack??String(error);
 async function persist(){
@@ -58,7 +58,7 @@ function requestDescription(raw){
 }
 async function isolatedPage(browser,host,profile,record){
  const context=await browser.newContext({viewport:profile.viewport,deviceScaleFactor:1,isMobile:false,hasTouch:false,serviceWorkers:'block'});
- const control={failIndustry:false,industryRequests:0},expectedFailures=new WeakSet();
+ const control={failIndustry:false,industryRequests:0,failContourBands:false},expectedFailures=new WeakSet();
  record.errors=[];record.failedRequests=[];record.externalCommunicationAttempts=[];
  // Install before creating a page. Cross-origin HTTP requests never continue.
  await context.route('**/*',async route=>{
@@ -72,6 +72,7 @@ async function isolatedPage(browser,host,profile,record){
    control.industryRequests++;
    if(control.failIndustry){expectedFailures.add(request);await route.fulfill({status:503,body:'Expected local retry regression failure'});return;}
   }
+  if(control.failContourBands&&url.pathname.endsWith('/east-asia.rainfall-bands.json.gz')){expectedFailures.add(request);await route.fulfill({status:503,body:'Expected local contour-band retry failure'});return;}
   await route.continue();
  });
  // No application WebSocket is needed; intercept before connectToServer().
@@ -125,7 +126,7 @@ function mapPixels(png,box){
  for(let y=Math.max(0,Math.ceil(box.y+4));y<Math.min(height,Math.floor(box.y+box.height-4));y+=3)for(let x=Math.max(0,Math.ceil(box.x+4));x<Math.min(width,Math.floor(box.x+box.width-4));x+=3){const i=(y*width+x)*channels;if(channels===4&&pixels[i+3]<128)continue;const key=`${pixels[i]>>4},${pixels[i+1]>>4},${pixels[i+2]>>4}`;colors.set(key,(colors.get(key)??0)+1);samples++;if(!backgroundPoint&&x>box.x+24&&x<box.x+box.width-24&&y>box.y+24&&y<box.y+box.height-24&&['230,238,240','215,218,213','225,228,219'].includes(`${pixels[i]},${pixels[i+1]},${pixels[i+2]}`))backgroundPoint={x,y};}
  const evidence={viewportWidth:width,viewportHeight:height,sampledMapPixels:samples,colorBuckets:colors.size,dominantColorRatio:samples?Math.max(...colors.values())/samples:1};
  assert(samples>1000,`The visible map has too few pixels to review: ${JSON.stringify({box,...evidence})}`);
- assert(colors.size>=16&&evidence.dominantColorRatio<.98,`The map is blank or nearly uniform: ${JSON.stringify(evidence)}`);return {...evidence,backgroundPoint};
+ assert(colors.size>=16&&evidence.dominantColorRatio<.98,`The map is blank or nearly uniform: ${JSON.stringify(evidence)}`);return {...evidence,backgroundPoint,colorBucketKeys:[...colors.keys()]};
 }
 async function geometry(page){
  return page.evaluate(()=>{
@@ -395,6 +396,44 @@ async function checkRequestedCorrections(browser,host,profile){
  });
 }
 
+async function checkEastContourBands(browser,host,profile){
+ await operation(browser,host,profile,'east-aligned-contour-bands',async(page,control)=>{
+  const evidence=[];
+  for(const [topic,kind,interval,legend] of [['precipitation','rainfall',250,'[data-hydrology-scale]'],['terrain','terrain',500,'[data-physical-legend] .asia-physical-key']]){
+   await open(page,host,`/atlas/asia/east-asia/nature/?topic=${topic}`);
+   await page.waitForFunction(kind=>{const r=document.querySelector('[data-asia-atlas]');return r.dataset.contourBandStatus==='ready'&&r.dataset.contourBandKind===kind;},kind);
+   const expected=await page.locator('[data-asia-config]').evaluate((node,kind)=>JSON.parse(node.textContent).presentation[kind].bands,kind);
+   assert.equal(expected.interval,interval);
+   const actual=await page.locator(`${legend} > span`).evaluateAll(nodes=>nodes.filter(n=>/–/.test(n.textContent)).map(n=>({color:n.querySelector('i').style.backgroundColor,label:n.textContent})));
+   const wanted=await page.evaluate(b=>b.colors.map((color,i)=>{const e=document.createElement('i');e.style.backgroundColor=color;return {color:e.style.backgroundColor,label:`${b.breaks[i].toLocaleString('ja-JP')}–${b.breaks[i+1].toLocaleString('ja-JP')}`};}),expected);
+   assert.deepEqual(actual,wanted,'Legend colors and thresholds match the generated polygons');
+   const mapLegend=await page.locator('[data-reading-map-legend] .asia-comparison-compact-key > span').evaluateAll(nodes=>nodes.map(n=>({color:n.querySelector('i').style.backgroundColor,label:n.textContent})));
+   assert.deepEqual(mapLegend,wanted,'The visible legend directly below the map also uses the same generated bands');
+   await settle(page);await contextPicture(page,profile,`east-${kind}-bands-overview`,'asia');
+   const capture=results.captures.at(-1),palette=expected.colors.map(c=>[1,3,5].map(i=>parseInt(c.slice(i,i+2),16)>>4).join(','));
+   const rendered=palette.filter(c=>capture.mapPixels.colorBucketKeys.includes(c));assert(new Set(rendered).size>=4,'The actual canvas must render several generated palette colors');
+   await open(page,host,`/atlas/asia/east-asia/nature/?topic=${topic}&lng=121.00000&lat=23.80000&z=6.000&at=121.00000,23.80000`);
+   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]').dataset.contourBandStatus==='ready');
+   const valueSelector=topic==='precipitation'?'[data-hydrology-value]':'[data-physical-value]';
+   await page.waitForFunction(selector=>/\d/.test(document.querySelector(selector)?.textContent??''),valueSelector);
+   const cfg=await page.locator('[data-asia-config]').evaluate(node=>JSON.parse(node.textContent)),grid=kind==='rainfall'?cfg.water.precipitation:cfg.physical;
+   const raw=gunzipSync(await readFile(path.join(repo,expected.sourceGrid))),[w,s,e,n]=grid.bounds3857;
+   const x=6378137*121*Math.PI/180,y=6378137*Math.log(Math.tan(Math.PI/4+23.8*Math.PI/360));
+   const value=raw.readInt16LE(2*(Math.floor((n-y)/(n-s)*grid.height)*grid.width+Math.floor((x-w)/(e-w)*grid.width)));
+   assert.notEqual(value,-32768);assert((await page.locator(valueSelector).textContent()).includes(value.toLocaleString('ja-JP')),'Point reading retains the original unsmoothed source value');
+   await settle(page);await contextPicture(page,profile,`east-${kind}-bands-detail`,'asia');
+   const url=page.url();await page.reload();await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]').dataset.contourBandStatus==='ready');
+   assert.equal(page.url(),url,'Reload preserves the topic, point and camera');assert.equal(await page.locator('.maplibregl-popup').count(),0);
+   evidence.push({kind,interval,paletteMatches:new Set(rendered).size,sourceGridSHA256:expected.sourceGridSHA256,originalPointValue:value,reloadRetainsURL:true});
+  }
+  control.failContourBands=true;await open(page,host,'/atlas/asia/east-asia/nature/?topic=precipitation&at=139.75000,35.69000');
+  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]').dataset.contourBandStatus==='error');
+  const url=page.url();control.failContourBands=false;await page.locator('[data-map-retry]').click();
+  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]').dataset.contourBandStatus==='ready');
+  assert.equal(page.url(),url,'Retry retains the selected point');return {bands:evidence,retryRetainsPoint:true};
+ });
+}
+
 async function main(){
  await mkdir(output,{recursive:true});await persist();let host,browser;
  try{
@@ -425,10 +464,11 @@ async function main(){
   for(const profile of profiles)await checkOperations(browser,host,profile,source);
   for(const profile of profiles)await checkContextOperations(browser,host,profile);
   for(const profile of profiles)await checkRequestedCorrections(browser,host,profile);
-  metadata.expectedImageCount=74;
-  assert.equal(results.captures.length,74);assert(results.captures.every(row=>row.passed),'All 74 viewport captures must pass');
+  for(const profile of profiles)await checkEastContourBands(browser,host,profile);
+  metadata.expectedImageCount=82;
+  assert.equal(results.captures.length,82);assert(results.captures.every(row=>row.passed),'All 82 viewport captures must pass');
   assert.equal(results.comparisons.length,8);assert(results.comparisons.every(row=>row.passed),'All 8 geometry comparisons must pass');
-  assert.equal(results.operations.length,36);assert(results.operations.every(row=>row.passed),'All 36 PC operation groups must pass');
+  assert.equal(results.operations.length,38);assert(results.operations.every(row=>row.passed),'All 38 PC operation groups must pass');
   assert.deepEqual(results.externalCommunicationAttempts,[]);assert.deepEqual(results.blockedWebSockets,[]);
   metadata.status='passed';
  }catch(error){metadata.status='failed';metadata.failure=failure(error);process.exitCode=1;}
