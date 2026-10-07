@@ -56,7 +56,8 @@ if(workspace){
   workspace.style.setProperty('--latin-nature-reader-top',`${Math.round(reader.getBoundingClientRect().top+window.scrollY)}px`);
  }
  function resizeMap(){
-  if(!state.fallback)q('[data-nature-map-host]').innerHTML=renderLatinNatureMap({...state,cityScale:cityScale(),interactiveCities:!state.source},'nature-main');
+  q('[data-nature-map-host]').innerHTML=renderLatinNatureMap({...state,cityScale:cityScale(),interactiveCities:!state.source},'nature-main');
+  if(state.fallback)void fallbackMap(q('[data-nature-map-host]'),renderVersion);
   if(state.source&&state.source.field==='nature'&&!(state.source.fallback??state.fallback))q('[data-nature-source-map]').innerHTML=sourceMap();
   alignMapCaptions();measureReader();
  }
@@ -73,12 +74,22 @@ if(workspace){
  async function fallbackMap(host:HTMLElement,version:number){
   const original=host.querySelector('svg');if(!original)return;
   const clone=original.cloneNode(true) as SVGSVGElement;
+  const points=original.querySelector('[data-nature-city-points]');
+  const interactivePoints=points?.querySelector('[data-nature-city-point][role="button"]');
+  if(interactivePoints)clone.querySelector('[data-nature-city-points]')?.remove();
   clone.setAttribute('xmlns','http://www.w3.org/2000/svg');
   try{
    for(const img of clone.querySelectorAll('image')){const href=img.getAttribute('href');if(href&&!href.startsWith('data:'))img.setAttribute('href',await inlineImage(href));}
-   if(version!==renderVersion)return;
+   if(version!==renderVersion||original!==host.querySelector('svg'))return;
    const img=document.createElement('img');img.className='latin-nature-fallback';img.alt=original.querySelector('title')?.textContent??'比較地図';img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(clone));img.setAttribute('data-nature-fallback','');
-   host.replaceChildren(img);
+   if(interactivePoints&&points){
+    const image=document.createElementNS('http://www.w3.org/2000/svg','image');
+    image.setAttribute('href',img.src);image.setAttribute('width',original.getAttribute('width')!);image.setAttribute('height',original.getAttribute('height')!);
+    image.setAttribute('data-nature-fallback','');image.setAttribute('aria-hidden','true');
+    // Keep the actual station controls and their focus; flatten only the distribution.
+    for(const child of [...original.children])if(child!==points&&child.localName!=='title')child.remove();
+    original.insertBefore(image,points);
+   }else host.replaceChildren(img);
   }catch{if(version===renderVersion){q('[data-nature-renderer]').textContent='地図画像を取得できません。元区分と観測所の数値一覧で確認できます。';workspace.dataset.natureRenderer='unavailable';}}
  }
  function render(push=false){
