@@ -1,0 +1,21 @@
+---
+import {mexicoFoodProcessingReading as copy} from '../../data/atlas/mexico/food-processing-reading';
+---
+<section class="mi-food-processing" data-mi-food-processing aria-label="食品加工の中身と原料・市場のつながり">
+  <p class="industry-key-sentence"><strong>{copy.takeaway}</strong></p>
+  <h3>原料から、どんな食品をつくるか</h3>
+  <dl class="mi-food-products" aria-label="食品加工の代表例：原料から製品へ">
+    {copy.products.map(product => <div><dt>{product.input}</dt><dd>{product.output}</dd></div>)}
+  </dl>
+  <ol class="mi-food-chain" aria-label="原料調達から加工・販売まで">
+    {copy.chain.map(step => <li><strong>{step.title}</strong><span>{step.text}</span></li>)}
+  </ol>
+  <p>{copy.connection}</p>
+  <h3>{copy.regions.period}</h3>
+  <p>{copy.regions.text}</p>
+  <div class="industry-reading-places">
+    {copy.regions.places.map(place => <button type="button" data-mi-region-option={place.state} data-mi-region-metric="food" data-mi-region-sector="manufacturing">{place.name}を地図で見る</button>)}
+  </div>
+  <p class="mi-food-period">{copy.regions.note}</p>
+  <p>{copy.classification}</p>
+</section>

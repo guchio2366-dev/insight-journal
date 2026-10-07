@@ -17,6 +17,40 @@ async function page(search='',interactive=true){const w=new Window({url:`https:/
 const change=(w,selector,value)=>{const el=w.document.querySelector(selector);el.value=value;el.dispatchEvent(new w.Event('change'));};
 const visible=(d,slot,selector='[data-mi-shape]')=>[...d.querySelector(`[data-mi-map=${slot}]`).querySelectorAll(selector)].filter(el=>!el.hasAttribute('hidden'));
 
+test('Food processing keeps 2019 production examples separate from 2025 exports through selection, comparison and history',async()=>{
+ const w=await page();let reload,comparison;
+ try{
+  const d=w.document,q=s=>d.querySelector(s);
+  q('[data-industry-sector=manufacturing]').click();q('[data-mi-metric-button=food]').click();
+  const food=q('[data-mi-food-processing]'),panel=q('[data-mi-industry-panel="manufacturing:food"]');
+  assert.equal(panel.hidden,false);assert.ok(panel.contains(food));
+  assert.equal(food.querySelectorAll('dl>div').length,4);
+  for(const product of ['トルティーヤ','製粉','パン','ビスケット','麺','乳製品','食肉加工','冷凍','缶詰'])assert.ok(food.textContent.includes(product));
+  assert.match(food.textContent,/国内.*輸入.*原料/);assert.match(food.textContent,/小売・外食/);assert.match(food.textContent,/加工食品の輸出/);
+  assert.match(food.textContent,/2019年経済センサス/);assert.match(food.textContent,/現在の順位.*ありません/);
+  assert.match(food.textContent,/食品製造311/);assert.match(food.textContent,/飲料製造3121/);assert.match(food.textContent,/生鮮.*加工食品.*区分が異な/);
+  assert.doesNotMatch(food.textContent,/GDP|17\.2|1\.73/);
+  assert.equal(panel.querySelectorAll('details a[href*="MX2026-0022.pdf"]').length,1);
+  assert.equal(panel.querySelectorAll('details a[href*="food-manufacturing"]').length,1);
+  const metric=catalog.metrics.find(m=>m.id==='food');
+  assert.ok(panel.querySelector('details').textContent.includes(metric.reading.text));
+  const initialMap=q('[data-mi-map=primary]').getAttribute('viewBox');
+  for(const state of ['14','15']){
+   food.querySelector(`[data-mi-region-option="${state}"]`).click();
+   assert.equal(q('[data-mi-state-select]').value,state);assert.equal(q('[data-mi-map=primary]').getAttribute('viewBox'),initialMap);
+   assert.equal(new URL(w.location).searchParams.get('metric'),'food');
+   assert.equal(q('[data-mi-value=food]').textContent,industryValueText(catalog.rows.find(r=>r.id===state).values.food));
+  }
+  reload=await page(w.location.search);assert.equal(reload.document.querySelector('[data-mi-state-select]').value,'15');assert.equal(reload.document.querySelector('[data-mi-industry-panel="manufacturing:food"]').hidden,false);
+  const target=new URL(q('[data-mi-population-link]').href);comparison=await page(target.search);
+  assert.equal(new URL(comparison.document.querySelector('[data-mi-return]').href).searchParams.get('metric'),'food');
+  assert.match(comparison.document.querySelector('[data-mi-period-note]').textContent,/2020.*2025/);
+  q('[data-mi-metric-button=electronics]').click();assert.equal(panel.hidden,true);
+  w.history.back();await w.happyDOM.waitUntilComplete();assert.equal(panel.hidden,false);assert.equal(q('[data-mi-state-select]').value,'15');
+  panel.querySelector('[data-industry-overview]').click();assert.equal(panel.hidden,true);assert.equal(q('[data-mi-industry-panel="manufacturing:all"]').hidden,false);
+ }finally{await w.happyDOM.close();await reload?.happyDOM.close();await comparison?.happyDOM.close();}
+});
+
 test('US sector and supported-field navigation opens visible geographic readings and statistics without moving the map',async()=>{
  const w=await page();let reload;
  try{

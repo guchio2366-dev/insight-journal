@@ -42,6 +42,14 @@
 .mexico-workspace.mexico-industry .mi-map-navigation button{width:38px;min-height:38px;padding:2px;border:1px solid #b7c5bb;border-radius:4px;background:#fffef5ed;box-shadow:0 1px 4px #243b4820;font-size:20px;line-height:1}
 .mexico-workspace.mexico-industry .mi-map-navigation [data-mi-map-action=fit]{font-size:12px}
 .mexico-workspace.mexico-industry .mi-map-navigation button:disabled{opacity:.45;cursor:default}
+.mexico-workspace.mexico-industry .mi-food-products{margin:7px 0 11px;font-size:14px;line-height:1.65}
+.mexico-workspace.mexico-industry .mi-food-products>div{display:grid;grid-template-columns:minmax(85px,.85fr) minmax(0,1.6fr);gap:10px;padding:5px 0;border-bottom:1px solid #d5ddd0}
+.mexico-workspace.mexico-industry .mi-food-products dt{font-weight:700}
+.mexico-workspace.mexico-industry .mi-food-products dd{margin:0}
+.mexico-workspace.mexico-industry .mi-food-chain{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;list-style:none;padding:0;margin:9px 0}
+.mexico-workspace.mexico-industry .mi-food-chain li{padding:7px;background:#edf1e6;border-top:2px solid #729475;font-size:14px;line-height:1.65}
+.mexico-workspace.mexico-industry .mi-food-chain :is(strong,span){display:block}
+.mexico-workspace.mexico-industry .mi-food-period{margin-top:6px}
 @media(min-width:960px){
  .atlas-desktop-shell .atlas-explorer.mexico-workspace.mexico-industry[data-field=industry] .mexico-primary-grid{grid-template-columns:minmax(0,7fr) minmax(290px,3fr);gap:14px}
  .atlas-desktop-shell .atlas-explorer.mexico-workspace.mexico-industry[data-field=industry] .mexico-map-frame{height:auto;min-height:300px;max-height:640px;aspect-ratio:1.55}
