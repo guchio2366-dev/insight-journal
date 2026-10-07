@@ -84,21 +84,25 @@ export function initMexicoLocalityPopulation(root:HTMLElement) {
   }
   labels.replaceChildren();
   const labelBoxes:number[][]=[];
-  for(const pick of [...picks].sort((a,b)=>b.population-a.population)){
+  for(const city of config.cityLabels??[]){
    if(labelBoxes.length>=7)break;
-   if(mode==='cluster'&&pick.population<150000)continue;
-   const label=pick.localities>1?`${pick.name}周辺`:pick.name;
+   if((onlyState&&city.stateCode!==onlyState)||!localityInFrame(city.position[0],city.position[1],frame))continue;
+   const screenX=(city.position[0]-frame[0])/frame[2]*box.width,screenY=(city.position[1]-frame[1])/frame[3]*box.height;
    const node=document.createElementNS('http://www.w3.org/2000/svg','text');
-   node.style.fontSize=`${13*900/box.width}px`;node.textContent=label;labels.append(node);
+   node.style.fontSize=`${13*900/box.width}px`;node.textContent=city.nameJa;node.dataset.localityCityLabel=city.sourceId;labels.append(node);
    // Use the actual SVG font metrics, including Japanese glyphs and accents.
    const measured=node.getBBox(),width=measured.width*box.width/900,height=measured.height*box.height/580;
    if(width>box.width-16){node.remove();continue;}
-   const x=Math.min(box.width-width-8,Math.max(8,pick.screenX+pick.radius+5));
-   let y=pick.screenY-pick.radius-4,top=y+measured.y*box.height/580;
+   const x=Math.min(box.width-width-8,Math.max(8,screenX+8));
+   let y=screenY-7,top=y+measured.y*box.height/580;
    if(top<8){y+=8-top;top=8;}else if(top+height>box.height-8){y-=top+height-(box.height-8);top=box.height-8-height;}
    if((x+width>box.width-60&&top<138)||labelBoxes.some(b=>x<b[0]+b[2]+6&&x+width>b[0]-6&&top<b[1]+b[3]+6&&top+height>b[1]-6)){node.remove();continue;}
    labelBoxes.push([x,top,width,height]);
    node.setAttribute('x',String(x/box.width*900));node.setAttribute('y',String(y/box.height*580));
+   const anchor=document.createElementNS('http://www.w3.org/2000/svg','path');
+   const u=900/box.width,v=580/box.height;
+   anchor.setAttribute('d',`M${(screenX-2.5)*u},${screenY*v}h${5*u}M${screenX*u},${(screenY-2.5)*v}v${5*v}M${(screenX+3)*u},${(screenY-3)*v}L${(x-2)*u},${(top+height)*v}`);
+   anchor.setAttribute('class','locality-population-city-marker');anchor.dataset.localityCityAnchor=city.sourceId;labels.prepend(anchor);
   }
   const legend=query<SVGSVGElement>('[data-locality-count-key]');
   if(legend){

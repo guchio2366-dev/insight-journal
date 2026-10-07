@@ -51,6 +51,7 @@
 .mexico-population .locality-population-land use{fill:#e3e8dd;stroke:#a3b4a8;stroke-width:.65;vector-effect:non-scaling-stroke}
 .mexico-population .locality-population-labels{z-index:3;pointer-events:none}
 .mexico-population .locality-population-labels text{fill:#26473c;font-family:var(--sans);font-weight:650;paint-order:stroke;stroke:#fffefa;stroke-width:4px;stroke-linejoin:round}
+.mexico-population .locality-population-city-marker{fill:none;stroke:#26473c;stroke-width:1;vector-effect:non-scaling-stroke}
 .mexico-population .locality-population-loading{position:absolute;bottom:10px;left:10px;right:10px;z-index:4;margin:0;padding:7px 10px;background:#fffef2e8;font-size:13px;line-height:1.5}
 .mexico-population .locality-population-key h2{margin:0 0 5px;font-size:16px}
 .mexico-population .locality-population-key p{margin:5px 0;font-size:13px;line-height:1.55}

@@ -2,7 +2,21 @@
 import {withBase} from '../../lib/urls';
 import population from '../../data/atlas/mexico/population-localities.json';
 import states from '../../data/atlas/mexico/population.json';
+import climate from '../../data/atlas/mexico/climate-normals.json';
+import {projectLonLat} from '../../lib/atlas-mexico-geometry';
+import type {LocalityCityLabel} from '../../lib/atlas-mexico-population-localities';
 const assets = withBase('/assets/atlas/mexico-population-localities-v1/');
+// Independent orientation annotations. These never name or total a population cell.
+// ITER positions and identifiers below are retained verbatim in the published shards.
+const cityLabels:LocalityCityLabel[] = [
+ {nameJa:'メキシコシティ',position:projectLonLat(climate.stations.find(station=>station.id==='mexico-city-tacubaya')!.coordinates),stateCode:'09',sourceKind:'station',sourceId:'09048',sourceName:'TACUBAYA CENTRAL (OBS)'},
+ {nameJa:'グアダラハラ',position:[414.79013,385.60826],stateCode:'14',sourceKind:'locality',sourceId:'140390001',sourceName:'Guadalajara'},
+ {nameJa:'モンテレイ',position:[494.28375,243.68182],stateCode:'19',sourceKind:'locality',sourceId:'190390001',sourceName:'Monterrey'},
+ {nameJa:'ティフアナ',position:[84.68147,28.32609],stateCode:'02',sourceKind:'locality',sourceId:'020040001',sourceName:'Tijuana'},
+ {nameJa:'シウダーフアレス',position:[340.52799,68.41567],stateCode:'08',sourceKind:'locality',sourceId:'080370001',sourceName:'Juárez'},
+ {nameJa:'チワワ',position:[348.03556,157.7751],stateCode:'08',sourceKind:'locality',sourceId:'080190001',sourceName:'Chihuahua'},
+ {nameJa:'メリダ',position:[780.96759,363.23685],stateCode:'31',sourceKind:'locality',sourceId:'310500001',sourceName:'Mérida'},
+];
 ---
 <div class="atlas-map-frame mexico-map-frame locality-population-frame" data-locality-frame hidden>
  <div class="population-map-actions" aria-label="集落人口図の表示範囲">
@@ -18,4 +32,4 @@ const assets = withBase('/assets/atlas/mexico-population-localities-v1/');
  <svg class="locality-population-labels" data-locality-labels viewBox="0 0 900 580" aria-hidden="true"></svg>
  <p class="locality-population-loading" data-locality-loading role="status">集落人口を読み込み中…</p>
 </div>
-<script type="application/json" data-locality-config set:html={JSON.stringify({assets,...population}).replace(/</g,'\\u003c')} />
+<script type="application/json" data-locality-config set:html={JSON.stringify({assets,...population,cityLabels}).replace(/</g,'\\u003c')} />

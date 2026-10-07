@@ -33,7 +33,8 @@ async function populationNationalLayout(page) {
       const frame=root.querySelector('[data-locality-frame]'), settings=root.querySelector('[data-population-display-settings]');
       const canvas=frame.querySelector('canvas'), pixels=canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data;
       let paintedPixels=0;for(let i=3;i<pixels.length;i+=4)if(pixels[i]>0)paintedPixels++;
-      return {map:box(frame),canvas:{...box(canvas),paintedPixels},landStates:frame.querySelectorAll('use').length,settings:{open:settings.open,box:box(settings)},dataset:{...root.dataset},state:root.querySelector('[data-population-state]').value,view:root.querySelector('[data-population-view]').value,legend:root.querySelector('[data-locality-legend]').textContent,total:root.querySelector('[data-locality-total]').textContent,labels:[...root.querySelectorAll('[data-locality-labels] text')].map(node=>({text:node.textContent,...box(node)})),contextLabels:[...frame.querySelectorAll('[data-locality-map] text')].map(node=>({text:node.textContent,...box(node)}))};
+      const geography=root.querySelector('[data-locality-geography]'),legend=root.querySelector('[data-locality-legend]');
+      return {map:box(frame),canvas:{...box(canvas),paintedPixels},landStates:frame.querySelectorAll('use').length,settings:{open:settings.open,box:box(settings)},dataset:{...root.dataset},state:root.querySelector('[data-population-state]').value,view:root.querySelector('[data-population-view]').value,legend:legend.textContent,legendBox:box(legend),readingBox:box(root.querySelector('.mexico-reading')),geography:{text:geography.textContent,...box(geography)},totalsBox:box(root.querySelector('[data-locality-totals]')),total:root.querySelector('[data-locality-total]').textContent,labels:[...root.querySelectorAll('[data-locality-labels] text')].map(node=>({text:node.textContent,sourceId:node.getAttribute('data-locality-city-label'),...box(node)})),cityAnnotations:JSON.parse(root.querySelector('[data-locality-config]').textContent).cityLabels,contextLabels:[...frame.querySelectorAll('[data-locality-map] text')].map(node=>({text:node.textContent,...box(node)}))};
     });
     assert.equal(layout.dataset.localityPopulationReady,'true');
     assert.equal(layout.dataset.localityVisiblePopulation,'126014024');
@@ -43,6 +44,12 @@ async function populationNationalLayout(page) {
     assert.equal(layout.state,'');assert.equal(layout.view,'locality');
     assert.equal(layout.landStates,32);assert(layout.canvas.width>250&&layout.canvas.height>160);assert(layout.canvas.paintedPixels>1000,'The actual population point layer must paint visible pixels');
     assert.match(layout.legend,/面積.*人数/s);assert.match(layout.legend,/代表位置/);
+    assert.match(layout.geography.text,/中央部の高地.*メキシコシティ.*グアダラハラ.*モンテレイ.*国境/s);
+    assert(layout.geography.top>=layout.readingBox.top&&layout.geography.bottom<=layout.readingBox.bottom-1,'The geographic overview must be fully visible in the initial PC reader');
+    assert(layout.geography.bottom<=layout.totalsBox.top&&layout.totalsBox.bottom<=layout.legendBox.top,'Geography must precede totals and technical legends');
+    assert(layout.labels.every(label=>/[ぁ-んァ-ヶ一-龯]/u.test(label.text)&&!label.text.includes('周辺')),'City orientation labels must be Japanese rather than translated population-cell names');
+    for(const name of ['メキシコシティ','グアダラハラ','モンテレイ'])assert(layout.labels.some(label=>label.text===name),`Missing orientation city: ${name}`);
+    for(const label of layout.labels)assert(layout.cityAnnotations.some(city=>city.sourceId===label.sourceId&&city.nameJa===label.text),'Each orientation label must retain its independent source anchor');
     assert.equal(layout.settings.open,false);assert(layout.settings.box.top>=layout.map.bottom-1.5);
     assert(layout.labels.length>0&&layout.labels.every(label=>label.left>=layout.map.left-1.5&&label.right<=layout.map.right+1.5&&label.top>=layout.map.top-1.5&&label.bottom<=layout.map.bottom+1.5),'Locality labels must fit the map');
     for(const label of layout.labels)for(const context of layout.contextLabels)assert(!(Math.min(label.right,context.right)-Math.max(label.left,context.left)>.5&&Math.min(label.bottom,context.bottom)-Math.max(label.top,context.top)>.5),`Locality and context labels overlap: ${label.text} / ${context.text}`);

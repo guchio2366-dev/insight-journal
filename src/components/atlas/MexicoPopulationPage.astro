@@ -91,13 +91,6 @@ const overviewGroups=['ethnicity','religion'] as const;
   </div>
   </Fragment>
  <Fragment slot="legend">
-  <section class="locality-population-key" data-locality-legend hidden>
-   <h2>集落の人数から人口集中を読む</h2>
-   <p><strong>橙色の円の面積＝人数</strong>。灰点は位置の目印です。1点が1人を表す図ではありません。</p>
-   <svg data-locality-count-key viewBox="0 0 300 62" width="300" height="62" role="img" aria-label="人数円の凡例。地図と同じ面積尺度。"></svg>
-   <p class="mexico-caption" data-locality-mode>近接集落を集約した人数円</p>
-   <details><summary>集約点と円の尺度</summary><p>縮小時は近接点の人口を合算し、人口で重み付けした平均位置に表示。拡大すると元の集落代表位置に分かれます。人数の合計は保持し、拡大率に合わせて円と凡例を同じ尺度で更新します。</p></details>
-  </section>
   <section class="population-overview-reading" data-population-overview-reading hidden>
    {overviewGroups.map(category=><div data-population-overview-reading-category={category} hidden>
     <h2>{category==='religion'?'申告した宗教の割合を、同じ尺度で読む':'言語と自己認識を分けて読む'}</h2>
@@ -150,9 +143,24 @@ const overviewGroups=['ethnicity','religion'] as const;
  </Fragment>
  <Fragment slot="reading">
    <section class="locality-population-reading" data-locality-reading hidden>
+    <div data-locality-geography>
+     <h2>中央部の高地と都市・国境への集中</h2>
+     <p>中央部の高地・メキシコシティ周辺に人口が集中し、グアダラハラやモンテレイにも大きな集積が見えます。</p>
+     <p>北部は集落が広く点在し、ティフアナやシウダーフアレスなど、国境の拠点に人口が集まります。</p>
+    </div>
+    <div data-locality-totals>
     <h2 data-locality-total-label>メキシコ全国の人口</h2>
     <p class="locality-population-total"><strong data-locality-total>126,014,024</strong> 人</p>
     <p>2020年3月15日。<span data-locality-total-localities>189,432</span>集落。<span data-locality-scope-note>州を選ばず全国で表示します。</span></p>
+    </div>
+    <section class="locality-population-key" data-locality-legend hidden>
+     <h3>点と人数円の読み方</h3>
+     <p><strong>橙色の円の面積＝人数</strong>。灰点は位置の目印です。1点が1人を表す図ではありません。</p>
+     <svg data-locality-count-key viewBox="0 0 300 62" width="300" height="62" role="img" aria-label="人数円の凡例。地図と同じ面積尺度。"></svg>
+     <p class="mexico-caption" data-locality-mode>近接集落を集約した人数円</p>
+     <p class="mexico-caption">日本語の都市名と十字は位置の目印です。人数円の集計名や都市圏全体の人口を表すラベルではありません。</p>
+     <details><summary>集約点と円の尺度</summary><p>縮小時は近接点の人口を合算し、人口で重み付けした平均位置に表示。拡大すると元の集落代表位置に分かれます。人数の合計は保持し、拡大率に合わせて円と凡例を同じ尺度で更新します。</p></details>
+    </section>
     <p>都市周辺の大きい人数円と、その間に広がる集落を拡大して読みます。人口総数にはINEGIの公式補完推計も含みます。</p>
     <p class="mexico-caption">表示中の点に含まれる集落・人口：<span data-locality-visible-count>全国</span></p>
     <section class="locality-population-selection" data-locality-selection hidden aria-live="polite">
@@ -160,7 +168,7 @@ const overviewGroups=['ethnicity','religion'] as const;
      <p data-locality-selected-description></p><button type="button" data-locality-selection-zoom>この集約を拡大して集落を見る</button>
     </section>
     <details data-locality-ranked><summary>表示範囲の大きい点と値</summary><ul class="locality-population-list" data-locality-list></ul></details>
-    <details><summary>点の位置・集計・原典</summary><p>元の点はINEGIが公表する集落代表座標です。住宅位置、集落の区域、連続した人口密度面を示していません。2020年の集落コードで集計し、背景の州境は2025年です。</p><p>表示中の合計は、画面内に代表位置がある点・集約点に含まれる人数です。範囲境界の集約点には画面外の集落も含まれるため、画面の区域内人口ではありません。</p><p>全国・各市町村・各州の人口総計と照合済み。集計行と小集落まとめ行を、集落人口へ二重に加えていません。</p><p><a href={`${withBase('/assets/atlas/mexico-population-localities-v1/') }manifest.json`}>集落点の原典・集約・照合記録</a></p></details>
+    <details><summary>点の位置・集計・原典</summary><p>元の点はINEGIが公表する集落代表座標です。住宅位置、集落の区域、連続した人口密度面を示していません。2020年の集落コードで集計し、背景の州境は2025年です。</p><p>日本語都市名は方位確認用です。6都市はINEGI ITERの都市代表点、メキシコシティはSMNのタクバヤ観測所の公表位置を目印にしています。集約セルの原名称と人数は点の選択詳細に残しており、市区やセルの人数を都市圏人口へ改名・再集計していません。</p><p>表示中の合計は、画面内に代表位置がある点・集約点に含まれる人数です。範囲境界の集約点には画面外の集落も含まれるため、画面の区域内人口ではありません。</p><p>全国・各市町村・各州の人口総計と照合済み。集計行と小集落まとめ行を、集落人口へ二重に加えていません。</p><p><a href={`${withBase('/assets/atlas/mexico-population-localities-v1/') }manifest.json`}>集落点の原典・集約・照合記録</a></p></details>
    </section>
    <p class="population-national-intro" data-population-national-intro><strong>全国 {formatMexicoPopulation(population.nationalPopulation)}人</strong>・公表密度 {formatMexicoDensity(population.nationalDensity)}人/km²（2020年）。{mexicoPopulationReading.takeaway}</p>
    <section class="population-composition-reading" data-population-composition-reading hidden aria-live="polite">

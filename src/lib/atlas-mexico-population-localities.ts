@@ -2,7 +2,8 @@ export type LocalityFrame = [number,number,number,number];
 export type LocalityPoint = [number,number,number,string,string,string];
 export type LocalityCluster = [number,number,number,number,string,string,number,number,number,number];
 export interface LocalityChunk {file:string;stateCode:string;localities:number;population:number;bounds:number[]}
-export interface LocalityManifest {assets:string;localities:number;population:number;overview:{file:string;points:number};chunks:LocalityChunk[]}
+export interface LocalityCityLabel {nameJa:string;position:[number,number];stateCode:string;sourceKind:'locality'|'station';sourceId:string;sourceName:string}
+export interface LocalityManifest {assets:string;localities:number;population:number;overview:{file:string;points:number};chunks:LocalityChunk[];cityLabels?:LocalityCityLabel[]}
 export const localityNationalFrame:LocalityFrame=[0,0,900,580];
 
 export function readLocalityFrame(url:URL):LocalityFrame {
