@@ -92,7 +92,7 @@ async function measure(page, selected) {
 
 async function capture(browser, origin, basePath, output, scene, commit, profile) {
   const {country, field, id = 'initial'} = scene;
-  const selected = selectors(country, field), name = `${country}-pc-${field}-${id}`;
+  const selected = selectors(country, field), name = `${country}-${profile.isMobile?'mobile':'pc'}-${field}-${id}`;
   const context = await browser.newContext({...profile, locale: 'ja-JP', timezoneId: 'UTC', colorScheme: 'light', reducedMotion: 'reduce'});
   const page = await context.newPage(); page.setDefaultTimeout(20_000);
   const errors = [], consoleMessages = [], failedRequests = [], assets = new Set();
@@ -110,13 +110,14 @@ async function capture(browser, origin, basePath, output, scene, commit, profile
     // Additional Mexico cases may operate the existing page before measurement.
     if (scene.run) {
       record.operation = {steps: []};
-      const captureStepImage = async id => {
+      const captureStepImage = async (id,selector) => {
         assert(/^[a-z0-9-]+$/.test(id));
         const filename = `${name}-${id}.png`;
         // Element screenshots scroll automatically and can change a viewport-fitted
         // reader after its clip was measured. Use the existing stable page clip.
         await settle(page, selected);
-        const {layout: {grid}} = await measure(page, selected);
+        const grid=selector?await page.locator(selector).boundingBox():(await measure(page,selected)).layout.grid;
+        assert(grid,'The requested capture target is not rendered');
         const clip = {x: Math.floor(grid.x), y: Math.floor(grid.y), width: Math.ceil(grid.x + grid.width) - Math.floor(grid.x), height: Math.ceil(grid.y + grid.height) - Math.floor(grid.y)};
         await page.screenshot({path: path.join(output, filename), fullPage: true, clip, animations: 'disabled'});
         (record.operation.screenshots ??= []).push(filename);

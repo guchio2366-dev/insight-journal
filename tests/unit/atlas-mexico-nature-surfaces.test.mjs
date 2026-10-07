@@ -8,6 +8,7 @@ const quantitative = JSON.parse(fs.readFileSync('public/assets/atlas/mexico-quan
 const basins = JSON.parse(fs.readFileSync('public/assets/atlas/mexico-basin-review-v1/catalog.json', 'utf8'));
 const contours=JSON.parse(fs.readFileSync('public/assets/atlas/mexico-water-v1/contours.geojson','utf8'));
 const basinGeometries=new Map(basins.systems.map(system=>['/basins/'+system.basinGeojson,JSON.parse(fs.readFileSync('public/assets/atlas/mexico-basin-review-v1/'+system.basinGeojson,'utf8'))]));
+const basinControls=JSON.parse(fs.readFileSync('public/assets/atlas/mexico-basin-review-v1/'+basins.controlGeometry.file,'utf8'));
 const originalWater = JSON.parse(fs.readFileSync('public/assets/atlas/mexico-water-v1/manifest.json', 'utf8'));
 const elevationPacked=fs.readFileSync('public/assets/atlas/mexico-water-v1/'+originalWater.layers.contours.bands.file);
 const packedResponse=()=>({ok:true,body:new ReadableStream({start(controller){controller.enqueue(new Uint8Array(elevationPacked));controller.close();}})});
@@ -53,6 +54,7 @@ function setup(search = '?category=precipitation&view=relief&waterBase=relief') 
     if (responder) {const result = await responder(path); if (result !== undefined) return result;}
     if (path === '/quant/manifest.json') return response(quantitative);
     if (path === '/basins/catalog.json') return response(basins);
+    if(path==='/basins/'+basins.controlGeometry.file)return response(basinControls);
     if(basinGeometries.has(path))return response(basinGeometries.get(path));
     if(path==='/water/'+originalWater.layers.contours.bands.file)return packedResponse();
     if(path==='/water/contours.geojson')return response(contours);
@@ -182,7 +184,7 @@ test('the basin entry has exactly three domestic systems, preserves scope, and r
     }
     const reset=f.q('[data-mexico-basin-overview]');reset.click();await waitFor(()=>!f.q('[data-mexico-basin-overview-reading]').hidden);
     const label=f.q('text[data-mexico-basin-system=bravo]');label.dispatchEvent(new f.window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));await waitFor(()=>f.root.dataset.mexicoWaterFeature==='basins:bravo');
-    assert.deepEqual(f.requests, ['/basins/catalog.json',...basins.systems.map(system=>'/basins/'+system.basinGeojson)]);
+    assert.deepEqual(f.requests, ['/basins/catalog.json','/basins/'+basins.controlGeometry.file]);
   } finally {await f.window.happyDOM.close();}
 });
 

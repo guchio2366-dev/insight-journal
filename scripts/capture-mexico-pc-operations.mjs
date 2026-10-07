@@ -286,6 +286,22 @@ async function water({page, evidence, captureStepImage}) {
     assert.equal(await page.locator('button[data-mexico-basin-system]').count(),0);
     assert.equal(await page.locator('image[data-mexico-basin-system-image]').count(),3);assert.equal(await page.locator('image[data-mexico-basin-system-image].is-muted').count(),0);
     assert.equal(await page.locator('[data-mexico-basin-label]').count(),3);await captureStepImage('basins-all');
+    const point=await page.locator('path[data-mexico-basin-system="bravo"]').evaluate(node=>{
+      const box=node.getBBox(),matrix=node.getScreenCTM();
+      for(let y=1;y<20;y++)for(let x=1;x<20;x++){
+        const local=new DOMPoint(box.x+box.width*x/20,box.y+box.height*y/20);
+        if(!node.isPointInFill(local))continue;
+        const screen=local.matrixTransform(matrix);
+        if(document.elementFromPoint(screen.x,screen.y)===node)return {x:screen.x,y:screen.y};
+      }
+      throw new Error('No visible basin geometry is available for a real pointer click');
+    });
+    await page.mouse.click(point.x,point.y);await hydrologyReady(page,'basins');
+    assert.equal(query(page,'waterFeature'),'bravo');
+    await click(page,'button[data-mexico-basin-overview]');await hydrologyReady(page,'basins');
+    await page.locator('path[data-mexico-basin-system="lerma-chapala-santiago"]').press('Enter');await hydrologyReady(page,'basins');
+    assert.equal(query(page,'waterFeature'),'lerma-chapala-santiago');
+    await click(page,'button[data-mexico-basin-overview]');await hydrologyReady(page,'basins');
     for (const id of ['bravo', 'lerma-chapala-santiago', 'grijalva-usumacinta']) {
       await click(page, `text[data-mexico-basin-system="${id}"]`); await hydrologyReady(page, 'basins');
       assert.equal(await page.locator(`text[data-mexico-basin-system="${id}"]`).getAttribute('aria-pressed'), 'true');

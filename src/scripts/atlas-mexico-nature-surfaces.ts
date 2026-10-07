@@ -1,6 +1,6 @@
 import {validateMexicoSurfaceManifest, mexicoSurfaceGradient, mexicoSurfaceTickPosition, type MexicoSurfaceManifest} from '../lib/atlas-mexico-quantitative';
-import {mexicoBasinLabelPoint, type MexicoWaterFeature} from '../lib/atlas-mexico-hydrology';
-import {projectLonLat,geometryPath,stateFeatures} from '../lib/atlas-mexico-geometry';
+import {mexicoBasinLabelPoint,validateMexicoWaterCollection, type MexicoWaterFeature} from '../lib/atlas-mexico-hydrology';
+import {projectLonLat,geometryPath} from '../lib/atlas-mexico-geometry';
 import {preparedMexicoBasinPlan} from '../lib/atlas-mexico-basin-evidence.mjs';
 
 export interface MexicoNaturePreparedAssets {surfaceAssetBase: string; basinAssetBase: string}
@@ -23,10 +23,6 @@ export function initMexicoNatureSurfaces(
   legend.setAttribute('data-mexico-quantitative-legend', '');
   const foreground = document.createElementNS(ns,'g');
   foreground.setAttribute('data-mexico-basin-foreground','');
-  const definitions=document.createElementNS(ns,'defs'),countryClip=document.createElementNS(ns,'clipPath');
-  countryClip.id='mexico-basin-control-country';
-  for(const state of stateFeatures){const path=document.createElementNS(ns,'path');path.setAttribute('d',geometryPath(state.geometry));path.setAttribute('clip-rule','evenodd');countryClip.append(path);}
-  definitions.append(countryClip);q('[data-mexico-nature-main-map]')?.prepend(definitions);
   q('[data-mexico-nature-main-map]')?.append(foreground);
   const overviewButton=document.createElement('button');
   overviewButton.type='button';overviewButton.textContent='3水系の概要へ戻る';
@@ -39,7 +35,7 @@ export function initMexicoNatureSurfaces(
   q('[data-mexico-hydrology-legend]')?.after(legend);
   const legendHome = document.createComment('quantitative-legend-home'); legend.before(legendHome);
   const images = new Map<string, SVGImageElement>();
-  let surfaces: MexicoSurfaceManifest | null = null, basins: any = null;
+  let surfaces: MexicoSurfaceManifest | null = null, basins: any = null,basinControlsLoaded=false;
   const text = (selector: string, value: string) => {const node = q(selector); if (node) node.textContent = value;};
   function sourceLink(label: string, href: string): HTMLAnchorElement {
     const link = document.createElement('a'); link.href = href; link.textContent = label; return link;
@@ -89,8 +85,9 @@ export function initMexicoNatureSurfaces(
     const fontSize=13/scale;
     for(const plan of plans){
       if(!basinLabelPoints.has(plan.id)){
-        const collection=await json(plan.basinGeojson,assets.basinAssetBase);
-        const feature:MexicoWaterFeature={type:'Feature',properties:{},geometry:{type:'MultiPolygon',coordinates:collection.features.flatMap((item:MexicoWaterFeature)=>item.geometry.type==='Polygon'?[item.geometry.coordinates]:item.geometry.coordinates)}};
+        let feature=basinFeatures.get(plan.id);
+        if(!feature){const collection=await json(plan.basinGeojson,assets.basinAssetBase);
+          feature={type:'Feature',properties:{},geometry:{type:'MultiPolygon',coordinates:collection.features.flatMap((item:MexicoWaterFeature)=>item.geometry.type==='Polygon'?[item.geometry.coordinates]:item.geometry.coordinates)}};}
         basinFeatures.set(plan.id,feature);
         basinLabelPoints.set(plan.id,mexicoBasinLabelPoint(feature));
       }
@@ -120,16 +117,28 @@ export function initMexicoNatureSurfaces(
       legendHome.after(legend);
       // Each plan rejects unverified flow arrows and mouth markers, even if supplied accidentally.
       const plans = basins.systems.map((system: any) => preparedMexicoBasinPlan(basins, system.id));
+      if(basins.controlGeometry&&!basinControlsLoaded){
+        const controls=validateMexicoWaterCollection(await json(basins.controlGeometry.file,assets.basinAssetBase),'basins');
+        if(!current())return null;
+        if(controls.features.length!==3||!plans.every((plan:any)=>controls.features.some(item=>item.properties.id===plan.id)))throw new Error('The three domestic control areas are missing');
+        for(const item of controls.features)basinFeatures.set(item.properties.id,item);basinControlsLoaded=true;
+      }
       const requested = feature.startsWith('basins:') ? feature.slice(7) : '';
       const plan = requested ? plans.find((item: any) => item.id === requested || item.basinSourceIds.includes(requested)) : undefined;
       const focusId = foreground.contains(document.activeElement) ? (document.activeElement as SVGElement).getAttribute('data-mexico-basin-system') : null;
       const focusLabel=document.activeElement?.hasAttribute('data-mexico-basin-label');
       overviewButton.hidden=!requested;overview.hidden=!!plan;
+      q('[data-mexico-hydrology-title]')?.after(overviewButton,overview);
+      const scopeBrief:Record<string,string>={bravo:'米国側の上流域を除いて表示。','lerma-chapala-santiago':'海へ直接流れない閉鎖流域を含めない。','grijalva-usumacinta':'国外の上流域を除いて表示。河口の範囲は確認中。'};
       overview.replaceChildren(...plans.map((item:any)=>{
         const section=document.createElement('section'),heading=document.createElement('h3'),copy=document.createElement('p');
-        heading.textContent=item.label;copy.textContent=`国内の${item.basinSourceIds.length}区分をまとめた代表水系の入口。${item.scopeNote}`;
+        heading.textContent=item.label;copy.textContent=`国内${item.basinSourceIds.length}区分。${scopeBrief[item.id]}`;
         section.append(heading,copy);return section;
       }));
+      const scopeDetails=document.createElement('details'),scopeSummary=document.createElement('summary');
+      scopeSummary.textContent='国内範囲と流域のまとめ方';scopeDetails.append(scopeSummary);
+      for(const item of plans){const copy=document.createElement('p');copy.textContent=`${item.label}：${item.scopeNote}`;scopeDetails.append(copy);}
+      overview.append(scopeDetails);
       legend.replaceChildren(); legend.hidden = false;
       const swatch = document.createElement('span'); swatch.className = 'mexico-basin-fill-key'; swatch.setAttribute('aria-hidden', 'true');
       legend.append(swatch, document.createTextNode('3代表水系に関連する国内の流域区分。選択すると他の水系を薄く表示'));
@@ -157,7 +166,6 @@ export function initMexicoNatureSurfaces(
       for(const item of plans){const image=images.get(assets.basinAssetBase+item.domesticFill.file)!;image.classList.add('mexico-basin-system-image');image.classList.toggle('is-muted',!!plan&&plan.id!==item.id);image.dataset.mexicoBasinSystemImage=item.id;}
       const hitAreas=plans.map((item:any)=>{const path=document.createElementNS(ns,'path');
         path.setAttribute('d',geometryPath(basinFeatures.get(item.id)!.geometry));path.setAttribute('fill','transparent');
-        path.setAttribute('clip-path','url(#mexico-basin-control-country)');
         path.setAttribute('fill-rule','evenodd');path.classList.add('mexico-basin-hit-area');
         basinControl(path,item.id,item.label,item.id===plan?.id);return path;
       });
@@ -212,5 +220,5 @@ export function initMexicoNatureSurfaces(
     readyImage(assets.surfaceAssetBase + layer.image.file, current);
     return layer.titleJa;
   }
-  return {render, reset, invalidate: () => {surfaces = null; basins = null;}};
+  return {render, reset, invalidate: () => {surfaces = null; basins = null;basinControlsLoaded=false;basinFeatures.clear();basinLabelPoints.clear();}};
 }
