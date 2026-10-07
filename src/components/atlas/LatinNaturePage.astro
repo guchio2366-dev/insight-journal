@@ -25,6 +25,7 @@ const state={layer:'climate',place:selected.place,scope:selected.scope,only:fals
  </section>
  <div slot="items" class="latin-nature-cases" aria-label="自然条件の代表例">{latinNatureCases.map((c,i)=><button type="button" data-nature-case={c.id} aria-pressed={i===0}>{c.name}</button>)}</div>
  <div slot="reading">
+  <label class="latin-nature-city-control">雨温図の都市・観測所（16地点）<select data-nature-city aria-label="雨温図の都市・観測所" disabled><option value="" data-nature-city-empty hidden>この事例の月別平年値は未収録</option>{latinNatureData.cities.map(city=><option value={city.id} selected={city.id===selected.city}>{city.name}</option>)}</select></label>
   <div data-nature-normals set:html={renderLatinNatureNormals(selected.city)} />
   <h2 data-nature-reading-title>{selected.title}</h2>
   <p class="latin-takeaway" data-nature-takeaway>{selected.takeaway}</p>
