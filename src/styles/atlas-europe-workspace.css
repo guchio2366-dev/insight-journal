@@ -414,6 +414,12 @@
 .eu-workspace-root .eu-map-label[data-eu-map-kind="city"].is-point-only:is(:hover,:focus) { width:auto; height:auto; padding:1px 3px; color:#203e49; font-size:12px; }
 .eu-workspace-root .eu-crop-label.is-muted { opacity:.22; }
 .eu-workspace-root .eu-crop-label.is-muted:is(:hover,:focus-visible) { opacity:1; }
+/* Retain 13px place names; dots and focus reveal the less prominent places. */
+.eu-workspace-root .eu-map-label[data-eu-map-kind="feature"]:not([data-eu-composition]) { min-height:22px; padding:1px 3px; border:0; border-radius:0; background:transparent; font:600 13px/1.5 var(--sans); text-shadow:0 1px 2px #fffdf2,1px 0 2px #fffdf2,-1px 0 2px #fffdf2; box-shadow:none; }
+.eu-workspace-root .eu-map-label[data-eu-map-kind="feature"]:not([data-eu-composition])[aria-pressed=true] { text-decoration:underline; text-underline-offset:3px; }
+.eu-workspace-root .eu-map-label[data-eu-map-kind="feature"]:not([data-eu-composition]):is(:hover,:focus-visible) { outline:2px solid #426b6b; outline-offset:2px; }
+.eu-workspace-root .eu-map-label[data-eu-map-kind="feature"]:not([data-eu-composition]).is-point-only { width:16px; height:16px; min-height:16px; padding:0; color:transparent; text-shadow:none; font-size:0; }
+.eu-workspace-root .eu-map-label[data-eu-map-kind="feature"]:not([data-eu-composition]).is-point-only:is(:hover,:focus) { width:auto; height:auto; padding:1px 3px; color:#173c48; text-shadow:0 1px 2px #fffdf2,1px 0 2px #fffdf2,-1px 0 2px #fffdf2; font-size:13px; }
 @media(min-width:960px) {
  .eu-workspace-root[data-europe-detail] .eu-workspace[data-field="agriculture"] .eu-map-stage { aspect-ratio:1.4; }
  .eu-workspace-root[data-europe-detail].is-eu-climate-reading .eu-city-reading-head { display:none; }

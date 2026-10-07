@@ -72,7 +72,7 @@ export function readEuropeState(search: string, countries: { code: string; regio
       if(censusCase.topics.some(topic=>topic.areas.some(area=>area.code===p.get('cultureArea'))))state.cultureArea=p.get('cultureArea')!;
     }
   }
-  if (/^[a-z0-9-]{1,60}$/.test(p.get('feature') ?? '')) state.feature = p.get('feature')!;
+  if (layer!=='contours'&&/^[a-z0-9-]{1,60}$/.test(p.get('feature') ?? '')) state.feature = p.get('feature')!;
   if (p.get('crops') === 'off') state.showCrops = false;
   if (p.get('livestock') === 'off') state.showLivestock = false;
   if (p.get('farmExtent') === 'full') state.farmExtent = 'full';
@@ -97,7 +97,7 @@ export function writeEuropeState(url: URL, state: EuropeState): URL {
   if (state.render === 'static') next.searchParams.set('render', 'static');
   if (state.layer) next.searchParams.set('layer', state.layer);
   if (state.layer === 'overlay') next.searchParams.set('returnLayer', state.returnLayer);
-  if (state.feature) next.searchParams.set('feature', state.feature);
+  if (state.feature&&state.layer!=='contours') next.searchParams.set('feature', state.feature);
   const industryGroup = normaliseEuropeIndustryGroup(state.industryGroup);
   if (industryGroup && state.layer === 'hubs') next.searchParams.set('industryGroup', industryGroup);
   const point = normaliseEuropePoint(state.point);

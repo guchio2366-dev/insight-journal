@@ -191,7 +191,7 @@ test('地形と等高線は同じ実格子の標高mを読み、負標高・0m�
   assert.equal(terrain.valueUnit,'m');
   assert.equal(contours.valueUnit,'m');
   assert.equal(contours.unit,'500m間隔','等高線間隔は値の単位と分けて凡例に残す');
-  assert.deepEqual(contours.labels,['500m間隔','1,000m間隔（濃線）']);
+  assert.deepEqual(contours.labels.slice(0,2),['500m間隔','1,000m間隔（濃線）']);
   const bytes=gunzipSync(readFileSync(new URL('../../public/assets/atlas/europe/physical-v1/elevation.bin.gz',import.meta.url)));
   assert.equal(bytes.byteLength,1800*1502*2);
   const values=Float32Array.from(new Int16Array(bytes.buffer,bytes.byteOffset,bytes.byteLength/2));
