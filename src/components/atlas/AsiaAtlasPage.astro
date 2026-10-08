@@ -128,7 +128,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
         <div class="asia-map-items" data-asia-map-items aria-label="地図に表示する項目"></div>
         <div class="asia-map-selection" aria-live="polite"><span class="selection-dot"></span><span data-grid-reading>{initialField==='natural'?'地図上の陸地を選ぶと、気候区分を確認できます。':'地図上の対象地域を選ぶと、格子内の米の収穫面積を確認できます。'}</span></div>
         <p class="asia-gesture" data-map-gesture>都市の点を選ぶと雨温図が開きます。地図は2本指で移動・拡大できます。</p>
-        {regionId==='south-central-asia'&&<section class="asia-farm-connections" data-south-central-farm-connections hidden={initialField!=='agriculture'} aria-label="農業の供給と世界での位置">
+        {(regionId==='south-central-asia'||regionId==='southeast-asia')&&<section class="asia-farm-connections" data-south-central-farm-connections hidden={initialField!=='agriculture'} aria-label="農業の供給と世界での位置">
           <h2>農業の供給と世界での位置</h2>
           <div class="asia-farm-connections-grid">
             <section><h3>供給元と行先</h3><p>仕向け先の内訳は未掲載です。生産量だけでは、国内向けと輸出向けを分けられません。</p></section>
