@@ -19,10 +19,13 @@
 .canada-agri-overview .map-story :is(strong,span){display:block}
 .canada-agri-overview .map-story span{white-space:nowrap}
 .canada-agri-overview .map-story i{margin-right:4px}
+.canada-agri-overview .map-crop-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2}
+.canada-agri-overview .map-crop-label{position:absolute;transform:translate(-50%,-50%);padding:2px 5px;color:#263f46;background:#fffdf4d9;border:1px solid #879d99;font:700 13px/1.35 var(--sans);white-space:nowrap}
 .canada-agri-overview .map-year{position:absolute;bottom:8px;left:8px;padding:2px 6px;background:#fffef5ee;color:#36535b;font-size:14px;pointer-events:none;z-index:4}
 .canada-agri-overview .key{background:#f6f5ec;border:1px solid #c8cfc4;border-top:0;padding:7px 9px;display:flex;flex-wrap:wrap;gap:4px 10px;font-size:14px}
 .canada-agri-overview .key :is(span,button){display:inline-flex;gap:5px;align-items:center}
 .canada-agri-overview .key .meaning{width:100%;font-size:14px;line-height:1.65}
+.canada-agri-overview .key .key-family{font-weight:700;color:#435960;border-left:2px solid #9db3af;padding-left:6px}
 .canada-agri-overview .key button{min-height:30px;padding:4px 6px;font-size:14px;white-space:nowrap}
 .canada-agri-overview .key button[aria-pressed=true]{background:#244653;color:white}
 .canada-agri-overview .shape{display:inline-block;width:12px;height:12px;flex:none;background:var(--color)}
@@ -56,6 +59,14 @@
 .canada-agri-overview .reading p{font-size:16px;margin:5px 0 10px}
 .canada-agri-overview .reading .eyebrow{font-size:14px;color:#647d77;margin:0}
 .canada-agri-overview .reading .source-note{font-size:14px}
+.canada-agri-overview .canada-agri-receipts{margin:0 0 18px;padding:0 0 14px;border-bottom:1px solid #c8d4cb}
+.canada-agri-overview .reading .canada-agri-receipts h2{font-size:20px;margin:0 0 4px}
+.canada-agri-overview .reading .canada-agri-receipts p{font-size:14px;line-height:1.6;margin:3px 0 9px}
+.canada-agri-receipt-bars{display:grid;gap:3px}
+.canada-agri-receipt-bars button{display:grid;grid-template-columns:86px minmax(0,1fr) 29px;align-items:center;gap:5px;border:0;background:transparent;text-align:left;min-height:25px;padding:1px 0;font-size:13px}
+.canada-agri-receipt-bars button:hover,.canada-agri-receipt-bars button:focus-visible{background:#eef3ea}
+.canada-agri-receipt-bars button i{height:12px;width:var(--receipt-size);background:var(--receipt-color)}
+.canada-agri-receipt-bars button strong{text-align:right;font-size:13px}
 .canada-agri-overview details{border-top:1px solid #d1d8cc;margin-top:14px;padding-top:9px}
 .canada-agri-overview summary{cursor:pointer;font-size:15px;font-weight:700;min-height:32px}
 .canada-agri-overview .statistics{margin:16px 0 0}

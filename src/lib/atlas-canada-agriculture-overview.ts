@@ -58,5 +58,5 @@ export function buildCanadaAgricultureOverviewModel(dataset: any, geometry: Cana
     return [id, { value, nationalShare: value / dataset.products[id].national.value * 100, unit: dataset.products[id].unit }];
   })) }));
   return { anchors, ids, counts, summaries, products:canadaAgricultureProducts, provinceNames: canadaCensusProvinceNames, labels: canadaCensusGeographicLabels(geometry), context,
-    evidence: { regionCount: seen.size, retainedIndicatorCells: seen.size * ids.length, exactDguidJoin: true, allDisplayAnchorsInsideOriginalCcs: true, boundarySourceGeneralizationMetres: 5000, overviewGranularity: 'official province/territory publication values, not summed CCS', detailAggregation: 'display cells group symbols, not values; counts are CCS, not farms' } };
+    evidence: { regionCount: seen.size, retainedIndicatorCells: seen.size * ids.length, exactDguidJoin: true, allDisplayAnchorsInsideOriginalCcs: true, boundarySourceGeneralizationMetres: 5000, overviewGranularity: '2021 CCS crop values; independent province-only pork and chicken symbols', detailAggregation: 'original CCS values and quality retained without reassignment' } };
 }
