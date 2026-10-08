@@ -38,8 +38,11 @@ export function initCanadaNature(root:HTMLElement){
  const climateContextSources=[
   ...[...root.querySelectorAll<HTMLElement>('[data-canada-crop-source]')].map(node=>({node,slot:climateMapSlot})),
   ...[...root.querySelectorAll<HTMLElement>('[data-canada-crop-context],[data-canada-forest-context],[data-canada-industry-context],[data-canada-population-context]')].map(node=>({node,slot:climateReadingSlot})),
-  ...[...root.querySelectorAll<HTMLElement>('[data-canada-crop-return],[data-canada-forestry-return],[data-canada-industry-return],[data-canada-population-return]')].map(link=>({node:link.parentElement!,slot:climateReadingSlot}))
+  ...[...root.querySelectorAll<HTMLElement>('[data-canada-crop-return],[data-canada-industry-return],[data-canada-population-return]')].map(link=>({node:link.parentElement!,slot:climateReadingSlot}))
  ].map(source=>{const home=root.ownerDocument.createComment('Canada comparison source');source.node.before(home);return {...source,home};});
+ const forestReturnNode=root.querySelector<HTMLElement>('[data-canada-forestry-return]')?.parentElement;
+ const forestReturnHome=root.ownerDocument.createComment('Canada forest return');
+ forestReturnNode?.before(forestReturnHome);
  function render(){
   const waterResource=state.view==='water'&&waterState.topic!=='surface';
   root.classList.toggle('is-water-resource',waterResource);
@@ -71,7 +74,21 @@ export function initCanadaNature(root:HTMLElement){
     if(classifiedClimate&&comparison){if(source.node.parentElement!==source.slot)source.slot!.append(source.node);}
     else if(source.node.parentNode!==source.home.parentNode)source.home.after(source.node);
    }
+   const hasMapSource=!!climateMapSlot.querySelector('[data-canada-crop-source]:not([hidden])');
+   climateMapSlot.hidden=!hasMapSource;
+   climateContext.classList.toggle('has-comparison-map',hasMapSource);
   }
+  for(const bridge of root.querySelectorAll<HTMLElement>('[data-canada-forest-climate-bridge]')){
+   const active=classifiedClimate&&!!savedForestry&&bridge.closest('[data-canada-climate-card]')?.getAttribute('data-canada-climate-card')===state.city;
+   bridge.hidden=!active;
+   if(active){
+    const reading=bridge.querySelector<HTMLElement>('[data-canada-forest-climate-bridge-text]')!;
+    reading.textContent=state.city==='vancouver'?'バンクーバー沿岸の温和な冬と秋冬の雨は、BC州の針葉樹林を読む手がかりです。':'BC州の沿岸林と比べる観測点はバンクーバーです。この都市の雨温図は沿岸林の代表値ではありません。';
+    const slot=bridge.querySelector<HTMLElement>('[data-canada-forest-climate-return-slot]')!;
+    if(forestReturnNode&&forestReturnNode.parentElement!==slot)slot.append(forestReturnNode);
+   }
+  }
+  if((!classifiedClimate||!savedForestry)&&forestReturnNode&&forestReturnNode.parentNode!==forestReturnHome.parentNode)forestReturnHome.after(forestReturnNode);
   root.classList.toggle('is-classified-climate',classifiedClimate);
   root.classList.toggle('is-elevation-reading',state.view==='elevation');
   for(const layer of naturalLayers){const host=naturalHosts[layer];if(host){host.hidden=layer==='climate'?!classifiedClimate:state.view!=='elevation';naturalMaps[layer]?.render({...naturalStates[layer],city:state.city});}}

@@ -130,6 +130,11 @@ import '../../styles/atlas-canada-country-parity.css';
 
         <AtlasClimatePlot name={s.name} period="1991–2020" temperatureC={s.temperatureC} precipitationMm={s.precipitationMm} minTemperatureC={-30} />
         <p class="canada-plot-key">青棒：降水量mm ／ 赤線：平均気温℃ ／ ×：未収録</p>
+        <div class="canada-forest-climate-bridge" data-canada-forest-climate-bridge hidden>
+         <p class="canada-takeaway" data-canada-forest-climate-bridge-text></p>
+         <p class="canada-caption">Vancouverは沿岸の1地点で、BC州全域の平均ではありません。森林分類は2020年、気候は1991–2020年の平年値です。</p>
+         <div data-canada-forest-climate-return-slot></div>
+        </div>
 
         <CanadaClimateAgriculture city={s.id} />
         <dl class="canada-climate-facts"><div><dt>年平均気温</dt><dd>{fmt(s.annualTemperatureC)} ℃</dd></div><div><dt>年降水量</dt><dd>{fmt(s.annualPrecipitationMm)} mm</dd></div><div><dt>1月／7月の平均気温</dt><dd>{fmt(s.temperatureC[0])} ／ {fmt(s.temperatureC[6])} ℃</dd></div></dl>
@@ -155,7 +160,7 @@ import '../../styles/atlas-canada-country-parity.css';
     </aside>
    </div>
    <details class="canada-climate-context" data-canada-climate-context hidden>
-    <summary>元の農業・人口・産業の分布と気候を比較する</summary>
+    <summary>元の分布と気候の比較を詳しく読む</summary>
     <div class="canada-climate-context-grid">
      <div data-canada-climate-context-map-slot></div>
      <div data-canada-climate-context-reading-slot></div>
