@@ -85,6 +85,42 @@ try{
     await shot(`${region}-${field}-${width}-overview`);
     if(farmingOnly){
      if(region==='russia'){
+      const wheatShare=host.locator('.russia-wheat-share');
+      const tradeGrid=host.locator('.russia-farming-trade-grid');
+      assert.ok(await wheatShare.isVisible(),'Historical wheat share chart is visible below the map');
+      assert.equal(await tradeGrid.locator(':scope > *').count(),3,'Supply, destinations and world share form three columns');
+      const gridBounds=await tradeGrid.boundingBox(),shareBounds=await wheatShare.boundingBox();
+      assert.ok(shareBounds.width<gridBounds.width*.38,'World share uses only the right third');
+      assert.ok(gridBounds.height<430,'The lower row stays compact');
+      assert.deepEqual(await tradeGrid.locator('.russia-wheat-use-bars strong').allTextContents(),['39.5百万t','23.5百万t','18百万t']);
+      assert.match(await tradeGrid.textContent(),/2020年7月〜2021年2月.*エジプトとトルコ/);
+      assert.match(await tradeGrid.textContent(),/全相手国別総量が未収録/);
+      assert.equal(await wheatShare.locator('details').evaluate(el=>el.open),false,'Detailed values start folded');
+      assert.match(await wheatShare.locator('h2').textContent(),/2022年.*12\.9%/);
+      assert.deepEqual(await wheatShare.locator('tbody tr td:last-child').allTextContents(),['11.1%','9.7%','12.9%']);
+      assert.equal(await wheatShare.locator('svg path.russia-wheat-line').count(),1);
+      assert.match(await wheatShare.textContent(),/2023・24年.*非公式値.*除外/);
+      assert.match(await wheatShare.textContent(),/2020年収穫面積とは別指標/);
+      assert.ok((await wheatShare.boundingBox()).y>bounds.y+bounds.height,'Chart follows the map');
+      const crop=await tradeGrid.evaluate(el=>{const b=el.getBoundingClientRect();return {x:Math.floor(b.left+scrollX),y:Math.floor(b.top+scrollY),width:Math.ceil(b.width),height:Math.ceil(b.height)};});
+      await page.screenshot({path:resolve(output,`russia-agriculture-${width}-lower-row.png`),fullPage:true,clip:crop});
+      result.screenshots.push(`russia-agriculture-${width}-lower-row.png`);
+      const candidates=host.locator('.russia-farming-candidates');
+      assert.ok(await candidates.isVisible());
+      assert.match(await candidates.textContent(),/大麦.*テンサイ.*ヒマワリ種子/);
+      assert.match(await candidates.textContent(),/ライムギ：.*2022\/23年度生産量は200万t.*全国分布格子は未収録/);
+      assert.doesNotMatch(await candidates.textContent(),/暫定候補|次点候補|掲載の下限/);
+      await candidates.locator('summary').click();
+      assert.equal(await candidates.locator('li').count(),10);
+      assert.match(await candidates.textContent(),/ライムギの全国行.*未収録/);
+      const productCrop=await candidates.evaluate(el=>{const b=el.getBoundingClientRect();return {x:Math.floor(b.left+scrollX),y:Math.floor(b.top+scrollY),width:Math.ceil(b.width),height:Math.ceil(b.height)};});
+      await page.screenshot({path:resolve(output,`russia-agriculture-${width}-products.png`),fullPage:true,clip:productCrop});
+      result.screenshots.push(`russia-agriculture-${width}-products.png`);
+      await candidates.locator('summary').click();
+      await page.evaluate(()=>window.scrollTo(0,0));
+      await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+      assert.ok(await map.locator('path[fill="#e5e9e6"]').count()>0,'Initial missing area uses a quiet solid fill');
+      assert.equal(await map.locator('[data-farming-product="cattle"][data-farming-mode="missing"]').getAttribute('opacity'),'0.18');
       const legend=host.locator('[data-primary-legend]'),key=host.locator('[data-key-legend]'),reading=host.locator('.russia-learning-reading');
       assert.equal(await key.evaluate(el=>!!el.closest('.russia-learning-map-panel')),true,'Legend belongs to the map panel');
       assert.equal(await reading.locator('[data-primary-legend]').count(),0,'Right reading is free of the map legend');
@@ -92,7 +128,11 @@ try{
       assert.ok(await host.locator('[data-geography-reading]').isVisible(),'Geographical explanation is visible initially');
       assert.equal(await host.locator('[data-explanation]').isVisible(),false,'Technical reading is folded initially');
       assert.match(await host.locator('[data-takeaway]').textContent(),/ロストフ.*オムスク.*ヤクーツク/);
-      assert.match(await host.locator('[data-geography-reading]').textContent(),/生育期.*飼料.*肉・乳/);
+      assert.match(await host.locator('[data-geography-reading]').textContent(),/冬小麦.*春小麦.*飼料.*肉・乳/);
+      assert.doesNotMatch(await host.locator('[data-geography-reading]').textContent(),/4,500万t|USDAの2020\/21年度需給表/);
+      const readingCrop=await reading.evaluate(el=>{const b=el.getBoundingClientRect();return {x:Math.floor(b.left+scrollX),y:Math.floor(b.top+scrollY),width:Math.ceil(b.width),height:Math.ceil(b.height)};});
+      await page.screenshot({path:resolve(output,`russia-agriculture-${width}-reading.png`),fullPage:true,clip:readingCrop});
+      result.screenshots.push(`russia-agriculture-${width}-reading.png`);
       assert.equal(await legend.locator('[data-farming-key]').count(),2);assert.equal(await legend.locator('[data-farming-legend]').count(),0);
       assert.ok((await key.boundingBox()).height<130,'Compact key and closed detail stay short');
       assert.equal(await host.locator('[data-primary-legend-definitions]').isVisible(),false);
@@ -169,7 +209,7 @@ try{
      const shown=async()=>[...new Set(await map.locator('[data-farming-product]').evaluateAll(elements=>elements.map(el=>el.dataset.farmingProduct)))].sort();
      assert.deepEqual(await shown(),products);
      if(region==='oceania')assert.deepEqual(await map.locator('[data-farming-place]').evaluateAll(elements=>elements.map(el=>Number(getComputedStyle(el).opacity))),[1,1,1,1,1]);
-     assert.match(await host.locator('[data-explanation]').textContent(),/上位10/);
+     assert.match(await host.locator('[data-explanation]').textContent(),region==='russia'?/他の品目の全国分布格子は未収録/:/上位10/);
      const cattle=map.locator('[data-farming-product="cattle"][data-farming-mode="texture"]');
      const initialOpacity=Number(await cattle.getAttribute('opacity'));
      const initialAnnotationPixels=new Map();
@@ -262,5 +302,12 @@ try{
  result.checks.push(farmingOnly?'Farming overlays and focused comparison retain separate source units, true zero and missing; product availability is explicitly limited.':'Crop and livestock comparison uses the same extent and separate units.');
  assert.deepEqual(result.errors,[]);
  result.status='passed';console.log(JSON.stringify({status:result.status,head:result.head,checks:result.checks,viewports:result.viewports,screenshots:result.screenshots},null,2));
-}catch(error){result.status='failed';result.failure=String(error);throw error;}
+}catch(error){
+ result.status='failed';result.failure=String(error);
+ if(process.env.GITHUB_ACTIONS==='true'){
+  const detail=String(error?.stack??error).replaceAll('%','%25').replaceAll('\r','%0D').replaceAll('\n','%0A');
+  console.error(`::error title=Oceania and Russia browser review failed::${detail}`);
+ }
+ throw error;
+}
 finally{await writeFile(resolve(output,'results.json'),JSON.stringify(result,null,2)+'\n');await browser?.close();await new Promise(resolve=>server.close(resolve));}

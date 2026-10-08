@@ -11,6 +11,8 @@ import {
 } from '../../data/atlas/russia-learning';
 import '../../styles/atlas-russia-learning.css';
 import {renderRussiaWorkspaceLegend} from '../../scripts/atlas-russia-learning';
+import {russiaWheatWorldShare} from '../../data/atlas/russia-wheat-world-share';
+import {russiaFarmingProductCandidates} from '../../data/atlas/russia-farming-products';
 type RussiaField=keyof typeof russiaFields;
 interface Props {field?:RussiaField;overview?:boolean}
 const {field='nature',overview=false}=Astro.props;
@@ -26,6 +28,13 @@ const fieldThemes=russiaThemes.filter(t=>t.field===field);
 const industryEntryLabels:Record<string,string>={'northern-resources':'鉱業・加工','markets-and-port':'都市・港湾'};
 const fieldLayers=overview?russiaLayers.filter(l=>l.id==='cities'):russiaLayers.filter(l=>l.field===field);
 const scopeOptions=[{id:'all',label:'全体'},{id:'theme',label:'テーマ'},{id:'region',label:'選択地域'}];
+const wheatShareAxis=[0,5,10,15];
+const wheatShareX=(index:number)=>44+index*105;
+const wheatShareY=(share:number)=>111-share/15*78;
+const wheatSharePath=russiaWheatWorldShare.map((point,index)=>`${index?'L':'M'} ${wheatShareX(index)} ${wheatShareY(point.share)}`).join(' ');
+const wheatNumber=new Intl.NumberFormat('ja-JP',{maximumFractionDigits:1});
+const wheatUseRows=[{label:'輸出',millionTonnes:39.5},{label:'食用・種子・工業用',millionTonnes:23.5},{label:'飼料・残差',millionTonnes:18.0}];
+const usdaWheatUrl='https://apps.fas.usda.gov/newgainapi/api/Report/DownloadReportByFileName?fileName=Grain+and+Feed+Annual_Moscow_Russian+Federation_04-15-2021';
 ---
 <BaseLayout title={overview?'ロシア｜概要':`ロシア｜${russiaFields[field].label}`} description={overview?'ロシアの都市と地域を確かめ、4分野の分布を読む':russiaFields[field].title} compactAtlas>
  <div class="russia-workspace" data-russia-learning data-field={overview?'population':field} data-russia-overview={overview?'true':undefined}><div class="russia-desktop-shell" data-atlas-shell><RussiaNewsRail /><article class="russia-learning atlas-explorer" data-field={overview?'regional-overview':field}>
@@ -53,6 +62,22 @@ const scopeOptions=[{id:'all',label:'全体'},{id:'theme',label:'テーマ'},{id
     {field==='agriculture'&&!overview?<div class="russia-reading-scroll" tabindex="0" aria-label="地理の読み取りと詳しい資料"><p class="russia-farming-geography" data-geography-reading>{getRussiaFarmingGeography(layer.id,state.place)}</p><div class="russia-learning-detailed-readings"><details class="russia-learning-explanation"><summary>資料・表示方法の詳細</summary><p data-explanation>{fieldOverview.explanation}</p><p class="russia-legend-resolution" data-legend-resolution hidden={!layer.resolution}>{layer.resolution}</p><div class="russia-learning-coverage"><h3>この地図で読める範囲</h3><p data-coverage>{russiaCoverage(layer,state)}</p></div></details><details class="russia-learning-social"><summary>社会・制度とのつながりを読む</summary><p data-social-context>{theme.social}</p></details></div></div>:(<div class="russia-reading-scroll" tabindex="0" aria-label="選んだ場所の詳しい説明">{!overview&&<><p class="russia-legend-resolution" data-legend-resolution hidden={!layer.resolution}>{layer.resolution}</p><div class="russia-learning-coverage"><h3>この地図で読める範囲</h3><p data-coverage>{russiaCoverage(layer,state)}</p></div><details class="russia-climate-dictionary" data-climate-dictionary hidden={layer.id!=='climate'}><summary>気候区分のコードと名前</summary><div class="russia-learning-legend" data-primary-legend-definitions set:html={renderRussiaLegend(layer)}></div></details></>}  <div class="russia-learning-detailed-readings"><details class="russia-learning-explanation"><summary>選んだ場所と分布を詳しく読む</summary><p data-explanation>{fieldOverview.explanation}</p></details><details class="russia-learning-social"><summary>社会・制度とのつながりを読む</summary><p data-social-context>{theme.social}</p></details></div>
 </div>)}
    </aside>
+   {field==='agriculture'&&!overview&&<section class="russia-farming-trade-grid" aria-label="小麦の供給・輸出先・世界生産量比">
+    <div class="russia-farming-trade-brief"><h2>小麦の用途・行先</h2><p>2020/21年度の全国需給表。食用・飼料・輸出への利用を示します。各項目は独立した量で、2020年の収穫量を分割した割合ではありません。</p><div class="russia-wheat-use-bars">{wheatUseRows.map(item=><div><span>{item.label}</span><strong>{wheatNumber.format(item.millionTonnes)}百万t</strong><i style={`--use-width:${item.millionTonnes/39.5*100}%`}></i></div>)}</div><p class="russia-trade-source"><a href={usdaWheatUrl}>USDA FAS・小麦需給表</a>（2021年報告）。産地別の経路は示しません。</p></div>
+    <div class="russia-farming-trade-brief"><h2>小麦の輸出先</h2><p><a href={usdaWheatUrl}>USDAの2021年報告</a>は、2020年7月〜2021年2月にエジプトとトルコを主な輸出先として挙げています。</p><p>同じ期間の全相手国別総量が未収録のため、構成比の円グラフは示せません。現在の仕向け先とも異なります。</p></div>
+    <section class="russia-wheat-share" aria-labelledby="russia-wheat-share-title">
+    <p class="russia-wheat-share-kicker">世界生産量比・2020〜2022年</p><h2 id="russia-wheat-share-title">ロシアの小麦：2022年 {wheatNumber.format(russiaWheatWorldShare[2].share)}%</h2>
+    <p class="russia-wheat-share-reading">同年のロシア／世界の生産量（t）で計算。地図の2020年収穫面積とは別指標です。</p>
+    <div class="russia-wheat-share-chart"><svg viewBox="0 0 300 145" role="img" aria-labelledby="russia-wheat-chart-title russia-wheat-chart-desc"><title id="russia-wheat-chart-title">ロシアの小麦生産量の世界比、2020〜2022年</title><desc id="russia-wheat-chart-desc">{russiaWheatWorldShare.map(point=>`${point.year}年 ${wheatNumber.format(point.share)}%`).join('、')}。同年のロシアと世界の公表生産量から算出。</desc>
+     {wheatShareAxis.map(tick=><g><line x1="37" x2="263" y1={wheatShareY(tick)} y2={wheatShareY(tick)} class="russia-wheat-grid"/><text x="32" y={wheatShareY(tick)+4} text-anchor="end" class="russia-wheat-axis-label">{tick}%</text></g>)}
+     <path d={wheatSharePath} class="russia-wheat-line"/>
+     {russiaWheatWorldShare.map((point,index)=><g><circle cx={wheatShareX(index)} cy={wheatShareY(point.share)} r="5" class="russia-wheat-dot"/><text x={wheatShareX(index)} y={wheatShareY(point.share)-11} text-anchor="middle" class="russia-wheat-value">{wheatNumber.format(point.share)}%</text><text x={wheatShareX(index)} y="135" text-anchor="middle" class="russia-wheat-year">{point.year}</text></g>)}
+    </svg></div>
+    <p class="russia-wheat-share-caveat">2023・24年のロシア値は非公式値（X）のため除外。</p>
+    <details class="russia-wheat-share-details"><summary>数値・出典・欠測の詳細</summary><div class="russia-wheat-share-data"><table><thead><tr><th scope="col">年</th><th scope="col">ロシア（万t）</th><th scope="col">世界（万t）</th><th scope="col">世界比</th></tr></thead><tbody>{russiaWheatWorldShare.map(point=><tr><th scope="row">{point.year}</th><td>{wheatNumber.format(point.russianTonnes/10000)}</td><td>{wheatNumber.format(point.worldTonnes/10000)}</td><td>{wheatNumber.format(point.share)}%</td></tr>)}</tbody></table></div><p class="russia-wheat-share-source">出典：<a href="https://www.fao.org/faostat/en/#data/QCL">FAOSTAT, Crops and livestock products, Wheat, Production Quantity（ロシア・World）</a>。2025年12月31日公開の保存済み系列、<a href="https://www.fao.org/contact-us/terms/db-terms-of-use/">CC BY 4.0</a>。2022年は確認できる最新年という意味ではありません。</p></details>
+    </section>
+   </section>}
+   {field==='agriculture'&&!overview&&<section class="russia-farming-candidates" aria-labelledby="russia-farming-candidates-title"><h2 id="russia-farming-candidates-title">小麦・牛以外の主要品目も確かめる</h2><p>大麦・テンサイ・ヒマワリ種子、豚・羊・鶏などの全国統計を収録しました。ライムギは別の公表資料で全国値を確認できます。地図で全域分布を示せるのは、現在は小麦と牛です。</p><p><strong>ライムギ：</strong><a href="https://apps.fas.usda.gov/psdonline/circulars/2025/07/Grain.pdf">USDA FAS の2025年7月公表表</a>では、ロシアの2022/23年度生産量は200万t、同じ表の世界総量は1,214.9万t。EUに次ぐ規模です。年度の区切りと出典が異なるため、下のFAOSTAT暦年値とは同列に順位付けしません。ライムギ単独の全国分布格子は未収録で、地図上の場所は示しません。</p><details><summary>2022年の作物・家畜の全国値</summary><p>作物は生産重量、家畜は飼養頭羽数です。単位が違うため合算・順位付けはできません。</p><div class="russia-farming-candidate-columns"><div><h3>作物生産量</h3><ul>{russiaFarmingProductCandidates.filter(item=>item.group==='crop').map(item=><li><span>{item.label}</span><strong>{wheatNumber.format(item.value/1e6)}百万t</strong></li>)}</ul></div><div><h3>家畜飼養数</h3><ul>{russiaFarmingProductCandidates.filter(item=>item.group==='livestock').map(item=><li><span>{item.label}</span><strong>{wheatNumber.format(item.unit==='1000 An'?item.value/1000:item.value/1e6)}百万{item.id==='chicken-stocks'?'羽':'頭'}</strong></li>)}</ul></div></div><p>出典：<a href="https://www.fao.org/faostat/en/#data/QCL">FAOSTAT QCL</a>、2022年の公表値（A）、<a href="https://www.fao.org/contact-us/terms/db-terms-of-use/">CC BY 4.0</a>。ライムギの全国行はこの保存済み系列に未収録です。上記のUSDA値は異なる年度区分です。</p></details></section>}
   </div>
   <section class="russia-learning-comparison" data-comparison-view hidden aria-label="元の分布と比較する">
    <div class="russia-learning-comparison-grid">
