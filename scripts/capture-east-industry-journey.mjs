@@ -66,13 +66,17 @@ try{
   await page.waitForFunction(()=>{const root=document.querySelector('[data-asia-atlas]');return root?.dataset.mapReady==='true'&&root.querySelector('[data-map-fallback]')?.hidden&&root.querySelector('[data-industry-status]')?.textContent===''&&!root.querySelector('[data-east-industry-journey]')?.hidden;});
   const guide=page.locator('[data-east-industry-journey]'),summary=await guide.locator('[data-east-industry-journey-summary]').textContent();
   assert(summary.includes(expected),`${code}: expected sourced country reading`);
-  assert.match(await guide.locator('[data-east-industry-journey-gap]').textContent(),/必要です/);
+  const gap=await guide.locator('[data-east-industry-journey-gap]').textContent();
+  if(code==='TWN'){
+   assert.match(gap,/未掲載：台湾のWDI製造業付加価値/);
+   assert.match(gap,/公式統計.*定義・年.*照合/);
+  }else{assert.match(gap,/未収録：/);assert.match(gap,/公式/);}
   assert.match(await page.locator('[data-industry-legend-note]').textContent(),/東アジア4対象は同じ色区分/);
   if(code==='TWN')assert.match(await page.locator('[data-industry-value]').textContent(),/台湾：未掲載/);
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   await page.evaluate(async()=>{await document.fonts.ready;scrollTo(0,0);});await page.waitForLoadState('networkidle');
   const image=`${code.toLowerCase()}.png`;await page.screenshot({path:path.join(output,image),animations:'disabled'});
-  return {summary,gap:await guide.locator('[data-east-industry-journey-gap]').textContent(),image};
+  return {summary,gap,image};
  });
  await runCase('us-reference',async page=>{
   await page.goto(`${host.origin}${basePath}/atlas/north-america/industry/?sector=manufacturing&subsector=auto`,{waitUntil:'domcontentloaded'});
