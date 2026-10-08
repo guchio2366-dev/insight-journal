@@ -23,6 +23,7 @@ test('comparison return preserves country, city, feature, point, rendering and i
   for (const query of [
     '?layer=wheat&region=east&place=UKR&city=kyiv&compare=london,paris&feature=rotterdam&render=static&crops=off&livestock=off&single=1&returnLayer=crops',
     '?layer=cattle&region=west&city=london&livestock=off&single=1',
+    '?layer=dairy&farmExtent=full&farmMeasure=cattle-milk&farmYear=2024',
     '?layer=overlay&returnLayer=hubs&place=SWE&city=helsinki&feature=kiruna&crops=off',
     '?layer=climate&place=CHE&city=invalid&returnLayer=terrain',
     '?layer=density&region=north&feature=kaukas&render=static',

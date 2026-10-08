@@ -35,7 +35,7 @@ const factualSources: Record<string, ReaderSource[]> = {
   terrain:readingSources('alps'),
   contours:readingSources('alps'),
   hubs:readingSources('rotterdam','ludwigshafen','toulouse'),
-  density:readingSources('kiruna','oulu'),
+  density:[],
   forest:readingSources('kaukas'),
   manufacturing:readingSources('munich','mlada'),
   industry:readingSources('kiruna','munich'),
@@ -44,6 +44,11 @@ const factualSources: Record<string, ReaderSource[]> = {
 
 /** Sources for the reader's factual examples, separate from the map-data link. */
 export function europeReaderSources(layer: EuropeLayer): ReaderSource[] {
+  if(layer.id==='dairy')return [
+    {url:'https://www.statistik.at/fileadmin/announcement/2025/06/20250625Milchstatistik2024EN.pdf',label:'Statistics Austria：乳牛の年間平均頭数・生乳量（2024年、表1）'},
+    {url:'https://www.bmluk.gv.at/en/topics/agriculture/agriculture-in-austria/animal-production-in-austria/dairy-farming-in-austria.html',label:'オーストリア農業省：山間地の酪農（2026-10-07参照）'},
+    {url:layer.source,label:'FAOSTAT QCL：国別の牛の生乳生産量'},
+  ];
   if(layer.id==='treecover')return europeTreeCoverReading.sources;
   if(layer.id==='precipitation')return europePrecipitationReading.sources;
   if(layer.id==='drainage')return drainageReading.sources;
@@ -135,7 +140,7 @@ const countryMessages: Record<string, ReaderMessage> = {
   },
   industry: {
     takeaway:'鉱工業・建設業のGDP比率は、製造業に資源採掘や電気・ガス・水道、建設を含めた産業構成を示します。',
-    body:'パリ、ミラノ、マドリードの都市周辺をたどり、都市の点の間にも人口の分布が続くかを格子の色で確かめます。ライン川沿いの都市とポー平原、北欧の都市とその周辺を比べると、国の平均だけでは読めない集中と広がりが見えます。国境は人口密度の区分境界ではありません。北部スウェーデンのキルナは鉄鉱石採掘、ドイツのミュンヘンは自動車製造の拠点です。資源の位置と技術開発・生産の集積は、異なる立地の条件です。',
+    body:'北部スウェーデンのキルナは鉄鉱石採掘、ドイツのミュンヘンは自動車製造の拠点です。資源の位置と技術開発・生産の集積は、異なる立地の条件です。国全体のGDP比率から個々の拠点の生産額や雇用は読み取れません。',
   },
   services: {
     takeaway:'2023年のサービス業のGDP比率は、英国・フランスがチェコより高いという国全体の違いがあります。',
@@ -157,6 +162,11 @@ const countryMessages: Record<string, ReaderMessage> = {
 
 /** A geographic takeaway and brief explanation; definitions stay in the note. */
 export function europeReaderCopy(layer:EuropeLayer) {
+  if(layer.id==='dairy')return {
+    title:'酪農・牛の生乳',takeaway:'生乳を生産する酪農と、肉用も含む牛の飼養分布を分けて読みます。',
+    body:'アルプスを含むオーストリアの山間地は酪農の場でもあり、同国農業省は酪農経営の89%が山間地にあると説明しています。Statistics Austriaの2024年統計では、乳牛の年間平均頭数は539,414頭、生乳生産量は4,020,699 tです。これらは国全体の値で、山間地だけの数量ではありません。',
+    note:layer.note+' 地図下ではFAOSTATの同年・同品目・同単位の全国生乳量とWorld値を比較します。乳牛頭数から生乳量を換算していません。',
+  };
   if(layer.id==='treecover')return {title:europeTreeCoverReading.title,takeaway:europeTreeCoverReading.takeaway,body:europeTreeCoverReading.body,note:europeTreeCoverReading.note};
   if(layer.id==='precipitation')return {title:europePrecipitationReading.title,takeaway:europePrecipitationReading.takeaway,body:europePrecipitationReading.body,note:europePrecipitationReading.note};
   if(layer.id==='drainage')return {title:drainageReading.title,takeaway:drainageReading.takeaway,body:drainageReading.body,note:drainageReading.note};
@@ -182,7 +192,7 @@ export function europeReaderCopy(layer:EuropeLayer) {
   };
   if(layer.id==='contours')return {
     title:'標高（等高線）',takeaway:'等高線が示すアルプスの起伏は、周辺の低地との違いを捉える手がかりになります。',
-    body:'同じ高さを結ぶ線を500m間隔で示し、1,000mごとの線を濃くしています。山地と平野の対比は農地や都市の位置を考える条件の一つで、立地の理由を標高だけで決めることはできません。',
+    body:'同じ高さを結ぶ線と標高帯の色を500m刻みで示し、1,000mごとの線を濃くしています。山地と平野の対比は農地や都市の位置を考える条件の一つで、立地の理由を標高だけで決めることはできません。',
     note:'表示用に平均化した標高から作った概略図です。等高線の間隔は標高精度を意味しません。',
   };
   if(layer.id==='hubs')return {
@@ -192,7 +202,7 @@ export function europeReaderCopy(layer:EuropeLayer) {
   };
   if(layer.id==='density')return {
     title:'人口分布',takeaway:'パリやミラノの都市周辺と、欧州北部・山地を同じ人口密度の尺度で読み比べます。',
-    body:'北部スウェーデンのキルナは鉄鉱石採掘、フィンランドのオウルは無線技術の研究・設計・製造の拠点です。人口の集中は地域の役割を考える手がかりですが、産業の機能まで決めるものではありません。',
+    body:'パリ、ミラノ、マドリードの都市周辺をたどり、都市の点の間にも人口の分布が続くかを格子の色で確かめます。ライン川沿いの都市とポー平原、北欧の都市とその周辺を比べると、国の平均だけでは読めない集中と広がりが見えます。国境は人口密度の区分境界ではありません。',
     note:'2020年の格子ごとのモデル推計です。現在の人口移動・避難状況を表すものではありません。都市の点は位置のみを示します。',
   };
   if(layer.id==='ethnicity'||layer.id==='religion')return {

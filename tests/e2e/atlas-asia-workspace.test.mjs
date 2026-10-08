@@ -154,3 +154,25 @@ test('南アジア・中央アジアは別URLと初期範囲を持ち、元資�
   }finally{await window.happyDOM.close();}
  }
 });
+
+
+test('Asia全景と国のfit範囲は既存詳細地理の離島を含み、画像矩形へ切らない',async()=>{
+ const expected={
+  'east-asia':[73.602256,15.776109,145.824962,53.567791],
+  'southeast-asia':[92.174973,-10.922621,140.977162,28.538466],
+  'south-central-asia':[46.478279,-0.688572,97.362253,55.43455],
+  'south-asia':[60.486778,-0.688572,97.362253,38.473673],
+  'central-asia':[46.478279,35.140647,87.323796,55.43455],
+ };
+ for(const [region,extent] of Object.entries(expected)){
+  const window=new Window({settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true}});
+  try{
+   window.document.write(await readFile(`dist/atlas/asia/${region}/nature/index.html`,'utf8'));
+   const config=JSON.parse(window.document.querySelector('[data-asia-config]').textContent);
+   for(let i=0;i<4;i++)assert.ok(Math.abs(config.contentExtent[i]-extent[i])<0.000001,`${region} keeps its source land extent`);
+   if(region==='east-asia')assert.ok(config.countries.find(c=>c.code==='JPN').bounds[1]<24.3,'Japan’s shipped southwestern islands remain inside its fit');
+   if(region==='south-asia')assert.ok(config.countries.find(c=>c.code==='MDV').bounds[1]<0,'Maldives south of the equator remains inside its fit');
+   const panel=window.document.querySelector('.asia-reading-panel');assert.equal(panel.firstElementChild,window.document.querySelector('[data-city-reading-host]'));
+  }finally{await window.happyDOM.close();}
+ }
+});

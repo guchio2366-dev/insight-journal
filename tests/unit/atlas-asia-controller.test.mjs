@@ -29,6 +29,8 @@ export class Map {
   (window.__maps??=[]).push(this);window.__map=this;
  }
  on(name,handler){(this.events[name]??=[]).push(handler);return this}
+ off(name,handler){this.events[name]=(this.events[name]??[]).filter(fn=>fn!==handler);return this}
+ isSourceLoaded(id){return !!this.sources[id]&&!window.__pendingContourSources?.has(id)}
  once(name,handler){this.on(name,handler);if(name==='load'&&!window.__deferMapLoad)queueMicrotask(async()=>{if(window.__initialSourceFailure)await this.fire('error',{error:Error('initial image 503')});await this.fire('load')});return this}
  async fire(name,event={}){for(const fn of this.events[name]??[])await fn(event)}
  project(p){return {x:(p[0]-90)*7,y:(50-p[1])*9}}
@@ -36,13 +38,14 @@ export class Map {
  addSource(id,source){this.sources[id]=source;source.setData=data=>{source.data=data}}addLayer(layer){this.layers[layer.id]=layer}
  removeLayer(id){delete this.layers[id]}removeSource(id){delete this.sources[id]}
  setLayoutProperty(id,key,value){this.layers[id].layout??={};this.layers[id].layout[key]=value}
+ getLayoutProperty(id,key){return this.layers[id]?.layout?.[key]}
  setPaintProperty(id,key,value){this.layers[id].paint??={};this.layers[id].paint[key]=value}
 
  setFilter(id,filter){this.layers[id].filter=filter}getCenter(){return this.center}getZoom(){return this.zoom}getCanvas(){return this.canvas}
  jumpTo(options){this.center={lng:options.center[0],lat:options.center[1]};this.zoom=options.zoom??this.zoom}
- fitBounds(bounds){this.center={lng:(bounds[0][0]+bounds[1][0])/2,lat:(bounds[0][1]+bounds[1][1])/2}}
- queryRenderedFeatures(point,options){if(options?.layers?.includes('asia-social-admin')&&window.__hitSocialId)return [{properties:{id:window.__hitSocialId}}];return [{properties:{code:window.__hitCountry??'CHN'}}]}
- zoomIn(){this.zoom++}zoomOut(){this.zoom--}resize(){this.resizeCount++}
+ fitBounds(bounds,options){this.fitCount=(this.fitCount??0)+1;this.lastFit={bounds,options};this.center={lng:(bounds[0][0]+bounds[1][0])/2,lat:(bounds[0][1]+bounds[1][1])/2}}
+ queryRenderedFeatures(point,options){if(options?.layers?.includes('asia-social-admin')&&window.__hitSocialId)return [{properties:{id:window.__hitSocialId}}];if(options?.layers?.includes('asia-hydrology-basins')&&window.__hitBasinId)return [{properties:{id:window.__hitBasinId}}];if(options?.layers?.includes('asia-rivers-hit')&&window.__hitRiverId)return [{properties:{id:window.__hitRiverId}}];return [{properties:{code:window.__hitCountry??'CHN'}}]}
+ zoomIn(){this.zoom++}zoomOut(){this.zoom--}resize(eventData={}){this.resizeCount++;void this.fire('resize',eventData);void this.fire('moveend',eventData)}
  remove(){this.removed=true;this.canvas.remove()}
 }
 export class Marker {
@@ -86,7 +89,7 @@ function fixture() {
     <select data-city-select><option value=""></option><option value="tokyo" data-country="JPN">Tokyo</option><option value="beijing" data-country="CHN">Beijing</option></select>
     <button data-country-button="JPN"></button><button data-country-button="CHN"></button><button data-country-button="MNG"></button>
     <nav class="atlas-tabs"><a href="/insight-journal/atlas/asia/east-asia/nature/" data-field="natural"></a><a href="/insight-journal/atlas/asia/east-asia/agriculture/" data-field="agriculture"></a><a href="/insight-journal/atlas/asia/east-asia/population/" data-field="population"></a></nav>
-    <div data-map-surface></div><div data-map-fallback><svg><path data-map-country="JPN"></path></svg></div>
+    <div class="asia-map-frame"><div data-map-surface></div></div><div data-map-fallback><svg><path data-map-country="JPN"></path></svg></div>
     <div data-map-state></div><button data-map-retry hidden></button>
     <section data-overview><div class="asia-next"><p></p><div class="asia-city-links"></div></div></section>
     <details data-reading-details><summary>詳しい解説</summary>${['tokyo','beijing'].map(id=>`<article data-city-panel="${id}" hidden><h3><b data-city-class-code></b><span data-city-class-name></span></h3><p data-city-class-description></p></article>`).join('')}</details>
@@ -115,7 +118,7 @@ async function setup(query = '', options = {}) {
   const q = selector => window.document.querySelector(selector), root = q('[data-asia-atlas]');
   const [west, south] = mercatorPoint(72, 17), [east, north] = mercatorPoint(155, 56);
   q('[data-asia-config]').textContent = JSON.stringify({
-    regionId: 'east-asia', label: '東アジア', bounds: [72, 17, 155, 56],
+    regionId: 'east-asia', label: '東アジア', bounds: [72, 17, 155, 56],...(options.contentExtent?{contentExtent:options.contentExtent}:{}),
     countries: [{ code: 'JPN', name: '日本', bounds: [129, 30, 146, 46] }, { code: 'CHN', name: '中国', bounds: [73, 18, 135, 53] }, { code: 'MNG', name: 'モンゴル', bounds: [87, 41, 120, 53] }],
     cities: [{ id: 'tokyo', name: '東京', countryCode: 'JPN', coordinates: [139.75, 35.69] }, { id: 'beijing', name: '北京', countryCode: 'CHN', coordinates: [116.4, 39.9] }],
     classes: asiaClimateClasses, climate: { image: 'east-asia.png', imageCoordinates: [[72, 56], [155, 56], [155, 17], [72, 17]], grid: 'east-asia.grid.json', classIds: [14, 21], countryCoverage: { JPN: { classifiedPixels: 1 }, CHN: { classifiedPixels: 1 } } },
@@ -140,6 +143,10 @@ async function setup(query = '', options = {}) {
     conf.industryBase='/assets/industry/';conf.industry={data:'east.json.gz',countries:['JPN','CHN','MNG'],topics:[topic('manufacturing','製造業','national'),topic('jp-00','日本製造業','admin','JPN'),topic('power-all','発電所','power',null,'all'),topic('power-coal','石炭','power',null,'Coal')]};
     if(options.industryRegion){
       conf.industry={...industryManifest.regions[options.industryRegion],data:'east.json.gz'};
+      if(options.industryRegion==='east-asia'){
+        for(const [code,name] of [['KOR','韓国'],['TWN','台湾']]){conf.countries.push({code,name,bounds:[124,33,133,39]});q('[data-country-select]').insertAdjacentHTML('beforeend',`<option value="${code}">${name}</option>`);}
+        root.insertAdjacentHTML('beforeend','<section data-east-industry-journey hidden><h2 data-east-industry-journey-title></h2><section data-east-industry-selected-site hidden><h3 data-east-industry-selected-title></h3><p data-east-industry-selected-lead></p><p data-east-industry-selected-reading></p><p data-east-industry-selected-scope></p><a data-east-industry-selected-source></a></section><p data-east-industry-journey-summary></p><p data-east-industry-journey-facts></p><div data-east-industry-sites hidden><nav data-east-industry-site-links></nav></div><p data-east-industry-journey-gap></p><button data-east-industry-next="primary"></button><button data-east-industry-next="secondary"></button></section>');
+      }
       if(options.industryRegion==='southeast-asia'){
         conf.countries.push({code:'MYS',name:'マレーシア',bounds:[99,0,120,8]});
         q('[data-country-select]').insertAdjacentHTML('beforeend','<option value="MYS">マレーシア</option>');
@@ -177,7 +184,9 @@ async function setup(query = '', options = {}) {
   }
   if(options.presentation){
     const conf=JSON.parse(q('[data-asia-config]').textContent);
-    conf.presentationBase='/assets/presentation/';conf.presentation={farming:{file:'farming.json.gz',products:[{id:'rice',kind:'crop',title:'米',color:'#43854c'},{id:'wheat',kind:'crop',title:'小麦',color:'#b39742'}],labels:[]},rainfall:{file:'rainfall.json.gz',levels:[250,500],labels:[]},terrain:{file:'terrain.json.gz',levels:[500,1000],labels:[]},climate:[]};q('[data-asia-config]').textContent=JSON.stringify(conf);
+    conf.presentationBase='/assets/presentation/';conf.presentation={farming:{file:'farming.json.gz',products:[{id:'rice',kind:'crop',title:'米',color:'#43854c'},{id:'wheat',kind:'crop',title:'小麦',color:'#b39742'}],labels:[]},rainfall:{file:'rainfall.json.gz',levels:[250,500],labels:[]},terrain:{file:'terrain.json.gz',levels:[500,1000],labels:[]},climate:[]};
+    if(options.contourBands){for(const [kind,interval] of [['rainfall',250],['terrain',500]])conf.presentation[kind].bands={file:kind+'-bands.json.gz',lineFile:kind+'-aligned.json.gz',interval,breaks:[0,interval,interval*2],colors:['#edf5fc','#4d9aca'],labels:[]};q('[data-physical-legend]').innerHTML='<div class="asia-physical-key"><span>legacy elevation</span></div><p>existing source note</p>';q('[data-natural-topics]').insertAdjacentHTML('beforeend','<button data-natural-topic="landform">landform</button>');}
+    q('[data-asia-config]').textContent=JSON.stringify(conf);
     root.insertAdjacentHTML('beforeend','<div data-farm-switches><button data-farm-toggle="crop" aria-pressed="true"><span></span></button><button data-farm-toggle="livestock" aria-pressed="true"><span></span></button></div><button data-farm-water></button><div data-map-annotations></div><section data-farm-overview-reading></section><section data-farm-overview-legend></section><input type="checkbox" data-farm-kind="crop" checked><input type="checkbox" data-farm-kind="livestock" checked><button data-farm-choice="overview"></button><button data-farm-choice="wheat"></button>');
     q('[data-farming-topic]').insertAdjacentHTML('afterbegin','<option value="overview"></option>');
   }
@@ -253,6 +262,7 @@ async function setup(query = '', options = {}) {
     if(name==='/assets/physical/water.json'){const response=()=>new Response(JSON.stringify({type:'FeatureCollection',features:[]}));if(options.delayedWater)return new Promise(resolve=>{resolveWater=()=>resolve(response());});return response();}
     throw Error('Unexpected fetch: ' + name);
   };
+  if(options.pendingContourSources)window.__pendingContourSources=new Set(['asia-rainfall-bands','asia-rainfall-aligned-lines']);
   window.eval(bundle.outputFiles[0].text);
   await until(() => options.delayedMap ? window.__map?.events.load?.length : options.mapFailure ? !q('[data-map-retry]').hidden : root.dataset.mapReady === 'true', 'controller ready');
   return { window, root, q, requests, resolvePresentation:()=>resolvePresentation?.(), rejectPopulation:()=>rejectPopulation?.(Error('population failed late')),resolveTrade:()=>resolveTrade?.(),rejectClimate: () => rejectClimate?.(Error('simulated climate fetch failure')), resolveRice: () => resolveRice?.(),resolveWater:()=>resolveWater?.(),resolveUrban:()=>resolveUrban?.(),resolveFarm:()=>resolveFarm?.(),resolveIndustry:()=>resolveIndustry?.(),resolveHydrology:()=>resolveHydrology?.(),resolveSocial:()=>resolveSocial?.() };
@@ -386,6 +396,59 @@ function industryCell(table,name){
 function industrySelectedOption(q){
  const select=q('[data-industry-detail]');return [...select.options].find(option=>option.value===select.value);
 }
+
+test('東アジア4国の読解は原本の国統計と設備能力を区別し、台湾の欠測から収録資料へ進める',async()=>{
+ const {window,q}=await setup('?field=industry&topic=manufacturing&place=KOR',{industry:true,industryRegion:'east-asia'});
+ try{
+  const card=q('[data-east-industry-journey]'),click=which=>q(`[data-east-industry-next="${which}"]`).click();
+  await until(()=>!card.hidden&&card.textContent.includes('26.62%'),'Korean national reading');
+  assert.match(card.textContent,/韓国内の地域別・業種別産業統計.*公式地域統計/);
+  assert.match(card.textContent,/80,885千t\/年/);
+  await until(()=>window.__map.getLayer('asia-industry-national'),'national distribution');
+  assert.deepEqual(JSON.parse(JSON.stringify(window.__map.layers['asia-industry-national'].filter)),['in',['get','code'],['literal',['CHN','JPN','KOR','TWN']]]);
+  const colors=window.__map.layers['asia-industry-national'].paint['fill-color'];
+  for(const code of ['CHN','JPN','KOR'])assert.notEqual(colors[colors.indexOf(code)+1],'#d2ceca',`${code} remains coloured while Korea is selected`);
+  assert.equal(colors[colors.indexOf('TWN')+1],'#d2ceca','Taiwan WDI stays missing');
+  await until(()=>window.__map.getLayer('asia-industry-site'),'semiconductor examples on map');
+  assert.equal(window.__map.layers['asia-industry-site'].layout.visibility,'visible');
+  assert.deepEqual(JSON.parse(JSON.stringify(window.__map.layers['asia-industry-site'].filter)),['==',['get','country'],'KOR']);
+  assert.deepEqual([...card.querySelectorAll('[data-east-industry-site]')].map(b=>b.textContent),['平沢：半導体の製造','清州：メモリー関連の製造']);
+  await until(()=>q('[data-map-surface]').querySelectorAll('.asia-industry-site-label').length===2,'two Korean city labels');
+  assert.deepEqual([...q('[data-map-surface]').querySelectorAll('.asia-industry-site-label')].map(b=>b.textContent),['平沢','清州']);
+  assert.match(q('[data-industry-legend-note]').textContent,/丸は.*生産量とは別/);
+  card.querySelector('[data-east-industry-site="cheongju-memory"]').click();
+  assert.equal(new URL(window.location.href).searchParams.get('story'),'cheongju-memory');
+  assert.equal(card.querySelector('[data-east-industry-selected-title]').textContent,'清州：メモリー関連の製造');
+  assert.match(card.querySelector('[data-east-industry-selected-reading]').textContent,/既存M15.*M15X.*計画/);
+  assert.match(card.querySelector('[data-east-industry-selected-source]').href,/news\.skhynix\.com/);
+  assert.equal(q('[data-asia-atlas]').dataset.industrySiteSelected,'true');
+  assert.match(q('[data-place-story-text]').textContent,/M15.*TSV/);
+  assert.equal(window.__map.getCenter().lng,127.49);
+  q('[data-country-select]').value='KOR';q('[data-country-select]').dispatchEvent(new window.Event('change'));
+  click('secondary');assert.equal(new URL(window.location.href).searchParams.get('topic'),'steel-capacity');
+  await until(()=>q('[data-map-surface]').querySelectorAll('.asia-industry-site-label').length===0,'city labels hidden on steel map');
+  click('primary');assert.equal(new URL(window.location.href).searchParams.get('topic'),'manufacturing');
+  q('[data-country-select]').value='TWN';q('[data-country-select]').dispatchEvent(new window.Event('change'));
+  await until(()=>card.textContent.includes('24,701千t/年'),'Taiwan sourced capacity');
+  assert.match(card.textContent,/WDIで未掲載.*公式統計/);
+  assert.deepEqual([...card.querySelectorAll('[data-east-industry-site]')].map(b=>b.textContent),['新竹：半導体受託製造','台南：半導体受託製造']);
+  await until(()=>[...q('[data-map-surface]').querySelectorAll('.asia-industry-site-label')].some(b=>b.textContent==='台南'),'Tainan map label');
+  [...q('[data-map-surface]').querySelectorAll('.asia-industry-site-label')].find(b=>b.textContent==='台南').click();
+  assert.equal(new URL(window.location.href).searchParams.get('story'),'tainan-fab');
+  assert.match(q('[data-place-story-text]').textContent,/Fab 14.*Fab 18/);
+  assert.equal(card.querySelector('[data-east-industry-selected-title]').textContent,'台南：半導体受託製造');
+  await until(()=>window.__map.layers['asia-industry-site'].layout.visibility==='visible','Taiwan semiconductor examples');
+  assert.deepEqual([...q('[data-map-surface]').querySelectorAll('.asia-industry-site-label')].map(b=>b.textContent),['新竹','台南']);
+  assert.equal(window.__map.layers['asia-industry-site'].layout.visibility,'visible');
+  assert.deepEqual(JSON.parse(JSON.stringify(window.__map.layers['asia-industry-site'].filter)),['==',['get','country'],'TWN']);
+  assert.match(q('[data-industry-value]').textContent,/台湾：未掲載/);
+  click('primary');assert.equal(new URL(window.location.href).searchParams.get('topic'),'steel-capacity');
+  click('secondary');assert.equal(new URL(window.location.href).searchParams.get('topic'),'power-all');
+  assert.equal(new URL(window.location.href).searchParams.get('place'),'TWN');
+  q('[data-country-select]').value='';q('[data-country-select]').dispatchEvent(new window.Event('change'));
+  assert.equal(card.hidden,true);
+ }finally{await window.happyDOM.close();}
+});
 
 test('実配信の愛知県は選択値・24業種・国内比較・年次表で同じ公表値を示す',async()=>{
  const {window,q}=await setup('?field=industry&topic=jp-00&detail=JP-23',{industry:true,industryRegion:'east-asia'});
@@ -783,7 +846,7 @@ test('国の米データ欠測を選択直後に説明し、収録国への切�
     await delay(); // Let the cached-grid continuation finish before closing the DOM.
     assert.equal(new URL(window.location.href).searchParams.get('place'), 'CHN');
     for (const selector of ['[data-grid-reading]', '[data-rice-value]']) {
-      assert.match(q(selector).textContent, /地図上.*選ぶと.*格子/);
+      assert.match(q(selector).textContent, /品目名.*同じ場所.*格子/);
       assert.doesNotMatch(q(selector).textContent, /データなし|欠測|収録されていません/);
     }
   } finally { await window.happyDOM.close(); }
@@ -829,7 +892,7 @@ test('事例の選択・比較・復帰・別地点選択を実コントロー�
   q('[data-comparison-back]').click();await until(()=>q('[data-farming-value]').textContent.includes('123.4'),'scene restored');
   assert.equal(q('[data-place-story]').value,'north-china-wheat');assert.equal(window.__map.getCenter().lng,115);
   await window.__map.fire('click',{lngLat:{lng:116,lat:38},point:{x:10,y:10}});
-  assert.equal(q('[data-place-story-body]').hidden,true);assert.equal(new URL(window.location.href).searchParams.has('story'),false);
+  assert.equal(q('[data-place-story-body]').hidden,false);assert.equal(new URL(window.location.href).searchParams.get('story'),'north-china-wheat','an unrelated agriculture background click preserves the selected example');
   q('[data-place-story]').value='north-china-wheat';q('[data-place-story]').dispatchEvent(new window.Event('change'));
   q('[data-farming-topic]').value='chicken';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));
   await until(()=>q('[data-farming-value]').textContent.includes('0 羽/km²'),'new topic loaded');
@@ -964,6 +1027,76 @@ test('等雨量線の取得失敗は主題を離れると消え、戻ると再�
   q('[data-natural-topic=climate]').click();assert.equal(q('[data-map-state]').hidden,true);assert.equal(q('[data-map-retry]').hidden,true);
   q('[data-natural-topic=precipitation]').click();await until(()=>window.__map.getLayer('asia-rainfall-lines')?.layout?.visibility==='visible','rainfall recovered');
   assert.equal(q('[data-map-state]').hidden,true);assert.equal(q('[data-map-retry]').hidden,true);
+ }finally{await window.happyDOM.close();}
+});
+
+test('東アジアの線と色帯・凡例を一緒に切り替え、地点の原格子値と従来の重ね合わせを保持する',async()=>{
+ const {window,root,q,requests}=await setup('?topic=precipitation&at=139.75000,35.69000',{farming:true,hydrology:true,presentation:true,contourBands:true});
+ try{
+  await until(()=>root.dataset.contourBandStatus==='ready'&&q('[data-hydrology-value]').textContent.includes('1,534'),'aligned rainfall and original point value');
+  const map=window.__map;
+  assert.equal(map.layers['asia-rainfall-bands'].layout.visibility,'visible');
+  assert.equal(map.layers['asia-rainfall-aligned-lines'].layout.visibility,'visible');
+  assert.equal(map.getSource('asia-rainfall-bands').tolerance,0);
+  assert.equal(map.getSource('asia-rainfall-aligned-lines').tolerance,0,'The browser cannot independently simplify the shared boundaries');
+  assert.equal(map.getLayer('asia-hydrology-rain'),undefined,'Do not blend an unrelated raster palette');
+  assert(requests.includes('/assets/presentation/rainfall-bands.json.gz'));
+  assert(requests.includes('/assets/presentation/rainfall-aligned.json.gz'));
+  assert.match(q('[data-hydrology-scale]').textContent,/0–250.*250–500/);
+  assert.match(q('[data-hydrology-legend-note]').textContent,/原格子値/);
+  q('[data-natural-topic=terrain]').click();
+  await until(()=>root.dataset.contourBandStatus==='ready'&&root.dataset.contourBandKind==='terrain','aligned terrain');
+  assert.equal(map.layers['asia-rainfall-bands'].layout.visibility,'none');
+  assert.equal(map.layers['asia-terrain-bands'].layout.visibility,'visible');
+  assert.equal(map.layers['asia-terrain-aligned-lines'].layout.visibility,'visible');
+  assert.equal(map.getSource('asia-terrain-bands').tolerance,0);
+  assert.equal(map.getSource('asia-terrain-aligned-lines').tolerance,0);
+  assert.equal(map.layers['asia-terrain'].layout.visibility,'none');
+  assert.match(q('[data-physical-legend] .asia-physical-key').textContent,/0–500.*500–1,000/);
+  assert.match(q('[data-physical-legend] p').textContent,/existing source note.*原格子値/);
+  q('[data-natural-topic=landform]').click();
+  await until(()=>map.layers['asia-terrain'].layout.visibility==='visible','original landform background');
+  assert.equal(map.layers['asia-terrain-bands'].layout.visibility,'none');
+  assert.equal(q('[data-physical-legend] .asia-physical-key').textContent,'legacy elevation');
+  assert.equal(q('[data-physical-legend] p').textContent,'existing source note');
+  q('[data-field=agriculture]').click();q('[data-farm-water]').click();
+  await until(()=>map.getLayer('asia-rainfall-lines')?.layout.visibility==='visible','unchanged agriculture water overlay');
+  assert.equal(map.layers['asia-rainfall-aligned-lines'].layout.visibility,'none');
+  assert.equal(map.layers['asia-rainfall-bands'].layout.visibility,'none');
+  assert(requests.includes('/assets/presentation/rainfall.json.gz'));
+ }finally{await window.happyDOM.close();}
+});
+
+test('色帯の取得失敗は誤った色背景を出さず、地点・URLを維持して再試行する',async()=>{
+ const {window,root,q}=await setup('?topic=precipitation&at=139.75000,35.69000',{hydrology:true,presentation:true,contourBands:true,presentationFailure:true});
+ try{
+  await until(()=>root.dataset.contourBandStatus==='error','contour bands error');
+  await until(()=>q('[data-hydrology-value]').textContent.includes('1,534'),'original point remains readable');
+  assert.equal(window.__map.getLayer('asia-hydrology-rain'),undefined);
+  assert.equal(q('[data-map-retry]').hidden,false);
+  assert.match(q('[data-map-state]').textContent,/等値線と色帯を取得できません/);
+  const at=new URL(window.location.href).searchParams.get('at');
+  q('[data-map-retry]').click();
+  await until(()=>root.dataset.contourBandStatus==='ready','aligned bands retry');
+  assert.equal(new URL(window.location.href).searchParams.get('at'),at);
+  assert.match(q('[data-hydrology-value]').textContent,/1,534/);
+  assert.equal(window.__map.layers['asia-rainfall-bands'].layout.visibility,'visible');
+  assert.equal(q('[data-map-state]').hidden,true);
+ }finally{await window.happyDOM.close();}
+});
+
+test('色帯と線の両方の描画準備を待ち、主題変更後の古い準備完了を採用しない',async()=>{
+ const {window,root,q}=await setup('?topic=precipitation',{hydrology:true,presentation:true,contourBands:true,pendingContourSources:true});
+ try{
+  await until(()=>window.__map.getSource('asia-rainfall-aligned-lines'),'contour source submitted');
+  assert.equal(root.dataset.contourBandStatus,'loading');
+  window.__pendingContourSources.delete('asia-rainfall-bands');await window.__map.fire('sourcedata',{sourceId:'asia-rainfall-bands'});
+  assert.equal(root.dataset.contourBandStatus,'loading','The line source still has unfinished worker tiles');
+  window.__pendingContourSources.delete('asia-rainfall-aligned-lines');await window.__map.fire('sourcedata',{sourceId:'asia-rainfall-aligned-lines'});
+  await until(()=>root.dataset.contourBandStatus==='ready','both contour sources ready');
+  window.__pendingContourSources.add('asia-rainfall-bands');q('[data-natural-topic=precipitation]').click();
+  q('[data-natural-topic=climate]').click();await window.__map.fire('sourcedata',{sourceId:'asia-rainfall-bands'});
+  assert.equal(root.dataset.contourBandStatus,'inactive');assert.equal(window.__map.layers['asia-rainfall-bands'].layout.visibility,'none');
  }finally{await window.happyDOM.close();}
 });
 
@@ -1116,4 +1249,55 @@ test('都市を選ぶと雨温図の詳細が開き、同じ都市では手動�
   q('[data-city-select]').value='beijing';q('[data-city-select]').dispatchEvent(new window.Event('change'));await delay();
   assert.equal(details.open,true);assert.equal(q('[data-city-panel="beijing"]').hidden,false);
  }finally{await app.window.happyDOM.close();}
+});
+
+
+test('不要な農林業・流域背景クリックは無反応で、流域と河川そのものの選択は保持する',async()=>{
+ for(const [query,options,ready] of [
+  ['?field=agriculture&topic=wheat&place=CHN&at=116,35',{farming:true},'[data-farming-value]'],
+  ['?topic=basins&detail=b-123',{hydrology:true,population:true},'[data-hydrology-value]'],
+ ]){
+  const {window,q}=await setup(query,options);
+  try{
+   await until(()=>window.__map&&q(ready).textContent&&!q(ready).textContent.includes('読み込'),'selected data ready');
+   const before=window.location.href,value=q(ready).textContent;
+   await window.__map.fire('click',{point:{x:20,y:20},lngLat:{lng:130,lat:45}});
+   assert.equal(window.location.href,before,'an unrelated country/background hit must not change URL selection');
+   assert.equal(q(ready).textContent,value);assert.equal(q('.asia-point-marker').hidden,true,'no country popup covers the distribution');
+  }finally{await window.happyDOM.close();}
+ }
+ const basin=await setup('?topic=basins',{hydrology:true,population:true});
+ try{
+  await until(()=>basin.window.__map?.getLayer('asia-hydrology-basins'),'basins rendered');basin.window.__hitBasinId='b-123';
+  await basin.window.__map.fire('click',{point:{x:80,y:80},lngLat:{lng:139.75,lat:35.69}});
+  assert.equal(new URL(basin.window.location.href).searchParams.get('detail'),'b-123');assert.match(basin.q('[data-hydrology-value]').textContent,/12,345.6/);
+ }finally{await basin.window.happyDOM.close();}
+ const river=await setup('?topic=water',{hydrology:true,population:true});
+ try{
+  await until(()=>river.window.__map?.getLayer('asia-rivers-hit'),'river hit layer ready');river.window.__hitRiverId='rivers-1';
+  await river.window.__map.fire('click',{point:{x:80,y:80},lngLat:{lng:105,lat:35}});
+  assert.equal(new URL(river.window.location.href).searchParams.get('detail'),'rivers-1');assert.equal(river.window.__map.getLayer('asia-rivers').layout.visibility,'visible');
+ }finally{await river.window.happyDOM.close();}
+});
+
+test('自動全景は実extentと小余白を使い、resizeのmoveend後も全景を保ち、明示した保存cameraは優先する',async()=>{
+ const extent=[73.602256,15.776109,145.824962,53.567791],fitted=await setup('',{contentExtent:extent});
+ try{
+  assert.deepEqual(JSON.parse(JSON.stringify(fitted.window.__map.lastFit.bounds)),[[extent[0],extent[1]],[extent[2],extent[3]]]);
+  assert.equal(fitted.window.__map.lastFit.options.padding,12);assert.equal(fitted.window.__map.lastFit.options.maxZoom,9);
+  assert.equal(fitted.window.__map.options.trackResize,false,'the controller owns container resizing');
+  const frame=fitted.q('.asia-map-frame');let width=900;
+  Object.defineProperty(frame,'clientWidth',{get:()=>width});Object.defineProperty(frame,'clientHeight',{get:()=>500});
+  fitted.window.dispatchEvent(new fitted.window.Event('resize'));await new Promise(resolve=>setTimeout(resolve,150));
+  assert.equal(new URL(fitted.window.location.href).searchParams.has('lng'),false,'resize moveend does not save an automatic camera');
+  const fitCount=fitted.window.__map.fitCount;
+  fitted.window.dispatchEvent(new fitted.window.Event('resize'));assert.equal(fitted.window.__map.fitCount,fitCount,'same size does not refit');
+  width=650;fitted.window.dispatchEvent(new fitted.window.Event('resize'));assert.equal(fitted.window.__map.fitCount,fitCount+1,'the next size change still fits the extent');
+  assert.deepEqual(JSON.parse(JSON.stringify(fitted.window.__map.lastFit.bounds)),[[extent[0],extent[1]],[extent[2],extent[3]]]);
+  fitted.q('[data-city-select]').value='tokyo';fitted.q('[data-city-select]').dispatchEvent(new fitted.window.Event('change'));
+  assert.deepEqual(JSON.parse(JSON.stringify(fitted.window.__map.getLayer('asia-country-selected').filter)),['==',['get','code'],''],'a city selection does not highlight its country too');
+  await delay();
+ }finally{await fitted.window.happyDOM.close();}
+ const saved=await setup('?lng=120&lat=35&z=6',{contentExtent:extent});
+ try{assert.equal(saved.window.__map.getCenter().lng,120);assert.equal(saved.window.__map.getZoom(),6);}finally{await saved.window.happyDOM.close();}
 });

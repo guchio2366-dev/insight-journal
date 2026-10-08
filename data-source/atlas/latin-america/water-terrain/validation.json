@@ -1,0 +1,502 @@
+{
+  "rainfall": {
+    "nativeGrid": {
+      "width": 242,
+      "height": 338,
+      "window": [
+        347,
+        247,
+        589,
+        585
+      ],
+      "firstCenter": [
+        -93.125,
+        28.125
+      ],
+      "step": [
+        0.25,
+        -0.25
+      ],
+      "nodata": -1,
+      "valid": 30420,
+      "range": [
+        0.5799999833106995,
+        10353.189453125
+      ],
+      "samples": [
+        {
+          "name": "San Jose",
+          "coordinate": [
+            -84.0833,
+            9.9333
+          ],
+          "cellCenter": [
+            -84.125,
+            9.875
+          ],
+          "months": [
+            36.31999969482422,
+            30.860000610351562,
+            33.380001068115234,
+            92.8499984741211,
+            270.95001220703125,
+            242.10000610351562,
+            192.0399932861328,
+            230.55999755859375,
+            309.0799865722656,
+            311.94000244140625,
+            188.0399932861328,
+            71.2300033569336
+          ],
+          "annual": 2009.3499755859375,
+          "row": 320,
+          "column": 383
+        },
+        {
+          "name": "Manaus",
+          "coordinate": [
+            -60.0167,
+            -3.1333
+          ],
+          "cellCenter": [
+            -60.125,
+            -3.125
+          ],
+          "months": [
+            307.7099914550781,
+            293.5899963378906,
+            323.17999267578125,
+            324.510009765625,
+            234.1199951171875,
+            115.27999877929688,
+            74.62000274658203,
+            56.22999954223633,
+            78.4000015258789,
+            109.11000061035156,
+            197.41000366210938,
+            252.7899932861328
+          ],
+          "annual": 2366.949951171875,
+          "row": 372,
+          "column": 479
+        },
+        {
+          "name": "Lima",
+          "coordinate": [
+            -77.1167,
+            -12.0167
+          ],
+          "cellCenter": [
+            -77.125,
+            -12.125
+          ],
+          "months": [
+            0.6200000047683716,
+            0.699999988079071,
+            0.41999998688697815,
+            0.5,
+            0.6800000071525574,
+            0.8799999952316284,
+            1.2599999904632568,
+            0.9700000286102295,
+            1.159999966621399,
+            0.8799999952316284,
+            0.6899999976158142,
+            0.699999988079071
+          ],
+          "annual": 9.460000038146973,
+          "row": 408,
+          "column": 411
+        },
+        {
+          "name": "Santiago",
+          "coordinate": [
+            -70.7833,
+            -33.3833
+          ],
+          "cellCenter": [
+            -70.875,
+            -33.375
+          ],
+          "months": [
+            0.4300000071525574,
+            1.1200000047683716,
+            3.630000114440918,
+            13.989999771118164,
+            37.41999816894531,
+            71.01000213623047,
+            43.599998474121094,
+            38.70000076293945,
+            20.260000228881836,
+            9.489999771118164,
+            4.110000133514404,
+            2.4700000286102295
+          ],
+          "annual": 246.22999572753906,
+          "row": 493,
+          "column": 436
+        },
+        {
+          "name": "Bogota",
+          "coordinate": [
+            -74.15,
+            4.7
+          ],
+          "cellCenter": [
+            -74.125,
+            4.625
+          ],
+          "months": [
+            30.59000015258789,
+            42.709999084472656,
+            73.5,
+            98.30999755859375,
+            105.4000015258789,
+            79.12999725341797,
+            75.52999877929688,
+            63.83000183105469,
+            57.099998474121094,
+            88.91999816894531,
+            92.41999816894531,
+            49.72999954223633
+          ],
+          "annual": 857.1699829101562,
+          "row": 341,
+          "column": 423
+        },
+        {
+          "name": "Buenos Aires",
+          "coordinate": [
+            -58.4167,
+            -34.5833
+          ],
+          "cellCenter": [
+            -58.375,
+            -34.625
+          ],
+          "months": [
+            114.13999938964844,
+            115.61000061035156,
+            111.58000183105469,
+            108.5,
+            80.7699966430664,
+            54.939998626708984,
+            65.77999877929688,
+            63.66999816894531,
+            72.0999984741211,
+            110.16999816894531,
+            106.06999969482422,
+            108.87000274658203
+          ],
+          "annual": 1112.199951171875,
+          "row": 498,
+          "column": 486
+        }
+      ],
+      "gridSha256": "8c5842b94ca84f28dd4ca69ab1a263c9b1a2c63e027f127dcf7c9be58a580358",
+      "sourceCoordinates": {
+        "firstLongitude": -179.875,
+        "firstLatitude": 89.875,
+        "declaredLatitudeUnit": "degrees_south",
+        "usedConvention": "Actual north-positive coordinate array; inconsistent degrees_south attribute not used to flip source."
+      },
+      "sourceTitle": "GPCC Global Precipitation Climatology (1991-2020) version 2025, 0.25 degree",
+      "sourcePeriod": [
+        "1991-01-01",
+        "2020-12-31"
+      ]
+    },
+    "contourGridShape": [
+      338,
+      242
+    ],
+    "stride": 1,
+    "sourceStepDegrees": [
+      0.25,
+      -0.25
+    ],
+    "contourStepDegrees": [
+      0.25,
+      -0.25
+    ],
+    "cornerMask": false,
+    "targetLandSourceCenters": 25787,
+    "validTargetLandCenters": 25787,
+    "missingTargetLandCenters": 0,
+    "sampledRange": [
+      0.8999999761581421,
+      10353.189453125
+    ],
+    "rangeMeaning": "Source centres inside the generalized display outline; coastal negative ETOPO cells may include bathymetry, not land minima.",
+    "interval": 250,
+    "levels": [
+      0,
+      250,
+      500,
+      750,
+      1000,
+      1250,
+      1500,
+      1750,
+      2000,
+      2250,
+      2500,
+      2750,
+      3000,
+      3250,
+      3500,
+      3750,
+      4000,
+      4250,
+      4500,
+      4750,
+      5000,
+      5250,
+      5500,
+      5750,
+      6000,
+      6250,
+      6500,
+      6750,
+      7000,
+      7250,
+      7500,
+      7750,
+      8000,
+      8250,
+      8500,
+      8750,
+      9000,
+      9250,
+      9500,
+      9750,
+      10000,
+      10250,
+      10500
+    ],
+    "colors": [
+      "#f2f9fd",
+      "#ecf6fb",
+      "#e5f2f9",
+      "#dfeff7",
+      "#d9ecf5",
+      "#d3e8f3",
+      "#cce5f2",
+      "#c6e1f0",
+      "#c0deee",
+      "#b9dbec",
+      "#b3d7ea",
+      "#add4e8",
+      "#a6d1e6",
+      "#a0cde4",
+      "#9ac9e2",
+      "#92c3de",
+      "#8bbedb",
+      "#83b8d8",
+      "#7cb2d4",
+      "#74add1",
+      "#6da7cd",
+      "#65a1ca",
+      "#5e9bc6",
+      "#5696c3",
+      "#4f90bf",
+      "#478abc",
+      "#4085b9",
+      "#387fb5",
+      "#3479b0",
+      "#3073a9",
+      "#2d6da2",
+      "#29679c",
+      "#266195",
+      "#225b8e",
+      "#1f5588",
+      "#1b4f81",
+      "#18497a",
+      "#144374",
+      "#113d6d",
+      "#0d3766",
+      "#0a3160",
+      "#062b59"
+    ],
+    "terrainColors": null,
+    "vertices": 25305,
+    "lineCount": 41,
+    "contourpyVersion": "1.3.3"
+  },
+  "elevation": {
+    "nativeGrid": {
+      "width": 3600,
+      "height": 5040,
+      "window": [
+        5220,
+        3720,
+        8820,
+        8760
+      ],
+      "origin": [
+        -93,
+        28
+      ],
+      "firstCenter": [
+        -92.99166666666666,
+        27.991666666666667
+      ],
+      "step": [
+        0.016666666666666666,
+        -0.016666666666666666
+      ],
+      "nodata": -99999,
+      "geokeys": {
+        "GTModelTypeGeoKey": 2,
+        "GTRasterTypeGeoKey": 1,
+        "GTCitationGeoKey": "WGS 84 + EGM2008 height",
+        "GeographicTypeGeoKey": 4326,
+        "VerticalCSTypeGeoKey": 3855
+      },
+      "missing": 0,
+      "range": [
+        -8461.5625,
+        6584.35595703125
+      ],
+      "decoder": "geotiff.js 3.0.5",
+      "encoding": "little-endian float32 row-major",
+      "gridSha256": "e33dfb988981659f7c11385314dd084879be0fb3cbbfc99f33101a09e19c2187",
+      "partialSource": true,
+      "fullGlobalSourceDownloaded": false
+    },
+    "contourGridShape": [
+      1680,
+      1200
+    ],
+    "stride": 3,
+    "sourceStepDegrees": [
+      0.016666666666666666,
+      -0.016666666666666666
+    ],
+    "contourStepDegrees": [
+      0.05,
+      -0.05
+    ],
+    "cornerMask": false,
+    "targetLandSourceCenters": 645037,
+    "validTargetLandCenters": 645037,
+    "missingTargetLandCenters": 0,
+    "sampledRange": [
+      -2316.25,
+      6584.35595703125
+    ],
+    "rangeMeaning": "Source centres inside the generalized display outline; coastal negative ETOPO cells may include bathymetry, not land minima.",
+    "interval": 500,
+    "levels": [
+      -10000,
+      0,
+      500,
+      1000,
+      1500,
+      2000,
+      2500,
+      3000,
+      3500,
+      4000,
+      4500,
+      5000,
+      5500,
+      6000,
+      6500,
+      7000
+    ],
+    "colors": [
+      "#ecf3e5",
+      "#e4efd8",
+      "#d5e3bb",
+      "#c6d69f",
+      "#b8ca82",
+      "#b9c179",
+      "#bfb876",
+      "#c5af73",
+      "#c3a26d",
+      "#b99164",
+      "#af7f5a",
+      "#ad7c5f",
+      "#c5a38d",
+      "#decabc",
+      "#f6f1ea"
+    ],
+    "terrainColors": [
+      "#ecece5",
+      "#e4e5dd",
+      "#dbddd5",
+      "#d3d6cd",
+      "#cbcec5",
+      "#c3c7bd",
+      "#babfb5",
+      "#b2b8ad",
+      "#a4aca1",
+      "#969f96",
+      "#88938a",
+      "#79877e",
+      "#6b7b72",
+      "#5d6e67",
+      "#4f625b"
+    ],
+    "vertices": 354564,
+    "lineCount": 14,
+    "contourpyVersion": "1.3.3"
+  },
+  "rivers": {
+    "features": 44,
+    "names": [
+      "Grande",
+      "Panama Canal",
+      "Paranaíba",
+      "Paraná",
+      "San Juan",
+      "São  Francisco",
+      "Tocantins",
+      "Amazonas",
+      "Araguaia",
+      "Braco Menor",
+      "Branco",
+      "Bío-Bío",
+      "Caquetá",
+      "Chixoy",
+      "Chubut",
+      "Coco",
+      "Colorado",
+      "Culuene",
+      "Desaguadero",
+      "Guaporé",
+      "Indaiá",
+      "Japurá",
+      "Jequitinhonha",
+      "Juruena",
+      "Madeira",
+      "Madre de Dios",
+      "Magdalena",
+      "Mamoré",
+      "Marañón",
+      "Mendoza",
+      "Meta",
+      "Negro",
+      "Neuquén",
+      "Orinoco",
+      "Paraiba",
+      "Pilcomayo",
+      "Purús",
+      "Salado",
+      "Santa Cruz",
+      "Tapajós",
+      "Ucayali",
+      "Uruguay",
+      "Usumacinta",
+      "Xingu"
+    ],
+    "MexicoIncluded": false,
+    "coordinateBounds": [
+      -93,
+      -56,
+      -33,
+      28
+    ]
+  }
+}

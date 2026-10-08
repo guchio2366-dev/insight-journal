@@ -1,5 +1,62 @@
 import {asiaFarmDefinitions,asiaFarmRegionReading,asiaForestSources,asiaFarmFlagLabels,asiaFarmUnit,type AsiaFarmingLayer,type AsiaFarmStatistics,type AsiaFarmObservation} from '../data/atlas/asia-farming';
 import type {AsiaRegionId} from '../lib/atlas-asia-state';
+import southCentralShares from '../../public/assets/atlas/south-central-asia-v1/world-shares.json';
+import southeastShares from '../../public/assets/atlas/southeast-asia-v1/world-shares.json';
+type ShareYear={year:number;countries:Record<string,{share:number;flag:string}>};
+type ShareSeries={id:string;label:string;definition:string;years:ShareYear[]};
+const worldShareByTopic:Record<string,string>={rice:'rice-production',wheat:'wheat-production',maize:'maize-production',soybean:'soybean-production',cattle:'cattle-stocks',chicken:'chicken-stocks',sheep:'sheep-stocks',forest:'forest-area'};
+const shareName:Record<string,string>={'rice-production':'米（籾米）','wheat-production':'小麦','maize-production':'トウモロコシ','soybean-production':'大豆','cattle-stocks':'牛の飼養頭数','chicken-stocks':'鶏の飼養羽数','sheep-stocks':'羊の飼養頭数','forest-area':'森林面積'};
+const shareKind=(id:string)=>id.endsWith('-stocks')?'世界の飼養頭数・羽数':id==='forest-area'?'世界の森林面積':'世界生産量';
+const percentage=(n:number)=>n<0.05?'0.05％未満':`${n.toLocaleString('ja-JP',{maximumFractionDigits:1,minimumFractionDigits:1})}％`;
+const sourceFlag=(flag:string)=>asiaFarmFlagLabels[flag]??`原資料区分 ${flag}`;
+const svgNode=(tag:string,attrs:Record<string,string>)=>{const node=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [key,value] of Object.entries(attrs))node.setAttribute(key,value);return node;};
+/** Source-matched country/world ratios; never repurpose them as trade or domestic supply. */
+export function renderSouthCentralFarmConnections(root:HTMLElement,region:AsiaRegionId,active:boolean,topic:string|null,country:{code:string;name:string}|undefined){
+ const section=root.querySelector<HTMLElement>('[data-south-central-farm-connections]');if(!section)return;
+ section.hidden=!active||(region!=='south-central-asia'&&region!=='southeast-asia');if(section.hidden)return;
+ const host=section.querySelector<HTMLElement>('[data-south-central-world-share]')!;host.replaceChildren();
+ const isSoutheast=region==='southeast-asia',worldSeries=(isSoutheast?southeastShares.series:southCentralShares.series) as ShareSeries[];
+ const sharePercent=(value:number)=>isSoutheast?(value>0&&value<.01?'0.01％未満':`${value.toLocaleString('ja-JP',{maximumFractionDigits:2,minimumFractionDigits:2})}％`):percentage(value);
+ let code=country?.code??(isSoutheast?'IDN':'IND'),id=worldShareByTopic[topic??''];
+ if(topic==='overview'){
+  const candidates=isSoutheast?['rice-production','maize-production','soybean-production']:['rice-production','wheat-production','maize-production','soybean-production'];
+  id=candidates.map(key=>({key,share:worldSeries.find(s=>s.id===key)?.years.find(y=>y.year===2024)?.countries[code]?.share??-1})).sort((a,b)=>b.share-a.share)[0]?.key;
+ }
+ const series=worldSeries.find(s=>s.id===id),record=series?.years.find(y=>y.year===2024)?.countries[code];
+ if(!series||!record){const p=document.createElement('p');p.textContent=topic==='overview'?'この地域の代表品目について、2024年の比較値がありません。':'選んだ品目と国・地域の同じ定義による世界比率は未収録です。';host.append(p);return;}
+ const name=country?.name??(isSoutheast?'インドネシア':'インド'),measure=shareName[id]??series.label;
+ const lead=document.createElement('p');lead.className='sc-share-lead';lead.textContent=`${name}の${measure}は、2024年に${shareKind(id)}の${sharePercent(record.share)}。`;host.append(lead);
+ const first=series.years.find(y=>y.year===2015)?.countries[code];
+ const change=document.createElement('p');change.className='sc-share-detail';
+ if(first){const delta=record.share-first.share;change.textContent=`2015年${sharePercent(first.share)} → 2024年${sharePercent(record.share)}（${Math.abs(delta).toFixed(isSoutheast?2:1)}ポイント${delta>0?'上昇':delta<0?'低下':'変化なし'}）。`;}
+ else change.textContent='2015年の比較値は未掲載です。';host.append(change);
+ const points=series.years.map(y=>({year:y.year,share:y.countries[code]?.share})).filter((p):p is {year:number;share:number}=>p.share!==undefined);
+ if(points.length>=2){
+  const max=Math.max(0.01,...points.map(p=>p.share))*1.12,svg=svgNode('svg',{viewBox:'0 0 310 130',class:'sc-share-chart',role:'img','aria-label':`${name}の${measure}の世界比率、2015年から2024年の折れ線。年別の正確な値は直後の表を参照。`});
+  const x=(year:number)=>28+(year-2015)*28,y=(share:number)=>105-share/max*87;
+  svg.append(svgNode('line',{x1:'28',y1:'105',x2:'280',y2:'105',class:'axis'}),svgNode('line',{x1:'28',y1:'18',x2:'28',y2:'105',class:'axis'}));
+  for(const [label,tx,ty] of [[sharePercent(max),'1','22'],['0','14','108'],['2015','24','124'],['2024','252','124']]){const text=svgNode('text',{x:tx,y:ty});text.textContent=label;svg.append(text);}
+  let segment:{year:number;share:number}[]=[];
+  const flush=()=>{if(segment.length>1)svg.append(svgNode('polyline',{points:segment.map(p=>`${x(p.year)},${y(p.share)}`).join(' '),class:'trend'}));segment=[];};
+  for(const year of series.years){const share=year.countries[code]?.share;if(share===undefined){flush();continue;}segment.push({year:year.year,share});}flush();
+  for(const p of points)svg.append(svgNode('circle',{cx:String(x(p.year)),cy:String(y(p.share)),r:p.year===2024?'3.7':'2.1',class:'dot'}));
+  host.append(svg);
+ }
+ if(!country&&topic==='overview'&&isSoutheast){
+  const rice=worldSeries.find(s=>s.id==='rice-production')?.years.find(y=>y.year===2024);
+  const vietnam=rice?.countries.VNM,thailand=rice?.countries.THA;
+  if(vietnam&&thailand){const p=document.createElement('p');p.className='sc-share-detail';p.textContent=`別の米の例：ベトナム${sharePercent(vietnam.share)}、タイ${sharePercent(thailand.share)}（2024年）。これは3か国の比較で、欠測のある地域全体の世界比ではありません。`;host.append(p);}
+ }
+ if(!country&&topic==='overview'&&!isSoutheast){
+  const kaz=worldSeries.find(s=>s.id==='wheat-production')?.years.find(y=>y.year===2024)?.countries.KAZ;
+  if(kaz){const p=document.createElement('p');p.className='sc-share-detail';p.textContent=`別の代表例：カザフスタンの小麦は2024年の世界生産量の${sharePercent(kaz.share)}。品目名や国を選ぶと、その系列に切り替わります。`;host.append(p);}
+ }
+ const detail=document.createElement('details'),summary=document.createElement('summary');summary.textContent='年別の値・分母・出典を確認する';detail.append(summary);
+ const table=document.createElement('table'),thead=document.createElement('thead'),header=document.createElement('tr');for(const title of ['年','世界比率','国別値の区分']){const th=document.createElement('th');th.scope='col';th.textContent=title;header.append(th);}thead.append(header);table.append(thead);
+ const body=document.createElement('tbody');for(const year of series.years){const tr=document.createElement('tr'),th=document.createElement('th');th.scope='row';th.textContent=String(year.year);const value=year.countries[code];const td=document.createElement('td'),flag=document.createElement('td');td.textContent=value?sharePercent(value.share):'未掲載';flag.textContent=value?sourceFlag(value.flag):'―';tr.append(th,td,flag);body.append(tr);}table.append(body);detail.append(table);
+ const note=document.createElement('p');note.className='sc-share-detail';note.textContent='同じFAOSTAT品目・年・単位の国別値÷世界値。比率の変化には、国と世界の両方の値が関わります。';detail.append(note);
+ const source=document.createElement('a');source.href=id==='forest-area'?'https://www.fao.org/faostat/en/#data/RL':id==='roundwood-production'||id==='sawnwood-production'?'https://www.fao.org/faostat/en/#data/FO':'https://www.fao.org/faostat/en/#data/QCL';source.textContent='FAOSTATの原資料';detail.append(source);host.append(detail);
+}
 const definitions={
  crop:'元資料はIFPRI MapSPAM 2020 v2r2です。緯度・経度それぞれ5分、南北で約9kmの元格子ごとに、年間の収穫面積をhaで推計しています。同じ土地から年に複数回収穫する場合は、その面積を複数回数えます。灌漑と天水を合計した値で、畑の境界を直接観測した図ではありません。',
  livestock:'元資料はFAO GLW4の2020年の家畜密度です。緯度・経度それぞれ5分、南北で約9kmの格子に、統計などを用いて頭数・羽数を配分した推計です。単位は頭/km²または羽/km²です。密度をそのまま足し合わせても頭数にはなりません。',
@@ -32,7 +89,7 @@ export function renderAsiaFarmingPanel(root:HTMLElement,region:AsiaRegionId,topi
  $('[data-farming-statistics-title]').textContent=country?`${country.name}の${definition.statName}`:'国・地域の統計を読む';$('[data-farming-statistics-definition]').textContent=definition.definition;
  const tables=$('[data-farming-statistics-tables]');tables.replaceChildren();
  const status=$('[data-farming-statistics-status]');
- if(!country){status.textContent='国・地域を選ぶと、2015–2024年の統計を表示します。';return;}
+ if(!country){status.textContent=region==='southeast-asia'?'雨温図や地域事例から同じ場所を比較すると、その国全体の2015–2024年の統計を表示します。':'国・地域を選ぶと、2015–2024年の統計を表示します。';return;}
  if(!statistics){status.textContent='国・地域の統計を読み込んでいます。';return;}
  const record=statistics.countries[country.code];status.textContent=country.code==='CHN'?'この表はFAOの中国本土の統計です。香港・マカオ・台湾を含むChina集計とは区別しています。':country.code==='TWN'?'この表はFAOの台湾区分（M49:158）を使っています。':'';
  for(const series of farmSeries(topic,layer,record?.observations??[])){

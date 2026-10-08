@@ -38,8 +38,11 @@ export function initCanadaNature(root:HTMLElement){
  const climateContextSources=[
   ...[...root.querySelectorAll<HTMLElement>('[data-canada-crop-source]')].map(node=>({node,slot:climateMapSlot})),
   ...[...root.querySelectorAll<HTMLElement>('[data-canada-crop-context],[data-canada-forest-context],[data-canada-industry-context],[data-canada-population-context]')].map(node=>({node,slot:climateReadingSlot})),
-  ...[...root.querySelectorAll<HTMLElement>('[data-canada-crop-return],[data-canada-forestry-return],[data-canada-industry-return],[data-canada-population-return]')].map(link=>({node:link.parentElement!,slot:climateReadingSlot}))
+  ...[...root.querySelectorAll<HTMLElement>('[data-canada-crop-return],[data-canada-industry-return],[data-canada-population-return]')].map(link=>({node:link.parentElement!,slot:climateReadingSlot}))
  ].map(source=>{const home=root.ownerDocument.createComment('Canada comparison source');source.node.before(home);return {...source,home};});
+ const forestReturnNode=root.querySelector<HTMLElement>('[data-canada-forestry-return]')?.parentElement;
+ const forestReturnHome=root.ownerDocument.createComment('Canada forest return');
+ forestReturnNode?.before(forestReturnHome);
  function render(){
   const waterResource=state.view==='water'&&waterState.topic!=='surface';
   root.classList.toggle('is-water-resource',waterResource);
@@ -59,7 +62,7 @@ export function initCanadaNature(root:HTMLElement){
    forestContext.hidden=!savedForestry;root.classList.toggle('is-learning-comparison',!!savedForestry);forestMap.style.display=savedForestry&&state.view!=='landform'?'':'none';forestLegend.hidden=!savedForestry||state.view==='landform';
    const text=forestContext.querySelector<HTMLElement>('[data-canada-forest-context-text]')!;
    const waterText=state.water&&state.water!=='Fraser'?`現在は${state.water}${state.only?'だけ':'を選択して全水系'}を表示しています。林業の比較入口はFraser川とBCの針葉樹林です。Fraserを選ぶと、森林と海岸の位置関係へ戻れます。`:'針葉樹林とFraser川の位置を重ね、森林と海岸のつながりを照合します。木材輸送には道路・港も必要です。';
-   text.textContent=state.view==='elevation'?'山地の高さをETOPOの等高線で確かめます。森林の重ね図と沿岸の観測点へは「気候区分・都市」で戻れます。':state.view==='landform'?'山地と海岸を地形図で確かめます。針葉樹林と観測点の重ね図へは「都市の気候」で戻れます。':state.view==='water'?waterText:state.city==='vancouver'?'Vancouverの温和な冬・秋冬の雨を、沿岸の針葉樹林と比べます。':'観測点を切り替えています。元の問いはVancouverの沿岸気候と針葉樹林の関係です。Vancouverで沿岸の事例へ戻れます。';
+   text.textContent=state.view==='elevation'?'山地の高さをETOPOの500 m色面で確かめます。森林の重ね図と沿岸の観測点へは「気候区分・都市」で戻れます。':state.view==='landform'?'山地と海岸を地形図で確かめます。針葉樹林と観測点の重ね図へは「都市の気候」で戻れます。':state.view==='water'?waterText:state.city==='vancouver'?'Vancouverの温和な冬・秋冬の雨を、沿岸の針葉樹林と比べます。':'観測点を切り替えています。元の問いはVancouverの沿岸気候と針葉樹林の関係です。Vancouverで沿岸の事例へ戻れます。';
   }
   const industryComparison=renderIndustryNatureComparison(root,config,state),populationComparison=renderPopulationNatureComparison(root,config,state),cropComparison=renderCanadaCropNatureComparison(root,state);root.classList.toggle('is-learning-comparison',state.view!=='climate'&&(!!savedForestry||industryComparison||populationComparison||cropComparison));root.classList.toggle('is-crop-comparison',state.view!=='climate'&&cropComparison);
   renderCanadaWaterOrigin(root,waterState);
@@ -71,7 +74,21 @@ export function initCanadaNature(root:HTMLElement){
     if(classifiedClimate&&comparison){if(source.node.parentElement!==source.slot)source.slot!.append(source.node);}
     else if(source.node.parentNode!==source.home.parentNode)source.home.after(source.node);
    }
+   const hasMapSource=!!climateMapSlot.querySelector('[data-canada-crop-source]:not([hidden])');
+   climateMapSlot.hidden=!hasMapSource;
+   climateContext.classList.toggle('has-comparison-map',hasMapSource);
   }
+  for(const bridge of root.querySelectorAll<HTMLElement>('[data-canada-forest-climate-bridge]')){
+   const active=classifiedClimate&&!!savedForestry&&bridge.closest('[data-canada-climate-card]')?.getAttribute('data-canada-climate-card')===state.city;
+   bridge.hidden=!active;
+   if(active){
+    const reading=bridge.querySelector<HTMLElement>('[data-canada-forest-climate-bridge-text]')!;
+    reading.textContent=state.city==='vancouver'?'バンクーバー沿岸の温和な冬と秋冬の雨は、BC州の針葉樹林を読む手がかりです。':'BC州の沿岸林と比べる観測点はバンクーバーです。この都市の雨温図は沿岸林の代表値ではありません。';
+    const slot=bridge.querySelector<HTMLElement>('[data-canada-forest-climate-return-slot]')!;
+    if(forestReturnNode&&forestReturnNode.parentElement!==slot)slot.append(forestReturnNode);
+   }
+  }
+  if((!classifiedClimate||!savedForestry)&&forestReturnNode&&forestReturnNode.parentNode!==forestReturnHome.parentNode)forestReturnHome.after(forestReturnNode);
   root.classList.toggle('is-classified-climate',classifiedClimate);
   root.classList.toggle('is-elevation-reading',state.view==='elevation');
   for(const layer of naturalLayers){const host=naturalHosts[layer];if(host){host.hidden=layer==='climate'?!classifiedClimate:state.view!=='elevation';naturalMaps[layer]?.render({...naturalStates[layer],city:state.city});}}
@@ -84,8 +101,8 @@ export function initCanadaNature(root:HTMLElement){
   if(zoneCity)zoneCity.textContent=`${config.cities.find((c:any)=>c.id===state.city).name}の元0.1°格子：${citySample?.class??citySample?.code??'未収録'}${citySample?.boundaryCandidates?.length>1?`（${citySample.boundaryCandidates.join('/')}の格子境界）`:''}。雨温図はECCCの一点の平年値です。`;
   const elevation=config.layers?.elevation?.groups?.find((g:any)=>g.id===naturalStates.elevation.selected);
   const elevationTitle=root.querySelector<HTMLElement>('[data-canada-elevation-title]'),elevationText=root.querySelector<HTMLElement>('[data-canada-elevation-text]');
-  if(elevationTitle)elevationTitle.textContent=elevation?`${elevation.name}の等高線を読む`:'西部山地と内陸の高さを、等高線で読む';
-  if(elevationText)elevationText.textContent=elevation?.id==='500'?`500 mの地点は西部の山地にも内陸の平原にもあります。西部でより高い等高線が近づく所と比べます。${elevation.description}`:elevation?.description??'等高線は同じ標高を結ぶ線です。西部の高い山地と内陸・海岸の位置を比べ、斜面や山越えが交通・水の流れに関わる場所を確かめます。';
+  if(elevationTitle)elevationTitle.textContent=elevation?`${elevation.name}の分布を読む`:'西の山地と東の低地を、500 mごとの色面で比べる';
+  if(elevationText)elevationText.textContent=elevation?.description??'西部では濃い色の山地が連なり、その東の内陸平原からハドソン湾沿岸・五大湖周辺へ高さが下がります。色の境界で500 mごとの高さの違いを読みます。境界が近い所ほど短い距離で高さが変わり、山越えの交通や川が高地から低地へ流れる向きを読む手掛かりになります。';
   root.classList.toggle('is-landform-reading',state.view==='landform');
   root.classList.toggle('is-water-reading',state.view==='water');
   for(const detail of root.querySelectorAll<HTMLDetailsElement>('[data-canada-general-reading]')){const context=String(comparison);if(detail.dataset.comparison!==context){detail.open=!comparison&&!detail.closest('[data-canada-reading="landform"],[data-canada-reading="water"]');detail.dataset.comparison=context;}}
@@ -130,7 +147,7 @@ export function initCanadaNature(root:HTMLElement){
   map.setAttribute('viewBox',canadaLegacyFrame(state.frame).join(' '));
   for(const selector of ['[data-canada-industry-context-map]','[data-canada-population-context-map]']){const group=root.querySelector<SVGElement>(selector);if(group)projectCanadaComparison(group);}
   const name=config.cities.find((c:any)=>c.id===state.city).name;
-  $('[data-canada-announcement]').textContent=state.view==='landform'?`${landform?.name??'七つの地形地域'}${state.landformOnly?'だけ':''}を表示。`:state.view==='elevation'?`${elevation?.name??'標高の等高線'}を表示。`:`${name}${state.compare?'と比較':''}。${({climate:'都市の気候',landform:'地形地域',water:'湖と河川'})[state.view]}を表示。`;
+  $('[data-canada-announcement]').textContent=state.view==='landform'?`${landform?.name??'七つの地形地域'}${state.landformOnly?'だけ':''}を表示。`:state.view==='elevation'?`${elevation?.name??'500 m間隔の標高区分'}を表示。`:`${name}${state.compare?'と比較':''}。${({climate:'都市の気候',landform:'地形地域',water:'湖と河川'})[state.view]}を表示。`;
  }
  function update(patch:Partial<CanadaNatureState>){state={...state,...patch};if(state.compare===state.city)state.compare=null;history.pushState(null,'',writeCanadaNatureState(new URL(location.href),state));render();}
  function updateWater(patch:Partial<CanadaWaterState>){waterState={...waterState,...patch};state={...state,view:'water'};history.pushState(null,'',writeCanadaWaterState(writeCanadaNatureState(new URL(location.href),state),waterState));render();}

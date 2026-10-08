@@ -6,7 +6,7 @@ import {africaForestryReading} from '../../src/data/atlas/africa-forestry-readin
 const manifest=JSON.parse(readFileSync(new URL('../../data-source/atlas/africa/manifest.json',import.meta.url)));
 const statistics=JSON.parse(readFileSync(new URL('../../src/data/atlas/africa-statistics.json',import.meta.url)));
 
-test('林業の比較は保存済みの国別森林割合を使い、森林分布や固定年を作らない',()=>{
+test('林業の保存資料は森林割合の定義を保ち、森林分布や固定年を作らない',()=>{
   const forestSource=manifest.sources.find(source=>source.metadata.name==='Forest area (% of land area)');
   assert.equal(africaForestryReading.compareMetric,forestSource.id);
   assert.match(forestSource.metadata.sourceNote,/excludes tree stands in agricultural production systems/);
@@ -24,6 +24,5 @@ test('森林利用の背景説明はFAO2001に帰属し、選択年の生産量�
   assert.match(africaForestryReading.reading,/2001年.*コンゴ盆地/);
   assert.match(africaForestryReading.reading,/道路・市場/);
   assert.match(africaForestryReading.reading,/土壌・野生生物の生息地/);
-  assert.match(africaForestryReading.compareText,/選択した年と国・比較国を保ち/);
   assert.match(africaForestryReading.compareText,/生産量・収益.*管理の良否は判断できません/);
 });

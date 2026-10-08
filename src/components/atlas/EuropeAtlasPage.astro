@@ -63,7 +63,7 @@ const config = { industryOverviews, farmingAreas, geography, climateWater, count
         <div class="eu-map-stage" data-map-surface tabindex="0" role="region" aria-label="欧州の地図">
           <EuropeLayoutControls position="map" {field} />
           <div class="eu-map-buttons" role="group" aria-label="地図の縮尺と表示"><button type="button" data-eu-reset>全体へ</button><button type="button" data-eu-zoom="in" aria-label="地図を拡大">＋</button><button type="button" data-eu-zoom="out" aria-label="地図を縮小">−</button><button type="button" data-eu-render>簡易表示</button></div>
-          <div class="eu-map-heading"><div><h2 id="eu-map-title" data-eu-map-title>{initialLayer.title}</h2><p data-eu-map-status>{initialClimateReader?'都市を選ぶと、その観測所の気候を表示します。':agriculture?'作物名を選ぶと、その分布を表示します。':'地図の分布と右側の説明を読み比べます。'}</p></div><p data-eu-focus aria-live="polite">欧州全体</p></div>
+          <div class="eu-map-heading"><div><h2 id="eu-map-title" data-eu-map-title>{initialLayer.title}</h2><p data-eu-map-status>{initialClimateReader?'都市を選ぶと、その観測所の気候を表示します。':agriculture?'作物・家畜の分布を同時表示しています。品目名を選ぶと輪郭を強調します。':'地図の分布と右側の説明を読み比べます。'}</p></div><p data-eu-focus aria-live="polite">欧州全体</p></div>
           <svg class="eu-static-map" data-eu-static viewBox={`0 0 ${frame.width} ${frame.height}`} role="img" aria-labelledby="eu-map-label">
             <title id="eu-map-label">欧州の{initialLayer.title}。{initialLayer.unit}。地図の名前から地点や品目を選べます。</title>
             <rect width={frame.width} height={frame.height} fill="#e7eff1" />
@@ -97,8 +97,9 @@ const config = { industryOverviews, farmingAreas, geography, climateWater, count
         </div>
         <div class="eu-map-legend" data-eu-map-legend><p class="eu-water-note">河川・湖の位置、年降水量、流域区画を切り替えます。地下水は公開利用条件が未確認のため未収録です。</p></div>
         <div class="eu-item-list" data-eu-farming-list hidden={!agriculture} aria-label="農畜産物と林業を選ぶ">
-          <p class="eu-item-ranking-note">収録済みの作物12区分・家畜4種です。生産額順位ではありません。野菜・果樹の集合区分と個別作物、生体数と肉・乳・卵を同列に順位付けしません。</p>
+          <p class="eu-item-ranking-note">作物12区分・家畜4種の分布と、酪農の生乳統計です。生産額順位ではありません。野菜・果樹の集合区分と個別作物、生体数と肉・乳・卵を同列に順位付けしません。</p>
           {(['crop','livestock'] as const).map(kind=><section data-eu-farming-children={kind}><h3>{kind==='crop'?'作物':'畜産'}</h3><div>{farmingAreas.features.filter(f=>f.properties.kind===kind).map(f=><button type="button" data-eu-layer={f.properties.id} aria-pressed="false"><span class:list={['eu-item-swatch',{'is-livestock':kind==='livestock'}]} style={{'--item-color':f.properties.color}}></span>{f.properties.name}</button>)}</div></section>)}
+          <section data-eu-farming-children="dairy"><h3>酪農</h3><button type="button" data-eu-layer="dairy" aria-pressed="false">牛の生乳 · 国別統計</button></section>
           <section data-eu-farming-children="forest" hidden><h3>林業</h3><button type="button" data-eu-layer="treecover" aria-pressed="false">樹木被覆の分布 · 2021</button><button type="button" data-eu-layer="forest" aria-pressed="false">国別の森林面積比率 · 2023</button></section>
         </div>
         <div class="eu-map-candidates" data-eu-farm-candidates hidden aria-live="polite"></div>
@@ -112,7 +113,7 @@ const config = { industryOverviews, farmingAreas, geography, climateWater, count
         <div class="eu-farming-key" data-eu-farming-legend hidden={!agriculture}>
           <p><strong>主な栽培域・飼養地域 · 2020年頃</strong></p>
           <p>作物は実線、家畜は破線で示します。重なった色は新しい分類ではありません。品目を選ぶと、その分布の輪郭を濃くします。</p>
-          <details class="eu-legend-methods"><summary>対象範囲・出典</summary>          <p>モデル推計の格子から主な集中域を取り出した概略図です。色のない場所でも生産がないとは限りません。色や面積で品目間の生産量を比較できません。</p>
+          <details class="eu-legend-methods"><summary>対象範囲・出典</summary><p>品目ごとの正値格子の上位10%が集中する場所から、元格子の数量が大きい原則5集中域を選んだ概略図です。ポー平原のトウモロコシの比較例と、米・柑橘類の小さく分かれた産地も残します。全ての産地を塗った図ではありません。色のない場所や北欧でも生産がないとは限らず、色や面積で品目間の生産量を比較できません。初期表示は主要生産地域を拡大し、「欧州全域へ」で北部も確認できます。</p>
           <p>牛は肉用・乳用、鶏は肉用・採卵用を分けていません。オリーブ・ブドウ単独の分布は未収録です。</p>
           <a href={withBase('/assets/atlas/europe/farming-overview-v2/manifest.json')}>出典・分布面の加工方法</a>
           </details>
@@ -162,7 +163,7 @@ const config = { industryOverviews, farmingAreas, geography, climateWater, count
     <details class="eu-sources"><summary>出典・データの範囲</summary><ul><li>気候分類：<a href="https://www.gloh2o.org/koppen/">Beck et al. (2023)</a>、1991–2020、CC BY 4.0。koppen.earthから取得し、Insight Journalが配色・投影を加工。<a href={withBase('/assets/atlas/europe/climate-v1/manifest.json')}>加工記録</a></li><li>雨温図：<a href="https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/outline.html">気象庁 ClimatView</a>、<a href="https://ds.data.jma.go.jp/tcc/tcc/products/climate/explanation/normal.html">平年値の算出方法</a>。気象庁のデータをInsight Journalが加工。<a href={withBase('/assets/atlas/europe/climate-v1/cities-manifest.json')}>取得記録</a></li><li>国境：<a href="https://www.naturalearthdata.com/">Natural Earth</a> 1:110m、微小国は1:50mを補完、パブリックドメイン。海外領土・表示枠外は省略。</li><li>気候色は格子分類、雨温図は観測地点の数値です。地図の色だけから国全体や観測所の値を推定しないでください。</li></ul></details>
     <details class="eu-sources"><summary>樹木被覆・年降水量・流域の出典と利用条件</summary>
       <p>樹木被覆：© ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium. Insight Journalが配信済み概略格子の樹木区分を抽出し、投影・範囲・配色を加工。<a href="https://esa-worldcover.org/en/data-access">原典</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <a href={withBase('/assets/atlas/europe/tree-cover-v1/manifest.json')}>取得・加工記録</a></p>
-      <p>年降水量：GPCC/DWD, Rustemeier et al. (2025), <a href="https://doi.org/10.5676/DWD_GPCC/CLIMAT_V2025_025">DOI: 10.5676/DWD_GPCC/CLIMAT_V2025_025</a>。1991–2020年の月別平年値を12か月合計し、Insight Journalが投影・範囲・配色を加工。<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <a href={withBase('/assets/atlas/europe/precipitation-v1/manifest.json')}>取得・加工記録</a></p>
+      <p>年降水量：GPCC/DWD, Rustemeier et al. (2025), <a href="https://doi.org/10.5676/DWD_GPCC/CLIMAT_V2025_025">DOI: 10.5676/DWD_GPCC/CLIMAT_V2025_025</a>。1991–2020年の月別平年値を12か月合計し、Insight Journalが投影・範囲・配色を加工。<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <a href={layers.find(layer=>layer.id==='precipitation')!.manifest}>取得・加工記録</a></p>
       <p>流域：BasinATLAS v1.0 / HydroATLAS, Bernhard Lehner; Simon Linke; Michele Thieme。Linke et al. (2019)、CC BY 4.0。HydroSHEDS/WWF由来のレベル4区画をInsight Journalが表示範囲・投影・配色へ加工。無保証のモデル境界で、流量・地下水量を示しません。<a href="https://doi.org/10.6084/m9.figshare.9890531.v1">原典</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <a href={withBase('/assets/atlas/europe/drainage-v1/manifest.json')}>取得・加工記録</a></p>
     </details>
     <noscript><p>JavaScriptが無効です。初期地図・解説一覧・出典を表示しています。主題や地点の変更にはJavaScriptが必要です。</p></noscript>

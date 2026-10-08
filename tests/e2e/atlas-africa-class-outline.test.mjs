@@ -22,7 +22,7 @@ async function withRenderer(run,{delayGrid=false}={}){
 
 test('non-agricultural class selection retains each complete native raster and overlays only the selected grid boundary',async()=>{
  await withRenderer(async({root,paint,ready})=>{
-  for(const [field,topic,selected,file] of [['nature','climate','1','climate.png'],['nature','terrain','4','elevation.png'],['population','distribution','density-0','population.png']]){
+  for(const [field,topic,selected,file] of [['nature','climate','1','climate.png'],['population','distribution','density-0','population.png']]){
    const search=`?field=${field}&topic=${topic}&zoom=all`;
    paint(search);await ready();const original=root.querySelector('[data-africa-raster]').getAttribute('href');assert.ok(original.endsWith('/'+file));
    const nativeFeatures=[...root.querySelectorAll('[data-africa-layer-feature]')].map(path=>path.getAttribute('d'));
@@ -50,4 +50,13 @@ test('while grids load the original PNG stays visible and eventual outlines foll
   assert.equal(root.querySelector('[data-africa-class-outline]').getAttribute('data-africa-class-outline'),'density-6');
   assert.equal(root.querySelector('[data-africa-class-outline]').getAttribute('data-africa-outline-layer'),'distribution');
  },{delayGrid:true});
+});
+
+test('terrain and rainfall are explicit source gaps without replacement raster, contours or country values',async()=>{
+ await withRenderer(async context=>{
+  const {root,paint,ready}=context;
+  for(const search of ['?field=nature&topic=terrain','?field=nature&topic=water&water=rain']){
+   paint(search);await ready();assert.equal(context.view.guide,true);assert.equal(context.view.legend.length,0);assert.match(context.view.scope,/未収録/);assert.equal(root.querySelector('[data-africa-raster],[data-africa-layer-feature],[data-africa-class-outline]'),null);
+  }
+ });
 });

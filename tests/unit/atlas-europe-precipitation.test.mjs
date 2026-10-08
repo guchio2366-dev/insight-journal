@@ -74,7 +74,7 @@ test('actual source monthly examples survive annual sum, latitude audit and shar
   assert.equal(displayCell(grid, [65, 55], -1), null, 'east display cutoff excludes the rest of Russia');
 });
 
-test('every map pixel agrees with the float32 lookup colour bin and missing mask', () => {
+test('every retained nearest-source raster pixel agrees with its float32 lookup colour bin and missing mask', () => {
   const png = bytes(base + 'precipitation.png');
   assert.deepEqual([...png.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
   const imageData = [];

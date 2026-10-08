@@ -1,6 +1,7 @@
 import type {AsiaState} from '../../lib/atlas-asia-state';
 export type IndustryTopic={id:string;title:string;parent:string;kind:'national'|'admin'|'power'|'steel'|'trade';unit:string;year:string;source:string;note:string;country?:string;fuel?:string};
-export type IndustryRegion={data:string;topics:IndustryTopic[];powerCount:number;adminCount:number;countries:string[]};
+export type IndustryCountryScope={label:string;countries:{code:string;name:string}[];regionalTrade?:boolean;readings?:Record<string,{title:string;reading:string;scope:string;source:{label:string;url:string}}>};
+export type IndustryRegion={data:string;topics:IndustryTopic[];powerCount:number;adminCount:number;countries:string[];countryScope?:IndustryCountryScope};
 export type IndustryObservation={value:number|null;status?:string};
 export type IndustrySeries=(IndustryObservation&{year:string})[];
 export type IndustryAdmin={id:string;country:string;name:string;sourceName:string;point?:[number,number];bounds?:number[];series:Record<string,IndustrySeries>;steelMethods?:Record<string,number>;employment2025?:number};
@@ -11,16 +12,31 @@ export const industryColors=['#eaf0dc','#c5d5a6','#92b982','#559078','#1d625e'];
 export const industryFuelNames:Record<string,string>={Coal:'石炭',Gas:'天然ガス',Oil:'石油',Hydro:'水力',Nuclear:'原子力',Solar:'太陽光',Wind:'風力',Biomass:'バイオマス',Waste:'廃棄物',Geothermal:'地熱','Wave and Tidal':'波力・潮汐'};
 export const industryFuelColors:Record<string,string>={Coal:'#4c4846',Gas:'#c07739',Oil:'#84637c',Hydro:'#2076a5',Nuclear:'#ad4c3b',Solar:'#c6a127',Wind:'#638e50',Biomass:'#356e4e',Waste:'#a47f62',Geothermal:'#bf744e','Wave and Tidal':'#346e83'};
 export const industryGroups=['製造業','資源・エネルギー','サービス業','工業・建設と経済全体','貿易'];
-export function industryTopic(region:IndustryRegion,state:AsiaState){return region.topics.find(t=>t.id===state.topic)??region.topics[0];}
+export const eastIndustryCountries=[{code:'CHN',name:'中国'},{code:'JPN',name:'日本'},{code:'KOR',name:'韓国'},{code:'TWN',name:'台湾'}];
+export function isEastIndustryRegion(region:IndustryRegion){return Array.isArray(region.countries)&&eastIndustryCountries.every(c=>region.countries.includes(c.code));}
+export function industryCountryChoices(region:IndustryRegion){return region.countryScope?.countries??(isEastIndustryRegion(region)?eastIndustryCountries:[]);}
+export function hasIndustryCountryScope(region:IndustryRegion){return industryCountryChoices(region).length>0;}
+export function industryTopicsForPlace(region:IndustryRegion,place:string|null){const choices=industryCountryChoices(region);return choices.length?region.topics.filter(t=>!t.country||(place?t.country===place:choices.some(c=>c.code===t.country))):region.topics;}
+export function industryScopeCountries(region:IndustryRegion,place:string|null){return hasIndustryCountryScope(region)?industryCountryChoices(region).filter(c=>!place||c.code===place).map(c=>c.code):region.countries;}
+export function industryTopic(region:IndustryRegion,state:AsiaState){const topics=industryTopicsForPlace(region,state.place);return topics.find(t=>t.id===state.topic)??topics.find(t=>t.id==='manufacturing')??topics[0];}
 export function isIndustryDetailId(id:string){return /^[A-Za-z0-9_-]{1,64}$/.test(id);}
+export function normalizeScopedIndustryState(region:IndustryRegion|undefined,state:AsiaState):AsiaState{
+ if(!region?.countryScope?.regionalTrade||state.field!=='industry'||!state.place||industryCountryChoices(region).some(c=>c.code===state.place))return state;
+ const trade=['trade-exports','trade-imports'].includes(state.topic??'');
+ return {...state,place:null,city:null,detail:trade?state.detail:null,point:null,story:null,camera:null};
+}
 export function normalizeIndustryState(region:IndustryRegion,state:AsiaState,data?:IndustryData|null):AsiaState{
  if(state.field!=='industry')return state;
- const topic=industryTopic(region,state),candidate=state.detail&&isIndustryDetailId(state.detail)?state.detail:null;
+ state=normalizeScopedIndustryState(region,state);
+ if(hasIndustryCountryScope(region)&&state.place&&!industryCountryChoices(region).some(c=>c.code===state.place))state={...state,place:null,detail:null,point:null,story:null};
+ const topic=industryTopic(region,state);
+ if(state.topic&&state.topic!==topic.id)state={...state,detail:null,point:null};
+ const candidate=state.detail&&isIndustryDetailId(state.detail)?state.detail:null;
  if(topic.kind==='trade')return {...state,topic:topic.id,city:null};
  // Keep a bounded URL candidate until the lazy dataset can validate it. No
  // facility names, coordinates or selections are displayed from this ID alone.
  if(!data)return {...state,topic:topic.id,detail:(topic.kind==='power'||topic.kind==='admin'&&(!state.place||state.place===topic.country))?candidate:null,place:topic.country??state.place,city:null};
- const detail=topic.kind==='admin'?data.admin.find(d=>d.id===candidate&&d.point&&d.country===topic.country):topic.kind==='power'?data.power.find(d=>d.id===candidate&&(topic.fuel==='all'||topic.fuel===d.fuel)):undefined;
+ const detail=topic.kind==='admin'?data.admin.find(d=>d.id===candidate&&d.point&&d.country===topic.country):topic.kind==='power'?data.power.find(d=>d.id===candidate&&(topic.fuel==='all'||topic.fuel===d.fuel)&&(!hasIndustryCountryScope(region)||industryScopeCountries(region,state.place).includes(d.country))):undefined;
  const valid=detail&&(!state.place||detail.country===state.place);
  return {...state,topic:topic.id,detail:valid?detail.id:null,place:valid?detail.country:topic.country??state.place,city:null};
 }
@@ -47,7 +63,7 @@ export const industryDomesticNotes:Record<string,string>={
  JPN:'県の製造品出荷額には、最終製品だけでなく他地域へ送る部品・素材も含まれます。輸送用機械、電子部品、食料品などへ切り替えると、同じ県でも産業ごとに順位が変わる様子を確認できます。雇用は2025年6月1日時点、金額は2024年の年間実績です。',
  CHN:'転炉（BOF）は主に高炉などで得た溶けた鉄を鋼にする設備です。電気炉（EAF）とは製法の区分が異なります。省別の能力と製法内訳を比べ、能力の大きさを実際の生産量や排出量と取り違えないように読んでください。',
  MYS:'製造業とサービス業では、州の順位と集中する場所が異なります。州内で生まれた付加価値を同じ2015年価格で比べています。プトラジャヤの独立した製造業系列は2024年からで、それより前は欠測です。クアラルンプールとの過去の境界・集計範囲の違いに注意してください。',
- IND:'製造業とサービス業を同じ年度で比較すると、国内の経済活動がどの州に集まるかを区別できます。2019–20年度より前のジャンムー・カシミールにはラダックが含まれ、その後と範囲が異なります。現在のラダックに過去の合算値を配分していません。',
+ IND:'2022–23年度の収録値では、製造業の州総額はグジャラート州・マハーラーシュトラ州・タミル・ナードゥ州、サービス業はマハーラーシュトラ州・カルナータカ州・タミル・ナードゥ州が上位です。ベンガルールの通信・事業支援やアナンドの集乳・加工の事例と比べ、産業を支える仕組みを考えます。州全体の付加価値は都市や個別業種だけの生産額ではなく、人口当たりの値でもありません。2019–20年度より前のジャンムー・カシミールにはラダックが含まれ、その後と範囲が異なります。現在のラダックに過去の合算値を配分していません。',
 };
 export const industryMalaysiaReading:Record<string,string>={
  'MY-07':'ペナンでは製造業が州経済を主導し、2025年は10.0%成長しました。DOSMは、電気・電子・光学製品の拡大を、半導体とデータセンター機器の世界市場の拡大に結び付けて説明しています。地図の金額は製造業全体であり、半導体だけの売上高ではありません。',

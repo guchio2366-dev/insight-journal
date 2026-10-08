@@ -12,9 +12,9 @@ import CanadaWaterResources from './CanadaWaterResources.astro';
 import {canadaClimateGroups} from '../../lib/atlas-canada-presentation';
 import waterResources from '../../data/atlas/canada/water-resources.json';
 import koppenGeometry from '../../../public/assets/atlas/canada-climate-elevation-v1/koppen.geojson?raw';
-import elevationGeometry from '../../../public/assets/atlas/canada-climate-elevation-v1/elevation-contours.geojson?raw';
+const elevationGeometry={type:'FeatureCollection' as const,features:[]};
 import koppenManifest from '../../../public/assets/atlas/canada-climate-elevation-v1/koppen-manifest.json';
-import elevationManifest from '../../../public/assets/atlas/canada-climate-elevation-v1/elevation-manifest.json';
+import elevationManifest from '../../../public/assets/atlas/canada-climate-elevation-v1/elevation-bands-manifest.json';
 import CanadaCropNatureMap from './CanadaCropNatureMap.astro';
 import climate from '../../data/atlas/canada/climate.json';
 import rivers from '../../data/atlas/canada/rivers.json';
@@ -79,7 +79,7 @@ import '../../styles/atlas-canada-country-parity.css';
     <section class="canada-map-column atlas-map-column" data-canada-original-map-column aria-label="カナダの地図">
      <CanadaCropNatureMap />
      <CanadaNaturalLayerMap layer="climate" hidden={false} geometry={koppenGeometry} groups={climateGroups} geometryUrl={withBase('/assets/atlas/canada-climate-elevation-v1/koppen.geojson')} stations={climate.stations} source={(koppenManifest as any).source} />
-     <CanadaNaturalLayerMap layer="elevation" geometry={elevationGeometry} groups={elevationGroups} geometryUrl={withBase('/assets/atlas/canada-climate-elevation-v1/elevation-contours.geojson')} source={(elevationManifest as any).source} />
+     <CanadaNaturalLayerMap layer="elevation" lazyGeometry raster={{...elevationManifest.raster,imageUrl:withBase(`/assets/atlas/canada-climate-elevation-v1/${elevationManifest.raster.image.file}`),groups:elevationManifest.levels.map(g=>({id:g.id,bounds:g.bounds,outlineUrl:withBase(`/assets/atlas/canada-climate-elevation-v1/${g.outline.file}`),imageUrl:withBase(`/assets/atlas/canada-climate-elevation-v1/${g.isolated.file}`)}))}} geometry={elevationGeometry} groups={elevationGroups} geometryUrl={withBase('/assets/atlas/canada-climate-elevation-v1/elevation-native-classes.png')} source={(elevationManifest as any).source} />
      <section data-canada-locator hidden>
       <div class="canada-map-title"><h2>観測地点と水の位置</h2></div>
       <div class="atlas-map-frame canada-map-frame"><svg class="canada-map" data-canada-map viewBox={fullFrame} role="group" aria-labelledby="canada-map-title canada-map-desc">
@@ -130,6 +130,11 @@ import '../../styles/atlas-canada-country-parity.css';
 
         <AtlasClimatePlot name={s.name} period="1991–2020" temperatureC={s.temperatureC} precipitationMm={s.precipitationMm} minTemperatureC={-30} />
         <p class="canada-plot-key">青棒：降水量mm ／ 赤線：平均気温℃ ／ ×：未収録</p>
+        <div class="canada-forest-climate-bridge" data-canada-forest-climate-bridge hidden>
+         <p class="canada-takeaway" data-canada-forest-climate-bridge-text></p>
+         <p class="canada-caption">Vancouverは沿岸の1地点で、BC州全域の平均ではありません。森林分類は2020年、気候は1991–2020年の平年値です。</p>
+         <div data-canada-forest-climate-return-slot></div>
+        </div>
 
         <CanadaClimateAgriculture city={s.id} />
         <dl class="canada-climate-facts"><div><dt>年平均気温</dt><dd>{fmt(s.annualTemperatureC)} ℃</dd></div><div><dt>年降水量</dt><dd>{fmt(s.annualPrecipitationMm)} mm</dd></div><div><dt>1月／7月の平均気温</dt><dd>{fmt(s.temperatureC[0])} ／ {fmt(s.temperatureC[6])} ℃</dd></div></dl>
@@ -143,7 +148,7 @@ import '../../styles/atlas-canada-country-parity.css';
 </details>
        <details><summary>降水量と観測系列の読み方</summary><p>降水量は雨と雪などを水量に換算した合計です。今の天気や国全体の平均ではありません。複数観測所をつないだ合成系列を含みます。</p></details>
       </section>
-      <section data-canada-reading="elevation" hidden><h2 data-canada-elevation-title>西部山地と内陸の高さを、等高線で読む</h2><p class="canada-takeaway" data-canada-elevation-text>等高線は同じ標高を結ぶ線です。西部の高い山地と内陸・海岸の位置を比べ、斜面や山越えが交通・水の流れに関わる場所を確かめます。</p><p class="canada-caption">ETOPO2022の60秒格子から作図。単位m、EGM2008基準。格子間の等高線を計算した全国的な概略図で、実測の道路勾配・洪水域ではありません。</p><details><summary>地形地域と標高の違い</summary><p>「地形」は山地・平原・楯状地などの地域分類、「標高」は高さです。同じ地域の中にも標高差があります。地形タブと切り替え、地域名と等高線を照合できます。</p><a href={(elevationManifest as any).source?.catalogueUrl}>ETOPO2022の原典</a></details></section>
+      <section data-canada-reading="elevation" hidden><h2 data-canada-elevation-title>西の山地と東の低地を、500 mごとの色面で比べる</h2><p class="canada-takeaway" data-canada-elevation-text>西部では濃い色の山地が連なり、その東の内陸平原からハドソン湾沿岸・五大湖周辺へ高さが下がります。色の境界で500 mごとの高さの違いを読みます。境界が近い所ほど短い距離で高さが変わり、山越えの交通や川が高地から低地へ流れる向きを読む手掛かりになります。</p><p class="canada-caption">ETOPO2022の60秒格子から作図。単位m、EGM2008基準。元格子を500 m幅に分類し、色を混ぜずに地図投影へ写した全国的な概略図です。輪郭は表示格子の区分境界で、元の角度解像度は60秒です。細かな島の個数や区分の面積をこの図から読み取ることはできません。灰色の0 m未満には海岸線と格子の解像度差も含まれ、陸上の窪地や洪水域とは限りません。2022はモデルの版で、全地点の観測年ではありません。</p><details><summary>地形地域と標高の違い</summary><p>「地形」は山地・平原・楯状地などの地域分類、「標高」は高さです。同じ地域の中にも標高差があります。地形タブと切り替え、地域名と標高の色面を照合できます。</p><a href={(elevationManifest as any).source?.catalogueUrl}>ETOPO2022の原典</a></details></section>
      <section data-canada-reading="landform" hidden>
       <h2 data-canada-landform-reading-title>山地・平原・低地を、場所で見分ける</h2>
       <p class="canada-takeaway" data-canada-landform-reading-text>西部の山地、中央の平原、東部の盾状地を比較します。地図か凡例で地域を選ぶと、その範囲と説明が対応します。</p>
@@ -155,7 +160,7 @@ import '../../styles/atlas-canada-country-parity.css';
     </aside>
    </div>
    <details class="canada-climate-context" data-canada-climate-context hidden>
-    <summary>元の農業・人口・産業の分布と気候を比較する</summary>
+    <summary>元の分布と気候の比較を詳しく読む</summary>
     <div class="canada-climate-context-grid">
      <div data-canada-climate-context-map-slot></div>
      <div data-canada-climate-context-reading-slot></div>
@@ -165,7 +170,7 @@ import '../../styles/atlas-canada-country-parity.css';
    <details class="canada-source-footer" id="canada-water-sources"><summary>水資源の取得記録・配布データ・利用条件</summary><p>降水はECCC CanGridP mlyV2の1991–2020年360か月から算出した雨・雪の水当量の年平均です。流域はHydroBASINS v1cの地形由来の集水域を上下流関係に沿って結合したものです。国境をまたぐ水系も含めます。地下水は2008年の広域区分と、1993–2025年に地図化されたBC南西部の帯水層事例です。地下水量・取水量・利用可能量は示しません。</p><p><a href={withBase('/assets/atlas/canada-water-v1/manifest.json')}>原典・利用条件・形状検証・加工とハッシュの台帳</a> ／ <a href={withBase('/assets/atlas/canada-water-v1/annual-valid-grid-points.csv.gz')}>年降水量の有効格子CSV（gzip）</a></p><p>全国地下水の原資料で輪郭が交差する7区域は、座標を補正せず輪郭のみ表示します。BCの空白は帯水層がないことを意味しません。日本語名・色と降水量の計算は本サイトによる加工です。Contains information licensed under the Open Government Licence – Canada and the Open Government Licence – British Columbia. 提供機関による本サイトの承認を意味しません。</p></details>
 
    <footer class="canada-source-footer" id="canada-nature-sources"><h2>出典・対象期間・読み方</h2><ul><li>気候：Environment and Climate Change Canada、1991–2020年平年値。公式表の数値を抽出し、未収録値を補間しません。取得日2026年9月30日。<a href="https://climate.weather.gc.ca/climate_normals/index_e.html">計算方法と観測所一覧</a> ／ <a href="https://www.canada.ca/en/transparency/terms.html">政府サイト利用条件</a>。公式グラフの転載ではなく数値から作図しています。</li><li>主地図：Natural Resources Canadaの公式GIS「Physiographic Regions of Canada」。7地域の全頂点を保持し、EPSG:3978から公式サービスでEPSG:4326へ変換。カタログ公開2019年4月1日、対象期間開始2017年9月1日、確認2026年10月2日。<a href={physiography.source.catalogueUrl}>原典</a> ／ <a href={physiography.manifestUrl}>取得・座標系・ハッシュ台帳</a>。Contains information licensed under the Open Government Licence – Canada. 色と日本語ラベルは本サイトが付け、提供機関の承認を意味しません。</li><li>資料用の旧版紙地図：Natural Resources Canada、Atlas第6版の2009年保存版。地形分類の基礎資料は1967年。<a href={geographySource}>データカタログ</a> ／ <a href="https://open.canada.ca/en/open-government-licence-canada">Open Government Licence – Canada</a>。原図を縮小し、分類・配置を変更していません。提供機関による本サイトの承認を意味しません。</li><li>境界・河川・湖：Natural Earth v5.1.2、public domain。既存国境データは1:110m、河川・湖は1:50m。国土の周辺を含む表示範囲で抽出。詳細な境界・現在の実効支配・流域境界を示すものではありません。</li><li>本文の気候説明：<a href={mechanismSource}>Canada's Changing Climate Report（2019年）、第4章</a>と、各観測地点の平年値。地域の仕組みと一点の観測値を区別します。</li></ul><p><a href={withBase('/assets/atlas/canada-nature-v1/manifest.json')}>加工方法・固定版・ファイルハッシュの台帳</a></p></footer>
-   <details class="canada-source-footer"><summary>気候区分・標高の原典と加工</summary><p>Beck et al.の1991–2020年ケッペン区分、元格子0.1°。格子の分類を同区分ごとに結合し、カナダ境界で切り出しています。ECCCの一点の月別平年値から国土の区分を推定したものではありません。<a href={withBase('/assets/atlas/canada-climate-elevation-v1/koppen-manifest.json')}>原典・CC BY 4.0・原データと加工のハッシュ</a></p><p>NOAA ETOPO2022、元格子60秒、標高m・EGM2008。格子から等高線を生成し、カナダ境界で切り出しました。<a href={withBase('/assets/atlas/canada-climate-elevation-v1/elevation-manifest.json')}>原典・利用条件・解像度・加工のハッシュ</a></p><p>国境の切り出しにはStatistics Canada 2021年州準州のcartographic境界を利用します。元境界の出典と帰属は各台帳に保持しています。</p></details>
+   <details class="canada-source-footer"><summary>気候区分・標高の原典と加工</summary><p>Beck et al.の1991–2020年ケッペン区分、元格子0.1°。格子の分類を同区分ごとに結合し、カナダ境界で切り出しています。ECCCの一点の月別平年値から国土の区分を推定したものではありません。<a href={withBase('/assets/atlas/canada-climate-elevation-v1/koppen-manifest.json')}>原典・CC BY 4.0・原データと加工のハッシュ</a></p><p>NOAA ETOPO2022、元格子60秒、標高m・EGM2008。元標高を500 m幅に分類し、メルカトル投影へ最近傍法で写しています。階級の色を混ぜず、カナダ陸域・湖の境界を表示格子に合わせて切り出しました。選択輪郭は同じ表示ピクセルの境界で、幾何的な簡略化を加えていません。値を0に丸めず、負標高と欠測を区別しています。<a href={withBase('/assets/atlas/canada-climate-elevation-v1/elevation-bands-manifest.json')}>原典・利用条件・解像度・加工のハッシュ</a></p><p>国境の切り出しにはStatistics Canada 2021年州準州のcartographic境界を利用します。元境界の出典と帰属は各台帳に保持しています。</p></details>
    <noscript><p>気候区分と首都オタワの雨温図、数値・本文・出典を読めます。地点・表示・比較の切替にはJavaScriptが必要です。</p></noscript>
    <p class="visually-hidden" data-canada-announcement aria-live="polite"></p>
    <script type="application/json" data-canada-config set:html={JSON.stringify(config).replace(/</g,'\\u003c')} />

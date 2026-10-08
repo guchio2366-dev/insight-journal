@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "dataset": "GPCC Precipitation Analysis Climatology Version 2025 at 0.25°, reference period 1991–2020",
+  "publisher": "Global Precipitation Climatology Centre (GPCC) at Deutscher Wetterdienst (DWD)",
+  "sourceUrl": "https://opendata.dwd.de/climate_environment/GPCC/html/gpcc_precipitation_analysis_climatology_v2025_doi_download.html",
+  "downloadUrl": "https://opendata.dwd.de/climate_environment/GPCC/GPCC_Precipitation_Analysis_Climatology/Version_2025/gpcc_precipitation_analysis_climatology_1991_2020_v2025_025.nc.gz",
+  "doi": "https://doi.org/10.5676/DWD_GPCC/CLIMAT_V2025_025",
+  "period": "1991-01-01/2020-12-31",
+  "originalResolution": "0.25° regular latitude/longitude grid",
+  "inputSha256": "3bd80d05df52572f6409b594ae26b43e9045147cb3c25254cddb5a934c16e5c5",
+  "inputMd5": "d701c717e08ce6ad457c9f4004984d65",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://www.dwd.de/EN/service/legal_notice/legal_notice.html",
+  "licenseEvidence": {
+    "publisherProductLinksToLegalNotice": true,
+    "officialIndexedLegalNoticeStatesCcBy40": true,
+    "officialIndexedQuote": "Re-use is permitted solely under the terms of the Creative Commons license BY 4.0 (CC BY 4.0) providing the source is duly acknowledged.",
+    "checkedAt": "2026-10-02",
+    "directLegalNoticeStatus": 403,
+    "dataCiteDoi": "10.5676/dwd_gpcc/climat_v2025_025",
+    "dataCiteRightsList": [],
+    "note": "DataCite confirms the exact publisher and product URL but supplies no registered rights. The license evidence is the official DWD indexed legal-notice text linked by the product page, not a DataCite rights claim. No access bypass used."
+  },
+  "attribution": "Rustemeier, Elke; Finger, Peter; Schirmeister, Zora; Ziese, Markus (2025): GPCC Precipitation Analysis Climatology Version 2025 at 0.25°. DOI: 10.5676/DWD_GPCC/CLIMAT_V2025_025. GPCC/DWD, CC BY 4.0. Modified: 12-month annual sum, target-country display masking, native-grid linear 250 mm contours and matching blue bands projected to Web Mercator. Original nearest native annual values retained for separate point lookup.",
+  "bounds": [
+    -25,
+    32,
+    65,
+    73
+  ],
+  "width": 1800,
+  "height": 1502,
+  "projection": "EPSG:3857",
+  "unit": "mm/year",
+  "breaks": [
+    250,
+    500,
+    750,
+    1000,
+    1250,
+    1500,
+    1750,
+    2000,
+    2250,
+    2500,
+    2750,
+    3000
+  ],
+  "colors": [
+    "#eef7fb",
+    "#dceef7",
+    "#c7e3f2",
+    "#add5eb",
+    "#8fc4df",
+    "#6fb1d3",
+    "#529ac5",
+    "#3d82b4",
+    "#2f6da4",
+    "#245b94",
+    "#1c4b82",
+    "#153b6d",
+    "#0c2d57"
+  ],
+  "numericLookup": {
+    "path": "../precipitation-v1/values.bin.gz",
+    "sha256": "84b2d7e502b3e529e57f6e3e3331ec7980518d144ed7574ee49d4ffc3f9875cc",
+    "method": "Unchanged nearest native annual source-cell lookup; it is distinct from interpolated contour display."
+  },
+  "monthlyWindow": {
+    "path": "data-source/atlas/europe/precipitation/isohyets-monthly-window.bin.gz",
+    "sha256": "97967364ff2ab42e8c4cad727e67f0c9219c626636ae58020eb80e6a085c521b",
+    "bytes": 1209283
+  },
+  "files": {
+    "native-window.json": {
+      "sha256": "e2fc53c435839665e85d7a790bfc31347b5fefa55e636edafaf981749c899c0c",
+      "bytes": 7756
+    },
+    "native-annual.bin.gz": {
+      "sha256": "50149482683533b704ae6f3b860063949b15028c1a683d8606896da3d94c010a",
+      "bytes": 122215
+    },
+    "source-mask.png": {
+      "sha256": "6b5b455d17633168b6015c844f101d895f5bcf49213d2832f9f95defbe55e9b5",
+      "bytes": 28314
+    },
+    "precipitation.svg": {
+      "sha256": "50c4a4cb7ccc9379ef2700ecaec19b3b0a6ee04b9105336ab6e422890642a9f4",
+      "bytes": 533988
+    },
+    "geometry.json.gz": {
+      "sha256": "f569a5abe37c33331fba914f3e43ec7c12ef34d091c2097e849ec098c2327037",
+      "bytes": 219142
+    },
+    "precipitation.png": {
+      "sha256": "d08b46c640479587962af2b16d6d19f38366c5bb608a7951ff22de63137a3a47",
+      "bytes": 395107
+    }
+  },
+  "processing": {
+    "algorithm": "ContourPy serial, Linear, corner_mask=False, quad_as_tri=False",
+    "version": "1.3.3",
+    "reference": "https://contourpy.readthedocs.io/en/stable/user_guide/calculate/z_interp.html",
+    "annualSum": "12 finite nonnegative native monthly normals required; float64 sum and a single float32 storage cast.",
+    "contours": "250 mm intervals between fully valid source centres, with exactly the same geometry boundaries for adjacent blue bands.",
+    "missing": "No source value changed or filled. Quads touching missing annual nodes remain unpainted; original country/source-missing mask also clips lines and bands.",
+    "smoothing": "No spline smoothing, resampling to invent observations, national averages, or extrapolation.",
+    "sourceMutation": false,
+    "displayDoesNotIncreaseSourceResolution": true
+  },
+  "validation": {
+    "validNativeNodes": 38941,
+    "verifiedLineVertices": 8621,
+    "verifiedSharedBandEdges": 8258,
+    "maximumVertexRainfallErrorMm": 3.26281224261038e-11
+  },
+  "limitations": [
+    "Contour display interpolates between 0.25 degree grid centres; it does not show measured station isohyets or fine valley rainfall.",
+    "The numeric point lookup retains the nearest original annual grid value and may differ from the interpolated colour at that point.",
+    "Where four valid annual corners are not available, the contour display is unpainted even when the nearest original grid value is available.",
+    "A 0.25° source grid cannot resolve local rainfall within small countries or individual mountain valleys; the 1800×1502 rendering does not increase source resolution.",
+    "Annual precipitation is not river discharge, groundwater recharge, available water supply or freshwater availability.",
+    "Different source cells have different station support. Rain-gauge interpolation and the source baseline are retained; no uncertainty interval is invented.",
+    "Ocean cells, source missing values, incomplete 12-month cells and land outside the 45-country display mask are transparent/missing; zero precipitation is distinct.",
+    "Country display geometry only clips the map. No national average, area-weighted statistic, water volume or country-specific quantity is calculated.",
+    "The longitude 65° east display limit clips the Russian Federation; this map does not represent all of Russia."
+  ],
+  "rendering": {
+    "engine": "Existing locked sharp SVG renderer",
+    "version": "0.35.4",
+    "paintedPixels": 1091047,
+    "partialPixels": 31128,
+    "oldValidPixels": 1091163,
+    "sourceMissingPixelsFilled": 0,
+    "note": "Colours and lines come from the same contour geometry. Coast/source-missing mask is unchanged; quads lacking any valid annual corner remain unpainted. PNG anti-aliasing does not add source observations."
+  }
+}

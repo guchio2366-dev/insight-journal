@@ -47,6 +47,11 @@ async function setup(location='?layer=terrain&render=static',fixture={}){
   const field=url.pathname.match(/\/atlas\/europe\/(nature|agriculture|industry|population)\//)?.[1]??'nature';
   const html=(await readFile(`dist/atlas/europe/${field}/index.html`,'utf8')).replace(/<script(?![^>]*type=["']application\/json["'])[^>]*>[\s\S]*?<\/script>/g,'');
   const w=new Window({url:url.href,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
+  // State commits and annotation rendering use separate frames; exercise a busy renderer.
+  if(fixture.animationFrameDelay){
+    const requestFrame=w.requestAnimationFrame.bind(w);
+    w.requestAnimationFrame=callback=>requestFrame(time=>w.setTimeout(()=>callback(time),fixture.animationFrameDelay));
+  }
   w.document.body.innerHTML=html;
   const q=selector=>w.document.querySelector(selector),root=q('[data-europe-detail]');
   const config=JSON.parse(q('[data-eu-config]').textContent);
@@ -128,7 +133,7 @@ test('terrain and contours query the same real elevation cell in metres, preserv
   }finally{await app.w.happyDOM.close();}
 });
 
-for(const layer of ['terrain','contours']){
+for(const layer of ['terrain']){
   test(`${layer} named feature selection survives comparison return and a fresh page load with its elevation`,async()=>{
     const app=await setup(`?layer=${layer}&render=static`);
     try{
@@ -148,6 +153,24 @@ for(const layer of ['terrain','contours']){
     }finally{await app.w.happyDOM.close();}
   });
 }
+
+test('elevation drops a stale named district but preserves the actual point through comparison and reload',async()=>{
+  const app=await setup('?layer=contours&feature=alps&point='+alps.join(',')+'&render=static');
+  try{
+    await assertReading(app,alps);
+    assert.equal(new URL(app.w.location.href).searchParams.has('feature'),false);
+    assert.equal(app.q('[data-eu-feature-list]').hidden,true);
+    assert.equal(app.q('[data-eu-feature-card]').hidden,true);
+    assert.match(app.q('[data-eu-subject-title]').textContent,/標高/);
+    const comparison=await setup(app.q('[data-eu-comparison-link="nature-density"]').href);
+    try{
+      const back=comparison.q('[data-eu-comparison-return]');
+      const reload=await setup(back.href);
+      try{await assertReading(reload,alps);assert.equal(new URL(reload.w.location.href).searchParams.has('feature'),false);assert.equal(reload.q('[data-eu-feature-list]').hidden,true);}
+      finally{await reload.w.happyDOM.close();}
+    }finally{await comparison.w.happyDOM.close();}
+  }finally{await app.w.happyDOM.close();}
+});
 
 test('back/forward popstate and reload restore arbitrary clicked points without inventing a feature selection',async()=>{
   const app=await setup();
@@ -287,8 +310,9 @@ for(const topic of ['ethnicity','religion'])test(`${topic} keeps the unselected 
 });
 
 for(const topic of ['ethnicity','religion'])test(`${topic} shows all three published response compositions without an initial case and preserves explicit selection/history`,async()=>{
-  const app=await setup(`/insight-journal/atlas/europe/population/?layer=${topic}&render=static`);
+  const app=await setup(`/insight-journal/atlas/europe/population/?layer=${topic}&render=static`,{animationFrameDelay:40});
   try{
+    const visibleCompositions=()=>app.w.document.querySelectorAll('[data-eu-composition]:not([hidden])').length;
     const initial=app.w.location.href,full=app.q('[data-eu-static]').getAttribute('viewBox');
     const key=app.q('[data-eu-culture-composition-key]');assert.equal(key.hidden,false);
     await until(()=>app.w.document.querySelectorAll('[data-eu-composition]').length===3,'The annotation frame renders all three compositions');
@@ -302,15 +326,19 @@ for(const topic of ['ethnicity','religion'])test(`${topic} shows all three publi
       assert.equal(key.querySelector(`[data-eu-composition-table="${code}"]`).querySelectorAll('tbody tr').length,expected[index]);
     }
     assert.match(app.q('[data-culture-overview]').textContent,/自己認識.*言語分布.*実践/);
-    app.q(`[data-eu-composition="${topic}-HRV"]`).click();await tick();
+    app.q(`[data-eu-composition="${topic}-HRV"]`).click();
+    await until(()=>visibleCompositions()===0,'Selecting a census case hides every overview composition');
     assert.equal(app.q('[data-culture-case]').value,'croatia-national-2021');assert.equal(key.hidden,true);
     assert.equal(app.q('[data-culture-category]').value,'');assert.equal(app.q('[data-culture-area]').value,'');
     assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);assert.equal(app.w.document.querySelectorAll('[data-eu-composition]:not([hidden])').length,0);
     assert.equal(new URL(app.w.location.href).searchParams.has('feature'),false);
     app.restore(initial);assert.equal(key.hidden,false);assert.equal(app.q('[data-culture-case]').value,'');
     await until(()=>app.w.document.querySelectorAll('[data-eu-composition]:not([hidden])').length===3);
-    const select=app.q('[data-culture-case]');select.value='england-wales-2021';select.dispatchEvent(new app.w.Event('change'));await tick();
-    select.value='';select.dispatchEvent(new app.w.Event('change'));await tick();assert.equal(key.hidden,false);
+    const select=app.q('[data-culture-case]');select.value='england-wales-2021';select.dispatchEvent(new app.w.Event('change'));
+    await until(()=>visibleCompositions()===0,'The case selector hides every overview composition');
+    select.value='';select.dispatchEvent(new app.w.Event('change'));
+    await until(()=>visibleCompositions()===3,'Clearing the case restores all three overview compositions');
+    assert.equal(key.hidden,false);
     assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
   }finally{await app.w.happyDOM.close();}
 });

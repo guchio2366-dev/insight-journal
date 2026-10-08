@@ -1,0 +1,54 @@
+{
+  "recoveredAt": "2026-10-07",
+  "sourceLedger": "data-source/atlas/canada-climate-elevation-v1/etopo/source-ledger.json",
+  "sourceUrl": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/60s/60s_surface_elev_gtif/ETOPO_2022_v1_60s_N90W180_surface.tif",
+  "head": {
+    "status": 200,
+    "contentLength": 465969062,
+    "lastModified": "Tue, 04 Oct 2022 21:52:12 GMT"
+  },
+  "acquisition": {
+    "method": "Standard TLS-verified HTTPS GET, stopped after the prefix was received; no alternate endpoint or certificate exception",
+    "receivedPrefixBytes": 168820736,
+    "fullSourceDownloaded": false,
+    "fullSourceHashRechecked": false,
+    "additionalNetworkRequestsAfterStop": 0
+  },
+  "nativeWindow": {
+    "window": [
+      2280,
+      360,
+      7740,
+      3000
+    ],
+    "requiredTiles": 253,
+    "compressedRequiredTileBytes": 36904904,
+    "earliestRequiredOffset": 4198197,
+    "lastRequiredEndExclusive": 97153695,
+    "requiredTilesAlreadyPresentInPrefix": true,
+    "decoder": "Rasterio 1.4.3 / GDAL native unresampled window read, little-endian float32",
+    "sha256": "779fbc97ee041d58ee09c87b6d5bbe07bd79d240cd01fc2328f22c562206526d",
+    "matchesPreviouslyVerifiedWindow": true,
+    "previousMetadata": "data-source/atlas/canada-climate-elevation-v1/etopo/native-window.json"
+  },
+  "precipitationSourceBlocker": {
+    "url": "https://crd-data-donnees-rdc.ec.gc.ca/CDAS/products/CanGridP_V2/CanGridP_mlyV2_1948-2023.nc",
+    "method": "Python urllib.request HEAD using normal verified HTTPS",
+    "result": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+    "action": "Stopped; no retry, alternate mirror, HTTP downgrade or authentication change. Existing precipitation classes unchanged.",
+    "roundedAuditAmbiguity": {
+      "table": "public/assets/atlas/canada-water-v1/annual-valid-grid-points.csv.gz",
+      "roundedPrecisionMm": 0.1,
+      "cellsExactlyAt250MmMultiplesAfterRounding": 33,
+      "countsByRoundedMm": {
+        "250": 6,
+        "500": 14,
+        "750": 5,
+        "1000": 2,
+        "1250": 5,
+        "1750": 1
+      },
+      "interpretation": "Original unrounded values may lie below or above the boundary; do not classify these cells precisely using the rounded audit table."
+    }
+  }
+}
