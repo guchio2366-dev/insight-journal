@@ -125,3 +125,19 @@ test('Shared comparison codec retains original indicator, country, scope, only a
  assert.equal(back.searchParams.get('place'),'CRI');assert.equal(back.searchParams.get('scope'),'central');assert.equal(back.searchParams.get('only'),'1');assert.equal(back.searchParams.get('fallback'),'1');assert.equal(back.searchParams.has('from'),false);
  assert.equal(lib.readLatinLearningState('place=EVIL&layer=gdp&scope=country&only=1','industry',['ores','manufactures'],'ores').place,'all');
 });
+
+test('Argentina industry reading and copper/lithium chains keep their distinct sources and denominators',async()=>{
+ const lib=await industryLibrary();
+ const argentina=lib.industryReadingForPlace('ARG','manufactures');
+ assert.equal(argentina.id,'argentina');
+ assert.equal(argentina.place,'ARG');
+ assert.match(argentina.takeaway,/INDEC.*2024年輸出複合体/);
+ assert.match(argentina.comparison,/分類と一致する指標ではありません/);
+ assert.match(argentina.sources[0].url,/indec\.gob\.ar/);
+ const page=await readFile('src/components/atlas/LatinIndustryPage.astro','utf8');
+ assert.match(page,/銅・リチウムが市場に届くまで/);
+ assert.match(page,/炭酸リチウム生産は69,515t/);
+ assert.match(page,/元素リチウムの重量や世界シェアではありません/);
+ assert.match(page,/cancilleria\.gob\.ar/);
+ assert.match(page,/usgs\.gov\/centers\/national-minerals-information-center\/argentina/);
+});
