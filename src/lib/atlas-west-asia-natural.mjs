@@ -1,9 +1,8 @@
 export const westNaturalAssets='../west-asia-natural-presentation-v1/';
-export const westWaterOverview='water-overview';
+export const westRiverGroundwater='rivers';
 export const westRepresentativeBasins=['1060034260','2060073570'];
-export const westWaterPickModes=[['all','すべて'],['rivers','河川・湖'],['groundwater','地下水'],['rainfall','年降水量'],['basins','流域']];
 const hashes={rainfall:'a38c40a4c9b81b59c4fc16eef047e18fef61aa2fd0d2d3d4f37336bc92d8373a',elevation:'0a88c86e19fdf7d04c275c7b44a82da8a10365d59b650e15050f06b6951764fc'};
-export function westNaturalKind(topic){return ['annual-precipitation',westWaterOverview].includes(topic.id)?'rainfall':['terrain','contours'].includes(topic.id)?'elevation':null;}
+export function westNaturalKind(topic){return topic.id==='annual-precipitation'?'rainfall':['terrain','contours'].includes(topic.id)?'elevation':null;}
 export function westGeometryVisible(geometry,bounds=[23,10,64,45]){
  const extent=[Infinity,Infinity,-Infinity,-Infinity];
  const visit=coordinates=>{if(typeof coordinates?.[0]==='number'){extent[0]=Math.min(extent[0],coordinates[0]);extent[1]=Math.min(extent[1],coordinates[1]);extent[2]=Math.max(extent[2],coordinates[0]);extent[3]=Math.max(extent[3],coordinates[1]);}else if(Array.isArray(coordinates))coordinates.forEach(visit);};
@@ -47,9 +46,10 @@ export async function decodeWestNaturalCollection(buffer,metadata,lines=false){
 export function westGroundwaterReading(properties){
  const code=Number(properties.HYGEO2),category={'1':'広い地下水盆','2':'複雑な地質構造','3':'局所的・浅い帯水層'}[String(code)[0]]??'原資料の区分';
  const ranges={11:'2未満',12:'2〜20',13:'20〜100',14:'100〜300',15:'300超',22:'20未満',23:'20〜100',24:'100〜300',25:'300超',33:'100未満',34:'100超'};
- return {title:category,description:'涵養区分：'+(ranges[code]??'区分値なし')+' mm／年。WHYMAPの広域区分で、地下水の残存量・取水量ではありません。'};
+ return {title:category,geography:'地下水を含む地層の区分です。乾燥したアラビア半島の農業では地下水の確保と揚水・送水が関わります。選択した地層の種類と、地下へ補給される水の区分を分けて読みます。',description:'涵養区分：'+(ranges[code]??'区分値なし')+' mm／年。WHYMAPの広域区分で、地下水の残存量・取水量ではありません。'};
 }
 const names={Nile:'ナイル川',Euphrates:'ユーフラテス川',Firat:'ユーフラテス川', 'Al Furat':'ユーフラテス川',Tigris:'ティグリス川',Dicle:'ティグリス川',Jordan:'ヨルダン川','Shatt al Arab':'シャット・アル・アラブ川'};
 export function westWaterFeatureReading(name,lake=false){
- return {title:names[name]??name??(lake?'湖':'河川'),description:'Natural Earth v5.1.2に収録された'+(lake?'湖の輪郭':'河川・水路')+'です。'+(lake?'面積の色は湖の深さや貯水量ではありません。':'線の太さは流量や取水量ではありません。')+(name&&names[name]?'原資料の名称：'+name+'。':'')};
+ const geography=name==='Nile'?'雨の少ないエジプトの川沿いを、南の上流から届く水と灌漑が支えます。エジプトの雨量だけで農地への水供給は説明できません。':['Euphrates','Firat','Al Furat','Tigris','Dicle'].includes(name)?'トルコなどの高地からシリア・イラクの低地へつながる川です。上流の雨・雪解けと貯水・取水の時期が、下流の農地へ届く水に関わります。':lake?'選択した湖と、周囲の河川・地下水の位置関係を比べます。湖の輪郭だけでは灌漑に使える水の量や、周囲の農場の水源は決まりません。':'選択した川と周囲の農地を比べます。川沿いの農業には取水・送水設備が関わり、雨の降る場所と農地へ水が届く場所は一致するとは限りません。';
+ return {title:names[name]??name??(lake?'湖':'河川'),geography,description:'Natural Earth v5.1.2に収録された'+(lake?'湖の輪郭':'河川・水路')+'です。'+(lake?'面積の色は湖の深さや貯水量ではありません。':'線の太さは流量や取水量ではありません。')+(name&&names[name]?'原資料の名称：'+name+'。':'')};
 }
