@@ -107,6 +107,14 @@
 }
 .west-subtabs{padding:6px;margin:0;border:1px solid #c7ccbf;border-bottom:0;background:#fbfaf3}
 .west-atlas .atlas-map-frame{background:#e3eff0}
+.west-farm-map-key{position:absolute;z-index:3;top:8px;left:8px;display:grid;grid-template-columns:repeat(2,max-content);gap:3px 10px;max-width:180px;padding:6px 8px;border:1px solid #b7c5b9;border-radius:4px;background:#fffef0ee;box-shadow:0 1px 3px #243b4822;color:#233d42;font:600 11px/1.35 var(--sans);pointer-events:none}
+.west-farm-map-key[hidden]{display:none}
+.west-farm-map-key strong{grid-column:1/-1;font-size:10px;font-weight:700}
+.west-farm-map-key span{display:flex;align-items:center;gap:4px;white-space:nowrap;transition:opacity .15s}
+.west-farm-map-key i{display:inline-block;width:10px;height:10px;flex:none;border:1px solid #fff;background:var(--farm-color)}
+.west-farm-map-key [data-kind=livestock] i{width:9px;height:9px;border-radius:50%}
+.west-farm-map-key .west-farm-map-overlap i{background:#344d70}
+.west-farm-map-key span.is-muted{opacity:.35}
 .west-atlas [data-west-map]{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
 .west-atlas [data-west-map]:active{cursor:grabbing}
 .west-atlas .atlas-map-tools button{min-width:44px;min-height:44px}
