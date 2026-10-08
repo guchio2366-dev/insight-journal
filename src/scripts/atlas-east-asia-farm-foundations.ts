@@ -1,4 +1,5 @@
 import data from '../../public/assets/atlas/east-asia-v1/farm-foundations.json';
+import {japanWheatSupply as wheat} from '../data/atlas/japan-wheat-supply';
 import type {AsiaRegionId} from '../lib/atlas-asia-state';
 
 type Country={code:string;name:string}|undefined;
@@ -16,11 +17,38 @@ const addBar=(host:HTMLElement,label:string,value:number,max:number,unit:string)
  const row=el('div');row.className='east-bar';const name=el('span',label),line=el('i'),number=el('b',format(value,unit));line.style.width=`${Math.max(1,value/max*100)}%`;row.append(name,line,number);host.append(row);
 };
 const svg=(tag:string,attrs:Record<string,string>)=>{const node=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [key,value] of Object.entries(attrs))node.setAttribute(key,value);return node;};
+const thousand=(n:number)=>`${(n/10).toLocaleString('ja-JP',{maximumFractionDigits:1})}万t`;
+function renderJapanWheat(forest:HTMLElement,destinations:HTMLElement,share:HTMLElement){
+ const use=wheat.domesticUse,domestic=use.food+use.processing+use.other;
+ p(forest,`${wheat.year}年度 · 小麦 · 万t。国内生産${thousand(wheat.production)}、純輸入${thousand(wheat.netImports)}、在庫減${thousand(-wheat.inventoryChange)}。`);
+ const flow=el('div');flow.className='east-wheat-flow';flow.setAttribute('role','img');flow.setAttribute('aria-label',`小麦の供給：国内生産${thousand(wheat.production)}、純輸入${thousand(wheat.netImports)}、在庫減${thousand(-wheat.inventoryChange)}。国内消費${thousand(domestic)}の内訳は粗食料${thousand(use.food)}、加工用${thousand(use.processing)}、その他${thousand(use.other)}。`);
+ const band=(title:string,items:{label:string;value:number;color:string}[])=>{const group=el('div');group.className='east-wheat-band';group.append(el('b',title));const line=el('div');line.className='east-wheat-segments';for(const item of items){const part=el('span');part.style.width=`${item.value/domestic*100}%`;part.style.background=item.color;part.title=`${item.label} ${thousand(item.value)}`;line.append(part);}group.append(line);flow.append(group);};
+ band('供給',[{label:'国内生産',value:wheat.production,color:'#326b63'},{label:'純輸入',value:wheat.netImports,color:'#85a762'},{label:'在庫減',value:-wheat.inventoryChange,color:'#d5a760'}]);
+ band('国内消費',Object.entries(use).map(([key,value])=>({label:key,value,color:key==='food'?'#326b63':key==='processing'?'#85a762':'#d5a760'})));
+ forest.append(flow);
+ for(const [index,[label,value]] of ([['国内生産',wheat.production],['純輸入',wheat.netImports],['在庫減',-wheat.inventoryChange],['粗食料',use.food],['加工用',use.processing],['その他',use.other]] as const).entries()){const key=el('div');key.className='east-wheat-key';const name=el('span',label),swatch=el('i');swatch.style.background=['#326b63','#85a762','#d5a760'][index%3];name.prepend(swatch);key.append(name,el('b',thousand(value)));forest.append(key);}
+ p(forest,`国内消費 ${thousand(domestic)}。在庫減は供給に加算。純輸入は輸入−輸出。粗食料は食用の供給量で、パン・麺だけの消費量ではありません。その他は飼料用・種子用・純旅客用・減耗量の計です。`);
+ p(destinations,`${wheat.year}年度 · 外国産食糧用小麦の輸入量 ${format(wheat.origins.total,'t')}（財務省貿易統計）。`);
+ const pie=el('div');pie.className='east-pie';pie.setAttribute('role','img');pie.setAttribute('aria-label','日本の外国産食糧用小麦の輸入相手国。比率は続く凡例を参照。');let angle=0;const colors=['#326b63','#85a762','#d5a760','#d9dfd7'];pie.style.background=`conic-gradient(${wheat.origins.rows.map((row,index)=>{const start=angle;angle+=row.tonnes/wheat.origins.total*100;return `${colors[index]} ${start}% ${angle}%`;}).join(',')})`;destinations.append(pie);
+ for(const [index,row] of wheat.origins.rows.entries()){const key=el('div');key.className='east-pie-key';const square=el('i');square.style.background=colors[index];key.append(square,el('span',row.name),el('span',`${(row.tonnes/wheat.origins.total*100).toFixed(1)}％`));destinations.append(key);}
+ p(destinations,'輸入先は小麦の相手国です。食糧用小麦の通関量であり、左の食料需給表の純輸入（全用途、輸出差引）とは範囲が異なります。');
+ p(share,`日本の小麦自給率 · 食料需給表 · ${wheat.selfSufficiency[0].year}–${wheat.year}年度`);
+ const trend=el('div');trend.className='east-wheat-trend';trend.setAttribute('role','img');trend.setAttribute('aria-label',wheat.selfSufficiency.map(row=>`${row.year}年度${row.rate}％`).join('、'));for(const row of wheat.selfSufficiency){const item=el('div');item.append(el('b',`${row.rate}％`));const bar=el('i');bar.style.height=`${row.rate/20*70}px`;item.append(bar,el('span',String(row.year)));trend.append(item);}share.append(trend);
+ p(share,'2023年度は17％。国内生産109.4万t ÷ 国内消費631.2万t（四捨五入）。食用小麦だけを分母にした率ではありません。');
+ p(share,'2024年FAOSTATの世界小麦生産に占める日本は約0.13％。世界の生産規模だけでは国内の供給構造を読めないため、日本の小麦を採用しました。次候補は韓国の小麦ですが、同一年・同一品目の需給と輸入相手国を照合してから判断します。');
+}
 export function renderEastAsiaFarmFoundations(root:HTMLElement,region:AsiaRegionId,active:boolean,topic:string|null,country:Country){
  const section=root.querySelector<HTMLElement>('[data-east-farm-foundations]');if(!section)return;
  section.hidden=!active||region!=='east-asia';if(section.hidden)return;
  const code=country?.code,forest=section.querySelector<HTMLElement>('[data-east-forest-flows]')!,destinations=section.querySelector<HTMLElement>('[data-east-export-partners]')!,share=section.querySelector<HTMLElement>('[data-east-world-share]')!;
  forest.replaceChildren();destinations.replaceChildren();share.replaceChildren();
+ const japanWheat=topic==='wheat'&&code==='JPN';
+ const heading=section.querySelector<HTMLElement>('[data-east-foundations-title]'),lead=section.querySelector<HTMLElement>('[data-east-foundations-lead]');
+ if(heading)heading.textContent=japanWheat?'日本の小麦：供給・輸入先・自給率':'生産・貿易・世界での位置';
+ if(lead)lead.textContent=japanWheat?'2023年度の食料需給表で、国内生産・純輸入・在庫変動と国内消費を同じ数量で読みます。輸入先は食糧用小麦の通関量、自給率は国内消費を分母にした値です。':'森林面積、木材の生産・輸出入、商品輸出先は別の統計です。地図の森林色から数量や仕向け先を推定せず、国の公表値と並べて読みます。';
+ section.querySelector<HTMLElement>('[data-east-partner-title]')!.textContent=japanWheat?'小麦の輸入相手国':'全商品の輸出先';
+ section.querySelector<HTMLElement>('[data-east-share-title]')!.textContent=japanWheat?'小麦の自給率':'世界比と推移';
+ if(japanWheat){section.querySelector<HTMLElement>('[data-east-supply-title]')!.textContent='日本の小麦：供給と国内消費';renderJapanWheat(forest,destinations,share);return;}
  const crop=topic&&Object.hasOwn(data.cropFlows,topic)?data.cropFlows[topic as keyof typeof data.cropFlows]:undefined;
  section.querySelector<HTMLElement>('[data-east-supply-title]')!.textContent=crop?`${cropLabels[topic!]}の生産・商品貿易`:'丸太・製材の供給と輸出入';
  if(crop){

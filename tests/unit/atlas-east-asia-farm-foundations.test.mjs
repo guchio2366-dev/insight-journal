@@ -45,7 +45,7 @@ test('East under-map reading changes with country and topic without treating mis
  const {renderEastAsiaFarmFoundations}=await import('data:text/javascript;base64,'+Buffer.from(output.outputFiles[0].text).toString('base64'));
  const window=new Window(),old=globalThis.document;globalThis.document=window.document;
  try{
-  const root=window.document.createElement('main');root.innerHTML='<section data-east-farm-foundations hidden><h3 data-east-supply-title></h3><div data-east-forest-flows></div><div data-east-export-partners></div><div data-east-world-share></div></section>';
+  const root=window.document.createElement('main');root.innerHTML='<section data-east-farm-foundations hidden><h3 data-east-supply-title></h3><div data-east-forest-flows></div><h3 data-east-partner-title></h3><div data-east-export-partners></div><h3 data-east-share-title></h3><div data-east-world-share></div></section>';
   const section=root.querySelector('[data-east-farm-foundations]');
   renderEastAsiaFarmFoundations(root,'east-asia',true,'overview',undefined);
   assert.equal(section.hidden,false);assert.match(section.textContent,/4対象の丸太生産量/);
@@ -55,11 +55,15 @@ test('East under-map reading changes with country and topic without treating mis
   assert.match(section.querySelector('[data-east-export-partners]').textContent,/その他のアジア（台湾等）の全商品輸出先/);
   assert.match(section.querySelector('[data-east-export-partners]').textContent,/全商品輸出先.*丸太・製材の輸出先/);
   renderEastAsiaFarmFoundations(root,'east-asia',true,'wheat',{code:'JPN',name:'日本'});
-  assert.match(section.querySelector('[data-east-supply-title]').textContent,/小麦の生産・商品貿易/);
-  assert.match(section.querySelector('[data-east-forest-flows]').textContent,/2024年.*t.*2023年.*名目米ドル/);
-  assert.match(section.querySelector('[data-east-forest-flows]').textContent,/HS 1001.*輸出.*1,402＄/);
-  assert.match(section.querySelector('[data-east-world-share]').textContent,/小麦生産量/);
-  assert.equal(section.querySelectorAll('[data-east-world-share] tbody tr').length,10);
+  assert.match(section.querySelector('[data-east-supply-title]').textContent,/日本の小麦：供給と国内消費/);
+  assert.match(section.querySelector('[data-east-forest-flows]').textContent,/2023年度.*109.4万t.*510.4万t.*11.4万t/);
+  assert.match(section.querySelector('[data-east-forest-flows]').textContent,/粗食料494.4万t.*加工用24.2万t.*その他112.6万t.*631.2万t/);
+  assert.match(section.querySelector('[data-east-partner-title]').textContent,/小麦の輸入相手国/);
+  assert.match(section.querySelector('[data-east-export-partners]').textContent,/財務省貿易統計.*カナダ.*米国.*豪州/);
+  assert.match(section.querySelector('[data-east-export-partners]').textContent,/447.8万t/);
+  assert.match(section.querySelector('[data-east-export-partners]').textContent,/範囲が異なります/);
+  assert.equal(section.querySelectorAll('[data-east-world-share] .east-wheat-trend>div').length,5);
+  assert.match(section.querySelector('[data-east-world-share]').textContent,/17％.*631.2万t.*0.13％/);
   renderEastAsiaFarmFoundations(root,'east-asia',true,'cotton',{code:'CHN',name:'中国'});
   assert.match(section.querySelector('[data-east-world-share]').textContent,/今回の7指標に含まれません/);
   renderEastAsiaFarmFoundations(root,'east-asia',false,'wheat',{code:'JPN',name:'日本'});

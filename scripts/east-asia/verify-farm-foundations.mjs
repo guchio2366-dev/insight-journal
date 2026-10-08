@@ -31,12 +31,13 @@ try{
  await page.reload({waitUntil:'domcontentloaded'});await section.waitFor({state:'visible'});assert.equal(await page.locator('[data-country-select]').inputValue(),'TWN');
  const before=new URL(page.url());await page.locator('[data-farming-panel] [data-compare="industry"]').click();await page.locator('[data-comparison-back]').click();await section.waitFor({state:'visible'});const restored=new URL(page.url());for(const key of ['topic','place','at'])assert.equal(restored.searchParams.get(key),before.searchParams.get(key));
  await page.goto(base+'/atlas/asia/east-asia/agriculture/?topic=wheat&place=JPN',{waitUntil:'domcontentloaded'});await section.waitFor({state:'visible'});
- assert.match(await section.locator('[data-east-supply-title]').textContent(),/小麦の生産・商品貿易/);
- assert.match(await section.locator('[data-east-forest-flows]').textContent(),/2024年.*2023年.*名目米ドル/);
- assert.match(await section.locator('[data-east-world-share]').textContent(),/小麦生産量/);
- assert.equal(await section.locator('[data-east-world-share] tbody tr').count(),10);
+ assert.match(await section.locator('[data-east-supply-title]').textContent(),/日本の小麦：供給と国内消費/);
+ assert.match(await section.locator('[data-east-forest-flows]').textContent(),/2023年度.*109.4万t.*510.4万t.*11.4万t/);
+ assert.match(await section.locator('[data-east-export-partners]').textContent(),/カナダ.*米国.*豪州/);
+ assert.match(await section.locator('[data-east-world-share]').textContent(),/17％.*631.2万t.*0.13％/);
  await section.screenshot({path:join(out,'east-japan-wheat-pc.png')});
  assert.deepEqual(errors,[]);
  const mobile=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1});await mobile.route('**/*',route=>{if(new URL(route.request().url()).origin!==new URL(base).origin)return route.abort();return route.continue();});await mobile.goto(base+'/atlas/asia/east-asia/agriculture/?topic=forest&place=TWN',{waitUntil:'domcontentloaded'});await mobile.locator('[data-east-farm-foundations]').waitFor({state:'visible'});await mobile.waitForLoadState('networkidle');assert.equal(await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);await mobile.locator('[data-east-farm-foundations]').screenshot({path:join(out,'east-taiwan-forest-mobile.png')});
- console.log(JSON.stringify({status:'passed',images:['us-agriculture-pc.png','east-overview-pc.png','east-taiwan-forest-pc.png','east-japan-wheat-pc.png','east-taiwan-forest-mobile.png'],scope:'local production build; external requests blocked'},null,2));
+ await mobile.goto(base+'/atlas/asia/east-asia/agriculture/?topic=wheat&place=JPN',{waitUntil:'domcontentloaded'});await mobile.locator('[data-east-farm-foundations]').waitFor({state:'visible'});assert.equal(await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);await mobile.locator('[data-east-farm-foundations]').screenshot({path:join(out,'east-japan-wheat-mobile.png')});
+ console.log(JSON.stringify({status:'passed',images:['us-agriculture-pc.png','east-overview-pc.png','east-taiwan-forest-pc.png','east-japan-wheat-pc.png','east-taiwan-forest-mobile.png','east-japan-wheat-mobile.png'],scope:'local production build; external requests blocked'},null,2));
 }finally{await browser.close();await new Promise(done=>server.close(done));}
