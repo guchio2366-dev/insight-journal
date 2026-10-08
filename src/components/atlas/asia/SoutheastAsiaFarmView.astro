@@ -82,10 +82,21 @@ const pieStyle=`conic-gradient(${[...topPartners.map((row,index)=>({share:row.sh
  const root=document.querySelector('[data-asia-region="southeast-asia"]')??document;
  const section=root.querySelector<HTMLElement>('[data-south-central-farm-connections]');
  if(section){
-  // The regional overview sits below both map and reading, so its three
-  // columns use the whole workspace width outside the persistent news rail.
+  // Bound the sticky reading panel to the map row. The following statistics
+  // remain a separate full-width row rather than part of its sticky range.
   const grid=root.querySelector<HTMLElement>('.asia-layout');
-  if(grid&&section.parentElement!==grid)grid.append(section);
+  if(grid){
+   const map=grid.querySelector<HTMLElement>(':scope > .atlas-map-column');
+   const reading=grid.querySelector<HTMLElement>(':scope > .asia-reading-panel');
+   if(map&&reading){
+    const workspace=document.createElement('div');
+    workspace.className='southeast-map-and-reading';
+    workspace.setAttribute('data-southeast-top-workspace','');
+    map.before(workspace);
+    workspace.append(map,reading);
+   }
+   if(section.parentElement!==grid)grid.append(section);
+  }
   const headings=section.querySelectorAll<HTMLElement>('.asia-farm-connections-grid > section');
   const supply=root.querySelector<HTMLTemplateElement>('[data-southeast-supply-template]');
   const partners=root.querySelector<HTMLTemplateElement>('[data-southeast-partner-template]');
@@ -103,11 +114,14 @@ const pieStyle=`conic-gradient(${[...topPartners.map((row,index)=>({share:row.sh
  :global([data-field-national]:not([data-field-national="agriculture"])) .southeast-forest-reading{display:none}.southeast-forest-reading{border-top:1px solid var(--rule);padding:9px 0;margin:5px 0 16px;font-size:12px;line-height:1.7}.southeast-forest-reading summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:700}.southeast-forest-reading p{font-size:11px;line-height:1.8}.southeast-forest-reading table{width:100%;border-collapse:collapse;font-size:11px;font-variant-numeric:tabular-nums}.southeast-forest-reading caption{text-align:left;font-size:10px}.southeast-forest-reading th,.southeast-forest-reading td{padding:5px 3px;border-bottom:1px solid var(--rule);text-align:right}.southeast-forest-reading th:first-child{text-align:left}.southeast-forest-reading small{font-size:9px}
  :global(.southeast-supply-bars){list-style:none;padding:0;margin:10px 0}.southeast-supply-bars li{display:grid;grid-template-columns:1fr auto;gap:1px 5px;font-size:11px;margin:5px 0}.southeast-supply-bars i{grid-column:1/-1;height:8px;background:#397765;width:var(--bar-width);display:block}.southeast-partner-pie{width:108px;height:108px;border-radius:50%;margin:10px auto}.southeast-partner-list{display:flex;flex-wrap:wrap;gap:3px 10px;list-style:none;padding:0;font-size:11px}.southeast-partner-list li{display:flex;align-items:center;gap:4px}.southeast-partner-list i{display:inline-block;width:10px;height:10px}
  @media(min-width:960px){
-  :global(.asia-atlas-root[data-region="southeast-asia"] .asia-layout>.atlas-map-column){grid-column:1;grid-row:1}
-  :global(.asia-atlas-root[data-region="southeast-asia"] .asia-layout>.asia-reading-panel){grid-column:2;grid-row:1;position:sticky;top:12px;align-self:start;height:var(--asia-reading-height,calc(100dvh - 24px));max-height:calc(100dvh - 24px);min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;scrollbar-gutter:stable}
-  :global(.asia-atlas-root[data-region="southeast-asia"] .asia-layout>.asia-farm-connections){grid-column:1/-1;grid-row:2;margin-top:14px}
+  :global(.asia-atlas-root[data-region="southeast-asia"] .asia-layout:has(>.southeast-map-and-reading)){display:block}
+  :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-map-and-reading){display:grid;grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px;align-items:start}
+  :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-map-and-reading>.atlas-map-column){grid-column:1;min-width:0}
+  :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-map-and-reading>.asia-reading-panel){grid-column:2;position:sticky;top:12px;align-self:start;height:var(--asia-reading-height,460px);max-height:calc(100dvh - 24px);min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;scrollbar-gutter:stable}
+  :global(.asia-atlas-root[data-region="southeast-asia"] .asia-layout>.asia-farm-connections){width:100%;margin:14px 0 8px}
   :global(.asia-atlas-root[data-region="southeast-asia"] .atlas-desktop-shell:not(.is-reading-news)>.atlas-news){position:sticky;top:10px;height:calc(100dvh - 22px);min-height:0}
  }
+ @media(max-width:959px){:global(.asia-atlas-root[data-region="southeast-asia"] .southeast-map-and-reading){display:contents}}
  :global(.asia-atlas-root[data-region="southeast-asia"] .asia-farm-connections-grid>section :is(p,li)){font-size:14px;line-height:1.65}
  :global(.asia-atlas-root[data-region="southeast-asia"] .asia-farm-connections-grid>section h3){font-size:16px;line-height:1.45}
 </style>
