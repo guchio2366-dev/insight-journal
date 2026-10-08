@@ -7,6 +7,7 @@ import farm from '../../../public/assets/atlas/asia-farming-v1/statistics.json';
 import industry from '../../../public/assets/atlas/asia-industry-v1/national.json';
 import population from '../../../public/assets/atlas/asia-population-v1/manifest.json';
 import west from './west-asia.json';
+import southCentralShares from '../../../public/assets/atlas/south-central-asia-v1/world-shares.json';
 
 export const asiaOverviewRegionIds = ['east-asia','southeast-asia','south-central-asia','south-asia','central-asia','west-asia'] as const;
 export type AsiaOverviewRegionId = typeof asiaOverviewRegionIds[number];
@@ -22,6 +23,13 @@ const ghsl = {label:'欧州委員会JRC：GHS-POP R2023A（2020年人口）',url
 const ucdb = {label:'欧州委員会JRC：GHS-UCDB R2024A（2025年の都市範囲）',url:population.urbanSource};
 const etopo = {label:'NOAA NCEI：ETOPO 2022全球標高モデル',url:'https://www.ncei.noaa.gov/products/etopo-global-relief-model'};
 const centralSource = asiaFocusFieldReadings['central-asia'].natural.source;
+const centralTransportSource = asiaFocusFieldReadings['central-asia'].industry.source;
+const comtrade = {label:'UN Comtrade：2023年の商品輸出、ウズベキスタンHS52',url:'https://comtradeplus.un.org/'};
+const scShare2024=(id:string,code:'IND'|'KAZ')=>{
+ const value=southCentralShares.series.find(s=>s.id===id)?.years.find(y=>y.year===2024)?.countries[code]?.share;
+ if(value===undefined)throw Error(`Missing South/Central FAOSTAT comparison: ${id} ${code}`);
+ return value.toFixed(1);
+};
 const asean = {label:'ASEAN憲章：協力の目的と制度',url:'https://asean.org/wp-content/uploads/2021/08/November-2020-The-ASEAN-Charter-28th-Reprint.pdf'};
 const saarc = {label:'SAARC憲章（1985年）：経済・社会・技術分野の協力',url:'https://www.saarc-sec.org/index.php/resources/agreements-conventions/46-saarc-charter-provisional-rules-of-procedure/file'};
 const apt = {label:'ASEAN＋3協力計画（2018–2022年）',url:'https://aseanplusthree.asean.org/asean-plus-three-cooperation-work-plan-2018-2022/'};
@@ -52,7 +60,7 @@ const regional:Record<AsiaOverviewRegionId,{title:string;takeaway:string;reading
  'central-asia':{title:'山地の水、内陸の農業と国境を越える輸送',takeaway:'中央アジアの生産と暮らしは、山地から届く水、灌漑と政策、加工・人材、国境を越える輸送を組み合わせて読む。',readings:[
   {id:'nature',title:'乾燥した低地と山地の水を分ける',paragraphs:[asiaFocusFieldReadings['central-asia'].natural.takeaway,asiaFocusFieldReadings['central-asia'].natural.reading],sources:[centralSource]},
   {id:'agriculture',title:'北部の小麦と、灌漑による綿花',paragraphs:['カザフスタン北部の小麦では短い生育期に合う品種と鉄道輸送が、ウズベキスタンの綿花では灌漑と生産計画の歴史が関わります。水・設備・政策・市場の条件を比べます。'],sources:asiaPlaceReadings.filter(s=>['kazakhstan-wheat','fergana-cotton'].includes(s.id)).map(s=>s.source)},
-  {id:'industry',title:'原料と加工、隣国を通る市場への道',paragraphs:[asiaFocusFieldReadings['central-asia'].industry.reading],sources:[asiaFocusFieldReadings['central-asia'].industry.source]},
+  {id:'industry',title:'原料と加工、隣国を通る市場への道',paragraphs:[asiaFocusFieldReadings['central-asia'].industry.reading,'収録した2023年のUN Comtradeでは、ウズベキスタンのHS52「綿・綿糸・綿織物」の輸出相手先はロシア、中国、トルコの順に金額が大きくなります。この章は生の綿花だけではなく加工品も含むため、綿花の収穫量や最終消費地と同じ図にはしません。'],sources:[asiaFocusFieldReadings['central-asia'].industry.source,comtrade]},
   {id:'population',title:'都市と灌漑地域の集まり、仕事とサービス',paragraphs:[asiaFocusFieldReadings['central-asia'].population.takeaway,asiaFocusFieldReadings['central-asia'].population.reading],sources:[asiaFocusFieldReadings['central-asia'].population.source]},
   {id:'politics',title:'国境と、上流・下流の調整',paragraphs:['FAOの2013年報告は、中央アジアの国を越える河川と灌漑の水利用を整理しています。上流と下流の水配分は国境を越えた協力の課題です。流域図は地形の接続を示し、現在の協定の履行や配分量を示しません。'],sources:[centralSource]},
  ]},
@@ -64,7 +72,13 @@ const regional:Record<AsiaOverviewRegionId,{title:string;takeaway:string;reading
   {id:'politics',title:'水と交通の利用は、管理と調整で変わる',paragraphs:['チグリス・ユーフラテス川やナイル川の上流は国境の外にも広がります。水を分ける制度や取引・交通の制度を考えると、乾燥や資源だけで農業・都市の姿を説明できないことが分かります。地図の境界は教材上の位置の目安で、領有権の判断を示しません。'],sources:[aquastat]},
  ]},
 };
-regional['south-central-asia'].readings = asiaOverviewTopics.map(t=>({id:t.id,title:t.id==='nature'?'モンスーンの平野と乾燥した内陸':`${t.label}を南・中央アジアで比較する`,paragraphs:[regional['south-asia'].readings.find(r=>r.id===t.id)!.paragraphs[0],regional['central-asia'].readings.find(r=>r.id===t.id)!.paragraphs[0]],sources:[...regional['south-asia'].readings.find(r=>r.id===t.id)!.sources,...regional['central-asia'].readings.find(r=>r.id===t.id)!.sources]}));
+regional['south-central-asia'].readings = [
+ {id:'nature',title:'雨の季節と、山地から低地へ届く水',paragraphs:['ガンジス・ブラマプトラの低地では季節風の雨が増える時期を、インダス川沿いでは上流から届く水を、中央アジアでは天山・パミールから乾燥した低地へ流れる水を比べます。雨温図は観測所の平年値、流域図は水が集まる範囲です。どちらも現在の取水量ではありません。','デリー・ダッカ・タシケントの月ごとの雨を確認した後、インダス川、ガンジス・ブラマプトラ川、アムダリヤ川・シルダリヤ川の流域を追うと、雨の降る場所と使う場所の違いが見えます。'],sources:[{label:'気象庁：ClimatView',url:'https://www.data.jma.go.jp/gmd/cpd/monitor/climatview/frame.php'},centralSource]},
+ {id:'agriculture',title:'米・小麦・綿花と、乳を集める仕組み',paragraphs:['ベンガルの米、パンジャーブの雨季の米と冬小麦、カザフスタン北部の春小麦、フェルガナ盆地の綿花を比べます。栽培地は雨量だけでなく、作期に合わせた灌漑、短い生育期に合う品種、輸送とも関わります。地図の格子は2020年の推計収穫面積で、国別の生産量とは別の資料です。',`同じ2024年のFAOSTAT生産量では、インドの米（籾米）は世界計の${scShare2024('rice-production','IND')}％、カザフスタンの小麦は${scShare2024('wheat-production','KAZ')}％です。これは地域全体の合計や地図の格子の合計ではありません。インド西部アナンドの村の集乳・地区の加工・州の販売は別の仕組みの事例です。ネパールの住民管理林も農業と分け、森林面積と丸太・製材の量を混ぜません。`],sources:[fao,...asiaPlaceReadings.filter(s=>['punjab-wheat','fergana-cotton','kazakhstan-wheat','anand-dairy','nepal-forest'].includes(s.id)).map(s=>s.source)]},
+ {id:'industry',title:'インドの州別産業と、地域の原料・加工・市場',paragraphs:['国別産業の詳しい対象はインドです。2022–23年度の収録値では、製造業の付加価値はグジャラート州・マハーラーシュトラ州・タミル・ナードゥ州、サービス業はマハーラーシュトラ州・カルナータカ州・タミル・ナードゥ州の総額が大きくなります。ベンガルールの通信・人材とグジャラート州の製造を、州全体の値と具体的な事例に分けて読みます。','地域全体では、パンジャーブの穀物、ウズベキスタンの綿繊維・織物など、原料から加工・輸送・市場への接続を比べます。2023年のウズベキスタンのHS52（綿・綿糸・綿織物）は、ロシア、中国、トルコへの輸出額が大きくなります。この商品章は綿花の収穫物だけではなく加工品を含み、輸出相手先は最終消費地を示しません。'],sources:[...asiaPlaceReadings.filter(s=>['bengaluru-services','gujarat-manufacturing'].includes(s.id)).flatMap(s=>[s.source,...s.additionalSources??[]]),centralTransportSource,comtrade]},
+ {id:'population',title:'河川平野・都市の人口と、社会の構成',paragraphs:['ガンジス川流域からベンガルの平野へ続く人口の帯と、中央アジアの都市・灌漑地域の集まりを、2020年の人口格子で比べます。デリー・ムンバイ・タシケントなど都市のまとまりは、国や州の人口と同じ単位ではありません。','民族に結びつく居住域の参考分布と、インド2011年国勢調査の母語・宗教の州別構成は、年・分母・分類が異なります。最多区分の色をその州の全住民の属性と読まず、人口密度から言語や宗教を推測しません。'],sources:[ghsl,ucdb,{label:'インド国勢調査：2011年の表',url:'https://censusindia.gov.in/census.website/data/census-tables'}]},
+ {id:'politics',title:'水・森林・交易の利用を決める制度',paragraphs:['アムダリヤ川とシルダリヤ川の上流・下流をまたぐ水利用には、国境を越えた調整が関わります。ネパールの住民林業では利用者の組織が管理計画を作ります。地形と森林の分布だけでは、水や木材を誰がどう使うかは決まりません。','SAARCの1985年憲章は経済・社会・技術分野の協力を掲げます。憲章上の目的と、個別の事業で実現した成果は分けて読みます。'],sources:[centralSource,asiaPlaceReadings.find(s=>s.id==='nepal-forest')!.source,saarc]},
+];
 
 const naturalNotes:Record<string,string> = {
  AFG:'アフガニスタンの山地と盆地を、周囲の低地や水系と比べます。',BGD:'バングラデシュの低地を、ガンジス川・ブラマプトラ川と稲作の分布につなげて読みます。',BTN:'ブータンのヒマラヤ山地を、南の低地への高低差と雨の季節から読みます。',IND:'インドの北の平野、デカン高原、沿岸を比較し、国内を一つの気候にまとめず読みます。',PAK:'パキスタンのインダス川沿いの低地と北部の山地を、水の季節とともに読みます。',LKA:'スリランカの中央高地と沿岸を、雨の季節差と標高から読みます。',MDV:'モルディブの島々では、海を含む広域格子と島の陸地面積を区別して読みます。',NPL:'ネパールの北の高地から南の低地へ、短い距離の標高差を読みます。',
@@ -74,6 +88,19 @@ const naturalNotes:Record<string,string> = {
  ARM:'アルメニアの山地・高原と盆地を、周辺国に続く地形から読みます。',AZE:'アゼルバイジャンのカスピ海沿岸の低地と山地を、水系とともに比べます。',BHR:'バーレーンの島の位置を、海岸や周辺国との距離から確認します。小島の広域格子は海を含みます。',CYP:'キプロスの山地と沿岸を、地中海の季節と合わせて読みます。境界線は領有権の判断ではありません。',GEO:'ジョージアの山地と黒海沿岸を、標高と雨の季節から比べます。',IRQ:'イラクの低地を、チグリス・ユーフラテス川の上流とつなげて読みます。',ISR:'イスラエルの地中海沿岸と内陸を、気候と水供給の異なる情報で読みます。',JOR:'ヨルダンの高地・低地と乾燥域を、河川・地下水の参考分布と比べます。',KWT:'クウェートの湾岸と乾燥した内陸を、水の供給設備とは別の自然条件として読みます。',LBN:'レバノンの地中海沿岸と山地を、標高と雨の季節から読みます。',OMN:'オマーンの山地・沿岸と内陸を、標高と気候の違いから比べます。',QAT:'カタールの半島と乾燥した気候を、水の供給設備とは別に読みます。',SAU:'サウジアラビアの広い乾燥域と西側の山地・沿岸を比較します。自然の水系と都市への供給は同じ情報ではありません。',PSE:'パレスチナの地図上の範囲と周辺の地形を確認します。境界線は法的地位や現在の通行・水利用を示しません。',SYR:'シリアの沿岸・内陸とユーフラテス川の位置を比べます。自然図は現在の災害・紛争や設備の稼働状況を示しません。',TUR:'トルコの山地・高原と沿岸を、河川と雨の季節から比べます。',ARE:'アラブ首長国連邦の湾岸と乾燥した内陸を、地形・水供給・都市の別々の情報で読みます。',YEM:'イエメンの山地・沿岸・内陸を、同じ標高尺度と気候図で比べます。',IRN:'イランの山地・高原と内陸の盆地を、水系と乾燥の分布から読みます。',EGY:'エジプトのナイル川沿いと周囲の乾燥域を、農業・人口と別々の図で比べます。',
 };
 const formatted=(value:number)=>value.toLocaleString('ja-JP',{maximumFractionDigits:1});
+function southCentralWorldShare(code:string):string[] {
+ const measures=[['rice-production','米（籾米）'],['wheat-production','小麦']] as const;
+ return measures.flatMap(([id,label])=>{
+  const year=southCentralShares.series.find(s=>s.id===id)?.years.find(r=>r.year===2024);
+  const first=southCentralShares.series.find(s=>s.id===id)?.years.find(r=>r.year===2015)?.countries[code as keyof typeof year.countries];
+  const record=year?.countries[code as keyof typeof year.countries];
+  if(!year||!record)return [];
+  const share=record.share<.05?'0.05％未満':`${formatted(record.share)}％`;
+  const earlier=first?`2015年は${first.share<.05?'0.05％未満':`${formatted(first.share)}％`}、`:'';
+  const flag=record.flag==='A'?'公的報告値':record.flag==='E'?'推計値':record.flag==='I'?'補完値':`原資料区分 ${record.flag}`;
+  return [`${label}の同じFAOSTAT品目・単位の世界生産量比は、${earlier}2024年は${share}です（2024年の国別値：${flag}）。比率の変化は国内と世界の両方の生産量に左右されます。`];
+ });
+}
 function cropLines(code:string,isWest:boolean):string[] {
  const records=(isWest?west.agriculture: farm).countries[code as keyof typeof farm.countries]?.observations ?? [];
  const crops=isWest?[['15','小麦'],['577','ナツメヤシの実'],['260','オリーブ']]:[['27','米（籾米）'],['15','小麦']];
@@ -94,17 +121,27 @@ export function getAsiaOverview(regionId:AsiaOverviewRegionId) {
   const focus=asiaPhysicalFocus.find(f=>f.country===country.code);
   const urban=isWest?west.urban.cities.filter(c=>c.countryCode===country.code).map(c=>({name:c.name,population:c.history['2020']})):population.regions[base as keyof typeof population.regions]?.cities.filter(c=>c.country===country.code)??[];
   const largest=[...urban].sort((a,b)=>b.population-a.population)[0];
-  const crops=cropLines(country.code,isWest),industries=industryLines(country.code,isWest);
+  const crops=cropLines(country.code,isWest),indiaOnlyIndustry=base==='south-central-asia'&&country.code!=='IND';
+  const industries=indiaOnlyIndustry?[]:industryLines(country.code,isWest);
+  const shares=base==='south-central-asia'?southCentralWorldShare(country.code):[];
   const agricultureStory=stories.find(s=>s.field==='agriculture'),industryStory=stories.find(s=>s.field==='industry');
+  const industryRegion=indiaOnlyIndustry&&regionId==='south-central-asia'?(new Set(['KAZ','KGZ','TJK','TKM','UZB']).has(country.code)?regional['central-asia']:regional['south-asia']):reading;
+  const industryContext=industryRegion.readings.find(r=>r.id==='industry')!;
+  const industryParagraphs=indiaOnlyIndustry?[
+   `この画面の国別産業の詳しい対象はインドです。${country.name}は地域内の位置と、原料・加工・輸送・市場を結ぶ事例から読みます。`,
+   ...(industryStory?[industryStory.reading,industryStory.scope]:industryContext.paragraphs),
+   '地域の産業事例を、この国の州別付加価値や工場分布と読み替えません。商品輸出入額は国内向けの量や特定の加工経路を示しません。',
+  ]:[...(industries.length?industries:[industry.missingNotes[country.code as keyof typeof industry.missingNotes]??'収録WDIの製造業・サービス業の系列に有効な値がありません。欠測を0へ置き換えません。']),...(industryStory?[industryStory.reading,industryStory.scope]:['地域内で比較する事例（選択国の地点値ではありません）：'+reading.readings.find(r=>r.id==='industry')!.paragraphs[0]]),'付加価値は生産額から中間投入の費用を差し引いた額です。国のGDP比は、国内の工場の位置や都市の雇用、輸出比率ではありません。'];
+  const industrySources=indiaOnlyIndustry?(industryStory?[industryStory.source]:industryContext.sources):[wdi,wdiServices,...(industryStory?[industryStory.source]:industryContext.sources)];
   const nature=naturalNotes[country.code]??`${country.name}の山地・低地と周辺の水系を、気候・標高の地図で比べます。`;
   const countryReadings:OverviewReading[]=[
    {id:'nature',title:`${country.name}：自然条件を読む`,paragraphs:[nature,...(station?[`${station.name}の観測所（平年期間${station.normalPeriod}）では、${station.summary} ${station.reading}`]:focus?[focus.reading]:['気候区分と標高、水系は異なる情報です。国全体の色から季節の水量や現在の利用可能量を推定しません。'])],sources:[etopo,...(station?[{label:station.sourceName,url:station.sourceUrl}]:reading.readings[0].sources)]},
-   {id:'agriculture',title:`${country.name}：生産と水・管理`,paragraphs:[...(country.code==='CHN'?['この農林業統計の中国は中国本土（FAOSTATのM49 156）です。「China」合計（M49 159）とは区別します。']:[]),...(crops.length?crops:['収録したFAOSTATの対象品目に有効な国別生産量がありません。欠測を0や他国の値で補っていません。']),...(agricultureStory?[agricultureStory.reading,agricultureStory.scope]:['地域内で比較する事例（選択国の地点値ではありません）：'+reading.readings.find(r=>r.id==='agriculture')!.paragraphs[0]]),'国別の重量は国内の栽培場所や加工後の量を示しません。農地の分布、水を使う時期、集荷・加工・管理を分けて確かめます。'],sources:[fao,...(agricultureStory?[agricultureStory.source]:reading.readings.find(r=>r.id==='agriculture')!.sources)]},
-   {id:'industry',title:`${country.name}：産業構成と市場`,paragraphs:[...(industries.length?industries:[industry.missingNotes[country.code as keyof typeof industry.missingNotes]??'収録WDIの製造業・サービス業の系列に有効な値がありません。欠測を0へ置き換えません。']),...(industryStory?[industryStory.reading,industryStory.scope]:['地域内で比較する事例（選択国の地点値ではありません）：'+reading.readings.find(r=>r.id==='industry')!.paragraphs[0]]),'付加価値は生産額から中間投入の費用を差し引いた額です。国のGDP比は、国内の工場の位置や都市の雇用、輸出比率ではありません。'],sources:[wdi,wdiServices,...(industryStory?[industryStory.source]:reading.readings.find(r=>r.id==='industry')!.sources)]},
+   {id:'agriculture',title:`${country.name}：生産と水・管理`,paragraphs:[...(country.code==='CHN'?['この農林業統計の中国は中国本土（FAOSTATのM49 156）です。「China」合計（M49 159）とは区別します。']:[]),...(crops.length?crops:['収録したFAOSTATの対象品目に有効な国別生産量がありません。欠測を0や他国の値で補っていません。']),...shares,...(agricultureStory?[agricultureStory.reading,agricultureStory.scope]:['地域内で比較する事例（選択国の地点値ではありません）：'+reading.readings.find(r=>r.id==='agriculture')!.paragraphs[0]]),'国別の重量は国内の栽培場所や加工後の量を示しません。農地の分布、水を使う時期、集荷・加工・管理を分けて確かめます。'],sources:[fao,...(agricultureStory?[agricultureStory.source]:reading.readings.find(r=>r.id==='agriculture')!.sources)]},
+   {id:'industry',title:indiaOnlyIndustry?`${country.name}：地域の産業と市場`:`${country.name}：産業構成と市場`,paragraphs:industryParagraphs,sources:industrySources},
    {id:'population',title:`${country.name}：都市と社会を読み分ける`,paragraphs:[largest?`収録した都市中心部の例：${largest.name}、2020年推計人口${formatted(Math.round(largest.population))}人（人数は四捨五入）。資料が定めた2025年の都市範囲に対応し、行政市や国全体の人口ではありません。`:'人口分布ページでは2020年の格子推計を読みます。この概要の都市一覧の収録がないことは、都市や人口がないことを意味しません。',country.code==='JPN'?'日本の2020年国勢調査では、外国人住民の国籍構成と全人口中の外国人の割合を分けて読みます。国籍は民族とは異なります。':country.code==='MYS'?'マレーシアの民族統計の分母は市民です。「その他のブミプトラ」は複数の集団をまとめた公表区分で、単一の民族ではありません。':country.code==='IND'?'インドの2011年国勢調査では、母語と宗教は別の設問です。州の最多区分が50％以上とは限らず、州内にも多様性があります。':'地域内で比較する事例（選択国の社会統計ではありません）：'+reading.readings.find(r=>r.id==='population')!.paragraphs[0],'人口密度、言語・民族・国籍、宗教はそれぞれ別の指標です。居住場所の色から文化や信仰、生活の仕方を断定しません。'],sources:[ghsl,ucdb,...reading.readings.find(r=>r.id==='population')!.sources.filter(s=>s.url!==ghsl.url)]},
    {id:'politics',title:`${country.name}：利用を支える制度と国際協力`,paragraphs:[...(country.code==='NPL'?[asiaPlaceReadings.find(s=>s.id==='nepal-forest')!.reading,asiaPlaceReadings.find(s=>s.id==='nepal-forest')!.scope]:country.code==='IND'?[asiaPlaceReadings.find(s=>s.id==='anand-dairy')!.reading]:country.code==='UZB'?[asiaPlaceReadings.find(s=>s.id==='fergana-cotton')!.reading]:reading.readings.find(r=>r.id==='politics')!.paragraphs),`これは${country.name}の自然・生産を地域の制度や協力とつなげる読み方です。現在の政権・法令や協定の履行状況は、これらの分布図からは判断できません。`],sources:country.code==='NPL'?[asiaPlaceReadings.find(s=>s.id==='nepal-forest')!.source]:country.code==='IND'?[asiaPlaceReadings.find(s=>s.id==='anand-dairy')!.source]:country.code==='UZB'?[asiaPlaceReadings.find(s=>s.id==='fergana-cotton')!.source]:reading.readings.find(r=>r.id==='politics')!.sources},
   ];
-  return {...country,takeaway:`${country.name}を、${station?`${station.name}の季節`:'地形と水'}・国別生産と産業構成・都市と制度の異なる尺度で読む。`,readings:countryReadings};
+  return {...country,takeaway:`${country.name}を、${station?`${station.name}の季節`:'地形と水'}・国別生産と${indiaOnlyIndustry?'地域の産業事例':'産業構成'}・都市と制度の異なる尺度で読む。`,readings:countryReadings};
  });
  return {region,reading,countries};
 }
