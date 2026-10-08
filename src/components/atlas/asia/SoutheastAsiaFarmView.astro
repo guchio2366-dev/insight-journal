@@ -3,11 +3,19 @@ import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
 import {resolve} from 'node:path';
 import {southeastCropPriority} from '../../../data/atlas/asia/southeast-asia-crop-priority.mjs';
+import shares from '../../../../public/assets/atlas/southeast-asia-v1/world-shares.json';
 
 const statistics=JSON.parse(gunzipSync(readFileSync(resolve(process.cwd(),'public/assets/atlas/asia-farming-v1/statistics.json.gz'))).toString('utf8'));
 const priority=southeastCropPriority(statistics);
 const amount=(tonnes:number)=>tonnes>0&&tonnes<5000?'<1':Math.round(tonnes/10000).toLocaleString('ja-JP');
 const mapLabels:Record<string,string>={arabica:'アラビカ分布',robusta:'ロブスタ分布'};
+const studyCountries=[['IDN','インドネシア'],['VNM','ベトナム'],['THA','タイ']] as const;
+const shareText=(value:number|undefined)=>value===undefined?'欠測':value>0&&value<.01?'0.01%未満':`${value.toLocaleString('ja-JP',{maximumFractionDigits:2})}%`;
+const worldRows=shares.series.flatMap(series=>studyCountries.map(([code,name])=>({
+ item:series.label,country:name,initial:series.years.find(row=>row.year===2020)?.countries[code]?.share,
+ latest:series.years.find(row=>row.year===2024)?.countries[code]?.share,
+})));
+const riceShare=(country:string)=>shareText(worldRows.find(row=>row.item==='米'&&row.country===country)?.initial);
 ---
 <button type="button" data-southeast-farm-single hidden aria-pressed="false">この品目だけ表示</button>
 <details class="southeast-crop-priority" data-southeast-crop-priority>
@@ -18,8 +26,16 @@ const mapLabels:Record<string,string>={arabica:'アラビカ分布',robusta:'ロ
  <p>油ヤシは果実、コーヒーは生豆の種類合計、ゴムは一次形態です。コーヒーの国計をアラビカ・ロブスタ両方へ重複計上していません。国の欠測・未収録は0とせず、合計と有効国数を併記しました。資料区分はA＝公的報告、E＝推計、I＝受入機関の補完、X＝外部機関の値です。特に有効国の少ない品目を地域の確定順位とは扱えません。</p>
  <p class="source">出典：<a href="https://www.fao.org/faostat/en/#data/QCL">FAOSTAT 作物生産</a>（2020年、Production、t）。<a href="https://www.fao.org/contact-us/terms/db-terms-of-use/">利用条件・CC BY 4.0</a>に基づく収録値の再集計。地図は別資料のMapSPAM 2020推計収穫面積で、この表の重量を描いたものではありません。</p>
 </details>
+<details class="southeast-world-share" data-southeast-world-share>
+ <summary>米・トウモロコシ・大豆の世界生産比を比べる</summary>
+ <p>2020年の地図に合わせて3か国の同じ品目・生産重量の世界比を示します。2024年も同じ定義です。米はインドネシア{riceShare('インドネシア')}、ベトナム{riceShare('ベトナム')}、タイ{riceShare('タイ')}で、地図の収穫面積とは別の国別数量です。</p>
+ <table><caption>国別生産重量 ÷ 当該年のWorld生産重量。％、欠測は0としない</caption><thead><tr><th scope="col">品目</th><th scope="col">国</th><th scope="col">2020</th><th scope="col">2024</th></tr></thead><tbody>{worldRows.map(row=><tr><th scope="row">{row.item}</th><td>{row.country}</td><td>{shareText(row.initial)}</td><td>{shareText(row.latest)}</td></tr>)}</tbody></table>
+ <p>世界計は保存済みFAOSTATの同一原ZIPにあるWorld行です。候補10品目のうち、この組み合わせで世界分母を照合できるのは3品目だけです。油ヤシなど残る7品目の世界比は示しません。これは生産量の比率で、輸出先・輸出量・国内向けの割合ではありません。</p>
+ <p class="source">出典：<a href="https://www.fao.org/faostat/en/#data/QCL">FAOSTAT 作物生産</a>（2015–2024年、Production、t）。<a href="https://www.fao.org/contact-us/terms/db-terms-of-use/">利用条件・CC BY 4.0</a>。<a href="/insight-journal/assets/atlas/southeast-asia-v1/world-shares.json">年別の値と資料区分</a>。</p>
+</details>
 <style>
  [data-southeast-farm-single]{width:100%;min-height:48px;padding:12px;margin:12px 0;border:1px solid #315b61;background:#edf3f1;color:#264c52;font:inherit;font-size:13px;text-align:left;cursor:pointer}
- :global([data-field-national]:not([data-field-national="agriculture"])) .southeast-crop-priority{display:none}
+ :global([data-field-national]:not([data-field-national="agriculture"])) .southeast-crop-priority,:global([data-field-national]:not([data-field-national="agriculture"])) .southeast-world-share{display:none}
+ .southeast-world-share{border-top:1px solid var(--rule);padding:9px 0;margin:5px 0 16px;font-size:12px;line-height:1.7}.southeast-world-share summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:700}.southeast-world-share p{font-size:11px;line-height:1.85}.southeast-world-share table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}.southeast-world-share caption{font-size:10px;text-align:left;margin:8px 0}.southeast-world-share th,.southeast-world-share td{border-bottom:1px solid var(--rule);padding:6px 3px;text-align:right}.southeast-world-share th:first-child{text-align:left}.southeast-world-share .source{color:var(--ink-soft)}
  .southeast-crop-priority{border-top:1px solid var(--rule);padding:9px 0;margin:5px 0 16px;font-size:12px;line-height:1.7}.southeast-crop-priority summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:700}.southeast-crop-priority p{font-size:11px;line-height:1.85}.southeast-crop-priority table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}.southeast-crop-priority caption{font-size:10px;text-align:left;margin:8px 0}.southeast-crop-priority th,.southeast-crop-priority td{border-bottom:1px solid var(--rule);padding:8px 4px;text-align:right;vertical-align:top}.southeast-crop-priority th:first-child{text-align:left;width:65%}.southeast-crop-priority th strong{display:block;font-size:11px}.crop-map-links{display:flex;flex-wrap:wrap;gap:4px;margin:3px 0}.crop-map-links button{min-height:34px;padding:4px 6px;border:1px solid #8a9e9c;background:#edf3f1;color:#264c52;font:inherit;font-size:10px;cursor:pointer}.source{color:var(--ink-soft)}button:focus-visible,summary:focus-visible{outline:3px solid #a74830;outline-offset:2px}[hidden]{display:none!important}
 </style>
