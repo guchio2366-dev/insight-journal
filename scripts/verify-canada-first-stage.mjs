@@ -50,7 +50,7 @@ try{
    else{
     assert.match(await page.locator('[data-demographic-heading]').textContent(),/全国/);
     assert.match(await page.locator('[data-population-coverage]').textContent(),/最多.*過半数/);
-    assert.equal(await page.locator('[data-population-composition-rows] tr').count(),topic==='religion'?23:14);
+    assert.equal(await page.locator('[data-population-composition-rows] tr').count(),topic==='religion'?13:14);
    }
    const keySizes=await page.locator('[data-population-category-key] button,[data-population-category-key] span').evaluateAll(nodes=>nodes.map(node=>parseFloat(getComputedStyle(node).fontSize)));
    assert.ok(keySizes.length>0&&keySizes.every(size=>size>=14),'Readable full population legend');
@@ -58,7 +58,7 @@ try{
    await shot(`canada-${topic}-${width}`);
   }
  }
- result.checks.push('Three PC sizes: national entry, 293 CDs, all 41 CMAs, 23 religion / 14 ethnicity categories, 14px legend, climate/map alignment');
+ result.checks.push('Three PC sizes: national entry, 293 CDs, all 41 CMAs, 13 religion display / 14 ethnicity categories, 14px legend, climate/map alignment');
  await page.setViewportSize({width:1536,height:864});
  await open('canada/population/?topic=religion');await populationReady();
  const distribution=()=>page.locator('[data-population-region]').evaluateAll(nodes=>nodes.map(node=>node.style.fill));
