@@ -479,13 +479,20 @@ async function main(){
   for(const profile of profiles)await operation(browser,host,profile,'southeast-forestry-trade-images',async page=>{
    await open(page,host,'/atlas/asia/southeast-asia/agriculture/');
    await page.waitForFunction(()=>document.querySelector('.southeast-supply-bars li'));
+   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-map-fallback]')?.hidden);
+   await page.evaluate(async()=>{await document.fonts.ready;scrollTo({top:0,behavior:'instant'});await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
+   await page.screenshot({path:path.join(output,`${profile.name}-southeast-agriculture-workspace-initial.png`),animations:'disabled'});
+   for(const selector of ['[data-southeast-forest-reading]','[data-southeast-trade-reading]'])await page.locator(selector).locator(':scope > summary').click();
+   await page.locator('[data-southeast-top-workspace]>.asia-reading-panel').evaluate(node=>node.scrollTop=180);
+   await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));
+   await page.screenshot({path:path.join(output,`${profile.name}-southeast-agriculture-reading-scrolled.png`),animations:'disabled'});
    await page.locator('[data-south-central-farm-connections]').evaluate(node=>node.scrollIntoView({block:'start',behavior:'instant'}));
    await page.screenshot({path:path.join(output,`${profile.name}-southeast-agriculture-statistics-visible.png`),animations:'disabled'});
    for(const [selector,name] of [['[data-southeast-forest-reading]','forestry'],['[data-southeast-trade-reading]','trade']]){
-    const panel=page.locator(selector);await panel.locator(':scope > summary').click();
+    const panel=page.locator(selector);
     await panel.screenshot({path:path.join(output,`${profile.name}-southeast-${name}-panel.png`),animations:'disabled'});
    }
-   return {imageFiles:['supply-and-partners','forestry-panel','trade-panel']};
+   return {imageFiles:['agriculture-workspace-initial','agriculture-reading-scrolled','agriculture-statistics-visible','forestry-panel','trade-panel']};
   });
   for(const profile of profiles)await checkEastContourBands(browser,host,profile);
   for(const profile of southCentralProfiles)await operation(browser,host,profile,'south-central-regional-acceptance',page=>verifySouthCentralAsia(page,{profile,source:host.origin+basePath,capture:contextPicture}));
