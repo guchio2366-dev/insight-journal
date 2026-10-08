@@ -37,12 +37,24 @@ jobs:
       REGION_REVIEW_FARMING_ONLY: '1'
       REGION_REVIEW_REPRESENTATIVE_ONLY: '1'
       REGION_REVIEW_FOCUS_DELTA_ONLY: '1'
-      REGION_REVIEW_REGIONS: 'oceania'
     steps:
       - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
+      - name: Select changed region for PC review
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin "$BASE_SHA"
+          region_files="$(git diff --name-only "$BASE_SHA" HEAD -- src public/assets/atlas)"
+          regions=()
+          if [[ "$region_files" == *[Oo]ceania* ]]; then regions+=(oceania); fi
+          if [[ "$region_files" == *[Rr]ussia* ]]; then regions+=(russia); fi
+          if [[ "${#regions[@]}" -eq 0 ]]; then regions=(oceania russia); fi
+          (IFS=,; echo "REGION_REVIEW_REGIONS=${regions[*]}") >> "$GITHUB_ENV"
       - uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc

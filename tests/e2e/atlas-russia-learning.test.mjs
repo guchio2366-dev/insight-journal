@@ -166,8 +166,10 @@ test('farming overview and product focus retain both distributions, separate uni
   const cattle=one('primary-map').querySelector('[data-farming-product="cattle"][data-farming-mode="texture"]');
   assert.ok(cattle);assert.ok(Number(cattle.getAttribute('opacity'))<initialOpacity);
   assert.equal(one('primary-map').querySelector('[data-farming-product="wheat"][data-farming-mode="outline"]').getAttribute('opacity'),'1');
+  assert.equal(one('primary-map').querySelector('[data-place-product="cattle"]').getAttribute('opacity'),'0.32');
   assert.equal(one('primary-map').querySelector('svg').getAttribute('viewBox'),frame);
   one('place').value='siberia';one('place').dispatchEvent(new win.Event('change'));
+  assert.match(one('geography-reading').textContent,/オムスク付近.*正の収穫面積/);
   assert.equal(one('layer').value,'wheat');assert.equal(one('primary-map').querySelectorAll('[data-region-marker]').length,0);
   const reloaded=page('agriculture',win.location.search);
   try{
@@ -176,6 +178,7 @@ test('farming overview and product focus retain both distributions, separate uni
    assert.equal(reloaded.one('primary-map').querySelector('svg').getAttribute('viewBox'),frame);
   }finally{reloaded.win.happyDOM.abort();}
   one('layer').value='cattle';one('layer').dispatchEvent(new win.Event('change'));
+  assert.equal(one('primary-map').querySelector('[data-place-product="wheat"]').getAttribute('opacity'),'0.32');
   assert.ok(one('primary-map').querySelector('[data-farming-product="cattle"][data-farming-mode="quantity"]'));
   assert.ok(one('primary-map').querySelector('[data-farming-product="wheat"][data-farming-mode="outline"]'));
   assertPrimaryLegend(one,model.getRussiaLayer('cattle'));

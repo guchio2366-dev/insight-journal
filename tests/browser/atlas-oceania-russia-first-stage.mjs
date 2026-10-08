@@ -55,7 +55,7 @@ try{
   });
  };
  const open=async(region,field,search='')=>{await page.goto(`${base}atlas/${region}/${field}/${search}`,{waitUntil:'networkidle'});await ready(region);};
- const shot=async name=>{if(focusDeltaOnly&&!/^oceania-agriculture-1536-(overview|crop-focus)$/.test(name))return;if(representativeOnly&&!/^(?:oceania|russia)-agriculture-(1536|1024)-(overview|crop-focus)$/.test(name))return;await page.screenshot({path:resolve(output,name+'.png'),fullPage:true});result.screenshots.push(name+'.png');};
+ const shot=async name=>{if(focusDeltaOnly&&!/^(?:oceania|russia)-agriculture-1536-(overview|crop-focus|selected-with-other-distributions)$/.test(name))return;if(representativeOnly&&!/^(?:oceania|russia)-agriculture-(1536|1024)-(overview|crop-focus|selected-with-other-distributions)$/.test(name))return;await page.screenshot({path:resolve(output,name+'.png'),fullPage:true});result.screenshots.push(name+'.png');};
  const annotationShot=async(map,product)=>{
   // Capture document pixels without element scrolling or a retained SVG handle.
   // Closing the details can resize the root and replace its SVG in the next frame.
@@ -102,6 +102,7 @@ try{
       assert.ok(regionControl.y<bounds.y&&layerControl.y<bounds.y,'Primary controls are above the map');
       assert.ok(regionControl.x<(await reading.boundingBox()).x,'Region control is in the left workspace');
       const places=map.locator('[data-farming-place]');assert.equal(await places.count(),4);
+      assert.deepEqual(await places.evaluateAll(elements=>elements.map(el=>Number(el.getAttribute('opacity')))),[1,1,1,1]);
       assert.equal(await places.locator('text').filter({hasText:'小麦｜'}).count(),2);assert.equal(await places.locator('text').filter({hasText:'牛｜'}).count(),2);
       const labels=await places.locator('rect').evaluateAll(elements=>elements.map(el=>{const b=el.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};}));
       for(let i=0;i<labels.length;i++)for(let j=i+1;j<labels.length;j++)assert.ok(labels[i].x+labels[i].width<=labels[j].x||labels[j].x+labels[j].width<=labels[i].x||labels[i].y+labels[i].height<=labels[j].y||labels[j].y+labels[j].height<=labels[i].y,'Farming names do not overlap');
@@ -176,6 +177,11 @@ try{
      await host.locator('[data-layer]').selectOption('wheat');await ready(region);
      assert.deepEqual(await shown(),products);
      assert.ok(Number(await cattle.getAttribute('opacity'))<initialOpacity);
+     if(region==='russia'){
+      const annotations=await map.locator('[data-farming-place]').evaluateAll(elements=>elements.map(el=>({product:el.dataset.placeProduct,opacity:Number(el.getAttribute('opacity'))})));
+      assert.ok(annotations.filter(item=>item.product==='wheat').every(item=>item.opacity===1));
+      assert.ok(annotations.filter(item=>item.product==='cattle').every(item=>item.opacity===.32));
+     }
      assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
      assert.equal(Number(await map.locator('[data-farming-product="wheat"][data-farming-mode="outline"]').getAttribute('opacity')),1);
      if(region==='oceania'){
@@ -197,6 +203,7 @@ try{
      assert.equal(await host.locator('[data-layer]').inputValue(),'wheat');assert.deepEqual(await shown(),products);
      await host.locator('[data-layer]').selectOption('cattle');await ready(region);
      assert.deepEqual(await shown(),products);
+     if(region==='russia')assert.ok(await map.locator('[data-farming-place][data-place-product="wheat"][opacity="0.32"]').count()>0);
      assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
      assert.match(await host.locator('[data-primary-legend-definitions] [data-farming-legend="cattle"] h3').textContent(),/頭／km²/);
      if(width===1536)await shot(`${region}-agriculture-${width}-livestock-focus`);
@@ -214,6 +221,7 @@ try{
     if(region==='russia'){
      if(field==='agriculture'){
       assert.equal(await host.locator('[data-place]').inputValue(),'far-east');assert.equal(await map.locator('[data-region-marker]').count(),0);
+      assert.match(await host.locator('[data-geography-reading]').textContent(),/ヤクーツク付近.*低密度の正値/);
       assert.equal(await host.locator('[data-place]').evaluate(el=>document.activeElement===el),true,'Native keyboard region focus survives redraw');
      }else{
       assert.equal(await map.locator('[data-region-marker]').count(),3);
