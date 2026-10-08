@@ -10,9 +10,10 @@ const root=new URL('../../',import.meta.url);
 const original=JSON.parse(readFileSync(new URL(africaClimateCityReuseSource,root),'utf8'));
 const manifest=JSON.parse(readFileSync(new URL('public/assets/atlas/africa-physical-v1/manifest.json',root),'utf8'));
 
-test('four African stations retain 12 monthly values, coordinates and individual source links',()=>{
- assert.equal(africaClimateCities.length,4);
- assert.match(africaClimateCityCoverage,/4観測所/);
+test('six African stations retain 12 monthly values, coordinates and individual source links',()=>{
+ assert.equal(africaClimateCities.length,6);
+ assert.match(africaClimateCityCoverage,/6観測所/);
+ assert.match(africaClimateCityCoverage,/赤道雨林.*未収録/);
  const station=africaClimateCityById('helwan'),source=original.find(row=>row.id==='helwan');
  assert.ok(station);assert.ok(source);
  for(const key of ['id','countryCode','name','stationId','stationName','coordinates','elevationM','temperatureC','precipitationMm','normalPeriod','sourceUrl','sourceName','sourceRetrievedAt','sourceTermsUrl','sourceSha256','notes','missingMonths','reading'])assert.deepEqual(station[key],source[key],key);
@@ -25,10 +26,21 @@ test('four African stations retain 12 monthly values, coordinates and individual
  assert.equal(new URL(station.sourceUrl).searchParams.get('n'),station.stationId);
  assert.equal(new URL(station.sourceUrl).hostname,'www.data.jma.go.jp');
  assert.equal(new URL(station.sourceTermsUrl).hostname,'www.jma.go.jp');
- for(const city of africaClimateCities){assert.equal(city.temperatureC.length,12);assert.equal(city.precipitationMm.length,12);assert.equal(city.missingMonths.temperature.length,0);assert.equal(city.missingMonths.precipitation.length,0);assert.equal(new URL(city.sourceUrl).searchParams.get('n'),city.stationId);}
+ for(const city of africaClimateCities){assert.equal(city.temperatureC.length,12);assert.equal(city.precipitationMm.length,12);assert.equal(city.missingMonths.temperature.length,0);assert.equal(city.missingMonths.precipitation.length,0);const url=new URL(city.sourceUrl);assert.equal(url.searchParams.get('n')??url.searchParams.get('stn'),city.stationId);}
  assert.deepEqual(africaClimateCityById('dakar')?.precipitationMm,[0,0.7,0.1,0,0.3,8.7,55.3,166.9,140.4,27.1,0.8,1]);
  assert.deepEqual(africaClimateCityById('bamako')?.temperatureC,[25,28.1,30.9,32.4,31.4,28.8,26.4,25.6,26.1,27.2,26.8,25.2]);
  assert.deepEqual(africaClimateCityById('dar-es-salaam')?.precipitationMm,[53.4,66,167.6,259.5,162.8,22,16.5,15.3,21.8,79,121.7,135.2]);
+ const addis=africaClimateCityById('addis-ababa'),cape=africaClimateCityById('cape-town');assert.ok(addis);assert.ok(cape);
+ assert.deepEqual([addis.stationName,addis.coordinates,addis.elevationM],['ADDIS ABABA-BOLE',[38.75,9.03],2354]);
+ assert.deepEqual(addis.temperatureC,[16.4,17.4,18.4,18.6,18.8,17.4,16.1,16.1,16.5,16.5,16,15.4]);
+ assert.deepEqual(addis.precipitationMm,[15.2,24.7,55.4,71.3,110.6,136,240.4,267.3,151.9,49.4,17.7,7]);
+ assert.deepEqual([cape.stationName,cape.coordinates,cape.elevationM],['CAPE TOWN INTNL. AIRPORT',[18.6,-33.97],46]);
+ assert.deepEqual(cape.temperatureC,[21.6,21.7,20.2,17.7,15.3,13.1,12.5,12.9,14.4,16.8,18.5,20.6]);
+ assert.deepEqual(cape.precipitationMm,[9.6,10.6,13.1,41.4,63.1,89,81.2,73,44.1,29,26.4,12.1]);
+ assert.deepEqual([addis.classification.code,cape.classification.code],['Cwb','Csb']);
+ assert.match(addis.classification.description,/0℃.*22℃.*10分の1/);
+ assert.match(cape.classification.description,/0℃.*22℃.*40 mm.*3分の1/);
+ assert.ok([addis,cape].every(city=>city.notes.some(note=>note.includes('無欠測だったことを意味しません'))));
  assert.equal(africaClimateCityById('nairobi'),undefined);
 });
 

@@ -67,10 +67,10 @@ test('clicking source prose or a passive country boundary never behaves like a f
  });
 });
 
-test('four station points and names open matching monthly values, classifications and sources with history and reload',async()=>{
+test('six station points and names open matching monthly values, classifications and sources with history and reload',async()=>{
  let saved;
  await page('?field=nature&topic=climate',context=>{
-  const {window,root,q}=context;assert.equal(root.querySelectorAll('[data-africa-city-point]').length,4);assert.equal(q('[data-africa-city-readings]').hidden,true);
+  const {window,root,q}=context;assert.equal(root.querySelectorAll('[data-africa-city-point]').length,6);assert.equal(q('[data-africa-city-readings]').hidden,true);
   for(const city of [africaClimateCities[0]])for(const selector of [`[data-africa-city-point="${city.id}"]`,`[data-africa-city-label="${city.id}"]`]){
    activate(context,selector);assert.equal(params(window).get('city'),city.id);assert.equal(q('[data-theme-title]').textContent,`${city.name}の雨温図`);
    const article=q(`[data-africa-city-reading="${city.id}"]`);assert.equal(article.hidden,false);assert.equal(q('[data-africa-city-readings]').hidden,false);assert.equal(q('[data-theme-source]').href,city.sourceUrl);
@@ -86,7 +86,7 @@ test('four station points and names open matching monthly values, classification
   assert.equal(params(window).get('city'),city.id);assert.equal(q('[data-theme-title]').textContent,`${city.name}の雨温図`);
   const article=q(`[data-africa-city-reading="${city.id}"]`);assert.equal(article.hidden,false);assert.equal(q('[data-theme-source]').href,city.sourceUrl);
   assert.equal(article.querySelectorAll('tbody tr').length,12);assert.ok(article.textContent.includes(city.classification.name));
-  assert.equal(root.querySelectorAll('[data-africa-city-point]').length,4);
+  assert.equal(root.querySelectorAll('[data-africa-city-point]').length,6);
  });
 });
 

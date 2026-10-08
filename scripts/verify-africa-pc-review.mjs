@@ -110,14 +110,13 @@ async function screenshot(page,record,name,{preserveScroll=false}={}){
  const file=`${record.profile}-${name}.png`,png=await page.screenshot({animations:'disabled',fullPage:false});await writeFile(path.join(output,file),png);
  const evidence={file,sha256:hash(png),url:page.url(),scroll:await page.evaluate(()=>({x:scrollX,y:scrollY})),capturedAt:new Date().toISOString()};record.screenshots.push(evidence);report.screenshots.push(evidence);return evidence;
 }
-async function climateReviewPair(){
- const files=['desktop1536-africa-climate-initial.png','desktop1536-africa-climate-bamako.png'];
+async function climateReviewPair(files,titles,file){
  const encoded=await Promise.all(files.map(async file=>(await readFile(path.join(output,file))).toString('base64')));
  const page=await browser.newPage({viewport:{width:3072,height:900},deviceScaleFactor:1});
  try{
-  await page.setContent(`<html lang="ja"><head><meta charset="utf-8"><style>body{margin:0;background:#fffdf8;font:20px sans-serif}.pair{display:flex}.pair>div{width:1536px}h1{height:36px;margin:0;padding:4px 12px;font-size:18px;box-sizing:border-box}img{display:block;width:1536px;height:864px}</style></head><body><div class="pair"><div><h1>初期表示</h1><img src="data:image/png;base64,${encoded[0]}"></div><div><h1>バマコの雨温図</h1><img src="data:image/png;base64,${encoded[1]}"></div></div></body></html>`);
+  await page.setContent(`<html lang="ja"><head><meta charset="utf-8"><style>body{margin:0;background:#fffdf8;font:20px sans-serif}.pair{display:flex}.pair>div{width:1536px}h1{height:36px;margin:0;padding:4px 12px;font-size:18px;box-sizing:border-box}img{display:block;width:1536px;height:864px}</style></head><body><div class="pair"><div><h1>${titles[0]}</h1><img src="data:image/png;base64,${encoded[0]}"></div><div><h1>${titles[1]}</h1><img src="data:image/png;base64,${encoded[1]}"></div></div></body></html>`);
   await page.locator('img').last().evaluate(image=>image.decode());
-  const file='africa-climate-initial-bamako-pair.png',png=await page.screenshot({animations:'disabled',fullPage:true});await writeFile(path.join(output,file),png);
+  const png=await page.screenshot({animations:'disabled',fullPage:true});await writeFile(path.join(output,file),png);
   report.screenshots.push({file,sha256:hash(png),sources:files,capturedAt:new Date().toISOString()});
  }finally{await page.close();}
 }
@@ -532,6 +531,7 @@ async function delayedRiver(page,record){
 }
 async function mobileNatureReader(page,record){
  await open(page,'/atlas/africa/?field=nature&topic=climate');await waitAfrica(page,'climate');await assertReaderUI(page);await page.locator('[data-africa-climate-map-label]').first().waitFor();await readerEvidence(page,record,'climate-mobile-initial');await screenshot(page,record,'africa-climate-initial');await climateCity(page,record,{touch:true});await mobileNoOverflow(page);
+ for(const id of ['addis-ababa','cape-town']){const city=africaClimateCities.find(row=>row.id===id),point=page.locator(`[data-africa-city-point="${id}"]`);await point.scrollIntoViewIfNeeded();await point.tap();const article=page.locator(`[data-africa-city-reading="${id}"]`);await article.waitFor({state:'visible'});assert.equal(await page.locator('[data-theme-title]').textContent(),`${city.name}の雨温図`);assert.equal(await page.locator('[data-theme-source]').getAttribute('href'),city.sourceUrl);await mobileNoOverflow(page);record.checks.push({check:`${city.name} mobile touch selection, matching source and no horizontal overflow`,status:'passed'});}
  await open(page,riverRoute);await waitAfrica(page,'river');await page.locator('[data-africa-river-label="nile"]').tap();await assertRiver(page,'nile');await page.locator('.africa-map-frame').scrollIntoViewIfNeeded();await screenshot(page,record,'africa-nile-mobile',{preserveScroll:true});await page.locator('.africa-detail').scrollIntoViewIfNeeded();await screenshot(page,record,'africa-nile-reading',{preserveScroll:true});await mobileNoOverflow(page);
  await open(page,populationRoute);await waitAfrica(page,'distribution');await cultureGuide(page,record,'ethnicity',{touch:true});await cultureGuide(page,record,'religion',{touch:true});await page.locator('[data-reset]').tap();await waitAfrica(page,'climate');
 }
@@ -583,7 +583,7 @@ async function main(){
     await runCase(profile,'africa-delayed-river',delayedRiver);
    }
   }
-  assert.equal(report.cases.filter(record=>record.status!=='passed').length,0,'Browser review failed; inspect metadata and failure screenshots');for(const profile of agricultureProfiles)for(const region of ['us','africa'])for(const scene of ['agriculture','agriculture-rice','agriculture-lower'])assert(report.screenshots.some(row=>row.file===`${profile.id}-${region}-${scene}.png`),`Missing ${profile.id} ${region} ${scene} representative capture`);for(const region of ['us','africa'])for(const scene of ['agriculture','agriculture-map','agriculture-rice','agriculture-rice-reading'])assert(report.screenshots.some(row=>row.file===`${mobileProfile.id}-${region}-${scene}.png`),`Missing mobile ${region} ${scene} capture`);assert(report.screenshots.some(row=>row.file===`${mobileProfile.id}-africa-agriculture-lower.png`),'Missing mobile Africa lower reading capture');await climateReviewPair();report.status='passed';
+  assert.equal(report.cases.filter(record=>record.status!=='passed').length,0,'Browser review failed; inspect metadata and failure screenshots');for(const profile of agricultureProfiles)for(const region of ['us','africa'])for(const scene of ['agriculture','agriculture-rice','agriculture-lower'])assert(report.screenshots.some(row=>row.file===`${profile.id}-${region}-${scene}.png`),`Missing ${profile.id} ${region} ${scene} representative capture`);for(const region of ['us','africa'])for(const scene of ['agriculture','agriculture-map','agriculture-rice','agriculture-rice-reading'])assert(report.screenshots.some(row=>row.file===`${mobileProfile.id}-${region}-${scene}.png`),`Missing mobile ${region} ${scene} capture`);assert(report.screenshots.some(row=>row.file===`${mobileProfile.id}-africa-agriculture-lower.png`),'Missing mobile Africa lower reading capture');await climateReviewPair(['desktop1536-africa-climate-initial.png','desktop1536-africa-climate-bamako.png'],['初期表示','バマコの雨温図'],'africa-climate-initial-bamako-pair.png');await climateReviewPair(['desktop1536-africa-climate-addis-ababa.png','desktop1536-africa-climate-cape-town.png'],['アディスアベバ／ボレの雨温図','ケープタウン国際空港の雨温図'],'africa-climate-addis-cape-pair.png');report.status='passed';
  }catch(error){report.status='failed';report.failure=error.stack??String(error);process.exitCode=1;console.error(error);}
  finally{report.completedAt=new Date().toISOString();await browser?.close();if(server)await new Promise(resolve=>server.close(resolve));await save();console.log(JSON.stringify({status:report.status,output,cases:report.cases.length,screenshots:report.screenshots.length}));}
 }
