@@ -57,6 +57,11 @@ try{
  });
  await context.routeWebSocket('**/*',socket=>{results.externalAttempts.push({url:new URL(socket.url()).origin,resourceType:'websocket'});socket.close({code:1008,reason:'Local static review only'});});
  const scenes=[
+  {id:'south-central-rivers-groundwater',route:'/atlas/asia/south-central-asia/nature/?topic=water',check:async page=>{
+   await page.waitForFunction(()=>{const root=document.querySelector('[data-asia-atlas]'),panel=document.querySelector('[data-hydrology-panel]'),picker=document.querySelector('[data-hydrology-detail]');return root?.dataset.mapReady==='true'&&panel&&!panel.hidden&&picker?.options.length>1;});
+   assert.match(await page.locator('[data-hydrology-panel]').textContent(),/河川|地下水/);
+   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+  }},
   {id:'south-central-nature',route:'/atlas/asia/south-central-asia/nature/',check:async page=>{
    await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-map-fallback]')?.hidden);
    assert.equal(await page.locator('[data-asia-atlas]').getAttribute('data-region'),'south-central-asia');

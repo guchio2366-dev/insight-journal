@@ -1,60 +1,88 @@
-name: Package South Central core review images
+name: Review South Central rivers and groundwater on PC
 
 on:
   pull_request:
     branches: [codex/south-central-insights-20261008]
-    paths: ['.github/workflows/atlas-south-central-pc-samples.yml']
+    paths:
+      - '.github/workflows/atlas-south-central-pc-samples.yml'
+      - 'scripts/capture-south-central-pc-samples.mjs'
 
+# Review artifacts only. No deployment or repository writes.
 permissions:
-  actions: read
   contents: read
 
+concurrency:
+  group: south-central-pc-samples-${{ github.event.pull_request.head.sha }}
+  cancel-in-progress: true
+
 jobs:
-  package:
+  samples:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    steps:
-      - name: Download the existing successful PC review
-        uses: actions/download-artifact@v4
-        with:
-          name: asia-pc-review-37758284170-1
-          github-token: ${{ github.token }}
-          repository: ${{ github.repository }}
-          run-id: 37758284170
-          path: incoming
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+      REVIEW_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+      REVIEW_SCENE: south-central-rivers-groundwater
 
-      - name: Select South Central Asia core review images
+    steps:
+      - name: Check out exact sample head
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+
+      - name: Verify existing Chrome and Japanese fonts
         shell: bash
         run: |
           set -euo pipefail
-          python - <<'PY'
-          from pathlib import Path
-          import shutil
-          source=Path('incoming')
-          output=Path('selected')
-          output.mkdir()
-          names=[
-            'desktop-south-central-asia-farm-overview.png',
-            'desktop-south-central-asia-city-first.png',
-            'desktop-south-central-asia-rainfall-no-country-popup.png',
-            'desktop-south-central-asia-basin-selection-retained.png',
-            'south-desktop-south-central-industry-overview.png',
-          ]
-          total=0
-          for name in names:
-            matches=list(source.rglob(name))
-            assert len(matches)==1, (name,matches)
-            shutil.copyfile(matches[0],output/name)
-            total+=(output/name).stat().st_size
-          assert total<=10*1024*1024, total
-          print(f'{len(names)} existing images: {total} bytes')
-          PY
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          if [[ -z "$chrome_path" ]]; then
+            echo "::error::The runner must provide Chrome."
+            exit 1
+          fi
+          japanese_fonts="$(fc-list ':lang=ja' family)"
+          font_setup="preinstalled"
+          if [[ -z "$japanese_fonts" ]]; then
+            sudo apt-get update
+            sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+            japanese_fonts="$(fc-list ':lang=ja' family)"
+            font_setup="installed-fonts-noto-cjk-from-ubuntu"
+          fi
+          if [[ -z "$japanese_fonts" ]]; then
+            echo "::error::Japanese fonts are required."
+            exit 1
+          fi
+          {
+            printf 'REVIEW_CHROME_PATH=%s\n' "$chrome_path"
+            printf 'REVIEW_JAPANESE_FONT_SETUP=%s\n' "$font_setup"
+            printf '%s\n' 'REVIEW_JAPANESE_FONTS<<SOUTH_CENTRAL_FONTS' "$japanese_fonts" 'SOUTH_CENTRAL_FONTS'
+            printf '%s\n' 'REVIEW_JAPANESE_FONT_MATCH<<SOUTH_CENTRAL_MATCH'
+            fc-match -f '%{family}\n' 'sans-serif:lang=ja'
+            fc-match -f '%{family}\n' 'serif:lang=ja'
+            printf '%s\n' 'SOUTH_CENTRAL_MATCH'
+          } >> "$GITHUB_ENV"
 
-      - name: Upload focused review images
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install existing dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Build local production site
+        run: npm run build
+
+      - name: Capture changed agriculture cards
+        timeout-minutes: 3
+        run: node scripts/capture-south-central-pc-samples.mjs
+
+      - name: Save changed image and result metadata
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: south-central-core-review-${{ github.run_id }}
-          path: selected
-          if-no-files-found: error
+          name: south-central-rivers-groundwater-${{ github.run_id }}
+          path: review-artifacts/south-central-pc-samples/south-central-rivers-groundwater.png
+          if-no-files-found: warn
           compression-level: 6
           retention-days: 7
