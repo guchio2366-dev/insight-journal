@@ -604,3 +604,12 @@
 .africa-atlas .africa-map-pick-label{cursor:pointer}
 .africa-atlas .africa-map-pick-label:focus-visible text{text-decoration:underline}
 .africa-atlas .africa-city-return{min-height:38px;border:0;background:transparent;padding:3px 0;color:#315d68;text-align:left;text-decoration:underline;text-underline-offset:3px;font-size:14px}
+
+/* Climate is read by selecting stations on the map and scrolling the adjacent account. */
+.africa-atlas[data-field=nature][data-topic=climate] .africa-country-controls,
+.africa-atlas[data-field=nature][data-topic=climate] .africa-map-tools{display:none}
+@media(min-width:960px){
+ .africa-atlas[data-field=nature][data-topic=climate] .africa-heading{min-height:78px}
+ .africa-atlas[data-field=nature][data-topic=climate] .africa-region-controls{display:block;min-height:44px;height:auto;grid-template-rows:none}
+ .africa-atlas[data-field=nature][data-topic=climate] .africa-detail{height:calc(100dvh - var(--africa-map-top,298px) - 10px);max-height:calc(100dvh - var(--africa-map-top,298px) - 10px);overflow-y:auto;scrollbar-gutter:stable}
+}
