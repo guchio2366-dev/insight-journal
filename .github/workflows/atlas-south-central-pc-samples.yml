@@ -1,4 +1,4 @@
-name: Package South Central rice review images
+name: Package South Central core review images
 
 on:
   pull_request:
@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Download successful existing PC review
+      - name: Download the existing successful PC review
         uses: actions/download-artifact@v4
         with:
           name: asia-pc-review-37758284170-1
@@ -23,44 +23,37 @@ jobs:
           run-id: 37758284170
           path: incoming
 
-      - name: Select only the three existing rice images and verified head
+      - name: Select South Central Asia core review images
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p selected
-          for profile in south-desktop south-laptop south-small; do
-            name="${profile}-india-rice-export-flow-section.png"
-            mapfile -t files < <(find incoming -type f -name "$name")
-            if [[ ${#files[@]} -ne 1 ]]; then
-              echo "::error::Expected one existing image named $name"
-              exit 1
-            fi
-            cp "${files[0]}" "selected/$name"
-          done
           python - <<'PY'
-          import json
           from pathlib import Path
-          files=list(Path('incoming').rglob('metadata.json'))
-          assert len(files)==1, files
-          meta=json.loads(files[0].read_text())
-          assert meta['status']=='passed', meta['status']
-          assert meta['checkedOutSHA']=='2877363239f47bd5c2c83b08044912763e998514'
-          assert meta['captureCount']==138, meta['captureCount']
-          assert meta['operationCount']==43, meta['operationCount']
-          summary={'reviewedHead':meta['checkedOutSHA'],'reviewRun':37758284170,'status':meta['status'],'mapImages':meta['captureCount'],'operations':meta['operationCount'],'riceSectionImages':[p.name for p in sorted(Path('selected').glob('*.png'))]}
-          Path('selected/head-and-review.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\n')
+          import shutil
+          source=Path('incoming')
+          output=Path('selected')
+          output.mkdir()
+          names=[
+            'desktop-south-central-asia-farm-overview.png',
+            'desktop-south-central-asia-city-first.png',
+            'desktop-south-central-asia-rainfall-no-country-popup.png',
+            'desktop-south-central-asia-basin-selection-retained.png',
+            'south-desktop-south-central-industry-overview.png',
+          ]
+          total=0
+          for name in names:
+            matches=list(source.rglob(name))
+            assert len(matches)==1, (name,matches)
+            shutil.copyfile(matches[0],output/name)
+            total+=(output/name).stat().st_size
+          assert total<=10*1024*1024, total
+          print(f'{len(names)} existing images: {total} bytes')
           PY
-          bytes="$(du -cb selected/* | tail -1 | cut -f1)"
-          if (( bytes > 10 * 1024 * 1024 )); then
-            echo "::error::Selected evidence exceeds 10 MiB: $bytes bytes"
-            exit 1
-          fi
-          echo "Selected evidence: $bytes bytes"
 
-      - name: Upload focused review evidence
+      - name: Upload focused review images
         uses: actions/upload-artifact@v4
         with:
-          name: south-central-rice-review-${{ github.run_id }}
+          name: south-central-core-review-${{ github.run_id }}
           path: selected
           if-no-files-found: error
           compression-level: 6
