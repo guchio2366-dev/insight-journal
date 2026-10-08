@@ -80,7 +80,12 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.equal(mainLegend.nextElementSibling,q('[data-farm-overview-legend]'),'the crop/livestock keys follow the active-map legend');
       assert.equal(q('[data-asia-statistics]').parentElement,q('[data-atlas-shell]'),'statistics share the shell and align with the map/reading column');
       assert.equal(q('[data-asia-statistics]').previousElementSibling,q('[data-asia-explorer]'),'statistics follow the main map and right reading');
-      assert.equal(q('[data-reading-details]').open,true,'the complete reading is initially visible beside the map, as in the US atlas');
+      const compactEastFarm=region==='east-asia'&&field==='agriculture';
+      assert.equal(q('[data-reading-details]').open,!compactEastFarm,'East Asia farming keeps its topic picker visible while detailed reading is collapsible');
+      if(compactEastFarm){
+        assert.equal(q('[data-farming-selector]').hidden,false);
+        assert.ok(q('[data-reading-dock]').contains(q('[data-farming-selector]')));
+      }
       assert.equal(config.presentation.rainfall.interval,250);assert.equal(config.presentation.terrain.interval,500);
       assert.ok(config.farmInsight.rivers.length>=2);assert.equal(q('[data-farm-water]'),null);
       assert.ok(config.social.topics.some(t=>t.key==='overview'));
