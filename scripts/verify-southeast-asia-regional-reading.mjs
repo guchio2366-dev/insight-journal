@@ -50,6 +50,21 @@ export async function verifySoutheastAsiaRegion(page,{source,capture:takePicture
 
  await open('agriculture/');await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmContextStatus==='ready');
  await page.waitForFunction(()=>document.querySelector('.asia-farm-connections-grid > section:first-child h3')?.textContent==='米を生産する国');
+ const layout=await page.evaluate(()=>{
+  const rectangle=selector=>{const r=document.querySelector(selector).getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,bottom:r.bottom};};
+  return {news:rectangle('.atlas-news'),grid:rectangle('.asia-layout'),map:rectangle('.asia-layout>.atlas-map-column'),reading:rectangle('.asia-layout>.asia-reading-panel'),statistics:rectangle('.asia-layout>.asia-farm-connections')};
+ });
+ assert(Math.abs(layout.statistics.x-layout.grid.x)<=1&&Math.abs(layout.statistics.width-layout.grid.width)<=1,'Regional statistics must span the full workspace beyond the news rail');
+ assert(layout.statistics.y>=Math.max(layout.map.bottom,layout.reading.bottom)-1,'Statistics must begin below the map and its reading frame');
+ assert(layout.news.x+layout.news.width<layout.statistics.x,'News rail must remain outside the statistics width');
+ await expand('[data-southeast-forest-reading]');await expand('[data-southeast-trade-reading]');
+ const readingScroll=await page.locator('.asia-layout>.asia-reading-panel').evaluate(node=>{const before=node.scrollTop;node.scrollTop=before+180;return {before,after:node.scrollTop,overflow:getComputedStyle(node).overflowY};});
+ assert(readingScroll.after>readingScroll.before&&readingScroll.overflow==='auto','The right reading must scroll inside its fixed frame');
+ await page.evaluate(()=>scrollTo(0,0));
+ const pageScroll=await page.evaluate(()=>{const before=scrollY;scrollTo(0,Math.min(400,document.documentElement.scrollHeight-innerHeight));return {before,after:scrollY,newsTop:document.querySelector('.atlas-news').getBoundingClientRect().top};});
+ assert(pageScroll.after>pageScroll.before&&pageScroll.newsTop<=12,'The page must scroll while the news rail stays fixed');
+ await page.evaluate(()=>{scrollTo(0,0);document.querySelector('.asia-layout>.asia-reading-panel').scrollTop=0;});
+ record('news rail, independent right reading scroll, and full-width regional statistics');
  assert.equal(await page.locator('.southeast-supply-bars li').count(),5);
  assert.match(await page.locator('.asia-farm-connections-grid > section:nth-child(2)').textContent(),/HS15章.*パーム油HS1511だけの相手国ではありません/s);
  assert.equal(await page.locator('.southeast-partner-list li').count(),5);
