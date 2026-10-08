@@ -8,6 +8,11 @@ on:
     branches-ignore:
       - main
   workflow_dispatch:
+    inputs:
+      export_europe_review_only:
+        description: Export four existing Europe review PNGs without testing or capture
+        type: boolean
+        default: false
 
 # This workflow only reads repository contents. It never publishes the site and
 # does not receive Notion credentials or other application secrets.
@@ -21,6 +26,7 @@ concurrency:
 jobs:
   validate:
     name: Test and build
+    if: github.event_name != 'workflow_dispatch' || !inputs.export_europe_review_only
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -130,4 +136,43 @@ jobs:
           name: site-preview-${{ github.run_id }}
           path: dist
           if-no-files-found: error
+          retention-days: 7
+
+  export-europe-review:
+    name: Export four existing Europe review images
+    if: github.event_name == 'workflow_dispatch' && inputs.export_europe_review_only
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out existing images
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Verify the four image files
+        shell: bash
+        run: |
+          set -euo pipefail
+          files=(
+            docs/review/europe-2026-10-08/agriculture-initial.png
+            docs/review/europe-2026-10-08/terrain-landforms.png
+            docs/review/europe-2026-10-08/precipitation.png
+            docs/review/europe-2026-10-08/industry-initial.png
+          )
+          for file in "${files[@]}"; do
+            test -s "$file"
+          done
+          sha256sum "${files[@]}"
+
+      - name: Upload four existing images
+        uses: actions/upload-artifact@v4
+        with:
+          name: europe-review-four-images-${{ github.run_id }}
+          path: |
+            docs/review/europe-2026-10-08/agriculture-initial.png
+            docs/review/europe-2026-10-08/terrain-landforms.png
+            docs/review/europe-2026-10-08/precipitation.png
+            docs/review/europe-2026-10-08/industry-initial.png
+          if-no-files-found: error
+          compression-level: 0
           retention-days: 7
