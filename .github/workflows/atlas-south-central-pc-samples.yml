@@ -72,11 +72,11 @@ jobs:
       - name: Build local production site
         run: npm run build
 
-      - name: Capture three regional PC views
+      - name: Capture five regional PC views
         timeout-minutes: 3
         run: node scripts/capture-south-central-pc-samples.mjs
 
-      - name: Save three images and result metadata
+      - name: Save five images and result metadata
         if: always()
         uses: actions/upload-artifact@v4
         with:

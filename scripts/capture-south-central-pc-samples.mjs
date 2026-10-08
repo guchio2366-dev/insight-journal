@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** Three South/Central Asia PC views from the checked-out local production build. */
+/** South/Central Asia PC views from the checked-out local production build. */
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {createServer} from 'node:http';
@@ -63,6 +63,21 @@ try{
    assert((await page.locator('[data-reading-dock-title]').textContent())?.trim(),'Regional reading must have a title');
    assert.equal(await page.locator('[data-ao-country]').count(),0);
   }},
+  {id:'south-central-farm-world-share',route:'/atlas/asia/south-central-asia/agriculture/',check:async page=>{
+   const section=page.locator('[data-south-central-farm-connections]');
+   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-south-central-world-share]')?.textContent?.includes('26.6％'));
+   assert.equal(await section.locator('.asia-farm-connections-grid > section').count(),3);
+   assert.match(await section.textContent(),/インドの米（籾米）.*26\.6％/s);
+   assert.equal(await section.locator('svg.sc-share-chart').count(),1);
+   await section.scrollIntoViewIfNeeded();
+  }},
+  {id:'central-asia-wheat-world-share',route:'/atlas/asia/central-asia/agriculture/?place=KAZ&topic=wheat',check:async page=>{
+   const section=page.locator('[data-south-central-farm-connections]');
+   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-south-central-world-share]')?.textContent?.includes('2.3％'));
+   assert.match(await section.textContent(),/カザフスタンの小麦.*2\.3％/s);
+   assert.equal(await section.locator('svg.sc-share-chart').count(),1);
+   await section.scrollIntoViewIfNeeded();
+  }},
   {id:'south-asia-india-world-share',route:'/atlas/asia/south-asia/overview/?country=IND&topic=agriculture',check:async page=>{
    await page.waitForFunction(()=>document.querySelector('[data-ao-country]')?.value==='IND'&&!document.querySelector('[data-ao-panel="agriculture"]')?.hidden);
    const panel=page.locator('[data-ao-panel="agriculture"]');assert.match(await panel.textContent(),/米（籾米）.*2024年は26\.6％/s);
@@ -91,7 +106,7 @@ try{
    console.log(`PASS ${scene.id} (${image.length} bytes)`);
   }finally{await page.close();await persist();}
  }
- assert.equal(results.captures.length,3);assert.deepEqual(results.externalAttempts,[]);
+ assert.equal(results.captures.length,5);assert.deepEqual(results.externalAttempts,[]);
  results.status='passed';
 }catch(error){results.status='failed';results.failure=error.stack??String(error);console.error(results.failure);process.exitCode=1;}
 finally{await browser?.close();await new Promise(resolve=>server.close(resolve));results.completedAt=new Date().toISOString();await persist();}
