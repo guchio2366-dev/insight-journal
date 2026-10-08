@@ -176,7 +176,7 @@ async function readerEvidence(page,record,scene){
  });
  assert(reading.title.trim(),'The reading has no heading');assert(reading.titleFont>=18,'Reading heading was reduced below 18px');assert(reading.titleScrollWidth<=reading.titleWidth+1,'Reading heading is clipped horizontally');assert.equal(reading.newsOverlap,false,'News rail covers the right reading');assert(reading.kickerFont===null||reading.kickerFont>=12.9,'Reading eyebrow is smaller than 13px');assert(reading.paragraphFonts.every(row=>row.font>=13.9),`Reading text is smaller than 14px: ${JSON.stringify(reading.paragraphFonts.filter(row=>row.font<13.9))}`);
  const labels=await page.locator('.africa-map').evaluate(map=>{
-  const frame=map.getBoundingClientRect(),nodes=[...map.querySelectorAll('[data-africa-agri-label-text],[data-africa-agri-place-text],[data-africa-river-label] text,[data-africa-basin-label] text,[data-africa-city-label] text,[data-africa-industry-location] text')];
+  const frame=map.getBoundingClientRect(),nodes=[...map.querySelectorAll('[data-africa-agri-label-text],[data-africa-agri-place-text],[data-africa-river-label] text,[data-africa-basin-label] text,[data-africa-city-label] text,[data-africa-climate-map-label] text,[data-africa-industry-location] text')];
   const rows=nodes.filter(node=>node.checkVisibility({visibilityProperty:true,opacityProperty:true})&&getComputedStyle(node).visibility==='visible').map(node=>{const r=node.getBoundingClientRect(),m=node.getScreenCTM();return{text:node.textContent,x:r.x,y:r.y,right:r.right,bottom:r.bottom,font:parseFloat(getComputedStyle(node).fontSize)*Math.hypot(m.a,m.b)};}).filter(row=>row.right>frame.left&&row.x<frame.right&&row.bottom>frame.top&&row.y<frame.bottom);
   return{rows,overlaps:rows.flatMap((a,i)=>rows.slice(i+1).filter(b=>a.x<b.right-1&&b.x<a.right-1&&a.y<b.bottom-1&&b.y<a.bottom-1).map(b=>[a.text,b.text]))};
  });
@@ -297,7 +297,7 @@ async function climateCity(page,record,{touch=false}={}){
  const city=africaClimateCities.find(row=>row.id==='helwan');
  const point=page.locator('[data-africa-city-point="helwan"]');await point.scrollIntoViewIfNeeded();if(touch)await point.tap();else await point.click();
  const article=page.locator('article[data-africa-city-reading="helwan"]');await article.waitFor({state:'visible'});assert.equal((await state(page)).city,'helwan');assert.equal(await page.locator('[data-theme-title]').textContent(),city.name);
- assert.equal(await article.locator('svg').count(),1);assert.equal(await article.locator('tbody tr').count(),12);const reading=await article.innerText();assert.match(reading,/砂漠気候/);assert.match(reading,/1991.*2020/);assert.match(reading,/13\.9/);assert.match(reading,/29\.2/);assert.match(reading,/未収録|まだ収録していません/);
+ assert.equal(await article.locator('svg').count(),1);assert.equal(await article.locator('tbody tr').count(),12);const reading=await article.innerText();assert.match(reading,/砂漠気候/);assert.match(reading,/1991.*2020/);assert.match(reading,/13\.9/);assert.match(reading,/29\.2/);assert.match(reading,/亜熱帯高圧帯/);assert.match(reading,/灌漑/);
  assert.equal(await page.locator('[data-theme-source]').getAttribute('href'),city.sourceUrl);assert.equal(await page.locator('[data-africa-raster="climate"]').count(),1);
  const months=article.locator('[data-africa-city-months]');if(!await months.evaluate(node=>node.open)){if(touch)await months.locator('summary').tap();else await months.locator('summary').click();}const monthly=await article.locator('tbody tr').allTextContents();for(let index=0;index<12;index++){const cells=await article.locator('tbody tr').nth(index).locator('td').allTextContents();assert.deepEqual(cells,[`${city.temperatureC[index].toFixed(1)} ℃`,`${city.precipitationMm[index].toFixed(1)} mm`],`Month ${index+1} does not match the stored station observations`);}await months.locator('summary').click();
  await readerEvidence(page,record,'helwan');await screenshot(page,record,'africa-climate-city');if(touch){await article.scrollIntoViewIfNeeded();await screenshot(page,record,'africa-climate-city-reading',{preserveScroll:true});}
@@ -317,6 +317,8 @@ async function unavailableNature(page,record){
 async function climateOperations(page,record,reference){
  assert(reference,'US climate reference was not successfully rendered');
  await open(page,'/atlas/africa/?field=nature&topic=climate&zoom=all');await waitAfrica(page,'climate');await assertReaderUI(page);
+ assert.equal((await state(page)).layerClass,undefined);assert.equal(await page.locator('[data-africa-class-outline]').count(),0);
+ await page.locator('[data-africa-climate-map-label]').first().waitFor();await readerEvidence(page,record,'climate-initial');await screenshot(page,record,'africa-climate-initial');
  const image=await page.locator('[data-africa-raster="climate"]').getAttribute('href'),count=await page.locator('[data-africa-layer-class]').count();assert(count>1);
  await page.locator('[data-africa-layer-class="1"]').click();await page.locator('[data-africa-class-outline="1"]').waitFor();assert.equal(await page.locator('[data-africa-layer-class="1"]').getAttribute('aria-pressed'),'true');
  assert.equal(await page.locator('[data-africa-raster="climate"]').getAttribute('href'),image);assert.equal(await page.locator('[data-africa-layer-class]').count(),count);
@@ -324,6 +326,9 @@ async function climateOperations(page,record,reference){
  const measurement=await measure(page,'africa');assertLayout(measurement,reference);record.measurements.push({scene:'climate',...measurement});record.checks.push({check:'Climate class selection preserves native raster, complete legend and actual grid outline',status:'passed',legendClasses:count,image,outline});await screenshot(page,record,'africa-climate-outline');
  await page.reload();await waitAfrica(page,'climate');await page.locator('[data-africa-class-outline="1"]').waitFor();await page.locator('[data-africa-layer-class="1"]').click();assert.equal(await page.locator('[data-africa-class-outline]').count(),0);
  await climateCity(page,record);
+ for(const city of africaClimateCities.filter(row=>row.id!=='helwan')){
+  await page.locator(`[data-africa-city-point="${city.id}"]`).click();const article=page.locator(`[data-africa-city-reading="${city.id}"]`);await article.waitFor({state:'visible'});assert.equal((await state(page)).city,city.id);assert.equal(await page.locator('[data-theme-title]').textContent(),city.name);assert.equal(await page.locator('[data-theme-source]').getAttribute('href'),city.sourceUrl);assert.match(await article.innerText(),new RegExp(city.classification.name));await readerEvidence(page,record,city.id);await screenshot(page,record,`africa-climate-${city.id}`);
+ }
  await checkTabs(page,'topic',[['climate','ArrowRight','water'],['water','End','elevation'],['elevation','Home','climate'],['climate','ArrowLeft','elevation'],['elevation','Home','climate']]);await waitAfrica(page,'climate');
  await unavailableNature(page,record);await page.locator('[data-reset]').click();await waitAfrica(page,'climate');assert.equal((await state(page)).city,undefined);
 }
@@ -514,7 +519,7 @@ async function delayedRiver(page,record){
  }
 }
 async function mobileNatureReader(page,record){
- await open(page,'/atlas/africa/?field=nature&topic=climate');await waitAfrica(page,'climate');await assertReaderUI(page);await climateCity(page,record,{touch:true});await mobileNoOverflow(page);
+ await open(page,'/atlas/africa/?field=nature&topic=climate');await waitAfrica(page,'climate');await assertReaderUI(page);await page.locator('[data-africa-climate-map-label]').first().waitFor();await readerEvidence(page,record,'climate-mobile-initial');await screenshot(page,record,'africa-climate-initial');await climateCity(page,record,{touch:true});await mobileNoOverflow(page);
  await open(page,riverRoute);await waitAfrica(page,'river');await page.locator('[data-africa-river-label="nile"]').tap();await assertRiver(page,'nile');await page.locator('.africa-map-frame').scrollIntoViewIfNeeded();await screenshot(page,record,'africa-nile-mobile',{preserveScroll:true});await page.locator('.africa-detail').scrollIntoViewIfNeeded();await screenshot(page,record,'africa-nile-reading',{preserveScroll:true});await mobileNoOverflow(page);
  await open(page,populationRoute);await waitAfrica(page,'distribution');await cultureGuide(page,record,'ethnicity',{touch:true});await cultureGuide(page,record,'religion',{touch:true});await page.locator('[data-reset]').tap();await waitAfrica(page,'climate');
 }

@@ -630,7 +630,7 @@
 .africa-atlas [data-africa-city-reading] td,.africa-atlas [data-africa-city-reading] th{padding:5px 7px;text-align:right;border-bottom:1px solid #d4ddd7}
 .africa-atlas .atlas-climate-grid line{stroke:#d5dcd8;stroke-width:.7}
 .africa-atlas .atlas-climate-grid text,.africa-atlas .atlas-climate-unit,.africa-atlas .atlas-climate-temp-label,.africa-atlas .atlas-climate-month,.africa-atlas .atlas-climate-axis-title{font-size:11px;fill:#465e64}
-.africa-atlas .atlas-climate-city-name{font-size:12px;fill:#29454e}
+.africa-atlas .atlas-climate-city-name{display:none}
 .africa-atlas .atlas-climate-bar{fill:#5990bd}
 .africa-atlas .atlas-climate-line{fill:none;stroke:#c65841;stroke-width:2.2}
 .africa-atlas .atlas-climate-dot{fill:#c65841}
