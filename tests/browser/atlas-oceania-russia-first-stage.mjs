@@ -86,13 +86,22 @@ try{
     if(farmingOnly){
      if(region==='russia'){
       const wheatShare=host.locator('.russia-wheat-share');
+      const tradeGrid=host.locator('.russia-farming-trade-grid');
       assert.ok(await wheatShare.isVisible(),'Historical wheat share chart is visible below the map');
+      assert.equal(await tradeGrid.locator(':scope > *').count(),3,'Supply, destinations and world share form three columns');
+      const gridBounds=await tradeGrid.boundingBox(),shareBounds=await wheatShare.boundingBox();
+      assert.ok(shareBounds.width<gridBounds.width*.38,'World share uses only the right third');
+      assert.ok(gridBounds.height<430,'The lower row stays compact');
+      assert.equal(await wheatShare.locator('details').evaluate(el=>el.open),false,'Detailed values start folded');
       assert.match(await wheatShare.locator('h2').textContent(),/2022年.*12\.9%/);
       assert.deepEqual(await wheatShare.locator('tbody tr td:last-child').allTextContents(),['11.1%','9.7%','12.9%']);
       assert.equal(await wheatShare.locator('svg path.russia-wheat-line').count(),1);
-      assert.match(await wheatShare.textContent(),/2023・2024年.*非公式値.*使っていません/);
+      assert.match(await wheatShare.textContent(),/2023・24年.*非公式値.*除外/);
       assert.match(await wheatShare.textContent(),/2020年の収穫面積モデル/);
       assert.ok((await wheatShare.boundingBox()).y>bounds.y+bounds.height,'Chart follows the map');
+      const crop=await tradeGrid.evaluate(el=>{const b=el.getBoundingClientRect();return {x:Math.floor(b.left+scrollX),y:Math.floor(b.top+scrollY),width:Math.ceil(b.width),height:Math.ceil(b.height)};});
+      await page.screenshot({path:resolve(output,`russia-agriculture-${width}-lower-row.png`),fullPage:true,clip:crop});
+      result.screenshots.push(`russia-agriculture-${width}-lower-row.png`);
       const legend=host.locator('[data-primary-legend]'),key=host.locator('[data-key-legend]'),reading=host.locator('.russia-learning-reading');
       assert.equal(await key.evaluate(el=>!!el.closest('.russia-learning-map-panel')),true,'Legend belongs to the map panel');
       assert.equal(await reading.locator('[data-primary-legend]').count(),0,'Right reading is free of the map legend');
