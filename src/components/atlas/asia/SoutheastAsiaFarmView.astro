@@ -6,14 +6,14 @@ import {southeastCropPriority} from '../../../data/atlas/asia/southeast-asia-cro
 
 const statistics=JSON.parse(gunzipSync(readFileSync(resolve(process.cwd(),'public/assets/atlas/asia-farming-v1/statistics.json.gz'))).toString('utf8'));
 const priority=southeastCropPriority(statistics);
-const amount=(tonnes:number)=>Math.round(tonnes/10000).toLocaleString('ja-JP');
+const amount=(tonnes:number)=>tonnes>0&&tonnes<5000?'<1':Math.round(tonnes/10000).toLocaleString('ja-JP');
 const mapLabels:Record<string,string>={arabica:'アラビカ分布',robusta:'ロブスタ分布'};
 ---
 <button type="button" data-southeast-farm-single hidden aria-pressed="false">この品目だけ表示</button>
 <details class="southeast-crop-priority" data-southeast-crop-priority>
  <summary>2020年の生産重量から主要作物の候補を確かめる</summary>
  <p>読めること：米の低地と、油ヤシ・ゴムなどの樹木作物は分布が異なります。収録14作物について、FAOSTATの2020年・生産重量（t）の有効値を11か国・地域で合計した候補順位です。重さは農業の価値や栄養、土地面積の順位ではありません。</p>
- <table><caption>生産重量の上位10候補。万tは四捨五入、有効国数は11か国・地域中</caption><thead><tr><th scope="col">品目・分布図</th><th scope="col">万t</th><th scope="col">有効国</th></tr></thead><tbody>{priority.selected.map(row=><tr><th scope="row"><strong>{row.label}</strong><span class="crop-map-links">{row.maps.length?row.maps.map(id=><button type="button" data-farm-group-topic={id}>{mapLabels[id]??'分布図を見る'}</button>):<span>分布図は未収録</span>}</span><small>資料区分 {row.flags.join('・')}</small></th><td>{amount(row.tonnes)}</td><td>{row.reportedCountries}/{priority.countryCount}</td></tr>)}</tbody></table>
+ <table><caption>生産重量の上位10候補。万tは四捨五入、「&lt;1」は1万t未満、有効国数は11か国・地域中</caption><thead><tr><th scope="col">品目・分布図</th><th scope="col">万t</th><th scope="col">有効国</th></tr></thead><tbody>{priority.selected.map(row=><tr><th scope="row"><strong>{row.label}</strong><span class="crop-map-links">{row.maps.length?row.maps.map(id=><button type="button" data-farm-group-topic={id}>{mapLabels[id]??'分布図を見る'}</button>):<span>分布図は未収録</span>}</span><small>資料区分 {row.flags.join('・')}</small></th><td>{amount(row.tonnes)}</td><td>{row.reportedCountries}/{priority.countryCount}</td></tr>)}</tbody></table>
  <p>次点：{priority.next.map(row=>`${row.label}（${amount(row.tonnes)}万t、${row.reportedCountries}/${priority.countryCount}か国）`).join('、')}。採用候補との差は、この収録集合で報告された重量の差です。茶・大豆・ひよこ豆は上位10候補でも地域の分布図がなく、地図へ追加していません。</p>
  <p>油ヤシは果実、コーヒーは生豆の種類合計、ゴムは一次形態です。コーヒーの国計をアラビカ・ロブスタ両方へ重複計上していません。国の欠測・未収録は0とせず、合計と有効国数を併記しました。資料区分はA＝公的報告、E＝推計、I＝受入機関の補完、X＝外部機関の値です。特に有効国の少ない品目を地域の確定順位とは扱えません。</p>
  <p class="source">出典：<a href="https://www.fao.org/faostat/en/#data/QCL">FAOSTAT 作物生産</a>（2020年、Production、t）。<a href="https://www.fao.org/contact-us/terms/db-terms-of-use/">利用条件・CC BY 4.0</a>に基づく収録値の再集計。地図は別資料のMapSPAM 2020推計収穫面積で、この表の重量を描いたものではありません。</p>
