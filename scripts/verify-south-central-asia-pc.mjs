@@ -9,7 +9,7 @@ export const southCentralProfiles=[
  {name:'south-laptop',viewport:{width:1280,height:720}},
  {name:'south-small',viewport:{width:1024,height:768}},
 ];
-export const southCentralImageCount=11*southCentralProfiles.length;
+export const southCentralImageCount=10*southCentralProfiles.length;
 
 export async function verifySouthCentralAsia(page,{source,profile,capture}){
  const checks=[],bandsChecks=[];
@@ -147,10 +147,10 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  await destinations.locator('.sc-flow-pie').waitFor({state:'visible'});
  await page.locator('[data-south-central-farm-connections]').scrollIntoViewIfNeeded();
  await page.waitForLoadState('networkidle');
- await capture(page,profile,'india-rice-export-flow','asia');
+ await page.locator('[data-south-central-farm-connections]').screenshot({path:`review-artifacts/asia-pc/${profile.name}-india-rice-export-flow-section.png`,animations:'disabled'});
  record('India rice export mix and basmati destinations render for overview and rice, and clear on wheat');
 
- // Reuse the 33-image regional budget for two overview references, one rice flow, and
+ // Reuse the 30 map-image regional budget for two overview references and
  // eight new band scenes across desktop, laptop and the smaller PC viewport.
  for(const [topic,kind,interval,legend] of [['precipitation','rainfall',250,'[data-hydrology-scale]'],['terrain','terrain',500,'[data-physical-legend] .asia-physical-key']]){
   let expected;
