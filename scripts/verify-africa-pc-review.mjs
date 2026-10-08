@@ -110,6 +110,17 @@ async function screenshot(page,record,name,{preserveScroll=false}={}){
  const file=`${record.profile}-${name}.png`,png=await page.screenshot({animations:'disabled',fullPage:false});await writeFile(path.join(output,file),png);
  const evidence={file,sha256:hash(png),url:page.url(),scroll:await page.evaluate(()=>({x:scrollX,y:scrollY})),capturedAt:new Date().toISOString()};record.screenshots.push(evidence);report.screenshots.push(evidence);return evidence;
 }
+async function climateReviewPair(){
+ const files=['desktop1536-africa-climate-initial.png','desktop1536-africa-climate-bamako.png'];
+ const encoded=await Promise.all(files.map(async file=>(await readFile(path.join(output,file))).toString('base64')));
+ const page=await browser.newPage({viewport:{width:3072,height:900},deviceScaleFactor:1});
+ try{
+  await page.setContent(`<html lang="ja"><head><meta charset="utf-8"><style>body{margin:0;background:#fffdf8;font:20px sans-serif}.pair{display:flex}.pair>div{width:1536px}h1{height:36px;margin:0;padding:4px 12px;font-size:18px;box-sizing:border-box}img{display:block;width:1536px;height:864px}</style></head><body><div class="pair"><div><h1>初期表示</h1><img src="data:image/png;base64,${encoded[0]}"></div><div><h1>バマコの雨温図</h1><img src="data:image/png;base64,${encoded[1]}"></div></div></body></html>`);
+  await page.locator('img').last().evaluate(image=>image.decode());
+  const file='africa-climate-initial-bamako-pair.png',png=await page.screenshot({animations:'disabled',fullPage:true});await writeFile(path.join(output,file),png);
+  report.screenshots.push({file,sha256:hash(png),sources:files,capturedAt:new Date().toISOString()});
+ }finally{await page.close();}
+}
 async function lowerAgriculture(page,record){
  const lower=page.locator('.africa-secondary');assert.equal(await lower.count(),1);
  for(const summary of await lower.locator(':scope > details > summary').all())if(await summary.isVisible()){await summary.scrollIntoViewIfNeeded();break;}
@@ -296,7 +307,8 @@ async function checkTabs(page,kind,steps){
 async function climateCity(page,record,{touch=false}={}){
  const city=africaClimateCities.find(row=>row.id==='helwan');
  const point=page.locator('[data-africa-city-point="helwan"]');await point.scrollIntoViewIfNeeded();if(touch)await point.tap();else await point.click();
- const article=page.locator('article[data-africa-city-reading="helwan"]');await article.waitFor({state:'visible'});assert.equal((await state(page)).city,'helwan');assert.equal(await page.locator('[data-theme-title]').textContent(),city.name);
+ const article=page.locator('article[data-africa-city-reading="helwan"]');await article.waitFor({state:'visible'});assert.equal((await state(page)).city,'helwan');assert.equal(await page.locator('[data-theme-title]').textContent(),`${city.name}の雨温図`);
+ const key=await article.locator('.africa-city-climate-key>span').evaluateAll(nodes=>nodes.map(node=>({text:node.textContent,y:Math.round(node.getBoundingClientRect().top)})));assert.deepEqual(key.map(row=>row.text),[`${city.normalPeriod}の観測所平年値`,'棒：降水量 mm','線：平均気温 ℃']);assert.equal(key[1].y,key[2].y,'Chart bar and line keys should share one readable row');
  assert.equal(await article.locator('svg').count(),1);assert.equal(await article.locator('tbody tr').count(),12);const reading=await article.innerText();assert.match(reading,/砂漠気候/);assert.match(reading,/1991.*2020/);assert.match(reading,/13\.9/);assert.match(reading,/29\.2/);assert.match(reading,/亜熱帯高圧帯/);assert.match(reading,/灌漑/);
  assert.equal(await page.locator('[data-theme-source]').getAttribute('href'),city.sourceUrl);assert.equal(await page.locator('[data-africa-raster="climate"]').count(),1);
  const months=article.locator('[data-africa-city-months]');if(!await months.evaluate(node=>node.open)){if(touch)await months.locator('summary').tap();else await months.locator('summary').click();}const monthly=await article.locator('tbody tr').allTextContents();for(let index=0;index<12;index++){const cells=await article.locator('tbody tr').nth(index).locator('td').allTextContents();assert.deepEqual(cells,[`${city.temperatureC[index].toFixed(1)} ℃`,`${city.precipitationMm[index].toFixed(1)} mm`],`Month ${index+1} does not match the stored station observations`);}await months.locator('summary').click();
@@ -327,7 +339,7 @@ async function climateOperations(page,record,reference){
  await page.reload();await waitAfrica(page,'climate');await page.locator('[data-africa-class-outline="1"]').waitFor();await page.locator('[data-africa-layer-class="1"]').click();assert.equal(await page.locator('[data-africa-class-outline]').count(),0);
  await climateCity(page,record);
  for(const city of africaClimateCities.filter(row=>row.id!=='helwan')){
-  await page.locator(`[data-africa-city-point="${city.id}"]`).click();const article=page.locator(`[data-africa-city-reading="${city.id}"]`);await article.waitFor({state:'visible'});assert.equal((await state(page)).city,city.id);assert.equal(await page.locator('[data-theme-title]').textContent(),city.name);assert.equal(await page.locator('[data-theme-source]').getAttribute('href'),city.sourceUrl);assert.match(await article.innerText(),new RegExp(city.classification.name));await readerEvidence(page,record,city.id);await screenshot(page,record,`africa-climate-${city.id}`);
+  await page.locator(`[data-africa-city-point="${city.id}"]`).click();const article=page.locator(`[data-africa-city-reading="${city.id}"]`);await article.waitFor({state:'visible'});assert.equal((await state(page)).city,city.id);assert.equal(await page.locator('[data-theme-title]').textContent(),`${city.name}の雨温図`);assert.equal(await page.locator('[data-theme-source]').getAttribute('href'),city.sourceUrl);assert.match(await article.innerText(),new RegExp(city.classification.name));await readerEvidence(page,record,city.id);await screenshot(page,record,`africa-climate-${city.id}`);
  }
  await checkTabs(page,'topic',[['climate','ArrowRight','water'],['water','End','elevation'],['elevation','Home','climate'],['climate','ArrowLeft','elevation'],['elevation','Home','climate']]);await waitAfrica(page,'climate');
  await unavailableNature(page,record);await page.locator('[data-reset]').click();await waitAfrica(page,'climate');assert.equal((await state(page)).city,undefined);
@@ -571,7 +583,7 @@ async function main(){
     await runCase(profile,'africa-delayed-river',delayedRiver);
    }
   }
-  assert.equal(report.cases.filter(record=>record.status!=='passed').length,0,'Browser review failed; inspect metadata and failure screenshots');for(const profile of agricultureProfiles)for(const region of ['us','africa'])for(const scene of ['agriculture','agriculture-rice','agriculture-lower'])assert(report.screenshots.some(row=>row.file===`${profile.id}-${region}-${scene}.png`),`Missing ${profile.id} ${region} ${scene} representative capture`);for(const region of ['us','africa'])for(const scene of ['agriculture','agriculture-map','agriculture-rice','agriculture-rice-reading'])assert(report.screenshots.some(row=>row.file===`${mobileProfile.id}-${region}-${scene}.png`),`Missing mobile ${region} ${scene} capture`);assert(report.screenshots.some(row=>row.file===`${mobileProfile.id}-africa-agriculture-lower.png`),'Missing mobile Africa lower reading capture');report.status='passed';
+  assert.equal(report.cases.filter(record=>record.status!=='passed').length,0,'Browser review failed; inspect metadata and failure screenshots');for(const profile of agricultureProfiles)for(const region of ['us','africa'])for(const scene of ['agriculture','agriculture-rice','agriculture-lower'])assert(report.screenshots.some(row=>row.file===`${profile.id}-${region}-${scene}.png`),`Missing ${profile.id} ${region} ${scene} representative capture`);for(const region of ['us','africa'])for(const scene of ['agriculture','agriculture-map','agriculture-rice','agriculture-rice-reading'])assert(report.screenshots.some(row=>row.file===`${mobileProfile.id}-${region}-${scene}.png`),`Missing mobile ${region} ${scene} capture`);assert(report.screenshots.some(row=>row.file===`${mobileProfile.id}-africa-agriculture-lower.png`),'Missing mobile Africa lower reading capture');await climateReviewPair();report.status='passed';
  }catch(error){report.status='failed';report.failure=error.stack??String(error);process.exitCode=1;console.error(error);}
  finally{report.completedAt=new Date().toISOString();await browser?.close();if(server)await new Promise(resolve=>server.close(resolve));await save();console.log(JSON.stringify({status:report.status,output,cases:report.cases.length,screenshots:report.screenshots.length}));}
 }

@@ -58,4 +58,7 @@ test('every map caption is placed inside its named published climate cell',()=>{
  for(const anchor of africaClimateClassAnchors){const [lon,lat]=anchor.coordinates,row=Math.floor((layer.bounds[3]-lat)/layer.resolutionDegrees),column=Math.floor((lon-layer.bounds[0])/layer.resolutionDegrees),category=layer.classes.find(item=>item.id===anchor.id);
   assert.equal(values[row*layer.width+column],anchor.id,anchor.label);assert.ok(category);assert.match(anchor.label,new RegExp(`^${category.code} `));
  }
+ assert.equal(africaClimateClassAnchors.find(row=>row.id===1)?.label,'Af 熱帯雨林');
+ assert.equal(africaClimateClassAnchors.find(row=>row.id===12)?.label,'Cwb 温帯冬季少雨');
+ assert.equal(africaClimateClassAnchors.find(row=>row.id===8)?.label,'Csa 地中海性');
 });

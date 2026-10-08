@@ -12,7 +12,7 @@ export type AfricaLayerView={key:string;ready:boolean;loading:boolean;error:stri
 type Loaded={value?:any;error?:string;promise?:Promise<void>};
 const SVG='http://www.w3.org/2000/svg';
 export const africaRiverDisplayColors={base:'#9bb5c1',named:'#377f9d',selected:'#b15e32'} as const;
-export const africaClimateClassAnchors=[{coordinates:[10,24],id:4,label:'BWh 砂漠'},{coordinates:[20,0],id:1,label:'Af 雨林'},{coordinates:[23,-9],id:3,label:'Aw サバナ'},{coordinates:[38,12],id:12,label:'Cwb 冬乾燥'},{coordinates:[19,-33],id:8,label:'Csa 夏乾燥'}] as const;
+export const africaClimateClassAnchors=[{coordinates:[10,24],id:4,label:'BWh 砂漠'},{coordinates:[20,0],id:1,label:'Af 熱帯雨林'},{coordinates:[23,-9],id:3,label:'Aw サバナ'},{coordinates:[38,12],id:12,label:'Cwb 温帯冬季少雨'},{coordinates:[19,-33],id:8,label:'Csa 地中海性'}] as const;
 export const africaCommodityColors:Record<string,string>={maize:'#c59320',rice:'#287daa',wheat:'#8b64aa',cassava:'#268365',cattle:'#98513e',goats:'#aa6b28',sheep:'#50698c'};
 export const africaCommodityLabels:Record<string,string>={maize:'とうもろこし',rice:'稲',wheat:'小麦',cassava:'キャッサバ',cattle:'牛',goats:'ヤギ',sheep:'羊'};
 export function africaCommodityColor(key:string):string{return africaCommodityColors[key.replace(/^crop-|^livestock-/,'').replace(/-harvested$|-production$/,'')]??'#567c77';}

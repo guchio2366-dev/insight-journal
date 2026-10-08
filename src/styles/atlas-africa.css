@@ -622,10 +622,17 @@
 .africa-atlas [data-africa-agri-value-legend]>button[aria-pressed=true]{font-weight:750;border-bottom-color:#244e55}
 .africa-atlas [data-africa-agri-value-legend] i{display:inline-block;flex:none;width:16px;height:12px;border:1px solid #6d7f75}
 .africa-atlas [data-africa-city-reading] h3{font-size:18px;line-height:1.5;margin:6px 0}
-.africa-atlas [data-africa-city-reading] p{font-size:15px;line-height:1.75;margin:8px 0}
-.africa-atlas [data-africa-city-reading] figure{margin:8px 0 12px}
+.africa-atlas [data-africa-city-reading] p{font-size:15px;line-height:1.7;margin:6px 0}
+.africa-atlas [data-africa-city-reading] figure{margin:0 0 9px}
 .africa-atlas [data-africa-city-reading] svg{display:block;width:100%;height:auto;overflow:visible}
 .africa-atlas [data-africa-city-reading] figcaption{font-size:14px;line-height:1.6}
+.africa-atlas .africa-city-climate-key{display:flex;flex-wrap:wrap;align-items:center;gap:2px 12px}
+.africa-atlas .africa-city-climate-key>span{white-space:nowrap}
+.africa-atlas .africa-city-climate-key .is-cold{color:#336a99}
+.africa-atlas .africa-city-climate-key .is-warm{color:#ad432f}
+.africa-atlas .africa-city-classification h4,.africa-atlas .africa-city-geographic-reason h4{font-size:15px;line-height:1.55;margin:9px 0 2px}
+.africa-atlas [data-africa-city-reading] .africa-city-source{margin:3px 0;font-size:14px;line-height:1.6}
+.africa-atlas:has([data-africa-city-reading]:not([hidden])) .africa-theme-explanation,.africa-atlas:has([data-africa-city-reading]:not([hidden])) .africa-theme-source{display:none}
 .africa-atlas [data-africa-city-reading] table{border-collapse:collapse;width:100%;font-size:14px}
 .africa-atlas [data-africa-city-reading] td,.africa-atlas [data-africa-city-reading] th{padding:5px 7px;text-align:right;border-bottom:1px solid #d4ddd7}
 .africa-atlas .atlas-climate-grid line{stroke:#d5dcd8;stroke-width:.7}
