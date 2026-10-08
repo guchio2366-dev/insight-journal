@@ -116,9 +116,9 @@
  /* Keep the selected water question and its controls beside the complete map. */
  .canada-nature[data-canada-nature].is-water-reading .canada-national-header{display:none}
  .canada-nature[data-canada-nature].is-water-reading .canada-country-primary .canada-map-frame{height:clamp(270px,calc(100dvh - 430px),540px);min-height:0;max-height:none;aspect-ratio:auto}
- .canada-nature[data-canada-nature].is-water-reading .canada-water-controls{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:0 0 10px}
+ .canada-nature[data-canada-nature].is-water-reading .canada-water-controls{display:block;margin:10px 0}
  .canada-nature[data-canada-nature].is-water-reading .canada-water-controls label{margin:0;font-size:13px}
- .canada-nature[data-canada-nature].is-water-reading .canada-water-controls label:first-child{display:grid;grid-template-columns:auto minmax(130px,1fr);flex:1 1 100%;gap:7px}
+ .canada-nature[data-canada-nature].is-water-reading .canada-water-controls label:first-of-type{display:grid;grid-template-columns:auto minmax(130px,1fr);gap:7px}
  .canada-nature[data-canada-nature].is-water-reading .canada-water-controls select{width:100%;min-width:0;min-height:36px;padding:5px 7px;font-size:13px}
  .canada-nature[data-canada-nature].is-water-reading .canada-water-controls button{min-height:36px;padding:5px 7px;font-size:13px}
  .canada-nature[data-canada-nature].is-water-reading .canada-water-controls details{flex:1 1 100%;margin:0;font-size:12px}
@@ -128,6 +128,18 @@
  /* Leave room beneath the population map for its complete colour/symbol key. */
  .canada-population[data-canada-population] .canada-country-primary[data-field=population] .canada-map-frame{height:clamp(270px,calc(100dvh - 455px),560px);min-height:0;max-height:none;aspect-ratio:auto}
 }
+
+/* River names are the primary selection controls in the surface-water view. */
+.canada-nature .canada-map .canada-river.is-featured{stroke:#186782;stroke-width:2.5;cursor:pointer}
+.canada-nature .canada-map .canada-river.is-featured.is-selected{stroke:#ad4e2f;stroke-width:3.5}
+.canada-nature [data-canada-river-label]{cursor:pointer}
+.canada-nature [data-canada-river-label] circle{fill:#186782;stroke:#fffef8;stroke-width:2;vector-effect:non-scaling-stroke}
+.canada-nature [data-canada-river-label] text{fill:#164a61;font-size:14px;font-weight:700;stroke:#fffef8;stroke-width:4px;paint-order:stroke}
+.canada-nature [data-canada-river-label][aria-pressed=true] circle{fill:#ad4e2f}
+.canada-nature [data-canada-river-label][aria-pressed=true] text{fill:#8e361c}
+.canada-nature[data-canada-nature] .country-water-subtopics{display:block;margin:0 0 10px;padding:8px 0;border-top:1px solid #cbd5d2}
+.canada-nature[data-canada-nature] .country-water-subtopics summary{cursor:pointer;font-size:14px;font-weight:700}
+.canada-nature[data-canada-nature] .country-water-subtopic-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 @media(max-width:959px){.canada-nature .canada-country-primary{padding:8px 0}.canada-nature .canada-country-primary .canada-reading{max-height:none;overflow:visible}}
 
 @media(min-width:900px){.atlas-desktop-shell [data-canada-nature].canada-nature .canada-general-reading>summary{display:list-item}}

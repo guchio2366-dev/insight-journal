@@ -14,6 +14,10 @@
 .canada-water-source-invalid{stroke-width:1.1}.canada-water-shape.is-selected .canada-water-source-invalid{stroke:#972f24;stroke-width:2.5}.canada-water-origin{padding:0 0 10px;margin:0 0 12px;border-bottom:1px solid #d1d8cc;font-size:12px}.canada-water-origin p{font-size:12px}.canada-water-origin details{margin-top:8px}.canada-water-origin summary{cursor:pointer}.canada-water-origin-map{display:block;width:100%;height:auto;background:#e8f0f1;margin:8px 0}.canada-water-origin [data-water-origin-legend]{font-size:11px}
 .canada-water-reading-note{font-size:11px;color:#645d51;border-left:2px solid #9a7961;padding-left:8px}
 .canada-water-references{pointer-events:none}.canada-water-references circle{fill:#263e48;stroke:#fffef8;stroke-width:1.5}.canada-water-references text{fill:#263e48;font-size:20px;font-weight:600;paint-order:stroke;stroke:#fffef8;stroke-width:2.5;stroke-linejoin:round}
+.canada-rain-map-labels{pointer-events:none}
+.canada-rain-map-labels circle{fill:#173f56;stroke:#fffefa;stroke-width:2}
+.canada-rain-map-labels text{fill:#173f56;font-size:13px;font-weight:700;paint-order:stroke;stroke:#fffefa;stroke-width:4px;stroke-linejoin:round}
+.canada-rain-map-unit{position:absolute;left:8px;bottom:8px;background:#fffef5eb;padding:3px 7px;font-size:13px;font-weight:700;color:#173f56;pointer-events:none}
 @media(min-width:1600px){.canada-water-resources{grid-template-columns:minmax(0,1.35fr) minmax(400px,1fr)}}
 @media(max-width:1100px){.canada-water-resources{grid-template-columns:minmax(0,1fr)}.canada-water-map{max-height:65dvh}.canada-water-reading{padding:12px}}
 @media(max-width:650px){.canada-water-map{max-height:none}.canada-water-selection select{max-width:220px}.canada-nature .canada-water-legend button{min-height:36px}.canada-water-map-tools{right:5px;top:5px}}

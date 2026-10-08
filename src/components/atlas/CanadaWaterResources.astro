@@ -22,6 +22,16 @@ const nationalPath=canadaMapPath(canadaOutline.geometry);
 const bcPath = industryGeometry.features.find(feature => feature.code === '59')?.path;
 const labels = {precipitation:'降水量',drainage:'河川の流域',groundwater:'全国の地下水地域',aquifers:'BC州の帯水層'};
 const conciseNote = (topic: string, dataset: typeof datasets.precipitation) => topic === 'groundwater' ? `地下水量の地図ではありません。${dataset.invalidGeometryCount ? `原資料で輪郭が交差する${dataset.invalidGeometryCount}区域は塗りを除外し、輪郭のみ表示。` : ''}` : topic === 'aquifers' ? '色は地下水の量・利用可能量や取水の持続可能性を示しません。' : dataset.note ? dataset.note.split('。')[0] + '。' : '';
+// Each anchor was checked against the held full-extent class mask, not inferred from a city observation.
+const rainLabels=[
+ {id:'p0',point:[-126,69],text:'250 mm未満',y:-8},
+ {id:'p1',point:[-112,53],text:'250〜500 mm',y:22},
+ {id:'p2',point:[-99,54],text:'500〜750 mm',y:-8},
+ {id:'p3',point:[-86,53],text:'750〜1,000 mm',y:22},
+ {id:'p4',point:[-73,47],text:'1,000〜1,500 mm',y:22,side:'left'},
+ {id:'p5',point:[-130,54],text:'1,500〜2,000 mm',y:-8},
+ {id:'p6',point:[-126,50],text:'2,000 mm以上',y:22},
+];
 ---
 <section class="canada-water-resources" data-canada-water-resources hidden={hidden} aria-label="カナダの水資源分布">
  <div class="canada-water-map-column">
@@ -38,8 +48,10 @@ const conciseNote = (topic: string, dataset: typeof datasets.precipitation) => t
     <g data-canada-basin-labels hidden>{datasets.drainage.groups.filter(g=>(g as any).labelAnchor).map(g=>{const [x,y]=projectCanadaMap((g as any).labelAnchor);return <g data-canada-basin-label={g.id} role="button" tabindex="0" aria-label={`${g.name}の流域を読む`}><text x={x} y={y}>{g.name}</text></g>})}</g>
     <path class="canada-water-national-outline" data-canada-water-national-outline d={nationalPath} fill="none" vector-effect="non-scaling-stroke" aria-hidden="true" />
     <g class="canada-water-references" aria-label="位置の目印に使う既存のECCC観測点">{climate.stations.map(station => {const [x,y] = projectCanadaWater(station.coordinates);return <g data-canada-water-reference={station.id} data-reference-x={x} data-reference-y={y} transform={`translate(${projectCanadaMap(station.coordinates).join(" ")})`}><title>{station.name}：ECCC観測点の位置。帯水層の測定点ではありません。</title><g data-canada-water-reference-glyph><circle r="5" vector-effect="non-scaling-stroke" /><text x="10" y="-8" vector-effect="non-scaling-stroke">{station.name}</text></g></g>;})}</g>
+    <g class="canada-rain-map-labels" data-canada-rain-map-labels hidden aria-label="各降水帯の年降水量">{rainLabels.map(label=>{const [x,y]=projectCanadaMap(label.point);return <g data-canada-rain-map-label={label.id} data-rain-x={x} data-rain-y={y} transform={`translate(${x} ${y})`}><g data-canada-rain-label-glyph><circle r="3" vector-effect="non-scaling-stroke"/><text x={label.side==='left'?'-8':'8'} y={label.y} text-anchor={label.side==='left'?'end':'start'}>{label.text}</text></g></g>})}</g>
    </svg>
    <p class="canada-water-loading" data-canada-water-load role="status">分布図は表示時に読み込みます。</p>
+   <span class="canada-rain-map-unit" data-canada-rain-map-unit hidden>年降水量 · mm/年</span>
    <div class="canada-water-map-tools" aria-label="水資源地図の操作"><button type="button" data-canada-water-zoom="in" aria-label="地図を拡大">＋</button><button type="button" data-canada-water-zoom="out" aria-label="地図を縮小">−</button><button type="button" data-canada-water-focus disabled>選択へ</button><button type="button" data-canada-water-full>南部</button><button type="button" data-canada-water-whole>全域</button></div>
   </div>
   <div class="canada-water-map-key">{Object.entries(datasets).map(([topic,dataset])=><div class="canada-water-legend" data-canada-water-resource-legend={topic} hidden aria-label="地図の凡例">{dataset.groups.map(group=><button type="button" data-canada-water-group={group.id} data-canada-water-group-topic={topic} aria-pressed="false"><i style={`background:${topic==='precipitation'?(canadaAnnualRainColor(group.id)??group.color):group.color}`} aria-hidden="true"></i><span>{group.name}</span></button>)}</div>)}</div>

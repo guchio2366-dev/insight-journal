@@ -132,12 +132,14 @@ export function initCanadaNature(root:HTMLElement){
   const selectedWater=state.water?selectedWaterReading[state.water]:null;
   const waterTitle=root.querySelector<HTMLElement>('[data-canada-water-reading-title]'),waterText=root.querySelector<HTMLElement>('[data-canada-water-reading-text]'),waterScope=root.querySelector<HTMLElement>('[data-canada-water-reading-scope]');
   if(waterTitle)waterTitle.textContent=waterGroup?'五大湖・セントローレンス上流と大西洋側':selectedWater?selectedWater.name:'湖と川を、海までつないで読む';
-  if(waterText)waterText.textContent=waterGroup?'五大湖とセントローレンス上流の位置を、産業の州別構成と比べます。この図は航路や輸送量を示しません。':selectedWater?.body??'湖や川を選び、内陸から海への出口と位置を確かめます。';
+  if(waterText)waterText.textContent=waterGroup?'五大湖とセントローレンス上流の位置を、産業の州別構成と比べます。この図は航路や輸送量を示しません。':selectedWater?.body??'マッケンジー川は北極海、フレーザー川は太平洋、ネルソン川はハドソン湾、セントローレンス川は大西洋側へ向かいます。地図の川名から選ぶと、その川の説明が出ます。';
   if(waterScope)waterScope.textContent=state.only&&state.water?'選択水域だけを表示中です。つながる他の湖・川は「すべての水系へ戻す」で照合できます。線の太さは流量、湖の色は水質ではありません。':'線は川、面は湖の概略形状です。流量・水質・地下水・流域境界の地図ではありません。';
   const waterLabels=root.querySelector<SVGElement>('[data-canada-industry-water-labels]');if(waterLabels)waterLabels.style.display=waterGroup?'':'none';
+  const riverLabels=root.querySelector<SVGElement>('[data-canada-river-labels]');if(riverLabels)riverLabels.toggleAttribute('hidden',state.view!=='water'||waterState.topic!=='surface'||waterGroup);
+  for(const label of root.querySelectorAll<SVGElement>('[data-canada-river-label]'))label.setAttribute('aria-pressed',String(label.getAttribute('data-canada-river-label')===state.water));
   for(const ocean of root.querySelectorAll<SVGElement>('.canada-ocean'))ocean.style.display=waterGroup?'none':'';
   const mapHeading=root.querySelector<HTMLElement>('.canada-map-title h2');if(mapHeading){mapHeading.dataset.original??=mapHeading.textContent!;mapHeading.textContent=waterGroup?'五大湖・川上流・大西洋側':mapHeading.dataset.original;}
-  for(const point of root.querySelectorAll<SVGElement>('[data-canada-map-city]'))point.style.display=waterGroup?'none':'';
+  for(const point of root.querySelectorAll<SVGElement>('[data-canada-map-city]'))point.style.display=state.view==='water'?'none':'';
   if(waterGroup)$('[data-canada-position-caption]').textContent='五大湖5湖・St. Lawrence上流・大西洋側の位置を比較します。気候観測点はこの表示では非表示です。「都市の気候」で観測点を確認できます。面積や航路の図ではありません。';
   const mapDesc=map.querySelector<SVGDescElement>('desc');if(mapDesc){mapDesc.dataset.original??=mapDesc.textContent!;mapDesc.textContent=waterGroup?'五大湖5湖とセントローレンス川上流を赤い縁・線で強調。大西洋側も表示しますが、下流の河道・航路は描いていません。観測地点はこの比較では非表示。':mapDesc.dataset.original;}
   for(const shape of root.querySelectorAll<SVGPathElement>('[data-canada-water-shape]')){
@@ -176,6 +178,8 @@ export function initCanadaNature(root:HTMLElement){
  }
  for(const button of root.querySelectorAll<HTMLElement>('[data-canada-view]'))button.addEventListener('click',()=>update({view:button.dataset.canadaView as CanadaNatureState['view']}));
  $<HTMLSelectElement>('[data-canada-water]').addEventListener('change',e=>update({water:(e.target as HTMLSelectElement).value||null,only:false}));
+ for(const label of root.querySelectorAll<SVGElement>('[data-canada-river-label]')){const choose=()=>update({water:state.water===label.getAttribute('data-canada-river-label')?null:label.getAttribute('data-canada-river-label'),only:false});label.addEventListener('click',choose);label.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose();}});}
+ root.querySelector('[data-canada-water-layers]')?.addEventListener('click',event=>{const name=(event.target as Element).getAttribute('data-canada-water-shape');if(name&&waters.includes(name))update({water:state.water===name?null:name,only:false});});
  $<HTMLInputElement>('[data-canada-only]').addEventListener('change',e=>update({only:(e.target as HTMLInputElement).checked}));
  $('[data-canada-all-water]').addEventListener('click',()=>update({water:null,only:false}));
  $('[data-canada-reset]').addEventListener('click',()=>update({frame:null}));

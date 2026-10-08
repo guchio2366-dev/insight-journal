@@ -44,9 +44,14 @@ export function initCanadaWaterResources(root: HTMLElement) {
   return topic === 'aquifers' && geometry.has(topic) ? canadaWaterFit(geometry.get(topic)!.features) ?? full : full;
  }
  function drawCamera() {
-  map.setAttribute('viewBox',canadaLegacyFrame(frame).join(' '));
+  const projectedFrame=canadaLegacyFrame(frame);map.setAttribute('viewBox',projectedFrame.join(' '));
   const matrix=map.getScreenCTM?.();
   const referenceScale=matrix?.a?1/matrix.a:frame[2]/900;
+  for(const label of map.querySelectorAll<SVGGElement>('[data-canada-rain-map-label]')){
+   const x=Number(label.dataset.rainX),y=Number(label.dataset.rainY);
+   label.style.display=x<projectedFrame[0]||x>projectedFrame[0]+projectedFrame[2]||y<projectedFrame[1]||y>projectedFrame[1]+projectedFrame[3]?'none':'';
+   label.querySelector('[data-canada-rain-label-glyph]')?.setAttribute('transform',`scale(${referenceScale})`);
+  }
   for(const reference of map.querySelectorAll<SVGGElement>('[data-canada-water-reference]')) {
    const x=Number(reference.dataset.referenceX),y=Number(reference.dataset.referenceY);
    reference.style.display=state.topic==='drainage'||x<frame[0]||x>frame[0]+frame[2]||y<frame[1]||y>frame[1]+frame[3]?'none':'';
@@ -161,7 +166,10 @@ export function initCanadaWaterResources(root: HTMLElement) {
   select.value=state.area??'';only.checked=!!state.area&&state.only;only.disabled=!state.area;$<HTMLButtonElement>('[data-canada-water-focus]').disabled=!state.area||topic==='precipitation';
   $('[data-canada-water-map-title]').textContent=dataset.title;
   map.querySelector('title')!.textContent=dataset.title;
-  map.querySelector('desc')!.textContent=`${dataset.reading} ${dataset.scope} 地図と同じ区分は凡例と選択欄で確認できます。丸は既存のECCC観測点の位置の目印で、帯水層の測定点ではありません。`;
+  map.querySelector('desc')!.textContent=`${dataset.reading} ${dataset.scope} ${topic==='precipitation'?'各色帯の年降水量を地図内にmm/年で表示します。':'地図と同じ区分は凡例と選択欄で確認できます。丸は既存のECCC観測点の位置の目印で、帯水層の測定点ではありません。'}`;
+  map.querySelector<SVGElement>('[data-canada-rain-map-labels]')?.toggleAttribute('hidden',topic!=='precipitation');
+  root.querySelector<HTMLElement>('[data-canada-rain-map-unit]')?.toggleAttribute('hidden',topic!=='precipitation');
+  map.querySelector<SVGElement>('.canada-water-references')?.toggleAttribute('hidden',topic==='precipitation');
   $('[data-canada-water-resource-scope]').textContent=dataset.scope;
   for(const layer of root.querySelectorAll<SVGElement>('[data-canada-basin-water],[data-canada-basin-labels]'))layer.toggleAttribute('hidden',topic!=='drainage');
   for(const label of root.querySelectorAll<SVGElement>('[data-canada-basin-label]')){const id=label.getAttribute('data-canada-basin-label');label.toggleAttribute('hidden',!!(state.only&&state.area&&id!==state.area&&!(state.area==='nelson'&&id==='saskatchewan')));}
