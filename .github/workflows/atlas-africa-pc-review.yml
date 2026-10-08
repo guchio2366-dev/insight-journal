@@ -117,6 +117,7 @@ jobs:
             review-artifacts/africa-pc-review/desktop1536-africa-climate-city.png
             review-artifacts/africa-pc-review/desktop1536-africa-nile.png
             review-artifacts/africa-pc-review/desktop1536-africa-industry.png
+            review-artifacts/africa-pc-review/desktop1536-africa-industry-selected.png
             review-artifacts/africa-pc-review/desktop1536-africa-population.png
             review-artifacts/africa-pc-review/*-failure.png
           if-no-files-found: warn
