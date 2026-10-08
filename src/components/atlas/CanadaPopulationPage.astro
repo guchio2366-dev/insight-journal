@@ -51,6 +51,7 @@ import '../../styles/atlas-canada-country-parity.css';
       <CanadaMapLand />
       {lakes.features.map(f=><g class="population-lake"><path class="canada-lake" d={geometryPath(f.geometry)} fill-rule="evenodd"><title>Ontario湖（オンタリオ湖）</title></path></g>)}
       {rivers.features.filter(f=>f.properties.name==='St. Lawrence').map(f=><path class="canada-river" d={geometryPath(f.geometry)}><title>セントローレンス川</title></path>)}
+      <defs data-population-concentration-patterns></defs>
       <g data-population-regions></g>
       {geo.map(g=><g data-population-map-cma={g.id} role="button" tabindex="0" aria-label={`${g.name}都市圏を選ぶ`} aria-pressed="false"><title>{g.name}都市圏、2021年 {fmt(g.population.value)}人{g.population.symbol?' '+g.population.symbol:''}</title><path data-population-boundary style={`fill:${densityColor(g.density)}`} d={g.rings.map(r=>line(r)).join('')} fill-rule="evenodd" /><circle class="population-anchor" cx={canadaLegacyPoint(g.point)[0]} cy={canadaLegacyPoint(g.point)[1]} r="1.8"/><circle data-population-symbol cx={canadaLegacyPoint(g.point)[0]} cy={canadaLegacyPoint(g.point)[1]} r={g.population.value===null?0:Math.sqrt(g.population.value/max)*22} style="display:none"/><text data-population-label x={canadaLegacyPoint(g.point)[0]+7} y={canadaLegacyPoint(g.point)[1]-7} style={['535','462','933'].includes(g.id)?undefined:'display:none'}>{g.name.match(/（(.+)）/)?.[1]??g.name}</text></g>)}
 
