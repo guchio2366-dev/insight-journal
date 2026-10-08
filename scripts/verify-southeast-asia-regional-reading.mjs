@@ -58,7 +58,7 @@ export async function verifySoutheastAsiaRegion(page,{source,capture:takePicture
  assert(layout.statistics.y>=Math.max(layout.map.bottom,layout.reading.bottom)-1,'Statistics must begin below the map and its reading frame');
  assert(layout.news.x+layout.news.width<layout.statistics.x,'News rail must remain outside the statistics width');
  await expand('[data-southeast-forest-reading]');await expand('[data-southeast-trade-reading]');
- const readingScroll=await page.locator('.asia-layout>.asia-reading-panel').evaluate(node=>{const before=node.scrollTop;node.scrollTop=before+180;return {before,after:node.scrollTop,overflow:getComputedStyle(node).overflowY};});
+ const readingScroll=await page.locator('.asia-layout>.asia-reading-panel').evaluate(node=>{node.scrollTop=0;const before=node.scrollTop;node.scrollTop=180;return {before,after:node.scrollTop,overflow:getComputedStyle(node).overflowY};});
  assert(readingScroll.after>readingScroll.before&&readingScroll.overflow==='auto','The right reading must scroll inside its fixed frame');
  await page.evaluate(()=>scrollTo(0,0));
  const pageScroll=await page.evaluate(()=>{const before=scrollY;scrollTo(0,Math.min(400,document.documentElement.scrollHeight-innerHeight));return {before,after:scrollY,newsTop:document.querySelector('.atlas-news').getBoundingClientRect().top};});
