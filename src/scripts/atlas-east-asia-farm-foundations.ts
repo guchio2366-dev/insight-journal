@@ -1,5 +1,6 @@
 import data from '../../public/assets/atlas/east-asia-v1/farm-foundations.json';
 import {japanWheatSupply as wheat} from '../data/atlas/japan-wheat-supply';
+import {cropImportPartners} from '../data/atlas/east-asia-crop-partners';
 import type {AsiaRegionId} from '../lib/atlas-asia-state';
 
 type Country={code:string;name:string}|undefined;
@@ -47,13 +48,15 @@ export function renderEastAsiaFarmFoundations(root:HTMLElement,region:AsiaRegion
  const japanWheat=topic==='wheat'&&code==='JPN';
  const heading=section.querySelector<HTMLElement>('[data-east-foundations-title]'),lead=section.querySelector<HTMLElement>('[data-east-foundations-lead]');
  if(heading)heading.textContent=japanWheat?'日本の小麦：供給・輸入先・自給率':'生産・貿易・世界での位置';
- if(lead)lead.textContent=japanWheat?'2023年度の食料需給表で、国内生産・純輸入・在庫変動と国内消費を同じ数量で読みます。輸入先は食糧用小麦の通関量、自給率は国内消費を分母にした値です。':'森林面積、木材の生産・輸出入、商品輸出先は別の統計です。地図の森林色から数量や仕向け先を推定せず、国の公表値と並べて読みます。';
+ if(lead&&japanWheat)lead.textContent='2023年度の食料需給表で、国内生産・純輸入・在庫変動と国内消費を同じ数量で読みます。輸入先は食糧用小麦の通関量、自給率は国内消費を分母にした値です。';
  const wheatSources=section.querySelector<HTMLElement>('[data-east-wheat-sources]'),otherSources=section.querySelector<HTMLDetailsElement>('[data-east-other-sources]');
  if(wheatSources)wheatSources.hidden=!japanWheat;if(otherSources)otherSources.open=!japanWheat;
  section.querySelector<HTMLElement>('[data-east-partner-title]')!.textContent=japanWheat?'小麦の輸入相手国':'全商品の輸出先';
  section.querySelector<HTMLElement>('[data-east-share-title]')!.textContent=japanWheat?'小麦の自給率':'世界比と推移';
  if(japanWheat){section.querySelector<HTMLElement>('[data-east-supply-title]')!.textContent='日本の小麦：供給と国内消費';renderJapanWheat(forest,destinations,share);return;}
  const crop=topic&&Object.hasOwn(data.cropFlows,topic)?data.cropFlows[topic as keyof typeof data.cropFlows]:undefined;
+ if(lead)lead.textContent=crop?'国別の生産重量と対応HS品目の貿易額を分けて示します。輸入元は選んだ品目の輸入額が分母で、国内消費の行先ではありません。':'森林面積、木材の生産・輸出入、商品輸出先は別の統計です。地図の森林色から数量や仕向け先を推定せず、国の公表値と並べて読みます。';
+ section.querySelector<HTMLElement>('[data-east-partner-title]')!.textContent=crop?'品目別の輸入元':'全商品の輸出先';
  section.querySelector<HTMLElement>('[data-east-supply-title]')!.textContent=crop?`${cropLabels[topic!]}の生産・商品貿易`:'丸太・製材の供給と輸出入';
  if(crop){
   if(code&&Object.hasOwn(crop,code)){
@@ -81,6 +84,17 @@ export function renderEastAsiaFarmFoundations(root:HTMLElement,region:AsiaRegion
  }
  if(!crop)p(forest,'生産・輸入・輸出はそれぞれ別の量です。輸入を国内伐採や国内仕向けに読み替えられず、在庫変動を含む需給表でもありません。');
  if(!crop&&topic!=='overview'&&topic!=='forest')p(forest,'選んだ品目に対応する供給・輸出入系列は今回の比較対象外です。上は林産物の参考値です。');
+ if(crop){
+  const row=code&&topic?cropImportPartners[code as keyof typeof cropImportPartners]?.[topic as 'rice'|'wheat'|'maize'|'soybean']:undefined;
+  if(row){
+   const reporter=code==='TWN'?'その他のアジア（台湾等）':names[code!],parts=[...row.top.map((part,index)=>({...part,color:colors[index]})),{name:'その他',value:row.total-row.top.reduce((sum,part)=>sum+part.value,0),color:colors[3]}];
+   p(destinations,`${reporter}のHS ${cropHS[topic!]} ${cropLabels[topic!]}輸入元 · 2023年 · 名目米ドル`);
+   const pie=el('div');pie.className='east-pie';pie.setAttribute('role','img');pie.setAttribute('aria-label',`${reporter}の${cropLabels[topic!]}輸入元。割合は直後の凡例を参照。`);let angle=0;pie.style.background=`conic-gradient(${parts.map(part=>{const start=angle;angle+=part.value/row.total*100;return `${part.color} ${start}% ${angle}%`;}).join(',')})`;destinations.append(pie);
+   for(const part of parts){const key=el('div');key.className='east-pie-key';const square=el('i');square.style.background=part.color;key.append(square,el('span',part.name),el('span',format(part.value/row.total*100,'%')));destinations.append(key);}
+   p(destinations,'分母はこのHS品目の輸入額です。国内生産量や国内消費量への仕向け割合ではありません。台湾の貿易は「Other Asia, nes」（台湾等）区分です。');
+   const source=el('a','2023年の品目別・相手国別原表');source.setAttribute('href',row.source);source.setAttribute('rel','noopener noreferrer');destinations.append(source);
+  }else p(destinations,code?'この品目の輸入元内訳は今回の詳細対象外です。対応HS品目の輸出入総額は左欄に示しています。全商品の相手国をこの品目の相手国に読み替えません。':'国を選ぶと、対象品目の輸入元を確認できます。');
+ }else{
  const exampleCode=code&&Object.hasOwn(data.exportDestinations,code)?code:'CHN',record=data.exportDestinations[exampleCode as keyof typeof data.exportDestinations];
  if(record){
   const reporter=exampleCode==='TWN'?'その他のアジア（台湾等）':names[exampleCode];p(destinations,`${reporter}の全商品輸出先 · 2023年 · 名目米ドル`);
@@ -89,6 +103,7 @@ export function renderEastAsiaFarmFoundations(root:HTMLElement,region:AsiaRegion
   for(const row of parts){const key=el('div');key.className='east-pie-key';const square=el('i'),label=el('span',row.label),value=el('span',format(row.value/record.world*100,'%'));square.style.background=row.color;key.append(square,label,value);destinations.append(key);}
   p(destinations,'分母はこの報告区分の全商品輸出額です。丸太・製材の輸出先や最終消費地ではありません。台湾の位置は「Other Asia, nes」区分で、台湾だけの厳密な値とは言い切れません。');
  }else p(destinations,'この報告区分の輸出相手先は未収録です。');
+ }
  const id=topics[topic??''];if(!id){p(share,'選んだ品目と同じ定義のWorld分母を照合した系列は、今回の7指標に含まれません。');return;}const series=data.series.find(row=>row.id===id);
  if(!series)return;
  if(!code){

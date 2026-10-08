@@ -65,8 +65,21 @@ try{
  assert.equal(await page.locator('.asia-reading-panel').evaluate(node=>getComputedStyle(node).overflowY),'visible');
  await section.screenshot({path:join(out,'east-japan-wheat-pc.png')});
  await page.locator('.atlas-workspace').screenshot({path:join(out,'east-japan-wheat-layout-pc.png')});
+ await page.goto(base+'/atlas/asia/east-asia/agriculture/?topic=rice&place=CHN',{waitUntil:'domcontentloaded'});await section.waitFor({state:'visible'});
+ assert.equal(await section.locator('[data-east-partner-title]').textContent(),'品目別の輸入元');
+ assert.match(await section.locator('[data-east-export-partners]').textContent(),/中国のHS 1006 米輸入元.*ベトナム.*タイ.*ミャンマー/);
+ assert.doesNotMatch(await section.locator('[data-east-export-partners]').textContent(),/全商品輸出先/);
+ await section.screenshot({path:join(out,'east-china-rice-partners-pc.png')});
+ await page.reload({waitUntil:'domcontentloaded'});await section.waitFor({state:'visible'});assert.match(await section.locator('[data-east-export-partners]').textContent(),/ベトナム/);
+ const cropBefore=new URL(page.url());await page.locator('[data-dock-compare="industry"]').click();await page.locator('[data-comparison-back]').click();await section.waitFor({state:'visible'});const cropAfter=new URL(page.url());for(const key of ['topic','place','at'])assert.equal(cropAfter.searchParams.get(key),cropBefore.searchParams.get(key));
+ await page.goto(base+'/atlas/asia/east-asia/agriculture/?topic=rice&place=TWN',{waitUntil:'domcontentloaded'});await section.waitFor({state:'visible'});
+ assert.match(await section.locator('[data-east-export-partners]').textContent(),/その他のアジア（台湾等）のHS 1006 米輸入元.*米国.*ベトナム.*タイ/);
+ await section.screenshot({path:join(out,'east-taiwan-rice-partners-pc.png')});
+ await page.goto(base+'/atlas/asia/east-asia/agriculture/?topic=wheat&place=KOR',{waitUntil:'domcontentloaded'});await section.waitFor({state:'visible'});
+ assert.match(await section.locator('[data-east-export-partners]').textContent(),/詳細対象外/);assert.equal(await section.locator('[data-east-export-partners] .east-pie').count(),0);
  assert.deepEqual(errors,[]);
  const mobile=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1});await mobile.route('**/*',route=>{if(new URL(route.request().url()).origin!==new URL(base).origin)return route.abort();return route.continue();});await mobile.goto(base+'/atlas/asia/east-asia/agriculture/?topic=forest&place=TWN',{waitUntil:'domcontentloaded'});await mobile.locator('[data-east-farm-foundations]').waitFor({state:'visible'});await mobile.waitForLoadState('networkidle');assert.equal(await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);await mobile.locator('[data-east-farm-foundations]').screenshot({path:join(out,'east-taiwan-forest-mobile.png')});
  await mobile.goto(base+'/atlas/asia/east-asia/agriculture/?topic=wheat&place=JPN',{waitUntil:'domcontentloaded'});await mobile.locator('[data-east-farm-foundations]').waitFor({state:'visible'});assert.equal(await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);await mobile.locator('[data-east-farm-foundations]').screenshot({path:join(out,'east-japan-wheat-mobile.png')});
- console.log(JSON.stringify({status:'passed',images:['us-agriculture-pc.png','east-overview-pc.png','east-taiwan-forest-pc.png','east-japan-wheat-pc.png','east-japan-wheat-layout-pc.png','east-taiwan-forest-mobile.png','east-japan-wheat-mobile.png'],scope:'local production build; external requests blocked'},null,2));
+ await mobile.goto(base+'/atlas/asia/east-asia/agriculture/?topic=rice&place=TWN',{waitUntil:'domcontentloaded'});await mobile.locator('[data-east-farm-foundations]').waitFor({state:'visible'});assert.equal(await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);await mobile.locator('[data-east-farm-foundations]').screenshot({path:join(out,'east-taiwan-rice-partners-mobile.png')});
+ console.log(JSON.stringify({status:'passed',images:['us-agriculture-pc.png','east-overview-pc.png','east-taiwan-forest-pc.png','east-japan-wheat-pc.png','east-japan-wheat-layout-pc.png','east-china-rice-partners-pc.png','east-taiwan-rice-partners-pc.png','east-taiwan-forest-mobile.png','east-japan-wheat-mobile.png','east-taiwan-rice-partners-mobile.png'],scope:'local production build; external requests blocked'},null,2));
 }finally{await browser.close();await new Promise(done=>server.close(done));}
