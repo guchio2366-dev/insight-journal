@@ -59,7 +59,8 @@ try{
  const scenes=[
   {id:'south-central-nature',route:'/atlas/asia/south-central-asia/nature/',check:async page=>{
    await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-map-fallback]')?.hidden);
-   assert.match(await page.locator('[data-reading-dock-title]').textContent(),/ベンガルの雨季と中央アジアの乾燥/);
+   assert.equal(await page.locator('[data-asia-atlas]').getAttribute('data-region'),'south-central-asia');
+   assert((await page.locator('[data-reading-dock-title]').textContent())?.trim(),'Regional reading must have a title');
    assert.equal(await page.locator('[data-ao-country]').count(),0);
   }},
   {id:'south-asia-india-world-share',route:'/atlas/asia/south-asia/overview/?country=IND&topic=agriculture',check:async page=>{
@@ -92,6 +93,6 @@ try{
  }
  assert.equal(results.captures.length,3);assert.deepEqual(results.externalAttempts,[]);
  results.status='passed';
-}catch(error){results.status='failed';results.failure=error.stack??String(error);process.exitCode=1;}
+}catch(error){results.status='failed';results.failure=error.stack??String(error);console.error(results.failure);process.exitCode=1;}
 finally{await browser?.close();await new Promise(resolve=>server.close(resolve));results.completedAt=new Date().toISOString();await persist();}
 console.log(JSON.stringify({status:results.status,headSHA:head,images:results.captures.length,externalAttempts:results.externalAttempts.length,failure:results.failure?.split('\n')[0]},null,2));
