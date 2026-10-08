@@ -50,16 +50,18 @@ export async function verifySoutheastAsiaRegion(page,{source,capture:takePicture
 
  await open('agriculture/');await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmContextStatus==='ready');
  await page.waitForFunction(()=>document.querySelector('.asia-farm-connections-grid > section:first-child h3')?.textContent==='米を生産する国');
+ await capture('agriculture-workspace-initial');
  const layout=await page.evaluate(()=>{
   const rectangle=selector=>{const r=document.querySelector(selector).getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,bottom:r.bottom};};
-  return {news:rectangle('.atlas-news'),grid:rectangle('.asia-layout'),map:rectangle('.asia-layout>.atlas-map-column'),reading:rectangle('.asia-layout>.asia-reading-panel'),statistics:rectangle('.asia-layout>.asia-farm-connections')};
+  return {news:rectangle('.atlas-news'),grid:rectangle('.asia-layout'),workspace:rectangle('[data-southeast-top-workspace]'),map:rectangle('[data-southeast-top-workspace]>.atlas-map-column'),reading:rectangle('[data-southeast-top-workspace]>.asia-reading-panel'),statistics:rectangle('.asia-layout>.asia-farm-connections')};
  });
  assert(Math.abs(layout.statistics.x-layout.grid.x)<=1&&Math.abs(layout.statistics.width-layout.grid.width)<=1,'Regional statistics must span the full workspace beyond the news rail');
  assert(layout.statistics.y>=Math.max(layout.map.bottom,layout.reading.bottom)-1,'Statistics must begin below the map and its reading frame');
  assert(layout.news.x+layout.news.width<layout.statistics.x,'News rail must remain outside the statistics width');
  await expand('[data-southeast-forest-reading]');await expand('[data-southeast-trade-reading]');
- const readingScroll=await page.locator('.asia-layout>.asia-reading-panel').evaluate(node=>{node.scrollTop=0;const before=node.scrollTop;node.scrollTop=180;return {before,after:node.scrollTop,overflow:getComputedStyle(node).overflowY};});
+ const readingScroll=await page.locator('[data-southeast-top-workspace]>.asia-reading-panel').evaluate(node=>{node.scrollTop=0;const before=node.scrollTop;node.scrollTop=180;return {before,after:node.scrollTop,overflow:getComputedStyle(node).overflowY};});
  assert(readingScroll.after>readingScroll.before&&readingScroll.overflow==='auto','The right reading must scroll inside its fixed frame');
+ await takePicture('agriculture-reading-scrolled');
  const pageScroll=await page.evaluate(()=>{
   const news=document.querySelector('.atlas-news'),shell=news.closest('.atlas-desktop-shell'),maxScroll=document.documentElement.scrollHeight-innerHeight;
   const shellY=shell.getBoundingClientRect().top+scrollY;
@@ -69,7 +71,16 @@ export async function verifySoutheastAsiaRegion(page,{source,capture:takePicture
   return {before,after:scrollY,firstTop,secondTop:news.getBoundingClientRect().top};
  });
  assert(pageScroll.after>pageScroll.before&&pageScroll.firstTop<=12&&Math.abs(pageScroll.secondTop-pageScroll.firstTop)<=1,`The page and news rail must scroll independently: ${JSON.stringify(pageScroll)}`);
- await page.evaluate(()=>{scrollTo({top:0,behavior:'instant'});document.querySelector('.asia-layout>.asia-reading-panel').scrollTop=0;});
+ await page.locator('.asia-layout>.asia-farm-connections').evaluate(node=>node.scrollIntoView({block:'start',behavior:'instant'}));
+ const lower=await page.evaluate(()=>{
+  const rect=selector=>document.querySelector(selector).getBoundingClientRect();
+  const reading=rect('[data-southeast-top-workspace]>.asia-reading-panel'),statistics=rect('.asia-layout>.asia-farm-connections');
+  const cards=[...document.querySelectorAll('.asia-farm-connections-grid>section')].map(node=>{const r=node.getBoundingClientRect(),x=r.x+r.width/2,y=Math.min(innerHeight-5,Math.max(5,r.y+Math.min(r.height/2,60)));return {visible:r.bottom>0&&r.top<innerHeight,uncovered:node.contains(document.elementFromPoint(x,y))};});
+  return {readingBottom:reading.bottom,statisticsTop:statistics.top,cards};
+ });
+ assert(lower.readingBottom<=lower.statisticsTop+1&&lower.cards.length===3&&lower.cards.every(card=>card.visible&&card.uncovered),`All three statistics cards must remain visible and uncovered: ${JSON.stringify(lower)}`);
+ await takePicture('agriculture-statistics-visible');
+ await page.evaluate(()=>{scrollTo({top:0,behavior:'instant'});document.querySelector('[data-southeast-top-workspace]>.asia-reading-panel').scrollTop=0;});
  record('news rail, independent right reading scroll, and full-width regional statistics');
  assert.equal(await page.locator('.southeast-supply-bars li').count(),5);
  assert.match(await page.locator('.asia-farm-connections-grid > section:nth-child(2)').textContent(),/HS15章.*パーム油HS1511だけの相手国ではありません/s);
