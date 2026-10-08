@@ -17,6 +17,7 @@ import { readEuropeFarmingFocus, writeEuropeFarmingFocus } from '../data/atlas/e
 import { europeIndustryGroupCopy, europeIndustryMatches, europeIndustryOverviewLabels, isEuropeIndustryCountry, normaliseEuropeIndustryGroup } from './atlas-europe-industry';
 import { createEuropeFarmingStatistics } from '../scripts/atlas-europe-farming-statistics';
 import { createEuropeCultureOverview, europeCultureOverviewPlaces } from './atlas-europe-culture-overview';
+import { europeReligionRegionalEvidence } from '../data/atlas/europe/religion-regional-evidence';
 import precipitationLineLabels from '../data/atlas/europe/precipitation-line-labels.json' with {type:'json'};
 import { europeTerrainGuides, europeTerrainPlaceNames } from '../data/atlas/europe/terrain-geography';
 type Country = { code: string; name: string; region: string };
@@ -275,7 +276,10 @@ export function initEuropeAtlas() {
     if(save)commit(['water','drainage','precipitation','terrain','contours','density'].includes(id)&&state.region==='all'&&!state.place);
   }
   function selectFeature(id:string) {
-    const composition=europeCultureOverviewPlaces.find(item=>item.id===id);
+    if(cultureActive()&&europeReligionRegionalEvidence.some(item=>item.id===id)){
+      state.feature=id;commit(false);return;
+    }
+    const composition=europeCultureOverviewPlaces.find(item=>item.id===id&&'caseId' in item);
     if(composition&&cultureActive()){
       culture.applyState({cultureCase:composition.caseId,cultureCategory:'',cultureArea:''});Object.assign(state,culture.readState());commit(false);return;
     }
@@ -327,7 +331,7 @@ export function initEuropeAtlas() {
         : `${countries.find(c=>c.code===feature.country)?.name}の${feature.capital?'首都':'都市'}です。都市の点は位置を示し、人口の大小を表すものではありません。`;
     }
     const overview=query<HTMLButtonElement>('[data-eu-overview]');
-    overview.hidden=!farm.item&&!feature&&!['forest','treecover','dairy'].includes(layer.id);
+    overview.hidden=!farm.item&&!feature&&!europeReligionRegionalEvidence.some(item=>item.id===state.feature)&&!['forest','treecover','dairy'].includes(layer.id);
     overview.textContent=layer.field==='agriculture'?'← 欧州の農林業':`← ${layer.title}の概論`;
     const hiddenNote=query<HTMLElement>('[data-eu-hidden-note]');
     hiddenNote.hidden=!farm.item||farm.selectedVisible;
@@ -675,6 +679,7 @@ export function initEuropeAtlas() {
       if(selected.state.cultureCase)query('[data-culture-takeaway]').textContent=selected.censusCase.grain==='LAD'?'イングランド・ウェールズで自己申告分類の地域差を読む事例です。欧州全域の分布ではありません。':'クロアチアの自己申告分類を全国値で読む事例です。行政区と同じ粒度では比較しません。';
     }else if(cultureRunning){cultureRunning=false;culture.setActive(false);}
     cultureOverview.render(cultureActive(),topic==='religion'?'religion':'ethnicity',state.cultureCase??'');
+    cultureOverview.renderEvidence(cultureActive()&&topic==='religion'&&!state.cultureCase,state.feature);
     const selectedTopic=currentField.id==='agriculture'?(['forest','treecover'].includes(topic)?'treecover':'crops'):currentField.id==='population'?(cultureActive()?topic:'density'):['precipitation','drainage'].includes(topic)?'water':topic;
     all<HTMLElement>('[data-eu-topic]').forEach(button=>{
       const industryGroup=normaliseEuropeIndustryGroup(button.dataset.euIndustryGroup);

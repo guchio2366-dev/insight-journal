@@ -1,0 +1,105 @@
+{
+  "checkedOn": "2026-10-08",
+  "basinSource": "BasinATLAS v1.0 level 04; CC BY 4.0; published Europe display mask and identifiers",
+  "riverSource": "Natural Earth v5.1.2 50m rivers, selected lines; see context-v1/manifest.json",
+  "method": "Group only identical MAIN_BAS identifiers, follow NEXT_DOWN to the same outlet; do not merge adjacent polygons. Compare the existing river line endpoints with the published basin grid.",
+  "limitations": [
+    "The Europe grid is a clipped display mask, not original basin geometry.",
+    "The stored river lines may start downstream of the source.",
+    "A complete source river and uncut whole-basin polygon need independent verification before the screen can say 全流域・本流・河口."
+  ],
+  "reviews": [
+    {
+      "name": "Danube",
+      "ja": "ドナウ川",
+      "anchor": [
+        19.04,
+        47.5
+      ],
+      "mainBasin": 2040008490,
+      "unitCount": 9,
+      "sourceIds": [
+        2040008490,
+        2040539930,
+        2040540100,
+        2040543090,
+        2040543160,
+        2040548500,
+        2040548700,
+        2040555600,
+        2040555780
+      ],
+      "pfafDigits": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "sourceNetworkClosed": true,
+      "sourceLevelFourSiblingSetComplete": true,
+      "clickedAnchor": 2040539930,
+      "lineFeatureCount": 1,
+      "lineVertexCount": 131,
+      "publishedRiverLineStart": [
+        17.206423,
+        48.061098
+      ],
+      "publishedRiverLineEnd": [
+        28.760705,
+        45.234138
+      ],
+      "lineStartBasin": 2040539930,
+      "lineEndBasin": 2040008490,
+      "mainstemComplete": false,
+      "productDecision": "Review only. The published river line does not establish a source-to-mouth mainstem; the displayed L4 mask clips source polygons to 45 countries and the frame. Do not call this a verified complete river basin/mainstem in the product."
+    },
+    {
+      "name": "Volga",
+      "ja": "ヴォルガ川",
+      "anchor": [
+        45,
+        55
+      ],
+      "mainBasin": 2040068680,
+      "unitCount": 9,
+      "sourceIds": [
+        2040068680,
+        2040288980,
+        2040289120,
+        2040292580,
+        2040292690,
+        2040309560,
+        2040309610,
+        2040315940,
+        2040315950
+      ],
+      "pfafDigits": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "sourceNetworkClosed": true,
+      "sourceLevelFourSiblingSetComplete": true,
+      "clickedAnchor": 2040292690,
+      "lineFeatureCount": 2,
+      "lineVertexCount": null,
+      "publishedRiverLineStart": null,
+      "publishedRiverLineEnd": null,
+      "lineStartBasin": null,
+      "lineEndBasin": null,
+      "mainstemComplete": false,
+      "productDecision": "Review only. The published river line does not establish a source-to-mouth mainstem; the displayed L4 mask clips source polygons to 45 countries and the frame. Do not call this a verified complete river basin/mainstem in the product."
+    }
+  ]
+}

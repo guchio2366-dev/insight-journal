@@ -1,0 +1,20 @@
+{
+  "checkedOn": "2026-10-08",
+  "dataset": "International Hydrogeological Map of Europe 1:5,000,000",
+  "publisher": "BGR Hannover / PANGAEA",
+  "doi": "https://doi.org/10.1594/PANGAEA.855274",
+  "license": "CC BY 3.0 Unported",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+  "sourceCharacter": "2008 printed map mosaic, deposited in 2015; old borders and draft-era cartography; hydrogeological conditions, not current groundwater storage, renewable quantity, or shortage",
+  "files": {
+    "completePdf": "https://store.pangaea.de/Publications/ihme_2008/ihme_500dpi.pdf",
+    "berlinSheet": "https://store.pangaea.de/Publications/ihme_2008/C4_Berlin_ec_f.img"
+  },
+  "test": {
+    "method": "Ordinary HTTPS HEAD via curl -IL --max-time 20 for the published Berlin IMG URL; no alternate host or permission/network configuration attempted",
+    "result": "CONNECT tunnel failed, response 403 from the local Envoy proxy before the PANGAEA store response; no IMG bytes acquired",
+    "georeferenceInspection": "blocked: no raster bytes to read with GDAL",
+    "overlayDecision": "do not publish or georeference an uninspected image"
+  },
+  "nextAllowedOption": "If the original IMG/PDF is made available through normal authorized access, use gdalinfo to check embedded CRS and transform, align one sheet against coast/river control points, and label it a historical hydrogeology reference. Keep WHYMAP and WISE out of this layer."
+}

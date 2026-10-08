@@ -105,7 +105,7 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, geography,
           <span class="eu-selected-point" data-eu-selected-point role="img" aria-label="選択地点" hidden></span>
         </div>
         <div class="eu-terrain-name-options" data-eu-terrain-name-options hidden role="group" aria-label="地形名の種類"><button type="button" data-eu-terrain-names="landforms" aria-pressed="true">山地・平原</button><button type="button" data-eu-terrain-names="coasts" aria-pressed="false">半島・島・海域</button></div>
-        <div class="eu-map-legend" data-eu-map-legend><p class="eu-water-note">河川・湖の位置、年降水量、流域区画を切り替えます。地下水は公開利用条件が未確認のため未収録です。</p></div>
+        <div class="eu-map-legend" data-eu-map-legend><p class="eu-water-note">河川・湖の位置、年降水量、流域区画を切り替えます。地下水の歴史的な水理地質図は利用条件を確認済みですが、原画像を取得・位置合わせできていないため未収録です。</p></div>
         <div class="eu-item-list" data-eu-farming-list hidden={!agriculture} aria-label="農畜産物と林業を選ぶ">
           <p class="eu-item-ranking-note" data-eu-farming-ranking-note>作物12区分・家畜4種の分布と、酪農の生乳統計です。生産額順位ではありません。野菜・果樹の集合区分と個別作物、生体数と肉・乳・卵を同列に順位付けしません。</p>
           {(['crop','livestock'] as const).map(kind=><section data-eu-farming-children={kind}><h3>{kind==='crop'?'作物':'畜産'}</h3><div>{farmingAreas.features.filter(f=>f.properties.kind===kind).map(f=><button type="button" data-eu-layer={f.properties.id} aria-pressed="false"><span class:list={['eu-item-swatch',{'is-livestock':kind==='livestock'}]} style={{'--item-color':f.properties.color}}></span>{f.properties.name}</button>)}</div></section>)}
@@ -129,8 +129,8 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, geography,
           </details>
         </div>
         <div class="eu-culture-composition-key" data-eu-culture-composition-key hidden>
-          <p>2021年の公表総計 · 円は同じ大きさです。角度は各対象の総人口に占める回答割合で、円の位置は対象を示す目印です。人口規模・個人の位置・細地域の分布を表しません。</p>
-          <p>イングランド・ウェールズ・クロアチアだけを掲載しています。最多・過半数の分類で土地を塗った地図ではありません。色は各表の分類を区別し、国をまたいだ同色の対応はありません。</p>
+          <p data-eu-culture-key-intro>2021年の公表総計 · 円は同じ大きさです。角度は各対象の総人口に占める回答割合で、円の位置は対象を示す目印です。人口規模・個人の位置・細地域の分布を表しません。</p>
+          <p data-eu-culture-key-coverage>イングランド・ウェールズ・クロアチアだけを掲載しています。最多・過半数の分類で土地を塗った地図ではありません。色は各表の分類を区別し、国をまたいだ同色の対応はありません。</p>
           <div class="eu-composition-tables" data-eu-composition-tables></div>
         </div>
         <p class="eu-map-caption">線は国境です。ロシアは欧州側の表示枠内を掲載しています。境界は概略で、係争地の帰属を示すものではありません。</p>

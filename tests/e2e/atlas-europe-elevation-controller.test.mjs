@@ -304,7 +304,7 @@ for(const topic of ['ethnicity','religion'])test(`${topic} keeps the unselected 
     assert.equal(legend.children.length,7);
     assert.ok([...legend.querySelectorAll('[data-culture-scale-key]')].every(key=>key.hidden));
     assert.equal(legend.lastElementChild.hidden,false);
-    assert.match(legend.lastElementChild.textContent,/未掲載・3対象以外.*0%ではありません/);
+    assert.match(legend.lastElementChild.textContent,topic==='religion'?/未掲載・資料未取得.*0%ではありません/:/未掲載・3対象以外.*0%ではありません/);
     assert.match(legend.lastElementChild.querySelector('i').getAttribute('style'),/#b8bec7/);
     assert.match(app.q('[data-culture-denominator]').textContent,/分母/);
     const select=(selector,value)=>{const node=app.q(selector);node.value=value;node.dispatchEvent(new app.w.Event('change',{bubbles:true}));};
@@ -334,7 +334,7 @@ for(const topic of ['ethnicity','religion'])test(`${topic} shows all three publi
       assert.equal(button.querySelector('svg').getAttribute('viewBox'),'0 0 56 56');
       assert.equal(key.querySelector(`[data-eu-composition-table="${code}"]`).querySelectorAll('tbody tr').length,expected[index]);
     }
-    assert.match(app.q('[data-culture-overview]').textContent,/自己認識.*言語分布.*実践/);
+    assert.match(app.q('[data-culture-overview]').textContent,topic==='religion'?/Czechia.*Estonia.*欧州全域の完成分布ではありません/: /自己認識.*言語分布.*実践/);
     app.q(`[data-eu-composition="${topic}-HRV"]`).click();
     await until(()=>visibleCompositions()===0,'Selecting a census case hides every overview composition');
     assert.equal(app.q('[data-culture-case]').value,'croatia-national-2021');assert.equal(key.hidden,true);
@@ -349,6 +349,24 @@ for(const topic of ['ethnicity','religion'])test(`${topic} shows all three publi
     await until(()=>visibleCompositions()===3,'Clearing the case restores all three overview compositions');
     assert.equal(key.hidden,false);
     assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
+  }finally{await app.w.happyDOM.close();}
+});
+
+test('religion regional excerpts remain simultaneous and a selected source stays in the right reader',async()=>{
+  const app=await setup('/insight-journal/atlas/europe/population/?layer=religion&render=static');
+  try{
+    await until(()=>app.w.document.querySelectorAll('[data-eu-religion-evidence]').length===7);
+    const markers=()=>app.w.document.querySelectorAll('[data-eu-religion-evidence]:not([hidden])').length;
+    assert.equal(markers(),7);
+    app.q('[data-eu-religion-evidence="religion-subotica"]').click();
+    await until(()=>!app.q('[data-eu-religion-evidence-reading]').hidden);
+    assert.equal(markers(),7);
+    assert.equal(app.q('[data-culture-case]').value,'');
+    assert.match(app.q('[data-eu-religion-evidence-reading]').textContent,/カトリック.*59,748人.*正教会.*37,674人/s);
+    assert.equal(new URL(app.w.location.href).searchParams.get('feature'),'religion-subotica');
+    app.q('[data-eu-overview]').click();
+    assert.equal(app.q('[data-eu-religion-evidence-reading]').hidden,true);
+    assert.equal(markers(),7);
   }finally{await app.w.happyDOM.close();}
 });
 

@@ -38,7 +38,7 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.ok(doc.querySelector('.eu-map-stage [data-eu-zoom="in"]'));
       assert.deepEqual([...doc.querySelectorAll('.eu-map-buttons button')].map(button=>button.hasAttribute('data-eu-reset')?'overview':button.dataset.euZoom??'renderer'),['overview','in','out','renderer']);
       assert.ok(doc.querySelector('.eu-map-stage').compareDocumentPosition(doc.querySelector('[data-eu-map-legend]'))&4);
-      assert.match(doc.querySelector('[data-eu-map-legend] .eu-water-note').textContent,/地下水.*未確認.*未収録/);
+      assert.match(doc.querySelector('[data-eu-map-legend] .eu-water-note').textContent,/地下水.*利用条件を確認済み.*位置合わせできていないため未収録/);
       const waterMask=doc.querySelector('[data-eu-water-mask="caspian-sea"]');
       assert.ok(waterMask);
       assert.equal(waterMask.getAttribute('fill'),'#e7eff1');
