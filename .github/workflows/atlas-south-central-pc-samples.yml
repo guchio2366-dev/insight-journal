@@ -1,88 +1,67 @@
-name: Review South and Central Asia samples on PC
+name: Package South Central rice review images
 
 on:
   pull_request:
     branches: [codex/south-central-insights-20261008]
-    paths:
-      - '.github/workflows/atlas-south-central-pc-samples.yml'
-      - 'scripts/capture-south-central-pc-samples.mjs'
+    paths: ['.github/workflows/atlas-south-central-pc-samples.yml']
 
-# Review artifacts only. No deployment or repository writes.
 permissions:
+  actions: read
   contents: read
 
-concurrency:
-  group: south-central-pc-samples-${{ github.event.pull_request.head.sha }}
-  cancel-in-progress: true
-
 jobs:
-  samples:
+  package:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    env:
-      ASTRO_TELEMETRY_DISABLED: '1'
-      REVIEW_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-      REVIEW_SCENE: south-central-farm-world-share
-
     steps:
-      - name: Check out exact sample head
-        uses: actions/checkout@v7
+      - name: Download successful existing PC review
+        uses: actions/download-artifact@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          persist-credentials: false
+          name: asia-pc-review-37758284170-1
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 37758284170
+          path: incoming
 
-      - name: Verify existing Chrome and Japanese fonts
+      - name: Select only the three existing rice images and verified head
         shell: bash
         run: |
           set -euo pipefail
-          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
-          if [[ -z "$chrome_path" ]]; then
-            echo "::error::The runner must provide Chrome."
+          mkdir -p selected
+          for profile in south-desktop south-laptop south-small; do
+            name="${profile}-india-rice-export-flow-section.png"
+            mapfile -t files < <(find incoming -type f -name "$name")
+            if [[ ${#files[@]} -ne 1 ]]; then
+              echo "::error::Expected one existing image named $name"
+              exit 1
+            fi
+            cp "${files[0]}" "selected/$name"
+          done
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          files=list(Path('incoming').rglob('metadata.json'))
+          assert len(files)==1, files
+          meta=json.loads(files[0].read_text())
+          assert meta['status']=='passed', meta['status']
+          assert meta['checkedOutSHA']=='2877363239f47bd5c2c83b08044912763e998514'
+          assert meta['captureCount']==138, meta['captureCount']
+          assert meta['operationCount']==43, meta['operationCount']
+          summary={'reviewedHead':meta['checkedOutSHA'],'reviewRun':37758284170,'status':meta['status'],'mapImages':meta['captureCount'],'operations':meta['operationCount'],'riceSectionImages':[p.name for p in sorted(Path('selected').glob('*.png'))]}
+          Path('selected/head-and-review.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\n')
+          PY
+          bytes="$(du -cb selected/* | tail -1 | cut -f1)"
+          if (( bytes > 10 * 1024 * 1024 )); then
+            echo "::error::Selected evidence exceeds 10 MiB: $bytes bytes"
             exit 1
           fi
-          japanese_fonts="$(fc-list ':lang=ja' family)"
-          font_setup="preinstalled"
-          if [[ -z "$japanese_fonts" ]]; then
-            sudo apt-get update
-            sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
-            japanese_fonts="$(fc-list ':lang=ja' family)"
-            font_setup="installed-fonts-noto-cjk-from-ubuntu"
-          fi
-          if [[ -z "$japanese_fonts" ]]; then
-            echo "::error::Japanese fonts are required."
-            exit 1
-          fi
-          {
-            printf 'REVIEW_CHROME_PATH=%s\n' "$chrome_path"
-            printf 'REVIEW_JAPANESE_FONT_SETUP=%s\n' "$font_setup"
-            printf '%s\n' 'REVIEW_JAPANESE_FONTS<<SOUTH_CENTRAL_FONTS' "$japanese_fonts" 'SOUTH_CENTRAL_FONTS'
-            printf '%s\n' 'REVIEW_JAPANESE_FONT_MATCH<<SOUTH_CENTRAL_MATCH'
-            fc-match -f '%{family}\n' 'sans-serif:lang=ja'
-            fc-match -f '%{family}\n' 'serif:lang=ja'
-            printf '%s\n' 'SOUTH_CENTRAL_MATCH'
-          } >> "$GITHUB_ENV"
+          echo "Selected evidence: $bytes bytes"
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version-file: .nvmrc
-
-      - name: Install existing dependencies
-        run: npm ci --no-audit --no-fund
-
-      - name: Build local production site
-        run: npm run build
-
-      - name: Capture changed agriculture cards
-        timeout-minutes: 3
-        run: node scripts/capture-south-central-pc-samples.mjs
-
-      - name: Save changed image and result metadata
-        if: always()
+      - name: Upload focused review evidence
         uses: actions/upload-artifact@v4
         with:
-          name: south-central-pc-samples-${{ github.run_id }}
-          path: review-artifacts/south-central-pc-samples
-          if-no-files-found: warn
+          name: south-central-rice-review-${{ github.run_id }}
+          path: selected
+          if-no-files-found: error
           compression-level: 6
           retention-days: 7
