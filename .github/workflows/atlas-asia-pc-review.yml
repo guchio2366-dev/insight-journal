@@ -130,19 +130,19 @@ jobs:
           compression-level: 6
           retention-days: 7
 
-      # QA-only branch: keep the six changed screens small enough for manual review.
-      - name: Save Southeast forestry and trade images
+      # QA-only branch: three layout states at both PC widths for manual review.
+      - name: Save Southeast layout images
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: southeast-forestry-trade-${{ github.run_id }}-${{ github.run_attempt }}
+          name: southeast-layout-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
-            review-artifacts/asia-pc/desktop-southeast-supply-and-partners.png
-            review-artifacts/asia-pc/laptop-southeast-supply-and-partners.png
-            review-artifacts/asia-pc/desktop-southeast-forestry-panel.png
-            review-artifacts/asia-pc/laptop-southeast-forestry-panel.png
-            review-artifacts/asia-pc/desktop-southeast-trade-panel.png
-            review-artifacts/asia-pc/laptop-southeast-trade-panel.png
+            review-artifacts/asia-pc/desktop-southeast-agriculture-workspace-initial.png
+            review-artifacts/asia-pc/laptop-southeast-agriculture-workspace-initial.png
+            review-artifacts/asia-pc/desktop-southeast-agriculture-reading-scrolled.png
+            review-artifacts/asia-pc/laptop-southeast-agriculture-reading-scrolled.png
+            review-artifacts/asia-pc/desktop-southeast-agriculture-statistics-visible.png
+            review-artifacts/asia-pc/laptop-southeast-agriculture-statistics-visible.png
           if-no-files-found: error
           compression-level: 6
           retention-days: 7
