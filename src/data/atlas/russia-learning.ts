@@ -40,7 +40,10 @@ export const russiaFarmingPlaces=[
  {id:'ufa-cattle',product:'cattle',name:'ウファ付近',coordinates:[56,54.7],offset:-36},
  {id:'yakutsk-cattle',product:'cattle',name:'ヤクーツク付近',coordinates:[129.7,62],offset:30},
 ] as const;
-export function getRussiaFarmingGeography(layerId:string):string{
+export function getRussiaFarmingGeography(layerId:string,place='all'):string{
+ if(place==='west')return layerId==='wheat'?'欧州側の表示窓では、ロストフ付近の小麦の正の収穫面積を確認できます。南部の生育期と水分に、貯蔵・輸送・市場を重ねて考えます。この面は2020年のモデル収穫面積で、実際の農場境界や輸出量ではありません。':layerId==='cattle'?'欧州側の表示窓では、ウラル南部のウファ付近に牛の正の密度があります。飼料と冬の設備、肉・乳の加工や市場を考える入口です。この点群から乳用・肉用の内訳や小麦との飼料取引は分かりません。':'欧州側ではロストフ付近の小麦とウファ付近の牛を同じ窓で確かめられます。小麦の収穫面積と牛の密度は別単位です。分布が近いだけで飼料の供給先や加工地は決められません。';
+ if(place==='siberia')return layerId==='wheat'?'西シベリア南部のオムスク付近では、小麦の正の収穫面積を確認できます。北側との違いを生育期や水分から考え、輸送・市場も合わせて読みます。地図の未収録は栽培ゼロを意味しません。':layerId==='cattle'?'シベリアの牛の密度は頭／km²の2020年モデル値です。飼料、冬の設備、加工・輸送との関係を考える際、点の濃さから個体数や乳用・肉用の内訳を推定しません。':'西シベリア南部のオムスク付近で小麦の正の収穫面積を確かめ、牛の密度と並べて読みます。両者は別の単位・推計資料で、同じ場所に見えても飼料の供給関係は分かりません。';
+ if(place==='far-east')return layerId==='wheat'?'極東の表示窓には小麦の代表位置名を置いていません。小麦の2020年モデル収穫面積を凡例に沿って確認し、未収録を栽培ゼロと読み替えないでください。寒さだけから栽培や出荷の可否は決まりません。':layerId==='cattle'?'極東ではヤクーツク付近に牛の低密度の正値があります。寒冷地の飼料と冬の設備を考える例で、乳用・肉用の内訳や牧場の位置はこの地図からは分かりません。':'極東ではヤクーツク付近の牛に低密度の正値があります。小麦は代表位置名の有無で栽培を判断せず、2020年モデルの数量色と未収録を区別して読みます。寒さに加え、設備・輸送・市場を考えます。';
  if(layerId==='wheat')return '南西部のロストフ付近と西シベリア南部のオムスク付近に小麦の収穫面積があります。寒冷な国土の中で、南部の生育期と播種時の水分を確かめ、経営・輸送・市場を合わせて読みます。小麦の食用や飼料としての利用を考えるときも、分布の重なりだけでは出荷先を特定できません。';
  if(layerId==='cattle')return '牛の正の密度はウラル南部のウファ付近で確認でき、東部のヤクーツク付近にも低密度の正値があります。飼料を得る条件、冬の飼育設備、加工・輸送・市場を合わせ、肉や乳としての利用との関係を考えます。この地図だけでは個々の牧場の用途や供給先は分かりません。';
  return '南西部と西シベリア南部の小麦は、生育期と水分に経営・輸送・市場を重ねて読みます。牛はウラル南部のウファ付近にも分布し、寒冷な東部にも正の密度があります。小麦の食用・飼料利用と牛の肉・乳の利用を考え、飼料を得る条件や飼育設備との関係を比べます。';
@@ -154,7 +157,8 @@ export function renderRussiaScene(layer:RussiaLayer,state:RussiaState,sceneId='p
    }
    annotations.push([left,top,width,height]);
    const icon=crop?'<path d="M0 7V-7M0-4L-4-7M0 0L-4-3M0 4L-4 1M0-2L4-5M0 2L4-1" fill="none" stroke="currentColor" stroke-width="1.7"/>':'<path d="M-5-3L-8-6M5-3L8-6M-5-2L-8 0M5-2L8 0M-5-3Q0-5 5-3L4 5Q0 8-4 5Z" fill="#eef5f8" stroke="currentColor" stroke-width="1.4"/><circle cx="-2" cy="1" r=".8" fill="currentColor"/><circle cx="2" cy="1" r=".8" fill="currentColor"/>';
-   marks+=`<g class="russia-farming-place" data-farming-place="${place.id}" data-place-product="${place.product}" style="color:${color}"><title>${escape(label+'：2020年の保存格子で正の値がある代表位置。実際の農場境界・全国順位ではありません。')}</title><path d="M${x} ${y}L${left+width/2} ${top+height/2}" stroke="${color}" stroke-width=".8" vector-effect="non-scaling-stroke"/><g transform="translate(${x},${y}) scale(${scale})">${icon}</g><rect x="${left}" y="${top}" width="${width}" height="${height}" rx="${3*scale}" fill="#fffef7" fill-opacity=".92" stroke="${color}" stroke-opacity=".5" stroke-width=".6" vector-effect="non-scaling-stroke"/><text x="${left+width/2}" y="${top+height/2}" text-anchor="middle" dominant-baseline="central" font-size="${14*scale}" fill="${color}">${escape(label)}</text></g>`;
+   const annotationOpacity=layer.id==='farming-all'||layer.id===place.product?1:.32;
+   marks+=`<g class="russia-farming-place" data-farming-place="${place.id}" data-place-product="${place.product}" opacity="${annotationOpacity}" style="color:${color}"><title>${escape(label+'：2020年の保存格子で正の値がある代表位置。実際の農場境界・全国順位ではありません。')}</title><path d="M${x} ${y}L${left+width/2} ${top+height/2}" stroke="${color}" stroke-width=".8" vector-effect="non-scaling-stroke"/><g transform="translate(${x},${y}) scale(${scale})">${icon}</g><rect x="${left}" y="${top}" width="${width}" height="${height}" rx="${3*scale}" fill="#fffef7" fill-opacity=".92" stroke="${color}" stroke-opacity=".5" stroke-width=".6" vector-effect="non-scaling-stroke"/><text x="${left+width/2}" y="${top+height/2}" text-anchor="middle" dominant-baseline="central" font-size="${14*scale}" fill="${color}">${escape(label)}</text></g>`;
   }
   for(const region of russiaRegions){const [x,y]=projectRussia([region.label[0],region.label[1]+9]);if(inFrame([x,y]))marks+=`<text class="russia-farming-geography-label" x="${x}" y="${y}" text-anchor="middle" font-size="${13*scale}">${escape(region.name)}</text>`;}
  }
