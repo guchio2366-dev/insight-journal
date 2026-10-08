@@ -352,6 +352,21 @@
 .russia-farming-trade-brief,.russia-wheat-share{min-width:0;padding:14px 16px;border:1px solid #cbd7cc;background:#fffefa;color:#203a42}
 .russia-farming-trade-brief h2,.russia-wheat-share h2{font-family:var(--serif);font-size:17px;line-height:1.45}
 .russia-farming-trade-brief p{margin-top:8px!important;font-size:14px;line-height:1.7}
+.russia-wheat-use-bars{display:grid;gap:8px;margin-top:12px}
+.russia-wheat-use-bars>div{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 8px;font-size:13px;line-height:1.4}
+.russia-wheat-use-bars strong{font-variant-numeric:tabular-nums}
+.russia-wheat-use-bars i{grid-column:1/-1;display:block;width:var(--use-width);height:8px;background:#496f58;border-radius:2px}
+.russia-farming-trade-brief .russia-trade-source{font-size:13px;color:#526570}
+.russia-farming-candidates{grid-column:1/-1;padding:14px 16px;border:1px solid #cbd7cc;background:#fffefa}
+.russia-farming-candidates h2{font-family:var(--serif);font-size:17px}
+.russia-farming-candidates>p,.russia-farming-candidates details>p{font-size:14px;line-height:1.7}
+.russia-farming-candidates details{margin-top:5px}
+.russia-farming-candidates summary{min-height:40px;font-size:14px;font-weight:700}
+.russia-farming-candidate-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:10px 0}
+.russia-farming-candidate-columns h3{font-size:14px}
+.russia-farming-candidate-columns ul{margin:4px 0 0;padding:0;list-style:none}
+.russia-farming-candidate-columns li{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #dce3dd;padding:3px 0;font-size:14px}
+.russia-farming-candidate-columns strong{white-space:nowrap;font-variant-numeric:tabular-nums}
 .russia-wheat-share-kicker{font-size:13px;color:#526570;font-weight:700}
 .russia-wheat-share-reading{margin-top:7px!important;font-size:14px;line-height:1.65}
 .russia-wheat-share-chart{width:100%;max-width:300px;margin:8px auto 0}
@@ -369,7 +384,7 @@
 .russia-wheat-share-data th,.russia-wheat-share-data td{padding:5px 6px;border-bottom:1px solid #dce3dd;text-align:right;font-size:13px}
 .russia-wheat-share-data th:first-child{text-align:left}
 .russia-wheat-share-source{margin-top:10px!important;font-size:13px;line-height:1.7;color:#526570}
-@media(max-width:760px){.russia-farming-trade-grid{grid-template-columns:1fr}.russia-farming-trade-brief,.russia-wheat-share{padding:12px 14px}}
+@media(max-width:760px){.russia-farming-trade-grid,.russia-farming-candidate-columns{grid-template-columns:1fr}.russia-farming-trade-brief,.russia-wheat-share,.russia-farming-candidates{padding:12px 14px}}
 .russia-farming-legend-details { margin-top: 6px; }
 .russia-workspace .russia-learning[data-field=agriculture] .russia-farming-legend-details [data-primary-legend-definitions] { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; font-size: 14px; }
 .russia-farming-legend-details .russia-farming-legend-group { grid-column: auto; }
