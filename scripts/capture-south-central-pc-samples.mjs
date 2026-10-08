@@ -57,6 +57,11 @@ try{
  });
  await context.routeWebSocket('**/*',socket=>{results.externalAttempts.push({url:new URL(socket.url()).origin,resourceType:'websocket'});socket.close({code:1008,reason:'Local static review only'});});
  const scenes=[
+  {id:'south-central-landform-overview',route:'/atlas/asia/south-central-asia/nature/?topic=landform',check:async page=>{
+   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-map-period]')?.textContent.includes('背景は標高')&&document.querySelectorAll('.asia-landform-label').length>0);
+   assert.match(await page.locator('[data-physical-reading]').textContent(),/ヒマラヤ|パミール|高低差/);
+   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+  }},
   {id:'south-central-nature',route:'/atlas/asia/south-central-asia/nature/',check:async page=>{
    await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-map-fallback]')?.hidden);
    assert.equal(await page.locator('[data-asia-atlas]').getAttribute('data-region'),'south-central-asia');
