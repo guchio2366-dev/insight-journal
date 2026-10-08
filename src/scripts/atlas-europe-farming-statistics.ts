@@ -2,6 +2,7 @@ import {
   europeFarmAvailableMetrics, europeFarmComparisonYear, europeFarmMetric,
   europeFarmObservation, europeFarmUnitLabel, europeFarmWorldShare,
   europeFarmWorldObservation, europeFarmYears,
+  europeForestryLeaders,
   type EuropeFarmMetric, type EuropeFarmObservation, type EuropeFarmStatistics,
 } from '../data/atlas/europe/farming-statistics';
 import { europeFarmShareSeries, europeFarmShareSegments } from '../lib/atlas-europe-farm-share';
@@ -68,6 +69,7 @@ export function createEuropeFarmingStatistics(root:HTMLElement,callbacks:Callbac
     for(const selector of ['[data-eu-farm-stat-summary]','[data-eu-farm-country-table]','[data-eu-farm-series]','[data-eu-farm-stat-source]','[data-eu-farm-measure-definition]'])query(selector).hidden=true;
     query('[data-eu-farm-share-title]').textContent='世界シェア・推移';
     quick.hidden=true;redrawShare=undefined;shareChart.replaceChildren();
+    query('[data-eu-forest-production]').hidden=true;
     query('[data-eu-farm-share-status]').textContent='品目・統計対象国を選ぶと、公表World値に対する割合と年次推移を表示します。';
   }
   function table(headers:string[],caption:string){
@@ -77,7 +79,29 @@ export function createEuropeFarmingStatistics(root:HTMLElement,callbacks:Callbac
     head.append(row);element.append(head,body);return {element,body};
   }
   function cell(text:string){return create('td',text);}
+  function renderForestry(state:EuropeState,statistics:EuropeFarmStatistics){
+    const section=query<HTMLElement>('[data-eu-forest-production]');
+    section.hidden=!['forest','treecover'].includes(state.layer);
+    if(section.hidden)return;
+    const leaders=europeForestryLeaders(statistics),shown=leaders.slice(0,10),next=leaders[10];
+    const rankingTable=table(['国・地域','丸太生産量','製材生産量'],'FAOSTAT Forestry · 2024年 · 国全体 · 製材量の降順。数値の単位は百万m³。');
+    const maxima={roundwood:Math.max(...shown.map(row=>row.roundwood.value)),sawnwood:Math.max(...shown.map(row=>row.sawnwood.value))};
+    for(const [index,row] of shown.entries()){
+      const tr=create('tr');tr.classList.toggle('is-selected',row.code===state.place);
+      const name=create('th',`${index+1}. ${countryName(row.code)}`);name.setAttribute('scope','row');tr.append(name);
+      for(const key of ['roundwood','sawnwood'] as const){
+        const observation=row[key],td=create('td'),wrap=create('span'),track=create('span'),bar=create('span'),number=create('span',(observation.value/1e6).toLocaleString('ja-JP',{maximumFractionDigits:1}));
+        wrap.className='eu-forest-quantity';track.className='eu-forest-track';bar.className=`eu-forest-bar is-${key}`;bar.style.width=`${observation.value/maxima[key]*100}%`;track.append(bar);number.className='eu-forest-value';
+        wrap.append(track,number);td.append(wrap);td.title=`${countryName(row.code)}の${key==='roundwood'?'丸太':'製材'}生産量 ${observation.value.toLocaleString('ja-JP')} m³（原資料記号 ${observation.flag||'なし'}）`;tr.append(td);
+      }
+      rankingTable.body.append(tr);
+    }
+    query('[data-eu-forest-production-rows]').replaceChildren(rankingTable.element);
+    const note=query('[data-eu-forest-production-note]');
+    note.textContent=`棒の長さは列ごとに最大国を100%として表示し、丸太と製材の棒同士は同じ尺度ではありません。${next?`次点は${countryName(next.code)}（製材 ${(next.sawnwood.value/1e6).toLocaleString('ja-JP',{maximumFractionDigits:1})}百万m³）。`:''}両方の2024年値がある${leaders.length}か国を比較対象とし、同年の製材量で上位10か国を採用しました。`;
+  }
   function renderStatistics(state:EuropeState,metric:EuropeFarmMetric,statistics:EuropeFarmStatistics){
+    renderForestry(state,statistics);
     const year=state.farmYear??europeFarmComparisonYear,unit=europeFarmUnitLabel(metric.unit);
     const codes=[state.place,...(state.farmCompare??[])].filter(Boolean);
     const summary=query('[data-eu-farm-stat-summary]');summary.replaceChildren();summary.hidden=codes.length===0;

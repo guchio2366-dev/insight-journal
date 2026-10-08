@@ -15,8 +15,18 @@ const ledger=json('data-source/atlas/europe/farming-statistics/provenance.json')
 const countryCatalog=json('src/data/atlas/europe/countries.json');
 const source=await transform(read('src/data/atlas/europe/farming-statistics.ts').toString('utf8'),{loader:'ts',format:'esm',tsconfigRaw:{}});
 const api=await import('data:text/javascript;base64,'+Buffer.from(source.code).toString('base64'));
-const {europeFarmMetrics,europeFarmAvailableMetrics,europeFarmMetric,europeFarmObservation,europeFarmWorldObservation,europeFarmWorldShare,europeFarmCountryRows,europeFarmSeries,europeFarmUnitLabel}=api;
+const {europeFarmMetrics,europeFarmAvailableMetrics,europeFarmMetric,europeFarmObservation,europeFarmWorldObservation,europeFarmWorldShare,europeFarmCountryRows,europeFarmSeries,europeFarmUnitLabel,europeForestryLeaders}=api;
 const copy=()=>structuredClone(data);
+
+test('2024 forestry comparison ranks direct national sawnwood rows without inventing a conversion balance',()=>{
+  const leaders=europeForestryLeaders(data);
+  assert.deepEqual(leaders.slice(0,10).map(row=>row.code),['RUS','DEU','SWE','FIN','AUT','FRA','CZE','BLR','POL','ROU']);
+  assert.equal(leaders[10].code,'UKR');
+  assert.equal(leaders[0].roundwood.value,205498000);
+  assert.equal(leaders[0].sawnwood.value,37200000);
+  assert.ok(leaders.every(row=>row.roundwood.unit==='m3'&&row.sawnwood.unit==='m3'&&row.sawnwood.year===2024));
+  assert.equal(leaders.find(row=>row.code==='KOS'),undefined);
+});
 
 test('the metadata catalog exposes only 22 direct publisher measures and matches the lazy data',()=>{
   assert.deepEqual(data.measures,europeFarmMetrics);

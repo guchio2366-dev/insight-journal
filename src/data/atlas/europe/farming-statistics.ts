@@ -90,6 +90,15 @@ export function europeFarmWorldShare(data:EuropeFarmStatistics,code:string,measu
 export function europeFarmCountryRows(data:EuropeFarmStatistics,measureId:string,year:number) {
   return Object.entries(data.countries).map(([code,country])=>({code,m49:country.m49,observation:europeFarmObservation(data,code,measureId,year),share:europeFarmWorldShare(data,code,measureId,year)}));
 }
+/** A national processing comparison, ranked by sawnwood output. These two
+ * product volumes are independent observations, not a timber balance. */
+export function europeForestryLeaders(data:EuropeFarmStatistics,year=2024) {
+  return Object.keys(data.countries).flatMap(code=>{
+    const roundwood=europeFarmObservation(data,code,'roundwood-production',year);
+    const sawnwood=europeFarmObservation(data,code,'sawnwood-production',year);
+    return roundwood&&sawnwood?[{code,roundwood,sawnwood}]:[];
+  }).sort((a,b)=>b.sawnwood.value-a.sawnwood.value||a.code.localeCompare(b.code));
+}
 export function europeFarmSeries(data:EuropeFarmStatistics,code:string,measureId:string) {
   return europeFarmYears.map(year=>({year,observation:europeFarmObservation(data,code,measureId,year),share:europeFarmWorldShare(data,code,measureId,year)}));
 }
