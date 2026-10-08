@@ -9,6 +9,8 @@ export const japanWheatSupply={
  netImports:5104,
  inventoryChange:-114,
  domesticUse:{food:4944,processing:242,other:1126},
+ // Separately reported flour output by intended use, not wheat-grain disposition.
+ flourUses:{unit:'thousand tonnes',bread:1823,noodles:1541,confectionery:503},
  selfSufficiency:[
   {year:2019,rate:16},{year:2020,rate:15},{year:2021,rate:17},
   {year:2022,rate:15},{year:2023,rate:17},

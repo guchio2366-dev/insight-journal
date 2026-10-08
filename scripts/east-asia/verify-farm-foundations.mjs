@@ -26,6 +26,8 @@ try{
  await page.waitForLoadState('networkidle');
  assert.match(await section.locator('[data-east-world-share]').textContent(),/未掲載.*公表0とは異なります/);
  assert.match(await section.locator('[data-east-export-partners]').textContent(),/全商品輸出先.*丸太・製材の輸出先/);
+ assert.equal(await section.locator('[data-east-other-sources]').evaluate(node=>node.open),true);
+ assert.equal(await section.locator('[data-east-wheat-sources]').isVisible(),false);
  assert.equal(await page.locator('[data-country-select]').inputValue(),'TWN');
  await page.screenshot({path:join(out,'east-taiwan-forest-pc.png'),fullPage:true});
  await page.reload({waitUntil:'domcontentloaded'});await section.waitFor({state:'visible'});assert.equal(await page.locator('[data-country-select]').inputValue(),'TWN');
@@ -33,8 +35,13 @@ try{
  await page.goto(base+'/atlas/asia/east-asia/agriculture/?topic=wheat&place=JPN',{waitUntil:'domcontentloaded'});await section.waitFor({state:'visible'});
  assert.match(await section.locator('[data-east-supply-title]').textContent(),/日本の小麦：供給と国内消費/);
  assert.match(await section.locator('[data-east-forest-flows]').textContent(),/2023年度.*109.4万t.*510.4万t.*11.4万t/);
+ assert.match(await section.locator('[data-east-forest-flows]').textContent(),/パン用182.3万t、めん用154.1万t、菓子用50.3万t.*原麦重量の内訳ではありません/);
+ assert.match(await section.locator('[data-east-forest-flows]').textContent(),/加工用24.2万tはしょうゆ・でん粉等.*製粉やパン用を指しません/);
  assert.match(await section.locator('[data-east-export-partners]').textContent(),/カナダ.*米国.*豪州/);
  assert.match(await section.locator('[data-east-world-share]').textContent(),/17％.*631.2万t.*0.13％/);
+ assert.equal(await section.locator('[data-east-other-sources]').evaluate(node=>node.open),false);
+ assert.equal(await section.locator('[data-east-wheat-sources]').isVisible(),true);
+ await page.setViewportSize({width:1440,height:1300});
  await section.screenshot({path:join(out,'east-japan-wheat-pc.png')});
  assert.deepEqual(errors,[]);
  const mobile=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1});await mobile.route('**/*',route=>{if(new URL(route.request().url()).origin!==new URL(base).origin)return route.abort();return route.continue();});await mobile.goto(base+'/atlas/asia/east-asia/agriculture/?topic=forest&place=TWN',{waitUntil:'domcontentloaded'});await mobile.locator('[data-east-farm-foundations]').waitFor({state:'visible'});await mobile.waitForLoadState('networkidle');assert.equal(await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);await mobile.locator('[data-east-farm-foundations]').screenshot({path:join(out,'east-taiwan-forest-mobile.png')});

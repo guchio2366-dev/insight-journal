@@ -58,12 +58,15 @@ test('East under-map reading changes with country and topic without treating mis
   assert.match(section.querySelector('[data-east-supply-title]').textContent,/日本の小麦：供給と国内消費/);
   assert.match(section.querySelector('[data-east-forest-flows]').textContent,/2023年度.*109.4万t.*510.4万t.*11.4万t/);
   assert.match(section.querySelector('[data-east-forest-flows]').textContent,/粗食料494.4万t.*加工用24.2万t.*その他112.6万t.*631.2万t/);
+  assert.match(section.querySelector('[data-east-forest-flows]').textContent,/加工用24.2万tはしょうゆ・でん粉等.*製粉やパン用を指しません/);
+  assert.match(section.querySelector('[data-east-forest-flows]').textContent,/小麦粉生産はパン用182.3万t、めん用154.1万t、菓子用50.3万t.*原麦重量の内訳ではありません/);
   assert.match(section.querySelector('[data-east-partner-title]').textContent,/小麦の輸入相手国/);
   assert.match(section.querySelector('[data-east-export-partners]').textContent,/財務省貿易統計.*カナダ.*米国.*豪州/);
   assert.match(section.querySelector('[data-east-export-partners]').textContent,/447.8万t/);
   assert.match(section.querySelector('[data-east-export-partners]').textContent,/範囲が異なります/);
   assert.equal(section.querySelectorAll('[data-east-world-share] .east-wheat-trend>div').length,5);
   assert.match(section.querySelector('[data-east-world-share]').textContent,/17％.*631.2万t.*0.13％/);
+  assert.doesNotMatch(section.querySelector('[data-east-world-share]').textContent,/次候補/);
   renderEastAsiaFarmFoundations(root,'east-asia',true,'cotton',{code:'CHN',name:'中国'});
   assert.match(section.querySelector('[data-east-world-share]').textContent,/今回の7指標に含まれません/);
   renderEastAsiaFarmFoundations(root,'east-asia',false,'wheat',{code:'JPN',name:'日本'});
