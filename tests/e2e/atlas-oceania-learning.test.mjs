@@ -32,6 +32,21 @@ test('all four built Oceania pages expose real initial distributions, complete l
   win.happyDOM.abort();
  }
 });
+test('Oceania export reading keeps the Australian production denominator separate from the 2020 map',()=>{
+ const {win,root}=page('agriculture');
+ try{
+  const panel=root.querySelector('[data-export-reading]');
+  assert.ok(panel);
+  assert.deepEqual([...panel.querySelectorAll('li strong')].map(el=>el.textContent),['85％','82％','77％','75％']);
+  assert.match(panel.textContent,/2022–23～2024–25年の3年平均・数量ベース/);
+  assert.match(panel.textContent,/2020年の収穫面積・家畜密度/);
+  assert.match(panel.textContent,/カノーラの位置は地図に未収録/);
+  assert.ok(panel.querySelector('a[href="https://www.agriculture.gov.au/abares/products/insights/snapshot-of-australian-agriculture"]'));
+  const place=root.querySelector('[data-place]');place.value='NZL';place.dispatchEvent(new win.Event('change'));
+  assert.match(root.querySelector('[data-geography-reading]').textContent,/乳牛と肉牛、羊毛と食肉/);
+  assert.equal(panel.querySelectorAll('li').length,4,'NZ selection does not create country statistics');
+ }finally{win.happyDOM.abort();}
+});
 test('built PNG comparison preserves the original climate, crop choice, country, all legends and named return',()=>{
  const {win,root}=page('nature','?place=PNG&scope=country&theme=altitude&layer=climate&compare=coconut&view=comparison&keep=source#reference');
  assert.equal(root.querySelector('[data-comparison-view]').hidden,false);

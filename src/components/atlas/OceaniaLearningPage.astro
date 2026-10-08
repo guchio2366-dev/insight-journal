@@ -29,6 +29,14 @@ const labels={agriculture:'農林業',nature:'自然環境',industry:'主要産�
 const subviews=field==='nature'?['気候区分','水資源','地形','標高']:field==='agriculture'?['農畜産','林業']:field==='industry'?['地域主要産業']:['人口分布','人種・民族','宗教'];
 const themeLabels:Record<string,string>={dryinterior:'内陸の乾燥と水',coastaltemperate:'沿岸の気候と農業',altitude:'NZ・PNGの高地',pacificislands:'島々の淡水・交通',wheat:'小麦と経営・輸送',livestock:'羊・牛と牧畜','tropical-crops':'熱帯作物と加工','australia-minerals':'豪州の鉱物資源','new-zealand-processing':'NZの農林産物加工','png-resources-and-port':'PNGの資源と協議','islands-processing-and-services':'島々の水産加工・港',coasts:'沿岸と都市','island-society':'島々の暮らし'};
 const industryLabels:Record<string,string>={'australia-minerals':'豪州の鉱業','new-zealand-processing':'NZの農林加工','png-resources-and-port':'PNGの資源・港','islands-processing-and-services':'島々の水産加工・港'};
+// ABARES, Snapshot of Australian Agriculture 2026, Figure 6. Percent of each
+// commodity's production volume exported, 2022–23 through 2024–25 mean.
+const australiaExportShares=[
+ {label:'カノーラ',share:85},
+ {label:'羊肉（マトン・ラム）',share:82},
+ {label:'牛肉・仔牛肉',share:77},
+ {label:'小麦',share:75},
+] as const;
 ---
 <BaseLayout title={`オセアニアの${oceaniaFields[field].label}`} description={oceaniaFields[field].title} compactAtlas>
  <article class="oceania-workspace-root" data-oceania-learning data-field={field}>
@@ -63,6 +71,16 @@ const industryLabels:Record<string,string>={'australia-minerals':'豪州の鉱�
     </div>
     </>}
    </aside>
+   {field==='agriculture'&&<section class="oceania-export-reading" aria-labelledby="oceania-export-title" data-export-reading>
+    <div class="oceania-export-intro"><p class="oceania-export-eyebrow">地図の先を読む · オーストラリア</p><h2 id="oceania-export-title">農業のどれほどが輸出へ向かうか</h2><p>同じ豪州でも品目によって輸出向けの割合は異なります。分布地図の濃さから仕向け先や輸出量は読み取れません。</p></div>
+    <div class="oceania-export-chart" role="group" aria-label="豪州の品目別、生産量のうち輸出された割合。2022–23年から2024–25年の3年平均">
+     <p class="oceania-export-axis">生産量に占める輸出割合（％）</p>
+     <ol>{australiaExportShares.map(item=><li><span class="oceania-export-label">{item.label}</span><span class="oceania-export-track"><span class="oceania-export-bar" style={`width:${item.share}%`}></span></span><strong>{item.share}％</strong></li>)}</ol>
+     <p class="oceania-export-reference">参考：豪州農業全体は71％。品目別の値を足し合わせる指標ではありません。</p>
+    </div>
+    <p class="oceania-export-note">棒は<strong>2022–23～2024–25年の3年平均・数量ベース</strong>、上の地図は<strong>2020年の収穫面積・家畜密度</strong>です。カノーラの位置は地図に未収録です。羊・牛の密度は羊肉・牛肉の生産量を表しません。輸出先と世界生産シェアは、この品目別資料からは示せません。</p>
+    <p class="oceania-export-source">出典：<a href="https://www.agriculture.gov.au/abares/products/insights/snapshot-of-australian-agriculture">Department of Agriculture, Fisheries and Forestry. 2026. <cite>Snapshot of Australian Agriculture 2026</cite>, Figure 6</a>（数値を横棒に再構成、© Department of Agriculture, Fisheries and Forestry 2026、<a href="https://www.agriculture.gov.au/about/copyright">CC BY 4.0</a>）。</p>
+   </section>}
   </div>
   <section class="oceania-learning-comparison" data-comparison-view hidden aria-label="元の分布と比較する">
    <div class="oceania-learning-comparison-grid">

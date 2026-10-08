@@ -121,6 +121,13 @@ try{
      }
      if(region==='oceania'){
       const key=host.locator('[data-key-legend]'),reading=host.locator('.oceania-learning-reading');
+      const exportPanel=host.locator('[data-export-reading]');
+      assert.ok(await exportPanel.isVisible());
+      assert.deepEqual(await exportPanel.locator('li strong').allTextContents(),['85％','82％','77％','75％']);
+      assert.match(await exportPanel.textContent(),/2022–23～2024–25年の3年平均・数量ベース/);
+      assert.match(await exportPanel.textContent(),/2020年の収穫面積・家畜密度/);
+      assert.match(await exportPanel.textContent(),/カノーラの位置は地図に未収録/);
+      assert.ok((await exportPanel.boundingBox()).y>(await map.boundingBox()).y+bounds.height);
       assert.equal(await key.evaluate(el=>!!el.closest('.oceania-learning-map-panel')),true);
       assert.equal(await reading.locator('[data-primary-legend]').count(),0);
       assert.ok((await key.boundingBox()).y>=bounds.y+bounds.height-1);
@@ -151,6 +158,10 @@ try{
        assert.equal(geometry.maxHeight,'none');assert.equal(geometry.overflow,'visible');assert.ok(geometry.scroll<=geometry.client+1);
       }
       await readingDetails.locator('summary').click();
+      await host.locator('[data-place]').selectOption('NZL');await ready(region);
+      assert.match(await host.locator('[data-geography-reading]').textContent(),/乳牛と肉牛、羊毛と食肉/);
+      assert.ok(await map.locator('[data-farming-product="sheep"]').count()>0);
+      await host.locator('[data-place]').selectOption('all');await ready(region);
      }
      assert.equal(await host.locator('[data-layer]').inputValue(),'farming-all');
      const products=region==='russia'?['cattle','wheat']:['cacao','cattle','coconut','sheep','wheat'];
