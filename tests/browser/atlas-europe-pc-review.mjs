@@ -175,8 +175,8 @@ async function snapshot(page, profile, topic, region = 'europe') {
     assert.ok(control.y >= measured.map.y && control.y + control.height <= measured.map.y + measured.map.height + 1);
     if (index) assert.ok(control.y >= measured.controls[index - 1].y + measured.controls[index - 1].height, 'Map controls retain fit / zoom in / zoom out order');
   }
-  // This source-link repair reuses PR246's accepted pictures; no redraw changed.
-  const photographStates=[];
+  // Photograph the changed industry and population readings at both PC widths.
+  const photographStates=['industry-gdp-reading','population-overview'];
   if(region!=='europe'||!photographStates.includes(topic))return measured;
   const filename = `${profile.name}-${region}-${topic}.png`;
   const png = await page.screenshot({path: resolve(output, filename), fullPage: false, animations: 'disabled'});
@@ -511,6 +511,10 @@ async function stageOneOperations(page, profile) {
   await openEurope(page, 'atlas/europe/industry/?layer=hubs', 'normal');
   assert.equal(new URL(page.url()).searchParams.has('feature'), false);
   await snapshot(page, profile, 'industry-overview');
+  await page.locator('[data-eu-topic-field="industry"] [data-eu-topic="industry"]').click();
+  assert.match(await page.locator('[data-eu-subject-intro]').textContent(), /キルナ.*鉱石.*ミュンヘン.*自動車/);
+  await snapshot(page, profile, 'industry-gdp-reading');
+  await page.locator('[data-eu-topic-field="industry"] [data-eu-topic="hubs"]:not([data-eu-industry-group])').click();
   const industryExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
   const industryPoints = await page.locator('[data-eu-feature-options] option').count();
   await quietFeatures('industry');
@@ -532,6 +536,7 @@ async function stageOneOperations(page, profile) {
 
   await openEurope(page, 'atlas/europe/population/?layer=density', 'normal');
   assert.equal(new URL(page.url()).searchParams.has('place'), false);
+  assert.match(await page.locator('[data-eu-subject-intro]').textContent(), /パリ.*ミラノ.*人口の分布/);
   await snapshot(page, profile, 'population-overview');
   const populationExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
   await quietFeatures('population');
@@ -667,11 +672,11 @@ try {
       }
     } finally { await context.close(); }
   }
-  networkClean(); assert.equal(manifest.images.length, 0); assert.equal(manifest.records.length, 3);
+  networkClean(); assert.equal(manifest.images.length, 4); assert.equal(manifest.records.length, 3);
   assert.ok(manifest.records.every(record => record.status === 'passed'));
   assert.equal(git('rev-parse', 'HEAD'), manifest.gitHead, 'Checkout changed during capture');
   assert.equal(git('rev-parse', 'HEAD:src'), manifest.gitSrcTree);
-  manifest.status = 'passed'; manifest.checks.push('PR246 final 4 viewport images reused: accepted head 5450538e6024ce2fa7d793cc5a281bae6b14fa21, artifact 11515068508; this repair changes only the processing-record link', 'Processing link matches the displayed contour asset for direct and tab routes at 2 PC sizes', 'Existing operations retained at 2 normal PC profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
+  manifest.status = 'passed'; manifest.checks.push('Changed industry and population readings photographed at 2 PC sizes', 'Processing link matches the displayed contour asset for direct and tab routes at 2 PC sizes', 'Existing operations retained at 2 normal PC profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
   console.log(JSON.stringify({status: manifest.status, output, images: manifest.images.length, head: manifest.gitHead}));
 } catch (error) {
   manifest.status = 'failed'; manifest.failure = {message: String(error), stack: error.stack};

@@ -35,7 +35,7 @@ const factualSources: Record<string, ReaderSource[]> = {
   terrain:readingSources('alps'),
   contours:readingSources('alps'),
   hubs:readingSources('rotterdam','ludwigshafen','toulouse'),
-  density:readingSources('kiruna','oulu'),
+  density:[],
   forest:readingSources('kaukas'),
   manufacturing:readingSources('munich','mlada'),
   industry:readingSources('kiruna','munich'),
@@ -140,7 +140,7 @@ const countryMessages: Record<string, ReaderMessage> = {
   },
   industry: {
     takeaway:'鉱工業・建設業のGDP比率は、製造業に資源採掘や電気・ガス・水道、建設を含めた産業構成を示します。',
-    body:'パリ、ミラノ、マドリードの都市周辺をたどり、都市の点の間にも人口の分布が続くかを格子の色で確かめます。ライン川沿いの都市とポー平原、北欧の都市とその周辺を比べると、国の平均だけでは読めない集中と広がりが見えます。国境は人口密度の区分境界ではありません。北部スウェーデンのキルナは鉄鉱石採掘、ドイツのミュンヘンは自動車製造の拠点です。資源の位置と技術開発・生産の集積は、異なる立地の条件です。',
+    body:'北部スウェーデンのキルナは鉄鉱石採掘、ドイツのミュンヘンは自動車製造の拠点です。資源の位置と技術開発・生産の集積は、異なる立地の条件です。国全体のGDP比率から個々の拠点の生産額や雇用は読み取れません。',
   },
   services: {
     takeaway:'2023年のサービス業のGDP比率は、英国・フランスがチェコより高いという国全体の違いがあります。',
@@ -202,7 +202,7 @@ export function europeReaderCopy(layer:EuropeLayer) {
   };
   if(layer.id==='density')return {
     title:'人口分布',takeaway:'パリやミラノの都市周辺と、欧州北部・山地を同じ人口密度の尺度で読み比べます。',
-    body:'北部スウェーデンのキルナは鉄鉱石採掘、フィンランドのオウルは無線技術の研究・設計・製造の拠点です。人口の集中は地域の役割を考える手がかりですが、産業の機能まで決めるものではありません。',
+    body:'パリ、ミラノ、マドリードの都市周辺をたどり、都市の点の間にも人口の分布が続くかを格子の色で確かめます。ライン川沿いの都市とポー平原、北欧の都市とその周辺を比べると、国の平均だけでは読めない集中と広がりが見えます。国境は人口密度の区分境界ではありません。',
     note:'2020年の格子ごとのモデル推計です。現在の人口移動・避難状況を表すものではありません。都市の点は位置のみを示します。',
   };
   if(layer.id==='ethnicity'||layer.id==='religion')return {
