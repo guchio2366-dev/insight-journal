@@ -1,11 +1,11 @@
-name: Review West Asia farm map on PC
+name: Review West Asia forestry on PC
 
 on:
   pull_request:
     branches: [main]
     paths:
       - '.github/workflows/west-asia-food-pc-review.yml'
-      - 'scripts/capture-west-asia-food-review.mjs'
+      - 'scripts/capture-west-asia-forestry-review.mjs'
       - 'src/data/atlas/west-asia-*'
       - 'src/lib/atlas-west-asia-farming.mjs'
       - 'src/scripts/atlas-west-asia.ts'
@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: west-asia-food-pc-${{ github.event.pull_request.number }}
+  group: west-asia-forestry-pc-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
@@ -63,13 +63,13 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Build site
         run: npm run build
-      - name: Capture only the wheat-selection screen
-        run: node scripts/capture-west-asia-food-review.mjs
+      - name: Capture forestry overview and Saudi selection
+        run: node scripts/capture-west-asia-forestry-review.mjs
       - name: Upload compact PC evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: west-asia-farm-map-pc-${{ github.run_id }}
-          path: review-artifacts/west-asia-food
+          name: west-asia-forestry-pc-${{ github.run_id }}
+          path: review-artifacts/west-asia-forestry
           if-no-files-found: error
           retention-days: 7
