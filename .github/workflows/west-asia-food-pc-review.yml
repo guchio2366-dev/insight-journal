@@ -1,4 +1,4 @@
-name: Review West Asia forestry on PC
+name: Review West Asia food and forestry on PC
 
 on:
   pull_request:
@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/west-asia-food-pc-review.yml'
       - 'scripts/capture-west-asia-forestry-review.mjs'
+      - 'scripts/capture-west-asia-food-review.mjs'
       - 'src/data/atlas/west-asia-*'
       - 'src/lib/atlas-west-asia-farming.mjs'
       - 'src/scripts/atlas-west-asia.ts'
@@ -63,9 +64,19 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Build site
         run: npm run build
+      - name: Capture wheat selection regression
+        run: node scripts/capture-west-asia-food-review.mjs
       - name: Capture forestry overview and Saudi selection
         run: node scripts/capture-west-asia-forestry-review.mjs
-      - name: Upload compact PC evidence
+      - name: Upload wheat regression evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: west-asia-farm-map-pc-${{ github.run_id }}
+          path: review-artifacts/west-asia-food
+          if-no-files-found: error
+          retention-days: 7
+      - name: Upload forestry PC evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
