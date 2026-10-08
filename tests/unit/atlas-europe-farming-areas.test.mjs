@@ -96,3 +96,12 @@ test('欧州の概略分布は元格子と照合できる16品目を独立した
     }
   }
 });
+
+test('overview wheat labels for northern France and central Germany stay inside supported wheat shapes',()=>{
+  const wheat=collection.features.find(feature=>feature.properties.id==='wheat');
+  const record=manifest.products.find(product=>product.id==='wheat');
+  assert.ok(record.countryCodes.includes('FRA')&&record.countryCodes.includes('DEU'));
+  for(const point of [[2.35938,50.375],[11.55208,51.875]]){
+    assert.ok(polygons(wheat.geometry).some(polygon=>polygonContains(polygon,point)),`wheat shape must support label ${point}`);
+  }
+});

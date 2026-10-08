@@ -104,7 +104,9 @@ test('drainage lookup feedback follows the basin choice with one live result, an
     assert.equal(app.result.textContent,'表示範囲外です。');
     assert.equal(app.result.hasAttribute('aria-busy'),false);assertDrainageLocation();
 
-    for(const layer of ['terrain','contours']){
+    chooseTopic('terrain');assertSameReading();
+    assert.equal(app.grid.hidden,true,'The named-landform map does not show a numeric grid reading');
+    for(const layer of ['contours']){
       chooseTopic(layer);assertSameReading();
       assert.ok(app.grid.closest('.eu-read-panel')===app.q('.eu-read-panel'),'Elevation feedback remains beside the map');
       assert.equal(controls.contains(app.grid),false);assert.equal(controls.hidden,true);assert.equal(app.grid.hidden,false);

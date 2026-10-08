@@ -1,0 +1,42 @@
+{
+  "status": "source-verified; food-calorie composition only; NOT a nine-group self-sufficiency dataset",
+  "source": {
+    "publisher": "Food and Agriculture Organization of the United Nations (FAO)",
+    "publication": "World Food and Agriculture – Statistical Yearbook 2025",
+    "official_url": "https://doi.org/10.4060/cd4313en",
+    "public_copy_url": "https://www.donorplatform.org/wp-content/uploads/2026/01/cd4313en.pdf",
+    "license": "CC BY 4.0",
+    "access_date": "2026-10-08",
+    "data_cutoff_date": "2025-10-28",
+    "geography": "Published Europe regional aggregate; UN M49-based classification. Russian Federation is its whole national statistical area, not European Russia. EU is not the aggregation boundary.",
+    "coverage_note": "The yearbook uses sums/weighted means and publishes aggregates subject to a sufficiency threshold. Published Europe is not proof of an observation for every microstate/territory. Country and reporting-area coverage can differ across domains."
+  },
+  "source_table": 49,
+  "printed_page": 320,
+  "pdf_page_1_indexed": 334,
+  "year": 2023,
+  "unit": "kcal per capita per day",
+  "total_kcal_per_capita_per_day": 3490,
+  "group_sum_kcal": 3490,
+  "rounding_difference": 0,
+  "width_formula": "published group kcal / sum of the nine published group kcal",
+  "interpretation": "Food available for human consumption; not observed individual dietary intake. Food waste at household level is not deducted. The published Europe row already aggregates the region; do not average national per-capita values unweighted.",
+  "groups": [
+    {"id":"cereals","label_ja":"穀類","source_fbs_item_codes":[2905],"food_kcal_per_capita_per_day":966,"width_share_percent":27.7,"self_sufficiency_percent":null},
+    {"id":"oilcrops_fats_oils","label_ja":"油糧作物・油脂","source_fbs_item_codes":[2913,2914,2946],"food_kcal_per_capita_per_day":692,"width_share_percent":19.8,"self_sufficiency_percent":null},
+    {"id":"sugar","label_ja":"糖類","source_fbs_item_codes":[2908,2909],"food_kcal_per_capita_per_day":384,"width_share_percent":11.0,"self_sufficiency_percent":null},
+    {"id":"roots_tubers_pulses","label_ja":"根茎類・豆類","source_fbs_item_codes":[2907,2911],"food_kcal_per_capita_per_day":153,"width_share_percent":4.4,"self_sufficiency_percent":null},
+    {"id":"fruit_vegetables","label_ja":"果物・野菜","source_fbs_item_codes":[2918,2919],"food_kcal_per_capita_per_day":196,"width_share_percent":5.6,"self_sufficiency_percent":null},
+    {"id":"meat","label_ja":"肉類","source_fbs_item_codes":[2943,2945],"food_kcal_per_capita_per_day":358,"width_share_percent":10.3,"self_sufficiency_percent":null},
+    {"id":"dairy_eggs_excl_butter","label_ja":"乳製品・卵（バター除く）","source_fbs_item_codes":[2948,2949],"food_kcal_per_capita_per_day":454,"width_share_percent":13.0,"self_sufficiency_percent":null},
+    {"id":"beverages_other","label_ja":"飲料・その他","source_fbs_item_codes":[2912,2922,2923,2924,2928],"food_kcal_per_capita_per_day":247,"width_share_percent":7.1,"self_sufficiency_percent":null},
+    {"id":"fish_seafood","label_ja":"魚介類","source_fbs_item_codes":[2960,2961],"food_kcal_per_capita_per_day":40,"width_share_percent":1.1,"self_sufficiency_percent":null}
+  ],
+  "self_sufficiency_null_reason": "Same-year matched production/import/export and appropriate aggregation not acquired. Do not pair with 2021 rates.",
+  "country_coverage_audit": {
+    "complete_national_nine_group_rows": 39,
+    "country_names": ["Albania","Austria","Belarus","Belgium","Bosnia and Herzegovina","Bulgaria","Croatia","Czechia","Denmark","Estonia","Finland","France","Germany","Greece","Hungary","Iceland","Ireland","Italy","Latvia","Lithuania","Luxembourg","Malta","Montenegro","Netherlands (Kingdom of the)","North Macedonia","Norway","Poland","Portugal","Republic of Moldova","Romania","Russian Federation","Serbia","Slovakia","Slovenia","Spain","Sweden","Switzerland","Ukraine","United Kingdom of Great Britain and Northern Ireland"],
+    "file": "europe_39_country_food_kcal_2023.json",
+    "scope_note": "Russian Federation national total included; Cyprus and Türkiye excluded by M49 Europe. Five microstates lack independent FBS series. The published regional row is used directly; no new population weighting has been invented."
+  }
+}

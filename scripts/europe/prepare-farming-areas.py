@@ -32,7 +32,9 @@ MIN_AREA_KM2 = 750
 # Irrigated rice and citrus occupy smaller, discontinuous concentrations.
 # Preserve those source-supported regions without widening their value cutoff.
 PRODUCT_RULES = {'rice': (0.50, 500), 'citrus': (0.50, 500)}
-SIMPLIFY_DEGREES = .07
+# The overview is read at roughly 600–900 CSS pixels across Europe. Retain
+# source-supported components while dropping sub-pixel stair steps at that scale.
+SIMPLIFY_DEGREES = .10
 RADIUS_KM = 6371.0088
 inputs = []
 
@@ -73,7 +75,11 @@ def polygons(geometry):
         return []
     if geometry.geom_type == 'Polygon':
         return [geometry]
-    return [part for child in geometry.geoms for part in polygons(child)]
+    if hasattr(geometry, 'geoms'):
+        return [part for child in geometry.geoms for part in polygons(child)]
+    # Topology repair may also return collapsed boundary lines. They are not
+    # cultivation or grazing areas and must never be drawn as polygons.
+    return []
 
 
 def area_km2(geometry):

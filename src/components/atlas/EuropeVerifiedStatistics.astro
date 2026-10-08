@@ -1,0 +1,56 @@
+---
+import production from '../../data/atlas/europe/europe_production_shares_2023.json';
+import food from '../../data/atlas/europe/europe_food_composition_2023.json';
+import trade from '../../data/atlas/europe/trade_europe_2021_value_donuts.json';
+import wood from '../../data/atlas/europe/europe_wood_key_comparisons_2024.json';
+
+const tradeColors=['#b89138','#608ba3','#688c69','#b7b7a6'];
+const foodColors=['#9e8546','#bd9e62','#bb755e','#928259','#668c63','#a46363','#7494a4','#9987a7','#56838d'];
+const bar=(parts:{share_pct:number}[])=>{
+  let offset=0;
+  return `conic-gradient(${parts.map((part,index)=>{
+    const start=offset;offset+=part.share_pct;
+    return `${tradeColors[index]} ${start}% ${offset}%`;
+  }).join(',')})`;
+};
+const percentage=(value:number)=>`${value.toLocaleString('ja-JP',{maximumFractionDigits:1})}%`;
+const number=(value:number)=>value.toLocaleString('ja-JP',{maximumFractionDigits:1});
+const woodCountries:Record<string,string>={DE:'ドイツ',AT:'オーストリア',FI:'フィンランド',SE:'スウェーデン'};
+const woodStages=[{code:'RW_IN',name:'産業用丸太',maximum:Math.max(...wood.balances.filter(row=>row.product_code==='RW_IN').map(row=>row.supply))},{code:'SN',name:'製材',maximum:Math.max(...wood.balances.filter(row=>row.product_code==='SN').map(row=>row.supply))}];
+---
+<div class="eu-verified-agriculture" data-eu-verified-agriculture>
+  <div class="eu-farm-three-columns">
+    <section aria-labelledby="eu-verified-share-title">
+      <h3 id="eu-verified-share-title">主要品目の世界生産シェア</h3>
+      <p class="eu-verified-meta">FAO公表の欧州地域 ÷ 世界 · 2023年 · 同品目の生産量</p>
+      <div class="eu-verified-share-list">{production.items.map(item=><div class="eu-verified-share-row"><span>{item.label_ja}</span><span class="eu-verified-share-track"><span style={`width:${item.world_share_percent}%`}></span></span><strong>{percentage(item.world_share_percent)}</strong></div>)}</div>
+      <p class="eu-verified-foot">生乳は牛・水牛の合計、肉類は生体数ではありません。ロシアは全土を含み、EU集計ではありません。</p>
+    </section>
+    <section aria-labelledby="eu-verified-trade-title">
+      <h3 id="eu-verified-trade-title">欧州域外の輸出先・輸入元</h3>
+      <p class="eu-verified-meta">UN Comtrade · 2021年 · 金額割合</p>
+      <div class="eu-verified-trade-charts">{trade.charts.map(chart=><figure><figcaption>{chart.title_ja}</figcaption><div class="eu-verified-donut" style={`background:${bar(chart.segments)}`} role="img" aria-label={`${chart.title_ja}。${chart.segments.map(segment=>`${segment.label_ja}${percentage(segment.share_pct)}`).join('、')}`}></div><ul>{chart.segments.map((segment,index)=><li><span class="eu-verified-trade-key" style={`background:${tradeColors[index]}`}></span>{segment.label_ja} <strong>{percentage(segment.share_pct)}</strong></li>)}</ul></figure>)}</div>
+      <p class="eu-verified-foot">対象40報告国・地域の相手国別金額が分母。小麦・メスリンのWorld製品記録は35報告国。地理帰属不明を除外し、関税領域とM49欧州は完全一致しません。</p>
+    </section>
+    <section aria-labelledby="eu-verified-food-title">
+      <h3 id="eu-verified-food-title">食品群の供給熱量構成</h3>
+      <p class="eu-verified-meta">FAO公表の欧州地域 · 2023年 · 計3,490 kcal/人/日</p>
+      <div class="eu-verified-food-band" role="img" aria-label={`9食品群の供給熱量構成。${food.groups.map(group=>`${group.label_ja}${group.width_share_percent}%`).join('、')}`}>
+        {food.groups.map((group,index)=><span style={`flex:${group.food_kcal_per_capita_per_day} 1 0; background:${foodColors[index]}`} title={`${group.label_ja} ${group.food_kcal_per_capita_per_day} kcal/人/日`}></span>)}
+      </div>
+      <ul class="eu-verified-food-key">{food.groups.map((group,index)=><li><span style={`background:${foodColors[index]}`}></span>{group.label_ja} <strong>{percentage(group.width_share_percent)}</strong></li>)}</ul>
+      <p class="eu-verified-foot">人が利用できる食料の熱量で、実際の摂取量ではありません。自給率は同年・同群の対応表が未確認のため表示しません。</p>
+    </section>
+  </div>
+  <p class="eu-verified-source">出典：<a href={production.source.official_url}>FAO Statistical Yearbook 2025、表21・24・25・49</a>（CC BY 4.0）、<a href="https://comtradeapi.un.org/">UN Comtrade、HS 1001・1201</a>。貿易円は消費量・自給率を示しません。</p>
+</div>
+
+<section class="eu-verified-wood" data-eu-verified-wood hidden aria-labelledby="eu-verified-wood-title">
+  <h3 id="eu-verified-wood-title">産業用丸太と製材の供給・見かけ消費</h3>
+  <p class="eu-verified-meta">Eurostat · 2024年 · 国全体 · 千m³。生産＋輸入＝輸出＋見かけ消費。加工段階を混ぜずに表示。</p>
+  <p class="eu-verified-foot">各国の上段は生産と輸入、下段は見かけ消費と輸出です。同じ加工段階の4か国を共通尺度で比べます。</p>
+  {woodStages.map(stage=><div class="eu-wood-stage"><h4>{stage.name}</h4>{wood.balances.filter(row=>row.product_code===stage.code).map(row=><div class="eu-wood-row"><strong>{woodCountries[row.country_code]}</strong><div class="eu-wood-flows"><div class="eu-wood-track" aria-label={`供給：生産${number(row.production)}、輸入${number(row.imports)} 千m³`}><span class="eu-wood-domestic" style={`width:${row.production/stage.maximum*100}%`}></span><span class="eu-wood-import" style={`width:${row.imports/stage.maximum*100}%`}></span></div><div class="eu-wood-track" aria-label={`使途：見かけ消費${number(row.apparent_consumption)}、輸出${number(row.exports)} 千m³`}><span class="eu-wood-apparent" style={`width:${row.apparent_consumption/stage.maximum*100}%`}></span><span class="eu-wood-export" style={`width:${row.exports/stage.maximum*100}%`}></span></div></div><span class="eu-wood-total">供給 {number(row.supply)}</span></div>)}</div>)}
+  <p class="eu-verified-foot"><span class="eu-wood-key eu-wood-domestic"></span>生産　<span class="eu-wood-key eu-wood-import"></span>輸入　<span class="eu-wood-key eu-wood-apparent"></span>見かけ消費　<span class="eu-wood-key eu-wood-export"></span>輸出。各段階の棒は同じ尺度。オーストリアの生産は定義差、スウェーデンの生産は暫定値。</p>
+  <p class="eu-verified-foot">見かけ消費は在庫増減を調整した実消費ではありません。輸出入には再輸出が含まれ、国産材の利用量ではありません。製材は丸太の次の加工段階で、差を歩留まりや用途割合とは読みません。</p>
+  <p class="eu-verified-source">出典：<a href="https://ec.europa.eu/eurostat/databrowser/view/for_basic/default/table?lang=en">Eurostat for_basic</a>・<a href="https://ec.europa.eu/eurostat/databrowser/view/for_swpan/default/table?lang=en">for_swpan</a>。EU27全体の完全な収支ではありません。フィンランドの実投入量は別資料・別単位のため合算しません。</p>
+</section>

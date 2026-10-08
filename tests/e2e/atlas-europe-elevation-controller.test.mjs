@@ -43,7 +43,7 @@ async function until(check,message='Europe elevation controller did not settle')
   throw Error(message);
 }
 
-async function setup(location='?layer=terrain&render=static',fixture={}){
+async function setup(location='?layer=contours&render=static',fixture={}){
   const url=new URL(location,'https://example.com/insight-journal/atlas/europe/nature/');
   const field=url.pathname.match(/\/atlas\/europe\/(nature|agriculture|industry|population)\//)?.[1]??'nature';
   const html=(await readFile(`dist/atlas/europe/${field}/index.html`,'utf8'))
@@ -113,48 +113,50 @@ async function assertReading(app,point){
   assert.equal(result.hasAttribute('aria-busy'),false);assertPoint(app,point);
 }
 
-test('terrain and contours query the same real elevation cell in metres, preserving zero, below-sea-level land and ocean missingness',async()=>{
+test('terrain keeps the named landforms visible; contours query real elevation including zero, below-sea-level land and ocean missingness',async()=>{
   assert.equal(displayCell(elevation,zero,-32768).value,0);
   assert.ok(displayCell(elevation,negative,-32768).value<0);
   assert.equal(displayCell(elevation,ocean,-32768).value,null);
   const app=await setup();
   try{
+    app.choose('terrain');
+    assert.equal(app.q('[data-eu-subject-grid]').hidden,true,'The landform overview does not ask for a numeric grid reading');
+    assert.equal(app.q('[data-eu-subject-legend]').hidden,true,'The landform overview does not repeat the elevation key');
+    assert.match(app.q('[data-eu-map-place="alps"][data-eu-map-kind="feature"]').textContent,/アルプス/);
     for(const point of [alps,zero,negative,ocean]){
-      app.choose('terrain');
+      app.choose('contours');
       const view=app.q('[data-eu-static]').getAttribute('viewBox'),historyLength=app.w.history.length;
       app.clickPoint(point);await assertReading(app,point);
       assert.equal(app.w.history.length,historyLength+1,'One point click creates one restorable history entry');
       assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),view,'Selecting a value retains the current map extent');
       assert.equal(app.q('[data-eu-subject-grid]').closest('.eu-read-panel'),app.q('.eu-read-panel'),'The elevation result is beside the map');
-      const terrain=app.q('[data-eu-subject-result]').textContent;
-      app.choose('contours');await assertReading(app,point);
-      assert.equal(app.q('[data-eu-subject-result]').textContent,terrain,'Both subjects use the exact same display cell value');
       assert.match(app.q('[data-eu-legend-title]').textContent,/500m間隔/);
       assert.match(app.q('[data-eu-layer-note]').textContent,/1,000m間隔.*標高精度を意味しません/);
       assert.match(app.q('[data-eu-grid-title]').textContent,/標高.*m.*ETOPO 2022/);
       assert.doesNotMatch(app.q('[data-eu-subject-result]').textContent,/標高 m|500m間隔/);
     }
-    assert.equal(app.requests.filter(asset=>asset===elevationAsset).length,1,'Terrain and contours share the source grid cache');
+    assert.equal(app.requests.filter(asset=>asset===elevationAsset).length,1,'Contour lookups share the source grid cache');
     assert.deepEqual(app.warnings,[]);
   }finally{await app.w.happyDOM.close();}
 });
 
 for(const layer of ['terrain']){
-  test(`${layer} named feature selection survives comparison return and a fresh page load with its elevation`,async()=>{
+  test(`${layer} named feature selection survives comparison return and a fresh page load`,async()=>{
     const app=await setup(`?layer=${layer}&render=static`);
     try{
-      app.q('[data-eu-map-place="alps"][data-eu-map-kind="feature"]').click();await assertReading(app,alps);
+      app.q('[data-eu-map-place="alps"][data-eu-map-kind="feature"]').click();
       assert.equal(new URL(app.w.location.href).searchParams.get('feature'),'alps');
+      assert.equal(app.q('[data-eu-subject-grid]').hidden,true);
       assert.match(app.q('[data-eu-subject-title]').textContent,/アルプス/);
       const compareUrl=new URL(app.q('[data-eu-comparison-link="nature-density"]').href);
       const source=new URLSearchParams(compareUrl.searchParams.get('europeReturn'));
-      assert.equal(source.get('layer'),layer);assert.equal(source.get('feature'),'alps');assert.deepEqual(source.get('point').split(',').map(Number),alps);
+      assert.equal(source.get('layer'),layer);assert.equal(source.get('feature'),'alps');
       const comparison=await setup(compareUrl.href);
       try{
         const back=comparison.q('[data-eu-comparison-return]');assert.match(back.textContent,/アルプス.*元の選択へ戻る/);
         const backUrl=new URL(back.href);assert.equal(backUrl.pathname,'/insight-journal/atlas/europe/nature/');assert.equal(backUrl.searchParams.get('layer'),layer);assert.equal(backUrl.searchParams.has('europeReturn'),false);
         const reload=await setup(back.href);
-        try{await assertReading(reload,alps);assert.equal(new URL(reload.w.location.href).searchParams.get('feature'),'alps');assert.match(reload.q('[data-eu-subject-title]').textContent,/アルプス/);}finally{await reload.w.happyDOM.close();}
+        try{assert.equal(reload.q('[data-eu-subject-grid]').hidden,true);assert.equal(new URL(reload.w.location.href).searchParams.get('feature'),'alps');assert.match(reload.q('[data-eu-subject-title]').textContent,/アルプス/);}finally{await reload.w.happyDOM.close();}
       }finally{await comparison.w.happyDOM.close();}
     }finally{await app.w.happyDOM.close();}
   });
@@ -196,7 +198,8 @@ test('back/forward popstate and reload restore arbitrary clicked points without 
     const reload=await setup(second);
     try{await assertReading(reload,negative);}finally{await reload.w.happyDOM.close();}
     app.choose('climate');assert.equal(app.q('[data-eu-selected-point]').hidden,true,'A grid selection does not impersonate a climate station');
-    app.choose('terrain');await assertReading(app,negative);
+    app.choose('terrain');assert.equal(app.q('[data-eu-subject-grid]').hidden,true);
+    app.choose('contours');await assertReading(app,negative);
   }finally{await app.w.happyDOM.close();}
 });
 
@@ -256,7 +259,7 @@ test('a slow elevation response cannot overwrite the newer precipitation value a
 test('the map owns a single source-backed key and arrow keys preserve the selected point across nature topics',async()=>{
   const point=[9.5,46.6],app=await setup('?layer=terrain&render=static&point='+point.join(','));
   try{
-    await assertReading(app,point);
+    assert.equal(app.q('[data-eu-subject-grid]').hidden,true);
     const host=app.q('[data-eu-map-legend]');
     assert.equal(app.q('[data-eu-subject-legend]').parentElement,host);
     assert.equal(app.q('[data-eu-climate-legend]').parentElement,host);
@@ -280,7 +283,7 @@ test('the map owns a single source-backed key and arrow keys preserve the select
 });
 
 test('a click outside the published extent clears the old point instead of leaving its elevation visible',async()=>{
-  const point=[9.5,46.6],app=await setup('?layer=terrain&render=static&point='+point.join(','));
+  const point=[9.5,46.6],app=await setup('?layer=contours&render=static&point='+point.join(','));
   try{
     await assertReading(app,point);
     app.clickPoint([70,50]);
@@ -310,7 +313,7 @@ for(const topic of ['ethnicity','religion'])test(`${topic} keeps the unselected 
     assert.equal(legend.lastElementChild.hidden,true);
     assert.equal(legend.querySelectorAll('[data-culture-scale-key]:not([hidden])').length,6);
     assert.match(legend.querySelectorAll('[data-culture-scale-key]')[5].textContent,/未掲載・数値なし/);
-    app.choose('terrain');
+    app.choose('contours');
     assert.equal(legend.hidden,true);assert.equal(app.q('[data-eu-subject-legend]').hidden,false);
   }finally{await app.w.happyDOM.close();}
 });

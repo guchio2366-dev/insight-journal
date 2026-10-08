@@ -92,7 +92,8 @@ test('自然・産業・人口をつなぐ説明でも欠測、量、位置の�
   assert.match(copy('climate').note, /欠測.*0で補いません/);
   assert.match(copy('water').body, /ドナウ川.*19か国/);
   assert.match(copy('water').note, /太さは流量を表しません/);
-  assert.match(copy('terrain').body, /8か国とEU/);
+  assert.match(copy('terrain').takeaway, /北ヨーロッパ平原.*ピレネー.*アルプス.*カルパチア/);
+  assert.match(copy('terrain').body, /プレートの収束.*氷河侵食/);
   assert.match(copy('contours').note, /間隔は標高精度を意味しません/);
   assert.match(copy('hubs').body, /ロッテルダム.*ルートヴィヒスハーフェン/);
   assert.match(copy('hubs').note, /生産量・雇用の大小を表しません/);

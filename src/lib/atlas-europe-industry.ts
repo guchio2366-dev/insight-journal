@@ -2,6 +2,13 @@
 export const europeIndustryCountries = ['DEU', 'GBR', 'FRA', 'ITA'] as const;
 export const europeIndustryGroups = ['エネルギー','鉱業・素材','自動車・機械','化学・医薬品','航空機','港湾物流','観光','金融','繊維・衣服','食品加工'] as const;
 export type EuropeIndustryGroup = typeof europeIndustryGroups[number];
+export const europeIndustryColors:Record<EuropeIndustryGroup,string>={
+  'エネルギー':'#a06a24','鉱業・素材':'#76614d','自動車・機械':'#4e70a3','化学・医薬品':'#8a5b91','航空機':'#286c9b',
+  '港湾物流':'#287d80','観光':'#548364','金融':'#695aa1','繊維・衣服':'#ac6176','食品加工':'#ad7636',
+};
+/** Named anchors cover all ten sectors and separate northern resources from
+ * central manufacturing. Remaining evidence points still carry sector color. */
+export const europeIndustryOverviewLabels=['johan','kiruna','rotterdam','munich','kalundborg','toulouse','hamburg','adriatic_tourism','frankfurt','portugal_textile','parma_food'] as const;
 export function normaliseEuropeIndustryGroup(value: unknown): EuropeIndustryGroup | undefined {
   return europeIndustryGroups.find(group => group === value);
 }

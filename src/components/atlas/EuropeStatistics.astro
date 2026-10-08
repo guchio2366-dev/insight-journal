@@ -1,5 +1,6 @@
 ---
 import EuropeClimateDiagram from './EuropeClimateDiagram.astro';
+import EuropeVerifiedStatistics from './EuropeVerifiedStatistics.astro';
 import cities from '../../data/atlas/europe/climate-cities.json';
 import countries from '../../data/atlas/europe/countries.json';
 import type { EuropeField } from '../../data/atlas/europe/layers';
@@ -23,7 +24,8 @@ const countryName = (code: string) => countries.find(country => country.code ===
       <h2 id="europe-farming-statistics-title" data-eu-statistics-title>欧州の農林業の統計</h2>
       <p>対象：<strong data-eu-statistics-item>欧州の農畜産物</strong>。国全体の公表統計と、地図の格子推計を分けて読みます。ロシアの統計は全土です。</p>
     </header>
-    <section class="eu-farm-numbers" data-eu-farm-numbers data-statistics-url={withBase('/assets/atlas/europe/farming-statistics-v1/statistics.json.gz')} aria-labelledby="eu-farm-numbers-title">
+    <EuropeVerifiedStatistics />
+    <section class="eu-farm-numbers" data-eu-farm-numbers hidden data-statistics-url={withBase('/assets/atlas/europe/farming-statistics-v1/statistics.json.gz')} aria-labelledby="eu-farm-numbers-title">
       <h3 id="eu-farm-numbers-title">生産・飼養・木材の国別数量</h3>
       <p data-eu-farm-statistics-message role="status">品目を選ぶと、その品目の数量と国別比較を読み込めます。</p>
       <p class="eu-statistic-note">世界生産量比・飼養数比・森林面積比の分母は、同年・同品目・同単位でFAOSTATが公表するWorld行です。</p>
@@ -63,11 +65,10 @@ const countryName = (code: string) => countries.find(country => country.code ===
         <div data-eu-farm-stat-source-content></div>
       </details>
     </section>
-    <dl class="eu-statistics-availability">
+    <dl class="eu-statistics-availability" hidden>
       <div><dt>販売総額（米ドル）</dt><dd><span data-eu-statistics-item>欧州の農畜産物</span>の販売総額は未収録です。</dd></div>
       <div><dt>地図と数量の対象</dt><dd>格子の収穫面積・家畜密度と、国全体の生産量・頭羽数は別の資料です。集合的な作物区分を個別品目の統計に置き換えません。</dd></div>
     </dl>
-    <p class="eu-statistic-note">「未収録」は、このサイトに数値を収録していないことを示します。販売・生産・輸出がゼロという意味ではありません。</p>
   </section>
   <slot />
 </section>

@@ -7,6 +7,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import EuropeClimateReading from './EuropeClimateReading.astro';
 import EuropeStatistics from './EuropeStatistics.astro';
 import farmingAreas from '../../data/atlas/europe/farming-areas.json';
+import { overviewColorCrops, farmingVisualWeight } from '../../lib/atlas-europe-farming';
 import EuropeSubjectReader from './EuropeSubjectReader.astro';
 import EuropePopulationCases from './EuropePopulationCases.astro';
 import '../../styles/atlas-europe-comparison.css';
@@ -26,7 +27,7 @@ import climateWater from '../../data/atlas/europe/climate-water.json';
 import { europeTerrainGuides } from '../../data/atlas/europe/terrain-geography';
 
 import { majorClimateCities } from '../../lib/atlas-europe-annotations';
-import { europeIndustryCountries } from '../../lib/atlas-europe-industry';
+import { europeIndustryCountries, europeIndustryGroups, europeIndustryColors } from '../../lib/atlas-europe-industry';
 import { countryOverview, countryOverviewSource } from '../../data/atlas/europe/country-overviews';
 import { europeReaderCopy } from '../../lib/atlas-europe-reader';
 import '../../styles/atlas-europe.css';
@@ -44,8 +45,10 @@ const initialClimateReader = field==='nature';
 const climateOverview = europeReaderCopy(layers.find(l=>l.id==='climate')!);
 const initialFeatures = field==='population'?populationCities:field==='industry'?europeReadings.filter(r=>r.field==='industry'):[];
 const initialPointVisible = (p:{id:string;rank?:number}) => initialFeatures.some(f=>f.id===p.id)&&(p.rank??0)<=1;
+const renderPriority=(feature:(typeof farmingAreas.features)[number])=>feature.properties.kind==='livestock'?10:Math.max(0,overviewColorCrops.indexOf(feature.properties.id as typeof overviewColorCrops[number])+1);
+const displayFarmingAreas={...farmingAreas,features:[...farmingAreas.features].sort((a,b)=>renderPriority(a)-renderPriority(b))};
 const industryOverviews = Object.fromEntries(europeIndustryCountries.map(code=>{const copy=countryOverview(code)!.topics.industry!;return [code,{...copy,sources:copy.sourceIds.map(id=>countryOverviewSource(id))}];}));
-const config = { industryOverviews, farmingAreas, geography, climateWater, countries, cities: cities.map(({ id, name, country, coordinates }) => ({ id, name, country, coordinates })), climate, wheat, wheatValues: withBase('/assets/atlas/europe/wheat-v1/values.bin.gz'), initialLayer: currentField.initial, layers, populationCities, readings:europeReadings, statistics };
+const config = { industryOverviews, farmingAreas:displayFarmingAreas, geography, climateWater, countries, cities: cities.map(({ id, name, country, coordinates }) => ({ id, name, country, coordinates })), climate, wheat, wheatValues: withBase('/assets/atlas/europe/wheat-v1/values.bin.gz'), initialLayer: currentField.initial, layers, populationCities, readings:europeReadings, statistics };
 ---
 <BaseLayout title={`欧州の${currentField.label}`} description="欧州の自然環境・農林業・産業・人口を、国境をまたぐ分布と国別の数値で読み比べる地図。" compactAtlas>
   <div class="eu-atlas eu-workspace-root" data-europe-detail>
@@ -76,9 +79,9 @@ const config = { industryOverviews, farmingAreas, geography, climateWater, count
             <g data-eu-terrain-guides style="display:none">{europeTerrainGuides.map(guide=><polyline points={guide.line.map(point=>project(point).join(',')).join(' ')} fill="none" stroke="#574b3c" stroke-width="2" stroke-dasharray="6 4" vector-effect="non-scaling-stroke" />)}</g>
             <image data-eu-drainage-selection x="0" y="0" width={frame.width} height={frame.height} preserveAspectRatio="none" style="display:none" />
             <image data-eu-origin-image x="0" y="0" width={frame.width} height={frame.height} preserveAspectRatio="none" style="display:none" />
-            <defs>{farmingAreas.features.map(f=><path id={`eu-farm-geometry-${f.properties.id}`} d={viewPath(f.geometry as any)} />)}</defs>
+            <defs>{displayFarmingAreas.features.map(f=><path id={`eu-farm-geometry-${f.properties.id}`} d={viewPath(f.geometry as any)} />)}</defs>
             <g class="eu-farming-areas" style={agriculture?'':'display:none'} data-eu-farming-shapes>
-              {farmingAreas.features.map(f=><use href={`#eu-farm-geometry-${f.properties.id}`} data-eu-farm-area={f.properties.id} fill-rule="evenodd" fill={f.properties.color} fill-opacity={f.properties.kind==='crop'?.26:.08} stroke={f.properties.color} stroke-width={f.properties.kind==='crop'?.45:.6} stroke-dasharray={f.properties.kind==='livestock'?'5 3':undefined} vector-effect="non-scaling-stroke"><title>{f.properties.name}の主な分布</title></use>)}
+              {displayFarmingAreas.features.map(f=><use href={`#eu-farm-geometry-${f.properties.id}`} data-eu-farm-area={f.properties.id} fill-rule="evenodd" fill={f.properties.color} fill-opacity={farmingVisualWeight(f.properties,undefined,false).fill} stroke={f.properties.color} stroke-opacity={farmingVisualWeight(f.properties,undefined,false).line} stroke-width={farmingVisualWeight(f.properties,undefined,false).width} stroke-dasharray={f.properties.kind==='livestock'?'5 3':undefined} vector-effect="non-scaling-stroke"><title>{f.properties.name}の主な分布</title></use>)}
             </g>
             <g class="eu-farming-selection">
               {farmingAreas.features.map(f=><g><use href={`#eu-farm-geometry-${f.properties.id}`} data-eu-farm-outline={f.properties.id} fill="none" stroke="#fffdf2" stroke-width="5" vector-effect="non-scaling-stroke" style="display:none"/><use href={`#eu-farm-geometry-${f.properties.id}`} data-eu-farm-outline={f.properties.id} fill="none" stroke="#173c48" stroke-width="2.5" vector-effect="non-scaling-stroke" style="display:none"/></g>)}
@@ -95,6 +98,8 @@ const config = { industryOverviews, farmingAreas, geography, climateWater, count
             <g data-eu-culture-layer></g>
           </svg>
           <div class="eu-live-map" data-eu-live aria-label="操作できる欧州地図"></div>
+          <div class="eu-map-inline-key" data-eu-inline-farm-key hidden={!agriculture} aria-label="農畜産分布の主な色"><strong>主な色面</strong>{overviewColorCrops.map(id=>{const item=farmingAreas.features.find(f=>f.properties.id===id)!.properties;return <span><i style={`background:${item.color}`}></i>{item.name}</span>})}<small>他品目は細い輪郭。選択で強調</small></div>
+          <div class="eu-map-inline-key eu-map-industry-key" data-eu-inline-industry-key hidden={field!=='industry'} aria-label="産業拠点の色と分野">{europeIndustryGroups.map(group=><span><i style={`background:${europeIndustryColors[group]}`}></i>{group}</span>)}</div>
           <div class="eu-map-annotations" data-eu-annotations aria-label="地図の都市と地点"><svg aria-hidden="true"></svg></div>
           <div class="eu-farming-focus-marker" data-eu-farming-focus-marker hidden><span aria-hidden="true"></span><strong data-eu-farming-focus-point-label></strong></div>
           <span class="eu-selected-point" data-eu-selected-point role="img" aria-label="選択地点" hidden></span>
@@ -102,7 +107,7 @@ const config = { industryOverviews, farmingAreas, geography, climateWater, count
         <div class="eu-terrain-name-options" data-eu-terrain-name-options hidden role="group" aria-label="地形名の種類"><button type="button" data-eu-terrain-names="landforms" aria-pressed="true">山地・平原</button><button type="button" data-eu-terrain-names="coasts" aria-pressed="false">半島・島・海域</button></div>
         <div class="eu-map-legend" data-eu-map-legend><p class="eu-water-note">河川・湖の位置、年降水量、流域区画を切り替えます。地下水は公開利用条件が未確認のため未収録です。</p></div>
         <div class="eu-item-list" data-eu-farming-list hidden={!agriculture} aria-label="農畜産物と林業を選ぶ">
-          <p class="eu-item-ranking-note">作物12区分・家畜4種の分布と、酪農の生乳統計です。生産額順位ではありません。野菜・果樹の集合区分と個別作物、生体数と肉・乳・卵を同列に順位付けしません。</p>
+          <p class="eu-item-ranking-note" data-eu-farming-ranking-note>作物12区分・家畜4種の分布と、酪農の生乳統計です。生産額順位ではありません。野菜・果樹の集合区分と個別作物、生体数と肉・乳・卵を同列に順位付けしません。</p>
           {(['crop','livestock'] as const).map(kind=><section data-eu-farming-children={kind}><h3>{kind==='crop'?'作物':'畜産'}</h3><div>{farmingAreas.features.filter(f=>f.properties.kind===kind).map(f=><button type="button" data-eu-layer={f.properties.id} aria-pressed="false"><span class:list={['eu-item-swatch',{'is-livestock':kind==='livestock'}]} style={{'--item-color':f.properties.color}}></span>{f.properties.name}</button>)}</div></section>)}
           <section data-eu-farming-children="dairy"><h3>酪農</h3><button type="button" data-eu-layer="dairy" aria-pressed="false">牛の生乳 · 国別統計</button></section>
           <section data-eu-farming-children="forest" hidden><h3>林業</h3><button type="button" data-eu-layer="treecover" aria-pressed="false">樹木被覆の分布 · 2021</button><button type="button" data-eu-layer="forest" aria-pressed="false">国別の森林面積比率 · 2023</button></section>
@@ -165,14 +170,6 @@ const config = { industryOverviews, farmingAreas, geography, climateWater, count
         </div>
       </aside>
     </div>
-    <details class="eu-sources"><summary>追加データの出典・加工記録</summary><ul><li>人口密度：欧州委員会JRC・GHSL R2023A、2020年、CC BY 4.0。Insight Journalが5km格子集計・投影を加工。<a href={withBase('/assets/atlas/europe/population-v1/manifest.json')}>加工記録</a></li><li>標高・等高線：NOAA NCEI ETOPO 2022、60秒角、EGM2008基準。水系：Natural Earth 5.1.2、1:50m、パブリックドメイン。<a href={withBase('/assets/atlas/europe/physical-v1/manifest.json')}>加工記録</a></li><li>作物：IFPRI SPAM 2020 v2r2・V6。家畜：FAO GLW4、2020年、CC BY 4.0。<a href={withBase('/assets/atlas/europe/farming-v1/manifest.json')}>取得・加工記録</a></li><li>国別統計：World Bank WDI、2023年を比較年として固定。都市位置：Natural Earth 5.1.2の首都・地図優先順位5以下、132地点。<a href={withBase('/assets/atlas/europe/context-v1/manifest.json')}>取得記録</a></li></ul></details>
-    <p class="eu-data-note" data-eu-extra-field="agriculture" hidden={!agriculture}>作物の出典：IFPRI (2026), <a href="https://doi.org/10.7910/DVN/SWPENT">Global Spatially-Disaggregated Crop Production Statistics Data for 2020 Version 2.0 Release 2</a>, Harvard Dataverse, V6。CC BY 4.0（IFPRI Dataverse利用条件）。Insight Journalが欧州範囲を切り出して加工しました。<a href={withBase('/assets/atlas/europe/farming-overview-v2/manifest.json')}>統合図の加工記録</a>と<a href={withBase('/assets/atlas/europe/farming-v1/manifest.json')}>品目別データの取得記録</a>を確認できます。</p>
-    <details class="eu-sources"><summary>出典・データの範囲</summary><ul><li>気候分類：<a href="https://www.gloh2o.org/koppen/">Beck et al. (2023)</a>、1991–2020、CC BY 4.0。koppen.earthから取得し、Insight Journalが配色・投影を加工。<a href={withBase('/assets/atlas/europe/climate-v1/manifest.json')}>加工記録</a></li><li>雨温図：<a href="https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/outline.html">気象庁 ClimatView</a>、<a href="https://ds.data.jma.go.jp/tcc/tcc/products/climate/explanation/normal.html">平年値の算出方法</a>。気象庁のデータをInsight Journalが加工。<a href={withBase('/assets/atlas/europe/climate-v1/cities-manifest.json')}>取得記録</a></li><li>国境：<a href="https://www.naturalearthdata.com/">Natural Earth</a> 1:110m、微小国は1:50mを補完、パブリックドメイン。海外領土・表示枠外は省略。</li><li>気候色は格子分類、雨温図は観測地点の数値です。地図の色だけから国全体や観測所の値を推定しないでください。</li></ul></details>
-    <details class="eu-sources"><summary>樹木被覆・年降水量・流域の出典と利用条件</summary>
-      <p>樹木被覆：© ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium. Insight Journalが配信済み概略格子の樹木区分を抽出し、投影・範囲・配色を加工。<a href="https://esa-worldcover.org/en/data-access">原典</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <a href={withBase('/assets/atlas/europe/tree-cover-v1/manifest.json')}>取得・加工記録</a></p>
-      <p>年降水量：GPCC/DWD, Rustemeier et al. (2025), <a href="https://doi.org/10.5676/DWD_GPCC/CLIMAT_V2025_025">DOI: 10.5676/DWD_GPCC/CLIMAT_V2025_025</a>。1991–2020年の月別平年値を12か月合計し、Insight Journalが投影・範囲・配色を加工。<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <a href={layers.find(layer=>layer.id==='precipitation')!.manifest}>取得・加工記録</a></p>
-      <p>流域：BasinATLAS v1.0 / HydroATLAS, Bernhard Lehner; Simon Linke; Michele Thieme。Linke et al. (2019)、CC BY 4.0。HydroSHEDS/WWF由来のレベル4区画をInsight Journalが表示範囲・投影・配色へ加工。無保証のモデル境界で、流量・地下水量を示しません。<a href="https://doi.org/10.6084/m9.figshare.9890531.v1">原典</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <a href={withBase('/assets/atlas/europe/drainage-v1/manifest.json')}>取得・加工記録</a></p>
-    </details>
     <noscript><p>JavaScriptが無効です。初期地図・解説一覧・出典を表示しています。主題や地点の変更にはJavaScriptが必要です。</p></noscript>
     <script type="application/json" data-eu-config set:html={JSON.stringify(config).replaceAll('<', '\\u003c')} />
     </div>
@@ -181,6 +178,19 @@ const config = { industryOverviews, farmingAreas, geography, climateWater, count
         <div class="eu-grid-value" data-eu-wheat-reading hidden><strong>小麦の面積を調べる</strong><p data-eu-grid-result aria-live="polite">地図を押すと、その格子に割り当てられた収穫面積（ha）を表示します。</p><p>5分角の格子ごとのモデル推計です。2020年頃の分布であり、現在の生産量や戦争の影響は表しません。面積の割合ではないため、緯度によって格子の実面積が異なる点にも注意してください。</p></div>
 <details class="eu-country-reader" data-eu-country-reader hidden><summary data-eu-country-title></summary><p class="eu-data-note">2023年・国全体の統計です。格子や都市の値とは異なります。ロシアは全土の値です。</p><dl class="eu-national-values" data-eu-national-values></dl></details>
     </EuropeStatistics>
+    <details class="eu-sources eu-consolidated-sources"><summary>地図・統計の出典と加工記録</summary>
+      <ul>
+        <li>作物：<a href="https://doi.org/10.7910/DVN/SWPENT">IFPRI SPAM 2020 v2r2・V6</a>、家畜：FAO GLW4 2020。<a href={withBase('/assets/atlas/europe/farming-overview-v2/manifest.json')}>農畜産の形状・加工記録</a>。統計：<a href="https://doi.org/10.4060/cd4313en">FAO Statistical Yearbook 2025</a>（2023年欧州・世界集計、CC BY 4.0）、<a href="https://comtradeapi.un.org/">UN Comtrade</a>（2021年の対象40報告国・地域、金額）。</li>
+        <li>林業：<a href="https://ec.europa.eu/eurostat/databrowser/view/for_basic/default/table?lang=en">Eurostat for_basic</a>・<a href="https://ec.europa.eu/eurostat/databrowser/view/for_swpan/default/table?lang=en">for_swpan</a>（2024年、4か国）。樹木被覆：<a href="https://esa-worldcover.org/en/data-access">ESA WorldCover 2021</a>（CC BY 4.0、<a href={withBase('/assets/atlas/europe/tree-cover-v1/manifest.json')}>加工記録</a>）。</li>
+        <li>地形・標高：NOAA NCEI ETOPO 2022、60秒角、EGM2008基準（<a href={withBase('/assets/atlas/europe/physical-v1/manifest.json')}>加工記録</a>）。河川・湖：Natural Earth 5.1.2、1:50m、パブリックドメイン。国境：Natural Earth 1:110mに微小国の1:50mを補完。</li>
+        <li>気候：<a href="https://www.gloh2o.org/koppen/">Beck et al. (2023)</a>、1991–2020、CC BY 4.0（<a href={withBase('/assets/atlas/europe/climate-v1/manifest.json')}>加工記録</a>）。雨温図：<a href="https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/outline.html">気象庁 ClimatView</a>（<a href={withBase('/assets/atlas/europe/climate-v1/cities-manifest.json')}>取得記録</a>）。</li>
+        <li>年降水量：<a href="https://doi.org/10.5676/DWD_GPCC/CLIMAT_V2025_025">GPCC/DWD、Rustemeier et al. (2025)</a>、1991–2020年、CC BY 4.0（<a href={layers.find(layer=>layer.id==='precipitation')!.manifest}>加工記録</a>）。流域区画：<a href="https://doi.org/10.6084/m9.figshare.9890531.v1">BasinATLAS v1.0 / HydroATLAS</a>、レベル4、CC BY 4.0（<a href={withBase('/assets/atlas/europe/drainage-v1/manifest.json')}>加工記録</a>）。</li>
+        <li>人口密度：欧州委員会JRC・GHSL R2023A、2020年、CC BY 4.0（<a href={withBase('/assets/atlas/europe/population-v1/manifest.json')}>加工記録</a>）。国別統計：World Bank WDI。都市位置：Natural Earth 5.1.2（<a href={withBase('/assets/atlas/europe/context-v1/manifest.json')}>取得記録</a>）。</li>
+      </ul>
+      <p>FAOの世界生産シェアは2023年の公表Europe行÷World行（同品目・同単位）です。欧州はM49に基づき、ロシアは全国値を含みます。公表地域行には集計の充足条件があり、全小国の観測値を保証しません。供給熱量は同じ公表Europe行の9群・計3,490 kcal/人/日で、国別値の単純平均ではありません。</p>
+      <p>UN Comtrade円の分母は、2021年の対象40報告国・地域について欧州内相手・World集計・地理帰属不明を除いた相手国別金額です。大豆輸入は9,881,386,718.92米ドル、小麦・メスリン輸出は18,924,714,476.237米ドル。小麦の製品World記録は35報告国で、関税領域とM49欧州は完全には一致しません。数量や自給率には換算しません。<a href="https://uncomtrade.org/docs/re-dissemination-of-data/">UN Comtrade再配布条件</a>。</p>
+      <p>地図の格子・点と国・地域集計は別の資料です。欠測を0としていません。Insight Journalが表示範囲・配色・投影と図表を加工したもので、原機関の推薦・保証を示しません。</p>
+    </details>
     </AtlasWorkspaceFrame>
   </div>
 </BaseLayout>

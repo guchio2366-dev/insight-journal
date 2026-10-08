@@ -1,0 +1,36 @@
+{
+  "charts": [
+    {
+      "id": "soy_import", "title_ja": "大豆の域外輸入相手（金額）", "year": 2021, "hs_code": "1201", "flow": "M", "unit": "current USD", "status": "verified_values_provisional_geographic_coverage", "reporters_queried": 40, "reporters_with_product_world_record": 40,
+      "source": "UN Comtrade", "source_url": "https://comtradeapi.un.org/public/v1/preview/C/A/HS?period=2021&reporterCode=8%2C20%2C40%2C56%2C70%2C100%2C112%2C191%2C203%2C208%2C233%2C246%2C251%2C276%2C300%2C348%2C352%2C372%2C380%2C428%2C440%2C442%2C470%2C498%2C499%2C528%2C579%2C616%2C620%2C642%2C643%2C688%2C703%2C705%2C724%2C752%2C757%2C804%2C807%2C826&cmdCode=1201&flowCode=M&partner2Code=0&customsCode=C00&motCode=0&maxRecords=500&includeDesc=true&aggregateBy=reporterCode", "retrieved_utc": "2026-10-08T17:51:16Z",
+      "denominator_description_ja": "対象欧州報告国・地域について、欧州内相手・World集計・地理帰属不明相手を除いた相手国別金額合計。域外と判定できる地域不詳（Other Asia, nes）は「その他」に含む。", "denominator_usd": 9881386718.92,
+      "segments": [
+        {"code":76,"label_ja":"ブラジル","value_usd":5843001565.745999,"share_pct":59.13139250545007},
+        {"code":842,"label_ja":"米国","value_usd":2533621173.7340007,"share_pct":25.640340225556077},
+        {"code":124,"label_ja":"カナダ","value_usd":771454501.5179998,"share_pct":7.807148161106652},
+        {"code":"other","label_ja":"その他の域外相手","value_usd":733309477.9220009,"share_pct":7.421119107887193}
+      ],
+      "geographically_unallocated_excluded_usd": 722.548, "unallocated_pct_of_identified_external_plus_unallocated": 0.00000731221201759352, "unallocated_pct_of_world_trade": 0.000006348913720063326,
+      "excluded_unallocated_categories": [{"code":899,"name":"Areas, nes","value_usd":722.548}],
+      "scope_note_ja": "UN M49 Europeを基本にComtradeの関税領域へ対応づけた利用可能報告国。ロシア全土を含む。トルコ・キプロス・南コーカサス・カザフスタンは域外。フランス関税領域は非欧州海外県も含む。小国・属領の包括関係は最終確認が必要。厳密なM49全域と同一ではない。",
+      "interpretation_note_ja": "輸出に再輸出を含む。輸入相手は原則原産国で、地域内再流通の影響を完全には除けない。消費量・国産比率・食料自給率には読み替えない。",
+      "weight_warning_ja": "国別World重量にnull/0があり、相手別重量総和とも不一致。数量の円グラフ・合計は採用せず、金額のみを使う。", "source_terms_url": "https://uncomtrade.org/docs/re-dissemination-of-data/"
+    },
+    {
+      "id": "wheat_export", "title_ja": "小麦・メスリンの域外輸出先（金額）", "year": 2021, "hs_code": "1001", "flow": "X", "unit": "current USD", "status": "verified_values_provisional_geographic_coverage", "reporters_queried": 40, "reporters_with_product_world_record": 35,
+      "source": "UN Comtrade", "source_url": "https://comtradeapi.un.org/public/v1/preview/C/A/HS?period=2021&reporterCode=8%2C20%2C40%2C56%2C70%2C100%2C112%2C191%2C203%2C208%2C233%2C246%2C251%2C276%2C300%2C348%2C352%2C372%2C380%2C428%2C440%2C442%2C470%2C498%2C499%2C528%2C579%2C616%2C620%2C642%2C643%2C688%2C703%2C705%2C724%2C752%2C757%2C804%2C807%2C826&cmdCode=1001&flowCode=X&partner2Code=0&customsCode=C00&motCode=0&maxRecords=500&includeDesc=true&aggregateBy=reporterCode", "retrieved_utc": "2026-10-08T17:51:00Z",
+      "denominator_description_ja": "対象欧州報告国・地域について、欧州内相手・World集計・地理帰属不明相手を除いた相手国別金額合計。域外と判定できる地域不詳（Other Asia, nes）は「その他」に含む。", "denominator_usd": 18924714476.237,
+      "segments": [
+        {"code":818,"label_ja":"エジプト","value_usd":3024653467.4729996,"share_pct":15.982557999862744},
+        {"code":792,"label_ja":"トルコ","value_usd":2371244100.1869993,"share_pct":12.529880454283603},
+        {"code":12,"label_ja":"アルジェリア","value_usd":1749160247.3260002,"share_pct":9.242729920825756},
+        {"code":"other","label_ja":"その他の域外相手","value_usd":11779656661.251,"share_pct":62.2448316250279}
+      ],
+      "geographically_unallocated_excluded_usd": 28092457.055, "unallocated_pct_of_identified_external_plus_unallocated": 0.1482232006788057, "unallocated_pct_of_world_trade": 0.1007869640384245,
+      "excluded_unallocated_categories": [{"code":837,"name":"Bunkers","value_usd":60800.297000000006},{"code":899,"name":"Areas, nes","value_usd":28031656.758}],
+      "scope_note_ja": "UN M49 Europeを基本にComtradeの関税領域へ対応づけた利用可能報告国。ロシア全土を含む。トルコ・キプロス・南コーカサス・カザフスタンは域外。フランス関税領域は非欧州海外県も含む。小国・属領の包括関係は最終確認が必要。厳密なM49全域と同一ではない。",
+      "interpretation_note_ja": "輸出に再輸出を含む。輸入相手は原則原産国で、地域内再流通の影響を完全には除けない。消費量・国産比率・食料自給率には読み替えない。",
+      "weight_warning_ja": "国別World重量にnull/0があり、相手別重量総和とも不一致。数量の円グラフ・合計は採用せず、金額のみを使う。", "source_terms_url": "https://uncomtrade.org/docs/re-dissemination-of-data/"
+    }
+  ]
+}
