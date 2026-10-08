@@ -57,10 +57,15 @@ try{
  });
  await context.routeWebSocket('**/*',socket=>{results.externalAttempts.push({url:new URL(socket.url()).origin,resourceType:'websocket'});socket.close({code:1008,reason:'Local static review only'});});
  const scenes=[
-  {id:'south-central-rivers-groundwater',route:'/atlas/asia/south-central-asia/nature/?topic=water',check:async page=>{
-   await page.waitForFunction(()=>{const root=document.querySelector('[data-asia-atlas]'),panel=document.querySelector('[data-hydrology-panel]'),picker=document.querySelector('[data-hydrology-detail]');return root?.dataset.mapReady==='true'&&panel&&!panel.hidden&&picker?.options.length>1;});
-   assert.match(await page.locator('[data-hydrology-panel]').textContent(),/河川|地下水/);
-   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+  {id:'south-central-population-initial',route:'/atlas/asia/south-central-asia/population/',check:async page=>{
+   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&!document.querySelector('[data-population-reading]')?.hidden);
+   assert.equal(await page.locator('[data-country-select]').inputValue(),'');
+   assert.match(await page.locator('[data-population-reading]').textContent(),/2020|人口/);
+  }},
+  {id:'south-central-religion-initial',route:'/atlas/asia/south-central-asia/population/?topic=religion',check:async page=>{
+   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&!document.querySelector('[data-settlement-reading="religion"]')?.hidden);
+   assert.equal(await page.locator('[data-country-select]').inputValue(),'');
+   assert.match(await page.locator('[data-settlement-reading="religion"]').textContent(),/宗教と結びついた居住域/);
   }},
   {id:'south-central-nature',route:'/atlas/asia/south-central-asia/nature/',check:async page=>{
    await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-map-fallback]')?.hidden);
@@ -97,8 +102,8 @@ try{
    await panel.getByText(/2024年は2\.3％/).first().scrollIntoViewIfNeeded();
   }},
  ];
- const selected=process.env.REVIEW_SCENE?scenes.filter(scene=>scene.id===process.env.REVIEW_SCENE):scenes;
- assert.equal(selected.length,process.env.REVIEW_SCENE?1:5,'Review scene must be one known capture');
+ const selected=process.env.REVIEW_SCENE==='population-review'?scenes.filter(scene=>['south-central-population-initial','south-central-religion-initial'].includes(scene.id)):process.env.REVIEW_SCENE?scenes.filter(scene=>scene.id===process.env.REVIEW_SCENE):scenes;
+ assert.equal(selected.length,process.env.REVIEW_SCENE==='population-review'?2:process.env.REVIEW_SCENE?1:7,'Review scene must be known');
  for(const scene of selected){
   const page=await context.newPage(),errors=[],failures=[];
   page.setDefaultTimeout(20000);page.setDefaultNavigationTimeout(30000);
