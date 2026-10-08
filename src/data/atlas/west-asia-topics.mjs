@@ -24,6 +24,12 @@ export const westTopics = [
   ]),
   topic('dates','agriculture','ナツメヤシの実・国別生産量','作物','ナツメヤシの実（デーツ）の年間生産量を国別に比較します。国全体に色を付ける比較図なので、国内の栽培地の分布は示しません。',{faoItem:'577',faoElement:'5510',unit:'t',breaks:[1e3,1e4,1e5,1e6]}),
   topic('olives','agriculture','オリーブ・国別生産量','作物','収穫したオリーブの量を比較します。オリーブ油の生産量とは異なります。統計にない国・年は灰色で表示し、0には置き換えません。',{faoItem:'260',faoElement:'5510',unit:'t',breaks:[1e3,1e4,1e5,1e6]}),
+  topic('cattle-milk','agriculture','牛の生乳・国別生産量','畜産','牛から搾った未加工の生乳の国別生産量です。牛の飼養密度から搾乳地や乳製品工場の位置を推測できません。欠測国は0とせず灰色にします。',{faoItem:'882',faoElement:'5510',unit:'t',breaks:[1e4,1e5,1e6,1e7]}),
+  topic('chicken-meat','agriculture','鶏肉・国別生産量','畜産','鶏肉の国別生産量です。飼養農場、飼料の産地、処理施設、輸出先の分布はこの国別統計に含まれません。',{faoItem:'1058',faoElement:'5510',unit:'t',breaks:[1e4,1e5,1e6,1e7]}),
+  topic('hen-eggs','agriculture','鶏卵・国別生産量','畜産','殻付き鶏卵の国別生産量です。卵の数ではなく重量で比較し、飼養頭数や消費量と区別します。',{faoItem:'1062',faoElement:'5510',unit:'t',breaks:[1e3,1e4,1e5,1e6]}),
+  topic('rice','agriculture','米・国別生産量','作物','FAOSTATの米の国別生産量です。国を塗る図から水田の位置、灌漑面積、単収は分かりません。未収録国の値を0にしません。',{faoItem:'27',faoElement:'5510',unit:'t',breaks:[1e3,1e4,1e5,1e6]}),
+  topic('cattle-meat','agriculture','牛肉・国別生産量','畜産','骨付き生鮮・冷蔵牛肉の国別生産量です。牛の飼養頭数・密度、輸入牛の処理量、国内消費量と同じ値ではありません。',{faoItem:'867',faoElement:'5510',unit:'t',breaks:[1e3,1e4,1e5,1e6]}),
+  topic('buffalo-milk','agriculture','水牛の生乳・国別生産量','畜産','水牛から搾った未加工の生乳の国別生産量です。牛の生乳とは別品目で、国全体の値を水牛の飼養地や工場の位置へ配分しません。',{faoItem:'951',faoElement:'5510',unit:'t',breaks:[1e3,1e4,1e5,1e6]}),
   ...[['sheep','羊','976'],['goat','山羊','1016'],['cattle','牛','866']].map(([id,label,item])=>topic(id,'agriculture',label+'の分布','畜産','地図は家畜の頭数を格子へ配分した密度の推計です。詳説の飼養頭数は国別統計です。家畜のいる場所と、牧草地の範囲、飼料を生産する場所は一致するとは限りません。',{layer:id,faoItem:item,faoElement:'5111',unit:'頭'})),
   topic('pasture','agriculture','永年採草・放牧地','土地・森林','多年にわたり草などの飼料植物に使う土地を、国別の面積で比較します。家畜が年間を通じて放牧される場所の精密な地図ではありません。',{faoItem:'6655',faoDomain:'Inputs_LandUse',faoElement:'5110',unit:'1000 ha',breaks:[10,100,1000,10000]}),
   topic('forest','agriculture','森林の分布と面積率','土地・森林','地図は森林の参考分布、国別統計は陸地面積に対する森林の割合です。国別の割合から国内の位置や樹種、木材の生産量は判断できません。',{layer:'forest',indicator:'AG.LND.FRST.ZS',unit:'%',breaks:[1,5,15,30,50]}),
@@ -88,7 +94,17 @@ export function westReading(t){
   const original=readings[base];
   const reason=westTopicReasons[t.id]??westTopicReasons[base]??original?.reason??'';
   const r=original?{...original,reason}:null;
-  if(!r)return {message:t.description,reason,comparisons:[]};
+  if(!r){
+    const foodMessages={
+      'cattle-milk':'牛の生乳はトルコ・イランで多く、飼料・水・冷蔵輸送まで合わせて読む。',
+      'chicken-meat':'鶏肉はエジプト・トルコ・イランで多く、乾燥地でも飼料と水の供給が生産を支える。',
+      'hen-eggs':'鶏卵の生産重量はトルコ・イランで多く、飼養頭数や消費とは分けて読む。',
+      rice:'米はエジプト・イランの国別生産が大きく、水田への水の供給を考える。',
+      'cattle-meat':'牛肉はトルコの国別生産が大きく、牛の密度と加工後の重量を分けて読む。',
+      'buffalo-milk':'水牛の生乳はエジプトの国別値が大きく、ナイル川沿いの農業と比べる。',
+    };
+    return {message:foodMessages[t.id]??t.description,reason,comparisons:[]};
+  }
   const annualComparison=compare('annual-precipitation','年降水量の分布と比べる',t.id.endsWith('-irrigated')?'2020年の灌漑小麦と1991–2020年の年降水量を比べます。水源・設備・水の配分も考えます。年合計は利用可能な水量を、収穫面積は取水量を示しません。':'2020年の天水小麦と1991–2020年の年降水量を比べます。雨を主な水源とする栽培を探し、生育期の雨・土壌・品種・経営も考えます。年合計は栽培限界や収量を示しません。');
   const annualAdditions=base==='wheat'?[annualComparison]:[];
   if(t.id.endsWith('-irrigated'))return {...r,message:'灌漑は降水を補って栽培を支え、水を届ける設備・費用・管理が関わる。',comparisons:[...r.comparisons,...annualAdditions]};
@@ -105,4 +121,15 @@ export function observation(data, topic, code, year) {
   const r=rows.find(r=>r.item===topic.faoItem&&r.elementCode===topic.faoElement&&r.year===year&&r.domain===(topic.faoDomain??'Production_Crops_Livestock'));
   const unit=r?.unit==='An'?'頭':r?.unit==='1000 An'?'千頭':r?.unit==='1000 ha'?'千ha':r?.unit??topic.unit??'';
   return {value:r?.value??null,year,unit,source:'FAOSTAT',flag:r?.flag??null};
+}
+
+// The 2024 selection is limited to the eleven tonne-denominated series shipped
+// with this region. Keep live country coverage beside every partial sum.
+export const westProductionCandidates=['wheat','cattle-milk','barley','rice','chicken-meat','olives','dates','hen-eggs','cattle-meat','buffalo-milk','pork-meat'];
+export function westProductionSelection(data,year=2024){
+  return westProductionCandidates.map(id=>{
+    const topic=westTopics.find(t=>t.id===id)??{label:'豚肉・国別生産量',faoItem:'1035',faoElement:'5510',unit:'t'};
+    const values=data.countries.map(country=>observation(data,topic,country.code,year).value).filter(value=>Number.isFinite(value));
+    return {id,label:topic.label.replace('・国別生産量','').replace('の収穫面積',''),sum:values.reduce((sum,value)=>sum+value,0),reported:values.length,missing:data.countries.length-values.length};
+  }).sort((a,b)=>b.sum-a.sum).slice(0,10);
 }

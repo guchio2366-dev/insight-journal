@@ -58,6 +58,35 @@ test('中東の農畜産は五品目を同時表示し、作物の輪郭選択�
  }finally{await w.happyDOM.close();}
 });
 
+test('中東の採用10品目は既存分布を保ち、明示操作だけ国別図へ切り替える',async()=>{
+ const {w,q,select}=await setup('agriculture');
+ try{
+  const table=q('[data-west-production-selection]');
+  assert.equal(q('[data-west-comparison]').hidden,false);
+  assert.equal(table.querySelectorAll('li').length,10);
+  assert.match(table.textContent,/牛の生乳.*19／20/);
+  assert.match(table.textContent,/水牛の生乳.*6／20/);
+  table.querySelector('[data-west-topic-button="cattle-milk"]').click();
+  await until(()=>q('[data-west-atlas]').dataset.topic==='cattle-milk'&&q('[data-west-atlas]').dataset.ready==='true');
+  assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-farm-context]').length,5);
+  assert.equal(q('[data-west-scene]').querySelectorAll('[data-country]').length,0);
+  assert.match(q('[data-west-caption]').textContent,/既存5品目の分布/);
+  assert.match(q('[data-west-detail]').textContent,/牛の密度図.*生乳の生産量に換算できません/);
+  select('[data-west-country]','TUR');
+  await until(()=>q('[data-west-detail]').textContent.includes('トルコ')&&q('[data-west-loading]').hidden);
+  assert.match(q('[data-west-detail]').textContent,/FAOSTAT/);
+  q('[data-west-production-map]').click();
+  await until(()=>q('[data-west-atlas]').dataset.ready==='true'&&q('[data-west-scene]').querySelectorAll('[data-west-farm-context]').length===0);
+  assert.equal(new URL(w.location.href).searchParams.get('productionMap'),'country');
+  assert.equal(q('[data-west-scene]').querySelectorAll('[data-country]').length,21);
+  q('[data-west-production-map]').click();
+  await until(()=>q('[data-west-atlas]').dataset.ready==='true'&&q('[data-west-scene]').querySelectorAll('[data-west-farm-context]').length===5);
+  assert.equal(new URL(w.location.href).searchParams.has('productionMap'),false);
+  assert.equal(q('[data-west-country]').value,'TUR');
+  assert.match(q('[data-west-detail]').textContent,/FAOSTAT/);
+ }finally{await w.happyDOM.close();}
+});
+
 test('中東の初期気候は地域全体、選んだ都市の雨温図と説明は右に同居し国名hoverを出さない',async()=>{
  const {w,q,select}=await setup('nature');
  try{

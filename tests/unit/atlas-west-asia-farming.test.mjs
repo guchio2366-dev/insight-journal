@@ -2,6 +2,19 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readWestState,westSearch} from '../../src/lib/atlas-west-asia-state.mjs';
 import {westFarmingGeometry,westFarmingProducts,isWestFarmingOverview} from '../../src/lib/atlas-west-asia-farming.mjs';
+import {readFileSync} from 'node:fs';
+import {westProductionSelection,westTopics} from '../../src/data/atlas/west-asia-topics.mjs';
+
+test('保存済み重量候補の選択は欠測を0扱いせず、飼養頭数と国別生産を混同しない',()=>{
+ const data=JSON.parse(readFileSync('public/assets/atlas/west-asia-v1/data.json','utf8'));
+ const chosen=westProductionSelection(data);
+ assert.equal(chosen.length,10);
+ assert.deepEqual(chosen.slice(0,3).map(row=>row.id),['wheat','cattle-milk','barley']);
+ assert.equal(chosen.find(row=>row.id==='rice').reported,7);
+ assert.equal(chosen.find(row=>row.id==='buffalo-milk').missing,14);
+ assert.equal(chosen.some(row=>row.id==='pork-meat'),false);
+ assert.ok(chosen.every(row=>westTopics.find(topic=>topic.id===row.id)?.faoElement==='5510'));
+});
 
 test('中東の農畜産は未選択の同時分布から始まり、既存小麦URLと比較復帰を維持する',()=>{
  const data={countries:[{code:'SAU'}],cities:[],urban:{cities:[]}};

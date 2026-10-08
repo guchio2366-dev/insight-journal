@@ -27,6 +27,19 @@
 .west-layout-statistics .atlas-climate-diagram{margin:0;max-width:none}
 .west-layout-statistics p{font-size:14px;line-height:1.85}
 .west-layout-statistics .atlas-city-source{font-size:13px}
+.west-layout-statistics:has(.west-production-summary){padding:12px 16px}
+.west-production-summary h2{font-size:19px;line-height:1.35;margin:0}
+.west-layout-statistics .west-production-summary>p{font-size:12px;line-height:1.5;margin:3px 0 6px}
+.west-production-summary ol{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px;list-style:none;margin:0;padding:0}
+.west-production-summary li{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:center;min-height:39px;padding:2px 3px;border-bottom:1px solid #dce2d8;font-size:13px;font-variant-numeric:tabular-nums}
+.west-production-summary li button{min-width:0;min-height:34px;padding:4px 0;border:0;background:transparent;color:#265660;text-decoration:underline;text-align:left;font:inherit;cursor:pointer}
+.west-production-summary li span{white-space:nowrap}
+.west-production-summary li small{white-space:nowrap;color:#526960;font-size:11px}
+.west-production-summary details{margin-top:4px}
+.west-production-summary details summary{min-height:38px;padding:6px 0}
+.west-production-map-choice{margin:8px 0 12px;padding:9px 10px;border-left:3px solid #7b9789;background:#f1f5ee}
+.west-reading .west-production-map-choice p{font-size:12px;line-height:1.55;margin:0 0 6px}
+.west-production-map-choice button{min-height:40px;padding:6px 10px;border:1px solid #66877b;background:#fffef8;color:#254952;font:inherit;cursor:pointer}
 .west-layout-statistics .west-detail-controls{margin:0 0 12px;padding:0}
 .west-layout-statistics [data-west-statistics-controls]:has(>[hidden]){display:none}
 @media(min-width:960px) and (max-width:1199px){
