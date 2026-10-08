@@ -113,11 +113,13 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   const font=14*scale,width=(name.length*14+8)*scale,height=21*scale,gap=5*scale,candidates:number[][]=[];
   for(const offset of [-12,19,-39,46,-66,73,-93,100])candidates.push([gap,offset*scale],[-width-gap,offset*scale]);
   const minX=viewport[0]+4*scale,maxX=viewport[0]+viewport[2]-width-4*scale,minY=viewport[1]+height,maxY=viewport[1]+viewport[3]-6*scale;
-  const fits=(box:LabelBox)=>!occupied.some(other=>box.x<other.x+other.w+gap&&box.x+box.w+gap>other.x&&box.y-height<other.y+gap&&box.y+gap>other.y-other.h);
+  const fits=(box:LabelBox)=>!occupied.some(other=>box.x<other.x+other.w+gap&&box.x+box.w+gap>other.x&&box.y-box.h<other.y+gap&&box.y+gap>other.y-other.h);
   const position=candidates.map(([dx,dy])=>({x:Math.max(minX,Math.min(maxX,ax+dx)),y:Math.max(minY,Math.min(maxY,ay+dy)),w:width,h:height})).find(fits);
   if(!position)return null;occupied.push(position);
-  const node=svg('g',attrs);node.append(svg('path',{d:`M${ax},${ay}L${Math.max(position.x,Math.min(position.x+width,ax))},${position.y-5*scale}`,fill:'none',stroke:color,'stroke-width':1,'vector-effect':'non-scaling-stroke','pointer-events':'none'}));
-  const nameNode=svg('text',{x:position.x,y:position.y,'font-size':font,'font-weight':650,fill:color,stroke:'#fffdf8','stroke-width':3*scale,'paint-order':'stroke','stroke-linejoin':'round'});nameNode.textContent=name;node.append(nameNode);target.append(node);return node;
+  // Keep the leader outside the interactive group: a long leader enlarges the
+  // group's hit box, so a normal click at its center can land on another name.
+  target.append(svg('path',{d:`M${ax},${ay}L${Math.max(position.x,Math.min(position.x+width,ax))},${position.y-5*scale}`,fill:'none',stroke:color,'stroke-width':1,'vector-effect':'non-scaling-stroke','pointer-events':'none','aria-hidden':'true'}));
+  const node=svg('g',attrs),nameNode=svg('text',{x:position.x,y:position.y,'font-size':font,'font-weight':650,fill:color,stroke:'#fffdf8','stroke-width':3*scale,'paint-order':'stroke','stroke-linejoin':'round'});nameNode.textContent=name;node.append(nameNode);target.append(node);return node;
  }
  const basinColors=['#c9dfd7','#d9d2e6','#e2d7b4','#c8dae8','#e5cfc3','#d4ddb8','#c7e0df','#e5d1d9','#d5d8b8'];
  function inGeometry(point:readonly number[],geometry:Row):boolean {
