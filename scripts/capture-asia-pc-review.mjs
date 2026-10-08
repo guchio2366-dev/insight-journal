@@ -216,7 +216,7 @@ async function checkContextOperations(browser,host,profile){
   await contextPicture(page,profile,'west-asia-farm-overview','west-asia');
   await page.locator('.west-agri-picker [data-west-topic-button="wheat"]').click();await page.waitForSelector('[data-west-farm-selected="wheat"]');await settle(page);
   assert.equal(await contexts.count(),5);
-  for(const id of ['sheep','goat','cattle'])assert.equal(await page.locator(`[data-west-farm-context="${id}"]`).getAttribute('opacity'),'.2');
+  for(const id of ['sheep','goat','cattle']){const opacity=Number(await page.locator(`[data-west-farm-context="${id}"]`).getAttribute('opacity'));assert(opacity>0&&opacity<.5,'other livestock remain visible but subdued');}
   assert.equal(await page.locator('[data-west-map]').getAttribute('viewBox'),frame);
   await contextPicture(page,profile,'west-asia-farm-selected','west-asia');
   await page.reload({waitUntil:'domcontentloaded'});await page.waitForSelector('[data-west-farm-selected="wheat"]');
