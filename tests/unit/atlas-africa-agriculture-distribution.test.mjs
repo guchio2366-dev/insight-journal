@@ -8,7 +8,22 @@ const base = new URL('../../public/assets/atlas/africa-agriculture-distribution-
 const manifest = JSON.parse(readFileSync(new URL('manifest.json', base), 'utf8'));
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const expected = ['crop-maize-harvested', 'crop-rice-harvested', 'crop-wheat-harvested', 'crop-cassava-harvested', 'livestock-cattle', 'livestock-goats', 'livestock-sheep'];
-const collection = layer => JSON.parse(gunzipSync(readFileSync(new URL(layer.file, base))));
+const asset = name => {
+  const parts = manifest.parts[name];
+  assert.ok(parts?.length, `missing parts for ${name}`);
+  const chunks = parts.map(part => {
+    const bytes = readFileSync(new URL(part.file, base));
+    assert.equal(bytes.length, part.bytes);
+    assert.equal(sha(bytes), part.sha256);
+    assert.ok(bytes.length <= 256 * 1024);
+    return bytes;
+  });
+  const bytes = Buffer.concat(chunks);
+  assert.equal(bytes.length, manifest.files[name].bytes);
+  assert.equal(sha(bytes), manifest.files[name].sha256);
+  return bytes;
+};
+const collection = layer => JSON.parse(gunzipSync(asset(layer.file)));
 const grid = layer => {
   const bytes = gunzipSync(readFileSync(new URL(layer.grid, base)));
   return new Float32Array(bytes.buffer, bytes.byteOffset, bytes.byteLength / 4);
@@ -41,7 +56,7 @@ test('agriculture distribution uses every retained 5-minute grid and its existin
     assert.match(layer.scope, key.startsWith('crop-') ? /被覆率ではありません/ : /頭\/km²/);
     assert.match(layer.queryDisplayDifference, /一致しない/);
     assert.deepEqual(layer.renderOrder, ['band', 'contour', 'zero']);
-    const bytes = readFileSync(new URL(layer.file, base));
+    const bytes = asset(layer.file);
     assert.equal(manifest.files[layer.file].sha256, sha(bytes));
     assert.equal(manifest.files[layer.file].bytes, bytes.length);
   }
@@ -55,7 +70,7 @@ test('every source threshold has matching isobands and isolines, with no percent
     assert.equal(bands.length, layer.positiveLegend.length);
     assert.deepEqual(contours.map(feature => feature.properties.value), layer.breaks);
     assert.equal(features.filter(feature => feature.properties.kind === 'zero').length, 1);
-    const linesBytes = readFileSync(new URL(layer.contoursFile, base));
+    const linesBytes = asset(layer.contoursFile);
     assert.equal(manifest.files[layer.contoursFile].sha256, sha(linesBytes));
     assert.equal(manifest.files[layer.contoursFile].bytes, linesBytes.length);
     assert.deepEqual(JSON.parse(gunzipSync(linesBytes)).features, contours, 'lightweight context outlines must equal the selected quantity contours');

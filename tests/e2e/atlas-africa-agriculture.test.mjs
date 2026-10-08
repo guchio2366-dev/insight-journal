@@ -52,7 +52,7 @@ test('one agriculture field click starts all seven distributions after the previ
     if(path==='/assets/atlas/africa-population-v1/manifest.json'){populationManifestRequests++;await populationGate;}
     let bytes=readFileSync(new URL('../../public'+path,import.meta.url));
     // Decode actual gzip fixtures synchronously, avoiding leftover stream work.
-    if(bytes[0]===31&&bytes[1]===139)bytes=gunzipSync(bytes);
+    if(!/\.part\d+$/.test(path)&&bytes[0]===31&&bytes[1]===139)bytes=gunzipSync(bytes);
     const response=new Response(bytes,{status:200}),read=response.arrayBuffer.bind(response);
     response.arrayBuffer=async()=>{pendingReads++;try{return await read();}finally{pendingReads--;}};
     return response;
@@ -70,7 +70,7 @@ test('one agriculture field click starts all seven distributions after the previ
   assert.equal(cropManifestRequests,1,'the first field click must request the distribution manifest without help from an earlier layer callback');
   assert.equal(root.dataset.field,'agriculture');assert.equal(root.querySelector('[data-africa-topic="farming"]').getAttribute('aria-pressed'),'true');
   const url=new URL(window.location.href);assert.equal(url.searchParams.get('field'),'agriculture');assert.equal(url.searchParams.get('topic'),'farming');
-  releaseCrop();await wait(()=>root.querySelectorAll('[data-africa-agri-distribution]').length===7&&root.querySelectorAll('[data-africa-commodity-layer]').length===7&&pendingFetches===0&&pendingReads===0,'the first field click must finish the native contour geometry and all seven original query grids');
+  releaseCrop();await wait(()=>root.dataset.actualLayer==='true'&&root.querySelectorAll('[data-africa-agri-distribution]').length===7&&root.querySelectorAll('[data-africa-commodity-layer]').length===7&&pendingFetches===0&&pendingReads===0,'the first field click must finish the native contour geometry and all seven original query grids');
   await new Promise(resolve=>setImmediate(resolve));assert.equal(clicks,1);assert.equal(window.document.querySelector('[data-africa-atlas]'),root);assert.equal(root.querySelector('[data-africa-raster="climate"]'),null);assert.equal(root.dataset.actualLayer,'true');assert.match(root.querySelector('[data-period]').textContent,/2020/);
   await new Promise(resolve=>setImmediate(resolve));assert.equal(pendingFetches,0);assert.equal(pendingReads,0);assert.equal(populationManifestRequests,0);
   const populationField=root.querySelector('[data-field="population"]');let populationClicks=0;populationField.addEventListener('click',()=>{populationClicks++;});populationField.click();

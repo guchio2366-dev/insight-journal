@@ -98,10 +98,10 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
  let currentKey='',lastPaint='',visibleKeys:string[]=[],agriMode=false;
  let lastAgriPaint='';
  const notify=()=>{if(root.isConnected)onReady();};
- function request(url:string,binary=false):Loaded {
+ function request(url:string,binary=false,parts?:Row[]):Loaded {
   const found=cache.get(url);if(found)return found;
   const loaded:Loaded={};cache.set(url,loaded);
-  loaded.promise=(async()=>{try{const response=await fetcher(url);if(!response.ok)throw new Error(`HTTP ${response.status}`);let bytes=new Uint8Array(await response.arrayBuffer());if(bytes[0]===31&&bytes[1]===139)bytes=new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer());loaded.value=binary?bytes:JSON.parse(new TextDecoder().decode(bytes));}catch(error){loaded.error=error instanceof Error?error.message:'取得失敗';}finally{loaded.promise=undefined;notify();}})();
+  loaded.promise=(async()=>{try{let bytes:Uint8Array;if(parts?.length){const chunks:Uint8Array[]=[];let total=0;for(const part of parts){const response=await fetcher(url.slice(0,url.lastIndexOf('/')+1)+text(part.file));if(!response.ok)throw new Error(`HTTP ${response.status}`);const chunk=new Uint8Array(await response.arrayBuffer());if(chunk.length!==part.bytes)throw new Error('分割ファイルの長さが一致しません');chunks.push(chunk);total+=chunk.length;}bytes=new Uint8Array(total);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}}else{const response=await fetcher(url);if(!response.ok)throw new Error(`HTTP ${response.status}`);bytes=new Uint8Array(await response.arrayBuffer());}if(bytes[0]===31&&bytes[1]===139)bytes=new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer());loaded.value=binary?bytes:JSON.parse(new TextDecoder().decode(bytes));}catch(error){loaded.error=error instanceof Error?error.message:'取得失敗';}finally{loaded.promise=undefined;notify();}})();
   return loaded;
  }
  const svg=(tag:string,attrs:Row)=>{const node=document.createElementNS(SVG,tag);for(const [key,value]of Object.entries(attrs))node.setAttribute(key,String(value));return node;};
@@ -263,7 +263,7 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   if(!distribution){baseGroup.replaceChildren();lastAgriPaint='';return empty;}
   const assets=new Map<string,{contours:Loaded;bands:Loaded|null;grid:Loaded;threshold:number}>(),views:AfricaLayerView[]=[];
   for(const key of keys){
-   const layer=distribution.layers[key],contours=request(base+layer.contoursFile),bands=!state.overview&&key===focused?request(base+layer.file):null,grid=request(base+layer.grid,true);
+   const layer=distribution.layers[key],contours=request(base+layer.contoursFile,false,distribution.parts?.[layer.contoursFile]),bands=!state.overview&&key===focused?request(base+layer.file,false,distribution.parts?.[layer.file]):null,grid=request(base+layer.grid,true);
    const originalResult=request(base+layer.sourceManifest),original=originalResult.value?.layers?.[layer.sourceLayer],input=key.startsWith('livestock-')?original?.countryInputs?.[state.place]:undefined;
    const threshold=Number(layer.sourceThresholds[Math.min(2,layer.sourceThresholds.length-1)]);assets.set(key,{contours,bands,grid,threshold});
    const ready=!!contours.value&&!!grid.value&&(!bands||!!bands.value),error=contours.error??bands?.error??grid.error??originalResult.error??'';

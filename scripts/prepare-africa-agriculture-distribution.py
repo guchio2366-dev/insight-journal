@@ -15,6 +15,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / 'public/assets/atlas'
 OUT = ASSETS / 'africa-agriculture-distribution-v1'
+PART_BYTES = 256 * 1024
 LAYERS = [
     ('crops', 'maize-harvested', 'とうもろこし', '#c59320', 'a2aa58a7765fb605ee164132823556bacfc9bedb744fbdbbcc3af991e4123734'),
     ('crops', 'rice-harvested', '稲', '#287daa', 'a31ef621e4fc8877a261ac03ebc36763eccc051025b436fb9ff9db4b2e944d8b'),
@@ -32,6 +33,18 @@ def sha(value):
 
 def encoded(value):
     return (json.dumps(value, ensure_ascii=False, separators=(',', ':'), allow_nan=False) + '\n').encode()
+
+
+def write_parts(name, data, parts, files):
+    """Keep the exact gzip stream while making each deployed object independently uploadable."""
+    files[name] = {'bytes': len(data), 'sha256': sha(data)}
+    parts[name] = []
+    for offset in range(0, len(data), PART_BYTES):
+        chunk = data[offset:offset + PART_BYTES]
+        part_name = f'{name}.part{len(parts[name]) + 1:03d}'
+        (OUT / part_name).write_bytes(chunk)
+        parts[name].append({'file': part_name, 'bytes': len(chunk), 'sha256': sha(chunk)})
+    (OUT / name).unlink(missing_ok=True)
 
 
 def points(value):
@@ -67,7 +80,7 @@ def zero_polygons(mask, west, north, step):
 
 def main():
     OUT.mkdir(exist_ok=True)
-    layers, files = {}, {}
+    layers, files, parts = {}, {}, {}
     for family, name, label, category_color, expected in LAYERS:
         source = ASSETS / f'africa-{family}-v1'
         source_manifest_bytes = (source / 'manifest.json').read_bytes()
@@ -129,12 +142,10 @@ def main():
         features.append(zero_feature)
         file_name = name + '.geojson.gz'
         geometry = gzip.compress(encoded({'type': 'FeatureCollection', 'features': features}), mtime=0)
-        (OUT / file_name).write_bytes(geometry)
-        files[file_name] = {'bytes': len(geometry), 'sha256': sha(geometry)}
+        write_parts(file_name, geometry, parts, files)
         contours_name = name + '.contours.geojson.gz'
         contours = gzip.compress(encoded({'type': 'FeatureCollection', 'features': [feature for feature in features if feature['properties']['kind'] == 'contour']}), mtime=0)
-        (OUT / contours_name).write_bytes(contours)
-        files[contours_name] = {'bytes': len(contours), 'sha256': sha(contours)}
+        write_parts(contours_name, contours, parts, files)
         key = ('crop-' if family == 'crops' else 'livestock-') + name
         quantity = ('収穫面積は元の5分角セル当たりのhaで、セル平均のha/km²や農地被覆率ではありません。複数回の収穫を含みます。'
                     if family == 'crops' else '密度は元の5分角セルの頭/km²です。全頭の実測位置・牧場境界・放牧だけの分布ではありません。')
@@ -163,7 +174,7 @@ def main():
         print(json.dumps({'layer': key, 'bytes': len(geometry), 'counts': layers[key]['counts']}, ensure_ascii=False))
     result = {
         'schemaVersion': 1, 'version': '1.0.0', 'bounds': [-27, -36, 64, 39], 'crs': 'EPSG:4326',
-        'width': 1092, 'height': 900, 'resolutionDegrees': 1 / 12, 'layers': layers, 'files': files,
+        'width': 1092, 'height': 900, 'resolutionDegrees': 1 / 12, 'layers': layers, 'files': files, 'parts': parts,
         'processing': {'generator': Path(__file__).relative_to(ROOT).as_posix(), 'generatorSha256': sha(Path(__file__).read_bytes()),
                        'reproduce': 'python3 scripts/prepare-africa-agriculture-distribution.py', 'contourpy': contourpy.__version__, 'numpy': np.__version__,
                        'algorithm': 'serial; corner_mask=false; quad_as_tri=false; z_interp=Linear; OuterOffset / Separate',
