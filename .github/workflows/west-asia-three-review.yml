@@ -1,0 +1,58 @@
+name: Review three West Asia priority screens
+
+on:
+  push:
+    branches: [codex/west-asia-three-review-20261008]
+    paths:
+      - '.github/workflows/west-asia-three-review.yml'
+      - 'scripts/capture-west-asia-three-review.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+      REVIEW_HEAD_SHA: ${{ github.sha }}
+      REVIEW_BASE_SHA: a0fec65c8aba2f3ac9f3f7dd789f02b41d3517b7
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Verify runner Chrome and Japanese fonts
+        shell: bash
+        run: |
+          set -euo pipefail
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          if [[ -z "$chrome_path" ]]; then echo '::error::Preinstalled Chrome required'; exit 1; fi
+          japanese_fonts="$(fc-list ':lang=ja' family)"
+          if [[ -z "$japanese_fonts" ]]; then
+            sudo apt-get update
+            sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+            japanese_fonts="$(fc-list ':lang=ja' family)"
+          fi
+          if [[ -z "$japanese_fonts" ]]; then echo '::error::Japanese fonts required'; exit 1; fi
+          {
+            printf 'REVIEW_CHROME_PATH=%s\n' "$chrome_path"
+            printf '%s\n' 'REVIEW_JAPANESE_FONTS<<WEST_FONTS' "$japanese_fonts" 'WEST_FONTS'
+            printf 'REVIEW_JAPANESE_FONT_MATCH=%s\n' "$(fc-match -f '%{family}' 'sans-serif:lang=ja')"
+          } >> "$GITHUB_ENV"
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - name: Capture three priority screens
+        run: node scripts/capture-west-asia-three-review.mjs
+      - name: Upload compact screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: west-asia-three-priority-${{ github.run_id }}
+          path: review-artifacts/west-asia-three
+          if-no-files-found: error
+          retention-days: 7
