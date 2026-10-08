@@ -28,14 +28,14 @@ export function renderEastAsiaFarmFoundations(root:HTMLElement,region:AsiaRegion
    const record=crop[code as keyof typeof crop],production=record.production;
    p(forest,`${country?.name}の${cropLabels[topic!]}生産量 · 2024年 · t`);
    if(production)addBar(forest,'生産',production.value,Math.max(1,production.value),'t');else p(forest,'生産：未掲載');
-   p(forest,`${country?.name}のHS ${cropHS[topic!]}商品の貿易額 · 2023年 · 名目米ドル`);
+   p(forest,`${code==='TWN'?'その他のアジア（台湾等）':country?.name}のHS ${cropHS[topic!]}商品の貿易額 · 2023年 · 名目米ドル`);
    const max=Math.max(1,record.imports??0,record.exports??0);
    for(const [field,label] of [['imports','輸入'],['exports','輸出']] as const){const value=record[field];if(value!==null)addBar(forest,label,value,max,'USD');else p(forest,`${label}：未掲載`);}
   }else{
    p(forest,`4対象の${cropLabels[topic!]}生産量 · 2024年 · t`);const rows=data.countries.map(key=>({key,value:crop[key as keyof typeof crop].production?.value})),max=Math.max(1,...rows.map(row=>row.value??0));
    for(const row of rows)if(row.value!==undefined)addBar(forest,names[row.key],row.value,max,'t');else p(forest,`${names[row.key]}：未掲載`);
   }
-  p(forest,'FAOSTATの国別生産重量とUN Comtradeの対応HS商品金額は年・単位・加工範囲が異なります。足し引きして国内仕向けを求めません。');
+  p(forest,'FAOSTATの国別生産重量とUN Comtradeの対応HS商品金額は年・単位・加工範囲が異なります。足し引きして国内仕向けを求めません。台湾の生産はFAO台湾区分、貿易は「Other Asia, nes」（台湾等）です。');
  }else if(code&&Object.hasOwn(data.forestFlows,code)){
   const flows=data.forestFlows[code as keyof typeof data.forestFlows];
   for(const [kind,label] of [['roundwood','丸太'],['sawnwood','製材']] as const){
@@ -51,9 +51,9 @@ export function renderEastAsiaFarmFoundations(root:HTMLElement,region:AsiaRegion
  if(!crop&&topic!=='overview'&&topic!=='forest')p(forest,'選んだ品目に対応する供給・輸出入系列は今回の比較対象外です。上は林産物の参考値です。');
  const exampleCode=code&&Object.hasOwn(data.exportDestinations,code)?code:'CHN',record=data.exportDestinations[exampleCode as keyof typeof data.exportDestinations];
  if(record){
-  p(destinations,`${names[exampleCode]}の全商品輸出先 · 2023年 · 名目米ドル`);
+  const reporter=exampleCode==='TWN'?'その他のアジア（台湾等）':names[exampleCode];p(destinations,`${reporter}の全商品輸出先 · 2023年 · 名目米ドル`);
   const parts=[...record.top.map((row,index)=>({label:partnerNames[row.partnerCode]??row.sourceName,value:row.value,color:colors[index]})),{label:'その他',value:record.other,color:colors[3]}];
-  const pie=el('div');pie.className='east-pie';pie.setAttribute('role','img');pie.setAttribute('aria-label',`${names[exampleCode]}の全商品輸出先の構成。割合は直後の凡例を参照。`);let angle=0;pie.style.background=`conic-gradient(${parts.map(row=>{const start=angle;angle+=row.value/record.world*100;return `${row.color} ${start}% ${angle}%`;}).join(',')})`;destinations.append(pie);
+  const pie=el('div');pie.className='east-pie';pie.setAttribute('role','img');pie.setAttribute('aria-label',`${reporter}の全商品輸出先の構成。割合は直後の凡例を参照。`);let angle=0;pie.style.background=`conic-gradient(${parts.map(row=>{const start=angle;angle+=row.value/record.world*100;return `${row.color} ${start}% ${angle}%`;}).join(',')})`;destinations.append(pie);
   for(const row of parts){const key=el('div');key.className='east-pie-key';const square=el('i'),label=el('span',row.label),value=el('span',format(row.value/record.world*100,'%'));square.style.background=row.color;key.append(square,label,value);destinations.append(key);}
   p(destinations,'分母はこの報告区分の全商品輸出額です。丸太・製材の輸出先や最終消費地ではありません。台湾の位置は「Other Asia, nes」区分で、台湾だけの厳密な値とは言い切れません。');
  }else p(destinations,'この報告区分の輸出相手先は未収録です。');

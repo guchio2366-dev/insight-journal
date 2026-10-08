@@ -52,6 +52,7 @@ test('East under-map reading changes with country and topic without treating mis
   assert.equal(section.querySelectorAll('[data-east-world-share] .east-bar').length,4);
   renderEastAsiaFarmFoundations(root,'east-asia',true,'forest',{code:'TWN',name:'台湾'});
   assert.match(section.querySelector('[data-east-world-share]').textContent,/森林面積は未掲載.*公表0とは異なります/);
+  assert.match(section.querySelector('[data-east-export-partners]').textContent,/その他のアジア（台湾等）の全商品輸出先/);
   assert.match(section.querySelector('[data-east-export-partners]').textContent,/全商品輸出先.*丸太・製材の輸出先/);
   renderEastAsiaFarmFoundations(root,'east-asia',true,'wheat',{code:'JPN',name:'日本'});
   assert.match(section.querySelector('[data-east-supply-title]').textContent,/小麦の生産・商品貿易/);
