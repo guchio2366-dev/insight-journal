@@ -307,9 +307,11 @@ export function initializeAfricaAtlas() {
   text('[data-africa-layer-scope]',state.context?'色付きの国別記号：国内の再生可能淡水／人。国外からの流入は含みません。':'表示枠は隣接陸域も含みます。河川を網羅せず、地下水の分布は未収録です。');
   text('[data-metric-title]',river?`${river.label}と収録河道`:'河川・湖の中心線');text('#africa-svg-title',actual?.ready&&river?`${river.label}を強調した河川・湖の中心線`:'河川・湖の中心線');
  }
+ let renderedClimateCity='';
  function renderClimateCityReading(){
   const climate=state.field==='nature'&&state.topic==='climate'&&state.view==='distribution';
   const city=climate?africaClimateCityById(state.city):undefined;
+  if(renderedClimateCity!==(city?.id??'')){query<HTMLElement>('.africa-detail').scrollTop=0;renderedClimateCity=city?.id??'';}
   query<HTMLElement>('[data-africa-city-return]').hidden=!city;
   query<HTMLElement>('[data-africa-city-readings]').hidden=!city;
   for(const node of root!.querySelectorAll<HTMLElement>('[data-africa-city-reading]'))node.hidden=node.dataset.africaCityReading!==city?.id;
