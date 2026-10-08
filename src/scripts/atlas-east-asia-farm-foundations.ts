@@ -20,7 +20,7 @@ const svg=(tag:string,attrs:Record<string,string>)=>{const node=document.createE
 const thousand=(n:number)=>`${(n/10).toLocaleString('ja-JP',{maximumFractionDigits:1})}万t`;
 function renderJapanWheat(forest:HTMLElement,destinations:HTMLElement,share:HTMLElement){
  const use=wheat.domesticUse,domestic=use.food+use.processing+use.other;
- p(forest,'国内の消費を、国産・純輸入・在庫減で支えています。');
+ p(forest,`国内生産は総供給の${(wheat.production/domestic*100).toFixed(1)}％、純輸入が${(wheat.netImports/domestic*100).toFixed(1)}％を占めます。`);
  const total=el('p');total.className='east-wheat-total';total.append('総供給 ',el('strong',thousand(domestic)),' · 2023年度、原麦');forest.append(total);
  const groups=[{title:'供給元',rows:[{label:'国内生産',value:wheat.production,color:'#326b63'},{label:'純輸入',value:wheat.netImports,color:'#85a762'},{label:'在庫減',value:-wheat.inventoryChange,color:'#d5a760'}]},{title:'行先',rows:[{label:'粗食料',value:use.food,color:'#326b63'},{label:'加工用',value:use.processing,color:'#85a762'},{label:'その他',value:use.other,color:'#d5a760'}]}];
  for(const group of groups){const band=el('div');band.className='east-wheat-band';band.append(el('b',group.title));const line=el('div');line.className='east-wheat-segments';line.setAttribute('role','img');line.setAttribute('aria-label',`${group.title}：${group.rows.map(row=>`${row.label} ${thousand(row.value)}、${(row.value/domestic*100).toFixed(1)}％`).join('、')}`);for(const row of group.rows){const part=el('span');part.style.width=`${row.value/domestic*100}%`;part.style.background=row.color;line.append(part);}band.append(line);const key=el('div');key.className='east-wheat-legend';for(const row of group.rows){const item=el('span');const swatch=el('i');swatch.style.background=row.color;item.append(swatch,`${row.label} ${(row.value/domestic*100).toFixed(1)}％`);key.append(item);}band.append(key);forest.append(band);}
@@ -31,7 +31,11 @@ function renderJapanWheat(forest:HTMLElement,destinations:HTMLElement,share:HTML
  p(destinations,'財務省貿易統計。通関の食糧用輸入量で、左の全用途の純輸入とは範囲が異なります。');
  p(share,'食料需給表 · 2019–2023年度');
  const latest=wheat.selfSufficiency.at(-1)!;const current=el('p');current.className='east-wheat-current';current.append(el('strong',`${latest.rate}％`),` ${latest.year}年度`);share.append(current);
- const trend=svg('svg',{viewBox:'0 0 300 130',class:'east-wheat-trend',role:'img','aria-label':wheat.selfSufficiency.map(row=>`${row.year}年度${row.rate}％`).join('、')});const x=(index:number)=>28+index*61,y=(rate:number)=>106-(rate-12)*12;trend.append(svg('line',{x1:'28',y1:'106',x2:'272',y2:'106',class:'axis'}),svg('polyline',{points:wheat.selfSufficiency.map((row,index)=>`${x(index)},${y(row.rate)}`).join(' '),class:'trend'}));for(const [index,row] of wheat.selfSufficiency.entries()){trend.append(svg('circle',{cx:String(x(index)),cy:String(y(row.rate)),r:'4',class:'dot'}));const year=svg('text',{x:String(x(index)),y:'124','text-anchor':'middle'});year.textContent=String(row.year);trend.append(year);}share.append(trend);
+ const trend=svg('svg',{viewBox:'0 0 320 142',class:'east-wheat-trend',role:'img','aria-label':`自給率、縦軸0–20％。${wheat.selfSufficiency.map(row=>`${row.year}年度${row.rate}％`).join('、')}`});
+ const x=(index:number)=>48+index*62,y=(rate:number)=>108-rate*4;
+ for(const rate of [0,10,20]){const py=y(rate);trend.append(svg('line',{x1:'39',y1:String(py),x2:'300',y2:String(py),class:rate===0?'axis':'guide'}));const tick=svg('text',{x:'32',y:String(py+4),'text-anchor':'end',class:'tick'});tick.textContent=`${rate}％`;trend.append(tick);}
+ trend.append(svg('polyline',{points:wheat.selfSufficiency.map((row,index)=>`${x(index)},${y(row.rate)}`).join(' '),class:'trend'}));
+ for(const [index,row] of wheat.selfSufficiency.entries()){trend.append(svg('circle',{cx:String(x(index)),cy:String(y(row.rate)),r:'3.5',class:'dot'}));const value=svg('text',{x:String(x(index)),y:String(y(row.rate)-8),'text-anchor':'middle',class:'value'});value.textContent=`${row.rate}％`;trend.append(value);const year=svg('text',{x:String(x(index)),y:'132','text-anchor':'middle'});year.textContent=String(row.year);trend.append(year);}share.append(trend);
  p(share,'国内生産109.4万t ÷ 国内消費631.2万t（四捨五入）。食用小麦だけを分母にした率ではありません。');
  p(share,'2024年FAOSTATの世界小麦生産に占める日本は約0.13％。世界の生産規模だけでは国内の供給構造を読めないため、国内需給を別に示します。');
 }
